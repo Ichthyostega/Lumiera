@@ -605,6 +605,13 @@ namespace engine {
       template<typename PFX>
       using Adapted = FeedPrototype<FUN,PFX>;
       
+      /** is the given functor suitable as parameter functor for this Feed? */
+      template<typename PFX>
+      static constexpr bool isSuitable()
+        {
+          return hasParam() and _Trait::template isParamFun<PFX>();
+        }
+      
       /**
        * Cross-Builder to add configuration with a given parameter-functor.
        * @return new FeedPrototype instance outfitted with the current

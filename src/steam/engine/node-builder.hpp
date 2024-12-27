@@ -369,6 +369,29 @@ namespace engine {
                                    };
         }
       
+      template<class AUTO>
+      auto
+      attachAutomation (AUTO&& aFun)
+        {
+          return attachParamFun ([automation = forward<AUTO>(aFun)]
+                                 (TurnoutSystem& turnoutSys)
+                                    {
+                                      Time nomTime = Time::ZERO; ////////////////////OOO need to retrieve that from turnoutSys
+                                      return automation(nomTime);
+                                    });
+        }
+      
+      template<typename PAR>
+      auto
+      setParam (PAR paramVal)
+        {
+          return attachParamFun ([=](TurnoutSystem&) -> PAR
+                                    {
+                                      return paramVal;
+                                    });
+        }
+      
+      
       
       /*************************************************************//**
        * Terminal: complete the Port wiring and return to the node level.

@@ -95,30 +95,27 @@ namespace test  {
         }
       
       
-      /** @test TODO build a Node with a fixed invocation parameter
-       * @todo WIP 12/24 🔁 define ⟶ implement
+      /** @test build a Node with a fixed invocation parameter
+       * @todo 12/24 ✔ define ⟶ ✔ implement
        */
       void
       build_Node_fixedParam()
         {
           auto procFun =  [](ushort param, uint* buff){ *buff = param; };
-          auto paramFun = [](TurnoutSystem&){ return LIFE_AND_UNIVERSE_4EVER; };
           
           ProcNode node{prepareNode("Test")
                           .preparePort()
-                            .invoke("fun()",procFun)
-                            .attachParamFun(paramFun)
+                            .invoke("fun()", procFun)
+                            .setParam (LIFE_AND_UNIVERSE_4EVER)
                             .completePort()
                           .build()};
           
           CHECK (LIFE_AND_UNIVERSE_4EVER == invokeRenderNode (node));
-          
-          UNIMPLEMENTED ("build node with fixed param");
         }
       
       
       /** @test TODO build a Node with dynamically generated parameter
-       * @todo WIP 12/24 define ⟶ implement
+       * @todo WIP 12/24 🔁 define ⟶ implement
        */
       void
       build_Node_dynamicParam()

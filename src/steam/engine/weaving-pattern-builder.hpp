@@ -301,6 +301,9 @@ namespace engine {
       auto
       adaptParam (PFX paramFunctor)
         {
+          static_assert (PROT::template isSuitable<PFX>()
+                        ,"suitable as param-functor for given processing-functor");
+          //
           using AdaptedWeavingBuilder = Adapted<PFX>;
           //
           return AdaptedWeavingBuilder{move(*this)
