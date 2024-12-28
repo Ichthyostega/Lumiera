@@ -19,7 +19,7 @@
 #include "lib/test/run.hpp"
 #include "steam/engine/proc-node.hpp"
 #include "steam/engine/node-builder.hpp"
-#include "steam/engine/weaving-pattern.hpp"
+#include "steam/engine/media-weaving-pattern.hpp"
 #include "steam/engine/turnout-system.hpp"
 #include "steam/engine/turnout.hpp"
 #include "steam/engine/diagnostic-buffer-provider.hpp"
@@ -49,6 +49,7 @@ namespace test  {
       run (Arg)
         {
           feedParam();
+          feedParamNode();
           UNIMPLEMENTED ("render node pulling source data from vault");
         }
       

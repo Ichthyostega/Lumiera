@@ -45,7 +45,7 @@
  **   and switches found in large railway stations.
  ** @see \ref proc-node.hpp "Overview of Render Node structures"
  ** @see turnout-system.hpp
- ** @see weaving-pattern.hpp
+ ** @see media-weaving-pattern.hpp
  ** @see weaving-pattern-builder.hpp
  ** [Railroad Turnout]: https://en.wikipedia.org/wiki/Railroad_turnout
  */
