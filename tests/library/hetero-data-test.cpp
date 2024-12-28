@@ -178,7 +178,7 @@ namespace test{
       /** @test demonstrate elaborate storage layout with several chain frames
        *      - follow-up frames shall be built using constructor types
        *      - these can be defined prior to any data allocation
-       *      - individual data elements can be accessed type-safe through accessor functors
+       *      - individual data elements can be accessed through type-safe accessor functors
        * @warning as demonstrated, this is a dangerous bare-bone memory layout without runtime checks!
        */
       void

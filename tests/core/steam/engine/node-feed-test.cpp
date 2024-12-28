@@ -20,6 +20,7 @@
 #include "steam/engine/proc-node.hpp"
 #include "steam/engine/node-builder.hpp"
 #include "steam/engine/media-weaving-pattern.hpp"
+#include "steam/engine/param-weaving-pattern.hpp"
 #include "steam/engine/turnout-system.hpp"
 #include "steam/engine/turnout.hpp"
 #include "steam/engine/diagnostic-buffer-provider.hpp"
@@ -104,7 +105,8 @@ namespace test  {
       void
       feedParamNode()
         {
-          TODO ("implement the logic for the TurnoutSystem --> node-base-test.cpp");
+          auto spec = buildParamSpec();
+SHOW_TYPE(decltype(spec))
           TODO ("implement a simple Builder for ParamAgent-Node");
           TODO ("then use both together to demonstrate a param data feed here");
         }

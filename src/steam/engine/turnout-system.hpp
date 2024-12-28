@@ -50,13 +50,6 @@ namespace engine {
   using lib::time::Time;
   using ProcessKey = uint64_t;
   
-  template<typename VAL>
-  class ParamStorageFrame
-    : util::NonCopyable
-    {
-      
-    };
-
 
   /**
    * Communication hub to coordinate and activate the »Render Node Network« performance.
@@ -65,12 +58,18 @@ namespace engine {
    * and initiates the recursive pull()-call into the render node network as attached for this call.
    */
   class TurnoutSystem
+    : util::NonCopyable
     {
-      /////////////////////////////////////////////////////////OOO Storage: ich brauche Overflow-Buckets. KISS ==> erst mal intrusive linked List
+    public:
+      using FrontBlock = lib::HeteroData<Time,ProcessKey>;
+      
+    private:
+      FrontBlock invoParam_;
+      
     public:
       TurnoutSystem (Time absoluteNominalTime, ProcessKey procKey =0)
+        : invoParam_{FrontBlock::build (absoluteNominalTime,procKey)}
         { }
-      // this is a copyable front-end object
     };
     
     
