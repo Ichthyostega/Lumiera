@@ -131,6 +131,9 @@ SHOW_EXPR(v0)
 SHOW_EXPR(v1)
 
           auto paramBlock = spec.buildParamDataBlock (turnoutSys);
+SHOW_EXPR(paramBlock)
+SHOW_EXPR(paramBlock.get<0>())
+SHOW_EXPR(paramBlock.get<1>())
           
           TODO ("implement a simple Builder for ParamAgent-Node");
           TODO ("then use both together to demonstrate a param data feed here");

@@ -113,9 +113,11 @@ namespace engine {
       typename ChainCons::NewFrame
       buildParamDataBlock (TurnoutSystem& turnoutSys)
         {
-          auto invoke = [&](auto& fun) { return fun(turnoutSys); };
-          ParamTup params = lib::meta::mapEach(functors_, invoke);
-          //////////////////////////////////////////////////////////////OOO now need to extract them
+          return std::apply ([&](auto&&... paramFun)
+                                  {  //    invoke parameter-functors and build NewFrame from results
+                                    return ChainCons::build (paramFun (turnoutSys) ...);
+                                  }
+                            ,functors_);
         }
       
       
