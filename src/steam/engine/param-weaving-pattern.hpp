@@ -102,6 +102,23 @@ namespace engine {
           return addSlot ([paramVal](TurnoutSystem&){ return paramVal; });
         }
       
+      /** @internal the _chain constructor type_ is a type rebinding meta function (nested struct),
+       * which extends the HeteroData chain given by \a ANK with the sequence of types derived from
+       * the result-values of all functors stored in the ParamBuildSpec, i.e. the resulting param tuple.
+       * @remark HeteroData defines a nested struct `Chain`, and with the help of `RebindVariadic`,
+       *         the type sequence from the ParamTup can be used to instantiate this Chain context.
+       */
+      using ChainCons = typename lib::meta::RebindVariadic<ANK::template Chain, ParamTup>::Type;
+      
+      typename ChainCons::NewFrame
+      buildParamDataBlock (TurnoutSystem& turnoutSys)
+        {
+          auto invoke = [&](auto& fun) { return fun(turnoutSys); };
+          ParamTup params = lib::meta::mapEach(functors_, invoke);
+          //////////////////////////////////////////////////////////////OOO now need to extract them
+        }
+      
+      
       template<size_t slot>
       class Slot
         : util::MoveOnly
@@ -118,6 +135,17 @@ namespace engine {
           invokeParamFun (TurnoutSystem& turnoutSys)
             {
               return std::get<slot> (spec_.functors_) (turnoutSys);
+            }
+          
+          /** a getter functor able to work on the full extended HeteroData-Chain
+           * @remark the front-end of this chain resides in TurnoutSystem */
+          using Accessor = typename ChainCons::template Accessor<slot>;
+          static auto makeAccessor() { return Accessor{}; }
+          
+          static auto&
+          getParamVal (TurnoutSystem& turnoutSys)
+            {
+              return turnoutSys.get (makeAccessor());
             }
         };
       

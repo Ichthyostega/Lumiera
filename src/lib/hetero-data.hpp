@@ -204,7 +204,7 @@ namespace lib {
       /**
        * Accessor-functor to get at the data residing within some tuple element
        * Using the enclosing typed scope to ensure safe storage access
-       * @tparam slot numer of the data element, counting from zero over the full chain
+       * @tparam slot number of the data element, counting from zero over the full chain
        * @note this functor holds no data, but shall be applied to some existing HeteroData.
        */
       template<size_t slot>

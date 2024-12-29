@@ -67,6 +67,10 @@ namespace engine {
            };
       
     private:
+      template<class SPEC, size_t idx>
+      using Accessor = typename lib::HeteroData<SPEC>::template Accessor<idx>;
+      
+      
       FrontBlock invoParam_;
       
     public:
@@ -78,6 +82,26 @@ namespace engine {
       getNomTime()
         {
           return invoParam_.get<SLOT_TIME>();
+        }
+      
+      ProcessKey
+      getProcKey()
+        {
+          return invoParam_.get<SLOT_KEY>();
+        }
+      
+      template<class SPEC, size_t idx>
+      auto&
+      get (Accessor<SPEC,idx> const& getter)
+        {
+          return getter.get (invoParam_);
+        }
+      
+      template<class CHAIN>
+      void
+      attachChainBlock (CHAIN& chainBlock)
+        {
+          chainBlock.linkInto (invoParam_);
         }
     };
     

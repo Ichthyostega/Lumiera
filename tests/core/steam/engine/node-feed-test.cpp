@@ -129,6 +129,9 @@ SHOW_TYPE(Spec::ParamTup)
           auto v1 = spec.slot<1>().invokeParamFun (turnoutSys);
 SHOW_EXPR(v0)
 SHOW_EXPR(v1)
+
+          auto paramBlock = spec.buildParamDataBlock (turnoutSys);
+          
           TODO ("implement a simple Builder for ParamAgent-Node");
           TODO ("then use both together to demonstrate a param data feed here");
         }
