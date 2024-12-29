@@ -47,6 +47,7 @@ namespace error = lumiera::error;
 
 #include "lib/time/timequant.hpp"
 #include "lib/time/quantiser.hpp"
+#include "lib/time/timecode.hpp"
 #include "lib/time/mutation.hpp"
 #include "common/advice.hpp"
 
@@ -97,6 +98,20 @@ namespace time {
   {
     return retrieveQuantiser (gridID);
   }
+  
+  /**
+   * @remark Handles the common case to determine the frame number relative to some time grid.
+   *         The regular path for this conversion would be to have a quantiser for this grid,
+   *         to construct a QuTime and then a FrameNr instance based on this QuTime. Assuming
+   *         that the grid is actually well-known and was registered via Advice-System with
+   *         a symbolic ID, the quantiser can directly be retrieved and applied to convert.
+   */
+  FrameCnt
+  FrameNr::quant (Time const& time, Symbol gridID)
+  {
+    return Quantiser::retrieve(gridID)->gridPoint (time);
+  }
+  
   
   
   /** build a time mutation to \em nudge the target time value in steps based on a pre-defined grid.

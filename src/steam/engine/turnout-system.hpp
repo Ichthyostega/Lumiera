@@ -62,6 +62,9 @@ namespace engine {
     {
     public:
       using FrontBlock = lib::HeteroData<Time,ProcessKey>;
+      enum {SLOT_TIME = 0
+           ,SLOT_KEY  = 1
+           };
       
     private:
       FrontBlock invoParam_;
@@ -70,6 +73,12 @@ namespace engine {
       TurnoutSystem (Time absoluteNominalTime, ProcessKey procKey =0)
         : invoParam_{FrontBlock::build (absoluteNominalTime,procKey)}
         { }
+      
+      Time
+      getNomTime()
+        {
+          return invoParam_.get<SLOT_TIME>();
+        }
     };
     
     

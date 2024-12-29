@@ -43,6 +43,9 @@
 #include "steam/engine/turnout.hpp"
 #include "steam/engine/turnout-system.hpp"
 #include "steam/engine/feed-manifold.hpp" ////////////TODO wegdamit
+#include "lib/meta/function.hpp"
+#include "lib/meta/variadic-helper.hpp"
+#include "lib/meta/tuple-helper.hpp"
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
 //#include "vault/gear/job.h"
 //#include "steam/engine/exit-node.hpp"
@@ -64,6 +67,8 @@ namespace steam {
 namespace engine {
   
   using std::move;
+  using std::forward;
+  using std::make_tuple;
   using std::tuple;
   using lib::Several;////TODO RLY?
   
@@ -73,11 +78,53 @@ namespace engine {
     {
       using Functors = tuple<FUNZ...>;
       
+      using ResTypes = typename lib::meta::ElmTypes<Functors>::template Apply<lib::meta::_FunRet>;
+      using ParamTup = lib::meta::Tuple<ResTypes>;
+      
       Functors functors_;
       
       ParamBuildSpec (Functors&& funz)
         : functors_{move (funz)}
         { }
+      
+      template<typename FUN>
+      auto
+      addSlot (FUN&& paramFun)
+        {
+          return ParamBuildSpec<ANK,FUNZ...,FUN>{std::tuple_cat (move(functors_)
+                                                                ,make_tuple (forward<FUN>(paramFun)))};
+        }
+      
+      template<typename PAR>
+      auto
+      addValSlot (PAR paramVal)
+        {
+          return addSlot ([paramVal](TurnoutSystem&){ return paramVal; });
+        }
+      
+      template<size_t slot>
+      class Slot
+        : util::MoveOnly
+        {
+          ParamBuildSpec& spec_;
+          
+          Slot (ParamBuildSpec& spec)
+            : spec_{spec}
+            { }
+          friend class ParamBuildSpec;
+          
+        public:
+          auto
+          invokeParamFun (TurnoutSystem& turnoutSys)
+            {
+              return std::get<slot> (spec_.functors_) (turnoutSys);
+            }
+        };
+      
+      template<size_t idx>
+      Slot<idx>
+      slot()
+        { return *this; }
     };
   
   auto

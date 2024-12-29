@@ -107,6 +107,9 @@ namespace time {
       
       FrameNr (QuTime const& quantisedTime);
       
+      /** convenience shortcut: time grid to frame number */
+      static FrameCnt quant (Time const&, Symbol gridID);// defined in common-services.cpp
+      
       using TCode::operator string;
      // CountVal implicitly convertible to long      ///////////TICKET #882 : outch! should be a 64bit type!
     };

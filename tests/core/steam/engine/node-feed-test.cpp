@@ -24,7 +24,9 @@
 #include "steam/engine/turnout-system.hpp"
 #include "steam/engine/turnout.hpp"
 #include "steam/engine/diagnostic-buffer-provider.hpp"
+#include "steam/asset/meta/time-grid.hpp"
 #include "lib/several-builder.hpp"
+#include "lib/time/timecode.hpp"
 #include "lib/test/diagnostic-output.hpp"/////////////////////TODO
 //#include "lib/util.hpp"
 
@@ -32,6 +34,8 @@
 //using std::string;
 using lib::Several;
 using lib::makeSeveral;
+using lib::time::Time;
+using lib::time::FSecs;
 
 
 namespace steam {
@@ -105,8 +109,26 @@ namespace test  {
       void
       feedParamNode()
         {
-          auto spec = buildParamSpec();
-SHOW_TYPE(decltype(spec))
+          steam::asset::meta::TimeGrid::build("grid_sec", 1);
+          
+          auto fun1 = [](TurnoutSystem& turSys)
+                        {
+                          return lib::time::FrameNr::quant (turSys.getNomTime(), "grid_sec");
+                        };
+          
+          auto spec = buildParamSpec()
+                        .addValSlot (LIFE_AND_UNIVERSE_4EVER)
+                        .addSlot (move (fun1))
+                        ;
+          using Spec = decltype(spec);
+SHOW_TYPE(Spec)
+SHOW_TYPE(Spec::ParamTup)
+          
+          TurnoutSystem turnoutSys{Time{FSecs(5,2)}};
+          auto v0 = spec.slot<0>().invokeParamFun (turnoutSys);
+          auto v1 = spec.slot<1>().invokeParamFun (turnoutSys);
+SHOW_EXPR(v0)
+SHOW_EXPR(v1)
           TODO ("implement a simple Builder for ParamAgent-Node");
           TODO ("then use both together to demonstrate a param data feed here");
         }
