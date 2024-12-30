@@ -110,6 +110,8 @@ namespace lib {
       
       template<typename SPEC>
       void linkInto (HeteroData<SPEC>&);
+      template<typename SPEC>
+      void detachFrom (HeteroData<SPEC>&);
       
       template<size_t slot> auto& get() noexcept { return std::get<slot>(*this); }
       template<typename X>  auto& get() noexcept { return std::get<X>(*this);    }
@@ -143,7 +145,8 @@ namespace lib {
       _Tail&
       accessTail()
         {
-          REQUIRE (Frame::next, "HeteroData storage logic broken: follow-up extent not yet allocated");
+          if (Frame::next == nullptr) // Halt system by breaking noexcept
+            throw lumiera::error::Fatal{"HeteroData storage logic broken: follow-up extent not(yet) allocated"};
           return * reinterpret_cast<_Tail*> (Frame::next);
         }
       
@@ -341,6 +344,32 @@ namespace lib {
              , segments);
       return last->next;
     }
+    
+    /**
+     * @internal detach the HeteroData-chain at the link to the given chainBlock.
+     *  This enables some additional data sanity, because the internal chain can
+     *  thus be severed when an extension data block is known to go out of scope.
+     *  If somehow a store accessor is used after that point, the system will
+     *  be halted when attempting to navigate to the (now defunct) data block.
+     */
+    inline void
+    checkedDetach (size_t segments, StorageLoc* seg, void* chainBlock)
+    {
+      REQUIRE(seg);
+      while (segments and seg->next)
+        if (segments == 1 and seg->next == chainBlock)
+          {
+            seg->next = nullptr;
+            return;
+          }
+        else
+          {
+            seg = seg->next;
+            --segments;
+          }
+      NOTREACHED ("Failure to detach a data segment from HeteroData: "
+                  "assumed type structure does not match real connectivity");
+    }
   }//(End)helper
   
   
@@ -368,6 +397,16 @@ namespace lib {
     StorageLoc*& lastLink = checkedTraversal (seg, firstSeg);
     ENSURE (lastLink == nullptr);
     lastLink = this;
+  }
+  
+  /** cleanly detach this storage frame from the HeteroData prefix-chain. */
+  template<size_t seg, typename...DATA>
+  template<typename SPEC>
+  inline void
+  StorageFrame<seg,DATA...>::detachFrom (HeteroData<SPEC>& prefixChain)
+  {
+    StorageLoc*  firstSeg = reinterpret_cast<StorageLoc*> (&prefixChain);
+    checkedDetach (seg, firstSeg, this);
   }
 }// namespace lib
 

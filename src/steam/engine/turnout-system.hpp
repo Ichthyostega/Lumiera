@@ -67,10 +67,6 @@ namespace engine {
            };
       
     private:
-      template<class SPEC, size_t idx>
-      using Accessor = typename lib::HeteroData<SPEC>::template Accessor<idx>;
-      
-      
       FrontBlock invoParam_;
       
     public:
@@ -90,18 +86,30 @@ namespace engine {
           return invoParam_.get<SLOT_KEY>();
         }
       
-      template<class SPEC, size_t idx>
+      template<class ACC>
       auto&
-      get (Accessor<SPEC,idx> const& getter)
+      get (ACC const& getter)
         {
           return getter.get (invoParam_);
         }
       
+      /** attach an extension block with further parameters
+       *  as HeteroData-chain to the embedded FrontBlock
+       * @note structural properties must match, which
+       *       is ensured when using a ParamBuildSpec.
+       */
       template<class CHAIN>
       void
       attachChainBlock (CHAIN& chainBlock)
         {
           chainBlock.linkInto (invoParam_);
+        }
+      
+      template<class CHAIN>
+      void
+      detachChainBlock (CHAIN& chainBlock)
+        {
+          chainBlock.detachFrom (invoParam_);
         }
     };
     

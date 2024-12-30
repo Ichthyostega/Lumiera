@@ -27,6 +27,7 @@
 #include "steam/asset/meta/time-grid.hpp"
 #include "lib/several-builder.hpp"
 #include "lib/time/timecode.hpp"
+#include "lib/test/test-helper.hpp"
 #include "lib/test/diagnostic-output.hpp"/////////////////////TODO
 //#include "lib/util.hpp"
 
@@ -36,12 +37,13 @@ using lib::Several;
 using lib::makeSeveral;
 using lib::time::Time;
 using lib::time::FSecs;
+using lib::time::FrameNr;
+using lib::test::showType;
 
 
 namespace steam {
 namespace engine{
 namespace test  {
-  
   
   
   
@@ -53,6 +55,7 @@ namespace test  {
       virtual void
       run (Arg)
         {
+          seedRand();
           feedParam();
           feedParamNode();
           UNIMPLEMENTED ("render node pulling source data from vault");
@@ -105,36 +108,73 @@ namespace test  {
           result.release();
         }
       
-      /** @test create extended parameter data for use in recursive Node invocation */
+      
+      /** @test create extended parameter data for use in recursive Node invocation.
+       *      - demonstrate the mechanism of param-functor invocation,
+       *        and how a Param-Spec is built to create and hold those functors
+       *      - then instantiate an actual TurnoutSystem, as is done for a Node invocation,
+       *        with an embedded »absolute nominal time« parameter value
+       *      - can then invoke the param-functors and materialise results into a Param-Data-Block
+       *      - which then can be linked internally to be reachable through the TurnoutSystem
+       *      - other code further down the call-stack can thus access those parameter values.
+       *      - The second part of the test uses the same scheme embedded into a Param(Agent)Node
+       */
       void
       feedParamNode()
         {
           steam::asset::meta::TimeGrid::build("grid_sec", 1);
           
+          // Parameter-functor based on time-quantisation into a 1-seconds-grid
           auto fun1 = [](TurnoutSystem& turSys)
                         {
-                          return lib::time::FrameNr::quant (turSys.getNomTime(), "grid_sec");
+                          return FrameNr::quant (turSys.getNomTime(), "grid_sec");
                         };
           
+          // The Param-Spec is used to coordinate type-safe access
+          // and also is used as a blueprint for building a Param(Agent)Node
           auto spec = buildParamSpec()
                         .addValSlot (LIFE_AND_UNIVERSE_4EVER)
                         .addSlot (move (fun1))
                         ;
-          using Spec = decltype(spec);
-SHOW_TYPE(Spec)
-SHOW_TYPE(Spec::ParamTup)
           
-          TurnoutSystem turnoutSys{Time{FSecs(5,2)}};
+          // The implied type of the parameter-tuple to generate
+          using ParamTup = decltype(spec)::ParamTup;
+          CHECK (showType<ParamTup>() == "tuple<uint, long>"_expect);
+          
+          // can now store accessor-functors for later use....
+          auto acc0 = spec.slot<0>().makeAccessor();
+          auto acc1 = spec.slot<1>().makeAccessor();
+          
+          // drive test with a random »nominal Time« <10s with ms granularity
+          Time nomTime{rani(10'000),0};
+          TurnoutSystem turnoutSys{nomTime};
+          // can now immediately invoke the embedded parameter-functors
           auto v0 = spec.slot<0>().invokeParamFun (turnoutSys);
           auto v1 = spec.slot<1>().invokeParamFun (turnoutSys);
-SHOW_EXPR(v0)
-SHOW_EXPR(v1)
+          CHECK (v0 == LIFE_AND_UNIVERSE_4EVER);                      // ◁————————— the first paramFun yields the configured fixed value
+          CHECK (v1 == FrameNr::quant (nomTime, "grid_sec"));         // ◁————————— the second paramFun accesses the time in TurnoutSystem
 
-          auto paramBlock = spec.buildParamDataBlock (turnoutSys);
-SHOW_EXPR(paramBlock)
-SHOW_EXPR(paramBlock.get<0>())
-SHOW_EXPR(paramBlock.get<1>())
-          
+          {  //  Now build an actual storage block in local scope,
+            //   thereby invoking the embedded parameter-functors...
+            auto paramBlock = spec.buildParamDataBlock (turnoutSys);
+            // Values are now materialised into paramBlock
+            CHECK (v0 == paramBlock.get<0>());
+            CHECK (v1 == paramBlock.get<1>());
+            
+            // link this extension block into the parameter-chain in TurnoutSystem
+            turnoutSys.attachChainBlock(paramBlock);
+            
+            // can now access the parameter values through the TurnoutSystem as front-End
+            CHECK (v0 == spec.slot<0>().getParamVal (turnoutSys));
+            CHECK (v1 == spec.slot<1>().getParamVal (turnoutSys));
+            // and can also use the accessor-functors stored above
+            CHECK (v0 == turnoutSys.get(acc0));
+            CHECK (v1 == turnoutSys.get(acc1));
+            
+            // should detach extension block before leaving scope
+            turnoutSys.detachChainBlock(paramBlock);
+          }
+
           TODO ("implement a simple Builder for ParamAgent-Node");
           TODO ("then use both together to demonstrate a param data feed here");
         }
