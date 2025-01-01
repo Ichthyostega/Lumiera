@@ -255,6 +255,12 @@ namespace lib {
             {
               return {initArgs ...}; // Note: NewFrame is non-copyable
             }
+          template<typename...INIT>
+          static NewFrame&
+          emplace (void* storage, INIT&& ...initArgs)   ///< placement-new flavour of the builder notation
+            {
+              return * new(storage) NewFrame{initArgs ...};
+            }
           
           template<class HET>
           static auto&

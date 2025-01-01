@@ -75,7 +75,7 @@ namespace lib {
    * @tparam T   the nominal type assumed to sit in each »slot«
    * @tparam cnt number of »slots« in the array
    */
-  template<typename T, size_t cnt>
+  template<typename T, size_t cnt =1>
   class UninitialisedStorage
     {
       using _Arr = std::array<T,cnt>;

@@ -43,19 +43,13 @@
 #include "steam/engine/turnout.hpp"
 #include "steam/engine/turnout-system.hpp"
 #include "steam/engine/feed-manifold.hpp" ////////////TODO wegdamit
-#include "lib/meta/function.hpp"
+#include "lib/uninitialised-storage.hpp"
 #include "lib/meta/variadic-helper.hpp"
 #include "lib/meta/tuple-helper.hpp"
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
-//#include "vault/gear/job.h"
-//#include "steam/engine/exit-node.hpp"
-//#include "lib/time/timevalue.hpp"
-//#include "lib/linked-elements.hpp"
+#include "lib/meta/function.hpp"
 #include "lib/several.hpp"
-//#include "lib/util-foreach.hpp"
-//#include "lib/iter-adapter.hpp"
-//#include "lib/meta/function.hpp"
-//#include "lib/itertools.hpp"
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
+//#include "lib/time/timevalue.hpp"
 //#include "lib/util.hpp"      ////////OOO wegen manifoldSiz<FUN>()
 
 //#include <stack>
@@ -110,6 +104,7 @@ namespace engine {
        */
       using ChainCons = typename lib::meta::RebindVariadic<ANK::template Chain, ParamTup>::Type;
       
+      /** invoke all parameter-functors and _drop off_ the result into a »chain-block« (non-copyable) */
       typename ChainCons::NewFrame
       buildParamDataBlock (TurnoutSystem& turnoutSys)
         {
@@ -118,6 +113,17 @@ namespace engine {
                                     return ChainCons::build (paramFun (turnoutSys) ...);
                                   }
                             ,functors_);
+        }
+      
+      /** invoke all parameter-functors and package all results by placement-new into a »chain-block« */
+      void
+      emplaceParamDataBlock (void* storage, TurnoutSystem& turnoutSys)
+        {
+          std::apply ([&](auto&&... paramFun)
+                          {  //    invoke parameter-functors and build NewFrame from results
+                            ChainCons::emplace (storage, paramFun (turnoutSys) ...);
+                          }
+                    ,functors_);
         }
       
       
@@ -167,86 +173,57 @@ namespace engine {
     /**
      * Implementation for a _Weaving Pattern_ to conduct extended parameter evaluation.
      */
-  template<class INVO>
+  template<class SPEC>
   struct ParamWeavingPattern
-    : INVO
+    : util::MoveOnly
     {
-      using Feed = typename INVO::Feed;
+      using Functors = typename SPEC::Functors;
+      using DataBlock = typename SPEC::ChainCons::NewFrame;
       
-      static_assert (_verify_usable_as_InvocationAdapter<Feed>());
+      Functors paramFunctors;
       
-      Several<PortRef>   leadPort;
-      Several<BuffDescr> outTypes;
+      struct Feed
+        : util::NonCopyable
+        {
+          lib::UninitialisedStorage<DataBlock> buffer;
+        };
       
-      uint resultSlot{0};
       
       /** forwarding-ctor to provide the detailed input/output connections */
       template<typename...ARGS>
-      ParamWeavingPattern (Several<PortRef>&&   pr
-                          ,Several<BuffDescr>&& dr
-                          ,uint resultIdx
-                          ,ARGS&& ...args)
-        : INVO{forward<ARGS>(args)...}
-        , leadPort{move(pr)}
-        , outTypes{move(dr)}
-        , resultSlot{resultIdx}
+      ParamWeavingPattern (Functors funTup)
+        : paramFunctors{move (funTup)}
         { }
       
       
       Feed
       mount (TurnoutSystem& turnoutSys)
         {
-          ENSURE (leadPort.size() <= INVO::FAN_I);
-          ENSURE (outTypes.size() <= INVO::FAN_O);
-          return INVO::buildFeed (turnoutSys);
+          return Feed{};
         }
       
       void
       pull (Feed& feed, TurnoutSystem& turnoutSys)
         {
-          if constexpr (Feed::hasInput())
-            for (uint i=0; i<leadPort.size(); ++i)
-              {
-                BuffHandle inputData = leadPort[i].get().weave (turnoutSys);
-                feed.inBuff.createAt(i, move(inputData));
-              }
+          UNIMPLEMENTED ("pull parameter functors");
         }
       
       void
       shed (Feed& feed, OptionalBuff outBuff)
         {
-          for (uint i=0; i<outTypes.size(); ++i)
-              {
-                BuffHandle resultData =
-                  i == resultSlot and outBuff? *outBuff
-                                             : outTypes[i].lockBuffer();
-                feed.outBuff.createAt(i, move(resultData));
-              }
-          feed.connect();
+          UNIMPLEMENTED ("connect and postprocess");
         }
       
       void
       weft (Feed& feed)
         {
-          feed.invoke();                 // process data
+          UNIMPLEMENTED ("forward to delegate");
         }
       
       BuffHandle
       fix (Feed& feed)
         {
-          if constexpr (Feed::hasInput())
-            for (uint i=0; i<leadPort.size(); ++i)
-              {
-                feed.inBuff[i].release();
-              }
-          for (uint i=0; i<outTypes.size(); ++i)
-              {
-                feed.outBuff[i].emit();    // state transition: data ready
-                if (i != resultSlot)
-                  feed.outBuff[i].release();
-              }
-          ENSURE (resultSlot < INVO::FAN_O, "invalid result buffer configured.");
-          return feed.outBuff[resultSlot];
+          UNIMPLEMENTED ("clean-up and return result buff");
         }
       
     };

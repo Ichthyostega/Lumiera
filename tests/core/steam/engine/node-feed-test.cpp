@@ -175,6 +175,14 @@ namespace test  {
             turnoutSys.detachChainBlock(paramBlock);
           }
 
+          using Spec = decltype(spec);
+          using WaPa = ParamWeavingPattern<Spec>;
+          using Feed = WaPa::Feed;
+          
+          Feed feed;
+          spec.emplaceParamDataBlock (& feed.buffer[0], turnoutSys);
+SHOW_EXPR(feed.buffer[0].get<0>())
+SHOW_EXPR(feed.buffer[0].get<1>())
           TODO ("implement a simple Builder for ParamAgent-Node");
           TODO ("then use both together to demonstrate a param data feed here");
         }
