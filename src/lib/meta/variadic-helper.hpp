@@ -46,6 +46,7 @@
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/typelist-util.hpp"
 #include "lib/meta/typeseq-util.hpp"
+#include "lib/meta/variadic-rebind.hpp"
 #include "lib/meta/util.hpp"
 
 namespace lib {
@@ -166,7 +167,7 @@ namespace meta {
   
   
   
-  
+#if false ////////////////////////////////////////////////////////////////////////////////TODO reorder  
   /* ==== Rebinding Variadic Arguments ==== **/
   
   /**
@@ -192,6 +193,7 @@ namespace meta {
   
   
   
+#endif ////////////////////////////////////////////////////////////////////////////////TODO reorder  
   
   
   

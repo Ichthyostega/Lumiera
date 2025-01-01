@@ -106,7 +106,7 @@
 #include "steam/engine/turnout.hpp"
 #include "steam/engine/turnout-system.hpp"
 #include "lib/uninitialised-storage.hpp"
-#include "lib/meta/variadic-helper.hpp"
+#include "lib/meta/variadic-rebind.hpp"
 #include "lib/meta/tuple-helper.hpp"
 #include "lib/meta/function.hpp"
 

@@ -28,6 +28,7 @@
 
 
 #include "lib/branch-case.hpp"
+#include "lib/meta/variadic-rebind.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/trait.hpp"
 #include "lib/regex.hpp"
@@ -47,6 +48,7 @@ namespace util {
     using lib::meta::_Fun;
     using lib::meta::has_Sig;
     using lib::meta::NullType;
+    using lib::meta::_Vari;
     using std::decay_t;
     using std::tuple;
     using std::array;
@@ -176,6 +178,7 @@ namespace util {
         Tup&& extractTuple() { return move(*this); }
       };
     
+    
     /**
      * Sum Model : results from a disjunction of parsing clauses,
      * which are are tested and accepted as alternatives, one at least.
@@ -184,13 +187,19 @@ namespace util {
     struct AltModel
       : lib::BranchCase<CASES...>
       {
-        using _Model = lib::BranchCase<CASES...>;
+        using Alt = lib::BranchCase<CASES...>;
         
         template<typename INIT,     typename =lib::meta::disable_if_self<AltModel,INIT>>
         AltModel (INIT&& init)
-          : _Model{_Model::TOP, forward<INIT> (init)}
+          : Alt{Alt::TOP, forward<INIT> (init)}
           { }
-          
+        
+        
+        
+        using SubSeq = typename _Vari<AltModel, CASES...>::Prefix;
+        using Penult = typename _Vari<AltModel, CASES...>::Penult;
+        using Ultima = typename _Vari<AltModel, CASES...>::Ultima;
+        
         template<typename EX>
         using Additionally = AltModel<CASES...,EX>;
         
@@ -201,6 +210,18 @@ namespace util {
             Additionally<EX>& upFaked = reinterpret_cast<Additionally<EX>&> (*this);
             return {move (upFaked)};
           }
+        
+        AltModel (SubSeq&& leftCases)
+          : AltModel{leftCases.template addBranch<Ultima>()}
+          { }
+        
+        AltModel (Penult&& leftCase)
+          : Alt{Alt::TOP-1, move(leftCase)}
+          { }
+        
+        AltModel (Ultima&& rightCase)
+          : Alt{Alt::TOP, move(rightCase)}
+          { }
       };
     
     
