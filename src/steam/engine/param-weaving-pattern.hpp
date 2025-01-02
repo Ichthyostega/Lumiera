@@ -201,15 +201,17 @@ namespace engine {
       using Functors = typename SPEC::Functors;
       using DataBlock = typename SPEC::ChainCons::NewFrame;
       using BlockBuilder = typename SPEC::BlockBuilder;
+      using PostProcessor = function<void(TurnoutSystem&)>;
       
       BlockBuilder blockBuilder_;
-      
-      function<void(TurnoutSystem&)> postProcess_;
+      PostProcessor postProcess_;
+      Port&        delegatePort_;
       
       struct Feed
         : util::NonCopyable
         {
           lib::UninitialisedStorage<DataBlock> buffer;
+          OptionalBuff outBuff;
           
           DataBlock& block() { return buffer[0]; }
           
@@ -222,39 +224,57 @@ namespace engine {
       
       
       /** forwarding-ctor to provide the detailed input/output connections */
-      ParamWeavingPattern (BlockBuilder builder)
+      ParamWeavingPattern (BlockBuilder builder, PostProcessor postProc, Port& delegate)
         : blockBuilder_{move (builder)}
+        , postProcess_{move (postProc)}
+        , delegatePort_{delegate}
         { }
       
       
+      /** Preparation: create a Feed data frame to use as local scope */
       Feed
       mount (TurnoutSystem& turnoutSys)
         {
           return Feed{};
         }
       
+      /** Invoke the parameter-functors to create the basic parameter data */
       void
       pull (Feed& feed, TurnoutSystem& turnoutSys)
         {
-          UNIMPLEMENTED ("pull parameter functors");
+          feed.emplaceParamDataBlock (blockBuilder_, turnoutSys);
         }
       
+      /** Link the param-data-block into the current TurnoutSystem,
+       *  possibly post-process the param data. From this point on,
+       *  nodes within the nested scope can draw from this data.
+       */
       void
-      shed (Feed& feed, OptionalBuff outBuff)
+      shed (Feed& feed, TurnoutSystem& turnoutSys, OptionalBuff outBuff)
         {
-          UNIMPLEMENTED ("connect and postprocess");
+          turnoutSys.attachChainBlock(feed.block());
+          feed.outBuff = outBuff;
+          if (postProcess_)
+            postProcess_(turnoutSys);
         }
       
+      /** recursively invoke the delegate port, while the generated
+       *  parameter-data is indirectly reachable through the TurnoutSystem
+       */
       void
-      weft (Feed& feed)
+      weft (Feed& feed, TurnoutSystem& turnoutSys)
         {
-          UNIMPLEMENTED ("forward to delegate");
+          feed.outBuff = delegatePort_.weave (turnoutSys, feed.outBuff);
         }
       
+      /** clean-up: detach the parameter-data-block.
+       * @return the output buffer produced by the recursive delegate call.
+       */
       BuffHandle
-      fix (Feed& feed)
+      fix (Feed& feed, TurnoutSystem& turnoutSys)
         {
-          UNIMPLEMENTED ("clean-up and return result buff");
+          turnoutSys.detachChainBlock(feed.block());
+          return feed.outBuff;
         }
       
     };

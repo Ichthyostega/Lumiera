@@ -94,9 +94,9 @@ namespace engine {
     using Feed = typename PAT::Feed;
     ASSERT_MEMBER_FUNCTOR (&PAT::mount, Feed(TurnoutSystem&));
     ASSERT_MEMBER_FUNCTOR (&PAT::pull, void(Feed&, TurnoutSystem&));
-    ASSERT_MEMBER_FUNCTOR (&PAT::shed, void(Feed&, OptionalBuff));
-    ASSERT_MEMBER_FUNCTOR (&PAT::weft, void(Feed&));
-    ASSERT_MEMBER_FUNCTOR (&PAT::fix,  BuffHandle(Feed&));
+    ASSERT_MEMBER_FUNCTOR (&PAT::shed, void(Feed&, TurnoutSystem&, OptionalBuff));
+    ASSERT_MEMBER_FUNCTOR (&PAT::weft, void(Feed&, TurnoutSystem&));
+    ASSERT_MEMBER_FUNCTOR (&PAT::fix,  BuffHandle(Feed&, TurnoutSystem&));
     return sizeof(PAT);
   }
   
@@ -135,9 +135,9 @@ namespace engine {
         {
           Feed feed = PAT::mount (turnoutSys);
           PAT::pull (feed, turnoutSys);
-          PAT::shed (feed, outBuff);
-          PAT::weft (feed);
-          return PAT::fix (feed);
+          PAT::shed (feed, turnoutSys, outBuff);
+          PAT::weft (feed, turnoutSys);
+          return PAT::fix (feed, turnoutSys);
         }
     };
 

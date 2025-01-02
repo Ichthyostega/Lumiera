@@ -219,7 +219,7 @@ namespace engine {
         }
       
       void
-      shed (Feed& feed, OptionalBuff outBuff)
+      shed (Feed& feed, TurnoutSystem&, OptionalBuff outBuff)
         {
           for (uint i=0; i<outTypes.size(); ++i)
               {
@@ -232,13 +232,13 @@ namespace engine {
         }
       
       void
-      weft (Feed& feed)
+      weft (Feed& feed, TurnoutSystem&)
         {
           feed.invoke();                 // process data
         }
       
       BuffHandle
-      fix (Feed& feed)
+      fix (Feed& feed, TurnoutSystem&)
         {
           if constexpr (Feed::hasInput())
             for (uint i=0; i<leadPort.size(); ++i)
