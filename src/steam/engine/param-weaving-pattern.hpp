@@ -62,6 +62,7 @@ namespace engine {
   
   using std::move;
   using std::forward;
+  using std::function;
   using std::make_tuple;
   using std::tuple;
   using lib::Several;////TODO RLY?
@@ -96,6 +97,15 @@ namespace engine {
           return addSlot ([paramVal](TurnoutSystem&){ return paramVal; });
         }
       
+      
+      /** intended for unit-testing: invoke one of the embedded param-functors */
+      template<size_t slot>
+      auto
+      invokeParamFun (TurnoutSystem& turnoutSys)
+        {
+          return std::get<slot> (functors_) (turnoutSys);
+        }
+      
       /** @internal the _chain constructor type_ is a type rebinding meta function (nested struct),
        * which extends the HeteroData chain given by \a ANK with the sequence of types derived from
        * the result-values of all functors stored in the ParamBuildSpec, i.e. the resulting param tuple.
@@ -104,63 +114,74 @@ namespace engine {
        */
       using ChainCons = typename lib::meta::RebindVariadic<ANK::template Chain, ParamTup>::Type;
       
-      /** invoke all parameter-functors and _drop off_ the result into a »chain-block« (non-copyable) */
-      typename ChainCons::NewFrame
-      buildParamDataBlock (TurnoutSystem& turnoutSys)
-        {
-          return std::apply ([&](auto&&... paramFun)
-                                  {  //    invoke parameter-functors and build NewFrame from results
-                                    return ChainCons::build (paramFun (turnoutSys) ...);
-                                  }
-                            ,functors_);
-        }
       
-      /** invoke all parameter-functors and package all results by placement-new into a »chain-block« */
-      void
-      emplaceParamDataBlock (void* storage, TurnoutSystem& turnoutSys)
-        {
-          std::apply ([&](auto&&... paramFun)
-                          {  //    invoke parameter-functors and build NewFrame from results
-                            ChainCons::emplace (storage, paramFun (turnoutSys) ...);
-                          }
-                    ,functors_);
-        }
-      
-      
+      /** a (static) getter functor able to work on the full extended HeteroData-Chain
+       * @remark the front-end of this chain resides in TurnoutSystem */
       template<size_t slot>
-      class Slot
+      struct Accessor
         : util::MoveOnly
         {
-          ParamBuildSpec& spec_;
-          
-          Slot (ParamBuildSpec& spec)
-            : spec_{spec}
-            { }
-          friend class ParamBuildSpec;
-          
-        public:
-          auto
-          invokeParamFun (TurnoutSystem& turnoutSys)
-            {
-              return std::get<slot> (spec_.functors_) (turnoutSys);
-            }
-          
-          /** a getter functor able to work on the full extended HeteroData-Chain
-           * @remark the front-end of this chain resides in TurnoutSystem */
-          using Accessor = typename ChainCons::template Accessor<slot>;
-          static auto makeAccessor() { return Accessor{}; }
-          
           static auto&
           getParamVal (TurnoutSystem& turnoutSys)
             {
-              return turnoutSys.get (makeAccessor());
+              using StorageAccessor = typename ChainCons::template Accessor<slot>;
+              return turnoutSys.get (StorageAccessor());
             }
         };
       
       template<size_t idx>
-      Slot<idx>
-      slot()
-        { return *this; }
+      Accessor<idx>
+      makeAccessor()
+        {
+          return Accessor<idx>{};
+        }
+      
+      class BlockBuilder
+        : util::MoveOnly
+        {
+          Functors functors_;
+          
+        public:
+          /** invoke all parameter-functors and _drop off_ the result into a »chain-block« (non-copyable) */
+          typename ChainCons::NewFrame
+          buildParamDataBlock (TurnoutSystem& turnoutSys)
+            {
+              return std::apply ([&](auto&&... paramFun)
+                                      {  //    invoke parameter-functors and build NewFrame from results
+                                        return ChainCons::build (paramFun (turnoutSys) ...);
+                                      }
+                                ,functors_);
+            }
+          
+          /** invoke all parameter-functors and package all results by placement-new into a »chain-block« */
+          void
+          emplaceParamDataBlock (void* storage, TurnoutSystem& turnoutSys)
+            {
+              std::apply ([&](auto&&... paramFun)
+                              {  //    invoke parameter-functors and build NewFrame from results
+                                ChainCons::emplace (storage, paramFun (turnoutSys) ...);
+                              }
+                        ,functors_);
+            }
+          
+        private:
+          BlockBuilder (Functors&& funz)
+            : functors_{move (funz)}
+            { }
+          
+          friend class ParamBuildSpec;
+        };
+      
+      /**
+       * Terminal Builder: (destructively) transform this ParamBuildSpec
+       * into a BlockBuilder, which can then be used to create a Parameter data block,
+       * thereby invoking the embedded functors and drop-off the results into storage.
+       */
+      BlockBuilder
+      makeBlockBuilder()
+        {
+          return BlockBuilder (move (functors_));
+        }
     };
   
   auto
@@ -179,20 +200,30 @@ namespace engine {
     {
       using Functors = typename SPEC::Functors;
       using DataBlock = typename SPEC::ChainCons::NewFrame;
+      using BlockBuilder = typename SPEC::BlockBuilder;
       
-      Functors paramFunctors;
+      BlockBuilder blockBuilder_;
+      
+      function<void(TurnoutSystem&)> postProcess_;
       
       struct Feed
         : util::NonCopyable
         {
           lib::UninitialisedStorage<DataBlock> buffer;
+          
+          DataBlock& block() { return buffer[0]; }
+          
+          void
+          emplaceParamDataBlock (BlockBuilder& builder, TurnoutSystem& turnoutSys)
+            {
+              builder.emplaceParamDataBlock (&block(), turnoutSys);
+            }
         };
       
       
       /** forwarding-ctor to provide the detailed input/output connections */
-      template<typename...ARGS>
-      ParamWeavingPattern (Functors funTup)
-        : paramFunctors{move (funTup)}
+      ParamWeavingPattern (BlockBuilder builder)
+        : blockBuilder_{move (builder)}
         { }
       
       

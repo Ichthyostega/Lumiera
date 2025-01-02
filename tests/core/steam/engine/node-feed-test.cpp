@@ -142,21 +142,25 @@ namespace test  {
           CHECK (showType<ParamTup>() == "tuple<uint, long>"_expect);
           
           // can now store accessor-functors for later use....
-          auto acc0 = spec.slot<0>().makeAccessor();
-          auto acc1 = spec.slot<1>().makeAccessor();
+          auto acc0 = spec.makeAccessor<0>();
+          auto acc1 = spec.makeAccessor<1>();
           
           // drive test with a random »nominal Time« <10s with ms granularity
           Time nomTime{rani(10'000),0};
           TurnoutSystem turnoutSys{nomTime};
           // can now immediately invoke the embedded parameter-functors
-          auto v0 = spec.slot<0>().invokeParamFun (turnoutSys);
-          auto v1 = spec.slot<1>().invokeParamFun (turnoutSys);
+          auto v0 = spec.invokeParamFun<0> (turnoutSys);
+          auto v1 = spec.invokeParamFun<1> (turnoutSys);
           CHECK (v0 == LIFE_AND_UNIVERSE_4EVER);                      // ◁————————— the first paramFun yields the configured fixed value
           CHECK (v1 == FrameNr::quant (nomTime, "grid_sec"));         // ◁————————— the second paramFun accesses the time in TurnoutSystem
 
+          // after all setup of further accessor functors is done
+          // finally transform the ParamSpec into a storage-block-builder:
+          auto blockBuilder = spec.makeBlockBuilder();
+          
           {  //  Now build an actual storage block in local scope,
             //   thereby invoking the embedded parameter-functors...
-            auto paramBlock = spec.buildParamDataBlock (turnoutSys);
+            auto paramBlock = blockBuilder.buildParamDataBlock (turnoutSys);
             // Values are now materialised into paramBlock
             CHECK (v0 == paramBlock.get<0>());
             CHECK (v1 == paramBlock.get<1>());
@@ -165,11 +169,9 @@ namespace test  {
             turnoutSys.attachChainBlock(paramBlock);
             
             // can now access the parameter values through the TurnoutSystem as front-End
-            CHECK (v0 == spec.slot<0>().getParamVal (turnoutSys));
-            CHECK (v1 == spec.slot<1>().getParamVal (turnoutSys));
-            // and can also use the accessor-functors stored above
-            CHECK (v0 == turnoutSys.get(acc0));
-            CHECK (v1 == turnoutSys.get(acc1));
+            // using the pre-configured accessor-functors stored above
+            CHECK (v0 == acc0.getParamVal (turnoutSys));
+            CHECK (v1 == acc1.getParamVal (turnoutSys));
             
             // should detach extension block before leaving scope
             turnoutSys.detachChainBlock(paramBlock);
@@ -180,7 +182,7 @@ namespace test  {
           using Feed = WaPa::Feed;
           
           Feed feed;
-          spec.emplaceParamDataBlock (& feed.buffer[0], turnoutSys);
+          feed.emplaceParamDataBlock (blockBuilder, turnoutSys);
 SHOW_EXPR(feed.buffer[0].get<0>())
 SHOW_EXPR(feed.buffer[0].get<1>())
           TODO ("implement a simple Builder for ParamAgent-Node");
