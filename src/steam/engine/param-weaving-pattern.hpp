@@ -184,7 +184,7 @@ namespace engine {
         }
     };
   
-  auto
+  inline auto
   buildParamSpec()
     {
       return ParamBuildSpec<TurnoutSystem::FrontBlock>{tuple<>{}};

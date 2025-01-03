@@ -86,6 +86,8 @@
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
 #include "steam/engine/weaving-pattern-builder.hpp"
+#include "steam/engine/media-weaving-pattern.hpp"
+#include "steam/engine/param-weaving-pattern.hpp"
 #include "steam/engine/proc-node.hpp"
 #include "steam/engine/turnout.hpp"
 #include "lib/several-builder.hpp"
@@ -240,9 +242,10 @@ namespace engine {
       template<typename FUN>
       auto invoke (StrView portSpec, FUN fun);
       
-      /** specify an `InvocationAdapter` to use explicitly. */
-      template<class ADA, typename...ARGS>
-      auto adaptInvocation(ARGS&& ...args);
+      /** setup a »ParamAgentNode« to compute additional parameters
+       *  and then delegate into an existing node invocation. */
+      template<class SPEC>
+      auto computeParam(SPEC&&);
       
       
     private:
@@ -461,15 +464,91 @@ namespace engine {
       using WeavingBuilder_FUN = WeavingBuilder<POL, Prototype>;
       return PortBuilder<POL,DAT, WeavingBuilder_FUN>{move(*this), move(fun), portSpec};
     }
-/*
-  template<class POL>
-  template<class ADA, typename...ARGS>
-  auto
-  PortBuilderRoot<POL>::adaptInvocation(ARGS&& ...args)
+  
+  
+  
+  
+  /**
+   * Nested sub-Builder analogous to \ref PortBuilder, but for building  a _»Param Agent Node«._
+   * This will compute additional parameters and make them temporarily accessible through the
+   * TurnoutSystem of the invocation, but only while delegating recursively to another
+   * computation node, which can then draw upon these additional parameter values.
+   * @tparam SPEC a ParamBuildSpec, which is a sub-builder to define the parameter-functors
+   *              evaluated on each invocation to retrieve the actual parameter values
+   */
+  template<class POL, class DAT, class SPEC>
+  class ParamAgentBuilder
+    : public PortBuilderRoot<POL,DAT>
     {
-      return move(*this);
+      using _Par = PortBuilderRoot<POL,DAT>;
+      
+      using BlockBuilder = typename SPEC::BlockBuilder;
+      using PostProcessor = function<void(TurnoutSystem&)>;
+
+      BlockBuilder blockBuilder_;
+      PostProcessor postProcessor_;
+      Port* delegatePort_;
+      uint defaultPortNr_;
+
+    public:
+      
+      /*********************************************************************//**
+       * Terminal: complete the Param-Agent wiring and return to the node level.
+       * @remark this prepares a suitable Turnout instance for a port; it will
+       *         actually built later, together with other ports of this Node.
+       */
+      auto
+      completePort()
+        {
+          if (not delegatePort_)
+            throw err::Logic{"Building a ParamAgentNode requires a delegate node "
+                             "to perform within the scope with extended parameters"
+                            ,LERR_(BOTTOM_VALUE)};
+          string portSpec = "Par+"+delegatePort_->procID.genProcSpec();
+          
+          using WeavingPattern  = ParamWeavingPattern<SPEC>;
+          using TurnoutWeaving  = Turnout<WeavingPattern>;
+          using PortDataBuilder = DataBuilder<POL, Port>;
+          
+          return NodeBuilder ( static_cast<NodeBuilder<POL,DAT>&&> (*this) // slice away PortBulder subclass data
+                             , SizMark<sizeof(TurnoutWeaving)>{}
+                             ,// prepare a builder-λ to construct the actual Turnout-object
+                              [procID = ProcID::describe(_Par::symbol_,portSpec)
+                              ,builder = move(blockBuilder_)
+                              ,postProc = move(postProcessor_)
+                              ,delegate = delegatePort_
+                              ]
+                              (PortDataBuilder& portData) mutable -> void
+                                {
+                                  portData.template emplace<TurnoutWeaving> (procID
+                                                                            ,move(builder)
+                                                                            ,move(postProc)
+                                                                            ,*delegate
+                                                                            );
+                                });
+        }                     // chain back up to Node-Builder with extended patternData
+      
+    private:
+      template<typename FUN>
+      ParamAgentBuilder(_Par&& base, BlockBuilder&& builder)
+        : _Par{move(base)}
+        , blockBuilder_{move(builder)}
+        , delegatePort_{nullptr}
+        , defaultPortNr_{_Par::patternData_.size()}
+        { }                 // ^^^ by default use next free port
+      
+      friend class PortBuilderRoot<POL,DAT>;
+    };
+  
+  
+  template<class POL, class DAT>
+  template<class SPEC>
+  auto
+  PortBuilderRoot<POL,DAT>::computeParam(SPEC&& spec)
+    {
+      using ParamBuildSpec = std::decay_t<SPEC>;
+      return ParamAgentBuilder<POL,DAT,ParamBuildSpec>{spec.makeBlockBuilder()};
     }
-  */
   
   /**
    * Entrance point for building actual Render Node Connectivity (Level-2)
