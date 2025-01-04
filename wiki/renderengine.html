@@ -4774,7 +4774,7 @@ Moreover, the design of coordinate matching and resolving incurs a structure sim
 In the most general case the render network may be just a DAG (not just a tree). Especially, multiple exit points may lead down to the same node, and following each of this possible paths the node may be at a different depth on each. This rules out a simple counter starting from the exit level, leaving us with the possibility of either employing a rather convoluted addressing scheme or using arbitrary ID numbers.{{red{...which is what we do for now}}}
 </pre>
 </div>
-<div title="NodeOperationProtocol" modifier="Ichthyostega" created="200806010251" modified="202412221642" tags="Rendering operational rewrite" changecount="9">
+<div title="NodeOperationProtocol" modifier="Ichthyostega" created="200806010251" modified="202501040403" tags="Rendering operational rewrite" changecount="10">
 <pre>{{red{⚠ In-depth rework underway as of 12/2024...}}}
 The [[Render Nodes|ProcNode]] are wired to form a &quot;Directed Acyclic Graph&quot; ([[DAG|https://en.wikipedia.org/wiki/Directed_acyclic_graph]]); each node knows its predecessor(s), but not its successor(s).  The RenderProcess is organized according to the ''pull principle''. This implies that there is no central entity to „activate and apply“ nodes consecutively. Rather, the ExitNode is prompted to produce results -- and since the nodes are interconnected in accordance to their required prerequisite, the calculation plan works itself out recursively. However, some prerequisite resources must be provided before any calculation can start. Notably, loading source media data is an I/O-intensive task and can not be precisely timed. The actual calculation is broken down thus into atomic chunks of work, resulting in a 2-phase invocation scheme for generating data:
 ;planning phase
@@ -4782,6 +4782,7 @@ The [[Render Nodes|ProcNode]] are wired to form a &quot;Directed Acyclic Graph&q
 :# the planning is initiated by issuing an &quot;get me output&quot; request, finally resulting in a JobTicket
 :# recursively, the ticket propagates &quot;get me output&quot; requests for its prerequisites
 :# after retrieving the planning information for these prerequisites, the JobPlanning pipeline generates [[job definitions|RenderJob]] for each frame and exit node involed, as well as I/O-jobs for preparing the prerequisites
+:# this involves an //integration step// to arrange the order and the timings, so that the overall calculation can be carried out successfully; depending on the [[render or playback mode|NonLinearPlayback]], the planning works either backwards from a known deadline (for realtime playback), or forwards from »now+x« for a quality render to use //whatever it takes// to complete the computation
 :# finally, all these jobs are handed over to the [[Scheduler]].
 ;pull phase
 :now the actual node invocation is embedded within a job, activated through the scheduler to deliver //just in time.//
@@ -4812,6 +4813,12 @@ some points to note:
 &amp;rarr; the [[&quot;mechanics&quot; of the render process|RenderMechanics]]
 &amp;rarr; more fine grained [[implementation details|RenderImplDetails]]
 </pre>
+</div>
+<div title="NodePort" creator="Ichthyostega" modifier="Ichthyostega" created="202501040435" modified="202501040448" tags="Rendering def draft" changecount="2">
+<pre>//The actual processing units within a Render Node.//
+At a conceptual level, a »Node« represents a distinct processing functionality. But when it comes down to actually invoking the processing code, the operation is typically exposed in several flavours or configuration variations typically related to data format. E.g. a sound filtering node can be able to process stereo sound, but also deliver the filtering on the left or right channel in isolation. Or video image processing can be provided to work on various image resolutions, each requiring a different buffer layout. Any such processing variants are exposed as »''ports''« of the node.
+
+This seemingly redundant configuration is based on //fundamental reasoning:// The Lumiera Render Engine performs //pre-arranged primitive operations,// which are -- to the extent this is even possible -- deprived of active decision logic. Instead of letting the invocation „work out“ some technical details like buffer-sizes on-the-fly, there is a pre-canned set of ports, each with a viable pre-configuration, so that data elements can be passed ''without any further checks'' and adaptation steps. In this respect, the [[»Render Node Network«|LowLevelModel]] is similar to //assembly code:// It proceeds into processing of low-level data right away and takes compatibility of all data types, buffer sizes and invoked functors for granted</pre>
 </div>
 <div title="NonLinearPlayback" modifier="Ichthyostega" created="201301132217" modified="201402161739" tags="def Player Rendering draft" changecount="3">
 <pre>The calculations for rendering and playback are designed with a base case in mind: calculating a linear sequence of frames consecutive in time.
@@ -6320,7 +6327,7 @@ In 2018, the middle Layer was renamed into &amp;rarr; Steam-Layer
 
 </pre>
 </div>
-<div title="ProcNode" modifier="Ichthyostega" created="200706220409" modified="202412220556" tags="def spec" changecount="23">
+<div title="ProcNode" modifier="Ichthyostega" created="200706220409" modified="202501040420" tags="def spec" changecount="24">
 <pre>//A data processing node within the Render Engine.// Its key feature is the ability to pull a [[Frame]] of calculated data -- which may involve the invocation of //predecessor nodes// and the evaluation of [[Parameter Providers|ParamProvider]]. Together, those nodes form a »node-network«, a ''D''irected ''A''cyclic ''G''raph (DAG) known as the LowLevelModel, which is //explicit// to the degree that it can be //performed// to generate or process media. As such it is an internal structure and //compiled// by evaluating and interpreting the HighLevelModel within the [[Session]], which is the symbolic or logical representation of »the film edit« or »media product« established and created by the user.
 
 So each node and all interconnections are //oriented.// Calculation starts from the output side and propagates to acquire the necessary inputs, thereby invoking the predecessor nodes (also known as »leads«). This recursive process leads to performing a sequence of calculations -- just to the degree necessary to deliver the desired result. And since the Render Node Network is generated by a compilation step, which is conducted repeatedly and on-demand by the part of the Lumiera application known as the [[Builder]], all node connectivity can be assumed to be adequate and fitting, each predecessor can be assumed to deliver precisely the necessary data into buffers with the correct format to be directly consumed for the current calculation step. The actual processing algorithm working on these buffers is provided by an ''external Media-processing-library'' -- the LowLevelModel can thus be seen as a pre-determined organisation and orchestration structure to enact externally provided processing functionality.
@@ -6341,6 +6348,12 @@ A {{{steam::engine::ProcNode}}} is an arrangement of descriptors, connectivity a
 :each Media-processing-library entails a very specific protocol how to invoke processing functionality, which becomes embedded into an individual adaptor object, including the {{{FeedManifold}}}. Typically, the actual invocation will be bound into a λ-closure, and thus the whole compound can be aggressively optimised.
 ;Weaving Pattern
 :while each processing variant is materialised into an individual {{{Turnout}}} instance, some more generic wiring- and invocation schemes come to play when adapting the processing functions of any given Media-processing-library. The {{{WeavingPattern}}} thus defines a distinct scheme how to arrange and connect inputs and outputs and how to actually invoke the processing function. Notably, some operations allow for in-place processing, where the input-buffer is also the output-buffer and data is directly manipulated in-place, while other libraries require some elaborate layout scheme for the data buffers to work efficiently. And while Lumiera provides a set of //building blocks for weaving patterns,// each Media-processing-library actually must be adapted through a Lumiera plug-in, which entails using those building blocks or even completely different yet compatible weaving patterns as appropriate. In the end, each instantiation of such a weaving pattern becomes embedded into the render node as a {{{Turnout}}} instance and can be invoked through the {{{Port}}} interface.
+&amp;rarr; [[Port / Turnout|NodePort]]
+&amp;rarr; [[Turnout-System|TurnoutSystem]]
+&amp;rarr; [[Weaving pattern|NodeWeavingPattern]]
+&amp;rarr; [[Feed manifold|NodeFeedManifold]]
+&amp;rarr; [[Parameters|RenderParamHandling]]
+
 
 !Building a Render Node
 !The render invocation
@@ -6960,10 +6973,11 @@ Prerequisite data for the media calculations can be considered just part of that
 * all it needs to know is the ''effective nominal time'' and an ''invocation instance ID''
 </pre>
 </div>
-<div title="RenderMechanics" modifier="Ichthyostega" created="200806030230" modified="202412221601" tags="Rendering operational rewrite" changecount="6">
-<pre>{{red{⚠ In-depth rework underway as of 12/2024...}}}
+<div title="RenderMechanics" modifier="Ichthyostega" created="200806030230" modified="202501040430" tags="Rendering operational rewrite" changecount="9">
+<pre>At architecure level, the render process is sufficiently characterized by the ''pull principle'', regarding dependencies, processing function and the [[»Render Node operation protocol«|NodeOperationProtocol]]. Yet at the level of actual operations and interactions, several intricate details become relevant, especially //how to manage the buffers// and where to provide additional storage for working data.
+{{red{⚠ In-depth rework underway as of 12/2024...}}}
 ^^┅┅┅┅┅┅the following text is ''superseded''┅┅┅┅┅┅┅┅┅^^
-While the render process, with respect to the dependencies, the builder and the processing function is sufficiently characterized by referring to the ''pull principle'' and by defining a [[protocol|NodeOperationProtocol]] each node has to adhere to &amp;mdash; for actually get it coded we have to care for some important details, especially //how to manage the buffers.// It may well be that the length of the code path necessary to invoke the individual processing functions is finally not so important, compared with the time spent at the inner pixel loop within these functions. But my guess is (as of 5/08), that the overall number of data moving and copying operations //will be//&amp;nbsp; of importance.
+ It may well be that the length of the code path necessary to invoke the individual processing functions is finally not so important, compared with the time spent at the inner pixel loop within these functions. But my guess is (as of 5/08), that the overall number of data moving and copying operations //will be//&amp;nbsp; of importance.
 {{red{WIP as of 9/11 -- need to mention the planning phase more explicitly}}}
 
 !requirements

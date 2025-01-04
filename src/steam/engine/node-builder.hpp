@@ -300,7 +300,12 @@ namespace engine {
           return move(*this);
         }
       
-      /** connect the next input slot to existing lead-node given by index */
+      /** connect the next input slot to existing lead-node given by index
+       * @note the port to use on this lead is implicitly defaulted to use the same port-number
+       *       as the port which is currently about to be built; this is a common pattern, since
+       *       when a top-level node exposes N different flavours, its predecessors will very
+       *       likely also be configured to produce the pre-product for these flavours.
+       */
       PortBuilder
       connectLead (uint idx)
         {
@@ -341,8 +346,7 @@ namespace engine {
             _Par::addLead (leadNode);
           
           ENSURE (knownEntry < _Par::leads_.size());
-          weavingBuilder_.attachToLeadPort (knownEntry, port);
-          return move(*this);
+          return connectLeadPort (knownEntry, port);
         }
       
       /** use given port-index as default for all following connections */
@@ -468,6 +472,7 @@ namespace engine {
   
   
   
+  
   /**
    * Nested sub-Builder analogous to \ref PortBuilder, but for building  a _»Param Agent Node«._
    * This will compute additional parameters and make them temporarily accessible through the
@@ -491,6 +496,72 @@ namespace engine {
       uint defaultPortNr_;
 
     public:
+      /** use a lead node designated by ID as delegate to invoke with the extended parameters.
+       * @note the port to use on this lead is implicitly defaulted to use the same port-number
+       *       as the port which is currently about to be built; this is a common pattern, since
+       *       when a top-level node exposes N different flavours, its predecessors will very
+       *       likely also be configured to produce the pre-product for these flavours.
+       */
+      ParamAgentBuilder
+      delegateLead (uint idx)
+        {
+          return delegateLeadPort (idx, defaultPortNr_);
+        }
+      
+      /** use the given node as delegate, but also possibly register it as lead node */
+      ParamAgentBuilder
+      delegateLead (ProcNode& leadNode)
+        {
+          return delegateLeadPort (leadNode, defaultPortNr_);
+        }
+      
+      /** use a lead node and specific port as delegate to invoke with extended parameters */
+      ParamAgentBuilder
+      delegateLeadPort (uint idx, uint port)
+        {
+          if (idx >= _Par::leads_.size())
+            throw err::Logic{_Fmt{"Builder refers to lead-node #%d, yet only %d are currently defined."}
+                                 % idx % _Par::leads_.size()
+                            ,LERR_(INDEX_BOUNDS)
+                            };
+          delegatePort_ = & _Par::leads_[idx].getPort (port);
+          return move(*this);
+        }
+      
+      /** use the specific port on the given node as delegate,
+       *  while possibly also registering it as lead node. */
+      ParamAgentBuilder
+      delegateLeadPort (ProcNode& leadNode, uint port)
+        {
+          uint knownEntry{0};
+          for (auto& lead : lib::IndexIter{_Par::leads_})
+            if (util::isSameObject (leadNode, lead))
+              break;
+            else
+              ++knownEntry;
+          if (knownEntry == _Par::leads_.size())
+            _Par::addLead (leadNode);
+          
+          ENSURE (knownEntry < _Par::leads_.size());
+          return delegateLeadPort (knownEntry, port);
+        }
+      
+      
+      /**
+       * Install a post-processing function for the parameters.
+       * This functor will be invoked after the individual parameter values have been created
+       * by invoking their respective parameter-functor; furthermore, the parameter data block
+       * in current scope has already been linked with the TurnoustSystem, and thus the new
+       * parameters are already accessible through this front-end and can be manipulated.
+       * @remark the purpose is to enable coordinated adjustments on all parameters together,
+       *         immediately before delegating to the nested node evaluation with these parameters.
+       */
+      ParamAgentBuilder
+      installPostProcessor(PostProcessor pp)
+        {
+          postProcessor_ = move(pp);
+        }
+      
       
       /*********************************************************************//**
        * Terminal: complete the Param-Agent wiring and return to the node level.
@@ -541,6 +612,36 @@ namespace engine {
     };
   
   
+  /** @remarks
+   * - this is an advanced setup for generating a complex set of _derived parameters,_
+   *   which can then be used by all nodes within a complete subtree of the node-graph.
+   * - such a setup is not necessary for simple parameters based on nominal timeline time.
+   * - the purpose is either to avoid redundancy or to draw from additional contextual
+   *   parameter sources (which must be accessible with the help of the processKey or
+   *   some global service or plug-in)
+   * - another special scenario could be to synthesise further data based on the consolidated
+   *   set of current automation values, possibly together with contextual data; basically
+   *   some kind of _parameter fusion_ that can not reasonably be pre-defined in the
+   *   High-level-Model, but must really be computed late, directly from the render process.
+   * - this function enters a nested port-builder, which will setup a »Param Weaving Pattern«
+   * - at Node invocation time, this _Weaving Pattern_ will first evaluate all parameter-funcors,
+   *   then consolidate the generated parameters into a local data block on the stack and link
+   *   this data block into the TurnoutSystem of this invocation; after establishing this
+   *   quite tricky and fragile setup, the invocation will recursively delegate to another
+   *   Node-Port, which thus performs in this extended scope and can refer to all the
+   *   additional parameters.
+   * - To define the set of parameter-functors, you need to use a helper-builder based on
+   *   \ref steam::engine::ParamBuildSpec, starting with \ref steam::engine::buildParamSpec().
+   * - this generates a _Param Spec,_ which especially provides _accessor functors_ for each
+   *   of the additional parameters; you need to bind these accessor functors into the
+   *   parameter-functors of nested nodes which want to access the additional parameters.
+   * - it is thus necessary first to build the _Param Spec,_ then to build the complete
+   *   subtree of processing nodes for the actual processing (aka the _delegate tree_),
+   *   and then finally create a _Param Agent Node_ with this builder, referring to the
+   *   entry point into the processing tree as _delegate lead_ (see \ref ParamAgentBuilder)
+   * @return a nested \ref ParamAgentBuilder to set up the desired wiring and delegate
+   * @see NodeFeed_test::feedParamNode()
+   */
   template<class POL, class DAT>
   template<class SPEC>
   auto
@@ -549,6 +650,9 @@ namespace engine {
       using ParamBuildSpec = std::decay_t<SPEC>;
       return ParamAgentBuilder<POL,DAT,ParamBuildSpec>{spec.makeBlockBuilder()};
     }
+  
+  
+  
   
   /**
    * Entrance point for building actual Render Node Connectivity (Level-2)
