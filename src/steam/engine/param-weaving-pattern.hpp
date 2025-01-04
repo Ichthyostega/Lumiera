@@ -15,16 +15,16 @@
 /** @file param-weaving-pattern.hpp
  ** Construction kit to establish a set of parameters pre-computed prior to invocation
  ** of nested nodes. This arrangement is also known as »Parameter Agent Node« (while actually
- ** it is a Weaving Patter residing within some Node's Port). The use-case is to provide a set
+ ** it is a Weaving Pattern residing within some Node's Port). The use-case is to provide a set
  ** of additional parameter values, beyond what can be derived directly by a parameter-functor
  ** based on the _absolute-nominal-Time_ of the invocation. The necessity for such a setup may
  ** arise when additional context or external state must be combined with the nominal time into
  ** a tuple of data values, which shall then be consumed by several follow-up evaluations further
  ** down into a recursive invocation tree _for one single render job._ The solution provided by
- ** the Parameter Agent Node relies on placing those additional data values into a tuple stored
- ** directly in the render invocation stack frame, prior to descending into further recursive
- ** Node evaluations. Notably, parameter-functors within the scope of this evaluation tree can
- ** then access these additional parameters through the TurnoutSystem of the overall invocation.
+ ** the Parameter Agent Node relies on placing those additional data values into a tuple, which
+ ** is then stored directly in the render invocation stack frame, prior to descending into further
+ ** recursive Node evaluations. Notably, parameter-functors within the scope of this evaluation tree
+ ** can then access these additional parameters through the TurnoutSystem of the overall invocation.
  ** 
  ** @see node-builder.hpp
  ** @see weaving-pattern-builder.hpp
@@ -42,7 +42,6 @@
 #include "steam/common.hpp"
 #include "steam/engine/turnout.hpp"
 #include "steam/engine/turnout-system.hpp"
-#include "steam/engine/feed-manifold.hpp" ////////////TODO wegdamit
 #include "lib/uninitialised-storage.hpp"
 #include "lib/meta/variadic-helper.hpp"
 #include "lib/meta/tuple-helper.hpp"
@@ -65,16 +64,17 @@ namespace engine {
   using std::function;
   using std::make_tuple;
   using std::tuple;
-  using lib::Several;////TODO RLY?
+  using lib::meta::Tuple;
+  using lib::meta::ElmTypes;
   
   
-  template<class ANK, typename...FUNZ>
+  template<class ANCH, typename...FUNZ>
   struct ParamBuildSpec
     {
       using Functors = tuple<FUNZ...>;
       
-      using ResTypes = typename lib::meta::ElmTypes<Functors>::template Apply<lib::meta::_FunRet>;
-      using ParamTup = lib::meta::Tuple<ResTypes>;
+      using ResTypes = typename ElmTypes<Functors>::template Apply<lib::meta::_FunRet>;
+      using ParamTup = Tuple<ResTypes>;
       
       Functors functors_;
       
@@ -82,12 +82,17 @@ namespace engine {
         : functors_{move (funz)}
         { }
       
+      /** can be copied if all functors are copyable... */
+      ParamBuildSpec clone() { return *this; }
+      
+      
       template<typename FUN>
       auto
       addSlot (FUN&& paramFun)
         {
-          return ParamBuildSpec<ANK,FUNZ...,FUN>{std::tuple_cat (move(functors_)
-                                                                ,make_tuple (forward<FUN>(paramFun)))};
+          using FunN = std::decay_t<FUN>;
+          return ParamBuildSpec<ANCH,FUNZ...,FunN>{std::tuple_cat (move(functors_)
+                                                                  ,make_tuple (forward<FUN>(paramFun)))};
         }
       
       template<typename PAR>
@@ -112,14 +117,13 @@ namespace engine {
        * @remark HeteroData defines a nested struct `Chain`, and with the help of `RebindVariadic`,
        *         the type sequence from the ParamTup can be used to instantiate this Chain context.
        */
-      using ChainCons = typename lib::meta::RebindVariadic<ANK::template Chain, ParamTup>::Type;
+      using ChainCons = typename lib::meta::RebindVariadic<ANCH::template Chain, ParamTup>::Type;
       
       
       /** a (static) getter functor able to work on the full extended HeteroData-Chain
        * @remark the front-end of this chain resides in TurnoutSystem */
       template<size_t slot>
       struct Accessor
-        : util::MoveOnly
         {
           static auto&
           getParamVal (TurnoutSystem& turnoutSys)
@@ -233,7 +237,7 @@ namespace engine {
       
       /** Preparation: create a Feed data frame to use as local scope */
       Feed
-      mount (TurnoutSystem& turnoutSys)
+      mount (TurnoutSystem&)
         {
           return Feed{};
         }
@@ -265,6 +269,7 @@ namespace engine {
       weft (Feed& feed, TurnoutSystem& turnoutSys)
         {
           feed.outBuff = delegatePort_.weave (turnoutSys, feed.outBuff);
+          ENSURE (feed.outBuff);
         }
       
       /** clean-up: detach the parameter-data-block.
@@ -274,7 +279,7 @@ namespace engine {
       fix (Feed& feed, TurnoutSystem& turnoutSys)
         {
           turnoutSys.detachChainBlock(feed.block());
-          return feed.outBuff;
+          return *feed.outBuff;
         }
       
     };

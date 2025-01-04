@@ -54,7 +54,6 @@
  **   Level-2 builder operations bottom-up to generate and wire up the corresponding Render Nodes.
  ** 
  ** ## Using custom allocators
- ** 
  ** Since the low-level-Model is a massive data structure comprising thousands of nodes, each with
  ** specialised parametrisation for some media handling library, and a lot of cross-linking pointers,
  ** it is important to care for efficient usage of memory with good locality. Furthermore, the higher
@@ -67,6 +66,35 @@
  ** specifically until a complete segment of the timeline is superseded and has been re-built.
  ** @remark syntactically, the custom allocator specification is given after opening a top-level
  **         builder, by means of the builder function `.withAllocator<ALO> (args...)`
+ ** 
+ ** 
+ ** # Building Render Nodes
+ ** 
+ ** At Level-2, actual render nodes are generated. The NodeBuilder creates a suitably configured
+ ** \ref Connectivity object, which can be dropped directly into a ProcNode. Managing the storage
+ ** of those Render Nodes themselves is beyond the scope of the builder; so the user of the builder
+ ** is responsible for the lifecycle of generated ProcNode objects.
+ ** 
+ ** ## Flavours of the processing function
+ ** The binding to the actual data processing operations (usually supplied by an external library)
+ ** is established by a **processing-functor** passed to configure the [Port builder](\PortBuilderRoot::invoke()).
+ ** The supported signatures of this functor are quite flexible to allow for various flavours of invocation.
+ ** Data types of parameters and buffers are picked up automatically (at compile time), based on the
+ ** signature of the actual function supplied. The accepted variations are described in detail
+ ** [here](\ref feed-manifold.hpp). Basically, a function can take parameters, input- and output-buffers,
+ ** yet only the output-buffers are mandatory. Several elements of one kind can be passed as tuple.
+ ** 
+ ** ## Handling of Invocation Parameters
+ ** Typically, a processing operation can be configured in various ways, by passing additional
+ ** setup- and invocation parameters. This entails both technical aspects (like picking some specific
+ ** data format), organisational concerns (like addressing a specific frame-number) and elements of
+ ** artistic control, like choosing the settings of a media processing effect. Parameters will thus
+ ** be collected from various sources, which leads to an additional binding step, where all these
+ ** sources are retrieved and the actual parameter value or value tuple is produced. This specific
+ ** _parameter binding_ is represented as a **parameter-functor**. Whenever the processing-function
+ ** accepts a parameter argument, optionally a such parameter-functor can be installed; this functor
+ ** is supplied with the \ref TurnoutSystem of the actual invocation, which acts as front-end to
+ ** access contextual parameters.
  ** 
  ** @todo WIP-WIP-WIP 10/2024 Node-Invocation is reworked from ground up -- some parts can not be
  **       spelled out completely yet, since we have to build this tightly interlocked system of
@@ -105,6 +133,7 @@ namespace engine {
   using util::_Fmt;
   using std::forward;
   using std::move;
+  using std::ref;
   
   
   namespace { // default policy configuration to use heap allocator
@@ -168,10 +197,10 @@ namespace engine {
       friend class NodeBuilder;
       
       
-      NodeBuilder
+      NodeBuilder&&
       addLead (ProcNode const& lead)
         {
-          leads_.append (lead);
+          leads_.append (ref(lead));
           return move(*this);
         }
       
@@ -284,7 +313,7 @@ namespace engine {
     public:
       
       template<class ILA, typename...ARGS>
-      PortBuilder
+      PortBuilder&&
       createBuffers (ARGS&& ...args)
         {
           UNIMPLEMENTED ("define builder for all buffers to use");
@@ -293,7 +322,7 @@ namespace engine {
       
       /** define the output slot to use as result
        * @remark default is to use the first one */
-      PortBuilder
+      PortBuilder&&
       asResultSlot (uint r)
         {
           weavingBuilder_.selectResultSlot(r);
@@ -306,21 +335,21 @@ namespace engine {
        *       when a top-level node exposes N different flavours, its predecessors will very
        *       likely also be configured to produce the pre-product for these flavours.
        */
-      PortBuilder
+      PortBuilder&&
       connectLead (uint idx)
         {
           return connectLeadPort (idx, this->defaultPort_);
         }
       
       /** connect the next input slot to either existing or new lead-node" */
-      PortBuilder
+      PortBuilder&&
       conectLead (ProcNode& leadNode)
         {
           return connectLeadPort (leadNode, this->defaultPort_);
         }
       
       /** connect next input to lead-node, using a specific port-number */
-      PortBuilder
+      PortBuilder&&
       connectLeadPort (uint idx, uint port)
         {
           if (idx >= _Par::leads_.size())
@@ -333,7 +362,7 @@ namespace engine {
         }
       
       /** connect next input to existing or new lead-node, with given port-number */
-      PortBuilder
+      PortBuilder&&
       connectLeadPort (ProcNode& leadNode, uint port)
         {
           uint knownEntry{0};
@@ -350,7 +379,7 @@ namespace engine {
         }
       
       /** use given port-index as default for all following connections */
-      PortBuilder
+      PortBuilder&&
       useLeadPort (uint defaultPort)
         {
           this->defaultPort_ = defaultPort;
@@ -502,21 +531,21 @@ namespace engine {
        *       when a top-level node exposes N different flavours, its predecessors will very
        *       likely also be configured to produce the pre-product for these flavours.
        */
-      ParamAgentBuilder
+      ParamAgentBuilder&&
       delegateLead (uint idx)
         {
           return delegateLeadPort (idx, defaultPortNr_);
         }
       
       /** use the given node as delegate, but also possibly register it as lead node */
-      ParamAgentBuilder
+      ParamAgentBuilder&&
       delegateLead (ProcNode& leadNode)
         {
           return delegateLeadPort (leadNode, defaultPortNr_);
         }
       
       /** use a lead node and specific port as delegate to invoke with extended parameters */
-      ParamAgentBuilder
+      ParamAgentBuilder&&
       delegateLeadPort (uint idx, uint port)
         {
           if (idx >= _Par::leads_.size())
@@ -524,13 +553,14 @@ namespace engine {
                                  % idx % _Par::leads_.size()
                             ,LERR_(INDEX_BOUNDS)
                             };
-          delegatePort_ = & _Par::leads_[idx].getPort (port);
+          ProcNode& leadNode = _Par::leads_[idx];
+          delegatePort_ = & leadNode.getPort (port);
           return move(*this);
         }
       
       /** use the specific port on the given node as delegate,
        *  while possibly also registering it as lead node. */
-      ParamAgentBuilder
+      ParamAgentBuilder&&
       delegateLeadPort (ProcNode& leadNode, uint port)
         {
           uint knownEntry{0};
@@ -556,7 +586,7 @@ namespace engine {
        * @remark the purpose is to enable coordinated adjustments on all parameters together,
        *         immediately before delegating to the nested node evaluation with these parameters.
        */
-      ParamAgentBuilder
+      ParamAgentBuilder&&
       installPostProcessor(PostProcessor pp)
         {
           postProcessor_ = move(pp);
@@ -600,7 +630,6 @@ namespace engine {
         }                     // chain back up to Node-Builder with extended patternData
       
     private:
-      template<typename FUN>
       ParamAgentBuilder(_Par&& base, BlockBuilder&& builder)
         : _Par{move(base)}
         , blockBuilder_{move(builder)}
@@ -645,10 +674,11 @@ namespace engine {
   template<class POL, class DAT>
   template<class SPEC>
   auto
-  PortBuilderRoot<POL,DAT>::computeParam(SPEC&& spec)
+  PortBuilderRoot<POL,DAT>::computeParam(SPEC&& ref)
     {
       using ParamBuildSpec = std::decay_t<SPEC>;
-      return ParamAgentBuilder<POL,DAT,ParamBuildSpec>{spec.makeBlockBuilder()};
+      ParamBuildSpec spec {forward<SPEC>(ref)};                      // consumes the spec
+      return ParamAgentBuilder<POL,DAT,ParamBuildSpec>{move(*this), spec.makeBlockBuilder()};
     }
   
   
