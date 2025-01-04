@@ -95,8 +95,14 @@
  ** accepts a parameter argument, optionally a such parameter-functor can be installed; this functor
  ** is supplied with the \ref TurnoutSystem of the actual invocation, which acts as front-end to
  ** access contextual parameters.
+ ** \par synthesised additional parameters
+ ** As an extension for (rare and elaborate) special cases, a special evaluation scheme is provided,
+ ** which relies on a »Param Agent Node« as entry point, to invoke additional functors and compute
+ ** additional parameter values, which can then be used in a nested _delegate Node tree._
+ ** This special scheme can be configured from the [nested Port builder](\ref PortBuilderRoot::computeParam()).
+ ** See the detailed description in param-weaving-pattern.hpp
  ** 
- ** @todo WIP-WIP-WIP 10/2024 Node-Invocation is reworked from ground up -- some parts can not be
+ ** @todo WIP-WIP 1/2025 Node-Invocation is reworked from ground up -- some parts can not be
  **       spelled out completely yet, since we have to build this tightly interlocked system of
  **       code moving bottom up, and then filling in further details later working top-down.
  ** 
@@ -163,10 +169,19 @@ namespace engine {
   
   template<class POL, class DAT>
   class PortBuilderRoot;
-
   
   
   
+  
+  /**
+   * Top-level builder to create a single [Render Node](\ref ProcNode)
+   * @note
+   *     - Entry-point for the Builder-DSL is \ref prepareNode()
+   *     - A sequence of Ports is defined by `.preparePort()` ... `.completePort()`
+   *     - the Build is completed with the NodeBuilder::build() terminal,
+   *       which generates a \ref Connectivity object, that can be directly
+   *       dropped into the constructor of ProcNode.
+   */
   template<class POL, class DAT = PatternDataAnchor>
   class NodeBuilder
     : util::MoveOnly
@@ -222,7 +237,7 @@ namespace engine {
        *          - `withAllocator<ALO> (ALO<X> allo)` uses a C++ standard allocator
        *            instance `allo`, dedicated to produce objects of type `X`
        *          - `withAllocator (AllocationCluster&)` attaches to a specific
-       *            AllocationCluster; this is the most relevant usage pattern
+       *            AllocationCluster; this is the most relevant usage pattern.
        */
       template<template<typename> class ALO =std::void_t, typename...INIT>
       auto
@@ -254,6 +269,10 @@ namespace engine {
   
   
   
+  /**
+   * Nested DSL builder scope to define a single Port for the enclosing Node.
+   * @note inherits from NodeBuilder and _slices away_ the subclass when done.
+   */
   template<class POL, class DAT>
   class PortBuilderRoot
     : protected NodeBuilder<POL,DAT>
@@ -301,6 +320,11 @@ namespace engine {
   
   
   
+  /**
+   * Nested DSL-Builder context to define a regular media processing Port
+   * @remark relies on [delegate sub-builder](\ref WeavingBuilder) for
+   *         technical details of data feed and parameter wiring.
+   */
   template<class POL, class DAT, class WAB>
   class PortBuilder
     : public PortBuilderRoot<POL,DAT>
@@ -312,6 +336,10 @@ namespace engine {
       
     public:
       
+      /** @remark this would allow to pass constructor arguments
+       *   to »buffer inlay objects« automatically placed into media buffers.
+       *   There is a corresponding hook in BufferProvider::getDescriptor(args...) 
+       */
       template<class ILA, typename...ARGS>
       PortBuilder&&
       createBuffers (ARGS&& ...args)
@@ -320,7 +348,8 @@ namespace engine {
           return move(*this);
         }
       
-      /** define the output slot to use as result
+      
+      /** define the output slot number to use as result
        * @remark default is to use the first one */
       PortBuilder&&
       asResultSlot (uint r)

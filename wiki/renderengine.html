@@ -5253,7 +5253,7 @@ Arrangement and interaction of components in the three Layers — {{red{envision
 &lt;/html&gt;
 </pre>
 </div>
-<div title="OverviewRenderEngine" modifier="Ichthyostega" created="200706190647" modified="202304140057" tags="Rendering overview" changecount="17">
+<div title="OverviewRenderEngine" modifier="Ichthyostega" created="200706190647" modified="202501050056" tags="Rendering overview" changecount="18">
 <pre>As can be seen on the [[Architecture Overview|Overview]], the functionality of the »[[Render Engine|RenderEngine]]« is implemented through the collaboration of various components, spanning the Steam-Layer and the Vault-Layer. The rendering is orchestrated by „performing“ the LowLevelModel, which is a //node graph//. This render node graph has been prepared by the [[Builder]] -- thereby reading and interpreting the HighLevelModel, which is maintained and edited as part of the [[Session]]. The actual rendering happens when the [[Scheduler]] invokes individual [[render jobs|RenderJob]] to invoke media processing functions configured and wired as [[Processing Nodes|ProcNode]], thus generating new media data into the [[processing buffers|BufferProvider]] for [[output|OutputManagement]].
 
 Any kind of rendering or playback requires a RenderProcess, which is initiated and controlled by the [[Player]].
@@ -5263,7 +5263,7 @@ see also &amp;rarr; [[Fixture]] &amp;rarr; [[Player]] &amp;rarr; EngineFaçade &
 {{red{TODO 4/23: create a new drawing to reflect current state of the design}}}
 
 !Render Engine Integration
-The Engine is unfinished and not in any usable shape {{red{as of 4/2023}}} -- currently an [[»integration slice«|PlaybackVerticalSlice]] is pursued, in an effort to complete foundation work done over the course of several years and achieve the first preliminary integration of rendering functionality.
+The Engine is unfinished and not in any usable shape {{red{as of 1/2025}}} -- currently an [[»integration slice«|PlaybackVerticalSlice]] is pursued, in an effort to complete foundation work done over the course of several years and achieve the first preliminary integration of rendering functionality.
 
 Why is ''all of this so complicated''?
 * the Lumiera application is envisioned as a very flexible setup
@@ -6228,7 +6228,7 @@ __December.24__: after an extended break of several months (due to family-relate
 :Unfortunately, we are not sufficiently naïve to [[believe into the 15th standard to rule them all|https://xkcd.com/927/]]. And this implies that the design confronts the extremely challenging task to handle the mapping into several Domain Ontologies. The approach pursued for this is to //deflect decisions back// into a //binding,// which is provided by a Plug-in to attach an external Media-handling Library. Building such a Plug-in and binding will in itself be difficult for sure. It will have to respond to some pre-defined queries how to deal with aspects relevant for processing an arrangement of media. This includes the enumeration of [[processing assets|ProcAsset]] and [[Stream Type instances|StreamType]], and the implementation for a function to //outfit// a render node with a //function binding// to invoke the implementation of a processing asset.
 </pre>
 </div>
-<div title="Player" modifier="Ichthyostega" created="201012181700" modified="202304140114" tags="def overview" changecount="4">
+<div title="Player" modifier="Ichthyostega" created="201012181700" modified="202501050055" tags="def overview" changecount="5">
 <pre>Within Lumiera, &amp;raquo;Player&amp;laquo; is the name for a [[Subsystem]] responsible for organising and tracking //ongoing playback and render processes.// &amp;rarr; [[PlayProcess]]
 The player subsystem does not perform or even manage any render operations, nor does it handle the outputs directly.
 Yet it addresses some central concerns:
@@ -6243,8 +6243,8 @@ Yet it addresses some central concerns:
 :to perform this [[quantisation|TimeQuant]], the help of the session for building a TimeGrid for each output channel is required.
 
 
-!{{red{WIP 4/2023}}} still not finished
-The design of the Player subsystem was settled several years ago, together with a draft implementation of the FrameDispatcher and some details regarding [[render jobs|RenderJob]] and [[processing nodes|ProcNode]]. The implementation could not be finished at that time, since too much further details in other parts of the engine were not quite settled yet. After focussing on the GUI for several years, a new effort towards [[integration of rendering|PlaybackVerticalSlice]] has been started...
+!{{red{WIP 1/2025}}} still not finished
+The design of the Player subsystem was settled several years ago, together with a draft implementation of the FrameDispatcher and some details regarding [[render jobs|RenderJob]] and [[processing nodes|ProcNode]]. The implementation could not be finished at that time, since too much further details in other parts of the engine were not quite settled yet. After focussing on the GUI for several years, a new effort towards [[integration of rendering|PlaybackVerticalSlice]] has been started, making good progress lately; we can now schedule and invoke render operations...
 &amp;rarr; [[Rendering]]
 </pre>
 </div>
@@ -7098,7 +7098,15 @@ An Activity is //performed// by invoking its {{{activate(now, ctx)}}} function -
 In a similar vein, also ''dependency notifications'' need to happen decoupled from the activity chain from which they originate; thus the Post-mechanism is also used for dispatching notifications. Yet notifications are to be treated specially, since they are directed towards a receiver, which in the standard case is a {{{GATE}}}-Activity and will respond by //decrementing its internal latch.// Consequently, notifications will be sent through the ''λ-post'' -- which operationally re-schedules a continuation as a follow-up job. Receiving such a notification may cause the Gate to become opened; in this case the trigger leads to //activation of the chain// hooked behind the Gate, which at some point typically enters into another calculation job. Otherwise, if the latch (in the Gate) is already zero (or the deadline has passed), nothing happens. Thus the implementation of state transition logic ensures the chain behind a Gate can only be //activated once.//
 </pre>
 </div>
-<div title="RenderProcess" modifier="Ichthyostega" created="200706190705" modified="202412221701" tags="Rendering operational" changecount="26">
+<div title="RenderParamHandling" creator="Ichthyostega" modifier="Ichthyostega" created="202501050139" modified="202501050143" changecount="6">
+<pre>//Invocation- and ~Configuration-Parameters are essential for rendering.//
+Typically, a processing operation can be configured in various ways, by passing additional setup- and invocation parameters. This entails both technical aspects (like picking some specific data format), organisational concerns (like addressing a specific frame-number) and elements of artistic control, like choosing the settings of a media processing effect. Parameters will thus be collected from various sources, which leads to an additional binding step, where all these sources are retrieved and the actual parameter value or value tuple is produced. This specific //parameter binding// is represented as a [[Parameter-functor|NodeParamFunctor]]. Whenever the processing-function accepts a parameter argument, optionally a such parameter-functor can be installed; this functor is supplied with the TurnoutSystem of the actual invocation, which acts as front-end to access contextual parameters.
+!Synthesised additional parameters
+As an extension for (rare and elaborate) special cases, a special evaluation scheme is provided, which relies on a »''Param Agent Node''« as entry point, to invoke additional functors and compute additional parameter values, which can then be used in a nested //delegate Node tree.//  The solution relies on placing those additional data values into a tuple, which is then stored directly in the render invocation stack frame, prior to descending into the recursive Node evaluations. Parameter-functors within the scope of this evaluation tree can then access these additional parameters through the TurnoutSystem of the overall invocation.
+
+The use-case is to provide a set of additional parameter values, beyond what can be derived directly by a parameter-functor based on the //absolute-nominal-Time// of the invocation. The necessity for such a setup may arise when additional context or external state must be combined with the nominal time into a tuple of data values, which shall then be consumed by several follow-up evaluations further down into a //recursive invocation tree for one single render job.//</pre>
+</div>
+<div title="RenderProcess" modifier="Ichthyostega" created="200706190705" modified="202501050058" tags="Rendering operational" changecount="27">
 <pre>At a high level, the Render Process is what „runs“ a playback or render. Using the EngineFaçade, the [[Player]] creates a descriptor for such a process, which notably defines a [[»calculation stream«|CalcStream]] for each individual //data feed// to be produced. To actually implement such an //ongoing stream of timed calculations,// a series of data frames must be produced, for which some source data has to be loaded and then individual calculations will be scheduled to work on this data and deliver results within a well defined time window for each frame. Thus, on the implementation level, a {{{CalcStream}}} comprises a pipeline to define [[render jobs|RenderJob]], and a self-repeating re-scheduling mechanism to repeatedly plan and dispatch a //chunk of render jobs// to the [[Scheduler]], which cares to invoke the individual jobs in due time.
 
 This leads to a even more detailed description at implementation level of the ''render processing''. Within the [[Session]], the user has defined the »edit« or the definition of the media product as a collection of media elements placed and arranged into a [[Timeline]]. A repeatedly-running, demand-driven, compiler-like process (in Lumiera known as [[the Builder|Builder]]) consolidates this [[»high-level definition«|HighLevelModel]] into a [[Fixture]] and a [[network of Render Nodes|LowLevelModel]] directly attached below. The Fixture hereby defines a [[segment for each part of the timeline|Segmentation]], which can be represented as a distinct and non-changing topology of connected render nodes. So each segment spans a time range, quantised into a range of frames -- and the node network attached below this segment is capable of producing media data for each frame within definition range, when given the actual frame number, and some designation of the actual data feed required at that point. Yet it depends on the circumstances what this »data feed« //actually is;// as a rule, anything which can be produced and consumed as compound will be represented as //a single feed.// The typical video will thus comprise a video feed and a stereo sound feed, while another setup may require to deliver individual sound feeds for the left and right channel, or whatever channel layout the sound system has, and it may require two distinct beamer feeds for the two channels of stereoscopic video. However -- as a general rule of architecture -- the Lumiera Render Engine is tasked to perform //all of the processing work,// up to and including any adaptation step required to reach the desired final result. Thus, for rendering into a media container, only a single feed is required, which can be drawn from an encoder node, which in turn consumes several data feeds for its constituents.
@@ -7114,8 +7122,8 @@ To summarise this break-down of the rendering process defined thus far, the [[Sc
 
 __see also__
 &amp;rarr; the [[Entities involved in Rendering|RenderEntities]]
-&amp;rarr; the [[mechanics of rendering and buffer management|RenderMechanics]]
 &amp;rarr; the protocol [[how to operate the nodes|NodeOperationProtocol]]
+&amp;rarr; the [[mechanics of rendering and buffer management|RenderMechanics]]
 </pre>
 </div>
 <div title="Rendering" modifier="Ichthyostega" created="200806010248" modified="202410292249" tags="def overview" changecount="1">
