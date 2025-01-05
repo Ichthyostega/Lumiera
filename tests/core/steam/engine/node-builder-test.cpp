@@ -19,17 +19,28 @@
 #include "lib/test/run.hpp"
 #include "steam/engine/node-builder.hpp"
 #include "steam/engine/diagnostic-buffer-provider.hpp"
+#include "steam/asset/meta/time-grid.hpp"
 #include "lib/test/diagnostic-output.hpp"
+#include "lib/time/timequant.hpp"
+#include "lib/time/timecode.hpp"
+#include "lib/symbol.hpp"
 //#include "lib/util.hpp"
 
-
+using lib::Symbol;
 using std::string;
+using lib::time::Time;
+using lib::time::QuTime;
+using lib::time::FrameNr;
+using lib::time::SmpteTC;
 
 
 namespace steam {
 namespace engine{
 namespace test  {
   
+  namespace {
+    Symbol SECONDS_GRID = "grid_sec";
+  }
   
   
   
@@ -41,6 +52,9 @@ namespace test  {
       virtual void
       run (Arg)
         {
+          seedRand();                // used for simple time-based „automation“
+          steam::asset::meta::TimeGrid::build (SECONDS_GRID, 1);
+          
           build_simpleNode();
           build_Node_fixedParam();
           build_Node_dynamicParam();
@@ -114,13 +128,37 @@ namespace test  {
         }
       
       
-      /** @test TODO build a Node with dynamically generated parameter
-       * @todo WIP 12/24 🔁 define ⟶ implement
+      /** @test build a Node with dynamically generated parameter
+       *      - use a processing function which takes a parameter
+       *      - use an _automation functor,_ which just quantises
+       *        the time into an implicitly defined grid
+       *      - install both into a render node
+       *      - set a random _nominal time_ for invocation
+       * @todo 12/24 ✔ define ⟶ ✔ implement
        */
       void
       build_Node_dynamicParam()
         {
-          UNIMPLEMENTED ("build node with param-functor");
+          auto procFun = [](long param, int* buff){ *buff = int(param); };
+          auto autoFun = [](Time nomTime){ return FrameNr::quant (nomTime, SECONDS_GRID); };
+          
+          ProcNode node{prepareNode("Test")
+                          .preparePort()
+                            .invoke("fun()", procFun)
+                            .attachAutomation (autoFun)
+                            .completePort()
+                          .build()};
+          
+          // invoke with a random »nominal Time« <10s with ms granularity
+          Time theTime{rani(10'000),0};
+          int res = invokeRenderNode (node, theTime);
+          
+          // for verification: quantise the given Time into SMPTE timecode;
+          QuTime qantTime (theTime, SECONDS_GRID);
+          CHECK (res == SmpteTC(qantTime).secs);
+          // Explanation: since the param-functor quantises into a 1-second grid
+          //              and the given time is below 1 minute, the seconds field
+          //              of SMPTE Timecode should match the parameter value
         }
       
       
@@ -135,7 +173,7 @@ namespace test  {
       
       
       /** @test TODO 
-       * @todo WIP 12/24 define ⟶ implement
+       * @todo WIP 12/24 🔁 define ⟶ implement
        */
       void
       build_ParamNode()

@@ -441,8 +441,7 @@ namespace engine {
           return attachParamFun ([automation = forward<AUTO>(aFun)]
                                  (TurnoutSystem& turnoutSys)
                                     {
-                                      Time nomTime = Time::ZERO; ////////////////////OOO need to retrieve that from turnoutSys
-                                      return automation(nomTime);
+                                      return automation (turnoutSys.getNomTime());
                                     });
         }
       

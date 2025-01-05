@@ -36,7 +36,6 @@
 using lib::Several;
 using lib::makeSeveral;
 using lib::time::Time;
-using lib::time::FSecs;
 using lib::time::FrameNr;
 using lib::test::showType;
 using std::make_tuple;

@@ -40,7 +40,7 @@ namespace meta {
   namespace error = lumiera::error;
   
   
- 
+  
   /**
    * @internal to be invoked indirectly by means of the Builder<TimeGrid>.
    * @todo drafted in 2010 -- usage of the builder feels unsatisfactory as of 2018
@@ -84,11 +84,10 @@ namespace meta {
     advice::Provision<PQuant>(bindingID).setAdvice(quantiser);
     return gridImplementation;
     }
-    
-
-  }
+  }//(End)Impl helper.
   
-  /** 
+  
+  /**
    * TimeGrid implementation: a trivial time grid,
    * starting at a given point in time and using a
    * constant grid spacing.
@@ -96,7 +95,7 @@ namespace meta {
    * @note The actual implementation is mixed in,
    * together with the Quantiser API; the intended use
    * of this implementation is to publish it via the advice
-   * framework, when building and registering the meta asset. 
+   * framework, when building and registering the meta asset.
    */
   class SimpleTimeGrid
     : public TimeGrid
@@ -120,7 +119,7 @@ namespace meta {
   /** Setup of a TimeGrid: validate the settings configured into this builder instance,
    *  then decide on the implementation strategy for the time grid. Convert the given
    *  frames per second into an appropriate gridSpacing time and build a suitable
-   *  name-ID to denote the TimeGrid-meta-Asset to be built. 
+   *  name-ID to denote the TimeGrid-meta-Asset to be built.
    * @return shared_ptr holding onto the new asset::Meta, which has already been
    *         registered with the AssetManager.
    * @throw  error::Config in case of invalid frames-per-second. The AssetManager
@@ -147,9 +146,9 @@ namespace meta {
       }
     GridID nameID (id);
     
-    // build new Meta-Asset, registered with AssetManager, and publish into Advice-System 
+    // build new Meta-Asset, registered with AssetManager, and publish into Advice-System
     return publishWrapped (*new SimpleTimeGrid(origin, fps, nameID));             ///////////////////////////TICKET #840 currently this replaces an existing Registration. What do we actually want here?
-  }
+  }                                                                              /////////////////////////// Remark 1/2025 : Tests meanwhile rely on being able just to replace a Grid without much ado. Seems natural this way...
   
   
   /* === TimeGrid shortcut builder functions === */
