@@ -26,8 +26,11 @@
 #include "lib/symbol.hpp"
 //#include "lib/util.hpp"
 
+#include <array>
+
 using lib::Symbol;
 using std::string;
+using std::array;
 using lib::time::Time;
 using lib::time::QuTime;
 using lib::time::FrameNr;
@@ -119,7 +122,7 @@ namespace test  {
           
           ProcNode node{prepareNode("Test")
                           .preparePort()
-                            .invoke("fun()", procFun)
+                            .invoke ("fun()", procFun)
                             .setParam (LIFE_AND_UNIVERSE_4EVER)
                             .completePort()
                           .build()};
@@ -144,7 +147,7 @@ namespace test  {
           
           ProcNode node{prepareNode("Test")
                           .preparePort()
-                            .invoke("fun()", procFun)
+                            .invoke ("fun()", procFun)
                             .attachAutomation (autoFun)
                             .completePort()
                           .build()};
@@ -162,13 +165,52 @@ namespace test  {
         }
       
       
-      /** @test TODO build a chain with two connected Nodes
-       * @todo WIP 12/24 define ⟶ implement
+      /** @test build a chain with three connected Nodes
+       *      - have two source nodes, which accept a parameter
+       *      - but configure them differently: one gets a constant,
+       *        while the other draws a random number
+       *      - the third node takes two input buffers and and one output;
+       *        it retrieves the input values, and sums them together
+       *      - use the »simplified 1:1 wiring«, which connects consecutively
+       *        each input slot to the next given node on the same port number;
+       *        here we only use port#0 on all three nodes.
+       * @todo 12/24 ✔ define ⟶ ✔ implement
        */
       void
       build_connectedNodes()
         {
-          UNIMPLEMENTED ("build two linked nodes");
+          using SrcBuffs = array<uint*, 2>;
+          auto detailFun = [](uint param, uint* out)  { *out = 1 + param; };
+          auto joinerFun = [](SrcBuffs src, uint* out){ *out = *src[0] + *src[1]; };
+          
+          int peek{0};
+          auto randParam = [&](TurnoutSystem&){ return peek = rani(100); };
+          
+          
+          ProcNode n1{prepareNode("Src1")
+                          .preparePort()
+                            .invoke ("fix-val()", detailFun)
+                            .setParam (LIFE_AND_UNIVERSE_4EVER)
+                            .completePort()
+                          .build()};
+          
+          ProcNode n2{prepareNode("Src2")
+                          .preparePort()
+                            .invoke ("ran-val()", detailFun)
+                            .attachParamFun (randParam)
+                            .completePort()
+                          .build()};
+          
+          ProcNode n3{prepareNode("Join")
+                          .preparePort()
+                            .invoke ("add()", joinerFun)
+                            .connectLead(n1)
+                            .connectLead(n2)
+                            .completePort()
+                          .build()};
+          
+          uint res = invokeRenderNode(n3);
+          CHECK (res == peek+1 + LIFE_AND_UNIVERSE_4EVER+1 );
         }
       
       

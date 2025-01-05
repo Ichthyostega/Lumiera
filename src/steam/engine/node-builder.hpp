@@ -372,7 +372,7 @@ namespace engine {
       
       /** connect the next input slot to either existing or new lead-node" */
       PortBuilder&&
-      conectLead (ProcNode& leadNode)
+      connectLead (ProcNode& leadNode)
         {
           return connectLeadPort (leadNode, this->defaultPort_);
         }
