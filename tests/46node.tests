@@ -6,7 +6,7 @@ PLANNED "Proc Node basics" NodeBase_test <<END
 END
 
 
-PLANNED "Proc Node creation" NodeBuilder_test <<END
+TEST "Proc Node creation" NodeBuilder_test <<END
 END
 
 

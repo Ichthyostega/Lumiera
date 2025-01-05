@@ -105,6 +105,7 @@
  ** @todo WIP-WIP 1/2025 Node-Invocation is reworked from ground up -- some parts can not be
  **       spelled out completely yet, since we have to build this tightly interlocked system of
  **       code moving bottom up, and then filling in further details later working top-down.
+ ** @todo as of 1/2025, the Layer-3 builder seems to be beyond the current integration scope.  //////////////TICKET #1389 : develop a processing builder
  ** 
  ** @see steam::engine::NodeFactory
  ** @see nodewiring.hpp
@@ -455,6 +456,17 @@ namespace engine {
                                     });
         }
       
+      template<typename GET>
+      auto
+      retrieveParam (GET&& getter)
+        {
+          return attachParamFun ([accessor=forward<GET>(getter)]
+                                 (TurnoutSystem& turnoutSys)
+                                    {
+                                      return accessor.getParamVal (turnoutSys);
+                                    });
+        }
+      
       
       
       /*************************************************************//**
@@ -733,16 +745,17 @@ namespace engine {
     {
     public:
       
-      void //////////////////////////////////////////////////////////OOO return type
+      void //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1389 : return type
       requiredSources ()
         {
           UNIMPLEMENTED ("enumerate all source feeds required");
 //        return move(*this);
         }
       
-      void //////////////////////////////////////////////////////////OOO return type
+      void //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1389 : return type
       retrieve (void* streamType)
         {
+          (void)streamType;
           UNIMPLEMENTED ("recursively define a predecessor feed");
 //        return move(*this);
         }
@@ -750,7 +763,7 @@ namespace engine {
       /****************************************************//**
        * Terminal: trigger the Level-3 build walk to produce a ProcNode network.
        */
-      void //////////////////////////////////////////////////////////OOO return type
+      void //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1389 : return type
       build()
         {
           UNIMPLEMENTED("Level-3 build-walk");
@@ -763,9 +776,10 @@ namespace engine {
     {
     public:
       
-      void //////////////////////////////////////////////////////////OOO return type
+      void //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1389 : return type
       from (void* procAsset)
         {
+          (void)procAsset;
           UNIMPLEMENTED ("recursively enter definition of processor node to produce this feed link");
 //        return move(*this);
         }
@@ -779,8 +793,9 @@ namespace engine {
   inline auto
   retrieve(void* streamType)
   {
+    (void)streamType;
     UNIMPLEMENTED("start a connectivity definition at Level-3");
-    return LinkBuilder{};  ///////////////////////////////////////////////////////////////////OOO this is placeholder code; should at least open a ticket
+    return LinkBuilder{};  //////////////////////////////////////////////////////////////////////////////////TICKET #1389 : this is placeholder code....
   }
   
   

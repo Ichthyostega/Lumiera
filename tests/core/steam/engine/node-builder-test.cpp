@@ -24,7 +24,6 @@
 #include "lib/time/timequant.hpp"
 #include "lib/time/timecode.hpp"
 #include "lib/symbol.hpp"
-//#include "lib/util.hpp"
 
 #include <array>
 
@@ -180,23 +179,23 @@ namespace test  {
       build_connectedNodes()
         {
           using SrcBuffs = array<uint*, 2>;
-          auto detailFun = [](uint param, uint* out)  { *out = 1 + param; };
+          auto sourceFun = [](uint param, uint* out)  { *out = 1 + param; };
           auto joinerFun = [](SrcBuffs src, uint* out){ *out = *src[0] + *src[1]; };
           
-          int peek{0};
+          int peek{-1};
           auto randParam = [&](TurnoutSystem&){ return peek = rani(100); };
           
           
           ProcNode n1{prepareNode("Src1")
                           .preparePort()
-                            .invoke ("fix-val()", detailFun)
+                            .invoke ("fix-val()", sourceFun)
                             .setParam (LIFE_AND_UNIVERSE_4EVER)
                             .completePort()
                           .build()};
           
           ProcNode n2{prepareNode("Src2")
                           .preparePort()
-                            .invoke ("ran-val()", detailFun)
+                            .invoke ("ran-val()", sourceFun)
                             .attachParamFun (randParam)
                             .completePort()
                           .build()};
@@ -211,16 +210,69 @@ namespace test  {
           
           uint res = invokeRenderNode(n3);
           CHECK (res == peek+1 + LIFE_AND_UNIVERSE_4EVER+1 );
+          CHECK (peek != -1);
         }
       
       
-      /** @test TODO 
-       * @todo WIP 12/24 🔁 define ⟶ implement
+      /** @test demonstrate the setup of a »Param Agent Node«
+       *      - perform effectively the same computation as the preceding test
+       *      - but use two new custom parameters in the Param Agent Node
+       *      - pick them up from the nested source nodes by accessor-functors
+       * @todo 12/24 ✔ define ⟶ ✔ implement
        */
       void
       build_ParamNode()
         {
-          UNIMPLEMENTED ("build ParamNode + follow-up-Node");
+          // Note: using exactly the same functors as in the preceding test
+          using SrcBuffs = array<uint*, 2>;
+          auto sourceFun = [](uint param, uint* out)  { *out = 1 + param; };
+          auto joinerFun = [](SrcBuffs src, uint* out){ *out = *src[0] + *src[1]; };
+          
+          int peek{-1};
+          auto randParam = [&](TurnoutSystem&){ return peek = rani(100); };
+          
+          // Step-1 : build a ParamSpec
+          auto spec = buildParamSpec()
+                          .addValSlot (LIFE_AND_UNIVERSE_4EVER)
+                          .addSlot (randParam)
+                          ;
+          auto get0 = spec.makeAccessor<0>();
+          auto get1 = spec.makeAccessor<1>();
+          
+          // Step-2 : build delegate Node tree
+          ProcNode n1{prepareNode("Src1")
+                          .preparePort()
+                            .invoke ("fix-val()", sourceFun)
+                            .retrieveParam (get0)
+                            .completePort()
+                          .build()};
+          
+          ProcNode n2{prepareNode("Src2")
+                          .preparePort()
+                            .invoke ("ran-val()", sourceFun)
+                            .retrieveParam (get1)
+                            .completePort()
+                          .build()};
+          
+          ProcNode n3{prepareNode("Join")
+                          .preparePort()
+                            .invoke ("add()", joinerFun)
+                            .connectLead(n1)
+                            .connectLead(n2)
+                            .completePort()
+                          .build()};
+          
+          // Step-3 : build Param Agent as entry point
+          ProcNode n4{prepareNode("Param")
+                          .preparePort()
+                            .computeParam(spec)
+                            .delegateLead(n3)
+                            .completePort()
+                          .build()};
+          
+          uint res = invokeRenderNode(n4);
+          CHECK (res == peek+1 + LIFE_AND_UNIVERSE_4EVER+1 );
+          CHECK (peek != -1);
         }
     };
   
