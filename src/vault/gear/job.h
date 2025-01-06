@@ -159,6 +159,10 @@ typedef lumiera_jobDefinition* LumieraJobDefinition;
  *       the referred LumieraJobClosure needs to be allocated
  *       and managed separately. Indeed, this closure happens
  *       to live within the segment data, as part of the JobTicket.
+ * @deprecated 2024 this was an early draft which actually was never expanded upon.
+ *       At that time, the Scheduler was seen as an interface to the (then) "Backend"
+ *       Structures in the Engine are meanwhile arranged differently, and this inteface
+ *       will be removed soon...
  */
 struct lumiera_jobDescriptor_struct
   {

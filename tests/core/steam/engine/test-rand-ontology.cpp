@@ -38,6 +38,12 @@ namespace engine{
 namespace test  {
 //  namespace err = lumiera::error;
   
+  using ont::FraNo;
+  using ont::ChaNo;
+  using ont::Flavr;
+  using ont::Factr;
+  using ont::Param;
+  
   namespace { // hidden local support facilities....
     
   } // (End) hidden impl details
@@ -53,7 +59,7 @@ namespace test  {
    * @param flavour a further seed parameter to determine the actual (reproducibly) random data
    */
   void
-  generateFrame (TestFrame* buff, size_t frameNr, uint flavour)
+  generateFrame (TestFrame* buff, FraNo frameNr, Flavr flavour)
   {
     REQUIRE (buff);
     new(buff) TestFrame{uint(frameNr), flavour};
@@ -70,7 +76,7 @@ namespace test  {
    *         which will be offset commonly by adding the \a flavour parameter.
    */
   void
-  generateMultichan (TestFrame* buffArry, uint chanCnt, size_t frameNr, uint flavour)
+  generateMultichan (TestFrame* buffArry, ChaNo chanCnt, FraNo frameNr, Flavr flavour)
   {
     REQUIRE (buffArry);
     for (uint i=0; i<chanCnt; ++i)
@@ -83,7 +89,7 @@ namespace test  {
    * @param outArry pointer to allocated storage sufficient to hold a clone copy of these
    */
   void
-  duplicateMultichan (TestFrame* outArry, TestFrame* inArry, uint chanCnt)
+  duplicateMultichan (TestFrame* outArry, TestFrame* inArry, ChaNo chanCnt)
   {
     REQUIRE (inArry);
     REQUIRE (outArry);
@@ -100,7 +106,7 @@ namespace test  {
    *         All data buffers will be manipulated and marked with as valid with a new checksum.
    */
   void
-  manipulateMultichan (TestFrame* buffArry, uint chanCnt, uint64_t param)
+  manipulateMultichan (TestFrame* buffArry, ChaNo chanCnt, Param param)
   {
     REQUIRE (buffArry);
     const uint SIZ = buffArry->data64().size();
@@ -126,7 +132,7 @@ namespace test  {
    *         by hash-chaining with \a param. The generated result is marked with a valid checksum.
    */
   void
-  manipulateFrame (TestFrame* out, TestFrame const* in, uint64_t param)
+  manipulateFrame (TestFrame* out, TestFrame const* in, Param param)
   {
     REQUIRE (in);
     REQUIRE (out);
@@ -145,7 +151,7 @@ namespace test  {
    *         each result byte is the linear interpolation between the corresponding inputs.
    */
   void
-  combineFrames (TestFrame* out, TestFrame const* srcA, TestFrame const* srcB, double mix)
+  combineFrames (TestFrame* out, TestFrame const* srcA, TestFrame const* srcB, Factr mix)
   {
     REQUIRE (srcA);
     REQUIRE (srcB);

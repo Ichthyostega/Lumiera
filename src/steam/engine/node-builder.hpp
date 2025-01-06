@@ -456,6 +456,16 @@ namespace engine {
                                     });
         }
       
+      template<typename PAR, typename...PARS>
+      auto
+      setParam (PAR v1, PARS ...vs)
+        {
+          return attachParamFun ([=](TurnoutSystem&) -> tuple<PAR,PARS...>
+                                    {
+                                      return std::make_tuple (v1,vs...);
+                                    });
+        }
+      
       template<typename GET>
       auto
       retrieveParam (GET&& getter)

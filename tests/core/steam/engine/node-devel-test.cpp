@@ -19,7 +19,9 @@
 #include "lib/test/run.hpp"
 #include "lib/hash-combine.hpp"
 #include "lib/test/test-helper.hpp"
-#include "steam/engine/test-rand-ontology.hpp" ///////////TODO
+#include "steam/engine/node-builder.hpp"
+#include "steam/engine/test-rand-ontology.hpp"
+#include "steam/engine/diagnostic-buffer-provider.hpp"
 #include "lib/test/diagnostic-output.hpp"/////////////////TODO
 #include "lib/iter-zip.hpp"
 #include "lib/random.hpp"
@@ -30,6 +32,8 @@
 using lib::zip;
 using lib::izip;
 using std::vector;
+using std::make_tuple;
+using lib::test::showType;
 
 
 namespace steam {
@@ -281,6 +285,49 @@ namespace test  {
           auto spec = testRand().setupGenerator();
 SHOW_EXPR(spec.PROTO);
           CHECK (spec.PROTO == "generate-TestFrame"_expect);
+SHOW_EXPR(spec.describe())
+          auto procFun = spec.makeFun();
+          using Sig = lib::meta::_Fun<decltype(procFun)>::Sig;
+SHOW_EXPR(showType<Sig>())
+          CHECK (showType<Sig>() == "void (tuple<ulong, uint>, engine::test::TestFrame*)"_expect);
+
+          // Behaves identical to processing_generateFrame()
+          size_t frameNr = defaultGen.u64();
+          uint flavour   = defaultGen.u64();
+          
+          Buffer buff;
+          CHECK (not buff->isSane());
+          
+          procFun (make_tuple (frameNr,flavour), buff);
+          CHECK ( buff->isSane());
+          CHECK ( buff->isPristine());
+          CHECK (*buff == TestFrame(frameNr,flavour));
+          
+          ProcNode node{prepareNode("Test")
+                          .preparePort()
+                            .invoke(spec.describe(), procFun)
+                            .setParam(frameNr,flavour)
+                            .completePort()
+                          .build()};
+          
+SHOW_EXPR(watch(node).getPortSpec(0))
+          CHECK (watch(node).getPortSpec(0) == "Test(TestFrame)"_expect);
+          
+          BufferProvider& provider = DiagnosticBufferProvider::build();
+          BuffHandle buffHandle = provider.lockBuffer (provider.getDescriptorFor(sizeof(TestFrame)));
+          
+          uint port{0};
+          
+          CHECK (not buffHandle.accessAs<TestFrame>().isSane());
+          
+          // Trigger Node invocation...
+          buffHandle = node.pull (port, buffHandle, Time::ZERO, ProcessKey{0});
+          
+          TestFrame& result = buffHandle.accessAs<TestFrame>();
+          CHECK (result.isSane());
+          CHECK (result.isPristine());
+          CHECK (result == *buff);
+          buffHandle.release();
         }
     };
   

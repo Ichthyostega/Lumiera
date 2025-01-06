@@ -24,38 +24,63 @@
 #include "lib/symbol.hpp"
 #include "lib/depend.hpp"
 #include "lib/nocopy.hpp"
+#include "lib/format-obj.hpp"
 #include "lib/format-string.hpp"
 #include "steam/engine/testframe.hpp"
 
 #include <array>
+#include <tuple>
 #include <string>
+#include <memory>
+#include <utility>
 
 
 namespace steam {
 namespace engine{
 namespace test  {
   
+  using std::tuple;
   using std::string;
   using lib::Literal;
+  using std::shared_ptr;
+  using std::make_shared;
+  using std::forward;
+  using std::move;
   using util::_Fmt;
+  using util::toString;
+  
+  /**
+   * Test-Rand-Ontology : definition structures similar to a media-library
+   */
+  namespace ont {
+    
+    using FraNo = size_t;
+    using ChaNo = uint;
+    using Flavr = uint;
+    using Factr = double;
+    using Param = uint64_t;
+    
+    const Literal TYPE_TESTFRAME{"TestFrame"};  ///< a stream implementation type with a frame of reproducible random data
+  }
+
   
   /** produce sequences of frames with (reproducible) random data */
-  void generateFrame (TestFrame* buff, size_t frameNr =0, uint flavour =0);
+  void generateFrame (TestFrame* buff, ont::FraNo frameNr =0, ont::Flavr flavour =0);
   
   /** produce planar multi channel output of random data frames */
-  void generateMultichan (TestFrame* buffArry, uint chanCnt, size_t frameNr =0, uint flavour =0);
+  void generateMultichan (TestFrame* buffArry, ont::ChaNo chanCnt, ont::FraNo frameNr =0, ont::Flavr flavour =0);
   
   /** create an identical clone copy of the planar multi channel frame array */
-  void duplicateMultichan (TestFrame* outArry, TestFrame* inArry, uint chanCnt);
+  void duplicateMultichan (TestFrame* outArry, TestFrame* inArry, ont::ChaNo chanCnt);
 
   /** »process« a planar multi channel array of data frames in-place */
-  void manipulateMultichan (TestFrame* buffArry, uint chanCnt, uint64_t param);
+  void manipulateMultichan (TestFrame* buffArry, ont::ChaNo chanCnt, ont::Param param);
   
   /** »process« random frame date by hash-chaining with a parameter */
-  void manipulateFrame (TestFrame* out, TestFrame const* in, uint64_t param);
+  void manipulateFrame (TestFrame* out, TestFrame const* in, ont::Param param);
   
   /** mix two random data frames by a parameter-controlled proportion */
-  void combineFrames (TestFrame* out, TestFrame const* srcA, TestFrame const* srcB, double mix);
+  void combineFrames (TestFrame* out, TestFrame const* srcA, TestFrame const* srcB, ont::Factr mix);
   
 
 
@@ -73,6 +98,7 @@ namespace test  {
     UNIMPLEMENTED ("a sincerely nonsensical operation");
   }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Dummy / Placeholder
+  
   /**
    * A fake _Domain Ontology_ to describe mocked »render operations« on
    * dummy data frames filled with random numbers.
@@ -88,10 +114,13 @@ namespace test  {
     public:
       struct Spec;
       
+      template<class CONF>
+      class Builder;
+      
      ~TestRandOntology()  = default;
       TestRandOntology()  = default;
       
-      Spec setupGenerator (string qual ="");
+      auto setupGenerator (string qual ="");
     private:
     };
   
@@ -100,19 +129,85 @@ namespace test  {
     : util::Cloneable
     {
       const string PROTO;
+      const string BASE_TYPE;
       
       Spec (Literal kind
            ,Literal type
            )
         : PROTO{_Fmt{"%s-%s"} % kind % type}
+        , BASE_TYPE{type}
         { }
     };
   
-  inline TestRandOntology::Spec
+  template<class CONF>
+  class TestRandOntology::Builder
+    : public Spec
+    {
+      shared_ptr<CONF> conf_;
+      
+    public:
+      template<typename...INIT>
+      Builder (Spec spec, INIT&& ...init)
+        : Spec{move(spec)}
+        , conf_{make_shared<CONF> (spec, forward<INIT> (init)...)}
+        { }
+      
+      auto
+      makeFun()
+        {
+          return conf_->binding();
+        }
+      
+      string
+      describe()
+        {
+          return conf_->procSpec();
+        }
+    };
+  
+  
+  namespace ont {
+    using Spec = TestRandOntology::Spec;
+    
+    /** extended config for Generator operations */
+    struct ConfGen
+      {
+        using Param = tuple<ont::FraNo, ont::Flavr>;
+        
+        ont::Flavr fOff = 0;
+        string streamType;
+        
+        ConfGen(Spec const& spec)
+          : streamType{spec.BASE_TYPE}
+          { }
+        
+        auto
+        binding()
+          {
+            return [offset = fOff]
+                   (Param par, TestFrame* out)
+                      {
+                        auto [frameNr,flavour] = par;
+                        generateFrame (out, frameNr, flavour+offset);
+                      };
+          }
+        
+        string
+        procSpec()
+          {
+            return _Fmt{"%s(%s)"}
+                       % (fOff? toString(fOff):"")
+                       % streamType;
+          }
+      };
+  }
+  
+  inline auto
   TestRandOntology::setupGenerator (string qual)
   {
-    Spec spec{"generate","TestFrame"};
-    return spec;
+    Spec spec{"generate", ont::TYPE_TESTFRAME};
+    Builder<ont::ConfGen> builder{spec};
+    return builder;
   }
   
   /** Singleton accessor */
