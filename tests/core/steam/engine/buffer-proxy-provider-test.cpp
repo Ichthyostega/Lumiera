@@ -66,7 +66,7 @@ namespace test  {
           CHECK (handle.isValid());
           auto& data = handle.accessAs<TestFrame>();
           uint64_t param = defaultGen.u64();
-          manipulateFrame (&data, &data, param);
+          ont::manipulateFrame (&data, &data, param);
 
           // »client« is done...
           handle.emit();

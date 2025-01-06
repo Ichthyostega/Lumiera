@@ -60,53 +60,55 @@ namespace test  {
     using Factr = double;
     using Param = uint64_t;
     
+    const Literal OID{"Test"};                  ///< classificatory prefix for functionality provided by this „library“
     const Literal TYPE_TESTFRAME{"TestFrame"};  ///< a stream implementation type with a frame of reproducible random data
-  }
 
+    /** a dummy value */
+    extern int dummyNum;
+    
+    /** the simplest possible function,
+     *  which can be bound as Render Node */
+    inline void
+    dummyOp (int* num_in_buff)
+    {
+      CHECK (num_in_buff != nullptr);
+      *num_in_buff = dummyNum++;
+    }
+    const Literal DUMMY_NODE_ID{"Test:dummy"};
+    const Literal DUMMY_PROC_ID{"op(int)"};
+    
+    
+    /** produce sequences of frames with (reproducible) random data */
+    void generateFrame (TestFrame* buff, FraNo frameNr =0, Flavr flavour =0);
+    
+    /** produce planar multi channel output of random data frames */
+    void generateMultichan (TestFrame* buffArry, ChaNo chanCnt, FraNo frameNr =0, Flavr flavour =0);
+    
+    /** create an identical clone copy of the planar multi channel frame array */
+    void duplicateMultichan (TestFrame* outArry, TestFrame* inArry, ChaNo chanCnt);
+    
+    /** »process« a planar multi channel array of data frames in-place */
+    void manipulateMultichan (TestFrame* buffArry, ChaNo chanCnt, Param param);
+    
+    /** »process« random frame date by hash-chaining with a parameter */
+    void manipulateFrame (TestFrame* out, TestFrame const* in, Param param);
+    
+    /** mix two random data frames by a parameter-controlled proportion */
+    void combineFrames (TestFrame* out, TestFrame const* srcA, TestFrame const* srcB, Factr mix);
+    
+  }//(End)namespace ont
   
-  /** produce sequences of frames with (reproducible) random data */
-  void generateFrame (TestFrame* buff, ont::FraNo frameNr =0, ont::Flavr flavour =0);
   
-  /** produce planar multi channel output of random data frames */
-  void generateMultichan (TestFrame* buffArry, ont::ChaNo chanCnt, ont::FraNo frameNr =0, ont::Flavr flavour =0);
   
-  /** create an identical clone copy of the planar multi channel frame array */
-  void duplicateMultichan (TestFrame* outArry, TestFrame* inArry, ont::ChaNo chanCnt);
-
-  /** »process« a planar multi channel array of data frames in-place */
-  void manipulateMultichan (TestFrame* buffArry, ont::ChaNo chanCnt, ont::Param param);
   
-  /** »process« random frame date by hash-chaining with a parameter */
-  void manipulateFrame (TestFrame* out, TestFrame const* in, ont::Param param);
-  
-  /** mix two random data frames by a parameter-controlled proportion */
-  void combineFrames (TestFrame* out, TestFrame const* srcA, TestFrame const* srcB, ont::Factr mix);
-  
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Dummy / Placeholder
-  using NoArg   = std::array<char*, 0>;
-  using SoloArg = std::array<char*, 1>;
-  
-  extern const string DUMMY_FUN_ID;
-  
-  /** @todo a placeholder operation to wire a prototypical render node
-   */
-  inline void
-  dummyOp (NoArg in, SoloArg out)
-  {
-    UNIMPLEMENTED ("a sincerely nonsensical operation");
-  }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Dummy / Placeholder
   
   /**
-   * A fake _Domain Ontology_ to describe mocked »render operations« on
-   * dummy data frames filled with random numbers.
-   * 
+   * A fake **Domain Ontology** to describe mocked »render operations« on dummy data frames
+   * filled with random numbers. It provides a _builder notation_ to configure a _processing-functor_
+   * for some operations working on such data frames.
    * @see TestFrame_test
    * @see NodeDevel_test
    * @see NodeLink_test
-   * 
    */
   class TestRandOntology
     {
@@ -120,21 +122,25 @@ namespace test  {
      ~TestRandOntology()  = default;
       TestRandOntology()  = default;
       
-      auto setupGenerator (string qual ="");
+      auto setupGenerator();
     private:
     };
+  
+  
   
   
   struct TestRandOntology::Spec
     : util::Cloneable
     {
       const string PROTO;
+      const string FUNC_ID;
       const string BASE_TYPE;
       
       Spec (Literal kind
            ,Literal type
            )
         : PROTO{_Fmt{"%s-%s"} % kind % type}
+        , FUNC_ID{kind}
         , BASE_TYPE{type}
         { }
     };
@@ -152,17 +158,9 @@ namespace test  {
         , conf_{make_shared<CONF> (spec, forward<INIT> (init)...)}
         { }
       
-      auto
-      makeFun()
-        {
-          return conf_->binding();
-        }
-      
-      string
-      describe()
-        {
-          return conf_->procSpec();
-        }
+      auto   makeFun() { return conf_->binding(); }
+      string procID()  { return conf_->procSpec(); }
+      string nodeID()  { return string{ont::OID}+":"+FUNC_ID; }
     };
   
   
@@ -200,10 +198,14 @@ namespace test  {
                        % streamType;
           }
       };
-  }
+  }//(End)namespace ont
   
+  
+  /**
+   * Initiate configuration of a generator-node to produce TestFrame(s)
+   */
   inline auto
-  TestRandOntology::setupGenerator (string qual)
+  TestRandOntology::setupGenerator()
   {
     Spec spec{"generate", ont::TYPE_TESTFRAME};
     Builder<ont::ConfGen> builder{spec};

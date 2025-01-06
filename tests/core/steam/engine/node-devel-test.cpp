@@ -97,7 +97,7 @@ namespace test  {
           Buffer buff;
           CHECK (not buff->isSane());
           
-          generateFrame (buff, frameNr, flavour);
+          ont::generateFrame (buff, frameNr, flavour);
           CHECK ( buff->isSane());
           CHECK ( buff->isPristine());
           CHECK (*buff == TestFrame(frameNr,flavour));
@@ -119,7 +119,7 @@ namespace test  {
           for (uint i=0; i<channels; ++i)
             CHECK (not buff[i]->isSane());
           
-          generateMultichan (buff[0], channels, frameNr, flavour);
+          ont::generateMultichan (buff[0], channels, frameNr, flavour);
           for (uint i=0; i<channels; ++i)
             {
               CHECK (buff[i]->isPristine());
@@ -136,13 +136,13 @@ namespace test  {
           uint flavour   = defaultGen.u64();
           uint channels  = 1 + rani(50);
           Buffer srcBuff[50];
-          generateMultichan (srcBuff[0], channels, frameNr, flavour);
+          ont::generateMultichan (srcBuff[0], channels, frameNr, flavour);
           
           Buffer clone[50];
           for (uint i=0; i<channels; ++i)
             CHECK (not clone[i]->isSane());
           
-          duplicateMultichan (clone[0],srcBuff[0], channels);
+          ont::duplicateMultichan (clone[0],srcBuff[0], channels);
           for (uint i=0; i<channels; ++i)
             {
               CHECK (clone[i]->isPristine());
@@ -168,15 +168,15 @@ namespace test  {
           uint flavour   = defaultGen.u64();
           uint channels  = 1 + rani(50);
           Buffer buff[50], refData[50];
-          generateMultichan (buff[0], channels, frameNr, flavour);
+          ont::generateMultichan (buff[0], channels, frameNr, flavour);
           // stash away a copy of the test data for verification
-          duplicateMultichan(refData[0],buff[0], channels);
+          ont::duplicateMultichan(refData[0],buff[0], channels);
           
           for (uint c=0; c<channels; ++c)
             CHECK (buff[c]->isPristine());
           
           uint64_t param = defaultGen.u64();
-          manipulateMultichan(buff[0], channels, param);
+          ont::manipulateMultichan(buff[0], channels, param);
           
           const uint SIZ = buff[0]->data64().size();
           vector<uint64_t> xlink(SIZ, param);     // temporary storage for verifying the hash-chain
@@ -214,7 +214,7 @@ namespace test  {
           CHECK (oBuff->isPristine());
           
           uint64_t param = defaultGen.u64();
-          manipulateFrame (oBuff, iBuff, param);
+          ont::manipulateFrame (oBuff, iBuff, param);
           CHECK (    oBuff->isValid());
           CHECK (not oBuff->isPristine());
           CHECK (    iBuff->isPristine());
@@ -230,7 +230,7 @@ namespace test  {
               CHECK (feed  == oDat);
             }
            // can also process in-place
-          manipulateFrame (iBuff, iBuff, param);
+          ont::manipulateFrame (iBuff, iBuff, param);
           CHECK (not iBuff->isPristine());
           CHECK (    iBuff->isValid());
           CHECK (*iBuff == *oBuff);  // second invocation exactly reproduced data from first invocation
@@ -253,7 +253,7 @@ namespace test  {
           CHECK (oBuff->isPristine());
           
           double mix = defaultGen.uni();
-          combineFrames (oBuff, i1Buff, i2Buff, mix);
+          ont::combineFrames (oBuff, i1Buff, i2Buff, mix);
           CHECK (    oBuff->isValid());
           CHECK (not oBuff->isPristine());
           CHECK (    i1Buff->isPristine());
@@ -265,7 +265,7 @@ namespace test  {
             CHECK (oDat == std::lround((1-mix)*i1Dat + mix*i2Dat));
           
           // can also process in-place
-          combineFrames (i1Buff, i1Buff, i2Buff, mix);
+          ont::combineFrames (i1Buff, i1Buff, i2Buff, mix);
           CHECK (not i1Buff->isPristine());
           CHECK (    i1Buff->isValid());
           CHECK (*i1Buff == *oBuff); // second invocation exactly reproduced data from first invocation
@@ -283,15 +283,14 @@ namespace test  {
       testRand_simpleUsage()
         {
           auto spec = testRand().setupGenerator();
-SHOW_EXPR(spec.PROTO);
           CHECK (spec.PROTO == "generate-TestFrame"_expect);
-SHOW_EXPR(spec.describe())
+          
+          // generate a binding as processing-functor
           auto procFun = spec.makeFun();
           using Sig = lib::meta::_Fun<decltype(procFun)>::Sig;
-SHOW_EXPR(showType<Sig>())
           CHECK (showType<Sig>() == "void (tuple<ulong, uint>, engine::test::TestFrame*)"_expect);
 
-          // Behaves identical to processing_generateFrame()
+          // Behaves identical to processing_generateFrame() — see above...
           size_t frameNr = defaultGen.u64();
           uint flavour   = defaultGen.u64();
           
@@ -303,15 +302,14 @@ SHOW_EXPR(showType<Sig>())
           CHECK ( buff->isPristine());
           CHECK (*buff == TestFrame(frameNr,flavour));
           
-          ProcNode node{prepareNode("Test")
+          ProcNode node{prepareNode(spec.nodeID())
                           .preparePort()
-                            .invoke(spec.describe(), procFun)
+                            .invoke(spec.procID(), procFun)
                             .setParam(frameNr,flavour)
                             .completePort()
                           .build()};
           
-SHOW_EXPR(watch(node).getPortSpec(0))
-          CHECK (watch(node).getPortSpec(0) == "Test(TestFrame)"_expect);
+          CHECK (watch(node).getPortSpec(0) == "Test:generate(TestFrame)"_expect);
           
           BufferProvider& provider = DiagnosticBufferProvider::build();
           BuffHandle buffHandle = provider.lockBuffer (provider.getDescriptorFor(sizeof(TestFrame)));

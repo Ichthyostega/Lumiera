@@ -36,132 +36,130 @@ using lib::zip;
 namespace steam {
 namespace engine{
 namespace test  {
+namespace ont   {
 //  namespace err = lumiera::error;
-  
-  using ont::FraNo;
-  using ont::ChaNo;
-  using ont::Flavr;
-  using ont::Factr;
-  using ont::Param;
-  
-  namespace { // hidden local support facilities....
     
-  } // (End) hidden impl details
-  
-  
-  const string DUMMY_FUN_ID{"dummyFun(TestFrame)"};
-
-  /* ========= Dummy implementation of Media processing ========= */
-
-  /**
-   * @param buff    a sufficiently sized allocation to place the result data into
-   * @param frameNr the frame of the »source feed« to generate (determines actual random data)
-   * @param flavour a further seed parameter to determine the actual (reproducibly) random data
-   */
-  void
-  generateFrame (TestFrame* buff, FraNo frameNr, Flavr flavour)
-  {
-    REQUIRE (buff);
-    new(buff) TestFrame{uint(frameNr), flavour};
-  }
-  
-  /**
-   * @param chanCnt  size of the array of frames to generate
-   * @param buffArry pointer to an allocation sufficiently sized to hold `TestFrame[chanCnt]`
-   * @param frameNr  the frame of the »source feed« to use commonly on all those frames in the output
-   * @param flavour  a further seed parameter used as starting offest for the output's `family` parameters
-   * @remark this is a variation of the [dummy data generator](\ref #generateFrame),
-   *         which immediately generates a planar block of related frames with random data,
-   *         all seeded with the _same_ `frameNr` and _consecutive_ `family` parameters,
-   *         which will be offset commonly by adding the \a flavour parameter.
-   */
-  void
-  generateMultichan (TestFrame* buffArry, ChaNo chanCnt, FraNo frameNr, Flavr flavour)
-  {
-    REQUIRE (buffArry);
-    for (uint i=0; i<chanCnt; ++i)
-      new(buffArry+i) TestFrame{uint(frameNr), flavour+i};
-  }
-  
-  /**
-   * @param chanCnt size of the array of frames to clone
-   * @param inArry  pointer to storage holding a TestFrame[chanCnt]
-   * @param outArry pointer to allocated storage sufficient to hold a clone copy of these
-   */
-  void
-  duplicateMultichan (TestFrame* outArry, TestFrame* inArry, ChaNo chanCnt)
-  {
-    REQUIRE (inArry);
-    REQUIRE (outArry);
-    for (uint i=0; i<chanCnt; ++i)
-      new(outArry+i) TestFrame{inArry[i]};
-  }
-  
-  /**
-   * @param chanCnt  size of the array of frames to manipulate
-   * @param buffArry pointer to an array of several frames (channels)
-   * @param param parameter to control or »mark« the data manipulation (hash-combining)
-   * @remark this function in-place processing of several channels in one step: data is processed
-   *         in 64-bit words, by hash-chaining with \a param and then joining in the data items.
-   *         All data buffers will be manipulated and marked with as valid with a new checksum.
-   */
-  void
-  manipulateMultichan (TestFrame* buffArry, ChaNo chanCnt, Param param)
-  {
-    REQUIRE (buffArry);
-    const uint SIZ = buffArry->data64().size();
-    for (uint i=0; i<SIZ; ++i)
-      {
-        uint64_t feed{param};
-        for (uint c=0; c<chanCnt; ++c)
-          {
-            auto& data = buffArry[c].data64()[i];
-            lib::hash::combine(feed, data);
-            data = feed;
-          }
-      }
-    for (uint c=0; c<chanCnt; ++c)
-      buffArry[c].markChecksum();
-  }
-  
-  /**
-   * @param out   existing allocation to place the generated TestFrame into
-   * @param in    allocation holding the input TestFrame data
-   * @param param parameter to control or »mark« the data manipulation (hash-combining)
-   * @remark this function emulates „media data processing“: data is processed in 64-bit words,
-   *         by hash-chaining with \a param. The generated result is marked with a valid checksum.
-   */
-  void
-  manipulateFrame (TestFrame* out, TestFrame const* in, Param param)
-  {
-    REQUIRE (in);
-    REQUIRE (out);
-    auto calculate = [](uint64_t chain, uint64_t val){ lib::hash::combine(chain,val); return chain; };
-    for (auto& [res,src] : zip (out->data64(), in->data64()))
-        res = calculate(param, src);
-    out->markChecksum();
-  }
-  
-  /**
-   * @param out  existing allocation to receive the calculated result TestFrame
-   * @param srcA a buffer holding the input data for feed-A
-   * @param srcB a buffer holding the input data for feed-B
-   * @param mix  degree of mixing (by integer arithmetics): 100 means 100% feed-B
-   * @remark this function emulates a mixing or overlaying operation:
-   *         each result byte is the linear interpolation between the corresponding inputs.
-   */
-  void
-  combineFrames (TestFrame* out, TestFrame const* srcA, TestFrame const* srcB, Factr mix)
-  {
-    REQUIRE (srcA);
-    REQUIRE (srcB);
-    REQUIRE (out);
-    for (auto& [res,inA,inB] : zip (out->data()
-                                   ,srcA->data()
-                                   ,srcB->data()))
-        res = lround((1-mix)*inA + mix*inB);
-    out->markChecksum();
-  }
+    namespace { // hidden local support facilities....
+      
+    } // (End) hidden impl details
+    
+    /** @remark will be returned from dummyOp() */
+    int dummyNum{-1};
+    
+    
+    
+    /* ========= Dummy implementation of Media processing ========= */
+    
+    /**
+     * @param buff    a sufficiently sized allocation to place the result data into
+     * @param frameNr the frame of the »source feed« to generate (determines actual random data)
+     * @param flavour a further seed parameter to determine the actual (reproducibly) random data
+     */
+    void
+    generateFrame (TestFrame* buff, FraNo frameNr, Flavr flavour)
+    {
+      REQUIRE (buff);
+      new(buff) TestFrame{uint(frameNr), flavour};
+    }
+    
+    /**
+     * @param chanCnt  size of the array of frames to generate
+     * @param buffArry pointer to an allocation sufficiently sized to hold `TestFrame[chanCnt]`
+     * @param frameNr  the frame of the »source feed« to use commonly on all those frames in the output
+     * @param flavour  a further seed parameter used as starting offest for the output's `family` parameters
+     * @remark this is a variation of the [dummy data generator](\ref #generateFrame),
+     *         which immediately generates a planar block of related frames with random data,
+     *         all seeded with the _same_ `frameNr` and _consecutive_ `family` parameters,
+     *         which will be offset commonly by adding the \a flavour parameter.
+     */
+    void
+    generateMultichan (TestFrame* buffArry, ChaNo chanCnt, FraNo frameNr, Flavr flavour)
+    {
+      REQUIRE (buffArry);
+      for (uint i=0; i<chanCnt; ++i)
+        new(buffArry+i) TestFrame{uint(frameNr), flavour+i};
+    }
+    
+    /**
+     * @param chanCnt size of the array of frames to clone
+     * @param inArry  pointer to storage holding a TestFrame[chanCnt]
+     * @param outArry pointer to allocated storage sufficient to hold a clone copy of these
+     */
+    void
+    duplicateMultichan (TestFrame* outArry, TestFrame* inArry, ChaNo chanCnt)
+    {
+      REQUIRE (inArry);
+      REQUIRE (outArry);
+      for (uint i=0; i<chanCnt; ++i)
+        new(outArry+i) TestFrame{inArry[i]};
+    }
+    
+    /**
+     * @param chanCnt  size of the array of frames to manipulate
+     * @param buffArry pointer to an array of several frames (channels)
+     * @param param parameter to control or »mark« the data manipulation (hash-combining)
+     * @remark this function in-place processing of several channels in one step: data is processed
+     *         in 64-bit words, by hash-chaining with \a param and then joining in the data items.
+     *         All data buffers will be manipulated and marked with as valid with a new checksum.
+     */
+    void
+    manipulateMultichan (TestFrame* buffArry, ChaNo chanCnt, Param param)
+    {
+      REQUIRE (buffArry);
+      const uint SIZ = buffArry->data64().size();
+      for (uint i=0; i<SIZ; ++i)
+        {
+          uint64_t feed{param};
+          for (uint c=0; c<chanCnt; ++c)
+            {
+              auto& data = buffArry[c].data64()[i];
+              lib::hash::combine(feed, data);
+              data = feed;
+            }
+        }
+      for (uint c=0; c<chanCnt; ++c)
+        buffArry[c].markChecksum();
+    }
+    
+    /**
+     * @param out   existing allocation to place the generated TestFrame into
+     * @param in    allocation holding the input TestFrame data
+     * @param param parameter to control or »mark« the data manipulation (hash-combining)
+     * @remark this function emulates „media data processing“: data is processed in 64-bit words,
+     *         by hash-chaining with \a param. The generated result is marked with a valid checksum.
+     */
+    void
+    manipulateFrame (TestFrame* out, TestFrame const* in, Param param)
+    {
+      REQUIRE (in);
+      REQUIRE (out);
+      auto calculate = [](uint64_t chain, uint64_t val){ lib::hash::combine(chain,val); return chain; };
+      for (auto& [res,src] : zip (out->data64(), in->data64()))
+          res = calculate(param, src);
+      out->markChecksum();
+    }
+    
+    /**
+     * @param out  existing allocation to receive the calculated result TestFrame
+     * @param srcA a buffer holding the input data for feed-A
+     * @param srcB a buffer holding the input data for feed-B
+     * @param mix  degree of mixing (by integer arithmetics): 100 means 100% feed-B
+     * @remark this function emulates a mixing or overlaying operation:
+     *         each result byte is the linear interpolation between the corresponding inputs.
+     */
+    void
+    combineFrames (TestFrame* out, TestFrame const* srcA, TestFrame const* srcB, Factr mix)
+    {
+      REQUIRE (srcA);
+      REQUIRE (srcB);
+      REQUIRE (out);
+      for (auto& [res,inA,inB] : zip (out->data()
+                                     ,srcA->data()
+                                     ,srcB->data()))
+          res = lround((1-mix)*inA + mix*inB);
+      out->markChecksum();
+    }
+  }//(End)namespace ont
   
   
   
