@@ -298,11 +298,11 @@ namespace engine {
       
       
     private:
-      PortBuilderRoot(NodeBuilder<POL>&& anchor)
-        : NodeBuilder<POL>{move(anchor)}
+      PortBuilderRoot(NodeBuilder<POL,DAT>&& anchor)
+        : NodeBuilder<POL,DAT>{move(anchor)}
         { }
       
-      friend PortBuilderRoot NodeBuilder<POL>::preparePort();
+      friend PortBuilderRoot NodeBuilder<POL,DAT>::preparePort();
     };
   
   /**

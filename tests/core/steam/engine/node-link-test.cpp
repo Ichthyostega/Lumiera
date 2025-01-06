@@ -51,19 +51,20 @@ namespace test  {
         {
           seedRand();
           
+          build_simple_node();
           build_connected_nodes();
-          generate_turnout_system();
           trigger_node_port_invocation();
         }
       
       
       
       
-      /** @test TODO Build render nodes linked into a connectivity network
-       * @todo WIP 7/24 🔁 define ⟶ ✔ implement
+      /** @test Build Node Port for simple function
+       *        and verify observable properties of a Render Node
+       * @todo 7/24 ✔ define ⟶ ✔ implement
        */
       void
-      build_connected_nodes()
+      build_simple_node()
         {
           // use some dummy specs and a dummy operation....
           StrView nodeID{ont::DUMMY_NODE_ID};
@@ -115,13 +116,37 @@ namespace test  {
         }
       
       
-      /** @test TODO Use existing node connectivity to generate a TurnoutSystem
-       * @todo WIP 12/24 🔁 define ⟶ implement
+      /** @test TODO Build more elaborate Render Nodes linked into a connectivity network
+       * @todo WIP 1/25 🔁 define ⟶ implement
        */
       void
-      generate_turnout_system()
+      build_connected_nodes()
         {
-          UNIMPLEMENTED ("use existing node connectivity to generate a TurnoutSystem");
+          auto srcOp = [](int param, int* res){ *res = param; };
+          
+          // A Node with two (source) ports
+          ProcNode n1{prepareNode("n1")
+                        .preparePort()
+                          .invoke("a(int)", srcOp)
+                          .setParam(5)
+                          .completePort()
+                        .preparePort()
+                          .invoke("b(int)", srcOp)
+                          .setParam(23)
+                          .completePort()
+                        .build()};
+
+          auto add1Op = [](int* src, int* res){ *res = 1 + *src; };
+          ProcNode n2{prepareNode("n2")
+                        .preparePort()
+                          .invoke("+1(int)(int)", add1Op)
+                          .connectLead(n1)
+                          .completePort()
+                        .preparePort()
+                          .invoke("+1(int)(int)", add1Op)
+                          .connectLead(n1)
+                          .completePort()
+                        .build()};
         }
       
       
