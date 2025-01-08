@@ -23,7 +23,9 @@
 #include "lib/test/diagnostic-output.hpp"/////////////////TODO
 #include "lib/util.hpp"
 
+#include <array>
 
+using std::array;
 using util::isnil;
 //using std::string;
 using util::isSameObject;
@@ -122,31 +124,79 @@ namespace test  {
       void
       build_connected_nodes()
         {
-          auto srcOp = [](int param, int* res){ *res = param; };
+          // This operation emulates a data source
+          auto src_op = [](int param, int* res){ *res = param; };
           
           // A Node with two (source) ports
           ProcNode n1{prepareNode("n1")
                         .preparePort()
-                          .invoke("a(int)", srcOp)
+                          .invoke("a(int)", src_op)
                           .setParam(5)
                           .completePort()
                         .preparePort()
-                          .invoke("b(int)", srcOp)
+                          .invoke("b(int)", src_op)
                           .setParam(23)
                           .completePort()
                         .build()};
 
-          auto add1Op = [](int* src, int* res){ *res = 1 + *src; };
+          // A node to add some "processing" to each data chain
+          auto add1_op = [](int* src, int* res){ *res = 1 + *src; };
           ProcNode n2{prepareNode("n2")
                         .preparePort()
-                          .invoke("+1(int)(int)", add1Op)
+                          .invoke("+1(int)(int)", add1_op)
                           .connectLead(n1)
                           .completePort()
                         .preparePort()
-                          .invoke("+1(int)(int)", add1Op)
+                          .invoke("+1(int)(int)", add1_op)
                           .connectLead(n1)
                           .completePort()
                         .build()};
+
+          // Need a secondary source, this time with three ports
+          ProcNode n1b{prepareNode("n1b")
+                        .preparePort()
+                          .invoke("a(int)", src_op)
+                          .setParam(7)
+                          .completePort()
+                        .preparePort()
+                          .invoke("b(int)", src_op)
+                          .setParam(13)
+                          .completePort()
+                        .preparePort()
+                          .invoke("c(int)", src_op)
+                          .setParam(17)
+                          .completePort()
+                        .build()};
+          
+          // This operation emulates mixing of two source chains
+          auto mix_op = [](array<int*,2> src, int* res){ *res = (*src[0] + *src[1]) / 2; };
+          
+          // Wiring for the Mix, building up three ports
+          // Since the first source-chain has only two ports,
+          // for the third result port we'll re-use the second source
+          ProcNode n3{prepareNode("n2")
+                        .preparePort()
+                          .invoke("A.mix(int/2)(int)", mix_op)
+                          .connectLead(n2)
+                          .connectLead(n1b)
+                          .completePort()
+                        .preparePort()
+                          .invoke("B.mix(int/2)(int)", mix_op)
+                          .connectLead(n2)
+                          .connectLead(n1b)
+                          .completePort()
+                        .preparePort()
+                          .invoke("C.mix(int/2)(int)", mix_op)
+                          .connectLeadPort(n2,1)
+                          .connectLead(n1b)
+                          .completePort()
+                        .build()};
+          
+SHOW_EXPR(watch(n1).getNodeSpec())
+SHOW_EXPR(watch(n1).getPortSpec(0))
+SHOW_EXPR(watch(n1).getPortSpec(1))
+SHOW_EXPR(watch(n1.getPort(0)).getProcSpec())
+SHOW_EXPR(watch(n1.getPort(0)).isSrc())
         }
       
       

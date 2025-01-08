@@ -218,4 +218,27 @@ namespace engine {
   }
   
   
+  lib::Several<PortRef>
+  PortDiagnostic::srcPorts()
+  {
+    UNIMPLEMENTED ("intrude into the Turnout and find out about source connectivity");
+  }
+  
+  /**
+   * @return the symbolic string representing this processing port,
+   *         as [provided by Node-identification](\ref ProcID::genProcSpec())
+   */
+  string
+  PortDiagnostic::getProcSpec()
+  {
+    p_.procID.genProcSpec();
+  }
+  
+  HashVal
+  PortDiagnostic::getProcHash()  ///< @return as [calculated by Node-identification](\ref ProcID)
+  {
+    UNIMPLEMENTED ("calculate an unique, stable and reproducible hash-key to identify the Turnout");
+  }
+  
+  
 }} // namespace steam::engine

@@ -200,15 +200,9 @@ namespace engine {
   
   
   /**
-   * Key abstraction of the Render Engine: A Data processing Node
+   * Key abstraction of the Render Engine: A Data processing Node.
    * 
-   * @todo it's not clear as of 9/09 if ProcNode shall be an ABC/Interface
-   *       It might be used as ABC (as was the original intention) when implementing
-   *       several query/information functions. In that case, the ctor will become protected.
-   *       The alternative would be to push down these information-retrieval part into a
-   *       configurable element within Connectivity, in which case we even might drop
-   *       ProcNode as a frontend entirely.
-   * @todo WIP-WIP-WIP 2024 Node-Invocation is reworked from ground up for the »Playback Vertical Slice«
+   * @todo WIP 2025 Node-Invocation is reworked from ground up for the »Playback Vertical Slice«
    */
   class ProcNode
     : util::NonCopyable
@@ -217,16 +211,10 @@ namespace engine {
       Connectivity wiring_;
       
     public:
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
       ProcNode (Connectivity&& con)
         : wiring_(move(con))
         { }
       
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
-      
-      
-    public:
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
       
       Port&
       getPort (uint portIdx)
@@ -258,14 +246,14 @@ namespace engine {
           TurnoutSystem turnoutSystem{nomTime, procKey};
           return getPort(portIdx).weave (turnoutSystem, output);
         }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
       
       /// „backdoor“ to watch internals from tests
       friend class ProcNodeDiagnostic;
     };
   
   
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
+  /* ========== Diagnostic and Testing ========== */
+  
   class ProcNodeDiagnostic
     : util::MoveOnly
     {
@@ -299,6 +287,32 @@ namespace engine {
   watch (ProcNode& theNode)
   {
     return ProcNodeDiagnostic{theNode};
+  }
+  
+  
+  
+  class PortDiagnostic
+    : util::MoveOnly
+    {
+      Port& p_;
+      
+    public:
+      PortDiagnostic (Port& thePort)
+        : p_{thePort}
+        { }
+      
+      lib::Several<PortRef> srcPorts();
+      
+      bool isSrc()  { return srcPorts().empty(); }
+      
+      string getProcSpec();   ///< generate a descriptive diagnostic Spec for the Turnout sitting behind this Port
+      HashVal getProcHash();  ///< calculate an unique, stable and reproducible hash-key to identify the associated operation
+    };
+  
+  inline PortDiagnostic
+  watch (Port& thePort)
+  {
+    return PortDiagnostic{thePort};
   }
   
   
