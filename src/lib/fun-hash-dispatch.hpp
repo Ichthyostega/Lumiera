@@ -14,7 +14,17 @@
 
 /** @file fun-hash-dispatch.hpp
  ** Service to register and dispatch opaque functions.
+ ** Under the hood, the implementation is a hash table holding function pointers.
+ ** An instance is thus always tied to one specific function signature. Yet due
+ ** to the implicit conversion, simple capture-less λ can be attached as well.
+ ** 
+ ** The purpose for such a setup is to provide a simple per-signature backend for
+ ** some advanced registration scheme involving specific function patterns. The
+ ** hash-IDs may be tied to target properties, which sometimes allows to limit
+ ** the number of actual functions in the dispatcher tables and can thus be
+ ** superior to a classic OO interface when subclasses would be templated.
  ** @see FunHashDispatch_test
+ ** @see proc-id.hpp "usage example"
  */
 
 
@@ -25,26 +35,17 @@
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/hash-value.h"
-#include "lib/meta/function.hpp"
 #include "lib/util.hpp"
 
-//#include <boost/functional/hash.hpp>
 #include <unordered_map>
-//#include <cstddef>
-//#include <functional>
 
 
 namespace lib {
   
-  namespace {// implementation details
-    
-    /** @internal mix-in for self-destruction capabilities
-     */
-  }//(End)implementation details
   
-  
-  
-  /************************************************//**
+  /**
+   * Dispatcher-table for state-less functions with a given signature.
+   * Entries are keyed by hashID and can not be changed, once entered.
    */
   template<class SIG>
   class FunHashDispatch
@@ -67,6 +68,7 @@ namespace lib {
           return util::contains (dispatchTab_, key);
         }
       
+      /** retrieve entry, which can be invoked directly */
       SIG*
       select (HashVal key)
         {

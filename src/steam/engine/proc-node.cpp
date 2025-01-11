@@ -26,7 +26,7 @@
 #include "lib/format-util.hpp"
 #include "lib/util.hpp"
 
-#include <boost/functional/hash.hpp>
+#include <boost/functional/hash.hpp>        /////////////////////////////////////////////////////TICKET #1391 is boost-hash the proper tool for this task?
 #include <unordered_set>
 #include <set>
 
@@ -104,9 +104,9 @@ namespace engine {
   HashVal
   hash_value (ProcID const& procID)
   {
-    HashVal hash = boost::hash_value (procID.nodeSymb_);
+    HashVal hash = boost::hash_value (procID.nodeSymb_);  ///////////////////////////////////////////////////TICKET #1391 : which technology to use for processing-ID hashes -> cache keys?
     if (not isnil(procID.portQual_))
-      hash_combine (hash, procID.portQual_);
+      hash_combine (hash, procID.portQual_);         ////////////////////////////////////////////////////////TICKET #1391 : should use lib/hash-combine.hpp (stable, but not portable!)
     hash_combine   (hash, procID.argLists_);
     return hash;
   }

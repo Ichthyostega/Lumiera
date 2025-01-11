@@ -33,26 +33,17 @@
 namespace lib {
 namespace test{
   
-//  using util::isSameAdr;
-//  using std::rand;
-  using util::toString;
   using std::string;
-  
-//  namespace error = lumiera::error;
-//  using error::LUMIERA_ERROR_FATAL;
-//  using error::LUMIERA_ERROR_STATE;
-  
-  
-  namespace {
-//    #define Type(_EXPR_) lib::test::showType<decltype(_EXPR_)>()
-  }
-
-  
+  using util::toString;
   
   
   
   /***********************************************************************************//**
    * @test Verify generic helper to provide a hash-based function dispatch table.
+   *     - instances are tied to one specific function signature
+   *     - entries are keyed by a hash-ID
+   *     - given that ID, the registered functions can be invoked
+   *     - once enrolled, entries can not be replaced
    * @see fun-hash-dispatch.hpp
    * @see NodeMeta_test
    */
@@ -71,15 +62,12 @@ namespace test{
           auto* res = dispatch.enrol (1, one);
           CHECK (res == one);
           CHECK (dispatch.contains(1));
-SHOW_EXPR(dispatch.select(1)(42));
           CHECK (dispatch.select(1)(42) == "42"_expect);
           
           dispatch.enrol (2, two);
           CHECK (dispatch.contains(1));
           CHECK (dispatch.contains(2));
-SHOW_EXPR(dispatch.select(1)(5));
           CHECK (dispatch.select(1)(5) == "5"_expect);
-SHOW_EXPR(dispatch.select(2)(5));
           CHECK (dispatch.select(2)(5) == "*****"_expect);
           
           res = dispatch.enrol (1,two);
