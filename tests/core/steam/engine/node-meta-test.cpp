@@ -50,14 +50,32 @@ namespace test  {
       
       
       /** @test TODO evaluation of processing-spec for a ProcID
-       * @todo WIP 1/25 🔁 define ⟶ implement
+       * @todo WIP 1/25 🔁 define ⟶ 🔁 implement
        */
       void
       verify_ID_specification()
         {
           auto& p1 = ProcID::describe("N1","(arg)");
-          auto& p2 = ProcID::describe("N1","(a1,a2)");
-          auto& p3 = ProcID::describe("N1","(in/3)(o1,o2/2)");
+          auto& p2 = ProcID::describe("U:N2","+(a1,a2)");
+          auto& p3 = ProcID::describe("O:N3","(in/3)(o1,o2/2)");
+          
+          CHECK (p1.genNodeName()   == "N1"_expect );
+          CHECK (p1.genNodeSymbol() == "N1"_expect );
+          CHECK (p1.genNodeDomain() ==   ""_expect );
+          CHECK (p2.genNodeName()   == "U:N2"_expect );
+          CHECK (p2.genNodeSymbol() == "N2"_expect );
+          CHECK (p2.genNodeDomain() ==  "U"_expect );
+          CHECK (p3.genNodeName()   == "O:N3"_expect );
+          CHECK (p3.genNodeSymbol() == "N3"_expect );
+          CHECK (p3.genNodeDomain() ==  "O"_expect );
+          
+          CHECK (p1.genProcName()   == "N1"_expect );
+          CHECK (p1.genQualifier()  ==   ""_expect );
+          CHECK (p2.genProcName()   == "N2.+"_expect );                   // domain omitted, qualifier joined with '.'
+          CHECK (p2.genQualifier()  == ".+"_expect );                     // qualifier includes leading '.'
+          CHECK (p3.genProcName()   == "N3"_expect );
+          CHECK (p2.genProcSpec()   == "U:N2.+(a1,a2)"_expect );
+          CHECK (p3.genProcSpec()   == "O:N3(in/3)(o1,o2/2)"_expect );
           UNIMPLEMENTED ("parse and evaluate");
         }
       

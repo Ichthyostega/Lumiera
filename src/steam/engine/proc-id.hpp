@@ -109,7 +109,7 @@ namespace engine {
    */
   class ProcID
     {
-      StrView nodeSymb_;
+      StrView nodeName_;
       StrView portQual_;
       StrView argLists_;
       ProcAttrib attrib_{};
@@ -127,14 +127,17 @@ namespace engine {
       
       string genProcName();
       string genProcSpec();        ///< render a descriptor for the operation (without predecessors)
+      string genQualifier();
       string genNodeName();
+      string genNodeSymbol();
+      string genNodeDomain();
       string genNodeSpec(Leads&);
       string genSrcSpec (Leads&);  ///< transitively enumerate all unique source nodes
       
       friend bool
       operator== (ProcID const& l, ProcID const& r)
       {
-        return l.nodeSymb_ == r.nodeSymb_
+        return l.nodeName_ == r.nodeName_
            and l.portQual_ == r.portQual_
            and l.argLists_ == r.argLists_
            and l.attrib_   == r.attrib_;

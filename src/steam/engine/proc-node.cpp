@@ -81,7 +81,7 @@ namespace engine {
     ProcID& entry{unConst (*res.first)};
     if (res.second)
       {// new record placed into the registry
-        dedupSymbol (entry.nodeSymb_);
+        dedupSymbol (entry.nodeName_);
         dedupSymbol (entry.argLists_);
         if (not isnil(entry.portQual_))
           dedupSymbol (entry.portQual_);
@@ -91,7 +91,7 @@ namespace engine {
   
   /** @internal */
   ProcID::ProcID (StrView nodeSymb, StrView portQual, StrView argLists)
-    : nodeSymb_{nodeSymb}
+    : nodeName_{nodeSymb}
     , portQual_{portQual}
     , argLists_{argLists}
     { }
@@ -104,7 +104,7 @@ namespace engine {
   HashVal
   hash_value (ProcID const& procID)
   {
-    HashVal hash = boost::hash_value (procID.nodeSymb_);  ///////////////////////////////////////////////////TICKET #1391 : which technology to use for processing-ID hashes -> cache keys?
+    HashVal hash = boost::hash_value (procID.nodeName_);  ///////////////////////////////////////////////////TICKET #1391 : which technology to use for processing-ID hashes -> cache keys?
     if (not isnil(procID.portQual_))
       hash_combine (hash, procID.portQual_);         ////////////////////////////////////////////////////////TICKET #1391 : should use lib/hash-combine.hpp (stable, but not portable!)
     hash_combine   (hash, procID.argLists_);
@@ -115,9 +115,8 @@ namespace engine {
   ProcID::genProcName()
   {
     std::ostringstream buffer;
-    buffer << nodeSymb_;
-    if (not isnil(portQual_))
-      buffer << '.' << portQual_;
+    buffer << genNodeSymbol()
+           << genQualifier();
     return buffer.str();
   }
   
@@ -125,17 +124,41 @@ namespace engine {
   ProcID::genProcSpec()
   {
     std::ostringstream buffer;
-    buffer << nodeSymb_;
-    if (not isnil(portQual_))
-      buffer << '.' << portQual_;
-    buffer << argLists_;
+    buffer << nodeName_
+           << genQualifier()
+           << argLists_;
     return buffer.str();
   }
   
   string
   ProcID::genNodeName()
   {
-    return string{nodeSymb_};
+    return string{nodeName_};
+  }
+  
+  string
+  ProcID::genNodeSymbol()
+  {
+    auto p = nodeName_.find(':');
+    return p == string::npos? string{nodeName_}
+                            : string{nodeName_.substr(p+1)};
+  }
+  
+  string
+  ProcID::genNodeDomain()
+  {
+    auto p = nodeName_.find(':');
+    return p == string::npos? string{}
+                            : string{nodeName_.substr(0,p)};
+  }
+  
+  string
+  ProcID::genQualifier()
+  {
+    std::ostringstream buffer;
+    if (not isnil(portQual_))
+      buffer << '.' << portQual_;
+    return buffer.str();
   }
   
   
@@ -152,7 +175,7 @@ namespace engine {
   ProcID::genNodeSpec (Leads& leads)
   {
     std::ostringstream buffer;
-    buffer << nodeSymb_;
+    buffer << nodeName_;
     if (1 != leads.size())
       buffer << genSrcSpec(leads);
     else
@@ -174,7 +197,7 @@ namespace engine {
                              explore(leads)
                                .expandAll([](ProcNode& n){ return explore(watch(n).leads()); })  // depth-first expand all predecessors
                                .filter   ([](ProcNode& n){ return watch(n).isSrc(); })           // but retain only leafs (≙ source nodes)
-                               .transform([](ProcNode& n){ return procID(n).nodeSymb_;})         // render the node-symbol of each src
+                               .transform([](ProcNode& n){ return procID(n).nodeName_;})         // render the node-symbol of each src
                                .deduplicate())                                                   // sort and deduplicate
                          + "}";
   }
@@ -231,7 +254,7 @@ namespace engine {
   string
   PortDiagnostic::getProcSpec()
   {
-    p_.procID.genProcSpec();
+    return p_.procID.genProcSpec();
   }
   
   HashVal
