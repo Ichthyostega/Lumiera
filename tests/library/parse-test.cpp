@@ -146,20 +146,23 @@ namespace test {
                                 auto eval1 = term1.parse (toParse);
                                 if (eval1.result)
                                   {
-                                    uint end1 = eval1.result->length();
+                                    uint end1 = eval1.consumed;
                                     StrView restInput = toParse.substr(end1);
                                     auto eval2 = term2.parse (restInput);
                                     if (eval2.result)
                                       {
-                                        uint end2 = end1 + eval2.result->length();
+                                        uint consumedOverall = end1 + eval2.consumed;
                                         return ProductEval{ProductResult{move(*eval1.result)
-                                                                        ,move(*eval2.result)}};
+                                                                        ,move(*eval2.result)}
+                                                          ,consumedOverall
+                                                          };
                                       }
                                   }
                                 return ProductEval{std::nullopt};
                               };
           string s1{"hello millions"};
           string s2{"helloworld"};
+          string s3{"helloworldtrade"};
           
           auto e1 = parseSeq(s1);
           CHECK (not e1.result);
@@ -182,6 +185,17 @@ namespace test {
           SeqRes seqModel = syntax.getResult();
           CHECK (get<0>(seqModel).str() == "hello"_expect);
           CHECK (get<1>(seqModel).str() == "world"_expect);
+          
+          auto syntax2 = syntax.seq("trade");
+          CHECK (not syntax2.hasResult());
+          syntax2.parse(s2);
+          CHECK (not syntax2.success());
+          syntax2.parse(s3);
+          CHECK (syntax2.success());
+          auto seqModel2 = syntax2.getResult();
+          CHECK (get<0>(seqModel2).str() == "hello"_expect);
+          CHECK (get<1>(seqModel2).str() == "world"_expect);
+          CHECK (get<2>(seqModel2).str() == "trade"_expect);
         }
     };
   

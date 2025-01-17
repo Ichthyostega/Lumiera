@@ -59,6 +59,7 @@ namespace util {
       {
         using Result = RES;
         optional<RES> result;
+        size_t consumed{0};
       };
     
     template<class FUN>
@@ -91,7 +92,9 @@ namespace util {
       return Connex{[regEx = move(rex)]
                     (StrView toParse) -> Eval<smatch>
                       {
-                        return {matchAtStart (toParse,regEx)};
+                        auto result{matchAtStart (toParse,regEx)};
+                        size_t consumed = result? result->length() : 0;
+                        return {move(result), consumed};
                       }};
     }
     using Term = decltype(buildConnex (std::declval<regex>()));
@@ -120,9 +123,9 @@ namespace util {
     auto
     adaptConnex (CON&& connex, BIND&& modelBinding)
     {
-      using R1 = typename CON::Result;
+      using RX = typename CON::Result;
       using Arg = lib::meta::_FunArg<BIND>;
-      static_assert (std::is_constructible_v<Arg,R1>,
+      static_assert (std::is_constructible_v<Arg,RX>,
                      "Model binding must accept preceding model result.");
       using AdaptedRes = typename _Fun<BIND>::Ret;
       return Connex{[origConnex = forward<CON>(connex)
@@ -153,7 +156,20 @@ namespace util {
         using Seq = lib::meta::TySeq<RESULTS...>;
         using Tup = std::tuple<RESULTS...>;
         
-        using Tup::Tup;
+        SeqModel() = default;
+        
+        template<typename...XS, typename XX>
+        SeqModel (SeqModel<XS...>&& seq, XX&& extraElm)
+          : Tup{std::tuple_cat (seq.extractTuple()
+                               ,make_tuple (forward<XX> (extraElm)) )}
+          { }
+          
+        template<typename X1, typename X2>
+        SeqModel (X1&& res1, X2&& res2)
+          : Tup{move(res1), move(res2)}
+          { }
+        
+        Tup&& extractTuple() { return move(*this); }
       };
     
     /**
@@ -237,14 +253,16 @@ namespace util {
                         auto eval1 = conL.parse (toParse);
                         if (eval1.result)
                           {
-                            uint end1 = eval1.result->length();/////////////////////////OOO pass that via Eval
-                            StrView restInput = toParse.substr(end1);
+                            size_t posAfter1 = eval1.consumed;
+                            StrView restInput = toParse.substr(posAfter1);
                             auto eval2 = conR.parse (restInput);
                             if (eval2.result)
                               {
-                                uint end2 = end1 + eval2.result->length();
+                                uint consumedOverall = posAfter1 + eval2.consumed;
                                 return ProductEval{ProductResult{move(*eval1.result)
-                                                                ,move(*eval2.result)}};
+                                                                ,move(*eval2.result)}
+                                                  ,consumedOverall
+                                                  };
                               }
                           }
                         return ProductEval{std::nullopt};
