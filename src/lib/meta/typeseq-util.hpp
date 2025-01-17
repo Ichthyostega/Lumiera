@@ -143,6 +143,46 @@ namespace meta {
   
   
   
+   //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #987 temporary WORKAROUND -- to be obsoleted
+  /**
+   * temporary workaround: additional specialisation for the template
+   * `Prepend` to work also with the (alternative) variadic TySeq.
+   * @see typeseq-util.hpp
+   */
+  template<typename T, typename...TYPES>
+  struct Prepend<T, TySeq<TYPES...>>
+  {
+    using Seq  = TySeq<T, TYPES...>;
+    using List = typename Types<T, TYPES...>::List;
+  };
+   //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #987 temporary WORKAROUND -- to be obsoleted
+  
+  
+  /**
+   * temporary workaround: strip trailing NullType entries from a
+   * type sequence, to make it compatible with new-style variadic
+   * template definitions.
+   * @note the result type is a TySec, to keep it apart from our
+   *    legacy (non-variadic) lib::meta::Types
+   * @deprecated necessary for the transition to variadic sequences      ////////////////////////////////////TICKET #987 : make lib::meta::Types<TYPES...> variadic
+   */
+  template<typename SEQ>
+  struct StripNullType;
+  
+  template<typename T, typename...TYPES>
+  struct StripNullType<Types<T,TYPES...>>
+    {
+      using TailSeq = typename StripNullType<Types<TYPES...>>::Seq;
+      
+      using Seq = typename Prepend<T, TailSeq>::Seq;
+    };
+  
+  template<typename...TYPES>
+  struct StripNullType<Types<NullType, TYPES...>>
+    {
+      using Seq = TySeq<>;  // NOTE: this causes the result to be a TySeq
+    };
+   //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #987 temporary WORKAROUND(End) -- to be obsoleted
   
   
   

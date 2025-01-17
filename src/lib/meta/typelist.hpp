@@ -133,6 +133,25 @@ namespace meta {
       };
     
     
-    
+   //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #987 temporary WORKAROUND -- to be obsoleted
+  /**
+   * temporary workaround:
+   * alternative definition of "type sequence",
+   * already using variadic template parameters.
+   * @remarks the problem with our existing type sequence type
+   *    is that it fills the end of each sequence with NullType,
+   *    which was the only way to get a flexible type sequence
+   *    prior to C++11. Unfortunately these trailing NullType
+   *    entries do not play well with other variadic defs.
+   * @deprecated when we switch our primary type sequence type
+   *    to variadic parameters, this type will be obsoleted.             ////////////////////////////////////TICKET #987 : make lib::meta::Types<TYPES...> variadic
+   */
+  template<typename...TYPES>
+  struct TySeq
+    {
+      using Seq = TySeq;
+      using List = typename Types<TYPES...>::List;
+    };
+   //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #987 temporary WORKAROUND(End) -- to be obsoleted
 }} // namespace lib::meta
 #endif

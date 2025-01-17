@@ -79,7 +79,6 @@ namespace control {
   using lib::meta::_Fun;
   using lib::meta::NullType;
   using lib::meta::Types;
-  using lib::meta::TySeq;
   using lib::meta::Tuple;
   
   

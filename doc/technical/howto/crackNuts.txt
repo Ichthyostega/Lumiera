@@ -183,7 +183,7 @@ pick and manipulate individually::
 - but sometimes it is easier to use the tried and true technique of the Loki-Typelists, which
   can be programmed recursively, similar to LISP. The »bridge« is to unpack the variadic argument pack
   into the `lib::meta::Types<ARGS...>` ([yellow-background]#⚠ still broken in 2024#
-  see https://issues.lumiera.org/ticket/987[#987], use `lib::meta::TySeq` from 'variadic-helper.hpp' as workaround...)
+  see https://issues.lumiera.org/ticket/987[#987], use `lib::meta::TySeq` from 'meta/typelist.hpp' as workaround...)
 +
 apply functor to each tuple element::
   A common trick is to use `std::apply` in combination with a _fold-expression_

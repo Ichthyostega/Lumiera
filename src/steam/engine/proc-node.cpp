@@ -24,6 +24,7 @@
 #include "lib/iter-explorer.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-util.hpp"
+#include "lib/regex.hpp"
 #include "lib/util.hpp"
 
 #include <boost/functional/hash.hpp>        /////////////////////////////////////////////////////TICKET #1391 is boost-hash the proper tool for this task?
@@ -41,7 +42,7 @@ namespace engine {
   using util::contains;
   using boost::hash_combine;
   
-  namespace {// Details: registration and symbol table for node spec data...
+  namespace {// Details: parsing, registration and symbol table for node spec data...
     
     std::unordered_set<ProcID> procRegistry;
     std::unordered_set<string> symbRegistry;

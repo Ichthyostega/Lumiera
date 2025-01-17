@@ -532,6 +532,11 @@ return: 0
 END
 
 
+TEST "helpers for specification parsing" Parse_test <<END
+return: 0
+END
+
+
 TEST "path array abstraction" PathArray_test <<END
 return: 0
 END

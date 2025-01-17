@@ -59,6 +59,24 @@ namespace util {
       ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (RegexSearchIter);
     };
   
+  
+  /**
+   * Helper algorithm to perform a search but require the match to start
+   * at the beginning of the string or sequence, while accepting trailing content.
+   * @param toParse a string, string-view or something that can be converted to string.
+   * @return a std::optional with the match result (`std::smatch`).
+   */
+  template<typename STR>
+  std::optional<smatch>
+  matchAtStart (STR&& toParse, regex const& regex)
+  {
+    auto search = RegexSearchIter{std::forward<STR> (toParse), regex};
+    if (search and 0 == search->position(0))
+      return *search;
+    else
+      return std::nullopt;
+  }
+  
 }// namespace util
 
 namespace lib {
@@ -66,4 +84,4 @@ namespace lib {
   using std::smatch;
   using std::string;
 }// namespace lib
-#endif/*LIB_STAT_REGEX_H*/
+#endif/*LIB_REGEX_H*/
