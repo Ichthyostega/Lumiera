@@ -77,6 +77,16 @@ namespace util {
       return std::nullopt;
   }
   
+  /** @return number of leading whitespace characters */
+  template<typename STR>
+  size_t
+  leadingWhitespace (STR&& toParse)
+  {
+    static const regex LEADING_WHITESPACE{"^\\s*", regex::optimize};
+    auto search = RegexSearchIter{std::forward<STR> (toParse), LEADING_WHITESPACE};
+    return search? search->length() : 0;
+  }
+  
 }// namespace util
 
 namespace lib {

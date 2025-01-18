@@ -86,7 +86,8 @@ namespace test {
         {
         }
       
-      /** @test TODO define a terminal symbol to match by parse. */
+      
+      /** @test define a terminal symbol to match by parse. */
       void
       acceptTerminal()
         {
@@ -95,7 +96,7 @@ namespace test {
           string toParse{"hello vile world of power"};
           auto eval = parse (toParse);
           CHECK (eval.result);
-          auto res = *eval.result;
+          auto res = *eval.result;                             // ◁——————————— the »result model« of a terminal parse is the RegExp-Matcher 
           CHECK (res.ready() and not res.empty());
           CHECK (res.size()     == "2"_expect );
           CHECK (res.position() == "0"_expect );
@@ -103,10 +104,10 @@ namespace test {
           CHECK (res[1]       ==      "vile"_expect );
           CHECK (res.suffix() == " of power"_expect );
           
-          auto syntax = Syntax{move (parse)};
+          auto syntax = Syntax{move (parse)};                  // Build a syntax clause from the simple terminal symbol parser
           CHECK (not syntax.hasResult());
           syntax.parse (toParse);
-          CHECK (syntax.success());
+          CHECK (syntax.success());                            // Syntax clause holds an implicit state from the last parse
           CHECK (syntax.getResult()[1] == "vile"_expect);
           
           // shorthand notation to start building a syntax
@@ -131,10 +132,12 @@ namespace test {
           CHECK (eval.result->str(1) == "cruel");
         }
       
-      /** @test TODO define a sequence of syntax structures to match by parse. */
+      
+      /** @test define a sequence of syntax structures to match by parse. */
       void
       acceptSequential()
         {
+          // Demonstration: how sequence combinator works....
           auto term1 = buildConnex ("hello");
           auto term2 = buildConnex ("world");
           auto parseSeq = [&](StrView toParse)
@@ -161,22 +164,29 @@ namespace test {
                                 return ProductEval{std::nullopt};
                               };
           string s1{"hello millions"};
-          string s2{"helloworld"};
-          string s3{"helloworldtrade"};
+          string s2{"hello world"};
+          string s3{" hello world trade "};
           
           auto e1 = parseSeq(s1);
-          CHECK (not e1.result);
+          CHECK (not e1.result);                               // Syntax 'hello'>>'world' does not accept "hello millions"
           auto e2 = parseSeq(s2);
           CHECK (    e2.result);
           
-          using SeqRes = std::decay_t<decltype(*e2.result)>;
-          CHECK (is_Tuple<SeqRes>());
+          using SeqRes = std::decay_t<decltype(*e2.result)>;   // Note: the result type depends on the actual syntax construction
+          CHECK (is_Tuple<SeqRes>());                          //       Result model from sequence is the tuple of terminal results
           auto& [r1,r2] = *e2.result;
           CHECK (r1.str() == "hello"_expect);
           CHECK (r2.str() == "world"_expect);
           
+          CHECK (term2.parse(" world").result);                // Note: leading whitespace skipped by the basic terminal parsers
+          CHECK (term2.parse("\n \t world  ").result);
+          CHECK (not term2.parse(" old  ").result);
+          
+          
+          // DSL parse clause builder: a sequence of terminals...
           auto syntax = accept("hello").seq("world");
           
+          // Perform the same parse as demonstrated above....
           CHECK (not syntax.hasResult());
           syntax.parse(s1);
           CHECK (not syntax.success());
@@ -186,13 +196,15 @@ namespace test {
           CHECK (get<0>(seqModel).str() == "hello"_expect);
           CHECK (get<1>(seqModel).str() == "world"_expect);
           
+          
+          // can build extended clause from existing one
           auto syntax2 = syntax.seq("trade");
           CHECK (not syntax2.hasResult());
           syntax2.parse(s2);
           CHECK (not syntax2.success());
           syntax2.parse(s3);
           CHECK (syntax2.success());
-          auto seqModel2 = syntax2.getResult();
+          auto seqModel2 = syntax2.getResult();                // Note: model of consecutive sequence is flattened into a single tuple
           CHECK (get<0>(seqModel2).str() == "hello"_expect);
           CHECK (get<1>(seqModel2).str() == "world"_expect);
           CHECK (get<2>(seqModel2).str() == "trade"_expect);

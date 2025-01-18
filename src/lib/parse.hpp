@@ -32,7 +32,6 @@
 #include "lib/meta/trait.hpp"
 #include "lib/regex.hpp"
 
-//#include <regex>
 #include <optional>
 #include <utility>
 
@@ -91,9 +90,11 @@ namespace util {
     {
       return Connex{[regEx = move(rex)]
                     (StrView toParse) -> Eval<smatch>
-                      {
+                      {           // skip leading whitespace...
+                        size_t pre = leadingWhitespace (toParse);
+                        toParse = toParse.substr(pre);
                         auto result{matchAtStart (toParse,regEx)};
-                        size_t consumed = result? result->length() : 0;
+                        size_t consumed = result? pre+result->length() : 0;
                         return {move(result), consumed};
                       }};
     }
@@ -236,7 +237,7 @@ namespace util {
       };
     
     
-    
+    /** accept sequence of two parse functions */
     template<class C1, class C2>
     auto
     sequenceConnex (C1&& connex1, C2&& connex2)
