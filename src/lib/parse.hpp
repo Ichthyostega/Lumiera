@@ -34,6 +34,9 @@
 
 #include <optional>
 #include <utility>
+#include <cstddef>
+#include <tuple>
+#include <array>
 
 namespace util {
   namespace parse {
@@ -46,12 +49,115 @@ namespace util {
     using lib::meta::NullType;
     using std::decay_t;
     using std::tuple;
+    using std::array;
     
     using StrView = std::string_view;
     
-  
+    template<typename...TYPES>
+    struct _MaxBufSiz;
+    template<>
+    struct _MaxBufSiz<>
+      {
+        static constexpr size_t siz = 0;
+      };
+    template<typename T, typename...TYPES>
+    struct _MaxBufSiz<T,TYPES...>
+      {
+        static constexpr size_t siz = std::max (sizeof(T)
+                                               ,_MaxBufSiz<TYPES...>::siz);
+      };
     
-    /** 
+    /**
+     * Data storage base for sum type with selector
+     */
+    template<size_t SIZ>
+    struct OpaqueSumType
+      {
+        size_t case_{0};
+        
+        alignas(int64_t)
+          std::byte buffer_[SIZ];
+        
+        template<size_t slot, typename T, typename...INITS>
+        T&
+        emplace (INITS&&...inits)
+          {
+            case_ = slot;
+            return * new(&buffer_) T(forward<INITS> (inits)...);
+          }
+        
+      };
+    
+    template<typename T, typename...TYPES>
+    class SumType
+      : private OpaqueSumType<_MaxBufSiz<T,TYPES...>::siz>
+      {
+      public:
+        static constexpr size_t TOP = sizeof...(TYPES);
+        static constexpr size_t SIZ = _MaxBufSiz<T,TYPES...>::siz;
+        using _Opaque = OpaqueSumType<SIZ>;
+        
+        template<typename...INITS,      typename = lib::meta::disable_if_self<SumType,INITS...>>
+        SumType (INITS&& ...inits)
+          {
+            _Opaque::template emplace<TOP,T> (forward<INITS> (inits)...);
+          }
+        
+        template<typename TX>
+        TX&
+        access ()
+          {
+            return * std::launder (reinterpret_cast<TX*> (& _Opaque::buffer_[0]));
+          }
+        
+        size_t
+        selected()  const
+          {
+            return _Opaque::case_;
+          }
+        
+        template<size_t slot>
+        using SlotType = std::tuple_element_t<TOP-slot, tuple<T,TYPES...>>;
+            
+        template<size_t slot>
+        SlotType<slot>&
+        get()
+          {
+            return access<SlotType<slot>>();
+          }
+        
+        template<typename TX, typename...TS, class FUN>
+        void
+        select (size_t slot, FUN&& fun)
+          {
+            REQUIRE (slot <= sizeof...(TS));
+            if constexpr (sizeof...(TS))
+              if (0 < slot)
+                select<TS...> (slot-1, forward<FUN>(fun));
+            fun (access<TX>());
+          }
+        
+        template<typename TX>
+        void
+        destroyIt (TX& it)
+          {
+            it.~TX();
+          }
+        
+        void
+        destroy (size_t slot)
+          {
+            select<T,TYPES...> (slot, [&](auto& it){ destroyIt(it); });
+          }
+        
+       ~SumType()
+          {
+            destroy (_Opaque::case_);
+          }
+      };
+    
+    
+    /**
      */
     template<class RES>
     struct Eval

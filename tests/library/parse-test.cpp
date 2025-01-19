@@ -77,6 +77,7 @@ namespace test {
           simpleBlah();
           acceptTerminal();
           acceptSequential();
+          acceptAlternatives();
         }
       
       
@@ -208,6 +209,22 @@ namespace test {
           CHECK (get<0>(seqModel2).str() == "hello"_expect);
           CHECK (get<1>(seqModel2).str() == "world"_expect);
           CHECK (get<2>(seqModel2).str() == "trade"_expect);
+        }
+      
+      
+      /** @test TODO define alternative syntax structures to match by parse. */
+      void
+      acceptAlternatives()
+        {
+          using Sum = SumType<ushort,char>;
+SHOW_EXPR(sizeof(Sum));
+          Sum sumt{42};
+SHOW_EXPR(sumt.selected());
+SHOW_EXPR(sumt.SIZ);
+SHOW_EXPR(sumt.TOP);
+SHOW_TYPE(Sum::_Opaque)
+SHOW_EXPR(sumt.get<1>());
+SHOW_EXPR(sumt.get<0>());
         }
     };
   
