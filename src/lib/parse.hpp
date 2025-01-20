@@ -27,7 +27,7 @@
 #define LIB_PARSE_H
 
 
-#include "lib/iter-adapter.hpp"
+#include "lib/branch-case.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/trait.hpp"
 #include "lib/regex.hpp"
@@ -52,158 +52,6 @@ namespace util {
     using std::array;
     
     using StrView = std::string_view;
-    
-    template<typename...TYPES>
-    struct _MaxBufSiz;
-    template<>
-    struct _MaxBufSiz<>
-      {
-        static constexpr size_t siz = 0;
-      };
-    template<typename T, typename...TYPES>
-    struct _MaxBufSiz<T,TYPES...>
-      {
-        static constexpr size_t siz = std::max (sizeof(T)
-                                               ,_MaxBufSiz<TYPES...>::siz);
-      };
-    
-    template<typename...TYPES>
-    class BranchCase
-      {
-      public:
-        static constexpr auto TOP = sizeof...(TYPES) -1;
-        static constexpr auto SIZ = _MaxBufSiz<TYPES...>::siz;
-        
-        template<size_t idx>
-        using SlotType = std::tuple_element_t<idx, tuple<TYPES...>>;
-
-      protected:
-        size_t branch_{0};
-        
-        alignas(int64_t)
-          std::byte buffer_[SIZ];
-        
-        template<typename TX, typename...INITS>
-        TX&
-        emplace (INITS&&...inits)
-          {
-            return * new(&buffer_) TX(forward<INITS> (inits)...);
-          }
-        
-        template<typename TX>
-        TX&
-        access ()
-          {
-            return * std::launder (reinterpret_cast<TX*> (&buffer_[0]));
-          }
-        
-        /** apply generic functor to the currently selected branch */
-        template<size_t idx, class FUN>
-        auto
-        selectBranch (FUN&& fun)
-          {
-            if constexpr (0 < idx)
-              if (branch_ < idx)
-                return selectBranch<idx-1> (forward<FUN>(fun));
-            return fun (get<idx>());
-          }
-        
-        BranchCase() = default;
-      public:
-        template<class FUN>
-        auto
-        apply (FUN&& fun)
-          {
-            return selectBranch<TOP> (forward<FUN> (fun));
-          }
-        
-       ~BranchCase()
-          {
-            apply ([this](auto& it)
-                          { using Elm = decay_t<decltype(it)>;
-                            access<Elm>().~Elm();
-                          });
-          }
-        
-        template<typename...INITS>
-        BranchCase (size_t idx, INITS&& ...inits)
-          {
-            branch_ = idx;
-            apply ([&,this](auto& it)
-                          { using Elm = decay_t<decltype(it)>;
-                            emplace<Elm> (forward<INITS> (inits)...);
-                          });
-          }
-        
-        BranchCase (BranchCase const& o)
-          {
-            branch_ = o.branch_;
-            BranchCase& unConst = const_cast<BranchCase&> (o);
-            unConst.apply ([this](auto& it)
-                          { using Elm = decay_t<decltype(it)>;
-                            this->emplace<Elm> (it);
-                          });
-          }
-        
-        BranchCase (BranchCase && ro)
-          {
-            branch_ = ro.branch_;
-            ro.apply ([this](auto& it)
-                          { using Elm = decay_t<decltype(it)>;
-                            this->emplace<Elm> (move (it));
-                          });
-          }
-        
-        friend void
-        swap (BranchCase& o1, BranchCase o2)
-          {
-            using std::swap;
-            BranchCase tmp;
-            o1.apply ([&](auto& it)
-                          { using Elm = decay_t<decltype(it)>;
-                            tmp.emplace<Elm> (move (o1.access<Elm>()));
-                          });
-            swap (o1.branch_,o2.branch_);
-            o1.apply ([&](auto& it)
-                          { using Elm = decay_t<decltype(it)>;
-                            o1.emplace<Elm> (move (o2.access<Elm>()));
-                          });
-            o2.apply ([&](auto& it)
-                          { using Elm = decay_t<decltype(it)>;
-                            o2.emplace<Elm> (move (tmp.access<Elm>()));
-                          });
-          }
-        
-        BranchCase&
-        operator= (BranchCase ref)
-          {
-            swap (*this, ref);
-            return *this;
-          }
-        
-        template<typename...MORE>
-        auto
-        moveExtended()
-          {
-            using Extended = BranchCase<TYPES...,MORE...>;
-            Extended& upFaked = reinterpret_cast<Extended&> (*this);
-            return Extended (move (upFaked));
-          }
-        
-        
-        size_t
-        selected()  const
-          {
-            return branch_;
-          }
-        
-        template<size_t idx>
-        SlotType<idx>&
-        get()
-          {
-            return access<SlotType<idx>>();
-          }
-      };
     
     
     /**
@@ -334,8 +182,25 @@ namespace util {
      */
     template<typename...CASES>
     struct AltModel
+      : BranchCase<CASES...>
       {
+        using _Model = BranchCase<CASES...>;
         
+        template<typename EX>
+        using Additionally = AltModel<CASES...,EX>;
+        
+        template<typename INIT,             typename =lib::meta::disable_if_self<AltModel,INIT>>
+        AltModel (INIT&& init)
+          : _Model{_Model::TOP, forward<INIT> (init)}
+          { }
+          
+        template<typename EX>
+        Additionally<EX>
+        addBranch()
+          {
+            Additionally<EX>& upFaked = reinterpret_cast<Additionally<EX>&> (*this);
+            return {move (upFaked)};
+          }
       };
     
     

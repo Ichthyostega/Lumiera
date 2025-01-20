@@ -216,33 +216,32 @@ namespace test {
       void
       acceptAlternatives()
         {
-          using Branch = BranchCase<char,ushort>;
-SHOW_EXPR(sizeof(Branch));
-          Branch b1{1, 42};
-SHOW_EXPR(b1.selected());
-SHOW_EXPR(b1.SIZ);
-SHOW_EXPR(b1.TOP);
-SHOW_EXPR(b1.get<1>());
-SHOW_EXPR(b1.get<0>());
-          Branch b2{0,'x'};
-SHOW_EXPR(b2.selected());
-SHOW_EXPR(b2.get<1>());
-SHOW_EXPR(b2.get<0>());
-          Branch b3{b1};
-SHOW_EXPR(b3.selected());
-SHOW_EXPR(b3.get<1>());
-SHOW_EXPR(b3.get<0>());
-          b3 = b2;
-SHOW_EXPR(b3.selected());
-SHOW_EXPR(b3.get<1>());
-SHOW_EXPR(b3.get<0>());
-          auto bx = b1.moveExtended<string>();
-SHOW_EXPR(sizeof(bx))
-SHOW_EXPR(bx.SIZ);
-SHOW_EXPR(bx.TOP);
-SHOW_EXPR(bx.selected());
-SHOW_EXPR(bx.get<1>());
-SHOW_EXPR(bx.get<0>());
+          using R1 = char;
+          using R2 = string;
+          using R3 = double;
+          
+          using A1 = AltModel<R1>;
+          string s{"second"};
+          using A2 = A1::Additionally<R2>;
+          A2 model2{s};
+SHOW_EXPR(sizeof(A2));
+SHOW_EXPR(model2.SIZ);
+SHOW_EXPR(model2.TOP);
+SHOW_EXPR(model2.selected())
+SHOW_EXPR(model2.get<1>())
+          using A3 = A2::Additionally<R3>;
+          A3 model3{model2.addBranch<R3>()};
+SHOW_TYPE(A3)
+SHOW_EXPR(sizeof(A3));
+SHOW_EXPR(model3.SIZ);
+SHOW_EXPR(model3.TOP);
+SHOW_EXPR(model3.selected())
+SHOW_EXPR(model3.get<1>())
+          auto res = move(model3);
+SHOW_TYPE(decltype(res))
+SHOW_EXPR(sizeof(res))
+SHOW_EXPR(res.selected())
+SHOW_EXPR(res.get<1>())
         }
     };
   
