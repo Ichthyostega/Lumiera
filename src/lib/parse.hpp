@@ -40,7 +40,7 @@
 
 namespace util {
   namespace parse {
-  
+    
     using std::move;
     using std::forward;
     using std::optional;
@@ -67,92 +67,141 @@ namespace util {
                                                ,_MaxBufSiz<TYPES...>::siz);
       };
     
-    /**
-     * Data storage base for sum type with selector
-     */
-    template<size_t SIZ>
-    struct OpaqueSumType
+    template<typename...TYPES>
+    class BranchCase
       {
-        size_t case_{0};
+      public:
+        static constexpr auto TOP = sizeof...(TYPES) -1;
+        static constexpr auto SIZ = _MaxBufSiz<TYPES...>::siz;
+        
+        template<size_t idx>
+        using SlotType = std::tuple_element_t<idx, tuple<TYPES...>>;
+
+      protected:
+        size_t branch_{0};
         
         alignas(int64_t)
           std::byte buffer_[SIZ];
         
-        template<size_t slot, typename T, typename...INITS>
-        T&
+        template<typename TX, typename...INITS>
+        TX&
         emplace (INITS&&...inits)
           {
-            case_ = slot;
-            return * new(&buffer_) T(forward<INITS> (inits)...);
-          }
-        
-      };
-    
-    template<typename T, typename...TYPES>
-    class SumType
-      : private OpaqueSumType<_MaxBufSiz<T,TYPES...>::siz>
-      {
-      public:
-        static constexpr size_t TOP = sizeof...(TYPES);
-        static constexpr size_t SIZ = _MaxBufSiz<T,TYPES...>::siz;
-        using _Opaque = OpaqueSumType<SIZ>;
-        
-        template<typename...INITS,      typename = lib::meta::disable_if_self<SumType,INITS...>>
-        SumType (INITS&& ...inits)
-          {
-            _Opaque::template emplace<TOP,T> (forward<INITS> (inits)...);
+            return * new(&buffer_) TX(forward<INITS> (inits)...);
           }
         
         template<typename TX>
         TX&
         access ()
           {
-            return * std::launder (reinterpret_cast<TX*> (& _Opaque::buffer_[0]));
+            return * std::launder (reinterpret_cast<TX*> (&buffer_[0]));
           }
+        
+        /** apply generic functor to the currently selected branch */
+        template<size_t idx, class FUN>
+        auto
+        selectBranch (FUN&& fun)
+          {
+            if constexpr (0 < idx)
+              if (branch_ < idx)
+                return selectBranch<idx-1> (forward<FUN>(fun));
+            return fun (get<idx>());
+          }
+        
+        BranchCase() = default;
+      public:
+        template<class FUN>
+        auto
+        apply (FUN&& fun)
+          {
+            return selectBranch<TOP> (forward<FUN> (fun));
+          }
+        
+       ~BranchCase()
+          {
+            apply ([this](auto& it)
+                          { using Elm = decay_t<decltype(it)>;
+                            access<Elm>().~Elm();
+                          });
+          }
+        
+        template<typename...INITS>
+        BranchCase (size_t idx, INITS&& ...inits)
+          {
+            branch_ = idx;
+            apply ([&,this](auto& it)
+                          { using Elm = decay_t<decltype(it)>;
+                            emplace<Elm> (forward<INITS> (inits)...);
+                          });
+          }
+        
+        BranchCase (BranchCase const& o)
+          {
+            branch_ = o.branch_;
+            BranchCase& unConst = const_cast<BranchCase&> (o);
+            unConst.apply ([this](auto& it)
+                          { using Elm = decay_t<decltype(it)>;
+                            this->emplace<Elm> (it);
+                          });
+          }
+        
+        BranchCase (BranchCase && ro)
+          {
+            branch_ = ro.branch_;
+            ro.apply ([this](auto& it)
+                          { using Elm = decay_t<decltype(it)>;
+                            this->emplace<Elm> (move (it));
+                          });
+          }
+        
+        friend void
+        swap (BranchCase& o1, BranchCase o2)
+          {
+            using std::swap;
+            BranchCase tmp;
+            o1.apply ([&](auto& it)
+                          { using Elm = decay_t<decltype(it)>;
+                            tmp.emplace<Elm> (move (o1.access<Elm>()));
+                          });
+            swap (o1.branch_,o2.branch_);
+            o1.apply ([&](auto& it)
+                          { using Elm = decay_t<decltype(it)>;
+                            o1.emplace<Elm> (move (o2.access<Elm>()));
+                          });
+            o2.apply ([&](auto& it)
+                          { using Elm = decay_t<decltype(it)>;
+                            o2.emplace<Elm> (move (tmp.access<Elm>()));
+                          });
+          }
+        
+        BranchCase&
+        operator= (BranchCase ref)
+          {
+            swap (*this, ref);
+            return *this;
+          }
+        
+        template<typename...MORE>
+        auto
+        moveExtended()
+          {
+            using Extended = BranchCase<TYPES...,MORE...>;
+            Extended& upFaked = reinterpret_cast<Extended&> (*this);
+            return Extended (move (upFaked));
+          }
+        
         
         size_t
         selected()  const
           {
-            return _Opaque::case_;
+            return branch_;
           }
         
-        template<size_t slot>
-        using SlotType = std::tuple_element_t<TOP-slot, tuple<T,TYPES...>>;
-            
-        template<size_t slot>
-        SlotType<slot>&
+        template<size_t idx>
+        SlotType<idx>&
         get()
           {
-            return access<SlotType<slot>>();
-          }
-        
-        template<typename TX, typename...TS, class FUN>
-        void
-        select (size_t slot, FUN&& fun)
-          {
-            REQUIRE (slot <= sizeof...(TS));
-            if constexpr (sizeof...(TS))
-              if (0 < slot)
-                select<TS...> (slot-1, forward<FUN>(fun));
-            fun (access<TX>());
-          }
-        
-        template<typename TX>
-        void
-        destroyIt (TX& it)
-          {
-            it.~TX();
-          }
-        
-        void
-        destroy (size_t slot)
-          {
-            select<T,TYPES...> (slot, [&](auto& it){ destroyIt(it); });
-          }
-        
-       ~SumType()
-          {
-            destroy (_Opaque::case_);
+            return access<SlotType<idx>>();
           }
       };
     

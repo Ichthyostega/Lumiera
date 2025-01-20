@@ -216,15 +216,33 @@ namespace test {
       void
       acceptAlternatives()
         {
-          using Sum = SumType<ushort,char>;
-SHOW_EXPR(sizeof(Sum));
-          Sum sumt{42};
-SHOW_EXPR(sumt.selected());
-SHOW_EXPR(sumt.SIZ);
-SHOW_EXPR(sumt.TOP);
-SHOW_TYPE(Sum::_Opaque)
-SHOW_EXPR(sumt.get<1>());
-SHOW_EXPR(sumt.get<0>());
+          using Branch = BranchCase<char,ushort>;
+SHOW_EXPR(sizeof(Branch));
+          Branch b1{1, 42};
+SHOW_EXPR(b1.selected());
+SHOW_EXPR(b1.SIZ);
+SHOW_EXPR(b1.TOP);
+SHOW_EXPR(b1.get<1>());
+SHOW_EXPR(b1.get<0>());
+          Branch b2{0,'x'};
+SHOW_EXPR(b2.selected());
+SHOW_EXPR(b2.get<1>());
+SHOW_EXPR(b2.get<0>());
+          Branch b3{b1};
+SHOW_EXPR(b3.selected());
+SHOW_EXPR(b3.get<1>());
+SHOW_EXPR(b3.get<0>());
+          b3 = b2;
+SHOW_EXPR(b3.selected());
+SHOW_EXPR(b3.get<1>());
+SHOW_EXPR(b3.get<0>());
+          auto bx = b1.moveExtended<string>();
+SHOW_EXPR(sizeof(bx))
+SHOW_EXPR(bx.SIZ);
+SHOW_EXPR(bx.TOP);
+SHOW_EXPR(bx.selected());
+SHOW_EXPR(bx.get<1>());
+SHOW_EXPR(bx.get<0>());
         }
     };
   
