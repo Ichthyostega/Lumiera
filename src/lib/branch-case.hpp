@@ -1,5 +1,5 @@
 /*
-  BRANCH-CASE.hpp  -  helpers for parsing textual specifications
+  BRANCH-CASE.hpp  -  variant-like data type to capture different result types
 
    Copyright (C)
      2024,            Hermann Vosseler <Ichthyostega@web.de>
@@ -13,13 +13,60 @@
 
 
 /** @file branch-case.hpp
- ** Convenience wrappers and definitions for parsing structured definitions.
- ** Whenever a specification syntax entails nested structures, extracting contents
- ** with regular expressions alone becomes tricky. Without much sophistication, a
- ** directly implemented simple recursive descent parser is often less brittle and
- ** easier to understand and maintain. With some helper abbreviations, notably
- ** a combinator scheme to work from building blocks, a hand-written solution
- ** can benefit from taking short-cuts, especially related to result bindings.
+ ** A _Sum Type_ (variant) to capture values from a branched evaluation.
+ ** While a _Product Type_ (tuple) holds a combination of individually typed values,
+ ** a _Sum Type_ can hold any of these types, but only one at a time. Such a structure
+ ** is needed when capturing results from an opaque (function-like) evaluation, which
+ ** may yield different and incompatible result types, depending on circumstances.
+ ** For illustration, this might be a _success_ and a _failure_ branch, but it might
+ ** also be the data model from parsing a syntax with alternative branches, where
+ ** each branch is bound to generate a different result object.
+ ** 
+ ** ## Technicalities
+ ** While the basic concept is simple, a C++ implementation of this scheme poses some
+ ** challenges, due to the fact that precise type information is only given at compile
+ ** time. For the implementation presented here, an additional requirement was not to
+ ** use any virtual (run-time) dispatch and also not to rely on heap storage. So the
+ ** implementation must embody all payload data into a buffer within the BranchCase
+ ** object, while storing an additional selector-mark to identify the number of the
+ ** actual case represented by this instance.
+ ** 
+ ** The type is parametrised similar to a tuple, i.e. with a variadic type sequence.
+ ** Each position in this sequence corresponds to one branch of the result system.
+ ** The selected branch must be identified at instance creation, while also providing
+ ** a proper initialiser for the branch's value. This design has several ramifications:
+ ** - the object can not be default created, because an _empty_ state would not be valid
+ ** - since type parameters can be arbitrary, we can not rely on _covariance_ for a
+ **   return type; this implies that the embodied branch data value can only be
+ **   accessed and retrieved when the invoker knows the branch-number at compile time.
+ ** Usually this is not a serious limitation though, since code using such an evaluation
+ ** must employ additional contextual knowledge anyway in order to draw any tangible
+ ** conclusions. So the receiving code typically will have a branching and matching
+ ** structure, based on probing the branch-selector value. Another situation might be
+ ** that the data types from several branches are actually compatible, while the
+ ** evaluation as such is written in a totally generic fashion and can thus not
+ ** exploit such knowledge. This is typically the case when parsing a syntax;
+ ** each branch might provide a regular expression match, but the receiving
+ ** logic of course must know how to interpret the matching capture groups.
+ ** 
+ ** In any case, every possible branch for access must be somehow instantiated at
+ ** compile time, because this is the only way to use the type information. This
+ ** observation leads to a further access-scheme, based on a _visitor-functor._
+ ** Typically this will be a generic (templated) lambda function, which must be able
+ ** to really handle all the possible data types; a recursive evaluation is generated
+ ** at compile time, which checks all possible branch-numbers and invokes only that
+ ** branch holding the value applicable at runtime. This scheme is used as foundation
+ ** to implement most of the internal functionality, notably the constructors,
+ ** copy-constructors and the swap function, thereby turning BranchCase into
+ ** a fully copyable, movable and assignable type (limited by the capabilities
+ ** of the payload types of course).
+ ** @warning This is a low-level implementation facility. The implementation itself
+ **   can not check any type safety at runtime and will thus access the payload buffer
+ **   blindly as instructed. When used within a proper framework however, full
+ **   type safety can be achieved, based on the fact that any instance is always
+ **   tied to one valid branch provided to the compiler.
+ ** @see BranchCase_test
+ ** @see parser.hpp "usage example"
  */
 
 
@@ -27,540 +74,196 @@
 #define LIB_BRANCH_CASE_H
 
 
-#include "lib/iter-adapter.hpp"
-#include "lib/meta/function.hpp"
-#include "lib/meta/trait.hpp"
-#include "lib/regex.hpp"
+#include "lib/meta/util.hpp"
 
-#include <optional>
 #include <utility>
 #include <cstddef>
 #include <tuple>
-#include <array>
-
-namespace util {
-  namespace parse {
-    
-    using std::move;
-    using std::forward;
-    using std::optional;
-    using lib::meta::_Fun;
-    using lib::meta::has_Sig;
-    using lib::meta::NullType;
-    using std::decay_t;
-    using std::tuple;
-    using std::array;
-    
-    using StrView = std::string_view;
-    
-    template<typename...TYPES>
-    struct _MaxBufSiz;
-    template<>
-    struct _MaxBufSiz<>
-      {
-        static constexpr size_t siz = 0;
-      };
-    template<typename T, typename...TYPES>
-    struct _MaxBufSiz<T,TYPES...>
-      {
-        static constexpr size_t siz = std::max (sizeof(T)
-                                               ,_MaxBufSiz<TYPES...>::siz);
-      };
-    
-    template<typename...TYPES>
-    class BranchCase
-      {
-      public:
-        static constexpr auto TOP = sizeof...(TYPES) -1;
-        static constexpr auto SIZ = _MaxBufSiz<TYPES...>::siz;
-        
-        template<size_t idx>
-        using SlotType = std::tuple_element_t<idx, tuple<TYPES...>>;
-
-      protected:
-        /** @internal default-created state is **invalid** */
-        BranchCase() = default;
-        
-        
-        size_t branch_{0};
-        
-        alignas(int64_t)
-          std::byte buffer_[SIZ];
-        
-        template<typename TX, typename...INITS>
-        TX&
-        emplace (INITS&&...inits)
-          {
-            return * new(&buffer_) TX(forward<INITS> (inits)...);
-          }
-        
-        template<typename TX>
-        TX&
-        access ()
-          {
-            return * std::launder (reinterpret_cast<TX*> (&buffer_[0]));
-          }
-        
-        /** apply generic functor to the currently selected branch */
-        template<size_t idx, class FUN>
-        auto
-        selectBranch (FUN&& fun)
-          {
-            if constexpr (0 < idx)
-              if (branch_ < idx)
-                return selectBranch<idx-1> (forward<FUN>(fun));
-            return fun (get<idx>());
-          }
-        
-      public:
-        template<class FUN>
-        auto
-        apply (FUN&& fun)
-          {
-            return selectBranch<TOP> (forward<FUN> (fun));
-          }
-        
-       ~BranchCase()
-          {
-            apply ([this](auto& it)
-                          { using Elm = decay_t<decltype(it)>;
-                            access<Elm>().~Elm();
-                          });
-          }
-        
-        template<typename...INITS>
-        BranchCase (size_t idx, INITS&& ...inits)
-          : branch_{idx}
-          {
-            apply ([&,this](auto& it)
-                          { using Elm = decay_t<decltype(it)>;
-                            if constexpr (std::is_constructible_v<Elm,INITS...>)
-                                this->emplace<Elm> (forward<INITS> (inits)...);
-                          });
-          }
-        
-        BranchCase (BranchCase const& o)
-          {
-            branch_ = o.branch_;
-            BranchCase& unConst = const_cast<BranchCase&> (o);
-            unConst.apply ([this](auto& it)
-                          { using Elm = decay_t<decltype(it)>;
-                            this->emplace<Elm> (it);
-                          });
-          }
-        
-        BranchCase (BranchCase && ro)
-          {
-            branch_ = ro.branch_;
-            ro.apply ([this](auto& it)
-                          { using Elm = decay_t<decltype(it)>;
-                            this->emplace<Elm> (move (it));
-                          });
-          }
-        
-        friend void
-        swap (BranchCase& o1, BranchCase o2)
-          {
-            using std::swap;
-            BranchCase tmp;
-            o1.apply ([&](auto& it)
-                          { using Elm = decay_t<decltype(it)>;
-                            tmp.emplace<Elm> (move (o1.access<Elm>()));
-                          });
-            swap (o1.branch_,o2.branch_);
-            o1.apply ([&](auto& it)
-                          { using Elm = decay_t<decltype(it)>;
-                            o1.emplace<Elm> (move (o2.access<Elm>()));
-                          });
-            o2.apply ([&](auto& it)
-                          { using Elm = decay_t<decltype(it)>;
-                            o2.emplace<Elm> (move (tmp.access<Elm>()));
-                          });
-          }
-        
-        BranchCase&
-        operator= (BranchCase ref)
-          {
-            swap (*this, ref);
-            return *this;
-          }
-        
-        template<typename...MORE>
-        auto
-        moveExtended()
-          {
-            using Extended = BranchCase<TYPES...,MORE...>;
-            Extended& upFaked = reinterpret_cast<Extended&> (*this);
-            return Extended (move (upFaked));
-          }
-        
-        
-        size_t
-        selected()  const
-          {
-            return branch_;
-          }
-        
-        template<size_t idx>
-        SlotType<idx>&
-        get()
-          {
-            return access<SlotType<idx>>();
-          }
-      };
-    
-#if false    ///////////////////////////////////////////////////////////////////////////////TODO accommodate
-    /**
-     */
-    template<class RES>
-    struct Eval
-      {
-        using Result = RES;
-        optional<RES> result;
-        size_t consumed{0};
-      };
-    
-    template<class FUN>
-    struct Connex
-      : util::NonAssign
-      {
-        using PFun = FUN;
-        PFun parse;
-        
-        using Result = typename _Fun<PFun>::Ret::Result;
-        
-        Connex (FUN&& pFun)
-          : parse{move(pFun)}
-          { }
-      };
-    
-    auto
-    buildConnex(NullType)
-    {
-      return Connex{[](StrView) -> Eval<NullType>
-                      {
-                        return {NullType{}};
-                      }};
-    }
-    using NulP = decltype(buildConnex (NullType()));
-    
-    auto
-    buildConnex (regex rex)
-    {
-      return Connex{[regEx = move(rex)]
-                    (StrView toParse) -> Eval<smatch>
-                      {           // skip leading whitespace...
-                        size_t pre = leadingWhitespace (toParse);
-                        toParse = toParse.substr(pre);
-                        auto result{matchAtStart (toParse,regEx)};
-                        size_t consumed = result? pre+result->length() : 0;
-                        return {move(result), consumed};
-                      }};
-    }
-    using Term = decltype(buildConnex (std::declval<regex>()));
-    
-    Term
-    buildConnex (string const& rexDef)
-    {
-      return buildConnex (regex{rexDef});
-    }
-    
-    template<class FUN>
-    auto
-    buildConnex (Connex<FUN> const& anchor)
-    {
-      return Connex{anchor};
-    }
-    template<class FUN>
-    auto
-    buildConnex (Connex<FUN> && anchor)
-    {
-      return Connex{move(anchor)};
-    }
-    
-    
-    template<class CON, class BIND>
-    auto
-    adaptConnex (CON&& connex, BIND&& modelBinding)
-    {
-      using RX = typename CON::Result;
-      using Arg = lib::meta::_FunArg<BIND>;
-      static_assert (std::is_constructible_v<Arg,RX>,
-                     "Model binding must accept preceding model result.");
-      using AdaptedRes = typename _Fun<BIND>::Ret;
-      return Connex{[origConnex = forward<CON>(connex)
-                    ,binding = forward<BIND>(modelBinding)
-                    ]
-                    (StrView toParse) -> Eval<AdaptedRes>
-                      {
-                        auto eval = origConnex.parse (toParse);
-                        if (eval.result)
-                          return {binding (move (*eval.result))};
-                        else
-                          return {std::nullopt};
-                      }};
-    }
-    
-    
-    /* ===== building structured models ===== */
-    
-    /**
-     * Product Model : results from a conjunction of parsing clauses,
-     * which are to be accepted in sequence, one after the other.
-     */
-    template<typename...RESULTS>
-    struct SeqModel
-      : tuple<RESULTS...>
-      {
-        static constexpr size_t SIZ = sizeof...(RESULTS);
-        using Seq = lib::meta::TySeq<RESULTS...>;
-        using Tup = std::tuple<RESULTS...>;
-        
-        SeqModel() = default;
-        
-        template<typename...XS, typename XX>
-        SeqModel (SeqModel<XS...>&& seq, XX&& extraElm)
-          : Tup{std::tuple_cat (seq.extractTuple()
-                               ,make_tuple (forward<XX> (extraElm)) )}
-          { }
-          
-        template<typename X1, typename X2>
-        SeqModel (X1&& res1, X2&& res2)
-          : Tup{move(res1), move(res2)}
-          { }
-        
-        Tup&& extractTuple() { return move(*this); }
-      };
-    
-    /**
-     * Sum Model : results from a disjunction of parsing clauses,
-     * which are are tested and accepted as alternatives, one at least.
-     */
-    template<typename...CASES>
-    struct AltModel
-      {
-        
-      };
-    
-    
-    /** Special case Product Model to represent iterative sequence */
-    template<typename RES>
-    struct IterModel
-      {
-        
-      };
-    
-    /** Marker-Tag for the result from a sub-expression, not to be joined */
-    template<typename RES>
-    struct SubModel
-      {
-        
-      };
-    
-    /** Standard case : combinator of two model branches */
-    template<template<class...> class TAG, class R1, class R2 =void>
-    struct _Join
-      {
-        using Result = TAG<R1,R2>;
-      };
-    
-    /** Generic case : extend a structured model by further branch */ 
-    template<template<class...> class TAG, class...RS, class R2>
-    struct _Join<TAG,TAG<RS...>,R2>
-      {
-        using Result = TAG<RS...,R2>;
-      };
-    
-    /** Special Case : absorb sub-expression without flattening */
-    template<template<class...> class TAG, class R1, class R2>
-    struct _Join<TAG,SubModel<R1>,R2>
-      {
-        using Result = TAG<R1,R2>;
-      };
-    template<template<class...> class TAG, class R1, class R2>
-    struct _Join<TAG,R1, SubModel<R2>>
-      {
-        using Result = TAG<R1,R2>;
-      };
-    template<template<class...> class TAG, class R1, class R2>
-    struct _Join<TAG,SubModel<R1>,SubModel<R2>>
-      {
-        using Result = TAG<R1,R2>;
-      };
-    
-    /** Special Case : absorb further similar elements into IterModel */
-    template<class RES>
-    struct _Join<IterModel, IterModel<RES>, RES>
-      {
-        using Result = IterModel<RES>;
-      };
-    
-    
-    /** accept sequence of two parse functions */
-    template<class C1, class C2>
-    auto
-    sequenceConnex (C1&& connex1, C2&& connex2)
-    {
-      using R1 = typename decay_t<C1>::Result;
-      using R2 = typename decay_t<C2>::Result;
-      using ProductResult = typename _Join<SeqModel, R1, R2>::Result;
-      using ProductEval = Eval<ProductResult>;
-      return Connex{[conL = forward<C1>(connex1)
-                    ,conR = forward<C2>(connex2)
-                    ]
-                    (StrView toParse) -> ProductEval
-                      {
-                        auto eval1 = conL.parse (toParse);
-                        if (eval1.result)
-                          {
-                            size_t posAfter1 = eval1.consumed;
-                            StrView restInput = toParse.substr(posAfter1);
-                            auto eval2 = conR.parse (restInput);
-                            if (eval2.result)
-                              {
-                                uint consumedOverall = posAfter1 + eval2.consumed;
-                                return ProductEval{ProductResult{move(*eval1.result)
-                                                                ,move(*eval2.result)}
-                                                  ,consumedOverall
-                                                  };
-                              }
-                          }
-                        return ProductEval{std::nullopt};
-                      }};
-    }
-    
-    
-    template<class PAR>
-    class Syntax;
-    
-    
-    template<class CON>
-    class Parser
-      : public CON
-      {
-        using PFun = typename CON::PFun;
-        static_assert (_Fun<PFun>(), "Connex must define a parse-function");
-        
-      public:
-        using Connex = CON;
-        using Result = typename CON::Result;
-        
-using Sigi = typename _Fun<PFun>::Sig;
-//lib::test::TypeDebugger<Sigi> buggi;
-//lib::test::TypeDebugger<Result> guggi;
-  
-        static_assert (has_Sig<PFun, Eval<Result>(StrView)>()
-                      ,"Signature of the parse-function not suitable");
-        
-        Eval<Result>
-        operator() (StrView toParse)
-          {
-            return CON::parse (toParse);
-          }
-        
-        template<typename SPEC>
-        Parser (SPEC&& spec)
-          : CON{buildConnex (forward<SPEC> (spec))}
-          { }
-        
-//      template<class PAR>
-//      Parser (Syntax<PAR> const& anchor)
-//        : CON{anchor}
-//        { }
-//      template<class PAR>
-//      Parser (CON const& anchor)
-//        : CON{anchor}
-//        { }
-      };
-    
-    Parser(NullType)      -> Parser<NulP>;
-    Parser(regex &&)      -> Parser<Term>;
-    Parser(regex const&)  -> Parser<Term>;
-    Parser(string const&) -> Parser<Term>;
-    
-    template<class FUN>
-    Parser(Connex<FUN> const&) -> Parser<Connex<FUN>>;
-//  
-//  template<class PAR>
-//  Parser(Syntax<PAR> const&) -> Parser<typename PAR::Connex>;
-    
-    
-    template<class PAR>
-    class Syntax
-      : public Eval<typename PAR::Result>
-      {
-        PAR parse_;
-        
-      public:
-        using Connex = typename PAR::Connex;
-        using Result = typename PAR::Result;
-        
-        bool success()    const { return bool(Syntax::result); }
-        bool hasResult()  const { return bool(Syntax::result); }
-        Result& getResult()     { return * Syntax::result;     }
-        Result&& extractResult(){ return move(getResult());    }
-        
-        Syntax()
-          : parse_{NullType()}
-          { }
-        
-        explicit
-        Syntax (PAR&& parser)
-          : parse_{move (parser)}
-          { }
-        
-        explicit
-        operator bool()  const
-          {
-            return success();
-          }
-        
-        Syntax&&
-        parse (StrView toParse)
-          {
-            eval() = parse_(toParse);
-            return move(*this);
-          }
-        
-        Connex const&
-        getConny()  const
-          {
-            return parse_;
-          }
-        
-        template<typename SPEC>
-        auto
-        seq (SPEC&& clauseDef)
-          {
-            return accept(
-                    sequenceConnex (move(parse_)
-                                   ,Parser{forward<SPEC> (clauseDef)}));
-          }
-        
-      private:
-        Eval<Result>&
-        eval()
-          {
-            return *this;
-          }
-      };
-  
-    template<typename SPEC>
-    auto
-    accept (SPEC&& clauseDef)
-    {
-      return Syntax{Parser{forward<SPEC> (clauseDef)}};
-    }
-    
-  //  template<class PAR>
-  //  Parser(Syntax<PAR> const&) -> Parser<typename PAR::Connex>;
-    
-#endif /////////////////////////////////////////////////////////////////////////////////////TODO accommodate
-  }// namespace parse
-  
-//using parse::accept;
-}// namespace util
 
 namespace lib {
+  
+  using std::move;
+  using std::forward;
+  using std::decay_t;
+  using std::tuple;
+  
+  
+  namespace {// Metaprogramming helper
+    
+    template<typename...TYPES>
+    struct _MaxBuf;
+    
+    template<>
+    struct _MaxBuf<>
+      {
+        static constexpr size_t siz = 0;
+        static constexpr size_t align = 0;
+      };
+    
+    template<typename T, typename...TYPES>
+    struct _MaxBuf<T,TYPES...>
+      {
+        static constexpr size_t siz   = std::max (sizeof(T),_MaxBuf<TYPES...>::siz);
+        static constexpr size_t align = std::max (alignof(T),_MaxBuf<TYPES...>::align);
+      };
+  }//(End)Meta-helper
+  
+  
+  
+  /*********************************************************************//**
+   * A _Sum Type_ to hold alternative results from a branched evaluation.
+   * @tparam TYPES sequence of all the types corresponding to all branches
+   * @remark an instance is locked into a specific branch, as designated
+   *         by the index in the type sequence. The payload object is
+   *         placed inline, into an opaque buffer. You need to know the
+   *         branch-number in order to re-access the (typed) content.
+   */
+  template<typename...TYPES>
+  class BranchCase
+    {
+    public:
+      static constexpr auto TOP = sizeof...(TYPES) -1;
+      static constexpr auto SIZ = _MaxBuf<TYPES...>::siz;
+      
+      template<size_t idx>
+      using SlotType = std::tuple_element_t<idx, tuple<TYPES...>>;
+
+    protected:
+      BranchCase() = default; ///< @internal default-created state is **invalid**
+      
+      /** selector field to designate the chosen branch */
+      size_t branch_{0};
+      
+      /** opaque inline storage buffer
+       *  with suitable size and alignment */
+      alignas(_MaxBuf<TYPES...>::align)
+        std::byte buffer_[SIZ];
+      
+      
+      template<typename TX, typename...INITS>
+      TX&
+      emplace (INITS&&...inits)
+        {
+          return * new(&buffer_) TX(forward<INITS> (inits)...);
+        }
+      
+      template<typename TX>
+      TX&
+      access ()
+        {
+          return * std::launder (reinterpret_cast<TX*> (&buffer_[0]));
+        }
+      
+      /** apply generic functor to the currently selected branch */
+      template<size_t idx, class FUN>
+      auto
+      selectBranch (FUN&& fun)
+        {
+          if constexpr (0 < idx)
+            if (branch_ < idx)
+              return selectBranch<idx-1> (forward<FUN>(fun));
+          return fun (get<idx>());
+        }
+      
+      
+    public:
+      /**
+       * Accept a _visitor-functor_ (double dispatch).
+       * @note the functor or lambda must be generic and indeed
+       *       able to handle every possible branch type.
+       * @warning can only return single type for all branches.
+       */
+      template<class FUN>
+      auto
+      accept (FUN&& visitor)
+        {
+          return selectBranch<TOP> (forward<FUN> (visitor));
+        }
+      
+     ~BranchCase()
+        {
+          accept ([this](auto& it)
+                        { using Elm = decay_t<decltype(it)>;
+                          access<Elm>().~Elm();
+                        });
+        }
+      
+      /** Standard constructor: select branch and provide initialiser */
+      template<typename...INITS>
+      BranchCase (size_t idx, INITS&& ...inits)
+        : branch_{idx}
+        {
+          accept ([&,this](auto& it)
+                        { using Elm = decay_t<decltype(it)>;
+                          if constexpr (std::is_constructible_v<Elm,INITS...>)
+                              this->emplace<Elm> (forward<INITS> (inits)...);
+                        });
+        }
+      
+      BranchCase (BranchCase const& o)
+        {
+          branch_ = o.branch_;
+          BranchCase& unConst = const_cast<BranchCase&> (o);
+          unConst.accept ([this](auto& it)
+                        { using Elm = decay_t<decltype(it)>;
+                          this->emplace<Elm> (it);
+                        });
+        }
+      
+      BranchCase (BranchCase && ro)
+        {
+          branch_ = ro.branch_;
+          ro.accept ([this](auto& it)
+                        { using Elm = decay_t<decltype(it)>;
+                          this->emplace<Elm> (move (it));
+                        });
+        }
+      
+      friend void
+      swap (BranchCase& o1, BranchCase& o2)
+        {
+          using std::swap;
+          BranchCase tmp;
+          tmp.branch_ = o1.branch_;
+          o1.accept ([&](auto& it)
+                        { using Elm = decay_t<decltype(it)>;
+                          tmp.emplace<Elm> (move (o1.access<Elm>()));
+                        });
+          swap (o1.branch_,o2.branch_);
+          o1.accept ([&](auto& it)
+                        { using Elm = decay_t<decltype(it)>;
+                          o1.emplace<Elm> (move (o2.access<Elm>()));
+                        });
+          o2.accept ([&](auto& it)
+                        { using Elm = decay_t<decltype(it)>;
+                          o2.emplace<Elm> (move (tmp.access<Elm>()));
+                        });
+        }
+      
+      BranchCase&
+      operator= (BranchCase ref)
+        {
+          swap (*this, ref);
+          return *this;
+        }
+      
+      
+      size_t
+      selected()  const
+        {
+          return branch_;
+        }
+      
+      /** re-access the value, using compile-time slot-index param.
+       * @warning must use the correct slot-idx (unchecked!)
+       */
+      template<size_t idx>
+      SlotType<idx>&
+      get()
+        {
+          return access<SlotType<idx>>();
+        }
+    };
+  
 }// namespace lib
 #endif/*LIB_BRANCH_CASE_H*/

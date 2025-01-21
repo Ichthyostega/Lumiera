@@ -35,6 +35,7 @@ namespace util {
 namespace parse{
 namespace test {
   
+  using lib::test::showType;
   using lib::meta::is_Tuple;
   using std::get;
 //  using util::join;
@@ -212,7 +213,10 @@ namespace test {
         }
       
       
-      /** @test TODO define alternative syntax structures to match by parse. */
+      /** @test TODO WIP define alternative syntax structures to match by parse.
+       *      - first demonstrate how a model with alternative branches can be
+       *        populated and gradually extended while searching for a match.
+       */
       void
       acceptAlternatives()
         {
@@ -221,27 +225,50 @@ namespace test {
           using R3 = double;
           
           using A1 = AltModel<R1>;
+SHOW_EXPR(showType<A1>())
+          CHECK (showType<A1>() == "parse::AltModel<char>"_expect);
           string s{"second"};
           using A2 = A1::Additionally<R2>;
+SHOW_EXPR(showType<A2>())
+          CHECK (showType<A2>() == "parse::AltModel<char, string>"_expect);
+          
           A2 model2{s};
 SHOW_EXPR(sizeof(A2));
+          CHECK (sizeof(A2) >= sizeof(string)+sizeof(size_t));
 SHOW_EXPR(model2.SIZ);
+          CHECK (model2.SIZ == sizeof(string));
 SHOW_EXPR(model2.TOP);
+          CHECK (model2.TOP == 1);
 SHOW_EXPR(model2.selected())
+          CHECK (model2.selected() == 1);
 SHOW_EXPR(model2.get<1>())
+          CHECK (model2.get<1>() == "second");
+
           using A3 = A2::Additionally<R3>;
           A3 model3{model2.addBranch<R3>()};
 SHOW_TYPE(A3)
+SHOW_EXPR(showType<A3>())
+          CHECK (showType<A3>() == "parse::AltModel<char, string, double>"_expect);
 SHOW_EXPR(sizeof(A3));
+          CHECK (sizeof(A3) == sizeof(A2));
 SHOW_EXPR(model3.SIZ);
 SHOW_EXPR(model3.TOP);
+          CHECK (model3.TOP == 2);
 SHOW_EXPR(model3.selected())
+          CHECK (model3.selected() == 1);
 SHOW_EXPR(model3.get<1>())
+          CHECK (model3.get<1>() == "second");
+
           auto res = move(model3);
 SHOW_TYPE(decltype(res))
+SHOW_EXPR(showType<decltype(res)>())
+          CHECK (showType<decltype(res)>() == "parse::AltModel<char, string, double>"_expect);
 SHOW_EXPR(sizeof(res))
+          CHECK (sizeof(res) == sizeof(A2));
 SHOW_EXPR(res.selected())
+          CHECK (res.selected() == 1);
 SHOW_EXPR(res.get<1>())
+          CHECK (res.get<1>() == "second");
         }
     };
   

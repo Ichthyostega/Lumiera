@@ -52,10 +52,23 @@ namespace test{
       static long _local_checksum;
       static bool _throw_in_ctor;
       
+      void
+      init()
+        {
+          checksum() += val_;
+          if (_throw_in_ctor)
+            throw val_;
+        }
+      
     public:
+      static constexpr int DEFUNCT = std::numeric_limits<int>::min();
+      static constexpr int DEAD    = std::numeric_limits<int>::max();
+      
       virtual ~Dummy()       ///< can act as interface
         {
-          checksum() -= val_;
+          if (val_ != DEFUNCT)
+            checksum() -= val_;
+          val_ = DEAD;
         }
       
       Dummy ()
@@ -66,20 +79,27 @@ namespace test{
         : val_(v)
         { init(); }
       
+      friend void
+      swap (Dummy& dum1, Dummy& dum2)  ///< checksum neutral
+      {
+        std::swap (dum1.val_, dum2.val_);
+      }
+      
+      Dummy (Dummy const& o)
+        : Dummy{o.val_}
+        { }
+      
       Dummy (Dummy && oDummy)  noexcept
         : Dummy(0)
         {
           swap (*this, oDummy);
+          oDummy.val_ = DEFUNCT;
         }
       
       Dummy&
-      operator= (Dummy && oDummy)
+      operator= (Dummy oDummy) ///< accepts both lvalues and rvalues
         {
-          if (&oDummy != this)
-            {
-              swap (*this, oDummy);
-              oDummy.setVal(0);
-            }
+          swap (*this, oDummy);
           return *this;
         }
       
@@ -104,12 +124,6 @@ namespace test{
           val_ = newVal;
         }
       
-      friend void
-      swap (Dummy& dum1, Dummy& dum2)  ///< checksum neutral
-      {
-        std::swap (dum1.val_, dum2.val_);
-      }
-      
       static long&
       checksum()
         {
@@ -120,16 +134,6 @@ namespace test{
       activateCtorFailure (bool indeed =true)
         {
           _throw_in_ctor = indeed;
-        }
-      
-      
-    private:
-      void
-      init()
-        {
-          checksum() += val_;
-          if (_throw_in_ctor)
-            throw val_;
         }
     };
 

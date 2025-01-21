@@ -182,18 +182,18 @@ namespace util {
      */
     template<typename...CASES>
     struct AltModel
-      : BranchCase<CASES...>
+      : lib::BranchCase<CASES...>
       {
-        using _Model = BranchCase<CASES...>;
+        using _Model = lib::BranchCase<CASES...>;
         
-        template<typename EX>
-        using Additionally = AltModel<CASES...,EX>;
-        
-        template<typename INIT,             typename =lib::meta::disable_if_self<AltModel,INIT>>
+        template<typename INIT,     typename =lib::meta::disable_if_self<AltModel,INIT>>
         AltModel (INIT&& init)
           : _Model{_Model::TOP, forward<INIT> (init)}
           { }
           
+        template<typename EX>
+        using Additionally = AltModel<CASES...,EX>;
+        
         template<typename EX>
         Additionally<EX>
         addBranch()
