@@ -320,6 +320,41 @@ namespace util {
     }
     
     
+    /** accept sequence of two parse functions */
+    template<class C1, class C2>
+    auto
+    branchedConnex (C1&& connex1, C2&& connex2)
+    {
+      using R1 = typename decay_t<C1>::Result;
+      using R2 = typename decay_t<C2>::Result;
+      using SumResult = typename _Join<AltModel, R1, R2>::Result;
+      using SumEval = Eval<SumResult>;
+      return Connex{[conL = forward<C1>(connex1)
+                    ,conR = forward<C2>(connex2)
+                    ]
+                    (StrView toParse) -> SumEval
+                      {
+                        auto eval1 = conL.parse (toParse);
+                        if (eval1.result)
+                          {
+                            uint endBranch1 = eval1.consumed;
+                            return SumEval{SumResult::mark_left (move(*eval1.result))
+                                          ,endBranch1
+                                          };
+                          }
+                        auto eval2 = conR.parse (toParse);
+                        if (eval2.result)
+                          {
+                            uint endBranch2 = eval2.consumed;
+                            return SumEval{SumResult::mark_right (move(*eval2.result))
+                                          ,endBranch2
+                                          };
+                          }
+                        return SumEval{std::nullopt};
+                      }};
+    }
+    
+    
     template<class PAR>
     class Syntax;
     
@@ -424,6 +459,15 @@ using Sigi = typename _Fun<PFun>::Sig;
           {
             return accept(
                     sequenceConnex (move(parse_)
+                                   ,Parser{forward<SPEC> (clauseDef)}));
+          }
+        
+        template<typename SPEC>
+        auto
+        alt (SPEC&& clauseDef)
+          {
+            return accept(
+                    branchedConnex (move(parse_)
                                    ,Parser{forward<SPEC> (clauseDef)}));
           }
         

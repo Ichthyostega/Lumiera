@@ -135,10 +135,17 @@ namespace test {
         }
       
       
-      /** @test define a sequence of syntax structures to match by parse. */
+      /** @test define a sequence of syntax structures to match by parse.
+       *      - first demonstrate explicitly how the consecutive parsing works
+       *        and how both models are combined into a product model (tuple)
+       *      - demonstrate how leading whitespace is skipped automatically
+       *      - then perform the same parse with a Syntax clause build with
+       *        the `seq()` builder-DSL
+       *      - extend this Syntax by adding a further sequential clause.
+       */
       void
       acceptSequential()
-        {
+        {  //_______________________________________________
           // Demonstration: how sequence combinator works....
           auto term1 = buildConnex ("hello");
           auto term2 = buildConnex ("world");
@@ -185,6 +192,7 @@ namespace test {
           CHECK (not term2.parse(" old  ").result);
           
           
+           //___________________________________________________
           // DSL parse clause builder: a sequence of terminals...
           auto syntax = accept("hello").seq("world");
           
@@ -213,9 +221,12 @@ namespace test {
         }
       
       
+      
       /** @test TODO WIP define alternative syntax structures to match by parse.
        *      - first demonstrate how a model with alternative branches can be
        *        populated and gradually extended while searching for a match.
+       *      - then show explicitly the logic to check and select branches
+       *        and construct the corresponding sum-model (variant)
        */
       void
       acceptAlternatives()
@@ -293,7 +304,42 @@ namespace test {
           CHECK (e2.result->selected() == 0);                  // Selector-ID of the first matching branch (here #0)
           CHECK (e2.result->get<0>().str() == "brazen");       // We know that branch#0 holds a RegExp-Matcher (from term1)
           CHECK (e2.result->get<0>().suffix() == " dicktator");
-        }
+          CHECK (e2.consumed == 6);
+          CHECK (s2.substr(e2.consumed)  == " dicktator");
+          
+          
+           //________________________________________________
+          // DSL parse clause builder: alternative branches...
+          auto syntax = accept("brazen").alt("bragging");
+          
+          // Perform the same parse as demonstrated above....
+          CHECK (not syntax.hasResult());
+          syntax.parse(s1);
+          CHECK (not syntax.success());
+          syntax.parse(s2);
+          CHECK (syntax);
+          auto altModel = syntax.getResult();
+          CHECK (altModel.selected() == 0);
+          CHECK (altModel.get<0>().str() == "brazen");
+          
+          // can build extended clause from existing one
+          auto syntax2 = syntax.alt("smarmy (\\w+)");
+          CHECK (not syntax2.hasResult());
+          syntax2.parse(s1);
+          CHECK (not syntax2.success());
+          syntax2.parse(s2);
+          CHECK (syntax2.success());
+          CHECK (syntax2.getResult().TOP == 2);                // Note: further branch has been folded into an extended AltModel
+          CHECK (syntax2.getResult().selected() == 0);         //  ... string s2 still matched the same branch (#0)
+          CHECK (syntax2.getResult().get<0>().str() == "brazen");
+          
+          syntax2.parse("smarmy saviour");
+          CHECK (syntax2.success());
+          auto altModel2 = syntax2.getResult();
+          CHECK (syntax2.getResult().selected() == 2);         //  ... but another string can match the added branch #2
+          CHECK (syntax2.getResult().get<2>().str() == "smarmy saviour");
+          CHECK (syntax2.getResult().get<2>().str(1) == "saviour");
+        }                                                      // Note: syntax for this branch #2 captured an additional word
     };
   
   LAUNCHER (Parse_test, "unit common");
