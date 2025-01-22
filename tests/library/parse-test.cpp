@@ -20,7 +20,6 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/parse.hpp"
-//#include "lib/iter-explorer.hpp"
 //#include "lib/format-util.hpp"
 #include "lib/meta/tuple-helper.hpp"
 #include "lib/test/diagnostic-output.hpp"//////////////////TODO
@@ -382,13 +381,13 @@ namespace test {
                                 return hasResults()? IterEval{move(results), consumed}
                                                    : IterEval{std::nullopt};
                               };
-          string s1{"Seit umschlungen, Millionen"};
+          string s1{"seid umschlungen, Millionen"};
           string s2{"beguile, extort, profit"};
           
           auto e1 = parseSeq(s1);
           CHECK (e1.result);
           CHECK (e1.result->size() == 1);
-          CHECK (e1.result->at(0).str() == "Seit");
+          CHECK (e1.result->at(0).str() == "seid");
           CHECK (e1.result->at(0).suffix() == " umschlungen, Millionen");
           CHECK (e1.consumed == 4);
           
@@ -406,7 +405,49 @@ namespace test {
           
            //______________________________________________
           // DSL parse clause builder: iterative sequence...
-          auto syntax1 = accept("brazen").alt("bragging");
+          auto syntax1 = accept(term).repeat(",");
+          
+          // Perform the same parse as demonstrated above....
+          CHECK (not syntax1.hasResult());
+          syntax1.parse(s1);
+          CHECK (syntax1.success());
+          auto res1 = syntax1.getResult();
+          CHECK (res1.size() == 1);
+          CHECK (res1.get(0).str() == "seid");
+          
+          syntax1.parse(s2);
+          CHECK (syntax1.success());
+          res1 = syntax1.getResult();
+          CHECK (res1.size() == 3);
+          CHECK (res1[0].str() == "beguile");
+          CHECK (res1[1].str() == "extort" );
+          CHECK (res1[2].str() == "profit" );
+          
+          auto syntax2 = accept(term).repeat(1,2,",");
+          auto syntax3 = accept(term).repeat(4,",");
+          syntax2.parse(s2);
+          syntax3.parse(s2);
+          CHECK (    syntax2);
+          CHECK (not syntax3);
+          CHECK (syntax2.getResult().size() == 2);
+          CHECK (s2.substr(syntax2.consumed()) == ", profit");
+          
+          auto sx = s2 + "  , \tdump";
+          syntax3.parse(sx);
+          CHECK (syntax3);
+          CHECK (syntax3.getResult().size() == 4);
+          CHECK (syntax3.getResult()[0].str() == "beguile");
+          CHECK (syntax3.getResult()[1].str() == "extort" );
+          CHECK (syntax3.getResult()[2].str() == "profit" );
+          CHECK (syntax3.getResult()[3].str() == "dump"   );
+          
+          auto syntax4 = accept(term).repeat();
+          syntax4.parse(s1);
+          CHECK (syntax4.success());
+          CHECK (syntax4.getResult().size() == 2);
+          CHECK (syntax4.getResult()[0].str() == "seid");
+          CHECK (syntax4.getResult()[1].str() == "umschlungen" );
+          CHECK (s1.substr(syntax4.consumed()) == ", Millionen");
         }
     };
   

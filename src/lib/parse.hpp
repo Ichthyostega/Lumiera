@@ -27,7 +27,9 @@
 #define LIB_PARSE_H
 
 
+#include "lib/error.hpp"
 #include "lib/branch-case.hpp"
+#include "lib/format-string.hpp"
 #include "lib/meta/variadic-rebind.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/trait.hpp"
@@ -41,6 +43,7 @@
 
 namespace util {
   namespace parse {
+    namespace err = lumiera::error;
     
     using std::move;
     using std::forward;
@@ -52,11 +55,14 @@ namespace util {
     using std::decay_t;
     using std::tuple;
     using std::array;
+    using util::_Fmt;
     
     using StrView = std::string_view;
     
     
     /**
+     * Parse evaluation result
+     * @tparam RES model type to bind
      */
     template<class RES>
     struct Eval
@@ -240,15 +246,16 @@ namespace util {
     /** Special case Product Model to represent iterative sequence */
     template<typename RES>
     struct IterModel
+      : std::vector<RES>
       {
-        
+        RES& get (size_t i) { return this->at(i); }
       };
     
     /** Marker-Tag for the result from a sub-expression, not to be joined */
     template<typename RES>
     struct SubModel
       {
-        
+        RES model;
       };
     
     /** Standard case : combinator of two model branches */
@@ -282,12 +289,6 @@ namespace util {
         using Result = TAG<R1,R2>;
       };
     
-    /** Special Case : absorb further similar elements into IterModel */
-    template<class RES>
-    struct _Join<IterModel, IterModel<RES>, RES>
-      {
-        using Result = IterModel<RES>;
-      };
     
     
     /** accept sequence of two parse functions */
@@ -359,6 +360,49 @@ namespace util {
     }
     
     
+    /** repeatedly accept parse-function, optionally delimited. */
+    template<class C1, class C2>
+    auto
+    repeatedConnex (uint min, uint max
+                   ,C1&& bodyConnex, C2&& delimConnex)
+    {
+      using Res = typename decay_t<C1>::Result;
+      using IterResult = IterModel<Res>;
+      using IterEval = Eval<IterResult>;
+      return Connex{[sep = forward<C2>(delimConnex)
+                    ,body = forward<C1>(bodyConnex)
+                    ,min,max
+                    ]
+                    (StrView toParse) -> IterEval
+                      {
+                        uint consumed{0};
+                        IterResult results;
+                        do
+                          {
+                            uint offset{0};
+                            if (not results.empty())
+                              {  // look for delimiter within sequence
+                                auto delim = sep.parse (toParse);
+                                if (not delim.result)
+                                  break;
+                                offset += delim.consumed;
+                              }
+                            auto eval = body.parse (toParse.substr(offset));
+                            if (not eval.result)
+                              break;
+                            offset += eval.consumed;
+                            results.emplace_back (move(*eval.result));
+                            toParse = toParse.substr(offset);
+                            consumed += offset;
+                          }
+                        while (results.size() < max);
+                        return results.size() >= min? IterEval{move(results), consumed}
+                                                    : IterEval{std::nullopt};
+                      }};
+    }
+    
+    
+    
     template<class PAR>
     class Syntax;
     
@@ -424,10 +468,11 @@ using Sigi = typename _Fun<PFun>::Sig;
         using Connex = typename PAR::Connex;
         using Result = typename PAR::Result;
         
-        bool success()    const { return bool(Syntax::result); }
-        bool hasResult()  const { return bool(Syntax::result); }
-        Result& getResult()     { return * Syntax::result;     }
-        Result&& extractResult(){ return move(getResult());    }
+        bool success()    const { return bool(Syntax::result);  }
+        bool hasResult()  const { return bool(Syntax::result);  }
+        size_t consumed() const { return Eval<Result>::consumed;}
+        Result& getResult()     { return * Syntax::result;      }
+        Result&& extractResult(){ return move(getResult());     }
         
         Syntax()
           : parse_{NullType()}
@@ -457,6 +502,9 @@ using Sigi = typename _Fun<PFun>::Sig;
             return parse_;
           }
         
+        
+        /** ===== Syntax clause builder DSL ===== */
+        
         template<typename SPEC>
         auto
         seq (SPEC&& clauseDef)
@@ -475,14 +523,47 @@ using Sigi = typename _Fun<PFun>::Sig;
                                    ,Parser{forward<SPEC> (clauseDef)}));
           }
         
-      private:
-        Eval<Result>&
-        eval()
+        auto
+        repeat(uint cnt =uint(-1))
           {
-            return *this;
+            return repeat (1,cnt, NullType{});
           }
+        
+        template<typename SPEC>
+        auto
+        repeat (SPEC&& delimDef)
+          {
+            return repeat (1,uint(-1), forward<SPEC> (delimDef));
+          }
+        
+        template<typename SPEC>
+        auto
+        repeat (uint cnt, SPEC&& delimDef)
+          {
+            return repeat (cnt,cnt, forward<SPEC> (delimDef));
+          }
+        
+        template<typename SPEC>
+        auto
+        repeat (uint min, uint max, SPEC&& delimDef)
+          {
+            if (max<min)
+              throw err::Invalid{_Fmt{"Invalid repeated syntax-spec: min:%d > max:%d"}
+                                                                   % min    % max    };
+            if (max == 0)
+              throw err::Invalid{"Invalid repeat with max ≡ 0 repetitions"};
+            
+            return accept(
+                    repeatedConnex (min,max
+                                   ,move(parse_)
+                                   ,Parser{forward<SPEC> (delimDef)}));
+          }
+        
+      private:
+        Eval<Result>& eval() { return *this;}
       };
-  
+    
+    
     template<typename SPEC>
     auto
     accept (SPEC&& clauseDef)
@@ -490,8 +571,9 @@ using Sigi = typename _Fun<PFun>::Sig;
       return Syntax{Parser{forward<SPEC> (clauseDef)}};
     }
     
-  //  template<class PAR>
-  //  Parser(Syntax<PAR> const&) -> Parser<typename PAR::Connex>;
+    /** empty syntax clause to start further definition */
+    auto accept() { return Syntax<Parser<NulP>>{}; }
+    
     
   }// namespace parse
   
