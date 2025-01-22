@@ -79,6 +79,7 @@ namespace test {
           acceptTerminal();
           acceptSequential();
           acceptAlternatives();
+          acceptIterWithDelim();
         }
       
       
@@ -222,7 +223,7 @@ namespace test {
       
       
       
-      /** @test TODO WIP define alternative syntax structures to match by parse.
+      /** @test define alternative syntax structures to match by parse.
        *      - first demonstrate how a model with alternative branches can be
        *        populated and gradually extended while searching for a match.
        *      - then show explicitly the logic to check and select branches
@@ -329,7 +330,7 @@ namespace test {
           CHECK (not syntax2.success());
           syntax2.parse(s2);
           CHECK (syntax2.success());
-          CHECK (syntax2.getResult().TOP == 2);                // Note: further branch has been folded into an extended AltModel
+          CHECK (syntax2.getResult().N == 2);                  // Note: further branch has been folded into an extended AltModel
           CHECK (syntax2.getResult().selected() == 0);         //  ... string s2 still matched the same branch (#0)
           CHECK (syntax2.getResult().get<0>().str() == "brazen");
           
@@ -340,6 +341,73 @@ namespace test {
           CHECK (syntax2.getResult().get<2>().str() == "smarmy saviour");
           CHECK (syntax2.getResult().get<2>().str(1) == "saviour");
         }                                                      // Note: syntax for this branch #2 captured an additional word
+      
+      
+      
+      /** @test TODO define repetitive sequence with delimiter
+       *      - demonstrate how actually to accept such a flexible sequence
+       */
+      void
+      acceptIterWithDelim()
+        {  //_______________________________________________
+          // Demonstration: how repetitive sequence works....
+          auto sep = buildConnex (",");
+          auto term = buildConnex ("\\w+");
+          auto parseSeq = [&](StrView toParse)
+                              {
+                                using Res = decltype(term)::Result;
+                                using IterResult = std::vector<Res>;
+                                using IterEval = Eval<IterResult>;
+                                uint consumed{0};
+                                IterResult results;
+                                auto hasResults = [&]{ return not results.empty(); };
+                                while (true)
+                                  {
+                                    uint offset{0};
+                                    if (hasResults())
+                                      {
+                                        auto delim = sep.parse (toParse);
+                                        if (not delim.result)
+                                          break;
+                                        offset += delim.consumed;
+                                      }
+                                    auto eval = term.parse (toParse.substr(offset));
+                                    if (not eval.result)
+                                      break;
+                                    offset += eval.consumed;
+                                    results.emplace_back (move(*eval.result));
+                                    toParse = toParse.substr(offset);
+                                    consumed += offset;
+                                  }
+                                return hasResults()? IterEval{move(results), consumed}
+                                                   : IterEval{std::nullopt};
+                              };
+          string s1{"Seit umschlungen, Millionen"};
+          string s2{"beguile, extort, profit"};
+          
+          auto e1 = parseSeq(s1);
+          CHECK (e1.result);
+          CHECK (e1.result->size() == 1);
+          CHECK (e1.result->at(0).str() == "Seit");
+          CHECK (e1.result->at(0).suffix() == " umschlungen, Millionen");
+          CHECK (e1.consumed == 4);
+          
+          auto e2 = parseSeq(s2);
+          CHECK (e2.result);
+          CHECK (e2.result->size() == 3);
+          CHECK (e2.result->at(0).str() == "beguile");
+          CHECK (e2.result->at(1).str() == "extort" );
+          CHECK (e2.result->at(2).str() == "profit" );
+          CHECK (e2.result->at(0).suffix() == ", extort, profit");
+          CHECK (e2.result->at(1).suffix() == ", profit");
+          CHECK (e2.result->at(2).suffix() == ""        );
+          CHECK (e2.consumed == s2.length());
+          
+          
+           //______________________________________________
+          // DSL parse clause builder: iterative sequence...
+          auto syntax1 = accept("brazen").alt("bragging");
+        }
     };
   
   LAUNCHER (Parse_test, "unit common");

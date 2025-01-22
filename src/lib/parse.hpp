@@ -158,7 +158,7 @@ namespace util {
     struct SeqModel
       : tuple<RESULTS...>
       {
-        static constexpr size_t SIZ = sizeof...(RESULTS);
+        static constexpr size_t N = sizeof...(RESULTS);
         using Seq = lib::meta::TySeq<RESULTS...>;
         using Tup = std::tuple<RESULTS...>;
         
@@ -176,6 +176,9 @@ namespace util {
           { }
         
         Tup&& extractTuple() { return move(*this); }
+        
+        template<size_t i>
+        auto get() { return std::get<i> (*this); }
       };
     
     
@@ -188,6 +191,7 @@ namespace util {
       : lib::BranchCase<CASES...>
       {
         using Alt = lib::BranchCase<CASES...>;
+        static constexpr size_t N = Alt::TOP;
         
         template<typename EXTRA>
         using Additionally = AltModel<CASES...,EXTRA>;
