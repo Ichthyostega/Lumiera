@@ -189,38 +189,46 @@ namespace util {
       {
         using Alt = lib::BranchCase<CASES...>;
         
-        template<typename INIT,     typename =lib::meta::disable_if_self<AltModel,INIT>>
-        AltModel (INIT&& init)
-          : Alt{Alt::TOP, forward<INIT> (init)}
-          { }
+        template<typename EXTRA>
+        using Additionally = AltModel<CASES...,EXTRA>;
         
-        
-        
-        using SubSeq = typename _Vari<AltModel, CASES...>::Prefix;
-        using Penult = typename _Vari<AltModel, CASES...>::Penult;
-        using Ultima = typename _Vari<AltModel, CASES...>::Ultima;
-        
-        template<typename EX>
-        using Additionally = AltModel<CASES...,EX>;
-        
-        template<typename EX>
-        Additionally<EX>
-        addBranch()
+        template<typename EXTRA>
+        Additionally<EXTRA>
+        addBranch()      ///< mark-up existing model to add a further branch-case
           {
-            Additionally<EX>& upFaked = reinterpret_cast<Additionally<EX>&> (*this);
+            Additionally<EXTRA>& upFaked = reinterpret_cast<Additionally<EXTRA>&> (*this);
             return {move (upFaked)};
+          }           // this trick works due to similar storage layout
+        
+        
+        /* === Builder functions to mark which side of the combinator to pick === */
+        
+        using SubSeq = typename _Vari<AltModel, CASES...>::Prefix;  ///< a nested sub-model to extend
+        using Penult = typename _Vari<AltModel, CASES...>::Penult;  ///< plain value expected for left-branch
+        using Ultima = typename _Vari<AltModel, CASES...>::Ultima;  ///< plain value expected for right-branch
+        
+        static AltModel
+        mark_left (SubSeq&& leftCases)
+          {
+            return {leftCases.template addBranch<Ultima>()};
           }
         
-        AltModel (SubSeq&& leftCases)
-          : AltModel{leftCases.template addBranch<Ultima>()}
-          { }
+        static AltModel
+        mark_left (Penult&& leftCase)
+          {
+            return {Alt::TOP-1, move(leftCase)};
+          }
         
-        AltModel (Penult&& leftCase)
-          : Alt{Alt::TOP-1, move(leftCase)}
-          { }
+        static AltModel
+        mark_right (Ultima&& rightCase)
+          {
+            return {Alt::TOP, move(rightCase)};
+          }
         
-        AltModel (Ultima&& rightCase)
-          : Alt{Alt::TOP, move(rightCase)}
+      private:
+        template<typename INIT>
+        AltModel (size_t branchID, INIT&& init)
+          : Alt{branchID, forward<INIT> (init)}
           { }
       };
     
@@ -246,7 +254,7 @@ namespace util {
         using Result = TAG<R1,R2>;
       };
     
-    /** Generic case : extend a structured model by further branch */ 
+    /** Generic case : extend a structured model by further branch */
     template<template<class...> class TAG, class...RS, class R2>
     struct _Join<TAG,TAG<RS...>,R2>
       {

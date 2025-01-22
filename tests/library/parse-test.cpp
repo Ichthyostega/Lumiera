@@ -174,7 +174,7 @@ namespace test {
           auto e2 = parseSeq(s2);
           CHECK (    e2.result);
           
-          using SeqRes = std::decay_t<decltype(*e2.result)>;   // Note: the result type depends on the actual syntax construction
+          using SeqRes = decltype(e2)::Result;                 // Note: the result type depends on the actual syntax construction
           CHECK (is_Tuple<SeqRes>());                          //       Result model from sequence is the tuple of terminal results
           auto& [r1,r2] = *e2.result;
           CHECK (r1.str() == "hello"_expect);
@@ -219,56 +219,80 @@ namespace test {
        */
       void
       acceptAlternatives()
-        {
+        {  //_______________________________
+          // Demonstrate Alt-Model mechanics
           using R1 = char;
           using R2 = string;
           using R3 = double;
           
+          // build Model-Alternatives incrementally
           using A1 = AltModel<R1>;
-SHOW_EXPR(showType<A1>())
           CHECK (showType<A1>() == "parse::AltModel<char>"_expect);
-          string s{"second"};
+          
           using A2 = A1::Additionally<R2>;
-SHOW_EXPR(showType<A2>())
           CHECK (showType<A2>() == "parse::AltModel<char, string>"_expect);
           
-          A2 model2{s};
-SHOW_EXPR(sizeof(A2));
+          // create instance to represent this second branch...
+          A2 model2 = A2::mark_right ("seduced");
           CHECK (sizeof(A2) >= sizeof(string)+sizeof(size_t));
-SHOW_EXPR(model2.SIZ);
           CHECK (model2.SIZ == sizeof(string));
-SHOW_EXPR(model2.TOP);
-          CHECK (model2.TOP == 1);
-SHOW_EXPR(model2.selected())
+          CHECK (model2.TOP        == 1);
           CHECK (model2.selected() == 1);
-SHOW_EXPR(model2.get<1>())
-          CHECK (model2.get<1>() == "second");
+          CHECK (model2.get<1>()   == "seduced");
 
           using A3 = A2::Additionally<R3>;
-          A3 model3{model2.addBranch<R3>()};
-SHOW_TYPE(A3)
-SHOW_EXPR(showType<A3>())
+          A3 model3 = A3::mark_left (move (model2));
           CHECK (showType<A3>() == "parse::AltModel<char, string, double>"_expect);
-SHOW_EXPR(sizeof(A3));
           CHECK (sizeof(A3) == sizeof(A2));
-SHOW_EXPR(model3.SIZ);
-SHOW_EXPR(model3.TOP);
-          CHECK (model3.TOP == 2);
-SHOW_EXPR(model3.selected())
+          CHECK (model3.TOP        == 2);
           CHECK (model3.selected() == 1);
-SHOW_EXPR(model3.get<1>())
-          CHECK (model3.get<1>() == "second");
+          CHECK (model3.get<1>()   == "seduced");
 
           auto res = move(model3);
-SHOW_TYPE(decltype(res))
-SHOW_EXPR(showType<decltype(res)>())
           CHECK (showType<decltype(res)>() == "parse::AltModel<char, string, double>"_expect);
-SHOW_EXPR(sizeof(res))
           CHECK (sizeof(res) == sizeof(A2));
-SHOW_EXPR(res.selected())
-          CHECK (res.selected() == 1);
-SHOW_EXPR(res.get<1>())
-          CHECK (res.get<1>() == "second");
+          CHECK (res.selected()    == 1);
+          CHECK (res.get<1>()      == "seduced");
+          
+          
+           //_____________________________________________
+          // Demonstration: how branch combinator works....
+          auto term1 = buildConnex ("brazen");
+          auto term2 = buildConnex ("bragging");
+          auto parseAlt = [&](StrView toParse)
+                              {
+                                using R1 = decltype(term1)::Result;
+                                using R2 = decltype(term2)::Result;
+                                using SumResult = AltModel<R1,R2>;
+                                using SumEval = Eval<SumResult>;
+                                auto eval1 = term1.parse (toParse);
+                                if (eval1.result)
+                                  {
+                                    uint endBranch1 = eval1.consumed;
+                                    return SumEval{SumResult::mark_left (move(*eval1.result))
+                                                  ,endBranch1
+                                                  };
+                                  }
+                                auto eval2 = term2.parse (toParse);
+                                if (eval2.result)
+                                  {
+                                    uint endBranch2 = eval2.consumed;
+                                    return SumEval{SumResult::mark_right (move(*eval2.result))
+                                                  ,endBranch2
+                                                  };
+                                  }
+                                return SumEval{std::nullopt};
+                              };
+          string s1{"decent contender"};
+          string s2{"brazen dicktator"};
+          
+          auto e1 = parseAlt(s1);
+          CHECK (not e1.result);                               // does not compute....
+          auto e2 = parseAlt(s2);                              // one hell of a match!
+          CHECK (    e2.result);
+          CHECK (e2.result->selected() == 0);                  // Selector-ID of the first matching branch (here #0)
+          CHECK (e2.result->get<0>().str() == "brazen");       // We know that branch#0 holds a RegExp-Matcher (from term1)
+          CHECK (e2.result->get<0>().suffix() == " dicktator");
         }
     };
   

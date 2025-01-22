@@ -167,33 +167,6 @@ namespace meta {
   
   
   
-#if false ////////////////////////////////////////////////////////////////////////////////TODO reorder  
-  /* ==== Rebinding Variadic Arguments ==== **/
-  
-  /**
-   * Metaprogramming helper to transfer variadic arguments.
-   * - builds a new type instantiation from the Template \a X
-   * - possibly picks up the variadic argument pack from a given
-   *   source template `U<ARGS....>`
-   * @tparam X a variadic template
-   */
-  template<template<typename...> class X, typename...ARGS>
-  struct RebindVariadic
-    {
-      using Type = X<ARGS...>;
-    };
-  
-  template<template<typename...> class X
-          ,template<typename...> class U
-          ,typename...ARGS>
-  struct RebindVariadic<X, U<ARGS...>>
-    {
-      using Type = X<ARGS...>;
-    };
-  
-  
-  
-#endif ////////////////////////////////////////////////////////////////////////////////TODO reorder  
   
   
   
