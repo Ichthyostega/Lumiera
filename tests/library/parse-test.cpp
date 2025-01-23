@@ -35,7 +35,9 @@ namespace parse{
 namespace test {
   
   using lib::test::showType;
+  using lib::meta::typeSymbol;
   using lib::meta::is_Tuple;
+  using std::decay_t;
   using std::get;
 //  using util::join;
 //  using util::isnil;
@@ -79,6 +81,8 @@ namespace test {
           acceptSequential();
           acceptAlternatives();
           acceptIterWithDelim();
+          acceptOptionally();
+          acceptBracketed();
         }
       
       
@@ -117,16 +121,14 @@ namespace test {
           CHECK (not syntax2.hasResult());
           syntax2.parse (toParse);
           CHECK (not syntax2.success());
+          
           string bye{"cruel world"};
           syntax2.parse (bye);
           CHECK (syntax2.success());
           CHECK (syntax2.getResult()[1] == "cruel"_expect);
           
-          // going full circle: extract parser def from syntax
-//          using Conn = decltype(syntax2)::Connex;
-//          Conn conny{syntax2};
-//          auto parse2 = Parser{conny};
-          auto parse2 = Parser{syntax2.getConny()};
+          // Going full circle: extract Parser definition from syntax
+          auto parse2 = Parser{syntax2};
           CHECK (eval.result->str(1) == "vile");
           eval = parse2 (toParse);
           CHECK (not eval.result);
@@ -343,8 +345,10 @@ namespace test {
       
       
       
-      /** @test TODO define repetitive sequence with delimiter
+      /** @test define repetitive sequence with delimiter
        *      - demonstrate how actually to accept such a flexible sequence
+       *      - cover integration into the syntax clause DSL
+       *      - repetition count and delimiter
        */
       void
       acceptIterWithDelim()
@@ -405,7 +409,7 @@ namespace test {
           
            //______________________________________________
           // DSL parse clause builder: iterative sequence...
-          auto syntax1 = accept(term).repeat(",");
+          auto syntax1 = accept_repeated(",", term);
           
           // Perform the same parse as demonstrated above....
           CHECK (not syntax1.hasResult());
@@ -423,8 +427,8 @@ namespace test {
           CHECK (res1[1].str() == "extort" );
           CHECK (res1[2].str() == "profit" );
           
-          auto syntax2 = accept(term).repeat(1,2,",");
-          auto syntax3 = accept(term).repeat(4,",");
+          auto syntax2 = accept_repeated(1,2,",", term);
+          auto syntax3 = accept_repeated(  4,",", term);
           syntax2.parse(s2);
           syntax3.parse(s2);
           CHECK (    syntax2);
@@ -441,13 +445,101 @@ namespace test {
           CHECK (syntax3.getResult()[2].str() == "profit" );
           CHECK (syntax3.getResult()[3].str() == "dump"   );
           
-          auto syntax4 = accept(term).repeat();
+          auto syntax4 = accept_repeated(term);
           syntax4.parse(s1);
           CHECK (syntax4.success());
           CHECK (syntax4.getResult().size() == 2);
           CHECK (syntax4.getResult()[0].str() == "seid");
           CHECK (syntax4.getResult()[1].str() == "umschlungen" );
           CHECK (s1.substr(syntax4.consumed()) == ", Millionen");
+        }
+      
+      
+      
+      /** @test define compound syntax with optional sub-clause
+       *      - use the DSL to construct a complex syntax
+       *      - by default, several parts are implicitly sequenced
+       *      - here we combine repeated parts with an optional clause
+       *      - which in turn is again a compound syntax clause
+       *      - the produced model reflects the structure of this syntax
+       *      - result model of the optional clause is wrapped into `std::optional`
+       *      - terminal elements produce a `std::smatch` (RegExp matcher object)
+       */
+      void
+      acceptOptionally()
+        {
+          auto syntax = accept_repeated(",", "\\w+")                       // first we look for comma separated words
+                          .opt(accept("and")                               // then (implicitly sequenced) an optional clause
+                                .repeat("\\w+"));                          //       ... comprising "and" followed by several words
+          using Model = decay_t<decltype(syntax.getResult())>;
+          
+          string s1{"fearmongering, scapegoating, intimidation"};
+          string s2{"charisma and divine blessing"};
+          
+          CHECK (not syntax.hasResult());
+          syntax.parse(s1);
+          CHECK (syntax.success());
+          
+          Model  res1 = syntax.getResult();
+          CHECK (typeSymbol(res1)       == "SeqModel");
+          CHECK (typeSymbol(res1.get<0>()) == "IterModel");
+          CHECK (typeSymbol(res1.get<1>()) == "optional");
+          
+          CHECK (res1.N                 == 2);                             // 2-component tuple at top
+          CHECK (res1.get<0>().size()   == 3);                             // sequence in 1st component matched 3 elements
+          CHECK (res1.get<0>()[0].str() == "fearmongering");               // elements in the sequence...
+          CHECK (res1.get<0>()[1].str() == "scapegoating");
+          CHECK (res1.get<0>()[2].str() == "intimidation");
+          CHECK (res1.get<1>()          == std::nullopt);                  // the optional clause did not match
+          
+          syntax.parse(s2);
+          CHECK (syntax.success());
+          
+          Model  res2 = syntax.getResult();
+          CHECK (typeSymbol(res2)       == "SeqModel");                    //            Syntax                    SeqModel
+          CHECK (typeSymbol(res2.get<0>()) == "IterModel");                //  repeat(word)  opt            IterModel   optional
+          CHECK (typeSymbol(res2.get<1>()) == "optional");                 //                 |                            |
+          CHECK (typeSymbol(*res2.get<1>()) == "SeqModel");                //              Syntax                       SeqModel
+          CHECK (typeSymbol(res2.get<1>()->get<0>()) == "match_results");  //           "and"  repeat(word)        Terminal  IterModel
+          CHECK (typeSymbol(res2.get<1>()->get<1>()) == "IterModel");      //
+          
+          CHECK (res2.get<0>().size()   == 1);
+          CHECK (res2.get<0>()[0].str() == "charisma");
+          CHECK (res2.get<1>()          != std::nullopt);
+          CHECK (res2.get<1>()->N       == 2);
+          CHECK (res2.get<1>()->get<0>().str()    == "and");
+          CHECK (res2.get<1>()->get<1>().size()   == 2      );
+          CHECK (res2.get<1>()->get<1>()[0].str() == "divine" );
+          CHECK (res2.get<1>()->get<1>()[1].str() == "blessing" );
+          
+          string s3{s1+" , "+s2};
+          syntax.parse(s3);
+          CHECK (syntax.success());
+          
+          Model  res3 = syntax.getResult();
+          CHECK (typeSymbol(res3)       == "SeqModel");
+          CHECK (res3.get<0>().size()   == 4);
+          CHECK (res3.get<0>()[0].str() == "fearmongering");
+          CHECK (res3.get<0>()[1].str() == "scapegoating");
+          CHECK (res3.get<0>()[2].str() == "intimidation");
+          CHECK (res3.get<0>()[3].str() == "charisma");
+          CHECK (res3.get<1>()          != std::nullopt);
+          CHECK (res3.get<1>()->N       == 2);
+          CHECK (res3.get<1>()->get<0>().str() == "and");
+          CHECK (res3.get<1>()->get<1>().size() == 2);
+          CHECK (res3.get<1>()->get<1>()[0].str() == "divine");
+          CHECK (res3.get<1>()->get<1>()[1].str() == "blessing");
+        }
+      
+      
+      
+      /** @test
+       * 
+       */
+      void
+      acceptBracketed()
+        {
+          UNIMPLEMENTED ("bracketed");
         }
     };
   

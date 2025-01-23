@@ -59,6 +59,10 @@ namespace util {
     
     using StrView = std::string_view;
     
+    template<class PAR>
+    class Syntax;
+    
+    
     
     /**
      * Parse evaluation result
@@ -72,6 +76,10 @@ namespace util {
         size_t consumed{0};
       };
     
+    /**
+     * Building block: parser function
+     * definition and connection element.
+     */
     template<class FUN>
     struct Connex
       : util::NonAssign
@@ -86,6 +94,8 @@ namespace util {
           { }
       };
     
+    
+    /** »Null-Connex« which always successfully accepts the empty sequence */
     auto
     buildConnex(NullType)
     {
@@ -96,6 +106,15 @@ namespace util {
     }
     using NulP = decltype(buildConnex (NullType()));
     
+    
+    /**
+     * Foundation: build a \ref Connex to accept a _terminal symbol._
+     * the actual parsing is delegated to a Regular Expression,
+     * which must match against the _beginning_ of the input sequence,
+     * possibly after skipping some whitespace. The defined parser
+     * returns an \ref Eval context, to hold a _Result Model_ and
+     * the number of characters matched by this terminal symbol.
+     */
     auto
     buildConnex (regex rex)
     {
@@ -111,12 +130,14 @@ namespace util {
     }
     using Term = decltype(buildConnex (std::declval<regex>()));
     
+    /** build from a string with Regular-Epression spec */
     Term
     buildConnex (string const& rexDef)
     {
       return buildConnex (regex{rexDef});
     }
     
+    /** copy-builder from an existing parser function */
     template<class FUN>
     auto
     buildConnex (Connex<FUN> const& anchor)
@@ -130,7 +151,21 @@ namespace util {
       return Connex{move(anchor)};
     }
     
+    template<class PAR>
+    auto
+    buildConnex (Syntax<PAR> const& anchor)
+    {
+      using Con = typename Syntax<PAR>::Connex;
+      return Con{anchor};
+    }
     
+    
+    /**
+     * Adapt by applying a result-transforming function after a successful parse.
+     * @remark the purpose is to extract a custom data model immediately from the
+     *         result; binding functors can be applied at any level of a Syntax,
+     *         and thus the parse can be configured to produce custom result data.
+     */
     template<class CON, class BIND>
     auto
     adaptConnex (CON&& connex, BIND&& modelBinding)
@@ -258,6 +293,7 @@ namespace util {
         RES model;
       };
     
+    
     /** Standard case : combinator of two model branches */
     template<template<class...> class TAG, class R1, class R2 =void>
     struct _Join
@@ -325,7 +361,7 @@ namespace util {
     }
     
     
-    /** accept sequence of two parse functions */
+    /** accept either one of two alternative parse functions */
     template<class C1, class C2>
     auto
     branchedConnex (C1&& connex1, C2&& connex2)
@@ -364,13 +400,14 @@ namespace util {
     template<class C1, class C2>
     auto
     repeatedConnex (uint min, uint max
-                   ,C1&& bodyConnex, C2&& delimConnex)
+                   ,C1&& delimConnex
+                   ,C2&& bodyConnex)
     {
-      using Res = typename decay_t<C1>::Result;
+      using Res = typename decay_t<C2>::Result;
       using IterResult = IterModel<Res>;
       using IterEval = Eval<IterResult>;
-      return Connex{[sep = forward<C2>(delimConnex)
-                    ,body = forward<C1>(bodyConnex)
+      return Connex{[sep = forward<C1>(delimConnex)
+                    ,body = forward<C2>(bodyConnex)
                     ,min,max
                     ]
                     (StrView toParse) -> IterEval
@@ -402,11 +439,33 @@ namespace util {
     }
     
     
+    /** try to accept parse-function, backtracking if not successful. */
+    template<class CNX>
+    auto
+    optionalConnex (CNX&& connex)
+    {
+      using Res = typename decay_t<CNX>::Result;
+      using OptResult = optional<Res>;
+      using OptEval = Eval<OptResult>;
+      return Connex{[body = forward<CNX>(connex)
+                    ]
+                    (StrView toParse) -> OptEval
+                      {
+                        auto eval = body.parse (toParse);
+                        size_t consumed{eval.result? eval.consumed : 0};
+                        return OptEval{OptResult{eval.result? move(eval.result) : std::nullopt}
+                                      ,consumed
+                                      };
+                      }};
+    }
     
-    template<class PAR>
-    class Syntax;
     
     
+    
+    /**
+     * A Parser function to match and accept some syntax.
+     * This is a typing- and interface-adapter, wrapping a Connex.
+     */
     template<class CON>
     class Parser
       : public CON
@@ -418,13 +477,12 @@ namespace util {
         using Connex = CON;
         using Result = typename CON::Result;
         
-using Sigi = typename _Fun<PFun>::Sig;
-//lib::test::TypeDebugger<Sigi> buggi;
-//lib::test::TypeDebugger<Result> guggi;
-  
         static_assert (has_Sig<PFun, Eval<Result>(StrView)>()
                       ,"Signature of the parse-function not suitable");
         
+        /**
+         * Parse-Function operator: test input and yield Eval record
+         */
         Eval<Result>
         operator() (StrView toParse)
           {
@@ -435,17 +493,9 @@ using Sigi = typename _Fun<PFun>::Sig;
         Parser (SPEC&& spec)
           : CON{buildConnex (forward<SPEC> (spec))}
           { }
-        
-//      template<class PAR>
-//      Parser (Syntax<PAR> const& anchor)
-//        : CON{anchor}
-//        { }
-//      template<class PAR>
-//      Parser (CON const& anchor)
-//        : CON{anchor}
-//        { }
       };
     
+    /* === Deduction guide : how to construct a Parser === */
     Parser(NullType)      -> Parser<NulP>;
     Parser(regex &&)      -> Parser<Term>;
     Parser(regex const&)  -> Parser<Term>;
@@ -453,11 +503,42 @@ using Sigi = typename _Fun<PFun>::Sig;
     
     template<class FUN>
     Parser(Connex<FUN> const&) -> Parser<Connex<FUN>>;
-//  
-//  template<class PAR>
-//  Parser(Syntax<PAR> const&) -> Parser<typename PAR::Connex>;
+    
+    template<class PAR>
+    Parser(Syntax<PAR> const&) -> Parser<typename PAR::Connex>;
     
     
+    /** @internal meta-helper : detect if parser can be built from a given type */
+    template<typename SPEC, typename SEL =void>
+    struct is_usableSpec : std::false_type{ };
+    
+    template<typename SPEC>
+    struct is_usableSpec<SPEC, std::void_t<decltype(Parser{std::declval<SPEC>()})>>
+      : std::true_type
+      { };
+    
+    template<typename SPEC>
+    using if_acceptableSpec  = lib::meta::enable_if<is_usableSpec<SPEC>>;
+    
+    template<typename SPEC1, typename SPEC2>
+    using if_acceptableSpecs = lib::meta::enable_if<is_usableSpec<SPEC1>
+                                                   ,lib::meta::enable_if<is_usableSpec<SPEC2>>>;
+    
+    
+    
+    
+    /***********************************************************************//**
+     * A Syntax clause with a parser and result state.
+     * An instance of this class embodies a (possibly complex)
+     * _expected syntactical structure;_ the [parse function](\ref parse)
+     * analyses a given input text for compliance with this expected structure.
+     * After the parse, result state has been set
+     * - indicating if the parse was successful
+     * - possibly with an failure message (TODO 1/25)
+     * - the number of characters covered by this match
+     * - a _Result Model,_ as a structured term holding
+     *   result components from each part / sub-clause
+     */
     template<class PAR>
     class Syntax
       : public Eval<typename PAR::Result>
@@ -467,12 +548,6 @@ using Sigi = typename _Fun<PFun>::Sig;
       public:
         using Connex = typename PAR::Connex;
         using Result = typename PAR::Result;
-        
-        bool success()    const { return bool(Syntax::result);  }
-        bool hasResult()  const { return bool(Syntax::result);  }
-        size_t consumed() const { return Eval<Result>::consumed;}
-        Result& getResult()     { return * Syntax::result;      }
-        Result&& extractResult(){ return move(getResult());     }
         
         Syntax()
           : parse_{NullType()}
@@ -484,11 +559,21 @@ using Sigi = typename _Fun<PFun>::Sig;
           { }
         
         explicit
-        operator bool()  const
-          {
-            return success();
-          }
+        operator bool()          const { return success();}
         
+        operator Connex&()             { return parse_; }
+        operator Connex const&() const { return parse_; }
+        
+        bool success()           const { return bool(Syntax::result);  }
+        bool hasResult()         const { return bool(Syntax::result);  }
+        size_t consumed()        const { return Eval<Result>::consumed;}
+        Result& getResult()            { return * Syntax::result;      }
+        Result&& extractResult()       { return move(getResult());     }
+        
+        
+        /********************************************//**
+         * Core API : parse against this syntax clause
+         */
         Syntax&&
         parse (StrView toParse)
           {
@@ -496,74 +581,41 @@ using Sigi = typename _Fun<PFun>::Sig;
             return move(*this);
           }
         
-        Connex const&
-        getConny()  const
-          {
-            return parse_;
-          }
         
         
         /** ===== Syntax clause builder DSL ===== */
         
         template<typename SPEC>
-        auto
-        seq (SPEC&& clauseDef)
-          {
-            return accept(
-                    sequenceConnex (move(parse_)
-                                   ,Parser{forward<SPEC> (clauseDef)}));
-          }
+        auto seq (SPEC&& clauseDef);
         
         template<typename SPEC>
-        auto
-        alt (SPEC&& clauseDef)
-          {
-            return accept(
-                    branchedConnex (move(parse_)
-                                   ,Parser{forward<SPEC> (clauseDef)}));
-          }
-        
-        auto
-        repeat(uint cnt =uint(-1))
-          {
-            return repeat (1,cnt, NullType{});
-          }
+        auto alt (SPEC&& clauseDef);
         
         template<typename SPEC>
-        auto
-        repeat (SPEC&& delimDef)
-          {
-            return repeat (1,uint(-1), forward<SPEC> (delimDef));
-          }
+        auto opt (SPEC&& clauseDef);
+        
+        template<typename SPEC1, typename SPEC2>
+        auto repeat (uint min, uint max, SPEC1&& delimDef, SPEC2&& clauseDef);
+        
+        template<typename SPEC1, typename SPEC2>
+        auto repeat (uint cnt, SPEC1&& delimDef, SPEC2&& clauseDef);
+        
+        template<typename SPEC1, typename SPEC2>
+        auto repeat (SPEC1&& delimDef, SPEC2&& clauseDef);
         
         template<typename SPEC>
-        auto
-        repeat (uint cnt, SPEC&& delimDef)
-          {
-            return repeat (cnt,cnt, forward<SPEC> (delimDef));
-          }
-        
-        template<typename SPEC>
-        auto
-        repeat (uint min, uint max, SPEC&& delimDef)
-          {
-            if (max<min)
-              throw err::Invalid{_Fmt{"Invalid repeated syntax-spec: min:%d > max:%d"}
-                                                                   % min    % max    };
-            if (max == 0)
-              throw err::Invalid{"Invalid repeat with max ≡ 0 repetitions"};
-            
-            return accept(
-                    repeatedConnex (min,max
-                                   ,move(parse_)
-                                   ,Parser{forward<SPEC> (delimDef)}));
-          }
+        auto repeat (SPEC&& clauseDef);
         
       private:
         Eval<Result>& eval() { return *this;}
       };
     
     
+    
+    
+    /** ===== Syntax clause builder DSL ===== */
+    
+    /** build a Syntax clause from anything usable as parser-spec. */
     template<typename SPEC>
     auto
     accept (SPEC&& clauseDef)
@@ -571,16 +623,183 @@ using Sigi = typename _Fun<PFun>::Sig;
       return Syntax{Parser{forward<SPEC> (clauseDef)}};
     }
     
-    /** empty syntax clause to start further definition */
+    /** empty Syntax clause to start further definition */
     auto accept() { return Syntax<Parser<NulP>>{}; }
     
     
+    /** start Syntax clause with an optional syntax part */ 
+    template<typename SPEC>
+    auto
+    accept_opt (SPEC&& clauseDef)
+    {
+      return accept(
+              optionalConnex (Parser{forward<SPEC> (clauseDef)}));
+    }
+    
+    
+    /**
+     * Start Syntax clause with a repeated sub-clause,
+     * with separator and repetition limit; repetitions ∊ [min..max]
+     * The separator will be expected _between_ instances of the repeated sub-clause
+     * and will by itself produce no model. The result model is an instance of \ref IterModel,
+     * which implies it is a vector (uses heap storage); if min ≡ 0, the model can be empty. 
+     */ 
+    template<typename SPEC1, typename SPEC2>
+    auto
+    accept_repeated (uint min, uint max, SPEC1&& delimDef, SPEC2&& clauseDef)
+      {
+        if (max<min)
+          throw err::Invalid{_Fmt{"Invalid repeated syntax-spec: min:%d > max:%d"}
+                                                               % min    % max    };
+        if (max == 0)
+          throw err::Invalid{"Invalid repeat with max ≡ 0 repetitions"};
+        
+        return accept(
+                repeatedConnex (min,max
+                               ,Parser{forward<SPEC1> (delimDef)}
+                               ,Parser{forward<SPEC2> (clauseDef)}));
+      }
+
+    /** \param cnt exact number of repetitions expected */
+    template<typename SPEC1, typename SPEC2,                                       typename =if_acceptableSpecs<SPEC1,SPEC2>>
+    auto
+    accept_repeated (uint cnt, SPEC1&& delimDef, SPEC2&& clauseDef)
+      {
+        return accept_repeated (cnt,cnt, forward<SPEC1>(delimDef), forward<SPEC2>(clauseDef));
+      }
+    
+    /** start Syntax with an arbitrarily repeated sub-clause, with separator */
+    template<typename SPEC1, typename SPEC2,                                       typename =if_acceptableSpecs<SPEC1,SPEC2>>
+    auto
+    accept_repeated (SPEC1&& delimDef, SPEC2&& clauseDef)
+      {
+        return accept_repeated (1,uint(-1), forward<SPEC1>(delimDef), forward<SPEC2>(clauseDef));
+      }
+    
+    template<typename SPEC>
+    auto
+    accept_repeated (uint min, uint max, SPEC&& clauseDef)
+      {
+        return accept_repeated (min, max, NullType{}, forward<SPEC>(clauseDef));
+      }
+    
+    template<typename SPEC>
+    auto
+    accept_repeated (uint cnt, SPEC&& clauseDef)
+      {
+        return accept_repeated (cnt, NullType{}, forward<SPEC>(clauseDef));
+      }
+    
+    template<typename SPEC>
+    auto
+    accept_repeated (SPEC&& clauseDef)
+      {
+        return accept_repeated (NullType{}, forward<SPEC>(clauseDef));
+      }
+
+    
+    /**
+     * Combinator: extend this Syntax clause by expecting a further sub-clause
+     * behind the part of the input matched by the already defined part of this Syntax.
+     * The result model will be a \SeqModel, which essentially is a tuple of the
+     * result models of all sequenced parts.
+     * @return Syntax clause instance accepting the extended structure.
+     * @warning the old syntax is invalidated by moving the parse-function out.
+     */
+    template<class PAR>
+    template<typename SPEC>
+    auto
+    Syntax<PAR>::seq (SPEC&& clauseDef)
+      {
+        return accept(
+                sequenceConnex (move(parse_)
+                               ,Parser{forward<SPEC> (clauseDef)}));
+      }
+    
+    /**
+     * Combinator: extend this Syntax by adding an _alternative branch_.
+     * So either the already defined part of this Syntax matches the input,
+     * or the alternative clause is probed from the start of the input. At least
+     * one branch must match for the parse to be successful; however, further
+     * branches are not tested after finding a matching branch (short-circuit). 
+     * The result model is a _Sum Type,_ implemented as a custom variant record
+     * of type \ref SubModel. It provides a branch selector field to detect which
+     * branch of the syntax did match. And it allows to retrieve the result model
+     * of this successful branch — which however requires that the invoking code
+     * precisely knows the model type to expect.
+     */
+    template<class PAR>
+    template<typename SPEC>
+    auto
+    Syntax<PAR>::alt (SPEC&& clauseDef)
+      {
+        return accept(
+                branchedConnex (move(parse_)
+                               ,Parser{forward<SPEC> (clauseDef)}));
+      }
+    
+    /**
+     * Combinator: extend this Syntax with a further sequenced sub-clause,
+     * which however is _only optional_ and the match succeed without it.
+     * The result model is (as always for \ref seq ) a tuple; the result
+     * from the optional part is packaged into a std::optional.
+     */
+    template<class PAR>
+    template<typename SPEC>
+    auto
+    Syntax<PAR>::opt (SPEC&& clauseDef)
+      {
+        return seq (accept_opt (forward<SPEC> (clauseDef)));
+      }
+    
+    /**
+     * Combinator: extend this Syntax with a further sequenced sub-clause,
+     * which in this case accepts a repeated sequence, with delimiter.
+     * @see accept_sequenced()
+     */
+    template<class PAR>
+    template<typename SPEC1, typename SPEC2>
+    auto
+    Syntax<PAR>::repeat (uint min, uint max, SPEC1&& delimDef, SPEC2&& clauseDef)
+      {
+        return seq (accept_repeated (min,max
+                                    ,forward<SPEC1>(clauseDef)
+                                    ,forward<SPEC2>(clauseDef)));
+      }
+    
+    template<class PAR>
+    template<typename SPEC1, typename SPEC2>
+    auto
+    Syntax<PAR>::repeat (uint cnt, SPEC1&& delimDef, SPEC2&& clauseDef)
+      {
+        return seq (accept_repeated (cnt
+                                    ,forward<SPEC1>(clauseDef)
+                                    ,forward<SPEC2>(clauseDef)));
+      }
+    
+    template<class PAR>
+    template<typename SPEC1, typename SPEC2>
+    auto
+    Syntax<PAR>::repeat (SPEC1&& delimDef, SPEC2&& clauseDef)
+      {
+        return seq (accept_repeated (forward<SPEC1>(clauseDef)
+                                    ,forward<SPEC2>(clauseDef)));
+      }
+    
+    template<class PAR>
+    template<typename SPEC>
+    auto
+    Syntax<PAR>::repeat (SPEC&& clauseDef)
+      {
+        return seq (accept_repeated (forward<SPEC>(clauseDef)));
+      }
+    
   }// namespace parse
   
+  
   using parse::accept;
+  using parse::accept_opt;
+  using parse::accept_repeated;
   
 }// namespace util
-
-namespace lib {
-}// namespace lib
 #endif/*LIB_PARSE_H*/
