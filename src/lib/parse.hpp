@@ -412,7 +412,7 @@ namespace util {
                     ]
                     (StrView toParse) -> IterEval
                       {
-                        uint consumed{0};
+                        size_t consumed{0};
                         IterResult results;
                         do
                           {
@@ -456,6 +456,48 @@ namespace util {
                         return OptEval{OptResult{eval.result? move(eval.result) : std::nullopt}
                                       ,consumed
                                       };
+                      }};
+    }
+    
+    
+    /** accept some structure enclosed into a bracketing construct.
+     * \param isOptional if the bracketing can be omitted */
+    template<class C1, class C2, class C3>
+    auto
+    bracketedConnex (C1&& openingConnex
+                    ,C2&& closingConnex
+                    ,C3&& bodyConnex
+                    ,bool isOptional)
+    {
+      using Res = typename decay_t<C3>::Result;
+      return Connex{[opening = forward<C1>(openingConnex)
+                    ,closing = forward<C2>(closingConnex)
+                    ,body    = forward<C3>(bodyConnex)
+                    ,isOptional
+                    ]
+                    (StrView toParse) -> Eval<Res>
+                      {
+                        auto bracket = opening.parse (toParse);
+                        if (bracket.result or isOptional)
+                          {
+                            size_t consumed = bracket.consumed;
+                            bool expectClose{bracket.result};
+                            auto eval = body.parse (toParse.substr(consumed));
+                            if (eval.result)
+                              {
+                                consumed += eval.consumed;
+                                if (expectClose)
+                                  bracket = closing.parse (toParse.substr(consumed));
+                                if (bracket.result or not expectClose)
+                                  {
+                                    consumed += bracket.consumed;
+                                    return Eval<Res>{move (*eval.result)
+                                                    ,consumed
+                                                    };
+                                  }
+                              }
+                          }
+                        return Eval<Res>{std::nullopt};
                       }};
     }
     
@@ -606,6 +648,21 @@ namespace util {
         template<typename SPEC>
         auto repeat (SPEC&& clauseDef);
         
+        template<typename SPEC1, typename SPEC2, typename SPEC3>
+        auto bracket (SPEC1&& openDef, SPEC2&& closeDef, SPEC3&& bodyDef);
+        
+        template<typename SPEC>
+        auto bracket (string bracketSpec, SPEC&& bodyDef);
+        
+        template<typename SPEC>
+        auto bracket (SPEC&& bodyDef);
+        
+        template<typename SPEC>
+        auto bracketOpt (string bracketSpec, SPEC&& bodyDef);
+        
+        template<typename SPEC>
+        auto bracketOpt (SPEC&& bodyDef);
+        
       private:
         Eval<Result>& eval() { return *this;}
       };
@@ -696,7 +753,74 @@ namespace util {
       {
         return accept_repeated (NullType{}, forward<SPEC>(clauseDef));
       }
-
+    
+    /**
+     * Start Syntax with a sub-clause enclosed into a _bracketing construct._
+     * The »bracket« is defined as syntax for the _open marker_ and _close marker._
+     * These are consumed without generating model elements. The parse fails unless
+     * the full sequence `open body close` can be matched.
+     */
+    template<typename SPEC1, typename SPEC2, typename SPEC3>
+    auto
+    accept_bracket (SPEC1&& openDef, SPEC2&& closeDef, SPEC3&& bodyDef)
+      {
+        return accept(
+                 bracketedConnex (Parser{forward<SPEC1>(openDef) }
+                                 ,Parser{forward<SPEC2>(closeDef)}
+                                 ,Parser{forward<SPEC3>(bodyDef) }
+                                 ,false // bracket mandatory, not optional
+                                 ));
+      }
+    
+    /**
+     * Start Syntax with a bracketed sub-clause, with given single-char delimiters.
+     * \param bracketSpec a 2-char string, e.g. "{}" to expect curly braces.
+     */
+    template<typename SPEC>
+    auto
+    accept_bracket (string bracketSpec, SPEC&& bodyDef)
+      {
+        if (bracketSpec.size() != 2)
+          throw err::Invalid{"Bracket spec with opening and closing character expected"};
+        return accept(
+                 bracketedConnex (Parser{"\\"+bracketSpec.substr(0,1)}
+                                 ,Parser{"\\"+bracketSpec.substr(1,1)}
+                                 ,Parser{forward<SPEC>(bodyDef) }
+                                 ,false // bracket mandatory, not optional
+                                 ));
+      }
+    
+    /** Start Syntax with a sub-clause enclosed in parentheses */
+    template<typename SPEC>
+    auto
+    accept_bracket (SPEC&& bodyDef)
+      {
+        return accept_bracket ("()", forward<SPEC>(bodyDef));
+      }
+    
+    /** Start Syntax with a sub-clause, _optionally_ enclosed into brackets. */
+    template<typename SPEC>
+    auto
+    accept_bracketOpt (string bracketSpec, SPEC&& bodyDef)
+      {
+        if (bracketSpec.size() != 2)
+          throw err::Invalid{"Bracket spec with opening and closing character expected"};
+        return accept(
+                 bracketedConnex (Parser{"\\"+bracketSpec.substr(0,1)}
+                                 ,Parser{"\\"+bracketSpec.substr(1,1)}
+                                 ,Parser{forward<SPEC>(bodyDef) }
+                                 ,true // bracket optional, can be omitted
+                                 ));
+      }
+    
+    template<typename SPEC>
+    auto
+    accept_bracketOpt (SPEC&& bodyDef)
+      {
+        return accept_bracketOpt ("()", forward<SPEC>(bodyDef));
+      }
+    
+    
     
     /**
      * Combinator: extend this Syntax clause by expecting a further sub-clause
@@ -792,6 +916,54 @@ namespace util {
     Syntax<PAR>::repeat (SPEC&& clauseDef)
       {
         return seq (accept_repeated (forward<SPEC>(clauseDef)));
+      }
+    
+    /**
+     * Combinator: extend this Syntax with a further sequenced sub-clause in brackets.
+     * @see accept_bracket()
+     */
+    template<class PAR>
+    template<typename SPEC1, typename SPEC2, typename SPEC3>
+    auto
+    Syntax<PAR>::bracket (SPEC1&& openDef, SPEC2&& closeDef, SPEC3&& bodyDef)
+      {
+        return seq (accept_bracket (forward<SPEC1>(openDef)
+                                   ,forward<SPEC2>(closeDef)
+                                   ,forward<SPEC3>(bodyDef)));
+      }
+    
+    template<class PAR>
+    template<typename SPEC>
+    auto
+    Syntax<PAR>::bracket (string bracketSpec, SPEC&& bodyDef)
+      {
+        return seq (accept_bracket (move (bracketSpec)
+                                   ,forward<SPEC>(bodyDef)));
+      }
+    
+    template<class PAR>
+    template<typename SPEC>
+    auto
+    Syntax<PAR>::bracket (SPEC&& bodyDef)
+      {
+        return seq (accept_bracket (forward<SPEC>(bodyDef)));
+      }
+    
+    template<class PAR>
+    template<typename SPEC>
+    auto
+    Syntax<PAR>::bracketOpt (string bracketSpec, SPEC&& bodyDef)
+      {
+        return seq (accept_bracketOpt (move (bracketSpec)
+                                      ,forward<SPEC>(bodyDef)));
+      }
+    
+    template<class PAR>
+    template<typename SPEC>
+    auto
+    Syntax<PAR>::bracketOpt (SPEC&& bodyDef)
+      {
+        return seq (accept_bracketOpt (forward<SPEC>(bodyDef)));
       }
     
   }// namespace parse

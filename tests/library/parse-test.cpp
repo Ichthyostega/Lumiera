@@ -533,13 +533,31 @@ namespace test {
       
       
       
-      /** @test
-       * 
-       */
+      /** @test define syntax with bracketed sub-expressions */
       void
       acceptBracketed()
         {
-          UNIMPLEMENTED ("bracketed");
+          string word{"\\w+"};
+          
+          CHECK (not accept(word).bracket(word)   .parse("so sad"));
+          CHECK (    accept(word).bracketOpt(word).parse("so sad"));
+          CHECK (    accept(word).bracketOpt(word).parse("so (sad)"));
+          
+          CHECK (accept_bracket(word).parse(" ( again ) ").getResult().str() == "again");
+          
+          CHECK (not accept_bracket(word)   .parse("(again"));
+          CHECK (not accept_bracketOpt(word).parse("(again"));
+          CHECK (    accept_bracketOpt(word).parse("again)"));             // just stops before the trailing ')'
+          CHECK (    accept_bracketOpt(word).parse("again)").consumed() == 5);
+          CHECK (    accept_bracketOpt(word).parse(" again"));             // backtracks also over the whitespace
+          
+          CHECK (not accept_bracket("[]",word).parse("(again)"));
+          CHECK (not accept_bracket("[]",word).parse("[again)"));
+          CHECK (not accept_bracket("[]",word).parse("(again]"));
+          CHECK (    accept_bracket("[]",word).parse("[again]"));
+          CHECK (    accept_bracket("a","n","...").parse("again"));        // arbitrary expressions for open / close
+          CHECK (not accept_bracket("a","n","...").parse(" gain"));        // opening expression "a" missing
+          CHECK (not accept_bracket("a","n", word).parse("again"));        // "\\w+" consumes eagerly => closing expression not found
         }
     };
   
