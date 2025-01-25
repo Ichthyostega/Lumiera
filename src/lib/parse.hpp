@@ -20,6 +20,13 @@
  ** easier to understand and maintain. With some helper abbreviations, notably
  ** a combinator scheme to work from building blocks, a hand-written solution
  ** can benefit from taking short-cuts, especially related to result bindings.
+ ** 
+ ** So what is provided here is _not a parser library_ — yet aims at »making
+ ** simple things simple« and let you implement the complicated ones yourselves.
+ ** Several decisions were taken accordingly, like only supporting std::string_view
+ ** and automatically consuming any leading whitespace. And notably the focus was
+ ** _not placed_ on the challenging aspects of parsing — while still allowing a
+ ** pathway towards definition of arbitrarily recursive grammars, if so desired.
  */
 
 
@@ -160,6 +167,25 @@ namespace util {
     }
     
     
+    
+//    namespace {
+//        /** handle all regular "function-like" entities */
+//        template<typename SRC, typename F, typename SEL =void>
+//        struct FunDetector
+//          {
+//            using Sig = typename _Fun<F>::Sig;
+//          };
+//        
+//        /** handle a generic lambda, accepting a reference to the `SRC` iterator */
+//        template<typename SRC, typename F>
+//        struct FunDetector<SRC, F,  lib::meta::disable_if<_Fun<F>> >
+//          {
+//            using Arg = std::add_lvalue_reference_t<SRC>;
+//            using Ret = decltype(std::declval<F>() (std::declval<Arg>()));
+//            using Sig = Ret(Arg);
+//          };
+//    }
+    
     /**
      * Adapt by applying a result-transforming function after a successful parse.
      * @remark the purpose is to extract a custom data model immediately from the
@@ -171,10 +197,12 @@ namespace util {
     adaptConnex (CON&& connex, BIND&& modelBinding)
     {
       using RX = typename CON::Result;
-      using Arg = lib::meta::_FunArg<BIND>;
-      static_assert (std::is_constructible_v<Arg,RX>,
-                     "Model binding must accept preceding model result.");
-      using AdaptedRes = typename _Fun<BIND>::Ret;
+//      using Arg = lib::meta::_FunArg<BIND>;
+//      static_assert (std::is_constructible_v<Arg,RX>,
+//                     "Model binding must accept preceding model result.");
+//      using AdaptedRes = typename _Fun<BIND>::Ret;
+      using Arg = std::add_lvalue_reference_t<RX>;
+      using AdaptedRes = decltype(modelBinding (std::declval<Arg>() ));
       return Connex{[origConnex = forward<CON>(connex)
                     ,binding = forward<BIND>(modelBinding)
                     ]
@@ -663,6 +691,11 @@ namespace util {
         template<typename SPEC>
         auto bracketOpt (SPEC&& bodyDef);
         
+        template<class FUN>
+        auto bind (FUN&& modelAdapt);
+        
+        auto bindMatch (uint group =0);
+        
       private:
         Eval<Result>& eval() { return *this;}
       };
@@ -964,6 +997,26 @@ namespace util {
     Syntax<PAR>::bracketOpt (SPEC&& bodyDef)
       {
         return seq (accept_bracketOpt (forward<SPEC>(bodyDef)));
+      }
+    
+    template<class PAR>
+    template<class FUN>
+    auto
+    Syntax<PAR>::bind (FUN&& modelAdapt)
+      {
+        return accept(
+                 adaptConnex (move(parse_)
+                             ,forward<FUN>(modelAdapt)));
+      }
+    
+    template<class PAR>
+    auto
+    Syntax<PAR>::bindMatch (uint group)
+      {
+        return bind ([group](smatch const& mat)
+                      {
+                        return mat.str(group);
+                      });
       }
     
   }// namespace parse

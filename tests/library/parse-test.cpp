@@ -76,19 +76,21 @@ namespace test {
       virtual void
       run (Arg)
         {
-          simpleBlah();
+          simpleUsage();
           acceptTerminal();
           acceptSequential();
           acceptAlternatives();
           acceptIterWithDelim();
           acceptOptionally();
           acceptBracketed();
+          
+          verify_modelBinding();
         }
       
       
       /** @test TODO just blah. */
       void
-      simpleBlah ()
+      simpleUsage ()
         {
         }
       
@@ -558,6 +560,32 @@ namespace test {
           CHECK (    accept_bracket("a","n","...").parse("again"));        // arbitrary expressions for open / close
           CHECK (not accept_bracket("a","n","...").parse(" gain"));        // opening expression "a" missing
           CHECK (not accept_bracket("a","n", word).parse("again"));        // "\\w+" consumes eagerly => closing expression not found
+        }
+      
+      
+      
+      /** @test define syntax with bracketed sub-expressions */
+      void
+      verify_modelBinding()
+        {
+          auto word{"\\w+"};
+          using Mod1 = SeqModel<smatch,smatch>;
+          auto syntax1 = accept(word).seq(word)
+                          .bind([](Mod1 res)
+                                  {
+//                                    auto& [a,b] = res;
+                                    return res.get<0>().str() +"-"+ res.get<1>().str();
+                                  });
+          
+          string s1{"ham actor"};
+          CHECK (not syntax1.hasResult());
+          syntax1.parse(s1);
+          CHECK (syntax1.success());
+          auto res1 = syntax1.getResult();
+SHOW_TYPE(decltype(res1))
+          CHECK (showType<decltype(res1)>() == "string");
+SHOW_EXPR(res1)
+          CHECK (res == "ham-actor"_expect);
         }
     };
   
