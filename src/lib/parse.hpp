@@ -168,23 +168,21 @@ namespace util {
     
     
     
-//    namespace {
-//        /** handle all regular "function-like" entities */
-//        template<typename SRC, typename F, typename SEL =void>
-//        struct FunDetector
-//          {
-//            using Sig = typename _Fun<F>::Sig;
-//          };
-//        
-//        /** handle a generic lambda, accepting a reference to the `SRC` iterator */
-//        template<typename SRC, typename F>
-//        struct FunDetector<SRC, F,  lib::meta::disable_if<_Fun<F>> >
-//          {
-//            using Arg = std::add_lvalue_reference_t<SRC>;
-//            using Ret = decltype(std::declval<F>() (std::declval<Arg>()));
-//            using Sig = Ret(Arg);
-//          };
-//    }
+    namespace {
+      /** helper to detect return type of a possibly generic λ */
+      template<typename ARG, typename FUN, typename SEL =void>
+      struct _ProbeFunReturn
+        {
+          static_assert (!sizeof(ARG),
+                         "Model binding must accept preceding model result.");
+        };
+      
+      template<typename ARG, typename FUN>
+      struct _ProbeFunReturn<ARG,FUN, std::void_t<decltype(std::declval<FUN>() (std::declval<ARG>()))>>
+        {                                       // probe the λ with ARG to force template instantiation
+          using Ret = decltype(std::declval<FUN>() (std::declval<ARG>()));
+        };
+    }
     
     /**
      * Adapt by applying a result-transforming function after a successful parse.
@@ -197,12 +195,8 @@ namespace util {
     adaptConnex (CON&& connex, BIND&& modelBinding)
     {
       using RX = typename CON::Result;
-//      using Arg = lib::meta::_FunArg<BIND>;
-//      static_assert (std::is_constructible_v<Arg,RX>,
-//                     "Model binding must accept preceding model result.");
-//      using AdaptedRes = typename _Fun<BIND>::Ret;
-      using Arg = std::add_lvalue_reference_t<RX>;
-      using AdaptedRes = decltype(modelBinding (std::declval<Arg>() ));
+      using Arg = std::add_rvalue_reference_t<RX>;
+      using AdaptedRes = typename _ProbeFunReturn<Arg,BIND>::Ret;
       return Connex{[origConnex = forward<CON>(connex)
                     ,binding = forward<BIND>(modelBinding)
                     ]
@@ -215,6 +209,7 @@ namespace util {
                           return {std::nullopt};
                       }};
     }
+    
     
     
     /* ===== building structured models ===== */

@@ -573,7 +573,6 @@ namespace test {
           auto syntax1 = accept(word).seq(word)
                           .bind([](Mod1 res)
                                   {
-//                                    auto& [a,b] = res;
                                     return res.get<0>().str() +"-"+ res.get<1>().str();
                                   });
           
@@ -582,10 +581,22 @@ namespace test {
           syntax1.parse(s1);
           CHECK (syntax1.success());
           auto res1 = syntax1.getResult();
-SHOW_TYPE(decltype(res1))
-          CHECK (showType<decltype(res1)>() == "string");
-SHOW_EXPR(res1)
-          CHECK (res == "ham-actor"_expect);
+          CHECK (showType<decltype(res1)>() == "string");                  // surprise! it is a simple string (as returned from λ)
+          CHECK (res1 == "ham-actor"_expect);
+          
+          // 💡 shortcut for RegExp match groups...
+          auto syntax1b = accept("(\\w+) (\\w+)");
+          CHECK (accept(syntax1b).bindMatch( ).parse(s1).getResult() == "ham actor"_expect );
+          CHECK (accept(syntax1b).bindMatch(1).parse(s1).getResult() ==   "ham"_expect );
+          CHECK (accept(syntax1b).bindMatch(2).parse(s1).getResult() == "actor"_expect );
+          CHECK (accept(syntax1b).bindMatch(3).parse(s1).getResult() ==      ""_expect );
+          
+          auto wordEx = accept(word).bindMatch();
+          auto syntax1c = accept(wordEx)
+                            .seq(wordEx)
+                                        .bind([](SeqModel<string,string> m)
+                                                { return m.get<0>() +"-"+ m.get<1>(); });
+SHOW_EXPR(syntax1c.parse(s1).getResult())
         }
     };
   
