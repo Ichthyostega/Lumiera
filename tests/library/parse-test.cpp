@@ -569,19 +569,18 @@ namespace test {
       verify_modelBinding()
         {
           auto word{"\\w+"};
-          using Mod1 = SeqModel<smatch,smatch>;
-          auto syntax1 = accept(word).seq(word)
-                          .bind([](Mod1 res)
-                                  {
-                                    return res.get<0>().str() +"-"+ res.get<1>().str();
-                                  });
+          auto syntax1 = accept(word).seq(word)                            // get a tuple with two RegExp-Matchers
+                                       .bind([](SeqModel<smatch,smatch> res)
+                                               {
+                                                 return res.get<0>().str() +"-"+ res.get<1>().str();
+                                               });
           
           string s1{"ham actor"};
           CHECK (not syntax1.hasResult());
           syntax1.parse(s1);
           CHECK (syntax1.success());
           auto res1 = syntax1.getResult();
-          CHECK (showType<decltype(res1)>() == "string");                  // surprise! it is a simple string (as returned from λ)
+          CHECK (showType<decltype(res1)>() == "string");                  // surprise! it's a simple string (as returned from λ)
           CHECK (res1 == "ham-actor"_expect);
           
           // 💡 shortcut for RegExp match groups...
@@ -593,10 +592,17 @@ namespace test {
           
           auto wordEx = accept(word).bindMatch();
           auto syntax1c = accept(wordEx)
-                            .seq(wordEx)
-                                        .bind([](SeqModel<string,string> m)
-                                                { return m.get<0>() +"-"+ m.get<1>(); });
-SHOW_EXPR(syntax1c.parse(s1).getResult())
+                            .seq(wordEx)                                   // sub-expressions did already transform to string
+                                       .bind([](SeqModel<string,string> res)
+                                              { return res.get<0>() +"-"+ res.get<1>(); });
+          
+          CHECK (syntax1c.parse("ham  actor").getResult() == "ham-actor");
+          CHECK (syntax1c.parse("con artist").getResult() == "con-artist");
+          
+          auto syntax1d =accept(word).seq(word)
+                                       .bindMatch();                       // generic shortcut: ignore model, yield accepted part of input
+          CHECK (syntax1d.parse("ham  actor").getResult() == "ham  actor");
+          CHECK (syntax1d.parse(" ham actor").getResult() == "ham actor");
         }
     };
   

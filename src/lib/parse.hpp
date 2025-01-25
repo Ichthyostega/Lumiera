@@ -41,6 +41,7 @@
 #include "lib/meta/function.hpp"
 #include "lib/meta/trait.hpp"
 #include "lib/regex.hpp"
+#include "lib/test/diagnostic-output.hpp"/////////TODO
 
 #include <optional>
 #include <utility>
@@ -204,10 +205,48 @@ namespace util {
                       {
                         auto eval = origConnex.parse (toParse);
                         if (eval.result)
-                          return {binding (move (*eval.result))};
+                          return {binding (move (*eval.result))
+                                 ,eval.consumed};
                         else
                           return {std::nullopt};
                       }};
+    }
+    
+    template<class CON>
+    auto
+    toStringConnex (CON&& connex, uint part)
+    {
+      using Result = typename CON::Result;
+      using Arg = std::add_rvalue_reference_t<Result>;
+      return Connex([baseConnex = forward<CON>(connex)
+                    ,part
+                    ]
+                    (StrView toParse) -> Eval<string>
+                      {
+                        if constexpr (lib::meta::is_basically<Result,smatch>())
+                          {
+                            Eval<smatch> eval = baseConnex.parse (toParse);
+                            if (eval.result)
+                              return {eval.result->str(part)
+                                     ,eval.consumed
+                                     };
+                            else
+                              return {std::nullopt};
+                          }
+                        else
+                          {
+                            auto eval = baseConnex.parse (toParse);
+                            if (eval.result)
+                              {
+                                size_t pre = leadingWhitespace (toParse);
+                                return {string{toParse.substr (pre, eval.consumed)}
+                                       ,eval.consumed
+                                       };
+                              }
+                            else
+                              return {std::nullopt};
+                          }
+                      });
     }
     
     
@@ -1008,10 +1047,8 @@ namespace util {
     auto
     Syntax<PAR>::bindMatch (uint group)
       {
-        return bind ([group](smatch const& mat)
-                      {
-                        return mat.str(group);
-                      });
+        return accept(
+                 toStringConnex (move(parse_), group));
       }
     
   }// namespace parse
