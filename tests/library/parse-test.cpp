@@ -333,7 +333,7 @@ namespace test {
           CHECK (not syntax2.success());
           syntax2.parse(s2);
           CHECK (syntax2.success());
-          CHECK (syntax2.getResult().N == 2);                  // Note: further branch has been folded into an extended AltModel
+          CHECK (syntax2.getResult().N == 3);                  // Note: further branch has been folded into an extended AltModel
           CHECK (syntax2.getResult().selected() == 0);         //  ... string s2 still matched the same branch (#0)
           CHECK (syntax2.getResult().get<0>().str() == "brazen");
           
@@ -500,7 +500,7 @@ namespace test {
           Model  res2 = syntax.getResult();
           CHECK (typeSymbol(res2)       == "SeqModel");                    //            Syntax                    SeqModel
           CHECK (typeSymbol(res2.get<0>()) == "IterModel");                //  repeat(word)  opt            IterModel   optional
-          CHECK (typeSymbol(res2.get<1>()) == "optional");                 //                 |                            |
+          CHECK (typeSymbol(res2.get<1>()) ==  "optional");                //                 |                            |
           CHECK (typeSymbol(*res2.get<1>()) == "SeqModel");                //              Syntax                       SeqModel
           CHECK (typeSymbol(res2.get<1>()->get<0>()) == "match_results");  //           "and"  repeat(word)        Terminal  IterModel
           CHECK (typeSymbol(res2.get<1>()->get<1>()) == "IterModel");      //
@@ -564,7 +564,9 @@ namespace test {
       
       
       
-      /** @test define syntax with bracketed sub-expressions */
+      /** @test attach model-transformation functions at various levels,
+       *        which is the primary intended way to build results from the parse.
+       */
       void
       verify_modelBinding()
         {
@@ -599,10 +601,20 @@ namespace test {
           CHECK (syntax1c.parse("ham  actor").getResult() == "ham-actor");
           CHECK (syntax1c.parse("con artist").getResult() == "con-artist");
           
-          auto syntax1d =accept(word).seq(word)
+          auto syntax1d = accept(word).seq(word)
                                        .bindMatch();                       // generic shortcut: ignore model, yield accepted part of input
           CHECK (syntax1d.parse("ham  actor").getResult() == "ham  actor");
           CHECK (syntax1d.parse(" ham actor").getResult() == "ham actor");
+          
+            // another example to demonstrate arbitrary transformations:
+           //  each sub-expr counts the letters, and the top-level binding sums those up
+          auto letterCnt = accept(word).bindMatch().bind([](string s){ return s.size(); });
+          auto syntax1e = accept(letterCnt)
+                            .seq(letterCnt)
+                                       .bind([](auto m){ auto [l1,l2] = m; return l1+l2; });
+                                                                           // note this time we provide a λ-generic and use a structured binding
+          CHECK (syntax1e.parse("ham  actor").getResult() == 8);
+          CHECK (syntax1e.parse("con artist").getResult() == 9);
         }
     };
   

@@ -424,7 +424,7 @@ namespace std { // Specialisation to support C++ »Tuple Protocol« and structur
   /** determine compile-time fixed size of a HeteroData */
   template<typename...DATA>
   struct tuple_size<lib::HeteroData<DATA...> >
-    : std::integral_constant<std::size_t, lib::HeteroData<DATA...>::size()>
+    : integral_constant<size_t, lib::HeteroData<DATA...>::size()>
     { };
   
   /** expose the type of the I-th element of a HeteroData chain */
@@ -447,13 +447,13 @@ namespace std { // Specialisation to support C++ »Tuple Protocol« and structur
   /** determine compile-time fixed size of a StorageFrame */
   template<size_t seg, typename...DATA>
   struct tuple_size<lib::StorageFrame<seg,DATA...> >
-    : std::tuple_size<typename lib::StorageFrame<seg,DATA...>::Tuple>
+    : tuple_size<typename lib::StorageFrame<seg,DATA...>::Tuple>
     { };
 
   /** delegate to the type access of a StorageFrame's underlying tuple */
   template<size_t I, size_t seg, typename...DATA>
   struct tuple_element<I, lib::StorageFrame<seg,DATA...> >
-    : std::tuple_element<I, typename lib::StorageFrame<seg,DATA...>::Tuple>
+    : tuple_element<I, typename lib::StorageFrame<seg,DATA...>::Tuple>
     { };
   
   // no need to define an overload for std::get<i>

@@ -217,35 +217,26 @@ namespace util {
     toStringConnex (CON&& connex, uint part)
     {
       using Result = typename CON::Result;
-      using Arg = std::add_rvalue_reference_t<Result>;
       return Connex([baseConnex = forward<CON>(connex)
                     ,part
                     ]
                     (StrView toParse) -> Eval<string>
                       {
-                        if constexpr (lib::meta::is_basically<Result,smatch>())
-                          {
-                            Eval<smatch> eval = baseConnex.parse (toParse);
-                            if (eval.result)
+                        auto eval = baseConnex.parse (toParse);
+                        if (eval.result)
+                          if constexpr (lib::meta::is_basically<Result,smatch>())
                               return {eval.result->str(part)
                                      ,eval.consumed
                                      };
-                            else
-                              return {std::nullopt};
-                          }
+                          else
+                            { // defensive fall-back: ignore model, return accepted input part
+                              size_t pre = leadingWhitespace (toParse);
+                              return {string{toParse.substr (pre, eval.consumed)}
+                                     ,eval.consumed
+                                     };
+                            }
                         else
-                          {
-                            auto eval = baseConnex.parse (toParse);
-                            if (eval.result)
-                              {
-                                size_t pre = leadingWhitespace (toParse);
-                                return {string{toParse.substr (pre, eval.consumed)}
-                                       ,eval.consumed
-                                       };
-                              }
-                            else
-                              return {std::nullopt};
-                          }
+                          return {std::nullopt};
                       });
     }
     
@@ -294,7 +285,7 @@ namespace util {
       : lib::BranchCase<CASES...>
       {
         using Alt = lib::BranchCase<CASES...>;
-        static constexpr size_t N = Alt::TOP;
+        static constexpr size_t N = sizeof...(CASES);
         
         template<typename EXTRA>
         using Additionally = AltModel<CASES...,EXTRA>;
@@ -1059,4 +1050,20 @@ namespace util {
   using parse::accept_repeated;
   
 }// namespace util
+
+
+namespace std { // Specialisation to support C++ »Tuple Protocol« and structured bindings.
+  
+  /** determine compile-time fixed size of a SeqModel */
+  template<typename...ELMS>
+  struct tuple_size<util::parse::SeqModel<ELMS...> >
+    : tuple_size<typename util::parse::SeqModel<ELMS...>::Tup >
+    { };
+
+  /** type of the I-th element of a SeqModel -> based on tuple type */
+  template<size_t I, typename...ELMS>
+  struct tuple_element<I, util::parse::SeqModel<ELMS...> >
+    : tuple_element<I, typename util::parse::SeqModel<ELMS...>::Tup >
+    { };
+}
 #endif/*LIB_PARSE_H*/
