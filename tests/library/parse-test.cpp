@@ -624,9 +624,27 @@ namespace test {
       void
       verify_recursiveSyntax()
         {
-          auto recursive = expectResult<int>();
+          auto recurse = expectResult<int>();
+          CHECK (not recurse.canInvoke());
+          
+          recurse = accept("great")
+                        .opt(accept("!")
+                               .seq(recurse))
+                                            .bind([](auto m) -> int
+                                                    {
+                                                      auto& [_,r] = m;
+                                                      return 1 + (r? get<1>(*r):0);
+                                                    });
+          CHECK (recurse.canInvoke());
           
           string s1{"great ! great ! great"};
+          recurse.parse(s1);
+          CHECK (recurse.success());
+          CHECK (recurse.getResult() == 3 );
+          
+          CHECK (not recurse.parse(" ! great"));
+          CHECK (recurse.parse("great ! great   actor").getResult() == 2);
+          CHECK (recurse.parse("great ! great ! actor").getResult() == 2);
         }
     };
   

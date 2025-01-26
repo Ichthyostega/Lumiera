@@ -70,6 +70,9 @@ namespace util {
     template<class PAR>
     class Syntax;
     
+    template<class CON>
+    class Parser;
+    
     
     
     /**
@@ -97,9 +100,19 @@ namespace util {
         using Result = typename _Fun<PFun>::Ret::Result;
         
         Connex (FUN pFun)
-          : parse{move(pFun)}
+          : parse{pFun}
           { }
       };
+    
+    /** special setup to be pre-declared and then used recursively */
+    template<class RES>
+    using OpaqueConnex = Connex<std::function<Eval<RES>(StrView)>>;
+    
+    template<class RES>
+    using ForwardConnex = Connex<std::function<Eval<RES>(StrView)>&>;
+    
+    
+    
     
     
     /** »Null-Connex« which always successfully accepts the empty sequence */
@@ -166,6 +179,18 @@ namespace util {
       return Con{anchor};
     }
     
+    /** special setup to attach to a pre-defined clause for recursive syntax
+     * @note works in concert with the Parser deduction guide, so that the
+     *       resulting ForwardConnex holds a _reference_ to std::function,
+     *       and thus gets to see the full definition reassigned later. */
+    template<class RES>
+    auto
+    buildConnex (Syntax<Parser<OpaqueConnex<RES>>> & refClause)
+    {
+      OpaqueConnex<RES>& refConnex = refClause;
+      return ForwardConnex<RES>{refConnex.parse};
+    }
+    
     
     
     namespace {
@@ -182,6 +207,17 @@ namespace util {
         {                                       // probe the λ with ARG to force template instantiation
           using Ret = decltype(std::declval<FUN>() (std::declval<ARG>()));
         };
+      
+      
+      template<class FUN>
+      inline bool
+      _boundFun(FUN const& fun)
+      {
+        if constexpr (std::is_constructible<bool, FUN const&>())
+          return bool(fun);
+        else
+          return std::is_invocable<FUN, StrView>();
+      }
     }
     
     /**
@@ -580,6 +616,7 @@ namespace util {
         Eval<Result>
         operator() (StrView toParse)
           {
+            REQUIRE (_boundFun (CON::parse), "unbound recursive syntax");
             return CON::parse (toParse);
           }
         
@@ -596,10 +633,14 @@ namespace util {
     Parser(string const&) -> Parser<Term>;
     
     template<class FUN>
-    Parser(Connex<FUN> const&) -> Parser<Connex<FUN>>;
+    Parser(Connex<FUN>) -> Parser<Connex<FUN>>;
     
     template<class PAR>
-    Parser(Syntax<PAR> const&) -> Parser<typename PAR::Connex>;
+    Parser(Syntax<PAR>) -> Parser<typename PAR::Connex>;
+    
+    template<class RES>
+    Parser(Syntax<Parser<OpaqueConnex<RES>>>) -> Parser<ForwardConnex<RES>>;
+                                              // bind to recursive syntax by reference
     
     
     /** @internal meta-helper : detect if parser can be built from a given type */
@@ -658,11 +699,12 @@ namespace util {
         operator Connex&()             { return parse_; }
         operator Connex const&() const { return parse_; }
         
-        bool success()           const { return bool(Syntax::result);  }
-        bool hasResult()         const { return bool(Syntax::result);  }
-        size_t consumed()        const { return Eval<Result>::consumed;}
-        Result& getResult()            { return * Syntax::result;      }
-        Result&& extractResult()       { return move(getResult());     }
+        bool success()           const { return bool(Syntax::result);   }
+        bool hasResult()         const { return bool(Syntax::result);   }
+        bool canInvoke()         const { return _boundFun(parse_.parse);}
+        size_t consumed()        const { return Eval<Result>::consumed; }
+        Result& getResult()            { return * Syntax::result;       }
+        Result&& extractResult()       { return move(getResult());      }
         
         
         /********************************************//**
@@ -675,6 +717,16 @@ namespace util {
             return move(*this);
           }
         
+        
+        template<class PX>
+        Syntax&
+        operator= (Syntax<PX> refSyntax)
+          {
+            using ConX = typename PX::Connex;
+            ConX& refConnex = refSyntax;
+            parse_.parse = move(refConnex.parse);
+            return *this;
+          }
         
         
         /** ===== Syntax clause builder DSL ===== */
@@ -878,7 +930,23 @@ namespace util {
       }
     
     
-    /** Setup an assignable, recursive Syntax clause, initially empty */
+    /**
+     * Setup an assignable, recursive Syntax clause, initially empty.
+     * @remark this provides the foundation for recursive syntax clauses;
+     *         initially, an empty std::function with the pre-declared return
+     *         type is embedded. Together with a special Parser deduction guide,
+     *         later on a full syntax clause can be built, taking a _reference_
+     *         to this function; finally the definition prepared here should be
+     *         _re-assigned_ with the fully defined syntax, which is handled
+     *         by the assignment operator in class Syntax to re-assign a
+     *         working parser function into the std::function holder.
+     * @tparam RES the result model type to be expected; it is necessary
+     *         to augment the full definition explicitly by a model-binding
+     *         to produce this type — which typically also involves writing
+     *         actual code to deal with the possibly open structure enable
+     *         through a recursive syntax definition
+     * @see Parse_test::verify_recursiveSyntax()
+     */
     template<typename RES>
     auto
     expectResult()
@@ -911,7 +979,7 @@ namespace util {
      * So either the already defined part of this Syntax matches the input,
      * or the alternative clause is probed from the start of the input. At least
      * one branch must match for the parse to be successful; however, further
-     * branches are not tested after finding a matching branch (short-circuit). 
+     * branches are not tested after finding a matching branch (short-circuit).
      * The result model is a _Sum Type,_ implemented as a custom variant record
      * of type \ref SubModel. It provides a branch selector field to detect which
      * branch of the syntax did match. And it allows to retrieve the result model
