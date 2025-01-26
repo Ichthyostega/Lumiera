@@ -90,14 +90,13 @@ namespace util {
      */
     template<class FUN>
     struct Connex
-      : util::NonAssign
       {
         using PFun = FUN;
         PFun parse;
         
         using Result = typename _Fun<PFun>::Ret::Result;
         
-        Connex (FUN&& pFun)
+        Connex (FUN pFun)
           : parse{move(pFun)}
           { }
       };
@@ -876,6 +875,15 @@ namespace util {
     accept_bracketOpt (SPEC&& bodyDef)
       {
         return accept_bracketOpt ("()", forward<SPEC>(bodyDef));
+      }
+    
+    
+    /** Setup an assignable, recursive Syntax clause, initially empty */
+    template<typename RES>
+    auto
+    expectResult()
+      {
+        return accept (Connex{std::function<Eval<RES>(StrView)>{}});
       }
     
     

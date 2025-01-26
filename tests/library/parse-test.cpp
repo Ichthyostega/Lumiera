@@ -85,6 +85,7 @@ namespace test {
           acceptBracketed();
           
           verify_modelBinding();
+          verify_recursiveSyntax();
         }
       
       
@@ -615,6 +616,17 @@ namespace test {
                                                                            // note this time we provide a λ-generic and use a structured binding
           CHECK (syntax1e.parse("ham  actor").getResult() == 8);
           CHECK (syntax1e.parse("con artist").getResult() == 9);
+        }
+      
+      
+      /** @test definition of recursive Syntax clauses
+       */
+      void
+      verify_recursiveSyntax()
+        {
+          auto recursive = expectResult<int>();
+          
+          string s1{"great ! great ! great"};
         }
     };
   
