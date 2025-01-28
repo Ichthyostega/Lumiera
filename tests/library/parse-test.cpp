@@ -105,7 +105,7 @@ namespace test {
           string toParse{"hello vile world of power"};
           auto eval = parse (toParse);
           CHECK (eval.result);
-          auto res = *eval.result;                             // ◁——————————— the »result model« of a terminal parse is the RegExp-Matcher 
+          smatch res = *eval.result;                           // ◁——————————— the »result model« of a terminal parse is the RegExp-Matcher 
           CHECK (res.ready() and not res.empty());
           CHECK (res.size()     == "2"_expect );
           CHECK (res.position() == "0"_expect );
@@ -269,6 +269,17 @@ namespace test {
           CHECK (sizeof(res) == sizeof(A2));
           CHECK (res.selected()    == 1);
           CHECK (res.get<1>()      == "seduced");
+          
+          
+          // AltModel with homogeneous types are special
+          auto hom = AltModel<int,int>::mark_right(42);
+          CHECK (hom.getAny()   == 42);
+          CHECK (hom.selected() == 1 );
+          
+          hom = AltModel<int,int>::mark_left(55);
+          CHECK (hom.getAny()   == 55);
+          CHECK (hom.selected() == 0 );
+
           
           
            //_____________________________________________
@@ -619,7 +630,16 @@ namespace test {
         }
       
       
+      
       /** @test definition of recursive Syntax clauses
+       *      - pre-declared placeholder with known result
+       *      - bind a syntax clause later to that placeholder,
+       *        which is possibly only with a binding to yield
+       *        the expected result type; in the example here
+       *        we count the optional sequenced expressions
+       *      - demonstrate textbook example of nested numeric
+       *        expression, including parentheses and even a
+       *        square root function. Calculate golden ratio!
        */
       void
       verify_recursiveSyntax()
@@ -637,14 +657,56 @@ namespace test {
                                                     });
           CHECK (recurse.canInvoke());
           
-          string s1{"great ! great ! great"};
-          recurse.parse(s1);
+          recurse.parse("great ! great ! great");
           CHECK (recurse.success());
           CHECK (recurse.getResult() == 3 );
           
-          CHECK (not recurse.parse(" ! great"));
+          CHECK (not recurse.parse("  ! great"));
           CHECK (recurse.parse("great ! great   actor").getResult() == 2);
           CHECK (recurse.parse("great ! great ! actor").getResult() == 2);
+          
+          
+           //_____________________________________________
+          // Build a recursive numeric expression syntax...
+          auto num  = accept("\\d+")                .bindMatch().bind([](auto num){ return std::stod(num);         });
+          auto sqrt = accept("√").seq(num)                      .bind([](auto seq){ return std::sqrt(get<1>(seq)); });
+          
+          CHECK (sqrt.parse(" √x ").getResult() ==  0 );
+          CHECK (sqrt.parse(" √2 ").getResult() == "1.4142136"_expect);
+          
+          //    E ::= T [ + E ]
+          //    T ::= F [ / F ]
+          //    F ::= ( E ) | V
+          //    V ::= num   | √ num
+          auto expr = expectResult<double>();
+          
+          auto valu = accept(num).alt(sqrt)                     .bind([](auto alt){ return alt.getAny(); });
+          auto fact = accept_bracket(expr).alt(valu)            .bind([](auto alt){ return alt.getAny(); });
+          auto term = accept(fact).opt(accept("/")  .seq(fact)) .bind([](auto seq){ auto [f1,f2] = seq; return f1 / (f2? get<1>(*f2) : 1.0); });
+               expr = accept(term).opt(accept("\\+").seq(expr)) .bind([](auto exp){ auto [s1,s2] = exp; return s1 + (s2? get<1>(*s2) : 0.0); });
+          
+          CHECK (expr.canInvoke());
+          CHECK (not expr.hasResult());
+          
+          expr.parse(" 42 forever");
+          CHECK (expr.success());
+          CHECK (expr.getResult() == 42 );
+          
+          expr.parse(" 42 + 13 =?");
+          CHECK (expr.success());
+          CHECK (expr.getResult() == 55 );
+          
+          expr.parse(" 1 + 4/3 ");
+          CHECK (expr.success());
+          CHECK (expr.getResult() == "2.3333333"_expect);
+          
+          expr.parse("(2+2)/(2+1) + 4/2");
+          CHECK (expr.success());
+          CHECK (expr.getResult() == "3.3333333"_expect);
+          
+          expr.parse("(1 + √5) / 2 ");
+          CHECK (expr.success());
+          CHECK (expr.getResult() == "1.618034"_expect);
         }
     };
   

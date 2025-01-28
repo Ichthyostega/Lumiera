@@ -263,6 +263,15 @@ namespace lib {
         {
           return access<SlotType<idx>>();
         }
+      
+      /** access the selected value of a homogeneous model.
+       * @warning compiles only if all cases yield the same type
+       */
+      auto
+      getAny()
+        {
+          return accept([](auto val){ return val; });
+        }
     };
   
 }// namespace lib

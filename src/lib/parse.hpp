@@ -296,7 +296,7 @@ namespace util {
         template<typename...XS, typename XX>
         SeqModel (SeqModel<XS...>&& seq, XX&& extraElm)
           : Tup{std::tuple_cat (seq.extractTuple()
-                               ,make_tuple (forward<XX> (extraElm)) )}
+                               ,std::make_tuple (forward<XX> (extraElm)) )}
           { }
           
         template<typename X1, typename X2>
