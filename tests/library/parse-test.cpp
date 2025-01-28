@@ -86,6 +86,7 @@ namespace test {
           
           verify_modelBinding();
           verify_recursiveSyntax();
+          verify_nestedSpecTerms();
         }
       
       
@@ -707,6 +708,68 @@ namespace test {
           expr.parse("(1 + √5) / 2 ");
           CHECK (expr.success());
           CHECK (expr.getResult() == "1.618034"_expect);
+        }
+      
+      
+      
+      /** @test demonstrate how to extract a nested specification term
+       *      - accept anything not delimiter-like
+       *      - open nested scope for parentheses and quotes
+       *      - especially this allows proper handling of comma separated
+       *        lists enclosed in parentheses, when the term itself is
+       *        also part of a comma separated list — such a term-selection
+       *        can not be achieved with regular expressions alone.
+       */
+      void
+      verify_nestedSpecTerms()
+        {
+          auto content = accept(R"_([^,\\\(\)\[\]{}<>"]+)_");
+          auto escape  = accept(R"_(\\.)_");
+          
+          auto nonQuot = accept(R"_([^"\\]+)_");
+          auto quoted = accept_repeated(accept(nonQuot).alt(escape));
+          auto quote = accept_bracket("\"\"", quoted);
+          
+          auto paren = expectResult<NullType>();
+          auto nonParen = accept(R"_([^\\\(\)"]+)_");
+          auto parenCont = accept_repeated(accept(nonParen)
+                                             .alt(escape)
+                                             .alt(quote)
+                                             .alt(paren));
+               paren = accept_bracket("()", parenCont).bind([](auto){ return NullType{}; });
+          
+          auto spec = accept_repeated(accept(content)
+                                        .alt(escape)
+                                        .alt(quote)
+                                        .alt(paren));
+          
+          auto apply = [](auto& syntax)
+                        { return [&](auto const& str)
+                                    { return accept(syntax).bindMatch()
+                                                           .parse(str)
+                                                           .getResult();
+                                    };
+                        };
+          
+SHOW_EXPR(apply(content)("prey .. haul .. loot"))
+SHOW_EXPR(apply(content)("prey .. haul ,. loot"))
+SHOW_EXPR(apply(content)("prey .( haul ,. loot"))
+          
+SHOW_EXPR(apply(quote)("\"prey .( haul ,\"loot"))
+SHOW_EXPR(apply(quote)("\"prey \\ haul ,\"loot"))
+SHOW_EXPR(apply(quote)("\"prey\\\"haul ,\"loot"))
+          
+SHOW_EXPR(apply(paren)("(prey) .. haul .. loot"))
+SHOW_EXPR(apply(paren)("(prey .. haul .. loot)"))
+SHOW_EXPR(apply(paren)("(prey(..(haul)..)loot)"))
+SHOW_EXPR(apply(paren)("(prey \" haul)\" loot)"))
+SHOW_EXPR(apply(paren)("(prey\\( haul)\" loot)"))
+          
+SHOW_EXPR(apply(spec)("\"prey .( haul ,\"loot!"))
+SHOW_EXPR(apply(spec)("\"prey .( haul \",loot!"))
+SHOW_EXPR(apply(spec)("  prey .( haul \",loot!"))
+SHOW_EXPR(apply(spec)("  prey .( haul )\"loot!"))
+SHOW_EXPR(apply(spec)(" (prey\\( haul }, loot)"))
         }
     };
   
