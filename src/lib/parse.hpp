@@ -27,6 +27,111 @@
  ** and automatically consuming any leading whitespace. And notably the focus was
  ** _not placed_ on the challenging aspects of parsing — while still allowing a
  ** pathway towards definition of arbitrarily recursive grammars, if so desired.
+ ** 
+ ** ## Functionality
+ ** This framework supports the construction of a recursive-descent parser without
+ ** underlying lexer. Rather, _terminal expressions_ are delegated to a regular
+ ** expression matcher, which allows for some additional leeway, like a negative
+ ** match, or using lookahead-assertions. The implementation relies on parser
+ ** _functions_ and the _combinator technique_ to combine building blocks — yet
+ ** those functions and combinators are wrapped into a syntax-clause builder DSL.
+ ** Each parse yields a result, depending on the structure of the parse-function.
+ ** The base building block, a parser to accept a regular expression, will yield
+ ** the C++ matcher object as result — and thus essentially some pointers into
+ ** the original sequence, which has to be passed in as C++ string_view.
+ ** 
+ ** An essential concept of this parsing support framework is that each parser
+ ** can be decorated by a _model transformation functor,_ which gets the result
+ ** of the wrapped parser and can return _any arbitrary value object._ In essence,
+ ** this framework does not provide the notion of an _abstract syntax tree_ — yet
+ ** the user is free to build a custom syntax tree, relying on these model-bindings.
+ ** 
+ ** \par Syntax building blocks
+ **  - `accept(SPEC)` builds a clause to accept anything the given SPEC for
+ **    a parser function would accept and to yield its return model.
+ **    The `SPEC` argument might be...
+ **    + a string describing regular expression syntax
+ **    + a C++ regexp object
+ **    + any hand-written functor `string_view ⟼ model`
+ **    + an existing syntax clause (either by RValue or LValue)
+ **  - `accept_opt` builds a clause to optionally accept in accordance
+ **    to the given definition; if no match is found, parsing backtracks.
+ **  - `accept_repeated` builds a clause to accept a repetition of the
+ **    structure accepted by its argument, optionally with an explicit delimiter
+ **    and possibly with a limited number of instances. The result values are
+ **    obviously all from the same type and will be collected into a IterModel,
+ **    which essentially is a std::vector<RES> (note: heap storage!).
+ **  - `accept_bracket` builds a clause to accept the structure of the
+ **    given argument, but enclosed in parentheses, or an explicitly defined
+ **    pair of delimiters. Variants are provided to accept optional bracketing.
+ **  - `<syntax>.seq(SPEC)` extends a given syntax clause to accept the structure
+ **    described by the SPEC _after_ the structure already described by the syntax.
+ **    Both parts must succeed for the parse to be successful. The result value
+ **    is packaged into a parse::SeqModel, which essentially is a tuple; when
+ **    attaching several .seq() specifications, it can become a N-ary tuple.
+ **  - `<syntax>.alt(SPEC)` adds an _alternative branch_ to the existing syntax.
+ **    Either part alone is sufficient for a successful parse. First the existing
+ **    branch(es) are tried, and only if those do not succeed, backtracking is
+ **    performed and then the alternative branch is tried. Once some match is
+ **    found, further branches will _not be attempted._ (short-circuit).
+ **    Thus there is _always one_ result model, is placed into an AltModel,
+ **    which is a _variant data type_ with a common inline result buffer.
+ **    The _selector field_ must be checked to find out which branch of the
+ **    syntax succeeded, and then the result must be handled with its appropriate
+ **    type, because the various branches can possibly yield entirely different
+ **    result value types.
+ **  - `<syntax>.repeat()` _sequentially adds_ a repeated clause be accepted
+ **    _after_ what the existing syntax accepts. The result is thus a SeqModel.
+ **  - `<syntax>.bracket()` _sequentially adds_ a bracketing clause to be
+ **    accepted _after_ parsing with the existing syntax. Again, the result
+ **    is a SeqModel, with the result-model from the repetition in the last
+ **    tuple element. The repetition itself yields an IterModel.
+ **  - `<syntax>.bind(FUN)` is a postfix-operator and decorates the existing
+ **    syntax with a result-binding functor `FUN`: The syntax's result value
+ **    is passed into this functor and whatever this functor returns will
+ **    become the result value of the compound.
+ **  - `<syntax>.bindMatch(n)`: a convenience shortcut to bind to the complete
+ **    input substring accepted by the underlying parser, or (when directly
+ **    applied to a reg-exp terminal) it can also extract a match-sub-group.
+ **    The result value of the resulting syntax clause will thus be a string.
+ ** 
+ ** ### Recursion
+ ** A _recursive syntax definition_ is what unleashes the parsing technique's
+ ** full strength; but recursive grammars can be challenging to master at times
+ ** and may in fact lead to deadlock due to unlimited recursion. Since this
+ ** framework is focused on ease of use in simple situations, recursion is
+ ** considered an advanced usage and thus supported in a way that requires
+ ** some preparation and help by the user. In essence...
+ ** - a syntax clause to be referred recursively _must be pre-declared_
+ ** - this pre-declaration gives it a known, fixed result type and will
+ **   internally use a `std::function` as parse function, initially empty.
+ ** - later the full syntax must be defined, and supplemented with a binding
+ **   to yield precisely the result-model type as pre-declared
+ ** - finally this definition is _assigned_ to the pre-declared syntax object.
+ ** One point to note is that internally a _reference_ to the pre-declared
+ ** `std::function` is stored — implying that the pre-declared syntax object
+ ** must **remain in scope and can not be moved**. Other than requiring
+ ** such a special setup, recursive syntax can be used without limits.
+ ** 
+ ** ## Structure
+ ** The util::parse::Syntax object is what the user handles and interacts with.
+ ** It both holds a result record of type util::parse::Eval, and a parser object
+ ** of type util::parse::Parser, while also acting as a move-style DSL builder.
+ ** Here, _move-style_ implies that invoking a DSL extension operator will
+ ** _move the embedded parser function_ into a new Syntax object with different
+ ** result type. However, when starting with some of the top-level function-style
+ ** builders, a given syntax object will be copied. This is important to keep
+ ** in mind when building complex expressions. Another point worth mentioning
+ ** is that the basic parse relies on std::string_view, which implies that the
+ ** original input sequence must remain valid until the parse result is built.
+ ** 
+ ** At the heart of the combinator mechanics is the class util::part::Connex,
+ ** which is essentially a parser function with additional configuration, and
+ ** can be passed to one of the _combinator functions_ `buildXXXConnex(...)`.
+ ** The construction of compound model results relies on a set of overloaded
+ ** `_Join` templates, which specify the way how models can be combined and
+ ** sequences can be extended.
+ **@see parse-test.cpp
  */
 
 
@@ -41,7 +146,6 @@
 #include "lib/meta/function.hpp"
 #include "lib/meta/trait.hpp"
 #include "lib/regex.hpp"
-#include "lib/test/diagnostic-output.hpp"/////////TODO
 
 #include <optional>
 #include <utility>
@@ -266,7 +370,7 @@ namespace util {
                           else
                             { // defensive fall-back: ignore model, return accepted input part
                               size_t pre = leadingWhitespace (toParse);
-                              return {string{toParse.substr (pre, eval.consumed)}
+                              return {string{toParse.substr (pre, eval.consumed - pre)}
                                      ,eval.consumed
                                      };
                             }
@@ -377,9 +481,7 @@ namespace util {
     /** Marker-Tag for the result from a sub-expression, not to be joined */
     template<typename RES>
     struct SubModel
-      {
-        RES model;
-      };
+      { /* for metaprogramming only */ };
     
     
     /** Standard case : combinator of two model branches */

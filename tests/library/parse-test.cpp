@@ -19,15 +19,10 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "lib/parse.hpp"
-//#include "lib/format-util.hpp"
 #include "lib/meta/tuple-helper.hpp"
-#include "lib/test/diagnostic-output.hpp"//////////////////TODO
-//#include "lib/util.hpp"
+#include "lib/parse.hpp"
 
-//#include <vector>
-//#include <memory>
-
+#include <vector>
 
 
 namespace util {
@@ -38,35 +33,15 @@ namespace test {
   using lib::meta::typeSymbol;
   using lib::meta::is_Tuple;
   using std::decay_t;
+  using std::vector;
   using std::get;
-//  using util::join;
-//  using util::isnil;
-//  using std::vector;
-//  using std::shared_ptr;
-//  using std::make_shared;
-  
-//  using LERR_(ITER_EXHAUST);
-//  using LERR_(INDEX_BOUNDS);
-  
-  
-  namespace { // test fixture
-    
-//    const uint NUM_ELMS = 10;
-    
-//    using Numz = vector<uint>;
-    
-  } // (END)fixture
   
   
   
   
-  
-  
-  
-  /************************************************************************//**
-   * @test verify helpers and shortcuts for simple recursive descent parsing
+  /****************************************************//**
+   * @test verify support for recursive descent parsing
    *       of structured data and specifications.
-   *
    * @see parse.hpp
    * @see proc-node.cpp "usage example"
    */
@@ -77,6 +52,7 @@ namespace test {
       run (Arg)
         {
           simpleUsage();
+          
           acceptTerminal();
           acceptSequential();
           acceptAlternatives();
@@ -90,11 +66,30 @@ namespace test {
         }
       
       
-      /** @test TODO just blah. */
+      /** @test demonstrate parsing a function-with-arguments structure. */
       void
       simpleUsage ()
         {
+          using Model = std::pair<string, vector<string>>;
+          
+          auto word = accept("\\w+").bindMatch();
+          auto term = accept(word)
+                        .bracket (accept_repeated(",", word))
+                                 .bind([](auto res){ return Model{get<0>(res),get<1>(res)}; });
+          
+          CHECK (not term.hasResult());
+          
+          term.parse("great (hypertrophy, confusion, deception, profit)");
+          CHECK (term.success());
+          Model model = term.getResult();
+          CHECK (model.first == "great");
+          CHECK (model.second[0] == "hypertrophy");
+          CHECK (model.second[1] == "confusion"  );
+          CHECK (model.second[2] == "deception"  );
+          CHECK (model.second[3] == "profit"     );
         }
+      
+      
       
       
       /** @test define a terminal symbol to match by parse. */
@@ -106,7 +101,7 @@ namespace test {
           string toParse{"hello vile world of power"};
           auto eval = parse (toParse);
           CHECK (eval.result);
-          smatch res = *eval.result;                           // ◁——————————— the »result model« of a terminal parse is the RegExp-Matcher 
+          smatch res = *eval.result;  // ◁——————————————————————— »result model« of a terminal parse is the RegExp-Matcher
           CHECK (res.ready() and not res.empty());
           CHECK (res.size()     == "2"_expect );
           CHECK (res.position() == "0"_expect );
@@ -133,7 +128,7 @@ namespace test {
           
           // Going full circle: extract Parser definition from syntax
           auto parse2 = Parser{syntax2};
-          CHECK (eval.result->str(1) == "vile");
+          CHECK (eval.result->str(1) == "vile"); // leftover value
           eval = parse2 (toParse);
           CHECK (not eval.result);
           eval = parse2 (bye);
@@ -145,7 +140,7 @@ namespace test {
        *      - first demonstrate explicitly how the consecutive parsing works
        *        and how both models are combined into a product model (tuple)
        *      - demonstrate how leading whitespace is skipped automatically
-       *      - then perform the same parse with a Syntax clause build with
+       *      - then perform the same parse with a Syntax clause, built by
        *        the `seq()` builder-DSL
        *      - extend this Syntax by adding a further sequential clause.
        */
@@ -198,8 +193,8 @@ namespace test {
           CHECK (not term2.parse(" old  ").result);
           
           
-           //___________________________________________________
-          // DSL parse clause builder: a sequence of terminals...
+           //____________________________________________________
+          // DSL syntax clause builder: a sequence of terminals...
           auto syntax = accept("hello").seq("world");
           
           // Perform the same parse as demonstrated above....
@@ -214,8 +209,9 @@ namespace test {
           
           
           // can build extended clause from existing one
-          auto syntax2 = syntax.seq("trade");
+          auto syntax2 = accept(syntax).seq("trade");          // Warning: seq() moves the parse function (but accept() has created a copy)
           CHECK (not syntax2.hasResult());
+          CHECK (    syntax.hasResult());                      // ...so the syntax2 is indeed an independent instance now
           syntax2.parse(s2);
           CHECK (not syntax2.success());
           syntax2.parse(s3);
@@ -228,11 +224,12 @@ namespace test {
       
       
       
-      /** @test define alternative syntax structures to match by parse.
+      /** @test define alternative syntax clauses to match by parse.
        *      - first demonstrate how a model with alternative branches can be
        *        populated and gradually extended while searching for a match.
        *      - then show explicitly the logic to check and select branches
        *        and construct the corresponding sum-model (variant)
+       *      - finally demonstrate equivalent behaviour using the DSL
        */
       void
       acceptAlternatives()
@@ -340,7 +337,7 @@ namespace test {
           CHECK (altModel.get<0>().str() == "brazen");
           
           // can build extended clause from existing one
-          auto syntax2 = syntax.alt("smarmy (\\w+)");
+          auto syntax2 = accept(syntax).alt("smarmy (\\w+)");
           CHECK (not syntax2.hasResult());
           syntax2.parse(s1);
           CHECK (not syntax2.success());
@@ -370,10 +367,10 @@ namespace test {
         {  //_______________________________________________
           // Demonstration: how repetitive sequence works....
           auto sep = buildConnex (",");
-          auto term = buildConnex ("\\w+");
+          auto word = buildConnex ("\\w+");
           auto parseSeq = [&](StrView toParse)
                               {
-                                using Res = decltype(term)::Result;
+                                using Res = decltype(word)::Result;
                                 using IterResult = std::vector<Res>;
                                 using IterEval = Eval<IterResult>;
                                 uint consumed{0};
@@ -389,7 +386,7 @@ namespace test {
                                           break;
                                         offset += delim.consumed;
                                       }
-                                    auto eval = term.parse (toParse.substr(offset));
+                                    auto eval = word.parse (toParse.substr(offset));
                                     if (not eval.result)
                                       break;
                                     offset += eval.consumed;
@@ -424,7 +421,7 @@ namespace test {
           
            //______________________________________________
           // DSL parse clause builder: iterative sequence...
-          auto syntax1 = accept_repeated(",", term);
+          auto syntax1 = accept_repeated(",", word);
           
           // Perform the same parse as demonstrated above....
           CHECK (not syntax1.hasResult());
@@ -442,8 +439,8 @@ namespace test {
           CHECK (res1[1].str() == "extort" );
           CHECK (res1[2].str() == "profit" );
           
-          auto syntax2 = accept_repeated(1,2,",", term);
-          auto syntax3 = accept_repeated(  4,",", term);
+          auto syntax2 = accept_repeated(1,2,",", word);
+          auto syntax3 = accept_repeated(  4,",", word);
           syntax2.parse(s2);
           syntax3.parse(s2);
           CHECK (    syntax2);
@@ -460,7 +457,7 @@ namespace test {
           CHECK (syntax3.getResult()[2].str() == "profit" );
           CHECK (syntax3.getResult()[3].str() == "dump"   );
           
-          auto syntax4 = accept_repeated(term);
+          auto syntax4 = accept_repeated(word);
           syntax4.parse(s1);
           CHECK (syntax4.success());
           CHECK (syntax4.getResult().size() == 2);
@@ -743,6 +740,7 @@ namespace test {
                                         .alt(quote)
                                         .alt(paren));
           
+          // abbreviation for the test...
           auto apply = [](auto& syntax)
                         { return [&](auto const& str)
                                     { return accept(syntax).bindMatch()
@@ -751,25 +749,25 @@ namespace test {
                                     };
                         };
           
-SHOW_EXPR(apply(content)("prey .. haul .. loot"))
-SHOW_EXPR(apply(content)("prey .. haul ,. loot"))
-SHOW_EXPR(apply(content)("prey .( haul ,. loot"))
+          CHECK (apply(content)("prey .. haul .. loot") ==    "prey .. haul .. loot"_expect   );
+          CHECK (apply(content)("prey .. haul ,. loot") ==    "prey .. haul "_expect          );
+          CHECK (apply(content)("prey .( haul ,. loot") ==    "prey ."_expect                 );
           
-SHOW_EXPR(apply(quote)("\"prey .( haul ,\"loot"))
-SHOW_EXPR(apply(quote)("\"prey \\ haul ,\"loot"))
-SHOW_EXPR(apply(quote)("\"prey\\\"haul ,\"loot"))
+          CHECK (apply(quote)("\"prey .( haul ,\"loot") ==  "\"prey .( haul ,\""_expect     );
+          CHECK (apply(quote)("\"prey \\ haul ,\"loot") ==  "\"prey \\ haul ,\""_expect     );
+          CHECK (apply(quote)("\"prey\\\"haul ,\"loot") ==  "\"prey\\\"haul ,\""_expect     );
           
-SHOW_EXPR(apply(paren)("(prey) .. haul .. loot"))
-SHOW_EXPR(apply(paren)("(prey .. haul .. loot)"))
-SHOW_EXPR(apply(paren)("(prey(..(haul)..)loot)"))
-SHOW_EXPR(apply(paren)("(prey \" haul)\" loot)"))
-SHOW_EXPR(apply(paren)("(prey\\( haul)\" loot)"))
+          CHECK (apply(paren)("(prey) .. haul .. loot") ==  "(prey)"_expect                 );
+          CHECK (apply(paren)("(prey .. haul .. loot)") ==  "(prey .. haul .. loot)"_expect );
+          CHECK (apply(paren)("(prey(..(haul)..)loot)") ==  "(prey(..(haul)..)loot)"_expect );
+          CHECK (apply(paren)("(prey \" haul)\" loot)") ==  "(prey \" haul)\" loot)"_expect );
+          CHECK (apply(paren)("(prey\\( haul)\" loot)") ==  "(prey\\( haul)"_expect         );
           
-SHOW_EXPR(apply(spec)("\"prey .( haul ,\"loot!"))
-SHOW_EXPR(apply(spec)("\"prey .( haul \",loot!"))
-SHOW_EXPR(apply(spec)("  prey .( haul \",loot!"))
-SHOW_EXPR(apply(spec)("  prey .( haul )\"loot!"))
-SHOW_EXPR(apply(spec)(" (prey\\( haul }, loot)"))
+          CHECK (apply(spec)("\"prey .( haul ,\"loot!") == "\"prey .( haul ,\"loot!"_expect);
+          CHECK (apply(spec)("\"prey .( haul \",loot!") == "\"prey .( haul \""_expect      );
+          CHECK (apply(spec)("  prey .( haul \",loot!") ==   "prey ."_expect                 );
+          CHECK (apply(spec)("  prey .( haul,)\"loot!") ==   "prey .( haul,)"_expect         );
+          CHECK (apply(spec)(" (prey\\( haul }, loot)") ==  "(prey\\( haul }, loot)"_expect  );
         }
     };
   
