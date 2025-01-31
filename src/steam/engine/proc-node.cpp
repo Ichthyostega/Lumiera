@@ -21,6 +21,7 @@
 
 #include "steam/engine/proc-id.hpp"
 #include "steam/engine/proc-node.hpp"
+#include "lib/several-builder.hpp"
 #include "lib/iter-explorer.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-util.hpp"
@@ -201,6 +202,19 @@ namespace engine {
                                .transform([](ProcNode& n){ return procID(n).nodeName_;})         // render the node-symbol of each src
                                .deduplicate())                                                   // sort and deduplicate
                          + "}";
+  }
+  
+  
+  /** parse and dissect the argument specification */
+  ProcID::ArgModel
+  ProcID::genArgModel()
+  {
+    using VecS = std::vector<string>;
+    VecS v1{"bla","blubb"};
+    VecS v2;
+    auto elms1 = lib::makeSeveral<const string>().appendAll(v1);
+    auto elms2 = lib::makeSeveral<const string>().appendAll(v2);
+    return ProcID::ArgModel{elms1.build(), elms2.build()};
   }
   
   

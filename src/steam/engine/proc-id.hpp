@@ -20,7 +20,11 @@
  **          of the media-processing-library binding plug-in to ensure that classification
  **          matches relevant semantic distinctions. In this context, "different" means
  **          that two functions produce _perceptibly different results_ — which also
- **          implies that for equivalent IDs we can use cached calculation results. 
+ **          implies that for equivalent IDs we can use cached calculation results.
+ ** \par Code arrangement
+ **    - proc-node.hpp is a shallow interface header (included rather widely)
+ **    - proc-id.hpp (this header) details node specifications and is used for the NodeBuidler
+ **    - proc-node.cpp acts as »module« and anchor for all implementation services
  ** 
  ** ## Structure and syntax
  ** A complete processing-specification combines a high-level identification of the enclosing
@@ -62,8 +66,8 @@
 #include "lib/error.hpp"
 #include "lib/hash-standard.hpp"
 #include "lib/several.hpp"
-//#include "steam/streamtype.hpp"
 
+#include <utility>
 #include <string>
 
 
@@ -71,6 +75,7 @@ namespace steam {
 namespace engine {
   namespace err = lumiera::error;
   
+  using std::move;
   using lib::HashVal;
   using std::string;
   using StrView = std::string_view;
@@ -134,6 +139,9 @@ namespace engine {
       string genNodeSpec(Leads&);
       string genSrcSpec (Leads&);  ///< transitively enumerate all unique source nodes
       
+      struct ArgModel;
+      ArgModel genArgModel();
+      
       friend bool
       operator== (ProcID const& l, ProcID const& r)
       {
@@ -151,6 +159,34 @@ namespace engine {
     };
   
   
+  
+  /**
+   * Expanded information regarding node input and output.
+   * Requires [parsing the spec](\ref ProcID::genArgModel) for construction.
+   */
+  struct ProcID::ArgModel
+    : util::MoveAssign
+    {
+      using Strings = lib::Several<const string>;
+      using iterator = Strings::iterator;
+      
+      Strings iArg;
+      Strings oArg;
+      
+      bool empty()      const { return not hasArgs(); };
+      bool hasArgs()    const { return hasInArgs() or hasOutArgs();}
+      bool hasInArgs()  const { return not iArg.empty(); }
+      bool hasOutArgs() const { return not oArg.empty(); }
+      uint inArity()    const { return iArg.size(); }
+      uint outArity()   const { return oArg.size(); }
+      
+    private:
+      ArgModel (Strings&& iarg, Strings&& oarg)
+        : iArg{move (iarg)}
+        , oArg{move (oarg)}
+        { }
+      friend ArgModel ProcID::genArgModel();
+    };
   
   
 }} // namespace steam::engine

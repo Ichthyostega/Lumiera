@@ -97,9 +97,9 @@
 #include "include/limits.hpp"
 #include "lib/iter-explorer.hpp"
 #include "lib/format-string.hpp"
+#include "lib/meta/trait.hpp"
 #include "lib/util.hpp"
 
-#include <type_traits>
 #include <functional>
 #include <cstring>
 #include <utility>
@@ -125,6 +125,7 @@ namespace lib {
     using util::max;
     using util::min;
     using util::_Fmt;
+    using util::unConst;
     using util::positiveDiff;
     using std::is_nothrow_move_constructible_v;
     using std::is_trivially_move_constructible_v;
@@ -183,13 +184,16 @@ namespace lib {
         using AlloT = std::allocator_traits<Allo>;
         using Bucket = ArrayBucket<I>;
         
+        template<typename X>
+        using XAlloT = typename AlloT::template rebind_traits<std::remove_cv_t<X>>;
+        
         Allo& baseAllocator() { return *this; }
         
         template<typename X>
         auto
         adaptAllocator()
           {
-            using XAllo = typename AlloT::template rebind_alloc<X>;
+            using XAllo = typename XAlloT<X>::allocator_type;
             if constexpr (std::is_constructible_v<XAllo, Allo>)
               return XAllo{baseAllocator()};
             else
@@ -229,7 +233,7 @@ namespace lib {
             ASSERT (storageBytes - offset >= cnt*spread);
             Bucket* bucket = reinterpret_cast<Bucket*> (loc);
             
-            using BucketAlloT = typename AlloT::template rebind_traits<Bucket>;
+            using BucketAlloT = XAlloT<Bucket>;
             auto bucketAllo = adaptAllocator<Bucket>();
             // Step-2 : construct the Bucket metadata       | ▽ ArrayBucket ctor arg ▽
             try { BucketAlloT::construct (bucketAllo, bucket, storageBytes, offset, spread); }
@@ -247,9 +251,9 @@ namespace lib {
         createAt (Bucket* bucket, size_t idx, ARGS&& ...args)
           {
             REQUIRE (bucket);
-            using ElmAlloT = typename AlloT::template rebind_traits<E>;
+            using ElmAlloT = XAlloT<E>;
             auto elmAllo = adaptAllocator<E>();
-            E* loc = reinterpret_cast<E*> (& bucket->subscript (idx));
+            E* loc = reinterpret_cast<E*> (& unConst(bucket->subscript (idx)));
             ElmAlloT::construct (elmAllo, loc, forward<ARGS> (args)...);
             ENSURE (loc);
             return *loc;
@@ -270,11 +274,11 @@ namespace lib {
             if (not is_trivially_destructible_v<E>)
               {
                 size_t cnt = bucket->cnt;
-                using ElmAlloT = typename AlloT::template rebind_traits<E>;
+                using ElmAlloT = XAlloT<E>;
                 auto elmAllo = adaptAllocator<E>();
                 for (size_t idx=0; idx<cnt; ++idx)
                   {
-                    E* elm = reinterpret_cast<E*> (& bucket->subscript (idx));
+                    E* elm = reinterpret_cast<E*> (& unConst(bucket->subscript (idx)));
                     ElmAlloT::destroy (elmAllo, elm);
                   }
               }
@@ -479,6 +483,15 @@ namespace lib {
           return move(*this);
         }
       
+      /** consume all values exposed through an iterator by moving into the builder */
+      template<class SEQ>
+      SeveralBuilder&&
+      moveAll (SEQ& dataSrc)
+        {
+          explore(dataSrc).foreach ([this](auto it){ emplaceMove(it); });
+          return move(*this);
+        }
+      
       /** emplace a number of elements of the defined element type \a E */
       template<typename...ARGS>
       SeveralBuilder&&
@@ -538,6 +551,14 @@ namespace lib {
         {
           using Val = typename IT::value_type;
           emplaceNewElm<Val> (*dataSrc);
+        }
+      
+      template<class IT>
+      void
+      emplaceMove (IT& dataSrc)
+        {
+          using Val = typename IT::value_type;
+          emplaceNewElm<Val> (move (*dataSrc));
         }
       
       template<class TY, typename...ARGS>
@@ -716,22 +737,26 @@ namespace lib {
       Deleter
       selectDestructor()
         {
+          using IVal = typename lib::meta::Strip<I>::TypeReferred;
+          using EVal = typename lib::meta::Strip<E>::TypeReferred;
+          using TVal = typename lib::meta::Strip<TY>::TypeReferred;
+          
           typename Policy::Fac& factory(*this);
           
-          if (is_Subclass<TY,I>() and has_virtual_destructor_v<I>)
+          if (is_Subclass<TVal,IVal>() and has_virtual_destructor_v<IVal>)
             {
-              __ensureMark<TY> (VIRTUAL);
-              return [factory](ArrayBucket<I>* bucket){ unConst(factory).template destroy<I> (bucket); };
+              __ensureMark<TVal> (VIRTUAL);
+              return [factory](ArrayBucket<I>* bucket){ unConst(factory).template destroy<IVal> (bucket); };
             }
-          if (is_trivially_destructible_v<TY>)
+          if (is_trivially_destructible_v<TVal>)
             {
-              __ensureMark<TY> (TRIVIAL);
-              return [factory](ArrayBucket<I>* bucket){ unConst(factory).template destroy<TY> (bucket); };
+              __ensureMark<TVal> (TRIVIAL);
+              return [factory](ArrayBucket<I>* bucket){ unConst(factory).template destroy<TVal> (bucket); };
             }
-          if (is_same_v<TY,E> and is_Subclass<E,I>())
+          if (is_same_v<TVal,EVal> and is_Subclass<EVal,IVal>())
             {
-              __ensureMark<TY> (ELEMENT);
-              return [factory](ArrayBucket<I>* bucket){ unConst(factory).template destroy<E> (bucket); };
+              __ensureMark<TVal> (ELEMENT);
+              return [factory](ArrayBucket<I>* bucket){ unConst(factory).template destroy<EVal> (bucket); };
             }
           throw err::Invalid{_Fmt{"Unsupported kind of destructor for element type %s."}
                                  % util::typeStr<TY>()};

@@ -19,6 +19,7 @@
 #include "lib/test/run.hpp"
 #include "steam/engine/proc-node.hpp"
 #include "steam/engine/node-builder.hpp"
+#include "lib/format-util.hpp"
 //#include "steam/engine/test-rand-ontology.hpp" ///////////TODO
 #include "lib/test/diagnostic-output.hpp"/////////////////TODO
 //#include "lib/util.hpp"
@@ -26,13 +27,14 @@
 #include <cmath>
 
 //using std::string;
-using std::abs;
 
 
 namespace steam {
 namespace engine{
 namespace test  {
   
+  using std::abs;
+  using util::join;
   
   
   
@@ -76,6 +78,11 @@ namespace test  {
           CHECK (p3.genProcName()   == "N3"_expect );
           CHECK (p2.genProcSpec()   == "U:N2.+(a1,a2)"_expect );
           CHECK (p3.genProcSpec()   == "O:N3(in/3)(o1,o2/2)"_expect );
+          
+          ProcID::ArgModel arg1 = p1.genArgModel();
+          ProcID::ArgModel arg2 = p2.genArgModel();
+          ProcID::ArgModel arg3 = p3.genArgModel();
+SHOW_EXPR(join (arg1.iArg))
           UNIMPLEMENTED ("parse and evaluate");
         }
       
