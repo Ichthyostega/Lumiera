@@ -25,7 +25,7 @@
 #include "lib/iter-explorer.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-util.hpp"
-#include "lib/regex.hpp"
+#include "lib/parse.hpp"
 #include "lib/util.hpp"
 
 #include <boost/functional/hash.hpp>        /////////////////////////////////////////////////////TICKET #1391 is boost-hash the proper tool for this task?
@@ -55,6 +55,54 @@ namespace engine {
       auto res = symbRegistry.emplace (symbol);
       symbol = *res.first;
     }
+    
+    /* ===== Parse nested spec ===== */
+    
+    using util::parse::accept;
+    using util::parse::accept_bracket;
+    using util::parse::accept_repeated;
+    using util::parse::expectResult;
+    using lib::meta::NullType;
+    using std::regex;
+    
+    const regex SPEC_CONTENT{R"_([^,\\\(\)\[\]{}<>"]+)_", regex::optimize};
+    const regex NON_QUOTE   {R"_([^"\\]+)_"             , regex::optimize};
+    const regex ESCAPE      {R"_(\\.)_"                 , regex::optimize};
+    const regex COMMA       {R"_(,)_"                   , regex::optimize};
+    const regex D_QUOTE     {R"_(")_"                   , regex::optimize};
+    
+    auto quoted = accept_repeated(accept(NON_QUOTE).alt(ESCAPE));
+    auto quote  = accept_bracket(D_QUOTE,D_QUOTE, quoted);
+    
+    template<char OPE, char CLO>
+    auto&
+    syntaxBracketed()
+    {
+      string esc{"\\"};
+      regex OPENING{esc+OPE};
+      regex CLOSING{esc+CLO};
+      regex NON_PAREN{R"_([^\\)_"+esc+OPE+esc+CLO+"]+"};
+      
+      static auto paren = expectResult<NullType>();
+      auto parenContent = accept_repeated(accept(NON_PAREN)
+                                            .alt(ESCAPE)
+                                            .alt(quote)
+                                            .alt(paren));
+      
+      paren = accept_bracket(OPENING,CLOSING, parenContent).bind([](auto){ return NullType{}; });
+      return paren;
+    }
+    
+    auto specTermSyntax = accept_repeated(accept(SPEC_CONTENT)
+                                            .alt(ESCAPE)
+                                            .alt(quote)
+                                            .alt(syntaxBracketed<'(',')'>())
+                                            .alt(syntaxBracketed<'<','>'>())
+                                            .alt(syntaxBracketed<'[',']'>())
+                                            .alt(syntaxBracketed<'{','}'>())
+                                         )
+                                         .bindMatch();
+    
   } // (END) Details...
   
   
@@ -209,12 +257,32 @@ namespace engine {
   ProcID::ArgModel
   ProcID::genArgModel()
   {
-    using VecS = std::vector<string>;
-    VecS v1{"bla","blubb"};
-    VecS v2;
-    auto elms1 = lib::makeSeveral<const string>().appendAll(v1);
-    auto elms2 = lib::makeSeveral<const string>().appendAll(v2);
-    return ProcID::ArgModel{elms1.build(), elms2.build()};
+    auto argListSyntax = accept_bracket(accept_repeated(COMMA, specTermSyntax));
+    auto argSpecSyntax = accept(argListSyntax)
+                           .opt(argListSyntax)
+                                             .bind([](auto model) -> ProcID::ArgModel
+                                                    {
+                                                      auto packageAsSeveral = [](std::vector<string>& parsedTerms)
+                                                                                {
+                                                                                  return lib::makeSeveral<const string>()
+                                                                                             .appendAll(parsedTerms);
+                                                                                };
+
+                                                      auto [list1,list2] = model;
+                                                      auto elms1 = packageAsSeveral(list1);
+                                                      auto elms2 = list2? packageAsSeveral(*list2)
+                                                                        : lib::makeSeveral<const string>();
+                                                      
+                                                      return ProcID::ArgModel{elms1.build(), elms2.build()};
+                                                    });
+    
+    argSpecSyntax.parse (argLists_);
+    if (not argSpecSyntax.success())
+      throw err::Invalid{_Fmt{"Unable to parse argument list. "
+                              "Node:%s Spec:%s"}
+                             % genProcName() % argLists_
+                        };
+    return argSpecSyntax.extractResult();
   }
   
   

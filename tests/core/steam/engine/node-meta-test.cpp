@@ -83,6 +83,11 @@ namespace test  {
           ProcID::ArgModel arg2 = p2.genArgModel();
           ProcID::ArgModel arg3 = p3.genArgModel();
 SHOW_EXPR(join (arg1.iArg))
+SHOW_EXPR(join (arg1.oArg))
+SHOW_EXPR(join (arg2.iArg))
+SHOW_EXPR(join (arg2.oArg))
+SHOW_EXPR(join (arg3.iArg))
+SHOW_EXPR(join (arg3.oArg))
           UNIMPLEMENTED ("parse and evaluate");
         }
       

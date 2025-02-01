@@ -220,7 +220,7 @@ namespace util {
     
     
     /** »Null-Connex« which always successfully accepts the empty sequence */
-    auto
+    inline auto
     buildConnex(NullType)
     {
       return Connex{[](StrView) -> Eval<NullType>
@@ -239,7 +239,7 @@ namespace util {
      * returns an \ref Eval context, to hold a _Result Model_ and
      * the number of characters matched by this terminal symbol.
      */
-    auto
+    inline auto
     buildConnex (regex rex)
     {
       return Connex{[regEx = move(rex)]
@@ -255,7 +255,7 @@ namespace util {
     using Term = decltype(buildConnex (std::declval<regex>()));
     
     /** build from a string with Regular-Epression spec */
-    Term
+    inline Term
     buildConnex (string const& rexDef)
     {
       return buildConnex (regex{rexDef});
@@ -263,20 +263,20 @@ namespace util {
     
     /** copy-builder from an existing parser function */
     template<class FUN>
-    auto
+    inline auto
     buildConnex (Connex<FUN> const& anchor)
     {
       return Connex{anchor};
     }
     template<class FUN>
-    auto
+    inline auto
     buildConnex (Connex<FUN> && anchor)
     {
       return Connex{move(anchor)};
     }
     
     template<class PAR>
-    auto
+    inline auto
     buildConnex (Syntax<PAR> const& anchor)
     {
       using Con = typename Syntax<PAR>::Connex;
@@ -288,7 +288,7 @@ namespace util {
      *       resulting ForwardConnex holds a _reference_ to std::function,
      *       and thus gets to see the full definition reassigned later. */
     template<class RES>
-    auto
+    inline auto
     buildConnex (Syntax<Parser<OpaqueConnex<RES>>> & refClause)
     {
       OpaqueConnex<RES>& refConnex = refClause;
@@ -331,7 +331,7 @@ namespace util {
      *         and thus the parse can be configured to produce custom result data.
      */
     template<class CON, class BIND>
-    auto
+    inline auto
     adaptConnex (CON&& connex, BIND&& modelBinding)
     {
       using RX = typename CON::Result;
@@ -352,7 +352,7 @@ namespace util {
     }
     
     template<class CON>
-    auto
+    inline auto
     toStringConnex (CON&& connex, uint part)
     {
       using Result = typename CON::Result;
@@ -519,7 +519,7 @@ namespace util {
     
     /** accept sequence of two parse functions */
     template<class C1, class C2>
-    auto
+    inline auto
     sequenceConnex (C1&& connex1, C2&& connex2)
     {
       using R1 = typename decay_t<C1>::Result;
@@ -553,7 +553,7 @@ namespace util {
     
     /** accept either one of two alternative parse functions */
     template<class C1, class C2>
-    auto
+    inline auto
     branchedConnex (C1&& connex1, C2&& connex2)
     {
       using R1 = typename decay_t<C1>::Result;
@@ -588,7 +588,7 @@ namespace util {
     
     /** repeatedly accept parse-function, optionally delimited. */
     template<class C1, class C2>
-    auto
+    inline auto
     repeatedConnex (uint min, uint max
                    ,C1&& delimConnex
                    ,C2&& bodyConnex)
@@ -631,7 +631,7 @@ namespace util {
     
     /** try to accept parse-function, backtracking if not successful. */
     template<class CNX>
-    auto
+    inline auto
     optionalConnex (CNX&& connex)
     {
       using Res = typename decay_t<CNX>::Result;
@@ -653,7 +653,7 @@ namespace util {
     /** accept some structure enclosed into a bracketing construct.
      * \param isOptional if the bracketing can be omitted */
     template<class C1, class C2, class C3>
-    auto
+    inline auto
     bracketedConnex (C1&& openingConnex
                     ,C2&& closingConnex
                     ,C3&& bodyConnex
@@ -885,19 +885,19 @@ namespace util {
     
     /** build a Syntax clause from anything usable as parser-spec. */
     template<typename SPEC>
-    auto
+    inline auto
     accept (SPEC&& clauseDef)
     {
       return Syntax{Parser{forward<SPEC> (clauseDef)}};
     }
     
     /** empty Syntax clause to start further definition */
-    auto accept() { return Syntax<Parser<NulP>>{}; }
+    inline auto accept() { return Syntax<Parser<NulP>>{}; }
     
     
     /** start Syntax clause with an optional syntax part */ 
     template<typename SPEC>
-    auto
+    inline auto
     accept_opt (SPEC&& clauseDef)
     {
       return accept(
@@ -913,7 +913,7 @@ namespace util {
      * which implies it is a vector (uses heap storage); if min ≡ 0, the model can be empty. 
      */ 
     template<typename SPEC1, typename SPEC2>
-    auto
+    inline auto
     accept_repeated (uint min, uint max, SPEC1&& delimDef, SPEC2&& clauseDef)
       {
         if (max<min)
@@ -930,7 +930,7 @@ namespace util {
 
     /** \param cnt exact number of repetitions expected */
     template<typename SPEC1, typename SPEC2,                                       typename =if_acceptableSpecs<SPEC1,SPEC2>>
-    auto
+    inline auto
     accept_repeated (uint cnt, SPEC1&& delimDef, SPEC2&& clauseDef)
       {
         return accept_repeated (cnt,cnt, forward<SPEC1>(delimDef), forward<SPEC2>(clauseDef));
@@ -938,28 +938,28 @@ namespace util {
     
     /** start Syntax with an arbitrarily repeated sub-clause, with separator */
     template<typename SPEC1, typename SPEC2,                                       typename =if_acceptableSpecs<SPEC1,SPEC2>>
-    auto
+    inline auto
     accept_repeated (SPEC1&& delimDef, SPEC2&& clauseDef)
       {
         return accept_repeated (1,uint(-1), forward<SPEC1>(delimDef), forward<SPEC2>(clauseDef));
       }
     
     template<typename SPEC>
-    auto
+    inline auto
     accept_repeated (uint min, uint max, SPEC&& clauseDef)
       {
         return accept_repeated (min, max, NullType{}, forward<SPEC>(clauseDef));
       }
     
     template<typename SPEC>
-    auto
+    inline auto
     accept_repeated (uint cnt, SPEC&& clauseDef)
       {
         return accept_repeated (cnt, NullType{}, forward<SPEC>(clauseDef));
       }
     
     template<typename SPEC>
-    auto
+    inline auto
     accept_repeated (SPEC&& clauseDef)
       {
         return accept_repeated (NullType{}, forward<SPEC>(clauseDef));
@@ -972,7 +972,7 @@ namespace util {
      * the full sequence `open body close` can be matched.
      */
     template<typename SPEC1, typename SPEC2, typename SPEC3>
-    auto
+    inline auto
     accept_bracket (SPEC1&& openDef, SPEC2&& closeDef, SPEC3&& bodyDef)
       {
         return accept(
@@ -988,7 +988,7 @@ namespace util {
      * \param bracketSpec a 2-char string, e.g. "{}" to expect curly braces.
      */
     template<typename SPEC>
-    auto
+    inline auto
     accept_bracket (string bracketSpec, SPEC&& bodyDef)
       {
         if (bracketSpec.size() != 2)
@@ -1003,7 +1003,7 @@ namespace util {
     
     /** Start Syntax with a sub-clause enclosed in parentheses */
     template<typename SPEC>
-    auto
+    inline auto
     accept_bracket (SPEC&& bodyDef)
       {
         return accept_bracket ("()", forward<SPEC>(bodyDef));
@@ -1011,7 +1011,7 @@ namespace util {
     
     /** Start Syntax with a sub-clause, _optionally_ enclosed into brackets. */
     template<typename SPEC>
-    auto
+    inline auto
     accept_bracketOpt (string bracketSpec, SPEC&& bodyDef)
       {
         if (bracketSpec.size() != 2)
@@ -1025,7 +1025,7 @@ namespace util {
       }
     
     template<typename SPEC>
-    auto
+    inline auto
     accept_bracketOpt (SPEC&& bodyDef)
       {
         return accept_bracketOpt ("()", forward<SPEC>(bodyDef));
@@ -1050,7 +1050,7 @@ namespace util {
      * @see Parse_test::verify_recursiveSyntax()
      */
     template<typename RES>
-    auto
+    inline auto
     expectResult()
       {
         return accept (Connex{std::function<Eval<RES>(StrView)>{}});
@@ -1068,7 +1068,7 @@ namespace util {
      */
     template<class PAR>
     template<typename SPEC>
-    auto
+    inline auto
     Syntax<PAR>::seq (SPEC&& clauseDef)
       {
         return accept(
@@ -1090,7 +1090,7 @@ namespace util {
      */
     template<class PAR>
     template<typename SPEC>
-    auto
+    inline auto
     Syntax<PAR>::alt (SPEC&& clauseDef)
       {
         return accept(
@@ -1106,7 +1106,7 @@ namespace util {
      */
     template<class PAR>
     template<typename SPEC>
-    auto
+    inline auto
     Syntax<PAR>::opt (SPEC&& clauseDef)
       {
         return seq (accept_opt (forward<SPEC> (clauseDef)));
@@ -1119,7 +1119,7 @@ namespace util {
      */
     template<class PAR>
     template<typename SPEC1, typename SPEC2>
-    auto
+    inline auto
     Syntax<PAR>::repeat (uint min, uint max, SPEC1&& delimDef, SPEC2&& clauseDef)
       {
         return seq (accept_repeated (min,max
@@ -1129,7 +1129,7 @@ namespace util {
     
     template<class PAR>
     template<typename SPEC1, typename SPEC2>
-    auto
+    inline auto
     Syntax<PAR>::repeat (uint cnt, SPEC1&& delimDef, SPEC2&& clauseDef)
       {
         return seq (accept_repeated (cnt
@@ -1139,7 +1139,7 @@ namespace util {
     
     template<class PAR>
     template<typename SPEC1, typename SPEC2>
-    auto
+    inline auto
     Syntax<PAR>::repeat (SPEC1&& delimDef, SPEC2&& clauseDef)
       {
         return seq (accept_repeated (forward<SPEC1>(clauseDef)
@@ -1148,7 +1148,7 @@ namespace util {
     
     template<class PAR>
     template<typename SPEC>
-    auto
+    inline auto
     Syntax<PAR>::repeat (SPEC&& clauseDef)
       {
         return seq (accept_repeated (forward<SPEC>(clauseDef)));
@@ -1160,7 +1160,7 @@ namespace util {
      */
     template<class PAR>
     template<typename SPEC1, typename SPEC2, typename SPEC3>
-    auto
+    inline auto
     Syntax<PAR>::bracket (SPEC1&& openDef, SPEC2&& closeDef, SPEC3&& bodyDef)
       {
         return seq (accept_bracket (forward<SPEC1>(openDef)
@@ -1170,7 +1170,7 @@ namespace util {
     
     template<class PAR>
     template<typename SPEC>
-    auto
+    inline auto
     Syntax<PAR>::bracket (string bracketSpec, SPEC&& bodyDef)
       {
         return seq (accept_bracket (move (bracketSpec)
@@ -1179,7 +1179,7 @@ namespace util {
     
     template<class PAR>
     template<typename SPEC>
-    auto
+    inline auto
     Syntax<PAR>::bracket (SPEC&& bodyDef)
       {
         return seq (accept_bracket (forward<SPEC>(bodyDef)));
@@ -1187,7 +1187,7 @@ namespace util {
     
     template<class PAR>
     template<typename SPEC>
-    auto
+    inline auto
     Syntax<PAR>::bracketOpt (string bracketSpec, SPEC&& bodyDef)
       {
         return seq (accept_bracketOpt (move (bracketSpec)
@@ -1196,7 +1196,7 @@ namespace util {
     
     template<class PAR>
     template<typename SPEC>
-    auto
+    inline auto
     Syntax<PAR>::bracketOpt (SPEC&& bodyDef)
       {
         return seq (accept_bracketOpt (forward<SPEC>(bodyDef)));
@@ -1204,7 +1204,7 @@ namespace util {
     
     template<class PAR>
     template<class FUN>
-    auto
+    inline auto
     Syntax<PAR>::bind (FUN&& modelAdapt)
       {
         return accept(
@@ -1213,7 +1213,7 @@ namespace util {
       }
     
     template<class PAR>
-    auto
+    inline auto
     Syntax<PAR>::bindMatch (uint group)
       {
         return accept(
@@ -1226,6 +1226,7 @@ namespace util {
   using parse::accept;
   using parse::accept_opt;
   using parse::accept_repeated;
+  using parse::accept_bracket;
   
 }// namespace util
 
