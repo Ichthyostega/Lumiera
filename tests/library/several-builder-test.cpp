@@ -36,6 +36,7 @@ using std::array;
 
 using lib::explore;
 using util::isLimited;
+using util::toString;
 using util::isnil;
 using util::join;
 
@@ -161,6 +162,7 @@ namespace test{
           CHECK (elms.back() == 13);
           CHECK (elms[3] == 3);
           CHECK (join (elms,"-") == "1-1-2-3-5-8-13"_expect);
+          CHECK (toString(elms)  == "[1, 1, 2, 3, 5, 8, 13]"_expect);
         }
       
       

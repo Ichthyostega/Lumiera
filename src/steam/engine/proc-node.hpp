@@ -129,6 +129,12 @@ namespace engine {
   using OptionalBuff = std::optional<BuffHandle>;
   
   
+  /** arbitrary safety limit on fain-in / fan-out
+   * @note expect lower limits in practice caused by AllocationCluster */
+  const size_t MAX_NODE_ARG = LUMIERA_MAX_ORDINAL_NUMBER / 2;
+  
+  
+  
   class Port
     : util::NonCopyable
     {

@@ -57,6 +57,10 @@
 #include <cstddef>
 #include <functional>
 
+namespace util {
+  template<class COLL>
+  std::string toStringBracket (COLL&& coll);
+}
 
 namespace lib {
   
@@ -179,6 +183,9 @@ namespace lib {
           return *this;
         }
       
+      explicit
+      operator std::string()  const;
+      
       size_t
       size()  const
         {
@@ -247,6 +254,14 @@ namespace lib {
         }
     };
   
+  
+  /** generic string rendering delegated to `util::toString(elm)` */
+  template<class I>
+  inline
+  Several<I>::operator std::string()  const
+  {
+    return util::toStringBracket (*this);
+  }
   
 } // namespace lib
 #endif

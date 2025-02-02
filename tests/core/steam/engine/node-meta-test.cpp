@@ -34,7 +34,7 @@ namespace engine{
 namespace test  {
   
   using std::abs;
-  using util::join;
+//  using util::join;
   
   
   
@@ -51,8 +51,8 @@ namespace test  {
         }
       
       
-      /** @test TODO evaluation of processing-spec for a ProcID
-       * @todo WIP 1/25 🔁 define ⟶ 🔁 implement
+      /** @test evaluation of processing-spec for a ProcID
+       * @todo 1/25 ✔ define ⟶ ✔ implement
        */
       void
       verify_ID_specification()
@@ -82,24 +82,34 @@ namespace test  {
           ProcID::ArgModel arg1 = p1.genArgModel();
           ProcID::ArgModel arg2 = p2.genArgModel();
           ProcID::ArgModel arg3 = p3.genArgModel();
-SHOW_EXPR(join (arg1.iArg))
-SHOW_EXPR(join (arg1.oArg))
-SHOW_EXPR(join (arg2.iArg))
-SHOW_EXPR(join (arg2.oArg))
-SHOW_EXPR(join (arg3.iArg))
-SHOW_EXPR(join (arg3.oArg))
-          CHECK (join (arg1.iArg) ==           ""_expect );
-          CHECK (join (arg1.oArg) ==        "arg"_expect );               // only one argument list -> used for output
-          CHECK (join (arg2.iArg) ==           ""_expect );
-          CHECK (join (arg2.oArg) ==     "a1, a2"_expect );
-          CHECK (join (arg3.iArg) == "in, in, in"_expect );               // repetition-abbreviation of arguments unfolded
-          CHECK (join (arg3.oArg) == "o1, o2, o2"_expect );
-          UNIMPLEMENTED ("parse and evaluate");
+          CHECK (not arg1.hasInArgs());
+          CHECK (not arg2.hasInArgs());
+          CHECK (arg1.outArity() == 1);
+          CHECK (arg2.outArity() == 2);
+          CHECK (arg3.outArity() == 3);
+          CHECK (arg3.inArity()  == 3);
+          CHECK (arg1.iArg ==           "[]"_expect );
+          CHECK (arg1.oArg ==        "[arg]"_expect );                    // only one argument list -> used for output
+          CHECK (arg2.iArg ==           "[]"_expect );
+          CHECK (arg2.oArg ==     "[a1, a2]"_expect );
+          CHECK (arg3.iArg == "[in, in, in]"_expect );                    // repetition-abbreviation of arguments unfolded
+          CHECK (arg3.oArg == "[o1, o2, o2]"_expect );
+          
+          // give the spec-parser a rough time....
+          string nastySpec = "(\":-)\"/2,std::tuple<short,long>/3,{oh,RLY?}/2,\\\")";
+          auto hairyModel = ProcID::describe("○", nastySpec).genArgModel();
+          CHECK (hairyModel.outArity() == 8);
+          CHECK (hairyModel.inArity()  == 0);
+          CHECK (hairyModel.oArg == "[\":-)\", \":-)\", "
+                                    "std::tuple<short,long>, "
+                                    "std::tuple<short,long>, "
+                                    "std::tuple<short,long>, "
+                                    "{oh,RLY?}, {oh,RLY?}, \\\"]"_expect);
         }
       
       
       /** @test TODO aspects of node definition relevant for the ProcID
-       * @todo WIP 1/25 🔁 define ⟶ implement
+       * @todo WIP 2/25 🔁 define ⟶ implement
        */
       void
       verify_ID_properties()

@@ -188,12 +188,12 @@ namespace util {
    *          absolutely generic (In fact that was the reason why I
    *          gave up and just rolled our own `join` utility)
    */
-  template<class CON>
+  template<class COLL>
   inline string
-  join (CON&& coll, string const& delim =", ")
+  join (COLL&& coll, string const& delim =", ")
   {
-    using Coll = typename lib::meta::Strip<CON>::TypePlain;
-    _RangeIter<Coll> range(std::forward<CON>(coll));    // copies when CON is reference
+    using Coll = typename lib::meta::Strip<COLL>::TypePlain;
+    _RangeIter<Coll> range(std::forward<COLL>(coll));    // copies when CON is reference
     
     auto strings = stringify (std::move (range.iter));
     if (!strings) return "";
@@ -239,6 +239,23 @@ namespace util {
   joinDot (ARGS const& ...args)
   {
     return join (stringify (args...), ".");
+  }
+  
+  
+  
+  /** one-argument variant that can be forward declared... */
+  template<class COLL>
+  inline string
+  toStringParen (COLL&& coll)
+  {
+    return "("+join (forward<COLL> (coll))+")";
+  }
+  
+  template<class COLL>
+  inline string
+  toStringBracket (COLL&& coll)
+  {
+    return "["+join (forward<COLL> (coll))+"]";
   }
   
   

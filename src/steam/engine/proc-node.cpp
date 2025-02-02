@@ -322,7 +322,7 @@ namespace engine {
   ProcID::ArgModel
   ProcID::genArgModel()
   {
-    auto argListSyntax = accept_bracket(accept_repeated(COMMA, specTermSyntax));
+    auto argListSyntax = accept_bracket(accept_repeated(0,MAX_NODE_ARG, COMMA, specTermSyntax));
     auto argSpecSyntax = accept(argListSyntax)
                            .opt(argListSyntax)
                                              .bind([](auto model) -> ProcID::ArgModel
