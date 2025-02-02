@@ -63,6 +63,7 @@ namespace engine {
     using util::parse::accept_repeated;
     using util::parse::expectResult;
     using lib::meta::NullType;
+    using std::regex_match;
     using std::regex;
     
     const regex SPEC_CONTENT{R"_([^,\\\(\)\[\]{}<>"]+)_", regex::optimize};
@@ -102,6 +103,70 @@ namespace engine {
                                             .alt(syntaxBracketed<'{','}'>())
                                          )
                                          .bindMatch();
+    
+    
+    const regex REPEAT_SPEC {R"_(^(.+)\s*/(\d+)\s*$)_", regex::optimize};
+    
+    /**
+     * Helper to expand an abbreviated repetition of arguments.
+     * Implemented as custom-processing layer for IterExplorer,
+     * by adapting the »State Core« interface
+     * @remark Repetition is indicated by a trailing "/NUM"
+     */
+    template<class IT>
+    struct RepetitionExpander
+      : lib::IterStateCore<IT>
+      {
+        using Core = lib::IterStateCore<IT>;
+        
+        mutable uint repeat_{0};
+        mutable std::smatch mat_;
+        
+        StrView
+        yield()  const
+          {
+            if (not repeat_)
+              {     //  check if the next string ends with repetition marker /NUM
+                if (not regex_match (*Core::srcIter(), mat_, REPEAT_SPEC))
+                  return *Core::srcIter(); // no repetition -> pass through
+                
+                // setup repetition by extracting the repetition count
+                repeat_ = boost::lexical_cast<uint>(mat_.str(2));
+              }
+            return StrView(& *mat_[1].first, mat_[1].length());
+          }     // several repetitions created from same source
+        
+        void
+        iterNext()
+          {  // hold iteration until all repetitions were delivered
+            if (repeat_)
+              --repeat_;
+            if (not repeat_)
+              ++ Core::srcIter();
+          }
+        
+        using Core::Core;
+      };
+    
+    /** Argument-Spec processing pipeline;
+     *  possibly expands repetition abbreviation,
+     *  collects all argument strings into a lib::Several
+     */
+    lib::Several<const string>
+    evaluateArgSeq (std::vector<string>& parsedArgTerms)
+    {
+      auto several = lib::makeSeveral<const string>();
+      lib::explore (parsedArgTerms)
+          .processingLayer<RepetitionExpander>()
+          .foreach([&](StrView s){ several.emplace<string>(s); });
+      return several.build();
+    }
+    
+    auto
+    emptyArgSeq()
+    {
+      return lib::Several<const string>();
+    }
     
   } // (END) Details...
   
@@ -262,18 +327,11 @@ namespace engine {
                            .opt(argListSyntax)
                                              .bind([](auto model) -> ProcID::ArgModel
                                                     {
-                                                      auto packageAsSeveral = [](std::vector<string>& parsedTerms)
-                                                                                {
-                                                                                  return lib::makeSeveral<const string>()
-                                                                                             .appendAll(parsedTerms);
-                                                                                };
-
                                                       auto [list1,list2] = model;
-                                                      auto elms1 = packageAsSeveral(list1);
-                                                      auto elms2 = list2? packageAsSeveral(*list2)
-                                                                        : lib::makeSeveral<const string>();
-                                                      
-                                                      return ProcID::ArgModel{elms1.build(), elms2.build()};
+                                                      if (list2)
+                                                        return {evaluateArgSeq(list1), evaluateArgSeq(*list2)};
+                                                      else
+                                                        return {emptyArgSeq(), evaluateArgSeq(list1)};
                                                     });
     
     argSpecSyntax.parse (argLists_);

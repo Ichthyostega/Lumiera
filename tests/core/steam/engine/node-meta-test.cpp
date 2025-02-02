@@ -88,6 +88,12 @@ SHOW_EXPR(join (arg2.iArg))
 SHOW_EXPR(join (arg2.oArg))
 SHOW_EXPR(join (arg3.iArg))
 SHOW_EXPR(join (arg3.oArg))
+          CHECK (join (arg1.iArg) ==           ""_expect );
+          CHECK (join (arg1.oArg) ==        "arg"_expect );               // only one argument list -> used for output
+          CHECK (join (arg2.iArg) ==           ""_expect );
+          CHECK (join (arg2.oArg) ==     "a1, a2"_expect );
+          CHECK (join (arg3.iArg) == "in, in, in"_expect );               // repetition-abbreviation of arguments unfolded
+          CHECK (join (arg3.oArg) == "o1, o2, o2"_expect );
           UNIMPLEMENTED ("parse and evaluate");
         }
       

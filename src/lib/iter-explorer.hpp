@@ -1885,7 +1885,7 @@ namespace lib {
        * - it is bound to play well with the other layers; especially it needs to be aware of `expandChildren()` calls,
        *   which for the consumer side behave like `iterNext()` calls. If a layer needs to do something special for
        *   `iterNext()`, it needs to perform a similar action for `expandChildren()`.
-       * - it must be behave like a default-constructible, copyable value object
+       * - it must allow to be handled as default-constructible, copyable value object
        * @return augmented IterExplorer, incorporating and adapting the injected layer
        */
       template<template<class> class LAY>

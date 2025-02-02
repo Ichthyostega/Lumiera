@@ -783,14 +783,18 @@ namespace lib {
       void
       probeMoveCapability()
         {
-          if (not (is_same_v<TY,E> or is_trivially_copyable_v<TY>))
+          using TVal = typename lib::meta::Strip<TY>::TypeReferred;
+          using EVal = typename lib::meta::Strip<E>::TypeReferred;
+          
+          if (not (is_same_v<TVal,EVal> or is_trivially_copyable_v<TVal>))
             lock_move = true;
         }
       
       bool
       canWildMove()
         {
-          return is_trivially_copyable_v<E> and not lock_move;
+          using EVal = typename lib::meta::Strip<E>::TypeReferred;
+          return is_trivially_copyable_v<EVal> and not lock_move;
         }
       
       bool
