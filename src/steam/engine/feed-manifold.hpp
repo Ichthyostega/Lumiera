@@ -345,7 +345,7 @@ namespace engine {
           template<typename...INIT>
           ParamStorage (INIT&& ...paramInit)
             : param{forward<INIT> (paramInit)...}
-            { }
+            { }                                                                 /////////////////////////////TICKET #1392 : pick up actual param and compute cache key
         };
       
       /** FeedManifold building block: hold input buffer pointers */

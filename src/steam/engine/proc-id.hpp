@@ -111,22 +111,25 @@ namespace engine {
   
   /**
    * Metadata to qualify a Port (and implicitly the enclosing Node).
+   * @note must be essentially immutable; should ensure that implementation
+   *       never changes anything constituent for the \ref hash_value(),
+   *       due to de-duplication into a hashtable (see proc-node.cpp).
    */
   class ProcID
     {
       StrView nodeName_;
       StrView portQual_;
       StrView argLists_;
-      ProcAttrib attrib_{};
+      ProcAttrib attrib_;
       
-      ProcID (StrView nodeSymb, StrView portQual, StrView argLists);
+      ProcID (StrView nodeSymb, StrView portQual, StrView argLists, ProcAttrib);
       
       using ProcNodeRef = std::reference_wrapper<ProcNode>;
       using Leads = lib::Several<ProcNodeRef>;
       
     public:
       /** build and register a processing ID descriptor */
-      static ProcID& describe (StrView nodeSymb, StrView portSpec);
+      static ProcID& describe (StrView nodeSymb, StrView portSpec, ProcAttrib extAttrib =ProcAttrib{});
       
       /* === symbolic descriptors === */
       

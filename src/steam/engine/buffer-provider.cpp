@@ -136,6 +136,7 @@ namespace engine {
    * @note this function may be used right away, without prior announcing, but then
    *       the client should be prepared for exceptions. The #announce operation allows
    *       to establish a reliably available baseline.
+   * @todo 2/2025 might need to accept a cache key as additional parameter //////////////////////////////////TICKET #1392 : get cache key from computation to the cache backend
    */
   BuffHandle
   BufferProvider::lockBuffer (BuffDescr const& type)

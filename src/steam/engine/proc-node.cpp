@@ -183,9 +183,11 @@ namespace engine {
    * @remark this is the only public access point to ProcID entries,
    *   which are automatically deduplicated and managed in a common registry
    *   and retained until end of the Lumiera process (never deleted).
+   * @todo isn't returning a non-const reference dangerous? someone might add
+   *   mutable state then, thereby undercutting de-duplication into a hashtable.
    */
   ProcID&
-  ProcID::describe (StrView nodeSymb, StrView portSpec)
+  ProcID::describe (StrView nodeSymb, StrView portSpec, ProcAttrib extAttrib)
   {
     REQUIRE (not isnil (nodeSymb));
     REQUIRE (not isnil (portSpec));
@@ -196,7 +198,7 @@ namespace engine {
                               "Node:%s Spec:%s"}
                              % nodeSymb % portSpec
                         };
-    auto res = procRegistry.insert (ProcID{nodeSymb, portSpec.substr(0,p), portSpec.substr(p)});
+    auto res = procRegistry.insert (ProcID{nodeSymb, portSpec.substr(0,p), portSpec.substr(p), extAttrib});
     ProcID& entry{unConst (*res.first)};
     if (res.second)
       {// new record placed into the registry
@@ -209,10 +211,11 @@ namespace engine {
   }
   
   /** @internal */
-  ProcID::ProcID (StrView nodeSymb, StrView portQual, StrView argLists)
+  ProcID::ProcID (StrView nodeSymb, StrView portQual, StrView argLists, ProcAttrib extAttrib)
     : nodeName_{nodeSymb}
     , portQual_{portQual}
     , argLists_{argLists}
+    , attrib_{extAttrib}
     { }
   
   /**
@@ -386,6 +389,7 @@ namespace engine {
   }
   
   
+  
   namespace {// create a »backdoor access« into actual weaving-pattern instances
     
     using _DummyProc = void(&)(NullType*);
@@ -393,12 +397,25 @@ namespace engine {
     using _DummyMediaWeaving = MediaWeavingPattern<_DummyProto>;
     using _RecastMediaWeaving = _TurnoutDiagnostic<_DummyMediaWeaving>;
     
+    using _EmptySpec = decltype(buildParamSpec());
+    using _DummyParamWeaving = ParamWeavingPattern<_EmptySpec>;
+    using _RecastParamWeaving = _TurnoutDiagnostic<_DummyParamWeaving>;
+    
     lib::Several<PortRef> EMPTY_PRECURSORS;
   }
   
-  
   /**
-   * Intrude into the Turnout and find out about source connectivity
+   * Intrude into the Turnout and find out about source connectivity.
+   * At interface level, this information about predecessor ports is not retained,
+   * but for the most common weaving patterns (Port implementations) there is a way
+   * to access implementation internals, bypassing the \ref Port interface; otherwise
+   * a reference to an empty port collection is returned.
+   * @warning this is a possibly dangerous low-level access, bypassing type safety.
+   *   It relies on flags in the ProcID attributes to be set properly by the builder,
+   *   and it relies on a common shared prefix in the memory layout of weaving patterns.
+   * @remark the \ref Port interface is kept minimal, since a very large number of
+   *   implementations and template instantiations can be expected, so that any further
+   *   function would cause a lot of additional and mostly redundant code generation. 
    */
   lib::Several<PortRef> const&
   PortDiagnostic::srcPorts()
@@ -408,7 +425,12 @@ namespace engine {
         auto [leads,types] = _RecastMediaWeaving::accessInternal (p_);
         return leads;
       }
-/////////////////////////////////////////////////OOO add branch here to support Proxy-patterns
+    else
+    if (p_.procID.hasProxyPatt())
+      {
+        Port& delegate = std::get<0>(_RecastParamWeaving::accessInternal (p_));
+        return watch(delegate).srcPorts();
+      }                     // recursive invocation on delegate of proxy
     else
       return EMPTY_PRECURSORS;
   }
