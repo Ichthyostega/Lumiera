@@ -364,6 +364,13 @@ namespace engine {
     return ports().front().procID.genNodeSpec (leads());
   }
   
+  string
+  ProcNodeDiagnostic::getNodeName()
+  {
+    REQUIRE (not isnil(ports()));
+    return ports().front().procID.genNodeName();
+  }
+  
   HashVal
   ProcNodeDiagnostic::getNodeHash() ///< @todo not clear yet if this has to include predecessor info
   {
@@ -445,10 +452,47 @@ namespace engine {
     return p_.procID.genProcSpec();
   }
   
+  string
+  PortDiagnostic::getProcName()
+  {
+    return p_.procID.genProcName();
+  }
+  
   HashVal
   PortDiagnostic::getProcHash()  ///< @return as [calculated by Node-identification](\ref ProcID)
   {
     UNIMPLEMENTED ("calculate an unique, stable and reproducible hash-key to identify the Turnout");
+  }
+  
+  
+  /* === cross-navigation === */
+  
+  ProcNodeDiagnostic
+  ProcNodeDiagnostic::watchLead (uint leadIdx)
+  {
+    if (leadIdx >= leads().size())
+      throw err::Invalid{_Fmt{"Lead-# %d >= %d (available lead-nodes)."}
+                             %     leadIdx  % leads().size()};
+    return watch (leads()[leadIdx]);
+  }
+  
+  PortDiagnostic
+  ProcNodeDiagnostic::watchPort (uint portIdx)
+  {
+    if (portIdx >= ports().size())
+      throw err::Invalid{_Fmt{"Port-idx %d >= %d (available Ports)."}
+                             %     portIdx  % ports().size()};
+    return watch (ports()[portIdx]);
+  }
+  
+  PortDiagnostic
+  PortDiagnostic::watchLead (uint leadIdx)
+  {
+    auto& leadPorts = srcPorts();
+    if (leadIdx >= leadPorts.size())
+      throw err::Invalid{_Fmt{"Lead-Port# %d >= %d (available src-ports)."}
+                             %       leadIdx  % leadPorts.size()};
+    return watch (leadPorts[leadIdx]);
   }
   
   

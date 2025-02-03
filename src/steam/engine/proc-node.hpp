@@ -259,6 +259,8 @@ namespace engine {
   
   /* ========== Diagnostic and Testing ========== */
   
+  class PortDiagnostic;
+  
   class ProcNodeDiagnostic
     : util::MoveOnly
     {
@@ -281,11 +283,15 @@ namespace engine {
           ///////////////////////////////////////////////////TODO 10/2024 more to verify here
         }
       
+      string getNodeName();   ///< show the node's descriptive name
       string getNodeSpec();   ///< generate a descriptive Spec of this ProcNode for diagnostics
       HashVal getNodeHash();  ///< calculate an unique hash-key to designate this node
       
       string getPortSpec  (uint portIdx);  ///< generate a descriptive diagnostic Spec for the designated Turnout
       HashVal getPortHash (uint portIdx);  ///< calculate an unique, stable and reproducible hash-key to identify the Turnout
+      
+      ProcNodeDiagnostic watchLead(uint leadIdx);
+      PortDiagnostic     watchPort(uint portIdx);
     };
   
   inline ProcNodeDiagnostic
@@ -310,8 +316,11 @@ namespace engine {
       
       bool isSrc()  { return srcPorts().empty(); }
       
+      string getProcName();   ///< generate a combined name for the node and the qualification of the port
       string getProcSpec();   ///< generate a descriptive diagnostic Spec for the Turnout sitting behind this Port
       HashVal getProcHash();  ///< calculate an unique, stable and reproducible hash-key to identify the associated operation
+      
+      PortDiagnostic watchLead(uint leadIdx);
     };
   
   inline PortDiagnostic

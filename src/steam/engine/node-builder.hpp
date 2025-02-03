@@ -656,6 +656,9 @@ namespace engine {
                              "to perform within the scope with extended parameters"
                             ,LERR_(BOTTOM_VALUE)};
           string portSpec = "Par+"+delegatePort_->procID.genProcSpec();
+          ProcAttrib flags;
+          flags.isProxy = true;
+          flags.manifold = false;
           
           using WeavingPattern  = ParamWeavingPattern<SPEC>;
           using TurnoutWeaving  = Turnout<WeavingPattern>;
@@ -664,7 +667,7 @@ namespace engine {
           return NodeBuilder ( static_cast<NodeBuilder<POL,DAT>&&> (*this) // slice away PortBulder subclass data
                              , SizMark<sizeof(TurnoutWeaving)>{}
                              ,// prepare a builder-λ to construct the actual Turnout-object
-                              [procID = ProcID::describe(_Par::symbol_,portSpec)
+                              [procID = ProcID::describe(_Par::symbol_,portSpec,flags)
                               ,builder = move(blockBuilder_)
                               ,postProc = move(postProcessor_)
                               ,delegate = delegatePort_

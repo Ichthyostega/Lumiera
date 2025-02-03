@@ -20,6 +20,7 @@
 #include "steam/engine/proc-node.hpp"
 #include "steam/engine/node-builder.hpp"
 #include "lib/format-util.hpp"
+#include "lib/test/test-helper.hpp"
 //#include "steam/engine/test-rand-ontology.hpp" ///////////TODO
 #include "lib/test/diagnostic-output.hpp"/////////////////TODO
 //#include "lib/util.hpp"
@@ -176,13 +177,42 @@ namespace test  {
                         .build()};
           
           ///////////////////////////////////////////////////////TODO WIP
-          Port& p1 = watch(nM).ports()[0];
-SHOW_EXPR(p1.procID.genProcSpec())
-          auto& p1src = watch(p1).srcPorts();
-          Port& p1s1 = p1src[0];
-          Port& p1s2 = p1src[1];
-SHOW_EXPR(p1s1.procID.genProcSpec())
-SHOW_EXPR(p1s2.procID.genProcSpec())
+SHOW_EXPR(watch(nA).getNodeName())
+SHOW_EXPR(watch(nA).getNodeSpec())
+SHOW_EXPR(watch(nA).isSrc())
+SHOW_EXPR(watch(nA).ports().size())
+SHOW_EXPR(watch(nA).watchPort(0).getProcName())
+SHOW_EXPR(watch(nA).watchPort(0).getProcSpec())
+SHOW_EXPR(watch(nA).watchPort(1).getProcSpec())
+          VERIFY_FAIL ("Port-idx 2 >= 2 (available Ports)"
+                      ,watch(nA).watchPort(2));
+
+SHOW_EXPR(watch(nB).getNodeSpec())
+SHOW_EXPR(watch(nB).isSrc())
+SHOW_EXPR(watch(nB).ports().size())
+SHOW_EXPR(watch(nB).watchPort(0).getProcSpec())
+SHOW_EXPR(watch(nB).watchPort(1).getProcSpec())
+SHOW_EXPR(watch(nB).watchPort(2).getProcSpec())
+
+SHOW_EXPR(watch(nM).getNodeName())
+SHOW_EXPR(watch(nM).getNodeSpec())
+SHOW_EXPR(watch(nM).ports().size())
+SHOW_EXPR(watch(nM).watchPort(0).getProcName())
+SHOW_EXPR(watch(nM).watchPort(1).getProcName())
+SHOW_EXPR(watch(nM).watchPort(2).getProcName())
+SHOW_EXPR(watch(nM).watchPort(2).getProcSpec())
+SHOW_EXPR(watch(nM).watchPort(0).srcPorts().size())
+SHOW_EXPR(watch(nM).watchPort(0).watchLead(0).getProcName())
+SHOW_EXPR(watch(nM).watchPort(0).watchLead(1).getProcName())
+SHOW_EXPR(watch(nM).watchPort(1).srcPorts().size())
+SHOW_EXPR(watch(nM).watchPort(1).watchLead(0).getProcName())
+SHOW_EXPR(watch(nM).watchPort(1).watchLead(1).getProcName())
+SHOW_EXPR(watch(nM).watchPort(2).srcPorts().size())
+SHOW_EXPR(watch(nM).watchPort(2).watchLead(0).getProcName())
+SHOW_EXPR(watch(nM).watchPort(2).watchLead(1).getProcName())
+SHOW_EXPR(watch(nM).watchPort(2).watchLead(1).getProcSpec())
+SHOW_EXPR(watch(nM).watchPort(2).watchLead(1).isSrc())
+SHOW_EXPR(watch(nM).watchPort(2).watchLead(1).srcPorts().size())
           ///////////////////////////////////////////////////////TODO WIP
           UNIMPLEMENTED ("verify connectivity");
         }
