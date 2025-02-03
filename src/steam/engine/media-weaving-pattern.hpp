@@ -175,16 +175,18 @@ namespace engine {
      */
   template<class INVO>
   struct MediaWeavingPattern
-    : INVO
+    : util::NonCopyable
     {
       using Feed = typename INVO::Feed;
       
       static_assert (_verify_usable_as_InvocationAdapter<Feed>());
       
-      Several<PortRef>   leadPort;
-      Several<BuffDescr> outTypes;
+      Several<PortRef>   leadPort_;
+      Several<BuffDescr> outTypes_;
       
-      uint resultSlot{0};
+      uint resultSlot_{0};
+      
+      INVO prototype_;
       
       /** forwarding-ctor to provide the detailed input/output connections */
       template<typename...ARGS>
@@ -192,28 +194,28 @@ namespace engine {
                           ,Several<BuffDescr>&& dr
                           ,uint resultIdx
                           ,ARGS&& ...args)
-        : INVO{forward<ARGS>(args)...}
-        , leadPort{move(pr)}
-        , outTypes{move(dr)}
-        , resultSlot{resultIdx}
+        : leadPort_{move(pr)}
+        , outTypes_{move(dr)}
+        , resultSlot_{resultIdx}
+        , prototype_{forward<ARGS>(args)...}
         { }
       
       
       Feed
       mount (TurnoutSystem& turnoutSys)
         {
-          ENSURE (leadPort.size() <= INVO::FAN_I);
-          ENSURE (outTypes.size() <= INVO::FAN_O);
-          return INVO::buildFeed (turnoutSys);
+          ENSURE (leadPort_.size() <= INVO::FAN_I);
+          ENSURE (outTypes_.size() <= INVO::FAN_O);
+          return prototype_.buildFeed (turnoutSys);
         }
       
       void
       pull (Feed& feed, TurnoutSystem& turnoutSys)
         {
           if constexpr (Feed::hasInput())
-            for (uint i=0; i<leadPort.size(); ++i)
+            for (uint i=0; i<leadPort_.size(); ++i)
               {
-                BuffHandle inputData = leadPort[i].get().weave (turnoutSys);
+                BuffHandle inputData = leadPort_[i].get().weave (turnoutSys);
                 feed.inBuff.createAt(i, move(inputData));
               }
         }
@@ -221,11 +223,11 @@ namespace engine {
       void
       shed (Feed& feed, TurnoutSystem&, OptionalBuff outBuff)
         {
-          for (uint i=0; i<outTypes.size(); ++i)
+          for (uint i=0; i<outTypes_.size(); ++i)
               {
                 BuffHandle resultData =
-                  i == resultSlot and outBuff? *outBuff
-                                             : outTypes[i].lockBuffer();
+                  i == resultSlot_ and outBuff? *outBuff
+                                              : outTypes_[i].lockBuffer();
                 feed.outBuff.createAt(i, move(resultData));
               }
           feed.connect();
@@ -241,20 +243,27 @@ namespace engine {
       fix (Feed& feed, TurnoutSystem&)
         {
           if constexpr (Feed::hasInput())
-            for (uint i=0; i<leadPort.size(); ++i)
+            for (uint i=0; i<leadPort_.size(); ++i)
               {
                 feed.inBuff[i].release();
               }
-          for (uint i=0; i<outTypes.size(); ++i)
+          for (uint i=0; i<outTypes_.size(); ++i)
               {
                 feed.outBuff[i].emit();    // state transition: data ready
-                if (i != resultSlot)
+                if (i != resultSlot_)
                   feed.outBuff[i].release();
               }
-          ENSURE (resultSlot < INVO::FAN_O, "invalid result buffer configured.");
-          return feed.outBuff[resultSlot];
+          ENSURE (resultSlot_ < INVO::FAN_O, "invalid result buffer configured.");
+          return feed.outBuff[resultSlot_];
         }
       
+      
+      /** @internal expose data not dependent on the template params */
+      friend auto
+      _accessInternal(MediaWeavingPattern& patt)
+      {
+        return std::tie (patt.leadPort_, patt.outTypes_);
+      }
     };
   
   

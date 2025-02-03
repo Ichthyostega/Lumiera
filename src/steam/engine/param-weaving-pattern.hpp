@@ -364,6 +364,14 @@ namespace engine {
           turnoutSys.detachChainBlock(feed.block());
           return *feed.outBuff;
         }
+      
+      
+      /** @internal expose data not dependent on the template params */
+      friend auto
+      _accessInternal(ParamWeavingPattern& patt)
+      {
+        return std::tie (patt.delegatePort_);
+      }
     };
   
   

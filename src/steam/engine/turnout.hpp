@@ -108,6 +108,7 @@ namespace engine {
    *             combined and processed to yield the results; actually this implementation
    *             is assembled from several building blocks, in accordance to the specific
    *             situation as established by the _Builder_ for a given render node.
+   * @warning    please ensure \ref _TurnoutDiagnostic remains _layout compatible_ 
    */
   template<class PAT>
   class Turnout
@@ -140,7 +141,38 @@ namespace engine {
           return PAT::fix (feed, turnoutSys);
         }
     };
-
+  
+  
+  
+  /**
+   * @internal »Backdoor« for diagnostic
+   * @warning  must be kept **layout compatible** with Turnout
+   */
+  template<class PAT>
+  class _TurnoutDiagnostic
+    : public Port
+    , public PAT
+    {
+      BuffHandle
+      weave (TurnoutSystem&, OptionalBuff =std::nullopt)  override
+        {
+          throw err::Fatal{"Diagnostic class -- must not be invoked"};
+        }
+      
+    public:
+      /**
+       * Access to internals of the _Weaving Pattern_ bypassing the VTable.
+       * @remark a huge number of different _Weaving Pattern instances_ will be created,
+       *         as result of implementing render functionality by delegating to some
+       *         external media processing library. Each time, a highly optimised and
+       *         tailored instance of Turnout::weave() is generated. However, by all
+       *         means we must avoid generating additional repetitive generic code,
+       *         which is only used occasionally and for unit-testing.
+       *         Rather, with the help of this »backdoor«, diagnostic code can exploit
+       *         the similar basic layout of weaving pattern templates to gain access
+       *         to some common infrastructure, notably the predecessor ports.
+       */
+    };
   
   
   
