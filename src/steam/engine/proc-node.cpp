@@ -28,6 +28,10 @@
 #include "lib/parse.hpp"
 #include "lib/util.hpp"
 
+// used for a »backdoor access« in PortDiagnostic::srcPorts
+#include "steam/engine/media-weaving-pattern.hpp"
+#include "steam/engine/param-weaving-pattern.hpp"
+
 #include <boost/functional/hash.hpp>        /////////////////////////////////////////////////////TICKET #1391 is boost-hash the proper tool for this task?
 #include <unordered_set>
 #include <set>
@@ -227,7 +231,7 @@ namespace engine {
   }
   
   string
-  ProcID::genProcName()
+  ProcID::genProcName()  const
   {
     std::ostringstream buffer;
     buffer << genNodeSymbol()
@@ -236,7 +240,7 @@ namespace engine {
   }
   
   string
-  ProcID::genProcSpec()
+  ProcID::genProcSpec()  const
   {
     std::ostringstream buffer;
     buffer << nodeName_
@@ -246,13 +250,13 @@ namespace engine {
   }
   
   string
-  ProcID::genNodeName()
+  ProcID::genNodeName()  const
   {
     return string{nodeName_};
   }
   
   string
-  ProcID::genNodeSymbol()
+  ProcID::genNodeSymbol()  const
   {
     auto p = nodeName_.find(':');
     return p == string::npos? string{nodeName_}
@@ -260,7 +264,7 @@ namespace engine {
   }
   
   string
-  ProcID::genNodeDomain()
+  ProcID::genNodeDomain()  const
   {
     auto p = nodeName_.find(':');
     return p == string::npos? string{}
@@ -268,7 +272,7 @@ namespace engine {
   }
   
   string
-  ProcID::genQualifier()
+  ProcID::genQualifier()  const
   {
     std::ostringstream buffer;
     if (not isnil(portQual_))
@@ -287,7 +291,7 @@ namespace engine {
   }
   
   string
-  ProcID::genNodeSpec (Leads& leads)
+  ProcID::genNodeSpec (Leads& leads)  const
   {
     std::ostringstream buffer;
     buffer << nodeName_;
@@ -304,7 +308,7 @@ namespace engine {
   }
   
   string
-  ProcID::genSrcSpec (Leads& leads)
+  ProcID::genSrcSpec (Leads& leads)  const
   {
     return isnil(leads)? string{"-◎"}  // no leads => starting point itself is a source node
                        : "┉┉{"
@@ -320,7 +324,7 @@ namespace engine {
   
   /** parse and dissect the argument specification */
   ProcID::ArgModel
-  ProcID::genArgModel()
+  ProcID::genArgModel()  const
   {
     auto argListSyntax = accept_bracket(accept_repeated(0,MAX_NODE_ARG, COMMA, specTermSyntax));
     auto argSpecSyntax = accept(argListSyntax)
@@ -382,10 +386,31 @@ namespace engine {
   }
   
   
-  lib::Several<PortRef>
+  namespace {// create a »backdoor access« into actual weaving-pattern instances
+    
+    using _DummyProc = void(&)(NullType*);
+    using _DummyProto = FeedPrototype<_DummyProc>;
+    using _DummyMediaWeaving = MediaWeavingPattern<_DummyProto>;
+    using _RecastMediaWeaving = _TurnoutDiagnostic<_DummyMediaWeaving>;
+    
+    lib::Several<PortRef> EMPTY_PRECURSORS;
+  }
+  
+  
+  /**
+   * Intrude into the Turnout and find out about source connectivity
+   */
+  lib::Several<PortRef> const&
   PortDiagnostic::srcPorts()
   {
-    UNIMPLEMENTED ("intrude into the Turnout and find out about source connectivity");
+    if (p_.procID.hasManifoldPatt())
+      {
+        auto [leads,types] = _RecastMediaWeaving::accessInternal (p_);
+        return leads;
+      }
+/////////////////////////////////////////////////OOO add branch here to support Proxy-patterns
+    else
+      return EMPTY_PRECURSORS;
   }
   
   /**

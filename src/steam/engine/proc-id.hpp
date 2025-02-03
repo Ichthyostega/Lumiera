@@ -130,17 +130,20 @@ namespace engine {
       
       /* === symbolic descriptors === */
       
-      string genProcName();
-      string genProcSpec();        ///< render a descriptor for the operation (without predecessors)
-      string genQualifier();
-      string genNodeName();
-      string genNodeSymbol();
-      string genNodeDomain();
-      string genNodeSpec(Leads&);
-      string genSrcSpec (Leads&);  ///< transitively enumerate all unique source nodes
+      string genProcName()       const;
+      string genProcSpec()       const;  ///< render a descriptor for the operation (without predecessors)
+      string genQualifier()      const;
+      string genNodeName()       const;
+      string genNodeSymbol()     const;
+      string genNodeDomain()     const;
+      string genNodeSpec(Leads&) const;
+      string genSrcSpec (Leads&) const;  ///< transitively enumerate all unique source nodes
       
       struct ArgModel;
-      ArgModel genArgModel();
+      ArgModel genArgModel()     const;
+      
+      bool hasManifoldPatt()     const { return attrib_.manifold; }
+      bool hasProxyPatt()        const { return attrib_.isProxy; }
       
       friend bool
       operator== (ProcID const& l, ProcID const& r)
@@ -185,7 +188,7 @@ namespace engine {
         : iArg{move (iarg)}
         , oArg{move (oarg)}
         { }
-      friend ArgModel ProcID::genArgModel();
+      friend ArgModel ProcID::genArgModel()  const;
     };
   
   

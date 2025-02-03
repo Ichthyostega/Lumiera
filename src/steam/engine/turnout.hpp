@@ -172,6 +172,13 @@ namespace engine {
        *         the similar basic layout of weaving pattern templates to gain access
        *         to some common infrastructure, notably the predecessor ports.
        */
+      static auto
+      accessInternal (Port& port)
+        {                                // Note: deliberately static, not dynamic-cast 
+          auto& internalView = static_cast<_TurnoutDiagnostic&> (port);
+          auto& weavingPattern = static_cast<PAT&> (internalView);
+          return _accessInternal(weavingPattern);
+        }
     };
   
   

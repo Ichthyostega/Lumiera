@@ -109,7 +109,7 @@ namespace test  {
       
       
       /** @test TODO aspects of node definition relevant for the ProcID
-       * @todo WIP 2/25 🔁 define ⟶ implement
+       * @todo WIP 2/25 🔁 define ⟶ 🔁 implement
        */
       void
       verify_ID_properties()
@@ -174,6 +174,16 @@ namespace test  {
                           .setParam(0.5)
                           .completePort()
                         .build()};
+          
+          ///////////////////////////////////////////////////////TODO WIP
+          Port& p1 = watch(nM).ports()[0];
+SHOW_EXPR(p1.procID.genProcSpec())
+          auto& p1src = watch(p1).srcPorts();
+          Port& p1s1 = p1src[0];
+          Port& p1s2 = p1src[1];
+SHOW_EXPR(p1s1.procID.genProcSpec())
+SHOW_EXPR(p1s2.procID.genProcSpec())
+          ///////////////////////////////////////////////////////TODO WIP
           UNIMPLEMENTED ("verify connectivity");
         }
     };

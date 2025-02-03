@@ -306,7 +306,7 @@ namespace engine {
         : p_{thePort}
         { }
       
-      lib::Several<PortRef> srcPorts();
+      lib::Several<PortRef> const& srcPorts();
       
       bool isSrc()  { return srcPorts().empty(); }
       
