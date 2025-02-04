@@ -84,7 +84,7 @@
  ** @remark A future extension to this scheme is conceivable, where common processing pipelines
  **         are pre-compiled in entirety, possibly combined with hardware acceleration.
  ** 
- ** @todo WIP-WIP 12/2024 Node-Invocation is reworked from ground up for the »Playback Vertical Slice«
+ ** @todo WIP 2/2025 Node-Invocation is reworked from ground up for the »Playback Vertical Slice«
  ** 
  ** @see turnout.hpp
  ** @see turnout-system.hpp
@@ -99,11 +99,8 @@
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/hash-value.h"
-//#include "steam/asset/proc.hpp"
-//#include "steam/mobject/parameter.hpp"
 #include "steam/engine/buffhandle.hpp"
 #include "steam/engine/turnout-system.hpp"
-#include "lib/ref-array.hpp" /////////////////////OOO phase out
 #include "lib/format-string.hpp"
 #include "lib/several.hpp"
 
@@ -118,6 +115,8 @@ namespace engine {
 
   using std::move;
   using std::string;
+  using std::nullopt;
+  using std::optional;
   using lib::HashVal;
   using util::_Fmt;
   
@@ -145,6 +144,10 @@ namespace engine {
       virtual BuffHandle weave (TurnoutSystem&, OptionalBuff =std::nullopt)   =0;
       
       ProcID& procID;
+      
+      ///    Port has reference semantics: all instances are distinct
+      friend bool operator== (Port const& pl, Port const& pr){ return    & pl == & pr;}
+      friend bool operator!= (Port const& pl, Port const& pr){ return not (pl == pr); }
     };
   
   using PortRef = std::reference_wrapper<Port>;
@@ -231,6 +234,10 @@ namespace engine {
                 };
           return wiring_.ports[portIdx];
         }
+      
+      /// ProcNode has reference semantics: all instances are distinct
+      friend bool operator== (ProcNode const& nl, ProcNode const& nr){ return    & nl == & nr;}
+      friend bool operator!= (ProcNode const& nl, ProcNode const& nr){ return not (nl == nr); }
       
       
       /*************************************************************//**
@@ -330,6 +337,48 @@ namespace engine {
   watch (Port& thePort)
   {
     return PortDiagnostic{thePort};
+  }
+  
+  
+  
+  
+  /** Helper for connectivity-checks in tests */
+  class _ConCheck
+    : util::MoveOnly
+    {
+      ProcNodeDiagnostic anchor;
+      ProcNode*          srcNode{nullptr};
+      Port*              srcPort{nullptr};
+      optional<uint>     leadNo{nullopt};
+      optional<uint>     portNo{nullopt};
+      optional<uint>     srcNo {nullopt};
+      optional<uint>     srcPNo{nullopt};
+      
+    public:
+      _ConCheck (ProcNode& n)
+        : anchor{watch(n)}
+        { }
+      
+      /** implement decision logic based on context given. */
+      operator bool();
+      
+      _ConCheck to (ProcNode& n) { srcNode = &n; return move(*this); }
+      _ConCheck to (Port& p)     { srcPort = &p; return move(*this); }
+      _ConCheck asLead (uint idx){ leadNo = idx; return move(*this); }
+      _ConCheck toLead (uint idx){ leadNo = idx; return move(*this); }
+      _ConCheck asSrc  (uint idx){ srcNo  = idx; return move(*this); }
+      _ConCheck port   (uint idx){ portNo = idx; return move(*this); }
+      _ConCheck atPort (uint idx){ srcPNo = idx; return move(*this); }
+    };
+  
+  /**
+   * start a DSL expression to verify node connectivity.
+   * @see NodeMeta_test::verify_ID_connectivity()
+   */
+  inline _ConCheck
+  is_linked (ProcNode& n)
+  {
+    return _ConCheck{n};
   }
   
   

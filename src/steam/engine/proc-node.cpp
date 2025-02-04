@@ -13,9 +13,11 @@
 
 
 /** @file proc-node.cpp
- ** Translation unit to hold the actual implementation of node processing operations.
- ** 
- ** @todo WIP-WIP-WIP 6/2024 not clear yet what goes here and what goes into turnout-system.cpp
+ ** Translation unit for implementation details regarding node-IDs and verification.
+ ** @remark \ref ProcNode itself is a shell to provide a node-ID and a high-level API
+ **         for Render Node invocation. The actual implementation of processing functionality
+ **         is located within the [Turnout](\ref turnout.hpp) and the individual »weaving patterns«
+ **         embedded therein.
  */
 
 
@@ -247,7 +249,7 @@ namespace engine {
   ProcID::genProcSpec()  const
   {
     std::ostringstream buffer;
-    buffer << nodeName_
+    buffer << genNodeSymbol()
            << genQualifier()
            << argLists_;
     return buffer.str();
@@ -501,15 +503,133 @@ namespace engine {
   {
     auto& leadPorts = srcPorts();
     return input < leadPorts.size()
-       and isSameObject (leadPorts[input].get(), tarPort);
+       and leadPorts[input] == tarPort;
   }
   
   bool
   PortDiagnostic::verify_connected (Port& tarPort)
   {
     for (Port& port : srcPorts())
-      if (isSameObject (port, tarPort))
+      if (port == tarPort)
         return true;
+    return false;
+  }
+  
+  
+  /**
+   * @remark _ConCheck provides a fluent DSL notation to verify node connectivity.
+   *   This is achieved by first collecting some counterparts and index specifications
+   *   for the kind of connection to validate. Each qualifier just sets a parameter and
+   *   returns the _ConCheck object by move. The final result is retrieved by this bool
+   *   conversion — which in fact has to implement a collection of different evaluations.
+   *   The proper kind of evaluation will be picked based on the actual arguments given;
+   *   the more are present, the more constricted the evaluation becomes. The selection
+   *   of the evaluation to take is thus ordered in reverse order, starting with the
+   *   most constricted cases. Three different kinds of link validations are provided
+   *   - compare two fully qualified Port objects for identity (same object)
+   *   - check if a given Port object is present in a collection of Ports
+   *   - exhaustive search for a match in the cross product of two Port collections.
+   *   The last case is what allows to perform a high-level connectivity test between
+   *   two nodes, which are considered as connected if any link is found.
+   * @see NodeMeta_test::verify_ID_connectivity()
+   */
+  _ConCheck::operator bool()
+  {
+    auto validPort = [this](uint idx) { return idx < anchor.ports().size(); };
+    auto validLead = [this](uint idx) { return idx < anchor.leads().size(); };
+    auto validSrc  = [this](uint pNo
+                           ,uint sNo) { return sNo < anchor.watchPort(pNo).srcPorts().size(); };
+    auto validSrcP = [this](ProcNode& lead
+                           ,uint idx) { return idx < watch(lead).ports().size(); };
+    
+    auto find_link = [](auto& seq1, auto& seq2)
+                            {
+                              return explore(seq1)
+                                       .transform([&](auto& elm){ return contains (seq2, *elm); })
+                                       .has_any();
+                            };
+    
+     // Determine case to handle,
+    //  starting with the most constricted...
+    if (portNo and srcNo and srcNode and srcPNo)
+      return validPort(*portNo)                                // is_linked(node).port(portNo).asSrc(srcNo).to(srcNode).atPort(srcPNo)
+         and validSrc (*portNo, *srcNo)
+         and validSrcP(*srcNode,*srcPNo)
+         and anchor.watchPort(*portNo).srcPorts()[*srcNo]
+             == watch(*srcNode).ports()[*srcPNo];
+    else
+    if (portNo and srcNo and leadNo and srcPNo)
+      return validPort(*portNo)                                // is_linked(node).port(portNo).asSrc(srcNo).toLead(leadNo).atPort(srcPNo)
+         and validSrc (*portNo,*srcNo)
+         and validLead(*leadNo)
+         and validSrcP(anchor.leads()[*leadNo], *srcPNo)
+         and anchor.watchPort(*portNo).srcPorts()[*srcNo]
+             == anchor.watchLead(*leadNo).ports()[*srcPNo];
+    else
+    if (portNo and srcNo and srcPort)
+      return validPort(*portNo)                                // is_linked(node).port(portNo).asSrc(srcNo).to(srcPort)
+         and validSrc (*portNo,*srcNo)
+         and anchor.watchPort(*portNo).srcPorts()[*srcNo]
+             == *srcPort;
+    else
+    if (portNo and srcNo and srcNode)
+      return validPort(*portNo)                                // is_linked(node).port(portNo).asSrc(srcNo).to(srcNode)
+         and validSrc (*portNo,*srcNo)
+         and contains (watch(*srcNode).ports()
+                      ,anchor.watchPort(*portNo).srcPorts()[*srcNo]);
+    else
+    if (portNo and srcNo and leadNo)
+      return validPort(*portNo)                                // is_linked(node).port(portNo).asSrc(srcNo).toLead(leadNo)
+         and validSrc (*portNo,*srcNo)
+         and validLead(*leadNo)
+         and contains (anchor.watchLead(*leadNo).ports()
+                      ,anchor.watchPort(*portNo).srcPorts()[*srcNo]);
+    else
+    if (portNo and srcNo)
+      return validPort(*portNo)                                // is_linked(node).port(portNo).asSrc(srcNo)
+         and validSrc (*portNo,*srcNo);
+    else
+    if (portNo and srcNode and srcPNo)
+      return validPort(*portNo)                                // is_linked(node).port(portNo).to(srcNode).atPort(srcPNo)
+         and validSrcP(*srcNode,*srcPNo)
+         and contains (anchor.watchPort(*portNo).srcPorts()
+                      ,watch(*srcNode).ports()[*srcPNo]);
+    else
+    if (portNo and leadNo and srcPNo)
+      return validPort(*portNo)                                // is_linked(node).port(portNo).toLead(leadNo).atPort(srcPNo)
+         and validLead(*leadNo)
+         and validSrcP(anchor.leads()[*leadNo], *srcPNo)
+         and contains (anchor.watchPort(*portNo).srcPorts()
+                      ,anchor.watchLead(*leadNo).ports()[*srcPNo]);
+    else
+    if (portNo and srcPort)
+      return validPort(*portNo)                                // is_linked(node).port(portNo).to(srcPort)
+         and contains (anchor.watchPort(*portNo).srcPorts()
+                      ,*srcPort);
+    else
+    if (portNo and srcNode)
+      return validPort(*portNo)                                // is_linked(node).port(portNo).to(srcNode)
+         and find_link(watch(*srcNode).ports()
+                      ,anchor.watchPort(*portNo).srcPorts());
+    else
+    if (portNo and leadNo)
+      return validPort(*portNo)                                // is_linked(node).port(portNo).toLead(leadNo)
+         and validLead(*leadNo)
+         and find_link(anchor.watchLead(*leadNo).ports()
+                      ,anchor.watchPort(*portNo).srcPorts());
+    else
+    if (portNo)
+      return validPort(*portNo)                                // is_linked(node).port(portNo)
+         and not anchor.watchPort(*portNo).isSrc();
+    else
+    if (srcNode and leadNo)
+      return validLead(*leadNo)                                // is_linked(node).to(srcNode).asLead(leadNo)
+         and anchor.leads()[*leadNo]
+             == *srcNode;
+    else
+    if (srcNode)
+      return contains (anchor.leads()                          // is_linked(node).to(srcNode)
+                      ,*srcNode);
     return false;
   }
   

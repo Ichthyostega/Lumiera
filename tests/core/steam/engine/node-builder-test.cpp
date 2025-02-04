@@ -208,6 +208,9 @@ namespace test  {
                             .completePort()
                           .build()};
           
+          CHECK (is_linked(n3).to(n1));
+          CHECK (is_linked(n3).to(n2));
+          
           uint res = invokeRenderNode(n3);
           CHECK (res == peek+1 + LIFE_AND_UNIVERSE_4EVER+1 );
           CHECK (peek != -1);

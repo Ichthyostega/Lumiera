@@ -21,13 +21,9 @@
 #include "steam/engine/node-builder.hpp"
 #include "lib/format-util.hpp"
 #include "lib/test/test-helper.hpp"
-//#include "steam/engine/test-rand-ontology.hpp" ///////////TODO
 #include "lib/test/diagnostic-output.hpp"/////////////////TODO
-//#include "lib/util.hpp"
 
 #include <cmath>
-
-//using std::string;
 
 
 namespace steam {
@@ -35,12 +31,12 @@ namespace engine{
 namespace test  {
   
   using std::abs;
-//  using util::join;
   
   
   
   /***************************************************************//**
    * @test Render node metadata and hash identity keys.
+   * @todo 2/2025 hash computation is not yet specified...
    */
   class NodeMeta_test : public Test
     {
@@ -77,8 +73,8 @@ namespace test  {
           CHECK (p2.genProcName()   == "N2.+"_expect );                   // domain omitted, qualifier joined with '.'
           CHECK (p2.genQualifier()  == ".+"_expect   );                   // qualifier includes leading '.'
           CHECK (p3.genProcName()   == "N3"_expect   );
-          CHECK (p2.genProcSpec()   == "U:N2.+(a1,a2)"_expect       );
-          CHECK (p3.genProcSpec()   == "O:N3(in/3)(o1,o2/2)"_expect );
+          CHECK (p2.genProcSpec()   == "N2.+(a1,a2)"_expect       );
+          CHECK (p3.genProcSpec()   == "N3(in/3)(o1,o2/2)"_expect );
           
           ProcID::ArgModel arg1 = p1.genArgModel();
           ProcID::ArgModel arg2 = p2.genArgModel();
@@ -109,13 +105,31 @@ namespace test  {
         }
       
       
-      /** @test TODO aspects of node definition relevant for the ProcID
-       * @todo WIP 2/25 🔁 define ⟶ 🔁 implement
+      
+      /** @test validate the interplay of node connectivity
+       *        with reported properties at the ProcID and
+       *        demonstrate tools to check connectivity.
+       *      - Build a 3-node network with dummy operations,
+       *        which however are built to mimic the very common
+       *        situation where two sources are mixed
+       *      - at exit side, three different »flavours« can be
+       *        produced, which implies that there are three Ports.
+       *      - the source at the »A-side« provided only two flavours,
+       *        and thus an explicit wiring has to be made for the
+       *        A-side connection of the third chain
+       *      - In real usage, the node specification strings will be
+       *        provided from the Media-Lib adapter plug-in. Here it is
+       *        hard wired, and defined in a way to reflect structure.
+       *      - various ways to drill-down into the structure are explored
+       *        by verifying the ProcID specification visible at each point.
+       *      - then the tools for verifying connectivity are demonstrated
+       *        and covered with relevant positive and negative combinations.
+       * @todo 2/25 🔁 define ⟶ ✔ implement
        */
       void
       verify_ID_connectivity()
         {
-          // This operation emulates a data source
+          // These operations emulate data sources
           auto src_opA = [](int param, int* res)    { *res = param; };
           auto src_opB = [](ulong param, ulong* res){ *res = param; };
           
@@ -214,7 +228,8 @@ namespace test  {
           CHECK (watch(nM).watchPort(2).watchLead(1).getProcName() == "srcB.c"_expect       );
           CHECK (watch(nM).watchPort(2).watchLead(1).getProcSpec() == "srcB.c(ulong)"_expect);
           CHECK (watch(nM).watchPort(2).watchLead(1).isSrc()       ==  true );                        // the lead port itself is a source
-          CHECK (watch(nM).watchPort(2).watchLead(1).srcPorts().size() == 0 );
+          CHECK (watch(nM).watchPort(2).watchLead(1).srcPorts().size() == 0 );                        // ...and thus has an empty source-port-collection
+          
           
           // Helper predicate to verify connectedness to a specific Port given by reference
           CHECK (watch(nM).watchPort(2).verify_connected(   watch(nA).ports()[0]) == false  );
@@ -227,8 +242,169 @@ namespace test  {
           CHECK (watch(nM).watchPort(2).verify_connected(0, watch(nB).ports()[2]) == false  );
           CHECK (watch(nM).watchPort(2).verify_connected(1, watch(nA).ports()[1]) == false  );        // Node-nM.port#2 doesn't connect via source#1 to Node-nA.port#1
           
-          ///////////////////////////////////////////////////////TODO WIP
-          UNIMPLEMENTED ("verify connectivity");
+          
+           //__________________________________
+          // Inspect Node and Port connectivity
+          
+          // High-level case: connections between nodes
+          CHECK (is_linked(nM).to(nA) == true );
+          CHECK (is_linked(nM).to(nB) == true );
+          CHECK (is_linked(nA).to(nB) == false);
+          
+          // additionally qualify the index position
+          // of the source node in the sequence of »Lead nodes«
+          CHECK (is_linked(nM).to(nA).asLead(0)  == true );                              // Node-nA is Lead-#0
+          CHECK (is_linked(nM).to(nA).asLead(1)  == false);
+          CHECK (is_linked(nM).to(nB).asLead(0)  == false);
+          CHECK (is_linked(nM).to(nB).asLead(1)  == true );                              // Node-nB is Lead-#1
+          
+          // Check if a specific Port is connected to a source node
+          CHECK (is_linked(nM).port(0).to(nA)    == true );
+          CHECK (is_linked(nM).port(0).to(nB)    == true );
+          CHECK (is_linked(nM).port(0).to(nM)    == false);                              // never connected to itself
+          
+          // Similar, but now pick the source node from the »Leads«
+          CHECK (is_linked(nM).port(0).toLead(0) == true );
+          CHECK (is_linked(nM).port(0).toLead(1) == true );
+          CHECK (is_linked(nA).port(0).toLead(0) == false);                              // nA is a source node and thus has no further source-connections
+          
+          // Verify detailed port-to-port connectivity
+          CHECK (is_linked(nM).port(0).to(watch(nA).ports()[0]) == true );               // Node-nM connected within Port-0 to Port-0 of Node-nA
+          CHECK (is_linked(nM).port(0).to(watch(nA).ports()[1]) == false);               //         ......but not connected to Port-1 of Node-nA 
+          CHECK (is_linked(nM).port(0).to(watch(nB).ports()[0]) == true );
+          CHECK (is_linked(nM).port(0).to(watch(nB).ports()[1]) == false);
+          CHECK (is_linked(nM).port(0).to(watch(nB).ports()[2]) == false);
+          CHECK (is_linked(nM).port(2).to(watch(nA).ports()[0]) == false);
+          CHECK (is_linked(nM).port(2).to(watch(nA).ports()[1]) == true );               // this is the connection routed from port-2 to Node-nA, Port-1
+          CHECK (is_linked(nM).port(2).to(watch(nB).ports()[0]) == false);
+          CHECK (is_linked(nM).port(2).to(watch(nB).ports()[1]) == false);
+          CHECK (is_linked(nM).port(2).to(watch(nB).ports()[2]) == true );
+          CHECK (is_linked(nM).port(2).to(watch(nM).ports()[2]) == false);               // a nonsensical check, nodes are never connected to themselves
+          
+          CHECK (is_linked(nM).port(0).to(nA).atPort(0)         == true );
+          CHECK (is_linked(nM).port(0).to(nA).atPort(1)         == false);
+          CHECK (is_linked(nM).port(0).to(nB).atPort(0)         == true );
+          CHECK (is_linked(nM).port(0).to(nB).atPort(1)         == false);
+          CHECK (is_linked(nM).port(0).to(nB).atPort(2)         == false);
+          CHECK (is_linked(nM).port(2).to(nA).atPort(0)         == false);
+          CHECK (is_linked(nM).port(2).to(nA).atPort(1)         == true );
+          CHECK (is_linked(nM).port(2).to(nB).atPort(0)         == false);
+          CHECK (is_linked(nM).port(2).to(nB).atPort(1)         == false);
+          CHECK (is_linked(nM).port(2).to(nB).atPort(2)         == true );
+          CHECK (is_linked(nM).port(2).to(nM).atPort(2)         == false);
+          
+          CHECK (is_linked(nM).port(0).toLead(0).atPort(0)      == true );
+          CHECK (is_linked(nM).port(0).toLead(0).atPort(1)      == false);
+          CHECK (is_linked(nM).port(0).toLead(1).atPort(0)      == true );
+          CHECK (is_linked(nM).port(0).toLead(1).atPort(1)      == false);
+          CHECK (is_linked(nM).port(0).toLead(1).atPort(2)      == false);
+          CHECK (is_linked(nM).port(2).toLead(0).atPort(0)      == false);
+          CHECK (is_linked(nM).port(2).toLead(0).atPort(1)      == true );
+          CHECK (is_linked(nM).port(2).toLead(1).atPort(0)      == false);
+          CHECK (is_linked(nM).port(2).toLead(1).atPort(1)      == false);
+          CHECK (is_linked(nM).port(2).toLead(1).atPort(2)      == true );
+          
+          // additionally also qualify the «source slot«
+          // at which the connection is used as input for the processing-function
+          CHECK (is_linked(nM).port(0).asSrc(0).to(nA)    == true );                     // Node-nM, Port-0 uses as source-slot-0 a connection to Node-nA
+          CHECK (is_linked(nM).port(0).asSrc(1).to(nA)    == false );
+          CHECK (is_linked(nM).port(0).asSrc(0).to(nB)    == false );
+          CHECK (is_linked(nM).port(0).asSrc(1).to(nB)    == true );
+          CHECK (is_linked(nM).port(2).asSrc(0).to(nA)    == true );
+          CHECK (is_linked(nM).port(2).asSrc(1).to(nA)    == false );
+          CHECK (is_linked(nM).port(2).asSrc(0).to(nB)    == false );
+          CHECK (is_linked(nM).port(2).asSrc(1).to(nB)    == true );
+          CHECK (is_linked(nM).port(2).asSrc(1).to(nM)    == false );                    // never connected to itself
+          
+          CHECK (is_linked(nM).port(0).asSrc(0).toLead(0) == true );                     // Lead-#0 is Node-nA
+          CHECK (is_linked(nM).port(0).asSrc(1).toLead(0) == false );
+          CHECK (is_linked(nM).port(0).asSrc(0).toLead(1) == false );
+          CHECK (is_linked(nM).port(0).asSrc(1).toLead(1) == true );
+          CHECK (is_linked(nM).port(2).asSrc(0).toLead(0) == true );
+          CHECK (is_linked(nM).port(2).asSrc(1).toLead(0) == false );
+          CHECK (is_linked(nM).port(2).asSrc(0).toLead(1) == false );
+          CHECK (is_linked(nM).port(2).asSrc(1).toLead(1) == true );
+          
+          // Again detailed port-to-port connections, this time limited by «source slot»
+          CHECK (is_linked(nM).port(0).asSrc(0).to(watch(nA).ports()[0]) == true );      // Node-nA, Port-0 connects as src-#0 to node-nA at Port-0
+          CHECK (is_linked(nM).port(0).asSrc(0).to(watch(nA).ports()[1]) == false);      // ...and can thus not be connected to any other Port there
+          CHECK (is_linked(nM).port(0).asSrc(1).to(watch(nA).ports()[0]) == false);
+          CHECK (is_linked(nM).port(0).asSrc(1).to(watch(nA).ports()[1]) == false);
+          CHECK (is_linked(nM).port(0).asSrc(0).to(watch(nB).ports()[0]) == false);
+          CHECK (is_linked(nM).port(0).asSrc(0).to(watch(nB).ports()[1]) == false);
+          CHECK (is_linked(nM).port(0).asSrc(0).to(watch(nB).ports()[2]) == false);
+          CHECK (is_linked(nM).port(0).asSrc(1).to(watch(nB).ports()[0]) == true );
+          CHECK (is_linked(nM).port(0).asSrc(1).to(watch(nB).ports()[1]) == false);
+          CHECK (is_linked(nM).port(0).asSrc(1).to(watch(nB).ports()[2]) == false);
+          CHECK (is_linked(nM).port(2).asSrc(0).to(watch(nA).ports()[0]) == false);
+          CHECK (is_linked(nM).port(2).asSrc(0).to(watch(nA).ports()[1]) == true );
+          CHECK (is_linked(nM).port(2).asSrc(1).to(watch(nA).ports()[0]) == false);
+          CHECK (is_linked(nM).port(2).asSrc(1).to(watch(nA).ports()[1]) == false);
+          CHECK (is_linked(nM).port(2).asSrc(0).to(watch(nB).ports()[0]) == false);
+          CHECK (is_linked(nM).port(2).asSrc(0).to(watch(nB).ports()[1]) == false);
+          CHECK (is_linked(nM).port(2).asSrc(0).to(watch(nB).ports()[2]) == false);
+          CHECK (is_linked(nM).port(2).asSrc(1).to(watch(nB).ports()[0]) == false);
+          CHECK (is_linked(nM).port(2).asSrc(1).to(watch(nB).ports()[1]) == false);
+          CHECK (is_linked(nM).port(2).asSrc(1).to(watch(nB).ports()[2]) == true );
+          CHECK (is_linked(nM).port(2).asSrc(1).to(watch(nM).ports()[2]) == false);      // never connected to itself
+          
+          CHECK (is_linked(nM).port(0).asSrc(0).to(nA).atPort(0)         == true );
+          CHECK (is_linked(nM).port(0).asSrc(0).to(nA).atPort(1)         == false);
+          CHECK (is_linked(nM).port(0).asSrc(1).to(nA).atPort(0)         == false);
+          CHECK (is_linked(nM).port(0).asSrc(1).to(nA).atPort(1)         == false);
+          CHECK (is_linked(nM).port(0).asSrc(0).to(nB).atPort(0)         == false);
+          CHECK (is_linked(nM).port(0).asSrc(0).to(nB).atPort(1)         == false);
+          CHECK (is_linked(nM).port(0).asSrc(0).to(nB).atPort(2)         == false);
+          CHECK (is_linked(nM).port(0).asSrc(1).to(nB).atPort(0)         == true );
+          CHECK (is_linked(nM).port(0).asSrc(1).to(nB).atPort(1)         == false);
+          CHECK (is_linked(nM).port(0).asSrc(1).to(nB).atPort(2)         == false);
+          CHECK (is_linked(nM).port(2).asSrc(0).to(nA).atPort(0)         == false);
+          CHECK (is_linked(nM).port(2).asSrc(0).to(nA).atPort(1)         == true );
+          CHECK (is_linked(nM).port(2).asSrc(1).to(nA).atPort(0)         == false);
+          CHECK (is_linked(nM).port(2).asSrc(1).to(nA).atPort(1)         == false);
+          CHECK (is_linked(nM).port(2).asSrc(0).to(nB).atPort(0)         == false);
+          CHECK (is_linked(nM).port(2).asSrc(0).to(nB).atPort(1)         == false);
+          CHECK (is_linked(nM).port(2).asSrc(0).to(nB).atPort(2)         == false);
+          CHECK (is_linked(nM).port(2).asSrc(1).to(nB).atPort(0)         == false);
+          CHECK (is_linked(nM).port(2).asSrc(1).to(nB).atPort(1)         == false);
+          CHECK (is_linked(nM).port(2).asSrc(1).to(nB).atPort(2)         == true );
+          CHECK (is_linked(nM).port(2).asSrc(1).to(nM).atPort(2)         == false);
+          
+          CHECK (is_linked(nM).port(0).asSrc(0).toLead(0).atPort(0)      == true );
+          CHECK (is_linked(nM).port(0).asSrc(0).toLead(0).atPort(1)      == false);
+          CHECK (is_linked(nM).port(0).asSrc(1).toLead(0).atPort(0)      == false);
+          CHECK (is_linked(nM).port(0).asSrc(1).toLead(0).atPort(1)      == false);
+          CHECK (is_linked(nM).port(0).asSrc(0).toLead(1).atPort(0)      == false);
+          CHECK (is_linked(nM).port(0).asSrc(0).toLead(1).atPort(1)      == false);
+          CHECK (is_linked(nM).port(0).asSrc(0).toLead(1).atPort(2)      == false);
+          CHECK (is_linked(nM).port(0).asSrc(1).toLead(1).atPort(0)      == true );
+          CHECK (is_linked(nM).port(0).asSrc(1).toLead(1).atPort(1)      == false);
+          CHECK (is_linked(nM).port(0).asSrc(1).toLead(1).atPort(2)      == false);
+          CHECK (is_linked(nM).port(2).asSrc(0).toLead(0).atPort(0)      == false);
+          CHECK (is_linked(nM).port(2).asSrc(0).toLead(0).atPort(1)      == true );
+          CHECK (is_linked(nM).port(2).asSrc(1).toLead(0).atPort(0)      == false);
+          CHECK (is_linked(nM).port(2).asSrc(1).toLead(0).atPort(1)      == false);
+          CHECK (is_linked(nM).port(2).asSrc(0).toLead(1).atPort(0)      == false);
+          CHECK (is_linked(nM).port(2).asSrc(0).toLead(1).atPort(1)      == false);
+          CHECK (is_linked(nM).port(2).asSrc(0).toLead(1).atPort(2)      == false);
+          CHECK (is_linked(nM).port(2).asSrc(1).toLead(1).atPort(0)      == false);
+          CHECK (is_linked(nM).port(2).asSrc(1).toLead(1).atPort(1)      == false);
+          CHECK (is_linked(nM).port(2).asSrc(1).toLead(1).atPort(2)      == true );
+          
+          // Some fallback-cases tested when given an incomplete chain:
+          // Specifying only a Port an source-slot just checks for valid index
+          CHECK (is_linked(nM).port(0).asSrc(0) == true );
+          CHECK (is_linked(nM).port(0).asSrc(1) == true );
+          CHECK (is_linked(nM).port(0).asSrc(2) == false);  // has only 2 source-slots
+          CHECK (is_linked(nA).port(0).asSrc(0) == false);  // node-nA is a source-node and thus has no source-slot at all
+          
+          // A port allone is checked for any incoming connections
+          CHECK (is_linked(nM).port(0) == true );
+          CHECK (is_linked(nM).port(1) == true );
+          CHECK (is_linked(nM).port(2) == true );
+          CHECK (is_linked(nM).port(3) == false);           // node-nM has only 3 ports, i.e. index [0...2]
+          CHECK (is_linked(nA).port(0) == false);           // node-nA is a source node and thus no port can have an incoming connection
+          CHECK (is_linked(nB).port(0) == false);           // same for node-nB
         }
     };
   
