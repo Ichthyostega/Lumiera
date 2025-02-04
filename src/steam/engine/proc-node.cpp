@@ -45,6 +45,7 @@ namespace engine {
   using util::isnil;
   using util::unConst;
   using util::contains;
+  using util::isSameObject;
   using boost::hash_combine;
   
   namespace {// Details: parsing, registration and symbol table for node spec data...
@@ -493,6 +494,23 @@ namespace engine {
       throw err::Invalid{_Fmt{"Lead-Port# %d >= %d (available src-ports)."}
                              %       leadIdx  % leadPorts.size()};
     return watch (leadPorts[leadIdx]);
+  }
+  
+  bool
+  PortDiagnostic::verify_connected (uint input, Port& tarPort)
+  {
+    auto& leadPorts = srcPorts();
+    return input < leadPorts.size()
+       and isSameObject (leadPorts[input].get(), tarPort);
+  }
+  
+  bool
+  PortDiagnostic::verify_connected (Port& tarPort)
+  {
+    for (Port& port : srcPorts())
+      if (isSameObject (port, tarPort))
+        return true;
+    return false;
   }
   
   

@@ -321,6 +321,9 @@ namespace engine {
       HashVal getProcHash();  ///< calculate an unique, stable and reproducible hash-key to identify the associated operation
       
       PortDiagnostic watchLead(uint leadIdx);
+      
+      bool verify_connected (uint input, Port&);
+      bool verify_connected (Port&);
     };
   
   inline PortDiagnostic
