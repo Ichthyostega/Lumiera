@@ -19,7 +19,7 @@
 #include "lib/test/run.hpp"
 #include "steam/engine/proc-node.hpp"
 #include "steam/engine/node-builder.hpp"
-#include "steam/engine/test-rand-ontology.hpp" ///////////TODO
+#include "steam/engine/test-rand-ontology.hpp"
 #include "lib/test/diagnostic-output.hpp"/////////////////TODO
 #include "lib/util.hpp"
 
@@ -27,7 +27,6 @@
 
 using std::array;
 using util::isnil;
-//using std::string;
 using util::isSameObject;
 
 
@@ -119,7 +118,16 @@ namespace test  {
       
       
       /** @test Build more elaborate Render Nodes linked into a connectivity network
-       * @todo WIP 1/25 🔁 define ⟶ ✔ implement
+       *      - verify nodes with several ports; at exit-level, 3 ports are available
+       *      - using two different source nodes, one with two, one with three ports
+       *      - the 2-port source is linearly chained to a 2-port filter node
+       *      - the exit-level is a mix node, combining data from both chains
+       *      - apply the automatic wiring of ports with the same number, whereby
+       *        the first port connects to the first port on the lead, and so on.
+       *      - yet for the 3rd port at the mix node, on one side the port number
+       *        must be given explicitly, since the »A-side« chain offers only
+       *        two ports.
+       * @todo 1/25 ✔ define ⟶ ✔ implement
        */
       void
       build_connected_nodes()
@@ -143,11 +151,11 @@ namespace test  {
           auto add1_op = [](int* src, int* res){ *res = 1 + *src; };
           ProcNode n1f{prepareNode("filterA")
                         .preparePort()
-                          .invoke("+1(int)(int)", add1_op)
+                          .invoke("a+1(int)(int)", add1_op)
                           .connectLead(n1s)
                           .completePort()
                         .preparePort()
-                          .invoke("+1(int)(int)", add1_op)
+                          .invoke("b+1(int)(int)", add1_op)
                           .connectLead(n1s)
                           .completePort()
                         .build()};
@@ -211,7 +219,7 @@ namespace test  {
           CHECK (watch(n2s).getNodeSpec() == "srcB-◎"_expect           );
           CHECK (watch(mix).getNodeSpec() == "mix┉┉{srcA, srcB}"_expect);
           
-          // verify setup of th source nodes
+          // verify setup of the source nodes
           CHECK (watch(n1s).ports().size() == 2 );
           CHECK (watch(n1s).watchPort(0).isSrc());
           CHECK (watch(n1s).watchPort(1).isSrc());
@@ -220,6 +228,7 @@ namespace test  {
           CHECK (watch(n1s).getPortSpec(0)             == "srcA.a(int)"_expect );
           CHECK (watch(n1s).getPortSpec(1)             == "srcA.b(int)"_expect );
           
+          // second source node has 3 ports....
           CHECK (watch(n2s).ports().size() == 3 );
           CHECK (watch(n2s).watchPort(0).isSrc());
           CHECK (watch(n2s).watchPort(1).isSrc());
@@ -241,6 +250,35 @@ namespace test  {
           CHECK (watch(n1f).watchLead(0).watchPort(0).getProcSpec() == "srcA.a(int)"_expect );
           CHECK (watch(n1f).watchPort(0).srcPorts()[0] == watch(n1f).watchLead(0).ports()[0]);
           CHECK (watch(n1f).watchPort(1).srcPorts()[0] == watch(n1f).watchLead(0).ports()[1]);
+          
+          // verify mix with 3 ports
+          CHECK (watch(mix).leads().size() == 2);
+          CHECK (watch(mix).leads()[0] == n1f  );
+          CHECK (watch(mix).leads()[1] == n2s  );
+          CHECK (watch(mix).ports().size() == 3);
+          CHECK (watch(mix).watchPort(0).srcPorts().size() == 2 );
+          CHECK (watch(mix).watchPort(1).srcPorts().size() == 2 );
+          CHECK (watch(mix).watchPort(2).srcPorts().size() == 2 );
+          CHECK (watch(mix).watchLead(0).ports().size()    == 2 );
+          CHECK (watch(mix).watchLead(1).ports().size()    == 3 );
+          CHECK (watch(mix).watchPort(0).watchLead(0).getProcName() == "filterA.a+1"_expect );
+          CHECK (watch(mix).watchLead(0).watchPort(0).getProcName() == "filterA.a+1"_expect );
+          CHECK (watch(mix).watchPort(1).watchLead(0).getProcName() == "filterA.b+1"_expect );
+          CHECK (watch(mix).watchLead(0).watchPort(1).getProcName() == "filterA.b+1"_expect );
+          CHECK (watch(mix).watchPort(2).watchLead(0).getProcName() == "filterA.b+1"_expect ); // special connection to port 1 on lead
+          CHECK (watch(mix).watchLead(0).watchPort(1).getProcName() == "filterA.b+1"_expect );
+          CHECK (watch(mix).watchPort(0).srcPorts()[0] == watch(mix).watchLead(0).ports()[0]);
+          CHECK (watch(mix).watchPort(1).srcPorts()[0] == watch(mix).watchLead(0).ports()[1]);
+          CHECK (watch(mix).watchPort(2).srcPorts()[0] == watch(mix).watchLead(0).ports()[1]);
+          CHECK (watch(mix).watchPort(0).watchLead(1).getProcName() == "srcB.a"_expect );
+          CHECK (watch(mix).watchLead(1).watchPort(0).getProcName() == "srcB.a"_expect );
+          CHECK (watch(mix).watchPort(1).watchLead(1).getProcName() == "srcB.b"_expect );
+          CHECK (watch(mix).watchLead(1).watchPort(1).getProcName() == "srcB.b"_expect );
+          CHECK (watch(mix).watchPort(2).watchLead(1).getProcName() == "srcB.c"_expect );
+          CHECK (watch(mix).watchLead(1).watchPort(2).getProcName() == "srcB.c"_expect );
+          CHECK (watch(mix).watchPort(0).srcPorts()[1] == watch(mix).watchLead(1).ports()[0]);
+          CHECK (watch(mix).watchPort(1).srcPorts()[1] == watch(mix).watchLead(1).ports()[1]);
+          CHECK (watch(mix).watchPort(2).srcPorts()[1] == watch(mix).watchLead(1).ports()[2]);
         }
       
       
