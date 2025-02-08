@@ -308,7 +308,8 @@ namespace engine {
         ProcNode& p{leads.front().get()};
         buffer << "◁—"
                << procID(p).genNodeName()      // show immediate predecessor
-               << procID(p).genSrcSpec(leads); // and behind that recursively the source(s)
+               << procID(p).genSrcSpec(       //  ...followed by it's source(s)
+                              watch(p).leads());
       }
     return buffer.str();
   }
@@ -322,7 +323,7 @@ namespace engine {
                              explore(leads)
                                .expandAll([](ProcNode& n){ return explore(watch(n).leads()); })  // depth-first expand all predecessors
                                .filter   ([](ProcNode& n){ return watch(n).isSrc(); })           // but retain only leafs (≙ source nodes)
-                               .transform([](ProcNode& n){ return procID(n).nodeName_;})         // render the node-symbol of each src
+                               .transform([](ProcNode& n){ return procID(n).nodeName_;})         // render the namespace and name of each src
                                .deduplicate())                                                   // sort and deduplicate
                          + "}";
   }

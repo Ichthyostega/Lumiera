@@ -396,8 +396,8 @@ namespace engine {
       connectLeadPort (ProcNode& leadNode, uint port)
         {
           uint knownEntry{0};
-          for (auto& lead : lib::IndexIter{_Par::leads_})
-            if (util::isSameObject (leadNode, lead))
+          for (auto& lead : lib::IndexIter{_Par::leads_})  // leads_ holds ref-wrappers
+            if (util::isSameObject (leadNode, lead.get()))
               break;
             else
               ++knownEntry;

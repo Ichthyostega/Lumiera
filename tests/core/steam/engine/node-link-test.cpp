@@ -128,7 +128,7 @@ namespace test  {
           auto src_op = [](int param, int* res){ *res = param; };
           
           // A Node with two (source) ports
-          ProcNode n1{prepareNode("n1")
+          ProcNode n1s{prepareNode("srcA")
                         .preparePort()
                           .invoke("a(int)", src_op)
                           .setParam(5)
@@ -141,19 +141,19 @@ namespace test  {
 
           // A node to add some "processing" to each data chain
           auto add1_op = [](int* src, int* res){ *res = 1 + *src; };
-          ProcNode n2{prepareNode("n2")
+          ProcNode n1f{prepareNode("filterA")
                         .preparePort()
                           .invoke("+1(int)(int)", add1_op)
-                          .connectLead(n1)
+                          .connectLead(n1s)
                           .completePort()
                         .preparePort()
                           .invoke("+1(int)(int)", add1_op)
-                          .connectLead(n1)
+                          .connectLead(n1s)
                           .completePort()
                         .build()};
 
           // Need a secondary source, this time with three ports
-          ProcNode n1b{prepareNode("n1b")
+          ProcNode n2s{prepareNode("srcB")
                         .preparePort()
                           .invoke("a(int)", src_op)
                           .setParam(7)
@@ -174,36 +174,73 @@ namespace test  {
           // Wiring for the Mix, building up three ports
           // Since the first source-chain has only two ports,
           // for the third result port we'll re-use the second source
-          ProcNode n3{prepareNode("n2")
+          ProcNode mix{prepareNode("mix")
                         .preparePort()
-                          .invoke("A.mix(int/2)(int)", mix_op)
-                          .connectLead(n2)
-                          .connectLead(n1b)
+                          .invoke("a-mix(int/2)(int)", mix_op)
+                          .connectLead(n1f)
+                          .connectLead(n2s)
                           .completePort()
                         .preparePort()
-                          .invoke("B.mix(int/2)(int)", mix_op)
-                          .connectLead(n2)
-                          .connectLead(n1b)
+                          .invoke("b-mix(int/2)(int)", mix_op)
+                          .connectLead(n1f)
+                          .connectLead(n2s)
                           .completePort()
                         .preparePort()
-                          .invoke("C.mix(int/2)(int)", mix_op)
-                          .connectLeadPort(n2,1)
-                          .connectLead(n1b)
+                          .invoke("c-mix(int/2)(int)", mix_op)
+                          .connectLeadPort(n1f,1)
+                          .connectLead(n2s)
                           .completePort()
                         .build()};
           
-SHOW_EXPR(watch(n1).getNodeSpec())
-SHOW_EXPR(watch(n1).getPortSpec(0))
-SHOW_EXPR(watch(n1).getPortSpec(1))
-SHOW_EXPR(watch(n1.getPort(0)).getProcSpec())
-SHOW_EXPR(watch(n1.getPort(0)).isSrc())
-          
-          CHECK (    is_linked(n2).to(n1));
-          CHECK (not is_linked(n1b).to(n1));
+          // verify Node-level connectivity
+          CHECK (    is_linked(n1f).to(n1s));
+          CHECK (not is_linked(n2s).to(n1s));
 
-          CHECK (not is_linked(n3).to(n1));
-          CHECK (    is_linked(n3).to(n1b));
-          CHECK (    is_linked(n3).to(n2));
+          CHECK (not is_linked(mix).to(n1s));
+          CHECK (    is_linked(mix).to(n2s));
+          CHECK (    is_linked(mix).to(n1f));
+
+          CHECK (watch(n1s).leads().size() == 0 );
+          CHECK (watch(n1f).leads().size() == 1 );
+          CHECK (watch(n2s).leads().size() == 0 );
+          CHECK (watch(mix).leads().size() == 2 );
+          
+          // verify Node and connectivity spec
+          CHECK (watch(n1s).getNodeSpec() == "srcA-◎"_expect           );
+          CHECK (watch(n1f).getNodeSpec() == "filterA◁—srcA-◎"_expect  );
+          CHECK (watch(n2s).getNodeSpec() == "srcB-◎"_expect           );
+          CHECK (watch(mix).getNodeSpec() == "mix┉┉{srcA, srcB}"_expect);
+          
+          // verify setup of th source nodes
+          CHECK (watch(n1s).ports().size() == 2 );
+          CHECK (watch(n1s).watchPort(0).isSrc());
+          CHECK (watch(n1s).watchPort(1).isSrc());
+          CHECK (watch(n1s).watchPort(0).getProcSpec() == "srcA.a(int)"_expect );
+          CHECK (watch(n1s).watchPort(1).getProcSpec() == "srcA.b(int)"_expect );
+          CHECK (watch(n1s).getPortSpec(0)             == "srcA.a(int)"_expect );
+          CHECK (watch(n1s).getPortSpec(1)             == "srcA.b(int)"_expect );
+          
+          CHECK (watch(n2s).ports().size() == 3 );
+          CHECK (watch(n2s).watchPort(0).isSrc());
+          CHECK (watch(n2s).watchPort(1).isSrc());
+          CHECK (watch(n2s).watchPort(2).isSrc());
+          CHECK (watch(n2s).watchPort(0).getProcSpec() == "srcB.a(int)"_expect );
+          CHECK (watch(n2s).watchPort(1).getProcSpec() == "srcB.b(int)"_expect );
+          CHECK (watch(n2s).watchPort(2).getProcSpec() == "srcB.c(int)"_expect );
+          CHECK (watch(n2s).getPortSpec(0)             == "srcB.a(int)"_expect );
+          CHECK (watch(n2s).getPortSpec(1)             == "srcB.b(int)"_expect );
+          CHECK (watch(n2s).getPortSpec(2)             == "srcB.c(int)"_expect );
+
+          // verify 2-chain
+          CHECK (watch(n1f).leads().size() == 1 );
+          CHECK (watch(n1f).ports().size() == 2 );
+          CHECK (watch(n1f).watchPort(0).srcPorts().size() == 1 );
+          CHECK (watch(n1f).watchLead(0).ports().size()    == 2 );
+          CHECK (watch(n1f).watchLead(0).getNodeName()     == "srcA"_expect);
+          CHECK (watch(n1f).watchPort(0).watchLead(0).getProcSpec() == "srcA.a(int)"_expect );
+          CHECK (watch(n1f).watchLead(0).watchPort(0).getProcSpec() == "srcA.a(int)"_expect );
+          CHECK (watch(n1f).watchPort(0).srcPorts()[0] == watch(n1f).watchLead(0).ports()[0]);
+          CHECK (watch(n1f).watchPort(1).srcPorts()[0] == watch(n1f).watchLead(0).ports()[1]);
         }
       
       
