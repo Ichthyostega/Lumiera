@@ -123,6 +123,7 @@ namespace test  {
       TestRandOntology()  = default;
       
       auto setupGenerator();
+      auto setupManipulator();
     private:
     };
   
@@ -170,9 +171,9 @@ namespace test  {
     /** extended config for Generator operations */
     struct ConfGen
       {
-        using Param = tuple<ont::FraNo, ont::Flavr>;
+        using Param = tuple<FraNo, Flavr>;
         
-        ont::Flavr fOff = 0;
+        Flavr fOff = 0;
         string streamType;
         
         ConfGen(Spec const& spec)
@@ -198,6 +199,36 @@ namespace test  {
                        % streamType;
           }
       };
+    
+    /** extended config for Manipulator/Filter operations */
+    struct ConfMan
+      {
+        
+        Param filter = 0;
+        string streamType;
+        
+        ConfMan(Spec const& spec)
+          : streamType{spec.BASE_TYPE}
+          { }
+        
+        auto
+        binding()
+          {
+            return [offset = filter]
+                   (Param par, TestFrame const* in, TestFrame* out)
+                      {
+                        manipulateFrame (out, in, par);
+                      };
+          }
+        
+        string
+        procSpec()
+          {
+            return _Fmt{"%s(%s)"}
+                       % (filter? util::showHash(filter):"")
+                       % streamType;
+          }
+      };
   }//(End)namespace ont
   
   
@@ -209,6 +240,18 @@ namespace test  {
   {
     Spec spec{"generate", ont::TYPE_TESTFRAME};
     Builder<ont::ConfGen> builder{spec};
+    return builder;
+  }
+  
+  
+  /**
+   * Initiate configuration of a generator-node to produce TestFrame(s)
+   */
+  inline auto
+  TestRandOntology::setupManipulator()
+  {
+    Spec spec{"manipulate", ont::TYPE_TESTFRAME};
+    Builder<ont::ConfMan> builder{spec};
     return builder;
   }
   

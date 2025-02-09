@@ -83,6 +83,8 @@ namespace test  {
           processing_combineFrames();
           
           testRand_simpleUsage();
+          testRand_buildFilterNode();
+          testRand_buildMixNode();
         }
       
       
@@ -302,6 +304,7 @@ namespace test  {
           CHECK ( buff->isPristine());
           CHECK (*buff == TestFrame(frameNr,flavour));
           
+          // Build a node using this processing-functor...
           ProcNode node{prepareNode(spec.nodeID())
                           .preparePort()
                             .invoke(spec.procID(), procFun)
@@ -309,7 +312,9 @@ namespace test  {
                             .completePort()
                           .build()};
           
-          CHECK (watch(node).getPortSpec(0) == "Test:generate(TestFrame)"_expect);
+          CHECK (watch(node).isSrc());
+          CHECK (watch(node).getNodeSpec() == "Test:generate-◎"_expect);
+          CHECK (watch(node).getPortSpec(0) == "generate(TestFrame)"_expect);
           
           BufferProvider& provider = DiagnosticBufferProvider::build();
           BuffHandle buffHandle = provider.lockBuffer (provider.getDescriptorFor(sizeof(TestFrame)));
@@ -326,6 +331,34 @@ namespace test  {
           CHECK (result.isPristine());
           CHECK (result == *buff);
           buffHandle.release();
+        }
+      
+      
+      /** @test use the »TestRand«-framework to setup a filter node
+       * 
+       */
+      void
+      testRand_buildFilterNode()
+        {
+          auto spec = testRand().setupManipulator();
+          CHECK (spec.PROTO == "manipulate-TestFrame"_expect);
+          
+          // generate a binding as processing-functor
+          auto procFun = spec.makeFun();
+          using Sig = lib::meta::_Fun<decltype(procFun)>::Sig;
+          CHECK (showType<Sig>() == "void (ulong, engine::test::TestFrame const*, engine::test::TestFrame*)"_expect);
+          
+          // Results can be verified by ont::manipulateFrame() — see above
+        }
+      
+      
+      /** @test use the »TestRand«-framework to setup a two-chain mixer node
+       * 
+       */
+      void
+      testRand_buildMixNode()
+        {
+          UNIMPLEMENTED ("Mixer Node");
         }
     };
   
