@@ -267,7 +267,15 @@ namespace engine {
       throw error::Logic ("Attempt to emit a buffer not known to this BufferProvider"
                          , LUMIERA_ERROR_BUFFER_MANAGEMENT);
     diagn::BlockPool& pool = getBlockPoolFor (typeID);
-    outSeq_.manage (pool.transferResponsibility (block4buffer));
+    Block* active = pool.transferResponsibility (block4buffer);
+    if (active)
+      outSeq_.manage (active);
+    else
+    if (block4buffer->was_closed())
+      WARN (proc_mem, "Attempt to emit() an already closed buffer.");
+    else
+      WARN (proc_mem, "Attempt to emit() a buffer not found in active pool. "
+                      "Maybe duplicate call to emit()?");
   }
   
   

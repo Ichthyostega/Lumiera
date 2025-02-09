@@ -238,6 +238,8 @@ namespace engine {
    * @tparam PROT Prototype to generate a Feed or invocation adapter to invoke
    * @remark in the standard case, PROT is a FeedManifold<FUN>::Prototype and
    *         thus embeds the processing-functor and possibly a parameter-functor
+   * @todo 2/2025 nothing is implemented yet for specific buffer / type config.
+   *         All type slots are filled with the default provider from EngineCtx.
    */
   template<class POL, class PROT>
   struct WeavingBuilder

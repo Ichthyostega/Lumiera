@@ -20,6 +20,7 @@
 #include "steam/engine/proc-node.hpp"
 #include "steam/engine/node-builder.hpp"
 #include "steam/engine/test-rand-ontology.hpp"
+#include "steam/engine/diagnostic-buffer-provider.hpp"
 #include "lib/test/diagnostic-output.hpp"/////////////////TODO
 #include "lib/util.hpp"
 
@@ -279,6 +280,36 @@ namespace test  {
           CHECK (watch(mix).watchPort(0).srcPorts()[1] == watch(mix).watchLead(1).ports()[0]);
           CHECK (watch(mix).watchPort(1).srcPorts()[1] == watch(mix).watchLead(1).ports()[1]);
           CHECK (watch(mix).watchPort(2).srcPorts()[1] == watch(mix).watchLead(1).ports()[2]);
+          
+          
+           //________________________________________________________
+          // for sake of completeness: all these nodes can be invoked
+          
+          BufferProvider& provider = DiagnosticBufferProvider::build();
+          auto invoke = [&](ProcNode& node, uint port)
+                            { // Sequence to invoke a Node...
+                              BuffHandle buff = provider.lockBufferFor<int> (-55);
+                              CHECK (-55 == buff.accessAs<int>());
+                              buff = node.pull (port, buff, Time::ZERO, ProcessKey{0});
+                              int result = buff.accessAs<int>();
+                              buff.release();
+                              return result;
+                            };
+          
+          //            node|port
+          CHECK (invoke (n1s, 0 ) == 5);
+          CHECK (invoke (n1s, 1 ) == 23);
+          
+          CHECK (invoke (n1f, 0 ) == 5+1);
+          CHECK (invoke (n1f, 1 ) == 23+1);
+          
+          CHECK (invoke (n2s, 0 ) == 7);
+          CHECK (invoke (n2s, 1 ) == 13);
+          CHECK (invoke (n2s, 2 ) == 17);
+          
+          CHECK (invoke (mix, 0 ) == (5+1  + 7 )/2);
+          CHECK (invoke (mix, 1 ) == (23+1 + 13)/2);
+          CHECK (invoke (mix, 2 ) == (23+1 + 17)/2);
         }
       
       
