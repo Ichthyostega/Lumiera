@@ -333,6 +333,20 @@ namespace test  {
           buffHandle.release();
         }
       
+      /** shortcut to simplify the following test cases */
+      static ProcNode
+      makeSrcNode (ont::FraNo frameNr, ont::Flavr flavour)
+        {
+          auto spec = testRand().setupGenerator();
+          return prepareNode(spec.nodeID())
+                      .preparePort()
+                        .invoke(spec.procID(), spec.makeFun())
+                        .setParam(frameNr,flavour)
+                        .completePort()
+                      .build();
+        }
+      
+      
       
       /** @test use the »TestRand«-framework to setup a filter node
        * 
@@ -349,6 +363,42 @@ namespace test  {
           CHECK (showType<Sig>() == "void (ulong, engine::test::TestFrame const*, engine::test::TestFrame*)"_expect);
           
           // Results can be verified by ont::manipulateFrame() — see above
+          size_t frameNr = defaultGen.u64();
+          uint flavour   = defaultGen.u64();
+          uint64_t param = defaultGen.u64();
+          
+          Buffer buff;
+          buff.buildData(frameNr,flavour);
+          CHECK (buff->isPristine());
+          
+          // Invoke the processing-functor directly
+          procFun (param, buff,buff);
+          CHECK (    buff->isValid());
+          CHECK (not buff->isPristine());
+          HashVal checksum = buff->markChecksum();
+          
+          // reproduce the same checksum...
+          buff.buildData(frameNr,flavour);
+          CHECK (buff->isPristine());
+          CHECK (checksum != buff->markChecksum());
+          ont::manipulateFrame (buff, buff, param);
+          CHECK (checksum == buff->markChecksum());
+          
+          // Build a node using this processing-functor...
+          ProcNode nSrc = makeSrcNode (frameNr,flavour);
+          ProcNode nFilt{prepareNode(spec.nodeID())
+                          .preparePort()
+                            .invoke(spec.procID(), procFun)
+                            .setParam(param)
+                            .connectLead(nSrc)
+                            .completePort()
+                          .build()};
+          
+          CHECK (watch(nSrc).isSrc());
+          CHECK (not watch(nFilt).isSrc());
+SHOW_EXPR(watch(nSrc).getNodeSpec()  );
+SHOW_EXPR(watch(nFilt).getNodeSpec()  );
+SHOW_EXPR(watch(nFilt).getPortSpec(0) );
         }
       
       
