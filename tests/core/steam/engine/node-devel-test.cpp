@@ -389,9 +389,9 @@ namespace test  {
           // reproduce the same checksum...
           buff.buildData(frameNr,flavour);
           CHECK (buff->isPristine());
-          CHECK (checksum != buff->markChecksum());
+          CHECK (checksum != buff->getChecksum());
           ont::manipulateFrame (buff, buff, param);
-          CHECK (checksum == buff->markChecksum());
+          CHECK (checksum == buff->getChecksum());
           
           // Build a node using this processing-functor...
           ProcNode nSrc = makeSrcNode (frameNr,flavour);
@@ -427,13 +427,65 @@ namespace test  {
         }
       
       
+      
       /** @test use the »TestRand«-framework to setup a two-chain mixer node
-       * 
+       *      - demonstrate convenience setup to package the ont::combineFrames() as »mix« Node
+       *      - this time, we need two source chains, both generating \ref TestFrame data
+       *      - complete processing with all steps can be verified by performing similar
+       *        computations directly and comparing the result checksum.
        */
       void
       testRand_buildMixNode()
         {
-          UNIMPLEMENTED ("Mixer Node");
+          auto spec = testRand().setupCombinator();
+          CHECK (spec.PROTO == "combine-TestFrame"_expect);
+          
+          // generate a binding as processing-functor
+          auto procFun = spec.makeFun();
+          using Sig = lib::meta::_Fun<decltype(procFun)>::Sig;
+          CHECK (showType<Sig>() == "void (double, array<engine::test::TestFrame const*, 2ul>, "
+                                                  "engine::test::TestFrame*)"_expect);  //^^/////////////////TICKET #1391 needlessly rendered as `long`
+          size_t frameNr = defaultGen.u64();
+          uint flavour   = defaultGen.u64();
+          double mix     = defaultGen.uni();
+          
+          // Build node graph to combine two chains
+          ProcNode nS1 = makeSrcNode (frameNr,flavour+0);
+          ProcNode nS2 = makeSrcNode (frameNr,flavour+1);
+          ProcNode nMix{prepareNode(spec.nodeID())
+                          .preparePort()
+                            .invoke(spec.procID(), procFun)
+                            .setParam(mix)
+                            .connectLead(nS1)
+                            .connectLead(nS2)
+                            .completePort()
+                          .build()};
+          
+          CHECK (not watch(nMix).isSrc());
+          CHECK (watch(nS1).getNodeSpec() == "Test:generate-◎"_expect );
+          CHECK (watch(nS2).getNodeSpec() == "Test:generate-◎"_expect );
+          CHECK (watch(nMix).getNodeSpec() == "Test:combine┉┉{Test:generate}"_expect );
+          CHECK (watch(nMix).getPortSpec(0) == "combine(TestFrame/2)"_expect );
+          
+          // prepare to invoke this Node chain...
+          BufferProvider& provider = DiagnosticBufferProvider::build();
+          BuffHandle buffHandle = provider.lockBuffer (provider.getDescriptorFor(sizeof(TestFrame)));
+          CHECK (not buffHandle.accessAs<TestFrame>().isValid());
+          uint port{0};
+          
+          // Trigger Node invocation...
+          buffHandle = nMix.pull (port, buffHandle, Time::ZERO, ProcessKey{0});
+          
+          CHECK (buffHandle.accessAs<TestFrame>().isValid());
+          HashVal checksum = buffHandle.accessAs<TestFrame>().getChecksum();
+          buffHandle.release();
+          
+          // verify the result data by reproducing it through direct computation
+          Buffer bu1, bu2;
+          bu1.buildData(frameNr,flavour+0);
+          bu2.buildData(frameNr,flavour+1);
+          ont::combineFrames (bu1, bu1, bu2, mix);
+          CHECK (bu1->getChecksum() == checksum);
         }
     };
   

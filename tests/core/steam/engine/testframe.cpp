@@ -365,7 +365,12 @@ namespace test  {
   {
     return accessHeader().checksum = computeChecksum();
   }
-
+  /** access current checksum without recomputing. */
+  HashVal
+  TestFrame::getChecksum()
+  {
+    return accessHeader().checksum;
+  }
   
   bool
   TestFrame::hasValidChecksum()  const

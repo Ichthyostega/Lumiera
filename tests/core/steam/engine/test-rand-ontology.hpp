@@ -124,6 +124,7 @@ namespace test  {
       
       auto setupGenerator();
       auto setupManipulator();
+      auto setupCombinator();
     private:
     };
   
@@ -229,6 +230,34 @@ namespace test  {
                        % streamType;
           }
       };
+    
+    /** extended config for combining/mixing operations */
+    struct ConfMix
+      {
+        using InFeed = std::array<TestFrame const*, 2>;
+        string streamType;
+        
+        ConfMix(Spec const& spec)
+          : streamType{spec.BASE_TYPE}
+          { }
+        
+        auto
+        binding()
+          {
+            return []
+                   (Factr mix, InFeed inChan, TestFrame* out)
+                      {
+                        combineFrames (out, inChan[0],inChan[1], mix);
+                      };
+          }
+        
+        string
+        procSpec()
+          {
+            return _Fmt{"(%s/2)"}
+                       % streamType;
+          }
+      };
   }//(End)namespace ont
   
   
@@ -243,15 +272,25 @@ namespace test  {
     return builder;
   }
   
-  
   /**
-   * Initiate configuration of a generator-node to produce TestFrame(s)
+   * Initiate configuration of a filter-node to manipulate TestFrame(s)
    */
   inline auto
   TestRandOntology::setupManipulator()
   {
     Spec spec{"manipulate", ont::TYPE_TESTFRAME};
     Builder<ont::ConfMan> builder{spec};
+    return builder;
+  }
+  
+  /**
+   * Initiate configuration for a mixing-node to combine TestFrame(s)
+   */
+  inline auto
+  TestRandOntology::setupCombinator()
+  {
+    Spec spec{"combine", ont::TYPE_TESTFRAME};
+    Builder<ont::ConfMix> builder{spec};
     return builder;
   }
   

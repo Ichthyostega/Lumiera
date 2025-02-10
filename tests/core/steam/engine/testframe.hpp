@@ -105,6 +105,7 @@ namespace test   {
       
       /** recompute and store checksum based on current contents */
       HashVal markChecksum();
+      HashVal getChecksum();
       
       /** Helper to verify that a given memory location holds
        *  an active TestFrame instance (created, not yet destroyed)
