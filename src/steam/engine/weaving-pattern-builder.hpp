@@ -375,7 +375,7 @@ namespace engine {
                  ,types = move(outTypes.build())
                  ,prototype = move(prototype_)
                  ,resultIdx = resultSlot
-                 ,procID = ProcID::describe (nodeSymb_,portSpec_)
+                 ,&procID = ProcID::describe (nodeSymb_,portSpec_)
                  ]
                  (PortDataBuilder& portData) mutable -> void
                    {

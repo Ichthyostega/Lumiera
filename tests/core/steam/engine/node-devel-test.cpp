@@ -338,12 +338,16 @@ namespace test  {
       makeSrcNode (ont::FraNo frameNr, ont::Flavr flavour)
         {
           auto spec = testRand().setupGenerator();
+SHOW_EXPR(spec.nodeID())
           return prepareNode(spec.nodeID())
+//          ProcNode n{prepareNode(spec.nodeID())
                       .preparePort()
                         .invoke(spec.procID(), spec.makeFun())
                         .setParam(frameNr,flavour)
                         .completePort()
                       .build();
+//SHOW_EXPR(watch(n).getNodeName()  );
+//          return move(n);
         }
       
       
@@ -386,6 +390,9 @@ namespace test  {
           
           // Build a node using this processing-functor...
           ProcNode nSrc = makeSrcNode (frameNr,flavour);
+SHOW_EXPR(watch(nSrc).getNodeName()  );
+  ProcID& px = ProcID::describe("Test:generate","(TestFrame)");
+SHOW_EXPR(px.genNodeName())
           ProcNode nFilt{prepareNode(spec.nodeID())
                           .preparePort()
                             .invoke(spec.procID(), procFun)

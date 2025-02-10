@@ -66,6 +66,7 @@
 #include "lib/error.hpp"
 #include "lib/hash-standard.hpp"
 #include "lib/several.hpp"
+#include "lib/nocopy.hpp"
 
 #include <utility>
 #include <string>
@@ -114,8 +115,12 @@ namespace engine {
    * @note must be essentially immutable; should ensure that implementation
    *       never changes anything constituent for the \ref hash_value(),
    *       due to de-duplication into a hashtable (see proc-node.cpp).
+   * @warning be sure always to take a reference to the instance emplaced
+   *       into the `procRegistry` (see proc-node.cpp); inadvertently taking
+   *       a reference to some transient ProcID value leads to insidious errors!
    */
   class ProcID
+    : util::MoveOnly   // ◁—— you must not create instances, use ProcID::describe()
     {
       StrView nodeName_;
       StrView portQual_;

@@ -201,7 +201,7 @@ namespace engine {
                               "Node:%s Spec:%s"}
                              % nodeSymb % portSpec
                         };
-    auto res = procRegistry.insert (ProcID{nodeSymb, portSpec.substr(0,p), portSpec.substr(p), extAttrib});
+    auto res = procRegistry.emplace (ProcID{nodeSymb, portSpec.substr(0,p), portSpec.substr(p), extAttrib});
     ProcID& entry{unConst (*res.first)};
     if (res.second)
       {// new record placed into the registry
