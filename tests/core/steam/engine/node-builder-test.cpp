@@ -176,15 +176,16 @@ namespace test  {
       build_Node_adaptedParam()
         {
           auto procFun = [](ulong param, int* buff){ *buff = int(param); };
-          auto adaptor = [](string const& spec){ return boost::lexical_cast<int>(spec); };
+          auto adaptor = [](string spec){ return boost::lexical_cast<int>(spec); };
           
           ProcNode node{prepareNode("Test")
                           .preparePort()
                             .invoke ("fun()", procFun)
-//                            .adaptParam (adaptor)    /////////////////////OOO engage here!
-//                            .setParam ("55")
+                            .adaptParam (adaptor)
+                            .setParam ("55")
                             .completePort()
                           .build()};
+SHOW_EXPR(invokeRenderNode (node));
         }
       
       

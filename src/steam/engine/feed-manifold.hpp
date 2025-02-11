@@ -256,7 +256,9 @@ namespace engine {
         using SigP = add_pointer_t<typename _Fun<PF>::Sig>;
         
         template<class PF>
-        using isSuitable  = is_constructible<Param, Res<PF>>;
+        using isSuitable  = __and_<is_constructible<Param, Res<PF>>
+                                  ,std::is_invocable<PF, TurnoutSystem&>
+                                  >;
         
         template<class PF>
         using isConfigurable = __and_<is_constructible<bool, PF&>
@@ -605,8 +607,8 @@ namespace engine {
       template<typename PFX>
       using Adapted = FeedPrototype<FUN,PFX>;
       
-      template<typename DEC>
-      using Decorated = FeedPrototype<DEC,PAM>;
+      template<typename FUX>
+      using Decorated = FeedPrototype<FUX,PAM>;
       
       /** is the given functor suitable as parameter functor for this Feed? */
       template<typename PFX>
@@ -632,12 +634,42 @@ namespace engine {
           return Adapted<OtherParamFun>{move(procFun_), move(otherParamFun)};
         }
       
-      template<typename DEC>
+      template<typename FUX>
       auto
-      moveDecoratedProc (DEC procFunDecorator)
+      moveDecoratedProc (FUX adaptedProcFun)
         {
-          using AugmentedProcFun = std::decay_t<decltype(procFunDecorator(move(procFun_)))>;
-          return Decorated<AugmentedProcFun>{procFunDecorator (move(procFun_)), move(paramFun_)};
+          using AugmentedProcFun = std::decay_t<FUX>;
+          return Decorated<AugmentedProcFun>{move(adaptedProcFun), move(paramFun_)};
+        }
+      
+      template<typename TRA>
+      auto
+      moveTransformedParam (TRA paramTransformer)
+        {
+          static_assert (_Trait::hasParam(), "Processing-functor with parameters expected");
+          using SigP = lib::meta::_FunArg<TRA>;
+          using SigI = typename _Proc::SigI;
+          using SigO = typename _Proc::SigO;
+          if constexpr (_Proc::hasInput())
+            {
+              return moveDecoratedProc([procFun = move(procFun_)
+                                       ,transform = move(paramTransformer)
+                                       ]
+                                       (SigP par, SigI in, SigO out)
+                                        {
+                                          return procFun (transform(par), in, out);
+                                        });
+            }
+          else
+            {
+              return moveDecoratedProc([procFun = move(procFun_)
+                                       ,transform = move(paramTransformer)
+                                       ]
+                                       (SigP par, SigO out)
+                                        {
+                                          return procFun (transform(par), out);
+                                        });
+            }
         }
       
       

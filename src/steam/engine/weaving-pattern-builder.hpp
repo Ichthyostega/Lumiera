@@ -296,7 +296,7 @@ namespace engine {
       using Adapted = WeavingBuilder<POL, AdaptedPrototype<PFX>>;
 
       template<class DEC>
-      using DecoratedPrototype = typename PROT::template Decorated<DEC>;
+      using DecoratedPrototype = decltype(std::declval<PROT>().moveTransformedParam (move (std::declval<DEC>())));   /////OOO ugly!!!!
       template<class DEC>
       using Decorated = WeavingBuilder<POL, DecoratedPrototype<DEC>>;
 
@@ -324,13 +324,12 @@ namespace engine {
       adaptProcFunParam (DEC decorator)
         {
 //          static_assert (PROT::template isSuitable<DEC>()
-//                        ,"suitable as param-functor for given processing-functor");  //////////////////////////TODO
+//                        ,"suitable as param-functor for given processing-functor");  //////////////////////////OOO need some static check here to reject processing-fun without params
           //
           using AdaptedWeavingBuilder = Decorated<DEC>;
           //
           return AdaptedWeavingBuilder{move(*this)
-                                      ,prototype_.moveDecoratedProc (move (decorator))
-                                      //////////////////////////////////////////////////////////////////////OOO need to do the actual adaptation here
+                                      ,prototype_.moveTransformedParam (move (decorator))
                                       };
         }
       
