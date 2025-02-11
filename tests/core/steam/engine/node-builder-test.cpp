@@ -26,6 +26,7 @@
 #include "lib/symbol.hpp"
 
 #include <array>
+#include <boost/lexical_cast.hpp>
 
 using lib::Symbol;
 using std::string;
@@ -60,6 +61,7 @@ namespace test  {
           build_simpleNode();
           build_Node_fixedParam();
           build_Node_dynamicParam();
+          build_Node_adaptedParam();
           build_connectedNodes();
           build_ParamNode();
         }
@@ -161,6 +163,28 @@ namespace test  {
           // Explanation: since the param-functor quantises into a 1-second grid
           //              and the given time is below 1 minute, the seconds field
           //              of SMPTE Timecode should match the parameter value
+        }
+      
+      
+      /** @test build a node and _adapt the parameters_ for invocation.
+       *      - again use a processing function which takes a parameter
+       *      - but then _decorate_ this functor, so that it takes different arguments
+       *      - attach parameter handling to supply these adapted arguments
+       * @todo 2/25 ✔ define ⟶ 🔁 implement
+       */
+      void
+      build_Node_adaptedParam()
+        {
+          auto procFun = [](ulong param, int* buff){ *buff = int(param); };
+          auto adaptor = [](string const& spec){ return boost::lexical_cast<int>(spec); };
+          
+          ProcNode node{prepareNode("Test")
+                          .preparePort()
+                            .invoke ("fun()", procFun)
+//                            .adaptParam (adaptor)    /////////////////////OOO engage here!
+//                            .setParam ("55")
+                            .completePort()
+                          .build()};
         }
       
       

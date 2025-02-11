@@ -294,7 +294,12 @@ namespace engine {
       using AdaptedPrototype = typename PROT::template Adapted<PFX>;
       template<class PFX>
       using Adapted = WeavingBuilder<POL, AdaptedPrototype<PFX>>;
-      
+
+      template<class DEC>
+      using DecoratedPrototype = typename PROT::template Decorated<DEC>;
+      template<class DEC>
+      using Decorated = WeavingBuilder<POL, DecoratedPrototype<DEC>>;
+
       /** Adapt a parameter-functor into the _Feed Prototype,_
        *  so that it is invoked whenever a new `FeedManifold` is built.
        * @return adapted WeavingBuilder marked with changed `FeedManifold` type.
@@ -309,7 +314,23 @@ namespace engine {
           using AdaptedWeavingBuilder = Adapted<PFX>;
           //
           return AdaptedWeavingBuilder{move(*this)
-                                      ,prototype_.moveAdapted (move (paramFunctor))
+                                      ,prototype_.moveAdaptedParam (move (paramFunctor))
+                                      };
+        }
+      
+      /** @todo */
+      template<class DEC>
+      auto
+      adaptProcFunParam (DEC decorator)
+        {
+//          static_assert (PROT::template isSuitable<DEC>()
+//                        ,"suitable as param-functor for given processing-functor");  //////////////////////////TODO
+          //
+          using AdaptedWeavingBuilder = Decorated<DEC>;
+          //
+          return AdaptedWeavingBuilder{move(*this)
+                                      ,prototype_.moveDecoratedProc (move (decorator))
+                                      //////////////////////////////////////////////////////////////////////OOO need to do the actual adaptation here
                                       };
         }
       

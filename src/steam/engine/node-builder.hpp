@@ -477,6 +477,18 @@ namespace engine {
                                     });
         }
       
+      template<typename ADA>
+      auto
+      adaptParam (ADA&& paramAdaptor)
+        {
+          using DecoratedPrototype = typename WAB::template Decorated<ADA>;
+          using AdaptedPortBuilder = PortBuilder<POL,DAT,DecoratedPrototype>;
+          //
+          return AdaptedPortBuilder{move(*this)
+                                   ,weavingBuilder_.adaptProcFunParam (move (paramAdaptor))
+                                   };
+        }
+      
       
       
       /*************************************************************//**

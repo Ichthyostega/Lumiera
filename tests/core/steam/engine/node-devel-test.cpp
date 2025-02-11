@@ -22,10 +22,8 @@
 #include "steam/engine/node-builder.hpp"
 #include "steam/engine/test-rand-ontology.hpp"
 #include "steam/engine/diagnostic-buffer-provider.hpp"
-#include "lib/test/diagnostic-output.hpp"/////////////////TODO
 #include "lib/iter-zip.hpp"
 #include "lib/random.hpp"
-//#include "lib/util.hpp"
 
 #include <vector>
 
@@ -39,7 +37,6 @@ using lib::test::showType;
 namespace steam {
 namespace engine{
 namespace test  {
-  
   
   namespace {
     /** uninitialised local storage that can be passed
@@ -66,6 +63,12 @@ namespace test  {
   
   /***************************************************************//**
    * @test verify support for developing Render Node functionality.
+   *     - raw processing functions to generate and manipulate
+   *       \ref TestFrame data, including hash chaining.
+   *     - a »TestRand-Ontology«, which is a test helper framework,
+   *       and mimics a real _Domain Ontology_ (as would be accessible
+   *       through the adapter plug-in of a specific media handling library.
+   *     - some convenience shortcuts to build test-nodes
    */
   class NodeDevel_test : public Test
     {

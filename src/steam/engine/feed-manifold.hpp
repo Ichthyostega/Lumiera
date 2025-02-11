@@ -605,6 +605,9 @@ namespace engine {
       template<typename PFX>
       using Adapted = FeedPrototype<FUN,PFX>;
       
+      template<typename DEC>
+      using Decorated = FeedPrototype<DEC,PAM>;
+      
       /** is the given functor suitable as parameter functor for this Feed? */
       template<typename PFX>
       static constexpr bool isSuitable()
@@ -623,10 +626,18 @@ namespace engine {
        */
       template<typename PFX>
       auto
-      moveAdapted (PFX otherParamFun =PFX{})
+      moveAdaptedParam (PFX otherParamFun =PFX{})
         {
           using OtherParamFun = std::decay_t<PFX>;
           return Adapted<OtherParamFun>{move(procFun_), move(otherParamFun)};
+        }
+      
+      template<typename DEC>
+      auto
+      moveDecoratedProc (DEC procFunDecorator)
+        {
+          using AugmentedProcFun = std::decay_t<decltype(procFunDecorator(move(procFun_)))>;
+          return Decorated<AugmentedProcFun>{procFunDecorator (move(procFun_)), move(paramFun_)};
         }
       
       

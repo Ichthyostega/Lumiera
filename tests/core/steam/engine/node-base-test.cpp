@@ -370,7 +370,7 @@ namespace test  {
           CHECK (    P1x::hasParamFun());
           CHECK (not P1x::canActivate());
           
-          P1x p1x = p1.moveAdapted (move(fun_paramSimple));
+          P1x p1x = p1.moveAdaptedParam (move(fun_paramSimple));
           M1 m1x = p1x.buildFeed(turSys);                  // ◁————————— param-functor invoked here
           CHECK (rr == m1x.param);                         //            ...as indicated by the side-effect
           short r1 = m1x.param;
@@ -413,7 +413,7 @@ namespace test  {
           CHECK (    P1F::canActivate());
           
           P1F p1f = p1x.clone()                            // if (and only if) the embedded functors allow clone-copy
-                       .moveAdapted<ParamFunction>();      // then we can fork-off and then adapt a cloned prototype
+                       .moveAdaptedParam<ParamFunction>(); // then we can fork-off and then adapt a cloned prototype
           
           // Need to distinguish between static capability and runtime state...
           CHECK (not p1 .canActivate());                   // Case-1 had no param functor installed...

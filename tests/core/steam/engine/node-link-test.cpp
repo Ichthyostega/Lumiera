@@ -319,6 +319,73 @@ namespace test  {
       void
       trigger_node_port_invocation()
         {
+          auto testGen = testRand().setupGenerator();
+          auto testMan = testRand().setupManipulator();
+          auto testMix = testRand().setupCombinator();
+          
+/*          
+          // A Node with two (source) ports
+          ProcNode n1s{prepareNode("srcA")
+                        .preparePort()
+                          .invoke("a(int)", src_op)
+                          .setParam(5)
+                          .completePort()
+                        .preparePort()
+                          .invoke("b(int)", src_op)
+                          .setParam(23)
+                          .completePort()
+                        .build()};
+
+          // A node to add some "processing" to each data chain
+          auto add1_op = [](int* src, int* res){ *res = 1 + *src; };
+          ProcNode n1f{prepareNode("filterA")
+                        .preparePort()
+                          .invoke("a+1(int)(int)", add1_op)
+                          .connectLead(n1s)
+                          .completePort()
+                        .preparePort()
+                          .invoke("b+1(int)(int)", add1_op)
+                          .connectLead(n1s)
+                          .completePort()
+                        .build()};
+
+          // Need a secondary source, this time with three ports
+          ProcNode n2s{prepareNode("srcB")
+                        .preparePort()
+                          .invoke("a(int)", src_op)
+                          .setParam(7)
+                          .completePort()
+                        .preparePort()
+                          .invoke("b(int)", src_op)
+                          .setParam(13)
+                          .completePort()
+                        .preparePort()
+                          .invoke("c(int)", src_op)
+                          .setParam(17)
+                          .completePort()
+                        .build()};
+          
+          // Wiring for the Mix, building up three ports
+          // Since the first source-chain has only two ports,
+          // for the third result port we'll re-use the second source
+          ProcNode mix{prepareNode("mix")
+                        .preparePort()
+                          .invoke("a-mix(int/2)(int)", mix_op)
+                          .connectLead(n1f)
+                          .connectLead(n2s)
+                          .completePort()
+                        .preparePort()
+                          .invoke("b-mix(int/2)(int)", mix_op)
+                          .connectLead(n1f)
+                          .connectLead(n2s)
+                          .completePort()
+                        .preparePort()
+                          .invoke("c-mix(int/2)(int)", mix_op)
+                          .connectLeadPort(n1f,1)
+                          .connectLead(n2s)
+                          .completePort()
+                        .build()};
+*/
           UNIMPLEMENTED ("operate some render nodes as linked together");
         }
     };
