@@ -170,7 +170,7 @@ namespace test  {
        *      - again use a processing function which takes a parameter
        *      - but then _decorate_ this functor, so that it takes different arguments
        *      - attach parameter handling to supply these adapted arguments
-       * @todo 2/25 ✔ define ⟶ 🔁 implement
+       * @todo 2/25 ✔ define ⟶ ✔ implement
        */
       void
       build_Node_adaptedParam()
@@ -185,7 +185,8 @@ namespace test  {
                             .setParam ("55")
                             .completePort()
                           .build()};
-SHOW_EXPR(invokeRenderNode (node));
+          
+          CHECK (55 == invokeRenderNode (node));
         }
       
       

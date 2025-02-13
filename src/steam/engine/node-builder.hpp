@@ -435,6 +435,7 @@ namespace engine {
                                    };
         }
       
+      /** control parameter(s) by an automation function, based on nominal timeline time */
       template<class AUTO>
       auto
       attachAutomation (AUTO&& aFun)
@@ -446,6 +447,7 @@ namespace engine {
                                     });
         }
       
+      /** embed a fixed value to use for the parameter(s) */
       template<typename PAR>
       auto
       setParam (PAR paramVal)
@@ -466,6 +468,8 @@ namespace engine {
                                     });
         }
       
+      /** retrieve the parameter(s) at invocation time through a getter functor,
+       *  which is typically constructed in conjunction with a »Param Agent« node. */
       template<typename GET>
       auto
       retrieveParam (GET&& getter)

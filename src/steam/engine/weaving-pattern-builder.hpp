@@ -294,12 +294,7 @@ namespace engine {
       using AdaptedPrototype = typename PROT::template Adapted<PFX>;
       template<class PFX>
       using Adapted = WeavingBuilder<POL, AdaptedPrototype<PFX>>;
-
-      template<class DEC>
-      using DecoratedPrototype = decltype(std::declval<PROT>().moveTransformedParam (move (std::declval<DEC>())));   /////OOO ugly!!!!
-      template<class DEC>
-      using Decorated = WeavingBuilder<POL, DecoratedPrototype<DEC>>;
-
+      
       /** Adapt a parameter-functor into the _Feed Prototype,_
        *  so that it is invoked whenever a new `FeedManifold` is built.
        * @return adapted WeavingBuilder marked with changed `FeedManifold` type.
@@ -308,7 +303,7 @@ namespace engine {
       auto
       adaptParam (PFX paramFunctor)
         {
-          static_assert (PROT::template isSuitable<PFX>()
+          static_assert (PROT::template isSuitableParamFun<PFX>()
                         ,"suitable as param-functor for given processing-functor");
           //
           using AdaptedWeavingBuilder = Adapted<PFX>;
@@ -318,13 +313,22 @@ namespace engine {
                                       };
         }
       
-      /** @todo */
+      
+      /** type builder for FeedPrototype with remoulded parameter input */
+      template<class DEC>
+      using DecoratedPrototype = typename PROT::template Decorated<DEC>;
+      template<class DEC>
+      using Decorated = WeavingBuilder<POL, DecoratedPrototype<DEC>>;
+      
+      /** Adapt parameter handling by _prepending_ the given transformer function
+       *  to supply the parameter argument of the processing-functor. Notably this
+       *  allows to _partially close_ some parameters. */
       template<class DEC>
       auto
       adaptProcFunParam (DEC decorator)
         {
-//          static_assert (PROT::template isSuitable<DEC>()
-//                        ,"suitable as param-functor for given processing-functor");  //////////////////////////OOO need some static check here to reject processing-fun without params
+          static_assert (PROT::template isSuitableParamAdaptor<DEC>()
+                        ,"suitable to adapt the processing-functor's param argument");
           //
           using AdaptedWeavingBuilder = Decorated<DEC>;
           //

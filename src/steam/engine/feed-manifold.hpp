@@ -256,9 +256,9 @@ namespace engine {
         using SigP = add_pointer_t<typename _Fun<PF>::Sig>;
         
         template<class PF>
-        using isSuitable  = __and_<is_constructible<Param, Res<PF>>
-                                  ,std::is_invocable<PF, TurnoutSystem&>
-                                  >;
+        using isSuitable  = is_constructible<Param, Res<PF>>;
+        template<class PF>
+        using canInvoke  = std::is_invocable<PF, TurnoutSystem&>;
         
         template<class PF>
         using isConfigurable = __and_<is_constructible<bool, PF&>
@@ -280,7 +280,9 @@ namespace engine {
         
         
         template<class PF>
-        static constexpr bool isParamFun()  { return isSuitable<PF>();                          }
+        static constexpr bool canAdapt()    { return isSuitable<PF>();                          }
+        template<class PF>
+        static constexpr bool isParamFun()  { return isSuitable<PF>() and canInvoke<PF>();      }
         template<class PF>
         static constexpr bool canActivate() { return isSuitable<PF>() and isConfigurable<PF>(); }
       };
@@ -607,14 +609,18 @@ namespace engine {
       template<typename PFX>
       using Adapted = FeedPrototype<FUN,PFX>;
       
-      template<typename FUX>
-      using Decorated = FeedPrototype<FUX,PAM>;
-      
       /** is the given functor suitable as parameter functor for this Feed? */
       template<typename PFX>
-      static constexpr bool isSuitable()
+      static constexpr bool isSuitableParamFun()
         {
           return hasParam() and _Trait::template isParamFun<PFX>();
+        }
+      /** is the given functor suitable to adapt the parameter argument
+       *  of the processing-functor to accept different input values? */
+      template<typename PFX>
+      static constexpr bool isSuitableParamAdaptor()
+        {
+          return hasParam() and _Trait::template canAdapt<PFX>();
         }
       
       /**
@@ -632,44 +638,6 @@ namespace engine {
         {
           using OtherParamFun = std::decay_t<PFX>;
           return Adapted<OtherParamFun>{move(procFun_), move(otherParamFun)};
-        }
-      
-      template<typename FUX>
-      auto
-      moveDecoratedProc (FUX adaptedProcFun)
-        {
-          using AugmentedProcFun = std::decay_t<FUX>;
-          return Decorated<AugmentedProcFun>{move(adaptedProcFun), move(paramFun_)};
-        }
-      
-      template<typename TRA>
-      auto
-      moveTransformedParam (TRA paramTransformer)
-        {
-          static_assert (_Trait::hasParam(), "Processing-functor with parameters expected");
-          using SigP = lib::meta::_FunArg<TRA>;
-          using SigI = typename _Proc::SigI;
-          using SigO = typename _Proc::SigO;
-          if constexpr (_Proc::hasInput())
-            {
-              return moveDecoratedProc([procFun = move(procFun_)
-                                       ,transform = move(paramTransformer)
-                                       ]
-                                       (SigP par, SigI in, SigO out)
-                                        {
-                                          return procFun (transform(par), in, out);
-                                        });
-            }
-          else
-            {
-              return moveDecoratedProc([procFun = move(procFun_)
-                                       ,transform = move(paramTransformer)
-                                       ]
-                                       (SigP par, SigO out)
-                                        {
-                                          return procFun (transform(par), out);
-                                        });
-            }
         }
       
       
@@ -697,6 +665,61 @@ namespace engine {
           paramFun_ = forward<PFX> (paramFunDef);
           return move(*this);
         }
+      
+      
+      /** @internal build an adapted version of the processing-functor,
+       *            thereby attaching the parameter-transformer. */
+      template<typename TRA>
+      auto
+      decorateProcParam (TRA paramTransformer)
+        {
+          static_assert (_Trait::hasParam(), "Processing-functor with parameters expected");
+          static_assert (isSuitableParamAdaptor<TRA>(), "Given functor's output not suitable "
+                                             "for adapting the proc-functor's 1st argument");
+          using SigP = lib::meta::_FunArg<TRA>;
+          using SigI = typename _Proc::SigI;
+          using SigO = typename _Proc::SigO;
+          if constexpr (_Proc::hasInput())
+            {
+              return [procFun = move(procFun_)
+                     ,transform = move(paramTransformer)
+                     ]
+                     (SigP par, SigI in, SigO out)
+                      {
+                        return procFun (transform(par), in, out);
+                      };
+            }
+          else
+            {
+              return [procFun = move(procFun_)
+                     ,transform = move(paramTransformer)
+                     ]
+                     (SigP par, SigO out)
+                      {
+                        return procFun (transform(par), out);
+                      };
+            }
+        }
+      
+      template<typename TRA>
+      using DecoratedProcFun = decltype(std::declval<FeedPrototype>().decorateProcParam (std::declval<TRA>()));
+      
+      template<typename TRA>
+      using Decorated = FeedPrototype<DecoratedProcFun<TRA>,PAM>;
+      
+      /**
+       * Adapt parameter handling of the _processing-function_ by passing parameters
+       * through an adapter functor _before_ feeding them into the processing-function.
+       * @remark notably this allows to _partially close_ some parameters, i.e. supply
+       *         some value from the adaptor, thereby removing them as visible parameters.
+       */
+      template<typename TRA>
+      auto
+      moveTransformedParam (TRA paramTransformer)
+        {
+          return Decorated<TRA>{decorateProcParam (move(paramTransformer)), move(paramFun_)};
+        }
+
     };
   
 }} // namespace steam::engine
