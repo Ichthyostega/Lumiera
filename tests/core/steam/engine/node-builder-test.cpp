@@ -23,6 +23,7 @@
 #include "lib/test/diagnostic-output.hpp"
 #include "lib/time/timequant.hpp"
 #include "lib/time/timecode.hpp"
+#include "lib/iter-explorer.hpp"
 #include "lib/symbol.hpp"
 
 #include <array>
@@ -31,6 +32,7 @@
 using lib::Symbol;
 using std::string;
 using std::array;
+using lib::explore;
 using lib::time::Time;
 using lib::time::QuTime;
 using lib::time::FrameNr;
@@ -62,6 +64,7 @@ namespace test  {
           build_Node_fixedParam();
           build_Node_dynamicParam();
           build_Node_adaptedParam();
+          build_Node_closedParam();
           build_connectedNodes();
           build_ParamNode();
         }
@@ -187,6 +190,35 @@ namespace test  {
                           .build()};
           
           CHECK (55 == invokeRenderNode (node));
+        }
+      
+      
+      /** @test build a node and partially close (≙ predefine) some parameters,
+       *        while leaving other parameters open to be set on invocation
+       *        through a parameter-functor. 
+       * @remark it is quite common that processing functionality provided by an
+       *   external library exposes both technical and artistic parameters, which
+       *   leads to the situation that technical parameters can be predetermined
+       *   and configured to a fixed value, while artistic parameters remain open
+       *   for control by the user, either as a fixed setting (e.g. colour balance)
+       *   or even a dynamic control by an automation function).
+       */
+      void
+      build_Node_closedParam()
+        {
+          using Params = std::tuple<uint,uint,uint,uint,uint>;//array<uint, 5>;
+          auto procFun = [](Params params, uint* out)  { auto [v1,v2,v3,v4,v5] = params; *out = v1+v2+v3+v4+v5; };//explore(params).resultSum(); };
+          auto autoFun = [](Time nomTime){ return FrameNr::quant (nomTime, SECONDS_GRID); };
+          ProcNode node{prepareNode("Test")
+                          .preparePort()
+                            .invoke ("fun()", procFun)
+                            .closeParamFront (1,2,3,4)
+                            .attachAutomation (autoFun)
+                            .completePort()
+                          .build()};
+          
+          Time timeOfEvil{5555,0};
+SHOW_EXPR(invokeRenderNode(node,timeOfEvil));
         }
       
       

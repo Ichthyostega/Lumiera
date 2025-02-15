@@ -33,6 +33,12 @@
  **       Providing a one-shot function-style interface for this kind of manipulations
  **       is still considered beneficial, and thus we should gradually modernise
  **       the tools we want to retain...
+ ** @todo 2/25 note that there is a bind_front in C++20 and C++23 will provide a bind_back
+ **       helper, which would provide the implementation fully in accordance with current
+ **       expectations (including move, constexpr); if we choose to retain a generic
+ **       function-style front-end, it should be aligned with these standard facilities.
+ **       We might want to retain a simple generic interface especially for binding some
+ **       selected argument, which handles the intricacies of storing the functor. 
  ** 
  ** @see control::CommandDef usage example
  ** @see function.hpp
@@ -412,7 +418,7 @@ namespace func{
      * @tparam TAR full target tuple type. Some oft the elements within this tuple will
      *             be default constructed, some will be initialised from the SRC tuple
      * @tparam SRC argument tuple type, for the values _actually to be initialised_ here.
-     * @tparam start position within TYPES, at which the sequence of init-arguments starts;
+     * @tparam start position within \a SRC, at which the sequence of init-arguments starts;
      *             all other positions will just be default initialised
      * @see lib::meta::TupleConstructor
      */

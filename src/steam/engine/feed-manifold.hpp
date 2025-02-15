@@ -102,6 +102,7 @@ namespace engine {
     using lib::meta::ElmTypes;
     using lib::meta::NullType;
     using lib::meta::Tagged;
+    using lib::meta::TySeq;
     using std::is_pointer;
     using std::is_reference;
     using std::is_convertible;
@@ -110,6 +111,7 @@ namespace engine {
     using std::remove_pointer_t;
     using std::tuple_element_t;
     using std::add_pointer_t;
+    using std::conditional_t;
     using std::__and_;
     using std::__not_;
     
@@ -248,7 +250,7 @@ namespace engine {
         
         static constexpr bool hasParam() { return _Proc::hasParam(); }
         
-        using Param = std::conditional_t<hasParam(), typename _Proc::SigP, std::tuple<>>;
+        using Param = conditional_t<hasParam(), typename _Proc::SigP, std::tuple<>>;
         
         template<class PF>
         using Res = typename _Fun<PF>::Ret;
@@ -332,8 +334,8 @@ namespace engine {
       using BuffI = BuffS<FAN_I>;
       using BuffO = BuffS<FAN_O>;
       
-      using Param = std::conditional_t<hasParam(), typename _Trait::SigP, std::tuple<>>;
-      using ArgI  = std::conditional_t<hasInput(), typename _Trait::SigI, std::tuple<>>;
+      using Param = conditional_t<hasParam(), typename _Trait::SigP, std::tuple<>>;
+      using ArgI  = conditional_t<hasInput(), typename _Trait::SigI, std::tuple<>>;
       using ArgO  = typename _Trait::SigO;
       
       
@@ -373,7 +375,7 @@ namespace engine {
       using NotProvided = Tagged<NullType, X>;
       
       template<bool yes, class B>
-      using Provide_if = std::conditional_t<yes, B, NotProvided<B>>;
+      using Provide_if = conditional_t<yes, B, NotProvided<B>>;
       
       using FeedOutput =                         BufferSlot_Output;
       using FeedInput  = Provide_if<hasInput(),  BufferSlot_Input>;
@@ -561,6 +563,8 @@ namespace engine {
       };
       using ElmsI = typename _Proc::ElmsI;
       using ElmsO = typename _Proc::ElmsO;
+      using ElmsP = conditional_t<_Trait::hasParam(), typename _Proc::ArgP, TySeq<>>;
+      using Param = typename _Proc::SigP; ///////////////////////////////////////////////////////////////////OOO qualify?
       
       template<template<class> class META>
       using OutTypesApply = typename ElmsO::template Apply<META>;

@@ -250,8 +250,8 @@ namespace engine {
       static constexpr SizMark<sizeof(TurnoutWeaving)> sizMark{};
       static constexpr uint FAN_I = PROT::FAN_I;
       static constexpr uint FAN_O = PROT::FAN_O;
-
       
+      using Param = typename PROT::Param;              ///////////////////////////OOO integrate here a partial-closure-helper
       using TypeMarker = std::function<BuffDescr(BufferProvider&)>;
       using ProviderRef = std::reference_wrapper<BufferProvider>;
       

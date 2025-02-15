@@ -360,7 +360,6 @@ namespace lib {
       auto
       adaptIn (FUN&& fun)
         {
-          using lib::meta::func::applyFirst;
           using _Fun = lib::meta::_Fun<FUN>;
           static_assert (_Fun(), "Need something function-like.");
           

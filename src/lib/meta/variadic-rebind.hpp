@@ -141,11 +141,11 @@ namespace meta {
       using Penult = typename _Vari<L,XS...>::Penult;
       using Ultima = typename _Vari<L,XS...>::Ultima;
       
-      using _Tail_Pre_ = typename _Vari<L, XS...>::Prefix;
+      using _Tail_Pre_ = typename _Vari<L,XS...>::Prefix;
       using _Tail_Rev_ = typename _Vari<L,XS...>::Revers;
       
       using Remain = L<XS...>;
-      using Prefix = typename _Vari<L, X, _Tail_Pre_>::Prepend;
+      using Prefix = typename _Vari<L, X,      _Tail_Pre_>::Prepend;
       using Revers = typename _Vari<L, Ultima, _Tail_Rev_>::Prepend;
     };
   
