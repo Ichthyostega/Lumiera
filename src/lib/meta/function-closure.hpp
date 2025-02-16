@@ -14,15 +14,17 @@
 
 /** @file function-closure.hpp
  ** Partial function application and building a complete function closure.
- ** This is a addendum to (and thin wrapper for) `<functional>`, supporting
- ** the case when a function should be _closed_ over (partially or all) arguments,
- ** where especially the parameter values to close on are provided as a tuple.
+ ** This is a addendum to std::bind, to support especially the case when a
+ ** function should be _closed_ over (partially or all) arguments. This implies
+ ** to bind some arguments immediately, while keeping other arguments open to
+ ** be supplied on function invocation.
  ** Additionally, we allow for composing (chaining) of two functions.
- ** 
- ** Because we have to deal with arbitrary functions and arbitrary parameter types,
- ** we need a lot of repetitive code to "catch" functions from zero to nine arguments.
- ** At the bottom of this header, you'll find a function-style interface, which
- ** wraps up all these technicalities.
+ ** @warning this header is in a state of transition as of 2/2025, because functionality
+ **       of this kind will certainly needed in future, but with full support for lambdas,
+ **       move-only types and perfect forwarding. A gradual rework has been started, and
+ **       will lead to a complete rewrite of the core functionality eventually, making
+ **       better use of variadic templates and library functions like std::apply, which
+ **       were not available at the time of the first implementation.
  ** 
  ** @todo the implementation is able to handle partial application with N arguments,
  **       but currently we need just one argument, thus only this case was wrapped
@@ -38,9 +40,11 @@
  **       expectations (including move, constexpr); if we choose to retain a generic
  **       function-style front-end, it should be aligned with these standard facilities.
  **       We might want to retain a simple generic interface especially for binding some
- **       selected argument, which handles the intricacies of storing the functor. 
+ **       selected argument, which handles the intricacies of storing the functor.
  ** 
  ** @see control::CommandDef usage example
+ ** @see function-closure-test.hpp
+ ** @see function-composition-test.hpp
  ** @see function.hpp
  ** 
  */
@@ -543,7 +547,7 @@ namespace func{
   /**
    * Partial function application
    * Takes a function and a value tuple,
-   * using the latter to close function arguments 
+   * using the latter to close function arguments
    * either from the front (left) or aligned to the end
    * of the function argument list. Result is a "reduced" function,
    * expecting only the remaining "un-closed" arguments at invocation.

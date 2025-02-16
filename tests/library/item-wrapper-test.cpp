@@ -24,6 +24,7 @@
 #include "lib/util.hpp"
 
 #include "lib/wrapper.hpp"
+#include "lib/wrapper-function-result.hpp"
 
 #include <functional>
 #include <iostream>

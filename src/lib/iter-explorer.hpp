@@ -103,7 +103,7 @@
 #include "lib/meta/duck-detector.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/trait.hpp"
-#include "lib/wrapper.hpp"        ////////////TODO : could be more lightweight by splitting FunctionResult into separate header. Relevant?
+#include "lib/wrapper.hpp"
 #include "lib/iter-adapter.hpp"
 #include "lib/iter-source.hpp"   /////////////TICKET #493 : only using the IterSource base feature / interface here. Should really split the iter-source.hpp
 #include "lib/iter-stack.hpp"

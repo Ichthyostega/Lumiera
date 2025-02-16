@@ -71,6 +71,7 @@
 #include "vault/gear/nop-job-functor.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/meta/variadic-rebind.hpp"
+#include "lib/meta/typeseq-util.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/wrapper.hpp"
 #include "lib/format-util.hpp"

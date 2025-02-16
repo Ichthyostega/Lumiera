@@ -218,7 +218,7 @@ namespace test  {
                           .build()};
           
           Time timeOfEvil{5555,0};
-SHOW_EXPR(invokeRenderNode(node,timeOfEvil));
+          CHECK (15 == invokeRenderNode(node,timeOfEvil));
         }
       
       

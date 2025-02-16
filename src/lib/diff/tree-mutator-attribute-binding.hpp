@@ -100,6 +100,7 @@
 #include "lib/symbol.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "lib/diff/tree-mutator.hpp"
+#include "lib/meta/typeseq-util.hpp"
 #include "lib/format-string.hpp"
 #include "lib/idi/entry-id.hpp"
 

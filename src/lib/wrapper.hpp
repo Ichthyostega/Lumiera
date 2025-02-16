@@ -16,16 +16,22 @@
  ** This is (intended to become) a loose collection of the various small helper templates
  ** for wrapping, containing, placing or handling a somewhat \em problematic other object.
  ** Mostly these are implemented to suit a specific need and then factored out later on.
- ** - ItemWrapper is a similar concept, but more like a smart-ptr. Moreover,
- **   it can be instantiated with a value type, a pointer or a reference type,
- **   yielding the same behaviour in all cases (useful for building templates)
+ ** - ReturnRef is similar to std::reference_wrapper, but with a function-like usage.
+ ** - ItemWrapper is a similar concept, but used more like a smart-ptr. Notably,
+ **   a value-object is stored inline, into an embedded buffer.
+ **   Furthermore, ItemWrapper can be used to level differences between values,
+ **   references and pointers, as it can be instantiated with any of them, offering
+ **   (almost) uniform handling in all cases (useful for building templates)
  ** - FunctionResult is the combination of ItemWrapper with a functor object
- **   to cache the function result value.
- ** 
+ **   to cache the function result value. It was split off into a separate
+ **   header \ref wrapper-function-result.hpp to reduce include impact
+ ** @remark most of this helper collection became obsolete with the evolution of the
+ **   standard library — with the exception of ItermWrapper, which turned out to be
+ **   very effective and is now pervasively used as part of transforming functor
+ **   pipelines, to cache the result of the transforming function invocation.
  ** @see lib::TransformIter
- ** 
- ** @todo 2017 consider to split off the FunctionResult into a dedicated header to reduce includes
- ** 
+ ** @see lib::explore
+ **
  */
 
 
@@ -34,24 +40,18 @@
 
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
-#include "lib/meta/function.hpp"
-#include "lib/meta/function-closure.hpp"
-#include "lib/meta/util.hpp"
 #include "lib/util.hpp"
 
-#include <functional>
 #include <cstddef>
+#include <utility>
+#include <type_traits>
 
 
 namespace lib {
 namespace wrapper {
   
-  using util::unConst;
   using util::isSameObject;
-  using lib::meta::_Fun;
   using LERR_(BOTTOM_VALUE);
-  
-  using std::function;
   
   
   
@@ -386,56 +386,5 @@ namespace wrapper {
   }
   
   
-  
-  
-  /**
-   * Extension of ItemWrapper: a function remembering the result of the
-   * last invocation. Initially, the "value" is bottom (undefined, NIL),
-   * until the function is invoked for the first time. After that, the
-   * result of the last invocation can be accessed by `operator* ()`
-   * @note deliberately non-copyable, since we capture a reference
-   *       to `this` in order to write to the embedded ItemWrapper.
-   *       (to alleviate, we'd have to re-link after copying/moving)
-   */
-  template<typename SIG>
-  struct FunctionResult
-    : public function<SIG>
-    , util::NonCopyable
-    {
-      using Res = typename _Fun<SIG>::Ret;
-      using ResWrapper = ItemWrapper<Res>;
-      
-      ResWrapper lastResult_;
-      
-    public:
-      /** by default locked to _invalid state_  */
-      FunctionResult()  = default;
-      
-      /**
-       * Create result-remembering functor by outfitting a _copy_
-       * of the given function with an adaptor to _capture_ each
-       * produced result.
-       * @warning if function result is a value, it is copied.
-       */
-      template<typename FUN>
-      FunctionResult (FUN&& targetFunction)
-        : function<SIG>{lib::meta::func::chained
-                            ( std::forward<FUN> (targetFunction)
-                            , [this](Res res) -> Res
-                                    {
-                                      lastResult_ = res;
-                                      return std::forward<Res> (res);
-                                    })}
-        { }
-      
-      /** retrieve the last function result observed */
-      Res& operator*() const { return *lastResult_; }
-      bool isValid ()  const { return lastResult_.isValid(); }
-     
-      explicit
-      operator bool()  const { return isValid(); }
-    };
-  
-  
 }} // namespace lib::wrap
-#endif
+#endif /*LIB_WRAPPER_H*/

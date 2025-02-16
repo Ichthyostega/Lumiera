@@ -493,51 +493,15 @@ namespace engine {
                                    };
         }
       
-      template<class PAR>
-      struct ClosureBuilder;
-      
-      template<template<typename...> class TUP, typename...PARS>
-      struct ClosureBuilder<TUP<PARS...>>
-        {
-          using Params = TUP<PARS...>;
-          
-          static Params
-          buildParam (PARS ...params)
-            {
-              return {params...};
-            }
-          
-          template<typename...VALS>
-          static auto
-          closeFront (VALS ...vs)
-            {
-              using lib::meta::_Fun;
-              using lib::meta::TySeq;
-              using lib::meta::func::PApply;
-              using ClosedTypes = TySeq<VALS...>;
-              using ParamBuilderSig = Params(PARS...);
-              auto  partialClosure = PApply<ParamBuilderSig, ClosedTypes>::bindFront (buildParam, std::make_tuple(vs...));
-              using RemainingArgs = typename _Fun<decltype(partialClosure)>::Args;
-              using RemStripped = typename lib::meta::StripNullType<RemainingArgs>::Seq;
-              using RemainingParams = typename lib::meta::RebindVariadic<TUP, RemStripped>::Type;
-//              using idx = std::make_index_sequence<sizeof...(VALS)>;
-//              auto& makeParamAggregate = buildParam;
-              return [closure = move(partialClosure)
-                     ]
-                     (RemainingParams remPar)
-                        {
-                          return std::apply (closure, remPar);
-                        };
-            }
-        };
-      
+      /** immediately close (≙ fix) some values in a parameter tuple,
+       *  starting from left, while leaving the remaining values open
+       *  to be supplied by automation or another parameter binding. */
       template<typename PAR, typename...PARS>
       auto
       closeParamFront (PAR v1, PARS ...vs)
         {
-          using Params = typename WAB::Param;
           return adaptParam(
-                    ClosureBuilder<Params>::template closeFront (v1,vs...));
+                    WAB::ParamClosure::template closeFront (v1,vs...));
         }
       
       

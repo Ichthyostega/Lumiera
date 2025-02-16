@@ -138,6 +138,7 @@
 #include "steam/engine/buffer-provider.hpp"
 #include "steam/engine/buffhandle-attach.hpp"  /////////////////OOO why do we need to include this? we need the accessAs<TY>() template function
 #include "steam/engine/media-weaving-pattern.hpp"
+#include "lib/meta/tuple-closure.hpp"
 #include "lib/meta/tuple-helper.hpp"
 //#include "lib/test/test-helper.hpp" ////////////////////////////OOO TODO added for test
 #include "lib/format-string.hpp"
@@ -251,9 +252,9 @@ namespace engine {
       static constexpr uint FAN_I = PROT::FAN_I;
       static constexpr uint FAN_O = PROT::FAN_O;
       
-      using Param = typename PROT::Param;              ///////////////////////////OOO integrate here a partial-closure-helper
       using TypeMarker = std::function<BuffDescr(BufferProvider&)>;
       using ProviderRef = std::reference_wrapper<BufferProvider>;
+      using ParamClosure = lib::meta::TupleClosureBuilder<typename PROT::Param>;
       
       DataBuilder<POL, PortRef> leadPorts;
       std::vector<TypeMarker>   buffTypes;

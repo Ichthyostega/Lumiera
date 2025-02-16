@@ -35,6 +35,7 @@
 #include "lib/hash-value.h"
 #include "lib/opaque-holder.hpp"
 #include "lib/meta/typelist-manip.hpp"
+#include "lib/meta/typelist-util.hpp"
 
 
 namespace steam {
