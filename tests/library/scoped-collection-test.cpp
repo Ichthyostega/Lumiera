@@ -270,7 +270,7 @@ namespace test{
             CHECK (d0.calc(0) == 11 + 22);
             
             // The others even point into obsoleted storage holding zombie objects
-            CHECK (d1.calc(44) == rr + 44);
+            CHECK (d1.getVal() == Dummy::DEAD);
             
           }
           CHECK (0 == Dummy::checksum());

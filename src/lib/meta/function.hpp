@@ -116,7 +116,7 @@ namespace meta{
     : std::true_type
     {
       using Ret  = RET;
-      using Args = Types<ARGS...>;
+      using Args = TySeq<ARGS...>;
       using Sig  = RET(ARGS...);
       using Functor = std::function<Sig>;
       enum { ARITY = sizeof...(ARGS) };
@@ -343,7 +343,17 @@ namespace meta{
   template<typename RET, typename ARGS>
   struct BuildFunType;
   
+                          ///////////////////////////////////////////////////////////////////////////////////TICKET #987 : this specialisation handles the variadic case and will be the only definition in future
+  template<typename RET, typename...ARGS>
+  struct BuildFunType<RET, TySeq<ARGS...>>
+  {
+    using Sig = RET(ARGS...);
+    using Fun = _Fun<Sig>;
+    using Func = function<Sig>;
+    using Functor = Func;
+  };
   
+                          ///////////////////////////////////////////////////////////////////////////////////TICKET #987 : the following specialisations become obsolete with the old-style type-sequence
   template< typename RET>
   struct BuildFunType<RET, Types<> >
   {

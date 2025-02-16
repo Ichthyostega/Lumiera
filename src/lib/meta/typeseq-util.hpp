@@ -84,10 +84,11 @@ namespace meta {
    * Helper: prepend a type to an existing type sequence,
    * thus shifting all elements within the sequence 
    * to the right, eventually dropping the last element
+   *  @todo support variadic type-seq        ////////////////////////////////////////////////////////////////TICKET #987 : make lib::meta::Types<TYPES...> variadic, then replace this by a single variadic template
    */
   template<class T, class TYPES>
   struct Prepend;
-  
+                          ///////////////////////////////////////////////////////////////////////////////////TICKET #987 : the following specialisation will be obsoleted by the removal of old-style type-sequences
   template< typename T01
           , typename T02
           , typename T03
@@ -155,6 +156,21 @@ namespace meta {
     using Seq  = TySeq<T, TYPES...>;
     using List = typename Types<T, TYPES...>::List;
   };
+  
+  template<class H, class T>
+  struct TySeq< Node<H,T> >
+    {
+      using List = Node<H,T>;
+      using Seq  = typename Prepend< H
+                                   , typename TySeq<T>::Seq
+                                   >::Seq;
+    };
+  template<>
+  struct TySeq<NullType>
+    {
+      using List = NullType;
+      using Seq  = TySeq<>;
+    };
    //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #987 temporary WORKAROUND -- to be obsoleted
   
   
@@ -182,14 +198,61 @@ namespace meta {
     {
       using Seq = TySeq<>;  // NOTE: this causes the result to be a TySeq
     };
+                          ///////////////////////////////////////////////////////////////////////////////////TICKET #987 : the following specialisation is a catch-all and becomes obsolete
+  template<typename...TYPES>
+  struct StripNullType<TySeq<TYPES...>>
+    {
+      using Seq = TySeq<TYPES...>;
+    };
    //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #987 temporary WORKAROUND(End) -- to be obsoleted
   
   
   
-  /** Helper: separate parts of a type sequence */
+  /** Helper: separate parts of a type sequence
+   *  @todo support variadic type-seq        ////////////////////////////////////////////////////////////////TICKET #987 : make lib::meta::Types<TYPES...> variadic, then replace this by a single variadic template
+   */
   template<class TYPES>
   struct Split;
   
+                          ///////////////////////////////////////////////////////////////////////////////////TICKET #987 : this specialisation handles the variadic case and will be the only definition in future
+  template<typename T1, typename...TS>
+  struct Split<TySeq<T1,TS...> >
+  {
+    using List = typename TySeq<T1,TS...>::List;
+    
+    using Head  = T1;
+    using First = TySeq<T1>;
+    using Tail  = TySeq<TS...>;
+    
+    // for finding the end we need the help of typelist-util.hpp
+    
+    using PrefixList = typename SplitLast<List>::List;
+    using TailList   = typename Tail::List;
+    
+    using Prefix     = typename TySeq<PrefixList>::Seq;
+    using End        = typename SplitLast<List>::Type;
+    using Last       = TySeq<End>;
+  };
+  
+  template<>
+  struct Split<TySeq<>>
+  {
+    using List = NullType;
+    
+    using Head  = NullType;
+    using First = TySeq<>;
+    using Tail  = TySeq<>;
+    
+    // for finding the end we need the help of typelist-util.hpp
+    
+    using PrefixList = NullType;
+    using TailList   = NullType;
+    
+    using Prefix     = TySeq<>;
+    using Last       = TySeq<>;
+    using End        = NullType;
+  };
+                          ///////////////////////////////////////////////////////////////////////////////////TICKET #987 : the following specialisation will be obsoleted by the removal of old-style type-sequences
   template< typename T01
           , typename T02
           , typename T03
@@ -274,6 +337,11 @@ namespace meta {
   struct Pick<Types<TYPES...>, i>
     {
       using Type = typename lib::meta::Shifted<Types<TYPES...>, i>::Head;
+    };
+  template<typename...TYPES, size_t i>
+  struct Pick<TySeq<TYPES...>, i>
+    {
+      using Type = typename Shifted<TySeq<TYPES...>, i>::Head;
     };
   
   

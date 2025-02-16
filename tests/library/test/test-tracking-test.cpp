@@ -118,21 +118,21 @@ namespace test{
             CHECK (Dummy::checksum() == dum1.getVal());
             
             Dummy dum2{55};
-            CHECK (55 == dum2.getVal());
+            CHECK (dum2.getVal() == 55);
             CHECK (Dummy::checksum() == dum1.getVal() + 55);
             
             Dummy dum3{move (dum2)};
-            CHECK (55 == dum3.getVal());
-            CHECK (0  == dum2.getVal());
+            CHECK (dum3.getVal() == 55);
+            CHECK (dum2.getVal() == Dummy::DEFUNCT);
             
             dum3.setVal (23);
-            CHECK (23 == dum3.getVal());
+            CHECK (dum3.getVal() == 23);
             
             dum1 = move (dum3);
-            CHECK (23 == dum1.getVal());
-            CHECK (0  == dum2.getVal());
-            CHECK (0  == dum3.getVal());
-            CHECK (Dummy::checksum() == 23);
+            CHECK (dum1.getVal() == 23            );
+            CHECK (dum2.getVal() == Dummy::DEFUNCT);
+            CHECK (dum3.getVal() == Dummy::DEFUNCT);
+            CHECK (Dummy::checksum() == 23        );
             
             Dummy::activateCtorFailure (true);
             try {
@@ -145,10 +145,10 @@ namespace test{
                 Dummy::checksum() -= v;
               }
             Dummy::activateCtorFailure (false);
-            CHECK (23 == dum1.getVal());
-            CHECK (0  == dum2.getVal());
-            CHECK (0  == dum3.getVal());
-            CHECK (Dummy::checksum() == 23);
+            CHECK (dum1.getVal()     == 23            );
+            CHECK (dum2.getVal()     == Dummy::DEFUNCT);
+            CHECK (dum3.getVal()     == Dummy::DEFUNCT);
+            CHECK (Dummy::checksum() == 23            );
           }
           CHECK (Dummy::checksum() == 0);
         }

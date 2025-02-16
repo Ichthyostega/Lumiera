@@ -71,13 +71,28 @@ namespace control {
     
       //
      // _______________________________________________________________________________________________________________
-    /** @internal mix in a function operator */
+    /** @internal mix in a function operator
+     *  @todo variadic type-seq        //////////////////////////////////////////////////////////////////////TICKET #987 : make lib::meta::Types<TYPES...> variadic, then replace this by a single variadic template
+     */
     template< class TAR, class BA, class RET
             , typename TYPES
             >
     struct AcceptArgs ;
     
+                          ///////////////////////////////////////////////////////////////////////////////////TICKET #987 : this specialisation handles the variadic case and will be the only definition in future
+    template<class TAR, class BA, class RET, typename...ARGS>
+    struct AcceptArgs<TAR,BA,RET, TySeq<ARGS...> >
+      : BA
+      {
+        RET
+        operator() (ARGS ...args)
+          {
+            return static_cast<TAR*> (this) -> bindArg (make_tuple (std::move(args) ...));
+          }
+      };
     
+    
+                          ///////////////////////////////////////////////////////////////////////////////////TICKET #987 : the following specialisations become obsolete with the old-style type-sequence
     /* specialisations for 0...9 Arguments.... */
     
     template< class TAR, class BA, class RET
@@ -262,13 +277,27 @@ namespace control {
       //
      // _______________________________________________________________________________________________________________
     /** @internal mix in a \c bind() function
+     *  @todo variadic type-seq        //////////////////////////////////////////////////////////////////////TICKET #987 : make lib::meta::Types<TYPES...> variadic, then replace this by a single variadic template
      */
     template< class TAR, class BA, class RET
             , typename TYPES
             >
     struct AcceptBind ;
     
+                          ///////////////////////////////////////////////////////////////////////////////////TICKET #987 : this specialisation handles the variadic case and will be the only definition in future
+    template<class TAR, class BA, class RET, typename...ARGS>
+    struct AcceptBind<TAR,BA,RET, TySeq<ARGS...> >
+      : BA
+      {
+        RET
+        bind (ARGS ...args)
+          {
+            return static_cast<TAR*> (this) -> bindArg (make_tuple (std::move(args)...));
+          }
+      };
     
+    
+                          ///////////////////////////////////////////////////////////////////////////////////TICKET #987 : the following specialisations become obsolete with the old-style type-sequence
     /* specialisations for 0...9 Arguments.... */
     
     template< class TAR, class BA, class RET

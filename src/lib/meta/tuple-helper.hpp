@@ -338,6 +338,18 @@ namespace meta {
     };
   
   
+                          ///////////////////////////////////////////////////////////////////////////////////TICKET #987 : this specialisation handles the variadic case and will be the only definition in future
+  template
+    < template<class,class,class, uint> class _X_
+    , class TUP
+    , uint i
+    >
+  class BuildTupleAccessor< _X_, TySeq<>, TUP, i>
+    {
+    public:
+      using Product = _X_<NullType, TUP, TUP, i>;   // Note: i == tuple size
+    };
+                          ///////////////////////////////////////////////////////////////////////////////////TICKET #987 : the following specialisation will be obsoleted by the removal of old-style type-sequences
   template
     < template<class,class,class, uint> class _X_
     , class TUP
