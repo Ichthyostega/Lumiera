@@ -29,7 +29,7 @@
  ** to exert artistic control and will be supplied later, through automation.
  ** 
  ** @see weaving-pattern-builder.hpp
- ** @see NodeBuilder_test::build_Node_closedParam() 
+ ** @see NodeBuilder_test::build_Node_closedParam()
  ** 
  */
 
@@ -54,9 +54,10 @@ namespace meta{
   template<template<typename...> class TUP, typename...PARS>
   struct TupleClosureBuilder<TUP<PARS...>>
     {
-      using Params = TUP<PARS...>;
+      using Tuple = TUP<PARS...>;
+      using TupleBuilderSig = Tuple(PARS...);
       
-      static Params
+      static Tuple
       buildParam (PARS ...params)
         {
           return {params...};
@@ -66,13 +67,24 @@ namespace meta{
       static auto
       closeFront (VALS ...vs)
         {
-          using lib::meta::_Fun;
-          using lib::meta::TySeq;
-          using lib::meta::func::PApply;
           using ClosedTypes = TySeq<VALS...>;
-          using ParamBuilderSig = Params(PARS...);
-          auto  partialClosure = PApply<ParamBuilderSig, ClosedTypes>::bindFront (buildParam, std::make_tuple(vs...));
-          using RemainingArgs = typename _Fun<decltype(partialClosure)>::Args;
+          return wrapBuilder (func::PApply<TupleBuilderSig, ClosedTypes>::bindFront (buildParam, std::make_tuple(vs...)));
+        }
+      
+      template<typename...VALS>
+      static auto
+      closeBack (VALS ...vs)
+        {
+          using ClosedTypes = TySeq<VALS...>;
+          return wrapBuilder (func::PApply<TupleBuilderSig, ClosedTypes>::bindBack (buildParam, std::make_tuple(vs...)));
+        }
+      
+    private:
+      template<class CLO>
+      static auto
+      wrapBuilder (CLO partialClosure)
+        {
+          using RemainingArgs = typename _Fun<CLO>::Args;
           using RemainingParams = typename lib::meta::RebindVariadic<TUP, RemainingArgs>::Type;
           return [closure = move(partialClosure)
                  ]

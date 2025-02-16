@@ -639,6 +639,11 @@ return: 0
 END
 
 
+PLANNED "tuple value pre-binding closure" TupleClosure_test <<END
+return: 0
+END
+
+
 TEST "tuple metaprogramming helpers" TupleHelper_test <<END
 out-lit: L1	:-<1>-<3>-<5>-
 out-lit: L2	:-<2>-<4>-
