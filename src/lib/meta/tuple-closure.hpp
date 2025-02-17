@@ -28,9 +28,10 @@
  ** the setup-phase of the render network, while other parameters allow the user
  ** to exert artistic control and will be supplied later, through automation.
  ** 
+ ** @see tuple-closure-test.cpp
  ** @see weaving-pattern-builder.hpp
  ** @see NodeBuilder_test::build_Node_closedParam()
- ** 
+ **
  */
 
 
@@ -38,7 +39,6 @@
 #define LIB_META_TUPLE_CLOSURE_H
 
 #include "lib/meta/function-closure.hpp"
-#include "lib/meta/tuple-helper.hpp"
 
 #include <utility>
 #include <tuple>
@@ -169,6 +169,10 @@ namespace meta{
         : Array{std::forward<XS> (inits)...}
         { }
     };
+  
+  template<typename...TTT>
+  ArrayAdapt(TTT...) -> ArrayAdapt<std::decay_t<TTT>...>;
+  
   
   
   /** partial specialisation to handle a std::array.

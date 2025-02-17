@@ -639,7 +639,7 @@ return: 0
 END
 
 
-PLANNED "tuple value pre-binding closure" TupleClosure_test <<END
+TEST "tuple value pre-binding closure" TupleClosure_test <<END
 return: 0
 END
 

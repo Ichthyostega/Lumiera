@@ -25,9 +25,6 @@
 #include "lib/test/test-helper.hpp"
 #include "lib/meta/tuple-closure.hpp"
 #include "lib/format-util.hpp"
-#include "lib/test/diagnostic-output.hpp"////////////////TODO
-
-
 
 
 namespace lib  {
@@ -47,6 +44,8 @@ namespace test {
   /*********************************************************************//**
    * @test wrap the constructors for »tuple-like« records as functor
    *       and pre-bind some arguments immediately.
+   *     - verify binding flavours for a tuple with mixed types
+   *     - verify binding also works seamlessly with std::array
    */
   class TupleClosure_test : public Test
     {
@@ -57,11 +56,12 @@ namespace test {
           tuple_bindBack();
           tuple_bindArg();
           array_bindFront();
+          array_bindArg();
+          verify_AdaptArray();
         }
       
       
-      /** @test use a regular tuple and pre-fix the first elements
-       */
+      /** @test use a regular tuple and pre-fix the first elements */
       void
       tuple_bindFront()
         {
@@ -78,8 +78,7 @@ namespace test {
         }
       
       
-      /** @test fix elements starting from the end of the tuple
-       */
+      /** @test fix elements starting from the end of the tuple */
       void
       tuple_bindBack()
         {
@@ -99,8 +98,7 @@ namespace test {
         }
       
       
-      /** @test fix specific argument within tuple
-       */
+      /** @test fix specific argument within tuple */
       void
       tuple_bindArg()
         {
@@ -119,8 +117,7 @@ namespace test {
         }
       
       
-      /** @test use a std::array and handle it like a tuple to pre-fix some elements
-       */
+      /** @test use a std::array and handle it like a tuple to pre-fix some elements */
       void
       array_bindFront()
         {
@@ -128,11 +125,70 @@ namespace test {
           using Builder = TupleClosureBuilder<Arr>;
           
           auto cons = Builder::closeFront (1u,2.3);
-          using FunType = _Fun<decltype(cons)>;
-          CHECK (showType<FunType::Sig>() == "ArrayAdapt<int, int, int, int, int> (ArrayAdapt<int, int, int>)"_expect);
+          CHECK (showType<_Fun<decltype(cons)>::Sig>() == "ArrayAdapt<int, int, int, int, int> (ArrayAdapt<int, int, int>)"_expect);
           
           Arr arr = cons({3,4,5});
           CHECK (arr == "[1, 2, 3, 4, 5]"_expect);
+        }
+      
+      
+      /** @test can also use the binding for arbitrary elements in a std::array */
+      void
+      array_bindArg()
+        {
+          using Arr = array<int,5>;
+          using Builder = TupleClosureBuilder<Arr>;
+          
+          auto cons = Builder::close<3>(55);
+          CHECK (showType<_Fun<decltype(cons)>::Sig>() == "ArrayAdapt<int, int, int, int, int> (ArrayAdapt<int, int, int, int>)"_expect);
+          
+          Arr arr = cons(array{1,2,3,4});
+          CHECK (arr == "[1, 2, 3, 55, 4]"_expect);
+        }
+      
+      
+      
+      /** @test verify properties of the metaprogramming-adapter,
+       *        used as seamless overlay to handle std::array
+       *        in the TUpleClosureBuilder.
+       */
+      void
+      verify_AdaptArray()
+        {
+          // can be constructed from aggregate
+          ArrayAdapt arr{1,2,3,4,5};
+          CHECK (arr.size() == 5);
+          
+          // picks up a tuple-loke type signature
+          using AA = decltype(arr);
+          CHECK (showType<AA>() == "ArrayAdapt<int, int, int, int, int>"_expect );
+          CHECK (showType<AA::value_type>() == "int"_expect );
+          
+          // can use subscript operator from underlying array
+          CHECK (arr[0] == 1);
+          CHECK (arr[2] == 3);
+          CHECK (arr[4] == 5);
+          // can use the tuple-like binding defined for array
+          CHECK (std::get<0>(arr) == 1);
+          CHECK (std::get<2>(arr) == 3);
+          CHECK (std::get<4>(arr) == 5);
+          
+          // supports structured bindings
+          auto& [v1,v2,v3,v4,v5] = arr;
+          CHECK (v3 == 3);
+          v3 = 33;
+          CHECK (arr[2] == 33);
+          
+          // can copy-assign from std::array
+          arr = array{5,4,3,2,1};
+          CHECK (arr[0] == 5);
+          CHECK (arr[4] == 1);
+          
+          // can copy/move-construct from std::array
+          AA axx{array{-1,-2,-3,-4,-5}};
+          CHECK (axx[0] == -1);
+          CHECK (axx[2] == -3);
+          CHECK (axx[4] == -5);
         }
     };
   
