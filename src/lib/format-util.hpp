@@ -35,6 +35,7 @@
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
 
+#include <array>
 #include <string>
 #include <vector>
 #include <sstream>
@@ -257,6 +258,18 @@ namespace util {
   {
     return "["+join (forward<COLL> (coll))+"]";
   }
+
+  
+  /** convenient pretty-printer for std::array instances */
+  template<typename T, std::size_t N>
+  struct StringConv<std::array<T,N>>
+    {
+      static std::string
+      invoke (std::array<T,N> const& arr) noexcept
+      {
+        return util::toStringBracket (arr);
+      }
+    };
   
   
 } // namespace util

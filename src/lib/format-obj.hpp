@@ -15,12 +15,12 @@
 /** @file format-obj.hpp
  ** Simple functions to represent objects, for debugging and diagnostics.
  ** The helpers provided here are rather commonplace, but written in a way
- ** as to incur only modest header inclusion load. It should be OK to use
- ** these even on widely used interface headers.
+ ** to incur only modest header inclusion load. It should be OK to use them
+ ** even on interface headers in widespread use.
  ** - util::toString() performs a failsafe to-String conversion, thereby preferring a
  **         built-in conversion operator, falling back to a lexical conversion (boost)
- **         or just a unmangled and simplified type string as default.
- ** - util::typedString() combines this with a always visible type display
+ **         or just an unmangled and simplified type string as default.
+ ** - util::typedString() combines this with an always visible type display
  ** - lib::meta::demangleCxx() uses the built-in compiler support to translate a mangled
  **         type-ID (as given by `typeid(TY).name()`) into a readable, fully qualified
  **         C++ type name. This is only supported for GNU compatible compilers.

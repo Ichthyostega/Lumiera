@@ -24,6 +24,7 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/meta/tuple-closure.hpp"
+#include "lib/format-util.hpp"
 #include "lib/test/diagnostic-output.hpp"////////////////TODO
 
 
@@ -35,6 +36,7 @@ namespace test {
   
   using std::string;
   using std::tuple;
+  using std::array;
   using std::make_tuple;
   using lib::meta::_Fun;
   using lib::test::showType;
@@ -53,6 +55,7 @@ namespace test {
         {
           tuple_bindFront();
           tuple_bindBack();
+          array_bindFront();
         }
       
       
@@ -93,6 +96,23 @@ SHOW_EXPR(showType<FunType::Sig>())
           
           Tup t2 = c2(make_tuple (-1));
           CHECK (t2 == "«tuple<int, double, string>»──(-1,3.1415927,pi)"_expect);
+        }
+      
+      
+      /** @test use a std::array and handle it like a tuple to pre-fix some elements
+       */
+      void
+      array_bindFront()
+        {
+          using Arr = array<int,5>;
+          using Builder = TupleClosureBuilder<Arr>;
+          
+          auto cons = Builder::closeFront (1u,2.3);
+          using FunType = _Fun<decltype(cons)>;
+          CHECK (showType<FunType::Sig>() == "ArrayAdapt<int, int, int, int, int> (ArrayAdapt<int, int, int>)"_expect);
+          
+          Arr arr = cons({3,4,5});
+          CHECK (arr == "[1, 2, 3, 4, 5]"_expect);
         }
     };
   

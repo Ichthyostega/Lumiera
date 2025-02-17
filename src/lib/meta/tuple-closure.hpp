@@ -42,6 +42,7 @@
 
 #include <utility>
 #include <tuple>
+#include <array>
 
 
 
@@ -96,5 +97,91 @@ namespace meta{
     };
   
   
+  /* ===== adapt array for tuple-like signature ===== */
+  
+  template<typename...TTT>
+  struct ArrayAdapt;
+  
+  namespace {
+    
+    template<typename...TTT>
+    struct AllSame
+      : std::true_type
+      { };
+    
+    template<typename T1, typename T2, typename...TS>
+    struct AllSame<T1,T2,TS...>
+      : __and_<is_same<T1,T2>
+              ,AllSame<T2,TS...>
+              >
+      { };
+    
+    
+    template<typename T, size_t N>
+    struct Repeat
+      {
+        using Rem = typename Repeat<T, N-1>::Seq;
+        using Seq = typename Prepend<T,Rem>::Seq;
+      };
+      
+    template<typename T>
+    struct Repeat<T,0>
+      {
+        using Seq = TySeq<>;
+      };
+    
+    template<typename T, size_t N>
+    struct _Adapt
+      {
+        using NFold = typename Repeat<T,N>::Seq;
+        using Array = typename RebindVariadic<ArrayAdapt, NFold>::Type;
+      };
+    
+    template<typename T, size_t N>
+    using _AdaptArray_t = typename _Adapt<T,N>::Array;
+  }
+  
+  template<typename T, typename...TT>
+  struct ArrayAdapt<T,TT...>
+    : std::array<T, 1+sizeof...(TT)>
+    {
+      static_assert (AllSame<T,TT...>()
+                    ,"Array can only hold elements of uniform type");
+      using Array = std::array<T, 1+sizeof...(TT)>;
+      
+      ArrayAdapt (Array const& o) : Array{o}       { }
+      ArrayAdapt (Array     && r) : Array{move(r)} { }
+      
+      template<typename...XS>
+      ArrayAdapt (XS&& ...inits)
+        : Array{std::forward<XS> (inits)...}
+        { }
+    };
+  
+  template<typename T, size_t N>
+  struct TupleClosureBuilder<std::array<T,N>>
+    : TupleClosureBuilder<_AdaptArray_t<T,N>>
+    {
+    };
+  
+  
 }} // namespace lib::meta
-#endif
+
+
+namespace std { // Specialisation to support C++ »Tuple Protocol« and structured bindings.
+  
+  /** determine compile-time fixed size of the adapted std::array */
+  template<typename...TTT>
+  struct tuple_size<lib::meta::ArrayAdapt<TTT...> >
+    : integral_constant<size_t, sizeof...(TTT)>
+    { };
+  
+  /** expose the element type of the adapted std::array */
+  template<size_t I, typename...TTT>
+  struct tuple_element<I, lib::meta::ArrayAdapt<TTT...> >
+    : tuple_element<I, typename lib::meta::ArrayAdapt<TTT...>::Array>
+    { };
+  
+  // Note: the std::get<i> function will pick the subclass
+}
+#endif /*LIB_META_TUPLE_CLOSURE_H*/
