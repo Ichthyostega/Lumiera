@@ -342,13 +342,12 @@ namespace test {
           
           Sig15& f = fun15<1,2,3,4,5>;
           SigA5& f5 = fun11<5>;
-          Tuple<Types<char>> argT(55);
           
-          function<SigR1> f_bound_1 = BindToArgument<Sig15,char,0>::reduced (f, argT);
-          function<SigR2> f_bound_2 = BindToArgument<Sig15,char,1>::reduced (f, argT);
-          function<SigR3> f_bound_3 = BindToArgument<Sig15,char,2>::reduced (f, argT);
-          function<SigR4> f_bound_4 = BindToArgument<Sig15,char,3>::reduced (f, argT);
-          function<SigR5> f_bound_5 = BindToArgument<Sig15,char,4>::reduced (f, argT);
+          function<SigR1> f_bound_1 = BindToArgument<Sig15,char,0>::reduced (f, 55);
+          function<SigR2> f_bound_2 = BindToArgument<Sig15,char,1>::reduced (f, 55);
+          function<SigR3> f_bound_3 = BindToArgument<Sig15,char,2>::reduced (f, 55);
+          function<SigR4> f_bound_4 = BindToArgument<Sig15,char,3>::reduced (f, 55);
+          function<SigR5> f_bound_5 = BindToArgument<Sig15,char,4>::reduced (f, 55);
           
           CHECK (55+2+3+4+5 == f_bound_1 (    _2_,_3_,_4_,_5_) );
           CHECK (1+55+3+4+5 == f_bound_2 (_1_,    _3_,_4_,_5_) );
@@ -359,7 +358,7 @@ namespace test {
           
           // degenerate case: specify wrong argument position (behind end of argument list)
           // causes the argument to be simply ignored and no binding to happen
-          function<Sig15> f_bound_X = BindToArgument<Sig15,char,5>::reduced (f, argT);
+          function<Sig15> f_bound_X = BindToArgument<Sig15,char,5>::reduced (f, 88);
           CHECK (1+2+3+4+5  == f_bound_X (_1_,_2_,_3_,_4_,_5_) );
           
           

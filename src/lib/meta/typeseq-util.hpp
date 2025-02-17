@@ -80,9 +80,9 @@ namespace meta {
   }
   
   
-  /** 
+  /**
    * Helper: prepend a type to an existing type sequence,
-   * thus shifting all elements within the sequence 
+   * thus shifting all elements within the sequence
    * to the right, eventually dropping the last element
    *  @todo support variadic type-seq        ////////////////////////////////////////////////////////////////TICKET #987 : make lib::meta::Types<TYPES...> variadic, then replace this by a single variadic template
    */
@@ -128,9 +128,9 @@ namespace meta {
   
   
   
-  /** 
+  /**
    * Additional specialisation of the basic type sequence type,
-   * allowing to re-create a (flat) type sequence from a typelist. 
+   * allowing to re-create a (flat) type sequence from a typelist.
    */
   template<class H, class T>
   struct Types< Node<H,T> >
@@ -280,7 +280,7 @@ namespace meta {
                     , T16,T17,T18,T19,T20
                     > >
   {
-    typedef typename 
+    typedef typename
             Types< T01,T02,T03,T04,T05
                  , T06,T07,T08,T09,T10
                  , T11,T12,T13,T14,T15
@@ -308,9 +308,9 @@ namespace meta {
   
   
   /**
-   * Helper: generate a type sequence left shifted 
+   * Helper: generate a type sequence left shifted
    * by i steps, filling in NullType at the end
-   */  
+   */
   template<class TYPES, uint i=1>
   class Shifted
     {
@@ -322,14 +322,14 @@ namespace meta {
   
   template<class TYPES>
   struct Shifted<TYPES,0>
-    { 
+    {
       typedef TYPES                      Type;
       typedef typename Split<Type>::Head Head;
     };
   
   
   
-  /** 
+  /**
    * specialisation: pick n-th element from a type sequence
    * @see typelist-manip.hpp
    */
@@ -345,6 +345,23 @@ namespace meta {
     };
   
   
+  
+  /**
+   * Generate a type-sequence filled with
+   * \a N times the same type \a T
+   */
+  template<typename T, size_t N>
+  struct Repeat
+    {
+      using Rem = typename Repeat<T, N-1>::Seq;
+      using Seq = typename Prepend<T,Rem>::Seq;
+    };
+  
+  template<typename T>
+  struct Repeat<T,0>
+    {
+      using Seq = TySeq<>;
+    };
   
   
   

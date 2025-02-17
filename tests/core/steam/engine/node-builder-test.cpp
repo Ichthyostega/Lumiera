@@ -206,9 +206,10 @@ namespace test  {
       void
       build_Node_closedParam()
         {
-          using Params = std::tuple<uint,uint,uint,uint,uint>;//array<uint, 5>;
-          auto procFun = [](Params params, uint* out)  { auto [v1,v2,v3,v4,v5] = params; *out = v1+v2+v3+v4+v5; };//explore(params).resultSum(); };
-          auto autoFun = [](Time nomTime){ return FrameNr::quant (nomTime, SECONDS_GRID); };
+          using Params = array<uint, 5>;
+          auto procFun = [](Params params, uint* out){ *out = explore(params).resultSum();     };
+          auto autoFun = [](Time nomTime){ return uint(FrameNr::quant (nomTime, SECONDS_GRID));};
+          
           ProcNode node{prepareNode("Test")
                           .preparePort()
                             .invoke ("fun()", procFun)

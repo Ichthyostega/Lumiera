@@ -55,6 +55,7 @@ namespace test {
         {
           tuple_bindFront();
           tuple_bindBack();
+          tuple_bindArg();
           array_bindFront();
         }
       
@@ -69,8 +70,7 @@ namespace test {
           
           auto cons = Builder::closeFront (1,2.3);
           using FunType = _Fun<decltype(cons)>;
-          CHECK (FunType());
-SHOW_EXPR(showType<FunType::Sig>())
+          CHECK (FunType() == true);       // indeed a function
           CHECK (showType<FunType::Sig>() == "tuple<int, double, string> (tuple<string>)"_expect);
           
           Tup tup = cons("five");
@@ -96,6 +96,26 @@ SHOW_EXPR(showType<FunType::Sig>())
           
           Tup t2 = c2(make_tuple (-1));
           CHECK (t2 == "«tuple<int, double, string>»──(-1,3.1415927,pi)"_expect);
+        }
+      
+      
+      /** @test fix specific argument within tuple
+       */
+      void
+      tuple_bindArg()
+        {
+          using Tup = tuple<int,double,string>;
+          using Builder = TupleClosureBuilder<Tup>;
+          
+          auto c1 = Builder::close<1>(3.1415927);
+          CHECK (showType<_Fun<decltype(c1)>::Sig>() == "tuple<int, double, string> (tuple<int, string>)"_expect);
+          
+          Tup t1 = c1({2,"π"});
+          CHECK (t1 == "«tuple<int, double, string>»──(2,3.1415927,π)"_expect);
+          
+          auto c2 = Builder::close<3>("fantastic");
+          // Binding to out-of-scope arguments is ignored: the result is the identity-function
+          CHECK (showType<_Fun<decltype(c2)>::Sig>() == "tuple<int, double, string> (tuple<int, double, string>)"_expect);
         }
       
       

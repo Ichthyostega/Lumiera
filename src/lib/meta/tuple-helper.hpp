@@ -225,11 +225,12 @@ namespace meta {
    *         - the actual index position of the tuple element
    *           to be initialised through this concrete instantiation.
    * @remarks this design has several extension points. Pretty much any conceivable
-   *    initialisation logic can be embodied in the `_ElmMapper_` template. The sole
-   *    requirement is that the concrete instance is _assignable_ by the source type
+   *    initialisation logic can be embodied in the `_ElmMapper_` template.
+   *    Required is that the concrete instance is _constructible_ from the source type
    *    and _convertible_ to the individual member type of the target tuple it is
-   *    invoked for. Moreover, it is possible to build a generic _element extractor_,
-   *    which will be specialised on base of the source type accepted.
+   *    invoked for. Source data _must_ be taken by-value, from the ctor argument.
+   * @note based on this mechanics, a generic _element extractor_ may be built,
+   *    selecting a (partial) specialisation based on the source type given.
    * @see ExtractArg
    */
   template< typename TYPES
@@ -243,15 +244,15 @@ namespace meta {
       
     protected:
       template<class SRC, size_t...idx>
-      TupleConstructor (SRC values, IndexSeq<idx...>)
-        : Tuple<TYPES> (_ElmMapper_<SRC, Tuple<TYPES>, idx>{values}...)
+      TupleConstructor (SRC initVals, IndexSeq<idx...>)
+        : Tuple<TYPES> (_ElmMapper_<SRC, Tuple<TYPES>, idx>{initVals}...)
         { }
       
       
     public:
       template<class SRC>
       TupleConstructor (SRC values)
-        : TupleConstructor (values, SequenceIterator())
+        : TupleConstructor (std::move(values), SequenceIterator())
         { }
     };
   

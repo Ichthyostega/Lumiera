@@ -699,9 +699,9 @@ namespace func{
       typedef function<ReducedSig> ReducedFunc;
       
       static ReducedFunc
-      reduced (SIG& f, Tuple<Types<X>> const& val)
+      reduced (SIG& f, X val)
         {
-          Tuple<PreparedArgTypes> params {BuildPreparedArgs(val)};
+          Tuple<PreparedArgTypes> params {BuildPreparedArgs{std::forward_as_tuple (val)}};
           return func::Apply<ARG_CNT>::template bind<ReducedFunc> (f, params);
         }
     };
@@ -897,13 +897,10 @@ namespace func{
   template<typename SIG, typename TERM>
   inline
   typename _PapE<SIG>::FunType::Functor
-  bindLast (SIG& f, TERM const& arg)
+  bindLast (SIG& f, TERM&& arg)
   {
-    typedef Types<TERM>     ArgTypeSeq;
-    typedef Tuple<ArgTypeSeq> ArgTuple;
-    ArgTuple argT(arg);
     enum { LAST_POS = -1 + count<typename _Fun<SIG>::Args::List>::value };
-    return BindToArgument<SIG,TERM,LAST_POS>::reduced (f, argT);
+    return BindToArgument<SIG,TERM,LAST_POS>::reduced (f, std::forward<TERM> (arg));
   }
   
   
