@@ -83,6 +83,10 @@ namespace func{
      * this Helper with repetitive specialisations for up to nine arguments
      * is used either to apply a function to arguments given as a tuple, or
      * to create the actual closure (functor) over all function arguments.
+     * @todo 2/2025 should be replaced by a single variadic template, and
+     *       implemented using std::apply. Note also that std::bind would
+     *       support perfect-forwarding, especially also for the functor;
+     *       the latter would allow to use move-only functors.
      */
     template<uint n>
     struct Apply;
@@ -567,11 +571,11 @@ namespace func{
   template<typename SIG, typename VAL>
   class PApply
     {
-      typedef typename _Fun<SIG>::Args Args;
-      typedef typename _Fun<SIG>::Ret  Ret;
-      typedef typename Args::List ArgsList;
-      typedef typename VAL::List ValList;
-      typedef typename Types<ValList>::Seq ValTypes;
+      using Args     = typename _Fun<SIG>::Args;
+      using Ret      = typename _Fun<SIG>::Ret;
+      using ArgsList = typename Args::List;
+      using ValList  = typename VAL::List;
+      using ValTypes = typename Types<ValList>::Seq;
       
       enum { ARG_CNT = count<ArgsList>::value
            , VAL_CNT = count<ValList> ::value
@@ -580,24 +584,24 @@ namespace func{
       
       
       // create list of the *remaining* arguments, after applying the ValList
-      typedef typename Splice<ArgsList, ValList>::Back           LeftReduced;
-      typedef typename Splice<ArgsList, ValList, ROFFSET>::Front RightReduced;
+      using LeftReduced = typename Splice<ArgsList, ValList>::Back;
+      using RightReduced = typename Splice<ArgsList, ValList, ROFFSET>::Front;
       
-      typedef typename Types<LeftReduced>::Seq  ArgsL;
-      typedef typename Types<RightReduced>::Seq ArgsR;
+      using ArgsL = typename Types<LeftReduced>::Seq;
+      using ArgsR = typename Types<RightReduced>::Seq;
       
       
       // build a list, where each of the *remaining* arguments is replaced by a placeholder marker
-      typedef typename func::PlaceholderTuple<LeftReduced>::List  TrailingPlaceholders;
-      typedef typename func::PlaceholderTuple<RightReduced>::List LeadingPlaceholders;
+      using TrailingPlaceholders = typename func::PlaceholderTuple<LeftReduced>::List;
+      using LeadingPlaceholders  = typename func::PlaceholderTuple<RightReduced>::List;
       
       // ... and splice these placeholders on top of the original argument type list,
       // thus retaining the types to be closed, but setting a placeholder for each remaining argument
-      typedef typename Splice<ArgsList, TrailingPlaceholders, VAL_CNT>::List LeftReplaced;
-      typedef typename Splice<ArgsList, LeadingPlaceholders, 0     >::List RightReplaced;
+      using LeftReplaced  = typename Splice<ArgsList, TrailingPlaceholders, VAL_CNT>::List;
+      using RightReplaced = typename Splice<ArgsList, LeadingPlaceholders,  0      >::List;
       
-      typedef typename Types<LeftReplaced>::Seq  LeftReplacedTypes;
-      typedef typename Types<RightReplaced>::Seq RightReplacedTypes;
+      using LeftReplacedTypes = typename Types<LeftReplaced>::Seq;
+      using RightReplacedTypes = typename Types<RightReplaced>::Seq;
       
       // create a "builder" helper, which accepts exactly the value tuple elements
       // and puts them at the right location, while default-constructing the remaining
@@ -623,8 +627,8 @@ namespace func{
       
       
     public:
-      typedef function<typename BuildFunType<Ret,ArgsL>::Sig> LeftReducedFunc;
-      typedef function<typename BuildFunType<Ret,ArgsR>::Sig> RightReducedFunc;
+      using LeftReducedFunc  = function<typename BuildFunType<Ret,ArgsL>::Sig>;
+      using RightReducedFunc = function<typename BuildFunType<Ret,ArgsR>::Sig>;
       
       
       /** do a partial function application, closing the first arguments<br/>
@@ -634,11 +638,16 @@ namespace func{
        *  @param arg value tuple, used to close function arguments starting from left
        *  @return new function object, holding copies of the values and using them at the
        *          closed arguments; on invocation, only the remaining arguments need to be supplied.
+       *  @note   BuildL, i.e. the TupleApplicator _must take its arguments by-value._ Any attempt
+       *          towards »perfect-forwarding« would be potentially fragile and not worth the effort,
+       *          since the optimiser sees the operation as a whole.
+       *  @todo 2/2025 However, the LeftReplacedArgs _could_ then possibly moved into the bind function,
+       *          as could the functor, once we replace the Apply-template by STDLIB features.
        */
       static LeftReducedFunc
-      bindFront (SIG const& f, Tuple<ValTypes> const& arg)
+      bindFront (SIG const& f, Tuple<ValTypes> arg)
         {
-          LeftReplacedArgs params {BuildL(arg)};
+          LeftReplacedArgs params {BuildL(std::move(arg))};
           return func::Apply<ARG_CNT>::template bind<LeftReducedFunc> (f, params);
         }
       
@@ -651,9 +660,9 @@ namespace func{
        *          closed arguments; on invocation, only the remaining arguments need to be supplied.
        */
       static RightReducedFunc
-      bindBack (SIG const& f, Tuple<ValTypes> const& arg)
+      bindBack (SIG const& f, Tuple<ValTypes> arg)
         {
-          RightReplacedArgs params {BuildR(arg)};
+          RightReplacedArgs params {BuildR(std::move(arg))};
           return func::Apply<ARG_CNT>::template bind<RightReducedFunc> (f, params);
         }
     };
@@ -667,21 +676,23 @@ namespace func{
   template<typename SIG, typename X, uint pos>
   class BindToArgument
     {
-      typedef typename _Fun<SIG>::Args Args;
-      typedef typename _Fun<SIG>::Ret  Ret;
-      typedef typename Args::List ArgsList;
-      typedef typename Types<X>::List ValList;
+      using Args     = typename _Fun<SIG>::Args;
+      using Ret      = typename _Fun<SIG>::Ret;
+      using ArgsList = typename     Args::List;
+      using ValList  = typename Types<X>::List;
       
       enum { ARG_CNT = count<ArgsList>::value };
 
-      typedef typename Splice<ArgsList, ValList, pos>::Front RemainingFront;
-      typedef typename Splice<ArgsList, ValList, pos>::Back  RemainingBack;
-      typedef typename func::PlaceholderTuple<RemainingFront>::List PlaceholdersBefore;
-      typedef typename func::PlaceholderTuple<RemainingBack,pos+1>::List PlaceholdersBehind;
-      typedef typename Append< typename Append< PlaceholdersBefore
-                                              , ValList >::List
-                             , PlaceholdersBehind >::List          PreparedArgs;
-      typedef typename Append<RemainingFront, RemainingBack>::List ReducedArgs;
+      using RemainingFront     = typename Splice<ArgsList, ValList, pos>::Front;
+      using RemainingBack      = typename Splice<ArgsList, ValList, pos>::Back;
+      using PlaceholdersBefore = typename func::PlaceholderTuple<RemainingFront>::List;
+      using PlaceholdersBehind = typename func::PlaceholderTuple<RemainingBack,pos+1>::List;
+      
+      using PreparedArgs     = typename Append< typename Append< PlaceholdersBefore
+                                                               , ValList >::List
+                                              , PlaceholdersBehind
+                                              >::List;
+      using ReducedArgs      = typename Append<RemainingFront, RemainingBack>::List;
       
       using PreparedArgTypes = typename Types<PreparedArgs>::Seq;
       using RemainingArgs    = typename Types<ReducedArgs>::Seq;
@@ -696,12 +707,12 @@ namespace func{
       
       
     public:
-      typedef function<ReducedSig> ReducedFunc;
+      using ReducedFunc = function<ReducedSig>;
       
       static ReducedFunc
       reduced (SIG& f, X val)
         {
-          Tuple<PreparedArgTypes> params {BuildPreparedArgs{std::forward_as_tuple (val)}};
+          Tuple<PreparedArgTypes> params {BuildPreparedArgs{std::make_tuple (val)}};
           return func::Apply<ARG_CNT>::template bind<ReducedFunc> (f, params);
         }
     };

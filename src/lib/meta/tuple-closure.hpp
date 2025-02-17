@@ -72,25 +72,28 @@ namespace meta{
       
       template<typename...VALS>
       static auto
-      closeFront (VALS ...vs)
+      closeFront (VALS&& ...vs)
         {
-          using ClosedTypes = TySeq<VALS...>;
-          return wrapBuilder (func::PApply<TupleBuilderSig, ClosedTypes>::bindFront (buildRecord, std::make_tuple(vs...)));
+          using ClosedTypes = TySeq<std::decay_t<VALS>...>;
+          auto  boundArgs = std::make_tuple (std::forward<VALS> (vs)...);                      // Note: must be passed by-val here
+          return wrapBuilder (func::PApply<TupleBuilderSig, ClosedTypes>::bindFront (buildRecord, move(boundArgs)));
         }
       
       template<typename...VALS>
       static auto
-      closeBack (VALS ...vs)
+      closeBack (VALS&& ...vs)
         {
-          using ClosedTypes = TySeq<VALS...>;
-          return wrapBuilder (func::PApply<TupleBuilderSig, ClosedTypes>::bindBack (buildRecord, std::make_tuple(vs...)));
+          using ClosedTypes = TySeq<std::decay_t<VALS>...>;
+          auto  boundArgs = std::make_tuple (std::forward<VALS> (vs)...);                      // Note: must be passed by-val here
+          return wrapBuilder (func::PApply<TupleBuilderSig, ClosedTypes>::bindBack  (buildRecord, move(boundArgs)));
         }
       
       template<size_t idx, typename VAL>
       static auto
-      close (VAL val)
+      close (VAL&& val)
         {
-          return wrapBuilder (func::BindToArgument<TupleBuilderSig,VAL,idx>::reduced (buildRecord, val));
+          using BoundVal = std::decay_t<VAL>;
+          return wrapBuilder (func::BindToArgument<TupleBuilderSig,BoundVal,idx>::reduced (buildRecord, std::forward<VAL>(val)));
         }
       
     private:
