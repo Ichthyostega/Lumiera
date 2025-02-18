@@ -655,7 +655,7 @@ namespace func{
        *  `f(a,b,c)->res  +  (b,c)`  yields  `f(a)->res`
        *  
        *  @param f   function, function pointer or functor
-       *  @param arg value tuple, used to close function arguments starting from right
+       *  @param arg value tuple, used to close function arguments, aligned to the right end.
        *  @return new function object, holding copies of the values and using them at the
        *          closed arguments; on invocation, only the remaining arguments need to be supplied.
        */

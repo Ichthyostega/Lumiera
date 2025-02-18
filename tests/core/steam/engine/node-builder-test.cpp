@@ -195,7 +195,14 @@ namespace test  {
       
       /** @test build a node and partially close (≙ predefine) some parameters,
        *        while leaving other parameters open to be set on invocation
-       *        through a parameter-functor. 
+       *        through a parameter-functor.
+       *      - define a processing-function which takes an array of parameters,
+       *        which will be handled similar as a tuple with uniform types.
+       *      - demonstrate that several partial-closures can be cascaded;
+       *        first close one parameter given by index, then close staring
+       *        from the front and then aligned to the end
+       *      - now a single param «slot» remains open, which can be wired
+       *        to receive automation data (note: 1-tuple generated automatically) 
        * @remark it is quite common that processing functionality provided by an
        *   external library exposes both technical and artistic parameters, which
        *   leads to the situation that technical parameters can be predetermined
@@ -212,14 +219,16 @@ namespace test  {
           
           ProcNode node{prepareNode("Test")
                           .preparePort()
-                            .invoke ("fun()", procFun)
-                            .closeParamFront (1,2,3,4)
-                            .attachAutomation (autoFun)
+                            .invoke ("fun()", procFun)        // param(·,·,·,·,·)
+                            .closeParam<2>  (1)               // param(·,·,1,·,·)
+                            .closeParamFront(2)               // param(2,·,1,·,·)
+                            .closeParamBack (3,4)             // param(2,·,1,3,4)
+                            .attachAutomation (autoFun)       //         △
                             .completePort()
                           .build()};
           
           Time timeOfEvil{5555,0};
-          CHECK (15 == invokeRenderNode(node,timeOfEvil));
+          CHECK (2+5+1+3+4 == invokeRenderNode (node, timeOfEvil));
         }
       
       

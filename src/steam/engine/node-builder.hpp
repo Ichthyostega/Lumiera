@@ -501,7 +501,30 @@ namespace engine {
       closeParamFront (PAR v1, PARS ...vs)
         {
           return adaptParam(
-                    WAB::ParamClosure::template closeFront (v1,vs...));
+                    WAB::ParamClosure::template closeFront (forward<PAR> (v1)
+                                                           ,forward<PARS>(vs)...));
+        }
+      
+      /** immediately close the rightmost parameter positions,
+       *  applying the given values in forward order. */
+      template<typename PAR, typename...PARS>
+      auto
+      closeParamBack (PAR v1, PARS ...vs)
+        {
+          return adaptParam(
+                    WAB::ParamClosure::template closeBack  (forward<PAR> (v1)
+                                                           ,forward<PARS>(vs)...));
+        }
+      
+      /** immediately close a single parameter at designated position
+       * @tparam idx zero-based index of the element in the param-tuple
+       */
+      template<size_t idx, typename PAR>
+      auto
+      closeParam (PAR val)
+        {
+          return adaptParam(
+                    WAB::ParamClosure::template close<idx> (forward<PAR> (val)));
         }
       
       

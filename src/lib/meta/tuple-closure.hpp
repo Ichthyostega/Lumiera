@@ -56,20 +56,30 @@ namespace meta{
    * ones are supplied as function arguments.
    */
   template<class PAR>
-  struct TupleClosureBuilder;
+  struct TupleClosureBuilder
+    {
+      static_assert (!sizeof(PAR),
+                    "attempt to partially close something not tuple-like");
+    };
   
   template<template<typename...> class TUP, typename...PARS>
   struct TupleClosureBuilder<TUP<PARS...>>
     {
+      static_assert (sizeof...(PARS)
+                    ,"attempt to partially close empty record");
+      
       using Tuple = TUP<PARS...>;
       using TupleBuilderSig = Tuple(PARS...);
       
+      /** the builder function to be partially closed */
       static Tuple
       buildRecord (PARS ...params)
         {
           return {std::move(params)...};
         }
       
+      /** preconfigure some elements to the given values,
+       *  starting from left */
       template<typename...VALS>
       static auto
       closeFront (VALS&& ...vs)
@@ -79,15 +89,19 @@ namespace meta{
           return wrapBuilder (func::PApply<TupleBuilderSig, ClosedTypes>::bindFront (buildRecord, move(boundArgs)));
         }
       
+      /** preconfigure some elements to the given values,
+       *  in forward order yet aligned to the tuple end */
       template<typename...VALS>
       static auto
       closeBack (VALS&& ...vs)
         {
           using ClosedTypes = TySeq<std::decay_t<VALS>...>;
-          auto  boundArgs = std::make_tuple (std::forward<VALS> (vs)...);                      // Note: must be passed by-val here
+          auto  boundArgs = std::make_tuple (std::forward<VALS> (vs)...);
           return wrapBuilder (func::PApply<TupleBuilderSig, ClosedTypes>::bindBack  (buildRecord, move(boundArgs)));
         }
       
+      /** preconfigure element to the given value
+       * @tparam idx zero-based position */
       template<size_t idx, typename VAL>
       static auto
       close (VAL&& val)
@@ -99,15 +113,15 @@ namespace meta{
     private:
       template<class CLO>
       static auto
-      wrapBuilder (CLO partialClosure)
+      wrapBuilder (CLO closureFun)
         {
           using RemainingArgs = typename _Fun<CLO>::Args;
           using RemainingParams = typename lib::meta::RebindVariadic<TUP, RemainingArgs>::Type;
-          return [closure = move(partialClosure)
+          return [partialClosure = move(closureFun)
                  ]
                  (RemainingParams remPar)
                     {
-                      return std::apply (closure, remPar);
+                      return std::apply (partialClosure, remPar);
                     };
         }
     };
@@ -121,7 +135,11 @@ namespace meta{
    * on top of std::array, with N times the same type.
    */
   template<typename...TTT>
-  struct ArrayAdapt;
+  struct ArrayAdapt
+    {
+      static_assert(sizeof...(TTT)
+                   ,"empty list ... attempting total (not partial) closure?");
+    };
   
   
   /** Metafunction to detect if a type-sequence holds uniform types */
@@ -145,6 +163,7 @@ namespace meta{
       {
         using NFold = typename Repeat<T,N>::Seq;
         using Array = typename RebindVariadic<ArrayAdapt, NFold>::Type;
+        static_assert(N,"attempt to partially close empty array");
       };
     
     template<typename T, size_t N>
