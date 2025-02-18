@@ -23,6 +23,7 @@
 #include "steam/engine/turnout.hpp"
 #include "steam/engine/turnout-system.hpp"
 #include "steam/engine/feed-manifold.hpp"
+#include "steam/engine/node-builder.hpp"
 #include "steam/engine/diagnostic-buffer-provider.hpp"
 #include "steam/engine/buffhandle-attach.hpp"
 #include "lib/test/test-helper.hpp"
@@ -73,7 +74,29 @@ namespace test  {
         {
           Time nomTime{rani(10'000),0};                    // drive test with a random »nominal Time« <10s with ms granularity
           TurnoutSystem invoker{nomTime};                  // a time spec is mandatory, all further parameters are optional
-          ////////////////////////////////OOO unfinished - demonstrate simple accesses to the TurnoutSystem
+          
+          CHECK (invoker.getNomTime() == nomTime);         // can access those basic params from within the render invocation.
+          CHECK (invoker.getProcKey() == ProcessKey{});
+          
+          /* == That's all required for basic usage. == */
+          
+          
+           // Demonstrate extension-block to TurnoutSystem
+          //  Used to setup elaborate parameter-nodes.
+          double someVal = defaultGen.uni();               // some param value, computed by »elaborate logic«
+          auto spec = buildParamSpec()
+                        .addValSlot (someVal);             // declare a parameter slot for an extension data block
+          auto acc0 = spec.makeAccessor<0>();              // capture an accessor-functor for later use
+          
+          {// Build and connect extension storage block
+            auto dataBlock =
+                      spec.makeBlockBuilder()
+                          .buildParamDataBlock(invoker);
+            
+            invoker.attachChainBlock (dataBlock);          // link extension data block into the TurnoutSystem
+            CHECK (invoker.get(acc0) == someVal);          // now able to retrieve data from extension block
+            invoker.detachChainBlock (dataBlock);
+          }
         }
       
       

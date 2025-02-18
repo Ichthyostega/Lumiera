@@ -211,7 +211,7 @@ namespace test{
           
           // Note the pitfall: Chain has not been connected yet,
           //                   but the Accessors would assume otherwise
-          CHECK (Acc2::get(front) == 2.3);
+          CHECK (Acc2::retrieveData(front) == 2.3);
 //        Acc3::get(front);                                            // would cause NPE (or assertion failure on debug build)
           
           Acc4 get4;                                                   // could even instantiate the accessors...
@@ -220,10 +220,10 @@ namespace test{
           
           // Now link the second data element in properly
           d2.linkInto(front);
-          CHECK (Acc1::get(front) == 0);
-          CHECK (Acc2::get(front) == 2.3);
-          CHECK (Acc3::get(front) == false);
-          CHECK (get4(front)      == "Ψ");
+          CHECK (Acc1::retrieveData(front) == 0);
+          CHECK (Acc2::retrieveData(front) == 2.3);
+          CHECK (Acc3::retrieveData(front) == false);
+          CHECK (get4(front)               == "Ψ");
           
           // further allocations can even be »elsewhere«
           const void* loc;
@@ -262,12 +262,12 @@ namespace test{
           CHECK (d2.get<0>()   == true);
           CHECK (d2.get<1>()   ==  "Ψ");
           
-          CHECK (isSameAdr (Acc1::get(front), v1));
-          CHECK (isSameAdr (Acc2::get(front), v2));
-          CHECK (isSameAdr (Acc3::get(front), v3));
-          CHECK (isSameAdr (Acc4::get(front), v4));
-          CHECK (isSameAdr (Acc5::get(front), v5));
-          CHECK (isSameAdr (Acc6::get(front), v6));
+          CHECK (isSameAdr (Acc1::retrieveData(front), v1));
+          CHECK (isSameAdr (Acc2::retrieveData(front), v2));
+          CHECK (isSameAdr (Acc3::retrieveData(front), v3));
+          CHECK (isSameAdr (Acc4::retrieveData(front), v4));
+          CHECK (isSameAdr (Acc5::retrieveData(front), v5));
+          CHECK (isSameAdr (Acc6::retrieveData(front), v6));
           
           CHECK (not isSameAdr (front, v1));
           CHECK (not isSameAdr (d2,    v3));

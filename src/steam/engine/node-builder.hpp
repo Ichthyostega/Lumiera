@@ -477,7 +477,7 @@ namespace engine {
           return attachParamFun ([accessor=forward<GET>(getter)]
                                  (TurnoutSystem& turnoutSys)
                                     {
-                                      return accessor.getParamVal (turnoutSys);
+                                      return turnoutSys.get(accessor);
                                     });
         }
       

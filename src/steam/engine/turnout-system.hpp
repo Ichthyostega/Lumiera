@@ -86,12 +86,20 @@ namespace engine {
           return invoParam_.get<SLOT_KEY>();
         }
       
+      /**
+       * get parameter from extension block,
+       * as configured by the provided getter functor
+       * @remark convenience front-end, will deflect to #retrieveData
+       * @warning only works if an extension block has been attached,
+       *          terminates with unexpected exception else.
+       */
       template<class ACC>
       auto&
       get (ACC const& getter)
         {
-          return getter.get (invoParam_);
+          return getter.getParamVal (*this);
         }
+      
       
       /** attach an extension block with further parameters
        *  as HeteroData-chain to the embedded FrontBlock
@@ -110,6 +118,15 @@ namespace engine {
       detachChainBlock (CHAIN& chainBlock)
         {
           chainBlock.detachFrom (invoParam_);
+        }
+      
+      /** @internal forward the call from a low-level accessor
+       *            to the embedded anchor data block */
+      template<class ACC>
+      auto&
+      retrieveData (ACC const& getter)
+        {
+          return getter(invoParam_);
         }
     };
     

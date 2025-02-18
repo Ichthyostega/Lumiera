@@ -217,14 +217,14 @@ namespace lib {
           
           template<class SPEC>
           static Type&
-          get (HeteroData<SPEC>& frontEnd)
+          retrieveData (HeteroData<SPEC>& frontEnd)
             {
               auto& fullChain = _Self::recast (frontEnd);
               return fullChain.template get<slot>();
             }
           
           template<typename HH>
-          Type& operator() (HH& frontEnd) const { return Accessor::get(frontEnd); }
+          Type& operator() (HH& frontEnd) const { return Accessor::retrieveData (frontEnd); }
         };
       
       /**

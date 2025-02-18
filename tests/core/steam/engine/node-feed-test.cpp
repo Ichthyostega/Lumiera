@@ -210,8 +210,8 @@ namespace test  {
           auto accessParam = [acc0,acc1]
                              (TurnoutSystem& turnoutSys) -> Param
                                 {
-                                  return make_tuple (acc0.getParamVal (turnoutSys)
-                                                    ,acc1.getParamVal (turnoutSys));
+                                  return make_tuple (turnoutSys.get(acc0)
+                                                    ,turnoutSys.get(acc1));
                                 };
           
           ProcNode delegate{prepareNode("Delegate")

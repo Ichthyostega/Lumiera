@@ -197,7 +197,7 @@ namespace engine {
           getParamVal (TurnoutSystem& turnoutSys)
             {
               using StorageAccessor = typename ChainCons::template Accessor<slot>;
-              return turnoutSys.get (StorageAccessor());
+              return turnoutSys.retrieveData (StorageAccessor());
             }
         };
       
