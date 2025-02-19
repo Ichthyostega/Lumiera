@@ -2,7 +2,7 @@ TESTING "Component Test Suite: Render Engine parts" ./test-suite --group=node
 
 
 
-PLANNED "Proc Node basics" NodeBase_test <<END
+TEST "Proc Node basics" NodeBase_test <<END
 END
 
 

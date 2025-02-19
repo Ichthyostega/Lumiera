@@ -19,6 +19,7 @@
 #include "lib/test/run.hpp"
 #include "lib/iter-zip.hpp"
 #include "lib/meta/function.hpp"
+#include "lib/several-builder.hpp"
 #include "steam/engine/proc-node.hpp"
 #include "steam/engine/turnout.hpp"
 #include "steam/engine/turnout-system.hpp"
@@ -27,17 +28,14 @@
 #include "steam/engine/diagnostic-buffer-provider.hpp"
 #include "steam/engine/buffhandle-attach.hpp"
 #include "lib/test/test-helper.hpp"
-//#include "lib/format-cout.hpp"
-#include "lib/test/diagnostic-output.hpp"/////////////////////TODO
-#include "lib/format-util.hpp"///////////////////////////////TODO
 #include "lib/util.hpp"
 
 
-//using std::string;
 using std::tuple;
 using std::array;
 using util::isSameAdr;
 using lib::test::showType;
+using lib::makeSeveral;
 using lib::izip;
 
 
@@ -46,14 +44,25 @@ namespace engine{
 namespace test  {
   
   
-  namespace { // Test fixture
-    /**
-     */
-  }
   
-  
-  /***************************************************************//**
-   * @test basic render node properties and behaviour.
+  /******************************************************//**
+   * @test basic render node structure and building blocks.
+   *  This test documents and verifies some fundamental
+   *  Render Node structures, looking at intricate technical
+   *  details, which are usually hidden below the NodeBuidler.
+   *  - #verify_NodeStructure is a demonstration example
+   *    to show fundamentals of node construction and
+   *    invocation, using a dummy implementation.
+   *  - the following cases cover extremely technical details
+   *    of the FeedManifold, which serves as junction point
+   *    between Render Node and external library functions.
+   *  - in a similar style, \ref NodeFeed_test covers the
+   *    various parameter- and data connections of Nodes
+   *    in a »clean-room« setting
+   *  - much more high-level is NodeLink_test, covering
+   *    the construction of a Render Node network
+   *  - NodeBuilder_test focuses on aspects of node
+   *    generation, as packaged into the NodeBuilder.
    */
   class NodeBase_test : public Test
     {
@@ -62,12 +71,20 @@ namespace test  {
         {
           seedRand();
           verify_TurnoutSystem();
+          verify_NodeStructure();
           verify_FeedManifold();
           verify_FeedPrototype();
-          UNIMPLEMENTED ("build a simple render node and then activate it");
         }
       
-      /** @test the TurnoutSystem as transient coordinator for node invocation
+      
+      /** @test the TurnoutSystem as transient connection hub for node invocation
+       *      - for most invocations, just the nominal timeline time and an
+       *        arbitrary process indentification-key is placed into fixed
+       *        «slots« within the TurnoutSystem, from where these parameters
+       *        can be retrieved by actual processing functions;
+       *      - for some special cases however, additional storage blocks
+       *        can be chained up, to allow accessing arbitrary parameters
+       *        through the TurnoutSystem as front-end.
        */
       void
       verify_TurnoutSystem()
@@ -82,14 +99,14 @@ namespace test  {
           
           
            // Demonstrate extension-block to TurnoutSystem
-          //  Used to setup elaborate parameter-nodes.
+          //  Used to setup elaborate parameter-nodes...
           double someVal = defaultGen.uni();               // some param value, computed by »elaborate logic«
           auto spec = buildParamSpec()
                         .addValSlot (someVal);             // declare a parameter slot for an extension data block
           auto acc0 = spec.makeAccessor<0>();              // capture an accessor-functor for later use
           
           {// Build and connect extension storage block
-            auto dataBlock =
+            auto dataBlock =                               // ...typically placed locally into a nested stack frame
                       spec.makeBlockBuilder()
                           .buildParamDataBlock(invoker);
             
@@ -97,10 +114,98 @@ namespace test  {
             CHECK (invoker.get(acc0) == someVal);          // now able to retrieve data from extension block
             invoker.detachChainBlock (dataBlock);
           }
+          // base block continues to be usable...
+          CHECK (invoker.getNomTime() == nomTime);
         }
       
       
-      /** @test the FeedManifold as adapter between Engine and processing library
+      /** @test very basic structure of a Render Node.
+       *      - All render processing happens in \ref Port implementations
+       *      - here we use a dummy port, which just picks up a parameter
+       *        from the TurnoutSystem and writes it into the output buffer;
+       *        no further recursive call happens — so this is a source node.
+       *      - To _incorporate_ this Port implementation into a Render Node,
+       *        the _connectivity_ of the node network must be defined:
+       *        + each node has a list of »Leads« (predecessor nodes)
+       *        + and an array of port implementation (here just one port)
+       *      - note that data placement relies on lib::Several, which can
+       *        be configured to use a custom allocator to manage storage
+       *      - furthermore, a node gets some ID descriptors, which are used
+       *        to generate processing metadata (notably a hash key for caching)
+       *      - for the actual invocation, foremost we need a _buffer provider_
+       *      - and we need to supply the most basic parameters, like the
+       *        nominal timeline time and a proccess-Key. These will be
+       *        embedded into the TurnoutSystem, to be accessible throughout
+       *        the complete recursive node-pull invocation.
+       *      - This test verifies that the actual invocation indeed happened
+       *        and placed a random parameter-value into the output buffer.
+       * @remark In reality, processing operations are delegated to a
+       *   media-processing library, which requires elaborate buffer handling
+       *   and typically entails recursive calls to predecessor nodes. This
+       *   intricate logic is handled by the typical Port implementation
+       *   known as \ref MediaWeavingPattern; notably the processing will
+       *   rely on a transient data structure called \ref FeedManifold, which
+       *   is verified in much more detail [below](\ref #verify_FeedManifold)
+       */
+      void
+      verify_NodeStructure()
+        {
+              class DummyProcessing
+                : public Port
+                {
+                public:
+                  DummyProcessing (ProcID& id)
+                    : Port{id}
+                    { }
+                  
+                  /** Entrance point to the next recursive step of media processing. */
+                  BuffHandle
+                  weave (TurnoutSystem& turnoutSystem, OptionalBuff outBuffer)  override
+                    {// do something deeply relevant, like feeding a dummy parameter...
+                      outBuffer->accessAs<long>() = turnoutSystem.getProcKey();
+                      return *outBuffer;
+                    }
+                };
+          
+          
+          // Prepare Connectivity for the Node
+          auto leadNodes = makeSeveral<ProcNodeRef>();     // empty, no predecessor nodes
+          auto nodePorts = makeSeveral<Port>()             // build the port implementation object(s)
+                              .emplace<DummyProcessing> (ProcID::describe ("TestDummy","live(long)"));
+          
+          // Build a Render Node
+          ProcNode theNode{Connectivity{nodePorts.build()
+                                       ,leadNodes.build()
+                          }};
+          
+          // Inspect Node metadata...
+          CHECK (watch(theNode).isSrc());
+          CHECK (watch(theNode).leads().size() == 0);
+          CHECK (watch(theNode).ports().size() == 1);
+          CHECK (watch(theNode).getNodeSpec () == "TestDummy-◎"_expect );
+          CHECK (watch(theNode).getPortSpec(0) == "TestDummy.live(long)"_expect );
+          
+          
+          // prepare for invoking the node....
+          BufferProvider& provider = DiagnosticBufferProvider::build();
+          BuffHandle buff = provider.lockBufferFor<long> (-55);
+          CHECK (-55 == buff.accessAs<long>());            // allocated some data buffer for the result, with a marker-value
+          
+          Time nomTime{Time::ZERO};
+          ProcessKey key = 1 + rani(100);                  // here we »hide« some data value in the ProcessKey
+          uint port{0};                                    // we will pull port-#0 of the node
+          
+          // Trigger Node invocation...
+          buff = theNode.pull (port, buff, nomTime, key);
+          
+          CHECK (key == buff.accessAs<uint>());            // DummyProcessing port placed ProcessKey into the output-buffer
+          buff.release();
+        }
+      
+      
+      
+      
+      /** @test the FeedManifold as adapter between Engine and processing library...
        *      - bind local λ with various admissible signatures
        *      - construct specifically tailored FeedManifold types
        *      - use the DiagnosticBufferProvider for test buffers
