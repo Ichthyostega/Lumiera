@@ -225,8 +225,9 @@ namespace test  {
         string
         procSpec()
           {
-            return _Fmt{"%s(%s)"}
+            return _Fmt{"%s(%s)(%s)"}
                        % (filter? util::showHash(filter):"")
+                       % streamType
                        % streamType;
           }
       };
@@ -254,7 +255,8 @@ namespace test  {
         string
         procSpec()
           {
-            return _Fmt{"(%s/2)"}
+            return _Fmt{"(%s/2)(%s)"}
+                       % streamType
                        % streamType;
           }
       };

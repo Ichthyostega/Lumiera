@@ -21,8 +21,11 @@
 #include "steam/engine/node-builder.hpp"
 #include "steam/engine/test-rand-ontology.hpp"
 #include "steam/engine/diagnostic-buffer-provider.hpp"
-#include "lib/test/diagnostic-output.hpp"/////////////////TODO
+#include "steam/asset/meta/time-grid.hpp"
+#include "lib/time/timequant.hpp"
+#include "lib/time/timecode.hpp"
 #include "lib/util.hpp"
+#include "lib/test/diagnostic-output.hpp"/////////////////TODO
 
 #include <array>
 
@@ -35,6 +38,10 @@ namespace steam {
 namespace engine{
 namespace test  {
   
+  using lib::time::Time;
+  using lib::time::QuTime;
+  using lib::time::FrameNr;
+  using lib::time::FrameCnt;
   
   
   
@@ -313,8 +320,9 @@ namespace test  {
         }
       
       
+      
       /** @test TODO Invoke some render nodes as linked together
-       * @todo WIP 12/24 🔁 define ⟶ implement
+       * @todo WIP 2/25 🔁 define ⟶ ✔ implement
        */
       void
       trigger_node_port_invocation()
@@ -323,70 +331,134 @@ namespace test  {
           auto testMan = testRand().setupManipulator();
           auto testMix = testRand().setupCombinator();
           
-/*          
+          ont::Flavr SRC_A = 10;
+          ont::Flavr SRC_B = 20;
+
+          // Prepare for Time-Quantisation --> Frame-# or Offset parameter
+          Symbol SECONDS_GRID = "grid_sec";
+          steam::asset::meta::TimeGrid::build (SECONDS_GRID, 1);
+
+          
+          // Prepare a precomputed parameter for the complete tree
+          auto selectFrameNo = [&](TurnoutSystem& tuSys){ return FrameNr::quant (tuSys.getNomTime(), SECONDS_GRID); };
+          auto paramSpec = buildParamSpec()
+                            .addSlot (selectFrameNo);
+          
+          auto accFrameNo = paramSpec.makeAccessor<0>();
+          
+          // Prepare mapping- and automation-functions
+          auto stepFilter = [] (FrameCnt id)-> ont::Param { return util::limited (10, -10 + id, 20);        };
+          auto stepMixer  = [] (FrameCnt id)-> double     { return util::limited (0,      + id, 50) / 50.0; };
+          
+          // note: binds the accessor for the precomputed FrameNo-parameter 
+          auto autoFilter = [=](TurnoutSystem& tuSys){ return stepFilter (tuSys.get (accFrameNo)); };
+          auto autoMixer  = [=](TurnoutSystem& tuSys){ return stepMixer  (tuSys.get (accFrameNo)); };
+          
+          
           // A Node with two (source) ports
           ProcNode n1s{prepareNode("srcA")
                         .preparePort()
-                          .invoke("a(int)", src_op)
-                          .setParam(5)
+                          .invoke(testGen.procID(), testGen.makeFun())         // params(frameNo, flavour)
+                          .closeParam<1>(SRC_A + 0)                            // --> flavour ≔ SRC_A + port#0
+                          .retrieveParam(accFrameNo)
                           .completePort()
                         .preparePort()
-                          .invoke("b(int)", src_op)
-                          .setParam(23)
+                          .invoke(testGen.procID(), testGen.makeFun())
+                          .closeParam<1>(SRC_A + 1)                            // --> flavour ≔ SRC_A + port#1
+                          .retrieveParam(accFrameNo)
                           .completePort()
                         .build()};
 
-          // A node to add some "processing" to each data chain
-          auto add1_op = [](int* src, int* res){ *res = 1 + *src; };
+          // A node to »filter« the data in chain-A
           ProcNode n1f{prepareNode("filterA")
                         .preparePort()
-                          .invoke("a+1(int)(int)", add1_op)
+                          .invoke(testMan.procID(), testMan.makeFun())
+                          .attachParamFun(autoFilter)                          // filter-param <-- autoFilter(frameNo)
                           .connectLead(n1s)
                           .completePort()
                         .preparePort()
-                          .invoke("b+1(int)(int)", add1_op)
+                          .invoke(testMan.procID(), testMan.makeFun())
+                          .attachParamFun(autoFilter)
                           .connectLead(n1s)
-                          .completePort()
-                        .build()};
-
-          // Need a secondary source, this time with three ports
-          ProcNode n2s{prepareNode("srcB")
-                        .preparePort()
-                          .invoke("a(int)", src_op)
-                          .setParam(7)
-                          .completePort()
-                        .preparePort()
-                          .invoke("b(int)", src_op)
-                          .setParam(13)
-                          .completePort()
-                        .preparePort()
-                          .invoke("c(int)", src_op)
-                          .setParam(17)
                           .completePort()
                         .build()};
           
-          // Wiring for the Mix, building up three ports
-          // Since the first source-chain has only two ports,
-          // for the third result port we'll re-use the second source
+          
+          // A secondary source Node, this time with three ports
+          ProcNode n2s{prepareNode("srcB")
+                        .preparePort()
+                          .invoke(testGen.procID(), testGen.makeFun())         // params(frameNo, flavour)
+                          .closeParam<1>(SRC_B + 0)                            // --> flavour ≔ SRC_B + port#0
+                          .retrieveParam(accFrameNo)
+                          .completePort()
+                        .preparePort()
+                          .invoke(testGen.procID(), testGen.makeFun())
+                          .closeParam<1>(SRC_B + 1)                            // --> flavour ≔ SRC_B + port#1
+                          .retrieveParam(accFrameNo)
+                          .completePort()
+                        .preparePort()
+                          .invoke(testGen.procID(), testGen.makeFun())
+                          .closeParam<1>(SRC_B + 2)                            // --> flavour ≔ SRC_B + port#2
+                          .retrieveParam(accFrameNo)
+                          .completePort()
+                        .build()};
+          
+          
+          // Wiring for the Mix, building three ports,
+          // drawing from both source-chains 
           ProcNode mix{prepareNode("mix")
                         .preparePort()
-                          .invoke("a-mix(int/2)(int)", mix_op)
+                          .invoke(testMix.procID(), testMix.makeFun())
+                          .attachParamFun(autoMixer)                           // mixer-param <-- autoMixer(frameNo)
                           .connectLead(n1f)
                           .connectLead(n2s)
                           .completePort()
                         .preparePort()
-                          .invoke("b-mix(int/2)(int)", mix_op)
+                          .invoke(testMix.procID(), testMix.makeFun())
+                          .attachParamFun(autoMixer)
                           .connectLead(n1f)
                           .connectLead(n2s)
                           .completePort()
                         .preparePort()
-                          .invoke("c-mix(int/2)(int)", mix_op)
-                          .connectLeadPort(n1f,1)
+                          .invoke(testMix.procID(), testMix.makeFun())
+                          .attachParamFun(autoMixer)
+                          .connectLeadPort(n1f,1)                              // note: using 2nd port from chain-A, which only has two ports
                           .connectLead(n2s)
                           .completePort()
                         .build()};
-*/
-          UNIMPLEMENTED ("operate some render nodes as linked together");
+          
+          
+          // Set a »Param-Agent«-Node on top to pre-compute the FrameNo
+          ProcNode parNode{prepareNode("Param")
+                        .preparePort()
+                          .computeParam(paramSpec)
+                          .delegateLead(mix)
+                          .completePort()
+                        .preparePort()
+                          .computeParam(paramSpec)
+                          .delegateLead(mix)
+                          .completePort()
+                        .preparePort()
+                          .computeParam(paramSpec)
+                          .delegateLead(mix)
+                          .completePort()
+                        .build()};
+          
+          
+          BufferProvider& provider = DiagnosticBufferProvider::build();
+          const BuffDescr buffDescr = provider.getDescriptorFor(sizeof(TestFrame));
+          
+          auto invoke = [&](Time nomTime, uint port)
+                            { // Sequence to invoke a Node...
+                              BuffHandle buff = provider.lockBuffer(buffDescr);
+                              CHECK (not buff.accessAs<TestFrame>().isValid());
+                              buff = parNode.pull (port, buff, nomTime, ProcessKey{});
+                              HashVal checksum = buff.accessAs<TestFrame>().getChecksum();
+                              buff.release();
+                              return checksum;
+                            };
+          
+SHOW_EXPR(invoke(Time::ZERO, 1));
         }
     };
   

@@ -90,10 +90,10 @@ namespace test  {
       verify_TurnoutSystem()
         {
           Time nomTime{rani(10'000),0};                    // drive test with a random »nominal Time« <10s with ms granularity
-          TurnoutSystem invoker{nomTime};                  // a time spec is mandatory, all further parameters are optional
+          TurnoutSystem turoSys{nomTime};                  // a time spec is mandatory, all further parameters are optional
           
-          CHECK (invoker.getNomTime() == nomTime);         // can access those basic params from within the render invocation.
-          CHECK (invoker.getProcKey() == ProcessKey{});
+          CHECK (turoSys.getNomTime() == nomTime);         // can access those basic params from within the render invocation.
+          CHECK (turoSys.getProcKey() == ProcessKey{});
           
           /* == That's all required for basic usage. == */
           
@@ -108,14 +108,14 @@ namespace test  {
           {// Build and connect extension storage block
             auto dataBlock =                               // ...typically placed locally into a nested stack frame
                       spec.makeBlockBuilder()
-                          .buildParamDataBlock(invoker);
+                          .buildParamDataBlock(turoSys);
             
-            invoker.attachChainBlock (dataBlock);          // link extension data block into the TurnoutSystem
-            CHECK (invoker.get(acc0) == someVal);          // now able to retrieve data from extension block
-            invoker.detachChainBlock (dataBlock);
+            turoSys.attachChainBlock (dataBlock);          // link extension data block into the TurnoutSystem
+            CHECK (turoSys.get(acc0) == someVal);          // now able to retrieve data from extension block
+            turoSys.detachChainBlock (dataBlock);
           }
           // base block continues to be usable...
-          CHECK (invoker.getNomTime() == nomTime);
+          CHECK (turoSys.getNomTime() == nomTime);
         }
       
       

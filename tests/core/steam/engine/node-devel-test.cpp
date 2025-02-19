@@ -410,7 +410,7 @@ namespace test  {
           CHECK (not watch(nFilt).isSrc());
           CHECK (watch(nSrc).getNodeSpec() == "Test:generate-◎"_expect );
           CHECK (watch(nFilt).getNodeSpec() == "Test:manipulate◁—Test:generate-◎"_expect );
-          CHECK (watch(nFilt).getPortSpec(0) == "manipulate(TestFrame)"_expect );
+          CHECK (watch(nFilt).getPortSpec(0) == "manipulate(TestFrame)(TestFrame)"_expect );
           
           // prepare to invoke this Node chain...
           BufferProvider& provider = DiagnosticBufferProvider::build();
@@ -468,7 +468,7 @@ namespace test  {
           CHECK (watch(nS1).getNodeSpec() == "Test:generate-◎"_expect );
           CHECK (watch(nS2).getNodeSpec() == "Test:generate-◎"_expect );
           CHECK (watch(nMix).getNodeSpec() == "Test:combine┉┉{Test:generate}"_expect );
-          CHECK (watch(nMix).getPortSpec(0) == "combine(TestFrame/2)"_expect );
+          CHECK (watch(nMix).getPortSpec(0) == "combine(TestFrame/2)(TestFrame)"_expect );
           
           // prepare to invoke this Node chain...
           BufferProvider& provider = DiagnosticBufferProvider::build();
