@@ -32,7 +32,6 @@
 //#include "lib/util.hpp"
 
 
-//using std::string;
 using lib::Several;
 using lib::makeSeveral;
 using lib::time::Time;
@@ -50,6 +49,7 @@ namespace test  {
   
   /************************************************************************//**
    * @test demonstrate how to feed data into, through and out of render nodes.
+   * @todo 2/2025 unfinished -- add cases to cover media data feeds
    */
   class NodeFeed_test : public Test
     {
@@ -59,7 +59,6 @@ namespace test  {
           seedRand();
           feedParam();
           feedParamNode();
-          UNIMPLEMENTED ("render node pulling source data from vault");
         }
       
       

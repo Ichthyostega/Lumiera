@@ -6174,7 +6174,7 @@ This is the core service provided by the player subsystem. The purpose is to cre
 :any details of this processing remain opaque for the clients; even the player subsystem just accesses the EngineFaçade
 </pre>
 </div>
-<div title="PlaybackVerticalSlice" creator="Ichthyostega" modifier="Ichthyostega" created="202303272236" modified="202412221832" tags="overview impl discuss draft" changecount="45">
+<div title="PlaybackVerticalSlice" creator="Ichthyostega" modifier="Ichthyostega" created="202303272236" modified="202502192215" tags="overview impl discuss draft" changecount="48">
 <pre>//Integration effort to promote the development of rendering, playback and video display in the GUI//
 This IntegrationSlice was started in {{red{2023}}} as [[Ticket #1221|https://issues.lumiera.org/ticket/1221]] to coordinate the completion and integration of various implementation facilities, planned, drafted and built during the last years; this effort marks the return of development focus to the lower layers (after years of focussed UI development) and will implement the asynchronous and time-bound rendering coordinated by the [[Scheduler]] in the [[Vault|Vault-Layer]]
 
@@ -6212,11 +6212,12 @@ __December.23__: building the Scheduler required time and dedication, including 
 __April.24__: after completing an extended round of performance tests for the new Scheduler, development focus is shifted now shifted upwards to the [[Render Node Network|ProcNode]], where Engine activity is carried out. This part was addressed at the very start of the project, and later again -- yet could never be completed, due to a lack of clear reference points and technical requirements. Hope to achieve a breakthrough rests on this integration effort now.
 __June.24__: assessment of the existing code indicated some parts not well suited to the expected usage. Notably the {{{AllocationCluster}}}, which is the custom allocator used by the render nodes network, was reworked and simplified. Moreover, a new custom container was developed, to serve as //link to connect the nodes.// Beyond that, in-depth review validated the existing design for the render nodes, while also indicating a clear need to rearrange and re-orient the internal structure within an node invocation to be better aligned with the structure of the Application developed thus far...
 __December.24__: after an extended break of several months (due to family-related obligations), a re-oriented concept for the Render Node invocation was developed in a prototyping setup. Assessment of results and further analysis leads to the conclusion that a more flexible invocation scheme -- and especially structured invocation parameters -- must be retro-fitted into the code developed thus far. Features of this kind can not be added later by decoration and extension -- rather, the data structures used directly within the invocation required considerable elaboration. This could be accomplished in the end, through a bold move to abandon array-style storage and switch over to strictly typed data tuples and a functor-based binding to the implementation library.
+__February.25__: built extended verification mechanisms, including some Node metadata handling; after some further retro-fitting and modernisation of function-support libraries (partial closure), a **complex Render Node graph could be built and invoked**, using {{{TestData}}} frames with reproducible hash-chaining computations. This is a milestone — the re-oriented Render Node structure feels much more adequate, and connection to [[Scheduler]] and [[Job-Planning|JobPlanningPipeline]] seems to be within reach now
 * ✔ establish a test setup for developing render node functionality
 * ✔ build and connect some dummy render nodes directly in a test setup
-* 🗘 invoke render nodes stand-alone, without framework
+* ✔ invoke render nodes stand-alone, without framework
 * ⌛ introduce a //placeholder link// to connect JobTicket to the actual invocation (without actual [[Fixture]])
-* ⌛ rework and complete the existing node invocation code
+* ✔ rework and complete the existing node invocation code
 
 !Decisions
 ;Scheduler

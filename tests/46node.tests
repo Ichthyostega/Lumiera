@@ -14,15 +14,15 @@ TEST "Proc Node test setup" NodeDevel_test <<END
 END
 
 
-PLANNED "Proc Node data feeds" NodeFeed_test <<END
+TEST "Proc Node data feeds" NodeFeed_test <<END
 END
 
 
-PLANNED "Proc Node connectivity" NodeLink_test <<END
+TEST "Proc Node connectivity" NodeLink_test <<END
 END
 
 
-Test "Proc Node metadata key" NodeMeta_test <<END
+TEST "Proc Node metadata key" NodeMeta_test <<END
 END
 
 

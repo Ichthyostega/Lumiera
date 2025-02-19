@@ -25,7 +25,6 @@
 #include "lib/time/timequant.hpp"
 #include "lib/time/timecode.hpp"
 #include "lib/util.hpp"
-#include "lib/test/diagnostic-output.hpp"/////////////////TODO
 
 #include <array>
 
@@ -43,15 +42,25 @@ namespace test  {
   using lib::time::FrameNr;
   using lib::time::FrameCnt;
   
+  namespace {
+          ont::Flavr SRC_A    = 10;         ///< »chain-A« arbitrary source frame marker 
+          ont::Flavr SRC_B    = 20;         ///< similar for »chain-B«
+          Symbol SECONDS_GRID = "grid_sec"; ///< 1-seconds grid for translation Time -> Frame-#
+          
+          const uint NUM_INVOCATIONS = 100;
+  }
+  
   
   
   /***************************************************************//**
    * @test demonstrate and document how [render nodes](\ref proc-node.hpp)
    *       are connected into a processing network, allowing to _invoke_
    *       a \ref Port on a node to pull-generate a render result.
-   *     - the foundation layer is formed by the nodes as linked into a network
-   *     - starting from any Port, a TurnoutSystem can be established
-   *     - which in turn allows _turn out_ a render result from this port.
+   *     - Nodes can be built and ID metadata can be inspected
+   *     - several Nodes can be linked into a render graph
+   *     - connectivity can be verified to match definition
+   *     - TestFrame data can be computed in a complex processing network
+   *     - parameters can be derived from time and fed into the nodes.
    */
   class NodeLink_test : public Test
     {
@@ -321,8 +330,19 @@ namespace test  {
       
       
       
-      /** @test TODO Invoke some render nodes as linked together
-       * @todo WIP 2/25 🔁 define ⟶ ✔ implement
+      /** @test Invoke some render nodes as linked together.
+       *      - use exactly the same topology as in the preceding test
+       *      - but this time use TestFrame (random data) and configure
+       *        hash-chaining operations provided by »Test Random«
+       *      - setup various automation functions, based on the frame-#
+       *      - use a pre-computation step to _quantise_ time into frame-#
+       *      - install this pre-computation as »Param Agent Node«
+       *      - configure individual parameters to consume precomputed frame-#
+       *      - use _partial closure_ to supply the source-»flavour« parameter
+       *      - also rebuild the expected computations by direct invocation
+       *      - sample various test runs with randomly chosen time and port-#
+       *      - verify computed data checksums match with expected computation.
+       * @todo 2/25 ✔ define ⟶ ✔ implement
        */
       void
       trigger_node_port_invocation()
@@ -331,24 +351,22 @@ namespace test  {
           auto testMan = testRand().setupManipulator();
           auto testMix = testRand().setupCombinator();
           
-          ont::Flavr SRC_A = 10;
-          ont::Flavr SRC_B = 20;
 
           // Prepare for Time-Quantisation --> Frame-# or Offset parameter
-          Symbol SECONDS_GRID = "grid_sec";
           steam::asset::meta::TimeGrid::build (SECONDS_GRID, 1);
+          auto quantSecs = [&](Time time){ return FrameNr::quant (time, SECONDS_GRID); };
 
           
           // Prepare a precomputed parameter for the complete tree
-          auto selectFrameNo = [&](TurnoutSystem& tuSys){ return FrameNr::quant (tuSys.getNomTime(), SECONDS_GRID); };
+          auto selectFrameNo = [&](TurnoutSystem& tuSys){ return quantSecs(tuSys.getNomTime()); };
           auto paramSpec = buildParamSpec()
                             .addSlot (selectFrameNo);
           
           auto accFrameNo = paramSpec.makeAccessor<0>();
           
           // Prepare mapping- and automation-functions
-          auto stepFilter = [] (FrameCnt id)-> ont::Param { return util::limited (10, -10 + id, 20);        };
-          auto stepMixer  = [] (FrameCnt id)-> double     { return util::limited (0,      + id, 50) / 50.0; };
+          auto stepFilter = [] (FrameCnt id)-> ont::Param { return util::limited (10, -10 + id, 50);        };
+          auto stepMixer  = [] (FrameCnt id)-> ont::Factr { return util::limited (0,      + id, 50) / 50.0; };
           
           // note: binds the accessor for the precomputed FrameNo-parameter 
           auto autoFilter = [=](TurnoutSystem& tuSys){ return stepFilter (tuSys.get (accFrameNo)); };
@@ -445,20 +463,51 @@ namespace test  {
                         .build()};
           
           
+          // Effectively, the following computation is expected to happen...
+          auto verify = [&](Time nomTime, uint port)
+                            {
+                              ont::FraNo fraNo = quantSecs(nomTime);
+                              ont::Flavr fla_A = SRC_A + util::min (port, 1u);
+                              ont::Flavr fla_B = SRC_B + util::min (port, 2u);
+                              ont::Param param = stepFilter(fraNo);
+                              ont::Factr mix   = stepMixer (fraNo);
+                              
+                              TestFrame f1{uint(fraNo),fla_A};
+                              TestFrame f2{uint(fraNo),fla_B};
+                              
+                              ont::manipulateFrame (&f1, &f1, param);
+                              ont::combineFrames (&f1, &f1, &f2, mix);
+                              CHECK (not f1.isPristine());
+                              CHECK (    f2.isPristine());
+                              return f1.getChecksum();
+                            };
+          
           BufferProvider& provider = DiagnosticBufferProvider::build();
-          const BuffDescr buffDescr = provider.getDescriptorFor(sizeof(TestFrame));
+          const BuffDescr buffDescr = provider.getDescriptor<TestFrame>();
           
           auto invoke = [&](Time nomTime, uint port)
                             { // Sequence to invoke a Node...
                               BuffHandle buff = provider.lockBuffer(buffDescr);
-                              CHECK (not buff.accessAs<TestFrame>().isValid());
+                              TestFrame& result = buff.accessAs<TestFrame>();
+                              CHECK (    result.isPristine());
                               buff = parNode.pull (port, buff, nomTime, ProcessKey{});
-                              HashVal checksum = buff.accessAs<TestFrame>().getChecksum();
+                              CHECK (    result.isValid());
+                              CHECK (not result.isPristine());
+                              HashVal checksum = result.getChecksum();
                               buff.release();
                               return checksum;
                             };
           
-SHOW_EXPR(invoke(Time::ZERO, 1));
+          // Computations should be pure (not depending on order)
+          // Thus sample various random times and ports
+          for (uint i=0; i < NUM_INVOCATIONS; ++i)
+            {
+              uint port =  rani(3);
+              Time nomTime{rani(60'000),0};  // drive test with a random »nominal Time« <60s with ms granularity
+              
+              // Invoke -- and compare checksum with direct computation
+              CHECK (invoke (nomTime,port) == verify (nomTime,port));
+            }
         }
     };
   
