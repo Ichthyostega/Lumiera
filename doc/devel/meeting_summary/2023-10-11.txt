@@ -1,0 +1,71 @@
+2023-10-11 Lumiera Developers Meeting
+=====================================
+:Author: Ichthyo
+:Date: 2023-10-11
+
+Oct 11, 2023 on #lumiera 20:00 - 22:00 UTC +
+
+__Participants__
+
+ * ichthyo
+ * benny
+ 
+_Summary written by Ichthyo_
+
+''''
+
+Development Summary
+-------------------
+_Ichthyo_ summarises the progress regarding the »Playback Vertical Slice«.
+
+- the design now favours _active_ workers and a _passive_ pool
+- the Scheduler now features _two layers_ and provides also some support for dependency management
+- there is a direct collaboration between workers and the Scheduler Layer-2
+- thus the Scheduler takes on some aspects of work management, in collaboration with the workers
+
+As a follow-up, the state of the C\++ concurrency framework was
+https://issues.lumiera.org/ticket/1279#comment:2[investigated] and compared with the features
+provided by some of our own ``homegrown'' support library. A lot of modern concurrency support
+facilities are meanwhile provided by the standard library of the language, and so we can abandon
+some of our old solutions to favour a modern approach. This investigation led to a complete rework
+of our thread-wrapper. Previously we had to implement a lot of our threading support ourselves,
+based on POSIX threading. The same feature set can now be achieved by delegating to `std::thread`
+from the C++14 language standard. Design analysis showed however that the application can still
+benefit from using a custom adaptation layer on top, especially for uniform error handling and
+to support lifecycle management of components executed concurrently. This allows especially to
+simplify some load tests performed as part of the Lumiera test-suite.
+
+
+Extended discussion ensued regarding the modern concurrency primitives (Atomics, Future+Promise,
+Coroutines), and their relation to the established long-standing solutions (Mutex, Condition Var).
+There is no single ``best'' solution, and each of these techniques to manage concurrency presents
+the developer with an unique set of benefits and trade-offs.
+
+For Lumiera it is important to assess the right order of magnitude regarding the precision of timings.
+The duration of one video frame at 25fps is 40ms, which implies that the scheduler must be reliable
+with its timings in the order of magnitude of 1ms. Thus it is desirable that the internal overhead
+is kept below 100µs. This goal is not difficult to achieve; it suffices to pay some attention to
+aspects of performance. To place this into context, single instructions in a modern CPU operate
+at the nanoseconds level.
+
+
+Compiler and Platform upgrades
+------------------------------
+Most of everyday development is done currently with GCC-8, which is rather dated already.
+Compilation with GCC-12 has been attempted recently, and did not turn up any serious problems.
+Two minor bugs could be fixed. With the planned system upgrade on _Ichthyo's_ developer PC
+most notably the build system *Scons* now uses Python-3. The necessary adjustments are mostly
+repetitive, and were committed by _Benny_ to a Git branch. Previously, the Lumiera build system
+used a ready-made plug-in to start *Doxygen*. This code does not work any more with Python-3,
+but a replacement solution was identified, which still needs to be integrated.
+
+
+''''
+
+Next meeting
+------------
+
+The next meeting will be Wednesday Nov 8, 20:00 UTC. 
+You are welcome to join.
+
+''''

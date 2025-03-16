@@ -278,6 +278,11 @@ function edit()
     EDITOR="${EDITOR:-$(git config --get core.editor)}"
     EDITOR="${EDITOR:-$VISUAL}"
 
+    if [ -z "$EDITOR" ]; then
+        echo -e "\nFATAL\n\$EDITOR undefined\n\n"
+        exit -1
+    fi
+
     local file="$1"
     local line=0
 

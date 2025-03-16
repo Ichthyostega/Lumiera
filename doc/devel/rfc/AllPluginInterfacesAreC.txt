@@ -3,7 +3,7 @@ Design Process : All Plugin Interfaces Are C
 
 [grid="all"]
 `------------`-----------------------
-*State*         _Final_
+*State*         _Dropped_
 *Date*          _2007-06-29_
 *Proposed by*   link:ct[]
 -------------------------------------
@@ -159,17 +159,50 @@ After a talk on IRC ichthyo and me agreed on making lumiera a multi language
 project where each part can be written in the language which will fit it best.
 Language purists might disagree on such a mix, but I believe the benefits
 outweigh the drawbacks.
- -- link:ct[] [[DateTime(2007-07-03T05:51:06Z)]]
+
+ct:: '2007-07-03 05:51:06'
 
 C is the only viable choice here. Perhaps some sort of "test bench" could be
 designed to rigorously test plugins for any problems which may cause Lumiera to
 become unstable (memory leaks etc).
- -- link:Deltafire[] [[DateTime(2007-07-03T12:17:09Z)]]
+
+Deltafire:: '2007-07-03 12:17:09'
 
 after a talk on irc, we decided to do it this way, further work will be
 documented in the repository (tiddlywiki/source)
- -- link:ct[] [[DateTime(2007-07-11T13:10:07Z)]]
+ 
+ct:: '2007-07-11 13:10:07'
 
+
+Development took another direction over course of the years;
+Lumiera is not based on a _generic plug-in Architecture_ and the topic
+of interfaces for _dedicated plugins_ still needs to be worked out
+ 
+Ichthyostega:: '2023-10-24 22:55:23'
+
+
+
+Conclusion
+----------
+Initially there was agreement over the general direction set out by this proposal.
+However, _Ichthyo_ was always sceptical regarding the benefits of a generic plug-in
+Architecture. Experience with high-profile projects based on such a concept seem
+to show both tremendous possibilities, especially regarding user involvement, but
+at the same time also indicate serious problems with long-term sustainability.
+
+The practical development -- mostly driven ahead by _Ichthyo_ -- thus never really
+embraced that idea; rather structuring by internal interfaces and contracts was
+preferred. The basic system for loading of Plug-ins, as indicated by this proposal,
+is still used though to load some dedicated plug-ins, most notably the GUI.
+
+To draw an conclusion: this proposal is now considered as *rejected*.
+Instead, Ticket https://issues.lumiera.org/ticket/1212[#1212 »Extension Concept«]
+was added to the list of relevant 
+https://issues.lumiera.org/report/17[»Focus Topics«] for further development.
+
+.........
+
+.........
 
 ''''
 Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]

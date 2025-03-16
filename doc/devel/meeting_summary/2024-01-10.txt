@@ -1,0 +1,87 @@
+2024-01-10 Lumiera Developers Meeting
+=====================================
+:Author: Benny
+:Date: 2024-01-20
+
+Jan 10, 2024
+on {l}/project/contact.html#_irc[`#lumiera`]
+20:00 - 23:00 UTC +
+
+__Participants__
+
+ * ichthyo
+ * benn
+
+''''
+Two main points of discussion:
+
+ - Scheduler tests to examine its suitability
+ - Using Gstreamer to view video for our vertical slice
+
+
+Test Scheduler Suitability
+--------------------------
+
+Once the scheduler had been implemented it was necessary to subject it
+to various load tests to establish its stability, and stress tests were necessary to
+provide information on performance limitations so that we would be able to establish
+whether these limitations met the demands required by Lumiera. 
+Results were encouraging.
+
+_Ichthyo_ reported on stress tests on the new scheduler. After resolving a series
+of initial bugs, processing runs stable now, even when entering over 500 test jobs
+simultaneously to the queue. Stress tests revealed typical limitations of the scheduler,
+which exhibited behaviour that is well within the requirements of Lumiera. Load tests
+showed that the scheduler remained stable when subjected to short heavy load bursts
+within expected bounds.
+
+Indeed performance testing is always a delicate and complex area to
+investigate, as it is necessary to establish reasonable performance boundaries
+of the system: we can always overload any scheduler with fanatically huge numbers
+of jobs; while the scheduler is still able to process all enqueued jobs eventually,
+congestion builds up and jobs start missing their deadlines. Of interest, however,
+is to establish some reasonable information on the processing rate of the scheduler
+which _Ichthyo_ was able to estimate statistically by carefully observing the
+scheduler under a collection of pre-calibrated loads.
+
+Some goals of the tests:
+
+ - establish the scheduler breaking point or performance limitations
+ - tests under pressure with parallelism and complex dependencies between jobs
+ - demonstrate that the scheduler is stable under typical load for several seconds
+
+Tests on a wider array of hardware constellations are not expected to reveal much
+relevant information in this stage of the project and will thus be conducted later.
+This kind of analytical, isolated component tests will not ultimately resolve the
+issue of whether the scheduler can perform as desired, but subjecting the scheduler
+to carefully selected tests can help to reduce the probability of missing serious
+performance limitations inherent to the chosen design.
+
+
+GStreamer Demo to Play Video
+----------------------------
+
+_Benn_ has written a simple GStreamer demo so that a video in raw format can be
+displayed on the GUI for the current vertical slice. The next step in this
+investigation is to identify a low-level entrance point to the functionality
+provided by the GStreamer library, since for use in this vertical slice the
+render engine produces a buffer filled with raw video data for each frame,
+which will then be displayed in a video widget as an ongoing process.
+
+This is a general question requiring further investigation: how to make use of
+established functionality from a library to simplify our implementation task,
+while retaining the full control and coordination of the rendering and playback
+process and resource management within the Lumiera render engine itself.
+
+''''
+
+Next meeting
+------------
+
+The next Lumiera meeting is scheduled for Wednesday, Feb 14 at 20:00 UTC.
+Should this be inconvenient for you, please speak up on, for example,
+link:http://lists.lumiera.org/cgi-bin/mailman/listinfo/lumiera[lumiera@lists.lumiera.org]
+and let us know of when you would prefer to attend.
+
+''''
+

@@ -11,8 +11,113 @@ spending time on the task of writing a summary.
 Anyone interested in Lumiera development is also encouraged to read mailing list
 archives and other documentation.
 
+8 May / 12 June 2024
+--------------------
+Discussion regarding the approach taken towards the next core topic, which
+is how to structure the render nodes in the low-level model and how to perform
+an invocation, leading to the calculation of media data. It is considered very
+important for Lumiera to remain library / framework agnostic, even while we
+use some frameworks and libraries for prototyping. The structure drafted over
+the course of the last years and about to be integrated now must be flexible
+enough to support adapt to the requirements of various libraries, _without
+attempting to build a super structure_ to ``rule them all''.
 
-12 Sep 2012
+
+13 Mar / 10 Apr 2024
+--------------------
+Status update and informal exchange regarding current development activities
+
+ * after factoring out further external influences, a _breaking point_ for
+   processing complex dependent schedules could be established, which closely
+   matches theoretical expectations
+ * a further measurement series (linear regression) was necessary to establish
+   performance characteristics of the scheduler under constant high load
+ * as expected, a serious weakness pertaining contention could be confirmed +
+   (yet contention is not expected to be a problem in practice)
+ * as mitigation, concurrency is scaled down on very short (100µs) jobs
+ * overall we are confident that the new scheduler is capable to handle the
+   expected load pattern and does not suffer from major (unknown) weaknesses.
+
+Moreover, the problems related to integration and use of external frameworks
+for video display were discussed further.
+
+
+14 Feb 2024
+-----------
+
+Topics
+~~~~~~
+ * Discussion about GTK\+, Python bindings vs. C++ bindings vs. the C-API,
+   challenges due to the dynamic nature of layout and inconsistent CSS settings,
+   and further difficulties integrating video display.
+ * Update regarding the ongoing effort to establish performance limits of the
+   Scheduler and discussion about methods of measurement.
+
+10 Jan 2024
+-----------
+
+Topics
+~~~~~~
+ * Scheduler performance testing
+ * using GStreamer for Video output to the GUI
+
+Summary
+^^^^^^^
+ * link:2024-01-10.html[Summary (by benn)]
+
+
+13 Dec 2023
+-----------
+
+Topics
+~~~~~~
+ * Extended technical discussion about Scheduler load testing
+   and how to find out about inherent limitations of the approach taken
+
+8 Nov 2023
+----------
+
+Topics
+~~~~~~
+ * Wikipedia
+ * Scheduler integration and testing
+ * Video output to the GUI
+
+Summary
+^^^^^^^
+ * link:2023-11-08.html[Summary (by ichthyo)]
+
+
+11 Oct 2023
+-----------
+
+Topics
+~~~~~~
+ * Scheduler and worker pool design
+ * Rework of multithreading support
+ * Compiler and platform upgrades
+
+Summary
+^^^^^^^
+ * link:2023-10-11.html[Summary (by ichthyo)]
+
+
+13 Sep 2023
+-----------
+
+Topics
+~~~~~~
+ * »Focus Topics«
+ * Progress on the »Playback Vertical Slice«
+ * Website Index and Glossary generator
+ * Library solutions for video display in the GUI
+
+Summary
+^^^^^^^
+ * link:2023-09-13.html[Summary (by ichthyo)]
+
+
+12 Sep 2013
 -----------
 
 Topics

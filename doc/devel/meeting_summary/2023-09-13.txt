@@ -1,0 +1,124 @@
+2023-09-13 Lumiera Developers Meeting
+=====================================
+:Author: Ichthyo, Benny
+:Date: 2023-09-14
+
+Sep 13, 2023 on #lumiera 20:00 - 22:30 UTC +
+
+__Participants__
+
+ * ichthyo
+ * benny
+ * cehteh
+ 
+_Summary written by Ichthyo and reviewed by Benny_
+
+''''
+
+Focus Topics
+------------
+_Ichthyo_ started to define a collection of *FocusTopics*.
+These are topics towards which we focus our attention for further development *after* the
+current Engine integration is completed. Some tickets currently of interest were enhanced
+and extended, and new tickets created, which were all marked with the `FocusTopic` Tag.
+
+-> See https://issues.lumiera.org/report/17[Report-17] in the Lumiera Issue Tracker
+
+_Ichthyo_ identified some difficult issues concerning session modifications and change logging,
+especially in connection with rules based configuration.
+
+We discussed in some detail event sourcing, session modification, session configuration
+and representation of a configuration possibly as a context in the session. Of particular
+interest is the portability of a session from one machine to another and, consequently,
+the problems that can arise when a change in configuration occurs: these should be
+recorded as an event in the Event-Log.  However, this requires the representation of the
+entire configuration in a consolidated form as part of The Model. A change in the
+configuration could then be detected and recorded as an event.
+
+Another task of concern is how the actual Diff Messages will be generated. We could first
+manipulate the data model and then _detect_ a diff. Yet the favourable solution would be
+to interpret the commands and directly derive the events associated with the commands,
+with an attached diff, which can then be applied against the data model as a _projection._
+
+A discussion followed to sort out which topics should be addressed first.
+
+It seems the topics regarding Event Log and Session persistence
+https://issues.lumiera.org/ticket/1234[#1234]
+https://issues.lumiera.org/ticket/540[#540] and
+https://issues.lumiera.org/ticket/569[#569]
+should be addressed first, since these may lead to decisions relevant to many other parts
+of the system.  Possibly also
+https://issues.lumiera.org/ticket/332[#332] regarding a full definition of placement capabilities.
+
+
+The topic of Placement interpretation will be addressed in the *next* vertical slice,
+where we intend to add a clip to the timeline. To do this, we'll require at least a
+_simple_ resolution capability of Placements, because we'll attempt do the groundwork for
+The Builder.
+
+_Benny_ proposes to add »interface« and »mock« tickets for Event-Log and Placements,
+blocking the full implementation follow-up tickets. Then these preliminary parts can be
+addressed first and integrated as part of the »Add Clip« Vertical Slice. For Context:
+currently the »Playback« Vertical Slice is being worked on, aiming towards a first
+integration of the Render Engine.
+
+
+Playback Vertical Slice
+-----------------------
+_Ichthyo_ reports on the progress of the »Playback Vertical Slice« effort.
+
+- Memory Manager is implemented and tested
+- Activity Language is also completed and tested
+- a passive worker pool has been implemented, based on the C++17 concurrency framework
+
+Next steps:
+
+- retrofit our existing thread wrapper (which was based on POSIX) to use C\+\+17 thread support;
+  this should be a drop-in replacement, since our own old design almost completely matches the
+  design and feature set standardised with C++17
+- complete implementation of the Scheduler Layer-2, integrating Activity-Language and worker pool
+- integration test of The Scheduler
+
+Documentation Index and Glossary
+--------------------------------
+_Benny_ reworked and extended the documentation overview in the Lumiera website.
+This can be published now.
+Moreover, _Benny_ investigated Glossary and Index generation.  It turns out that
+ASCIIDOC already provides an index generation feature, which could be configured and used
+to build an index. But there is no support to generate a glossary which we'll build soon.
+The next goal would be to build a prototype for testing and to see how this can be
+integrated into the website infrastructure.
+
+Library solutions for Video Display
+-----------------------------------
+_Benny_ conducted some research regarding library solutions for *video display*, notably
+ffmpeg, GStreamer and libVLC. It was rather easy to code up an "hello world" example based on
+GStreamer, while it was difficult to find suitable documentation regarding the ffmpeg based
+solution. Moreover, GStreamer seems to have a much more active and helpful community.
+
+Next steps would be to look in more depth into libVLC, and especially to compare the
+feature sets of these solutions. _Cehteh_ points out that MPV (formerly MPlayer) would also
+be an interesting point of reference. _Benny_ mentions that GTK4 offers an integrated
+video display capability. We'll investigate these frameworks further.
+
+Extended discussion ensued regarding video frameworks and the difficulties regarding the plethora
+of interfaces, especially when it comes to hardware acceleration support. Ideally, the Lumiera
+project should follow the solutions provided by a sufficiently active community, capable of following
+the constant evolution of interfaces and frameworks.
+
+It was agreed upon that the »Playback Vertical Slice« just needs a very simple solution to output
+raw video (RGB888 or YUV), and offers a good opportunity for experimentation to find a suitable
+support framework.
+
+
+''''
+
+Next meeting
+------------
+
+The next meeting will be Wednesday Oct 11, 20:00 UTC. 
+You are welcome to join.
+
+''''
+
+

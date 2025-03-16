@@ -3,7 +3,7 @@ Design Process : Data Backend
 
 [grid="all"]
 `------------`-----------------------
-*State*         _Final_
+*State*         _Parked_
 *Date*          _2007-06-04_
 *Proposed by*   link:ct[]
 -------------------------------------
@@ -42,24 +42,14 @@ This just starts as braindump, I will refine it soon:
   http://www.pipapo.org/pipawiki/Cinelerra/Developers/ichthyo/Cinelerra3/Architecture[Architecture] and a sketch/draft about http://www.pipapo.org/pipawiki/Cinelerra/Developers/ichthyo/Possibilities_at_hand[things possible in the middle layer]
 
 
-Tasks
-^^^^^
+Parked
+~~~~~~
+The underlying principles remain valid, yet development took another
+direction during the last years. Special frameworks for high-performance
+asynchronous IO will be used for dedicated use cases.
 
+Ichthyostega:: '2023-10-24' ~<prg@ichthyostega.de>~
 
-Pros
-^^^^
-
-
-Cons
-^^^^
-
-
-Alternatives
-^^^^^^^^^^^^
-
-
-Rationale
-~~~~~~~~~
 
 
 Comments
@@ -70,6 +60,11 @@ Sounds fairly complete to me
 
 Developement takes place in the repo now
  -- link:ct[] [[DateTime(2007-06-27T16:14:56Z)]]
+
+Development took another direction over the last years;
+the former »Backend« layer is restructured
+ -- link:Ichthyostega[] [[DateTime(2023-10-24T22:45:55Z)]]
+
 
 ''''
 Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
