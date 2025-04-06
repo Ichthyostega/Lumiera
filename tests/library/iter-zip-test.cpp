@@ -160,10 +160,11 @@ namespace test{
           CHECK (t1   == "«tuple<uint, double, char>»──(42,1.61803,7)"_expect );   // ...while the other one was picked by value => t1 unchanged
           
           // function may return references....
-          auto refr = [](auto&& v) -> decltype(auto) { return v; };
-          int five = 5;
+          auto refr = [](auto& v) -> decltype(auto) { return v; };
+          int five{5};
+          int& fiveR{five};
           CHECK (TYPE (refr(five)) == "int&"_expect);
-          CHECK (TYPE (refr(5   )) == "int&"_expect);
+          CHECK (TYPE (refr(fiveR)) == "int&"_expect);
           
           auto t2r = mapEach (t2, refr);
           CHECK (t2r == "«tuple<char&, char&>»──(6,6)"_expect );                   // function yields references, which are placed into res-tuple

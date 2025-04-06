@@ -154,6 +154,9 @@ namespace timeline {
       auto get_vadjustment()  { return contentArea_.get_vadjustment(); }
       auto get_hadjustment()  { return contentArea_.get_hadjustment(); }
       
+      /** a way to get and possibly (re)compute the current TrackProfile */
+      using ProfileGetter = std::function<TrackProfile&()>;
+      
       
     protected: /* ==== Interface: CanvasHook ===== */
       
@@ -169,9 +172,6 @@ namespace timeline {
       void completeLayout (DisplayEvaluation&)         override;
       
     private:/* ===== Internals ===== */
-      
-      /** a way to get and possibly (re)compute the current TrackProfile */
-      using ProfileGetter = std::function<TrackProfile&()>;
       ProfileGetter getProfile;
       
       TimelineCanvas& getCanvas(int yPos);

@@ -108,6 +108,7 @@
 #include "lib/meta/value-type-binding.hpp"
 
 #include <iterator>
+#include <limits>
 
 
 namespace util {   // see lib/util.hpp

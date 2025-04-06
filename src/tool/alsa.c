@@ -19,6 +19,7 @@
 
 #include "alsa.h"
 
+#include <err.h>
 #include <alsa/asoundlib.h>
 
 static snd_pcm_t* playback_handle = 0;

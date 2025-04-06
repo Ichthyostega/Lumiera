@@ -305,14 +305,15 @@ namespace lib {
   class HeteroData
     : public HeteroData<meta::Node<StorageFrame<0, DATA...>, meta::NullType>>
     {
-      using _Front = HeteroData<meta::Node<StorageFrame<0, DATA...>, meta::NullType>>;
+      using _FrontBlock = HeteroData<meta::Node<StorageFrame<0, DATA...>, meta::NullType>>;
       
     public:
-      using NewFrame = typename _Front::Frame;
-      using ChainType = _Front;
+      using NewFrame = typename _FrontBlock::Frame;
+      using ChainType = _FrontBlock;
+      using _FrontBlock::_FrontBlock;
       
       template<typename...INIT>
-      static _Front
+      static HeteroData
       build (INIT&& ...initArgs)
         {
           return {initArgs ...};
