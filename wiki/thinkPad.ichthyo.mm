@@ -91295,7 +91295,7 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 <node CREATED="1733868698535" ID="ID_1014714524" MODIFIED="1733868718664" TEXT="und gilt nicht f&#xfc;r die Chain-Bl&#xf6;cke"/>
 </node>
 <node COLOR="#338800" CREATED="1743955568022" ID="ID_1380156916" MODIFIED="1743955590047" TEXT="Konstruktion aus einzelnen Daten-Elementen per Builder m&#xf6;glich">
-<linktarget COLOR="#3f6fc5" DESTINATION="ID_886647001" ENDARROW="Default" ENDINCLINATION="-1456;101;" ID="Arrow_ID_1259369192" SOURCE="ID_1913797897" STARTARROW="None" STARTINCLINATION="-817;46;"/>
+<linktarget COLOR="#3f6fc5" DESTINATION="ID_1380156916" ENDARROW="Default" ENDINCLINATION="-1456;101;" ID="Arrow_ID_1259369192" SOURCE="ID_1913797897" STARTARROW="None" STARTINCLINATION="-817;46;"/>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -160471,8 +160471,7 @@ actively maintained upstream. Please remove gdl from Debian.</pre>
       ...und daf&#252;r auch den Basis-Konstruktor explizit sichtbar machen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -160493,10 +160492,216 @@ actively maintained upstream. Please remove gdl from Debian.</pre>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1742175432695" ID="ID_271125011" MODIFIED="1742175441476" TEXT="offen: L&#xf6;sung f&#xfc;r BuilderDoxygen">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1742175432695" ID="ID_271125011" MODIFIED="1743981505637" TEXT="L&#xf6;sung f&#xfc;r BuilderDoxygen">
+<icon BUILTIN="pencil"/>
 <node CREATED="1742175442925" ID="ID_776664661" MODIFIED="1742175453375" TEXT="das war ein Plug-in &#xbb;aus dem Netz&#xab;"/>
 <node CREATED="1742175456267" ID="ID_1577214709" MODIFIED="1742175471861" TEXT="ungepflegt &#x2014; nicht Python-3-kompatibel"/>
+<node CREATED="1743980353617" ID="ID_1597159025" LINK="https://github.com/SCons/scons-contrib/tree/master/sconscontrib/SCons/Tool/doxygen" MODIFIED="1743980412340" TEXT="Eine Google-Schnitzeljagt f&#xfc;hrt zum Contrib-Github">
+<node CREATED="1743980426208" ID="ID_1350020983" MODIFIED="1743980440481" TEXT="zun&#xe4;chst war das ein komplett externes Tool (Mercurial)"/>
+<node CREATED="1743980465715" ID="ID_899704954" MODIFIED="1743980475676" TEXT="dann hat Bitbucket den Mercurial-Support aufgegeben"/>
+<node CREATED="1743980552151" ID="ID_1617159129" MODIFIED="1743980572295" TEXT="dann hat Russel Winder eine konsolidierte Version vom Mercurial auf Github publiziert"/>
+<node CREATED="1743980573092" ID="ID_507148070" MODIFIED="1743980590229" TEXT="und irgendwie kam es von dort ins Contrib-Repo"/>
+<node CREATED="1743980591332" ID="ID_969352345" MODIFIED="1743980611100" TEXT="angeblich wurde es sogar auf Python-3 portiert">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#464398" CREATED="1743981417336" ID="ID_731766959" MODIFIED="1743981489825" STYLE="bubble">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <u>Feststellung</u>: das ist eine deutlich &#252;berarbeitete Version <b>vom gleichen Code</b>
+    </p>
+  </body>
+</html></richcontent>
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="info"/>
+</node>
+<node COLOR="#338800" CREATED="1743981508764" ID="ID_1922609779" MODIFIED="1744081135199" TEXT="Git-Historie konsolidieren und integrieren">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Da hier offensichtlich eine Kontinuit&#228;t besteht und die &#246;ffentliche SCons-Website (wenngleich um mehrere Ecken) auf dieses Tool verweist, erscheint es mir angezeigt, eine vollst&#228;ndige Historie bereitzustellen &#8212; wenngleich auch der Code selber direkt von Lumiera in-Tree ausgeliefert wird.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1743981746292" ID="ID_20631009" MODIFIED="1743981754575" TEXT="zweistufige &#xdc;bersetzung">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1743981768401" ID="ID_1811100485" MODIFIED="1744081132457" TEXT="Subtree-Extract aus scons-contrib-Repo">
+<icon BUILTIN="full-1"/>
+<node CREATED="1743981821658" ID="ID_1552664185" LINK="file:///Lager/soft/DEB/Archiv/Lumi/SconsContrib.git" MODIFIED="1743985404818" TEXT="scons-contrib: in mein lokales Software-Archiv"/>
+<node CREATED="1743985409777" ID="ID_1311614819" MODIFIED="1743985429875" TEXT="git subtree -b sconsDoxy --annotate=&quot;sconsDoxy: &quot; --rejoin -P sconscontrib/SCons/Tool/doxygen split">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1743985439855" ID="ID_388356909" MODIFIED="1743985459942" TEXT="das liefert aber nur Historie bis zum Export/Inport durch Russel Winder">
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#ece5b0" COLOR="#435e98" CREATED="1743985465299" ID="ID_523992664" MODIFIED="1743998595942" TEXT="findet man die Mercurial-Historie noch irgendwo?">
+<icon BUILTIN="help"/>
+<node COLOR="#5b280f" CREATED="1743985474965" ID="ID_1586467614" MODIFIED="1743985478646" TEXT="Archive.org">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1743985490792" ID="ID_1270774273" LINK="https://bitbucket-archive.softwareheritage.org/projects/ri/richvdh/scons_doxygen.html" MODIFIED="1743985497475" TEXT="Software-Heritage"/>
+</node>
+<node COLOR="#007288" CREATED="1743985514364" ID="ID_1821037157" MODIFIED="1743998562754" TEXT="Mercurial-Repo &#x27fc; Git">
+<node CREATED="1743985573973" ID="ID_377672953" LINK="https://git-scm.com/book/en/v2/Git-and-Other-Systems-Migrating-to-Git" MODIFIED="1743985610412" TEXT="Anleitung (Git-scm.org)"/>
+<node CREATED="1743985593378" ID="ID_1771760987" LINK="https://stackoverflow.com/a/6917665/444796" MODIFIED="1743985603330" TEXT="&#xe4;hnlich auf SO beschrieben"/>
+<node CREATED="1743985802854" ID="ID_1404016799" MODIFIED="1743987275262" TEXT="Schritte">
+<icon BUILTIN="list"/>
+<node CREATED="1743985686860" ID="ID_1274980886" MODIFIED="1743985690719" TEXT="apt install mercurial"/>
+<node CREATED="1743985796271" ID="ID_372637812" MODIFIED="1743985799650" TEXT="git clone https://github.com/frej/fast-export.git"/>
+<node CREATED="1743985888420" MODIFIED="1743985888420" TEXT="git init git_repo"/>
+<node CREATED="1743985897372" MODIFIED="1743985897372" TEXT="cd git_repo"/>
+<node CREATED="1743985943822" ID="ID_380818007" MODIFIED="1743986118300" TEXT="../fast-export/hg-fast-export.sh -r ../mercurialRepo/ --force">
+<node CREATED="1743986119300" ID="ID_262788882" MODIFIED="1743986141853" TEXT="--force da &quot;repository has at least one unnamed head&quot;"/>
+</node>
+</node>
+<node CREATED="1743987279273" ID="ID_1619414089" MODIFIED="1743987298795" TEXT="am Ende eine Menge offene Fix-Branches">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1743987301011" ID="ID_648921220" MODIFIED="1743987316791" TEXT="h&#xe4;ngt m&#xf6;glicherweise mit dem &quot;unnamed head&quot;-Problem zusammen"/>
+<node CREATED="1743987318584" ID="ID_1670119138" MODIFIED="1743987367943" TEXT="da hat jemand wohl an einem Tag eine Menge Fixes versucht">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      alle diese Commits sind von Richard van der Hoff&lt;richard@richvdh.org&gt; am 12.8.2013
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1743987369972" ID="ID_1762027688" MODIFIED="1743987496322" TEXT="man kann den all_fixes-Branch per cherry-pick konsolidieren">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      wenn man sich die Zeiten und &#196;nderungen etwas anschaut, dann waren das experimentelle Fixes oder Verbesserungen, die am Ende des Tages irgendwie zusammengeh&#228;ngt wurden.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node COLOR="#007288" CREATED="1743987518875" ID="ID_1895969931" MODIFIED="1743998562754" TEXT="Historien zusammenh&#xe4;ngen">
+<node COLOR="#435e98" CREATED="1743989467821" ID="ID_581184903" MODIFIED="1743998529741" TEXT="brauche daf&#xfc;r den historischen Anfangsstand">
+<icon BUILTIN="yes"/>
+<node CREATED="1743989486722" ID="ID_1324572817" MODIFIED="1743989980597" TEXT="hier wird die Situation unklar">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Denn der erste Code vor 2007 war im Scons-Wiki gespeichert, auf einer frei editierbaren Seite, auf der verschiedene Leute Fixes und neue Features vorgeschlagen haben. Es gab wohl mal ein eMail-Archiv, aber das ist schon vor langer Zeit verlorengegangen....
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1743989982966" ID="ID_1837294555" MODIFIED="1743991071017" TEXT="Quelle-1 : ein Archive.org Snapshot von 21 Jun 2006">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1837294555" ENDARROW="Default" ENDINCLINATION="323;0;" ID="Arrow_ID_410924004" SOURCE="ID_223067193" STARTARROW="None" STARTINCLINATION="72;-109;"/>
+</node>
+<node CREATED="1743990050463" ID="ID_984028702" MODIFIED="1743990068752" TEXT="Quelle-2: die Git-Historie der Scons-Wiki-Seite (migriert auf Github)"/>
+<node CREATED="1743990069606" ID="ID_281243368" MODIFIED="1743990085406" TEXT="Quelle-3: die Anfangs-Commits im Mercurial-Repo"/>
+<node CREATED="1743990089618" ID="ID_881947749" MODIFIED="1743990286523" TEXT="Quelle-4 : notes.txt im neuen Github (Stand Mar 7, 2010)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Commit Roussel Wilder on Mar 7, 2010
+    </p>
+    <p>
+      Dieses Commit-Datum geht hervor aus einem Mirror in https://github.com/ptomulik/scons_doxygen/commits/master/notes.txt
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1743990326345" ID="ID_676358029" MODIFIED="1743990360680" STYLE="bubble">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <pre http-equiv="content-type" content="text/html; charset=utf-8"><font size="2">The original plugin file is the file posted to http://www.scons.org/wiki/DoxygenBuilder by Matthew Nicolson
+2006-03-31.  Attached to this wiki page were two other files, both of which are in the repository history
+although removed from being in the working tree: doxygen_reiners_2007-02-26.py, and
+doxygen_boehme_2007-07-18.py.  Boehme's version seems to include many of the changes in Reiners but many of
+Reiners changes are missing from Boehme.  It is not clear why Reiner's changes have been reverted by Boehme.
+it seems appropriate to merge in Boehme's directly rather than Reiner's and then Boehme's.
+
+Robert Smallshire in his email of
+http://scons.tigris.org/ds/viewMessage.do?dsForumId=1272&amp;dsMessageId=2383574 supports the move to use
+Boehme's version as the next iteration.  It may then be that a version he has can be merged in.
+
+Apart from one change to the builder command line, Norton's version seems to be Boehme's version with all
+the TAGFILE stuff removed.
+
+Since then others have made contributions, see the log for the history.</font></pre>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1743990957961" ID="ID_734535585" MODIFIED="1743998693920" TEXT="aus diesen Quellenangaben die Alt-Historie rekonstruieren">
+<arrowlink COLOR="#5393de" DESTINATION="ID_1640766750" ENDARROW="Default" ENDINCLINATION="64;3;" ID="Arrow_ID_937784840" STARTARROW="None" STARTINCLINATION="28;60;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1743991014534" ID="ID_223067193" MODIFIED="1743991071017" TEXT="Startpunkt: Matthew Nicolson 2006-03-31">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Inhalt aus dem Archive.org-Snapshot
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink DESTINATION="ID_1837294555" ENDARROW="Default" ENDINCLINATION="323;0;" ID="Arrow_ID_410924004" STARTARROW="None" STARTINCLINATION="72;-109;"/>
+</node>
+<node CREATED="1743991280467" ID="ID_1673240399" MODIFIED="1743991297908" TEXT="dann die Reiner und Boehme-Linien separat"/>
+<node CREATED="1743998702468" ID="ID_1597276906" MODIFIED="1743998748985" TEXT="und mit Rousel Winder&apos;s Konsolidierung 2010 verbinden"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1743998506055" ID="ID_1640766750" MODIFIED="1743998835933" TEXT="Merge-Struktur nachbauen und mit dem Subtree-Split verbinden">
+<arrowlink COLOR="#fdfec6" DESTINATION="ID_459235559" ENDARROW="Default" ENDINCLINATION="74;0;" ID="Arrow_ID_996452297" STARTARROW="None" STARTINCLINATION="-153;7;"/>
+<linktarget COLOR="#5393de" DESTINATION="ID_1640766750" ENDARROW="Default" ENDINCLINATION="64;3;" ID="Arrow_ID_937784840" SOURCE="ID_734535585" STARTARROW="None" STARTINCLINATION="28;60;"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fefc4e" COLOR="#351d75" CREATED="1743998613064" ID="ID_459235559" MODIFIED="1743998835933" TEXT="nun habe ich die komplette noch dokumentierbare Historie isoliert">
+<linktarget COLOR="#fdfec6" DESTINATION="ID_459235559" ENDARROW="Default" ENDINCLINATION="74;0;" ID="Arrow_ID_996452297" SOURCE="ID_1640766750" STARTARROW="None" STARTINCLINATION="-153;7;"/>
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1743981787423" ID="ID_884818317" MODIFIED="1744081130868" TEXT="per Subtree-Merge an Lumiera ankoppeln">
+<icon BUILTIN="full-2"/>
+<node COLOR="#5b280f" CREATED="1744080901531" ID="ID_192585382" MODIFIED="1744080930224" TEXT="es ist sinnlos den LInk zum Code von 2008 herzustellen">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1744080931335" ID="ID_456772163" MODIFIED="1744081017173" TEXT="Zwischen-Branch f&#xfc;r Verzeichnis admin/scons &#x27fb; Branch sconsDoxy">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ich verwende einen Zwichen-Branch, um nur den Inhalt von admin/scons mit dem Subtree-Branch sconsDoxy zu verbinden
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1744081110476" ID="ID_1187366953" MODIFIED="1744081125274" TEXT="mit einem weiteren Merge in den Mainline-Branch bringen (und umbenennen)">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1744081144445" ID="ID_1790764546" MODIFIED="1744081162083" TEXT="in separates Repo auf Lumiera.org publizieren">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d0e6a4" COLOR="#338800" CREATED="1744081164842" ID="ID_1660080641" MODIFIED="1744081197438" STYLE="bubble" TEXT="aktuelle Version l&#xe4;uft wie gewohnt">
+<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1744081211266" ID="ID_1900866796" MODIFIED="1744081269039" STYLE="fork" TEXT="Doxygen 1.9.8 : wesentlich verbessert">
+<icon BUILTIN="idea"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1744081272203" ID="ID_603439219" MODIFIED="1744081300094" STYLE="fork" TEXT="Warnungen im Doxyfile">
+<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
+<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="flag-pink"/>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1742175483087" ID="ID_40670399" MODIFIED="1742175487035" TEXT="Nacharbeiten">
 <icon BUILTIN="hourglass"/>
@@ -160952,6 +161157,9 @@ actively maintained upstream. Please remove gdl from Debian.</pre>
 <node CREATED="1742175245473" ID="ID_1357727858" MODIFIED="1742175247915" TEXT="Warnungen"/>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1742175249127" ID="ID_1185124760" MODIFIED="1742175325795" TEXT="Testsuite GR&#xdc;N">
 <icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1743970651055" ID="ID_527599811" MODIFIED="1743970655841" TEXT="7 failed Tests">
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1742175264309" ID="ID_1163480280" MODIFIED="1742175329181" TEXT="Preview-Release">
 <icon BUILTIN="hourglass"/>
@@ -162433,8 +162641,8 @@ actively maintained upstream. Please remove gdl from Debian.</pre>
 </node>
 <node CREATED="1439842359711" ID="ID_1982964862" MODIFIED="1581813505207" TEXT="Paket">
 <icon BUILTIN="stop"/>
-<node CREATED="1742177593391" ID="ID_149045169" MODIFIED="1742177602941" TEXT="Anpassungen">
-<icon BUILTIN="stop"/>
+<node CREATED="1742177593391" ID="ID_149045169" MODIFIED="1743977437156" TEXT="Anpassungen">
+<icon BUILTIN="prepare"/>
 <node COLOR="#6a1928" CREATED="1561237113163" ID="ID_1613245846" MODIFIED="1561237134536" TEXT="zu kl&#xe4;ren">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1439842379420" ID="ID_1336697213" MODIFIED="1557498707243" TEXT="gtk-Abh&#xe4;ngigkeiten"/>
@@ -162493,8 +162701,10 @@ actively maintained upstream. Please remove gdl from Debian.</pre>
 <node CREATED="1742400100115" ID="ID_385693841" MODIFIED="1742400113269" TEXT="Arbeitsverzeichnis: ~/devel/pack.deb/Archiv/Lumi/nobug"/>
 <node CREATED="1742400116017" ID="ID_280444876" MODIFIED="1742400130946" TEXT="Git-Repo dort f&#xfc;r Upstream+DEB"/>
 </node>
-<node CREATED="1742401640747" ID="ID_832744357" MODIFIED="1742401644217" TEXT="Aktualisierungen">
-<node CREATED="1742401646533" ID="ID_191467071" MODIFIED="1742401663759" TEXT="f&#xfc;r Trixie 2025-03">
+<node CREATED="1742401640747" ID="ID_832744357" MODIFIED="1743977400527" TEXT="Aktualisierungen">
+<icon BUILTIN="list"/>
+<node COLOR="#435e98" CREATED="1742401646533" FOLDED="true" ID="ID_191467071" MODIFIED="1743977410571" TEXT="f&#xfc;r Trixie 2025-03">
+<icon BUILTIN="yes"/>
 <node COLOR="#338800" CREATED="1742401664987" ID="ID_1518625918" MODIFIED="1742693083883" TEXT="Bugfixes nach 2008.1 aufsammeln">
 <linktarget COLOR="#06c135" DESTINATION="ID_1518625918" ENDARROW="Default" ENDINCLINATION="-299;796;" ID="Arrow_ID_1603071918" SOURCE="ID_1305334768" STARTARROW="None" STARTINCLINATION="-232;-28;"/>
 <icon BUILTIN="button_ok"/>
@@ -162689,7 +162899,7 @@ actively maintained upstream. Please remove gdl from Debian.</pre>
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1742417827151" ID="ID_31098087" MODIFIED="1742692609648" TEXT="Paket modernisieren">
+<node COLOR="#338800" CREATED="1742417827151" FOLDED="true" ID="ID_31098087" MODIFIED="1743977375801" TEXT="Paket modernisieren">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1742418070158" ID="ID_1379720551" MODIFIED="1742418101102" TEXT="Standards v3.8.0 &#x27f6; v4.7.2">
 <node CREATED="1742418109961" ID="ID_689200571" LINK="https://www.debian.org/doc/debian-policy/upgrading-checklist.html#version-4-6-1" MODIFIED="1742418121079" TEXT="&#xc4;nderungs-Hinweise durchgehen"/>
@@ -163150,7 +163360,7 @@ actively maintained upstream. Please remove gdl from Debian.</pre>
 </html></richcontent>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1742608164223" ID="ID_950262848" MODIFIED="1742692600068" TEXT="Build zum Laufen bekommen">
+<node COLOR="#338800" CREATED="1742608164223" FOLDED="true" ID="ID_950262848" MODIFIED="1743977391884" TEXT="Build zum Laufen bekommen">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1742608175517" ID="ID_163111584" MODIFIED="1742608281621" TEXT="-Werror &#x27f9; Nobug macht jede Menge Pointer-Arrithmetik auf void*">
 <richcontent TYPE="NOTE"><html>
@@ -163226,6 +163436,7 @@ actively maintained upstream. Please remove gdl from Debian.</pre>
 </node>
 </node>
 </node>
+</node>
 <node COLOR="#338800" CREATED="1742682792528" ID="ID_706573175" MODIFIED="1742682810898" TEXT="Paket wird gebaut und sieht korrekt aus">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1743300493252" ID="ID_1169717329" MODIFIED="1743300501153" TEXT="Paketbau im Container">
@@ -163249,7 +163460,6 @@ actively maintained upstream. Please remove gdl from Debian.</pre>
     </p>
   </body>
 </html></richcontent>
-</node>
 </node>
 </node>
 </node>
