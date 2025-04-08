@@ -1,0 +1,2 @@
+env = Environment(tools=["default", "doxygen"], toolpath=".")
+env.Doxygen("doxy.cfg")
