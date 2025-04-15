@@ -37,7 +37,7 @@
  ** holder instances. This is the purpose of the \c transfer_control
  ** friend function.
  ** 
- ** @deprecated this is a pre C++11 concept and superseded by rvalue references 
+ ** @deprecated this is a pre C++11 concept and superseded by rvalue references /////////////////////////////TICKET #958
  ** 
  ** @see scoped-holder-test.cpp
  ** @see scoped-holder-transfer.hpp use in std::vector
@@ -198,7 +198,7 @@ namespace lib {
       operator* ()  const
         {
           ASSERT (created_);
-          return (TY&) content_;
+          return (TY&) content_;           //////////////////////////////////////////////////////////////////TICKET #958 : GCC-14 warns here -- really time to get rid of this class alltogether
         }
       
       TY* 

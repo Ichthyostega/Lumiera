@@ -285,7 +285,7 @@ namespace advice {
       bool
       isGiven()  const
         {
-          return bool{this->getSolution()};
+          return bool(this->getSolution());
         }
       
       void
@@ -474,7 +474,7 @@ namespace advice {
       bool
       isMatched()  const
         {
-          return bool{this->getSolution()};
+          return bool(this->getSolution());
         }
       
       

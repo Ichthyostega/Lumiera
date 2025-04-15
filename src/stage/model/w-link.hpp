@@ -140,7 +140,7 @@ namespace model {
       explicit
       operator bool()  const
         {
-          return bool{widget_};
+          return bool(widget_);
         }
       
       TAR&

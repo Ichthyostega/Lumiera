@@ -75,7 +75,7 @@ namespace test {
       resolveEmbeddedOriginToken ()
         {
           fsys::path exePath (findExePath());
-          string expected = (exePath.remove_leaf() / "modules").string();
+          string expected = (exePath.remove_leaf() / "modules").string();    ////////OOO warning by GCC-14 : `path::remove_leaf()` is deprecated: Use `path::remove_filename()` instead
           
           SearchPathSplitter sp("xyz:$ORIGIN/modules:abc");
           CHECK ("xyz" == sp.next());

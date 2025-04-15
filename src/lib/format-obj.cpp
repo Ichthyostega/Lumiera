@@ -69,11 +69,11 @@ namespace { // hard-wired configuration for debugging output....
   const size_t DIAGNOSTICS_ADDRESS_SUFFIX_LEN = 4;
   
   
-  /** maximum decimal digits able to pass through a round trip without value change */ 
+  /** maximum decimal digits able to pass through a round trip without value change */
   template<typename F>
   constexpr size_t PRECISION_DECIMAL = std::numeric_limits<F>::digits10;
   
-  /** decimal digits require tod represent each different floating-point value */ 
+  /** decimal digits required to represent each different floating-point value completely */
   template<typename F>
   constexpr size_t PRECISION_COMPLETE = std::numeric_limits<F>::max_digits10;
 }

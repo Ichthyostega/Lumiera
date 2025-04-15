@@ -141,12 +141,12 @@ namespace test{
           VERIFY_ERROR (STATE, tab.val.get());
           VERIFY_ERROR (STATE, tab.off.get());
           VERIFY_ERROR (STATE, tab.off = 5  );
-          VERIFY_ERROR (STATE,(tab.off == 5));
+          VERIFY_ERROR (STATE, int(tab.off) );
           
           // direct access to the data is possible and tolerated
           tab.val.data.push_back (5.5);
           CHECK (tab.val == 5.5);
-          VERIFY_ERROR (STATE, (tab.off == 5));
+          VERIFY_ERROR (STATE, tab.off.get());
           CHECK (1 == tab.val.data.size());
           CHECK (0 == tab.off.data.size());
           CHECK (0 == tab.id.data.size());

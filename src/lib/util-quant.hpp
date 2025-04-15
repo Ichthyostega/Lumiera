@@ -54,7 +54,7 @@ namespace util {
   struct IDiv<int>
     : div_t
     {
-      IDiv<int> (int num, int den)
+      IDiv (int num, int den)
         : div_t(div (num,den))
         { }
     };
@@ -63,7 +63,7 @@ namespace util {
   struct IDiv<long>
     : ldiv_t
     {
-      IDiv<long> (long num, long den)
+      IDiv (long num, long den)
         : ldiv_t(ldiv (num,den))
         { }
     };
@@ -72,7 +72,7 @@ namespace util {
   struct IDiv<llong>
     : lldiv_t
     {
-      IDiv<llong> (llong num, llong den)
+      IDiv (llong num, llong den)
         : lldiv_t(lldiv (num,den))
         { }
     };

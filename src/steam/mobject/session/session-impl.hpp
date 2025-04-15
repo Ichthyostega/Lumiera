@@ -206,7 +206,7 @@ namespace session {
         };
       
     protected:
-      ServiceAccessPoint<SessionServiceExploreScope, IMPL>()
+      ServiceAccessPoint()
         : resolvingWrapper_(AccessCurrentIndex (*this))
         { }
     };
@@ -235,7 +235,7 @@ namespace session {
       }
     
     protected:
-      ServiceAccessPoint<SessionServiceMockIndex, IMPL>()
+      ServiceAccessPoint()
         : mockIndex_(0)
         { }
       

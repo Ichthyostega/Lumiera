@@ -84901,6 +84901,30 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 <arrowlink COLOR="#fbfed6" DESTINATION="ID_576332674" ENDARROW="Default" ENDINCLINATION="-670;-163;" ID="Arrow_ID_18042992" STARTARROW="None" STARTINCLINATION="525;35;"/>
 <icon BUILTIN="idea"/>
 </node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1744755490793" ID="ID_1135941103" MODIFIED="1744756657146" TEXT="2025-4 : kann jetzt &#xfc;berall weg">
+<linktarget COLOR="#fd26d0" DESTINATION="ID_1135941103" ENDARROW="Default" ENDINCLINATION="-1048;89;" ID="Arrow_ID_1050531240" SOURCE="ID_831819953" STARTARROW="None" STARTINCLINATION="-1120;-23;"/>
+<icon BUILTIN="yes"/>
+<node COLOR="#435e98" CREATED="1744755518679" ID="ID_1083442460" MODIFIED="1744755532011" TEXT="lib::Several hat sich gut etabliert">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1744755533738" ID="ID_584942928" MODIFIED="1744756510905" TEXT="auch ScopedHolder jetzt endlich mal wegr&#xe4;umen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das waren allesamt Datenstrukturen aus der ersten Zeit; wir waren auf C++03 und ich hatte noch wenig Erfahrung mit Library-Design in C++ &#8212; <i>leider wurde dieser teilweise recht dilettantische Code immerfort festgehalten</i>&#160; von den ersten Entw&#252;rfen zum Memory-Management und zur Node-Invocation. Insofern habe ich mich fast schon daran gew&#246;hnt, das immerfort zu &#252;bersehen. Aber zum Gl&#252;ck ist jetzt die Ausrede weg, und die letzten Reste sollten keinen gro&#223;en Aufwand mehr machen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1744756217156" ID="ID_1812508757" LINK="https://issues.lumiera.org/ticket/958" MODIFIED="1744756256421" TEXT="# 958 replace ScopedHolder">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1744756270441" ID="ID_326401228" LINK="https://issues.lumiera.org/ticket/473" MODIFIED="1744756293052" TEXT="#473 sort out RefArray">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -159640,7 +159664,7 @@ actively maintained upstream. Please remove gdl from Debian.</pre>
 </node>
 </node>
 </node>
-<node COLOR="#5b280f" CREATED="1743635848139" ID="ID_1135581711" MODIFIED="1743900162587" TEXT="dieses Paket sollte ich lediglich nochmal neu bauen">
+<node COLOR="#5b280f" CREATED="1743635848139" FOLDED="true" ID="ID_1135581711" MODIFIED="1743900162587" TEXT="dieses Paket sollte ich lediglich nochmal neu bauen">
 <arrowlink COLOR="#3197be" DESTINATION="ID_1274696766" ENDARROW="Default" ENDINCLINATION="18;-87;" ID="Arrow_ID_272172070" STARTARROW="None" STARTINCLINATION="-17;68;"/>
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1743635865622" ID="ID_363165312" MODIFIED="1743635990866" TEXT="ohne Aufwand reinzustecken">
@@ -160492,8 +160516,8 @@ actively maintained upstream. Please remove gdl from Debian.</pre>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1742175432695" ID="ID_271125011" MODIFIED="1743981505637" TEXT="L&#xf6;sung f&#xfc;r BuilderDoxygen">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1742175432695" ID="ID_271125011" MODIFIED="1744663656725" TEXT="L&#xf6;sung f&#xfc;r BuilderDoxygen">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1742175442925" ID="ID_776664661" MODIFIED="1742175453375" TEXT="das war ein Plug-in &#xbb;aus dem Netz&#xab;"/>
 <node CREATED="1742175456267" ID="ID_1577214709" MODIFIED="1742175471861" TEXT="ungepflegt &#x2014; nicht Python-3-kompatibel"/>
 <node CREATED="1743980353617" ID="ID_1597159025" LINK="https://github.com/SCons/scons-contrib/tree/master/sconscontrib/SCons/Tool/doxygen" MODIFIED="1743980412340" TEXT="Eine Google-Schnitzeljagt f&#xfc;hrt zum Contrib-Github">
@@ -160528,7 +160552,7 @@ actively maintained upstream. Please remove gdl from Debian.</pre>
 </html></richcontent>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1743981746292" ID="ID_20631009" MODIFIED="1743981754575" TEXT="zweistufige &#xdc;bersetzung">
-<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1743981768401" ID="ID_1811100485" MODIFIED="1744081132457" TEXT="Subtree-Extract aus scons-contrib-Repo">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1743981768401" FOLDED="true" ID="ID_1811100485" MODIFIED="1744081132457" TEXT="Subtree-Extract aus scons-contrib-Repo">
 <icon BUILTIN="full-1"/>
 <node CREATED="1743981821658" ID="ID_1552664185" LINK="file:///Lager/soft/DEB/Archiv/Lumi/SconsContrib.git" MODIFIED="1743985404818" TEXT="scons-contrib: in mein lokales Software-Archiv"/>
 <node CREATED="1743985409777" ID="ID_1311614819" MODIFIED="1743985429875" TEXT="git subtree -b sconsDoxy --annotate=&quot;sconsDoxy: &quot; --rejoin -P sconscontrib/SCons/Tool/doxygen split">
@@ -160645,8 +160669,7 @@ Since then others have made contributions, see the log for the history.</font></
       Inhalt aus dem Archive.org-Snapshot
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink DESTINATION="ID_1837294555" ENDARROW="Default" ENDINCLINATION="323;0;" ID="Arrow_ID_410924004" STARTARROW="None" STARTINCLINATION="72;-109;"/>
 </node>
 <node CREATED="1743991280467" ID="ID_1673240399" MODIFIED="1743991297908" TEXT="dann die Reiner und Boehme-Linien separat"/>
@@ -160665,7 +160688,7 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1743981787423" ID="ID_884818317" MODIFIED="1744081130868" TEXT="per Subtree-Merge an Lumiera ankoppeln">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1743981787423" FOLDED="true" ID="ID_884818317" MODIFIED="1744081130868" TEXT="per Subtree-Merge an Lumiera ankoppeln">
 <icon BUILTIN="full-2"/>
 <node COLOR="#5b280f" CREATED="1744080901531" ID="ID_192585382" MODIFIED="1744080930224" TEXT="es ist sinnlos den LInk zum Code von 2008 herzustellen">
 <icon BUILTIN="button_cancel"/>
@@ -160685,8 +160708,20 @@ Since then others have made contributions, see the log for the history.</font></
 <node COLOR="#338800" CREATED="1744081110476" ID="ID_1187366953" MODIFIED="1744081125274" TEXT="mit einem weiteren Merge in den Mainline-Branch bringen (und umbenennen)">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1744081144445" ID="ID_1790764546" MODIFIED="1744081162083" TEXT="in separates Repo auf Lumiera.org publizieren">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1744081144445" ID="ID_1790764546" MODIFIED="1744671791804" TEXT="in separates Repo auf Lumiera.org publizieren">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1744670344547" ID="ID_1807108013" LINK="file:///Lager/soft/DEB/Archiv/Lumi/SconsContrib.git" MODIFIED="1744670361690" TEXT="Ankerpunkt liegt auch bei mir lokal"/>
+<node BACKGROUND_COLOR="#eceeb5" COLOR="#435e98" CREATED="1744671704542" ID="ID_1033104310" MODIFIED="1744671787168" TEXT="git remote &#xd83e;&#xdc32; Lumiera">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      git+ssh://ichthyo@git.lumiera.org/git/libs/scons-contrib
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="info"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#d0e6a4" COLOR="#338800" CREATED="1744081164842" ID="ID_1660080641" MODIFIED="1744081197438" STYLE="bubble" TEXT="aktuelle Version l&#xe4;uft wie gewohnt">
@@ -160739,8 +160774,8 @@ Since then others have made contributions, see the log for the history.</font></
 <arrowlink COLOR="#1a37c0" DESTINATION="ID_1667505670" ENDARROW="Default" ENDINCLINATION="808;-56;" ID="Arrow_ID_1103843085" STARTARROW="None" STARTINCLINATION="1108;118;"/>
 <linktarget COLOR="#532fa9" DESTINATION="ID_1843112182" ENDARROW="Default" ENDINCLINATION="-165;-15;" ID="Arrow_ID_1812008513" SOURCE="ID_172043061" STARTARROW="None" STARTINCLINATION="-30;184;"/>
 <icon BUILTIN="button_ok"/>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1743527331656" ID="ID_56609592" LINK="https://issues.lumiera.org/ticket/1397" MODIFIED="1743527357498" TEXT="#1397 provide libGDL and mm-bindings for Debian-Trixie">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1743527331656" ID="ID_56609592" LINK="https://issues.lumiera.org/ticket/1397" MODIFIED="1744670278508" TEXT="#1397 provide libGDL and mm-bindings for Debian-Trixie">
+<icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#435e98" CREATED="1743515805607" HGAP="60" ID="ID_306553601" MODIFIED="1743619159245" TEXT="FTBS auf Trixie (Stand April 2025)" VSHIFT="-20">
 <icon BUILTIN="broken-line"/>
@@ -161107,6 +161142,11 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1742175621250" ID="ID_1886919024" MODIFIED="1742175634845" TEXT="boost-filesystem loswerden!">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1744754918427" ID="ID_368377472" MODIFIED="1744754923731" TEXT="lib/searchpath.hpp"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1744756270441" ID="ID_831819953" LINK="https://issues.lumiera.org/ticket/473" MODIFIED="1744756657146" TEXT="RefArray und ScopedHolder m&#xfc;ssen jetzt wirklich mal weg">
+<arrowlink COLOR="#fd26d0" DESTINATION="ID_1135941103" ENDARROW="Default" ENDINCLINATION="-1048;89;" ID="Arrow_ID_1050531240" STARTARROW="None" STARTINCLINATION="-1120;-23;"/>
+<icon BUILTIN="yes"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1742175872016" ID="ID_1131308211" MODIFIED="1742175881001" TEXT="Untersuchung: einfacher XV-Displayer">
 <icon BUILTIN="flag-yellow"/>
@@ -161144,6 +161184,17 @@ Since then others have made contributions, see the log for the history.</font></
 </html></richcontent>
 <arrowlink COLOR="#592f6e" DESTINATION="ID_450633851" ENDARROW="Default" ENDINCLINATION="338;12;" ID="Arrow_ID_637755539" STARTARROW="None" STARTINCLINATION="466;0;"/>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1744719728307" ID="ID_1783840760" MODIFIED="1744719819653" TEXT="siehe steam/external/libgavl.hpp">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      wohl inzwischen nirgends mehr includiert
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1742175299968" ID="ID_1393531242" MODIFIED="1742175305316" TEXT="C++20">
@@ -161153,8 +161204,295 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node CREATED="1439176890840" ID="ID_535116778" MODIFIED="1581813253348" TEXT="Probleme"/>
-<node CREATED="1742175245473" ID="ID_1357727858" MODIFIED="1742175247915" TEXT="Warnungen"/>
+<node CREATED="1439176890840" ID="ID_535116778" MODIFIED="1581813253348" TEXT="Probleme">
+<node COLOR="#435e98" CREATED="1744664606562" ID="ID_1701757170" MODIFIED="1744664617904" TEXT="(bisher nix Grunds&#xe4;tzliches)">
+<font NAME="SansSerif" SIZE="9"/>
+</node>
+</node>
+<node CREATED="1744749837898" ID="ID_426505316" MODIFIED="1744749846538" TEXT="Deprecations">
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1744749991694" ID="ID_593970637" MODIFIED="1744751399369" TEXT="rsvg-convert">
+<icon BUILTIN="bell"/>
+<node CREATED="1744750427328" ID="ID_976491551" MODIFIED="1744750440220" TEXT="Warnungen">
+<icon BUILTIN="edit"/>
+<node CREATED="1744750013097" ID="ID_828388523" MODIFIED="1744750013097" TEXT="&quot;Including &lt;librsvg/rsvg-cairo.h&gt; directly is deprecated"/>
+<node CREATED="1744750044882" ID="ID_379938485" MODIFIED="1744750044882" TEXT="&apos;rsvg_init&apos; is deprecated: Use &apos;g_type_init&apos; instead"/>
+<node CREATED="1744750142895" ID="ID_1047193119" MODIFIED="1744750193988" TEXT="&apos;rsvg_handle_set_size_callback&apos;"/>
+<node CREATED="1744750159070" ID="ID_1628636932" MODIFIED="1744750176381" TEXT="&apos;rsvg_handle_get_dimensions&apos;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Use 'rsvg_handle_get_intrinsic_size_in_pixels' instead
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1744750189596" ID="ID_1356114476" MODIFIED="1744750442839" TEXT="&apos;rsvg_handle_render_cairo&apos;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <font color="#4a2626" face="Bitstream Vera Sans Mono">Use 'rsvg_handle_render_document' instead</font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1744750218412" ID="ID_225209177" MODIFIED="1744750219080" TEXT="&apos;rsvg_term&apos;"/>
+</node>
+<node CREATED="1744750446803" ID="ID_1804154829" MODIFIED="1744750452747" TEXT="schon laaaaange bekannt">
+<node CREATED="1744750453740" ID="ID_1607362143" MODIFIED="1744750561464" TEXT="erstmals vermerkt f&#xfc;r Debian-7 (Wheezy) / GCC-4.7 / Mai 2013"/>
+<node BACKGROUND_COLOR="#daad8c" COLOR="#532f45" CREATED="1744750612853" ID="ID_801353105" LINK="https://issues.lumiera.org/ticket/1340" MODIFIED="1744751385996" TEXT="#1340 rsvg-convert deprecations (2023-09)">
+<icon BUILTIN="hourglass"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1742175245473" ID="ID_1357727858" MODIFIED="1744765471084" TEXT="Warnungen">
+<icon BUILTIN="pencil"/>
+<node COLOR="#435e98" CREATED="1744717880469" ID="ID_1900004997" MODIFIED="1744765441677" TEXT="std::unary_function is deprecated">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      typically this was used as mix-in base class to get the typedefs <font color="#8c505c" face="Bitstream Vera Sans Mono"><b>argument_type</b></font> and <font color="#8c505c" face="Bitstream Vera Sans Mono"><b>result_type</b></font> &#8212; which are no longer needed by modern code (and the STL), since traits or even concepts are commonplace nowadays.
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1744718844432" ID="ID_1017848222" MODIFIED="1744718883002" TEXT="hash-indexed.hpp : Policy-Marker UseEmbeddedHash or UseHashID"/>
+<node CREATED="1744718951829" ID="ID_1987113340" MODIFIED="1744718957653" TEXT="asset/db.hpp"/>
+<node CREATED="1744719175267" ID="ID_1712341337" MODIFIED="1744719178945" TEXT="entry-id.hpp"/>
+</node>
+<node COLOR="#435e98" CREATED="1744719218815" ID="ID_1772151030" MODIFIED="1744765438948" TEXT="implicitly-declared &apos;Time(Time const&amp;)&apos; is deprecated">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <font color="#4a2626" face="Bitstream Vera Sans Mono" size="9pt">src/lib/time/timevalue.hpp:303:13: note: because 'lib::time::Time' has user-provided 'lib::time::Time&amp; lib::time::Time::operator=(lib::time::Time)'</font>
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1744719544682" ID="ID_1257073174" MODIFIED="1744719585457" TEXT="die Regel lautet: keine automatische Copy-Operationen sobald man explizit definiert"/>
+<node CREATED="1744719592121" ID="ID_1113294176" MODIFIED="1744719653785">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      bedeutet: hier sollte der (erlaubte) copy-ctor explizit deklariert werden als <font face="Monospaced" color="#4a0d0d">=default&#160;</font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#338800" CREATED="1744728259900" ID="ID_190933533" MODIFIED="1744728272681" TEXT="also: defaultet ctor explizit deklarieren">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1744721146723" ID="ID_483308549" MODIFIED="1744721159558" TEXT="analog auch f&#xfc;r ExplicitPlacement">
+<node CREATED="1744721161585" ID="ID_266272220" MODIFIED="1744721171373" TEXT="wobei ... zOMG">
+<icon BUILTIN="smiley-angry"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#d80c92" CREATED="1744721172792" ID="ID_1590464827" MODIFIED="1744721204249" TEXT="so eine zentrale Stelle und derma&#xdf;en verrottet">
+<icon BUILTIN="smily_bad"/>
+</node>
+</node>
+<node CREATED="1744759443861" ID="ID_92142352" MODIFIED="1744759451823" TEXT="auch f&#xfc;r lib::Literal"/>
+<node CREATED="1744753283247" ID="ID_1658012259" MODIFIED="1744753304420" TEXT="analog auch f&#xfc;r div. weitere Test-helper"/>
+</node>
+<node COLOR="#435e98" CREATED="1744722066815" ID="ID_803784418" MODIFIED="1744765445679" TEXT="virtual-copy-support: shadowing problems in override">
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1744722146950" ID="ID_480039546" MODIFIED="1744722241511" TEXT="-Woverloaded-virtual">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      MoveSupport&lt;I, D, B&gt;::moveInto(void*) was hidden by FullCopySupport&lt;I, D, B&gt;::moveInto(I&amp;)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1744724881959" ID="ID_237205244" LINK="https://gcc.gnu.org/bugzilla/show_bug.cgi?id=109740" MODIFIED="1744727658566" TEXT="Bug #109740 f&#xfc;r GCC-14.2">
+<linktarget COLOR="#fdfbb2" DESTINATION="ID_237205244" ENDARROW="Default" ENDINCLINATION="130;13;" ID="Arrow_ID_1000669305" SOURCE="ID_701397571" STARTARROW="None" STARTINCLINATION="-224;8;"/>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1744726532593" ID="ID_1383636021" MODIFIED="1744726585847" TEXT="die Warnung ist formal korrekt und trotzdem irrelevant">
+<icon BUILTIN="yes"/>
+<node CREATED="1744726613295" ID="ID_866223553" MODIFIED="1744727088184" TEXT="nach den Sichtbarkeitsregeln von C++ erfolgt zun&#xe4;chst die Aufl&#xf6;sung des Namens">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das bedeutet, der Scope, in dem dem der Funktionsaufruf interpretiert wird, ist gegeben durch den Typ der Referenz, &#252;ber die aufgerufen wird. Das kann das Interface sein, es kann aber auch die konkrete Klasse sein, oder irgend was dazwischen. In <i>diesem Scope wird nach dem reinen Namen der Funktion</i>&#160;gesucht. F&#252;r diesen k&#246;nnten mehrere Overloads <i>in dieser Funktion</i>&#160;sichtbar sein, und <i>nur auf diesen</i>&#160;wird die Overload-Resolution gemacht. Nur falls die konkrete Subklasse die Funktion gar nicht definiert, wird dann &#252;ber die Vererbungshierarchie gesucht (und bei Templates gar nicht). Das hei&#223;t, hier kollidiert das Standard-Verhalten von C++ (das von C abstammt), mit dem Konzept eines virtuellen Dispatch. Im Zweifelsfall macht der Compiler immer einen direkten Aufruf, und versucht dann ggfs. sogar, die Argumente automatisch zu konvertieren. Deshalb <b>k&#246;nnte das tats&#228;chlich eine Falle sein</b>, und die Warnung ist grunds&#228;tzlich angebracht.....
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1744726666456" ID="ID_1468752604" MODIFIED="1744727412844" TEXT="im konkreten Nutzungs-Muster (Copy-Support) rufen wir immer durch das Interface auf">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Der konkrete Fall ist der &#187;VirtualCopySupport&#171;, und noch konkreter, er wird verwendet in unserem Variant-Typ. Daf&#252;r bauen wir eine Vererbungs-Kette, in der das VirtualCopySupportInterface irgendwo unter dem <b>Interface</b>&#160;liegt, und dann das per Policy gew&#228;hlte Implementierungs-Mix-in irgendwo unter dem konkreten Typ. Aber die eigentliche Verwendung steckt im Variant-Container, der eben nichts &#252;ber den konkreten Typ in seinem Inline-Buffer wei&#223;. Deshalb erfolgt der Dispatch stets &#252;ber das Basis-Interface des Buffers in das VirtualCopySupportInterface. Insofern wird hier vor einem potentiellen Problem gewarnt in dem Moment, in dem der konkrete Typ konstruiert wird, obwohl der gef&#228;hrliche Aufruf niemals stattfinden kann
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1744726786424" ID="ID_488567128" MODIFIED="1744727613022" TEXT="w&#xfc;rde man theoretisch auf dem konkreten Typ aufrufen, g&#xe4;be es einen Typfehler im Argument">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das VirtualCopySupportInterface bietet zwei S&#228;tze von Zugriffsfunktionen
+    </p>
+    <ul>
+      <li>
+        einen direkten Zugang &#252;ber eine Referenz auf das Interface
+      </li>
+      <li>
+        einen indirekten Zugang, in dem der Empf&#228;nger einen Storage-Buffer anbietet (das wird zur Implementierung von Konstruktoren ben&#246;tigt, weil in diesem Fall noch gar nichts im Buffer liegen kann)
+      </li>
+    </ul>
+    <p>
+      Und das bedeutet: die Argument-Typen f&#252;r die beiden Funktions-Varianten sind total inkompatibel. W&#252;rde man also versehentlich mal tats&#228;chlich &#252;ber die konkrete Klasse aufrufen, dann w&#228;re die u.U. die Variante mit dem Storage-Buffer shaddowed (<b>und davor warnt der Compiler</b>), aber man k&#246;nnte einen Aufruf darauf auch gar nicht aufl&#246;sen, da die Argumente nicht kompatibel sind
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1744727616937" ID="ID_701397571" MODIFIED="1744727664158" TEXT="der Bug-Report zeigt, da&#xdf; andere Leute diese Diskrepanz auch bemerkt haben">
+<arrowlink COLOR="#fdfbb2" DESTINATION="ID_237205244" ENDARROW="Default" ENDINCLINATION="130;13;" ID="Arrow_ID_1000669305" STARTARROW="None" STARTINCLINATION="-224;8;"/>
+<node CREATED="1744727691183" ID="ID_1986793919" MODIFIED="1744727703783" TEXT="theoretisch k&#xf6;nnte der Compiler tats&#xe4;chlich intelligenter sein"/>
+<node CREATED="1744727704378" ID="ID_692221600" MODIFIED="1744727720439" TEXT="aber praktisch w&#xe4;re das wohl ziemlich komplex zu implementieren"/>
+<node CREATED="1744727722307" ID="ID_1914061525" MODIFIED="1744727783545" TEXT="und die Sprachdefinition von C++ ist eigentlich eindeutig in dem Fall">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...auch wenn sie nicht dem entspricht, was man intuitiv erwarten w&#252;rde (aber gleiches hier: eine L&#246;sung st&#252;nde in keinem Verh&#228;ltnis zum Nutzen)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1744727789706" ID="ID_1359338580" MODIFIED="1744728235966" TEXT="also: Using-Klausel hinzuf&#xfc;gen damit der Compiler gl&#xfc;cklich ist">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1744730902377" ID="ID_1209993358" MODIFIED="1744765452029" TEXT="overloaded-virtual in (Mock)ConfigRules">
+<node CREATED="1744730926258" ID="ID_1995534798" MODIFIED="1744730945938" TEXT="und das hier ist ein interessanter Spezialfall zum Vorhergehenden">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1744730947404" ID="ID_432173649" MODIFIED="1744730969200">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      denn hier <b>kann</b>&#160;man gar nicht die Basis-Impl in scope bringen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1744730970034" ID="ID_1561358452" MODIFIED="1744731062318" TEXT="weil sie aus einem Template generiert wird und inh&#xe4;rent zweideutig ist">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      d.h. wenn ich hinzuf&#252;ge using BASE::resolve,&#160;&#160;dann bekomme ich einen <b>echten Compile-Fehler</b>, weil das Symbol zweideutig ist. Und zwar by design, wir bauen das ja &#252;ber eine Typ-Sequenz auf
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1744731063960" ID="ID_1817424782" MODIFIED="1744731077654" TEXT="und zudem sind alle Implementierungen private"/>
+</node>
+<node COLOR="#435e98" CREATED="1744732077372" ID="ID_1756283446" MODIFIED="1744765455541" TEXT="Warnung boost bind placeholders">
+<node CREATED="1744732093626" ID="ID_1341990558" MODIFIED="1744732096590" TEXT="util.cpp"/>
+<node CREATED="1744732099170" ID="ID_253562011" MODIFIED="1744732106368" TEXT="ist ein deprecation-warning von Boost"/>
+<node CREATED="1744732107032" ID="ID_1250871163" MODIFIED="1744732129825" TEXT="L&#xf6;sung: ein Lambda verwenden statt boost::bind"/>
+</node>
+<node COLOR="#435e98" CREATED="1744733370447" ID="ID_1574284195" MODIFIED="1744765459469" TEXT="-Wpessimizing-move">
+<node CREATED="1744733385605" ID="ID_384328748" MODIFIED="1744733389418" TEXT="warning: moving a temporary object prevents copy elision">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1744733393769" ID="ID_1173983016" MODIFIED="1744733470322" TEXT="Interessanter Fehler ... hatte ich auch schon in Yoshimi">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      siehe Zyn.mm, suche nach &quot;std::move ungeschickt verwendet&quot;
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1744733471946" ID="ID_1596508800" MODIFIED="1744733498665" TEXT="tritt auf bei verkettetern Funktionen mit return-value">
+<node CREATED="1744733505597" ID="ID_694590608" MODIFIED="1744733512174" TEXT="in diesem Falle w&#xfc;rde die RVO greifen"/>
+<node CREATED="1744733513020" ID="ID_39594248" MODIFIED="1744733523326" TEXT="d.h. der Compiler w&#xfc;rde &#xfc;berhaupt nichts kopieren"/>
+<node CREATED="1744733524218" ID="ID_1812713561" MODIFIED="1744733540692" TEXT="wenn man aber um den delegierenden aufruf ein std::move() wickelt"/>
+<node CREATED="1744733541447" ID="ID_1571790215" MODIFIED="1744733722165" TEXT="dann zwingt man den Compiler, einen Move-Konstruktor aufzurufen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      weil std::move() einen Cast macht, und damit das Ergebnis der delegate-Funktion nicht mehr den gleichen Value-Typ hat, den wir grade zur&#252;ckkeben wollen. Denn bei gleichem Value-Typ, kann der Compiler die ganze Kette aufl&#246;sen und erstellt den Ergebniswert bereits am endg&#252;ltigen Zielort (das ist die RVO). Aber durch unseren Cast sieht er einen RValue, und <b>mu&#223;</b>&#160;damit ein neues Objekt konstruieren. Weil Herrchen das so verlangt hat ;-)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1744734605409" ID="ID_324402855" MODIFIED="1744765467956" TEXT="warning: template-id not allowed for constructor in C++20">
+<node CREATED="1744734609664" ID="ID_470294556" MODIFIED="1744734628817" TEXT="es war bisher toleriert, aber eigentlich nie sinnvoll"/>
+<node CREATED="1744734629757" ID="ID_1941589131" MODIFIED="1744734669406" TEXT="ein Konstruktor verwendet die Namens-ID seiner umschlie&#xdf;enden Klasse"/>
+<node CREATED="1744734670032" ID="ID_171319792" MODIFIED="1744734682858" TEXT="in der Klasse ist diese ID definiert ohne Template-Argumente"/>
+<node CREATED="1744734683990" ID="ID_1949839497" MODIFIED="1744734699708" TEXT="es best&#xfc;nde die Gefahr, da&#xdf; jemand abweichende Template-Argumente anschreibt"/>
+<node CREATED="1744734707532" ID="ID_1694967194" LINK="https://stackoverflow.com/a/63514123" MODIFIED="1744734747708" TEXT="also letztlich unn&#xf6;tige Redundanz, die ab C++20 nicht mehr erlaubt sein wird"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1744761652860" ID="ID_1828866577" MODIFIED="1744765464781" TEXT="UILocationSolver : ambiguity with the UICoord ctor">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1744761684295" ID="ID_1305677242" MODIFIED="1744761938350" TEXT="GCC warnt hier wegen dem scheinbar &#xfc;berfl&#xfc;ssigen std::move">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ui-location-solver.hpp , l.280
+    </p>
+    <p>
+      Das move ist hier aber nicht &#252;berfl&#252;ssig, sondern soll tats&#228;chlich die Terminal-Operation des UICoord::Builder ausl&#246;sen (von dem UILocationSolver erbt). Also mi&#223;deutet der Compiler die Situation komplett, denn es handelt sich nicht um eine RVO, sondern um einen speziellen Konstruktor-Aufruf von UICoord, in dem noch eine Normalisierung stattfindet
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1744762215328" ID="ID_854345549" MODIFIED="1744762327273" TEXT="weiteres Problem: diese Ctor-Definitionen sind instabil wie ein Kartenhaus">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      UICoord hat n&#228;mlich einen variadischen Konstruktor; hier tritt wieder das <i>notorische Problem</i>&#160;auf, da&#223; dieser andere konkrete Definitionen verdeckt. Ich mu&#223;te deshalb auch schon die ganzen Copy-Operationen nochmal anschreiben (inzwischen g&#228;be es daf&#252;r den disable_if_self-Helper)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1744762329273" ID="ID_759150688" MODIFIED="1744762389127" TEXT="ein expliziter Aufruf UICoord(resolver) biegt in den variadischen Konstruktor ab und scheitert">
+<icon BUILTIN="clanbomber"/>
+</node>
+<node CREATED="1744761940037" ID="ID_1010790149" MODIFIED="1744762416116" TEXT="dieses Design erscheint mir aber zweifelhaft &#x2014; hier wird eine echte Operation versteckt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Ich hab auch erst selbst nicht verstanden, was hier vorgeht, zumal die Terminal-Operation im UICoord::Builder selber gar nicht zu sehen ist (obzwar die tats&#228;chliche Implementierung direkt dahinter steht, und auch erst an der Stelle gegeben werden kann). Ein weiterer <i>design smell</i>&#160; ist, da&#223; ich dazu UICoord zum <i>friend</i>&#160;machen mu&#223;te. Was war nochmal die Motivation f&#252;r dieses Design?&#160;&#160;UICoord selber ist doch kopierbar, also warum nicht eine explzite Terminal-Operation, in der die Normalisierung passiert, und das Ergebnis dann direkt in ein neue UICoord-Objekt schieben?
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1744762441896" ID="ID_1755986239" MODIFIED="1744762461934" TEXT="besser mit expliziter Terminal-Operation implementieren">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1742175249127" ID="ID_1185124760" MODIFIED="1742175325795" TEXT="Testsuite GR&#xdc;N">
 <icon BUILTIN="yes"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1743970651055" ID="ID_527599811" MODIFIED="1743970655841" TEXT="7 failed Tests">
@@ -162009,6 +162347,10 @@ Since then others have made contributions, see the log for the history.</font></
   </body>
 </html></richcontent>
 <arrowlink COLOR="#2a999f" DESTINATION="ID_22551307" ENDARROW="Default" ENDINCLINATION="682;41;" ID="Arrow_ID_344918215" STARTARROW="None" STARTINCLINATION="885;-71;"/>
+</node>
+<node CREATED="1744664547020" ID="ID_976309473" MODIFIED="1744664561969" TEXT="minimale weitere Fixes f&#xfc;r GCC-14"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1744664562802" ID="ID_1255291765" MODIFIED="1744664569721" TEXT="noch viele Warnings offfen">
+<icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
 </node>
@@ -163682,8 +164024,8 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1704063600555" ID="ID_1082998656" MODIFIED="1743862464248" TEXT="NoBug 2008.1">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1704063600555" FOLDED="true" ID="ID_1082998656" MODIFIED="1744664502163" TEXT="NoBug 2008.1">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1704063600555" ID="ID_37073977" MODIFIED="1742403460106" TEXT="Historie nachf&#xfc;hren">
 <icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1704063600555" ID="ID_692118072" MODIFIED="1742403197634" TEXT="keine Aktivit&#xe4;t mehr seit 2008 -- nur Bugfixes">
@@ -163759,9 +164101,8 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1704063600555" ID="ID_528817515" MODIFIED="1743632536467" TEXT="build f&#xfc;r Debian(Trixie) + Ubuntu(Noble)">
-<icon BUILTIN="flag-orange"/>
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1704063600555" ID="ID_528817515" MODIFIED="1744664342675" TEXT="build f&#xfc;r Debian(Trixie) + Ubuntu(Noble)">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1704063600555" ID="ID_190199456" MODIFIED="1742178666223" STYLE="fork" TEXT="seit letztem Herbst: neuer GPG-Schl&#xfc;ssel">
 <arrowlink DESTINATION="ID_906075673" ENDARROW="Default" ENDINCLINATION="825;188;" ID="Arrow_ID_1017484755" STARTARROW="None" STARTINCLINATION="327;-11;"/>
 <icon BUILTIN="info"/>
@@ -163807,8 +164148,9 @@ Since then others have made contributions, see the log for the history.</font></
 <arrowlink COLOR="#5ffe1d" DESTINATION="ID_168439488" ENDARROW="Default" ENDINCLINATION="173;0;" ID="Arrow_ID_1396492424" STARTARROW="None" STARTINCLINATION="274;28;"/>
 </node>
 <node COLOR="#435e98" CREATED="1704063600555" ID="ID_431904252" MODIFIED="1743298636160" TEXT="debian:bookworm-20250317"/>
-<node COLOR="#5b280f" CREATED="1704063600555" ID="ID_1494547248" MODIFIED="1743298869903" TEXT="debian:forky-2025####">
+<node COLOR="#5b280f" CREATED="1704063600555" ID="ID_1494547248" MODIFIED="1744664314459" TEXT="debian:forky-2025.....">
 <icon BUILTIN="button_cancel"/>
+<icon BUILTIN="hourglass"/>
 </node>
 <node COLOR="#435e98" CREATED="1708384148912" ID="ID_1809307049" MODIFIED="1743299618528" TEXT="ubuntu:noble-20250127">
 <node BACKGROUND_COLOR="#c8c0b6" CREATED="1708384167653" HGAP="27" ID="ID_248856474" MODIFIED="1742178666224" TEXT="das neue LTS 24" VSHIFT="11">
@@ -163819,11 +164161,11 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdd095" COLOR="#ff1e00" CREATED="1704063600555" ID="ID_168439488" MODIFIED="1742178666224" TEXT="lokal Installation getestet">
+<node COLOR="#338800" CREATED="1704063600555" ID="ID_168439488" MODIFIED="1744664322374" TEXT="lokal Installation getestet">
 <linktarget COLOR="#5ffe1d" DESTINATION="ID_168439488" ENDARROW="Default" ENDINCLINATION="173;0;" ID="Arrow_ID_1396492424" SOURCE="ID_871496167" STARTARROW="None" STARTINCLINATION="274;28;"/>
-<icon BUILTIN="flag-orange"/>
-<node BACKGROUND_COLOR="#fdd095" COLOR="#ff1e00" CREATED="1727143416876" HGAP="26" ID="ID_1136622644" MODIFIED="1742178666224" TEXT="Smoke-Test" VSHIFT="8">
-<icon BUILTIN="flag-orange"/>
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1727143416876" HGAP="26" ID="ID_1136622644" MODIFIED="1744664337800" TEXT="Lumiera Build &amp; Testsuite l&#xe4;uft" VSHIFT="8">
+<icon BUILTIN="idea"/>
 </node>
 </node>
 </node>
@@ -163857,9 +164199,8 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1704063600555" ID="ID_800326559" MODIFIED="1743813218137" TEXT="GDL 3.40.0">
-<icon BUILTIN="flag-orange"/>
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1704063600555" FOLDED="true" ID="ID_800326559" MODIFIED="1744664500084" TEXT="GDL 3.40.0">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1704063600555" ID="ID_204305744" MODIFIED="1743512290583" TEXT="Historie nachf&#xfc;hren">
 <icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1704063600555" ID="ID_1667505670" MODIFIED="1743527324627" TEXT="&#xfc;bernehme letztes DEB-Paket f&#xfc;r Lumiera">
@@ -163958,7 +164299,7 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1578717041052" ID="ID_1708779083" MODIFIED="1743813878298" TEXT="gdl_3.40.0-3lum">
 <linktarget COLOR="#23a8a3" DESTINATION="ID_1708779083" ENDARROW="Default" ENDINCLINATION="228;35;" ID="Arrow_ID_96751245" SOURCE="ID_1502474315" STARTARROW="None" STARTINCLINATION="1210;-216;"/>
-<linktarget COLOR="#23a8a3" DESTINATION="ID_1708779083" ENDARROW="Default" ENDINCLINATION="228;35;" ID="Arrow_ID_104110562" SOURCE="ID_983535405" STARTARROW="None" STARTINCLINATION="1248;-112;"/>
+<linktarget COLOR="#23a8a3" DESTINATION="ID_1708779083" ENDARROW="Default" ENDINCLINATION="228;35;" ID="Arrow_ID_104110562" SOURCE="ID_983535405" STARTARROW="None" STARTINCLINATION="701;-75;"/>
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 </node>
 </node>
@@ -163966,8 +164307,8 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1704063600555" ID="ID_252997752" MODIFIED="1743632819866" TEXT="build f&#xfc;r Debian(Trixie) + Ubuntu(Noble)">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1704063600555" ID="ID_252997752" MODIFIED="1744664380612" TEXT="build f&#xfc;r Debian(Trixie) + Ubuntu(Noble)">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1704063600555" ID="ID_1918762549" MODIFIED="1742178666223" STYLE="fork" TEXT="seit letztem Herbst: neuer GPG-Schl&#xfc;ssel">
 <arrowlink DESTINATION="ID_906075673" ENDARROW="Default" ENDINCLINATION="825;188;" ID="Arrow_ID_669632263" STARTARROW="None" STARTINCLINATION="327;-11;"/>
 <icon BUILTIN="info"/>
@@ -164032,8 +164373,12 @@ Since then others have made contributions, see the log for the history.</font></
 <node COLOR="#338800" CREATED="1704063600555" ID="ID_1762429409" MODIFIED="1743619450962" TEXT="lokal Installation getestet">
 <linktarget COLOR="#5ffe1d" DESTINATION="ID_1762429409" ENDARROW="Default" ENDINCLINATION="173;0;" ID="Arrow_ID_1584619570" SOURCE="ID_740104864" STARTARROW="None" STARTINCLINATION="274;28;"/>
 <icon BUILTIN="button_ok"/>
-<node BACKGROUND_COLOR="#fdd095" COLOR="#ff1e00" CREATED="1727143416876" HGAP="26" ID="ID_321383808" MODIFIED="1742178666224" TEXT="Smoke-Test" VSHIFT="8">
-<icon BUILTIN="flag-orange"/>
+<node COLOR="#338800" CREATED="1727143416876" HGAP="26" ID="ID_321383808" MODIFIED="1744664410784" TEXT="Smoke-Test" VSHIFT="8">
+<linktarget COLOR="#286175" DESTINATION="ID_321383808" ENDARROW="Default" ENDINCLINATION="93;218;" ID="Arrow_ID_1792336460" SOURCE="ID_1330748750" STARTARROW="None" STARTINCLINATION="193;20;"/>
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1744664354816" ID="ID_1208210195" MODIFIED="1744664377093" TEXT="Docks umgeordnet"/>
+<node COLOR="#435e98" CREATED="1744664359541" ID="ID_1853213245" MODIFIED="1744664377094" TEXT="Docks vom Hauptfenster getrennt"/>
+<node COLOR="#435e98" CREATED="1744664365843" ID="ID_981261452" MODIFIED="1744664377094" TEXT="alle bekannten UI-Aktionen funktionieren"/>
 </node>
 </node>
 </node>
@@ -164071,9 +164416,9 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1704063600555" ID="ID_1427579682" MODIFIED="1743814044171" TEXT="GDLmm 2.7.3">
+<node COLOR="#338800" CREATED="1704063600555" FOLDED="true" ID="ID_1427579682" MODIFIED="1744664498090" TEXT="GDLmm 2.7.3">
 <linktarget COLOR="#01c42b" DESTINATION="ID_1427579682" ENDARROW="Default" ENDINCLINATION="510;-3323;" ID="Arrow_ID_2975652" SOURCE="ID_512453931" STARTARROW="None" STARTINCLINATION="-203;1871;"/>
-<icon BUILTIN="pencil"/>
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1704063600555" ID="ID_1318094950" MODIFIED="1743813405591" TEXT="Historie nachf&#xfc;hren">
 <icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1704063600555" ID="ID_497480417" MODIFIED="1743636321215" TEXT="baue lediglich mein Paket aktualisiert neu">
@@ -164150,7 +164495,7 @@ Since then others have made contributions, see the log for the history.</font></
     </p>
   </body>
 </html></richcontent>
-<arrowlink COLOR="#23a8a3" DESTINATION="ID_1708779083" ENDARROW="Default" ENDINCLINATION="228;35;" ID="Arrow_ID_104110562" STARTARROW="None" STARTINCLINATION="1248;-112;"/>
+<arrowlink COLOR="#23a8a3" DESTINATION="ID_1708779083" ENDARROW="Default" ENDINCLINATION="228;35;" ID="Arrow_ID_104110562" STARTARROW="None" STARTINCLINATION="701;-75;"/>
 </node>
 </node>
 </node>
@@ -164190,8 +164535,8 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1704063600555" ID="ID_327459139" MODIFIED="1743814051048" TEXT="build f&#xfc;r Debian(Bookworm/Trixie/Forky/Noble)">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1704063600555" ID="ID_327459139" MODIFIED="1744664428932" TEXT="build f&#xfc;r Debian(Bookworm/Trixie/Forky/Noble)">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1704063600555" ID="ID_1339527053" MODIFIED="1742178666223" STYLE="fork" TEXT="seit letztem Herbst: neuer GPG-Schl&#xfc;ssel">
 <arrowlink DESTINATION="ID_906075673" ENDARROW="Default" ENDINCLINATION="825;188;" ID="Arrow_ID_1874805688" STARTARROW="None" STARTINCLINATION="327;-11;"/>
 <icon BUILTIN="info"/>
@@ -164253,12 +164598,10 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdd095" COLOR="#ff1e00" CREATED="1704063600555" ID="ID_1330748750" MODIFIED="1742178666224" TEXT="lokal Installation getestet">
+<node COLOR="#338800" CREATED="1704063600555" ID="ID_1330748750" MODIFIED="1744664425160" TEXT="lokal Installation getestet">
+<arrowlink COLOR="#286175" DESTINATION="ID_321383808" ENDARROW="Default" ENDINCLINATION="93;218;" ID="Arrow_ID_1792336460" STARTARROW="None" STARTINCLINATION="193;20;"/>
 <linktarget COLOR="#5ffe1d" DESTINATION="ID_1330748750" ENDARROW="Default" ENDINCLINATION="173;0;" ID="Arrow_ID_33602863" SOURCE="ID_983995823" STARTARROW="None" STARTINCLINATION="274;28;"/>
-<icon BUILTIN="flag-orange"/>
-<node BACKGROUND_COLOR="#fdd095" COLOR="#ff1e00" CREATED="1727143416876" HGAP="26" ID="ID_1398156335" MODIFIED="1742178666224" TEXT="Smoke-Test" VSHIFT="8">
-<icon BUILTIN="flag-orange"/>
-</node>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node COLOR="#5b280f" CREATED="1704063600555" ID="ID_922209687" MODIFIED="1743863877956" TEXT="PPA-Builds">

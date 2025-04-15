@@ -30,6 +30,7 @@
 #include <cstdlib>
 #include <string>
 #include <tuple>
+#include <array>
 
 using util::_Fmt;
 using util::isnil;
@@ -113,12 +114,12 @@ namespace test    {
      */
     struct Sint5
       {
-        int i[5];
+        std::array<int,5> i5i;
         
         friend bool
         operator== (Sint5 const& i1, Sint5 const& i2)
           {
-            return i1.i == i2.i;
+            return i1.i5i == i2.i5i;
           }
       };
     
@@ -265,7 +266,7 @@ namespace test    {
           CHECK (arg5->canUndo());
           CHECK (*arg5->memento() == "destruction");
           
-          VERIFY_ERROR(MISSING_MEMENTO, arg4->memento().i[3] = 513 );
+          VERIFY_ERROR(MISSING_MEMENTO, arg4->memento().i5i[3] = 513 );
           
           for_each (tup, showIt);
         }

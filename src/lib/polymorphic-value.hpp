@@ -326,7 +326,7 @@ namespace lib {
         static CopyAPI&
         accessCopyHandlingInterface (IFA& bufferContents)
           {
-            REQUIRE (INSTANCEOF (CopyAPI, &bufferContents));
+            REQUIRE (INSTANCEOF (CopyAPI, &bufferContents));   //////////////////////////////////////////////TICKET #1197 : GCC-14 warns here this is always true -- when used from verb-visitor.hpp ; I'd say again, the design is unsatisfactory
             return static_cast<CopyAPI&> (bufferContents);
           }
       };

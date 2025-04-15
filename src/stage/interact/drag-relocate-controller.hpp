@@ -182,7 +182,7 @@ namespace interact {
       bool
       isAnchored()
         {
-          return bool{subject_};
+          return bool(subject_);
         }
       
       void

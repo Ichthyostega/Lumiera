@@ -118,7 +118,7 @@ namespace gear {
           return starting > o.starting;
         }
       
-      operator bool()      const { return bool{activity}; }
+      operator bool()      const { return bool(activity); }
       operator Activity*() const { return activity; }
       
       Time startTime()     const { return Time{TimeValue{starting}};}

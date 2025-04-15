@@ -176,7 +176,7 @@ namespace test {
           Time nominalTime(dummyFrameStart(frameNr));
           Time deadline(TEST_START_TIME + nominalTime);
           
-          MockJob job{nominalTime, frameNr};
+          MockJob job{nominalTime, int(frameNr)};
           
           currentTx.addJob (deadline, job);
           

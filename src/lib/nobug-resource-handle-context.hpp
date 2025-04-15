@@ -37,7 +37,6 @@
 
 #include "lib/error.hpp"
 #include "lib/diagnostic-context.hpp"
-#include "lib/thread-local.hpp"
 
 #include <nobug.h>
 
