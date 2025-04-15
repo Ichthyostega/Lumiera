@@ -69,6 +69,8 @@ namespace engine {
           privateID_._as_pointer = impl_related_ptr;
         }
       
+      LocalTag (LocalTag const&) = default;
+      
       /** Marker when no distinct local key is given */
       static const LocalTag UNKNOWN;
       

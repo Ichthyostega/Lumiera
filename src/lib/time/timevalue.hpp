@@ -250,10 +250,10 @@ namespace time {
         : TimeValue(o)
         { }
       
-      TimeVar&
-      operator= (TimeValue const& o)
+      TimeVar& operator= (TimeVar const&) = default;
+      TimeVar& operator= (TimeValue const& o)
         {
-          t_ = TimeVar(o);
+          *this = TimeVar(o);
           return *this;
         }
       
@@ -318,12 +318,14 @@ namespace time {
         : TimeValue(val)
         { }
       
+      explicit
+      Time (FSecs const& fractionalSeconds);
+      
+      Time (Time const&) = default;
+      
       Time (TimeVar const& calcResult)
         : TimeValue(calcResult)
         { }
-      
-      explicit
-      Time (FSecs const& fractionalSeconds);
       
       Time ( long millis
            , uint secs
@@ -375,7 +377,9 @@ namespace time {
       
       explicit
       Offset (FSecs const& delta_in_secs);
-
+      
+      Offset (Offset const&) = default;
+      
       Offset (FrameCnt count, FrameRate const& fps);
       
       Offset (TimeValue const& origin, TimeValue const& target)

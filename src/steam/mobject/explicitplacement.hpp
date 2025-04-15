@@ -47,6 +47,10 @@ namespace mobject {
    * and reduced to simple positions. This so called Fixture
    * contains only ExplicitPlacement objects and is processed
    * by the Builder to create the render engine  node network.
+   * 
+   * @deprecated 2025/4 while we need a marker for an _explicit placement,_
+   *             implementing this as a subclass is the dog-no-wag-tail anti pattern.
+   *             Inheritance indicates a contract, but should not be abused to mark properties.
    *
    * @ingroup fixture
    * @see Placement#resolve factory method for deriving an ExplicitPlacement 
@@ -57,7 +61,7 @@ namespace mobject {
       const Time time;
       const Pipe pipe;
       
-      typedef std::pair<Time,Pipe> SolutionData;  //TODO (ichthyo considers better passing of solution by subclass)
+      typedef std::pair<Time,Pipe> SolutionData;   //////////////////////TICKET #100 : ichthyo considers better passing of solution by subclass...
       
       /** no need to resolve any further, as this ExplicitPlacement
        *  already \e is the result of a resolve()-call.
@@ -66,7 +70,7 @@ namespace mobject {
       virtual
       ExplicitPlacement resolve ()  const 
         { 
-          return *this; 
+          return *this;  // and this very special dog breaks the wag-the-tail contract :-P
         }
       
       
@@ -75,13 +79,16 @@ namespace mobject {
        *        of FixedLocation, which would serve as Placement::LocatingSolution, and
        *        would be used as LocatingPin::chain subobject as well, so that it could
        *        be initialised directly here in the ExplicitPlacement ctor. 
-       *        (ichthyo: see Trac #100)
+       *        /////////////////////////////////////////////////////////TICKET #100
        */
-      ExplicitPlacement (const Placement<MObject>& base, const SolutionData found)
+      ExplicitPlacement (Placement<MObject> const& base, const SolutionData found)
         : Placement<MObject>(base),
           time(found.first), pipe(found.second)
         { };
-        
+      
+      /** @warning 2025/4 design smells all over the place. It should not be copyable!! */
+      ExplicitPlacement (ExplicitPlacement const&) = default;
+      
       friend ExplicitPlacement Placement<MObject>::resolve () const;
       
     private:

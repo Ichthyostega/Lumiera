@@ -72,7 +72,9 @@ namespace test    {
         Tracker (TY init = TY())     : element_(init)         { ++instanceCnt; }
         Tracker (Tracker const& otr) : element_(otr.element_) { ++instanceCnt; }
        ~Tracker()                                             { --instanceCnt; }
-       
+        
+        Tracker& operator= (Tracker const&) = default;
+        
         TY&
         operator* ()
           {

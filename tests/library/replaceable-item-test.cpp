@@ -51,6 +51,8 @@ namespace test{
         Tracker(Tracker const& ot) : i_(ot.i_)     { ++cntTracker; }
         Tracker(uint i)            : i_(i)         { ++cntTracker; }
        ~Tracker()                                  { --cntTracker; }
+        
+        Tracker& operator= (Tracker const&) = default;
       };
     
     struct NonAssign

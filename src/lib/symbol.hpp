@@ -85,9 +85,8 @@ namespace lib {
          : str_(literal)
          { }
        
-       Literal (Literal const& o) noexcept
-         : str_(o.str_)
-         { }
+       Literal (Literal const&)            noexcept = default;
+       Literal& operator= (Literal const&) noexcept = default;
        
        operator CStr()  const { return str_; }
        const char* c()  const { return str_; }
