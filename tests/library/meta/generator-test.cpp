@@ -39,6 +39,13 @@ using util::_Fmt;
 using std::string;
 using std::cout;
 
+// GCC > 13 warns at class definition when a new overload shadows an inherited virtual function.
+// While theoretically correct, this warning is besides the point when an interface is assembled
+// by metaprogramming from a chain of template instantiations, driven by a type list
+// See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=109740
+_Pragma("GCC diagnostic push") \
+_Pragma("GCC diagnostic ignored \"-Woverloaded-virtual\"")
+
 
 namespace lib  {
 namespace meta {

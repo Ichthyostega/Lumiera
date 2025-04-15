@@ -157,6 +157,15 @@ namespace session {
       };
     
     
+    // GCC > 13 warns at class definition when a new overload shadows an inherited virtual function.
+    // While theoretically correct, in practice any call will be dispatched through the base interface
+    // and it is not even possible to reach the concrete classes (and the implementation function is private).
+    // The workaround with a `using` clause is not applicable, since the name is ambiguous (by design)
+    // See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=109740
+    _Pragma("GCC diagnostic push") \
+    _Pragma("GCC diagnostic ignored \"-Woverloaded-virtual\"")
+    
+    
     /** 
      * building block providing the 
      * mock implementation for a \em single type.
@@ -166,7 +175,6 @@ namespace session {
     class LookupPreconfigured : public BASE
       {
         typedef typename WrapReturn<TY>::Wrapper Ret;
-        
         
         /** (dummy) implementation of the QueryHandler interface */
         virtual bool 
@@ -184,7 +192,6 @@ namespace session {
             return try_special_case(solution, q);
           }
       
-      private:
         bool
         try_special_case (Ret& solution, Query<TY> const& q)
           {

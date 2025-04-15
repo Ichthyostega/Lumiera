@@ -148,6 +148,7 @@ namespace meta{
   class NoCopyMoveSupport
     : public B
     {
+    public:
       virtual void
       copyInto (void*)  const override
         {
@@ -178,6 +179,7 @@ namespace meta{
   class MoveSupport
     : public NoCopyMoveSupport<I,D,B>
     {
+    public:
       virtual void
       copyInto (void*)  const override
         {
@@ -190,6 +192,10 @@ namespace meta{
           D& src = static_cast<D&> (*this);
           new(targetStorage) D(move(src));
         }
+      
+      // irrelevant for any practical usage, but formally required
+      using NoCopyMoveSupport<I,D,B>::copyInto;
+      using NoCopyMoveSupport<I,D,B>::moveInto;
     };
   
   
@@ -197,12 +203,15 @@ namespace meta{
   class CloneSupport
     : public MoveSupport<I,D,B>
     {
+    public:
       virtual void
       copyInto (void* targetStorage)  const override
         {
           D const& src = static_cast<D const&> (*this);
           new(targetStorage) D(src);
         }
+      
+      using MoveSupport<I,D,B>::copyInto;
     };
   
   
@@ -210,6 +219,7 @@ namespace meta{
   class FullCopySupport
     : public CloneSupport<I,D,B>
     {
+    public:
       virtual void
       copyInto (I& target)  const override
         {
@@ -225,8 +235,12 @@ namespace meta{
           D& s = static_cast<D&> (*this);
           t = move(s);
         }
-    };
-  
+      
+      using CloneSupport<I,D,B>::copyInto;
+      using CloneSupport<I,D,B>::moveInto;
+    };                         // see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=109740
+                              //  In our case here, calls will always be through VirtualCopySupportInterface
+                             //   and void* is incompatible with I&, so the warning is irrelevant...
   
   
   
