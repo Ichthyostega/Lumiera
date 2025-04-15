@@ -65,7 +65,7 @@ namespace test {
           cout << "--> Testgroup=" << optparser->getTestgroup() << endl;
           cout << "--> Test-ID  =" << (isnil(testID)? "--missing--" : testID ) << endl;
           cout << "--> remaining=" << args << endl;
-          return std::move (optparser);
+          return optparser;
         }
       
       void noOptions()      { doIt (""); }

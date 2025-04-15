@@ -151,7 +151,7 @@ namespace interact {
         : LocatorSpec{
             LocationRule{
               LocationClause{
-                UICoord{std::move (simpleLocationSpec)}}}}
+                UICoord{std::move (simpleLocationSpec)}}}}     //////////////////////////////////////////////TICKET #1402 : how to go from Builder to UICoord? DSL design vs. constructor ambiguity
         { }
       
       operator string()  const

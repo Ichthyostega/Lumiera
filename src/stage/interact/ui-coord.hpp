@@ -491,6 +491,7 @@ namespace interact {
   
   class LocationClause;
   
+  /** @remark the result of this builder is retrieved by creating an `UICoord(builder)` */
   class UICoord::Builder
     : util::MoveOnly
     {

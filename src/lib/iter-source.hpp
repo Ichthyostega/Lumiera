@@ -150,8 +150,7 @@ namespace lib {
       static iterator
       build (IterSource& sourceImpl)
         {
-          return std::move(
-              startIteration (DataHandle{&sourceImpl, &detach_without_destroy}));
+          return startIteration (DataHandle{&sourceImpl, &detach_without_destroy});
         }
       
       /** build an iterator frontend, thereby managing
@@ -163,8 +162,7 @@ namespace lib {
       static iterator
       build (IterSource* sourceImplObject)
         {
-          return std::move(
-              startIteration (DataHandle{sourceImplObject, &destroy_managed_source}));
+          return startIteration (DataHandle{sourceImplObject, &destroy_managed_source});
         }
       
       static iterator EMPTY_SOURCE;

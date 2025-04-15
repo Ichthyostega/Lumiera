@@ -182,7 +182,7 @@ namespace model {
   {
     UICoord::Builder targetLocation{destination.rebuild()};
     performAccessTo (targetLocation, limitCreation);
-    return targetLocation;
+    return targetLocation;   ////////////////////////////////////////////////////////////////////////////////TICKET #1402 : ambiguities related to the terminal Builder-operation and the UICoord constructors
   }
   
   
