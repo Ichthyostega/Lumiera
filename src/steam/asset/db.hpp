@@ -30,7 +30,6 @@
 
 #include <memory>
 #include <unordered_map>
-// #include <boost/functional/hash.hpp>   /////////TODO which boost include to use here??
 #include <boost/utility.hpp>
 
 
@@ -70,7 +69,6 @@ namespace asset {
    * already containing valid hash values.
    */
   struct IdentityHash
-    : public std::unary_function<size_t, size_t>
     {
       size_t 
       operator() (size_t val)  const { return val; }

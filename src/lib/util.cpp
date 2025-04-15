@@ -26,7 +26,6 @@
 
 #include <boost/algorithm/string.hpp>
 #include <functional>
-#include <boost/bind.hpp>          // we need operator! for bind-expressions
 
 using boost::algorithm::trim_right_copy_if;
 using boost::algorithm::is_any_of;
@@ -38,14 +37,16 @@ using boost::algorithm::is_space;
 using std::regex;
 using std::regex_match;
 
+using std::string;
 using std::function;
 using util::_Fmt;
 
 namespace util {
 
   
-  using ChPredicate = function<bool(string::value_type)>;
-  ChPredicate operator! (ChPredicate p) { return not bind(p,_1); }
+  using Cha         = string::value_type;
+  using ChPredicate = function<bool(Cha)>;
+  ChPredicate operator! (ChPredicate p) { return [p](Cha c){ return not p(c); }; }
 
   // character classes used for sanitising a string
   ChPredicate isValid (is_alnum() or is_any_of("-_.+$()@"));                ///< characters to be retained

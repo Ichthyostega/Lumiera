@@ -53,8 +53,6 @@ extern "C" {
 #include "lib/luid.h"
 }
 
-#include <functional>
-
 
 namespace lib {
   
@@ -149,14 +147,12 @@ namespace lib {
       
       /** enables use of BA objects as keys within std::unordered_map */
       struct UseEmbeddedHash
-        : public std::unary_function<BA, HashVal>
         {
           HashVal operator() (BA const& obj)  const { return obj.getID(); }
         };
       
       /** trivial hash functor using the ID as hash */
       struct UseHashID
-        : public std::unary_function<ID, HashVal>
         {
           HashVal operator() (ID const& id)  const { return id; }
         };

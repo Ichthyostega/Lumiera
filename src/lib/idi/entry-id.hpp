@@ -183,7 +183,6 @@ namespace idi {
       
       /** using BareEntryID derived objects as keys within std::unordered_map */
       struct UseEmbeddedHash
-        : public std::unary_function<BareEntryID, size_t>
         {
           size_t operator() (BareEntryID const& obj)  const { return obj.getHash(); }
         };
