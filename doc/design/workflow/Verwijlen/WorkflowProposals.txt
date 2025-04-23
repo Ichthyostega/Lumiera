@@ -1,27 +1,26 @@
 Lumiera Workflow Proposals
-Wouter Verwijlen
-Last updated: 3 April 2025
+==========================
+:Author: Wouter Verwijlen
+:Date: 3 April 2025
+:TOC:
+
 I would like to share a first version of a collection of workflow ideas for Lumiera. These ideas come
 from having cut hundreds (or possibly thousands) of videos over the past 20 years as a professional
 editor, working in Avid Media Composer, Adobe Premiere Pro (from before it was called "Pro"),
 Lightworks and DaVinci Resolve.
-The main ideas behind these proposals are:
-•
 
-Editing should feel as organic as possible. An editor should perceive the NLE as an
+The main ideas behind these proposals are:
+
+* Editing should feel as organic as possible. An editor should perceive the NLE as an
 extension of their body, where interaction with the NLE will ultimately become natural. This
 does not mean that a user should immediately understand everything without there being a
 certain learning curve. Some new concepts might take a while to master.
 
-•
-
-An editor should not be able to accidentally overwite part of their work in the timeline when
+* An editor should not be able to accidentally overwite part of their work in the timeline when
 that part is not within sight (in other words: when it's offscreen). This includes throwing
 things out of sync, losing transitions, or overwriting clips.
 
-•
-
-Interaction with a NLE shouldn't depend on a specific device. It should be possible to
+* Interaction with a NLE shouldn't depend on a specific device. It should be possible to
 operate Lumiera with only the keyboard, only the mouse, other peripherals or a combination
 of these. We can nudge people towards ways of working we think are optimal, but we
 shouldn't dictate how to use this application. Many different editors work on many different
@@ -30,6 +29,7 @@ might not even foresee. We can't make a one size fits all solution in terms of w
 unless we would target Lumiera at a very specific professional field (for example: only long
 form films and not short social media content). But even within the same types of content
 I've seen different editors using different ways of working.
++
 So if the aim for Lumiera is to be a general purpose video editing application, then we can
 not force any specific way of doing things and instead we should support many different
 workflows, in other words: provide a platform with possibilities for each editor to make it
@@ -37,86 +37,92 @@ their own (which will arguably be a harder goal to achieve). Instead of a "we kn
 best for you" approach I propose a "smart defaults with many options for configuration"
 approach.
 
-•
-
-A big question is: who is "the user"? We aim to create a tool for professionals, but there are
+* A big question is: who is "the user"? We aim to create a tool for professionals, but there are
 many types of professionals working in entirely different parts of the media industry or in
 other fields. In the previous paragraph it was mentioned that different types of content
 require different types of workflows. How to accomodate all of these different people who
 work on different things?
++
 I would like to propose a set of personas to keep in mind while designing the application.
 Examples of such personas could be:
-◦ The highly specialised editor who works in an environment where different parts of the
++
+** The highly specialised editor who works in an environment where different parts of the
 post-production of a film are handled by different people: assisant editors, colorists,
 audio engineers, etc.
-◦ The allround contracted editor who handles all aspects of post-production
-◦ The allround artistic filmmaker who also edits
-
-◦ The allround social media creator who values the use of visual effects, motion graphics
+** The allround contracted editor who handles all aspects of post-production
+** The allround artistic filmmaker who also edits
+** The allround social media creator who values the use of visual effects, motion graphics
 and sound effects.
-◦ The free-flowing editor who doesn’t have a fixed idea of how the edit should be and
+** The free-flowing editor who doesn't have a fixed idea of how the edit should be and
 instead wants to play and move things around, and who might not work in a linear
 fashion: they might do a bit of color correction to get a better sense of how a scene feels,
 then go back to editing, etc.
-◦ The editor who has the film already cut in their head and have a very strong sense of
+** The editor who has the film already cut in their head and have a very strong sense of
 what they want to do and work in a very structured way towards accomplishing this
 vision.
++
 Of course, there are many more types of people and many people who are a combination of
 personas. These are only meant to paint the spectrum of possibilities.
-•
 
-Lumiera provides a chance to reimagine how an NLE could work, in other words: how it
+* Lumiera provides a chance to reimagine how an NLE could work, in other words: how it
 can be designed around modern ways of interacting with computers. In that sense there is
 total freedom to create innovative new solutions to improve how people edit videos. On the
 other hand, if we create paradigms that are too uncommon, new users might not understand
 Lumiera fast enough and move on to something else. There's a balance to be found between
 providing familiarity and innovation, and we need to think carefully when breaking
-traditional paradigms about the reason they have existed for so long and if it’s worth
+traditional paradigms about the reason they have existed for so long and if it's worth
 breaking them.
++
 In any case, I think we should at least make an effort to study the way current NLE's work,
 and while we might never know for sure what the reasoning behind their workflow designs
 was, we should make an attempt to understand this reasoning. Some designs might have
 come from technical limitations, and others might have had really clever thinking behind
 them. Let's see what we can learn from that.
 
-•
-
-Ideally we should also include workflows for editors using XR headsets in combination with
+* Ideally we should also include workflows for editors using XR headsets in combination with
 controllers or even hand tracking. While I do have a headset at work that I experiment with,
 we might want someone with actual XR design skills to be involved here.
 
 Initially I would like to focus on the most fundamental tasks that each and every editor has to deal
 with while creating a video:
+
 1. Finding the parts you need out of a lot of source material (logging and organizing footage)
-2. The timeline as the editor’s canvas: inserting and grouping material, arranging clips,
+2. The timeline as the editor's canvas: inserting and grouping material, arranging clips,
 trimming and other timeline features
 3. Finishing: audio mixing, color correction, titles, effects, exporting
 4. The broader GUI concept
+
 Many of the ideas presented here are not necessarily unique: a lot of these either exist in one NLE
 or another, or might be more common in so-called Digital Audio Workstations (DAWs). This
 document closely inspects the working of other software applications to see how we can learn from
 those.
+
 These proposals are by no means finished or complete. They are merely meant to be the starting
 point for discussion and would also require user testing. We will want to iterate over certain ideas so
 that they will evolve over time, while others might be rejected completely, which is totally fine, of
 course.
 
-The current NLE landscape
-A few decades ago there was this idea that only a single application could be called ‘the best’, in
-other words: the one true NLE to rule them all. Some even went as far as calling it “the NLE wars”.
+The current NLE landscape
+-------------------------
+A few decades ago there was this idea that only a single application could be called ``the best'', in
+other words: the one true NLE to rule them all. Some even went as far as calling it ``the NLE wars''.
 There was fierce competition between Avid Media Composer, Final Cut Pro, and Adobe Premiere
 and each had its fans. Over the years this discussion faded away. Final Cut Pro was disregarded by
 many after the radical rewrite that was released as Final Cut Pro X. Avid Media Composer retained
 its spot as the industry standard for television and feature film, while Adobe Premiere Pro
-conquered the rest of the media industry. It became clear that no single NLE would be ‘the best’ for
+conquered the rest of the media industry. It became clear that no single NLE would be ``the best'' for
 all people and all purposes. They each had their own sets of strengths and weaknesses, and therefore
 each would find its own audience.
-While NLE’s evolved in de 2010’s, differences between them grew.
-Media Composer and Lightworks were already very powerful NLE’s, specialised in the core editing
+
+While NLE's evolved in de 2010's, differences between them grew.
+
+Media Composer and Lightworks were already very powerful NLE's, specialised in the core editing
 process, mostly for longer format productions. They offered many configuration options and in turn
 had a high learning curve.
+
 Final Cut Pro X sat on the other end of the spectrum. It had few configuration options but was easy
 to learn. It became popular among a new crowd: the solo content creators.
+
 Then in between sat Premiere Pro, comfortably. It profited massively from being part of the
 Creative Suite, later the Creative Cloud: for many media companies it was very cost effective to pay
 Adobe a single sum of money (pre-Creative Cloud) and later subscription fees, and receive all the
@@ -124,84 +130,92 @@ tools they could possibly need for media creation. But also the application itse
 solution for all parts of post-production: it offered many tools for audio mixing, color grading,
 visual effects, etc. Sure, Media Composer and FCPX also offered tools for these jobs, but were less
 developed in these areas and often required plugins to achieve many of the more advanced tasks.
+
 Then came along DaVinci Resolve, a color grading application that was bought by Blackmagic
 Design and transformed into another all-in-one powerhouse, which slowly started to take a seat next
-to Premiere’s throne.
-In the meantime the media landscape changed. NLE’s became more affordable and hardware more
+to Premiere's throne.
+
+In the meantime the media landscape changed. NLE's became more affordable and hardware more
 capable, and the result was that editing was no longer a thing only done by professionals: everybody
 became an editor, and everybody could edit any moment, anywhere, on laptops, tablets or
 smartphones. Social media became a huge new platform where many new makers developed their
-own channels and found an audience for their videos. And so came NLE’s that were focussed on
-social media content, most notably CapCut. It took FCP’s idea of easy to learn even farther and
+own channels and found an audience for their videos. And so came NLE's that were focussed on
+social media content, most notably CapCut. It took FCP's idea of easy to learn even farther and
 offered many one-click visual effects, automatic subtitles and mostly: a lot of effect presets and
 assets (titles, other graphics, music) available within the application.
-Right now we’re witnessing the early stages of the introduction of AI in most NLE’s. This expands
+
+Right now we're witnessing the early stages of the introduction of AI in most NLE's. This expands
 the possibilities for manipulating video and audio without requiring much technical knowledge.
 Voices, music, video clips and even rough cuts can be generated. Audio issues can easily be fixed,
 mixing and mastering can be done automatically, tracking en keying becomes a lot easier than it
 used to, to name a few things.
-And that’s basically where we are now. There’s not one editor to rule them all, there are many, and
-they all shine in different fields or sectors. Some NLE’s try to expand and cater to different crowds
+
+And that's basically where we are now. There's not one editor to rule them all, there are many, and
+they all shine in different fields or sectors. Some NLE's try to expand and cater to different crowds
 (Lightworks for example, received an easier GUI and many presets and assets to attract social
-media content creators), others decided to just keep on doing what they’ve always been good at.
+media content creators), others decided to just keep on doing what they've always been good at.
+
 The question is: where will we position Lumiera? Due to targeting the Linux platform, it makes
 most sense to try and sit in the middle of everything. If we specialise too much, the potential user
 base might be too small, although in all fairness, this is an assumption not backed by any real world
-
-data. Would there be a way to check the validity of this statement? And how should we quantify
+data. Would there be a way to check the validity of this statement? And how should we quantify
 "too small"? This is a topic that requires more discussion.
 
+
 Chapter 1: working with source material
-To be written.
+---------------------------------------
+[red]#To be written.#
+
 
 Chapter 2: the timeline
-The timeline is the core of the editing application. This is the editor’s canvas: the space where the
+-----------------------
+The timeline is the core of the editing application. This is the editor's canvas: the space where the
 actual film or video is constructed, or rather: crafted. Therefore it is of the highest importance for
-Lumiera to feature a timeline that takes the best of what current NLE’s have to offer, while thinking
+Lumiera to feature a timeline that takes the best of what current NLE's have to offer, while thinking
 carefully on how we can improve upon these ways of working. There are many different aspects to
 working in the timeline which I will explore in the different subsections of this chapter.
 
 Tracks vs trackless
+~~~~~~~~~~~~~~~~~~~
 Traditionally, NLE's have been track-based. The reason for this is that they have been modelled
 after analog hardware. For example, Adobe Premiere's predecessor ReelTime was created to work
 like 3/4" tape decks.
+
 I'd like to quote Randy Ubillos, original creator of ReelTime and Final Cut Pro:
+____
 "In a track based system the layers at the beginning, middle and end all share the exact same tracks
-and you’re always potentially disrupting things in other parts of the project when you make changes
+and you're always potentially disrupting things in other parts of the project when you make changes
 in another area. One of the most common things I heard from editors was that as a project
 progressed the likelihood of a change in one part of a project having an unintended effect
 somewhere else in the timeline went up dramatically. Tracks implicitly put a relationship between
 all of the items in that track, even though they may be actually completely unrelated. "
-Source: https://www.linkedin.com/pulse/interview-randy-ubillos-developer-fcp-x-david-busse
+____
+Source: https://www.linkedin.com/pulse/interview-randy-ubillos-developer-fcp-x-david-busse[Interview with Randy Ubillos]
+
 Tracks have several advantages:
-•
 
-They give us a way to organise our timeline by dedicating certain types of clips to certain
-tracks. For example:
-◦ Interview shots on V1
-◦ B-roll on V2
-◦ Graphics on V3
-Or for audio:
-◦ Dialog on A1 + A2
-◦ Music on A3 + A4
-◦ Sound effects on A5-A8
+* They give us a way to organise our timeline by dedicating certain types of clips to certain
+tracks.
 
-•
+** For example:
+*** Interview shots on V1
+*** B-roll on V2
+*** Graphics on V3
 
-They allow for track-based effects (usually only implemented on the audio side).
+** Or for audio:
+*** Dialog on A1 + A2
+*** Music on A3 + A4
+*** Sound effects on A5-A8
 
-•
+* They allow for track-based effects (usually only implemented on the audio side).
 
-They support editing by keyboard, as you can toggle tracks on and off and bind this to keys.
+* They support editing by keyboard, as you can toggle tracks on and off and bind this to keys.
 
 Disadvantages of tracks:
-•
 
-They’re quite inflexible: you can't easily change their order.
+* They're quite inflexible: you can't easily change their order.
 
-•
-
-As we saw in Randy’s quote, later in the editing process, when timelines become more
+* As we saw in Randy's quote, later in the editing process, when timelines become more
 complex, it's easy to mess things up. Often not all tracks are visible within the viewport and
 therefore you will need to remember its state (enabled/disabled/sync locked) and contents
 or else a trim operation might throw things out of sync, or you might accidentally overwrite
@@ -210,236 +224,196 @@ entire row of empty cuts at the end of their timeline, simply so they can check 
 anything was accidentally thrown out of sync. Lightworks has out-of-sync indicators to
 mitigate sync issues.
 
-•
-
-Clips that naturally belong together are separated, for example b-roll and associated sound
+* Clips that naturally belong together are separated, for example b-roll and associated sound
 effects. Instead, clips that only share a shallow relation are grouped together.
 
-•
-
-To me, personally, track management takes me out of my storytelling flow. It's a necessity
+* To me, personally, track management takes me out of my storytelling flow. It's a necessity
 that doesn't directly aid in the creative process.
 
 Editors often proudly share screenshots of their timelines on social media, and they do look
 impressive, but these are in fact pretty fragile structures.
 
-One of my own timelines, which is relatively simple by comparison to those of many Hollywood movies
+.One of my own timelines, which is relatively simple by comparison to those of many Hollywood movies
+image::{imgg}/wouter/01-timeline.jpg[Screenshot of a timeline]
 
 So naturally, a question would be: what will happen if we would let go of the track paradigm? This
 is what Final Cut Pro has done, starting from the rewrite of Final Cut Pro X. At the time, a
 disastrous marketing campaign caused many editors to leave the application, although more and
-more people are starting to realise that many of its ideas were way ahead of its time. It’s still the
+more people are starting to realise that many of its ideas were way ahead of its time. It's still the
 only big NLE out there that was designed with computers in mind, and not analog hardware.
-It’s not entirely trackless, but it manages to hide the concept of tracks from the user. In a nutshell, it
+
+It's not entirely trackless, but it manages to hide the concept of tracks from the user. In a nutshell, it
 works by having a primary storyline (in a track-based NLE this would be V1+A1) where you build
 the foundation of your edit. Then the video clips you put on top and the audio clips you put below
 get connected to one or more clips from the primary storyline. Move a clip on the primary storyline,
 and all connected clips automatically move with it. With a modifier key you can ignore clip
 connections, so that you can also easily move a primary clip elsewhere without its connected
 siblings coming along.
+
 Sounds good! Why not just copy this? One reason is that FCP assumes that all clips clips that are
 not on the primary storyline should be connected to this primary storyline. This might work well for
 fiction films, but not necessarily for other types of video. Earlier I mentioned an example of sound
-effects that share a connection to b-roll on a higher layer. FCP won’t allow you to connect them.
+effects that share a connection to b-roll on a higher layer. FCP won't allow you to connect them.
+
 How else could we group clips together that ought to be connected? We could potentially group
 them in compound clips that are directly editable, like so:
 
-However, there are a few problems with this: we expect rendering to happen from top to bottom, in
-which case the b-roll would cover the subtitles. On top of that, it’s hard to see at which points video
+.Compound clips
+image::{imgg}/wouter/02-1-grouped.png[Timeline with compound clips]
+
+However, there are a few problems with this: we expect rendering to happen from top to bottom, in
+which case the b-roll would cover the subtitles. On top of that, it's hard to see at which points video
 clips overlap. Last but not least: it looks rather unorganised.
+
 Can we restructure this? Perhaps like this:
 
-But how exactly would a user interact with a timeline like this? You’d need a toggle somewhere
+.Overlapping compound clips
+image::{imgg}/wouter/02-2-grouped.png[Timeline with stacked overlapping compound clips]
+
+But how exactly would a user interact with a timeline like this? You'd need a toggle somewhere
 (and corresponding keyboard shortcut) to toggle the compounds on and off. When the compounds
 are enabled, you can move entire compound clips at once. When turned off, you could edit any
 individual clip. When using the keyboard, one could cycle through all visible compound clips with
-a key like Tab and then perform actions on the compound clip, or choose to step ‘into’ and ‘out of’
+a key like Tab and then perform actions on the compound clip, or choose to step ``into'' and ``out of''
 these compound clips to work on the material inside.
+
 This rises another question: would enabling/disabling of compounds actually be an improvement
 over track management? This idea clearly needs a lot more thought and development to see if it
 could actually work in a real-world editing scenario, but it might be an interesting direction to
 explore.
 
-Inserting material onto the timeline
-To be written.
+
+Inserting material onto the timeline
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[red]#To be written.#
+
 
 Grouping material: sections
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 I would like to propose the ability to divide a timeline into multiple sections. Each of these sections
 will have a header in the ruler that can be edited, to give each section a name (similar to how
 duration markers in Premiere are displayed).
 
-The benefits of sections:
-•
+.Timeline with sections
+image::{imgg}/wouter/03-sections.png[Timeline organised into a sequence of sections]
 
-Creating a broad sense and clear overview of how a timeline is constructed. Background
+
+The benefits of sections:
+
+* Creating a broad sense and clear overview of how a timeline is constructed. Background
 colors in the timeline will make it easy to differentiate between different sections.
 
-•
+* Easy navigation between sections by keyboard shortcuts.
 
-Easy navigation between sections by keyboard shortcuts.
-
-•
-
-Keeping sync. All clips in a section are encapsulated. If you work in one section, you will
+* Keeping sync. All clips in a section are encapsulated. If you work in one section, you will
 not be able to throw clips in other sections out of sync. Users could also time-lock a section,
 so it will stay in place regardless of other edit operations. This is especially useful when
 editing on music, but will also prevent losing sync between other elements that have been
 carefully lined up. Sections will not prevent anyone throwing anything out of sync within a
 section, but at least not the entire timeline will be affected.
 
-•
-
-The order of sections can easily be changed by clicking and dragging. This way sections can
+* The order of sections can easily be changed by clicking and dragging. This way sections can
 be used to, for example, easily change the order of scenes. The free-flowing editor for
 example, can construct different parts of their edit on different parts of the timeline in
 different sections, and then arrange them later.
 
-•
-
-Sections could have a versioning system: this would allow the user to try different cuts
+* Sections could have a versioning system: this would allow the user to try different cuts
 within a section and to quickly change between these different versions.
 
 Several other characteristics of sections:
-•
 
-Clips can be excluded from being part of a section. For example: music tracks could span
+* Clips can be excluded from being part of a section. For example: music tracks could span
 the entire length of a video by not being included in any section.
 
-•
-
-When working within a section, its size will adapt to your edit operations (so its edges will
+* When working within a section, its size will adapt to your edit operations (so its edges will
 shrink or expand automatically while trimming or moving clips).
 
-•
-
-A new timeline will have one large section spanning its entire length. A “split section”
+* A new timeline will have one large section spanning its entire length. A ``split section''
 button and keyboard shortcut will create new sections.
 
 Things to consider:
-•
 
-How to move clips from one section to another?
+* How to move clips from one section to another?
+* If sections can be time-locked then they will probably need to be able to overlap.
 
-•
-
-If sections can be time-locked then they will probably need to be able to overlap.
 
 Navigating the timeline
-Quick timeline navigation is key in editing. Let’s start by examining how other NLE’s deal with
+~~~~~~~~~~~~~~~~~~~~~~~
+Quick timeline navigation is key in editing. Let's start by examining how other NLE's deal with
 this. We need to make a distinction between:
-•
 
-Moving the viewport: the visible section of the timeline.
+* Moving the viewport: the visible section of the timeline.
 
-•
-
-Moving the playhead (which will ultimately also move the viewport, once the playhead goes
+* Moving the playhead (which will ultimately also move the viewport, once the playhead goes
 offscreen).
 
 Moving the viewport, by mouse:
-•
 
-This usually happens by dragging scrollbars.
+* This usually happens by dragging scrollbars.
 
-•
-
-In pretty much every application the scrollwheel can be used to scroll either horizontally or
+* In pretty much every application the scrollwheel can be used to scroll either horizontally or
 vertically (usually a setting defines the default direction, and the other direction can be
 toggled with a modifier key).
 
-•
-
-DaVinci Resolve allows moving the viewport by middle mouse dragging. Quite useful,
+* DaVinci Resolve allows moving the viewport by middle mouse dragging. Quite useful,
 actually.
 
 Moving the viewport, by keyboard:
-•
 
-Some apps use Page Up/Down for this (i.e. Premiere).
+* Some apps use Page Up/Down for this (i.e. Premiere).
 
-•
-
-Resolve scrolls the timeline vertically with Page Up and Down and supports shortcuts for
+* Resolve scrolls the timeline vertically with Page Up and Down and supports shortcuts for
 Previous/Next Timeline Page.
 
 Moving the viewport, by other device:
-•
 
-I don't recall having seen this option anywhere.
+* I don't recall having seen this option anywhere.
 
 Moving the playhead, by mouse:
-•
 
-Avid allows doing this by clicking anywhere in the timeline (as long as the smart tools are
+* Avid allows doing this by clicking anywhere in the timeline (as long as the smart tools are
 disabled, else you need to click in empty areas).
 
-•
-
-FCP skims the timeline by default when moving the mouse. Clicking parks the playhead in a
+* FCP skims the timeline by default when moving the mouse. Clicking parks the playhead in a
 new location.
 
-•
+* Others require clicking in the ruler above the timeline or dragging the actual playhead.
 
-Others require clicking in the ruler above the timeline or dragging the actual playhead.
-
-•
-
-The playhead will obviously also move during playback, which can be started and stopped
+* The playhead will obviously also move during playback, which can be started and stopped
 by clicking buttons underneath viewers or above the timeline.
 
 Moving the playhead, by keyboard:
-•
 
-Through playback, using j/k/l as a shuttle (repeated taps increase playback speed).
+* Through playback, using j/k/l as a shuttle (repeated taps increase playback speed).
 
-•
+* Most apps provide keyboard shortcuts for moving single frames left and right.
 
-Most apps provide keyboard shortcuts for moving single frames left and right.
-
-•
-
-Most apps provide keyboard shortcuts for moving steps of multiple frames left and right (in
+* Most apps provide keyboard shortcuts for moving steps of multiple frames left and right (in
 Premiere you can choose how large the steps are, Resolve only supports single seconds).
 
-•
+* Most apps provide keyboard shortcuts for going to the previous or next cut.
 
-Most apps provide keyboard shortcuts for going to the previous or next cut.
+* Most apps provide keyboard shortcuts for going to the previous or next marker.
 
-•
+* Most apps will use the Home and End keys to move to the start and end of the timeline.
 
-Most apps provide keyboard shortcuts for going to the previous or next marker.
+* Most apps provide keyboard shortcuts for going to the previous or next keyframe.
 
-•
-
-Most apps will use the Home and End keys to move to the start and end of the timeline.
-
-•
-
-Most apps provide keyboard shortcuts for going to the previous or next keyframe.
-
-•
-
-Most apps provide ways for typing timecodes.
+* Most apps provide ways for typing timecodes.
 
 Combining mouse and keyboard:
-•
 
-Adobe Premiere has a "move playhead to cursor" feature that can be bound to a key. Very
-useful!
+* Adobe Premiere has a "move playhead to cursor" feature that can be bound to a key.
+  Very useful!
 
 Using other devices:
-•
 
-Shuttle: allows controlling playback speeds and direction depending on how far you turn the
+* Shuttle: allows controlling playback speeds and direction depending on how far you turn the
 dial left or right.
 
-•
+* Jog wheel: allows stepping left or right, frame by frame.
 
-Jog wheel: allows stepping left or right, frame by frame.
-
-•
-
-Blackmagic's Speed Editor has the option to change the function of its wheel between
+* Blackmagic's Speed Editor has the option to change the function of its wheel between
 shuttle, jog and scroll. The shuttle mode is practically unusable, but jog and scroll provide
 amazingly fluid ways to navigate the timeline. Especially in combination with markers and
 jumping between these by keyboard shortcuts, this is a wonderful way to work.
@@ -447,40 +421,42 @@ jumping between these by keyboard shortcuts, this is a wonderful way to work.
 Zooming also needs to be mentioned here, because often we might be zoomed in, do some work,
 zoom out to get an overview of the timeline, and zoom in to another part of the timeline.
 Zooming in and out, by mouse:
-•
 
-Usually done either by using a zoom tool,
+* Usually done either by using a zoom tool,
 
-•
-
-Or by using zoom sliders.
+* Or by using zoom sliders.
 
 Zooming in and out, by keyboard:
-•
 
-Every NLE has keys to zoom in and out horizontally. Some (Premiere, Resolve, Avid)
+* Every NLE has keys to zoom in and out horizontally. Some (Premiere, Resolve, Avid)
 support keys to expand and shrink all track heights at once (vertical zooming).
 
+
 About keyboard shortcuts
+~~~~~~~~~~~~~~~~~~~~~~~~
 I can imagine that all of the keyboard shortcuts for navigation were invented simply to provide
 many options for each editor to choose what they need. This way, every editor can pick the
 shortcuts that best fit their workflow.
-Navigation by means of keyboard has very good support in most apps and it's a matter of providing
-similar shortcuts in Lumiera. It could be expanded by allowing the creation of navigation markers
-(a special category of markers) that are bound to keys or numbers. A user can jump to specific
-markers by pressing a "go to navigation marker" key, followed by the key they bound. This is
-basically Vim's way of doing it (m+0-9a-zA-Z to bind, backtick+0-9a-zA-Z to jump). Or we might
-want to keep it as simple as having the regular ‘add marker’, ‘add and edit marker’ and ‘go to
-next/previous marker’ keyboard shortcuts.
-Sections will get navigation markers automatically, so a user doesn't have to create each marker
-manually. Or we might want to include keyboard shortcuts for ‘go to previous/next section’.
-Fast forward and fast rewind keys as found in Reaper might be a helpful addition to the
-aforementioned keys. This would give as a quick way to skim a timeline by keyboard. While fast
 
-forward and rewind can be achieved by the regular j/k/l shuttle controls, this requires a lot of
+Navigation by means of keyboard has very good support in most apps and it's a matter of providing
+similar shortcuts in Lumiera. It could be expanded by allowing the creation of *navigation markers*
+(a special category of markers) that are bound to keys or numbers. A user can jump to specific
+markers by pressing a ``go to navigation marker'' key, followed by the key they bound. This is
+basically Vim's way of doing it (m+0-9a-zA-Z to bind, backtick+0-9a-zA-Z to jump). Or we might
+want to keep it as simple as having the regular ``add marker'', ``add and edit marker'' and ``go to
+next/previous marker'' keyboard shortcuts.
+
+Sections will get navigation markers automatically, so a user doesn't have to create each marker
+manually. Or we might want to include keyboard shortcuts for ``go to previous/next section''.
+
+*Fast forward and fast rewind keys* as found in Reaper might be a helpful addition to the
+aforementioned keys. This would give as a quick way to skim a timeline by keyboard. While fast
+forward and rewind can be achieved by the regular j/k/l shuttle controls, this requires a lot of
 tapping to get to the desired speed, over and over again.
 
+
 About mouse navigation
+~~~~~~~~~~~~~~~~~~~~~~
 Scrollbars and zoom sliders have a different set of reasons for being chosen as the de facto standard
 widgets for navigation. Familiarity on the one hand, and visibility on the other. By having these
 controls visible at all times, yet outside of the working area itself, each user will be able to locate
@@ -488,68 +464,87 @@ them while they remain out of the way. These are very good reasons for their exi
 positioning, but they come at the cost of speed: moving your mouse cursor out of your main
 working area towards the edges and back takes time and interrupts the creative flow. It works, but
 it's not ideal. That's why I would like to propose an additional way to navigate by mouse, which is
-by popup widgets. These will pop up around the cursor, triggered by a keyboard press (similar to
+by *popup widgets*. These will pop up around the cursor, triggered by a keyboard press (similar to
 how Blender uses pie menus):
-• Skim widget: by moving the mouse in a small bar we can quickly skim the entire timeline. This
+
+Skim widget:: by moving the mouse in a small bar we can quickly skim the entire timeline. This
 will move both the viewport and playhead. Clicking the left mouse button will accept the new
 position and close the widget.
++
+.Skim widget
+image::{imgg}/wouter/04-1-skim.png[A skim widget rendered as overlay]
 
-• Autoscroll widget: when the user moves the mouse cursor slightly left or right, it will enter zones
+
+Autoscroll widget:: when the user moves the mouse cursor slightly left or right, it will enter zones
 in which the timeline view will scroll left or right (much like the autoscroll feature in Firefox).
 When the user moves the mouse farther away from the initial starting point, the scrollspeed will
 increase. This will also work vertically. The playhead will move along as well.
++
+.Autoscroll widget
+image::{imgg}/wouter/04-2-autoscroll.png[A widget for auto-scrolling]
 
-• Zoom widget: moving the mouse left or right from the center will zoom horizontally, up and
+Zoom widget:: moving the mouse left or right from the center will zoom horizontally, up and
 down will zoom vertically.
++
+.Zoom widget
+image::{imgg}/wouter/04-3-zoom.png[An overlay widget to control zooming]
 
 Mouse-only navigation:
-• Combined widget: we could make a widget that combines skimming, autoscroll (only
+
+Combined widget:: we could make a widget that combines skimming, autoscroll (only
 horizontally) and zooming (horizontally). This widget is triggered by clicking and pressing the right
 mouse button. When released, it will commit to the new location/view. If a user right clicks and
 immediately releases the button, a regular context menu will appear.
++
+.Combined skim, zoom and scroll widget
+image::{imgg}/wouter/04-4-combined.png[Overlay widget to combin skim, zoom and autoscrol function]
 
-Why popup widgets?
-I can’t speak for others, but personally I dislike moving the mouse downwards towards the edge of
-the screen to access scrollbars or zoom sliders. We’d like the mouse to stay in the center of where
-we’re working.
+
+Why popup widgets?
+^^^^^^^^^^^^^^^^^^
+I can't speak for others, but personally I dislike moving the mouse downwards towards the edge of
+the screen to access scrollbars or zoom sliders. We'd like the mouse to stay in the center of where
+we're working.
+
 With popup widgets, we might be able to improve navigation speed, but at the cost of familiarity
 and visibility. That's why I propose to include all aforementioned widgets. We keep the traditional
 sliders and scrollbars, but also add the popup widgets as an extra method for navigation for whoever
 is willing to learn this.
 
 Potential downsides
-•
+^^^^^^^^^^^^^^^^^^^
 
-Widgets might be partially displayed offscreen when the mouse is near the edge of the
+* Widgets might be partially displayed offscreen when the mouse is near the edge of the
 screen.
 
-•
-
-Very long timelines might make the skimming widget oversensitive. Possible solution:
+* Very long timelines might make the skimming widget oversensitive. Possible solution:
 either enlarge the bar, or create zones near the edges of the bar where the behaviour changes
 to be similar to the autoscroll widget.
 
-•
-
-When using the keyboard shortcut versions: a downside is having even more keyboard
+* When using the keyboard shortcut versions: a downside is having even more keyboard
 shortcuts that need quick access from the one hand that stays on the keyboard.
 
 Arranging clips
-To be written.
+~~~~~~~~~~~~~~~
+[red]#To be written.#
 
 Selecting and moving clips
-To be written.
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+[red]#To be written.#
 
 Timeline tools vs modes
-To be written.
+~~~~~~~~~~~~~~~~~~~~~~~
+[red]#To be written.#
 
 Trimming
-To be written.
+~~~~~~~~
+[red]#To be written.#
 
-Chapter 3: finishing
-To be written.
+Chapter 3: finishing
+--------------------
+[red]#To be written.#
 
 Chapter 4: a broader GUI concept
-To be written.
+--------------------------------
+[red]#To be written.#
 
-

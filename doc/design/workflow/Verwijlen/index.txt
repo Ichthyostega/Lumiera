@@ -3,7 +3,23 @@ Lumiera Workflow Proposals
 Date: 2025
 
 //MENU: label Workflow Proposals Verwijlen
+//MENU: prepend WorkflowProposals
 
-- TODO include full text of from Wouter
+************************
+Wouter Verwijlen is a documentary filmmaker from Utrecht (Netherlands).
+************************
+
+Many years ago, the Lumiera team first got to know Wouter on occasion
+of the link:https://lac.linuxaudio.org/2010/[Linux Audio Conference].
+In spring 2025, he proposed to contribute with concept work related to
+UI and workflow, drawing on his longtime experience working with all
+professional editing software packages as part of his work in media
+production and filmmaking. Knowing those applications in and out,
+with all their various strengths and weaknesses allows to compile
+a comprehensive overview how the central tasks of film editing
+are handled by contemporary software solutions -- and how
+this handling might be improved.
+
+- link:WorkflowProposals.html[»Lumiera Workflow Proposals«] by Wouter Verwijlen
 - link:FrosconMeeting.html[Discussion at FrOSCon 2025]
  
