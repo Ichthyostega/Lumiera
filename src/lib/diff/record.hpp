@@ -193,6 +193,10 @@ namespace diff{
         { }
       
       // all default copy operations acceptable
+      Record (Record &&)                = default;
+      Record (Record const&)            = default;
+      Record& operator= (Record &&)     = default;
+      Record& operator= (Record const&) = default;
       
       
       /** for diagnostic purpose */
@@ -262,11 +266,11 @@ namespace diff{
       /**
        * While otherwise immutable,
        * a Record object can be remoulded
-       * with the help of a Mutator object
+       * with the help of a Mutator object...
        * @remarks a Mutator basically wraps a \em copy
        *          of the original object. After performing
        *          the desired changes, the altered copy can either
-       *          be sliced out (by conversion), or moved overwriting
+       *          be copied out (by conversion), or moved overwriting
        *          an existing other Record instance (implemented as swap)
        */
       class Mutator;
@@ -287,12 +291,14 @@ namespace diff{
        *          which in turn becomes the only child of the new Record.
        */
       Record (Mutator const& mut)
-        : Record((Record const&) mut)
+        : Record(static_cast<Record const&> (mut))
         { }
       explicit
       Record (Mutator && mut)
-        : Record(std::move (Record(mut)))
-        { }
+        : Record{}
+        { 
+          mut.swap(*this);
+        }
       
       friend class Mutator;
       
@@ -418,10 +424,9 @@ namespace diff{
         : record_(std::move (startingPoint))
         { }
       
-      operator Rec&()
-        {
-          return record_;
-        }
+      /** Builder-terminal: return copy of mutated results when done */
+      operator Rec &     ()       { return record_; }
+      operator Rec const&() const { return record_; }
       
       void
       swap (Rec& existingInstance)  noexcept

@@ -161248,8 +161248,8 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1742175245473" ID="ID_1357727858" MODIFIED="1744765471084" TEXT="Warnungen">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1742175245473" ID="ID_1357727858" MODIFIED="1745535177961" TEXT="Warnungen">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1744717880469" ID="ID_1900004997" MODIFIED="1744765441677" TEXT="std::unary_function is deprecated">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -161258,8 +161258,7 @@ Since then others have made contributions, see the log for the history.</font></
       typically this was used as mix-in base class to get the typedefs <font color="#8c505c" face="Bitstream Vera Sans Mono"><b>argument_type</b></font> and <font color="#8c505c" face="Bitstream Vera Sans Mono"><b>result_type</b></font> &#8212; which are no longer needed by modern code (and the STL), since traits or even concepts are commonplace nowadays.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1744718844432" ID="ID_1017848222" MODIFIED="1744718883002" TEXT="hash-indexed.hpp : Policy-Marker UseEmbeddedHash or UseHashID"/>
 <node CREATED="1744718951829" ID="ID_1987113340" MODIFIED="1744718957653" TEXT="asset/db.hpp"/>
 <node CREATED="1744719175267" ID="ID_1712341337" MODIFIED="1744719178945" TEXT="entry-id.hpp"/>
@@ -161272,8 +161271,7 @@ Since then others have made contributions, see the log for the history.</font></
       <font color="#4a2626" face="Bitstream Vera Sans Mono" size="9pt">src/lib/time/timevalue.hpp:303:13: note: because 'lib::time::Time' has user-provided 'lib::time::Time&amp; lib::time::Time::operator=(lib::time::Time)'</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1744719544682" ID="ID_1257073174" MODIFIED="1744719585457" TEXT="die Regel lautet: keine automatische Copy-Operationen sobald man explizit definiert"/>
 <node CREATED="1744719592121" ID="ID_1113294176" MODIFIED="1744719653785">
 <richcontent TYPE="NODE"><html>
@@ -161314,6 +161312,11 @@ Since then others have made contributions, see the log for the history.</font></
 <node CREATED="1744724881959" ID="ID_237205244" LINK="https://gcc.gnu.org/bugzilla/show_bug.cgi?id=109740" MODIFIED="1744727658566" TEXT="Bug #109740 f&#xfc;r GCC-14.2">
 <linktarget COLOR="#fdfbb2" DESTINATION="ID_237205244" ENDARROW="Default" ENDINCLINATION="130;13;" ID="Arrow_ID_1000669305" SOURCE="ID_701397571" STARTARROW="None" STARTINCLINATION="-224;8;"/>
 <icon BUILTIN="idea"/>
+<node COLOR="#338800" CREATED="1745533826603" HGAP="26" ID="ID_1606131037" LINK="https://gcc.gnu.org/bugzilla/show_bug.cgi?id=109740#c8" MODIFIED="1745535159124" TEXT="Kommentar hinzugef&#xfc;gt und unsere konkrete Situation beschrieben" VSHIFT="-2">
+<linktarget COLOR="#368cbc" DESTINATION="ID_1606131037" ENDARROW="Default" ENDINCLINATION="310;12;" ID="Arrow_ID_1990845143" SOURCE="ID_1986793919" STARTARROW="None" STARTINCLINATION="62;-190;"/>
+<linktarget COLOR="#487089" DESTINATION="ID_1606131037" ENDARROW="Default" ENDINCLINATION="-125;12;" ID="Arrow_ID_95767001" SOURCE="ID_1176951480" STARTARROW="None" STARTINCLINATION="182;10;"/>
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 <node CREATED="1744726532593" ID="ID_1383636021" MODIFIED="1744726585847" TEXT="die Warnung ist formal korrekt und trotzdem irrelevant">
 <icon BUILTIN="yes"/>
@@ -161325,8 +161328,7 @@ Since then others have made contributions, see the log for the history.</font></
       Das bedeutet, der Scope, in dem dem der Funktionsaufruf interpretiert wird, ist gegeben durch den Typ der Referenz, &#252;ber die aufgerufen wird. Das kann das Interface sein, es kann aber auch die konkrete Klasse sein, oder irgend was dazwischen. In <i>diesem Scope wird nach dem reinen Namen der Funktion</i>&#160;gesucht. F&#252;r diesen k&#246;nnten mehrere Overloads <i>in dieser Funktion</i>&#160;sichtbar sein, und <i>nur auf diesen</i>&#160;wird die Overload-Resolution gemacht. Nur falls die konkrete Subklasse die Funktion gar nicht definiert, wird dann &#252;ber die Vererbungshierarchie gesucht (und bei Templates gar nicht). Das hei&#223;t, hier kollidiert das Standard-Verhalten von C++ (das von C abstammt), mit dem Konzept eines virtuellen Dispatch. Im Zweifelsfall macht der Compiler immer einen direkten Aufruf, und versucht dann ggfs. sogar, die Argumente automatisch zu konvertieren. Deshalb <b>k&#246;nnte das tats&#228;chlich eine Falle sein</b>, und die Warnung ist grunds&#228;tzlich angebracht.....
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1744726666456" ID="ID_1468752604" MODIFIED="1744727412844" TEXT="im konkreten Nutzungs-Muster (Copy-Support) rufen wir immer durch das Interface auf">
 <richcontent TYPE="NOTE"><html>
@@ -161361,7 +161363,9 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node CREATED="1744727616937" ID="ID_701397571" MODIFIED="1744727664158" TEXT="der Bug-Report zeigt, da&#xdf; andere Leute diese Diskrepanz auch bemerkt haben">
 <arrowlink COLOR="#fdfbb2" DESTINATION="ID_237205244" ENDARROW="Default" ENDINCLINATION="130;13;" ID="Arrow_ID_1000669305" STARTARROW="None" STARTINCLINATION="-224;8;"/>
-<node CREATED="1744727691183" ID="ID_1986793919" MODIFIED="1744727703783" TEXT="theoretisch k&#xf6;nnte der Compiler tats&#xe4;chlich intelligenter sein"/>
+<node CREATED="1744727691183" ID="ID_1986793919" MODIFIED="1745533886802" TEXT="theoretisch k&#xf6;nnte der Compiler tats&#xe4;chlich intelligenter sein">
+<arrowlink COLOR="#368cbc" DESTINATION="ID_1606131037" ENDARROW="Default" ENDINCLINATION="310;12;" ID="Arrow_ID_1990845143" STARTARROW="None" STARTINCLINATION="62;-190;"/>
+</node>
 <node CREATED="1744727704378" ID="ID_692221600" MODIFIED="1744727720439" TEXT="aber praktisch w&#xe4;re das wohl ziemlich komplex zu implementieren"/>
 <node CREATED="1744727722307" ID="ID_1914061525" MODIFIED="1744727783545" TEXT="und die Sprachdefinition von C++ ist eigentlich eindeutig in dem Fall">
 <richcontent TYPE="NOTE"><html>
@@ -161401,10 +161405,13 @@ Since then others have made contributions, see the log for the history.</font></
       d.h. wenn ich hinzuf&#252;ge using BASE::resolve,&#160;&#160;dann bekomme ich einen <b>echten Compile-Fehler</b>, weil das Symbol zweideutig ist. Und zwar by design, wir bauen das ja &#252;ber eine Typ-Sequenz auf
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1744731063960" ID="ID_1817424782" MODIFIED="1744731077654" TEXT="und zudem sind alle Implementierungen private"/>
+<node BACKGROUND_COLOR="#a899c4" COLOR="#911857" CREATED="1745535101666" ID="ID_1176951480" MODIFIED="1745535211629" TEXT="diesen Fall speziell f&#xfc;r den Bug-Report dargestellt">
+<arrowlink COLOR="#487089" DESTINATION="ID_1606131037" ENDARROW="Default" ENDINCLINATION="-125;12;" ID="Arrow_ID_95767001" STARTARROW="None" STARTINCLINATION="182;10;"/>
+<icon BUILTIN="yes"/>
+</node>
 </node>
 <node COLOR="#435e98" CREATED="1744732077372" ID="ID_1756283446" MODIFIED="1744765455541" TEXT="Warnung boost bind placeholders">
 <node CREATED="1744732093626" ID="ID_1341990558" MODIFIED="1744732096590" TEXT="util.cpp"/>
@@ -161423,8 +161430,7 @@ Since then others have made contributions, see the log for the history.</font></
       siehe Zyn.mm, suche nach &quot;std::move ungeschickt verwendet&quot;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1744733471946" ID="ID_1596508800" MODIFIED="1744733498665" TEXT="tritt auf bei verkettetern Funktionen mit return-value">
 <node CREATED="1744733505597" ID="ID_694590608" MODIFIED="1744733512174" TEXT="in diesem Falle w&#xfc;rde die RVO greifen"/>
@@ -161449,8 +161455,8 @@ Since then others have made contributions, see the log for the history.</font></
 <node CREATED="1744734683990" ID="ID_1949839497" MODIFIED="1744734699708" TEXT="es best&#xfc;nde die Gefahr, da&#xdf; jemand abweichende Template-Argumente anschreibt"/>
 <node CREATED="1744734707532" ID="ID_1694967194" LINK="https://stackoverflow.com/a/63514123" MODIFIED="1744734747708" TEXT="also letztlich unn&#xf6;tige Redundanz, die ab C++20 nicht mehr erlaubt sein wird"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1744761652860" ID="ID_1828866577" MODIFIED="1744765464781" TEXT="UILocationSolver : ambiguity with the UICoord ctor">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1744761652860" FOLDED="true" ID="ID_1828866577" MODIFIED="1745540604315" TEXT="UILocationSolver : ambiguity with the UICoord ctor">
+<icon BUILTIN="bell"/>
 <node CREATED="1744761684295" ID="ID_1305677242" MODIFIED="1744761938350" TEXT="GCC warnt hier wegen dem scheinbar &#xfc;berfl&#xfc;ssigen std::move">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -161462,8 +161468,7 @@ Since then others have made contributions, see the log for the history.</font></
       Das move ist hier aber nicht &#252;berfl&#252;ssig, sondern soll tats&#228;chlich die Terminal-Operation des UICoord::Builder ausl&#246;sen (von dem UILocationSolver erbt). Also mi&#223;deutet der Compiler die Situation komplett, denn es handelt sich nicht um eine RVO, sondern um einen speziellen Konstruktor-Aufruf von UICoord, in dem noch eine Normalisierung stattfindet
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1744762215328" ID="ID_854345549" MODIFIED="1744762327273" TEXT="weiteres Problem: diese Ctor-Definitionen sind instabil wie ein Kartenhaus">
 <richcontent TYPE="NOTE"><html>
@@ -161488,8 +161493,67 @@ Since then others have made contributions, see the log for the history.</font></
   </body>
 </html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1744762441896" ID="ID_1755986239" MODIFIED="1744762461934" TEXT="besser mit expliziter Terminal-Operation implementieren">
+<node BACKGROUND_COLOR="#e3d292" COLOR="#990000" CREATED="1744762441896" ID="ID_1755986239" MODIFIED="1745515670597" TEXT="besser mit expliziter Terminal-Operation implementieren">
 <icon BUILTIN="yes"/>
+<icon BUILTIN="help"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1745513250922" ID="ID_189032463" MODIFIED="1745513311638">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Frage: wirklich?
+    </p>
+    <p>
+      <font size="2">und jetzt umsetzen?</font>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="help"/>
+<node CREATED="1745513265948" ID="ID_203330967" MODIFIED="1745513272471" TEXT="es ist Teil einer Builder-Notation"/>
+<node CREATED="1745513273157" ID="ID_1286047095" MODIFIED="1745513283605" TEXT="h&#xe4;ngt eng damit zusammen, was ich mit UI-Coordinaten vor habe"/>
+<node CREATED="1745513284286" ID="ID_795078635" MODIFIED="1745513292634" TEXT="...aber bisher nur ansatzweise umsetzen konnte"/>
+</node>
+<node CREATED="1745513330820" ID="ID_529516789" MODIFIED="1745513344262" TEXT="nach kurzer Durchsicht: 2 Verwendungen im core-Code">
+<node CREATED="1745513738462" ID="ID_1675259174" MODIFIED="1745513750391" TEXT="aber: UICoord_test">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1745513752112" ID="ID_1081333493" MODIFIED="1745513924299" TEXT="zweigt was mir vorschwebte">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Ich wollte zwar auf der technischen Ebene die Klasse UICoord immutable machen, aber f&#252;r die Verwendung sollte sich das transparent anf&#252;hlen, &#228;hnlich wie die moderne funktionale Programmierung mit immutable-containers umgeht:
+    </p>
+    <ul>
+      <li>
+        gewisse <i>Spezifikations-Funktionen</i>&#160;steigen in einen Builder ein, der auf einer Kopie aufbaut
+      </li>
+      <li>
+        dieser Builder kann aber nahtlos &#252;berall dort verwendet werden, wo auch UI-Coordinaten verwendet werden k&#246;nnen
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1745513773389" ID="ID_1446147219" MODIFIED="1745513794899">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      ich wollte <b>definitiv</b>&#160;<i>kein Terminal</i>&#160;in der Notation
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1745513928516" ID="ID_1944225967" MODIFIED="1745513950020" TEXT="Fazit: auf sp&#xe4;ter vertagen">
+<icon BUILTIN="stop-sign"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1745515595554" ID="ID_1719195818" LINK="clarify role of the UI-coordinate builder and constructors" MODIFIED="1745540594145" TEXT="#1402 clarify role of the UI-coordinate builder and constructors">
+<linktarget COLOR="#78759d" DESTINATION="ID_1719195818" ENDARROW="Default" ENDINCLINATION="331;14;" ID="Arrow_ID_57012059" SOURCE="ID_1268069179" STARTARROW="None" STARTINCLINATION="590;0;"/>
+<icon BUILTIN="hourglass"/>
+</node>
+<node CREATED="1745515632553" ID="ID_418936483" MODIFIED="1745515641275" TEXT="entsprechende Stellen im Code markieren"/>
+</node>
 </node>
 </node>
 </node>
@@ -161497,6 +161561,334 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="yes"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1743970651055" ID="ID_527599811" MODIFIED="1743970655841" TEXT="7 failed Tests">
 <icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1745537726553" ID="ID_520603271" MODIFIED="1745537840749" TEXT="00test.tests">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      TEST test stderr, cat'ing noonexistant file: ,nonexistent_file .. FAILED
+    </p>
+    <p>
+      cat: ,nonexistent_file: No such file or directory
+    </p>
+    <p>
+      unexpected data on stderr
+    </p>
+    <p>
+      more output than expected: 'cat: ,nonexistent_file: No such file or directory':1
+    </p>
+    <p>
+      stderr was:
+    </p>
+    <p>
+      cat: ,nonexistent_file: No such file or directory
+    </p>
+    <p>
+      END
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1745537758304" ID="ID_1842827052" MODIFIED="1745537772123" TEXT="sieht irgendwie nach ge&#xe4;nderten Sytemmeldungen aus">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1745537807785" ID="ID_1689259926" MODIFIED="1745537827981" TEXT="Ha! ich sehe es: Die Meldung enth&#xe4;lt nicht mehr den Pfad &apos;/bin/cat&apos;"/>
+<node COLOR="#435e98" CREATED="1745537773651" ID="ID_1498219479" MODIFIED="1745537836890" TEXT="Debian hat nun endg&#xfc;ltig die top-Level /bin und /sbin und /lib aufgegeben">
+<icon BUILTIN="info"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1745537873206" ID="ID_1566687837" MODIFIED="1745539271003" TEXT="FileSupport_test">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1745537891733" ID="ID_1913606646" MODIFIED="1745537916159" TEXT="Exception wird geworfen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      TEST Filesystem manipulations: FileSupport_test .. FAILED
+    </p>
+    <p>
+      unexpected return value 5, expected 0
+    </p>
+    <p>
+      stderr was:
+    </p>
+    <p>
+      0000000514: INFO: suite.cpp:193: thread_1: invokeTestCase: ++------------------- invoking TEST: stat::test::FileSupport_test
+    </p>
+    <p>
+      *** Test Failure &#171;stat::test::FileSupport_test&#187;
+    </p>
+    <p>
+      ***&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;: LUMIERA_ERROR_CONFIG:misconfiguration (Program environment doesn't define $HOME (Unix home directory).).
+    </p>
+    <p>
+      0000000515: ERR: suite.cpp:202: thread_1: invokeTestCase: Error state (null)
+    </p>
+    <p>
+      0000000516: WARNING: suite.cpp:203: thread_1: invokeTestCase: Caught exception LUMIERA_ERROR_CONFIG:misconfiguration (Program environment doesn't define $HOME (Unix home directory).).
+    </p>
+    <p>
+      END
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="list"/>
+</node>
+<node CREATED="1745538088801" ID="ID_1790511977" MODIFIED="1745538098312" TEXT="bei direktem Aufruf der Testsuite ist alles OK"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1745539133640" ID="ID_1693419317" MODIFIED="1745539241438" TEXT="Verdacht: SCons bereinigt das Environment">
+<icon BUILTIN="idea"/>
+<node CREATED="1745539158846" ID="ID_977263920" MODIFIED="1745539170080" TEXT="wir haben jetzt eine neue SCons-Version und Python-3"/>
+<node CREATED="1745539170814" ID="ID_1113974889" MODIFIED="1745539185769" TEXT="vielleicht war fr&#xfc;her $HOME implizit propagiert"/>
+<node COLOR="#435e98" CREATED="1745539191782" ID="ID_600864952" MODIFIED="1745539234377" TEXT="in tests/SConscript : explizit $HOME propagieren">
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#338800" CREATED="1745539212425" ID="ID_1561250997" MODIFIED="1745539236602" TEXT="&#x27f9; Fehler verschwunden">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1745539242368" ID="ID_582249795" MODIFIED="1745539261939" TEXT="auf Verdacht behoben im Buildsystem">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1745537930655" ID="ID_508476526" MODIFIED="1745593532406" TEXT="GenericRecord_test">
+<icon BUILTIN="broken-line"/>
+<node COLOR="#435e98" CREATED="1745539309225" ID="ID_721065474" MODIFIED="1745593555941" TEXT="SEGFAULT">
+<linktarget COLOR="#5c3279" DESTINATION="ID_721065474" ENDARROW="Default" ENDINCLINATION="-13;95;" ID="Arrow_ID_1372407656" SOURCE="ID_447874063" STARTARROW="None" STARTINCLINATION="13;-103;"/>
+<icon BUILTIN="broken-line"/>
+<node CREATED="1745539392507" ID="ID_1889028158" MODIFIED="1745539398656" TEXT="reproduzierbar im Debugger"/>
+<node CREATED="1745539417783" ID="ID_153647464" MODIFIED="1745539439680" TEXT="sieht aus nach Stackoverflow nach endloser selbst-Rekursion"/>
+<node CREATED="1745540429474" ID="ID_1908347818" MODIFIED="1745540499208" TEXT="Problem tritt auf am Konstruktor Record (Mutator const&amp; mut)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Record.hpp, 289
+    </p>
+    <div style="background-color: #eee0b5; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 2px">
+      <div style="color: #202020; background-color: #eee0b5; font-family: Bitstream Vera Sans Mono; font-size: 9pt; white-space: pre">
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">/&ast;*</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* copy-initialise (or convert) from the given Mutator instance.</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* </font><font color="#b76746">@remarks</font><font color="#b88b63">&#160;need to code this explicitly, otherwise Record's</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* build-from sequence templated ctor would kick in.</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* </font><font color="#b76746">@warning</font><font color="#b88b63">&#160;beware of initialiser lists. Record has a dedicated</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* ctor to accept an initialiser list of GenNode elements,</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* and GenNode's ctor is deliberately _not explicit,_ to ease</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* building argument lists wrapped in GenNodes. When writing</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* initialisation expressions inline, the compiler might pick</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* the conversion path through initialiser list, which means</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* the contents of the Mutator end up wrapped into a GenNode,</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* which in turn becomes the only child of the new Record.</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">*/</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#632d2d"><b>Record</b></font><font color="#3a1f18">&#160;</font><font color="#11123a">(</font><font color="#635e96"><b>Mutator</b></font><font color="#3a1f18">&#160;</font><font color="#4a1a65"><b>const</b></font><font color="#65533c">&amp;</font><font color="#3a1f18">&#160; mut</font><font color="#11123a">)</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#65533c">:</font><font color="#3a1f18">&#160;</font><font color="#753737">Record</font><font color="#11123a">((</font><font color="#635e96"><b>Record</b></font><font color="#3a1f18">&#160;</font><font color="#4a1a65"><b>const</b></font><font color="#65533c">&amp;</font><font color="#11123a">)</font><font color="#3a1f18">&#160; mut</font><font color="#11123a">)</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#11123a">{</font><font color="#3a1f18">&#160;</font><font color="#11123a">}</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          
+        </p>
+      </div>
+    </div>
+  </body>
+</html></richcontent>
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1745540507612" ID="ID_1268069179" MODIFIED="1745540600729" TEXT="Beachte: eine durchaus &#xe4;hnliche Situation wie beim UICoord::Mutator">
+<arrowlink COLOR="#78759d" DESTINATION="ID_1719195818" ENDARROW="Default" ENDINCLINATION="331;14;" ID="Arrow_ID_57012059" STARTARROW="None" STARTINCLINATION="590;0;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1745542461314" ID="ID_871788611" MODIFIED="1745542495190" TEXT="und auch hier: f&#xfc;r sich betrachtet erscheint das Konstrukt etwas &#xbb;halbseiden&#xab;">
+<icon BUILTIN="smily_bad"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d7a98e" COLOR="#5c0099" CREATED="1745542511399" FOLDED="true" ID="ID_282354655" MODIFIED="1745593507733" TEXT="wie kann es aber nun zur Endlos-Schleife kommen?">
+<icon BUILTIN="help"/>
+<node CREATED="1745542820354" ID="ID_153267171" MODIFIED="1745542825093" TEXT="es passiert aus verifyMutations()">
+<node CREATED="1745542844061" ID="ID_1682765821" MODIFIED="1745542851178" TEXT="RecS aa(mut);  (Zeile 312)"/>
+<node CREATED="1745543178622" ID="ID_1401912081" MODIFIED="1745543191741" TEXT="ruft auf Record(Mutator const&amp;)"/>
+<node CREATED="1745543193840" ID="ID_1810321201" MODIFIED="1745543236631" TEXT="und der delegate-Konstruktor (Zeile 290) ruft sofort wider den gleichen Konstruktor auf"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1745543409044" ID="ID_928969001" MODIFIED="1745543436557" TEXT="Beobachtung: in jedem der self-calls hat this eine andere Adresse">
+<icon BUILTIN="clanbomber"/>
+</node>
+</node>
+<node CREATED="1745546038730" ID="ID_1444312124" MODIFIED="1745546054744" TEXT="es ist ein C-style cast">
+<icon BUILTIN="idea"/>
+<node CREATED="1745546056403" ID="ID_1116133647" MODIFIED="1745547140485" TEXT="gemeint war wohl ein reinterpret_cast....">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...zumindest w&#252;rde ich das aus dem Kontext und dem Kommentar dar&#252;ber so deuten
+    </p>
+    <div style="background-color: #eee0b5; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 2px">
+      <div style="color: #202020; background-color: #eee0b5; font-family: Bitstream Vera Sans Mono; font-size: 9pt; white-space: pre">
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* After performing</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* the desired changes, the altered copy can either</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* be sliced out (by conversion), or moved overwriting</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* an existing other Record instance (implemented as swap)</font>
+        </p>
+      </div>
+    </div>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1745546198219" ID="ID_1849483483" MODIFIED="1745546206504" TEXT="diesen explizit so coden">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1745546208422" ID="ID_198120546" MODIFIED="1745546219792" TEXT="&#x27f9; Problem verschwindet"/>
+</node>
+<node CREATED="1745547151216" ID="ID_926012573" MODIFIED="1745547162072" TEXT="trotzdem noch nicht klar was passiert">
+<node CREATED="1745546799302" ID="ID_1151409285" MODIFIED="1745547173895" TEXT="Beobachtung: es gibt auch einen Conversion-Operator">
+<node CREATED="1745546810397" ID="ID_636057048" MODIFIED="1745546822386" TEXT="Mutator::operator Rec&amp;()"/>
+<node CREATED="1745546827408" ID="ID_1103550071" MODIFIED="1745546849380" TEXT="dar&#xfc;ber k&#xf6;nnte man auch in den Copy-Konstruktor einsteigen"/>
+</node>
+<node CREATED="1745546851923" ID="ID_974977486" MODIFIED="1745546865689" TEXT="Versuch: einen static_cast&lt;Record const&amp;&gt;"/>
+<node CREATED="1745546875484" ID="ID_1705559492" MODIFIED="1745546881959" TEXT="&#x27f9; Crash wieder da"/>
+<node CREATED="1745547177931" ID="ID_507093076" MODIFIED="1745547192318" TEXT="f&#xfc;ge einen operator Rec const&amp;()  const hinzu"/>
+<node CREATED="1745547195359" ID="ID_1712287817" MODIFIED="1745547200869" TEXT="&#x27f9; Crash verschwindet"/>
+</node>
+<node CREATED="1745547207602" ID="ID_735014605" MODIFIED="1745592443407" TEXT="Zwischenfazit: f&#xfc;r const&amp; wurde versucht ein anonymes Temporary zu erzeugen">
+<arrowlink COLOR="#d90c38" DESTINATION="ID_1689335347" ENDARROW="Default" ENDINCLINATION="-170;-8;" ID="Arrow_ID_1031352375" STARTARROW="None" STARTINCLINATION="474;17;"/>
+<icon BUILTIN="back"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1745586941815" ID="ID_1895577990" MODIFIED="1745586971156" TEXT="au Weia ... das ist alles so halbgar...">
+<icon BUILTIN="smiley-angry"/>
+<node CREATED="1745586977957" ID="ID_1513406398" MODIFIED="1745587001885" TEXT="der Template-Konstruktor von einer &#xbb;Sequenz&#xab; verdeckt den Copy-Konstruktor"/>
+<node CREATED="1745587002712" ID="ID_1269518176" MODIFIED="1745590612684" TEXT="der Move-vom-Mutator macht eine Kopie"/>
+</node>
+<node CREATED="1745586706399" ID="ID_17820946" MODIFIED="1745589309673" TEXT="trotzdem: sehe immer noch nicht wie die Schleife zustande kommen konnte">
+<node CREATED="1745589362799" ID="ID_914804611" MODIFIED="1745590495447" TEXT="denn offensichtilch ist der Aufruf sofort wieder in diesen Konstruktor gegangen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und nicht &#252;ber einen Umweg; ich bin ja mit dem Debugger durchgesteppt. Obwohl theoretisch der getemplatete Konstruktor gepa&#223;t h&#228;tte, war nichts von zwei Iterationen &#252;ber Attribute und Kinder zu sehen. Und mehr noch: wie w&#252;rden wir wieder zu einem Mutator-Typ kommen, mit dem wir wieder in den selben Konstruktor einsteigen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1745591964245" ID="ID_1812857334" MODIFIED="1745591997416" TEXT="schon der static_cast h&#xe4;tte gar nicht stattfinden d&#xfc;rfen...!!"/>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1745591998640" ID="ID_296296988" MODIFIED="1745593503949" TEXT="Ha! das ist es: der Konstruktor selber gilt als user-defined-conversion">
+<arrowlink COLOR="#378e99" DESTINATION="ID_83843328" ENDARROW="Default" ENDINCLINATION="364;-15;" ID="Arrow_ID_1302641401" STARTARROW="None" STARTINCLINATION="-257;11;"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1745592225275" ID="ID_1005858545" MODIFIED="1745592265535" TEXT="es wird ein static_cast auf Record const&amp; verlangt"/>
+<node CREATED="1745592266342" ID="ID_1689335347" MODIFIED="1745592453984" TEXT="Compiler versuct ein anonymes Temporary  (Typ Record) zu erzeugen">
+<linktarget COLOR="#d90c38" DESTINATION="ID_1689335347" ENDARROW="Default" ENDINCLINATION="-170;-8;" ID="Arrow_ID_1031352375" SOURCE="ID_735014605" STARTARROW="None" STARTINCLINATION="474;17;"/>
+</node>
+<node CREATED="1745592347906" ID="ID_1443753570" MODIFIED="1745592468353" TEXT="und verwendet hierf&#xfc;r wieder den Konstruktor Record(Mutator const&amp;)">
+<icon BUILTIN="broken-line"/>
+</node>
+<node CREATED="1745592490303" ID="ID_1001053070" MODIFIED="1745592520204" TEXT="das erkl&#xe4;rt auch, warum der ganze Stack mit jeweils weiteren Constructor-Calls gef&#xfc;llt wird">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      die allesamt noch gar nicht initialisiert sind
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1745592038044" ID="ID_478947616" MODIFIED="1745592216927" TEXT="Beleg: die beiden Conversion-Operatoren in Mutator komplett auskommentieren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      dann scheitert die Compilation an anderer Stelle, n&#228;mlich an der Initialisierung einer Referenz <font color="#4a2626" face="Bitstream Vera Sans Mono" size="9pt">Rec&amp; root = target</font>. Aber generic-record-test.cpp compiliert ohne Fehler
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1745546400622" ID="ID_1975980154" MODIFIED="1745593519261" TEXT="old-style-cast f&#xfc;hrt in Endlosschleife">
+<icon BUILTIN="info"/>
+<node CREATED="1745592537214" ID="ID_1992939672" MODIFIED="1745592558241" TEXT="der C-style-Cast wurde wohl fr&#xfc;her als reinterpret-cast interpretiert"/>
+<node CREATED="1745592558926" ID="ID_261116010" MODIFIED="1745592591117" TEXT="nun ist der Compiler &#x201e;intelligenter&#x201c; und versucht eine Konversion via Temporary"/>
+<node CREATED="1745592606855" ID="ID_665242196" MODIFIED="1745592634744" TEXT="und da aber (das ist der Bug!) die Konversion im Mutator selbst fehlte"/>
+<node CREATED="1745592636249" ID="ID_692415633" MODIFIED="1745592658065" TEXT="...behilft er sich mit dem gleichen Konstruktor als custom-Conversion"/>
+</node>
+<node COLOR="#435e98" CREATED="1745592668624" ID="ID_1302732444" MODIFIED="1745593235260" TEXT="identifizierte Defekte beheben">
+<icon BUILTIN="yes"/>
+<node COLOR="#338800" CREATED="1745592693877" ID="ID_1747228831" MODIFIED="1745593238757" TEXT="den gew&#xfc;nschten static_cast explizit anschreiben">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1745592678715" ID="ID_1687781997" MODIFIED="1745593238759" TEXT="sicherheitshalber die default-Copy-Operationen explizit deklarieren">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1745592733328" ID="ID_83843328" MODIFIED="1745593495749" TEXT="Conversion-Operator in Mutator auch f&#xfc;r den const-Fall definieren">
+<linktarget COLOR="#378e99" DESTINATION="ID_83843328" ENDARROW="Default" ENDINCLINATION="364;-15;" ID="Arrow_ID_1302641401" SOURCE="ID_296296988" STARTARROW="None" STARTINCLINATION="-257;11;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1745592750443" ID="ID_1286182929" MODIFIED="1745593238758" TEXT="den Move-Konstruktor explizit auf Mutator::swap(Record) abbilden">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1745592794608" ID="ID_277814708" MODIFIED="1745593238758" TEXT="den Move-Fall ebenfalls im Test abdecken">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1745537939853" ID="ID_856500393" MODIFIED="1745593572737" TEXT="GenNode_test">
+<icon BUILTIN="broken-line"/>
+<node COLOR="#5c3279" CREATED="1745593535416" ID="ID_447874063" MODIFIED="1745593568987" TEXT="war vom vorherigen Bug ebenfalls betroffen">
+<arrowlink COLOR="#5c3279" DESTINATION="ID_721065474" ENDARROW="Default" ENDINCLINATION="-13;95;" ID="Arrow_ID_1372407656" STARTARROW="None" STARTINCLINATION="13;-103;"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1745537946821" ID="ID_1319727141" MODIFIED="1745538004763" TEXT="HeteroData_test">
+<icon BUILTIN="broken-line"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1745537959959" ID="ID_802122855" MODIFIED="1745538004763" TEXT="TestChainLoad_test">
+<icon BUILTIN="broken-line"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1745537983863" ID="ID_1313307442" MODIFIED="1745538004763" TEXT="UICoordResolver_test">
+<icon BUILTIN="broken-line"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1745537993750" ID="ID_1907252021" MODIFIED="1745538004763" TEXT="UILocationSolver_test">
+<icon BUILTIN="broken-line"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1742175264309" ID="ID_1163480280" MODIFIED="1742175329181" TEXT="Preview-Release">
@@ -161545,6 +161937,237 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1439644368572" ID="ID_1667125104" MODIFIED="1581813253348" TEXT="Doku: Referenz-System">
 <icon BUILTIN="bell"/>
+<node BACKGROUND_COLOR="#e1d0aa" CREATED="1744938484753" ID="ID_581586255" MODIFIED="1745014676554" TEXT="Website: Aufr&#xe4;um-Arbeiten">
+<icon BUILTIN="bell"/>
+<node BACKGROUND_COLOR="#b3d0c1" COLOR="#435e98" CREATED="1744938498263" FOLDED="true" ID="ID_1741468339" MODIFIED="1745014721994" TEXT="menugen.py auf Python-3 portieren">
+<icon BUILTIN="yes"/>
+<node COLOR="#338800" CREATED="1744938517308" ID="ID_609346776" MODIFIED="1744938524702" TEXT="einige print-Statements">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1744938525548" ID="ID_216356776" MODIFIED="1744939057490" TEXT="itertools.ifilter erstetzt durch filter (built-in)">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1744938637574" ID="ID_603436130" LINK="https://stackoverflow.com/a/33715649" MODIFIED="1744938651385" TEXT="man k&#xf6;nnte hier eine Python2/3-Weiche bauen">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1744939059460" ID="ID_248556075" MODIFIED="1744982296614" TEXT="typ basestring gibts nicht mehr in Python3">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1744939743185" ID="ID_617368821" MODIFIED="1744939762794" TEXT="in Python2 war basestring die abstrakte Basis von str (bytestring) und unicode"/>
+<node CREATED="1744939731203" ID="ID_919316403" MODIFIED="1744939770626" TEXT="Typ str ist nun in Python3 immer Unicode"/>
+<node COLOR="#435e98" CREATED="1744939779626" ID="ID_1802044540" MODIFIED="1744982293705" STYLE="fork" TEXT="also isinstance(id, str)">
+<icon BUILTIN="back"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1744983314479" ID="ID_970791566" MODIFIED="1744991155065" TEXT="file(...) - Konstruktor wurde verwendet">
+<linktarget COLOR="#4291c6" DESTINATION="ID_970791566" ENDARROW="Default" ENDINCLINATION="-7;24;" ID="Arrow_ID_1365593540" SOURCE="ID_309132916" STARTARROW="None" STARTINCLINATION="-306;27;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1744983326980" ID="ID_1190535256" MODIFIED="1744983340338" TEXT="das war auch schon in Python2 keine gute Idee (aber es war valide)"/>
+<node CREATED="1744983344653" ID="ID_1404803395" MODIFIED="1744983362687" TEXT="man sollte die builtin-function open() verwenden"/>
+<node CREATED="1744991027885" ID="ID_925940568" MODIFIED="1744991082383" TEXT="Vorsicht: per default wird im Text-Modus gelesen &#x27f9; Daten sind vom type(str) (&#x2259;Unicode)">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1744989332791" ID="ID_1205328415" MODIFIED="1744991017809" TEXT="alte Exception raise / except -Syntax">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1744989345588" ID="ID_1389145234" MODIFIED="1744989360046" TEXT="vor allem: Zugriff auf die Exception via system-Magic-Vars"/>
+<node CREATED="1744990711543" ID="ID_1808736096" MODIFIED="1744990716498" TEXT="stattdessen">
+<node CREATED="1744990717483" ID="ID_833154440" MODIFIED="1744990734184" TEXT="alle Exceptions stemmen nun ab von BaseException"/>
+<node CREATED="1744990734778" ID="ID_67490169" MODIFIED="1744990754125" TEXT="es gibt einen __str__ handler, der bereits auch die Argumente mit ausgibt"/>
+<node CREATED="1744990791967" ID="ID_770243781" MODIFIED="1744990803387" TEXT="sys.exec_info() ist nun eine Funktion (und threadsafe)">
+<node CREATED="1744990809557" ID="ID_1326328626" MODIFIED="1744990834118" TEXT="ergebnis is Listen-artig"/>
+<node CREATED="1744990834838" ID="ID_1031480856" MODIFIED="1744990859311" TEXT="(exc_type, exc_value, exc_traceback)"/>
+</node>
+<node CREATED="1744990995097" ID="ID_936553898" MODIFIED="1744991003154" TEXT="Standard-L&#xf6;sung">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <pre http-equiv="content-type" content="text/html; charset=utf-8" dir="ltr" id="CA-d995048164cd5e5b13b65f9268810ab0a49d5efa" lang="en"><a href="https://wiki.python.org/moin/HandlingExceptions#CA-d995048164cd5e5b13b65f9268810ab0a49d5efa_1">   1</a> import sys
+<a href="https://wiki.python.org/moin/HandlingExceptions#CA-d995048164cd5e5b13b65f9268810ab0a49d5efa_2">   2</a> 
+<a href="https://wiki.python.org/moin/HandlingExceptions#CA-d995048164cd5e5b13b65f9268810ab0a49d5efa_3">   3</a> try:
+<a href="https://wiki.python.org/moin/HandlingExceptions#CA-d995048164cd5e5b13b65f9268810ab0a49d5efa_4">   4</a>     untrusted.execute()
+<a href="https://wiki.python.org/moin/HandlingExceptions#CA-d995048164cd5e5b13b65f9268810ab0a49d5efa_5">   5</a> except:  # catch *all* exceptions
+<a href="https://wiki.python.org/moin/HandlingExceptions#CA-d995048164cd5e5b13b65f9268810ab0a49d5efa_6">   6</a>     e = sys.exc_info()[0]
+<a href="https://wiki.python.org/moin/HandlingExceptions#CA-d995048164cd5e5b13b65f9268810ab0a49d5efa_7">   7</a>     write_to_page(&quot;&lt;p&gt;Error: %s&lt;/p&gt;&quot; % e)</pre>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1744991883516" ID="ID_339251115" MODIFIED="1744999896432" TEXT="apply()-Funktion verwendet">
+<linktarget COLOR="#5393b3" DESTINATION="ID_339251115" ENDARROW="Default" ENDINCLINATION="196;-131;" ID="Arrow_ID_977246566" SOURCE="ID_1857876334" STARTARROW="None" STARTINCLINATION="-236;-13;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1744991896687" ID="ID_1475539085" MODIFIED="1744991920033" TEXT="wie bin ich denn da darauf gekommen??">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das ist Python-uralt()
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="smiley-angry"/>
+</node>
+<node CREATED="1744991944690" ID="ID_1188159603" MODIFIED="1744991966791" TEXT="seitdem es positionelle und kw-Args gibt, kann man Funktoren direkt aufrufen"/>
+<node COLOR="#435e98" CREATED="1744992128897" ID="ID_1172843801" MODIFIED="1744992154279" TEXT="also handler() hier....">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      bzw allgemein fn(*arg,**kw)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1744982312168" ID="ID_106967569" MODIFIED="1745000559538" TEXT="startet &#x2014; aber verh&#xe4;lt sich unerwartet">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1744982418820" ID="ID_914749687" MODIFIED="1744982679541" TEXT="mit -p (predefined) : DSL-Methoden auf Nodes nicht angewandt (Fehlermeldung)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <font face="Monospaced">hiv@flaucher:~/devel/doku/LumiWeb$ ./menugen.py -p -s -w &gt;menu.html.tmp </font>
+    </p>
+    <p>
+      <font face="Monospaced">--WARNING--&#160;&#160;&#160;DSL-method &quot;discover&quot; not applicable for Node(root) </font>
+    </p>
+    <p>
+      <font face="Monospaced">--WARNING--&#160;&#160;&#160;DSL-method &quot;discover&quot; not applicable for Node(documentation) </font>
+    </p>
+    <p>
+      <font face="Monospaced">--WARNING--&#160;&#160;&#160;DSL-method &quot;discover&quot; not applicable for Node(documentation) </font>
+    </p>
+    <p>
+      <font face="Monospaced">--WARNING--&#160;&#160;&#160;DSL-method &quot;link&quot; not applicable for Node(documentation) </font>
+    </p>
+    <p>
+      <font face="Monospaced">--WARNING--&#160;&#160;&#160;DSL-method &quot;link&quot; not applicable for Node(project) </font>
+    </p>
+    <p>
+      <font face="Monospaced">--WARNING--&#160;&#160;&#160;DSL-method &quot;link&quot; not applicable for Node(devs-vault) </font>
+    </p>
+    <p>
+      <font face="Monospaced">--WARNING--&#160;&#160;&#160;DSL-method &quot;link&quot; not applicable for Node(devs-vault) </font>
+    </p>
+    <p>
+      <font face="Monospaced">--WARNING--&#160;&#160;&#160;DSL-method &quot;sortChildren&quot; not applicable for Node(news) </font>
+    </p>
+    <p>
+      <font face="Monospaced">Traceback (most recent call last): </font>
+    </p>
+    <p>
+      <font face="Monospaced">&#160;&#160;File &quot;/Werk/devel/doku/LumiWeb/./menugen.py&quot;, line 1183, in &lt;module&gt; </font>
+    </p>
+    <p>
+      <font face="Monospaced">&#160;&#160;&#160;&#160;parseAndDo() </font>
+    </p>
+    <p>
+      <font face="Monospaced">&#160;&#160;&#160;&#160;~~~~~~~~~~^^ </font>
+    </p>
+    <p>
+      <font face="Monospaced">&#160;&#160;File &quot;/Werk/devel/doku/LumiWeb/./menugen.py&quot;, line 141, in parseAndDo </font>
+    </p>
+    <p>
+      <font face="Monospaced">&#160;&#160;&#160;&#160;addPredefined() </font>
+    </p>
+    <p>
+      <font face="Monospaced">&#160;&#160;&#160;&#160;~~~~~~~~~~~~~^^ </font>
+    </p>
+    <p>
+      <font face="Monospaced">&#160;&#160;File &quot;/Werk/devel/doku/LumiWeb/./menugen.py&quot;, line 102, in addPredefined </font>
+    </p>
+    <p>
+      <font face="Monospaced">&#160;&#160;&#160;&#160;.putChildLast('old_news') </font>
+    </p>
+    <p>
+      <font face="Monospaced">&#160;&#160;&#160;&#160;&#160;^^^^^^^^^^^^ </font>
+    </p>
+  </body>
+</html></richcontent>
+<node COLOR="#338800" CREATED="1744999845028" ID="ID_1857876334" MODIFIED="1744999913433" TEXT="jede DSL-Funktion l&#xe4;uft in den Fehlerzweig">
+<arrowlink COLOR="#5393b3" DESTINATION="ID_339251115" ENDARROW="Default" ENDINCLINATION="196;-131;" ID="Arrow_ID_977246566" STARTARROW="None" STARTINCLINATION="-236;-13;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1744999917984" ID="ID_691790691" MODIFIED="1744999930450" TEXT="dann die (zu erwartenden) Probleme mit Iteratoren">
+<node CREATED="1744999934079" ID="ID_144064957" MODIFIED="1744999939606" TEXT="map liefert jetzt einen Iterator"/>
+<node CREATED="1744999940205" ID="ID_411807744" MODIFIED="1744999950351" TEXT="filter liefert einen Iterator"/>
+<node CREATED="1744999951613" ID="ID_958420300" MODIFIED="1744999959033" TEXT="diese lassen sich nicht direkt konkatenieren"/>
+</node>
+<node COLOR="#435e98" CREATED="1744999961263" ID="ID_1179121740" MODIFIED="1744999980696" TEXT="mu&#xdf; bestehenden Code verstehen....">
+<icon BUILTIN="idea"/>
+<node CREATED="1744999981741" ID="ID_387455593" MODIFIED="1745000014128" TEXT="leider....">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      er ist n&#228;mlich wirklich point-and-shot geschrieben, in etwa zwei Tagen, und das merkt man
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1745000015931" ID="ID_17388114" MODIFIED="1745000436274" TEXT="im Grunde ist der Code aber OK">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <ul>
+      <li>
+        er verwendet sehr viel Funktoren
+      </li>
+      <li>
+        einige dieser sind auch als Klassen definiert,&#160;mit Polymorphismus
+      </li>
+      <li>
+        jede beshandelte Resource wird in ein Node-Objekt transformiert
+      </li>
+      <li>
+        Processing-Instructions (entweder vom Scannen, oder in den predefined() elements) werden in Placement-Objekte &#252;bersetzt
+      </li>
+      <li>
+        Placement-Objekte sind selber Funktoren, die in einer Kette angewendet werden (ja das ist das gleiche Konzept wie in Lumiera selber)
+      </li>
+      <li>
+        es gibt nur eine fest konfigurierte Liste m&#246;glicher Placements
+      </li>
+      <li>
+        und hier verwenden wir <i>committed choice, </i>&#160;d.h. das erste Placement, das die DSL-Spec oder die processing-Instruction parsen kann, wird angewendet, und kann den aktuellen Discovery-status manipulieren
+      </li>
+      <li>
+        das ist ein flexibles Baukastensystem, mit dem man direkt im Discovery-Proze&#223; eingreifen kann und bestimmen kann, was mit der aktuellen Node passiert und was als ihre Kinder rekursiv verarbeitet wird
+      </li>
+    </ul>
+    <p>
+      Am Ende haben wir einen DAG aus Node-Objekten, die wir traversiern und rendern
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#338800" CREATED="1745000441882" ID="ID_353410423" MODIFIED="1745000477889" TEXT="Lesbarkeit an einigen Stellen verbessern">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...immer da, wo ich selber &quot;woot?&quot; sage; es gen&#252;gt, Variable und Funktionen klarer zu benennen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1745000483530" ID="ID_1512679082" MODIFIED="1745000526010" TEXT="es zeigt sich: mu&#xdf; lediglich einen iterator &#xfc;ber itaratoren einmal anwenden">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1744982692692" ID="ID_309132916" MODIFIED="1744991166818" TEXT="mit -s (scan) : file() nicht bekannt">
+<arrowlink COLOR="#4291c6" DESTINATION="ID_970791566" ENDARROW="Default" ENDINCLINATION="-7;24;" ID="Arrow_ID_1365593540" STARTARROW="None" STARTINCLINATION="-306;27;"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d0e6a4" COLOR="#338800" CREATED="1745000561858" ID="ID_726241520" MODIFIED="1745000572261" STYLE="bubble" TEXT="l&#xe4;uft und generiert wieder das bekannte Men&#xfc;">
+<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1742313583059" ID="ID_580462484" MODIFIED="1742313592747" TEXT="Dependency-Liste aktualisieren">
 <icon BUILTIN="flag-yellow"/>
 </node>

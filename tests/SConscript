@@ -129,6 +129,7 @@ def propagateSetting(env, key):
 propagateSetting(testEnv, 'TESTSUITES')
 propagateSetting(testEnv, 'TESTMODE')
 propagateSetting(testEnv, 'LUMIERA_PLUGIN_PATH')
+propagateSetting(testEnv, 'HOME')
 
 testDir = env.Dir('#$TARGDIR')
 runTest = env.File("test.sh").abspath

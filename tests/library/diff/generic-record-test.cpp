@@ -329,6 +329,12 @@ namespace test{
           CHECK (isnil (mut));
           CHECK (Seq({"a = α", "b = β", "⟂", "a"}) == contents(a));
           CHECK (Seq({"a = 1", "a"}) == contents(aa));
+          
+          // move out into Mutator and move into target
+          RecS aaa{RecS::Mutator{move(a)}};
+          CHECK (isnil (a));
+          CHECK (not isnil (aaa));
+          CHECK (Seq({"a = α", "b = β", "⟂", "a"}) == contents(aaa));
         }
       
       
