@@ -161877,8 +161877,39 @@ Since then others have made contributions, see the log for the history.</font></
 <arrowlink COLOR="#5c3279" DESTINATION="ID_721065474" ENDARROW="Default" ENDINCLINATION="-13;95;" ID="Arrow_ID_1372407656" STARTARROW="None" STARTINCLINATION="13;-103;"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1745537946821" ID="ID_1319727141" MODIFIED="1745538004763" TEXT="HeteroData_test">
+<node COLOR="#435e98" CREATED="1745537946821" ID="ID_1319727141" MODIFIED="1745599992122" TEXT="HeteroData_test">
 <icon BUILTIN="broken-line"/>
+<node CREATED="1745595723151" ID="ID_1057941772" MODIFIED="1745596135332" TEXT="OK: hier hab ich im Test mit &#xbb;undefined behaviour&#xab; gespielt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      &#220;berraschung: wer sich in den Fu&#223; schie&#223;t, schie&#223;t sich in den Fu&#223;
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1745596148617" ID="ID_230477037" MODIFIED="1745596185817" TEXT="der Compiler ist in keinster Weise verpflichtet, Daten im Stackframe irgendwie anzuordnen"/>
+<node CREATED="1745598449798" ID="ID_1524131528" MODIFIED="1745598461412" TEXT="was will ich denn hier demonstrieren?">
+<node CREATED="1745598462637" ID="ID_554868027" MODIFIED="1745598475244" TEXT="da&#xdf; der Overflow-Datenblock &#xbb;irgendwo&#xab; liegen kann"/>
+<node CREATED="1745598479159" ID="ID_1513870970" MODIFIED="1745598499276" TEXT="da&#xdf; die Verzeigerung bestehen bleibt"/>
+</node>
+<node CREATED="1745599892391" ID="ID_1677707130" MODIFIED="1745599990906" TEXT="L&#xf6;sung: die Storage explizit vorgeben">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...ohne die implizite Annahme eines Layout, einfach indem ich den Overflow-Frame gleich per placement-New erzeuge; dann kann man trotzdem immer noch zeigen, da&#223; die Daten weiterhin in der UninitialisedStorage liegen und dort verwendet werden k&#246;nnen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1745537959959" ID="ID_802122855" MODIFIED="1745538004763" TEXT="TestChainLoad_test">
 <icon BUILTIN="broken-line"/>

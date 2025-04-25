@@ -226,11 +226,11 @@ namespace test{
           CHECK (get4(front)               == "Ψ");
           
           // further allocations can even be »elsewhere«
-          const void* loc;
+          lib::UninitialisedStorage<Data3, 1> evilSpace;
+          const void* loc = &evilSpace;
           {
             Acc6 get6;
-            auto magic = Cons3::build("magic","cloud");
-            loc = getAdr(magic);
+            auto& magic = * new(&evilSpace) Cons3::NewFrame{"magic","cloud"};
             CHECK (magic.get<0>() == "magic"_expect);
             CHECK (magic.get<1>() == "cloud"_expect);
             // link into the cloud...
@@ -240,13 +240,18 @@ namespace test{
           //  it's gone
           
           // Evil, evil...
-          lib::UninitialisedStorage<Data3, 1> evilSpace;
           Data3& d3 = evilSpace[0];                                    // note: working with left-over data from expired stack frame
           CHECK (isSameAdr (d3, loc));
           CHECK (d3.get<0>() == "magic"_expect);                       // const char* points into static data, so the chars are still there
-          new(&d3.get<1>()) string{"mushrooms"};                       // the "cloud"-string was destroyed by magic's destructor
+          new(&d3.get<1>()) string{"mushrooms"};                       // ...but we can implant another message here....
           
-          auto& [v1,v2,v3,v4,v5,v6] = Cons3::recast(front);            // using connectivity from the linked list connecting the segments
+          // All of this demonstrates that HeteroData is really
+          // just a light-weight front-end and access structure
+          // pointing to a data block that can be »anywhere«
+          // Since for this test we keep the evilSpace allocated,
+          // it is possible to continue accessing the data block,
+          // using connectivity from the linked list connecting the segments
+          auto& [v1,v2,v3,v4,v5,v6] = Cons3::recast(front);
           CHECK (v1 == "0"_expect);
           CHECK (v2 == "2.3"_expect);
           CHECK (v3 == "false"_expect);
@@ -293,7 +298,7 @@ namespace test{
           
           // Note: basically we are still using stale memory,
           //       previously allocated to the "magic" block,
-          //       and now covered by the UninitialisedStorage
+          //       and still covered by the UninitialisedStorage
           CHECK (loc == & d3);
           CHECK (loc  < & v5);
           CHECK (loc  < & v6);
