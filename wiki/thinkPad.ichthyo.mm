@@ -59580,8 +59580,61 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1731987525974" ID="ID_890369638" MODIFIED="1731987552620" TEXT="lib::hash::combine ist jetzt die Boost-Impl (und 32bit sind kaputt)">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1731987525974" ID="ID_890369638" MODIFIED="1745604183446" TEXT="lib::hash::combine ist jetzt die Boost-Impl (und 32bit sind kaputt)">
+<arrowlink COLOR="#df3778" DESTINATION="ID_310342175" ENDARROW="Default" ENDINCLINATION="140;-301;" ID="Arrow_ID_1213905598" STARTARROW="Default" STARTINCLINATION="1697;76;"/>
 <icon BUILTIN="clanbomber"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#f41a26" CREATED="1745604202094" ID="ID_814058799" MODIFIED="1745623260947" TEXT="Tadaaa!!! ">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1745604223322" ID="ID_832010310" MODIFIED="1745604229339" TEXT="jetzt sind wir auf Debian-Trixie"/>
+<node CREATED="1745604229972" ID="ID_621777208" MODIFIED="1745604246497" TEXT="und Boost 1.83 verwendet ganz vertr&#xe4;umt eine andere Hash-Impl"/>
+<node CREATED="1745604292857" ID="ID_720905619" MODIFIED="1745604456746" TEXT="jetzt haben wir den Salat">
+<linktarget COLOR="#d90153" DESTINATION="ID_720905619" ENDARROW="Default" ENDINCLINATION="-4158;471;" ID="Arrow_ID_603824224" SOURCE="ID_715784100" STARTARROW="None" STARTINCLINATION="-1454;-82;"/>
+<node CREATED="1745604457695" ID="ID_1750923336" MODIFIED="1745604894682" TEXT="...das ist n&#xe4;mlch ziemlich ... Schade &#xd83d;&#xddf1;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      jetzt zeigt sich bereits, da&#223; wir locked-in sind:
+    </p>
+    <p>
+      der ganze aufwendige Test f&#252;r die Scheduler Test-Chain-Load verwendet Hash-Chaining zur Verifikation; zwar sind das erst mal nur die Pr&#252;fsummen, weil die Topologie zum Gl&#252;ck aus einer zu Fu&#223; programmierten, deterministischen Auswahl-Mechanik gebaut wird; als k&#246;nnte man theoretisch dieses Mal noch eine neue Hash-Funktion nehmen, und m&#252;&#223;te dann halt alle Hashes neu berechnen und im Test aktualisieren. Aber dieser Fall zeigt bereits, welche Bedeutung Hash-Werte bald spielen k&#246;nnten.
+    </p>
+    <p>
+      Und da&#223; wir nun nicht mehr einfach so die Verbesserungen von Upstream mitnehmen k&#246;nnen.
+    </p>
+    <p>
+      Und da&#223; wir jetzt in einer einzigen Plattform festsitzen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1745604469582" ID="ID_133785360" MODIFIED="1745623279271" TEXT="(und ich bin froh...)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Und zwar sowas von froh!
+    </p>
+    <ul>
+      <li>
+        Da&#223; ich das noch rechtzeitig &#8222;geschnallt&#8220; habe, und ohne viel Nachdenken die bestehende Boost-Implementierung in-Tree genommen habe.
+      </li>
+      <li>
+        Da&#223; ich derart vollst&#228;ndige und pedantische Tests geschrieben habe, die auch die Hash-Berechnung im Einzelnen nachzeichnen
+      </li>
+      <li>
+        Und da&#223; ich die Zeit in eine selbst programmierte Graph-Generierung gesteckt habe, anstatt schnell irgend etwas &quot;mit Hashes&quot; zu zaubern.
+      </li>
+    </ul>
+    <p>
+      Dadurch kann ich jetzt auf die alte Implementierung umstellen (die in unserer Library in-Tree liegt), und wei&#223; sofort, da&#223; die Graph-Topologie unver&#228;ndert ist.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1701698319632" ID="ID_1255956298" MODIFIED="1701698326482" TEXT="Bedeutung der Hash-Values">
@@ -59995,6 +60048,7 @@
   </body>
 </html></richcontent>
 <arrowlink COLOR="#911843" DESTINATION="ID_686530981" ENDARROW="Default" ENDINCLINATION="269;545;" ID="Arrow_ID_1170062700" STARTARROW="None" STARTINCLINATION="355;-670;"/>
+<linktarget COLOR="#df3778" DESTINATION="ID_310342175" ENDARROW="Default" ENDINCLINATION="140;-301;" ID="Arrow_ID_1213905598" SOURCE="ID_890369638" STARTARROW="Default" STARTINCLINATION="1697;76;"/>
 <icon BUILTIN="clanbomber"/>
 </node>
 </node>
@@ -161795,9 +161849,7 @@ Since then others have made contributions, see the log for the history.</font></
 <node CREATED="1745586706399" ID="ID_17820946" MODIFIED="1745589309673" TEXT="trotzdem: sehe immer noch nicht wie die Schleife zustande kommen konnte">
 <node CREATED="1745589362799" ID="ID_914804611" MODIFIED="1745590495447" TEXT="denn offensichtilch ist der Aufruf sofort wieder in diesen Konstruktor gegangen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...und nicht &#252;ber einen Umweg; ich bin ja mit dem Debugger durchgesteppt. Obwohl theoretisch der getemplatete Konstruktor gepa&#223;t h&#228;tte, war nichts von zwei Iterationen &#252;ber Attribute und Kinder zu sehen. Und mehr noch: wie w&#252;rden wir wieder zu einem Mutator-Typ kommen, mit dem wir wieder in den selben Konstruktor einsteigen
@@ -161818,9 +161870,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node CREATED="1745592490303" ID="ID_1001053070" MODIFIED="1745592520204" TEXT="das erkl&#xe4;rt auch, warum der ganze Stack mit jeweils weiteren Constructor-Calls gef&#xfc;llt wird">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       die allesamt noch gar nicht initialisiert sind
@@ -161831,9 +161881,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node CREATED="1745592038044" ID="ID_478947616" MODIFIED="1745592216927" TEXT="Beleg: die beiden Conversion-Operatoren in Mutator komplett auskommentieren">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       dann scheitert die Compilation an anderer Stelle, n&#228;mlich an der Initialisierung einer Referenz <font color="#4a2626" face="Bitstream Vera Sans Mono" size="9pt">Rec&amp; root = target</font>. Aber generic-record-test.cpp compiliert ohne Fehler
@@ -161881,9 +161929,7 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="broken-line"/>
 <node CREATED="1745595723151" ID="ID_1057941772" MODIFIED="1745596135332" TEXT="OK: hier hab ich im Test mit &#xbb;undefined behaviour&#xab; gespielt">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       &#220;berraschung: wer sich in den Fu&#223; schie&#223;t, schie&#223;t sich in den Fu&#223;
@@ -161899,9 +161945,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node CREATED="1745599892391" ID="ID_1677707130" MODIFIED="1745599990906" TEXT="L&#xf6;sung: die Storage explizit vorgeben">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...ohne die implizite Annahme eines Layout, einfach indem ich den Overflow-Frame gleich per placement-New erzeuge; dann kann man trotzdem immer noch zeigen, da&#223; die Daten weiterhin in der UninitialisedStorage liegen und dort verwendet werden k&#246;nnen
@@ -161911,8 +161955,67 @@ Since then others have made contributions, see the log for the history.</font></
 </richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1745537959959" ID="ID_802122855" MODIFIED="1745538004763" TEXT="TestChainLoad_test">
+<node COLOR="#435e98" CREATED="1745537959959" ID="ID_802122855" MODIFIED="1745623338004" TEXT="TestChainLoad_test">
 <icon BUILTIN="broken-line"/>
+<node BACKGROUND_COLOR="#e1c768" COLOR="#9f034c" CREATED="1745602150864" ID="ID_154841907" MODIFIED="1745623367165" TEXT="puh... warum weicht der Hash-Wert ab?">
+<icon BUILTIN="smily_bad"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#a40d7a" CREATED="1745603890228" ID="ID_944790496" MODIFIED="1745623295750" TEXT="eisiger Schreck">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      sollte da ... die Topologie nicht stabil sein....?
+    </p>
+    <p>
+      Dann w&#228;re der gesamte aufwendige Scheduler-Stress-Test (f&#252;r den ich Monate an Arbeit versenkt habe) <i><font size="4">&#187;auf Sand gebaut&#171;</font></i>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="smily_bad"/>
+</node>
+<node CREATED="1745602431987" ID="ID_1407740921" MODIFIED="1745602460803" TEXT="bereits im einfachsten verify_Node()"/>
+<node CREATED="1745602493802" ID="ID_941458386" MODIFIED="1745603818751" TEXT="wir verwenden hier noch boost::hash_combine">
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1745602633783" ID="ID_715784100" MODIFIED="1745604456746" TEXT="und dessen Impl sieht jetzt anders aus">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...als damals in 1.67, von wo ich die interne Implementierung f&#252;r Lumiera genommen und eingefrohren hatte
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#d90153" DESTINATION="ID_720905619" ENDARROW="Default" ENDINCLINATION="-4158;471;" ID="Arrow_ID_603824224" STARTARROW="None" STARTINCLINATION="-1454;-82;"/>
+<icon BUILTIN="clanbomber"/>
+</node>
+<node CREATED="1745603012878" ID="ID_265649980" MODIFIED="1745603062930" TEXT="summiert nun unmittelbar den Seet + einen Offset + den Hasher-Aufruf"/>
+<node CREATED="1745603063531" ID="ID_1722957476" MODIFIED="1745603076140" TEXT="danach wird explizit einer Mixer-Funktion aufgerufen"/>
+</node>
+<node CREATED="1745603724357" ID="ID_1925495805" MODIFIED="1745603734281" TEXT="versuche mal unser lib::hash::combine()">
+<icon BUILTIN="idea"/>
+<node CREATED="1745603736156" ID="ID_1447387709" MODIFIED="1745603763920">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <font size="6" color="#c501a2">SCHWEIN</font><font size="4">&#160;gehabt</font>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1745603771294" HGAP="37" ID="ID_528170484" MODIFIED="1745603805617" TEXT="" VSHIFT="1">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1745603779142" ID="ID_444058662" MODIFIED="1745603794975" TEXT="">
+<icon BUILTIN="ksmiletris"/>
+<icon BUILTIN="smiley-oh"/>
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1745623305506" ID="ID_1565068615" MODIFIED="1745623333190" TEXT="L&#xf6;sung: Boost-Aufruf durch das lib::hash::combine ersetzen">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1745537983863" ID="ID_1313307442" MODIFIED="1745538004763" TEXT="UICoordResolver_test">
 <icon BUILTIN="broken-line"/>

@@ -124,11 +124,11 @@
 #include "lib/iter-explorer.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"
+#include "lib/hash-combine.hpp"
 #include "lib/random-draw.hpp"
 #include "lib/dot-gen.hpp"
 #include "lib/util.hpp"
 
-#include <boost/functional/hash.hpp>
 #include <functional>
 #include <utility>
 #include <future>
@@ -331,7 +331,7 @@ namespace test {
           calculate()
             {
               for (Node* entry: pred)
-                boost::hash_combine (hash, entry->hash);
+                lib::hash::combine(hash, entry->hash);
               return hash;
             }
           
@@ -421,11 +421,11 @@ namespace test {
       size_t
       getHash()  const
         {
-          auto combineBoostHashes = [](size_t h, size_t hx){ boost::hash_combine(h,hx); return h;};
+          auto combineHashes = [](size_t h, size_t hx){ lib::hash::combine(h,hx); return h;};
           return allExitHashes()
                     .filter([](size_t h){ return h != 0; })
                     .reduce(lib::iter_explorer::IDENTITY
-                           ,combineBoostHashes
+                           ,combineHashes
                            );
         }
       
@@ -1392,7 +1392,7 @@ namespace test {
           Sink sink;
           size_t scree{sink};
           for ( ; 0 < round; --round)
-            boost::hash_combine (scree,scree);
+            lib::hash::combine (scree,scree);
           sink = scree;
           sink++;
         }

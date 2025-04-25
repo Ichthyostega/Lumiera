@@ -227,9 +227,9 @@ namespace test {
               node->calculate();
               CHECK (exHash == node->hash);
               
-              // explicitly compute the hash using boost::hash
+              // explicitly compute the hash (formula taken from boost)
               node->hash = 0;
-              boost::hash_combine (node->hash, node->pred[0]->hash);
+              lib::hash::combine (node->hash, node->pred[0]->hash);
               CHECK (exHash == node->hash);
             }
            // got a complete chain using all allocated nodes
@@ -240,7 +240,7 @@ namespace test {
           // Since this graph has only a single exit-node,
           // the global hash of the graph is derived from this hash
           size_t globalHash{0};
-          boost::hash_combine (globalHash, node->hash);
+          lib::hash::combine (globalHash, node->hash);
           CHECK (globalHash == graph.getHash());
           CHECK (globalHash == 0xB3445F1240A1B05F);
         }
@@ -942,7 +942,7 @@ namespace test {
           
           size_t combinedHash{0};
           for (uint i=0; i <16; ++i)
-            boost::hash_combine (combinedHash, exitHashes[i]);
+            lib::hash::combine (combinedHash, exitHashes[i]);
           
           CHECK (graph.getHash() == combinedHash);
           CHECK (graph.getHash() == 0x33B00C450215EB00);
