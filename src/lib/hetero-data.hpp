@@ -31,6 +31,7 @@
  ** 
  ** # Usage
  ** @warning it is essential to understand where actual storage resides!
+ ** 
  ** A HeteroData chain is built-up gradually, starting with a front-block
  ** - the front-block is usually placed at an _anchor location_ and populated with data
  ** - retrieve a _chain constructor type_ from the _type_ of the front-block,
@@ -39,7 +40,8 @@
  ** - need to link this data block explicitly into the front
  ** - get _accessor types_ from the _chain constructor_
  ** - use these to work with individual data elements _through the front-block._
- ** @example
+ ** 
+ **\par example of typical usage
  ** \code
  **   using Front = lib::HeteroData<uint,double>;
  **   auto h1 = Front::build (1,2.3);
@@ -205,7 +207,7 @@ namespace lib {
       
       
       /**
-       * Accessor-functor to get at the data residing within some tuple element
+       * Accessor-functor to get at the data residing within some tuple element.
        * Using the enclosing typed scope to ensure safe storage access
        * @tparam slot number of the data element, counting from zero over the full chain
        * @note this functor holds no data, but shall be applied to some existing HeteroData.

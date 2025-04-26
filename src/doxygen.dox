@@ -107,3 +107,46 @@ implementation namespaces within \c lumiera::
 Implementation namespace for support and library code.
 */
 
+
+
+/* ==== Test Namespaces ==== */
+
+/** @namespace test
+Test runner and basic definitions for tests.
+*/
+
+/** @namespace lib::test
+Unit tests for the Lumiera support library.
+*/
+
+/** @namespace lib::test::test */
+/** @namespace lib::time::test */
+/** @namespace lib::diff::test */
+/** @namespace lib::hash::test */
+/** @namespace lib::idi::test  */
+/** @namespace lib::iter::test */
+/** @namespace lib::meta::test */
+
+/** @namespace util::test */
+
+/** @namespace vault::test */
+/** @namespace vault::mem::test */
+/** @namespace vault::gear::test */
+
+/** @namespace steam::test */
+/** @namespace steam::play:test */
+/** @namespace steam::engine::test */
+/** @namespace steam::fixture::test */
+/** @namespace steam::asset::test */
+/** @namespace steam::asset::meta::test */
+/** @namespace steam::control::test */
+/** @namespace steam::session::test */
+/** @namespace steam::builder::test */
+
+/** @namespace stage::test */
+/** @namespace stage::ctrl::test */
+/** @namespace stage::model::test */
+/** @namespace stage::interact::test */
+
+// Remark: for some unclear reason, cross-links to test-class names do not work in Doxygen;
+//         even after declaring these namespaces, or after setting EXTRACT_ALL = YES

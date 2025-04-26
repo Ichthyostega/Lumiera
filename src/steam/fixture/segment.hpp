@@ -48,7 +48,7 @@ namespace fixture {
   
   /**
    * For the purpose of building and rendering, the fixture (for each timeline)
-   * is partitioned such that each segment is _structurally constant._
+   * is partitioned such that each segment is _structurally constant_.
    * For each segment there is a RenderGraph (unit of the render engine)
    * which is able to render all ExitNode(s) for this segment.
    * 

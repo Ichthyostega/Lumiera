@@ -24,7 +24,7 @@ namespace mobject {
 namespace session {
   
   /**
-   * @TODO: clarify asset->mobject relation and asset dependencies; Ticket #255
+   * @todo: clarify asset->mobject relation and asset dependencies; /////////////////////////////////////////TICKET #255
    */
   asset::Proc const& 
   Effect::getProcAsset() const

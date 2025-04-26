@@ -490,7 +490,7 @@ namespace timeline {
   
   /**
    * The Lumiera Timeline model does not rely on a list of tracks, as most conventional video editing software does --
-   * rather, each sequence holds a _fork of nested scopes._ This recursively nested structure is parallelled in the way
+   * rather, each sequence holds a _fork of nested scopes_. This recursively nested structure is parallelled in the way
    * we organise and draw the timeline representation onto the TimelineCanvas: we use an intermediary entity, the TrackBody
    * as an organisational grouping device, even while we draw _all of the timeline representation_ onto a single global
    * #mainCanvas_ within the (scrollable) #contentArea_. Thus, adding the first TrackBody to represent the root track

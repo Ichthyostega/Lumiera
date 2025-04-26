@@ -12,7 +12,7 @@
 */
 
 
-/** @file splite-splice.hpp
+/** @file split-splice.hpp
  ** Generic algorithm to splice a new segment into a seamless segmentation of intervals.
  ** Here _"segmentation"_ denotes a partitioning of an ordered axis into a seamless sequence
  ** of intervals (here called "segment"). The axis is based on some _ordering type,_ like e.g.

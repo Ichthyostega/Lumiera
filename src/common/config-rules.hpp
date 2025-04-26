@@ -160,7 +160,7 @@ namespace lumiera {
          *  fulfilling the given query.
          *  @param solution object fulfilling the query. Will be bound or
          *         unified (in case it's already bound) with the first solution.
-         *  @query any goals to be fulfilled by the solution.
+         *  @param q any goals to be fulfilled by the solution.
          *  @return false if resolution failed. In this case, solution ptr is empty.
          */
         virtual bool resolve (P<TY>& solution, Query<TY> const& q) = 0;

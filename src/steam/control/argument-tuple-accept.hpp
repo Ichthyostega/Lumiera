@@ -541,8 +541,8 @@ namespace control {
   /** Helper Template for building a Functor or function-like class:
    *  Mix in a function call operator, which mimics the specified signature SIG .
    *  This template is to be used as a base class to inherit the target type TAR from;
-   *  this target type is assumed to provide a function \bindArg(Tuple<TYPES..>) --
-   *  where \c TYPES... is the sequence of types found in the provided Signature SIG.
+   *  this target type is assumed to provide a function `bindArg(Tuple<TYPES..>)` —
+   *  where `TYPES...` is the sequence of types found in the provided Signature \a SIG.
    */
   template<typename SIG, class TAR, class BASE =bind_arg::Dummy>
   class AcceptArgumentTuple
@@ -551,7 +551,7 @@ namespace control {
     { };
   
   
-  /** Helper Template for Steam-Layer control::Command : mix in a \c bind(...) function
+  /** Helper Template for Steam-Layer control::Command : mix in a `bind(...)` function
    *  @param SIG  function signature to mimic (regarding the arguments and return type)
    *  @param TAR  the target class providing a function \c bindArg(Tuple<Types<T1...> >)
    *  @param BASE the base class for inheritance chaining

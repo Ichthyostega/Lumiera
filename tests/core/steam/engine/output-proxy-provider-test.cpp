@@ -11,7 +11,7 @@
 
 * *****************************************************************/
 
-/** @file output-proxy-provider-test.cpp
+/** @file output-proxy-provider-test.cpp 
  ** unit test \ref OutputProxyProvider_test
  */
 

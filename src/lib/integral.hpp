@@ -12,7 +12,7 @@
 */
 
 
-/** @file integral.h
+/** @file integral.hpp
  ** Inclusion for common place integral types and constants.
  */
 

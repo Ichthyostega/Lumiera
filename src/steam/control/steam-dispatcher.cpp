@@ -101,7 +101,7 @@ namespace control {
   
   
   /********************************************************************//**
-   * PImpl within SteamDispatcher to implement the _Session Loop Thread._
+   * PImpl within SteamDispatcher to implement the _Session Loop Thread_.
    * During the lifetime of this object...
    * - the SessionCommandService is offered to enqueue commands
    * - the Session Loop thread dispatches commands and triggers the Builder

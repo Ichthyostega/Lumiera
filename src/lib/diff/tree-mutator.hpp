@@ -430,7 +430,7 @@ namespace diff{
         auto ignoreAllChanges();
         
         
-        /** attach a listener function, to be invoked on _structural changes._
+        /** attach a listener function, to be invoked on _structural changes_.
          *  Here, we define any change as "structural", which alters the _sequence_ of
          *  child elements, as opposed to their content. In practice, this listener will
          *  be invoked _after_ applying a diff with any `INS`, `DEL`, `FIND`, `SKIP` verb.
@@ -442,7 +442,7 @@ namespace diff{
         template<typename LIS>
         auto onSeqChange (LIS changeListener);
         
-        /** attach a listener function, to be invoked on any _local change._
+        /** attach a listener function, to be invoked on any _local change_.
          *  This includes the [structural changes](\ref onSeqChange()), but also
          *  value assignments to any attribute or element.
          * @note mutation of a nested child scope will _not_ trigger this listener.

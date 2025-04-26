@@ -20,14 +20,14 @@
  ** Due to the extremely huge number space, LUID values can be used as unique identifiers
  ** without the need to check for duplicates or collisions. At various places, LUIDs are
  ** thus used right away on creation of new object instances or elements, in case a
- ** distinguishable <i>object identity</i> is required, e.g.
+ ** distinguishable _object identity_ is required, e.g.
  ** - any new attachment of an object into the session ("placement")
  ** - unique output designation discovered during the translation into a low-level
  **   node graph ("builder")
  ** - interface slots for external binding and plug-ins
  ** 
- ** Moreover, there is a \link luidgen.c Luidgen \endlink tool to generate fixed LUIDs
- ** to be included into source code. It works by replacing the token \c LUIDGEN in the
+ ** Moreover, there is a [Luidgen](\ref luidgen.c) tool to generate fixed LUIDs
+ ** to be included into source code. It works by replacing the token `LUIDGEN` in the
  ** source code text by a newly generated (random) LUID in octal representation.
  ** 
  ** LUIDs can also be used to generate hash values for hash table storage.

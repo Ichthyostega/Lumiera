@@ -20,10 +20,10 @@
  ** 
  ** # Implementation data layout
  ** 
- ** The front-end container lib::Several<I> is actually just a smart-ptr referring
+ ** The front-end container `lib::Several<I>` is actually just a smart-ptr referring
  ** to the actual data storage, which resides within an _array bucket._ Typically
  ** the latter is placed into memory managed by a custom allocator, most notably
- ** lib::AllocationCluster. However, by default, the ArrayBucket<I> will be placed
+ ** lib::AllocationCluster. However, by default, the `ArrayBucket<I>` will be placed
  ** into heap memory. All further meta information is also maintained alongside
  ** this data allocation, including a _deleter function_ to invoke all element
  ** destructors and de-allocate the bucket itself. Neither the type of the
@@ -31,7 +31,7 @@
  ** 
  ** Since the actual data elements can (optionally) be of a different type than
  ** the exposed interface type \a I, additional storage and spacing is required
- ** in the element array. The field ArrayBucket<I>::spread defines this spacing
+ ** in the element array. The field `ArrayBucket<I>::spread` defines this spacing
  ** and thus the offset used for subscript access. The actual data storage starts
  ** immediately behind the ArrayBucket, which thus acts as a metadata header.
  ** This arrangement requires a sufficiently sized raw memory allocation to place
@@ -144,7 +144,7 @@ namespace lib {
     
     /**
      * Helper to determine the »spread« required to hold
-     * elements of type \a TY in memory _with proper alignment._
+     * elements of type \a TY in memory _with proper alignment_.
      */
     template<typename TY>
     size_t inline constexpr
@@ -170,7 +170,7 @@ namespace lib {
   namespace allo {// Allocation management policies
     
     /**
-     * Generic factory to manage objects within an ArrayBucket<I> storage,
+     * Generic factory to manage objects within an `ArrayBucket<I>` storage,
      * delegating to a custom allocator \a ALO for memory handling.
      * - #create a storage block for a number of objects
      * - #createAt construct a single payload object at index position
@@ -291,7 +291,7 @@ namespace lib {
     
     /**
      * Policy Mix-In used to adapt to the ElementFactory and Allocator.
-     * @tparam I   Interface type (also used in the lib::Several<I> front-end
+     * @tparam I   Interface type (also used in the `lib::Several<I>` front-end
      * @tparam E   a common _element type_ to use by default
      * @tparam ALO custom allocator template
      */
@@ -369,7 +369,7 @@ namespace lib {
   
   
   /*************************************************//**
-   * Builder to create and populate a lib::Several<I>.
+   * Builder to create and populate a `lib::Several<I>`.
    * Content elements can be of the _interface type_ \a I,
    * or the _default element type_ \a E. When possible, even
    * elements of an ad-hoc given, unrelated type can be used.
@@ -388,7 +388,7 @@ namespace lib {
    *          patterns, consistency checks may throw at runtime,
    *          when attempting to add an unsuitable element.
    */
-  template<class I         ///< Interface or base type visible on resulting Several<I>
+  template<class I         ///< Interface or base type visible on resulting `Several<I>`
           ,class E   =I    ///< a subclass element element type (relevant when not trivially movable and destructible)
           ,template<class,class> class POL =allo::HeapOwn  ///< Allocator policy template (parametrised `POL<I,E>`)
           >

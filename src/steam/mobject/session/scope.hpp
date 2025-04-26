@@ -46,18 +46,18 @@ namespace session {
    * Within the Session/Model, Placements are used to attach
    * MObjects; but beyond that, each Placement can \em contain
    * other Placements, effectively forming a scope. Thus Scope
-   * is basically another view on Placements <i>which are attached
-   * to the session.</i> This (hidden) link to the session is utilised
+   * is basically another view on Placements _which are attached
+   * to the session_. This (hidden) link to the session is utilised
    * to establish the nesting of scopes and allow querying and navigating.
    * 
    * Actually, Scope is implemented through a PlacementRef pointing to
-   * the Placement which \em constitutes this Scope. We call this Placement
-   * the "scope top". A fork e.g. can \em contain several clips, but also
+   * the Placement which _constitutes this Scope_. We call this Placement
+   * the "scope top". A fork e.g. can _contain_ several clips, but also
    * nested sub forks, all of which would be within the scope of this fork.
-   * This scoping relation plays an important role when it comes to \em resolving
+   * This scoping relation plays an important role when it comes to _resolving_
    * properties of placement, like e.g. the output designation, overlay mode,
    * sound pan position etc -- properties from enclosing scopes will be 
-   * inherited unless \em shaded by local definitions, similar to the
+   * inherited unless _shaded_ by local definitions, similar to the
    * behaviour known from most programming languages when referring
    * to local variables. 
    * @note Scope is a passive entity,

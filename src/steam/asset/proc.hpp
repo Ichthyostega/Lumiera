@@ -14,7 +14,7 @@
 
 /** @file proc.hpp
  ** Data processing Plugins and Codecs can be treated as a specific Kind of Asset.
- ** For the different <i>Kinds</i> of Assets, we use sub-interfaces inheriting
+ ** For the different _Kinds of Assets_, we use sub-interfaces inheriting
  ** from the general Asset interface. To be able to get asset::Proc instances
  ** directly from the AssetManager, we define a specialisation of the Asset ID.
  ** 

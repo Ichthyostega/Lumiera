@@ -13,7 +13,7 @@
 
 /** @file subsystem-runner-test.cpp
  ** The \ref SubsystemRunner_test performs various scenarios
- ** regarding start, stop and failure of _Subsystems._ Its primary
+ ** regarding start, stop and failure of _Subsystems_. Its primary
  ** purpose is to cover the \ref SubsystemRunner.
  */
 

@@ -61,7 +61,7 @@ namespace fixture {
   
   /**
    * For the purpose of building and rendering, the fixture (for each timeline)
-   * is partitioned such that each segment is _structurally constant._
+   * is partitioned such that each segment is _structurally constant_.
    * The Segmentation defines and maintains this partitioning. Furthermore,
    * it is the general entry point for accessing the correct part of the engine
    * responsible for a given timeline time point.

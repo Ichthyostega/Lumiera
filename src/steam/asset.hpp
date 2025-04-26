@@ -21,7 +21,7 @@
  ** These classes are placed into namespace asset and proc_interface.
  **
  ** Assets are handled by a hierarchy of interfaces. Below the top level Asset interface
- ** there are interfaces for various different <i>Kinds</i> of Assets, like asset::Media,
+ ** there are interfaces for various different _Kinds of Assets_, like asset::Media,
  ** asset::Proc, etc. Code utilising the specific properties of e.g. Media assets, will
  ** be implemented directly against the asset::Media interface. To make this feasible 
  ** while at the same time being able to handle all asset Kinds in a uniform manner, 

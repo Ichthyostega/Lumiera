@@ -17,7 +17,7 @@
  ** While client code accesses model ports only as immutable descriptors handled
  ** through an (opaque) reference, the builder is in charge of detecting and organising
  ** any (new) model ports arising as the result of the build process. Changes to the set
- ** of current model ports are to be activated with an atomic <i>transactional switch.</i>
+ ** of current model ports are to be activated with an atomic _transactional switch_.
  ** 
  ** builder::ModelPortRegistry thus acts as management interface and factory for model ports.
  ** A given instance of this registry can be promoted to be "the" model port registry reflecting

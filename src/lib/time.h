@@ -102,7 +102,7 @@ int64_t
 lumiera_quantise_frames_fps (gavl_time_t time, gavl_time_t origin, uint framerate);
 
 /**
- * Similar to #lumiera_quantise_frames, but returns a grid aligned _relative time._
+ * Similar to #lumiera_quantise_frames, but returns a grid aligned _relative time_.
  * @return time of start of the grid interval containing the given time,
  *         but measured relative to the origin
  * @warning because the resulting value needs to be limited to fit into a 64bit long,

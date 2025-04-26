@@ -54,13 +54,13 @@ namespace lib {
    *   two instances, it will invoke a free function named
    *   <tt> transfer_control(TY& from, TY& to)</tt> intended
    *   to be found by ADL. Note: in case this function throws,
-   *   it <i>must not have any side effects</i>.
-   * - besides, the \em noncopyable type needs to provide an
+   *   it **must not have any side effects**.
+   * - besides, the _noncopyable_ type needs to provide an
    *   <tt>operator bool()</tt> yielding true iff currently
    *   containing an managed object. This is similar to
    *   std::unique_ptr or even the behaviour of a plain
-   *   old raw pointer, which is equivalent to \c true
-   *   when the pointer isn'T \c NULL
+   *   old raw pointer, which is equivalent to `true`
+   *   when the pointer isn'T `NULL`
    * @deprecated obsoleted by C++11 rvalue references
    * 
    */

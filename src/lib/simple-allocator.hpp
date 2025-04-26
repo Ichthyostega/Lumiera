@@ -61,8 +61,8 @@ namespace lib {
   
   /**
    * Policy: use just plain heap allocations
-   * @waring whenever you define a specialisation,
-   *         _you_ are responsible for proper alignment
+   * @warning whenever you define a specialisation,
+   *          _you_ are responsible for proper alignment
    * @see TICKET #1204
    */
   template<typename TY>

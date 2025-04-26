@@ -13,9 +13,9 @@
 
 
 /** @file interpolator.hpp
- ** Core abstraction: automation parameter interpolator
+ ** Core abstraction: automation parameter interpolator.
  ** Each interpolator implementation has the ability to resolve intermediary
- ** values and to provide a parameter value for _every arbitrary point in time._
+ ** values and to provide a parameter value for _every arbitrary point in time_.
  */
 
 

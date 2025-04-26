@@ -13,7 +13,7 @@
 
 /** @file iter-source.hpp
  ** Extension module to build an opaque data source, accessible as
- ** <i>Lumiera Forward Iterator</i>. It is based on combining an IterAdapter
+ ** **Lumiera Forward Iterator**. It is based on combining an IterAdapter
  ** with classical polymorphism; here, the data source, which is addressed
  ** by IderAdapter through the "iteration control API", is abstracted behind
  ** an interface (with virtual functions). Together this allows to build

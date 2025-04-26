@@ -152,9 +152,9 @@ namespace asset {
     other->unlink (this->id);  
   }
     
-  /** release all links to other <i>dependent</i> 
-   *  asset objects held internally and advise all parent
-   *  assets to do so with the link to this asset. 
+  /** release all links to other _dependent asset objects_
+   *  held internally and advise all parent assets to do so
+   *  with the link to this asset.
    *  @note we don't release upward links to parent assets,
    *        thus effectively keeping the parents alive, because
    *        frequently the accessibility of parent assets is part

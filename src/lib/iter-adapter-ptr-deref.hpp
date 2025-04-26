@@ -103,8 +103,8 @@ namespace lib {
        *  from (TY *)* -- just we know that our intention is to dereference both levels
        *  of pointers, and then the resulting conversion is correct.
        *  @note in case IT == WrappedIterType, this is just a redefinition of the
-       *        default copy ctor. In all other cases, this is an <i>additional
-       *        ctor besides the default copy ctor</i> */
+       *        default copy ctor. In all other cases, this is an _additional
+       *        ctor besides the default copy ctor_. */
       PtrDerefIter (PtrDerefIter<WrappedIterType> const& oIter)
         : i_(reinterpret_cast<IT const&> (oIter.getBase()))
         { }

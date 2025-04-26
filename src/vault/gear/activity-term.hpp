@@ -175,7 +175,7 @@ namespace gear {
         /**
          * Builder operation: append a Notification link to the end of this Term's chain.
          * @param targetTerm another Term, which thereby becomes dependent on this Term.
-         * @remark the \q targetTerm will be inhibited, until this Term's chain has
+         * @remark the \a targetTerm will be inhibited, until this Term's chain has
          *         been activated and processed up to emitting the inserted `NOTIFY`.
          */
         Term&

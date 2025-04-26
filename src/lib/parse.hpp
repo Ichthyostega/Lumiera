@@ -232,7 +232,7 @@ namespace util {
     
     
     /**
-     * Foundation: build a \ref Connex to accept a _terminal symbol._
+     * Foundation: build a \ref Connex to accept a _terminal symbol_.
      * the actual parsing is delegated to a Regular Expression,
      * which must match against the _beginning_ of the input sequence,
      * possibly after skipping some whitespace. The defined parser
@@ -966,8 +966,8 @@ namespace util {
       }
     
     /**
-     * Start Syntax with a sub-clause enclosed into a _bracketing construct._
-     * The »bracket« is defined as syntax for the _open marker_ and _close marker._
+     * Start Syntax with a sub-clause enclosed into a _bracketing construct_.
+     * The »bracket« is defined as syntax for the _open marker_ and _close marker_.
      * These are consumed without generating model elements. The parse fails unless
      * the full sequence `open body close` can be matched.
      */
@@ -1061,7 +1061,7 @@ namespace util {
     /**
      * Combinator: extend this Syntax clause by expecting a further sub-clause
      * behind the part of the input matched by the already defined part of this Syntax.
-     * The result model will be a \SeqModel, which essentially is a tuple of the
+     * The result model will be a \ref SeqModel, which essentially is a tuple of the
      * result models of all sequenced parts.
      * @return Syntax clause instance accepting the extended structure.
      * @warning the old syntax is invalidated by moving the parse-function out.

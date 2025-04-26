@@ -54,7 +54,7 @@ namespace test    {
        * and DummyMO objects (wrapped into any acceptable shared-ptr).
        * Intentionally, we omit to declare it applicable to TestSubMO2 instances.
        * In reality this would be a case of misconfiguration, because TestSubMO2
-       * is defined to be processable and consequently has an \apply() function,
+       * is defined to be processable and consequently has an `apply()` function,
        * which, due to this omission can't find a dispatcher entry when invoked,
        * so it will call the \c onUnknown(Buildable&) instead
        */

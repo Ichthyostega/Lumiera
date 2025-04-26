@@ -165,7 +165,7 @@ namespace test {
   /**
    * Configurable template framework for running Scheduler Stress tests
    * Use to build a custom setup class, which is then [injected](\ref StressTestRig::with)
-   * to [perform](\ref StressTestRig::Launcher::perform) a _specific measurement tool._
+   * to [perform](\ref StressTestRig::Launcher::perform) a _specific measurement tool_.
    * Several tools and detailed customisations are available in `namespace bench`
    * - bench::BreakingPoint conducts a binary search to _break a schedule_
    * - bench::ParameterRange performs a randomised series of parametrised test runs

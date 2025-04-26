@@ -80,7 +80,7 @@ namespace control {
       friend class lib::DependencyFactory<STypeManager>;
       
       /** Lifecycle: reset all type registration information
-       *  to the <i>generic pristine default</i> state. This includes
+       *  to the _generic pristine default_ state. This includes
        *  hard wired defaults and defaults provided by type plugins, but
        *  excludes everything added by the session
        */

@@ -103,7 +103,7 @@ namespace session {
   }
   
   
-  /** detach the denoted element from the model _including all children._
+  /** detach the denoted element from the model _including all children_.
    *  @return true if actually erased something
    *  @note when specifying model root, all sub-elements will be cleared,
    *        but model root itself will be retained. 

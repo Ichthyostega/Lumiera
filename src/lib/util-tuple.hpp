@@ -12,7 +12,7 @@
 */
 
 
-/** @file util-tuples.hpp
+/** @file util-tuple.hpp
  ** Some small helpers and convenience shortcuts to simplify working with
  ** tuples and sequences (given by iterator). While tuples and sequences
  ** are fundamentally different insofar a tuple has a fixed structure (and

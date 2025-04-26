@@ -21,8 +21,8 @@
  ** The UI layer retrieves the necessary configuration values from lumiera::Config,
  ** the config facade in the application core. Currently as of 2/2011 these values are
  ** loaded from setup.ini, because the full-blown config system is not yet implemented.
- ** Amongst others, this configuration defines a <i>search path</i> for icons and a
- ** separate search path for resources. These path specs may use the token \c $ORIGIN
+ ** Amongst others, this configuration defines a _search path_ for icons and a
+ ** separate search path for resources. These path specs may use the token `$ORIGIN`
  ** to refer to the installation directory of the currently executing program.
  ** This allows for a relocatable Lumiera installation bundle.
  ** 

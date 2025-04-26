@@ -38,7 +38,7 @@
  ** just for passing an abstraction barrier (while the optimiser can be expected to
  ** remove this barrier and the accompanying nominal copy operations altogether in
  ** the generated code). Consequently the ability to return a polymorphic object
- ** from a factory or configuration function <i>by value</i> would open a lot of
+ ** from a factory or configuration function _by value_ would open a lot of
  ** straight forward design possibilities and concise formulations.
  ** 
  ** # how to build a copyable value without knowing it's layout in detail

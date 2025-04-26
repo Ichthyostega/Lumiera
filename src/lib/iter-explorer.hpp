@@ -1877,7 +1877,7 @@ namespace lib {
       
       
       
-      /** builder function to attach a _custom extension layer._
+      /** builder function to attach a _custom extension layer_.
        * Any template in compliance with the general construction scheme can be injected through the template parameter.
        * - it must take a first template parameter SRC and inherit from this source iterator
        * - towards layers on top, it must behave like a _state core,_ either by redefining the state core API functions,

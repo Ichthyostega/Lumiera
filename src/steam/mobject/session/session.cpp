@@ -57,8 +57,8 @@ namespace mobject {
    *  implementation object, where the smart pointer is actually
    *  the SessionManager (which is singleton as well...).
    * 
-   *  Consequently, if you want to talk to the <i>session manager,</i>
-   *  you use dot-notation, while you access the <i>session object</i>
+   *  Consequently, if you want to talk to the _session manager_,
+   *  you use dot-notation, while you access the _session object_
    *  via arrow notation (e.g. `Session::current->getFixture()` )
    */
   SessManager& Session::current = theSessionManager();

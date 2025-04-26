@@ -99,7 +99,7 @@ namespace fixture {
     
     
     
-    /** does the <i>transaction currently being built</i>
+    /** does the transaction _currently being built_
      *  already contain a model port registration for the given ID?
      * @note this does \em not query registration state of the
      *       global registry; use #isRegistered for that...*/

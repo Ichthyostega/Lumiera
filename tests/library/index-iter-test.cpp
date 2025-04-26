@@ -11,7 +11,7 @@
 
 * *****************************************************************/
 
-/** @file iter-index-test.cpp
+/** @file index-iter-test.cpp
  ** unit test \ref IndexIter_test
  */
 

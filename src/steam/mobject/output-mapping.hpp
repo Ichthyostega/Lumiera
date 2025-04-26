@@ -107,7 +107,7 @@ namespace mobject {
    * This is an generic map-like container, acting as Interface to be used
    * in the signature of API functions either providing or requiring a Mapping.
    * For each distinct usage situation, an instantiation of this template should
-   * be created, providing a <i>definition context</i> as template parameter.
+   * be created, providing a _definition context_ as template parameter.
    * Instances of this concrete mapping type may then be default constructed
    * and copied freely. The definition context is supposed to provide
    * - a functor `DEF::output` usable as function pipe-ID --> Target

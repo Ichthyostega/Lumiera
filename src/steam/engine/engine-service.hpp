@@ -18,7 +18,7 @@
  ** The EngineService singleton has no state beyond the jobs currently managed by the
  ** scheduler; when the latter isn't available, any invocation will throw.
  ** 
- ** The central concept provided through this facade interface is the <i>calculation stream</i>.
+ ** The central concept provided through this facade interface is the **calculation stream**.
  ** This represents a series of calculations, expected to happen in a timely fashion and in order
  ** to deliver a frame data stream into an opened output connection. On the implementation side,
  ** a calculation stream will be translated into a series of jobs to invoke render nodes;

@@ -54,20 +54,20 @@
  ** and the presence of some component, several contextual predications may be queried:
  ** 
  ** - *anchorage*
- **   ** the way the given coordinate spec is or can be anchored
- **      *** it is already _explicitly anchored_ by referring either to a specific window or by generic specification
- **      *** it _can be a anchored_ by interpolation of some wildcards
- **      *** it is _incomplete_ and need to be extended to allow anchoring
- **      *** it is _impossible to anchor_ in the current UI configuration
+ **   + the way the given coordinate spec is or can be anchored
+ **     * it is already _explicitly anchored_ by referring either to a specific window or by generic specification
+ **     * it _can be a anchored_ by interpolation of some wildcards
+ **     * it is _incomplete_ and need to be extended to allow anchoring
+ **     * it is _impossible to anchor_ in the current UI configuration
  ** 
  ** - *coverage*
- **   ** the extent to which a given coordinate spec is backed by the actual UI configuration
- **   ** _please note_: to determine the coverage, the spec needs to be anchored, either explicitly,
- **      or by interpolation, or by extension of an incomplete spec
- **      *** it is _completely covered_
- **      *** it is _partially covered_ with an remaining, uncovered extension part
- **      *** it is _possible to cover completely_
- **      *** it is _impossible to cover_ related to the current UI topology
+ **   + the extent to which a given coordinate spec is backed by the actual UI configuration
+ **   + _please note_: to determine the coverage, the spec needs to be anchored, either explicitly,
+ **     or by interpolation, or by extension of an incomplete spec
+ **     * it is _completely covered_
+ **     * it is _partially covered_ with an remaining, uncovered extension part
+ **     * it is _possible to cover completely_
+ **     * it is _impossible to cover_ related to the current UI topology
  ** 
  ** \par Some fine points to note
  ** Anchorage and coverage are not the same thing, but coverage implies anchorage. Only when a path is complete
@@ -84,17 +84,17 @@
  ** it is also possible to rewrite or extend the spec based on this environment
  ** 
  ** - *anchoring*
- **   ** in correspondence to the possible states of anchorage, we may derive an explicitly anchored spec
- **      *** by interpolating the given spec
- **      *** by interpretation and extension of the given spec
+ **   + in correspondence to the possible states of anchorage, we may derive an explicitly anchored spec
+ **     * by interpolating the given spec
+ **     * by interpretation and extension of the given spec
  ** 
  ** - *covering*
- **   ** we may construct the covered part of a given spec, which includes automatic anchoring
+ **   + we may construct the covered part of a given spec, which includes automatic anchoring
  ** 
  ** - *extending*
- **   ** a given UI coordinate pattern is covered...
- **   ** and _truncated_ to the covered part
- **   ** the given _extension suffix_ is then attached behind
+ **   + a given UI coordinate pattern is covered...
+ **   + and _truncated_ to the covered part
+ **   + the given _extension suffix_ is then attached behind
  ** 
  ** @see UICoordResolver_test
  ** @see UICoord_test
@@ -536,7 +536,7 @@ namespace interact {
         }
       
       
-      /** mutate to turn a wildcard into _existentially quantified._
+      /** mutate to turn a wildcard into _existentially quantified_.
        * This means to assume (or require) that an element actually exists at the given position,
        * without knowing or caring about its actual name. This becomes relevant when matching for
        * _partially covered_ path; normal wildcards are only accepted to build a solution, when

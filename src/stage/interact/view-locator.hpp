@@ -15,7 +15,7 @@
 /** @file view-locator.hpp
  ** Access and allocation of UI component views.
  ** Within the Lumiera UI, a _component view_ is a building block to deal with some component
- ** of relevance to _»the model«. As such, all component views exhibit some distinctive traits:
+ ** of relevance to _»the model«_. As such, all component views exhibit some distinctive traits:
  ** - they conform to a built-in fixed list of view types, each of which is unique and dedicated
  **   to a very specific purpose: *Timeline*, *Viewer*, (Asset)*Bin*, *Infobox*, *Playcontrol*,...
  ** - each component view has a distinguishable identity and is connected to and addressable

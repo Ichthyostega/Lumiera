@@ -12,7 +12,7 @@
 */
 
 
-/** @file statistic.cpp
+/** @file statistic.hpp
  ** Support for generic statistics calculations.
  ** - average over the N last elements in a data sequence
  ** - simple linear regression with weights (single predictor variable)

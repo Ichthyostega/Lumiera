@@ -31,7 +31,7 @@
  ** has an associated StreamType.
  ** 
  ** Because model ports are discovered this way, dynamically during the build process,
- ** at some point there is a <i>transactional switch</i> to promote the new configuration
+ ** at some point there is a _transactional switch_ to promote the new configuration
  ** to become the valid current model port configuration. After that switch, model ports
  ** are immutable.
  ** 

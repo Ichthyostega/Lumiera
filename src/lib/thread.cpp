@@ -11,7 +11,7 @@
 
 * *****************************************************************/
 
-/** @file sync.cpp
+/** @file thread.cpp
  ** This compilation unit holds some implementation details
  ** of the [thread wrapper](\ref lib::Thread), relegated here
  ** to reduce header inclusions.

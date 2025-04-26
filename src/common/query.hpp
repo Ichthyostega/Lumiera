@@ -19,10 +19,10 @@
  ** to decouple the parts of the application and allows for a rules based configuration and
  ** orchestration of the internal workings.
  ** 
- ** A Query is a request for just \em someone to come up with a solution, a preconfigured
+ ** A Query is a request for _just someone_ to come up with a solution, a preconfigured
  ** setup, some existing data object or contextual information. In order to be usable,
  ** actually a QueryResolver needs to be available to compute the solution and retrieve
- ** the results. As a common denominator, queries can be <i>generic queries</i> given
+ ** the results. As a common denominator, queries can be _generic queries_ given
  ** in predicate logic syntax; in this case a generic query resolver (Planned feature
  ** as of 1/2013) will be able at least to determine a suitable facility for delegating
  ** the resolution. Besides, specific subsystems are using more specific kinds of
@@ -45,7 +45,7 @@
  ** The QueryResolver returns a result set, actually a Query::Cursor, which can be used to
  ** enumerate multiple solutions, if any.
  ** 
- ** Queries are \em immutable, but it is possible to re-build and remould a query using
+ ** Queries are _immutable_, but it is possible to re-build and remould a query using
  ** a Query<TY>::Builder, accessible via Query#build() and Query#rebuild().
  ** 
  ** @note as of 1/2013 this is rather a concept draft, but some parts of the code base

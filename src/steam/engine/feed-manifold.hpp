@@ -236,7 +236,7 @@ namespace engine {
     
     
     /**
-     * Trait template to handle an _associated parameter functor._
+     * Trait template to handle an _associated parameter functor_.
      * In those cases, where the basic processing function is classified such
      * as to accept parameter(s), it may be desirable to _generate_ those parameters
      * at invocation — be it as a fixed parametrisation chosen for this usage, or even

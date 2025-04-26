@@ -138,7 +138,7 @@ namespace test{
       /**
        * Helper for #tortureTest():
        * Build a table of functors, where the i-th entry invokes the function
-       * increment<i>(), which leads to incrementing the counter for Dummy<i>.
+       * `increment<i>()`, which leads to incrementing the counter for `Dummy<i>`.
        */
       template<size_t...I>
       static auto
@@ -163,7 +163,7 @@ namespace test{
        *       - run a large number of threads in parallel, each incrementing
        *         a randomly picked counter; this is achieved by using a table
        *         of »increment operators«, where each one is tied to a specific
-       *         Dummy<i>.
+       *         `Dummy<i>`.
        */
       void
       tortureTest()

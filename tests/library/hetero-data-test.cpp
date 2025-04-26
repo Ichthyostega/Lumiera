@@ -11,7 +11,7 @@
 
 * *****************************************************************/
 
-/** @file del-stash-test.cpp
+/** @file hetero-data-test.cpp
  ** unit test \ref HeteroData_test
  */
 

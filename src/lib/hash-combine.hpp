@@ -28,7 +28,7 @@
 */
 
 
-/** @file hash-combine.h
+/** @file hash-combine.hpp
  ** Hash combine function extracted from LibBoost 1.67
  ** Combine two hash values to form a composite depending on both.
  ** @todo 2024 the Lumiera project has yet to decide how to approach

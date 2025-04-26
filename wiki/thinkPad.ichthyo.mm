@@ -160496,8 +160496,8 @@ actively maintained upstream. Please remove gdl from Debian.</pre>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1439176875682" ID="ID_1482098521" MODIFIED="1742175232490" TEXT="Debian/Trixie">
 <icon BUILTIN="pencil"/>
 <node CREATED="1742175232490" ID="ID_1849121366" MODIFIED="1742175241823" TEXT="Aufgaben">
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1742175284498" ID="ID_381697845" MODIFIED="1742175309536" TEXT="Scons-Build migrieren">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1742175284498" ID="ID_381697845" MODIFIED="1745722043514" TEXT="Scons-Build migrieren">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1742175408138" ID="ID_22551307" MODIFIED="1742176275192" TEXT="den gro&#xdf;en Schritt hat bereits Benny gemacht">
 <linktarget COLOR="#2a999f" DESTINATION="ID_22551307" ENDARROW="Default" ENDINCLINATION="682;41;" ID="Arrow_ID_344918215" SOURCE="ID_1353266444" STARTARROW="None" STARTINCLINATION="885;-71;"/>
 <icon BUILTIN="ksmiletris"/>
@@ -160785,10 +160785,98 @@ Since then others have made contributions, see the log for the history.</font></
 <node COLOR="#435e98" CREATED="1744081211266" ID="ID_1900866796" MODIFIED="1744081269039" STYLE="fork" TEXT="Doxygen 1.9.8 : wesentlich verbessert">
 <icon BUILTIN="idea"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1744081272203" ID="ID_603439219" MODIFIED="1744081300094" STYLE="fork" TEXT="Warnungen im Doxyfile">
+<node COLOR="#435e98" CREATED="1744081272203" FOLDED="true" ID="ID_603439219" MODIFIED="1745722037099" STYLE="fork" TEXT="Warnungen im Doxyfile">
 <edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
-<icon BUILTIN="flag-yellow"/>
-<icon BUILTIN="flag-pink"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1745707663740" ID="ID_944767991" MODIFIED="1745707676207" TEXT="Definitionen im Doxyfile durchgesehen"/>
+<node CREATED="1745707676865" ID="ID_1588763069" MODIFIED="1745707684615" TEXT="obsolete Einstellungen entfernt"/>
+<node CREATED="1745707687223" ID="ID_1637635649" MODIFIED="1745707709082" TEXT="neue Einstellungen sinnvoll gew&#xe4;hlt"/>
+<node CREATED="1745707713980" ID="ID_1978721037" MODIFIED="1745707716671" TEXT="Anpassungen">
+<node CREATED="1745707717811" ID="ID_1379881762" MODIFIED="1745707730461" TEXT="habe nun doch EXTRACT_ALL = YES gesetzt">
+<node CREATED="1745707737991" ID="ID_1873527585" MODIFIED="1745707756663" TEXT="vermutlich der Hauptgrund warum Links fehlen"/>
+<node CREATED="1745707757260" ID="ID_146201452" MODIFIED="1745707770831" TEXT="sonst m&#xfc;&#xdf;te ich diverse Namespaces und innere Klasen dokumentieren"/>
+<node BACKGROUND_COLOR="#f8ebcc" CREATED="1745719246745" ID="ID_238218365" MODIFIED="1745719317394" TEXT="versuche zudem, explizit die nested &quot;test&quot;-Namespaces in doxygen.dox aufzuf&#xfc;hren">
+<icon BUILTIN="back"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1745719329498" ID="ID_1669179666" MODIFIED="1745719807391" TEXT="die Querverweise auf Testklassen-Namen wollen trotzdem einfach nicht funktionieren">
+<icon BUILTIN="broken-line"/>
+</node>
+<node CREATED="1745719974100" ID="ID_725413583" LINK="file:///Werk/devel/lumi/doc/devel/html/classlib_1_1diff_1_1test_1_1DiffTreeApplication__test.html" MODIFIED="1745720034755" TEXT="seltsamerweise funktionieren die automatischen Links innerhalb des namespace lib::diff::test">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1745719345036" ID="ID_610525952" MODIFIED="1745719821867" TEXT="dabei sind nun die Test-Klassen wenigstens schon mal dokumentiert">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1745721980457" ID="ID_1943182149" MODIFIED="1745722020735" TEXT="funktionieren automatische Links &#xfc;berhaupt irgendwo au&#xdf;erhalb des aktuellen Namespace?">
+<icon BUILTIN="help"/>
+</node>
+</node>
+<node CREATED="1745707772348" ID="ID_1241109351" MODIFIED="1745707839072" TEXT="VERBATIME_HEADERS = No"/>
+<node CREATED="1745707839739" ID="ID_1824175795" MODIFIED="1745707845186" TEXT="versuche nun CLANG_ASSISTED_PARSING = YES">
+<node CREATED="1745707941608" ID="ID_301450630" MODIFIED="1745707961124" TEXT="soll zu deutlich verbesserter Auswertung von C++ -  Code f&#xfc;hren">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1745707863114" ID="ID_1416573466" MODIFIED="1745707891985" TEXT="setzt libclang vorraus (von Debian als Dependency )"/>
+<node CREATED="1745707850065" ID="ID_165935386" MODIFIED="1745707857628" TEXT="Build dauert WESENTLICH l&#xe4;nger">
+<node CREATED="1745718764741" ID="ID_1947466431" MODIFIED="1745718784199" TEXT="zus&#xe4;tzliches Problem: Code-Generation l&#xe4;uft dann single-threaded"/>
+<node CREATED="1745718813319" ID="ID_1766773373" MODIFIED="1745718873200" TEXT="und zwar trotzdem ich NUM_PROC_THREADS = 0 gesetzt habe">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das wirkt zwar offensichtlich im ersten Teil, wenn die source-Files erstmals geparst werden, denn dann werden (nur mit diesem Setting) alle Cores zu 100% ausgelastet
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1745712100573" ID="ID_1063103301" MODIFIED="1745712121288" TEXT="naja ... nicht sicher ob ich &#xfc;berhaupt eine Verbesserung sehe">
+<icon BUILTIN="smiley-neutral"/>
+</node>
+</node>
+</node>
+<node CREATED="1745718567027" ID="ID_544667736" MODIFIED="1745718578227" TEXT="einige spezielle Warnungen repariert">
+<node CREATED="1745718579430" ID="ID_1803171119" MODIFIED="1745718680754" TEXT="Wenn ich emphasis am Ende der \brief-Section verwendet habe">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...und zwar in der der _speziellen Form mit Unterstrich._&#160;&#160;(meint: der Unterstrich steht hinter dem Punkt, und damit nicht mehr im \brief -Teil
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1745718682705" ID="ID_510006002" MODIFIED="1745718728784" TEXT="Wenn Typnamen die Template-Argument-Liste `somename&lt;i&gt;` enthalten">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      (wird als HTML-Trag geparst)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1745718737730" ID="ID_718435242" MODIFIED="1745718753587" TEXT="diverse &quot;unknown commands&quot; die auf Schreibfehler zur&#xfc;ckgehen"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d4a582" COLOR="#690f14" CREATED="1745718923727" ID="ID_1446478913" MODIFIED="1745719292645">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      das Ergebnis ist letztlich <b>immer wieder entt&#228;uschend</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Doxygen (wie auch diverse andere Sourcecode-Scanner und Validatoren) passen konzeptionell nicht sonderlich gut auf die spezielle Struktur von C++ Code, welcher sehr stark auf Scopes und Querbez&#252;ge setzt. Und mein eigener Code-Stil tr&#228;gt dazu auch noch einiges bei. Meistens sind nur die Texte in den Header-Kommentaren brauchbar. Es folgt dann eine mehr-oder-weniger willk&#252;rlich wirkende Liste von Klassen und namespace-Membern. Eine solche Liste erz&#228;hlt keine Geschichte (der Code tut es schon). Und der Umstand, da&#223; in Doxygen die Struktur flach geklopft wird, tut ein &#220;briges
+    </p>
+  </body>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -161265,7 +161353,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node CREATED="1744749837898" ID="ID_426505316" MODIFIED="1744749846538" TEXT="Deprecations">
 <icon BUILTIN="messagebox_warning"/>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1744749991694" ID="ID_593970637" MODIFIED="1744751399369" TEXT="rsvg-convert">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1744749991694" FOLDED="true" ID="ID_593970637" MODIFIED="1744751399369" TEXT="rsvg-convert">
 <icon BUILTIN="bell"/>
 <node CREATED="1744750427328" ID="ID_976491551" MODIFIED="1744750440220" TEXT="Warnungen">
 <icon BUILTIN="edit"/>
@@ -161302,7 +161390,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1742175245473" ID="ID_1357727858" MODIFIED="1745535177961" TEXT="Warnungen">
+<node COLOR="#338800" CREATED="1742175245473" FOLDED="true" ID="ID_1357727858" MODIFIED="1745535177961" TEXT="Warnungen">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1744717880469" ID="ID_1900004997" MODIFIED="1744765441677" TEXT="std::unary_function is deprecated">
 <richcontent TYPE="NOTE"><html>
@@ -161611,11 +161699,13 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1742175249127" ID="ID_1185124760" MODIFIED="1742175325795" TEXT="Testsuite GR&#xdc;N">
+<node BACKGROUND_COLOR="#d0e6a4" COLOR="#338800" CREATED="1742175249127" ID="ID_1185124760" MODIFIED="1745628094269" STYLE="fork" TEXT="Testsuite GR&#xdc;N">
+<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="yes"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1743970651055" ID="ID_527599811" MODIFIED="1743970655841" TEXT="7 failed Tests">
-<icon BUILTIN="flag-yellow"/>
-<node COLOR="#338800" CREATED="1745537726553" ID="ID_520603271" MODIFIED="1745537840749" TEXT="00test.tests">
+<node COLOR="#338800" CREATED="1743970651055" FOLDED="true" ID="ID_527599811" MODIFIED="1745628140544" TEXT="7 failed Tests">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1745537726553" FOLDED="true" ID="ID_520603271" MODIFIED="1745628135439" TEXT="00test.tests">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -161643,17 +161733,17 @@ Since then others have made contributions, see the log for the history.</font></
   </body>
 </html></richcontent>
 <icon BUILTIN="button_ok"/>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1745537758304" ID="ID_1842827052" MODIFIED="1745537772123" TEXT="sieht irgendwie nach ge&#xe4;nderten Sytemmeldungen aus">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1745537758304" ID="ID_1842827052" MODIFIED="1745628094270" TEXT="sieht irgendwie nach ge&#xe4;nderten Sytemmeldungen aus">
 <icon BUILTIN="help"/>
 </node>
-<node CREATED="1745537807785" ID="ID_1689259926" MODIFIED="1745537827981" TEXT="Ha! ich sehe es: Die Meldung enth&#xe4;lt nicht mehr den Pfad &apos;/bin/cat&apos;"/>
-<node COLOR="#435e98" CREATED="1745537773651" ID="ID_1498219479" MODIFIED="1745537836890" TEXT="Debian hat nun endg&#xfc;ltig die top-Level /bin und /sbin und /lib aufgegeben">
+<node CREATED="1745537807785" ID="ID_1689259926" MODIFIED="1745628094270" TEXT="Ha! ich sehe es: Die Meldung enth&#xe4;lt nicht mehr den Pfad &apos;/bin/cat&apos;"/>
+<node COLOR="#435e98" CREATED="1745537773651" ID="ID_1498219479" MODIFIED="1745628094270" TEXT="Debian hat nun endg&#xfc;ltig die top-Level /bin und /sbin und /lib aufgegeben">
 <icon BUILTIN="info"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1745537873206" ID="ID_1566687837" MODIFIED="1745539271003" TEXT="FileSupport_test">
+<node COLOR="#338800" CREATED="1745537873206" FOLDED="true" ID="ID_1566687837" MODIFIED="1745539271003" TEXT="FileSupport_test">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1745537891733" ID="ID_1913606646" MODIFIED="1745537916159" TEXT="Exception wird geworfen">
+<node CREATED="1745537891733" ID="ID_1913606646" MODIFIED="1745628094270" TEXT="Exception wird geworfen">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -161688,8 +161778,8 @@ Since then others have made contributions, see the log for the history.</font></
 </html></richcontent>
 <icon BUILTIN="list"/>
 </node>
-<node CREATED="1745538088801" ID="ID_1790511977" MODIFIED="1745538098312" TEXT="bei direktem Aufruf der Testsuite ist alles OK"/>
-<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1745539133640" ID="ID_1693419317" MODIFIED="1745539241438" TEXT="Verdacht: SCons bereinigt das Environment">
+<node CREATED="1745538088801" ID="ID_1790511977" MODIFIED="1745628094270" TEXT="bei direktem Aufruf der Testsuite ist alles OK"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1745539133640" ID="ID_1693419317" MODIFIED="1745628094270" TEXT="Verdacht: SCons bereinigt das Environment">
 <icon BUILTIN="idea"/>
 <node CREATED="1745539158846" ID="ID_977263920" MODIFIED="1745539170080" TEXT="wir haben jetzt eine neue SCons-Version und Python-3"/>
 <node CREATED="1745539170814" ID="ID_1113974889" MODIFIED="1745539185769" TEXT="vielleicht war fr&#xfc;her $HOME implizit propagiert"/>
@@ -161919,15 +162009,16 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node COLOR="#435e98" CREATED="1745537939853" ID="ID_856500393" MODIFIED="1745593572737" TEXT="GenNode_test">
+<node COLOR="#435e98" CREATED="1745537939853" ID="ID_856500393" MODIFIED="1745628125617" TEXT="GenNode_test">
+<linktarget COLOR="#5f688e" DESTINATION="ID_856500393" ENDARROW="Default" ENDINCLINATION="-7;20;" ID="Arrow_ID_1431024191" SOURCE="ID_981250865" STARTARROW="None" STARTINCLINATION="-251;11;"/>
 <icon BUILTIN="broken-line"/>
 <node COLOR="#5c3279" CREATED="1745593535416" ID="ID_447874063" MODIFIED="1745593568987" TEXT="war vom vorherigen Bug ebenfalls betroffen">
 <arrowlink COLOR="#5c3279" DESTINATION="ID_721065474" ENDARROW="Default" ENDINCLINATION="-13;95;" ID="Arrow_ID_1372407656" STARTARROW="None" STARTINCLINATION="13;-103;"/>
 </node>
 </node>
-<node COLOR="#435e98" CREATED="1745537946821" ID="ID_1319727141" MODIFIED="1745599992122" TEXT="HeteroData_test">
+<node COLOR="#435e98" CREATED="1745537946821" FOLDED="true" ID="ID_1319727141" MODIFIED="1745628113877" TEXT="HeteroData_test">
 <icon BUILTIN="broken-line"/>
-<node CREATED="1745595723151" ID="ID_1057941772" MODIFIED="1745596135332" TEXT="OK: hier hab ich im Test mit &#xbb;undefined behaviour&#xab; gespielt">
+<node CREATED="1745595723151" ID="ID_1057941772" MODIFIED="1745628094272" TEXT="OK: hier hab ich im Test mit &#xbb;undefined behaviour&#xab; gespielt">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -161935,15 +162026,14 @@ Since then others have made contributions, see the log for the history.</font></
       &#220;berraschung: wer sich in den Fu&#223; schie&#223;t, schie&#223;t sich in den Fu&#223;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1745596148617" ID="ID_230477037" MODIFIED="1745596185817" TEXT="der Compiler ist in keinster Weise verpflichtet, Daten im Stackframe irgendwie anzuordnen"/>
 <node CREATED="1745598449798" ID="ID_1524131528" MODIFIED="1745598461412" TEXT="was will ich denn hier demonstrieren?">
 <node CREATED="1745598462637" ID="ID_554868027" MODIFIED="1745598475244" TEXT="da&#xdf; der Overflow-Datenblock &#xbb;irgendwo&#xab; liegen kann"/>
 <node CREATED="1745598479159" ID="ID_1513870970" MODIFIED="1745598499276" TEXT="da&#xdf; die Verzeigerung bestehen bleibt"/>
 </node>
-<node CREATED="1745599892391" ID="ID_1677707130" MODIFIED="1745599990906" TEXT="L&#xf6;sung: die Storage explizit vorgeben">
+<node CREATED="1745599892391" ID="ID_1677707130" MODIFIED="1745628094272" TEXT="L&#xf6;sung: die Storage explizit vorgeben">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -161951,11 +162041,10 @@ Since then others have made contributions, see the log for the history.</font></
       ...ohne die implizite Annahme eines Layout, einfach indem ich den Overflow-Frame gleich per placement-New erzeuge; dann kann man trotzdem immer noch zeigen, da&#223; die Daten weiterhin in der UninitialisedStorage liegen und dort verwendet werden k&#246;nnen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
-<node COLOR="#435e98" CREATED="1745537959959" ID="ID_802122855" MODIFIED="1745623338004" TEXT="TestChainLoad_test">
+<node COLOR="#435e98" CREATED="1745537959959" FOLDED="true" ID="ID_802122855" MODIFIED="1745628127369" TEXT="TestChainLoad_test">
 <icon BUILTIN="broken-line"/>
 <node BACKGROUND_COLOR="#e1c768" COLOR="#9f034c" CREATED="1745602150864" ID="ID_154841907" MODIFIED="1745623367165" TEXT="puh... warum weicht der Hash-Wert ab?">
 <icon BUILTIN="smily_bad"/>
@@ -161973,9 +162062,9 @@ Since then others have made contributions, see the log for the history.</font></
 </html></richcontent>
 <icon BUILTIN="smily_bad"/>
 </node>
-<node CREATED="1745602431987" ID="ID_1407740921" MODIFIED="1745602460803" TEXT="bereits im einfachsten verify_Node()"/>
-<node CREATED="1745602493802" ID="ID_941458386" MODIFIED="1745603818751" TEXT="wir verwenden hier noch boost::hash_combine">
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1745602633783" ID="ID_715784100" MODIFIED="1745604456746" TEXT="und dessen Impl sieht jetzt anders aus">
+<node CREATED="1745602431987" ID="ID_1407740921" MODIFIED="1745628094272" TEXT="bereits im einfachsten verify_Node()"/>
+<node CREATED="1745602493802" ID="ID_941458386" MODIFIED="1745628094272" TEXT="wir verwenden hier noch boost::hash_combine">
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1745602633783" ID="ID_715784100" MODIFIED="1745628094273" TEXT="und dessen Impl sieht jetzt anders aus">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -162000,10 +162089,9 @@ Since then others have made contributions, see the log for the history.</font></
       <font size="6" color="#c501a2">SCHWEIN</font><font size="4">&#160;gehabt</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
-<node CREATED="1745603771294" HGAP="37" ID="ID_528170484" MODIFIED="1745603805617" TEXT="" VSHIFT="1">
+<node CREATED="1745603771294" HGAP="37" ID="ID_528170484" MODIFIED="1745628094274" TEXT="" VSHIFT="1">
 <icon BUILTIN="ksmiletris"/>
 </node>
 <node CREATED="1745603779142" ID="ID_444058662" MODIFIED="1745603794975" TEXT="">
@@ -162017,12 +162105,32 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1745537983863" ID="ID_1313307442" MODIFIED="1745538004763" TEXT="UICoordResolver_test">
+<node COLOR="#5b280f" CREATED="1745537983863" ID="ID_1313307442" MODIFIED="1745628094274" TEXT="UICoordResolver_test">
 <icon BUILTIN="broken-line"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1745626600392" ID="ID_34784349" MODIFIED="1745628094274" TEXT="hier gab es Crashes"/>
+<node COLOR="#338800" CREATED="1745627880489" ID="ID_981250865" MODIFIED="1745628125616" TEXT="gehen nachweislich auf GenNode und den Rec::Mutator zur&#xfc;ck">
+<arrowlink COLOR="#5f688e" DESTINATION="ID_856500393" ENDARROW="Default" ENDINCLINATION="-7;20;" ID="Arrow_ID_1431024191" STARTARROW="None" STARTINCLINATION="-251;11;"/>
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1745537993750" ID="ID_1907252021" MODIFIED="1745538004763" TEXT="UILocationSolver_test">
+</node>
+<node COLOR="#5b280f" CREATED="1745537993750" ID="ID_1907252021" MODIFIED="1745628094274" TEXT="UILocationSolver_test">
 <icon BUILTIN="broken-line"/>
+<icon BUILTIN="button_cancel"/>
 </node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1745627990960" ID="ID_11585725" MODIFIED="1745628094274" TEXT="wackelig">
+<icon BUILTIN="messagebox_warning"/>
+<node COLOR="#810953" CREATED="1745627994313" ID="ID_1589304377" MODIFIED="1745628094274" TEXT="SchedulerStress_test"/>
+<node COLOR="#810953" CREATED="1745627998855" ID="ID_1932909119" MODIFIED="1745628094274" TEXT="WorkForce_test"/>
+<node COLOR="#435e98" CREATED="1745628002831" ID="ID_486276485" MODIFIED="1745628094274" TEXT="nichts neues">
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d0e6a4" COLOR="#338800" CREATED="1745628042310" ID="ID_578951152" MODIFIED="1745628066900" STYLE="bubble" TEXT="l&#xe4;uft wieder wie vorher">
+<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1742175264309" ID="ID_1163480280" MODIFIED="1742175329181" TEXT="Preview-Release">

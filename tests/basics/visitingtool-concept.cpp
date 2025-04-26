@@ -19,23 +19,22 @@
  ** for the drafting process and is self-contained. The final solution was
  ** then extracted later as library implementation into visitor.hpp
  **
- ** Basic considerations
- ** <ul><li>cyclic dependencies should be avoided or at least restricted
- **         to some library related place. The responsibilities for
- **         user code should be as small as possible.</li>
- **     <li>Visitor is about <i>double dispatch</i>, thus we can't avoid
- **         using some table lookup implementation, and we can't avoid using
- **         some of the cooperating classes' vtables. Besides that, the
- **         implementation should not be too wasteful...</li>
- **     <li>individual Visiting Tool implementation classes should be able
- **         to opt in or opt out on implementing functions treating some of
- **         the visitable subclasses.</li>
- **     <li>there should be a safe fallback mechanism backed by the
- **         visitable object's hierarchy relations. If some new class declares
- **         to be visitable, existing Visiting Tools not yet treating this new
- **         visitable type should fall back rather to the next best match up the
- **         hierarchy, instead of invoking some almost abstract base class</li>
- ** </ul>
+ ** \par Basic considerations
+ ** - cyclic dependencies should be avoided or at least restricted
+ **   to some library related place. The responsibilities for
+ **   user code should be as small as possible.
+ ** - the purpose of Visitor is to achieve **double dispatch**, thus we
+ **   can not avoid using some table lookup implementation, and we can not
+ **   avoid using some of the cooperating classes' vtables. Besides that,
+ **   the implementation should not be too wasteful...
+ ** - individual Visiting Tool implementation classes should be able
+ **   to opt in or opt out on implementing functions treating some of
+ **   the visitable subclasses.
+ ** - there should be a safe fallback mechanism backed by the
+ **   visitable object's hierarchy relations. If some new class declares
+ **   to be visitable, existing Visiting Tools not yet treating this new
+ **   visitable type should fall back rather to the next best match up the
+ **   hierarchy, instead of invoking some almost abstract base class.
  ** 
  ** @see visitor.hpp the final lib implementation
  ** @see visitingtooltest.cpp test cases using our lib implementation

@@ -214,7 +214,7 @@ namespace gear {
     
     /**
      * Allocation Extent holding _scheduler Activities_ to be performed altogether
-     * before a common _deadline._ Other than the underlying raw Extent, the Epoch
+     * before a common _deadline_. Other than the underlying raw Extent, the Epoch
      * maintains a deadline time and keeps track of storage slots already claimed.
      * This is achieved by using the Activity record in the first slot as a GATE term
      * to maintain those administrative information.

@@ -93,7 +93,7 @@ namespace asset {
       bool known (IDA id, const Category& cat) ;
       
       /** remove the given asset from the internal DB.
-       * <i>together with all its dependents</i> */
+       *  _together with all its dependents_. */
       void remove (IDA id) ;
       
       /** deregister and evict all known Assets.

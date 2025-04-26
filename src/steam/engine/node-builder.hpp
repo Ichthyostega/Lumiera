@@ -77,7 +77,7 @@
  ** 
  ** ## Flavours of the processing function
  ** The binding to the actual data processing operations (usually supplied by an external library)
- ** is established by a **processing-functor** passed to configure the [Port builder](\PortBuilderRoot::invoke()).
+ ** is established by a **processing-functor** passed to configure the [Port builder](\ref PortBuilderRoot::invoke()).
  ** The supported signatures of this functor are quite flexible to allow for various flavours of invocation.
  ** Data types of parameters and buffers are picked up automatically (at compile time), based on the
  ** signature of the actual function supplied. The accepted variations are described in detail
@@ -603,7 +603,7 @@ namespace engine {
   
   
   /**
-   * Nested sub-Builder analogous to \ref PortBuilder, but for building  a _»Param Agent Node«._
+   * Nested sub-Builder analogous to \ref PortBuilder, but for building  a _»Param Agent Node«_.
    * This will compute additional parameters and make them temporarily accessible through the
    * TurnoutSystem of the invocation, but only while delegating recursively to another
    * computation node, which can then draw upon these additional parameter values.
