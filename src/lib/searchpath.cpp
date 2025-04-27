@@ -40,20 +40,13 @@ namespace lib {
   /** @internal helper to figure out the installation directory,
    *  as given by the absolute path of the currently executing program
    *  @warning this is Linux specific code */
-  string
+  fs::path
   findExePath()
   {
-    static string buff(lib::STRING_MAX_RELEVANT+1, '\0' );
-    if (!buff[0])
-      {
-        ssize_t chars_read = readlink (GET_PATH_TO_EXECUTABLE, &buff[0], lib::STRING_MAX_RELEVANT);
-        
-        if (0 > chars_read || chars_read == ssize_t(lib::STRING_MAX_RELEVANT))
-          throw error::Fatal ("unable to discover path of running executable");
-        
-        buff.resize(chars_read);
-      }
-    return buff;
+    fs::path selfExe{GET_PATH_TO_EXECUTABLE};
+    if (not fs::exists (selfExe))
+      throw error::Fatal ("unable to discover path of running executable");
+    return fs::canonical (selfExe);
   }
   
   
@@ -66,9 +59,9 @@ namespace lib {
   {
     static const regex PICK_ORIGIN_TOKEN ("\\$?ORIGIN/?");
     static const string expandedOriginDir  
-      = fsys::path (findExePath()).parent_path().string() + "/";          ///////////TICKET #896
+      = findExePath().parent_path().string() + "/";                       ///////////TICKET #896
     
-    return regex_replace(src, PICK_ORIGIN_TOKEN, expandedOriginDir);
+    return regex_replace (src, PICK_ORIGIN_TOKEN, expandedOriginDir);
   }
   
   
@@ -76,16 +69,16 @@ namespace lib {
   
   
   string
-  resolveModulePath (fsys::path moduleName, string searchPath)
+  resolveModulePath (fs::path moduleName, string searchPath)
   {
-    fsys::path modulePathName (moduleName);
+    fs::path modulePathName (moduleName);
     SearchPathSplitter searchLocation(searchPath);                        ///////////TICKET #896
     
-    while (!fsys::exists (modulePathName))
+    while (not fs::exists (modulePathName))
       {
         // try / continue search path
         if (searchLocation.isValid())
-          modulePathName = fsys::path() / searchLocation.next() / moduleName;
+          modulePathName = fs::path() / searchLocation.next() / moduleName;
         else
           throw error::Config ("Module \""+moduleName.string()+"\" not found"   /////TICKET #896
                               + (searchPath.empty()? ".":" in search path: "+searchPath));

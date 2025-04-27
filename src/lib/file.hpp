@@ -25,8 +25,8 @@
 
 
 
-#ifndef LIB_STAT_FILE_H
-#define LIB_STAT_FILE_H
+#ifndef LIB_FILE_H
+#define LIB_FILE_H
 
 
 #include "lib/error.hpp"
@@ -65,9 +65,7 @@ namespace std::filesystem {
       if (UNIX_HOMEDIR_SYMBOL == *rawPath.begin())
           rawPath = getHomePath() / rawPath.lexically_proximate(UNIX_HOMEDIR_SYMBOL);
   
-      return fs::exists(rawPath)? fs::absolute(
-                                  fs::canonical(rawPath))
-                                : rawPath;
+      return fs::weakly_canonical(rawPath);
   }
   
   
@@ -116,4 +114,4 @@ namespace util {
     };
   
 }//(End)namespace util
-#endif /*LIB_STAT_FILE_H*/
+#endif /*LIB_FILE_H*/

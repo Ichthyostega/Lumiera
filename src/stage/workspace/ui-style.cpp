@@ -27,10 +27,10 @@
 #include "stage/style-scheme.hpp"
 #include "stage/config-keys.hpp"
 #include "lib/searchpath.hpp"
+#include "lib/file.hpp"
 #include "lib/util.hpp"
 
 #include <gtkmm/stylecontext.h>
-#include <boost/filesystem.hpp>
 
 using Gtk::IconSize;
 using Gtk::IconFactory;
@@ -39,8 +39,6 @@ using Gtk::IconFactory;
 
 namespace stage {
 namespace workspace {
-  
-  namespace fsys = boost::filesystem;
   
   IconSize UiStyle::GiantIconSize = Gtk::ICON_SIZE_INVALID;
   IconSize UiStyle::MenuIconSize = Gtk::ICON_SIZE_INVALID;
@@ -329,7 +327,7 @@ namespace workspace {
                                 ,Gtk::IconSize size
                                 ,bool wildcard)
   {
-    if (!fsys::exists (path)) return false;
+    if (not fs::exists (path)) return false;
     
     try {
         Gtk::IconSource source;

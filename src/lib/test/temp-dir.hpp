@@ -25,9 +25,9 @@
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/random.hpp"
-#include "lib/stat/file.hpp"
 #include "include/limits.hpp"
 #include "lib/format-string.hpp"
+#include "lib/file.hpp"
 #include "lib/util.hpp"
 
 #include <fstream>

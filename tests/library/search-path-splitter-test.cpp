@@ -19,6 +19,7 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/format-cout.hpp"
+#include "lib/file.hpp"
 
 #include "lib/searchpath.hpp"
 
@@ -74,8 +75,8 @@ namespace test {
       void
       resolveEmbeddedOriginToken ()
         {
-          fsys::path exePath (findExePath());
-          string expected = (exePath.remove_leaf() / "modules").string();    ////////OOO warning by GCC-14 : `path::remove_leaf()` is deprecated: Use `path::remove_filename()` instead
+          fs::path exePath{findExePath()};
+          string expected{exePath.parent_path() / "modules"};
           
           SearchPathSplitter sp("xyz:$ORIGIN/modules:abc");
           CHECK ("xyz" == sp.next());

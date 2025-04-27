@@ -18,7 +18,7 @@
  */
 
 
-#include "lib/stat/file.hpp"
+#include "lib/file.hpp"
 
 
 namespace std::filesystem {

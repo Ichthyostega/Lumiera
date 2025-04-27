@@ -26,26 +26,25 @@
 
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
+#include "lib/regex.hpp"
+#include "lib/file.hpp"
 
-#include <boost/filesystem.hpp>
 #include <string>
-#include <regex>
 
 
 namespace lib {
+  namespace error = lumiera::error;
   
   using std::string;
   
   using SubMatch = std::smatch::value_type const&;
   
-  namespace error = lumiera::error;
-  namespace fsys = boost::filesystem;
   
   using LERR_(ITER_EXHAUST);
   
   
   /** retrieve the location of the executable */
-  string findExePath();
+  fs::path findExePath();
   
   /** replace $ORIGIN tokens in the given string
    *  @return copy with expansions applied */
@@ -106,7 +105,7 @@ namespace lib {
    *  @return the absolute pathname of the module file found
    *  @throws error::Config when the resolution fails  
    */
-  string resolveModulePath (fsys::path moduleName, string searchPath = "");
+  string resolveModulePath (fs::path moduleName, string searchPath = "");
   
   
   

@@ -19,7 +19,7 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/test/temp-dir.hpp"
-#include "lib/stat/file.hpp"
+#include "lib/file.hpp"
 
 #include <fstream>
 

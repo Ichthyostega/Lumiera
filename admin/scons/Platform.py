@@ -82,10 +82,6 @@ def configure(env):
             problems.append('We need boost::format (header).')
         if not conf.CheckLibWithHeader('boost_program_options','boost/program_options.hpp','C++'):
             problems.append('We need boost::program_options (including binary lib for linking).')
-        if not conf.CheckLibWithHeader('boost_system','boost/system/error_code.hpp','C++'):
-            problems.append('We need the boost::system support library (including binary lib).')
-        if not conf.CheckLibWithHeader('boost_filesystem','boost/filesystem.hpp','C++'):
-            problems.append('We need the boost::filesystem lib (including binary lib for linking).')
     
     
     if not conf.CheckPkgConfig('gavl', '1.4'):

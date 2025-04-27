@@ -71,7 +71,7 @@ For Debian based systems, e.g. Mint, Ubuntu..., you can install these packages a
 
 -------------------------------------------------------------------------------------
 sudo apt-get install build-essential scons git-core valgrind intltool \
-libboost-dev libboost-program-options-dev libboost-regex-dev libboost-filesystem-dev \
+libboost-dev libboost-program-options-dev \
 libgavl-dev libgtkmm-3.0-dev libgdl-3-dev librsvg2-dev libxv-dev
 -------------------------------------------------------------------------------------
 

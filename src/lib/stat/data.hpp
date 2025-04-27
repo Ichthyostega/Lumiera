@@ -82,7 +82,7 @@
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/stat/csv.hpp"
-#include "lib/stat/file.hpp"
+#include "lib/file.hpp"
 #include "lib/format-string.hpp"
 #include "lib/util.hpp"
 

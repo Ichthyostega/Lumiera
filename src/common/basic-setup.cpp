@@ -27,12 +27,12 @@
 #include "common/basic-setup.hpp"
 #include "lib/searchpath.hpp"
 #include "lib/error.hpp"
+#include "lib/file.hpp"
 #include "lib/util.hpp"
 
 extern "C" {
 #include <unistd.h>
 }
-#include <boost/filesystem.hpp>
 #include <fstream>
 
 
@@ -41,7 +41,6 @@ namespace lumiera {
   using std::string;
   using std::ifstream;
   
-  namespace fsys = boost::filesystem;
   namespace opt = boost::program_options;
   
   namespace { // details of the bootstrap process...
@@ -53,7 +52,7 @@ namespace lumiera {
     /** use the general mechanism for resolving a search path
      *  to get the absolute path of the \c setup.ini */
     string
-    resolve (fsys::path iniSpec)
+    resolve (fs::path iniSpec)
     {
       string searchpath = iniSpec.parent_path().string();                     ///////////TICKET #896
       return resolveModulePath (iniSpec.filename(), searchpath);

@@ -157153,7 +157153,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1736638491692" ID="ID_54383680" MODIFIED="1736714784317" TEXT="Parser-Combinator bauen">
+<node CREATED="1736638491692" FOLDED="true" ID="ID_54383680" MODIFIED="1736714784317" TEXT="Parser-Combinator bauen">
 <linktarget COLOR="#404a87" DESTINATION="ID_54383680" ENDARROW="Default" ENDINCLINATION="-2293;243;" ID="Arrow_ID_533922637" SOURCE="ID_149530013" STARTARROW="None" STARTINCLINATION="-1497;80;"/>
 <node CREATED="1736638519989" ID="ID_1002798343" MODIFIED="1736638536376" TEXT="Einf&#xfc;hrung">
 <icon BUILTIN="info"/>
@@ -157467,7 +157467,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 </node>
 </node>
-<node CREATED="1699972103508" ID="ID_1402372766" MODIFIED="1699972200037" TEXT="Graphviz: generated diagrams">
+<node CREATED="1699972103508" FOLDED="true" ID="ID_1402372766" MODIFIED="1699972200037" TEXT="Graphviz: generated diagrams">
 <linktarget COLOR="#435fb4" DESTINATION="ID_1402372766" ENDARROW="Default" ENDINCLINATION="-1358;124;" ID="Arrow_ID_1189460163" SOURCE="ID_551004748" STARTARROW="None" STARTINCLINATION="-1697;146;"/>
 <node CREATED="1699973368997" ID="ID_1070258863" LINK="https://graphviz.org/documentation/" MODIFIED="1699973377453" TEXT="offizielle Dokumentation">
 <icon BUILTIN="info"/>
@@ -157570,7 +157570,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1710633971367" ID="ID_260122422" LINK="gnuplotting.org/" MODIFIED="1710633978050" TEXT="Tutorials"/>
 <node CREATED="1710633929641" ID="ID_1371157643" LINK="http://www.gnuplot.info/faq/index.html" MODIFIED="1710633941539" TEXT="FAQ"/>
 </node>
-<node CREATED="1710633892087" ID="ID_1685206239" MODIFIED="1710633903201" TEXT="Fundamentals">
+<node CREATED="1710633892087" FOLDED="true" ID="ID_1685206239" MODIFIED="1710633903201" TEXT="Fundamentals">
 <node CREATED="1710634003727" ID="ID_810427376" MODIFIED="1710634010818" TEXT="an engine interpreting commands"/>
 <node CREATED="1710634011902" ID="ID_1786651279" MODIFIED="1710634028569" TEXT="commands from command line or files given at commandline (scripts)">
 <node CREATED="1711674184719" ID="ID_1963052194" MODIFIED="1711674195673" TEXT="gnuplot -p &lt;filename&gt;">
@@ -158110,6 +158110,116 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
     </p>
   </body>
 </html></richcontent>
+</node>
+<node CREATED="1745796352791" ID="ID_43939105" MODIFIED="1745796357517" TEXT="Intro">
+<node CREATED="1745796360697" ID="ID_1993267290" LINK="https://www.linuxjournal.com/article/6735" MODIFIED="1745796385612" TEXT="Linux-Journal: Introduction to Sound-Programming with ALSA"/>
+</node>
+</node>
+<node CREATED="1745782756562" ID="ID_234538183" MODIFIED="1745782783821" STYLE="fork" TEXT="Video">
+<edge COLOR="#61617d" STYLE="sharp_bezier" WIDTH="thin"/>
+<node CREATED="1745782770967" ID="ID_1146653979" MODIFIED="1745782783815" TEXT="Video-Ausgabe">
+<node CREATED="1745790344084" ID="ID_1378935901" MODIFIED="1745790352551" TEXT="Frameworks / Technologien">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1745790353944" ID="ID_1890042435" MODIFIED="1745790605840" TEXT="Wayland">
+<icon BUILTIN="hourglass"/>
+<node CREATED="1745790357389" ID="ID_1466301721" MODIFIED="1745790361268" TEXT="ist die Zukunft">
+<node CREATED="1745790361971" ID="ID_656311559" MODIFIED="1745790398832" TEXT="zur&#xfc;ck in die Zukunft">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1745790595984" ID="ID_1469022935" MODIFIED="1745790600411" TEXT="schon seit 15 Jahren"/>
+</node>
+<node CREATED="1745790373229" ID="ID_109392183" MODIFIED="1745790390509" TEXT="alle zwei Jahre: &#xbb;Wayland wird in 2 Jahren da sein&#xab;"/>
+<node CREATED="1745790410789" ID="ID_1978402799" MODIFIED="1745790415607" TEXT="Stand Sommer 2024">
+<node CREATED="1745790416436" ID="ID_1461285444" MODIFIED="1745790422715" TEXT="langsamer als X">
+<node CREATED="1745790576339" ID="ID_991507967" MODIFIED="1745790588285" TEXT="auch wenn man OpenGL oder Vulcan durchreicht"/>
+</node>
+<node CREATED="1745790423367" ID="ID_587999539" MODIFIED="1745790446559" TEXT="ruckelig / Latenzen"/>
+<node CREATED="1745790427630" ID="ID_340721374" MODIFIED="1745790442748" TEXT="Farbkalibrierung funktioniert nicht richtig"/>
+<node CREATED="1745790455331" ID="ID_416586188" MODIFIED="1745790462823" TEXT="Fokus / Logik / Darstellungsfehler"/>
+<node CREATED="1745790463762" ID="ID_1177207910" MODIFIED="1745790483631" TEXT="fehlende Tuning-M&#xf6;glichkeiten f&#xfc;r die Grafikkarte"/>
+<node CREATED="1745790487047" ID="ID_539146080" MODIFIED="1745790574371" TEXT="eng mit dem Desktop-Environment verwoben &#x27f9; Diskrepanzen"/>
+</node>
+</node>
+<node CREATED="1745791348367" ID="ID_1162906344" LINK="https://en.wikipedia.org/wiki/VDPAU" MODIFIED="1745796472258" TEXT="VDPAU">
+<node CREATED="1745791357898" ID="ID_1307405771" MODIFIED="1745791380506" TEXT="API von NVidia &#x2014; royality-free usage">
+<node CREATED="1745791407011" ID="ID_1299810279" MODIFIED="1745791431015" TEXT="wird auch von einigen ATI / AMD-Karten (Radeon HD) unterst&#xfc;tz"/>
+<node CREATED="1745791431648" ID="ID_1433673122" MODIFIED="1745791440857" TEXT="Intel hat ein Konkurrenz-Produkt: VA-API"/>
+<node CREATED="1745791442121" ID="ID_1679927063" MODIFIED="1745791457133" TEXT="es gibt eine Bridge VDPAU &#x27f6; VA-API"/>
+<node CREATED="1745791457781" ID="ID_1274593758" MODIFIED="1745791468575" TEXT="es gibt eine Bridge VDPAU &#x27f6; OpenGL"/>
+</node>
+<node CREATED="1745791383345" ID="ID_1219320187" MODIFIED="1745791396097" TEXT="offload video decoding and post-processing to the GPU"/>
+<node CREATED="1745791542834" ID="ID_384637616" MODIFIED="1745791559867" TEXT="es gibt generische VDPAU-Treiber, die das passende Backend w&#xe4;hlen"/>
+</node>
+<node CREATED="1745797121386" ID="ID_1689721798" LINK="https://en.wikipedia.org/wiki/Simple_DirectMedia_Layer" MODIFIED="1745797137309" TEXT="Simple DirectMedia Layer (SDL)">
+<node CREATED="1745797148720" ID="ID_1896783966" MODIFIED="1745797163214" TEXT="eine X-plattform Hardware-Abstraktions-Library"/>
+</node>
+<node CREATED="1745790632209" ID="ID_1480441401" LINK="https://en.wikipedia.org/wiki/X_video_extension" MODIFIED="1745796465085" TEXT="X Video extension (XV)">
+<node CREATED="1745790640314" ID="ID_1331264503" MODIFIED="1745790646637" TEXT="Uralt-Standard von 1990"/>
+<node CREATED="1745790664103" ID="ID_1383683758" MODIFIED="1745791054413" TEXT="Applikation &#x27f6; Bitmap &#x27f6; Grafikhardware : Skalieren, Filtern">
+<arrowlink DESTINATION="ID_1459512504" ENDARROW="Default" ENDINCLINATION="228;-10;" ID="Arrow_ID_979502299" STARTARROW="None" STARTINCLINATION="343;0;"/>
+</node>
+<node CREATED="1745790710746" ID="ID_174158315" MODIFIED="1745790719763" TEXT="erfordert zus&#xe4;tzlich eine Compositing-Technik">
+<node CREATED="1745790770669" ID="ID_1286647910" MODIFIED="1745790787498" TEXT="h&#xe4;ngt vom Window-Manager ab"/>
+<node CREATED="1745790788106" ID="ID_1219461820" MODIFIED="1745790794314" TEXT="&#xbb;compositing window manager&#xab;"/>
+<node CREATED="1745790794909" ID="ID_794334923" MODIFIED="1745790813390" TEXT="alternativ: OpenGL pbuffer (Framebuffer Object)"/>
+<node CREATED="1745790814130" ID="ID_1716450494" MODIFIED="1745790821725" TEXT="fallback: Chroma-Keying-Trick"/>
+</node>
+<node CREATED="1745790900201" ID="ID_1543421309" MODIFIED="1745790904811" TEXT="Vorrausetzungen">
+<node CREATED="1745790906886" ID="ID_1946251450" MODIFIED="1745790954584" TEXT="Videokarte oder Controller mu&#xdf; die acceleration-Funktionen bereitstellen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+  <body>
+    <p>
+      d.h. je nachdem, was man machen m&#246;chte: Skalieren, Positionieren, Farbraum-Mapping
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1745790970318" ID="ID_89388403" MODIFIED="1745790990806" TEXT="Device-Driver f&#xfc;r Video-Controller und X-Server m&#xfc;ssen XV unterst&#xfc;tzen"/>
+</node>
+<node CREATED="1745791016342" ID="ID_1843598374" MODIFIED="1745791030110" TEXT="i.d.R verwendet man heutzutage nur noch wenige Funktionen">
+<node CREATED="1745791031502" ID="ID_1459512504" MODIFIED="1745791054413" TEXT="functions XvPutImage and XvShmPutImage">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1459512504" ENDARROW="Default" ENDINCLINATION="228;-10;" ID="Arrow_ID_979502299" SOURCE="ID_1383683758" STARTARROW="None" STARTINCLINATION="343;0;"/>
+</node>
+</node>
+</node>
+<node CREATED="1745791075321" ID="ID_1681203488" MODIFIED="1745791078290" TEXT="Framebuffer">
+<node CREATED="1745791079095" ID="ID_1998553178" MODIFIED="1745791086392" TEXT="low-level-Abstraktion des Kernels"/>
+<node CREATED="1745791087219" ID="ID_1502801829" MODIFIED="1745791103792" TEXT="Sicht auf einen Video-Buffer als ein &#xbb;memory device&#xab;"/>
+<node CREATED="1745791112618" ID="ID_1190334707" MODIFIED="1745791124376" TEXT="leistet Abstraktion von der Hardware"/>
+<node CREATED="1745791125111" ID="ID_1832906994" MODIFIED="1745791134091" TEXT="aber Software mu&#xdf; Video-Rohdaten liefern">
+<node CREATED="1745791135240" ID="ID_76898434" MODIFIED="1745791141059" TEXT="Timings / &#xbb;Modes&#xab;"/>
+<node CREATED="1745791141767" ID="ID_136871284" MODIFIED="1745791148543" TEXT="Pixel- und Farbformate"/>
+</node>
+<node CREATED="1745791149957" ID="ID_541376290" MODIFIED="1745791158968" TEXT="X-Server arbeitet auf dem Framebuffer"/>
+</node>
+</node>
+<node CREATED="1745782684675" ID="ID_345446521" MODIFIED="1745782809317" TEXT="Tip von Chrisian im Chat: zum Thema Video-Ausgabe">
+<linktarget COLOR="#fdfdd3" DESTINATION="ID_345446521" ENDARROW="Default" ENDINCLINATION="-748;40;" ID="Arrow_ID_1665163331" SOURCE="ID_846823682" STARTARROW="None" STARTINCLINATION="717;38;"/>
+<node COLOR="#435e98" CREATED="1745782054150" ID="ID_1388778311" MODIFIED="1745782783816" TEXT="2024-04-10T21:58:05">
+<icon BUILTIN="calendar"/>
+</node>
+<node CREATED="1742175921948" ID="ID_913929108" LINK="https://github.com/x42/xjadeo/tree/master/src/xjadeo" MODIFIED="1745782783816" TEXT="xjadeo von Robin Gareus"/>
+<node CREATED="1742175904431" ID="ID_1652277690" MODIFIED="1745782783816" TEXT="eine ziemlich alt-etablierte Video-Player-Application">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#450099" CREATED="1742175930588" ID="ID_1772473871" MODIFIED="1745783181212" TEXT="direkter Link auf den relevanten C-Code">
+<icon BUILTIN="idea"/>
+<node CREATED="1745782035173" ID="ID_569856037" LINK="https://github.com/x42/xjadeo/blob/master/src/xjadeo/display.c" MODIFIED="1745782783816" TEXT="https://github.com/x42/xjadeo/blob/master/src/xjadeo/display.c"/>
+<node CREATED="1745782098503" ID="ID_1976615984" MODIFIED="1745782783816" TEXT="au&#xdf;erdem sollte man sich Vulcan-Video anschauen...">
+<icon BUILTIN="idea"/>
+<node CREATED="1745782210207" ID="ID_1341192412" LINK="https://vulkan.org/blog/an-introduction-to-vulkan-video" MODIFIED="1745782783816" TEXT="https://vulkan.org/blog/an-introduction-to-vulkan-video"/>
+<node CREATED="1745782248621" LINK="https://www.khronos.org/blog/an-introduction-to-vulkan-video" MODIFIED="1745782783817" TEXT="https://www.khronos.org/blog/an-introduction-to-vulkan-video"/>
+</node>
+</node>
+<node CREATED="1745782304018" ID="ID_1602498599" MODIFIED="1745782783817" TEXT="an Caching f&#xfc;r Mem-Bl&#xf6;cke denken">
+<node CREATED="1745782317402" LINK="https://www.man7.org/linux/man-pages/man2/cacheflush.2.html" MODIFIED="1745782783817" TEXT="https://www.man7.org/linux/man-pages/man2/cacheflush.2.html"/>
+<node CREATED="1745782339385" MODIFIED="1745782783817" TEXT="void __builtin___clear_cache(void *begin, void *end);"/>
+</node>
+</node>
+</node>
+<node CREATED="1745795959699" ID="ID_1764495386" MODIFIED="1745795983081" TEXT="Video-Formate">
+<node CREATED="1745795986779" ID="ID_770800240" LINK="https://wiki.xiph.org/Videos/A_Digital_Media_Primer_For_Geeks" MODIFIED="1745796008637" TEXT="Video: A Digital Media Primer for Geeks (ciph.org)"/>
 </node>
 </node>
 </node>
@@ -160867,8 +160977,7 @@ Since then others have made contributions, see the log for the history.</font></
       das Ergebnis ist letztlich <b>immer wieder entt&#228;uschend</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -161284,7 +161393,74 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1742175621250" ID="ID_1886919024" MODIFIED="1742175634845" TEXT="boost-filesystem loswerden!">
 <icon BUILTIN="flag-yellow"/>
-<node CREATED="1744754918427" ID="ID_368377472" MODIFIED="1744754923731" TEXT="lib/searchpath.hpp"/>
+<node CREATED="1744754918427" ID="ID_368377472" MODIFIED="1745799970522" TEXT="lib/searchpath.hpp">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_368377472" ENDARROW="Default" ENDINCLINATION="47;6;" ID="Arrow_ID_1410738800" SOURCE="ID_883309222" STARTARROW="None" STARTINCLINATION="54;6;"/>
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_368377472" ENDARROW="Default" ENDINCLINATION="107;14;" ID="Arrow_ID_1432393919" SOURCE="ID_1713220396" STARTARROW="None" STARTINCLINATION="74;7;"/>
+<node CREATED="1745799915063" HGAP="36" ID="ID_1523545815" MODIFIED="1745799930703" TEXT="Einstiegspunkt: lib::resolveModulePath" VSHIFT="-7">
+<node COLOR="#435e98" CREATED="1745799978331" ID="ID_1013959969" MODIFIED="1745848739251" TEXT="verwendet boost::fsys::path auf dem API">
+<icon BUILTIN="messagebox_warning"/>
+<node COLOR="#435e98" CREATED="1745800796649" ID="ID_586711996" MODIFIED="1745848760858" TEXT="generische L&#xf6;sung konsolidieren">
+<icon BUILTIN="yes"/>
+<node COLOR="#435e98" CREATED="1745801572023" ID="ID_1130395329" MODIFIED="1745804020414" TEXT="Header wohin?">
+<icon BUILTIN="help"/>
+<node CREATED="1745801788213" ID="ID_826307504" MODIFIED="1745801814242" TEXT="es gibt bisher keine passende &#xbb;Komponente&#xab;"/>
+<node CREATED="1745801831854" ID="ID_1878514572" MODIFIED="1745801839714" TEXT="thread und sync sind auch top-level"/>
+<node CREATED="1745801855425" ID="ID_759687393" MODIFIED="1745801864415" TEXT="cmdline ebenfalls"/>
+<node CREATED="1745801865147" ID="ID_29042931" MODIFIED="1745801871572" TEXT="und searchpath"/>
+<node CREATED="1745803933903" ID="ID_619536030" MODIFIED="1745804017383" TEXT="OK &#x2014; die Lumiera-Support-Lib hat &#xbb;generische&#xab; Hilfsmittel auf top-Level">
+<richcontent TYPE="NOTE"><html>
+  <head>
+  <body>
+    <p>
+      wie lib/regex.hpp, lib/result.hpp, lib/thread.hpp, lib/parse.hpp ....
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1745804023888" ID="ID_1609940984" MODIFIED="1745804309640" TEXT="also nach lib/file.hpp verschieben">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1745805990154" ID="ID_1777434171" MODIFIED="1745848751673" TEXT="auf std::filesystem umstellen">
+<icon BUILTIN="yes"/>
+<node CREATED="1745806000382" ID="ID_1148823363" LINK="https://man7.org/linux/man-pages/man2/readlink.2.html" MODIFIED="1745806028718" TEXT="readlink()-Funktion von Linux verwendet (aus unistd.h)"/>
+<node CREATED="1745806035169" ID="ID_431487034" MODIFIED="1745806098154" TEXT="umschreiben...">
+<node COLOR="#5b280f" CREATED="1745806099135" ID="ID_1155150476" MODIFIED="1745848145216" TEXT="man k&#xf6;nnte read_symlink verwenden">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1745806106898" ID="ID_1016185706" MODIFIED="1745848158645" TEXT="oder cannonical()">
+<icon BUILTIN="back"/>
+</node>
+<node COLOR="#435e98" CREATED="1745848167167" ID="ID_273588071" MODIFIED="1745848185599" TEXT="liefert jetzt auch einen fs::path">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1745800050780" ID="ID_53680199" MODIFIED="1745800058623" TEXT="Impl. verwendet SearchPatchSplitter">
+<node CREATED="1745800059996" ID="ID_1732566176" MODIFIED="1745800114759" TEXT="dies ist ein &#xbb;Iterator&#xab; &#x2014; aber kein Lumiera Forward Iterator">
+<richcontent TYPE="NOTE"><html>
+  <head>
+  <body>
+    <p>
+      ...das war vermutlich mein erster Versuch, eine Iterator-Klasse in C++ zu bauen.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1745800146421" ID="ID_274063300" MODIFIED="1745800186494" TEXT="wird noch vewendet von configfacade.cpp und ui-style.cpp"/>
+<node CREATED="1745800193650" ID="ID_490272268" MODIFIED="1745800204496" TEXT="nimmt einen boost::fsys::path in den ctor"/>
+</node>
+</node>
+</node>
+<node CREATED="1745799339555" ID="ID_883309222" MODIFIED="1745799968850" TEXT="common/basic-setup.cpp">
+<arrowlink DESTINATION="ID_368377472" ENDARROW="Default" ENDINCLINATION="47;6;" ID="Arrow_ID_1410738800" STARTARROW="None" STARTINCLINATION="54;6;"/>
+</node>
+<node CREATED="1745799358169" ID="ID_1713220396" MODIFIED="1745799961435" TEXT="stage/workspace/ui-style.cpp">
+<arrowlink DESTINATION="ID_368377472" ENDARROW="Default" ENDINCLINATION="107;14;" ID="Arrow_ID_1432393919" STARTARROW="None" STARTINCLINATION="74;7;"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1744756270441" ID="ID_831819953" LINK="https://issues.lumiera.org/ticket/473" MODIFIED="1744756657146" TEXT="RefArray und ScopedHolder m&#xfc;ssen jetzt wirklich mal weg">
 <arrowlink COLOR="#fd26d0" DESTINATION="ID_1135941103" ENDARROW="Default" ENDINCLINATION="-1048;89;" ID="Arrow_ID_1050531240" STARTARROW="None" STARTINCLINATION="-1120;-23;"/>
@@ -161292,15 +161468,20 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1742175872016" ID="ID_1131308211" MODIFIED="1742175881001" TEXT="Untersuchung: einfacher XV-Displayer">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1742175882083" ID="ID_846823682" MODIFIED="1742175899940" TEXT="Christian hatte uns im Chat einen Tip gegeben">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1742175882083" ID="ID_846823682" MODIFIED="1745783296480" TEXT="Christian hatte uns im Chat einen Tip gegeben">
+<richcontent TYPE="NOTE"><html>
+  <head>
+  <body>
+    <p>
+      Und zwar schon vor einem Jahr.
+    </p>
+    <p>
+      Grrr..... wo ist die Zeit hin??
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#fdfdd3" DESTINATION="ID_345446521" ENDARROW="Default" ENDINCLINATION="-748;40;" ID="Arrow_ID_1665163331" STARTARROW="None" STARTINCLINATION="717;38;"/>
 <icon BUILTIN="idea"/>
-<node CREATED="1742175921948" ID="ID_913929108" MODIFIED="1742175923838" TEXT="xxxx"/>
-<node CREATED="1742175904431" ID="ID_1652277690" MODIFIED="1742175929591" TEXT="eine ziemlich alt-etablierte Video-Player-Application">
-<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1742175930588" ID="ID_1772473871" MODIFIED="1742175941839" TEXT="direkter Link auf den relevanten C-Code">
-<icon BUILTIN="flag-yellow"/>
-</node>
 </node>
 <node CREATED="1742175967881" ID="ID_1117969598" MODIFIED="1742175981193" TEXT="Recherche: Basis-Infos zu XV"/>
 <node CREATED="1742175946044" ID="ID_114770740" MODIFIED="1742175960772" TEXT="Untersuchen bzgl. Lib-Dependencies"/>
@@ -161308,6 +161489,9 @@ Since then others have made contributions, see the log for the history.</font></
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1742176004434" ID="ID_393175435" MODIFIED="1742176020024" TEXT="GTK-2 Videoplayer-Widget entfernen">
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1742176027489" ID="ID_1395603395" MODIFIED="1742176036634" TEXT="Ziel: Dependencies reduzieren"/>
+<node COLOR="#5b280f" CREATED="1745798298207" ID="ID_1464159274" MODIFIED="1745798323397" TEXT="aber: das war eine XV-basierte L&#xf6;sung (korrekt?)">
+<icon BUILTIN="stop-sign"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1742249461535" ID="ID_1554376708" MODIFIED="1742256553530" TEXT="Rolle der lib-Gavl &#xfc;berpr&#xfc;fen">
 <linktarget COLOR="#a41b18" DESTINATION="ID_1554376708" ENDARROW="Default" ENDINCLINATION="440;-36;" ID="Arrow_ID_608156847" SOURCE="ID_1683248748" STARTARROW="None" STARTINCLINATION="193;12;"/>
