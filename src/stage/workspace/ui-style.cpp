@@ -262,10 +262,10 @@ namespace workspace {
       return true;
     
     // Try to resolve the icon via the configured search path
-    lib::SearchPathSplitter iconLocations (iconSearchPath_);
-    while (iconLocations)
+    lib::SearchPathSplitter iconLocations{iconSearchPath_};
+    for (auto const& location : iconLocations)
       if (addNonThemeIconSource (icon_set
-                                ,iconLocations.next()
+                                ,location
                                 ,icon_name
                                 ,size
                                 ,wildcard))

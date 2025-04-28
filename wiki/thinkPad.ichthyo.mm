@@ -158172,8 +158172,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
       d.h. je nachdem, was man machen m&#246;chte: Skalieren, Positionieren, Farbraum-Mapping
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1745790970318" ID="ID_89388403" MODIFIED="1745790990806" TEXT="Device-Driver f&#xfc;r Video-Controller und X-Server m&#xfc;ssen XV unterst&#xfc;tzen"/>
 </node>
@@ -161391,8 +161390,8 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1742175611912" ID="ID_16098937" MODIFIED="1742175617591" TEXT="etwas aufr&#xe4;umen">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1742175621250" ID="ID_1886919024" MODIFIED="1742175634845" TEXT="boost-filesystem loswerden!">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1742175621250" FOLDED="true" ID="ID_1886919024" MODIFIED="1745860228467" TEXT="boost-filesystem loswerden!">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1744754918427" ID="ID_368377472" MODIFIED="1745799970522" TEXT="lib/searchpath.hpp">
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_368377472" ENDARROW="Default" ENDINCLINATION="47;6;" ID="Arrow_ID_1410738800" SOURCE="ID_883309222" STARTARROW="None" STARTINCLINATION="54;6;"/>
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_368377472" ENDARROW="Default" ENDINCLINATION="107;14;" ID="Arrow_ID_1432393919" SOURCE="ID_1713220396" STARTARROW="None" STARTINCLINATION="74;7;"/>
@@ -161439,19 +161438,29 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node CREATED="1745800050780" ID="ID_53680199" MODIFIED="1745800058623" TEXT="Impl. verwendet SearchPatchSplitter">
-<node CREATED="1745800059996" ID="ID_1732566176" MODIFIED="1745800114759" TEXT="dies ist ein &#xbb;Iterator&#xab; &#x2014; aber kein Lumiera Forward Iterator">
+<node COLOR="#435e98" CREATED="1745800050780" ID="ID_53680199" MODIFIED="1745860206848" TEXT="Impl. verwendet SearchPatchSplitter">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1745800193650" ID="ID_490272268" MODIFIED="1745850089541" TEXT="nimmt einen boost::fsys::path in den ctor"/>
+<node CREATED="1745800146421" ID="ID_274063300" MODIFIED="1745800186494" TEXT="wird noch vewendet von configfacade.cpp und ui-style.cpp"/>
+<node COLOR="#338800" CREATED="1745800059996" ID="ID_1732566176" MODIFIED="1745860210862" TEXT="dies ist ein &#xbb;Iterator&#xab; &#x2014; aber kein Lumiera Forward Iterator">
 <richcontent TYPE="NOTE"><html>
   <head>
+    
+  </head>
   <body>
     <p>
-      ...das war vermutlich mein erster Versuch, eine Iterator-Klasse in C++ zu bauen.
+      ...das war vermutlich mein erster Versuch, eine Iterator-Klasse in C++ zu bauen &#8212; hatte mich dabei offensichtlich an Java orientiert
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1745850122914" ID="ID_1543137724" MODIFIED="1745850144722" TEXT="inzwischen k&#xf6;nnen &#x201e;wir&#x201c; das vieeel besser"/>
+<node CREATED="1745850145440" ID="ID_1260012350" MODIFIED="1745850185900" TEXT="der RegexpSearchIter bietet sich da gradezu an (&#x27f6; siehe CSV.hpp)"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1745859667169" ID="ID_161905722" MODIFIED="1745859694033" TEXT="Vorsicht: Regexp-Search verweist in bestehenden String">
+<icon BUILTIN="clanbomber"/>
 </node>
-<node CREATED="1745800146421" ID="ID_274063300" MODIFIED="1745800186494" TEXT="wird noch vewendet von configfacade.cpp und ui-style.cpp"/>
-<node CREATED="1745800193650" ID="ID_490272268" MODIFIED="1745800204496" TEXT="nimmt einen boost::fsys::path in den ctor"/>
+</node>
 </node>
 </node>
 </node>

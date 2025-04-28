@@ -20,11 +20,12 @@
 #include "lib/test/test-helper.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/file.hpp"
+#include "lib/util.hpp"
 
 #include "lib/searchpath.hpp"
 
 
-
+using util::isnil;
 
 namespace lib {
 namespace test {
@@ -54,20 +55,21 @@ namespace test {
           walk ("a:");
           walk (":a");
           walk ("a:b");
-          walk (":a:b:c:");
-          walk (" d : e f");
+          walk (":a:b\n:c:");
+          walk (" d : e f ");
           walk ("/usr/bin:/usr/lib");
           
-          SearchPathSplitter sp("");
-          VERIFY_ERROR (ITER_EXHAUST, sp.next() );
+          SearchPathSplitter sp{};
+          CHECK (not sp);
+          VERIFY_ERROR (ITER_EXHAUST, *sp );
         }
       
       void
       walk (string spec)
         {
-          SearchPathSplitter path(spec);
-          while (path)
-            cout << "➢➢" << path.next() << endl;
+          SearchPathSplitter path{spec};
+          for (auto const& pathElm : path)
+            cout <<"▶"<< pathElm <<"◀"<< endl;
         }
       
       
@@ -78,11 +80,15 @@ namespace test {
           fs::path exePath{findExePath()};
           string expected{exePath.parent_path() / "modules"};
           
-          SearchPathSplitter sp("xyz:$ORIGIN/modules:abc");
-          CHECK ("xyz" == sp.next());
-          CHECK (sp.next() == expected);
-          CHECK ("abc" == sp.next());
-          CHECK (!sp.isValid());
+          string searchSpec = "xyz:$ORIGIN/modules:abc";
+          SearchPathSplitter sp{searchSpec};
+          CHECK (*sp == "xyz"_expect);
+          ++sp;
+          CHECK (*sp == ExpectString{expected});
+          ++sp;
+          CHECK (*sp == "abc"_expect);
+          ++sp;
+          CHECK (isnil (sp));
         }
     };
   

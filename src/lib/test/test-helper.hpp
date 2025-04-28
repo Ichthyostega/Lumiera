@@ -41,6 +41,7 @@
 #include <boost/lexical_cast.hpp>
 #include <typeinfo>
 #include <cstdlib>
+#include <utility>
 #include <limits>
 #include <string>
 #include <cmath>
@@ -49,7 +50,7 @@
 
 namespace lib {
 namespace test{
-  
+
   using lib::Literal;
   using std::string;
   using lib::rani;
@@ -327,7 +328,12 @@ namespace test{
   class ExpectString
     : public std::string
     {
+    public:
       using std::string::string;
+      
+      ExpectString(std::string && s)     : std::string{std::move(s)}{ }
+      ExpectString(std::string const& s) : std::string{s}           { }
+      
       
       template<typename X>
       friend bool

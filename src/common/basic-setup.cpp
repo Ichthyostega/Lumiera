@@ -54,7 +54,7 @@ namespace lumiera {
     string
     resolve (fs::path iniSpec)
     {
-      string searchpath = iniSpec.parent_path().string();                     ///////////TICKET #896
+      string searchpath = iniSpec.parent_path().generic_string();
       return resolveModulePath (iniSpec.filename(), searchpath);
     }
     

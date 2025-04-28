@@ -35,6 +35,8 @@
 #include "include/config-facade.h"
 #include "common/appstate.hpp"
 #include "lib/searchpath.hpp"
+#include "lib/iter-explorer.hpp"
+#include "lib/format-util.hpp"
 #include "lib/util.hpp"
 
 extern "C" {
@@ -130,18 +132,11 @@ extern "C" { /* ==== implementation C interface for accessing setup.ini ======= 
   
   const char*
   lumiera_get_plugin_path_default ()
-  {
-    static string pathSpec;
-    if (isnil (pathSpec))
-      {
-        pathSpec += "plugin.path="; // syntax expected by lumiera_config_setdefault
-        
-        // fetch plugin search path from setup.ini and expand any $ORIGIN token
-        SearchPathSplitter pathElement(Config::get (KEY_PLUGIN_PATH));
-        while (pathElement)
-          pathSpec += pathElement.next() +":";
-      }
-    
+  {            // Meyer's Singleton...
+    static string pathSpec = []{ string pluginPath = Config::get (KEY_PLUGIN_PATH);
+                                 return "plugin.path=" // syntax expected by lumiera_config_setdefault
+                                      + util::join (SearchPathSplitter{pluginPath}, ":");
+                               }();
     return cStr(pathSpec);
   }
 }

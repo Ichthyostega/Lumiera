@@ -30,6 +30,7 @@
 #include "lib/file.hpp"
 
 #include <string>
+#include <boost/algorithm/string.hpp>
 
 
 namespace lib {
@@ -56,42 +57,35 @@ namespace lib {
    * This iterator class dissects a ':'-separated path list. The individual
    * components may use the symbol \c $ORIGIN to refer to the directory
    * holding the current executable.
-   * @note #next picks the current component and advances the iteration. 
    */
   class SearchPathSplitter
-    : util::NonCopyable
+    : public util::RegexSearchIter
     {
-      string pathSpec_;
-      std::sregex_iterator pos_,
-                           end_;
-      
-      static const std::regex EXTRACT_PATHSPEC;
+      static const regex ACCEPT_PATHELEMENT;
       
     public:
-      SearchPathSplitter (string const& searchPath)
-        : pathSpec_(replaceMagicLinkerTokens (searchPath))
-        , pos_(pathSpec_.begin(),pathSpec_.end(), EXTRACT_PATHSPEC)
-        , end_()
+      SearchPathSplitter() = default;
+      SearchPathSplitter (string& searchPath)         ///< @warning search path string must exist somewhere else
+        : RegexSearchIter{searchPath, ACCEPT_PATHELEMENT}
         { }
       
-      explicit operator bool() const { return isValid(); }
+      LIFT_PARENT_INCREMENT_OPERATOR (std::sregex_iterator);
+      ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (SearchPathSplitter);
       
-      bool
-      isValid()  const
-        {
-          return pos_ != end_;
-        }
+      using value_type = std::string;
+      using reference = value_type&;
+      using pointer =   value_type*;
       
       string
-      next ()
+      operator*()  const
         {
           if (!isValid())
             throw error::Logic ("Search path exhausted."
                                ,LERR_(ITER_EXHAUST));
           
-          string currentPathElement = pos_->str();
-          ++pos_;
-          return currentPathElement;
+          string pathElm = util::RegexSearchIter::operator*()[2];
+          pathElm = boost::algorithm::trim_right_copy(pathElm);
+          return replaceMagicLinkerTokens (pathElm);
         }
     };
   
@@ -103,7 +97,7 @@ namespace lib {
    *  SearchPathSplitter, until encountering an existing file with the
    *  given name.
    *  @return the absolute pathname of the module file found
-   *  @throws error::Config when the resolution fails  
+   *  @throws error::Config when the resolution fails
    */
   string resolveModulePath (fs::path moduleName, string searchPath = "");
   

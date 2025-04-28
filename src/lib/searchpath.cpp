@@ -19,6 +19,7 @@
 
 #include "lib/error.hpp"
 #include "lib/searchpath.hpp"
+#include "lib/format-string.hpp"
 #include "lib/symbol.hpp"
 
 
@@ -31,10 +32,11 @@
 
 namespace lib {
   
+  using util::_Fmt;
   using std::regex;
   using std::regex_replace;
   
-  const regex SearchPathSplitter::EXTRACT_PATHSPEC   ("[^:]+");
+  const regex SearchPathSplitter::ACCEPT_PATHELEMENT{"(^|:)\\s*([^:]+)", regex::optimize};
   
   
   /** @internal helper to figure out the installation directory,
@@ -57,9 +59,9 @@ namespace lib {
   string
   replaceMagicLinkerTokens (string const& src)
   {
-    static const regex PICK_ORIGIN_TOKEN ("\\$?ORIGIN/?");
+    static const regex PICK_ORIGIN_TOKEN{"\\$?ORIGIN/?", regex::optimize};
     static const string expandedOriginDir  
-      = findExePath().parent_path().string() + "/";                       ///////////TICKET #896
+      = findExePath().parent_path().generic_string() + "/";
     
     return regex_replace (src, PICK_ORIGIN_TOKEN, expandedOriginDir);
   }
@@ -72,20 +74,21 @@ namespace lib {
   resolveModulePath (fs::path moduleName, string searchPath)
   {
     fs::path modulePathName (moduleName);
-    SearchPathSplitter searchLocation(searchPath);                        ///////////TICKET #896
+    SearchPathSplitter searchLocation(searchPath);
     
     while (not fs::exists (modulePathName))
       {
         // try / continue search path
-        if (searchLocation.isValid())
-          modulePathName = fs::path() / searchLocation.next() / moduleName;
-        else
-          throw error::Config ("Module \""+moduleName.string()+"\" not found"   /////TICKET #896
-                              + (searchPath.empty()? ".":" in search path: "+searchPath));
+        if (not searchLocation)
+          throw error::Config{_Fmt{"Module %s not found%s"}
+                                  % moduleName
+                                  %(searchPath.empty()? ".":" in search path: "+searchPath)};
+        modulePathName = *searchLocation / moduleName;
+        ++searchLocation;
       }
     
-    TRACE (config, "found module %s", modulePathName.string().c_str());
-    return modulePathName.string();                                       ///////////TICKET #896
+    TRACE (config, "found module %s", cStr(modulePathName.generic_string()));
+    return modulePathName.generic_string();
   }
   
   
