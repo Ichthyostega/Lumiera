@@ -95,7 +95,7 @@
 
 
 #include "stage/gtk-base.hpp"  //////////////////////////////////////////////////////TODO remove any GTK dependency if possible
-#include "stage/ctrl/playback-controller.hpp"
+#include "stage/ctrl/player-controller.hpp"
 #include "lib/nocopy.hpp"
 
 #include <memory>
@@ -119,12 +119,12 @@ namespace stage {
     class Controller
       {
         model::Project&    project_;
-        ctrl::PlaybackController playback_;
+        ctrl::PlayerController playback_;
         
       public:
         Controller (model::Project&);
       
-        ctrl::PlaybackController& get_playback_controller();
+        ctrl::PlayerController& get_playback_controller();
       };
   
 }// namespace stage::controller

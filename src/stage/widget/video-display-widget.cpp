@@ -19,10 +19,12 @@
 
 
 #include "stage/gtk-base.hpp"
-#include "stage/output/xvdisplayer.hpp"
-#include "stage/output/gdkdisplayer.hpp"
+#include "stage/output/xv-displayer.hpp"
+#include "stage/output/pixbuf-displayer.hpp"
+#include "stage/output/null-displayer.hpp"
+#include "stage/widget/video-display-widget.hpp"
+#include "stage/style-scheme.hpp"
 
-#include "video-display-widget.hpp"
 
 namespace stage {
 namespace widget {

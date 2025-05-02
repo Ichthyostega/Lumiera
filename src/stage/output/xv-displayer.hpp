@@ -1,5 +1,5 @@
 /*
-  XVDISPLAYER.hpp  -  XVideo display
+  XV-DISPLAYER.hpp  -  XVideo display
 
    Copyright (C)
      2000,            Arne Schirmacher <arne@schirmacher.de>
@@ -14,19 +14,15 @@
 */
 
 
-/** @file xvdisplayer.hpp
+/** @file xv-displayer.hpp
  ** Implementation of video output via XVideo
- ** @warning as of 2016 it is not clear, if this code will be
- **          evolved into the actual display facility, or be
- **          replaced and rewritten, when we're about to 
- **          create a functional video display connected
- **          to the render engine. 
+ ** @todo WIP as of 5/2025 -- attempt to port this component to GTK-3 ///////////////////////////////////////TICKET #1403
  ** @see displayer.hpp
  */
 
 
-#ifndef STAGE_OUTPUT_XVDISPLAYER_H
-#define STAGE_OUTPUT_XVDISPLAYER_H
+#ifndef STAGE_OUTPUT_XV_DISPLAYER_H
+#define STAGE_OUTPUT_XV_DISPLAYER_H
 
 
 #include "stage/output/displayer.hpp"
@@ -127,4 +123,4 @@ namespace output {
   
   
 }}   // namespace stage::output
-#endif // XVDISPLAYER_HPP
+#endif /*STAGE_OUTPUT_XV_DISPLAYER_H*/

@@ -28,7 +28,7 @@
 
 #include "stage/gtk-base.hpp"
 #include "stage/output/displayer.hpp"
-#include "stage/output/xvdisplayer.hpp"
+#include "stage/output/xv-displayer.hpp"
 #include "stage/output/gdkdisplayer.hpp"
 
 namespace stage {

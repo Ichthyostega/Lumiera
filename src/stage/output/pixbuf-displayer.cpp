@@ -1,5 +1,5 @@
 /*
-  GgdkDisplayer  -  displaying video via GDK
+  GdkDisplayer  -  displaying video via GDK
 
    Copyright (C)
      2000,            Arne Schirmacher <arne@schirmacher.de>
@@ -14,15 +14,16 @@
 * *****************************************************************/
 
 
-/** @file gdkdisplayer.cpp
+/** @file pixbuf-displayer.cpp
  ** Dysfunctional implementation code, formerly used to
  ** create a video display based on GDK
  ** @deprecated obsolete since GTK-3
+ ** @todo WIP as of 5/2025 attempt to accommodate to GTK-3   ////////////////////////////////////////////////TICKET #1403
  */
 
 
 #include "stage/gtk-base.hpp"
-#include "stage/output/gdkdisplayer.hpp"
+#include "stage/output/pixbuf-displayer.hpp"
 
 #if false  ///////////////////////////////////////////////////////////////////////////////////////////////////TICKET #950 : new solution for video display
 #include <gdk/gdkx.h>

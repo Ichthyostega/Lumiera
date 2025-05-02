@@ -129646,6 +129646,136 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <linktarget COLOR="#fe160d" DESTINATION="ID_920789803" ENDARROW="Default" ENDINCLINATION="435;-485;" ID="Arrow_ID_370130803" SOURCE="ID_738125022" STARTARROW="None" STARTINCLINATION="-1332;116;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746196449003" ID="ID_1070775068" MODIFIED="1746196453932" TEXT="Video-Display">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746196482500" ID="ID_1819581335" LINK="https://issues.lumiera.org/ticket/1403" MODIFIED="1746226359001" TEXT=" #1403 Invesitgate if XV displayer can be revived ">
+<linktarget COLOR="#fefeb4" DESTINATION="ID_1819581335" ENDARROW="Default" ENDINCLINATION="-2783;152;" ID="Arrow_ID_1160980366" SOURCE="ID_1219347509" STARTARROW="None" STARTINCLINATION="-4870;297;"/>
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1746196518190" ID="ID_411481779" MODIFIED="1746237828685" TEXT="Research-Setup">
+<icon BUILTIN="pencil"/>
+<node COLOR="#435e98" CREATED="1746201044698" ID="ID_1152249373" MODIFIED="1746230756302" TEXT="Frage: wie viel bauen wir jetzt &#xbb;neu im Sandkasten&#xab;?">
+<icon BUILTIN="help"/>
+<node CREATED="1746201077774" ID="ID_444644025" MODIFIED="1746201091898" TEXT="Lumi-GUI ist gegen Core-Library gelinkt">
+<icon BUILTIN="idea"/>
+<node CREATED="1746201100778" ID="ID_1816394825" MODIFIED="1746201611393">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      bedeutet: im Grunde kann man <i>wild jede Funktion aufrufen</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...auch bez&#252;glich Lifecycle: weil GUI depends-on Core
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1746201618342" ID="ID_66476144" MODIFIED="1746201712676" TEXT="F&#xfc;r die endg&#xfc;ltige L&#xf6;sung sollten wir uns dann aber schon auf Interfaces berschr&#xe4;nken">
+<icon BUILTIN="smiley-oh"/>
+</node>
+<node CREATED="1746201658073" ID="ID_811133573" MODIFIED="1746201708083" TEXT="wenngleich auch ich nicht mehr das &#xbb;Interface-System&#xab; verwenden m&#xf6;gen werde">
+<icon BUILTIN="smiley-angry"/>
+</node>
+</node>
+<node CREATED="1746203278184" ID="ID_1326787016" MODIFIED="1746203304384" TEXT="die Strukturen f&#xfc;r den Play-Service sind schon sinnvoll durchdacht...">
+<icon BUILTIN="yes"/>
+<node CREATED="1746203306407" ID="ID_88399140" MODIFIED="1746203313760" TEXT="wenngleich auch lediglich skizziert"/>
+<node CREATED="1746203314417" ID="ID_385277676" MODIFIED="1746203550912" TEXT="das Design wurde erkenntlich aus dem Dummy-Player abgeleitet">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das zeigt, da&#223; ich damals das Prototyping durchaus richtig gemacht haben mu&#223; (finde keine Aufzeichnungen dazu mehr). Habe das erst mal irgendwie in funktionierenden Code gew&#252;rgt, und mir dann angeschaut, was pa&#223;t und was nicht pa&#223;t. Beibehalten habe ich die Idee eines &#187;Play-Prozesses&#171;. Aber Display-Connections sollen nicht mehr direkt vom Play-Prozess gemacht werden, sondern &#252;ber einen OutputManager abstrahiert sein. Und als Schnittstelle hinter dem Proze&#223;-Handle bekommt man nun ein Controller-Interface (State Machine).
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Klingt alles sehr plausibel &#8212; sollte diesem Design folgen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746203581424" ID="ID_441476633" MODIFIED="1746230763527" TEXT="Konsequenz: in diesem Rahmen bleiben &#x2014; Kurzschlu&#xdf; bauen">
+<icon BUILTIN="yes"/>
+<node CREATED="1746203611871" ID="ID_1500164071" MODIFIED="1746203618891" TEXT="bedeutet: der Controller ist schon da"/>
+<node CREATED="1746203623607" ID="ID_1866389672" MODIFIED="1746203637441" TEXT="dieser stellt direkt eine Display-Verbindung her"/>
+<node CREATED="1746203638366" ID="ID_1890894783" MODIFIED="1746203659523" TEXT="und greift daf&#xfc;r &#xbb;wild&#xab; auf den Tick-Service zu"/>
+<node CREATED="1746203662933" ID="ID_816585590" MODIFIED="1746203684714" TEXT="der Tick-Service und DummyImageGenerator k&#xf6;nnen direkt verwendet werden">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1746203694670" ID="ID_1794331285" MODIFIED="1746230885543" TEXT="Vorlage: ProcessImpl-ctor (dummy-player-service.cpp)"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1746231119721" ID="ID_1893495747" MODIFIED="1746237815559" TEXT="Code-Anordnung">
+<icon BUILTIN="pencil"/>
+<node COLOR="#435e98" CREATED="1746231126835" ID="ID_163411237" MODIFIED="1746231131310" TEXT="der Name?">
+<node CREATED="1746231133280" ID="ID_1300819912" MODIFIED="1746231141717" TEXT="&#xbb;PlaybackController&#xab;"/>
+<node CREATED="1746231142471" ID="ID_279124391" MODIFIED="1746231149371" TEXT="&#xbb;PlayController&#xab;">
+<node CREATED="1746231150863" ID="ID_1765618943" MODIFIED="1746231197493" TEXT="es gibt steam::play::PlayController (obsolet?)"/>
+<node CREATED="1746231186899" ID="ID_1114744201" MODIFIED="1746231205260" TEXT="es gibt lumiera::Play::Controller"/>
+<node CREATED="1746231219238" ID="ID_1631275694" MODIFIED="1746231238715" TEXT="hier stets: &#xbb;Play&#xab; &#x2259; playback-and-rendering"/>
+<node CREATED="1746231306168" ID="ID_4522841" MODIFIED="1746231315485" TEXT="aber im GUI geht&apos;s nur um playback"/>
+</node>
+<node CREATED="1746231357372" ID="ID_926942695" MODIFIED="1746231387506" TEXT="der genaueste Name w&#xe4;re: stage::ctrl::PlayerController">
+<icon BUILTIN="forward"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1746231390297" ID="ID_87527589" MODIFIED="1746237663416" TEXT="Konsequenz: forken und umbenennen">
+<icon BUILTIN="yes"/>
+<node CREATED="1746231417906" ID="ID_1653206071" MODIFIED="1746231437026" TEXT="playback-controller &#x27fc; player-controller"/>
+<node CREATED="1746231445781" ID="ID_1228761711" MODIFIED="1746231481065" TEXT="++ &#x27fc; demo-controller"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746237670793" ID="ID_258474163" MODIFIED="1746237738880" TEXT="dann entkernen und kurzschlie&#xdf;en">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746237725210" ID="ID_138416616" MODIFIED="1746237781562" TEXT="entferne lumiera::DummyPlayer::Process playHandle_">
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746237741584" ID="ID_4101489" MODIFIED="1746237781562" TEXT="entferne LumieraDisplaySlot viewerHandle_">
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746237759901" ID="ID_331458322" MODIFIED="1746237781562" TEXT="entferne static DemoController* instance">
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746237799176" ID="ID_1428195458" MODIFIED="1746237807456" TEXT="Lebenszyklus neu aufbauen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746237785154" ID="ID_1469394159" MODIFIED="1746237807455" TEXT="direkt einen Tick-Service instantiieren">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746237836971" ID="ID_349974806" MODIFIED="1746237847634" TEXT="einen Null-Displayer schaffen">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746237900191" ID="ID_891690513" MODIFIED="1746237941748" TEXT="dieser empf&#xe4;ngt zwar einen Datenblock">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746237922301" ID="ID_261548220" MODIFIED="1746237941749" TEXT="quitiert aber nur geeignet im Log">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746237950796" ID="ID_833924220" MODIFIED="1746237960794" TEXT="ggfs mit gedrosselter Frame-Rate laufen lassen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node CREATED="1746237851254" ID="ID_991590991" MODIFIED="1746237873586" TEXT="Widget und Controller-Logik mit Null-Displayer neu aufbauen">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746237875118" ID="ID_1626821300" MODIFIED="1746237896495" TEXT="Widget soll erst mal schwarzen Hintergrund zeichnen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746237886231" ID="ID_81175326" MODIFIED="1746237894236" TEXT="ein paar Buttons einbinden">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1688336338313" ID="ID_1758461421" MODIFIED="1688336340923" TEXT="Integration">
@@ -161444,16 +161574,13 @@ Since then others have made contributions, see the log for the history.</font></
 <node CREATED="1745800146421" ID="ID_274063300" MODIFIED="1745800186494" TEXT="wird noch vewendet von configfacade.cpp und ui-style.cpp"/>
 <node COLOR="#338800" CREATED="1745800059996" ID="ID_1732566176" MODIFIED="1745860210862" TEXT="dies ist ein &#xbb;Iterator&#xab; &#x2014; aber kein Lumiera Forward Iterator">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...das war vermutlich mein erster Versuch, eine Iterator-Klasse in C++ zu bauen &#8212; hatte mich dabei offensichtlich an Java orientiert
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1745850122914" ID="ID_1543137724" MODIFIED="1745850144722" TEXT="inzwischen k&#xf6;nnen &#x201e;wir&#x201c; das vieeel besser"/>
 <node CREATED="1745850145440" ID="ID_1260012350" MODIFIED="1745850185900" TEXT="der RegexpSearchIter bietet sich da gradezu an (&#x27f6; siehe CSV.hpp)"/>
@@ -161470,10 +161597,6 @@ Since then others have made contributions, see the log for the history.</font></
 <node CREATED="1745799358169" ID="ID_1713220396" MODIFIED="1745799961435" TEXT="stage/workspace/ui-style.cpp">
 <arrowlink DESTINATION="ID_368377472" ENDARROW="Default" ENDINCLINATION="107;14;" ID="Arrow_ID_1432393919" STARTARROW="None" STARTINCLINATION="74;7;"/>
 </node>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1744756270441" ID="ID_831819953" LINK="https://issues.lumiera.org/ticket/473" MODIFIED="1744756657146" TEXT="RefArray und ScopedHolder m&#xfc;ssen jetzt wirklich mal weg">
-<arrowlink COLOR="#fd26d0" DESTINATION="ID_1135941103" ENDARROW="Default" ENDINCLINATION="-1048;89;" ID="Arrow_ID_1050531240" STARTARROW="None" STARTINCLINATION="-1120;-23;"/>
-<icon BUILTIN="yes"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1742175872016" ID="ID_1131308211" MODIFIED="1742175881001" TEXT="Untersuchung: einfacher XV-Displayer">
 <icon BUILTIN="flag-yellow"/>
@@ -161493,14 +161616,218 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1742175967881" ID="ID_1117969598" MODIFIED="1742175981193" TEXT="Recherche: Basis-Infos zu XV"/>
-<node CREATED="1742175946044" ID="ID_114770740" MODIFIED="1742175960772" TEXT="Untersuchen bzgl. Lib-Dependencies"/>
+<node CREATED="1746053053337" ID="ID_385901530" MODIFIED="1746053077036" TEXT="Reste vom alten Video-Widget beurteilen">
+<node CREATED="1742175946044" ID="ID_114770740" MODIFIED="1746053104281" TEXT="Lib-Dependencies">
+<node CREATED="1746053105247" ID="ID_1243539235" MODIFIED="1746053166039" TEXT="der eigentliche XV-Code ist vollst&#xe4;ndig">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      nix auskommentiert oder deaktiviert &#8212; und das hei&#223;t, die aktuellen Dependencies sind hierf&#252;r ausreichend
+    </p>
+  </body>
+</html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1742176004434" ID="ID_393175435" MODIFIED="1742176020024" TEXT="GTK-2 Videoplayer-Widget entfernen">
+<node CREATED="1746053167516" ID="ID_1584096195" MODIFIED="1746053185150" TEXT="wir linken getgen libXV und die X-Lib"/>
+<node CREATED="1746053198648" ID="ID_46196863" MODIFIED="1746053205147" TEXT="und dieser Code ist der Grund daf&#xfc;r"/>
+</node>
+<node CREATED="1746053208935" ID="ID_533884265" MODIFIED="1746053226772" TEXT="der Code verwendete ein &#xbb;Displayer&#xab;-Framework">
+<node CREATED="1746053242202" ID="ID_1152747748" MODIFIED="1746053248605" TEXT="stage/output/displayer.hpp"/>
+<node CREATED="1746053263665" ID="ID_80445168" MODIFIED="1746053285448" TEXT="Code Copyright 2000: Arne Schirmacher und Dan Dennedy"/>
+<node CREATED="1746053319130" ID="ID_333451218" LINK="https://en.wikipedia.org/wiki/Kino_(software)" MODIFIED="1746053451595" TEXT="die Initiatoren vom Video-Editor &#xbb;Kino&#xab;">
+<node CREATED="1746053403556" ID="ID_1463636489" MODIFIED="1746053419556" TEXT="war ein &#xbb;anwenderfreundlicher einfacher&#xab; Video-Editor"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1746053393558" ID="ID_288300776" MODIFIED="1746053440418" TEXT="&#xd83d;&#xdc80; Projekt inzwischen tot &#xd83d;&#xdc80;">
+<icon BUILTIN="button_cancel"/>
+</node>
+</node>
+<node CREATED="1746053511510" ID="ID_1615258291" MODIFIED="1746053537677" TEXT="Design sieht grunds&#xe4;tzlich vern&#xfc;nftig aus">
+<node CREATED="1746053543946" ID="ID_4996437" MODIFIED="1746053600643" TEXT="virtual bool usable()">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      jeder Displayer versucht eine minimale Initialisierung im Konstruktor und signalisiert damit, da&#223; er im Prinzip Video ausgeben k&#246;nnte
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1746053626501" ID="ID_1505251313" MODIFIED="1746053644326" TEXT="virtual DisplayerInput format()">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      zeigt an, in welchem Format die Daten angeliefert werden m&#252;ssen
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1746053661289" MODIFIED="1746053661289" TEXT="DISPLAY_NONE,"/>
+<node CREATED="1746053661290" MODIFIED="1746053661290" TEXT="DISPLAY_YUV,"/>
+<node CREATED="1746053661290" MODIFIED="1746053661290" TEXT="DISPLAY_RGB,"/>
+<node CREATED="1746053661291" MODIFIED="1746053661291" TEXT="DISPLAY_BGR,"/>
+<node CREATED="1746053661291" MODIFIED="1746053661291" TEXT="DISPLAY_BGR0,"/>
+<node CREATED="1746053661292" MODIFIED="1746053661292" TEXT="DISPLAY_RGB16"/>
+</node>
+<node CREATED="1746053690040" ID="ID_153671787" MODIFIED="1746053743902" TEXT="virtual preferredWidth() | preferredHeight()">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      der Displayer macht eine Vorgabe, kann aber durchaus (wohl in gewissen Grenzen) noch skalieren
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1746053756237" ID="ID_1295809959" MODIFIED="1746053757384" TEXT="static void calculateVideoLayout"/>
+<node CREATED="1746053944707" ID="ID_1761798130" MODIFIED="1746053969482">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <font face="Monospaced">virtual void <b>put</b>&#160;(</font><font face="Monospaced" color="#990c0c">void* const</font><font face="Monospaced">)</font>
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1746053977262" ID="ID_1039914100" MODIFIED="1746053991758" TEXT="hier implementiert der konkrete Displayer seine Logik"/>
+<node CREATED="1746053993724" ID="ID_347422184" MODIFIED="1746054012830" TEXT="der &#xfc;bergebene Pointer zeigt unmittelbar auf Videodaten des Frames"/>
+</node>
+<node BACKGROUND_COLOR="#f2fec9" CREATED="1746053802118" ID="ID_1460156687" MODIFIED="1746053833546" TEXT="beachte: KEINERLEI GTK-Abh&#xe4;ngigkeit">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node CREATED="1746054132315" ID="ID_238515167" MODIFIED="1746054140756" TEXT="Implementierung: XvDisplayer">
+<node CREATED="1746054802958" ID="ID_682224799" MODIFIED="1746054974334" TEXT="enth&#xe4;t etwas altert&#xfc;mlichen GDK-Code">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <font face="Monospaced">window = GDK_WINDOW_XID (area_window-&gt;gobj()); </font>
+    </p>
+    <p>
+      <font face="Monospaced">display = GDK_WINDOW_XDISPLAY (area_window-&gt;gobj());</font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1746054976063" ID="ID_851195916" MODIFIED="1746054985536" TEXT="der aber mit GTK-3 noch compiliert"/>
+<node CREATED="1746054995773" ID="ID_1029633245" MODIFIED="1746055002028" TEXT="beschafft sich auf dem Weg...">
+<node CREATED="1746055003379" ID="ID_591197179" MODIFIED="1746055009035" TEXT="das XWindow"/>
+<node CREATED="1746055009659" ID="ID_65785979" MODIFIED="1746055012958" TEXT="das X-Display"/>
+</node>
+<node CREATED="1746055093775" ID="ID_1790374649" MODIFIED="1746055112483" TEXT="sonst: nur einiges an (m&#xe4;&#xdf;ig technischem) X-Lib-Code"/>
+</node>
+<node CREATED="1746055119979" ID="ID_1886055504" MODIFIED="1746055133036" TEXT="Implementierung: GdkDisplayer">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1746055135072" ID="ID_296123462" MODIFIED="1746055151088" TEXT="broken seit Umstellung auf GTK-3">
+<icon BUILTIN="broken-line"/>
+</node>
+<node CREATED="1746055152887" ID="ID_1155553121" MODIFIED="1746055207009">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Implementierung war <i>extrem einfach</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Nichts weiter als etwas Bit-Blitting.
+    </p>
+    <p>
+      Das hei&#223;t, ein Pixmap wurde via GDK zur Anzeige gebracht
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1746055208184" ID="ID_1012325246" MODIFIED="1746055223026" TEXT="das sollte sich einfachst re-implementieren lassen mit GTK-3"/>
+</node>
+<node CREATED="1746055409329" ID="ID_758788483" MODIFIED="1746055413169" TEXT="VideoDisplayWidget">
+<node CREATED="1746055414411" ID="ID_1527139798" MODIFIED="1746055425991" TEXT="erbt von Gtk::DrawingArea">
+<node CREATED="1746055564313" ID="ID_1632165084" MODIFIED="1746055569452" TEXT="nicht wirklich klar warum"/>
+<node CREATED="1746055570184" ID="ID_1290132049" MODIFIED="1746055577198" TEXT="vmtl. vor allem aus logischen Gr&#xfc;nden"/>
+<node CREATED="1746055605098" ID="ID_1921436901" MODIFIED="1746055625287" TEXT="vielleicht auch, weil damit der GdkDisplayer einfach sein Pixmap ablegen konnte"/>
+</node>
+<node CREATED="1746055717912" ID="ID_1645096609" MODIFIED="1746055744272" TEXT="implementiert den on_realize()-Hook">
+<node CREATED="1746056007502" ID="ID_767747431" MODIFIED="1746056016416" TEXT="das war unter GTK-2 viel &#xfc;blicher"/>
+<node CREATED="1746056017076" ID="ID_1373990997" MODIFIED="1746056024607" TEXT="heute w&#xfc;rde man das im Konstruktor machen"/>
+<node CREATED="1746056025686" ID="ID_525188288" MODIFIED="1746056044309" TEXT="erstellt und verdrahtet einen passenden Displayer">
+<node CREATED="1746056045709" ID="ID_1696997856" MODIFIED="1746056052732" TEXT="versucht zun&#xe4;chst XvDisplayer"/>
+<node CREATED="1746056053359" ID="ID_641244777" MODIFIED="1746056059875" TEXT="f&#xe4;llt dann auf GdkDisplayer zur&#xfc;ck"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1746058970157" ID="ID_991442275" MODIFIED="1746058986973" TEXT="Einsch&#xe4;tzung: aktueller Stand">
+<node CREATED="1746058988279" ID="ID_1992351880" MODIFIED="1746059009850">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      die Anzeige erscheint nur <i>marginal gebrochen</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1746059010720" ID="ID_431781822" MODIFIED="1746059029328" TEXT="es m&#xfc;&#xdf;ten nur wenige Teile (einfach) nach GTK-3 portiert werden">
+<node CREATED="1746059031084" ID="ID_752582525" MODIFIED="1746059039703" TEXT="das VideoDisplayWidget"/>
+<node CREATED="1746059048115" ID="ID_269648070" MODIFIED="1746059068296" TEXT="das ViewerPannel m&#xfc;&#xdf;te man wieder reparieren"/>
+<node CREATED="1746059563342" ID="ID_1477952429" MODIFIED="1746059586582" TEXT="eigentlich einfach neu implementieren, nach GTK-Tutorial"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1746059132520" ID="ID_1219347509" MODIFIED="1746226359001" TEXT="Hilfsprojekt: Funktionsf&#xe4;higkeit validieren">
+<arrowlink COLOR="#fefeb4" DESTINATION="ID_1819581335" ENDARROW="Default" ENDINCLINATION="-2783;152;" ID="Arrow_ID_1160980366" STARTARROW="None" STARTINCLINATION="-4870;297;"/>
+<icon BUILTIN="yes"/>
+<node COLOR="#5b280f" CREATED="1746059159380" ID="ID_56657133" MODIFIED="1746059884614" TEXT="es g&#xe4;be noch den DummyPlayer">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1746059167483" ID="ID_344363985" MODIFIED="1746059179978" TEXT="der ist vermutlich noch zu 100% funktionsf&#xe4;hig"/>
+<node CREATED="1746059180793" ID="ID_486458513" MODIFIED="1746059194235" TEXT="aber auch zu 99% undurchsichtig"/>
+<node CREATED="1746059194967" ID="ID_308980123" MODIFIED="1746059201412" TEXT="und zu 98% zum Kotzen"/>
+<node CREATED="1746059247592" ID="ID_1169651943" MODIFIED="1746059386761" TEXT="Zweck erf&#xfc;llt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Mit dem DummyPlayer wollte ich damals demonstrieren, wie eine Zusammenarbeit &#252;ber Facade-Interfaces funktionieren kann; das hat die ganzen Schwachstellen an Christian's Interface-Konzept schonungslos offengelegt &#8212; und war ein ziemliches Gew&#252;rge. Au&#223;erdem ist der Code alt, und verwendet einige Dinge wie den ScopedPtrVect, die ich gerne mal begraben w&#252;rde.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1746059388997" ID="ID_1757013848" MODIFIED="1746059905577">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      man k&#246;nnte den DummyImageGenerator
+    </p>
+    <p>
+      &#160;+ TickService wieder ins GUI ziehen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="back"/>
+<node CREATED="1746059413045" ID="ID_417725173" MODIFIED="1746059419902" TEXT="und dort vereinfachen"/>
+<node CREATED="1746059420397" ID="ID_690919476" MODIFIED="1746059434780" TEXT="so da&#xdf; der TickService direkt den VideoDisplayer aufruft"/>
+<node CREATED="1746059436927" ID="ID_129605320" MODIFIED="1746059447855" TEXT="also das ganze Facaden / Interface-Thema erst mal weg"/>
+<node CREATED="1746059484960" ID="ID_199950226" MODIFIED="1746059499836" TEXT="sie w&#xfc;rden dann zusammen mit dem PlayController im ViewerPanel h&#xe4;ngen"/>
+</node>
+</node>
+<node CREATED="1746059640388" ID="ID_1149968188" MODIFIED="1746059644047" TEXT="danach...">
+<node CREATED="1746059645095" ID="ID_1095537094" MODIFIED="1746059662007" TEXT="steht fest: wir k&#xf6;nnen / k&#xf6;nnen nicht Video anzeigen"/>
+<node CREATED="1746059663185" ID="ID_473345546" MODIFIED="1746059697070" TEXT="kann der ganze DummyPlayer entfernt werden"/>
+<node CREATED="1746059700212" ID="ID_191158269" MODIFIED="1746059710934" TEXT="k&#xf6;nnte auch gleich die alte Timeline mit entfernt werden"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1742176004434" ID="ID_393175435" MODIFIED="1746059770010" TEXT="Reste vom GTK-2-GUI zur&#xfc;ckbauen">
 <icon BUILTIN="flag-yellow"/>
-<node CREATED="1742176027489" ID="ID_1395603395" MODIFIED="1742176036634" TEXT="Ziel: Dependencies reduzieren"/>
-<node COLOR="#5b280f" CREATED="1745798298207" ID="ID_1464159274" MODIFIED="1745798323397" TEXT="aber: das war eine XV-basierte L&#xf6;sung (korrekt?)">
-<icon BUILTIN="stop-sign"/>
-</node>
+<node CREATED="1746059790896" ID="ID_1458700110" MODIFIED="1746059808265" TEXT="macht den GUI-Code verst&#xe4;ndlicher"/>
+<node CREATED="1746059809402" ID="ID_252295365" MODIFIED="1746059816488" TEXT="man k&#xf6;nnte auch den DummyPlayer loswerden"/>
+<node CREATED="1746059817267" ID="ID_1413142939" MODIFIED="1746059824776" TEXT="und einige daran h&#xe4;ngende Library-Helper"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1742249461535" ID="ID_1554376708" MODIFIED="1742256553530" TEXT="Rolle der lib-Gavl &#xfc;berpr&#xfc;fen">
 <linktarget COLOR="#a41b18" DESTINATION="ID_1554376708" ENDARROW="Default" ENDINCLINATION="440;-36;" ID="Arrow_ID_608156847" SOURCE="ID_1683248748" STARTARROW="None" STARTINCLINATION="193;12;"/>
@@ -161530,6 +161857,13 @@ Since then others have made contributions, see the log for the history.</font></
 </html></richcontent>
 <icon BUILTIN="flag-yellow"/>
 </node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746059853111" ID="ID_975342117" MODIFIED="1746059870062" TEXT="auch altes RenderNode-Framework zur&#xfc;ckbauen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1744756270441" ID="ID_831819953" LINK="https://issues.lumiera.org/ticket/473" MODIFIED="1746059845274" TEXT="RefArray und ScopedHolder m&#xfc;ssen jetzt wirklich mal weg">
+<arrowlink COLOR="#fd26d0" DESTINATION="ID_1135941103" ENDARROW="Default" ENDINCLINATION="-1048;89;" ID="Arrow_ID_1050531240" STARTARROW="None" STARTINCLINATION="-1120;-23;"/>
+<icon BUILTIN="yes"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1742175299968" ID="ID_1393531242" MODIFIED="1742175305316" TEXT="C++20">

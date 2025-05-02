@@ -20,7 +20,7 @@
  */
 
 
-#include "stage/ctrl/playback-controller.hpp"
+#include "stage/ctrl/player-controller.hpp"
 #include "stage/display-service.hpp"
 #include "lib/error.hpp"
 #include "include/logging.h"
@@ -33,23 +33,23 @@ namespace ctrl {
   
   
   
-  PlaybackController::PlaybackController()
+  PlayerController::PlayerController()
     : playing_(false)
     , viewerHandle_(0)
     { 
       instance = this;                               ////////////////////////////////////////////////////////TICKET #1067 shitty workaround to allow disentangling of top-level
     }
   
-  PlaybackController::~PlaybackController()
+  PlayerController::~PlayerController()
     { 
       instance = nullptr;                            ////////////////////////////////////////////////////////TICKET #1067 shitty workaround to allow disentangling of top-level
     }
   
   
-  PlaybackController* PlaybackController::instance;  ////////////////////////////////////////////////////////TICKET #1067 shitty workaround to allow disentangling of top-level
+  PlayerController* PlayerController::instance;  ////////////////////////////////////////////////////////TICKET #1067 shitty workaround to allow disentangling of top-level
   
-  PlaybackController&
-  PlaybackController::get()                          ////////////////////////////////////////////////////////TICKET #1067 shitty workaround to allow disentangling of top-level
+  PlayerController&
+  PlayerController::get()                          ////////////////////////////////////////////////////////TICKET #1067 shitty workaround to allow disentangling of top-level
   {
     if (not instance)
       throw error::Logic ("GTK UI is not in running state"
@@ -59,7 +59,7 @@ namespace ctrl {
   }
   
   void
-  PlaybackController::play()
+  PlayerController::play()
   {
     if (playHandle_)
       {
@@ -81,7 +81,7 @@ namespace ctrl {
   }
   
   void
-  PlaybackController::pause()
+  PlayerController::pause()
   {
     if (playHandle_)
       playHandle_.play(false);
@@ -89,14 +89,14 @@ namespace ctrl {
   }
   
   void
-  PlaybackController::stop()
+  PlayerController::stop()
   {
     playHandle_.close();
     playing_ = false;
   }
   
   bool
-  PlaybackController::is_playing()
+  PlayerController::is_playing()
   {
     return playing_;
   }
@@ -104,7 +104,7 @@ namespace ctrl {
   
   
   void
-  PlaybackController::useDisplay (LumieraDisplaySlot display)
+  PlayerController::useDisplay (LumieraDisplaySlot display)
   {
     viewerHandle_ = display;
   }

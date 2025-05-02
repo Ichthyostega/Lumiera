@@ -22,7 +22,7 @@
 
 #include "stage/panel/panel.hpp"
 #include "stage/widget/video-display-widget.hpp"
-#include "stage/ctrl/playback-controller.hpp"
+#include "stage/ctrl/demo-controller.hpp"
 
 namespace stage {
 namespace panel {
@@ -33,7 +33,7 @@ namespace panel {
   class ViewerPanel
     : public Panel
     {
-      ctrl::PlaybackController playbackController_;
+      ctrl::DemoController demoPlayback_;
       
     public:
       ViewerPanel (workspace::PanelManager&, Gdl::DockItem&);

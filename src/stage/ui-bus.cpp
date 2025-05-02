@@ -42,7 +42,7 @@ namespace controller {
   
   
   
-  ctrl::PlaybackController& Controller::get_playback_controller()
+  ctrl::PlayerController& Controller::get_playback_controller()
   {
     return playback_;
   }

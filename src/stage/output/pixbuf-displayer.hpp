@@ -14,15 +14,16 @@
 */
 
 
-/** @file gdkdisplayer.hpp
+/** @file pixbuf-displayer.hpp
  ** Display video via GDK
  ** 
  ** @deprecated obsolete since GTK-3
+ ** @todo WIP as of 5/2025 attempt to accommodate to GTK-3   ////////////////////////////////////////////////TICKET #1403
  ** @see displayer.hpp
  */
 
-#ifndef STAGE_OUTPUT_GDKDISPLAYER_H
-#define STAGE_OUTPUT_GDKDISPLAYER_H
+#ifndef STAGE_OUTPUT_PIXBUF_DISPLAYER_H
+#define STAGE_OUTPUT_PIXBUF_DISPLAYER_H
 
 #include "stage/gtk-base.hpp"
 #include "stage/output/displayer.hpp"
@@ -40,7 +41,8 @@ namespace output {
  *
  * @todo the GdkDisplayer class is not supported anymore in Gtk3.
  *       This is due to Gtk3 only supporting drawing with Cairo
- *       /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #950 : new solution for video display
+ *       ////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #950 : new solution for video display
+ * @todo WIP as of 5/2025 attempt to accommodate to GTK-3   /////////////////////////////////////////////////TICKET #1403
  */
 class GdkDisplayer
   : public Displayer
@@ -85,4 +87,4 @@ class GdkDisplayer
   
   
 }}   // namespace stage::output
-#endif /*STAGE_OUTPUT_GDKDISPLAYER_H*/
+#endif /*STAGE_OUTPUT_PIXBUF_DISPLAYER_H*/

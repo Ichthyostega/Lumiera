@@ -34,13 +34,13 @@ namespace panel {
   ViewerPanel::ViewerPanel (workspace::PanelManager& panelManager
                            ,Gdl::DockItem& dockItem)
     : Panel(panelManager, dockItem, getTitle(), getStockID())
-    , playbackController_{}
+    , demoPlayback_{}
     {
       //----- Pack in the Widgets -----//
       pack_start(display_, PACK_EXPAND_WIDGET);
       
       FrameDestination outputDestination (sigc::mem_fun(this, &ViewerPanel::on_frame));
-      playbackController_.useDisplay (DisplayService::setUp (outputDestination));
+      demoPlayback_.useDisplay (DisplayService::setUp (outputDestination));
     }
   
   const char*
