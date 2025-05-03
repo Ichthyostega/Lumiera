@@ -129665,8 +129665,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       bedeutet: im Grunde kann man <i>wild jede Funktion aufrufen</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -129704,7 +129703,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746203581424" ID="ID_441476633" MODIFIED="1746230763527" TEXT="Konsequenz: in diesem Rahmen bleiben &#x2014; Kurzschlu&#xdf; bauen">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1746203581424" ID="ID_441476633" MODIFIED="1746321084489" TEXT="Konsequenz: in diesem Rahmen bleiben &#x2014; Kurzschlu&#xdf; bauen">
 <icon BUILTIN="yes"/>
 <node CREATED="1746203611871" ID="ID_1500164071" MODIFIED="1746203618891" TEXT="bedeutet: der Controller ist schon da"/>
 <node CREATED="1746203623607" ID="ID_1866389672" MODIFIED="1746203637441" TEXT="dieser stellt direkt eine Display-Verbindung her"/>
@@ -129712,11 +129711,13 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1746203662933" ID="ID_816585590" MODIFIED="1746203684714" TEXT="der Tick-Service und DummyImageGenerator k&#xf6;nnen direkt verwendet werden">
 <icon BUILTIN="idea"/>
 </node>
-<node CREATED="1746203694670" ID="ID_1794331285" MODIFIED="1746230885543" TEXT="Vorlage: ProcessImpl-ctor (dummy-player-service.cpp)"/>
+<node CREATED="1746203694670" ID="ID_1794331285" MODIFIED="1746321090634" TEXT="Vorlage: ProcessImpl-ctor (dummy-player-service.cpp)">
+<icon BUILTIN="forward"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1746231119721" ID="ID_1893495747" MODIFIED="1746237815559" TEXT="Code-Anordnung">
-<icon BUILTIN="pencil"/>
+</node>
+<node COLOR="#338800" CREATED="1746231119721" ID="ID_1893495747" MODIFIED="1746321120760" TEXT="Code-Anordnung">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1746231126835" ID="ID_163411237" MODIFIED="1746231131310" TEXT="der Name?">
 <node CREATED="1746231133280" ID="ID_1300819912" MODIFIED="1746231141717" TEXT="&#xbb;PlaybackController&#xab;"/>
 <node CREATED="1746231142471" ID="ID_279124391" MODIFIED="1746231149371" TEXT="&#xbb;PlayController&#xab;">
@@ -129729,50 +129730,81 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="forward"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1746231390297" ID="ID_87527589" MODIFIED="1746237663416" TEXT="Konsequenz: forken und umbenennen">
+<node COLOR="#435e98" CREATED="1746231390297" ID="ID_87527589" MODIFIED="1746321103385" TEXT="Konsequenz: forken und umbenennen">
 <icon BUILTIN="yes"/>
-<node CREATED="1746231417906" ID="ID_1653206071" MODIFIED="1746231437026" TEXT="playback-controller &#x27fc; player-controller"/>
-<node CREATED="1746231445781" ID="ID_1228761711" MODIFIED="1746231481065" TEXT="++ &#x27fc; demo-controller"/>
+<node COLOR="#435e98" CREATED="1746231417906" ID="ID_1653206071" MODIFIED="1746321106400" TEXT="playback-controller &#x27fc; player-controller"/>
+<node COLOR="#435e98" CREATED="1746231445781" ID="ID_1228761711" MODIFIED="1746321106399" TEXT="++ &#x27fc; demo-controller"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746237670793" ID="ID_258474163" MODIFIED="1746237738880" TEXT="dann entkernen und kurzschlie&#xdf;en">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746237725210" ID="ID_138416616" MODIFIED="1746237781562" TEXT="entferne lumiera::DummyPlayer::Process playHandle_">
-<icon BUILTIN="yes"/>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746237741584" ID="ID_4101489" MODIFIED="1746237781562" TEXT="entferne LumieraDisplaySlot viewerHandle_">
+<node COLOR="#338800" CREATED="1746237670793" ID="ID_258474163" MODIFIED="1746321119456" TEXT="dann entkernen und kurzschlie&#xdf;en">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1746237725210" ID="ID_138416616" MODIFIED="1746321111559" TEXT="entferne lumiera::DummyPlayer::Process playHandle_">
 <icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746237759901" ID="ID_331458322" MODIFIED="1746237781562" TEXT="entferne static DemoController* instance">
+<node COLOR="#435e98" CREATED="1746237741584" ID="ID_4101489" MODIFIED="1746321111559" TEXT="entferne LumieraDisplaySlot viewerHandle_">
 <icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746237799176" ID="ID_1428195458" MODIFIED="1746237807456" TEXT="Lebenszyklus neu aufbauen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#435e98" CREATED="1746237759901" ID="ID_331458322" MODIFIED="1746321111558" TEXT="entferne static DemoController* instance">
+<icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746237785154" ID="ID_1469394159" MODIFIED="1746237807455" TEXT="direkt einen Tick-Service instantiieren">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1746237799176" ID="ID_1428195458" MODIFIED="1746321116092" TEXT="Lebenszyklus neu aufbauen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1746321662339" ID="ID_705046124" MODIFIED="1746321673987" TEXT="direkt einen DummyImmageGenerator instantiieren">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1746237785154" ID="ID_1469394159" MODIFIED="1746321684837" TEXT="einen Tick-Service instantiieren sobald Playback stattfindet">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746237836971" ID="ID_349974806" MODIFIED="1746237847634" TEXT="einen Null-Displayer schaffen">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1746237836971" ID="ID_349974806" MODIFIED="1746321699135" TEXT="einen Null-Displayer schaffen">
+<icon BUILTIN="pencil"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746237900191" ID="ID_891690513" MODIFIED="1746237941748" TEXT="dieser empf&#xe4;ngt zwar einen Datenblock">
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1746285283565" ID="ID_1980886210" MODIFIED="1746285291666" TEXT="was f&#xfc;r ein Format?">
+<node CREATED="1746285293070" ID="ID_1654823808" MODIFIED="1746285299797" TEXT="Code-Arch&#xe4;ologie..."/>
+<node CREATED="1746285300603" ID="ID_1713770409" MODIFIED="1746285307663" TEXT="stelle fest: das Format wurde nie verwendet"/>
+</node>
+<node CREATED="1746306976033" ID="ID_1750181201" MODIFIED="1746306980116" TEXT="Gr&#xf6;&#xdf;e">
+<node CREATED="1746306981128" ID="ID_322973917" MODIFIED="1746306997011" TEXT="wird mit dem Konstruktor des Displayers festgelegt"/>
+<node CREATED="1746306997902" ID="ID_949805986" MODIFIED="1746307010754" TEXT="das ist nicht (notwendig) die Gr&#xf6;&#xdf;e des Anzeige-Widgets"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746237922301" ID="ID_261548220" MODIFIED="1746237941749" TEXT="quitiert aber nur geeignet im Log">
 <icon BUILTIN="flag-yellow"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746237950796" ID="ID_833924220" MODIFIED="1746237960794" TEXT="ggfs mit gedrosselter Frame-Rate laufen lassen">
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1746321706423" ID="ID_476605997" MODIFIED="1746321714046" TEXT="versuche mal 4 FPS"/>
 </node>
 </node>
 <node CREATED="1746237851254" ID="ID_991590991" MODIFIED="1746237873586" TEXT="Widget und Controller-Logik mit Null-Displayer neu aufbauen">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746237875118" ID="ID_1626821300" MODIFIED="1746237896495" TEXT="Widget soll erst mal schwarzen Hintergrund zeichnen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1746237875118" ID="ID_1626821300" MODIFIED="1746321177564" TEXT="Widget soll erst mal schwarzen Hintergrund zeichnen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1746321143947" ID="ID_302254163" MODIFIED="1746321175715" TEXT="verwende Gtk::Image">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1746321151041" ID="ID_792096752" MODIFIED="1746321175716" TEXT="setze neue Klasse &quot;videodisplay&quot;">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1746321165038" ID="ID_1935368140" MODIFIED="1746321175717" TEXT="definiere f&#xfc;r diese im CSS einen schwarzen Hintergrund">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#435e98" CREATED="1746321602028" ID="ID_471888500" MODIFIED="1746321627339" TEXT="setze auch mal min-width und min-height (auf 320 x 240px)">
+<icon BUILTIN="idea"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746237886231" ID="ID_81175326" MODIFIED="1746237894236" TEXT="ein paar Buttons einbinden">
 <icon BUILTIN="flag-yellow"/>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746321719549" ID="ID_1181117478" MODIFIED="1746321726590" TEXT="Buttons mit controller verdrahten">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node CREATED="1746313536301" ID="ID_407425498" MODIFIED="1746313654699" TEXT="Infos zu den Low-Level-Zugriffen">
+<arrowlink COLOR="#6c7789" DESTINATION="ID_292602658" ENDARROW="Default" ENDINCLINATION="-1126;108;" ID="Arrow_ID_1434687356" STARTARROW="None" STARTINCLINATION="-901;77;"/>
+<icon BUILTIN="info"/>
 </node>
 </node>
 </node>
@@ -150890,7 +150922,7 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
 <node BACKGROUND_COLOR="#c9d1da" COLOR="#2d2198" CREATED="1439664045448" HGAP="240" ID="ID_21531707" MODIFIED="1557498707237" POSITION="left" TEXT="Info" VSHIFT="-500">
 <edge COLOR="#b4a9e3"/>
 <font NAME="SansSerif" SIZE="16"/>
-<node CREATED="1439664217489" FOLDED="true" ID="ID_104059794" MODIFIED="1557498707237" TEXT="GTK-3">
+<node CREATED="1439664217489" ID="ID_104059794" MODIFIED="1746287328902" TEXT="GTK-3">
 <node CREATED="1439664230168" FOLDED="true" ID="ID_235548644" LINK="https://wiki.gnome.org/Projects/GTK%2B/Inspector" MODIFIED="1557498707237" TEXT="GTK+ Inspector">
 <icon BUILTIN="idea"/>
 <node CREATED="1439664318604" ID="ID_1327496126" MODIFIED="1557498707237" TEXT="keyboard shortcut">
@@ -150921,6 +150953,18 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
   </body>
 </html></richcontent>
 <icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node CREATED="1746287605697" HGAP="29" ID="ID_1605299883" MODIFIED="1746287612557" TEXT="Dokumentation">
+<node CREATED="1746287995242" ID="ID_445627802" MODIFIED="1746288001360" TEXT="Programming with Gtkmm">
+<node CREATED="1746288002185" ID="ID_632354219" LINK="https://web.archive.org/web/20200428080214/https://developer.gnome.org/gtkmm-tutorial/stable/index.html.en" MODIFIED="1746289645030" TEXT="Gtkmm-3 (Archive 2020)">
+<node CREATED="1746288192067" ID="ID_1226751634" LINK="https://download.gnome.org/sources/gtkmm-documentation/3.24/" MODIFIED="1746288198981" TEXT="download"/>
+</node>
+<node CREATED="1746288009436" ID="ID_1259724761" LINK="https://gnome.pages.gitlab.gnome.org/gtkmm-documentation/index.html" MODIFIED="1746288033465" TEXT="Gtkmm-4 (current)"/>
+</node>
+<node CREATED="1746309394880" ID="ID_1482721663" LINK="https://gtkmm.gnome.org/en/documentation.html" MODIFIED="1746311409207" TEXT="GTKmm-Documentation (current)"/>
+<node CREATED="1746288640997" ID="ID_865943990" LINK="https://web.archive.org/web/20200508150948/https://developer.gnome.org/references" MODIFIED="1746289246861" TEXT="Developers.gnome.org (Archive 2020)">
+<node CREATED="1746289110036" ID="ID_910026032" LINK="https://web.archive.org/web/20201112022432/https://developer.gnome.org/gtkmm/stable/" MODIFIED="1746289198485" TEXT="Gtkmm-3"/>
 </node>
 </node>
 <node COLOR="#435e98" CREATED="1534634232557" HGAP="31" ID="ID_1467351006" MODIFIED="1557498707237" TEXT="Konzepte" VSHIFT="-22">
@@ -152000,6 +152044,51 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
 </node>
 <node CREATED="1563630894868" ID="ID_222380322" MODIFIED="1563630929426" TEXT="WidgeqPath: die Sequenz von Top zum konkreten Widget">
 <arrowlink COLOR="#76a5de" DESTINATION="ID_293762905" ENDARROW="Default" ENDINCLINATION="109;127;" ID="Arrow_ID_1149853107" STARTARROW="None" STARTINCLINATION="-391;0;"/>
+</node>
+</node>
+<node CREATED="1746311574167" FOLDED="true" ID="ID_348215446" MODIFIED="1746311577938" TEXT="Lowlevel">
+<node CREATED="1746311579567" ID="ID_595285490" MODIFIED="1746311686884" TEXT="wird zunehmend verborgen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...und zwar, weil GTK portabel ist, und man eigentlich nicht auf die unterliegende Window/Grafik-Technologie zugreifen sollte; mit Wayland gibt es nun sogar unter Linux eine zweite Variante, d.h. man kann nicht mehr sicher sein, da&#223; man &#252;berhaupt an ein X-Window oder X-Display gebunden ist.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1746311688604" ID="ID_748124734" MODIFIED="1746313520669" TEXT="stattdessen">
+<linktarget COLOR="#627b8f" DESTINATION="ID_748124734" ENDARROW="Default" ENDINCLINATION="83;412;" ID="Arrow_ID_1511868825" SOURCE="ID_13585943" STARTARROW="None" STARTINCLINATION="342;-494;"/>
+<node CREATED="1746311692915" ID="ID_1276548378" MODIFIED="1746311710469" TEXT="von Widget &#x27f6; get_native">
+<node CREATED="1746311712628" ID="ID_1671886026" MODIFIED="1746311772953">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <u>Interface</u>: dasjenige Widget,
+    </p>
+    <p>
+      das die tats&#228;chliche Realisierung macht
+    </p>
+    <p>
+      (typischerweise ein Gtk::Window)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1746311792870" ID="ID_1171457982" LINK="https://gnome.pages.gitlab.gnome.org/gtkmm/classGtk_1_1Native.html#a72083bb9c428f484af08758ad6cd0e17" MODIFIED="1746311903570" TEXT="Glib::RefPtr&lt; Gdk::Surface &gt; Gtk::Native::get_surface ()">
+<arrowlink DESTINATION="ID_435101528" ENDARROW="Default" ENDINCLINATION="71;-12;" ID="Arrow_ID_1108289227" STARTARROW="None" STARTINCLINATION="-125;9;"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1746311873405" ID="ID_435101528" LINK="https://gnome.pages.gitlab.gnome.org/gtkmm/classGdk_1_1Surface.html" MODIFIED="1746311903570" TEXT="Gdk::Surface">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_435101528" ENDARROW="Default" ENDINCLINATION="71;-12;" ID="Arrow_ID_1108289227" SOURCE="ID_1171457982" STARTARROW="None" STARTINCLINATION="-125;9;"/>
+<node CREATED="1746311909912" ID="ID_1528013851" MODIFIED="1746311923922" TEXT="eine abstrahierte Zone auf einem Grafik-Display"/>
+<node CREATED="1746312004492" ID="ID_220756072" MODIFIED="1746312017221" TEXT="kann X-Window sein, aber auch Cairo oder OpenGL"/>
+<node CREATED="1746312035670" ID="ID_410018707" MODIFIED="1746312045864" TEXT="von dort kommt man auf das Gdk::Display"/>
+<node CREATED="1746312046709" ID="ID_778386913" MODIFIED="1746312057450" TEXT="und von dort auf Gdk::Monitor"/>
+</node>
 </node>
 </node>
 <node CREATED="1477523681978" HGAP="14" ID="ID_400257229" MODIFIED="1557498707238" TEXT="Richtlinien" VSHIFT="11">
@@ -153394,7 +153483,7 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
   <head/>
   <body>
     <p>
-      /*
+      /&ast;
     </p>
     <p>
       &#160;* Gadgets are 'next-generation widgets' - they combine a CSS node
@@ -154442,6 +154531,67 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
 </node>
 </node>
 <node CREATED="1504215729848" ID="ID_518260540" MODIFIED="1557498707239" TEXT="howto">
+<node CREATED="1746313074008" ID="ID_326777030" MODIFIED="1746313077703" TEXT="X-Window">
+<node CREATED="1746313079527" FOLDED="true" ID="ID_292602658" MODIFIED="1746313654699" TEXT="an das X-Window rankommen">
+<linktarget COLOR="#6c7789" DESTINATION="ID_292602658" ENDARROW="Default" ENDINCLINATION="-1126;108;" ID="Arrow_ID_1434687356" SOURCE="ID_407425498" STARTARROW="None" STARTINCLINATION="-901;77;"/>
+<node CREATED="1746313102451" ID="ID_757727277" LINK="https://discourse.gnome.org/t/set-absolut-window-position-in-gtk4/8552/4" MODIFIED="1746313148021" TEXT="Frage im GNOME-Forum">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      es ging darum, an die unterliegenden X-Windows ranzukommen, um sie dann auf dem Bidschirm zu positionierenl
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1746313154700" ID="ID_1881885906" MODIFIED="1746313243780" TEXT="Wir haben entsprechenden Code in unserem XvDisplayer">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <div style="background-color: #eee0b5; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 2px">
+      <div style="color: #202020; background-color: #eee0b5; font-family: Bitstream Vera Sans Mono; font-size: 9pt; white-space: pre">
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#1a1ac4">Window window</font><font color="#3a1f18">&#160;</font><font color="#65533c">=</font><font color="#3a1f18">&#160;</font><font color="#95271a">GDK_WINDOW_XID</font><font color="#3a1f18">&#160;</font><font color="#11123a">(</font><font color="#3a1f18">area_window</font><font color="#874a15"><b>-&gt;</b></font><font color="#753737">gobj</font><font color="#11123a">())</font><font color="#65533c">;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#1a1ac4">Display* display</font><font color="#3a1f18">&#160;</font><font color="#65533c">=</font><font color="#3a1f18">&#160;</font><font color="#95271a">GDK_WINDOW_XDISPLAY</font><font color="#3a1f18">&#160;</font><font color="#11123a">(</font><font color="#3a1f18">area_window</font><font color="#874a15"><b>-&gt;</b></font><font color="#753737">gobj</font><font color="#11123a">())</font><font color="#65533c">;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          
+        </p>
+      </div>
+    </div>
+  </body>
+</html></richcontent>
+<node CREATED="1746313246086" ID="ID_1024347343" MODIFIED="1746313262481" TEXT="dabei expandieren die Macros &#xe4;quivalent zu dem im Forum Gesagten"/>
+<node CREATED="1746313268165" ID="ID_1783118756" MODIFIED="1746313278287" TEXT="gdkx11window.h"/>
+</node>
+<node CREATED="1746313293476" ID="ID_13585943" MODIFIED="1746313528485">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      dieser Code ist anscheinend <i>nicht deprecated</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#627b8f" DESTINATION="ID_748124734" ENDARROW="Default" ENDINCLINATION="83;412;" ID="Arrow_ID_1511868825" STARTARROW="None" STARTINCLINATION="342;-494;"/>
+<node CREATED="1746313308823" ID="ID_586730227" MODIFIED="1746313316638" TEXT="aber man findet dazu nichts in der Doku"/>
+<node CREATED="1746313317267" ID="ID_580811889" MODIFIED="1746313423821" TEXT="das hei&#xdf;t, er geh&#xf6;rt zur Implementierung, nicht zum Interface">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das GTK-Projekt f&#252;hrt seit Gtk-3 zunehmen weitere Abstraktionen ein, &#252;ber die alle relevanten Aufgaben erledigt werden k&#246;nnen (selbst low-Level-Aufgaben wie das Mapping von Device-Koordinaten). Siehe Gtk::Native, und von dort Gdk::Surface
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
 <node CREATED="1446515847047" FOLDED="true" ID="ID_290915762" MODIFIED="1557498707239" TEXT="GtkCssProvider">
 <node CREATED="1446515865029" ID="ID_1503616150" MODIFIED="1557498707239" TEXT="parsing errors"/>
 <node CREATED="1477784584821" ID="ID_1810760662" LINK="https://developer.gnome.org/gtkmm-tutorial/stable/sec-custom-widgets.html.en" MODIFIED="1576282357941" TEXT="Beispiel im GTKmm-Guide (custom widget)">
@@ -161649,8 +161799,7 @@ Since then others have made contributions, see the log for the history.</font></
       jeder Displayer versucht eine minimale Initialisierung im Konstruktor und signalisiert damit, da&#223; er im Prinzip Video ausgeben k&#246;nnte
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1746053626501" ID="ID_1505251313" MODIFIED="1746053644326" TEXT="virtual DisplayerInput format()">
 <richcontent TYPE="NOTE"><html>
@@ -161729,8 +161878,7 @@ Since then others have made contributions, see the log for the history.</font></
       Implementierung war <i>extrem einfach</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -161770,8 +161918,7 @@ Since then others have made contributions, see the log for the history.</font></
       die Anzeige erscheint nur <i>marginal gebrochen</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1746059010720" ID="ID_431781822" MODIFIED="1746059029328" TEXT="es m&#xfc;&#xdf;ten nur wenige Teile (einfach) nach GTK-3 portiert werden">
 <node CREATED="1746059031084" ID="ID_752582525" MODIFIED="1746059039703" TEXT="das VideoDisplayWidget"/>

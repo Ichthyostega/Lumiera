@@ -91,6 +91,7 @@ namespace stage {
   
   extern cuString CLASS_background;
   
+  extern cuString CLASS_videodisplay;
   
   extern Literal ICON_placement;
   extern Literal ICON_arrow_hand_menu;

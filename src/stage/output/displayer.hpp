@@ -27,6 +27,8 @@
 #define STAGE_OUTPUT_DISPLAYER_H
 
 
+#include "lib/nocopy.hpp"
+
 namespace stage {
 namespace output {
   
@@ -63,26 +65,28 @@ namespace output {
    * rewrite the two other put methods as required.
    */
   class Displayer
+    : util::NonCopyable
     {
     protected:
-      int imageWidth;
-      int imageHeight;
+      const int videoWidth;
+      const int videoHeight;
       
     public:
       virtual ~Displayer() { }
+      
+      Displayer(int w, int h)
+        : videoWidth{w}
+        , videoHeight{h}
+        { }
       
       
       /** Indicates if this object can be used to render images on the running system. */
       virtual bool usable();
       
-      /** Indicates the format required by the abstract put method. */
+      /** Indicates the format required by the abstract put method.
+       * @todo this feature was seemingly never used... can it be relevant? can we handle different formats?
+       */
       virtual DisplayerInput format();
-      
-      /** Expected width of input to put. */
-      virtual int preferredWidth();
-      
-      /** Expected height of input to put. */
-      virtual int preferredHeight();
       
       /**
        * Put an image of a given width and height with the expected input

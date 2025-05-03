@@ -31,18 +31,16 @@ namespace output {
   
   XvDisplayer::XvDisplayer(Gtk::Widget *drawing_area,
                            int width, int height)
-    : gotPort(false)
-    , drawingArea(drawing_area)
-    , xvImage(NULL)
+    : Displayer{width,height}
+    , gotPort{false}
+    , drawingArea_{drawing_area}
+    , xvImage{nullptr}
     {
-      REQUIRE(drawing_area != NULL);
-      REQUIRE(width > 0);
-      REQUIRE(height > 0);
+      REQUIRE (drawing_area);
+      REQUIRE (width > 0);
+      REQUIRE (height > 0);
       
       INFO(stage, "Trying XVideo at %d x %d", width, height);
-    
-      imageWidth = width;
-      imageHeight = height;
     
       shmInfo.shmaddr = NULL;
     
@@ -208,7 +206,7 @@ namespace output {
   XvDisplayer::put (void* const image)
   {
     REQUIRE (image != NULL);
-    REQUIRE (drawingArea != NULL);
+    REQUIRE (drawingArea_ != NULL);
     
     if (xvImage != NULL)
       {
@@ -216,15 +214,15 @@ namespace output {
         
         int video_x = 0, video_y = 0, video_width = 0, video_height = 0;
         calculateVideoLayout(
-          drawingArea->get_width(),
-          drawingArea->get_height(),
-          preferredWidth(), preferredHeight(),
+          drawingArea_->get_width(),
+          drawingArea_->get_height(),
+          videoWidth, videoHeight,
           video_x, video_y, video_width, video_height );
   
         memcpy (xvImage->data, image, xvImage->data_size);
   
         XvShmPutImage (display, grabbedPort, window, gc, xvImage,
-                       0, 0, preferredWidth(), preferredHeight(),
+                       0, 0, videoWidth, videoHeight,
                        video_x, video_y, video_width, video_height, false);
       }
   }

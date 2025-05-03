@@ -81,7 +81,7 @@ class GdkDisplayer
      * The widget that video will be drawn into.
      * @remarks This value must be a valid pointer.
      */
-    Gtk::Widget* drawingArea;
+    Gtk::Widget* drawingArea_;
   };
   
   

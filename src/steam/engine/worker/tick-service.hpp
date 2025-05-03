@@ -71,9 +71,10 @@ namespace node {
      ~TickService ()
         {
           timespan_ = 0;
-          this->join();
-          usleep (200000);    // additional delay allowing GTK to dispatch the last output
+          auto res = this->join();
+          WARN_IF (res, steam, "Failure in TickService");
           
+          usleep (200000);    // additional delay allowing GTK to dispatch the last output
           INFO (steam, "TickService shutdown.");
         }
       

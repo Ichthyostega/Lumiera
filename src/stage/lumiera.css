@@ -277,6 +277,25 @@ class "gtkmm__CustomObject_TimelineHeaderWidget" style:highest "timeline_header_
 */
 
 
+/* ---------- Styles for Lumiera Widgets ---------- */
+
+/* ElementBoxWidget and IDLabel within */
+.idlabel .image-button {
+  min-width: unset;
+  min-height: unset;
+  padding: inherit;
+}
+.idlabel__icon image {
+  padding-left: 0.5ex;
+}
+.videodisplay {
+  background-color: Black;
+  min-width:  320px;
+  min-height: 240px;
+}
+
+
+
 /* ---------- Styles for special markup ---------- */
 
   .indication-flash,

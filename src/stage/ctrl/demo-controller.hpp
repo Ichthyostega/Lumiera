@@ -32,49 +32,45 @@
 #define DEMO_CONTROLLER_H
 
 #include "stage/gtk-base.hpp"
-#include "include/dummy-player-facade.h"
-#include "include/display-facade.h"
 #include "lib/nocopy.hpp"
 
+#include <memory>
+#include <functional>
 
+namespace steam {
+namespace node {
+  class TickService;
+  class DummyImageGenerator;
+}}
 
 namespace stage {
 namespace ctrl {
   
+  using std::unique_ptr;
+  using FrameSink = std::function<void(void* const)>;
   
   
   /** @deprecated we need a durable design for the playback process */
   class DemoController
     : util::NonCopyable
     {
-
-      volatile bool playing_;
-      
-      lumiera::DummyPlayer::Process playHandle_;
-      
-      LumieraDisplaySlot viewerHandle_;
-      
-      static DemoController* instance;  /////////////////////////////////////////////////////////////////////TICKET #1067 shitty workaround to allow disentangling of top-level
+      unique_ptr<steam::node::DummyImageGenerator> imageGen_;
+      unique_ptr<steam::node::TickService>         tick_;
+      FrameSink output_;
+      bool playing_;
       
     public:
-    
-      DemoController();
      ~DemoController();
+      DemoController(FrameSink);
       
-      static DemoController& get();     /////////////////////////////////////////////////////////////////////TICKET #1067 shitty workaround to allow disentangling of top-level 
-    
+      bool isPlaying() const { return playing_; }
+      
       void play();
       void pause();
       void stop();
       
-      bool is_playing();
-    
-      void useDisplay (LumieraDisplaySlot display);
-      
     private:
-      
-      void on_frame();
-      
+      void processFrame();
     };
   
   

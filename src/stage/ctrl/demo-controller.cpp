@@ -20,92 +20,71 @@
 
 
 #include "stage/ctrl/demo-controller.hpp"
-#include "stage/display-service.hpp"
-#include "lib/error.hpp"
-#include "include/logging.h"
+#include "steam/engine/worker/tick-service.hpp"
+#include "steam/engine/worker/dummy-image-generator.hpp"
+
+#include <utility>
 
 
 namespace stage {
 namespace ctrl {
-  
   namespace error = lumiera::error;
-  
-  
-  
-  DemoController::DemoController()
-    : playing_(false)
-    , viewerHandle_(0)
-    { 
-      instance = this;                               ////////////////////////////////////////////////////////TICKET #1067 shitty workaround to allow disentangling of top-level
-    }
-  
-  DemoController::~DemoController()
-    { 
-      instance = nullptr;                            ////////////////////////////////////////////////////////TICKET #1067 shitty workaround to allow disentangling of top-level
-    }
-  
-  
-  DemoController* DemoController::instance;  ////////////////////////////////////////////////////////TICKET #1067 shitty workaround to allow disentangling of top-level
-  
-  DemoController&
-  DemoController::get()                          ////////////////////////////////////////////////////////TICKET #1067 shitty workaround to allow disentangling of top-level
-  {
-    if (not instance)
-      throw error::Logic ("GTK UI is not in running state"
-                         , LERR_(LIFECYCLE));
-    
-    return *instance;
+
+  namespace {
+    const uint FPS = 4;
   }
+  
+  using std::make_unique;
+  using steam::node::TickService;
+  using steam::node::DummyImageGenerator;
+  
+  
+  DemoController::DemoController(FrameSink outputSink)
+    : imageGen_{make_unique<DummyImageGenerator>(FPS)}
+    , tick_{}
+    , output_{std::move (outputSink)}
+    , playing_{false}
+    { }
+  
+  DemoController::~DemoController() { stop(); }
+  
+  
+  void
+  DemoController::processFrame()
+  {
+    REQUIRE (tick_);
+    REQUIRE (imageGen_);
+    
+    if (playing_)
+      output_(imageGen_->next());
+    else
+      output_(imageGen_->current());
+  }
+  
   
   void
   DemoController::play()
   {
-    if (playHandle_)
-      {
-        playHandle_.play(true);
-        playing_ = true;
-      }
-    else if (viewerHandle_)
-      try
-        {
-          playHandle_ =  lumiera::DummyPlayer::facade().start (viewerHandle_);
-          playing_ = true;
-        }
-      catch (lumiera::error::State& err)
-        {
-          WARN (stage, "failed to start playback: %s" ,err.what());
-          lumiera_error();
-          playing_ = false;
-        }
+    if (not tick_)
+        tick_.reset (new TickService{[this]{ processFrame(); }});
+    ASSERT (tick_);
+    tick_->activate (FPS);
+    playing_ = true;
   }
   
   void
   DemoController::pause()
   {
-    if (playHandle_)
-      playHandle_.play(false);
+    if (tick_)
+      tick_->activate(0);
     playing_ = false;
   }
   
   void
   DemoController::stop()
   {
-    playHandle_.close();
+    tick_.reset(); // blocks for one cycle to join()
     playing_ = false;
-  }
-  
-  bool
-  DemoController::is_playing()
-  {
-    return playing_;
-  }
-  
-  
-  
-  void
-  DemoController::useDisplay (LumieraDisplaySlot display)
-  {
-    viewerHandle_ = display;
   }
   
   

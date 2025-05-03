@@ -29,21 +29,29 @@
 namespace stage {
 namespace widget {
   
-  VideoDisplayWidget::VideoDisplayWidget()
-    : displayer_(NULL)
-    { }
-  
-  
-  VideoDisplayWidget::~VideoDisplayWidget()
-  {
-    if (displayer_) delete displayer_;
+  namespace {
+    const uint VIDEO_WIDTH = 320;
+    const uint VIDEO_HEIGHT = 240;   ////////////////////////////////////////////////////////////////////////TICKET #1289 : these should not be hard coded, but negotiated with the OutputManager
   }
   
   
-  Displayer*
-  VideoDisplayWidget::getDisplayer()  const
+  using std::make_unique;
+  using stage::output::XvDisplayer;
+  using stage::output::GdkDisplayer;
+  using stage::output::NullDisplayer;
+  
+  VideoDisplayWidget::VideoDisplayWidget()
   {
-    return displayer_;
+      get_style_context()->add_class (CLASS_background);     // Style to ensure an opaque backdrop
+      get_style_context()->add_class (CLASS_videodisplay);
+  }
+  
+  
+  void
+  VideoDisplayWidget::pushFrame (void* const buffer)
+  {
+    REQUIRE(displayer_);
+    displayer_->put(buffer);
   }
   
   
@@ -52,39 +60,26 @@ namespace widget {
   {
     // invoke base implementation
     Gtk::Widget::on_realize ();
-    
-    // Set colours
-    //modify_bg (Gtk::STATE_NORMAL, Gdk::Color ("black"));
-    
-    if (displayer_) delete displayer_;
-    displayer_ = createDisplayer (this, 320, 240);
-    
-    add_events (Gdk::ALL_EVENTS_MASK);
+    setupDisplayer (VIDEO_WIDTH, VIDEO_HEIGHT);
   }
   
   
-  Displayer*
-  VideoDisplayWidget::createDisplayer (Gtk::Widget *drawingArea, int width, int height)
+  void
+  VideoDisplayWidget::setupDisplayer(uint videoWidth, uint videoHeight)
   {
-    REQUIRE (drawingArea != NULL);
-    REQUIRE (width > 0 && height > 0);
+    REQUIRE (videoWidth > 0);
+    REQUIRE (videoHeight > 0);
+    /*
+    displayer_ = make_unique<XvDisplayer> (this, videoWidth, videoHeight);
+    if (displayer_->usable())
+      return;
     
-    Displayer *displayer = NULL;
-    
-    displayer = new XvDisplayer (drawingArea, width, height);
-    if (!displayer->usable())
-      {
-        delete displayer;
-        displayer = NULL;
-      }
-    
-    if (!displayer)
-      {
-        displayer = new GdkDisplayer (drawingArea, width, height);
-        ///////////////////////////////////////////////////////////////////////////////////////TICKET #950 : new solution for video display
-      }
-    
-    return displayer;
+    displayer_ = make_unique<GdkDisplayer> (this, videoWidth, videoHeight);
+    if (displayer_->usable())
+      return;
+    */
+    displayer_ = make_unique<NullDisplayer> (this, videoWidth, videoHeight);
+    ENSURE (displayer_->usable());
   }
   
   

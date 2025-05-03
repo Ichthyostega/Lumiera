@@ -30,6 +30,12 @@
 .idlabel__icon image {
   padding-left: 0.5ex;
 }
+.videodisplay {
+  background-color: Black;
+  min-width:  320px;
+  min-height: 240px;
+}
+
 
 
 /* ---------- Styles for special markup ---------- */

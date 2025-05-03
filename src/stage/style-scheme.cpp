@@ -81,6 +81,7 @@ namespace stage {
   
   cuString CLASS_background    {"background"};            ///< opaque backdrop
   
+  cuString CLASS_videodisplay  {"videodisplay"};
   
   Literal ICON_placement       {"placement"};
   Literal ICON_arrow_hand_menu {"arrow_hand"};

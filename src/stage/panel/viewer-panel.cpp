@@ -33,14 +33,12 @@ namespace panel {
   
   ViewerPanel::ViewerPanel (workspace::PanelManager& panelManager
                            ,Gdl::DockItem& dockItem)
-    : Panel(panelManager, dockItem, getTitle(), getStockID())
-    , demoPlayback_{}
+    : Panel{panelManager, dockItem, getTitle(), getStockID()}
+    , display_{}
+    , demoPlayback_{[this](void * const buffer){ display_.pushFrame(buffer); }}
     {
       //----- Pack in the Widgets -----//
       pack_start(display_, PACK_EXPAND_WIDGET);
-      
-      FrameDestination outputDestination (sigc::mem_fun(this, &ViewerPanel::on_frame));
-      demoPlayback_.useDisplay (DisplayService::setUp (outputDestination));
     }
   
   const char*
@@ -53,15 +51,6 @@ namespace panel {
   ViewerPanel::getStockID()
   {
     return "panel_viewer";
-  }
-  
-  void
-  ViewerPanel::on_frame (void* buffer)
-  {
-    Displayer *displayer = display_.getDisplayer();
-    REQUIRE(displayer);
-    
-    displayer->put(buffer);
   }
   
   

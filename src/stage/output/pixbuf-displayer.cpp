@@ -39,14 +39,12 @@ namespace output {
   
   GdkDisplayer::GdkDisplayer (Gtk::Widget* drawing_area,
                               int width, int height)
-    : drawingArea( drawing_area )
+    : Displayer{width,height}
+    , drawingArea_{drawing_area}
     {
-      REQUIRE (drawing_area != NULL);
+      REQUIRE (drawing_area);
       REQUIRE (width > 0);
       REQUIRE (height > 0);
-      
-      imageWidth = width,
-      imageHeight = height;
     }
   
   bool
@@ -64,12 +62,12 @@ namespace output {
         video_height = 0;
     
     calculateVideoLayout(
-      drawingArea->get_width(),
-      drawingArea->get_height(),
-      preferredWidth(), preferredHeight(),
+      drawingArea_->get_width(),
+      drawingArea_->get_height(),
+      videoWidth, videoHeight,
       video_x, video_y, video_width, video_height);
   
-    GdkWindow *window = drawingArea->get_window()->gobj();
+    GdkWindow *window = drawingArea_->get_window()->gobj();
     REQUIRE (window != NULL);
       
   #if false  ///////////////////////////////////////////////////////////////////////////////////////////////////TICKET #950 : new solution for video display

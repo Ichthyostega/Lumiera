@@ -33,6 +33,7 @@ namespace panel {
   class ViewerPanel
     : public Panel
     {
+      widget::VideoDisplayWidget display_;
       ctrl::DemoController demoPlayback_;
       
     public:
@@ -40,15 +41,6 @@ namespace panel {
       
       static const char* getTitle();
       static const gchar* getStockID();
-      
-      
-    protected:
-      void on_frame(void *buffer);
-      
-    protected:
-      
-      /** widget to display the video content */
-      widget::VideoDisplayWidget display_;
     };
   
 }}// namespace stage::panel

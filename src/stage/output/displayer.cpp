@@ -28,8 +28,6 @@
 
 #include "stage/gtk-base.hpp"
 #include "stage/output/displayer.hpp"
-#include "stage/output/xv-displayer.hpp"
-#include "stage/output/gdkdisplayer.hpp"
 
 namespace stage {
 namespace output {
@@ -44,18 +42,6 @@ namespace output {
   Displayer::format()
   {
     return DISPLAY_NONE;
-  }
-  
-  int
-  Displayer::preferredWidth()
-  {
-    return imageWidth;
-  }
-  
-  int
-  Displayer::preferredHeight()
-  {
-    return imageHeight;
   }
   
   void

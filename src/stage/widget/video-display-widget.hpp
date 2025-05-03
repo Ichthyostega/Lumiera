@@ -26,12 +26,14 @@
 #include "stage/gtk-base.hpp"
 #include "stage/output/displayer.hpp"
 
-
-using namespace stage::output;  ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
+#include <memory>
 
 namespace stage {
 namespace widget {
-
+  
+  using stage::output::Displayer;
+  
+  
   /**
    * @todo the first UI draft included a video displayer widget library implementation,
    *       Unfortunately, this became defunct with the switch to GTK-3. And a fun fact is,
@@ -39,24 +41,22 @@ namespace widget {
    *       as to care for video display ourselves. Someone (TM) need to care for this!
    */
   class VideoDisplayWidget
-    : public Gtk::DrawingArea
+    : public Gtk::Image
     {
-      Displayer* displayer_;
+      std::unique_ptr<Displayer> displayer_;
       
     public:
       VideoDisplayWidget();
-     ~VideoDisplayWidget();
       
-      Displayer* getDisplayer() const;
+      void pushFrame (void* const);
       
       
-    private: /* ===== Overrides ===== */
+    private:
       virtual void on_realize()  override;
       
       
-    private: /* ===== Internals ===== */
-      static Displayer*
-      createDisplayer (Gtk::Widget* drawingArea, int width, int height);
+    private:
+      void setupDisplayer(uint videoWidth, uint videoHeight);
     };
   
   
