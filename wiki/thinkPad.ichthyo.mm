@@ -129797,6 +129797,124 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746237886231" ID="ID_81175326" MODIFIED="1746237894236" TEXT="ein paar Buttons einbinden">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1746366500471" ID="ID_442660271" MODIFIED="1746366507224" TEXT="blo&#xdf; wo?">
+<node CREATED="1746366514666" ID="ID_414805814" MODIFIED="1746366526915" TEXT="k&#xf6;nnte nat&#xfc;rlich eine Button-Bar in den Viewer h&#xe4;ngen"/>
+<node CREATED="1746366527794" ID="ID_488665860" MODIFIED="1746366562250" TEXT="aber vertical Screen-Real-Estate ist bereits knapp">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1746366544285" ID="ID_148444359" MODIFIED="1746366557240" TEXT="k&#xf6;nnte die Button-Bar auch vertikal machen">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1746366566357" ID="ID_669235936" MODIFIED="1746366588141" TEXT="geplant war aber ein Play-Control-Widget"/>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1746366589535" ID="ID_944511675" MODIFIED="1746366785144" TEXT="also ein neues Docking-Panel schaffen">
+<icon BUILTIN="yes"/>
+<node CREATED="1746366642490" ID="ID_997232477" MODIFIED="1746366650524" TEXT="bekommt in erster N&#xe4;herung die Buttons direkt"/>
+<node CREATED="1746366651348" ID="ID_1947097226" MODIFIED="1746366715461" TEXT="soll sp&#xe4;ter mal auch den Timecode darstellen"/>
+<node COLOR="#5b280f" CREATED="1746366631539" ID="ID_1644863113" MODIFIED="1746366893632" TEXT="PlayerPanel">
+<icon BUILTIN="button_cancel"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1746366854412" ID="ID_329913152" MODIFIED="1746366899251" TEXT="PlayPanel">
+<icon BUILTIN="forward"/>
+</node>
+<node CREATED="1746366860054" ID="ID_597519647" MODIFIED="1746366904498" TEXT="k&#xf6;nnte n&#xe4;mlich auch Richtung Navigator gehen">
+<font NAME="SansSerif" SIZE="11"/>
+</node>
+</node>
+<node CREATED="1746374503622" ID="ID_1680072042" MODIFIED="1746374522309" TEXT="grrr .... warum ist das so m&#xfc;hsam???">
+<icon BUILTIN="smiley-angry"/>
+<node CREATED="1746374525273" ID="ID_1538200585" MODIFIED="1746374534611" TEXT="mu&#xdf; &#xbb;Stock-ID&#xab; registrieren"/>
+<node CREATED="1746374535343" ID="ID_406063817" MODIFIED="1746489702760" TEXT="brauche ein Icon">
+<arrowlink COLOR="#67647f" DESTINATION="ID_1569870904" ENDARROW="Default" ENDINCLINATION="-1095;296;" ID="Arrow_ID_1632100831" STARTARROW="None" STARTINCLINATION="-1256;195;"/>
+<node CREATED="1746374590955" ID="ID_175519777" MODIFIED="1746374594839" TEXT="woher nehmen?"/>
+<node CREATED="1746374595458" ID="ID_1292478720" LINK="notably https://github.com/shimmerproject/elementary-xfce" MODIFIED="1746383116727" TEXT="am Besten gleich stehlen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      mal bei den Standard-Icons vom XFCE-Desktop nachschauen
+    </p>
+    <p>
+      ... die Starter-Konfig-Box durchscrollen
+    </p>
+    <p>
+      .... mal bei Tango nachschauen...
+    </p>
+    <p>
+      ..... XFCE hat doch diesen sehr sauber-minimalistischen Icon-Satz von &#187;Elementary-OS&#171; &#252;bernommen (den man dort wegwerfen wollte)
+    </p>
+  </body>
+</html></richcontent>
+<node COLOR="#435e98" CREATED="1746489774498" ID="ID_1118210967" MODIFIED="1746489931429" TEXT="Idee: ein Laufwerk">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Ausgangspunkt sind verschiedene Icons f&#252;r Musik-Player, die eine stilisierte Compact-Kasette zeigen. Das bringt mich auf die Idee, auf die Steenbeck-Schneidemaschinen anzuspielen, mit den gro&#223;en Rollen, bzw. auf eine Magnetton-Maschine ... und dann k&#246;nnte man ein &#187;Playhead&#171; aus einem &#187;Play/Pause&#171;-Symbol erzeugen
+    </p>
+  </body>
+</html>
+</richcontent>
+<font NAME="SansSerif" SIZE="8"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node COLOR="#5b280f" CREATED="1746374605761" ID="ID_1626786868" MODIFIED="1746374633750" TEXT="Vorsicht: GPL-3+">
+<icon BUILTIN="stop-sign"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#d90a15" CREATED="1746374883465" HGAP="30" ID="ID_335713990" MODIFIED="1746374915951" TEXT="wenns dumm l&#xe4;uft hat das &#xbb;Konsequenzen&#xab;">
+<edge STYLE="sharp_linear"/>
+<font NAME="SansSerif" SIZE="8"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#d90a15" CREATED="1746374883465" HGAP="30" ID="ID_294861733" MODIFIED="1746383199394" TEXT="Einbahnstra&#xdf;e CC-BY-SA &#x27f6; GPL-3 (nicht umgekehrt)">
+<edge STYLE="sharp_linear"/>
+<font NAME="SansSerif" SIZE="8"/>
+</node>
+</node>
+<node CREATED="1746374734536" ID="ID_501174899" MODIFIED="1746490067343">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Tja &#10233; dann gibt's blo&#223; <i>Inspiration</i>&#160;+ Arbeit
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Ideen sind immer noch frei (sofern sie nicht patentiert sind) &#8212; nur der <i>konkrete gestalterische Ausruck</i>&#160;steht unter Copyright...
+    </p>
+  </body>
+</html></richcontent>
+<node COLOR="#632c48" CREATED="1746489632822" ID="ID_1733758969" MODIFIED="1746489674012" TEXT="ja es ist Arbeit">
+<font NAME="SansSerif" SIZE="11"/>
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node COLOR="#632c48" CREATED="1746489638293" ID="ID_811033416" MODIFIED="1746489674012" TEXT="hab 5 Stunden gebraucht">
+<font NAME="SansSerif" SIZE="11"/>
+<icon BUILTIN="smiley-oh"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746378431051" HGAP="29" ID="ID_1919752859" LINK="https://issues.lumiera.org/ticket/1405" MODIFIED="1746489711110" TEXT=" #1405 simplify UI ressource integration " VSHIFT="-30">
+<icon BUILTIN="bell"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1746378455815" HGAP="25" ID="ID_366179176" LINK="https://issues.lumiera.org/ticket/566" MODIFIED="1746378493624" TEXT="+ neue Meta-Kategorie: #566 Code Base Organisation" VSHIFT="6"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1746488154956" ID="ID_116419305" MODIFIED="1746488255464" TEXT="Panel-Layout einrichten">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1746488164339" ID="ID_278027101" MODIFIED="1746488236697" TEXT="mu&#xdf; hier explizit ein anderes Panel splitten">
+<icon BUILTIN="yes"/>
+<node CREATED="1746488238312" ID="ID_1496606411" MODIFIED="1746488245414" TEXT="m&#xf6;chte es rechts haben"/>
+<node CREATED="1746488246255" ID="ID_1090098350" MODIFIED="1746488253027" TEXT="unter der InfoBox aber &#xfc;ber der Timeline"/>
+</node>
+<node COLOR="#338800" CREATED="1746488179556" ID="ID_373436185" MODIFIED="1746488229099" TEXT="PanelManager::splitPanel() erweitern...">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1746488200828" ID="ID_548215294" MODIFIED="1746488213246" TEXT="so da&#xdf; man optional ein schon bestehendes Panel &#xfc;bergeben kann"/>
+<node CREATED="1746488214025" ID="ID_307597163" MODIFIED="1746488224814" TEXT="denn sonst w&#xfc;rde lediglich das aktuell gedockte Pannel aufgedoppelt"/>
+</node>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746321719549" ID="ID_1181117478" MODIFIED="1746321726590" TEXT="Buttons mit controller verdrahten">
 <icon BUILTIN="flag-yellow"/>
@@ -154542,8 +154660,7 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
       es ging darum, an die unterliegenden X-Windows ranzukommen, um sie dann auf dem Bidschirm zu positionierenl
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1746313154700" ID="ID_1881885906" MODIFIED="1746313243780" TEXT="Wir haben entsprechenden Code in unserem XvDisplayer">
 <richcontent TYPE="NOTE"><html>
@@ -154575,8 +154692,7 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
       dieser Code ist anscheinend <i>nicht deprecated</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#627b8f" DESTINATION="ID_748124734" ENDARROW="Default" ENDINCLINATION="83;412;" ID="Arrow_ID_1511868825" STARTARROW="None" STARTINCLINATION="342;-494;"/>
 <node CREATED="1746313308823" ID="ID_586730227" MODIFIED="1746313316638" TEXT="aber man findet dazu nichts in der Doku"/>
 <node CREATED="1746313317267" ID="ID_580811889" MODIFIED="1746313423821" TEXT="das hei&#xdf;t, er geh&#xf6;rt zur Implementierung, nicht zum Interface">
@@ -157720,8 +157836,9 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1538838573613" ID="ID_1610361741" MODIFIED="1557498707241" TEXT="Graphic">
 <node CREATED="1538838576956" ID="ID_1174319279" MODIFIED="1665346614450" TEXT="SVG-Icons">
 <linktarget COLOR="#668497" DESTINATION="ID_1174319279" ENDARROW="Default" ENDINCLINATION="-533;-310;" ID="Arrow_ID_1274211300" SOURCE="ID_465159869" STARTARROW="None" STARTINCLINATION="-2393;215;"/>
-<node CREATED="1504201038435" ID="ID_1569870904" MODIFIED="1557498707241" TEXT="Anleitung">
+<node CREATED="1504201038435" ID="ID_1569870904" MODIFIED="1746488128368" TEXT="Anleitung">
 <linktarget COLOR="#8697d2" DESTINATION="ID_1569870904" ENDARROW="Default" ENDINCLINATION="-935;-133;" ID="Arrow_ID_421953450" SOURCE="ID_1898190659" STARTARROW="None" STARTINCLINATION="-861;94;"/>
+<linktarget COLOR="#67647f" DESTINATION="ID_1569870904" ENDARROW="Default" ENDINCLINATION="-1095;296;" ID="Arrow_ID_1632100831" SOURCE="ID_406063817" STARTARROW="None" STARTINCLINATION="-1256;195;"/>
 <node CREATED="1504201044122" ID="ID_612955500" MODIFIED="1557498707241" TEXT="SVG in data/icons/svg"/>
 <node CREATED="1504201192870" ID="ID_823572488" MODIFIED="1576282357932" TEXT="Dokument-Gr&#xf6;&#xdf;e anscheinend egal">
 <richcontent TYPE="NOTE"><html>
@@ -157739,11 +157856,36 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1504201055449" ID="ID_1652674635" MODIFIED="1557498707241" TEXT="braucht &apos;artwork:&apos;-Layer"/>
+<node CREATED="1504201055449" ID="ID_1652674635" MODIFIED="1557498707241" TEXT="braucht &apos;artwork:&apos;-Layer">
+<node CREATED="1746487790861" ID="ID_609916222" MODIFIED="1746487812558" TEXT="aus dem Namen hinter &apos;artwork:&apos; ergibt sich der gerenderte Icon-Name"/>
+</node>
 <node CREATED="1504201074566" ID="ID_1803123712" MODIFIED="1557498707241" TEXT="braucht Sub-Layer &apos;plate&apos;">
 <node CREATED="1504201085348" ID="ID_971103885" MODIFIED="1557498707241" TEXT="dort bounding-boxes"/>
 <node CREATED="1504201089491" ID="ID_1411697919" MODIFIED="1557498707241" TEXT="deren Gr&#xf6;&#xdf;e in PX ist die Icon-Gr&#xf6;&#xdf;e"/>
-<node CREATED="1504201101314" ID="ID_813225733" MODIFIED="1557498707241" TEXT="brauche 16, 22, 32"/>
+<node CREATED="1504201101314" ID="ID_813225733" MODIFIED="1557498707241" TEXT="brauche 16, 22, 32">
+<node CREATED="1746487870329" HGAP="24" ID="ID_1328260940" MODIFIED="1746487888167" TEXT="man kann weitere Gr&#xf6;&#xdf;en rendern" VSHIFT="7">
+<font NAME="SansSerif" SIZE="11"/>
+</node>
+</node>
+</node>
+<node CREATED="1746487901880" ID="ID_1458780963" MODIFIED="1746488115881" TEXT="Tips">
+<icon BUILTIN="idea"/>
+<node CREATED="1746487947608" ID="ID_951309875" MODIFIED="1746487952957" TEXT="__Icon_TEMPLATE als Startpunkt verwenden"/>
+<node CREATED="1746487953628" ID="ID_151495585" MODIFIED="1746487974488" TEXT="Bitte den Autor und die LIzenz korrekt ausf&#xfc;llen (CC-BY-SA bevorzugt)"/>
+<node CREATED="1746487993769" ID="ID_1785313960" MODIFIED="1746488037899" TEXT="Dokument ist so konfiguriert, da&#xdf; 1:1-Anzeige das Icon in Originalgr&#xf6;&#xdf;e zeigt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das ist essentiell; gute Icons zeichnen ist eine Kunst
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1746488049804" ID="ID_410833116" MODIFIED="1746488064098" TEXT="ggfs tempor&#xe4;r einen farbigen / dunklen HIntergrund dahinter legen"/>
+<node CREATED="1746488065232" ID="ID_428636762" MODIFIED="1746488081816" TEXT="Icons m&#xfc;ssen sowohl auf hellem, alsauch auf dunklem HInterrund funktionieren"/>
+<node CREATED="1746488082832" ID="ID_13749749" MODIFIED="1746488107790" TEXT="Schatteren bitte m&#xf6;gichst nur mit Transparenz + wei&#xdf; / schwarz"/>
 </node>
 </node>
 </node>

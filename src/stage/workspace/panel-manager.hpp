@@ -126,7 +126,7 @@ namespace workspace {
        * @param panel The panel to split.
        * @param split_direction The direction to split the panel in.
        */
-      void splitPanel (panel::Panel& panel, Gtk::Orientation split_direction);
+      void splitPanel (panel::Panel& panel, Gtk::Orientation split_direction, panel::Panel* toAdd =nullptr);
       
       
     public:

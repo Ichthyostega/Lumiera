@@ -1,5 +1,5 @@
 /*
-  ViewerPanel  -  Dockable panel to hold the video display widgets and controls
+  PlayPanel  -  Dockable panel to hold the video display widgets and controls
 
    Copyright (C)
      2008,            Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -12,12 +12,12 @@
 * *****************************************************************/
 
 
-/** @file viewer-panel.cpp
- ** Implementation of a dockable panel with a video display widget
+/** @file play-panel.cpp
+ ** Implementation of a dockable panel for player control and timecode display
  */
 
 #include "stage/gtk-base.hpp"
-#include "stage/panel/viewer-panel.hpp"
+#include "stage/panel/play-panel.hpp"
 
 #include "stage/workspace/workspace-window.hpp"
 #include "stage/ui-bus.hpp"  ///////////////////////////////////TODO why are we forced to include this after workspace-window.hpp ??  Ambiguity between std::ref and boost::reference_wrapper
@@ -31,7 +31,7 @@ using namespace stage::controller;       ///////////////////////////////////////
 namespace stage {
 namespace panel {
   
-  ViewerPanel::ViewerPanel (workspace::PanelManager& panelManager
+  PlayPanel::PlayPanel (workspace::PanelManager& panelManager
                            ,Gdl::DockItem& dockItem)
     : Panel{panelManager, dockItem, getTitle(), getStockID()}
     , display_{}
@@ -42,15 +42,15 @@ namespace panel {
     }
   
   const char*
-  ViewerPanel::getTitle()
+  PlayPanel::getTitle()
   {
-    return _("Viewer");
+    return _("Play");
   }
   
   const gchar*
-  ViewerPanel::getStockID()
+  PlayPanel::getStockID()
   {
-    return "panel_viewer";
+    return "panel_play";
   }
   
   

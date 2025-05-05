@@ -11,13 +11,13 @@
 
 */
 
-/** @file viewer-panel.hpp
- ** Definition of a dockable panel to hold a video viewer
+/** @file play-panel.hpp
+ ** Definition of a dockable panel for playback control        //////////////////////////////////////////////TICKET #1097 : me can haz more play panelz? wanna chase teh rat
  */
 
 
-#ifndef STAGE_PANEL_VIEWER_PANEL_H
-#define STAGE_PANEL_VIEWER_PANEL_H
+#ifndef STAGE_PANEL_PLAY_PANEL_H
+#define STAGE_PANEL_PLAY_PANEL_H
 
 
 #include "stage/panel/panel.hpp"
@@ -30,18 +30,18 @@ namespace panel {
   /**
    * A panel to display the video output.
    */
-  class ViewerPanel
+  class PlayPanel
     : public Panel
     {
       widget::VideoDisplayWidget display_;
       ctrl::DemoController demoPlayback_;
       
     public:
-      ViewerPanel (workspace::PanelManager&, Gdl::DockItem&);
+      PlayPanel (workspace::PanelManager&, Gdl::DockItem&);
       
       static const char* getTitle();
       static const gchar* getStockID();
     };
   
 }}// namespace stage::panel
-#endif /*STAGE_PANEL_VIEWER_PANEL_H*/
+#endif /*STAGE_PANEL_PLAY_PANEL_H*/

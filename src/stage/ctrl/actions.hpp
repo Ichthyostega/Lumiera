@@ -22,7 +22,9 @@
  **       Recommendation is to rely on `Gtk::Builder` and `Gtk::SimpleAction` instead.
  **       As of 5/2017, it is not clear to what extent this might force us into additional
  **       "desktop integration" we do not need nor want (like automatically connecting to
- **       D-Bus). For that reason, we'll postpone this transition for the time being    /////////////////////TICKET #1068 
+ **       D-Bus). For that reason, we'll postpone this transition for the time being    /////////////////////TICKET #1068
+ ** @todo 5/2025 generally speaking, we use way too much registration relying on
+ **       matching textual IDs; This is a "boilerplaty" approach, we can do better    ///////////////////////TICKET #1405 : all this registration with matching IDs is way too much "boilerplaty"
  ** 
  ** @see ui-manager.hpp
  ** @see gtk-lumiera.cpp
@@ -147,6 +149,10 @@ namespace ctrl {
           viewerPanelAction->signal_toggled().connect(                               [&]() { onMenu_view_viewer(); });
           actionGroup->add(viewerPanelAction);
           
+          playPanelAction = ToggleAction::create("ViewPlay", StockID("panel_play"));
+          playPanelAction->signal_toggled().connect(                               [&]() { onMenu_view_play(); });
+          actionGroup->add(playPanelAction);
+          
           uiManager.insert_action_group(actionGroup);
           
           
@@ -180,6 +186,7 @@ namespace ctrl {
                     <menuitem action='ViewInfoBox'/>
                     <menuitem action='ViewTimeline'/>
                     <menuitem action='ViewViewer'/>
+                    <menuitem action='ViewPlay'/>
                   </menu>
                   <menu action='SequenceMenu'>
                     <menuitem action='SequenceAdd'/>
@@ -250,6 +257,7 @@ namespace ctrl {
           assetsPanelAction->set_active  (currentWindow.assetsPanel->is_shown());
           timelinePanelAction->set_active(currentWindow.timelinePanel->is_shown());
           viewerPanelAction->set_active  (currentWindow.viewerPanel->is_shown());
+          ///////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1403 now we also have a playPanel
 //        is_updating_action_state = false;
           */
         }
@@ -340,6 +348,16 @@ namespace ctrl {
           unimplemented ("view viewer");
         }
       
+      void
+      onMenu_view_play()
+        {
+          ///////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1403 added for sake of consistency : we have now also a palyer panel
+          /////////////////////////////////////////////////////////////////////////////////////TODO defunct since GTK-3 transition
+          //if(!is_updating_action_state)
+          //  workspaceWindow.playPanel->show(viewerPanelAction->get_active());          //////global -> InteractionDirector
+          unimplemented ("view player");
+        }
+      
       
       // Temporary Junk
       void
@@ -358,6 +376,7 @@ namespace ctrl {
       Glib::RefPtr<Gtk::ToggleAction> infoboxPanelAction;
       Glib::RefPtr<Gtk::ToggleAction> timelinePanelAction;
       Glib::RefPtr<Gtk::ToggleAction> viewerPanelAction;
+      Glib::RefPtr<Gtk::ToggleAction> playPanelAction;
       
       
     private: /* ===== Internals ===== */

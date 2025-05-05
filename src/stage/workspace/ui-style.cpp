@@ -190,10 +190,11 @@ namespace workspace {
    */
   void
   UiStyle::registerStockItems()
-  {
+  {                                      ////////////////////////////////////////////////////////////////////TICKET #1405 : all this registration with matching IDs is way too much "boilerplaty"
     Glib::RefPtr<IconFactory> factory = Gtk::IconFactory::create();
     
     addStockIconSet(factory, "panel-assets",   "panel_assets",  _("_Assets"));
+    addStockIconSet(factory, "panel-play",     "panel_play",    _("_Play"));
     addStockIconSet(factory, "panel-viewer",   "panel_viewer",  _("_Viewer"));
     addStockIconSet(factory, "panel-infobox",  "panel_infobox", _("_InfoBox"));
     addStockIconSet(factory, "panel-timeline", "panel_timeline",_("_Timeline"));
@@ -246,7 +247,7 @@ namespace workspace {
     // Add the icon set to the icon factory
     const Gtk::StockID stock_id(id);
     factory->add(stock_id, icon_set);
-    Gtk::Stock::add(Gtk::StockItem(stock_id, uLabel));             //////////////////////TICKET #1030 : use "icon names" instead of Gtk::StockItem
+    Gtk::Stock::add(Gtk::StockItem(stock_id, uLabel));             //////////////////////////////////////////TICKET #1030 : use "icon names" instead of Gtk::StockItem
     return true;
   }
   

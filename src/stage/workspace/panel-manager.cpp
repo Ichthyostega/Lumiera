@@ -22,7 +22,8 @@
 #include "stage/workspace/panel-manager.hpp"
 
 #include "stage/panel/assets-panel.hpp"
-#include "stage/panel/viewer-panel.hpp"
+#include "stage/panel/play-panel.hpp"              //////////////////////////////////////////////////////////TICKET #1097 : need multiple play controls
+#include "stage/panel/viewer-panel.hpp"           ///////////////////////////////////////////////////////////TICKET #1097 : need multiple viewers
 #include "stage/panel/infobox-panel.hpp"
 #include "stage/panel/timeline-panel.hpp"
 
@@ -41,6 +42,7 @@ namespace workspace {
       PanelManager::Panel<TimelinePanel>(),
       PanelManager::Panel<InfoBoxPanel>(),
       PanelManager::Panel<ViewerPanel>(),
+      PanelManager::Panel<PlayPanel>(),
       PanelManager::Panel<AssetsPanel>()
     };
   
@@ -183,13 +185,13 @@ namespace workspace {
   
   
   void
-  PanelManager::splitPanel (panel::Panel& panel, Gtk::Orientation split_direction)
+  PanelManager::splitPanel (panel::Panel& panel, Gtk::Orientation split_direction, panel::Panel* toAdd)
   {
-    
-    // Create the new panel
-    const int index = getPanelType(&panel);
-    panel::Panel *new_panel = createPanel_by_index(index);
-    
+    if (not toAdd)
+      {// then duplicate the panel to split...
+        int index = getPanelType(&panel);
+        toAdd = createPanel_by_index(index);
+      }
     // Dock the panel
     Gdl::DockPlacement placement = Gdl::DOCK_NONE;
     switch(split_direction)
@@ -209,7 +211,7 @@ namespace workspace {
       }
       
       panel.getDockItem().dock(
-          new_panel->getDockItem(),placement);
+          toAdd->getDockItem(),placement);
   }
   
   
@@ -240,13 +242,15 @@ namespace workspace {
   PanelManager::createPanels()
   {
                                                             ///////////////////////////////TICKET #1026 : code smell, use types directly instead          
-    panel::Panel* assetsPanel =   createPanel_by_name("AssetsPanel");
-    panel::Panel* viewerPanel =   createPanel_by_name("InfoBoxPanel");
+    panel::Panel* playPanel =     createPanel_by_name("PlayPanel");
+    panel::Panel* viewerPanel =   createPanel_by_name("ViewerPanel");
+    panel::Panel* infoBoxPanel =  createPanel_by_name("InfoBoxPanel");
     panel::Panel* timelinePanel = createPanel_by_name("TimelinePanel");
     
-    dock_.add_item(assetsPanel->getDockItem(),Gdl::DOCK_LEFT);
+    dock_.add_item(viewerPanel->getDockItem(),Gdl::DOCK_LEFT);
     dock_.add_item(timelinePanel->getDockItem(),Gdl::DOCK_BOTTOM);
-    dock_.add_item(viewerPanel->getDockItem(),Gdl::DOCK_RIGHT);
+    dock_.add_item(infoBoxPanel->getDockItem(),Gdl::DOCK_RIGHT);
+    splitPanel(*infoBoxPanel, ORIENTATION_VERTICAL, playPanel);
   }
   
   
