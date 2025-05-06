@@ -36,6 +36,7 @@
 
 #include <functional>
 #include <limits>
+#include <atomic>
 
 
 namespace steam {
@@ -54,16 +55,17 @@ namespace node {
     : lib::ThreadJoinable<>
     {
       typedef function<void(void)> Tick;
-      volatile uint timespan_;
+      std::atomic_uint timespan_;
       
       /** poll interval for new settings in wait state */
-      static const uint POLL_TIMEOUT = 1000;
+      static const uint POLL_TIMEOUT = 10000;
       
     public:
       TickService (Tick callback)
         : ThreadJoinable("Tick generator (dummy)"
                         , bind (&TickService::timerLoop, this, callback)
                         )
+        , timespan_{POLL_TIMEOUT}
         { 
           INFO (steam, "TickService started.");
         }
@@ -71,8 +73,8 @@ namespace node {
      ~TickService ()
         {
           timespan_ = 0;
-          auto res = this->join();
-          WARN_IF (res, steam, "Failure in TickService");
+          if (not this->join())
+            WARN (steam, "Failure in TickService");
           
           usleep (200000);    // additional delay allowing GTK to dispatch the last output
           INFO (steam, "TickService shutdown.");
@@ -99,15 +101,16 @@ namespace node {
     private:
       void timerLoop(Tick periodicFun)
         {
-          timespan_ = POLL_TIMEOUT;
-          while (0 < timespan_)
+          do
             {
               if (timespan_ > POLL_TIMEOUT)
                 periodicFun();
               
               usleep (timespan_);
             }
-          TRACE (proc_dbg, "Tick Thread timer loop exiting..."); 
+          while (timespan_);   //(possible yet very unlikely race with ctor)
+          //
+          TRACE (proc_dbg, "Tick Thread timer loop exiting...");
         }
 
     };

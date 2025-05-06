@@ -129779,7 +129779,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1746321706423" ID="ID_476605997" MODIFIED="1746321714046" TEXT="versuche mal 4 FPS"/>
 </node>
 </node>
-<node CREATED="1746237851254" ID="ID_991590991" MODIFIED="1746237873586" TEXT="Widget und Controller-Logik mit Null-Displayer neu aufbauen">
+<node COLOR="#338800" CREATED="1746237851254" ID="ID_991590991" MODIFIED="1746503055920" TEXT="Widget und Controller-Logik mit Null-Displayer neu aufbauen">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1746237875118" ID="ID_1626821300" MODIFIED="1746321177564" TEXT="Widget soll erst mal schwarzen Hintergrund zeichnen">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1746321143947" ID="ID_302254163" MODIFIED="1746321175715" TEXT="verwende Gtk::Image">
@@ -129795,8 +129796,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746237886231" ID="ID_81175326" MODIFIED="1746237894236" TEXT="ein paar Buttons einbinden">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1746237886231" ID="ID_81175326" MODIFIED="1746503049411" TEXT="ein paar Buttons einbinden">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1746366500471" ID="ID_442660271" MODIFIED="1746366507224" TEXT="blo&#xdf; wo?">
 <node CREATED="1746366514666" ID="ID_414805814" MODIFIED="1746366526915" TEXT="k&#xf6;nnte nat&#xfc;rlich eine Button-Bar in den Viewer h&#xe4;ngen"/>
 <node CREATED="1746366527794" ID="ID_488665860" MODIFIED="1746366562250" TEXT="aber vertical Screen-Real-Estate ist bereits knapp">
@@ -129807,7 +129808,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node CREATED="1746366566357" ID="ID_669235936" MODIFIED="1746366588141" TEXT="geplant war aber ein Play-Control-Widget"/>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1746366589535" ID="ID_944511675" MODIFIED="1746366785144" TEXT="also ein neues Docking-Panel schaffen">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1746366589535" ID="ID_944511675" MODIFIED="1746503051582" TEXT="also ein neues Docking-Panel schaffen">
 <icon BUILTIN="yes"/>
 <node CREATED="1746366642490" ID="ID_997232477" MODIFIED="1746366650524" TEXT="bekommt in erster N&#xe4;herung die Buttons direkt"/>
 <node CREATED="1746366651348" ID="ID_1947097226" MODIFIED="1746366715461" TEXT="soll sp&#xe4;ter mal auch den Timecode darstellen"/>
@@ -129852,8 +129853,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       Ausgangspunkt sind verschiedene Icons f&#252;r Musik-Player, die eine stilisierte Compact-Kasette zeigen. Das bringt mich auf die Idee, auf die Steenbeck-Schneidemaschinen anzuspielen, mit den gro&#223;en Rollen, bzw. auf eine Magnetton-Maschine ... und dann k&#246;nnte man ein &#187;Playhead&#171; aus einem &#187;Play/Pause&#171;-Symbol erzeugen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font NAME="SansSerif" SIZE="8"/>
 <icon BUILTIN="idea"/>
 </node>
@@ -129916,8 +129916,72 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746321719549" ID="ID_1181117478" MODIFIED="1746321726590" TEXT="Buttons mit controller verdrahten">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1746321719549" ID="ID_1181117478" MODIFIED="1746503040965" TEXT="Buttons mit controller verdrahten">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1746491309584" ID="ID_136709320" MODIFIED="1746491324787" TEXT="Buttons erst mal vorl&#xe4;ufig in das Player-Panel packen">
+<node COLOR="#338800" CREATED="1746491325687" ID="ID_769867914" MODIFIED="1746491618741" TEXT="verwende eine Button-Bar">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1746491149720" ID="ID_55661240" MODIFIED="1746503014295" TEXT="wirft das n&#xe4;chste Problem auf: Kommunikation">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1746491192817" ID="ID_387749605" MODIFIED="1746491247688" TEXT="es ist noch nicht klar, wie l&#xe4;ngerfristig die Verbindung zum Play-Controller aufgebaut wird"/>
+<node CREATED="1746491257764" ID="ID_86692047" MODIFIED="1746491276155" TEXT="allerdings kann man f&#xfc;r eine solches Experiment hier durchaus direkt verdrahten"/>
+<node CREATED="1746491277433" ID="ID_597033627" MODIFIED="1746503031902" TEXT="sofern man irgendwie an das Viewer-Panel rankommt">
+<arrowlink COLOR="#1d7cba" DESTINATION="ID_652181497" ENDARROW="Default" ENDINCLINATION="-204;162;" ID="Arrow_ID_153772805" STARTARROW="None" STARTINCLINATION="-65;103;"/>
+<node CREATED="1746491178444" ID="ID_45035522" MODIFIED="1746493546548" TEXT="der ViewLocator funktioniert bisher nur rudiment&#xe4;r">
+<node CREATED="1746493563981" ID="ID_604740347" MODIFIED="1746493620710" TEXT="moment mal ... was macht der InteractionDirector...?">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      siehe <font color="#632d2d" face="Bitstream Vera Sans Mono" size="9pt"><b>InteractionDirector::injectTimeline</b></font>()
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1746493548812" ID="ID_1243095299" MODIFIED="1746493585672" TEXT="Ha! f&#xfc;r Docking-Panels gibts eine Implementierung">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1746493696311" ID="ID_1278234244" MODIFIED="1746494206876" TEXT="dann m&#xfc;&#xdf;te man aber an den WindowLocator rankommen"/>
+<node CREATED="1746494209321" ID="ID_121273946" MODIFIED="1746494219485" TEXT="das ist n&#xe4;mlich auch nur ein Workaround...">
+<node CREATED="1746494220662" ID="ID_1690344435" MODIFIED="1746494230532" TEXT="und im top-level-Kontext direkt verdrahtet"/>
+<node CREATED="1746494231415" ID="ID_1376525419" MODIFIED="1746494240787" TEXT="weshalb der InteractionDirector da einsteigen kann"/>
+</node>
+</node>
+<node CREATED="1746494243403" ID="ID_239599231" MODIFIED="1746494259137" TEXT="aber diese Implementierung verwendet auch nur den PanelManager">
+<node CREATED="1746494264689" ID="ID_1488667661" MODIFIED="1746494272098" TEXT="der hat sogar ein statisches Interface"/>
+<node CREATED="1746494272644" ID="ID_1041353864" MODIFIED="1746494293488" TEXT="ja genau &#x2014; das ist Teil des Problems">
+<icon BUILTIN="smily_bad"/>
+</node>
+<node CREATED="1746494300207" ID="ID_643613061" MODIFIED="1746494332790" TEXT="und das ElementAccess-Interaface soll das (einmal) alles l&#xf6;sen!!!!">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ist aber leider nicht implementiert...
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1746494341646" ID="ID_652181497" MODIFIED="1746503027050" TEXT="ein Docking-Panel hat Zugang zum PanelManager">
+<linktarget COLOR="#1d7cba" DESTINATION="ID_652181497" ENDARROW="Default" ENDINCLINATION="-204;162;" ID="Arrow_ID_153772805" SOURCE="ID_597033627" STARTARROW="None" STARTINCLINATION="-65;103;"/>
+<node CREATED="1746496222837" ID="ID_1964317767" MODIFIED="1746496237280" TEXT="den bekommt der Konstruktor eines Docking-Panels in die Hand"/>
+<node CREATED="1746495051432" ID="ID_1507221393" MODIFIED="1746495062055" TEXT="aber im Konstruktor sollte man noch keine Aufl&#xf6;sung machen"/>
+<node CREATED="1746495062853" ID="ID_1030445862" MODIFIED="1746495115103" TEXT="zumal zu dem Zeitpunkt die Panels noch gar nicht zum Dock hinzugef&#xfc;gt wurden"/>
+<node CREATED="1746496242736" ID="ID_369538552" MODIFIED="1746496269528" TEXT="aber er ist auch &#xfc;ber die Basis-Klasse Panel::panelManager_ zug&#xe4;nglich">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#338800" CREATED="1746496272938" ID="ID_215870350" MODIFIED="1746503005412" TEXT="also k&#xf6;nnen wir eine Lazy-Aufl&#xf6;sung machen">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1746503059144" ID="ID_1217403537" MODIFIED="1746503069530" TEXT="Testen mit Ausgabe auf STDOUT">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node CREATED="1746313536301" ID="ID_407425498" MODIFIED="1746313654699" TEXT="Infos zu den Low-Level-Zugriffen">
@@ -157880,8 +157944,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
       Das ist essentiell; gute Icons zeichnen ist eine Kunst
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1746488049804" ID="ID_410833116" MODIFIED="1746488064098" TEXT="ggfs tempor&#xe4;r einen farbigen / dunklen HIntergrund dahinter legen"/>
 <node CREATED="1746488065232" ID="ID_428636762" MODIFIED="1746488081816" TEXT="Icons m&#xfc;ssen sowohl auf hellem, alsauch auf dunklem HInterrund funktionieren"/>

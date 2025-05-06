@@ -140,7 +140,7 @@ namespace interact {
                     return injectTimeline (spec);
                   }))
         .mutateAttrib(ATTR_fork, [&](TreeMutator::Handle buff)
-            {                                                  // »Attribute Mutator« : how enter an object field as nested scope
+            {                                                  // »Attribute Mutator« : how to enter an object field as nested scope
               REQUIRE (assets_);
               assets_->buildMutator(buff);
             }));

@@ -34,13 +34,14 @@ namespace panel {
     : public Panel
     {
       widget::VideoDisplayWidget display_;
-      ctrl::DemoController demoPlayback_;
       
     public:
       ViewerPanel (workspace::PanelManager&, Gdl::DockItem&);
       
       static const char* getTitle();
       static const gchar* getStockID();
+      
+      ctrl::DemoController demoPlayback_;
     };
   
 }}// namespace stage::panel

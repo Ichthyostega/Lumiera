@@ -110,7 +110,7 @@ namespace model {
    * UI-Coordinates. Rather we have to deal with a small set of possible base interfaces,
    * and thus the actual [access function](\ref #performAccessTo) returns a _variant record_
    * holding a pointer, and internally tagged with the base interface type to apply. Now the
-   * public API functions are templated to the _result type as expected by the invoking clinent_
+   * public API functions are templated to the _result type as expected by the invoking client_
    * and thus we get a matrix of possible cases; when the expected result type is _reachable by
    * dynamic downcast_ from the actual base interface type returned by the internal access function,
    * we can perform this `dynamic_cast`. Otherwise the returned result proxy object is marked as empty.

@@ -3,6 +3,7 @@
 
    Copyright (C)
      2008,            Joel Holdsworth <joel@airwebreathe.org.uk>
+     2025,            Hermann Vosseler <Ichthyostega@web.de>
 
   **Lumiera** is free software; you can redistribute it and/or modify it
   under the terms of the GNU General Public License as published by the
@@ -24,10 +25,6 @@
 #include "stage/display-service.hpp"
 
 
-using namespace Gtk;                   ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
-using namespace stage::widget;           ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
-using namespace stage::controller;       ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
-
 namespace stage {
 namespace panel {
   
@@ -38,7 +35,7 @@ namespace panel {
     , demoPlayback_{[this](void * const buffer){ display_.pushFrame(buffer); }}
     {
       //----- Pack in the Widgets -----//
-      pack_start(display_, PACK_EXPAND_WIDGET);
+      pack_start(display_, Gtk::PACK_EXPAND_WIDGET);
     }
   
   const char*

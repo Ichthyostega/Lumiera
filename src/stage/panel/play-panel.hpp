@@ -1,8 +1,8 @@
 /*
-  VIEWER-PANEL.hpp  -  Dockable panel to hold the video display widgets and controls            
+  PLAY-PANEL.hpp  -  Dockable panel to hold the play control and switchboard
 
    Copyright (C)
-     2008,            Joel Holdsworth <joel@airwebreathe.org.uk>
+     2025,            Hermann Vosseler <Ichthyostega@web.de>
 
   **Lumiera** is free software; you can redistribute it and/or modify it
   under the terms of the GNU General Public License as published by the
@@ -21,26 +21,41 @@
 
 
 #include "stage/panel/panel.hpp"
-#include "stage/widget/video-display-widget.hpp"
-#include "stage/ctrl/demo-controller.hpp"
+#include "stage/widget/button-bar.hpp"
+#include "stage/model/w-link.hpp"
 
 namespace stage {
 namespace panel {
   
+  class ViewerPanel;
+  
+  
   /**
-   * A panel to display the video output.
+   * A »media player« panel.
    */
   class PlayPanel
     : public Panel
     {
-      widget::VideoDisplayWidget display_;
-      ctrl::DemoController demoPlayback_;
+      widget::ButtonBar buttons_;
+      widget::MiniButton buttonStop_;
+      widget::MiniButton buttonPlay_;
+      widget::MiniButton buttonPause_;
       
     public:
       PlayPanel (workspace::PanelManager&, Gdl::DockItem&);
       
       static const char* getTitle();
       static const gchar* getStockID();
+      
+    private:
+      void dispatchStop();
+      void dispatchPlay();
+      void dispatchPause();
+      
+      using ViewLink = model::WLink<ViewerPanel>;
+      ViewLink viewer_;
+      
+      ViewLink& accessViewer();
     };
   
 }}// namespace stage::panel
