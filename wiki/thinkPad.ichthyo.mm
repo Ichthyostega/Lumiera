@@ -129984,9 +129984,22 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1746313536301" ID="ID_407425498" MODIFIED="1746313654699" TEXT="Infos zu den Low-Level-Zugriffen">
-<arrowlink COLOR="#6c7789" DESTINATION="ID_292602658" ENDARROW="Default" ENDINCLINATION="-1126;108;" ID="Arrow_ID_1434687356" STARTARROW="None" STARTINCLINATION="-901;77;"/>
+<node CREATED="1746313536301" ID="ID_407425498" MODIFIED="1746542753237" TEXT="Infos zu den Low-Level-(GDK)-Zugriffen">
+<arrowlink COLOR="#6c7789" DESTINATION="ID_292602658" ENDARROW="Default" ENDINCLINATION="-1126;108;" ID="Arrow_ID_1434687356" STARTARROW="None" STARTINCLINATION="-984;70;"/>
 <icon BUILTIN="info"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746542764270" ID="ID_1879098999" MODIFIED="1746542827394" TEXT="Experiment: die Fallback-Anzeige (pixbuff) portieren">
+<icon BUILTIN="full-1"/>
+<node CREATED="1746630398020" ID="ID_1520924993" MODIFIED="1746632466497" TEXT="mit GTK-3 m&#xfc;ssen wir einen Pixbuf verwenden">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1746630418070" ID="ID_396250251" MODIFIED="1746630427582" TEXT="die neueren Alternativen wurden erst mit GTK-4 eingef&#xfc;hrt"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1746632432347" ID="ID_110870446" MODIFIED="1746632460790" TEXT="k&#xf6;nne aber versuchen, den in ein Gtk::Image einzubinden">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746542785647" ID="ID_1968916517" MODIFIED="1746542843774" TEXT="Experiment: den XV-Code aktivieren">
+<icon BUILTIN="full-2"/>
 </node>
 </node>
 </node>
@@ -151138,15 +151151,20 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
 </node>
 </node>
 <node CREATED="1746287605697" HGAP="29" ID="ID_1605299883" MODIFIED="1746287612557" TEXT="Dokumentation">
+<node CREATED="1746544251281" ID="ID_1804838777" LINK="https://docs.gtk.org/" MODIFIED="1746544594564" TEXT="GTK-Doku (Einstieg|aktuell)">
+<node CREATED="1746544641070" ID="ID_468111780" LINK="https://docs.gtk.org/gtk4/" MODIFIED="1746544652939" TEXT="GTK-4(aktuell)"/>
+<node CREATED="1746544690363" ID="ID_1351157489" LINK="https://docs.gtk.org/gtk3/" MODIFIED="1746544705768" TEXT="GTK-3(3.24|supported)"/>
+</node>
 <node CREATED="1746287995242" ID="ID_445627802" MODIFIED="1746288001360" TEXT="Programming with Gtkmm">
 <node CREATED="1746288002185" ID="ID_632354219" LINK="https://web.archive.org/web/20200428080214/https://developer.gnome.org/gtkmm-tutorial/stable/index.html.en" MODIFIED="1746289645030" TEXT="Gtkmm-3 (Archive 2020)">
 <node CREATED="1746288192067" ID="ID_1226751634" LINK="https://download.gnome.org/sources/gtkmm-documentation/3.24/" MODIFIED="1746288198981" TEXT="download"/>
 </node>
 <node CREATED="1746288009436" ID="ID_1259724761" LINK="https://gnome.pages.gitlab.gnome.org/gtkmm-documentation/index.html" MODIFIED="1746288033465" TEXT="Gtkmm-4 (current)"/>
 </node>
-<node CREATED="1746309394880" ID="ID_1482721663" LINK="https://gtkmm.gnome.org/en/documentation.html" MODIFIED="1746311409207" TEXT="GTKmm-Documentation (current)"/>
+<node CREATED="1746309394880" ID="ID_1482721663" LINK="https://gtkmm.gnome.org/en/documentation.html" MODIFIED="1746311409207" TEXT="GTKmm-Documentation (current)">
 <node CREATED="1746288640997" ID="ID_865943990" LINK="https://web.archive.org/web/20200508150948/https://developer.gnome.org/references" MODIFIED="1746289246861" TEXT="Developers.gnome.org (Archive 2020)">
 <node CREATED="1746289110036" ID="ID_910026032" LINK="https://web.archive.org/web/20201112022432/https://developer.gnome.org/gtkmm/stable/" MODIFIED="1746289198485" TEXT="Gtkmm-3"/>
+</node>
 </node>
 </node>
 <node COLOR="#435e98" CREATED="1534634232557" HGAP="31" ID="ID_1467351006" MODIFIED="1557498707237" TEXT="Konzepte" VSHIFT="-22">
@@ -154715,7 +154733,7 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
 <node CREATED="1504215729848" ID="ID_518260540" MODIFIED="1557498707239" TEXT="howto">
 <node CREATED="1746313074008" ID="ID_326777030" MODIFIED="1746313077703" TEXT="X-Window">
 <node CREATED="1746313079527" FOLDED="true" ID="ID_292602658" MODIFIED="1746313654699" TEXT="an das X-Window rankommen">
-<linktarget COLOR="#6c7789" DESTINATION="ID_292602658" ENDARROW="Default" ENDINCLINATION="-1126;108;" ID="Arrow_ID_1434687356" SOURCE="ID_407425498" STARTARROW="None" STARTINCLINATION="-901;77;"/>
+<linktarget COLOR="#6c7789" DESTINATION="ID_292602658" ENDARROW="Default" ENDINCLINATION="-1126;108;" ID="Arrow_ID_1434687356" SOURCE="ID_407425498" STARTARROW="None" STARTINCLINATION="-984;70;"/>
 <node CREATED="1746313102451" ID="ID_757727277" LINK="https://discourse.gnome.org/t/set-absolut-window-position-in-gtk4/8552/4" MODIFIED="1746313148021" TEXT="Frage im GNOME-Forum">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -158572,13 +158590,21 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#d7cec4" CREATED="1437693678626" HGAP="136" ID="ID_1536988357" MODIFIED="1731199643025" POSITION="left" STYLE="bubble" VSHIFT="-39">
+<node BACKGROUND_COLOR="#d7cec4" CREATED="1437693678626" HGAP="136" ID="ID_1536988357" MODIFIED="1746546760400" POSITION="left" STYLE="bubble" VSHIFT="-39">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
-    <p>
-      Dokumentation zu<br/>
-      Themenbereichen
+    <p style="text-align: center">
+      Quellen
+    </p>
+    <p style="text-align: center">
+      <font size="2">und</font>
+    </p>
+    <p style="text-align: center">
+      Dokumentation
+    </p>
+    <p style="text-align: center">
+      <font size="2">zu</font><br /><font size="5">Themenbereichen</font>
     </p>
   </body>
 </html></richcontent>
@@ -158704,6 +158730,15 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 <node CREATED="1745795959699" ID="ID_1764495386" MODIFIED="1745795983081" TEXT="Video-Formate">
 <node CREATED="1745795986779" ID="ID_770800240" LINK="https://wiki.xiph.org/Videos/A_Digital_Media_Primer_For_Geeks" MODIFIED="1745796008637" TEXT="Video: A Digital Media Primer for Geeks (ciph.org)"/>
+</node>
+</node>
+<node CREATED="1746546779168" ID="ID_462246089" MODIFIED="1746546805043" STYLE="fork" TEXT="Free Software">
+<edge COLOR="#61617d" STYLE="sharp_bezier" WIDTH="thin"/>
+<node CREATED="1746546784656" ID="ID_771853414" MODIFIED="1746546805040" TEXT="Film/Schnitt">
+<node CREATED="1746546826106" ID="ID_790336128" LINK="https://en.wikipedia.org/wiki/Olive_(software)" MODIFIED="1746546829067" TEXT="Olive">
+<node CREATED="1746546830884" ID="ID_1609191791" LINK="https://www.patreon.com/posts/olives-future-79926246" MODIFIED="1746546862915" TEXT="Zukunft ungewiss (2022)"/>
+</node>
+<node CREATED="1746546915150" ID="ID_138512802" LINK="https://en.wikipedia.org/wiki/List_of_free_and_open-source_software_packages#Video_editing" MODIFIED="1746546953470" TEXT="List of Free Video Editing Software (Wikipedia)"/>
 </node>
 </node>
 </node>

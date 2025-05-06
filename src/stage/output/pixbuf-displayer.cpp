@@ -1,10 +1,11 @@
 /*
-  GdkDisplayer  -  displaying video via GDK
+  PixbufDisplayer  -  displaying video via bitmap image
 
    Copyright (C)
      2000,            Arne Schirmacher <arne@schirmacher.de>
      2001-2007,       Dan Dennedy <dan@dennedy.org>
      2008,            Joel Holdsworth <joel@airwebreathe.org.uk>
+     2025,            Hermann Vosseler <Ichthyostega@web.de>
 
   **Lumiera** is free software; you can redistribute it and/or modify it
   under the terms of the GNU General Public License as published by the
@@ -15,29 +16,26 @@
 
 
 /** @file pixbuf-displayer.cpp
- ** Dysfunctional implementation code, formerly used to
- ** create a video display based on GDK
- ** @deprecated obsolete since GTK-3
+ ** Implementation of fallback functionality for video display.
  ** @todo WIP as of 5/2025 attempt to accommodate to GTK-3   ////////////////////////////////////////////////TICKET #1403
  */
 
 
 #include "stage/gtk-base.hpp"
 #include "stage/output/pixbuf-displayer.hpp"
+#include "lib/format-cout.hpp"
 
 #if false  ///////////////////////////////////////////////////////////////////////////////////////////////////TICKET #950 : new solution for video display
 #include <gdk/gdkx.h>
 #endif     ///////////////////////////////////////////////////////////////////////////////////////////////////TICKET #950 : new solution for video display
 #include <iostream>
 
-using std::cerr;
-using std::endl;
 
 
 namespace stage {
 namespace output {
   
-  GdkDisplayer::GdkDisplayer (Gtk::Widget* drawing_area,
+  PixbufDisplayer::PixbufDisplayer (Gtk::Image* drawing_area,
                               int width, int height)
     : Displayer{width,height}
     , drawingArea_{drawing_area}
@@ -45,16 +43,17 @@ namespace output {
       REQUIRE (drawing_area);
       REQUIRE (width > 0);
       REQUIRE (height > 0);
+      cout << "USING PixbufDisplayer" <<endl;
     }
   
   bool
-  GdkDisplayer::usable()
+  PixbufDisplayer::usable()
   {
-    return false;  /////////////////////////////////////////////////////////////////////////////////////////////TICKET #950 : new solution for video display
+    return true;  /////////////////////////////////////////////////////////////////////////////////////////////TICKET #950 : new solution for video display
   }
   
   void
-  GdkDisplayer::put (void* const image)
+  PixbufDisplayer::put (void* const image)
   {  
     int video_x = 0,
         video_y = 0,
@@ -69,7 +68,17 @@ namespace output {
   
     GdkWindow *window = drawingArea_->get_window()->gobj();
     REQUIRE (window != NULL);
-      
+    
+    if (not init_)
+      {
+        auto iconSet = Gtk::IconSet::lookup_default (Gtk::StockID("panel_play"));
+        drawingArea_->set(iconSet, Gtk::IconSize(Gtk::ICON_SIZE_DIALOG));
+        init_ = true;
+        cout << "INIT Pixbuf"<< iconSet.get() <<endl;
+      }
+    drawingArea_->queue_draw();
+    int pixSiz = drawingArea_->property_pixel_size();
+    cout << "bong.."<<pixSiz<<endl;
   #if false  ///////////////////////////////////////////////////////////////////////////////////////////////////TICKET #950 : new solution for video display
     GdkGC *gc = gdk_gc_new( window );
     REQUIRE(gc != NULL);

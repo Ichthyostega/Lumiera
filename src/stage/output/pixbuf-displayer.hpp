@@ -1,10 +1,11 @@
 /*
-  GDKDISPLAYER.hpp  -  displaying video via GDK
+  PIXBUF-DISPLAYER.hpp  -  displaying video via bitmap image
 
    Copyright (C)
      2000,            Arne Schirmacher <arne@schirmacher.de>
      2001-2007,       Dan Dennedy <dan@dennedy.org>
      2008,            Joel Holdsworth <joel@airwebreathe.org.uk>
+     2025,            Hermann Vosseler <Ichthyostega@web.de>
 
   **Lumiera** is free software; you can redistribute it and/or modify it
   under the terms of the GNU General Public License as published by the
@@ -15,9 +16,8 @@
 
 
 /** @file pixbuf-displayer.hpp
- ** Display video via GDK
+ ** Display video as bitmap image with the UI toolkit.
  ** 
- ** @deprecated obsolete since GTK-3
  ** @todo WIP as of 5/2025 attempt to accommodate to GTK-3   ////////////////////////////////////////////////TICKET #1403
  ** @see displayer.hpp
  */
@@ -36,17 +36,16 @@ namespace stage {
 namespace output {
 
 /**
- * GdkDisplayer is a class which is responsible for rendering a video
+ * PixbufDisplayer is a class which is responsible for rendering a video
  * image via GDK.
  *
- * @todo the GdkDisplayer class is not supported anymore in Gtk3.
- *       This is due to Gtk3 only supporting drawing with Cairo
- *       ////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #950 : new solution for video display
  * @todo WIP as of 5/2025 attempt to accommodate to GTK-3   /////////////////////////////////////////////////TICKET #1403
  */
-class GdkDisplayer
+class PixbufDisplayer
   : public Displayer
   {
+    Gtk::Image* drawingArea_;
+    
   public:
     
     /**
@@ -58,7 +57,7 @@ class GdkDisplayer
      * @param[in] height The height of the video image in pixels. This
      * value must be greater than zero.
      */
-    GdkDisplayer (Gtk::Widget* drawing_area, int width, int height );
+    PixbufDisplayer (Gtk::Image* drawing_area, int width, int height );
     
     /**
      * Put an image of a given width and height with the expected input
@@ -68,20 +67,10 @@ class GdkDisplayer
     void put (void* const image);
     
   protected:
-    
-    /** 
-     * Indicates if this object can be used to render images on the
-     * running system.
-     */
-    bool usable();
+    bool usable()  override;
     
   private:
-    
-    /**
-     * The widget that video will be drawn into.
-     * @remarks This value must be a valid pointer.
-     */
-    Gtk::Widget* drawingArea_;
+    bool init_{false};
   };
   
   
