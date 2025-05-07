@@ -29,14 +29,13 @@
 namespace stage {
 namespace output {
   
-  XvDisplayer::XvDisplayer(Gtk::Widget *drawing_area,
-                           int width, int height)
+  XvDisplayer::XvDisplayer(Gtk::Widget& drawing_area
+                          ,int width, int height)
     : Displayer{width,height}
     , gotPort{false}
     , drawingArea_{drawing_area}
     , xvImage{nullptr}
     {
-      REQUIRE (drawing_area);
       REQUIRE (width > 0);
       REQUIRE (height > 0);
       
@@ -44,7 +43,7 @@ namespace output {
     
       shmInfo.shmaddr = NULL;
     
-      Glib::RefPtr<Gdk::Window> area_window = drawing_area->get_window();
+      Glib::RefPtr<Gdk::Window> area_window = drawing_area.get_window();
     
       window = GDK_WINDOW_XID (area_window->gobj());
       display = GDK_WINDOW_XDISPLAY (area_window->gobj());
@@ -206,7 +205,6 @@ namespace output {
   XvDisplayer::put (void* const image)
   {
     REQUIRE (image != NULL);
-    REQUIRE (drawingArea_ != NULL);
     
     if (xvImage != NULL)
       {
@@ -214,8 +212,8 @@ namespace output {
         
         int video_x = 0, video_y = 0, video_width = 0, video_height = 0;
         calculateVideoLayout(
-          drawingArea_->get_width(),
-          drawingArea_->get_height(),
+          drawingArea_.get_width(),
+          drawingArea_.get_height(),
           videoWidth, videoHeight,
           video_x, video_y, video_width, video_height );
   

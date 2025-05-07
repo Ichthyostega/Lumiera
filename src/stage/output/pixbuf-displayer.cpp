@@ -35,14 +35,15 @@
 namespace stage {
 namespace output {
   
-  PixbufDisplayer::PixbufDisplayer (Gtk::Image* drawing_area,
+  PixbufDisplayer::PixbufDisplayer (Gtk::Image& drawing_area,
                               int width, int height)
     : Displayer{width,height}
     , drawingArea_{drawing_area}
     {
-      REQUIRE (drawing_area);
       REQUIRE (width > 0);
       REQUIRE (height > 0);
+      auto iconSet = Gtk::IconSet::lookup_default (Gtk::StockID("panel_play"));
+      drawingArea_.set(iconSet, Gtk::IconSize(Gtk::ICON_SIZE_DIALOG));
       cout << "USING PixbufDisplayer" <<endl;
     }
   
@@ -57,28 +58,18 @@ namespace output {
   {  
     int video_x = 0,
         video_y = 0,
-        video_width = 0,
-        video_height = 0;
+        destWidth = 0,
+        destHeight = 0;
     
     calculateVideoLayout(
-      drawingArea_->get_width(),
-      drawingArea_->get_height(),
+      drawingArea_.get_width(),
+      drawingArea_.get_height(),
       videoWidth, videoHeight,
-      video_x, video_y, video_width, video_height);
+      video_x, video_y, destWidth, destHeight);
   
-    GdkWindow *window = drawingArea_->get_window()->gobj();
+    GdkWindow *window = drawingArea_.get_window()->gobj();
     REQUIRE (window != NULL);
     
-    if (not init_)
-      {
-        auto iconSet = Gtk::IconSet::lookup_default (Gtk::StockID("panel_play"));
-        drawingArea_->set(iconSet, Gtk::IconSize(Gtk::ICON_SIZE_DIALOG));
-        init_ = true;
-        cout << "INIT Pixbuf"<< iconSet.get() <<endl;
-      }
-    drawingArea_->queue_draw();
-    int pixSiz = drawingArea_->property_pixel_size();
-    cout << "bong.."<<pixSiz<<endl;
   #if false  ///////////////////////////////////////////////////////////////////////////////////////////////////TICKET #950 : new solution for video display
     GdkGC *gc = gdk_gc_new( window );
     REQUIRE(gc != NULL);
@@ -87,7 +78,7 @@ namespace output {
       preferredWidth(), preferredHeight(), preferredWidth() * 3, NULL, NULL );
     REQUIRE(pixbuf != NULL);
       
-    GdkPixbuf *scaled_image = gdk_pixbuf_scale_simple( pixbuf, video_width, video_height, GDK_INTERP_NEAREST );
+    GdkPixbuf *scaled_image = gdk_pixbuf_scale_simple( pixbuf, destWidth, destHeight, GDK_INTERP_NEAREST );
     REQUIRE(scaled_image != NULL);
     
     gdk_draw_pixbuf( window, gc, scaled_image, 0, 0, video_x, video_y, -1, -1, GDK_RGB_DITHER_NORMAL, 0, 0 );
@@ -96,6 +87,20 @@ namespace output {
     g_object_unref( pixbuf );
     g_object_unref( gc );
   #endif     ///////////////////////////////////////////////////////////////////////////////////////////////////TICKET #950 : new solution for video display
+    auto* imageData = static_cast<const guint8*> (image);
+    auto rawBuf = Gdk::Pixbuf::create_from_data (imageData
+                                                ,Gdk::COLORSPACE_RGB
+                                                ,false                 // has_alpha
+                                                ,8                     // bits_per_sample
+                                                ,videoWidth
+                                                ,videoHeight
+                                                ,0                     // rowstride (can be used to round up to even powers of two per row)                     
+                                                );
+    ASSERT (rawBuf);
+    auto scaledBuf = rawBuf->scale_simple (destWidth, destHeight, Gdk::INTERP_NEAREST);
+    drawingArea_.set (scaledBuf);
+    drawingArea_.queue_draw();
+    cout << "bong.."<<scaledBuf.get()<<endl;
   }
   
   

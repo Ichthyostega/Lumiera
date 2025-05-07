@@ -71,15 +71,15 @@ namespace widget {
     REQUIRE (videoWidth > 0);
     REQUIRE (videoHeight > 0);
     /*
-    displayer_ = make_unique<XvDisplayer> (this, videoWidth, videoHeight);
+    displayer_ = make_unique<XvDisplayer> (*this, videoWidth, videoHeight);
     if (displayer_->usable())
       return;
     */
-    displayer_ = make_unique<PixbufDisplayer> (this, videoWidth, videoHeight);
+    displayer_ = make_unique<PixbufDisplayer> (*this, videoWidth, videoHeight);
     if (displayer_->usable())
       return;
     
-    displayer_ = make_unique<NullDisplayer> (this, videoWidth, videoHeight);
+    displayer_ = make_unique<NullDisplayer> (*this, videoWidth, videoHeight);
     ENSURE (displayer_->usable());
   }
   

@@ -26,15 +26,14 @@
 namespace stage {
 namespace output {
   
-  NullDisplayer::NullDisplayer (Gtk::Widget* drawing_area,
+  NullDisplayer::NullDisplayer (Gtk::Widget& drawing_area,
                                 int width, int height)
     : Displayer{width,height}
     , drawingArea_{drawing_area}
     {
-      REQUIRE (drawing_area);
       REQUIRE (width > 0);
       REQUIRE (height > 0);
-      cout << "NullDisplayer("<<drawing_area<<"): "<<width<<" x "<<height<<endl;
+      cout << "NullDisplayer("<<&drawing_area<<"): "<<width<<" x "<<height<<endl;
     }
   
   void
@@ -46,12 +45,12 @@ namespace output {
         video_height = 0;
     
     calculateVideoLayout(
-      drawingArea_->get_width(),
-      drawingArea_->get_height(),
+      drawingArea_.get_width(),
+      drawingArea_.get_height(),
       videoWidth, videoHeight,
       video_x, video_y, video_width, video_height);
   
-    GdkWindow *window = drawingArea_->get_window()->gobj();
+    GdkWindow *window = drawingArea_.get_window()->gobj();
     REQUIRE (window != NULL);
     cout << "put("<<util::showAdr(image)<<")\t x="<<video_x<<" y="<<video_y<<" w:"<<video_width<<" h:"<<video_height<<endl;
   }

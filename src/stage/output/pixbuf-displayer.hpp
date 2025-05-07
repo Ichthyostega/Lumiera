@@ -44,7 +44,7 @@ namespace output {
 class PixbufDisplayer
   : public Displayer
   {
-    Gtk::Image* drawingArea_;
+    Gtk::Image& drawingArea_;
     
   public:
     
@@ -57,7 +57,7 @@ class PixbufDisplayer
      * @param[in] height The height of the video image in pixels. This
      * value must be greater than zero.
      */
-    PixbufDisplayer (Gtk::Image* drawing_area, int width, int height );
+    PixbufDisplayer (Gtk::Image& drawing_area, int width, int height );
     
     /**
      * Put an image of a given width and height with the expected input
@@ -70,7 +70,6 @@ class PixbufDisplayer
     bool usable()  override;
     
   private:
-    bool init_{false};
   };
   
   

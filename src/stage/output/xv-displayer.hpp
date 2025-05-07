@@ -59,7 +59,7 @@ namespace output {
        * @param height The height of the video image in pixels. This value
        *            must be greater than zero.
        */
-      XvDisplayer (Gtk::Widget* drawing_area, int width, int height);
+      XvDisplayer (Gtk::Widget& drawing_area, int width, int height);
       
      ~XvDisplayer();
       
@@ -92,7 +92,7 @@ namespace output {
        * The widget that video will be drawn into.
        * @remarks This value must be a valid pointer.
        */
-      Gtk::Widget* drawingArea_;
+      Gtk::Widget& drawingArea_;
       
       /**
        * The display that video will be drawn into.

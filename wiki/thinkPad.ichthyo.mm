@@ -129990,12 +129990,48 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746542764270" ID="ID_1879098999" MODIFIED="1746542827394" TEXT="Experiment: die Fallback-Anzeige (pixbuff) portieren">
 <icon BUILTIN="full-1"/>
-<node CREATED="1746630398020" ID="ID_1520924993" MODIFIED="1746632466497" TEXT="mit GTK-3 m&#xfc;ssen wir einen Pixbuf verwenden">
+<node COLOR="#435e98" CREATED="1746630398020" ID="ID_1520924993" MODIFIED="1746635759884" TEXT="mit GTK-3 m&#xfc;ssen wir einen Pixbuf verwenden">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1746630418070" ID="ID_396250251" MODIFIED="1746630427582" TEXT="die neueren Alternativen wurden erst mit GTK-4 eingef&#xfc;hrt"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1746632432347" ID="ID_110870446" MODIFIED="1746632460790" TEXT="k&#xf6;nne aber versuchen, den in ein Gtk::Image einzubinden">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1746632432347" ID="ID_110870446" MODIFIED="1746635776370" TEXT="den in ein Gtk::Image einbinden">
+<icon BUILTIN="idea"/>
+<node COLOR="#435e98" CREATED="1746634011595" ID="ID_637524869" MODIFIED="1746634070068" TEXT="mal versuchsweise mit einem Stock-Iconset f&#xfc;llen"/>
+<node COLOR="#435e98" CREATED="1746634026920" ID="ID_1276591207" MODIFIED="1746634070096" TEXT="unser UiStyle erzeugt einige Stock-Iconsets">
 <icon BUILTIN="idea"/>
 </node>
+<node COLOR="#338800" CREATED="1746634037518" ID="ID_1438708277" MODIFIED="1746634061326" TEXT="Erfolg: verwende StockID(&quot;panel_play&quot;) mit ICON_SIZE_DIALOG">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1746633912948" ID="ID_909409546" MODIFIED="1746635752594" TEXT="passenden Pixbuf erzeugen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1746633922734" ID="ID_877262015" MODIFIED="1746635757088" TEXT="hangle mich an der Doku in der verwendeten Lib-Version (Gtkmm 3.24) entlang">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#435e98" CREATED="1746633984432" ID="ID_610899228" MODIFIED="1746635757087" TEXT="die create_from_data()-Funktionen sehen vielversprechend aus">
+<node CREATED="1746634167740" ID="ID_814656388" MODIFIED="1746634185273" TEXT="HA! der alte Code verwendete die C-Variante dieser Funktionen"/>
+<node CREATED="1746635669035" ID="ID_315206220" MODIFIED="1746635676774" TEXT="dann eigentlich sinngem&#xe4;&#xdf;"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1746635683569" ID="ID_1223394798" MODIFIED="1746635750815" TEXT="aber nun diesen direkt an das Gtk::Image geben">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1746635693567" ID="ID_315751256" MODIFIED="1746635747623" STYLE="fork">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Erfolg-1 : es wird <b>irgendwas angezeigt</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="full-1"/>
+<node CREATED="1746635712253" ID="ID_1901638448" MODIFIED="1746635741949" TEXT="da pa&#xdf;t wohl das Pixel-Layout nicht"/>
+<node CREATED="1746635726454" ID="ID_1915597327" MODIFIED="1746635741949" TEXT="aber man sieht den Frame-Takt"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746542785647" ID="ID_1968916517" MODIFIED="1746542843774" TEXT="Experiment: den XV-Code aktivieren">
