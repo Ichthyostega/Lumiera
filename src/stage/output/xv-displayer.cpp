@@ -170,6 +170,8 @@ namespace output {
         {
           gotPort = false;
         }
+      if (not gotPort)
+        ERROR (stage, "unable to use XVideo for display.");
     }
   
   
@@ -210,18 +212,17 @@ namespace output {
       {
         REQUIRE(display != NULL);
         
-        int video_x = 0, video_y = 0, video_width = 0, video_height = 0;
+        int org_x = 0, org_y = 0, destW = 0, destH = 0;
         calculateVideoLayout(
           drawingArea_.get_width(),
           drawingArea_.get_height(),
-          videoWidth, videoHeight,
-          video_x, video_y, video_width, video_height );
+          org_x, org_y, destW, destH );
   
         memcpy (xvImage->data, image, xvImage->data_size);
   
         XvShmPutImage (display, grabbedPort, window, gc, xvImage,
                        0, 0, videoWidth, videoHeight,
-                       video_x, video_y, video_width, video_height, false);
+                       org_x, org_y, destW, destH, false);
       }
   }
   

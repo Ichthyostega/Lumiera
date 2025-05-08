@@ -57,7 +57,7 @@ class PixbufDisplayer
      * @param[in] height The height of the video image in pixels. This
      * value must be greater than zero.
      */
-    PixbufDisplayer (Gtk::Image& drawing_area, int width, int height );
+    PixbufDisplayer (Gtk::Image& drawing_area, uint width, uint height );
     
     /**
      * Put an image of a given width and height with the expected input

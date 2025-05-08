@@ -42,7 +42,7 @@ class NullDisplayer
   {
   public:
     
-    NullDisplayer (Gtk::Widget& drawing_area, int width, int height );
+    NullDisplayer (Gtk::Widget& drawing_area, uint width, uint height );
     
     /** NULL-implementation: accept anything, do nothing */
     void put (void* const image) override;

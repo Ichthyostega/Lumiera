@@ -36,7 +36,7 @@ namespace stage {
 namespace output {
   
   PixbufDisplayer::PixbufDisplayer (Gtk::Image& drawing_area,
-                              int width, int height)
+                              uint width, uint height)
     : Displayer{width,height}
     , drawingArea_{drawing_area}
     {
@@ -56,16 +56,15 @@ namespace output {
   void
   PixbufDisplayer::put (void* const image)
   {  
-    int video_x = 0,
-        video_y = 0,
+    int orgX = 0,
+        orgY = 0,
         destWidth = 0,
         destHeight = 0;
     
     calculateVideoLayout(
       drawingArea_.get_width(),
       drawingArea_.get_height(),
-      videoWidth, videoHeight,
-      video_x, video_y, destWidth, destHeight);
+      orgX, orgY, destWidth, destHeight);
   
     GdkWindow *window = drawingArea_.get_window()->gobj();
     REQUIRE (window != NULL);
@@ -81,7 +80,7 @@ namespace output {
     GdkPixbuf *scaled_image = gdk_pixbuf_scale_simple( pixbuf, destWidth, destHeight, GDK_INTERP_NEAREST );
     REQUIRE(scaled_image != NULL);
     
-    gdk_draw_pixbuf( window, gc, scaled_image, 0, 0, video_x, video_y, -1, -1, GDK_RGB_DITHER_NORMAL, 0, 0 );
+    gdk_draw_pixbuf( window, gc, scaled_image, 0, 0, orgX, orgY, -1, -1, GDK_RGB_DITHER_NORMAL, 0, 0 );
     
     g_object_unref( scaled_image );
     g_object_unref( pixbuf );

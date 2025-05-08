@@ -27,7 +27,7 @@ namespace stage {
 namespace output {
   
   NullDisplayer::NullDisplayer (Gtk::Widget& drawing_area,
-                                int width, int height)
+                                uint width, uint height)
     : Displayer{width,height}
     , drawingArea_{drawing_area}
     {
@@ -47,7 +47,6 @@ namespace output {
     calculateVideoLayout(
       drawingArea_.get_width(),
       drawingArea_.get_height(),
-      videoWidth, videoHeight,
       video_x, video_y, video_width, video_height);
   
     GdkWindow *window = drawingArea_.get_window()->gobj();

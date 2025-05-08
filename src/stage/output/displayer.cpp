@@ -18,25 +18,22 @@
  ** Implementation of a displayer object, intended for creating
  ** a video display in the UI. This class was created as part of
  ** an initial draft of the user interface.
- ** @warning as of 2016 it is not clear, if this code will be
+ ** @todo as of 2016 it is not clear, if this code will be
  **          evolved into the actual display facility, or be
- **          replaced and rewritten, when we're about to 
+ **          replaced and rewritten, when we're about to
  **          create a functional video display connected
- **          to the render engine. 
+ **          to the render engine.
+ ** @todo 5/2025 used in an experiment for video output
  */
 
 
 #include "stage/gtk-base.hpp"
 #include "stage/output/displayer.hpp"
 
+#include <cmath>
+
 namespace stage {
 namespace output {
-  
-  bool
-  Displayer::usable()
-  {
-    return false;
-  }
   
   DisplayerInput
   Displayer::format()
@@ -46,28 +43,26 @@ namespace output {
   
   void
   Displayer::calculateVideoLayout(
-          int widget_width, int widget_height,
-          int image_width, int image_height,
-          int &video_x, int &video_y, int &video_width, int &video_height )
+          int widgetWidth, int widgetHeight,
+          int &imgOrg_x, int &imgOrg_y, int &imgWidth, int &imgHeight )
   {
-    REQUIRE (widget_width >= 0);
-    REQUIRE (widget_height >= 0);
-    REQUIRE (image_width >= 0);
-    REQUIRE (image_height >= 0);
+    REQUIRE (0 < widgetWidth );
+    REQUIRE (0 < widgetHeight);
+    REQUIRE (0 < videoWidth  );
+    REQUIRE (0 < videoHeight );
 
-    double ratio_width = ( double ) widget_width / ( double ) image_width;
-    double ratio_height = ( double ) widget_height / ( double ) image_height;
-    double ratio_constant = ratio_height < ratio_width ?
-                           ratio_height : ratio_width;
-    video_width = ( int ) ( image_width * ratio_constant + 0.5 );
-    video_height = ( int ) ( image_height * ratio_constant + 0.5 );
-    video_x = ( widget_width - video_width ) / 2;
-    video_y = ( widget_height - video_height ) / 2;
+    auto ratioW = double(widgetWidth ) / videoWidth;
+    auto ratioH = double(widgetHeight) / videoHeight;
+    auto scale  = std::min (ratioW, ratioH);
+    imgWidth  = std::lround (scale * videoWidth);
+    imgHeight = std::lround (scale * videoHeight);
+    imgOrg_x = (widgetWidth - imgWidth)   / 2;
+    imgOrg_y = (widgetHeight - imgHeight) / 2;
     
-    ENSURE (video_x >= 0 && video_x < widget_width);
-    ENSURE (video_y >= 0 && video_y < widget_height);
-    ENSURE (video_width <= widget_width);
-    ENSURE (video_width <= widget_width);
+    ENSURE (imgWidth <= widgetWidth);
+    ENSURE (imgWidth <= widgetWidth);
+    ENSURE (0 <= imgOrg_x and imgOrg_x < widgetWidth);
+    ENSURE (0 <= imgOrg_y and imgOrg_y < widgetHeight);
   }
   
   

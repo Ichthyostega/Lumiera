@@ -130027,15 +130027,38 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       Erfolg-1 : es wird <b>irgendwas angezeigt</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="full-1"/>
-<node CREATED="1746635712253" ID="ID_1901638448" MODIFIED="1746635741949" TEXT="da pa&#xdf;t wohl das Pixel-Layout nicht"/>
-<node CREATED="1746635726454" ID="ID_1915597327" MODIFIED="1746635741949" TEXT="aber man sieht den Frame-Takt"/>
+<node CREATED="1746635726454" ID="ID_1915597327" MODIFIED="1746710193073" TEXT="man sieht den Frame-Takt"/>
+<node CREATED="1746710178642" ID="ID_136906548" MODIFIED="1746710186933" TEXT="aber die Anzeige ist &#xbb;sonderbar&#xab;">
+<node CREATED="1746635712253" ID="ID_1901638448" MODIFIED="1746710176681" TEXT="da pa&#xdf;t wohl das Pixel-Layout nicht"/>
+<node CREATED="1746710197119" ID="ID_154063098" MODIFIED="1746710231128" TEXT="das Image im Displayer wird vergr&#xf6;&#xdf;ert...">
+<node CREATED="1746710231811" ID="ID_1505139667" MODIFIED="1746710240582" TEXT="auf 744 &#xd7; 558 pixels"/>
+<node CREATED="1746710241433" ID="ID_581911863" MODIFIED="1746710261314" TEXT="und zwar in dem Moment, wo der PixBuff zum ersten Mal gesetzt wird"/>
+<node CREATED="1746710300930" ID="ID_1739522299" MODIFIED="1746710317071" TEXT="trotzdem vestehe ich die Ma&#xdf;e nicht: 320px mal 2 w&#xe4;re 640"/>
+<node CREATED="1746710330318" ID="ID_1347613953" MODIFIED="1746710350055" TEXT="das Display-Panel l&#xe4;&#xdf;t sich interaktiv nicht verkleinern (nur vergr&#xf6;&#xdf;ern)"/>
+</node>
+</node>
+<node COLOR="#5b280f" CREATED="1746713519060" ID="ID_1373646714" MODIFIED="1746713539641" TEXT="doch erstmal: den XV-Code untersuchen und (re)aktivieren">
+<icon BUILTIN="stop-sign"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746542785647" ID="ID_1968916517" MODIFIED="1746542843774" TEXT="Experiment: den XV-Code aktivieren">
 <icon BUILTIN="full-2"/>
+<node CREATED="1746718064358" ID="ID_1201089630" MODIFIED="1746718080146" TEXT="erst mal sinngem&#xe4;&#xdf; mit den neuen Widget-Parametern verdrahtet"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1746718080949" ID="ID_1374647638" MODIFIED="1746718100295" TEXT="Erfolg-2 : die XV-Anzeige funktioniert grunds&#xe4;tzlich">
+<icon BUILTIN="full-2"/>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1746718103627" ID="ID_1187659462" MODIFIED="1746718152643" TEXT="...aber nur, wenn man die Maus &#xfc;ber dem Widget bewegt">
+<icon BUILTIN="broken-line"/>
+</node>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1746718116512" ID="ID_415171245" MODIFIED="1746718148895" TEXT="und die H&#xf6;he der Dekoration ist auch nicht korrekt eingerechnet">
+<icon BUILTIN="broken-line"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1746718129879" ID="ID_1760604400" MODIFIED="1746718147158" TEXT="und eine sonderbare durchsichtige Zone ist im GUI">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
 </node>
 </node>
 </node>

@@ -68,20 +68,20 @@ namespace output {
     : util::NonCopyable
     {
     protected:
-      const int videoWidth;
-      const int videoHeight;
+      const uint videoWidth;
+      const uint videoHeight;
       
     public:
       virtual ~Displayer() { }
       
-      Displayer(int w, int h)
+      Displayer(uint w, uint h)
         : videoWidth{w}
         , videoHeight{h}
         { }
       
       
       /** Indicates if this object can be used to render images on the running system. */
-      virtual bool usable();
+      virtual bool usable()  =0;
       
       /** Indicates the format required by the abstract put method.
        * @todo this feature was seemingly never used... can it be relevant? can we handle different formats?
@@ -99,21 +99,21 @@ namespace output {
       /**
        * Calculates the coordinates for placing a video image inside a widget
        * 
-       * @param[in] widget_width   The width of the display widget.
-       * @param[in] widget_height  The height of the display widget.
-       * @param[in] image_width    The width of the video image.
-       * @param[in] image_height   The height of the video image.
-       * @param[out] video_x       The x-coordinate of the top left
-       *                           corner of the scaled video image.
-       * @param[out] video_y       The y-coordinate of the top left
-       *                           corner of the scaled video image.
-       * @param[out] video_width   The width of the scale video image.
-       * @param[out] video_height  The height of the scale video image.
+       * @param[in] widgetWidth  available width for display in the widget.
+       * @param[in] widgetHeight available height for display in the widget.
+       * @param[out] imgOrg_x    x-coordinate of the top left corner of the
+       *                         scaled video image to display.
+       * @param[out] imgOrg_y    y-coordinate of the top left corner.
+       * @param[out] imgWidth    width of the scale video image to display.
+       * @param[out] imgHeight   height of the scale video image.
        */
-      static void calculateVideoLayout(
-          int widget_width, int widget_height,
-          int image_width, int image_height,
-          int &video_x, int &video_y, int &video_width, int &video_height );
+      void calculateVideoLayout(int widgetWidth
+                               ,int widgetHeight
+                               ,int& imgOrg_x
+                               ,int& imgOrg_y
+                               ,int& imgWidth
+                               ,int& imgHeight
+                               );
     };
     
     
