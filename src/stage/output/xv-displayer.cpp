@@ -23,27 +23,32 @@
 #include "stage/gtk-base.hpp"
 #include "stage/output/xv-displayer.hpp"
 #include "include/logging.h"
+//#include "lib/format-cout.hpp"
 
 #include <gdk/gdkx.h>
 
 namespace stage {
 namespace output {
   
+  namespace {
+    const uint32_t FORMAT_ID_YUY2 = 0x32595559;
+  }
+  
   XvDisplayer::XvDisplayer(Gtk::Widget& drawing_area
-                          ,int width, int height)
+                          ,uint width, uint height)
     : Displayer{width,height}
     , gotPort{false}
     , drawingArea_{drawing_area}
     , xvImage{nullptr}
     {
-      REQUIRE (width > 0);
-      REQUIRE (height > 0);
+      REQUIRE (videoWidth > 0);
+      REQUIRE (videoHeight > 0);
       
-      INFO(stage, "Trying XVideo at %d x %d", width, height);
+      INFO(stage, "Trying XVideo at %d x %d", videoWidth, videoHeight);
     
       shmInfo.shmaddr = NULL;
     
-      Glib::RefPtr<Gdk::Window> area_window = drawing_area.get_window();
+      Glib::RefPtr<Gdk::Window> area_window = drawingArea_.get_window();
     
       window = GDK_WINDOW_XID (area_window->gobj());
       display = GDK_WINDOW_XDISPLAY (area_window->gobj());
@@ -82,7 +87,7 @@ namespace output {
                                    ( list[ i ].id >> 16 ) & 0xff,
                                    ( list[ i ].id >> 24 ) & 0xff,
                                    ( list[ i ].format == XvPacked ) ? "packed" : "planar" );
-                          if ( list[ i ].id == 0x32595559 && !gotPort )
+                          if ( list[ i ].id == FORMAT_ID_YUY2 && !gotPort )
                             gotPort = true;
                         }
     
@@ -143,7 +148,7 @@ namespace output {
               memset(&values, 0, sizeof(XGCValues));
               gc = XCreateGC( display, window, 0, NULL );
     
-              xvImage = ( XvImage * ) XvShmCreateImage( display, grabbedPort, 0x32595559, 0, width, height, &shmInfo );
+              xvImage = ( XvImage * ) XvShmCreateImage( display, grabbedPort, FORMAT_ID_YUY2, 0, videoWidth, videoHeight, &shmInfo );
     
               shmInfo.shmid = shmget( IPC_PRIVATE, xvImage->data_size, IPC_CREAT | 0777 );
               if (shmInfo.shmid < 0) {
@@ -210,14 +215,19 @@ namespace output {
     
     if (xvImage != NULL)
       {
-        REQUIRE(display != NULL);
+        REQUIRE (display != NULL);
+        REQUIRE (drawingArea_.get_mapped());
         
         int org_x = 0, org_y = 0, destW = 0, destH = 0;
         calculateVideoLayout(
           drawingArea_.get_width(),
           drawingArea_.get_height(),
           org_x, org_y, destW, destH );
-  
+        
+        auto spaceAlloc = drawingArea_.get_allocation();
+        org_x += spaceAlloc.get_x();
+        org_y += spaceAlloc.get_y();
+        
         memcpy (xvImage->data, image, xvImage->data_size);
   
         XvShmPutImage (display, grabbedPort, window, gc, xvImage,

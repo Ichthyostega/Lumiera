@@ -52,14 +52,11 @@ namespace output {
     public:
       /**
        * Constructor
-       * @param drawing_area The widget into which the video image will be
-       *            drawn. This value must not be NULL.
-       * @param width The width of the video image in pixels. This value
-       *            must be greater than zero.
-       * @param height The height of the video image in pixels. This value
-       *            must be greater than zero.
+       * @param drawing_area The widget into which the video image will be drawn.
+       * @param width  of the video image image to be displayed, in pixels.
+       * @param height of the video image in pixels to be displayed.
        */
-      XvDisplayer (Gtk::Widget& drawing_area, int width, int height);
+      XvDisplayer (Gtk::Widget& drawing_area, uint width, uint height);
       
      ~XvDisplayer();
       

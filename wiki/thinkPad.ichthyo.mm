@@ -130051,12 +130051,63 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="full-2"/>
 <node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1746718103627" ID="ID_1187659462" MODIFIED="1746718152643" TEXT="...aber nur, wenn man die Maus &#xfc;ber dem Widget bewegt">
 <icon BUILTIN="broken-line"/>
+<node CREATED="1746753368642" ID="ID_907692574" MODIFIED="1746753406105" TEXT="wenn ich einen queue_redraw() f&#xfc;r jeden put() mache, wird unten schwarz dr&#xfc;bergezeichnet"/>
+<node CREATED="1746753425155" ID="ID_893585016" MODIFIED="1746753650297" TEXT="wenn ich den schwarzen HIntergrund weglasse, ist es analog, aber mit default-Background"/>
+<node CREATED="1746753577298" ID="ID_1381345463" MODIFIED="1746753640834" TEXT="wenn ich dagegen die CLASS_background vom VideoDisplayWidget weglasse...">
+<node CREATED="1746753652389" ID="ID_1001449914" MODIFIED="1746753677932" TEXT="wird der gesamte Bereich des Display-panels nicht refreshed"/>
+<node CREATED="1746753679035" ID="ID_1957359311" MODIFIED="1746753700917" TEXT="das hei&#xdf;t: was vorher dahinter war, bleibt stehen"/>
+<node CREATED="1746753701678" ID="ID_371467731" MODIFIED="1746753713283" TEXT="aber wenn man das Fenster verschiebt, bleibt einfach M&#xfc;ll"/>
 </node>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1746718116512" ID="ID_415171245" MODIFIED="1746718148895" TEXT="und die H&#xf6;he der Dekoration ist auch nicht korrekt eingerechnet">
+<node CREATED="1746753406837" ID="ID_458597358" MODIFIED="1746753420111" TEXT="aber das Video updatet nur, wenn die Maus bewegt wird"/>
+<node CREATED="1746753723320" ID="ID_1317517051" MODIFIED="1746753739591" TEXT="und zwar egal wo, es mu&#xdf; nur im Bereich des Lumiera-Fenster sein"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#330f69" CREATED="1746718116512" ID="ID_415171245" MODIFIED="1746756819258" TEXT="und die H&#xf6;he der Dekoration ist auch nicht korrekt eingerechnet">
 <icon BUILTIN="broken-line"/>
+<node CREATED="1746753745775" ID="ID_1490197751" MODIFIED="1746753762431" TEXT="genauer: es wird wohl das ganze XWindow als Koordinaten-Basis genommen">
+<node CREATED="1746756246859" ID="ID_948265923" MODIFIED="1746756278756" TEXT="&#x27f9; man m&#xfc;&#xdf;te die Allokation des eigentlichen Image-Widgets mit ber&#xfc;cksichtigen"/>
+<node CREATED="1746756291194" ID="ID_808564158" LINK="https://web.archive.org/web/20210306120056/https://developer.gnome.org/gtkmm/3.22/classGtk_1_1Widget.html#a67a286b9da91a83ee6016b479dad2341" MODIFIED="1746756310394" TEXT="Gtk::Widget::getAllocation">
+<node CREATED="1746756337943" ID="ID_956508739" MODIFIED="1746756339042" TEXT="typedef Gdk::Rectangle Gtk::Allocation"/>
+<node COLOR="#338800" CREATED="1746756776005" ID="ID_1382536900" MODIFIED="1746756792366" TEXT="Offset des Widgets in das Video-Display mitber&#xfc;cksichtigen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#435e98" CREATED="1746756918061" ID="ID_1884149717" MODIFIED="1746756934352" TEXT="kaum macht man&apos;s richtig, schon funktionierts">
+<font NAME="SansSerif" SIZE="7"/>
+</node>
+</node>
+</node>
+<node CREATED="1746756014267" ID="ID_444628176" MODIFIED="1746756032086" TEXT="und es wird f&#xfc;r das gesamte XWindow die Compositing-Strategie angewendet">
+<node CREATED="1746756054837" ID="ID_1371798971" MODIFIED="1746756061608" TEXT="wir setzen das Port-Attribute"/>
+<node CREATED="1746756062309" ID="ID_1479032515" MODIFIED="1746756081453" TEXT="ich deute das so, da&#xdf; dieser Code ein Compositing per Color-Key macht"/>
+<node CREATED="1746756083857" ID="ID_80824487" MODIFIED="1746756106802" TEXT="das w&#xe4;re die einfachste (uralt)-Methode, auf die XV stets zur&#xfc;ckfallen kann"/>
+<node CREATED="1746756107974" ID="ID_34298329" MODIFIED="1746756233195" TEXT="zus&#xe4;tzlich kann XV mit einem Compositor verwendet werden (glaub ich)">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      beziehe mich hier per Ged&#228;chtnis auf Sachverhalte, die ich irgenwann irgendwo mal gelesen habe; demnach kann XV mit irgend einer Art von &#187;Compositor&#171; zusammenarbeiten, notfalls aber seine sichtbare (clipping)-Region auch per Colour-Key herausfinden; dabei geht es um die Frage, welcher Teil des Videobildes tats&#228;chlich auf dem Desktop zu sehen ist, denn das Fenster k&#246;nnte partiell verdeckt sein
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node BACKGROUND_COLOR="#dda58c" COLOR="#5b280f" CREATED="1746756832085" ID="ID_853235588" MODIFIED="1746757025215" TEXT="&#x27f9; in den Grenzen dieses Demo-Codes nicht reparierbar">
+<arrowlink COLOR="#db2739" DESTINATION="ID_682377255" ENDARROW="Default" ENDINCLINATION="179;8;" ID="Arrow_ID_438825790" STARTARROW="None" STARTINCLINATION="-4;66;"/>
+<icon BUILTIN="button_cancel"/>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1746718129879" ID="ID_1760604400" MODIFIED="1746718147158" TEXT="und eine sonderbare durchsichtige Zone ist im GUI">
 <icon BUILTIN="messagebox_warning"/>
+<node CREATED="1746753315931" ID="ID_1431535426" MODIFIED="1746753343029" TEXT="diese umfa&#xdf;t die Kopfzeile des Docking-Pannel"/>
+<node CREATED="1746753343975" ID="ID_1196127587" MODIFIED="1746753362511" TEXT="die Video-Anzeige beginnt ebenfalls in der Kopfzeile"/>
+<node CREATED="1746756947014" ID="ID_716643169" MODIFIED="1746756974526" TEXT="Deutung">
+<node CREATED="1746756975402" ID="ID_682377255" MODIFIED="1746757016772" TEXT="wir verwenden Colour-Keying auf dem ganzen zugeordneten XWindow">
+<linktarget COLOR="#db2739" DESTINATION="ID_682377255" ENDARROW="Default" ENDINCLINATION="179;8;" ID="Arrow_ID_438825790" SOURCE="ID_853235588" STARTARROW="None" STARTINCLINATION="-4;66;"/>
+</node>
+<node CREATED="1746756977623" ID="ID_1960782604" MODIFIED="1746757001777" TEXT="und da das Dock beweglich ist, verwendet es wohl ein eigenes XWindow"/>
+</node>
 </node>
 </node>
 </node>
