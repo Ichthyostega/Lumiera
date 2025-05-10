@@ -79,7 +79,7 @@ namespace stage {
       Dispatcher dispatcher_;
       FrameSignal hasFrame_;
       
-      LumieraDisplayFrame currBuffer_;
+      DummyFrame currBuffer_;
       
       
     public:
@@ -89,7 +89,7 @@ namespace stage {
       /* Implementation-level API to be used by DisplayService */
       
       /** receive a frame to be displayed */
-      inline void put (LumieraDisplayFrame);
+      inline void put (DummyFrame);
       
       
     private:
@@ -161,7 +161,7 @@ namespace stage {
   
   
   void
-  DisplayerSlot::put(LumieraDisplayFrame newFrame)
+  DisplayerSlot::put(DummyFrame newFrame)
   {
     if (newFrame != currBuffer_)
       {

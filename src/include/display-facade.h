@@ -96,7 +96,7 @@ namespace lumiera {
            *  through the CL Interface.
            *  @see DisplayService::allocate */
           inline void
-          operator() (LumieraDisplayFrame frame)
+          operator() (DummyFrame frame)
             {
               impl().put_ (&impl(),frame);
             }
@@ -126,9 +126,9 @@ extern "C" {
 #include "common/interface.h"
 
 LUMIERA_INTERFACE_DECLARE (lumieraorg_Display, 0
-                          , LUMIERA_INTERFACE_SLOT (void, allocate,(LumieraDisplaySlot)                     )
-                          , LUMIERA_INTERFACE_SLOT (void,  release,(LumieraDisplaySlot)                     )
-                          , LUMIERA_INTERFACE_SLOT (void,      put,(LumieraDisplaySlot, LumieraDisplayFrame))
+                          , LUMIERA_INTERFACE_SLOT (void, allocate,(LumieraDisplaySlot)            )
+                          , LUMIERA_INTERFACE_SLOT (void,  release,(LumieraDisplaySlot)            )
+                          , LUMIERA_INTERFACE_SLOT (void,      put,(LumieraDisplaySlot, DummyFrame))
 );
 
 

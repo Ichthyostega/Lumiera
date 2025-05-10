@@ -145,7 +145,7 @@ namespace stage {
                                                              }
                                                           )
                                , LUMIERA_INTERFACE_INLINE (put,
-                                                           void, (LumieraDisplaySlot slotHandle, LumieraDisplayFrame frame),
+                                                           void, (LumieraDisplaySlot slotHandle, DummyFrame frame),
                                                              { 
                                                                //skipping full checks for performance reasons
                                                                REQUIRE (_instance && !lumiera_error_peek());

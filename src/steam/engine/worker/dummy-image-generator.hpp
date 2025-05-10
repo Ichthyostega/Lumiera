@@ -23,7 +23,7 @@
  ** @todo obsolete since 2010, can be removed once we have a real player in the UI
  ** @see stage::controller::PlaybackController
  ** @see steam::play::DummyPlayerService
- **  
+ ** 
  */
 
 
@@ -34,42 +34,44 @@
 #include "lib/error.hpp"
 #include "include/display-facade.h"
 
+#include <array>
+
 
 namespace steam {
 namespace node {
-
-      
+  
+  
   class DummyImageGenerator
     {
-      
-      unsigned char buf_[320 * 240 * 3];         ///< working buffer for next frame
-      
-      unsigned char outFrame_A_[320 * 240 * 4];  ///< output frame 1
-      unsigned char outFrame_B_[320 * 240 * 4];  ///< output frame 2
-
-      uint current_;
-      uint frame_;
       uint fps_;
       
-      
     public:
+      static const uint W = 320;
+      static const uint H = 240;
+      
       DummyImageGenerator(uint fps);
       
-     ~DummyImageGenerator() { }
-    
-      /** generate the next frame and 
-       *  occupy the alternate buffer.
-       *  @return the buffer containing the new frame
-       */
-      LumieraDisplayFrame next();
+      /** generate the next frame and occupy the alternate buffer.
+       *  @return the buffer containing the new frame */
+      DummyFrame next();
       
       /** just re-return a pointer to the current frame
        *  without generating any new image data */
-      LumieraDisplayFrame current();
-    
+      DummyFrame current();
+      
       
     private:
+      static constexpr uint WORK_SIZ = W * H * 3;
+      static constexpr uint BUFF_SIZ = W * H * 4;
       
+      bool beat_;
+      uint frame_;
+      
+      std::array<std::byte,WORK_SIZ> workBuf_;     ///< workspace for RGB calculation
+      std::array<std::byte,BUFF_SIZ> outFrame_A_;  ///< alternating output buffers
+      std::array<std::byte,BUFF_SIZ> outFrame_B_;
+      
+      void generateFrame (DummyFrame buffer);
     };
   
   

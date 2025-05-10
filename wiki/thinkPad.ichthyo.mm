@@ -130060,6 +130060,10 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node CREATED="1746753406837" ID="ID_458597358" MODIFIED="1746753420111" TEXT="aber das Video updatet nur, wenn die Maus bewegt wird"/>
 <node CREATED="1746753723320" ID="ID_1317517051" MODIFIED="1746753739591" TEXT="und zwar egal wo, es mu&#xdf; nur im Bereich des Lumiera-Fenster sein"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1746757140958" ID="ID_1593531865" MODIFIED="1746757194999" TEXT="hier fehlt uns Wissen &#xfc;ber die Schnittstelle">
+<arrowlink COLOR="#b70f3e" DESTINATION="ID_1411409809" ENDARROW="Default" ENDINCLINATION="58;-133;" ID="Arrow_ID_1129084559" STARTARROW="None" STARTINCLINATION="-188;12;"/>
+<icon BUILTIN="yes"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#330f69" CREATED="1746718116512" ID="ID_415171245" MODIFIED="1746756819258" TEXT="und die H&#xf6;he der Dekoration ist auch nicht korrekt eingerechnet">
 <icon BUILTIN="broken-line"/>
@@ -130109,6 +130113,174 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1746756977623" ID="ID_1960782604" MODIFIED="1746757001777" TEXT="und da das Dock beweglich ist, verwendet es wohl ein eigenes XWindow"/>
 </node>
 </node>
+<node CREATED="1746757051600" ID="ID_1411409809" MODIFIED="1746757194999" TEXT="Einsch&#xe4;tzung">
+<linktarget COLOR="#b70f3e" DESTINATION="ID_1411409809" ENDARROW="Default" ENDINCLINATION="58;-133;" ID="Arrow_ID_1129084559" SOURCE="ID_1593531865" STARTARROW="None" STARTINCLINATION="-188;12;"/>
+<node CREATED="1746757057796" ID="ID_1825980418" MODIFIED="1746757071675" TEXT="an diesem Code ist viele unflexibel und hart codiert"/>
+<node CREATED="1746757072453" ID="ID_1065119380" MODIFIED="1746757089585" TEXT="f&#xfc;r einen zuverl&#xe4;ssigeren XV-Displayer m&#xfc;ssen wir die Formate verstehen"/>
+<node CREATED="1746757090333" ID="ID_11791207" MODIFIED="1746757103652" TEXT="sowie das Thema Clipping/Keying/Compositing"/>
+</node>
+</node>
+</node>
+<node CREATED="1746893065718" ID="ID_1080057772" MODIFIED="1746893077566" TEXT="Mehr Flexibilit&#xe4;t f&#xfc;r das Pixelformat">
+<node CREATED="1746893079288" ID="ID_1996986668" MODIFIED="1746893093648" TEXT="schon die bestehenden Ans&#xe4;tze sind nicht kompatibel">
+<node CREATED="1746893095388" ID="ID_542989222" MODIFIED="1746893119924" TEXT="der XV-Code verwendet &#xbb;Yuv&#xab;"/>
+<node CREATED="1746893120700" ID="ID_150794172" MODIFIED="1746893135491" TEXT="der pixbuf-Ansatz braucht RGB-Pixel"/>
+</node>
+<node CREATED="1746893143163" ID="ID_728521523" MODIFIED="1746893170062" TEXT="brauche Mechanismus zur Format-Bestimmung"/>
+<node CREATED="1746893172426" ID="ID_252885347" MODIFIED="1746893188715" TEXT="Image-Generator soll mehrere Formate unterst&#xfc;tzen">
+<node CREATED="1746896060805" ID="ID_307284442" MODIFIED="1746896067887" TEXT="welche sind konkret bekannt?">
+<node CREATED="1746896069943" ID="ID_1946006105" MODIFIED="1746896077179" TEXT="Gdk::Pixbuf">
+<node CREATED="1746896096808" ID="ID_1859341105" LINK="https://gnome.pages.gitlab.gnome.org/gtkmm/classGdk_1_1Pixbuf.html#a5611379f1b3fd308cef781c2ed7ec9a7" MODIFIED="1746896111367" TEXT="API-Doc">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Tip: suche nach &quot;image data&quot;
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1746896115704" ID="ID_830630093" MODIFIED="1746896127222" TEXT="Beschreibung nicht ganz klar wegen Alpha"/>
+<node CREATED="1746896128024" ID="ID_1425663830" MODIFIED="1746896136962" TEXT="deute es so: es gibt zwei Varianten">
+<node CREATED="1746896138022" ID="ID_684097851" MODIFIED="1746896144257" TEXT="RGB : drei Bytes in Folge"/>
+<node CREATED="1746896144965" ID="ID_1166994604" MODIFIED="1746896151056" TEXT="RGBA : vier Bytes in Folge"/>
+<node CREATED="1746896606942" ID="ID_1779749459" MODIFIED="1746896636159" TEXT="k&#xf6;nnte aber auch sein, da&#xdf; der Platzt f&#xfc;r &#x3b1; stets reserviert wird"/>
+</node>
+<node CREATED="1746896153645" ID="ID_1979121211" MODIFIED="1746896183972" TEXT="auf jeden Fall: interleved (R,G,B[,A]) and packed"/>
+</node>
+<node CREATED="1746896199230" ID="ID_741408214" MODIFIED="1746896206601" TEXT="XV: YUY2">
+<node CREATED="1746896326183" ID="ID_645436469" LINK="https://learn.microsoft.com/en-us/windows/win32/medfound/recommended-8-bit-yuv-formats-for-video-rendering" MODIFIED="1746896334677" TEXT="Artikel von Microsoft-Learn"/>
+<node CREATED="1746896350729" ID="ID_53313141" LINK="https://gstreamer.freedesktop.org/documentation/additional/design/mediatype-video-raw.html?gi-language=c" MODIFIED="1746896643175" TEXT="GStreamer: Raw video types">
+<icon BUILTIN="forward"/>
+<node CREATED="1746896661544" ID="ID_158116185" MODIFIED="1746896663172" TEXT="&quot;YUY2&quot; packed 4:2:2 YUV"/>
+<node CREATED="1746896699379" ID="ID_1417105458" MODIFIED="1746896701443" TEXT="|Y0|U0|Y1|V0| |Y2|U2|Y3|V2|"/>
+</node>
+</node>
+</node>
+<node COLOR="#5b280f" CREATED="1746896775753" ID="ID_522887084" MODIFIED="1746896789587" TEXT="Vorsicht: auf dem Teppich bleiben">
+<icon BUILTIN="stop-sign"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1746896791415" ID="ID_299651976" MODIFIED="1746896805893" TEXT="es geht nur darum, erst mal diesen Image-Generator etwas flexibler zu machen">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1746896815060" ID="ID_1022113333" MODIFIED="1746896821031" TEXT="Generierung wird immer RGB sein"/>
+<node CREATED="1746896822170" ID="ID_795424268" MODIFIED="1746896842745" TEXT="brauche aber erweitertes Buffer-Management">
+<node CREATED="1746896843553" ID="ID_1850852470" MODIFIED="1746896858665" TEXT="abh&#xe4;ngig vom Format wird ein 2.Arbeitsbuffer gebraucht"/>
+<node CREATED="1746896912285" ID="ID_246850547" MODIFIED="1746896922737" TEXT="brauche also pro Format ein Zuordnungs-Schema">
+<node CREATED="1746896924001" ID="ID_1285226369" MODIFIED="1746896934815" TEXT="RGB kann man direkt im Ausgabepuffer rechnen"/>
+<node CREATED="1746896935427" ID="ID_1399171111" MODIFIED="1746896942694" TEXT="f&#xfc;r andere Formate mu&#xdf; Temp-Buffer nehmen"/>
+</node>
+</node>
+<node CREATED="1746896867877" ID="ID_718765609" MODIFIED="1746896882238" TEXT="bleibt aber im Prinzip ein fest-verdrahtetes Double-Buffering"/>
+<node CREATED="1746896889270" ID="ID_880503060" MODIFIED="1746896907698" TEXT="Idee: ggfs eine &#xdc;ber-Allokation f&#xfc;r den Buffer, so da&#xdf; jedes Format pa&#xdf;t">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746921512647" ID="ID_1654688911" MODIFIED="1746921530413" TEXT="erster Schritt: Code reorganisieren und klarer machen">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1746921531585" ID="ID_156630022" MODIFIED="1746921551379" TEXT="den double-buffering-Mechanismus von der Bildgenerierung trennen"/>
+<node CREATED="1746921552092" ID="ID_492214837" MODIFIED="1746921563913" TEXT="die Farbraumkonvertierung als extra Schritt formulieren">
+<node CREATED="1746921707185" ID="ID_1757569540" MODIFIED="1746921715007" TEXT="dabei auch die Theorie nochmal verifizieren">
+<node CREATED="1746921716337" ID="ID_683787640" MODIFIED="1746921728880" TEXT="&quot;yuv&quot; ist selber ein ungenauer Begriff"/>
+<node CREATED="1746921729694" ID="ID_1983082888" MODIFIED="1746921740370" TEXT="gemeint ist meist YCrCb"/>
+<node CREATED="1746929700320" ID="ID_878404124" MODIFIED="1746929714669" TEXT="die Koeffizienten sind eindeutig von Rec.601 / MPEG"/>
+<node CREATED="1746929715402" ID="ID_1228492062" MODIFIED="1746929744583" TEXT="sie sind nur vereinfacht, damit man es mit 16bit Integer-Arrithmetik machen kann"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746929753402" ID="ID_1545724068" MODIFIED="1746929764957" TEXT="da ich nun die Rechnung auf Int umstelle, k&#xf6;nnte man genauer rechnen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node CREATED="1746921564743" ID="ID_472874597" MODIFIED="1746921696992" TEXT="umstellen auf std::array und m&#xf6;glichst Pointer durch Referenzen ersetzen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      sieht zwar nach nitpicking aus, aber da wir dann explizit per structured-Binding auf die Komponenten zugreifen, k&#246;nnte der Code etwas klarer werden
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node COLOR="#435e98" CREATED="1746929669548" ID="ID_485365336" MODIFIED="1746936730029" TEXT="tja... compiliert aber das Ausgabeformat stimmt nicht">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1746936697077" ID="ID_3029485" MODIFIED="1746936719015" TEXT="Vermutung: der Fehler steckt in der rgb_to_yuv-Konvertierung">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1746936576704" ID="ID_1002369760" MODIFIED="1746936722511" TEXT="zwei Fehler gemacht">
+<icon BUILTIN="forward"/>
+<node CREATED="1746936592414" ID="ID_1482938348" MODIFIED="1746936639995" TEXT="das Tripel mu&#xdf; ein byte-Array sein">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...sonst ist es nicht m&#246;glich, das als virtuellen Zugriff f&#252;r Input und Output zu verwenden
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1746936646298" ID="ID_86296092" MODIFIED="1746936667952" TEXT="die 2-Pixel-Schritte hab ich bereits in die Schleifenvariable genommen"/>
+</node>
+<node CREATED="1746936671244" ID="ID_1148968519" MODIFIED="1746936695084" TEXT="&#x27f9; mu&#xdf; also doch direkt nach dem Zugriff auf die Input-Daten nach int casten"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746893845732" ID="ID_217120465" MODIFIED="1746893853763" TEXT="Einsichten / Schlu&#xdf;folgerungen">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1746893871037" ID="ID_75343016" MODIFIED="1746893876488" TEXT="problematische Aspekte">
+<node CREATED="1746893877430" ID="ID_497483495" MODIFIED="1746893885023" TEXT="das konkrete Pixelformat und Layout"/>
+<node CREATED="1746893895370" ID="ID_219712401" MODIFIED="1746893906279" TEXT="ben&#xf6;tigte externe LIbraries f&#xfc;r eine Technologie">
+<node CREATED="1746895905012" ID="ID_813655508" MODIFIED="1746895950411" TEXT="die stellen ein Problem dar f&#xfc;r Publication und Deployment"/>
+<node CREATED="1746895956446" ID="ID_1040915814" MODIFIED="1746895965881" TEXT="man m&#xf6;chte sie von der Kern-Applikation getrennt halten"/>
+<node CREATED="1746895966757" ID="ID_1182691383" MODIFIED="1746895974360" TEXT="dann also wohl per Plug-in einbinden"/>
+<node CREATED="1746895975163" ID="ID_517417723" MODIFIED="1746895985954" TEXT="damit ist die Komplexit&#xe4;t im Build-System"/>
+<node CREATED="1746895987890" ID="ID_367836628" MODIFIED="1746896041287" TEXT="mu&#xdf; aber auch an die Paketierung denken">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn sonst endet man doch wieder mit z.B. einem Debian-Paket, das <i>build-depends on the world of media processing</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1746893907208" ID="ID_273417317" MODIFIED="1746893913676" TEXT="Initialisierung des Playback">
+<node CREATED="1746895605925" ID="ID_264051602" MODIFIED="1746895615928" TEXT="mu&#xdf; zu dem Zeitpunkt">
+<node CREATED="1746895616820" ID="ID_1418854250" MODIFIED="1746895630951" TEXT="die konkrete Ausgabe-Technologie ausw&#xe4;hlen"/>
+<node CREATED="1746895632529" ID="ID_1371830854" MODIFIED="1746895690966" TEXT="f&#xfc;r diese eine Ressource-Allocation + Initialisierung machen"/>
+<node CREATED="1746895712671" ID="ID_1685215425" MODIFIED="1746895725801" TEXT="dann ein jeweils passendes Handle auf diese Allocation halten"/>
+</node>
+<node CREATED="1746895741504" ID="ID_770645161" MODIFIED="1746895744643" TEXT="Vorraussetzungen">
+<node CREATED="1746895745674" ID="ID_1620017985" MODIFIED="1746895757740" TEXT="es mu&#xdf; grunds&#xe4;tzlich Code geben, der diese Technologie beherrscht"/>
+<node CREATED="1746895758448" ID="ID_712745956" MODIFIED="1746895768232" TEXT="man mu&#xdf; daf&#xfc;r auch eine Render-Pipeline konstruieren k&#xf6;nnen"/>
+<node CREATED="1746895772998" ID="ID_691651282" MODIFIED="1746895845873" TEXT="die Technologie mu&#xdf; aber auch konkret aktivierbar sein">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      sie k&#246;nnte zwar im System installiert und vorhanden sein, aber nicht richtig konfiguriert, vielleicht &#252;berhaupt nie nutzbar sein, oder aber derzeit grade nicht nutzbar (weil eine externe Verbindung oder Ressource fehlt)
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1746895729204" ID="ID_677582239" MODIFIED="1746895739484" TEXT="Caching und Abk&#xfc;rzungen"/>
 </node>
 </node>
 </node>

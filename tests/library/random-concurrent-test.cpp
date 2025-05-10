@@ -41,7 +41,7 @@ namespace test {
   namespace {
     const uint NUM_THREADS = 8;           ///< for concurrent probes
     const uint NUM_SAMPLES = 80;          ///< overall number measurement runs
-    const uint NUM_INVOKES = 1'000'000;   ///< invocations of the target per measurment
+    const uint NUM_INVOKES = 1'000'000;   ///< invocations of the target per measurement
   }
   
   

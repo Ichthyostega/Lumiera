@@ -23,15 +23,15 @@
 #ifndef LUMIERA_DISPLAY_HANDLES_H
 #define LUMIERA_DISPLAY_HANDLES_H
 
+#include <cstddef>
 
 
-
-typedef unsigned char * LumieraDisplayFrame;
+using DummyFrame = std::byte *;
 
 
 struct lumiera_displaySlot_struct 
   {
-    void (*put_)(lumiera_displaySlot_struct*, LumieraDisplayFrame);
+    void (*put_)(lumiera_displaySlot_struct*, DummyFrame);
   };
 typedef struct lumiera_displaySlot_struct lumiera_displaySlot;
 typedef lumiera_displaySlot* LumieraDisplaySlot;
