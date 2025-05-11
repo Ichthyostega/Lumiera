@@ -72,6 +72,8 @@ namespace node {
       std::array<std::byte,BUFF_SIZ> outFrame_B_;
       
       void generateFrame (DummyFrame buffer);
+      void generateNoise (DummyFrame buffer);
+      void generateBars  (DummyFrame buffer);
     };
   
   

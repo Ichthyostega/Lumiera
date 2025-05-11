@@ -130179,21 +130179,25 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746921512647" ID="ID_1654688911" MODIFIED="1746921530413" TEXT="erster Schritt: Code reorganisieren und klarer machen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1746921512647" ID="ID_1654688911" MODIFIED="1746971761434" TEXT="erster Schritt: Code reorganisieren und klarer machen">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1746921531585" ID="ID_156630022" MODIFIED="1746921551379" TEXT="den double-buffering-Mechanismus von der Bildgenerierung trennen"/>
-<node CREATED="1746921552092" ID="ID_492214837" MODIFIED="1746921563913" TEXT="die Farbraumkonvertierung als extra Schritt formulieren">
+<node COLOR="#338800" CREATED="1746921552092" ID="ID_492214837" MODIFIED="1746972188067" TEXT="die Farbraumkonvertierung als extra Schritt formulieren">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1746921707185" ID="ID_1757569540" MODIFIED="1746921715007" TEXT="dabei auch die Theorie nochmal verifizieren">
 <node CREATED="1746921716337" ID="ID_683787640" MODIFIED="1746921728880" TEXT="&quot;yuv&quot; ist selber ein ungenauer Begriff"/>
 <node CREATED="1746921729694" ID="ID_1983082888" MODIFIED="1746921740370" TEXT="gemeint ist meist YCrCb"/>
 <node CREATED="1746929700320" ID="ID_878404124" MODIFIED="1746929714669" TEXT="die Koeffizienten sind eindeutig von Rec.601 / MPEG"/>
-<node CREATED="1746929715402" ID="ID_1228492062" MODIFIED="1746929744583" TEXT="sie sind nur vereinfacht, damit man es mit 16bit Integer-Arrithmetik machen kann"/>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746929753402" ID="ID_1545724068" MODIFIED="1746929764957" TEXT="da ich nun die Rechnung auf Int umstelle, k&#xf6;nnte man genauer rechnen">
-<icon BUILTIN="flag-yellow"/>
+<node CREATED="1746929715402" ID="ID_1228492062" MODIFIED="1746972230168" TEXT="sie sind nur vereinfacht, damit man es mit 16bit Integer-Arrithmetik machen kann">
+<arrowlink COLOR="#467bb9" DESTINATION="ID_1545724068" ENDARROW="Default" ENDINCLINATION="43;-21;" ID="Arrow_ID_198569523" STARTARROW="None" STARTINCLINATION="-96;5;"/>
 </node>
 </node>
-<node CREATED="1746921564743" ID="ID_472874597" MODIFIED="1746921696992" TEXT="umstellen auf std::array und m&#xf6;glichst Pointer durch Referenzen ersetzen">
+<node COLOR="#338800" CREATED="1746929753402" ID="ID_1545724068" MODIFIED="1746972230168" TEXT="da ich nun die Rechnung auf Int umstelle, k&#xf6;nnte man genauer rechnen">
+<linktarget COLOR="#467bb9" DESTINATION="ID_1545724068" ENDARROW="Default" ENDINCLINATION="43;-21;" ID="Arrow_ID_198569523" SOURCE="ID_1228492062" STARTARROW="None" STARTINCLINATION="-96;5;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1746921564743" ID="ID_472874597" MODIFIED="1746972240706" TEXT="umstellen auf std::array und m&#xf6;glichst Pointer durch Referenzen ersetzen">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -130205,6 +130209,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html>
 </richcontent>
+<icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#435e98" CREATED="1746929669548" ID="ID_485365336" MODIFIED="1746936730029" TEXT="tja... compiliert aber das Ausgabeformat stimmt nicht">
 <icon BUILTIN="broken-line"/>
@@ -130229,6 +130234,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1746936646298" ID="ID_86296092" MODIFIED="1746936667952" TEXT="die 2-Pixel-Schritte hab ich bereits in die Schleifenvariable genommen"/>
 </node>
 <node CREATED="1746936671244" ID="ID_1148968519" MODIFIED="1746936695084" TEXT="&#x27f9; mu&#xdf; also doch direkt nach dem Zugriff auf die Input-Daten nach int casten"/>
+</node>
+<node COLOR="#338800" CREATED="1746971763801" ID="ID_505273316" MODIFIED="1746971792732" TEXT="Auch die Generierung der Colour-Bars kann man in C++ viel eleganter formulieren">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>

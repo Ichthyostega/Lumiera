@@ -43,9 +43,9 @@ namespace node {
       auto b = int(rgb[2]);
       Trip yuv;
       auto& [y,u,v] = yuv;
-      y = byte(clamp (  0 + ( 299 * r + 587 * g + 114 * b) / 1000, 16,235));   // Luma clamped to MPEG scan range
-      u = byte(clamp (128 + (-169 * r - 331 * g + 500 * b) / 1000, 0, 255));   // Chroma components mapped according to Rec.601
-      v = byte(clamp (128 + ( 500 * r - 419 * g -  81 * b) / 1000, 0, 255));   // (but with integer arithmetics and slightly rounded coefficients)
+      y = byte(clamp (  0 + (    299 * r +    587 * g +    114 * b) /    1000, 16,235));   // Luma clamped to MPEG scan range
+      u = byte(clamp (128 + (-168736 * r - 331264 * g + 500000 * b) / 1000000, 0, 255));   // Chroma components mapped according to Rec.601
+      v = byte(clamp (128 + ( 500000 * r - 418688 * g -  81312 * b) / 1000000, 0, 255));   // (but with integer arithmetics and slightly rounded coefficients)
       return yuv;
     }
     
@@ -93,47 +93,58 @@ namespace node {
       frame_ = 0;
     
     if(frame_ < 1 * fps_)
-      {
-        // create random snow...
-        for (uint i = 0; i < W*H*3; i+=3)
-          {
-            auto value = byte(rand());
-            buffer[i]   = value;
-            buffer[i+1] = value;
-            buffer[i+2] = value;
-          }
-      }
+      generateNoise (buffer);
     else
-      { // create a colour strip pattern
-        typedef byte Row[W * 3];
-        
-        byte* row = buffer;
-        
-        // create a colour strip pattern in the first row...
-        for (uint x = 0; x < W; ++x)
-          {
-            byte& r = row[x*3];
-            byte& g = row[x*3+1];
-            byte& b = row[x*3+2];
-            
-            const byte ON = byte(0xC0);
-            const byte OFF{0};
-            
-            if     (x < 1*W/7) r = ON,  g = ON,  b = ON;
-            else if(x < 2*W/7) r = ON,  g = ON,  b = OFF;
-            else if(x < 3*W/7) r = OFF, g = ON,  b = ON;
-            else if(x < 4*W/7) r = OFF, g = ON,  b = OFF;
-            else if(x < 5*W/7) r = ON,  g = OFF, b = ON;
-            else if(x < 6*W/7) r = ON,  g = OFF, b = OFF;
-            else               r = OFF, g = OFF, b = ON;
-          }
-        
-        // fill remaining rows of the frame with the same pattern
-        for (uint y = 1; y < H; ++y)
-          memcpy(buffer + y*sizeof(Row), row, sizeof(Row));
-        
+      generateBars (buffer);
+  }
+  
+  void
+  DummyImageGenerator::generateNoise (DummyFrame buffer)
+  {  // create random snow...
+    for (uint i = 0; i < W*H*3; i+=3)
+      {
+        auto value = byte(rand());
+        buffer[i]   = value;
+        buffer[i+1] = value;
+        buffer[i+2] = value;
       }
   }
+  
+  /** fill the RGB-Buffer with the well-known NTSC colour-bar pattern */
+  void
+  DummyImageGenerator::generateBars (DummyFrame buffer)
+  {
+    using Row = std::array<Trip, W>;
+    using Img = std::array<Row,  H>;
+    
+    Img& img = reinterpret_cast<Img&> (*buffer);
+    Row& row = img[0];
+    
+    const byte ON = byte(0xC0);
+    const byte OFF{0};
+
+    // classic NTSC colour bars  --R---G---B--
+    std::array<Trip, 7> bars = {{{ ON, ON, ON}
+                                ,{ ON, ON,OFF}
+                                ,{OFF, ON, ON}
+                                ,{OFF, ON,OFF}
+                                ,{ ON,OFF, ON}
+                                ,{ ON,OFF,OFF}
+                                ,{OFF,OFF, ON}
+                               }};
+    
+    // create a colour strip pattern in the first row...
+    for (uint x = 0; x < W; ++x)
+      {  //  quantise into 7 columns
+        uint col = x  * 7/W;
+        row[x] = bars[col];
+      }
+    
+    // fill remaining rows of the frame with the same pattern
+    for (uint y = 1; y < H; ++y)
+      img[y] = row;
+  }
+  
   
   DummyFrame
   DummyImageGenerator::next()
