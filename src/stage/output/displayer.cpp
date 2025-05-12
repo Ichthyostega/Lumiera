@@ -38,7 +38,7 @@ namespace output {
   DisplayerInput
   Displayer::format()
   {
-    return DISPLAY_NONE;
+    return lumiera::DISPLAY_NONE;
   }
   
   void

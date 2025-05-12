@@ -80,10 +80,21 @@ namespace node {
   
   DummyImageGenerator::DummyImageGenerator(uint fps)
     : fps_{fps}
+    , useRGB_{false}
     , beat_{false}
     , frame_{0}
   { }
   
+  void
+  DummyImageGenerator::configure (lumiera::DisplayerInput displayFormat)
+    {
+      INFO (steam, "ImageGen: use format %d", displayFormat);
+      REQUIRE (  displayFormat == lumiera::DISPLAY_NONE
+              or displayFormat == lumiera::DISPLAY_YUV
+              or displayFormat == lumiera::DISPLAY_RGB);
+      
+      useRGB_ = (displayFormat == lumiera::DISPLAY_RGB);
+    }
   
   void
   DummyImageGenerator::generateFrame (DummyFrame buffer)
@@ -153,9 +164,11 @@ namespace node {
     DummyFrame outBuff = current();
     // next output buffer to return
     
-    generateFrame (workBuf_.data());
+    DummyFrame workspace = useRGB_? outBuff : workBuf_.data();
+    generateFrame (workspace);
+    if (not useRGB_)
+      rgb_buffer_to_yuy2(workBuf_.data(), outBuff, W*H);
     
-    rgb_buffer_to_yuy2(workBuf_.data(), outBuff, W*H);
     return outBuff;
     
   }

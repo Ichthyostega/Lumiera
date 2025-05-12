@@ -62,6 +62,7 @@ namespace widget {
     // invoke base implementation
     Gtk::Widget::on_realize ();
     setupDisplayer (VIDEO_WIDTH, VIDEO_HEIGHT);
+    signal_activate (displayer_->format());
   }
   
   
@@ -70,11 +71,11 @@ namespace widget {
   {
     REQUIRE (videoWidth > 0);
     REQUIRE (videoHeight > 0);
-    
+    /*                                                                        ///////////////////////////////TICKET #1403 : temporarily disabled XV for experimentation with Pixbuf (but XV works and is usable)
     displayer_ = make_unique<XvDisplayer> (*this, videoWidth, videoHeight);
     if (displayer_->usable())
       return;
-    
+    */
     displayer_ = make_unique<PixbufDisplayer> (*this, videoWidth, videoHeight);
     if (displayer_->usable())
       return;

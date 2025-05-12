@@ -32,6 +32,7 @@
 #define DEMO_CONTROLLER_H
 
 #include "stage/gtk-base.hpp"
+#include "include/display-handles.h"
 #include "lib/nocopy.hpp"
 
 #include <memory>
@@ -47,21 +48,19 @@ namespace stage {
 namespace ctrl {
   
   using std::unique_ptr;
-  using FrameSink = std::function<void(void* const)>;
   
   
   /** @deprecated we need a durable design for the playback process */
   class DemoController
     : util::NonCopyable
+    , public sigc::trackable
     {
       unique_ptr<steam::node::DummyImageGenerator> imageGen_;
       unique_ptr<steam::node::TickService>         tick_;
-      FrameSink output_;
-      bool playing_;
       
     public:
      ~DemoController();
-      DemoController(FrameSink);
+      DemoController();
       
       bool isPlaying() const { return playing_; }
       
@@ -69,7 +68,10 @@ namespace ctrl {
       void pause();
       void stop();
       
+      void activate (lumiera::DisplayerInput);
+      sigc::signal<void(void* const)> output_;
     private:
+      bool playing_;
       void processFrame();
     };
   

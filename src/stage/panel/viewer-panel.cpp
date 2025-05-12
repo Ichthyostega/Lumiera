@@ -32,9 +32,14 @@ namespace panel {
                            ,Gdl::DockItem& dockItem)
     : Panel{panelManager, dockItem, getTitle(), getStockID()}
     , display_{}
-    , demoPlayback_{[this](void * const buffer){ display_.pushFrame(buffer); }}
+    , demoPlayback_{}
     {
-      //----- Pack in the Widgets -----//
+      // wire control and frame-output signals...
+      display_.signal_activate.connect(
+        sigc::mem_fun (demoPlayback_, &ctrl::DemoController::activate));
+      demoPlayback_.output_.connect(
+        sigc::mem_fun (display_, &widget::VideoDisplayWidget::pushFrame));
+      
       pack_start(display_, Gtk::PACK_EXPAND_WIDGET);
     }
   

@@ -61,17 +61,22 @@ namespace output {
      ~XvDisplayer();
       
       
+    private:
       /**
        * Put an image of a given width and height with the expected input
        * format (as indicated by the format method).
        * @param[in] image The video image array to draw.
        */
-      void put (void* const image);
+      void put (void* const image)  override;
       
       /** Indicates if this object can be used to render images on the running system. */
-      bool usable();
+      bool usable()  override;
       
-    private:
+      DisplayerInput format() override
+        {
+          return lumiera::DISPLAY_YUV;
+        }
+      
       
       /**
        * Specifies whether the object is currently attached to an XVideo port.

@@ -33,6 +33,8 @@
 
 #include "lib/error.hpp"
 #include "include/display-facade.h"
+#include "include/display-handles.h"
+
 
 #include <array>
 
@@ -44,12 +46,15 @@ namespace node {
   class DummyImageGenerator
     {
       uint fps_;
+      bool useRGB_;
       
     public:
       static const uint W = 320;
       static const uint H = 240;
       
       DummyImageGenerator(uint fps);
+      void configure (lumiera::DisplayerInput);
+      
       
       /** generate the next frame and occupy the alternate buffer.
        *  @return the buffer containing the new frame */

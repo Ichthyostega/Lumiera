@@ -23,13 +23,6 @@
 
 #include "stage/gtk-base.hpp"
 #include "stage/output/pixbuf-displayer.hpp"
-#include "lib/format-cout.hpp"
-
-#if false  ///////////////////////////////////////////////////////////////////////////////////////////////////TICKET #950 : new solution for video display
-#include <gdk/gdkx.h>
-#endif     ///////////////////////////////////////////////////////////////////////////////////////////////////TICKET #950 : new solution for video display
-#include <iostream>
-
 
 
 namespace stage {
@@ -44,7 +37,7 @@ namespace output {
       REQUIRE (height > 0);
       auto iconSet = Gtk::IconSet::lookup_default (Gtk::StockID("panel_play"));
       drawingArea_.set(iconSet, Gtk::IconSize(Gtk::ICON_SIZE_DIALOG));
-      cout << "USING PixbufDisplayer" <<endl;
+      INFO(stage, "Using Pixbuf with RGB output within Gtk::Image");
     }
   
   bool
@@ -66,40 +59,21 @@ namespace output {
       drawingArea_.get_height(),
       orgX, orgY, destWidth, destHeight);
   
-    GdkWindow *window = drawingArea_.get_window()->gobj();
-    REQUIRE (window != NULL);
-    
-  #if false  ///////////////////////////////////////////////////////////////////////////////////////////////////TICKET #950 : new solution for video display
-    GdkGC *gc = gdk_gc_new( window );
-    REQUIRE(gc != NULL);
-    
-    GdkPixbuf *pixbuf = gdk_pixbuf_new_from_data( (const guchar*)image, GDK_COLORSPACE_RGB, FALSE, 8,
-      preferredWidth(), preferredHeight(), preferredWidth() * 3, NULL, NULL );
-    REQUIRE(pixbuf != NULL);
-      
-    GdkPixbuf *scaled_image = gdk_pixbuf_scale_simple( pixbuf, destWidth, destHeight, GDK_INTERP_NEAREST );
-    REQUIRE(scaled_image != NULL);
-    
-    gdk_draw_pixbuf( window, gc, scaled_image, 0, 0, orgX, orgY, -1, -1, GDK_RGB_DITHER_NORMAL, 0, 0 );
-    
-    g_object_unref( scaled_image );
-    g_object_unref( pixbuf );
-    g_object_unref( gc );
-  #endif     ///////////////////////////////////////////////////////////////////////////////////////////////////TICKET #950 : new solution for video display
     auto* imageData = static_cast<const guint8*> (image);
-    auto rawBuf = Gdk::Pixbuf::create_from_data (imageData
+    auto imgBuf = Gdk::Pixbuf::create_from_data (imageData
                                                 ,Gdk::COLORSPACE_RGB
                                                 ,false                 // has_alpha
                                                 ,8                     // bits_per_sample
                                                 ,videoWidth
                                                 ,videoHeight
-                                                ,0                     // rowstride (can be used to round up to even powers of two per row)                     
+                                                ,3 * videoWidth        // rowstride (offset between consecutive rows)                     
                                                 );
-    ASSERT (rawBuf);
-    auto scaledBuf = rawBuf->scale_simple (destWidth, destHeight, Gdk::INTERP_NEAREST);
-    drawingArea_.set (scaledBuf);
+    ASSERT (imgBuf);
+    if (uint(destWidth) != videoWidth
+        or uint(destHeight) != videoHeight)
+      imgBuf = imgBuf->scale_simple (destWidth, destHeight, Gdk::INTERP_NEAREST);
+    drawingArea_.set (imgBuf);
     drawingArea_.queue_draw();
-    cout << "bong.."<<scaledBuf.get()<<endl;
   }
   
   

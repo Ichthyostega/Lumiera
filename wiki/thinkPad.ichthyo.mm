@@ -129648,14 +129648,14 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746196449003" ID="ID_1070775068" MODIFIED="1746196453932" TEXT="Video-Display">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746196482500" ID="ID_1819581335" LINK="https://issues.lumiera.org/ticket/1403" MODIFIED="1746226359001" TEXT=" #1403 Invesitgate if XV displayer can be revived ">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1746196482500" ID="ID_1819581335" LINK="https://issues.lumiera.org/ticket/1403" MODIFIED="1747012983605" TEXT=" #1403 Invesitgate if XV displayer can be revived ">
 <linktarget COLOR="#fefeb4" DESTINATION="ID_1819581335" ENDARROW="Default" ENDINCLINATION="-2783;152;" ID="Arrow_ID_1160980366" SOURCE="ID_1219347509" STARTARROW="None" STARTINCLINATION="-4870;297;"/>
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1746196518190" ID="ID_411481779" MODIFIED="1746237828685" TEXT="Research-Setup">
-<icon BUILTIN="pencil"/>
+<icon BUILTIN="hourglass"/>
+<node COLOR="#338800" CREATED="1746196518190" ID="ID_411481779" MODIFIED="1747013174739" TEXT="Research-Setup">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1746201044698" ID="ID_1152249373" MODIFIED="1746230756302" TEXT="Frage: wie viel bauen wir jetzt &#xbb;neu im Sandkasten&#xab;?">
 <icon BUILTIN="help"/>
-<node CREATED="1746201077774" ID="ID_444644025" MODIFIED="1746201091898" TEXT="Lumi-GUI ist gegen Core-Library gelinkt">
+<node CREATED="1746201077774" FOLDED="true" ID="ID_444644025" MODIFIED="1746201091898" TEXT="Lumi-GUI ist gegen Core-Library gelinkt">
 <icon BUILTIN="idea"/>
 <node CREATED="1746201100778" ID="ID_1816394825" MODIFIED="1746201611393">
 <richcontent TYPE="NODE"><html>
@@ -129682,7 +129682,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="smiley-angry"/>
 </node>
 </node>
-<node CREATED="1746203278184" ID="ID_1326787016" MODIFIED="1746203304384" TEXT="die Strukturen f&#xfc;r den Play-Service sind schon sinnvoll durchdacht...">
+<node CREATED="1746203278184" FOLDED="true" ID="ID_1326787016" MODIFIED="1746203304384" TEXT="die Strukturen f&#xfc;r den Play-Service sind schon sinnvoll durchdacht...">
 <icon BUILTIN="yes"/>
 <node CREATED="1746203306407" ID="ID_88399140" MODIFIED="1746203313760" TEXT="wenngleich auch lediglich skizziert"/>
 <node CREATED="1746203314417" ID="ID_385277676" MODIFIED="1746203550912" TEXT="das Design wurde erkenntlich aus dem Dummy-Player abgeleitet">
@@ -129703,7 +129703,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1746203581424" ID="ID_441476633" MODIFIED="1746321084489" TEXT="Konsequenz: in diesem Rahmen bleiben &#x2014; Kurzschlu&#xdf; bauen">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1746203581424" FOLDED="true" ID="ID_441476633" MODIFIED="1747013200144" TEXT="Konsequenz: in diesem Rahmen bleiben &#x2014; Kurzschlu&#xdf; bauen">
 <icon BUILTIN="yes"/>
 <node CREATED="1746203611871" ID="ID_1500164071" MODIFIED="1746203618891" TEXT="bedeutet: der Controller ist schon da"/>
 <node CREATED="1746203623607" ID="ID_1866389672" MODIFIED="1746203637441" TEXT="dieser stellt direkt eine Display-Verbindung her"/>
@@ -129716,7 +129716,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1746231119721" ID="ID_1893495747" MODIFIED="1746321120760" TEXT="Code-Anordnung">
+<node COLOR="#338800" CREATED="1746231119721" FOLDED="true" ID="ID_1893495747" MODIFIED="1747013187765" TEXT="Code-Anordnung">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1746231126835" ID="ID_163411237" MODIFIED="1746231131310" TEXT="der Name?">
 <node CREATED="1746231133280" ID="ID_1300819912" MODIFIED="1746231141717" TEXT="&#xbb;PlaybackController&#xab;"/>
@@ -129758,25 +129758,29 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1746237836971" ID="ID_349974806" MODIFIED="1746321699135" TEXT="einen Null-Displayer schaffen">
-<icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746237900191" ID="ID_891690513" MODIFIED="1746237941748" TEXT="dieser empf&#xe4;ngt zwar einen Datenblock">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1746237836971" FOLDED="true" ID="ID_349974806" MODIFIED="1747013205967" TEXT="einen Null-Displayer schaffen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1746237900191" ID="ID_891690513" MODIFIED="1747013146046" TEXT="dieser empf&#xe4;ngt zwar einen Datenblock">
+<icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1746285283565" ID="ID_1980886210" MODIFIED="1746285291666" TEXT="was f&#xfc;r ein Format?">
 <node CREATED="1746285293070" ID="ID_1654823808" MODIFIED="1746285299797" TEXT="Code-Arch&#xe4;ologie..."/>
 <node CREATED="1746285300603" ID="ID_1713770409" MODIFIED="1746285307663" TEXT="stelle fest: das Format wurde nie verwendet"/>
+<node CREATED="1747013151041" ID="ID_204602169" LINK="#ID_1080057772" MODIFIED="1747013166117" TEXT="das Thema wird aber sp&#xe4;ter dennoch relevant"/>
 </node>
 <node CREATED="1746306976033" ID="ID_1750181201" MODIFIED="1746306980116" TEXT="Gr&#xf6;&#xdf;e">
 <node CREATED="1746306981128" ID="ID_322973917" MODIFIED="1746306997011" TEXT="wird mit dem Konstruktor des Displayers festgelegt"/>
 <node CREATED="1746306997902" ID="ID_949805986" MODIFIED="1746307010754" TEXT="das ist nicht (notwendig) die Gr&#xf6;&#xdf;e des Anzeige-Widgets"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746237922301" ID="ID_261548220" MODIFIED="1746237941749" TEXT="quitiert aber nur geeignet im Log">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1746237922301" ID="ID_261548220" MODIFIED="1747013142665" TEXT="quitiert aber nur geeignet im Log">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746237950796" ID="ID_833924220" MODIFIED="1746237960794" TEXT="ggfs mit gedrosselter Frame-Rate laufen lassen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1746237950796" ID="ID_833924220" MODIFIED="1747013140411" TEXT="ggfs mit gedrosselter Frame-Rate laufen lassen">
+<icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1746321706423" ID="ID_476605997" MODIFIED="1746321714046" TEXT="versuche mal 4 FPS"/>
+<node COLOR="#435e98" CREATED="1747013126349" ID="ID_1177767712" MODIFIED="1747013137894" TEXT="recht praktisch f&#xfc;r Debugging">
+<icon BUILTIN="idea"/>
+</node>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1746237851254" ID="ID_991590991" MODIFIED="1746503055920" TEXT="Widget und Controller-Logik mit Null-Displayer neu aufbauen">
@@ -129808,7 +129812,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node CREATED="1746366566357" ID="ID_669235936" MODIFIED="1746366588141" TEXT="geplant war aber ein Play-Control-Widget"/>
 </node>
-<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1746366589535" ID="ID_944511675" MODIFIED="1746503051582" TEXT="also ein neues Docking-Panel schaffen">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1746366589535" FOLDED="true" ID="ID_944511675" MODIFIED="1747013218559" TEXT="also ein neues Docking-Panel schaffen">
 <icon BUILTIN="yes"/>
 <node CREATED="1746366642490" ID="ID_997232477" MODIFIED="1746366650524" TEXT="bekommt in erster N&#xe4;herung die Buttons direkt"/>
 <node CREATED="1746366651348" ID="ID_1947097226" MODIFIED="1746366715461" TEXT="soll sp&#xe4;ter mal auch den Timecode darstellen"/>
@@ -129923,7 +129927,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node COLOR="#435e98" CREATED="1746491149720" ID="ID_55661240" MODIFIED="1746503014295" TEXT="wirft das n&#xe4;chste Problem auf: Kommunikation">
+<node COLOR="#435e98" CREATED="1746491149720" FOLDED="true" ID="ID_55661240" MODIFIED="1747013224085" TEXT="wirft das n&#xe4;chste Problem auf: Kommunikation">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1746491192817" ID="ID_387749605" MODIFIED="1746491247688" TEXT="es ist noch nicht klar, wie l&#xe4;ngerfristig die Verbindung zum Play-Controller aufgebaut wird"/>
 <node CREATED="1746491257764" ID="ID_86692047" MODIFIED="1746491276155" TEXT="allerdings kann man f&#xfc;r eine solches Experiment hier durchaus direkt verdrahten"/>
@@ -129988,7 +129992,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <arrowlink COLOR="#6c7789" DESTINATION="ID_292602658" ENDARROW="Default" ENDINCLINATION="-1126;108;" ID="Arrow_ID_1434687356" STARTARROW="None" STARTINCLINATION="-984;70;"/>
 <icon BUILTIN="info"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746542764270" ID="ID_1879098999" MODIFIED="1746542827394" TEXT="Experiment: die Fallback-Anzeige (pixbuff) portieren">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#5c0099" CREATED="1746542764270" ID="ID_1879098999" MODIFIED="1747012935271" TEXT="Experiment: die Fallback-Anzeige (pixbuff) portieren">
 <icon BUILTIN="full-1"/>
 <node COLOR="#435e98" CREATED="1746630398020" ID="ID_1520924993" MODIFIED="1746635759884" TEXT="mit GTK-3 m&#xfc;ssen wir einen Pixbuf verwenden">
 <icon BUILTIN="messagebox_warning"/>
@@ -130017,11 +130021,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node COLOR="#338800" CREATED="1746635683569" ID="ID_1223394798" MODIFIED="1746635750815" TEXT="aber nun diesen direkt an das Gtk::Image geben">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1746635693567" ID="ID_315751256" MODIFIED="1746635747623" STYLE="fork">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1746635693567" FOLDED="true" ID="ID_315751256" MODIFIED="1747013234212" STYLE="fork">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Erfolg-1 : es wird <b>irgendwas angezeigt</b>
@@ -130038,56 +130040,59 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1746710300930" ID="ID_1739522299" MODIFIED="1746710317071" TEXT="trotzdem vestehe ich die Ma&#xdf;e nicht: 320px mal 2 w&#xe4;re 640"/>
 <node CREATED="1746710330318" ID="ID_1347613953" MODIFIED="1746710350055" TEXT="das Display-Panel l&#xe4;&#xdf;t sich interaktiv nicht verkleinern (nur vergr&#xf6;&#xdf;ern)"/>
 </node>
+<node COLOR="#338800" CREATED="1747012614265" ID="ID_668076631" MODIFIED="1747012685778" TEXT="konnte letztlich aufgekl&#xe4;rt werden">
+<arrowlink COLOR="#2e779b" DESTINATION="ID_1421021124" ENDARROW="Default" ENDINCLINATION="-387;-587;" ID="Arrow_ID_1012178798" STARTARROW="None" STARTINCLINATION="-286;22;"/>
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 <node COLOR="#5b280f" CREATED="1746713519060" ID="ID_1373646714" MODIFIED="1746713539641" TEXT="doch erstmal: den XV-Code untersuchen und (re)aktivieren">
 <icon BUILTIN="stop-sign"/>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746542785647" ID="ID_1968916517" MODIFIED="1746542843774" TEXT="Experiment: den XV-Code aktivieren">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#5c0099" CREATED="1746542785647" ID="ID_1968916517" MODIFIED="1747012944349" STYLE="fork" TEXT="Experiment: den XV-Code aktivieren">
+<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
 <icon BUILTIN="full-2"/>
-<node CREATED="1746718064358" ID="ID_1201089630" MODIFIED="1746718080146" TEXT="erst mal sinngem&#xe4;&#xdf; mit den neuen Widget-Parametern verdrahtet"/>
-<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1746718080949" ID="ID_1374647638" MODIFIED="1746718100295" TEXT="Erfolg-2 : die XV-Anzeige funktioniert grunds&#xe4;tzlich">
+<node CREATED="1746718064358" ID="ID_1201089630" MODIFIED="1747012941630" TEXT="erst mal sinngem&#xe4;&#xdf; mit den neuen Widget-Parametern verdrahtet"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1746718080949" ID="ID_1374647638" MODIFIED="1747012941631" TEXT="Erfolg-2 : die XV-Anzeige funktioniert grunds&#xe4;tzlich">
 <icon BUILTIN="full-2"/>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1746718103627" ID="ID_1187659462" MODIFIED="1746718152643" TEXT="...aber nur, wenn man die Maus &#xfc;ber dem Widget bewegt">
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1746718103627" ID="ID_1187659462" MODIFIED="1747012941631" TEXT="...aber nur, wenn man die Maus &#xfc;ber dem Widget bewegt">
 <icon BUILTIN="broken-line"/>
-<node CREATED="1746753368642" ID="ID_907692574" MODIFIED="1746753406105" TEXT="wenn ich einen queue_redraw() f&#xfc;r jeden put() mache, wird unten schwarz dr&#xfc;bergezeichnet"/>
-<node CREATED="1746753425155" ID="ID_893585016" MODIFIED="1746753650297" TEXT="wenn ich den schwarzen HIntergrund weglasse, ist es analog, aber mit default-Background"/>
-<node CREATED="1746753577298" ID="ID_1381345463" MODIFIED="1746753640834" TEXT="wenn ich dagegen die CLASS_background vom VideoDisplayWidget weglasse...">
-<node CREATED="1746753652389" ID="ID_1001449914" MODIFIED="1746753677932" TEXT="wird der gesamte Bereich des Display-panels nicht refreshed"/>
-<node CREATED="1746753679035" ID="ID_1957359311" MODIFIED="1746753700917" TEXT="das hei&#xdf;t: was vorher dahinter war, bleibt stehen"/>
-<node CREATED="1746753701678" ID="ID_371467731" MODIFIED="1746753713283" TEXT="aber wenn man das Fenster verschiebt, bleibt einfach M&#xfc;ll"/>
+<node CREATED="1746753368642" ID="ID_907692574" MODIFIED="1747012941631" TEXT="wenn ich einen queue_redraw() f&#xfc;r jeden put() mache, wird unten schwarz dr&#xfc;bergezeichnet"/>
+<node CREATED="1746753425155" ID="ID_893585016" MODIFIED="1747012941631" TEXT="wenn ich den schwarzen HIntergrund weglasse, ist es analog, aber mit default-Background"/>
+<node CREATED="1746753577298" ID="ID_1381345463" MODIFIED="1747012941631" TEXT="wenn ich dagegen die CLASS_background vom VideoDisplayWidget weglasse...">
+<node CREATED="1746753652389" ID="ID_1001449914" MODIFIED="1747012941631" TEXT="wird der gesamte Bereich des Display-panels nicht refreshed"/>
+<node CREATED="1746753679035" ID="ID_1957359311" MODIFIED="1747012941631" TEXT="das hei&#xdf;t: was vorher dahinter war, bleibt stehen"/>
+<node CREATED="1746753701678" ID="ID_371467731" MODIFIED="1747012941631" TEXT="aber wenn man das Fenster verschiebt, bleibt einfach M&#xfc;ll"/>
 </node>
-<node CREATED="1746753406837" ID="ID_458597358" MODIFIED="1746753420111" TEXT="aber das Video updatet nur, wenn die Maus bewegt wird"/>
-<node CREATED="1746753723320" ID="ID_1317517051" MODIFIED="1746753739591" TEXT="und zwar egal wo, es mu&#xdf; nur im Bereich des Lumiera-Fenster sein"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1746757140958" ID="ID_1593531865" MODIFIED="1746757194999" TEXT="hier fehlt uns Wissen &#xfc;ber die Schnittstelle">
+<node CREATED="1746753406837" ID="ID_458597358" MODIFIED="1747012941631" TEXT="aber das Video updatet nur, wenn die Maus bewegt wird"/>
+<node CREATED="1746753723320" ID="ID_1317517051" MODIFIED="1747012941631" TEXT="und zwar egal wo, es mu&#xdf; nur im Bereich des Lumiera-Fenster sein"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1746757140958" ID="ID_1593531865" MODIFIED="1747012941631" TEXT="hier fehlt uns Wissen &#xfc;ber die Schnittstelle">
 <arrowlink COLOR="#b70f3e" DESTINATION="ID_1411409809" ENDARROW="Default" ENDINCLINATION="58;-133;" ID="Arrow_ID_1129084559" STARTARROW="None" STARTINCLINATION="-188;12;"/>
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#330f69" CREATED="1746718116512" ID="ID_415171245" MODIFIED="1746756819258" TEXT="und die H&#xf6;he der Dekoration ist auch nicht korrekt eingerechnet">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#330f69" CREATED="1746718116512" FOLDED="true" ID="ID_415171245" MODIFIED="1747013242960" TEXT="und die H&#xf6;he der Dekoration ist auch nicht korrekt eingerechnet">
 <icon BUILTIN="broken-line"/>
-<node CREATED="1746753745775" ID="ID_1490197751" MODIFIED="1746753762431" TEXT="genauer: es wird wohl das ganze XWindow als Koordinaten-Basis genommen">
-<node CREATED="1746756246859" ID="ID_948265923" MODIFIED="1746756278756" TEXT="&#x27f9; man m&#xfc;&#xdf;te die Allokation des eigentlichen Image-Widgets mit ber&#xfc;cksichtigen"/>
-<node CREATED="1746756291194" ID="ID_808564158" LINK="https://web.archive.org/web/20210306120056/https://developer.gnome.org/gtkmm/3.22/classGtk_1_1Widget.html#a67a286b9da91a83ee6016b479dad2341" MODIFIED="1746756310394" TEXT="Gtk::Widget::getAllocation">
-<node CREATED="1746756337943" ID="ID_956508739" MODIFIED="1746756339042" TEXT="typedef Gdk::Rectangle Gtk::Allocation"/>
-<node COLOR="#338800" CREATED="1746756776005" ID="ID_1382536900" MODIFIED="1746756792366" TEXT="Offset des Widgets in das Video-Display mitber&#xfc;cksichtigen">
+<node CREATED="1746753745775" ID="ID_1490197751" MODIFIED="1747012941631" TEXT="genauer: es wird wohl das ganze XWindow als Koordinaten-Basis genommen">
+<node CREATED="1746756246859" ID="ID_948265923" MODIFIED="1747012941631" TEXT="&#x27f9; man m&#xfc;&#xdf;te die Allokation des eigentlichen Image-Widgets mit ber&#xfc;cksichtigen"/>
+<node CREATED="1746756291194" ID="ID_808564158" LINK="https://web.archive.org/web/20210306120056/https://developer.gnome.org/gtkmm/3.22/classGtk_1_1Widget.html#a67a286b9da91a83ee6016b479dad2341" MODIFIED="1747012941631" TEXT="Gtk::Widget::getAllocation">
+<node CREATED="1746756337943" ID="ID_956508739" MODIFIED="1747012941631" TEXT="typedef Gdk::Rectangle Gtk::Allocation"/>
+<node COLOR="#338800" CREATED="1746756776005" ID="ID_1382536900" MODIFIED="1747012941631" TEXT="Offset des Widgets in das Video-Display mitber&#xfc;cksichtigen">
 <icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#435e98" CREATED="1746756918061" ID="ID_1884149717" MODIFIED="1746756934352" TEXT="kaum macht man&apos;s richtig, schon funktionierts">
+<node COLOR="#435e98" CREATED="1746756918061" ID="ID_1884149717" MODIFIED="1747012941631" TEXT="kaum macht man&apos;s richtig, schon funktionierts">
 <font NAME="SansSerif" SIZE="7"/>
 </node>
 </node>
 </node>
-<node CREATED="1746756014267" ID="ID_444628176" MODIFIED="1746756032086" TEXT="und es wird f&#xfc;r das gesamte XWindow die Compositing-Strategie angewendet">
-<node CREATED="1746756054837" ID="ID_1371798971" MODIFIED="1746756061608" TEXT="wir setzen das Port-Attribute"/>
-<node CREATED="1746756062309" ID="ID_1479032515" MODIFIED="1746756081453" TEXT="ich deute das so, da&#xdf; dieser Code ein Compositing per Color-Key macht"/>
-<node CREATED="1746756083857" ID="ID_80824487" MODIFIED="1746756106802" TEXT="das w&#xe4;re die einfachste (uralt)-Methode, auf die XV stets zur&#xfc;ckfallen kann"/>
-<node CREATED="1746756107974" ID="ID_34298329" MODIFIED="1746756233195" TEXT="zus&#xe4;tzlich kann XV mit einem Compositor verwendet werden (glaub ich)">
+<node CREATED="1746756014267" ID="ID_444628176" MODIFIED="1747012941631" TEXT="und es wird f&#xfc;r das gesamte XWindow die Compositing-Strategie angewendet">
+<node CREATED="1746756054837" ID="ID_1371798971" MODIFIED="1747012941631" TEXT="wir setzen das Port-Attribute"/>
+<node CREATED="1746756062309" ID="ID_1479032515" MODIFIED="1747012941631" TEXT="ich deute das so, da&#xdf; dieser Code ein Compositing per Color-Key macht"/>
+<node CREATED="1746756083857" ID="ID_80824487" MODIFIED="1747012941631" TEXT="das w&#xe4;re die einfachste (uralt)-Methode, auf die XV stets zur&#xfc;ckfallen kann"/>
+<node CREATED="1746756107974" ID="ID_34298329" MODIFIED="1747012941631" TEXT="zus&#xe4;tzlich kann XV mit einem Compositor verwendet werden (glaub ich)">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       beziehe mich hier per Ged&#228;chtnis auf Sachverhalte, die ich irgenwann irgendwo mal gelesen habe; demnach kann XV mit irgend einer Art von &#187;Compositor&#171; zusammenarbeiten, notfalls aber seine sichtbare (clipping)-Region auch per Colour-Key herausfinden; dabei geht es um die Frage, welcher Teil des Videobildes tats&#228;chlich auf dem Desktop zu sehen ist, denn das Fenster k&#246;nnte partiell verdeckt sein
@@ -130096,45 +130101,71 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html>
 </richcontent>
 </node>
-<node BACKGROUND_COLOR="#dda58c" COLOR="#5b280f" CREATED="1746756832085" ID="ID_853235588" MODIFIED="1746757025215" TEXT="&#x27f9; in den Grenzen dieses Demo-Codes nicht reparierbar">
+<node BACKGROUND_COLOR="#dda58c" COLOR="#5b280f" CREATED="1746756832085" ID="ID_853235588" MODIFIED="1747012941631" TEXT="&#x27f9; in den Grenzen dieses Demo-Codes nicht reparierbar">
 <arrowlink COLOR="#db2739" DESTINATION="ID_682377255" ENDARROW="Default" ENDINCLINATION="179;8;" ID="Arrow_ID_438825790" STARTARROW="None" STARTINCLINATION="-4;66;"/>
 <icon BUILTIN="button_cancel"/>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1746718129879" ID="ID_1760604400" MODIFIED="1746718147158" TEXT="und eine sonderbare durchsichtige Zone ist im GUI">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1746718129879" ID="ID_1760604400" MODIFIED="1747012941631" TEXT="und eine sonderbare durchsichtige Zone ist im GUI">
 <icon BUILTIN="messagebox_warning"/>
-<node CREATED="1746753315931" ID="ID_1431535426" MODIFIED="1746753343029" TEXT="diese umfa&#xdf;t die Kopfzeile des Docking-Pannel"/>
-<node CREATED="1746753343975" ID="ID_1196127587" MODIFIED="1746753362511" TEXT="die Video-Anzeige beginnt ebenfalls in der Kopfzeile"/>
-<node CREATED="1746756947014" ID="ID_716643169" MODIFIED="1746756974526" TEXT="Deutung">
-<node CREATED="1746756975402" ID="ID_682377255" MODIFIED="1746757016772" TEXT="wir verwenden Colour-Keying auf dem ganzen zugeordneten XWindow">
+<node CREATED="1746753315931" ID="ID_1431535426" MODIFIED="1747012941632" TEXT="diese umfa&#xdf;t die Kopfzeile des Docking-Pannel"/>
+<node CREATED="1746753343975" ID="ID_1196127587" MODIFIED="1747012941632" TEXT="die Video-Anzeige beginnt ebenfalls in der Kopfzeile"/>
+<node CREATED="1746756947014" ID="ID_716643169" MODIFIED="1747012941632" TEXT="Deutung">
+<node CREATED="1746756975402" ID="ID_682377255" MODIFIED="1747012941632" TEXT="wir verwenden Colour-Keying auf dem ganzen zugeordneten XWindow">
 <linktarget COLOR="#db2739" DESTINATION="ID_682377255" ENDARROW="Default" ENDINCLINATION="179;8;" ID="Arrow_ID_438825790" SOURCE="ID_853235588" STARTARROW="None" STARTINCLINATION="-4;66;"/>
 </node>
-<node CREATED="1746756977623" ID="ID_1960782604" MODIFIED="1746757001777" TEXT="und da das Dock beweglich ist, verwendet es wohl ein eigenes XWindow"/>
+<node CREATED="1746756977623" ID="ID_1960782604" MODIFIED="1747012941632" TEXT="und da das Dock beweglich ist, verwendet es wohl ein eigenes XWindow"/>
 </node>
 </node>
-<node CREATED="1746757051600" ID="ID_1411409809" MODIFIED="1746757194999" TEXT="Einsch&#xe4;tzung">
+<node CREATED="1746757051600" ID="ID_1411409809" MODIFIED="1747012941632" TEXT="Einsch&#xe4;tzung">
 <linktarget COLOR="#b70f3e" DESTINATION="ID_1411409809" ENDARROW="Default" ENDINCLINATION="58;-133;" ID="Arrow_ID_1129084559" SOURCE="ID_1593531865" STARTARROW="None" STARTINCLINATION="-188;12;"/>
-<node CREATED="1746757057796" ID="ID_1825980418" MODIFIED="1746757071675" TEXT="an diesem Code ist viele unflexibel und hart codiert"/>
-<node CREATED="1746757072453" ID="ID_1065119380" MODIFIED="1746757089585" TEXT="f&#xfc;r einen zuverl&#xe4;ssigeren XV-Displayer m&#xfc;ssen wir die Formate verstehen"/>
-<node CREATED="1746757090333" ID="ID_11791207" MODIFIED="1746757103652" TEXT="sowie das Thema Clipping/Keying/Compositing"/>
+<node CREATED="1746757057796" ID="ID_1825980418" MODIFIED="1747012941632" TEXT="an diesem Code ist viele unflexibel und hart codiert"/>
+<node CREATED="1746757072453" ID="ID_1065119380" MODIFIED="1747012941632" TEXT="f&#xfc;r einen zuverl&#xe4;ssigeren XV-Displayer m&#xfc;ssen wir die Formate verstehen"/>
+<node CREATED="1746757090333" ID="ID_11791207" MODIFIED="1747012941632" TEXT="sowie das Thema Clipping/Keying/Compositing"/>
 </node>
 </node>
 </node>
-<node CREATED="1746893065718" ID="ID_1080057772" MODIFIED="1746893077566" TEXT="Mehr Flexibilit&#xe4;t f&#xfc;r das Pixelformat">
+<node COLOR="#338800" CREATED="1746893065718" ID="ID_1080057772" MODIFIED="1747012952196" TEXT="Mehr Flexibilit&#xe4;t f&#xfc;r das Pixelformat">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1746893079288" ID="ID_1996986668" MODIFIED="1746893093648" TEXT="schon die bestehenden Ans&#xe4;tze sind nicht kompatibel">
 <node CREATED="1746893095388" ID="ID_542989222" MODIFIED="1746893119924" TEXT="der XV-Code verwendet &#xbb;Yuv&#xab;"/>
 <node CREATED="1746893120700" ID="ID_150794172" MODIFIED="1746893135491" TEXT="der pixbuf-Ansatz braucht RGB-Pixel"/>
 </node>
-<node CREATED="1746893143163" ID="ID_728521523" MODIFIED="1746893170062" TEXT="brauche Mechanismus zur Format-Bestimmung"/>
-<node CREATED="1746893172426" ID="ID_252885347" MODIFIED="1746893188715" TEXT="Image-Generator soll mehrere Formate unterst&#xfc;tzen">
-<node CREATED="1746896060805" ID="ID_307284442" MODIFIED="1746896067887" TEXT="welche sind konkret bekannt?">
+<node COLOR="#5b280f" CREATED="1746893143163" ID="ID_728521523" MODIFIED="1747012901592" TEXT="brauche Mechanismus zur Format-Bestimmung">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1747012837462" ID="ID_91647932" MODIFIED="1747012861006" TEXT="das ist eigentlich ein l&#xe4;ngerfristiges Thema">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...und geh&#246;rt in einen dedizierten OutputManager
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1747012862178" ID="ID_1494657487" MODIFIED="1747012907629" TEXT="kurzfristig mu&#xdf; ich den DemoImageGenerator umschaltbar machen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      er rechnet ja ohnehin zun&#228;chst in RGB, und macht dann eine YUV-Konvertierung
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1746893172426" ID="ID_252885347" MODIFIED="1747012826665" TEXT="Image-Generator soll mehrere Formate unterst&#xfc;tzen">
+<icon BUILTIN="yes"/>
+<node CREATED="1746896060805" ID="ID_307284442" MODIFIED="1747013260678" TEXT="welche sind konkret bekannt?">
+<icon BUILTIN="info"/>
 <node CREATED="1746896069943" ID="ID_1946006105" MODIFIED="1746896077179" TEXT="Gdk::Pixbuf">
 <node CREATED="1746896096808" ID="ID_1859341105" LINK="https://gnome.pages.gitlab.gnome.org/gtkmm/classGdk_1_1Pixbuf.html#a5611379f1b3fd308cef781c2ed7ec9a7" MODIFIED="1746896111367" TEXT="API-Doc">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Tip: suche nach &quot;image data&quot;
@@ -130160,7 +130191,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node COLOR="#5b280f" CREATED="1746896775753" ID="ID_522887084" MODIFIED="1746896789587" TEXT="Vorsicht: auf dem Teppich bleiben">
+<node COLOR="#5b280f" CREATED="1746896775753" FOLDED="true" ID="ID_522887084" MODIFIED="1747013257489" TEXT="Vorsicht: auf dem Teppich bleiben">
 <icon BUILTIN="stop-sign"/>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1746896791415" ID="ID_299651976" MODIFIED="1746896805893" TEXT="es geht nur darum, erst mal diesen Image-Generator etwas flexibler zu machen">
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
@@ -130179,7 +130210,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1746921512647" ID="ID_1654688911" MODIFIED="1746971761434" TEXT="erster Schritt: Code reorganisieren und klarer machen">
+<node COLOR="#338800" CREATED="1746921512647" FOLDED="true" ID="ID_1654688911" MODIFIED="1747013268015" TEXT="erster Schritt: Code reorganisieren und klarer machen">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1746921531585" ID="ID_156630022" MODIFIED="1746921551379" TEXT="den double-buffering-Mechanismus von der Bildgenerierung trennen"/>
 <node COLOR="#338800" CREATED="1746921552092" ID="ID_492214837" MODIFIED="1746972188067" TEXT="die Farbraumkonvertierung als extra Schritt formulieren">
@@ -130199,9 +130230,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node COLOR="#338800" CREATED="1746921564743" ID="ID_472874597" MODIFIED="1746972240706" TEXT="umstellen auf std::array und m&#xf6;glichst Pointer durch Referenzen ersetzen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       sieht zwar nach nitpicking aus, aber da wir dann explizit per structured-Binding auf die Komponenten zugreifen, k&#246;nnte der Code etwas klarer werden
@@ -130220,9 +130249,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="forward"/>
 <node CREATED="1746936592414" ID="ID_1482938348" MODIFIED="1746936639995" TEXT="das Tripel mu&#xdf; ein byte-Array sein">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...sonst ist es nicht m&#246;glich, das als virtuellen Zugriff f&#252;r Input und Output zu verwenden
@@ -130239,6 +130266,82 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
+<node COLOR="#338800" CREATED="1747000750044" ID="ID_125512914" MODIFIED="1747012819497" TEXT="zweiter Schritt: Format flexibel steuern">
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1747000768833" FOLDED="true" ID="ID_1498756293" MODIFIED="1747013273863" TEXT="Struktur-Probleme mit der Demo">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1747000781530" ID="ID_1653583640" MODIFIED="1747000837976" TEXT="brauche jetzt Kommunikaions-Kanal: Displayer-Impl &#x27f6; Image-Generator"/>
+<node CREATED="1747000896127" ID="ID_618925489" MODIFIED="1747000929958" TEXT="die beiden sind aber zwei Schritte voneinander getrennt">
+<node CREATED="1747000933083" ID="ID_1954023440" MODIFIED="1747000945783" TEXT="Displayer sitzt im VideoDisplayWidget"/>
+<node CREATED="1747000948037" ID="ID_1743597104" MODIFIED="1747000958467" TEXT="Initialisierung findet erst on_realize() statt"/>
+<node CREATED="1747000962207" ID="ID_23465755" MODIFIED="1747001010188" TEXT="Image-Generator wird privat im DemoController gehalten"/>
+<node CREATED="1747001016367" ID="ID_1435373660" MODIFIED="1747001029293" TEXT="beide sind nur lose gekoppelt im ViwerPanel"/>
+</node>
+<node CREATED="1747001118720" ID="ID_929495266" MODIFIED="1747001136880" TEXT="(und &#xe4;rgerlicherweise ist das alles hier ohnehin provisorisch)">
+<font NAME="SansSerif" SIZE="11"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1747003964179" FOLDED="true" ID="ID_750342866" MODIFIED="1747013272551" TEXT="weiche aus auf SigC-Verdrahtung">
+<icon BUILTIN="yes"/>
+<node CREATED="1747003975952" ID="ID_19044172" MODIFIED="1747003984385" TEXT="die wird dann auch im Viewer-Panel gemacht"/>
+<node CREATED="1747004674463" ID="ID_760778116" MODIFIED="1747004722988" TEXT="das ist eine bidirektionale Verdrahtung">
+<node CREATED="1747004738415" ID="ID_1291491218" MODIFIED="1747004754030" TEXT="Format: Displayer &#x27f6; Image-Gen"/>
+<node CREATED="1747004755380" ID="ID_1662160080" MODIFIED="1747004807890" TEXT="Frame: Tick &#x27f6; VideoWidget"/>
+</node>
+<node CREATED="1747004810989" ID="ID_1579511913" MODIFIED="1747004842551" TEXT="in beide Richtungen mu&#xdf; der Slot auf einem Sigc::trackable sitzen">
+<icon BUILTIN="messagebox_warning"/>
+<node COLOR="#338800" CREATED="1747004849016" ID="ID_1567538556" MODIFIED="1747008006029" TEXT="DemoController davon ableiten">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1747004863158" ID="ID_1897255553" MODIFIED="1747004905112" TEXT="in beide Richtungen gibt es eine Delegation">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...was jetzt einfach an dem Test-Setup liegt, in dem die Komponenten nochmal gewrapped sind
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1747006403724" ID="ID_160039328" MODIFIED="1747006427854" TEXT="Arrrgh &#x2014; es will einfach nicht passen">
+<icon BUILTIN="smily_bad"/>
+<node CREATED="1747006429062" ID="ID_1359665843" MODIFIED="1747006455751" TEXT="jetzt m&#xfc;ssen alle Beteiligten Seiten ein gemeinsames Enum kennen"/>
+<node CREATED="1747006459962" ID="ID_135808836" MODIFIED="1747006478883" TEXT="aber ich wollte doch die Komponenten entkoppelt lassen"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#c0111a" CREATED="1747006490342" ID="ID_1993838979" MODIFIED="1747007988861" TEXT="Augen zu und durch &#x2014; es ist ein Prototyp !!!">
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#434570" CREATED="1747006552420" ID="ID_1329008862" MODIFIED="1747007999227" TEXT="dann wenigstens nach include/display-handles.h">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1747012516633" ID="ID_220969951" MODIFIED="1747012533243" TEXT="danach f&#xfc;hre ich eine einfache Flag ein: useRGB">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1747012541729" ID="ID_1576440995" MODIFIED="1747012553716" TEXT="in dem Fall brauchen wir keinen Arbeitspuffer"/>
+<node CREATED="1747012556550" ID="ID_1798327648" MODIFIED="1747012567403" TEXT="und die YUV-Konvertierung kann &#xfc;bersprungen werden"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1747012631806" ID="ID_1421021124" MODIFIED="1747012673686" TEXT="Anzeige im PixbufDisplayer funktionert nun ebenfalls">
+<linktarget COLOR="#2e779b" DESTINATION="ID_1421021124" ENDARROW="Default" ENDINCLINATION="-387;-587;" ID="Arrow_ID_1012178798" SOURCE="ID_668076631" STARTARROW="None" STARTINCLINATION="-286;22;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1747012697750" ID="ID_551718865" MODIFIED="1747012759241" TEXT="die Anzeige mit packed-RGB-Bytes ist nun korrekt"/>
+<node CREATED="1747012759963" ID="ID_477966291" MODIFIED="1747012775399" TEXT="es funktioniert auch mit einem minimal kleinen Fenster"/>
+<node CREATED="1747012777339" ID="ID_798177962" MODIFIED="1747012805870" TEXT="verstanden: sobald mal ein Pixbuf gesetzt ist, l&#xe4;&#xdf;t sich das Gtk::Img nicht mehr verkleinern">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#504398" CREATED="1747012989918" ID="ID_1944900255" MODIFIED="1747013089654" TEXT="Zwischenfazit">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="forward"/>
+<node COLOR="#435e98" CREATED="1747013068485" ID="ID_51924925" MODIFIED="1747013077621" TEXT="Anzeige funktioniert wieder"/>
+<node COLOR="#435e98" CREATED="1747012995571" ID="ID_850186760" MODIFIED="1747013077621" TEXT="die GTK-3 - bezogenen Themen waren allesamt l&#xf6;sbar"/>
+<node COLOR="#435e98" CREATED="1747013009348" ID="ID_927829887" MODIFIED="1747013077620" TEXT="es zeichnet sich ein Setup ab, bei dem ein Gtk::Image als Arbeitsfl&#xe4;che verwendet wird"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1747013032931" ID="ID_1133235749" MODIFIED="1747013064504" TEXT="nun ist vor allem mehr Verst&#xe4;ndnis des XV-Standards von N&#xf6;ten">
+<icon BUILTIN="yes"/>
 </node>
 </node>
 </node>
@@ -130253,9 +130356,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1746895975163" ID="ID_517417723" MODIFIED="1746895985954" TEXT="damit ist die Komplexit&#xe4;t im Build-System"/>
 <node CREATED="1746895987890" ID="ID_367836628" MODIFIED="1746896041287" TEXT="mu&#xdf; aber auch an die Paketierung denken">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...denn sonst endet man doch wieder mit z.B. einem Debian-Paket, das <i>build-depends on the world of media processing</i>
@@ -130276,9 +130377,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1746895758448" ID="ID_712745956" MODIFIED="1746895768232" TEXT="man mu&#xdf; daf&#xfc;r auch eine Render-Pipeline konstruieren k&#xf6;nnen"/>
 <node CREATED="1746895772998" ID="ID_691651282" MODIFIED="1746895845873" TEXT="die Technologie mu&#xdf; aber auch konkret aktivierbar sein">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       sie k&#246;nnte zwar im System installiert und vorhanden sein, aber nicht richtig konfiguriert, vielleicht &#252;berhaupt nie nutzbar sein, oder aber derzeit grade nicht nutzbar (weil eine externe Verbindung oder Ressource fehlt)
@@ -142480,7 +142579,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1703798050746" ID="ID_339326725" MODIFIED="1731712947664" TEXT="Scheduler-Stre&#xdf;tests">
+<node COLOR="#338800" CREATED="1703798050746" ID="ID_339326725" MODIFIED="1747013115839" TEXT="Scheduler-Stre&#xdf;tests">
 <linktarget COLOR="#33a090" DESTINATION="ID_339326725" ENDARROW="Default" ENDINCLINATION="224;-1281;" ID="Arrow_ID_1171977868" SOURCE="ID_1032000470" STARTARROW="None" STARTINCLINATION="1205;67;"/>
 <font NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="button_ok"/>

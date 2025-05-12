@@ -59,6 +59,7 @@ class PixbufDisplayer
      */
     PixbufDisplayer (Gtk::Image& drawing_area, uint width, uint height );
     
+  private:
     /**
      * Put an image of a given width and height with the expected input
      * format (as indicated by the format method).
@@ -66,10 +67,12 @@ class PixbufDisplayer
      */
     void put (void* const image);
     
-  protected:
     bool usable()  override;
     
-  private:
+    DisplayerInput format() override
+      {
+        return lumiera::DISPLAY_RGB;
+      }
   };
   
   

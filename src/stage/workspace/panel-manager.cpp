@@ -74,7 +74,7 @@ namespace workspace {
       ///////////////////////////////////////////////////////TICKET #172 : observed as a reason for crashes when closing the GUI. It was invoked after end of main, when the GUI as already gone.
     
 #if false ///////////////////////////////////////////////////TICKET #937 : disabled for GTK-3 transition. TODO investigate why this logic existed...    
-      ///////////////////////////////////////////////////////TICKET #1027
+      ///////////////////////////////////////////////////////TICKET #1027: but now the destructors of components attached to docking panel are not invoked any more !!
     for(int i = 0; i < 4; i++)
       if(dockPlaceholders_[i])
         g_object_unref(dockPlaceholders_[i]);

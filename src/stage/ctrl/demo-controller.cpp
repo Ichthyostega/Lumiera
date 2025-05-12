@@ -37,17 +37,28 @@ namespace ctrl {
   using std::make_unique;
   using steam::node::TickService;
   using steam::node::DummyImageGenerator;
+  using lumiera::DisplayerInput;
   
   
-  DemoController::DemoController(FrameSink outputSink)
+  DemoController::DemoController()
     : imageGen_{make_unique<DummyImageGenerator>(FPS)}
     , tick_{}
-    , output_{std::move (outputSink)}
+    , output_{}
     , playing_{false}
     { }
   
   DemoController::~DemoController() { stop(); }
   
+  /** Signal slot to be called after the output window was created
+   *  and the actually usable video display technology has been determined.
+   * @param displayFormat format for the frames expected in the passed image buffer.
+   */
+  void
+  DemoController::activate (lumiera::DisplayerInput displayFormat)
+  {
+    REQUIRE (imageGen_);
+    imageGen_->configure (displayFormat);
+  }
   
   void
   DemoController::processFrame()

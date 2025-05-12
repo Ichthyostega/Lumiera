@@ -28,19 +28,12 @@
 
 
 #include "lib/nocopy.hpp"
+#include "include/display-handles.h"
 
 namespace stage {
 namespace output {
   
-  /** Supported Displayer formats */
-  enum DisplayerInput {
-      DISPLAY_NONE,
-      DISPLAY_YUV,
-      DISPLAY_RGB,
-      DISPLAY_BGR,
-      DISPLAY_BGR0,
-      DISPLAY_RGB16
-    };
+  using lumiera::DisplayerInput;
   
   
   /**

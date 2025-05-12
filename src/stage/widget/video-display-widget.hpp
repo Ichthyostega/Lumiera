@@ -32,6 +32,7 @@ namespace stage {
 namespace widget {
   
   using stage::output::Displayer;
+  using lumiera::DisplayerInput;
   
   
   /**
@@ -48,8 +49,11 @@ namespace widget {
     public:
       VideoDisplayWidget();
       
+      /** signal slot to display the next frame */
       void pushFrame (void* const);
       
+      /** signal to configure the image generation format */
+      sigc::signal<void(DisplayerInput)> signal_activate;
       
     private:
       virtual void on_realize()  override;

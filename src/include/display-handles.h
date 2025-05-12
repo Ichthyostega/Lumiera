@@ -14,6 +14,9 @@
 /** @file display-handles.h
  ** Opaque handles and similar typedefs used to communicate via the
  ** lumiera::Display and lumiera::DummyPlayer facade interfaces.
+ ** 
+ ** @deprecated this is part of prototyping code; as of 5/2025 it is clear
+ **   that we will not use any of these interface schemes (yet something similar)
  **
  ** @see stage::DisplayService
  ** 
@@ -43,4 +46,18 @@ typedef struct lumiera_playprocess_struct lumiera_playprocess;
 typedef lumiera_playprocess* LumieraPlayProcess;
 
 
-#endif
+#ifdef __cplusplus
+namespace lumiera {
+
+  /** Supported Displayer formats */
+  enum DisplayerInput {
+      DISPLAY_NONE,
+      DISPLAY_YUV,
+      DISPLAY_RGB,
+      DISPLAY_BGR,
+      DISPLAY_BGR0,
+      DISPLAY_RGB16
+    };
+} // namespace lumiera
+#endif /*__cplusplus*/
+#endif /*LUMIERA_DISPLAY_HANDLES_H*/
