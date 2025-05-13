@@ -20,7 +20,7 @@
 
 
 #include "stage/ctrl/demo-controller.hpp"
-#include "steam/engine/worker/tick-service.hpp"
+#include "steam/engine/worker/dummy-tick-service.hpp"
 #include "steam/engine/worker/dummy-image-generator.hpp"
 
 #include <utility>
@@ -35,7 +35,7 @@ namespace ctrl {
   }
   
   using std::make_unique;
-  using steam::node::TickService;
+  using steam::node::DummyTickService;
   using steam::node::DummyImageGenerator;
   using lumiera::DisplayerInput;
   
@@ -77,7 +77,7 @@ namespace ctrl {
   DemoController::play()
   {
     if (not tick_)
-        tick_.reset (new TickService{[this]{ processFrame(); }});
+        tick_.reset (new DummyTickService{[this]{ processFrame(); }});
     ASSERT (tick_);
     tick_->activate (FPS);
     playing_ = true;

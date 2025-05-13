@@ -32,23 +32,6 @@
 
 
 namespace stage {
-  ///////////////////////////////////////////////////////////////////////////////////TICKET #959 : scheduled for termination....
-namespace controller {
-    
-  Controller::Controller (model::Project& modelProject)
-    : project_(modelProject)
-    , playback_()
-    { }
-  
-  
-  
-  ctrl::PlayerController& Controller::get_playback_controller()
-  {
-    return playback_;
-  }
-  
-}// namespace stage::controller
-  ///////////////////////////////////////////////////////////////////////////////////TICKET #959 : scheduled for termination....
   
   
   UiBus::UiBus()

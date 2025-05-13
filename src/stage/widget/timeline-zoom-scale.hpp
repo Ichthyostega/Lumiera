@@ -29,7 +29,6 @@
 
 #include "stage/gtk-base.hpp"
 #include "stage/widget/mini-button.hpp"
-//#include "stage/widget/timeline-widget.hpp"  //////////////////////////////////////////////////////////////TODO old GTK-2 UI is defunct (3/23)
 #include "stage/widget/timeline/timeline-state.hpp"
 
 using namespace Gtk;         ////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!

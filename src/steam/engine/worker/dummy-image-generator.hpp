@@ -32,8 +32,7 @@
 
 
 #include "lib/error.hpp"
-#include "include/display-facade.h"
-#include "include/display-handles.h"
+#include "include/display-handles.hpp"
 
 
 #include <array>

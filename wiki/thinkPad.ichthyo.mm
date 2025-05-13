@@ -130098,8 +130098,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       beziehe mich hier per Ged&#228;chtnis auf Sachverhalte, die ich irgenwann irgendwo mal gelesen habe; demnach kann XV mit irgend einer Art von &#187;Compositor&#171; zusammenarbeiten, notfalls aber seine sichtbare (clipping)-Region auch per Colour-Key herausfinden; dabei geht es um die Frage, welcher Teil des Videobildes tats&#228;chlich auf dem Desktop zu sehen ist, denn das Fenster k&#246;nnte partiell verdeckt sein
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node BACKGROUND_COLOR="#dda58c" COLOR="#5b280f" CREATED="1746756832085" ID="ID_853235588" MODIFIED="1747012941631" TEXT="&#x27f9; in den Grenzen dieses Demo-Codes nicht reparierbar">
 <arrowlink COLOR="#db2739" DESTINATION="ID_682377255" ENDARROW="Default" ENDINCLINATION="179;8;" ID="Arrow_ID_438825790" STARTARROW="None" STARTINCLINATION="-4;66;"/>
@@ -130142,8 +130141,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       ...und geh&#246;rt in einen dedizierten OutputManager
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1747012862178" ID="ID_1494657487" MODIFIED="1747012907629" TEXT="kurzfristig mu&#xdf; ich den DemoImageGenerator umschaltbar machen">
 <richcontent TYPE="NOTE"><html>
@@ -130153,8 +130151,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       er rechnet ja ohnehin zun&#228;chst in RGB, und macht dann eine YUV-Konvertierung
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
 </node>
@@ -130171,8 +130168,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       Tip: suche nach &quot;image data&quot;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1746896115704" ID="ID_830630093" MODIFIED="1746896127222" TEXT="Beschreibung nicht ganz klar wegen Alpha"/>
 <node CREATED="1746896128024" ID="ID_1425663830" MODIFIED="1746896136962" TEXT="deute es so: es gibt zwei Varianten">
@@ -130236,8 +130232,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       sieht zwar nach nitpicking aus, aber da wir dann explizit per structured-Binding auf die Komponenten zugreifen, k&#246;nnte der Code etwas klarer werden
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#435e98" CREATED="1746929669548" ID="ID_485365336" MODIFIED="1746936730029" TEXT="tja... compiliert aber das Ausgabeformat stimmt nicht">
@@ -130255,8 +130250,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       ...sonst ist es nicht m&#246;glich, das als virtuellen Zugriff f&#252;r Input und Output zu verwenden
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1746936646298" ID="ID_86296092" MODIFIED="1746936667952" TEXT="die 2-Pixel-Schritte hab ich bereits in die Schleifenvariable genommen"/>
 </node>
@@ -130301,8 +130295,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       ...was jetzt einfach an dem Test-Setup liegt, in dem die Komponenten nochmal gewrapped sind
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1747006403724" ID="ID_160039328" MODIFIED="1747006427854" TEXT="Arrrgh &#x2014; es will einfach nicht passen">
@@ -130362,8 +130355,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       ...denn sonst endet man doch wieder mit z.B. einem Debian-Paket, das <i>build-depends on the world of media processing</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1746893907208" ID="ID_273417317" MODIFIED="1746893913676" TEXT="Initialisierung des Playback">
@@ -130383,8 +130375,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       sie k&#246;nnte zwar im System installiert und vorhanden sein, aber nicht richtig konfiguriert, vielleicht &#252;berhaupt nie nutzbar sein, oder aber derzeit grade nicht nutzbar (weil eine externe Verbindung oder Ressource fehlt)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1746895729204" ID="ID_677582239" MODIFIED="1746895739484" TEXT="Caching und Abk&#xfc;rzungen"/>
@@ -162395,7 +162386,8 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1742175967881" ID="ID_1117969598" MODIFIED="1742175981193" TEXT="Recherche: Basis-Infos zu XV"/>
-<node CREATED="1746053053337" ID="ID_385901530" MODIFIED="1746053077036" TEXT="Reste vom alten Video-Widget beurteilen">
+<node COLOR="#435e98" CREATED="1746053053337" FOLDED="true" ID="ID_385901530" MODIFIED="1747179141231" TEXT="Reste vom alten Video-Widget beurteilen">
+<icon BUILTIN="info"/>
 <node CREATED="1742175946044" ID="ID_114770740" MODIFIED="1746053104281" TEXT="Lib-Dependencies">
 <node CREATED="1746053105247" ID="ID_1243539235" MODIFIED="1746053166039" TEXT="der eigentliche XV-Code ist vollst&#xe4;ndig">
 <richcontent TYPE="NOTE"><html>
@@ -162549,12 +162541,12 @@ Since then others have made contributions, see the log for the history.</font></
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1746059010720" ID="ID_431781822" MODIFIED="1746059029328" TEXT="es m&#xfc;&#xdf;ten nur wenige Teile (einfach) nach GTK-3 portiert werden">
+<node COLOR="#435e98" CREATED="1746059010720" ID="ID_431781822" MODIFIED="1747179152638" TEXT="es m&#xfc;&#xdf;ten nur wenige Teile (einfach) nach GTK-3 portiert werden">
 <node CREATED="1746059031084" ID="ID_752582525" MODIFIED="1746059039703" TEXT="das VideoDisplayWidget"/>
 <node CREATED="1746059048115" ID="ID_269648070" MODIFIED="1746059068296" TEXT="das ViewerPannel m&#xfc;&#xdf;te man wieder reparieren"/>
 <node CREATED="1746059563342" ID="ID_1477952429" MODIFIED="1746059586582" TEXT="eigentlich einfach neu implementieren, nach GTK-Tutorial"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1746059132520" ID="ID_1219347509" MODIFIED="1746226359001" TEXT="Hilfsprojekt: Funktionsf&#xe4;higkeit validieren">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1746059132520" ID="ID_1219347509" MODIFIED="1747179061138" TEXT="Hilfsprojekt: Funktionsf&#xe4;higkeit validieren">
 <arrowlink COLOR="#fefeb4" DESTINATION="ID_1819581335" ENDARROW="Default" ENDINCLINATION="-2783;152;" ID="Arrow_ID_1160980366" STARTARROW="None" STARTINCLINATION="-4870;297;"/>
 <icon BUILTIN="yes"/>
 <node COLOR="#5b280f" CREATED="1746059159380" ID="ID_56657133" MODIFIED="1746059884614" TEXT="es g&#xe4;be noch den DummyPlayer">
@@ -162573,7 +162565,7 @@ Since then others have made contributions, see the log for the history.</font></
 </html></richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1746059388997" ID="ID_1757013848" MODIFIED="1746059905577">
+<node BACKGROUND_COLOR="#dcd3ac" COLOR="#435e98" CREATED="1746059388997" ID="ID_1757013848" MODIFIED="1747179047215">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
@@ -162593,8 +162585,20 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 <node CREATED="1746059640388" ID="ID_1149968188" MODIFIED="1746059644047" TEXT="danach...">
-<node CREATED="1746059645095" ID="ID_1095537094" MODIFIED="1746059662007" TEXT="steht fest: wir k&#xf6;nnen / k&#xf6;nnen nicht Video anzeigen"/>
-<node CREATED="1746059663185" ID="ID_473345546" MODIFIED="1746059697070" TEXT="kann der ganze DummyPlayer entfernt werden"/>
+<node COLOR="#435e98" CREATED="1746059645095" ID="ID_1095537094" MODIFIED="1747179092024">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      steht fest: <i>wir k&#246;nnen Video anzeigen</i>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#338800" CREATED="1746059663185" ID="ID_473345546" MODIFIED="1747182536693" TEXT="kann der ganze DummyPlayer entfernt werden">
+<icon BUILTIN="button_ok"/>
+</node>
 <node CREATED="1746059700212" ID="ID_191158269" MODIFIED="1746059710934" TEXT="k&#xf6;nnte auch gleich die alte Timeline mit entfernt werden"/>
 </node>
 </node>
@@ -162640,6 +162644,9 @@ Since then others have made contributions, see the log for the history.</font></
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1744756270441" ID="ID_831819953" LINK="https://issues.lumiera.org/ticket/473" MODIFIED="1746059845274" TEXT="RefArray und ScopedHolder m&#xfc;ssen jetzt wirklich mal weg">
 <arrowlink COLOR="#fd26d0" DESTINATION="ID_1135941103" ENDARROW="Default" ENDINCLINATION="-1048;89;" ID="Arrow_ID_1050531240" STARTARROW="None" STARTINCLINATION="-1120;-23;"/>
 <icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1747180091430" ID="ID_202566672" MODIFIED="1747180099934" TEXT="was ist mit ScopedPtrvect?">
+<icon BUILTIN="help"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1742175299968" ID="ID_1393531242" MODIFIED="1742175305316" TEXT="C++20">

@@ -1,5 +1,5 @@
 /*
-  TICK-SERVICE.hpp  -  issuing timed callbacks
+  DUMMY-TICK-SERVICE.hpp  -  issuing timed callbacks
 
    Copyright (C)
     2009,               Joel Holdsworth <joel@airwebreathe.org.uk>,
@@ -12,7 +12,7 @@
 
 */
 
-/** @file tick-service.hpp
+/** @file dummy-tick-service.hpp
  ** A timer service invoking a given callback periodically.
  ** This is a rough preliminary implementation as of 1/2009. We use it to
  ** drive the frame "creation" of a player dummy (the render engine is not 
@@ -25,8 +25,8 @@
  */
 
 
-#ifndef STEAM_PLAY_TICKSERVICE_H
-#define STEAM_PLAY_TICKSERVICE_H
+#ifndef STEAM_PLAY_DUMMY_TICK_SERVICE_H
+#define STEAM_PLAY_DUMMY_TICK_SERVICE_H
 
 
 #include "lib/error.hpp"
@@ -51,7 +51,7 @@ namespace node {
    * Tick generating service for a periodic callback,
    * with adjustable frequency. Quick'n dirty implementation!
    */
-  class TickService
+  class DummyTickService
     : lib::ThreadJoinable<>
     {
       typedef function<void(void)> Tick;
@@ -61,23 +61,23 @@ namespace node {
       static const uint POLL_TIMEOUT = 10000;
       
     public:
-      TickService (Tick callback)
+      DummyTickService (Tick callback)
         : ThreadJoinable("Tick generator (dummy)"
-                        , bind (&TickService::timerLoop, this, callback)
+                        , bind (&DummyTickService::timerLoop, this, callback)
                         )
         , timespan_{POLL_TIMEOUT}
         { 
-          INFO (steam, "TickService started.");
+          INFO (steam, "DummyTickService started.");
         }
       
-     ~TickService ()
+     ~DummyTickService ()
         {
           timespan_ = 0;
           if (not this->join())
-            WARN (steam, "Failure in TickService");
+            WARN (steam, "Failure in DummyTickService");
           
           usleep (200000);    // additional delay allowing GTK to dispatch the last output
-          INFO (steam, "TickService shutdown.");
+          INFO (steam, "DummyTickService shutdown.");
         }
       
       
@@ -117,7 +117,6 @@ namespace node {
   
   
   
-  
 }} // namespace steam::node
-#endif
+#endif /*STEAM_PLAY_DUMMY_TICK_SERVICE_H*/
 

@@ -26,7 +26,6 @@
 #include "vault/enginefacade.hpp"
 #include "vault/netnodefacade.hpp"
 #include "vault/scriptrunnerfacade.hpp"
-#include "include/dummy-player-facade.h"
 #include "steam/facade.hpp"
 #include "stage/guifacade.hpp"
 
@@ -38,7 +37,6 @@ namespace {
   Subsys& engine  = vault::EngineFacade::getDescriptor();
   Subsys& netNode = vault::NetNodeFacade::getDescriptor();
   Subsys& script  = vault::ScriptRunnerFacade::getDescriptor();
-  Subsys& player  = lumiera::DummyPlayer::getDescriptor();        ///////TODO: just a dummy, until we're able to render
   Subsys& session = steam::Facade::getSessionDescriptor();
   Subsys& playOut = steam::Facade::getPlayOutDescriptor();
   Subsys& lumigui = stage::GuiFacade::getDescriptor();
@@ -60,12 +58,10 @@ main (int argc, const char* argv[])
       
       netNode.depends (session);
       netNode.depends (engine);
-//    playOut.depends (engine);
+//    playOut.depends (engine);         ///////////////////////////////////////TICKET #1149 actually start an »Engine subsystem«
       playOut.depends (session);
       lumigui.depends (session);
 //    lumigui.depends (engine);
-      player.depends (playOut);    //////TODO dummy player, until we're able to render
-      lumigui.depends (player);
       script.depends (session);
       script.depends (engine);
       

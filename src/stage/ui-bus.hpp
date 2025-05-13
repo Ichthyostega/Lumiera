@@ -84,9 +84,6 @@
  ** @see ctrl/core-service.hpp
  ** 
  ** [MVC-Pattern]: http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller
- ** 
- ** @todo as of 1/2015, this header needs to be reshaped ////////////////////TICKET #959
- ** 
  */
 
 
@@ -95,7 +92,6 @@
 
 
 #include "stage/gtk-base.hpp"  //////////////////////////////////////////////////////TODO remove any GTK dependency if possible
-#include "stage/ctrl/player-controller.hpp"
 #include "lib/nocopy.hpp"
 
 #include <memory>
@@ -106,30 +102,6 @@ using std::unique_ptr;
 
 
 namespace stage {
-  ///////////////////////////////////////////////////////////////////////////////////TICKET #959 : scheduled for termination....
-  namespace model {
-    class Project;
-  } // namespace model
-    
-  namespace controller { 
-    
-    /**
-     * @todo needs to be reshaped for communication with Steam-Layer ////////////////TICKET #959
-     */
-    class Controller
-      {
-        model::Project&    project_;
-        ctrl::PlayerController playback_;
-        
-      public:
-        Controller (model::Project&);
-      
-        ctrl::PlayerController& get_playback_controller();
-      };
-  
-}// namespace stage::controller
-  ///////////////////////////////////////////////////////////////////////////////////TICKET #959 : scheduled for termination....
-  
   namespace ctrl {
     class StateManager;
     class CoreService;

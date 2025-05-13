@@ -27,7 +27,6 @@
 
 #include "stage/workspace/workspace-window.hpp"
 #include "stage/ui-bus.hpp"  ///////////////////////////////////TODO why are we forced to include this after workspace-window.hpp ??  Ambiguity between std::ref and boost::reference_wrapper
-#include "stage/display-service.hpp"
 
 
 namespace stage {

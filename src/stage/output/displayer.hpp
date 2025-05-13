@@ -28,7 +28,7 @@
 
 
 #include "lib/nocopy.hpp"
-#include "include/display-handles.h"
+#include "include/display-handles.hpp"
 
 namespace stage {
 namespace output {

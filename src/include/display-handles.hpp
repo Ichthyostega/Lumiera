@@ -1,5 +1,5 @@
 /*
-  DISPLAY-HANDLES.h  -  opaque handle types for playback and display
+  DISPLAY-HANDLES.hpp  -  opaque handle types for playback and display
 
    Copyright (C)
      2009,            Hermann Vosseler <Ichthyostega@web.de>
@@ -32,21 +32,11 @@
 using DummyFrame = std::byte *;
 
 
-struct lumiera_displaySlot_struct 
-  {
-    void (*put_)(lumiera_displaySlot_struct*, DummyFrame);
-  };
-typedef struct lumiera_displaySlot_struct lumiera_displaySlot;
-typedef lumiera_displaySlot* LumieraDisplaySlot;
 
 
 
-struct lumiera_playprocess_struct { };
-typedef struct lumiera_playprocess_struct lumiera_playprocess;
-typedef lumiera_playprocess* LumieraPlayProcess;
 
 
-#ifdef __cplusplus
 namespace lumiera {
 
   /** Supported Displayer formats */
@@ -59,5 +49,4 @@ namespace lumiera {
       DISPLAY_RGB16
     };
 } // namespace lumiera
-#endif /*__cplusplus*/
 #endif /*LUMIERA_DISPLAY_HANDLES_H*/

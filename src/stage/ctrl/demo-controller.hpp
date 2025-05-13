@@ -32,7 +32,7 @@
 #define DEMO_CONTROLLER_H
 
 #include "stage/gtk-base.hpp"
-#include "include/display-handles.h"
+#include "include/display-handles.hpp"
 #include "lib/nocopy.hpp"
 
 #include <memory>
@@ -40,7 +40,7 @@
 
 namespace steam {
 namespace node {
-  class TickService;
+  class DummyTickService;
   class DummyImageGenerator;
 }}
 
@@ -56,7 +56,7 @@ namespace ctrl {
     , public sigc::trackable
     {
       unique_ptr<steam::node::DummyImageGenerator> imageGen_;
-      unique_ptr<steam::node::TickService>         tick_;
+      unique_ptr<steam::node::DummyTickService>    tick_;
       
     public:
      ~DemoController();

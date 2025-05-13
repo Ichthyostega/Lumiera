@@ -71,7 +71,7 @@ namespace play {
   
   
 //  class DummyImageGenerator;
-//  class TickService;
+//  class DummyTickService;
   class ProcessTable;
   class RenderConfigurator;
   
