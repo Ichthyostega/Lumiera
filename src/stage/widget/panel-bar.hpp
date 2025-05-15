@@ -12,11 +12,11 @@
 */
 
 /** @file panel-bar.hpp
- ** Custom container widget to allow placing toolbar buttons
- ** into the active docking header area of GDL docking panels.
- ** This arrangement allows us to save a significant amount
- ** of screen real estate
+ ** Custom container widget to allow placing toolbar buttons into the active
+ ** docking header area of GDL docking panels.
+ ** @remark This arrangement allows us to save a significant amount of screen real estate.
  ** 
+ ** @todo still not completely ported to GTK-3 and not used as of 5/2025   /////////////////////////////////TICKET #937 : complete Port to GTK-3
  */
 
 
@@ -24,9 +24,8 @@
 #define STAGE_WIDGET_PANEL_BAR_H
 
 
+#include "stage/gtk-base.hpp"
 #include "stage/widget/menu-button.hpp"
-
-#include <gtkmm.h>
 
 
 namespace stage {
@@ -73,33 +72,13 @@ namespace stage {
       
       
     private:
-      /**
-       * Sets up panelButton, populating it with menu items.
-       */
       void setupPanelButton();
       
-      
-      /**
-       * An event handler for when a panel type is chosen.
-       * @param type_index index of the panel description that will be instantiated.
-       */
       void on_panel_type (int type_index);
-      
-      /**
-       * An event handler for when the "Hide" menu item is clicked
-       */
-      void on_hide();
-      
-      /**
-       * Event handler for when the "Lock" menu item is clicked
-       */
-      void on_lock();
-      
-      /**
-       * Event handler for when the split panel menu item is clicked
-       * @param split_direction The direction to split in.
-       */
       void on_split_panel (Gtk::Orientation split_direction);
+      
+      void on_hide()  override;
+      void on_lock();
     };
   
   

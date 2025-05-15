@@ -15,7 +15,7 @@
 /** @file timeline-zoom-scale.cpp
  ** Widget to control timeline zoom scale
  ** @warning as of 2016 the entire timeline display is planned to be reworked
- ** @todo this was the »zoom slider« implementation from the old GTK-2 GUI of Lumiera.
+ ** @todo 2025 this was the »zoom slider« implementation from the old GTK-2 GUI of Lumiera.
  **       Since 2016, this was deactivated and since 3/23 it is no longer included anywhere,
  **       just left in tree to be re-integrated into the reworked GKT-3 Timeline UI
  */
@@ -23,45 +23,34 @@
 
 #include "stage/widget/timeline-zoom-scale.hpp"
 
-using namespace Gtk;         ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
 
 namespace stage {
 namespace widget {
-
-class TimelineWidget;
-
-namespace timeline {
   
   /**
-   * @todo The initial adjustment value needs to
-   * match what the TimelineViewWindow's actual timeScale
-   * Value is. TimelineViewWindow::get_time_scale() is
-   * currently a public method, but will soon be private.
-   * Maybe TimelineViewWindow can have a zoom_adjustment
-   * that gets passed to this widget's Constructor?
-   * 
-   * @todo actually there is a more involved problem.
+   * A widget to control the timeline zoom state.
+   * @todo 2023 / 2025 the remainder of the old GTK-2 Timeline UI was removed.
+   * @todo 2025 much is broken and unclear on a design level here...
    * The TimelineWidget maintains a TimelineState, which in turn
    * owns the TimelineViewWindow. Now, the problem is: when we
    * switch to another Sequence (View), then this TimelineState
    * gets switched too, causing also a entirely different TimelineViewWindow
    * to become effective. Thus
-   * - how can we managed to be notified from that switch?
+   * - how can we manage to be notified from that switch?
    * - problem is: TimelineZoomScale widget is owned by the TimelinePannel.
    *   Likewise, TimelineWidget is owned by the TimelinePannel. But the
    *   state handling/switching logic is embedded within TimelineWidget
    * - and finally: how can we translate the actual scale (in time units),
    *   as maintained within TimelineViewWindow, back into the adjustment
-   *   used here (which uses a relative scale 0...1.0 ) 
-   * S
+   *   used here (which uses a relative scale 0...1.0 )
    */
   
   TimelineZoomScale::TimelineZoomScale()
     : HBox()
     , adjustment(Gtk::Adjustment::create(0.5, 0.0, 1.0, 0.000001))
     , slider()
-    , zoomIn(Stock::ZOOM_IN)
-    , zoomOut(Stock::ZOOM_OUT)
+    , zoomIn(Gtk::Stock::ZOOM_IN)
+    , zoomOut(Gtk::Stock::ZOOM_OUT)             /////////////////////////////////////////////////////////////TICKET #1030 StockItems are deprecated and will be removed with GTK-4
     , button_step_size(0.03)
     {
       /* Setup the Slider Control */
@@ -83,32 +72,26 @@ namespace timeline {
           connect (sigc::mem_fun(this, &TimelineZoomScale::on_zoom));
       
       /* Add Our Widgets and show them */
-      pack_start (zoomOut,PACK_SHRINK);
-      pack_start (slider,PACK_SHRINK);
-      pack_start (zoomIn,PACK_SHRINK);
+      pack_start (zoomOut,Gtk::PACK_SHRINK);
+      pack_start (slider, Gtk::PACK_SHRINK);
+      pack_start (zoomIn, Gtk::PACK_SHRINK);
       
       show_all();
     }
   
   
   void
-  TimelineZoomScale::wireTimelineState (shared_ptr<TimelineState> currentState
-//                                      TimelineWidget::TimelineStateChangeSignal stateChangeSignal          ////////////TODO defunct
-                                       )
+  TimelineZoomScale::wireTimelineState (/* TODO what to pass here? */)   ////////////////////////////////////TICKET #1264 : how to integrate with the new GTK-3 timeline structure?
   {
-    on_timeline_state_changed (currentState);
 //  stateChangeSignal.connect (
 //      sigc::mem_fun(this, &TimelineZoomScale::on_timeline_state_changed));
   }
   
   
   void
-  TimelineZoomScale::on_timeline_state_changed (shared_ptr<TimelineState> newState)
+  TimelineZoomScale::on_timeline_state_changed (/* TODO what to pass here? */)
   {
-    REQUIRE (newState);
-    timelineState = newState;
-    
-//  adjustment->set_value (getViewWindow().get_smoothed_time_scale());
+//  adjustment->set_value (/* TODO how to represent the statte? */);
   }
   
   
@@ -142,12 +125,4 @@ namespace timeline {
   }
   
   
-  TimelineViewWindow&
-  TimelineZoomScale::getViewWindow()
-  {
-    REQUIRE (timelineState, "lifecycle error");
-    return timelineState->getViewWindow();
-  }
-  
-  
-}}}// namespace stage::widget::timeline
+}}// namespace stage::widget

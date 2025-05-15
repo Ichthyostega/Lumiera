@@ -18,8 +18,18 @@
 /** @file timecode-widget.hpp
  ** Widget for timecode display and input.
  ** Ported and adapted from the Ardour DAW.
- ** @todo needs extensive rework to get smooth integration
- **       with Lumiera's timecode handling functions 
+ ** @todo 2016 needs extensive rework to get smooth integration
+ **       with Lumiera's timecode handling functions
+ ** @todo 2023 this widget was used in the first GTK-2 based UI.
+ **       While it still works with GTK-3, there are various fine points
+ **       which you wouldn't do this way in a modern GTK UI, like directly
+ **       checking for keyboard modifiers, or processing any kind of formatting
+ **       directly in a event handler, instead of building a set of error-safe
+ **       formatting helpers.
+ ** @todo 2025 ...rather we should invest in generic sub-widgets, and try
+ **       to build some generic pattern how to work with numeric values with
+ **       high precision (e.g. interactive nudging and spinning with a _gear switch_).
+ **       Bottom line: this code is currently unused and should be re-engineered.
  */
 
 
@@ -28,12 +38,6 @@
 
 #include "stage/gtk-base.hpp"
 #include "lib/time/timevalue.hpp"
-
-#include <gtkmm/box.h>
-#include <gtkmm/menu.h>
-#include <gtkmm/eventbox.h>
-#include <gtkmm/label.h>
-#include <gtkmm/frame.h>
 
 #include <string>
 
@@ -101,16 +105,16 @@ namespace widget {
       // bool is_duration;
       bool   editable;
       
-      Gtk::Menu  *ops_menu;
+      Gtk::Menu* ops_menu;
       
-      Gtk::HBox   smpte_packer_hbox;
-      Gtk::HBox   smpte_packer;
+      Gtk::HBox  smpte_packer_hbox;
+      Gtk::HBox  smpte_packer;
       
-      Gtk::HBox   minsec_packer_hbox;
-      Gtk::HBox   minsec_packer;
+      Gtk::HBox  minsec_packer_hbox;
+      Gtk::HBox  minsec_packer;
       
-      Gtk::HBox   frames_packer_hbox;
-      Gtk::HBox   frames_packer;
+      Gtk::HBox  frames_packer_hbox;
+      Gtk::HBox  frames_packer;
       
       enum Field {
         SMPTE_Hours,

@@ -20,53 +20,49 @@
 #include "stage/widget/menu-button.hpp"
 
 
-using namespace Gtk;      ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
-using namespace Glib;     ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
-using namespace sigc;     ///////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
-
-
 #define POPUP_SLUG "TheMenu"
 #define POPUP_PATH "/" POPUP_SLUG
 
+
 namespace stage {
-namespace widget {
+namespace widget{
   
   namespace {
-    const int CaptionPadding = 4;
-    const ArrowType arrowType = ARROW_DOWN;
-    const ShadowType shadowType = SHADOW_NONE;
+    const int CAPTION_PADDING = 4;
+    const Gtk::ArrowType  ARROW_TYPE = Gtk::ARROW_DOWN;
+    const Gtk::ShadowType SHADOW_TYPE = Gtk::SHADOW_NONE;
   }
   
   
   
   MenuButton::MenuButton()
     : ToggleButton()
-    , arrow(arrowType, shadowType)
-    , uimanager(UIManager::create())
-    , actions(ActionGroup::create())
+    , arrow_{ARROW_TYPE, SHADOW_TYPE}
+    , uimanager_{Gtk::UIManager::create()}
+    , actions_{Gtk::ActionGroup::create()}
     {
       setupButton();
     }
   
   
-  MenuButton::MenuButton (StockID const& stock_id)
-    : ToggleButton()
-    , image(stock_id, ICON_SIZE_MENU)
-    , caption()
-    , arrow(arrowType, shadowType)
+  MenuButton::MenuButton (Gtk::StockID const& stock_id)
+    : ToggleButton{}
+    , image_{stock_id, Gtk::ICON_SIZE_MENU}
+    , caption_{}
+    , arrow_{ARROW_TYPE, SHADOW_TYPE}
     {
-      StockItem stock_item;
-      REQUIRE (StockItem::lookup (stock_id, stock_item));
-      caption.set_text_with_mnemonic (stock_item.get_label());
-      hBox.pack_start (image);
+      Gtk::StockItem stock_item;
+      REQUIRE (Gtk::StockItem::lookup (stock_id, stock_item));
+      caption_.set_text_with_mnemonic (stock_item.get_label());
+      hBox_.pack_start (image_);
       setupButton();
     }
   
   
   MenuButton::MenuButton (cuString& label, bool mnemonic)
     : ToggleButton()
-    , caption(label, mnemonic)
-    , arrow(arrowType, shadowType)
+    , caption_(label, mnemonic)
+    , arrow_(ARROW_TYPE, SHADOW_TYPE)
     {
       setupButton();
     }
@@ -79,36 +75,40 @@ namespace widget {
     //TODO: if (slug == "Menu") return &get_menu();
     uString path (POPUP_PATH);
     path.append("/");
-    return uimanager->get_widget(path.append(slug));
+    return uimanager_->get_widget(path.append(slug));
   }
   
   
-  Menu&
+  Gtk::Menu&
   MenuButton::get_menu()
   {
-    uString path ("/");
+    uString path{"/"};
     path.append (POPUP_SLUG);
-    Menu* p_menu = dynamic_cast<Menu*>(
-                uimanager->get_widget(path));
+    auto* p_menu = dynamic_cast<Gtk::Menu*> (uimanager_->get_widget(path));
     REQUIRE (p_menu);
     return *p_menu;
   }
   
   
   void
-  MenuButton::append (uString &slug, uString &title,
-                      sigc::slot<void> &callback, bool toggle)
+  MenuButton::append (uString& slug, uString &title,
+                      sigc::slot<void>& callback, bool toggle)
   {
-    if (!toggle)
-      actions->add(Action::create(slug, title,""), callback);
+    if (not toggle)
+      actions_->add (Gtk::Action::create (slug, title,""), callback);
     else
-      actions->add(ToggleAction::create(slug, title,"",false), callback);
+      actions_->add (Gtk::ToggleAction::create (slug, title,"",false), callback);
     
-    uimanager->add_ui(uimanager->new_merge_id(),
-                      ustring("ui/").append(POPUP_SLUG),
-                      slug, slug, Gtk::UI_MANAGER_AUTO,
-                      false);
-    uimanager->ensure_update();
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1181 based on Interface-builder // @deprecated
+    uimanager_->add_ui (uimanager_->new_merge_id()           // ID for the merged UI, see gtk_ui_manager_new_merge_id().
+                       ,uString{"ui/"}.append(POPUP_SLUG)    // schematic path in the UI
+                       ,slug                                 // name for the added UI element
+                       ,slug                                 // name for the action to be proxied
+                       ,Gtk::UI_MANAGER_AUTO                 // type of the UI element to add
+                       ,false                                // if the UI element is added before its siblings (otherwise added after them)
+                       );
+    
+    uimanager_->ensure_update();
   }
   
   
@@ -125,9 +125,9 @@ namespace widget {
   void
   MenuButton::appendSeparator()
   {
-    uimanager->add_ui_separator(
-        uimanager->new_merge_id(),
-        ustring("ui/").append(POPUP_SLUG),
+    uimanager_->add_ui_separator(
+        uimanager_->new_merge_id(),
+        uString{"ui/"}.append(POPUP_SLUG),
         "Separator", Gtk::UI_MANAGER_SEPARATOR,
         false);
   }
@@ -136,34 +136,37 @@ namespace widget {
   void
   MenuButton::popup()
   {
-    get_menu().popup(mem_fun(this, &MenuButton::on_menu_position),
-      0, gtk_get_current_event_time());
-    set_active();
+    get_menu().popup (sigc::mem_fun (this, &MenuButton::on_menu_position)
+                     ,0                                      // The mouse button which was pressed to initiate the event
+                     ,gtk_get_current_event_time());         // activate_time The time at which the activation event occurred.
+    this->set_active();
   }
   
   
   void
   MenuButton::setupButton()
   {
-    uimanager = UIManager::create();
-    actions = ActionGroup::create();
-    uimanager->insert_action_group(actions);
+    uimanager_ = Gtk::UIManager::create();
+    actions_   = Gtk::ActionGroup::create();
+    uimanager_->insert_action_group(actions_);
     
     // Setup the UIManager with a popup menu
-    const guint rootId = uimanager->new_merge_id();
-    uimanager->add_ui(rootId, "ui",
-        POPUP_SLUG, POPUP_SLUG,
-        Gtk::UI_MANAGER_POPUP);
+    const guint rootId = uimanager_->new_merge_id();
+    uimanager_->add_ui (rootId
+                       ,"ui"
+                       ,POPUP_SLUG
+                       ,POPUP_SLUG
+                       ,Gtk::UI_MANAGER_POPUP
+                       );
+    get_menu().signal_deactivate().connect(
+        sigc::mem_fun (this, &MenuButton::on_menu_deactivated));
     
-    get_menu().signal_deactivate().connect(mem_fun(
-      this, &MenuButton::on_menu_deactivated));
+    arrow_.set (Gtk::ARROW_DOWN, Gtk::SHADOW_NONE);
     
-    arrow.set(ARROW_DOWN, SHADOW_NONE);
+    hBox_.pack_start (caption_, Gtk::PACK_EXPAND_WIDGET, CAPTION_PADDING);
+    hBox_.pack_start (arrow_);
     
-    hBox.pack_start(caption, PACK_EXPAND_WIDGET, CaptionPadding);
-    hBox.pack_start(arrow);
-    
-    add(hBox);
+    add (hBox_);
     show_all();
   }
   
@@ -171,14 +174,14 @@ namespace widget {
   void
   MenuButton::on_pressed()
   {
-    popup();
+    this->popup();
   }
   
   
   void
   MenuButton::on_menu_deactivated()
   {
-    set_active(false);
+    this->set_active (false);
   }
   
   
@@ -189,11 +192,11 @@ namespace widget {
     REQUIRE(window);
     
     window->get_origin(x, y);
-    const Allocation allocation = get_allocation();
-      x += allocation.get_x();
-      y += allocation.get_y() + allocation.get_height();
-      
-      push_in = true;
+    auto allocation = get_allocation();
+    x += allocation.get_x();
+    y += allocation.get_y() + allocation.get_height();
+    
+    push_in = true;
   }
   
   

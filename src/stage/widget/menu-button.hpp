@@ -14,7 +14,7 @@
 
 /** @file menu-button.hpp
  ** A button widget that displays a menu when clicked.
- ** @todo leftover from the old GTK-2 Lumiera UI as of 3/23,
+ ** @todo 2023 leftover from the old GTK-2 Lumiera UI as of 3/23,
  **       but should be retained and integrated into the reworked GTK-3 UI 
  */
 
@@ -29,14 +29,22 @@
 namespace stage {
 namespace widget {
   
-  using namespace Gtk;       ////////////////////////////////////////////////////////////////////////////////TICKET #1071 no wildcard includes please!
   
   /**
    * A button that displays a menu when clicked on.
    */
   class MenuButton
-    : public ToggleButton
+    : public Gtk::ToggleButton
     {
+      Gtk::HBox hBox_;            ///< holds the layout of an image, caption and arrow.
+      Gtk::Image image_;          ///< can optionally display an icon.
+      Gtk::Label caption_;        ///< caption text label to show on the button.
+      Gtk::Arrow arrow_;          ///< arrow widget to be displayed to indicate a drop-down menu
+      Gtk::Menu menu_;            ///< internal menu object which is the popup menu of this widget.
+      
+      Glib::RefPtr<Gtk::UIManager> uimanager_;
+      Glib::RefPtr<Gtk::ActionGroup> actions_;
+      
     public:
       /**
        * Create an empty button.
@@ -49,10 +57,11 @@ namespace widget {
       MenuButton();
       
       /**
-       * Creates a new Button containing the image and text from a stock item. 
-       * @remarks Stock IDs have identifiers like \c Stock::OK and \c Stock::APPLY.
+       * Creates a new Button containing the image and text from a stock item.
+       * @remarks Stock IDs have identifiers like `Stock::OK` and `Stock::APPLY`.
+       * @deprecated Stock-IDs will be removed with GTK-4
        */
-      MenuButton (StockID const& stock_id);
+      MenuButton (Gtk::StockID const& stock_id);
       
       /**
        * Creates a simple Push Button with label.
@@ -67,7 +76,7 @@ namespace widget {
        * @return Returns a reference to the menu that will be clicked on.
        *    This reference can be used to populate the menu with items.
        */
-      Menu& get_menu();
+      Gtk::Menu& get_menu();
       
       /**
        * Append a Menu Item to the Menu
@@ -86,7 +95,7 @@ namespace widget {
        * @param callback The signal handler when clicked
        * @param toggle
        */
-      void append (const char *slug, const char* title, sigc::slot<void>& callback, bool toggle=false);
+      void append (const char* slug, const char* title, sigc::slot<void>& callback, bool toggle=false);
       
       
       /** Append a Gtk::SeparatorMenuItem to the Menu */
@@ -134,31 +143,6 @@ namespace widget {
        *          pushed in if it collides with the edge of the screen.
        */
       void on_menu_position (int& x, int& y, bool& push_in);
-      
-    private:
-      /** hBox for the layout of an image, caption and arrow. */
-      HBox hBox;
-      
-      /** The image that will optionally display an icon. */
-      Image image;
-      
-      /** caption text label to show on the button. */
-      Label caption;
-      
-      /**
-       * The arrow widget that will be displayed to hint the user that this
-       * button is a drop-down.
-       */
-      Arrow arrow;
-      
-      /**
-       * The internal menu object which is the popup menu of this widget.
-       */
-      Menu menu;
-      
-      Glib::RefPtr<UIManager> uimanager;
-      Glib::RefPtr<ActionGroup> actions;
-    
     };
   
   

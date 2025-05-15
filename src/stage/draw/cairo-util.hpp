@@ -13,61 +13,97 @@
 
 
 /** @file cairo-util.hpp
- ** Utility functions for working with elements from the Cairo
- ** vector drawing library.
+ ** Utility functions for working with elements from the Cairo vector drawing library.
  */
 
-#include <cairomm/cairomm.h>
 
 #ifndef STAGE_DRAW_CAIRO_H
 #define STAGE_DRAW_CAIRO_H
 
-using Cairo::RefPtr;
-using Cairo::SolidPattern;
+#include "stage/gtk-base.hpp"
+#include "lib/util.hpp"
 
 
-namespace stage {
+namespace stage{
 namespace draw {
   
-  /**
-   * @todo this is not a real entity; consider to turn this into a set of free functions!
-   */ 
-  class CairoUtil
-    {
-    public:
-      /**
-       * Make a new SolidPattern from an old one, changing the red component of the colour.
-       * @param The new value for the red component of the colour.
-       * @return The new pattern.
-       */
-      static RefPtr<SolidPattern>
-      pattern_set_red (const RefPtr<SolidPattern> color, double red);
-      
-      /**
-       * Make a new SolidPattern from an old one, changing the green component of the colour.
-       * @param The new value for the green component of the colour.
-       * @return The new pattern.
-       */
-      static RefPtr<SolidPattern>
-      pattern_set_green (const RefPtr<SolidPattern>, double green);
-      
-      /**
-       * Make a new SolidPattern from an old one, changing the blue component of the colour.
-       * @param The new value for the blue component of the colour.
-       * @return The new pattern.
-       */
-      static RefPtr<SolidPattern>
-      pattern_set_blue (const RefPtr<SolidPattern>, double blue);
-      
-      /**
-       * Make a new SolidPattern from an old one, changing the alpha component of the colour.
-       * @param The new value for the alpha component of the colour.
-       * @return The new pattern.
-       */
-      static RefPtr<SolidPattern>
-      pattern_set_alpha (const RefPtr<SolidPattern>, double alpha);
-    };
+  using Cairo::SolidPattern;
+  using Cairo::RefPtr;
   
+  
+  inline RefPtr<SolidPattern>
+  pattern_set_red (RefPtr<SolidPattern> const& color, double red)
+  {
+    double _red_ignored;
+    double green;
+    double blue;
+    double alpha;
+    
+    color->get_rgba (_red_ignored, green, blue, alpha);
+    return Cairo::SolidPattern::create_rgba (red, green, blue, alpha);
+  }
+  
+  
+  inline RefPtr<SolidPattern>
+  pattern_set_green (RefPtr<SolidPattern> const& color, double green)
+  {
+    double red;
+    double _green_ignored;
+    double blue;
+    double alpha;
+    
+    color->get_rgba (red, _green_ignored, blue, alpha);
+    return Cairo::SolidPattern::create_rgba (red, green, blue, alpha);
+  }
+  
+  
+  inline RefPtr<SolidPattern>
+  pattern_set_blue (RefPtr<SolidPattern> const& color, double blue)
+  {
+    double red;
+    double green;
+    double _blue_ignored;
+    double alpha;
+    
+    color->get_rgba (red, green, _blue_ignored, alpha);
+    return Cairo::SolidPattern::create_rgba (red, green, blue, alpha);
+  }
+  
+  
+  inline RefPtr<SolidPattern>
+  pattern_set_alpha (RefPtr<SolidPattern> const& color, double alpha)
+  {
+    double red;
+    double green;
+    double blue;
+    double _alpha_ignored;
+    
+    color->get_rgba (red, green, blue, _alpha_ignored);
+    
+    return Cairo::SolidPattern::create_rgba (red, green, blue, alpha);
+  }
+  
+  
+  inline bool
+  pt_in_rect (Gdk::Point const& point, Gdk::Rectangle const& rect)
+  {
+    return (point.get_x() >= rect.get_x()
+       and  point.get_x() <  rect.get_x() + rect.get_width()
+       and  point.get_y() >= rect.get_y()
+       and  point.get_y() <  rect.get_y() + rect.get_height());
+  }
+  
+  inline bool
+  rects_overlap (Gdk::Rectangle const& recA, Gdk::Rectangle const& recB)
+  {
+    return (
+      util::max (recA.get_x(), recB.get_x())
+        < util::min (recA.get_x() + recA.get_width(), recB.get_x() + recB.get_width())
+      and
+      util::max (recA.get_y(), recB.get_y())
+        < util::min (recA.get_y() + recA.get_height(), recB.get_y() + recB.get_height())
+      );
+  }
   
 }}// namespace stage::draw
 #endif /*STAGE_DRAW_CAIRO_H*/

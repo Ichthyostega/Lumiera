@@ -84,7 +84,7 @@ namespace widget {
      * @todo 9/2018 dummy placeholder code, later to be transformed into a framework    /////////////////////TICKET #1168 : find a way to manage style of custom extended UI elements
      */
     inline void
-    populateStandardTextTags (Glib::RefPtr<TextBuffer::TagTable> tagTable)
+    populateStandardTextTags (Glib::RefPtr<Gtk::TextBuffer::TagTable> tagTable)
     {
       Tag errorTag = Gtk::TextBuffer::Tag::create (cuString{TAG_ERROR});
       errorTag->property_background() = "Yellow";                ////////////////////////////////////////////TICKET #1168 : should be retrieved from a central location

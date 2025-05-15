@@ -34027,6 +34027,23 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1540639291974" ID="ID_1116103118" MODIFIED="1557498707231" TEXT="Zoom">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1747343336875" ID="ID_380679673" MODIFIED="1747343338533" TEXT="Stand">
+<node COLOR="#338800" CREATED="1664058686704" ID="ID_446702745" MODIFIED="1747343364970" TEXT="Basis-Technologie gebaut (ZoomWindow)">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1747343351160" ID="ID_378138637" MODIFIED="1747343420890" TEXT="Integration in das Timeline-UI noch offen">
+<arrowlink COLOR="#985f78" DESTINATION="ID_1763437884" ENDARROW="Default" ENDINCLINATION="-1406;-260;" ID="Arrow_ID_297087748" STARTARROW="None" STARTINCLINATION="1272;87;"/>
+<icon BUILTIN="hourglass"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1747342638800" ID="ID_616947134" MODIFIED="1747342674483" TEXT="transient-State">
+<icon BUILTIN="hourglass"/>
+<node CREATED="1747342682778" ID="ID_1446567013" MODIFIED="1747342827585" TEXT="playback position">
+<linktarget COLOR="#7f6a74" DESTINATION="ID_1446567013" ENDARROW="Default" ENDINCLINATION="-1578;239;" ID="Arrow_ID_590507558" SOURCE="ID_883853531" STARTARROW="None" STARTINCLINATION="-2460;177;"/>
+</node>
+<node CREATED="1747342675856" ID="ID_1692322588" MODIFIED="1747342832761" TEXT="time-range selection"/>
+<node CREATED="1747342687204" ID="ID_1566825368" MODIFIED="1747342709625" TEXT="expand / collapse"/>
 </node>
 </node>
 <node CREATED="1540638842100" ID="ID_202893866" MODIFIED="1557498707231" TEXT="Track...">
@@ -35102,9 +35119,39 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680564423273" ID="ID_7752918" MODIFIED="1680567145813" TEXT="Video-Display-GUI">
 <linktarget COLOR="#f6e1c2" DESTINATION="ID_7752918" ENDARROW="Default" ENDINCLINATION="-612;79;" ID="Arrow_ID_1986887171" SOURCE="ID_1435039515" STARTARROW="None" STARTINCLINATION="-2008;-180;"/>
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1747342339657" ID="ID_84701526" MODIFIED="1747342345274" TEXT="bisheriger Stand">
+<icon BUILTIN="info"/>
+<node CREATED="1747342347190" ID="ID_1130003899" MODIFIED="1747342361984" TEXT="ca 2011 gab es die Architektur-Studie zum Dummy-Player"/>
+<node CREATED="1746059132520" ID="ID_150758489" MODIFIED="1747342439335" TEXT="5/2025 habe ich das Video-Display-Widget neu mit GTK-3 aufgebaut">
+<arrowlink COLOR="#fdebca" DESTINATION="ID_1819581335" ENDARROW="Default" ENDINCLINATION="-2783;152;" ID="Arrow_ID_421873944" STARTARROW="None" STARTINCLINATION="1417;60;"/>
+<node CREATED="1747342457463" ID="ID_937824500" MODIFIED="1747342523372" TEXT="vor allem als Basis zur Unsteruschung von Display-Technologien">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...mit dem Ergebnis
+    </p>
+    <ul>
+      <li>
+        die XV-Videowidergabe funktioniert immer noch
+      </li>
+      <li>
+        eine einfache Bitmap-basierte Anzeige kann leicht mit Gtk::Image + Gdk::Pixbuf realisiert werden (aber Vorsicht, Pixpuf ist @deprecated)
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680567169798" ID="ID_1105975184" MODIFIED="1680567175175" TEXT="Play-control">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1747342874978" ID="ID_286658301" MODIFIED="1747343152973" TEXT="neues Panel angelegt (5/2025)">
+<arrowlink COLOR="#6f7781" DESTINATION="ID_944511675" ENDARROW="Default" ENDINCLINATION="219;-670;" ID="Arrow_ID_1473472749" STARTARROW="None" STARTINCLINATION="1035;96;"/>
+<node CREATED="1747343048767" ID="ID_1933627478" MODIFIED="1747343065384" TEXT="zun&#xe4;chst im alten Schma: eine fest-Verdrahtete neue &#xbb;Gattung&#xab;"/>
+<node CREATED="1747343081307" HGAP="34" ID="ID_1956938900" MODIFIED="1747343105355" TEXT="aber hat nun ein sch&#xf6;nes neues Icon &#x2014; und einen Platz im standard-Layout" VSHIFT="-15"/>
+</node>
 </node>
 </node>
 <node CREATED="1680567033328" ID="ID_60631732" MODIFIED="1680567036668" TEXT="Infrastruktur">
@@ -44266,7 +44313,9 @@
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1672883774136" HGAP="85" ID="ID_135908111" MODIFIED="1672883794675" TEXT="anzubinden" VSHIFT="21">
 <edge COLOR="#976c6c"/>
-<node CREATED="1672883797610" ID="ID_1763437884" MODIFIED="1672883807253" TEXT="Canvas-Scrollbar"/>
+<node CREATED="1672883797610" ID="ID_1763437884" MODIFIED="1747343420890" TEXT="Canvas-Scrollbar">
+<linktarget COLOR="#985f78" DESTINATION="ID_1763437884" ENDARROW="Default" ENDINCLINATION="-1406;-260;" ID="Arrow_ID_297087748" SOURCE="ID_378138637" STARTARROW="None" STARTINCLINATION="1272;87;"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1667488193842" ID="ID_1347640673" MODIFIED="1667488208549" TEXT="Invarianten">
@@ -129648,8 +129697,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746196449003" ID="ID_1070775068" MODIFIED="1746196453932" TEXT="Video-Display">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1746196482500" ID="ID_1819581335" LINK="https://issues.lumiera.org/ticket/1403" MODIFIED="1747012983605" TEXT=" #1403 Invesitgate if XV displayer can be revived ">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1746196482500" ID="ID_1819581335" LINK="https://issues.lumiera.org/ticket/1403" MODIFIED="1747342428317" TEXT=" #1403 Invesitgate if XV displayer can be revived ">
 <linktarget COLOR="#fefeb4" DESTINATION="ID_1819581335" ENDARROW="Default" ENDINCLINATION="-2783;152;" ID="Arrow_ID_1160980366" SOURCE="ID_1219347509" STARTARROW="None" STARTINCLINATION="-4870;297;"/>
+<linktarget COLOR="#fdebca" DESTINATION="ID_1819581335" ENDARROW="Default" ENDINCLINATION="-2783;152;" ID="Arrow_ID_421873944" SOURCE="ID_150758489" STARTARROW="None" STARTINCLINATION="1417;60;"/>
 <icon BUILTIN="hourglass"/>
 <node COLOR="#338800" CREATED="1746196518190" ID="ID_411481779" MODIFIED="1747013174739" TEXT="Research-Setup">
 <icon BUILTIN="button_ok"/>
@@ -129812,7 +129862,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node CREATED="1746366566357" ID="ID_669235936" MODIFIED="1746366588141" TEXT="geplant war aber ein Play-Control-Widget"/>
 </node>
-<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1746366589535" FOLDED="true" ID="ID_944511675" MODIFIED="1747013218559" TEXT="also ein neues Docking-Panel schaffen">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1746366589535" FOLDED="true" ID="ID_944511675" MODIFIED="1747343152973" TEXT="also ein neues Docking-Panel schaffen">
+<linktarget COLOR="#6f7781" DESTINATION="ID_944511675" ENDARROW="Default" ENDINCLINATION="219;-670;" ID="Arrow_ID_1473472749" SOURCE="ID_286658301" STARTARROW="None" STARTINCLINATION="1035;96;"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1746366642490" ID="ID_997232477" MODIFIED="1746366650524" TEXT="bekommt in erster N&#xe4;herung die Buttons direkt"/>
 <node CREATED="1746366651348" ID="ID_1947097226" MODIFIED="1746366715461" TEXT="soll sp&#xe4;ter mal auch den Timecode darstellen"/>
@@ -162288,8 +162339,8 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1742175611912" ID="ID_16098937" MODIFIED="1742175617591" TEXT="etwas aufr&#xe4;umen">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1742175611912" ID="ID_16098937" MODIFIED="1747359127313" TEXT="etwas aufr&#xe4;umen">
+<icon BUILTIN="pencil"/>
 <node COLOR="#338800" CREATED="1742175621250" FOLDED="true" ID="ID_1886919024" MODIFIED="1745860228467" TEXT="boost-filesystem loswerden!">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1744754918427" ID="ID_368377472" MODIFIED="1745799970522" TEXT="lib/searchpath.hpp">
@@ -162368,8 +162419,8 @@ Since then others have made contributions, see the log for the history.</font></
 <arrowlink DESTINATION="ID_368377472" ENDARROW="Default" ENDINCLINATION="107;14;" ID="Arrow_ID_1432393919" STARTARROW="None" STARTINCLINATION="74;7;"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1742175872016" ID="ID_1131308211" MODIFIED="1742175881001" TEXT="Untersuchung: einfacher XV-Displayer">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1742175872016" ID="ID_1131308211" MODIFIED="1747359118365" TEXT="Untersuchung: einfacher XV-Displayer">
+<icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1742175882083" ID="ID_846823682" MODIFIED="1745783296480" TEXT="Christian hatte uns im Chat einen Tip gegeben">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -162530,7 +162581,8 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node CREATED="1746058970157" ID="ID_991442275" MODIFIED="1746058986973" TEXT="Einsch&#xe4;tzung: aktueller Stand">
+<node COLOR="#338800" CREATED="1746058970157" FOLDED="true" ID="ID_991442275" MODIFIED="1747359114488" TEXT="Einsch&#xe4;tzung: aktueller Stand">
+<icon BUILTIN="back"/>
 <node CREATED="1746058988279" ID="ID_1992351880" MODIFIED="1746059009850">
 <richcontent TYPE="NODE"><html>
   <head/>
@@ -162599,15 +162651,139 @@ Since then others have made contributions, see the log for the history.</font></
 <node COLOR="#338800" CREATED="1746059663185" ID="ID_473345546" MODIFIED="1747182536693" TEXT="kann der ganze DummyPlayer entfernt werden">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1746059700212" ID="ID_191158269" MODIFIED="1746059710934" TEXT="k&#xf6;nnte auch gleich die alte Timeline mit entfernt werden"/>
+<node COLOR="#2a7a90" CREATED="1746059700212" ID="ID_191158269" MODIFIED="1747358935400" TEXT="k&#xf6;nnte auch gleich die alte Timeline mit entfernt werden">
+<arrowlink COLOR="#4b94c0" DESTINATION="ID_877133844" ENDARROW="Default" ENDINCLINATION="89;5;" ID="Arrow_ID_1014835150" STARTARROW="None" STARTINCLINATION="89;60;"/>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1742176004434" ID="ID_393175435" MODIFIED="1746059770010" TEXT="Reste vom GTK-2-GUI zur&#xfc;ckbauen">
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1746059790896" ID="ID_1458700110" MODIFIED="1746059808265" TEXT="macht den GUI-Code verst&#xe4;ndlicher"/>
-<node CREATED="1746059809402" ID="ID_252295365" MODIFIED="1746059816488" TEXT="man k&#xf6;nnte auch den DummyPlayer loswerden"/>
-<node CREATED="1746059817267" ID="ID_1413142939" MODIFIED="1746059824776" TEXT="und einige daran h&#xe4;ngende Library-Helper"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#4f171a" CREATED="1747358961060" ID="ID_1229619846" MODIFIED="1747359100154" TEXT="Fazit">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node COLOR="#435e98" CREATED="1747358965085" ID="ID_1159622561" MODIFIED="1747359106297" TEXT="der alte XV-Code konnte wieder zum Laufen gebracht werden"/>
+<node COLOR="#435e98" CREATED="1747358980695" ID="ID_1228763349" MODIFIED="1747359106297" TEXT="neuer Bitmap-basierter (fallback)-Displayer dazugebaut"/>
+<node BACKGROUND_COLOR="#d3b2a9" COLOR="#5c4d6e" CREATED="1747358995044" ID="ID_1689326228" MODIFIED="1747359081222" TEXT="offen: Handhabung und Eigenschaften von XVideo besser verstehen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      vor allem...
+    </p>
+    <ul>
+      <li>
+        wie man tats&#228;chlich einen Darstellungsvorgang erzwingt
+      </li>
+      <li>
+        wie das Compositing mit dem Window-Manager integriert wird
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="bell"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1742176004434" ID="ID_393175435" MODIFIED="1747355570776" TEXT="Reste vom GTK-2-GUI zur&#xfc;ckbauen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#984373" CREATED="1746059790896" ID="ID_1458700110" MODIFIED="1747358892480" TEXT="macht den GUI-Code verst&#xe4;ndlicher...">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node BACKGROUND_COLOR="#b8b6c8" COLOR="#1f2d48" CREATED="1746059809402" ID="ID_252295365" MODIFIED="1747347298791" TEXT="man k&#xf6;nnte auch den DummyPlayer loswerden">
+<icon BUILTIN="yes"/>
+<node COLOR="#435e98" CREATED="1747355601697" ID="ID_1016070090" MODIFIED="1747355611437" TEXT="ges&#xe4;gt">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+<node COLOR="#435e98" CREATED="1747355604293" ID="ID_650581088" MODIFIED="1747355611456" TEXT="getan">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1747318813636" ID="ID_770178888" MODIFIED="1747347203040" TEXT="und die alte GTK-2 timeline">
+<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1747347206016" ID="ID_877133844" MODIFIED="1747358919513" TEXT="hab 2023 bereits den gr&#xf6;&#xdf;ten Teil wegger&#xe4;umt">
+<linktarget COLOR="#4b94c0" DESTINATION="ID_877133844" ENDARROW="Default" ENDINCLINATION="89;5;" ID="Arrow_ID_1014835150" SOURCE="ID_191158269" STARTARROW="None" STARTINCLINATION="89;60;"/>
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#435e98" CREATED="1747318826981" ID="ID_349873328" MODIFIED="1747347192250" TEXT="stage/widget/timeline"/>
+<node COLOR="#435e98" CREATED="1747341331057" ID="ID_511983400" MODIFIED="1747347193958" TEXT="timeline-state">
+<node CREATED="1747341338630" ID="ID_375326380" MODIFIED="1747341345815" TEXT="kann keinen Wert mehr erkennen"/>
+<node CREATED="1747341347546" ID="ID_1556587592" MODIFIED="1747341364104" TEXT="GUI-Signal basierte Zustandsbehandlung"/>
+<node CREATED="1747341391949" ID="ID_883853531" MODIFIED="1747342827585" TEXT="festzuhalten ist die strukturelle Idee">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      man hat ein time::Control (was auch immer das in Zukunft sein wird), welches mit einem Change-Signal verbunden wird. GUI-seitig verdrahtet man dieses Signal mit dem Code, der die tats&#228;chliche &#196;nderung des Presentation-State macht
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#7f6a74" DESTINATION="ID_1446567013" ENDARROW="Default" ENDINCLINATION="-1578;239;" ID="Arrow_ID_590507558" STARTARROW="None" STARTINCLINATION="-2460;177;"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1747347046661" ID="ID_1909627824" MODIFIED="1747347195079" TEXT="timeline-zoom-state">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1747347052683" ID="ID_1909321007" MODIFIED="1747347075291" TEXT="umwandeln in reines Widget">
+<icon BUILTIN="yes"/>
+<icon BUILTIN="hourglass"/>
+</node>
+<node COLOR="#338800" CREATED="1747347058492" ID="ID_1243897701" MODIFIED="1747347069374" TEXT="zun&#xe4;chst einmal: Rest-Funktionalit&#xe4;t entfernt">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1747320207459" ID="ID_1787845536" MODIFIED="1747355564742" TEXT="nebenbei">
+<icon BUILTIN="idea"/>
+<node COLOR="#338800" CREATED="1747320211058" ID="ID_1715404862" MODIFIED="1747351629662" TEXT="stage/draw/cairo-util">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1747320223361" ID="ID_1728274505" MODIFIED="1747320227360" TEXT="derzeit nicht verwendet"/>
+<node COLOR="#338800" CREATED="1747320251388" ID="ID_1709983182" MODIFIED="1747351626034" TEXT="in einen Utility-Header verwandeln">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1747322279220" ID="ID_105159102" MODIFIED="1747351621473" TEXT="stage/draw/rectangle dort integrieren">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1747322262618" ID="ID_123316480" MODIFIED="1747351634158" TEXT="stage/widget/panel-bar.hpp">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1747322269934" ID="ID_436403941" MODIFIED="1747322272308" TEXT="aufr&#xe4;umen"/>
+<node CREATED="1747324058600" ID="ID_1325990171" MODIFIED="1747324066006" TEXT="dto  menu-button.hpp"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#990009" CREATED="1747324088506" ID="ID_1073724702" MODIFIED="1747355543340" TEXT="timecode-widget : mal anschauen">
+<icon BUILTIN="smiley-oh"/>
+<node CREATED="1747355253615" ID="ID_1827502464" MODIFIED="1747355271723">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      ja ... der code ist <i>anr&#252;chig</i>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="smily_bad"/>
+</node>
+<node CREATED="1747355297554" ID="ID_120093101" MODIFIED="1747355526952" TEXT="jede Menge Anti-Patterns, eigentlich kein Gewinn">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Urspr&#252;nglich war das mal so eine Idee von Code-Reuse. Klingt plausibel, schlie&#223;lich hat Ardour einen guten Ruf....
+    </p>
+    <p>
+      Bei genauerer Betrachtung allerdings zeigt sich, da&#223; die Qualit&#228;t von Ardour auf einer sehr gr&#252;ndlichen QA beruht, ein anderes Projekt (wie Lumiera) aber nicht davon profitieren kann, denn der Code enth&#228;lt keine besonderen strukturell gefa&#223;ten Einsichten; ganz im Gegenteil, man w&#252;rde sich eine Menge ungesunder Strukturmuster einhandeln, wenn man an solchen Code <i>anbauen w&#252;rde. </i>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Abgesehen davon ist der Code inzwischen auch technologisch &#252;berholt und wird mit GTK-4 nicht mehr funktionieren
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1747355273449" ID="ID_1703747958" MODIFIED="1747355286397" TEXT="ehrlich gesagt: wegwerfen und neuschreiben">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1742249461535" ID="ID_1554376708" MODIFIED="1742256553530" TEXT="Rolle der lib-Gavl &#xfc;berpr&#xfc;fen">
 <linktarget COLOR="#a41b18" DESTINATION="ID_1554376708" ENDARROW="Default" ENDINCLINATION="440;-36;" ID="Arrow_ID_608156847" SOURCE="ID_1683248748" STARTARROW="None" STARTINCLINATION="193;12;"/>

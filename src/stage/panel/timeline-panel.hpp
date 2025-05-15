@@ -26,6 +26,8 @@
  ** 
  ** @todo as of 10/2016 this is WIP-WIP-WIP : canvas widgets experiment
  ** @todo as of 10/2018 we start to build a new timeline widget, connected to the UI-Bus
+ ** @todo as of 03/2023 the backbone of the new structure is in place (see #1042)
+ ** @todo as of 05/2025 we need actual editing functionality in the core to continue building here.... //////TICKET #305
  */
 
 
