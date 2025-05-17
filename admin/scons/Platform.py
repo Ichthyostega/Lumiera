@@ -85,7 +85,7 @@ def configure(env):
     
     
     if not conf.CheckPkgConfig('gavl', '1.4'):
-        problems.append('Did not find Gmerlin Audio Video Lib [http://gmerlin.sourceforge.net/gavl.html].')
+        problems.append('Did not find Gmerlin Audio Video Lib [https://github.com/bplaum/gavl].')
     else:
         conf.env.mergeConf('gavl')
     

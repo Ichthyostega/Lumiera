@@ -129698,8 +129698,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746196449003" ID="ID_1070775068" MODIFIED="1746196453932" TEXT="Video-Display">
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1746196482500" ID="ID_1819581335" LINK="https://issues.lumiera.org/ticket/1403" MODIFIED="1747342428317" TEXT=" #1403 Invesitgate if XV displayer can be revived ">
-<linktarget COLOR="#fefeb4" DESTINATION="ID_1819581335" ENDARROW="Default" ENDINCLINATION="-2783;152;" ID="Arrow_ID_1160980366" SOURCE="ID_1219347509" STARTARROW="None" STARTINCLINATION="-4870;297;"/>
 <linktarget COLOR="#fdebca" DESTINATION="ID_1819581335" ENDARROW="Default" ENDINCLINATION="-2783;152;" ID="Arrow_ID_421873944" SOURCE="ID_150758489" STARTARROW="None" STARTINCLINATION="1417;60;"/>
+<linktarget COLOR="#fefeb4" DESTINATION="ID_1819581335" ENDARROW="Default" ENDINCLINATION="-2783;152;" ID="Arrow_ID_1160980366" SOURCE="ID_1219347509" STARTARROW="None" STARTINCLINATION="-4870;297;"/>
 <icon BUILTIN="hourglass"/>
 <node COLOR="#338800" CREATED="1746196518190" ID="ID_411481779" MODIFIED="1747013174739" TEXT="Research-Setup">
 <icon BUILTIN="button_ok"/>
@@ -159479,18 +159479,21 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1742256149038" FOLDED="true" ID="ID_1347393646" MODIFIED="1742256644046" TEXT="welche Rolle k&#xf6;nnen andere Libraries hier noch spielen?">
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1742256149038" ID="ID_1347393646" MODIFIED="1747523933091" TEXT="welche Rolle k&#xf6;nnen andere Libraries hier noch spielen?">
 <font NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="help"/>
-<node CREATED="1742256164252" ID="ID_798828861" MODIFIED="1742256311817" TEXT="konkret: Gavl und Gmerlin">
+<node CREATED="1742256164252" ID="ID_798828861" LINK="https://github.com/bplaum/gavl" MODIFIED="1747524023410" TEXT="konkret: Gavl und Gmerlin">
 <richcontent TYPE="NOTE"><html>
-  <head/>
+  <head>
+    
+  </head>
   <body>
     <p>
       Christian kannte bereits Burkart Pflaum, und hat uns auf dessen Libraries aufmerksam gemacht. Die Libraries sind vorbildlich in iherer Struktur und in dem beschr&#228;nkten Scope. Wahrscheinlich sind sie problemloser einzubinden als FFmpeg. Aber das Kernproblem bleibt: das ist eine one-Man-Show, und wir werden trotzdem auf FFmpeg nicht verzichten k&#246;nnen....
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <node CREATED="1742256340945" ID="ID_457200888" MODIFIED="1742256484596" TEXT="denkbar als Erg&#xe4;nzung, sollte FFmpeg tats&#xe4;chliche Schw&#xe4;chen zeigen">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -162285,7 +162288,8 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="button_ok"/>
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1742168602576" ID="ID_871737890" MODIFIED="1742168698565" TEXT="Gmerlin">
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1742249270854" ID="ID_1347801315" MODIFIED="1742249278755" TEXT="falsch! es ist Gavl">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1742249270854" ID="ID_1347801315" MODIFIED="1747524127181" TEXT="falsch! es ist Gavl">
+<arrowlink COLOR="#c95974" DESTINATION="ID_219954631" ENDARROW="Default" ENDINCLINATION="813;-128;" ID="Arrow_ID_889384701" STARTARROW="None" STARTINCLINATION="1093;150;"/>
 <icon BUILTIN="broken-line"/>
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1742249279746" ID="ID_1189167261" MODIFIED="1742249293729" TEXT="Vorsicht: Upgrade auf Version-2">
@@ -162713,8 +162717,7 @@ Since then others have made contributions, see the log for the history.</font></
       man hat ein time::Control (was auch immer das in Zukunft sein wird), welches mit einem Change-Signal verbunden wird. GUI-seitig verdrahtet man dieses Signal mit dem Code, der die tats&#228;chliche &#196;nderung des Presentation-State macht
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#7f6a74" DESTINATION="ID_1446567013" ENDARROW="Default" ENDINCLINATION="-1578;239;" ID="Arrow_ID_590507558" STARTARROW="None" STARTINCLINATION="-2460;177;"/>
 </node>
 </node>
@@ -162775,8 +162778,7 @@ Since then others have made contributions, see the log for the history.</font></
       Abgesehen davon ist der Code inzwischen auch technologisch &#252;berholt und wird mit GTK-4 nicht mehr funktionieren
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1747355273449" ID="ID_1703747958" MODIFIED="1747355286397" TEXT="ehrlich gesagt: wegwerfen und neuschreiben">
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
@@ -162785,10 +162787,11 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1742249461535" ID="ID_1554376708" MODIFIED="1742256553530" TEXT="Rolle der lib-Gavl &#xfc;berpr&#xfc;fen">
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1742249461535" ID="ID_1554376708" MODIFIED="1747524255970" TEXT="Rolle der lib-Gavl &#xfc;berpr&#xfc;fen">
 <linktarget COLOR="#a41b18" DESTINATION="ID_1554376708" ENDARROW="Default" ENDINCLINATION="440;-36;" ID="Arrow_ID_608156847" SOURCE="ID_1683248748" STARTARROW="None" STARTINCLINATION="193;12;"/>
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1742256560103" ID="ID_1579484179" MODIFIED="1742266889152" TEXT="so traurig es ist: Gavl ist nicht erste Wahl">
+<linktarget COLOR="#4c3b8b" DESTINATION="ID_1554376708" ENDARROW="Default" ENDINCLINATION="219;519;" ID="Arrow_ID_589652743" SOURCE="ID_219954631" STARTARROW="None" STARTINCLINATION="326;-188;"/>
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#95060e" CREATED="1742256560103" ID="ID_1579484179" MODIFIED="1747524214221" TEXT="so traurig es ist: Gavl ist nicht erste Wahl">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -162801,8 +162804,9 @@ Since then others have made contributions, see the log for the history.</font></
   </body>
 </html></richcontent>
 <arrowlink COLOR="#592f6e" DESTINATION="ID_450633851" ENDARROW="Default" ENDINCLINATION="338;12;" ID="Arrow_ID_637755539" STARTARROW="None" STARTINCLINATION="466;0;"/>
+<icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1744719728307" ID="ID_1783840760" MODIFIED="1744719819653" TEXT="siehe steam/external/libgavl.hpp">
+<node COLOR="#435e98" CREATED="1744719728307" ID="ID_1783840760" MODIFIED="1747524201441" TEXT="siehe steam/external/libgavl.hpp">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -162812,6 +162816,98 @@ Since then others have made contributions, see the log for the history.</font></
   </body>
 </html></richcontent>
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1747489068132" ID="ID_491604266" MODIFIED="1747489074061" TEXT="wird derzeit &#xfc;berhaupt nicht verwendet"/>
+<node CREATED="1747489084369" ID="ID_1779252669" MODIFIED="1747489105751" TEXT="wohl auch gar nicht implementierbar"/>
+<node CREATED="1747489074724" ID="ID_663261791" MODIFIED="1747489124777" TEXT="ist eine blo&#xdf;e leere H&#xfc;lle"/>
+<node CREATED="1747489111527" ID="ID_229720543" MODIFIED="1747489130041" TEXT="zeigt aber die Richtung"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1747489138341" ID="ID_621636330" MODIFIED="1747489143519" TEXT="dokumentieren">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#166d3d" CREATED="1747489147636" ID="ID_1626357015" MODIFIED="1747524236658" TEXT="gavl_time_t ersetzen">
+<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1747489190149" ID="ID_395347682" LINK="https://issues.lumiera.org/ticket/1261" MODIFIED="1747489218934" TEXT="siehe Design-Skizze in #1261">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1747489228725" ID="ID_397750077" MODIFIED="1747489369180" TEXT="verwende einen Namen exakt gleicher L&#xe4;nge">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      raw_time_64
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1747489254856" ID="ID_971197875" MODIFIED="1747489345064" TEXT="danach k&#xf6;nnen alle Includes des C-Headers time.h weg">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      schon seit langem will ich von der &quot;C-Time-Library&quot; weg, denn diese ist gradezu eine Einladung, Timecode-Operationen ad-hoc zu implementieren
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1747489277561" ID="ID_1782395866" MODIFIED="1747489284084" TEXT="einzige Ausnahme: Time.cpp"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1747520420088" ID="ID_1585137684" MODIFIED="1747524248767" TEXT="C-Library f&#xfc;r Time-Handling aufl&#xf6;sen">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1747520433501" ID="ID_1627011016" MODIFIED="1747520503864" TEXT="die ist mir schon lange ein &#xbb;Dorn im Auge&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ....weil eine solche Library gradezu dazu einl&#228;d, sich nicht mit den &#8222;m&#252;hsamen&#8220; Abstraktionen des Time-Handling-Frameworks herumzuschlagen, sondern stattessen <i>einfach mit Zahlen zu rechnen.</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1747520507617" ID="ID_391130031" MODIFIED="1747520575548" TEXT="sollte die konkreten Verwendungen durchsehen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...m&#246;glicherweise lassen sich diese Funktionen n&#228;mlich in Gruppen einteilen und dann direkt in einen anonymen namespace in die jeweilige Translation-Unit schieben....
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1747520518579" ID="ID_1232667630" MODIFIED="1747520531129" TEXT="m&#xfc;&#xdf;te dann auch den C-Test (test-time) aufl&#xf6;sen">
+<node CREATED="1747520690709" ID="ID_920147641" MODIFIED="1747520695437" TEXT="der ist eigentlich nicht lang"/>
+<node CREATED="1747520696080" ID="ID_1610185152" MODIFIED="1747520880755" TEXT="und bei n&#xe4;herer Betrachtung ziemlich banal">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Der Test t&#228;uscht: weil er in C geschrieben ist, sieht er so komplex aus. Dabei besteht die erste H&#228;lfte lediglich draus, eine Konstruktor-Funktion zu testen. Der sinnvolle Kern daran ist die decimator-Sequenz zum Herunterbrechen von Zeiten. Die wird hier aber nur oberfl&#228;chlich getestet. Da sollte man, wenn schon, wirklich auf die Grenzf&#228;lle losgehen &#10233; Test neu schreiben!
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Der zweite Teil besteht im <i>Antesten</i>&#160;der drop-Frame-Umwandlung &#10233; auch das in eigenst&#228;ndigen neuen Test packen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746059853111" ID="ID_975342117" MODIFIED="1746059870062" TEXT="auch altes RenderNode-Framework zur&#xfc;ckbauen">
@@ -163898,6 +163994,15 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1742313583059" ID="ID_580462484" MODIFIED="1742313592747" TEXT="Dependency-Liste aktualisieren">
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1747524067725" ID="ID_219954631" MODIFIED="1747524193833" TEXT="Abh&#xe4;ngigkeit GAVL">
+<arrowlink COLOR="#4c3b8b" DESTINATION="ID_1554376708" ENDARROW="Default" ENDINCLINATION="219;519;" ID="Arrow_ID_589652743" STARTARROW="None" STARTINCLINATION="326;-188;"/>
+<linktarget COLOR="#c95974" DESTINATION="ID_219954631" ENDARROW="Default" ENDINCLINATION="813;-128;" ID="Arrow_ID_889384701" SOURCE="ID_1347801315" STARTARROW="None" STARTINCLINATION="1093;150;"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1747524076555" ID="ID_1964951178" MODIFIED="1747524084106" TEXT="behalte das vorerst noch bei">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1747524085359" ID="ID_976130232" LINK="https://github.com/bplaum/gavl" MODIFIED="1747524093250" TEXT="Achtung: umgezogen auf Gitub"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1742313577420" ID="ID_527584176" MODIFIED="1742313592746" TEXT="Bau-Anleitung &#xfc;berarbeiten">
 <icon BUILTIN="flag-yellow"/>

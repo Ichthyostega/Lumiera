@@ -14,7 +14,8 @@
 /** @file timevalue.hpp
  ** a family of time value like entities and their relationships.
  ** This is the foundation for the Lumiera time handling framework. On the implementation
- ** level, time values are represented as 64bit integer values `gavl_time_t`. But for the
+ ** level, time values are represented as 64bit integer values `raw_time_64`, similar to
+ ** and inspired by `gavl_time_t` from the raw-video handling [Lib-GAVL]. But for the
  ** actual use, we create several kinds of time "values", based on their logical properties.
  ** These time values are considered to be fixed (immutable) values, which may only be
  ** created through some limited construction paths, and any time based calculation
@@ -30,7 +31,7 @@
  ** way to retrieve such a value is by formatting it into a time code format.
  ** 
  ** The lib::time::TimeValue serves as foundation for all further time calculations;
- ** in fact it is implemented as a single 64bit µ-tick value (`gavl_time_t`). The
+ ** in fact it is implemented as a single 64bit µ-tick value (`raw_time_64`). The
  ** further time entities are implemented as value objects (without virtual functions):
  ** - lib::time::Time represents a time instant and is the reference for any usage
  ** - lib::time::TimeVar is a mutable time variable and can be used for calculations
@@ -86,7 +87,8 @@
  ** @see time.h basic time calculation library functions
  ** @see timequant.hpp
  ** @see TimeValue_test
- ** 
+ **  
+ ** [Lib-GAVL]: https://github.com/bplaum/gavl
  */
 
 
@@ -99,11 +101,6 @@
 #include <boost/rational.hpp>
 #include <cstdlib>
 #include <string>
-
-extern "C" {
-#include <stdint.h>
-#include <gavl/gavltime.h>
-}
 
 
 namespace lib {
@@ -119,10 +116,21 @@ namespace time {
   
   
   /**
+   * Raw µ-tick time representation used in Lumiera.
+   * @remark this representation was inspired by [Lib-GAVL].
+   * @todo 2025 a mere type alias is up to debate -- very likely we'll use a wrapper soon   /////////////////TICKET #1258
+   * @warning application logic should avoid handling any raw time value
+   *          directly and rather treat time data as an opaque entity. 
+   * [Lib-GAVL]: https://github.com/bplaum/gavl
+   */
+  using raw_time_64 = int64_t;
+  
+  
+  /**
    * basic constant internal time value.
    * These time values provide the implementation base
    * for all further time types. They can be created by
-   * wrapping up a raw micro tick value (gavl_time_t),
+   * wrapping up a raw micro tick value (raw_time_64),
    * are totally ordered, but besides that,
    * they are opaque and non-mutable.
    * @note clients should prefer to use Time instances,
@@ -132,12 +140,12 @@ namespace time {
    */
   class TimeValue
     : boost::totally_ordered<TimeValue,
-      boost::totally_ordered<TimeValue, gavl_time_t>>
+      boost::totally_ordered<TimeValue, raw_time_64>>
     {
     protected:
       /** the raw (internal) time value
        *  used to implement the time types */
-      gavl_time_t t_;
+      raw_time_64 t_;
       
       
       /** Assigning of time values is not allowed,
@@ -153,9 +161,9 @@ namespace time {
       friend class Mutation;
       
       /** explicit limit of allowed time range */
-      static gavl_time_t limitedTime (gavl_time_t raw);
+      static raw_time_64 limitedTime (raw_time_64 raw);
       /** safe calculation of explicitly limited time offset */
-      static gavl_time_t limitedDelta (gavl_time_t origin, gavl_time_t target);
+      static raw_time_64 limitedDelta (raw_time_64 origin, raw_time_64 target);
       
       /** @internal for Offset and Duration entities built on top */
       TimeValue (TimeValue const& origin, TimeValue const& target)
@@ -164,11 +172,11 @@ namespace time {
       
     public:
       /** Number of micro ticks (µs) per second as basic time scale */
-      static const gavl_time_t SCALE;
+      static const raw_time_64 SCALE;
       
       
       explicit
-      TimeValue (gavl_time_t val)         ///< time given in µ ticks here
+      TimeValue (raw_time_64 val)         ///< time given in µ ticks here
         : t_{limitedTime (val)}
         { }
       
@@ -178,9 +186,9 @@ namespace time {
         { }
       
       /** @internal to pass Time values to C functions */
-      friend gavl_time_t _raw (TimeValue const& time) { return time.t_; }
+      friend raw_time_64 _raw (TimeValue const& time) { return time.t_; }
       friend HashVal hash_value (TimeValue const&);
-      static TimeValue buildRaw_(gavl_time_t);
+      static TimeValue buildRaw_(raw_time_64);
       
       /** @internal diagnostics */
       operator std::string ()  const;
@@ -190,10 +198,10 @@ namespace time {
       
       // Supporting totally_ordered
       friend bool operator<  (TimeValue const& t1, TimeValue const& t2)  { return t1.t_ <  t2.t_; }
-      friend bool operator<  (TimeValue const& t1, gavl_time_t t2)       { return t1.t_ <  t2   ; }
-      friend bool operator>  (TimeValue const& t1, gavl_time_t t2)       { return t1.t_ >  t2   ; }
+      friend bool operator<  (TimeValue const& t1, raw_time_64 t2)       { return t1.t_ <  t2   ; }
+      friend bool operator>  (TimeValue const& t1, raw_time_64 t2)       { return t1.t_ >  t2   ; }
       friend bool operator== (TimeValue const& t1, TimeValue const& t2)  { return t1.t_ == t2.t_; }
-      friend bool operator== (TimeValue const& t1, gavl_time_t t2)       { return t1.t_ == t2   ; }
+      friend bool operator== (TimeValue const& t1, raw_time_64 t2)       { return t1.t_ == t2   ; }
     };
   
   
@@ -207,7 +215,7 @@ namespace time {
   /** relative framecount or frame number.
    *  Used within the engine at places where the underlying
    *  grid and origin is obvious from the call context.
-   * @warning do not mix up gavl_time_t and FrameCnt.
+   * @warning do not mix up raw_time_64 and FrameCnt.
    * @warning use 64bit consistently.
    *          beware: `long` is 32bit on i386
    * @note any conversion to frame numbers should go through
@@ -216,7 +224,7 @@ namespace time {
   using FrameCnt = int64_t;
   
   /** rational representation of fractional seconds
-   * @warning do not mix up gavl_time_t and FSecs */
+   * @warning do not mix up raw_time_64 and FSecs */
   using FSecs = boost::rational<int64_t>;
   
   
@@ -226,7 +234,7 @@ namespace time {
    *  allowing copy and re-accessing
    * @note supports scaling by a factor,
    *       which _deliberately_ is chosen
-   *       as int, not gavl_time_t, because the
+   *       as int, not raw_time_64, because the
    *       multiplying of times is meaningless.
    */
   class TimeVar
@@ -258,7 +266,7 @@ namespace time {
         }
       
       /// Support mixing with plain 64bit int arithmetics
-      operator gavl_time_t()  const { return t_; }
+      operator raw_time_64()  const { return t_; }
       /// Support for micro-tick precise time arithmetics
       operator FSecs()  const { return FSecs{t_, TimeValue::SCALE}; }
       
@@ -708,8 +716,8 @@ namespace time {
       return n;
     }
     
-    inline gavl_time_t
-    symmetricLimit (gavl_time_t raw, TimeValue lim)
+    inline raw_time_64
+    symmetricLimit (raw_time_64 raw, TimeValue lim)
     {
       return  raw > lim?  _raw(lim)
            : -raw > lim? -_raw(lim)
@@ -744,21 +752,21 @@ namespace time {
    * While Time entities are \c not a "safeInt"
    * implementation, we limit new values to
    * lower the likelihood of wrap-around */
-  inline gavl_time_t
-  TimeValue::limitedTime (gavl_time_t raw)
+  inline raw_time_64
+  TimeValue::limitedTime (raw_time_64 raw)
   {
     return symmetricLimit (raw, Time::MAX);
   }
   
-  inline gavl_time_t
-  TimeValue::limitedDelta (gavl_time_t origin, gavl_time_t target)
+  inline raw_time_64
+  TimeValue::limitedDelta (raw_time_64 origin, raw_time_64 target)
   {
     if (0 > (origin^target))
       {// prevent possible numeric wrap
         origin = symmetricLimit (origin, Duration::MAX);
         target = symmetricLimit (target, Duration::MAX);
       }
-    gavl_time_t res = target - origin;
+    raw_time_64 res = target - origin;
     return symmetricLimit (res, Duration::MAX);
   }
   

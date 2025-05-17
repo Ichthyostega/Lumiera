@@ -29,7 +29,7 @@
 
 
 #include "stage/widget/timecode-widget.hpp"
-
+#include "lib/time/timevalue.hpp"
 #include "lib/time/diagnostics.hpp"  ////////////TODO: temporary solution to get H:M:S components. Use TimeCode instead!
 
 #include <boost/lexical_cast.hpp>
@@ -39,9 +39,6 @@
 #include <cstdlib>
 #include <locale>
 #include <string>
-
-#include <gavl/gavl.h>
-#include <sigc++/bind.h>
 
 
 using boost::lexical_cast;
@@ -433,7 +430,7 @@ namespace widget {
   // void
   // TimeCode::smpte_offset_changed()
   // {
-  //  gavl_time_t current;
+  //  raw_time_64 current;
   
   //  switch (_mode) {
   //  case SMPTE:
@@ -1278,7 +1275,7 @@ namespace widget {
   Time
   TimeCode::audio_time_from_display ()  const
   {
-    gavl_time_t parsedAudioFrames = lexical_cast<int>(audio_frames_label.get_text());
+    raw_time_64 parsedAudioFrames = lexical_cast<int>(audio_frames_label.get_text());
     return Time(TimeValue(parsedAudioFrames));
   }
   

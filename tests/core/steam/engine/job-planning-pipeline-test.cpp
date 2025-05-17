@@ -235,7 +235,7 @@ namespace test  {
                               {
                                 Time frame{pipeline.currPoint};                     // can access the embedded PipeFrameTick core to get "currPoint" (nominal time)
                                 Job job = pipeline->ticket().createJobFor(frame);   // looking always at the second element, which is the current JobTicket
-                                TimeValue nominalTime{job.parameter.nominalTime};   // job parameter holds the microseconds (gavl_time_t)
+                                TimeValue nominalTime{job.parameter.nominalTime};   // job parameter holds the microseconds (raw_time_64)
                                 int32_t mark = job.parameter.invoKey.part.a;        // the MockDispatcher places the given "mark" here
                                 return _Fmt{"J(%d|%s)"} % mark % nominalTime;
                               };
@@ -309,7 +309,7 @@ namespace test  {
           auto visualise = [](auto& pipeline) -> string
                               {
                                 Job job = pipeline.buildJob();                      // let the JobPlanning construct the »current job«
-                                TimeValue nominalTime{job.parameter.nominalTime};   // job parameter holds the microseconds (gavl_time_t)
+                                TimeValue nominalTime{job.parameter.nominalTime};   // job parameter holds the microseconds (raw_time_64)
                                 int32_t mark = job.parameter.invoKey.part.a;        // the MockDispatcher places the given "mark" here
                                 TimeValue deadline{pipeline.determineDeadline()};
                                 return _Fmt{"J(%d|%s⧐%s)"}

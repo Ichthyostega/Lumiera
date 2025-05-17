@@ -339,7 +339,7 @@ namespace test {
                                   {
                                     auto N = AVERAGE_EPOCHS;
                                     auto averageTicks = double(_raw(old))*(N-1)/N + contribution/N;
-                                    return TimeValue{gavl_time_t (floor (averageTicks))};
+                                    return TimeValue{raw_time_64 (floor (averageTicks))};
                                   };
           
           TimeVar step = bFlow.getEpochStep();
@@ -396,8 +396,8 @@ namespace test {
         {
           const size_t      FPS = 200;
           const size_t TICK_P_S = FPS * ACTIVITIES_P_FR;   // Simulated throughput 200 frames per second
-          const gavl_time_t STP = Time::SCALE / TICK_P_S;  // Simulation stepping (here 2 steps per ms)
-          const gavl_time_t RUN = _raw(Time{0,0,3});       // nominal length of the simulation time axis
+          const raw_time_64 STP = Time::SCALE / TICK_P_S;  // Simulation stepping (here 2 steps per ms)
+          const raw_time_64 RUN = _raw(Time{0,0,3});       // nominal length of the simulation time axis
           Offset BASE_DEADLINE{FSecs{1,2}};                // base pre-roll before deadline
           Offset SPREAD_DEAD{FSecs{2,100}};                // random spread of deadline around base
           const uint INVOKE_LAG = _raw(Time{250,0}) /STP;  // „invoke“ the Activity after simulated 250ms (≙ 500 steps)

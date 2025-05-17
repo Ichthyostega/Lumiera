@@ -13,11 +13,31 @@
 
 
 /** @file libgavl.hpp
- ** Concrete implementation of the MediaImplLib facade to work with `libGAVL`
+ ** Concrete implementation of the MediaImplLib facade to work with [lib-GAVL],
+ ** a library for handling basic raw video data formats.
  ** @todo a draft and placeholder code from 2008, at which time the intention was
  **       to rely on libGAVL for processing of raw media data. This seemed like a
  **       good idea at that time, but we should re-evaluate if libGAVL is maintained
- **       and in actual use, before we start really relying on it
+ **       and in actual use, before we start really relying on it.
+ ** @todo 2025 this code is a kind of _architecture placeholder_ — it is clear that
+ **       a solution can can not be _that simple_, but any viable solution will
+ **       rely onto an approach like outlined here: provide a façade interface,
+ **       which has to be implemented by any plug-in component to provide access
+ **       to the processing capabilities of a specific library. The access point
+ **       functions exposed on the facade however must be shaped by the specific
+ **       way how the builder and the render engine interacts with and delegates
+ **       back to the media-handling library. Such an interface can not be based
+ **       on first principles alone.
+ ** @todo 2025 I still retain the dependency on lib-GAVL for now, even while we
+ **       never got into actually using it. Simply because I still consider this
+ **       library exemplary, and would love to use it for real. Yet it remains
+ **       to be seen if the project actually gets a chance to do so, simply
+ **       because FFmpeg roughly covers the same ground. Presumably it turns
+ **       out to be a basic requirement to ship a plug-in with FFmpeg binding.
+ **       Furthermore, one especially tricky aspect is how to support displays
+ **       with extended dynamic range -- a requirement which has the potential
+ **       to blur the notion of »raw video«...
+ ** [Lib-GAVL]: https://github.com/bplaum/gavl
  */
 
 

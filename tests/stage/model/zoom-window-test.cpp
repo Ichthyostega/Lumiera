@@ -67,6 +67,7 @@ namespace stage{
 namespace model{
 namespace test {
   
+  using lib::time::raw_time_64;
   
   namespace { // simplified notation for expected results...
     
@@ -577,7 +578,7 @@ namespace test {
           CHECK (2_r/3 < poison and poison < 1);                                 // looks innocuous...
           CHECK (poison + Time::SCALE < 0);                                      // simple calculations fail due to numeric overflow
           CHECK (poison * Time::SCALE < 0);
-          CHECK (-6 == rational_cast<gavl_time_t>(poison * Time::SCALE));        // naive conversion to µ-ticks would lead to overflow
+          CHECK (-6 == rational_cast<raw_time_64>(poison * Time::SCALE));        // naive conversion to µ-ticks would lead to overflow
           CHECK (671453 == _raw(Time(FSecs(poison))));                           // however the actual conversion routine is safeguarded
           CHECK (671453.812f == rational_cast<float>(poison)*Time::SCALE);
           
@@ -667,7 +668,7 @@ namespace test {
           CHECK (win.overallSpan().duration() == TimeValue{307445734561825860}); // However, all base values turn out unaffected
           CHECK (win.visible().duration()     == TimeValue{856350691});
           
-          TimeValue targetPos{gavl_time_t(_raw(win.overallSpan().duration())     // based on the overall span...
+          TimeValue targetPos{raw_time_64(_raw(win.overallSpan().duration())     // based on the overall span...
                                           * rational_cast<double> (poison))};    // the given toxic factor would point at that target position
           
           CHECK (targetPos             == TimeValue{206435633551724864});

@@ -493,10 +493,10 @@ NOTE: At the time when Lumiera project started, the standard library provided
 Time
 ~~~~
 Time values are represented by a family of opaque date types
-with overloaded operators. The implementation is based on `gavl_time_t`,
-an integral (µsec) time tick value. Thus, the arithmetic on time values
-and time spans is limited and any Time handling and conversion is
-centralised in library routines.
+with overloaded operators. The implementation was inspired by `gavl_time_t`
+and is thus based on a µ-seccond time grid, represented as 64-bit integer.
+Thus, the arithmetic on time values and time spans is limited and any Time
+handling and conversion is centralised in library routines.
 
 We distinguish between time values and a _quantisation_ into a frame
 or sample grid. In any case, quantisation has to be done once, explicitly

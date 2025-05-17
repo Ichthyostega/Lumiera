@@ -362,7 +362,7 @@ namespace gear {
         {
           auto scatter = [&](Duration horizon)
                             {
-                              gavl_time_t wrap = hash_value(now) % _raw(horizon);
+                              lib::time::raw_time_64 wrap = hash_value(now) % _raw(horizon);
                               ENSURE (0 <= wrap and wrap < _raw(horizon));
                               return TimeValue{wrap};
                             };

@@ -61,13 +61,13 @@ namespace test{
    */
   class TimeMutation_test : public Test
     {
-      gavl_time_t
+      raw_time_64
       random_or_get (string arg)
         {
           if (isnil(arg))
-            return gavl_time_t(1 + rani (100000)) * TimeValue::SCALE;
+            return raw_time_64(1 + rani (100000)) * TimeValue::SCALE;
           else
-            return lexical_cast<gavl_time_t> (arg);
+            return lexical_cast<raw_time_64> (arg);
         }
       
       struct TestValues

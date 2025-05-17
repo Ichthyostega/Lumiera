@@ -44,7 +44,7 @@ namespace test{
    */
   class TimeValue_test : public Test
     {
-      gavl_time_t
+      raw_time_64
       random_or_get (Arg arg)
         {
           if (isnil(arg))
@@ -53,7 +53,7 @@ namespace test{
               return 1 + rani(10000);
             }
           else
-            return lexical_cast<gavl_time_t> (arg[1]);
+            return lexical_cast<raw_time_64> (arg[1]);
         }
       
       
@@ -101,7 +101,7 @@ namespace test{
           CHECK (val  < max);
           
           // mixed comparisons with raw numeric time
-          gavl_time_t g2 (-2);
+          raw_time_64 g2 (-2);
           CHECK (zero > g2);
           CHECK (one  > g2);
           CHECK (one >= g2);
@@ -142,7 +142,7 @@ namespace test{
           CHECK (var < Time::MAX);
           CHECK (var > Time::MIN);
           
-          gavl_time_t raw (var);
+          raw_time_64 raw (var);
           CHECK (raw == org);
           CHECK (raw >  org - two);
           

@@ -31,6 +31,12 @@
  ** this model are defined to be a special kind of timecode, and thus dependent on
  ** a preceding time quantisation.
  ** 
+ ** @deprecated 2025 this should not be a "simple" C library set aside from the Lumiera
+ **             time handling framework, rather it should be clarified that these are
+ **             implementation helpers and must not be used by any application code.
+ **             It should be checked which of these functions actually need to be
+ **             exposed through an interface header, since these are typically
+ **             used to implement parts of the time handling framework.
  ** 
  ** @see lib::time::Time
  ** @see timequant.hpp
@@ -43,10 +49,11 @@
 #define LUMIERA_TIME_H
 
 #include <inttypes.h>
-#include <gavl/gavl.h>
 
 #ifdef __cplusplus /*=================== C++ facilities ===================== */
 #include "lib/time/timevalue.hpp"
+
+using lib::time::raw_time_64;
 
 
 /**
@@ -56,7 +63,7 @@
  *       here negative fractional micro-ticks are truncated towards zero.
  *       This was deemed irrelevant in practice.
  */
-gavl_time_t
+raw_time_64
 lumiera_rational_to_time (lib::time::FSecs const& fractionalSeconds);
 
 
@@ -66,7 +73,7 @@ lumiera_rational_to_time (lib::time::FSecs const& fractionalSeconds);
  * @note handles only positive frame counts and assumes the
  *       origin to be at zero.
  */
-gavl_time_t
+raw_time_64
 lumiera_framecount_to_time (uint64_t frameCount, lib::time::FrameRate const& fps);
 
 
@@ -75,7 +82,7 @@ lumiera_framecount_to_time (uint64_t frameCount, lib::time::FrameRate const& fps
  * @param framerate underlying framerate as rational number
  * @throw error::Logic on zero framerate
  */
-gavl_time_t
+raw_time_64
 lumiera_frame_duration (lib::time::FrameRate const& fps);
 
 
@@ -91,15 +98,15 @@ extern "C" {    /* ===================== C interface ======================== */
  * The time grid used for quantisation is comprised of equally spaced intervals,
  * rooted at the given origin. The interval starting with the origin is numbered
  * as zero. Each interval includes its lower bound, but excludes its upper bound.
- * @param grid spacing of the grid intervals, measured in GAVL_TIME_SCALE
+ * @param grid spacing of the grid intervals, measured in TimeValue::Scale (µ-ticks)
  * @return number of the grid interval containing the given time.
  * @warning the resulting value is limited to (Time::Min, Time::MAX)
  */
 int64_t
-lumiera_quantise_frames (gavl_time_t time, gavl_time_t origin, gavl_time_t grid);
+lumiera_quantise_frames (raw_time_64 time, raw_time_64 origin, raw_time_64 grid);
 
 int64_t
-lumiera_quantise_frames_fps (gavl_time_t time, gavl_time_t origin, uint framerate);
+lumiera_quantise_frames_fps (raw_time_64 time, raw_time_64 origin, uint framerate);
 
 /**
  * Similar to #lumiera_quantise_frames, but returns a grid aligned _relative time_.
@@ -110,17 +117,17 @@ lumiera_quantise_frames_fps (gavl_time_t time, gavl_time_t origin, uint framerat
  *         origin = Time::MIN, then all original time values above zero will be
  *         clipped, because the result, relative to origin, needs to be <= Time::MAX
  */
-gavl_time_t
-lumiera_quantise_time (gavl_time_t time, gavl_time_t origin, gavl_time_t grid);
+raw_time_64
+lumiera_quantise_time (raw_time_64 time, raw_time_64 origin, raw_time_64 grid);
 
 /**
  * Calculate time of a grid point (frame start)
  * @param nr index number of the grid point (0 is at origin)
- * @param grid spacing of the grid intervals, measured in GAVL_TIME_SCALE
+ * @param grid spacing of the grid intervals, measured in TimeValue::Scale (µ-ticks)
  * @return time point (frame start) on the Lumiera internal time scale
  */
-gavl_time_t
-lumiera_time_of_gridpoint (int64_t nr, gavl_time_t origin, gavl_time_t grid);
+raw_time_64
+lumiera_time_of_gridpoint (int64_t nr, raw_time_64 origin, raw_time_64 grid);
 
 /**
  * Build a time value by summing up the given components.
@@ -129,7 +136,7 @@ lumiera_time_of_gridpoint (int64_t nr, gavl_time_t origin, gavl_time_t grid);
  * @param mins number of minutes
  * @param hours number of hours
  */
-gavl_time_t
+raw_time_64
 lumiera_build_time (long millis, uint secs, uint mins, uint hours);
 
 /**
@@ -140,7 +147,7 @@ lumiera_build_time (long millis, uint secs, uint mins, uint hours);
  * @param mins number of minutes
  * @param hours number of hours
  */
-gavl_time_t
+raw_time_64
 lumiera_build_time_fps (uint fps, uint frames, uint secs, uint mins, uint hours);
 
 /**
@@ -148,59 +155,59 @@ lumiera_build_time_fps (uint fps, uint frames, uint secs, uint mins, uint hours)
  * The components are interpreted as a NTSC drop-frame timecode.
  * @warning take care not to specify time codes that are illegal NTSC drop-frame times.
  */
-gavl_time_t
+raw_time_64
 lumiera_build_time_ntsc_drop (uint frames, uint secs, uint mins, uint hours);
 
 
 /** Extract the hour part of given time. */
 int
-lumiera_time_hours (gavl_time_t time);
+lumiera_time_hours (raw_time_64 time);
 
 
 /** Extract the minute part of given time. */
 int
-lumiera_time_minutes (gavl_time_t time);
+lumiera_time_minutes (raw_time_64 time);
 
 
 /** Extract the seconds part of given time. */
 int
-lumiera_time_seconds (gavl_time_t time);
+lumiera_time_seconds (raw_time_64 time);
 
 
 /** Extract the milliseconds part of given time. */
 int
-lumiera_time_millis (gavl_time_t time);
+lumiera_time_millis (raw_time_64 time);
 
 /**
  * Extract the remaining frame part of given time.
  * @param fps frame rate (frames per second)
  */
 int
-lumiera_time_frames (gavl_time_t time, uint fps);
+lumiera_time_frames (raw_time_64 time, uint fps);
 
 /**
  * Extract the frame part of given time, using NTSC drop-frame timecode.
  */
 int
-lumiera_time_ntsc_drop_frames (gavl_time_t time);
+lumiera_time_ntsc_drop_frames (raw_time_64 time);
 
 /**
  * Extract the second part of given time, using NTSC drop-frame timecode.
  */
 int
-lumiera_time_ntsc_drop_seconds (gavl_time_t time);
+lumiera_time_ntsc_drop_seconds (raw_time_64 time);
 
 /**
  * Extract the minute part of given time, using NTSC drop-frame timecode.
  */
 int
-lumiera_time_ntsc_drop_minutes (gavl_time_t time);
+lumiera_time_ntsc_drop_minutes (raw_time_64 time);
 
 /**
  * Extract the hour part of given time, using NTSC drop-frame timecode.
  */
 int
-lumiera_time_ntsc_drop_hours (gavl_time_t time);
+lumiera_time_ntsc_drop_hours (raw_time_64 time);
 
 
 /**
@@ -210,7 +217,7 @@ lumiera_time_ntsc_drop_hours (gavl_time_t time);
  *       by rendering into a suitable timecode format.
  */
 char*
-lumiera_tmpbuf_print_time (gavl_time_t time);
+lumiera_tmpbuf_print_time (raw_time_64 time);
 
 
 

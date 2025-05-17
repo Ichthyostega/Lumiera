@@ -20,13 +20,18 @@
 
 
 #include "lib/test/test.h"
-#include "lib/time.h"
 
+#include <inttypes.h>
 #include <ctype.h>
 #include <nobug.h>
 
+typedef int64_t raw_time_64;   //////////////////////////////////////////////////////////////////////////////TICKET #1259 turn time.h in to a C++ implementation header
+
+#include "lib/time.h"   /////////////////////////////////////////////////////////////////////////////////////TICKET #1259 this should not be a general purpose library, but rather an implementation base
+
+
 static int
-calculate_framecount (gavl_time_t t, uint fps)
+calculate_framecount (raw_time_64 t, uint fps)
 {
   return lumiera_quantise_frames_fps (t,0,fps);
 }
@@ -48,9 +53,9 @@ const int FPS = 24;
 TEST (basic)
 {
   // Zero
-  gavl_time_t t = lumiera_build_time (0,0,0,0);
+  raw_time_64 t = lumiera_build_time (0,0,0,0);
 
-  CHECK ((gavl_time_t) t                 == 0);
+  CHECK ((raw_time_64) t                 == 0);
   CHECK (lumiera_time_millis (t)         == 0);
   CHECK (lumiera_time_seconds (t)        == 0);
   CHECK (lumiera_time_minutes (t)        == 0);
@@ -83,7 +88,7 @@ TEST (basic)
 
 TEST (fps)
 {
-  gavl_time_t t = lumiera_build_time_fps (FPS, FRAMES, SECONDS, MINUTES, HOURS);
+  raw_time_64 t = lumiera_build_time_fps (FPS, FRAMES, SECONDS, MINUTES, HOURS);
 
   CHECK (lumiera_time_millis (t)         == FRAMES * 1000 / FPS);
   CHECK (lumiera_time_seconds (t)        == SECONDS);
@@ -102,9 +107,9 @@ TEST (fps)
 TEST (ntsc_drop_frame)
 {
   // Make sure frame 0 begins at 0
-  gavl_time_t t = lumiera_build_time_ntsc_drop (0, 0, 0, 0);
+  raw_time_64 t = lumiera_build_time_ntsc_drop (0, 0, 0, 0);
 
-  CHECK ((gavl_time_t) t                 == 0);
+  CHECK ((raw_time_64) t                 == 0);
   CHECK (lumiera_time_millis (t)         == 0);
   CHECK (lumiera_time_seconds (t)        == 0);
   CHECK (lumiera_time_minutes (t)        == 0);

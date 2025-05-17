@@ -21,6 +21,10 @@
  ** the referenced libraries, though. This will be done with adapter implementations,
  ** where the interface MediaImplLip defines those aspects actually used and required
  ** by our internal processing.
+ ** @deprecated 2025 -- this is an architecture draft, and shows the direction to take
+ **             for the integration with external libraries. Yet in reality, this task
+ **             can not conceivably be thus simple; take everything here with a grain
+ **             of salt (since this code is not yet actually used in any way).
  */
 
 

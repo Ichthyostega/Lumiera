@@ -350,7 +350,7 @@ namespace time {
   /** */
   Secs::Secs (QuTime const& quantisedTime)
     : TCode(quantisedTime)
-//  : sec_(TimeVar(quantisedTime) / GAVL_TIME_SCALE)   //////////////////////////////////////////////////////TICKET #736 implement Seconds format
+//  : sec_(TimeVar(quantisedTime) / TimeValue::SCALE)   /////////////////////////////////////////////////////TICKET #736 implement Seconds format
     { }
   
   

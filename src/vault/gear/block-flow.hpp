@@ -434,7 +434,7 @@ namespace gear {
       adjustEpochStep (double factor)
         {
           double stretched = _raw(epochStep_) * factor;
-          gavl_time_t microTicks(floor (stretched));
+          raw_time_64 microTicks(floor (stretched));
           epochStep_ = TimeValue{microTicks};
         }
       

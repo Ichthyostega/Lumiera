@@ -124,7 +124,7 @@ union InvocationInstanceID
  */
 struct lumiera_jobParameter_struct
   {
-    gavl_time_t nominalTime;        /////////////////////////////////////////////////////////////////////////TICKET #1295 job invocation parameter: framework to interpret this time
+    raw_time_64 nominalTime;        /////////////////////////////////////////////////////////////////////////TICKET #1295 job invocation parameter: framework to interpret this time
     InvocationInstanceID invoKey;
                          //////////////////////////////////////////////////////////////TODO: place an additional parameter value here, or make the instanceID globally unique?
                          ////////////////////////////////////////////////////////////////////////////////////TICKET #1293 job invocation identity
@@ -166,7 +166,7 @@ typedef lumiera_jobDefinition* LumieraJobDefinition;
  */
 struct lumiera_jobDescriptor_struct
   {
-    gavl_time_t deadline;                ///< given in real wall clock time
+    raw_time_64 deadline;                ///< given in real wall clock time
     JobState jobState;
     
     lumiera_jobDefinition jobDefinition; ///< of interest only to Steam-Layer

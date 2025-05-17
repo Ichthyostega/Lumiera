@@ -20,7 +20,7 @@ Description
   * We use an uniform time type. Time is time, not frames, samples etc.
   * All timings in Lumiera are based on integral datatypes
   * We use a fixed, very fine grid, something of the sort of microseconds
-  * The internal representation is based on a `typedef int64_t gavl_time_t`
+  * The internal representation is based on a `using raw_time_64 = int64_t`
   * We use a set of library routines and  convenience-methods to
     - Get time in different formats (fractional seconds, frame counts)
     - Calculate with time values (overloaded operators)

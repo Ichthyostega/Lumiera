@@ -17,9 +17,9 @@
 /** @file time.cpp
  ** Lumiera time handling core implementation unit.
  ** This translation unit generates code for the Lumiera internal time wrapper,
- ** based on gavl_time_t, associated constants, marker classes for the derived
- ** time entities (TimeVar, Offset, Duration, TimeSpan, FrameRate) and for the
- ** basic time and frame rate conversion functions.
+ ** based on 64bit integral µ-tick values, associated constants, marker classes
+ ** for the derived time entities (TimeVar, Offset, Duration, TimeSpan, FrameRate)
+ ** and for the basic time and frame rate conversion functions.
  ** 
  ** Client code includes either time.h (for basics and conversion functions)
  ** or timevalue.hpp (for the time entities), timequant.hpp for grid aligned
@@ -75,11 +75,11 @@ namespace meta {
 namespace time {
   
   
-  const gavl_time_t TimeValue::SCALE = GAVL_TIME_SCALE;
+  const raw_time_64 TimeValue::SCALE = 1'000'000;
   
   
   /** @note the allowed time range is explicitly limited to help overflow protection */
-  const Time Time::MAX ( TimeValue::buildRaw_(+std::numeric_limits<gavl_time_t>::max() / 30) );
+  const Time Time::MAX ( TimeValue::buildRaw_(+std::numeric_limits<raw_time_64>::max() / 30) );
   const Time Time::MIN ( TimeValue::buildRaw_(-_raw(Time::MAX)                             ) );
   const Time Time::ZERO;
   
@@ -94,8 +94,8 @@ namespace time {
 
   
 /** scale factor _used locally within this implementation header_.
- *  GAVL_TIME_SCALE rsp. TimeValue::SCALE is the correct factor or dividend when using
- *  gavl_time_t for display on a scale with seconds. Since we want to use milliseconds,
+ *  TimeValue::SCALE (µ-ticks, i.e. 1e6) is the correct factor or dividend when using
+ *  raw_time_64 for display on a scale with seconds. Since we want to use milliseconds,
  *  we need to multiply or divide by 1000 to get correct results. */
 #define TIME_SCALE_MS (lib::time::TimeValue::SCALE / 1000)
   
@@ -138,7 +138,7 @@ namespace time {
    *        of any "time-like" value, it is meant to be compact. */
   TimeValue::operator string()  const
   {
-    gavl_time_t time = t_;
+    raw_time_64 time = t_;
     int64_t millis, seconds;
     bool negative = (time < 0);
     
@@ -163,7 +163,7 @@ namespace time {
    */
   Time::operator string()  const
   {
-    gavl_time_t time = t_;
+    raw_time_64 time = t_;
     int millis, seconds, minutes, hours;
     bool negative = (time < 0);
     
@@ -233,7 +233,7 @@ namespace time {
   /** @internal backdoor to sneak in a raw time value
    *      bypassing any normalisation and limiting */
   TimeValue
-  TimeValue::buildRaw_ (gavl_time_t raw)
+  TimeValue::buildRaw_ (raw_time_64 raw)
   {
     return reinterpret_cast<TimeValue const&> (raw);
   }
@@ -326,7 +326,7 @@ namespace time {
   {
     boost::rational<int64_t> distance (this->t_);
     distance *= factor;
-    gavl_time_t microTicks = floordiv (distance.numerator(), distance.denominator());
+    raw_time_64 microTicks = floordiv (distance.numerator(), distance.denominator());
     return Offset{buildRaw_(microTicks)};
   }
   
@@ -337,7 +337,7 @@ namespace time {
   {
     double distance(this->t_);
     distance *= factor;
-    gavl_time_t microTicks = floor (distance);
+    raw_time_64 microTicks = floor (distance);
     return Offset{buildRaw_(microTicks)};
   }
   
@@ -383,7 +383,7 @@ namespace util {
 
 
 char*
-lumiera_tmpbuf_print_time (gavl_time_t time)
+lumiera_tmpbuf_print_time (raw_time_64 time)
 {
   int milliseconds, seconds, minutes, hours;
   bool negative = (time < 0);
@@ -409,7 +409,7 @@ lumiera_tmpbuf_print_time (gavl_time_t time)
 
 
 /// @todo this utility function could be factored out into a `FSecs` or `RSec` class  ///////////////////////TICKET #1262
-gavl_time_t
+raw_time_64
 lumiera_rational_to_time (FSecs const& fractionalSeconds)
 {
   // avoid numeric wrap from values not representable as 64bit µ-ticks
@@ -417,22 +417,22 @@ lumiera_rational_to_time (FSecs const& fractionalSeconds)
     return (fractionalSeconds < 0? -1:+1)
          * std::numeric_limits<int64_t>::max();
   
-  return gavl_time_t(util::reQuant (fractionalSeconds.numerator()
+  return raw_time_64(util::reQuant (fractionalSeconds.numerator()
                                    ,fractionalSeconds.denominator()
                                    ,lib::time::TimeValue::SCALE
                                    ));
 }
 
-gavl_time_t
+raw_time_64
 lumiera_framecount_to_time (uint64_t frameCount, FrameRate const& fps)
 {
   // convert to 64bit
   boost::rational<uint64_t> framerate (fps.numerator(), fps.denominator());
   
-  return rational_cast<gavl_time_t> (lib::time::TimeValue::SCALE * frameCount / framerate);
+  return rational_cast<raw_time_64> (lib::time::TimeValue::SCALE * frameCount / framerate);
 }
 
-gavl_time_t
+raw_time_64
 lumiera_frame_duration (FrameRate const& fps)
 {
   if (!fps)
@@ -447,20 +447,20 @@ lumiera_frame_duration (FrameRate const& fps)
 namespace { // implementation: basic frame quantisation....
   
   inline int64_t
-  calculate_quantisation (gavl_time_t time, gavl_time_t origin, gavl_time_t grid)
+  calculate_quantisation (raw_time_64 time, raw_time_64 origin, raw_time_64 grid)
   {
     time -= origin;
     return floordiv (time,grid);
   }
   
   inline int64_t
-  calculate_quantisation (gavl_time_t time, gavl_time_t origin, uint framerate, uint framerate_divisor=1)
+  calculate_quantisation (raw_time_64 time, raw_time_64 origin, uint framerate, uint framerate_divisor=1)
   {
     REQUIRE (framerate);
     REQUIRE (framerate_divisor);
     
-    const int64_t limit_num = std::numeric_limits<gavl_time_t>::max() / framerate;
-    const int64_t limit_den = std::numeric_limits<gavl_time_t>::max() / framerate_divisor;
+    const int64_t limit_num = std::numeric_limits<raw_time_64>::max() / framerate;
+    const int64_t limit_den = std::numeric_limits<raw_time_64>::max() / framerate_divisor;
     const int64_t microScale {lib::time::TimeValue::SCALE};
     
     // protect against numeric overflow
@@ -474,7 +474,7 @@ namespace { // implementation: basic frame quantisation....
       {
         // direct calculation will overflow.
         // use the less precise method instead...
-        gavl_time_t frameDuration = microScale / framerate; // truncated to µs
+        raw_time_64 frameDuration = microScale / framerate; // truncated to µs
         return calculate_quantisation (time,origin, frameDuration);
       }
   }
@@ -482,37 +482,37 @@ namespace { // implementation: basic frame quantisation....
 
 
 int64_t
-lumiera_quantise_frames (gavl_time_t time, gavl_time_t origin, gavl_time_t grid)
+lumiera_quantise_frames (raw_time_64 time, raw_time_64 origin, raw_time_64 grid)
 {
   return calculate_quantisation (time, origin, grid);
 }
 
 int64_t
-lumiera_quantise_frames_fps (gavl_time_t time, gavl_time_t origin, uint framerate)
+lumiera_quantise_frames_fps (raw_time_64 time, raw_time_64 origin, uint framerate)
 {
   return calculate_quantisation (time, origin, framerate);
 }
 
-gavl_time_t
-lumiera_quantise_time (gavl_time_t time, gavl_time_t origin, gavl_time_t grid)
+raw_time_64
+lumiera_quantise_time (raw_time_64 time, raw_time_64 origin, raw_time_64 grid)
 {
   int64_t count = calculate_quantisation (time, origin, grid);
-  gavl_time_t alignedTime = count * grid;
+  raw_time_64 alignedTime = count * grid;
   return alignedTime;
 }
 
-gavl_time_t
-lumiera_time_of_gridpoint (int64_t nr, gavl_time_t origin, gavl_time_t grid)
+raw_time_64
+lumiera_time_of_gridpoint (int64_t nr, raw_time_64 origin, raw_time_64 grid)
 {
-  gavl_time_t offset = nr * grid;
+  raw_time_64 offset = nr * grid;
   return origin + offset;
 }
 
 
-gavl_time_t
+raw_time_64
 lumiera_build_time(long millis, uint secs, uint mins, uint hours)
 {
-  gavl_time_t time = millis
+  raw_time_64 time = millis
                    + 1000 * secs
                    + 1000 * 60 * mins
                    + 1000 * 60 * 60 * hours;
@@ -520,10 +520,10 @@ lumiera_build_time(long millis, uint secs, uint mins, uint hours)
   return time;
 }
 
-gavl_time_t
+raw_time_64
 lumiera_build_time_fps (uint fps, uint frames, uint secs, uint mins, uint hours)
 {
-  gavl_time_t time = 1000LL * frames/fps
+  raw_time_64 time = 1000LL * frames/fps
                    + 1000 * secs
                    + 1000 * 60 * mins
                    + 1000 * 60 * 60 * hours;
@@ -532,31 +532,31 @@ lumiera_build_time_fps (uint fps, uint frames, uint secs, uint mins, uint hours)
 }
 
 int
-lumiera_time_hours (gavl_time_t time)
+lumiera_time_hours (raw_time_64 time)
 {
   return time / TIME_SCALE_MS / 1000 / 60 / 60;
 }
 
 int
-lumiera_time_minutes (gavl_time_t time)
+lumiera_time_minutes (raw_time_64 time)
 {
   return (time / TIME_SCALE_MS / 1000 / 60) % 60;
 }
 
 int
-lumiera_time_seconds (gavl_time_t time)
+lumiera_time_seconds (raw_time_64 time)
 {
   return (time / TIME_SCALE_MS / 1000) % 60;
 }
 
 int
-lumiera_time_millis (gavl_time_t time)
+lumiera_time_millis (raw_time_64 time)
 {
   return (time / TIME_SCALE_MS) % 1000;
 }
 
 int
-lumiera_time_frames (gavl_time_t time, uint fps)
+lumiera_time_frames (raw_time_64 time, uint fps)
 {
   REQUIRE (fps < uint(std::numeric_limits<int>::max()));
   return floordiv<int> (lumiera_time_millis(time) * int(fps), TIME_SCALE_MS);
@@ -581,7 +581,7 @@ namespace { // implementation helper
    * @todo I doubt this works correct for negative times!!
    */
   inline int64_t
-  calculate_drop_frame_number (gavl_time_t time)
+  calculate_drop_frame_number (raw_time_64 time)
   {
     int64_t frameNr = calculate_quantisation (time, 0, 30000, 1001);
     
@@ -599,30 +599,30 @@ namespace { // implementation helper
 }
 
 int
-lumiera_time_ntsc_drop_frames (gavl_time_t time)
+lumiera_time_ntsc_drop_frames (raw_time_64 time)
 {
   return calculate_drop_frame_number(time) % 30;
 }
 
 int
-lumiera_time_ntsc_drop_seconds (gavl_time_t time)
+lumiera_time_ntsc_drop_seconds (raw_time_64 time)
 {
   return calculate_drop_frame_number(time) / 30 % 60;
 }
 
 int
-lumiera_time_ntsc_drop_minutes (gavl_time_t time)
+lumiera_time_ntsc_drop_minutes (raw_time_64 time)
 {
   return calculate_drop_frame_number(time) / 30 / 60 % 60;
 }
 
 int
-lumiera_time_ntsc_drop_hours (gavl_time_t time)
+lumiera_time_ntsc_drop_hours (raw_time_64 time)
 {
   return calculate_drop_frame_number(time) / 30 / 60 / 60 % 24;
 }
 
-gavl_time_t
+raw_time_64
 lumiera_build_time_ntsc_drop (uint frames, uint secs, uint mins, uint hours)
 {
   uint64_t total_mins = 60 * hours + mins;
@@ -631,7 +631,7 @@ lumiera_build_time_ntsc_drop (uint frames, uint secs, uint mins, uint hours)
                          + 30 * secs
                          + frames
                          - 2 * (total_mins - total_mins / 10);
-  gavl_time_t result = lumiera_framecount_to_time (total_frames, FrameRate::NTSC);
+  raw_time_64 result = lumiera_framecount_to_time (total_frames, FrameRate::NTSC);
   
   if (0 != result) // compensate for truncating down on conversion
     result += 1;  //  without this adjustment the frame number

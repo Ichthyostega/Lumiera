@@ -101,7 +101,7 @@ namespace test{
           CHECK (!(var <  ref) );
           CHECK ( (var >  ref) );
           
-          gavl_time_t gat(var);
+          raw_time_64 gat(var);
           CHECK (!(gat == ref) );
           CHECK ( (gat != ref) );
           CHECK ( (gat >= ref) );
