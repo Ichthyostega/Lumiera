@@ -1,5 +1,0 @@
-TESTING "Time conversion" ./test-time
-
-TEST "ntsc drop-frame calculations" ntsc_drop_frame << END
-return: 0
-END

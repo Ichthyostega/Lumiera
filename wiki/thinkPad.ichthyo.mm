@@ -162886,8 +162886,7 @@ Since then others have made contributions, see the log for the history.</font></
       ...nachdem gavl_time_t durch einen Typedef ersetzt ist, und ich das Thema durch #1261 bereits abgesteckt habe, k&#246;nnte der Bestand einer eigenst&#228;ndigen Basis-Library durch wenige Umordnungen aufgehoben werden. Denn darum geht es mir: ich will in Lumiera eine Ordnung schaffen, in der gedankenloses einfach-mal-Machen keinen Raum findet.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1747520507617" ID="ID_391130031" MODIFIED="1748350248986" TEXT="sollte die konkreten Verwendungen durchsehen">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -162896,8 +162895,7 @@ Since then others have made contributions, see the log for the history.</font></
       ...m&#246;glicherweise lassen sich diese Funktionen n&#228;mlich in Gruppen einteilen und dann direkt in einen anonymen namespace in die jeweilige Translation-Unit schieben....
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1747520518579" ID="ID_1232667630" MODIFIED="1747520531129" TEXT="m&#xfc;&#xdf;te dann auch den C-Test (test-time) aufl&#xf6;sen">
 <node CREATED="1747520690709" ID="ID_920147641" MODIFIED="1747520695437" TEXT="der ist eigentlich nicht lang"/>
@@ -163166,7 +163164,8 @@ Since then others have made contributions, see the log for the history.</font></
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 </node>
 </node>
-<node CREATED="1748363166124" ID="ID_20271646" MODIFIED="1748363183352" TEXT="also: stattdessen rigoros mit Stubs arbeiten">
+<node CREATED="1748363166124" ID="ID_20271646" MODIFIED="1748388589043" TEXT="also: stattdessen rigoros mit Stubs arbeiten">
+<icon BUILTIN="yes"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1748363186304" ID="ID_1752179075" MODIFIED="1748363276225" TEXT="d.h. das Timecode-Widget ganz ersichtlich brechen">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -163175,8 +163174,7 @@ Since then others have made contributions, see the log for the history.</font></
       gebrochen ist es ja ohnehin und sowiso, und weiter damit arbeiten m&#246;chte ich nicht &#8212; ganz ehrlich, das war ein &#187;Griff ins Klo&#171;, das ist kein Code, den man erhalten sollte.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
 <node COLOR="#435e98" CREATED="1748370343922" ID="ID_767625066" MODIFIED="1748370424799" TEXT="weitere Verwendungen der Dezimator-Funktionen direkt inlinen">
@@ -163192,10 +163190,45 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1748370446771" ID="ID_514685019" MODIFIED="1748370458042" TEXT="Drop-Frame-Berechnung dokumentieren">
-<icon BUILTIN="pencil"/>
-<node COLOR="#435e98" CREATED="1748370471401" ID="ID_241597558" MODIFIED="1748370583898" TEXT="teset-time.c &#x27fc; time/time-dropframe-test.cpp">
+<node COLOR="#338800" CREATED="1748370446771" ID="ID_514685019" MODIFIED="1748388515380" TEXT="Drop-Frame-Berechnung dokumentieren">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1748370471401" ID="ID_241597558" MODIFIED="1748383700953" TEXT="test-time.c &#x27fc; time/time-dropframe-test.cpp">
 <icon BUILTIN="list"/>
+</node>
+<node COLOR="#338800" CREATED="1748383707870" ID="ID_1871702886" MODIFIED="1748388462890" TEXT="Funktionen umordnen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1748383746542" ID="ID_1117132995" MODIFIED="1748383761481" TEXT="umziehen in Namespace lib::time"/>
+<node CREATED="1748383717910" ID="ID_6099644" MODIFIED="1748383730804" TEXT="umziehen in Header lib/time/dropframe.hpp"/>
+<node CREATED="1748383731428" ID="ID_1472070007" MODIFIED="1748383743307" TEXT="Implementierung verbleibt in lib/time/time.cpp"/>
+<node CREATED="1748383780122" ID="ID_170667006" MODIFIED="1748383790175" TEXT="nur die eigentliche Berechnungslogik erhalten">
+<node CREATED="1748383816257" ID="ID_1470396784" MODIFIED="1748384512960" TEXT="int64_t calculate_ntsc_drop_frame_number (raw_time_64 timecode)"/>
+<node CREATED="1748383835599" ID="ID_328152526" MODIFIED="1748385988435" TEXT="raw_time_64 build_time_from_ntsc_drop_frame (frames, secs, mins, hours)"/>
+</node>
+<node COLOR="#435e98" CREATED="1748388465815" ID="ID_1825328642" MODIFIED="1748388490811" STYLE="fork" TEXT="all die Konverter / Deizimator-Funktionen direkt lokal im Test definieren">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#174956" COLOR="#8dfd49" CREATED="1748388518698" ID="ID_1682762507" MODIFIED="1748388574315" STYLE="bubble" TEXT="umgezogener Test l&#xe4;uft GR&#xdc;N">
+<edge COLOR="#61fe5b" STYLE="bezier" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="15"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#8b2f98" CREATED="1748388204363" ID="ID_926423450" MODIFIED="1748388454445" TEXT=" &#xd83d;&#xdc80; totmachen &#xd83d;&#xdc80;">
+<node COLOR="#435e98" CREATED="1748388215333" ID="ID_1531959638" MODIFIED="1748388508038" TEXT="test-time.c">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="back"/>
+</node>
+<node COLOR="#435e98" CREATED="1748388277997" ID="ID_1633487385" MODIFIED="1748388508037" TEXT="lumiera_build_time_fps (uint fps, uint frames, uint secs, uint mins, uint hours)"/>
+<node COLOR="#435e98" CREATED="1748388277999" ID="ID_260910175" MODIFIED="1748388508037" TEXT="lumiera_build_time_ntsc_drop (uint frames, uint secs, uint mins, uint hours)"/>
+<node COLOR="#435e98" CREATED="1748388278001" ID="ID_1058883405" MODIFIED="1748388508037" TEXT="lumiera_time_hours (raw_time_64 time)"/>
+<node COLOR="#435e98" CREATED="1748388278002" ID="ID_235432384" MODIFIED="1748388508037" TEXT="lumiera_time_minutes (raw_time_64 time)"/>
+<node COLOR="#435e98" CREATED="1748388278003" ID="ID_493874247" MODIFIED="1748388508036" TEXT="lumiera_time_seconds (raw_time_64 time)"/>
+<node COLOR="#435e98" CREATED="1748388278005" ID="ID_1348006733" MODIFIED="1748388508036" TEXT="lumiera_time_millis (raw_time_64 time)"/>
+<node COLOR="#435e98" CREATED="1748388278006" ID="ID_1001439160" MODIFIED="1748388508036" TEXT="lumiera_time_frames (raw_time_64 time, uint fps)"/>
+<node COLOR="#435e98" CREATED="1748388278008" ID="ID_18545784" MODIFIED="1748388508036" TEXT="lumiera_time_ntsc_drop_frames (raw_time_64 time)"/>
+<node COLOR="#435e98" CREATED="1748388278010" ID="ID_1558655339" MODIFIED="1748388508035" TEXT="lumiera_time_ntsc_drop_seconds (raw_time_64 time)"/>
+<node COLOR="#435e98" CREATED="1748388278011" ID="ID_1940069424" MODIFIED="1748388508035" TEXT="lumiera_time_ntsc_drop_minutes (raw_time_64 time)"/>
+<node COLOR="#435e98" CREATED="1748388278013" ID="ID_1868369312" MODIFIED="1748388508035" TEXT="lumiera_time_ntsc_drop_hours (raw_time_64 time)"/>
+<node COLOR="#435e98" CREATED="1748388278014" ID="ID_275417741" MODIFIED="1748388508019" TEXT="lumiera_tmpbuf_print_time (raw_time_64 time)"/>
 </node>
 </node>
 </node>

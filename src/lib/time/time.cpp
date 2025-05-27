@@ -42,10 +42,6 @@
 #include "lib/format-string.hpp"
 #include "lib/util.hpp"
 
-extern "C" {
-#include "lib/tmpbuf.h"
-}
-
 #include <math.h>
 #include <limits>
 #include <string>
@@ -382,32 +378,6 @@ namespace util {
 /* ===== implementation of the C API functions ===== */
 
 
-char*
-lumiera_tmpbuf_print_time (raw_time_64 time)
-{
-  int milliseconds, seconds, minutes, hours;
-  bool negative = (time < 0);
-  
-  if (negative)
-      time = -time;
-  
-  time /= TIME_SCALE_MS;
-  milliseconds = time % 1000;
-  time /= 1000;
-  seconds = time % 60;
-  time /= 60;
-  minutes = time % 60;
-  time /= 60;
-  hours = time;
-  
-  char *buffer = lumiera_tmpbuf_snprintf(64, lib::time::DIAGNOSTIC_FORMAT,
-    negative ? "-" : "", hours, minutes, seconds, milliseconds);
-  
-  ENSURE(buffer != NULL);
-  return buffer;
-}
-
-
 /// @todo this utility function could be factored out into a `FSecs` or `RSec` class  ///////////////////////TICKET #1262
 raw_time_64
 lumiera_rational_to_time (FSecs const& fractionalSeconds)
@@ -564,24 +534,30 @@ lumiera_time_frames (raw_time_64 time, uint fps)
 
 
 
+namespace lib {
+namespace time { ////////////////////////////////////////////////////////////////////////////////////////////TICKET #1259 : move all calculation functions into a C++ namespace
 
-/* ===== NTSC drop-frame conversions ===== */
 
+  /* ===== NTSC drop-frame conversions ===== */
 
-namespace { // implementation helper
+  namespace { // conversion parameters
   
-  const uint FRAMES_PER_10min = 10*60 * 30000/1001;
-  const uint FRAMES_PER_1min  =  1*60 * 30000/1001;
-  const uint DISCREPANCY      = (1*60 * 30) - FRAMES_PER_1min;
+    const uint FRAMES_PER_10min = 10*60 * 30000/1001;
+    const uint FRAMES_PER_1min  =  1*60 * 30000/1001;
+    const uint DISCREPANCY      = (1*60 * 30) - FRAMES_PER_1min;
+  }
   
   
-  /** reverse the drop-frame calculation
-   * @param  time absolute time value in micro ticks
-   * @return the absolute frame number using NTSC drop-frame encoding
-   * @todo I doubt this works correct for negative times!!
+  /**
+   * @remark This function reverses building the drop-frame timecode,
+   *         and thus maps a time into consecutive frame numbers
+   *         at NTSC framerate (i.e. without gaps)
+   * @param  timecode represented as time value in µ-ticks
+   * @return the absolute frame number as addressed by NTSC drop-frame
+   * @todo 2011 I doubt this works correct for negative times!!
    */
-  inline int64_t
-  calculate_drop_frame_number (raw_time_64 time)
+  int64_t
+  calculate_ntsc_drop_frame_number (raw_time_64 time)
   {
     int64_t frameNr = calculate_quantisation (time, 0, 30000, 1001);
     
@@ -596,44 +572,30 @@ namespace { // implementation helper
     int64_t dropIncidents = (10-1) * tenMinFrames.quot + remainingMinutes;
     return frameNr + 2*dropIncidents;
   }
-}
-
-int
-lumiera_time_ntsc_drop_frames (raw_time_64 time)
-{
-  return calculate_drop_frame_number(time) % 30;
-}
-
-int
-lumiera_time_ntsc_drop_seconds (raw_time_64 time)
-{
-  return calculate_drop_frame_number(time) / 30 % 60;
-}
-
-int
-lumiera_time_ntsc_drop_minutes (raw_time_64 time)
-{
-  return calculate_drop_frame_number(time) / 30 / 60 % 60;
-}
-
-int
-lumiera_time_ntsc_drop_hours (raw_time_64 time)
-{
-  return calculate_drop_frame_number(time) / 30 / 60 / 60 % 24;
-}
-
-raw_time_64
-lumiera_build_time_ntsc_drop (uint frames, uint secs, uint mins, uint hours)
-{
-  uint64_t total_mins = 60 * hours + mins;
-  uint64_t total_frames  = 30*60*60 * hours
-                         + 30*60 * mins
-                         + 30 * secs
-                         + frames
-                         - 2 * (total_mins - total_mins / 10);
-  raw_time_64 result = lumiera_framecount_to_time (total_frames, FrameRate::NTSC);
   
-  if (0 != result) // compensate for truncating down on conversion
-    result += 1;  //  without this adjustment the frame number
-  return result; //   would turn out off by -1 on back conversion
-}
+  
+  /**
+   * @remark This is the mapping function to translate NTSC drop frame
+   *         timecode specification into an actual time, with the necessary
+   *         skip events every 1.-9. minute, thereby allocating 108 frames
+   *         less per hour, than would be required for full 30 fps.
+   * @return raw time value on a µ-tick scale
+   */
+  raw_time_64
+  build_time_from_ntsc_drop_frame (uint frames, uint secs, uint mins, uint hours)
+  {
+    uint64_t total_mins = 60 * hours + mins;
+    uint64_t total_frames  = 30*60*60 * hours
+                           + 30*60 * mins
+                           + 30 * secs
+                           + frames
+                           - 2 * (total_mins - total_mins / 10);
+    raw_time_64 result = lumiera_framecount_to_time (total_frames, FrameRate::NTSC);
+    
+    if (0 != result) // compensate for truncating down on conversion
+      result += 1;  //  without this adjustment the frame number
+    return result; //   would turn out off by -1 on back conversion
+  }
+  
+  
+}} // lib::time

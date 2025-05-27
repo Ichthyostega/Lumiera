@@ -130,7 +130,7 @@ return: 0
 END
 
 
-PLANNED "Drop-Frame calculation" TimeDropframe_test  <<END
+TEST "NTSC drop-frame calculation" TimeDropframe_test  <<END
 return: 0
 END
 

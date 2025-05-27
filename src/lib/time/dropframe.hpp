@@ -1,5 +1,5 @@
 /*
-  DROPFRAME.hpp  -  Utilities for handling time
+  DROPFRAME.hpp  -  drop-frame timecode conversions
 
    Copyright (C)
      2010,            Stefan Kangas <skangas@skangas.se>
@@ -11,35 +11,39 @@
 */
 
 /** @file dropframe.hpp
- ** Common functions for handling of time values.
- ** Working with time values in sexagesimal format, quantising time and converting
- ** to/from common timecode formats can be tricky to get right. Thus the goal is
- ** to concentrate the actual bits of math for these operations into a small number
- ** of library functions, which are easy to test thoroughly in isolation.
+ ** Calculations to support mapping into NTSC drop frame timecode.
+ ** This is a scheme for mapping frame numbers to a time display in SMPTE format,
+ ** i.e. with hours, minutes, seconds and a frame count. It was introduced in USA
+ ** at the time when colour television with the NTSC standard was introduced.
+ ** Since the existing black and white television broadcast system based on analogue
+ ** signal processing had initially be fixed to the same frequency as the power grid,
+ ** which runs with 60 Hz in USA, the addition of the additional carriers for the
+ ** colour information was confronted with problems of signal cross-talk, due to
+ ** some overtones of the used carriers falling into the same frequency band.
+ ** As a pragmatic workaround, the frame rate was reduced to 29.97 fps.
  ** 
- ** Built on top of that, the actual time handling in the GUI and within the Lumiera
- ** session is mostly confined to use the opaque lib::time::Time wrapper objects.
- ** When time values actually need to be _quantised_ (aligned to a frame grid),
- ** this is expressed at the API through using the lib::time::QuTime type, which
- ** then in turn can be materialised into a number of _timecode formats_.
- ** These definitions ensure that whenever an actual quantisation (rounding)
- ** operation is performed, the link to the appropriate time grid is available,
- ** so that multiple output or rendering operations can use differing time origins
- ** and frame rates simultaneously on the same model.
+ ** This fix of one problem however caused secondary problems for the production
+ ** of content for television broadcast, since at this frame rate, one hour of
+ ** content would not sum up cleanly to a simple number of frames. Since the
+ ** purpose of time code is to label each frame with a time stamp, as a solution,
+ ** the mapping of time stamps to frame numbers is manipulated:
+ ** - every minute, there is one second which is mapped to 28 frames only
+ ** - with the exception of every 10 minutes, where no such gap is applied
+ ** This scheme adds up to allocating 108 frames less per hour, as would be used
+ ** with a full frame rate of 30 fps. It should be noted though that applying such
+ ** a »drop event« every minute does not mean to _omit actual content frames_ —
+ ** rather it is the dime display in the time stamp which suddenly skips ahead by
+ ** +2 frames every minute (but not every 10th minute).
  ** 
- ** The Lumiera Vault Layer functions mostly operate on raw frame counts, which in
- ** this model are defined to be a special kind of timecode, and thus dependent on
- ** a preceding time quantisation.
+ ** @todo 2025 this header provides some calculation functions to implement such
+ **       a mapping scheme (thereby documenting the know-how). But the project
+ **       never got to the point of integrating this functionality into an
+ **       actual timecode implementation. Doing so will be future work.
+ **                                                       ///////////////////////////////////////////////////TICKET #751
  ** 
- ** @deprecated 2025 this should not be a "simple" C library set aside from the Lumiera
- **             time handling framework, rather it should be clarified that these are
- **             implementation helpers and must not be used by any application code.
- **             It should be checked which of these functions actually need to be
- **             exposed through an interface header, since these are typically
- **             used to implement parts of the time handling framework.
- ** 
- ** @see lib::time::Time
+ ** @see time-dropframe-test.cpp
  ** @see timequant.hpp
+ ** @see lib::time::Time
  ** @see TimeValue_test
  ** 
  */
@@ -48,180 +52,28 @@
 #ifndef LUMIERA_TIME_DROPFRAME_H
 #define LUMIERA_TIME_DROPFRAME_H
 
-#include <inttypes.h>
-
-#ifdef __cplusplus /*=================== C++ facilities ===================== */
 #include "lib/time/timevalue.hpp"
 
-using lib::time::raw_time_64;
 
 
-/**
- * Converts a fraction of seconds to Lumiera's internal opaque time scale.
- * @param fractionalSeconds given as rational number
- * @note inconsistent with Lumiera's general quantisation behaviour,
- *       here negative fractional micro-ticks are truncated towards zero.
- *       This was deemed irrelevant in practice.
- */
-raw_time_64
-lumiera_rational_to_time (lib::time::FSecs const& fractionalSeconds);
-
-
-/**
- * Converts a frame count into Lumiera's internal time scale.
- * based on a framerate given as rational number (e.g. NTSC)
- * @note handles only positive frame counts and assumes the
- *       origin to be at zero.
- */
-raw_time_64
-lumiera_framecount_to_time (uint64_t frameCount, lib::time::FrameRate const& fps);
-
-
-/**
- * Calculates the duration of one frame in Lumiera time units.
- * @param framerate underlying framerate as rational number
- * @throw error::Logic on zero framerate
- */
-raw_time_64
-lumiera_frame_duration (lib::time::FrameRate const& fps);
-
-
-
-
-
-extern "C" {    /* ===================== C interface ======================== */
-#endif
-
-
-/**
- * Quantise the given time into a fixed grid, relative to the origin.
- * The time grid used for quantisation is comprised of equally spaced intervals,
- * rooted at the given origin. The interval starting with the origin is numbered
- * as zero. Each interval includes its lower bound, but excludes its upper bound.
- * @param grid spacing of the grid intervals, measured in TimeValue::Scale (µ-ticks)
- * @return number of the grid interval containing the given time.
- * @warning the resulting value is limited to (Time::Min, Time::MAX)
- */
-int64_t
-lumiera_quantise_frames (raw_time_64 time, raw_time_64 origin, raw_time_64 grid);
-
-int64_t
-lumiera_quantise_frames_fps (raw_time_64 time, raw_time_64 origin, uint framerate);
-
-/**
- * Similar to #lumiera_quantise_frames, but returns a grid aligned _relative time_.
- * @return time of start of the grid interval containing the given time,
- *         but measured relative to the origin
- * @warning because the resulting value needs to be limited to fit into a 64bit long,
- *         the addressable time range can be considerably reduced. For example, if
- *         origin = Time::MIN, then all original time values above zero will be
- *         clipped, because the result, relative to origin, needs to be <= Time::MAX
- */
-raw_time_64
-lumiera_quantise_time (raw_time_64 time, raw_time_64 origin, raw_time_64 grid);
-
-/**
- * Calculate time of a grid point (frame start)
- * @param nr index number of the grid point (0 is at origin)
- * @param grid spacing of the grid intervals, measured in TimeValue::Scale (µ-ticks)
- * @return time point (frame start) on the Lumiera internal time scale
- */
-raw_time_64
-lumiera_time_of_gridpoint (int64_t nr, raw_time_64 origin, raw_time_64 grid);
-
-/**
- * Build a time value by summing up the given components.
- * @param millis number of milliseconds
- * @param secs number of seconds
- * @param mins number of minutes
- * @param hours number of hours
- */
-raw_time_64
-lumiera_build_time (long millis, uint secs, uint mins, uint hours);
-
-/**
- * Builds a time value by summing up the given components.
- * @param fps framerate (frames per second)
- * @param frames number of additional frames
- * @param secs number of seconds
- * @param mins number of minutes
- * @param hours number of hours
- */
-raw_time_64
-lumiera_build_time_fps (uint fps, uint frames, uint secs, uint mins, uint hours);
-
-/**
- * Builds a time value by summing up the given components.
- * The components are interpreted as a NTSC drop-frame timecode.
- * @warning take care not to specify time codes that are illegal NTSC drop-frame times.
- */
-raw_time_64
-lumiera_build_time_ntsc_drop (uint frames, uint secs, uint mins, uint hours);
-
-
-/** Extract the hour part of given time. */
-int
-lumiera_time_hours (raw_time_64 time);
-
-
-/** Extract the minute part of given time. */
-int
-lumiera_time_minutes (raw_time_64 time);
-
-
-/** Extract the seconds part of given time. */
-int
-lumiera_time_seconds (raw_time_64 time);
-
-
-/** Extract the milliseconds part of given time. */
-int
-lumiera_time_millis (raw_time_64 time);
-
-/**
- * Extract the remaining frame part of given time.
- * @param fps frame rate (frames per second)
- */
-int
-lumiera_time_frames (raw_time_64 time, uint fps);
-
-/**
- * Extract the frame part of given time, using NTSC drop-frame timecode.
- */
-int
-lumiera_time_ntsc_drop_frames (raw_time_64 time);
-
-/**
- * Extract the second part of given time, using NTSC drop-frame timecode.
- */
-int
-lumiera_time_ntsc_drop_seconds (raw_time_64 time);
-
-/**
- * Extract the minute part of given time, using NTSC drop-frame timecode.
- */
-int
-lumiera_time_ntsc_drop_minutes (raw_time_64 time);
-
-/**
- * Extract the hour part of given time, using NTSC drop-frame timecode.
- */
-int
-lumiera_time_ntsc_drop_hours (raw_time_64 time);
-
-
-/**
- * @internal Diagnostics helper: render time value in H:MM:SS.mmm format.
- * @return `safeclib` temporary buffer containing formatted time string
- * @note any time output for real should go through quantisation followed
- *       by rendering into a suitable timecode format.
- */
-char*
-lumiera_tmpbuf_print_time (raw_time_64 time);
-
-
-
-#ifdef __cplusplus
-}//extern "C"
-#endif
+namespace lib {
+namespace time {
+  
+  
+  /**
+   * Compute the consecutive frame number from a given time,
+   * which is interpreted at the NTSC drop frame timecode grid.
+   */
+  int64_t calculate_ntsc_drop_frame_number (raw_time_64 time);
+  
+  
+  /**
+   * Build effective time from a NTSC drop frame timecode.
+   * @warning take care not to specify time codes that are illegal NTSC drop-frame times.
+   */
+  raw_time_64 build_time_from_ntsc_drop_frame (uint frames, uint secs, uint mins, uint hours);
+  
+  
+  
+}} // lib::time
 #endif /*LUMIERA_TIME_DROPFRAME_H*/

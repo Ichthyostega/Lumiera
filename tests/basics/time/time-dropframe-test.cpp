@@ -20,166 +20,177 @@
  */
 
 
-#include "lib/test/test.h"
-
-#include <inttypes.h>
-#include <ctype.h>
-#include <nobug.h>
-
-typedef int64_t raw_time_64;   //////////////////////////////////////////////////////////////////////////////TICKET #1259 turn time.h in to a C++ implementation header
-
-#include "lib/time.h"   /////////////////////////////////////////////////////////////////////////////////////TICKET #1259 this should not be a general purpose library, but rather an implementation base
+#include "lib/test/run.hpp"
+#include "lib/test/test-helper.hpp"
+#include "lib/time/dropframe.hpp"
+#include "lib/time/timevalue.hpp"
 
 
-static int
-calculate_framecount (raw_time_64 t, uint fps)
-{
-  return lumiera_quantise_frames_fps (t,0,fps);
-}
-
-
-TESTS_BEGIN
-
-const int FRAMES = 15;
-const int MILLIS = 700;
-const int SECONDS = 20;
-const int MINUTES = 55;
-const int HOURS = 3;
-const int FPS = 24;
-
-/*
- * 1. Basic functionality
- */
-
-TEST (basic)
-{
-  // Zero
-  raw_time_64 t = lumiera_build_time (0,0,0,0);
-
-  CHECK ((raw_time_64) t                 == 0);
-  CHECK (lumiera_time_millis (t)         == 0);
-  CHECK (lumiera_time_seconds (t)        == 0);
-  CHECK (lumiera_time_minutes (t)        == 0);
-  CHECK (lumiera_time_hours (t)          == 0);
-  CHECK (lumiera_time_frames (t, FPS)    == 0);
-  CHECK (lumiera_time_frames (t, FPS+5)  == 0);
-  CHECK (calculate_framecount (t,FPS)    == 0);
-  CHECK (calculate_framecount (t, FPS+5) == 0);
-
-  ECHO ("%s", lumiera_tmpbuf_print_time (t));
-
-  // Non-zero
-  t = lumiera_build_time (MILLIS, SECONDS, MINUTES, HOURS);
-
-  CHECK (lumiera_time_millis (t)         == MILLIS);
-  CHECK (lumiera_time_seconds (t)        == SECONDS);
-  CHECK (lumiera_time_minutes (t)        == MINUTES);
-  CHECK (lumiera_time_hours (t)          == HOURS);
-  CHECK (lumiera_time_frames (t, FPS)    == FPS * MILLIS / 1000);
-  CHECK (lumiera_time_frames (t, FPS+5)  == (FPS+5) * MILLIS / 1000);
-  CHECK (calculate_framecount (t, FPS)   == 338896);
-  CHECK (calculate_framecount (t, FPS+5) == 409500);
-
-  ECHO ("%s", lumiera_tmpbuf_print_time (t));
-}
-
-/*
- * 2. Frame rate dependent calculations.
- */
-
-TEST (fps)
-{
-  raw_time_64 t = lumiera_build_time_fps (FPS, FRAMES, SECONDS, MINUTES, HOURS);
-
-  CHECK (lumiera_time_millis (t)         == FRAMES * 1000 / FPS);
-  CHECK (lumiera_time_seconds (t)        == SECONDS);
-  CHECK (lumiera_time_minutes (t)        == MINUTES);
-  CHECK (lumiera_time_hours (t)          == HOURS);
-  CHECK (lumiera_time_frames (t, FPS)    == FRAMES);
-  CHECK (lumiera_time_frames (t, FPS+5)  == FRAMES * (FPS+5)/FPS); 
-  CHECK (calculate_framecount (t, FPS)   == 338895);
-  CHECK (calculate_framecount (t, FPS+5) == 409498);
-}
-
-/*
- * 3. NTSC drop-frame calculations.
- */
-
-TEST (ntsc_drop_frame)
-{
-  // Make sure frame 0 begins at 0
-  raw_time_64 t = lumiera_build_time_ntsc_drop (0, 0, 0, 0);
-
-  CHECK ((raw_time_64) t                 == 0);
-  CHECK (lumiera_time_millis (t)         == 0);
-  CHECK (lumiera_time_seconds (t)        == 0);
-  CHECK (lumiera_time_minutes (t)        == 0);
-  CHECK (lumiera_time_hours (t)          == 0);
-  CHECK (lumiera_time_frames (t, FPS)    == 0);
-  CHECK (lumiera_time_frames (t, FPS+5)  == 0);
-  CHECK (calculate_framecount (t, FPS)   == 0);
-  CHECK (calculate_framecount (t, FPS+5) == 0);
+namespace lib {
+namespace time{
+namespace test{
   
+  using time::Time;
+  using time::TimeVar;
+  using time::FSecs;
+  using time::raw_time_64;
   
-  
-  t = lumiera_build_time_ntsc_drop (FRAMES, SECONDS, MINUTES, HOURS);
-  
-  // Calculate manually what result to expect....
-  int frames = FRAMES + 30*SECONDS + 30*60*MINUTES + 30*60*60*HOURS;   // sum up using nominal 30fps
-  int minutes_to_drop_frames = (MINUTES - MINUTES/10) + (HOURS * 54);  // but every minute, with the exception of every 10 minutes...
-  frames -= 2*minutes_to_drop_frames;                                  // ...drop 2 frames
-  int64_t expectedMillis = 1000LL * frames  * 1001/30000;              // now convert frames to time, using the real framerate
-  
-  expectedMillis %= 1000;                                              // look at the remainder..
-  CHECK (lumiera_time_millis (t)  == expectedMillis);
-  
-  CHECK (lumiera_time_seconds (t) == SECONDS);                         // while all other components should come out equal as set
-  CHECK (lumiera_time_minutes (t) == MINUTES);
-  CHECK (lumiera_time_hours (t)   == HOURS);
-  
-  // Reverse calculate frames for NTSC drop
-//CHECK (lumiera_quantise_frames (t, 0, dropFrameDuration) == frames); // the total nominal frames
-  CHECK (lumiera_time_ntsc_drop_frames (t) == FRAMES);        // maximum one frame off due to rounding
-  
-  // Cover the whole value range;
-  // Manually construct a drop-frame timecode
-  // Make sure our library function returns the same times.
-  int min;
-  int sec;
-  int frame;
-  int hrs;
-  for (hrs = 0; hrs <= 24; hrs += 6)
-    for (min = 0; min <= 59; min += 1)
-      for (sec = 0; sec <= 59; sec += 10)
-        for (frame = 0; frame <= 29; frame++)
-          {
-            // Skip dropped frames
-            if (min % 10 && sec == 0 && frame < 2)
-              continue;
-
-            t = lumiera_build_time_ntsc_drop(frame, sec, min, hrs);
-            /*
-            ECHO ("%02d:%02d:%02d;%02d"
-                 , lumiera_time_ntsc_drop_hours (t)
-                 , lumiera_time_ntsc_drop_minutes (t)
-                 , lumiera_time_ntsc_drop_seconds (t)
-                 , lumiera_time_ntsc_drop_frames (t)
-                 );
-            */
-            CHECK (lumiera_time_ntsc_drop_frames (t) == frame);
-            CHECK (lumiera_time_ntsc_drop_seconds (t) == sec);
-            CHECK (lumiera_time_ntsc_drop_minutes (t) == min);
-            CHECK (lumiera_time_ntsc_drop_hours (t)   == hrs % 24);
-          }
-
-  // Make sure we do not get non-existent frames
-  int i;
-  for (i = 0; i < 59; i++)
+  namespace {// Test setup
+    const int FRAMES = 15;
+    const int MILLIS = 700;
+    const int SECONDS = 20;
+    const int MINUTES = 55;
+    const int HOURS = 3;
+    
+    
+    /* ====== conversion helpers to verify results ====== */
+    
+    const auto TIME_SCALE_sec{lib::time::TimeValue::SCALE        };
+    const auto TIME_SCALE_ms {lib::time::TimeValue::SCALE / 1'000};
+    
+    int
+    dropframe_frames (raw_time_64 timecode)
     {
-      int frame = (i % 10 == 0) ? 0 : 2;
-      t = lumiera_build_time_ntsc_drop (frame, 0, i, 0);
-      CHECK (lumiera_time_ntsc_drop_frames (t) == frame);
+      return calculate_ntsc_drop_frame_number(timecode) % 30;
     }
-}
+    
+    int
+    dropframe_seconds (raw_time_64 timecode)
+    {
+      return calculate_ntsc_drop_frame_number(timecode) / 30 % 60;
+    }
+    
+    int
+    dropframe_minutes (raw_time_64 timecode)
+    {
+      return calculate_ntsc_drop_frame_number(timecode) / 30 / 60 % 60;
+    }
+    
+    int
+    dropframe_hours (raw_time_64 timecode)
+    {
+      return calculate_ntsc_drop_frame_number(timecode) / 30 / 60 / 60 % 24;
+    }
+    
+    int
+    time_hours (raw_time_64 time)
+    {
+      return time / TIME_SCALE_sec / 60 / 60;
+    }
+    
+    int
+    time_minutes (raw_time_64 time)
+    {
+      return (time / TIME_SCALE_sec / 60) % 60;
+    }
+    
+    int
+    time_seconds (raw_time_64 time)
+    {
+      return (time / TIME_SCALE_sec) % 60;
+    }
+    
+    int
+    time_millis (raw_time_64 time)
+    {
+      return (time / TIME_SCALE_ms) % 1000;
+    }
+  }
+  
+  
+  
+  
+  /******************************************************************//**
+   * @test document the computation of NTSC drop frame timecode mapping.
+   */
+  class TimeDropframe_test : public Test
+    {
+      virtual void
+      run (Arg)
+        {
+          verify_DropFrame_conv();
+          verify_completeMapping();
+        }
+      
+      
+      /** @test perform a drop-frame timecode conversion
+       *        and verify the complete round-trip is correct.
+       */
+      void
+      verify_DropFrame_conv()
+        {
+            // Make sure frame 0 begins at 0
+            raw_time_64 t = build_time_from_ntsc_drop_frame (0, 0, 0, 0);
+            CHECK (t == 0);
+            
+            t = build_time_from_ntsc_drop_frame (FRAMES, SECONDS, MINUTES, HOURS);
+            
+            // Calculate manually what result to expect....
+            int frames = FRAMES + 30*SECONDS + 30*60*MINUTES + 30*60*60*HOURS;   // sum up using nominal 30fps
+            int minutes_to_drop_frames = (MINUTES - MINUTES/10) + (HOURS * 54);  // but every minute, with the exception of every 10 minutes...
+            frames -= 2*minutes_to_drop_frames;                                  // ...drop 2 frames
+            int64_t expectedMillis = 1000LL * frames  * 1001/30000;              // now convert frames to time, using the real framerate
+            
+            expectedMillis %= 1000;                                              // look at the remainder..
+            CHECK (time_millis (t)  == expectedMillis);
+            
+            CHECK (time_seconds (t) == SECONDS);                                 // while all other components should come out equal as set
+            CHECK (time_minutes (t) == MINUTES);
+            CHECK (time_hours (t)   == HOURS);
+            
+            // Reverse calculate frames for NTSC drop
+          //CHECK (lumiera_quantise_frames (t, 0, dropFrameDuration) == frames); // the total nominal frames
+            CHECK (dropframe_frames (t) == FRAMES);                              // maximum one frame off due to rounding
 
-TESTS_END
+          }
+      
+      
+      
+      /** @test Cover the whole value range of a day in drop-frame:
+       *      - manually construct a drop-frame timecode
+       *      - make sure our library function returns the same times.
+       */
+      void
+      verify_completeMapping()
+        {
+          for (int hrs = 0; hrs <= 24; hrs += 6)
+            for (int min = 0; min <= 59; min += 1)
+              for (int sec = 0; sec <= 59; sec += 10)
+                for (int frame = 0; frame <= 29; frame++)
+                  {
+                    // Skip dropped frames
+                    if (min % 10 && sec == 0 && frame < 2)
+                      continue;
+                    
+                    raw_time_64 t = build_time_from_ntsc_drop_frame(frame, sec, min, hrs);
+                    /*
+                    ECHO ("%02d:%02d:%02d;%02d"
+                         , lumiera_time_ntsc_drop_hours (t)
+                         , lumiera_time_ntsc_drop_minutes (t)
+                         , lumiera_time_ntsc_drop_seconds (t)
+                         , lumiera_time_ntsc_drop_frames (t)
+                         );
+                    */
+                    CHECK (dropframe_frames (t)  == frame);
+                    CHECK (dropframe_seconds (t) == sec);
+                    CHECK (dropframe_minutes (t) == min);
+                    CHECK (dropframe_hours (t)   == hrs % 24);
+                  }
+          
+          // Make sure we do not get non-existent frames
+          for (int i = 0; i < 59; i++)
+            {
+              int frame = (i % 10 == 0) ? 0 : 2;
+              raw_time_64 t = build_time_from_ntsc_drop_frame (frame, 0, i, 0);
+              CHECK (dropframe_frames (t) == frame);
+            }
+        }
+    };
+  
+  
+  /** Register this test class... */
+  LAUNCHER (TimeDropframe_test, "unit common");
+  
+  
+  
+}}} // namespace lib::time::test
