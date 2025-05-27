@@ -30,7 +30,6 @@
 
 #include "stage/widget/timecode-widget.hpp"
 #include "lib/time/timevalue.hpp"
-#include "lib/time/diagnostics.hpp"  ////////////TODO: temporary solution to get H:M:S components. Use TimeCode instead!
 
 #include <boost/lexical_cast.hpp>
 #include <cmath>
@@ -457,6 +456,26 @@ namespace widget {
     audio_frames_label.set_text(buf);
   }
   
+  
+  namespace { ///////////////////////////////////////////////////////////////////////////////////////////////TICKET #750 placeholder implementation: should integrate with the Digxel components of a given time code
+    inline int
+    getSecs (Time tpoint)
+    {
+      return (_raw(tpoint) / lib::time::TimeValue::SCALE) % 60;
+    }
+    
+    inline int
+    getMins (Time tpoint)
+    {
+      return (_raw(tpoint) / lib::time::TimeValue::SCALE / 60) % 60;
+    }
+    
+    inline int
+    getHours (Time tpoint)
+    {
+      return _raw(tpoint) / lib::time::TimeValue::SCALE / 60 / 60;
+    }
+  }
   
   void
   TimeCode::set_minsec (Time when, bool force)
@@ -1275,7 +1294,7 @@ namespace widget {
   Time
   TimeCode::audio_time_from_display ()  const
   {
-    raw_time_64 parsedAudioFrames = lexical_cast<int>(audio_frames_label.get_text());
+    lib::time::raw_time_64 parsedAudioFrames = lexical_cast<int>(audio_frames_label.get_text());
     return Time(TimeValue(parsedAudioFrames));
   }
   

@@ -92051,6 +92051,17 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 <font NAME="SansSerif" SIZE="11"/>
 <icon BUILTIN="ksmiletris"/>
 </node>
+<node COLOR="#5b280f" CREATED="1748359389672" ID="ID_1143583321" MODIFIED="1748359476713" TEXT="letztlich habe ich dann aber doch mit einer zuf&#xe4;llig erzeugten ms-Zeit getestet">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      also das Thema &#187;Quantisierung&#171; war dann letztlichn doch nicht relevant f&#252;r den Test, hat mich aber immerhin an den Sachverhalt erinnert, und dazu gef&#252;hrt, da&#223; ich eine <i>vertretbare Abk&#252;rzung</i>&#160;in den FrameNo-Timecode eingabaut habe
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_cancel"/>
+</node>
 </node>
 <node CREATED="1733585833256" ID="ID_423093899" MODIFIED="1733585852018" TEXT="der Test erzeugt eine zuf&#xe4;llige nominal Time"/>
 <node CREATED="1733585871755" ID="ID_1296941844" MODIFIED="1733586199513" TEXT="der Quantiser mu&#xdf; aber in den Render-Nodes liegen">
@@ -129307,7 +129318,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681347258814" ID="ID_1046752034" MODIFIED="1681347345729" TEXT="TimingObservable">
-<linktarget COLOR="#a54e77" DESTINATION="ID_1046752034" ENDARROW="Default" ENDINCLINATION="-1519;212;" ID="Arrow_ID_1830118942" SOURCE="ID_1139462793" STARTARROW="None" STARTINCLINATION="836;79;"/>
+<linktarget COLOR="#a54e77" DESTINATION="ID_1046752034" ENDARROW="Default" ENDINCLINATION="-1519;212;" ID="Arrow_ID_1830118942" SOURCE="ID_1139462793" STARTARROW="None" STARTINCLINATION="869;78;"/>
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1685034759152" ID="ID_1462535336" MODIFIED="1687914505078" TEXT="Zeitplanung ist &#xfc;ber die Activity-Struktur verteilt">
 <linktarget COLOR="#8f29b2" DESTINATION="ID_1462535336" ENDARROW="Default" ENDINCLINATION="885;-44;" ID="Arrow_ID_1037995856" SOURCE="ID_321040814" STARTARROW="None" STARTINCLINATION="503;38;"/>
@@ -159251,6 +159262,12 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
   </body>
 </html></richcontent>
 </node>
+<node CREATED="1748358501346" ID="ID_1333326103" MODIFIED="1748358508469" TEXT="Umgang mit Zeit-Berechnungen">
+<node COLOR="#5b280f" CREATED="1748358400143" ID="ID_325475859" MODIFIED="1748358525980" TEXT="Zeit ist nicht &#xbb;einfach eine Zahl&#xab;">
+<arrowlink COLOR="#9e234b" DESTINATION="ID_1261892451" ENDARROW="Default" ENDINCLINATION="-869;-140;" ID="Arrow_ID_600286501" STARTARROW="None" STARTINCLINATION="750;59;"/>
+<icon BUILTIN="closed"/>
+</node>
+</node>
 </node>
 <node CREATED="1522933471266" ID="ID_1652255203" MODIFIED="1557498707241" TEXT="GUI">
 <node COLOR="#435e98" CREATED="1522933474914" FOLDED="true" ID="ID_1612113311" MODIFIED="1561238415968" TEXT="Backbone">
@@ -159484,16 +159501,13 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <icon BUILTIN="help"/>
 <node CREATED="1742256164252" ID="ID_798828861" LINK="https://github.com/bplaum/gavl" MODIFIED="1747524023410" TEXT="konkret: Gavl und Gmerlin">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Christian kannte bereits Burkart Pflaum, und hat uns auf dessen Libraries aufmerksam gemacht. Die Libraries sind vorbildlich in iherer Struktur und in dem beschr&#228;nkten Scope. Wahrscheinlich sind sie problemloser einzubinden als FFmpeg. Aber das Kernproblem bleibt: das ist eine one-Man-Show, und wir werden trotzdem auf FFmpeg nicht verzichten k&#246;nnen....
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1742256340945" ID="ID_457200888" MODIFIED="1742256484596" TEXT="denkbar als Erg&#xe4;nzung, sollte FFmpeg tats&#xe4;chliche Schw&#xe4;chen zeigen">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -159915,7 +159929,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1680388296693" ID="ID_283603911" LINK="https://issues.lumiera.org/ticket/1284" MODIFIED="1680388318115" TEXT="#1284 Render Engine operational control">
 <icon BUILTIN="hourglass"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1680389959705" ID="ID_1139462793" LINK="https://issues.lumiera.org/ticket/1286" MODIFIED="1680389986151" TEXT="#1286 Timing Observable">
-<arrowlink COLOR="#a54e77" DESTINATION="ID_1046752034" ENDARROW="Default" ENDINCLINATION="-1519;212;" ID="Arrow_ID_1830118942" STARTARROW="None" STARTINCLINATION="836;79;"/>
+<arrowlink COLOR="#a54e77" DESTINATION="ID_1046752034" ENDARROW="Default" ENDINCLINATION="-1519;212;" ID="Arrow_ID_1830118942" STARTARROW="None" STARTINCLINATION="869;78;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
@@ -162832,29 +162846,23 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node CREATED="1747489228725" ID="ID_397750077" MODIFIED="1747489369180" TEXT="verwende einen Namen exakt gleicher L&#xe4;nge">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       raw_time_64
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1747489254856" ID="ID_971197875" MODIFIED="1747489345064" TEXT="danach k&#xf6;nnen alle Includes des C-Headers time.h weg">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       schon seit langem will ich von der &quot;C-Time-Library&quot; weg, denn diese ist gradezu eine Einladung, Timecode-Operationen ad-hoc zu implementieren
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1747489277561" ID="ID_1782395866" MODIFIED="1747489284084" TEXT="einzige Ausnahme: Time.cpp"/>
 </node>
@@ -162862,22 +162870,27 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1747520433501" ID="ID_1627011016" MODIFIED="1747520503864" TEXT="die ist mir schon lange ein &#xbb;Dorn im Auge&#xab;">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ....weil eine solche Library gradezu dazu einl&#228;d, sich nicht mit den &#8222;m&#252;hsamen&#8220; Abstraktionen des Time-Handling-Frameworks herumzuschlagen, sondern stattessen <i>einfach mit Zahlen zu rechnen.</i>
     </p>
   </body>
+</html></richcontent>
+</node>
+<node CREATED="1748350238828" ID="ID_83235134" MODIFIED="1748350701480" TEXT="erscheint kurzfristig machbar">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...nachdem gavl_time_t durch einen Typedef ersetzt ist, und ich das Thema durch #1261 bereits abgesteckt habe, k&#246;nnte der Bestand einer eigenst&#228;ndigen Basis-Library durch wenige Umordnungen aufgehoben werden. Denn darum geht es mir: ich will in Lumiera eine Ordnung schaffen, in der gedankenloses einfach-mal-Machen keinen Raum findet.
+    </p>
+  </body>
 </html>
 </richcontent>
-</node>
-<node CREATED="1747520507617" ID="ID_391130031" MODIFIED="1747520575548" TEXT="sollte die konkreten Verwendungen durchsehen">
+<node CREATED="1747520507617" ID="ID_391130031" MODIFIED="1748350248986" TEXT="sollte die konkreten Verwendungen durchsehen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...m&#246;glicherweise lassen sich diese Funktionen n&#228;mlich in Gruppen einteilen und dann direkt in einen anonymen namespace in die jeweilige Translation-Unit schieben....
@@ -162890,9 +162903,7 @@ Since then others have made contributions, see the log for the history.</font></
 <node CREATED="1747520690709" ID="ID_920147641" MODIFIED="1747520695437" TEXT="der ist eigentlich nicht lang"/>
 <node CREATED="1747520696080" ID="ID_1610185152" MODIFIED="1747520880755" TEXT="und bei n&#xe4;herer Betrachtung ziemlich banal">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Der Test t&#228;uscht: weil er in C geschrieben ist, sieht er so komplex aus. Dabei besteht die erste H&#228;lfte lediglich draus, eine Konstruktor-Funktion zu testen. Der sinnvolle Kern daran ist die decimator-Sequenz zum Herunterbrechen von Zeiten. Die wird hier aber nur oberfl&#228;chlich getestet. Da sollte man, wenn schon, wirklich auf die Grenzf&#228;lle losgehen &#10233; Test neu schreiben!
@@ -162904,8 +162915,288 @@ Since then others have made contributions, see the log for the history.</font></
       Der zweite Teil besteht im <i>Antesten</i>&#160;der drop-Frame-Umwandlung &#10233; auch das in eigenst&#228;ndigen neuen Test packen
     </p>
   </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1748350712006" ID="ID_452116165" MODIFIED="1748350730212" TEXT="Analyse der Situation">
+<icon BUILTIN="pencil"/>
+<node CREATED="1748350733469" ID="ID_367890679" MODIFIED="1748350825691" TEXT="nahezu alle Funktionen werden verwendet">
+<node CREATED="1748351651943" ID="ID_1629068440" MODIFIED="1748351657948" TEXT="Time-Entities">
+<node CREATED="1748351786463" ID="ID_367667761" MODIFIED="1748351793337" TEXT="lumiera_build_time">
+<icon BUILTIN="back"/>
+</node>
+<node CREATED="1748351664280" MODIFIED="1748351664280" TEXT="lumiera_rational_to_time"/>
+<node CREATED="1748351681851" ID="ID_779025772" MODIFIED="1748351681851" TEXT="lumiera_framecount_to_time"/>
+</node>
+<node CREATED="1748351719286" ID="ID_1061505265" MODIFIED="1748351726517" TEXT="TIme-Quant">
+<node CREATED="1748351727660" MODIFIED="1748351727660" TEXT="lumiera_quantise_frames"/>
+<node CREATED="1748351746809" MODIFIED="1748351746809" TEXT="lumiera_quantise_time"/>
+<node CREATED="1748351756245" MODIFIED="1748351756245" TEXT="lumiera_time_of_gridpoint"/>
+</node>
+<node CREATED="1748351615912" ID="ID_1345424183" MODIFIED="1748351622237" TEXT="Timecodes">
+<node CREATED="1748351465182" ID="ID_1420943840" MODIFIED="1748351465182" TEXT="lumiera_time_hours"/>
+<node CREATED="1748351471312" ID="ID_1577658302" MODIFIED="1748351471312" TEXT="lumiera_time_minutes"/>
+<node CREATED="1748351475601" ID="ID_828981584" MODIFIED="1748351475601" TEXT="lumiera_time_seconds"/>
+<node CREATED="1748351482281" ID="ID_76044701" MODIFIED="1748351482281" TEXT="lumiera_time_millis"/>
+</node>
+<node CREATED="1748351146392" ID="ID_1900378289" MODIFIED="1748351155511" TEXT="nur C-Test">
+<node CREATED="1748351152077" MODIFIED="1748351152077" TEXT="lumiera_quantise_frames_fps"/>
+<node CREATED="1748351210265" ID="ID_980580438" MODIFIED="1748351210265" TEXT="lumiera_build_time_fps"/>
+<node CREATED="1748351564782" ID="ID_1914445290" MODIFIED="1748351569194" TEXT="lumiera_time_frames"/>
+<node BACKGROUND_COLOR="#e8bbac" CREATED="1748351261819" ID="ID_1487541722" MODIFIED="1748351593699" TEXT="lumiera_build_time_ntsc_drop">
+<icon BUILTIN="back"/>
+<node CREATED="1748351268414" ID="ID_1899730691" MODIFIED="1748351298088">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      zeigt besonders deutlich <b>warum ich diesen Ansatz ablehne</b>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1748351299146" ID="ID_83659486" MODIFIED="1748351312564" TEXT="es wird ein direkter Berechnungsweg geschaffen"/>
+<node CREATED="1748351313642" ID="ID_1143876727" MODIFIED="1748351359260" TEXT="von quasi-plausiblen &#xbb;einfachen&#xab; Werten &#x27fc; &#x201e;Zeit&#x201c;"/>
+<node CREATED="1748351361584" ID="ID_1756120220" MODIFIED="1748351378448" TEXT="aber diese &#x201e;Zeit&#x201c; ist tats&#xe4;chlich ein drop-Frame-Timecode"/>
+<node CREATED="1748351386220" ID="ID_1075454332" MODIFIED="1748351402450" TEXT="und keinerlei Kontext wird explizit gemacht"/>
+</node>
+<node CREATED="1748351830217" MODIFIED="1748351830217" TEXT="lumiera_time_ntsc_drop_frames"/>
+<node CREATED="1748351844585" MODIFIED="1748351844585" TEXT="lumiera_time_ntsc_drop_seconds"/>
+<node CREATED="1748351897754" MODIFIED="1748351897754" TEXT="lumiera_time_ntsc_drop_minutes"/>
+<node CREATED="1748351911358" MODIFIED="1748351911358" TEXT="lumiera_time_ntsc_drop_hours"/>
+<node CREATED="1748351925746" MODIFIED="1748351925746" TEXT="lumiera_tmpbuf_print_time"/>
+</node>
+<node CREATED="1748351446052" ID="ID_620111210" MODIFIED="1748351456006" TEXT="nur Timecode-Widget (+ C-Test)"/>
+<node CREATED="1748350835257" ID="ID_337045682" MODIFIED="1748351145534" TEXT="keine Verwendung">
+<node CREATED="1748350857513" ID="ID_1512877366" MODIFIED="1748350857513" TEXT="lumiera_frame_duration"/>
+</node>
+</node>
+<node CREATED="1748350875193" ID="ID_284160351" MODIFIED="1748350878244" TEXT="zwei Pfade">
+<node CREATED="1748350879480" ID="ID_671325750" MODIFIED="1748350943121" TEXT="f&#xfc;r darauf aufbauende Funktionen der C-Time-Library"/>
+<node CREATED="1748350943852" ID="ID_1403855905" MODIFIED="1748350949921" TEXT="als Back-end f&#xfc;r">
+<node CREATED="1748350953230" ID="ID_1574226598" MODIFIED="1748350975981" TEXT="Operatoren der C++ Time-Entities"/>
+<node CREATED="1748350977713" ID="ID_1147989256" MODIFIED="1748350985724" TEXT="Timecode-Formate"/>
+</node>
+</node>
+<node CREATED="1748350997721" ID="ID_266616127" MODIFIED="1748351028774" TEXT="und au&#xdf;erdem...">
+<node CREATED="1748351029770" ID="ID_324213134" MODIFIED="1748351034557" TEXT="im Timecode-Widget"/>
+<node CREATED="1748351035274" ID="ID_1640433443" MODIFIED="1748351046306" TEXT="im C-Test f&#xfc;r die Time-Library"/>
+</node>
+<node CREATED="1748352902464" ID="ID_790522662" MODIFIED="1748352905396" TEXT="Probleme">
+<node CREATED="1748352906772" ID="ID_1144464670" MODIFIED="1748354044614" TEXT="die Dezimator-Funktionen">
+<node CREATED="1748352940751" ID="ID_1822394695" MODIFIED="1748352961195" TEXT="werden ben&#xf6;tigt zur Timecode-Implementierung"/>
+<node CREATED="1748352961890" ID="ID_528108203" MODIFIED="1748352970368" TEXT="sind aber selber ein imliziter Timecode"/>
+<node CREATED="1748352971412" ID="ID_1258243727" MODIFIED="1748353001365">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p style="text-align: right">
+      und k&#246;nnten vewendet werden,
+    </p>
+    <p style="text-align: right">
+      das Framework zu umgehen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1748354078102" ID="ID_1402361874" MODIFIED="1748354107033" TEXT="habe seinerzeit hierzu den time/diagnostics.hpp geschaffen"/>
+</node>
+<node CREATED="1748353026524" ID="ID_790164429" MODIFIED="1748353043510" TEXT="der HMS-Timecode ist noch nicht (vollst&#xe4;ndig) implementiert"/>
+<node CREATED="1748353088884" ID="ID_1586930607" MODIFIED="1748353098238" TEXT="es gibt &#xfc;berhaupt keinen Timecode mit Millisekunden">
+<node CREATED="1748353873306" ID="ID_1222020355" MODIFIED="1748353889615" TEXT="und will man dann vielleicht auch noch fraktionale Millisekunden"/>
+<node CREATED="1748353890657" ID="ID_511857523" MODIFIED="1748353974561" TEXT="also wie im ISO8601 - Zeitformat?"/>
+<node CREATED="1748354022848" ID="ID_81275657" MODIFIED="1748354036901" TEXT="das w&#xe4;re die saubere L&#xf6;sung f&#xfc;r die Dezimator-Funktionen"/>
+</node>
+<node CREATED="1748353099258" ID="ID_651820064" MODIFIED="1748353109237" TEXT="die Rolle der fractional-Seconds ist unklar"/>
+<node CREATED="1748353117104" ID="ID_573256028" MODIFIED="1748353232679" TEXT="die Rolle von &#xbb;drop-frame&#xab; ist unbestimmt">
+<node CREATED="1748353236897" ID="ID_1729099451" MODIFIED="1748353284705" TEXT="es gibt nur einen Satz C-Implementierungsfunktionen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      diese dokumentieren einen gewissen Standard-Algorithmus, mit dem man einen SMPTE-drop-frame-Timecode aufbauen k&#246;nnte
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1748353305614" ID="ID_252015907" MODIFIED="1748353817074" TEXT="rein logisch handelt es sich um einen Qualifier zu anderen Timecodes">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Bekanntlich war &#187;drop-frame&#171; vor langer Zeit in USA eingef&#252;hrt worden, um ein Elektronik-Problem mit dem NTSC-Farbfernseh-Standard zu entsch&#228;rfen. <i>Klassischer Pragmatismus:</i>&#160;was uns schadet, kann doch keine Wahrheit sein!
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Also handelt es sich im Kern darum, wie ein Frame-Count in ein klassisches Zeit-Schema gemappt wird. Das pa&#223;t nicht in den gedanklichen Rahmen, den ich ansonsten f&#252;r Zeiten und Timecodes errichtet habe. Andererseits ist drop-Frame ein <i>practical hack,</i>&#160;und tritt meines Wissens nur auf im Zusammenhang mit SMPTE-Timecode &#8212; geh&#246;rt also in eine <i>vergangene Welt, in der die Verh&#228;ltnisse einfach waren</i>.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1748353843717" ID="ID_102195936" MODIFIED="1748353860097" TEXT="&#x27f9; vorerst nur als Library-Funktionen zu dokumentieren"/>
+</node>
+</node>
+<node CREATED="1748357125863" ID="ID_159998129" MODIFIED="1748357132330" TEXT="aktuelle Relevanz">
+<node CREATED="1748357135126" ID="ID_1818420467" MODIFIED="1748357170741" TEXT="gebraucht wird">
+<node CREATED="1748357171918" ID="ID_469296373" MODIFIED="1748358669049" TEXT="eine Verifikation von Ergebnissen im Unit-Test">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_469296373" ENDARROW="Default" ENDINCLINATION="174;11;" ID="Arrow_ID_1443598664" SOURCE="ID_1839634922" STARTARROW="None" STARTINCLINATION="69;-91;"/>
+</node>
+<node CREATED="1748357189265" ID="ID_1071301470" MODIFIED="1748357206613" TEXT="sonst stets eine Grid-Quantisierung"/>
+<node CREATED="1748357214051" ID="ID_1145240923" MODIFIED="1748357218790" TEXT="oder relationale Operatoren"/>
+</node>
+<node BACKGROUND_COLOR="#ead6bd" CREATED="1748357229639" ID="ID_322676309" MODIFIED="1748358198160" TEXT="das hei&#xdf;t: hier haben wir ein Scheinproblem">
+<icon BUILTIN="idea"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#7b1a3f" CREATED="1748357246347" ID="ID_1261892451" MODIFIED="1748363156809" STYLE="bubble">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p style="text-align: right">
+      es ist dadurch entstanden,
+    </p>
+    <p style="text-align: right">
+      da&#223; man ausgehend von
+    </p>
+    <p style="text-align: right">
+      &#187;Basis-Operationen&#171;
+    </p>
+    <p style="text-align: right">
+      gedacht hat
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Also zeigt sich wieder einmal: die zugrundeliegende &#187;pragmatische Denkweise&#171; ist zutieft fehlgeleitet. <i>Die Realit&#228;t ist kein Baukasten-System.</i>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Hinter dem pragmatischen &#187;hands-on&#171; steckt ein Glaube an eine verborgene <i>einfache Wahrheit.</i>&#160;Nur unter dieser Annahme macht die Heuristik Sinn, da&#223; man mal mit einem ausgedachten Exempel anf&#228;ngt, dieses in Einzelschritte zerlegt, und dann behauptet, diese Einzelschritte w&#228;ren Basis-Elemente.
+    </p>
+    <p>
+      Und exakt so wurde bei dieser C-Library vorgegangen: Exempel-1: wir bauen uns mal eine Zeit. Einmal mit alles-auf-Null, dann einmal mit &#187;random numbers&#171; (return 47). Dabei st&#246;&#223;t man dann auf die Dezimator-Schritte, und da diese <i>irgendwie elementar aussehen</i>, verpackt man sie in Funktionen, und behauptet, man habe das Atom gefunden. Das f&#252;hrt dazu, da&#223; man eine Rechnung in <b>Schein-Abstraktionen verpackt<i>,</i></b>&#160;welche man in einer Implementierung auch ohne Weiteres direkt anschreiben k&#246;nnte. Tats&#228;chlich ist die <b>Modulus</b>-Funktion bereits eine echte Abstraktion, d.h. sie ist ausdrucksst&#228;rker als eine <font face="Monospaced">lumiera_get_seconds()</font>-Funktion. Und im Hintergrund macht sich auf diesem Weg wieder die gel&#228;ufige Vorstellung breit, eine Zeit &#8222;bestehe&#8220; aus Stunden, Minuten und Sekunden. Das ist bereits ein Irrtum, <i>Time is fleeting.</i>&#160;
+    </p>
+  </body>
+</html></richcontent>
+<edge COLOR="#de003c"/>
+<linktarget COLOR="#9e234b" DESTINATION="ID_1261892451" ENDARROW="Default" ENDINCLINATION="-869;-140;" ID="Arrow_ID_600286501" SOURCE="ID_325475859" STARTARROW="None" STARTINCLINATION="750;59;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1748358001579" ID="ID_1984671672" MODIFIED="1748358120717" TEXT="was wir tats&#xe4;chlich brauchen">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1748358644511" ID="ID_1839634922" MODIFIED="1748358669049" TEXT="Literale f&#xfc;r Text-Expectations">
+<arrowlink DESTINATION="ID_469296373" ENDARROW="Default" ENDINCLINATION="174;11;" ID="Arrow_ID_1443598664" STARTARROW="None" STARTINCLINATION="69;-91;"/>
+</node>
+<node CREATED="1748358012444" ID="ID_996552254" MODIFIED="1748358153615" TEXT="Frame-Positionen zur Adressierung"/>
+<node CREATED="1748358026880" ID="ID_274379158" MODIFIED="1748358054112" TEXT="ein Agens, um ein Grid in ein Anderes abbilden zu k&#xf6;nnen"/>
+<node CREATED="1748358087704" ID="ID_1822209643" MODIFIED="1748358114059" TEXT="eine Gliederung in handliche Zeitspannen f&#xfc;r den Editor"/>
+</node>
+</node>
+</node>
+<node CREATED="1748358751369" ID="ID_920187834" MODIFIED="1748358756276" TEXT="Weg zur Aufl&#xf6;sung">
+<node CREATED="1748358771454" ID="ID_810358375" MODIFIED="1748358805918" TEXT="alle Verwendungen der Komponenten-Accessoren beseitigen"/>
+<node CREATED="1748358858563" ID="ID_567453270" MODIFIED="1748358892312" TEXT="den Basis-Test neu schreiben, mit einer Literal-Expectation"/>
+<node CREATED="1748358817067" ID="ID_557771496" MODIFIED="1748358830620" TEXT="Dezimation in Komponenten stets direkt berechnen"/>
+<node CREATED="1748358907068" ID="ID_918217691" MODIFIED="1748358919181" TEXT="die restlichen Funktionen zur Implementierung"/>
+<node CREATED="1748358931317" ID="ID_1847347457" MODIFIED="1748358944202" TEXT="Drop-Frame-Algo separat dokumentieren"/>
+</node>
+</node>
+<node CREATED="1748350717103" ID="ID_1477694076" MODIFIED="1748350722786" TEXT="Aufr&#xe4;umen">
+<node COLOR="#5b280f" CREATED="1748362636897" ID="ID_793532606" MODIFIED="1748362658768" TEXT="man k&#xf6;nnte versuchen, H:M:S fertig zu implementieren">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1748362660474" ID="ID_1457327168" MODIFIED="1748362804911" TEXT="das w&#xe4;re aber &#xbb;premature&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <ul>
+      <li>
+        auch hier sollte vom tats&#228;chlichen Nutzen ausgegangen werden...
+      </li>
+      <li>
+        Vorrausetzung w&#228;re, das Verh&#228;ltnis zu ISO8601 zu kl&#228;ren, d.h. verwenden wir H:M:S tats&#228;chlich, um auch Millisekunden darzustellen? m&#246;glicherweise sogar konfigurierbar bis auf das &#181;-Grid hinunter
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1748362806781" ID="ID_584255798" MODIFIED="1748362815687" TEXT="die tats&#xe4;chlichen Use-Cases sind in weiter Ferne">
+<node CREATED="1748362822504" ID="ID_1172436619" MODIFIED="1748362832347" TEXT="das Timecode-Widget mu&#xdf; neu geschrieben werden"/>
+<node CREATED="1748362833771" ID="ID_619408540" MODIFIED="1748363038493" TEXT="wir haben noch keinerlei Komponenten im GUI, welche Zeitangaben ben&#xf6;tigen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Solche Komponenten w&#228;ren z.B. ein Editor f&#252;r Marker-Positionen, f&#252;r Clip-L&#228;ngen, f&#252;r Keyframes, f&#252;r Effekte mit temporalem Aspekt. Aus diesem Kontext w&#252;rde sich dann ergeben, wie mit der Format-Auswahl eines Timecode-Widget umgegangen werden soll, und daraus w&#252;rde sich ergeben, wieein Timecode-Widget mit einem bestimmten Timecode verschaltet wird (und auf dessen Digxel zugreifen k&#246;nnte). <i>Erst von dort w&#252;rde klar,</i>&#160;welches API ein Timecode tats&#228;chlich bieten mu&#223;. Im Moment wissen wir nur, da&#223; ein Timecode auch als String gerendert werden kann....
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1748363055658" ID="ID_401527488" MODIFIED="1748363127100" TEXT="und au&#xdf;erdem h&#xe4;tten wir dann doch wieder die Komponenten-Accessoren">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...wenngleich auch <i>durch die Hintert&#252;r</i>&#160;&#8212; was aber egal ist, wenn man drin ist, is man drin
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1748365047381" ID="ID_606825976" MODIFIED="1748365054799" TEXT="dokumentiere diese per inlining"/>
+<node CREATED="1748365055413" ID="ID_1098034514" MODIFIED="1748365070571">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      und markiert als <font color="#f12505">@deprecated</font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node COLOR="#7b1a3f" CREATED="1748363128683" ID="ID_209274506" LINK="#ID_1261892451" MODIFIED="1748363156816" TEXT="hier weiterzumachen w&#xe4;re wieder die gleiche, fehlgeleitete Denkweise">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
+<node CREATED="1748363166124" ID="ID_20271646" MODIFIED="1748363183352" TEXT="also: stattdessen rigoros mit Stubs arbeiten">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1748363186304" ID="ID_1752179075" MODIFIED="1748363276225" TEXT="d.h. das Timecode-Widget ganz ersichtlich brechen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      gebrochen ist es ja ohnehin und sowiso, und weiter damit arbeiten m&#246;chte ich nicht &#8212; ganz ehrlich, das war ein &#187;Griff ins Klo&#171;, das ist kein Code, den man erhalten sollte.
+    </p>
+  </body>
 </html>
 </richcontent>
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#435e98" CREATED="1748370343922" ID="ID_767625066" MODIFIED="1748370424799" TEXT="weitere Verwendungen der Dezimator-Funktionen direkt inlinen">
+<icon BUILTIN="yes"/>
+<node COLOR="#338800" CREATED="1748370368406" ID="ID_342971514" MODIFIED="1748370418488" TEXT="vorl&#xe4;ufige Implementierung f&#xfc;r HmsTC">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1748370391243" ID="ID_204089569" MODIFIED="1748370418489" TEXT="TimeBasics_test : zuf&#xe4;llige Zeit zerlegen">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1748370427239" ID="ID_1416072330" MODIFIED="1748370442482" TEXT="diagnostics.hpp bereits entfernen">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1748370446771" ID="ID_514685019" MODIFIED="1748370458042" TEXT="Drop-Frame-Berechnung dokumentieren">
+<icon BUILTIN="pencil"/>
+<node COLOR="#435e98" CREATED="1748370471401" ID="ID_241597558" MODIFIED="1748370583898" TEXT="teset-time.c &#x27fc; time/time-dropframe-test.cpp">
+<icon BUILTIN="list"/>
+</node>
 </node>
 </node>
 </node>

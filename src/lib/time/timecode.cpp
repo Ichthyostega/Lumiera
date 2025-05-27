@@ -443,33 +443,37 @@ namespace time {
     return *this;
   }
   
-  /** */
-  int
-  HmsTC::getSecs() const
-  {
-    return lumiera_time_seconds (tpoint_);
+  namespace {
+    const auto TIME_SCALE_sec{lib::time::TimeValue::SCALE        };
+    const auto TIME_SCALE_ms {lib::time::TimeValue::SCALE / 1'000};
   }
   
-  /** */
+  /** @deprecated 5/25 : no numeric computations in this class! use Digxel instead! */
+  int
+  HmsTC::getSecs() const
+  {         /////////////////////////////////////////////////////////////////////////////////////////////////TICKET #750 we do not want numeric accessors her — rather we want Digxel members
+    return (raw_time_64(tpoint_) / TIME_SCALE_sec) % 60;
+  }
+  
+  /** @deprecated 5/25 : no numeric computations in this class! use Digxel instead! */
   int
   HmsTC::getMins() const
   {
-    return lumiera_time_minutes (tpoint_);
+    return (raw_time_64(tpoint_) / TIME_SCALE_sec / 60) % 60;
   }
   
-  /** */
+  /** @deprecated 5/25 : no numeric computations in this class! use Digxel instead! */
   int
   HmsTC::getHours() const
   {
-    return lumiera_time_hours (tpoint_);
+    return raw_time_64(tpoint_) / TIME_SCALE_sec / 60 / 60;
   }
   
-  /** */
+  /** @deprecated 5/25 : no numeric computations in this class! use Digxel instead! */
   double
   HmsTC::getMillis() const
   {
-    TODO ("Frame-Quantisation");
-    return lumiera_time_millis (tpoint_);
+    return (raw_time_64(tpoint_) / TIME_SCALE_ms) % 1000;
   }
   
   /** */

@@ -305,12 +305,12 @@ namespace time {
   
   
   /* == predefined Digxel configurations == */
-  typedef Digxel< int, digxel::SexaFormatter> SexaDigit;  ///< for displaying time components (sexagesimal)
-  typedef Digxel<uint, digxel::HexaFormatter> HexaDigit;  ///< for displaying a hex byte
-  typedef Digxel< int, digxel::HourFormatter> HourDigit;  ///< for displaying hours in H:M.S
+  using SexaDigit = Digxel< int, digxel::SexaFormatter>;  ///< for displaying time components (sexagesimal)
+  using HexaDigit = Digxel<uint, digxel::HexaFormatter>;  ///< for displaying a hex byte
+  using HourDigit = Digxel< int, digxel::HourFormatter>;  ///< for displaying hours in H:M:S
   
-  typedef int64_t FrameCnt;
-  typedef Digxel<FrameCnt, digxel::CountFormatter> CountVal;  ///< for displaying a counter
+  using FrameCnt = int64_t;
+  using CountVal = Digxel<FrameCnt, digxel::CountFormatter>;  ///< for displaying a counter
   
   
   /** special Digxel to show a sign.

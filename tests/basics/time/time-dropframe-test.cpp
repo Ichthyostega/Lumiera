@@ -1,8 +1,8 @@
 /*
-  TEST-TIME  -  test the time conversion lib
+  TimeDropframe(test)  -  document drop-frame calculation
 
    Copyright (C)
-     2010,            Stefan Kangas <skangas@skangas.se>
+    2010                Stefan Kangas <skangas@skangas.se>
 
   **Lumiera** is free software; you can redistribute it and/or modify it
   under the terms of the GNU General Public License as published by the
@@ -11,11 +11,12 @@
 
 * *****************************************************************/
 
-/** @file test-time.c
- ** C unit test to cover the basic low-level time handling operations
- ** @see time.h
+/** @file time-dropframe-test.cpp
+ ** unit test \ref TimeDropframe_test to document the
+ ** algorithm to compute the components of drop-frame timecode.
+ ** @see TimeFormats_test
+ ** @see TimeValue_test
  ** @see timevalue.hpp
- ** @see TimeValue_test high-level time entities
  */
 
 
@@ -40,11 +41,65 @@ calculate_framecount (raw_time_64 t, uint fps)
 TESTS_BEGIN
 
 const int FRAMES = 15;
+const int MILLIS = 700;
 const int SECONDS = 20;
 const int MINUTES = 55;
 const int HOURS = 3;
 const int FPS = 24;
 
+/*
+ * 1. Basic functionality
+ */
+
+TEST (basic)
+{
+  // Zero
+  raw_time_64 t = lumiera_build_time (0,0,0,0);
+
+  CHECK ((raw_time_64) t                 == 0);
+  CHECK (lumiera_time_millis (t)         == 0);
+  CHECK (lumiera_time_seconds (t)        == 0);
+  CHECK (lumiera_time_minutes (t)        == 0);
+  CHECK (lumiera_time_hours (t)          == 0);
+  CHECK (lumiera_time_frames (t, FPS)    == 0);
+  CHECK (lumiera_time_frames (t, FPS+5)  == 0);
+  CHECK (calculate_framecount (t,FPS)    == 0);
+  CHECK (calculate_framecount (t, FPS+5) == 0);
+
+  ECHO ("%s", lumiera_tmpbuf_print_time (t));
+
+  // Non-zero
+  t = lumiera_build_time (MILLIS, SECONDS, MINUTES, HOURS);
+
+  CHECK (lumiera_time_millis (t)         == MILLIS);
+  CHECK (lumiera_time_seconds (t)        == SECONDS);
+  CHECK (lumiera_time_minutes (t)        == MINUTES);
+  CHECK (lumiera_time_hours (t)          == HOURS);
+  CHECK (lumiera_time_frames (t, FPS)    == FPS * MILLIS / 1000);
+  CHECK (lumiera_time_frames (t, FPS+5)  == (FPS+5) * MILLIS / 1000);
+  CHECK (calculate_framecount (t, FPS)   == 338896);
+  CHECK (calculate_framecount (t, FPS+5) == 409500);
+
+  ECHO ("%s", lumiera_tmpbuf_print_time (t));
+}
+
+/*
+ * 2. Frame rate dependent calculations.
+ */
+
+TEST (fps)
+{
+  raw_time_64 t = lumiera_build_time_fps (FPS, FRAMES, SECONDS, MINUTES, HOURS);
+
+  CHECK (lumiera_time_millis (t)         == FRAMES * 1000 / FPS);
+  CHECK (lumiera_time_seconds (t)        == SECONDS);
+  CHECK (lumiera_time_minutes (t)        == MINUTES);
+  CHECK (lumiera_time_hours (t)          == HOURS);
+  CHECK (lumiera_time_frames (t, FPS)    == FRAMES);
+  CHECK (lumiera_time_frames (t, FPS+5)  == FRAMES * (FPS+5)/FPS); 
+  CHECK (calculate_framecount (t, FPS)   == 338895);
+  CHECK (calculate_framecount (t, FPS+5) == 409498);
+}
 
 /*
  * 3. NTSC drop-frame calculations.

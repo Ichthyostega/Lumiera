@@ -1,8 +1,7 @@
 /*
-  time.h  -  Utilities for handling time
+  DROPFRAME.hpp  -  Utilities for handling time
 
    Copyright (C)
-     2008,            Christian Thaeter <ct@pipapo.org>
      2010,            Stefan Kangas <skangas@skangas.se>
 
   **Lumiera** is free software; you can redistribute it and/or modify it
@@ -11,7 +10,7 @@
   option) any later version. See the file COPYING for further details.
 */
 
-/** @file time.h
+/** @file dropframe.hpp
  ** Common functions for handling of time values.
  ** Working with time values in sexagesimal format, quantising time and converting
  ** to/from common timecode formats can be tricky to get right. Thus the goal is
@@ -46,8 +45,8 @@
  */
 
 
-#ifndef LUMIERA_TIME_H
-#define LUMIERA_TIME_H
+#ifndef LUMIERA_TIME_DROPFRAME_H
+#define LUMIERA_TIME_DROPFRAME_H
 
 #include <inttypes.h>
 
@@ -225,5 +224,4 @@ lumiera_tmpbuf_print_time (raw_time_64 time);
 #ifdef __cplusplus
 }//extern "C"
 #endif
-#endif
-
+#endif /*LUMIERA_TIME_DROPFRAME_H*/

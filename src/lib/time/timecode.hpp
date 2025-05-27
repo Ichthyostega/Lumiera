@@ -103,7 +103,7 @@ namespace time {
       TimeValue value() const { return Format::evaluate (*this, *quantiser_); }
       
     public:
-      typedef format::Frames Format;
+      using Format = format::Frames;
       
       FrameNr (QuTime const& quantisedTime);
       
@@ -153,7 +153,7 @@ namespace time {
       
       
     public:
-      typedef format::Smpte Format;
+      using Format = format::Smpte;
       
       SmpteTC (QuTime const& quantisedTime);
       SmpteTC (SmpteTC const&);
@@ -180,21 +180,27 @@ namespace time {
   
   /**
    * @warning missing implementation
+   *   - not clear what we need and want
+   *   - because also the use cases for H:M:S are not well defined
+   *   - notable question: do we need/want a milliseconds part?
+   *   - do we even want to go into fractional milliseconds,
+   *     down to the µ-Grid? Or do we want that to be configurable?  
    */        ////////////////////////////////////////////////////////////////////////////////////////////////TICKET #736 implement HMS format
   class HmsTC
     : public TCode
     {
-      TimeVar tpoint_;
+      TimeVar tpoint_;          ///< @deprecated most definitively we do not want numeric computations here in this object 
       
       virtual string show()     const { return string(tpoint_); }
       virtual Literal tcID()    const { return "Timecode"; }        
       virtual TimeValue value() const { return tpoint_; }        
       
     public:
-      typedef format::Hms Format;
+      using Format = format::Hms;
       
       HmsTC (QuTime const& quantisedTime);
       
+      ///////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #750 we do not want numeric accessors her — rather we want Digxel members
       double getMillis () const;
       int getSecs      () const; 
       int getMins      () const; 
@@ -216,7 +222,7 @@ namespace time {
       virtual TimeValue value() const { return Time(sec_); }
       
     public:
-      typedef format::Seconds Format;
+      using Format = format::Seconds;
       
       Secs (QuTime const& quantisedTime);
       
