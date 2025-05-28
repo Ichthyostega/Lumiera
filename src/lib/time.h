@@ -78,57 +78,12 @@ raw_time_64
 lumiera_framecount_to_time (uint64_t frameCount, lib::time::FrameRate const& fps);
 
 
-/**
- * Calculates the duration of one frame in Lumiera time units.
- * @param framerate underlying framerate as rational number
- * @throw error::Logic on zero framerate
- */
-raw_time_64
-lumiera_frame_duration (lib::time::FrameRate const& fps);
-
-
 
 
 
 extern "C" {    /* ===================== C interface ======================== */
 #endif
 
-
-/**
- * Quantise the given time into a fixed grid, relative to the origin.
- * The time grid used for quantisation is comprised of equally spaced intervals,
- * rooted at the given origin. The interval starting with the origin is numbered
- * as zero. Each interval includes its lower bound, but excludes its upper bound.
- * @param grid spacing of the grid intervals, measured in TimeValue::Scale (µ-ticks)
- * @return number of the grid interval containing the given time.
- * @warning the resulting value is limited to (Time::Min, Time::MAX)
- */
-int64_t
-lumiera_quantise_frames (raw_time_64 time, raw_time_64 origin, raw_time_64 grid);
-
-int64_t
-lumiera_quantise_frames_fps (raw_time_64 time, raw_time_64 origin, uint framerate);
-
-/**
- * Similar to #lumiera_quantise_frames, but returns a grid aligned _relative time_.
- * @return time of start of the grid interval containing the given time,
- *         but measured relative to the origin
- * @warning because the resulting value needs to be limited to fit into a 64bit long,
- *         the addressable time range can be considerably reduced. For example, if
- *         origin = Time::MIN, then all original time values above zero will be
- *         clipped, because the result, relative to origin, needs to be <= Time::MAX
- */
-raw_time_64
-lumiera_quantise_time (raw_time_64 time, raw_time_64 origin, raw_time_64 grid);
-
-/**
- * Calculate time of a grid point (frame start)
- * @param nr index number of the grid point (0 is at origin)
- * @param grid spacing of the grid intervals, measured in TimeValue::Scale (µ-ticks)
- * @return time point (frame start) on the Lumiera internal time scale
- */
-raw_time_64
-lumiera_time_of_gridpoint (int64_t nr, raw_time_64 origin, raw_time_64 grid);
 
 /**
  * Build a time value by summing up the given components.

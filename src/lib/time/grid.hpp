@@ -62,7 +62,7 @@ namespace time {
       
       
       virtual FrameCnt  gridPoint (TimeValue const& raw)  const   =0;
-      virtual TimeValue gridLocal (TimeValue const& raw)  const   =0;
+      virtual Offset    gridLocal (TimeValue const& raw)  const   =0;
       virtual TimeValue timeOf    (FrameCnt gridPoint)    const   =0;
       virtual TimeValue timeOf    (FSecs gridTime, int=0) const   =0;
     };

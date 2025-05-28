@@ -162938,7 +162938,8 @@ Since then others have made contributions, see the log for the history.</font></
 <node CREATED="1748351475601" ID="ID_828981584" MODIFIED="1748351475601" TEXT="lumiera_time_seconds"/>
 <node CREATED="1748351482281" ID="ID_76044701" MODIFIED="1748351482281" TEXT="lumiera_time_millis"/>
 </node>
-<node CREATED="1748351146392" ID="ID_1900378289" MODIFIED="1748351155511" TEXT="nur C-Test">
+<node CREATED="1748351146392" ID="ID_1900378289" MODIFIED="1748389490642" TEXT="nur C-Test">
+<icon BUILTIN="idea"/>
 <node CREATED="1748351152077" MODIFIED="1748351152077" TEXT="lumiera_quantise_frames_fps"/>
 <node CREATED="1748351210265" ID="ID_980580438" MODIFIED="1748351210265" TEXT="lumiera_build_time_fps"/>
 <node CREATED="1748351564782" ID="ID_1914445290" MODIFIED="1748351569194" TEXT="lumiera_time_frames"/>
@@ -162966,8 +162967,8 @@ Since then others have made contributions, see the log for the history.</font></
 <node CREATED="1748351911358" MODIFIED="1748351911358" TEXT="lumiera_time_ntsc_drop_hours"/>
 <node CREATED="1748351925746" MODIFIED="1748351925746" TEXT="lumiera_tmpbuf_print_time"/>
 </node>
-<node CREATED="1748351446052" ID="ID_620111210" MODIFIED="1748351456006" TEXT="nur Timecode-Widget (+ C-Test)"/>
-<node CREATED="1748350835257" ID="ID_337045682" MODIFIED="1748351145534" TEXT="keine Verwendung">
+<node CREATED="1748350835257" ID="ID_337045682" MODIFIED="1748389483435" TEXT="keine Verwendung">
+<icon BUILTIN="idea"/>
 <node CREATED="1748350857513" ID="ID_1512877366" MODIFIED="1748350857513" TEXT="lumiera_frame_duration"/>
 </node>
 </node>
@@ -162980,7 +162981,9 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node CREATED="1748350997721" ID="ID_266616127" MODIFIED="1748351028774" TEXT="und au&#xdf;erdem...">
 <node CREATED="1748351029770" ID="ID_324213134" MODIFIED="1748351034557" TEXT="im Timecode-Widget"/>
-<node CREATED="1748351035274" ID="ID_1640433443" MODIFIED="1748351046306" TEXT="im C-Test f&#xfc;r die Time-Library"/>
+<node CREATED="1748351035274" ID="ID_1640433443" MODIFIED="1748389509129" TEXT="im C-Test f&#xfc;r die Time-Library">
+<icon BUILTIN="back"/>
+</node>
 </node>
 <node CREATED="1748352902464" ID="ID_790522662" MODIFIED="1748352905396" TEXT="Probleme">
 <node CREATED="1748352906772" ID="ID_1144464670" MODIFIED="1748354044614" TEXT="die Dezimator-Funktionen">
@@ -163100,15 +163103,27 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node CREATED="1748358751369" ID="ID_920187834" MODIFIED="1748358756276" TEXT="Weg zur Aufl&#xf6;sung">
-<node CREATED="1748358771454" ID="ID_810358375" MODIFIED="1748358805918" TEXT="alle Verwendungen der Komponenten-Accessoren beseitigen"/>
-<node CREATED="1748358858563" ID="ID_567453270" MODIFIED="1748358892312" TEXT="den Basis-Test neu schreiben, mit einer Literal-Expectation"/>
-<node CREATED="1748358817067" ID="ID_557771496" MODIFIED="1748358830620" TEXT="Dezimation in Komponenten stets direkt berechnen"/>
-<node CREATED="1748358907068" ID="ID_918217691" MODIFIED="1748358919181" TEXT="die restlichen Funktionen zur Implementierung"/>
-<node CREATED="1748358931317" ID="ID_1847347457" MODIFIED="1748358944202" TEXT="Drop-Frame-Algo separat dokumentieren"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1748358751369" ID="ID_920187834" MODIFIED="1748389559916" TEXT="Weg zur Aufl&#xf6;sung">
+<icon BUILTIN="yes"/>
+<node COLOR="#338800" CREATED="1748358771454" ID="ID_810358375" MODIFIED="1748389566617" TEXT="alle Verwendungen der Komponenten-Accessoren beseitigen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1748358858563" ID="ID_567453270" MODIFIED="1748389568085" TEXT="den Basis-Test neu schreiben, mit einer Literal-Expectation">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1748358817067" ID="ID_557771496" MODIFIED="1748389571906" TEXT="Dezimation in Komponenten stets direkt berechnen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1748358907068" ID="ID_918217691" MODIFIED="1748389575707" TEXT="die restlichen Funktionen zur Implementierung">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node COLOR="#338800" CREATED="1748358931317" ID="ID_1847347457" MODIFIED="1748389574283" TEXT="Drop-Frame-Algo separat dokumentieren">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1748350717103" ID="ID_1477694076" MODIFIED="1748350722786" TEXT="Aufr&#xe4;umen">
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1748350717103" ID="ID_1477694076" MODIFIED="1748479104036" TEXT="Aufr&#xe4;umen">
+<icon BUILTIN="pencil"/>
 <node COLOR="#5b280f" CREATED="1748362636897" ID="ID_793532606" MODIFIED="1748362658768" TEXT="man k&#xf6;nnte versuchen, H:M:S fertig zu implementieren">
 <icon BUILTIN="stop-sign"/>
 <node CREATED="1748362660474" ID="ID_1457327168" MODIFIED="1748362804911" TEXT="das w&#xe4;re aber &#xbb;premature&#xab;">
@@ -163199,7 +163214,10 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="button_ok"/>
 <node CREATED="1748383746542" ID="ID_1117132995" MODIFIED="1748383761481" TEXT="umziehen in Namespace lib::time"/>
 <node CREATED="1748383717910" ID="ID_6099644" MODIFIED="1748383730804" TEXT="umziehen in Header lib/time/dropframe.hpp"/>
-<node CREATED="1748383731428" ID="ID_1472070007" MODIFIED="1748383743307" TEXT="Implementierung verbleibt in lib/time/time.cpp"/>
+<node COLOR="#5b280f" CREATED="1748383731428" ID="ID_1472070007" MODIFIED="1748442507691" TEXT="Implementierung verbleibt in lib/time/time.cpp">
+<arrowlink COLOR="#6361b7" DESTINATION="ID_1724729549" ENDARROW="Default" ENDINCLINATION="1281;74;" ID="Arrow_ID_444441914" STARTARROW="None" STARTINCLINATION="771;44;"/>
+<icon BUILTIN="button_cancel"/>
+</node>
 <node CREATED="1748383780122" ID="ID_170667006" MODIFIED="1748383790175" TEXT="nur die eigentliche Berechnungslogik erhalten">
 <node CREATED="1748383816257" ID="ID_1470396784" MODIFIED="1748384512960" TEXT="int64_t calculate_ntsc_drop_frame_number (raw_time_64 timecode)"/>
 <node CREATED="1748383835599" ID="ID_328152526" MODIFIED="1748385988435" TEXT="raw_time_64 build_time_from_ntsc_drop_frame (frames, secs, mins, hours)"/>
@@ -163229,6 +163247,165 @@ Since then others have made contributions, see the log for the history.</font></
 <node COLOR="#435e98" CREATED="1748388278011" ID="ID_1940069424" MODIFIED="1748388508035" TEXT="lumiera_time_ntsc_drop_minutes (raw_time_64 time)"/>
 <node COLOR="#435e98" CREATED="1748388278013" ID="ID_1868369312" MODIFIED="1748388508035" TEXT="lumiera_time_ntsc_drop_hours (raw_time_64 time)"/>
 <node COLOR="#435e98" CREATED="1748388278014" ID="ID_275417741" MODIFIED="1748388508019" TEXT="lumiera_tmpbuf_print_time (raw_time_64 time)"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1748436006749" ID="ID_439524098" MODIFIED="1748479104035" TEXT="verbleibende Funktionen verteilen">
+<icon BUILTIN="pencil"/>
+<node CREATED="1748436021050" ID="ID_1426888385" MODIFIED="1748436030803" TEXT="generische HIlfsfunktionen">
+<node CREATED="1748436257559" ID="ID_1140529126" MODIFIED="1748436260804" TEXT="lumiera_rational_to_time">
+<node CREATED="1748436293884" ID="ID_534358506" MODIFIED="1748436301463" TEXT="technisch kniffelig">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1748436263298" ID="ID_1571065618" MODIFIED="1748436277061" TEXT="k&#xf6;nnte Basis f&#xfc;r eine RSec-Klasse werden">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1748436280279" ID="ID_1020376151" MODIFIED="1748436289210" TEXT="bisher nur intern von den Time-Entit&#xe4;ten verwendet"/>
+</node>
+<node CREATED="1748436314956" ID="ID_135965943" MODIFIED="1748436317043" TEXT="lumiera_framecount_to_time">
+<node CREATED="1748436317043" ID="ID_1149266151" MODIFIED="1748436333277" TEXT="eigentlich einfach &#x2014; aber tricky"/>
+<node CREATED="1748436335001" ID="ID_21451369" MODIFIED="1748436352201" TEXT="auch verwendet von NTSC Drop-frame">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1748436444348" ID="ID_37784063" MODIFIED="1748436473941" TEXT="verwendet eine FrameRate als Argument &#x27f9; geh&#xf6;rt in Klasse FrameRate"/>
+<node CREATED="1748436579524" ID="ID_47238779" MODIFIED="1748436664963" TEXT="ist bereits Baiss-Implementierung des Konstrukturs Offset{cnt, rate}">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1748436604184" ID="ID_1226697297" MODIFIED="1748436673076" TEXT="FrameCount::duration()">
+<icon BUILTIN="back"/>
+</node>
+</node>
+<node CREATED="1748437205734" ID="ID_1510698290" MODIFIED="1748437216165" TEXT="lumiera_build_time">
+<node CREATED="1748437218033" ID="ID_1983858379" MODIFIED="1748437242305" TEXT="effektiv ist das der Konstrutor Time(ms,s,min,h)"/>
+<node CREATED="1748437245750" ID="ID_1962316549" MODIFIED="1748437254099" TEXT="sonst jetzt keine Verwendung mehr">
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1748436687122" ID="ID_498539691" MODIFIED="1748436742026" STYLE="bubble" TEXT="k&#xf6;nnen &#xbb;wegdiskutiert werden&#xab;  &#x27f6; Time-Entit&#xe4;ten">
+<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1748436052160" ID="ID_332930192" MODIFIED="1748479008869" TEXT="Zeit-Quantisierung">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1748436068486" ID="ID_236415016" MODIFIED="1748451420529" TEXT="lumiera_quantise_frames">
+<arrowlink COLOR="#4e8ead" DESTINATION="ID_830480651" ENDARROW="Default" ENDINCLINATION="153;-10;" ID="Arrow_ID_875820569" STARTARROW="None" STARTINCLINATION="503;54;"/>
+</node>
+<node CREATED="1748436074681" ID="ID_867414214" MODIFIED="1748436074681" TEXT="lumiera_quantise_time"/>
+<node CREATED="1748436080004" ID="ID_308010594" MODIFIED="1748436080004" TEXT="lumiera_time_of_gridpoint"/>
+<node BACKGROUND_COLOR="#b6c8ba" COLOR="#435e98" CREATED="1748436089328" HGAP="24" ID="ID_1017613960" MODIFIED="1748478999996" STYLE="bubble" TEXT="reine Implementierung &#x27f6; quantiser.cpp" VSHIFT="13">
+<icon BUILTIN="yes"/>
+<node CREATED="1748441710788" ID="ID_929357775" MODIFIED="1748441736850" STYLE="fork" TEXT="sogar umformulieren in Time-Entities">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+<node CREATED="1748441710788" ID="ID_1159666529" MODIFIED="1748441755465" STYLE="fork" TEXT="als private static in FixedFrameQuantiser">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1748441710788" ID="ID_830480651" MODIFIED="1748451436980" STYLE="fork" TEXT="grid_aligned() wird sogar zum Implementierungs-Kern">
+<arrowlink COLOR="#7aabe4" DESTINATION="ID_762146581" ENDARROW="Default" ENDINCLINATION="-166;9;" ID="Arrow_ID_160880569" STARTARROW="None" STARTINCLINATION="53;127;"/>
+<linktarget COLOR="#4e8ead" DESTINATION="ID_830480651" ENDARROW="Default" ENDINCLINATION="153;-10;" ID="Arrow_ID_875820569" SOURCE="ID_236415016" STARTARROW="None" STARTINCLINATION="503;54;"/>
+<font NAME="SansSerif" SIZE="10"/>
+<node COLOR="#434698" CREATED="1748451451319" HGAP="25" ID="ID_439737233" MODIFIED="1748451501391" TEXT="viel besser &#x27f8; klarer &#x2227; mit limit-check" VSHIFT="10">
+<font NAME="SansSerif" SIZE="11"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node CREATED="1748442444116" ID="ID_1724729549" MODIFIED="1748442507692" TEXT="Drop-Frame-Implementierung ebenfalls umziehen">
+<linktarget COLOR="#6361b7" DESTINATION="ID_1724729549" ENDARROW="Default" ENDINCLINATION="1281;74;" ID="Arrow_ID_444441914" SOURCE="ID_1472070007" STARTARROW="None" STARTINCLINATION="771;44;"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1748443770239" HGAP="27" ID="ID_900416096" MODIFIED="1748443794005" TEXT="verwendet erweiterte Variante von grid_aligned" VSHIFT="37">
+<icon BUILTIN="info"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1748443795974" ID="ID_1475460893" MODIFIED="1748443808643" TEXT="AUA: in den wenigen Zeilen stecken zwei Bugs">
+<icon BUILTIN="broken-line"/>
+</node>
+<node CREATED="1748443855397" ID="ID_1688939667" MODIFIED="1748443866719" TEXT="ziehe erst mal den Origin-Offset raus"/>
+<node COLOR="#5b280f" CREATED="1748444585733" ID="ID_1996155038" MODIFIED="1748468854134" TEXT="k&#xf6;nnte  stets die erweiterte Variante verwenden">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1748468860305" ID="ID_1750630451" MODIFIED="1748468870864" TEXT="ist nicht sinnvoll"/>
+<node CREATED="1748468871585" ID="ID_1915828426" MODIFIED="1748468899785" TEXT="der einfache Standardfall braucht keine Framerate"/>
+<node CREATED="1748468900420" ID="ID_1493748826" MODIFIED="1748468930405" TEXT="und ist auch nicht von Overflows bedroht">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Zeiten sind bereits &#181;-Tick-quantisiert, d.h. eine einfache Division &#252;ber ein Grid ist stets im Integer-Value range und ohne Fehler ausf&#252;hrbar
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1748449969608" ID="ID_762146581" MODIFIED="1748468816509" TEXT="diese aber neu schreiben &#x27f5; util::reQuant nutzen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      und zwar wegen der Gefahr numerischer Overflows; die eingebaute Limitierung der Lumiera-Time ist <i>nicht ausreichend:</i>&#160;denn die Quantisierung mu&#223; die Framerate durch das &#181;-Grid dividieren, also den Z&#228;hler mal 10^6 nehmen
+    </p>
+  </body>
+</html>
+</richcontent>
+<linktarget COLOR="#7aabe4" DESTINATION="ID_762146581" ENDARROW="Default" ENDINCLINATION="-166;9;" ID="Arrow_ID_160880569" SOURCE="ID_830480651" STARTARROW="None" STARTINCLINATION="53;127;"/>
+</node>
+<node COLOR="#435e98" CREATED="1748452649267" FOLDED="true" ID="ID_1766809889" MODIFIED="1748478967926" TEXT="test Failures">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1748452670184" ID="ID_124809807" MODIFIED="1748452679547" TEXT="QuantiserBasics_test (und diverse andere)"/>
+<node CREATED="1748454238651" ID="ID_433970184" MODIFIED="1748454264048" TEXT="habe beim Umbau Framerate und Grid-Duration verwechselt"/>
+<node CREATED="1748454328068" ID="ID_555997242" MODIFIED="1748468961571" TEXT="QuantiserBasics_test : Grenzfall-Bedingung nicht mehr erf&#xfc;llt">
+<node CREATED="1748470251934" ID="ID_1257197599" MODIFIED="1748470264939" TEXT="Limitierungen sind nun signifikant anders"/>
+<node CREATED="1748470265887" ID="ID_1915675840" MODIFIED="1748471065332" TEXT="wir geben nun effektiv einen Offset heraus">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und das macht durchaus Sinn, grade wegen der starken Limitierung, die ich bisher in diesem Fall demonstriert habe; au&#223;erdem ist diese grid-local-Time ohnehin etwas sonderbar, und auch daher ist es sinnvoll, diese als Offset (gegen&#252;ber dem Origin) zu modellieren. Sofern der Benutzer in eine normale Lumiera-Time speichert, sind wir wieder zur&#252;ck bei den alten Limitierungen, aber man kann eben mit diesem Offset auch weiterrechnen, und ihn z.B. zum Origin dazuaddieren (und w&#252;rde dann im Beispiel wieder bei ganz kleinen Zeiten ankommen)
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1748470276454" ID="ID_1578018466" MODIFIED="1748470869371" TEXT="und dieser ist limitiert auf &#xb1; Duration::MAX"/>
+<node CREATED="1748470870415" ID="ID_1224045565" MODIFIED="1748470884416" TEXT="&#x27f9; Grid-API entspreichend anpassen"/>
+<node CREATED="1748472727015" ID="ID_762218159" MODIFIED="1748472735878" TEXT="mu&#xdf; dann den Test umschreiben">
+<node CREATED="1748472736947" ID="ID_1167982787" MODIFIED="1748472745825" TEXT="m&#xf6;chte aber das Prinzip der Demonstration beibehalten"/>
+<node CREATED="1748472746714" ID="ID_1982316622" MODIFIED="1748472860999" TEXT="mu&#xdf; daf&#xfc;r Hilfskonstanten einf&#xfc;hren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und die Grenzen ausreizen, die das Zeit-Framework (bewu&#223;t) erlaubt, wenn man die Typisierung geschickt ausnutzt: denn ein TimeValue wird aus einer anderen Zeit-Enit&#228;t (absichtlich) ohne weiteren Bounds-Check &#252;bernommen. Es sind mithin durchaus TimeValue m&#246;glich, die gr&#246;&#223;er sind als Time::MAX
+    </p>
+  </body>
+</html>
+</richcontent>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1748478811956" ID="ID_1509469989" MODIFIED="1748478819810" TEXT="Time SUB_MIN{-Duration::MAX};"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1748478811956" ID="ID_315980503" MODIFIED="1748478819809" TEXT="Time SUP_MAX{ Duration::MAX};"/>
+</node>
+<node CREATED="1748472909503" ID="ID_1458117682" MODIFIED="1748472936823" TEXT="die Limitierung passiert nun bereits beim Berchnen des Offset zum Origin"/>
+<node CREATED="1748472937481" ID="ID_1805019467" MODIFIED="1748472956687" TEXT="das ist viel besser so &#x27f9; denn damit liegt jedes Ergebnis stets auf dem Grid">
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e9d3ae" COLOR="#a50125" CREATED="1748478829786" ID="ID_1611930745" MODIFIED="1748478859145" TEXT="es gibt hier eine Art L&#xfc;cke im Sicherheitsnetz">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1748478862377" ID="ID_591567262" MODIFIED="1748478874096" TEXT="TimeVar &#xfc;bernimmt eine andere Zeit-Entit&#xe4;t"/>
+<node CREATED="1748478874828" ID="ID_1454599373" MODIFIED="1748478883719" TEXT="und macht direkte Integer-Arithmetik"/>
+<node CREATED="1748478884351" ID="ID_1695859043" MODIFIED="1748478892386" TEXT="erst im n&#xe4;chsten Konstruktur wird wieder gelimited"/>
+<node CREATED="1748478896305" ID="ID_381040546" MODIFIED="1748478930393" TEXT="&#x27f9; das f&#xfc;hrt dazu, da&#xdf; die Berechnungen Duration::MAX * 2 erreichen k&#xf6;nnen"/>
+<node CREATED="1748478931881" ID="ID_1630974569" MODIFIED="1748478955275" TEXT="(aber nicht zuletzt deshalb bin ich um den Faktor 10 unter die tats&#xe4;chlichen Grenzen gegangen"/>
+</node>
+</node>
+</node>
+</node>
+</node>
 </node>
 </node>
 </node>

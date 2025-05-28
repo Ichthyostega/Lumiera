@@ -402,81 +402,8 @@ lumiera_framecount_to_time (uint64_t frameCount, FrameRate const& fps)
   return rational_cast<raw_time_64> (lib::time::TimeValue::SCALE * frameCount / framerate);
 }
 
-raw_time_64
-lumiera_frame_duration (FrameRate const& fps)
-{
-  if (!fps)
-    throw error::Logic ("Impossible to quantise to an zero spaced frame grid"
-                       , error::LUMIERA_ERROR_BOTTOM_VALUE);
-  
-  FSecs duration = 1 / fps;
-  return lumiera_rational_to_time (duration);
-}
 
 
-namespace { // implementation: basic frame quantisation....
-  
-  inline int64_t
-  calculate_quantisation (raw_time_64 time, raw_time_64 origin, raw_time_64 grid)
-  {
-    time -= origin;
-    return floordiv (time,grid);
-  }
-  
-  inline int64_t
-  calculate_quantisation (raw_time_64 time, raw_time_64 origin, uint framerate, uint framerate_divisor=1)
-  {
-    REQUIRE (framerate);
-    REQUIRE (framerate_divisor);
-    
-    const int64_t limit_num = std::numeric_limits<raw_time_64>::max() / framerate;
-    const int64_t limit_den = std::numeric_limits<raw_time_64>::max() / framerate_divisor;
-    const int64_t microScale {lib::time::TimeValue::SCALE};
-    
-    // protect against numeric overflow
-    if (abs(time) < limit_num and microScale < limit_den)
-      {
-        // safe to calculate "time * framerate"
-        time -= origin;
-        return floordiv (time*framerate, microScale*framerate_divisor);
-      }
-    else
-      {
-        // direct calculation will overflow.
-        // use the less precise method instead...
-        raw_time_64 frameDuration = microScale / framerate; // truncated to µs
-        return calculate_quantisation (time,origin, frameDuration);
-      }
-  }
-}
-
-
-int64_t
-lumiera_quantise_frames (raw_time_64 time, raw_time_64 origin, raw_time_64 grid)
-{
-  return calculate_quantisation (time, origin, grid);
-}
-
-int64_t
-lumiera_quantise_frames_fps (raw_time_64 time, raw_time_64 origin, uint framerate)
-{
-  return calculate_quantisation (time, origin, framerate);
-}
-
-raw_time_64
-lumiera_quantise_time (raw_time_64 time, raw_time_64 origin, raw_time_64 grid)
-{
-  int64_t count = calculate_quantisation (time, origin, grid);
-  raw_time_64 alignedTime = count * grid;
-  return alignedTime;
-}
-
-raw_time_64
-lumiera_time_of_gridpoint (int64_t nr, raw_time_64 origin, raw_time_64 grid)
-{
-  raw_time_64 offset = nr * grid;
-  return origin + offset;
-}
 
 
 raw_time_64
@@ -536,66 +463,6 @@ lumiera_time_frames (raw_time_64 time, uint fps)
 
 namespace lib {
 namespace time { ////////////////////////////////////////////////////////////////////////////////////////////TICKET #1259 : move all calculation functions into a C++ namespace
-
-
-  /* ===== NTSC drop-frame conversions ===== */
-
-  namespace { // conversion parameters
-  
-    const uint FRAMES_PER_10min = 10*60 * 30000/1001;
-    const uint FRAMES_PER_1min  =  1*60 * 30000/1001;
-    const uint DISCREPANCY      = (1*60 * 30) - FRAMES_PER_1min;
-  }
-  
-  
-  /**
-   * @remark This function reverses building the drop-frame timecode,
-   *         and thus maps a time into consecutive frame numbers
-   *         at NTSC framerate (i.e. without gaps)
-   * @param  timecode represented as time value in µ-ticks
-   * @return the absolute frame number as addressed by NTSC drop-frame
-   * @todo 2011 I doubt this works correct for negative times!!
-   */
-  int64_t
-  calculate_ntsc_drop_frame_number (raw_time_64 time)
-  {
-    int64_t frameNr = calculate_quantisation (time, 0, 30000, 1001);
-    
-    // partition into 10 minute segments
-    lldiv_t tenMinFrames = lldiv (frameNr, FRAMES_PER_10min);
-    
-    // ensure the drop-frame incidents happen at full minutes;
-    // at start of each 10-minute segment *no* drop incident happens,
-    // thus we need to correct discrepancy between nominal/real framerate once:
-    int64_t remainingMinutes = (tenMinFrames.rem - DISCREPANCY) / FRAMES_PER_1min;
-    
-    int64_t dropIncidents = (10-1) * tenMinFrames.quot + remainingMinutes;
-    return frameNr + 2*dropIncidents;
-  }
-  
-  
-  /**
-   * @remark This is the mapping function to translate NTSC drop frame
-   *         timecode specification into an actual time, with the necessary
-   *         skip events every 1.-9. minute, thereby allocating 108 frames
-   *         less per hour, than would be required for full 30 fps.
-   * @return raw time value on a µ-tick scale
-   */
-  raw_time_64
-  build_time_from_ntsc_drop_frame (uint frames, uint secs, uint mins, uint hours)
-  {
-    uint64_t total_mins = 60 * hours + mins;
-    uint64_t total_frames  = 30*60*60 * hours
-                           + 30*60 * mins
-                           + 30 * secs
-                           + frames
-                           - 2 * (total_mins - total_mins / 10);
-    raw_time_64 result = lumiera_framecount_to_time (total_frames, FrameRate::NTSC);
-    
-    if (0 != result) // compensate for truncating down on conversion
-      result += 1;  //  without this adjustment the frame number
-    return result; //   would turn out off by -1 on back conversion
-  }
   
   
 }} // lib::time
