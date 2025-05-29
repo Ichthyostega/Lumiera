@@ -162820,7 +162820,7 @@ Since then others have made contributions, see the log for the history.</font></
 <arrowlink COLOR="#592f6e" DESTINATION="ID_450633851" ENDARROW="Default" ENDINCLINATION="338;12;" ID="Arrow_ID_637755539" STARTARROW="None" STARTINCLINATION="466;0;"/>
 <icon BUILTIN="yes"/>
 </node>
-<node COLOR="#435e98" CREATED="1744719728307" ID="ID_1783840760" MODIFIED="1748489965153" TEXT="siehe steam/external/libgavl.hpp">
+<node COLOR="#435e98" CREATED="1744719728307" FOLDED="true" ID="ID_1783840760" MODIFIED="1748489965153" TEXT="siehe steam/external/libgavl.hpp">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -162838,7 +162838,7 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#c8c0b6" COLOR="#166d3d" CREATED="1747489147636" ID="ID_1626357015" MODIFIED="1747524236658" TEXT="gavl_time_t ersetzen">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#166d3d" CREATED="1747489147636" FOLDED="true" ID="ID_1626357015" MODIFIED="1747524236658" TEXT="gavl_time_t ersetzen">
 <icon BUILTIN="yes"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1747489190149" ID="ID_395347682" LINK="https://issues.lumiera.org/ticket/1261" MODIFIED="1747489218934" TEXT="siehe Design-Skizze in #1261">
 <icon BUILTIN="idea"/>
@@ -162865,7 +162865,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node CREATED="1747489277561" ID="ID_1782395866" MODIFIED="1747489284084" TEXT="einzige Ausnahme: Time.cpp"/>
 </node>
-<node BACKGROUND_COLOR="#bcd0c6" COLOR="#338800" CREATED="1747520420088" ID="ID_1585137684" MODIFIED="1748490000277" TEXT="C-Library f&#xfc;r Time-Handling aufl&#xf6;sen">
+<node BACKGROUND_COLOR="#bcd0c6" COLOR="#338800" CREATED="1747520420088" FOLDED="true" ID="ID_1585137684" MODIFIED="1748490000277" TEXT="C-Library f&#xfc;r Time-Handling aufl&#xf6;sen">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1747520433501" ID="ID_1627011016" MODIFIED="1747520503864" TEXT="die ist mir schon lange ein &#xbb;Dorn im Auge&#xab;">
 <richcontent TYPE="NOTE"><html>
@@ -163407,8 +163407,53 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1746059853111" ID="ID_975342117" MODIFIED="1746059870062" TEXT="auch altes RenderNode-Framework zur&#xfc;ckbauen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1746059853111" ID="ID_975342117" MODIFIED="1748563719621" TEXT="auch altes RenderNode-Framework zur&#xfc;ckbauen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1748561872884" ID="ID_962941766" MODIFIED="1748563677391" TEXT="Ansatzpunkte">
+<icon BUILTIN="idea"/>
+<node COLOR="#338800" CREATED="1748561878800" ID="ID_384659073" MODIFIED="1748562139320" TEXT="suche Verwendungen von frameid.hpp">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1748561923626" ID="ID_282276348" MODIFIED="1748561938045" TEXT="l&#xf6;sche alles um renderengine.hpp|cpp">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1748562090488" ID="ID_672562159" MODIFIED="1748562131826" TEXT="channel-descriptor_obsolete">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#435e98" CREATED="1748561916132" ID="ID_1417094608" MODIFIED="1748562136917" TEXT="lasse rendergraph.hpp bestehen">
+<icon BUILTIN="yes"/>
+<node CREATED="1748561946315" ID="ID_1051187114" MODIFIED="1748561956269" TEXT="&#xdc;bergangspunkt zum Builder-Entwurf"/>
+<node CREATED="1748561956900" ID="ID_544436989" MODIFIED="1748561985361" TEXT="das sind auch alles Stubs">
+<icon BUILTIN="broken-line"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1748561964860" ID="ID_904849096" MODIFIED="1748561979175" TEXT="aber relevante Platzhalter">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1748561897480" ID="ID_1077832767" MODIFIED="1748563664819" TEXT="nodewiring-conf.hpp aufkl&#xe4;ren">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1748562174413" ID="ID_1385748288" MODIFIED="1748563666964" TEXT="configflags.hpp kann weg!">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das ist der Ansatz mit den Feature-Flags in Metaprogramming.
+    </p>
+    <p>
+      Dieser Weg ist definitiv obsolet!
+    </p>
+    <p>
+      Habe stattdessen die Feed-Manifold, und der flexible Teil besteht nun Richtung Weaving Pattern und Domain Ontologies
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#e304be" CREATED="1748563681452" ID="ID_223953539" MODIFIED="1748563712702" TEXT="hat Spa&#xdf; gemacht">
+<font ITALIC="true" NAME="SansSerif" SIZE="15"/>
+<icon BUILTIN="ksmiletris"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1744756270441" ID="ID_831819953" LINK="https://issues.lumiera.org/ticket/473" MODIFIED="1746059845274" TEXT="RefArray und ScopedHolder m&#xfc;ssen jetzt wirklich mal weg">
 <arrowlink COLOR="#fd26d0" DESTINATION="ID_1135941103" ENDARROW="Default" ENDINCLINATION="-1048;89;" ID="Arrow_ID_1050531240" STARTARROW="None" STARTINCLINATION="-1120;-23;"/>

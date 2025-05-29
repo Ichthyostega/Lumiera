@@ -18,8 +18,7 @@
 
 
 #include "steam/engine/rendergraph.hpp"
-#include "steam/engine/state-closure-obsolete.hpp"
-#include "lib/frameid.hpp"
+#include "lib/frameid.hpp"     //////////////////////////////////////////////////////////////////////////////TICKET #1367 : role of frameid.hpp and NodeID could not yet be clarified (5/25)
 
 namespace lumiera {
   

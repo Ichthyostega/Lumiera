@@ -42,27 +42,6 @@ namespace engine {
   } // (END) Details of node fabrication
   
   
-  using mobject::Placement;
-  using mobject::session::Effect;
-  
-  
-  /** create a processing node able to render an effect
-   * @todo as of 2016 this is the only (placeholder) implementation
-   *       to indicate how building and wiring of nodes was meant to happen
-   */
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1367 : Rebuild the Node Invocation
-  PNode
-  NodeFactory::operator() (Placement<Effect> const& effect, WiringSituation& intendedWiring)
-  {
-    intendedWiring.resolveProcessor(effect->getProcAsset());
-    Connectivity& wiring = wiringFac_(intendedWiring);
-    
-    ProcNode& newNode = alloc_.create<ProcNode> (wiring);
-    ENSURE (newNode.isValid());
-    return &newNode;
-  }
-    UNIMPLEMENTED ("Node Factory for reworked Render Node Connectivity");
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1367 : Rebuild the Node Invocation
 
 
 }} // namespace engine

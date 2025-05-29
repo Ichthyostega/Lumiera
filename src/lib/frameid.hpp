@@ -41,6 +41,10 @@ namespace lumiera {
    * 
    * @todo currently (10/08) this is a dummy implementation. We'll find out
    *       what is needed once the outline of the render engine is complete.
+   * @todo 5/2025 meanwhile a new effort to define the processing nodes was successful,
+   *       but it is still not clear if the »Render Nodes« will expose any runtime logic
+   *       beyond the mere ability to be invoked.
+   *       ** This is a placeholder**  — we are using ProcID instead
    */
   struct NodeID
     {

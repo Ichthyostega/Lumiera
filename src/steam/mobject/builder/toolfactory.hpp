@@ -64,7 +64,7 @@ namespace builder {
       
       /** receive the finished product of the build process; effectively
        *  releases any other builder tool object
-       * @todo unclear what to do and to return here
+       * @todo 2025 unclear what to do and to return here     ///////////////////////////////////////////////TICKET #1367 : 5/25 left in tree for now; purpose unclear, maybe relevant for the next »Vertical Slice« ?
        */
       engine::RenderGraph& getProduct ();
     };

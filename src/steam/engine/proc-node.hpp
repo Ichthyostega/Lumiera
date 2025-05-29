@@ -168,39 +168,17 @@ namespace engine {
   class Connectivity
     {
     public: /* === public information record describing the node graph === */
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
+      
       using Ports = lib::Several<Port>;
       using Leads = lib::Several<ProcNodeRef>;
       
       Ports ports;
       Leads leads;
       
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
-      
-//  protected:
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
       Connectivity (Ports&& pr, Leads&& lr)
         : ports(move(pr))
         , leads(move(lr))
         { }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
-      
-      
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
-      /* ==== strategy API for configuring the node operation ==== */
-      
-      friend class ProcNode;                               /////////////////////////////////OOO who needs friendship?
-      
-      /** the wiring-dependent part of the node operation.
-       *  Includes the creation of a one-way state object on the stack
-       *  holding the actual buffer pointers and issuing the recursive pull() calls
-       *  @see NodeWiring#callDown default implementation
-       */
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1367 : Rebuild the Node Invocation
-      virtual BuffHandle
-      callDown (StateClosure_OBSOLETE& currentProcess, uint requiredOutputNr)  const =0;
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #1367 : Rebuild the Node Invocation
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
       
     };
   
