@@ -162309,8 +162309,8 @@ Since then others have made contributions, see the log for the history.</font></
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1742249279746" ID="ID_1189167261" MODIFIED="1742249293729" TEXT="Vorsicht: Upgrade auf Version-2">
 <icon BUILTIN="messagebox_warning"/>
 </node>
-<node BACKGROUND_COLOR="#d49f72" COLOR="#5e1744" CREATED="1742249294608" ID="ID_1683248748" MODIFIED="1742256553530" TEXT="ehrlich gesagt: k&#xf6;nnte man in Frage stellen">
-<arrowlink COLOR="#a41b18" DESTINATION="ID_1554376708" ENDARROW="Default" ENDINCLINATION="440;-36;" ID="Arrow_ID_608156847" STARTARROW="None" STARTINCLINATION="193;12;"/>
+<node BACKGROUND_COLOR="#d49f72" COLOR="#5e1744" CREATED="1742249294608" ID="ID_1683248748" MODIFIED="1748489831128" TEXT="ehrlich gesagt: k&#xf6;nnte man in Frage stellen">
+<arrowlink COLOR="#1857a4" DESTINATION="ID_1554376708" ENDARROW="Default" ENDINCLINATION="440;-36;" ID="Arrow_ID_608156847" STARTARROW="None" STARTINCLINATION="193;12;"/>
 <icon BUILTIN="yes"/>
 </node>
 <node COLOR="#435e98" CREATED="1742313412377" ID="ID_1229409179" MODIFIED="1742313437600" TEXT="libgavl-dev 2.0.0~svn6298-1+b3 : vorerst mal installiert"/>
@@ -162713,7 +162713,7 @@ Since then others have made contributions, see the log for the history.</font></
 <font NAME="SansSerif" SIZE="10"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1747318813636" ID="ID_770178888" MODIFIED="1747347203040" TEXT="und die alte GTK-2 timeline">
+<node COLOR="#338800" CREATED="1747318813636" FOLDED="true" ID="ID_770178888" MODIFIED="1747347203040" TEXT="und die alte GTK-2 timeline">
 <icon BUILTIN="yes"/>
 <node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1747347206016" ID="ID_877133844" MODIFIED="1747358919513" TEXT="hab 2023 bereits den gr&#xf6;&#xdf;ten Teil wegger&#xe4;umt">
 <linktarget COLOR="#4b94c0" DESTINATION="ID_877133844" ENDARROW="Default" ENDINCLINATION="89;5;" ID="Arrow_ID_1014835150" SOURCE="ID_191158269" STARTARROW="None" STARTINCLINATION="89;60;"/>
@@ -162745,7 +162745,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1747320207459" ID="ID_1787845536" MODIFIED="1747355564742" TEXT="nebenbei">
+<node COLOR="#338800" CREATED="1747320207459" FOLDED="true" ID="ID_1787845536" MODIFIED="1748489867011" TEXT="nebenbei">
 <icon BUILTIN="idea"/>
 <node COLOR="#338800" CREATED="1747320211058" ID="ID_1715404862" MODIFIED="1747351629662" TEXT="stage/draw/cairo-util">
 <icon BUILTIN="button_ok"/>
@@ -162801,10 +162801,10 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1742249461535" ID="ID_1554376708" MODIFIED="1747524255970" TEXT="Rolle der lib-Gavl &#xfc;berpr&#xfc;fen">
-<linktarget COLOR="#a41b18" DESTINATION="ID_1554376708" ENDARROW="Default" ENDINCLINATION="440;-36;" ID="Arrow_ID_608156847" SOURCE="ID_1683248748" STARTARROW="None" STARTINCLINATION="193;12;"/>
+<node BACKGROUND_COLOR="#bfcad3" COLOR="#1a475d" CREATED="1742249461535" ID="ID_1554376708" MODIFIED="1748489820913" TEXT="Rolle der lib-Gavl &#xfc;berpr&#xfc;fen">
+<linktarget COLOR="#1857a4" DESTINATION="ID_1554376708" ENDARROW="Default" ENDINCLINATION="440;-36;" ID="Arrow_ID_608156847" SOURCE="ID_1683248748" STARTARROW="None" STARTINCLINATION="193;12;"/>
 <linktarget COLOR="#4c3b8b" DESTINATION="ID_1554376708" ENDARROW="Default" ENDINCLINATION="219;519;" ID="Arrow_ID_589652743" SOURCE="ID_219954631" STARTARROW="None" STARTINCLINATION="326;-188;"/>
-<icon BUILTIN="pencil"/>
+<icon BUILTIN="yes"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#95060e" CREATED="1742256560103" ID="ID_1579484179" MODIFIED="1747524214221" TEXT="so traurig es ist: Gavl ist nicht erste Wahl">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -162820,16 +162820,15 @@ Since then others have made contributions, see the log for the history.</font></
 <arrowlink COLOR="#592f6e" DESTINATION="ID_450633851" ENDARROW="Default" ENDINCLINATION="338;12;" ID="Arrow_ID_637755539" STARTARROW="None" STARTINCLINATION="466;0;"/>
 <icon BUILTIN="yes"/>
 </node>
-<node COLOR="#435e98" CREATED="1744719728307" ID="ID_1783840760" MODIFIED="1747524201441" TEXT="siehe steam/external/libgavl.hpp">
+<node COLOR="#435e98" CREATED="1744719728307" ID="ID_1783840760" MODIFIED="1748489965153" TEXT="siehe steam/external/libgavl.hpp">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
     <p>
-      wohl inzwischen nirgends mehr includiert
+      inzwischen nirgends mehr includiert &#8212; lasse diesen Header und die Library-Abh&#228;ngigkeit dennoch vorerst bestehen &#8212; als Platzhalter (f&#252;r eine &#187;Domain-Ontology&#171;)
     </p>
   </body>
 </html></richcontent>
-<icon BUILTIN="flag-yellow"/>
 <node CREATED="1747489068132" ID="ID_491604266" MODIFIED="1747489074061" TEXT="wird derzeit &#xfc;berhaupt nicht verwendet"/>
 <node CREATED="1747489084369" ID="ID_1779252669" MODIFIED="1747489105751" TEXT="wohl auch gar nicht implementierbar"/>
 <node CREATED="1747489074724" ID="ID_663261791" MODIFIED="1747489124777" TEXT="ist eine blo&#xdf;e leere H&#xfc;lle"/>
@@ -162866,8 +162865,8 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node CREATED="1747489277561" ID="ID_1782395866" MODIFIED="1747489284084" TEXT="einzige Ausnahme: Time.cpp"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1747520420088" ID="ID_1585137684" MODIFIED="1747524248767" TEXT="C-Library f&#xfc;r Time-Handling aufl&#xf6;sen">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#bcd0c6" COLOR="#338800" CREATED="1747520420088" ID="ID_1585137684" MODIFIED="1748490000277" TEXT="C-Library f&#xfc;r Time-Handling aufl&#xf6;sen">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1747520433501" ID="ID_1627011016" MODIFIED="1747520503864" TEXT="die ist mir schon lange ein &#xbb;Dorn im Auge&#xab;">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -162917,9 +162916,10 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1748350712006" ID="ID_452116165" MODIFIED="1748350730212" TEXT="Analyse der Situation">
-<icon BUILTIN="pencil"/>
-<node CREATED="1748350733469" ID="ID_367890679" MODIFIED="1748350825691" TEXT="nahezu alle Funktionen werden verwendet">
+<node COLOR="#338800" CREATED="1748350712006" FOLDED="true" ID="ID_452116165" MODIFIED="1748489702107" TEXT="Analyse der Situation">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1748350733469" FOLDED="true" ID="ID_367890679" MODIFIED="1748489639423" TEXT="nahezu alle Funktionen werden verwendet">
+<icon BUILTIN="info"/>
 <node CREATED="1748351651943" ID="ID_1629068440" MODIFIED="1748351657948" TEXT="Time-Entities">
 <node CREATED="1748351786463" ID="ID_367667761" MODIFIED="1748351793337" TEXT="lumiera_build_time">
 <icon BUILTIN="back"/>
@@ -162985,7 +162985,8 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="back"/>
 </node>
 </node>
-<node CREATED="1748352902464" ID="ID_790522662" MODIFIED="1748352905396" TEXT="Probleme">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1748352902464" ID="ID_790522662" MODIFIED="1748489650585" TEXT="Probleme">
+<icon BUILTIN="messagebox_warning"/>
 <node CREATED="1748352906772" ID="ID_1144464670" MODIFIED="1748354044614" TEXT="die Dezimator-Funktionen">
 <node CREATED="1748352940751" ID="ID_1822394695" MODIFIED="1748352961195" TEXT="werden ben&#xf6;tigt zur Timecode-Implementierung"/>
 <node CREATED="1748352961890" ID="ID_528108203" MODIFIED="1748352970368" TEXT="sind aber selber ein imliziter Timecode"/>
@@ -163042,7 +163043,7 @@ Since then others have made contributions, see the log for the history.</font></
 <node CREATED="1748353843717" ID="ID_102195936" MODIFIED="1748353860097" TEXT="&#x27f9; vorerst nur als Library-Funktionen zu dokumentieren"/>
 </node>
 </node>
-<node CREATED="1748357125863" ID="ID_159998129" MODIFIED="1748357132330" TEXT="aktuelle Relevanz">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#824835" CREATED="1748357125863" ID="ID_159998129" MODIFIED="1748489690131" TEXT="aktuelle Relevanz">
 <node CREATED="1748357135126" ID="ID_1818420467" MODIFIED="1748357170741" TEXT="gebraucht wird">
 <node CREATED="1748357171918" ID="ID_469296373" MODIFIED="1748358669049" TEXT="eine Verifikation von Ergebnissen im Unit-Test">
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_469296373" ENDARROW="Default" ENDINCLINATION="174;11;" ID="Arrow_ID_1443598664" SOURCE="ID_1839634922" STARTARROW="None" STARTINCLINATION="69;-91;"/>
@@ -163103,7 +163104,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1748358751369" ID="ID_920187834" MODIFIED="1748389559916" TEXT="Weg zur Aufl&#xf6;sung">
+<node COLOR="#435e98" CREATED="1748358751369" ID="ID_920187834" MODIFIED="1748489617798" TEXT="Weg zur Aufl&#xf6;sung">
 <icon BUILTIN="yes"/>
 <node COLOR="#338800" CREATED="1748358771454" ID="ID_810358375" MODIFIED="1748389566617" TEXT="alle Verwendungen der Komponenten-Accessoren beseitigen">
 <icon BUILTIN="button_ok"/>
@@ -163114,17 +163115,17 @@ Since then others have made contributions, see the log for the history.</font></
 <node COLOR="#338800" CREATED="1748358817067" ID="ID_557771496" MODIFIED="1748389571906" TEXT="Dezimation in Komponenten stets direkt berechnen">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1748358907068" ID="ID_918217691" MODIFIED="1748389575707" TEXT="die restlichen Funktionen zur Implementierung">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1748358907068" ID="ID_918217691" MODIFIED="1748489616388" TEXT="die restlichen Funktionen zur Implementierung">
+<icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1748358931317" ID="ID_1847347457" MODIFIED="1748389574283" TEXT="Drop-Frame-Algo separat dokumentieren">
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1748350717103" ID="ID_1477694076" MODIFIED="1748479104036" TEXT="Aufr&#xe4;umen">
-<icon BUILTIN="pencil"/>
-<node COLOR="#5b280f" CREATED="1748362636897" ID="ID_793532606" MODIFIED="1748362658768" TEXT="man k&#xf6;nnte versuchen, H:M:S fertig zu implementieren">
+<node COLOR="#338800" CREATED="1748350717103" ID="ID_1477694076" MODIFIED="1748489726550" TEXT="Aufr&#xe4;umen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#5b280f" CREATED="1748362636897" FOLDED="true" ID="ID_793532606" MODIFIED="1748489735949" TEXT="man k&#xf6;nnte versuchen, H:M:S fertig zu implementieren">
 <icon BUILTIN="stop-sign"/>
 <node CREATED="1748362660474" ID="ID_1457327168" MODIFIED="1748362804911" TEXT="das w&#xe4;re aber &#xbb;premature&#xab;">
 <richcontent TYPE="NOTE"><html>
@@ -163179,7 +163180,7 @@ Since then others have made contributions, see the log for the history.</font></
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 </node>
 </node>
-<node CREATED="1748363166124" ID="ID_20271646" MODIFIED="1748388589043" TEXT="also: stattdessen rigoros mit Stubs arbeiten">
+<node COLOR="#352754" CREATED="1748363166124" FOLDED="true" ID="ID_20271646" MODIFIED="1748489765992" TEXT="also: stattdessen rigoros mit Stubs arbeiten">
 <icon BUILTIN="yes"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1748363186304" ID="ID_1752179075" MODIFIED="1748363276225" TEXT="d.h. das Timecode-Widget ganz ersichtlich brechen">
 <richcontent TYPE="NOTE"><html>
@@ -163205,7 +163206,7 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1748370446771" ID="ID_514685019" MODIFIED="1748388515380" TEXT="Drop-Frame-Berechnung dokumentieren">
+<node COLOR="#338800" CREATED="1748370446771" FOLDED="true" ID="ID_514685019" MODIFIED="1748489708025" TEXT="Drop-Frame-Berechnung dokumentieren">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1748370471401" ID="ID_241597558" MODIFIED="1748383700953" TEXT="test-time.c &#x27fc; time/time-dropframe-test.cpp">
 <icon BUILTIN="list"/>
@@ -163228,7 +163229,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node BACKGROUND_COLOR="#174956" COLOR="#8dfd49" CREATED="1748388518698" ID="ID_1682762507" MODIFIED="1748388574315" STYLE="bubble" TEXT="umgezogener Test l&#xe4;uft GR&#xdc;N">
 <edge COLOR="#61fe5b" STYLE="bezier" WIDTH="thin"/>
-<font NAME="SansSerif" SIZE="15"/>
+<font NAME="SansSerif" SIZE="14"/>
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#8b2f98" CREATED="1748388204363" ID="ID_926423450" MODIFIED="1748388454445" TEXT=" &#xd83d;&#xdc80; totmachen &#xd83d;&#xdc80;">
 <node COLOR="#435e98" CREATED="1748388215333" ID="ID_1531959638" MODIFIED="1748388508038" TEXT="test-time.c">
@@ -163249,9 +163250,10 @@ Since then others have made contributions, see the log for the history.</font></
 <node COLOR="#435e98" CREATED="1748388278014" ID="ID_275417741" MODIFIED="1748388508019" TEXT="lumiera_tmpbuf_print_time (raw_time_64 time)"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1748436006749" ID="ID_439524098" MODIFIED="1748479104035" TEXT="verbleibende Funktionen verteilen">
-<icon BUILTIN="pencil"/>
-<node CREATED="1748436021050" ID="ID_1426888385" MODIFIED="1748436030803" TEXT="generische HIlfsfunktionen">
+<node COLOR="#338800" CREATED="1748436006749" ID="ID_439524098" MODIFIED="1748489728107" TEXT="verbleibende Funktionen verteilen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1748436021050" FOLDED="true" ID="ID_1426888385" MODIFIED="1748489730189" TEXT="generische HIlfsfunktionen">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1748436257559" ID="ID_1140529126" MODIFIED="1748436260804" TEXT="lumiera_rational_to_time">
 <node CREATED="1748436293884" ID="ID_534358506" MODIFIED="1748436301463" TEXT="technisch kniffelig">
 <icon BUILTIN="messagebox_warning"/>
@@ -163260,6 +163262,7 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1748436280279" ID="ID_1020376151" MODIFIED="1748436289210" TEXT="bisher nur intern von den Time-Entit&#xe4;ten verwendet"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1748489507389" ID="ID_1108010731" MODIFIED="1748489557860" TEXT="umbenannt &#x27fc; built_time_from"/>
 </node>
 <node CREATED="1748436314956" ID="ID_135965943" MODIFIED="1748436317043" TEXT="lumiera_framecount_to_time">
 <node CREATED="1748436317043" ID="ID_1149266151" MODIFIED="1748436333277" TEXT="eigentlich einfach &#x2014; aber tricky"/>
@@ -163279,13 +163282,14 @@ Since then others have made contributions, see the log for the history.</font></
 <node CREATED="1748437245750" ID="ID_1962316549" MODIFIED="1748437254099" TEXT="sonst jetzt keine Verwendung mehr">
 <icon BUILTIN="ksmiletris"/>
 </node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1748489507389" ID="ID_65232146" MODIFIED="1748489538457" TEXT="umbenannt &#x27fc; built_time_from"/>
 </node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1748436687122" ID="ID_498539691" MODIFIED="1748436742026" STYLE="bubble" TEXT="k&#xf6;nnen &#xbb;wegdiskutiert werden&#xab;  &#x27f6; Time-Entit&#xe4;ten">
+<node BACKGROUND_COLOR="#b6c8ba" COLOR="#435e98" CREATED="1748436687122" HGAP="17" ID="ID_498539691" MODIFIED="1748489576953" STYLE="bubble" TEXT="k&#xf6;nnen &#xbb;wegdiskutiert werden&#xab;  &#x27f6; Time-Entit&#xe4;ten" VSHIFT="10">
 <edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1748436052160" ID="ID_332930192" MODIFIED="1748479008869" TEXT="Zeit-Quantisierung">
+<node COLOR="#338800" CREATED="1748436052160" FOLDED="true" ID="ID_332930192" MODIFIED="1748479008869" TEXT="Zeit-Quantisierung">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1748436068486" ID="ID_236415016" MODIFIED="1748451420529" TEXT="lumiera_quantise_frames">
 <arrowlink COLOR="#4e8ead" DESTINATION="ID_830480651" ENDARROW="Default" ENDINCLINATION="153;-10;" ID="Arrow_ID_875820569" STARTARROW="None" STARTINCLINATION="503;54;"/>
@@ -163325,30 +163329,24 @@ Since then others have made contributions, see the log for the history.</font></
 <node CREATED="1748468871585" ID="ID_1915828426" MODIFIED="1748468899785" TEXT="der einfache Standardfall braucht keine Framerate"/>
 <node CREATED="1748468900420" ID="ID_1493748826" MODIFIED="1748468930405" TEXT="und ist auch nicht von Overflows bedroht">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Zeiten sind bereits &#181;-Tick-quantisiert, d.h. eine einfache Division &#252;ber ein Grid ist stets im Integer-Value range und ohne Fehler ausf&#252;hrbar
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1748449969608" ID="ID_762146581" MODIFIED="1748468816509" TEXT="diese aber neu schreiben &#x27f5; util::reQuant nutzen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       und zwar wegen der Gefahr numerischer Overflows; die eingebaute Limitierung der Lumiera-Time ist <i>nicht ausreichend:</i>&#160;denn die Quantisierung mu&#223; die Framerate durch das &#181;-Grid dividieren, also den Z&#228;hler mal 10^6 nehmen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <linktarget COLOR="#7aabe4" DESTINATION="ID_762146581" ENDARROW="Default" ENDINCLINATION="-166;9;" ID="Arrow_ID_160880569" SOURCE="ID_830480651" STARTARROW="None" STARTINCLINATION="53;127;"/>
 </node>
 <node COLOR="#435e98" CREATED="1748452649267" FOLDED="true" ID="ID_1766809889" MODIFIED="1748478967926" TEXT="test Failures">
@@ -163359,16 +163357,13 @@ Since then others have made contributions, see the log for the history.</font></
 <node CREATED="1748470251934" ID="ID_1257197599" MODIFIED="1748470264939" TEXT="Limitierungen sind nun signifikant anders"/>
 <node CREATED="1748470265887" ID="ID_1915675840" MODIFIED="1748471065332" TEXT="wir geben nun effektiv einen Offset heraus">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...und das macht durchaus Sinn, grade wegen der starken Limitierung, die ich bisher in diesem Fall demonstriert habe; au&#223;erdem ist diese grid-local-Time ohnehin etwas sonderbar, und auch daher ist es sinnvoll, diese als Offset (gegen&#252;ber dem Origin) zu modellieren. Sofern der Benutzer in eine normale Lumiera-Time speichert, sind wir wieder zur&#252;ck bei den alten Limitierungen, aber man kann eben mit diesem Offset auch weiterrechnen, und ihn z.B. zum Origin dazuaddieren (und w&#252;rde dann im Beispiel wieder bei ganz kleinen Zeiten ankommen)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1748470276454" ID="ID_1578018466" MODIFIED="1748470869371" TEXT="und dieser ist limitiert auf &#xb1; Duration::MAX"/>
 <node CREATED="1748470870415" ID="ID_1224045565" MODIFIED="1748470884416" TEXT="&#x27f9; Grid-API entspreichend anpassen"/>
@@ -163376,16 +163371,13 @@ Since then others have made contributions, see the log for the history.</font></
 <node CREATED="1748472736947" ID="ID_1167982787" MODIFIED="1748472745825" TEXT="m&#xf6;chte aber das Prinzip der Demonstration beibehalten"/>
 <node CREATED="1748472746714" ID="ID_1982316622" MODIFIED="1748472860999" TEXT="mu&#xdf; daf&#xfc;r Hilfskonstanten einf&#xfc;hren">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...und die Grenzen ausreizen, die das Zeit-Framework (bewu&#223;t) erlaubt, wenn man die Typisierung geschickt ausnutzt: denn ein TimeValue wird aus einer anderen Zeit-Enit&#228;t (absichtlich) ohne weiteren Bounds-Check &#252;bernommen. Es sind mithin durchaus TimeValue m&#246;glich, die gr&#246;&#223;er sind als Time::MAX
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1748478811956" ID="ID_1509469989" MODIFIED="1748478819810" TEXT="Time SUB_MIN{-Duration::MAX};"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1748478811956" ID="ID_315980503" MODIFIED="1748478819809" TEXT="Time SUP_MAX{ Duration::MAX};"/>
 </node>
@@ -163407,6 +163399,10 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
+</node>
+<node BACKGROUND_COLOR="#174956" COLOR="#8dfd49" CREATED="1748489592263" ID="ID_1377471143" MODIFIED="1748489605929" STYLE="bubble" TEXT="Testuite GR&#xdc;N">
+<edge COLOR="#61fe5b" STYLE="bezier" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="15"/>
 </node>
 </node>
 </node>

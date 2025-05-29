@@ -45,8 +45,9 @@
 
 #include "lib/llist.h"
 #include "lib/hash-value.h"
-#include "lib/time.h"
+#include <inttypes.h>
 
+typedef int64_t  raw_time_64;        ////////////////////////////////////////////////////////////////////////TICKET #1287 : rework Job representation -- and then turn this into a C++ Header
 
 
 enum JobState
@@ -189,6 +190,7 @@ typedef lumiera_jobDescriptor* LumieraJobDescriptor;
 #ifdef __cplusplus  /* ============== C++ Interface ================= */
 
 #include "lib/nocopy.hpp"
+#include "lib/time/timevalue.hpp"    ////////////////////////////////////////////////////////////////////////TICKET #1287 : rework Job representation -- and then turn this into a C++ Header
 #include <string>
 
 

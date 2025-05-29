@@ -21,9 +21,8 @@
  ** for the derived time entities (TimeVar, Offset, Duration, TimeSpan, FrameRate)
  ** and for the basic time and frame rate conversion functions.
  ** 
- ** Client code includes either time.h (for basics and conversion functions)
- ** or timevalue.hpp (for the time entities), timequant.hpp for grid aligned
- ** time values or timecode.hpp
+ ** Client code includes either timevalue.hpp (for the time entities),
+ ** or timequant.hpp for grid aligned time values, or timecode.hpp.
  ** 
  ** @see Time
  ** @see TimeValue
@@ -35,14 +34,12 @@
 
 
 #include "lib/error.hpp"
-#include "lib/time.h"
-#include "lib/time/timevalue.hpp"
 #include "lib/rational.hpp"
-#include "lib/util-quant.hpp"
+#include "lib/time/timevalue.hpp"
 #include "lib/format-string.hpp"
+#include "lib/util-quant.hpp"
 #include "lib/util.hpp"
 
-#include <math.h>
 #include <limits>
 #include <string>
 #include <sstream>
@@ -61,20 +58,18 @@ using boost::lexical_cast;
 #undef MIN
 
 
-namespace error = lumiera::error;
-
-
 namespace lib {
 namespace meta {
   extern const std::string FAILURE_INDICATOR;
 }
 namespace time {
   
+  namespace error = lumiera::error;
   
   const raw_time_64 TimeValue::SCALE = 1'000'000;
   
   
-  /** @note the allowed time range is explicitly limited to help overflow protection */
+  /** @note the allowed time range is explicitly limited to allow for overflow protection */
   const Time Time::MAX ( TimeValue::buildRaw_(+std::numeric_limits<raw_time_64>::max() / 30) );
   const Time Time::MIN ( TimeValue::buildRaw_(-_raw(Time::MAX)                             ) );
   const Time Time::ZERO;
@@ -84,16 +79,57 @@ namespace time {
   
   const Offset Offset::ZERO (Time::ZERO);
   
+  
+  
+  namespace { // local definitions for the implementation....
+    
+  /** scale factor _used locally within this implementation header_.
+   *  TimeValue::SCALE (µ-ticks, i.e. 1e6) is the correct factor or dividend when using
+   *  raw_time_64 for display on a scale with seconds. Since we want to use milliseconds,
+   *  we need a factor of 1000 to get correct results. */
+  const raw_time_64 TIME_SCALE_MS (lib::time::TimeValue::SCALE / 1000);
+  
+  
   const FSecs FSEC_MAX{std::numeric_limits<int64_t>::max() / lib::time::TimeValue::SCALE};
   
   Literal DIAGNOSTIC_FORMAT{"%s%01d:%02d:%02d.%03d"};
-
   
-/** scale factor _used locally within this implementation header_.
- *  TimeValue::SCALE (µ-ticks, i.e. 1e6) is the correct factor or dividend when using
- *  raw_time_64 for display on a scale with seconds. Since we want to use milliseconds,
- *  we need to multiply or divide by 1000 to get correct results. */
-#define TIME_SCALE_MS (lib::time::TimeValue::SCALE / 1000)
+  
+  /**
+   * Converts a fraction of seconds to Lumiera's internal opaque time scale.
+   * @param fractionalSeconds given as rational number
+   * @note inconsistent with Lumiera's general quantisation behaviour,
+   *       here negative fractional micro-ticks are truncated towards zero.
+   *       This was deemed irrelevant in practice.
+   * @todo 2022 this utility function could be factored out into a `FSecs` or `RSec` class  /////////////////TICKET #1262
+   */
+    raw_time_64
+    build_time_from (FSecs const& fractionalSeconds)
+    {
+      // avoid numeric wrap from values not representable as 64bit µ-ticks
+      if (abs(fractionalSeconds) > lib::time::FSEC_MAX)
+        return (fractionalSeconds < 0? -1:+1)
+             * std::numeric_limits<int64_t>::max();
+      
+      return raw_time_64(util::reQuant (fractionalSeconds.numerator()
+                                       ,fractionalSeconds.denominator()
+                                       ,lib::time::TimeValue::SCALE
+                                       ));
+    }
+    
+    
+    raw_time_64
+    build_time_from (long millis, uint secs, uint mins, uint hours)
+    {
+      raw_time_64 time = millis
+                       + 1000 * secs
+                       + 1000 * 60 * mins
+                       + 1000 * 60 * 60 * hours;
+      time *= TIME_SCALE_MS;
+      return time;
+    }
+  }//(End)local definitions
+  
   
   
   /** convenience constructor to build an
@@ -111,7 +147,7 @@ namespace time {
              , uint mins
              , uint hours
              )
-    : TimeValue(lumiera_build_time (millis,secs,mins,hours))
+    : TimeValue(build_time_from (millis,secs,mins,hours))
     { }
   
   
@@ -120,11 +156,11 @@ namespace time {
    *  An example would be to the time unit of a framerate.
    */
   Time::Time (FSecs const& fractionalSeconds)
-    : TimeValue(lumiera_rational_to_time (fractionalSeconds))
+    : TimeValue(build_time_from (fractionalSeconds))
     { }
   
   Offset::Offset (FSecs const& delta_in_secs)
-    : TimeValue{buildRaw_(symmetricLimit (lumiera_rational_to_time (delta_in_secs)
+    : TimeValue{buildRaw_(symmetricLimit (build_time_from (delta_in_secs)
                                          ,Duration::MAX))}
     { }
   
@@ -338,10 +374,21 @@ namespace time {
   }
   
   
+  namespace {
+    raw_time_64
+    framecount_to_time (uint64_t frameCount, FrameRate const& fps)
+    {
+      // convert to 64bit
+      boost::rational<uint64_t> framerate (fps.numerator(), fps.denominator());
+      
+      return rational_cast<raw_time_64> (lib::time::TimeValue::SCALE * frameCount / framerate);
+    }
+  }
+  
   /** offset by the given number of frames. */
   Offset::Offset (FrameCnt count, FrameRate const& fps)
     : TimeValue{buildRaw_(
-        count? (count<0? -1:+1) * lumiera_framecount_to_time (::abs(count), fps)
+        count? (count<0? -1:+1) * framecount_to_time (::abs(count), fps)
              :_raw(Duration::NIL))}
     { }
   
@@ -361,6 +408,8 @@ namespace time {
   
 }} // namespace lib::Time
 
+
+
 namespace util {
   string
   StringConv<lib::time::FSecs, void>::invoke (lib::time::FSecs val) noexcept
@@ -369,100 +418,3 @@ namespace util {
   }
 } // namespace util
 
-
-
-
-
-
-
-/* ===== implementation of the C API functions ===== */
-
-
-/// @todo this utility function could be factored out into a `FSecs` or `RSec` class  ///////////////////////TICKET #1262
-raw_time_64
-lumiera_rational_to_time (FSecs const& fractionalSeconds)
-{
-  // avoid numeric wrap from values not representable as 64bit µ-ticks
-  if (abs(fractionalSeconds) > lib::time::FSEC_MAX)
-    return (fractionalSeconds < 0? -1:+1)
-         * std::numeric_limits<int64_t>::max();
-  
-  return raw_time_64(util::reQuant (fractionalSeconds.numerator()
-                                   ,fractionalSeconds.denominator()
-                                   ,lib::time::TimeValue::SCALE
-                                   ));
-}
-
-raw_time_64
-lumiera_framecount_to_time (uint64_t frameCount, FrameRate const& fps)
-{
-  // convert to 64bit
-  boost::rational<uint64_t> framerate (fps.numerator(), fps.denominator());
-  
-  return rational_cast<raw_time_64> (lib::time::TimeValue::SCALE * frameCount / framerate);
-}
-
-
-
-
-
-raw_time_64
-lumiera_build_time(long millis, uint secs, uint mins, uint hours)
-{
-  raw_time_64 time = millis
-                   + 1000 * secs
-                   + 1000 * 60 * mins
-                   + 1000 * 60 * 60 * hours;
-  time *= TIME_SCALE_MS;
-  return time;
-}
-
-raw_time_64
-lumiera_build_time_fps (uint fps, uint frames, uint secs, uint mins, uint hours)
-{
-  raw_time_64 time = 1000LL * frames/fps
-                   + 1000 * secs
-                   + 1000 * 60 * mins
-                   + 1000 * 60 * 60 * hours;
-  time *= TIME_SCALE_MS;
-  return time;
-}
-
-int
-lumiera_time_hours (raw_time_64 time)
-{
-  return time / TIME_SCALE_MS / 1000 / 60 / 60;
-}
-
-int
-lumiera_time_minutes (raw_time_64 time)
-{
-  return (time / TIME_SCALE_MS / 1000 / 60) % 60;
-}
-
-int
-lumiera_time_seconds (raw_time_64 time)
-{
-  return (time / TIME_SCALE_MS / 1000) % 60;
-}
-
-int
-lumiera_time_millis (raw_time_64 time)
-{
-  return (time / TIME_SCALE_MS) % 1000;
-}
-
-int
-lumiera_time_frames (raw_time_64 time, uint fps)
-{
-  REQUIRE (fps < uint(std::numeric_limits<int>::max()));
-  return floordiv<int> (lumiera_time_millis(time) * int(fps), TIME_SCALE_MS);
-}
-
-
-
-namespace lib {
-namespace time { ////////////////////////////////////////////////////////////////////////////////////////////TICKET #1259 : move all calculation functions into a C++ namespace
-  
-  
-}} // lib::time
