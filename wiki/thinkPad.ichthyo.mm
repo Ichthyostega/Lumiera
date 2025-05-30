@@ -163461,6 +163461,173 @@ Since then others have made contributions, see the log for the history.</font></
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1747180091430" ID="ID_202566672" MODIFIED="1747180099934" TEXT="was ist mit ScopedPtrvect?">
 <icon BUILTIN="help"/>
 </node>
+<node CREATED="1748609941535" ID="ID_309992355" MODIFIED="1748609956540" TEXT="Status feststellen">
+<node CREATED="1748609976008" ID="ID_406349837" LINK="https://issues.lumiera.org/ticket/1059" MODIFIED="1748610043456" TEXT="#1059 verify and use perfect forwarding">
+<icon BUILTIN="idea"/>
+<node CREATED="1748610060693" ID="ID_1805620153" MODIFIED="1748610070678" TEXT="damit noch markierte Stellen"/>
+<node CREATED="1748610072404" ID="ID_1048223493" MODIFIED="1748610074089" TEXT="ReplaceableItem">
+<node CREATED="1748610172811" ID="ID_1302490511" MODIFIED="1748610179076" TEXT="nur verwendet in MementoTie">
+<node CREATED="1748610357399" ID="ID_592334688" MODIFIED="1748615675308">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      &#187;Commands&#171; sind selber im <i>Schwebezustand</i>
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Zwar halte ich Commands nicht f&#252;r <i>insgesamt obsolet</i>&#160;&#8212; wir werden so etwas definitiv brauchen, da unser GUI per Messaging angebunden ist. Aber es ist bisher unklar geblieben, <i>wie die Schnittstelle zur Sessinon tats&#228;chlich aussehen wird,</i>&#160;auf der die Command-Funktoren dann einmal arbeiten sollen. Zudem waren die Commands auch als Teil eines &#187;Command-Systems&#171; gedacht, welches auch UNDO und REDO erm&#246;glicht. Und <i>in dieser Hinsicht</i>&#160;bewege ich mich schon seit l&#228;ngerer Zeit in Richtung auf <b>Events</b>&#160;und <b>Event-sourcing</b>. Damit w&#228;re ein Gro&#223;teil der Komplexit&#228;t im bestehenden Command-Framework hinf&#228;llig
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1748614552731" ID="ID_346301743" LINK="https://issues.lumiera.org/ticket/1406" MODIFIED="1748614580419" TEXT="das als Ticket #1406 dokumentiert">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1748615683688" ID="ID_30876581" MODIFIED="1748615697365" TEXT="emplace()-Funktion">
+<node CREATED="1748615698444" ID="ID_1303082006" MODIFIED="1748616023594" TEXT="Fallback-Implementierung ist zweifelhaft">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      pfui ... einen Konstruktor-Fehler unterdr&#252;cken und stattdessen ein default-konstruiertes Objekt unterschieben, und das auch noch in einer Funktion, die <font face="Monospaced"><b>emplace</b>()</font>&#160;hei&#223;t...
+    </p>
+  </body>
+</html>
+</richcontent>
+<node COLOR="#e304be" CREATED="1748616025456" HGAP="27" ID="ID_861306315" MODIFIED="1748622359848" TEXT="sowas hab ich 2017 geschrieben ???" VSHIFT="5">
+<arrowlink COLOR="#d20262" DESTINATION="ID_937835041" ENDARROW="Default" ENDINCLINATION="271;-18;" ID="Arrow_ID_40047268" STARTARROW="None" STARTINCLINATION="270;21;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="11"/>
+<icon BUILTIN="smily_bad"/>
+</node>
+</node>
+<node CREATED="1748615708061" ID="ID_1952799104" MODIFIED="1748615719258" TEXT="und bricht tats&#xe4;chlich bei move-only payload"/>
+</node>
+</node>
+<node CREATED="1748614957898" ID="ID_1767040619" MODIFIED="1748614982384" TEXT="hoppla ... da gibt es ja tats&#xe4;chlich einen auskommentierten Testfall">
+<node CREATED="1748614996449" ID="ID_1125899180" MODIFIED="1748615007540" TEXT="ReplaceableItem_test::verifyOnlyMoveConstructible"/>
+<node CREATED="1748615728560" ID="ID_869271198" MODIFIED="1748615747564" TEXT="hatte damals Zweifel am Compiler"/>
+</node>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1748616937343" ID="ID_1907997038" MODIFIED="1748616954102" STYLE="fork" TEXT="immer noch: sonderbares Verhalten des Compilers">
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="broken-line"/>
+<node CREATED="1748616955995" ID="ID_1759129160" MODIFIED="1748616996939" TEXT=" w&#xe4;hlt den deleted copy constructor"/>
+<node CREATED="1748616972914" ID="ID_1249573186" MODIFIED="1748616991994" TEXT="obwohl ein move-ctor explizit definiert wurde"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1748617034911" ID="ID_1469388650" MODIFIED="1748617042353" TEXT="untersuchen">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1748619335635" ID="ID_721492625" MODIFIED="1748621260565" TEXT="in try.cpp nicht ohne Weiteres reproduzierbar">
+<icon BUILTIN="clanbomber"/>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1748620682218" ID="ID_1781899575" MODIFIED="1748620715236" TEXT="so exakt wie m&#xf6;glich extrahieren &#x27f9; Fehler nun reproduzierbar">
+<icon BUILTIN="idea"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#d51d02" CREATED="1748621267614" ID="ID_1330365517" MODIFIED="1748622302088">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ReplacableIterm ist <b>schlampig definiert</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="smiley-oh"/>
+<node CREATED="1748621309800" ID="ID_1952174695" MODIFIED="1748621319170" TEXT="Rule-of-Five etc...."/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1748621320031" ID="ID_1206089903" MODIFIED="1748621346780" TEXT="der &quot;move-ctor&quot; ist tats&#xe4;chlich ein take-everything-ctor">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1748621350195" ID="ID_1301662963" MODIFIED="1748621452771" TEXT="und wenn er zum move-ctor wird, dann ist er unsinnig implementiert">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn er w&#252;rde ReplacableItem in ein ReplacableItem einpflanzen &#8212; also <b>ein Stockwerk zu viel</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="broken-line"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#d50277" CREATED="1748622317411" ID="ID_937835041" MODIFIED="1748622353471" TEXT="Historie / Hintergrund">
+<linktarget COLOR="#d20262" DESTINATION="ID_937835041" ENDARROW="Default" ENDINCLINATION="271;-18;" ID="Arrow_ID_40047268" SOURCE="ID_861306315" STARTARROW="None" STARTINCLINATION="270;21;"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1748622369577" ID="ID_1844169551" MODIFIED="1748622390296" TEXT="an einem einzigen Tag durchgepr&#xfc;gelt (Jan.2017)">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+<node CREATED="1748622393804" ID="ID_1814476265" MODIFIED="1748622445242">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wollte <b>Time</b>, <b>Duration</b>&#160;etc. in einem Command als Memento binden
+    </p>
+  </body>
+</html>
+</richcontent>
+<font NAME="SansSerif" SIZE="11"/>
+</node>
+<node BACKGROUND_COLOR="#d9c28d" COLOR="#a50125" CREATED="1748622481259" ID="ID_1066388646" LINK="https://issues.lumiera.org/ticket/1261" MODIFIED="1748622522979" TEXT="#1261 immutable Time considered harmful">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1748622539774" ID="ID_913302370" MODIFIED="1748622550271" TEXT="reparieren oder wegwerfen?">
+<icon BUILTIN="help"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1748622575863" ID="ID_1364270668" MODIFIED="1748622595883" TEXT="krasse Diskrepanz zu dem was tats&#xe4;chlich gebraucht wird">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1748622552618" ID="ID_1702305891" MODIFIED="1748622570467" TEXT="man k&#xf6;nnte n&#xe4;mlich den ItemWrapper stattdessen nehmen">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1748622617846" ID="ID_451189507" MODIFIED="1748622659320" TEXT="der ist zwar sehr viel m&#xe4;chtiger, wird aber auch sehr viel verwendet"/>
+<node CREATED="1748622665802" ID="ID_1153584758" MODIFIED="1748622719413" TEXT="und wird dadurch langsam &#xbb;sauber geklopft&#xab;">
+<icon BUILTIN="smiley-angry"/>
+<node CREATED="1748622689989" HGAP="27" ID="ID_1342148038" MODIFIED="1748622714135" TEXT="war n&#xe4;mlich ebenso schlampig geschrieben" VSHIFT="5">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1748622735899" ID="ID_1255281715" MODIFIED="1748622746287" TEXT="also aufr&#xe4;umen">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node COLOR="#338800" CREATED="1748622748112" ID="ID_922876099" MODIFIED="1748623903974" TEXT="MementoTie umstellen auf ItemWrapper">
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#c0c8b6" COLOR="#435e98" CREATED="1748623906654" ID="ID_640360358" MODIFIED="1748623941289" TEXT="banal ... in 5 Minuten erledigt">
+<font NAME="SansSerif" SIZE="11"/>
+<icon BUILTIN="smiley-oh"/>
+</node>
+</node>
+<node CREATED="1748622765812" ID="ID_1447472606" MODIFIED="1748622792373" TEXT="Header aufr&#xe4;umen">
+<node CREATED="1748622795210" ID="ID_971344498" MODIFIED="1748622815722" TEXT="wrapper.hpp &#x27fc; item-wrapper.hpp"/>
+<node CREATED="1748622837148" ID="ID_1686776944" MODIFIED="1748622856501" TEXT="ReturnRef &#xfc;berfl&#xfc;ssig machen"/>
+<node CREATED="1748622823574" ID="ID_518076065" MODIFIED="1748622828698" TEXT="Kommentar glattziehen"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1742175299968" ID="ID_1393531242" MODIFIED="1742175305316" TEXT="C++20">

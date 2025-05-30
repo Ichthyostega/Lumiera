@@ -34,7 +34,8 @@
 #include "lib/meta/maybe-compare.hpp"
 #include "lib/meta/function-closure.hpp"
 #include "steam/control/command-signature.hpp"
-#include "lib/replaceable-item.hpp"
+//#include "lib/replaceable-item.hpp"
+#include "lib/wrapper.hpp"
 #include "lib/format-obj.hpp"
 #include "lib/util.hpp"
 
@@ -51,7 +52,7 @@ namespace control {
   using lib::meta::func::bindLast;
   using lib::meta::func::chained;
   using lib::meta::equals_safeInvoke;
-  using lib::wrapper::ReplaceableItem;
+  using lib::wrapper::ItemWrapper;
   
   
   /**
@@ -82,7 +83,7 @@ namespace control {
       typedef typename CommandSignature<SIG,MEM>::CaptureSig SIG_cap;
       typedef typename CommandSignature<SIG,MEM>::UndoOp_Sig SIG_undo;
       
-      ReplaceableItem<MEM> memento_; ///< storage holding the captured state for undo
+      ItemWrapper<MEM> memento_; ///< storage holding the captured state for undo
       
       bool isCaptured_;
       
@@ -110,10 +111,10 @@ namespace control {
        */
       MementoTie (function<SIG_undo> const& undoFunc,
                   function<SIG_cap> const& captureFunc)
-        : memento_()
-        , isCaptured_(false)
-        , undo_(undoFunc)
-        , capture_(captureFunc)
+        : memento_{}
+        , isCaptured_{false}
+        , undo_{undoFunc}
+        , capture_{captureFunc}
         { }
       
       
@@ -124,7 +125,7 @@ namespace control {
       clear()
         {
           isCaptured_ = false;
-          memento_.clear();
+          memento_.reset();
         }
       
       /** bind the undo function to the internal memento store within this object.
@@ -163,10 +164,10 @@ namespace control {
       MEM&
       getState ()
         {
-          if (!isCaptured_)
+          if (not isCaptured_)
             throw err::State{"need to invoke memento state capturing beforehand"
                             , LERR_(MISSING_MEMENTO)};
-          return memento_;
+          return *memento_;
         }
       
       
@@ -183,7 +184,7 @@ namespace control {
       bool
       isValid ()  const
         {
-          return undo_ && capture_ && isCaptured_;
+          return undo_ and capture_ and isCaptured_;
         }
       
       /** for diagnostics: include format-util.hpp */
@@ -195,14 +196,14 @@ namespace control {
   template<typename SIG, typename MEM>
   MementoTie<SIG,MEM>::operator std::string()  const
   {
-    if (!undo_ || !capture_)
+    if (!undo_ or !capture_)
       return "·noUNDO·";
     
-    if (!isCaptured_)
+    if (not isCaptured_)
       return "<mem:missing>";
     
     return "<mem: "
-         + util::toString (memento_.get())
+         + util::toString (*memento_)
          + ">";
   }
   

@@ -92,10 +92,6 @@ namespace test    {
           
           MemHolder mementoHolder (undo_func,cap_func);
           
-          CHECK (sizeof(MemHolder) <= sizeof(int)                    // storage for the memento
-                                     + 2 * sizeof(function<void()>)  // storage for the 2 undecorated functors
-                                     + ALIGNMENT);
-          
           function<OpSIG> bound_undo_func = mementoHolder.tieUndoFunc();
           function<OpSIG> bound_cap_func  = mementoHolder.tieCaptureFunc();
           

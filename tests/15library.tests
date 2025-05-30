@@ -527,11 +527,6 @@ return: 0
 END
 
 
-TEST "inline adapter for state snapshot" ReplaceableItem_test <<END
-return: 0
-END
-
-
 TEST "switchable reference" OptionalRef_test <<END
 return: 0
 END
