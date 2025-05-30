@@ -1,5 +1,5 @@
 /*
-  SCOPED-PTRVECT.hpp  -  simple noncopyable lifecycle managing collection of pointers 
+  SCOPED-PTRVECT.hpp  -  simple noncopyable lifecycle managing collection of pointers
 
    Copyright (C)
      2009,            Hermann Vosseler <Ichthyostega@web.de>
@@ -13,20 +13,24 @@
 
 /** @file scoped-ptrvect.hpp
  ** Managing lifecycle for a collection of objects. Sometimes we need to
- ** build and own a number of objects, including lifecycle management. 
+ ** build and own a number of objects, including lifecycle management.
  ** For example, a service provider may need to maintain a number of individual
  ** process handles. The solution here is deliberately kept simple, it is
  ** similar to using a STL container with shared_ptr(s), but behaves rather
- ** like std::unique_ptr. It provides the same basic functionality as
- ** boost::ptr_vector, but doesn't require us to depend on boost-serialisation.
+ ** like std::unique_ptr.
  ** 
  ** Some details to note:
  ** - contained objects accessed by reference, never NULL.
  ** - the exposed iterator automatically dereferences
- ** - TODO: detaching of objects...
- ** - TODO: retro-fit with RefArray interface
  ** 
- ** @warning deliberately \em not threadsafe
+ ** @warning deliberately **not threadsafe**
+ ** @remark This library class provides the same basic functionality as
+ **   `boost::ptr_vector`, but doesn't require us to depend on boost-serialisation.
+ **   Furthermore, Boost provides several variants of containers and a much more
+ **   feature-rich API, also with the ability to clone / move containers;
+ **   yet we prefer to leave out most functionality, in favour of adding
+ **   a dedicated API with #manage() and #detach() to indicated semantics.
+ **   And we value the ability to integrate with Lumiera Forward Iterators.
  ** 
  ** @see scoped-ptrvect-test.cpp
  ** @see scoped-holder.hpp
@@ -55,23 +59,23 @@ namespace lib {
   /**
    * Simple vector based collection of pointers,
    * managing lifecycle of the pointed-to objects.
-   * Implemented as a non-copyable object, based on a
-   * vector of bare pointers (private inheritance)
+   * Implemented as a non-copyable object, based
+   * on a vector of bare pointers.
    */
   template<class T>
   class ScopedPtrVect
-    : std::vector<T*>,
-      util::NonCopyable
+    : util::NonCopyable
     {
-      typedef std::vector<T*> _Vec;
-      typedef typename _Vec::iterator VIter;
+      using _Vec  = std::vector<T*>;
+      using VIter = typename _Vec::iterator;
       
-      typedef RangeIter<VIter> RIter;
-      typedef PtrDerefIter<RIter> IterType;
+      using RIter    = RangeIter<VIter>;
+      using IterType = PtrDerefIter<RIter>;
       
-      typedef typename IterType::ConstIterType ConstIterType;
-      typedef typename IterType::WrappedConstIterType RcIter;
+      using ConstIterType = typename IterType::ConstIterType;
+      using RcIter        = typename IterType::WrappedConstIterType;
       
+      _Vec vec_;
       
     public:
       typedef size_t   size_type;
@@ -81,20 +85,20 @@ namespace lib {
       
       
       
-      ScopedPtrVect ()
-        : _Vec()
+     ~ScopedPtrVect()
+        {
+          clear();
+        }
+      
+      ScopedPtrVect()
+        : vec_{}
         { }
       
       explicit
       ScopedPtrVect (size_type capacity)
-        : _Vec()
+        : vec_{}
         {
-          _Vec::reserve (capacity);
-        }
-      
-     ~ScopedPtrVect ()
-        { 
-          clear();
+          vec_.reserve (capacity);
         }
       
       
@@ -107,9 +111,9 @@ namespace lib {
       manage (T* obj)
         {
           REQUIRE (obj);
-          try 
+          try
             {
-              this->push_back (obj);
+              vec_.push_back (obj);
               return *obj;
             }
           catch(...)
@@ -128,35 +132,33 @@ namespace lib {
        *         Otherwise, NULL will be returned and the
        *         collection of managed objects remains unaltered
        * @note EX_STRONG
-       * @todo TICKET #856 better return a Maybe<T&> instead of a pointer?
        */
       T*
       detach (void* objAddress)
         {
           T* extracted = static_cast<T*> (objAddress);
-          VIter pos = std::find (_Vec::begin(),_Vec::end(), extracted);
-          if (pos != _Vec::end() && bool(*pos))
+          VIter pos = std::find (vec_.begin(),vec_.end(), extracted);
+          if (pos != vec_.end() and *pos != nullptr)
             {
               extracted = *pos;
-              _Vec::erase(pos);  // EX_STRONG
+              vec_.erase(pos);  // EX_STRONG
               return extracted;
             }
-          return NULL;
+          return nullptr;
         }
       
       
       void
       clear()
-        { 
-          VIter e = _Vec::end();
-          for (VIter i = _Vec::begin(); i!=e; ++i)
-            if (*i)
+        {
+          for (T*& p : vec_)
+            if (p)
               try {
-                  delete *i;
-                  *i = 0;
+                  delete p;
+                  p = nullptr;
                 }
               ERROR_LOG_AND_IGNORE (library, "Clean-up of ScopedPtrVect");
-          _Vec::clear();
+          vec_.clear();
         }
       
       
@@ -165,26 +167,26 @@ namespace lib {
       T&
       operator[] (size_type i)
         {
-          return *get(i);
+          return * get(i);
         }
       
-      typedef IterType      iterator;
-      typedef ConstIterType const_iterator;
+      using iterator       = IterType;
+      using const_iterator = ConstIterType;
       
-      iterator       begin()        { return       iterator (allPtrs()); }
-      iterator       end()          { return       iterator ( RIter() ); }
-      const_iterator begin()  const { return const_iterator::build_by_cast (allPtrs()); }
-      const_iterator end()    const { return const_iterator::nil();      }
+      iterator       begin()       { return       iterator (allPtrs()); }
+      iterator       end()         { return       iterator ( RIter() ); }
+      const_iterator begin() const { return const_iterator::build_by_cast (allPtrs()); }
+      const_iterator end()   const { return const_iterator::nil();      }
       
       
       
       
       /* ====== proxied vector functions ==================== */
       
-      size_type  size ()      const  { return _Vec::size();     }
-      size_type  max_size ()  const  { return _Vec::max_size(); }
-      size_type  capacity ()  const  { return _Vec::capacity(); }
-      bool       empty ()     const  { return _Vec::empty();    }
+      size_type  size()      const { return vec_.size();     }
+      size_type  max_size()  const { return vec_.max_size(); }
+      size_type  capacity()  const { return vec_.capacity(); }
+      bool       empty()     const { return vec_.empty();    }
       
       
     private:
@@ -192,7 +194,7 @@ namespace lib {
       T*
       get (size_type i)
         {
-          T* p (_Vec::at (i));
+          T* p (vec_.at (i));
           if (!p)
             throw lumiera::error::Invalid("no valid object at this index");
           else
@@ -201,15 +203,15 @@ namespace lib {
       
       /** @internal access sequence of all managed pointers */
       RIter
-      allPtrs ()
+      allPtrs()
         {
-          return RIter (_Vec::begin(), _Vec::end());
+          return RIter{vec_.begin(), vec_.end()};
         }
       RIter
-      allPtrs ()  const
+      allPtrs()  const
         {
-          _Vec& elements = util::unConst(*this);
-          return RIter (elements.begin(), elements.end());
+          _Vec& elements = util::unConst(this)->vec_;
+          return RIter{elements.begin(), elements.end()};
         }
     };
   

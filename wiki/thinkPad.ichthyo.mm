@@ -163462,11 +163462,15 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="help"/>
 </node>
 <node CREATED="1748609941535" ID="ID_309992355" MODIFIED="1748609956540" TEXT="Status feststellen">
-<node CREATED="1748609976008" ID="ID_406349837" LINK="https://issues.lumiera.org/ticket/1059" MODIFIED="1748610043456" TEXT="#1059 verify and use perfect forwarding">
-<icon BUILTIN="idea"/>
-<node CREATED="1748610060693" ID="ID_1805620153" MODIFIED="1748610070678" TEXT="damit noch markierte Stellen"/>
-<node CREATED="1748610072404" ID="ID_1048223493" MODIFIED="1748610074089" TEXT="ReplaceableItem">
-<node CREATED="1748610172811" ID="ID_1302490511" MODIFIED="1748610179076" TEXT="nur verwendet in MementoTie">
+<node COLOR="#338800" CREATED="1748609976008" FOLDED="true" ID="ID_406349837" LINK="https://issues.lumiera.org/ticket/1059" MODIFIED="1748647349774" TEXT="#1059 verify and use perfect forwarding">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1748610060693" ID="ID_1805620153" MODIFIED="1748646943713" TEXT="damit noch markierte Stellen betrachten">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1748610072404" ID="ID_1048223493" MODIFIED="1748646900708" TEXT="ReplaceableItem">
+<font BOLD="true" NAME="Monospaced" SIZE="12"/>
+<node CREATED="1748610172811" ID="ID_1302490511" MODIFIED="1748646912832" TEXT="nur verwendet in MementoTie">
+<icon BUILTIN="messagebox_warning"/>
 <node CREATED="1748610357399" ID="ID_592334688" MODIFIED="1748615675308">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -163494,7 +163498,8 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node CREATED="1748615683688" ID="ID_30876581" MODIFIED="1748615697365" TEXT="emplace()-Funktion">
+<node CREATED="1748615683688" ID="ID_30876581" MODIFIED="1748646924967" TEXT="emplace()-Funktion">
+<icon BUILTIN="back"/>
 <node CREATED="1748615698444" ID="ID_1303082006" MODIFIED="1748616023594" TEXT="Fallback-Implementierung ist zweifelhaft">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -163516,22 +163521,26 @@ Since then others have made contributions, see the log for the history.</font></
 <node CREATED="1748615708061" ID="ID_1952799104" MODIFIED="1748615719258" TEXT="und bricht tats&#xe4;chlich bei move-only payload"/>
 </node>
 </node>
-<node CREATED="1748614957898" ID="ID_1767040619" MODIFIED="1748614982384" TEXT="hoppla ... da gibt es ja tats&#xe4;chlich einen auskommentierten Testfall">
+<node CREATED="1748614957898" ID="ID_1767040619" MODIFIED="1748646952812" TEXT="hoppla ... da gibt es ja tats&#xe4;chlich einen auskommentierten Testfall">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <node CREATED="1748614996449" ID="ID_1125899180" MODIFIED="1748615007540" TEXT="ReplaceableItem_test::verifyOnlyMoveConstructible"/>
 <node CREATED="1748615728560" ID="ID_869271198" MODIFIED="1748615747564" TEXT="hatte damals Zweifel am Compiler"/>
+<node COLOR="#6d4398" CREATED="1748646994996" ID="ID_1180222130" MODIFIED="1748647013071" TEXT="der war aber nicht schuld...">
+<font NAME="SansSerif" SIZE="10"/>
 </node>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1748616937343" ID="ID_1907997038" MODIFIED="1748616954102" STYLE="fork" TEXT="immer noch: sonderbares Verhalten des Compilers">
+</node>
+<node COLOR="#435e98" CREATED="1748616937343" ID="ID_1907997038" MODIFIED="1748646851006" STYLE="fork" TEXT="immer noch: sonderbares Verhalten des Compilers">
 <font NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="broken-line"/>
 <node CREATED="1748616955995" ID="ID_1759129160" MODIFIED="1748616996939" TEXT=" w&#xe4;hlt den deleted copy constructor"/>
 <node CREATED="1748616972914" ID="ID_1249573186" MODIFIED="1748616991994" TEXT="obwohl ein move-ctor explizit definiert wurde"/>
-<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1748617034911" ID="ID_1469388650" MODIFIED="1748617042353" TEXT="untersuchen">
+<node COLOR="#435e98" CREATED="1748617034911" ID="ID_1469388650" MODIFIED="1748646978708" TEXT="untersuchen">
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1748619335635" ID="ID_721492625" MODIFIED="1748621260565" TEXT="in try.cpp nicht ohne Weiteres reproduzierbar">
 <icon BUILTIN="clanbomber"/>
 </node>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1748620682218" ID="ID_1781899575" MODIFIED="1748620715236" TEXT="so exakt wie m&#xf6;glich extrahieren &#x27f9; Fehler nun reproduzierbar">
+<node BACKGROUND_COLOR="#ced3b2" COLOR="#2c01a5" CREATED="1748620682218" ID="ID_1781899575" MODIFIED="1748646824519" TEXT="so exakt wie m&#xf6;glich extrahieren &#x27f9; Fehler nun reproduzierbar">
 <icon BUILTIN="idea"/>
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#d51d02" CREATED="1748621267614" ID="ID_1330365517" MODIFIED="1748622302088">
@@ -163549,7 +163558,7 @@ Since then others have made contributions, see the log for the history.</font></
 <font NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="smiley-oh"/>
 <node CREATED="1748621309800" ID="ID_1952174695" MODIFIED="1748621319170" TEXT="Rule-of-Five etc...."/>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1748621320031" ID="ID_1206089903" MODIFIED="1748621346780" TEXT="der &quot;move-ctor&quot; ist tats&#xe4;chlich ein take-everything-ctor">
+<node BACKGROUND_COLOR="#d9b289" COLOR="#9a242b" CREATED="1748621320031" ID="ID_1206089903" MODIFIED="1748646795972" TEXT="der &quot;move-ctor&quot; ist tats&#xe4;chlich ein take-everything-ctor">
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1748621350195" ID="ID_1301662963" MODIFIED="1748621452771" TEXT="und wenn er zum move-ctor wird, dann ist er unsinnig implementiert">
@@ -163592,7 +163601,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1748622539774" ID="ID_913302370" MODIFIED="1748622550271" TEXT="reparieren oder wegwerfen?">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#6b0099" CREATED="1748622539774" ID="ID_913302370" MODIFIED="1748646743184" TEXT="reparieren oder wegwerfen?">
 <icon BUILTIN="help"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1748622575863" ID="ID_1364270668" MODIFIED="1748622595883" TEXT="krasse Diskrepanz zu dem was tats&#xe4;chlich gebraucht wird">
 <icon BUILTIN="messagebox_warning"/>
@@ -163607,6 +163616,8 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#d2ad9f" COLOR="#9d3218" CREATED="1748646652236" ID="ID_1863794122" MODIFIED="1748646723897" TEXT="&#xd83d;&#xdc80; totmachen &#xd83d;&#xdc80;"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1748622735899" ID="ID_1255281715" MODIFIED="1748622746287" TEXT="also aufr&#xe4;umen">
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
@@ -163618,8 +163629,9 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="smiley-oh"/>
 </node>
 </node>
-<node CREATED="1748622765812" ID="ID_1447472606" MODIFIED="1748622792373" TEXT="Header aufr&#xe4;umen">
-<node CREATED="1748622795210" ID="ID_971344498" MODIFIED="1748622815722" TEXT="wrapper.hpp &#x27fc; item-wrapper.hpp"/>
+<node BACKGROUND_COLOR="#b6b5d5" COLOR="#435e98" CREATED="1748622765812" ID="ID_1447472606" MODIFIED="1748646234978" TEXT="Header aufr&#xe4;umen">
+<icon BUILTIN="yes"/>
+<node COLOR="#435e98" CREATED="1748622795210" ID="ID_971344498" MODIFIED="1748646185254" TEXT="wrapper.hpp &#x27fc; item-wrapper.hpp"/>
 <node COLOR="#5b280f" CREATED="1748622837148" ID="ID_1686776944" MODIFIED="1748642624085" TEXT="ReturnRef: bereits obsolet">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -163630,13 +163642,73 @@ Since then others have made contributions, see the log for the history.</font></
       ...hat bereits keinerlei Verwendungen mehr (hab es wohl schrittweise durch std::ref() ersetzt ... ohne eigens darauf zu achten)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_cancel"/>
 </node>
-<node CREATED="1748622823574" ID="ID_518076065" MODIFIED="1748622828698" TEXT="Kommentar glattziehen"/>
+<node COLOR="#338800" CREATED="1748622823574" ID="ID_518076065" MODIFIED="1748646180274" TEXT="Kommentar glattziehen">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
+</node>
+</node>
+<node COLOR="#2d2677" CREATED="1748646853561" ID="ID_664715017" MODIFIED="1748646876978" TEXT="gekl&#xe4;rt: Problem sa&#xdf; vor dem Bilschirm">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1748647039941" ID="ID_1043849033" MODIFIED="1748648221837" TEXT="ItemWrapper dagegen wird extrem viel verwendet">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1748648193159" ID="ID_777661860" MODIFIED="1748648215385" TEXT="ScopedPtrvect : sinnnvoll und ein wenig verwendet">
+<icon BUILTIN="yes"/>
+<node CREATED="1748648315357" ID="ID_789031781" MODIFIED="1748648433360" TEXT="eine sinnvolle Variante ohne offensichtlichen Ersatz">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...was man auch daran sieht, da&#223; es das gleiche Konezpt in Boost gibt; w&#228;re da nicht Boost-serialisation, dann k&#246;nnte man das als Ersatz nehmen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1748648337326" ID="ID_1916387682" MODIFIED="1748648375629" TEXT="API ist speziell auf die Verwendung in einem Objekt-manager zugeschnitten">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1748648447725" ID="ID_1000331471" MODIFIED="1748648471427" TEXT="und dann ist da auch noch die elegante Integration mit unserem Iterator-Framework">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1748648474000" ID="ID_778015068" MODIFIED="1748648486629" TEXT="einziger Schmerz: wozu private inheritance?">
+<node CREATED="1748649227483" ID="ID_295400455" MODIFIED="1748649267708" TEXT="private inheritance w&#xe4;re nur in zwei F&#xe4;llen zu rechtfertigen">
+<icon BUILTIN="info"/>
+<node CREATED="1748649241937" ID="ID_1876085509" MODIFIED="1748649307945" TEXT="wenn man das Template-Method-Pattern verwendet"/>
+<node CREATED="1748649311288" ID="ID_1048551387" MODIFIED="1748649325342" TEXT="wenn man Zugang zu protected internals braucht"/>
+</node>
+<node CREATED="1748649333445" ID="ID_1086860277" MODIFIED="1748649422814">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      au&#223;erdem habe ich hier bereits pervasiv mit einem Typ-Pr&#228;fix <font face="Monospaced" color="#7b4747">_Vect::</font>&#160; dekoriert
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...was darauf hindeutet, da&#223; ich bereits Probleme mit der Eindeutigkeit von Namen hatte, bzw. die Notation ohnehin verwirrend war.
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
 </node>

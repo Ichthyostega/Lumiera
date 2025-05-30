@@ -125,7 +125,7 @@ namespace test{
             
             
             // Verify correct behaviour of iteration end
-            CHECK (! (holder.end()));
+            CHECK (not holder.end());
             CHECK (isnil (holder.end()));
             
             VERIFY_ERROR (ITER_EXHAUST, *holder.end() );

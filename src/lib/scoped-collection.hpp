@@ -50,7 +50,7 @@
  **       is sufficient to hold any of these subclass instances. This condition
  **       is protected by a static assertion (compilation failure). 
  ** @warning when using subclasses, a virtual dtor is mandatory
- ** @warning deliberately \em not threadsafe
+ ** @warning deliberately **not threadsafe**
  ** 
  ** @see ScopedCollection_test
  ** @see scoped-ptrvect.hpp quite similar, but using individual heap pointers
