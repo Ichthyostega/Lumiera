@@ -69,10 +69,10 @@
 
 
 #include "lib/iter-adapter.hpp"
+#include "lib/item-wrapper.hpp"
 #include "lib/meta/value-type-binding.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/trait.hpp"
-#include "lib/wrapper.hpp"
 #include "lib/util.hpp"
 
 #include <functional>

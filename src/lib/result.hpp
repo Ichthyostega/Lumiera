@@ -38,7 +38,7 @@
 #define LIB_RESULT_H
 
 #include "lib/error.hpp"
-#include "lib/wrapper.hpp"
+#include "lib/item-wrapper.hpp"
 #include "lib/meta/util.hpp"
 #include "lib/null-value.hpp"
 

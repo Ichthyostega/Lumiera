@@ -23,7 +23,7 @@
 #ifndef LIB_WRAPPER_FUNCTION_RESULT_H
 #define LIB_WRAPPER_FUNCTION_RESULT_H
 
-#include "lib/wrapper.hpp"
+#include "lib/item-wrapper.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/function-closure.hpp"
 #include "lib/meta/util.hpp"

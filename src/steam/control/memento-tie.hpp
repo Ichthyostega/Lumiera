@@ -34,8 +34,7 @@
 #include "lib/meta/maybe-compare.hpp"
 #include "lib/meta/function-closure.hpp"
 #include "steam/control/command-signature.hpp"
-//#include "lib/replaceable-item.hpp"
-#include "lib/wrapper.hpp"
+#include "lib/item-wrapper.hpp"
 #include "lib/format-obj.hpp"
 #include "lib/util.hpp"
 

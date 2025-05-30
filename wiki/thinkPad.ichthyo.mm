@@ -163620,7 +163620,20 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node CREATED="1748622765812" ID="ID_1447472606" MODIFIED="1748622792373" TEXT="Header aufr&#xe4;umen">
 <node CREATED="1748622795210" ID="ID_971344498" MODIFIED="1748622815722" TEXT="wrapper.hpp &#x27fc; item-wrapper.hpp"/>
-<node CREATED="1748622837148" ID="ID_1686776944" MODIFIED="1748622856501" TEXT="ReturnRef &#xfc;berfl&#xfc;ssig machen"/>
+<node COLOR="#5b280f" CREATED="1748622837148" ID="ID_1686776944" MODIFIED="1748642624085" TEXT="ReturnRef: bereits obsolet">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...hat bereits keinerlei Verwendungen mehr (hab es wohl schrittweise durch std::ref() ersetzt ... ohne eigens darauf zu achten)
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_cancel"/>
+</node>
 <node CREATED="1748622823574" ID="ID_518076065" MODIFIED="1748622828698" TEXT="Kommentar glattziehen"/>
 </node>
 </node>

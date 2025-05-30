@@ -1,8 +1,8 @@
 /*
-  WRAPPER.hpp  -  some smart wrapping and reference managing helper templates
+  ITEM-WRAPPER.hpp  -  hold anything for unified handling
 
    Copyright (C)
-     2009,            Hermann Vosseler <Ichthyostega@web.de>
+     2009,2023        Hermann Vosseler <Ichthyostega@web.de>
 
   **Lumiera** is free software; you can redistribute it and/or modify it
   under the terms of the GNU General Public License as published by the
@@ -11,32 +11,34 @@
 
 */
 
-/** @file wrapper.hpp
- ** Library implementation: smart-pointer variations, wrappers and managing holders.
- ** This is (intended to become) a loose collection of the various small helper templates
- ** for wrapping, containing, placing or handling a somewhat \em problematic other object.
- ** Mostly these are implemented to suit a specific need and then factored out later on.
- ** - ReturnRef is similar to std::reference_wrapper, but with a function-like usage.
- ** - ItemWrapper is a similar concept, but used more like a smart-ptr. Notably,
- **   a value-object is stored inline, into an embedded buffer.
- **   Furthermore, ItemWrapper can be used to level differences between values,
- **   references and pointers, as it can be instantiated with any of them, offering
- **   (almost) uniform handling in all cases (useful for building templates)
- ** - FunctionResult is the combination of ItemWrapper with a functor object
- **   to cache the function result value. It was split off into a separate
- **   header \ref wrapper-function-result.hpp to reduce include impact
- ** @remark most of this helper collection became obsolete with the evolution of the
- **   standard library — with the exception of ItermWrapper, which turned out to be
- **   very effective and is now pervasively used as part of transforming functor
- **   pipelines, to cache the result of the transforming function invocation.
+/** @file item-wrapper.hpp
+ ** Adapter to store and hold an element of arbitrary type in local storage.
+ ** Notably, the difference between values and references can be levelled,
+ ** while default construction or copy abilities are passed through.
+ ** Such an _inline container_ can be relevant for generic programming,
+ ** especially to capture the result of an arbitrary function.
+ ** This container can be created empty (which requires to store an additional
+ ** state flag); the stored payload can be accessed through the dereferentiation
+ ** operator (similar to a smart-ptr or to std::optional). The interface was
+ ** shaped by its primary use case, which is to bind transforming functors
+ ** into a processing pipeline, or for caching the result of a computation.
+ ** Another use case is to circumvent the finiteness of references, to
+ ** re-bind them to another target, or to replace an immutable object.
+ ** @note the essential trait is that for each usage we have static,
+ **       compile-time knowledge of the precise type with all its adornments,
+ **       while we can not assume _anything_ about this type when writing the
+ **       code, to allow for maximum flexibility of potential usages. Contrast
+ **       this to the pattern of _type erasure_, where we discard specific
+ **       knowledge after construction; for _such_ cases, opaque-holder.hpp
+ **       might be a better fit.
  ** @see lib::TransformIter
  ** @see lib::explore
  **
  */
 
 
-#ifndef LIB_WRAPPER_H
-#define LIB_WRAPPER_H
+#ifndef LIB_ITEM_WRAPPER_H
+#define LIB_ITEM_WRAPPER_H
 
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
@@ -52,32 +54,6 @@ namespace wrapper {
   
   using util::isSameObject;
   using LERR_(BOTTOM_VALUE);
-  
-  
-  
-  /**
-   * Reference wrapper implemented as constant function,
-   * returning the (fixed) reference on invocation
-   */
-  template<typename T>
-  class ReturnRef
-    {
-      T& ref_;
-      
-    public:
-      ReturnRef(T& target) : ref_(target) { }
-      T& operator() ()  const { return ref_;}
-    };
-  
-  template<typename T>
-  ReturnRef<T>
-  refFunction (T& target)
-  {
-    return ReturnRef<T> (target);
-  }
-  
-  
-  
   
   
   
@@ -387,4 +363,4 @@ namespace wrapper {
   
   
 }} // namespace lib::wrap
-#endif /*LIB_WRAPPER_H*/
+#endif /*LIB_ITEM_WRAPPER_H*/

@@ -23,7 +23,7 @@
 #include "lib/random.hpp"
 #include "lib/util.hpp"
 
-#include "lib/wrapper.hpp"
+#include "lib/item-wrapper.hpp"
 #include "lib/wrapper-function-result.hpp"
 
 #include <functional>

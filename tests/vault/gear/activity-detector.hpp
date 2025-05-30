@@ -73,7 +73,7 @@
 #include "lib/meta/variadic-rebind.hpp"
 #include "lib/meta/typeseq-util.hpp"
 #include "lib/meta/function.hpp"
-#include "lib/wrapper.hpp"
+#include "lib/item-wrapper.hpp"
 #include "lib/format-util.hpp"
 #include "lib/random.hpp"
 #include "lib/util.hpp"
