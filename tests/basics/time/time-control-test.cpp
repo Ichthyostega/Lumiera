@@ -24,7 +24,7 @@
 
 #include "lib/meta/generator-combinations.hpp"
 #include "steam/asset/meta/time-grid.hpp"
-#include "lib/scoped-holder.hpp"
+#include "lib/item-wrapper.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
@@ -44,7 +44,7 @@ namespace test{
   
   namespace error = lumiera::error;
   
-  using lib::ScopedHolder;
+  using lib::wrapper::ItemWrapper;
   using steam::asset::meta::TimeGrid;
   using lib::meta::Types;
   using lib::meta::InstantiateChainedCombinations;
@@ -75,24 +75,21 @@ namespace test{
       : util::NonCopyable
       {
         mutable
-        ScopedHolder<TI> received_;
+        ItemWrapper<TI> received_;
         
       public:
         TestListener()
-          { 
-            received_.create (Time::ZERO); 
-          }
+          : received_{TI{Time::ZERO}}
+          { }
         
         TestListener(TI const& initialValue)
-          { 
-            received_.create (initialValue);
-          }
+          : received_{initialValue}
+          { }
         
         void
         operator() (TI const& changeValue)  const
           {
-            received_.clear();
-            received_.create (changeValue);
+            received_ = changeValue;
           }
         
         TI const&

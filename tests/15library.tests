@@ -577,32 +577,6 @@ return: 0
 END
 
 
-TEST "ScopedHolder_test" ScopedHolder_test <<END
-out: checking ScopedHolder<Dummy>...
-out: checking ScopedPtrHolder<Dummy>...
-return: 0
-END
-
-
-TEST "ScopedHolderTransfer_test" ScopedHolderTransfer_test <<END
-out-lit: checking ScopedHolder<Dummy>...
-out-lit: .
-out-lit: ..install one element at index[0]
-out-lit: .
-out-lit: ..*** resize table to 16 elements
-out-lit: .
-out-lit: .throw some exceptions...
-out-lit: checking ScopedPtrHolder<Dummy>...
-out-lit: .
-out-lit: ..install one element at index[0]
-out-lit: .
-out-lit: ..*** resize table to 16 elements
-out-lit: .
-out-lit: .throw some exceptions...
-return: 0
-END
-
-
 TEST "Managed Collection (I)" ScopedCollection_test <<END
 return: 0
 END
@@ -840,11 +814,6 @@ out-lit: dispatching VerbPack(honk) ->  'Hoonk-Hoonk!'
 out-lit: dispatching VerbPack(woof) ->  'Woof..Woof..'
 out-lit: dispatching VerbPack(moo) ->  'Moo__Moo__Moo'
 out-lit: dispatching VerbPack(meh) ->  'Meh?'
-return: 0
-END
-
-
-TEST "VectorTransfer_test" VectorTransfer_test <<END
 return: 0
 END
 

@@ -20,7 +20,6 @@
 #include "lib/error.hpp"
 #include "include/logging.h"
 #include "lib/scoped-ptrvect.hpp"
-#include "lib/scoped-holder.hpp"
 #include "lib/util-foreach.hpp"
 
 #include "steam/engine/tracking-heap-block-provider.hpp"
@@ -30,7 +29,6 @@
 
 using util::and_all;
 using std::vector;
-using lib::ScopedHolder;
 using lib::ScopedPtrVect;
 
 
@@ -87,8 +85,7 @@ namespace engine {
   
   namespace diagn {
     
-    typedef ScopedPtrVect<Block>  PoolVec;
-    typedef ScopedHolder<PoolVec> PoolHolder;
+    using PoolBlocks = ScopedPtrVect<Block>;
     
     /**
      * @internal Pool of allocated buffer Blocks of a specific size.
@@ -105,19 +102,18 @@ namespace engine {
       {
         uint maxAllocCount_;
         size_t memBlockSize_;
-        PoolHolder blockList_;
+        PoolBlocks blockList_;
         
       public:
         BlockPool()
           : maxAllocCount_(0) // unlimited by default
           , memBlockSize_(0)
-          , blockList_()
+          , blockList_{}
           { }
         
         void
         initialise (size_t blockSize)
           {
-            blockList_.create();
             memBlockSize_ = blockSize;
           }
          // standard copy operations are valid, but will
@@ -134,19 +130,18 @@ namespace engine {
         void
         discard()
           {
-            if (blockList_)
-              for (Block& block : *blockList_)
-                block.markReleased();
+            for (Block& block : blockList_)
+              block.markReleased();
           }
         
         uint
         prepare_for (uint number_of_expected_buffers)
           {
             if (maxAllocCount_ &&
-                maxAllocCount_ < blockList_->size() + number_of_expected_buffers)
+                maxAllocCount_ < blockList_.size() + number_of_expected_buffers)
               {
-                ASSERT (maxAllocCount_ >= blockList_->size());
-                return maxAllocCount_ - blockList_->size();
+                ASSERT (maxAllocCount_ >= blockList_.size());
+                return maxAllocCount_ - blockList_.size();
               }
             // currently no hard limit imposed
             return number_of_expected_buffers;
@@ -156,34 +151,34 @@ namespace engine {
         Block&
         createBlock()
           {
-            return blockList_->manage (new Block(memBlockSize_));
+            return blockList_.manage (new Block(memBlockSize_));
           }
         
         
         Block*
         find (void* blockLocation)
           {
-            return pick_Block_by_storage (*blockList_, blockLocation);
+            return pick_Block_by_storage (blockList_, blockLocation);
           }
         
         
         Block*
         transferResponsibility (Block* allocatedBlock)
           {
-            return blockList_->detach (allocatedBlock);
+            return blockList_.detach (allocatedBlock);
           }
         
         
         size_t
         size()  const
           {
-            return blockList_->size();
+            return blockList_.size();
           }
         
         bool
         isValid()  const
           {
-            return bool(blockList_);
+            return not blockList_.empty();
           }
       
         explicit
@@ -197,8 +192,7 @@ namespace engine {
           verify_all_children_idle()
             {
             try {
-                if (blockList_)
-                  return and_all (*blockList_, is_in_sane_state);
+                  return and_all (blockList_, is_in_sane_state);
                 }
               ERROR_LOG_AND_IGNORE (test, "State verification of diagnostic BufferProvider allocation pool");
               return true;

@@ -163473,9 +163473,7 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1748610357399" ID="ID_592334688" MODIFIED="1748615675308">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       &#187;Commands&#171; sind selber im <i>Schwebezustand</i>
@@ -163483,16 +163481,13 @@ Since then others have made contributions, see the log for the history.</font></
   </body>
 </html></richcontent>
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Zwar halte ich Commands nicht f&#252;r <i>insgesamt obsolet</i>&#160;&#8212; wir werden so etwas definitiv brauchen, da unser GUI per Messaging angebunden ist. Aber es ist bisher unklar geblieben, <i>wie die Schnittstelle zur Sessinon tats&#228;chlich aussehen wird,</i>&#160;auf der die Command-Funktoren dann einmal arbeiten sollen. Zudem waren die Commands auch als Teil eines &#187;Command-Systems&#171; gedacht, welches auch UNDO und REDO erm&#246;glicht. Und <i>in dieser Hinsicht</i>&#160;bewege ich mich schon seit l&#228;ngerer Zeit in Richtung auf <b>Events</b>&#160;und <b>Event-sourcing</b>. Damit w&#228;re ein Gro&#223;teil der Komplexit&#228;t im bestehenden Command-Framework hinf&#228;llig
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1748614552731" ID="ID_346301743" LINK="https://issues.lumiera.org/ticket/1406" MODIFIED="1748614580419" TEXT="das als Ticket #1406 dokumentiert">
 <icon BUILTIN="idea"/>
@@ -163502,16 +163497,13 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="back"/>
 <node CREATED="1748615698444" ID="ID_1303082006" MODIFIED="1748616023594" TEXT="Fallback-Implementierung ist zweifelhaft">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       pfui ... einen Konstruktor-Fehler unterdr&#252;cken und stattdessen ein default-konstruiertes Objekt unterschieben, und das auch noch in einer Funktion, die <font face="Monospaced"><b>emplace</b>()</font>&#160;hei&#223;t...
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node COLOR="#e304be" CREATED="1748616025456" HGAP="27" ID="ID_861306315" MODIFIED="1748622359848" TEXT="sowas hab ich 2017 geschrieben ???" VSHIFT="5">
 <arrowlink COLOR="#d20262" DESTINATION="ID_937835041" ENDARROW="Default" ENDINCLINATION="271;-18;" ID="Arrow_ID_40047268" STARTARROW="None" STARTINCLINATION="270;21;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="11"/>
@@ -163545,16 +163537,13 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#d51d02" CREATED="1748621267614" ID="ID_1330365517" MODIFIED="1748622302088">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ReplacableIterm ist <b>schlampig definiert</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="smiley-oh"/>
 <node CREATED="1748621309800" ID="ID_1952174695" MODIFIED="1748621319170" TEXT="Rule-of-Five etc...."/>
@@ -163563,16 +163552,13 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1748621350195" ID="ID_1301662963" MODIFIED="1748621452771" TEXT="und wenn er zum move-ctor wird, dann ist er unsinnig implementiert">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...denn er w&#252;rde ReplacableItem in ein ReplacableItem einpflanzen &#8212; also <b>ein Stockwerk zu viel</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="broken-line"/>
 </node>
 <node BACKGROUND_COLOR="#c8c0b6" COLOR="#d50277" CREATED="1748622317411" ID="ID_937835041" MODIFIED="1748622353471" TEXT="Historie / Hintergrund">
@@ -163583,16 +163569,13 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node CREATED="1748622393804" ID="ID_1814476265" MODIFIED="1748622445242">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       wollte <b>Time</b>, <b>Duration</b>&#160;etc. in einem Command als Memento binden
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font NAME="SansSerif" SIZE="11"/>
 </node>
 <node BACKGROUND_COLOR="#d9c28d" COLOR="#a50125" CREATED="1748622481259" ID="ID_1066388646" LINK="https://issues.lumiera.org/ticket/1261" MODIFIED="1748622522979" TEXT="#1261 immutable Time considered harmful">
@@ -163634,9 +163617,7 @@ Since then others have made contributions, see the log for the history.</font></
 <node COLOR="#435e98" CREATED="1748622795210" ID="ID_971344498" MODIFIED="1748646185254" TEXT="wrapper.hpp &#x27fc; item-wrapper.hpp"/>
 <node COLOR="#5b280f" CREATED="1748622837148" ID="ID_1686776944" MODIFIED="1748642624085" TEXT="ReturnRef: bereits obsolet">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...hat bereits keinerlei Verwendungen mehr (hab es wohl schrittweise durch std::ref() ersetzt ... ohne eigens darauf zu achten)
@@ -163658,21 +163639,18 @@ Since then others have made contributions, see the log for the history.</font></
 <node COLOR="#435e98" CREATED="1748647039941" ID="ID_1043849033" MODIFIED="1748648221837" TEXT="ItemWrapper dagegen wird extrem viel verwendet">
 <icon BUILTIN="yes"/>
 </node>
-<node COLOR="#435e98" CREATED="1748648193159" ID="ID_777661860" MODIFIED="1748707165077" TEXT="ScopedPtrVect : sinnnvoll und ein wenig verwendet">
+<node COLOR="#435e98" CREATED="1748648193159" FOLDED="true" ID="ID_777661860" MODIFIED="1748712913999" TEXT="ScopedPtrVect : sinnnvoll und ein wenig verwendet">
 <linktarget COLOR="#548bc6" DESTINATION="ID_777661860" ENDARROW="Default" ENDINCLINATION="-16;39;" ID="Arrow_ID_5941421" SOURCE="ID_896065065" STARTARROW="None" STARTINCLINATION="-387;-18;"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1748648315357" ID="ID_789031781" MODIFIED="1748648433360" TEXT="eine sinnvolle Variante ohne offensichtlichen Ersatz">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...was man auch daran sieht, da&#223; es das gleiche Konezpt in Boost gibt; w&#228;re da nicht Boost-serialisation, dann k&#246;nnte man das als Ersatz nehmen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1748648337326" ID="ID_1916387682" MODIFIED="1748648375629" TEXT="API ist speziell auf die Verwendung in einem Objekt-manager zugeschnitten">
 <icon BUILTIN="idea"/>
@@ -163689,27 +163667,21 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node CREATED="1748649333445" ID="ID_1086860277" MODIFIED="1748649422814">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       au&#223;erdem habe ich hier bereits pervasiv mit einem Typ-Pr&#228;fix <font face="Monospaced" color="#7b4747">_Vect::</font>&#160; dekoriert
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...was darauf hindeutet, da&#223; ich bereits Probleme mit der Eindeutigkeit von Namen hatte, bzw. die Notation ohnehin verwirrend war.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
@@ -163721,26 +163693,25 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1748652139435" ID="ID_1800650777" MODIFIED="1748652144635" TEXT="ScopedHolder">
+<node BACKGROUND_COLOR="#bc9daa" COLOR="#5b280f" CREATED="1748652139435" FOLDED="true" ID="ID_1800650777" MODIFIED="1748712910351" TEXT="ScopedHolder &#xd83d;&#xdc80;">
+<icon BUILTIN="button_cancel"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#a10043" CREATED="1748652280157" ID="ID_1235606498" MODIFIED="1748652472016" TEXT="jedesmal wenn ich den sehe, sage ich &#xbb;w&#xe4;&#xe4;&#xe4;h&#xab;">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       allein schon wenn man so viel Kommentar zur Rechtfertigung schreiben mu&#223;; und dann ist das Ganze auch noch stateful, und es f&#252;hrte zu einer Erweiterun, ScopedHolderTransfer, mit noch viel mehr Kommentar und Erl&#228;uterung und umst&#228;ndlichen Tests (und dann wird das am Ende doch fast nicht verwendet)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="smiley-angry"/>
 </node>
-<node CREATED="1748652489024" ID="ID_1954563627" MODIFIED="1748652500133" TEXT="leider ist das Thema aber trotz C++11 nicht ganz trivial">
+<node COLOR="#435e98" CREATED="1748652489024" FOLDED="true" ID="ID_1954563627" MODIFIED="1748712899819" TEXT="leider ist das Thema aber trotz C++11 nicht ganz trivial">
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1748654242179" ID="ID_844246830" MODIFIED="1748654269356" TEXT="These: im Grunde geht es um non-copyable-Objekte"/>
 <node CREATED="1748654281813" ID="ID_1594859729" MODIFIED="1748654308952" TEXT="und die Verlockung der &#x201e;Effizienz&#x201c; eines Vectors"/>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1748654312219" ID="ID_1611256541" MODIFIED="1748654329986" TEXT="k&#xf6;nnte man das nicht einfach durch eine Deque l&#xf6;sen?">
+<node COLOR="#435e98" CREATED="1748654312219" ID="ID_1611256541" MODIFIED="1748712849602" TEXT="k&#xf6;nnte man das nicht einfach durch eine Deque l&#xf6;sen?">
 <icon BUILTIN="help"/>
 </node>
 <node CREATED="1748654337002" ID="ID_328246402" MODIFIED="1748654355692" TEXT="verwirrend ist der Umstand, da&#xdf; ich eigenes API geschaffen habe">
@@ -163751,38 +163722,36 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node CREATED="1748654479683" ID="ID_1589998526" MODIFIED="1748654524092" TEXT="con-&gt;..."/>
 </node>
-<node CREATED="1748654893223" ID="ID_1967446266" MODIFIED="1748655021163" TEXT="langsam d&#xe4;mmert mir&apos;s: das ist eigentlich ein Item-Wrapper">
+<node BACKGROUND_COLOR="#e0de9d" COLOR="#690f14" CREATED="1748654893223" ID="ID_1967446266" MODIFIED="1748712887358" TEXT="langsam d&#xe4;mmert mir&apos;s: das ist eigentlich ein Item-Wrapper">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       hatte das zwar geschaffen, um non-copyable Objekte in einen Vector packen zu k&#246;nnen &#8212; aber es <i>ist kein Container,</i>&#160;sondern lediglich ein inline-Buffer
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
+<icon BUILTIN="back"/>
 <node CREATED="1748707079815" ID="ID_643047944" MODIFIED="1748707091410" TEXT="und die transfer_control ist eine move-Operation"/>
 </node>
 </node>
-<node CREATED="1748652500812" ID="ID_1634636436" MODIFIED="1748652506226" TEXT="verbleibende Usages">
+<node COLOR="#5b280f" CREATED="1748652500812" ID="ID_1634636436" MODIFIED="1748712722254" TEXT="verbleibende Usages">
+<icon BUILTIN="button_cancel"/>
+<icon BUILTIN="ksmiletris"/>
 <node CREATED="1748655144495" ID="ID_1838839217" MODIFIED="1748655183316" TEXT="ScopedPtrHolder ist ohne Verwendungen &#x27f9; ignorieren">
 <icon BUILTIN="yes"/>
 </node>
-<node CREATED="1748652522844" ID="ID_1491633267" MODIFIED="1748652533235" TEXT="tracking-heap-block-provider.cpp">
+<node COLOR="#435e98" CREATED="1748652522844" ID="ID_1491633267" MODIFIED="1748712658114" TEXT="tracking-heap-block-provider.cpp">
+<icon BUILTIN="messagebox_warning"/>
 <node CREATED="1748707113641" ID="ID_896065065" MODIFIED="1748707243639" TEXT="verwendet f&#xfc;r die Speicherbl&#xf6;cke selber einen ScopedPtrVect">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       f&#252;r einen Test / Diagnose-Container ist das in der Tat sinnvoll, denn man m&#246;chte da nicht die Komplexit&#228;t mit der Verwaltung von <i>Extents</i>&#160; haben (gr&#246;&#223;ere Speicherbl&#246;cke, aus denen dann kleinere Allokationen ausgegeben werden)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#548bc6" DESTINATION="ID_777661860" ENDARROW="Default" ENDINCLINATION="-16;39;" ID="Arrow_ID_5941421" STARTARROW="None" STARTINCLINATION="-387;-18;"/>
 </node>
 <node CREATED="1748707246896" ID="ID_1809312961" MODIFIED="1748707251960" TEXT="dieser ist aber non-copyable"/>
@@ -163790,23 +163759,18 @@ Since then others have made contributions, see the log for the history.</font></
 <node CREATED="1748707382005" ID="ID_69938178" MODIFIED="1748707397135" TEXT="w&#xe4;re eigentlich hier gar nicht notwendig: der BlockPool kommt dann in eine Map"/>
 <node CREATED="1748707601579" ID="ID_800614981" MODIFIED="1748711042415" TEXT="man k&#xf6;nnte ScopedPtrVect move-only machen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       dann k&#246;nnte man ihn n&#228;mlich ohne weiteres direkt in jedem STL-Container per emplace einbringen, selbst in std::vector
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
-<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1748709078635" ID="ID_503264993" MODIFIED="1748711030534" TEXT="sogar MoveAssign w&#xe4;re sinnvoll">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1748709078635" ID="ID_503264993" MODIFIED="1748711452447" TEXT="sogar MoveAssign w&#xe4;re sinnvoll">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       unique_ptr kann das ja auc
@@ -163820,15 +163784,26 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="idea"/>
 </node>
 </node>
+<node COLOR="#338800" CREATED="1748712666787" ID="ID_1514558883" MODIFIED="1748712680010" TEXT="damit l&#xe4;&#xdf;t er sich direkt im Block-Pool verwenden">
+<icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1748652534162" ID="ID_562424850" MODIFIED="1748652540893" TEXT="time-control-test.cpp">
+<node COLOR="#338800" CREATED="1748712682927" ID="ID_973045674" MODIFIED="1748712691605" TEXT="TrackingHeapBlockProvier_test GR&#xdc;N">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1748652534162" ID="ID_562424850" MODIFIED="1748712658102" TEXT="time-control-test.cpp">
+<icon BUILTIN="messagebox_warning"/>
 <node CREATED="1748707494159" ID="ID_1077262401" MODIFIED="1748707538467" TEXT="der TestListener wird informiert &#xfc;ber neue Time-Elemente"/>
 <node CREATED="1748707539616" ID="ID_1362948341" MODIFIED="1748707577729" TEXT="er verwendet ScopedHolder, um die die Immutabilit&#xe4; zu umgehen"/>
-<node CREATED="1748707580758" ID="ID_1042435059" MODIFIED="1748707593581" TEXT="das k&#xf6;nnte man auch per ItemWrapper machen">
+<node COLOR="#338800" CREATED="1748707580758" ID="ID_1042435059" MODIFIED="1748712699686" TEXT="das k&#xf6;nnte man auch per ItemWrapper machen">
 <icon BUILTIN="idea"/>
 </node>
+<node COLOR="#338800" CREATED="1748712702950" ID="ID_247303398" MODIFIED="1748712710821" TEXT="ges&#xe4;gt ... getan ... GR&#xdc;N">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
+</node>
+<node BACKGROUND_COLOR="#c8b6c1" COLOR="#435e98" CREATED="1748712767350" ID="ID_1069989891" MODIFIED="1748712793537" TEXT="tot &#xd83d;&#xdc80;"/>
 </node>
 </node>
 </node>
