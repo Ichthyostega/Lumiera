@@ -42,6 +42,11 @@
  **       relying on rvalue references and variadic templates. However, we still need a
  **       specialised factory template to allow for a _family of factory functions_ with
  **       common configuration.
+ ** @todo 2025 ...and still not fully convinced this is the way to go;
+ **       admittedly we did not get to a point yet where fabricating lots of elements
+ **       poses any kind of challenge — up to now a dedicated factory function within a service
+ **       was enough to handle this task. Yet this may change, once we have stream types,
+ **       various kinds of assets (notably effects and processors) and lots of queries. 
  ** 
  ** @see multifact-test.cpp
  ** @see multifact-singleton-test.cpp

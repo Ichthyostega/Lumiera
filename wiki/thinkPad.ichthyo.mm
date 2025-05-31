@@ -163776,8 +163776,7 @@ Since then others have made contributions, see the log for the history.</font></
       unique_ptr kann das ja auc
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="yes"/>
 <node COLOR="#435e98" CREATED="1748709096713" ID="ID_1603400780" MODIFIED="1748711086783" TEXT="dann copy-and-swap">
 <arrowlink COLOR="#8198b2" DESTINATION="ID_165954046" ENDARROW="Default" ENDINCLINATION="511;33;" ID="Arrow_ID_1516296474" STARTARROW="None" STARTINCLINATION="331;-41;"/>
@@ -163804,6 +163803,37 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 <node BACKGROUND_COLOR="#c8b6c1" COLOR="#435e98" CREATED="1748712767350" ID="ID_1069989891" MODIFIED="1748712793537" TEXT="tot &#xd83d;&#xdc80;"/>
+</node>
+<node COLOR="#5b280f" CREATED="1748730829818" ID="ID_700236683" MODIFIED="1748730848701" TEXT="nicht verwendet ... schnell weg damit">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1748730811995" ID="ID_1675553345" MODIFIED="1748730820630" TEXT="nobug-resource-handle-context"/>
+<node CREATED="1748730821812" ID="ID_1395653066" MODIFIED="1748730826587" TEXT="simple-allocator"/>
+<node CREATED="1748731113312" ID="ID_1142890094" MODIFIED="1748731115709" TEXT="Sub-ID">
+<node CREATED="1748731116748" ID="ID_434973605" MODIFIED="1748731124619" TEXT="ja die Idee ist in der Tat sehr relevant"/>
+<node CREATED="1748731125255" ID="ID_1963832206" MODIFIED="1748731133648" TEXT="wir brauchen strukturierte, algebraische IDs"/>
+<node CREATED="1748731134567" ID="ID_1264506394" MODIFIED="1748731197197" TEXT="aber wenn schon, dann auch tats&#xe4;chlich ernsthaft implementiert">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ein M&#252;ll-Header mit einem Dummy-Test, der seit &gt; 10 Jahren herumliegt, und alle wichtigen Probleme nicht l&#246;st ...
+    </p>
+    <p>
+      <i>dann kann man auch gleich von Null anfangen</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1748731241722" ID="ID_1013782064" MODIFIED="1748731245961" TEXT="vcall.h">
+<node CREATED="1748731246885" HGAP="27" ID="ID_189593518" MODIFIED="1748731258996" TEXT="nice try" VSHIFT="4">
+<font NAME="SansSerif" SIZE="11"/>
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
 </node>
 </node>
 </node>
