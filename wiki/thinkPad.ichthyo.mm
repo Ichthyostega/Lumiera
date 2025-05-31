@@ -52278,7 +52278,7 @@
   </body>
 </html></richcontent>
 <node CREATED="1732337022157" ID="ID_544252009" MODIFIED="1732337084587" TEXT="das k&#xf6;nnte dann weiteres Verschieben sperren"/>
-<node CREATED="1732337085316" ID="ID_487485041" MODIFIED="1732337105606" TEXT="zumindest darf Invarianten-Processing erst mit diesem Schirt passieren"/>
+<node CREATED="1732337085316" ID="ID_487485041" MODIFIED="1732337085316" TEXT="zumindest darf Invarianten-Processing erst mit diesem Schritt passieren"/>
 <node CREATED="1732372728476" ID="ID_1531001529" MODIFIED="1732373067818" TEXT="&#xe4;rgerlich: bl&#xe4;ht Storage auf und bricht Invarianten"/>
 </node>
 <node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1732377283840" ID="ID_1863518121" MODIFIED="1732378140499" TEXT="versuche Workaround: re-engage">
@@ -163658,7 +163658,8 @@ Since then others have made contributions, see the log for the history.</font></
 <node COLOR="#435e98" CREATED="1748647039941" ID="ID_1043849033" MODIFIED="1748648221837" TEXT="ItemWrapper dagegen wird extrem viel verwendet">
 <icon BUILTIN="yes"/>
 </node>
-<node CREATED="1748648193159" ID="ID_777661860" MODIFIED="1748648215385" TEXT="ScopedPtrvect : sinnnvoll und ein wenig verwendet">
+<node COLOR="#435e98" CREATED="1748648193159" ID="ID_777661860" MODIFIED="1748707165077" TEXT="ScopedPtrVect : sinnnvoll und ein wenig verwendet">
+<linktarget COLOR="#548bc6" DESTINATION="ID_777661860" ENDARROW="Default" ENDINCLINATION="-16;39;" ID="Arrow_ID_5941421" SOURCE="ID_896065065" STARTARROW="None" STARTINCLINATION="-387;-18;"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1748648315357" ID="ID_789031781" MODIFIED="1748648433360" TEXT="eine sinnvolle Variante ohne offensichtlichen Ersatz">
 <richcontent TYPE="NOTE"><html>
@@ -163679,7 +163680,8 @@ Since then others have made contributions, see the log for the history.</font></
 <node CREATED="1748648447725" ID="ID_1000331471" MODIFIED="1748648471427" TEXT="und dann ist da auch noch die elegante Integration mit unserem Iterator-Framework">
 <icon BUILTIN="ksmiletris"/>
 </node>
-<node CREATED="1748648474000" ID="ID_778015068" MODIFIED="1748648486629" TEXT="einziger Schmerz: wozu private inheritance?">
+<node COLOR="#5b280f" CREATED="1748648474000" ID="ID_778015068" MODIFIED="1748651087573" TEXT="einziger Schmerz: wozu private inheritance?">
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1748649227483" ID="ID_295400455" MODIFIED="1748649267708" TEXT="private inheritance w&#xe4;re nur in zwei F&#xe4;llen zu rechtfertigen">
 <icon BUILTIN="info"/>
 <node CREATED="1748649241937" ID="ID_1876085509" MODIFIED="1748649307945" TEXT="wenn man das Template-Method-Pattern verwendet"/>
@@ -163709,6 +163711,122 @@ Since then others have made contributions, see the log for the history.</font></
 </html>
 </richcontent>
 <icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1748651090099" ID="ID_1759532502" MODIFIED="1748651108454" TEXT="also: umgeschrieben auf has-a private vector">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1748711055481" ID="ID_165954046" MODIFIED="1748711081730" TEXT="und move-assignable machen (incl Test)">
+<linktarget COLOR="#8198b2" DESTINATION="ID_165954046" ENDARROW="Default" ENDINCLINATION="511;33;" ID="Arrow_ID_1516296474" SOURCE="ID_1603400780" STARTARROW="None" STARTINCLINATION="331;-41;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1748652139435" ID="ID_1800650777" MODIFIED="1748652144635" TEXT="ScopedHolder">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#a10043" CREATED="1748652280157" ID="ID_1235606498" MODIFIED="1748652472016" TEXT="jedesmal wenn ich den sehe, sage ich &#xbb;w&#xe4;&#xe4;&#xe4;h&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      allein schon wenn man so viel Kommentar zur Rechtfertigung schreiben mu&#223;; und dann ist das Ganze auch noch stateful, und es f&#252;hrte zu einer Erweiterun, ScopedHolderTransfer, mit noch viel mehr Kommentar und Erl&#228;uterung und umst&#228;ndlichen Tests (und dann wird das am Ende doch fast nicht verwendet)
+    </p>
+  </body>
+</html>
+</richcontent>
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="smiley-angry"/>
+</node>
+<node CREATED="1748652489024" ID="ID_1954563627" MODIFIED="1748652500133" TEXT="leider ist das Thema aber trotz C++11 nicht ganz trivial">
+<node CREATED="1748654242179" ID="ID_844246830" MODIFIED="1748654269356" TEXT="These: im Grunde geht es um non-copyable-Objekte"/>
+<node CREATED="1748654281813" ID="ID_1594859729" MODIFIED="1748654308952" TEXT="und die Verlockung der &#x201e;Effizienz&#x201c; eines Vectors"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1748654312219" ID="ID_1611256541" MODIFIED="1748654329986" TEXT="k&#xf6;nnte man das nicht einfach durch eine Deque l&#xf6;sen?">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1748654337002" ID="ID_328246402" MODIFIED="1748654355692" TEXT="verwirrend ist der Umstand, da&#xdf; ich eigenes API geschaffen habe">
+<node CREATED="1748654397040" ID="ID_1618042684" MODIFIED="1748654407036" TEXT="con.create()"/>
+<node CREATED="1748654436059" ID="ID_1168980803" MODIFIED="1748654438504" TEXT="bool(con)"/>
+<node CREATED="1748654407777" ID="ID_210801942" MODIFIED="1748654427694" TEXT="*con">
+<node CREATED="1748654428486" ID="ID_57633774" MODIFIED="1748654432849" TEXT="was soll denn das?"/>
+</node>
+<node CREATED="1748654479683" ID="ID_1589998526" MODIFIED="1748654524092" TEXT="con-&gt;..."/>
+</node>
+<node CREATED="1748654893223" ID="ID_1967446266" MODIFIED="1748655021163" TEXT="langsam d&#xe4;mmert mir&apos;s: das ist eigentlich ein Item-Wrapper">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      hatte das zwar geschaffen, um non-copyable Objekte in einen Vector packen zu k&#246;nnen &#8212; aber es <i>ist kein Container,</i>&#160;sondern lediglich ein inline-Buffer
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1748707079815" ID="ID_643047944" MODIFIED="1748707091410" TEXT="und die transfer_control ist eine move-Operation"/>
+</node>
+</node>
+<node CREATED="1748652500812" ID="ID_1634636436" MODIFIED="1748652506226" TEXT="verbleibende Usages">
+<node CREATED="1748655144495" ID="ID_1838839217" MODIFIED="1748655183316" TEXT="ScopedPtrHolder ist ohne Verwendungen &#x27f9; ignorieren">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1748652522844" ID="ID_1491633267" MODIFIED="1748652533235" TEXT="tracking-heap-block-provider.cpp">
+<node CREATED="1748707113641" ID="ID_896065065" MODIFIED="1748707243639" TEXT="verwendet f&#xfc;r die Speicherbl&#xf6;cke selber einen ScopedPtrVect">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      f&#252;r einen Test / Diagnose-Container ist das in der Tat sinnvoll, denn man m&#246;chte da nicht die Komplexit&#228;t mit der Verwaltung von <i>Extents</i>&#160; haben (gr&#246;&#223;ere Speicherbl&#246;cke, aus denen dann kleinere Allokationen ausgegeben werden)
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#548bc6" DESTINATION="ID_777661860" ENDARROW="Default" ENDINCLINATION="-16;39;" ID="Arrow_ID_5941421" STARTARROW="None" STARTINCLINATION="-387;-18;"/>
+</node>
+<node CREATED="1748707246896" ID="ID_1809312961" MODIFIED="1748707251960" TEXT="dieser ist aber non-copyable"/>
+<node CREATED="1748707257052" ID="ID_541151098" MODIFIED="1748707269497" TEXT="&#x27f9; also wird er in einen ScopedHolder eingewickelt"/>
+<node CREATED="1748707382005" ID="ID_69938178" MODIFIED="1748707397135" TEXT="w&#xe4;re eigentlich hier gar nicht notwendig: der BlockPool kommt dann in eine Map"/>
+<node CREATED="1748707601579" ID="ID_800614981" MODIFIED="1748711042415" TEXT="man k&#xf6;nnte ScopedPtrVect move-only machen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      dann k&#246;nnte man ihn n&#228;mlich ohne weiteres direkt in jedem STL-Container per emplace einbringen, selbst in std::vector
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1748709078635" ID="ID_503264993" MODIFIED="1748711030534" TEXT="sogar MoveAssign w&#xe4;re sinnvoll">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      unique_ptr kann das ja auc
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="yes"/>
+<node COLOR="#435e98" CREATED="1748709096713" ID="ID_1603400780" MODIFIED="1748711086783" TEXT="dann copy-and-swap">
+<arrowlink COLOR="#8198b2" DESTINATION="ID_165954046" ENDARROW="Default" ENDINCLINATION="511;33;" ID="Arrow_ID_1516296474" STARTARROW="None" STARTINCLINATION="331;-41;"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node CREATED="1748652534162" ID="ID_562424850" MODIFIED="1748652540893" TEXT="time-control-test.cpp">
+<node CREATED="1748707494159" ID="ID_1077262401" MODIFIED="1748707538467" TEXT="der TestListener wird informiert &#xfc;ber neue Time-Elemente"/>
+<node CREATED="1748707539616" ID="ID_1362948341" MODIFIED="1748707577729" TEXT="er verwendet ScopedHolder, um die die Immutabilit&#xe4; zu umgehen"/>
+<node CREATED="1748707580758" ID="ID_1042435059" MODIFIED="1748707593581" TEXT="das k&#xf6;nnte man auch per ItemWrapper machen">
+<icon BUILTIN="idea"/>
+</node>
 </node>
 </node>
 </node>

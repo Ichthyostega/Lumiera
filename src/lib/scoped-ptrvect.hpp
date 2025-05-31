@@ -22,6 +22,7 @@
  ** Some details to note:
  ** - contained objects accessed by reference, never NULL.
  ** - the exposed iterator automatically dereferences
+ ** - can be move-assigned and move constructed, like `unique_ptr`
  ** 
  ** @warning deliberately **not threadsafe**
  ** @remark This library class provides the same basic functionality as
@@ -64,7 +65,7 @@ namespace lib {
    */
   template<class T>
   class ScopedPtrVect
-    : util::NonCopyable
+    : util::MoveAssign
     {
       using _Vec  = std::vector<T*>;
       using VIter = typename _Vec::iterator;
@@ -99,6 +100,23 @@ namespace lib {
         : vec_{}
         {
           vec_.reserve (capacity);
+        }
+      
+      ScopedPtrVect (ScopedPtrVect && src)
+        : vec_{std::move (src.vec_)}
+        { }
+      
+      friend void
+      swap (ScopedPtrVect& left, ScopedPtrVect& right)
+        {
+          swap (left.vec_, right.vec_);
+        }
+      
+      ScopedPtrVect&
+      operator= (ScopedPtrVect && other)
+        {
+          swap (*this, other);
+          return *this;
         }
       
       

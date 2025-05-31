@@ -51,6 +51,7 @@ namespace test{
           simpleUsage();
           iterating();
           detaching();
+          moving();
         }
       
       
@@ -145,7 +146,7 @@ namespace test{
       detaching()
         {
           int id2, id3;
-          Dummy* extracted(0);
+          Dummy* extracted{nullptr};
           CHECK (0 == Dummy::checksum());
           {
             VectD holder;
@@ -175,6 +176,47 @@ namespace test{
           CHECK (id2+id3 == Dummy::checksum());
           
           delete extracted;
+          CHECK (0 == Dummy::checksum());
+        }
+      
+      
+      void
+      moving()
+        { {
+            VectD org;
+            VectD left;
+            CHECK (0 == Dummy::checksum());
+            
+            org.manage (new Dummy);
+            org.manage (new Dummy);
+            org.manage (new Dummy);
+            
+            CHECK (not isnil (org));
+            CHECK (    isnil (left));
+            auto sum = Dummy::checksum();
+            CHECK (sum > 0);
+            int id0 = org[0].getVal(),
+                id1 = org[1].getVal(),
+                id2 = org[2].getVal();
+            
+            // create by move
+            VectD right{std::move (org)};
+            CHECK (    isnil (org));
+            CHECK (    isnil (left));
+            CHECK (not isnil (right));
+            CHECK (sum == Dummy::checksum());
+            
+            // move-assignment
+            left = std::move (right);
+            CHECK (    isnil (org));
+            CHECK (not isnil (left));
+            CHECK (    isnil (right));
+            CHECK (sum == Dummy::checksum());
+            CHECK (id0 == left[0].getVal());
+            CHECK (id1 == left[1].getVal());
+            CHECK (id2 == left[2].getVal());
+            
+          }
           CHECK (0 == Dummy::checksum());
         }
     };
