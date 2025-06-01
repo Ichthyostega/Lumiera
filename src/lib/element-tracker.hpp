@@ -55,8 +55,8 @@
 #include "lib/p.hpp"
 #include "lib/optional-ref.hpp"
 #include "lib/util-foreach.hpp"
-#include "lib/ref-array-impl.hpp"
 
+#include <vector>
 
 
 namespace lib {
@@ -79,7 +79,7 @@ namespace lib {
    */
   template<typename ELM>
   class ElementTracker
-    : public lib::RefArrayVector<P<ELM>>
+    : public std::vector<P<ELM>>
     {
       using  _Vec = std::vector<P<ELM>>;
       using  Iter = typename _Vec::iterator;

@@ -75156,6 +75156,7 @@
 <linktarget COLOR="#2a45b9" DESTINATION="ID_1490841818" ENDARROW="Default" ENDINCLINATION="-1217;-20;" ID="Arrow_ID_1140294930" SOURCE="ID_1036649579" STARTARROW="None" STARTINCLINATION="-582;56;"/>
 <font NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="forward"/>
+<node CREATED="1748736911007" ID="ID_1960135352" MODIFIED="1748736919447" TEXT="Form">
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1533918279368" FOLDED="true" ID="ID_90099848" MODIFIED="1720131398331" TEXT="Assets">
 <icon BUILTIN="yes"/>
 <node CREATED="1533918370708" ID="ID_1044798440" MODIFIED="1557498707237" TEXT="Arten">
@@ -75361,6 +75362,10 @@
 </node>
 </node>
 <node CREATED="1533918281880" ID="ID_1584868520" MODIFIED="1557498707237" TEXT="MObject"/>
+</node>
+<node CREATED="1748736913830" ID="ID_747669722" MODIFIED="1748737076982" TEXT="Repr&#xe4;sentation">
+<arrowlink COLOR="#802752" DESTINATION="ID_1289244616" ENDARROW="Default" ENDINCLINATION="-1333;61;" ID="Arrow_ID_657332017" STARTARROW="None" STARTINCLINATION="-1024;178;"/>
+</node>
 </node>
 <node CREATED="1674160453319" ID="ID_1069058254" MODIFIED="1674160457633" TEXT="Fragen der Anordnung">
 <node CREATED="1674160465628" ID="ID_1715063705" MODIFIED="1674160468831" TEXT="Konventionen"/>
@@ -159241,6 +159246,234 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1737320216607" ID="ID_900361053" MODIFIED="1737320223218" TEXT="algebraische Terme"/>
 </node>
 </node>
+<node CREATED="1748737119043" ID="ID_1848488024" MODIFIED="1748737134366">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Lumiera verarbeitet vor allem <b>Metadaten</b>
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1748737156496" ID="ID_1872021141" MODIFIED="1748737233491">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <u>High-Level</u>: die Session ist ein Syntax-Baum mit Attribution
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1748819280378" ID="ID_1774937798" MODIFIED="1748819323823" TEXT="Aufgabe der Auslegung">
+<node CREATED="1748819358981" ID="ID_1273029818" MODIFIED="1748819569171">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p style="text-align: center">
+      Auf konzeptioneller Ebene
+    </p>
+    <p style="text-align: center">
+      und f&#252;r das UI : klar gegeben
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1748819387961" ID="ID_1349302951" MODIFIED="1748819405976" TEXT="wir haben Dinge in IT-technischer Repr&#xe4;sentation"/>
+<node CREATED="1748819406899" ID="ID_650235939" MODIFIED="1748819421494" TEXT="diese werden platziert, arrangiert und verbunden"/>
+<node CREATED="1748819422245" ID="ID_240737761" MODIFIED="1748819434597" TEXT="wir bestimmen ihre Eigenschaften"/>
+<node CREATED="1748819437673" ID="ID_812276048" MODIFIED="1748819453181" TEXT="und das daraus zusammengef&#xfc;gte Gebilde wird der Film"/>
+</node>
+<node CREATED="1748819528398" ID="ID_1081660572" MODIFIED="1748819553464" TEXT="f&#xfc;r ein Script">
+<node CREATED="1748819593395" ID="ID_208217039" MODIFIED="1748819597122" TEXT="zwei Sichten">
+<node CREATED="1748819603106" ID="ID_1565720479" MODIFIED="1748819683894" TEXT="automatisierte Steuerung der im UI zug&#xe4;nglichen Verh&#xe4;ltnisse"/>
+<node CREATED="1748819684784" ID="ID_1868118899" MODIFIED="1748819729931" TEXT="automatisiertes Operieren mit den Bestandteilen der Session"/>
+</node>
+<node CREATED="1748819807960" ID="ID_1579506210" MODIFIED="1748819826131" TEXT="man m&#xf6;chte die Objekte direkt als Objekte der Skriptsprache"/>
+<node CREATED="1748819848677" ID="ID_1129284982" MODIFIED="1748819867507" TEXT="man m&#xf6;chte Operationen unmittelbar ausf&#xfc;hren, ohne weitere &#xbb;Zeremonie&#xab;"/>
+</node>
+<node CREATED="1748819914478" ID="ID_1617010948" MODIFIED="1748819924060" TEXT="f&#xfc;r die Implementierung von Session-Commands">
+<node CREATED="1748819939337" ID="ID_1433995333" MODIFIED="1748819987841">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p style="text-align: right">
+      das Command steht f&#252;r einen Satz,
+    </p>
+    <p style="text-align: right">
+      der einen Auftrag erteilt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1748820031323" ID="ID_829413319" MODIFIED="1748820080683" TEXT="explizit gegeben ist das Subjekt der Instruktion"/>
+<node CREATED="1748820081530" ID="ID_460818217" MODIFIED="1748820252929" TEXT="von dort mu&#xdf; aller notwendige Kontext zug&#xe4;nglich sein">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      diese Forderung kann in doppelter Hinsicht verstanden werden...
+    </p>
+    <ul>
+      <li>
+        wenn ich schon eine Instruktion habe, mu&#223; ich vom Subjekt alle weiteren Beteiligten erreichen k&#246;nnen; im Besonderen einen Kontext, in dem sich das Subjekt befindet, und welcher eigentlich <i>eine koordinierte Aktion vollziehen mu&#223;,</i>&#160;um die Instruktion zu verwirklichen
+      </li>
+      <li>
+        das Command und damit die Instruktion ist so anzuordnen, da&#223; das Subjekt der Instruktion die notwendige Souver&#228;nit&#228;t hat, um die Instruktion vollumf&#228;nglich zu verwirklichen
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1748820488482" ID="ID_601612448" MODIFIED="1748820507518" TEXT="es handelt sich i.d.R um eine einfache Binding/ oder Mapping-Aufgabe"/>
+<node CREATED="1748820508425" ID="ID_275704911" MODIFIED="1748820522004" TEXT="Verwendung eines technischen Meta-Interfaces ist denkbar"/>
+<node CREATED="1748820555540" ID="ID_311044165" MODIFIED="1748820615010" TEXT="Framework-Code und &#xbb;Zeremonie&#xab; ist zu vermeiden">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ....denn andernfalls werden mit hoher Wahrscheinlichkeit fehlerhaft bzw. unvollst&#228;ndig definierte Commands auftreten
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1748737022343" ID="ID_1289244616" MODIFIED="1748737645948">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      auf welcher Art Repr&#228;sentation
+    </p>
+    <p>
+      wird in der Session gearbeitet?
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#802752" DESTINATION="ID_1289244616" ENDARROW="Default" ENDINCLINATION="-1333;61;" ID="Arrow_ID_657332017" SOURCE="ID_747669722" STARTARROW="None" STARTINCLINATION="-1024;178;"/>
+<linktarget COLOR="#ff0014" DESTINATION="ID_1289244616" ENDARROW="Default" ENDINCLINATION="33;398;" ID="Arrow_ID_974738759" SOURCE="ID_1539358489" STARTARROW="None" STARTINCLINATION="537;-744;"/>
+<icon BUILTIN="help"/>
+<node CREATED="1748737260968" ID="ID_407734575" MODIFIED="1748819321306" TEXT="anders gefragt: gibt es &#xfc;berhaupt &#xbb;Business-Logik&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <ul>
+      <li>
+        Wobei unter <i>Business-Logik</i>&#160;verstanden wird, da&#223; gewisse Verarbeitungs-Schemata, die sich an der Target-Domain orientieren, direkt in Code zur Datenverarbeitung &#252;bersetzt worden sind. Man kann dann &#8222;im Code sehen was das System macht&#8220;.
+      </li>
+      <li>
+        Das andere Extrem w&#228;re, wenn ein System lediglich eine Meta-Verarbeitung implementiert, w&#228;hend Logik und Inhalt der Verarbeitung in Parametern und Arbeitsdaten steckt.
+      </li>
+      <li>
+        Ein Zwischending w&#228;re die &#187;Pinball-Machine&#171;: bei dieser steckt die Verarbeitungs-Struktur in der Verschaltung, &#252;ber welche Ereignisse weitergeleitet und beantwortet werden
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<node CREATED="1748820700549" ID="ID_1277609627" MODIFIED="1748820858649" TEXT="wenig bis gar nicht">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      &#252;berwiegend geht es darum, verbundene oder betroffene weitere Objekte zu finden, oder einen Kontext zu erlangen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1748820705893" ID="ID_318155844" MODIFIED="1748820824091" TEXT="und wenn, bleibt sie auf Command-Ebene unsichtbar">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      denn das Command <i>bestimmt was getan werden soll</i>&#160;&#8212; ob das dann tats&#228;chlich passiert, oder gar weitere Konsequenzen hat, stellt sich in der Verarbeitung heraus und wird als Ergebnis-Feedback asynchron zur&#252;ckgemeldet
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1748820880468" ID="ID_450822655" MODIFIED="1748820907525" TEXT="&#xbb;Metadaten&#xab; kann mehrere Bedeutungen haben">
+<node CREATED="1748820919900" ID="ID_1256467001" MODIFIED="1748820949470" TEXT="Daten aus einer Spezifikations-Datenbank"/>
+<node CREATED="1748820961743" ID="ID_497098876" MODIFIED="1748820969754" TEXT="Algebraische Terme und Pr&#xe4;dikate"/>
+<node CREATED="1748820989134" ID="ID_26494541" MODIFIED="1748821007829" TEXT="Objekte einer Dom&#xe4;nen-Modellierung"/>
+</node>
+<node CREATED="1748821076318" ID="ID_1490582004" MODIFIED="1748821080801" TEXT="Einsch&#xe4;tzung">
+<node CREATED="1748821082527" ID="ID_138839350" MODIFIED="1748821192809" TEXT="Datenbank-Daten und algebraische Terme w&#xe4;ren die nat&#xfc;rliche Repr&#xe4;sentation">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      und zwar &#8222;nat&#252;rlich&#8220; aus Sicht dessen, was hier geschieht, also aus Sicht der Implementierung. Dem w&#252;rde eine technische / Meta-Schnittstelle entsprechen, auf der man eine Art &#187;instruction code&#171; absetzt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1748821196209" ID="ID_1040225824" MODIFIED="1748821353396" TEXT="was es sicher nicht bedeutet: da&#xdf; man die eigentliche Medien-Implementierung manipuliert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Es wird also definitiv nicht &#187;der Clip&#171; den Code enthalten, wie <i>er sich selber rendert,</i>&#160;oder &#187;der Track&#171; den Code enhalten, mit dem Mediendaten kombiniert und verarbeitet werden.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1748821580331" ID="ID_586599540" MODIFIED="1748821639455" TEXT="M&#xf6;glichkeit zur Anreicherung mit weiteren Metadaten wird ben&#xf6;tigt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      und zwar mu&#223; das einzelne Objekt im Stande sein, beliebige, lokal opaque aber stukturierte Daten zu transportieren
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1748821683132" ID="ID_1469699624" MODIFIED="1748821699766" TEXT="die Dom&#xe4;nen-Modellierung ist am n&#xe4;chsten an den Erwartungen und Anforderungen"/>
+</node>
+<node CREATED="1748821716345" ID="ID_1339581237" MODIFIED="1748821720597" TEXT="Achitektur-Skizze">
+<node CREATED="1748821721658" ID="ID_666952299" MODIFIED="1748821726347" TEXT="wir bleiben bei Objekten">
+<node CREATED="1748821727418" ID="ID_1175981783" MODIFIED="1748821747342" TEXT="sie haben direkte Wert-Attribute"/>
+<node CREATED="1748821748450" ID="ID_1398961450" MODIFIED="1748821757127" TEXT="sie bieten Methoden zur Manipulation"/>
+<node CREATED="1748821758924" ID="ID_1481443258" MODIFIED="1748821773925" TEXT="Objekte haben eine interne Service-Verdrahtung"/>
+<node CREATED="1748821774728" ID="ID_1424108521" MODIFIED="1748821783705" TEXT="die Methoden leisten die &#xdc;bersetzung in Events"/>
+<node CREATED="1748821789065" ID="ID_201559458" MODIFIED="1748821809701" TEXT="Objekte werden als Polymorphic-Value repr&#xe4;sentiert"/>
+<node CREATED="1748821820591" ID="ID_7700102" MODIFIED="1748821831500" TEXT="Objekt-Argumente werden stets per Referenz genommen"/>
+</node>
+<node CREATED="1748821839481" ID="ID_136996698" MODIFIED="1748821855026" TEXT="Identit&#xe4;t wird als Identifier materialisiert"/>
+<node CREATED="1748821855926" ID="ID_1891952955" MODIFIED="1748822531261" TEXT="das hei&#xdf;t: wir arbeiten weitgehend mit Wert-Semantik">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Und nicht mit Referenz-Semantik, wie urspr&#252;nglich beabsichtigt. All die smart-Pointer mit angebundenem Memory-Management fallen weg; stattdessen arbeiten wir pervasiv mit EntryIDs. Placements liegen nur noch im Placement-Index, werden aber extern ausschlie&#223;lich als ID-basierte Referenzen gehandhabt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1748822095685" ID="ID_1018969075" MODIFIED="1748822429641" TEXT="jeder Verarbeitungsschritt bekommt Objekt-Kopien">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Objekte sind stets vergleichsweise klein. Wo das schwierig wird, arbeiten wir mit Proxies (z.B. lib::Literal oder lib::Symbol f&#252;r Strings). Zu einer gegebenen EntryID kann man stets eine Objekt-Kopie bekommen; auch ein Command bezieht solche Kopien, um darauf eine Methode aufzurufen, welche intern, &#252;ber Session-Services die entsprechenden Events ausl&#246;sen. Auch der nachfolgende Builder-Lauf zieht sich eine Kopie des Session-Inhalts
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1748822110420" ID="ID_636425002" MODIFIED="1748822124312" TEXT="die Session enth&#xe4;lt einen verbindlichen Modell-Bestand"/>
+<node CREATED="1748822125067" ID="ID_1713086918" MODIFIED="1748822141962" TEXT="dieser Modell-Bestand ist eine &#xbb;Projektion&#xab; im Sinn von CQRS"/>
+</node>
+</node>
+</node>
+<node CREATED="1748737180852" ID="ID_1653171650" MODIFIED="1748737227045">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <u>Low-Level</u>: die Nodes sind ein funktionaler Aufruf-Plan
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
 <node CREATED="1737319070929" ID="ID_1581929006" MODIFIED="1737319192871">
 <richcontent TYPE="NODE"><html>
   <head/>
@@ -163455,13 +163688,14 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="ksmiletris"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1744756270441" ID="ID_831819953" LINK="https://issues.lumiera.org/ticket/473" MODIFIED="1746059845274" TEXT="RefArray und ScopedHolder m&#xfc;ssen jetzt wirklich mal weg">
+<node COLOR="#338800" CREATED="1744756270441" ID="ID_831819953" LINK="https://issues.lumiera.org/ticket/473" MODIFIED="1748738386934" TEXT="RefArray und ScopedHolder m&#xfc;ssen jetzt wirklich mal weg">
 <arrowlink COLOR="#fd26d0" DESTINATION="ID_1135941103" ENDARROW="Default" ENDINCLINATION="-1048;89;" ID="Arrow_ID_1050531240" STARTARROW="None" STARTINCLINATION="-1120;-23;"/>
 <icon BUILTIN="yes"/>
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1747180091430" ID="ID_202566672" MODIFIED="1747180099934" TEXT="was ist mit ScopedPtrvect?">
 <icon BUILTIN="help"/>
 </node>
-<node CREATED="1748609941535" ID="ID_309992355" MODIFIED="1748609956540" TEXT="Status feststellen">
+<node COLOR="#435e98" CREATED="1748609941535" ID="ID_309992355" MODIFIED="1748738408223" TEXT="Status feststellen">
+<icon BUILTIN="yes"/>
 <node COLOR="#338800" CREATED="1748609976008" FOLDED="true" ID="ID_406349837" LINK="https://issues.lumiera.org/ticket/1059" MODIFIED="1748647349774" TEXT="#1059 verify and use perfect forwarding">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1748610060693" ID="ID_1805620153" MODIFIED="1748646943713" TEXT="damit noch markierte Stellen betrachten">
@@ -163804,7 +164038,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node BACKGROUND_COLOR="#c8b6c1" COLOR="#435e98" CREATED="1748712767350" ID="ID_1069989891" MODIFIED="1748712793537" TEXT="tot &#xd83d;&#xdc80;"/>
 </node>
-<node COLOR="#5b280f" CREATED="1748730829818" ID="ID_700236683" MODIFIED="1748730848701" TEXT="nicht verwendet ... schnell weg damit">
+<node COLOR="#5b280f" CREATED="1748730829818" FOLDED="true" ID="ID_700236683" MODIFIED="1748732380623" TEXT="nicht verwendet ... schnell weg damit">
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1748730811995" ID="ID_1675553345" MODIFIED="1748730820630" TEXT="nobug-resource-handle-context"/>
 <node CREATED="1748730821812" ID="ID_1395653066" MODIFIED="1748730826587" TEXT="simple-allocator"/>
@@ -163813,9 +164047,7 @@ Since then others have made contributions, see the log for the history.</font></
 <node CREATED="1748731125255" ID="ID_1963832206" MODIFIED="1748731133648" TEXT="wir brauchen strukturierte, algebraische IDs"/>
 <node CREATED="1748731134567" ID="ID_1264506394" MODIFIED="1748731197197" TEXT="aber wenn schon, dann auch tats&#xe4;chlich ernsthaft implementiert">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ein M&#252;ll-Header mit einem Dummy-Test, der seit &gt; 10 Jahren herumliegt, und alle wichtigen Probleme nicht l&#246;st ...
@@ -163824,14 +164056,133 @@ Since then others have made contributions, see the log for the history.</font></
       <i>dann kann man auch gleich von Null anfangen</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1748731241722" ID="ID_1013782064" MODIFIED="1748731245961" TEXT="vcall.h">
 <node CREATED="1748731246885" HGAP="27" ID="ID_189593518" MODIFIED="1748731258996" TEXT="nice try" VSHIFT="4">
 <font NAME="SansSerif" SIZE="11"/>
 <icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node CREATED="1748731316160" ID="ID_1388202310" MODIFIED="1748731324655" TEXT="hash-fnv.h|c"/>
+</node>
+<node BACKGROUND_COLOR="#bc9daa" COLOR="#5b280f" CREATED="1748732382635" ID="ID_365290009" MODIFIED="1748737931585" STYLE="fork" TEXT="RefArray &#xd83d;&#xdc80;">
+<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
+<icon BUILTIN="button_cancel"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1748732389628" ID="ID_344324779" MODIFIED="1748737931582" TEXT="eine Verwendung auf dem Session-Interface">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1748732426725" ID="ID_280482100" MODIFIED="1748737931582" TEXT="also wirklich: Interface-hat-eine-Collection"/>
+<node CREATED="1748732511785" ID="ID_1712841924" MODIFIED="1748737931582" TEXT="und zwar mit shared-Pointern"/>
+<node BACKGROUND_COLOR="#c3aba4" COLOR="#990033" CREATED="1748732564173" ID="ID_329324495" MODIFIED="1748737931582" TEXT="was f&#xfc;r eine Abstraktion wird denn hier gebraucht?">
+<icon BUILTIN="help"/>
+<node COLOR="#5b280f" CREATED="1748732586054" ID="ID_984326516" MODIFIED="1748737931582" TEXT="ist da irgendwo ein (opaque) Sub-Typ involviert?">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1748732726586" ID="ID_595830892" MODIFIED="1748737931582" TEXT="nein; sondern der Container selber ist eine Abstraktion"/>
+<node CREATED="1748732739437" ID="ID_1194985494" MODIFIED="1748737931582" TEXT="implementiert wird als ElementTracker &#x2014;&#x25b7; RefArrayVector">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1748733405294" ID="ID_913940989" MODIFIED="1748737931582" TEXT="die verschiedenen Objekt-Arten werden generisch behandelt &#x2014; nicht polymorph">
+<icon BUILTIN="idea"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#e200bd" CREATED="1748733433864" ID="ID_1028771402" MODIFIED="1748737931582" TEXT="Schwein gehabt">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1748733519315" ID="ID_843259489" MODIFIED="1748737931582" TEXT="Verwendung der Timeline/Sequence-Accessoren">
+<icon BUILTIN="edit"/>
+<node CREATED="1748733527340" ID="ID_1987018959" MODIFIED="1748737931582" TEXT="gibt es eine Menge"/>
+<node CREATED="1748733531151" ID="ID_104771213" MODIFIED="1748737931582" TEXT="aber ich wei&#xdf; da&#xdf; das alles Platzhalter-Code ist"/>
+<node BACKGROUND_COLOR="#dac1b2" COLOR="#a50125" CREATED="1748733552077" ID="ID_1539358489" MODIFIED="1748737931582" TEXT="es ist immer noch &#xfc;berhaupt nicht klar welches Session-Interface gebraucht wird">
+<arrowlink COLOR="#ff0014" DESTINATION="ID_1289244616" ENDARROW="Default" ENDINCLINATION="33;398;" ID="Arrow_ID_974738759" STARTARROW="None" STARTINCLINATION="537;-744;"/>
+<icon BUILTIN="clanbomber"/>
+<node CREATED="1748733572026" ID="ID_1804348424" MODIFIED="1748737931582" TEXT="Stichwort: generisch vs. spezifisch"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1748733713805" ID="ID_1716101761" MODIFIED="1748737931582" TEXT="wegen Event-Sourcing kann die Session keine &#xbb;Implementierungs-Objekte&#xab; enthalten">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1748733791073" ID="ID_1437256753" MODIFIED="1748737931582" TEXT="wobei der Gehalt dieser &#x201e;Implementierung&#x201c; ohnehin nie so recht klar war"/>
+<node CREATED="1748733830376" ID="ID_728052298" MODIFIED="1748737931582" TEXT="also k&#xf6;nnte...">
+<node CREATED="1748733835406" ID="ID_155518420" MODIFIED="1748737931582" TEXT="die Session ein Property-Tree sein"/>
+<node CREATED="1748733845924" ID="ID_1715760843" MODIFIED="1748737931582" TEXT="oder sie k&#xf6;nnte symbolische Platzhalter enthalten"/>
+</node>
+<node CREATED="1748734349031" ID="ID_1886447558" MODIFIED="1748737931582" TEXT="es k&#xf6;nnte auch sein....">
+<node CREATED="1748734354497" ID="ID_476637960" MODIFIED="1748737931582" TEXT="da&#xdf; auf die Sesseion gar nicht mehr daten-zentrisch zugegriffen wird"/>
+<node CREATED="1748734370822" ID="ID_1791599272" MODIFIED="1748737931582" TEXT="sondern nur noch per Callback &#xfc;ber eine Objekt-ID"/>
+</node>
+<node BACKGROUND_COLOR="#ddb79b" COLOR="#5b280f" CREATED="1748734402026" ID="ID_761844471" MODIFIED="1748737931582" TEXT="Aber: wie sollte man das jemals herausfinden k&#xf6;nnen">
+<icon BUILTIN="stop-sign"/>
+<icon BUILTIN="clanbomber"/>
+<node CREATED="1748734632851" ID="ID_1162134510" MODIFIED="1748737931582" TEXT="will sagen: erst mal mu&#xdf; man es schon implementieren"/>
+<node CREATED="1748734648174" ID="ID_1158758052" MODIFIED="1748737931582" TEXT="um es dann diskutieren und letztlich anders machen zu k&#xf6;nnen"/>
+</node>
+<node CREATED="1748734790313" ID="ID_1549532218" MODIFIED="1748737931582">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      der n&#228;chste &#187;Vertical Slice&#171; <b>wird das entscheiden m&#252;ssen</b>
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      denn im n&#228;chsten Slice wird <i>das Agens festgelegt, auf dem der Builder arbeitet....</i>
+    </p>
+    <p>
+      Daran wird sich dann anmessen, was f&#252;r eine Repr&#228;sentation in der Session liegt&#160;
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1748735071405" ID="ID_611636546" MODIFIED="1748737931583" TEXT="Fazit">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="back"/>
+<node CREATED="1748735076771" ID="ID_1932129798" MODIFIED="1748737931583" TEXT="wir erhalten erst einmal den Status-quo"/>
+<node CREATED="1748735089726" ID="ID_930844028" MODIFIED="1748737931583" TEXT="und betrachten diese Objekte aber als symbolische Platzhalter"/>
+<node CREATED="1748733473387" ID="ID_1536258078" MODIFIED="1748737931583">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      man k&#246;nnte also RefArray durch eine <font face="Monospaced" color="#331dc8"><b>const vector&amp;</b></font>&#160; ersetzen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#b0d8cd" COLOR="#338800" CREATED="1748736160142" ID="ID_270025509" MODIFIED="1748737931583" TEXT="das geht verbl&#xfc;ffend einfach">
+<linktarget COLOR="#27c271" DESTINATION="ID_270025509" ENDARROW="Default" ENDINCLINATION="-700;44;" ID="Arrow_ID_1173221972" SOURCE="ID_1525129133" STARTARROW="None" STARTINCLINATION="193;15;"/>
+<icon BUILTIN="idea"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1748736172483" ID="ID_1273083458" MODIFIED="1748737931583" TEXT="was zeigt: der bestehende Platzhalter-Code ist oberfl&#xe4;chlich">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1748737775178" ID="ID_1525129133" MODIFIED="1748737931583" TEXT="diese l&#xe4;&#xdf;t sich banal einfach ersetzen">
+<arrowlink COLOR="#27c271" DESTINATION="ID_270025509" ENDARROW="Default" ENDINCLINATION="-700;44;" ID="Arrow_ID_1173221972" STARTARROW="None" STARTINCLINATION="193;15;"/>
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#21755f" CREATED="1748737841954" HGAP="23" ID="ID_498489405" MODIFIED="1748737931583" VSHIFT="-40">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p style="text-align: right">
+      weil zum Gl&#252;ck
+    </p>
+    <p style="text-align: right">
+      die Abstraktions-Eigenschaft
+    </p>
+    <p style="text-align: right">
+      gar nicht verwendet wurde
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
 </node>
 </node>
 </node>
