@@ -113,23 +113,23 @@ namespace meta {
       , class T19=NullType
       , class T20=NullType
       >
-    class Types
+    class TyOLD
       {
-        typedef typename Types<      T02, T03, T04
+        typedef typename TyOLD<      T02, T03, T04
                               , T05, T06, T07, T08
                               , T09, T10, T11, T12
                               , T13, T14, T15, T16
                               , T17, T18, T19, T20>::List ListTail;
       public:
         using List = Node<T01, ListTail>;
-        using Seq  = Types;
+        using Seq  = TyOLD;
       };
     
     template<> 
-    struct Types<>
+    struct TyOLD<>
       {
         using List = NullType;
-        using Seq  = Types<>;
+        using Seq  = TyOLD<>;
       };
     
     
@@ -150,7 +150,7 @@ namespace meta {
   struct TySeq
     {
       using Seq = TySeq;
-      using List = typename Types<TYPES...>::List;
+      using List = typename TyOLD<TYPES...>::List;
     };
    //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #987 temporary WORKAROUND(End) -- to be obsoleted
 }} // namespace lib::meta

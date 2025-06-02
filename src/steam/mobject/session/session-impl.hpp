@@ -268,7 +268,7 @@ namespace session {
    *       to create "the session" instance and expose it through the
    *       global Session PImpl
    */
-  typedef SessionServices< Types< SessionServiceFetch
+  typedef SessionServices< TyOLD< SessionServiceFetch
                                 , SessionServiceMutate
                                 , SessionServiceExploreScope
                                 , SessionServiceMockIndex

@@ -88,7 +88,7 @@ namespace test {
       using BASE::eat; // prevent shadowing
     };
   
-  typedef Types< Block<1>
+  typedef TyOLD< Block<1>
                , Block<2>
                , Block<3>
                , Block<5>

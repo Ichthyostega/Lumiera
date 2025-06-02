@@ -152,9 +152,9 @@ namespace meta {
      * prior to rebinding to the `std::tuple` type.
      */
     template<typename...TYPES>
-    struct BuildTupleType<Types<TYPES...>>
+    struct BuildTupleType<TyOLD<TYPES...>>
       {
-        using VariadicSeq = typename StripNullType<Types<TYPES...>>::Seq;
+        using VariadicSeq = typename StripNullType<TyOLD<TYPES...>>::Seq;
         
         using Type = typename BuildTupleType<VariadicSeq>::Type;
       };
@@ -162,14 +162,14 @@ namespace meta {
     template<class H, typename TAIL>
     struct BuildTupleType<Node<H, TAIL>>
       {
-        using Seq  = typename Types< Node<H,TAIL>>::Seq;
+        using Seq  = typename TyOLD< Node<H,TAIL>>::Seq;
         using Type = typename BuildTupleType<Seq>::Type;
       };
     
     template<>
     struct BuildTupleType<NullType>
       {
-        using Type = typename BuildTupleType<Types<>>::Type;
+        using Type = typename BuildTupleType<TyOLD<>>::Type;
       };
   }
   
@@ -195,13 +195,13 @@ namespace meta {
   template<typename...TYPES>
   struct RebindTupleTypes
     {
-      using Seq  = typename Types<TYPES...>::Seq;
+      using Seq  = typename TyOLD<TYPES...>::Seq;
       using List = typename Seq::List;
     };
   template<typename...TYPES>
   struct RebindTupleTypes<std::tuple<TYPES...>>
     {
-      using Seq  = typename Types<TYPES...>::Seq;
+      using Seq  = typename TyOLD<TYPES...>::Seq;
       using List = typename Seq::List;
     };
   
@@ -356,7 +356,7 @@ namespace meta {
     , class TUP
     , uint i
     >
-  class BuildTupleAccessor< _X_, Types<>, TUP, i>
+  class BuildTupleAccessor< _X_, TyOLD<>, TUP, i>
     {
     public:
       using Product = _X_<NullType, TUP, TUP, i>;   // Note: i == tuple size
@@ -421,7 +421,7 @@ namespace meta {
   inline std::string
   dump (std::tuple<TYPES...> const& tuple)
   {
-    using BuildAccessor = BuildTupleAccessor<TupleElementDisplayer, Types<TYPES...>>;
+    using BuildAccessor = BuildTupleAccessor<TupleElementDisplayer, TyOLD<TYPES...>>;
     using Displayer     = typename BuildAccessor::Product ;
     
     return static_cast<Displayer const&> (tuple)

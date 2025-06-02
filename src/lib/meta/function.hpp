@@ -355,7 +355,7 @@ namespace meta{
   
                           ///////////////////////////////////////////////////////////////////////////////////TICKET #987 : the following specialisations become obsolete with the old-style type-sequence
   template< typename RET>
-  struct BuildFunType<RET, Types<> >
+  struct BuildFunType<RET, TyOLD<> >
   {
     using Sig = RET(void);
     using Fun = _Fun<Sig>;
@@ -367,7 +367,7 @@ namespace meta{
   template< typename RET
           , typename A1
           >
-  struct BuildFunType<RET, Types<A1>>
+  struct BuildFunType<RET, TyOLD<A1>>
   {
     using Sig = RET(A1);
     using Fun = _Fun<Sig>;
@@ -380,7 +380,7 @@ namespace meta{
           , typename A1
           , typename A2
           >
-  struct BuildFunType<RET, Types<A1,A2>>
+  struct BuildFunType<RET, TyOLD<A1,A2>>
   {
     using Sig = RET(A1,A2);
     using Fun = _Fun<Sig>;
@@ -394,7 +394,7 @@ namespace meta{
           , typename A2
           , typename A3
           >
-  struct BuildFunType<RET, Types<A1,A2,A3>>
+  struct BuildFunType<RET, TyOLD<A1,A2,A3>>
   {
     using Sig = RET(A1,A2,A3);
     using Fun = _Fun<Sig>;
@@ -409,7 +409,7 @@ namespace meta{
           , typename A3
           , typename A4
           >
-  struct BuildFunType<RET, Types<A1,A2,A3,A4>>
+  struct BuildFunType<RET, TyOLD<A1,A2,A3,A4>>
   {
     using Sig = RET(A1,A2,A3,A4);
     using Fun = _Fun<Sig>;
@@ -425,7 +425,7 @@ namespace meta{
           , typename A4
           , typename A5
           >
-  struct BuildFunType<RET, Types<A1,A2,A3,A4,A5>>
+  struct BuildFunType<RET, TyOLD<A1,A2,A3,A4,A5>>
   {
     using Sig = RET(A1,A2,A3,A4,A5);
     using Fun = _Fun<Sig>;
@@ -442,7 +442,7 @@ namespace meta{
           , typename A5
           , typename A6
           >
-  struct BuildFunType<RET, Types<A1,A2,A3,A4,A5,A6>>
+  struct BuildFunType<RET, TyOLD<A1,A2,A3,A4,A5,A6>>
   {
     using Sig = RET(A1,A2,A3,A4,A5,A6);
     using Fun = _Fun<Sig>;
@@ -460,7 +460,7 @@ namespace meta{
           , typename A6
           , typename A7
           >
-  struct BuildFunType<RET, Types<A1,A2,A3,A4,A5,A6,A7>>
+  struct BuildFunType<RET, TyOLD<A1,A2,A3,A4,A5,A6,A7>>
   {
     using Sig = RET(A1,A2,A3,A4,A5,A6,A7);
     using Fun = _Fun<Sig>;
@@ -479,7 +479,7 @@ namespace meta{
           , typename A7
           , typename A8
           >
-  struct BuildFunType<RET, Types<A1,A2,A3,A4,A5,A6,A7,A8>>
+  struct BuildFunType<RET, TyOLD<A1,A2,A3,A4,A5,A6,A7,A8>>
   {
     using Sig = RET(A1,A2,A3,A4,A5,A6,A7,A8);
     using Fun = _Fun<Sig>;
@@ -499,7 +499,7 @@ namespace meta{
           , typename A8
           , typename A9
           >
-  struct BuildFunType<RET, Types<A1,A2,A3,A4,A5,A6,A7,A8,A9>>
+  struct BuildFunType<RET, TyOLD<A1,A2,A3,A4,A5,A6,A7,A8,A9>>
   {
     using Sig = RET(A1,A2,A3,A4,A5,A6,A7,A8,A9);
     using Fun = _Fun<Sig>;

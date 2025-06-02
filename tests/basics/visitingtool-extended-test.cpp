@@ -65,7 +65,7 @@ namespace test2  {
     
   class Babbler
     : public Applicable< Babbler, 
-                         Types<Boss,BigBoss>::List,    // treat this types
+                         TyOLD<Boss,BigBoss>::List,    // treat this types
                          VerboseVisitor<Tool>         //  intermediary base class
                        >
     {
@@ -114,7 +114,7 @@ namespace test2  {
    */  
   class Blatherer
     : public Applicable< Blatherer, 
-                         Types<Visionary>::List,         // get calls to Visionary dispatched 
+                         TyOLD<Visionary>::List,         // get calls to Visionary dispatched 
                          VerboseVisitor<Hastalavista>   // note: different tool base class 
                        >
     {

@@ -52,11 +52,11 @@ namespace test {
         
         
         
-        typedef Types< Num<1>
+        typedef TyOLD< Num<1>
                      , Num<2>
                      , Num<3>
                      >::List List1;
-        typedef Types< Num<5>
+        typedef TyOLD< Num<5>
                      , Num<6>
                      , Num<7>
                      >::List List2;
@@ -173,7 +173,7 @@ namespace test {
           void
           check_splice ()
             {
-              typedef Types<Num<9>,Num<8>>::List OLi;
+              typedef TyOLD<Num<9>,Num<8>>::List OLi;
               // will "paste" the list OLi "on top" of another Typelist...
               
               typedef Splice<NullType, NullType> Overl01;
@@ -216,7 +216,7 @@ namespace test {
               DISPLAY (Overl13);
               
               
-              typedef Types<Num<99>>::List OLi2;
+              typedef TyOLD<Num<99>>::List OLi2;
               typedef Splice<List1, OLi2, 0>::Front Front1;
               typedef Splice<List1, OLi2, 1>::Front Front2;
               typedef Splice<List1, OLi2, 5>::Front Front3;
@@ -244,7 +244,7 @@ namespace test {
               typedef SplitLast<List1>::Type Elm;
               typedef SplitLast<List1>::List Prefix;
               
-              typedef Types<Elm>::List ElmL;
+              typedef TyOLD<Elm>::List ElmL;
               
               DISPLAY (Prefix);
               DISPLAY (ElmL);
@@ -253,13 +253,13 @@ namespace test {
               typedef SplitLast<ElmL>::List NPrefix;
               
               DISPLAY (NPrefix);
-              DISPLAY (Types<Elm1>);
+              DISPLAY (TyOLD<Elm1>);
               
               typedef SplitLast<NullType>::Type Nil;
               typedef SplitLast<NullType>::List NList;
               
               DISPLAY (NList);
-              DISPLAY (Types<Nil>);
+              DISPLAY (TyOLD<Nil>);
             }
           
           
@@ -278,7 +278,7 @@ namespace test {
               typedef Dissect<LL>::Head   Head;
               typedef Dissect<LL>::End    End;
               
-              typedef Types<Head,End>  HeadEnd;     DISPLAY(HeadEnd);
+              typedef TyOLD<Head,End>  HeadEnd;     DISPLAY(HeadEnd);
             }
           
           
@@ -318,7 +318,7 @@ namespace test {
               typedef PrefixAll<NullType,List1>  Prefix3;
               DISPLAY (Prefix3);
               
-              typedef Types<List1::List,Num<0>,List2::List>::List  List_of_Lists;
+              typedef TyOLD<List1::List,Num<0>,List2::List>::List  List_of_Lists;
               typedef PrefixAll<Num<111>,List_of_Lists> Prefix4;
               DISPLAY (Prefix4);
               
@@ -336,14 +336,14 @@ namespace test {
               typedef Distribute<Num<11>, List1> Dist1;
               DISPLAY (Dist1);
               
-              typedef Types<Num<11>,Num<22>,Num<33>>::List Prefixes;
+              typedef TyOLD<Num<11>,Num<22>,Num<33>>::List Prefixes;
               typedef Distribute<Prefixes, Num<0>> Dist2;
               DISPLAY (Dist2);
               
               typedef Distribute<Prefixes, List1> Dist3;
               DISPLAY (Dist3);
               
-              typedef Distribute<Prefixes, Types<List1::List,List2::List>::List> Dist4;
+              typedef Distribute<Prefixes, TyOLD<List1::List,List2::List>::List> Dist4;
               DISPLAY (Dist4);
             }
           

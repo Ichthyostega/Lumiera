@@ -79,7 +79,7 @@ namespace test    {
     typedef function<Sig_capt> Fun_c;
     typedef function<Sig_undo> Fun_u;
     
-    using ArgTuple  = Tuple<Types<char>>;
+    using ArgTuple  = Tuple<TyOLD<char>>;
     using ArgHolder = OpClosure<Sig_oper>;
     using MemHolder = MementoTie<Sig_oper, string>;
     using Closure   = SimpleClosure<Sig_oper>;

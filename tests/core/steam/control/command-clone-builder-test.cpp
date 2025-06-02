@@ -111,7 +111,7 @@ namespace test    {
       void
       bindRandArgument (CommandImpl& cmd)
         {
-          typedef Types<int> ArgType;
+          typedef TyOLD<int> ArgType;
           TypedArguments<Tuple<ArgType>> arg (std::make_tuple (rani (10000)));
           cmd.setArguments (arg);
           CHECK (cmd.canExec());

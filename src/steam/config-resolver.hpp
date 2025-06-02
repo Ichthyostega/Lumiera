@@ -61,7 +61,7 @@ namespace steam {
    *  the list of all concrete types participating in the
    *  rule based config query system
    */
-  typedef lib::meta::Types < steam::mobject::session::Fork
+  typedef lib::meta::TyOLD < steam::mobject::session::Fork
                            , steam::asset::Pipe
                            , const steam::asset::ProcPatt
                            , steam::asset::Timeline

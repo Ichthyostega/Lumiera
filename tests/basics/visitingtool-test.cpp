@@ -74,7 +74,7 @@ namespace test1 {
   
   class Babbler
     : public Applicable< Babbler
-                       , Types<Boss,BigBoss,Visionary>::List   // dispatch calls to this types
+                       , TyOLD<Boss,BigBoss,Visionary>::List   // dispatch calls to this types
                        , VerboseVisitor
                        >
     {

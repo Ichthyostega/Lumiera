@@ -44,11 +44,11 @@ namespace test {
   
   namespace { // test data
     
-    typedef Types< Num<1>
+    typedef TyOLD< Num<1>
                  , Num<2>
                  , Num<3>
                  >         Types1;
-    typedef Types< Num<7>
+    typedef TyOLD< Num<7>
                  , Num<8>
                  , Num<9>
                  >         Types2;
@@ -99,12 +99,12 @@ namespace test {
           typedef Append<Types1::List, Types2::List>::List LL;
           DISPLAY (LL);
           
-          typedef Types<LL>::Seq Seq;
+          typedef TyOLD<LL>::Seq Seq;
           typedef Seq::List SeqList;
           DISPLAY (Seq);
           DISPLAY (SeqList);
           
-          typedef Types<NodeNull>::Seq NulS;
+          typedef TyOLD<NodeNull>::Seq NulS;
           DISPLAY (NulS);
         }
       
@@ -118,10 +118,10 @@ namespace test {
           typedef Prepend<NullType, Types1> Prepend2;
           DISPLAY(Prepend2);
           
-          typedef Prepend<Num<5>,  Types<> > Prepend3;
+          typedef Prepend<Num<5>,  TyOLD<> > Prepend3;
           DISPLAY(Prepend3);
           
-          typedef Prepend<NullType,  Types<> > Prepend4;
+          typedef Prepend<NullType,  TyOLD<> > Prepend4;
           DISPLAY(Prepend4);
         }
       
@@ -130,7 +130,7 @@ namespace test {
       check_shift ()
         {
           typedef Append<Types2::List, Types1::List>::List LL;
-          typedef Types<LL>::Seq Seq;
+          typedef TyOLD<LL>::Seq Seq;
           
           typedef Shifted<Seq,0>::Type Seq_0;  DISPLAY (Seq_0);
           typedef Shifted<Seq,1>::Type Seq_1;  DISPLAY (Seq_1);
@@ -140,13 +140,13 @@ namespace test {
           typedef Shifted<Seq,5>::Type Seq_5;  DISPLAY (Seq_5);
           typedef Shifted<Seq,6>::Type Seq_6;  DISPLAY (Seq_6);
           
-          typedef Types<Shifted<Seq,0>::Head> Head_0; DISPLAY (Head_0);
-          typedef Types<Shifted<Seq,1>::Head> Head_1; DISPLAY (Head_1);
-          typedef Types<Shifted<Seq,2>::Head> Head_2; DISPLAY (Head_2);
-          typedef Types<Shifted<Seq,3>::Head> Head_3; DISPLAY (Head_3);
-          typedef Types<Shifted<Seq,4>::Head> Head_4; DISPLAY (Head_4);
-          typedef Types<Shifted<Seq,5>::Head> Head_5; DISPLAY (Head_5);
-          typedef Types<Shifted<Seq,6>::Head> Head_6; DISPLAY (Head_6);
+          typedef TyOLD<Shifted<Seq,0>::Head> Head_0; DISPLAY (Head_0);
+          typedef TyOLD<Shifted<Seq,1>::Head> Head_1; DISPLAY (Head_1);
+          typedef TyOLD<Shifted<Seq,2>::Head> Head_2; DISPLAY (Head_2);
+          typedef TyOLD<Shifted<Seq,3>::Head> Head_3; DISPLAY (Head_3);
+          typedef TyOLD<Shifted<Seq,4>::Head> Head_4; DISPLAY (Head_4);
+          typedef TyOLD<Shifted<Seq,5>::Head> Head_5; DISPLAY (Head_5);
+          typedef TyOLD<Shifted<Seq,6>::Head> Head_6; DISPLAY (Head_6);
         }
       
       
@@ -154,7 +154,7 @@ namespace test {
       check_split ()
         {
           typedef Append<Types1::List, Types2::List>::List LL;
-          typedef Types<LL>::Seq Seq;
+          typedef TyOLD<LL>::Seq Seq;
           DISPLAY (Seq);
           
           typedef Split<Seq>::List   List;     DISPLAY(List); 
@@ -166,7 +166,7 @@ namespace test {
           typedef Split<Seq>::Head   Head;
           typedef Split<Seq>::End    End;
           
-          typedef Types<Head,End>  HeadEnd;    DISPLAY(HeadEnd);
+          typedef TyOLD<Head,End>  HeadEnd;    DISPLAY(HeadEnd);
         }
       
       

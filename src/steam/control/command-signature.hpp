@@ -59,7 +59,7 @@ namespace control {
   
   using lib::meta::BuildFunType;
   using lib::meta::_Fun;
-  using lib::meta::Types;
+  using lib::meta::TyOLD;
   using lib::meta::Append;
   using lib::meta::SplitLast;
   
@@ -77,7 +77,7 @@ namespace control {
       using Args            = typename _Fun<SIG>::Args;
       using ArgList         = typename Args::List;
       using ExtendedArglist = typename Append<ArgList, MEM>::List;
-      using ExtendedArgs    = typename Types<ExtendedArglist>::Seq;
+      using ExtendedArgs    = typename TyOLD<ExtendedArglist>::Seq;
       
     public:
       using OperateSig = typename BuildFunType<void, Args>::Sig;
@@ -118,7 +118,7 @@ namespace control {
           using Memento = RET;
           
           using ExtendedArglist = typename Append<ARG, Memento>::List;
-          using ExtendedArgs    = typename Types<ExtendedArglist>::Seq;
+          using ExtendedArgs    = typename TyOLD<ExtendedArglist>::Seq;
           
           using OperateSig = typename BuildFunType<void, ARG>::Sig;
           using CaptureSig = typename BuildFunType<Ret,ARG>::Sig;
@@ -132,7 +132,7 @@ namespace control {
           
           using Memento          = typename SplitLast<Args>::Type;
           using OperationArglist = typename SplitLast<Args>::List;
-          using OperationArgs    = typename Types<OperationArglist>::Seq;
+          using OperationArgs    = typename TyOLD<OperationArglist>::Seq;
           
           using OperateSig = typename BuildFunType<void, OperationArgs>::Sig;
           using CaptureSig = typename BuildFunType<Ret,OperationArgs>::Sig;

@@ -35,11 +35,11 @@ namespace test {
   
   namespace { // test cases and data....
     
-    typedef Types< Num<1>
+    typedef TyOLD< Num<1>
                  , Num<3>
                  , Num<5>
                  >        Types1;
-    typedef Types< Num<2>
+    typedef TyOLD< Num<2>
                  , Num<4>
                  , Num<6>
                  >        Types2;

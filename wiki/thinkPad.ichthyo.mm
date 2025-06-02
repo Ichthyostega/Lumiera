@@ -58642,6 +58642,10 @@
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1739743240214" ID="ID_1756740911" MODIFIED="1739743248263" TEXT="geplant: Namen austauschen">
 <icon BUILTIN="hourglass"/>
 </node>
+<node CREATED="1748826315559" ID="ID_575940847" MODIFIED="1748826459126" TEXT="gehe das Thema jetzt vor C++20 an">
+<arrowlink COLOR="#4c5dd7" DESTINATION="ID_358783348" ENDARROW="Default" ENDINCLINATION="-1131;-56;" ID="Arrow_ID_470275962" STARTARROW="None" STARTINCLINATION="-4286;314;"/>
+<icon BUILTIN="yes"/>
+</node>
 </node>
 </node>
 <node CREATED="1540682674455" ID="ID_1625152878" MODIFIED="1557498707236" TEXT="Typliste filtern">
@@ -164186,6 +164190,47 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1748826201673" ID="ID_358783348" MODIFIED="1748826459126" TEXT="gehe jetzt das Problem mit den variadischen Typlisten an">
+<linktarget COLOR="#4c5dd7" DESTINATION="ID_358783348" ENDARROW="Default" ENDINCLINATION="-1131;-56;" ID="Arrow_ID_470275962" SOURCE="ID_575940847" STARTARROW="None" STARTINCLINATION="-4286;314;"/>
+<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1748826834261" ID="ID_1288761919" LINK="https://issues.lumiera.org/ticket/987" MODIFIED="1748826884703" TEXT="siehe ausf&#xfc;hrliche &#xdc;berlegungen in Ticket #987 ">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1748826541021" ID="ID_1606562967" MODIFIED="1748826643902" TEXT="Ziel: vor der Umstellung auf C++20 sollen solche Altlasten weitgehend aufger&#xe4;umt sein">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Zwar wird daran die Compilation mit C++20 nicht scheitern, aber danach d&#252;rfte doch ein gewisser Aufbruch stattfinden &#8212; und solche problematischen Reste der Zeit vor C++11 geraten dann zunehmend zum Hindernis.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1748826645643" ID="ID_298681004" MODIFIED="1748826712364" TEXT="Habe bereits vor einiger Zeit die Grundlagen gelegt f&#xfc;r einen schrittweisen &#xdc;bergang">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...indem ich den bisherigen &#187;Workaround&#171; in den wichtigsten Definitionen unmittelbar daneben gestellt habe; teilweise k&#246;nnen beide F&#228;lle bereits koexistieren
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1748826715182" ID="ID_480113665" MODIFIED="1748826910245">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Vorbereitung: alten Typ umbenennen: <font color="#3d2bb6" face="Monospaced"><b>Types</b>&lt;TY...&gt; </font>in<font color="#3d2bb6" face="Monospaced">&#160;</font><font color="#942bb6" face="Monospaced"><b>TyOLD</b>&lt;TY...&gt;</font>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1748826894390" ID="ID_1736451439" MODIFIED="1748826903420" TEXT="Zonen f&#xfc;r Umstellung identifizieren">
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 </node>

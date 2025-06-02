@@ -52,11 +52,11 @@ namespace test {
         
         
         
-        typedef Types< Num<1>
+        typedef TyOLD< Num<1>
                      , Num<2>
                      , Num<3>
                      >::List List1;
-        typedef Types< Num<5>
+        typedef TyOLD< Num<5>
                      , Num<6>
                      , Num<7>
                      >::List List2;
@@ -153,10 +153,10 @@ namespace test {
         {
           cout << "\t:\n\t: ---Apply---\n";
           
-          Tuple<Types<>>            tup0 ;
-          Tuple<Types<int>>         tup1 (11);
-          Tuple<Types<int,int>>     tup2 (11,12);
-          Tuple<Types<int,int,int>> tup3 (11,12,13);
+          Tuple<TyOLD<>>            tup0 ;
+          Tuple<TyOLD<int>>         tup1 (11);
+          Tuple<TyOLD<int,int>>     tup2 (11,12);
+          Tuple<TyOLD<int,int,int>> tup3 (11,12,13);
           DUMPVAL (tup0);
           DUMPVAL (tup1);
           DUMPVAL (tup2);
@@ -183,10 +183,10 @@ namespace test {
       void
       check_applyFunc ()
         {
-          Tuple<Types<>>             tup0 ;
-          Tuple<Types<int>>          tup1 (11);
-          Tuple<Types<int,int>>      tup2 (11,12);
-          Tuple<Types<int,int,int>>  tup3 (11,12,13);
+          Tuple<TyOLD<>>             tup0 ;
+          Tuple<TyOLD<int>>          tup1 (11);
+          Tuple<TyOLD<int,int>>      tup2 (11,12);
+          Tuple<TyOLD<int,int,int>>  tup3 (11,12,13);
           function<int()>            functor0 (fun0);
           function<int(int)>         functor1 (fun1);
           function<int(int,int)>     functor2 (fun2);
@@ -215,10 +215,10 @@ namespace test {
         {
           cout << "\t:\n\t: ---Bind----\n";
           
-          Tuple<Types<>>            tup0 ;
-          Tuple<Types<int>>         tup1 (11);
-          Tuple<Types<int,int>>     tup2 (11,12);
-          Tuple<Types<int,int,int>> tup3 (11,12,13);
+          Tuple<TyOLD<>>            tup0 ;
+          Tuple<TyOLD<int>>         tup1 (11);
+          Tuple<TyOLD<int,int>>     tup2 (11,12);
+          Tuple<TyOLD<int,int,int>> tup3 (11,12,13);
           
           typedef function<int()> BoundFun;
           
@@ -248,10 +248,10 @@ namespace test {
       void
       check_bindFunc ()
         {
-          Tuple<Types<>>             tup0 ;
-          Tuple<Types<int>>          tup1 (11);
-          Tuple<Types<int,int>>      tup2 (11,12);
-          Tuple<Types<int,int,int>>  tup3 (11,12,13);
+          Tuple<TyOLD<>>             tup0 ;
+          Tuple<TyOLD<int>>          tup1 (11);
+          Tuple<TyOLD<int,int>>      tup2 (11,12);
+          Tuple<TyOLD<int,int,int>>  tup3 (11,12,13);
           function<int()>            unbound_functor0 (fun0);
           function<int(int)>         unbound_functor1 (fun1);
           function<int(int,int)>     unbound_functor2 (fun2);
@@ -285,10 +285,10 @@ namespace test {
       void
       build_closure ()
         {
-          Tuple<Types<>>            tup0 ;
-          Tuple<Types<int>>         tup1 (11);
-          Tuple<Types<int,int>>     tup2 (11,12);
-          Tuple<Types<int,int,int>> tup3 (11,12,13);
+          Tuple<TyOLD<>>            tup0 ;
+          Tuple<TyOLD<int>>         tup1 (11);
+          Tuple<TyOLD<int,int>>     tup2 (11,12);
+          Tuple<TyOLD<int,int,int>> tup3 (11,12,13);
           
           FunctionClosure<int()>            clo0 (fun0,tup0);
           FunctionClosure<int(int)>         clo1 (fun1,tup1);
@@ -327,7 +327,7 @@ namespace test {
           
           
           // finally combine all techniques....
-          using NumberzArg = Types<List2>::Seq;
+          using NumberzArg = TyOLD<List2>::Seq;
           using NumberzSig = BuildFunType<int,NumberzArg>::Sig;
           
           Tuple<NumberzArg> numberzTup (Num<5>(22), Num<6>(33), Num<7>(44));

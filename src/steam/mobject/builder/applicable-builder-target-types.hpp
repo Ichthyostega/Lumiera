@@ -58,7 +58,7 @@ namespace steam    {
 namespace mobject {
 namespace builder {
   
-    typedef Types< session::Root, 
+    typedef TyOLD< session::Root, 
                    session::Clip, 
                    session::Effect,
                    session::Binding,

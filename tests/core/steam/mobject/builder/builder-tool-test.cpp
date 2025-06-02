@@ -59,7 +59,7 @@ namespace test    {
        * so it will call the \c onUnknown(Buildable&) instead
        */
       class TestTool 
-        : public Applicable<TestTool, Types<Clip, DummyMO>::List>
+        : public Applicable<TestTool, TyOLD<Clip, DummyMO>::List>
         {
         public:
           string log_;

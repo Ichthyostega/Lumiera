@@ -168,7 +168,7 @@ namespace test   {
           CHECK (com);
           CHECK (!com->canExec());
           
-          typedef Types<int> ArgType;
+          typedef TyOLD<int> ArgType;
           const int ARGR{1 + rani (1000)};
           Tuple<ArgType> tuple(ARGR);
           TypedArguments<Tuple<ArgType>> arg(tuple);

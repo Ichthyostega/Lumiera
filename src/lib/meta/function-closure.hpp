@@ -575,7 +575,7 @@ namespace func{
       using Ret      = typename _Fun<SIG>::Ret;
       using ArgsList = typename Args::List;
       using ValList  = typename VAL::List;
-      using ValTypes = typename Types<ValList>::Seq;
+      using ValTypes = typename TyOLD<ValList>::Seq;
       
       enum { ARG_CNT = count<ArgsList>::value
            , VAL_CNT = count<ValList> ::value
@@ -587,8 +587,8 @@ namespace func{
       using LeftReduced = typename Splice<ArgsList, ValList>::Back;
       using RightReduced = typename Splice<ArgsList, ValList, ROFFSET>::Front;
       
-      using ArgsL = typename Types<LeftReduced>::Seq;
-      using ArgsR = typename Types<RightReduced>::Seq;
+      using ArgsL = typename TyOLD<LeftReduced>::Seq;
+      using ArgsR = typename TyOLD<RightReduced>::Seq;
       
       
       // build a list, where each of the *remaining* arguments is replaced by a placeholder marker
@@ -600,8 +600,8 @@ namespace func{
       using LeftReplaced  = typename Splice<ArgsList, TrailingPlaceholders, VAL_CNT>::List;
       using RightReplaced = typename Splice<ArgsList, LeadingPlaceholders,  0      >::List;
       
-      using LeftReplacedTypes = typename Types<LeftReplaced>::Seq;
-      using RightReplacedTypes = typename Types<RightReplaced>::Seq;
+      using LeftReplacedTypes = typename TyOLD<LeftReplaced>::Seq;
+      using RightReplacedTypes = typename TyOLD<RightReplaced>::Seq;
       
       // create a "builder" helper, which accepts exactly the value tuple elements
       // and puts them at the right location, while default-constructing the remaining
@@ -679,7 +679,7 @@ namespace func{
       using Args     = typename _Fun<SIG>::Args;
       using Ret      = typename _Fun<SIG>::Ret;
       using ArgsList = typename     Args::List;
-      using ValList  = typename Types<X>::List;
+      using ValList  = typename TyOLD<X>::List;
       
       enum { ARG_CNT = count<ArgsList>::value };
 
@@ -694,8 +694,8 @@ namespace func{
                                               >::List;
       using ReducedArgs      = typename Append<RemainingFront, RemainingBack>::List;
       
-      using PreparedArgTypes = typename Types<PreparedArgs>::Seq;
-      using RemainingArgs    = typename Types<ReducedArgs>::Seq;
+      using PreparedArgTypes = typename TyOLD<PreparedArgs>::Seq;
+      using RemainingArgs    = typename TyOLD<ReducedArgs>::Seq;
       
       using ReducedSig = typename BuildFunType<Ret,RemainingArgs>::Sig;
       
@@ -844,10 +844,10 @@ namespace func{
    */
   template<typename...ARG>
   inline
-  typename _Sig<void, Types<ARG...>>::Applicator
+  typename _Sig<void, TyOLD<ARG...>>::Applicator
   tupleApplicator (std::tuple<ARG...>& args)
   {
-    typedef typename _Sig<void,Types<ARG...>>::Type Signature;
+    typedef typename _Sig<void,TyOLD<ARG...>>::Type Signature;
     return TupleApplicator<Signature> (args);
   }
   
@@ -860,7 +860,7 @@ namespace func{
   apply (SIG& f, std::tuple<ARG...>& args)
   {
     typedef typename _Fun<SIG>::Ret Ret;                          //
-    typedef typename _Sig<Ret,Types<ARG...>>::Type Signature;    // Note: deliberately re-building the Signature Type
+    typedef typename _Sig<Ret,TyOLD<ARG...>>::Type Signature;    // Note: deliberately re-building the Signature Type
     return TupleApplicator<Signature> (args) (f);               //        in order to get better error messages here
   }
   
@@ -871,10 +871,10 @@ namespace func{
    *          function result. */
   template<typename SIG, typename...ARG>
   inline
-  typename _Clo<SIG,Types<ARG...>>::Type
+  typename _Clo<SIG,TyOLD<ARG...>>::Type
   closure (SIG& f, std::tuple<ARG...>& args)
   {
-    typedef typename _Clo<SIG,Types<ARG...>>::Type Closure;
+    typedef typename _Clo<SIG,TyOLD<ARG...>>::Type Closure;
     return Closure (f,args);
   }
   

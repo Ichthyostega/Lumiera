@@ -97,7 +97,7 @@ namespace control {
     
     template< class TAR, class BA, class RET
             >                                                                        //____________________________________
-    struct AcceptArgs<TAR,BA,RET, Types<> >                                         ///< Accept dummy binding (0 Arguments)
+    struct AcceptArgs<TAR,BA,RET, TyOLD<> >                                         ///< Accept dummy binding (0 Arguments)
       : BA
       {
         RET
@@ -111,7 +111,7 @@ namespace control {
     template< class TAR, class BA, class RET
             , typename T1
             >                                                                        //_______________________________
-    struct AcceptArgs<TAR,BA,RET, Types<T1> >                                       ///< Accept binding for 1 Argument
+    struct AcceptArgs<TAR,BA,RET, TyOLD<T1> >                                       ///< Accept binding for 1 Argument
       : BA
       {
         RET
@@ -126,7 +126,7 @@ namespace control {
             , typename T1
             , typename T2
             >                                                                        //________________________________
-    struct AcceptArgs<TAR,BA,RET, Types<T1,T2> >                                    ///< Accept binding for 2 Arguments
+    struct AcceptArgs<TAR,BA,RET, TyOLD<T1,T2> >                                    ///< Accept binding for 2 Arguments
       : BA
       {
         RET
@@ -142,7 +142,7 @@ namespace control {
             , typename T2
             , typename T3
             >                                                                        //________________________________
-    struct AcceptArgs<TAR,BA,RET, Types<T1,T2,T3> >                                 ///< Accept binding for 3 Arguments
+    struct AcceptArgs<TAR,BA,RET, TyOLD<T1,T2,T3> >                                 ///< Accept binding for 3 Arguments
       : BA
       {
         RET
@@ -159,7 +159,7 @@ namespace control {
             , typename T3
             , typename T4
             >                                                                        //________________________________
-    struct AcceptArgs<TAR,BA,RET, Types<T1,T2,T3,T4> >                              ///< Accept binding for 4 Arguments
+    struct AcceptArgs<TAR,BA,RET, TyOLD<T1,T2,T3,T4> >                              ///< Accept binding for 4 Arguments
       : BA
       {
         RET
@@ -177,7 +177,7 @@ namespace control {
             , typename T4
             , typename T5
             >                                                                        //________________________________
-    struct AcceptArgs<TAR,BA,RET, Types<T1,T2,T3,T4,T5> >                           ///< Accept binding for 5 Arguments
+    struct AcceptArgs<TAR,BA,RET, TyOLD<T1,T2,T3,T4,T5> >                           ///< Accept binding for 5 Arguments
       : BA
       {
         RET
@@ -196,7 +196,7 @@ namespace control {
             , typename T5
             , typename T6
             >                                                                        //________________________________
-    struct AcceptArgs<TAR,BA,RET, Types<T1,T2,T3,T4,T5,T6> >                        ///< Accept binding for 6 Arguments
+    struct AcceptArgs<TAR,BA,RET, TyOLD<T1,T2,T3,T4,T5,T6> >                        ///< Accept binding for 6 Arguments
       : BA
       {
         RET
@@ -216,7 +216,7 @@ namespace control {
             , typename T6
             , typename T7
             >                                                                        //________________________________
-    struct AcceptArgs<TAR,BA,RET, Types<T1,T2,T3,T4,T5,T6,T7> >                     ///< Accept binding for 7 Arguments
+    struct AcceptArgs<TAR,BA,RET, TyOLD<T1,T2,T3,T4,T5,T6,T7> >                     ///< Accept binding for 7 Arguments
       : BA
       {
         RET
@@ -237,7 +237,7 @@ namespace control {
             , typename T7
             , typename T8
             >                                                                        //________________________________
-    struct AcceptArgs<TAR,BA,RET, Types<T1,T2,T3,T4,T5,T6,T7,T8> >                  ///< Accept binding for 8 Arguments
+    struct AcceptArgs<TAR,BA,RET, TyOLD<T1,T2,T3,T4,T5,T6,T7,T8> >                  ///< Accept binding for 8 Arguments
       : BA
       {
         RET
@@ -259,7 +259,7 @@ namespace control {
             , typename T8
             , typename T9
             >                                                                        //________________________________
-    struct AcceptArgs<TAR,BA,RET, Types<T1,T2,T3,T4,T5,T6,T7,T8,T9> >               ///< Accept binding for 9 Arguments
+    struct AcceptArgs<TAR,BA,RET, TyOLD<T1,T2,T3,T4,T5,T6,T7,T8,T9> >               ///< Accept binding for 9 Arguments
       : BA
       {
         RET
@@ -302,7 +302,7 @@ namespace control {
     
     template< class TAR, class BA, class RET
             >                                                                        //____________________________________
-    struct AcceptBind<TAR,BA,RET, Types<> >                                         ///< Accept dummy binding (0 Arguments)
+    struct AcceptBind<TAR,BA,RET, TyOLD<> >                                         ///< Accept dummy binding (0 Arguments)
       : BA
       {
         RET
@@ -316,7 +316,7 @@ namespace control {
     template< class TAR, class BA, class RET
             , typename T1
             >                                                                        //_______________________________
-    struct AcceptBind<TAR,BA,RET, Types<T1> >                                       ///< Accept binding for 1 Argument
+    struct AcceptBind<TAR,BA,RET, TyOLD<T1> >                                       ///< Accept binding for 1 Argument
       : BA
       {
         RET
@@ -331,7 +331,7 @@ namespace control {
             , typename T1
             , typename T2
             >                                                                        //________________________________
-    struct AcceptBind<TAR,BA,RET, Types<T1,T2> >                                    ///< Accept binding for 2 Arguments
+    struct AcceptBind<TAR,BA,RET, TyOLD<T1,T2> >                                    ///< Accept binding for 2 Arguments
       : BA
       {
         RET
@@ -347,7 +347,7 @@ namespace control {
             , typename T2
             , typename T3
             >                                                                        //________________________________
-    struct AcceptBind<TAR,BA,RET, Types<T1,T2,T3> >                                 ///< Accept binding for 3 Arguments
+    struct AcceptBind<TAR,BA,RET, TyOLD<T1,T2,T3> >                                 ///< Accept binding for 3 Arguments
       : BA
       {
         RET
@@ -364,7 +364,7 @@ namespace control {
             , typename T3
             , typename T4
             >                                                                        //________________________________
-    struct AcceptBind<TAR,BA,RET, Types<T1,T2,T3,T4> >                              ///< Accept binding for 4 Arguments
+    struct AcceptBind<TAR,BA,RET, TyOLD<T1,T2,T3,T4> >                              ///< Accept binding for 4 Arguments
       : BA
       {
         RET
@@ -382,7 +382,7 @@ namespace control {
             , typename T4
             , typename T5
             >                                                                        //________________________________
-    struct AcceptBind<TAR,BA,RET, Types<T1,T2,T3,T4,T5> >                           ///< Accept binding for 5 Arguments
+    struct AcceptBind<TAR,BA,RET, TyOLD<T1,T2,T3,T4,T5> >                           ///< Accept binding for 5 Arguments
       : BA
       {
         RET
@@ -401,7 +401,7 @@ namespace control {
             , typename T5
             , typename T6
             >                                                                        //________________________________
-    struct AcceptBind<TAR,BA,RET, Types<T1,T2,T3,T4,T5,T6> >                        ///< Accept binding for 6 Arguments
+    struct AcceptBind<TAR,BA,RET, TyOLD<T1,T2,T3,T4,T5,T6> >                        ///< Accept binding for 6 Arguments
       : BA
       {
         RET
@@ -421,7 +421,7 @@ namespace control {
             , typename T6
             , typename T7
             >                                                                        //________________________________
-    struct AcceptBind<TAR,BA,RET, Types<T1,T2,T3,T4,T5,T6,T7> >                     ///< Accept binding for 7 Arguments
+    struct AcceptBind<TAR,BA,RET, TyOLD<T1,T2,T3,T4,T5,T6,T7> >                     ///< Accept binding for 7 Arguments
       : BA
       {
         RET
@@ -442,7 +442,7 @@ namespace control {
             , typename T7
             , typename T8
             >                                                                        //________________________________
-    struct AcceptBind<TAR,BA,RET, Types<T1,T2,T3,T4,T5,T6,T7,T8> >                  ///< Accept binding for 8 Arguments
+    struct AcceptBind<TAR,BA,RET, TyOLD<T1,T2,T3,T4,T5,T6,T7,T8> >                  ///< Accept binding for 8 Arguments
       : BA
       {
         RET
@@ -464,7 +464,7 @@ namespace control {
             , typename T8
             , typename T9
             >                                                                        //________________________________
-    struct AcceptBind<TAR,BA,RET, Types<T1,T2,T3,T4,T5,T6,T7,T8,T9> >               ///< Accept binding for 9 Arguments
+    struct AcceptBind<TAR,BA,RET, TyOLD<T1,T2,T3,T4,T5,T6,T7,T8,T9> >               ///< Accept binding for 9 Arguments
       : BA
       {
         RET
@@ -524,7 +524,7 @@ namespace control {
     template<typename...TYPES>
     struct _Type<std::tuple<TYPES...> >
       {
-        using Args = typename Types<TYPES...>::Seq;
+        using Args = typename TyOLD<TYPES...>::Seq;
         using Ret  = void;
         using Sig  = typename BuildFunType<void, Args>::Sig;
         using ArgTuple = std::tuple<TYPES...>;

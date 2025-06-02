@@ -43,14 +43,14 @@ namespace test {
   namespace { // test data
     
     
-    typedef Types< Num<1>
+    typedef TyOLD< Num<1>
                  , Num<3>
                  , Num<5>
                  >         Types1;
-    typedef Types< Num<2>
+    typedef TyOLD< Num<2>
                  , Num<4>
                  >         Types2;
-    typedef Types< Num<7>> Types3;
+    typedef TyOLD< Num<7>> Types3;
     
     
     
@@ -125,7 +125,7 @@ namespace test {
           Prepend prep (22, 11,33,Num<5>());
           DUMPVAL (prep);
           
-          typedef Tuple<Types<> > NulT;     // plain-flat empty Tuple
+          typedef Tuple<TyOLD<> > NulT;     // plain-flat empty Tuple
           typedef Tuple<NullType> NulL;     // list-style empty Tuple
           
           NulT nulT;                        // and these, too, can be instantiated

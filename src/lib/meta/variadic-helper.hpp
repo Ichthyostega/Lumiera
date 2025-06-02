@@ -141,10 +141,10 @@ namespace meta {
 
   /** build an index number sequence from a type sequence */
   template<typename...TYPES>
-  struct BuildIdxIter<Types<TYPES...>>
+  struct BuildIdxIter<TyOLD<TYPES...>>
     {
       ///////////////////////TICKET #987 : since Types<T...> is not variadic, need to strip NullType here (instead of just using sizeof...(TYPES)
-      enum {SIZ = lib::meta::count<typename Types<TYPES...>::List>::value };
+      enum {SIZ = lib::meta::count<typename TyOLD<TYPES...>::List>::value };
       using Builder = BuildIndexSeq<SIZ>;
       
       using Ascending  = typename Builder::Ascending;

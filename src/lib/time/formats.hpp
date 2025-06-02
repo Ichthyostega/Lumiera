@@ -166,7 +166,7 @@ namespace time {
     
     /* == Descriptor to define Support for specific formats == */
     
-    using lib::meta::Types;
+    using lib::meta::TyOLD;
     using lib::meta::Node;
     using lib::meta::NullType;
     
@@ -238,7 +238,7 @@ namespace time {
       : Supported
       {
         SupportStandardTimecode()
-          : Supported(formats< Types<Hms,Smpte,Frames,Seconds> >())
+          : Supported(formats< TyOLD<Hms,Smpte,Frames,Seconds> >())
           { }
       };
     

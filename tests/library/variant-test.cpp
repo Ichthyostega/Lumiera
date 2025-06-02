@@ -31,7 +31,7 @@ namespace lib {
 namespace test{
   
   using ::Test;
-  using meta::Types;
+  using meta::TyOLD;
   using lib::time::Time;
   using lib::time::TimeVar;
   
@@ -43,7 +43,7 @@ namespace test{
   
   
   // Test fixture...
-  typedef Variant<Types<bool,int,string,Time>> TestVariant;
+  typedef Variant<TyOLD<bool,int,string,Time>> TestVariant;
   
   
   

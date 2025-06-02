@@ -99,7 +99,7 @@ namespace lib {
     
     using std::remove_reference;
     using meta::NullType;
-    using meta::Types;
+    using meta::TyOLD;
     using meta::Node;
     
     
@@ -159,8 +159,8 @@ namespace lib {
       };
     
     template<class...TYPES, template<class> class _P_>
-    struct FirstMatchingType<Types<TYPES...>, _P_>
-      : FirstMatchingType<typename Types<TYPES...>::List, _P_>
+    struct FirstMatchingType<TyOLD<TYPES...>, _P_>
+      : FirstMatchingType<typename TyOLD<TYPES...>::List, _P_>
       { };
     
     template<class T, class TYPES, template<class> class _P_>

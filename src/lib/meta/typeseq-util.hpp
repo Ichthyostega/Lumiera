@@ -111,14 +111,14 @@ namespace meta {
           , typename T20
           , typename IGN
           >
-  struct Prepend<T01, Types<     T02,T03,T04,T05
+  struct Prepend<T01, TyOLD<     T02,T03,T04,T05
                            , T06,T07,T08,T09,T10
                            , T11,T12,T13,T14,T15
                            , T16,T17,T18,T19,T20
                            , IGN
                            > >
   {
-    typedef Types< T01,T02,T03,T04,T05
+    typedef TyOLD< T01,T02,T03,T04,T05
                  , T06,T07,T08,T09,T10
                  , T11,T12,T13,T14,T15
                  , T16,T17,T18,T19,T20 > Seq;
@@ -133,12 +133,12 @@ namespace meta {
    * allowing to re-create a (flat) type sequence from a typelist.
    */
   template<class H, class T>
-  struct Types< Node<H,T> >
+  struct TyOLD< Node<H,T> >
     {
       typedef Node<H,T> List;
       
       typedef typename Prepend< H
-                              , typename Types<T>::Seq
+                              , typename TyOLD<T>::Seq
                               >::Seq  Seq;
     };
   
@@ -154,7 +154,7 @@ namespace meta {
   struct Prepend<T, TySeq<TYPES...>>
   {
     using Seq  = TySeq<T, TYPES...>;
-    using List = typename Types<T, TYPES...>::List;
+    using List = typename TyOLD<T, TYPES...>::List;
   };
   
   template<class H, class T>
@@ -186,15 +186,15 @@ namespace meta {
   struct StripNullType;
   
   template<typename T, typename...TYPES>
-  struct StripNullType<Types<T,TYPES...>>
+  struct StripNullType<TyOLD<T,TYPES...>>
     {
-      using TailSeq = typename StripNullType<Types<TYPES...>>::Seq;
+      using TailSeq = typename StripNullType<TyOLD<TYPES...>>::Seq;
       
       using Seq = typename Prepend<T, TailSeq>::Seq;
     };
   
   template<typename...TYPES>
-  struct StripNullType<Types<NullType, TYPES...>>
+  struct StripNullType<TyOLD<NullType, TYPES...>>
     {
       using Seq = TySeq<>;  // NOTE: this causes the result to be a TySeq
     };
@@ -274,22 +274,22 @@ namespace meta {
           , typename T19
           , typename T20
           >
-  struct Split<Types< T01,T02,T03,T04,T05
+  struct Split<TyOLD< T01,T02,T03,T04,T05
                     , T06,T07,T08,T09,T10
                     , T11,T12,T13,T14,T15
                     , T16,T17,T18,T19,T20
                     > >
   {
     typedef typename
-            Types< T01,T02,T03,T04,T05
+            TyOLD< T01,T02,T03,T04,T05
                  , T06,T07,T08,T09,T10
                  , T11,T12,T13,T14,T15
                  , T16,T17,T18,T19,T20
                  >::List                 List;
     
     typedef        T01                   Head;
-    typedef Types< T01                 > First;
-    typedef Types<     T02,T03,T04,T05
+    typedef TyOLD< T01                 > First;
+    typedef TyOLD<     T02,T03,T04,T05
                  , T06,T07,T08,T09,T10
                  , T11,T12,T13,T14,T15
                  , T16,T17,T18,T19,T20 > Tail;
@@ -299,9 +299,9 @@ namespace meta {
     typedef typename SplitLast<List>::List  PrefixList;
     typedef typename Tail::List             TailList;
     
-    typedef typename Types<PrefixList>::Seq Prefix;
+    typedef typename TyOLD<PrefixList>::Seq Prefix;
     typedef typename SplitLast<List>::Type  End;
-    typedef Types<End>                      Last;
+    typedef TyOLD<End>                      Last;
   };
   
   
@@ -334,9 +334,9 @@ namespace meta {
    * @see typelist-manip.hpp
    */
   template<typename...TYPES, size_t i>
-  struct Pick<Types<TYPES...>, i>
+  struct Pick<TyOLD<TYPES...>, i>
     {
-      using Type = typename lib::meta::Shifted<Types<TYPES...>, i>::Head;
+      using Type = typename lib::meta::Shifted<TyOLD<TYPES...>, i>::Head;
     };
   template<typename...TYPES, size_t i>
   struct Pick<TySeq<TYPES...>, i>

@@ -36,7 +36,7 @@ namespace steam {
   namespace mobject { class MObject; }
   
   
-  typedef lib::meta::Types < mobject::Placement<mobject::MObject>*
+  typedef lib::meta::TyOLD < mobject::Placement<mobject::MObject>*
                            , lib::P<asset::Asset>*
                            > ::List
                            WrapperTypes;
