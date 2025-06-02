@@ -13,7 +13,7 @@
 
 
 /** @file typelist-util.hpp
- ** Metaprogramming: simple helpers for working with lists-of-types. 
+ ** Metaprogramming: simple helpers for working with lists-of-types.
  ** This header provides some very basic "meta functions" for extracting
  ** pieces of information from a list-of-types. In Lumiera, we use template
  ** metaprogramming and especially such lists-of-types, whenever we build
@@ -22,7 +22,7 @@
  ** 
  ** The "meta functions" defined here are templates; to access the "result" of
  ** such a meta function, we instantiate the template and then access one of the
- ** embedded constant definitions (usually the enum constant named \c value)
+ ** embedded constant definitions (usually the compile-time constant named `value`)
  ** 
  ** @see generator.hpp
  ** @see TypelistUtil_test
@@ -39,6 +39,9 @@
 
 
 #include "lib/meta/typelist.hpp"
+#include "lib/meta/util.hpp"
+
+#include <algorithm>
 
 namespace lib {
 namespace meta {
@@ -46,20 +49,20 @@ namespace meta {
     
     /**
      * Metafunction counting the number of Types in the collection
-     * @return an embedded constant \c value holding the result
+     * @return an std::integral_constant type, which can be used
+     *         as constexpr value.
+     * @note typeseq-util.hpp defines a specialisation for type-seq
      */
-    template<class TYPES>
+    template<class... TYPES>
     struct count;
     template<>
     struct count<Nil>
-      {
-        enum{ value = 0 };
-      };
+      : SizConst<0>
+      { };
     template<class TY, class TYPES>
     struct count<Node<TY,TYPES>>
-      {
-        enum{ value = 1 + count<TYPES>::value };
-      };
+      : SizConst<1 + count<TYPES>()>
+      { };
     
     
     /**
@@ -69,16 +72,12 @@ namespace meta {
     struct maxSize;
     template<>
     struct maxSize<Nil>
-      {
-        static constexpr int value = 0;
-      };
+      : SizConst<0>
+      { };
     template<class TY, class TYPES>
     struct maxSize<Node<TY,TYPES>>
-      {
-        static constexpr size_t thisval = sizeof(TY);
-        static constexpr size_t nextval = maxSize<TYPES>::value;
-        static constexpr size_t value   = nextval > thisval?  nextval:thisval;
-      };
+      : SizConst<std::max (sizeof(TY), maxSize<TYPES>::value)>
+      { };
     
     
     /**
@@ -88,16 +87,12 @@ namespace meta {
     struct maxAlign;
     template<>
     struct maxAlign<Nil>
-      {
-        static constexpr int value = 0;
-      };
+      : SizConst<0>
+      { };
     template<class TY, class TYPES>
     struct maxAlign<Node<TY,TYPES>>
-      {
-        static constexpr size_t thisval = alignof(TY);
-        static constexpr size_t nextval = maxAlign<TYPES>::value;
-        static constexpr size_t value   = nextval > thisval?  nextval:thisval;
-      };
+      : SizConst<std::max (alignof(TY), maxAlign<TYPES>::value)>
+      { };
     
     
     /**
@@ -105,30 +100,20 @@ namespace meta {
      * in a given typelist. Only exact match is detected.
      */
     template<typename TY, typename TYPES>
-    struct IsInList
-      {
-        enum{ value = false };
-      };
+    struct isInList
+      : std::false_type
+      { };
     
     template<typename TY, typename TYPES>
-    struct IsInList<TY, Node<TY,TYPES>>
-      {
-        enum{ value = true };
-      };
+    struct isInList<TY, Node<TY,TYPES>>
+      : std::true_type
+      { };
     
     template<typename TY, typename XX, typename TYPES>
-    struct IsInList<TY, Node<XX,TYPES>>
-      {
-        enum{ value = IsInList<TY,TYPES>::value };
-      };
+    struct isInList<TY, Node<XX,TYPES>>
+      : std::bool_constant<isInList<TY,TYPES>::value>
+      { };
     
-    /** convenience shortcut: query function */
-    template<typename TY, typename TYPES>
-    constexpr bool
-    isInList()
-    {
-      return IsInList<TY,TYPES>::value;
-    }
     
     
     /**
@@ -146,7 +131,7 @@ namespace meta {
     template<typename TY, typename TYPES>
     struct ConstAll<Node<TY,TYPES>>
       {
-        using List = Node<const TY, typename ConstAll<TYPES>::List>;
+        using List = Node<std::add_const_t<TY>, typename ConstAll<TYPES>::List>;
       };
     
     

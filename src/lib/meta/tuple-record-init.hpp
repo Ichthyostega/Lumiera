@@ -193,7 +193,7 @@ namespace meta {
   struct ElementExtractor<lib::diff::Rec, std::tuple<TYPES...>>
     {
       template<size_t i>
-      using TargetType = typename Pick<TyOLD<TYPES...>, i>::Type;
+      using TargetType = typename Pick<TySeq<TYPES...>, i>::Type;
       
       
       template<size_t i>

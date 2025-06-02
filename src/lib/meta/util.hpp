@@ -52,6 +52,10 @@ namespace lib {
   
 namespace meta {
   
+  template<size_t siz>
+  using SizConst = std::integral_constant<size_t, siz>;
+  
+  
   /* === conditional definition selector === */
   
   template <bool B, class T = void>

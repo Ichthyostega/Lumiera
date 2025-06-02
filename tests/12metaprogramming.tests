@@ -335,19 +335,18 @@ return: 0
 END
 
 
-TEST "TypeList_test" TypeList_test <<END
-out: - 1 -- 2 -- 3 -- 5 -- 8 -- 13 -- The End -
-out: ..Size of = 1
+TEST "Loki Type-List" TypeList_test <<END
+out-lit: - 21 -- 13 -- 8 -- 5 -- 3 -- 2 -- 1 -- The End -
 return: 0
 END
 
 
-TEST "simple typelist utils" TypeListUtil_test <<END
+TEST "Simple Type-List utilities" TypeListUtil_test <<END
 return: 0
 END
 
 
-TEST "TypeListGenerator_test" TypeListGenerator_test <<END
+TEST "Type driven class generation" TypeListGenerator_test <<END
 out: ctor DoIt<Block<13> >
 out: ctor DoIt<Block< 8> >
 out: ctor DoIt<Block< 5> >
@@ -368,7 +367,7 @@ return: 0
 END
 
 
-TEST "typelist manipulation" TypeListManip_test <<END
+TEST "Typelist manipulation" TypeListManip_test <<END
 out-lit: List1	:-<1>-<2>-<3>-
 out-lit: List2	:-<5>-<6>-<7>-
 out-lit: Added2	:-<3>-<4>-<5>-

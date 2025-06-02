@@ -164231,6 +164231,185 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1748826894390" ID="ID_1736451439" MODIFIED="1748826903420" TEXT="Zonen f&#xfc;r Umstellung identifizieren">
 <icon BUILTIN="flag-yellow"/>
+<node COLOR="#435e98" CREATED="1748827924638" ID="ID_1710277250" MODIFIED="1748869708456" TEXT="Manipulations-Funktionen">
+<node CREATED="1748827943942" ID="ID_1841252518" MODIFIED="1748828044902" TEXT="Tuple-Builder, Split, Prepend und Pick unterst&#xfc;tzen bereits beide Varianten"/>
+<node CREATED="1748828081030" ID="ID_780708642" MODIFIED="1748828109653" TEXT="damit k&#xf6;nnen alle typeseq-util bereits f&#xfc;r beide Varianten verwendet werden">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1748828247849" ID="ID_476644412" MODIFIED="1748869713383" TEXT="Verbindung mit Typelisten">
+<node COLOR="#435e98" CREATED="1748828313009" ID="ID_1470463237" MODIFIED="1748869832016" TEXT="R&#xfc;ckweg Typelist &#x27f6; Typsequenz">
+<arrowlink DESTINATION="ID_281104576" ENDARROW="Default" ENDINCLINATION="589;-82;" ID="Arrow_ID_351374746" STARTARROW="None" STARTINCLINATION="458;41;"/>
+<node CREATED="1748828416378" ID="ID_1994646495" MODIFIED="1748869656471" TEXT="es gibt eine Spezialisierung von TyOLD">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      in typeseq-util (etwas versteckt zwischen den Spezialisierungen von Prepend, was wiederum Vorraussetzung ist, so einen R&#252;ckweg konstruieren zu k&#246;nnen)
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node COLOR="#338800" CREATED="1748828427985" ID="ID_819357004" MODIFIED="1748869657923" TEXT="auch eine f&#xfc;r TySeq hinzuf&#xfc;gen">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1748828579825" ID="ID_873142911" MODIFIED="1748869733060" TEXT="typelist-manip ist v&#xf6;llig eigenst&#xe4;ndig">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      d.h arbeitet ausschlie&#223;lich auf Typlisten und bezieht sich nirgends auf Typ-Sequenzen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1748828920169" ID="ID_511778446" MODIFIED="1748869770714" TEXT="generator.hpp arbeitet ebenfalls nur auf Typlisten">
+<arrowlink DESTINATION="ID_803058969" ENDARROW="Default" ENDINCLINATION="852;0;" ID="Arrow_ID_1971292758" STARTARROW="None" STARTINCLINATION="302;17;"/>
+<node CREATED="1748828953483" ID="ID_1328523415" MODIFIED="1748828958980" TEXT="das kommt mir nun zugute"/>
+<node CREATED="1748828933676" ID="ID_1716238563" MODIFIED="1748828952655" TEXT="man k&#xf6;nnte dann convenience-Front-End definieren"/>
+</node>
+<node CREATED="1748828754106" ID="ID_138237629" MODIFIED="1748869733060" TEXT="typelist-diagnostic ebenso">
+<node CREATED="1748828767089" ID="ID_1047311703" MODIFIED="1748828818895" TEXT="meta::is_Typelist ist geschickt definiert">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      es stellt n&#228;mllich nur auf einen nested&#160;&#160;X::List ab
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1748828781783" ID="ID_691444823" MODIFIED="1748828794388" TEXT="sollte also f&#xfc;r alle Varianten gleicherma&#xdf;en greifen"/>
+</node>
+</node>
+<node CREATED="1748829095135" ID="ID_1295682918" MODIFIED="1748829098145" TEXT="Funktionen">
+<node CREATED="1748829099022" ID="ID_766756688" MODIFIED="1748829101916" TEXT="Signatur-Utils">
+<node CREATED="1748829959670" ID="ID_1188075291" MODIFIED="1748829968228" TEXT="sind bereits mit beiden kompatibel"/>
+</node>
+<node CREATED="1748829102455" ID="ID_1254282139" MODIFIED="1748829106392" TEXT="Closure">
+<node CREATED="1748829838133" ID="ID_1933174501" MODIFIED="1748829845923" TEXT="hat nur wenige Verwendungen">
+<node CREATED="1748829860803" ID="ID_517247632" MODIFIED="1748829863739" TEXT="Commands"/>
+<node CREATED="1748829872320" ID="ID_568804131" MODIFIED="1748829875428" TEXT="Random-Draw"/>
+<node CREATED="1748829881837" ID="ID_1354679657" MODIFIED="1748829885400" TEXT="tuple-closure"/>
+<node CREATED="1748829890844" ID="ID_1803577911" MODIFIED="1748829894782" TEXT="view-spec-dsl"/>
+</node>
+<node CREATED="1748829733384" ID="ID_83679265" MODIFIED="1748829744922" TEXT="sollte sich bereits ohne weiteres schwenken lassen"/>
+<node CREATED="1748829745682" ID="ID_61352432" MODIFIED="1748829759664" TEXT="erzeugt nur Tuple, oder macht Split / Prepend"/>
+<node CREATED="1748829779637" ID="ID_1158113558" MODIFIED="1748829835939" TEXT="man k&#xf6;nnte dann im Nachgang die Apply-Definition eliminieren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...aber nur wenn's einfach geht; eigentlich ist das au&#223;erhalb vom Scope und k&#246;nnte auch sp&#228;ter mal gemacht werden (ist nur ein Implementierungsdetail), sofern die bestehende Impl mit den neuen Typlisten arbeitet
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1748829133428" ID="ID_266502224" MODIFIED="1748829134942" TEXT="Tuple">
+<node CREATED="1748829135672" ID="ID_1078202790" MODIFIED="1748829142923" TEXT="tuple-record-init">
+<node CREATED="1748869115796" ID="ID_508891239" MODIFIED="1748869125930" TEXT="sehr wichtig f&#xfc;r GenNode via UI-Bus"/>
+<node CREATED="1748869126637" ID="ID_1892597632" MODIFIED="1748869141216" TEXT="verwendet Type-Sequenze lediglich zum Re-binding eines Tuple-Typs"/>
+<node COLOR="#338800" CREATED="1748869141825" ID="ID_893825351" MODIFIED="1748869166877" TEXT="kann man einfach auf die neue Variante schwenken">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node CREATED="1748829164245" ID="ID_1618911636" MODIFIED="1748829167991" TEXT="variadic-helper">
+<node CREATED="1748830128123" ID="ID_450144323" MODIFIED="1748830132130" TEXT="(nur am Rande)"/>
+<node CREATED="1748830132883" ID="ID_1589913777" MODIFIED="1748830138854" TEXT="IndexIter unterst&#xfc;tzt beide"/>
+<node CREATED="1748830139501" ID="ID_622177889" MODIFIED="1748830160252" TEXT="ElmTypes ist nur f&#xfc;r neue (variadisch) definiert"/>
+</node>
+<node CREATED="1748829176262" ID="ID_1246318914" MODIFIED="1748829178958" TEXT="Variant"/>
+<node CREATED="1748829201135" ID="ID_1330371655" MODIFIED="1748829203111" TEXT="Visitor"/>
+<node CREATED="1748829220424" ID="ID_795696886" MODIFIED="1748829224836" TEXT="Session-Command">
+<node CREATED="1748829229664" ID="ID_214343950" MODIFIED="1748829240967" TEXT="AcceptArg und AcceptBind umstellen"/>
+<node CREATED="1748829241698" ID="ID_1502522588" MODIFIED="1748829249189" TEXT="dann sollte big-Bang m&#xf6;glich sein"/>
+</node>
+<node CREATED="1748829278917" ID="ID_250508253" MODIFIED="1748829282736" TEXT="Session &amp; Builder">
+<node CREATED="1748829283559" ID="ID_373354659" MODIFIED="1748829291711" TEXT="h&#xe4;ngt vermutlich an Variant bzw. Visitor"/>
+</node>
+<node CREATED="1748829316732" ID="ID_733906672" MODIFIED="1748829324434" TEXT="Timecode-formate"/>
+<node CREATED="1748829331775" ID="ID_1553022384" MODIFIED="1748829333067" TEXT="Tests">
+<node CREATED="1748829335663" ID="ID_953757498" MODIFIED="1748829343651" TEXT="jeweils bei Bezug mit umstellen"/>
+<node CREATED="1748829344620" ID="ID_1034418764" MODIFIED="1748883769361" TEXT="im Einzelnen">
+<icon BUILTIN="list"/>
+<node CREATED="1748829369449" MODIFIED="1748829369449" TEXT="FormatSupport_test"/>
+<node CREATED="1748829384655" MODIFIED="1748829384655" TEXT="TimeControl_test"/>
+<node CREATED="1748829402514" MODIFIED="1748829402514" TEXT="VisitingTool_test"/>
+<node CREATED="1748829412897" MODIFIED="1748829412897" TEXT="CommandCloneBuilder_test"/>
+<node CREATED="1748829420654" MODIFIED="1748829420654" TEXT="CommandEquality_test"/>
+<node CREATED="1748829427640" MODIFIED="1748829427640" TEXT="CommandMutation_test"/>
+<node CREATED="1748829435006" MODIFIED="1748829435006" TEXT="CommandRegistry_test"/>
+<node CREATED="1748829442778" MODIFIED="1748829442778" TEXT="HandlingPatternBasics_test"/>
+<node CREATED="1748829453011" MODIFIED="1748829453011" TEXT="BuilderTool_test"/>
+<node CREATED="1748829468217" MODIFIED="1748829468217" TEXT="SessionServiceAccess_test"/>
+<node CREATED="1748829480048" MODIFIED="1748829480048" TEXT="FunctionClosure_test"/>
+<node CREATED="1748829502213" MODIFIED="1748829502213" TEXT="FunctionComposition_test"/>
+<node CREATED="1748829512571" MODIFIED="1748829512571" TEXT="GeneratorCombinations_test"/>
+<node COLOR="#435e98" CREATED="1748829523737" ID="ID_803058969" MODIFIED="1748883754992" TEXT="TypeListGenerator_test">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_803058969" ENDARROW="Default" ENDINCLINATION="852;0;" ID="Arrow_ID_1971292758" SOURCE="ID_511778446" STARTARROW="None" STARTINCLINATION="302;17;"/>
+</node>
+<node CREATED="1748829534601" MODIFIED="1748829534601" TEXT="MetaUtils_test"/>
+<node CREATED="1748829542074" MODIFIED="1748829542074" TEXT="TupleHelper_test"/>
+<node CREATED="1748829551216" MODIFIED="1748829551216" TEXT="TupleRecordInit_test"/>
+<node CREATED="1748829559066" MODIFIED="1748829559066" TEXT="TypeListManip_test"/>
+<node CREATED="1748829567920" MODIFIED="1748829567920" TEXT="TypeList_test"/>
+<node COLOR="#435e98" CREATED="1748829576396" ID="ID_281104576" MODIFIED="1748883754992" TEXT="TypeListUtil_test">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_281104576" ENDARROW="Default" ENDINCLINATION="589;-82;" ID="Arrow_ID_351374746" SOURCE="ID_1470463237" STARTARROW="None" STARTINCLINATION="458;41;"/>
+</node>
+<node CREATED="1748829585985" MODIFIED="1748829585985" TEXT="TypeSeqManipl_test"/>
+<node CREATED="1748829607017" MODIFIED="1748829607017" TEXT="Variant_test"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1748871733811" ID="ID_1327114043" MODIFIED="1748871745451" TEXT="schrittweise umarbeiten...">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1748871746934" ID="ID_1013283697" MODIFIED="1748883821476" TEXT="mit einfachen Typ-Listen anfangen">
+<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1748871760093" ID="ID_234969081" MODIFIED="1748883829134" TEXT="alle Konvertierungspfade aufgedoppelt">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1748871777734" ID="ID_543292197" MODIFIED="1748883832925" TEXT="die zugeh&#xf6;rigen Tests auf die neuen Typ-Sequenzen umstellen">
+<icon BUILTIN="pencil"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1748871811471" ID="ID_1037157310" MODIFIED="1748883848889" TEXT="bei der Gelegenheit auch modernisieren">
+<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1748871820220" ID="ID_446849123" MODIFIED="1748883860119" TEXT="typedefs durch using ersetzen">
+<icon BUILTIN="pencil"/>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1748871829578" ID="ID_308061484" MODIFIED="1748883860119" TEXT="Meta-Wertfunktionen in constexpr &#xfc;berf&#xfc;hren">
+<icon BUILTIN="pencil"/>
+</node>
+<node CREATED="1748871856256" ID="ID_304666403" MODIFIED="1748871864810" TEXT="Tests vervollst&#xe4;ndigen"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1748873216115" ID="ID_1189899594" MODIFIED="1748879258348" TEXT="Big anti-Bang: NullType &#x27fc; Nil">
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1748873298068" ID="ID_132055056" MODIFIED="1748873322310" TEXT="182 usages...">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1748873306616" ID="ID_906235553" MODIFIED="1748873326356" TEXT="jede Menge Code-Formatierung kaputt">
+<font NAME="SansSerif" SIZE="7"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1748873250610" ID="ID_7395466" MODIFIED="1748873280467" TEXT="Big-Bang: TySeq &#x27fc; Types">
+<icon BUILTIN="hourglass"/>
 </node>
 </node>
 </node>

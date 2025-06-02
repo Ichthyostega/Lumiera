@@ -27,13 +27,13 @@ namespace test {
   
   
   
-  typedef TyOLD< int
-               , uint
-               , int64_t
-               , uint64_t
-               >::List     TheList;
+  using TheList = TySeq< int
+                       , uint
+                       , int64_t
+                       , uint64_t
+                       >::List;
   
-  typedef TyOLD<  >::List  EmptyList;
+  using EmptyList = TySeq<  >::List;
   
   
   
@@ -50,23 +50,25 @@ namespace test {
   class TypeListUtil_test : public Test
     {
       void
-      run (Arg) 
+      run (Arg)
         {
-          CHECK (4 == count<TheList>::value);
-          CHECK (0 == count<EmptyList>::value);
+          CHECK (4 == count<TheList>()  );
+          CHECK (0 == count<EmptyList>());
           
-          CHECK (sizeof(int64_t) == maxSize<TheList>::value);
-          CHECK (0               == maxSize<EmptyList>::value);
+          CHECK (sizeof(int64_t)  == maxSize<TheList>()   );
+          CHECK (0                == maxSize<EmptyList>() );
+          CHECK (alignof(int64_t) == maxAlign<TheList>()  );
+          CHECK (0                == maxAlign<EmptyList>());
           
-          CHECK ( bool(IsInList<int     , TheList>::value));
-          CHECK ( bool(IsInList<uint    , TheList>::value));
-          CHECK ( bool(IsInList<int64_t , TheList>::value));
-          CHECK ( bool(IsInList<uint64_t, TheList>::value));
+          CHECK ( bool(isInList<int     , TheList>()));
+          CHECK ( bool(isInList<uint    , TheList>()));
+          CHECK ( bool(isInList<int64_t , TheList>()));
+          CHECK ( bool(isInList<uint64_t, TheList>()));
           
-          CHECK (!bool(IsInList<double  , TheList>::value));
-          CHECK (!bool(IsInList<int     , EmptyList>::value));
-          CHECK (!bool(IsInList<int     , int>::value));         // Note: not-a-typelist yields false too
-        } 
+          CHECK (!bool(isInList<double  , TheList>()));
+          CHECK (!bool(isInList<int     , EmptyList>()));
+          CHECK (!bool(isInList<int     , int>()));         // Note: not-a-typelist yields false too
+        }
     };
   
   

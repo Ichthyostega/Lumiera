@@ -79,6 +79,23 @@ namespace meta {
       return 1 + indexOfType<X,TYPES...>();
   }
   
+  /** series of definitions to level across variadics,
+   *  type-sequences and type-lists
+   * @see typelist-util.hpp
+   */
+  template<class... TYPES>
+  struct count
+    : SizConst<sizeof...(TYPES)>
+  { };
+  template<class... TYPES>
+  struct count<TySeq<TYPES...>>
+    : SizConst<sizeof...(TYPES)>
+  { };
+  template<class... TYPES>
+  struct count<TyOLD<TYPES...>>
+    : SizConst<sizeof...(TYPES)>
+  { };
+  
   
   /**
    * Helper: prepend a type to an existing type sequence,
@@ -128,6 +145,7 @@ namespace meta {
   
   
   
+   //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #987 temporary WORKAROUND -- to be obsoleted
   /**
    * Additional specialisation of the basic type sequence type,
    * allowing to re-create a (flat) type sequence from a typelist.
@@ -157,6 +175,12 @@ namespace meta {
     using List = typename TyOLD<T, TYPES...>::List;
   };
   
+  
+  
+  /**
+   * Additional specialisation of the basic type sequence type,
+   * allowing to re-create a (flat) type sequence from a typelist.
+   */
   template<class H, class T>
   struct TySeq< Node<H,T> >
     {
@@ -171,9 +195,9 @@ namespace meta {
       using List = Nil;
       using Seq  = TySeq<>;
     };
+  
+  
    //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #987 temporary WORKAROUND -- to be obsoleted
-  
-  
   /**
    * temporary workaround: strip trailing Nil entries from a
    * type sequence, to make it compatible with new-style variadic

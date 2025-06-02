@@ -21,8 +21,8 @@
 
 #include <iostream>
 
-using std::string;
 using std::cout;
+using std::endl;
 
 
 namespace lib  {
@@ -34,19 +34,21 @@ namespace test {
         { 
           Block() { cout << "- "<<I<<" -"; }  
         };
-      struct Zero 
+      struct Ending
         { 
-          Zero()  { cout << "- The End -"; }
+          Ending(){ cout << "- The End -" <<endl; }
         };
       
       
-      typedef TyOLD< Block<1>
-                   , Block<2>
-                   , Block<3>
-                   , Block<5>
-                   , Block<8>
-                   , Block<13>
-                   >::List     TheList;
+      using SequenceOfTypes = TySeq< Block<21>
+                                   , Block<13>
+                                   , Block<8>
+                                   , Block<5>
+                                   , Block<3>
+                                   , Block<2>
+                                   , Block<1>
+                                   >;
+      using ListOfTypes = typename SequenceOfTypes::List;
       
       
       template<class X, class P>
@@ -60,7 +62,8 @@ namespace test {
       { }
       ;
       
-      typedef Chain<TheList,Zero> AssembledClass;
+      using AssembledClass = Chain<ListOfTypes, Ending>;
+      
       
       /*********************************************************************//**
        * @test try out Loki-style typelist metaprogramming.
@@ -73,10 +76,9 @@ namespace test {
           void
           run (Arg) 
             {
-              AssembledClass wow_me_haz_numbers;
+              AssembledClass me_haz_numbers;
               
-              cout << "\n..Size of = " 
-                   << sizeof(wow_me_haz_numbers) <<"\n";
+              CHECK (1 == sizeof(me_haz_numbers));
             } 
         };
       

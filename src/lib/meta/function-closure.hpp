@@ -496,7 +496,7 @@ namespace func{
       
       using BoundFunc = function<Ret()>;
       
-      enum { ARG_CNT = count<typename Args::List>::value };
+      enum { ARG_CNT = count<typename Args::List>() };
       
       
       /** storing a ref to the parameter tuple */
@@ -577,8 +577,8 @@ namespace func{
       using ValList  = typename VAL::List;
       using ValTypes = typename TyOLD<ValList>::Seq;
       
-      enum { ARG_CNT = count<ArgsList>::value
-           , VAL_CNT = count<ValList> ::value
+      enum { ARG_CNT = count<ArgsList>()
+           , VAL_CNT = count<ValList>()
            , ROFFSET = (VAL_CNT < ARG_CNT)? ARG_CNT-VAL_CNT : 0
            };
       
@@ -681,7 +681,7 @@ namespace func{
       using ArgsList = typename     Args::List;
       using ValList  = typename TyOLD<X>::List;
       
-      enum { ARG_CNT = count<ArgsList>::value };
+      enum { ARG_CNT = count<ArgsList>() };
 
       using RemainingFront     = typename Splice<ArgsList, ValList, pos>::Front;
       using RemainingBack      = typename Splice<ArgsList, ValList, pos>::Back;
@@ -910,7 +910,7 @@ namespace func{
   typename _PapE<SIG>::FunType::Functor
   bindLast (SIG& f, TERM&& arg)
   {
-    enum { LAST_POS = -1 + count<typename _Fun<SIG>::Args::List>::value };
+    enum { LAST_POS = -1 + count<typename _Fun<SIG>::Args>() };
     return BindToArgument<SIG,TERM,LAST_POS>::reduced (f, std::forward<TERM> (arg));
   }
   

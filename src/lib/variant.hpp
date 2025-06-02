@@ -216,8 +216,8 @@ namespace lib {
     {
       
     public:
-      enum { SIZ   = meta::maxSize<typename TYPES::List>::value
-           , ALIGN = meta::maxAlign<typename TYPES::List>::value
+      enum { SIZ   = meta::maxSize<typename TYPES::List>()
+           , ALIGN = meta::maxAlign<typename TYPES::List>()
            };
       
       template<typename RET>

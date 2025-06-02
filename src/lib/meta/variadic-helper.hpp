@@ -306,11 +306,11 @@ namespace meta {
                     return size_t(std::tuple_size<TTX>::value);
                   else
                   if constexpr (lib::meta::is_Typelist<TTX>::value)
-                    return lib::meta::count<typename TTX::List>::value;
+                    return lib::meta::count<typename TTX::List>();
                   else
                     { // Fallback: rebind template arguments into a type sequence
                       using Seq = typename RebindVariadic<TySeq, TTX>::Type;
-                      return size_t(count<typename Seq::List>::value);
+                      return size_t(count<Seq>());
                     }
                };
     
