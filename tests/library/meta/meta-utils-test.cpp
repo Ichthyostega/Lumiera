@@ -186,7 +186,7 @@ namespace test {
           CHECK ((not is_Structured<int const &&         >()));
           CHECK ((not is_Structured<double               >()));
           CHECK ((not is_Structured<string               >()));
-          CHECK ((not is_Structured<Node<short,NullType> >()));
+          CHECK ((not is_Structured<Node<short,Nil>      >()));
           
           // the following indeed support C++ tuple protocol
           CHECK ((    is_Structured<tuple<int>           >()));

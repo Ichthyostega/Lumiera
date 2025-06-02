@@ -98,9 +98,9 @@ namespace lib {
   namespace variant { // implementation metaprogramming helpers
     
     using std::remove_reference;
-    using meta::NullType;
     using meta::TyOLD;
     using meta::Node;
+    using meta::Nil;
     
     
     template<typename X, typename TYPES>
@@ -137,7 +137,7 @@ namespace lib {
       { };
     
     template<typename X>
-    struct CanBuildFrom<X, NullType>
+    struct CanBuildFrom<X, Nil>
       : std::false_type
       { };
     

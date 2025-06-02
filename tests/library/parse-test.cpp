@@ -727,13 +727,13 @@ namespace test {
           auto quoted = accept_repeated(accept(nonQuot).alt(escape));
           auto quote = accept_bracket("\"\"", quoted);
           
-          auto paren = expectResult<NullType>();
+          auto paren = expectResult<Nil>();
           auto nonParen = accept(R"_([^\\\(\)"]+)_");
           auto parenCont = accept_repeated(accept(nonParen)
                                              .alt(escape)
                                              .alt(quote)
                                              .alt(paren));
-               paren = accept_bracket("()", parenCont).bind([](auto){ return NullType{}; });
+               paren = accept_bracket("()", parenCont).bind([](auto){ return Nil{}; });
           
           auto spec = accept_repeated(accept(content)
                                         .alt(escape)

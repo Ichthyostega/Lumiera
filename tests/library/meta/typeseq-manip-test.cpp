@@ -96,15 +96,15 @@ namespace test {
       void
       check_buildSeq ()
         {
-          typedef Append<Types1::List, Types2::List>::List LL;
+          using LL = Append<Types1::List, Types2::List>::List;
           DISPLAY (LL);
           
-          typedef TyOLD<LL>::Seq Seq;
-          typedef Seq::List SeqList;
+          using Seq     = TyOLD<LL>::Seq;
+          using SeqList = Seq::List;
           DISPLAY (Seq);
           DISPLAY (SeqList);
           
-          typedef TyOLD<NodeNull>::Seq NulS;
+          using NulS = TyOLD<NilNode>::Seq;
           DISPLAY (NulS);
         }
       
@@ -112,16 +112,16 @@ namespace test {
       void
       check_prepend ()
         {
-          typedef Prepend<Num<5>, Types1> Prepend1;
+          using Prepend1 = Prepend<Num<5>, Types1 >;
           DISPLAY(Prepend1);
           
-          typedef Prepend<NullType, Types1> Prepend2;
+          using Prepend2 = Prepend<Nil,    Types1 >;
           DISPLAY(Prepend2);
           
-          typedef Prepend<Num<5>,  TyOLD<> > Prepend3;
+          using Prepend3 = Prepend<Num<5>, TyOLD<>>;
           DISPLAY(Prepend3);
           
-          typedef Prepend<NullType,  TyOLD<> > Prepend4;
+          using Prepend4 = Prepend<Nil,    TyOLD<>>;
           DISPLAY(Prepend4);
         }
       
@@ -129,44 +129,44 @@ namespace test {
       void
       check_shift ()
         {
-          typedef Append<Types2::List, Types1::List>::List LL;
-          typedef TyOLD<LL>::Seq Seq;
+          using LL  = Append<Types2::List, Types1::List>::List;
+          using Seq = TyOLD<LL>::Seq;
           
-          typedef Shifted<Seq,0>::Type Seq_0;  DISPLAY (Seq_0);
-          typedef Shifted<Seq,1>::Type Seq_1;  DISPLAY (Seq_1);
-          typedef Shifted<Seq,2>::Type Seq_2;  DISPLAY (Seq_2);
-          typedef Shifted<Seq,3>::Type Seq_3;  DISPLAY (Seq_3);
-          typedef Shifted<Seq,4>::Type Seq_4;  DISPLAY (Seq_4);
-          typedef Shifted<Seq,5>::Type Seq_5;  DISPLAY (Seq_5);
-          typedef Shifted<Seq,6>::Type Seq_6;  DISPLAY (Seq_6);
+          using  Seq_0 =       Shifted<Seq,0>::Type;   DISPLAY (Seq_0);
+          using  Seq_1 =       Shifted<Seq,1>::Type;   DISPLAY (Seq_1);
+          using  Seq_2 =       Shifted<Seq,2>::Type;   DISPLAY (Seq_2);
+          using  Seq_3 =       Shifted<Seq,3>::Type;   DISPLAY (Seq_3);
+          using  Seq_4 =       Shifted<Seq,4>::Type;   DISPLAY (Seq_4);
+          using  Seq_5 =       Shifted<Seq,5>::Type;   DISPLAY (Seq_5);
+          using  Seq_6 =       Shifted<Seq,6>::Type;   DISPLAY (Seq_6);
           
-          typedef TyOLD<Shifted<Seq,0>::Head> Head_0; DISPLAY (Head_0);
-          typedef TyOLD<Shifted<Seq,1>::Head> Head_1; DISPLAY (Head_1);
-          typedef TyOLD<Shifted<Seq,2>::Head> Head_2; DISPLAY (Head_2);
-          typedef TyOLD<Shifted<Seq,3>::Head> Head_3; DISPLAY (Head_3);
-          typedef TyOLD<Shifted<Seq,4>::Head> Head_4; DISPLAY (Head_4);
-          typedef TyOLD<Shifted<Seq,5>::Head> Head_5; DISPLAY (Head_5);
-          typedef TyOLD<Shifted<Seq,6>::Head> Head_6; DISPLAY (Head_6);
+          using Head_0 = TyOLD<Shifted<Seq,0>::Head>;  DISPLAY (Head_0);
+          using Head_1 = TyOLD<Shifted<Seq,1>::Head>;  DISPLAY (Head_1);
+          using Head_2 = TyOLD<Shifted<Seq,2>::Head>;  DISPLAY (Head_2);
+          using Head_3 = TyOLD<Shifted<Seq,3>::Head>;  DISPLAY (Head_3);
+          using Head_4 = TyOLD<Shifted<Seq,4>::Head>;  DISPLAY (Head_4);
+          using Head_5 = TyOLD<Shifted<Seq,5>::Head>;  DISPLAY (Head_5);
+          using Head_6 = TyOLD<Shifted<Seq,6>::Head>;  DISPLAY (Head_6);
         }
       
       
       void
       check_split ()
         {
-          typedef Append<Types1::List, Types2::List>::List LL;
-          typedef TyOLD<LL>::Seq Seq;
+          using LL  = Append<Types1::List, Types2::List>::List;
+          using Seq = TyOLD<LL>::Seq;
           DISPLAY (Seq);
           
-          typedef Split<Seq>::List   List;     DISPLAY(List); 
-          typedef Split<Seq>::First  First;    DISPLAY(First); 
-          typedef Split<Seq>::Tail   Tail;     DISPLAY(Tail);
-          typedef Split<Seq>::Prefix Prefix;   DISPLAY(Prefix);
-          typedef Split<Seq>::Last   Last;     DISPLAY(Last);
+          using List   = Split<Seq>::List;      DISPLAY(List); 
+          using First  = Split<Seq>::First;     DISPLAY(First); 
+          using Tail   = Split<Seq>::Tail;      DISPLAY(Tail);
+          using Prefix = Split<Seq>::Prefix;    DISPLAY(Prefix);
+          using Last   = Split<Seq>::Last;      DISPLAY(Last);
           
-          typedef Split<Seq>::Head   Head;
-          typedef Split<Seq>::End    End;
+          using Head   = Split<Seq>::Head;
+          using End    = Split<Seq>::End;    
           
-          typedef TyOLD<Head,End>  HeadEnd;    DISPLAY(HeadEnd);
+          using HeadEnd = TyOLD<Head,End>;      DISPLAY(HeadEnd);
         }
       
       

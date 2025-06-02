@@ -51,7 +51,7 @@ namespace meta {
     template<class TYPES>
     struct count;
     template<>
-    struct count<NullType>
+    struct count<Nil>
       {
         enum{ value = 0 };
       };
@@ -68,7 +68,7 @@ namespace meta {
     template<class TYPES>
     struct maxSize;
     template<>
-    struct maxSize<NullType>
+    struct maxSize<Nil>
       {
         static constexpr int value = 0;
       };
@@ -87,7 +87,7 @@ namespace meta {
     template<class TYPES>
     struct maxAlign;
     template<>
-    struct maxAlign<NullType>
+    struct maxAlign<Nil>
       {
         static constexpr int value = 0;
       };
@@ -138,15 +138,15 @@ namespace meta {
     struct ConstAll;
     
     template<>
-    struct ConstAll<NullType>
+    struct ConstAll<Nil>
       {
-        typedef NullType List;
+        using List = Nil;
       };
     
     template<typename TY, typename TYPES>
     struct ConstAll<Node<TY,TYPES>>
       {
-        typedef Node<const TY, typename ConstAll<TYPES>::List> List;
+        using List = Node<const TY, typename ConstAll<TYPES>::List>;
       };
     
     

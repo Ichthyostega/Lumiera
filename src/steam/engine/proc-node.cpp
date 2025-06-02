@@ -65,11 +65,11 @@ namespace engine {
     
     /* ===== Parse nested spec ===== */
     
+    using lib::meta::Nil;
     using util::parse::accept;
     using util::parse::accept_bracket;
     using util::parse::accept_repeated;
     using util::parse::expectResult;
-    using lib::meta::NullType;
     using std::regex_match;
     using std::regex;
     
@@ -91,13 +91,13 @@ namespace engine {
       regex CLOSING{esc+CLO};
       regex NON_PAREN{R"_([^\\)_"+esc+OPE+esc+CLO+"]+"};
       
-      static auto paren = expectResult<NullType>();
+      static auto paren = expectResult<Nil>();
       auto parenContent = accept_repeated(accept(NON_PAREN)
                                             .alt(ESCAPE)
                                             .alt(quote)
                                             .alt(paren));
       
-      paren = accept_bracket(OPENING,CLOSING, parenContent).bind([](auto){ return NullType{}; });
+      paren = accept_bracket(OPENING,CLOSING, parenContent).bind([](auto){ return Nil{}; });
       return paren;
     }
     
@@ -403,7 +403,7 @@ namespace engine {
   
   namespace {// create a »backdoor access« into actual weaving-pattern instances
     
-    using _DummyProc = void(&)(NullType*);
+    using _DummyProc = void(&)(Nil*);
     using _DummyProto = FeedPrototype<_DummyProc>;
     using _DummyMediaWeaving = MediaWeavingPattern<_DummyProto>;
     using _RecastMediaWeaving = _TurnoutDiagnostic<_DummyMediaWeaving>;

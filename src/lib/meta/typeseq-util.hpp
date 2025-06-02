@@ -166,16 +166,16 @@ namespace meta {
                                    >::Seq;
     };
   template<>
-  struct TySeq<NullType>
+  struct TySeq<Nil>
     {
-      using List = NullType;
+      using List = Nil;
       using Seq  = TySeq<>;
     };
    //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #987 temporary WORKAROUND -- to be obsoleted
   
   
   /**
-   * temporary workaround: strip trailing NullType entries from a
+   * temporary workaround: strip trailing Nil entries from a
    * type sequence, to make it compatible with new-style variadic
    * template definitions.
    * @note the result type is a TySec, to keep it apart from our
@@ -183,24 +183,24 @@ namespace meta {
    * @deprecated necessary for the transition to variadic sequences      ////////////////////////////////////TICKET #987 : make lib::meta::Types<TYPES...> variadic
    */
   template<typename SEQ>
-  struct StripNullType;
+  struct StripNil;
   
   template<typename T, typename...TYPES>
-  struct StripNullType<TyOLD<T,TYPES...>>
+  struct StripNil<TyOLD<T,TYPES...>>
     {
-      using TailSeq = typename StripNullType<TyOLD<TYPES...>>::Seq;
+      using TailSeq = typename StripNil<TyOLD<TYPES...>>::Seq;
       
       using Seq = typename Prepend<T, TailSeq>::Seq;
     };
   
   template<typename...TYPES>
-  struct StripNullType<TyOLD<NullType, TYPES...>>
+  struct StripNil<TyOLD<Nil, TYPES...>>
     {
       using Seq = TySeq<>;  // NOTE: this causes the result to be a TySeq
     };
                           ///////////////////////////////////////////////////////////////////////////////////TICKET #987 : the following specialisation is a catch-all and becomes obsolete
   template<typename...TYPES>
-  struct StripNullType<TySeq<TYPES...>>
+  struct StripNil<TySeq<TYPES...>>
     {
       using Seq = TySeq<TYPES...>;
     };
@@ -237,20 +237,20 @@ namespace meta {
   template<>
   struct Split<TySeq<>>
   {
-    using List = NullType;
+    using List  = Nil;
     
-    using Head  = NullType;
+    using Head  = Nil;
     using First = TySeq<>;
     using Tail  = TySeq<>;
     
     // for finding the end we need the help of typelist-util.hpp
     
-    using PrefixList = NullType;
-    using TailList   = NullType;
+    using PrefixList = Nil;
+    using TailList   = Nil;
     
     using Prefix     = TySeq<>;
     using Last       = TySeq<>;
-    using End        = NullType;
+    using End        = Nil;
   };
                           ///////////////////////////////////////////////////////////////////////////////////TICKET #987 : the following specialisation will be obsoleted by the removal of old-style type-sequences
   template< typename T01
@@ -309,7 +309,7 @@ namespace meta {
   
   /**
    * Helper: generate a type sequence left shifted
-   * by i steps, filling in NullType at the end
+   * by i steps, filling in Nil at the end
    */
   template<class TYPES, uint i=1>
   class Shifted
@@ -326,6 +326,7 @@ namespace meta {
       typedef TYPES                      Type;
       typedef typename Split<Type>::Head Head;
     };
+                          ///////////////////////////////////////////////////////////////////////////////////TICKET #987 : reimplement for variadic type-sequences
   
   
   

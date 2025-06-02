@@ -66,18 +66,18 @@ namespace meta{
     template
       < class TYPES                  // List of Types 
       , template<class> class _X_   //  your-template-goes-here
-      , class BASE = NullType      //   Base class at end of chain
+      , class BASE = Nil           //   Base class at end of chain
       >
     class InstantiateForEach;
     
     
     template<template<class> class _X_, class BASE>
-    class InstantiateForEach<NullType, _X_, BASE>
+    class InstantiateForEach<Nil, _X_, BASE>
       : public BASE
       { 
       public:
-        typedef BASE     Unit;
-        typedef NullType Next;
+        using Unit = BASE;
+        using Next = Nil;
       };
     
       
@@ -91,8 +91,8 @@ namespace meta{
         public InstantiateForEach<TYPES, _X_, BASE>
       { 
       public:
-        typedef _X_<TY> Unit;
-        typedef InstantiateForEach<TYPES,_X_> Next;
+        using Unit = _X_<TY>;
+        using Next = InstantiateForEach<TYPES,_X_>;
       };
     
     
@@ -115,18 +115,18 @@ namespace meta{
     template
       < class TYPES                      // List of Types 
       , template<class,class> class _X_ //  your-template-goes-here
-      , class BASE = NullType          //   Base class at end of chain
+      , class BASE = Nil          //   Base class at end of chain
       >
     class InstantiateChained;
     
     
     template<template<class,class> class _X_, class BASE>
-    class InstantiateChained<NullType, _X_, BASE>
+    class InstantiateChained<Nil, _X_, BASE>
       : public BASE
       { 
       public:
-        typedef BASE     Unit;
-        typedef NullType Next;
+        using Unit = BASE;
+        using Next = Nil;
       };
     
       
@@ -141,8 +141,8 @@ namespace meta{
                   >
       { 
       public:
-        typedef InstantiateChained<TYPES,_X_,BASE> Next;
-        typedef _X_<TY,Next> Unit;
+        using Next = InstantiateChained<TYPES,_X_,BASE>;
+        using Unit = _X_<TY,Next>;
       };
     
     
@@ -159,7 +159,7 @@ namespace meta{
     template
       < class TYPES                           // List of Types
       , template<class,class,uint> class _X_ //  your-template-goes-here
-      , class BASE = NullType               //   Base class at end of chain
+      , class BASE = Nil                    //   Base class at end of chain
       , uint i = 0                         //    incremented on each instantiation
       >
     class InstantiateWithIndex;
@@ -169,12 +169,12 @@ namespace meta{
             , class BASE
             , uint i
             >
-    class InstantiateWithIndex<NullType, _X_, BASE, i>
+    class InstantiateWithIndex<Nil, _X_, BASE, i>
       : public BASE
       { 
       public:
-        typedef BASE     Unit;
-        typedef NullType Next;
+        using Unit = BASE;
+        using Next = Nil;
         enum{ COUNT = i };
       };
     
@@ -192,8 +192,8 @@ namespace meta{
                   >
       { 
       public:
-        typedef InstantiateWithIndex<TYPES,_X_,BASE,i+1> Next;
-        typedef _X_<TY,Next,i> Unit;
+        using Next = InstantiateWithIndex<TYPES,_X_,BASE,i+1>;
+        using Unit = _X_<TY,Next,i>;
         enum{ COUNT = Next::COUNT };
       };
     

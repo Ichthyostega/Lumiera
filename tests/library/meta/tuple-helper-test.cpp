@@ -125,8 +125,8 @@ namespace test {
           Prepend prep (22, 11,33,Num<5>());
           DUMPVAL (prep);
           
-          typedef Tuple<TyOLD<> > NulT;     // plain-flat empty Tuple
-          typedef Tuple<NullType> NulL;     // list-style empty Tuple
+          using NulT = Tuple<TyOLD<> >;     // plain-flat empty Tuple
+          using NulL = Tuple<Nil>;          // list-style empty Tuple
           
           NulT nulT;                        // and these, too, can be instantiated
           NulL nulL;
@@ -139,7 +139,7 @@ namespace test {
           CHECK (is_Tuple<T_L1>());
           CHECK (is_Tuple<Prepend>());
           CHECK (is_Tuple<NulT>());
-          CHECK (!is_Tuple<Seq1>());
+          CHECK (not is_Tuple<Seq1>());
           
           cout << tup1 <<endl               // these automatically use our generic string conversion
                << prep <<endl

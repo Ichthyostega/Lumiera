@@ -80,8 +80,8 @@ namespace meta {
   
   
   /** helper for generating test lists */      
-  template<class X> struct CountDown         { typedef NullType List; };
-  template<>        struct CountDown<Num<0>> { typedef Node<Num<0>, NullType> List; };
+  template<class X> struct CountDown         { typedef Nil List; };
+  template<>        struct CountDown<Num<0>> { typedef Node<Num<0>, Nil> List; };
   template<int I>   struct CountDown<Num<I>> { typedef Node<Num<I>, typename CountDown<Num<I-1>>::List> List; };
   
   
@@ -101,7 +101,7 @@ namespace meta {
       /** debugging template, 
        *  printing the "number" used for instantiation on ctor call
        */
-      template<class T=NullType, class BASE=NullP>
+      template<class T=Nil, class BASE=NullP>
       struct Printer
         : BASE
         {
@@ -109,7 +109,7 @@ namespace meta {
         };
       
       template<class BASE>
-      struct Printer<NullType, BASE>
+      struct Printer<Nil, BASE>
         : BASE
         {
           static string print () { return _Fmt("-<%u>%s") % "·" % BASE::print(); }

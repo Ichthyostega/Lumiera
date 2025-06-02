@@ -400,9 +400,9 @@ namespace func{
       };
     
     template<size_t i>
-    struct PlaceholderTuple<NullType, i>
+    struct PlaceholderTuple<Nil, i>
       {
-        using List = NullType;
+        using List = Nil;
       };
     
     

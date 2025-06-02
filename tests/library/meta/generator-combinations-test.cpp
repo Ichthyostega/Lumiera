@@ -68,7 +68,7 @@ namespace test {
       };
     
     template<>
-    struct TestCase<void,void,NullType>
+    struct TestCase<void,void,Nil>
       {
         static string
         visitAll()
@@ -76,7 +76,7 @@ namespace test {
             return "-|";
           }
       };
-    typedef TestCase<void,void,NullType> IterationEnd;
+    typedef TestCase<void,void,Nil> IterationEnd;
     
   } // (End) test data
   

@@ -52,8 +52,8 @@ namespace control {
   using lib::meta::Tuple;
   using lib::meta::BuildTupleAccessor;
   using lib::meta::func::TupleApplicator;
-  using lib::meta::NullType;
   using lib::meta::buildTuple;
+  using lib::meta::Nil;
   
   using lib::TypedAllocationManager;
   using std::function;
@@ -94,7 +94,7 @@ namespace control {
     };
     
   template<class TUP, uint n>
-  class ParamAccessor<NullType, TUP, TUP, n>   ///< used for recursion end of implementation functions
+  class ParamAccessor<Nil, TUP, TUP, n>   ///< used for recursion end of implementation functions
     : public TUP
     {
     public:

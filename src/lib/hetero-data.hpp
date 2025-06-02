@@ -286,7 +286,7 @@ namespace lib {
    * @internal implementation specialisation to mark the end of a chain
    */
   template<>
-  class HeteroData<meta::NullType>
+  class HeteroData<meta::Nil>
     {
     public:
       static size_t constexpr size() { return 0; }
@@ -305,9 +305,9 @@ namespace lib {
    */
   template<typename...DATA>
   class HeteroData
-    : public HeteroData<meta::Node<StorageFrame<0, DATA...>, meta::NullType>>
+    : public HeteroData<meta::Node<StorageFrame<0, DATA...>, meta::Nil>>
     {
-      using _FrontBlock = HeteroData<meta::Node<StorageFrame<0, DATA...>, meta::NullType>>;
+      using _FrontBlock = HeteroData<meta::Node<StorageFrame<0, DATA...>, meta::Nil>>;
       
     public:
       using NewFrame = typename _FrontBlock::Frame;
@@ -437,7 +437,7 @@ namespace std { // Specialisation to support C++ »Tuple Protocol« and structur
       using type = typename lib::HeteroData<DATA...>::template Elm_t<I>;
     };
   template<size_t I>
-  struct tuple_element<I, lib::HeteroData<lib::meta::NullType> >
+  struct tuple_element<I, lib::HeteroData<lib::meta::Nil> >
     {
       static_assert ("accessing element-type of an empty HeteroData block");
     };

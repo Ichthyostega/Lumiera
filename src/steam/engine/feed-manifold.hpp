@@ -100,9 +100,9 @@ namespace engine {
     using lib::meta::is_Structured;
     using lib::meta::forEachIDX;
     using lib::meta::ElmTypes;
-    using lib::meta::NullType;
     using lib::meta::Tagged;
     using lib::meta::TySeq;
+    using lib::meta::Nil;
     using std::is_pointer;
     using std::is_reference;
     using std::is_convertible;
@@ -372,7 +372,7 @@ namespace engine {
       using enable_if_hasParam  = typename lib::meta::enable_if_c<_ProcFun<F>::hasParam()>::type;
       
       template<class X>
-      using NotProvided = Tagged<NullType, X>;
+      using NotProvided = Tagged<Nil, X>;
       
       template<bool yes, class B>
       using Provide_if = conditional_t<yes, B, NotProvided<B>>;

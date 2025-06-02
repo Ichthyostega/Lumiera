@@ -168,7 +168,7 @@ namespace time {
     
     using lib::meta::TyOLD;
     using lib::meta::Node;
-    using lib::meta::NullType;
+    using lib::meta::Nil;
     
     /**
      * Descriptor to denote support for a specific (timecode) format.
@@ -204,9 +204,9 @@ namespace time {
             flags_.set (typeID<F>());
             return define(FS());
           }
-        Supported define(NullType) { return *this;} ///< @internal recursion end
+        Supported define(Nil) { return *this;}  ///< @internal recursion end
         
-        Supported() { } ///< @note use #formats to set up a new descriptor
+        Supported() { }    ///< @note use #formats to set up a new descriptor
         
         
       public:

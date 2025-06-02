@@ -170,7 +170,7 @@ namespace test{
           CHECK (x2 == "Φ"_expect);
           
 //        auto& [z0,z1,z2,z3] = chain2;                                // Error: 4 names provided for structured binding, while HeteroData... decomposes into 3 elements
-//        auto& [z0,z1,z2] = b1;                                       // Error: HeteroData<Node<StorageFrame<0, uint>, NullType> >' decomposes into 1 element
+//        auto& [z0,z1,z2] = b1;                                       // Error: HeteroData<Node<StorageFrame<0, uint>, Nil> >' decomposes into 1 element
         }
       
       

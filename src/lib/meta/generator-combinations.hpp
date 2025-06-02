@@ -77,7 +77,7 @@ namespace meta{
   template
     < class TYPES_1, class TYPES_2           ///< the two type collections to pick combinations from
     , template<class,class,class> class _X_  ///< template with two arg types and a base type
-    , class BASE = NullType
+    , class BASE = Nil
     >
   struct InstantiateChainedCombinations
     : InstantiateChained< typename CartesianProduct<TYPES_1,TYPES_2>::List

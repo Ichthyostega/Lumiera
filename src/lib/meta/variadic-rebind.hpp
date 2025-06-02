@@ -103,7 +103,7 @@ namespace meta {
    * A secondary helper template variant is provided for rebinding
    * while prepending or appending a single type parameter.
    * @note does not work with empty sequences; also the penultimate
-   *       of a one-element sequence is mapped to NullType
+   *       of a one-element sequence is mapped to the `Nil`-type
    */
   template<template<class...> class L, typename...XS>
   struct _Vari;
@@ -129,7 +129,7 @@ namespace meta {
   struct _Vari<L, X>
     {
       using Ultima = X;
-      using Penult = NullType;  ///< marker for undefined
+      using Penult = Nil;     ///< marker for undefined
       using Remain = L<X>;
       using Revers = L<X>;
       using Prefix = L<>;

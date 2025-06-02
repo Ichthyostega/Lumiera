@@ -57,7 +57,7 @@ namespace meta {
     template<class TYPES, size_t i>
     struct Pick
       {
-        typedef NullType Type;  
+        typedef Nil Type;  
       };
     template<class TY, class TYPES>
     struct Pick<Node<TY,TYPES>, 0>
@@ -99,7 +99,7 @@ namespace meta {
     struct Filter;
     
     template<template<class> class _P_>
-    struct Filter<NullType,_P_>            { typedef NullType  List; };
+    struct Filter<Nil,_P_>            { typedef Nil  List; };
     
     template< class TY, class TYPES
             , template<class> class _P_
@@ -113,7 +113,7 @@ namespace meta {
     
     /** append lists-of-types */
     template<class TY1, class TY2>
-    struct Append                          { typedef Node<TY1, typename Append<TY2,NullType>::List>  List; };
+    struct Append                          { typedef Node<TY1, typename Append<TY2,Nil>::List>  List; };
     
     template< class TY, class TYPES
             , class TAIL
@@ -121,19 +121,19 @@ namespace meta {
     struct Append<Node<TY,TYPES>, TAIL>    { typedef Node<TY,  typename Append<TYPES,  TAIL>::List>  List; };
     
     template<class TY, class TYPES>
-    struct Append<NullType, Node<TY,TYPES>>    { typedef Node<TY,TYPES>   List; };
+    struct Append<Nil, Node<TY,TYPES>>    { typedef Node<TY,TYPES>   List; };
     
     template<class TY, class TYPES>
-    struct Append<Node<TY,TYPES>, NullType>    { typedef Node<TY,TYPES>   List; };
+    struct Append<Node<TY,TYPES>, Nil>    { typedef Node<TY,TYPES>   List; };
     
     template<class TY1>
-    struct Append<TY1,NullType>            { typedef Node<TY1,NullType>   List; };
+    struct Append<TY1,Nil>            { typedef Node<TY1,Nil>   List; };
     
     template<class TY2>
-    struct Append<NullType,TY2>            { typedef Node<TY2,NullType>   List; };
+    struct Append<Nil,TY2>            { typedef Node<TY2,Nil>   List; };
     
     template<>
-    struct Append<NullType,NullType>       { typedef NullType             List; };
+    struct Append<Nil,Nil>       { typedef Nil             List; };
     
     
     
@@ -143,11 +143,11 @@ namespace meta {
     struct SplitLast;
     
     template<>
-    struct SplitLast<NullType>             { typedef NullType Type;
-                                             typedef NullType List; };
+    struct SplitLast<Nil>             { typedef Nil Type;
+                                             typedef Nil List; };
     template<class TY>
-    struct SplitLast<Node<TY,NullType>>    { typedef TY       Type;
-                                             typedef NullType List; };
+    struct SplitLast<Node<TY,Nil>>    { typedef TY       Type;
+                                             typedef Nil List; };
     
     template<class TY, class TYPES>
     struct SplitLast<Node<TY,TYPES>>       { typedef typename SplitLast<TYPES>::Type Type;
@@ -163,7 +163,7 @@ namespace meta {
      * into an base typelist, starting at given index.
      * @return either the combined (spliced) List, or
      *         the Front/Back part before or after the Overlay
-     * @note using a NullType as OVERLAY allows to extract
+     * @note using a Nil as OVERLAY allows to extract
      *         an arbitrary Front/Back part of the list
      */
     template<class BASE, class OVERLAY, uint i=0>
@@ -178,18 +178,18 @@ namespace meta {
     template<class B, class BS,
              class O, class OS >
     struct Splice<Node<B,BS>,Node<O,OS>,0> { typedef Node<O, typename Splice<BS,OS, 0>::List>          List;
-                                             typedef NullType                                          Front;
+                                             typedef Nil                                          Front;
                                              typedef         typename Splice<BS,OS, 0>::Back           Back; };
     
     template<class B, class BS>
-    struct Splice<Node<B,BS>, NullType, 0> { typedef Node<B, BS> List;
-                                             typedef NullType    Front;
+    struct Splice<Node<B,BS>, Nil, 0> { typedef Node<B, BS> List;
+                                             typedef Nil    Front;
                                              typedef Node<B, BS> Back; };
     
     template<class XX, uint i>
-    struct Splice<NullType, XX, i>         { typedef NullType    List;
-                                             typedef NullType    Front;
-                                             typedef NullType    Back; };
+    struct Splice<Nil, XX, i>         { typedef Nil    List;
+                                             typedef Nil    Front;
+                                             typedef Nil    Back; };
     
     
     
@@ -206,23 +206,23 @@ namespace meta {
       {
         typedef Node<T,TYPES>                  List;  ///< the complete list
         typedef T                              Head;  ///< first element
-        typedef Node<T,NullType>               First; ///< a list containing the first element
+        typedef Node<T,Nil>               First; ///< a list containing the first element
         typedef TYPES                          Tail;  ///< remainder of the list starting with the second elm.
         typedef typename SplitLast<List>::List Prefix;///< all of the list, up to but excluding the last element
         typedef typename SplitLast<List>::Type End;   ///< the last element
-        typedef Node<End,NullType>             Last;  ///< a list containing the last element
+        typedef Node<End,Nil>             Last;  ///< a list containing the last element
       };
     
     template<>
-    struct Dissect<NullType>
+    struct Dissect<Nil>
       {
-        typedef NullType                       List;
-        typedef NullType                       Head;
-        typedef NullType                       First;
-        typedef NullType                       Tail;
-        typedef NullType                       Prefix;
-        typedef NullType                       End;
-        typedef NullType                       Last;
+        typedef Nil                       List;
+        typedef Nil                       Head;
+        typedef Nil                       First;
+        typedef Nil                       Tail;
+        typedef Nil                       Prefix;
+        typedef Nil                       End;
+        typedef Nil                       Last;
       };
     
     
@@ -233,13 +233,13 @@ namespace meta {
      * yielding a list-of lists-of-types
      */
     template<class T, class TY>
-    struct PrefixAll                       { typedef Node< typename Append<T,TY>::List, NullType>  List; };
+    struct PrefixAll                       { typedef Node< typename Append<T,TY>::List, Nil>  List; };
     
     template<class T>
-    struct PrefixAll<T, NullType>          { typedef NullType  List; };
+    struct PrefixAll<T, Nil>               { typedef Nil  List; };
     
     template<class T>
-    struct PrefixAll<T, NodeNull>          { typedef Node< typename Append<T,NodeNull>::List, NullType>  List; };
+    struct PrefixAll<T, NilNode>           { typedef Node< typename Append<T, NilNode>::List, Nil>  List; };
     
     template< class T
             , class TY, class TYPES
@@ -261,7 +261,7 @@ namespace meta {
     struct Distribute                      { typedef typename PrefixAll<TY1,TY2>::List  List; };
     
     template<class TY>
-    struct Distribute<NullType,TY>         { typedef NullType List; };
+    struct Distribute<Nil,TY>         { typedef Nil List; };
     
     template< class TY, class TYPES
             , class TAIL
@@ -287,10 +287,10 @@ namespace meta {
     template< class X
             , template<class> class _ENUM_>
     struct Combine                         { typedef typename Distribute< typename _ENUM_<X>::List
-                                                                        , Node<NullType,NullType>
+                                                                        , Node<Nil,Nil>
                                                                         >::List  List; };
     template< template<class> class _ENUM_>
-    struct Combine<NullType, _ENUM_ >      { typedef NodeNull                    List; };
+    struct Combine<Nil, _ENUM_ >      { typedef NilNode                    List; };
     
     template< class TY, class TYPES
             , template<class> class _ENUM_>
@@ -304,7 +304,7 @@ namespace meta {
     template<class F>
     struct FlagOnOff
       { 
-        typedef Node<F, Node<NullType,NullType>>  List;
+        typedef Node<F, Node<Nil,Nil>>  List;
       };
     
     

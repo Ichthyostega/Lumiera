@@ -75,7 +75,7 @@ namespace test {
        * @test check utilities for manipulating lists-of-types.
        *       - build an list of constant-wrapper-types and
        *         print them for debugging purpose.
-       *       - append lists, single elements and NullType
+       *       - append lists, single elements and Nil-Type
        *         in various combinations
        *       - manipulations like splice, get end, dissect
        *       - filtering out some types from a typelist by
@@ -124,48 +124,48 @@ namespace test {
               Pick<List2,1>::Type e1;
               Pick<List2,2>::Type e2;
               
-              typedef Pick<List2,3>::Type     E3;
-              typedef Pick<NullType,23>::Type Nil;
-              typedef Pick<void*,456>::Type   Irrelevant;
+              using E3         = Pick<List2,3>::Type;
+              using NilE       = Pick<Nil, 23>::Type;
+              using Irrelevant = Pick<void*,456>::Type;
               
               CHECK (5 == e0);
               CHECK (6 == e1);
               CHECK (7 == e2);
               
-              CHECK ((is_same<NullType, E3>        ::value));
-              CHECK ((is_same<NullType, Nil>       ::value));
-              CHECK ((is_same<NullType, Irrelevant>::value));
+              CHECK ((is_same<Nil, E3>        ::value));
+              CHECK ((is_same<Nil, NilE>      ::value));
+              CHECK ((is_same<Nil, Irrelevant>::value));
             }
           
           
           void
           check_append ()
             {
-              typedef Append<NullType, NullType> Append1;
+              using Append1 = Append<Nil, Nil>;
               DISPLAY (Append1);
               
-              typedef Append<Num<11>,Num<22>>    Append2;
+              using Append2 = Append<Num<11>,Num<22>>;
               DISPLAY (Append2);
               
-              typedef Append<Num<111>,NullType>  Append3;
+              using Append3 = Append<Num<111>,Nil>;
               DISPLAY (Append3);
               
-              typedef Append<NullType,Num<222>>  Append4;
+              using Append4 = Append<Nil,Num<222>>;
               DISPLAY (Append4);
               
-              typedef Append<List1,NullType>     Append5;
+              using Append5 = Append<List1,Nil>;
               DISPLAY (Append5);
               
-              typedef Append<NullType,List2>     Append6;
+              using Append6 = Append<Nil,List2>;
               DISPLAY (Append6);
               
-              typedef Append<Num<111>,List2>     Append7;
+              using Append7 = Append<Num<111>,List2>;
               DISPLAY (Append7);
               
-              typedef Append<List1,Num<222>>     Append8;
+              using Append8 = Append<List1,Num<222>>;
               DISPLAY (Append8);
               
-              typedef Append<List1,List2>        Append9;
+              using Append9 = Append<List1,List2>;
               DISPLAY (Append9);
             }
           
@@ -173,66 +173,66 @@ namespace test {
           void
           check_splice ()
             {
-              typedef TyOLD<Num<9>,Num<8>>::List OLi;
+              using OLi = TyOLD<Num<9>,Num<8>>::List;
               // will "paste" the list OLi "on top" of another Typelist...
               
-              typedef Splice<NullType, NullType> Overl01;
+              using Overl01 = Splice<Nil, Nil>;
               DISPLAY (Overl01);
               
-              typedef Splice<NullType, OLi>      Overl02;
+              using Overl02 = Splice<Nil, OLi>;
               DISPLAY (Overl02);
               
-              typedef Splice<NullType, OLi, 5>   Overl03;
+              using Overl03 = Splice<Nil, OLi, 5>;
               DISPLAY (Overl03);
               
-              typedef Splice<List1, OLi>         Overl04;
+              using Overl04 = Splice<List1, OLi>;
               DISPLAY (Overl04);
               
-              typedef Splice<List1, OLi, 1>      Overl05;
+              using Overl05 = Splice<List1, OLi, 1>;
               DISPLAY (Overl05);
               
-              typedef Splice<List1, OLi, 2>      Overl06;
+              using Overl06 = Splice<List1, OLi, 2>;
               DISPLAY (Overl06);
               
-              typedef Splice<List1, OLi, 3>      Overl07;
+              using Overl07 = Splice<List1, OLi, 3>;
               DISPLAY (Overl07);
               
-              typedef Splice<List1, OLi, 5>      Overl08;
+              using Overl08 = Splice<List1, OLi, 5>;
               DISPLAY (Overl08);
               
-              typedef Splice<List1, List1>       Overl09;
+              using Overl09 = Splice<List1, List1>;
               DISPLAY (Overl09);
               
-              typedef Splice<List1, List1, 1>    Overl10;
+              using Overl10 = Splice<List1, List1, 1>;
               DISPLAY (Overl10);
               
-              typedef Splice<List1, NullType>    Overl11;
+              using Overl11 = Splice<List1, Nil>;
               DISPLAY (Overl11);
               
-              typedef Splice<List1, NullType, 1> Overl12;
+              using Overl12 = Splice<List1, Nil, 1>;
               DISPLAY (Overl12);
               
-              typedef Splice<List1, NullType, 5> Overl13;
+              using Overl13 = Splice<List1, Nil, 5>;
               DISPLAY (Overl13);
               
               
-              typedef TyOLD<Num<99>>::List OLi2;
-              typedef Splice<List1, OLi2, 0>::Front Front1;
-              typedef Splice<List1, OLi2, 1>::Front Front2;
-              typedef Splice<List1, OLi2, 5>::Front Front3;
+              using OLi2   = TyOLD<Num<99>>::List;
+              using Front1 = Splice<List1, OLi2, 0>::Front;
+              using Front2 = Splice<List1, OLi2, 1>::Front;
+              using Front3 = Splice<List1, OLi2, 5>::Front;
               DISPLAY (Front1);
               DISPLAY (Front2);
               DISPLAY (Front3);
-              typedef Splice<List1, OLi2, 0>::Back  Back1;
-              typedef Splice<List1, OLi2, 1>::Back  Back2;
-              typedef Splice<List1, OLi2, 5>::Back  Back3;
+              using Back1  = Splice<List1, OLi2, 0>::Back;
+              using Back2  = Splice<List1, OLi2, 1>::Back;
+              using Back3  = Splice<List1, OLi2, 5>::Back;
               DISPLAY (Back1);
               DISPLAY (Back2);
               DISPLAY (Back3);
               
               // Note: with a Null-Overlay, this can be used to extract arbitrary sublists:
-              typedef Splice<List1, NullType, 1>::Front Front4;
-              typedef Splice<List1, NullType, 1>::Back  Back4;
+              using Front4 = Splice<List1, Nil, 1>::Front;
+              using Back4  = Splice<List1, Nil, 1>::Back;
               DISPLAY (Front4);
               DISPLAY (Back4);
             }
@@ -241,25 +241,25 @@ namespace test {
           void
           check_s_last()
             {
-              typedef SplitLast<List1>::Type Elm;
-              typedef SplitLast<List1>::List Prefix;
+              using    Elm = SplitLast<List1>::Type;
+              using Prefix = SplitLast<List1>::List;
               
-              typedef TyOLD<Elm>::List ElmL;
+              using   ElmL = TyOLD<Elm>::List;
               
               DISPLAY (Prefix);
               DISPLAY (ElmL);
               
-              typedef SplitLast<ElmL>::Type Elm1;
-              typedef SplitLast<ElmL>::List NPrefix;
+              using    Elm1 = SplitLast<ElmL>::Type;
+              using NPrefix = SplitLast<ElmL>::List;
               
               DISPLAY (NPrefix);
               DISPLAY (TyOLD<Elm1>);
               
-              typedef SplitLast<NullType>::Type Nil;
-              typedef SplitLast<NullType>::List NList;
+              using  NilSplit = SplitLast<Nil>::Type;
+              using  NList    = SplitLast<Nil>::List;
               
               DISPLAY (NList);
-              DISPLAY (TyOLD<Nil>);
+              DISPLAY (TyOLD<NilSplit>);
             }
           
           
@@ -269,16 +269,16 @@ namespace test {
               typedef Append<List1,List2>::List LL;
               DISPLAY (LL);
               
-              typedef Dissect<LL>::List   List;     DISPLAY(List); 
-              typedef Dissect<LL>::First  First;    DISPLAY(First); 
-              typedef Dissect<LL>::Tail   Tail;     DISPLAY(Tail);
-              typedef Dissect<LL>::Prefix Prefix;   DISPLAY(Prefix);
-              typedef Dissect<LL>::Last   Last;     DISPLAY(Last);
+              using List   = Dissect<LL>::List;     DISPLAY(List);
+              using First  = Dissect<LL>::First;    DISPLAY(First);
+              using Tail   = Dissect<LL>::Tail;     DISPLAY(Tail);
+              using Prefix = Dissect<LL>::Prefix;   DISPLAY(Prefix);
+              using Last   = Dissect<LL>::Last;     DISPLAY(Last);
               
-              typedef Dissect<LL>::Head   Head;
-              typedef Dissect<LL>::End    End;
+              using Head   = Dissect<LL>::Head;
+              using End    = Dissect<LL>::End;
               
-              typedef TyOLD<Head,End>  HeadEnd;     DISPLAY(HeadEnd);
+              using HeadEnd = TyOLD<Head,End>;      DISPLAY(HeadEnd);
             }
           
           
@@ -290,7 +290,7 @@ namespace test {
           void
           check_apply ()
             {
-              typedef Apply<List1, AddConst2> Added2;
+              using Added2 = Apply<List1, AddConst2>;
               DISPLAY (Added2);
             }
           
@@ -301,7 +301,7 @@ namespace test {
           void
           check_filter ()
             {
-              typedef Filter<Append<List1,List2>::List, IsEven > FilterEven; 
+              using FilterEven = Filter<Append<List1,List2>::List, IsEven >; 
               DISPLAY (FilterEven);
             }
           
@@ -309,23 +309,23 @@ namespace test {
           void
           check_prefix ()
             {
-              typedef PrefixAll<Num<11>,Num<22>> Prefix1;
+              using Prefix1 = PrefixAll<Num<11>,Num<22>>;
               DISPLAY (Prefix1);
               
-              typedef PrefixAll<Num<101>,List1>  Prefix2;
+              using Prefix2 = PrefixAll<Num<101>,List1>;
               DISPLAY (Prefix2);
               
-              typedef PrefixAll<NullType,List1>  Prefix3;
+              using Prefix3 = PrefixAll<Nil,List1>;
               DISPLAY (Prefix3);
               
-              typedef TyOLD<List1::List,Num<0>,List2::List>::List  List_of_Lists;
-              typedef PrefixAll<Num<111>,List_of_Lists> Prefix4;
+              using List_of_Lists = TyOLD<List1::List,Num<0>,List2::List>::List;
+              using Prefix4       = PrefixAll<Num<111>, List_of_Lists>;
               DISPLAY (Prefix4);
               
-              typedef PrefixAll<List1,List2>   Prefix5;
+              using Prefix5 = PrefixAll<List1,List2>;
               DISPLAY (Prefix5);
               
-              typedef PrefixAll<List1,List_of_Lists> Prefix6;
+              using Prefix6 = PrefixAll<List1,List_of_Lists>;
               DISPLAY (Prefix6);
             }
           
@@ -333,17 +333,17 @@ namespace test {
           void
           check_distribute()
             {
-              typedef Distribute<Num<11>, List1> Dist1;
+              using Dist1 = Distribute<Num<11>, List1>;
               DISPLAY (Dist1);
               
-              typedef TyOLD<Num<11>,Num<22>,Num<33>>::List Prefixes;
-              typedef Distribute<Prefixes, Num<0>> Dist2;
+              using Prefixes = TyOLD<Num<11>,Num<22>,Num<33>>::List;
+              using  Dist2   = Distribute<Prefixes, Num<0>>;
               DISPLAY (Dist2);
               
-              typedef Distribute<Prefixes, List1> Dist3;
+              using Dist3 = Distribute<Prefixes, List1>;
               DISPLAY (Dist3);
               
-              typedef Distribute<Prefixes, TyOLD<List1::List,List2::List>::List> Dist4;
+              using Dist4 = Distribute<Prefixes, TyOLD<List1::List,List2::List>::List>;
               DISPLAY (Dist4);
             }
           
@@ -351,16 +351,15 @@ namespace test {
           void
           check_combine()
             {
-              typedef CountDown<Num<11>> Down;
+              using Down = CountDown<Num<11>>;
               DISPLAY (Down);
               
-              typedef Combine<List1::List, CountDown> Combi;
+              using Combi = Combine<List1::List, CountDown>;
               DISPLAY (Combi);
               
-              typedef CombineFlags<List1::List> OnOff;
+              using OnOff = CombineFlags<List1::List>;
               DISPLAY (OnOff);
             }
-          
           
         };
       

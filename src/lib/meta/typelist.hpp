@@ -10,16 +10,16 @@
   option) any later version. See the file COPYING for further details.
 
 ====================================================================
-This code is heavily inspired by  
+This code is heavily inspired by
  The Loki Library (loki-lib/trunk/include/loki/Sequence.h)
     Copyright (c) 2001 by Andrei Alexandrescu
     Copyright (c) 2005 by Peter Kümmel
     This Loki code accompanies the book:
     Alexandrescu, Andrei. "Modern C++ Design: Generic Programming
-        and Design Patterns Applied". 
+        and Design Patterns Applied".
         Copyright (c) 2001. Addison-Wesley. ISBN 0201704315
-        
-  Loki Copyright Notice: 
+
+  Loki Copyright Notice:
   Permission to use, copy, modify, distribute and sell this software for any
   purpose is hereby granted without fee, provided that the above copyright
   notice appear in all copies and that both that copyright notice and this
@@ -32,14 +32,16 @@ This code is heavily inspired by
 /** @file typelist.hpp
  ** A template metaprogramming technique for manipulating collections of types.
  ** Effectively this is a tailored and simplified version of what can be found in the Loki library.
- ** We use it in other generic library-style code to generate repetitive code. If you tend to find
- ** template metaprogramming (or functional programming in general) offending, please ignore the 
- ** technical details and just consider the benefit of such an simplification for the client code.
- **
- ** Interface for using this facility is the template Types(.....) for up to 20 Type parameters.
+ ** We use it in other generic library-style code to generate repetitive code.
+ ** @remark If you tend to find the use of template metaprogramming detrimental
+ **         (or functional programming and generally any kind of abstraction)
+ **         please kindly ignore the technical details and just consider the
+ **         benefit of simplification for the client code.
+ ** 
+ ** Interface for using this facility is the template `Types<TS...>`.
  ** To start typelist processing, other templates typically pick up the Types<...>::List type.
- ** This allows for LISP-style list processing, with a pattern match on either Node<TY,TYPES>
- ** or NullType to terminate recursion. In C++ template metaprogramming, "pattern match"
+ ** This allows for LISP-style list processing, with a pattern match on either `Node<TY,TYPES>`
+ ** or the type `Nil` to terminate recursion. In C++ template metaprogramming, "pattern match"
  ** is done by partial template specialisations (the compiler will pick up and thus
  ** match the template parameters). A typedef acts like a declaration in normal
  ** programming. Because such a "declaration" can't be changed after the fact,
@@ -74,44 +76,44 @@ This code is heavily inspired by
 namespace lib {
 namespace meta {
     
-    struct NullType 
-      { 
-        typedef NullType List;
+    struct Nil
+      {
+        using List = Nil;
       };
     
-    template<class H, class T> 
+    template<class H, class T>
     struct Node
       {
-        typedef Node List;
-        typedef H Head;
-        typedef T Tail;
+        using List = Node;
+        using Head = H;
+        using Tail = T;
       };
     
-    typedef Node<NullType,NullType> NodeNull;
+    using NilNode = Node<Nil,Nil>;
     
     
     
     template
-      < class T01=NullType
-      , class T02=NullType
-      , class T03=NullType
-      , class T04=NullType
-      , class T05=NullType
-      , class T06=NullType
-      , class T07=NullType
-      , class T08=NullType
-      , class T09=NullType
-      , class T10=NullType
-      , class T11=NullType
-      , class T12=NullType
-      , class T13=NullType
-      , class T14=NullType
-      , class T15=NullType
-      , class T16=NullType
-      , class T17=NullType
-      , class T18=NullType
-      , class T19=NullType
-      , class T20=NullType
+      < class T01=Nil
+      , class T02=Nil
+      , class T03=Nil
+      , class T04=Nil
+      , class T05=Nil
+      , class T06=Nil
+      , class T07=Nil
+      , class T08=Nil
+      , class T09=Nil
+      , class T10=Nil
+      , class T11=Nil
+      , class T12=Nil
+      , class T13=Nil
+      , class T14=Nil
+      , class T15=Nil
+      , class T16=Nil
+      , class T17=Nil
+      , class T18=Nil
+      , class T19=Nil
+      , class T20=Nil
       >
     class TyOLD
       {
@@ -125,10 +127,10 @@ namespace meta {
         using Seq  = TyOLD;
       };
     
-    template<> 
+    template<>
     struct TyOLD<>
       {
-        using List = NullType;
+        using List = Nil;
         using Seq  = TyOLD<>;
       };
     
@@ -139,9 +141,9 @@ namespace meta {
    * alternative definition of "type sequence",
    * already using variadic template parameters.
    * @remarks the problem with our existing type sequence type
-   *    is that it fills the end of each sequence with NullType,
+   *    is that it fills the end of each sequence with Nil,
    *    which was the only way to get a flexible type sequence
-   *    prior to C++11. Unfortunately these trailing NullType
+   *    prior to C++11. Unfortunately these trailing Nil
    *    entries do not play well with other variadic defs.
    * @deprecated when we switch our primary type sequence type
    *    to variadic parameters, this type will be obsoleted.             ////////////////////////////////////TICKET #987 : make lib::meta::Types<TYPES...> variadic

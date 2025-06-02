@@ -138,7 +138,7 @@ namespace visitor {
     < class TOOLImpl,
       class BASE 
     >
-  class Applicable<TOOLImpl, typelist::NullType, BASE>
+  class Applicable<TOOLImpl, typelist::Nil, BASE>
     : public BASE
   { }
   ;

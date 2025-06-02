@@ -294,7 +294,7 @@ namespace test {
         {
           using Ret = typename lib::meta::_Fun<SIG>::Ret;
           using Args = typename lib::meta::_Fun<SIG>::Args;
-          using ArgsX = typename lib::meta::StripNullType<Args>::Seq;    ////////////////////////////////////TICKET #987 : make lib::meta::Types<TYPES...> variadic
+          using ArgsX = typename lib::meta::StripNil<Args>::Seq;    ////////////////////////////////////TICKET #987 : make lib::meta::Types<TYPES...> variadic
           using SigTypes = typename lib::meta::Prepend<Ret, ArgsX>::Seq;
           
           using Type  = typename RebindVariadic<DiagnosticFun, SigTypes>::Type;

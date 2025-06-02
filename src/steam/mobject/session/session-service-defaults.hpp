@@ -38,7 +38,7 @@ namespace session {
   
 //  using lib::meta::InstantiateChained;
 //  using lib::meta::InheritFrom;
-//  using lib::meta::NullType;
+//  using lib::meta::Nil;
   
   
   class SessionServiceDefaults

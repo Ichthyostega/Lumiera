@@ -148,13 +148,13 @@ namespace meta {
       };
     
     /**
-     * temporary workaround: strip trailing NullType entries
+     * temporary workaround: strip trailing Nil-Type entries
      * prior to rebinding to the `std::tuple` type.
      */
     template<typename...TYPES>
     struct BuildTupleType<TyOLD<TYPES...>>
       {
-        using VariadicSeq = typename StripNullType<TyOLD<TYPES...>>::Seq;
+        using VariadicSeq = typename StripNil<TyOLD<TYPES...>>::Seq;
         
         using Type = typename BuildTupleType<VariadicSeq>::Type;
       };
@@ -167,7 +167,7 @@ namespace meta {
       };
     
     template<>
-    struct BuildTupleType<NullType>
+    struct BuildTupleType<Nil>
       {
         using Type = typename BuildTupleType<TyOLD<>>::Type;
       };
@@ -348,7 +348,7 @@ namespace meta {
   class BuildTupleAccessor< _X_, TySeq<>, TUP, i>
     {
     public:
-      using Product = _X_<NullType, TUP, TUP, i>;   // Note: i == tuple size
+      using Product = _X_<Nil, TUP, TUP, i>;   // Note: i == tuple size
     };
                           ///////////////////////////////////////////////////////////////////////////////////TICKET #987 : the following specialisation will be obsoleted by the removal of old-style type-sequences
   template
@@ -359,7 +359,7 @@ namespace meta {
   class BuildTupleAccessor< _X_, TyOLD<>, TUP, i>
     {
     public:
-      using Product = _X_<NullType, TUP, TUP, i>;   // Note: i == tuple size
+      using Product = _X_<Nil, TUP, TUP, i>;   // Note: i == tuple size
       
     };
   
@@ -390,7 +390,7 @@ namespace meta {
     };
   
   template<class TUP, uint n>
-  struct TupleElementDisplayer<NullType, TUP, TUP, n>
+  struct TupleElementDisplayer<Nil, TUP, TUP, n>
     : TUP
     {
       TupleElementDisplayer (TUP const& tup)

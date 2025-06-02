@@ -162,8 +162,8 @@ namespace util {
     using std::optional;
     using lib::meta::_Fun;
     using lib::meta::has_Sig;
-    using lib::meta::NullType;
     using lib::meta::_Vari;
+    using lib::meta::Nil;
     using std::decay_t;
     using std::tuple;
     using std::array;
@@ -221,14 +221,14 @@ namespace util {
     
     /** »Null-Connex« which always successfully accepts the empty sequence */
     inline auto
-    buildConnex(NullType)
+    buildConnex(Nil)
     {
-      return Connex{[](StrView) -> Eval<NullType>
+      return Connex{[](StrView) -> Eval<Nil>
                       {
-                        return {NullType{}};
+                        return {Nil()};
                       }};
     }
-    using NulP = decltype(buildConnex (NullType()));
+    using NulP = decltype(buildConnex (Nil()));
     
     
     /**
@@ -729,7 +729,7 @@ namespace util {
       };
     
     /* === Deduction guide : how to construct a Parser === */
-    Parser(NullType)      -> Parser<NulP>;
+    Parser(Nil)           -> Parser<NulP>;
     Parser(regex &&)      -> Parser<Term>;
     Parser(regex const&)  -> Parser<Term>;
     Parser(string const&) -> Parser<Term>;
@@ -787,7 +787,7 @@ namespace util {
         using Result = typename PAR::Result;
         
         Syntax()
-          : parse_{NullType()}
+          : parse_{Nil()}
           { }
         
         explicit
@@ -948,21 +948,21 @@ namespace util {
     inline auto
     accept_repeated (uint min, uint max, SPEC&& clauseDef)
       {
-        return accept_repeated (min, max, NullType{}, forward<SPEC>(clauseDef));
+        return accept_repeated (min, max, Nil{}, forward<SPEC>(clauseDef));
       }
     
     template<typename SPEC>
     inline auto
     accept_repeated (uint cnt, SPEC&& clauseDef)
       {
-        return accept_repeated (cnt, NullType{}, forward<SPEC>(clauseDef));
+        return accept_repeated (cnt, Nil{}, forward<SPEC>(clauseDef));
       }
     
     template<typename SPEC>
     inline auto
     accept_repeated (SPEC&& clauseDef)
       {
-        return accept_repeated (NullType{}, forward<SPEC>(clauseDef));
+        return accept_repeated (Nil{}, forward<SPEC>(clauseDef));
       }
     
     /**
