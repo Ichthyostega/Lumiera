@@ -250,11 +250,11 @@ namespace meta {
     
     // for finding the end we need the help of typelist-util.hpp
     
-    using PrefixList = typename SplitLast<List>::List;
+    using PrefixList = typename PickLast<List>::List;
     using TailList   = typename Tail::List;
     
     using Prefix     = typename TySeq<PrefixList>::Seq;
-    using End        = typename SplitLast<List>::Type;
+    using End        = typename PickLast<List>::Type;
     using Last       = TySeq<End>;
   };
   
@@ -320,11 +320,11 @@ namespace meta {
 
     // for finding the end we need the help of typelist-util.hpp
     
-    typedef typename SplitLast<List>::List  PrefixList;
+    typedef typename PickLast<List>::List   PrefixList;
     typedef typename Tail::List             TailList;
     
     typedef typename TyOLD<PrefixList>::Seq Prefix;
-    typedef typename SplitLast<List>::Type  End;
+    typedef typename PickLast<List>::Type   End;
     typedef TyOLD<End>                      Last;
   };
   

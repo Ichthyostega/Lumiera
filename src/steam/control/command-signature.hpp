@@ -61,7 +61,7 @@ namespace control {
   using lib::meta::_Fun;
   using lib::meta::TyOLD;
   using lib::meta::Append;
-  using lib::meta::SplitLast;
+  using lib::meta::PickLast;
   
   
   /** 
@@ -130,8 +130,8 @@ namespace control {
         {
           using Args = typename ARG::List;
           
-          using Memento          = typename SplitLast<Args>::Type;
-          using OperationArglist = typename SplitLast<Args>::List;
+          using Memento          = typename PickLast<Args>::Type;
+          using OperationArglist = typename PickLast<Args>::List;
           using OperationArgs    = typename TyOLD<OperationArglist>::Seq;
           
           using OperateSig = typename BuildFunType<void, OperationArgs>::Sig;

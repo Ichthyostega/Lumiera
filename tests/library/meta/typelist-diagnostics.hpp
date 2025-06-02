@@ -17,7 +17,7 @@
  ** a Printer template usable for debugging the structure of a typelist built
  ** upon some simple debugging-style types. Examples being a Num<int> template,
  ** or the Flag type. A Printer type generated from this template provides
- ** a static \c print() function. The string returned from this function
+ ** a static `show()` function. The string returned from this function
  ** visualises the structure of the typelist provided as parameter
  ** to the Printer template.
  ** 
@@ -30,20 +30,20 @@
 #define META_TYPELIST_DIAGNOSTICS_H
 
 
+#include "lib/test/test-helper.hpp"
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/generator.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/meta/util.hpp"
 
-#include <string>
-
-
-using std::string;
 
 
 namespace lib  {
 namespace meta {
+  
+  using std::string;
+  
   
   /** dummy interface / baseclass for diagnostics */
   struct Numz
@@ -80,9 +80,9 @@ namespace meta {
   
   
   /** helper for generating test lists */      
-  template<class X> struct CountDown         { typedef Nil List; };
-  template<>        struct CountDown<Num<0>> { typedef Node<Num<0>, Nil> List; };
-  template<int I>   struct CountDown<Num<I>> { typedef Node<Num<I>, typename CountDown<Num<I-1>>::List> List; };
+  template<class X> struct CountDown         { using List = Nil; };
+  template<>        struct CountDown<Num<0>> { using List = Node<Num<0>, Nil>; };
+  template<int I>   struct CountDown<Num<I>> { using List = Node<Num<I>, typename CountDown<Num<I-1>>::List>; };
   
   
   
@@ -95,7 +95,7 @@ namespace meta {
       
       struct NullP
         {
-          static string print () { return "-"; }
+          static string show() { return "-"; }
         };
       
       /** debugging template, 
@@ -105,35 +105,35 @@ namespace meta {
       struct Printer
         : BASE
         {
-          static string print () { return _Fmt("-<%s>%s") % typeStr<T>() % BASE::print(); }
+          static string show() { return _Fmt("-<%s>%s") % typeStr<T>() % BASE::show(); }
         };
       
       template<class BASE>
       struct Printer<Nil, BASE>
         : BASE
         {
-          static string print () { return _Fmt("-<%u>%s") % "·" % BASE::print(); }
+          static string show() { return _Fmt("-<%u>%s") % "·" % BASE::show(); }
         };
       
       template<class BASE, int I>
       struct Printer<Num<I>, BASE>    ///< display the presence of a Num instance in the typelist
         : BASE
         {
-          static string print () { return _Fmt("-<%u>%s") % uint(Num<I>::VAL) % BASE::print(); }
+          static string show() { return _Fmt("-<%u>%s") % uint(Num<I>::VAL) % BASE::show(); }
         };
       
       template<class BASE, uint Fl>
       struct Printer<Flag<Fl>, BASE>  ///< display the presence of a Flag in the typelist
         : BASE
         {
-          static string print () { return _Fmt("-<%u>%s") % uint(Fl) % BASE::print(); }
+          static string show() { return _Fmt("-<%u>%s") % uint(Fl) % BASE::show(); }
         };
       
       template<class BASE>
       struct Printer<int, BASE>  ///< display the presence of a plain int in the typelist
         : BASE
         {
-          static string print () { return _Fmt("-<%u>%s") % 'i' % BASE::print(); }
+          static string show() { return _Fmt("-<%u>%s") % 'i' % BASE::show(); }
         };
       
       
@@ -145,7 +145,7 @@ namespace meta {
       printSublist ()
       {
         typedef InstantiateChained<L, Printer, NullP> SubList;
-        return SubList::print();
+        return SubList::show();
       }
       
       /** Specialisation for debug-printing of a nested sublist */
@@ -153,11 +153,11 @@ namespace meta {
       struct Printer<Node<TY,TYPES>, BASE>
         : BASE
         {
-          static string print () 
+          static string show() 
             {
               typedef Node<TY,TYPES> List;
               return string("\n\t+--") + printSublist<List>()+"+"
-                   + BASE::print(); 
+                   + BASE::show(); 
             }
         };
       
@@ -165,11 +165,11 @@ namespace meta {
       struct Printer<Config<f1,f2,f3,f4,f5>, BASE>
         : BASE
         {
-          static string print () 
+          static string show() 
             {
               typedef typename Config<f1,f2,f3,f4,f5>::Flags FlagList;
               return string("\n\t+-Conf-[") + printSublist<FlagList>()+"]"
-                   + BASE::print(); 
+                   + BASE::show(); 
             }
         };
       
@@ -185,11 +185,16 @@ namespace meta {
     showType ()
     {
       typedef InstantiateChained<typename TYPES::List, Printer, NullP>  DumpPrinter;
-      return DumpPrinter::print();
+      return DumpPrinter::show();
     }
     
     //  Note: we define overloads of this function for other types, especially Tuples
     
+    
+    
+    
+    
+    /* ================= convenience macro notation ================= */
     
 #define DISPLAY(_IT_)  \
         cout << STRINGIFY(_IT_) << "\t:" << showType<_IT_>() << endl;
@@ -197,8 +202,8 @@ namespace meta {
 #define DUMPVAL(_IT_)  \
         cout << STRINGIFY(_IT_) << "\t:" << util::toString(_IT_) << endl;
     
-    
-    
+#define EXPECT(_TY_, RENDERED_STRUCTURE )  \
+        CHECK (showType<_TY_>() == RENDERED_STRUCTURE ## _expect)
     
     
 }}} // namespace lib::meta::test

@@ -75,7 +75,7 @@ namespace test {
     using DumpPrinter = InstantiateChained<TypeList, Printer, NullP>;
     
     return "TUPLE"
-         + DumpPrinter::print();
+         + DumpPrinter::show();
   }
   
   // see the macros DISPLAY and DUMPVAL defined in typelist-diagnostics.hpp

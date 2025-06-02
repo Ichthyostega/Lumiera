@@ -164257,7 +164257,7 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1748828579825" ID="ID_873142911" MODIFIED="1748869733060" TEXT="typelist-manip ist v&#xf6;llig eigenst&#xe4;ndig">
+<node COLOR="#338800" CREATED="1748828579825" ID="ID_873142911" MODIFIED="1748900607872" TEXT="typelist-manip ist v&#xf6;llig eigenst&#xe4;ndig">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -164269,6 +164269,10 @@ Since then others have made contributions, see the log for the history.</font></
   </body>
 </html>
 </richcontent>
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1748900614743" ID="ID_516014802" MODIFIED="1748900632652" TEXT="durch Test belegt: funtioniert auch mit den neuen Type-Sequenzen">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
 </node>
 <node CREATED="1748828920169" ID="ID_511778446" MODIFIED="1748869770714" TEXT="generator.hpp arbeitet ebenfalls nur auf Typlisten">
 <arrowlink DESTINATION="ID_803058969" ENDARROW="Default" ENDINCLINATION="852;0;" ID="Arrow_ID_1971292758" STARTARROW="None" STARTINCLINATION="302;17;"/>
@@ -164290,6 +164294,16 @@ Since then others have made contributions, see the log for the history.</font></
 </richcontent>
 </node>
 <node CREATED="1748828781783" ID="ID_691444823" MODIFIED="1748828794388" TEXT="sollte also f&#xfc;r alle Varianten gleicherma&#xdf;en greifen"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1748888164617" ID="ID_145174722" MODIFIED="1748888298322" TEXT="sollte Tests ustellen auf Inline-Checks (mit _expect)">
+<arrowlink DESTINATION="ID_1431343903" ENDARROW="Default" ENDINCLINATION="156;-14;" ID="Arrow_ID_1374886089" STARTARROW="None" STARTINCLINATION="253;316;"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1748888193247" ID="ID_979097077" MODIFIED="1748888251981" TEXT="in der bisherigen Form sind sie ordentlich &#x2014; aber wertlos">
+<icon BUILTIN="smiley-neutral"/>
+</node>
+<node CREATED="1748888215764" ID="ID_1132022634" MODIFIED="1748888243058" TEXT="(und ja ... diese Umstellung ist ein ziemlicher Aufwarnd)">
+<font NAME="SansSerif" SIZE="11"/>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1748829095135" ID="ID_1295682918" MODIFIED="1748829098145" TEXT="Funktionen">
@@ -164320,16 +164334,19 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node CREATED="1748829133428" ID="ID_266502224" MODIFIED="1748829134942" TEXT="Tuple">
-<node CREATED="1748829135672" ID="ID_1078202790" MODIFIED="1748829142923" TEXT="tuple-record-init">
+<node COLOR="#435e98" CREATED="1748829133428" ID="ID_266502224" MODIFIED="1748884086384" TEXT="Tuple">
+<node COLOR="#435e98" CREATED="1748829135672" ID="ID_1078202790" MODIFIED="1748884086383" TEXT="tuple-record-init">
 <node CREATED="1748869115796" ID="ID_508891239" MODIFIED="1748869125930" TEXT="sehr wichtig f&#xfc;r GenNode via UI-Bus"/>
 <node CREATED="1748869126637" ID="ID_1892597632" MODIFIED="1748869141216" TEXT="verwendet Type-Sequenze lediglich zum Re-binding eines Tuple-Typs"/>
 <node COLOR="#338800" CREATED="1748869141825" ID="ID_893825351" MODIFIED="1748869166877" TEXT="kann man einfach auf die neue Variante schwenken">
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
+<node COLOR="#338800" CREATED="1748884068125" ID="ID_12615533" MODIFIED="1748884080973" TEXT="ansonsten bereits beidseitig kompatibel">
+<icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1748829164245" ID="ID_1618911636" MODIFIED="1748829167991" TEXT="variadic-helper">
+</node>
+<node COLOR="#435e98" CREATED="1748829164245" ID="ID_1618911636" MODIFIED="1748884058416" TEXT="variadic-helper">
 <node CREATED="1748830128123" ID="ID_450144323" MODIFIED="1748830132130" TEXT="(nur am Rande)"/>
 <node CREATED="1748830132883" ID="ID_1589913777" MODIFIED="1748830138854" TEXT="IndexIter unterst&#xfc;tzt beide"/>
 <node CREATED="1748830139501" ID="ID_622177889" MODIFIED="1748830160252" TEXT="ElmTypes ist nur f&#xfc;r neue (variadisch) definiert"/>
@@ -164344,8 +164361,11 @@ Since then others have made contributions, see the log for the history.</font></
 <node CREATED="1748829283559" ID="ID_373354659" MODIFIED="1748829291711" TEXT="h&#xe4;ngt vermutlich an Variant bzw. Visitor"/>
 </node>
 <node CREATED="1748829316732" ID="ID_733906672" MODIFIED="1748829324434" TEXT="Timecode-formate"/>
-<node CREATED="1748829331775" ID="ID_1553022384" MODIFIED="1748829333067" TEXT="Tests">
-<node CREATED="1748829335663" ID="ID_953757498" MODIFIED="1748829343651" TEXT="jeweils bei Bezug mit umstellen"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1748829331775" ID="ID_1553022384" MODIFIED="1748900515205" TEXT="Tests">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1748829335663" ID="ID_953757498" MODIFIED="1748900529301" TEXT="jeweils bei Bezug mit umstellen">
+<icon BUILTIN="yes"/>
+</node>
 <node CREATED="1748829344620" ID="ID_1034418764" MODIFIED="1748883769361" TEXT="im Einzelnen">
 <icon BUILTIN="list"/>
 <node CREATED="1748829369449" MODIFIED="1748829369449" TEXT="FormatSupport_test"/>
@@ -164367,7 +164387,9 @@ Since then others have made contributions, see the log for the history.</font></
 <node CREATED="1748829534601" MODIFIED="1748829534601" TEXT="MetaUtils_test"/>
 <node CREATED="1748829542074" MODIFIED="1748829542074" TEXT="TupleHelper_test"/>
 <node CREATED="1748829551216" MODIFIED="1748829551216" TEXT="TupleRecordInit_test"/>
-<node CREATED="1748829559066" MODIFIED="1748829559066" TEXT="TypeListManip_test"/>
+<node COLOR="#435e98" CREATED="1748829559066" ID="ID_1431343903" MODIFIED="1748900495968" TEXT="TypeListManip_test">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1431343903" ENDARROW="Default" ENDINCLINATION="156;-14;" ID="Arrow_ID_1374886089" SOURCE="ID_145174722" STARTARROW="None" STARTINCLINATION="253;316;"/>
+</node>
 <node CREATED="1748829567920" MODIFIED="1748829567920" TEXT="TypeList_test"/>
 <node COLOR="#435e98" CREATED="1748829576396" ID="ID_281104576" MODIFIED="1748883754992" TEXT="TypeListUtil_test">
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_281104576" ENDARROW="Default" ENDINCLINATION="589;-82;" ID="Arrow_ID_351374746" SOURCE="ID_1470463237" STARTARROW="None" STARTINCLINATION="458;41;"/>
@@ -164395,7 +164417,12 @@ Since then others have made contributions, see the log for the history.</font></
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1748871829578" ID="ID_308061484" MODIFIED="1748883860119" TEXT="Meta-Wertfunktionen in constexpr &#xfc;berf&#xfc;hren">
 <icon BUILTIN="pencil"/>
 </node>
-<node CREATED="1748871856256" ID="ID_304666403" MODIFIED="1748871864810" TEXT="Tests vervollst&#xe4;ndigen"/>
+<node CREATED="1748871856256" ID="ID_304666403" MODIFIED="1748900585714" TEXT="Tests ggfs vervollst&#xe4;ndigen">
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1748900565184" ID="ID_1203054358" MODIFIED="1748900572521" TEXT="ExpectString verwenden">
+<icon BUILTIN="pencil"/>
+</node>
 </node>
 </node>
 </node>

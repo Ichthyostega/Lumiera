@@ -33,30 +33,24 @@
 #include "lib/meta/generator.hpp"
 #include "lib/meta/typelist-manip.hpp"
 #include "meta/typelist-diagnostics.hpp"
+#include "lib/test/diagnostic-output.hpp"/////////////////TODO
 
 #include <type_traits>
-#include <iostream>
 
-using ::test::Test;
 using std::is_same;
-using std::cout;
-using std::endl;
 
 
 namespace lib  {
 namespace meta {
 namespace test {
       
-      
-      namespace { // test data
+      namespace { // type-lists to test with
         
-        
-        
-        typedef TyOLD< Num<1>
+        typedef TySeq< Num<1>
                      , Num<2>
                      , Num<3>
                      >::List List1;
-        typedef TyOLD< Num<5>
+        typedef TySeq< Num<5>
                      , Num<6>
                      , Num<7>
                      >::List List2;
@@ -85,28 +79,29 @@ namespace test {
       class TypeListManip_test : public Test
         {
           virtual void
-          run (Arg) 
+          run (Arg)
             {
-              check_diagnostics ();
-              check_pick_elm ();
-              check_apply  ();
-              check_filter ();
-              check_append ();
-              check_splice ();
-              check_s_last ();
-              check_dissect();
-              check_prefix ();
-              check_distribute();
-              check_combine();
+              demonstrate_diagnostics();
+              verify_pick   ();
+              verify_last   ();
+              verify_append ();
+              verify_splice ();
+              verify_dissect();
+              verify_apply  ();
+              verify_filter ();
+              verify_prefix ();
+              verify_distribute();
+              verify_combine();
             }
           
           
+          /** @test can print the type list structure for diagnostic */
           void
-          check_diagnostics ()
+          demonstrate_diagnostics ()
             {
               // Explanation: the DISPLAY macro results in the following definition....
               typedef InstantiateChained<List1::List, Printer, NullP >  Contents_List1;
-              cout << "List1" << "\t:" << Contents_List1::print() << endl;
+              cout << "List1" << "\t:" << Contents_List1::show() << endl;
               
               // That is: we instantiate the "Printer" template for each of the types in List1,
               // forming an inheritance chain. I.e. the defined Type "Contents_List1" inherits
@@ -114,171 +109,147 @@ namespace test {
               // The print() function is defined to create a string showing each.
               
               DISPLAY (List2);
+              
+              // Furthermore, we use verification against lib::test::ExpectString,
+              // which can be given as literal "some text"_expect, to document and
+              // verify that the rendered type structure is indeed as expected
+              CHECK (showType<List1>() == "-<1>-<2>-<3>-"_expect);
+              
+              EXPECT (List2, "-<5>-<6>-<7>-");
             }
           
           
+          /** @test pick a type by index from a type list */
           void
-          check_pick_elm ()
+          verify_pick ()
             {
-              Pick<List2,0>::Type e0;
-              Pick<List2,1>::Type e1;
-              Pick<List2,2>::Type e2;
+              using E0 = Pick<List2,0>::Type;
+              using E1 = Pick<List2,1>::Type;
+              using E2 = Pick<List2,2>::Type;
               
-              using E3         = Pick<List2,3>::Type;
-              using NilE       = Pick<Nil, 23>::Type;
-              using Irrelevant = Pick<void*,456>::Type;
+              using E3   = Pick<List2,3>::Type;
+              using NilE = Pick<Nil, 23>::Type;
+              using Bull = Pick<void*,456>::Type;
+              using Shit = Pick<string,0>::Type;
               
+              CHECK ((is_same<E0, Num<5> >() ));
+              CHECK ((is_same<E1, Num<6> >() ));
+              CHECK ((is_same<E2, Num<7> >() ));
+              
+              CHECK ((is_same<E3,   Nil  >() ));
+              CHECK ((is_same<NilE, Nil  >() ));
+              CHECK ((is_same<Bull, Nil  >() ));
+              CHECK ((is_same<Shit, Nil  >() ));
+              
+              // note: in the end, all this meta-processing yields types,
+              //       which can be instantiated and used as if defined directly
+              E0 e0;
+              E1 e1;
+              E2 e2;
               CHECK (5 == e0);
               CHECK (6 == e1);
               CHECK (7 == e2);
-              
-              CHECK ((is_same<Nil, E3>        ::value));
-              CHECK ((is_same<Nil, NilE>      ::value));
-              CHECK ((is_same<Nil, Irrelevant>::value));
+              CHECK (7 == e2.o_);
             }
           
           
           void
-          check_append ()
+          verify_last()
             {
-              using Append1 = Append<Nil, Nil>;
-              DISPLAY (Append1);
+              using    Elm = PickLast<List1>::Type;
+              using Prefix = PickLast<List1>::List;
               
-              using Append2 = Append<Num<11>,Num<22>>;
-              DISPLAY (Append2);
+              using   ElmL = TySeq<Elm>::List;
               
-              using Append3 = Append<Num<111>,Nil>;
-              DISPLAY (Append3);
+              EXPECT (Prefix,  "-<1>-<2>-");
+              EXPECT (ElmL  ,  "-<3>-"    );
               
-              using Append4 = Append<Nil,Num<222>>;
-              DISPLAY (Append4);
+              using    Elm1 = PickLast<ElmL>::Type;
+              using NPrefix = PickLast<ElmL>::List;
               
-              using Append5 = Append<List1,Nil>;
-              DISPLAY (Append5);
+              EXPECT (TySeq<Elm1>, "-<3>-");
+              EXPECT (NPrefix    ,     "-");
               
-              using Append6 = Append<Nil,List2>;
-              DISPLAY (Append6);
+              using NilSplit = PickLast<Nil>::Type;
+              using NilList  = PickLast<Nil>::List;
               
-              using Append7 = Append<Num<111>,List2>;
-              DISPLAY (Append7);
-              
-              using Append8 = Append<List1,Num<222>>;
-              DISPLAY (Append8);
-              
-              using Append9 = Append<List1,List2>;
-              DISPLAY (Append9);
+              EXPECT (TySeq<NilSplit>, "-");
+              EXPECT (NilList        , "-");
             }
           
           
+          /** @test append and concatenate type lists */
           void
-          check_splice ()
+          verify_append ()
             {
-              using OLi = TyOLD<Num<9>,Num<8>>::List;
+              using Append1 = Append<Nil     , Nil     >;   EXPECT (Append1, "-"                        );
+              using Append2 = Append<Num<11> , Num<22> >;   EXPECT (Append2, "-<11>-<22>-"              );
+              using Append3 = Append<Num<111>, Nil     >;   EXPECT (Append3, "-<111>-"                  );
+              using Append4 = Append<Nil     , Num<222>>;   EXPECT (Append4, "-<222>-"                  );
+              using Append5 = Append<List1   , Nil     >;   EXPECT (Append5, "-<1>-<2>-<3>-"            );
+              using Append6 = Append<Nil     , List2   >;   EXPECT (Append6, "-<5>-<6>-<7>-"            );
+              using Append7 = Append<Num<111>, List2   >;   EXPECT (Append7, "-<111>-<5>-<6>-<7>-"      );
+              using Append8 = Append<List1   , Num<222>>;   EXPECT (Append8, "-<1>-<2>-<3>-<222>-"      );
+              using Append9 = Append<List1   , List2   >;   EXPECT (Append9, "-<1>-<2>-<3>-<5>-<6>-<7>-");
+            }
+          
+          
+          /** @test splice (or rather paste) a list on top of a base list
+           *  @remark the intended use case is to manipulate some parameters
+           *          in a given function-type argument list
+           */
+          void
+          verify_splice ()
+            {
+              using OLi = TySeq<Num<9>,Num<8>>::List;
               // will "paste" the list OLi "on top" of another Typelist...
               
-              using Overl01 = Splice<Nil, Nil>;
-              DISPLAY (Overl01);
+              using Overl01 = Splice<Nil, Nil>;              EXPECT (Overl01, "-");
+              using Overl02 = Splice<Nil, OLi>;              EXPECT (Overl02, "-");
+              using Overl03 = Splice<Nil, OLi, 5>;           EXPECT (Overl03, "-");
+              using Overl04 = Splice<List1, OLi>;            EXPECT (Overl04, "-<9>-<8>-<3>-");
+              using Overl05 = Splice<List1, OLi, 1>;         EXPECT (Overl05, "-<1>-<9>-<8>-");
+              using Overl06 = Splice<List1, OLi, 2>;         EXPECT (Overl06, "-<1>-<2>-<9>-");
+              using Overl07 = Splice<List1, OLi, 3>;         EXPECT (Overl07, "-<1>-<2>-<3>-");
+              using Overl08 = Splice<List1, OLi, 5>;         EXPECT (Overl08, "-<1>-<2>-<3>-");
+              using Overl09 = Splice<List1, List1>;          EXPECT (Overl09, "-<1>-<2>-<3>-");
+              using Overl10 = Splice<List1, List1, 1>;       EXPECT (Overl10, "-<1>-<1>-<2>-");
+              using Overl11 = Splice<List1, Nil>;            EXPECT (Overl11, "-<1>-<2>-<3>-");
+              using Overl12 = Splice<List1, Nil, 1>;         EXPECT (Overl12, "-<1>-<2>-<3>-");
+              using Overl13 = Splice<List1, Nil, 5>;         EXPECT (Overl13, "-<1>-<2>-<3>-");
               
-              using Overl02 = Splice<Nil, OLi>;
-              DISPLAY (Overl02);
-              
-              using Overl03 = Splice<Nil, OLi, 5>;
-              DISPLAY (Overl03);
-              
-              using Overl04 = Splice<List1, OLi>;
-              DISPLAY (Overl04);
-              
-              using Overl05 = Splice<List1, OLi, 1>;
-              DISPLAY (Overl05);
-              
-              using Overl06 = Splice<List1, OLi, 2>;
-              DISPLAY (Overl06);
-              
-              using Overl07 = Splice<List1, OLi, 3>;
-              DISPLAY (Overl07);
-              
-              using Overl08 = Splice<List1, OLi, 5>;
-              DISPLAY (Overl08);
-              
-              using Overl09 = Splice<List1, List1>;
-              DISPLAY (Overl09);
-              
-              using Overl10 = Splice<List1, List1, 1>;
-              DISPLAY (Overl10);
-              
-              using Overl11 = Splice<List1, Nil>;
-              DISPLAY (Overl11);
-              
-              using Overl12 = Splice<List1, Nil, 1>;
-              DISPLAY (Overl12);
-              
-              using Overl13 = Splice<List1, Nil, 5>;
-              DISPLAY (Overl13);
-              
-              
-              using OLi2   = TyOLD<Num<99>>::List;
-              using Front1 = Splice<List1, OLi2, 0>::Front;
-              using Front2 = Splice<List1, OLi2, 1>::Front;
-              using Front3 = Splice<List1, OLi2, 5>::Front;
-              DISPLAY (Front1);
-              DISPLAY (Front2);
-              DISPLAY (Front3);
-              using Back1  = Splice<List1, OLi2, 0>::Back;
-              using Back2  = Splice<List1, OLi2, 1>::Back;
-              using Back3  = Splice<List1, OLi2, 5>::Back;
-              DISPLAY (Back1);
-              DISPLAY (Back2);
-              DISPLAY (Back3);
+              using OLi2   = TySeq<Num<99>>::List;
+              // can retrieve the remaining part of the original list, left and right of splice
+              using Front1 = Splice<List1, OLi2, 0>::Front;  EXPECT (Front1, "-"            );
+              using Front2 = Splice<List1, OLi2, 1>::Front;  EXPECT (Front2, "-<1>-"        );
+              using Front3 = Splice<List1, OLi2, 5>::Front;  EXPECT (Front3, "-<1>-<2>-<3>-");
+              using Back1  = Splice<List1, OLi2, 0>::Back;   EXPECT (Back1 , "-<2>-<3>-"    );
+              using Back2  = Splice<List1, OLi2, 1>::Back;   EXPECT (Back2 , "-<3>-"        );
+              using Back3  = Splice<List1, OLi2, 5>::Back;   EXPECT (Back3 , "-"            );
               
               // Note: with a Null-Overlay, this can be used to extract arbitrary sublists:
-              using Front4 = Splice<List1, Nil, 1>::Front;
-              using Back4  = Splice<List1, Nil, 1>::Back;
-              DISPLAY (Front4);
-              DISPLAY (Back4);
+              using Front4 = Splice<List1, Nil, 1>::Front;   EXPECT (Front4, "-<1>-"    );
+              using Back4  = Splice<List1, Nil, 1>::Back;    EXPECT (Back4 , "-<2>-<3>-");
             }
           
           
-          void
-          check_s_last()
-            {
-              using    Elm = SplitLast<List1>::Type;
-              using Prefix = SplitLast<List1>::List;
-              
-              using   ElmL = TyOLD<Elm>::List;
-              
-              DISPLAY (Prefix);
-              DISPLAY (ElmL);
-              
-              using    Elm1 = SplitLast<ElmL>::Type;
-              using NPrefix = SplitLast<ElmL>::List;
-              
-              DISPLAY (NPrefix);
-              DISPLAY (TyOLD<Elm1>);
-              
-              using  NilSplit = SplitLast<Nil>::Type;
-              using  NList    = SplitLast<Nil>::List;
-              
-              DISPLAY (NList);
-              DISPLAY (TyOLD<NilSplit>);
-            }
           
-          
+          /** @test dissect and access front and back parts of a list */
           void
-          check_dissect()
+          verify_dissect()
             {
-              typedef Append<List1,List2>::List LL;
-              DISPLAY (LL);
+              using LL = Append<List1,List2>::List; EXPECT (LL    , "-<1>-<2>-<3>-<5>-<6>-<7>-");
               
-              using List   = Dissect<LL>::List;     DISPLAY(List);
-              using First  = Dissect<LL>::First;    DISPLAY(First);
-              using Tail   = Dissect<LL>::Tail;     DISPLAY(Tail);
-              using Prefix = Dissect<LL>::Prefix;   DISPLAY(Prefix);
-              using Last   = Dissect<LL>::Last;     DISPLAY(Last);
+              using List   = Dissect<LL>::List;     EXPECT (List  , "-<1>-<2>-<3>-<5>-<6>-<7>-");
+              using First  = Dissect<LL>::First;    EXPECT (First , "-<1>-"                    );
+              using Tail   = Dissect<LL>::Tail;     EXPECT (Tail  , "-<2>-<3>-<5>-<6>-<7>-"    );
+              using Prefix = Dissect<LL>::Prefix;   EXPECT (Prefix, "-<1>-<2>-<3>-<5>-<6>-"    );
+              using Last   = Dissect<LL>::Last;     EXPECT (Last  , "-<7>-"                    );
               
               using Head   = Dissect<LL>::Head;
               using End    = Dissect<LL>::End;
               
-              using HeadEnd = TyOLD<Head,End>;      DISPLAY(HeadEnd);
+              using HeadEnd = TySeq<Head,End>;      EXPECT (HeadEnd, "-<1>-<7>-");
             }
           
           
@@ -287,80 +258,185 @@ namespace test {
           template<class X> struct AddConst2         { typedef X        Type; };
           template<int I>   struct AddConst2<Num<I>> { typedef Num<I+2> Type; };
           
+          /** @test apply a _meta-function_ to each type in list */
           void
-          check_apply ()
+          verify_apply()
             {
               using Added2 = Apply<List1, AddConst2>;
-              DISPLAY (Added2);
+              EXPECT (List1 , "-<1>-<2>-<3>-");
+              EXPECT (Added2, "-<3>-<4>-<5>-");
             }
           
           
           template<class X> struct IsEven         { enum {value = false };        };
           template<int I>   struct IsEven<Num<I>> { enum {value = (0 == I % 2) }; };
           
+          /** @test filter a type list based on a meta-predicate */
           void
-          check_filter ()
+          verify_filter()
             {
-              using FilterEven = Filter<Append<List1,List2>::List, IsEven >; 
-              DISPLAY (FilterEven);
+              CHECK (not IsEven<Num<5>>::value);
+              CHECK (    IsEven<Num<6>>::value);
+              
+              using FilterEven = Filter<Append<List1,List2>::List, IsEven >;
+              EXPECT (FilterEven, "-<2>-<6>-");
             }
           
           
+          
+          
+          /** @test verify generation of nested lists-of-lists
+           *        by distributing the elements from the first list
+           *        as prefix-concatenation to the elements of the second list
+           *  @note the second list can actually be already a list-of-lists,
+           *        allowing to set up quite elaborate generation schemes.
+           */
           void
-          check_prefix ()
+          verify_prefix ()
             {
               using Prefix1 = PrefixAll<Num<11>,Num<22>>;
-              DISPLAY (Prefix1);
+              // Note this creates a nested two-dimensional structure,
+              // i.e. a type-list, whose elements are again type-lists.
+              // The diagnostic helper prints each sublist in a new line,
+              // and prefixed by a tab:
+              EXPECT (Prefix1, "\n\t"  "+---<11>-<22>-+-");
               
               using Prefix2 = PrefixAll<Num<101>,List1>;
-              DISPLAY (Prefix2);
+              EXPECT (List1  ,         "-<1>-<2>-<3>-");
+              EXPECT (Prefix2, "\n\t"  "+---<101>-<1>-+"
+                               "\n\t"  "+---<101>-<2>-+"
+                               "\n\t"  "+---<101>-<3>-+-");
               
               using Prefix3 = PrefixAll<Nil,List1>;
-              DISPLAY (Prefix3);
+              EXPECT (Prefix3, "\n\t"  "+---<1>-+"
+                               "\n\t"  "+---<2>-+"
+                               "\n\t"  "+---<3>-+-");
               
-              using List_of_Lists = TyOLD<List1::List,Num<0>,List2::List>::List;
+              // Notably this can also be used to distribute into an already nested structure,
+              // since the implementation is based on Append, which will actually concatenate lists
+              // To demonstrate this, we first create a mixed list, where some elements are nested lists
+              using List_of_Lists = TySeq<List1::List
+                                         ,Num<0>             // ◁—————————————— this one is a regular element
+                                         ,List2::List>::List;
+              EXPECT (List_of_Lists,
+                               "\n\t"  "+---<1>-<2>-<3>-+"
+                                       "-<0>"                // ◁—————————————— here shows the regular element
+                               "\n\t"  "+---<5>-<6>-<7>-+-");
+              
               using Prefix4       = PrefixAll<Num<111>, List_of_Lists>;
-              DISPLAY (Prefix4);
+              EXPECT (Prefix4, "\n\t"  "+---<111>-<1>-<2>-<3>-+"    // ◁——————— concatenation »flattens« the lists
+                               "\n\t"  "+---<111>-<0>-+"
+                               "\n\t"  "+---<111>-<5>-<6>-<7>-+-");
               
               using Prefix5 = PrefixAll<List1,List2>;
-              DISPLAY (Prefix5);
+              EXPECT (Prefix5, "\n\t"  "+---<1>-<2>-<3>-<5>-+"
+                               "\n\t"  "+---<1>-<2>-<3>-<6>-+"
+                               "\n\t"  "+---<1>-<2>-<3>-<7>-+-");
               
               using Prefix6 = PrefixAll<List1,List_of_Lists>;
-              DISPLAY (Prefix6);
+              EXPECT (Prefix6, "\n\t"  "+---<1>-<2>-<3>-<1>-<2>-<3>-+"
+                               "\n\t"  "+---<1>-<2>-<3>-<0>-+"
+                               "\n\t"  "+---<1>-<2>-<3>-<5>-<6>-<7>-+-");
             }
           
           
+          
+          /** @test use the Prefix mechanism to generate a _cartesian product_ */
           void
-          check_distribute()
+          verify_distribute()
             {
               using Dist1 = Distribute<Num<11>, List1>;
-              DISPLAY (Dist1);
+              EXPECT (Dist1,  "\n\t"  "+---<11>-<1>-+"
+                              "\n\t"  "+---<11>-<2>-+"
+                              "\n\t"  "+---<11>-<3>-+-");
               
-              using Prefixes = TyOLD<Num<11>,Num<22>,Num<33>>::List;
-              using  Dist2   = Distribute<Prefixes, Num<0>>;
-              DISPLAY (Dist2);
+              using Prefixes = TySeq<Num<11>,Num<22>,Num<33>>::List;
+              using  Dist2 = Distribute<Prefixes, Num<0>>;
+              EXPECT (Dist2,   "\n\t"  "+---<11>-<0>-+"
+                               "\n\t"  "+---<22>-<0>-+"
+                               "\n\t"  "+---<33>-<0>-+-");
               
               using Dist3 = Distribute<Prefixes, List1>;
-              DISPLAY (Dist3);
+              EXPECT (Dist3,   "\n\t"  "+---<11>-<1>-+"
+                               "\n\t"  "+---<11>-<2>-+"
+                               "\n\t"  "+---<11>-<3>-+"
+                               "\n\t"  "+---<22>-<1>-+"
+                               "\n\t"  "+---<22>-<2>-+"
+                               "\n\t"  "+---<22>-<3>-+"
+                               "\n\t"  "+---<33>-<1>-+"
+                               "\n\t"  "+---<33>-<2>-+"
+                               "\n\t"  "+---<33>-<3>-+-");
               
-              using Dist4 = Distribute<Prefixes, TyOLD<List1::List,List2::List>::List>;
-              DISPLAY (Dist4);
+              using LioLi = TySeq<List1::List,List2::List>::List;
+              EXPECT (LioLi,   "\n\t"  "+---<1>-<2>-<3>-+"
+                               "\n\t"  "+---<5>-<6>-<7>-+-");
+              using Dist4 = Distribute<Prefixes, LioLi>;
+              EXPECT (Dist4,   "\n\t"  "+---<11>-<1>-<2>-<3>-+"
+                               "\n\t"  "+---<11>-<5>-<6>-<7>-+"
+                               "\n\t"  "+---<22>-<1>-<2>-<3>-+"
+                               "\n\t"  "+---<22>-<5>-<6>-<7>-+"
+                               "\n\t"  "+---<33>-<1>-<2>-<3>-+"
+                               "\n\t"  "+---<33>-<5>-<6>-<7>-+-");
             }
           
           
+          /** @test demonstrate special setup to enumerate case combinations
+           *  @remark can be used to pre-generate template instantiations
+           *          at compile time, for a complete configuration space
+           */
           void
-          check_combine()
-            {
-              using Down = CountDown<Num<11>>;
-              DISPLAY (Down);
+          verify_combine()
+            {          //   ▽▽▽ ———————————————defined in typelist-diagnostic.cpp
+              using Count = CountDown<Num<11>>;
+              EXPECT (Count, "-<11>-<10>-<9>-<8>-<7>-<6>-<5>-<4>-<3>-<2>-<1>-<0>-");
               
+                       //   Apply on a single type and tabulate
+              using Apply = Combine<Num<5>, CountDown>;
+              EXPECT (Apply,   "\n\t"  "+---<5>-<·>-+"
+                               "\n\t"  "+---<4>-<·>-+"
+                               "\n\t"  "+---<3>-<·>-+"
+                               "\n\t"  "+---<2>-<·>-+"
+                               "\n\t"  "+---<1>-<·>-+"
+                               "\n\t"  "+---<0>-<·>-+-");
+              
+                       //   Apply recursively to generate all combinations
               using Combi = Combine<List1::List, CountDown>;
-              DISPLAY (Combi);
+              EXPECT (Combi,   "\n\t"  "+---<1>-<2>-<3>-<·>-+"
+                               "\n\t"  "+---<1>-<2>-<2>-<·>-+"
+                               "\n\t"  "+---<1>-<2>-<1>-<·>-+"
+                               "\n\t"  "+---<1>-<2>-<0>-<·>-+"
+                               "\n\t"  "+---<1>-<1>-<3>-<·>-+"
+                               "\n\t"  "+---<1>-<1>-<2>-<·>-+"
+                               "\n\t"  "+---<1>-<1>-<1>-<·>-+"
+                               "\n\t"  "+---<1>-<1>-<0>-<·>-+"
+                               "\n\t"  "+---<1>-<0>-<3>-<·>-+"
+                               "\n\t"  "+---<1>-<0>-<2>-<·>-+"
+                               "\n\t"  "+---<1>-<0>-<1>-<·>-+"
+                               "\n\t"  "+---<1>-<0>-<0>-<·>-+"
+                               "\n\t"  "+---<0>-<2>-<3>-<·>-+"
+                               "\n\t"  "+---<0>-<2>-<2>-<·>-+"
+                               "\n\t"  "+---<0>-<2>-<1>-<·>-+"
+                               "\n\t"  "+---<0>-<2>-<0>-<·>-+"
+                               "\n\t"  "+---<0>-<1>-<3>-<·>-+"
+                               "\n\t"  "+---<0>-<1>-<2>-<·>-+"
+                               "\n\t"  "+---<0>-<1>-<1>-<·>-+"
+                               "\n\t"  "+---<0>-<1>-<0>-<·>-+"
+                               "\n\t"  "+---<0>-<0>-<3>-<·>-+"
+                               "\n\t"  "+---<0>-<0>-<2>-<·>-+"
+                               "\n\t"  "+---<0>-<0>-<1>-<·>-+"
+                               "\n\t"  "+---<0>-<0>-<0>-<·>-+-");
               
+                       //   Special use-case: call combinations of a set of flags
               using OnOff = CombineFlags<List1::List>;
-              DISPLAY (OnOff);
+              EXPECT (OnOff,   "\n\t"  "+---<1>-<2>-<3>-<·>-+"
+                               "\n\t"  "+---<1>-<2>-<·>-+"
+                               "\n\t"  "+---<1>-<3>-<·>-+"
+                               "\n\t"  "+---<1>-<·>-+"
+                               "\n\t"  "+---<2>-<3>-<·>-+"
+                               "\n\t"  "+---<2>-<·>-+"
+                               "\n\t"  "+---<3>-<·>-+"
+                               "\n\t"  "+---<·>-+-");
             }
-          
         };
       
       
