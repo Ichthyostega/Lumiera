@@ -29,10 +29,11 @@
 #include "meta/tuple-diagnostics.hpp"
 #include "lib/format-cout.hpp"
 
+#include <string>
 
-using ::test::Test;
 using lib::test::showSizeof;
-
+using util::toString;
+using std::get;
 
 namespace lib  {
 namespace meta {
@@ -43,14 +44,14 @@ namespace test {
   namespace { // test data
     
     
-    typedef TyOLD< Num<1>
+    typedef TySeq< Num<1>
                  , Num<3>
                  , Num<5>
                  >         Types1;
-    typedef TyOLD< Num<2>
+    typedef TySeq< Num<2>
                  , Num<4>
                  >         Types2;
-    typedef TyOLD< Num<7>> Types3;
+    typedef TySeq< Num<7>> Types3;
     
     
     
@@ -97,6 +98,11 @@ namespace test {
           DISPLAY (Tup1);     // prints the type
           DUMPVAL (Tup1());   // prints the contents
           DUMPVAL (tup1x);
+          
+          EXPECT (Types1,    "-<1>-<3>-<5>-");
+          EXPECT (Tup1, "TUPLE-<1>-<3>-<5>-");
+          CHECK  (get<2>(tup1x) == Num<5>{55});
+          CHECK  (toString(tup1x) == "«tuple<Num<1>, Num<3>, Num<5> >»──({11},(3),{55})"_expect);
         }
       
       
@@ -113,23 +119,27 @@ namespace test {
           using T_L1 = Tuple<L1>;           // derive a tuple type from this typelist
           using Seq1 = RebindTupleTypes<T_L1>::Seq;
                                             // extract the underlying type sequence
-          DISPLAY (T_L1);
-          DISPLAY (Seq1);
+          EXPECT (T_L1, "TUPLE-<1>-<3>-<5>-");
+          EXPECT (Seq1, "-<1>-<3>-<5>-");
           
           T_L1 tup1;                        // can be instantiated at runtime (and is just a std:tuple)
-          DUMPVAL (tup1);
+          CHECK (toString(tup1) == "«tuple<Num<1>, Num<3>, Num<5> >»──((1),(3),(5))"_expect);
           
           using Prepend = Tuple<Node<int, L1>>;
-          DISPLAY (Prepend);                // another ListType based tuple created by prepending
+                                            // another ListType based tuple created by prepending
+          EXPECT (Prepend, "TUPLE-<i>-<1>-<3>-<5>-");
           
           Prepend prep (22, 11,33,Num<5>());
-          DUMPVAL (prep);
+          CHECK (toString(prep) == "«tuple<int, Num<1>, Num<3>, Num<5> >»──(22,{11},{33},(5))"_expect);
           
-          using NulT = Tuple<TyOLD<> >;     // plain-flat empty Tuple
+          using NulT = Tuple<TySeq<> >;     // plain-flat empty Tuple
           using NulL = Tuple<Nil>;          // list-style empty Tuple
           
           NulT nulT;                        // and these, too, can be instantiated
           NulL nulL;
+          CHECK (toString(nulT) == "«tuple<>»──()"_expect);
+          CHECK (toString(nulL) == "«tuple<>»──()"_expect);
+          CHECK ((is_same<NulT, NulL>()));
           
           using S4 = struct{int a,b,c,d;};  // expect this to have the same memory layout
           CHECK (sizeof(S4) == sizeof(prep));
@@ -149,6 +159,8 @@ namespace test {
                << showSizeof(prep) <<endl
                << showSizeof(nulT) <<endl
                << showSizeof(nulL) <<endl;
+          
+          CHECK (sizeof(prep) == sizeof(int)+sizeof(Num<1>)+sizeof(Num<3>)+sizeof(Num<5>));
         }
     };
   

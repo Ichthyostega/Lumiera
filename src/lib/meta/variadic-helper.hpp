@@ -94,22 +94,22 @@ namespace meta {
   template<>
   struct BuildIndexSeq<0>
     {
-      using Empty = IndexSeq<>;
+      using EmptySeq = IndexSeq<>;
       
-      using Ascending  = Empty;
-      using Descending = Empty;
-      
-      template<size_t>
-      using OffsetBy   = Empty;
+      using Ascending  = EmptySeq;
+      using Descending = EmptySeq;
       
       template<size_t>
-      using FilledWith = Empty;
+      using OffsetBy   = EmptySeq;
       
       template<size_t>
-      using First = Empty;
+      using FilledWith = EmptySeq;
       
       template<size_t>
-      using After = Empty;
+      using First = EmptySeq;
+      
+      template<size_t>
+      using After = EmptySeq;
     };
   
   
@@ -140,6 +140,7 @@ namespace meta {
     };
 
   /** build an index number sequence from a type sequence */
+   //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #987 temporary WORKAROUND -- to be obsoleted
   template<typename...TYPES>
   struct BuildIdxIter<TyOLD<TYPES...>>
     {
@@ -162,6 +163,11 @@ namespace meta {
       template<size_t c>
       using After = typename Builder::template After<c>;
     };
+   //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #987 temporary WORKAROUND(END)
+  template<typename...TYPES>
+  struct BuildIdxIter<TySeq<TYPES...>>
+    : BuildIdxIter<TYPES...>
+    { };
   
   
   

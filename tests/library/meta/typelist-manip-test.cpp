@@ -33,7 +33,6 @@
 #include "lib/meta/generator.hpp"
 #include "lib/meta/typelist-manip.hpp"
 #include "meta/typelist-diagnostics.hpp"
-#include "lib/test/diagnostic-output.hpp"/////////////////TODO
 
 #include <type_traits>
 
@@ -383,6 +382,7 @@ namespace test {
           /** @test demonstrate special setup to enumerate case combinations
            *  @remark can be used to pre-generate template instantiations
            *          at compile time, for a complete configuration space
+           *  @see GeneratorCombinations_test
            */
           void
           verify_combine()

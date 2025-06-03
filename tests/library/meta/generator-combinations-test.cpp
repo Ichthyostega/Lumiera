@@ -35,11 +35,11 @@ namespace test {
   
   namespace { // test cases and data....
     
-    typedef TyOLD< Num<1>
+    typedef TySeq< Num<1>
                  , Num<3>
                  , Num<5>
                  >        Types1;
-    typedef TyOLD< Num<2>
+    typedef TySeq< Num<2>
                  , Num<4>
                  , Num<6>
                  >        Types2;
@@ -95,7 +95,7 @@ namespace test {
   class GeneratorCombinations_test : public Test
     {
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           checkCartesian();
           checkCaseInstantiation();
@@ -113,9 +113,9 @@ namespace test {
       void
       checkCaseInstantiation ()
         {
-          typedef InstantiateChainedCombinations< Types1,Types2
-                                                , TestCase
-                                                , IterationEnd > CombnationCases;
+          using CombnationCases = InstantiateChainedCombinations< Types1,Types2
+                                                                , TestCase
+                                                                , IterationEnd >;
           
           cout << "All-Test-Combinations-" << CombnationCases::visitAll() << endl;
         }

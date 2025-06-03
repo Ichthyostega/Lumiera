@@ -277,7 +277,7 @@ namespace interact {
                     // append ID of the new element to be created
                     // unless it's already there (and thus exists)
                     resolver.append (elementTypeID);
-                  return move (resolver);  //////////////////////////////////////////////////////////////////TICKET #1402 : need a better solution for the builder-terminal-op. (it collides with the templated UICoord ctor)
+                  return move (resolver);  //////////////////////////////////////////////////////////////////TICKET #1402 : need a better solution for the builder-terminal-op. (it collides with the templated UICoord ctor) |NOTE: the compiler waring is wrong here, the move() is essential 
                       // use the first suitable solution and exit
                 }
               else
