@@ -173,9 +173,9 @@ namespace test {
           typedef Num<1> Sig123(Num<1>, Num<2>, Num<3>);             // signature of the original function
           
           typedef Num<1> Sig23(Num<2>, Num<3>);                      // signature after having closed over the first argument
-          typedef function<Sig23> F23;                               // and a std::function object to hold such a function
+          using F23 = function<Sig23>;                               // and a std::function object to hold such a function
           
-          Sig123& f =fun13<1,2,3>;                                   // the actual input: a reference to the bare function
+          Sig123& f = fun13<1,2,3>;                                  // the actual input: a reference to the bare function
           
           
           // Version1: do a direct argument binding----------------- //
@@ -200,8 +200,8 @@ namespace test {
           
           // Version2: extract the binding arguments from a tuple--- //
           
-          using PartialArg =  Tuple<TyOLD<Num<1>, PH1, PH2>>;        // Tuple type to hold the binding values. Note the placeholder types
-          PartialArg arg(num18, PH1(), PH2());                       // Value for partial application (the placeholders are default constructed)
+          using PartialArg =  Tuple<TySeq<Num<1>, PH1, PH2>>;        // Tuple type to hold the binding values. Note the placeholder types
+          PartialArg arg{num18, PH1(), PH2()};                       // Value for partial application (the placeholders are default constructed)
           
           fun_23 = std::bind (f, get<0>(arg)                         // now extract the values to bind from this tuple
                                , get<1>(arg)
@@ -216,8 +216,8 @@ namespace test {
           
           // Version3: let the PApply-template do the work for us--- //
           
-          typedef TyOLD<Num<1>> ArgTypes;                            // now package just the argument(s) to be applied into a tuple
-          Tuple<ArgTypes> args_to_bind (Num<1>(18));
+          using ArgTypes = TySeq<Num<1>>;                            // now package just the argument(s) to be applied into a tuple
+          Tuple<ArgTypes> args_to_bind{Num<1>(18)};
           
           fun_23 = PApply<Sig123, ArgTypes>::bindFront (f , args_to_bind);
                                                                      // "bindFront" will close the parameters starting from left....
@@ -235,29 +235,29 @@ namespace test {
           fun_23 = func::applyFirst (f, Num<1>(18));                 // use the convenience function API to close over a single value
           
           res = 0;
-          res = fun_23 (_2_,_3_).o_;                                 // invoke the resulting functor...
+          res = fun_23(_2_,_3_).o_;                                  // invoke the resulting functor...
           CHECK (23 == res);
           
           
           
           // what follows is the real unit test...
-          function<Sig123> func123 (f);                              // alternatively do it with an std::function object
+          function<Sig123> func123{f};                               // alternatively do it with an std::function object
           fun_23 = func::applyFirst (func123, Num<1>(19));
-          res = fun_23 (_2_,_3_).o_;
+          res = fun_23(_2_,_3_).o_;
           CHECK (24 == res);
           
-          typedef function<Num<1>(Num<1>, Num<2>)> F12;
-          F12 fun_12 = func::applyLast(f, Num<3>(20));               // close the *last* argument of a function
-          res = fun_12 (_1_,_2_).o_;
+          using F12 = function<Num<1>(Num<1>, Num<2>)>;
+          F12 fun_12 = func::applyLast (f, Num<3>(20));              // close the *last* argument of a function
+          res = fun_12(_1_,_2_).o_;
           CHECK (23 == res);
           
-          fun_12 = func::applyLast(func123, Num<3>(21));             // alternatively use a function object
-          res = fun_12 (_1_,_2_).o_;
+          fun_12 = func::applyLast (func123, Num<3>(21));            // alternatively use a function object
+          res = fun_12(_1_,_2_).o_;
           CHECK (24 == res);
           
-          Sig123 *fP = &f;                                           // a function pointer works too
-          fun_12 = func::applyLast( fP, Num<3>(22));
-          res = fun_12 (_1_,_2_).o_;
+          Sig123* fP = &f;                                           // a function pointer works too
+          fun_12 = func::applyLast (fP, Num<3>(22));
+          res = fun_12(_1_,_2_).o_;
           CHECK (25 == res);
                                                                      // cover more cases....
           
@@ -277,17 +277,17 @@ namespace test {
           
           // Finally a more convoluted example
           // covering the general case of partial function closure:
-          typedef Num<5> Sig54321(Num<5>, Num<4>, Num<3>, Num<2>, Num<1>);   // Signature of the 5-argument function
-          typedef Num<5> Sig54   (Num<5>, Num<4>);                           // ...closing the last 3 arguments should yield this 2-argument function
-          typedef TyOLD<Num<3>,Num<2>,Num<1>> Args2Close;                    // Tuple type to hold the 3 argument values used for the closure
+          typedef Num<5> Sig54321 (Num<5>, Num<4>, Num<3>, Num<2>, Num<1>);  // Signature of the 5-argument function
+          typedef Num<5> Sig54    (Num<5>, Num<4>);                          // ...closing the last 3 arguments should yield this 2-argument function
+          using Args2Close = TyOLD<Num<3>, Num<2>, Num<1>>;                  // Tuple type to hold the 3 argument values used for the closure
           
           // Close the trailing 3 arguments of the 5-argument function...
-          function<Sig54> fun_54 = PApply<Sig54321, Args2Close>::bindBack(fun15<5,4,3,2,1>,
-                                                                          make_tuple(_3_,_2_,_1_)
+          function<Sig54> fun_54 = PApply<Sig54321,Args2Close>::bindBack (fun15<5,4,3,2,1>
+                                                                         ,make_tuple (_3_,_2_,_1_)
                                                                          );
           
           // apply the remaining argument values
-          Num<5> resN5 = fun_54 (_5_,_4_);
+          Num<5> resN5 = fun_54(_5_,_4_);
           CHECK (5+4+3+2+1 == resN5.o_);
         }
       

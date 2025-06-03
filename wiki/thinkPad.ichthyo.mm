@@ -58636,11 +58636,11 @@
 </node>
 <node CREATED="1739743156265" ID="ID_221325784" MODIFIED="1739743198704" TEXT="&#xdc;bergang per alternativer Definition: Types&lt;...&gt; vs TySeq&lt;...&gt;"/>
 <node CREATED="1739743142166" ID="ID_1562037968" MODIFIED="1739743153038" TEXT="schrittweise kompatibel machen und schwenken">
-<node COLOR="#338800" CREATED="1739743226160" ID="ID_490359788" MODIFIED="1739743238719" TEXT="_Fun&lt;SIG&gt; liefert nun variadic-sequence">
+<node COLOR="#338800" CREATED="1739743226160" ID="ID_490359788" MODIFIED="1748990717720" TEXT="_Fun&lt;SIG&gt; liefert nun variadic-sequence">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1739743240214" ID="ID_1756740911" MODIFIED="1739743248263" TEXT="geplant: Namen austauschen">
-<icon BUILTIN="hourglass"/>
+<node BACKGROUND_COLOR="#d2ccaf" COLOR="#5c4d6e" CREATED="1739743240214" ID="ID_1756740911" MODIFIED="1748990676800" TEXT="Idee f&#xfc;r schrittweise migration: Namen austauschen">
+<icon BUILTIN="idea"/>
 </node>
 <node CREATED="1748826315559" ID="ID_575940847" MODIFIED="1748826459126" TEXT="gehe das Thema jetzt vor C++20 an">
 <arrowlink COLOR="#4c5dd7" DESTINATION="ID_358783348" ENDARROW="Default" ENDINCLINATION="-1131;-56;" ID="Arrow_ID_470275962" STARTARROW="None" STARTINCLINATION="-4286;314;"/>
@@ -106148,7 +106148,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node COLOR="#435e98" CREATED="1739242327059" FOLDED="true" ID="ID_1669934372" MODIFIED="1739907809832" TEXT="Adapter zum Binden bestimmter Argumente im Node-Builder generieren">
+<node COLOR="#435e98" CREATED="1739242327059" ID="ID_1669934372" MODIFIED="1748990571547" TEXT="Adapter zum Binden bestimmter Argumente im Node-Builder generieren">
 <icon BUILTIN="full-3"/>
 <node COLOR="#435e98" CREATED="1739549014719" ID="ID_1456986239" MODIFIED="1739901513065" TEXT="Design-Frage: wie weit ausarbeiten?">
 <node CREATED="1739549031081" ID="ID_1258607359" MODIFIED="1739890680031" TEXT="minimal-L&#xf6;sung: gar nix bieten &#x2014; User soll &#x3bb; bauen">
@@ -106305,7 +106305,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node COLOR="#435e98" CREATED="1739582050928" FOLDED="true" ID="ID_1634640852" MODIFIED="1739907799729" TEXT="also mal im Test-Setup beispielhaft ausarbeiten">
+<node COLOR="#435e98" CREATED="1739582050928" ID="ID_1634640852" MODIFIED="1748990607692" TEXT="also mal im Test-Setup beispielhaft ausarbeiten">
 <linktarget COLOR="#4936b3" DESTINATION="ID_1634640852" ENDARROW="Default" ENDINCLINATION="82;-233;" ID="Arrow_ID_40372708" SOURCE="ID_1709833697" STARTARROW="None" STARTINCLINATION="-287;31;"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1739644403194" ID="ID_1724825463" MODIFIED="1739644431815" TEXT="Beispiel-Funktion nimmt ein Array mit 5 Parametern"/>
@@ -106460,7 +106460,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node COLOR="#338800" CREATED="1739742027076" ID="ID_1345350905" MODIFIED="1739834260054" TEXT="schrittweise verallgemeinern">
 <arrowlink COLOR="#29d01f" DESTINATION="ID_116229103" ENDARROW="Default" ENDINCLINATION="73;-65;" ID="Arrow_ID_1782513655" STARTARROW="None" STARTINCLINATION="-195;18;"/>
 <icon BUILTIN="button_ok"/>
-<node COLOR="#338800" CREATED="1739742051151" FOLDED="true" ID="ID_240638029" MODIFIED="1739890549558" TEXT="Hindernis wegr&#xe4;umen: trailing NullType in Typsequenz der Funktions-Argumente">
+<node COLOR="#338800" CREATED="1739742051151" ID="ID_240638029" MODIFIED="1748990610930" TEXT="Hindernis wegr&#xe4;umen: trailing NullType in Typsequenz der Funktions-Argumente">
 <icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#e6e1bd" CREATED="1739742093416" ID="ID_74503597" LINK="#ID_490359788" MODIFIED="1739743326711" TEXT="zugleich ein wichtiger Schritt f&#xfc;r #987">
 <icon BUILTIN="idea"/>
@@ -164240,9 +164240,7 @@ Since then others have made contributions, see the log for the history.</font></
 <node COLOR="#435e98" CREATED="1748828247849" ID="ID_476644412" MODIFIED="1748869713383" TEXT="Verbindung mit Typelisten">
 <node COLOR="#338800" CREATED="1749001830758" ID="ID_91346918" MODIFIED="1749007560980" TEXT="eigenst&#xe4;ndige Konstruktion von Type-Listen hinzuf&#xfc;gen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       bisher wurde das durch Delegieren an die alte Loki-Implementierung bewerkstelligt; das nun direkt auf der Basis von Variadics zu machen, w&#228;re der zentrale Schritt, der das neue &#214;kosystem der variadischen Typlisten autonom macht (so da&#223; man am Ende die alte nicht-variadische Definition entfernen kann)
@@ -164257,9 +164255,7 @@ Since then others have made contributions, see the log for the history.</font></
 <arrowlink DESTINATION="ID_281104576" ENDARROW="Default" ENDINCLINATION="589;-82;" ID="Arrow_ID_351374746" STARTARROW="None" STARTINCLINATION="458;41;"/>
 <node CREATED="1748828416378" ID="ID_1994646495" MODIFIED="1748869656471" TEXT="es gibt eine Spezialisierung von TyOLD">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       in typeseq-util (etwas versteckt zwischen den Spezialisierungen von Prepend, was wiederum Vorraussetzung ist, so einen R&#252;ckweg konstruieren zu k&#246;nnen)
@@ -164274,9 +164270,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node COLOR="#338800" CREATED="1748828579825" ID="ID_873142911" MODIFIED="1748900607872" TEXT="typelist-manip ist v&#xf6;llig eigenst&#xe4;ndig">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       d.h arbeitet ausschlie&#223;lich auf Typlisten und bezieht sich nirgends auf Typ-Sequenzen
@@ -164297,9 +164291,7 @@ Since then others have made contributions, see the log for the history.</font></
 <node COLOR="#435e98" CREATED="1748828754106" ID="ID_138237629" MODIFIED="1749003967494" TEXT="typelist-diagnostic ebenso">
 <node CREATED="1748828767089" ID="ID_1047311703" MODIFIED="1748828818895" TEXT="meta::is_Typelist ist geschickt definiert">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       es stellt n&#228;mllich nur auf einen nested&#160;&#160;X::List ab
@@ -164327,23 +164319,54 @@ Since then others have made contributions, see the log for the history.</font></
 <node COLOR="#435e98" CREATED="1748829095135" ID="ID_1295682918" MODIFIED="1749007403090" TEXT="Funktionen">
 <node COLOR="#435e98" CREATED="1748829099022" ID="ID_766756688" MODIFIED="1749007398648" TEXT="Signatur-Utils">
 <node CREATED="1748829959670" ID="ID_1188075291" MODIFIED="1748829968228" TEXT="sind bereits mit beiden kompatibel"/>
+<node COLOR="#374933" CREATED="1748990516282" ID="ID_1244770313" LINK="#ID_490359788" MODIFIED="1748990753597" TEXT="Typ der Argumentliste wird als variadische Sequenz geliefert">
+<icon BUILTIN="idea"/>
+</node>
 </node>
 <node COLOR="#338800" CREATED="1748829102455" ID="ID_1254282139" MODIFIED="1749007395415" TEXT="Closure">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1748829838133" ID="ID_1933174501" MODIFIED="1748995159628" TEXT="wenige wichtige Verwendungen">
 <node CREATED="1748829860803" ID="ID_517247632" MODIFIED="1748829863739" TEXT="Commands"/>
 <node CREATED="1748829872320" ID="ID_568804131" MODIFIED="1748829875428" TEXT="Random-Draw"/>
-<node CREATED="1748829881837" ID="ID_1354679657" MODIFIED="1748829885400" TEXT="tuple-closure"/>
+<node CREATED="1748829881837" ID="ID_1354679657" MODIFIED="1748829885400" TEXT="tuple-closure">
+<node CREATED="1748994867978" ID="ID_233227122" MODIFIED="1748994877591" TEXT="NodeBuilder">
+<icon BUILTIN="idea"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1748994962147" ID="ID_1390459320" MODIFIED="1748995118216" TEXT="volles Feature">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das ist m.W. der einzige Use-Case, der das <i>vollst&#228;ndige Feature</i>&#160; der partiellen Funktions-Closure mit N argumenten verwendet; meist wird nur der einfache convenience-Fall mit dem ersten oder letzten Argument genommen. Das bedeutet, hier wird auch eine Typ-Sequenz generiert, und daraus ein Tupel... (und da ich dieses Feature erst 2025 entwickelt habe, arbeitet es bereits ausschlie&#223;lich mit den neuen variadischen Sequenzen)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
 <node CREATED="1748829890844" ID="ID_1803577911" MODIFIED="1748829894782" TEXT="view-spec-dsl"/>
 </node>
-<node CREATED="1749007506535" ID="ID_240022720" MODIFIED="1749007506535" TEXT="mu&#xdf; auf einen Schlag geschwenkt werden (Komplexit&#xe4;t)"/
+<node CREATED="1748992492455" ID="ID_240022720" MODIFIED="1748992513597" TEXT="mu&#xdf; auf einen Schlag geschwenkt werden (Komplexit&#xe4;t)">
+<arrowlink DESTINATION="ID_142039126" ENDARROW="Default" ENDINCLINATION="726;0;" ID="Arrow_ID_535671141" STARTARROW="None" STARTINCLINATION="726;0;"/>
+<arrowlink DESTINATION="ID_1545630215" ENDARROW="Default" ENDINCLINATION="741;0;" ID="Arrow_ID_1949399206" STARTARROW="None" STARTINCLINATION="741;0;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
 <node CREATED="1748829733384" ID="ID_83679265" MODIFIED="1748829744922" TEXT="sollte sich bereits ohne weiteres schwenken lassen"/>
-<node CREATED="1748829745682" ID="ID_61352432" MODIFIED="1748829759664" TEXT="erzeugt nur Tuple, oder macht Split / Prepend"/>
-<node CREATED="1748829779637" ID="ID_1158113558" MODIFIED="1748829835939" TEXT="man k&#xf6;nnte dann im Nachgang die Apply-Definition eliminieren">
+<node CREATED="1748829745682" ID="ID_61352432" MODIFIED="1748829759664" TEXT="erzeugt nur Tuple, oder macht Split / Prepend">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1749000930632" ID="ID_858022461" MODIFIED="1749001079813" TEXT="Vorsicht Types&lt;List&gt;::Seq">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
+  <body>
+    <p>
+      Das sieht auf den ersten Blick d&#228;mlich aus, aber vorsicht, der Template-Parameter ist kein Variadic, sondern eine Loki-Liste; damit greift hier eine Spezialisierung, die im Header typeseq-util.hpp definiert ist: die variadische Sequenz wird eigens per Prepend&lt;...&gt; wieder aufgebaut... (hab lange gebraucht bist ich das geschnallt habe)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1748992588450" ID="ID_262144930" MODIFIED="1748992602312" TEXT="Typ-Sequenzen treten nur intern auf, nicht auf dem API"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1748829779637" ID="ID_1158113558" MODIFIED="1749001112944" TEXT="man k&#xf6;nnte dann im Nachgang die Apply-Definition eliminieren">
+<richcontent TYPE="NOTE"><html>
+  <head/>
   <body>
     <p>
       ...aber nur wenn's einfach geht; eigentlich ist das au&#223;erhalb vom Scope und k&#246;nnte auch sp&#228;ter mal gemacht werden (ist nur ein Implementierungsdetail), sofern die bestehende Impl mit den neuen Typlisten arbeitet
@@ -164351,6 +164374,7 @@ Since then others have made contributions, see the log for the history.</font></
   </body>
 </html>
 </richcontent>
+<icon BUILTIN="hourglass"/>
 </node>
 </node>
 </node>
@@ -164409,8 +164433,16 @@ Since then others have made contributions, see the log for the history.</font></
 <node CREATED="1748829442778" MODIFIED="1748829442778" TEXT="HandlingPatternBasics_test"/>
 <node CREATED="1748829453011" MODIFIED="1748829453011" TEXT="BuilderTool_test"/>
 <node CREATED="1748829468217" MODIFIED="1748829468217" TEXT="SessionServiceAccess_test"/>
-<node CREATED="1748829480048" MODIFIED="1748829480048" TEXT="FunctionClosure_test"/>
-<node CREATED="1748829502213" MODIFIED="1748829502213" TEXT="FunctionComposition_test"/>
+<node COLOR="#435e98" CREATED="1748829480048" ID="ID_142039126" MODIFIED="1749007517616" TEXT="FunctionClosure_test">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_142039126" ENDARROW="Default" ENDINCLINATION="726;0;" ID="Arrow_ID_535671141" SOURCE="ID_240022720" STARTARROW="None" STARTINCLINATION="726;0;"/>
+</node>
+<node COLOR="#435e98" CREATED="1748829502213" ID="ID_1545630215" MODIFIED="1749007517616" TEXT="FunctionComposition_test">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1545630215" ENDARROW="Default" ENDINCLINATION="741;0;" ID="Arrow_ID_1949399206" SOURCE="ID_240022720" STARTARROW="None" STARTINCLINATION="741;0;"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#cd016f" CREATED="1748993653112" ID="ID_1058696109" MODIFIED="1748993677622" TEXT="Stackoverflow in Eclipse">
+<font NAME="SansSerif" SIZE="10"/>
+<icon BUILTIN="smiley-angry"/>
+</node>
+</node>
 <node COLOR="#435e98" CREATED="1748829512571" ID="ID_1542151497" MODIFIED="1749007468620" TEXT="GeneratorCombinations_test"/>
 <node COLOR="#435e98" CREATED="1748829523737" ID="ID_803058969" MODIFIED="1748883754992" TEXT="TypeListGenerator_test">
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_803058969" ENDARROW="Default" ENDINCLINATION="852;0;" ID="Arrow_ID_1971292758" SOURCE="ID_511778446" STARTARROW="None" STARTINCLINATION="302;17;"/>

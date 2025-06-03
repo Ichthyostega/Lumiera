@@ -14,15 +14,19 @@
 
 /** @file function-closure.hpp
  ** Partial function application and building a complete function closure.
- ** This is a addendum to std::bind, to support especially the case when a
- ** function should be _closed_ over (partially or all) arguments. This implies
- ** to bind some arguments immediately, while keeping other arguments open to
- ** be supplied on function invocation.
- ** Additionally, we allow for composing (chaining) of two functions.
- ** @warning this header is in a state of transition as of 2/2025, because functionality
- **       of this kind will certainly needed in future, but with full support for lambdas,
- **       move-only types and perfect forwarding. A gradual rework has been started, and
- **       will lead to a complete rewrite of the core functionality eventually, making
+ ** These are features known from functional programming and are here implemented
+ ** based on std::bind, to support especially the case when some arguments of a
+ ** function are known at an earlier stage, and should thus be »baked in«, while
+ ** further arguments will be supplied later, for the actual invocation. This
+ ** implies to _close_ (and thus bind) some arguments immediately, while keeping
+ ** other arguments open to — so the result of this operation is again a function,
+ ** albeit with fewer arguments.
+ ** Additionally, we allow for _composing_ (chaining) of two functions.
+ ** @warning this header is in a state of transition as of 6/2025, because functionality
+ **       of this kind will certainly be needed in future, but with full support for lambdas,
+ **       move-only types and perfect forwarding. The current implementation of std::bind
+ **       is already quite optimal regarding this support. A gradual rework has been started,
+ **       and will lead to a complete rewrite of the core functionality eventually, making
  **       better use of variadic templates and library functions like std::apply, which
  **       were not available at the time of the first implementation.
  ** 
@@ -41,6 +45,8 @@
  **       function-style front-end, it should be aligned with these standard facilities.
  **       We might want to retain a simple generic interface especially for binding some
  **       selected argument, which handles the intricacies of storing the functor.
+ ** @todo 6/25 note however that the full-fledged partial function application is a
+ **       **relevant core feature** and is used in the NodeBuilder (see tuple-closure.hpp).
  ** 
  ** @see control::CommandDef usage example
  ** @see function-closure-test.hpp
@@ -575,7 +581,7 @@ namespace func{
       using Ret      = typename _Fun<SIG>::Ret;
       using ArgsList = typename Args::List;
       using ValList  = typename VAL::List;
-      using ValTypes = typename TyOLD<ValList>::Seq;
+      using ValTypes = typename TySeq<ValList>::Seq;           // reconstruct a type-seq from a type-list
       
       enum { ARG_CNT = count<ArgsList>()
            , VAL_CNT = count<ValList>()
@@ -587,8 +593,8 @@ namespace func{
       using LeftReduced = typename Splice<ArgsList, ValList>::Back;
       using RightReduced = typename Splice<ArgsList, ValList, ROFFSET>::Front;
       
-      using ArgsL = typename TyOLD<LeftReduced>::Seq;
-      using ArgsR = typename TyOLD<RightReduced>::Seq;
+      using ArgsL = typename TySeq<LeftReduced>::Seq;
+      using ArgsR = typename TySeq<RightReduced>::Seq;
       
       
       // build a list, where each of the *remaining* arguments is replaced by a placeholder marker
@@ -600,8 +606,8 @@ namespace func{
       using LeftReplaced  = typename Splice<ArgsList, TrailingPlaceholders, VAL_CNT>::List;
       using RightReplaced = typename Splice<ArgsList, LeadingPlaceholders,  0      >::List;
       
-      using LeftReplacedTypes = typename TyOLD<LeftReplaced>::Seq;
-      using RightReplacedTypes = typename TyOLD<RightReplaced>::Seq;
+      using LeftReplacedTypes = typename TySeq<LeftReplaced>::Seq;
+      using RightReplacedTypes = typename TySeq<RightReplaced>::Seq;
       
       // create a "builder" helper, which accepts exactly the value tuple elements
       // and puts them at the right location, while default-constructing the remaining
@@ -679,7 +685,7 @@ namespace func{
       using Args     = typename _Fun<SIG>::Args;
       using Ret      = typename _Fun<SIG>::Ret;
       using ArgsList = typename     Args::List;
-      using ValList  = typename TyOLD<X>::List;
+      using ValList  = typename TySeq<X>::List;
       
       enum { ARG_CNT = count<ArgsList>() };
 
@@ -694,8 +700,8 @@ namespace func{
                                               >::List;
       using ReducedArgs      = typename Append<RemainingFront, RemainingBack>::List;
       
-      using PreparedArgTypes = typename TyOLD<PreparedArgs>::Seq;
-      using RemainingArgs    = typename TyOLD<ReducedArgs>::Seq;
+      using PreparedArgTypes = typename TySeq<PreparedArgs>::Seq;
+      using RemainingArgs    = typename TySeq<ReducedArgs>::Seq;
       
       using ReducedSig = typename BuildFunType<Ret,RemainingArgs>::Sig;
       
@@ -728,16 +734,16 @@ namespace func{
     template<typename RET, typename ARG>
     struct _Sig
       {
-        typedef typename BuildFunType<RET, ARG>::Sig Type;
-        typedef TupleApplicator<Type> Applicator;
+        using Type = typename BuildFunType<RET, ARG>::Sig;
+        using Applicator = TupleApplicator<Type>;
       };
     
     template<typename SIG, typename ARG>
     struct _Clo
       {
-        typedef typename _Fun<SIG>::Ret Ret;
-        typedef typename _Sig<Ret,ARG>::Type Signature;
-        typedef FunctionClosure<Signature> Type;
+        using Ret       = typename _Fun<SIG>::Ret;
+        using Signature = typename _Sig<Ret,ARG>::Type;
+        using Type      = FunctionClosure<Signature>;
       };
     
     template<typename FUN1, typename FUN2>
@@ -844,11 +850,11 @@ namespace func{
    */
   template<typename...ARG>
   inline
-  typename _Sig<void, TyOLD<ARG...>>::Applicator
+  typename _Sig<void, TySeq<ARG...>>::Applicator
   tupleApplicator (std::tuple<ARG...>& args)
   {
-    typedef typename _Sig<void,TyOLD<ARG...>>::Type Signature;
-    return TupleApplicator<Signature> (args);
+    using Signature = typename _Sig<void,TySeq<ARG...>>::Type;
+    return TupleApplicator<Signature>{args};
   }
   
   
@@ -859,9 +865,9 @@ namespace func{
   typename _Fun<SIG>::Ret
   apply (SIG& f, std::tuple<ARG...>& args)
   {
-    typedef typename _Fun<SIG>::Ret Ret;                          //
-    typedef typename _Sig<Ret,TyOLD<ARG...>>::Type Signature;    // Note: deliberately re-building the Signature Type
-    return TupleApplicator<Signature> (args) (f);               //        in order to get better error messages here
+    using Ret = typename _Fun<SIG>::Ret;                          //
+    using Signature = typename _Sig<Ret,TySeq<ARG...>>::Type;    // Note: deliberately re-building the Signature Type
+    return TupleApplicator<Signature>{args} (f);                //        in order to get better error messages here
   }
   
   /** close the given function over all arguments,
@@ -871,10 +877,10 @@ namespace func{
    *          function result. */
   template<typename SIG, typename...ARG>
   inline
-  typename _Clo<SIG,TyOLD<ARG...>>::Type
+  typename _Clo<SIG,TySeq<ARG...>>::Type
   closure (SIG& f, std::tuple<ARG...>& args)
   {
-    typedef typename _Clo<SIG,TyOLD<ARG...>>::Type Closure;
+    using Closure = typename _Clo<SIG,TySeq<ARG...>>::Type;
     return Closure (f,args);
   }
   

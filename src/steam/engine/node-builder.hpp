@@ -182,6 +182,8 @@ namespace engine {
    *     - the Build is completed with the NodeBuilder::build() terminal,
    *       which generates a \ref Connectivity object, that can be directly
    *       dropped into the constructor of ProcNode.
+   * @tparam POL policy to control allocation etc...
+   * @tparam DAT pattern data structure built during chained NodeBuilder invocations
    */
   template<class POL, class DAT = PatternDataAnchor>
   class NodeBuilder
@@ -325,6 +327,9 @@ namespace engine {
    * Nested DSL-Builder context to define a regular media processing Port
    * @remark relies on [delegate sub-builder](\ref WeavingBuilder) for
    *         technical details of data feed and parameter wiring.
+   * @tparam POL policy (allocation)
+   * @tparam DAT pattern data (collect results for chained calls)
+   * @tparam WAB concrete instantiation of the WeavingBuilder delegate
    */
   template<class POL, class DAT, class WAB>
   class PortBuilder
