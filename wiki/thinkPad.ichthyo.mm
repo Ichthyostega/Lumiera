@@ -164238,7 +164238,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 <node COLOR="#435e98" CREATED="1748828247849" ID="ID_476644412" MODIFIED="1748869713383" TEXT="Verbindung mit Typelisten">
-<node COLOR="#338800" CREATED="1749001830758" ID="ID_91346918" MODIFIED="1749007560980" TEXT="eigenst&#xe4;ndige Konstruktion von Type-Listen hinzuf&#xfc;gen">
+<node COLOR="#338800" CREATED="1749001830758" ID="ID_91346918" MODIFIED="1749078634991" TEXT="eigenst&#xe4;ndige Konstruktion von Type-Listen hinzuf&#xfc;gen">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -164246,8 +164246,7 @@ Since then others have made contributions, see the log for the history.</font></
       bisher wurde das durch Delegieren an die alte Loki-Implementierung bewerkstelligt; das nun direkt auf der Basis von Variadics zu machen, w&#228;re der zentrale Schritt, der das neue &#214;kosystem der variadischen Typlisten autonom macht (so da&#223; man am Ende die alte nicht-variadische Definition entfernen kann)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#8ec9a3" DESTINATION="ID_1097523075" ENDARROW="Default" ENDINCLINATION="1324;0;" ID="Arrow_ID_370033957" STARTARROW="None" STARTINCLINATION="481;24;"/>
 <icon BUILTIN="button_ok"/>
 </node>
@@ -164261,8 +164260,7 @@ Since then others have made contributions, see the log for the history.</font></
       in typeseq-util (etwas versteckt zwischen den Spezialisierungen von Prepend, was wiederum Vorraussetzung ist, so einen R&#252;ckweg konstruieren zu k&#246;nnen)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node COLOR="#338800" CREATED="1748828427985" ID="ID_819357004" MODIFIED="1748869657923" TEXT="auch eine f&#xfc;r TySeq hinzuf&#xfc;gen">
 <icon BUILTIN="button_ok"/>
@@ -164276,8 +164274,7 @@ Since then others have made contributions, see the log for the history.</font></
       d.h arbeitet ausschlie&#223;lich auf Typlisten und bezieht sich nirgends auf Typ-Sequenzen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1748900614743" ID="ID_516014802" MODIFIED="1748900632652" TEXT="durch Test belegt: funtioniert auch mit den neuen Type-Sequenzen">
 <font NAME="SansSerif" SIZE="10"/>
@@ -164297,8 +164294,7 @@ Since then others have made contributions, see the log for the history.</font></
       es stellt n&#228;mllich nur auf einen nested&#160;&#160;X::List ab
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1748828781783" ID="ID_691444823" MODIFIED="1748828794388" TEXT="sollte also f&#xfc;r alle Varianten gleicherma&#xdf;en greifen"/>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1748888164617" ID="ID_145174722" MODIFIED="1748980951490" TEXT="sollte Tests ustellen auf Inline-Checks (mit _expect)">
@@ -164345,7 +164341,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node CREATED="1748829890844" ID="ID_1803577911" MODIFIED="1748829894782" TEXT="view-spec-dsl"/>
 </node>
-<node CREATED="1748992492455" ID="ID_240022720" MODIFIED="1748992513597" TEXT="mu&#xdf; auf einen Schlag geschwenkt werden (Komplexit&#xe4;t)">
+<node CREATED="1748992492455" ID="ID_240022720" MODIFIED="1749078649878" TEXT="mu&#xdf; auf einen Schlag geschwenkt werden (Komplexit&#xe4;t)">
 <arrowlink DESTINATION="ID_142039126" ENDARROW="Default" ENDINCLINATION="726;0;" ID="Arrow_ID_535671141" STARTARROW="None" STARTINCLINATION="726;0;"/>
 <arrowlink DESTINATION="ID_1545630215" ENDARROW="Default" ENDINCLINATION="741;0;" ID="Arrow_ID_1949399206" STARTARROW="None" STARTINCLINATION="741;0;"/>
 <icon BUILTIN="messagebox_warning"/>
@@ -164372,9 +164368,35 @@ Since then others have made contributions, see the log for the history.</font></
       ...aber nur wenn's einfach geht; eigentlich ist das au&#223;erhalb vom Scope und k&#246;nnte auch sp&#228;ter mal gemacht werden (ist nur ein Implementierungsdetail), sofern die bestehende Impl mit den neuen Typlisten arbeitet
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="hourglass"/>
+<node CREATED="1749074120514" ID="ID_1124039482" MODIFIED="1749074155396" TEXT="Schritt 1: Apply::invoke durch std::apply ersetzen">
+<node CREATED="1749074488848" ID="ID_483438140" MODIFIED="1749074510349" TEXT="std::apply nimmt Funktion und Argument-Tupel per perfect-forwarding"/>
+<node CREATED="1749074518632" ID="ID_271102144" MODIFIED="1749074526683" TEXT="unsere Impl arbeitet bisher mit Referenzen"/>
+<node CREATED="1749074644727" ID="ID_800672638" MODIFIED="1749074650748" TEXT="tats&#xe4;chlich...">
+<node CREATED="1749074651689" ID="ID_1201506659" MODIFIED="1749074657673" TEXT="nur zwei Verwendungen"/>
+<node CREATED="1749074658274" ID="ID_1612862461" MODIFIED="1749074814185" TEXT="theoretisch k&#xf6;nnte die Funktion per forwarding durchgereicht werden"/>
+<node CREATED="1749074676501" ID="ID_1942815860" MODIFIED="1749074872305" TEXT="w&#xe4;hrend die Params im TupleApplicator gespeichert sind"/>
+<node CREATED="1749074815269" ID="ID_1502758690" MODIFIED="1749074832547" TEXT="tats&#xe4;chlich aber ist die Funktion als SIG im TupleApplicator festgelegt"/>
+<node CREATED="1749074914027" ID="ID_827747475" MODIFIED="1749074928981" TEXT="und es gibt zwei Overloads, die beider per Ref nehmen">
+<node CREATED="1749074930358" ID="ID_60505718" MODIFIED="1749074938288" TEXT="einmal f&#xfc;r eine Funktions-Referenz"/>
+<node CREATED="1749074938991" ID="ID_1933479118" MODIFIED="1749074945258" TEXT="einmal f&#xfc;r eine std::function"/>
+</node>
+<node COLOR="#338800" CREATED="1749074949182" ID="ID_922059503" MODIFIED="1749078724388" TEXT="man k&#xf6;nnte das durch einen einzigen, echten Forwarder ersetzen">
+<arrowlink COLOR="#3195b1" DESTINATION="ID_1229605231" ENDARROW="Default" ENDINCLINATION="-11;-24;" ID="Arrow_ID_1270112967" STARTARROW="None" STARTINCLINATION="-46;2;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1749075523968" ID="ID_1229605231" MODIFIED="1749078724388" TEXT="mehr noch: komplett eliminieren">
+<linktarget COLOR="#3195b1" DESTINATION="ID_1229605231" ENDARROW="Default" ENDINCLINATION="-11;-24;" ID="Arrow_ID_1270112967" SOURCE="ID_922059503" STARTARROW="None" STARTINCLINATION="-46;2;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1749075539726" ID="ID_1117642835" MODIFIED="1749075548070" TEXT="es gibt n&#xe4;mlich nur eine einzige Usage"/>
+<node CREATED="1749075560359" ID="ID_1888947775" MODIFIED="1749075565388" TEXT="command-op-closure.hpp">
+<node CREATED="1749075574514" ID="ID_576031540" MODIFIED="1749075590619" TEXT="OpClosure::invoke(CmdFunctor const&amp;)"/>
+<node CREATED="1749075598293" ID="ID_1797552075" MODIFIED="1749075608850" TEXT="das l&#xe4;&#xdf;t sich offensichtlich direkt durch std::apply ersetzen"/>
+</node>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -164436,7 +164458,7 @@ Since then others have made contributions, see the log for the history.</font></
 <node COLOR="#435e98" CREATED="1748829480048" ID="ID_142039126" MODIFIED="1749007517616" TEXT="FunctionClosure_test">
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_142039126" ENDARROW="Default" ENDINCLINATION="726;0;" ID="Arrow_ID_535671141" SOURCE="ID_240022720" STARTARROW="None" STARTINCLINATION="726;0;"/>
 </node>
-<node COLOR="#435e98" CREATED="1748829502213" ID="ID_1545630215" MODIFIED="1749007517616" TEXT="FunctionComposition_test">
+<node COLOR="#435e98" CREATED="1748829502213" ID="ID_1545630215" MODIFIED="1749078649878" TEXT="FunctionComposition_test">
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_1545630215" ENDARROW="Default" ENDINCLINATION="741;0;" ID="Arrow_ID_1949399206" SOURCE="ID_240022720" STARTARROW="None" STARTINCLINATION="741;0;"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#cd016f" CREATED="1748993653112" ID="ID_1058696109" MODIFIED="1748993677622" TEXT="Stackoverflow in Eclipse">
 <font NAME="SansSerif" SIZE="10"/>
@@ -164464,7 +164486,7 @@ Since then others have made contributions, see the log for the history.</font></
 <node COLOR="#435e98" CREATED="1748829576396" ID="ID_281104576" MODIFIED="1748883754992" TEXT="TypeListUtil_test">
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_281104576" ENDARROW="Default" ENDINCLINATION="589;-82;" ID="Arrow_ID_351374746" SOURCE="ID_1470463237" STARTARROW="None" STARTINCLINATION="458;41;"/>
 </node>
-<node COLOR="#435e98" CREATED="1748829567920" ID="ID_1097523075" MODIFIED="1749007565198" TEXT="TypeList_test">
+<node COLOR="#435e98" CREATED="1748829567920" ID="ID_1097523075" MODIFIED="1749078634991" TEXT="TypeList_test">
 <linktarget COLOR="#8ec9a3" DESTINATION="ID_1097523075" ENDARROW="Default" ENDINCLINATION="1324;0;" ID="Arrow_ID_370033957" SOURCE="ID_91346918" STARTARROW="None" STARTINCLINATION="481;24;"/>
 </node>
 <node CREATED="1748829607017" MODIFIED="1748829607017" TEXT="Variant_test"/>

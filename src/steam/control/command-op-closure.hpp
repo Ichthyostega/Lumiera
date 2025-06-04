@@ -51,7 +51,6 @@ namespace control {
   using lib::meta::_Fun;
   using lib::meta::Tuple;
   using lib::meta::BuildTupleAccessor;
-  using lib::meta::func::TupleApplicator;
   using lib::meta::buildTuple;
   using lib::meta::Nil;
   
@@ -175,8 +174,8 @@ namespace control {
       void
       invoke (CmdFunctor const& unboundFunctor)
         {
-          TupleApplicator<SIG> apply_this_arguments(params_);
-          apply_this_arguments (unboundFunctor.getFun<SIG>());
+          ArgTuple& paramTuple{params_};
+          std::apply (unboundFunctor.getFun<SIG>(), paramTuple);
         }
       
       

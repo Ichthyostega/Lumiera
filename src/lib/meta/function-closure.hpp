@@ -103,13 +103,6 @@ namespace func{
       {
         template<typename RET, class FUN, class TUP>
         static RET
-        invoke (FUN& f, TUP&)
-          {
-            return f ();
-          }
-        
-        template<typename RET, class FUN, class TUP>
-        static RET
         bind (FUN& f, TUP&)
           {
             return std::bind (f);
@@ -120,13 +113,6 @@ namespace func{
     template<>                                            //_________________________________
     struct Apply<1>                                      ///< Apply function with 1 Argument
       {
-        template<typename RET, class FUN, class TUP>
-        static RET
-        invoke (FUN& f, TUP & arg)
-          {
-            return f (get<0>(arg));
-          }
-        
         template<typename RET, class FUN, class TUP>
         static RET
         bind (FUN& f, TUP & arg)
@@ -141,15 +127,6 @@ namespace func{
       {
         template<typename RET, class FUN, class TUP>
         static RET
-        invoke (FUN& f, TUP & arg)
-          {
-            return f ( get<0>(arg)
-                     , get<1>(arg)
-                     );
-          }
-        
-        template<typename RET, class FUN, class TUP>
-        static RET
         bind (FUN& f, TUP & arg)
           {
             return std::bind (f, get<0>(arg)
@@ -162,16 +139,6 @@ namespace func{
     template<>                                            //_________________________________
     struct Apply<3>                                      ///< Apply function with 3 Arguments
       {
-        template<typename RET, class FUN, class TUP>
-        static RET
-        invoke (FUN& f, TUP & arg)
-          {
-            return f ( get<0>(arg)
-                     , get<1>(arg)
-                     , get<2>(arg)
-                     );
-          }
-        
         template<typename RET, class FUN, class TUP>
         static RET
         bind (FUN& f, TUP & arg)
@@ -189,17 +156,6 @@ namespace func{
       {
         template<typename RET, class FUN, class TUP>
         static RET
-        invoke (FUN& f, TUP & arg)
-          {
-            return f ( get<0>(arg)
-                     , get<1>(arg)
-                     , get<2>(arg)
-                     , get<3>(arg)
-                     );
-          }
-        
-        template<typename RET, class FUN, class TUP>
-        static RET
         bind (FUN& f, TUP & arg)
           {
             return std::bind (f, get<0>(arg)
@@ -214,18 +170,6 @@ namespace func{
     template<>                                            //_________________________________
     struct Apply<5>                                      ///< Apply function with 5 Arguments
       {
-        template<typename RET, class FUN, class TUP>
-        static RET
-        invoke (FUN& f, TUP & arg)
-          {
-            return f ( get<0>(arg)
-                     , get<1>(arg)
-                     , get<2>(arg)
-                     , get<3>(arg)
-                     , get<4>(arg)
-                     );
-          }
-        
         template<typename RET, class FUN, class TUP>
         static RET
         bind (FUN& f, TUP & arg)
@@ -245,19 +189,6 @@ namespace func{
       {
         template<typename RET, class FUN, class TUP>
         static RET
-        invoke (FUN& f, TUP & arg)
-          {
-            return f ( get<0>(arg)
-                     , get<1>(arg)
-                     , get<2>(arg)
-                     , get<3>(arg)
-                     , get<4>(arg)
-                     , get<5>(arg)
-                     );
-          }
-        
-        template<typename RET, class FUN, class TUP>
-        static RET
         bind (FUN& f, TUP & arg)
           {
             return std::bind (f, get<0>(arg)
@@ -274,20 +205,6 @@ namespace func{
     template<>                                            //_________________________________
     struct Apply<7>                                      ///< Apply function with 7 Arguments
       {
-        template<typename RET, class FUN, class TUP>
-        static RET
-        invoke (FUN& f, TUP & arg)
-          {
-            return f ( get<0>(arg)
-                     , get<1>(arg)
-                     , get<2>(arg)
-                     , get<3>(arg)
-                     , get<4>(arg)
-                     , get<5>(arg)
-                     , get<6>(arg)
-                     );
-          }
-        
         template<typename RET, class FUN, class TUP>
         static RET
         bind (FUN& f, TUP & arg)
@@ -309,21 +226,6 @@ namespace func{
       {
         template<typename RET, class FUN, class TUP>
         static RET
-        invoke (FUN& f, TUP & arg)
-          {
-            return f ( get<0>(arg)
-                     , get<1>(arg)
-                     , get<2>(arg)
-                     , get<3>(arg)
-                     , get<4>(arg)
-                     , get<5>(arg)
-                     , get<6>(arg)
-                     , get<7>(arg)
-                     );
-          }
-        
-        template<typename RET, class FUN, class TUP>
-        static RET
         bind (FUN& f, TUP & arg)
           {
             return std::bind (f, get<0>(arg)
@@ -342,22 +244,6 @@ namespace func{
     template<>                                            //_________________________________
     struct Apply<9>                                      ///< Apply function with 9 Arguments
       {
-        template<typename RET, class FUN, class TUP>
-        static RET
-        invoke (FUN& f, TUP & arg)
-          {
-            return f ( get<0>(arg)
-                     , get<1>(arg)
-                     , get<2>(arg)
-                     , get<3>(arg)
-                     , get<4>(arg)
-                     , get<5>(arg)
-                     , get<6>(arg)
-                     , get<7>(arg)
-                     , get<8>(arg)
-                     );
-          }
-        
         template<typename RET, class FUN, class TUP>
         static RET
         bind (FUN& f, TUP & arg)
@@ -516,8 +402,13 @@ namespace func{
       BoundFunc bind (SIG& f)                 { return Apply<ARG_CNT>::template bind<BoundFunc> (f, params_); }
       BoundFunc bind (function<SIG> const& f) { return Apply<ARG_CNT>::template bind<BoundFunc> (f, params_); }
       
-      Ret operator() (SIG& f)                 { return Apply<ARG_CNT>::template invoke<Ret> (f, params_); }
-      Ret operator() (function<SIG>& f)       { return Apply<ARG_CNT>::template invoke<Ret> (f, params_); }
+      template<class FUN>
+      Ret
+      operator() (FUN&& f)
+        {
+          ASSERT_VALID_SIGNATURE (FUN,SIG);
+          return std::apply (forward<FUN> (f), params_);
+        }
     };
   
   
@@ -644,7 +535,7 @@ namespace func{
        *  @param arg value tuple, used to close function arguments starting from left
        *  @return new function object, holding copies of the values and using them at the
        *          closed arguments; on invocation, only the remaining arguments need to be supplied.
-       *  @note   BuildL, i.e. the TupleApplicator _must take its arguments by-value._ Any attempt
+       *  @note   BuildL, and consequently TupleApplicator _must take the arguments by-value._ Any attempt
        *          towards »perfect-forwarding« would be potentially fragile and not worth the effort,
        *          since the optimiser sees the operation as a whole.
        *  @todo 2/2025 However, the LeftReplacedArgs _could_ then possibly moved into the bind function,
@@ -843,32 +734,6 @@ namespace func{
   
   
   /*  ========== function-style interface =============  */
-  
-  /** build a TupleApplicator, which embodies the given
-   *  argument tuple and can be used to apply them
-   *  to various functions repeatedly.
-   */
-  template<typename...ARG>
-  inline
-  typename _Sig<void, TySeq<ARG...>>::Applicator
-  tupleApplicator (std::tuple<ARG...>& args)
-  {
-    using Signature = typename _Sig<void,TySeq<ARG...>>::Type;
-    return TupleApplicator<Signature>{args};
-  }
-  
-  
-  /** apply the given function to the argument tuple
-   * @deprecated 11/23 meanwhile provided by the standard lib! */
-  template<typename SIG, typename...ARG>
-  inline
-  typename _Fun<SIG>::Ret
-  apply (SIG& f, std::tuple<ARG...>& args)
-  {
-    using Ret = typename _Fun<SIG>::Ret;                          //
-    using Signature = typename _Sig<Ret,TySeq<ARG...>>::Type;    // Note: deliberately re-building the Signature Type
-    return TupleApplicator<Signature>{args} (f);                //        in order to get better error messages here
-  }
   
   /** close the given function over all arguments,
    *  using the values from the argument tuple.

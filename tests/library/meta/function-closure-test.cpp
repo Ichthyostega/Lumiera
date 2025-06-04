@@ -86,7 +86,6 @@ namespace test {
   using func::TupleApplicator;
   using func::FunctionClosure;
   using func::closure;
-  using func::apply;
   
   
   /*********************************************************************//**
@@ -164,21 +163,15 @@ namespace test {
           DUMPVAL (tup2);
           DUMPVAL (tup3);
           
-          CHECK (-1       == Apply<0>::invoke<int> (fun0, tup0) );
-          CHECK (11       == Apply<1>::invoke<int> (fun1, tup1) );
-          CHECK (11+12    == Apply<2>::invoke<int> (fun2, tup2) );
-          CHECK (11+12+13 == Apply<3>::invoke<int> (fun3, tup3) );
-          
           CHECK (-1       == TupleApplicator<int()>            (tup0) (fun0) );
           CHECK (11       == TupleApplicator<int(int)>         (tup1) (fun1) );
           CHECK (11+12    == TupleApplicator<int(int,int)>     (tup2) (fun2) );
           CHECK (11+12+13 == TupleApplicator<int(int,int,int)> (tup3) (fun3) );
           
-          CHECK (-1       == apply(fun0, tup0) );
-          CHECK (11       == apply(fun1, tup1) );
-          CHECK (11+12    == apply(fun2, tup2) );
-          CHECK (11+12+13 == apply(fun3, tup3) );
-        
+          CHECK (-1       == std::apply(fun0, tup0) );
+          CHECK (11       == std::apply(fun1, tup1) );
+          CHECK (11+12    == std::apply(fun2, tup2) );
+          CHECK (11+12+13 == std::apply(fun3, tup3) );
         }
       
       
@@ -194,21 +187,15 @@ namespace test {
           function<int(int,int)>     functor2 (fun2);
           function<int(int,int,int)> functor3 (fun3);
           
-          CHECK (-1       == Apply<0>::invoke<int> (functor0, tup0) );
-          CHECK (11       == Apply<1>::invoke<int> (functor1, tup1) );
-          CHECK (11+12    == Apply<2>::invoke<int> (functor2, tup2) );
-          CHECK (11+12+13 == Apply<3>::invoke<int> (functor3, tup3) );
-          
           CHECK (-1       == TupleApplicator<int()>            (tup0) (functor0) );
           CHECK (11       == TupleApplicator<int(int)>         (tup1) (functor1) );
           CHECK (11+12    == TupleApplicator<int(int,int)>     (tup2) (functor2) );
           CHECK (11+12+13 == TupleApplicator<int(int,int,int)> (tup3) (functor3) );
           
-          CHECK (-1       == apply(functor0, tup0) );
-          CHECK (11       == apply(functor1, tup1) );
-          CHECK (11+12    == apply(functor2, tup2) );
-          CHECK (11+12+13 == apply(functor3, tup3) );
-          
+          CHECK (-1       == std::apply(functor0, tup0) );
+          CHECK (11       == std::apply(functor1, tup1) );
+          CHECK (11+12    == std::apply(functor2, tup2) );
+          CHECK (11+12+13 == std::apply(functor3, tup3) );
         }
       
       
