@@ -172,8 +172,8 @@ namespace test {
               using NilSplit = PickLast<Nil>::Type;
               using NilList  = PickLast<Nil>::List;
               
-              EXPECT (TySeq<NilSplit>, "-");
-              EXPECT (NilList        , "-");
+              EXPECT (NilSplit, "-");
+              EXPECT (NilList , "-");
             }
           
           

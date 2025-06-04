@@ -162,14 +162,14 @@ namespace meta {
     template<class H, typename TAIL>
     struct BuildTupleType<Node<H, TAIL>>
       {
-        using Seq  = typename TyOLD< Node<H,TAIL>>::Seq;
+        using Seq  = typename TySeq<Node<H,TAIL>>::Seq;
         using Type = typename BuildTupleType<Seq>::Type;
       };
     
     template<>
     struct BuildTupleType<Nil>
       {
-        using Type = typename BuildTupleType<TyOLD<>>::Type;
+        using Type = std::tuple<>;
       };
   }
   

@@ -164238,6 +164238,21 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 <node COLOR="#435e98" CREATED="1748828247849" ID="ID_476644412" MODIFIED="1748869713383" TEXT="Verbindung mit Typelisten">
+<node COLOR="#338800" CREATED="1749001830758" ID="ID_91346918" MODIFIED="1749007560980" TEXT="eigenst&#xe4;ndige Konstruktion von Type-Listen hinzuf&#xfc;gen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      bisher wurde das durch Delegieren an die alte Loki-Implementierung bewerkstelligt; das nun direkt auf der Basis von Variadics zu machen, w&#228;re der zentrale Schritt, der das neue &#214;kosystem der variadischen Typlisten autonom macht (so da&#223; man am Ende die alte nicht-variadische Definition entfernen kann)
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#8ec9a3" DESTINATION="ID_1097523075" ENDARROW="Default" ENDINCLINATION="1324;0;" ID="Arrow_ID_370033957" STARTARROW="None" STARTINCLINATION="481;24;"/>
+<icon BUILTIN="button_ok"/>
+</node>
 <node COLOR="#435e98" CREATED="1748828313009" ID="ID_1470463237" MODIFIED="1748869832016" TEXT="R&#xfc;ckweg Typelist &#x27f6; Typsequenz">
 <arrowlink DESTINATION="ID_281104576" ENDARROW="Default" ENDINCLINATION="589;-82;" ID="Arrow_ID_351374746" STARTARROW="None" STARTINCLINATION="458;41;"/>
 <node CREATED="1748828416378" ID="ID_1994646495" MODIFIED="1748869656471" TEXT="es gibt eine Spezialisierung von TyOLD">
@@ -164274,12 +164289,12 @@ Since then others have made contributions, see the log for the history.</font></
 <font NAME="SansSerif" SIZE="10"/>
 </node>
 </node>
-<node CREATED="1748828920169" ID="ID_511778446" MODIFIED="1748869770714" TEXT="generator.hpp arbeitet ebenfalls nur auf Typlisten">
+<node COLOR="#435e98" CREATED="1748828920169" ID="ID_511778446" MODIFIED="1749003965023" TEXT="generator.hpp arbeitet ebenfalls nur auf Typlisten">
 <arrowlink DESTINATION="ID_803058969" ENDARROW="Default" ENDINCLINATION="852;0;" ID="Arrow_ID_1971292758" STARTARROW="None" STARTINCLINATION="302;17;"/>
 <node CREATED="1748828953483" ID="ID_1328523415" MODIFIED="1748828958980" TEXT="das kommt mir nun zugute"/>
 <node CREATED="1748828933676" ID="ID_1716238563" MODIFIED="1748828952655" TEXT="man k&#xf6;nnte dann convenience-Front-End definieren"/>
 </node>
-<node CREATED="1748828754106" ID="ID_138237629" MODIFIED="1748869733060" TEXT="typelist-diagnostic ebenso">
+<node COLOR="#435e98" CREATED="1748828754106" ID="ID_138237629" MODIFIED="1749003967494" TEXT="typelist-diagnostic ebenso">
 <node CREATED="1748828767089" ID="ID_1047311703" MODIFIED="1748828818895" TEXT="meta::is_Typelist ist geschickt definiert">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -164309,17 +164324,19 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node CREATED="1748829095135" ID="ID_1295682918" MODIFIED="1748829098145" TEXT="Funktionen">
-<node CREATED="1748829099022" ID="ID_766756688" MODIFIED="1748829101916" TEXT="Signatur-Utils">
+<node COLOR="#435e98" CREATED="1748829095135" ID="ID_1295682918" MODIFIED="1749007403090" TEXT="Funktionen">
+<node COLOR="#435e98" CREATED="1748829099022" ID="ID_766756688" MODIFIED="1749007398648" TEXT="Signatur-Utils">
 <node CREATED="1748829959670" ID="ID_1188075291" MODIFIED="1748829968228" TEXT="sind bereits mit beiden kompatibel"/>
 </node>
-<node CREATED="1748829102455" ID="ID_1254282139" MODIFIED="1748829106392" TEXT="Closure">
-<node CREATED="1748829838133" ID="ID_1933174501" MODIFIED="1748829845923" TEXT="hat nur wenige Verwendungen">
+<node COLOR="#338800" CREATED="1748829102455" ID="ID_1254282139" MODIFIED="1749007395415" TEXT="Closure">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1748829838133" ID="ID_1933174501" MODIFIED="1748995159628" TEXT="wenige wichtige Verwendungen">
 <node CREATED="1748829860803" ID="ID_517247632" MODIFIED="1748829863739" TEXT="Commands"/>
 <node CREATED="1748829872320" ID="ID_568804131" MODIFIED="1748829875428" TEXT="Random-Draw"/>
 <node CREATED="1748829881837" ID="ID_1354679657" MODIFIED="1748829885400" TEXT="tuple-closure"/>
 <node CREATED="1748829890844" ID="ID_1803577911" MODIFIED="1748829894782" TEXT="view-spec-dsl"/>
 </node>
+<node CREATED="1749007506535" ID="ID_240022720" MODIFIED="1749007506535" TEXT="mu&#xdf; auf einen Schlag geschwenkt werden (Komplexit&#xe4;t)"/
 <node CREATED="1748829733384" ID="ID_83679265" MODIFIED="1748829744922" TEXT="sollte sich bereits ohne weiteres schwenken lassen"/>
 <node CREATED="1748829745682" ID="ID_61352432" MODIFIED="1748829759664" TEXT="erzeugt nur Tuple, oder macht Split / Prepend"/>
 <node CREATED="1748829779637" ID="ID_1158113558" MODIFIED="1748829835939" TEXT="man k&#xf6;nnte dann im Nachgang die Apply-Definition eliminieren">
@@ -164394,7 +164411,7 @@ Since then others have made contributions, see the log for the history.</font></
 <node CREATED="1748829468217" MODIFIED="1748829468217" TEXT="SessionServiceAccess_test"/>
 <node CREATED="1748829480048" MODIFIED="1748829480048" TEXT="FunctionClosure_test"/>
 <node CREATED="1748829502213" MODIFIED="1748829502213" TEXT="FunctionComposition_test"/>
-<node CREATED="1748829512571" MODIFIED="1748829512571" TEXT="GeneratorCombinations_test"/>
+<node COLOR="#435e98" CREATED="1748829512571" ID="ID_1542151497" MODIFIED="1749007468620" TEXT="GeneratorCombinations_test"/>
 <node COLOR="#435e98" CREATED="1748829523737" ID="ID_803058969" MODIFIED="1748883754992" TEXT="TypeListGenerator_test">
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_803058969" ENDARROW="Default" ENDINCLINATION="852;0;" ID="Arrow_ID_1971292758" SOURCE="ID_511778446" STARTARROW="None" STARTINCLINATION="302;17;"/>
 </node>
@@ -164415,7 +164432,9 @@ Since then others have made contributions, see the log for the history.</font></
 <node COLOR="#435e98" CREATED="1748829576396" ID="ID_281104576" MODIFIED="1748883754992" TEXT="TypeListUtil_test">
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_281104576" ENDARROW="Default" ENDINCLINATION="589;-82;" ID="Arrow_ID_351374746" SOURCE="ID_1470463237" STARTARROW="None" STARTINCLINATION="458;41;"/>
 </node>
-<node CREATED="1748829567920" ID="ID_1097523075" MODIFIED="1748959903101" TEXT="TypeList_test"/>
+<node COLOR="#435e98" CREATED="1748829567920" ID="ID_1097523075" MODIFIED="1749007565198" TEXT="TypeList_test">
+<linktarget COLOR="#8ec9a3" DESTINATION="ID_1097523075" ENDARROW="Default" ENDINCLINATION="1324;0;" ID="Arrow_ID_370033957" SOURCE="ID_91346918" STARTARROW="None" STARTINCLINATION="481;24;"/>
+</node>
 <node CREATED="1748829607017" MODIFIED="1748829607017" TEXT="Variant_test"/>
 </node>
 </node>

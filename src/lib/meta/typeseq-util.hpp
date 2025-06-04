@@ -172,7 +172,7 @@ namespace meta {
   struct Prepend<T, TySeq<TYPES...>>
   {
     using Seq  = TySeq<T, TYPES...>;
-    using List = typename TyOLD<T, TYPES...>::List;
+    using List = typename TySeq<T, TYPES...>::List;
   };
   
   
@@ -195,6 +195,10 @@ namespace meta {
       using List = Nil;
       using Seq  = TySeq<>;
     };
+  template<>
+  struct TySeq<NilNode>
+    : TySeq<Nil>
+    { };
   
   
    //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #987 temporary WORKAROUND -- to be obsoleted
@@ -338,19 +342,18 @@ namespace meta {
   template<class TYPES, uint i=1>
   class Shifted
     {
-      typedef typename Split<TYPES>::Tail Tail;
+      using Tail = typename Split<TYPES>::Tail;
     public:
-      typedef typename Shifted<Tail,i-1>::Type Type;
-      typedef typename Split<Type>::Head       Head;
+      using Type = typename Shifted<Tail,i-1>::Type;
+      using Head = typename Split<Type>::Head;
     };
   
   template<class TYPES>
   struct Shifted<TYPES,0>
     {
-      typedef TYPES                      Type;
-      typedef typename Split<Type>::Head Head;
+      using Type = TYPES;
+      using Head = typename Split<Type>::Head;       ///< @warning may be Nil in case of an empty list
     };
-                          ///////////////////////////////////////////////////////////////////////////////////TICKET #987 : reimplement for variadic type-sequences
   
   
   

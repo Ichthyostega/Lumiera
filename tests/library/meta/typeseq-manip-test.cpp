@@ -136,7 +136,8 @@ namespace test {
           using Head_3 = TySeq<Shifted<Seq,3>::Head>;  EXPECT (Head_3, "-<1>-");
           using Head_4 = TySeq<Shifted<Seq,4>::Head>;  EXPECT (Head_4, "-<2>-");
           using Head_5 = TySeq<Shifted<Seq,5>::Head>;  EXPECT (Head_5, "-<3>-");
-          using Head_6 = TySeq<Shifted<Seq,6>::Head>;  EXPECT (Head_6, "-");
+          using Head_6 = TySeq<Shifted<Seq,6>::Head>;  EXPECT (Head_6, "-"    );
+          using Head_7 = TySeq<Shifted<Seq,7>::Head>;  EXPECT (Head_7, "-"    );
         }
       
       
@@ -155,7 +156,10 @@ namespace test {
           using Head   = Split<Seq>::Head;
           using End    = Split<Seq>::End;
           
-          using HeadEnd = TySeq<Head,End>;      EXPECT (HeadEnd, "-<1>-<9>-");
+          using Ends   = TySeq<Head,End>;       EXPECT (Ends  , "-<1>-<9>-");
+          
+          using NoList = Split<TySeq<>>::List;  EXPECT (NoList, "-");
+          using NoHead = Split<TySeq<>>::Head;  EXPECT (NoHead, "-");
         }
       
       

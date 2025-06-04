@@ -112,7 +112,7 @@ namespace meta {
       struct Printer<Nil, BASE>
         : BASE
         {
-          static string show() { return _Fmt("-<%u>%s") % "·" % BASE::show(); }
+          static string show() { return _Fmt("-<%s>%s") % "·" % BASE::show(); }
         };
       
       template<class BASE, int I>
@@ -133,19 +133,19 @@ namespace meta {
       struct Printer<int, BASE>  ///< display the presence of a plain int in the typelist
         : BASE
         {
-          static string show() { return _Fmt("-<%u>%s") % 'i' % BASE::show(); }
+          static string show() { return _Fmt("-<%s>%s") % 'i' % BASE::show(); }
         };
       
       
       
       /** call the debug-print for a typelist
        *  utilising the Printer template */
-      template<class L>
+      template<class LIST>
       string
       printSublist ()
       {
-        typedef InstantiateChained<L, Printer, NullP> SubList;
-        return SubList::show();
+        using PrinterChain = InstantiateChained<LIST, Printer, NullP>;
+        return PrinterChain::show();
       }
       
       /** Specialisation for debug-printing of a nested sublist */
@@ -184,8 +184,8 @@ namespace meta {
     string                  >
     showType ()
     {
-      typedef InstantiateChained<typename TYPES::List, Printer, NullP>  DumpPrinter;
-      return DumpPrinter::show();
+      using TypeList = typename TYPES::List;
+      return printSublist<TypeList>();
     }
     
     //  Note: we define overloads of this function for other types, especially Tuples
