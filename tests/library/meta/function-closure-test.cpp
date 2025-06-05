@@ -84,6 +84,7 @@ namespace test {
   
   using func::Apply;
   using func::TupleApplicator;
+  using func::bindArgTuple;
   using func::FunctionClosure;
   using func::closure;
   
@@ -208,6 +209,10 @@ namespace test {
           Tuple<TySeq<int>>         tup1 (11);
           Tuple<TySeq<int,int>>     tup2 (11,12);
           Tuple<TySeq<int,int,int>> tup3 (11,12,13);
+          DUMPVAL (tup0);
+          DUMPVAL (tup1);
+          DUMPVAL (tup2);
+          DUMPVAL (tup3);
           
           typedef function<int()> BoundFun;
           
@@ -221,10 +226,10 @@ namespace test {
           CHECK (11+12    == functor2() );
           CHECK (11+12+13 == functor3() );
           
-          functor0 = TupleApplicator<int()>            (tup0).bind (fun0);
-          functor1 = TupleApplicator<int(int)>         (tup1).bind (fun1);
-          functor2 = TupleApplicator<int(int,int)>     (tup2).bind (fun2);
-          functor3 = TupleApplicator<int(int,int,int)> (tup3).bind (fun3);
+          functor0 = bindArgTuple (fun0, tup0);
+          functor1 = bindArgTuple (fun1, tup1);
+          functor2 = bindArgTuple (fun2, tup2);
+          functor3 = bindArgTuple (fun3, tup3);
           
           CHECK (-1       == functor0() );
           CHECK (11       == functor1() );
@@ -258,10 +263,10 @@ namespace test {
           CHECK (11+12    == functor2() );
           CHECK (11+12+13 == functor3() );
           
-          functor0 = TupleApplicator<int()>            (tup0).bind (unbound_functor0);
-          functor1 = TupleApplicator<int(int)>         (tup1).bind (unbound_functor1);
-          functor2 = TupleApplicator<int(int,int)>     (tup2).bind (unbound_functor2);
-          functor3 = TupleApplicator<int(int,int,int)> (tup3).bind (unbound_functor3);
+          functor0 = bindArgTuple (unbound_functor0, tup0);
+          functor1 = bindArgTuple (unbound_functor1, tup1);
+          functor2 = bindArgTuple (unbound_functor2, tup2);
+          functor3 = bindArgTuple (unbound_functor3, tup3);
           
           CHECK (-1       == functor0() );
           CHECK (11       == functor1() );

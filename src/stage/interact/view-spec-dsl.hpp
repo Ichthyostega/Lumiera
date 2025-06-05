@@ -208,7 +208,6 @@ namespace interact {
           using lib::meta::Split;
           using lib::meta::Tuple;
           using lib::meta::TySeq;
-          using lib::meta::func::_Sig;
           using lib::meta::func::PApply;
           
           typedef typename _Fun<FUN>::Ret Ret;

@@ -412,6 +412,20 @@ namespace func{
     };
   
   
+  template<class FUN, class TUP, typename = enable_if_Tuple<TUP>>
+  auto
+  bindArgTuple (FUN&& fun, TUP&& tuple)
+  {
+    return std::apply ([functor = forward<FUN>(fun)]
+                       (auto&&... args)
+                            {
+                              return std::bind (move(functor)
+                                               ,forward<decltype(args)> (args) ...);
+                            }
+                      ,std::forward<TUP> (tuple));
+  }
+  
+  
   
   /**
    * Closing a function over its arguments.
@@ -429,11 +443,11 @@ namespace func{
       function<Ret(void)> closure_;
       
     public:
-      FunctionClosure (SIG& f, Tuple<Args>& arg)
-        : closure_(TupleApplicator<SIG>(arg).bind(f))
+      FunctionClosure (SIG& f, Tuple<Args>& args)
+        : closure_{bindArgTuple (f, args)}
         { }
-      FunctionClosure (function<SIG> const& f, Tuple<Args>& arg)
-        : closure_(TupleApplicator<SIG>(arg).bind(f))
+      FunctionClosure (function<SIG> const& f, Tuple<Args>& args)
+        : closure_{bindArgTuple (f, args)}
         { }
       
       Ret operator() () { return closure_(); }
@@ -535,17 +549,18 @@ namespace func{
        *  @param arg value tuple, used to close function arguments starting from left
        *  @return new function object, holding copies of the values and using them at the
        *          closed arguments; on invocation, only the remaining arguments need to be supplied.
-       *  @note   BuildL, and consequently TupleApplicator _must take the arguments by-value._ Any attempt
+       *  @note   BuildL, and consequently std::bind _must take the arguments by-value._ Any attempt
        *          towards »perfect-forwarding« would be potentially fragile and not worth the effort,
        *          since the optimiser sees the operation as a whole.
        *  @todo 2/2025 However, the LeftReplacedArgs _could_ then possibly moved into the bind function,
        *          as could the functor, once we replace the Apply-template by STDLIB features.
+       *  @todo 5/2025 seems indeed we could perfect-forward everything into the binder object.
        */
       static LeftReducedFunc
       bindFront (SIG const& f, Tuple<ValTypes> arg)
         {
           LeftReplacedArgs params {BuildL(std::move(arg))};
-          return func::Apply<ARG_CNT>::template bind<LeftReducedFunc> (f, params);
+          return bindArgTuple (f, params);
         }
       
       /** do a partial function application, closing the last arguments<br/>
@@ -560,7 +575,7 @@ namespace func{
       bindBack (SIG const& f, Tuple<ValTypes> arg)
         {
           RightReplacedArgs params {BuildR(std::move(arg))};
-          return func::Apply<ARG_CNT>::template bind<RightReducedFunc> (f, params);
+          return bindArgTuple (f, params);
         }
     };
   
@@ -611,6 +626,7 @@ namespace func{
         {
           Tuple<PreparedArgTypes> params {BuildPreparedArgs{std::make_tuple (val)}};
           return func::Apply<ARG_CNT>::template bind<ReducedFunc> (f, params);
+//        return bindArgTuple (f, params);   ///////////////////////////////////////////////////////OOO does not compile when pos > length of ArgList
         }
     };
   
@@ -622,18 +638,11 @@ namespace func{
     using util::unConst;
     
     
-    template<typename RET, typename ARG>
-    struct _Sig
-      {
-        using Type = typename BuildFunType<RET, ARG>::Sig;
-        using Applicator = TupleApplicator<Type>;
-      };
-    
     template<typename SIG, typename ARG>
     struct _Clo
       {
         using Ret       = typename _Fun<SIG>::Ret;
-        using Signature = typename _Sig<Ret,ARG>::Type;
+        using Signature = typename BuildFunType<Ret, ARG>::Sig;
         using Type      = FunctionClosure<Signature>;
       };
     

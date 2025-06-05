@@ -164397,6 +164397,137 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
+<node CREATED="1749079273770" ID="ID_579464028" MODIFIED="1749079303130" TEXT="Schritt 2: Bind-to-Arg-Tuple neu implementieren">
+<node CREATED="1749079304502" ID="ID_1638673098" MODIFIED="1749079325099" TEXT="rein intuitiv: das k&#xf6;nnte mit der tuple-for-each Technik gehen...">
+<node CREATED="1749079326999" ID="ID_34944630" MODIFIED="1749079363110" TEXT="also siehe forEach (tup, fun) ini tuple-helper.hpp"/>
+<node CREATED="1749079368228" ID="ID_1090818949" MODIFIED="1749081564861" TEXT="und zwar mit diesem upack-Trick nach David Vandervoorde">
+<arrowlink COLOR="#5d38bc" DESTINATION="ID_667556429" ENDARROW="Default" ENDINCLINATION="23;-31;" ID="Arrow_ID_1911198692" STARTARROW="None" STARTINCLINATION="-163;8;"/>
+</node>
+<node CREATED="1749079417426" ID="ID_25131995" MODIFIED="1749079495704" TEXT="wende std::apply auf ein Lambda an &#x27f6; bekommt Tupel-Elemente als Argument-Pack">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1749080688030" ID="ID_162973867" MODIFIED="1749080711048" TEXT="scheint zu gehen .... zumindest wird&apos;s schon mal vom Compiler akzeptiert"/>
+<node CREATED="1749080712258" ID="ID_1500605099" MODIFIED="1749080733204" TEXT="und wir haben nur volles forwarding f&#xfc;r diesen Aufruf &#x27f6; Kopie im Binder"/>
+</node>
+<node CREATED="1749081475903" ID="ID_605063967" MODIFIED="1749081505836" TEXT="Zwischenschritt">
+<node CREATED="1749081506641" ID="ID_667556429" MODIFIED="1749081559124" TEXT="neue Hilfsfunktion bindArgTuple">
+<linktarget COLOR="#5d38bc" DESTINATION="ID_667556429" ENDARROW="Default" ENDINCLINATION="23;-31;" ID="Arrow_ID_1911198692" SOURCE="ID_1090818949" STARTARROW="None" STARTINCLINATION="-163;8;"/>
+</node>
+<node CREATED="1749081571461" ID="ID_1222760176" MODIFIED="1749081586647" TEXT="dann Verwendungen des TupleApplicators eliminieren"/>
+<node CREATED="1749082302350" ID="ID_1914498797" MODIFIED="1749082308154" TEXT="BindToArgument umstellen">
+<node CREATED="1749082310090" ID="ID_618843730" MODIFIED="1749082348031" TEXT="Problem: out-of-bounds Index jetzt anders behandelt">
+<node CREATED="1749082386028" ID="ID_1571223641" MODIFIED="1749082388299" TEXT="bisher...">
+<node CREATED="1749082348881" ID="ID_1539878278" MODIFIED="1749082385036" TEXT="es wurde Apply&lt;ARG_CNT&gt; ausgew&#xe4;hlt"/>
+<node CREATED="1749082393371" ID="ID_1673961372" MODIFIED="1749082436871" TEXT="das hat hinten &#xfc;bersch&#xfc;ssige Tupel-Elemente stillschweigend ignoriert">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      da es auf std::get&lt;i&gt; mit frest verdrahtetem Index aufsetzt
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1749082438789" ID="ID_477817163" MODIFIED="1749082442014" TEXT="nun...">
+<node CREATED="1749082442742" ID="ID_71863154" MODIFIED="1749082453887" TEXT="ein zu gro&#xdf; konstruiertes Binder-Tupel wird durchgereicht"/>
+<node CREATED="1749082454586" ID="ID_1932110866" MODIFIED="1749082461397" TEXT="std::apply ist wirklich voll generisch"/>
+<node CREATED="1749082466958" ID="ID_1265074650" MODIFIED="1749082473555" TEXT="&#x27f9; Compilation-Failure im Binder"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1749082478231" ID="ID_1161415270" MODIFIED="1749082494638" TEXT="kann man das bestehende Verhalten erhalten?">
+<icon BUILTIN="help"/>
+<node CREATED="1749082495532" ID="ID_367606531" MODIFIED="1749082502619" TEXT="wei&#xdf; zwar nicht ob das sinnvoll ist...?"/>
+<node CREATED="1749082503424" ID="ID_1896561211" MODIFIED="1749082514629" TEXT="aber es gibt einen Test und es ist so dokumentiert"/>
+<node CREATED="1749082714136" ID="ID_1965208394" MODIFIED="1749082734615" TEXT="also &#x27f9; wie kommt die L&#xe4;nge des Binder-Tuples in BindToArg zustande?">
+<node CREATED="1749085756772" ID="ID_1774712935" MODIFIED="1749085768340" TEXT="es wird aus drei Teilen zusammengesetzt"/>
+<node CREATED="1749085769610" ID="ID_1876115458" MODIFIED="1749085780773" TEXT="und Pr&#xe4;fix/Suffix beruhen auf der angegebenen pos"/>
+<node CREATED="1749085786524" ID="ID_1747871175" MODIFIED="1749085803306" TEXT="Zugriff vewendet die Splice-Metafunktion">
+<node CREATED="1749086105021" ID="ID_242475174" MODIFIED="1749086116894" TEXT="Splice war explizit f&#xfc;r diesen Zweck geschaffen worden">
+<icon BUILTIN="info"/>
+<node CREATED="1749086171316" ID="ID_289035698" MODIFIED="1749086179374" TEXT="der Name ist etwas irref&#xfc;hrend"/>
+<node CREATED="1749086180059" ID="ID_1000117906" MODIFIED="1749086190840" TEXT="es ist mehr wie ein &#xbb;slide edit&#xab;"/>
+<node CREATED="1749086192917" ID="ID_51185866" MODIFIED="1749086202659" TEXT="gepr&#xfc;ft: es gibt nur diese eine Verwendung"/>
+</node>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1749086082424" ID="ID_792762505" MODIFIED="1749086090303" TEXT="Fehler in List-Splice">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1749086093678" ID="ID_1935542921" MODIFIED="1749086103057" TEXT="dank umgeschriebenen Test jetzt klar zu sehen">
+<node CREATED="1749086219612" ID="ID_1085792366" MODIFIED="1749086248922" TEXT="OLi : -&lt;9&gt;-&lt;8&gt;-"/>
+<node CREATED="1749086269399" ID="ID_878268645" MODIFIED="1749086278084" TEXT="List1: -&lt;1&gt;-&lt;2&gt;-&lt;3&gt;-"/>
+<node CREATED="1749086340477" ID="ID_1317717416" MODIFIED="1749086342945" TEXT="Fall-1">
+<node CREATED="1749086293428" ID="ID_294374445" MODIFIED="1749086474248" TEXT="Splice&lt;List1, OLi&gt;: -&lt;9&gt;-&lt;8&gt;-&lt;3&gt;-">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1749086357867" ID="ID_302844078" MODIFIED="1749086474248" TEXT="Splice&lt;List1, OLi2, 0&gt;::Front:  &quot;-&quot;">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1749086380050" ID="ID_464757347" MODIFIED="1749086487758" TEXT="Splice&lt;List1, OLi2, 0&gt;::Back:   -&lt;2&gt;-&lt;3&gt;-">
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
+<node CREATED="1749086394605" ID="ID_23168968" MODIFIED="1749086396476" TEXT="Fall-2">
+<node CREATED="1749086407860" ID="ID_1388390572" MODIFIED="1749086474248" TEXT="Splice&lt;List1, OLi, 1&gt;:  -&lt;1&gt;-&lt;9&gt;-&lt;8&gt;-">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1749086430949" ID="ID_1849113809" MODIFIED="1749086474248" TEXT="Splice&lt;List1, OLi2, 1&gt;::Front:   -&lt;1&gt;-">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1749086451494" ID="ID_1435991702" MODIFIED="1749086487758" TEXT="Splice&lt;List1, OLi2, 1&gt;::Back:  -&lt;3&gt;-">
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#bd0711" CREATED="1749086526784" ID="ID_757037322" MODIFIED="1749086594846">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p style="text-align: center">
+      d.h.: f&#252;r die Back-Berchnung
+    </p>
+    <p style="text-align: center">
+      wird die L&#228;nge der Overlay-Liste
+    </p>
+    <p style="text-align: center">
+      nicht richtig gerechnet
+    </p>
+    <p style="text-align: center">
+      <font size="2">&#187; off by one &#171;</font>
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="broken-line"/>
+<node CREATED="1749089660750" ID="ID_1758217572" MODIFIED="1749089678824" TEXT="sonderbar: dieser Fehler besteht so schon lange....">
+<icon BUILTIN="clanbomber"/>
+</node>
+<node CREATED="1749089681585" ID="ID_1206510313" MODIFIED="1749089694378" TEXT="warum wurde das nie bemerkt?">
+<node CREATED="1749089706918" ID="ID_1155480413" MODIFIED="1749089728318" TEXT="Hypothese: man hat immer nur das close-last wirklich getestet"/>
+<node COLOR="#5b280f" CREATED="1749090006670" ID="ID_844297972" MODIFIED="1749090022859" TEXT="das stimmt nicht!  function-composition-test: check_bindToArbitraryParameter">
+<icon BUILTIN="button_cancel"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1749090267058" ID="ID_541383828" MODIFIED="1749090428234" TEXT="Fokussierte Untersuchung notwendig!">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1749081592088" ID="ID_1143027952" MODIFIED="1749081623439" TEXT="Tests OK">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1749081604439" ID="ID_372037050" MODIFIED="1749081621876" TEXT="FunctionClosure_test"/>
+<node COLOR="#435e98" CREATED="1749081613141" ID="ID_126616986" MODIFIED="1749081621876" TEXT="FunctionComposition_test"/>
+<node COLOR="#435e98" CREATED="1749081619255" ID="ID_945095728" MODIFIED="1749081621876" TEXT="TupleClosure_test"/>
+</node>
+</node>
+</node>
 </node>
 </node>
 </node>
