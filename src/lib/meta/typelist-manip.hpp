@@ -201,6 +201,14 @@ namespace meta {
                                              using Front = Nil;
                                              using Back  = Nil; };
     
+    /** extract prefix of given length */
+    template<class LI, uint l>
+    using Prefix = typename Splice<LI, Nil, l>::Front;
+    
+    /** extract suffix starting at given pos */
+    template<class LI, uint p>
+    using Suffix = typename Splice<LI, Nil, p>::Back;
+    
     
     
     

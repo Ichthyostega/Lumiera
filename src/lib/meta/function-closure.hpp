@@ -583,7 +583,7 @@ namespace func{
   
   /**
    * Bind a specific argument to an arbitrary value.
-   * Especially, this "value" might be another binder.
+   * Notably this "value" might be another binder.
    */
   template<typename SIG, typename X, uint pos>
   class BindToArgument
@@ -600,16 +600,17 @@ namespace func{
       using PlaceholdersBefore = typename func::PlaceholderTuple<RemainingFront>::List;
       using PlaceholdersBehind = typename func::PlaceholderTuple<RemainingBack,pos+1>::List;
       
-      using PreparedArgs     = typename Append< typename Append< PlaceholdersBefore
-                                                               , ValList >::List
-                                              , PlaceholdersBehind
-                                              >::List;
+      using PreparedArgsRaw    = typename Append<typename Append<PlaceholdersBefore    // arguments before the splice: passed-through
+                                                                ,ValList >::List       // splice in the value tuple
+                                                ,PlaceholdersBehind                    // arguments behind the splice: passed-through
+                                                >::List;
+      using PreparedArgs     = Prefix<PreparedArgsRaw, ARG_CNT>;
       using ReducedArgs      = typename Append<RemainingFront, RemainingBack>::List;
       
       using PreparedArgTypes = typename TySeq<PreparedArgs>::Seq;
       using RemainingArgs    = typename TySeq<ReducedArgs>::Seq;
       
-      using ReducedSig = typename BuildFunType<Ret,RemainingArgs>::Sig;
+      using ReducedSig  = typename BuildFunType<Ret,RemainingArgs>::Sig;
       
       template<class SRC, class TAR, size_t i>
       using IdxSelector = typename PartiallyInitTuple<SRC, TAR, pos>::template IndexMapper<i>;
@@ -625,8 +626,7 @@ namespace func{
       reduced (SIG& f, X val)
         {
           Tuple<PreparedArgTypes> params {BuildPreparedArgs{std::make_tuple (val)}};
-          return func::Apply<ARG_CNT>::template bind<ReducedFunc> (f, params);
-//        return bindArgTuple (f, params);   ///////////////////////////////////////////////////////OOO does not compile when pos > length of ArgList
+          return bindArgTuple (f, params);
         }
     };
   

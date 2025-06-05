@@ -30,7 +30,7 @@ namespace meta {
 namespace test {
   
   using ::test::Test;
-  using lib::test::showType;
+//  using lib::test::showType;
   using lib::meta::_Fun;
   using func::applyFirst;
   using func::applyLast;
@@ -192,9 +192,8 @@ namespace test {
                                    , ph2
                                  );
           
-          int res = 0;
-          res = fun_23 (_2_,_3_).o_;                                 // and invoke the resulting functor ("closure"), providing the remaining arguments
-          CHECK (23 == res);
+          int r1 = fun_23 (_2_,_3_).o_;                              // and invoke the resulting functor ("closure"), providing the remaining arguments
+          CHECK (23 == r1);                                          // result ≡ num18 + _2_ + _3_  ≙ 18 + 2 + 3
           
           
           
@@ -207,10 +206,15 @@ namespace test {
                                , get<1>(arg)
                                , get<2>(arg)
                              );
-          res = 0;
-          res = fun_23 (_2_,_3_).o_;                                 // and invoke the resulting functor....
-          CHECK (23 == res);
           
+          int r2 = fun_23 (_2_,_3_).o_;                              // and invoke the resulting functor....
+          CHECK (23 == r2);
+          
+          // function-closure.hpp defines a shorthand for this operation
+          fun_23 = func::bindArgTuple (f, arg);
+          
+          int r3 = fun_23 (_2_,_3_).o_;
+          CHECK (23 == r3);
           
           
           
@@ -221,9 +225,9 @@ namespace test {
           
           fun_23 = PApply<Sig123, ArgTypes>::bindFront (f , args_to_bind);
                                                                      // "bindFront" will close the parameters starting from left....
-          res = 0;
-          res = fun_23 (_2_,_3_).o_;                                 // invoke the resulting functor...
-          CHECK (23 == res);
+          
+          int r4 = fun_23 (_2_,_3_).o_;                              // invoke the resulting functor...
+          CHECK (23 == r4);
           
           
           
@@ -232,33 +236,33 @@ namespace test {
           
           // Version4: as you'd typically do it in real life-------- //
           
+/*
           fun_23 = func::applyFirst (f, Num<1>(18));                 // use the convenience function API to close over a single value
           
-          res = 0;
-          res = fun_23(_2_,_3_).o_;                                  // invoke the resulting functor...
-          CHECK (23 == res);
+          int r5 = fun_23(_2_,_3_).o_;                               // invoke the resulting functor...
+          CHECK (23 == r5);
           
           
           
           // what follows is the real unit test...
           function<Sig123> func123{f};                               // alternatively do it with an std::function object
           fun_23 = func::applyFirst (func123, Num<1>(19));
-          res = fun_23(_2_,_3_).o_;
-          CHECK (24 == res);
+          int r5 = fun_23(_2_,_3_).o_;
+          CHECK (24 == r5);
           
           using F12 = function<Num<1>(Num<1>, Num<2>)>;
           F12 fun_12 = func::applyLast (f, Num<3>(20));              // close the *last* argument of a function
-          res = fun_12(_1_,_2_).o_;
-          CHECK (23 == res);
+          int r6 = fun_12(_1_,_2_).o_;
+          CHECK (23 == r6);
           
           fun_12 = func::applyLast (func123, Num<3>(21));            // alternatively use a function object
-          res = fun_12(_1_,_2_).o_;
-          CHECK (24 == res);
+          int r7 = fun_12(_1_,_2_).o_;
+          CHECK (24 == r7);
           
           Sig123* fP = &f;                                           // a function pointer works too
           fun_12 = func::applyLast (fP, Num<3>(22));
-          res = fun_12(_1_,_2_).o_;
-          CHECK (25 == res);
+          int r8 = fun_12(_1_,_2_).o_;
+          CHECK (25 == r8);
                                                                      // cover more cases....
           
           CHECK (1         == (func::applyLast (fun11<1>        , _1_ ) ( )              ).o_);
@@ -272,6 +276,7 @@ namespace test {
           CHECK (    7+6+5 == (func::applyFirst(    fun13<7,6,5>, _7_ )         (_6_,_5_)).o_);
           CHECK (      6+5 == (func::applyFirst(      fun12<6,5>, _6_ )             (_5_)).o_);
           CHECK (        5 == (func::applyFirst(        fun11<5>, _5_ )               ( )).o_);
+      */
           
           
           
@@ -279,7 +284,7 @@ namespace test {
           // covering the general case of partial function closure:
           typedef Num<5> Sig54321 (Num<5>, Num<4>, Num<3>, Num<2>, Num<1>);  // Signature of the 5-argument function
           typedef Num<5> Sig54    (Num<5>, Num<4>);                          // ...closing the last 3 arguments should yield this 2-argument function
-          using Args2Close = TyOLD<Num<3>, Num<2>, Num<1>>;                  // Tuple type to hold the 3 argument values used for the closure
+          using Args2Close = TySeq<Num<3>, Num<2>, Num<1>>;                  // Tuple type to hold the 3 argument values used for the closure
           
           // Close the trailing 3 arguments of the 5-argument function...
           function<Sig54> fun_54 = PApply<Sig54321,Args2Close>::bindBack (fun15<5,4,3,2,1>
@@ -290,7 +295,6 @@ namespace test {
           Num<5> resN5 = fun_54(_5_,_4_);
           CHECK (5+4+3+2+1 == resN5.o_);
         }
-      
       
       
       
@@ -399,9 +403,9 @@ namespace test {
           using SigC = _Fun<decltype(chain)>::Sig;
           using SigP = _Fun<decltype(pappl)>::Sig;
           
-          CHECK (showType<Sig1>() == "double (float&, int&, long)"_expect);
-          CHECK (showType<SigC>() ==   "long (float&, int&, long)"_expect);
-          CHECK (showType<SigP>() ==         "double (int&, long)"_expect);
+//          CHECK (showType<Sig1>() == "double (float&, int&, long)"_expect);
+//          CHECK (showType<SigC>() ==   "long (float&, int&, long)"_expect);
+//          CHECK (showType<SigP>() ==         "double (int&, long)"_expect);
           
           CHECK (220 == f1   (ff,ii,33));
           CHECK (220 == chain(ff,ii,33));

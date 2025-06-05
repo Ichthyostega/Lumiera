@@ -164428,8 +164428,7 @@ Since then others have made contributions, see the log for the history.</font></
       da es auf std::get&lt;i&gt; mit frest verdrahtetem Index aufsetzt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1749082438789" ID="ID_477817163" MODIFIED="1749082442014" TEXT="nun...">
@@ -164438,11 +164437,12 @@ Since then others have made contributions, see the log for the history.</font></
 <node CREATED="1749082466958" ID="ID_1265074650" MODIFIED="1749082473555" TEXT="&#x27f9; Compilation-Failure im Binder"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1749082478231" ID="ID_1161415270" MODIFIED="1749082494638" TEXT="kann man das bestehende Verhalten erhalten?">
+<node COLOR="#435e98" CREATED="1749082478231" ID="ID_1161415270" MODIFIED="1749137091814" TEXT="kann man das bestehende Verhalten erhalten?">
 <icon BUILTIN="help"/>
 <node CREATED="1749082495532" ID="ID_367606531" MODIFIED="1749082502619" TEXT="wei&#xdf; zwar nicht ob das sinnvoll ist...?"/>
 <node CREATED="1749082503424" ID="ID_1896561211" MODIFIED="1749082514629" TEXT="aber es gibt einen Test und es ist so dokumentiert"/>
-<node CREATED="1749082714136" ID="ID_1965208394" MODIFIED="1749082734615" TEXT="also &#x27f9; wie kommt die L&#xe4;nge des Binder-Tuples in BindToArg zustande?">
+<node COLOR="#435e98" CREATED="1749082714136" FOLDED="true" ID="ID_1965208394" MODIFIED="1749137084537" TEXT="also &#x27f9; wie kommt die L&#xe4;nge des Binder-Tuples in BindToArg zustande?">
+<arrowlink COLOR="#fefbd6" DESTINATION="ID_1677536516" ENDARROW="Default" ENDINCLINATION="-312;-26;" ID="Arrow_ID_1066352629" STARTARROW="None" STARTINCLINATION="593;24;"/>
 <node CREATED="1749085756772" ID="ID_1774712935" MODIFIED="1749085768340" TEXT="es wird aus drei Teilen zusammengesetzt"/>
 <node CREATED="1749085769610" ID="ID_1876115458" MODIFIED="1749085780773" TEXT="und Pr&#xe4;fix/Suffix beruhen auf der angegebenen pos"/>
 <node CREATED="1749085786524" ID="ID_1747871175" MODIFIED="1749085803306" TEXT="Zugriff vewendet die Splice-Metafunktion">
@@ -164452,8 +164452,9 @@ Since then others have made contributions, see the log for the history.</font></
 <node CREATED="1749086180059" ID="ID_1000117906" MODIFIED="1749086190840" TEXT="es ist mehr wie ein &#xbb;slide edit&#xab;"/>
 <node CREATED="1749086192917" ID="ID_51185866" MODIFIED="1749086202659" TEXT="gepr&#xfc;ft: es gibt nur diese eine Verwendung"/>
 </node>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1749086082424" ID="ID_792762505" MODIFIED="1749086090303" TEXT="Fehler in List-Splice">
+<node COLOR="#5b280f" CREATED="1749086082424" FOLDED="true" ID="ID_792762505" MODIFIED="1749136865497" TEXT="Fehler in List-Splice">
 <icon BUILTIN="broken-line"/>
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1749086093678" ID="ID_1935542921" MODIFIED="1749086103057" TEXT="dank umgeschriebenen Test jetzt klar zu sehen">
 <node CREATED="1749086219612" ID="ID_1085792366" MODIFIED="1749086248922" TEXT="OLi : -&lt;9&gt;-&lt;8&gt;-"/>
 <node CREATED="1749086269399" ID="ID_878268645" MODIFIED="1749086278084" TEXT="List1: -&lt;1&gt;-&lt;2&gt;-&lt;3&gt;-"/>
@@ -164499,8 +164500,7 @@ Since then others have made contributions, see the log for the history.</font></
       <font size="2">&#187; off by one &#171;</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="broken-line"/>
 <node CREATED="1749089660750" ID="ID_1758217572" MODIFIED="1749089678824" TEXT="sonderbar: dieser Fehler besteht so schon lange....">
 <icon BUILTIN="clanbomber"/>
@@ -164511,11 +164511,160 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="button_cancel"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1749090267058" ID="ID_541383828" MODIFIED="1749090428234" TEXT="Fokussierte Untersuchung notwendig!">
+<node COLOR="#5b280f" CREATED="1749128362887" ID="ID_1714360602" MODIFIED="1749128402891" TEXT="STOP: hier funktioniert alles">
+<icon BUILTIN="closed"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1749128408112" ID="ID_1682700621" MODIFIED="1749128444261" TEXT="kein Fehler in List-Splice">
+<linktarget COLOR="#6f7598" DESTINATION="ID_1682700621" ENDARROW="Default" ENDINCLINATION="21;247;" ID="Arrow_ID_854761063" SOURCE="ID_385899449" STARTARROW="None" STARTINCLINATION="-365;29;"/>
+<icon BUILTIN="smiley-angry"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1749090267058" ID="ID_541383828" MODIFIED="1749136898652" TEXT="Fokussierte Untersuchung notwendig!">
 <icon BUILTIN="yes"/>
+<node COLOR="#5b280f" CREATED="1749121913400" FOLDED="true" ID="ID_1387809956" MODIFIED="1749136875547" TEXT="erst mal: Splice-Verhalten">
+<icon BUILTIN="help"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1749121939226" ID="ID_637516691" MODIFIED="1749121966264" TEXT="das ist ein &#x201e;echt jetzt?&#x201c;-Test"/>
+<node COLOR="#435e98" CREATED="1749121967392" ID="ID_1112761959" MODIFIED="1749130939350" TEXT="brauche volle Fallkombination">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ECHT JETZT!
+    </p>
+    <p>
+      Es geht um <b>Intervall-Relationen</b>&#160;&#8212; bekannterma&#223;en eines der (fast) ekelhaftesten Fallunterscheidungen (Lage von Raumgebieten zueinander oder teilweise &#228;hnlichen Topologien zueinander ist noch schrecklicher)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+<node CREATED="1749121975569" ID="ID_1446200422" MODIFIED="1749121988950" TEXT="Position jeweils">
+<node COLOR="#5e7e91" CREATED="1749122041338" ID="ID_1056644148" MODIFIED="1749122091062" TEXT="(links au&#xdf;en unm&#xf6;glich)">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      da als rekursive Berechnung implementiert und der pos-Parameter auch korrekt als uint definiert
+    </p>
+  </body>
+</html></richcontent>
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+<node CREATED="1749121990017" ID="ID_1788372706" MODIFIED="1749121999308" TEXT="linker Rand"/>
+<node CREATED="1749122003143" ID="ID_618160479" MODIFIED="1749122010310" TEXT="Innenbereich"/>
+<node CREATED="1749122012526" ID="ID_357846463" MODIFIED="1749122016476" TEXT="rechts b&#xfc;ndig"/>
+<node CREATED="1749122017266" ID="ID_104294290" MODIFIED="1749122021056" TEXT="rechts &#xfc;berlappend"/>
+<node CREATED="1749122021393" ID="ID_162203580" MODIFIED="1749122026669" TEXT="rechts au&#xdf;erhalb"/>
+</node>
+<node CREATED="1749122107913" ID="ID_97606834" MODIFIED="1749122110525" TEXT="Overlays">
+<node CREATED="1749122111511" ID="ID_883140295" MODIFIED="1749122116769" TEXT="1-elementig"/>
+<node CREATED="1749122117365" ID="ID_689358826" MODIFIED="1749122121795" TEXT="2-elementig"/>
+<node CREATED="1749122122743" ID="ID_1402014204" MODIFIED="1749122127694" TEXT="3-elementig"/>
+<node CREATED="1749122138685" ID="ID_486640344" MODIFIED="1749122139873" TEXT="leer"/>
+</node>
+<node CREATED="1749122141461" ID="ID_1512239211" MODIFIED="1749122144250" TEXT="Basislisten">
+<node CREATED="1749122145251" ID="ID_1489241747" MODIFIED="1749122150725" TEXT="3-elementig"/>
+<node CREATED="1749122151858" ID="ID_1187303971" MODIFIED="1749122155841" TEXT="5-elementig"/>
+<node CREATED="1749122494571" ID="ID_547342416" MODIFIED="1749122522364" TEXT="2-elementig"/>
+<node CREATED="1749122523130" ID="ID_566182892" MODIFIED="1749122526460" TEXT="1-elementig"/>
+<node CREATED="1749122527209" ID="ID_809047392" MODIFIED="1749122529258" TEXT="leer"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1749122263404" ID="ID_421629155" MODIFIED="1749130941827" TEXT="Test komplett neu runterklopfen">
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#ff00cd" CREATED="1749128173762" ID="ID_368064208" MODIFIED="1749128192153" TEXT="zOMG">
+<icon BUILTIN="smily_bad"/>
+</node>
+<node BACKGROUND_COLOR="#a8a8bf" COLOR="#2f6210" CREATED="1749128228587" ID="ID_385899449" MODIFIED="1749128454852" TEXT="leider Nein: alles wie erwartet">
+<arrowlink COLOR="#6f7598" DESTINATION="ID_1682700621" ENDARROW="Default" ENDINCLINATION="21;247;" ID="Arrow_ID_854761063" STARTARROW="None" STARTINCLINATION="-365;29;"/>
+<icon BUILTIN="back"/>
 </node>
 </node>
 </node>
+<node COLOR="#338800" CREATED="1749130960161" ID="ID_1423104834" MODIFIED="1749136753253" TEXT="dann: fragliche Situation schrittweise aufbauen">
+<icon BUILTIN="yes"/>
+<node CREATED="1749135516159" ID="ID_771788486" MODIFIED="1749135572733" TEXT="FunctionComposition_test::check_bindToArbitraryParameter"/>
+<node CREATED="1749135574065" ID="ID_1658667842" MODIFIED="1749135594450" TEXT="hier wird dieser problematische Grenzfall ebenfalls mit abgedeckt"/>
+<node CREATED="1749135599358" ID="ID_12902561" MODIFIED="1749135607346" TEXT="verwende nochmal die alte Implementierung"/>
+<node CREATED="1749135608311" ID="ID_539233629" MODIFIED="1749135621803" TEXT="mache einfach die internen Type-defs zug&#xe4;nglich"/>
+<node BACKGROUND_COLOR="#e3dbae" CREATED="1749135655444" ID="ID_1677536516" MODIFIED="1749136790143" TEXT="Problem ist ganz einfach...">
+<linktarget COLOR="#fefbd6" DESTINATION="ID_1677536516" ENDARROW="Default" ENDINCLINATION="-312;-26;" ID="Arrow_ID_1066352629" SOURCE="ID_1965208394" STARTARROW="None" STARTINCLINATION="593;24;"/>
+<icon BUILTIN="idea"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#dd01af" CREATED="1749135685273" ID="ID_1646532463" MODIFIED="1749135896001" TEXT="was bin ich f&#xfc;r ein Esel">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Warum hab ich das nicht gleich gesehen?????
+    </p>
+    <ul>
+      <li>
+        Ich hatte alle relevanten Informationen bereits gestern Nacht, aus dem Compile-Fehler
+      </li>
+      <li>
+        hab dann wohl einen Tunellblick gehabt, und dann sofort nach der Splice-Implementierung als &#187;Strohhalm&#171; gegriffen, denn das ist was Systematisches
+      </li>
+      <li>
+        und heute hab ich jetzt ein paar Stunden damit verbracht, einen systematischen Testfall runterzuklopfen (was nun immerhin eine vertrauensbildende Ma&#223;name ist, denn die Splice-Metafunktion <i>ist definitiv komplex</i>)
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="smily_bad"/>
+</node>
+<node CREATED="1749135899620" ID="ID_717531911" MODIFIED="1749136016376" TEXT="die alte Implementierung hat ganz &#xbb;elegant&#xab; ausgenutzt, da&#xdf; unser Bind-to-Tuple beschneidet">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      also vermutlich war mir das damals so v&#246;llig klar, da&#223; ich es einfach gemacht habe, ohne einen Kommentar zu hinterlassen; es war ja auch eine Spezialanfertigung f&#252;r diesen einen Fall, und explizit f&#252;r 1..9 Parameter so ausgeklopft
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1749136018329" ID="ID_286675786" MODIFIED="1749136040691" TEXT="deshalb konnte man zulassen, da&#xdf; im out-of-bounds-Fall einfach eine zu lange Liste entsteht"/>
+<node CREATED="1749136045930" ID="ID_1875577568" MODIFIED="1749136073330" TEXT="liegt lediglich daran, da&#xdf; dann eben schon der Front-Teil die gesamte Original-Liste enth&#xe4;lt"/>
+<node CREATED="1749136081259" ID="ID_520285904" MODIFIED="1749136096661" TEXT="und der Code dann blindlings noch das Value-Tupel dranh&#xe4;ngt"/>
+</node>
+<node COLOR="#338800" CREATED="1749136099720" ID="ID_505387580" MODIFIED="1749136694912" TEXT="Abhilfe">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1749136114759" ID="ID_681718012" MODIFIED="1749136133620" TEXT="BindToArgument::PreparedArgs nicht nur per Append zusammenh&#xe4;ngen"/>
+<node CREATED="1749136134368" ID="ID_1812769735" MODIFIED="1749136975445" TEXT="sondern sofort auch gleich auf das Pr&#xe4;fix der richtigen L&#xe4;nge stutzen">
+<linktarget COLOR="#dafdce" DESTINATION="ID_1812769735" ENDARROW="Default" ENDINCLINATION="-413;16;" ID="Arrow_ID_161658453" SOURCE="ID_1705757881" STARTARROW="None" STARTINCLINATION="393;-10;"/>
+</node>
+<node COLOR="#435e98" CREATED="1749136149348" ID="ID_727667602" MODIFIED="1749136697664" TEXT="kann daf&#xfc;r Splice verwenden">
+<icon BUILTIN="idea"/>
+<node CREATED="1749136164904" ID="ID_765120873" MODIFIED="1749136714537" TEXT="mit einem Nil-Overlay">
+<icon BUILTIN="info"/>
+</node>
+<node COLOR="#435e98" CREATED="1749136171879" ID="ID_219649908" MODIFIED="1749136707713" TEXT="definiere daf&#xfc;r eine Abk&#xfc;rzung">
+<icon BUILTIN="yes"/>
+<node CREATED="1749136188701" ID="ID_1987132867" MODIFIED="1749136199343" TEXT="Prefix&lt;LI, p&gt;"/>
+<node CREATED="1749136200140" ID="ID_178861800" MODIFIED="1749136205897" TEXT="Suffix&lt;LI, p&gt;"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1749136902974" ID="ID_1705757881" MODIFIED="1749136983225" TEXT="Fazit: indem man explizit das Binder-Tupel auf L&#xe4;nge der Funktions-Argumentliste kappt">
+<arrowlink COLOR="#dafdce" DESTINATION="ID_1812769735" ENDARROW="Default" ENDINCLINATION="-413;16;" ID="Arrow_ID_161658453" STARTARROW="None" STARTINCLINATION="393;-10;"/>
+<icon BUILTIN="back"/>
+<node BACKGROUND_COLOR="#e3dbae" COLOR="#3a700e" CREATED="1749136997746" HGAP="28" ID="ID_750676907" MODIFIED="1749137070625" STYLE="fork" TEXT="(was die handgeschriebene Apply&lt;ARG_CNT&gt;::bind implzit auch getan hat)" VSHIFT="19">
+<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="8"/>
 </node>
 </node>
 </node>
@@ -164594,6 +164743,35 @@ Since then others have made contributions, see the log for the history.</font></
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#cd016f" CREATED="1748993653112" ID="ID_1058696109" MODIFIED="1748993677622" TEXT="Stackoverflow in Eclipse">
 <font NAME="SansSerif" SIZE="10"/>
 <icon BUILTIN="smiley-angry"/>
+<node CREATED="1749132089784" ID="ID_939851572" MODIFIED="1749132196714">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <u>Trigger</u>...
+    </p>
+    <p>
+      jeder vollst&#228;ndige Aufruf von
+    </p>
+    <p>
+      <font face="Monospaced" color="#b70606">func::bindFirst(f, val) </font>
+    </p>
+    <p>
+      <font size="1">&#8212; oder &#8212;</font>
+    </p>
+    <p>
+      <font face="Monospaced" color="#b70606">func::bindLast(f, val) </font>
+    </p>
+    <p>
+      
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="broken-line"/>
+</node>
 </node>
 </node>
 <node COLOR="#435e98" CREATED="1748829512571" ID="ID_1542151497" MODIFIED="1749007468620" TEXT="GeneratorCombinations_test"/>
