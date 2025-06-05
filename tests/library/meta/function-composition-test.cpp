@@ -30,7 +30,7 @@ namespace meta {
 namespace test {
   
   using ::test::Test;
-//  using lib::test::showType;
+  using lib::test::showType;
   using lib::meta::_Fun;
   using func::applyFirst;
   using func::applyLast;
@@ -236,7 +236,6 @@ namespace test {
           
           // Version4: as you'd typically do it in real life-------- //
           
-/*
           fun_23 = func::applyFirst (f, Num<1>(18));                 // use the convenience function API to close over a single value
           
           int r5 = fun_23(_2_,_3_).o_;                               // invoke the resulting functor...
@@ -276,7 +275,6 @@ namespace test {
           CHECK (    7+6+5 == (func::applyFirst(    fun13<7,6,5>, _7_ )         (_6_,_5_)).o_);
           CHECK (      6+5 == (func::applyFirst(      fun12<6,5>, _6_ )             (_5_)).o_);
           CHECK (        5 == (func::applyFirst(        fun11<5>, _5_ )               ( )).o_);
-      */
           
           
           
@@ -403,9 +401,9 @@ namespace test {
           using SigC = _Fun<decltype(chain)>::Sig;
           using SigP = _Fun<decltype(pappl)>::Sig;
           
-//          CHECK (showType<Sig1>() == "double (float&, int&, long)"_expect);
-//          CHECK (showType<SigC>() ==   "long (float&, int&, long)"_expect);
-//          CHECK (showType<SigP>() ==         "double (int&, long)"_expect);
+          CHECK (showType<Sig1>() == "double (float&, int&, long)"_expect);
+          CHECK (showType<SigC>() ==   "long (float&, int&, long)"_expect);
+          CHECK (showType<SigP>() ==         "double (int&, long)"_expect);
           
           CHECK (220 == f1   (ff,ii,33));
           CHECK (220 == chain(ff,ii,33));

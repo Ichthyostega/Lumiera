@@ -33,12 +33,6 @@
  ** @todo the implementation is able to handle partial application with N arguments,
  **       but currently we need just one argument, thus only this case was wrapped
  **       up into a convenient functions func::applyFirst and func::applyLast
- ** @todo 11/23 these functor-utils were written at a time when support for handling
- **       generic functions in C++ was woefully inadequate; at that time, we neither
- **       had Lambda-support in the language, nor the ability to use variadic arguments.
- **       Providing a one-shot function-style interface for this kind of manipulations
- **       is still considered beneficial, and thus we should gradually modernise
- **       the tools we want to retain...
  ** @todo 2/25 note that there is a bind_front in C++20 and C++23 will provide a bind_back
  **       helper, which would provide the implementation fully in accordance with current
  **       expectations (including move, constexpr); if we choose to retain a generic
@@ -82,191 +76,6 @@ namespace func{
   
   
   namespace { // helpers for binding and applying a function to an argument tuple
-    
-    using std::get;
-    
-    /**
-     * this Helper with repetitive specialisations for up to nine arguments
-     * is used either to apply a function to arguments given as a tuple, or
-     * to create the actual closure (functor) over all function arguments.
-     * @todo 2/2025 should be replaced by a single variadic template, and
-     *       implemented using std::apply. Note also that std::bind would
-     *       support perfect-forwarding, especially also for the functor;
-     *       the latter would allow to use move-only functors.
-     */
-    template<uint n>
-    struct Apply;
-    
-    
-    template<>                                            //__________________________________
-    struct Apply<0>                                      ///< Apply function without Arguments
-      {
-        template<typename RET, class FUN, class TUP>
-        static RET
-        bind (FUN& f, TUP&)
-          {
-            return std::bind (f);
-          }
-      };
-    
-    
-    template<>                                            //_________________________________
-    struct Apply<1>                                      ///< Apply function with 1 Argument
-      {
-        template<typename RET, class FUN, class TUP>
-        static RET
-        bind (FUN& f, TUP & arg)
-          {
-            return std::bind (f, get<0>(arg));
-          }
-      };
-    
-    
-    template<>                                            //_________________________________
-    struct Apply<2>                                      ///< Apply function with 2 Arguments
-      {
-        template<typename RET, class FUN, class TUP>
-        static RET
-        bind (FUN& f, TUP & arg)
-          {
-            return std::bind (f, get<0>(arg)
-                               , get<1>(arg)
-                              );
-          }
-      };
-    
-    
-    template<>                                            //_________________________________
-    struct Apply<3>                                      ///< Apply function with 3 Arguments
-      {
-        template<typename RET, class FUN, class TUP>
-        static RET
-        bind (FUN& f, TUP & arg)
-          {
-            return std::bind (f, get<0>(arg)
-                               , get<1>(arg)
-                               , get<2>(arg)
-                              );
-          }
-      };
-    
-    
-    template<>                                            //_________________________________
-    struct Apply<4>                                      ///< Apply function with 4 Arguments
-      {
-        template<typename RET, class FUN, class TUP>
-        static RET
-        bind (FUN& f, TUP & arg)
-          {
-            return std::bind (f, get<0>(arg)
-                               , get<1>(arg)
-                               , get<2>(arg)
-                               , get<3>(arg)
-                              );
-          }
-      };
-    
-    
-    template<>                                            //_________________________________
-    struct Apply<5>                                      ///< Apply function with 5 Arguments
-      {
-        template<typename RET, class FUN, class TUP>
-        static RET
-        bind (FUN& f, TUP & arg)
-          {
-            return std::bind (f, get<0>(arg)
-                               , get<1>(arg)
-                               , get<2>(arg)
-                               , get<3>(arg)
-                               , get<4>(arg)
-                              );
-          }
-      };
-    
-    
-    template<>                                            //_________________________________
-    struct Apply<6>                                      ///< Apply function with 6 Arguments
-      {
-        template<typename RET, class FUN, class TUP>
-        static RET
-        bind (FUN& f, TUP & arg)
-          {
-            return std::bind (f, get<0>(arg)
-                               , get<1>(arg)
-                               , get<2>(arg)
-                               , get<3>(arg)
-                               , get<4>(arg)
-                               , get<5>(arg)
-                              );
-          }
-      };
-    
-    
-    template<>                                            //_________________________________
-    struct Apply<7>                                      ///< Apply function with 7 Arguments
-      {
-        template<typename RET, class FUN, class TUP>
-        static RET
-        bind (FUN& f, TUP & arg)
-          {
-            return std::bind (f, get<0>(arg)
-                               , get<1>(arg)
-                               , get<2>(arg)
-                               , get<3>(arg)
-                               , get<4>(arg)
-                               , get<5>(arg)
-                               , get<6>(arg)
-                              );
-          }
-      };
-    
-    
-    template<>                                            //_________________________________
-    struct Apply<8>                                      ///< Apply function with 8 Arguments
-      {
-        template<typename RET, class FUN, class TUP>
-        static RET
-        bind (FUN& f, TUP & arg)
-          {
-            return std::bind (f, get<0>(arg)
-                               , get<1>(arg)
-                               , get<2>(arg)
-                               , get<3>(arg)
-                               , get<4>(arg)
-                               , get<5>(arg)
-                               , get<6>(arg)
-                               , get<7>(arg)
-                              );
-          }
-      };
-    
-    
-    template<>                                            //_________________________________
-    struct Apply<9>                                      ///< Apply function with 9 Arguments
-      {
-        template<typename RET, class FUN, class TUP>
-        static RET
-        bind (FUN& f, TUP & arg)
-          {
-            return std::bind (f, get<0>(arg)
-                               , get<1>(arg)
-                               , get<2>(arg)
-                               , get<3>(arg)
-                               , get<4>(arg)
-                               , get<5>(arg)
-                               , get<6>(arg)
-                               , get<7>(arg)
-                               , get<8>(arg)
-                              );
-          }
-      };
-    
-    
-    
-    
-    
-    
-    /* ===== Helpers for partial function application ===== */
     
     /** @note relying on the implementation type
      *        since we need to _build_ placeholders */
@@ -371,47 +180,23 @@ namespace func{
   
   
   
+  
   /* ======= core operations: closures and partial application ========= */
   
   /**
-   * Closure-creating template.
-   * The instance is linked (reference) to a given concrete argument tuple.
-   * A functor with a matching signature may then either be _closed_ over
-   * this argument values, or even be invoked right away with theses arguments.
-   * @warning we take functor objects _and parameters_ by reference
+   * Base technique: build a binder with arguments from a tuple.
+   * @remark based on the apply-λ-trick by David Vandervoorde
+   *         to unpack the tuple elements as argument pack
+   * @note both the functor and the arguments can be passed
+   *       by _perfect forwarding_, yet both will be **copied**
+   *       into the resulting binder
+   * @param fun   anything »invocable«
+   * @param tuple a suitable set of arguments, or std binding placeholders
+   * @return a _binder functor_, as generated by `std::bind`; all arguments
+   *         supplied with explicitly given values will be _closed_, while
+   *         argument positions marked with `std::_Placeholder<N>` instances
+   *         will remain _open_ to accept arguments on the resulting function.
    */
-  template<typename SIG>
-  class TupleApplicator
-    {
-      using Args = typename _Fun<SIG>::Args;
-      using Ret  = typename _Fun<SIG>::Ret;
-      
-      using BoundFunc = function<Ret()>;
-      
-      enum { ARG_CNT = count<typename Args::List>() };
-      
-      
-      /** storing a ref to the parameter tuple */
-      Tuple<Args>& params_;
-      
-    public:
-      TupleApplicator (Tuple<Args>& args)
-        : params_(args)
-        { }
-      
-      BoundFunc bind (SIG& f)                 { return Apply<ARG_CNT>::template bind<BoundFunc> (f, params_); }
-      BoundFunc bind (function<SIG> const& f) { return Apply<ARG_CNT>::template bind<BoundFunc> (f, params_); }
-      
-      template<class FUN>
-      Ret
-      operator() (FUN&& f)
-        {
-          ASSERT_VALID_SIGNATURE (FUN,SIG);
-          return std::apply (forward<FUN> (f), params_);
-        }
-    };
-  
-  
   template<class FUN, class TUP, typename = enable_if_Tuple<TUP>>
   auto
   bindArgTuple (FUN&& fun, TUP&& tuple)
@@ -424,37 +209,6 @@ namespace func{
                             }
                       ,std::forward<TUP> (tuple));
   }
-  
-  
-  
-  /**
-   * Closing a function over its arguments.
-   * This is a small usage example or spin-off,
-   * having almost the same effect than invoking `std::bind()`.
-   * The notable difference is that the function arguments for
-   * creating the closure are passed in as one tuple compound.
-   */
-  template<typename SIG>
-  class FunctionClosure
-    {
-      typedef typename _Fun<SIG>::Args Args;
-      typedef typename _Fun<SIG>::Ret  Ret;
-      
-      function<Ret(void)> closure_;
-      
-    public:
-      FunctionClosure (SIG& f, Tuple<Args>& args)
-        : closure_{bindArgTuple (f, args)}
-        { }
-      FunctionClosure (function<SIG> const& f, Tuple<Args>& args)
-        : closure_{bindArgTuple (f, args)}
-        { }
-      
-      Ret operator() () { return closure_(); }
-      
-      typedef Ret  result_type;  ///< for STL use
-      typedef void argument_type;
-    };
   
   
   
@@ -638,14 +392,6 @@ namespace func{
     using util::unConst;
     
     
-    template<typename SIG, typename ARG>
-    struct _Clo
-      {
-        using Ret       = typename _Fun<SIG>::Ret;
-        using Signature = typename BuildFunType<Ret, ARG>::Sig;
-        using Type      = FunctionClosure<Signature>;
-      };
-    
     template<typename FUN1, typename FUN2>
     struct _Chain
       {
@@ -743,21 +489,6 @@ namespace func{
   
   
   /*  ========== function-style interface =============  */
-  
-  /** close the given function over all arguments,
-   *  using the values from the argument tuple.
-   *  @return a closure object, which can be
-   *          invoked later to yield the
-   *          function result. */
-  template<typename SIG, typename...ARG>
-  inline
-  typename _Clo<SIG,TySeq<ARG...>>::Type
-  closure (SIG& f, std::tuple<ARG...>& args)
-  {
-    using Closure = typename _Clo<SIG,TySeq<ARG...>>::Type;
-    return Closure (f,args);
-  }
-  
   
   /** close the given function over the first argument.
    * @warning never tie an ownership-managing object by-value! */
