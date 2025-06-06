@@ -58872,7 +58872,7 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1700669580665" FOLDED="true" ID="ID_1852128670" MODIFIED="1739901271086" TEXT="Funktor-Manipulationen">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1700669580665" FOLDED="true" ID="ID_1852128670" MODIFIED="1749164022400" TEXT="Funktor-Manipulationen">
 <icon BUILTIN="hourglass"/>
 <icon BUILTIN="pencil"/>
 <node CREATED="1700669596447" ID="ID_1886923243" MODIFIED="1700669617888" TEXT="einige Werkzeuge hatte ich vor sehr langer Zeit schon gebaut....">
@@ -58945,8 +58945,9 @@
   </body>
 </html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1739901065885" ID="ID_314645109" LINK="https://issues.lumiera.org/ticket/1394" MODIFIED="1739901344418" TEXT="#1394 modernise partial-closure support">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1739901065885" ID="ID_314645109" LINK="https://issues.lumiera.org/ticket/1394" MODIFIED="1749166324232" TEXT="#1394 modernise partial-closure support">
 <linktarget COLOR="#fe091d" DESTINATION="ID_314645109" ENDARROW="Default" ENDINCLINATION="2059;133;" ID="Arrow_ID_1085573551" SOURCE="ID_154602686" STARTARROW="None" STARTINCLINATION="827;-62;"/>
+<linktarget COLOR="#feeece" DESTINATION="ID_314645109" ENDARROW="Default" ENDINCLINATION="-1342;84;" ID="Arrow_ID_500905386" SOURCE="ID_1115408861" STARTARROW="None" STARTINCLINATION="-1296;84;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
@@ -59008,7 +59009,9 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1739578153245" ID="ID_1925401409" MODIFIED="1739578180409" TEXT="&#x27f9; die gebundenen Argumente kommen als Referenz aus dem intern gespeicherten Tupel"/>
+<node CREATED="1739578153245" ID="ID_1925401409" MODIFIED="1739578180409" TEXT="&#x27f9; die gebundenen Argumente kommen als Referenz aus dem intern gespeicherten Tupel">
+<linktarget COLOR="#fe676f" DESTINATION="ID_1925401409" ENDARROW="Default" ENDINCLINATION="-1170;38;" ID="Arrow_ID_820226821" SOURCE="ID_1568193648" STARTARROW="None" STARTINCLINATION="-943;50;"/>
+</node>
 <node CREATED="1739578181249" ID="ID_1870061994" MODIFIED="1739578195091" TEXT="&#x27f9; die sonstigen Argumente werden per perfect-forwarding durchgereicht"/>
 </node>
 </node>
@@ -59062,6 +59065,23 @@
     </ul>
   </body>
 </html></richcontent>
+<node COLOR="#5b280f" CREATED="1749167825397" ID="ID_1530992847" MODIFIED="1749168207565" TEXT="Einwand: geht gar nicht mit std::bind">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Diese Anmerkung mache ich Juni 2025, als ich versucher herauszufinden, warum ich in den letzten zwei Jahren umgebaut habe, und warum ich den TupleConstructor auf const&amp; gelassen habe, und einen eigenes Binder-&#955; implementiert habe.
+    </p>
+    <br/>
+    <p>
+      Es k&#246;nnte n&#228;mlich sein, da&#223; diese Bedenken <i>rein theoretisch sind,</i>&#160;weil std::bind explizit auf eine Kopie abstellt, also mit unique-ownership ohnehin nicht arbeiten k&#246;nnte. Habe da wohl vor vier Monaten (Feb.25) explizit in die Implementierung der Stdlib geschaut....
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#884345" DESTINATION="ID_1293782408" ENDARROW="Default" ENDINCLINATION="368;602;" ID="Arrow_ID_376662766" STARTARROW="None" STARTINCLINATION="210;219;"/>
+<icon BUILTIN="stop-sign"/>
+<icon BUILTIN="help"/>
+</node>
 </node>
 <node CREATED="1739826248153" ID="ID_213763590" MODIFIED="1739826386851" TEXT="das remapped Tuple (mit Placeholdern) mu&#xdf; als Value f&#xfc;r den Binder zur Verf&#xfc;gung stehen">
 <icon BUILTIN="messagebox_warning"/>
@@ -59086,6 +59106,7 @@
     </p>
   </body>
 </html></richcontent>
+<linktarget COLOR="#fdfcce" DESTINATION="ID_1933382686" ENDARROW="Default" ENDINCLINATION="-843;33;" ID="Arrow_ID_411875782" SOURCE="ID_1191852073" STARTARROW="None" STARTINCLINATION="-1184;46;"/>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -59133,7 +59154,8 @@
 <node COLOR="#338800" CREATED="1700680962986" ID="ID_417878820" MODIFIED="1700686489900" TEXT="applyFirst / applyLast gegen neue Implementierung austauschen">
 <icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#338800" CREATED="1700686490730" ID="ID_270581080" MODIFIED="1700686505300" TEXT="zus&#xe4;tzlicher Test: auch Referenzen werden korrekt gehandhabt">
+<node COLOR="#338800" CREATED="1700686490730" ID="ID_270581080" MODIFIED="1749167462959" TEXT="zus&#xe4;tzlicher Test: auch Referenzen werden korrekt gehandhabt">
+<linktarget COLOR="#daf6c0" DESTINATION="ID_270581080" ENDARROW="Default" ENDINCLINATION="-630;22;" ID="Arrow_ID_217188821" SOURCE="ID_1623000211" STARTARROW="None" STARTINCLINATION="-1081;36;"/>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -59151,7 +59173,8 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="clanbomber"/>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1739581690561" HGAP="49" ID="ID_1293782408" MODIFIED="1739581965371" TEXT="ich glaube das ist gar nicht m&#xf6;glich" VSHIFT="-2">
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1739581690561" HGAP="49" ID="ID_1293782408" MODIFIED="1749167880759" TEXT="ich glaube das ist gar nicht m&#xf6;glich" VSHIFT="-2">
+<linktarget COLOR="#884345" DESTINATION="ID_1293782408" ENDARROW="Default" ENDINCLINATION="368;602;" ID="Arrow_ID_376662766" SOURCE="ID_1530992847" STARTARROW="None" STARTINCLINATION="210;219;"/>
 <font NAME="SansSerif" SIZE="11"/>
 <icon BUILTIN="idea"/>
 <icon BUILTIN="help"/>
@@ -106207,8 +106230,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node CREATED="1739580556302" ID="ID_1748409648" MODIFIED="1739580594120" TEXT="somit kein grunds&#xe4;tzliches Problem mit dem alten Tooling">
 <arrowlink DESTINATION="ID_1805875630" ENDARROW="Default" ENDINCLINATION="331;15;" ID="Arrow_ID_275367387" STARTARROW="None" STARTINCLINATION="290;15;"/>
-<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1739663114472" HGAP="61" ID="ID_154602686" MODIFIED="1739901454483" TEXT="mu&#xdf; aber dringend modernisiert werden" VSHIFT="21">
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1739663114472" HGAP="61" ID="ID_154602686" MODIFIED="1749166023561" TEXT="mu&#xdf; aber dringend modernisiert werden" VSHIFT="21">
 <arrowlink COLOR="#fe091d" DESTINATION="ID_314645109" ENDARROW="Default" ENDINCLINATION="2059;133;" ID="Arrow_ID_1085573551" STARTARROW="None" STARTINCLINATION="827;-62;"/>
+<linktarget COLOR="#9c6d6e" DESTINATION="ID_154602686" ENDARROW="Default" ENDINCLINATION="-433;1357;" ID="Arrow_ID_36383076" SOURCE="ID_450823972" STARTARROW="None" STARTINCLINATION="-898;41;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1739901126701" ID="ID_311690952" MODIFIED="1739901242578">
@@ -106487,7 +106511,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node COLOR="#338800" CREATED="1739822405519" ID="ID_1159986625" MODIFIED="1739822418374" TEXT="weitere partial-closure-F&#xe4;lle integrieren">
 <icon BUILTIN="button_ok"/>
-<node COLOR="#435e98" CREATED="1739822430227" FOLDED="true" ID="ID_1498733913" MODIFIED="1739890484924">
+<node COLOR="#435e98" CREATED="1739822430227" FOLDED="true" ID="ID_1498733913" MODIFIED="1749164513993">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
@@ -106544,6 +106568,40 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 <arrowlink COLOR="#fef2de" DESTINATION="ID_783082623" ENDARROW="Default" ENDINCLINATION="-2327;222;" ID="Arrow_ID_897208269" STARTARROW="Default" STARTINCLINATION="1408;-47;"/>
 <icon BUILTIN="stop-sign"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1749165097523" ID="ID_54445536" MODIFIED="1749166212351">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <u>Anmerkung (function-closure aufger&#228;umt, Juni 25)</u>:
+    </p>
+    <ul>
+      <li>
+        habe jetzt in die alten Templates einen modernen Binder-Builder eingebaut
+      </li>
+      <li>
+        man kann jetzt Funktor und zu bindende Werte per Forwarding in den std::bind schieben
+      </li>
+      <li>
+        gebe jetzt eine Forwarding-Ref durch den TupleConstructor !
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das Ziel war, die ganzen Workarounds schrittweise zu reduzieren, damit letztlich alle Varianten wieder auf einen einzigen Implementierungspfad aufsetzen. Zwischenzeitlich waren n&#228;mlich bis zu drei verschiedene Implementierungsl&#246;sungen aufgebaut worden.
+    </p>
+    <p>
+      F&#252;r den TupleConstructor war die wichtige Einsicht, da&#223; eine Forwarding-Referenz nicht zwangsl&#228;ufig eine RValue-Referenz ist; vielmehr ist sie <i>flexibel,</i>&#160;weil sie auf einem Template-Argument aufsetzt, das an die direkte Aufruf-Quelle andockt. Dieses Muster l&#228;&#223;t sich in den ElmMapper hineintragen, da dieser die Quelle als Parameter SRC bekommt. Wurde die Quelle also initial als LValue-Referenz in den TupleConstructor gegeben, dann wird dieser Parameter ebenfalls zur Referenz; andernfalls wird er zur RValue-Referenz. Damit, und mit dem explizit gegebenen Zieltyp f&#252;r jedes Element im Ergebnis-Tupel l&#228;&#223;t sich dieser ElmMapper also komplett &#187;fernsteuern&#171;. Ob das <b>aber dennoch eine Falle darstellt f&#252;r unique-values</b>&#160;mu&#223; sich erst in der Praxis zeigen (wenn denn &#252;berhaupt jemals ein so komplexer ElmMapper gebraucht wird, der einzelne Elemente dupliziert, und diese Elemente dann aber unique-ownership h&#228;tten....)
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#874361" DESTINATION="ID_54445536" ENDARROW="Default" ENDINCLINATION="-1061;86;" ID="Arrow_ID_1751771989" SOURCE="ID_1085804262" STARTARROW="None" STARTINCLINATION="-693;24;"/>
+<icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
 <node CREATED="1739822955768" ID="ID_82653424" MODIFIED="1739830817696" TEXT="wir k&#xf6;nnen also nur Werte bis zum Tuple-Constructor bringen">
@@ -133400,6 +133458,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
     </p>
   </body>
 </html></richcontent>
+<linktarget COLOR="#5b588a" DESTINATION="ID_1754735258" ENDARROW="Default" ENDINCLINATION="-275;462;" ID="Arrow_ID_1779451858" SOURCE="ID_267763001" STARTARROW="None" STARTINCLINATION="-2041;72;"/>
 <icon BUILTIN="idea"/>
 <node CREATED="1700669349834" ID="ID_1795148710" MODIFIED="1700669452457" TEXT="auch daf&#xfc;r gabs bereits eine LIbrary-L&#xf6;sung">
 <node CREATED="1700669462313" ID="ID_146361421" MODIFIED="1700669512820" TEXT="genau die Geliche, die ich vor ein paar Tagen schon modernisiert habe...">
@@ -164360,17 +164419,21 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 <node CREATED="1748992588450" ID="ID_262144930" MODIFIED="1748992602312" TEXT="Typ-Sequenzen treten nur intern auf, nicht auf dem API"/>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1748829779637" ID="ID_1158113558" MODIFIED="1749001112944" TEXT="man k&#xf6;nnte dann im Nachgang die Apply-Definition eliminieren">
+<node BACKGROUND_COLOR="#b4afd2" COLOR="#5c4d6e" CREATED="1748829779637" ID="ID_1158113558" MODIFIED="1749144572119" TEXT="man k&#xf6;nnte dann im Nachgang die Apply-Definition eliminieren">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
     <p>
-      ...aber nur wenn's einfach geht; eigentlich ist das au&#223;erhalb vom Scope und k&#246;nnte auch sp&#228;ter mal gemacht werden (ist nur ein Implementierungsdetail), sofern die bestehende Impl mit den neuen Typlisten arbeitet
+      ...aber nur wenn's einfach geht; eigentlich ist das au&#223;erhalb vom Scope und k&#246;nnte auch sp&#228;ter mal gemacht werden, sofern nur die bestehende Impl mit den neuen Typlisten arbeitet.
+    </p>
+    <br/>
+    <p>
+      Tats&#228;chlich hab ich das jetzt doch angehen m&#252;ssen, da ich im Zuge der Umstellung in compile-Fehler gelaufen bin. Und das ist die Art <i>Blocker, </i>die ich f&#252;r dieses Refactoring stets bef&#252;rchtet habe; letztlich war es aber doch nicht so schlimm, denn bedingt durch den inkrementellen Ansatz konnte ich st&#252;ckweise zur&#252;ckgehen und hab dann gesehen, da&#223; der Fehler &#8222;nur&#8220; darauf zur&#252;ckgeht, da&#223; meine neue Ersatz-Implementierung nun voll generisch ist, und deshalb einen out-of-bounds-Zugriff nicht mehr stillschweigend abschneidet, sondern an std::bind durchreicht (welches dann die nicht passenden Argumenttypen bemerkt). Insgesamt war das nun etwa ein Tag full-time-Arbeit, und nun ist dieser <i>bedrohliche Header</i>&#160;wenigstens schon mal so weit reduziert, da&#223; man die Redundanzen klar sehen kann
     </p>
   </body>
 </html></richcontent>
-<icon BUILTIN="hourglass"/>
-<node CREATED="1749074120514" ID="ID_1124039482" MODIFIED="1749074155396" TEXT="Schritt 1: Apply::invoke durch std::apply ersetzen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1749074120514" FOLDED="true" ID="ID_1124039482" MODIFIED="1749144199739" TEXT="Schritt 1: Apply::invoke durch std::apply ersetzen">
 <node CREATED="1749074488848" ID="ID_483438140" MODIFIED="1749074510349" TEXT="std::apply nimmt Funktion und Argument-Tupel per perfect-forwarding"/>
 <node CREATED="1749074518632" ID="ID_271102144" MODIFIED="1749074526683" TEXT="unsere Impl arbeitet bisher mit Referenzen"/>
 <node CREATED="1749074644727" ID="ID_800672638" MODIFIED="1749074650748" TEXT="tats&#xe4;chlich...">
@@ -164397,7 +164460,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node CREATED="1749079273770" ID="ID_579464028" MODIFIED="1749079303130" TEXT="Schritt 2: Bind-to-Arg-Tuple neu implementieren">
+<node COLOR="#435e98" CREATED="1749079273770" FOLDED="true" ID="ID_579464028" MODIFIED="1749144201938" TEXT="Schritt 2: Bind-to-Arg-Tuple neu implementieren">
 <node CREATED="1749079304502" ID="ID_1638673098" MODIFIED="1749079325099" TEXT="rein intuitiv: das k&#xf6;nnte mit der tuple-for-each Technik gehen...">
 <node CREATED="1749079326999" ID="ID_34944630" MODIFIED="1749079363110" TEXT="also siehe forEach (tup, fun) ini tuple-helper.hpp"/>
 <node CREATED="1749079368228" ID="ID_1090818949" MODIFIED="1749081564861" TEXT="und zwar mit diesem upack-Trick nach David Vandervoorde">
@@ -164409,7 +164472,8 @@ Since then others have made contributions, see the log for the history.</font></
 <node CREATED="1749080688030" ID="ID_162973867" MODIFIED="1749080711048" TEXT="scheint zu gehen .... zumindest wird&apos;s schon mal vom Compiler akzeptiert"/>
 <node CREATED="1749080712258" ID="ID_1500605099" MODIFIED="1749080733204" TEXT="und wir haben nur volles forwarding f&#xfc;r diesen Aufruf &#x27f6; Kopie im Binder"/>
 </node>
-<node CREATED="1749081475903" ID="ID_605063967" MODIFIED="1749081505836" TEXT="Zwischenschritt">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1749081475903" ID="ID_605063967" MODIFIED="1749144185785" TEXT="Zwischenschritte">
+<icon BUILTIN="yes"/>
 <node CREATED="1749081506641" ID="ID_667556429" MODIFIED="1749081559124" TEXT="neue Hilfsfunktion bindArgTuple">
 <linktarget COLOR="#5d38bc" DESTINATION="ID_667556429" ENDARROW="Default" ENDINCLINATION="23;-31;" ID="Arrow_ID_1911198692" SOURCE="ID_1090818949" STARTARROW="None" STARTINCLINATION="-163;8;"/>
 </node>
@@ -164421,9 +164485,7 @@ Since then others have made contributions, see the log for the history.</font></
 <node CREATED="1749082348881" ID="ID_1539878278" MODIFIED="1749082385036" TEXT="es wurde Apply&lt;ARG_CNT&gt; ausgew&#xe4;hlt"/>
 <node CREATED="1749082393371" ID="ID_1673961372" MODIFIED="1749082436871" TEXT="das hat hinten &#xfc;bersch&#xfc;ssige Tupel-Elemente stillschweigend ignoriert">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       da es auf std::get&lt;i&gt; mit frest verdrahtetem Index aufsetzt
@@ -164484,9 +164546,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#bd0711" CREATED="1749086526784" ID="ID_757037322" MODIFIED="1749086594846">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p style="text-align: center">
       d.h.: f&#252;r die Back-Berchnung
@@ -164530,9 +164590,7 @@ Since then others have made contributions, see the log for the history.</font></
 <node CREATED="1749121939226" ID="ID_637516691" MODIFIED="1749121966264" TEXT="das ist ein &#x201e;echt jetzt?&#x201c;-Test"/>
 <node COLOR="#435e98" CREATED="1749121967392" ID="ID_1112761959" MODIFIED="1749130939350" TEXT="brauche volle Fallkombination">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ECHT JETZT!
@@ -164546,9 +164604,7 @@ Since then others have made contributions, see the log for the history.</font></
 <node CREATED="1749121975569" ID="ID_1446200422" MODIFIED="1749121988950" TEXT="Position jeweils">
 <node COLOR="#5e7e91" CREATED="1749122041338" ID="ID_1056644148" MODIFIED="1749122091062" TEXT="(links au&#xdf;en unm&#xf6;glich)">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       da als rekursive Berechnung implementiert und der pos-Parameter auch korrekt als uint definiert
@@ -164599,9 +164655,7 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="idea"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#dd01af" CREATED="1749135685273" ID="ID_1646532463" MODIFIED="1749135896001" TEXT="was bin ich f&#xfc;r ein Esel">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Warum hab ich das nicht gleich gesehen?????
@@ -164624,9 +164678,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node CREATED="1749135899620" ID="ID_717531911" MODIFIED="1749136016376" TEXT="die alte Implementierung hat ganz &#xbb;elegant&#xab; ausgenutzt, da&#xdf; unser Bind-to-Tuple beschneidet">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       also vermutlich war mir das damals so v&#246;llig klar, da&#223; ich es einfach gemacht habe, ohne einen Kommentar zu hinterlassen; es war ja auch eine Spezialanfertigung f&#252;r diesen einen Fall, und explizit f&#252;r 1..9 Parameter so ausgeklopft
@@ -164676,19 +164728,436 @@ Since then others have made contributions, see the log for the history.</font></
 <node COLOR="#435e98" CREATED="1749081613141" ID="ID_126616986" MODIFIED="1749081621876" TEXT="FunctionComposition_test"/>
 <node COLOR="#435e98" CREATED="1749081619255" ID="ID_945095728" MODIFIED="1749081621876" TEXT="TupleClosure_test"/>
 </node>
-<node CREATED="1749141651868" ID="ID_1929986459" MODIFIED="1749141664903" TEXT="Hilfskonstrukte entfernen">
-<node CREATED="1749141665773" ID="ID_1270373632" MODIFIED="1749141670880" TEXT="Apply-Spezialisierungen"/>
-<node CREATED="1749141689698" ID="ID_865992669" MODIFIED="1749141693005" TEXT="TupleApplicator"/>
-<node CREATED="1749141693742" ID="ID_1131353514" MODIFIED="1749141699732" TEXT="FunctionClosure"/>
-<node CREATED="1749141700512" ID="ID_10137882" MODIFIED="1749141707469" TEXT="func::closure()"/>
+<node COLOR="#338800" CREATED="1749141651868" ID="ID_1929986459" MODIFIED="1749144169241" TEXT="Hilfskonstrukte entfernen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#5b280f" CREATED="1749141665773" ID="ID_1270373632" MODIFIED="1749144173296" TEXT="Apply-Spezialisierungen">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node COLOR="#5b280f" CREATED="1749141689698" ID="ID_865992669" MODIFIED="1749144173298" TEXT="TupleApplicator">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node COLOR="#5b280f" CREATED="1749141693742" ID="ID_1131353514" MODIFIED="1749144173297" TEXT="FunctionClosure">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node COLOR="#5b280f" CREATED="1749141700512" ID="ID_10137882" MODIFIED="1749144173297" TEXT="func::closure()">
+<icon BUILTIN="button_cancel"/>
 </node>
 </node>
 </node>
-<node CREATED="1749142101434" ID="ID_1381240660" MODIFIED="1749142108466" TEXT="verbleibende Konstrukte">
+</node>
+</node>
+<node COLOR="#338800" CREATED="1749144588714" ID="ID_1479414175" MODIFIED="1749172141146" TEXT="inzwischen eingef&#xfc;hrte Work-arounds reduzieren">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1749144605777" ID="ID_644297858" MODIFIED="1749144634945" TEXT="2023 habe ich perfect-forwarding in einem Fall gebraucht"/>
+<node CREATED="1749144635772" ID="ID_1576498176" MODIFIED="1749144864798" TEXT="daraufhin habe ich die bestehenden Front-end-F&#xe4;lle &#x201e;daneben&#x201c; komplett neu implementiert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...und zwar habe ich, mithilfe eines &#955;-generic, teilweise die F&#228;higkeit von std::bind nachgebaut, einen Functor per Forwarding in die Kopie zu nehmen; das war damals f&#252;r mich ein ziemlicher Schritt vorw&#228;rts &#8212; wiewohl eigentlich auch die alte Implementierung auf std::bind aufbaut, und somit eigentlich dazu f&#228;hig sein m&#252;&#223;te (wenn man sie denn druchdringen k&#246;nnte....)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1749144667428" ID="ID_1844824357" MODIFIED="1749147502136" TEXT="nun w&#xe4;re aber, durch das Aufr&#xe4;umen, auch die Haupt-Implementierung Forwarding-f&#xe4;hig">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#435e98" CREATED="1749147503517" ID="ID_482440451" MODIFIED="1749171900876" TEXT="fast &#x2014; denn die bestehende Template-Infrastruktur ist darauf nicht vorbereitet">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1749147538267" ID="ID_1114230801" MODIFIED="1749147550961" TEXT="sie stammt aus pre-C++11-Zeiten"/>
+<node CREATED="1749147551799" ID="ID_1914453505" MODIFIED="1749147563563" TEXT="damals mu&#xdf;te man sich entscheiden">
+<node CREATED="1749147564760" ID="ID_1519948433" MODIFIED="1749147572996" TEXT="entweder man reicht eine Referenz durch"/>
+<node CREATED="1749147573785" ID="ID_1535823138" MODIFIED="1749147581339" TEXT="oder eine const&amp; f&#xfc;r Kopie"/>
+</node>
+<node CREATED="1749147930655" ID="ID_845306059" MODIFIED="1749147936766" TEXT="Problem ist hier der Index-Mapper">
+<node CREATED="1749148644033" ID="ID_1488875557" MODIFIED="1749148655110" TEXT="denn der mu&#xdf; f&#xfc;r jedes Argument einzeln operieren"/>
+<node CREATED="1749148655799" ID="ID_702424855" MODIFIED="1749148674514" TEXT="aber jeweils das ganze Tupel durchreichen"/>
+<node CREATED="1749148675285" ID="ID_1349817968" MODIFIED="1749148703278" TEXT="damit sich std::get&lt;N&gt; ein Element greifen kann"/>
+<node CREATED="1749150436464" ID="ID_1129160412" MODIFIED="1749150544796" TEXT="der Ziel-Typ wird explizit angegeben">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      wir greifen den aus dem Original-Tupel-Typ heraus; d.h. wenn std::get&lt;i&gt; eine Referenz liefert, wird diese an den Konstruktor dieses Zieltyps gegeben
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1749150863239" ID="ID_1240166951" MODIFIED="1749150958791" TEXT="std::get&lt;i&gt; verh&#xe4;lt sich je nach Eingabe-Art">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <ul>
+      <li>
+        wenn es sein Argument, also das Tupel normal bekommt, nimmt es eine Referenz und liefert auch eine Referenz auf das Einzelargument
+      </li>
+      <li>
+        wenn es dagegen sein Argument-Tupel per forwarding oder RValue bekommt, dann liefert es eine Forwarding-Referenz
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1749148708776" ID="ID_1478586190" MODIFIED="1749148721203" TEXT="und speziell trickreich wird es mit Referenzen im Tupel">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1749148835978" ID="ID_1135002615" MODIFIED="1749148899533" TEXT="auch der TupleConstructor (tuple-helper.hpp) ist hier involviert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ....und auch der wurde noch nicht auf den Fall <i>perfect-forwarding mit m&#246;glicherweise Referenzen im Tupel</i>&#160;vorbereitet
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1749150220276" ID="ID_1956528784" MODIFIED="1749150248926" TEXT="zun&#xe4;chst: wie nimmt dieser sein Quell-Argument?"/>
+<node CREATED="1749150250395" ID="ID_1673919134" MODIFIED="1749150275991" TEXT="und: der Elm-Mapper wird von diesem Argument initialisiert"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1749148915968" ID="ID_408052313" MODIFIED="1749171820668" TEXT="also &#x27f9; Aufgabe schrittweise durchgehen">
+<icon BUILTIN="yes"/>
+<node CREATED="1749148942740" ID="ID_1600664427" MODIFIED="1749149036114" TEXT="die front-End-Funktionen reichen lediglich durch">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      hier sollte alles komplett auf <i>perfect forwarding</i>&#160;bleiben; egal ob nun ein Einzel-Argument gegeben ist, oder (sp&#228;ter mal) ein Tupel
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1749149070349" ID="ID_634966896" MODIFIED="1749149094088" TEXT="andererseits: der Binder erzeugt letztlich eine Kopie von allem">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1749149102950" ID="ID_1254704894" MODIFIED="1749152442764" TEXT="&#xbb;best-practice&#xab; : Kopie gleich auf der Argumentliste machen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      wenn in C++ ein Funktionsaufruf dazu dienen soll, eine Objektinstanz(Kopie) zu erstellen, dann sollte man nicht die Forwarding-F&#228;lle durchreichen, sondern diese Handhabung besser dem Compiler &#252;berlassen, und die Kopie also sofort <i>ganz vorne auf den Funktionsargumenten</i>&#160;passieren lassen. Ab diesem Punkt kann man dieses Objekt per move ans Ziel schieben
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#544e7a" DESTINATION="ID_1254704894" ENDARROW="Default" ENDINCLINATION="459;0;" ID="Arrow_ID_1763118577" SOURCE="ID_725492019" STARTARROW="None" STARTINCLINATION="-130;-233;"/>
+</node>
+<node CREATED="1749151020976" ID="ID_1948629686" MODIFIED="1749151036520" TEXT="ABER: wir haben hier einen Zwischenschritt: das Binding-Tupel">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1749151040237" ID="ID_1059716656" MODIFIED="1749151062149" TEXT="in diesem m&#xfc;ssen die Platzhalter default-initialisiert werden"/>
+<node CREATED="1749151068773" ID="ID_785722932" MODIFIED="1749151094236" TEXT="also sollte dieses die Basis-Kopie sein, die dann weiterbewegt wird (in den Binder)">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1749151106718" ID="ID_1712194165" MODIFIED="1749151132633" TEXT="&#x27f9; vom Argument bis in das Binding-Tupel mu&#xdf; geForwardet werden">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1749151700514" ID="ID_1581833432" MODIFIED="1749151717265" TEXT="mu&#xdf; das also durch den Elm-Mapper durchbekommen">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1749151724394" ID="ID_203092071" MODIFIED="1749151758762" TEXT="aber der TupleConstructor nimmt das zum Gl&#xfc;ck als zus&#xe4;tzliches Template-Argument">
+<node CREATED="1749151759978" ID="ID_678195357" MODIFIED="1749151776047" TEXT="das l&#xe4;&#xdf;t sich in vollst&#xe4;ndiges perfect-forwarding umwandeln"/>
+<node CREATED="1749151984637" ID="ID_725492019" MODIFIED="1749152448845" TEXT="oder aber in front-copy + move">
+<arrowlink COLOR="#544e7a" DESTINATION="ID_1254704894" ENDARROW="Default" ENDINCLINATION="459;0;" ID="Arrow_ID_1763118577" STARTARROW="None" STARTINCLINATION="-130;-233;"/>
+</node>
+<node COLOR="#435e98" CREATED="1749152458071" ID="ID_586675126" MODIFIED="1749155785730" TEXT="was ist besser?">
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="help"/>
+<node CREATED="1749152465774" ID="ID_889462658" MODIFIED="1749152481528" TEXT="TupleConstructor ist eine Framwork-Klasse"/>
+<node CREATED="1749152482462" ID="ID_1411256146" MODIFIED="1749152518223" TEXT="das hei&#xdf;t, sollte keinen Design-Entscheidungen vorgreifen"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1749152519258" ID="ID_257023635" MODIFIED="1749155789062" TEXT="demnach &#x27f9; sollte hier perfect-Forwarding gemacht werden">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1749152556698" ID="ID_694951026" MODIFIED="1749152681615" TEXT="die ElemMapper-Implementierung hat durch denn SRC-Parameter Handlungsfreiheit">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...denn sie bekommt hier, was auf der Eingangs-Seite im Konstruktor gebunden wurde. Wurde also eingangsseitig ein perfect-forwarding gemacht, dann <i>schwenkt dieser Parameter je nach gegebener Objekt-Art.</i>&#160; Man kann von sowas nun entweder kopieren, oder sich das selber als Forwarding-Referenz speichern
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1749155810853" ID="ID_578273830" MODIFIED="1749155814560" TEXT="mu&#xdf; dann aber...">
+<node CREATED="1749155816028" ID="ID_35442507" MODIFIED="1749155829438" TEXT="durch den gesamten TupleConstructor hindurch eine forward-Kette bilden"/>
+<node CREATED="1749155830386" ID="ID_1500065778" MODIFIED="1749155845643" TEXT="mu&#xdf; aufpassen, dem ElmMapper den richtigen SRC-Typ zu geben"/>
+<node CREATED="1749155846975" ID="ID_1327025943" MODIFIED="1749155854871" TEXT="verwende hier std::decay_t">
+<node CREATED="1749155859643" ID="ID_892038282" MODIFIED="1749155867536" TEXT="denn der ElmMapper wird spezialisiert"/>
+<node CREATED="1749155868485" ID="ID_805816125" MODIFIED="1749155888181" TEXT="und die Spezialisierung sollte keine Typ-Adornements sehen">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1749171744790" ID="ID_1132616577" MODIFIED="1749171810342" TEXT="damit l&#xe4;&#xdf;t sich bindFirst / bindLast komplett darstellen">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1749160837758" ID="ID_1760677880" MODIFIED="1749171638642" TEXT="grunds&#xe4;tzliches(konzeptionelles) Problem: std::bind kopiert alles">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1749160876952" ID="ID_594896228" MODIFIED="1749160898778" TEXT="selbst wenn man Argumente oder den Funktor als Referenz anliefert"/>
+<node CREATED="1749160900145" ID="ID_1202100652" MODIFIED="1749160913016" TEXT="im Binder findet stets ein Decay statt">
+<node CREATED="1749160913956" ID="ID_1337223119" MODIFIED="1749160922564" TEXT="und es werden (sichere) Werte gespeichert"/>
+</node>
+<node COLOR="#5b280f" CREATED="1749160945089" ID="ID_471705411" MODIFIED="1749169736464" TEXT="will man je etwas Anderes?">
+<icon BUILTIN="help"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1749161069089" ID="ID_1618982018" MODIFIED="1749161913375" TEXT="seinerzeit (Nov.2023) war mir das wichtig">
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1749161100371" ID="ID_767800501" MODIFIED="1749161146683" TEXT="commit 32b740cd">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      commit 32b740cd400127b1d119b1e4bab490e063aa4f3e
+    </p>
+    <p>
+      Author: Ichthyostega &lt;prg@ichthyostega.de&gt;
+    </p>
+    <p>
+      Date:&#160;&#160;&#160;Wed Nov 22 22:11:59 2023 +0100
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;Library: RandomDraw - dynamic configuration requires partial application
+    </p>
+    <p>
+      &#160;&#160;&#160;
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;Investigation in test setup reveals that the intended solution
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;for dynamic configuration of the RandomDraw can not possibly work.
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;The reason is: the processing function binds back into the object instance.
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;This implies that RandomDraw must be *non-copyable*.
+    </p>
+    <p>
+      &#160;&#160;&#160;
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;So we have to go full circle.
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;We need a way to pass the current instance to the configuration function.
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;And the most obvious and clear way would be to pass it as function argument.
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;Which however requires to *partially apply* this function.
+    </p>
+    <p>
+      &#160;&#160;&#160;
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;So -- again -- we have to resort to one of the functor utilities
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;written several years ago; and while doing so, we must modernise
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;these tools further, to support perfect forwarding and binding
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;of reference arguments.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1749161867728" ID="ID_373531451" MODIFIED="1749161891005" TEXT="hab dann selber eine Art Binder-&#x3bb; geschrieben"/>
+<node CREATED="1749161891806" ID="ID_796478497" MODIFIED="1749163902879" TEXT="und in einem Test einen wilden Stunt mit Referenzen demonstriert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      in diesem Test wird
+    </p>
+    <ul>
+      <li>
+        einmal eine Referenz auf eine lokale Variable in die closure gespeichert
+      </li>
+      <li>
+        eine Referenz auf ein std::function-Object als Funktor gespeichert
+      </li>
+    </ul>
+    <p>
+      dann werden beide Referenzen manipuliert, und dadurch &#228;ndert sich (per Seiteneffekt) das Ergebnis, das man aus der den Funktoren f&#252;r Funktions-Komposition und f&#252;r partielle closure bekommt. Das hei&#223;t, die in diesem Testfall konstruierten Funktoren / Closures sind auf extreme Weise von verdecktem Kontext abh&#228;ngig.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#c9010c" CREATED="1749163906059" ID="ID_423556227" MODIFIED="1749163941561" TEXT="ich kann leider nicht mehr feststellen, weshalb ich das wollte">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1749169318595" ID="ID_1362260767" MODIFIED="1749169335654" TEXT="ich kann aber im Moment keinerlei Notwendigkeit f&#xfc;r gebundene Referenzen sehen">
+<node CREATED="1749169336887" ID="ID_1408025125" MODIFIED="1749169344571" TEXT="das Feature wird anscheinend nicht verwendet"/>
+<node CREATED="1749169345366" ID="ID_441347345" MODIFIED="1749169427367" TEXT="mit der neuen Implementierung (Value-Kopie) laufen alle wichtigen Tests">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Die neue Implementierung verwendet wieder die alte Template-Infrastruktur, aber gr&#252;ndlich modernisiert, mit variadics und std::apply. Damit k&#246;nnen keine Referenzen in einen Binder gespeichert werden
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1749165646336" ID="ID_1410403672" MODIFIED="1749165666132" TEXT="Hinweise sammeln....">
+<icon BUILTIN="edit"/>
+<node CREATED="1749165683673" ID="ID_450823972" MODIFIED="1749166023560" TEXT="der entscheidende Durchbruch war erst Feb.25 (NodeBuilder)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Dabei ging es darum, einzelne Parameter in einem Tupel bereits &#187;technisch&#171; vorbinden zu k&#246;nnen, w&#228;hrend der Rest erst sp&#228;ter von der Automation gesetzt wird.
+    </p>
+    <p>
+      <u>Beobachtung</u>: das Thema <i>Referenzen</i>&#160;spielte in diesen &#220;berlegungen keine Rolle. Vielmehr ging es um <b>Performance</b>: ich hatte Sorgen, weil das partial-application-Framework std::function-Objekte erzeugt; das bedeutet, da&#223; jedes Lambda mit mehr als einem kontextuell gebundenen Wert in <b>Heap-Storage</b>&#160;wandert. <i>Das</i>&#160; war die Hauptsorge hier
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#9c6d6e" DESTINATION="ID_154602686" ENDARROW="Default" ENDINCLINATION="-433;1357;" ID="Arrow_ID_36383076" STARTARROW="None" STARTINCLINATION="-898;41;"/>
+</node>
+<node CREATED="1749166026538" ID="ID_1085804262" MODIFIED="1749166220673" TEXT="dabei war ich auch schon auf das Forwarding-Problem im TupleConstructor gesto&#xdf;en">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...hatte damals aber keine L&#246;sung gesehen, und war zu dem Schlu&#223; gekommen, da&#223; dieser per Value arbeiten mu&#223;, weil sonst der ElmMapper heimt&#252;ckischen Berschr&#228;nkungen unterliegen k&#246;nnte, wenn unique-ownership im Spiel ist. <b><font color="#881515">Wei&#223; nicht, ob diese Sorge berechtigt ist</font></b>. Jedenfalls ist mir damals der Unterschied zwischen RValue-Referenz und Universeller-Referenz(forwarding, template) nicht aufgefallen.
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#874361" DESTINATION="ID_54445536" ENDARROW="Default" ENDINCLINATION="-1061;86;" ID="Arrow_ID_1751771989" STARTARROW="None" STARTINCLINATION="-693;24;"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1749166282475" ID="ID_1115408861" MODIFIED="1749166332356" TEXT="es gibt sogar ein spezielles Ticket #1394">
+<arrowlink COLOR="#feeece" DESTINATION="ID_314645109" ENDARROW="Default" ENDINCLINATION="-1342;84;" ID="Arrow_ID_500905386" STARTARROW="None" STARTINCLINATION="-1296;84;"/>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1749168716041" ID="ID_267763001" MODIFIED="1749171687464" TEXT="eine erste &#xdc;berarbeitung war durch Probleme beim &#xbb;Random-Draw&#xab; erzwungen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Hier ist der Zusammenhang im R&#252;ckblick (auch nach l&#228;ngerer Recherche) nebul&#246;s. Ich habe mich damals wohl &#8222;verhackt&#8220;, d.h. ich stand unter Druck, weil das ganze ja nur ein Test-Hilfsmittel sein sollte (warum hat sich dann der ganze Scheduler-Stress-Test so extrem &#252;ber mehrere Monate &#187;gezogen&#171;....?). Das RandomDraw, mit dieser Graph-Generierung ist wohl so eine Idee, die mich im Hintergrund fasziniert, und die eigentlich &#252;ber das Ziel hinausschie&#223;t.....
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Wie dem auch sei, ich habe das durchgepr&#252;gelt, und dann bei den abschlie&#223;enden Tests gemerkt, da&#223; ich mit meinen Referenz-gebundenen Lambdas, auf die ich die ganze L&#246;sung (f&#252;r die Konfiguration dieses Zufalls-Generators) aufgebaut habe, ganz wunderbar in's eigene Bein geschossen habe: Das Ding soll ein Value-Objekt sein, darf aber nicht bewegt werden, sonst sind alle Referenzen in den Lambdas kaputt. Daraufhin habe ich mich mit einer noch wilderen Hack-L&#246;sung <i>gerettet...</i>&#160; (das LazyInit). Irgendwo in dieser Verzweiflungs-Aktion habe ich partielle Anwendung gebraucht; in der endg&#252;litgen L&#246;sung wird sie aber gar nicht mehr verwendet, sondern nur Funktions-Komposition (die Zufalls-Quelle wird dem Zieh-Mechanismus vorgeschaltet). Ich war damals (Winter 23/24) wieder sehr nah am low-level-Hacking, und hab extrem steilen Code geschrieben (&#252;ber den ich mich jetzt, 1 Jahr sp&#228;ter, schon wieder sch&#228;me.
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#5b588a" DESTINATION="ID_1754735258" ENDARROW="Default" ENDINCLINATION="-275;462;" ID="Arrow_ID_1779451858" STARTARROW="None" STARTINCLINATION="-2041;72;"/>
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1749167381696" ID="ID_1623000211" MODIFIED="1749167799190" TEXT="bei dieser &#xdc;berarbeitung habe ich das Thema &#xbb;Referenzen&#xab; ehr nebenbei gestreift">
+<arrowlink COLOR="#daf6c0" DESTINATION="ID_270581080" ENDARROW="Default" ENDINCLINATION="-630;22;" ID="Arrow_ID_217188821" STARTARROW="None" STARTINCLINATION="-1081;36;"/>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1749167712775" ID="ID_1191852073" MODIFIED="1749169273571" TEXT="Hauptfokus war, da&#xdf; man move-only Funktoren verarbeiten kann">
+<arrowlink COLOR="#fdfcce" DESTINATION="ID_1933382686" ENDARROW="Default" ENDINCLINATION="-843;33;" ID="Arrow_ID_411875782" STARTARROW="None" STARTINCLINATION="-1184;46;"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1749168221679" ID="ID_1568193648" MODIFIED="1749168480247" TEXT="Hinweis auf inh&#xe4;rente Einschr&#xe4;nkungen von std::bind">
+<arrowlink COLOR="#fe676f" DESTINATION="ID_1925401409" ENDARROW="Default" ENDINCLINATION="-1170;38;" ID="Arrow_ID_820226821" STARTARROW="None" STARTINCLINATION="-943;50;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1749169430750" ID="ID_1885624602" MODIFIED="1749171708021" TEXT="Schlu&#xdf;folgerungen">
+<linktarget COLOR="#865051" DESTINATION="ID_1885624602" ENDARROW="Default" ENDINCLINATION="-28;3;" ID="Arrow_ID_1901045932" SOURCE="ID_904687716" STARTARROW="None" STARTINCLINATION="-23;-52;"/>
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="back"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1749169444025" ID="ID_448919652" MODIFIED="1749169454404" TEXT="Nein! man will keine Referenzen speichern"/>
+<node CREATED="1749169456099" ID="ID_890603810" MODIFIED="1749169463811" TEXT="und schon gar nicht nebenbei, als Seiteneffekt"/>
+<node CREATED="1749169464916" ID="ID_367341736" MODIFIED="1749169475296" TEXT="das war eine theoretische Finger&#xfc;beung"/>
+<node BACKGROUND_COLOR="#ead584" COLOR="#435e98" CREATED="1749169476152" ID="ID_1709249274" MODIFIED="1749169724339" TEXT="was wirklich wichtig ist...">
+<icon BUILTIN="idea"/>
+<node CREATED="1749169483200" ID="ID_232168724" MODIFIED="1749169704680" TEXT="keine std::function f&#xfc;r die Ergebnisse">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      der ganz alte Code konnte noch keine Typ-Infrerenz verwenden und <i>mu&#223;te deshalb</i>&#160;stets einen Ergebnis-Typ definieren, der dann zwangsl&#228;ufig eine std::function war. <i>Das</i>&#160;war einer der Hauptgr&#252;nde, warum ich zwischenzeitlich mit diesem Framework in Probleme gelaufen bin, und deshalb angefangen habe, Teile &#8222;daneben auf der gr&#252;nen Wiese&#8220; zu bauen. (Erstaunlich, da&#223; ich das alles nach 5 Montaten bereits restlos vergessen hatte)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1749169503960" ID="ID_1403593640" MODIFIED="1749169511594" TEXT="stattdessen den Binder direkt speichern"/>
+<node CREATED="1749169512412" ID="ID_1448159157" MODIFIED="1749169534122" TEXT="forwarding des gebundenen Funktors (move-only functoren!)"/>
+<node CREATED="1749169545138" ID="ID_1242749939" MODIFIED="1749169560447" TEXT="vermeiden von Heap-Allokationen (Render-Nodes)"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1749171644599" ID="ID_904687716" MODIFIED="1749171708021" TEXT="....also kein Problem, sondern sogar gut so">
+<arrowlink COLOR="#865051" DESTINATION="ID_1885624602" ENDARROW="Default" ENDINCLINATION="-28;3;" ID="Arrow_ID_1901045932" STARTARROW="None" STARTINCLINATION="-23;-52;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1749173842629" ID="ID_1193052412" MODIFIED="1749173949961" TEXT="std::function als Return-Typ eliminieren">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1749174621285" ID="ID_395474349" MODIFIED="1749174643440" TEXT="l&#xe4;uft in ein Problem mit tuple-Closure">
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1749174647486" ID="ID_1166377834" MODIFIED="1749174674298" TEXT="meta::_Fun kann die Signatur nicht extrahieren">
+<icon BUILTIN="broken-line"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1749174685327" ID="ID_1675851330" MODIFIED="1749174693640" TEXT="Untersuchung anstellen">
+<icon BUILTIN="flag-pink"/>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#5b280f" CREATED="1749172142798" ID="ID_429839344" MODIFIED="1749172230369" TEXT="STOP: alles Weitere w&#xe4;re off-topic">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      es geht darum, die alten nicht-variadischen (pre-C++11)-Konstrukte loszuwerden, bevor wir auf C++20 schalten. Es geht nicht darum, ein generells Funktion/Binding-Framework aufzubauen; das kann man schrittweise weiterentwickeln. Siehe das Ticket #1394
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="stop-sign"/>
+</node>
+<node CREATED="1749142101434" ID="ID_1381240660" MODIFIED="1749172133286" TEXT="verbleibende Konstrukte">
+<icon BUILTIN="info"/>
 <node CREATED="1749142116785" ID="ID_1310351984" MODIFIED="1749142126238" TEXT="func::bindArgTuple"/>
+<node CREATED="1749144238952" ID="ID_262951123" MODIFIED="1749144243512" TEXT="func::bindFirst"/>
 <node CREATED="1749142164570" ID="ID_779039468" MODIFIED="1749142166210" TEXT="func::bindLast"/>
 <node CREATED="1749142129186" ID="ID_1530717251" MODIFIED="1749142133129" TEXT="func::chained"/>
-<node CREATED="1749142208397" ID="ID_1965271283" MODIFIED="1749142210078" TEXT="func::PApply"/>
+<node CREATED="1749171920198" ID="ID_1210236207" MODIFIED="1749171926601" TEXT="func::BindToArgument">
+<node CREATED="1749171927604" ID="ID_154901422" MODIFIED="1749171937940" TEXT="das k&#xf6;nnte der Implementierungs-Kern werden">
+<icon BUILTIN="idea"/>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1749171939946" ID="ID_906504150" MODIFIED="1749172126729" TEXT="vorerst noch stet func::PApply redundant daneben">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...und wird definitiv f&#252;r den allgemeinsten Fall verwendet. Das Backend ist in beiden F&#228;llen bindArgTuple() und damit std::bind. Und die Implementierung ist eigentlich gleich (da hab ich letztlich das Problem x-mal gel&#246;st).
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Man k&#246;nnte also BindToArgument so verallgemeinern, da&#223; es eine typ-sequenz f&#252;r mehrere Parameter nimmt, und die Werte dann als Tupel. Und dann k&#246;nnte man ein function-style API als front-End davor stellen.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
 </node>
 </node>
 </node>
@@ -164753,14 +165222,13 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node COLOR="#435e98" CREATED="1748829502213" ID="ID_1545630215" MODIFIED="1749078649878" TEXT="FunctionComposition_test">
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_1545630215" ENDARROW="Default" ENDINCLINATION="741;0;" ID="Arrow_ID_1949399206" SOURCE="ID_240022720" STARTARROW="None" STARTINCLINATION="741;0;"/>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#cd016f" CREATED="1748993653112" ID="ID_1058696109" MODIFIED="1748993677622" TEXT="Stackoverflow in Eclipse">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#cd016f" CREATED="1748993653112" FOLDED="true" ID="ID_1058696109" MODIFIED="1749146178518" TEXT="Stackoverflow in Eclipse">
 <font NAME="SansSerif" SIZE="10"/>
 <icon BUILTIN="smiley-angry"/>
-<node CREATED="1749132089784" ID="ID_939851572" MODIFIED="1749132196714">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1749132089784" HGAP="68" ID="ID_939851572" MODIFIED="1749146056625" VSHIFT="-32">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       <u>Trigger</u>...
@@ -164784,6 +165252,33 @@ Since then others have made contributions, see the log for the history.</font></
 </html>
 </richcontent>
 <icon BUILTIN="broken-line"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1749146003081" ID="ID_1398865116" MODIFIED="1749146061722">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      lag vermutlich an dem &#955;-generic,
+    </p>
+    <p>
+      welches inline definiert und per
+    </p>
+    <p>
+      auto-R&#252;ckgabetyp geliefert wurde
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#b4afd2" COLOR="#513594" CREATED="1749146067294" HGAP="23" ID="ID_1093680557" MODIFIED="1749146108003" STYLE="fork" TEXT="aaand ... it&apos;s gone" VSHIFT="9">
+<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
+<icon BUILTIN="button_ok"/>
+<node COLOR="#3e3d7b" CREATED="1749146124497" ID="ID_1208200657" MODIFIED="1749146155188" TEXT="_PapS">
+<font NAME="SansSerif" SIZE="8"/>
+</node>
+<node COLOR="#3e3d7b" CREATED="1749146135068" ID="ID_1841780941" MODIFIED="1749146155189" TEXT="_PapE">
+<font NAME="SansSerif" SIZE="8"/>
+</node>
 </node>
 </node>
 </node>

@@ -32,8 +32,7 @@ namespace test {
   using ::test::Test;
   using lib::test::showType;
   using lib::meta::_Fun;
-  using func::applyFirst;
-  using func::applyLast;
+  using func::bindFirst;
   using func::bindLast;
   using func::PApply;
   using func::BindToArgument;
@@ -236,7 +235,7 @@ namespace test {
           
           // Version4: as you'd typically do it in real life-------- //
           
-          fun_23 = func::applyFirst (f, Num<1>(18));                 // use the convenience function API to close over a single value
+          fun_23 = func::bindFirst (f, Num<1>(18));                  // use the convenience function API to close over a single value
           
           int r5 = fun_23(_2_,_3_).o_;                               // invoke the resulting functor...
           CHECK (23 == r5);
@@ -245,36 +244,36 @@ namespace test {
           
           // what follows is the real unit test...
           function<Sig123> func123{f};                               // alternatively do it with an std::function object
-          fun_23 = func::applyFirst (func123, Num<1>(19));
-          int r5 = fun_23(_2_,_3_).o_;
-          CHECK (24 == r5);
+          fun_23 = func::bindFirst (func123, Num<1>(19));
+          int r6 = fun_23(_2_,_3_).o_;
+          CHECK (24 == r6);
           
           using F12 = function<Num<1>(Num<1>, Num<2>)>;
-          F12 fun_12 = func::applyLast (f, Num<3>(20));              // close the *last* argument of a function
-          int r6 = fun_12(_1_,_2_).o_;
-          CHECK (23 == r6);
-          
-          fun_12 = func::applyLast (func123, Num<3>(21));            // alternatively use a function object
+          F12 fun_12 = func::bindLast (f, Num<3>(20));               // close the *last* argument of a function
           int r7 = fun_12(_1_,_2_).o_;
-          CHECK (24 == r7);
+          CHECK (23 == r7);
+          
+          fun_12 = func::bindLast (func123, Num<3>(21));             // alternatively use a function object
+          int r8 = fun_12(_1_,_2_).o_;
+          CHECK (24 == r8);
           
           Sig123* fP = &f;                                           // a function pointer works too
-          fun_12 = func::applyLast (fP, Num<3>(22));
-          int r8 = fun_12(_1_,_2_).o_;
-          CHECK (25 == r8);
+          fun_12 = func::bindLast (fP, Num<3>(22));
+          int r9 = fun_12(_1_,_2_).o_;
+          CHECK (25 == r9);
                                                                      // cover more cases....
           
-          CHECK (1         == (func::applyLast (fun11<1>        , _1_ ) ( )              ).o_);
-          CHECK (1+3       == (func::applyLast (fun12<1,3>      , _3_ ) (_1_)            ).o_);
-          CHECK (1+3+5     == (func::applyLast (fun13<1,3,5>    , _5_ ) (_1_,_3_)        ).o_);
-          CHECK (1+3+5+7   == (func::applyLast (fun14<1,3,5,7>  , _7_ ) (_1_,_3_,_5_)    ).o_);
-          CHECK (1+3+5+7+9 == (func::applyLast (fun15<1,3,5,7,9>, _9_ ) (_1_,_3_,_5_,_7_)).o_);
+          CHECK (1         == (func::bindLast (fun11<1>        , _1_ ) ( )              ).o_);
+          CHECK (1+3       == (func::bindLast (fun12<1,3>      , _3_ ) (_1_)            ).o_);
+          CHECK (1+3+5     == (func::bindLast (fun13<1,3,5>    , _5_ ) (_1_,_3_)        ).o_);
+          CHECK (1+3+5+7   == (func::bindLast (fun14<1,3,5,7>  , _7_ ) (_1_,_3_,_5_)    ).o_);
+          CHECK (1+3+5+7+9 == (func::bindLast (fun15<1,3,5,7,9>, _9_ ) (_1_,_3_,_5_,_7_)).o_);
           
-          CHECK (9+8+7+6+5 == (func::applyFirst(fun15<9,8,7,6,5>, _9_ ) (_8_,_7_,_6_,_5_)).o_);
-          CHECK (  8+7+6+5 == (func::applyFirst(  fun14<8,7,6,5>, _8_ )     (_7_,_6_,_5_)).o_);
-          CHECK (    7+6+5 == (func::applyFirst(    fun13<7,6,5>, _7_ )         (_6_,_5_)).o_);
-          CHECK (      6+5 == (func::applyFirst(      fun12<6,5>, _6_ )             (_5_)).o_);
-          CHECK (        5 == (func::applyFirst(        fun11<5>, _5_ )               ( )).o_);
+          CHECK (9+8+7+6+5 == (func::bindFirst(fun15<9,8,7,6,5>, _9_ ) (_8_,_7_,_6_,_5_)).o_);
+          CHECK (  8+7+6+5 == (func::bindFirst(  fun14<8,7,6,5>, _8_ )     (_7_,_6_,_5_)).o_);
+          CHECK (    7+6+5 == (func::bindFirst(    fun13<7,6,5>, _7_ )         (_6_,_5_)).o_);
+          CHECK (      6+5 == (func::bindFirst(      fun12<6,5>, _6_ )             (_5_)).o_);
+          CHECK (        5 == (func::bindFirst(        fun11<5>, _5_ )               ( )).o_);
           
           
           
@@ -395,7 +394,7 @@ namespace test {
           
           // build chained and a partially applied functors
           auto chain = func::chained(f1,floorIt);
-          auto pappl = func::applyFirst (f1, ff);
+          auto pappl = func::bindFirst (f1, ff);
           
           using Sig1 = _Fun<decltype(f1)>::Sig;
           using SigC = _Fun<decltype(chain)>::Sig;
@@ -416,14 +415,18 @@ namespace test {
           
           CHECK ( 97 == f1   (ff,ii,33));
           CHECK ( 97 == chain(ff,ii,33));
-          CHECK ( 97 == pappl(   ii,33));
+          
+          // NOTE: the partial-application generates a std::bind (Binder object),
+          //       which deliberately _decays_ arguments to values.
+          CHECK (143 == pappl(   ii,33));     // --> uses original *value* for f, but the int-ref (88+22+33)
           
           // can even exchange the actual function, since f1 was passed as reference
           fun =  [](float& f, int& i, size_t s) -> double { return f - i - s; };
           
           CHECK (-13 == f1   (ff,ii,33));
           CHECK (-13 == chain(ff,ii,33));
-          CHECK (-13 == pappl(   ii,33));
+          
+          CHECK (143 == pappl(   ii,33));     // Note again: uses original value for the function and the float
         }
     };
   

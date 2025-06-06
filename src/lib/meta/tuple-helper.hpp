@@ -191,17 +191,17 @@ namespace meta {
   
   
   
-  /** temporary workaround: match and rebind the type sequence from a tuple */
+  /** match and rebind the type sequence from a tuple */
   template<typename...TYPES>
   struct RebindTupleTypes
     {
-      using Seq  = typename TyOLD<TYPES...>::Seq;
+      using Seq  = typename TySeq<TYPES...>::Seq;
       using List = typename Seq::List;
     };
   template<typename...TYPES>
   struct RebindTupleTypes<std::tuple<TYPES...>>
     {
-      using Seq  = typename TyOLD<TYPES...>::Seq;
+      using Seq  = typename TySeq<TYPES...>::Seq;
       using List = typename Seq::List;
     };
   
@@ -242,17 +242,27 @@ namespace meta {
       /** meta-sequence to drive instantiation of the ElmMapper */
       using SequenceIterator = typename BuildIdxIter<TYPES>::Ascending;
       
+      template<size_t idx, class SRC>
+      static auto
+      mapElm (SRC&& init)   ///< initialise an instance of the element-mapper
+        {
+          return _ElmMapper_<std::decay_t<SRC>
+                            ,Tuple<TYPES>
+                            , idx
+                            >{std::forward<SRC> (init)};
+        }
+      
     protected:
       template<class SRC, size_t...idx>
-      TupleConstructor (SRC initVals, IndexSeq<idx...>)
-        : Tuple<TYPES> (_ElmMapper_<SRC, Tuple<TYPES>, idx>{initVals}...)
+      TupleConstructor (SRC&& initVals, IndexSeq<idx...>)
+        : Tuple<TYPES> {mapElm<idx> (std::forward<SRC>(initVals)) ...}
         { }
       
       
     public:
       template<class SRC>
-      TupleConstructor (SRC values)
-        : TupleConstructor (std::move(values), SequenceIterator())
+      TupleConstructor (SRC&& values)
+        : TupleConstructor (std::forward<SRC>(values), SequenceIterator())
         { }
     };
   
@@ -284,9 +294,9 @@ namespace meta {
    */
   template<typename TYPES, class SRC>
   Tuple<TYPES>
-  buildTuple (SRC values)
+  buildTuple (SRC&& values)
   {
-    return TupleConstructor<TYPES, ExtractArg> (values);
+    return TupleConstructor<TYPES, ExtractArg>{std::forward<SRC> (values)};
   }
 
 

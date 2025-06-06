@@ -159,7 +159,7 @@ namespace test {
           ArrayAdapt arr{1,2,3,4,5};
           CHECK (arr.size() == 5);
           
-          // picks up a tuple-loke type signature
+          // picks up a tuple-like type signature
           using AA = decltype(arr);
           CHECK (showType<AA>() == "ArrayAdapt<int, int, int, int, int>"_expect );
           CHECK (showType<AA::value_type>() == "int"_expect );
