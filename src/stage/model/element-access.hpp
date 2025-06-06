@@ -63,7 +63,7 @@ namespace model {
   namespace error = lumiera::error;
   
   using interact::UICoord;
-  using lib::meta::TyOLD;
+  using lib::meta::TySeq;
   using std::string;
   
   class Tangible;
@@ -91,7 +91,7 @@ namespace model {
       
       
     protected:
-      using RawResult = lib::Variant<TyOLD<model::Tangible*, Gtk::Widget*>>;
+      using RawResult = lib::Variant<TySeq<model::Tangible*, Gtk::Widget*>>;
       
       /** @internal drill down according to coordinates, maybe create element */
       virtual RawResult performAccessTo (UICoord::Builder &, size_t limitCreation)  =0;

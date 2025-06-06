@@ -88,13 +88,13 @@ namespace test {
       using BASE::eat; // prevent shadowing
     };
   
-  typedef TyOLD< Block<1>
-               , Block<2>
-               , Block<3>
-               , Block<5>
-               , Block<8>
-               , Block<13>
-               >::List TheTypes;
+  using TheTypes = TySeq< Block<1>
+                        , Block<2>
+                        , Block<3>
+                        , Block<5>
+                        , Block<8>
+                        , Block<13>
+                        >::List;
   
   typedef InstantiateForEach<TheTypes,TakeIt>  TheInterface;
   

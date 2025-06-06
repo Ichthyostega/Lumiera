@@ -46,7 +46,7 @@ namespace test{
   
   using lib::wrapper::ItemWrapper;
   using steam::asset::meta::TimeGrid;
-  using lib::meta::TyOLD;
+  using lib::meta::TySeq;
   using lib::meta::InstantiateChainedCombinations;
   using LERR_(UNCONNECTED);
   
@@ -475,12 +475,12 @@ namespace test{
   void
   TimeControl_test::verifyMatrix_of_MutationCases (TimeValue const& origVal, TimeValue const& change)
   {
-    typedef TyOLD<Duration,TimeSpan,QuTime>                KindsOfTarget;  // time entities to receive value changes
-    typedef TyOLD<TimeValue,Time,Duration,TimeSpan,QuTime> KindsOfSource;  // time entities to be used as change values
-    typedef InstantiateChainedCombinations< KindsOfTarget
-                                          , KindsOfSource
-                                          , TestCase                       // template to be instantiated for each type
-                                          , IterationEnd > TestMatrix;
+    using KindsOfTarget = TySeq<Duration,TimeSpan,QuTime>               ;  // time entities to receive value changes
+    using KindsOfSource = TySeq<TimeValue,Time,Duration,TimeSpan,QuTime>;  // time entities to be used as change values
+    using TestMatrix    = InstantiateChainedCombinations< KindsOfTarget
+                                                        , KindsOfSource
+                                                        , TestCase         // template to be instantiated for each type
+                                                        , IterationEnd >;
     
     TestMatrix().performTestSequence(origVal, change);
   }

@@ -268,17 +268,15 @@ namespace session {
    *       to create "the session" instance and expose it through the
    *       global Session PImpl
    */
-  typedef SessionServices< TyOLD< SessionServiceFetch
-                                , SessionServiceMutate
-                                , SessionServiceExploreScope
-                                , SessionServiceMockIndex
-                                , SessionServiceDefaults
-                                >              // List of the APIs to provide
-                         , SessManagerImpl    //  frontend for access
-                         , SessionImpl       //   implementation base class
-                         >                  //
-                         SessionImplAPI;
-  
+  using SessionImplAPI = SessionServices< TySeq< SessionServiceFetch
+                                               , SessionServiceMutate
+                                               , SessionServiceExploreScope
+                                               , SessionServiceMockIndex
+                                               , SessionServiceDefaults
+                                               >              // List of the APIs to provide
+                                        , SessManagerImpl    //  frontend for access
+                                        , SessionImpl       //   implementation base class
+                                        >;                 //
   
   
   

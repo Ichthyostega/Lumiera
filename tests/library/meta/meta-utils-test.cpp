@@ -203,13 +203,13 @@ namespace test {
       
       
       //-------------------------------------------------TEST-types--
-      typedef TyOLD< int
-                   , uint
-                   , int64_t
-                   , uint64_t
-                   >::List     TheList;
+      using TheList = TySeq<int
+                           ,uint
+                           ,int64_t
+                           ,uint64_t
+                           >::List;
       
-      typedef TyOLD<  >::List  EmptyList;
+      using EmptyList = Nil;
       //-------------------------------------------------TEST-types--
       
       

@@ -166,9 +166,9 @@ namespace test   {
       checkExec (PCommandImpl com)
         {
           CHECK (com);
-          CHECK (!com->canExec());
+          CHECK (not com->canExec());
           
-          typedef TyOLD<int> ArgType;
+          using ArgType = TySeq<int>;
           const int ARGR{1 + rani (1000)};
           Tuple<ArgType> tuple(ARGR);
           TypedArguments<Tuple<ArgType>> arg(tuple);

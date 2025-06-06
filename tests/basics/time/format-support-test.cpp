@@ -39,8 +39,8 @@ namespace test {
       run (Arg) 
         {
           SupportStandardTimecode just_fine;
-          Supported just_smpte  = Supported::formats< TyOLD<Smpte> >();
-          Supported just_simple = Supported::formats< TyOLD<Frames,Seconds> >();
+          Supported just_smpte  = Supported::formats< TySeq<Smpte> >();
+          Supported just_simple = Supported::formats< TySeq<Frames,Seconds> >();
           
           Supported& support1 (just_fine);
           Supported& support2 (just_smpte);

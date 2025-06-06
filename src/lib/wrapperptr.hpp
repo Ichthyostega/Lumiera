@@ -36,10 +36,9 @@ namespace steam {
   namespace mobject { class MObject; }
   
   
-  typedef lib::meta::TyOLD < mobject::Placement<mobject::MObject>*
-                           , lib::P<asset::Asset>*
-                           > ::List
-                           WrapperTypes;
+  using WrapperTypes = lib::meta::TySeq< mobject::Placement<mobject::MObject>*
+                                       , lib::P<asset::Asset>*
+                                       > ::List;
 }
 
 namespace lumiera {

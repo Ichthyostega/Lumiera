@@ -77,7 +77,6 @@ namespace control {
   using lib::Symbol;
   
   using lib::meta::_Fun;
-  using lib::meta::TyOLD;
   using lib::meta::Tuple;
   
   

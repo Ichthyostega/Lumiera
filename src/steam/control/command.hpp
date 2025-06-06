@@ -88,7 +88,7 @@ namespace control {
   using lib::Symbol;
   using std::shared_ptr;
   using lib::meta::Tuple;
-  using lib::meta::TyOLD;
+  using lib::meta::TySeq;
   
   using FuncPtr = void*;
   

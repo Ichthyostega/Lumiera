@@ -107,7 +107,7 @@ namespace test    {
           VERIFY_ERROR (UNBOUND_ARGUMENTS, functor(nullClosure) );
           
           // now create a real closure....
-          Tuple<TyOLD<int>> param = std::make_tuple (23);
+          Tuple<TySeq<int>> param = std::make_tuple (23);
           SimpleClosure<void(int)> closed_over{param};
           
           CmdClosure& closure (closed_over);
@@ -154,7 +154,7 @@ namespace test    {
           VERIFY_ERROR (UNBOUND_ARGUMENTS, undoFunctor(nullClosure) );
           VERIFY_ERROR (UNBOUND_ARGUMENTS, undoFunctor.captureState(nullClosure) );
           
-          Tuple<TyOLD<> > param;
+          Tuple<TySeq<>> param;
           SimpleClosure<void()> clo{param};
           
           CHECK (!mementoHolder);

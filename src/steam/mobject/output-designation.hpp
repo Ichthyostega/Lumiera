@@ -113,7 +113,7 @@ namespace mobject {
         { VTABLE   = sizeof(size_t)
         , SPEC_SIZ = VTABLE
                    + mp::maxSize<
-                       mp::TyOLD< PID, lumiera_uid, uint>::List>()
+                       mp::TySeq< PID, lumiera_uid, uint>::List>()
         };
       typedef lib::OpaqueHolder<TargetSpec, SPEC_SIZ> SpecBuff;
       

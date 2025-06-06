@@ -431,7 +431,7 @@ namespace meta {
   inline std::string
   dump (std::tuple<TYPES...> const& tuple)
   {
-    using BuildAccessor = BuildTupleAccessor<TupleElementDisplayer, TyOLD<TYPES...>>;
+    using BuildAccessor = BuildTupleAccessor<TupleElementDisplayer, TySeq<TYPES...>>;
     using Displayer     = typename BuildAccessor::Product ;
     
     return static_cast<Displayer const&> (tuple)

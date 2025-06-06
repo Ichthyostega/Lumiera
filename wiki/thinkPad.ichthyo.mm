@@ -164482,7 +164482,7 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1748829102455" ID="ID_1254282139" MODIFIED="1749007395415" TEXT="Closure">
+<node COLOR="#338800" CREATED="1748829102455" FOLDED="true" ID="ID_1254282139" MODIFIED="1749259866722" TEXT="Closure">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1748829838133" ID="ID_1933174501" MODIFIED="1748995159628" TEXT="wenige wichtige Verwendungen">
 <node CREATED="1748829860803" ID="ID_517247632" MODIFIED="1748829863739" TEXT="Commands"/>
@@ -164848,10 +164848,10 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1749176997322" ID="ID_1006977719" MODIFIED="1749177273560" TEXT="aufr&#xe4;umen (soweit m&#xf6;glich....)">
+<node COLOR="#338800" CREATED="1749176997322" ID="ID_1006977719" MODIFIED="1749259855555" TEXT="aufr&#xe4;umen (soweit m&#xf6;glich....)">
 <linktarget COLOR="#a14e46" DESTINATION="ID_1006977719" ENDARROW="Default" ENDINCLINATION="-53;352;" ID="Arrow_ID_960970945" SOURCE="ID_1746274296" STARTARROW="None" STARTINCLINATION="-349;-20;"/>
-<icon BUILTIN="pencil"/>
-<node COLOR="#338800" CREATED="1749144588714" ID="ID_1479414175" MODIFIED="1749172141146" TEXT="inzwischen eingef&#xfc;hrte Work-arounds reduzieren">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1749144588714" FOLDED="true" ID="ID_1479414175" MODIFIED="1749259843397" TEXT="inzwischen eingef&#xfc;hrte Work-arounds reduzieren">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1749144605777" ID="ID_644297858" MODIFIED="1749144634945" TEXT="2023 habe ich perfect-forwarding in einem Fall gebraucht"/>
 <node CREATED="1749144635772" ID="ID_1576498176" MODIFIED="1749144864798" TEXT="daraufhin habe ich die bestehenden Front-end-F&#xe4;lle &#x201e;daneben&#x201c; komplett neu implementiert">
@@ -165007,7 +165007,7 @@ Since then others have made contributions, see the log for the history.</font></
 <node CREATED="1749160900145" ID="ID_1202100652" MODIFIED="1749160913016" TEXT="im Binder findet stets ein Decay statt">
 <node CREATED="1749160913956" ID="ID_1337223119" MODIFIED="1749160922564" TEXT="und es werden (sichere) Werte gespeichert"/>
 </node>
-<node COLOR="#5b280f" CREATED="1749160945089" ID="ID_471705411" MODIFIED="1749169736464" TEXT="will man je etwas Anderes?">
+<node COLOR="#5b280f" CREATED="1749160945089" FOLDED="true" ID="ID_471705411" MODIFIED="1749259833558" TEXT="will man je etwas Anderes?">
 <icon BUILTIN="help"/>
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1749161069089" ID="ID_1618982018" MODIFIED="1749161913375" TEXT="seinerzeit (Nov.2023) war mir das wichtig">
@@ -165214,15 +165214,15 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1749173842629" ID="ID_1193052412" MODIFIED="1749173949961" TEXT="std::function als Return-Typ eliminieren">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1749174621285" ID="ID_395474349" MODIFIED="1749174643440" TEXT="l&#xe4;uft in ein Problem mit tuple-Closure">
+<node COLOR="#338800" CREATED="1749173842629" FOLDED="true" ID="ID_1193052412" MODIFIED="1749259849888" TEXT="std::function als Return-Typ eliminieren">
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#4f0f69" CREATED="1749174621285" ID="ID_395474349" MODIFIED="1749259811469" TEXT="l&#xe4;uft in ein Problem mit tuple-Closure">
 <icon BUILTIN="messagebox_warning"/>
 <node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1749174647486" ID="ID_1166377834" MODIFIED="1749174674298" TEXT="meta::_Fun kann die Signatur nicht extrahieren">
 <icon BUILTIN="broken-line"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1749174685327" ID="ID_1675851330" MODIFIED="1749220917005" TEXT="Untersuchung anstellen">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#ff0000" CREATED="1749174685327" FOLDED="true" ID="ID_1675851330" MODIFIED="1749259801019" TEXT="Untersuchung anstellen">
 <linktarget COLOR="#5d738d" DESTINATION="ID_1675851330" ENDARROW="Default" ENDINCLINATION="-2063;-216;" ID="Arrow_ID_1587544190" SOURCE="ID_824524746" STARTARROW="None" STARTINCLINATION="-3181;188;"/>
-<icon BUILTIN="flag-pink"/>
+<icon BUILTIN="yes"/>
 <node CREATED="1749224426699" ID="ID_445129042" MODIFIED="1749224430732" TEXT="try.cpp"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1749224434259" ID="ID_854500863" MODIFIED="1749224464915" TEXT="Problem best&#xe4;tigt">
 <icon BUILTIN="broken-line"/>
@@ -165258,8 +165258,8 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node CREATED="1749247089096" ID="ID_901849776" MODIFIED="1749247097492" TEXT="funktioniert im Experiment-Setup"/>
 </node>
-<node CREATED="1749247108332" ID="ID_1805229821" MODIFIED="1749247120271" TEXT="std::function durch neuen Wrapper ersetzen">
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1749247122127" ID="ID_534442801" MODIFIED="1749247134561" TEXT="10 Kilometer Template-Fehlermeldungen">
+<node COLOR="#435e98" CREATED="1749247108332" FOLDED="true" ID="ID_1805229821" MODIFIED="1749259797003" TEXT="std::function durch neuen Wrapper ersetzen">
+<node BACKGROUND_COLOR="#e8c87b" COLOR="#fa002a" CREATED="1749247122127" ID="ID_534442801" MODIFIED="1749259766172" TEXT="10 Kilometer Template-Fehlermeldungen">
 <icon BUILTIN="broken-line"/>
 </node>
 <node COLOR="#435e98" CREATED="1749247140146" ID="ID_1154477976" MODIFIED="1749256796295" STYLE="fork" TEXT="also schrittweise untersuchen...">
@@ -165327,7 +165327,7 @@ Since then others have made contributions, see the log for the history.</font></
 </html></richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1749256558045" ID="ID_1138789948" MODIFIED="1749256785561" TEXT="unaufl&#xf6;sbare Widerspr&#xfc;che zwischen const / non-const">
+<node BACKGROUND_COLOR="#e1c4aa" COLOR="#a50125" CREATED="1749256558045" ID="ID_1138789948" MODIFIED="1749259777782" TEXT="unaufl&#xf6;sbare Widerspr&#xfc;che zwischen const / non-const">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1749256643664" ID="ID_490598677" MODIFIED="1749256785561" TEXT="wird zum Problem, sobald man das Ergebnis in ein Lambda-capture packt"/>
 <node CREATED="1749256665484" ID="ID_948383115" MODIFIED="1749256785561" TEXT="das ist dann const, und hat keinen aufrufbaren Funktions-Operator mehr"/>
@@ -165366,11 +165366,11 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node CREATED="1749142101434" ID="ID_1381240660" MODIFIED="1749172133286" TEXT="verbleibende Konstrukte">
 <icon BUILTIN="info"/>
-<node CREATED="1749142116785" ID="ID_1310351984" MODIFIED="1749142126238" TEXT="func::bindArgTuple"/>
-<node CREATED="1749144238952" ID="ID_262951123" MODIFIED="1749144243512" TEXT="func::bindFirst"/>
-<node CREATED="1749142164570" ID="ID_779039468" MODIFIED="1749142166210" TEXT="func::bindLast"/>
-<node CREATED="1749142129186" ID="ID_1530717251" MODIFIED="1749142133129" TEXT="func::chained"/>
-<node CREATED="1749171920198" ID="ID_1210236207" MODIFIED="1749171926601" TEXT="func::BindToArgument">
+<node COLOR="#435e98" CREATED="1749142116785" ID="ID_1310351984" MODIFIED="1749259864338" TEXT="func::bindArgTuple"/>
+<node COLOR="#435e98" CREATED="1749144238952" ID="ID_262951123" MODIFIED="1749259864374" TEXT="func::bindFirst"/>
+<node COLOR="#435e98" CREATED="1749142164570" ID="ID_779039468" MODIFIED="1749259864374" TEXT="func::bindLast"/>
+<node COLOR="#435e98" CREATED="1749142129186" ID="ID_1530717251" MODIFIED="1749259864374" TEXT="func::chained"/>
+<node COLOR="#435e98" CREATED="1749171920198" ID="ID_1210236207" MODIFIED="1749259864373" TEXT="func::BindToArgument">
 <node CREATED="1749171927604" ID="ID_154901422" MODIFIED="1749171937940" TEXT="das k&#xf6;nnte der Implementierungs-Kern werden">
 <icon BUILTIN="idea"/>
 </node>

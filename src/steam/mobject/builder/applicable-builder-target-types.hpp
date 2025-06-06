@@ -54,17 +54,16 @@
                                         /////////////////////////////////TICKET #414
 
 
-namespace steam    {
+namespace steam   {
 namespace mobject {
 namespace builder {
   
-    typedef TyOLD< session::Root, 
-                   session::Clip, 
-                   session::Effect,
-                   session::Binding,
-                   session::AbstractMO
-                 > ::List
-                   BuilderTargetTypes;
+    using BuilderTargetTypes = TySeq< session::Root
+                                    , session::Clip
+                                    , session::Effect
+                                    , session::Binding
+                                    , session::AbstractMO
+                                    > ::List ;
                                         /////////////////////////////////TICKET #414
     
     

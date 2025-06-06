@@ -210,7 +210,7 @@ namespace test    {
           CHECK (!isSameObject (*pImpl, *clone));
           
           CHECK (!pImpl->canExec());
-          typedef TyOLD<int> ArgType;
+          using ArgType = TySeq<int>;
           TypedArguments<Tuple<ArgType>> arg{Tuple<ArgType>(98765)};
           pImpl->setArguments(arg);
           CHECK (pImpl->canExec());

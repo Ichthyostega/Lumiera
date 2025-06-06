@@ -61,13 +61,12 @@ namespace steam {
    *  the list of all concrete types participating in the
    *  rule based config query system
    */
-  typedef lib::meta::TyOLD < steam::mobject::session::Fork
-                           , steam::asset::Pipe
-                           , const steam::asset::ProcPatt
-                           , steam::asset::Timeline
-                           , steam::asset::Sequence
-                           > ::List
-                             InterfaceTypes;
+  using InterfaceTypes = lib::meta::TySeq < steam::mobject::session::Fork
+                                          , steam::asset::Pipe
+                                          , const steam::asset::ProcPatt
+                                          , steam::asset::Timeline
+                                          , steam::asset::Sequence
+                                          > ::List;
   
   /**
    * user-visible Interface to the ConfigRules subsystem.
