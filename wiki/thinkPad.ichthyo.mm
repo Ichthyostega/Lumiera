@@ -58951,7 +58951,23 @@
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
-<node CREATED="1739577090376" ID="ID_1072629570" MODIFIED="1739577099267" TEXT="Einsichten / moderne Tools">
+<node CREATED="1749219377705" HGAP="35" ID="ID_686076269" MODIFIED="1749219775142" TEXT="gesammelte Hinweise zur Motivation" VSHIFT="-16">
+<arrowlink COLOR="#67759c" DESTINATION="ID_1410403672" ENDARROW="Default" ENDINCLINATION="-1407;-165;" ID="Arrow_ID_1765775484" STARTARROW="None" STARTINCLINATION="-2161;166;"/>
+<icon BUILTIN="info"/>
+<node CREATED="1749219548697" ID="ID_159745079" MODIFIED="1749219758153" TEXT="wurde seit 2023 problematisch">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ist aber im R&#252;ckblick nicht mehr so ganz klar, was das Problem war. Die Zielsetzung erscheint etwas widerspr&#252;chlich... ging es um perfect-forwrading, um move-only-Funktoren, wollte ich Referenzen binden k&#246;nnen?
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1749219556079" ID="ID_1449348986" MODIFIED="1749219580216" TEXT="dann die Tuple-Closure Feb.2025 (NodeBuilder)"/>
+<node CREATED="1749219580958" ID="ID_586000291" LINK="#ID_1254282139" MODIFIED="1749219671225" TEXT="schlie&#xdf;lich angegangen in Vorbereitung auf C++20"/>
+</node>
+<node CREATED="1739577090376" HGAP="43" ID="ID_1072629570" MODIFIED="1749219782365" TEXT="Einsichten / moderne Tools" VSHIFT="-5">
 <icon BUILTIN="idea"/>
 <node CREATED="1739577101558" ID="ID_1975024377" MODIFIED="1739577112033" TEXT="baut im Grunde auf std::bind auf"/>
 <node CREATED="1739577112711" ID="ID_1192118535" MODIFIED="1739581980174" TEXT="std::bind ist inzwischen minimalistisch und flexibel">
@@ -59013,6 +59029,93 @@
 <linktarget COLOR="#fe676f" DESTINATION="ID_1925401409" ENDARROW="Default" ENDINCLINATION="-1170;38;" ID="Arrow_ID_820226821" SOURCE="ID_1568193648" STARTARROW="None" STARTINCLINATION="-943;50;"/>
 </node>
 <node CREATED="1739578181249" ID="ID_1870061994" MODIFIED="1739578195091" TEXT="&#x27f9; die sonstigen Argumente werden per perfect-forwarding durchgereicht"/>
+</node>
+<node CREATED="1749219957794" ID="ID_1991602943" MODIFIED="1749219987034" TEXT="std::bind / Binder haben inh&#xe4;rente Einschr&#xe4;nkungen">
+<node CREATED="1749220042086" ID="ID_624207707" MODIFIED="1749220129456" TEXT="das liegt an der Inline-storage (und ihrer Initialisierung)">
+<arrowlink COLOR="#a97c7c" DESTINATION="ID_1530992847" ENDARROW="Default" ENDINCLINATION="157;-11;" ID="Arrow_ID_896318678" STARTARROW="None" STARTINCLINATION="191;10;"/>
+</node>
+<node CREATED="1749219995491" ID="ID_1524558019" MODIFIED="1749220058551" TEXT="siehe auch Untersuchung in commit 03b17c78da">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      commit 03b17c78da67b8cdba014773fa99736f2f9ed8b5
+    </p>
+    <p>
+      Author: Ichthyostega &lt;prg@ichthyostega.de&gt;
+    </p>
+    <p>
+      Date:&#160;&#160;&#160;Mon Dec 16 23:01:57 2024 +0100
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;Buffer-Provider: investigate Problem with embedded type-constructor-arguments
+    </p>
+    <p>
+      &#160;&#160;&#160;
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;This is a possible extension which frequently comes up again during the design of the Engine.
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;Basically, the `TypeHandler` in the metadata-descriptor used by the `BufferProvder` could capture
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;additional context-arguments, which are then later passed to an object instance embedded into the buffer.
+    </p>
+    <p>
+      &#160;&#160;&#160;
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;Yesterday I attempted to use this feature for a simple demonstration in `NodeBasic_test`,
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;just to find out that passing additional constructor arguments to the capture fails with
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;a confusing compilation error message. This failure could be traced down to the function binder;
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;and what at first sight seemed to be a compiler error, turned out to be a quite logical limitation:
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;When we &#187;close&#171; some objects of the constructor, but delay the construction itself, we'll have to
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;store a copy in the constructor-&#955;. And this implies, that we'll have to change the types
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;used for instantiation of the compiler, so that the construction-function can be invoked
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;by passing references from the captured copy of the additional arguments.
+    </p>
+    <p>
+      &#160;&#160;&#160;
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;When naively passing those forwarded arguments into the std::bind()-call,
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;the resulting functor will fail at instantiation, when the compiler attempts
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;to generate the function-call `operator()`
+    </p>
+    <p>
+      &#160;&#160;&#160;
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;see: https://stackoverflow.com/q/30968573/444796
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1749220839249" ID="ID_824524746" MODIFIED="1749220917005" TEXT="empirisch untersucht: Funktionstyp / Erkennung">
+<arrowlink COLOR="#5d738d" DESTINATION="ID_1675851330" ENDARROW="Default" ENDINCLINATION="-2063;-216;" ID="Arrow_ID_1587544190" STARTARROW="None" STARTINCLINATION="-3181;188;"/>
+</node>
 </node>
 </node>
 <node CREATED="1739578237489" ID="ID_843718662" MODIFIED="1739578271506" TEXT="die Hilfsklasse TupleApplicator und Apply&lt;N&gt; sind komplett ersetzbar">
@@ -59079,6 +59182,7 @@
   </body>
 </html></richcontent>
 <arrowlink COLOR="#884345" DESTINATION="ID_1293782408" ENDARROW="Default" ENDINCLINATION="368;602;" ID="Arrow_ID_376662766" STARTARROW="None" STARTINCLINATION="210;219;"/>
+<linktarget COLOR="#a97c7c" DESTINATION="ID_1530992847" ENDARROW="Default" ENDINCLINATION="157;-11;" ID="Arrow_ID_896318678" SOURCE="ID_624207707" STARTARROW="None" STARTINCLINATION="191;10;"/>
 <icon BUILTIN="stop-sign"/>
 <icon BUILTIN="help"/>
 </node>
@@ -133458,7 +133562,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
     </p>
   </body>
 </html></richcontent>
-<linktarget COLOR="#5b588a" DESTINATION="ID_1754735258" ENDARROW="Default" ENDINCLINATION="-275;462;" ID="Arrow_ID_1779451858" SOURCE="ID_267763001" STARTARROW="None" STARTINCLINATION="-2041;72;"/>
+<linktarget COLOR="#5b588a" DESTINATION="ID_1754735258" ENDARROW="Default" ENDINCLINATION="-1087;-791;" ID="Arrow_ID_1779451858" SOURCE="ID_267763001" STARTARROW="None" STARTINCLINATION="-2041;72;"/>
 <icon BUILTIN="idea"/>
 <node CREATED="1700669349834" ID="ID_1795148710" MODIFIED="1700669452457" TEXT="auch daf&#xfc;r gabs bereits eine LIbrary-L&#xf6;sung">
 <node CREATED="1700669462313" ID="ID_146361421" MODIFIED="1700669512820" TEXT="genau die Geliche, die ich vor ein paar Tagen schon modernisiert habe...">
@@ -164672,8 +164776,7 @@ Since then others have made contributions, see the log for the history.</font></
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="smily_bad"/>
 </node>
 <node CREATED="1749135899620" ID="ID_717531911" MODIFIED="1749136016376" TEXT="die alte Implementierung hat ganz &#xbb;elegant&#xab; ausgenutzt, da&#xdf; unser Bind-to-Tuple beschneidet">
@@ -164684,8 +164787,7 @@ Since then others have made contributions, see the log for the history.</font></
       also vermutlich war mir das damals so v&#246;llig klar, da&#223; ich es einfach gemacht habe, ohne einen Kommentar zu hinterlassen; es war ja auch eine Spezialanfertigung f&#252;r diesen einen Fall, und explizit f&#252;r 1..9 Parameter so ausgeklopft
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1749136018329" ID="ID_286675786" MODIFIED="1749136040691" TEXT="deshalb konnte man zulassen, da&#xdf; im out-of-bounds-Fall einfach eine zu lange Liste entsteht"/>
 <node CREATED="1749136045930" ID="ID_1875577568" MODIFIED="1749136073330" TEXT="liegt lediglich daran, da&#xdf; dann eben schon der Front-Teil die gesamte Original-Liste enth&#xe4;lt"/>
@@ -164746,6 +164848,9 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1749176997322" ID="ID_1006977719" MODIFIED="1749177273560" TEXT="aufr&#xe4;umen (soweit m&#xf6;glich....)">
+<linktarget COLOR="#a14e46" DESTINATION="ID_1006977719" ENDARROW="Default" ENDINCLINATION="-53;352;" ID="Arrow_ID_960970945" SOURCE="ID_1746274296" STARTARROW="None" STARTINCLINATION="-349;-20;"/>
+<icon BUILTIN="pencil"/>
 <node COLOR="#338800" CREATED="1749144588714" ID="ID_1479414175" MODIFIED="1749172141146" TEXT="inzwischen eingef&#xfc;hrte Work-arounds reduzieren">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1749144605777" ID="ID_644297858" MODIFIED="1749144634945" TEXT="2023 habe ich perfect-forwarding in einem Fall gebraucht"/>
@@ -164762,7 +164867,7 @@ Since then others have made contributions, see the log for the history.</font></
 <node CREATED="1749144667428" ID="ID_1844824357" MODIFIED="1749147502136" TEXT="nun w&#xe4;re aber, durch das Aufr&#xe4;umen, auch die Haupt-Implementierung Forwarding-f&#xe4;hig">
 <icon BUILTIN="idea"/>
 </node>
-<node COLOR="#435e98" CREATED="1749147503517" ID="ID_482440451" MODIFIED="1749171900876" TEXT="fast &#x2014; denn die bestehende Template-Infrastruktur ist darauf nicht vorbereitet">
+<node COLOR="#435e98" CREATED="1749147503517" FOLDED="true" ID="ID_482440451" MODIFIED="1749176918280" TEXT="fast &#x2014; denn die bestehende Template-Infrastruktur ist darauf nicht vorbereitet">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1749147538267" ID="ID_1114230801" MODIFIED="1749147550961" TEXT="sie stammt aus pre-C++11-Zeiten"/>
 <node CREATED="1749147551799" ID="ID_1914453505" MODIFIED="1749147563563" TEXT="damals mu&#xdf;te man sich entscheiden">
@@ -165014,7 +165119,8 @@ Since then others have made contributions, see the log for the history.</font></
 </html></richcontent>
 </node>
 </node>
-<node CREATED="1749165646336" ID="ID_1410403672" MODIFIED="1749165666132" TEXT="Hinweise sammeln....">
+<node CREATED="1749165646336" ID="ID_1410403672" MODIFIED="1749219526312" TEXT="Hinweise sammeln....">
+<linktarget COLOR="#67759c" DESTINATION="ID_1410403672" ENDARROW="Default" ENDINCLINATION="-1407;-165;" ID="Arrow_ID_1765775484" SOURCE="ID_686076269" STARTARROW="None" STARTINCLINATION="-2161;166;"/>
 <icon BUILTIN="edit"/>
 <node CREATED="1749165683673" ID="ID_450823972" MODIFIED="1749166023560" TEXT="der entscheidende Durchbruch war erst Feb.25 (NodeBuilder)">
 <richcontent TYPE="NOTE"><html>
@@ -165060,7 +165166,7 @@ Since then others have made contributions, see the log for the history.</font></
     </p>
   </body>
 </html></richcontent>
-<arrowlink COLOR="#5b588a" DESTINATION="ID_1754735258" ENDARROW="Default" ENDINCLINATION="-275;462;" ID="Arrow_ID_1779451858" STARTARROW="None" STARTINCLINATION="-2041;72;"/>
+<arrowlink COLOR="#5b588a" DESTINATION="ID_1754735258" ENDARROW="Default" ENDINCLINATION="-1087;-791;" ID="Arrow_ID_1779451858" STARTARROW="None" STARTINCLINATION="-2041;72;"/>
 <icon BUILTIN="info"/>
 </node>
 <node CREATED="1749167381696" ID="ID_1623000211" MODIFIED="1749167799190" TEXT="bei dieser &#xdc;berarbeitung habe ich das Thema &#xbb;Referenzen&#xab; ehr nebenbei gestreift">
@@ -165114,13 +165220,140 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="messagebox_warning"/>
 <node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1749174647486" ID="ID_1166377834" MODIFIED="1749174674298" TEXT="meta::_Fun kann die Signatur nicht extrahieren">
 <icon BUILTIN="broken-line"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1749174685327" ID="ID_1675851330" MODIFIED="1749174693640" TEXT="Untersuchung anstellen">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1749174685327" ID="ID_1675851330" MODIFIED="1749220917005" TEXT="Untersuchung anstellen">
+<linktarget COLOR="#5d738d" DESTINATION="ID_1675851330" ENDARROW="Default" ENDINCLINATION="-2063;-216;" ID="Arrow_ID_1587544190" SOURCE="ID_824524746" STARTARROW="None" STARTINCLINATION="-3181;188;"/>
 <icon BUILTIN="flag-pink"/>
+<node CREATED="1749224426699" ID="ID_445129042" MODIFIED="1749224430732" TEXT="try.cpp"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1749224434259" ID="ID_854500863" MODIFIED="1749224464915" TEXT="Problem best&#xe4;tigt">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1749224467637" ID="ID_953723060" MODIFIED="1749224474027" TEXT="selbst bei einfacher Funktion"/>
+<node CREATED="1749224474707" ID="ID_1994818687" MODIFIED="1749224489605" TEXT="der erzeugte Binder hat mehrere &#xfc;berladene operator()"/>
+<node CREATED="1749224491138" ID="ID_1586164726" MODIFIED="1749224511574" TEXT="auch std::function scheitert an der Parameter-Deduktion"/>
+<node CREATED="1749224513517" ID="ID_1540461228" MODIFIED="1749224547704" TEXT="in der libC++ - Impl">
+<icon BUILTIN="list"/>
+<node CREATED="1749224565395" ID="ID_879740125" MODIFIED="1749224616164" TEXT="include/c++/14/functional &#x2014; Line 647"/>
+<node CREATED="1749224554001" ID="ID_1660355589" MODIFIED="1749224555592" TEXT="class _Bind_result&lt;_Result, _Functor(_Bound_args...)&gt;"/>
+<node CREATED="1749224618217" ID="ID_731942825" MODIFIED="1749224659485">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      hat nur eine public Typedef <font face="Monospaced" color="#683428">return_type</font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1749224673612" ID="ID_1646206582" MODIFIED="1749224696955" TEXT="hat overloads f&#xfc;r normal,const,volatile, const volatile"/>
+</node>
+<node COLOR="#5b280f" CREATED="1749224707937" ID="ID_505814077" MODIFIED="1749224723637" TEXT="also direkt: Dead End">
+<icon BUILTIN="closed"/>
+</node>
+</node>
+<node CREATED="1749224732173" ID="ID_1061275041" MODIFIED="1749224737043" TEXT="Workaround: Wrapper">
+<node CREATED="1749224737963" ID="ID_996900856" MODIFIED="1749224754157" TEXT="mu&#xdf; aber dort erzeugt werden wo die Typen noch bekannt sind"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1749247066786" ID="ID_123519603" MODIFIED="1749247077026" TEXT="Wrapper-Builder-Template konstruieren">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1749247089096" ID="ID_901849776" MODIFIED="1749247097492" TEXT="funktioniert im Experiment-Setup"/>
+</node>
+<node CREATED="1749247108332" ID="ID_1805229821" MODIFIED="1749247120271" TEXT="std::function durch neuen Wrapper ersetzen">
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1749247122127" ID="ID_534442801" MODIFIED="1749247134561" TEXT="10 Kilometer Template-Fehlermeldungen">
+<icon BUILTIN="broken-line"/>
+</node>
+<node COLOR="#435e98" CREATED="1749247140146" ID="ID_1154477976" MODIFIED="1749256796295" STYLE="fork" TEXT="also schrittweise untersuchen...">
+<icon BUILTIN="yes"/>
+<node CREATED="1749249834539" ID="ID_1693895755" MODIFIED="1749256785559" TEXT="erst mal als eine alternative Impl-Funktion in BindToArgument"/>
+<node CREATED="1749249875934" ID="ID_1569651727" MODIFIED="1749256785559" TEXT="und nur mit einem speziellen Aufruf aus TupleClosure testen"/>
+<node CREATED="1749249901478" ID="ID_272901667" MODIFIED="1749256785559" TEXT="reduzierte Fehlermeldung">
+<node CREATED="1749250003596" ID="ID_355324801" MODIFIED="1749256785559" STYLE="bubble">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      no matching function for call to '
+    </p>
+    <p>
+      <font face="Monospaced" size="2">__invoke( </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2" color="#5a5971">AdaptInvokable&lt;int, double&gt;::buildWrapper&lt;BINDER &gt;(BINDER&amp;&amp;)</font><font face="Monospaced" size="2">::&lt;lambda(int, double)&gt; </font><font face="Monospaced" size="2" color="#d90505">const&amp;</font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">, __tuple_element_t&lt;0, tuple&lt;int, double&gt; &gt;</font><font face="Monospaced" size="2" color="#9a0707">&amp;</font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">, __tuple_element_t&lt;1, tuple&lt;int, double&gt; &gt;</font><font face="Monospaced" size="2" color="#9a0707">&amp;</font>
+    </p>
+    <p>
+      )'
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1749250168246" ID="ID_553581324" MODIFIED="1749256785560" TEXT="erwartet wird __invoke( __Fun&amp;&amp;, __Arg&amp;&amp; ...)">
+<icon BUILTIN="info"/>
+</node>
+</node>
+<node CREATED="1749250215648" ID="ID_98065138" MODIFIED="1749256785560">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      das <font color="#cb0707" face="Monospaced">const&amp;</font>&#160;erscheint verd&#228;chtig
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1749250257065" ID="ID_461267681" MODIFIED="1749256785560" TEXT="das Lamda speichert ja den Funktor(Binder) in seine context-Capture"/>
+<node CREATED="1749250303217" ID="ID_282716574" MODIFIED="1749256785560" TEXT="aber ich hatte das Lambda mutable gemacht....">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      damit die regul&#228;re Variante des Funktions-Operators genommen wird
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1749250378101" ID="ID_206142535" MODIFIED="1749256785560" TEXT="jetzt verstehe ich langsam den Sinn dieser &#xfc;berladenen Operatoren">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      weil man n&#228;mlich damit versucht, die Probleme mit const / volatile <i>wegzub&#252;geln</i>, so da&#223; sich der Binder in jedem Fall aufrufen l&#228;&#223;t
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1749256558045" ID="ID_1138789948" MODIFIED="1749256785561" TEXT="unaufl&#xf6;sbare Widerspr&#xfc;che zwischen const / non-const">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1749256643664" ID="ID_490598677" MODIFIED="1749256785561" TEXT="wird zum Problem, sobald man das Ergebnis in ein Lambda-capture packt"/>
+<node CREATED="1749256665484" ID="ID_948383115" MODIFIED="1749256785561" TEXT="das ist dann const, und hat keinen aufrufbaren Funktions-Operator mehr"/>
+<node CREATED="1749256684673" ID="ID_267264402" MODIFIED="1749256785561" TEXT="andererseits gelingt es mir nicht, die const-Variante vom Binder in ein &#x3bb; einzubinden"/>
+<node CREATED="1749256713510" ID="ID_1419482273" MODIFIED="1749256785561" TEXT="L&#xf6;sung">
+<node CREATED="1749256722170" ID="ID_1841787389" MODIFIED="1749256785561" TEXT="die Wrapper-Klassen explizit ausprogrammieren"/>
+<node CREATED="1749256730655" ID="ID_865418835" MODIFIED="1749256785561" TEXT="wie in der guten alten Zeit">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1749256736823" ID="ID_143001780" MODIFIED="1749256785561" TEXT="und dann mit unConst() gewaltsam stets aufrufbar machen"/>
 </node>
 </node>
 </node>
+<node COLOR="#338800" CREATED="1749256811884" ID="ID_552780295" MODIFIED="1749256825286" TEXT="den so gebauten Wrapper in function-closure integrieren">
+<icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#5b280f" CREATED="1749172142798" ID="ID_429839344" MODIFIED="1749172230369" TEXT="STOP: alles Weitere w&#xe4;re off-topic">
+<node COLOR="#338800" CREATED="1749256826146" ID="ID_1031599066" MODIFIED="1749256839413" TEXT="entsprechend auch den Wrapper in tuple-closure explizit programmieren">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1749256843368" ID="ID_1949709284" MODIFIED="1749256859670" TEXT="kann dann die std::function tats&#xe4;chlich eliminieren">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#5b280f" CREATED="1749172142798" ID="ID_429839344" MODIFIED="1749177037902" TEXT="STOP: alles Weitere w&#xe4;re off-topic">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -165157,6 +165390,7 @@ Since then others have made contributions, see the log for the history.</font></
   </body>
 </html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
+</node>
 </node>
 </node>
 </node>
@@ -165249,8 +165483,7 @@ Since then others have made contributions, see the log for the history.</font></
       
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="broken-line"/>
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1749146003081" ID="ID_1398865116" MODIFIED="1749146061722">
@@ -165286,7 +165519,7 @@ Since then others have made contributions, see the log for the history.</font></
 <node COLOR="#435e98" CREATED="1748829523737" ID="ID_803058969" MODIFIED="1748883754992" TEXT="TypeListGenerator_test">
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_803058969" ENDARROW="Default" ENDINCLINATION="852;0;" ID="Arrow_ID_1971292758" SOURCE="ID_511778446" STARTARROW="None" STARTINCLINATION="302;17;"/>
 </node>
-<node CREATED="1748829534601" MODIFIED="1748829534601" TEXT="MetaUtils_test"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1748829534601" ID="ID_75861658" MODIFIED="1749177103638" TEXT="MetaUtils_test"/>
 <node COLOR="#435e98" CREATED="1748829542074" ID="ID_653647632" MODIFIED="1748960053937" TEXT="TupleHelper_test">
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_653647632" ENDARROW="Default" ENDINCLINATION="135;-20;" ID="Arrow_ID_1807168701" SOURCE="ID_145174722" STARTARROW="None" STARTINCLINATION="235;315;"/>
 </node>
@@ -165334,6 +165567,24 @@ Since then others have made contributions, see the log for the history.</font></
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1748900565184" ID="ID_1203054358" MODIFIED="1748900572521" TEXT="ExpectString verwenden">
 <icon BUILTIN="pencil"/>
 </node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1749177155817" ID="ID_253850750" MODIFIED="1749177176623" TEXT="dann den Themenkomplex &#xbb;Funktionen&#xab; angehen">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1749177180341" ID="ID_1746274296" MODIFIED="1749177280835">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      hier droht das <i><font size="5">Function-Closure-Monster</font></i>
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#a14e46" DESTINATION="ID_1006977719" ENDARROW="Default" ENDINCLINATION="-53;352;" ID="Arrow_ID_960970945" STARTARROW="None" STARTINCLINATION="-349;-20;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node COLOR="#338800" CREATED="1749177309813" ID="ID_988836148" MODIFIED="1749177346649" TEXT="von den tats&#xe4;chlichen use-Cases ausgehend entflechten">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>

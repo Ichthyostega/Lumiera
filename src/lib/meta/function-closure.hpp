@@ -176,6 +176,38 @@ namespace func{
           };
       };
     
+    
+    /**
+     * Helper to package a given invokable,
+     * so that it has a well defined function signature.
+     * @warning defined argument types must be suitable.
+     * @remark need to define the wrapper functor class explicitly,
+     *         to be able to work around any const / non-const cases;
+     *         we can not overload `operator()` because then `decltype(operator())`
+     *         would be ambiguous, breaking the detection of the function signature.
+     */
+    template<typename...ARGS>
+    struct AdaptInvokable
+      {
+        template<class FUN>
+        static auto
+        buildWrapper (FUN&& fun)
+          {
+                  struct Wrap
+                    {
+                      FUN fun_;
+                      
+                      auto
+                      operator() (ARGS... args)
+                        {
+                          return fun_(forward<ARGS>(args)...);
+                        }
+                    };
+            
+            return Wrap{forward<FUN>(fun)};
+          }
+      };
+
   } // (END) impl-namespace
   
   
@@ -211,7 +243,26 @@ namespace func{
                       ,std::forward<TUP> (tuple));
   }
   
-  
+  /**
+   * Workaround to yield std::bind functors
+   * with a clearly defined function signature.
+   * @tparam TYPES type-sequence or type-list of the function arguments to take
+   * @remark the result of `std::bind` exposes several overloaded `operator()`,
+   *         which unfortunately defeats detection of the resulting function signature
+   *         by downstream code, which needs this information to guide further processing.
+   * @see TupleClosureBuilder::wrapBuilder(closureFun)
+   */
+  template<class TYPES, class FUN>
+  auto
+  buildInvokableWrapper (FUN&& fun)
+    {
+      static_assert (is_Typelist<TYPES>::value);
+      using ArgTypes = typename TYPES::Seq;
+      using Builder = typename lib::meta::RebindVariadic<AdaptInvokable, ArgTypes>::Type;
+      
+      return Builder::buildWrapper (forward<FUN> (fun));
+    }
+
   
   
   /**
@@ -234,7 +285,7 @@ namespace func{
    *       over time several variations were added, so that now the main functionality
    *       is now _implemented twice_, in a very similar way in BindToArgument.
    *       Actually, the latter seems much clearer, and possibly PApply could be
-   *       rewritten into a front-end and delegate to BindToArgument..   ////////////////////////////////////TICKET #1394
+   *       rewritten into a front-end and delegate to BindToArgument...  ////////////////////////////////////TICKET #1394
    */
   template<typename SIG, typename VAL>
   class PApply
@@ -375,7 +426,6 @@ namespace func{
       using PreparedArgTypes = typename TySeq<PreparedArgs>::Seq;
       using RemainingArgs    = typename TySeq<ReducedArgs>::Seq;
       
-      using ReducedSig  = typename BuildFunType<Ret,RemainingArgs>::Sig;
       
       template<class SRC, class TAR, size_t i>
       using IdxSelector = typename PartiallyInitTuple<SRC, TAR, pos>::template IndexMapper<i>;
@@ -385,18 +435,18 @@ namespace func{
       
       
     public:
-      using ReducedFunc = function<ReducedSig>;   ///////////////////////////////////////////////////////////TICKET #1394 : get rid of std::function ////OOO problem with tuple-closure
-      
       template<class FUN, class VAL>
-      static ReducedFunc
+      static auto
       reduced (FUN&& f, VAL&& val)
         {
           Tuple<PreparedArgTypes> bindingTuple {
             BuildPreparedArgs{
               std::forward_as_tuple (
                   forward<VAL>(val))}};
-          return bindArgTuple (forward<FUN>(f)
-                              , move(bindingTuple));
+          
+          return buildInvokableWrapper<RemainingArgs>(
+                  bindArgTuple (forward<FUN>(f)
+                              , move(bindingTuple)));
         }
     };
   

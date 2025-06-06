@@ -35,12 +35,8 @@
 #include "meta/typelist-diagnostics.hpp"
 #include "meta/tuple-diagnostics.hpp"
 
-#include <iostream>
 
-using ::test::Test;
 using std::string;
-using std::cout;
-using std::endl;
 
 
 namespace lib  {

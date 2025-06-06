@@ -32,6 +32,11 @@
  ** @see weaving-pattern-builder.hpp
  ** @see NodeBuilder_test::build_Node_closedParam()
  **
+ ** @remark const correctness creates an unfortunate twist here, so that the Wrapper
+ **         in #wrapBuilder must be declared explicitly (no λ). There must not be
+ **         several overloaded `operator()` — otherwise the metaprogramming for
+ **         detection of the function signature would be defeated, since it
+ **         relies on `decltype(operator())`
  */
 
 
@@ -39,6 +44,7 @@
 #define LIB_META_TUPLE_CLOSURE_H
 
 #include "lib/meta/function-closure.hpp"
+#include "lib/util.hpp"
 
 #include <utility>
 #include <tuple>
@@ -48,6 +54,9 @@
 
 namespace lib {
 namespace meta{
+  
+  using std::move;
+  using util::unConst;
   
   /**
    * Metaprogramming helper to build a constructor-function
@@ -110,19 +119,34 @@ namespace meta{
           return wrapBuilder (func::BindToArgument<TupleBuilderSig,BoundVal,idx>::reduced (buildRecord, std::forward<VAL>(val)));
         }
       
+      template<size_t idx, typename VAL>
+      static auto
+      closett (VAL&& val)
+        {
+          using BoundVal = std::decay_t<VAL>;
+          return wrapBuilder (func::BindToArgument<TupleBuilderSig,BoundVal,idx>::refused (buildRecord, std::forward<VAL>(val)));
+        }
+      
     private:
       template<class CLO>
       static auto
-      wrapBuilder (CLO closureFun)
+      wrapBuilder (CLO closureFun)   ///< need to provide the remaining arguments as a tuple
         {
           using RemainingArgs = typename _Fun<CLO>::Args;
           using RemainingParams = typename lib::meta::RebindVariadic<TUP, RemainingArgs>::Type;
-          return [partialClosure = move(closureFun)
-                 ]
-                 (RemainingParams remPar)
-                    {
-                      return std::apply (partialClosure, remPar);
-                    };
+
+                struct Wrap
+                  {
+                    auto
+                    operator() (RemainingParams remPar)  const
+                      {
+                        return std::apply (unConst(this)->partialClosure_, remPar);
+                      };
+
+                    CLO partialClosure_;
+                  };                   //  Note: need a single operator() which works also for const
+                                      //         can not do this with a λ
+          return Wrap{move(closureFun)};
         }
     };
   
