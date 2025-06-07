@@ -60,7 +60,7 @@ namespace steam {
       
       /** provide a descriptor for lumiera::AppState,
        *  wired accordingly to allow `main()` to bring up
-       *  the render / playback coordination and 
+       *  the render / playback coordination and
        *  output management subsystem. */
       static lumiera::Subsys& getPlayOutDescriptor();
       
@@ -70,7 +70,7 @@ namespace steam {
       //////////////////TODO: register similar proxy/facade interfaces for the GUI
       
     };
-    
+  
   
   
 } // namespace steam

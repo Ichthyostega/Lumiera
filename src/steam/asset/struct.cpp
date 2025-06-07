@@ -112,13 +112,13 @@ namespace asset {
   StructFactory::operator() (Query<STRU> const& capabilities)
   {
     lib::P<STRU> res;
-    QueryHandler<STRU>& typeHandler = ConfigResolver::instance();  
+    QueryHandler<STRU>& typeHandler = ConfigResolver::instance();
     typeHandler.resolve (res, capabilities);
     
     if (res)
       return res;
     
-    // create new one, since the 
+    // create new one, since the
     // ConfigQuery didn't yield any result
     STRU* pS = impl_->fabricate(capabilities);
     return AssetManager::instance().wrap (*pS);
@@ -152,8 +152,8 @@ namespace asset {
    *  automatically, based on pipeID and streamID (and they
    *  are editable anyways)
    * @see ProcPatt
-   * @see DefaultsManager 
-   */ 
+   * @see DefaultsManager
+   */
   lib::P<Pipe> 
   StructFactory::newPipe (string pipeID, string streamID)
   {

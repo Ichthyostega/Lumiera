@@ -139,9 +139,9 @@ namespace play {
        *         corresponding to a frame specified relative
        *         to [time axis origin](\ref #getOrigin)
        * @note for other playback urgencies `Time::NEVER` is returned
-       * 
+       *
        * @warning not clear as of 1/13 if it is even possible to have such a function
-       *          on the Timings record. 
+       *          on the Timings record.
        */
       Time getTimeDue(FrameCnt frameOffset)  const;
       

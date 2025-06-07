@@ -44,7 +44,7 @@ def testCases(env,dir):
         Test classes will be linked into shared libraries,
         while plain-C tests end up as standalone test-XXX.
         @note: using the tree root as additional includepath
-        @note: linking scope chosen based on the name-prefix 
+        @note: linking scope chosen based on the name-prefix
     """
     env = env.Clone()
     env.Append(CPPPATH=dir) # add subdir to Includepath
@@ -69,7 +69,7 @@ def testCases(env,dir):
 
 # Specific linker treatment for the testsuite:
 # force explicit linking against all dependencies to ensure auto-registration of
-# any test-class on startup, even if no code dependency is visible for the linker 
+# any test-class on startup, even if no code dependency is visible for the linker
 envSuite = env.Clone()
 envSuite.Append(LINKFLAGS='-Wl,--no-as-needed')
 

@@ -26,7 +26,7 @@
  ** need to be below any other diff binding, and may be used to absorb any diff verbs
  ** not matched and consumed by a more specific binding. Contrast this to the TreeMutator
  ** default implementation, which likewise absorbs diff verbs, but in a way to trigger
- ** a lumiera::error::LUMIERA_ERROR_DIFF_CONFLICT. 
+ ** a lumiera::error::LUMIERA_ERROR_DIFF_CONFLICT.
  ** 
  ** @note the header tree-mutator-noop-binding.hpp was split off for sake of readability
  **       and is included automatically from bottom of tree-mutator.hpp

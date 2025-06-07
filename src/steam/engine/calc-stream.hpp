@@ -117,7 +117,7 @@ namespace engine{
       
     };
   
-  typedef std::vector<CalcStream> CalcStreams;         //////////////////////////////////////////////////////TICKET #1297 : probably unnecessary, since we intend to connect always one Feed per ModelPort (and handle multiple channels internally, in the processing nodes)
+  using CalcStreams = std::vector<CalcStream>;         //////////////////////////////////////////////////////TICKET #1297 : probably unnecessary, since we intend to connect always one Feed per ModelPort (and handle multiple channels internally, in the processing nodes)
       
 
   

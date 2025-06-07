@@ -67,7 +67,7 @@ I propose that the future Lumiera GUI is designed without too much (or anything)
 * Jog feature +
 A jog tool is a sliding ui element that when clicked and held, will play the video at a certain rate as the mouse drags left or right.  As the mouse drags the the left the video plays forward faster (It should advance very slowly at first.).  It acts the same way when the mouse drags to the right, except that the video plays in reverse. Again, it can be tedious trying to make frame-accurate cuts to long video files.  Without a jog tool it makes it more tedious to get to the exact frame you want to cut on because you must scan through, then click the next frame button half a dozen times.  A jog tool would remedy this because one could easily vary the playback rate, even reverse it, zeroing in on the frame much more quickly. Together these two features could really increase the speed at which one can edit precisely in Cinelerra.
 
-  - Comment: This idea seems feasible, it could be worked together with cehteh shuttle slider proposal. 
+  - Comment: This idea seems feasible, it could be worked together with cehteh shuttle slider proposal.
 -- link:joelholdsworth[] [[DateTime(2008-07-19T19:42:04Z)]]
 
 * most numeric value entries (sliders, spinbuttons) can be changed when hovering the mouse over it and turn the scroll wheel (maybe with an additional modifier key?) -- The scroll wheel is accelerated depending on how fast it is operated by the user, snapping it slowly gives frame/interval precise increments, turning it faster will exponentially increases the increment (2,4,8.. frames per click)
@@ -91,11 +91,11 @@ Let the user have more flexibility over the track view height. Some tracks can b
 The track view height could be individually selectable , for example, by changing the "draw media" icon from toggle mode to drop down menu. The drop down selection options could include "don't show", followed by track sizes as per the drop down menu at the bottom of track view.
 -- link:Tree[][[DateTime(2008-05-07T17:30:00NZ)]]
 
-  - Comment: Yes, I was thinking about this idea myself. At first I was thinking of just allowing the user to expand or collapse the track with a +/- button. But then I wondered if it would be good to have the track completely sizable. My current thinking is the best way would be to have it sizable but with a kind of snap-to-grid behaviour so the whole thing doesn't become really messy. 
+  - Comment: Yes, I was thinking about this idea myself. At first I was thinking of just allowing the user to expand or collapse the track with a +/- button. But then I wondered if it would be good to have the track completely sizable. My current thinking is the best way would be to have it sizable but with a kind of snap-to-grid behaviour so the whole thing doesn't become really messy.
 -- link:JoelHoldsworth[] [[DateTime(2008-08-04T16:03:24Z)]]
 +
 --
-* Ardour provides an example for this: the track height can be changed (by buttons or with the mouse wheel + modifyer key), but there is only a fixed set of possible track heights, some of which have a preconfigured layout. For example, in "smallest" size the track head shows only the track label without any buttons and the track is reduced to a tiny waveform.  
+* Ardour provides an example for this: the track height can be changed (by buttons or with the mouse wheel + modifyer key), but there is only a fixed set of possible track heights, some of which have a preconfigured layout. For example, in "smallest" size the track head shows only the track label without any buttons and the track is reduced to a tiny waveform.
 -- link:Ichthyostega[] [[DateTime(2008-08-08T15:18:31Z)]]
 --
 
@@ -118,7 +118,7 @@ Xinerama and twinView test comparison http://www.phoronix.com/scan.php?page=arti
 * Automatic Clip Creation based on video content. +
 When scanning through an hour long video clip, it can be tedious to go through it all making clips.  It would allow the user to get right to work if Lumiera could split the video into clips based on scene changes.  Each clip would begin at precisely the frame the current shot begins and end at the last frame before the next shot.  As long as the user could then edit these clips on the timeline, this would decrease the time spent sifting through the raw footage.
 
-  - Comment: This seems like a good idea, and quite easy to implement. I think that when we get the video-capture and media manager code working this would a be a good subproject for someone to take on. 
+  - Comment: This seems like a good idea, and quite easy to implement. I think that when we get the video-capture and media manager code working this would a be a good subproject for someone to take on.
 -- link:joelholdsworth[] [[DateTime(2008-07-19T19:42:04Z)]]
 
 * Import and Export SMIL files +
@@ -143,7 +143,7 @@ Make the timeline view _sparse_, that means the time on top is not continuous an
 This needs an ui (menu or whatever) to turn this feature on and some selection which events the user is interested in (scene cuts, transitions begin/end/mids, keyframes (begin/mid), labels, ...)
 -- link:ct[] [[DateTime(2008-05-21T13:46:51Z)]]
 
-  - Comment: Do you think we could use view splitting to accomplish this? You can see this sort of thing OpenOffice.org calc. Where you drag a splitter out from the ends of the scrollbar, this allows you compare 2 or 4 parts of a big spreadsheet at the same time. Implementing something like that might be reasonably doable. But if you're talking about hiding periods on the timeline, that sounds a lot less easy to me, and it feels like a bit a bit of an odd thing to do. What do you think ct? 
+  - Comment: Do you think we could use view splitting to accomplish this? You can see this sort of thing OpenOffice.org calc. Where you drag a splitter out from the ends of the scrollbar, this allows you compare 2 or 4 parts of a big spreadsheet at the same time. Implementing something like that might be reasonably doable. But if you're talking about hiding periods on the timeline, that sounds a lot less easy to me, and it feels like a bit a bit of an odd thing to do. What do you think ct?
 -- link:joelholdsworth[] [[DateTime(2008-07-21T21:58:48Z)]]
 +
 --
@@ -288,7 +288,7 @@ When attaching such and such effect to a track, disable "play" before attaching 
 -- link:JoelHoldsworth[] [[DateTime(2008-07-24T16:24:50Z)]]
 +
 --
-* I wouldn't even be skeptical, I am against such a proposal. Any feature we add should just work, without crashing the application and trashing the users efforts. If a feature doesn't work, it needs to be fixed, instead of automatically warning the user that this feature is broken. The fact that for Cinelerra you need the "secrets" tells quite a lot about the state of affairs regarding Cinelerra, and because we wanted to change this, Lumiera was born. ;-)  
+* I wouldn't even be skeptical, I am against such a proposal. Any feature we add should just work, without crashing the application and trashing the users efforts. If a feature doesn't work, it needs to be fixed, instead of automatically warning the user that this feature is broken. The fact that for Cinelerra you need the "secrets" tells quite a lot about the state of affairs regarding Cinelerra, and because we wanted to change this, Lumiera was born. ;-)
 -- link:Ichthyostega[] [[DateTime(2008-07-27T23:04:42Z)]]
 --
 

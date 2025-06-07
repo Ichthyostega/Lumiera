@@ -17,9 +17,9 @@
  ** The Displayer serves as base of all video display implementations
  ** @warning as of 2016 it is not clear, if this code will be
  **          evolved into the actual display facility, or be
- **          replaced and rewritten, when we're about to 
+ **          replaced and rewritten, when we're about to
  **          create a functional video display connected
- **          to the render engine. 
+ **          to the render engine.
  */
 
 
@@ -43,7 +43,7 @@ namespace output {
    * @remarks All Displayer classes must extend the Displayer class and
    * minimally rewrite:
    *
-   * + usable() - to indicate if the object can be used, 
+   * + usable() - to indicate if the object can be used,
    * + format() - to indicate what type of input the put method expects
    * + put( void * ) - deal with an image of the expected type and size
    *
@@ -51,7 +51,7 @@ namespace output {
    * resolution of IMG_WIDTH * IMG_HEIGHT. If another size is required,
    * then the rewrite the methods:
    *
-   * + preferredWidth 
+   * + preferredWidth
    * + preferredHeight
    *
    * If the widget being written to doesn't need a fixed size, then
@@ -108,8 +108,8 @@ namespace output {
                                ,int& imgHeight
                                );
     };
-    
-    
+  
+  
   
 }} // namespace stage::output
 #endif /*STAGE_OUTPUT_DISPLAYER_H*/

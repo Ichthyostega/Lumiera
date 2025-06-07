@@ -6,7 +6,7 @@ shopt -s extglob
 # RFC's are created from ./doc/devel/template/new_rfc.sh and stored in
 # ./doc/devel/rfc/ . There are directories for the various states
 # ./doc/devel/rfc_final, ./doc/devel/rfc_pending, ./doc/devel/rfc_parked,
-# ./doc/devel/rfc_dropped . Which contain symlinks back to ../rfc/ 
+# ./doc/devel/rfc_dropped . Which contain symlinks back to ../rfc/
 #
 
 

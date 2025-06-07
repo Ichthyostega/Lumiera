@@ -67,11 +67,11 @@ namespace test {
       friend ostream& operator<< (ostream&, const TestOption&);
     };
   
-    
-  /** for outputting the help messages. Forward accumulated 
+  
+  /** for outputting the help messages. Forward accumulated
    *  help messages from all contained option definitions */
   ostream& operator<< (ostream& os, const TestOption& to);
- 
+  
   
 } // namespace test
 #endif

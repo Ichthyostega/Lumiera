@@ -51,7 +51,7 @@ namespace time {
    * @todo as of 2016 this is basically finished since years,
    *       but still not in any widespread practical use (not by bad intention,
    *       simply by lack of opportunities). So this core interface still needs
-   *       some feedback from practice in order to be finalised. 
+   *       some feedback from practice in order to be finalised.
    */
   class TCode
     {
@@ -91,7 +91,7 @@ namespace time {
    * (rounded) into a definite integral number, stripping the excess
    * precision contained in the original (raw) TimeValue.
    * As framecount values are implemented as single display field for an
-   * integral value (time::Digxel), they allow for simple presentation. 
+   * integral value (time::Digxel), they allow for simple presentation.
    */
   class FrameNr
     : public TCode
@@ -99,7 +99,7 @@ namespace time {
     {
       
       string show()     const { return string(CountVal::show())+"#"; }
-      Literal tcID()    const { return "Framecount"; } 
+      Literal tcID()    const { return "Framecount"; }
       TimeValue value() const { return Format::evaluate (*this, *quantiser_); }
       
     public:
@@ -184,16 +184,16 @@ namespace time {
    *   - because also the use cases for H:M:S are not well defined
    *   - notable question: do we need/want a milliseconds part?
    *   - do we even want to go into fractional milliseconds,
-   *     down to the µ-Grid? Or do we want that to be configurable?  
+   *     down to the µ-Grid? Or do we want that to be configurable?
    */        ////////////////////////////////////////////////////////////////////////////////////////////////TICKET #736 implement HMS format
   class HmsTC
     : public TCode
     {
-      TimeVar tpoint_;          ///< @deprecated most definitively we do not want numeric computations here in this object 
+      TimeVar tpoint_;          ///< @deprecated most definitively we do not want numeric computations here in this object
       
       virtual string show()     const { return string(tpoint_); }
-      virtual Literal tcID()    const { return "Timecode"; }        
-      virtual TimeValue value() const { return tpoint_; }        
+      virtual Literal tcID()    const { return "Timecode"; }
+      virtual TimeValue value() const { return tpoint_; }
       
     public:
       using Format = format::Hms;
@@ -202,9 +202,9 @@ namespace time {
       
       ///////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #750 we do not want numeric accessors her — rather we want Digxel members
       double getMillis () const;
-      int getSecs      () const; 
-      int getMins      () const; 
-      int getHours     () const; 
+      int getSecs      () const;
+      int getMins      () const;
+      int getHours     () const;
     };
   
   
@@ -229,7 +229,7 @@ namespace time {
       operator FSecs()  const;
     };
   
-    
+  
   /** writes time value, formatted as HH:MM:SS:mmm */
   
 

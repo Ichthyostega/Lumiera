@@ -93,7 +93,7 @@ namespace test    {
     {
       
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           TestClass<void()> testVoid;
           TestClass<int(TimeVar,int)> testTime;

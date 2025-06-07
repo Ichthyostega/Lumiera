@@ -90,9 +90,9 @@ namespace session {
   
   
   /* some type shorthands */
-  typedef mobject::PlacementMO PlacementMO;
-  typedef PlacementIndex::PRef PRef;
-  typedef PlacementIndex::ID ID;
+  using PlacementMO = mobject::PlacementMO;
+  using PRef        = PlacementIndex::PRef;
+  using ID          = PlacementIndex::ID  ;
   
   
   /*****************************************************************//**
@@ -104,7 +104,7 @@ namespace session {
    */
   class PlacementIndex::Table
     {
-      typedef shared_ptr<PlacementMO> PPlacement;
+      using PPlacement = shared_ptr<PlacementMO>;
       
       struct PlacementEntry
         {
@@ -113,11 +113,11 @@ namespace session {
         };
       
       // using hashtables to implement the index
-      typedef PlacementMO::ID PID;
-      typedef unordered_map<PID, PlacementEntry>  IDTable;
-      typedef std::unordered_multimap<PID,PID> ScopeTable;
+      using PID = PlacementMO::ID;
+      using IDTable    = std::unordered_map<PID, PlacementEntry>;
+      using ScopeTable = std::unordered_multimap<PID,PID>;
       
-      typedef pair<ScopeIter, ScopeIter> ScopeContents;
+      using ScopeContents = pair<ScopeIter, ScopeIter>;
       
       
       TypedAllocationManager allocator_;
@@ -313,7 +313,7 @@ namespace session {
       
       
     private:
-      typedef IDTable::const_iterator Slot;
+      using Slot = IDTable::const_iterator;
       
       PlacementEntry const&
       base_entry (ID key)  const
@@ -338,7 +338,7 @@ namespace session {
       void
       remove_from_scope (ID scopeID, ID entryID)
         {
-          typedef ScopeTable::const_iterator Pos;
+          using Pos = ScopeTable::const_iterator;
           pair<Pos,Pos> searchRange = scopeTab_.equal_range(scopeID);
           
           Pos pos = searchRange.first;
@@ -356,13 +356,13 @@ namespace session {
       void
       remove_all_from_scope (ID scopeID)
         {
-          typedef ScopeTable::const_iterator Pos;
+          using Pos = ScopeTable::const_iterator;
           pair<Pos,Pos> scopeEntries = scopeTab_.equal_range(scopeID);
           Pos first = scopeEntries.first;
           Pos end   = scopeEntries.second;
           
           // take a snapshot of all children to be processed recursively
-          typedef IterSnapshot<PID> ChildIDs;
+          using ChildIDs = IterSnapshot<PID>;
           ChildIDs child (eachVal(first,end));
           
           scopeTab_.erase (first,end); // assumed to be NOP for first==end
@@ -395,7 +395,7 @@ namespace session {
         }
       
       
-      typedef function<PlacementMO& (pair<PID,PID> const&)> ElementResolver;
+      using  ElementResolver = function<PlacementMO& (pair<PID,PID> const&)>;
       mutable ElementResolver elementResolver_;
       
       ElementResolver
@@ -614,8 +614,8 @@ namespace session {
           
           PMO& theElement = *elm(id);
           ID theScope (sco(id)->getID());
-          if (theScope == id
-             && elm(id)==tab._root_4check()
+          if ( theScope == id
+             and elm(id)==tab._root_4check()
              )        // no need to check root,
             return;  //  because root is it's own scope
           
@@ -635,7 +635,7 @@ namespace session {
           
           PMO* root  = tab._root_4check();
           PMO* scope = sco(id);
-          while (scope && scope != sco(scope->getID()))
+          while (scope and scope != sco(scope->getID()))
             scope = sco(scope->getID());
           
           VERIFY ( root==scope,          "(2.4) Scopes",   "Found a scope not attached below root.");

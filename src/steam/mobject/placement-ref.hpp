@@ -227,7 +227,7 @@ namespace steam {
       checkValidity ()  const
         {
           return session::SessionServiceFetch::isAccessible() // session interface opened?
-              && session::SessionServiceFetch::isRegisteredID (this->id_);
+             and session::SessionServiceFetch::isRegisteredID (this->id_);
         }
       
       static void
@@ -260,7 +260,7 @@ namespace steam {
       static PlacementMX&
       access (_Id const& placementID)
         {
-          if (!placementID)
+          if (not placementID)
             throw error::Logic{"Attempt to access a NIL PlacementRef"
                               , LERR_(BOTTOM_PLACEMENTREF)};
           

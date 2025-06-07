@@ -24,7 +24,7 @@ import Options
 TARGDIR      = 'target'
 VERSION      = '0.pre.03'
 TOOLDIR      = './admin/scons'    # SCons plugins
-OPTCACHE     = 'optcache' 
+OPTCACHE     = 'optcache'
 CUSTOPTFILE  = 'custom-options'
 
 # these are accessible via env.path.xxxx
@@ -66,10 +66,10 @@ def defineBuildEnvironment():
                , CPPDEFINES=['LUMIERA_VERSION='+VERSION ]    # note: it's a list to append further defines
                , CCFLAGS='-Wall -Wextra -Wformat-security'
                , CXXFLAGS='-std=gnu++17 -Wno-enum-compare'
-               , CFLAGS='-std=gnu99' 
+               , CFLAGS='-std=gnu99'
                )
     env.Append(LINKFLAGS='-Wl,--no-undefined')  # require every dependency is given on link, in the right order
-    env.Append(LINKFLAGS='-Wl,--as-needed')     # by default only link against dependencies actually needed to resolve symbols 
+    env.Append(LINKFLAGS='-Wl,--as-needed')     # by default only link against dependencies actually needed to resolve symbols
     handleVerboseMessages(env)
     handleNoBugSwitches(env)
     
@@ -82,9 +82,9 @@ def defineBuildEnvironment():
     
     # setup search path for Lumiera plugins
     appendCppDefine(env,'PKGLIBDIR','LUMIERA_PLUGIN_PATH=\\"$PKGLIBDIR/:ORIGIN/modules\\"'
-                                   ,'LUMIERA_PLUGIN_PATH=\\"ORIGIN/modules\\"') 
+                                   ,'LUMIERA_PLUGIN_PATH=\\"ORIGIN/modules\\"')
     appendCppDefine(env,'PKGDATADIR','LUMIERA_CONFIG_PATH=\\"$PKGLIBDIR/:.\\"'
-                                    ,'LUMIERA_CONFIG_PATH=\\"$DESTDIR/share/lumiera/:.\\"') 
+                                    ,'LUMIERA_CONFIG_PATH=\\"$DESTDIR/share/lumiera/:.\\"')
     
     Options.prepareOptionsHelp(buildVars,env)
     buildVars.Save(OPTCACHE, env)
@@ -104,7 +104,7 @@ def appendVal(env,var,targetVar,val=None):
 
 
 def handleNoBugSwitches(env):
-    """ set the build level for NoBug. 
+    """ set the build level for NoBug.
         Release builds imply no DEBUG
         whereas ALPHA and BETA require DEBUG
     """

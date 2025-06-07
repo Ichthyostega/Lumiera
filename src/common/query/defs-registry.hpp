@@ -25,7 +25,7 @@
  ** @remarks as of 2017, we're still using a fake implementation of the resolution,
  **          no real resolution engine. While the basic idea of this "defaults registry"
  **          is likely to stay, the actual order relation and maybe even the components
- **          to be stored in this registry might be subject to change. 
+ **          to be stored in this registry might be subject to change.
  ** 
  ** @see mobject::session::DefsManager
  ** @see DefsRegistryImpl_test
@@ -71,7 +71,7 @@ namespace query  {
     }
     
     
-    struct TableEntry 
+    struct TableEntry
       {
         virtual ~TableEntry() {};
       };
@@ -82,7 +82,7 @@ namespace query  {
     
     
     /**
-     * holding a single "default object" entry 
+     * holding a single "default object" entry
      */
     template<class TAR>
     struct Record
@@ -105,11 +105,11 @@ namespace query  {
             
             P<TAR> const& obj_;
             
-            bool 
+            bool
             operator() (Record const& rec)
             {
               P<TAR> storedObj (rec.objRef.lock());
-              return storedObj && (storedObj == obj_);
+              return storedObj and (storedObj == obj_);
             }
           };
         
@@ -124,7 +124,7 @@ namespace query  {
       };
       
     /** every new kind of object (Type) creates a new
-     *  slot in the main Table holding all registered 
+     *  slot in the main Table holding all registered
      *  default objects. Each slot actually holds a
      *  separate tree (set) of registry entries
      */
@@ -140,12 +140,12 @@ namespace query  {
         static Registry&
         access (Table& table)
           {
-            if ( !index 
-               || index > table.size() 
-               ||!table[index-1])
+            if (  not index
+               or     index > table.size()
+               or not table[index-1])
               createSlot (table);
             
-            ASSERT (0 < index && index<=table.size() && table[index-1]);
+            ASSERT (0 < index and index<=table.size() and table[index-1]);
             Slot* item = static_cast<Slot*> (table[index-1].get());
             return item->registry;
           }
@@ -159,7 +159,7 @@ namespace query  {
               index = ++maxSlots;
             if (index > table.size())
               table.resize (index);
-            table[index-1].reset(new Slot);   
+            table[index-1].reset(new Slot);
           }
       };
       
@@ -191,7 +191,7 @@ namespace query  {
       public:
         /** used for enumerating solutions */
         template<class TAR>
-        class Iter          
+        class Iter
           {
             friend class DefsRegistry;
             typedef typename Slot<TAR>::Registry::iterator II;
@@ -199,16 +199,16 @@ namespace query  {
             II p,i,e;
             P<TAR> next, ptr;
             
-            Iter (II from, II to) ///< just enumerates the given range 
+            Iter (II from, II to) ///< just enumerates the given range
               : p(from), i(from), e(to)
               {
                 if (i!=e) ++i;  // p is next to be tested, i always one ahead
                 operator++ ();
               }
             
-            Iter (II match, II from, II to) ///< returns direct match first, then enumerates 
+            Iter (II match, II from, II to) ///< returns direct match first, then enumerates
               : p(match), i(from), e(to)
-              { 
+              {
                 operator++ ();  // init to first element (or to null if empty)
               }
             
@@ -227,12 +227,12 @@ namespace query  {
           
           public:
             P<TAR> operator* ()    { return ptr; }
-            bool  hasNext ()       { return next || findNext(); }
+            bool  hasNext ()       { return next or findNext(); }
             Iter& operator++ ()
-              { 
+              {
                 ptr=findNext();
                 next.reset();
-                return *this; 
+                return *this;
               }
           };
         
@@ -282,8 +282,8 @@ namespace query  {
             
             Registry& registry = Slot<TAR>::access(table_);
             RIter pos = registry.lower_bound (entry);
-            if (  pos!=registry.end()
-               && pos->queryKey == query)
+            if (pos!=registry.end() and
+                pos->queryKey == query)
               {
                 P<TAR> storedObj (pos->objRef.lock());
                 if (storedObj)

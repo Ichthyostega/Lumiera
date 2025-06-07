@@ -94,7 +94,7 @@ def configure(env):
     
     if not conf.CheckPkgConfig('gtkmm-3.0', '3.10'):
         problems.append('Unable to configure the mm-bindings for GTK-3')
-        
+    
     if not conf.CheckPkgConfig('glibmm-2.4', '2.39'):
         problems.append('Unable to configure the mm-bindings for Glib')
     
@@ -119,17 +119,17 @@ def configure(env):
                         'and suitable C++ ("mm")-bindings (GDLmm >=%s)' % (verGDL, verGDLmm))
     if not conf.CheckPkgConfig('gdlmm-3.0', verGDLmm, alias='gdl'):
         problems.append('We need the C++ bindings for GDL by Fabien Parent: GDLmm >=%s '
-                        '(either from GNOME %s or use the debian package from %s)' % 
+                        '(either from GNOME %s or use the debian package from %s)' %
                         (verGDLmm, urlGDLmm, urlGDLmmDEB))
     
     if not conf.CheckPkgConfig('librsvg-2.0', '2.30'):
         problems.append('Need rsvg Library for rendering icons.')
-        
+    
     if not conf.CheckCHeader(['X11/Xutil.h', 'X11/Xlib.h'],'<>'):
         problems.append('Xlib.h and Xutil.h required. Please install libx11-dev.')
     
     # NOTE the following dependencies where for the video displayer widget.
-    # As of 11/2015 this is broken and disabled. Might be obsolete.... 
+    # As of 11/2015 this is broken and disabled. Might be obsolete....
     if not conf.CheckPkgConfig('xv')  : problems.append('Need libXv...')
     if not conf.CheckPkgConfig('x11') : problems.append('Need X-lib...')   # for the xvdisplayer widget
     if not conf.CheckPkgConfig('xext'): problems.append('Need libXext.')

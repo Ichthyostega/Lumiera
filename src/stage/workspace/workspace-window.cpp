@@ -34,7 +34,7 @@ namespace workspace {
   
   WorkspaceWindow::WorkspaceWindow (UiManager& uiManager)
     : panelManager_(*this)
-    {    
+    {
       createUI (uiManager);
     }
   

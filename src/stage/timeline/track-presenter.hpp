@@ -55,7 +55,7 @@
  ** presentation schemes to form a coherent layout. We solve this challenge by introducing a helper
  ** entity, the DisplayFrame. These act as a bridge to hook into both display hierarchies (the nested
  ** TrackHeaderWidget and the TrackBody record managed by the BodyCanvasWidget). Display frames are
- ** hooked down from their respective parent frame, thereby creating a properly interwoven fabric.  
+ ** hooked down from their respective parent frame, thereby creating a properly interwoven fabric.
  ** 
  ** After assembling the necessary GTK widgets, typically our custom drawing code will be invoked
  ** at some point, thereby triggering BodyCanvasWidget::maybeRebuildLayout(). At this point the
@@ -132,7 +132,7 @@ namespace timeline {
    * @remark avoiding this 2-step indirect dispatch is possibly,
    *       bug likely not of any significance, given the overhead
    *       of drawing.
-   * @todo investigate real-live performance ////////////////////////////////////////////////////////////////TICKET #1254 : investigate impact of indirection 
+   * @todo investigate real-live performance ////////////////////////////////////////////////////////////////TICKET #1254 : investigate impact of indirection
    */
   template<class WID>
   class RelativeCanvasHook

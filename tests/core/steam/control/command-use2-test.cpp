@@ -55,9 +55,9 @@ namespace test    {
   
   
   /** diagnostics: checks if the given value has been written
-   *  to the test protocol (string stream) of command2 
+   *  to the test protocol (string stream) of command2
    *  Explanation: command2 accepts a function, invokes
-   *  it and writes the result to the protocol stream. 
+   *  it and writes the result to the protocol stream.
    */
   template<typename TY>
   inline bool

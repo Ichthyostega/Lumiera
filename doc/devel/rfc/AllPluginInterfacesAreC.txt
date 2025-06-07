@@ -170,14 +170,14 @@ Deltafire:: '2007-07-03 12:17:09'
 
 after a talk on irc, we decided to do it this way, further work will be
 documented in the repository (tiddlywiki/source)
- 
+
 ct:: '2007-07-11 13:10:07'
 
 
 Development took another direction over course of the years;
 Lumiera is not based on a _generic plug-in Architecture_ and the topic
 of interfaces for _dedicated plugins_ still needs to be worked out
- 
+
 Ichthyostega:: '2023-10-24 22:55:23'
 
 
@@ -197,7 +197,7 @@ is still used though to load some dedicated plug-ins, most notably the GUI.
 
 To draw an conclusion: this proposal is now considered as *rejected*.
 Instead, Ticket https://issues.lumiera.org/ticket/1212[#1212 »Extension Concept«]
-was added to the list of relevant 
+was added to the list of relevant
 https://issues.lumiera.org/report/17[»Focus Topics«] for further development.
 
 .........

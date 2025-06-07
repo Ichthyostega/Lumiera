@@ -91,14 +91,14 @@ extra user experience, instead the user has to learn a new kind of window class.
 To chime in with the commenting... this comparison rather strengthened my preference for paradigm #2 _for our situation here._
 But I think we should try to exploit some of the extended possibilities which you usually rather find in those Super-IDE type applications:
 perspectives, freely configurable pannels, multiple top level windows, something like palettes or tiling.
- 
-When you compare the situation when working on software with the situation when working on a feature film, it seems to me that the situation 
+
+When you compare the situation when working on software with the situation when working on a feature film, it seems to me that the situation
 don't match up. The rationale of having multiple software projects opened is (a) "lets see how I solved the same problem 2 months ago there..."
 and (b) working on a larger software compound, comprised of multiple parts, which may even be deployed distributed.
 I think none of these applies to film editing. (Maybe the situation is a bit different for putting together a TV show)
 
 According to my own editing experiences, both film and sound, the "bringing in media into the project"-phase makes only a very small percentage of the overall time spent with a given project. Initially, after bringing in the raw footage, for me there is a long lasting phase where I just explore the material, i.e. I am viewing (or listening) to the footage and maybe try out some possible cuts and combinations in a throwaway fashion, just to get a feeling about the material. Then I build up the backbone of the cut rather quickly (and this is the only time where I could imagine having muliple projects opened at the same time). What follows is a long fine tuning and augmenting phase. So, for me, setting things up so I can work comfortably in a rather focussed and limited part of the application couold be more important then exploring multiple projects at the same time. +
 -- link:Ichthyostega[] [[DateTime(2009-01-29T03:31:54Z)]]
- 
+
 Another important thing: Do not automatically pop up windows. Creating a new window (even dialog boxes) must always be a consequence an user action. Even error conditions shall _NOT_ pop up an window (with one exception, that is fatal errors which will block the application until resolved). Otherwise the \'error' window shall be some log (perhaps with filtering capabilities) similar to cinelerra, but when an error happens some big red ERROR might blink in the status bar instead and only clicking on that will open the error log. +
 -- link:ct[] [[DateTime(2009-02-01T09:40:08Z)]]

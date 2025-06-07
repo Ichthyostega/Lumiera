@@ -295,7 +295,7 @@ namespace time {
   
   /** a rather arbitrary safety limit imposed on internal numbers used to represent a frame rate.
    * @remark rational numbers bear the danger to overflow for quite ordinary computations;
-   *         we stay away from the absolute maximum by an additional safety margin of 1/1000. 
+   *         we stay away from the absolute maximum by an additional safety margin of 1/1000.
    */
   const uint RATE_LIMIT{std::numeric_limits<uint>::max() / 1024};
   

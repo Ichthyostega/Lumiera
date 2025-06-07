@@ -25,7 +25,7 @@
  ** 
  ** The standard use case for this feature is the management of the structural
  ** facade assets Timeline and Sequence within the session. They're created
- ** automatically to reflect some internal structures within the model; 
+ ** automatically to reflect some internal structures within the model;
  ** with the help of lib::ElementTracker we can expose a list of
  ** all instances as part of the public Session interface.
  ** 
@@ -74,8 +74,8 @@ namespace lib {
    *       Depending on the semantics of this equality,
    *       registration might behave surprisingly, as
    *       previously registered \em equivalent instances
-   *       will be deregistered prior to appending the 
-   *       new instance. 
+   *       will be deregistered prior to appending the
+   *       new instance.
    */
   template<typename ELM>
   class ElementTracker

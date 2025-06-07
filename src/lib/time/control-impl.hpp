@@ -1,5 +1,5 @@
 /*
-  CONTROL-IMPL.hpp  -  time::control implementation building blocks  
+  CONTROL-IMPL.hpp  -  time::control implementation building blocks
 
    Copyright (C)
      2011,            Hermann Vosseler <Ichthyostega@web.de>
@@ -67,7 +67,7 @@ namespace mutation {
    * which then will be subject to any received value changes,
    * offsets and grid nudging. The actual attachment is to be
    * performed in a subclass, by using the Mutation interface.
-   * When attaching to a target, the Mutator will be outfitted 
+   * When attaching to a target, the Mutator will be outfitted
    * with a set of suitable functors, incorporating the specific
    * behaviour for the concrete combination of input changes
    * ("source values") and target object type. This works by
@@ -75,7 +75,7 @@ namespace mutation {
    * guided by a templated policy class. After installing
    * these functors, these decisions remains opaque and
    * encapsulated within the functor objects, so the
-   * mutator object doesn't need to carry this 
+   * mutator object doesn't need to carry this
    * type information on the interface
    */
   template<class TI>
@@ -120,7 +120,7 @@ namespace mutation {
    * besides exposing a function-call operator to feed the changed
    * time value to. Both Mutator and Propagator employ one primary
    * template parameter, which is the type of the time values
-   * to be fed in and propagated. 
+   * to be fed in and propagated.
    */
   template<class TI>
   class Propagator
@@ -162,7 +162,6 @@ namespace mutation {
       
       // using default construction and copy
     };
-  
 }}} // lib::time::mutation
 
 

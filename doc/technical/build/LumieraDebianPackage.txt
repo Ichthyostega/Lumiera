@@ -6,7 +6,7 @@ The Lumiera Debian Package
 //Menu: label Debian Package
 
 Since several of the Lumiera core developers run a Debian flavour as their primary development platform,
-it seems natural to care for the debian packaging of Lumiera ourselves. Moreover, we've declared 
+it seems natural to care for the debian packaging of Lumiera ourselves. Moreover, we've declared
 Debian/Stable to be our *reference platform* -- we'll provide any additionally required, more recent
 packages through our own link:http://Lumiera.org/debian[Debian Apt-Repository] (Debian depot).
 

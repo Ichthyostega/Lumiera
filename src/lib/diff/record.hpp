@@ -179,7 +179,7 @@ namespace diff{
         {
           auto p = std::begin(con);
           auto e = std::end(con);
-          for ( ; p!=e && isAttribute(*p); ++p)
+          for ( ; p!=e and isAttribute(*p); ++p)
             if (isTypeID (*p))
               type_ = extractTypeID(*p);
             else
@@ -296,7 +296,7 @@ namespace diff{
       explicit
       Record (Mutator && mut)
         : Record{}
-        { 
+        {
           mut.swap(*this);
         }
       
@@ -340,13 +340,13 @@ namespace diff{
         {
           REQUIRE (src);
           static const ElmIter END;
-          if (pos != END && pos == src->attribs_.end() && !src->children_.empty())
+          if (pos != END and pos == src->attribs_.end() and not src->children_.empty())
             {
               pos = src->children_.begin();
               return true;
             }
           else
-            if (pos != END && (pos != src->children_.end()))
+            if (pos != END and (pos != src->children_.end()))
               return true;
             else
               {
@@ -756,7 +756,7 @@ namespace diff{
   Record<string>::isTypeID (string const& v)
   {
     return isAttribute(v)
-        && "type" == extractKey(v);
+       and "type" == extractKey(v);
   }
   
   template<>

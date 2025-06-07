@@ -62,8 +62,8 @@ namespace test{
   class NullValue_test : public Test
     {
       
-      void
-      run (Arg) 
+      virtual void
+      run (Arg)
         {
           seedRand();
           CHECK (long() == NullValue<long>::get());

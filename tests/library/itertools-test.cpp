@@ -249,13 +249,13 @@ namespace test{
           FilteredSeq filtered = filterRepetitions (completeSequence);
           
           uint num=0;
-          for (; num<NUM_ELMS && !isnil(filtered);
+          for (; num<NUM_ELMS and not isnil(filtered);
                ++num,
                ++filtered
               )
             CHECK (num == *filtered);
           
-          CHECK (num == NUM_ELMS && isnil(filtered));
+          CHECK (num == NUM_ELMS and isnil(filtered));
         }
       
       
@@ -324,7 +324,7 @@ namespace test{
               ++idi,++neg)
             CHECK (idi != neg);
           
-          CHECK (!idi && !neg);
+          CHECK (!idi and !neg);
           CHECK (idi == neg);
         }
       

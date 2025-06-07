@@ -27,7 +27,7 @@
  ** 
  ** @warning in the standard case (STL container) the collection to operate on is
  **   taken by \c const& -- but the <b>const is stripped</b> silently.
- **   
+ ** 
  ** Thus, within the iteration, the function passed in can \em modify the original collection.
  ** If you pass in a ref to a temporary, the compiler won't complain. Moreover, several kinds
  ** of wrappers are also <b>stripped silently</b>, including reference_wrapper, shared_ptr and
@@ -196,7 +196,7 @@ namespace util {
    * @note obviously one of those arguments must be a placeholder */
   template <typename CON, typename FUN, typename P1, typename...ARGS>
   inline void
-  for_each (CON const& elements, FUN function, P1&& bind1, ARGS&& ...args) 
+  for_each (CON const& elements, FUN function, P1&& bind1, ARGS&& ...args)
   {
     for_each (elements, std::bind (function, std::forward<P1>(bind1), std::forward<ARGS> (args)...));
   }

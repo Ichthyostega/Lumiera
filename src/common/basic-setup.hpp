@@ -54,7 +54,7 @@
 
 
 /** "bootstrapIni" : the basic setup configuration to load */
-#define LUMIERA_LOCATION_OF_BOOTSTRAP_INI  "$ORIGIN/setup.ini" 
+#define LUMIERA_LOCATION_OF_BOOTSTRAP_INI  "$ORIGIN/setup.ini"
 
 
 
@@ -83,7 +83,7 @@ namespace lumiera {
    * configuration as a replacement for the time being.
    * 
    * @see configfacade.hpp
-   * @see AppState 
+   * @see AppState
    */
   class BasicSetup
     : util::NonCopyable
@@ -117,7 +117,7 @@ namespace lumiera {
             throw error::Logic ("Key \""+key+"\" not found in setup.ini");
         }
     };
- 
+  
   
 } // namespace lumiera
 #endif

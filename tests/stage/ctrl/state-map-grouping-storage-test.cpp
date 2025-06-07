@@ -28,7 +28,7 @@
 
 using std::string;
 using lib::idi::EntryID;
-using lib::diff::GenNode; 
+using lib::diff::GenNode;
 using util::isSameObject;
 using util::isnil;
 

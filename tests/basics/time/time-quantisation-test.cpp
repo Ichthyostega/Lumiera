@@ -77,7 +77,7 @@ namespace test{
           check_theFullStory (ref);
           checkMultipleGrids (ref);
           checkGridBinding (ref);
-        } 
+        }
       
       
       void

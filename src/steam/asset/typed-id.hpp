@@ -98,7 +98,7 @@ namespace asset {
   /**
    * Mixin for automatic TypedID registration
    * 
-   * @todo unfinished design; especially: have to care for correct copying ////////////////////TICKET #593 
+   * @todo unfinished design; especially: have to care for correct copying ////////////////////TICKET #593
    */
   template<typename TY>
   class TypedID::Link

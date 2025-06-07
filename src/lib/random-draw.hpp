@@ -184,7 +184,7 @@ namespace lib {
       Tar    maxResult_{Tar::maxVal()};      ///< maximum result val actually to produce < max
       Tar    minResult_{Tar::minVal()};      ///< minimum result val actually to produce > min
       double probability_{0};                ///< probability that value is in [min .. max] \ neutral
-      size_t shuffle_{0};                    ///< statefull additional randomisation to inject into hash 
+      size_t shuffle_{0};                    ///< statefull additional randomisation to inject into hash
       
       
       /** @internal quantise into limited result value */

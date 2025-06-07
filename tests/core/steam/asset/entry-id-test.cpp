@@ -62,14 +62,14 @@ namespace test{
   
   /***********************************************************************//**
    * @test proof-of-concept test for a combined symbolic and hash based ID.
-   *       - create some symbolic IDs 
+   *       - create some symbolic IDs
    *       - check default assignment works properly
    *       - check comparisons
    *       - check hashing
    *       - use the embedded hash ID (LUID) as hashtable key
    * 
    * @see lib::HashIndexed::Id
-   * @see mobject::Placement real world usage example 
+   * @see mobject::Placement real world usage example
    */
   class EntryID_test : public Test
     {
@@ -201,11 +201,11 @@ namespace test{
       
       /** @test handling of EntryIDs through their common base class,
        *        which means erasing the specific type information.
-       *        While this type information can't be recovered 
-       *        after erasure, we can try to upcast back 
+       *        While this type information can't be recovered
+       *        after erasure, we can try to upcast back
        *        to a known type; this upcast is safe,
        *        because the embedded hash-ID
-       *        is based on the type info. 
+       *        is based on the type info.
        */
       void
       checkErasure ()
@@ -259,7 +259,7 @@ namespace test{
       
       
       
-                              //---key--+-value-+-hash-function--- 
+                              //---key--+-value-+-hash-function---
       typedef std::unordered_map<DummyID, string, DummyID::UseEmbeddedHash> Hashtable;
       
       /** @test build a hashtable, using EntryID as key,

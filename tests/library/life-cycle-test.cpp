@@ -50,7 +50,7 @@ namespace test   {
    */
   class LifeCycle_test : public Test
     {
-      virtual void 
+      virtual void
       run (Arg)
         {
           CHECK (basicInit, "the basic-init callback hasn't been invoked automatically");
@@ -60,11 +60,11 @@ namespace test   {
           LifecycleHook::trigger  (MY_DEADLY_EVENT);
           CHECK ( 1 == customCallback);
         }
-      
     };
   
-  LAUNCHER (LifeCycle_test, "function common");
   
+  
+  LAUNCHER (LifeCycle_test, "function common");
   
   
   

@@ -260,7 +260,7 @@ namespace control {
     
     return isDirty_
        and maxBuildTimeout < Offset(gotDirty_, RealClock::now());
-  }                                                                          ///////////////////TICKET #1055 : likely to become more readable when Lumiera Time has std::chrono integration 
+  }                                                                          ///////////////////TICKET #1055 : likely to become more readable when Lumiera Time has std::chrono integration
 
   
   

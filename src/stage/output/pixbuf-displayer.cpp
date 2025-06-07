@@ -48,7 +48,7 @@ namespace output {
   
   void
   PixbufDisplayer::put (void* const image)
-  {  
+  {
     int orgX = 0,
         orgY = 0,
         destWidth = 0,
@@ -66,7 +66,7 @@ namespace output {
                                                 ,8                     // bits_per_sample
                                                 ,videoWidth
                                                 ,videoHeight
-                                                ,3 * videoWidth        // rowstride (offset between consecutive rows)                     
+                                                ,3 * videoWidth        // rowstride (offset between consecutive rows)
                                                 );
     ASSERT (imgBuf);
     if (uint(destWidth) != videoWidth

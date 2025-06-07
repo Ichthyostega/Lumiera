@@ -107,9 +107,9 @@ namespace asset {
       static StructFactory retrieve;
       
       virtual const ID<Struct>&
-      getID()  const             ///< @return ID of kind asset::Struct 
-        { 
-          return static_cast<const ID<Struct>& > (Asset::getID()); 
+      getID()  const             ///< @return ID of kind asset::Struct
+        {
+          return static_cast<const ID<Struct>& > (Asset::getID());
         }
       
       
@@ -130,9 +130,9 @@ namespace asset {
   
   
   
-  /** 
+  /**
    * Factory specialised for creating Structural Asset objects.
-   */ 
+   */
   class StructFactory
     : util::NonCopyable
     {

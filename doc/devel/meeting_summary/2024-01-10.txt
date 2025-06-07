@@ -25,7 +25,7 @@ Test Scheduler Suitability
 Once the scheduler had been implemented it was necessary to subject it
 to various load tests to establish its stability, and stress tests were necessary to
 provide information on performance limitations so that we would be able to establish
-whether these limitations met the demands required by Lumiera. 
+whether these limitations met the demands required by Lumiera.
 Results were encouraging.
 
 _Ichthyo_ reported on stress tests on the new scheduler. After resolving a series

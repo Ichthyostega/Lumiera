@@ -63,7 +63,7 @@ namespace engine {
   
   using lib::HashVal;
   using lib::Literal;
-  using util::for_each; 
+  using util::for_each;
   
   namespace error = lumiera::error;
   
@@ -146,7 +146,7 @@ namespace engine {
         
         
       public:
-        /** build a standard basic key describing a kind of Buffer. 
+        /** build a standard basic key describing a kind of Buffer.
          * @param familyID basic hash seed value to distinguish
          *                 families of buffer types managed by
          *                 different BufferProvider instances
@@ -166,7 +166,7 @@ namespace engine {
          *  Using a different storage size than the parent type,
          *  all else remaining the same
          */
-        Key (Key const& parent, size_t differingStorageSize) 
+        Key (Key const& parent, size_t differingStorageSize)
           : parent_(parent.hashID_)
           , hashID_(chainedHash (parent_, differingStorageSize))
           , storageSize_(differingStorageSize)  // differing from parent
@@ -179,7 +179,7 @@ namespace engine {
          *  Using different ctor and dtor functions,
          *  all else remaining the same as with parent
          */
-        Key (Key const& parent, TypeHandler const& differingTypeHandlerFunctions) 
+        Key (Key const& parent, TypeHandler const& differingTypeHandlerFunctions)
           : parent_(parent.hashID_)
           , hashID_(chainedHash (parent_, differingTypeHandlerFunctions))
           , storageSize_(parent.storageSize_)
@@ -192,7 +192,7 @@ namespace engine {
          *  Using a different private ID than the parent type,
          *  all else remaining the same
          */
-        Key (Key const& parent, LocalTag anotherTypeSpecificInternalTag) 
+        Key (Key const& parent, LocalTag anotherTypeSpecificInternalTag)
           : parent_(parent.hashID_)
           , hashID_(chainedHash (parent_, anotherTypeSpecificInternalTag))
           , storageSize_(parent.storageSize_)
@@ -225,7 +225,7 @@ namespace engine {
                 newKey.parent_ = HashVal(parent);
                 newKey.hashID_ = chainedHash(newKey.hashID_, bufferAddr);
               }
-            return newKey; 
+            return newKey;
           }
         
         void
@@ -276,14 +276,14 @@ namespace engine {
           , buffer_{bufferPtr}
           { }
         
-        /// BufferMetadata is allowed to create 
+        /// BufferMetadata is allowed to create
         friend class engine::BufferMetadata;
         
         // standard copy operations permitted
         
       public:
         /** is this Entry currently associated to a
-         *  concrete buffer? Is this buffer in use? */ 
+         *  concrete buffer? Is this buffer in use? */
         bool
         isLocked()  const
           {
@@ -293,7 +293,7 @@ namespace engine {
         
         /** is this Entry just an (abstract) placeholder for a type?
          * @return false if it's a real entry corresponding to a concrete buffer
-         */ 
+         */
         bool
         isTypeKey()  const
           {
@@ -425,7 +425,7 @@ namespace engine {
       };
     
     
-      
+    
     /**
      * (Hash)Table to store and manage buffer metadata.
      * Buffer metadata entries are comprised of a Key part and an extended
@@ -437,7 +437,7 @@ namespace engine {
      */
     class Table
       {
-        typedef std::unordered_map<HashVal,Entry> MetadataStore;
+        using MetadataStore = std::unordered_map<HashVal,Entry>;
         
         MetadataStore entries_;
 
@@ -565,7 +565,7 @@ namespace engine {
        *  second level, and implementation defined LocalTag entries
        *  the third level. All these levels describe abstract type
        *  keys, not entries for concrete buffers. The latter are
-       *  always created as children of a known type key.  
+       *  always created as children of a known type key.
        */
       Key
       key ( size_t storageSize
@@ -601,8 +601,8 @@ namespace engine {
       
       /** shortcut to access the Key part of a (probably new) Entry
        *  describing a concrete buffer at the given address
-       * @note might create/register a new Entry as a side-effect 
-       */ 
+       * @note might create/register a new Entry as a side-effect
+       */
       Key const&
       key (Key const& parentKey, metadata::Buff* concreteBuffer, LocalTag const& specifics =LocalTag::UNKNOWN)
         {
@@ -667,7 +667,7 @@ namespace engine {
       /** access the metadata record registered with the given hash key.
        *  This might be a pseudo entry in case of a Key describing a buffer type.
        *  Otherwise, the entry associated with a concrete buffer pointer is returned
-       *  by reference, an can be modified (e.g. state change) 
+       *  by reference, an can be modified (e.g. state change)
        * @param hashID which can be calculated from the Key
        * @throw error::Invalid when there is no such entry
        * @note use #isKnown to check existence
@@ -745,8 +745,8 @@ namespace engine {
       
       
       
-    private: 
-            
+    private:
+      
       template<typename PAR, typename DEF>
       Key
       trackKey (PAR parent, DEF specialisation)

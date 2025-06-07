@@ -52,15 +52,15 @@ using std::cout;
 using std::endl;
 
 
-int 
+int
 main (int, char**)
   {
     std::string str = "hullo wöld";
     std::vector<int> vec (1000);
-    
+
     for (uint i = 0; i < vec.size(); ++i)
         vec[i] = i;
-    
+
     cout << str <<  "\n.gulp.\n";
     return 0;
   }

@@ -85,7 +85,7 @@ namespace test    {
   class SessionElementQuery_test : public Test
     {
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           // Prepare an (test)Index (dummy "session")
           PPIdx testSession (build_testScopes());
@@ -122,7 +122,7 @@ namespace test    {
           CHECK (!findAgain);     // empty result because searched element was removed from session...
           
           MORef<DummyMO> otherElm = queryAPI.pick (elementID_contains("MO21"));
-          CHECK (otherElm);    // now pick just some other arbitrary element 
+          CHECK (otherElm);    // now pick just some other arbitrary element
           
           testSession->insert(newPlacement, otherElm);
           dummy2 = queryAPI.pick (elementID_contains(specificID));

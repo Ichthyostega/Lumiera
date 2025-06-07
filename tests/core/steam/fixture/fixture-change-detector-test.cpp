@@ -31,17 +31,17 @@ namespace test  {
   
 //  using util::isSameObject;
 //  using util::isnil;
-//  
+//
   using asset::Pipe;
   using asset::PPipe;
   using asset::Struct;
   using asset::Timeline;
   using asset::PTimeline;
   using lumiera::Query;
-//  
+//
   typedef asset::ID<Pipe> PID;
   typedef asset::ID<Struct> TID;
-//    
+//
 //  typedef ModelPortRegistry::ModelPortDescriptor const& MPDescriptor;
   
   

@@ -13,7 +13,7 @@
 
 
 /** @file common-services.cpp
- ** Wire library facilities directly into application core services 
+ ** Wire library facilities directly into application core services
  ** This translation unit serves to complete the definition of some parts of the Lumiera library.
  ** While library facilities usually are written to be self-contained, at places we want "magic"
  ** integration with central services, without incurring tight coupling to the application core.
@@ -76,7 +76,7 @@ namespace time {
   }//(End) implementation helpers
   
   
-  /** 
+  /**
    * build a quantised time value, referring the time grid by-name.
    * This is the preferred standard way of establishing a quantisation,
    * but it requires an existing time scale defined in the Lumiera Session,

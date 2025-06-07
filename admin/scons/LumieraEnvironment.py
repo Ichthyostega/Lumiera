@@ -26,7 +26,7 @@ from Buildhelper import *
 class LumieraEnvironment(Environment):
     """ Custom SCons build environment for Lumiera
         This allows us to carry structured config data without
-        using global vars. Idea inspired by Ardour. 
+        using global vars. Idea inspired by Ardour.
     """
     def __init__(self, buildSetup, buildVars, **kw):
         kw.update(VERSION = buildSetup.VERSION
@@ -62,7 +62,7 @@ class LumieraEnvironment(Environment):
                 self.mergeConf(self.libInfo[other])
         else:
             self.Append (LIBS = other.get ('LIBS',[]))
-            self.Append (LIBPATH = other.get ('LIBPATH', []))    
+            self.Append (LIBPATH = other.get ('LIBPATH', []))
             self.Append (CPPPATH = other.get('CPPPATH', []))
             self.Append (LINKFLAGS = other.get('LINKFLAGS', []))
         
@@ -72,7 +72,7 @@ class LumieraEnvironment(Environment):
     def addLibInfo (self, libID, minVersion=0, alias=None):
         """ use pkg-config to create an Environment describing the lib.
             Don't add this defs to the current Environment, rather store
-            them in the libInfo Dictionary. 
+            them in the libInfo Dictionary.
         """
         minVersion = str(minVersion)
         if 0 != os.system('pkg-config --print-errors --exists "%s >= %s"' % (libID,minVersion)):
@@ -116,7 +116,7 @@ class LumieraConfigContext(ConfigBase):
 def register_LumieraResourceBuilder(env):
     """ Registers Custom Builders for generating and installing Icons.
         Additionally you need to build the tool (rsvg-convert.c)
-        used to generate png from the svg source using librsvg. 
+        used to generate png from the svg source using librsvg.
     """
     
     import IconSvgRenderer as renderer  # load Joel's python script for invoking the rsvg-convert (SVG render)
@@ -142,7 +142,7 @@ def register_LumieraResourceBuilder(env):
             icon = targetdir+icon
             subdir = getDirname(str(icon))
             env.Install (installLocation+subdir, icon)
-            generateTargets.append(icon) 
+            generateTargets.append(icon)
         
         return (generateTargets, source)
     
@@ -168,7 +168,7 @@ def register_LumieraResourceBuilder(env):
             target dir is either the install location configured (in SConstruct),
             or an explicitly given absolute or relative path segment, which might refer
             to the location of the executable through the $ORIGIN token
-        """   
+        """
         source = path.join(prefix,str(source))
         subdir = getDirname(source, prefix)  # removes source location path prefix
         if targetDir:
@@ -218,13 +218,13 @@ class WrappedStandardExeBuilder(SCons.Util.Proxy):
             create a clone environment for specific configuration
             and then pass on the call to the wrapped original builder.
             Automatically define installation targets for build results.
-            @note only returning the build targets, not the install targets 
+            @note only returning the build targets, not the install targets
         """
         customisedEnv = self.getCustomEnvironment(env, target=target, **kw)    # defined in subclasses
         buildTarget   = self.buildLocation(customisedEnv, target)
         buildTarget   = self.invokeOriginalBuilder(customisedEnv, buildTarget, source, **kw)
-        self.installTarget(customisedEnv, buildTarget, **kw) 
-        return buildTarget 
+        self.installTarget(customisedEnv, buildTarget, **kw)
+        return buildTarget
     
     
     def invokeOriginalBuilder(self, env, target, source, **kw):
@@ -269,7 +269,7 @@ class LumieraExeBuilder(WrappedStandardExeBuilder):
     
     def getBuildDestination(self, lumiEnv):   return lumiEnv.path.buildExe
     def getInstallDestination(self, lumiEnv): return lumiEnv.path.installExe
-        
+    
 
 
 
@@ -279,7 +279,7 @@ class LumieraModuleBuilder(WrappedStandardExeBuilder):
         """ augments the built-in SharedLibrary() builder to add  some tweaks missing in SCons 1.0,
             like setting a SONAME proper instead of just passing the relative pathname to the linker.
             Besides, we override the library search path to allow for transitive dependencies between
-            Lumiera modules; modules are assumed to reside in a subdirectory below the executable. 
+            Lumiera modules; modules are assumed to reside in a subdirectory below the executable.
         """
         custEnv = lumiEnv.Clone()
         custEnv.Append(LINKFLAGS = "-Wl,-soname="+self.defineSoname(target,**kw))

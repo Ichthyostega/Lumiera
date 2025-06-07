@@ -93,7 +93,7 @@ namespace test{
   class TimeParsing_test : public Test
     {
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           defineTestTimeGrids();
           
@@ -103,7 +103,7 @@ namespace test{
 //        parseHms();
 //        parseSmpte();
 //        parseDropFrame();
-        } 
+        }
       
       
       void
@@ -152,7 +152,7 @@ namespace test{
           
           Parsing<format::Seconds> ("1/2sec")         .should_yield (Time(500,0)     );
           Parsing<format::Seconds> ("1/25sec")        .should_yield (Time( 40,0)     );
-          Parsing<format::Seconds> ("1/250sec")       .should_yield (Time(  4,0)     ); // no quantisation involved in parsing 
+          Parsing<format::Seconds> ("1/250sec")       .should_yield (Time(  4,0)     ); // no quantisation involved in parsing
           Parsing<format::Seconds> ("1/250sec", OFFSET_GRID).should_yield (Time(4,10)); // ...but the origin of the grid is used
           
           Parsing<format::Seconds> ("10/2sec")        .should_yield (5);

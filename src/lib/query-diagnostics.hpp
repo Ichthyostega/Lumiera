@@ -58,7 +58,7 @@ namespace test {
   garbage_query (int degree=0)    ///< fabricating (random) query strings
   {
     string fake;
-    if (!degree) 
+    if (!degree)
       degree = 1 + rani(MAX_DEGREE_RAND);
     while (0 < --degree)
       fake += garbage_term() + ", ";

@@ -427,10 +427,10 @@ Topics
 ~~~~~~
  * boilerplate (protocol, what's left from last meeting)
  * Introduction of Lumiera
- * handling of config errors. 
- * scripting language. 
- * editing on small devices (eeePC) 
- * uWiki. 
+ * handling of config errors.
+ * scripting language.
+ * editing on small devices (eeePC)
+ * uWiki.
  * 'musical' timeline in bars and beats
 
 Summary
@@ -448,7 +448,7 @@ Topics
  * boilerplate (protocol, what's left from last meeting)
  * Go through Ideas and Drafts in design process
    - processing node interface
-   - Placement concept 
+   - Placement concept
 
 Summary
 ^^^^^^^

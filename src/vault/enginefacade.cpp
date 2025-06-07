@@ -40,7 +40,7 @@ namespace vault {
     {
       operator string ()  const { return "Engine"; }
       
-      bool 
+      bool
       shouldStart (lumiera::Option&)  override
         {
           TODO ("determine, if renderengine should be started");
@@ -60,7 +60,7 @@ namespace vault {
           UNIMPLEMENTED ("initiate halting the engine");
         }
       
-      bool 
+      bool
       checkRunningState ()  noexcept override
         {
           //Lock guard{*this};

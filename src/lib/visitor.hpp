@@ -10,12 +10,12 @@
   option) any later version. See the file COPYING for further details.
 
 ====================================================================
-This code is heavily inspired by  
+This code is heavily inspired by
  The Loki Library (loki-lib/trunk/include/loki/Visitor.h)
     Copyright (c) 2001 by Andrei Alexandrescu
     This Loki code accompanies the book:
     Alexandrescu, Andrei. "Modern C++ Design: Generic Programming
-        and Design Patterns Applied". 
+        and Design Patterns Applied".
         Copyright (c) 2001. Addison-Wesley. ISBN 0201704315
  
 Credits for many further implementation ideas go to
@@ -34,7 +34,7 @@ Credits for many further implementation ideas go to
  ** (and thus triggering the double dispatch) need not know any of these concrete types and is
  ** thus completely decoupled form implementation details encapsulated within the visiting tool.
  ** The visiting tool implementation class provides specific "treat(ConcreteVisitable&)" functions,
- ** and this visitor lib will dispatch the call to the* correct "treat"-function based on the 
+ ** and this visitor lib will dispatch the call to the* correct "treat"-function based on the
  ** concrete target visitable type.
  **
  ** Implementation notes
@@ -84,11 +84,11 @@ namespace visitor {
   namespace typelist = lib::meta;
   
   
-  /** 
+  /**
    * Marker interface / base class for all "visiting tools".
    * When applying such a tool to some concrete instance
    * derived from Visitable, a special function treating
-   * this concrete subclass will be selected on the 
+   * this concrete subclass will be selected on the
    * concrete visiting tool instance.
    */
   template
@@ -98,30 +98,30 @@ namespace visitor {
   class Tool : public ERR<RET>
     {
     public:
-      typedef RET ReturnType;      ///< Tool function invocation return type
-      typedef Tool ToolBase;      ///<  for templating the Tag and Dispatcher
+      using ReturnType = RET;      ///< Tool function invocation return type
+      using ToolBase  = Tool;     ///<  for templating the Tag and Dispatcher
       
       virtual ~Tool ()  { };    ///< use RTTI for all visiting tools
       
       /** allows discovery of the concrete Tool type when dispatching a
        *  visitor call. Can be implemented by inheriting from ToolTag */
-      virtual Tag<ToolBase> getTag() = 0; 
+      virtual Tag<ToolBase> getTag() = 0;
     };
   
   
   
   
-  /** 
-   * Marker template to declare that some "visiting tool" 
+  /**
+   * Marker template to declare that some "visiting tool"
    * wants to treat a set of concrete Visitable classes.
-   * 
+   *
    * Each "first class" concrete visiting tool implementation has
    * to inherit from an instance of this template parametrised with
-   * the desired types; for each of the mentioned types, calls will 
+   * the desired types; for each of the mentioned types, calls will
    * be dispatched to the tool implementation. (To make it clear:
    * Calls to all other types not marked by such an "Applicable"
    * won't ever be dispatched to this tool class.).
-   * A Sideeffect of inheriting from such an "Applicable" is that 
+   * A Sideeffect of inheriting from such an "Applicable" is that
    * the tool gets an unique Tag entry, which is used internally
    * as index in the dispatcher tables. And the automatic ctor call
    * allows us to record the type information and pre-register the
@@ -130,13 +130,13 @@ namespace visitor {
   template
     < class TOOLImpl,      // concrete tool implementation type
       class TYPES,        // List of applicable Types goes here...
-      class BASE=Tool<>  // "visiting tool" base class 
+      class BASE=Tool<>  // "visiting tool" base class
     >
   class Applicable;
   
   template           // recursion end: inherit from BASE
     < class TOOLImpl,
-      class BASE 
+      class BASE
     >
   class Applicable<TOOLImpl, typelist::Nil, BASE>
     : public BASE
@@ -146,13 +146,13 @@ namespace visitor {
   template
     < class TOOLImpl,
       class TAR, class TYPES,
-      class BASE 
+      class BASE
     >
   class Applicable<TOOLImpl, typelist::Node<TAR, TYPES>, BASE>
     : public Applicable<TOOLImpl, TYPES, BASE>
     {
       
-      typedef typename BASE::ToolBase ToolBase;
+      using ToolBase = typename BASE::ToolBase;
       
     protected:
       virtual ~Applicable () {}
@@ -163,7 +163,7 @@ namespace visitor {
         }
       
     public:
-      virtual Tag<ToolBase> 
+      virtual Tag<ToolBase>
       getTag ()
         {
           TOOLImpl* typeref = 0;
@@ -175,20 +175,20 @@ namespace visitor {
   
   
   
-  /** 
-   * Marker interface or base class for all "Visitables". 
+  /**
+   * Marker interface or base class for all "Visitables".
    * Concrete types to be treated by a "visiting tool" derive from
    * this interface and need to implement an #apply(Tool&), forwarding
    * to the (internal, static, templated) #dispatchOp. This is done
    * best by using the #DEFINE_PROCESSABLE_BY macro.
    */
-  template 
-    < class TOOL = Tool<> 
+  template
+    < class TOOL = Tool<>
     >
   class Visitable
     {
     public:
-      typedef typename TOOL::ReturnType ReturnType;
+      using ReturnType = typename TOOL::ReturnType;
       
       /** to be defined by the DEFINE_PROCESSABLE_BY macro
        *  in all classes wanting to be treated by some tool */
@@ -199,10 +199,10 @@ namespace visitor {
       virtual ~Visitable () { };
       
       /// @note may differ from TOOL
-      typedef typename TOOL::ToolBase ToolBase;
+      using ToolBase = typename TOOL::ToolBase;
       
       /** @internal used by the #DEFINE_PROCESSABLE_BY macro.
-       *            Dispatches to the actual operation on the 
+       *            Dispatches to the actual operation on the
        *            "visiting tool" (visitor implementation)
        *            Note: creates a context templated on concrete TAR.
        */

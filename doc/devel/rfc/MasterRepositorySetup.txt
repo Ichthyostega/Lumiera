@@ -26,7 +26,7 @@ repositories:
 
 [grid="all"]
 `-------------`----------------------------------------------------`----------------------------
-*BRANCHNAME*      *DESCRIPTION*                                       
+*BRANCHNAME*      *DESCRIPTION*
  *Automatic updated from*
 'master'        Stable branch, use this as generic entry point.        cehteh,
  ichthyo

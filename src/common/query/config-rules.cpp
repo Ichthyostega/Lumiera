@@ -43,7 +43,7 @@ namespace lumiera {
   namespace query {
     namespace { // local definitions: implementing a backdoor for tests
         QueryKey fakeBypass;
-    } 
+    }
     
     void setFakeBypass(QueryKey const& q)  { fakeBypass = q; }
     bool isFakeBypass (QueryKey const& q)  { return q == fakeBypass; }

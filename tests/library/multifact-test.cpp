@@ -108,13 +108,13 @@ namespace test{
    *         Such a concrete factory configuration can be copied
    *       - optionally each created product can be passed through a wrapper function
    *       - there is a preconfigured wrapper for creating refcounting smart ptrs.
-   *       - it is possible to define a custom wrapper function on factory setup. 
+   *       - it is possible to define a custom wrapper function on factory setup.
    * @see  lib::MultiFact
    */
   class MultiFact_test : public Test
     {
-      void
-      run (Arg) 
+      virtual void
+      run (Arg)
         {
           produce_simple_values();
           produce_smart_pointers();

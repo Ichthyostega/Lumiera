@@ -32,7 +32,7 @@ using lumiera::ON_GLOBAL_SHUTDOWN;
  *  @return exit code signalling if any exception was caught
  *          at the level of individual test cases
  *  @throws any further exceptions raised outside of test cases
- *  @throws any library and external exceptions (not lumiera::Exception)  
+ *  @throws any library and external exceptions (not lumiera::Exception)
  */
 int main (int argc, const char* argv[])
 {
@@ -44,7 +44,7 @@ int main (int argc, const char* argv[])
   if (optparser.shouldDescribe())
     suite.describe();
   else
-    optparser.handleHelpRequest() || suite.run (args);
+    optparser.handleHelpRequest() or suite.run (args);
 
   LifecycleHook::trigger (ON_GLOBAL_SHUTDOWN);
   return suite.getExitCode();

@@ -283,7 +283,7 @@ In order to support scenario/take/clip tagging:
     x = c:extra ; extra only visible in this clip!
     x = tc:extra ; this take and clip show the extra
     etc
-    
+
 Other keyargs (the part in front of the colon) can be added to account for
 other uses (e.g. l = all taken on the same location).
 
@@ -293,7 +293,7 @@ associate (with space, multiple tags can be added.). The following specials are
 defined:
     [:keyarg:]:TAG is special tagging for scenario/take/clip.
     !TAG removes TAG if it is present. This is useful because it allows huge
-     sections of the clip to be defined as a certain tag, then have parts 
+     sections of the clip to be defined as a certain tag, then have parts
      removed later.
     a:TAG applies TAG only to the audio.
     v:TAG applies TAG only to the video.

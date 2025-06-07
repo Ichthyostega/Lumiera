@@ -122,5 +122,5 @@ namespace lib {
   
   
   
-} // namespace lib  
+} // namespace lib
 #endif /*LIB_VERB_TOKEN_H*/

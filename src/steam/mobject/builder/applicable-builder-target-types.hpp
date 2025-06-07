@@ -76,7 +76,7 @@ namespace builder {
      * to be generated for this concrete BuilderTool implementation.
      */
     template<class TOOL>
-    struct ApplicableBuilderTargetTypes 
+    struct ApplicableBuilderTargetTypes
       : Applicable<TOOL, BuilderTargetTypes>
       { };
     

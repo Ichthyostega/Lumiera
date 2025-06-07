@@ -111,7 +111,7 @@ namespace lib {
       points_to (T const& target)  const
         {
           return isValid()
-              && ref_ == &target;
+             and ref_ == &target;
         }
       
       friend bool

@@ -210,10 +210,10 @@ namespace interact {
           using lib::meta::Types;
           using lib::meta::func::PApply;
           
-          typedef typename _Fun<FUN>::Ret Ret;
-          typedef typename _Fun<FUN>::Args Args;
-          typedef typename Split<Args>::Head Arg1;
-          typedef typename Split<Args>::Tail FurtherArgs;
+          using Ret         = typename _Fun<FUN>::Ret;
+          using Args        = typename _Fun<FUN>::Args;
+          using Arg1        = typename Split<Args>::Head;
+          using FurtherArgs = typename Split<Args>::Tail;
           
           static_assert (std::is_convertible<UICoord, Arg1>::value,
                          "Allocator function must accept UICoordinates (where to create/locate) as first argument");

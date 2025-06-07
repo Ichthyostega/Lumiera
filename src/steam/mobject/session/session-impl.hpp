@@ -29,7 +29,7 @@
  ** 
  ** @see Session public API
  ** @see session-services.hpp
- ** @see session-service-access-test.cpp for a complete simplified mock session manager 
+ ** @see session-service-access-test.cpp for a complete simplified mock session manager
  **
  */
 
@@ -141,7 +141,7 @@ namespace session {
           if (index().contains (scope))
               index().clear (scope);
           
-          ENSURE (!index().contains (scope) || (scope == index().getRoot().getID()));
+          ENSURE (!index().contains (scope) or (scope == index().getRoot().getID()));
           ENSURE (siz >= index().size());
           return siz != index().size();
         }
@@ -222,7 +222,7 @@ namespace session {
       PlacementIndex&
       getPlacementIndex()
         {
-          if (mockIndex_ && mockIndex_->isValid())
+          if (mockIndex_ and mockIndex_->isValid())
             return *mockIndex_;
           else
             return IMPL::getPlacementIndex();

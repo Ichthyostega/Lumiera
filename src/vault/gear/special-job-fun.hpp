@@ -63,7 +63,7 @@ namespace gear {
   
   
   /**
-   * Interface: JobFunctor configured to invoke a function a limited number of times. 
+   * Interface: JobFunctor configured to invoke a function a limited number of times.
    */
   class SpecialFunPrototype
     : public NopJobFunctor

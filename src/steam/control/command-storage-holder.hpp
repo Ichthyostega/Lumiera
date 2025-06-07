@@ -172,10 +172,10 @@ namespace control {
         : arguments_()
         , memento_()
         {
-          if (oAh.arguments_->isValid())  // don't clone garbage from invalid arguments 
+          if (oAh.arguments_->isValid())  // don't clone garbage from invalid arguments
             arguments_.template create<ArgHolder> (*oAh.arguments_);
           
-          // memento can be cloned as-is, irrespective of activation state 
+          // memento can be cloned as-is, irrespective of activation state
           memento_.template  create<MemHolder> (*oAh.memento_);
         }
       

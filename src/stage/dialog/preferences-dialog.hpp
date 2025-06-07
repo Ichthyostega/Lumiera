@@ -61,7 +61,7 @@ namespace dialog {
           set_border_width (BorderPadding);
           set_resizable (false);
         
-          // Configure the Cancel and OK buttons    
+          // Configure the Cancel and OK buttons
           add_button (Stock::CANCEL, RESPONSE_CANCEL);
           add_button (Stock::OK, RESPONSE_OK);
         

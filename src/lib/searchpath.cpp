@@ -54,13 +54,13 @@ namespace lib {
   
   /** @internal helper to replace all $ORIGIN prefixes in a given string
    *   by the directory holding the current executable
-   *  @note also picks ORIGIN, $ORIGIN/, ORIGIN/ 
+   *  @note also picks ORIGIN, $ORIGIN/, ORIGIN/
    */
   string
   replaceMagicLinkerTokens (string const& src)
   {
     static const regex PICK_ORIGIN_TOKEN{"\\$?ORIGIN/?", regex::optimize};
-    static const string expandedOriginDir  
+    static const string expandedOriginDir
       = findExePath().parent_path().generic_string() + "/";
     
     return regex_replace (src, PICK_ORIGIN_TOKEN, expandedOriginDir);

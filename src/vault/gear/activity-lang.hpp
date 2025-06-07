@@ -61,7 +61,7 @@ namespace gear {
    *   ** λ-post : hand over a chain of Activities for (time bound) activation
    *   ** λ-work : signal start of media processing and then leave »management mode«
    *   ** λ-done : signal completion of media processing
-   *   ** λ-tick : activate an internal heartbeat and scheduler maintenance hook 
+   *   ** λ-tick : activate an internal heartbeat and scheduler maintenance hook
    * 
    * @see Activity
    * @see SchedulerActivity_test

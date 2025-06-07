@@ -29,10 +29,10 @@ namespace builder {
   
   /**
    * Connection Manager: used to build the connections between render engine nodes
-   * if these nodes need to cooperate besides the normal "data pull" operation. 
-   * Esp. the Connection Manager knows how to wire up the effect's parameters 
+   * if these nodes need to cooperate besides the normal "data pull" operation.
+   * Esp. the Connection Manager knows how to wire up the effect's parameters
    * with the corresponding ParamProviders (automation) in the Session.
-   * Questions regarding the possibility of a media stream connection are 
+   * Questions regarding the possibility of a media stream connection are
    * delegated internally to the STypeManager.
    * 
    * The primary service of the connection manager is to accept a wiring request

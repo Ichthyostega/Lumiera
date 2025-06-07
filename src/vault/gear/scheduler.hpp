@@ -88,7 +88,7 @@
  ** @todo WIP 11/2024 »Playback Vertical Slice«
  **     - initial version of Scheduler was built and validated by \ref scheduler-stress-test.cpp
  **     - now awaiting integration with Render-Node invocation and Job-Planning
- **     - very likely we'll extract a Scheduler-Interface (and this file then becomes a service-impl) 
+ **     - very likely we'll extract a Scheduler-Interface (and this file then becomes a service-impl)
  */
 
 

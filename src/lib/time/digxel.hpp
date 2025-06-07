@@ -109,7 +109,7 @@ namespace time {
         maxlen()  const
           {
             return len;
-          } 
+          }
         
         CBuf
         show (NUM val)
@@ -127,9 +127,9 @@ namespace time {
       };
     
     
-    /** 
+    /**
      * default configured Formatter implementations
-     * for some of the basic numeric types 
+     * for some of the basic numeric types
      */
     template<typename NUM>
     struct Formatter;
@@ -173,11 +173,11 @@ namespace time {
         HourFormatter() : PrintfFormatter<int,9>("%2d") { }
       };
     
-      
+    
     struct SignFormatter
       {
         void clear()          {  }
-        size_t maxlen() const { return 1; }        
+        size_t maxlen() const { return 1; }
         CBuf show (int val)   { return val<0? "-":" "; }
       };
     
@@ -202,14 +202,14 @@ namespace time {
    * - stores and these given value numerically
    * - will then format these numbers and cache the formatted representation
    * - can store and invoke a mutation functor to pre-process values on setting
-   * 
+   *
    * @note comparisons are assumed to be not performance relevant
    * @param NUM numeric type to be used for the value
    * @param FMT a formatter and buffer holder type
    * @see digxel::Formatter default printf based formatter
    * @see lib::time::TCode
    * @see Digxel_test
-   * 
+   *
    */
     template< typename NUM
             , class FMT  = digxel::Formatter<NUM>
@@ -324,7 +324,7 @@ namespace time {
       storeSign (int val)
         {
           setValueRaw (val<0? -1:+1);
-        } 
+        }
       
     public:
       Signum()

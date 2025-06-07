@@ -416,7 +416,7 @@ namespace diff{
       operator== (GenNode const& n1, GenNode const& n2)
       {
         return n1.idi == n2.idi
-            && n1.data.matchData(n2.data);
+           and n1.data.matchData(n2.data);
       }
       
       friend bool
@@ -640,9 +640,9 @@ namespace diff{
       operator== (ScopeExplorer const& s1, ScopeExplorer const& s2)
       {
         return not s1.scopes_.empty()
-            && not s2.scopes_.empty()
-            && s1.scopes_.size() == s2.scopes_.size()
-            && s1.yield() == s2.yield();
+           and not s2.scopes_.empty()
+           and s1.scopes_.size() == s2.scopes_.size()
+           and s1.yield() == s2.yield();
       }
     };
   

@@ -6,7 +6,7 @@ Lumiera Developers Meeting
 March 9, 2011 on +#lumiera+ +
 ^20:00 GMT - 23:30 GMT^
 
-//Menu: label 2011-03-09 
+//Menu: label 2011-03-09
 
 __Participants__
 
@@ -32,7 +32,7 @@ How do we proceed with the graphical layout?
     ...
     21:50 <ichthyo> fsiddi: I liked the way you provided a slightly larger content area
                                for the tutorial part
-    
+
 image:{img}/meetings/2011-03-09-mockup_dev_1.jpg["Website Proposal Mockup number 3", width=128, link="{img}/meetings/2011-03-09-mockup_dev_1.jpg"]
 
 image:{img}/meetings/2011-03-09-mockup_dev_2.jpg["Website Proposal Mockup number 2", width=128, link="{img}/meetings/2011-03-09-mockup_dev_2.jpg"]
@@ -157,7 +157,7 @@ Hermann has written an rfc for version numbers.
     23:30 <ichthyo> also, it is more in line with the "extreme programming" style
     23:30 <ichthyo> i.e. don't do too disruptive changes
     23:30 <cehteh> if you want 'pre' or 'rc'
-    23:30 <ichthyo> but rather refactor often 
+    23:30 <ichthyo> but rather refactor often
     23:30 <skangas_> OK.
     23:31 <ichthyo> there is onre concern though
     23:31 <ichthyo> there *needs* to be some stability then
@@ -199,7 +199,7 @@ Hermann has written an rfc for version numbers.
     23:27 <cehteh> (eventually or maybe we might even put tests/bugs there which prevent
                    certain staging actions, finally all integration and complete releases
                    could be automatized)
-    23:26 <cehteh> remember in test.sh i reserved the 90-99* area for 'bugs' 
+    23:26 <cehteh> remember in test.sh i reserved the 90-99* area for 'bugs'
     23:26 <cehteh> we may put some blocking tests there which prevent staging
 
 Next meeting

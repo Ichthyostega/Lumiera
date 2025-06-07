@@ -19,27 +19,27 @@
  ** while hiding the actual signature behind an common interface ("type erasure").
  ** The usual solution based on subclassing has the downside of requiring separate
  ** storage for the concrete functor object, which might become problematic when
- ** dealing with lots of functor objects. 
- ** 
+ ** dealing with lots of functor objects.
+ **
  ** Especially when dealing with std::function objects, all of the type differences
  ** are actually encoded into 3 internal pointers, thus yielding the same size for
  ** all various types of functors. Building on this observation, we can create an
  ** common container object to store the varying functors inline, while hiding the
  ** actual signature.
- ** 
+ **
  ** There remains the problem of re-accessing the concrete functor later on. As
  ** C++ has only rudimental introspection capabilities, we can only rely on the
  ** usage context to provide the correct function signature; only when using a
  ** virtual function for the re-access, we can perform at least a runtime-check.
- ** 
+ **
  ** Thus there are various flavours for actually implementing this idea, and
  ** picking a suitable implementation depends largely on the context. Thus we
  ** provide a common frontend for access and expect the client code to pick
  ** a suitable implementation policy.
- ** 
+ **
  ** @see control::Mutation usage example
  ** @see function-erasure-test.cpp
- ** 
+ **
  */
 
 
@@ -65,11 +65,11 @@ namespace meta{
    * Generic wrapper carrying a function object
    * while hiding the actual function signature
    * - create it using a function ref or pointer
-   * - the StoreFunction-policy also allows 
+   * - the StoreFunction-policy also allows
    *   creation based on an existing function object
    * - re-access the functor or function ref
    *   using the templated \c getFun()
-   *   
+   *
    * @param FH policy to control the implementation.
    *        In most cases, you should use "StoreFunction"
    * @note not statically typesafe. Depending on
@@ -96,14 +96,14 @@ namespace meta{
   /* ====== Policy classes ====== */
   
   typedef function<void(void)> FunVoid;
-  typedef lib::InPlaceAnyHolder< sizeof(FunVoid)                       // same size for all function objects 
+  typedef lib::InPlaceAnyHolder< sizeof(FunVoid)                       // same size for all function objects
                                , lib::InPlaceAnyHolder_unrelatedTypes  // no common base class!
                                > FunHolder;
-  typedef lib::InPlaceAnyHolder< sizeof(void*) 
+  typedef lib::InPlaceAnyHolder< sizeof(void*)
                                , lib::InPlaceAnyHolder_unrelatedTypes
                                > FunPtrHolder;
   
-                               
+  
   /**
    * Policy for FunErasure: store an embedded std::function
    * Using this policy allows to store arbitrary complex functor objects
@@ -137,7 +137,7 @@ namespace meta{
    * Policy for FunErasure: store a bare function pointer.
    * Using this policy allows to store a conventional function ptr,
    * while still being able to re-access it later with run-time type check.
-   * The price to pay is vtable access. 
+   * The price to pay is vtable access.
    */
   class StoreFunPtr
     : public FunPtrHolder

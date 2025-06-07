@@ -59,7 +59,7 @@ namespace time {
   
   
   
-  /* Warning: all the classes defined here must be of size below MUTATION_IMPL_SIZE */ 
+  /* Warning: all the classes defined here must be of size below MUTATION_IMPL_SIZE */
   
   /**
    * concrete time value mutation:
@@ -275,7 +275,7 @@ namespace time {
   
   /** Convenience factory to yield a simple Mutation changing the absolute start time.
    *  This whole procedure might look quite inefficient, but actually most of the
-   *  abstractions are removed at runtime, leaving only a single indirection 
+   *  abstractions are removed at runtime, leaving only a single indirection
    *  through the VTable of the Mutation Interface.
    * @throw  error::Logic when attempting to change the (non existent) start time of a Duration
    * @return EncapsulatedMutation, which is an "polymorphic value object",
@@ -348,7 +348,7 @@ namespace time {
    *  value later will be cast into any kind of time code or materialised
    *  otherwise, the quantised value's own grid will apply as well,
    *  resulting in the net result of two quantisation operations
-   *  being applied in sequence.  
+   *  being applied in sequence.
    * @param adjustment number of grid steps to apply as offset
    * @param grid reference to a concrete grid instance
    * @note there is a variant of this function, using just a

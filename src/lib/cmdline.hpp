@@ -1,5 +1,5 @@
 /*
-  CMDLINE.hpp  -  abstraction of the usual commandline, a sequence of strings 
+  CMDLINE.hpp  -  abstraction of the usual commandline, a sequence of strings
 
    Copyright (C)
      2008,            Hermann Vosseler <Ichthyostega@web.de>
@@ -43,7 +43,7 @@ namespace lib {
    * Abstraction of the usual `int argc, int** argv`-Commandline,
    * to be able to treat it as a vector of strings. Inherits from
    * vector<std::string>, but provides convenient conversions to
-   * string (joining delimited by space)... 
+   * string (joining delimited by space)...
    */
   class Cmdline : public VectS
     {
@@ -57,7 +57,7 @@ namespace lib {
       // inherited ctors
       template <class In>
       Cmdline (In first, In last) : VectS (first,last) {}
-      Cmdline () : VectS () {} 
+      Cmdline () : VectS () {}
       
     };
    

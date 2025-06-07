@@ -37,7 +37,7 @@ namespace vault {
 namespace test {
   
   /**
-   * Mock implementation of the MediaAccessFacade. 
+   * Mock implementation of the MediaAccessFacade.
    * Provides preconfigured responses for some Test-Filenames.
    */
   class MediaAccessMock

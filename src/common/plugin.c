@@ -12,7 +12,7 @@
 * *****************************************************************/
 
 
-/** @file plugin.c 
+/** @file plugin.c
  ** Plugin loader implementation.
  */
 

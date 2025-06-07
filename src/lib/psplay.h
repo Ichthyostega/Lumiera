@@ -3,7 +3,7 @@
 
    Copyright (C)       (contributed to CinelerraCV)
      2004-2006,       Christian Thaeter <chth@gmx.net>
-   Copyright (C)     
+   Copyright (C)
      2007, 2008,      Christian Thaeter <ct@pipapo.org>
 
   **Lumiera** is free software; you can redistribute it and/or modify it

@@ -248,7 +248,7 @@ namespace ctrl {
              ///////////////////////////////////////////////////////////////////////////////////////TICKET #1076  find out how to handle this properly
              ///////////////////////////////////////////////////////////////////////////////////////TICKET #1097  clarify the role and behaviour of Panels
           /* unfinished, disabled by Joel with changeset 6151415 (from 4.4.2009)
-           * 
+           *
           REQUIRE(currentWindow.assetsPanel != NULL);
           REQUIRE(currentWindow.timelinePanel != NULL);
           REQUIRE(currentWindow.viewerPanel != NULL);

@@ -94,10 +94,10 @@ namespace lumiera {
    *  Thus, the individual resolution function can (re)establish a
    *  typed context and downcast the Goal appropriately
    */
-  PReso  
+  PReso
   QueryResolver::issue (Goal const& query)  const
   {
-    REQUIRE (!dispatcher_->empty(), "attempt to issue a query without having installed any resolver (yet)");  
+    REQUIRE (!dispatcher_->empty(), "attempt to issue a query without having installed any resolver (yet)");
     
     if (!canHandle (query))
       throw lumiera::error::Invalid ("unable to resolve this kind of query"); //////////////////////////////////TICKET #197

@@ -26,14 +26,14 @@ namespace steam {
 namespace mobject {
 namespace session {
   
-  RelativeLocation* 
+  RelativeLocation*
   RelativeLocation::clone ()  const
-  { 
+  {
     return new RelativeLocation (*this);
   }
   
   
-  void 
+  void
   RelativeLocation::intersect (LocatingSolution& solution)  const
   {
     LocatingPin::intersect (solution);

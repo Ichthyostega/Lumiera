@@ -36,7 +36,7 @@ namespace vault {
    * Global access point for starting a script within Lumiera application
    * context. 
    * 
-   * @todo build the (LUA,C)-script runner. 
+   * @todo build a suitable binding interface and a script runner.
    * 
    */
   struct ScriptRunnerFacade
@@ -51,7 +51,7 @@ namespace vault {
       //////////////////TODO: provide a function for accessing this interface
       
     };
-    
+  
   
   
 } // namespace vault

@@ -116,7 +116,7 @@ Tasks
 ~~~~~
 // List what needs to be done to implement this Proposal:
 * identify what impedes such a modern setup procedure ([green]#✔ done#)
-* rectify the folder structure created in the build target 
+* rectify the folder structure created in the build target
   directory ([green]#✔ done#)
 * build the executables in a way to allow relative resolution of the
   internal shared modules ([green]#✔ done#)
@@ -176,7 +176,7 @@ breeds on an academic setup and really excels with small nifty commandline utils
 combined by pipes, each specialised to do a single thing very well. These utils
 are more like the objects within our implementation. The concept of large
 application software bundles and desktop software was always a bit alien
-within the classic UNIX environment. 
+within the classic UNIX environment.
 
 
 

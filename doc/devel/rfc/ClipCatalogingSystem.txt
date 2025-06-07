@@ -122,7 +122,7 @@ Parked until someone cares
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 Decided on Developer meeting
 
-    Do 14 Apr 2011 02:52:30 CEST Christian Thaeter 
+    Do 14 Apr 2011 02:52:30 CEST Christian Thaeter
 
 
 Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]

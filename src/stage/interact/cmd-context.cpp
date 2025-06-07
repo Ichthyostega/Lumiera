@@ -18,7 +18,7 @@
  ** @todo as of 3/2021 the first prototype for a dragging gesture is shaped
  **       The scheme for addressing gestures and scopes is nothing but guesswork currently,
  **       since we mostly lack any real-world implementation and haven't done any detailed
- **       analysis regarding the actual gestures to be implemented. Only the concept is clear. 
+ **       analysis regarding the actual gestures to be implemented. Only the concept is clear.
  ** 
  ** @see TODO___cmd-access-test.cpp
  ** 

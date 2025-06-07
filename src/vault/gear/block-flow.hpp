@@ -57,7 +57,7 @@
  ** events_ are registered, and on clean-up the actual usage ratio of each Epoch is
  ** detected, leading to exponentially damped adjustments of the actual Epoch duration.
  ** The increasing of capacity on overflow and the exponential targeting of an optimal
- ** fill factor counteract each other, typically converging after some »duty cycles«. 
+ ** fill factor counteract each other, typically converging after some »duty cycles«.
  ** 
  ** @remark 7/2023 this implementation explicates the intended memory management pattern,
  **         yet a lot more measurements and observations with real-world load patterns

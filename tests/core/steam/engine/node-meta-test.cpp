@@ -165,7 +165,7 @@ namespace test  {
           auto fade_op = [](double mix, tuple<int*,ulong*> src, uint64_t* res)
                           {
                             auto [srcA,srcB] = src;
-                            *res = uint64_t(abs(*srcA * mix + (1-mix) * int64_t(*srcB))); 
+                            *res = uint64_t(abs(*srcA * mix + (1-mix) * int64_t(*srcB)));
                           };
           
           // Wiring for the Mix, building up three ports
@@ -270,7 +270,7 @@ namespace test  {
           
           // Verify detailed port-to-port connectivity
           CHECK (is_linked(nM).port(0).to(watch(nA).ports()[0]) == true );               // Node-nM connected within Port-0 to Port-0 of Node-nA
-          CHECK (is_linked(nM).port(0).to(watch(nA).ports()[1]) == false);               //         ......but not connected to Port-1 of Node-nA 
+          CHECK (is_linked(nM).port(0).to(watch(nA).ports()[1]) == false);               //         ......but not connected to Port-1 of Node-nA
           CHECK (is_linked(nM).port(0).to(watch(nB).ports()[0]) == true );
           CHECK (is_linked(nM).port(0).to(watch(nB).ports()[1]) == false);
           CHECK (is_linked(nM).port(0).to(watch(nB).ports()[2]) == false);

@@ -43,8 +43,8 @@ namespace lib {
       
       using ChPredicate = std::function<bool(string::value_type)> ;
       
-      ChPredicate is_alpha = boost::algorithm::is_alpha();    
-      ChPredicate is_upper = boost::algorithm::is_upper();    
+      ChPredicate is_alpha = boost::algorithm::is_alpha();
+      ChPredicate is_upper = boost::algorithm::is_upper();
     } // local defs
     
     
@@ -52,7 +52,7 @@ namespace lib {
     normaliseID (string& id)
     {
       id = util::sanitise(id);
-      if (isnil(id) || !is_alpha (id[0]))
+      if (isnil(id) or not is_alpha (id[0]))
         id.insert(0, "o");
       
       
@@ -84,7 +84,7 @@ namespace lib {
     }
     
     /** (preliminary) helper: instead of really parsing and evaluating the terms,
-     *  just do a regular expression match to extract the literal argument 
+     *  just do a regular expression match to extract the literal argument
      *  behind the given predicate symbol. e.g calling
      *  `extractID ("stream", "id(abc), stream(mpeg)")` yields \c "mpeg"
      */
@@ -96,10 +96,10 @@ namespace lib {
         return (match[1]);
       else
         return "";
-    } 
+    }
     
     
-    /** (preliminary) helper: cut a term with the given symbol. 
+    /** (preliminary) helper: cut a term with the given symbol.
      *  The term is matched, removed from the original string and returned
      *  @note parameter termString will be modified!
      *  @todo as it seems we're not using the extracted term anymore,
@@ -126,19 +126,19 @@ namespace lib {
       smatch match;
       return regex_search (queryString, match, getTermRegex (sym));
     }
-  
     
-    /** @note this is a very hackish preliminary implementation. 
-     *  The regex used will flounder when applied to nested terms. 
+    
+    /** @note this is a very hackish preliminary implementation.
+     *  The regex used will flounder when applied to nested terms.
      *  We need a real parser for predicate logic terms (which we
      *  probably get for free when we embed a prolog system)...
      */
-    uint 
+    uint
     countPred (const string& q)
     {
       uint cnt (0);
       sregex_iterator end;
-      for (sregex_iterator i (q.begin(),q.end(), FIND_PREDICATE); 
+      for (sregex_iterator i (q.begin(),q.end(), FIND_PREDICATE);
            i != end; ++i)
         ++cnt;
       return cnt;

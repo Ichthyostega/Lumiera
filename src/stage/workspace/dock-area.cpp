@@ -75,10 +75,10 @@ namespace workspace {
   
   DockArea::~DockArea()
   {
-      ///////////////////////////////////////////////////////TICKET #195 : violation of policy, dtors must not do any work 
+      ///////////////////////////////////////////////////////TICKET #195 : violation of policy, dtors must not do any work
       ///////////////////////////////////////////////////////TICKET #172 : observed as a reason for crashes when closing the GUI. It was invoked after end of main, when the GUI as already gone.
     
-#if false ///////////////////////////////////////////////////TICKET #937 : disabled for GTK-3 transition. TODO investigate why this logic existed...    
+#if false ///////////////////////////////////////////////////TICKET #937 : disabled for GTK-3 transition. TODO investigate why this logic existed...
       ///////////////////////////////////////////////////////TICKET #1027
     for(int i = 0; i < 4; i++)
       if(dockPlaceholders_[i])
@@ -96,7 +96,7 @@ namespace workspace {
       ///////////////////////////////////////////////////////TICKET #1027 : investigate what would be the proper way to do this with gdlmm (C++ binding). No direct usage of GDL !
 
     REQUIRE(dockPlaceholders_[0] == NULL && dockPlaceholders_[1] == NULL &&
-      dockPlaceholders_[2] == NULL && dockPlaceholders_[3] == NULL);
+            dockPlaceholders_[2] == NULL && dockPlaceholders_[3] == NULL);
     dockPlaceholders_[0] = GDL_DOCK_PLACEHOLDER(gdl_dock_placeholder_new(
       "ph1", GDL_DOCK_OBJECT(dock_.gobj()), GDL_DOCK_TOP, FALSE));
     dockPlaceholders_[1] = GDL_DOCK_PLACEHOLDER(gdl_dock_placeholder_new(
@@ -105,8 +105,8 @@ namespace workspace {
       "ph3", GDL_DOCK_OBJECT(dock_.gobj()), GDL_DOCK_LEFT, FALSE));
     dockPlaceholders_[3] = GDL_DOCK_PLACEHOLDER(gdl_dock_placeholder_new(
       "ph4", GDL_DOCK_OBJECT(dock_.gobj()), GDL_DOCK_RIGHT, FALSE));
-    ENSURE(dockPlaceholders_[0] && dockPlaceholders_[1] &&
-      dockPlaceholders_[2] && dockPlaceholders_[3]);
+    ENSURE(dockPlaceholders_[0] and dockPlaceholders_[1] and
+      dockPlaceholders_[2] and dockPlaceholders_[3]);
     
     createPanels();
   }
@@ -176,8 +176,8 @@ namespace workspace {
   void
   DockArea::switchPanel (panel::Panel& old_panel, const int description_index)
   {
-    REQUIRE (description_index >= 0 &&
-             description_index < getPanelDescriptionCount());
+    REQUIRE (description_index >= 0);
+    REQUIRE (description_index < getPanelDescriptionCount());
     
     // Get the dock item
     Gdl::DockItem &dock_item = old_panel.getDockItem();
@@ -231,7 +231,8 @@ namespace workspace {
   const gchar*
   DockArea::getPanelStockID (int index)
   {
-    REQUIRE (index >= 0 && index < getPanelDescriptionCount());
+    REQUIRE (index >= 0);
+    REQUIRE (index < getPanelDescriptionCount());
     return panelDescriptionList[index].getStockID();
   }
   
@@ -239,7 +240,8 @@ namespace workspace {
   const char*
   DockArea::getPanelTitle (int index)
   {
-    REQUIRE (index >= 0 && index < getPanelDescriptionCount());
+    REQUIRE (index >= 0);
+    REQUIRE (index < getPanelDescriptionCount());
     return panelDescriptionList[index].getTitle();
   }
   
@@ -278,7 +280,8 @@ namespace workspace {
   panel::Panel*
   DockArea::createPanel_by_index (const int index)
   {
-    REQUIRE(index >= 0 && index < getPanelDescriptionCount());
+    REQUIRE (index >= 0);
+    REQUIRE (index < getPanelDescriptionCount());
     
     // Make a unique name for the panel
     char name[5];
@@ -370,7 +373,7 @@ namespace workspace {
   DockArea::on_panel_shown (panel::Panel* panel)
   {
     REQUIRE(panel);
-    if(panel->is_shown() || panel->is_iconified()) return;
+    if (panel->is_shown() or panel->is_iconified()) return;
     
     removePanel(panel);
   }

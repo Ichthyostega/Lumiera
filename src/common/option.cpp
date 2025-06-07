@@ -67,15 +67,15 @@ namespace lumiera {
       op::positional_options_description posopt;
       posopt.add("session", 1);   // ... can be given as 1st positional parameter
       
-      op::parsed_options parsed = 
+      op::parsed_options parsed =
         op::command_line_parser (cmdline)
           .options (syntax)
           .positional(posopt)
           .allow_unregistered()
-          .run();  
+          .run();
       
       op::store (parsed, parameters);
-      op::notify(parameters);   
+      op::notify(parameters);
       
       // remove all recognised options from original cmdline vector
       cmdline = op::collect_unrecognized(parsed.options, op::include_positional);
@@ -104,14 +104,14 @@ namespace lumiera {
   
   
   /** @return the name of the session file to open */
-  const string 
+  const string
   Option::getSessName ()
     {
       ASSERT (parameters.count ("session"));
       return parameters["session"].as<string>();
     }
   
-  /** @return an (maybe empty) vector 
+  /** @return an (maybe empty) vector
    *  containing all specified scripts to run. */
   const VectS
   Option::getScripts ()
@@ -119,7 +119,7 @@ namespace lumiera {
       return parameters["script"].as<VectS>();
     }
   
-  /** @return an (maybe empty) vector 
+  /** @return an (maybe empty) vector
    *  containing any additional Config definitions to set. */
   const VectS
   Option::getConfigDefs ()
@@ -128,7 +128,7 @@ namespace lumiera {
     }
   
   /** @return \c true if --headless switch was given */
-  bool 
+  bool
   Option::isHeadless ()
     {
       return parameters["headless"].as<bool>();
@@ -146,13 +146,13 @@ namespace lumiera {
     }
   
   
-
-  ostream& 
+  
+  ostream&
   operator<< (ostream& os, const Option& ops)
     {
       return os << ops.syntax;
     }
-
+  
   
   
 } // namespace lumiera

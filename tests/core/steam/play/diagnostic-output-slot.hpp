@@ -81,9 +81,9 @@ namespace play {
   }
   
   
-  /** 
+  /**
    * Diagnostic output connection for a single channel,
-   * allowing to track generated frames and verify 
+   * allowing to track generated frames and verify
    * the processing protocol for output buffers.
    */
   class TrackingInMemoryBlockSequence
@@ -129,7 +129,7 @@ namespace play {
       /* === Connection API === */
       
       BuffHandle
-      claimBufferFor(FrameID frameNr) 
+      claimBufferFor(FrameID frameNr)
         {
           TRACE (test, "Con=%p : lock buffer for frame-#%lu", this, frameNr);
           REQUIRE (!closed_);
@@ -411,7 +411,7 @@ namespace play {
           diagn::Block const *block = accessSequence(channel)
                                         .accessEmittedBuffer(outputFrame);
           return block
-              && block->was_used();
+             and block->was_used();
         }
       
       
@@ -421,7 +421,7 @@ namespace play {
           diagn::Block const *block = accessSequence(channel)
                                         .accessEmittedBuffer(outputFrame);
           return block
-              && block->was_closed();
+             and block->was_closed();
         }
     };
   

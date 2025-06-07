@@ -129,7 +129,7 @@ namespace lib {
   template<class BA>
   struct InPlaceAnyHolder_useCommonBase
     {
-      typedef BA Base;
+      using Base = BA;
       
       template<class SUB>
       static Base*
@@ -159,7 +159,7 @@ namespace lib {
    */
   struct InPlaceAnyHolder_unrelatedTypes
     {
-      typedef void Base;
+      using Base = void;
       
       template<class SUB>
       static void*
@@ -184,7 +184,7 @@ namespace lib {
    * or cleared afterwards, and this #empty() state may be detected
    * at runtime. In a similar vein, when the stored object has a
    * `bool` validity check, this can be accessed though #isValid().
-   * Moreover `!empty() && isValid()` may be tested as by `bool`
+   * Moreover `not empty() and isValid()` may be tested as by `bool`
    * conversion of the Holder object. The whole compound
    * is copyable if and only if the contained object is copyable.
    * 
@@ -200,7 +200,7 @@ namespace lib {
     >
   class InPlaceAnyHolder
     {
-      typedef typename AccessPolicy::Base * BaseP;
+      using BaseP = typename AccessPolicy::Base *;
       
       /** Inner capsule managing the contained object (interface) */
       struct Buffer
@@ -451,8 +451,8 @@ namespace lib {
       template<class SUB>
       SUB& get()  const
         {
-          typedef const Buffer* Iface;
-          typedef const Buff<SUB> * Actual;
+          using Iface = const Buffer *;
+          using Actual = const Buff<SUB> *;
           Iface interface = &buff();
           Actual actual = dynamic_cast<Actual> (interface);
           if (actual)

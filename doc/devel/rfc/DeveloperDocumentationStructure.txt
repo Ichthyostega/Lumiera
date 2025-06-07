@@ -10,7 +10,7 @@ Developer Documentation Structure
 *Proposed by*   Cehteh + Ichthyo
 -------------------------------------
 
-******************************************************************************** 
+********************************************************************************
 We describe here how to bring the Lumiera Developer Documentation into an simple
 yet systematic structure. Previously we accumulated a lot Documentation which
 ended in quite a few different places. This will gradually be tidied up.
@@ -43,7 +43,7 @@ The Lumiera (developer) documentation shall be organised in the following way:
      links into the relevant technical detail documentation.
    . the extensive link:{ldoc}/technical/[technical documentation]
      is comprised of several bodies of information existing side by side
-     
+
      - there is a hierarchy of written documentation to explain the workings
        of subsystems and components. Typically, these writings emerge from
        working notes and design drafts.
@@ -53,10 +53,10 @@ The Lumiera (developer) documentation shall be organised in the following way:
        which can be comprehended by reference to mailing list threads
        and IRC transcripts
      - there is a section with link:{ldoc}/technical/howto/[developer HOWTOs and tutorials]
-     
+
    . the documentation of technical details is always kept close to the
      actual source
-     
+
      - file level link:{doxy}/[Doxygen] comments serve as overview and explanations
        of 'key abstractions' and 'components'.
      - unit tests are often written in a ``narative'' fashion and
@@ -76,7 +76,7 @@ Tasks
    [red yellow-background]#TBD#
  * Create a facility to support the cross-linking between the various kinds of documents
    [yellow-background]#WIP#
- 
+
 
 
 Pros
@@ -84,7 +84,7 @@ Pros
 // add just a fact list/enumeration which make this suitable:
 
 Much easier entry to the whole developer documentation. Reading the »Inner Core«
-document should be sufficient to get a good idea about the Lumiera design and 
+document should be sufficient to get a good idea about the Lumiera design and
 layout. All details are linked from there and thus easily findable.
 
 
@@ -114,9 +114,9 @@ Rationale
 ---------
 //rationale: Describe why it should be done *this* way:
 
-This approach fits nicely into our overall infrastructure and the way we wanted 
-to do things. Using git and asciidoc mostly, making the developer documentation 
-part of the source tree and reasonable easy available/maintainable to 
+This approach fits nicely into our overall infrastructure and the way we wanted
+to do things. Using git and asciidoc mostly, making the developer documentation
+part of the source tree and reasonable easy available/maintainable to
 developers.
 
 //Conclusion

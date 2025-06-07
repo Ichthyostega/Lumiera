@@ -65,7 +65,7 @@ namespace lumiera {
      * @todo WIP-WIP-WIP 6/2011
      * @note Lumiera is not yet able actually to deliver rendered data.
      * @todo there should be an accompanying CL Interface defined for
-     *       the Lumiera interface system, so the player can be 
+     *       the Lumiera interface system, so the player can be
      *       accessed from external clients. This was left out
      *       for now, as we don't have either plugins, nor
      *       any script running capabilities yet. (5/2011)
@@ -86,13 +86,13 @@ namespace lumiera {
          * and started with a fixed set of output slots. started with a specific
          * output size, format and framerate. It is a handle to a calculation process,
          * which is about to produce a stream of frames and push them to the outputs.
-         * 
+         *
          * The Lifecycle of the referred playback process is managed automatically
          * through this handle (by ref count). Client code is supposed to use the
          * API on this handle to navigate and control the playback mode.
-         * 
+         *
          * @ingroup player
-         * @see handle.hpp 
+         * @see handle.hpp
          * @see player-service.cpp implementation
          */
         class Controller

@@ -126,7 +126,7 @@ namespace test{
           CHECK (0 == garN.size());
           
           typedef function<bool(string::value_type)> ChPredicate;
-          ChPredicate is_OK (is_lower() || is_digit());
+          ChPredicate is_OK (is_lower() or is_digit());
           
           string garM = randStr(1000000);
           for_each (garM, is_OK);

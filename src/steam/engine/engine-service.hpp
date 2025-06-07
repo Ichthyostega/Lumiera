@@ -73,7 +73,7 @@ namespace engine{
   using mobject::ModelPort;
   using steam::play::Timings;
   
-  typedef steam::play::OutputSlot::Allocation OutputConnection;
+  using OutputConnection = steam::play::OutputSlot::Allocation;
   
   
   
@@ -117,8 +117,8 @@ namespace engine{
         };
       
       
-      typedef lib::polyvalue::CloneValueSupport<Quality> _Clonable_QoS_Strategy;
-      typedef lib::PolymorphicValue<Quality, QoS_IMPL_SIZE, _Clonable_QoS_Strategy> QoS_Definition;
+      using _Clonable_QoS_Strategy = lib::polyvalue::CloneValueSupport<Quality>;
+      using  QoS_Definition        = lib::PolymorphicValue<Quality, QoS_IMPL_SIZE, _Clonable_QoS_Strategy>;
       
       static QoS_Definition  QoS_DEFAULT;
       static QoS_Definition  QoS_BACKGROUND;

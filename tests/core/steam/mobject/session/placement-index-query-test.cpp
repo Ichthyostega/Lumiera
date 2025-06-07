@@ -1,5 +1,5 @@
 /*
-  PlacementIndexQuery(Test)  -  querying the placement index through the generic query interface 
+  PlacementIndexQuery(Test)  -  querying the placement index through the generic query interface
 
    Copyright (C)
      2009,            Hermann Vosseler <Ichthyostega@web.de>
@@ -41,9 +41,9 @@ namespace test    {
   /************************************************************************//**
    * @test accessing the PlacementIndex through the generic query interface,
    *       for discovering scope contents and containing scope.
-   *       
+   *
    * @todo change that to use a more realistic test session, based on the actual model types   //////////////// TICKET #532
-   * 
+   *
    * @see  mobject::session::PlacementIndex
    * @see  mobject::session::QueryResolver
    * @see  mobject::session::ContentsQuery
@@ -52,7 +52,7 @@ namespace test    {
     {
       
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           checkQueryResolver();
           checkQueryOperations();
@@ -67,8 +67,8 @@ namespace test    {
           
           CHECK (isSameObject (resolver1, resolver2));
           
-          PlacementMO& root1 = index->getRoot();          
-          PlacementMO& root2 = SessionServiceExploreScope::getScopeRoot();          
+          PlacementMO& root1 = index->getRoot();
+          PlacementMO& root2 = SessionServiceExploreScope::getScopeRoot();
           CHECK (isSameObject (root1, root2));
           
           PlacementMO& elm1 = *ContentsQuery<TestSubMO2>(root1).resolveBy(resolver1);
@@ -85,7 +85,7 @@ namespace test    {
         {
           // Prepare an (test)Index (dummy "session")
           PPIdx index = build_testScopes();
-          PlacementMO& root = index->getRoot();          
+          PlacementMO& root = index->getRoot();
           PlacementIndexQueryResolver resolver(*index);
           
           cout << "explore contents depth-first..." << endl;
@@ -105,8 +105,8 @@ namespace test    {
           for ( ; result; ++result)
             cout << *result << endl;
         }
-      
     };
+  
   
   
   /** Register this test class... */

@@ -13,7 +13,7 @@ the more RAM and the more/faster CPU's you have the better.
 Nevertheless lower end 32bit machines are supported too.
 
 Secondary targets will be other free operating systems which offer a decent Posix API.
-Porting to other more or less similar platforms will be possible, if -- by coincidence -- 
+Porting to other more or less similar platforms will be possible, if -- by coincidence --
 Someone(TM) helps with porting.
 
 Having said that -- for the time being, the core team won't spend much effort on porting.
@@ -60,7 +60,7 @@ Languages and Tools
    On rare occasions in the past, we _did_ use some GCC extensions, like `typeof()`, but we care for
    workarounds, in case this becomes a problem. Incidentally, `typeof()` is obsoleted by the new
    C++ standard, which provides `decltype()` for this purpose.].
- 
+
 * BOOST (listed below are the Debian package names)
  - libboost-dev (at least *1.67*)
  - libboost-program-options-dev
@@ -69,7 +69,7 @@ Languages and Tools
 * Script languages
  - Python (*2.x*) might still be handy for build scripts.footnote:[SCons supports both Python 2.x
    and Python 3.x transparently. Basically there is no reason to stick to Python 2.x -- just the standard
-   python is not yet switched on Debian/stable, and so we might miss out on some scripts.] 
+   python is not yet switched on Debian/stable, and so we might miss out on some scripts.]
  - bash (some test scripts use bash specific extensions)
 
 Build Tools

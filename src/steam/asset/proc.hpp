@@ -65,9 +65,9 @@ namespace asset {
     public:
       static ProcFactory create;
       
-      virtual const ID<Proc>& getID()  const    ///< @return ID of kind Proc 
-        { 
-          return static_cast<const ID<Proc>& > (Asset::getID()); 
+      virtual const ID<Proc>& getID()  const    ///< @return ID of kind Proc
+        {
+          return static_cast<const ID<Proc>& > (Asset::getID());
         }
       
       typedef StreamType::ImplFacade::DataBuffer Buff;
@@ -77,7 +77,7 @@ namespace asset {
       
       /** resolve any plugin and configuration info
        *  to yield the actual media data processing function.
-       *  @return a function ready to be invoked; either the 
+       *  @return a function ready to be invoked; either the
        *          "real thing" or a suitable placeholder.
        *  @throw lumiera::error::Fatal if unable to provide
        *         any usable function or placeholder. This case
@@ -104,16 +104,16 @@ namespace asset {
   
   
   
-  /** 
+  /**
    * Factory specialised for creating Processor Asset objects.
-   */ 
+   */
   class ProcFactory
     : util::NonCopyable
     {
     public:
       typedef lib::P<asset::Proc> PType;
-       
-      PType operator() (Asset::Ident& key);      ////////////TODO define actual operation 
+      
+      PType operator() (Asset::Ident& key);      ////////////TODO define actual operation
       
     };
   

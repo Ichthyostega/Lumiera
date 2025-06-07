@@ -115,7 +115,7 @@ namespace mobject {
   const char* ON_SESSION_CLOSE ="ON_SESSION_CLOSE";
   
   /**
-   *  LifecycleHook, to perform any state saving, deregistration or de-activation necessary 
+   *  LifecycleHook, to perform any state saving, deregistration or de-activation necessary
    *  before bringing down an existing session. When invoked, the session is still fully valid
    *  and functional, but the GUI/external access has already been closed.
    *  @todo specify how this is related to "saving". Is there a way for subsystems to add

@@ -78,11 +78,11 @@ in general.
 
 The good news is, that:
 
- 1. All commonly used filters are either type 1 or type 2 
+ 1. All commonly used filters are either type 1 or type 2
  (type 3 are more the fun effects)
  2. Filters of type 2 are colormodel agnostic
  3. If a filter of type 1 makes only linear transformations of the color
- vectors (new_color = matrix * old_color), 
+ vectors (new_color = matrix * old_color),
  the matrix can be transformed from e.g. RGB to YUV, so these filters can
  always work in both colorspaces directly
 

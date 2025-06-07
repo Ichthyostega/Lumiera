@@ -121,7 +121,7 @@ namespace util {
   {
     u = 0!=u? u:1;
     auto [d,r] = util::iDiv (num, den);
-    // round to smallest integer fraction, to shake off "number dust" 
+    // round to smallest integer fraction, to shake off "number dust"
     f128 const ROUND_ULP = 1 + 1/(f128(std::numeric_limits<int64_t>::max()) * 2);
     
     // construct approximation quantised to 1/u

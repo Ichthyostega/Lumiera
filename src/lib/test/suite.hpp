@@ -15,10 +15,10 @@
  ** Building and running a suite of tests, implemented as test classes.
  ** This simple test suite runner is intended to be linked into a standalone C++ application,
  ** allowing to invoke individual tests by ID, invoking groups of tests and producing a
- ** report of all registered tests. Registration of individual testcases happens 
+ ** report of all registered tests. Registration of individual testcases happens
  ** automatically through static test::Launcher instances.
  ** 
- ** @todo as of 9/09, the implementation seems OKish but a bit clumsy. See Ticket #289 
+ ** @todo as of 9/09, the implementation seems OKish but a bit clumsy. See Ticket #289
  ** 
  ** @see HelloWorld_test
  ** @see test::Test
@@ -46,7 +46,7 @@ namespace test {
   class Test;
   class Launcher;
   
-  typedef std::vector<string> & Arg; 
+  using Arg = std::vector<string>&;
   
   
   /**

@@ -59,7 +59,7 @@ namespace session {
    * specific MObject type given as template parameter. To ensure
    * this, an additional ContentFilter is applied on the yielded
    * results; this filter function is constructed by a virtual
-   * call when actually issuing the query. 
+   * call when actually issuing the query.
    */
   template<class MO>
   class DiscoveryQuery
@@ -68,7 +68,7 @@ namespace session {
       typedef Query<Placement<MO>> _Query;
       
       
-    public:      
+    public:
       typedef typename _Query::iterator iterator;
       
       typedef function<bool(PlacementMO const&)> ContentFilter;
@@ -100,7 +100,7 @@ namespace session {
   
   enum ScopeQueryKind
     { CONTENTS = 0      ///< discover any contained objects depth-first
-    , CHILDREN          ///< discover the immediate children 
+    , CHILDREN          ///< discover the immediate children
     , PARENTS           ///< discover the enclosing scopes
     , PATH              ///< discover the path to root
     };

@@ -59,7 +59,7 @@ The `boost::operators` library allows to build families of types/objects with co
 algebraic properties. Especially, it eases building _equality comparable_, _totally ordered_,
 _additive_, _mulitplicative_ entities: You're just required to provide some basic operators
 and the library will define all sorts of additional operations to care for the logical
-consequences, removing the need for writing lots of boilerplate code. 
+consequences, removing the need for writing lots of boilerplate code.
 
 .lexical_cast
 Converting numerics to string and back without much ado, as you'd expect it from any decent language.

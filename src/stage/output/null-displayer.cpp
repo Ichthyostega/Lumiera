@@ -38,7 +38,7 @@ namespace output {
   
   void
   NullDisplayer::put (void* const image)
-  {  
+  {
     int video_x = 0,
         video_y = 0,
         video_width = 0,
@@ -48,7 +48,7 @@ namespace output {
       drawingArea_.get_width(),
       drawingArea_.get_height(),
       video_x, video_y, video_width, video_height);
-  
+    
     GdkWindow *window = drawingArea_.get_window()->gobj();
     REQUIRE (window != NULL);
     cout << "put("<<util::showAdr(image)<<")\t x="<<video_x<<" y="<<video_y<<" w:"<<video_width<<" h:"<<video_height<<endl;

@@ -95,7 +95,7 @@ need more implementation experience.
 
 Some existing iterators or collection-style interfaces should be retro-fitted.
 See https://issues.lumiera.org/ticket/349[Ticket #349]. +
-Moreover, we need to 
+Moreover, we need to
 gain experience about mapping this concept down into a flat C-style API.
 
 
@@ -147,13 +147,13 @@ concept, but provides an opaque frontend, allowing to decouple completely from t
 actual implementation. Besides that, over time I've written several standard adapters
 for the most common STL containers, plus Map, key and value extractors.
 
-Ichthyostega:: 'Sa 16 Apr 2011 00:20:13 CEST' 
+Ichthyostega:: 'Sa 16 Apr 2011 00:20:13 CEST'
 
 minor change: removed support for post-increment. It doesn't fit with the concept
 and caused serious problems in practice. A correct implementation of post-increment
 would require a ``deep copy'' of any underlying data structures.
 
-Ichthyostega:: 'Sa 07 Jan 2012 21:49:09 CET' ~<prg@ichthyostega.de>~ 
+Ichthyostega:: 'Sa 07 Jan 2012 21:49:09 CET' ~<prg@ichthyostega.de>~
 
 NOTE: Lumiera Forward Iterators can be made to work together with the
       'range for loop', as introduced with C++11. The preferred solution

@@ -103,7 +103,7 @@ namespace test  {
     {
       
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           TestContext ctx;
           
@@ -199,21 +199,21 @@ namespace test  {
           CHECK (!registry.contains (pipeA));    // removed from the current (pending) transaction
           CHECK ( ModelPort::exists (pipeA));    // but not yet publicly visible
           
-          // now create a new and differing definition of port A 
+          // now create a new and differing definition of port A
           TID anotherTimeline = getTimeline ("another_test_Timeline");
           MPDescriptor p1 = registry.definePort (pipeA, anotherTimeline);
           CHECK (registry.contains (pipeA));
           CHECK (anotherTimeline == p1.holder());
           CHECK (ModelPort(pipeA).holder() != anotherTimeline);
           
-          registry.remove (pipeB);               // some more wired definitions 
+          registry.remove (pipeB);               // some more wired definitions
           registry.definePort (pipeWC, anotherTimeline);
           CHECK (!registry.contains (pipeB));
           CHECK ( registry.contains (pipeWC));
           CHECK ( ModelPort::exists (pipeB));
           CHECK (!ModelPort::exists (pipeWC));
           CHECK ( registry.isRegistered (pipeB));   // this is the same as ModelPort::exists
-          CHECK (!registry.isRegistered (pipeWC)); // 
+          CHECK (!registry.isRegistered (pipeWC)); //
                                                   //  Note: pending transaction not yet committed
           ModelPort portA(pipeA);                // ...... thus the changes aren't reflected to client code
           ModelPort portB(pipeB);

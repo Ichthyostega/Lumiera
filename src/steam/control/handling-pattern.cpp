@@ -37,7 +37,7 @@ namespace control {
   HandlingPattern const&
   HandlingPattern::get (ID id)
   {
-    return getPatternInstance(id); 
+    return getPatternInstance(id);
   }
   
   

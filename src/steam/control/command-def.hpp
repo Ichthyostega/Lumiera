@@ -93,7 +93,7 @@ namespace control {
     template<typename SIG>
     struct CompletedDefinition
       : AcceptArgumentBindingRet< Command&, SIG               // Return type and Argument Signature of the \c bind(..) function
-                                , CompletedDefinition<SIG>   //  target type (this class) providing the implementation \c bindArg(Tuple<..>) 
+                                , CompletedDefinition<SIG>   //  target type (this class) providing the implementation \c bindArg(Tuple<..>)
                                 >
       {
         Command& prototype_;
@@ -304,7 +304,7 @@ namespace control {
     private:
       /** callback from completed command definition stage:
        *  "arm up" the command handle object and register it
-       *  with the CommandRegistry.  */ 
+       *  with the CommandRegistry.  */
       Command& activate (PImpl && completedDef)
         {
           prototype_.activate (move (completedDef), id_);

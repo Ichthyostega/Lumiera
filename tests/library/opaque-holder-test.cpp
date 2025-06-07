@@ -43,13 +43,13 @@ namespace test{
   using std::endl;
   
   namespace { // test dummy hierarchy
-             //  Note: common storage but no vtable 
+             //  Note: common storage but no vtable
     
     long _checksum = 0;
     uint _create_count = 0;
     
     
-    struct Base   
+    struct Base
       {
         uint id_;
         
@@ -173,7 +173,7 @@ namespace test{
           VERIFY_ERROR (WRONG_TYPE, oo.get<D3>() );
           
           // can get a direct reference to contained object
-          D5 &rd5 (oo.get<D5>()); 
+          D5 &rd5 (oo.get<D5>());
           CHECK (isSameObject (rd5, *oo));
           
           CHECK (!isnil(oo));
@@ -236,7 +236,7 @@ namespace test{
        *  @test Moreover, if the concrete class has a custom operator bool(), it
        *        will be invoked automatically from OpaqueHolder's operator bool()
        * 
-       */ 
+       */
       void
       checkSpecialSubclass ()
         {

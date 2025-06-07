@@ -70,21 +70,21 @@ namespace asset {
    */
   struct IdentityHash
     {
-      size_t 
+      size_t
       operator() (size_t val)  const { return val; }
     };
   
-  typedef std::unordered_map<size_t, PAsset, IdentityHash> IdHashtable;
+  using IdHashtable = std::unordered_map<size_t, PAsset, IdentityHash>;
   
   
   
   
   /**
-   * Implementation of the registry holding all Asset 
-   * instances known to the Asset Manager subsystem. 
+   * Implementation of the registry holding all Asset
+   * instances known to the Asset Manager subsystem.
    * As of 8/2007 implemented by a hashtable.
    */
-  class DB 
+  class DB
     : util::NonCopyable
     , public Sync<RecursiveLock_NoWait>
     {
@@ -104,7 +104,7 @@ namespace asset {
       
     public:
       template<class KIND>
-      lib::P<KIND> 
+      lib::P<KIND>
       get (ID<KIND> hash)  const
         {
           return dynamic_pointer_cast<KIND,Asset> (find (hash));
@@ -126,26 +126,26 @@ namespace asset {
       bool
       del (ID<Asset> hash)
         {
-          return table.erase (hash); 
+          return table.erase (hash);
         }
       
-      /** removes all registered assets and does something similar 
+      /** removes all registered assets and does something similar
        *  to Asset::unlink() on each to break cyclic dependencies
-       *  (we can't use the real unlink()-function, because this 
+       *  (we can't use the real unlink()-function, because this
        *  will propagate, including calls to the AssetManager.
        *  As the destructor of DB needs to call clear(), this
        *  could result in segfaults. This doesn't seem to be
        *  a problem, though, because we register and process
        *  \e all assets and the net effect is just breaking
        *  any cyclic dependencies)
-       * @note EX_FREE 
+       * @note EX_FREE
        */ 
       void
       clear ()
         try
           {
-            IdHashtable::iterator i = table.begin(); 
-            IdHashtable::iterator e = table.end(); 
+            IdHashtable::iterator i = table.begin();
+            IdHashtable::iterator e = table.end();
             for ( ; i!=e ; ++i )
               i->second->dependants.clear();
             
@@ -155,10 +155,10 @@ namespace asset {
       
       
       /** intended for diagnostics */
-      void 
-      asList (list<PcAsset>& output)  const  
-        { 
-          IdHashtable::const_iterator i = table.begin(); 
+      void
+      asList (list<PcAsset>& output)  const
+        {
+          IdHashtable::const_iterator i = table.begin();
           IdHashtable::const_iterator e = table.end(); 
           for ( ; i!=e ; ++i )  
             output.push_back (i->second);
@@ -178,6 +178,6 @@ namespace asset {
         }
     };
   
-    
+  
 }} // namespace steam::asset
 #endif

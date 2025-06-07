@@ -61,7 +61,7 @@ namespace test {
   class FunctionErasure_test : public Test
     {
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           function<void(int,char)> bindFunc = bind (testFunc,_1,_2);
           function<void(int     )> pAplFunc = bind (testFunc,_1,'x');

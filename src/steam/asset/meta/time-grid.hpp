@@ -73,12 +73,11 @@ namespace meta {
    * @note for this to work, the actual implementation classes returned
    *       by the builder or the static #build function additionally expose
    *       an implementation of the lib::time::Quantiser API
-   */ 
+   */
   class TimeGrid
     : public Meta
     , public virtual lib::time::Grid
     {
-      
     public:
       /* === shortcut builder functions === */
       static PGrid build (FrameRate frames_per_second);
@@ -88,7 +87,6 @@ namespace meta {
     protected:
       TimeGrid (GridID const&);
     };
-    
   
   
   

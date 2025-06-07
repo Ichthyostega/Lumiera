@@ -91,7 +91,7 @@ namespace workspace {
       ///////////////////////////////////////////////////////TICKET #1027 : investigate what would be the proper way to do this with gdlmm (C++ binding). No direct usage of GDL !
 
     REQUIRE(dockPlaceholders_[0] == NULL && dockPlaceholders_[1] == NULL &&
-      dockPlaceholders_[2] == NULL && dockPlaceholders_[3] == NULL);
+            dockPlaceholders_[2] == NULL && dockPlaceholders_[3] == NULL);
     dockPlaceholders_[0] = GDL_DOCK_PLACEHOLDER(gdl_dock_placeholder_new(
       "ph1", GDL_DOCK_OBJECT(dock_.gobj()), GDL_DOCK_TOP, FALSE));
     dockPlaceholders_[1] = GDL_DOCK_PLACEHOLDER(gdl_dock_placeholder_new(
@@ -100,8 +100,8 @@ namespace workspace {
       "ph3", GDL_DOCK_OBJECT(dock_.gobj()), GDL_DOCK_LEFT, FALSE));
     dockPlaceholders_[3] = GDL_DOCK_PLACEHOLDER(gdl_dock_placeholder_new(
       "ph4", GDL_DOCK_OBJECT(dock_.gobj()), GDL_DOCK_RIGHT, FALSE));
-    ENSURE(dockPlaceholders_[0] && dockPlaceholders_[1] &&
-      dockPlaceholders_[2] && dockPlaceholders_[3]);
+    ENSURE(dockPlaceholders_[0] and dockPlaceholders_[1] and
+           dockPlaceholders_[2] and dockPlaceholders_[3]);
     
     createPanels();
   }
@@ -170,8 +170,8 @@ namespace workspace {
   void
   PanelManager::switchPanel (panel::Panel& old_panel, const int description_index)
   {
-    REQUIRE (description_index >= 0 &&
-             description_index < getPanelDescriptionCount());
+    REQUIRE (description_index >= 0);
+    REQUIRE (description_index < getPanelDescriptionCount());
     
     // Get the dock item
     Gdl::DockItem &dock_item = old_panel.getDockItem();
@@ -225,7 +225,8 @@ namespace workspace {
   const gchar*
   PanelManager::getPanelStockID (int index)
   {
-    REQUIRE (index >= 0 && index < getPanelDescriptionCount());
+    REQUIRE (index >= 0);
+    REQUIRE (index < getPanelDescriptionCount());
     return panelDescriptionList[index].getStockID();
   }
   
@@ -233,7 +234,8 @@ namespace workspace {
   const char*
   PanelManager::getPanelTitle (int index)
   {
-    REQUIRE (index >= 0 && index < getPanelDescriptionCount());
+    REQUIRE (index >= 0);
+    REQUIRE (index < getPanelDescriptionCount());
     return panelDescriptionList[index].getTitle();
   }
   

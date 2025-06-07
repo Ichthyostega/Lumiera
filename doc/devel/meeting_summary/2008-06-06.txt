@@ -58,7 +58,7 @@ On the whole, there is no conclusion yet. Certainly, this proposal needs more di
 While in this discussion, several aspects of the cooperation of GUI and Proc layer are considered.
 
  * it is not necessary to make all of the Placement proposal visible to the GUI (and the user). Proc layer may as well provide a simplyfied and hard wired API for the most common properties (layer index, pan) and only use this part of the Placement concept for building and wiring the nodes.
- * the adjustment of objects linked together by a placement can be handled as follows: 
+ * the adjustment of objects linked together by a placement can be handled as follows:
    . GUI notifies Proc of a position/parameter change of one object and gets immediate, synchronous feedback (OK or fail)
    . Proc detects the other linked objects affected by the change and notifies GUI (both synchronous and asynchronous is possible) to update information regarding those objects
    . GUI pulls the necessary properties by calling Proc on a per object base.

@@ -1,5 +1,5 @@
 /*
-  Cmdline  -  abstraction of the usual commandline, a sequence of strings 
+  Cmdline  -  abstraction of the usual commandline, a sequence of strings
 
    Copyright (C)
      2008,            Hermann Vosseler <Ichthyostega@web.de>
@@ -48,9 +48,9 @@ namespace lib {
         }
     }
    
-    
-  /** create by tokenising a string 
-   *  (e.g. "fake" cmdline, separated by whitespace) 
+   
+  /** create by tokenising a string
+   *  (e.g. "fake" cmdline, separated by whitespace)
    */ 
   Cmdline::Cmdline (const string cmdline)
     {

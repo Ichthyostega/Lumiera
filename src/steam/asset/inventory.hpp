@@ -39,7 +39,7 @@ namespace asset {
     {};
   
   
-  typedef lib::P<Inventory> PInv;
+  using PInv = lib::P<Inventory>;
   
   
 }} // namespace steam::asset

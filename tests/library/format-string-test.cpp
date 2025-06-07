@@ -214,7 +214,7 @@ namespace test {
           virtual
           operator string()  const
             {
-              return _Fmt("Number-%03d") % i_; 
+              return _Fmt("Number-%03d") % i_;
             }
         };
       

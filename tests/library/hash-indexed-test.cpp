@@ -54,15 +54,15 @@ namespace test{
   
   /***********************************************************************//**
    * @test proof-of-concept test for a generic hash based and typed ID struct.
-   *       - check the various ctors 
+   *       - check the various ctors
    *       - check default assignment works properly
    *       - check assumptions about memory layout
    *       - check equality comparison
    *       - extract LUID and then cast LUID back into ID
    *       - use the embedded hash ID (LUID) as hashtable key
-   *       
+   *
    * @see lib::HashIndexed::Id
-   * @see mobject::Placement real world usage example 
+   * @see mobject::Placement real world usage example
    */
   class HashIndexed_test : public Test
     {
@@ -73,7 +73,7 @@ namespace test{
           checkBasicProperties();
           checkLUID_passing();
           
-          //            ---key-type-------+-value-+-hash-function--- 
+          //            ---key-type-------+-value-+-hash-function---
           buildHashtable<TestB::Id<TestDB>, TestDB, TestB::UseHashID> ();
           buildHashtable<TestDB,            TestDB, TestB::UseEmbeddedHash>();
         }
@@ -100,7 +100,7 @@ namespace test{
           TestDA d2;
           CHECK (d1.getID() != d2.getID());   // should be different because LUIDs are random
           
-          d2 = d1; 
+          d2 = d1;
           CHECK (d1.getID() == d2.getID());   // default assignment operator works as expected
         }
       

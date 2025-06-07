@@ -1,5 +1,5 @@
 /*
-  ITERTOOLS.hpp  -  collection of tools for building and combining iterators 
+  ITERTOOLS.hpp  -  collection of tools for building and combining iterators
 
    Copyright (C)
      2009,            Hermann Vosseler <Ichthyostega@web.de>
@@ -27,7 +27,7 @@
  ** generic base gets configured with an active core, implementing
  ** the filtering or processing functionality, while the base class
  ** (IterTool) exposes the operations necessary to comply to the
- ** Forward Iterator Concept. 
+ ** Forward Iterator Concept.
  ** 
  ** \par filtering Iterator
  ** The FilterIter template can be used to build a filter into a pipeline,
@@ -53,10 +53,10 @@
  ** 
  ** \par processing Iterator
  ** the TransformIter template can be used as processing (or transforming)
- ** step within the pipeline. It is created with a functor, which, when 
- ** pulling elements, is invoked for each element pulled from the 
+ ** step within the pipeline. It is created with a functor, which, when
+ ** pulling elements, is invoked for each element pulled from the
  ** source iterator. The signature of the functor must match the
- ** desired value (output) type. 
+ ** desired value (output) type.
  ** 
  ** @see iter-adapter.hpp
  ** @see itertools-test.cpp
@@ -90,7 +90,7 @@ namespace lib {
   
   
   
-  /** 
+  /**
    * A neutral \em identity-function core,
    * also serving as point-of reference how any
    * core is intended to work. Any core is intended
@@ -137,9 +137,9 @@ namespace lib {
           return bool(source_);
         }
       
-      typedef typename IT::pointer pointer;
-      typedef typename IT::reference reference;
-      typedef typename IT::value_type value_type;
+      using pointer    = typename IT::pointer;
+      using reference  = typename IT::reference;
+      using value_type = typename IT::value_type;
     };
   
   
@@ -162,16 +162,16 @@ namespace lib {
       hasData()  const
         {
           return core_.evaluate()
-              || unConst(this)->iterate();
+              or unConst(this)->iterate();
         }     // to skip irrelevant results doesn't count as "mutation"
       
       bool
       iterate ()
         {
-          if (!core_.pipe()) return false;
+          if (not core_.pipe()) return false;
           
           do core_.advance();
-          while (core_.pipe() && !core_.evaluate());
+          while (core_.pipe() and not core_.evaluate());
           
           return bool{core_.pipe()};
         }
@@ -186,9 +186,9 @@ namespace lib {
       
       
     public:
-      typedef typename CORE::pointer pointer;
-      typedef typename CORE::reference reference;
-      typedef typename CORE::value_type value_type;
+      using pointer    = typename CORE::pointer;
+      using reference  = typename CORE::reference;
+      using value_type = typename CORE::value_type;
       
       
       IterTool (CORE&& setup)
@@ -248,8 +248,8 @@ namespace lib {
   inline bool
   operator== (IterTool<CX> const& it1, IterTool<CX> const& it2)
   {
-    return (!it1 && !it2 )
-        || ( it1 &&  it2 && (*it1) == (*it2) )
+    return (!it1 and !it2 )
+        or ( it1 and  it2 and (*it1) == (*it2) )
         ;
   }
   
@@ -289,7 +289,7 @@ namespace lib {
       evaluate () const
         {
           return Raw::pipe()
-              && currVal_isOK();
+             and currVal_isOK();
         }
       
       
@@ -299,9 +299,9 @@ namespace lib {
       bool
       currVal_isOK () const  ///< @return (maybe cached) result of filter predicate
         {
-          return (cached_ && isOK_)
-              || (cached_ = true
-                 &&(isOK_ = predicate_(*Raw::pipe())));
+          return (cached_ and isOK_)
+              or (cached_ = true
+                 and (isOK_ = predicate_(*Raw::pipe())));
         }
       
       void
@@ -337,7 +337,7 @@ namespace lib {
   class FilterIter
     : public IterTool<FilterCore<IT>>
     {
-      typedef FilterCore<IT> _Filter;
+      typedef FilterCore<IT>  _Filter;
       typedef IterTool<_Filter> _Impl;
       
     public:
@@ -383,7 +383,7 @@ namespace lib {
   }
   
   
-  /** 
+  /**
    * Additional capabilities for FilterIter,
    * allowing to extend the filter condition underway.
    * This wrapper enables remoulding of the filer functor
@@ -537,12 +537,12 @@ namespace lib {
   /**
    * Helper: predicate returning `true`
    * whenever the argument value changes
-   * during a sequence of invocations. 
-   */ 
+   * during a sequence of invocations.
+   */
   template<typename VAL>
   class SkipRepetition
     {
-      typedef wrapper::ItemWrapper<VAL> Item;
+      using Item = wrapper::ItemWrapper<VAL>;
       
       Item prev_;
       
@@ -550,7 +550,7 @@ namespace lib {
       bool
       operator() (VAL const& elm)
         {
-           if (prev_ &&
+           if (prev_ and
               (*prev_ == elm))
              return false;
            
@@ -559,7 +559,7 @@ namespace lib {
            return true;
         }
       
-      typedef bool result_type;
+      using result_type = bool;
     };
   
   
@@ -578,7 +578,7 @@ namespace lib {
   template<typename VAL>
   class SingleValCore
     {
-      typedef wrapper::ItemWrapper<VAL> Item;
+      using Item = wrapper::ItemWrapper<VAL>;
       
       Item theValue_;
       
@@ -607,9 +607,9 @@ namespace lib {
           return theValue_.isValid();
         }
       
-      typedef std::remove_reference_t<VAL> * pointer;
-      typedef std::remove_reference_t<VAL> & reference;
-      typedef std::remove_reference_t<VAL>   value_type;
+      using pointer    = std::remove_reference_t<VAL> *;
+      using reference  = std::remove_reference_t<VAL> &;
+      using value_type = std::remove_reference_t<VAL>  ;
     };
   
   

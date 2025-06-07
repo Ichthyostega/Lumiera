@@ -21,7 +21,7 @@
  ** As a safety measure, such _strictly metaprogramming related_ facilities may be
  ** marked to provoke a compilation failure, when the compiler -- accidentally --
  ** attempts to generate code to incorporate such an entity into the runtime world.
- ** 
+ **
  ** \par example
  ** The classical example is a marker type used to select one of various implementation
  ** flavours of a given facility. In fact this helper was created to mark variations
@@ -37,7 +37,7 @@
 namespace lib {
 namespace meta{
   
-  /** 
+  /**
    * An Entity never to be instantiated.
    * Marker baseclass for elements used in metaprogramming only.
    * Every attempt to instantiate such an element will cause an

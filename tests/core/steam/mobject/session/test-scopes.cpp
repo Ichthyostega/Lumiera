@@ -32,7 +32,7 @@ namespace test    {
   
   /** @note this dummy index isn't actively connected to the session;
    *        the unit tests rely on this dummy index containing
-   *        a specific tree structure of test-dummy MObjects. 
+   *        a specific tree structure of test-dummy MObjects.
    */
   PPIdx
   build_testScopes()

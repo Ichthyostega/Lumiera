@@ -1,5 +1,5 @@
 /*
-  TypeListUtil(Test)  -  check the simple typelist metaprogramming helpers 
+  TypeListUtil(Test)  -  check the simple typelist metaprogramming helpers
 
    Copyright (C)
      2011,            Hermann Vosseler <Ichthyostega@web.de>

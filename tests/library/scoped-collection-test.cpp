@@ -299,7 +299,7 @@ namespace test{
           CHECK (0 == Dummy::checksum());
           {
             int rr = rani(100);
-            int trigger = 100 + 5 + 1;   // prevents the bomb from exploding (since rr < 100) 
+            int trigger = 100 + 5 + 1;   // prevents the bomb from exploding (since rr < 100)
             
             CollD coll (6, Populator(rr, trigger));
             
@@ -353,7 +353,7 @@ namespace test{
           void
           operator() (CollD::ElementHolder& storage)
             {
-              switch (i_ % 2) 
+              switch (i_ % 2)
                 {
                 case 0:
                   storage.create<Dummy> (i_+off_);
@@ -419,7 +419,7 @@ namespace test{
             source.emplace<uint>(i);           // holding the numbers 0..24
           
           CollI coll (20, CollI::pull(source.begin()));
-                                              // this immediately pulls in the first 20 elements 
+                                              // this immediately pulls in the first 20 elements
           CHECK (!isnil (coll));
           CHECK (20 == coll.size());
           CHECK (25 == source.size());
@@ -467,7 +467,7 @@ namespace test{
           ManagerDemo(uint cnt)
             : memberVar_(cnt)
             , my_own_Numbers_(cnt, &ManagerDemo::buildNumbers, this)
-            { 
+            {
               CHECK (0 == memberVar_);
               CHECK (cnt == my_own_Numbers_.size());
             }

@@ -49,7 +49,8 @@ namespace test {
     {
       typedef MediaAccessFacade MAF;
       
-      virtual void run(Arg) 
+      virtual void
+      run (Arg)
         {
           DependInject<MediaAccessFacade>::Local<MediaAccessMock> useMockMedia;
           
@@ -59,7 +60,7 @@ namespace test {
       
       
       /** perform the test: query for an (alleged) file
-       *  and retrieve the mock answer. 
+       *  and retrieve the mock answer.
        */
       void queryScenario (string const& filename)
         {

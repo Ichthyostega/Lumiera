@@ -82,7 +82,7 @@ namespace test {
             ++instanceCnt;
           }
         
-        // instanceCnt remains same...  
+        // instanceCnt remains same...
         N& operator= (N const&) = default;
         N& operator= (N&&)      = default;
         
@@ -91,8 +91,8 @@ namespace test {
             static _Fmt format{"%s──%s─"};
             return format % typeStr(*this) % i_;
           }
-        friend bool operator== (N const& l, N const& r) { return l.i_ == r.i_; } 
-        friend bool operator!= (N const& l, N const& r) { return l.i_ != r.i_; } 
+        friend bool operator== (N const& l, N const& r) { return l.i_ == r.i_; }
+        friend bool operator!= (N const& l, N const& r) { return l.i_ != r.i_; }
       };
     
     template<int n>
@@ -125,7 +125,7 @@ namespace test {
   class VariadicArgumentPicker_test : public Test
     {
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           seedRand();
           verify_fixture();
@@ -223,7 +223,7 @@ namespace test {
        *          - note that `idx` without the `...` sits within the template list of `pickArg<idx>`
        *          - while the corresponding expansion operator is outmost and thus works on the whole expression
        *          - and thus it is the `idx...` pack which actually drives the generation of several `pickArg` instantiations
-       *          - in the end the net effect is that the _Index sequence_ absolutely dictates which arguments are picked 
+       *          - in the end the net effect is that the _Index sequence_ absolutely dictates which arguments are picked
        */
       template<class...ARGS, size_t...idx>
       static auto

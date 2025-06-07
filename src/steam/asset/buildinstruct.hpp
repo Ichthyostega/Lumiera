@@ -14,7 +14,7 @@
 
 /** @file buildinstruct.hpp
  ** Helper classes used by asset::ProcPatt to represent the processing information.
- ** Consider these classes as owned by ProcPatt. Non-inline functions go to procpatt.cpp 
+ ** Consider these classes as owned by ProcPatt. Non-inline functions go to procpatt.cpp
  **
  */
 
@@ -54,16 +54,15 @@ namespace asset {
       /** identifying the point where the nodes should be attached */
       Literal point;
       
-      DoAttach (Symbol where = CURRENT) 
-        : point(where) 
+      DoAttach (Symbol where = CURRENT)
+        : point(where)
         { }
       
-      DoAttach (PProc& node, Symbol where = CURRENT) 
-        : point(where) 
-        { 
-          nodes.push_back(node); 
+      DoAttach (PProc& node, Symbol where = CURRENT)
+        : point(where)
+        {
+          nodes.push_back(node);
         }
-      
     };
     
     

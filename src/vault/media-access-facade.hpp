@@ -47,12 +47,12 @@ namespace vault {
   /**************************************************************//**
    * Interface to the vault layer:
    * provides functions for querying (opening) a media file,
-   * detecting the channels or streams found within this file etc. 
+   * detecting the channels or streams found within this file etc.
    * Implementation delegating to the actual vault layer functions.
    * 
    * convention: data passed by pointer is owned by the originator;
-   * it should be copied if needed beyond the control flow 
-   * of the invoked function. 
+   * it should be copied if needed beyond the control flow
+   * of the invoked function.
    */
   class MediaAccessFacade
     {
@@ -61,30 +61,30 @@ namespace vault {
       
       static lib::Depend<MediaAccessFacade> instance;
       
-      /** request for testing the denoted files accessibility 
+      /** request for testing the denoted files accessibility
        *  @param name path and filename of the media file.
        *  @throw error::Invalid when passing empty filename,
-       *          or in case the media file is inaccessible 
-       *          or otherwise inappropriate. 
+       *          or in case the media file is inaccessible
+       *          or otherwise inappropriate.
        *  @return opaque handle usable for querying channel
        *          information from this file, NULL if the
        *          file is not accessible.
        */
       virtual MediaDesc& queryFile (string const& name)  const;
       
-      /** request for information about the n-th channel 
+      /** request for information about the n-th channel
        *  of the file referred by FileHandle.
        *  @return ChanDesc which may contain \c NULL values if
        *          the file doesn't contain this much channels.
        *  @todo   throw or return NULL-ChanDesc if Filehandle is invalid?
-       */  
+       */
       virtual ChanDesc queryChannel (MediaDesc&, uint chanNo)  const;
       
       virtual ~MediaAccessFacade () {}
     };
   
   
-  /** 
+  /**
    * Descriptor holding the global information record
    * required for further handling this kind of media within Lumiera.
    */
@@ -93,8 +93,8 @@ namespace vault {
       /** effectively usable duration.
        *  A clip created from this media will have this
        *  maximum duration. We expect to get media stream data
-       *  from all channels within this limit. 
-       */ 
+       *  from all channels within this limit.
+       */
       Duration length;
       
       MediaDesc() : length(Duration::NIL) { }
@@ -117,9 +117,9 @@ namespace vault {
       
       /** identifier characterising the access method (or codec)
        *  needed to get at the media data. This should be rather
-       *  a high level description of the media stream type, 
+       *  a high level description of the media stream type,
        *  e.g. "H264" -- anyhow, it will be used to find a 
-       *  codec asset for this channel. 
+       *  codec asset for this channel.
        */
       const char* codecID;
       
@@ -128,7 +128,7 @@ namespace vault {
        */
       MediaAccessFacade::ChanHandle handle;
       
-      ChanDesc (const char* chanName=0, const char* codec=0, 
+      ChanDesc (const char* chanName=0, const char* codec=0,
                 MediaAccessFacade::ChanHandle h=0)
         : chanID(chanName),
           codecID(codec),

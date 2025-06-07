@@ -344,7 +344,7 @@ namespace engine {
       
       /** @remark this would allow to pass constructor arguments
        *   to »buffer inlay objects« automatically placed into media buffers.
-       *   There is a corresponding hook in BufferProvider::getDescriptor(args...) 
+       *   There is a corresponding hook in BufferProvider::getDescriptor(args...)
        */
       template<class ILA, typename...ARGS>
       PortBuilder&&

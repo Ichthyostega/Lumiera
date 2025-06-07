@@ -1,5 +1,5 @@
 /*
-  CONTROL-POLICY.hpp  -  detail definition of actual time changing functionality  
+  CONTROL-POLICY.hpp  -  detail definition of actual time changing functionality
 
    Copyright (C)
      2011,            Hermann Vosseler <Ichthyostega@web.de>
@@ -149,9 +149,9 @@ namespace mutation {
   }
   
   
-  /** 
+  /**
    * Implementation policy: how to build a new
-   * notification value of type \c TI, given a 
+   * notification value of type \c TI, given a
    * target time value entity of type \c TAR
    */
   template<class TI, class TAR>
@@ -216,7 +216,7 @@ namespace mutation {
   
   
   
-  /**  
+  /**
    * Policy to tie the various detail policies together
    * for providing actual value change operations.
    * The standard case uses the (inherited) time::Mutation
@@ -268,7 +268,7 @@ namespace mutation {
   
   
   
-  /** 
+  /**
    * Policy how to impose changes onto a connected target time value entity
    * This policy will be parametrised with the concrete time entity types
    * involved in the usage situation of time::Control. The purpose of the
@@ -280,7 +280,7 @@ namespace mutation {
    * @param SRC the actual type of the change to be imposed
    * @param TAR the actual type of the target entity to receive the changes
    * @note typically either SRC is identical to TI, or it is an
-   *       time::Offset, or an int for \em nudging the target 
+   *       time::Offset, or an int for \em nudging the target
    */
   template<class TI, class SRC, class TAR>
   struct Policy
@@ -313,14 +313,14 @@ namespace mutation {
   }
   
   
-  /** 
+  /**
    * special case: a Duration target value can't be changed by plain time values.
    * This specialisation is \em not used (\c disable_if ) when the given change (SRC)
    * is applicable to a Duration in a sensible way. We either define explicit
-   * specialisations (for TimeSpan) or fall back to the default in these cases. 
+   * specialisations (for TimeSpan) or fall back to the default in these cases.
    */
   template<class TI, class SRC>
-  struct Policy<TI,SRC,                  typename disable_if< canMutateDuration<SRC>, 
+  struct Policy<TI,SRC,                  typename disable_if< canMutateDuration<SRC>,
                        Duration>::type>
     {
       static function<TI(SRC const&)>
@@ -337,7 +337,7 @@ namespace mutation {
    * can sensibly be applied. 
    */
   template<class TAR>
-  struct Policy<Duration,                typename disable_if< canReceiveDuration<TAR>, 
+  struct Policy<Duration,                typename disable_if< canReceiveDuration<TAR>,
                    Duration>::type, TAR>
     {
       static function<Duration(Duration const&)>

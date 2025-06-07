@@ -2,7 +2,7 @@ Initial Lumiera Developers Meeting
 ==================================
 :Date: 2008-02-01
 
-//Menu: label 2008-02-01  the first Lumiera Developers Meeting 
+//Menu: label 2008-02-01  the first Lumiera Developers Meeting
 
 __Participants__
 
@@ -71,7 +71,7 @@ Since the render nodes are stateless they can be driven in multiple threads (but
 
 The naming discussion
 ---------------------
-The discussion looks healthy so far... People can add new proposals on the http://www.pipapo.org/pipawiki/Lumiera/Names[pipawiki]. Interesting names are still coming in, so we should just let the name-choosing game go on for a while. And, btw, we _can_ depart from beeing similar to "Cinelerra" ;-) 
+The discussion looks healthy so far... People can add new proposals on the http://www.pipapo.org/pipawiki/Lumiera/Names[pipawiki]. Interesting names are still coming in, so we should just let the name-choosing game go on for a while. And, btw, we _can_ depart from beeing similar to "Cinelerra" ;-)
 Let's say, we need a person volonteering to guide/moderate the selection, going over the list and scratching inammprobiate ones. Criteria for good names being:
 
  * should not be an existing project

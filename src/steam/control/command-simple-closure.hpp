@@ -23,7 +23,7 @@
  ** This proof-of-concept variation was split off in an attempt to improve the
  ** overall design of the command / closure system. The original design had the
  ** embedded argument holder also implement the CmdClosure interface, which is
- ** a clever implementation and code-reuse trick, but otherwise caused confusion. 
+ ** a clever implementation and code-reuse trick, but otherwise caused confusion.
  ** 
  ** @see Ticket #301
  ** @see CommandMutation_test
@@ -166,7 +166,7 @@ namespace control {
       SimpleClosure (SimpleClosure const& oAh)
         : arguments_()
         {
-          if (oAh.arguments_->isValid())  // don't clone garbage from invalid arguments 
+          if (oAh.arguments_->isValid())  // don't clone garbage from invalid arguments
             arguments_.template create<ArgHolder> (*oAh.arguments_);
         }
       

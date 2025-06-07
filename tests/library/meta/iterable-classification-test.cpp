@@ -83,7 +83,7 @@ namespace test {
     {
       
       void
-      run (Arg) 
+      run (Arg)
         {
           // define a bunch of STL containers
           typedef std::vector<long>   LongVector;
@@ -125,7 +125,7 @@ namespace test {
           SHOW_CHECK( can_IterForEach<TransformedForwardIter> );
           SHOW_CHECK( can_IterForEach<FilteredForwardIter> );
           SHOW_CHECK( can_IterForEach<CustomForwardIter> );
-        } 
+        }
     };
   
   

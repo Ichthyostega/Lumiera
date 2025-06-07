@@ -146,7 +146,7 @@ namespace control {
        *  By accepting the clone builder as a visitor and dispatching
        *  this visitation down into the concrete closure, the builder
        *  can re-gain the fully typed context available on creation
-       *  of the ComandImpl. Within this context, for the clone 
+       *  of the ComandImpl. Within this context, for the clone
        *  to be created, the UndoMutation has to be re-wired,
        *  otherwise it would continue to cooperate with
        *  original closure.
@@ -210,12 +210,12 @@ namespace control {
       bool
       isValid()  const    ///< validity self-check: is basically usable.
         {
-          return bool(pClo_) 
+          return bool(pClo_)
              and HandlingPattern::get(defaultPatt_).isValid();
         }
       
       bool
-      canExec()  const    ///< state check: sufficiently defined to be invoked 
+      canExec()  const    ///< state check: sufficiently defined to be invoked
         {
           return isValid()
              and pClo_->isValid();

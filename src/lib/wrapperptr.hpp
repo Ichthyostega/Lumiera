@@ -45,7 +45,7 @@ namespace lumiera {
   
   
   
-  /** 
+  /**
    * helper to treat various sorts of smart-ptrs uniformly.
    * Implemented as a variant-type value object, it is preconfigured
    * with the possible hierarchy-base classes used within this application.
@@ -58,9 +58,9 @@ namespace lumiera {
    * @deprecated not sure if this was a good idea anyway. Better re-think how to handle wrapped objects in visitation
    * @todo really need to switch to the new lib::Variant and util::AccessCasted implementation  ////////////////TICKET #450
    */
-  typedef lib::VariantO<steam::WrapperTypes, util::AccessCasted_O> WrapperPtr;
+  using WrapperPtr = lib::VariantO<steam::WrapperTypes, util::AccessCasted_O>;
   
   
   
-} // namespace lumiera 
+} // namespace lumiera
 #endif

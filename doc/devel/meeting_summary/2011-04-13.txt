@@ -115,7 +115,7 @@ using a »liquid layout«?
 [2011-04-13 23:14:08] <ichthyo> so I draw the conclusion, that the documentation pages are optimised for much content
 [2011-04-13 23:14:19] <fsiddi> yes
 [2011-04-13 23:13:30] <cehteh> ok .. settled
-... 
+...
 [2011-04-13 23:13:54] <fsiddi> i propose to keep the layout not liquid also in that pages
 [2011-04-13 23:14:35] <fsiddi> if you prefer i can make them larger
 [2011-04-13 23:14:49] <fsiddi> but for the moment i'd like to keep the same width
@@ -164,7 +164,7 @@ Colour scheme
 [caption="☉Transcript☉ "]
 ----------------------------
 [2011-04-13 23:28:23] <ichthyo> I'd like to bring up the question regarding color
-[2011-04-13 23:28:36] <ichthyo> and I'll ask especially you, fsiddi 
+[2011-04-13 23:28:36] <ichthyo> and I'll ask especially you, fsiddi
 [2011-04-13 23:28:44] <ichthyo> you know, colours are a matter of taste
 [2011-04-13 23:29:15] <ichthyo> thus I'd say, as you did the general layout, you have an important say in that
 [2011-04-13 23:28:59] <fsiddi> ah yes colors
@@ -298,7 +298,7 @@ Website licensing and legal questions
 [2011-04-14 00:11:42] <cehteh> anyeays ... dual license gpl and cc-by-sa
 [2011-04-14 00:11:46] <cehteh> ok for me
 [2011-04-14 00:11:55] <ichthyo> fine, seems case is settled
-[2011-04-14 00:12:04] <cehteh> eh which gpl ? gpl2+ .. same as lumiera 
+[2011-04-14 00:12:04] <cehteh> eh which gpl ? gpl2+ .. same as lumiera
 [2011-04-14 00:12:08] <ichthyo> yes
 [2011-04-14 00:12:15] <ichthyo> thats important
 [2011-04-14 00:12:32] <cehteh> and we may bump lumiera to gplv3 when we release it (and we know all its dependencies)
@@ -333,7 +333,7 @@ actually repackaging a current version into an pre-release debian package, as th
 official debian package isn't on the required level). After a bit of training,
 the Bayesian filter successfully blocked any further spam tickets.
 
-The remaining problem are spam user accounts though. To deal with that problem, _Ichthyo_ 
+The remaining problem are spam user accounts though. To deal with that problem, _Ichthyo_
 designed a custom SQL query based on some obvious heuristics, which seems to pinpoint
 all spurious accounts. We'll try to execute that SQL for some time manually, and --
 in case it behaves sane -- automate that cleanup as a cronjob in some months.
@@ -362,7 +362,7 @@ revisit the relevant design process entries in each developer meeting.
 [2011-04-14 00:50:25] <cehteh> maybe we want another state "accepted" ..
 [2011-04-14 00:50:44] <cehteh> that is the interesting things which we know we will not drop but which are not finalized yet
 [2011-04-14 00:54:29] <cehteh> the application install came first... we need it, you did it well .. it could be 'finalized' or
-                               rather that would be some 'acceepted' candidate .. 
+                               rather that would be some 'acceepted' candidate ..
 [2011-04-14 00:53:25] <ichthyo> I think, the existing states are enough
 [2011-04-14 00:53:44] <ichthyo> either really discuss something and then decide, or just leave it in draft
 [2011-04-14 00:54:05] <ichthyo> lets just postpone the application install and leave it in draft!
@@ -502,7 +502,7 @@ That's rather final by now. This link:{rfc}/ProcHighLevelModel.html[proposal]
 meanwhile documents the existing design; it's up to date and didn't see significant
 additions since almost two years. Generally agreed upon, so it's _final_ now.
 
-The same holds true for the 
+The same holds true for the
 link:{rfc}/ProcPlacementMetaphor.html[Placement] proposal
 
 
@@ -519,14 +519,14 @@ Render Optimizer, Resource Management and Profiling
 [2011-04-14 01:18:02] <ichthyo> so, maybe just polish a bit
 [2011-04-14 01:18:18] <cehteh> yes park because it needs some polishing before final
 [2011-04-14 01:18:24] <ichthyo> (remove the "pro and con") and then we could accept it right away
-[2011-04-14 01:18:28] <cehteh> i can put a note that its basically accepted 
+[2011-04-14 01:18:28] <cehteh> i can put a note that its basically accepted
 [2011-04-14 01:18:38] <cehteh> parking isnt neccessary bad :P
 
 [2011-04-14 01:18:46] <ichthyo> ResourceManagement
 [2011-04-14 01:18:49] <cehteh> (well again that would be a 'accept' candidate)
 [2011-04-14 01:18:53] <ichthyo> needs some more work
 [2011-04-14 01:19:01] <cehteh> that are 2 things .. yes
-[2011-04-14 01:19:10] <cehteh> profiling and budgeting .. 
+[2011-04-14 01:19:10] <cehteh> profiling and budgeting ..
 [2011-04-14 01:19:21] <cehteh> i think i will implement them and then see how it works
 [2011-04-14 01:19:40] <cehteh> (unless someone else shows better alternatives)
 [2011-04-14 01:19:47] <ichthyo> if you change that and e.g. remove the code sample and make it really short and high level,
@@ -555,7 +555,7 @@ Stream Type System
 [caption="☉Transcript☉ "]
 ----------------------------
 [2011-04-14 01:24:06] <ichthyo> very important for me -- my vote is for accept
-[2011-04-14 01:24:16] <cehteh> we had some discussion how to maintain metadata .. 
+[2011-04-14 01:24:16] <cehteh> we had some discussion how to maintain metadata ..
 [2011-04-14 01:24:40] <cehteh> i vote for accept too but this metadata (which may decribe the type) needs work
 [2011-04-14 01:24:49] <ichthyo> well, this one is really a heavyweight conceptual RfC
 [2011-04-14 01:25:00] <ichthyo> it is not about *how* to maintain metadata
@@ -567,7 +567,7 @@ Stream Type System
 [2011-04-14 01:26:36] <ichthyo> but well, at the moment I am the only one thinking into more details of this whole topic
 [2011-04-14 01:26:24] <cehteh> shall i leave it pending just to nag us?
 [2011-04-14 01:26:50] <ichthyo> yes, leave it pending
-[2011-04-14 01:27:10] <cehteh> i was thinking too about this .. but not consistently ... 
+[2011-04-14 01:27:10] <cehteh> i was thinking too about this .. but not consistently ...
 [2011-04-14 01:27:24] <ichthyo> as said, I vote for accept, but I would really ask you to think it over
 [2011-04-14 01:27:38] <cehteh> i think that needs some time to settle to the right point [tm]
 [2011-04-14 01:27:43] <ichthyo> I'm not right away implementing it, but the implementation is rather trivial
@@ -597,7 +597,7 @@ Threads Signals and important management tasks
 [2011-04-14 01:31:39] <cehteh> not only starting and shutdown but also control the direction
 [2011-04-14 01:32:08] <cehteh> but really this isnt much a difference, if you want an extra thread then let it be so
 [2011-04-14 01:32:46] <ichthyo> I see the code complexity. It would just look okish for me if we split it into these two
-[2011-04-14 01:33:26] <cehteh> there is not much complexity, the main thread waits currently .. 
+[2011-04-14 01:33:26] <cehteh> there is not much complexity, the main thread waits currently ..
 [2011-04-14 01:34:02] <cehteh> and it can get woken by signals or condvar (convars return when a signal arrives)
 [2011-04-14 01:34:29] <cehteh> actually having an extra thread wont make the code simpler because then the main thread
                                needs to be rigged to ignore the signals. All other threads are created by us and can

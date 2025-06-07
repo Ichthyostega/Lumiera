@@ -86,12 +86,12 @@ namespace asset {
   
   
   
-  /** 
+  /**
    * Implementation details, especially concerning how configuration
    * queries are resolved and when to create new objects automatically.
    * @todo better use a general struct traits class, esp.for creating the Ident
    * @todo shouldn't some of the generic factory logic be moved over into the struct baseclass? ////////////////TICKET #565
-   */ 
+   */
   class StructFactoryImpl
     {
       
@@ -115,11 +115,11 @@ namespace asset {
                            % StructTraits<STRU>::namePrefix()
                            % (++i);
             }
-          ENSURE (!isnil (nameID));
+          ENSURE (not isnil (nameID));
           
           // does the query actually demand the Nth instance/element?
           string seqID = query.extractID (seqNrPredicate);
-          if (!isnil (seqID) && 1 < uNum(seqID))
+          if (not isnil (seqID) and 1 < uNum(seqID))
             nameID += "."+seqID;
           
           Category cat (STRUCT, StructTraits<STRU>::catFolder());
@@ -132,14 +132,14 @@ namespace asset {
       getFork_forSequence (string const& desiredID)
         {
           RFork fork;
-          if (!isnil (desiredID))
+          if (not isnil (desiredID))
             fork = Session::current->elements.pick (match_specificFork (desiredID));
           
-          if (fork && !Scope::containing (fork.getRef()).isRoot())
+          if (fork and not Scope::containing (fork.getRef()).isRoot())
             {
               UNIMPLEMENTED ("how to deal with 'stealing' a fork sub-tree to a new sequence??");
             }
-          if (!fork)
+          if (not fork)
             fork = Session::current->getRoot().attach (MObject::create (ForkID (desiredID)));
           
           return fork;

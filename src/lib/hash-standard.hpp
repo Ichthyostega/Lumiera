@@ -46,7 +46,7 @@
  ** 
  ** @todo 4/2014 doesn't work as expected. My suspicion is that in the actual use case (PlacementIndex),
  **       the type providing the hasher is mixed in through inheritance, and the template specialisation
- **       for this base type is not considered on lookup.  ///////TICKET #722 
+ **       for this base type is not considered on lookup.  ///////TICKET #722
  ** 
  ** @see HashIndexed
  ** @see LUID

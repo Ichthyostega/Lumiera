@@ -1,5 +1,5 @@
 /*
-  ScopeQuery(Test)  -  running queries to discover container contents, filtering (sub)types 
+  ScopeQuery(Test)  -  running queries to discover container contents, filtering (sub)types
 
    Copyright (C)
      2009,            Hermann Vosseler <Ichthyostega@web.de>
@@ -87,7 +87,7 @@ namespace test    {
   class ScopeQuery_test : public Test
     {
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           // Prepare an (test)Index (dummy "session")
           PPIdx testSession (build_testScopes());

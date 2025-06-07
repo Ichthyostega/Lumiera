@@ -1,5 +1,5 @@
 /*
-  LateBindInstance(Test)  -  verify rewriting of member function invocation 
+  LateBindInstance(Test)  -  verify rewriting of member function invocation
 
    Copyright (C)
      2023,            Hermann Vosseler <Ichthyostega@web.de>

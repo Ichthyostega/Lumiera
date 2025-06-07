@@ -114,7 +114,7 @@ namespace stage {
       {
         using Model = steam::asset::meta::ErrorLog;
         
-        ///////////////////////////////////////////////////////////////////////////////////////////TICKET #1105 : consider use of a DSL to configure component view access 
+        ///////////////////////////////////////////////////////////////////////////////////////////TICKET #1105 : consider use of a DSL to configure component view access
         //
         // alloc = onePerWindow
         // locate = within(InfoBoxPanel)

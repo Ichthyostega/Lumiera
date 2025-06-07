@@ -157,7 +157,7 @@ Comments
 
 .State -> Final
 ichthyo wants this to be a dedicated thread (own subsystem) instead running in
-the initial thread. Fixed this in the proposal above, this makes this accepted. 
+the initial thread. Fixed this in the proposal above, this makes this accepted.
     Do 14 Apr 2011 03:40:41 CEST Christian Thaeter <ct@pipapo.org>
 
 

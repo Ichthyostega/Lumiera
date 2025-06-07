@@ -184,7 +184,7 @@ tend to cause difficulties).
 The line following your one line summary should be blank. Then on the third
 line, you can begin your exposition in as much detail as you like on your
 changes.
- 
+
 
 Publishing Your Contribution
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -197,18 +197,18 @@ Finally you can *push* your changes to the Lumiera server on the 'mob'
 repository:
 
 ------------------------------------------------------------
-$ git push git://git.lumiera.org/lumiera/mob master:refs/heads/YOURNAME 
+$ git push git://git.lumiera.org/lumiera/mob master:refs/heads/YOURNAME
 ------------------------------------------------------------
 
 This creates a new branch +YOURNAME+ on the mob repository.
 
-Check that indeed your changes are public by visiting 
+Check that indeed your changes are public by visiting
 link:http://Lumiera.org/gitweb[the Git-Web]: +
 The lumiera/mob repository should indicate
 [green]#right now# as its ``Last Change'' entry.
 
 Thereafter, notify the other developers on the mailing list and they may examine
-your code into the main project line. 
+your code into the main project line.
 
 
 Lumiera Communication Channels

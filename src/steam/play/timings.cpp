@@ -102,11 +102,11 @@ namespace play {
   Timings::isValid()  const
   {
     return bool(grid_)
-        && (( (ASAP == playbackUrgency || NICE == playbackUrgency)
-            && Time::NEVER == scheduledDelivery)
-           ||
-            (TIMEBOUND == playbackUrgency
-            && Time::MIN < scheduledDelivery && scheduledDelivery < Time::MAX)
+       and ((  (ASAP == playbackUrgency or NICE == playbackUrgency)
+            and Time::NEVER == scheduledDelivery)
+           or
+            (  TIMEBOUND == playbackUrgency
+            and Time::MIN < scheduledDelivery and scheduledDelivery < Time::MAX)
            );
   }
   
@@ -182,7 +182,7 @@ namespace play {
     Offset nominalOffset (grid_->timeOf(0), grid_->timeOf(frameOffset));
     return isOriginalSpeed()? nominalOffset
                             : nominalOffset * playbackSpeed;
-                                             ////////////////////////TICKET #902  for full-featured variable speed playback, we need to integrate (sum up step wise) instead of just using a fixed factor 
+                                             ////////////////////////TICKET #902  for full-featured variable speed playback, we need to integrate (sum up step wise) instead of just using a fixed factor
   }
   
   

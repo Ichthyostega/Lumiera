@@ -16,7 +16,7 @@
  ** Once created, an SchedulerDiagnostics object connects to the scheduler implementation
  ** through the SchedulerFrontend interface to activate additional diagnostic facilities.
  ** This allows to verify the operation of the scheduler from within unit-tests;
- ** typically doing so incurs a performance overhead. 
+ ** typically doing so incurs a performance overhead.
  ** 
  ** @deprecated 8/23 obsoleted by rework for »Playback Vertical Slice«     //////////////////////////////////TICKET #1228
  ** @see SchedulerFrontend
@@ -55,7 +55,7 @@ namespace gear {
    * will be disabled and disconnected when going out of scope.
    * @warning not reentrant, no reference-counting.
    *          At any given time, at most a single instance
-   *          of SchedulerDiagnostics may be used.  
+   *          of SchedulerDiagnostics may be used.
    */
   class SchedulerDiagnostics
     : util::NonCopyable
@@ -99,7 +99,7 @@ namespace gear {
         {
           return is_scheduled_timebound (hash_value (job));
         }
-     
+      
       bool
       is_scheduled_freewheeling (Job const& job)
         {

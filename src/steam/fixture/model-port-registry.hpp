@@ -89,7 +89,7 @@ namespace fixture {
       globalInstance();
       
       static ModelPortDescriptor const&
-      accessDescriptor (PID); 
+      accessDescriptor (PID);
       
       
       ModelPortDescriptor const&
@@ -122,7 +122,7 @@ namespace fixture {
     private:
       static lib::OptionalRef<ModelPortRegistry> theGlobalRegistry;
       
-      typedef std::map<PID, ModelPortDescriptor> MPTable;
+      using MPTable = std::map<PID, ModelPortDescriptor>;
       
       MPTable currentReg_;
       MPTable transaction_;

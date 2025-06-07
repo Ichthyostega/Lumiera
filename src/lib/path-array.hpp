@@ -400,7 +400,7 @@ namespace lib {
       firstNonempty ()  const
         {
           iterator startPos{this, elms_.begin()};
-          while (startPos && isnil (*startPos))
+          while (startPos and isnil (*startPos))
             ++startPos;
           return startPos;
         }

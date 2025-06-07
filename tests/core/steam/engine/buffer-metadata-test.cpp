@@ -86,7 +86,7 @@ namespace test  {
       unique_ptr<BufferMetadata> meta_;
       
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           seedRand();
           SIZE_A = 1 + rani(TEST_MAX_SIZE);
@@ -100,15 +100,15 @@ namespace test  {
       
       
       bool
-      ensure_proper_fixture() 
+      ensure_proper_fixture()
         {
           if (!meta_)
             meta_.reset(new BufferMetadata("BufferMetadata_test"));
           
           return (SIZE_A != SIZE_B)
-              && (JUST_SOMETHING != meta_->key(SIZE_A))
-              && (JUST_SOMETHING != meta_->key(SIZE_B))
-              ;
+             and (JUST_SOMETHING != meta_->key(SIZE_A))
+             and (JUST_SOMETHING != meta_->key(SIZE_B))
+               ;
         }
       
       
@@ -159,7 +159,7 @@ namespace test  {
           CHECK (keyX);
           
           CHECK ( isSameObject (m1, meta_->get(key)));
-          CHECK ( isSameObject (m1, meta_->get(key1))); 
+          CHECK ( isSameObject (m1, meta_->get(key1)));
           CHECK ( isSameObject (m2, meta_->get(keyX)));
           CHECK ( key1 == m2.parentKey());
           
@@ -172,7 +172,7 @@ namespace test  {
           CHECK ( meta_->isKnown(keyX));
           
           // but the FREE state is a dead end
-          m2.mark(FREE); 
+          m2.mark(FREE);
           CHECK (!meta_->isLocked(keyX));
           CHECK ( meta_->isKnown(keyX));
           CHECK ( meta_->isKnown(key1));
@@ -189,7 +189,7 @@ namespace test  {
         }
       
       
-      /** @test simulate a standard buffer provider usage cycle 
+      /** @test simulate a standard buffer provider usage cycle
        *  @note to get the big picture, please refer to
        *        BufferProviderProtocol_test#verifyStandardCase()
        *        This testcase here performs precisely the metadata related

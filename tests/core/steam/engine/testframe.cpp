@@ -308,7 +308,7 @@ namespace test  {
   {
     TestFrame& candidate (accessAsTestFrame (memLocation));
     return candidate.isSane()
-        && candidate == *this;
+       and candidate == *this;
   }
 
   bool

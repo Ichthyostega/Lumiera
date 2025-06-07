@@ -34,7 +34,7 @@ namespace asset {
    */
   Category::operator string ()  const
   {
-    typedef const char * const SymID;  
+    using SymID = const char * const;
 
     SymID kinds[6] = { "AUDIO"
                      , "VIDEO"
@@ -52,15 +52,15 @@ namespace asset {
   
   
   
-  /** hierarchical inclusion test. 
-   *  @return true if \c this can be considered 
+  /** hierarchical inclusion test.
+   *  @return true if \c this can be considered
    *          a subcategory of the given reference
    */
-  bool 
+  bool
   Category::isWithin (const Category& ref) const
   {
-    return ( ref.hasKind (kind_)
-          && starts_with (path_, ref.path_) 
+    return (  ref.hasKind (kind_)
+          and starts_with (path_, ref.path_)
            );
   }
 

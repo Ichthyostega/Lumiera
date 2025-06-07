@@ -44,10 +44,10 @@ https://Lumiera.org[Lumiera homepage] by the menus on the left hand-side of the
 page. This menu is also organised into layers that reflects the organisation of
 the documentation to help you navigate through the documentation.
 
-Source code doc directory structure :: 
+Source code doc directory structure ::
 The layout of the sub-directories below the *doc* directory is structured around
 the hierarchy,
- 
+
 ==== The Uppermost Layer
 
 At the highest, uppermost layer is the document

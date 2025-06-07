@@ -95,7 +95,7 @@ namespace stage {
   void
   NotificationService::displayInfo (NotifyLevel severity, string const& text)
   {                                                                         ///////////////////////////////////TICKET #1102 : build a dedicated message display box in the UI
-    ID errorLogID = interact::Wizard::getErrorLogID();                     ////////////////////////////////////TICKET #1047 : as a temporary solution, use the InfoBox panel... 
+    ID errorLogID = interact::Wizard::getErrorLogID();                     ////////////////////////////////////TICKET #1047 : as a temporary solution, use the InfoBox panel...
     switch (severity) {
       case NOTE_ERROR:
         markError (errorLogID, text);

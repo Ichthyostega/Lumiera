@@ -1,5 +1,5 @@
 /*
-  SYMBOL.hpp  -  symbolic constant datatype 
+  SYMBOL.hpp  -  symbolic constant datatype
 
    Copyright (C)
      2008,            Hermann Vosseler <Ichthyostega@web.de>
@@ -37,7 +37,7 @@
  ** - improve Lifecycle in startup and shutdown phase
  ** - maybe some metaprogramming magic to build distinct types based on symbols.
  ** 
- ** @see symbol-impl.cpp 
+ ** @see symbol-impl.cpp
  ** @see configrules.hpp
  ** @see query.hpp
  */
@@ -94,7 +94,7 @@ namespace lib {
        bool
        empty()  const
          {
-           return !str_ || 0 == std::strlen(str_);
+           return not str_ or 0 == std::strlen(str_);
          }
        
        bool operator== (CStr cString)  const;

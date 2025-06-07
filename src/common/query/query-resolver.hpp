@@ -50,7 +50,7 @@ namespace lumiera {
   typedef std::shared_ptr<Resolution> PReso;
   
   
-  /** 
+  /**
    * ABC representing the result set
    * of an individual query resolution
    */

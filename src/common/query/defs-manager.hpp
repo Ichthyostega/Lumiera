@@ -117,8 +117,8 @@ namespace query  {
    * For various kinds of objects we can tweak the default parametrisation
    * as part of the general session configuration. A ref to an instance of
    * this class is accessible through the current session and can be used
-   * to fill in parts of the configuration of new objects, if the user 
-   * code didn't give more specific parameters. Necessary sub-objects 
+   * to fill in parts of the configuration of new objects, if the user
+   * code didn't give more specific parameters. Necessary sub-objects
    * will be created on demand, and any default configuration, once
    * found, will be remembered and stored with the current session.
    * 
@@ -139,23 +139,23 @@ namespace query  {
       /** common access point: retrieve the default object fulfilling
        *  some given conditions. May silently trigger object creation.
        *  @throw error::Config in case no solution is possible, which
-       *         is considered \e misconfiguration. 
+       *         is considered \e misconfiguration.
        */
       template<class TAR>
       lib::P<TAR> operator() (Query<TAR> const&);
       
       
       /** search through the registered defaults, never create anything.
-       *  @return object fulfilling the query, \c empty ptr if not found. 
+       *  @return object fulfilling the query, \c empty ptr if not found.
        */
       template<class TAR>
       lib::P<TAR> search  (Query<TAR> const&);
       
       /** retrieve an object fulfilling the query and register it as default.
        *  The resolution is delegated to the ConfigQuery system (which may cause
-       *  creation of new object instances) 
+       *  creation of new object instances)
        *  @return object fulfilling the query, \c empty ptr if no solution.
-       */ 
+       */
       template<class TAR>
       lib::P<TAR> create  (Query<TAR> const&);
       
@@ -182,7 +182,7 @@ namespace query  {
 // Q: can we have something along the line of...?
 //
 //        template
-//          < class TAR,                   ///< the target to query for 
+//          < class TAR,                   ///< the target to query for
 //            template <class> class SMP  ///<  smart pointer class to wrap the result
 //          >
 //        SMP<TAR> operator() (const lumiera::Query<TAR>&);

@@ -31,7 +31,7 @@
  ** on referral; Sequences can be queried from the StructFactory, providing additional
  ** requested capabilities. Commonly clients will retrieve a given sequence by query
  ** on the name-ID of the sequence: \c Struct::retrieve(Query<Sequence> ("id(theName)."))
- ** Additionally, a specific fork root may be requested: \c "id(theName),rootFork(trackID)." 
+ ** Additionally, a specific fork root may be requested: \c "id(theName),rootFork(trackID)."
  ** 
  ** @todo this is a very crucial part of the emerging design of the session model. Unfortunately,
  **       development on that frontier has stalled since 2010, since we focused efforts towards
@@ -65,7 +65,7 @@ namespace mobject {
 namespace session {
   
   class Fork;
-  typedef MORef<Fork> RFork;
+  using RFork = MORef<Fork>;
 }}
 
 
@@ -73,18 +73,18 @@ namespace asset {
   
   
   class Sequence;
-  typedef lib::P<Sequence> PSequence;
-   
+  using PSequence = lib::P<Sequence>;
+  
   
   
   /**
    * TODO type comment
    */
-  class Sequence 
+  class Sequence
     : public Struct
     , public lib::AutoRegistered<Sequence>
     {
-      typedef mobject::session::RFork RFork;
+      using RFork = mobject::session::RFork;
       
       Sequence (Ident const&);                //////////////////////////////////////////////TICKET #692  pass in fork here
       
@@ -96,7 +96,7 @@ namespace asset {
       virtual void unlink ();
       
     };
-    
+  
   
   
 ///////////////////////////TODO currently just fleshing the API

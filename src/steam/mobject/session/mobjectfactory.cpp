@@ -62,11 +62,11 @@ namespace session {
    *  So, when the render engine gets across this Clip-MO, it is able
    *  to obtain the media information contained in the corresponding
    *  media asset.
-   *  @param mediaDef the actual asset::Media to be used 
-   *  created Clip could be a compound (multichannel) clip 
+   *  @param mediaDef the actual asset::Media to be used
+   *  created Clip could be a compound (multichannel) clip
    *  comprised of several SimpleClip sub-objects.
    */
-  Placement<Clip>   
+  Placement<Clip>
   MObjectFactory::operator() (const asset::Clip& clipRef, const asset::Media& mediaDef)
   {
     return Placement<Clip> (*new Clip (clipRef,mediaDef), &deleterFunc);

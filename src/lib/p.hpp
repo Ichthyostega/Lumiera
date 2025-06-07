@@ -21,7 +21,7 @@
  ** By default different instantiations of shared_ptr are completely unrelated types,
  ** even if using inheritance related type parameters for instantiation: a shared_ptr<Media>
  ** isn't some kind-of shared_ptr<Asset> -- we need to do an explicit static_ptr_cast. Another
- ** common problem is the definition of equality and ordering relations for shared_ptr: 
+ ** common problem is the definition of equality and ordering relations for shared_ptr:
  ** equality is based on the equality of the managed pointers, while ordering is built upon
  ** the ref count. While generally this may be a good compromise, in our case it hinders treating
  ** the smart ptrs within the application almost as if they were the objects themselves and proved
@@ -60,7 +60,7 @@ namespace lib {
    * @param BASE the shared-ptr type used as implementation
    * @note if the BASE smart-ptr type used as implementation
    *       implies another pointer type than the one used on
-   *       the interface (=type TAR), then every access to the 
+   *       the interface (=type TAR), then every access to the
    *       pointee causes an dynamic cast. Thus the pointee types
    *       need to support RTTI.
    */
@@ -97,27 +97,27 @@ namespace lib {
                                                                                           //////////////////TICKET #932 Clang is unable to fill in the default template argument. Resolved in newer versions of Clang. Temporary workaround: add second parameter B
       template<typename _O_,typename B>
       friend inline bool
-      operator== (P const& p, P<_O_, B> const& q) { return (p && q)? (*p == *q) : (!p && !q); }
+      operator== (P const& p, P<_O_, B> const& q) { return (p and q)? (*p == *q) : (!p and !q); }
       
       template<typename _O_,typename B>
       friend inline bool
-      operator!= (P const& p, P<_O_, B> const& q) { return (p && q)? (*p != *q) : !(!p && !q); }
+      operator!= (P const& p, P<_O_, B> const& q) { return (p and q)? (*p != *q) : !(!p and !q); }
       
       template<typename _O_,typename B>
       friend inline bool
-      operator<  (P const& p, P<_O_, B> const& q) { REQUIRE (p && q); return *p < *q; }   ///< @note deliberately not allowing comparison on NIL ////TICKET #307  : problem with equality test in associative containers, where equal(a,b) := !(a < b) && !(b < a)
+      operator<  (P const& p, P<_O_, B> const& q) { REQUIRE (p and q); return *p < *q; }   ///< @note deliberately not allowing comparison on NIL ////TICKET #307  : problem with equality test in associative containers, where equal(a,b) := !(a < b) and !(b < a)
       
       template<typename _O_,typename B>
       friend inline bool
-      operator>  (P const& p, P<_O_, B> const& q) { REQUIRE (p && q); return *q < *p; }
+      operator>  (P const& p, P<_O_, B> const& q) { REQUIRE (p and q); return *q < *p; }
       
       template<typename _O_,typename B>
       friend inline bool
-      operator<= (P const& p, P<_O_, B> const& q) { REQUIRE (p && q); return *p <= *q;}
+      operator<= (P const& p, P<_O_, B> const& q) { REQUIRE (p and q); return *p <= *q;}
       
       template<typename _O_,typename B>
       friend inline bool
-      operator>= (P const& p, P<_O_, B> const& q) { REQUIRE (p && q); return *p >= *q;}
+      operator>= (P const& p, P<_O_, B> const& q) { REQUIRE (p and q); return *p >= *q;}
       
     };
   

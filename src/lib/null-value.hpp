@@ -1,5 +1,5 @@
 /*
-  NULL-VALUE.hpp  -  maintain per-type NIL values in static memory 
+  NULL-VALUE.hpp  -  maintain per-type NIL values in static memory
 
    Copyright (C)
      2010,            Hermann Vosseler <Ichthyostega@web.de>
@@ -53,7 +53,7 @@
 
 namespace lib {
   
-  /** 
+  /**
    * Singleton holder for NIL or default value objects.
    * Implemented as a cluster of Meyer's singletons, maintaining
    * a single value per type. Specialisation is intended.

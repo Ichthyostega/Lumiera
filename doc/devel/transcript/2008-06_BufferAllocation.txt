@@ -16,7 +16,7 @@ __cehteh__ and __ichthyo__
 [19:21:57] <ichthyo> I have one topic I want to discuss with you, cehteh
 [19:22:07] <ichthyo> but it need not be now, or in the meeting
 [19:22:07] <cehteh> ok
-[19:22:24] <ichthyo> it's about allocating processing buffers 
+[19:22:24] <ichthyo> it's about allocating processing buffers
 [19:23:20] <cehteh> the backend will provide them as temporary files/cyclic buffers
 [19:23:52] <cehteh> its not there yet but in my mind
 [19:24:11] <ichthyo> haha, same for the builder... it's mostly just in my mind
@@ -68,7 +68,7 @@ __cehteh__ and __ichthyo__
 [19:39:50] <ichthyo> we can't prepare everything, because, some nodes may include a variable ammount of source frames
 [19:40:11] <ichthyo> and this number can depend on automation. Classic example is the "time average" video effect
 [19:39:53] <cehteh> problem is only when the builder generates one node which takes X and in-place generates Y from it
-[19:40:10] <cehteh> and you have a 2nd node which takes X too 
+[19:40:10] <cehteh> and you have a 2nd node which takes X too
 [19:40:23] <cehteh> this needs to be serialized somehow
 [19:41:12] <ichthyo> regarding the problem you mention: I want to exclude/avoid this situation already when building
 [19:41:35] <cehteh> yes thats what i was thinking .. thats easiest addressed there
@@ -118,7 +118,7 @@ __cehteh__ and __ichthyo__
 [19:52:31] <cehteh> but memory requirements grow quadratic!
 [19:52:46] <ichthyo> the user should NEVER need to set up the processing buffer size, as is necessary in cinelerra
 [19:52:59] <cehteh> yes agreed
-[19:53:15] <ichthyo> I don't think we need safe-regions allways, 
+[19:53:15] <ichthyo> I don't think we need safe-regions allways,
 [19:53:31] <ichthyo> but, as e.g. the motion tracking will create automation data in Lumiera
 [19:53:38] <cehteh> yes only for some effect .. motion tracker doesnt need it
 [19:53:50] <ichthyo> it means the actual buffer size depends on automation data for a given frame
@@ -131,7 +131,7 @@ __cehteh__ and __ichthyo__
 [19:55:30] <cehteh> (in case of rotations)
 [19:55:36] <ichthyo> yes agreed
 [19:56:16] <cehteh> well temp buffers will be allcocated for frames of the same 'class' i aleready saied that
-[19:56:50] <cehteh> and i will group these classes so that some similar sizes fall in the same class 
+[19:56:50] <cehteh> and i will group these classes so that some similar sizes fall in the same class
 [19:57:19] <cehteh> that might waste some memory on disk at the end of each frame .. but that doesnt need to be mapped in
 [19:57:32] <cehteh> the kernel will do that automatically for us
 [19:57:37] <ichthyo> :)

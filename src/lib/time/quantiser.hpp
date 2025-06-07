@@ -105,7 +105,7 @@ namespace time {
       bool
       supports()  const
         {
-          return supportedFormats_.check<FMT>(); 
+          return supportedFormats_.check<FMT>();
         }
       
       static PQuant retrieve (Symbol gridID);                         ///< @note defined in common-services.cpp

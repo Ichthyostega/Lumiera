@@ -25,7 +25,7 @@
  ** 
  ** @see session-command-facade.h
  ** @see facade.hpp subsystems for the Steam-Layer
- ** @see guifacade.cpp starting this service 
+ ** @see guifacade.cpp starting this service
  */
 
 
@@ -93,7 +93,7 @@ namespace control {
       void bindArg (Symbol cmdID, Rec const& args)            override;
       void invoke  (Symbol cmdID)                             override;
     };
-    
+  
   
   
 }} // namespace steam::control

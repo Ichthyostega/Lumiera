@@ -62,13 +62,13 @@ namespace util {
     string::const_iterator e = i + (res.length());
     while ( i != e )
       {
-        while ( i != e && !isValid (*i) )   ++i;
-        while ( i != e && isValid  (*i) )   *(j++) = *(i++);
-        if    ( i != e && isPunct  (*i) )
+        while ( i != e and !isValid (*i) )   ++i;
+        while ( i != e and isValid  (*i) )   *(j++) = *(i++);
+        if    ( i != e and isPunct  (*i) )
           {
             *j++ = '_';
             do  ++i;
-            while ( i != e && isPunct (*i));
+            while ( i != e and isPunct (*i));
           }
       }
     res.erase(j,res.end());

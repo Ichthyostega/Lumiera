@@ -13,7 +13,7 @@
 
 
 /** @file typelist-diagnostics.hpp
- ** Support for writing metaprogramming unit-tests dealing with typelists and flags.  
+ ** Support for writing metaprogramming unit-tests dealing with typelists and flags.
  ** a Printer template usable for debugging the structure of a typelist built
  ** upon some simple debugging-style types. Examples being a Num<int> template,
  ** or the Flag type. A Printer type generated from this template provides
@@ -79,7 +79,7 @@ namespace meta {
   
   
   
-  /** helper for generating test lists */      
+  /** helper for generating test lists */
   template<class X> struct CountDown         { using List = Nil; };
   template<>        struct CountDown<Num<0>> { using List = Node<Num<0>, Nil>; };
   template<int I>   struct CountDown<Num<I>> { using List = Node<Num<I>, typename CountDown<Num<I-1>>::List>; };
@@ -98,7 +98,7 @@ namespace meta {
           static string show() { return "-"; }
         };
       
-      /** debugging template, 
+      /** debugging template,
        *  printing the "number" used for instantiation on ctor call
        */
       template<class T=Nil, class BASE=NullP>
@@ -153,11 +153,11 @@ namespace meta {
       struct Printer<Node<TY,TYPES>, BASE>
         : BASE
         {
-          static string show() 
+          static string show()
             {
               typedef Node<TY,TYPES> List;
               return string("\n\t+--") + printSublist<List>()+"+"
-                   + BASE::show(); 
+                   + BASE::show();
             }
         };
       
@@ -165,7 +165,7 @@ namespace meta {
       struct Printer<Config<f1,f2,f3,f4,f5>, BASE>
         : BASE
         {
-          static string show() 
+          static string show()
             {
               typedef typename Config<f1,f2,f3,f4,f5>::Flags FlagList;
               return string("\n\t+-Conf-[") + printSublist<FlagList>()+"]"
@@ -177,7 +177,7 @@ namespace meta {
     
     
     
-    /* ===== printing types and contents ===== */ 
+    /* ===== printing types and contents ===== */
     
     template<typename TYPES>
     inline                  enable_if< is_Typelist<TYPES>,

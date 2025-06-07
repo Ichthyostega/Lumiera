@@ -54,7 +54,7 @@ namespace advice {
   namespace{  // Implementation details
     
     const string matchSym = "(\\w+(?:[\\.\\-]\\w+)*)";
-    const string matchArg = "\\(\\s*"+matchSym+"?\\s*\\)"; 
+    const string matchArg = "\\(\\s*"+matchSym+"?\\s*\\)";
     regex findPredicate ("\\s*"+matchSym+"("+matchArg+")?\\s*,?");    ///< \c sym(arg), groups: [symbol, parenthesis, argument symbol]
     
     /** detect the _arity_ of an predicate, as matched by #findPredicate.
@@ -75,12 +75,12 @@ namespace advice {
   
   void
   Binding::parse_and_append (Literal lit)
-  {      
+  {
     string def(lit);
     string::const_iterator end_of_last_match = def.begin();
     
     sregex_iterator end;
-    sregex_iterator pos (def.begin(),def.end(), findPredicate, 
+    sregex_iterator pos (def.begin(),def.end(), findPredicate,
                                                 match_continuous);    // continuous: don't allow garbage *not* matched by the RegExp
     while (pos != end)
       {
@@ -91,8 +91,8 @@ namespace advice {
       }
     
     if (  end_of_last_match !=def.end()
-       && *end_of_last_match !='.'
-       ) // if the match did *not stop at the end of the pattern definition list 
+       and *end_of_last_match !='.'
+       ) // if the match did *not stop at the end of the pattern definition list
       throw lumiera::error::Invalid ("Trailing garbage in binding pattern definition"                 ///////////////TICKET #197  should include the garbage, i.e. where the parsing stops
                                     , LUMIERA_ERROR_BINDING_PATTERN_SYNTAX);
   }

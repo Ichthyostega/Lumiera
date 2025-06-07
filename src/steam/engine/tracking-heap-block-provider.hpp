@@ -103,7 +103,7 @@ namespace engine {
       
     class BlockPool;
     
-    typedef std::unordered_map<HashVal,BlockPool> PoolTable;
+    using PoolTable = std::unordered_map<HashVal,BlockPool>;
   }
   
   

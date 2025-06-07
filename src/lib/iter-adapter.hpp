@@ -283,7 +283,7 @@ namespace lib {
       bool
       check()  const
         {
-          return source_ && checkPoint (source_,pos_);           // extension point: free function checkPoint(...)
+          return source_ and checkPoint (source_,pos_);          // extension point: free function checkPoint(...)
         }
       
       /** ask the controlling container to yield the next position.
@@ -864,7 +864,7 @@ namespace lib {
       bool
       isValid ()  const
         {
-          return (p_!= IT()) && (p_ != e_);
+          return (p_!= IT()) and (p_ != e_);
         }
       
       bool
@@ -896,10 +896,10 @@ namespace lib {
   
   /// Supporting equality comparisons...
   template<class I1, class I2>
-  inline bool operator== (RangeIter<I1> const& il, RangeIter<I2> const& ir)  { return (!il && !ir) || (il.getPos() == ir.getPos()); }
+  inline bool operator== (RangeIter<I1> const& il, RangeIter<I2> const& ir)  { return (!il and !ir) or (il.getPos() == ir.getPos()); }
   
   template<class I1, class I2>
-  inline bool operator!= (RangeIter<I1> const& il, RangeIter<I2> const& ir)  { return !(il == ir); }
+  inline bool operator!= (RangeIter<I1> const& il, RangeIter<I2> const& ir)  { return not (il == ir); }
   
   
   
@@ -923,9 +923,9 @@ namespace lib {
       INT e_;
       
     public:
-      typedef INT* pointer;
-      typedef INT& reference;
-      typedef INT  value_type;
+      using pointer    = INT*;
+      using reference  = INT&;
+      using value_type = INT ;
       
       NumIter (INT start, INT end)
         : i_(start)
@@ -1035,13 +1035,13 @@ namespace lib {
   template<template<class,class> class Iter, class TY, class CON>
   struct IterType<Iter<TY,CON>>
     {
-      typedef CON Container;
-      typedef TY  ElemType;
+      using Container = CON;
+      using ElemType  = TY ;
       
       template<class T2>
       struct SimilarIter  ///< rebind to a similarly structured Iterator with value type T2
         {
-          typedef Iter<T2,CON> Type;
+          using Type = Iter<T2,CON>;
         };
     };
   
@@ -1052,8 +1052,8 @@ namespace lib {
       template<class T2>
       struct SimilarIter  ///< rebind to rewritten Iterator wrapped into RangeIter
         {
-          typedef typename IterType<IT>::template SimilarIter<T2>::Type WrappedIter;
-          typedef RangeIter<WrappedIter> Type;
+          using WrappedIter = typename IterType<IT>::template SimilarIter<T2>::Type;
+          using        Type = RangeIter<WrappedIter>;
         };
     };
   
@@ -1067,9 +1067,9 @@ namespace lib {
       
       
     public:
-      typedef const typename IT::value_type value_type;
-      typedef const typename IT::pointer    pointer;
-      typedef const typename IT::reference  reference;
+      using value_type = const typename IT::value_type;
+      using pointer    = const typename IT::pointer   ;
+      using reference  = const typename IT::reference ;
       
       ConstIter (IT srcIter)
         : i_(srcIter)

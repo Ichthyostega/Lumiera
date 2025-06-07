@@ -146,7 +146,7 @@ typedef lumiera_jobDefinition* LumieraJobDefinition;
 
 
 /**
- * Description of a job. Jobs are passed by the Steam-Layer to the Back-End. 
+ * Description of a job. Jobs are passed by the Steam-Layer to the Back-End.
  * 
  * This descriptor record is used by the scheduler to organise job invocation.
  * The actual job's definition, i.e. the invocation parameter and the closure

@@ -52,7 +52,7 @@ namespace test    {
   class DeleteClip_test : public Test
     {
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           buildTestsession1();
           PSess sess = Session::current;
@@ -63,7 +63,7 @@ namespace test    {
           
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #639 : work out how to search within the Model!!
                 
-          PClipMO clipPlacement = sess->currEDL().find(SESSION1_CLIP); 
+          PClipMO clipPlacement = sess->currEDL().find(SESSION1_CLIP);
                                                               // global Var assigned in buildTestsession1()
           PMedia media = clipPlacement->getMedia();
           IDA clipAID = media->getID();

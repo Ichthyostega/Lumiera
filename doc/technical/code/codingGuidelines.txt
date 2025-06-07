@@ -20,7 +20,7 @@ The Lumiera project uses GNU indentation style with slight adaptations.
   topics into a single line...]
 - originally, GNU style focused on plain-C code. +
   We thus apply some relaxations and clarifications ...
-  
+
   * the braces for a class scope are indented by 2 spaces
   * the access modifiers start at this brace level, while all declarations and definitions
     within the class are again indented by 2 spaces
@@ -30,12 +30,12 @@ The Lumiera project uses GNU indentation style with slight adaptations.
   * the line breaking rules are relaxed. Definitions and statements may be written as single line,
     provided that the length remains below 110 chars and the result _remains legible_.
     More specifically...
-  
+
     ** function declarations may be written in one line
     ** same for definitions with just a single statement in the body
     ** same for simple if-statements without else-branch.
     ** If in doubt however, we prefer to wrap the lines.
-  
+
   * it is OK to write if-then-else without braces, but only as long as the structure
     is uttermost clear and poses no danger for maintenance. Use your common sense on this one.
     Often, a ternary operator is a viable alternative. When a `?` ... `:` becomes long and
@@ -50,7 +50,7 @@ The Lumiera project uses GNU indentation style with slight adaptations.
   * the body of λ-functions is indented beyond the capture clause, i.e. it is rather
     starkly offset with respect to the regular code. When capture clauses become complicated
     beyond just a short list of names -- especially when including initialisers -- they are
-    preferably written on a separate line, directly above the argument list in parenthesis  
+    preferably written on a separate line, directly above the argument list in parenthesis
   * the opening brace of namespaces is placed on the same line. Optionally, the namespace
     body may be indented, as long as this helps underpinning the nesting structure. But
     there is no need to use 3 indents on a 3 level nested namespace. One level is enough

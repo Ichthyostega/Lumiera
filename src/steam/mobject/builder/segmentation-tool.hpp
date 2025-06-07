@@ -43,10 +43,10 @@ namespace builder {
   
   
   /**
-   * Tool implementation for deriving a partitioning of the current 
-   * timeline, such that each Segment has a constant configuration. 
+   * Tool implementation for deriving a partitioning of the current
+   * timeline, such that each Segment has a constant configuration.
    * "Constant" means here, that any remaining changes over time
-   * can be represented by automation solely, without the need 
+   * can be represented by automation solely, without the need
    * to change the node connections.
    */
   class SegmentationTool 

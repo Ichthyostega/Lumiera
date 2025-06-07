@@ -89,11 +89,11 @@ namespace lumiera {
       friend ostream& operator<< (ostream&, const Option&);
     };
   
-    
-  /** for outputting the help messages. Forward accumulated 
+  
+  /** for outputting the help messages. Forward accumulated
    *  help messages from all contained option definitions */
   ostream& operator<< (ostream& os, const Option& to);
- 
+  
   
 } // namespace lumiera
 #endif

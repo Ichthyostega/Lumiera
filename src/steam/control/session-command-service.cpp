@@ -186,7 +186,7 @@ namespace control {
                                , LUMIERA_INTERFACE_INLINE (cycle,
                                                            const char*, (const char* cmdID, const char* invocationID),
                                                              {
-                                                               if (!_instance) 
+                                                               if (!_instance)
                                                                  return lumiera_error_set (LUMIERA_ERROR_LIFECYCLE, cmdID);
                                                                else
                                                                  return _instance().cycle(cmdID, invocationID);

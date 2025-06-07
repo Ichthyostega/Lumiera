@@ -87,12 +87,12 @@ namespace test {
    *         function argument list signatures, to build suitable
    *         argument tuple types by metaprogramming, and finally
    *         to pass them to construct a binder.
-   * @see function-composition-test.cpp (advanced features like partial application) 
+   * @see function-composition-test.cpp (advanced features like partial application)
    */
   class FunctionClosure_test : public Test
     {
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           verify_setup();
           check_signatureTypeManip();

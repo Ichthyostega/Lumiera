@@ -59,8 +59,8 @@ namespace fixture {
     : util::NonCopyable
     {
       
-      typedef ID<Pipe>   PID;
-//      typedef ID<Struct> StID;
+      using PID = ID<Pipe>;
+//    using StID = ID<Struct>;
       
     public:
       

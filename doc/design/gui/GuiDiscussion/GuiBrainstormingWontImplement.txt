@@ -5,7 +5,7 @@ GuiBrainstorming Reviewed - Won't Implement
 
 * Help feedback for quality management +
 Sometimes help files and tutorials are improvable. Keeping track of which help is to which amount useful for a majority of users will provide data about which help files are improvable. It will also provide data about which features most often users use help and might be candidate for usability consideration. like: []solved my problem []got me on the right way []needed to find help elsewhere []problem not solved
- 
+
   - This is surprisingly hard to implement (I think), and in a sense it's already obvious to us whether the docs are quality - filled with nice graphics, simple steps, and lots of clear information or whether they need improvement. This feature might have some use on the website.
 -- link:JoelHoldsworth[] [[DateTime(2008-07-23T20:47:35Z)]]
 
@@ -28,7 +28,7 @@ If it was context sensitive, then it would provide relevant information, similar
 Video tips and Tutorials could be available via Youtube, which also doubles as promotion for the project. Users could choose to download groups of videos on selected topics.
 -- link:Tree[][[DateTime(2008-06-11T17:04:00NZ)]]
 
-  - If the user stops to thing I think we should give them some peace while they get their thoughts together. I'm sure if they want help they'll ask for it. Remember how annoying Clippy was in MS Office? :-P 
+  - If the user stops to thing I think we should give them some peace while they get their thoughts together. I'm sure if they want help they'll ask for it. Remember how annoying Clippy was in MS Office? :-P
 -- link:JoelHoldsworth[] [[DateTime(2008-07-23T20:45:00Z)]]
 
 * Help and visual prompts use GIFs for visual cue as to time behaviour of feature. +
@@ -54,10 +54,10 @@ The user could be asked to choose their experience level, and more complex optio
   - Comments: I can't see any good reason for this. The user interface ought to be usable for everyone. The problem is that we want to enable everyone to be an "expert" by making power intuitively available even to beginners. The other problems is that light users might use only 10% of the functionality - but different light users use a different 10% from each other. So hiding things doesn't actually help make things simpler. It's much better to have things tidily arranged with clear descriptions etc. to help the user understand what a command might do - rather than hiding the command from them.
 -- link:JoelHoldsworth[] [[DateTime(2008-07-22T22:25:58Z)]]
 
-* SVG-based GUI elements (buttons and chevrons) could allow for easy GUI skinning and function calls since one would just have to mod an xml file to create new skins. It also means you could use code from the Webkit project for rendering the interface maybe. My practical reasoning is that if the devs wanted to work on the refining cinelerra/lumeira core technology or add plug-ins to extend its functionality, adding the GUI elements of those plug-ins might be less of a chore. It also may be a practical image format for a node-based compositing interface(if desired) because it supports embedded grouping of vector expressions. It could also be used as the basis for drawing things like masks and vector objects in the compisitor and the xml vector-values of those drawn objects could be communicated back to the programs core for updating events. (Similar to the way some more popular editor/compositors use PostScript to draw objects and place values.) It also the SVG spec supports transparency bluring and the ability to interpolate these events over time...things that can be incorperated into program beyond the the gui. Sorry for the long post...felt I needed to explain my reasoning better. 
+* SVG-based GUI elements (buttons and chevrons) could allow for easy GUI skinning and function calls since one would just have to mod an xml file to create new skins. It also means you could use code from the Webkit project for rendering the interface maybe. My practical reasoning is that if the devs wanted to work on the refining cinelerra/lumeira core technology or add plug-ins to extend its functionality, adding the GUI elements of those plug-ins might be less of a chore. It also may be a practical image format for a node-based compositing interface(if desired) because it supports embedded grouping of vector expressions. It could also be used as the basis for drawing things like masks and vector objects in the compisitor and the xml vector-values of those drawn objects could be communicated back to the programs core for updating events. (Similar to the way some more popular editor/compositors use PostScript to draw objects and place values.) It also the SVG spec supports transparency bluring and the ability to interpolate these events over time...things that can be incorperated into program beyond the the gui. Sorry for the long post...felt I needed to explain my reasoning better.
 -- jb [[DateTime(2008-07-21T21:58:48Z)]]
 
-  - Comment: I am hoping that we can implement a simple set of skins for Lumiera. But we will be using the GTK based styles system, which is the standard. This allows theming to be done with a simple script file. These styles files are the more natural choice for UI theming, because WebKit is designed primarily for web, and would add a lot of unnecessary bloat to the app. Icons will be drawn as SVGs; a good choice for drawing the graphics, but these will be prerendered into PNGs at compile time as is standard practice for most free-desktop apps. 
+  - Comment: I am hoping that we can implement a simple set of skins for Lumiera. But we will be using the GTK based styles system, which is the standard. This allows theming to be done with a simple script file. These styles files are the more natural choice for UI theming, because WebKit is designed primarily for web, and would add a lot of unnecessary bloat to the app. Icons will be drawn as SVGs; a good choice for drawing the graphics, but these will be prerendered into PNGs at compile time as is standard practice for most free-desktop apps.
 -- link:joelholdsworth[] [[DateTime(2008-07-21T21:58:48Z)]]
 
 * Client / Server Model +
@@ -82,7 +82,7 @@ There may be several methods to make menu selections, and other choices. The Gui
 I am not sure how the current video play system works, but speed might be increased if several frames got sent to the video card at once. The video card can act as a video cache and play them as required. The number of interrupts to the process is reduced, to much less than one per frame, freeing up more CPU time for calculating the effects etc..
 --link:Tree[][[DateTime(2008-07-18T18:18:00NZ)]].
 
-  - Comment: Good idea, but not really necessarily. Firstly because XVideo is pretty fast, and the bottle neck is in rendering not drawing. Second, we can't get direct access to video RAM anyway because X abstracts it away. 
+  - Comment: Good idea, but not really necessarily. Firstly because XVideo is pretty fast, and the bottle neck is in rendering not drawing. Second, we can't get direct access to video RAM anyway because X abstracts it away.
 -- link:joelholdsworth[] [[DateTime(2008-07-19T19:42:04Z)]]
 
 * GUI development - flexible approach - using "Skin Methods" +
@@ -105,7 +105,7 @@ The Status bar can show more information but isn't directly in the users view, h
 +
 This might be a bit different to some common other user interfaces (M$...) but I think this is much more valuable.
 -- link:ct[] [[DateTime(2008-04-08T01:26:06Z)]]
-  
+
   - Comment:The thing about tooltips is that one usually uses them to aid the user in figuring out what a toolbar button (which would otherwise be a crytic icon bitmap) actually does - and so in this sense they're not a waste - they help users figure out how the application works. Users expect to find those hints in tooltips, and so it's rather unkind to the user to do something different and unexpected, and so we should avoid breaking the norms if we can. The actual state of the widget should be visible to see straight off and editing that value should be allowed straight off. That functionality should not be hidden inside a tooltips. People will find it really counter-intuitive to have to edit a value inside a tooltip in order to make a change.
 -- link:JoelHoldsworth[] [[DateTime(2008-07-22T21:42:32Z)]]
 +

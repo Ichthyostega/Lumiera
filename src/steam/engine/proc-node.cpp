@@ -426,7 +426,7 @@ namespace engine {
    *   and it relies on a common shared prefix in the memory layout of weaving patterns.
    * @remark the \ref Port interface is kept minimal, since a very large number of
    *   implementations and template instantiations can be expected, so that any further
-   *   function would cause a lot of additional and mostly redundant code generation. 
+   *   function would cause a lot of additional and mostly redundant code generation.
    */
   lib::Several<PortRef> const&
   PortDiagnostic::srcPorts()

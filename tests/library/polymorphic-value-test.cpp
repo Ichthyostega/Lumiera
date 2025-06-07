@@ -284,7 +284,7 @@ namespace test{
        * which then requires to use a more expensive implementation. Sometimes it's
        * desirable to support _cloning only_ (copy ctor), but no assignment after
        * the fact. In this special case, a support API with only a `cloneInto()` member
-       * can be implemented, causing the PolymorphicValue container to raise an 
+       * can be implemented, causing the PolymorphicValue container to raise an
        * exception in case the copy operator is invoked.
        */
       void

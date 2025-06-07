@@ -22,7 +22,7 @@
  ** 
  ** @remarks this facility was created during the attempt to shape the internal API
  **          of TreeMutator, including definition of the "mutation primitives";
- **          it might be helpful later to diagnose problems with data mutation. 
+ **          it might be helpful later to diagnose problems with data mutation.
  ** 
  ** @todo WIP 2/2016
  ** 

@@ -120,7 +120,7 @@ namespace time {
    * @remark this representation was inspired by [Lib-GAVL].
    * @todo 2025 a mere type alias is up to debate -- very likely we'll use a wrapper soon   /////////////////TICKET #1258
    * @warning application logic should avoid handling any raw time value
-   *          directly and rather treat time data as an opaque entity. 
+   *          directly and rather treat time data as an opaque entity.
    * [Lib-GAVL]: https://github.com/bplaum/gavl
    */
   using raw_time_64 = int64_t;
@@ -644,7 +644,7 @@ namespace time {
       contains (TimeValue const& tp)  const
         {
           return *this <= tp
-              && tp < end();
+             and tp < end();
         }
       
       /** may change start / duration */

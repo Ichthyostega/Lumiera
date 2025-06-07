@@ -48,11 +48,11 @@ namespace lib {
    *       ClassLock template with differing CONF count as different type.
    *       Actually using two different configurations within for a single
    *       class X should be detected and flagged as error, but actually
-   *       just two non-shared lock instances get created silently. Beware! 
+   *       just two non-shared lock instances get created silently. Beware!
    * @see Sync::Lock the usual simple instance-bound variant
    */
   template<class X, class CONF = RecursiveLock_NoWait>
-  class ClassLock 
+  class ClassLock
     : public Sync<CONF>::Lock
     {
       using Lock    = typename Sync<CONF>::Lock;

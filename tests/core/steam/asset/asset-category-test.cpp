@@ -44,7 +44,8 @@ namespace test {
    */
   class AssetCategory_test : public Test
     {
-      virtual void run(Arg) 
+      virtual void
+      run(Arg)
         {
           createCategory();
           containmentQuery();

@@ -53,16 +53,16 @@ namespace asset {
   
   
   
-  PPipe 
+  PPipe
   Pipe::query (string const& properties)
-  { 
+  {
     return Struct::retrieve (Query<Pipe> (properties));
   }
   
   
   /** @param id asset-ID of the pipe to retrieve
    *  @throw error::Invalid when not found
-   */ 
+   */
   PPipe
   Pipe::lookup (ID<Pipe> id)
   {
@@ -70,7 +70,7 @@ namespace asset {
   }
 
   
-  void 
+  void
   Pipe::switchProcPatt (PProcPatt& another)
   {
     wiringTemplate_ = another;

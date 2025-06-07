@@ -256,7 +256,7 @@ namespace lib {
       LazyInit (std::function<SIG>& targetFunctor, INI&& initialiser, ARGS&& ...parentCtorArgs)
         : PAR(forward<ARGS> (parentCtorArgs)...)
         , pendingInit_{}
-        { 
+        {
           installInitialiser (targetFunctor, forward<INI> (initialiser));
         }
       

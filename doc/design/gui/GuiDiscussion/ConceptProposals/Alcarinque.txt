@@ -46,7 +46,7 @@ Modules
 -------
 
 * Main Menu
-  
+
   - It doesn't have to be a menu.
   - Contains a a way to manage proyects, render as movie, setup the preferences,
     customize the UI, manage the others modules, and capture a footage.
@@ -59,7 +59,7 @@ Modules
 
     . Just think of this... I have a footage of a kid playing with some red stick.
     . I add this as an _In_ node. Then connect its output to a _Glow_ node.
-      Also connect the output of the _In_ node to a _RGB Curves_ node which I use 
+      Also connect the output of the _In_ node to a _RGB Curves_ node which I use
       to filter a certain tone of red. The output to the curves is sent to the
       alpha input of the glow node. The output of glow is sent to an _Out_ node.
     . I save this node layout as a preset, a file called `lightsaber.np`. I go
@@ -92,7 +92,7 @@ Modules
     node (to convert audio to video), oscilators, noise, etc. For example, we
     could drive a brightness/contrast node with a one dimension noise generator,
     to obtain an scene with lightnings or broken lamps like “doom”
-    
+
 * Sound
 * Media Library:
 
@@ -161,7 +161,7 @@ Modules
     different timelines, maybe when selecting in one module the others could
     switch inmmediatly, but maybe it is useful in some case.
   - It would be divided into three parts.
-  
+
     . A list of nodes into the node layout
     . The options of the selected node in the list.
     . A curve timeline. A list for of the node parameters and curves for it.

@@ -106,14 +106,14 @@ namespace control {
       virtual ~SessionCommand() {} ///< this is an interface
       friend class lib::DependencyFactory<SessionCommand>;
     };
-    
+  
   
   
 }} // namespace steam::control
 
 
 extern "C" {
-#endif /* =========================== CL Interface ===================== */ 
+#endif /* =========================== CL Interface ===================== */
 
   
 #include "common/interface.h"

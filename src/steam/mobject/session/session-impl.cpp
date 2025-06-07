@@ -69,7 +69,7 @@ namespace session {
   }
   
   
-  bool 
+  bool
   SessionImpl::isValid ()
   {
     return true;          //////////////////////////////////////////////////////////////////////////TICKET #694
@@ -83,7 +83,7 @@ namespace session {
    *          instance (placement) which was attached
    *          below the position given by current focus
    */
-  MObjectRef 
+  MObjectRef
   SessionImpl::attach (PMO const& placement)
   {
     MObjectRef newAttachedInstance;
@@ -96,14 +96,14 @@ namespace session {
   
   /** detach the denoted object (placement) from model,
    *  together with any child objects contained in the
-   *  scope of this placement. 
+   *  scope of this placement.
    *  @note as a sideeffect, the current QueryFocus
    *        is moved to the scope containing the
    *        object to be removed
    *  @throw error::Invalid when attempting to kill root
    *  @return \c true if actually removing something
    */
-  bool 
+  bool
   SessionImpl::detach (PMO const& placement)
   {
     bool is_known = contents_.contains (placement);
@@ -141,7 +141,7 @@ namespace session {
   
   void
   SessionImpl::rebuildFixture ()
-  { 
+  {
     UNIMPLEMENTED ("rebuild Fixture");
   }
   

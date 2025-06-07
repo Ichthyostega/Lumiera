@@ -14,9 +14,9 @@
 #####################################################################
 
 # history: 8/2008 adapted for Lumiera build system
-#                 changed to accept a list of precompiled header defs 
+#                 changed to accept a list of precompiled header defs
 
-# TODO: WIP-remove these comments when port to Python 3.x is DONE 
+# TODO: WIP-remove these comments when port to Python 3.x is DONE
 # types.py does not contain ListType in Python 3.x
 # # Why do we require ListType?
 # To do something like

@@ -87,8 +87,8 @@ namespace test   {
     
   }//(End) test fixture
   
-  typedef shared_ptr<CommandImpl> PCommandImpl;
-  typedef HandlingPattern const& HaPatt;
+  using PCommandImpl = shared_ptr<CommandImpl>;
+  using HaPatt       = HandlingPattern const&;
   
   
   
@@ -149,7 +149,7 @@ namespace test   {
           function<Sig_capt> c_Fun (command1::capture);
           function<Sig_undo> u_Fun (command1::undoIt);
           
-          CHECK (o_Fun && c_Fun && u_Fun);
+          CHECK (o_Fun and c_Fun and u_Fun);
           
           // when the CommandDef is complete, it issues the
           // allocation call to the registry behind the scenes....

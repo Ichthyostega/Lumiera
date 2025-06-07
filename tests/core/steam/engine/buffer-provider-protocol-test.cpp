@@ -70,7 +70,7 @@ namespace test  {
   class BufferProviderProtocol_test : public Test
     {
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           verifySimpleUsage();
           verifyStandardCase();
@@ -127,13 +127,13 @@ namespace test  {
           CHECK (num1 == TEST_ELMS);
           CHECK (0 < num2 && num2 <=TEST_ELMS);
           
-          const size_t STORAGE_SIZE = BuffTable::Storage<2*TEST_ELMS>::size; 
+          const size_t STORAGE_SIZE = BuffTable::Storage<2*TEST_ELMS>::size;
           char storage[STORAGE_SIZE];
           BuffTable& tab =
               BuffTable::prepare(STORAGE_SIZE, storage)
                         .announce(num1, desc1)
                         .announce(num2, desc2)
-                        .build(); 
+                        .build();
           
           tab.lockBuffers();
           for_each (tab.buffers(), do_some_calculations);

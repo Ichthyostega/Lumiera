@@ -73,7 +73,7 @@ namespace session {
    * focus location aside. This new focus location will remain the
    * current focus, until all handles referring to it go out of scope.
    * 
-   * Using an existing QueryFocus (handle), the current focus may be 
+   * Using an existing QueryFocus (handle), the current focus may be
    * shifted to another scope within the current session. This
    * »navigating« operation will use the current focus position as
    * point of departure, thus retaining a similar access path to any
@@ -151,7 +151,7 @@ namespace session {
   
   /** @return ref to internal datastructure
    *  @warning don't store it directly. Rather
-   *        copy it or store a QueryFocus instance. 
+   *        copy it or store a QueryFocus instance.
    *  @note use #attach if the intention is
    *        to \em manipulate the current
    *        focus location */

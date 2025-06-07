@@ -64,9 +64,9 @@ namespace test{
   /***********************************************************************************//**
    * @test cover the basic implementation of a custom allocator, delegating to mpool.
    *       TypedAllocationManager is a base class, used e.g. to build the CommandRegistry.
-   * 
+   *
    * @todo as of 9/09 we do heap allocation, but we should use mpool --   see also Ticket #219
-   *        
+   *
    * @see CommandRegistry
    * @see command-registry-test.cpp
    * @see allocation-cluster-test.cpp
@@ -75,7 +75,7 @@ namespace test{
     {
       
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           CHECK (0 == checksum_);
           seedRand();

@@ -45,8 +45,8 @@ namespace control {
   lib::Depend<STypeManager> STypeManager::instance;
   
   
-  void 
-  STypeManager::reset() 
+  void
+  STypeManager::reset()
   {
     reg_.reset(new Registry);
     lumiera::LifecycleHook::trigger (ON_STREAMTYPES_RESET);
@@ -57,7 +57,7 @@ namespace control {
    *  providing the pristine state of the stream type system has to be registered.
    *  @note plugins providing additional streamtype configuration should register
    *        their basic setup functions using this hook, which can be done via
-   *        the C interface functions 
+   *        the C interface functions
    */
   const char* ON_STREAMTYPES_RESET ("ON_STREAMTYPES_RESET");
   
@@ -69,7 +69,7 @@ namespace control {
   
   /** */
   StreamType const&
-  STypeManager::getType (Symbol sTypeID) 
+  STypeManager::getType (Symbol sTypeID)
   {
     UNIMPLEMENTED ("get type just by symbolic ID (query defaults manager)");
   }
@@ -77,13 +77,13 @@ namespace control {
   
   /** */
   StreamType const&
-  STypeManager::getType (StreamType::ID stID) 
+  STypeManager::getType (StreamType::ID stID)
   {
     UNIMPLEMENTED ("get type just by symbolic ID (query defaults manager)");
   }
   
   
-  StreamType const& 
+  StreamType const&
   STypeManager::getType (StreamType::Prototype const& protoType)
   {
     UNIMPLEMENTED ("build complete StreamType based on prototype; may include querying defaults manager");
@@ -115,7 +115,7 @@ namespace control {
 
 // ==== C interface for registering setup of basic stream type configuration =======
 
-void 
+void
 lumiera_StreamType_registerInitFunction (void setupFun(void))
 {
   lumiera::LifecycleHook (steam::control::ON_STREAMTYPES_RESET, setupFun);

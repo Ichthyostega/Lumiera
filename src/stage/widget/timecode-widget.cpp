@@ -486,21 +486,21 @@ namespace widget {
     int mins   = getMins (when);
     float secs = getSecs (when);
     
-    if (force || hrs != ms_last_hrs)
+    if (force or hrs != ms_last_hrs)
       {
         sprintf(buf, "%02d", hrs);        ///////////////////////////////////////////////////////////////////TICKET #750 : code smell, integrate Timecode formats
         ms_hours_label.set_text(buf);
         ms_last_hrs = hrs;
       }
     
-    if (force || mins != ms_last_mins)
+    if (force or mins != ms_last_mins)
       {
         sprintf(buf, "%02d", mins);
         ms_minutes_label.set_text(buf);
         ms_last_mins = mins;
       }
     
-    if (force || secs != ms_last_secs)
+    if (force or secs != ms_last_secs)
       {
         sprintf(buf, "%06.3f", secs);
         ms_seconds_label.set_text(buf);
@@ -526,7 +526,7 @@ namespace widget {
     // session->smpte_time(when, smpte);
     // }
     
-    if (force || smpte_hours != last_hrs || smpte_negative != last_negative)
+    if (force or smpte_hours != last_hrs or smpte_negative != last_negative)
       {
         if (smpte_negative)
           {
@@ -541,21 +541,21 @@ namespace widget {
         last_negative = smpte_negative;
       }
     
-    if (force || smpte_minutes != last_mins)
+    if (force or smpte_minutes != last_mins)
       {
         sprintf(buf, "%02d", smpte_minutes);
         minutes_label.set_text(buf);
         last_mins = smpte_minutes;
       }
     
-    if (force || smpte_seconds != last_secs)
+    if (force or smpte_seconds != last_secs)
       {
         sprintf(buf, "%02d", smpte_seconds);
         seconds_label.set_text(buf);
         last_secs = smpte_seconds;
       }
     
-    if (force || smpte_frames != last_frames)
+    if (force or smpte_frames != last_frames)
       {
         sprintf(buf, "%02d", smpte_frames);
         frames_label.set_text(buf);
@@ -911,8 +911,8 @@ namespace widget {
       {
         gdk_pointer_ungrab(GDK_CURRENT_TIME);
         dragging = false;
-        if (ev->y > drag_start_y+1 || ev->y < drag_start_y-1
-            || (ev->state & GDK_SHIFT_MASK) == GDK_SHIFT_MASK)
+        if (ev->y > drag_start_y+1 or ev->y < drag_start_y-1
+            or (ev->state & GDK_SHIFT_MASK) == GDK_SHIFT_MASK)
         {
           // we actually dragged so return without setting editing focus, or we shift clicked
           return true;

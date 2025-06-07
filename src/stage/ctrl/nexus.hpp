@@ -68,7 +68,7 @@ namespace ctrl{
     : public BusTerm
     , util::NonCopyable
     {
-      typedef std::unordered_map<EntryID, Tangible*, EntryID::UseEmbeddedHash> RoutingTable;
+      using RoutingTable = std::unordered_map<EntryID, Tangible*, EntryID::UseEmbeddedHash>;
       
       RoutingTable routingTable_;
       

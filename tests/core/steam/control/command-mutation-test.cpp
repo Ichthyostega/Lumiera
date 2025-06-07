@@ -135,7 +135,7 @@ namespace test    {
        *        previously captured state.
        *  @note Mutation and UndoMutation are value objects, but they refer
        *        to a common command state, which for this test is modelled
-       *        by local variables and which for the real commands is 
+       *        by local variables and which for the real commands is
        *        contained in a Command-StorageHolder
        */
       void
@@ -183,7 +183,7 @@ namespace test    {
         }
       
       
-      /** @test check the undo memento capturing mechanism in isolation 
+      /** @test check the undo memento capturing mechanism in isolation
        *  @see memento-tie-test.cpp more in-depth coverage */
       void
       checkStateCapturingMechanism ()
@@ -198,7 +198,7 @@ namespace test    {
           
           int rr{rani (100)};
           testVal = rr;
-          bound_cap_func();       // invoke state capturing 
+          bound_cap_func();       // invoke state capturing
           CHECK (rr == mementoHolder.getState());
           
           testVal = 10;        // meanwhile "somehow" mutate the state

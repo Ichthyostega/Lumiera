@@ -119,7 +119,7 @@ namespace util {
   floorwrap (I num, I den)
   {
     IDiv<I> res(num,den);
-    if (0 > (num^den) && res.rem)
+    if (0 > (num^den) and res.rem)
       {  // negative results
         //  wrapped similar to floor()
         --res.quot;
@@ -151,7 +151,7 @@ namespace util {
   {
     using std::fabs;
     return fabs (d1-d2) < DBL_EPSILON * fabs (d1+d2) * ulp
-        || fabs (d1-d2) < DBL_MIN; // special treatment for subnormal results
+        or fabs (d1-d2) < DBL_MIN; // special treatment for subnormal results
   }
   
   

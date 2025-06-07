@@ -79,7 +79,7 @@ slopes::
 header::
   The track header area to the left of the timeline display is built up „conventionally“, by nested widgets
   +
-  - the container spanning the total height of the timeline display (moving with the scrollbar): `.timeline__head` 
+  - the container spanning the total height of the timeline display (moving with the scrollbar): `.timeline__head`
   - at the top sits a small navigator control with class `.timeline__navi`
   - the remaining space below is taken by a »Patchbay« container with class `.timeline__pbay`
 fork head::
@@ -134,4 +134,4 @@ image:{imgd}/TimelineCSS.png["Demonstration of CSS for custom drawing"]
 [red]##TODO 3/2023:##
 
  - [red]##should also document the selector for an actual Clip element in a concrete timeline##
- 
+

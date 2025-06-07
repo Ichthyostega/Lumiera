@@ -18,7 +18,7 @@ Mathematics
 - the simple case for _linear regression_ is also implemented there
 - Gnuplot provides also common statistics functions, which may come in handy when the
   goal is anyway to create a visualisation (-> see <<_investigation,below>>)
-  
+
 
 
 
@@ -126,7 +126,7 @@ IterExplorer::
 - can be used to build complex layered search- and evaluation schemes
 STL-adaptors::
   A set of convenience functions like `eachElm(CON)` -- available in 'iter-adapter-stl.hpp'.
-  Also allows to iterate _each key_ or _value_, and to take snapshots  
+  Also allows to iterate _each key_ or _value_, and to take snapshots
 IterSource::
   This is a special Lumiera iterator implementation which delegates through a virtual (OO) interface.
   Thus the source of the data can be abstracted away and switched transparently at runtime.
@@ -170,7 +170,7 @@ build-from-anything::
 
 - prevent shadowing of _automatically generated copy operations._
   See https://issues.lumiera.org/ticket/963[#963]. Based on the ``disable if'' SFINAE technique.
-  A ready-made templated typedef `lib::meta::disable_if_self` can be found in 'lib/meta/util.hpp'  
+  A ready-made templated typedef `lib::meta::disable_if_self` can be found in 'lib/meta/util.hpp'
 
 
 Variadics

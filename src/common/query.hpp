@@ -53,11 +53,11 @@
  **
  ** @see lumiera::QueryResolver
  ** @see mobject::session::DefsManager
- ** @see asset::StructFactory 
+ ** @see asset::StructFactory
  ** @see config-resolver.hpp specialised setup for the Steam-Layer
  ** @see fake-configrules.hpp currently used dummy-implementation
  ** @see SessionServiceExploreScope
- ** @see PlacementIndexQueryResolver 
+ ** @see PlacementIndexQueryResolver
  ** 
  */
 
@@ -98,7 +98,7 @@ namespace lumiera {
   
   class Goal;
   class Resolution;
-  class QueryResolver;      
+  class QueryResolver;
   class QueryKey;
 
   
@@ -145,7 +145,7 @@ namespace lumiera {
         }
       
       
-      /** 
+      /**
        * Single Solution, possibly part of a result set.
        * A pointer-like object, usually to be down-casted
        * to a specifically typed Query::Cursor
@@ -189,14 +189,14 @@ namespace lumiera {
   operator< (Goal::QueryID const& id1, Goal::QueryID const& id2)
   {
     return id1.kind < id2.kind
-        ||(id1.kind == id2.kind && id1.type < id2.type);
+        or(id1.kind == id2.kind and id1.type < id2.type);
   }
   
   inline bool
   operator== (Goal::QueryID const& id1, Goal::QueryID const& id2)
   {
     return id1.kind == id2.kind
-        && id1.type == id2.type;
+       and id1.type == id2.type;
   }
   
   inline bool
@@ -319,7 +319,7 @@ namespace lumiera {
       Query (QueryID typeID, string querySpec)
         : Goal (defineQueryTypeID(typeID.kind))
         , def_(querySpec)
-        { 
+        {
           REQUIRE (this->getQID().type == typeID.type);
         }
       
@@ -380,7 +380,7 @@ namespace lumiera {
   
   
   
-  /** 
+  /**
    * Wrapper for indexing and ordering.
    * Defines a synthetic totally ordered index value.
    * Implicitly convertible to and from Query instances.
@@ -388,7 +388,7 @@ namespace lumiera {
   class QueryKey
     : boost::totally_ordered<QueryKey>
     {
-      Goal::QueryID id_;      
+      Goal::QueryID id_;
       lib::QueryText def_;
       
     public:
@@ -448,15 +448,15 @@ namespace lumiera {
         uint d1 = q1.degree();
         uint d2 = q2.degree();
         return d1 < d2
-            ||(d1 == d2 && (  q1.def_ < q2.def_ 
-                           ||(q1.def_ == q2.def_ && q1.id_ < q2.id_)));  
+            or(d1 == d2 and (   q1.def_ < q2.def_
+                            or (q1.def_ == q2.def_ and q1.id_ < q2.id_)));
       }
       
       friend bool
       operator== (QueryKey const& q1, QueryKey const& q2)
       {
-        return q1.def_ == q2.def_;  
-      } 
+        return q1.def_ == q2.def_;
+      }
       
       friend size_t
       hash_value (QueryKey const& q)
@@ -553,7 +553,6 @@ namespace lumiera {
           this->predicateForm_ = queryPredicates;
           return *this;
         }
-      
     };
   
   
@@ -608,8 +607,6 @@ namespace lumiera {
   {
     return QueryKey (this->id_, getQueryDefinition());
   }
-      
-
   
   
   

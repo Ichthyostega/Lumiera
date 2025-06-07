@@ -10,7 +10,7 @@ __Participants__
  * ichthyo
  * benny
  * cehteh
- 
+
 _Summary written by Ichthyo and reviewed by Benny_
 
 ''''
@@ -116,7 +116,7 @@ support framework.
 Next meeting
 ------------
 
-The next meeting will be Wednesday Oct 11, 20:00 UTC. 
+The next meeting will be Wednesday Oct 11, 20:00 UTC.
 You are welcome to join.
 
 ''''

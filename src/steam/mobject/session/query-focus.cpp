@@ -95,7 +95,7 @@ namespace session {
    *  causing it to \em navigate, changing the
    *  current ScopePath as a side-effect
    *  @throw error::Invalid if the given container is
-   *         invalid or can't be located within the model 
+   *         invalid or can't be located within the model
    */
   QueryFocus&
   QueryFocus::shift (Scope const& container)

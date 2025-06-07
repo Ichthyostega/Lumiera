@@ -101,7 +101,7 @@ Hash-chaining
 ~~~~~~~~~~~~~
 We use a dedicated function `lib::hash::combine(s,h)` to join several source(component) hashes.
 This usage pattern was pioneered by Boost and is based on the
-https://github.com/aappleby/smhasher/blob/master/src/MurmurHash2.cpp[Murmur-2.64A] hash algorithm. 
+https://github.com/aappleby/smhasher/blob/master/src/MurmurHash2.cpp[Murmur-2.64A] hash algorithm.
 
 WARNING: as of [yellow-background]#11/2024#, portability of hash values is an unresolved issue;
          this code does not work on 32bit systems https://issues.lumiera.org/ticket/722#comment:10[see #722]

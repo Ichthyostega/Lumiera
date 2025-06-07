@@ -260,7 +260,7 @@ GUI handling could make use of expanded view features like ;
   zoomed and other camera/projector render, or show full rendering including
   effects - this ties in with the idea of being able to link a monitor with
   viewing anywhere in the node system - but is able to be swiftly changed
-  within the monitor view by icons mounted somewhere on each of the respective 
+  within the monitor view by icons mounted somewhere on each of the respective
   monitors' perimeter.
 
 * the trackview itself, could be considered as a subview of a

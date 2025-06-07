@@ -113,7 +113,7 @@ namespace lumiera {
       
     private:
       /** whether this subsystem is actually operational.
-       *  When returning \c false here, the application may 
+       *  When returning \c false here, the application may
        *  terminate at any point without further notice
        *  Note further, that a subsystem must not be in
        *  running state when signalling termination. */

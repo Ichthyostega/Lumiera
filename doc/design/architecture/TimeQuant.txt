@@ -70,7 +70,7 @@ wall clock and system time::
   of a _running synchronisation process,_ with the authority to adjust the time
   base;
   +
-  contrast this to the internal time, which is static and unconnected -- 
+  contrast this to the internal time, which is static and unconnected --
 
 quantised time::
   The *act of quantisation* transforms a continuous property into a *discrete*

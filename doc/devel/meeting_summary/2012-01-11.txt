@@ -29,7 +29,7 @@ Conclusions
 . _benny_ and _ichthyo_ follow up on the
   link:http://libregraphicsmag.com/[Libre Graphics Magazine]'s offer to promote
   graphics and media projects and try to get into discussion with them and see
-  what can be done within our limited time. 
+  what can be done within our limited time.
 . when it comes to have a working example for media file output, we stick to the
   mainstream solutions *ffmpeg* and or *gstreamer*, but care not to lock ourselves
   into a single solution. Concluded that we do this over plugin interfaces --

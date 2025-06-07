@@ -33,7 +33,7 @@ env.SymLink('#$DESTDIR/bin/lumiera',env.path.installExe+'lumiera','../lib/lumier
 
 
 # building Lumiera Plugins
-plugins = [] # currently none 
+plugins = [] # currently none
 
 
 # the Lumiera GTK GUI

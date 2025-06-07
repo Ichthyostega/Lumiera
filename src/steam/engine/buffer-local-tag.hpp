@@ -59,13 +59,13 @@ namespace engine {
     public:
       explicit
       LocalTag (uint64_t opaqueValue=0)
-        { 
+        {
           privateID_._as_number = opaqueValue;
         }
       
       LocalTag (void* impl_related_ptr)
-        { 
-          privateID_._as_number  = 0;          
+        {
+          privateID_._as_number  = 0;
           privateID_._as_pointer = impl_related_ptr;
         }
       
@@ -87,7 +87,7 @@ namespace engine {
       explicit
       operator bool()  const
         {
-          return bool(privateID_._as_number); 
+          return bool(privateID_._as_number);
         }
       
       friend size_t

@@ -71,7 +71,7 @@ Firstly, as SimAV was not able to be present during the meeting a proposal by hi
 
 joelholdsworth is a new developer in the group and had showed interest in developing the GUI. he stated that he is interested in seeing a GUI that uses popular toolkits and that plays by the standards to create a consistent UI with the rest of the free desktop. For this reason he was advocating using  GTKmm. There was no direct objections to GTKmm. Generally, there seems some preference for GTK. (Note this doesn't mean GNOME). Cehteh advocates the idea to use Lua-gtk, i.e. writing the GUI in a clean and lightweight scripting language.
 
-Cario was suggested to be used for implementing the canvas in the timeline view. 
+Cario was suggested to be used for implementing the canvas in the timeline view.
 
 The gui should provide a skeleton. Timeline and canvas should be controllable and extensible by plugins. Tracks can be nested. Use tiling windows and dockeable views and tools palettes. For example some configuration within session/renderpipeline may cause some pluggable elements to be added to the gui. A fader or a toggle/icon and so forth. Some plugins might render additional output (e.g. in previews). A video track renders thumbnails, automation curves on top.
 
@@ -83,7 +83,7 @@ Workflow is another important aspect to take into account in the design. A lot o
 
 Customisation is deemed important. Some points brought up in the discussion:
 
- * sakalli: would be great if we could provide a fcp configuration and a avid configuration besides the default configuration as well. That could lure a lot of users quickly. On the other side, too much flexibility can be be a problem as well. 
+ * sakalli: would be great if we could provide a fcp configuration and a avid configuration besides the default configuration as well. That could lure a lot of users quickly. On the other side, too much flexibility can be be a problem as well.
  * cehteh: yes .. but such things are prolly costly to setup .. we need volunteers for anything optional
  * Customization should be possible without recompile, but not too cheap.
  * There should be a working skeleton or some fixed anchor but gui operations should be bound to a scripting language to achieve customization.
@@ -111,7 +111,7 @@ some discussion:
 Some brainstorming points about usability:
 
  * We need a realy good bezier widget for all sorts of curves.
- * Faders that can be grabbed everywhere are nice like  like ardours and Blender faders. Or others which have no big knob 
+ * Faders that can be grabbed everywhere are nice like  like ardours and Blender faders. Or others which have no big knob
  * The controls in blender's node view would be a good modal to copy (not advocating GL UI, just using widgets and concepts).
 
 One extra point:
@@ -163,14 +163,14 @@ The next meeting will be at thuesday 8th may 21:00GMT
 12:52 gmerlin 1. arithmetic <-> struct
 12:53 gmerlin 2. Generic <-> format specific
 12:53 cehteh arithmetic for sure
-12:53 gmerlin On the decoder API side, I want to export ideally only one type 
+12:53 gmerlin On the decoder API side, I want to export ideally only one type
 12:54 gmerlin No no SMPTEXXX and ISO999908098
 12:54 cehteh will that be attached to the frames in a intrusive way?
 12:54 cehteh i rather leave the attaching up to the application
 12:54 gmerlin intrusive?
 12:55 cehteh struct frame { uint64_t timecode; }   vs...
 12:55 cehteh struct frame { struct metadata* something; }
-12:55 cehteh or even vs something done at a api level 
+12:55 cehteh or even vs something done at a api level
 12:56 gmerlin struct lumiera_video_frame { gavl_video_frame_t * f; uint64_t timecode};
 12:56 gmerlin Or add timecodes to gavl_video_frame_t
 12:57 cehteh struct lumiera_video_frame { gavl_video_frame_t * f; struct metadata* timecode_n_stuff; }
@@ -179,11 +179,11 @@ The next meeting will be at thuesday 8th may 21:00GMT
 12:58 cehteh i mean thats the purpose of timecodes .. to tag every frame and dont make assumptions that your footage is perfect
 12:58 ichthyo but a struct metadata* would rather mean to keep it out of basic GAVL and have a libmetadata -- which may be integrated with GAVL -- right?
 12:59 cehteh someome may have stolen a frame :P
-12:59 cehteh thats gmerlins decision ... 
+12:59 cehteh thats gmerlins decision ...
 12:59 gmerlin I'm against gavl integration of metadata
 12:59 gmerlin gavl has a clear scope: Number crunching
 01:00 cehteh gmerlin: you somehow have to pass it from the decoder to the application
-01:01 cehteh i would prefer to introduce some sidechannel 
+01:01 cehteh i would prefer to introduce some sidechannel
 01:01 gmerlin Yes, gmerlin_avdecoder will provide a separate function for getting the next timecode
 01:01 gmerlin bgav_get_next_timecode()
 01:01 cehteh gavl_get_frame (gavl_frame* place the frame here, metadata* place metadata there)
@@ -193,7 +193,7 @@ The next meeting will be at thuesday 8th may 21:00GMT
 01:06 gmerlin better have them together in one lib
 01:06 cehteh actually i would like to cache gavls internal states into the backend
 01:08 gmerlin Ok, so timecodes are YYYYMMDDHHMMSSFF as int64_t
-01:08 cehteh the indexing is something i prolly have some words about 
+01:08 cehteh the indexing is something i prolly have some words about
 01:09 cehteh timecodes are uint64_t as microseconds
 01:09 cehteh well for lumiera :-P
 01:10 cehteh YYYYMMDDHHMMSSFF as int64_t   isnt that much better than a struct :P
@@ -215,9 +215,9 @@ The next meeting will be at thuesday 8th may 21:00GMT
 01:13 ichthyo also, what sort of timecode this was based on (drop frame or not)
 01:13 cehteh gmerlin: thats a important point .. just uint64_t does not suffice
 01:13 cehteh it needs a tag describing what kind of timecode was used
-01:14 cehteh no matter how you encode it 
+01:14 cehteh no matter how you encode it
 01:14 cehteh and iirc there are quite some timecodes
-01:14 ichthyo because in this respect richard was right: we need to be able to reprocuce any value 1:1 
+01:14 ichthyo because in this respect richard was right: we need to be able to reprocuce any value 1:1
 01:14 cehteh yep
 01:15 cehteh further i want to be able to convert between any kind of timecode in a fingersnip
 01:15 gmerlin ichthyo: and that's impossible with usecs
@@ -243,7 +243,7 @@ The next meeting will be at thuesday 8th may 21:00GMT
 .about Metadata
 ----
 01:19 cehteh gmerlin: well .. how bout other metadata
-01:19 cehteh your decoder needs to pass that too 
+01:19 cehteh your decoder needs to pass that too
 01:20 gmerlin like?
 01:20 gmerlin Author, Artist title...
 01:20 cehteh some cameras encode shutter speed, focus, gain control, colour balance
@@ -254,7 +254,7 @@ The next meeting will be at thuesday 8th may 21:00GMT
 01:21 gmerlin flac has vorbis metadata
 01:21 ichthyo important for the more modern sound formats
 01:21 cehteh dunno .. just thinkin about pro codecs and raw film metadata
-01:21 ichthyo just wanting to point out: things to come here, 
+01:21 ichthyo just wanting to point out: things to come here,
 01:22 ichthyo e.g for sound: what stream is what channel
 01:22 gmerlin Channel locations are handles by gavl
 01:22 gmerlin If you have a multichannel stream
@@ -285,6 +285,6 @@ The next meeting will be at thuesday 8th may 21:00GMT
 01:28 cehteh plugin parameters are volatile
 
 01:33 gmerlin One other point (but too late for it now) are audio timecodes. I'll adress that on libopenvideo
-01:33 cehteh we will write a little more sophisticated timecode library 
+01:33 cehteh we will write a little more sophisticated timecode library
 01:34 cehteh gmerlin: that should be unified :)
 ----

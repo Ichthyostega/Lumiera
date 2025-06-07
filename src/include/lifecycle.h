@@ -1,5 +1,5 @@
 /*
-  LIFECYCLE.h  -  interface for registering and triggering lifecycle callbacks 
+  LIFECYCLE.h  -  interface for registering and triggering lifecycle callbacks
 
    Copyright (C)
      2008,            Hermann Vosseler <Ichthyostega@web.de>
@@ -55,14 +55,14 @@ namespace lumiera {
   /**
    *  define and register a callback for a specific lifecycle event.
    *  The purpose of this class is to be defined as a static variable in the implementation
-   *  of some subsystem (i.e. in the cpp file), providing the ctor with the pointer to a 
+   *  of some subsystem (i.e. in the cpp file), providing the ctor with the pointer to a
    *  callback function. Thus the specified callback gets enrolled when the corresponding
    *  object file is loaded. The event ON_BASIC_INIT is handled specifically, firing off the
    *  referred callback function as soon as possible. All other labels are just arbitrary (string)
    *  constants and it is necessary that "someone" cares to fire off the lifecycle events
-   *  at the right place. For example, lumiera-main (and the test runner) calls 
+   *  at the right place. For example, lumiera-main (and the test runner) calls
    *  \c LifecycleHook::trigger(ON_GLOBAL_INIT) (and..SHUTDOWN)
-   *  @note duplicate or repeated calls with the same callback are NOP 
+   *  @note duplicate or repeated calls with the same callback are NOP
    */
   class LifecycleHook
     : util::NonCopyable
@@ -96,6 +96,6 @@ extern const char * lumiera_ON_GLOBAL_SHUTDOWN;
 
 void lumiera_LifecycleHook_add (const char* eventLabel, void callbackFun(void));
 void lumiera_Lifecycle_trigger (const char* eventLabel);
-  
+
 #endif
 #endif

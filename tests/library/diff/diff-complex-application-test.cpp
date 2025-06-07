@@ -414,7 +414,7 @@ namespace test{
           CHECK (subject.verifyData("78:56:34.012, b"));      // the child values weren't altered
           CHECK (subject.nestedObj_1()->verifyType("ξ"));     // but the nested child object's type has been set
           CHECK (subject.nestedObj_1()->verifyBeta(2));       // ...and the attribute β has been set on the nested object
-          CHECK (subject.nestedObj_1()->verifyData("b, a"));  // ...plus some child values where added here     
+          CHECK (subject.nestedObj_1()->verifyData("b, a"));  // ...plus some child values where added here
         }
     };
   

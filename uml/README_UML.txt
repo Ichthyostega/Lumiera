@@ -40,7 +40,7 @@ fast, reliable, with even some round trip capabilities. The generated code was h
 we were able to produce valid GNU style on our initial code generation round.
 
 http://www.bouml.fr/[Bouml] was written by Bruno Pages (bouml@free.fr).
-It used to be OpenSource, released under GPL up to 
+It used to be OpenSource, released under GPL up to
 http://www.bouml.fr/historic_old.html[Version 4.21].
 Some years ago, there was a somewhat confusing move of the original author,
 who blamed ``Wikipedia editors and copyright violation'' to destroy his work.

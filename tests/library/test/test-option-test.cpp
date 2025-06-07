@@ -93,7 +93,7 @@ namespace test {
         }
     };
   
-  LAUNCHER (TestOption_test, "function common");    
+  LAUNCHER (TestOption_test, "function common");
   
   
 } // namespace test

@@ -60,7 +60,7 @@ namespace test    {
   /*************************************************************************************//**
    * @test Verify the state capturing mechanism (memento), which is used to implement
    * the Undo() functionality for Steam-Layer commands. Bind an undo function and a state
-   * capturing function and wire up both to store and retrieve a memento value. 
+   * capturing function and wire up both to store and retrieve a memento value.
    * Verify that after closing the functions, actually state is captured by each invocation.
    *       
    * @see  control::Command
@@ -72,7 +72,7 @@ namespace test    {
     {
       
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           seedRand();
           checkStateCapturingMechanism();

@@ -15,13 +15,13 @@
 /** @file dummy-tick-service.hpp
  ** A timer service invoking a given callback periodically.
  ** This is a rough preliminary implementation as of 1/2009. We use it to
- ** drive the frame "creation" of a player dummy (the render engine is not 
+ ** drive the frame "creation" of a player dummy (the render engine is not
  ** ready yet). The intention is to use this service as part of a mock engine
  ** setup, used to verify the construction of engine components. As an integration
  ** test, we build a "dummy player", delivering some test data frames to the GUI.
  ** 
  ** @see steam::play::DummyPlayerService
- **  
+ ** 
  */
 
 
@@ -54,7 +54,7 @@ namespace node {
   class DummyTickService
     : lib::ThreadJoinable<>
     {
-      typedef function<void(void)> Tick;
+      using Tick = function<void(void)>;
       std::atomic_uint timespan_;
       
       /** poll interval for new settings in wait state */
@@ -66,7 +66,7 @@ namespace node {
                         , bind (&DummyTickService::timerLoop, this, callback)
                         )
         , timespan_{POLL_TIMEOUT}
-        { 
+        {
           INFO (steam, "DummyTickService started.");
         }
       
@@ -88,9 +88,9 @@ namespace node {
        */
       void activate (uint fps)
         {
-          REQUIRE (  0==fps 
-                  ||(   1000000/fps < std::numeric_limits<uint>::max() 
-                     && 1000000/fps > POLL_TIMEOUT));
+          REQUIRE (  0==fps
+                  or(    1000000/fps < std::numeric_limits<uint>::max()
+                     and 1000000/fps > POLL_TIMEOUT));
           if (fps)
             timespan_ = 1000000/fps; // microseconds per tick
           else

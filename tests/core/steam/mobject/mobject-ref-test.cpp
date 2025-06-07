@@ -237,19 +237,19 @@ namespace test    {
           
           rM.activate (p1);
           rC.activate (p2);
-          CHECK (rM && rC);
-          CHECK (!(rM == rC) && !(rC == rM));
-          CHECK ( (rM != rC) &&  (rC != rM));
+          CHECK (rM and rC);
+          CHECK (!(rM == rC) and !(rC == rM));
+          CHECK ( (rM != rC) and  (rC != rM));
           
           // mixed comparisons
-          CHECK ( (rM == pRef1) &&  (pRef1 == rM));
-          CHECK ( (rC == pRef2) &&  (pRef2 == rC));
-          CHECK (!(rM != pRef1) && !(pRef1 != rM));
-          CHECK (!(rC != pRef2) && !(pRef2 != rC));
-          CHECK ( (rM != pRef2) &&  (pRef2 != rM));
-          CHECK ( (rC != pRef1) &&  (pRef1 != rC));
-          CHECK (!(rM == pRef2) && !(pRef2 == rM));
-          CHECK (!(rC == pRef1) && !(pRef1 == rC));
+          CHECK ( (rM == pRef1) and  (pRef1 == rM));
+          CHECK ( (rC == pRef2) and  (pRef2 == rC));
+          CHECK (!(rM != pRef1) and !(pRef1 != rM));
+          CHECK (!(rC != pRef2) and !(pRef2 != rC));
+          CHECK ( (rM != pRef2) and  (pRef2 != rM));
+          CHECK ( (rC != pRef1) and  (pRef1 != rC));
+          CHECK (!(rM == pRef2) and !(pRef2 == rM));
+          CHECK (!(rC == pRef1) and !(pRef1 == rC));
           
           CHECK ( (rM == p1.getID()) );
           CHECK ( (rC == p2.getID()) );
@@ -262,13 +262,13 @@ namespace test    {
           
           
           rC.activate (pRef1);
-          CHECK ( (rM == rC) &&  (rC == rM));
-          CHECK (!(rM != rC) && !(rC != rM));
+          CHECK ( (rM == rC) and  (rC == rM));
+          CHECK (!(rM != rC) and !(rC != rM));
           
-          CHECK ( (rC == pRef1) &&  (pRef1 == rC));
-          CHECK (!(rC != pRef1) && !(pRef1 != rC));
-          CHECK ( (rC != pRef2) &&  (pRef2 != rC));
-          CHECK (!(rC == pRef2) && !(pRef2 == rC));
+          CHECK ( (rC == pRef1) and  (pRef1 == rC));
+          CHECK (!(rC != pRef1) and !(pRef1 != rC));
+          CHECK ( (rC != pRef2) and  (pRef2 != rC));
+          CHECK (!(rC == pRef2) and !(pRef2 == rC));
           
           CHECK ( (rC == p1.getID()) );
           CHECK (!(rC != p1.getID()) );
@@ -278,13 +278,13 @@ namespace test    {
           
           rM.close();
           CHECK (!rM);
-          CHECK (!(rM == rC) && !(rC == rM));
-          CHECK ( (rM != rC) &&  (rC != rM));
+          CHECK (!(rM == rC) and !(rC == rM));
+          CHECK ( (rM != rC) and  (rC != rM));
           
-          CHECK (!(rM == pRef1) && !(pRef1 == rM));
-          CHECK ( (rM != pRef1) &&  (pRef1 != rM));
-          CHECK ( (rM != pRef2) &&  (pRef2 != rM));
-          CHECK (!(rM == pRef2) && !(pRef2 == rM));
+          CHECK (!(rM == pRef1) and !(pRef1 == rM));
+          CHECK ( (rM != pRef1) and  (pRef1 != rM));
+          CHECK ( (rM != pRef2) and  (pRef2 != rM));
+          CHECK (!(rM == pRef2) and !(pRef2 == rM));
           
           CHECK (!(rM == p1.getID()) );
           CHECK ( (rM != p1.getID()) );
@@ -336,19 +336,19 @@ namespace test    {
           MORef<Clip> rClip;
           MORef<TestSubMO1> rSub1;
           
-          CHECK ( ! rMObj.use_count());
-          CHECK ( ! rClip.use_count());
-          CHECK ( ! rSub1.use_count());
+          CHECK (not rMObj.use_count());
+          CHECK (not rClip.use_count());
+          CHECK (not rSub1.use_count());
           
           rMObj.activate(luid);
           CHECK (checkUseCount(rMObj, 1));
-          CHECK ( ! rClip.use_count());
-          CHECK ( ! rSub1.use_count());
+          CHECK (not rClip.use_count());
+          CHECK (not rSub1.use_count());
           
           rClip.activate(rMObj);              // attach on existing MObjectRef
           CHECK (checkUseCount(rMObj, 2));
           CHECK (checkUseCount(rClip, 2));
-          CHECK ( ! rSub1.use_count());
+          CHECK (not rSub1.use_count());
           
           // impossible, because Clip isn't a subclass of TestSubMO1:
           VERIFY_ERROR (INVALID_PLACEMENTREF, rSub1.activate(luid) );
@@ -363,7 +363,7 @@ namespace test    {
           
           rClip.close();
           CHECK (checkUseCount(rMObj, 1));
-          CHECK ( ! rClip.use_count());
+          CHECK (not rClip.use_count());
           
           // can assign, because the actual type is checked:
           rClip = rMObj;

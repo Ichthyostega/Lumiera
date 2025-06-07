@@ -115,7 +115,7 @@ namespace timeline {
   
   /**
    * TimelineLayout also participates itself in the DisplayEvaluation,
-   * notably to set up the basic parameters for Zoom management 
+   * notably to set up the basic parameters for Zoom management
    */
   void
   TimelineLayout::establishLayout (DisplayEvaluation&)
@@ -138,7 +138,7 @@ namespace timeline {
    * known size of the timeline canvas in pixels.
    * @remark changes to ZoomWindow parameters cause notification of the listener,
    *         thereby triggering a new DisplayEvaluation; this in turn will invoke
-   *         TimelineLayout::establishLayout() eventually, accommodating changes. 
+   *         TimelineLayout::establishLayout() eventually, accommodating changes.
    */
   void
   TimelineLayout::syncZoomWindow (PAdjustment hadj)
@@ -151,7 +151,7 @@ namespace timeline {
   /**
    * Signal receiver (slot) to react on changes of the window screen space allocation.
    * Whenever an actual change to the usable window width in pixels is detected,
-   * the ZoomWindow will be re-calibrated, in turn leading to a DisplayEvaluation. 
+   * the ZoomWindow will be re-calibrated, in turn leading to a DisplayEvaluation.
    */
   void
   TimelineLayout::sizeZoomWindow (Gtk::Allocation& alloc)

@@ -41,7 +41,7 @@ namespace test  {
   class OutputProxyProvider_test : public Test
     {
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           size_t seenID{0};
           BufferState lastState{NIL};

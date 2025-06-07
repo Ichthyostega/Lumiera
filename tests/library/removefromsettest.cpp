@@ -41,7 +41,7 @@ namespace test {
   
   using IntSet = std::set<uint>;
   
-  void 
+  void
   show (IntSet const& coll)
   {
     cout << "[ "
@@ -50,9 +50,9 @@ namespace test {
   }
   
   function<bool(uint)>
-  select_match (string description) 
+  select_match (string description)
   {
-    return [&](uint candidate) 
+    return [&](uint candidate)
             {
               return string::npos != description.find( lexical_cast<string> (candidate));
             };

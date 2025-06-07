@@ -27,7 +27,7 @@
 #include <string>
 
 
-namespace steam    {
+namespace steam   {
 namespace mobject {
 namespace session {
 namespace test    {
@@ -229,12 +229,12 @@ namespace test    {
     
     
     /* === Implementation of Session internals === */          //----------------corresponding-to-session-impl.cpp
-      
+    
     TSessionImpl::operator string() const
     {
       return string("Session-Impl(")
            + lexical_cast<string>(magic_)
-           + ")"; 
+           + ")";
     }
     
     TSessionImpl::TSessionImpl()
@@ -276,22 +276,22 @@ namespace test    {
    * complete with interfaces, implementation and session manager frontend.
    * 
    * @see session-impl.hpp the real thing
-   * @see SessionServices; 
+   * @see SessionServices;
    */
   class SessionServiceAccess_test : public Test
     {
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           access_defaultSession();
           make_newSession();
           invoke_implServices();
-        } 
+        }
       
       
       /** @test accessing an non-existing session
        *        causes creation of a new TSessionImpl instance.
-       *        After that, the public API function gets invoked. 
+       *        After that, the public API function gets invoked.
        */
       void
       access_defaultSession ()
@@ -303,7 +303,7 @@ namespace test    {
       
       /** @test invoking the management API to close the session.
        *        The next public API invocation will create
-       *        a new TSessionImpl instance. 
+       *        a new TSessionImpl instance.
        */
       void
       make_newSession ()

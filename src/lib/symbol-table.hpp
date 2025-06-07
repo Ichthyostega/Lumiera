@@ -1,5 +1,5 @@
 /*
-  SYMBOL-TABLE.hpp  -  registry for automatically interned symbol string tokens 
+  SYMBOL-TABLE.hpp  -  registry for automatically interned symbol string tokens
 
    Copyright (C)
      2017,            Hermann Vosseler <Ichthyostega@web.de>
@@ -29,7 +29,7 @@
  **       systematically, just literal c-string constants weren't sufficient anymore, leading to this
  **       very preliminary table based implementation.
  ** 
- ** @see symbol-impl.cpp 
+ ** @see symbol-impl.cpp
  ** @see Symbol_test
  ** @see Symbol_HashtableTest
  ** @see SessionCommandFunction_test multithreaded access
@@ -54,7 +54,7 @@ namespace lib {
   using std::move;
   
   
-  /** 
+  /**
    * Table for automatically _interned strings_.
    * This table is used to back the lib::Symbol token type,
    * which is implemented by a pointer into this registration table

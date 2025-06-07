@@ -32,7 +32,7 @@
  ** 
  ** \par operations and behaviour
  ** 
- ** In addition to some search and query functions, a scope path has the ability to 
+ ** In addition to some search and query functions, a scope path has the ability to
  ** \em navigate to a given target scope, which must be reachable by ascending and
  ** descending into the branches of the overall tree or DAG (in the general case).
  ** Navigating is a mutating operation which usually happens when the current
@@ -53,9 +53,9 @@
  **   be executed rather in a GUI action triggered context.
  ** - the iteration (Lumiera Forward Iterator) yields the path elements in
  **   \em ascending order, starting with the leaf element
- ** - a path containing just the root element evaluates to \c bool(false) 
+ ** - a path containing just the root element evaluates to \c bool(false)
  **   (rationale is that any valid, usable path is below just root).
- ** - an empty (nil) path doesn't even contain the root element and 
+ ** - an empty (nil) path doesn't even contain the root element and
  **   may throw on many operations.
  ** 
  ** \par relation to ScopeLocator
@@ -118,8 +118,8 @@ namespace session {
    * Implemented as vector of Scope elements. Providing
    * state and relation predicates, and the ability to
    * \em navigate the current location, as represented
-   * by the current leaf element of the path. 
-   * 
+   * by the current leaf element of the path.
+   *
    * Incorporates a ref count to be utilised by ScopeLocator
    * and QueryFocus to establish the \em current focus (path).
    */
@@ -263,7 +263,7 @@ namespace session {
   {
     return (1 == size())
 #if NOBUG_MODE_ALPHA
-        && path_[0].isRoot()
+       and path_[0].isRoot()
 #endif
         ;
   }

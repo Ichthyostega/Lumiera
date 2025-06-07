@@ -38,7 +38,7 @@ namespace control {
   
   /**
    * Adapter interface for invoking an argument binding for a command
-   * \em without the need to disclose the concrete types and number of arguments.
+   * _without the need to disclose_ the concrete types and number of arguments.
    * At the receiver side, the concrete type can be restored by a dynamic cast.
    * This requires the receiver somehow to know the desired argument types;
    * usually this receiver will be an implementation object, whose exact

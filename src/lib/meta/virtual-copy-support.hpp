@@ -73,7 +73,7 @@
  **       ovar.buffer().copyInto (this->buffer());
  **       return *this;
  **     }
- **     
+ **   
  **   Buffer const&
  **   buffer()  const
  **     {

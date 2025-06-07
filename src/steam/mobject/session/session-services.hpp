@@ -31,7 +31,7 @@
  ** with the session implementation; the necessary link has to be
  ** abstracted into an implementation level API. Typically, this
  ** API provides an static access function, which is to be implemented
- ** "somewhere else", so the Steam implementation isn't required to 
+ ** "somewhere else", so the Steam implementation isn't required to
  ** include anything of the session implementation level
  ** 
  ** In order to actually provide such a service, an specialisation of
@@ -102,7 +102,7 @@ namespace session {
    * 
    * @param APIS  sequence of API types to implement
    * @param FRONT type of the frontend used for access
-   * @param SESS  the basic session implementation 
+   * @param SESS  the basic session implementation
    */
   template< typename APIS
           , class FRONT
@@ -115,11 +115,11 @@ namespace session {
                                >
     {
     public:
-      static FRONT& current;                      ///< intended to be hard-wired to SessManagerImpl singleton 
+      static FRONT& current;                      ///< intended to be hard-wired to SessManagerImpl singleton
       
       /** access an service by explicit downcast.
        *  @warning this function is dangerous; never store the
-       *           returned reference, as the referred object 
+       *           returned reference, as the referred object
        *           might go away due to session close/reset/load
        */
       template<class API>

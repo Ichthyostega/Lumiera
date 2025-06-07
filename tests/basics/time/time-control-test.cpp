@@ -137,7 +137,7 @@ namespace test{
             seedRand();
           TimeValue o (random_or_get (pop(arg)));
           TimeValue c (random_or_get (pop(arg)));
-          CHECK (c!=Time::ZERO && o != c, "unsuitable testdata");
+          CHECK (c!=Time::ZERO and o != c, "unsuitable testdata");
           
           // 25fps-grid, but with an time origin offset by 1/50sec
           TimeGrid::build("test_grid_PAL", FrameRate::PAL, Time(FSecs(1,50)));
@@ -346,14 +346,14 @@ namespace test{
     void
     ____verify_nudged (TAR const& target, TAR const& refState, FrameCnt offsetSteps)
     {
-      CHECK (target != refState  || !offsetSteps);
+      CHECK (target != refState  or not offsetSteps);
       CHECK (target == Time(refState)+Time(FSecs(offsetSteps)));
     }
     template<>
     void
     ____verify_nudged (QuTime const& target, QuTime const& refState, FrameCnt offsetSteps)
     {
-      CHECK (target != refState  || !offsetSteps);
+      CHECK (target != refState  or not offsetSteps);
       CHECK (target == Time (materialise(refState))
                      + Offset(offsetSteps, FrameRate::PAL));
     }
@@ -366,7 +366,7 @@ namespace test{
       if (isDuration<SRC>())
         {
           CHECK (materialise(target) == follower.receivedValue()
-                 ||    Duration::NIL == follower.receivedValue() );
+                 or    Duration::NIL == follower.receivedValue() );
         }
       else
       if (isQuTime<TAR>())

@@ -884,14 +884,14 @@ namespace test{
           
           CHECK (not mutator3.acceptSrc (ATTRIB1));
           CHECK (not mutator3.acceptSrc (ATTRIB2));
-          CHECK (    mutator3.acceptSrc (ATTRIB3)); // in this round we just have a binding for ATTRIB3 (== "γ")  
+          CHECK (    mutator3.acceptSrc (ATTRIB3)); // in this round we just have a binding for ATTRIB3 (== "γ")
           CHECK (    mutator3.acceptSrc (ATTRIB_NODE));
                                                     // ...and of course a binding for a nested ATTRIB_NODE
           
           CHECK (3.45 == gamma);
           CHECK (mutator3.assignElm(GAMMA_PI));     // ...we assign a new payload to the current element first     // assignElm
           CHECK (3.14159265 == gamma);
-          CHECK ( 1 == alpha);                      // the other fields remain unaffected 
+          CHECK ( 1 == alpha);                      // the other fields remain unaffected
           CHECK ( 2 == beta);
           
           cout << "successfully assigned a new value." <<endl;

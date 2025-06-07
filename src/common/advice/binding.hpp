@@ -16,7 +16,7 @@
  ** A pattern to define and identify a specific attachment to the Advice system.
  ** This pattern is comprised of a predicate list and intended to be matched or unified
  ** against a similar pattern associated with the attachment of a possible collaboration partner.
- ** Semantically, this list of atoms forms an conjunction of predicates to be resolved against 
+ ** Semantically, this list of atoms forms an conjunction of predicates to be resolved against
  ** similar predicates of the partner. Informally, when two entities attach to the Advice system,
  ** each specifying a binding, they can be paired up if any condition included into the binding
  ** holds true for both sides.
@@ -125,8 +125,8 @@ namespace advice {
           identical (Atom const& oa)  const
             {
               return ari_ == oa.ari_
-                  && sym_ == oa.sym_
-                  && arg_ == oa.arg_;
+                 and sym_ == oa.sym_
+                 and arg_ == oa.arg_;
             }
           
           int
@@ -141,7 +141,7 @@ namespace advice {
           friend bool
           operator< (Atom const& a1, Atom const& a2)
           {
-            return a1.compare(a2) < 0; 
+            return a1.compare(a2) < 0;
           }
         };
       

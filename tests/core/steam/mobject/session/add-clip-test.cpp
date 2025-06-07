@@ -44,7 +44,7 @@ namespace test {
   class AddClip_test : public Test
     {
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           PSess sess = Session::current;
           PMO clip = TestClip::create();
@@ -53,7 +53,7 @@ namespace test {
 ///////////////////////////////////////////////////////////////////TICKET #499              
 //            CHECK (sess->currEDL().contains (clip));
           // TODO: Clip-Asset and Placement magic??
-        } 
+        }
     };
   
   

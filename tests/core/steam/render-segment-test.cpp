@@ -33,8 +33,8 @@ namespace test {
    *       Basically this includes cooperation of all parts of the
    *       Lumiera Steam Layer. For a prepared test-Session we invoke the
    *       controller to create a render process. This includes building
-   *       the render pipeline. Finally, we analyse all the created 
-   *       Structures. 
+   *       the render pipeline. Finally, we analyse all the created
+   *       Structures.
    * @note this test doesn't cover the actual rendering.
    * @see  proc_interface::ControllerFacade
    */
@@ -44,7 +44,7 @@ namespace test {
       run (Arg)
         {
           UNIMPLEMENTED ("complete render process for a given test segment of the Session");
-        } 
+        }
     };
   
   

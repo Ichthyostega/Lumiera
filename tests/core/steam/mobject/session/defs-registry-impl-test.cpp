@@ -163,7 +163,7 @@ namespace test    {
               
               // store for verification....
               px->instanceID = QueryKey(qx).getQueryString();
-              ps[qx] = px; 
+              ps[qx] = px;
             }
         }
       

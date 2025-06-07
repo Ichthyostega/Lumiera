@@ -242,7 +242,7 @@ namespace lib {
         
       public:
         enum{ value = exposes_CloneFunction<T>::value
-                 && ! HasMember_copyInto<T>::value
+                      and not HasMember_copyInto<T>::value
             };
       };
     
@@ -471,7 +471,7 @@ namespace lib {
       
     public: /* === PolymorphicValue public API === */
       
-      typedef IFA Interface;
+      using Interface = IFA;
       
       Interface&
       getPayload()

@@ -52,7 +52,7 @@ namespace dialog {
       
       outputFileBrowseButton_.set_image (browseButtonImage_);
       outputFileBrowseButton_.signal_clicked().connect(
-        sigc::mem_fun(*this, &Render::on_button_browse));  
+        sigc::mem_fun(*this, &Render::on_button_browse));
       
       outputFileHBox_.pack_start (outputFileBrowseButton_, PACK_SHRINK);
       outputFileHBox_.set_spacing(4);
@@ -72,7 +72,7 @@ namespace dialog {
       set_border_width (BorderPadding);
       set_resizable (false);
       
-      // Configure the Cancel and Render buttons    
+      // Configure the Cancel and Render buttons
       add_button (Stock::CANCEL, RESPONSE_CANCEL);
       
       Button* render_button = add_button (Stock::OK, RESPONSE_OK);

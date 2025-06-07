@@ -137,7 +137,7 @@ namespace test{
   class Digxel_test : public Test
     {
       virtual void
-      run (Arg arg) 
+      run (Arg arg)
         {
           seedRand();
           
@@ -151,7 +151,7 @@ namespace test{
           
           if (!isnil (arg))
             timingMeasurements();
-        } 
+        }
       
       
       void
@@ -235,28 +235,28 @@ namespace test{
           digi.installMutator (protocollingMutator, digi);
           
           digi = 12.3;
-          CHECK ( 0.0 == preval && 12.3 == newval);
+          CHECK ( 0.0 == preval and 12.3 == newval);
           digi += 10;
-          CHECK (12.3 == preval && 22.3 == newval);
+          CHECK (12.3 == preval and 22.3 == newval);
           digi -= 5;
-          CHECK (22.3 == preval && 17.3 == newval);
+          CHECK (22.3 == preval and 17.3 == newval);
           ++digi;
-          CHECK (17.3 == preval && 18.3 == newval);
+          CHECK (17.3 == preval and 18.3 == newval);
           digi++;
-          CHECK (18.3 == preval && 19.3 == newval);
+          CHECK (18.3 == preval and 19.3 == newval);
           --digi;
-          CHECK (19.3 == preval && 18.3 == newval);
+          CHECK (19.3 == preval and 18.3 == newval);
           digi--;
-          CHECK (18.3 == preval && 17.3 == newval);
+          CHECK (18.3 == preval and 17.3 == newval);
           
           double val = ++digi;
-          CHECK (18.3 == digi && 18.3 == val);
+          CHECK (18.3 == digi and 18.3 == val);
           val = digi++;
-          CHECK (19.3 == digi && 18.3 == val);
+          CHECK (19.3 == digi and 18.3 == val);
           val = --digi;
-          CHECK (18.3 == digi && 18.3 == val);
+          CHECK (18.3 == digi and 18.3 == val);
           val = digi--;
-          CHECK (17.3 == digi && 18.3 == val);
+          CHECK (17.3 == digi and 18.3 == val);
         }
       
       

@@ -1,5 +1,5 @@
 /*
-  TIMELINE-PANEL.hpp  -  Dockable panel to hold the main timeline view            
+  TIMELINE-PANEL.hpp  -  Dockable panel to hold the main timeline view
 
    Copyright (C)
      2016,            Hermann Vosseler <Ichthyostega@web.de>

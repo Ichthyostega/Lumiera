@@ -15,7 +15,7 @@
 /** @file access-casted.hpp
  ** Helper for accessing a value, employing either a conversion or downcast,
  ** depending on the relation of the source type (type of the original value)
- ** and the target type (type we need within the usage context). 
+ ** and the target type (type we need within the usage context).
  ** When instantiating AcessCasted<TAR>, we get a template static function
  ** \c AcessCasted<TAR>::access<SRC>(SRC&& elm), where the actual implementation
  ** is chosen using based on our type traits. If no sensible implementation can be
@@ -34,6 +34,7 @@
  **   values, references and pointers-to-const are supported as well.
  ** 
  ** @see lib::InPlaceAnyHolder usage example to access a subclass in embedded storage
+ ** @warning to state the obvious — usage of such a facility raises questions...
  ** 
  */
 

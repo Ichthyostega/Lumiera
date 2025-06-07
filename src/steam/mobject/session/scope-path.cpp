@@ -162,8 +162,8 @@ namespace session {
   {
     return (1 < length())
 #if NOBUG_MODE_ALPHA
-        && hasValidRoot()
-#endif      
+       and hasValidRoot()
+#endif
            ;
   }
   
@@ -252,11 +252,11 @@ namespace session {
   bool
   disjoint (ScopePath const& path1, ScopePath const& path2)
   {
-    if (path1.empty() || path2.empty()) return false;
+    if (path1.empty() or path2.empty()) return false;
     
-    return (path1.isValid() && path2.isValid())
-        && (path1.path_[1]  != path2.path_[1]) // no common prefix
-         ; 
+    return (path1.isValid() and path2.isValid())
+       and (path1.path_[1]   != path2.path_[1]) // no common prefix
+         ;
   }
   
   

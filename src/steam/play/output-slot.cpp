@@ -46,7 +46,7 @@ namespace play {
   
   /** whether this output slot is occupied
    * @return true if currently unconnected and
-   *         able to connect and handle output data 
+   *         able to connect and handle output data
    */
   bool
   OutputSlot::isFree()  const
@@ -67,7 +67,7 @@ namespace play {
    *         as well as the actual output sinks, ready for use.
    * @remarks calls back into #buildState, where the concrete OutputSlot
    *         is expected to provide a private Connection implementation,
-   *         subclassing OutputSlot::Allocation 
+   *         subclassing OutputSlot::Allocation
    */
   OutputSlot::Allocation&
   OutputSlot::allocate()
@@ -84,7 +84,7 @@ namespace play {
   OutputSlot::disconnect()
   {
     if (not isFree())
-      state_.reset(0);    
+      state_.reset(0);
   }
   
   

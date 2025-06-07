@@ -1,5 +1,5 @@
 /*
-  VIEWER-PANEL.hpp  -  Dockable panel to hold the video display widgets and controls            
+  VIEWER-PANEL.hpp  -  Dockable panel to hold the video display widgets and controls
 
    Copyright (C)
      2008,            Joel Holdsworth <joel@airwebreathe.org.uk>

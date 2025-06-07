@@ -23,7 +23,7 @@
  ** 
  ** @see Session public API
  ** @see query-resolver.hpp
- ** @see scope-query.hpp 
+ ** @see scope-query.hpp
  **
  */
 

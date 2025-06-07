@@ -24,7 +24,7 @@ namespace asset {
   
   
   namespace {
-    /** @internal derive a sensible asset ident tuple when creating 
+    /** @internal derive a sensible asset ident tuple when creating
      *  a proxy placeholder media based on some existing asset::Media
      *  @todo getting this one right is important for the handling
      *        of "proxy editing"....
@@ -35,10 +35,9 @@ namespace asset {
       string name (mediaref.name + "-proxy");  // TODO something sensible here; append number, sanitise etc.
       Category category (mediaref.category);
       TODO ("put it in another subfolder within the same category??");
-      return Asset::Ident (name, category, 
-                           mediaref.org, 
+      return Asset::Ident (name, category,
+                           mediaref.org,
                            mediaref.version );
-      
     }
   }//(End)implementation helper
   

@@ -131,7 +131,7 @@ namespace test {
        *       delay introduced by synchronisation, and not an overhead of the
        *       implementation technique as such. However — the classical implementation
        *       based on Mutex + ConditionVar, which enters a thread sleep state on wait,
-       *       is slower by orders of magnitude. 
+       *       is slower by orders of magnitude.
        */
       virtual void
       run (Arg)

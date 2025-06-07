@@ -128,7 +128,7 @@ namespace play {
   RenderConfigurator::buildActiveFeed (ModelPort port)
   {
     OutputSlot& slot = getOutputFor (port);
-    return Feed (buildCalculationStreams (port,slot)); 
+    return Feed (buildCalculationStreams (port,slot));
   }
   
   
@@ -159,6 +159,6 @@ namespace play {
                           };
   }
   
- 
+  
   
 }} // namespace steam::play

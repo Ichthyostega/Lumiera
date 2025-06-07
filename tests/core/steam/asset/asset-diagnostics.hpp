@@ -71,9 +71,9 @@ namespace asset {
   dependencyCheck (lib::P<CHI> child, lib::P<PAR> parent)
   {
     return (child == parent)
-        || (0 < child->getParents().size()
-           && (parent == child->getParents()[0])
-           && (contains (parent->getDependant(), child)))
+        or (0 < child->getParents().size()
+           and (parent == child->getParents()[0])
+           and (contains (parent->getDependant(), child)))
         ;
   }
   

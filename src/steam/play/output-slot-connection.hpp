@@ -101,7 +101,7 @@ namespace play {
   
   
   
-  /** 
+  /**
    * Extension point for Implementation.
    * The ConnectionState is where the concrete output
    * handling implementation is expected to reside.

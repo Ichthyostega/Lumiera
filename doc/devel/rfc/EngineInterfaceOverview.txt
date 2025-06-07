@@ -59,7 +59,7 @@ processes exist.
   released finally
 
 .Process parameters
-A process is linked to a single stream data format (a -> 
+A process is linked to a single stream data format (a ->
 link:StreamTypeSystem.html[stream implementation type]). +
 It is configured with _frame quantisation_ and _timings_, and a _model port_
 identifier and _channel selector_.
@@ -67,16 +67,16 @@ identifier and _channel selector_.
  quantisation::
    translates time values into frame numbers. (In the most general
    case this is a function, connected to the session)
-   
+
  timings::
    a definition to translate global model time units in real clock time,
    including _alignment_ to an external _time grid_.
-   
+
  model port::
    a point in the (high level) model where output can be produced. +
    This might be a global pipe in one of the model's timelines, or
    it might be a _probe point_.
-   
+
  channel::
    within the session and high level model, details of the stream
    implementation are abstracted. Typically, a global pipe (master bus

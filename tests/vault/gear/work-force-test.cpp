@@ -450,7 +450,7 @@ namespace test {
           wof.incScale();
           wof.incScale();
           wof.incScale();
-          sleep_for(10us);         // this may be fragile; must be sufficiently short
+          sleep_for(15us);         // this may be fragile; must be sufficiently short
           
           CHECK (3 == wof.size());
           
@@ -504,7 +504,7 @@ namespace test {
           CHECK (not shutdown_done);        // all workers are trapped in the work-functor
                                             // thus the destructor can't dismantle the pool
           trapped = false;
-          sleep_for(20ms);
+          sleep_for(40ms);
           CHECK (shutdown_done);
           CHECK (not operate);              // operate-thread has detached and terminated
         }

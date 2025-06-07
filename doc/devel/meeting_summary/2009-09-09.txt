@@ -68,7 +68,7 @@ Point 3: Website
 ----------------
 
 The news in the homepage makes the project look alive. But this is not
-enough to communicate the state of the Lumiera development. Two 
+enough to communicate the state of the Lumiera development. Two
 solutions are proposed:
 
 * The website needs to be reorganized and made accessible. andrewjames

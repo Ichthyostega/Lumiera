@@ -30,12 +30,12 @@ namespace meta {
 namespace test {
       
       template<int I>
-      struct Block    
+      struct Block
         { 
-          Block() { cout << "- "<<I<<" -"; }  
+          Block() { cout << "- "<<I<<" -"; }
         };
       struct Ending
-        { 
+        {
           Ending(){ cout << "- The End -" <<endl; }
         };
       
@@ -52,7 +52,7 @@ namespace test {
       
       
       template<class X, class P>
-      class Chain 
+      class Chain
         : X, P
       { }
       ;
@@ -74,12 +74,12 @@ namespace test {
       class TypeList_test : public Test
         {
           void
-          run (Arg) 
+          run (Arg)
             {
               AssembledClass me_haz_numbers;
               
               CHECK (1 == sizeof(me_haz_numbers));
-            } 
+            }
         };
       
       

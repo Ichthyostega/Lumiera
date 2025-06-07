@@ -24,12 +24,12 @@
  ** - at the same time, the concrete BuilderTool subclass has to declare
  **   being Applicable to this concrete Buildable subtype. The recommended way
  **   of ensuring this, is to add an entry to applicable-builder-target-types.hpp
- **   and then derive the concrete BuilderTool subclass from 
+ **   and then derive the concrete BuilderTool subclass from
  **   ApplicableBuilderTargetTypes
  ** - when accessing the wrapper from within a `treat()` function, a suitable
  **   concrete wrapper type has to be specified. If the wrapper type used for
  **   invoking the BuilderTool (function `apply(BuilderTool&, WrappedObject&)`)
- **   can not be converted to this type requested from within the call, an 
+ **   can not be converted to this type requested from within the call, an
  **   assertion failure (or segmentation fault in a release build) will result.
  ** 
  ** @see visitor.hpp
@@ -57,9 +57,9 @@ namespace mobject {
   class Buildable;
   
   namespace builder {
-  
     
-    /** 
+    
+    /**
      * Policy invoking an catch-all function for processing
      * an unknown tool / target pair, effectively enforcing the
      * implementation of a catch-all function \c onUnknown(BASE&)
@@ -76,11 +76,11 @@ namespace mobject {
     
     
     /**
-     * Base class of all BuilderTools, used according to the visitor pattern: 
+     * Base class of all BuilderTools, used according to the visitor pattern:
      * each Tool contains the concrete implementation for one task to be done
      * to the various MObject classes. The concrete builder tool implementation
      * should not directly inherit from this base interface, but rather through
-     * an instantiation of the "Applicable" template parametrised with all 
+     * an instantiation of the "Applicable" template parametrised with all
      * concrete Buildable classes, for which it wants calls to be dispatched.
      * \par
      * In addition to lib::visitor::Tool, BuilderTool adds support for dealing
@@ -90,7 +90,7 @@ namespace mobject {
      * which forwards to the visitation mechanism supported by the type contained
      * in the wrapper, but stores away a pointer to the wrapped object, which can
      * be retrieved in a typesafe manner from within the  \c treat(ConcreteType&)
-     * function. 
+     * function.
      * @note retrieving the wrapper is <b>not threadsafe</b> and <b>not reentrant</b>,
      *       as we simply store a pointer within the BuilderTool instance.
      */
@@ -168,7 +168,7 @@ namespace mobject {
   
   
   /**
-   *  Marker Interface for classes visitable by Builder tools. 
+   *  Marker Interface for classes visitable by Builder tools.
    */
   class Buildable : public lib::visitor::Visitable<builder::BuilderTool>
     { };

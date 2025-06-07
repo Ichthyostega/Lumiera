@@ -55,7 +55,7 @@ namespace dialog {
        * @return Returns the name currently typed into the edit box of the
        * dialog.
        */
-      cuString 
+      cuString
       getName()  const
         {
           return name_.get_text();

@@ -1,5 +1,5 @@
 /*
-  TYPED-COUNTER.hpp  -  maintain a set of type based contexts 
+  TYPED-COUNTER.hpp  -  maintain a set of type based contexts
 
    Copyright (C)
      2009,            Hermann Vosseler <Ichthyostega@web.de>

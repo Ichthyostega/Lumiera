@@ -1,5 +1,5 @@
 /*
-  CONTROL.hpp  -  a life time control for feedback and mutation  
+  CONTROL.hpp  -  a life time control for feedback and mutation
 
    Copyright (C)
      2011,            Hermann Vosseler <Ichthyostega@web.de>
@@ -17,7 +17,7 @@
  ** This is an control- and callback element to handle any kind of "running"
  ** time entities. This element is to be provided by the client and then attached
  ** to the target time entity as a time::Mutation. Internally, a life connection to
- ** the target is built, allowing both to 
+ ** the target is built, allowing both to
  ** - to manipulate the target by invoking the function operator
  ** - to receive change notifications by installing a callback functor.
  ** 
@@ -130,7 +130,7 @@ namespace time {
       virtual void change (Duration&)  const;
       virtual void change (TimeSpan&)  const;
       virtual void change (QuTime&)    const;
-        
+      
     public:
       void operator() (TI const&)      const;
       void operator() (Offset const&)  const;

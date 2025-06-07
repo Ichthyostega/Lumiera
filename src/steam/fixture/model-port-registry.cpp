@@ -60,7 +60,7 @@ namespace fixture {
     {
       INFO (builder, "disabling ModelPort registry....");
       LockRegistry global_lock;
-      theGlobalRegistry.clear(); 
+      theGlobalRegistry.clear();
     }
     
     
@@ -94,7 +94,7 @@ namespace fixture {
         return theGlobalRegistry();
       
       throw error::State ("global model port registry is not accessible"
-                         , LUMIERA_ERROR_BUILDER_LIFECYCLE); 
+                         , LUMIERA_ERROR_BUILDER_LIFECYCLE);
     }
     
     
@@ -107,7 +107,7 @@ namespace fixture {
     ModelPortRegistry::contains (ID<Pipe> key)  const
     {
       return bool(key)
-          && util::contains (transaction_, key); 
+         and util::contains (transaction_, key);
     }
     
     
@@ -121,13 +121,13 @@ namespace fixture {
     ModelPortRegistry::isRegistered (ID<Pipe> key)  const
     {
       return bool(key)
-          && util::contains (currentReg_, key); 
+         and util::contains (currentReg_, key);
     }
     
     
     /** basic access operation: access the descriptor
      *  of a currently valid model port.
-     * @note no locking (but #accessDescriptor does lock!) 
+     * @note no locking (but #accessDescriptor does lock!)
      * @throw error::Logic if accessing a non registered port
      * @throw error::State if accessing an invalid / disconnected port
      */

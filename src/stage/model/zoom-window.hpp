@@ -42,7 +42,7 @@
  ** - the visible interval („window“), likewise modelled as time::TimeSpan
  ** - the scale defined as pixels per second
  ** @todo as of 12/2022 it rather seems the more general navigation should be abstracted
- **       at a higher level, leaving ZoomWindow mostly focused on time scale handling. 
+ **       at a higher level, leaving ZoomWindow mostly focused on time scale handling.
  ** 
  ** 
  ** # Interactions

@@ -11,7 +11,7 @@ __Participants__
  * ichthyo
  * joelholdsworth
  * raffa
- 
+
 _Summary and transcript supplemented by Ichthyo 11/2011_
 
 
@@ -19,7 +19,7 @@ _Summary and transcript supplemented by Ichthyo 11/2011_
 Platform and lib dependency status
 ----------------------------------
 Right away, there is agreement between all 3 core devs that the Lumiera project
-should try to stay close to a *stable reference linux distribution*. Usually, 
+should try to stay close to a *stable reference linux distribution*. Usually,
 developers tend to stick to ``latest greatest'', causing lots of difficult to resolve
 problems to packagers and ursers of their software. The Lumiera team wants to go into
 the opposite direction: staying close to a mature and stable distro and rather try to
@@ -87,7 +87,7 @@ panel layouts would be covered easily
 [2008-11-12 22:05:46] <joelholdsworth> so bundling GUI together with plugins is easier now, right?
 [2008-11-12 22:05:59] <joelholdsworth> we implement some kind of parameters system
 [2008-11-12 22:06:03] <ichthyo> yes
-[2008-11-12 22:06:14] <cehteh> joelholdsworth: thats up to you .. but the plugin system is ready 
+[2008-11-12 22:06:14] <cehteh> joelholdsworth: thats up to you .. but the plugin system is ready
 [2008-11-12 22:06:27] <joelholdsworth> yeah that's fine
 [2008-11-12 22:06:38] <joelholdsworth> if you want to extend the GUI you just expose and interface for it
 
@@ -126,14 +126,14 @@ panel layouts would be covered easily
                                 plugin systems we want to wrap up.
 [2008-11-12 22:13:01] <cehteh> you have a list (or maybe tree) of parameters .. presentation aside
                                ... tree just because some parameters depend on the presence of some else
-                               and you have a presentation .. 
-                                
-[2008-11-12 22:11:53] <ichthyo> next problem is: 
+                               and you have a presentation ..
+
+[2008-11-12 22:11:53] <ichthyo> next problem is:
 [2008-11-12 22:12:16] <ichthyo> the plugins need to allocate some space in the GUI and should not clutter
                                 the workspace this is a tough really tough interface design problem
                                 because some plugins aren't just some "optional stuff", but wired
                                 right into the core operation
-                                
+
 [2008-11-12 22:12:54] <joelholdsworth> well ichthyo: I'm not planning to allow plugins to "take over"
                                 handling workflow. they get to extend very specific parts of the UI
 [2008-11-12 22:13:09] <joelholdsworth> e.g. params
@@ -171,12 +171,12 @@ panel layouts would be covered easily
                                 or to bind them to some knobs on an external control surface
                                 and now you have multiple instances of the same panner plugin
                                 so we need a naming scheme
-                                
+
 [2008-11-12 22:19:03] <cehteh> how i thought about this:
                                1) plugin provides the list of its parameters (maybe as tree)
                                2) there is a config file (config system) which gets installed
                                   with the plugins which defines the default layout
-                               3) user might override that in his own configs ... 
+                               3) user might override that in his own configs ...
                                   but still only defaults for new instances of the things
                                4) the actual configured state is saved with the session
                                while all this config just is a definition which gets applied to a kindof stylesheet
@@ -200,7 +200,7 @@ panel layouts would be covered easily
 [2008-11-12 22:26:48] <ichthyo> which means, some GUI code in the plugin takes over. That is something I utterly dislike
 
 [2008-11-12 22:33:29] <cehteh> no thats not needed
-[2008-11-12 22:33:29] <cehteh> in the session each object has a uuid thats its address 
+[2008-11-12 22:33:29] <cehteh> in the session each object has a uuid thats its address
 [2008-11-12 22:33:29] <cehteh> each parameter has a uuid too(interface system)
 [2008-11-12 22:33:31] <cehteh> so you can say parameter 0x2344545645654534 of object 0x4543765732525t643 ....
 [2008-11-12 22:33:34] <cehteh> "yet unknown" doesnt exist .. it is either unknown or known :)
@@ -214,7 +214,7 @@ panel layouts would be covered easily
                                 I have the object representing the connectionn to the plugin, I can provide the GUI with
                                 some means for re-addressing a certain parameter, e.g. for a key binding, and, of course
                                 for re-establishing the same binding when re-creating the session from storage
-                               
+
 [2008-11-12 23:00:50] <ichthyo> Further, with plugin guis instances there is yet another problem in that you probably
                                 have more option windows of some plugins as you can show in any reasonable GUI
                                 These issues were one of the reasons I made this "FeatureBundle" proposal some time ago,
@@ -233,13 +233,13 @@ panel layouts would be covered easily
                                 say some color correction on 2 tracks, and then you open and close variouos plugins
                                 for several different clips ...plus, maybe the possibility to "pin" some of the plugin
                                 windows, while others just allocate the next free slot
-                                
+
 [2008-11-12 23:13:14] <joelholdsworth> I guess we need some modeless way of putting plugin controls in a panel
-[2008-11-12 23:15:32] <joelholdsworth> so maybe having panels open up - or do it like inkscape with a scrollable panel 
+[2008-11-12 23:15:32] <joelholdsworth> so maybe having panels open up - or do it like inkscape with a scrollable panel
                                 container that gets longer as more panels are opened
 
 [2008-11-12 23:20:10] <cehteh> Cinelerra's plugin guis who constantly get lost behind the main window are really a mess
-[2008-11-12 23:19:28] <ichthyo> joelholdsworth: have you already any ideas about focus handling? 
+[2008-11-12 23:19:28] <ichthyo> joelholdsworth: have you already any ideas about focus handling?
 [2008-11-12 23:20:15] <ichthyo> joelholdsworth: do we get a "current object", a "current track" or the like
                                 which receives keybord input
 [2008-11-12 23:20:37] <joelholdsworth> keybaord focus, yes - that was the plan
@@ -285,7 +285,7 @@ panel layouts would be covered easily
 [2008-11-12 23:31:54] <ichthyo> but it's fine we are all aware of the problem and seemingly share the same approach
                                 config system +  some sort of automatic persistent references within proc +  some
                                 indirection + maybe a focus system
-                                
+
 [2008-11-12 23:33:10] <ichthyo> and another point I want to note is: all of us are rather reluctant to allow plugins
                                 to create GUIs on their own
 [2008-11-12 23:33:27] <joelholdsworth> depends what you mean by that
@@ -300,15 +300,15 @@ panel layouts would be covered easily
                                 copy/paste and a lot of diverging GUI, so you need to "help" the plugins
                                 by putting them in a strict framework. Then, on top of that we allow
                                 extensions which allow a little more flexibility
-                                
+
 [2008-11-12 23:35:20] <ichthyo> Steinberg failed to address this problem properly and VST bears on this heritage until today
 [2008-11-12 23:35:35] <cehteh> make it in a way where the 'correct' way is also the most convenient for any programmer is
                                 all and the best we can do
 [2008-11-12 23:35:49] * ichthyo nods
 [2008-11-12 23:36:04] <joelholdsworth> yes
-[2008-11-12 23:36:07] <cehteh> note the 'any' ... 
+[2008-11-12 23:36:07] <cehteh> note the 'any' ...
 [2008-11-12 23:36:20] <ichthyo> :-P
-[2008-11-12 23:36:26] <cehteh> means mad programmers, beginner programmers, experienced programmers, html programmers ... 
+[2008-11-12 23:36:26] <cehteh> means mad programmers, beginner programmers, experienced programmers, html programmers ...
 
 [2008-11-12 23:36:52] <joelholdsworth> but I'm thinking we do need to remember that the majority of our plugin developers
                                will be part of this project team
@@ -351,7 +351,7 @@ from the *support library* (+liblumiera.so+).
 [2008-11-12 23:53:14] <cehteh> the interface/plugin system has now its own rules which are somewhat special
                                and good by that way. I am thinking about a interface_doc.h which can be used
                                to generate documentation from the interface language with some special gcc/cpp flags
-                               
+
 [2008-11-12 23:53:18] <ichthyo> those interface parts will be contained in a "Lumiera sdk"
                                 and probably all those interfaces (for C++) will go into namespace lumiera::
                                 because it's just the best and most natural pick
@@ -359,11 +359,11 @@ from the *support library* (+liblumiera.so+).
                                 a real interface part and cleanly separated from the implementation
                                 meaning: I don't want *.c and *.cpp files in this package/directory/namespace,
                                 unless they are really needed there
-                                
+
 [2008-11-12 23:55:55] <cehteh> well interfaces themself need to be .c they need to be implemented
                                and the implementation might adapt the code for example the config system
                                sometimes returns internal state as success/failure indicator
-                               but its interface just returns integers 
+                               but its interface just returns integers
 
 [2008-11-12 23:56:13] <ichthyo> so the question regarding namespaces is connected to the question:
                                 how is the implementation organized in relation to the interface part?
@@ -396,11 +396,11 @@ from the *support library* (+liblumiera.so+).
 [2008-11-13 00:04:28] <ichthyo> and only the class SessManagerImpl knows of the implementation class SessionImpl
 [2008-11-13 00:04:32] <ichthyo> and so on
 
-[2008-11-13 00:04:50] <cehteh> well thats not important yet... 
+[2008-11-13 00:04:50] <cehteh> well thats not important yet...
                                I currently have some 'mess' of includes because its just easier for now to mix them
                                all together and relative easy to clean up when done, and I don't have a differentiation
                                between interface and implementation headers .. because
-                               a) its all implementation code yet 
+                               a) its all implementation code yet
 [2008-11-13 00:06:06] <cehteh> b) i was under the impression that i only wanted to export interfaces
                                   over 'Interfaces'
 [2008-11-13 00:06:25] <ichthyo> ...which is fine
@@ -413,7 +413,7 @@ from the *support library* (+liblumiera.so+).
 [2008-11-13 00:08:29] <ichthyo> but... on the long run I am sure we don't just get one "includes" package,
                                 rather I guess we get a (very small) tree of interfaces.
                                 That's the rationale behind my keeping the implementation namespaces completely apart
-                                
+
 [2008-11-13 00:08:53] <cehteh> ok
 [2008-11-13 00:09:43] <cehteh> the _interface.c  is the glue code which can stay in the implementation dir imo
 [2008-11-13 00:10:16] <cehteh> actually i wanted a include dir too .. i just didnt start because i wanted to ask you too
@@ -433,7 +433,7 @@ from the *support library* (+liblumiera.so+).
 [2008-11-13 00:16:29] <ichthyo> ok, back to the include dir question:
                                My proposal would be to use src/lumiera/... and namespace lumiera::...
                                (and its children) for the public interfaces
-                               
+
 [2008-11-13 00:17:04] <cehteh> mhm thats the usual reversal operation
 [2008-11-13 00:17:31] <cehteh> src/lumiera/include/ ... gets installed in /usr/include/lumiera :P
 [2008-11-13 00:17:40] <cehteh> ok you dont have the include
@@ -483,7 +483,7 @@ from the *support library* (+liblumiera.so+).
                                 which need to be in the .h and need full public structure definitions
                                 which expose private details. I think these will stay private
                                 but if not i wont really care.
-                                
+
 [2008-11-13 00:27:06] <ichthyo> ah, I see
 [2008-11-13 00:27:59] <ichthyo> probably those just count as "reasonable exceptions from the rule"
 [2008-11-13 00:28:33] <cehteh> well C has no access protection at all .. you have to do whats allowed/documented
@@ -499,7 +499,7 @@ from the *support library* (+liblumiera.so+).
 [2008-11-13 00:33:02] <ichthyo> I always assume we have separate interface namespace(s)
                                 and implementation is in a different namespace then the exported interface
                                 basically I see two scenarios:
-                                
+
                                 so, the first scenario I'd call "libarry type"
                                 it means that the implementation namespace is nested
                                 eg namespace mylib  <-- the stuff the library users include and use in their code
@@ -519,7 +519,7 @@ from the *support library* (+liblumiera.so+).
                                 the way we discussed
                                 for a real library, the situation is reversed: Often you have much code close
                                 to the interface, maybe even inline
-                                e.g. think at boost: 
+                                e.g. think at boost:
                                 half of the code is immediately inline within the interface classes you use
                                 and the more technical parts are in shallow sub-namespaces below
                                 the good side of course is, that the implementation code doesn't need
@@ -529,7 +529,7 @@ from the *support library* (+liblumiera.so+).
                                 because it clearly documents what non-local parts you use
                                 that was my rationale for keeping the implementation part
                                 in a completely separate hierarchy.
-                                
+
 [2008-11-13 00:43:17] <ichthyo> joelholdsworth: so you moved your gui code within namespace gui, is that correct?
 [2008-11-13 00:43:50] <joelholdsworth> yes that's right!
 [2008-11-13 00:43:59] <ichthyo> because, then the issue seems to be settled.
@@ -570,7 +570,7 @@ from the *support library* (+liblumiera.so+).
 [2008-11-13 00:51:56] <cehteh> we really dont need a 1:1 relation between dirs and namespaces
 [2008-11-13 00:52:08] <ichthyo> so, then, how can the build system tell at what level of the tree below plugins
                                 we'd need to start with building one shared libarary?
-                                
+
 [2008-11-13 00:52:46] <ichthyo> would the following rule be ok for you?
 [2008-11-13 00:52:58] <ichthyo> start with dir src/plugins and descend
 [2008-11-13 00:53:12] <ichthyo> depth-first tree search
@@ -586,11 +586,11 @@ from the *support library* (+liblumiera.so+).
                                 file *.c *cpp in some of the root directories...
                                 the moment you add a *c or *cpp file in some new sub tree,
                                 you'll find a <subtree-rootdirname>.lum in the corresponding bin dir
-                                
+
 [2008-11-13 00:55:17] <cehteh> thats prolly a good choice anyways
 [2008-11-13 00:55:28] <cehteh> plugins shall be only at the leaves of the tree
 
-[2008-11-13 00:55:42] <cehteh> be careful when linking 
+[2008-11-13 00:55:42] <cehteh> be careful when linking
 [2008-11-13 00:56:16] <cehteh> the autoconf build included a lot libs from configure which where not needed for plugins
 
 [2008-11-13 00:56:57] <ichthyo> besides, I will set up a different "build environment" for plugins
@@ -601,7 +601,7 @@ from the *support library* (+liblumiera.so+).
 [2008-11-13 00:58:12] <ichthyo> and I match them from the directory name
 [2008-11-13 00:58:20] <ichthyo> the rest is fully automatic
 
-[2008-11-13 00:58:14] * cehteh thinks 
+[2008-11-13 00:58:14] * cehteh thinks
 [2008-11-13 00:58:38] <cehteh> a bare plugin doesnt need any lib
 [2008-11-13 00:59:04] <ichthyo> not even the lumiera support lib?
 [2008-11-13 00:59:11] <ichthyo> liblumiera.a
@@ -618,7 +618,7 @@ from the *support library* (+liblumiera.so+).
 [2008-11-13 01:00:54] <ichthyo> but what is when a plugin wants to open another interface
 [2008-11-13 01:01:11] <cehteh> it asks the host to do it
 [2008-11-13 01:01:17] <ichthyo> doesn't it need to link against your plugin system impl?
-[2008-11-13 01:01:32] <cehteh> nope .. just the interface.h 
+[2008-11-13 01:01:32] <cehteh> nope .. just the interface.h
 [2008-11-13 01:02:49] <cehteh> interface.h defines some functions .. but these are not available for the plugin either
                                but the nature of plugins is to extend the system ..
                                thus follows that they will need some more specific libs in many cases
@@ -638,7 +638,7 @@ from the *support library* (+liblumiera.so+).
 [2008-11-13 01:07:41] <ichthyo> as said, in future I'll tell scons
                                 "build everything below this root  dir into a dynamic module"
                                 and scons will derive the necessary compile and link commands
-                                
+
 [2008-11-13 01:10:32] <ichthyo> ah, another little issue
 [2008-11-13 01:10:42] <ichthyo> we have two tools directories currently
 [2008-11-13 01:10:53] <ichthyo> one as "src/tool"
@@ -701,10 +701,10 @@ from the *support library* (+liblumiera.so+).
                                 Could you explain it? Lets say: we have interface A
                                 now a plugin wants to provide an implementation of interface A
                                 i.e. the client of this plugin would use interface A to access it
-                                
+
 [2008-11-13 01:34:03] <cehteh> in a mail to you i explained that i would like mockup plugins which
                                override core functionality
-                               
+
 [2008-11-13 01:35:07] <ichthyo> so, wouldn't the mockup just be another implementation of interface A ?
 [2008-11-13 01:35:09] <cehteh> well you query an interface+implementation tuple
 [2008-11-13 01:35:35] <cehteh> you cant just open a interface .. you open a implementation of an interface
@@ -714,7 +714,7 @@ from the *support library* (+liblumiera.so+).
 
 [2008-11-13 01:40:32] <cehteh> imagine 2 *.lum modules implement and export exactly the same thing
                                (or at least announce it as exactly the same thing)
-                               
+
 [2008-11-13 01:40:57] <ichthyo> I'd just try to relate it to the similar situation with classes
 [2008-11-13 01:41:16] <ichthyo> you have an interface and now you have two subclasses
 [2008-11-13 01:41:12] <cehteh> nah classes are different
@@ -753,7 +753,7 @@ from the *support library* (+liblumiera.so+).
 [2008-11-13 01:48:12] <ichthyo> well... at some point you will be able to tell the loader:
                                 load this module for use as interface A
 [2008-11-13 01:48:20] <cehteh> nah
-[2008-11-13 01:48:37] <cehteh> but you forget that modules != interfaces 
+[2008-11-13 01:48:37] <cehteh> but you forget that modules != interfaces
 [2008-11-13 01:49:07] <ichthyo> I understand the modules as being like a "subclass" of the interface
 [2008-11-13 01:49:23] <ichthyo> meaning, each of them can "stand-in" for the interface
 [2008-11-13 01:49:18] <cehteh> nope wrong
@@ -767,9 +767,9 @@ from the *support library* (+liblumiera.so+).
 [2008-11-13 01:51:00] <ichthyo> but what then is the term for the implementation of an interface?
 [2008-11-13 01:51:08] <ichthyo> because, at an extension point
 [2008-11-13 01:51:21] <ichthyo> you just want to tell: this is the interface to be used at this extension point
-[2008-11-13 01:51:28] <cehteh> but the module is just a bunch of interfaces .. and module itself doesnt give them a purpose 
+[2008-11-13 01:51:28] <cehteh> but the module is just a bunch of interfaces .. and module itself doesnt give them a purpose
 [2008-11-13 01:52:09] <ichthyo> thats clear. Something like the feature bundle could give it a speficic purpose,
-                                or something similar, which itself is loaded as plugin 
+                                or something similar, which itself is loaded as plugin
 [2008-11-13 01:52:46] <cehteh> modules are just the bucket .. it is pretty unspecified what you put in
 [2008-11-13 01:53:01] <ichthyo> yes thats fine, to start with
 [2008-11-13 01:53:23] <ichthyo> anything more specific can be built on top of such a system

@@ -38,7 +38,7 @@ namespace session {
   
   class Clip;
   class Effect;
-  typedef Placement<Effect> PEffect;
+  using PEffect = Placement<Effect>;
   // TODO: class Transition;
   
 }} // namespace mobject::session

@@ -78,7 +78,7 @@ namespace steam {
           SteamDispatcher::instance().requestStop();
         }
       
-      bool 
+      bool
       checkRunningState()  noexcept override
         {
           return SteamDispatcher::instance().isRunning();
@@ -97,9 +97,9 @@ namespace steam {
        * @return true if any output system is required to start stand-alone.
        *         otherwise, the player and a default configured output connection
        *         is pulled up only when required by another subsystem (e.g. GUI)
-       * @todo   actually define cmdline options and parse/decide here! 
+       * @todo   actually define cmdline options and parse/decide here!
        */
-      bool 
+      bool
       shouldStart (Option&)  override
         {
           TODO ("extract options about specific output systems to be brought up");
@@ -123,7 +123,7 @@ namespace steam {
         }
       
       
-      bool 
+      bool
       checkRunningState()  noexcept override
         {
           return play::OutputDirector::instance().isOperational();

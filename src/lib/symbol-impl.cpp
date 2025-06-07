@@ -1,5 +1,5 @@
 /*
-  Symbol(impl)  -  helpers for working with literal string IDs 
+  Symbol(impl)  -  helpers for working with literal string IDs
 
    Copyright (C)
      2009,            Hermann Vosseler <Ichthyostega@web.de>

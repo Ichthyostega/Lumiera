@@ -42,7 +42,7 @@ namespace test {
   
   
   /*************************************************************************//**
-   * @test Ensure expected Scheduler functionality in standard usage situations. 
+   * @test Ensure expected Scheduler functionality in standard usage situations.
    * @see SchedulerActivity_test
    * @see SchedulerInvocation_test
    * @see SchedulerCommutator_test

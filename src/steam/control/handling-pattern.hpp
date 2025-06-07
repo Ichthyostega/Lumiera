@@ -20,7 +20,7 @@
  ** invoked (template method pattern). A pattern may cause the command to be
  ** enqueued, registered for UNDO or dispatched into a background thread.
  ** To carry out the work, HandlingPattern implementations are allowed to
- ** invoke the CommandImpl API directly. 
+ ** invoke the CommandImpl API directly.
  **
  ** @todo it is not clear what's the difference between "throw" and "no-throw" pattern
  ** @todo any integration with the (yet undefined as of 9/09) SteamDispatcher is missing.

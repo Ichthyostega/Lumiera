@@ -117,7 +117,7 @@ namespace engine {
       
       
     public:
-      typedef Buff* PBuff;
+      using PBuff = Buff*;
       
       /** @internal a buffer handle may be obtained by "locking"
        *  a buffer from the corresponding BufferProvider */
@@ -155,7 +155,7 @@ namespace engine {
       isValid()  const
         {
           return bool(pBuffer_)
-              && descriptor_.verifyValidity();
+             and descriptor_.verifyValidity();
         }
       
       HashVal

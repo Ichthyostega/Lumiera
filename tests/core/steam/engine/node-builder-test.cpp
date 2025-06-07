@@ -202,7 +202,7 @@ namespace test  {
        *        first close one parameter given by index, then close staring
        *        from the front and then aligned to the end
        *      - now a single param «slot» remains open, which can be wired
-       *        to receive automation data (note: 1-tuple generated automatically) 
+       *        to receive automation data (note: 1-tuple generated automatically)
        * @remark it is quite common that processing functionality provided by an
        *   external library exposes both technical and artistic parameters, which
        *   leads to the situation that technical parameters can be predetermined

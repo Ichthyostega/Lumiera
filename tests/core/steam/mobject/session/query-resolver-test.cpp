@@ -58,14 +58,14 @@ namespace test{
     
     template<>
     class DummySolutions<string>
-      : public DummySolutions<int> 
+      : public DummySolutions<int>
       {
         string currentText_;
         
       public:
         string*
         next ()
-          { 
+          {
             static const char* lumi ="Lumiera";
             currentText_ = string (lumi + *DummySolutions<int>::next());
             return &currentText_;
@@ -75,7 +75,7 @@ namespace test{
     
     /**
      * a concrete "resolution" of the query
-     * is a set of "solutions", which can be 
+     * is a set of "solutions", which can be
      * explored by iteration. Thus, the result set
      * has to implement the iteration control API
      * as required by IterAdapter
@@ -121,9 +121,9 @@ namespace test{
         bool
         canHandleQuery (QID qID)  const
           {
-            return Goal::GENERIC == qID.kind 
-                && (wantResultType<int> (qID)
-                  ||wantResultType<string>(qID));
+            return Goal::GENERIC == qID.kind
+               and (  wantResultType<int> (qID)
+                   or wantResultType<string>(qID));
           }
         
         template<typename TY>
@@ -140,7 +140,7 @@ namespace test{
           {
             QID qID = goal.getQID();
             REQUIRE (qID.kind == Goal::GENERIC
-                  && qID.type == getResultTypeID<TY>());
+                 and qID.type == getResultTypeID<TY>());
             
             return new DummyResultSet<TY>(); 
           }
@@ -177,7 +177,7 @@ namespace test{
   
   /*******************************************************************************//**
    * @test verify the mechanism for issuing typed queries through a generic interface,
-   *       without disclosing the facility actually answering those queries. 
+   *       without disclosing the facility actually answering those queries.
    *       Results are to be retrieved through a Lumiera Forward Iterator.
    *       
    * @see  mobject::session::QueryResolver
@@ -189,7 +189,7 @@ namespace test{
     {
       
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           QueryResolver& resolver = buildTestQueryResolver();
           Query<int> firstQuery("");

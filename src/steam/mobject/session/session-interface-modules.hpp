@@ -14,13 +14,13 @@
 
 /** @file session-interface-modules.hpp
  ** Self-contained sub-elements on the Session API.
- ** Part of the Session interface is exposed as self-contained 
+ ** Part of the Session interface is exposed as self-contained
  ** interface modules -- both for notational convenience at the
  ** usage site, and for keeping session implementation code manageable.
  ** Clients access these modules as nested parts of the public Session interface
  ** through references exposing just the respective interfaces, while the actual
  ** implementation is located in-place (within the SesssionImpl object), packaged
- ** into a non-public baseclass. 
+ ** into a non-public baseclass.
  ** - the DefsManager acts as frontend to the system of default configurations
  **   and config rules, allowing to retrieve the \em default version of various
  **   kinds of objects
@@ -30,7 +30,7 @@
  **   located directly below model root.
  ** - likewise there is an table of all Sequence (structural assets), which
  **   correspond to the fork roots (roots of "track" trees), attached below model root.
- ** - the ElementQuery interface allows to retrieve specific object 
+ ** - the ElementQuery interface allows to retrieve specific object
  **   instances by applying a filter predicate.
  ** 
  ** \par maintaining the link between session, timelines and sequences
@@ -49,7 +49,7 @@
  ** respectively. This is accomplished by using kind-of a backdoor, a SessionServices (???)
  ** (steam internal API) definition, allowing direct communication on implementation
  ** level, without the need to expose this access point on the public session API.
- ** The lib::ElementTracker configured in ( ??? ) receives these  
+ ** The lib::ElementTracker configured in ( ??? ) receives these
  ** calls to maintain a list of asset smart-ptrs
  ** 
  ** @see SessionImpl
@@ -102,7 +102,7 @@ namespace session {
   /** init element-tracking mechanism for
    *  timelines and sequences on session creation
    */
-  inline 
+  inline
   SessionInterfaceModules::SessionInterfaceModules()
   {
     asset::Timeline::setRegistryInstance (timelineRegistry_);

@@ -69,17 +69,17 @@
  ** If unable to uphold this consistency assumption, it is the client's responsibility
  ** to care for _transactional behaviour,_ i.e. create a clone copy of the data structure
  ** beforehand, and "commit" or "roll back" the result atomically.
- **  
+ **
  ** @note to improve readability, the actual implementation of the "binding layers"
  **       is defined in separate headers and included towards the bottom of this header.
- ** 
+ **
  ** @see tree-mutator-test.cpp
  ** @see tree-mutator-binding-test.cpp
  ** @see [usage for tree diff application](\ref tree-diff-application.hpp)
- **      especially `DiffApplicationStrategy<TAR,  enable_if<TreeDiffTraits<TAR>>>` defined there 
+ **      especially `DiffApplicationStrategy<TAR,  enable_if<TreeDiffTraits<TAR>>>` defined there
  ** @see diff-language.hpp
  ** @see DiffDetector
- ** 
+ **
  */
 
 

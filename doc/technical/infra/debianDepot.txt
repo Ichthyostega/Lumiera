@@ -90,7 +90,7 @@ this will __re__generate all of the indices, signatures and metadata of the 'squ
 Configuration
 ~~~~~~~~~~~~~
 The current configuration and the state of the Debian Depot index files is tracked
-is a separate branch in the 
+is a separate branch in the
 link:http://git.lumiera.org/gitweb?p=debian/lumiera;a=shortlog;h=refs/heads/depot[debian/lumiera]
 repository. (Note: this is a somewhat unconventional setup, insofar the 'depot' branch tracks
 a directory tree completely separete from the main lumiera source tree tracked by the deb branch;
@@ -104,10 +104,10 @@ want to create _yet another not so useful Git repository..._)
 .some special details to note in our setup
 =======================================================================================================================
 - each block in the 'distributions' file defines a repository for a ``distribution'' (e.g. Jessie, Trusty, Rafaela).
-  Within such a repo, there are sections named 'Components'. 
+  Within such a repo, there are sections named 'Components'.
 - The _override_ files mentioned in the configuration allow to overwrite / replace arbitrary fields in the metadata of
   all packages added to that distribution.
-- In this setup, we enabled the 'tracking' function: thereby reprepro will keep track of the dependencies between 
+- In this setup, we enabled the 'tracking' function: thereby reprepro will keep track of the dependencies between
   binary packages, signatures, debianisation patches and original upstream tarballs. Never packages overwirte older
   ones -- _at any time there is at most one version of a package in the repository._ Parts not referred to anymore
   are automatically discareded. In our configuration, they are moved into the 'morguedir'

@@ -216,7 +216,7 @@ namespace mobject {
         {
           PlacementRef<MO> newRef (pRefID);
           
-          if (isValid() && pRef_ == newRef )
+          if (isValid() and pRef_ == newRef)
             return *this;                // self assignment detected
           else
             return activate (*newRef); // STRONG exception safe
@@ -263,7 +263,7 @@ namespace mobject {
       isValid()  const
         {
           return _Handle::isValid()
-              && pRef_.isValid();
+             and pRef_.isValid();
         }
       
       size_t
@@ -277,7 +277,7 @@ namespace mobject {
       isCompatible()  const
         {
           return pRef_
-              && (*pRef_).template isCompatible<MOX>();
+             and (*pRef_).template isCompatible<MOX>();
         }
       
       operator string()   const                      ///////////////////////TICKET #527 #528 should be better integrated with the other object types
@@ -296,7 +296,7 @@ namespace mobject {
       operator== (MORef<MOX> const& oRef)  const
         {
           return isValid()
-              && oRef == this->pRef_;
+             and oRef == this->pRef_;
         }
       
       template<class MOX>
@@ -369,8 +369,8 @@ namespace mobject {
   inline bool
   isSharedPointee (MORef<MOX> const& ref1, MORef<MOY> const& ref2)
   {
-    return ref1.isValid() && ref2.isValid()
-        && isSharedPointee (ref1.getPlacement(), ref2.getPlacement());
+    return ref1.isValid() and ref2.isValid()
+       and isSharedPointee (ref1.getPlacement(), ref2.getPlacement());
   }
   
   /** check if the two references actually denote an equivalent placement */
@@ -378,8 +378,8 @@ namespace mobject {
   inline bool
   isEquivalentPlacement (MORef<MOX> const& ref1, MORef<MOY> const& ref2)
   {
-    return ref1.isValid() && ref2.isValid()
-        && isSameDef (ref1.getPlacement(), ref2.getPlacement());
+    return ref1.isValid() and ref2.isValid()
+       and isSameDef (ref1.getPlacement(), ref2.getPlacement());
   }
   
   

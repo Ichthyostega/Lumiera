@@ -32,7 +32,7 @@ That's why, if you rely on any system PATHs or environment variables -- you need
 those settings explicitly in your build definition.
 
 .SConstruct
-when SCons executes, it performs a build definition python script written by the user. 
+when SCons executes, it performs a build definition python script written by the user.
 By convention, this main script is called 'SConstruct' and is located in the root of the source tree.
 It is a full featured Python module executed within a specifically prepared environment.
 
@@ -46,7 +46,7 @@ the sub-trees of the project.
 The SCons buildsystem revolves around the metaphor of a _Builder_. This is a SCons object that you explicitly
 invoke from the scripts to _define_ that there is something to build, transforming a _source_ into a _target_.
 So the target depends on the sources, and typically those _source nodes_ were created by previous builder invocations.
-The power of SCons is in the fact that dependencies are tracked automatically. When source files change, the system 
+The power of SCons is in the fact that dependencies are tracked automatically. When source files change, the system
 is able to derive which targets to rebuild.
 
 .Scanner
@@ -134,7 +134,7 @@ in SVG and in UML.
 
 .the target directory
 This is where the results of the build process are created. Lumiera is organised into a
-_self contained folder structure_. As long as the relative locations, as found within +target/+, 
+_self contained folder structure_. As long as the relative locations, as found within +target/+,
 are kept intact, the Application will be able to start up and find all its resources. Consequently,
 there is no need to ``install'' Lumiera (and the ``install'' target just copies this folder structure
 into the standard installation locations of a typical Unix system)
@@ -145,11 +145,11 @@ So, for the time being, we're just building in-tree. Apologies for that.
 
 Invoking the Build
 ~~~~~~~~~~~~~~~~~~
-All of the build process is launched through the `scons` python script, usually installed into 
+All of the build process is launched through the `scons` python script, usually installed into
 `/usr/bin` when installing the SCons package onto the system. Just invoking
 
  scons -h
- 
+
 prints a summary of all custom options, targets and toggles defined for our build.
 
 Targets

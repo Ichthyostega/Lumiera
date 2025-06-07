@@ -24,7 +24,7 @@
  ** This test relies on a demonstration setup featuring a custom encapsulated state type:
  ** we rely on a counter with start and end value, embedded into an iterator as »state core«.
  ** This running counter, when iterated, generates a descending sequence of numbers start ... end.
- ** So -- conceptually -- this counting iterator can be conceived as _representing_ this sequence 
+ ** So -- conceptually -- this counting iterator can be conceived as _representing_ this sequence
  ** of numbers, while not actually representing all these numbers as data in memory. And this is
  ** the whole point of the exercise: _not to represent_ this sequence in runtime state at once,
  ** rather to __pull and expand it on demand._

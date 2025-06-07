@@ -86,7 +86,7 @@ namespace test {
       bool checkProperties (PM object, Asset::Ident identity, string filename)
         {
           return identity == object->ident   
-              && filename == object->getFilename();
+             and filename == object->getFilename();
         }
     };
   

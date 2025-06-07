@@ -36,7 +36,7 @@ namespace test_format {
   
   /***************************************************************//**
    * @test check the basic workings of the stream type handling.
-   *       create some stream implementation data, build a 
+   *       create some stream implementation data, build a
    *       StreamType::ImplFacade from this, and derive a prototype
    *       and a full StreamType based on this information.
    */
@@ -56,7 +56,7 @@ namespace test_format {
       buildImplType ()
         {
           STypeManager& typeManager = STypeManager::instance();
-      
+          
           gavl_video_format_t rawType = test_createRawType();
           ImplType iTy (typeManager.getImpl (GAVL, rawType));
           
@@ -76,9 +76,9 @@ namespace test_format {
           TODO ("add equality comparable concept to the ImplType class");
           
           CHECK (StreamType::VIDEO==refType.getKind());
-          UNIMPLEMENTED ("get a lib descriptor"); 
-          UNIMPLEMENTED ("check the lib of the type"); 
-          UNIMPLEMENTED ("compare two types"); 
+          UNIMPLEMENTED ("get a lib descriptor");
+          UNIMPLEMENTED ("check the lib of the type");
+          UNIMPLEMENTED ("compare two types");
         }
       
       SType

@@ -85,7 +85,7 @@ namespace session {
       PIter tip_;
       
       bool
-      exhausted() 
+      exhausted()
         {
           return !tip_;
         }
@@ -117,9 +117,9 @@ namespace session {
       std::stack<PIter> scopes_;
       
       bool
-      exhausted() 
+      exhausted()
         {
-          while (!scopes_.empty() && !scopes_.top())
+          while (not scopes_.empty() and not scopes_.top())
             scopes_.pop();
           return scopes_.empty();
         }
@@ -127,7 +127,7 @@ namespace session {
       Pla&
       step ()
         {
-          REQUIRE (!scopes_.empty() && scopes_.top());
+          REQUIRE (not scopes_.empty() and scopes_.top());
           Pla& pos = *scopes_.top();
           ++scopes_.top();
           scopes_.push(index_.getReferrers(pos.getID()));
@@ -154,7 +154,7 @@ namespace session {
       Pla* tip_;
       
       bool
-      exhausted() 
+      exhausted()
         {
           return !tip_;
         }
@@ -186,7 +186,7 @@ namespace session {
    * on query, an individual result set is prepared
    * to be explored by the invoking client code.
    * It is built wrapping the low-level scope iterator
-   * obtained from the index, controlled by an 
+   * obtained from the index, controlled by an
    * exploration strategy. Embedded into the iterator
    * there is a smart-ptr managing this ResultSet.
    */
@@ -232,7 +232,7 @@ namespace session {
           
           ASSERT (explore_->exhausted());
           cursor.point_at (0);
-        }   
+        }
       
     public:
       ResultSet (ExplorerBuilder b
@@ -281,7 +281,7 @@ namespace session {
       {
         UseThisIndex (PlacementIndex& idx) : refIndex_(idx) {}
         
-        PlacementIndex& refIndex_;  
+        PlacementIndex& refIndex_;
         PlacementIndex& operator() (void) { return refIndex_; }
       };
   } //(END) Helpers
@@ -323,15 +323,15 @@ namespace session {
   PlacementIndexQueryResolver::canHandleQuery(QID qID)  const
   {
     return qID.kind == Goal::DISCOVERY
-       &&( qID.type == getResultTypeID<Placement<MObject>>()
-         ||qID.type == getResultTypeID<Placement<Clip>>()
-         ||qID.type == getResultTypeID<Placement<Effect>>()
+      and( qID.type == getResultTypeID<Placement<MObject>>()
+        or qID.type == getResultTypeID<Placement<Clip>>()
+        or qID.type == getResultTypeID<Placement<Effect>>()
                        /////////////////////////////////////////////////////////////////TICKET #414
          
-         ||qID.type == getResultTypeID<Placement<mobject::test::DummyMO    >>()
-         ||qID.type == getResultTypeID<Placement<mobject::test::TestSubMO1 >>()
-         ||qID.type == getResultTypeID<Placement<mobject::test::TestSubMO2 >>()
-         ||qID.type == getResultTypeID<Placement<mobject::test::TestSubMO21>>()
+        or qID.type == getResultTypeID<Placement<mobject::test::DummyMO    >>()
+        or qID.type == getResultTypeID<Placement<mobject::test::TestSubMO1 >>()
+        or qID.type == getResultTypeID<Placement<mobject::test::TestSubMO2 >>()
+        or qID.type == getResultTypeID<Placement<mobject::test::TestSubMO21>>()
                        /////////////////////////////////////////////////////////////////TICKET #532
          );
   }
@@ -350,7 +350,7 @@ namespace session {
   
   /** an instance of this function is installed for each specifically typed
    *  kind of query to be handled. This allows the client code to retrieve
-   *  just placements of this special type (e.g. Placement<Clip>) in a 
+   *  just placements of this special type (e.g. Placement<Clip>) in a
    *  typesafe manner. We ensure a suitable ContentFilter will be installed,
    *  dropping any other query results (of other type) before the point
    *  where they may get casted to the desired result type. The key for
@@ -368,7 +368,7 @@ namespace session {
     ScopeQueryKind direction = query.searchDirection();
     PID scopeID = query.searchScope();
     
-    return new ResultSet( bind (&PlacementIndexQueryResolver::setupExploration, 
+    return new ResultSet( bind (&PlacementIndexQueryResolver::setupExploration,
                                 this, scopeID, direction)
                         , getContentFilter(query)
                         );

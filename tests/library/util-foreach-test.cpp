@@ -98,7 +98,7 @@ namespace test {
   /*****************************************************************//**
    * @test Invoking an operation for each element of a collection.
    *       Covers the various flavours of these convenience helpers:
-   *       They might operate either on a STL container (providing 
+   *       They might operate either on a STL container (providing
    *       \c begin() and \c end() functions), or at a "Lumiera
    *       Forward Iterator", which is incremented and dereferenced
    *       for each value it yields, until exhaustion.
@@ -106,7 +106,7 @@ namespace test {
    *       Moreover for each of these cases, there are additional
    *       overloads allowing to create a bind-expression on-the fly.
    *       As a further variation of this scheme, an predicate can be
-   *       evaluated for each element, either with universal quantisation 
+   *       evaluated for each element, either with universal quantisation
    *       (results are && combined), or with existential quantisation.
    */
   class UtilForeach_test : public Test
@@ -229,7 +229,6 @@ namespace test {
        *        the changes go through to the original container, in spite of
        *        passing the iterator by value. This behaviour is correct, as
        *        an iterator is an reference-like object
-       * 
        */
       template<typename CO>
       void

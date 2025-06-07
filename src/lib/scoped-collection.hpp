@@ -1,5 +1,5 @@
 /*
-  SCOPED-COLLECTION.hpp  -  managing a fixed collection of noncopyable polymorphic objects 
+  SCOPED-COLLECTION.hpp  -  managing a fixed collection of noncopyable polymorphic objects
 
    Copyright (C)
      2012,            Hermann Vosseler <Ichthyostega@web.de>
@@ -48,7 +48,7 @@
  **       by the template parameter `I`. But you need to ensure in this case
  **       that the defined buffer size for each element (2nt template parameter)
  **       is sufficient to hold any of these subclass instances. This condition
- **       is protected by a static assertion (compilation failure). 
+ **       is protected by a static assertion (compilation failure).
  ** @warning when using subclasses, a virtual dtor is mandatory
  ** @warning deliberately **not threadsafe**
  ** 
@@ -96,7 +96,7 @@ namespace lib {
     {
       
     public:
-      /** 
+      /**
        * Storage Frame to hold one Child object.
        * The storage will be an heap allocated
        * array of such Wrapper objects.
@@ -109,7 +109,7 @@ namespace lib {
             std::byte buf_[siz];
           
         public:
-         
+          
           I&
           accessObj()  const
             {
@@ -144,7 +144,7 @@ namespace lib {
       
       
      ~ScopedCollection ()
-        { 
+        {
           clear();
         }
       
@@ -176,7 +176,7 @@ namespace lib {
        *  typical usage situation, where a manager object builds
        *  a ScopedCollection of some components
        * @param builder member function used to create the elements
-       * @param instance the owning class instance, on which the 
+       * @param instance the owning class instance, on which the
        *        builder member function will be invoked ("this").
        */
       template<class TY>
@@ -248,7 +248,7 @@ namespace lib {
       template<class CTOR>
       void
       populate_by (CTOR builder)
-        try { 
+        try {
           while (level_ < capacity_)
             {
               ElementHolder& storageFrame (elements_[level_]);
@@ -270,7 +270,7 @@ namespace lib {
       template<class TY>
       void
       populate_by (void (TY::*builder) (ElementHolder&), TY * const instance)
-        try { 
+        try {
           while (level_ < capacity_)
             {
               ElementHolder& storageFrame (elements_[level_]);
@@ -453,7 +453,7 @@ namespace lib {
    * @note anything in accordance to the Lumiera Forward Iterator pattern is OK.
    *       This rules out just passing a plain STL iterator (because these can't
    *       tell for themselves when they're exhausted). Use an suitable iter-adapter
-   *       instead, e.g. by invoking lib::iter_stl::eachElm(stl_container) 
+   *       instead, e.g. by invoking lib::iter_stl::eachElm(stl_container)
    */
   template<class I, size_t siz>
   template<typename IT>

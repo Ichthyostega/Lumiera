@@ -46,7 +46,7 @@
  **       admittedly we did not get to a point yet where fabricating lots of elements
  **       poses any kind of challenge — up to now a dedicated factory function within a service
  **       was enough to handle this task. Yet this may change, once we have stream types,
- **       various kinds of assets (notably effects and processors) and lots of queries. 
+ **       various kinds of assets (notably effects and processors) and lots of queries.
  ** 
  ** @see multifact-test.cpp
  ** @see multifact-singleton-test.cpp
@@ -200,7 +200,7 @@ namespace lib {
     
     
     
-    /** 
+    /**
      * @internal configuration of the elements
      * to be combined into a MultiFact instance
      */

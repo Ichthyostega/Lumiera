@@ -152,8 +152,8 @@ namespace session {
   template<typename MO, typename BMO>
   struct BuildID<Placement<MO,BMO>>
     {
-      typedef PlacementMO::Id<MO> Type;
-      typedef MO                  Target;
+      using Type   = PlacementMO::Id<MO>;
+      using Target = MO                 ;
     };
   
   

@@ -351,8 +351,8 @@ namespace wrapper {
   inline bool
   operator== (ItemWrapper<TY> const& w1, ItemWrapper<TY> const& w2)
   {
-    return (!w1 && !w2)
-        || ( w1 &&  w2 && (*w1)==(*w2));
+    return (!w1 and !w2)
+        or ( w1 and  w2 and (*w1)==(*w2));
   }
   template<typename TY>
   inline bool

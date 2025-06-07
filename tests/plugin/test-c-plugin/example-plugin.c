@@ -134,7 +134,7 @@ LUMIERA_INTERFACE_INSTANCE (lumieraorg_interfacedescriptor, 0,
                             LUMIERA_INTERFACE_INLINE (license,
                                                       const char*, (LumieraInterface iface),
                                                       {
-                                                        (void)iface; 
+                                                        (void)iface;
                                                         return
                                                                  "**Lumiera** is free software; you can redistribute it and/or modify it\n"
                                                                  "under the terms of the GNU General Public License as published by the\n"

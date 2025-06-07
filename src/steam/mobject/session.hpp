@@ -22,7 +22,7 @@
  ** invoking any mutating operation should be wrapped into a Command.
  ** 
  ** The Interface Session is abstract and only accessible via the
- ** static field Session::current, which actually refers to a SessManager 
+ ** static field Session::current, which actually refers to a SessManager
  ** singleton instance. The latter acts as smart ptr-to-Impl for accessing the
  ** current session, but at the same time exposes a lifecycle/management API.
  ** 
@@ -65,7 +65,7 @@ namespace fixture {
 
 namespace mobject {
   
-  namespace session { 
+  namespace session {
     class SessManager;
     class ElementQuery;
   }
@@ -81,23 +81,23 @@ namespace mobject {
    * (--> MObject) placed (--> Placement) onto virtual
    * Tracks.
    * 
-   * Opening a Session has effectively global consequences, 
-   * because the Session defines the available Assets, and some 
+   * Opening a Session has effectively global consequences,
+   * because the Session defines the available Assets, and some
    * kinds of Assets define default behaviour. Thus, access to the
    * Session is similar to a Singleton, through \c Session::current
    * Besides the SessionManager, several sub-interfaces are exposed
    * as embedded components: DefaultsManger, timelines and sequences.
    * 
-   * @note Any client should be aware that the Session can be closed, 
+   * @note Any client should be aware that the Session can be closed,
    *       replaced and loaded. The only way to access the Session is
    *       via a "PImpl" smart pointer session::PSess (which indeed is
    *       a reference to the SessManager and is accessible as the static
    *       field Session::current). Clients shouldn't try to get a direct
    *       pointer or reference to the Session object.
    * @ingroup session
-   * 
+   *
    */
-  class Session 
+  class Session
     : util::NonCopyable
     {
     protected:
@@ -156,9 +156,9 @@ namespace mobject {
         /** diagnostics: session interface opened? */
         virtual bool isUp ()  =0;
         
-        /** clear current session contents 
+        /** clear current session contents
          *  without resetting overall session config.
-         *  Afterwards, the session will contain only one 
+         *  Afterwards, the session will contain only one
          *  empty Sequence, while all Assets are retained.
          */
         virtual void clear () =0;
@@ -171,7 +171,7 @@ namespace mobject {
          */
         virtual void close () =0;
         
-        /** reset all session config and 
+        /** reset all session config and
          *  start with a pristine default session.
          */
         virtual void reset () =0;

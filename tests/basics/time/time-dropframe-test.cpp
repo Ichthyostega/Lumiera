@@ -159,7 +159,7 @@ namespace test{
                 for (int frame = 0; frame <= 29; frame++)
                   {
                     // Skip dropped frames
-                    if (min % 10 && sec == 0 && frame < 2)
+                    if (min % 10 and sec == 0 and frame < 2)
                       continue;
                     
                     raw_time_64 t = build_time_from_ntsc_drop_frame(frame, sec, min, hrs);

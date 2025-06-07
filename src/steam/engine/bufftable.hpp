@@ -56,8 +56,8 @@ namespace engine {
      */
   struct BuffTable
     {
-      typedef BuffHandle        * PHa;
-      typedef BuffHandle::PBuff * PBu;
+      using PHa = BuffHandle        *;
+      using PBu = BuffHandle::PBuff *;
       
       struct StorageChunk
         { };
@@ -80,8 +80,8 @@ namespace engine {
       void lockBuffers();
       void releaseBuffers();
       
-      typedef vector<BuffHandle> BuffHandleTable;
-      typedef lib::RangeIter<BuffHandleTable::iterator> iterator;
+      using BuffHandleTable = vector<BuffHandle>;
+      using iterator = lib::RangeIter<BuffHandleTable::iterator>;
       
       iterator buffers();
       iterator inBuffers();

@@ -137,7 +137,7 @@ namespace diff{
       /**
        * MutationMessage builder:
        * take ownership of an opaque heap allocated context
-       * from which the concrete diff can be pulled on demand 
+       * from which the concrete diff can be pulled on demand
        */
       explicit
       MutationMessage(DiffSource* diffGenerationContext)
@@ -175,7 +175,7 @@ namespace diff{
       /**
        * Convenience builder to use elements form any STL-like container
        * @note creating heap allocated IterSource, which _refers_ to the original container
-       * @warning like with any classical iterators, the container must stay alive and accessible 
+       * @warning like with any classical iterators, the container must stay alive and accessible
        */
       template<class CON>
       MutationMessage(CON& container,                 enable_if< __and_< can_STL_ForEach<CON>

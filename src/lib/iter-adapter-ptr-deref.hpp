@@ -1,5 +1,5 @@
 /*
-  ITER-ADAPTER-PTR-DEREF.hpp  -  wrapping iterator to dereference pointers automatically 
+  ITER-ADAPTER-PTR-DEREF.hpp  -  wrapping iterator to dereference pointers automatically
 
    Copyright (C)
      2015,            Hermann Vosseler <Ichthyostega@web.de>
@@ -124,11 +124,11 @@ namespace lib {
       
       
       
-      /** explicit builder to allow creating a const variant from the basic srcIter type. 
+      /** explicit builder to allow creating a const variant from the basic srcIter type.
        *  Again, the reason necessitating this "backdoor" is that we want to swallow one level
        *  of indirection. Generally speaking `const T **` is not the same as `T * const *`,
        *  but in our specific case the API ensures that a `PtrDerefIter<WrappedConstIterType>`
-       *  only exposes const elements. 
+       *  only exposes const elements.
        */
       static PtrDerefIter
       build_by_cast (WrappedIterType const& srcIter)
@@ -220,7 +220,7 @@ namespace lib {
   template<class IT>
   class AddressExposingIter
     {
-      typedef typename IT::pointer _Ptr;
+      using _Ptr = typename IT::pointer;
       
       IT i_;  ///< nested source iterator
       
@@ -238,9 +238,9 @@ namespace lib {
       
       
     public:
-      typedef typename IT::pointer const* pointer;
-      typedef typename IT::pointer const& reference;
-      typedef typename IT::pointer const  value_type;
+      using pointer    = typename IT::pointer const*;
+      using reference  = typename IT::pointer const&;
+      using value_type = typename IT::pointer const ;
       
       ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (AddressExposingIter);
       

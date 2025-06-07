@@ -1,5 +1,5 @@
 /*
-  NoBugInit  -  NoBug static initialisation and definition of logging vars 
+  NoBugInit  -  NoBug static initialisation and definition of logging vars
 
    Copyright (C)
      2009,            Hermann Vosseler <Ichthyostega@web.de>
@@ -28,11 +28,11 @@
 
 namespace lumiera {
   
-  void 
-  initialise_NoBug () 
+  void
+  initialise_NoBug ()
   {
     NOBUG_INIT;
-    
+
 #if NOBUG_MODE_ALPHA
     static uint callCount = 0;
     ASSERT ( 0 == callCount++ );

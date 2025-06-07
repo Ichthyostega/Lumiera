@@ -32,7 +32,7 @@ namespace control {
   
   
   /**
-   * While building a render engine, this Strategy class 
+   * While building a render engine, this Strategy class
    * decides on the actual render strategy in accordance
    * to the current controller settings (system state)
    */

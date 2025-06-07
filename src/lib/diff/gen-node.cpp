@@ -192,7 +192,7 @@ namespace diff{
         MATCH_STRING (bool)
         
         virtual bool handle  (string const& str) override { return str == txt_; }
-        virtual bool handle  (char   const& c  ) override { return 1 == txt_.length() && txt_.front() == c; }
+        virtual bool handle  (char   const& c  ) override { return 1 == txt_.length() and txt_.front() == c; }
         
       public:
         MatchString(string const& text)
@@ -237,7 +237,7 @@ namespace diff{
   DataCap::matchBool (bool b)  const
   {
     bool* val = unConst(this)->maybeGet<bool>();
-    return val && (b == *val);
+    return val and (b == *val);
   }
   
   
@@ -245,7 +245,7 @@ namespace diff{
   DataCap::matchLuid (LuidH hash)  const
   {
     LuidH* val = unConst(this)->maybeGet<LuidH>();
-    return val && (hash == *val);
+    return val and (hash == *val);
   }
   
   
@@ -257,7 +257,7 @@ namespace diff{
     else
       {
         RecRef* val = unConst(this)->maybeGet<RecRef>();
-        return val && val->empty();
+        return val and val->empty();
       }
   }
   
@@ -271,7 +271,7 @@ namespace diff{
         RecRef* r = unConst(this)->maybeGet<RecRef>();
         if (r) val = r->get();
       }
-    return val && (rec == *val);
+    return val and (rec == *val);
   }
   
   

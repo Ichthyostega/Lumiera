@@ -56,10 +56,10 @@ namespace session {
    * nested sub forks, all of which would be within the scope of this fork.
    * This scoping relation plays an important role when it comes to _resolving_
    * properties of placement, like e.g. the output designation, overlay mode,
-   * sound pan position etc -- properties from enclosing scopes will be 
+   * sound pan position etc -- properties from enclosing scopes will be
    * inherited unless _shaded_ by local definitions, similar to the
    * behaviour known from most programming languages when referring
-   * to local variables. 
+   * to local variables.
    * @note Scope is a passive entity,
    *       basically just wrapping up a Scope-top Placement.
    *       Contrast this to QueryFocus, which actively

@@ -72,7 +72,7 @@ namespace time {
   
   
   /* The following typedefs allow to hand out
-   * "unspecific" mutation value objects from 
+   * "unspecific" mutation value objects from
    * factory functions, without disclosing any
    * implementation details here in this header.
    */
@@ -144,7 +144,7 @@ namespace time {
   inline TimeValue&
   Mutation::imposeChange (TimeValue& target, Offset const& offset)
   {
-    return imposeChange (target, TimeVar(target) += offset); 
+    return imposeChange (target, TimeVar(target) += offset);
   }
   
   /** @internal nudge a target time value by a step wise offset.

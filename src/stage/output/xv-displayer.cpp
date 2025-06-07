@@ -59,7 +59,7 @@ namespace output {
       if (XvQueryAdaptors (display, window, &count, &adaptorInfo) == Success)
         {
           INFO(stage, "XvQueryAdaptors count: %d", count);
-          for (uint n = 0; gotPort == false && n < count; ++n )
+          for (uint n = 0; gotPort == false and n < count; ++n )
             {
               // Diagnostics
               INFO(stage, "%s, %lu, %lu", adaptorInfo[ n ].name,
@@ -87,7 +87,7 @@ namespace output {
                                    ( list[ i ].id >> 16 ) & 0xff,
                                    ( list[ i ].id >> 24 ) & 0xff,
                                    ( list[ i ].format == XvPacked ) ? "packed" : "planar" );
-                          if ( list[ i ].id == FORMAT_ID_YUY2 && !gotPort )
+                          if ( list[ i ].id == FORMAT_ID_YUY2 and not gotPort )
                             gotPort = true;
                         }
     
@@ -123,7 +123,7 @@ namespace output {
               XvAttribute* xvattr = XvQueryPortAttributes (display, grabbedPort, &num);
               for (int k = 0; k < num; k++ )
                 {
-                  if ( xvattr[k].flags & XvSettable ) 
+                  if ( xvattr[k].flags & XvSettable )
                     {
                       if (strcmp (xvattr[k].name, "XV_AUTOPAINT_COLORKEY") == 0 )
                         {
@@ -131,7 +131,7 @@ namespace output {
                           if (XvSetPortAttribute(display, grabbedPort, val_atom, 1 ) != Success )
                             NOBUG_ERROR(stage, "Couldn't set Xv attribute %s\n", xvattr[k].name);
                         }
-                      else 
+                      else
                       if (strcmp (xvattr[k].name, "XV_COLORKEY") == 0 )
                         {
                           Atom val_atom = XInternAtom( display, xvattr[k].name, False );
@@ -141,15 +141,15 @@ namespace output {
                     }
                 }
             }
-    
+          
           if (gotPort)
             {
               XGCValues values;
               memset(&values, 0, sizeof(XGCValues));
               gc = XCreateGC( display, window, 0, NULL );
-    
+              
               xvImage = ( XvImage * ) XvShmCreateImage( display, grabbedPort, FORMAT_ID_YUY2, 0, videoWidth, videoHeight, &shmInfo );
-    
+              
               shmInfo.shmid = shmget( IPC_PRIVATE, xvImage->data_size, IPC_CREAT | 0777 );
               if (shmInfo.shmid < 0) {
                   perror("shmget");
@@ -160,12 +160,12 @@ namespace output {
                   shmInfo.shmaddr = (char*) shmat (shmInfo.shmid, 0, 0);
                   xvImage->data = shmInfo.shmaddr;
                   shmInfo.readOnly = 0;
-    
+                  
                   if (!XShmAttach (display, &shmInfo))
                   {
                     gotPort = false;
                   }
-    
+                  
                   XSync( display, false );
                   shmctl( shmInfo.shmid, IPC_RMID, 0 );
                 }
@@ -183,12 +183,12 @@ namespace output {
   XvDisplayer::~XvDisplayer()
   {
     NOBUG_ERROR(stage, "Destroying XV Displayer");
-  
+    
     if ( gotPort )
       {
         XvUngrabPort( display, grabbedPort, CurrentTime );
       }
-  
+    
     if ( shmInfo.shmaddr != NULL )
       {
         XShmDetach( display, &shmInfo );
@@ -229,7 +229,7 @@ namespace output {
         org_y += spaceAlloc.get_y();
         
         memcpy (xvImage->data, image, xvImage->data_size);
-  
+        
         XvShmPutImage (display, grabbedPort, window, gc, xvImage,
                        0, 0, videoWidth, videoHeight,
                        org_x, org_y, destW, destH, false);

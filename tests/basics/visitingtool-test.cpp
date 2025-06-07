@@ -31,7 +31,7 @@ namespace lib {
 namespace visitor {
 namespace test1 {
   
-  typedef visitor::Tool<> VisitingTool;
+  using VisitingTool = visitor::Tool<>;
   
   class HomoSapiens : public Visitable<>
     {

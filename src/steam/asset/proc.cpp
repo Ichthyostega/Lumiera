@@ -36,7 +36,7 @@ namespace asset {
    *  @return an Proc smart ptr linked to the internally registered smart ptr
    *          created as a side effect of calling the concrete Proc subclass ctor.
    */
-  ProcFactory::PType 
+  ProcFactory::PType
   ProcFactory::operator() (Asset::Ident& key) ////TODO
   {
     UNIMPLEMENTED ("Proc-Factory");

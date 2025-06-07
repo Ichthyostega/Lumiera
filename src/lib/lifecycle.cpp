@@ -1,5 +1,5 @@
 /*
-  Lifecycle  -  registering and triggering lifecycle callbacks 
+  Lifecycle  -  registering and triggering lifecycle callbacks
 
    Copyright (C)
      2008,            Hermann Vosseler <Ichthyostega@web.de>
@@ -48,7 +48,7 @@ namespace lumiera {
   
   // ==== implementation LifecycleHook class =======
   
-  typedef LifecycleRegistry::Hook Callback;
+  using Callback = LifecycleRegistry::Hook;
   
   
   LifecycleHook::LifecycleHook (Symbol eventLabel, Callback callbackFun)

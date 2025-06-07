@@ -52,7 +52,7 @@ namespace asset {
       
     };
   
-  typedef lib::P<const asset::Clip> PClipAsset;
+  using PClipAsset = lib::P<const asset::Clip>;
   
   const string CLIP_SUBFOLDER = "clips";      // TODO: handling of hard-wired constants....
   

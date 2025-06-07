@@ -1,5 +1,5 @@
 /*
-  STREAMTYPE.hpp  -  classification of media stream types 
+  STREAMTYPE.hpp  -  classification of media stream types
 
    Copyright (C)
      2008,            Hermann Vosseler <Ichthyostega@web.de>
@@ -101,11 +101,11 @@ namespace steam {
     public:
       Symbol libraryID;
       
-      class TypeTag ; 
+      class TypeTag ;
       
-      /** 
+      /**
        * placeholder type for the contents of a data buffer.
-       * The actual buffer will always be provided by a 
+       * The actual buffer will always be provided by a
        * library implementation; throughout the engine,
        * it's just hidden behind a DataBuffer pointer.
        */
@@ -160,8 +160,8 @@ namespace steam {
     };
   
   
-    /** 
-     * opaque placeholder (type erasure) 
+    /**
+     * opaque placeholder (type erasure)
      * for implementation specific type info.
      * Intended to be passed to a concrete
      * MediaImplLib to build an ImplFacade.

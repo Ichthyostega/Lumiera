@@ -23,7 +23,7 @@ discussions and brainstorming sessions.
    contains some fundamental terms and definitions.
  * discussions regarding time values and timecode handling shed some light on the requirements
    to be fulfilled by a player subsystem
-   
+
    - link:http://article.gmane.org/gmane.comp.video.lumiera.general/2116[Timecode Widget and Framerates]
    - link:http://article.gmane.org/gmane.comp.video.lumiera.general/2109[Time, Time-spans, Quatisation and Timecode]
    - link:{l}/wiki/renderengine.html#TimeQuant[Definition of Time entities]
@@ -33,7 +33,7 @@ discussions and brainstorming sessions.
 Reasoning Behind the Player Subsystem's Structure
 ------------------------------------------------
 
-The name ``Player'' might seem surprising at first. 
+The name ``Player'' might seem surprising at first.
 The full, complete and precise name would be something along
 the lines of ``_render- and playback-process coordination subsystem_''.
 However we need to shorten that into a single word. The more obvious
@@ -49,7 +49,7 @@ Influences and Requirements
 
 In accordance with the spirit of modern software development, the analysis
 starts by determining the _Service_ that is provided by such a
-player. Examination of the Use Cases determines the fundamental forces 
+player. Examination of the Use Cases determines the fundamental forces
 to be _multiplicity_, combined with _differentiation in detail_, all under
 the government of _time-bound delivery_, combined with _live reconfiguration_.
 
@@ -90,8 +90,7 @@ reconfiguration driven by user interactions:
 Conclusions for the Design
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Based on these observations, the following design would appear to be pretty much
-obvious: 
+Based on these observations, the following design would appear to be pretty much obvious:
 
 The overall player subsystem can be described as ``play/render-this''-service.
 Given a suitable (high-level) object, the player has the ability to ``perform''
@@ -171,7 +170,7 @@ where to place quantisation: the Vault, the GUI, the player and the session.
   we can ``do away'' with nasty things soon, especially if they are technicalities,
   ``get a clean state soon'' -- and hasn't frame quantisation something to do
   with media data, which is handled in the vault?
-+  
++
 Well, actually, all of those are pitfalls to trap the unwary. About
 cleanliness, well, sigh! Doing rounding soon will leave us with a huge
 amount of degraded information flows throughout the whole system; as a
@@ -183,7 +182,7 @@ application the subsystem most remote and unaware of output requirements.
 - rounding/quantising in the GUI is extremely common within media applications;
   unfortunately there does not appear to be a single rational argument in
   support of this habit. Most of all, it is a violation of the subsidiarity
-  principle. 
+  principle.
 
 Which leaves us with the player and the session. Both positions could
 arguably be supported. Here, a more careful consideration shows, that

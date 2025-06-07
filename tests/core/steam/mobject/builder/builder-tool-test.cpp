@@ -49,7 +49,7 @@ namespace test    {
       
       /**
        * BuilderTool implementation for checking the invocation of the correct
-       * \c treat() function and for accessing the original Placement from
+       * `treat()` function and for accessing the original Placement from
        * within this invocation. It is declared to be applicable to Clip
        * and DummyMO objects (wrapped into any acceptable shared-ptr).
        * Intentionally, we omit to declare it applicable to TestSubMO2 instances.
@@ -97,7 +97,7 @@ namespace test    {
        * function. Note further, within the specific  treat-functions we get direct
        * references, without interfering with  Placements and memory management.
        * But from within the \c treat() function, we may access the wrapper object
-       * (i.e. shared_ptr, or lumiera::P or Placement) used when invoking the 
+       * (i.e. shared_ptr, or lumiera::P or Placement) used when invoking the
        * BuilderTool by using the protected interface on BuilderTool.
        * 
        * @see VisitingTool_test for checking general visitor functionality

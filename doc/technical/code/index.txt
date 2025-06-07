@@ -30,8 +30,8 @@ To give a delineation to the other side, a constantly growing project might even
 reach the point where the actual coding of new functionality makes up less than 25%
 of the overall work required. More people might be involved than anyone can recall or
 overlook reasonably. A code size of 1 Million LoC seems to exceed any kind of sufficiently
-precise imagination. From that point on, a rigorosely formalsed organisation is vital
-to keep such a *large scale project* from floundering. 
+precise imagination. From that point on, a rigorously formalised organisation is vital
+to keep such a *large scale project* from floundering.
 
 ////
 Conventions

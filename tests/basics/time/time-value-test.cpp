@@ -58,7 +58,7 @@ namespace test{
       
       
       virtual void
-      run (Arg arg) 
+      run (Arg arg)
         {
           TimeValue ref (random_or_get(arg));
           
@@ -74,7 +74,7 @@ namespace test{
           relateTimeIntervals (ref);
           verify_extremeValues();
           verify_fractionalOffset();
-        } 
+        }
       
       
       /** @test creating some time values and performing trivial comparisons.
@@ -209,7 +209,7 @@ namespace test{
           size_t h1 = hashFunc (org);
           size_t h2 = hashFunc (Time{org} + TimeValue{1});
           size_t h3 = hashFunc (TimeValue(h1));
-          CHECK (h1 > 0 || org == Time::ZERO);
+          CHECK (h1 > 0 or org == Time::ZERO);
           CHECK (h2 - h1 == size_t(1)<<hh);
           CHECK (h3 == size_t(_raw(org)));
         }
@@ -411,7 +411,7 @@ namespace test{
                << "  Interval-2: " << successor
                << "  End point: "  << successor.end()
                << endl;
-        }          
+        }
       
       
       void

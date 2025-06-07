@@ -200,7 +200,7 @@ namespace test{
       
       
       /** @test use a custom-provided
-       *        deleter function 
+       *        deleter function
        */
       void
       checkCustomKill ()
@@ -212,7 +212,7 @@ namespace test{
            *  bound to mess up the checksum,
            *  unless the random bias is removed
            *  by the custom deleter function
-           */ 
+           */
           class Special
             : Probe<555>
             {

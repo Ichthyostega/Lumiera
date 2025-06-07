@@ -13,7 +13,7 @@
 
 /** @file render-configurator.hpp
  ** Strategy to hold all the detail knowledge necessary to establish
- ** a running render CalculationStream. 
+ ** a running render CalculationStream.
  ** 
  ** @warning as of 4/2023 Render-Engine integration work is underway ////////////////////////////////////////TICKET #1280
  ** 
@@ -90,7 +90,7 @@ namespace play {
        *  This strategy will try to allocate the output slot for output (may fail).
        *  Moreover, a suitable combination of output timings and service quality
        *  will be picked
-       * @return List of active CalcStream descriptors, created and registered 
+       * @return List of active CalcStream descriptors, created and registered
        *         with the EngineFacade, one for each channel connection.
        * @note   when this strategy function returns, the corresponding
        *         render activities are already up and running.
@@ -110,7 +110,7 @@ namespace play {
    *        Besides the required delivery interval, this might also define
    *        quality-of-service expectations.
    * @return the public access point to an RenderConfigurator,
-   *         wrapped as generic function object 
+   *         wrapped as generic function object
    */
   RenderConfigurator::ConnectFunction
   buildRenderConfiguration (POutputManager outputPossibilities, Timings playbackTimings);

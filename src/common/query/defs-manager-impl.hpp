@@ -22,7 +22,7 @@
  ** For the standard use-case within the session / Steam-Layer, this is performed for the
  ** core MObject types, alongside with the definition of the generic config-query-resolver.
  ** 
- ** @see config-resolver.cpp definition of the explicit specialisations for the session 
+ ** @see config-resolver.cpp definition of the explicit specialisations for the session
  ** @see steam::ConfigResolver
  **
  */
@@ -94,7 +94,7 @@ namespace query  {
   
   
   template<class TAR>
-  P<TAR> 
+  P<TAR>
   DefsManager::create  (const Query<TAR>& capabilities)
   {
     P<TAR> res;
@@ -107,11 +107,11 @@ namespace query  {
   
   
   template<class TAR>
-  bool 
+  bool
   DefsManager::define  (const P<TAR>& defaultObj, const Query<TAR>& capabilities)
   {
     P<TAR> candidate (defaultObj);
-    QueryHandler<TAR>& typeHandler = ConfigResolver::instance();  
+    QueryHandler<TAR>& typeHandler = ConfigResolver::instance();
     typeHandler.resolve (candidate, capabilities);
     if (!candidate)
       return false;
@@ -133,7 +133,7 @@ namespace query  {
   DefsManager::operator() (const Query<TAR>& capabilities)
   {
     P<TAR> res (search (capabilities));
-    if (res) 
+    if (res)
       return res;
     else
       res = create (capabilities); // not yet known as default, create new

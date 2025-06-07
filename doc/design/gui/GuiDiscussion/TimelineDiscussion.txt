@@ -40,7 +40,7 @@ Akhil
    the linkage to change in the middle of the timeline.
 
 
-Richard Spindler 
+Richard Spindler
 ~~~~~~~~~~~~~~~~
 -> link:ConceptProposals/RichardSpindler.html[Richard's Proposal]
 
@@ -64,12 +64,12 @@ Richard Spindler
    of elegantly expressing this concept through the views that we already have.
 
 
-Alcarinque 
+Alcarinque
 ~~~~~~~~~~
 -> link:ConceptProposals/Alcarinque.html[Proposal by »Alcarinque« (Francisco G. Rodriguez)] (http://telniratha.atspace.com/spec.html[original page])
 
 .Things I like
- * Node Layouts in the media library. This isn't a page about the ML, but I like your ideas of having stored node layouts in the library. My own name for these is compound effects - but it's the same idea. Your idea of having collecting a library of these on the website is pretty cool as well. 
+ * Node Layouts in the media library. This isn't a page about the ML, but I like your ideas of having stored node layouts in the library. My own name for these is compound effects - but it's the same idea. Your idea of having collecting a library of these on the website is pretty cool as well.
  * Being able to connect the view port to different plugs in the compositing system - rather like the PFL buttons on a mixing desk.
  * Keyable parameters, automatable on the timeline
  * Having a transform trajectory applied to every track
@@ -83,7 +83,7 @@ Alcarinque
    clips.
 
 
-Hermann Vosseler (Ichthyo) 
+Hermann Vosseler (Ichthyo)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 -> http://ichthyostega.de/cin3/drafts/GUI-draft1.html[]
 

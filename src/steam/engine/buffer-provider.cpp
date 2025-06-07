@@ -91,7 +91,7 @@ namespace engine {
    * Performs the necessary metadata state transition leading from an
    * abstract buffer type to a metadata::Entry corresponding to an
    * actual buffer, which is locked for exclusive use by one client.
-   */ 
+   */
   BuffHandle
   BufferProvider::buildHandle (HashVal typeID, Buff* storage, LocalTag const& localTag)
   {
@@ -157,7 +157,7 @@ namespace engine {
    *        may be emitted, and at most once.
    * @warning by convention, emitting a buffer implies that the contained data is ready and
    *        might be used by other parts of the application.
-   *        While an emitted buffer should not be modified anymore, it can still be accessed. 
+   *        While an emitted buffer should not be modified anymore, it can still be accessed.
    */
   void
   BufferProvider::emitBuffer (BuffHandle const& handle)
@@ -173,7 +173,7 @@ namespace engine {
    * @warning invalidates the BuffHandle, clients mustn't access the buffer anymore.
    *          Right after releasing, an access through the handle will throw;
    *          yet the buffer might be re-used and the handle become valid
-   *          later on accidentally. 
+   *          later on accidentally.
    * @note EX_FREE
    */
   void
@@ -214,7 +214,7 @@ namespace engine {
   
   
   /** @internal abort normal lifecycle, reset the underlying buffer and detach from it.
-   *  This allows to break out of normal usage and reset the handle to \em invalid state 
+   *  This allows to break out of normal usage and reset the handle to _invalid state_
    * @param invokeDtor if possibly the clean-up function of an TypeHandler registered with
    *        the buffer metadata should be invoked prior to resetting the metadata state.
    *        Default is \em not to invoke anything

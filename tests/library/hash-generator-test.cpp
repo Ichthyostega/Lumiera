@@ -44,7 +44,7 @@ namespace test{
    *       - weakness of boost::hash
    *       
    * @see HashIndexed_test
-   * @see EntryID_test 
+   * @see EntryID_test
    */
   class HashGenerator_test : public Test
     {

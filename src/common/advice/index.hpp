@@ -122,14 +122,14 @@ namespace advice {
    * by invoking the \c setSolution() function on the
    * corresponding PointOfAdvice entity.
    * 
-   * @note element \em identity is defined in terms of pointing 
+   * @note element \em identity is defined in terms of pointing
    *       to the same memory location of a POA (point of advice).
    *       Thus e.g. #hasProvision means this index holds an entry
    *       pointing to exactly this given data entity.
    * @note the implementation of modifying a Request entry
    *       explicitly relies on that definition of equality.
    * @note the diagnostic API is mainly intended for unit testing
-   *       and \em not implemented with focus on performance. 
+   *       and \em not implemented with focus on performance.
    * 
    * \par Exception safety
    * Adding new registrations might throw error::Fatal or bad_alloc.
@@ -325,7 +325,7 @@ namespace advice {
       
       
       
-      /* ==== Index Tables ===== */  
+      /* ==== Index Tables ===== */
       
       typedef unordered_map<HashVal, RequestCluster> RTable;
       typedef unordered_map<HashVal, ProvisionCluster> PTable;
@@ -350,7 +350,7 @@ namespace advice {
        *        Thus we can use the already modified Request to find
        *        the old entry within the index pointing to this Request.
        *  @param oKey the binding hash value prior to modification
-       */      
+       */
       void
       modifyRequest (HashVal oKey, POA& entry)
         {
@@ -459,11 +459,11 @@ namespace advice {
         {
           return provisionEntries_[hash_value(refEntry)].contains (refEntry);
         }                       // note: even just lookup might create a new (empty) cluster;
-                               //        thus the tables are defined as mutable 
+                               //        thus the tables are defined as mutable
       
       
     private:
-      /** internal: sum element count over all 
+      /** internal: sum element count over all
        *  clusters in the given hashtable */
       template<class IT>
       static size_t
@@ -569,9 +569,9 @@ namespace advice {
     verify_Entry (e,hash);
     POA& request = *(e.second);
     const POA* solution (request.getSolution());
-    if (solution && hasProvision(*solution))
+    if (solution and hasProvision (*solution))
       {
-        POA* currentSolution = provisionEntries_[hash].find_latest_solution (request); 
+        POA* currentSolution = provisionEntries_[hash].find_latest_solution (request);
         VERIFY (e.first.matches (solution->getMatcher()),"stored advice solution not supported by binding match");
         VERIFY (bool(currentSolution),                   "unable to reproduce stored solution with the current provisions")
         VERIFY (solution == currentSolution,             "stored advice solution isn't the topmost solution for this request")

@@ -220,13 +220,13 @@ namespace advice {
           {
             Lock sync{this};
             
-            if (!previousProvision && newProvision)
+            if (not previousProvision and newProvision)
               index_.addProvision (*newProvision);
             else
-            if (previousProvision && newProvision)
+            if (previousProvision and newProvision)
               index_.modifyProvision (*previousProvision, *newProvision);
             else
-            if (previousProvision && !newProvision)
+            if (previousProvision and not newProvision)
               index_.removeProvision (*previousProvision);
             
             discardEntry (unConst(previousProvision));
@@ -276,7 +276,7 @@ namespace advice {
   
   void
   AdviceLink::releaseBuffer (void* buff, size_t siz)
-  { 
+  {
     aSys().releaseBuffer(buff, siz);
   }
   

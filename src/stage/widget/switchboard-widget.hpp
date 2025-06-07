@@ -30,7 +30,7 @@
  ** compare or relate them in partial view. An example would be to place
  ** a probe point before some effect processing chain, hook it up to the
  ** switchboard and then to compare the processed and unprocessed video
- ** side by side by moving a slider 
+ ** side by side by moving a slider
  ** 
  ** @todo WIP-WIP-WIP as of 12/2016 this is a plan (yes, we most definitively
  **       want that!), but we do not even remotely know how to implement such

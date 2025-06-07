@@ -46,7 +46,7 @@ namespace output {
    * XvDisplayer is a class which is responsible for rendering  a video
    * image via XVideo.
    */
-  class XvDisplayer 
+  class XvDisplayer
     : public Displayer
     {
     public:

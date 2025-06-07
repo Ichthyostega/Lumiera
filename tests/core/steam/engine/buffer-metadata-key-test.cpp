@@ -159,7 +159,7 @@ namespace test  {
       
       
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           seedRand();
           SIZE_A = 1 + rani(TEST_MAX_SIZE);
@@ -174,7 +174,7 @@ namespace test  {
       
       
       bool
-      ensure_proper_fixture() 
+      ensure_proper_fixture()
         {
           return (SIZE_A != SIZE_B);
         }
@@ -316,7 +316,7 @@ namespace test  {
           
           
           // Verify 2nd level specialisation (some examples)
-          Key k_han1_siz (k_han1, SIZE_B);           // sub-key deriving from k_han1, but differing buffer size 
+          Key k_han1_siz (k_han1, SIZE_B);           // sub-key deriving from k_han1, but differing buffer size
           Key k_siz_han1 (k_siz,  placeMarker);      // sub-key deriving from k_siz, but using another type functor
           
           // Verify some 3rd level specialisations

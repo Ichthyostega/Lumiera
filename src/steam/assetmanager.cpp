@@ -178,7 +178,7 @@ namespace asset {
   AssetManager::known (IDA id, const Category& cat)
   {
     PAsset pA = registry.get (id);
-    return ( pA && pA->ident.category.isWithin(cat));
+    return ( pA and pA->ident.category.isWithin(cat));
   }
   
   

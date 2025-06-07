@@ -92,7 +92,7 @@ to help with automating the build and test execution, test code should adhere to
     these are linked together into a single testrunner, which is also linked against the application core.
     The resulting executable 'test-suite' is able to invoke any of the test classes in
     isolation, or a group / category of tests. +
-  * simple plain-C tests (names starting with 'test-*') are grouped into several directories thematically, 
+  * simple plain-C tests (names starting with 'test-*') are grouped into several directories thematically,
     and linked according to the application layer. Each of those simple tests needs to be self contained
     and provide a main method.
 
@@ -114,25 +114,25 @@ using std::cout;
 using std::endl;
 
 namespace test   {
-    
+
   class HelloWorld_test
     : public Test
     {
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           greeting();
-        } 
+        }
 
       void
-      greeting() 
-        { 
-          cout << "goodbye cruel world..." <<endl; 
+      greeting()
+        {
+          cout << "goodbye cruel world..." <<endl;
         }
     };
 
   /** Register this test class to be invoked in some test groups (suites) */
-  LAUNCHER (HelloWorld_test, "unit function common");    
+  LAUNCHER (HelloWorld_test, "unit function common");
 }
 ----------------------------------------------------------------
 
@@ -151,7 +151,7 @@ invoking a testrunner executable
 The class `test::TestOption` predefines a boost-commandlineparser to support the following options:
 
 [width="90%",cols="<.<,^4"]
-|====  
+|====
 2+<| `./test-suite --group <groupID> [testID [arguments...]]`
 |`--help` | options summary
 |`-g <groupID>` | run all tests from this group as suite. If missing, ALL tests will be included
@@ -159,7 +159,7 @@ The class `test::TestOption` predefines a boost-commandlineparser to support the
 |`--describe`| print all registered tests to stdout in a format suited for use with test.sh
 |====
 Further commandline arguments are deliverd to a single testcase only if you specify a `testID`.
-Otherwise, all commandline arguments remaining after options parsing will be discarded and all tests of the suite 
+Otherwise, all commandline arguments remaining after options parsing will be discarded and all tests of the suite
 ill be run with an commandline vector of `size()==0`
 
 
@@ -175,7 +175,7 @@ Options for running the Test Script
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 - Valgrind can be disabled with `VALGRINDFLAGS=DISABLE`
 - one may define `TESTMODE` containing any one of the following strings:
- 
+
   * `FAST` only run tests which failed recently
   * `FIRSTFAIL` abort the tests at the first failure
 
@@ -187,8 +187,8 @@ Options for running the Test Script
 . running a very fast check while hacking::
 
   (cd target; TESTSUITES=41 VALGRINDFLAGS=DISABLE TESTMODE=FAST+FIRSTFAIL ../tests/test.sh)
-  
-. invoking the buildsystem, rebuilding if necessary, then invoking just the steam-layer test collections::  
+
+. invoking the buildsystem, rebuilding if necessary, then invoking just the steam-layer test collections::
 
   scons VALGRIND=false TESTSUITES=4 check
 

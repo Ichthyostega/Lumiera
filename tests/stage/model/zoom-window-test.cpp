@@ -431,7 +431,7 @@ namespace test {
           
           win.setVisiblePos(-0.50);
           CHECK (win.visible()     == TimeSpan(_t(-16-40/2), FSecs(16)));        // relative positioning not limited at lower bound
-          CHECK (win.visible().start() ==      _t(-36));                         //   (causing also further expansion of canvas) 
+          CHECK (win.visible().start() ==      _t(-36));                         //   (causing also further expansion of canvas)
           win.setVisiblePos(_t(200));                                            // absolute positioning likewise not limited
           CHECK (win.visible()     == TimeSpan(_t(200-16), FSecs(16)));          // but anchored according to relative anchor pos
           CHECK (win.px_per_sec()  == 80);                                       // metric retained

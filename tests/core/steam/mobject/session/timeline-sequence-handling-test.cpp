@@ -59,7 +59,7 @@ namespace test    {
    *       Moreover we can create new top level elements in the session
    *       just by querying the respective asset.
    *       
-   * @todo specify how deletion is handled      
+   * @todo specify how deletion is handled
    * @todo specify how to \em move objects by placement
    *       
    * @see  session-structure-test.cpp
@@ -70,7 +70,7 @@ namespace test    {
   class TimelineSequenceHandling_test : public Test
     {
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           Session::current.reset();
           CHECK (Session::current.isUp());

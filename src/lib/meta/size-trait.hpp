@@ -97,15 +97,15 @@ namespace meta {
           T    m_storage_;
         };
       
-      enum IOS_Openmode 
-        { 
+      enum IOS_Openmode
+        {
           _S_app        = 1L << 0,
           _S_ate        = 1L << 1,
           _S_bin        = 1L << 2,
           _S_in         = 1L << 3,
           _S_out        = 1L << 4,
           _S_trunc      = 1L << 5,
-          _S_ios_openmode_end = 1L << 16 
+          _S_ios_openmode_end = 1L << 16
         };      
       
       struct BasicStringbuf
@@ -147,7 +147,7 @@ namespace meta {
       //-------------------------------------mimicked-definitions--
       
       
-    public:/* ===== Interface: size constants ===== */ 
+    public:/* ===== Interface: size constants ===== */
       
       enum { ALIGNMENT       = sizeof(size_t)
            

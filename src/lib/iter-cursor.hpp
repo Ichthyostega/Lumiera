@@ -127,7 +127,7 @@ namespace lib {
         friend bool
         operator== (CursorGear const& g1, CursorGear const& g2)
         {
-          return (not g1.checkPoint() and not g2.checkPoint()) // note: all exhausted iters are equal 
+          return (not g1.checkPoint() and not g2.checkPoint()) // note: all exhausted iters are equal
               or (   g1.pos_ == g2.pos_
                  and g1.backwards_ == g2.backwards_
                  and g1.start_ == g2.start_

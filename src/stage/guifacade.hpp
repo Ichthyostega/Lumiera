@@ -73,7 +73,7 @@ namespace stage {
     public:
       
       /** provide a descriptor for lumiera::AppState,
-       *  wired accordingly to allow main to load, 
+       *  wired accordingly to allow main to load,
        *  start and stop the Lumiera GTK GUI. */
       static lumiera::Subsys& getDescriptor();
       

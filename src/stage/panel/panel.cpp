@@ -1,5 +1,5 @@
 /*
-  Panel  -  common base class for all docking panels 
+  Panel  -  common base class for all docking panels
 
    Copyright (C)
      2008,            Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -66,10 +66,10 @@ namespace panel{
   
   Panel::~Panel()
   {
-      ///////////////////////////////////////////////////////TICKET #195 : violation of policy, dtors must not do any work 
+      ///////////////////////////////////////////////////////TICKET #195 : violation of policy, dtors must not do any work
       ///////////////////////////////////////////////////////TICKET #172 : observed as a reason for crashes when closing the GUI. It was invoked after end of main, when the GUI was already gone.
     
-  #if false /////////////////////////////////////////////////TICKET #937 : disabled for GTK-3 transition. TODO investigate why this logic existed...    
+  #if false /////////////////////////////////////////////////TICKET #937 : disabled for GTK-3 transition. TODO investigate why this logic existed...
     /* Detach the panel bar */
       ///////////////////////////////////////////////////////TICKET #1027 !!
     GdlDockItemGrip *grip = GDL_DOCK_ITEM_GRIP(

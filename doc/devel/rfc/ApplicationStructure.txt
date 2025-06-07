@@ -165,7 +165,7 @@ own internal things too. Imo thats some very valuable service.
   -- link:ct[] [[DateTime(2008-11-08T06:26:18Z)]]
 
 Some further minor details: We didn't finish the discussion about namespaces on
-the last meeting. (I know I still have to write up a proposal showing the two 
+the last meeting. (I know I still have to write up a proposal showing the two
 or three alternatives I see regarding namespace organisation). But probably,
 "lumiera::" will be our top level interface namespace and then probably the
 lumiera directory will be taken by that. I see no problem also putting some

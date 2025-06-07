@@ -52,7 +52,7 @@ namespace test  {
     {
       
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           UNIMPLEMENTED ("in-depth coverage of calculation streams");
         }

@@ -91,7 +91,7 @@ namespace test  {
       
       
       
-      /** 
+      /**
        * A simulated "Lumiera Subsystem".
        * It is capable of starting a separate thread, which may terminate regularly
        * after a random time, or may fail in various ways. The behaviour is controlled
@@ -117,7 +117,7 @@ namespace test  {
           shouldStart (lumiera::Option&)  override
             {
               string startSpec (extractID ("start",spec_));
-              return "true" ==startSpec 
+              return "true" ==startSpec
                   or "fail" ==startSpec
                   or "throw"==startSpec;
             }
@@ -160,7 +160,7 @@ namespace test  {
               INFO (test, "triggerShutdown() --> %s....", cStr(*this));
             }
           
-          bool 
+          bool
           checkRunningState ()  noexcept override
             {
               // note: *not* locking here...
@@ -184,7 +184,7 @@ namespace test  {
               
               // run-status handshake
               started_ = true;
-              isUp_    = ("true"==runSpec || "throw"==runSpec);
+              isUp_    = ("true"==runSpec or "throw"==runSpec);
               didRun_  = ("false"!=runSpec); // includes "fail" and "throw"
               
               // coordinate startup with controlling thread
@@ -192,7 +192,7 @@ namespace test  {
               
               if (isUp_) //-------------actually enter running state for some time
                 {
-                  running_duration_ = TIME_GOAL;    // prepared when creating instance 
+                  running_duration_ = TIME_GOAL;    // prepared when creating instance
                   
                   INFO (test, "thread %s now running....", cStr(*this));
                   
@@ -217,14 +217,13 @@ namespace test  {
                   string problemReport (problemIndicator.what());
                   termination (&problemReport);
                 }
-              
             }
           
           
           bool
           shouldTerminate ()  ///< simulates async termination, either on request or by timing
             {
-              return termRequest_ || running_duration_ <= 0;
+              return termRequest_ or running_duration_ <= 0;
             }
           
           

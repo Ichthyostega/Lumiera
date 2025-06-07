@@ -40,7 +40,7 @@ namespace test    {
   class SessionManager_test : public Test
     {
       virtual void
-      run (Arg arg) 
+      run (Arg arg)
         {
           getCurrentSession ();
           clearSession();
@@ -52,7 +52,7 @@ namespace test    {
           saveSession (serialized);
           loadSession (serialized);
           CHECK (checkTestsession1());
-        } 
+        }
       
       
       /** @test accessing the current (global) session */
@@ -64,7 +64,7 @@ namespace test    {
         }
       
       
-      /** @test clear current session contents 
+      /** @test clear current session contents
        *        without resetting global session config.
        * @todo  implement all session content, implement
        *        mobject and asset deletion operations.
@@ -78,7 +78,7 @@ namespace test    {
       
       
       /** @test reset global session config and start with
-       *        a pristine default session. 
+       *        a pristine default session.
        * @todo  define the "global session config", implement session default ctor
        */
       void
@@ -89,7 +89,7 @@ namespace test    {
         }
       
       
-      /** @test use a mock session serialiser to load 
+      /** @test use a mock session serialiser to load
        *        a preconfigured test session. Verify
        *        objects are wired correctly.
        *  @todo implement rebuilding session, implement mock session serialiser
@@ -104,7 +104,7 @@ namespace test    {
       /** @test load serialised session using the
        *        real session serialiser implementation.
        * @param src string with serialised session data
-       * @todo  implement real session serialiser 
+       * @todo  implement real session serialiser
        */
       void
       loadSession (const string& src)

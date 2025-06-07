@@ -35,10 +35,10 @@ namespace test  {
    */
   class NodeOpera_test : public Test
     {
-      virtual void run(Arg) 
+      virtual void run(Arg)
         {
           UNIMPLEMENTED ("operate some render nodes as linked together");
-        } 
+        }
     };
   
   

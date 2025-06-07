@@ -22,7 +22,7 @@
  ** being almost worthless as an API or interface, causing lots of type casts when using
  ** such a common object management facility. Passing additional context or API information
  ** on a metaprogramming level through the management interface helps avoiding these
- ** shortcomings. 
+ ** shortcomings.
  ** 
  ** Here we build an ID facility with the following properties:
  ** - based on a configurable storage/implementation of the actual hash or index code.
@@ -31,7 +31,7 @@
  ** - establishing an type hierarchy relation between ID related to the base class
  **   and the IDs denoting specific subclasses, such that the latter can stand-in
  **   for the generic ID.
- ** - providing a Mixin, which allows any hierarchy to use this facility without 
+ ** - providing a Mixin, which allows any hierarchy to use this facility without
  **   much code duplication, including an adapter for std::unordered_map
  ** - equality comparison
  **
@@ -60,7 +60,7 @@ namespace lib {
    *  as well as key within std::unordered_map */
   namespace hash {
     
-    /** 
+    /**
      * simple Hash implementation
      * directly incorporating the hash value.
      * @note currently (3/2010) not used
@@ -86,7 +86,7 @@ namespace lib {
      * Hash implementation based on a lumiera unique object id (LUID)
      * When invoking the default ctor, a new LUID is generated
      */
-    class LuidH 
+    class LuidH
       {
         lumiera_uid luid_;
         
@@ -134,7 +134,7 @@ namespace lib {
           ID (IMP const& ir) : IMP (ir)          {}
         };
       
-      /** 
+      /**
        * Hash based ID, typed to a specific subclass of BA
        */
       template<typename T>
@@ -160,8 +160,8 @@ namespace lib {
       
       ID const&
       getID ()  const
-        { 
-          return id_; 
+        {
+          return id_;
         }
       
       /** redefining of the specific type info of the Id is allowed,
@@ -175,7 +175,7 @@ namespace lib {
       
       void
       assignID (HashIndexed const& ref)
-        { 
+        {
           this->id_ = ref.getID();
         }
       

@@ -65,23 +65,23 @@ namespace session {
     
     namespace {
       
-      typedef std::pair<const QueryKey, any> AnyPair;
+      using AnyPair = std::pair<const QueryKey, any>;
       
       /** helper to simplify creating mock table entries, wrapped correctly */
       template<class TY>
       AnyPair entry (Query<TY> const& query, typename WrapReturn<TY>::Wrapper& obj)
       {
-        return AnyPair(query, any(obj)); 
+        return AnyPair(query, any(obj));
       }
       
       /** helper especially for creating structural assets from a capability query */
       template<class STRU>
       AnyPair entry_Struct(Literal caps)
       {
-        typedef typename WrapReturn<STRU>::Wrapper Ptr;
+        using Ptr = typename WrapReturn<STRU>::Wrapper;
         
         string capabilities (caps);
-        Query<STRU> query (capabilities); 
+        Query<STRU> query (capabilities);
         Ptr obj = Struct::retrieve (query);
         return AnyPair(query, obj);
       }
@@ -99,7 +99,7 @@ namespace session {
       INFO (config, "creating mock answers for some hard wired config queries...");
       isInit_ = true; // allow re-entrance
       
-      typedef const ProcPatt cPP;
+      using cPP = const ProcPatt;
       
       
       // for baiscpipetest.cpp ---------
@@ -137,7 +137,7 @@ namespace session {
     bool 
     MockTable::fabricate_matching_new_Pipe (Query<Pipe> const& q, string const& pipeID, string const& streamID)
     {
-      typedef WrapReturn<Pipe>::Wrapper Ptr;
+      using Ptr = WrapReturn<Pipe>::Wrapper;
       
       Ptr newPipe (Struct::retrieve.newPipe (pipeID, streamID));
       answer_.insert (entry<Pipe> (q, newPipe));
@@ -145,10 +145,10 @@ namespace session {
     }
     
     /** special case: create a new pipe for a specific stream ID */
-    bool 
+    bool
     MockTable::fabricate_just_new_Pipe (Query<Pipe> const& q )
     {
-      typedef WrapReturn<Pipe>::Wrapper Ptr;
+      using Ptr = WrapReturn<Pipe>::Wrapper;
       
       Ptr newPipe (Struct::retrieve.made4fake (q));
       answer_.insert (entry<Pipe> (q, newPipe));
@@ -156,7 +156,7 @@ namespace session {
     }
     
     /** special case: create/retrieve new processing pattern for given stream ID... */
-    bool 
+    bool
     MockTable::fabricate_ProcPatt_on_demand (Query<const ProcPatt> const& q)
     {
       typedef const ProcPatt cPP;
@@ -171,11 +171,11 @@ namespace session {
      *  as hinted by the IDs given within the query. This might include searching
      *  the session's timelines / sequences to retrieve an existing object
      *  with matching ID... */
-    bool 
+    bool
     MockTable::fabricate_Timeline_on_demand (Query<asset::Timeline> const& query)
     {
-      typedef asset::Timeline aTL;
-      typedef WrapReturn<aTL>::Wrapper Ptr;
+      using aTL = asset::Timeline;
+      using Ptr = WrapReturn<aTL>::Wrapper;
       
       string nameID = query.extractID("id");
       if (isnil (nameID))
@@ -207,11 +207,11 @@ namespace session {
     }
     
     /** special case: fabricate new Timeline, maybe using ID specs from the query... */
-    bool 
+    bool
     MockTable::fabricate_Sequence_on_demand (Query<asset::Sequence> const& query)
     {
-      typedef asset::Sequence aSeq;
-      typedef WrapReturn<aSeq>::Wrapper Ptr;
+      using aSeq = asset::Sequence;
+      using Ptr  = WrapReturn<aSeq>::Wrapper;
       
       string nameID = query.extractID("id");
       if (isnil (nameID))
@@ -245,7 +245,7 @@ namespace session {
     
     /** for entering "valid" solutions on-the-fly from tests */
     template<class TY>
-    bool 
+    bool
     MockTable::set_new_mock_solution (Query<TY> const& q, typename WrapReturn<TY>::Wrapper& obj)
     {
       answer_.erase (q);
@@ -259,7 +259,7 @@ namespace session {
     
     
     
-    MockConfigRules::MockConfigRules () 
+    MockConfigRules::MockConfigRules ()
     {
       WARN (config, "using a mock implementation of the ConfigQuery interface");
     }
@@ -283,7 +283,7 @@ namespace session {
      *  @return smart ptr (or similar) holding the object,
      *          maybe an empty smart ptr if not found
      */
-    any const& 
+    any const&
     MockTable::fetch_from_table_for (QueryKey const& query)
     {
       static const any NOTFOUND;

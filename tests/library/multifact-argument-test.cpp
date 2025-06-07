@@ -78,7 +78,7 @@ namespace test{
    * @test define a MultiFact (factory with dynamic registration),
    *       which accepts additional arguments and passes them
    *       through to the registered factory function(s).
-   * @note we set up fabrication functions by binding the functions 
+   * @note we set up fabrication functions by binding the functions
    *       in such a way as to match the function signature declared
    *       in the factory; thereby one argument remains unclosed,
    *       which is the argument to be supplied on each

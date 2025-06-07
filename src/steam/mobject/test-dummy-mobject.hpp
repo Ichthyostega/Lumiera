@@ -12,11 +12,11 @@
 */
 
 /** @file test-dummy-mobject.hpp
- ** A hierarchy of simple dummy-Media-Objects for easy unit testing. 
+ ** A hierarchy of simple dummy-Media-Objects for easy unit testing.
  ** Normally, the creation of MObjects and corresponding Placements is defined to be
  ** very restricted. Any MObjects are supposed to be created by the MObjectFactory,
  ** which provided very specialised factory functions. When writing unit tests to
- ** check the basic MObject properties and behaviour, this can be an obstacle. 
+ ** check the basic MObject properties and behaviour, this can be an obstacle.
  ** Thus we create a separate branch in the MObject hierarchy with relaxed
  ** requirements and some dummy/test API functions.
  ** 
@@ -58,7 +58,7 @@ namespace test    {
   using builder::BuilderTool;
   
   
-  /** 
+  /**
    *  Test MObject subclass, which, contrary to any real MObject,
    *  can be created directly without involving MObjectFactory.
    */
@@ -86,28 +86,28 @@ namespace test    {
         }
     };
   
-  /** 
+  /**
    * Subclass-1 is \em not defined "processible",
    * thus will always be handled as DummyMO...
    */
-  struct TestSubMO1 : DummyMO 
+  struct TestSubMO1 : DummyMO
     {
       virtual operator string() const      { return display("TestSubMO1"); }
     };
   
-  /** 
-   * Subclass-2 \em is defined "processible", 
+  /**
+   * Subclass-2 \em is defined "processible",
    * but we omit the necessary "applicable" definition in TestTool,
    * resulting in an invocation of the error (catch-all) function...
    */
-  struct TestSubMO2 : DummyMO 
-    { 
+  struct TestSubMO2 : DummyMO
+    {
       DEFINE_PROCESSABLE_BY (BuilderTool);
 
       virtual operator string() const      { return display("TestSubMO2"); }
     };
   
-  struct TestSubMO21 : TestSubMO2 
+  struct TestSubMO21 : TestSubMO2
     {
       virtual operator string() const      { return display("TestSubMO21"); }
       virtual void specialAPI() const      { cout << "specialAPI()\n";}
@@ -122,7 +122,7 @@ namespace test    {
   class TestPlacement<> : public Placement<DummyMO>
     {
     public:
-      TestPlacement(DummyMO& dummyObj) 
+      TestPlacement(DummyMO& dummyObj)
         : Placement<DummyMO>::Placement(dummyObj, &DummyMO::killDummy)
         { }
       
@@ -136,7 +136,7 @@ namespace test    {
   class TestPlacement : public TestPlacement<B>
     {
     public:
-      TestPlacement(DMO& dummyObj) 
+      TestPlacement(DMO& dummyObj)
         : TestPlacement<B>(dummyObj)
         { }
       

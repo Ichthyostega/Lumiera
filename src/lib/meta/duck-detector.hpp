@@ -315,7 +315,7 @@
                                                                          \
       public:                                                             \
         static const bool value = (sizeof(Yes_t)==sizeof(check1<TY>(0))    \
-                                 ||sizeof(Yes_t)==sizeof(check2<TY>(0)));   \
+                                or sizeof(Yes_t)==sizeof(check2<TY>(0)));   \
       };
 
 

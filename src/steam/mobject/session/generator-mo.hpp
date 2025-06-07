@@ -39,8 +39,8 @@ namespace session {
   using asset::Media;
   using lib::time::TimeVar;
   
-  typedef lib::P<Media> PMedia;
-  typedef lib::P<asset::Clip> PClipAsset;
+  using PMedia     = lib::P<Media>;
+  using PClipAsset = lib::P<asset::Clip>;
   
   
   /**

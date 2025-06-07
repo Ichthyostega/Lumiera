@@ -72,7 +72,7 @@ namespace meta{
    *       Typically you'll define some (static) functions within that
    *       template, which then forward the call to the given BASE
    *       (and of course, that BASE then needs to define this
-   *       function as well). 
+   *       function as well).
    */
   template
     < class TYPES_1, class TYPES_2           ///< the two type collections to pick combinations from

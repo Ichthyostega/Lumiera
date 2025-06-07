@@ -36,10 +36,10 @@ namespace session {
   inline LocatingPin*
   cloneChain (const unique_ptr<LocatingPin>& chain)
   {
-    if (!chain) 
+    if (!chain)
       return 0;
-    else        
-      return chain->clone(); 
+    else
+      return chain->clone();
   }
   
   
@@ -51,16 +51,16 @@ namespace session {
   { }
   
   
-  LocatingPin& 
+  LocatingPin&
   LocatingPin::operator= (const LocatingPin& other)
   {
-    if (this != &other) 
+    if (this != &other)
       this->next_.reset (cloneChain (other.next_));
     return *this;
   }
   
   
-  LocatingPin* 
+  LocatingPin*
   LocatingPin::clone ()  const
   {
     return new LocatingPin(*this);
@@ -74,7 +74,7 @@ namespace session {
     REQUIRE (newLp);
     REQUIRE (!newLp->next_, "can insert only single LocatingPins");
     
-    if (next_ && newLp->getPrioLevel() > next_->getPrioLevel())
+    if (next_ and newLp->getPrioLevel() > next_->getPrioLevel())
       return next_->addChain (newLp);
     else
       {
@@ -104,28 +104,28 @@ namespace session {
     return SolutionData (solution.getTime(), solution.getPipe());
   }
   
-  bool 
+  bool
   LocatingPin::isOverdetermined () const
   {
     LocatingSolution solution;
     resolve (solution);
-    return solution.is_impossible(); 
+    return solution.is_impossible();
   }
   
   
   
-  void 
+  void
   LocatingPin::resolve (LocatingSolution& solution)  const
   {
-    if (!solution.still_to_solve()) 
+    if (!solution.still_to_solve())
       return;
     this->intersect (solution);
-    if (next_ && solution.still_to_solve())
+    if (next_ and solution.still_to_solve())
       next_->resolve(solution);
   }
   
   
-  void 
+  void
   LocatingPin::intersect (LocatingSolution& solution)  const
   {
     REQUIRE (solution.still_to_solve());
@@ -137,12 +137,12 @@ namespace session {
    *  solution. This doesn't imply this value is a solution,
    *  It's just a value we can use. At the moment (10/07),
    *  LocatingSolution is implemented as interval, and
-   *  we return the lower bound here. 
+   *  we return the lower bound here.
    */
-  LocatingPin::Time 
+  LocatingPin::Time
   LocatingPin::LocatingSolution::getTime()
   {
-    return minTime;   
+    return minTime;
   }
   
   LocatingPin::Pipe
@@ -153,13 +153,13 @@ namespace session {
   }
   
   
-  bool 
+  bool
   LocatingPin::LocatingSolution::is_definite()  ///< found a solution?
   {
-    return (minTime == maxTime && minTrack == maxTrack);
+    return (minTime == maxTime and minTrack == maxTrack);
   }
   
-  bool 
+  bool
   LocatingPin::LocatingSolution::is_impossible()
   {
     if (minTime > maxTime)  impo = true;
@@ -168,9 +168,9 @@ namespace session {
   }
   
   bool
-  LocatingPin::LocatingSolution::still_to_solve () 
-  { 
-    return not (is_definite() or is_impossible()); 
+  LocatingPin::LocatingSolution::still_to_solve ()
+  {
+    return not (is_definite() or is_impossible());
   }
   
   
@@ -182,18 +182,18 @@ namespace session {
   
   /* === Factory functions for adding LocatingPins === */
   
-  FixedLocation&    
+  FixedLocation&
   LocatingPin::operator() (Time start, Fork track)    /////////////TODO "track" should be reworked to be the output designation
   {
-    return static_cast<FixedLocation&> 
+    return static_cast<FixedLocation&>
               (addChain (new FixedLocation (start, track)));
   }
   
   
-  RelativeLocation& 
+  RelativeLocation&
   LocatingPin::operator() (PlaRef& refObj, Offset const& offset)
   {
-    return static_cast<RelativeLocation&> 
+    return static_cast<RelativeLocation&>
               (addChain (new RelativeLocation (refObj, offset)));
   }
   

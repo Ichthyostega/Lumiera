@@ -1,5 +1,5 @@
 /*
-  ITER-ADAPTER-STL.hpp  -  helpers for building simple forward iterators 
+  ITER-ADAPTER-STL.hpp  -  helpers for building simple forward iterators
 
    Copyright (C)
      2010,            Hermann Vosseler <Ichthyostega@web.de>
@@ -78,9 +78,9 @@ namespace iter_stl {
       operator++()
         {
           do ++i_;
-          while (i_ && prev_ && *prev_ == *i_ );
+          while (i_ and prev_ and *prev_ == *i_ );
           memorise();
-          return *this; 
+          return *this;
         }
       
       friend bool operator== (DistinctIter const& i1, DistinctIter const& i2) { return i1.i_ == i2.i_; }
@@ -96,9 +96,9 @@ namespace iter_stl {
   template<typename DEF>
   struct WrappedStlIter : DEF
     {
-      typedef typename DEF::Iter Iter;
-      typedef typename DEF::reference reference;
-      typedef typename DEF::pointer  pointer;
+      using Iter      = typename DEF::Iter;
+      using reference = typename DEF::reference;
+      using pointer   = typename DEF::pointer;
       
       
       WrappedStlIter()              : i_()  { }
@@ -185,33 +185,33 @@ namespace iter_stl {
     template<class MAP>
     struct _MapTypeSelector
       {
-        typedef typename MAP::value_type::first_type  Key;
-        typedef typename MAP::value_type::second_type Val;
-        typedef typename MAP::iterator                Itr;
+        using Key = typename MAP::value_type::first_type;
+        using Val = typename MAP::value_type::second_type;
+        using Itr = typename MAP::iterator;
       };
     
     template<class MAP>
     struct _MapTypeSelector<const MAP>
       {
-        typedef typename MAP::value_type::first_type        Key;
-        typedef typename MAP::value_type::second_type const Val;
-        typedef typename MAP::const_iterator                Itr;
+        using Key = typename MAP::value_type::first_type;
+        using Val = typename MAP::value_type::second_type const;
+        using Itr = typename MAP::const_iterator;
       };
     
     /** helper to access the parts of the pair values correctly...*/
     template<class IT, typename SEL>
     struct _MapSubSelector
       {
-        typedef WrappedStlIter< Wrapped_PickKey<IT>> PickKey;
-        typedef WrappedStlIter< Wrapped_PickVal<IT>> PickVal;
+        using PickKey = WrappedStlIter< Wrapped_PickKey<IT>>;
+        using PickVal = WrappedStlIter< Wrapped_PickVal<IT>>;
       };
     
     /** especially for const iterators we need to use \c const& and \c const* */
     template<class IT, typename SEL>
     struct _MapSubSelector<IT, SEL const&>
       {
-        typedef WrappedStlIter< Wrapped_PickKey<IT>>      PickKey; // Key is always const for maps
-        typedef WrappedStlIter< Wrapped_PickConstVal<IT>> PickVal;
+        using PickKey = WrappedStlIter< Wrapped_PickKey<IT>>;    // Key is always const for maps
+        using PickVal = WrappedStlIter< Wrapped_PickConstVal<IT>>;
       };
     
     
@@ -219,37 +219,37 @@ namespace iter_stl {
     template<class MAP>
     struct _MapT
       {
-        typedef typename _MapTypeSelector<MAP>::Key KeyType;
-        typedef typename _MapTypeSelector<MAP>::Val ValType;
-        typedef typename _MapTypeSelector<MAP>::Itr EntryIter;
+        using KeyType   = typename _MapTypeSelector<MAP>::Key;
+        using ValType   = typename _MapTypeSelector<MAP>::Val;
+        using EntryIter = typename _MapTypeSelector<MAP>::Itr;
         
-        typedef typename EntryIter::reference DetectConst;
-        typedef typename _MapSubSelector<EntryIter,DetectConst>::PickKey PickKeyIter;
-        typedef typename _MapSubSelector<EntryIter,DetectConst>::PickVal PickValIter;
+        using DetectConst = typename EntryIter::reference;
+        using PickKeyIter = typename _MapSubSelector<EntryIter,DetectConst>::PickKey;
+        using PickValIter = typename _MapSubSelector<EntryIter,DetectConst>::PickVal;
         
-        typedef RangeIter<PickKeyIter> KeyIter;
-        typedef RangeIter<PickValIter> ValIter;
+        using KeyIter     = RangeIter<PickKeyIter>;
+        using ValIter     = RangeIter<PickValIter>;
         
-        typedef DistinctIter<KeyIter> DistinctKeys;
+        using DistinctKeys = DistinctIter<KeyIter>;
       };
     
     
     template<class IT>
     struct _MapIterT
       {
-        typedef IT EntryIter;
+        using EntryIter = IT;
         
-        typedef typename EntryIter::value_type::first_type KeyType;
-        typedef typename EntryIter::value_type::second_type ValType;
+        using KeyType = typename EntryIter::value_type::first_type;
+        using ValType = typename EntryIter::value_type::second_type;
         
-        typedef typename EntryIter::reference DetectConst;
-        typedef typename _MapSubSelector<EntryIter,DetectConst>::PickKey PickKeyIter;
-        typedef typename _MapSubSelector<EntryIter,DetectConst>::PickVal PickValIter;
+        using DetectConst = typename EntryIter::reference;
+        using PickKeyIter = typename _MapSubSelector<EntryIter,DetectConst>::PickKey;
+        using PickValIter = typename _MapSubSelector<EntryIter,DetectConst>::PickVal;
           
-        typedef RangeIter<PickKeyIter> KeyIter;
-        typedef RangeIter<PickValIter> ValIter;
+        using KeyIter     = RangeIter<PickKeyIter>;
+        using ValIter     = RangeIter<PickValIter>;
         
-        typedef DistinctIter<KeyIter> DistinctKeys;
+        using DistinctKeys = DistinctIter<KeyIter>;
       };
     
     
@@ -257,19 +257,19 @@ namespace iter_stl {
     template<class SEQ>
     struct _SeqT
       {
-        typedef typename SEQ::iterator Iter;
-        typedef RangeIter<Iter> Range;
-        typedef DistinctIter<Range> DistinctVals;
-        typedef AddressExposingIter<Range> Addrs;
+        using Iter  = typename SEQ::iterator;
+        using Range = RangeIter<Iter>;
+        using DistinctVals = DistinctIter<Range>;
+        using Addrs = AddressExposingIter<Range>;
       };
     
     template<class SEQ>
     struct _SeqT<const SEQ>
       {
-        typedef typename SEQ::const_iterator Iter;
-        typedef RangeIter<Iter> Range;
-        typedef DistinctIter<Range> DistinctVals;
-        typedef AddressExposingIter<Range> Addrs;
+        using Iter  = typename SEQ::const_iterator;
+        using Range = RangeIter<Iter>;
+        using DistinctVals = DistinctIter<Range>;
+        using Addrs = AddressExposingIter<Range>;
       };
     
   }//(End) traits/helpers
@@ -284,7 +284,7 @@ namespace iter_stl {
   inline typename _SeqT<CON>::Range
   eachElm (CON& coll)
   {
-    typedef typename _SeqT<CON>::Range Range;
+    using Range = typename _SeqT<CON>::Range;
     return Range (coll.begin(), coll.end());
   }
   
@@ -296,7 +296,7 @@ namespace iter_stl {
   inline typename _SeqT<CON>::Addrs
   eachAddress (CON& coll)
   {
-    typedef typename _SeqT<CON>::Addrs Addresses;
+    using Addresses = typename _SeqT<CON>::Addrs;
     return Addresses (eachElm (coll));
   }
   
@@ -308,8 +308,8 @@ namespace iter_stl {
   inline typename _MapT<MAP>::KeyIter
   eachKey (MAP& map)
   {
-    typedef typename _MapT<MAP>::KeyIter Range;
-    typedef typename _MapT<MAP>::PickKeyIter PickKey;
+    using Range   = typename _MapT<MAP>::KeyIter;
+    using PickKey = typename _MapT<MAP>::PickKeyIter;
     
     return Range (PickKey (map.begin()), PickKey (map.end()));
   }
@@ -322,8 +322,8 @@ namespace iter_stl {
   inline typename _MapIterT<IT>::KeyIter
   eachKey (IT const& begin, IT const& end)
   {
-    typedef typename _MapIterT<IT>::KeyIter Range;
-    typedef typename _MapIterT<IT>::PickKeyIter PickKey;
+    using Range   = typename _MapIterT<IT>::KeyIter;
+    using PickKey = typename _MapIterT<IT>::PickKeyIter;
     
     return Range (PickKey (begin), PickKey (end));
   }
@@ -336,8 +336,8 @@ namespace iter_stl {
   inline typename _MapT<MAP>::ValIter
   eachVal (MAP& map)
   {
-    typedef typename _MapT<MAP>::ValIter Range;
-    typedef typename _MapT<MAP>::PickValIter PickVal;
+    using Range   = typename _MapT<MAP>::ValIter;
+    using PickVal = typename _MapT<MAP>::PickValIter;
     
     return Range (PickVal (map.begin()), PickVal (map.end()));
   }
@@ -350,8 +350,8 @@ namespace iter_stl {
   inline typename _MapIterT<IT>::ValIter
   eachVal (IT const& begin, IT const& end)
   {
-    typedef typename _MapIterT<IT>::ValIter Range;
-    typedef typename _MapIterT<IT>::PickValIter PickVal;
+    using Range   = typename _MapIterT<IT>::ValIter;
+    using PickVal = typename _MapIterT<IT>::PickValIter;
     
     return Range (PickVal (begin), PickVal (end));
   }
@@ -364,8 +364,8 @@ namespace iter_stl {
   inline typename _SeqT<SEQ>::DistinctVals
   eachDistinct (SEQ& seq)
   {
-    typedef typename _SeqT<SEQ>::Range Range;
-    typedef typename _SeqT<SEQ>::DistinctVals DistinctValues;
+    using Range          = typename _SeqT<SEQ>::Range;
+    using DistinctValues = typename _SeqT<SEQ>::DistinctVals;
     
     return DistinctValues (Range (seq.begin(), seq.end()));
   }
@@ -391,13 +391,13 @@ namespace iter_stl {
   inline typename _MapT<MMAP>::ValIter
   eachValForKey (MMAP& multimap, KEY key)
   {
-    typedef typename _MapT<MMAP>::EntryIter Pos;
-    typedef typename _MapT<MMAP>::ValIter Range;
-    typedef typename _MapT<MMAP>::PickValIter PickVal;
+    using Pos     = typename _MapT<MMAP>::EntryIter;
+    using Range   = typename _MapT<MMAP>::ValIter;
+    using PickVal = typename _MapT<MMAP>::PickValIter;
     
     std::pair<Pos,Pos> valRange = multimap.equal_range (key);
     
-    return Range (PickVal (valRange.first), PickVal (valRange.second));
+    return Range (PickVal{valRange.first}, PickVal{valRange.second});
   }
   
   
@@ -413,7 +413,7 @@ namespace iter_stl {
   template<typename VAL>
   class IterSnapshot
     {
-      typedef std::vector<VAL> Sequence;
+      using Sequence = std::vector<VAL>;
       
       mutable
       Sequence buffer_;
@@ -483,9 +483,9 @@ namespace iter_stl {
       
       /* === lumiera forward iterator concept === */
       
-      typedef VAL* pointer;
-      typedef VAL& reference;
-      typedef VAL  value_type;
+      using pointer    = VAL*;
+      using reference  = VAL&;
+      using value_type = VAL ;
       
       reference
       operator*() const

@@ -138,7 +138,7 @@ namespace idi {
       LuidH hash_;
       
     protected:
-      /** 
+      /**
        * Not to be created stand-alone.
        * derived classes feed down the specific type information
        * encoded into a hash seed. Thus even the same symbolicID
@@ -288,7 +288,7 @@ namespace idi {
   /**
    * Entry-ID with a symbolic tag but just a plain random hash part.
    * @remarks use this flavour when it is _not relevant_ to tag with
-   *    some type information nor to reproduce the hash value. 
+   *    some type information nor to reproduce the hash value.
    */
   struct RandID
     : BareEntryID

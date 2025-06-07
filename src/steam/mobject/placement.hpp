@@ -198,7 +198,7 @@ namespace mobject {
         { }
       
       /** @todo 2025-4 what is the semantics of such an assignment?
-       *        Shouldn't placement be treated with reference semantics?   //////////////////////////////////TICKET #123 : (from 2009) "Find out about the correct meaning when assigning placements...." 
+       *        Shouldn't placement be treated with reference semantics?   //////////////////////////////////TICKET #123 : (from 2009) "Find out about the correct meaning when assigning placements...."
        */
       Placement& operator= (Placement const&)  = default;
       

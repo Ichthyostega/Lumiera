@@ -128,7 +128,7 @@ namespace test {
   class FunctionSignature_test : public Test
     {
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           // this is how the key trick of the _Fun traits template works:
           // for anything "function like" we retrieve a member-pointer to the function call operator

@@ -75,7 +75,7 @@ namespace stage {
        *            loading and startup process. Don't call it manually.
        */
       bool launchUI (Subsys::SigTerm& terminationHandle)
-        { 
+        {
           return theGUI_->launchUI (reinterpret_cast<void*> (&terminationHandle));
         }
     };
@@ -94,7 +94,7 @@ namespace stage {
       {
         operator string()  const { return "Lumiera GTK GUI"; }
         
-        bool 
+        bool
         shouldStart (lumiera::Option& opts)  override
           {
             if (opts.isHeadless() or 0 < opts.getPort())

@@ -58,7 +58,7 @@ namespace session {
   SessionServiceFetch::isAccessible ()
   {
     return Session::initFlag
-        && Session::current.isUp();
+       and Session::current.isUp();
   }
   
   /** verify the given placement-ID (hash) is valid,
@@ -79,7 +79,7 @@ namespace session {
    *        only \em now, which means, by virtue of the SteamDispatcher
    *        and command processing, during this operation. It can be
    *        used to invoke an operation, but should never be stored;
-   *        rather, client code should create an MObjectRef, if 
+   *        rather, client code should create an MObjectRef, if
    *        bound to store an reference for later.
    */
   PlacementMO&
@@ -106,7 +106,7 @@ namespace session {
   /** detach the denoted element from the model _including all children_.
    *  @return true if actually erased something
    *  @note when specifying model root, all sub-elements will be cleared,
-   *        but model root itself will be retained. 
+   *        but model root itself will be retained.
    */
   bool
   SessionServiceMutate::detach_and_clear (PID scope)
@@ -167,14 +167,14 @@ namespace session {
   
   
   /** @return root scope of the current model (session datastructure) */
-  PlacementMO& 
+  PlacementMO&
   SessionServiceExploreScope::getScope (PlacementMO const& placementToLocate)
   {
     return SessionImplAPI::current->getScope(placementToLocate);
   }
 
 
-  PlacementMO& 
+  PlacementMO&
   SessionServiceExploreScope::getScope (PlacementMO::ID const& placementToLocate)
   {
     return SessionImplAPI::current->getScope(placementToLocate);

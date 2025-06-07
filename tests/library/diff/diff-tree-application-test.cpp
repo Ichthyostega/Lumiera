@@ -181,23 +181,23 @@ namespace test{
           CHECK (  *scope == CHILD_A);                                 //   there is CHILD_A
           CHECK (*++scope == CHILD_T);                                 //   followed by a copy of CHILD_T
           CHECK (*++scope == CHILD_T);                                 //   and another copy of CHILD_T
-          CHECK (*++scope == MakeRec().appendChild(CHILD_B)            //   and there is a nested Record 
+          CHECK (*++scope == MakeRec().appendChild(CHILD_B)            //   and there is a nested Record
                                       .appendChild(CHILD_A)            //       with CHILD_B
                               .genNode(SUB_NODE.idi.getSym()));        //       and CHILD_A
           CHECK (isnil(++scope));                                      // thats all -- no more children
           
           // Part II : apply the second diff
           application.consume (mutationDiff());
-          CHECK (join (subject.keys()) == "α, β, γ");                  // the attributes weren't altered 
+          CHECK (join (subject.keys()) == "α, β, γ");                  // the attributes weren't altered
           scope = subject.scope();                                     // but the scope was reordered
           CHECK (  *scope == CHILD_T);                                 //   CHILD_T
           CHECK (*++scope == CHILD_A);                                 //   CHILD_A
           Rec nested = (++scope)->data.get<Rec>();                     //   and our nested Record, which too has been altered:
             CHECK (nested.get("γ").data.get<double>() == 3.45);        //       it carries now an attribute "δ", which is again
             CHECK (nested.get("δ") == MakeRec().appendChild(CHILD_A)   //           a nested Record with three children CHILD_A
-                                               .appendChild(CHILD_A)   // 
-                                               .appendChild(CHILD_A)   // 
-                                       .genNode("δ"));                 // 
+                                               .appendChild(CHILD_A)   //
+                                               .appendChild(CHILD_A)   //
+                                       .genNode("δ"));                 //
             auto subScope = nested.scope();                            //       and within the nested sub-scope we find
             CHECK (  *subScope != CHILD_A);                            //           CHILD_A has been altered by assignment
             CHECK (CHILD_A.idi == subScope->idi);                      //           ...: same ID as CHILD_A
@@ -206,7 +206,7 @@ namespace test{
                                            .set("β", int64_t(2))       //               with just an attribute "β" == 2L
                                    .genNode(CHILD_NODE.idi.getSym())); //               (and an empty child scope)
             CHECK (*++subScope == CHILD_T);                            //           followed by another copy of CHILD_T
-            CHECK (isnil (++subScope));                                // 
+            CHECK (isnil (++subScope));                                //
           CHECK (isnil (++scope));                                     // and nothing beyond that.
         }
     };

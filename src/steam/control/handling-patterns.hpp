@@ -43,7 +43,7 @@
 namespace steam {
 namespace control {
 
-  namespace { // concrete command handling patterns 
+  namespace { // concrete command handling patterns
     
     
     

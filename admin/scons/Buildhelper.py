@@ -30,8 +30,8 @@ def isCleanupOperation(env):
 def isHelpRequest():
     """ this is a hack: SCons does all configure tests even if only
         the help message is requested. SCons doesn't export the
-        help option for retrieval by env.GetOption(), 
-        so we scan the commandline directly. 
+        help option for retrieval by env.GetOption(),
+        so we scan the commandline directly.
     """
     return '-h' in sys.argv or '--help' in sys.argv
 
@@ -48,8 +48,8 @@ def srcSubtree(tree, **args):
 SRCPATTERNS = ['*.c','*.cpp','*.cc']
 
 def scanSubtree(roots, patterns=SRCPATTERNS):
-    """ first expand (possible) wildcards and filter out non-dirs. 
-        Then scan the given subtree for source filenames 
+    """ first expand (possible) wildcards and filter out non-dirs.
+        Then scan the given subtree for source filenames
         (python generator function)
     """
     for root in globRootdirs(roots):
@@ -92,7 +92,7 @@ def findSrcTrees(location, patterns=SRCPATTERNS):
 
 def isSrcDir(path, patterns=SRCPATTERNS):
     """ helper: investigate the given (relative) path
-        @param patterns: list of wildcards to define what counts as "source file" 
+        @param patterns: list of wildcards to define what counts as "source file"
         @return: True if it's a directory containing any source file
     """
     if not os.path.isdir(path):
@@ -144,7 +144,7 @@ def createPlugins(env, directory, **kw):
     """ investigate the given source directory to identify all contained source trees.
         @return: a list of build nodes defining a plugin for each of these source trees.
     """
-    return [env.LumieraPlugin( getDirname(tree) 
+    return [env.LumieraPlugin( getDirname(tree)
                              , srcSubtree(tree)
                              , **kw
                              )

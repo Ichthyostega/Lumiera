@@ -129,7 +129,7 @@ namespace engine {
       
       /**
        * Core Dispatcher operation: locate the appropriate Segment and
-       * retrieve/derive  a »blueprint« for render job generation. 
+       * retrieve/derive  a »blueprint« for render job generation.
        * @param portIDX index-number for a ModelPort [as resolved](\ref #resolveModelPort)
        * @param nominalTime time of the frame to calculate, relative to Timeline origin
        */

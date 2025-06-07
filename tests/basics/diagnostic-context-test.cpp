@@ -1,5 +1,5 @@
 /*
-  DiagnosticContext(Test)  -  verify thread local stack for collecting diagnostics 
+  DiagnosticContext(Test)  -  verify thread local stack for collecting diagnostics
 
    Copyright (C)
      2011,            Hermann Vosseler <Ichthyostega@web.de>

@@ -36,7 +36,7 @@ namespace test {
   class FormatSupport_test : public Test
     {
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           SupportStandardTimecode just_fine;
           Supported just_smpte  = Supported::formats< Types<Smpte> >();
@@ -63,7 +63,7 @@ namespace test {
           
           // format support descriptors are assignable
           just_smpte = just_simple;
-          CHECK (support2.check<Hms>()     == support3.check<Hms>());  
+          CHECK (support2.check<Hms>()     == support3.check<Hms>());
           CHECK (support2.check<Smpte>()   == support3.check<Smpte>());
           CHECK (support2.check<Frames>()  == support3.check<Frames>());
           CHECK (support2.check<Seconds>() == support3.check<Seconds>());

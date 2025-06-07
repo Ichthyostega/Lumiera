@@ -56,7 +56,7 @@ namespace test   {
   
   
   
-  /** Register this test class to be invoked in some test groups (suites) 
+  /** Register this test class to be invoked in some test groups (suites)
    * @remarks this macro \c LUNCHER is defined in run.hpp to simplify
    *          the registration of test classes. It expands to the
    *          following static variable definition

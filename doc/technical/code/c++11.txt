@@ -68,12 +68,12 @@ funny (char c)
 
 using Funky = function<uint(char)>;      // <1>
 
-int 
+int
 main (int, char**)
   {
     Funky fun(funny);                    // <2>
     Funky empty;                         // <3>
-    
+
     cout << "ASCII 'A' = " << fun('A');
     cout << " defined: " << bool(fun)    // <4>
          << " undefd; " << bool(empty)
@@ -207,7 +207,7 @@ September 2014::
   which means we're using *GCC-4.7* and *CLang 3.0*. While these compilers both provide a roughly complete
   C++11 support, a lot of fine points were discovered in the follow-up versions of the compilers and standard
   library -- current versions being GCC-3.9 and CLang 3.4
-  
+
   * GCC-4.7 was too liberal and sloppy at some points, where 4.8 rightfully spotted conceptual problems
   * CLang 3.0 turns out to be really immature and even segfaults on some combinations of new language features
   * Thus we've got some kind of a _situation:_ We need to hold back further modernisation and just hope that
@@ -222,7 +222,7 @@ February 2020::
   our »reference system« (platform) is Debian/Buster from now on.
   We have switched to **C\+\+17** and use (even require) GCC-8 or CLang 7 -- we can expect solid support
   for all C++17 features.
-  
+
   * still running into problems with perfect forwarding in combination with overload resolution;
     not clear if this is a shortcoming of current compilers, or the current shape of the language
 

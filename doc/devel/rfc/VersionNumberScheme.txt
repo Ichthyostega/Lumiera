@@ -29,7 +29,7 @@ be monotonous increasing according to this ordering.
 Version number sequence
 ~~~~~~~~~~~~~~~~~~~~~~~
 ....
-0.pre.## < 0.01~dev.20YYMMDDhhmm < 0.01 < 0.99 < 1.0~dev.20YYMMDDhhmm < 1.0 < 1.0.1 
+0.pre.## < 0.01~dev.20YYMMDDhhmm < 0.01 < 0.99 < 1.0~dev.20YYMMDDhhmm < 1.0 < 1.0.1
 ....
 
 Specifications
@@ -50,29 +50,29 @@ releases, we distinguish *major* and *minor* and *bugfix* releases.
 
 - besides the releases, we create *development snapshot releases*, which
   are just _tagged builds_.
-  
+
   * Not every build/check-in gets promoted to such a tagged build;
     rather there needs to be any reason from the users point of view,
     e.g. a bugfix we expect to be tried out at least by _someone_.
-  
+
   * these _development snapshots_ are an _anticipation_ of the
     upcoming next release and thus get a numbering _derived_ from this
     _next_ release (not the previous one).
-  
+
   * dev snapshots use a _timestamp_ attached with a '~' (tilde char).
     It is common practice to order a tilde _below_ the release it is
     attached to (and debian follows this practice)
 
 - when we decide the application to be stable enough for real use and
   past the _beta_ phase, we switch over to the usual 3-digit version numbering.
-  
+
   * _major_ releases start with 1.0 and feature high impact changes, usually linked
     to some significant breakage of compatibility or some other disruptive event.
-  
+
   * _minor_ releases may include some new features, but can be considered
     evolutionary. Their numbers are incremented on the second digit, like
     1.1, 1.2, 1.3, 1.4, ....
-  
+
   * _bugfix_ releases are created when we have serious bugfixes to publish,
     without any real new features.
 

@@ -1,5 +1,5 @@
 /*
-  Allocation  -  objective to place a MObject in a specific way  
+  Allocation  -  objective to place a MObject in a specific way
 
    Copyright (C)
      2008,            Hermann Vosseler <Ichthyostega@web.de>
@@ -13,7 +13,7 @@
 
 
 /** @file allocation.cpp
- ** @todo result of the very first code generation from UML in 2008. Relevance not clear yet... 
+ ** @todo result of the very first code generation from UML in 2008. Relevance not clear yet...
  */
 
 
@@ -24,7 +24,7 @@ namespace mobject {
 namespace session {
   
   /** @todo probably a placeholder and to be pushed down....*/
-  void 
+  void
   Allocation::intersect (LocatingSolution& solution)  const
   {
     LocatingPin::intersect (solution);

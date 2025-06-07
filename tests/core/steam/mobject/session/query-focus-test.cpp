@@ -60,9 +60,9 @@ namespace test    {
     {
       
       virtual void
-      run (Arg) 
+      run (Arg)
         {
-          // Prepare a (test)Session with 
+          // Prepare a (test)Session with
           // some nested dummy placements
           PPIdx index = build_testScopes();
           PMO& root = index->getRoot();

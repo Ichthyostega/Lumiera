@@ -57,7 +57,7 @@ From this point on, we can switch configuration by
 
 ----
 sudo update-alternatives --config gcc
----- 
+----
 
 
 Building on Mint 17.2 (Rafaela) -- gcc and Libstdc++ 4.9
@@ -73,7 +73,7 @@ which is indeed linked against the 4.9 libraries. Stay away from Clang on Mint f
 Transcript from a build session on a ``pristine'' Mint 17.2 installation:
 
  * add the following to your `/etc/apt/sources.list`
-+   
++
 ----
 deb https://lumiera.org/debian/ rafaela experimental
 deb-src https://lumiera.org/debian/ rafaela experimental

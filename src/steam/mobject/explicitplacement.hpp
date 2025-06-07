@@ -53,7 +53,7 @@ namespace mobject {
    *             Inheritance indicates a contract, but should not be abused to mark properties.
    *
    * @ingroup fixture
-   * @see Placement#resolve factory method for deriving an ExplicitPlacement 
+   * @see Placement#resolve factory method for deriving an ExplicitPlacement
    */
   class ExplicitPlacement : public Placement<MObject>
     {
@@ -68,17 +68,17 @@ namespace mobject {
        *                                           //////////////////////TICKET #439
        */
       virtual
-      ExplicitPlacement resolve ()  const 
-        { 
+      ExplicitPlacement resolve ()  const
+        {
           return *this;  // and this very special dog breaks the wag-the-tail contract :-P
         }
       
       
     protected:
-      /*  @todo ichthyo considers a much more elegant implementation utilising a subclass 
+      /*  @todo ichthyo considers a much more elegant implementation utilising a subclass
        *        of FixedLocation, which would serve as Placement::LocatingSolution, and
        *        would be used as LocatingPin::chain subobject as well, so that it could
-       *        be initialised directly here in the ExplicitPlacement ctor. 
+       *        be initialised directly here in the ExplicitPlacement ctor.
        *        /////////////////////////////////////////////////////////TICKET #100
        */
       ExplicitPlacement (Placement<MObject> const& base, const SolutionData found)

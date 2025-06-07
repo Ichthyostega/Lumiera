@@ -16,7 +16,7 @@
  ** The OutputDirector is an application internal singleton service for
  ** coordinating and controlling all actual input/output- and rendering
  ** capabilities, exposing distinct lifecycle functions to connect, bring
- ** up and shut down what can be considered the "Player/Output" subsystem. 
+ ** up and shut down what can be considered the "Player/Output" subsystem.
  **
  ** @see output-manager-test.cpp  ////TODO
  */

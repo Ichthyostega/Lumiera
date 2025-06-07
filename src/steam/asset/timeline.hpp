@@ -71,7 +71,7 @@ namespace mobject {
 namespace session {
   
   class Binding;
-  typedef MORef<Binding> RBinding;
+  using RBinding = MORef<Binding>;
 }}
 
 
@@ -79,7 +79,7 @@ namespace asset {
   
   
   class Timeline;
-  typedef lib::P<Timeline> PTimeline;
+  using PTimeline = lib::P<Timeline>;
   
   
   /**
@@ -92,7 +92,7 @@ namespace asset {
     : public Struct
     , public lib::AutoRegistered<Timeline>
     {
-      typedef mobject::session::RBinding RBinding;
+      using RBinding = mobject::session::RBinding;
       
       RBinding boundSequence_;
       

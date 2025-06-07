@@ -152,7 +152,7 @@ namespace test{
         checkPoint (const TestContainer* src, ITER& pos)
         {
           REQUIRE (src);
-          if ((pos != ITER()) && (pos != src->numberz_.end()))
+          if ((pos != ITER()) and (pos != src->numberz_.end()))
             return true;
           else
             {
@@ -248,7 +248,7 @@ namespace test{
           typedef RangeIter<I> Range;
           
           Range range (iVec.begin(), iVec.end());
-          CHECK (!isnil (range) || !NUM_ELMS);
+          CHECK (not isnil(range) or not NUM_ELMS);
           
           // now for example the client could....
           while ( range )

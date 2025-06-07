@@ -39,14 +39,14 @@ namespace asset {
   class Proc;
   class ProcPatt;
   struct BuildInstruct;
-  typedef lib::P<const asset::Proc> PProc;
-  typedef lib::P<const asset::ProcPatt> PProcPatt;
+  using PProc     = lib::P<const asset::Proc>;
+  using PProcPatt = lib::P<const asset::ProcPatt>;
   
-  typedef vector<BuildInstruct> InstructionSequence;
+  using InstructionSequence = vector<BuildInstruct>;
   
   /**
-   * "Processing Pattern" is a structural Asset 
-   * representing information how to build some part 
+   * "Processing Pattern" is a structural Asset
+   * representing information how to build some part
    * of the render engine's processing nodes network.
    */
   class ProcPatt

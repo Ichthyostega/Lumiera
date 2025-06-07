@@ -82,10 +82,10 @@ namespace session {
       
       /** a traits-class to define the smart-ptr to wrap the result */
       template<class TY>
-      struct WrapReturn             { typedef P<TY> Wrapper;  };
+      struct WrapReturn             { using Wrapper = P<TY>;  };
       
       template<>
-      struct WrapReturn<ProcPatt>   { typedef PProcPatt Wrapper;  };
+      struct WrapReturn<ProcPatt>   { using Wrapper = PProcPatt;  };
       
       
       /** helper detecting if a query actually intended to retrieve a "default" object.
@@ -116,12 +116,12 @@ namespace session {
      * \c resolve(..) functions. Finally #MockConfigRules wraps things up.
      * 
      * The implementation relies on boost::any records to stash the objects
-     * in automatically managed heap memory. 
+     * in automatically managed heap memory.
      */
     class MockTable
       : public steam::ConfigResolver
       {
-        typedef std::map<QueryKey,any> Tab;
+        using Tab = std::map<QueryKey,any>;
         
         Tab  answer_;
         bool isInit_;
@@ -132,7 +132,7 @@ namespace session {
         any const& fetch_from_table_for (QueryKey const& query);
         
         // special cases....
-        template<class TY> 
+        template<class TY>
         bool detect_case (typename WrapReturn<TY>::Wrapper&, Query<TY> const&);
         bool fabricate_matching_new_Pipe  (Query<Pipe> const& q, string const& pipeID, string const& streamID);
         bool fabricate_just_new_Pipe      (Query<Pipe> const& q);
@@ -147,7 +147,7 @@ namespace session {
       private:
         void fill_mock_table ();
         
-        /** shortcut for simply accessing a table entry */ 
+        /** shortcut for simply accessing a table entry */
         template<class STRU>
         any&
         item (string const& querySpec)
@@ -166,8 +166,8 @@ namespace session {
     _Pragma("GCC diagnostic ignored \"-Woverloaded-virtual\"")
     
     
-    /** 
-     * building block providing the 
+    /**
+     * building block providing the
      * mock implementation for a \em single type.
      * We simply access a table holding pre-created objects.
      */
@@ -177,7 +177,7 @@ namespace session {
         typedef typename WrapReturn<TY>::Wrapper Ret;
         
         /** (dummy) implementation of the QueryHandler interface */
-        virtual bool 
+        virtual bool
         resolve (Ret& solution, Query<TY> const& q)
           {
             any const& entry = this->fetch_from_table_for(q);
@@ -185,17 +185,17 @@ namespace session {
               {
                 Ret const& candidate (any_cast<Ret const&> (entry));
                 if (! solution
-                   ||(solution &&  solution == candidate)      // simulates a real unification
+                   or(solution and solution == candidate)      // simulates a real unification
                    )
                   return exists (solution = candidate);
               }
             return try_special_case(solution, q);
           }
-      
+        
         bool
         try_special_case (Ret& solution, Query<TY> const& q)
           {
-            if (solution && isFakeBypass(q))        // backdoor for tests
+            if (solution and isFakeBypass(q))        // backdoor for tests
               return exists (solution);
             
             if (is_defaults_query (q))
@@ -203,7 +203,7 @@ namespace session {
                 Query<TY> defaultsQuery = q.rebuild().removeTerm("default");
                 return exists (solution = Session::current->defaults (defaultsQuery));
               }                             //  may lead to recursion
-                                            
+            
             if (this->detect_case (solution, q))
               return resolve (solution, q);
             
@@ -214,13 +214,13 @@ namespace session {
     
     /** Hook for treating very special cases for individual types only */
     template<class TY>
-    inline bool 
+    inline bool
     MockTable::detect_case (typename WrapReturn<TY>::Wrapper&, Query<TY> const&)
     {
       return false;
     }
     template<>
-    inline bool 
+    inline bool
     MockTable::detect_case (WrapReturn<Pipe>::Wrapper& candidate, Query<Pipe> const& q)
     {
       if (q.usesPredicate ("make"))
@@ -230,31 +230,31 @@ namespace session {
       const string pipeID   = q.extractID("pipe");
       const string streamID = q.extractID("stream");
       
-      if (candidate && pipeID == candidate->getPipeID())
+      if (candidate and pipeID == candidate->getPipeID())
         return set_new_mock_solution (q, candidate); // "learn" this solution to be "valid"
       
-      if (!isnil(pipeID) && !isnil(streamID))
+      if (!isnil(pipeID) and not isnil(streamID))
         return fabricate_matching_new_Pipe (q, pipeID, streamID);
 
-      if (!candidate && (!isnil(streamID) || !isnil(pipeID)))
+      if (not candidate and (not isnil(streamID) or not isnil(pipeID)))
         return fabricate_just_new_Pipe (q);
       
       return false;
     }
     
     template<>
-    inline bool 
+    inline bool
     MockTable::detect_case (WrapReturn<const ProcPatt>::Wrapper& candidate, Query<const ProcPatt> const& q)
     {
       const string streamID = q.extractID("stream");
       
-      if (!candidate && !isnil(streamID))
+      if (not candidate and not isnil(streamID))
           return fabricate_ProcPatt_on_demand (q);
       return false;
     }
     
     template<>
-    inline bool 
+    inline bool
     MockTable::detect_case (WrapReturn<asset::Timeline>::Wrapper& candidate, Query<asset::Timeline> const& q)
     {
       if (!candidate)
@@ -263,7 +263,7 @@ namespace session {
     }
     
     template<>
-    inline bool 
+    inline bool
     MockTable::detect_case (WrapReturn<asset::Sequence>::Wrapper& candidate, Query<asset::Sequence> const& q)
     {
       if (!candidate)
@@ -276,15 +276,15 @@ namespace session {
     
     
     
-    /** 
+    /**
      * Facade: Dummy Implementation of the query interface.
      * Provides an explicit implementation using hard wired
      * values for some types of interest for testing and debugging.
      */
-    class MockConfigRules 
-      : public InstantiateChained < steam::InterfaceTypes           
+    class MockConfigRules
+      : public InstantiateChained < steam::InterfaceTypes
                                   , LookupPreconfigured  // building block used for each of the types
-                                  , MockTable           //  for implementing the base class (interface) 
+                                  , MockTable           //  for implementing the base class (interface)
                                   >
       {
       protected:
@@ -297,7 +297,7 @@ namespace session {
         
         /* === implementation of additional functions on the ConfigRules interface goes here === */
       };
-      
+    
     
     
   } // namespace query

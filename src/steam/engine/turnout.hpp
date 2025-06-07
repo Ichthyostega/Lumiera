@@ -108,7 +108,7 @@ namespace engine {
    *             combined and processed to yield the results; actually this implementation
    *             is assembled from several building blocks, in accordance to the specific
    *             situation as established by the _Builder_ for a given render node.
-   * @warning    please ensure \ref _TurnoutDiagnostic remains _layout compatible_ 
+   * @warning    please ensure \ref _TurnoutDiagnostic remains _layout compatible_
    */
   template<class PAT>
   class Turnout
@@ -176,7 +176,7 @@ namespace engine {
        */
       static auto
       accessInternal (Port& port)
-        {                                // Note: deliberately static, not dynamic-cast 
+        {                                // Note: deliberately static, not dynamic-cast
           auto& internalView = static_cast<_TurnoutDiagnostic&> (port);
           auto& weavingPattern = static_cast<PAT&> (internalView);
           return _accessInternal(weavingPattern);

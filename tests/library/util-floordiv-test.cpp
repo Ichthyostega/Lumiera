@@ -76,8 +76,8 @@ namespace test {
     floordiv_alternate (long num, long den)
       {
         ldiv_t res = ldiv(num,den);
-        return (0 >= res.quot && res.rem)? res.quot-1
-                                         : res.quot;
+        return (0 >= res.quot and res.rem)? res.quot-1
+                                          : res.quot;
       }
     
   } // (End) test data and operations
@@ -116,7 +116,7 @@ namespace test {
           verifyIntegerTypes<int64_t>();
           verifyIntegerTypes<llong>();
           
-          if (!isnil (arg))
+          if (not isnil (arg))
             runPerformanceTest();
         }
       
@@ -202,7 +202,7 @@ namespace test {
        * \c fdiv() function also to divide the positive results,
        * performs only slightly worse. So this implementation
        * was chosen mainly because it seems to state its
-       * intent more clearly in code.  
+       * intent more clearly in code.
        */
       void
       runPerformanceTest ()
@@ -213,7 +213,7 @@ namespace test {
           clock_t start(0), stop(0);
           _Fmt resultDisplay{"timings(%s)%|30T.|%5.3fsec\n"};
           
-#define   START_TIMINGS start=clock();          
+#define   START_TIMINGS start=clock();
 #define   DISPLAY_TIMINGS(ID) \
           stop = clock();      \
           cout << resultDisplay % STRINGIFY (ID) % (double(stop-start)/CLOCKS_PER_SEC) ;

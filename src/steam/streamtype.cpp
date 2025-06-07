@@ -1,5 +1,5 @@
 /*
-  StreamType  -  classification of media stream types 
+  StreamType  -  classification of media stream types
 
    Copyright (C)
      2008,            Hermann Vosseler <Ichthyostega@web.de>
@@ -26,7 +26,7 @@ namespace steam {
    StreamType::ImplFacade::ImplFacade (Symbol libID)
      : libraryID(libID)
      { }
-
-  
-
+   
+   
+   
 } // namespace steam

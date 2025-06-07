@@ -16,7 +16,7 @@
  ** Helper for registering lifecycle event callbacks, which are
  ** provided as a global service by lumiera::AppState. This service
  ** allows to enrol functions under a given label and then to call
- ** all those registered functions. 
+ ** all those registered functions.
  ** @note this is in fact an event mechanism, and if we start using
  ** more than just this basic functionality, we should switch to
  ** boost::signals. (which has the downside of being an binary
@@ -62,25 +62,25 @@ namespace lumiera {
       typedef Callbacks::iterator Iter;
       
       
-      /** @note only one copy of each distinct callback remembered */ 
+      /** @note only one copy of each distinct callback remembered */
       bool enrol (Symbol label, Hook toCall)
         {
           return table_[label]
                         .insert(toCall)
-                        .second;  // true if actually stored 
+                        .second;  // true if actually stored
         }
       
       void execute (Symbol label)
         {
           Callbacks& cbs (table_[label]);
           Iter e = cbs.end();
-          for (Iter p = cbs.begin(); 
-               p != e; ++p) 
+          for (Iter p = cbs.begin();
+               p != e; ++p)
             (*p)(); // invoke callback
         }
       
       
-      /** get the (single) LifecycleRegistry instance. 
+      /** get the (single) LifecycleRegistry instance.
        *  @warning don't use it after the end of main()! */
       static LifecycleRegistry& instance();
       
@@ -89,7 +89,7 @@ namespace lumiera {
       std::map<Symbol, Callbacks> table_;
       
       LifecycleRegistry ()  {
-        execute (ON_BASIC_INIT);   // just to be sure, typically a NOP, because nothing is registered yet 
+        execute (ON_BASIC_INIT);   // just to be sure, typically a NOP, because nothing is registered yet
       }
       
      ~LifecycleRegistry () { }

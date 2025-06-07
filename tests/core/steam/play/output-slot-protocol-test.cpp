@@ -46,7 +46,7 @@ namespace test {
   class OutputSlotProtocol_test : public Test
     {
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           verifyStandardCase();
         }

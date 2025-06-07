@@ -32,7 +32,7 @@
  ** possible to create additional _sub group_ collecting busses, together
  ** with additional processing steps. In a similar way as the video viewer
  ** widgets are _allocated_ for display, also a mixing desk display will
- ** be _allocated_ and thus associated with a given timeline. 
+ ** be _allocated_ and thus associated with a given timeline.
  ** 
  ** @todo WIP-WIP-WIP as of 12/2016
  ** 

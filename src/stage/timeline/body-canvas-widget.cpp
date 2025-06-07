@@ -478,7 +478,7 @@ namespace timeline {
       rulerArea_.property_expand() = false;
       rulerArea_.add (rulerCanvas_);
       contentArea_.set_shadow_type (Gtk::SHADOW_NONE);
-      contentArea_.set_policy (Gtk::POLICY_ALWAYS, Gtk::POLICY_ALWAYS);  // always use both scrollbars ////////////////TICKET #1208 : 2/2002 Gtk::POLICY_AUTOMATIC hides scrollbar after focus loss 
+      contentArea_.set_policy (Gtk::POLICY_ALWAYS, Gtk::POLICY_ALWAYS);  // always use both scrollbars ////////////////TICKET #1208 : 2/2002 Gtk::POLICY_AUTOMATIC hides scrollbar after focus loss
       contentArea_.property_expand() = true;                            //  dynamically grab additional space
       contentArea_.add (mainCanvas_);
       

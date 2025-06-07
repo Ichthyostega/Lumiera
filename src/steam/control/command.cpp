@@ -340,7 +340,7 @@ namespace control {
   CommandDef::isValid()  const
   {
     return (was_activated (prototype_))
-        && (prototype_ == registered_for (this->id_))
+       and (prototype_ == registered_for (this->id_))
          ;
   }
   
@@ -350,7 +350,7 @@ namespace control {
   Command::canExec()  const
   {
     return isValid()
-        && impl().canExec();
+       and impl().canExec();
   }
   
   
@@ -358,7 +358,7 @@ namespace control {
   Command::canUndo()  const
   {
     return isValid()
-        && impl().canUndo();
+       and impl().canUndo();
   }
   
   

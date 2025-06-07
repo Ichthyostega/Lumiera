@@ -895,7 +895,7 @@ namespace util {
     inline auto accept() { return Syntax<Parser<NulP>>{}; }
     
     
-    /** start Syntax clause with an optional syntax part */ 
+    /** start Syntax clause with an optional syntax part */
     template<typename SPEC>
     inline auto
     accept_opt (SPEC&& clauseDef)
@@ -910,8 +910,8 @@ namespace util {
      * with separator and repetition limit; repetitions ∊ [min..max]
      * The separator will be expected _between_ instances of the repeated sub-clause
      * and will by itself produce no model. The result model is an instance of \ref IterModel,
-     * which implies it is a vector (uses heap storage); if min ≡ 0, the model can be empty. 
-     */ 
+     * which implies it is a vector (uses heap storage); if min ≡ 0, the model can be empty.
+     */
     template<typename SPEC1, typename SPEC2>
     inline auto
     accept_repeated (uint min, uint max, SPEC1&& delimDef, SPEC2&& clauseDef)

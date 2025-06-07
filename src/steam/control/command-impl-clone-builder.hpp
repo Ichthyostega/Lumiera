@@ -130,7 +130,7 @@ namespace control {
        *  and then prepare a new UNDO-Functor, which is correctly wired
        *  with the memento holder within this new \em clone closure.
        *  After that point, these prepared parts can be retrieved
-       *  through the public accessor functions; they will be 
+       *  through the public accessor functions; they will be
        *  used by the command registry to put together a complete
        *  clone copy of the original CommandImpl.
        */
@@ -162,7 +162,6 @@ namespace control {
           REQUIRE (newContext_->isValid());
           return newContext_->getClosure();
         }
-      
     };
   
   

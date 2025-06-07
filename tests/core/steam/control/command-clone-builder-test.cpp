@@ -97,7 +97,7 @@ namespace test    {
           function<Sig_capt> c_Fun (command1::capture);
           function<Sig_undo> u_Fun (command1::undoIt);
           
-          CHECK (o_Fun && c_Fun && u_Fun);
+          CHECK (o_Fun and c_Fun and u_Fun);
           PCmdImpl cmd = registry.newCommandImpl(o_Fun,c_Fun,u_Fun);
           
           // make ready for execution

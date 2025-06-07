@@ -113,7 +113,7 @@ namespace session {
    *  actually to link the system of Scope and QueryFocus
    *  to the current session, by delegating resolution
    *  of contents discovery queries to the PlacementIndex
-   *  managed within the session 
+   *  managed within the session
    */
   lumiera::QueryResolver const&
   ScopeLocator::theResolver()
@@ -136,7 +136,7 @@ namespace session {
    *  @return the current path corresponding to the
    *          most recently used QueryFocus, which is
    *          actually still referred from somewhere.
-   *  @note may cause the QueryFocusStack to pop 
+   *  @note may cause the QueryFocusStack to pop
    *          path entries no longer in use.
    */
   ScopePath&
@@ -148,7 +148,7 @@ namespace session {
   
   /** push aside the current focus location
    *  and open a new ScopePath frame, to serve
-   *  as \em current location until released 
+   *  as \em current location until released
    */
   ScopePath&
   ScopeLocator::pushPath()

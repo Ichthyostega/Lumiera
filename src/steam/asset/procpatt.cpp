@@ -59,9 +59,9 @@ namespace asset {
    *  of this one. The new ProcPatt can then be customised
    *  independently of the original one. This allows using
    *  some ProcPatt as a template for creating more
-   *  specialised patterns. 
+   *  specialised patterns.
    */
-  lib::P<ProcPatt> 
+  lib::P<ProcPatt>
   ProcPatt::newCopy (string newID)  const
   {
     TODO ("implement the Pattern-ID within the propDescriptor!");
@@ -78,15 +78,15 @@ namespace asset {
    *  @param where denotes the insertion point where to attach the Effect
    *  @param node  prototype of the Effect to be inserted when building.
    */
-  ProcPatt& 
+  ProcPatt&
   ProcPatt::attach(Symbol where, PProc& node)
   {
     DoAttach *last (0);
-    if ( !isnil (instructions_) 
-       && (last = boost::get<DoAttach> (&(instructions_.back())))
-       && last->point==where
+    if (   not isnil (instructions_)
+       and (last = boost::get<DoAttach> (&(instructions_.back())))
+       and last->point==where
        )
-       // instead of adding a new build instruct entry, 
+       // instead of adding a new build instruct entry,
       //  we can extend the list in the last "DoAttach" entry.
       last->nodes.push_back(node);
     else
@@ -105,7 +105,7 @@ namespace asset {
    *  This allowes for using simple PorcPatt instances as building blocks
    *  to define more complicated patterns.
    */
-  ProcPatt& 
+  ProcPatt&
   ProcPatt::operator+= (PProcPatt& toReuse)
   {
     DoRecurse entry(toReuse);

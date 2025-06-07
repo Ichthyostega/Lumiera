@@ -71,41 +71,41 @@ namespace asset {
       using PProcPatt = lib::P<steam::asset::ProcPatt>;
       using PClip = mobject::Placement<mobject::session::Clip>;
      
-      
+     
       static MediaFactory create;
       const string& getFilename ()  const { return filename_; }
       
-      virtual const ID<Media>& getID()  const    ///< @return ID of kind Media 
-        { 
-          return static_cast<const ID<Media>& > (Asset::getID()); 
+      virtual const ID<Media>& getID()  const    ///< @return ID of kind Media
+        {
+          return static_cast<const ID<Media>& > (Asset::getID());
         }
       
       /** Service Access Point for getting a processing template
-       *  describing how to build the render nodes network 
+       *  describing how to build the render nodes network
        *  necessary for this Media or Clip. This includes
        *  Codecs and postprocessing (stretching, deinterlacing...)
        */
       PProcPatt howtoProc ()  const;
       
-      /** Service Access Point for creating a Clip entity usable within 
+      /** Service Access Point for creating a Clip entity usable within
        *  the Session from a given Media or Clip Asset. As a sideeffect,
-       *  a corresponding asset::Clip is created as well if necessary. 
+       *  a corresponding asset::Clip is created as well if necessary.
        *  It is OK to use and throw away the returned Clip-MO, because
        *  it can be regenerated from the corresponding asset::Clip
-       *  @return a Placement smart ptr owning the new Clip MObject 
+       *  @return a Placement smart ptr owning the new Clip MObject
        */
       PClip createClip ();
       
-      /** @return the overall length of the media represented by this asset */ 
+      /** @return the overall length of the media represented by this asset */
       virtual Duration getLength ()  const;
       
       
     protected:
-      Media (const Asset::Ident& idi, const string& file, Duration length) 
+      Media (const Asset::Ident& idi, const string& file, Duration length)
         : Asset(idi), filename_(file), len_(length) {}
       friend class MediaFactory;
       
-      /** get or create the correct asset::Clip 
+      /** get or create the correct asset::Clip
        *  corresponding to this media */
       virtual PClipAsset getClipAsset ();
       
@@ -128,14 +128,14 @@ namespace asset {
   
   
   
-  /** 
+  /**
    * Factory specialised for creating Media Asset objects.
-   */ 
-  class MediaFactory 
+   */
+  class MediaFactory
     : util::NonCopyable
     {
     public:
-      typedef lib::P<Media> PType;
+      using PType = lib::P<Media>;
       
       PType operator() (Asset::Ident& key, const string& file="");
       PType operator() (const string& file, const Category& cat);

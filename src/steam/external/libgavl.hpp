@@ -55,8 +55,8 @@ namespace external {
   
   using lib::Symbol;
   
-  typedef StreamType::ImplFacade ImplFacade;
-  typedef StreamType::ImplFacade::TypeTag TypeTag;
+  using ImplFacade = StreamType::ImplFacade;
+  using    TypeTag = StreamType::ImplFacade::TypeTag;
   
   
   class LibGavl;

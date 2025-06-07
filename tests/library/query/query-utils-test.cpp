@@ -51,13 +51,13 @@ namespace test{
   
   /********************************************************************//**
    * @test check the various small helpers and utilities we utilise
-   *       for dealing with ConfigQuery 
+   *       for dealing with ConfigQuery
    */
   class QueryUtils_test : public Test
     {
       
       virtual void
-      run (Arg arg) 
+      run (Arg arg)
         {
           if (isnil(arg))  arg = Cmdline ("normaliseID extractID removeTerm countPred");
           

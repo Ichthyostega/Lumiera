@@ -1,5 +1,5 @@
 /*
-  MetaUtils(Test)  -  check some simple type trait helpers 
+  MetaUtils(Test)  -  check some simple type trait helpers
 
    Copyright (C)
      2011,            Hermann Vosseler <Ichthyostega@web.de>
@@ -49,7 +49,7 @@ namespace test {
   class MetaUtils_test : public Test
     {
       void
-      run (Arg) 
+      run (Arg)
         {
           verify_basicTypeProbing();
           verify_genericTypeDisplay();

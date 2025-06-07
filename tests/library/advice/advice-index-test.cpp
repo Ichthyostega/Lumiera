@@ -334,7 +334,7 @@ namespace test {
           CHECK ( idx.hasRequest (_entry (5,"dog")));
           _entry (5,"dog").changeBinding("cat");       // transmogrify existing request into cat-request
           CHECK (_hasDefault  (5));                    // of course this didn't change the solution
-          CHECK (!idx.hasRequest (_entry (5,"cat")));  // can't find it anymore because of changed binding           
+          CHECK (!idx.hasRequest (_entry (5,"cat")));  // can't find it anymore because of changed binding
           
           idx.modifyRequest (dogHash, _entry (5,"cat"));
           

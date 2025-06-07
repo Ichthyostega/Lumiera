@@ -63,15 +63,15 @@ namespace test {
       op::positional_options_description posopt;
       posopt.add("id", -1);
       
-      op::parsed_options parsed = 
+      op::parsed_options parsed =
         op::command_line_parser (cmdline)
           .options (syntax)
           .positional(posopt)
           .allow_unregistered()
-          .run();  
+          .run();
       
       op::store (parsed, parameters);
-      op::notify(parameters);   
+      op::notify(parameters);
       
       // remove all recognised options from original cmdline vector
       cmdline = op::collect_unrecognized(parsed.options, op::include_positional);
@@ -82,7 +82,7 @@ namespace test {
   
   /** @return the Tests-Group as given on cmdline, or Suite::ALLGROUP as default
    */
-  const string 
+  const string
   TestOption::getTestgroup ()
   {
     ASSERT (parameters.count ("group"));
@@ -111,7 +111,7 @@ namespace test {
   }
   
   /** @return \c true if --describe switch was given */
-  bool 
+  bool
   TestOption::shouldDescribe ()
   {
     return parameters["describe"].as<bool>();
@@ -132,7 +132,7 @@ namespace test {
     return false;
   }
   
-
+  
   ostream& 
   operator<< (ostream& os, const TestOption& to)
   {

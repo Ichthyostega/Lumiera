@@ -14,7 +14,7 @@ Scrolling without modifiers should jump directly from the current frame to the n
 Shift Modifiers
 ---------------
 
-The Shift modifier should be used to toggle how scrolling with the mouse affects the gui. 
+The Shift modifier should be used to toggle how scrolling with the mouse affects the gui.
 
 So scrolling while holding down Shift should not scroll horizontally but instead let you scroll through the tracks vertically. This is just a very small detail, but it does matter if you want to cut 2 hours of a Musical filmed with several cameras and two or more effects-tracks. Then you will mind whether you have to use your mouse at a border of the timeline or if you can let it stay where it is.
 
@@ -44,4 +44,4 @@ The Ctrl modifier should switch from normal scrolling to zooming like in most ot
 
 Here again the Shift modifier held down together with the Control modifier should switch from time-zoom to switching the height of a track.
 
-But in the second case there is a need for another definition: As every track can have it's own height, there should also be the possibility of changing the height of all tracks at one time. Here it would be a good idea to let the modifier change its catchment area to all tracks when the mouse pointer is over a trackhead as this should be a big enough area so that you don't have to care on which pixel the mouse pointer exactly is. 
+But in the second case there is a need for another definition: As every track can have it's own height, there should also be the possibility of changing the height of all tracks at one time. Here it would be a good idea to let the modifier change its catchment area to all tracks when the mouse pointer is over a trackhead as this should be a big enough area so that you don't have to care on which pixel the mouse pointer exactly is.

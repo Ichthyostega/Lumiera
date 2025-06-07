@@ -12,10 +12,10 @@
 */
 
 
-/** @file locatingpin.hpp 
+/** @file locatingpin.hpp
  ** Implementing the Placement mechanics. The various specifications how
  ** to place some MObject (logically) within the Session are given by small
- ** LocatingPin objects forming a chain. For resolving the actual position, at the 
+ ** LocatingPin objects forming a chain. For resolving the actual position, at the
  ** moment (10/07) we use a preliminary implementation to support the most common
  ** Placement types (fixed and relative). It is comprised of the nested LocatingSolution
  ** and the functions FixedLocation#resolve(LocatingSolution&) and
@@ -26,7 +26,7 @@
  ** @todo this can be considered a preliminary sketch without being backed
  **       by actual functionality. Just enough to be able to drive the design of
  **       other parts ahead. See esp. TICKET #100, which contains an idea for a
- **       refactoring. 
+ **       refactoring.
  **
  */
 
@@ -54,9 +54,9 @@ namespace mobject {
   
   class MObject;
   
-///////////////////////////////////////////TODO: all those dependencies are just a plain mess right now.  
-//  
-//template<class MO, class B=MObject> 
+///////////////////////////////////////////TODO: all those dependencies are just a plain mess right now.
+//
+//template<class MO, class B=MObject>
 //class Placement ;
 //typedef Placement<MObject> PMO;
   

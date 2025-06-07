@@ -252,7 +252,7 @@ namespace diff{
    *       the template DiffApplicationStrategy with the concrete target type
    *       as parameter (see below). This concrete instantiation happens
    *       inline from within the usage context, while inheriting the
-   *       actual implementation logic from this baseclass here 
+   *       actual implementation logic from this baseclass here
    * 
    * @throws  lumiera::error::State when diff application fails structurally.
    * @throws  _unspecified errors_ when delegated operations fail.

@@ -46,13 +46,13 @@ namespace test    {
    *       structure of the most important components: The session
    *       contains an Sequence, we can get at the Fixture, we have at least
    *       one Fork and the corresponding Fork-ID (asset) can be retrieved.
-   * @todo define further criteria to be checked 
+   * @todo define further criteria to be checked
    * @todo implement Sequence, Fixture, Session#rebuildFixture, handling of EntryID<Fork>
    */
   class SessionStructure_test : public Test
     {
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           Session::current.reset();
           CHECK (Session::current.isUp());
@@ -70,7 +70,7 @@ namespace test    {
           
           UNIMPLEMENTED("the real standard structure of the session"); //////////////////////////TICKET #499
           
-#if false //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #546              
+#if false //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #546
           
 /////TODO the following is code from the old session mockup... try to rephrase it into the new (real) session API
 //        
@@ -121,7 +121,7 @@ namespace test    {
           focus.navigate (til);
           CHECK (til.getBinding() == focus.getObject());
           CHECK (rootFork == *(focus.children()));
-#endif //////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #546              
+#endif //////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #546
         }
     };
   

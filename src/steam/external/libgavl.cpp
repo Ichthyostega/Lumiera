@@ -43,12 +43,12 @@ namespace external {
     
     namespace { // internal functionality
     
-        LifecycleHook _register_gavl_types_ (ON_STREAMTYPES_RESET, &provide_GAVL_stream_implementation_types);         
+        LifecycleHook _register_gavl_types_ (ON_STREAMTYPES_RESET, &provide_GAVL_stream_implementation_types);
     }
   
   
-  /** 
-   * Use an type information struct, which actually has to be 
+  /**
+   * Use an type information struct, which actually has to be
    * a GAVL frame type (TODO), to wire up an ImplFacade such
    * as to deal with GAVL data frames of this type.
    * @todo fill in the actual GAVL frame type

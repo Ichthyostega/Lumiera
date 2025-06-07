@@ -36,7 +36,7 @@ namespace test    {
     
     Scope const&
     fabricate_invalidScope()
-    {        /** 
+    {        /**
               * assumed to have identical memory layout
               * to a Scope object, as the latter is implemented
               * by a PlacementRef, which in turn is just an

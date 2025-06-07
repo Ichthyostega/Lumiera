@@ -17,7 +17,7 @@
  ** @todo draft from the early days of the Lumiera project, reworked in 2009
  **       Development activity in that area as stalled ever since. In the end,
  **       it is highly likely we'll _indeed need_ a node factory though...
- ** @todo WIP-WIP 2024 to be reworked from ground up for the »Playback Vertical Slice«      
+ ** @todo WIP-WIP 2024 to be reworked from ground up for the »Playback Vertical Slice«
  */
 
 

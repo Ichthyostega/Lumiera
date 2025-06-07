@@ -57,7 +57,7 @@ namespace lib {
        * install a zombie check, tagged with the given id.
        * When invoked after death, the raised error::Fatal
        * includes this ID in the diagnostic message.
-       * @remark recommended to use util::typeStr 
+       * @remark recommended to use util::typeStr
        */
       ZombieCheck (string id)
         {

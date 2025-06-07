@@ -40,7 +40,7 @@ namespace asset {
    * top-level distinction of different Kinds of Assets.
    * For convenience, this classification is slightly denormalised,
    * as AUDIO, and VIDEO are both asset::Media objects, EFFECT and CODEC
-   * are asset::Proc objects, while STRUCT and META refer directly to 
+   * are asset::Proc objects, while STRUCT and META refer directly to
    * the corresponding Interfaces asset::Struct and asset::Meta.
    */
   enum Kind
@@ -60,7 +60,7 @@ namespace asset {
    * @remark the path in the tree constitutes a type classification scheme
    * @todo could be far more elaborate. could be a singleton like centralised tree, while
    *       just holding references to Category nodes in the individual Asset. At the moment,
-   *       we just use the most simplistic implementation and handle Category objects 
+   *       we just use the most simplistic implementation and handle Category objects
    *       using value semantics.
    */
   class Category
@@ -73,8 +73,8 @@ namespace asset {
       Category (const Kind root, Literal subfolder ="")
         : kind_(root), path_(subfolder) {};
       
-      bool operator== (Category const& other) const { return kind_== other.kind_ && path_== other.path_; }
-      bool operator!= (Category const& other) const { return kind_!= other.kind_ || path_!= other.path_; }
+      bool operator== (Category const& other) const { return kind_== other.kind_ and path_== other.path_; }
+      bool operator!= (Category const& other) const { return kind_!= other.kind_ or  path_!= other.path_; }
       
       bool hasKind  (Kind refKind)    const         { return kind_ == refKind; }
       bool isWithin (Category const&) const;
@@ -90,7 +90,7 @@ namespace asset {
       compare (Category const& co)  const
         {
           int res = int(kind_) - int(co.kind_);
-          if (0 != res) 
+          if (0 != res)
             return res;
           else
             return path_.compare (co.path_);

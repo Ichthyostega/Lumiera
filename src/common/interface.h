@@ -28,13 +28,13 @@
  ** number of macros here which ease this process.
  **
  ** The interface is declared by placing the following macro in a
- ** header file: 
+ ** header file:
  ** \code
  **  LUMIERA_INTERFACE_DECLARE(name, version,
  **                            LUMIERA_INTERFACE_SLOT(ret, name, params),
  **                            ...
  **                           )
- ** 
+ **
  ** \endcode
  ** Any code that wants to use this interface must then include the header file.
  **
@@ -51,7 +51,7 @@
  **
  ** A collection of interfaces can be defined in 2 different ways depending on
  ** where whether the interface is exported by the core, or by a plugin:
- ** \code 
+ ** \code
  ** LUMIERA_EXPORT(queryfunc,
  **                LUMIERA_INTERFACE_DEFINE(...),
  **                ...

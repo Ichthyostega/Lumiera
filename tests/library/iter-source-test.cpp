@@ -83,10 +83,10 @@ namespace test{
         virtual void
         nextResult (Pos& pos)  override
           {
-            if (pos && *pos && **pos)
+            if (pos and *pos and **pos)
               ++(*pos);
             
-            if (!(pos && *pos && **pos))
+            if (!(pos and *pos and **pos))
               pos = 0;
           }
         
@@ -282,11 +282,11 @@ namespace test{
           StringIter sIter = eachMapKey (testMap);
           TimeIter   tIter = eachMapVal (testMap);
           
-          CHECK (sIter && tIter);
+          CHECK (sIter and tIter);
           pullOut (sIter);
           pullOut (tIter);
           
-          CHECK (!sIter && !tIter);
+          CHECK (not sIter and not tIter);
           
           
           // The each-value-for-given-key-Iterator can be used for a map or multimap.

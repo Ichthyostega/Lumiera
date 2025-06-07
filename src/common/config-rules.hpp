@@ -15,7 +15,7 @@
 /** @file config-rules.hpp
  ** Interface for accessing rule based configuration.
  ** By using the Query template, you can pose a query in prolog syntax and get some
- ** existing or newly created object fulfilling the requested predicates. The actual 
+ ** existing or newly created object fulfilling the requested predicates. The actual
  ** implementation will be hidden behind a `instance` (Singleton factory). As of 1/2008,
  ** it is _planned_ to use an embedded YAP Prolog system at some point in the future,
  ** for now we use a [mock implementation](\ref fake-configrules.hpp) based on lookup in
@@ -43,7 +43,7 @@
  **
  ** @see lumiera::Query
  ** @see mobject::session::DefsManager
- ** @see asset::StructFactory 
+ ** @see asset::StructFactory
  ** @see config-resolver.hpp specialised setup for the Steam-Layer
  ** @see fake-configrules.hpp currently used dummy-implementation
  **
@@ -117,12 +117,12 @@ namespace lumiera {
     /**
      * the "back side" interface towards the classes participating
      * in the configuration system (the config system will be
-     * delivering instances of these classes for a given query). 
+     * delivering instances of these classes for a given query).
      * This one currently is just brainstorming. The idea is that
      * a participating class would provide such  and TypeHandler
      * implementing the predicates which make sense for this special
      * type of object. Registering  such a TypeHandler should create
-     * the necessary handler functions to be installed into 
+     * the necessary handler functions to be installed into
      * the Prolog system.
      * @deprecated it can't be done exactly this way, but I leave it in the
      *       current shape as a reminder for later, to show the intention...
@@ -140,11 +140,11 @@ namespace lumiera {
         TY make (Pred<SYM,SIG> capability, TY& refObj =NIL);
       };
     
-    /** 
+    /**
      * the "front side" interface: the Steam-Layer code can
      * use this QueryHandler to retrieve instances of the
      * type TY fulfilling the given Query. To start with,
-     * we use a mock implementation. 
+     * we use a mock implementation.
      * (this code works and is already used 2/2008)
      * @todo retrofit this to install and use a QueryResolver
      * @see lumiera::query::LookupPreconfigured
@@ -156,7 +156,7 @@ namespace lumiera {
       protected:
         virtual ~QueryHandler()  { }
       public:
-        /** try to find or create an object of type TY 
+        /** try to find or create an object of type TY
          *  fulfilling the given query.
          *  @param solution object fulfilling the query. Will be bound or
          *         unified (in case it's already bound) with the first solution.
@@ -176,16 +176,16 @@ namespace lumiera {
       
       
       
-    /** 
+    /**
      * Generic query interface for retrieving objects matching
      * some capability query. To be instantiated using a typelist,
      * thus inheriting from the Handler classes for each type. In
      * the (future) version using YAP Prolog, this will drive the
-     * generation and registration of the necessary predicate 
+     * generation and registration of the necessary predicate
      * implementations for each concrete type, using the specialisations
      * given alongside with the types. For now it just serves to generate
      * the necessary resolve(Query<TY>) virtual functions (implemented
-     * by MockConfigRules) 
+     * by MockConfigRules)
      */
     template<typename TYPES>
     class ConfigRules
@@ -193,7 +193,7 @@ namespace lumiera {
       {
       protected:
         ConfigRules ()         {}
-        virtual ~ConfigRules() {} 
+        virtual ~ConfigRules() {}
         
       public:
         /** roll back to a pristine yet operational state.

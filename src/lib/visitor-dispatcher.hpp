@@ -42,14 +42,14 @@ namespace visitor {
   
   
   template<class TOOL, class TOOLImpl>
-  struct TagTypeRegistry 
+  struct TagTypeRegistry
     {
       static Tag<TOOL> tag;
     };
     
   /**
    * Type tag for concrete visiting tool classes.
-   * Used to access the previously registered dispatcher 
+   * Used to access the previously registered dispatcher
    * trampoline function when handling a visitor invocation.
    */
   template<class TOOL>
@@ -86,7 +86,7 @@ namespace visitor {
   
   /** storage for the Tag registry for each concrete tool */
   template<class TOOL, class TOOLImpl>
-  Tag<TOOL> TagTypeRegistry<TOOL,TOOLImpl>::tag; 
+  Tag<TOOL> TagTypeRegistry<TOOL,TOOLImpl>::tag;
   
   template<class TOOL>
   size_t Tag<TOOL>::lastRegisteredID (0);
@@ -108,19 +108,19 @@ namespace visitor {
   template<class TAR, class TOOL>
   class Dispatcher
     {
-      typedef typename TOOL::ReturnType ReturnType;
+      using ReturnType = typename TOOL::ReturnType;
       
       /** generator for Trampoline functions,
-       *  used to dispatch calls down to the 
+       *  used to dispatch calls down to the
        *  right "treat"-Function on the correct
        *  concrete tool implementation class
        */
       template<class TOOLImpl>
-      static ReturnType 
+      static ReturnType
       callTrampoline (TAR& obj, TOOL& tool)
         {
           // cast down to real implementation type
-          REQUIRE (INSTANCEOF (TOOLImpl, &tool));  
+          REQUIRE (INSTANCEOF (TOOLImpl, &tool));
           TOOLImpl& toolObj = static_cast<TOOLImpl&> (tool);
           
           // trigger (compile time) overload resolution
@@ -146,11 +146,11 @@ namespace visitor {
       
       inline bool
       is_known (size_t id)
-        { 
-          return id<=table_.size() && table_[id-1]; 
+        {
+          return id<=table_.size() and table_[id-1];
         }
       
-      inline void 
+      inline void
       storePtr (size_t id, Trampoline func)
         {
           REQUIRE (func);
@@ -160,10 +160,10 @@ namespace visitor {
           table_[id-1] = func;
         }
       
-      inline Trampoline 
+      inline Trampoline
       storedTrampoline (size_t id)
         {
-          if (id<=table_.size() && table_[id-1])
+          if (id<=table_.size() and table_[id-1])
             return table_[id-1];
           else
             return &errorHandler;
@@ -179,16 +179,16 @@ namespace visitor {
     public:
       static Depend<Dispatcher<TAR,TOOL>> instance;
       
-      inline ReturnType 
+      inline ReturnType
       forwardCall (TAR& target, TOOL& tool)
         {
-          // get concrete type via tool's VTable 
+          // get concrete type via tool's VTable
           Tag<TOOL> index = tool.getTag();
           return (*storedTrampoline(index)) (target, tool);
         }
       
       template<class TOOLImpl>
-      inline void 
+      inline void
       enrol(TOOLImpl* typeref)
         {
           Tag<TOOL>& index = Tag<TOOL>::get (typeref);
@@ -199,7 +199,6 @@ namespace visitor {
               Trampoline func = &callTrampoline<TOOLImpl>;
               storePtr (index, func);
             }
-            
         }
     };
   

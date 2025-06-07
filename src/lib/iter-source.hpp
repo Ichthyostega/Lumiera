@@ -1,5 +1,5 @@
 /*
-  ITER-SOURCE.hpp  -  an interface to build an opaque iterator-based data source 
+  ITER-SOURCE.hpp  -  an interface to build an opaque iterator-based data source
 
    Copyright (C)
      2010,            Hermann Vosseler <Ichthyostega@web.de>
@@ -30,7 +30,7 @@
  ** Using this WrappedLumieraIter, the details of this wrapped source iterator
  ** remain opaque. To ease the use of this adapter, a selection of free functions
  ** is provided, allowing to build opaque "all elements" or "all keys" iterators
- ** for various STL containers. 
+ ** for various STL containers.
  ** 
  ** @see iter-adapter.hpp
  ** @see itertool.hpp
@@ -81,8 +81,8 @@ namespace lib {
       
     protected: /* == data source API to implement == */
       
-      typedef TY* Pos;
-      typedef shared_ptr<IterSource> DataHandle;
+      using Pos = TY*;
+      using DataHandle = shared_ptr<IterSource>;
       
                                                               ///////////////////////////////////////////////TICKET #1125 : this API should use three control functions, similar to IterStateWrapper
       /** iteration start: prepare the first element.
@@ -326,8 +326,8 @@ namespace lib {
           // we can strip the const added by the STL map types
           using KeyType = typename std::remove_const<ConstKeyType>::type;
           
-          typedef TransformIter<Src, KeyType> KeyIter;
-          typedef TransformIter<Src, ValType> ValIter;
+          using KeyIter = TransformIter<Src, KeyType>;
+          using ValIter = TransformIter<Src, ValType>;
           
           static KeyType  takeFirst (PairType const& pair) { return pair.first; }
           static ValType  takeSecond(PairType const& pair) { return pair.second;}
@@ -395,8 +395,8 @@ namespace lib {
     typename _TransformIterT<IT,FUN>::Iter
     transform (IT&& source, FUN processingFunc)
     {
-      typedef typename _TransformIterT<IT,FUN>::ResVal    ValType;
-      typedef typename _TransformIterT<IT,FUN>::TransIter TransIT;
+      using ValType = typename _TransformIterT<IT,FUN>::ResVal;
+      using TransIT = typename _TransformIterT<IT,FUN>::TransIter;
       
       return IterSource<ValType>::build (
           new WrappedLumieraIter<TransIT> (
@@ -466,8 +466,8 @@ namespace lib {
     
     
     /** @param container a STL-like container, providing
-     *         - a typedef \c iterator
-     *         - functions \c begin() and \c end()
+     *         - a typedef `iterator`
+     *         - functions `begin()` and `end()`
      *  @return a Lumiera Forward Iterator yielding all values
      *          starting with \c begin and excluding \c end .
      */

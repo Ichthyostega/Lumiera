@@ -1,5 +1,5 @@
 /*
-  SUBSYSTEMRUNNER.hpp  -  helper for controlling execution of several dependent subsystems 
+  SUBSYSTEMRUNNER.hpp  -  helper for controlling execution of several dependent subsystems
 
    Copyright (C)
      2008,            Hermann Vosseler <Ichthyostega@web.de>

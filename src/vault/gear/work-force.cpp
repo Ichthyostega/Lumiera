@@ -60,7 +60,7 @@ namespace gear {
    * When a worker is kicked out from processing due to contention, the immediate
    * reaction is to try again; if this happens repeatedly however, increasingly strong
    * delays are interspersed. Within the _weak zone,_ a short spinning wait is performed,
-   * and then the thread requests a `yield()` from the OS scheduler; this cycle is repeated. 
+   * and then the thread requests a `yield()` from the OS scheduler; this cycle is repeated.
    */
   void
   work::performRandomisedSpin (size_t stepping, size_t randFact)

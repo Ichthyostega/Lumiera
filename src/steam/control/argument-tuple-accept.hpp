@@ -185,11 +185,11 @@ namespace control {
   template<typename SIG, class TAR, class BASE =bind_arg::Dummy>
   class AcceptArgumentBinding
     : public bind_arg::AcceptBind<TAR,BASE, typename bind_arg::_Type<SIG>::Ret
-                                          , typename bind_arg::_Type<SIG>::Args>   
+                                          , typename bind_arg::_Type<SIG>::Args>
     { };
   
-    
-  /** Variation of AcceptArgumentBinding, allowing to control the return type 
+  
+  /** Variation of AcceptArgumentBinding, allowing to control the return type
    *  of the generated \c bind(...) functions independently from SIG
    */
   template<typename RET, typename SIG, class TAR, class BASE =bind_arg::Dummy>
@@ -201,7 +201,7 @@ namespace control {
   
   /** Helper Template for control::Command, mix-in complete set of \c bind(...) functions
    *  @param TAR  the target class providing a function \c bindArg(Tuple<Types<T1...> >)
-   *  @param RET  common return type of \c bindArg() and all \c bind() functions  
+   *  @param RET  common return type of \c bindArg() and all \c bind() functions
    *  @param BASE the base class for inheritance chaining
    */
   template< class TAR

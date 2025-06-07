@@ -13,7 +13,7 @@
 
 
 /** @file visitor-policies.hpp
- ** Policies usable for configuring the lib::visitor::Tool for different kinds of error handling. 
+ ** Policies usable for configuring the lib::visitor::Tool for different kinds of error handling.
  ** @see buildertool.hpp for another flavour (calling an catch-all-function there)
  **
  */
@@ -29,7 +29,7 @@
 namespace lib {
 namespace visitor {
   
-  /** 
+  /**
    * Policy returning just the default return value in case
    * of encountering an unknown Visitor (typically caused by
    * adding a new class to the visitable hierarchy)
@@ -38,21 +38,21 @@ namespace visitor {
   struct UseDefault
     {
       template<class TAR>
-      RET 
+      RET
       onUnknown (TAR&)
         {
           return RET();
         }
     };
   
-  /** 
+  /**
    * Policy to throw when encountering an unknown visiting tool
    */
   template<class RET>
   struct ThrowException
     {
       template<class TAR>
-      RET 
+      RET
       onUnknown (TAR&)
         {
           throw lumiera::error::Config("unable to decide what tool operation to call");

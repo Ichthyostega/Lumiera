@@ -17,7 +17,7 @@
  ** 
  ** @see lumiera::Display
  ** @see lumiera::DummyPlayer
- ** @see stage::PlaybackController usage example 
+ ** @see stage::PlaybackController usage example
  */
 
 

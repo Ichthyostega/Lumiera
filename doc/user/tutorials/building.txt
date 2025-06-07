@@ -54,7 +54,7 @@ in addition to the following tools and libraries:
  * link:http://www.boost.org/[Boost libraries]
  * link:http://gmerlin.sourceforge.net/[GAVL library]
  * link:http://nobug.pipapo.org/[NoBug] (see below)
- * Lumiera source code 
+ * Lumiera source code
 
 The GUI depends on the following:
 
@@ -83,7 +83,7 @@ Build Directory
 You'll need to check out the source code in some directory or other. You'll also
 have to use this directory to build Lumiera. This could be a temporary
 directory, or some "workspace" directory below your home directory. We'll refer
-to this directory as _workspace directory_ . 
+to this directory as _workspace directory_ .
 
 
 Lumiera Specific Libraries
@@ -110,7 +110,7 @@ NoBug: building and installing
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 link:http://nobug.pipapo.org/[NoBug] is an instrumentation and diagnostics library. +
-Enter _workspace direcory_ as explained above. 
+Enter _workspace direcory_ as explained above.
 Get the NoBug source code:
 
 ------------------------------------------------------------
@@ -140,7 +140,7 @@ the following shows how to build the latter
 Version limitation::
   we rely on GTK-3 and thus need a compatible GDL-3.
 
-There is a dependency on `xmlto`, which is an xml converter. To install on Debian: 
+There is a dependency on `xmlto`, which is an xml converter. To install on Debian:
 
 ------------------------------------------------------------
 apt-get install xmlto

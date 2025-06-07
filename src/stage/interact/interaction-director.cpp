@@ -321,7 +321,7 @@ namespace interact {
          )    )
         throw error::State (_Fmt{"When populating a new Timeline, a root track must be given immediately"
                                  "nested into INS message. We got the following initialisation payload: %s"}
-                                % spec                      
+                                % spec
                            , LERR_(DIFF_STRUCTURE));
       
       return spec.data.get<Rec>().get(string{ATTR_fork}).idi;

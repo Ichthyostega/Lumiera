@@ -37,10 +37,10 @@ namespace test {
    */
   class BuildSegment_test : public Test
     {
-      virtual void run(Arg) 
+      virtual void run(Arg)
         {
           UNIMPLEMENTED ("oh my");
-        } 
+        }
     };
   
   

@@ -138,9 +138,9 @@ namespace asset {
    *  @return an Media smart ptr linked to the internally registered smart ptr
    *          created as a side effect of calling the concrete Media subclass ctor.
    */
-  MediaFactory::PType 
+  MediaFactory::PType
   MediaFactory::operator() (Asset::Ident& key, const string& file)
-  { 
+  {
     asset::Media* pM (0);
     AssetManager& aMang = AssetManager::instance();
     
@@ -164,51 +164,51 @@ namespace asset {
         Duration length = handle.length;
         
         //////////////////////////////////////////////////////////TICKET #841 detecting and wiring multichannel compound media
-        pM = new Media (key,file,length); 
+        pM = new Media (key,file,length);
       }
     ASSERT (pM);
-    ENSURE (key.category.hasKind (VIDEO) || key.category.hasKind(AUDIO));
-    ENSURE (!isnil (key.name));
-    ENSURE (dynamic_cast<Media*>(pM) || (isnil (file) && dynamic_cast<Unknown*>(pM)));
+    ENSURE (key.category.hasKind (VIDEO) or key.category.hasKind(AUDIO));
+    ENSURE (not isnil (key.name));
+    ENSURE (dynamic_cast<Media*>(pM) or (isnil (file) and dynamic_cast<Unknown*>(pM)));
     
-    return aMang.getAsset (pM->getID());  // note: because we query with an ID<Media>, 
+    return aMang.getAsset (pM->getID());  // note: because we query with an ID<Media>,
                                          //        we get a Media smart ptr.    
   }
 
   
-  /** Variant of the Factory method for Media Assets, automatically 
+  /** Variant of the Factory method for Media Assets, automatically
    *  providing most of the Asset key fields based on the filename given
    */
   MediaFactory::PType 
   MediaFactory::operator() (const string& file, const Category& cat)
-  { 
+  {
     Asset::Ident key(extractName(file), cat, "lumi", 1);
     return operator() (key, file);
   }
   
-  MediaFactory::PType 
+  MediaFactory::PType
   MediaFactory::operator() (const string& file, asset::Kind kind)
-  { 
+  {
     Category cat(kind);
     return operator() (file, cat);
   }
 
   
-  MediaFactory::PType 
+  MediaFactory::PType
   MediaFactory::operator() (const char* file, const Category& cat)
-  { 
+  {
     if (!file) file = "";
     return operator() (string(file),cat);
   }
   
   MediaFactory::PType 
   MediaFactory::operator() (const char* file, asset::Kind kind)
-  { 
+  {
     if (!file) file = "";
     return operator() (string(file),kind);
   }
   
-  MediaFactory::PType 
+  MediaFactory::PType
   MediaFactory::operator() (Asset::Ident& key, const char* file)
   {
     if (!file) file = "";
@@ -220,7 +220,7 @@ namespace asset {
    *  on the given Media asset. This asset::Clip can be used
    *  to create a clip in the session covering the whole length
    *  of this media.
-   *  @note  creates a dependency between media and new clip 
+   *  @note  creates a dependency between media and new clip
    *  @throw Invalid if the given media asset is not top-level,
    *         but rather part or a multichannel (compound) media
    */
@@ -230,7 +230,7 @@ namespace asset {
     if (mediaref.checkCompound())
       throw error::Invalid (_Fmt("Attempt to create a asset::Clip from the media %s, "
                                  "which is not toplevel but rather part of a compound "
-                                 "(multichannel) media. Found parent Media %s.") 
+                                 "(multichannel) media. Found parent Media %s.")
                                  % mediaref
                                  % *mediaref.checkCompound()
                            ,LUMIERA_ERROR_PART_OF_COMPOUND);

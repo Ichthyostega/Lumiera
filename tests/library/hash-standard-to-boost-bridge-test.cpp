@@ -182,7 +182,7 @@ namespace test{
           
 //  Note: does not compile,
 //        since there is not automatic bridge to use std::hash from boost::hash
-//  
+//
 //        boost::hash<S>()(s);
         }
       

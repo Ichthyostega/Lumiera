@@ -21,7 +21,7 @@
  ** session lifecycle. Besides that, no actual implementation code is to be found
  ** here; any implementation is delegated to the relevant session facilities.
  ** 
- ** The idea of a LifecycleAdvisor is inspired by GUI frameworks, especially 
+ ** The idea of a LifecycleAdvisor is inspired by GUI frameworks, especially
  ** Spring RichClient. Typically, such frameworks provide a means for flexible
  ** configuration of the application lifecycle. Configurability isn't the primary
  ** goal here, as there is only one Lumiera application and the session lifecycle

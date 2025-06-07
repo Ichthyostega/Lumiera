@@ -91,7 +91,7 @@ namespace engine {
    * @note engine::BufferMetadata uses a TypeHandler to represent any
    *       special treatment of a buffer space. When defined, the buffer
    *       will be prepared on locking and cleanup will be invoked
-   *       automatically when releasing. 
+   *       automatically when releasing.
    * @warning comparison and hash values are based merely on the type
    *       of the Ctor and Dtor functions -- so all type handlers bound
    *       to the same functor type count as equivalent. This might not
@@ -103,7 +103,7 @@ namespace engine {
    */
   struct TypeHandler
     {
-      typedef function<void(void*)> DoInBuffer;
+      using DoInBuffer = function<void(void*)>;
       
       DoInBuffer createAttached;
       DoInBuffer destroyAttached;
@@ -166,7 +166,7 @@ namespace engine {
       operator== (TypeHandler const& left, TypeHandler const& right)
       {
         return (not left.isValid() and not right.isValid())
-            || (left.identity == right.identity);
+            or (left.identity == right.identity);
       }
       friend bool
       operator!= (TypeHandler const& left, TypeHandler const& right)

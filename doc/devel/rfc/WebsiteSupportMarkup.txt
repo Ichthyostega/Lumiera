@@ -39,8 +39,8 @@ Authoring::
   is finished or in the final stages of completion. It is crucial for this
   activity not to impose a _context switch_  on the writer. It must be ``just
   writing down the obvious'' -- otherwise developers tend to defer this activity
-  ``for later''. This situation creates some unique problems... 
-  
+  ``for later''. This situation creates some unique problems...
+
   - during the write-up, the coder-author realises several external presuppositions, which,
     during the act of coding, seemed to be ``obvious'' and ``self evident''.
   - since expanding on all of those secondary topics is out of scope (the author would rather
@@ -50,7 +50,7 @@ Authoring::
     nor hunt for URLs; the author is disinclined to consult a markup syntax
     reference. This arises from the nature of the required text which is
     essentially difficult to grasp in the first place and even more difficult
-    too put into words. A task requiring full mental concentration. 
+    too put into words. A task requiring full mental concentration.
 
 
 Integrating Content::
@@ -59,7 +59,7 @@ Integrating Content::
   Thus, some existing markup is extracted from an external system and pasted into some location,
   ``just for the moment''. Of course, this content will be forgotten and rest there for
   years to come. To counter act such a situation, we propose the following:
-  
+
   - structural cross-references of the integrated markup needs to be easy to do.
   - a way in which we can somehow hook the new content into our current scheme
     of categories
@@ -72,7 +72,7 @@ Editorial work::
   trees of pages, even splitting some of them, and adding introductory paragraphs and pages here and
   there -- all without the ability to read or understand any of the reviewed
   material to any degree of depth.
-  
+
   - this work will be performed on the primary content using its ``natural'' representation: that is,
     the editor will copy and move files in the file system and edit text. There is no room for using
     any external system (unless such an external system is a fully integrated authoring environment).
@@ -96,7 +96,7 @@ to the markup for setting an external link, e.g. `link:SomeTopic[see the explana
 Variations and extensions
 
 - we might consider detecting _CamelCaseWords_. This has some Pros and Cons. If we do so, we need some
-  easy to use escape mechanism, and this CamelCase detection must not trigger within code examples and 
+  easy to use escape mechanism, and this CamelCase detection must not trigger within code examples and
   other kinds of literal quotes.
 - specifying the displayed link text should be optional
 - we might consider adding some domain prefixes, e.g. +link:rfc:SomeTopic+ or +link:ticket:SomeTopic+
@@ -129,7 +129,7 @@ to take precedence.
 Definition entries
 ^^^^^^^^^^^^^^^^^^
 Define a suitable format to promote an existing piece of information into a *definition*. While not
-interfering with the presentation at the textual location of this definition, the mechanism should support the  
+interfering with the presentation at the textual location of this definition, the mechanism should support the
 possibility of providing a definition in the source which is then extracted from the text and presented
 in a new file as, for example, a glossary of terms. It would be nice if such a generated glossary could
 provide an automatic back-link to the location where the definition was picked up initially.
@@ -197,7 +197,7 @@ Alternatives
 
 . _using a mature CMS_: this is what most people do, so it can't be uttermost wrong. +
   Yet still, the benefits of running a CMS need to outweigh the known problems, especially
-  
+
   * lock-in, ``insular'' ecosystem, being tied to the evolution of a platform ``not invented here''
   * separation from the code tree, lack of seamless SCM integration
   * the general penalties of using a database backed system

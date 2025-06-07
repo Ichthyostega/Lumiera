@@ -1,5 +1,5 @@
 /*
-  assets-panel.hpp  -  Definition of the assets panel            
+  assets-panel.hpp  -  Definition of the assets panel
 
    Copyright (C)
      2008,            Joel Holdsworth <joel@airwebreathe.org.uk>

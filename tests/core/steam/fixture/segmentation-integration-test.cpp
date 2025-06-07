@@ -85,14 +85,14 @@ namespace test  {
    *       - integration with AllocationCluster memory managment
    * @todo 2010 ⁐ 2023 a sketch for a test setup, which was meanwhile elaborated
    *       into the DummyPlayConnection; indeed such a component integration test
-   *       is still required to document and cover the fixture data structure.... 
+   *       is still required to document and cover the fixture data structure....
    * @see  mobject::builder::FixtureChangeDetector
    */
   class SegmentationIntegration_test : public Test
     {
       
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           TestContext ctx;
         }

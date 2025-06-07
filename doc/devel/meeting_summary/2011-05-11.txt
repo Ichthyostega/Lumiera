@@ -10,7 +10,7 @@ __Participants__
  * cehteh
  * ichthyo
  * daylife
- 
+
 _Transcript prepared by Ichthyo_
 
 
@@ -84,7 +84,7 @@ IRC Transcript
 .-- Engine Interface ⟺ Scheduler Interface --
 [caption="☉Transcript☉ "]
 ----------------------------
-[2011-05-11 22:08:54] <cehteh> ichthyo: how do we want to proceed with the engine interface, 
+[2011-05-11 22:08:54] <cehteh> ichthyo: how do we want to proceed with the engine interface,
                                discuss it point by point or only a overview and edit comments in the rfc?
 [2011-05-11 22:09:08] <ichthyo> well I thought rather the latter...its a rough draft
 [2011-05-11 22:10:52] <cehteh> well generally i agree with your proposal (i'm just reading it)
@@ -95,7 +95,7 @@ IRC Transcript
 [2011-05-11 22:13:20] <cehteh> well your proposal sounded like constants (to be defined)
 [2011-05-11 22:13:35] <ichthyo> yes, its constants, but it seems natural to extend that
 [2011-05-11 22:13:47] <cehteh> i think about a functor or even a trait-class where you can query things
-[2011-05-11 22:14:19] <cehteh> this class can then react more dynamic 
+[2011-05-11 22:14:19] <cehteh> this class can then react more dynamic
 [2011-05-11 22:14:22] <ichthyo> ok, yes, so that you could e.g. combine several independent degrees of freedom
 [2011-05-11 22:14:31] <cehteh> yes
 [2011-05-11 22:16:02] <cehteh> then we can ask precisely "shall we render this frame now?"...
@@ -134,7 +134,7 @@ IRC Transcript
 ----------------------------
 [2011-05-11 22:22:49] <ichthyo> e.g think about the following scenario:
 [2011-05-11 22:23:06] <ichthyo> we're in the middle of playing, and now we want to switch to double speed playback
-[2011-05-11 22:23:39] <cehteh> yes then the player cancels every other frame job and changes its timebase 
+[2011-05-11 22:23:39] <cehteh> yes then the player cancels every other frame job and changes its timebase
 [2011-05-11 22:23:56] <cehteh> or instead canceling it could put them on a lower priority
 [2011-05-11 22:24:01] <ichthyo> that means, the player/scheduler/whatever needs to find out a point in time,
                                 *when* this switch can be performed
@@ -178,7 +178,7 @@ IRC Transcript
 [2011-05-11 22:35:14] <cehteh> then rescheduling automatically walks all dependencies, reschedules them too
                                and by that it can already see if we can met timing constraints
 [2011-05-11 22:36:37] <cehteh> the 'reschedule' can answer if rescheduling is possible
-[2011-05-11 22:37:07] <cehteh> so you just iterate over all frame-job to be rescheduled from shortest to longest time 
+[2011-05-11 22:37:07] <cehteh> so you just iterate over all frame-job to be rescheduled from shortest to longest time
 [2011-05-11 22:37:36] <cehteh> the most urgend reschedules may return "hey this job is already running, cant reschedule"
 [2011-05-11 22:37:49] <cehteh> or even "already done, nothing to do"
 [2011-05-11 22:38:03] <cehteh> to "sorry, cant do that dave"
@@ -227,16 +227,16 @@ IRC Transcript
 [2011-05-11 22:52:09] <cehteh> nah not only reference data i am really thinking that jobs have absolutely
                                no references into the session
 [2011-05-11 22:52:18] <cehteh> they have references into the backend data
-[2011-05-11 22:52:23] <cehteh> but these are managed there 
+[2011-05-11 22:52:23] <cehteh> but these are managed there
 [2011-05-11 22:52:37] <cehteh> while closing a session doesnt require to shutdown the backend
 [2011-05-11 22:53:01] <ichthyo> well, so to clarify that: there *is* some kind of back reference for sure.
                                 Just it isn't direct. See for example: a job references an exit node
 [2011-05-11 22:53:35] <ichthyo> and it references an output slot
-[2011-05-11 22:53:38] <cehteh> really? 
+[2011-05-11 22:53:38] <cehteh> really?
 [2011-05-11 22:53:47] <cehteh> how about a functor there
 [2011-05-11 22:53:50] <ichthyo> both are things which are somehow allocated from the session
 [2011-05-11 22:53:55] <cehteh> jobs references a continutation job
-[2011-05-11 22:54:16] <cehteh> which is an abstraction of the exit node 
+[2011-05-11 22:54:16] <cehteh> which is an abstraction of the exit node
 [2011-05-11 22:54:36] <cehteh> well anyways .. the callback *is* trivially possible
 [2011-05-11 22:54:48] <cehteh> but do not expect that i want to do rescheduling for aborting jobs
 [2011-05-11 22:55:30] <ichthyo> well... as said: jobs can't be aborted
@@ -360,7 +360,7 @@ IRC Transcript
                                (and later easily adaptable/extendable to new technologies)
 [2011-05-11 23:32:01] <ichthyo> I'd rather doubt that. In all those cases, we're using already existing
                                 libraries and solutions. and we're rather integrating with them
-[2011-05-11 23:32:23] <cehteh> yes so there is no much effort doing so .. 
+[2011-05-11 23:32:23] <cehteh> yes so there is no much effort doing so ..
 [2011-05-11 23:32:54] <ichthyo> that extends even more to the media libs, we're intend to use
 [2011-05-11 23:32:55] <cehteh> but since the backend always knows what memory is in use it can do a clean shutdown
 [2011-05-11 23:33:18] <cehteh> without all this callbacks and asyncronous messages
@@ -395,7 +395,7 @@ IRC Transcript
 [2011-05-11 23:44:51] <ichthyo> do our jobs have some mechanism to 'yield' or wait or similar?
 [2011-05-11 23:45:10] <ichthyo> i.e. go in a wait state (and make room for other jobs to be scheduled meanwhile)?
 [2011-05-11 23:45:34] <cehteh> waiting on other jobs
-[2011-05-11 23:45:49] <cehteh> i am thinking if i make a generic waiting or only on jobs 
+[2011-05-11 23:45:49] <cehteh> i am thinking if i make a generic waiting or only on jobs
 [2011-05-11 23:45:54] <ichthyo> so you call into a funciton on the lumiera scheduler
 [2011-05-11 23:45:55] <cehteh> i think only on jobs is good
 [2011-05-11 23:46:06] <ichthyo> which blocks and reschedules other jobs meanwhile?
@@ -403,15 +403,15 @@ IRC Transcript
 [2011-05-11 23:46:34] <ichthyo> just brainstorming
 [2011-05-11 23:46:45] <ichthyo> both is thinkable
 [2011-05-11 23:46:56] <ichthyo> also it would be thinkable that we disallow any waits
-[2011-05-11 23:47:03] <cehteh> nope i do not want that, rather split the jobs up into small pieces 
-[2011-05-11 23:47:13] <ichthyo> and just say, then the job function has to terminate and another job has to pick up 
+[2011-05-11 23:47:03] <cehteh> nope i do not want that, rather split the jobs up into small pieces
+[2011-05-11 23:47:13] <ichthyo> and just say, then the job function has to terminate and another job has to pick up
 [2011-05-11 23:47:27] <cehteh> yes thats possible
-[2011-05-11 23:48:00] <cehteh> but when a job runs it runs until its done (which might be a errorneous/abort on its own) 
+[2011-05-11 23:48:00] <cehteh> but when a job runs it runs until its done (which might be a errorneous/abort on its own)
 [2011-05-11 23:48:20] <cehteh> after running a job wont become rescheduled
 [2011-05-11 23:48:49] <cehteh> if it turns out we need a yield i could implement it .. but not prematurely
 [2011-05-11 23:49:44] <ichthyo> but likely for our purposes we don't even need that
 [2011-05-11 23:50:16] <cehteh> yes and thats not domain of the scheduler
-[2011-05-11 23:50:32] <cehteh> jobs can block anyways 
+[2011-05-11 23:50:32] <cehteh> jobs can block anyways
 [2011-05-11 23:50:40] <cehteh> in running state
 [2011-05-11 23:50:53] <cehteh> no need to put them on a wait queue or whatever
 [2011-05-11 23:51:31] <ichthyo> but of course the goal is to write them such that they don't block
@@ -445,8 +445,8 @@ IRC Transcript
 [2011-05-12 00:02:59] <ichthyo> the engine interface needs something like these calculation streams
 [2011-05-12 00:03:19] <ichthyo> that means, that  the individual job needs to cary a marker, so it can be associated
                                 to a specific stream
-[2011-05-12 00:02:59] <cehteh> first, asking the backend for a frame 
-[2011-05-12 00:03:58] <cehteh> i add at least one generic void* to the job where you can put any data along 
+[2011-05-12 00:02:59] <cehteh> first, asking the backend for a frame
+[2011-05-12 00:03:58] <cehteh> i add at least one generic void* to the job where you can put any data along
 [2011-05-12 00:04:12] <cehteh> type safety on the level above please :P
 [2011-05-12 00:05:20] <ichthyo> I'm fine with that
 [2011-05-12 00:05:27] <cehteh> (caveat about the lifetime and ownership of this void*)
@@ -455,7 +455,7 @@ IRC Transcript
 (...)
 
 [2011-05-12 00:10:44] <cehteh> next would be a interface how to setup a job... possibly in multiple stages
-[2011-05-12 00:11:59] <cehteh> job_new(); job_wait_for(another_job); job_data()=some_calculation_stream;   
+[2011-05-12 00:11:59] <cehteh> job_new(); job_wait_for(another_job); job_data()=some_calculation_stream;
 [2011-05-12 00:12:06] <cehteh> job_arm()
 [2011-05-12 00:12:14] <cehteh> something like that
 [2011-05-12 00:12:38] <ichthyo> sounds ok
@@ -472,7 +472,7 @@ IRC Transcript
 [2011-05-12 00:15:04] <ichthyo> really?
 [2011-05-12 00:15:11] <cehteh> i wonder -- makes sense or?
 [2011-05-12 00:15:38] <ichthyo> *could* be done, but somehow goes against that simplicity
-[2011-05-12 00:15:53] <cehteh> I mean each of this class shares a lot, how abortion is handled and more 
+[2011-05-12 00:15:53] <cehteh> I mean each of this class shares a lot, how abortion is handled and more
 [2011-05-12 00:16:43] <cehteh> Ok on the low level you can always put a job together with all the little
                                details needed and then arm it. I expect that we have maybe half a dozen classes of jobs
 [2011-05-12 00:17:03] <ichthyo> not only on the low level. That would also be the correct OO aproach
@@ -529,17 +529,17 @@ IRC Transcript
 [2011-05-12 00:24:18] <cehteh> this 'timer' possibly wont be singleton too .. you can play unrelated things in parallel
 [2011-05-12 00:24:51] <ichthyo> well... I'd rather expect that to be quite similar to the jobs
 [2011-05-12 00:25:26] <cehteh> well i wonder if the normal jobs become bit more heavyweight
-[2011-05-12 00:25:40] <cehteh> and the high prio queue gets its own interface 
+[2011-05-12 00:25:40] <cehteh> and the high prio queue gets its own interface
 [2011-05-12 00:26:00] <cehteh> no full blown jobs, no waiting (inter-jobs)
 [2011-05-12 00:26:10] <ichthyo> what do you think to add to the normal jobs, beyond what we just discussed?
 [2011-05-12 00:26:15] <ichthyo> ah maybe the dependencies
 [2011-05-12 00:26:23] <ichthyo> but besides that?
-[2011-05-12 00:29:03] <cehteh> so there will be the full blown jobs 
-[2011-05-12 00:29:27] <cehteh> which can record dependencies on other jobs, have their state, a jobfunction 
+[2011-05-12 00:29:03] <cehteh> so there will be the full blown jobs
+[2011-05-12 00:29:27] <cehteh> which can record dependencies on other jobs, have their state, a jobfunction
 
 (...)
 
-[2011-05-12 00:34:00] <cehteh> the exact setup for scheduling will likely become little more complicated 
+[2011-05-12 00:34:00] <cehteh> the exact setup for scheduling will likely become little more complicated
 [2011-05-12 00:34:46] <cehteh> you dont just set a time when to render but timespans and priorities,
                                possibly twice for each queue -- at least my plan is that a job can be in the
                                background render queue and in the high prio queue (we should give this a better name) at once
@@ -595,7 +595,7 @@ IRC Transcript
 [2011-05-12 00:58:46] <cehteh> and depend on backend/proc
 [2011-05-12 00:59:16] <ichthyo> anyway... that means that there might be thumbnails to process, and I take it that we
                                 handle that somehow through our engine as well, just with lower priority
-[2011-05-12 00:59:23] <cehteh> yes that costs a lot performance there .. 
+[2011-05-12 00:59:23] <cehteh> yes that costs a lot performance there ..
 [2011-05-12 01:00:01] <ichthyo> as a *user* I really don't know what to prefer
 [2011-05-12 01:00:10] <cehteh> btw if frames or thumbnails have higher priority might be a feature of 'perspectives'
 [2011-05-12 01:00:24] <ichthyo> an application which burns quite some resources, but gets me a steady updating display
@@ -650,7 +650,7 @@ IRC Transcript
 [2011-05-12 01:14:46] <cehteh> the 'actual' interfaces how the backend queries a frame from proc and how proc
                                asks the backend for a frame .. do we need to work this out?
                                But i think about not working it offically out at all in a big way,
-                               this interfaces prolly just happen and can be improved in small details 
+                               this interfaces prolly just happen and can be improved in small details
 [2011-05-12 01:16:10] <ichthyo> in the (half finished) code in the ProcNode, I used placeholder / facade interfaces
 [2011-05-12 01:16:21] <ichthyo> that is enough to set up the backbone
 [2011-05-12 01:16:52] <ichthyo> that is, for node -> backend (to get a frame)
@@ -660,7 +660,7 @@ IRC Transcript
 [2011-05-12 01:17:50] <ichthyo> "node invocation interface"
 [2011-05-12 01:18:22] <ichthyo> well, personally I think I'll first concentrate on the player, to get a rough outline there
 [2011-05-12 01:18:36] <cehteh> yes that will show us the requirements
-[2011-05-12 01:19:15] <ichthyo> and if I recall right, you were rather engaged into the framecache / frame database 
+[2011-05-12 01:19:15] <ichthyo> and if I recall right, you were rather engaged into the framecache / frame database
 [2011-05-12 01:20:10] <cehteh> the general interface is simple (in my head) .. but there are some dirty corners to worked out
 
 (...)
@@ -691,13 +691,13 @@ IRC Transcript
 [2011-05-12 01:30:27] <ichthyo> yes... that was kind of the middle ground we agreed on
 [2011-05-12 01:31:10] <ichthyo> I retained the possibility to decide if and where a chain of calculations for a single
                                 frame should be split and scheduled as separate jobs
-[2011-05-12 01:31:24] <cehteh> ah 
+[2011-05-12 01:31:24] <cehteh> ah
 [2011-05-12 01:34:15] <cehteh> run only the heavy lifting in single jobs
 [2011-05-12 01:34:38] <ichthyo> I allways assume that 1 frame is one job
 [2011-05-12 01:34:40] <ichthyo> at least
 [2011-05-12 01:34:53] <cehteh> well refine 'rendering one frame is one job'
 [2011-05-12 01:35:02] <ichthyo> the controversy was to what extend a single frame should be split into multiple jobs
-[2011-05-12 01:35:10] <cehteh> i dont care if discovery over a sequence is one job for multiple frames 
+[2011-05-12 01:35:10] <cehteh> i dont care if discovery over a sequence is one job for multiple frames
 [2011-05-12 01:36:54] <ichthyo> at that point (more than a year ago), you insisted that every calculation
                                 be done in a separate job, and I didn't agree to that
 [2011-05-12 01:37:00] <cehteh> yes

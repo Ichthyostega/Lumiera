@@ -15,7 +15,7 @@
  ** Functionality for driving and controlling an ongoing playback or render.
  **
  ** @see lumiera::DummyPlayer
- ** @see stage::PlaybackController usage example 
+ ** @see stage::PlaybackController usage example
  */
 
 

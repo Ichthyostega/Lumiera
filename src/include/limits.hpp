@@ -1,5 +1,5 @@
 /*
-  LIMITS.hpp  -  hard wired safety limits 
+  LIMITS.hpp  -  hard wired safety limits
 
    Copyright (C)
      2012,            Hermann Vosseler <Ichthyostega@web.de>
@@ -21,7 +21,7 @@
  ** than 1000 characters. Whenever an actual allocation is based on such ordinal values,
  ** a tighter and more specific limitation will be enforced on a case by case base.
  ** 
- ** @see symbol-impl.cpp 
+ ** @see symbol-impl.cpp
  ** @see util::uNum
  */
 
@@ -31,7 +31,7 @@
 
 
 #define LUMIERA_IDSTRING_MAX_RELEVANT 1000
-#define LUMIERA_MAX_ORDINAL_NUMBER    1000 
+#define LUMIERA_MAX_ORDINAL_NUMBER    1000
 #define LUMIERA_MAX_COMPETITION        100
 
 #endif /*LUMIERA_LIMITS_H*/

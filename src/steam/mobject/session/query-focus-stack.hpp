@@ -40,7 +40,7 @@ namespace session {
    * A custom stack holding ScopePath »frames«.
    * It is utilised by the ScopeLocator to establish the
    * \em current query focus location. Client code should
-   * access this mechanism through QueryFocus instances 
+   * access this mechanism through QueryFocus instances
    * used as frontend. These QueryFocus objects incorporate
    * a boost::intrusive_ptr, which stores the ref-count within
    * the mentioned ScopePath frames located in the stack.
@@ -125,7 +125,7 @@ namespace session {
   QueryFocusStack::push (Scope const& newStartPoint)
   {
     ScopePath newPathFrame (newStartPoint); // may throw
-    ENSURE (newPathFrame.isValid() || newStartPoint.isRoot());
+    ENSURE (newPathFrame.isValid() or newStartPoint.isRoot());
     
     paths_.push_back (newPathFrame);
     ENSURE (0 < size());
@@ -136,12 +136,12 @@ namespace session {
   /** @return the topmost path frame actually in use
    *  @note may invoke #pop_unused()
    *  @note EXCEPTON_FREE    ///////TODO prove!
-   */ 
+   */
   ScopePath&
   QueryFocusStack::top ()
   {
     if ( 0 == size()
-      || 0 == paths_.back().ref_count()
+      or 0 == paths_.back().ref_count()
        )
       pop_unused();
     
@@ -160,10 +160,10 @@ namespace session {
   void
   QueryFocusStack::pop_unused ()
   {
-    if (1 == size() && !paths_.front().isValid())
+    if (1 == size() and not paths_.front().isValid())
       return; // unnecessary to evict a base frame repeatedly
     
-    while (size() && (0 == paths_.back().ref_count()))
+    while (size() and (0 == paths_.back().ref_count()))
       paths_.pop_back();
     
     if (0 == size())
@@ -183,8 +183,8 @@ namespace session {
     
     paths_.resize(1);
     
-    ENSURE (!paths_.front().empty());
-    ENSURE (!paths_.front().isValid()); // i.e. just root scope
+    ENSURE (not paths_.front().empty());
+    ENSURE (not paths_.front().isValid()); // i.e. just root scope
   }
   
   

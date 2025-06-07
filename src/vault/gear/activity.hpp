@@ -166,7 +166,7 @@ namespace gear {
          *         is accessible, and an additional payload data field (`size_t`). Since
          *         the execution context is a _concept,_ it is necessary to know the actual
          *         type of the concrete execution context and cast down in the implementation.
-         *         This mechanism is used especially for detecting expected test invocations. 
+         *         This mechanism is used especially for detecting expected test invocations.
          */
         virtual Proc activation ( Activity& thisHook
                                 , Time now
@@ -496,7 +496,7 @@ namespace gear {
           param.nominalTime = _raw(Time{data_.invocation.time});
           param.invoKey.code.w1 = next->data_.feed.one;
           param.invoKey.code.w2 = next->data_.feed.two;
-                           //////////////////////////////////////////////////////////////////////////////////TICKET #1295 : rework Job parameters to accommodate input / output info required for rendering          
+                           //////////////////////////////////////////////////////////////////////////////////TICKET #1295 : rework Job parameters to accommodate input / output info required for rendering
           try {
               functor.invokeJobOperation (param);
             }

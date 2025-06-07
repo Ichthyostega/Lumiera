@@ -23,7 +23,7 @@
  ** The test/mock instance of the placement index obtained by this API
  ** is \em not wired with the session. Rather it is managed by smart-ptr.
  ** When the last smart-ptr instance goes out of scope, the test index
- ** instance will be shut down and removed, thereby uncovering the 
+ ** instance will be shut down and removed, thereby uncovering the
  ** original PlacementIndex living within the session.
  ** 
  ** @see session-impl.hpp implementation of the service

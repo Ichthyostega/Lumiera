@@ -71,7 +71,7 @@ Basically, we can expect to encounter the following kinds of fundamental data el
 - `diff::Record<GenNode>`
 
 The last option is what makes our representation recursive.footnote:[Regarding the implementation,
-all these data elements are embedded _inline,_ as values. 
+all these data elements are embedded _inline,_ as values.
 With the exception of the record, which, like any `std::vector` implicitly uses heap allocations
 for the members of the collection.]
 

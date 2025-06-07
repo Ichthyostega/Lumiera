@@ -41,7 +41,7 @@ namespace builder {
    * render engine under construction such as to reflect the properties
    * of the MObject in the actual render.
    */
-  class NodeCreatorTool 
+  class NodeCreatorTool
     : public ApplicableBuilderTargetTypes<NodeCreatorTool>
     {
       ToolFactory& toolKit_;

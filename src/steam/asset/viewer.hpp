@@ -58,7 +58,7 @@ namespace mobject {
 namespace session {
   
   class Binding;
-  typedef MORef<Binding> RBinding;
+  using RBinding = MORef<Binding>;
 }}
 
 
@@ -66,7 +66,7 @@ namespace asset {
   
   
   class Viewer;
-  typedef lib::P<Viewer> PViewer;
+  using PViewer = lib::P<Viewer>;
   
   
   /**

@@ -29,13 +29,13 @@ using lumiera::error::Invalid;
 
 namespace vault {
   
-  /** storage for the SingletonFactory 
+  /** storage for the SingletonFactory
    *  (actually a lumiera::test::MockInjector) */
   lib::Depend<MediaAccessFacade> MediaAccessFacade::instance;
-
   
   
-  MediaDesc& 
+  
+  MediaDesc&
   MediaAccessFacade::queryFile (string const& name)  const
   {
     if (isnil (name))
@@ -45,14 +45,14 @@ namespace vault {
   }
   
   
-  ChanDesc 
+  ChanDesc
   MediaAccessFacade::queryChannel (MediaDesc& mHandle, uint chanNo)  const
   {
     UNIMPLEMENTED ("delegate to vault: query channel information");
     ChanDesc nix;
     return nix;
   }
-
-
-
+  
+  
+  
 } // namespace vault

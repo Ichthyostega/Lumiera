@@ -47,7 +47,7 @@
  **       ProcNode and Connectivity objects are.
  ** 
  ** @see ModelPortRegistry_test abstract usage example
- ** @see ModelPortRegistry management interface 
+ ** @see ModelPortRegistry management interface
  ** @see OutputDesignation
  ** @see OutputMapping
  ** @see Timeline

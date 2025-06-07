@@ -28,7 +28,7 @@ The menu generation and display is comprised of several parts working together
   menu generator script is invoked
 . the +menugen+ python script walks the subdirectories to discover possible
   menu contents. It visits Asciidoc source files (`*.txt`) and picks up
-  
+
   - the location / URL
   - the title
   - special `//MENU:` directives embedded in Asciidoc comments
@@ -84,7 +84,7 @@ options to deal with special cases. Adjustments can be done on several levels:
   script. This code generation is driven by a classical recursive tree visitation
   over the menu data structure built up thus far; code generation hooks are called
   on each tree leaf and when entering and leaving inner nodes (submenu nodes).
-* the highlighting is done by the client side JavaScript in +js/menu.js+ -- 
+* the highlighting is done by the client side JavaScript in +js/menu.js+ --
   mostly just by _adding or removing CSS classes_ dynamically. The actual styling
   of the menu entries is thus largely independent of the menu generation (but of
   course the CSS selectors must line up with the basic structure of the generated
@@ -136,11 +136,11 @@ def addPredefined():
     root = Node(TREE_ROOT, label='Lumiera')                                # <1>
     proj = root.linkChild('project')                                       # <2>
     proj.linkChild('faq')
-    
+
     proj.prependChild ('screenshots')                                      # <3>
     proj.putChildLast ('press')
     proj.putChildAfter('faq', refPoint=Node('screenshots'))                # <4>
-    
+
     proj.link('https://issues.lumiera.org/roadmap',label="Roadmap (Trac)") # <5>
     Node('rfc').sortChildren()
 --------------------------------------------------------------------------
@@ -187,7 +187,7 @@ supported placement directives
   putChildLast(id)        [attach] child <id>                  move child to current end of list
   appendChild(id)         [append] child <id>
   putChildFirst(id)                                            move child to current list start
-  prependChild(id)        prepend [child] <id> 
+  prependChild(id)        prepend [child] <id>
   putChildAfter(id,ref)   [attach|put] child <id> after <ref>  move child after the given ref entry
   link(url[,id][,label])  [child <id>] link ::<url>[<label>]    attach an entry, holding an external link
   Node(<id>,label=<lbl>)  label|title <lbl>                    define the visible text in the menu entry
@@ -195,8 +195,8 @@ supported placement directives
   enable(False)           off|disable|deactivate               make node passive; any children/parents added later are ignored
   enable([True])          on|active|activate                   make node active again (this is the default)
   detach()                detach                               cut away any parents and children, disable the node
-  discover(srcdirs=...)   include dir <token>[,<token>]        instead of current dir, retrieve children from other dirs (relative) 
-  discover(includes=...)  include <token>[,<token>]            explicitly use the listed elements as children 
+  discover(srcdirs=...)   include dir <token>[,<token>]        instead of current dir, retrieve children from other dirs (relative)
+  discover(includes=...)  include <token>[,<token>]            explicitly use the listed elements as children
   discover(excludes=...)  exclude <token>[,<token>]            after discovering, filter names matching the <token> (without extension)
 --------------------------------------------------------------------------------------------------------------------
 
@@ -206,7 +206,7 @@ commandline options
 The behaviour of the +menugen+ script can be influenced by some options:
 
 predefined:: using the built-in predefined nodes
-scan::    discover nodes 
+scan::    discover nodes
 debug::   dump data structure after discovery
 text::    generate plaintext version of the menu
 webpage:: actually generate HTML / JavaScript
@@ -229,7 +229,7 @@ syntax of the specifications; it was tested to generate suitable HTML and CSS.
 The syntactic elements where then added as a collection of parser or matcher objects,
 each with the ability to recognise and implement one kind of placement specification.
 Each such +Placement+ subclass exposes an +acceptVerb()+ function for handling invocations
-of the internal DSL functions, and an +acceptDSL()+ function to parse and accept a 
+of the internal DSL functions, and an +acceptDSL()+ function to parse and accept a
 `//Menu:` line from some Asciidoc source file. This approach makes adding further
 configuration options simple.
 
@@ -267,7 +267,7 @@ Known issues
   generated as +parentPath/fileID+, to avoid mixing up similarly named
   files in different directories. (The NodeIndex allows to retrieve
   a node just by its bare ID, without path anyway)
-* no escaping: currently any variable text is written to the generated 
+* no escaping: currently any variable text is written to the generated
   HTML without any sanitising or escaping. This might be a security issue,
   especially because Git pushes immediately trigger menu generation.
 * the method Node.matches() is implemented sloppily: it uses just a mutual

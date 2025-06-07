@@ -1,5 +1,5 @@
 /*
-  TYPED-ALLOCATION-MANAGER.hpp  -  abstract backbone to build custom memory managers 
+  TYPED-ALLOCATION-MANAGER.hpp  -  abstract backbone to build custom memory managers
 
    Copyright (C)
      2009,            Hermann Vosseler <Ichthyostega@web.de>
@@ -83,7 +83,7 @@ namespace lib {
    * placing them into the storage maintained by a low-level
    * allocator or pooled storage manager. The created smart-ptr
    * owns the new object and is wired internally to #releaseSlot.
-   * Subclasses may also directly allocate and de-allocate 
+   * Subclasses may also directly allocate and de-allocate
    * such a (typed) storage slot.
    * 
    * @todo currently (as of 8/09) the low-level pooled allocator

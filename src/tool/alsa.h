@@ -15,7 +15,7 @@
  ** Interfacing to ALSA sound output.
  ** @remarks Example implementation from 2011
  ** 
- ** @todo for now this header defines some functions used for experimentation with ALSA 
+ ** @todo for now this header defines some functions used for experimentation with ALSA
  **
  ** @see output-slot.hpp
  */

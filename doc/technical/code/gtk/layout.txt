@@ -51,7 +51,7 @@ natural:: the extension necessary to use the widget properly, without wasting sc
 
 size request mode::
   by implementing ´get_request_mode_vfunc()`, the widget defines how its allocation shall be treated...
-  
+
   - `SIZE_REQUEST_HEIGHT_FOR_WIDTH` : start with a desired width and then accommodate the vertical extension
   - `SIZE_REQUEST_WIDTH_FOR_HEIGHT` : start with a desired height and expand horizontally as needed
   - `SIZE_REQUEST_CONSTANT_SIZE` (this seems to be there for sake of completeness, but is typically
@@ -66,8 +66,8 @@ shifting the pixel coordinates. From the allocation worked out thus far, all hea
 proper drawing is then _subtracted,_ and the resulting bare allocation is passed to the widget through
 the function `gtk_widget_set_allocation()`, which also invokes the `Gtk::Widget::on_size_allocate()`
 hook. Note that the fully expanded allocation is not stored; GTK just assumes that widgets will
-draw themselves properly, including their decorations, thereby possibly using extended screen space. 
- 
+draw themselves properly, including their decorations, thereby possibly using extended screen space.
+
 Minimal vs. natural size request
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 In short: you need to define both, while the natural size request is more relevant in most cases.

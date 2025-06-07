@@ -26,9 +26,9 @@
  ** 
  ** Each command starts out as command definition, accessed by client code through CommandDef.
  ** While collecting the necessary parts of such a definition, there is just an empty (pending)
- ** Command (smart-ptr frontend), which is not yet usable, being held within the CommandDef. 
+ ** Command (smart-ptr frontend), which is not yet usable, being held within the CommandDef.
  ** When the definition is complete, a CommandImpl frame is allocated, configured and used to
- ** activate the Command (smart-ptr frontend), at which point it also gets accessible 
+ ** activate the Command (smart-ptr frontend), at which point it also gets accessible
  ** through the CommandRegistry.
  ** 
  ** Later on, client code is assumed to re-access the command by ID. It may bind arguments, which are
@@ -85,7 +85,7 @@ namespace control {
   /**
    * Helper for building a std::map with
    * Command* as keys. Defines the order
-   * by the address of the Command's 
+   * by the address of the Command's
    * implementation object.
    */
   struct order_by_impl
@@ -93,8 +93,8 @@ namespace control {
       bool
       operator() (const Command *pC1, const Command *pC2)  const
         {
-          return (!pC1 && pC2)
-              || ( pC1 && pC2  && (*pC1 < *pC2));
+          return (!pC1 and pC2)
+              or ( pC1 and pC2  and (*pC1 < *pC2));
         }
     };
   
@@ -195,7 +195,7 @@ namespace control {
       
       /** search the command index for a definition
        *  @param cmdInstance using the definition to look up
-       *  @return the ID used to register this definition 
+       *  @return the ID used to register this definition
        *          or `NULL` in case of an "anonymous" command */
       Symbol
       findDefinition (Command const& cmdInstance)  const
@@ -256,7 +256,7 @@ namespace control {
        *  to the memory manager for allocating the clone. Actually, we perform
        *  this operation through the help of a visitor, which re-gains the
        *  complete type context and prepares the necessary clone objects;
-       *  in a final step, we allocate a new CommandImpl frame and 
+       *  in a final step, we allocate a new CommandImpl frame and
        *  initialise it with the prepared clone objects.
        *  @see command.cpp (implementation)
        */

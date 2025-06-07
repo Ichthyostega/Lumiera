@@ -183,7 +183,7 @@ namespace lumiera {
         inline bool
         is_known (size_t id)
           { 
-            return id<=table_.size() && table_[id-1];
+            return id<=table_.size() and table_[id-1];
           }
         
         inline void
@@ -198,7 +198,7 @@ namespace lumiera {
         inline Trampoline
         storedTrampoline (size_t id)
           {
-            if (id<=table_.size() && table_[id-1])
+            if (id<=table_.size() and table_[id-1])
               return table_[id-1];
             else
               return &errorHandler;

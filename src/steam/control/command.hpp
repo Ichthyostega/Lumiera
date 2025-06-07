@@ -118,7 +118,7 @@ namespace control {
            , lib::Handle<CommandImpl>     //   actually implemented as ref counting Handle
            >                             //
     {
-      typedef lib::Handle<CommandImpl> _Handle;
+      using _Handle = lib::Handle<CommandImpl>;
       
     public:
       /* === command registry === */
@@ -300,8 +300,8 @@ namespace control {
   inline bool
   operator== (Command const& c1, Command const& c2)
   {
-    return (!c1 && !c2)
-        || ( c1 &&  c2  && (&c1.impl() == &c2.impl()));
+    return (!c1 and !c2)
+        or ( c1 and  c2  and (&c1.impl() == &c2.impl()));
   }
   
   inline bool
@@ -314,8 +314,8 @@ namespace control {
   inline bool
   operator< (Command const& c1, Command const& c2)
   {
-    return (!c1 && c2)
-        || ( c1 && c2 && (&c1.impl() < &c2.impl()));
+    return (!c1 and c2)
+        or ( c1 and c2 and (&c1.impl() < &c2.impl()));
   }
   
   

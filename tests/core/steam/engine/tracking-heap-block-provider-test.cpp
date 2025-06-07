@@ -52,8 +52,8 @@ namespace test  {
     verifyUsedBlock (uint nr, diagn::Block& memoryBlock)
     {
       return memoryBlock.was_used()
-          && memoryBlock.was_closed()
-          && has_expectedContent (nr, memoryBlock);
+         and memoryBlock.was_closed()
+         and has_expectedContent (nr, memoryBlock);
     }
   }
   
@@ -68,7 +68,7 @@ namespace test  {
   class TrackingHeapBlockProvider_test : public Test
     {
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           seedRand();
           

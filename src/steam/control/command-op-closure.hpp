@@ -14,7 +14,7 @@
 
 /** @file command-op-closure.hpp
  ** Implementation of the concrete (sub)-closure of a command, responsible for
- ** invoking the actual command operation with the concrete (binding) arguments. 
+ ** invoking the actual command operation with the concrete (binding) arguments.
  ** 
  ** @see Command
  ** @see command-closure.hpp
@@ -112,7 +112,7 @@ namespace control {
       
       ostream&
       dump (ostream& output)  const
-        { 
+        {
           return output;
         }
     };
@@ -166,7 +166,7 @@ namespace control {
       /** Core operation: use the embedded argument tuple for invoking a functor
        *  @param unboundFunctor an function object, whose function arguments are
        *         required to match the types of the embedded ParamStorageTuple
-       *  @note  ASSERTION failure if the function signature 
+       *  @note  ASSERTION failure if the function signature
        *         doesn't match the argument types tuple.
        *  @note  the functor might actually \em modify the param values.
        *         Thus this function can't be const.

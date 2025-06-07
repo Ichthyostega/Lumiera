@@ -40,8 +40,8 @@ namespace asset {
       string name (mediaref.ident.name + "-clip");  // TODO something sensible here; append number, sanitise etc.
       Category category (mediaref.ident.category);
       category.setPath(CLIP_SUBFOLDER);
-      return Asset::Ident (name, category, 
-                           mediaref.ident.org, 
+      return Asset::Ident (name, category,
+                           mediaref.ident.org,
                            mediaref.ident.version );
     }
     
@@ -58,7 +58,7 @@ namespace asset {
     : Media (createClipIdent (mediaref),
              mediaref.getFilename(),
              mediaref.getLength())
-    , source_ (mediaref) 
+    , source_ (mediaref)
     , clipMO_ (createClipMO (*this, source_))
     {
       this->defineDependency (mediaref);
@@ -67,10 +67,10 @@ namespace asset {
   
   /** Specialisation of the asset::Media interface method,
    *  just returning the already existing Clip-MO. Every
-   *  asset::Clip internally holds a Clip-MO, which has 
+   *  asset::Clip internally holds a Clip-MO, which has
    *  been created alongside. This Clip-MO may have several
    *  Placements or no placement at all (meaning it need not
-   *  be placed within the session) 
+   *  be placed within the session)
    */
   Media::PClip
   Clip::createClip ()  const
@@ -93,7 +93,7 @@ namespace asset {
   
   /** specialisation delegating the decision to
    *  the media asset referred by this clip
-   */ 
+   */
   Media::PMedia
   Clip::checkCompound()  const
   {

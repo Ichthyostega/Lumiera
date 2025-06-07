@@ -35,7 +35,7 @@ namespace builder {
   /**
    * A statefull value object denoting the wish to establish a link or connection
    * between two entities. Used to organise the proper working of the build process.
-   * Wiring requests are first to be checked and can be deemed impossible to 
+   * Wiring requests are first to be checked and can be deemed impossible to
    * satisfy. Internally, wiring requests contain specific information about
    * the objects to be connected. This information is exposed only to the
    * ConManager, which is the facility actually wiring the connections.

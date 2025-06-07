@@ -104,7 +104,7 @@ namespace test    {
   class SessionElementTracker_test : public Test
     {
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           verify_trackingMechanism();
           verify_integration();
@@ -163,7 +163,7 @@ namespace test    {
             
             // now the tracker goes out of scope...
           }
-          CHECK (0 == checksum); // ...remaining elements have been unlinked 
+          CHECK (0 == checksum); // ...remaining elements have been unlinked
         }
       
       

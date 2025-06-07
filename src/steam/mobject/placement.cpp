@@ -32,20 +32,20 @@ namespace mobject {
 
 
   /** @note we know we need only this single specialisation,
-   *        because we define the Placements of more specific 
+   *        because we define the Placements of more specific
    *        MObject kinds to be subclasses of Placement<MObject>,
    *        so they will inherit this function.
    *                                           //////////////////////TICKET #439
    */
   ExplicitPlacement
-  Placement<MObject>::resolve ()  const 
-  { 
-    return ExplicitPlacement (*this, chain.resolve()); 
+  Placement<MObject>::resolve ()  const
+  {
+    return ExplicitPlacement (*this, chain.resolve());
   }
   
   
   
-  Placement<MObject>::operator string ()  const 
+  Placement<MObject>::operator string ()  const
   {
     return _Fmt{"Placement<%s> %|50T.| use-cnt=%u ID(%016x) adr=%p pointee=%p"}
               % typeStr(this->get()) % use_count()
@@ -68,8 +68,8 @@ namespace mobject {
   isSameDef (PlacementMO const& pl1, PlacementMO const& pl2)
   {
     return pl1.getID() == pl2.getID()
-        || pl1.chain == pl2.chain
-        ;
+        or pl1.chain == pl2.chain
+         ;
   }
 
   

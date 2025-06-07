@@ -34,7 +34,7 @@
  ** frontend object. This smart-ptr like handle can be used by the client to
  ** control all aspects of playback or rendering; it behaves like a state machine.
  ** When the last copy of this Play::Controller frontend goes out of scope, behind
- ** the scenes the corresponding PlayProcess gets terminated and prepared for cleanup. 
+ ** the scenes the corresponding PlayProcess gets terminated and prepared for cleanup.
  ** 
  ** @see engine::EngineService
  ** @todo started as draft in 11/2011
@@ -91,7 +91,7 @@ namespace play {
    * by the OutputDirector, which acts as a central hub
    * for the Player subsystem. Clients should always
    * access this functionality through the
-   * lumiera::Play facade interface. 
+   * lumiera::Play facade interface.
    */
   class PlayService
     : public lumiera::Play

@@ -1,5 +1,5 @@
 /*
-  ITER-STACK.hpp  -  a stack which can be popped by iterating 
+  ITER-STACK.hpp  -  a stack which can be popped by iterating
 
    Copyright (C)
      2012,            Hermann Vosseler <Ichthyostega@web.de>
@@ -31,8 +31,8 @@
  **          and a container at the same time. Which opens the interesting possibility
  **          to intermix retrieval and feeding of new elements. It can be seen as a
  **          zero overhead adapter to ease the use within Lumiera's library framework.
- ** @note    EX_STRONG, since std::deque gives this guarantee for push and pop operations    
- ** @warning STL containers aren't thread safe. 
+ ** @note    EX_STRONG, since std::deque gives this guarantee for push and pop operations
+ ** @warning STL containers aren't thread safe.
  ** 
  ** @see IterStack_test
  ** @see IterQueue_test
@@ -171,7 +171,7 @@ namespace lib {
   
   
   
-  /** 
+  /**
    * A Queue which can be pulled by iterating.
    * As a variation of the IterStack frontend, here the
    * exposed additional interface works like a queue:
@@ -181,7 +181,7 @@ namespace lib {
    * both feed and the iterating operation in amortised
    * constant time, using chunk wise heap allocations.
    * Feeding of new elements into the queue and
-   * retrieving old elements by iteration 
+   * retrieving old elements by iteration
    * may be mixed freely.
    */
   template<class TY>
@@ -236,7 +236,7 @@ namespace lib {
         }
       
       
-      /** 
+      /**
        * Adapter for use as opaque sequence.
        * This builder exposes generic operations
        * to prepare and pre-fill a sequence
@@ -276,7 +276,7 @@ namespace lib {
        * @param initial the initial contents of the queue
        *        to start with, maybe empty. This parameter
        *        also acts as type tag to pick this \c build()
-       *        function by ADL 
+       *        function by ADL
        */
       friend IterQueue::Builder
       build (IterQueue& initial)

@@ -60,19 +60,19 @@ namespace test    {
   
   /***************************************************************************//**
    * @test perform the most important structural modifications on a session and
-   *       verify they're carried out properly. 
+   *       verify they're carried out properly.
    *       - attaching forks ("tracks")
    *       - adding clips
    *       
    *       
-   * @todo check more kinds of modifications, especially moving parts 
+   * @todo check more kinds of modifications, especially moving parts
    * @todo define criteria to be checked more precisely
    * @todo verify the actually dispatched commands 
    */
   class SessionModifyParts_test : public Test
     {
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           Session::current.reset();
           CHECK (Session::current.isUp());

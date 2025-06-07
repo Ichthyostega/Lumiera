@@ -241,10 +241,10 @@ anchor:anchor_types[]provided TYPES
 config type     C type					semantic (example)
 -------------------------------------------------------------------------------------------------------------------
 number		signed long long			also hex and octal (foo.bar = 12345 #comment)
-real		long double				differerent formats as well (foo.bar=1.2345 #comment) 
+real		long double				differerent formats as well (foo.bar=1.2345 #comment)
 string		const char*				optionaly quoted string (foo.bar="this string" #this not)
 word		const char*				first optionaly quoted word of the config (foo.bar= first this # not)
-bool		int					common representations for bools (0,1,true,false,yes,no,on,off,set,clear) 
+bool		int					common representations for bools (0,1,true,false,yes,no,on,off,set,clear)
 -------------------------------------------------------------------------------------------------------------------
 
 ... add more types on demand (ichthyo mentioned a tuple type for color triples etc.)

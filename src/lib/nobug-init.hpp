@@ -33,11 +33,11 @@
 
 
 
-namespace lumiera { 
+namespace lumiera {
   void initialise_NoBug ();
   
   namespace {
-    LifecycleHook trigger_init_ (ON_BASIC_INIT, &initialise_NoBug);         
+    LifecycleHook trigger_init_ (ON_BASIC_INIT, &initialise_NoBug);
 } }
 
 
