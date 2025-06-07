@@ -14,20 +14,13 @@
 
 /** @file tuple-helper.hpp
  ** Metaprogramming with tuples-of-types and the `std::tuple` record.
- ** The metaprogramming part of this header complements typelist.hpp and allows
- ** some additional manipulations on type sequences, especially to integrate
- ** with the Tuples provided by the standard library.
+ ** This header complements typelist.hpp and provides a bridge from type sequences
+ ** to the tuple type provided by the standard library, including traits and
+ ** helpers to build tuple types from metaprogramming and to pretty-print tuples.
  ** 
- ** @warning the metaprogramming part of Lumiera to deal with type sequences is in a
- **          state of transition, since C++11 now offers direct language support for
- **          processing of flexible template parameter sequences ("parameter packs").
- **          It is planned to regroup and simplify our homemade type sequence framework
- **          to rely on variadic templates and integrate better with std::tuple.
- **          It is clear that we will _retain some parts_ of our own framework,
- **          since programming with _Loki-style typelists_ is way more obvious
- **          and straight forward than handling of template parameter packs,
- **          since the latter can only be rebound through pattern matching.
- ** @todo transition lib::meta::Types to variadic parameters  /////////////////////////////////TICKET #987
+ ** Furthermore, a generic iteration construct is provided, to instantiate
+ ** a generic Lambda for each element of a given tuple, which allows to write
+ ** generic code »for each tuple element«.
  ** 
  ** @see control::CommandDef usage example
  ** @see TupleHelper_test
@@ -142,27 +135,15 @@ namespace meta {
       { };
     
     template<typename...TYPES>
-    struct BuildTupleType<TySeq<TYPES...>>
+    struct BuildTupleType<Types<TYPES...>>
       {
         using Type = std::tuple<TYPES...>;
-      };
-    
-    /**
-     * temporary workaround: strip trailing Nil-Type entries
-     * prior to rebinding to the `std::tuple` type.
-     */
-    template<typename...TYPES>
-    struct BuildTupleType<TyOLD<TYPES...>>
-      {
-        using VariadicSeq = typename StripNil<TyOLD<TYPES...>>::Seq;
-        
-        using Type = typename BuildTupleType<VariadicSeq>::Type;
       };
     
     template<class H, typename TAIL>
     struct BuildTupleType<Node<H, TAIL>>
       {
-        using Seq  = typename TySeq<Node<H,TAIL>>::Seq;
+        using Seq  = typename Types<Node<H,TAIL>>::Seq;
         using Type = typename BuildTupleType<Seq>::Type;
       };
     
@@ -195,13 +176,13 @@ namespace meta {
   template<typename...TYPES>
   struct RebindTupleTypes
     {
-      using Seq  = typename TySeq<TYPES...>::Seq;
+      using Seq  = typename Types<TYPES...>::Seq;
       using List = typename Seq::List;
     };
   template<typename...TYPES>
   struct RebindTupleTypes<std::tuple<TYPES...>>
     {
-      using Seq  = typename TySeq<TYPES...>::Seq;
+      using Seq  = typename Types<TYPES...>::Seq;
       using List = typename Seq::List;
     };
   
@@ -349,28 +330,15 @@ namespace meta {
     };
   
   
-                          ///////////////////////////////////////////////////////////////////////////////////TICKET #987 : this specialisation handles the variadic case and will be the only definition in future
   template
     < template<class,class,class, uint> class _X_
     , class TUP
     , uint i
     >
-  class BuildTupleAccessor< _X_, TySeq<>, TUP, i>
+  class BuildTupleAccessor< _X_, Types<>, TUP, i>
     {
     public:
       using Product = _X_<Nil, TUP, TUP, i>;   // Note: i == tuple size
-    };
-                          ///////////////////////////////////////////////////////////////////////////////////TICKET #987 : the following specialisation will be obsoleted by the removal of old-style type-sequences
-  template
-    < template<class,class,class, uint> class _X_
-    , class TUP
-    , uint i
-    >
-  class BuildTupleAccessor< _X_, TyOLD<>, TUP, i>
-    {
-    public:
-      using Product = _X_<Nil, TUP, TUP, i>;   // Note: i == tuple size
-      
     };
   
   
@@ -431,7 +399,7 @@ namespace meta {
   inline std::string
   dump (std::tuple<TYPES...> const& tuple)
   {
-    using BuildAccessor = BuildTupleAccessor<TupleElementDisplayer, TySeq<TYPES...>>;
+    using BuildAccessor = BuildTupleAccessor<TupleElementDisplayer, Types<TYPES...>>;
     using Displayer     = typename BuildAccessor::Product ;
     
     return static_cast<Displayer const&> (tuple)

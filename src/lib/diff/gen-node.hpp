@@ -132,7 +132,7 @@ namespace diff{
   using Rec = Record<GenNode>;
   using RecRef = RecordRef<GenNode>;
   using MakeRec = Rec::Mutator;
-  using DataValues = meta::TySeq<int
+  using DataValues = meta::Types<int
                                 ,int64_t
                                 ,short
                                 ,char

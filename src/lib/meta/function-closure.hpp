@@ -294,7 +294,7 @@ namespace func{
       using Ret      = typename _Fun<SIG>::Ret;
       using ArgsList = typename Args::List;
       using ValList  = typename VAL::List;
-      using ValTypes = typename TySeq<ValList>::Seq;           // reconstruct a type-seq from a type-list
+      using ValTypes = typename Types<ValList>::Seq;           // reconstruct a type-seq from a type-list
       
       enum { ARG_CNT = count<ArgsList>()
            , VAL_CNT = count<ValList>()
@@ -306,8 +306,8 @@ namespace func{
       using LeftReduced = typename Splice<ArgsList, ValList>::Back;
       using RightReduced = typename Splice<ArgsList, ValList, ROFFSET>::Front;
       
-      using ArgsL = typename TySeq<LeftReduced>::Seq;
-      using ArgsR = typename TySeq<RightReduced>::Seq;
+      using ArgsL = typename Types<LeftReduced>::Seq;
+      using ArgsR = typename Types<RightReduced>::Seq;
       
       
       // build a list, where each of the *remaining* arguments is replaced by a placeholder marker
@@ -319,8 +319,8 @@ namespace func{
       using LeftReplaced  = typename Splice<ArgsList, TrailingPlaceholders, VAL_CNT>::List;
       using RightReplaced = typename Splice<ArgsList, LeadingPlaceholders,  0      >::List;
       
-      using LeftReplacedTypes = typename TySeq<LeftReplaced>::Seq;
-      using RightReplacedTypes = typename TySeq<RightReplaced>::Seq;
+      using LeftReplacedTypes = typename Types<LeftReplaced>::Seq;
+      using RightReplacedTypes = typename Types<RightReplaced>::Seq;
       
       // create a "builder" helper, which accepts exactly the value tuple elements
       // and puts them at the right location, while default-constructing the remaining
@@ -407,7 +407,7 @@ namespace func{
       using Args     = typename _Fun<SIG>::Args;
       using Ret      = typename _Fun<SIG>::Ret;
       using ArgsList = typename     Args::List;
-      using ValList  = typename TySeq<X>::List;
+      using ValList  = typename Types<X>::List;
       
       enum { ARG_CNT = count<ArgsList>() };
 
@@ -423,8 +423,8 @@ namespace func{
       using PreparedArgs     = Prefix<PreparedArgsRaw, ARG_CNT>;
       using ReducedArgs      = typename Append<RemainingFront, RemainingBack>::List;
       
-      using PreparedArgTypes = typename TySeq<PreparedArgs>::Seq;
-      using RemainingArgs    = typename TySeq<ReducedArgs>::Seq;
+      using PreparedArgTypes = typename Types<PreparedArgs>::Seq;
+      using RemainingArgs    = typename Types<ReducedArgs>::Seq;
       
       
       template<class SRC, class TAR, size_t i>

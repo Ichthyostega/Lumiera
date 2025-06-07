@@ -58,6 +58,7 @@ namespace test1 {
   
   class Leader : public Visionary
     {
+      /* can not be visited */
     };
   
   
@@ -74,8 +75,8 @@ namespace test1 {
   
   class Babbler
     : public Applicable< Babbler
-                       , TySeq<Boss,BigBoss,Visionary>::List   // dispatch calls to this types
-                       , VerboseVisitor
+                       , Types<Boss,BigBoss,Visionary>::List   // dispatch calls to this types
+                       , VerboseVisitor                       //  (base class / interface)
                        >
     {
     public:
@@ -83,9 +84,9 @@ namespace test1 {
       void treat (BigBoss&) { talk_to("Big Boss"); }
     };
   
-  // note the following details:
+  // note the following fine points:
   // - Babbler "forgot" to declare being applicable to HomoSapiens
-  // - we have new derived class Leader without separate "apply()"-implementation 
+  // - the class Leader hidden deep in the hierarchy is lacking an "apply()"-implementation
   
   
   
@@ -95,7 +96,7 @@ namespace test1 {
    *       Defines a hierarchy of test classes to check the following cases
    *       - calling the correct visiting tool specialised function
    *         for given concrete hierarchy classes
-   *       - visiting tool not declaring to visit some class 
+   *       - visiting tool not declaring to visit some class
    *         is silently ignored by default
    *       - newly added classes will be handled by existing
    *         functions according to inheritance relations
@@ -103,7 +104,7 @@ namespace test1 {
   class VisitingTool_test : public Test
     {
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           known_visitor_known_class();
           visiting_extended_hierarchy();
@@ -116,12 +117,12 @@ namespace test1 {
           BigBoss x2;
           
           // masquerade as HomoSapiens...
-          HomoSapiens& homo1 (x1);
-          HomoSapiens& homo2 (x2);
+          HomoSapiens& homo1{x1};
+          HomoSapiens& homo2{x2};
           
           cout << "=== Babbler meets Boss and BigBoss ===\n";
           Babbler bab;
-          VisitingTool& vista (bab);
+          VisitingTool& vista{bab};
           homo1.apply (vista);
           homo2.apply (vista);
         }
@@ -141,7 +142,6 @@ namespace test1 {
           homo1.apply (vista);  // silent error handler (not Applicable to HomoSapiens)
           homo2.apply (vista); //  Leader handled as Visionary and treated as Boss
         }
-        
     };
   
   

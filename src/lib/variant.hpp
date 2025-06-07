@@ -98,7 +98,7 @@ namespace lib {
   namespace variant { // implementation metaprogramming helpers
     
     using std::remove_reference;
-    using meta::TySeq;
+    using meta::Types;
     using meta::Node;
     using meta::Nil;
     
@@ -159,8 +159,8 @@ namespace lib {
       };
     
     template<class...TYPES, template<class> class _P_>
-    struct FirstMatchingType<TySeq<TYPES...>, _P_>
-      : FirstMatchingType<typename TySeq<TYPES...>::List, _P_>
+    struct FirstMatchingType<Types<TYPES...>, _P_>
+      : FirstMatchingType<typename Types<TYPES...>::List, _P_>
       { };
     
     template<class T, class TYPES, template<class> class _P_>

@@ -88,7 +88,7 @@ namespace test {
       using BASE::eat; // prevent shadowing
     };
   
-  using TheTypes = TySeq< Block<1>
+  using TheTypes = Types< Block<1>
                         , Block<2>
                         , Block<3>
                         , Block<5>

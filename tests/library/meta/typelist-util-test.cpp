@@ -27,13 +27,13 @@ namespace test {
   
   
   
-  using TheList = TySeq< int
+  using TheList = Types< int
                        , uint
                        , int64_t
                        , uint64_t
                        >::List;
   
-  using EmptyList = TySeq<  >::List;
+  using EmptyList = Types<  >::List;
   
   
   

@@ -31,7 +31,7 @@ using lib::idi::EntryID;
 using lib::diff::Rec;
 using lib::diff::MakeRec;
 using lib::diff::GenNode;
-using lib::meta::TySeq;
+using lib::meta::Types;
 using lib::meta::Tuple;
 using lib::meta::buildTuple;
 using lib::time::Duration;
@@ -82,8 +82,8 @@ namespace test {
       void
       show_simpleUsage()
         {
-          using NiceTypes = TySeq<string, int>;
-          using UgglyTypes = TySeq<EntryID<long>, Symbol, int, int64_t, double, Duration>; // various conversions and an immutable type (Duration)
+          using NiceTypes = Types<string, int>;
+          using UgglyTypes = Types<EntryID<long>, Symbol, int, int64_t, double, Duration>; // various conversions and an immutable type (Duration)
           
           Rec args = MakeRec().scope("lalü", 42);
           Rec urgs = MakeRec().scope("lalü", "lala", 12, 34, 5.6, Time(7,8,9));
@@ -108,19 +108,19 @@ namespace test {
         {
           Rec args = MakeRec().scope("surprise", 42);
           
-          using TooMany = TySeq<string, int, long>;
+          using TooMany = Types<string, int, long>;
           VERIFY_ERROR (WRONG_TYPE, buildTuple<TooMany> (args));      // number of types in tuple exceeds capacity of the supplied argument record
           
-          using Unsigned = TySeq<string, uint>;
-          using Floating = TySeq<string, float>;
-          using Narrowing = TySeq<string, short>;
+          using Unsigned = Types<string, uint>;
+          using Floating = Types<string, float>;
+          using Narrowing = Types<string, short>;
           VERIFY_ERROR (WRONG_TYPE, buildTuple<Unsigned> (args));     // dangerous conversion from signed to unsigned int is prohibited
           VERIFY_ERROR (WRONG_TYPE, buildTuple<Floating> (args));     // conversion from integral to floating point element is prohibited
           VERIFY_ERROR (WRONG_TYPE, buildTuple<Narrowing> (args));    // narrowing conversion from int to short is prohibited
           
           // yet other (non-numeric) conversions are still possible
           Rec timeArg = MakeRec().scope(Time(1,2,3,4));
-          using TupStr = TySeq<string>;
+          using TupStr = Types<string>;
           Tuple<TupStr> tup = buildTuple<TupStr> (timeArg);
           
           CHECK (std::get<string> (tup) == "4:03:02.001");
@@ -133,7 +133,7 @@ namespace test {
           VERIFY_ERROR (WRONG_TYPE, buildTuple<Floating> (args));
           VERIFY_ERROR (WRONG_TYPE, buildTuple<Narrowing> (args));
           
-          using ToSizeT = TySeq<string, size_t>;
+          using ToSizeT = Types<string, size_t>;
           VERIFY_ERROR (WRONG_TYPE, (buildTuple<ToSizeT> (args)));    // not even conversion to size_t is allowed
           
           struct Hashy
@@ -145,7 +145,7 @@ namespace test {
                 { }
             };
           
-          using WithHashy = TySeq<string, Hashy>;
+          using WithHashy = Types<string, Hashy>;
           
           Tuple<WithHashy> tup2 = buildTuple<WithHashy> (hashArg);    // while any type explicitly constructible from LUID are permitted.
           VERIFY_ERROR (WRONG_TYPE, buildTuple<WithHashy> (args));    // building a `Hashy` from int(42) is disallowed, of course

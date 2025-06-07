@@ -111,8 +111,7 @@ namespace test    {
       void
       bindRandArgument (CommandImpl& cmd)
         {
-          using ArgType = TySeq<int>;
-          TypedArguments<Tuple<ArgType>> arg (std::make_tuple (rani (10000)));
+          TypedArguments<std::tuple<int>> arg {std::make_tuple (rani (10000))};
           cmd.setArguments (arg);
           CHECK (cmd.canExec());
         }
@@ -126,7 +125,7 @@ namespace test    {
       void
       verifySeparation (PCmdImpl orig, PCmdImpl copy)
         {
-          CHECK (orig && copy);
+          CHECK (orig and copy);
           CHECK (orig->canExec());
           CHECK (copy->canExec());
           

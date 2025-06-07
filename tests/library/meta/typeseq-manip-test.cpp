@@ -43,14 +43,14 @@ namespace test {
   
   namespace { // type-sequences to test with
     
-    typedef TySeq< Num<1>
-                 , Num<2>
-                 , Num<3>
-                 >         Types1;
-    typedef TySeq< Num<7>
-                 , Num<8>
-                 , Num<9>
-                 >         Types2;
+    using Types1 = Types< Num<1>
+                        , Num<2>
+                        , Num<3>
+                        >;
+    using Types2 = Types< Num<7>
+                        , Num<8>
+                        , Num<9>
+                        >;
     
   } // (End) test data
   
@@ -96,12 +96,12 @@ namespace test {
           using LL = Append<Types1::List, Types2::List>::List;
           EXPECT (LL, "-<1>-<2>-<3>-<7>-<8>-<9>-");
           
-          using Seq     = TySeq<LL>::Seq;
+          using Seq     = Types<LL>::Seq;
           using SeqList = Seq::List;
           EXPECT (Seq,     "-<1>-<2>-<3>-<7>-<8>-<9>-");
           EXPECT (SeqList, "-<1>-<2>-<3>-<7>-<8>-<9>-");
           
-          using NulS = TySeq<NilNode>::Seq;
+          using NulS = Types<NilNode>::Seq;
           EXPECT (NulS, "-");
         }
       
@@ -111,8 +111,8 @@ namespace test {
         {
           using Prepend1 = Prepend<Num<5>, Types1 >;   EXPECT (Prepend1, "-<5>-<1>-<2>-<3>-");
           using Prepend2 = Prepend<Nil,    Types1 >;   EXPECT (Prepend2, "-<·>-<1>-<2>-<3>-");
-          using Prepend3 = Prepend<Num<5>, TySeq<>>;   EXPECT (Prepend3, "-<5>-");
-          using Prepend4 = Prepend<Nil,    TySeq<>>;   EXPECT (Prepend4, "-");
+          using Prepend3 = Prepend<Num<5>, Types<>>;   EXPECT (Prepend3, "-<5>-");
+          using Prepend4 = Prepend<Nil,    Types<>>;   EXPECT (Prepend4, "-");
         }
       
       
@@ -120,7 +120,7 @@ namespace test {
       check_shift ()
         {
           using LL  = Append<Types2::List, Types1::List>::List;
-          using Seq = TySeq<LL>::Seq;
+          using Seq = Types<LL>::Seq;
           
           using  Seq_0 =       Shifted<Seq,0>::Type;   EXPECT (Seq_0,  "-<7>-<8>-<9>-<1>-<2>-<3>-");
           using  Seq_1 =       Shifted<Seq,1>::Type;   EXPECT (Seq_1,  "-<8>-<9>-<1>-<2>-<3>-");
@@ -130,14 +130,14 @@ namespace test {
           using  Seq_5 =       Shifted<Seq,5>::Type;   EXPECT (Seq_5,  "-<3>-");
           using  Seq_6 =       Shifted<Seq,6>::Type;   EXPECT (Seq_6,  "-");
           
-          using Head_0 = TySeq<Shifted<Seq,0>::Head>;  EXPECT (Head_0, "-<7>-");
-          using Head_1 = TySeq<Shifted<Seq,1>::Head>;  EXPECT (Head_1, "-<8>-");
-          using Head_2 = TySeq<Shifted<Seq,2>::Head>;  EXPECT (Head_2, "-<9>-");
-          using Head_3 = TySeq<Shifted<Seq,3>::Head>;  EXPECT (Head_3, "-<1>-");
-          using Head_4 = TySeq<Shifted<Seq,4>::Head>;  EXPECT (Head_4, "-<2>-");
-          using Head_5 = TySeq<Shifted<Seq,5>::Head>;  EXPECT (Head_5, "-<3>-");
-          using Head_6 = TySeq<Shifted<Seq,6>::Head>;  EXPECT (Head_6, "-"    );
-          using Head_7 = TySeq<Shifted<Seq,7>::Head>;  EXPECT (Head_7, "-"    );
+          using Head_0 = Types<Shifted<Seq,0>::Head>;  EXPECT (Head_0, "-<7>-");
+          using Head_1 = Types<Shifted<Seq,1>::Head>;  EXPECT (Head_1, "-<8>-");
+          using Head_2 = Types<Shifted<Seq,2>::Head>;  EXPECT (Head_2, "-<9>-");
+          using Head_3 = Types<Shifted<Seq,3>::Head>;  EXPECT (Head_3, "-<1>-");
+          using Head_4 = Types<Shifted<Seq,4>::Head>;  EXPECT (Head_4, "-<2>-");
+          using Head_5 = Types<Shifted<Seq,5>::Head>;  EXPECT (Head_5, "-<3>-");
+          using Head_6 = Types<Shifted<Seq,6>::Head>;  EXPECT (Head_6, "-"    );
+          using Head_7 = Types<Shifted<Seq,7>::Head>;  EXPECT (Head_7, "-"    );
         }
       
       
@@ -145,7 +145,7 @@ namespace test {
       check_split ()
         {
           using LL  = Append<Types1::List, Types2::List>::List;
-          using Seq = TySeq<LL>::Seq;           EXPECT (Seq   , "-<1>-<2>-<3>-<7>-<8>-<9>-");
+          using Seq = Types<LL>::Seq;           EXPECT (Seq   , "-<1>-<2>-<3>-<7>-<8>-<9>-");
           
           using List   = Split<Seq>::List;      EXPECT (List  , "-<1>-<2>-<3>-<7>-<8>-<9>-");
           using First  = Split<Seq>::First;     EXPECT (First , "-<1>-"                    );
@@ -156,10 +156,10 @@ namespace test {
           using Head   = Split<Seq>::Head;
           using End    = Split<Seq>::End;
           
-          using Ends   = TySeq<Head,End>;       EXPECT (Ends  , "-<1>-<9>-");
+          using Ends   = Types<Head,End>;       EXPECT (Ends  , "-<1>-<9>-");
           
-          using NoList = Split<TySeq<>>::List;  EXPECT (NoList, "-");
-          using NoHead = Split<TySeq<>>::Head;  EXPECT (NoHead, "-");
+          using NoList = Split<Types<>>::List;  EXPECT (NoList, "-");
+          using NoHead = Split<Types<>>::Head;  EXPECT (NoHead, "-");
         }
       
       

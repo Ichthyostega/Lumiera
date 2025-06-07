@@ -85141,7 +85141,7 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 <icon BUILTIN="idea"/>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1744755490793" ID="ID_1135941103" MODIFIED="1744756657146" TEXT="2025-4 : kann jetzt &#xfc;berall weg">
-<linktarget COLOR="#fd26d0" DESTINATION="ID_1135941103" ENDARROW="Default" ENDINCLINATION="-1048;89;" ID="Arrow_ID_1050531240" SOURCE="ID_831819953" STARTARROW="None" STARTINCLINATION="-1120;-23;"/>
+<linktarget COLOR="#265efd" DESTINATION="ID_1135941103" ENDARROW="Default" ENDINCLINATION="-1048;89;" ID="Arrow_ID_1050531240" SOURCE="ID_831819953" STARTARROW="None" STARTINCLINATION="-1120;-23;"/>
 <icon BUILTIN="yes"/>
 <node COLOR="#435e98" CREATED="1744755518679" ID="ID_1083442460" MODIFIED="1744755532011" TEXT="lib::Several hat sich gut etabliert">
 <icon BUILTIN="ksmiletris"/>
@@ -161972,7 +161972,8 @@ actively maintained upstream. Please remove gdl from Debian.</pre>
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1439176875682" ID="ID_1482098521" MODIFIED="1742175232490" TEXT="Debian/Trixie">
 <icon BUILTIN="pencil"/>
-<node CREATED="1742175232490" ID="ID_1849121366" MODIFIED="1742175241823" TEXT="Aufgaben">
+<node CREATED="1742175232490" ID="ID_1849121366" MODIFIED="1749341104677" TEXT="Aufgaben">
+<icon BUILTIN="yes"/>
 <node COLOR="#338800" CREATED="1742175284498" ID="ID_381697845" MODIFIED="1745722043514" TEXT="Scons-Build migrieren">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1742175408138" ID="ID_22551307" MODIFIED="1742176275192" TEXT="den gro&#xdf;en Schritt hat bereits Benny gemacht">
@@ -162757,8 +162758,8 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1742175611912" ID="ID_16098937" MODIFIED="1747359127313" TEXT="etwas aufr&#xe4;umen">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1742175611912" ID="ID_16098937" MODIFIED="1749341021068" TEXT="etwas aufr&#xe4;umen">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1742175621250" FOLDED="true" ID="ID_1886919024" MODIFIED="1745860228467" TEXT="boost-filesystem loswerden!">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1744754918427" ID="ID_368377472" MODIFIED="1745799970522" TEXT="lib/searchpath.hpp">
@@ -162837,9 +162838,9 @@ Since then others have made contributions, see the log for the history.</font></
 <arrowlink DESTINATION="ID_368377472" ENDARROW="Default" ENDINCLINATION="107;14;" ID="Arrow_ID_1432393919" STARTARROW="None" STARTINCLINATION="74;7;"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1742175872016" ID="ID_1131308211" MODIFIED="1747359118365" TEXT="Untersuchung: einfacher XV-Displayer">
+<node COLOR="#338800" CREATED="1742175872016" FOLDED="true" ID="ID_1131308211" MODIFIED="1747359118365" TEXT="Untersuchung: einfacher XV-Displayer">
 <icon BUILTIN="button_ok"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1742175882083" ID="ID_846823682" MODIFIED="1745783296480" TEXT="Christian hatte uns im Chat einen Tip gegeben">
+<node BACKGROUND_COLOR="#dae1b4" COLOR="#0a0099" CREATED="1742175882083" ID="ID_846823682" MODIFIED="1747359118480" TEXT="Christian hatte uns im Chat einen Tip gegeben">
 <richcontent TYPE="NOTE"><html>
   <head>
   <body>
@@ -163099,7 +163100,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1742176004434" ID="ID_393175435" MODIFIED="1747355570776" TEXT="Reste vom GTK-2-GUI zur&#xfc;ckbauen">
+<node COLOR="#338800" CREATED="1742176004434" FOLDED="true" ID="ID_393175435" MODIFIED="1747355570776" TEXT="Reste vom GTK-2-GUI zur&#xfc;ckbauen">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#984373" CREATED="1746059790896" ID="ID_1458700110" MODIFIED="1747358892480" TEXT="macht den GUI-Code verst&#xe4;ndlicher...">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
@@ -163201,7 +163202,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#bfcad3" COLOR="#1a475d" CREATED="1742249461535" ID="ID_1554376708" MODIFIED="1748489820913" TEXT="Rolle der lib-Gavl &#xfc;berpr&#xfc;fen">
+<node BACKGROUND_COLOR="#bfcad3" COLOR="#1a475d" CREATED="1742249461535" FOLDED="true" ID="ID_1554376708" MODIFIED="1748489820913" TEXT="Rolle der lib-Gavl &#xfc;berpr&#xfc;fen">
 <linktarget COLOR="#1857a4" DESTINATION="ID_1554376708" ENDARROW="Default" ENDINCLINATION="440;-36;" ID="Arrow_ID_608156847" SOURCE="ID_1683248748" STARTARROW="None" STARTINCLINATION="193;12;"/>
 <linktarget COLOR="#4c3b8b" DESTINATION="ID_1554376708" ENDARROW="Default" ENDINCLINATION="219;519;" ID="Arrow_ID_589652743" SOURCE="ID_219954631" STARTARROW="None" STARTINCLINATION="326;-188;"/>
 <icon BUILTIN="yes"/>
@@ -163807,7 +163808,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1746059853111" ID="ID_975342117" MODIFIED="1748563719621" TEXT="auch altes RenderNode-Framework zur&#xfc;ckbauen">
+<node COLOR="#338800" CREATED="1746059853111" FOLDED="true" ID="ID_975342117" MODIFIED="1748563719621" TEXT="auch altes RenderNode-Framework zur&#xfc;ckbauen">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1748561872884" ID="ID_962941766" MODIFIED="1748563677391" TEXT="Ansatzpunkte">
 <icon BUILTIN="idea"/>
@@ -163855,11 +163856,17 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="ksmiletris"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1744756270441" ID="ID_831819953" LINK="https://issues.lumiera.org/ticket/473" MODIFIED="1748738386934" TEXT="RefArray und ScopedHolder m&#xfc;ssen jetzt wirklich mal weg">
-<arrowlink COLOR="#fd26d0" DESTINATION="ID_1135941103" ENDARROW="Default" ENDINCLINATION="-1048;89;" ID="Arrow_ID_1050531240" STARTARROW="None" STARTINCLINATION="-1120;-23;"/>
+<node COLOR="#338800" CREATED="1744756270441" FOLDED="true" ID="ID_831819953" LINK="https://issues.lumiera.org/ticket/473" MODIFIED="1748738386934" TEXT="RefArray und ScopedHolder m&#xfc;ssen jetzt wirklich mal weg">
+<arrowlink COLOR="#265efd" DESTINATION="ID_1135941103" ENDARROW="Default" ENDINCLINATION="-1048;89;" ID="Arrow_ID_1050531240" STARTARROW="None" STARTINCLINATION="-1120;-23;"/>
 <icon BUILTIN="yes"/>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1747180091430" ID="ID_202566672" MODIFIED="1747180099934" TEXT="was ist mit ScopedPtrvect?">
+<node COLOR="#435e98" CREATED="1747180091430" ID="ID_202566672" MODIFIED="1749340966203" TEXT="was ist mit ScopedPtrvect?">
 <icon BUILTIN="help"/>
+<node COLOR="#437498" CREATED="1749340995322" ID="ID_1686131057" MODIFIED="1749341011299" TEXT="sinnvoll...">
+<font NAME="SansSerif" SIZE="9"/>
+</node>
+<node COLOR="#437498" CREATED="1749340999254" ID="ID_1836393412" MODIFIED="1749341011300" TEXT="bleibt erhalten">
+<font NAME="SansSerif" SIZE="9"/>
+</node>
 </node>
 <node COLOR="#435e98" CREATED="1748609941535" ID="ID_309992355" MODIFIED="1748738408223" TEXT="Status feststellen">
 <icon BUILTIN="yes"/>
@@ -164234,10 +164241,10 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node CREATED="1748731316160" ID="ID_1388202310" MODIFIED="1748731324655" TEXT="hash-fnv.h|c"/>
 </node>
-<node BACKGROUND_COLOR="#bc9daa" COLOR="#5b280f" CREATED="1748732382635" ID="ID_365290009" MODIFIED="1748737931585" STYLE="fork" TEXT="RefArray &#xd83d;&#xdc80;">
+<node BACKGROUND_COLOR="#bc9daa" COLOR="#5b280f" CREATED="1748732382635" FOLDED="true" ID="ID_365290009" MODIFIED="1749340958256" STYLE="fork" TEXT="RefArray &#xd83d;&#xdc80;">
 <edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
 <icon BUILTIN="button_cancel"/>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1748732389628" ID="ID_344324779" MODIFIED="1748737931582" TEXT="eine Verwendung auf dem Session-Interface">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1748732389628" FOLDED="true" ID="ID_344324779" MODIFIED="1749340952576" TEXT="eine Verwendung auf dem Session-Interface">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1748732426725" ID="ID_280482100" MODIFIED="1748737931582" TEXT="also wirklich: Interface-hat-eine-Collection"/>
 <node CREATED="1748732511785" ID="ID_1712841924" MODIFIED="1748737931582" TEXT="und zwar mit shared-Pointern"/>
@@ -164355,7 +164362,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1748826201673" ID="ID_358783348" MODIFIED="1748826459126" TEXT="gehe jetzt das Problem mit den variadischen Typlisten an">
+<node BACKGROUND_COLOR="#bee5cf" COLOR="#338800" CREATED="1748826201673" FOLDED="true" ID="ID_358783348" MODIFIED="1749341082318" TEXT="gehe jetzt das Problem mit den variadischen Typlisten an">
 <linktarget COLOR="#4c5dd7" DESTINATION="ID_358783348" ENDARROW="Default" ENDINCLINATION="-1131;-56;" ID="Arrow_ID_470275962" SOURCE="ID_575940847" STARTARROW="None" STARTINCLINATION="-4286;314;"/>
 <icon BUILTIN="yes"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1748826834261" ID="ID_1288761919" LINK="https://issues.lumiera.org/ticket/987" MODIFIED="1748826884703" TEXT="siehe ausf&#xfc;hrliche &#xdc;berlegungen in Ticket #987 ">
@@ -164392,8 +164399,8 @@ Since then others have made contributions, see the log for the history.</font></
 </html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1748826894390" ID="ID_1736451439" MODIFIED="1748826903420" TEXT="Zonen f&#xfc;r Umstellung identifizieren">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#d1d3d8" COLOR="#524398" CREATED="1748826894390" FOLDED="true" ID="ID_1736451439" MODIFIED="1749340895600" TEXT="Zonen f&#xfc;r Umstellung identifizieren">
+<icon BUILTIN="yes"/>
 <node COLOR="#435e98" CREATED="1748827924638" ID="ID_1710277250" MODIFIED="1748869708456" TEXT="Manipulations-Funktionen">
 <node CREATED="1748827943942" ID="ID_1841252518" MODIFIED="1748828044902" TEXT="Tuple-Builder, Split, Prepend und Pick unterst&#xfc;tzen bereits beide Varianten"/>
 <node CREATED="1748828081030" ID="ID_780708642" MODIFIED="1748828109653" TEXT="damit k&#xf6;nnen alle typeseq-util bereits f&#xfc;r beide Varianten verwendet werden">
@@ -164460,7 +164467,7 @@ Since then others have made contributions, see the log for the history.</font></
 </html></richcontent>
 </node>
 <node CREATED="1748828781783" ID="ID_691444823" MODIFIED="1748828794388" TEXT="sollte also f&#xfc;r alle Varianten gleicherma&#xdf;en greifen"/>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1748888164617" ID="ID_145174722" MODIFIED="1748980951490" TEXT="sollte Tests ustellen auf Inline-Checks (mit _expect)">
+<node COLOR="#435e98" CREATED="1748888164617" ID="ID_145174722" MODIFIED="1749340875647" TEXT="sollte Tests ustellen auf Inline-Checks (mit _expect)">
 <arrowlink DESTINATION="ID_1431343903" ENDARROW="Default" ENDINCLINATION="206;-13;" ID="Arrow_ID_1374886089" STARTARROW="None" STARTINCLINATION="250;329;"/>
 <arrowlink DESTINATION="ID_665924488" ENDARROW="Default" ENDINCLINATION="358;-61;" ID="Arrow_ID_369345367" STARTARROW="None" STARTINCLINATION="208;250;"/>
 <arrowlink DESTINATION="ID_653647632" ENDARROW="Default" ENDINCLINATION="135;-20;" ID="Arrow_ID_1807168701" STARTARROW="None" STARTINCLINATION="235;315;"/>
@@ -165424,33 +165431,50 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node CREATED="1748830139501" ID="ID_622177889" MODIFIED="1748830160252" TEXT="ElmTypes ist nur f&#xfc;r neue (variadisch) definiert"/>
 </node>
-<node CREATED="1748829176262" ID="ID_1246318914" MODIFIED="1748829178958" TEXT="Variant"/>
-<node CREATED="1748829201135" ID="ID_1330371655" MODIFIED="1748829203111" TEXT="Visitor"/>
-<node CREATED="1748829220424" ID="ID_795696886" MODIFIED="1748829224836" TEXT="Session-Command">
+<node COLOR="#435e98" CREATED="1748829176262" ID="ID_1246318914" MODIFIED="1749340864846" TEXT="Variant"/>
+<node COLOR="#435e98" CREATED="1748829201135" ID="ID_1330371655" MODIFIED="1749340864846" TEXT="Visitor"/>
+<node COLOR="#435e98" CREATED="1748829220424" ID="ID_795696886" MODIFIED="1749340869312" TEXT="Session-Command">
 <node CREATED="1748829229664" ID="ID_214343950" MODIFIED="1748829240967" TEXT="AcceptArg und AcceptBind umstellen"/>
 <node CREATED="1748829241698" ID="ID_1502522588" MODIFIED="1748829249189" TEXT="dann sollte big-Bang m&#xf6;glich sein"/>
 </node>
-<node CREATED="1748829278917" ID="ID_250508253" MODIFIED="1748829282736" TEXT="Session &amp; Builder">
+<node COLOR="#435e98" CREATED="1748829278917" ID="ID_250508253" MODIFIED="1749340869312" TEXT="Session &amp; Builder">
 <node CREATED="1748829283559" ID="ID_373354659" MODIFIED="1748829291711" TEXT="h&#xe4;ngt vermutlich an Variant bzw. Visitor"/>
 </node>
-<node CREATED="1748829316732" ID="ID_733906672" MODIFIED="1748829324434" TEXT="Timecode-formate"/>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1748829331775" ID="ID_1553022384" MODIFIED="1748900515205" TEXT="Tests">
-<icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1748829335663" ID="ID_953757498" MODIFIED="1748900529301" TEXT="jeweils bei Bezug mit umstellen">
+<node COLOR="#435e98" CREATED="1748829316732" ID="ID_733906672" MODIFIED="1749340869312" TEXT="Timecode-formate"/>
+<node COLOR="#338800" CREATED="1748829331775" FOLDED="true" ID="ID_1553022384" MODIFIED="1749340860142" TEXT="Tests">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1748829335663" ID="ID_953757498" MODIFIED="1749336247762" TEXT="jeweils bei Bezug mit umstellen">
 <icon BUILTIN="yes"/>
 </node>
 <node CREATED="1748829344620" ID="ID_1034418764" MODIFIED="1748883769361" TEXT="im Einzelnen">
 <icon BUILTIN="list"/>
-<node CREATED="1748829369449" MODIFIED="1748829369449" TEXT="FormatSupport_test"/>
-<node CREATED="1748829384655" MODIFIED="1748829384655" TEXT="TimeControl_test"/>
-<node CREATED="1748829402514" MODIFIED="1748829402514" TEXT="VisitingTool_test"/>
-<node CREATED="1748829412897" MODIFIED="1748829412897" TEXT="CommandCloneBuilder_test"/>
-<node CREATED="1748829420654" MODIFIED="1748829420654" TEXT="CommandEquality_test"/>
-<node CREATED="1748829427640" MODIFIED="1748829427640" TEXT="CommandMutation_test"/>
-<node CREATED="1748829435006" MODIFIED="1748829435006" TEXT="CommandRegistry_test"/>
-<node CREATED="1748829442778" MODIFIED="1748829442778" TEXT="HandlingPatternBasics_test"/>
-<node CREATED="1748829453011" MODIFIED="1748829453011" TEXT="BuilderTool_test"/>
-<node CREATED="1748829468217" MODIFIED="1748829468217" TEXT="SessionServiceAccess_test"/>
+<node COLOR="#435e98" CREATED="1748829369449" ID="ID_1712572941" MODIFIED="1749296147872" TEXT="FormatSupport_test"/>
+<node COLOR="#435e98" CREATED="1748829384655" ID="ID_818292101" MODIFIED="1749297906698" TEXT="TimeControl_test"/>
+<node COLOR="#435e98" CREATED="1748829402514" ID="ID_1475154957" MODIFIED="1749298311811" TEXT="VisitingTool_test"/>
+<node COLOR="#5b280f" CREATED="1748829412897" ID="ID_1140250977" MODIFIED="1749298480081" TEXT="CommandCloneBuilder_test">
+<icon BUILTIN="button_cancel"/>
+<node COLOR="#744398" CREATED="1749298484082" HGAP="22" ID="ID_1296599024" MODIFIED="1749336241334" TEXT="std::tuple stat type-seq verwendet" VSHIFT="5">
+<arrowlink COLOR="#8526c8" DESTINATION="ID_783380997" ENDARROW="None" ENDINCLINATION="54;5;" ID="Arrow_ID_829287253" STARTARROW="None" STARTINCLINATION="5;20;"/>
+<arrowlink COLOR="#9e6ac3" DESTINATION="ID_556747715" ENDARROW="None" ENDINCLINATION="102;11;" ID="Arrow_ID_1444297637" STARTARROW="None" STARTINCLINATION="13;57;"/>
+<font NAME="SansSerif" SIZE="9"/>
+</node>
+</node>
+<node COLOR="#5b280f" CREATED="1748829442778" ID="ID_783380997" MODIFIED="1749335956242" TEXT="HandlingPatternBasics_test">
+<linktarget COLOR="#8526c8" DESTINATION="ID_783380997" ENDARROW="None" ENDINCLINATION="54;5;" ID="Arrow_ID_829287253" SOURCE="ID_1296599024" STARTARROW="None" STARTINCLINATION="5;20;"/>
+<icon BUILTIN="button_cancel"/>
+</node>
+<node COLOR="#5b280f" CREATED="1748829420654" ID="ID_580068958" MODIFIED="1749336193046" TEXT="CommandEquality_test">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node COLOR="#5b280f" CREATED="1748829427640" ID="ID_1308198327" MODIFIED="1749336193045" TEXT="CommandMutation_test">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node COLOR="#5b280f" CREATED="1748829435006" ID="ID_556747715" MODIFIED="1749336230725" TEXT="CommandRegistry_test">
+<linktarget COLOR="#9e6ac3" DESTINATION="ID_556747715" ENDARROW="None" ENDINCLINATION="102;11;" ID="Arrow_ID_1444297637" SOURCE="ID_1296599024" STARTARROW="None" STARTINCLINATION="13;57;"/>
+<icon BUILTIN="button_cancel"/>
+</node>
+<node COLOR="#435e98" CREATED="1748829453011" ID="ID_298624775" MODIFIED="1749265246395" TEXT="BuilderTool_test"/>
+<node COLOR="#435e98" CREATED="1748829468217" ID="ID_294054246" MODIFIED="1749332387894" TEXT="SessionServiceAccess_test"/>
 <node COLOR="#435e98" CREATED="1748829480048" ID="ID_142039126" MODIFIED="1749007517616" TEXT="FunctionClosure_test">
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_142039126" ENDARROW="Default" ENDINCLINATION="726;0;" ID="Arrow_ID_535671141" SOURCE="ID_240022720" STARTARROW="None" STARTINCLINATION="726;0;"/>
 </node>
@@ -165519,7 +165543,7 @@ Since then others have made contributions, see the log for the history.</font></
 <node COLOR="#435e98" CREATED="1748829523737" ID="ID_803058969" MODIFIED="1748883754992" TEXT="TypeListGenerator_test">
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_803058969" ENDARROW="Default" ENDINCLINATION="852;0;" ID="Arrow_ID_1971292758" SOURCE="ID_511778446" STARTARROW="None" STARTINCLINATION="302;17;"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1748829534601" ID="ID_75861658" MODIFIED="1749177103638" TEXT="MetaUtils_test"/>
+<node COLOR="#435e98" CREATED="1748829534601" ID="ID_75861658" MODIFIED="1749332314880" TEXT="MetaUtils_test"/>
 <node COLOR="#435e98" CREATED="1748829542074" ID="ID_653647632" MODIFIED="1748960053937" TEXT="TupleHelper_test">
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_653647632" ENDARROW="Default" ENDINCLINATION="135;-20;" ID="Arrow_ID_1807168701" SOURCE="ID_145174722" STARTARROW="None" STARTINCLINATION="235;315;"/>
 </node>
@@ -165539,38 +165563,38 @@ Since then others have made contributions, see the log for the history.</font></
 <node COLOR="#435e98" CREATED="1748829567920" ID="ID_1097523075" MODIFIED="1749078634991" TEXT="TypeList_test">
 <linktarget COLOR="#8ec9a3" DESTINATION="ID_1097523075" ENDARROW="Default" ENDINCLINATION="1324;0;" ID="Arrow_ID_370033957" SOURCE="ID_91346918" STARTARROW="None" STARTINCLINATION="481;24;"/>
 </node>
-<node CREATED="1748829607017" MODIFIED="1748829607017" TEXT="Variant_test"/>
+<node COLOR="#435e98" CREATED="1748829607017" ID="ID_596384261" MODIFIED="1749265034416" TEXT="Variant_test"/>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1748871733811" ID="ID_1327114043" MODIFIED="1748871745451" TEXT="schrittweise umarbeiten...">
-<icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1748871746934" ID="ID_1013283697" MODIFIED="1748883821476" TEXT="mit einfachen Typ-Listen anfangen">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1748871733811" FOLDED="true" ID="ID_1327114043" MODIFIED="1749340906083" TEXT="schrittweise umarbeiten...">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1748871746934" ID="ID_1013283697" MODIFIED="1749265043727" TEXT="mit einfachen Typ-Listen anfangen">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1748871760093" ID="ID_234969081" MODIFIED="1748883829134" TEXT="alle Konvertierungspfade aufgedoppelt">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1748871777734" ID="ID_543292197" MODIFIED="1748883832925" TEXT="die zugeh&#xf6;rigen Tests auf die neuen Typ-Sequenzen umstellen">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1748871777734" ID="ID_543292197" MODIFIED="1749265045831" TEXT="die zugeh&#xf6;rigen Tests auf die neuen Typ-Sequenzen umstellen">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1748871811471" ID="ID_1037157310" MODIFIED="1748883848889" TEXT="bei der Gelegenheit auch modernisieren">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1748871811471" ID="ID_1037157310" MODIFIED="1749336412166" TEXT="bei der Gelegenheit auch modernisieren">
 <icon BUILTIN="yes"/>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1748871820220" ID="ID_446849123" MODIFIED="1748883860119" TEXT="typedefs durch using ersetzen">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1748871820220" ID="ID_446849123" MODIFIED="1749336257348" TEXT="typedefs durch using ersetzen">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1748871829578" ID="ID_308061484" MODIFIED="1748883860119" TEXT="Meta-Wertfunktionen in constexpr &#xfc;berf&#xfc;hren">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1748871829578" ID="ID_308061484" MODIFIED="1749336409239" TEXT="Meta-Wertfunktionen in constexpr &#xfc;berf&#xfc;hren">
+<icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1748871856256" ID="ID_304666403" MODIFIED="1748900585714" TEXT="Tests ggfs vervollst&#xe4;ndigen">
+<node COLOR="#338800" CREATED="1748871856256" ID="ID_304666403" MODIFIED="1749336274575" TEXT="Tests ggfs vervollst&#xe4;ndigen">
 <icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1748900565184" ID="ID_1203054358" MODIFIED="1748900572521" TEXT="ExpectString verwenden">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1748900565184" ID="ID_1203054358" MODIFIED="1749336262676" TEXT="ExpectString verwenden">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1749177155817" ID="ID_253850750" MODIFIED="1749177176623" TEXT="dann den Themenkomplex &#xbb;Funktionen&#xab; angehen">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1749177155817" ID="ID_253850750" MODIFIED="1749265047728" TEXT="dann den Themenkomplex &#xbb;Funktionen&#xab; angehen">
+<icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1749177180341" ID="ID_1746274296" MODIFIED="1749177280835">
 <richcontent TYPE="NODE"><html>
   <head/>
@@ -165587,8 +165611,14 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
+<node COLOR="#338800" CREATED="1749265055449" ID="ID_1617513184" MODIFIED="1749265074876" TEXT="dann in der Kern-Codebasis alle Verwendungen schwenken">
+<icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#338800" CREATED="1748873216115" ID="ID_1189899594" MODIFIED="1748879258348" TEXT="Big anti-Bang: NullType &#x27fc; Nil">
+<node COLOR="#338800" CREATED="1749265075819" ID="ID_1509578336" MODIFIED="1749340800423" TEXT="schlie&#xdf;lich die alten Definitionen und Br&#xfc;cken entfernen">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1748873216115" FOLDED="true" ID="ID_1189899594" MODIFIED="1749340910868" TEXT="Big anti-Bang: NullType &#x27fc; Nil">
 <icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1748873298068" ID="ID_132055056" MODIFIED="1748873322310" TEXT="182 usages...">
 <font NAME="SansSerif" SIZE="10"/>
@@ -165597,8 +165627,8 @@ Since then others have made contributions, see the log for the history.</font></
 <font NAME="SansSerif" SIZE="7"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1748873250610" ID="ID_7395466" MODIFIED="1748873280467" TEXT="Big-Bang: TySeq &#x27fc; Types">
-<icon BUILTIN="hourglass"/>
+<node COLOR="#338800" CREATED="1748873250610" ID="ID_7395466" MODIFIED="1749340803860" TEXT="Big-Bang: TySeq &#x27fc; Types">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>

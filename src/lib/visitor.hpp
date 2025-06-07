@@ -171,7 +171,7 @@ namespace visitor {
         }
     };
   
-  using typelist::TySeq;  // convenience for the user of "Applicable"
+  using typelist::Types;  // convenience for the user of "Applicable"
   
   
   

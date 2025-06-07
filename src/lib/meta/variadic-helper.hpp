@@ -20,18 +20,13 @@
  ** lists _at compile time,_ driven by template instantiation, allowing to specialise
  ** and react specifically on some concrete pattern of argument types.
  ** 
- ** @warning the metaprogramming part of Lumiera to deal with type sequences is in a
- **          state of transition, since C++11 now offers direct language support for
- **          processing of flexible template parameter sequences ("parameter packs").
- **          It is planned to regroup and simplify our homemade type sequence framework
- **          to rely on variadic templates and integrate better with std::tuple.
- **          It is clear that we will _retain some parts_ of our own framework,
- **          since programming with _Loki-style typelists_ is way more obvious
- **          and straight forward than handling of template parameter packs,
- **          since the latter can only be rebound through pattern matching.
- ** @todo transition lib::meta::Types to variadic parameters  /////////////////////////////////TICKET #987
- ** 
- ** @see control::CommandDef usage example
+ ** @remark in Lumiera, over time three different approaches were developed for
+ **         handling sequences of types in metaprogramming; some of these techniques
+ **         are better suited for specific kinds of tasks than others
+ **         - templates with variadic arguments (e.g. std::tuple) can be manipulated directly
+ **         - a type-sequence `Types<T...>` can be primed / rebound from other variadic templates
+ **         - Loki-style type-lists are created from type-sequences and enable elaborate manipulations
+ ** @see feed-manifold.hpp advanced usage example in the Render Engine
  ** @see TupleHelper_test
  ** @see typelist.hpp
  ** @see function.hpp
@@ -140,32 +135,8 @@ namespace meta {
     };
 
   /** build an index number sequence from a type sequence */
-   //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #987 temporary WORKAROUND -- to be obsoleted
   template<typename...TYPES>
-  struct BuildIdxIter<TyOLD<TYPES...>>
-    {
-      ///////////////////////TICKET #987 : since Types<T...> is not variadic, need to strip Nil-Type here (instead of just using sizeof...(TYPES)
-      enum {SIZ = lib::meta::count<typename TyOLD<TYPES...>::List>::value };
-      using Builder = BuildIndexSeq<SIZ>;
-      
-      using Ascending  = typename Builder::Ascending;
-      using Descending = typename Builder::Descending;
-      
-      template<size_t d>
-      using OffsetBy   = typename Builder::template OffsetBy<d>;
-      
-      template<size_t x>
-      using FilledWith = typename Builder::template FilledWith<x>;
-      
-      template<size_t c>
-      using First = typename Builder::template First<c>;
-      
-      template<size_t c>
-      using After = typename Builder::template After<c>;
-    };
-   //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #987 temporary WORKAROUND(END)
-  template<typename...TYPES>
-  struct BuildIdxIter<TySeq<TYPES...>>
+  struct BuildIdxIter<Types<TYPES...>>
     : BuildIdxIter<TYPES...>
     { };
   
@@ -196,11 +167,11 @@ namespace meta {
     {
       static constexpr size_t SIZ = 1;
       using Idx = std::index_sequence<SIZ>;
-      using Seq = TySeq<X>;
+      using Seq = Types<X>;
       using Tup = std::tuple<X>;
       
       template<template<class> class META>
-      using Apply = TySeq<META<X>>;
+      using Apply = Types<META<X>>;
       template<template<typename...> class O>
       using Rebind = O<X>;
       template<template<class> class PRED>
@@ -211,15 +182,15 @@ namespace meta {
   
   /** Partial specialisation to handle type sequences */
   template<typename...TYPES>
-  struct ElmTypes<TySeq<TYPES...>>
+  struct ElmTypes<Types<TYPES...>>
     {
       static constexpr size_t SIZ = sizeof...(TYPES);
       using Idx = std::make_index_sequence<SIZ>;
-      using Seq = TySeq<TYPES...>;
+      using Seq = Types<TYPES...>;
       using Tup = std::tuple<TYPES...>;
       
       template<template<class> class META>
-      using Apply = TySeq<META<TYPES>...>;
+      using Apply = Types<META<TYPES>...>;
       
       template<template<typename...> class O>
       using Rebind = typename lib::meta::RebindVariadic<O, Seq>::Type;
@@ -242,7 +213,7 @@ namespace meta {
       template<size_t...idx>
       struct Extract<std::index_sequence<idx...>>
         {
-          using ElmTypes = TySeq<typename std::tuple_element<idx,TUP>::type ...>;
+          using ElmTypes = Types<typename std::tuple_element<idx,TUP>::type ...>;
         };
       
       static constexpr size_t SIZ = std::tuple_size<TUP>::value;
@@ -315,7 +286,7 @@ namespace meta {
                     return lib::meta::count<typename TTX::List>();
                   else
                     { // Fallback: rebind template arguments into a type sequence
-                      using Seq = typename RebindVariadic<TySeq, TTX>::Type;
+                      using Seq = typename RebindVariadic<Types, TTX>::Type;
                       return size_t(count<Seq>());
                     }
                };

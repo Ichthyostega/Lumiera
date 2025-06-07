@@ -40,7 +40,7 @@ namespace test {
         };
       
       
-      using SequenceOfTypes = TySeq< Block<21>
+      using SequenceOfTypes = Types< Block<21>
                                    , Block<13>
                                    , Block<8>
                                    , Block<5>

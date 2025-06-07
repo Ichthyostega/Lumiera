@@ -207,7 +207,7 @@ namespace interact {
           using lib::meta::_Fun;
           using lib::meta::Split;
           using lib::meta::Tuple;
-          using lib::meta::TySeq;
+          using lib::meta::Types;
           using lib::meta::func::PApply;
           
           typedef typename _Fun<FUN>::Ret Ret;
@@ -219,7 +219,7 @@ namespace interact {
                          "Allocator function must accept UICoordinates (where to create/locate) as first argument");
           static_assert (std::is_convertible<Ret, UICoord>::value,
                          "Allocator function must produce UICoordinates (of the actually allocated UI element)");
-          static_assert (std::is_convertible<FurtherArgs, TySeq<ARGS...>>::value,
+          static_assert (std::is_convertible<FurtherArgs, Types<ARGS...>>::value,
                          "Additional parameters of the allocator function must match the AllocSpec<ARGS> template parameters");
           
           

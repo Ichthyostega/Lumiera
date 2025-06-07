@@ -268,7 +268,7 @@ namespace session {
    *       to create "the session" instance and expose it through the
    *       global Session PImpl
    */
-  using SessionImplAPI = SessionServices< TySeq< SessionServiceFetch
+  using SessionImplAPI = SessionServices< Types< SessionServiceFetch
                                                , SessionServiceMutate
                                                , SessionServiceExploreScope
                                                , SessionServiceMockIndex

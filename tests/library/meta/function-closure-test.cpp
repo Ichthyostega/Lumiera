@@ -46,8 +46,8 @@ namespace test {
       
       namespace { // test data
         
-        using List1 = TySeq<Num<1>, Num<2>, Num<3> >::List;
-        using List2 = TySeq<Num<5>, Num<6>, Num<7> >::List;
+        using List1 = Types<Num<1>, Num<2>, Num<3> >::List;
+        using List2 = Types<Num<5>, Num<6>, Num<7> >::List;
         
         
         /** special test fun 
@@ -140,10 +140,10 @@ namespace test {
         {
           cout << "\t:\n\t: ---Bind----\n";
           
-          Tuple<TySeq<>>            tup0 ;
-          Tuple<TySeq<int>>         tup1 (11);
-          Tuple<TySeq<int,int>>     tup2 (11,12);
-          Tuple<TySeq<int,int,int>> tup3 (11,12,13);
+          Tuple<Types<>>            tup0 ;
+          Tuple<Types<int>>         tup1 (11);
+          Tuple<Types<int,int>>     tup2 (11,12);
+          Tuple<Types<int,int,int>> tup3 (11,12,13);
           DUMPVAL (tup0);
           DUMPVAL (tup1);
           DUMPVAL (tup2);
@@ -167,10 +167,10 @@ namespace test {
       void
       check_bindFunc ()
         {
-          Tuple<TySeq<>>             tup0 ;
-          Tuple<TySeq<int>>          tup1 (11);
-          Tuple<TySeq<int,int>>      tup2 (11,12);
-          Tuple<TySeq<int,int,int>>  tup3 (11,12,13);
+          Tuple<Types<>>             tup0 ;
+          Tuple<Types<int>>          tup1 (11);
+          Tuple<Types<int,int>>      tup2 (11,12);
+          Tuple<Types<int,int,int>>  tup3 (11,12,13);
           function<int()>            unbound_functor0 (fun0);
           function<int(int)>         unbound_functor1 (fun1);
           function<int(int,int)>     unbound_functor2 (fun2);

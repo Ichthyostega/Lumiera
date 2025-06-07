@@ -93,7 +93,7 @@ namespace meta{
       static auto
       closeFront (VALS&& ...vs)
         {
-          using ClosedTypes = TySeq<std::decay_t<VALS>...>;
+          using ClosedTypes = Types<std::decay_t<VALS>...>;
           auto  boundArgs = std::make_tuple (std::forward<VALS> (vs)...);                      // Note: must be passed by-val here
           return wrapBuilder (func::PApply<TupleBuilderSig, ClosedTypes>::bindFront (buildRecord, move(boundArgs)));
         }
@@ -104,7 +104,7 @@ namespace meta{
       static auto
       closeBack (VALS&& ...vs)
         {
-          using ClosedTypes = TySeq<std::decay_t<VALS>...>;
+          using ClosedTypes = Types<std::decay_t<VALS>...>;
           auto  boundArgs = std::make_tuple (std::forward<VALS> (vs)...);
           return wrapBuilder (func::PApply<TupleBuilderSig, ClosedTypes>::bindBack  (buildRecord, move(boundArgs)));
         }

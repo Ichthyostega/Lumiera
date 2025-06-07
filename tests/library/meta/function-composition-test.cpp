@@ -198,7 +198,7 @@ namespace test {
           
           // Version2: extract the binding arguments from a tuple--- //
           
-          using PartialArg =  Tuple<TySeq<Num<1>, PH1, PH2>>;        // Tuple type to hold the binding values. Note the placeholder types
+          using PartialArg =  Tuple<Types<Num<1>, PH1, PH2>>;        // Tuple type to hold the binding values. Note the placeholder types
           PartialArg arg{num18, PH1(), PH2()};                       // Value for partial application (the placeholders are default constructed)
           
           fun_23 = std::bind (f, get<0>(arg)                         // now extract the values to bind from this tuple
@@ -219,7 +219,7 @@ namespace test {
           
           // Version3: let the PApply-template do the work for us--- //
           
-          using ArgTypes = TySeq<Num<1>>;                            // now package just the argument(s) to be applied into a tuple
+          using ArgTypes = Types<Num<1>>;                            // now package just the argument(s) to be applied into a tuple
           Tuple<ArgTypes> args_to_bind{Num<1>(18)};
           
           fun_23 = PApply<Sig123, ArgTypes>::bindFront (f , args_to_bind);
@@ -281,7 +281,7 @@ namespace test {
           // covering the general case of partial function closure:
           typedef Num<5> Sig54321 (Num<5>, Num<4>, Num<3>, Num<2>, Num<1>);  // Signature of the 5-argument function
           typedef Num<5> Sig54    (Num<5>, Num<4>);                          // ...closing the last 3 arguments should yield this 2-argument function
-          using Args2Close = TySeq<Num<3>, Num<2>, Num<1>>;                  // Tuple type to hold the 3 argument values used for the closure
+          using Args2Close = Types<Num<3>, Num<2>, Num<1>>;                  // Tuple type to hold the 3 argument values used for the closure
           
           // Close the trailing 3 arguments of the 5-argument function...
           function<Sig54> fun_54 = PApply<Sig54321,Args2Close>::bindBack (fun15<5,4,3,2,1>

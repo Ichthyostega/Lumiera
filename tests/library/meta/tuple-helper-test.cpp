@@ -44,14 +44,14 @@ namespace test {
   namespace { // test data
     
     
-    typedef TySeq< Num<1>
+    typedef Types< Num<1>
                  , Num<3>
                  , Num<5>
                  >         Types1;
-    typedef TySeq< Num<2>
+    typedef Types< Num<2>
                  , Num<4>
                  >         Types2;
-    typedef TySeq< Num<7>> Types3;
+    typedef Types< Num<7>> Types3;
     
     
     
@@ -132,7 +132,7 @@ namespace test {
           Prepend prep (22, 11,33,Num<5>());
           CHECK (toString(prep) == "«tuple<int, Num<1>, Num<3>, Num<5> >»──(22,{11},{33},(5))"_expect);
           
-          using NulT = Tuple<TySeq<> >;     // plain-flat empty Tuple
+          using NulT = Tuple<Types<> >;     // plain-flat empty Tuple
           using NulL = Tuple<Nil>;          // list-style empty Tuple
           
           NulT nulT;                        // and these, too, can be instantiated

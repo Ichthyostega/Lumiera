@@ -64,8 +64,8 @@ namespace test2  {
     };
     
   class Babbler
-    : public Applicable< Babbler, 
-                         TySeq<Boss,BigBoss>::List,    // treat this types
+    : public Applicable< Babbler,
+                         Types<Boss,BigBoss>::List,    // treat this types
                          VerboseVisitor<Tool>         //  intermediary base class
                        >
     {
@@ -75,7 +75,7 @@ namespace test2  {
     };
 
   // the classes above comprise the standard use case,
-  // what follows covers rather exotic corner cases 
+  // what follows covers rather exotic corner cases
   
   
   
@@ -86,7 +86,7 @@ namespace test2  {
       RET onUnknown (HomoSapiens&) { cout << "we-do-everything-for-YOU!\n"; return RET(); }
     };
     
-  /** defines another different visiting tool base */  
+  /** defines another different visiting tool base */
   typedef visitor::Tool<void, Catched> Hastalavista;
   typedef Visitable<Hastalavista> Chief;  ///< another special kind of visitable
 
@@ -113,9 +113,9 @@ namespace test2  {
    *  tailored for the Chief hierarchy
    */  
   class Blatherer
-    : public Applicable< Blatherer, 
-                         TySeq<Visionary>::List,         // get calls to Visionary dispatched 
-                         VerboseVisitor<Hastalavista>   // note: different tool base class 
+    : public Applicable< Blatherer,
+                         Types<Visionary>::List,         // get calls to Visionary dispatched
+                         VerboseVisitor<Hastalavista>   // note: different tool base class
                        >
     {
     public:
@@ -123,8 +123,8 @@ namespace test2  {
     };
   
   
-        
-
+  
+  
   
   
   
@@ -137,12 +137,13 @@ namespace test2  {
    */
   class VisitingToolExtended_test : public Test
     {
-      virtual void run(Arg) 
+      virtual void
+      run(Arg)
         {
           known_visitor_known_class();
           visitor_not_visiting_some_class();
           visiting_mixed_hierarchy();
-        } 
+        }
       
       void known_visitor_known_class()
         {
@@ -193,7 +194,7 @@ namespace test2  {
           Babbler bab;
           Tool& tool1 (bab);
           cout << "=== Babbler masqueraded as Tool meets Leader and Visionary masqueraded as HomoSapiens ===\n";
-          homo1.apply (tool1); // because just going through the VTable, the dispatch works as expected 
+          homo1.apply (tool1); // because just going through the VTable, the dispatch works as expected
           homo2.apply (tool1); // same here (in both cases, the call is resolved to treat(Boss&) as expected)
           
           cout << "=== Babbler masqueraded as Tool meets Leader and Visionary masqueraded as Leader ===\n";
@@ -202,8 +203,8 @@ namespace test2  {
           
           // note: the following doesn't compile (an this is a feature, not a bug):
           
-          // "Chief chief"           : is abstract, because the Visitable-Template enforces implementing 
-          //                           the "apply(TOOL&)" function, either directly or via the 
+          // "Chief chief"           : is abstract, because the Visitable-Template enforces implementing
+          //                           the "apply(TOOL&)" function, either directly or via the
           //                           DEFINE_PROCESSABLE_BY macro
 
         }

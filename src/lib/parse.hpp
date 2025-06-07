@@ -392,7 +392,7 @@ namespace util {
       : tuple<RESULTS...>
       {
         static constexpr size_t N = sizeof...(RESULTS);
-        using Seq = lib::meta::TySeq<RESULTS...>;
+        using Seq = lib::meta::Types<RESULTS...>;
         using Tup = std::tuple<RESULTS...>;
         
         SeqModel() = default;

@@ -22,17 +22,6 @@
  ** - shifting a type sequence
  ** - re-generating a type sequence from a typelist.
  ** 
- ** @warning the metaprogramming part of Lumiera to deal with type sequences is in a
- **          state of transition, since C++11 now offers direct language support for
- **          processing of flexible template parameter sequences ("parameter packs").
- **          It is planned to regroup and simplify our homemade type sequence framework
- **          to rely on variadic templates and integrate better with std::tuple.
- **          It is clear that we will _retain some parts_ of our own framework,
- **          since programming with _Loki-style typelists_ is way more obvious
- **          and straight forward than handling of template parameter packs,
- **          since the latter can only be rebound through pattern matching.
- ** @todo transition lib::meta::Types to variadic parameters  /////////////////////////////////TICKET #987
- ** 
  ** @see typeseq-manip-test.cpp
  ** @see typelist.hpp
  ** @see typelist-util.hpp
@@ -88,11 +77,7 @@ namespace meta {
     : SizConst<sizeof...(TYPES)>
   { };
   template<class... TYPES>
-  struct count<TySeq<TYPES...>>
-    : SizConst<sizeof...(TYPES)>
-  { };
-  template<class... TYPES>
-  struct count<TyOLD<TYPES...>>
+  struct count<Types<TYPES...>>
     : SizConst<sizeof...(TYPES)>
   { };
   
@@ -101,78 +86,15 @@ namespace meta {
    * Helper: prepend a type to an existing type sequence,
    * thus shifting all elements within the sequence
    * to the right, eventually dropping the last element
-   *  @todo support variadic type-seq        ////////////////////////////////////////////////////////////////TICKET #987 : make lib::meta::Types<TYPES...> variadic, then replace this by a single variadic template
    */
   template<class T, class TYPES>
   struct Prepend;
-                          ///////////////////////////////////////////////////////////////////////////////////TICKET #987 : the following specialisation will be obsoleted by the removal of old-style type-sequences
-  template< typename T01
-          , typename T02
-          , typename T03
-          , typename T04
-          , typename T05
-          , typename T06
-          , typename T07
-          , typename T08
-          , typename T09
-          , typename T10
-          , typename T11
-          , typename T12
-          , typename T13
-          , typename T14
-          , typename T15
-          , typename T16
-          , typename T17
-          , typename T18
-          , typename T19
-          , typename T20
-          , typename IGN
-          >
-  struct Prepend<T01, TyOLD<     T02,T03,T04,T05
-                           , T06,T07,T08,T09,T10
-                           , T11,T12,T13,T14,T15
-                           , T16,T17,T18,T19,T20
-                           , IGN
-                           > >
-  {
-    typedef TyOLD< T01,T02,T03,T04,T05
-                 , T06,T07,T08,T09,T10
-                 , T11,T12,T13,T14,T15
-                 , T16,T17,T18,T19,T20 > Seq;
-    
-    typedef typename Seq::List          List;
-  };
   
-  
-  
-   //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #987 temporary WORKAROUND -- to be obsoleted
-  /**
-   * Additional specialisation of the basic type sequence type,
-   * allowing to re-create a (flat) type sequence from a typelist.
-   */
-  template<class H, class T>
-  struct TyOLD< Node<H,T> >
-    {
-      typedef Node<H,T> List;
-      
-      typedef typename Prepend< H
-                              , typename TyOLD<T>::Seq
-                              >::Seq  Seq;
-    };
-  
-  
-  
-   //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #987 temporary WORKAROUND -- to be obsoleted
-  /**
-   * temporary workaround: additional specialisation for the template
-   * `Prepend` to work also with the (alternative) variadic TySeq.
-   * @see typeseq-util.hpp
-   */
   template<typename T, typename...TYPES>
-  struct Prepend<T, TySeq<TYPES...>>
+  struct Prepend<T, Types<TYPES...>>
   {
-    using Seq  = TySeq<T, TYPES...>;
-    using List = typename TySeq<T, TYPES...>::List;
+    using Seq  = Types<T, TYPES...>;
+    using List = typename Types<T, TYPES...>::List;
   };
   
   
@@ -180,156 +102,72 @@ namespace meta {
   /**
    * Additional specialisation of the basic type sequence type,
    * allowing to re-create a (flat) type sequence from a typelist.
+   * @remark can now be built with the help of \ref Prepend.
    */
   template<class H, class T>
-  struct TySeq< Node<H,T> >
+  struct Types< Node<H,T> >
     {
       using List = Node<H,T>;
       using Seq  = typename Prepend< H
-                                   , typename TySeq<T>::Seq
+                                   , typename Types<T>::Seq
                                    >::Seq;
     };
   template<>
-  struct TySeq<Nil>
+  struct Types<Nil>
     {
       using List = Nil;
-      using Seq  = TySeq<>;
+      using Seq  = Types<>;
     };
   template<>
-  struct TySeq<NilNode>
-    : TySeq<Nil>
+  struct Types<NilNode>
+    : Types<Nil>
     { };
   
   
-   //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #987 temporary WORKAROUND -- to be obsoleted
-  /**
-   * temporary workaround: strip trailing Nil entries from a
-   * type sequence, to make it compatible with new-style variadic
-   * template definitions.
-   * @note the result type is a TySec, to keep it apart from our
-   *    legacy (non-variadic) lib::meta::Types
-   * @deprecated necessary for the transition to variadic sequences      ////////////////////////////////////TICKET #987 : make lib::meta::Types<TYPES...> variadic
-   */
-  template<typename SEQ>
-  struct StripNil;
-  
-  template<typename T, typename...TYPES>
-  struct StripNil<TyOLD<T,TYPES...>>
-    {
-      using TailSeq = typename StripNil<TyOLD<TYPES...>>::Seq;
-      
-      using Seq = typename Prepend<T, TailSeq>::Seq;
-    };
-  
-  template<typename...TYPES>
-  struct StripNil<TyOLD<Nil, TYPES...>>
-    {
-      using Seq = TySeq<>;  // NOTE: this causes the result to be a TySeq
-    };
-                          ///////////////////////////////////////////////////////////////////////////////////TICKET #987 : the following specialisation is a catch-all and becomes obsolete
-  template<typename...TYPES>
-  struct StripNil<TySeq<TYPES...>>
-    {
-      using Seq = TySeq<TYPES...>;
-    };
-   //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #987 temporary WORKAROUND(End) -- to be obsoleted
   
   
   
   /** Helper: separate parts of a type sequence
-   *  @todo support variadic type-seq        ////////////////////////////////////////////////////////////////TICKET #987 : make lib::meta::Types<TYPES...> variadic, then replace this by a single variadic template
    */
   template<class TYPES>
   struct Split;
   
-                          ///////////////////////////////////////////////////////////////////////////////////TICKET #987 : this specialisation handles the variadic case and will be the only definition in future
   template<typename T1, typename...TS>
-  struct Split<TySeq<T1,TS...> >
+  struct Split<Types<T1,TS...> >
   {
-    using List = typename TySeq<T1,TS...>::List;
+    using List = typename Types<T1,TS...>::List;
     
     using Head  = T1;
-    using First = TySeq<T1>;
-    using Tail  = TySeq<TS...>;
+    using First = Types<T1>;
+    using Tail  = Types<TS...>;
     
     // for finding the end we need the help of typelist-util.hpp
     
     using PrefixList = typename PickLast<List>::List;
     using TailList   = typename Tail::List;
     
-    using Prefix     = typename TySeq<PrefixList>::Seq;
+    using Prefix     = typename Types<PrefixList>::Seq;
     using End        = typename PickLast<List>::Type;
-    using Last       = TySeq<End>;
+    using Last       = Types<End>;
   };
   
   template<>
-  struct Split<TySeq<>>
+  struct Split<Types<>>
   {
     using List  = Nil;
     
     using Head  = Nil;
-    using First = TySeq<>;
-    using Tail  = TySeq<>;
+    using First = Types<>;
+    using Tail  = Types<>;
     
     // for finding the end we need the help of typelist-util.hpp
     
     using PrefixList = Nil;
     using TailList   = Nil;
     
-    using Prefix     = TySeq<>;
-    using Last       = TySeq<>;
+    using Prefix     = Types<>;
+    using Last       = Types<>;
     using End        = Nil;
-  };
-                          ///////////////////////////////////////////////////////////////////////////////////TICKET #987 : the following specialisation will be obsoleted by the removal of old-style type-sequences
-  template< typename T01
-          , typename T02
-          , typename T03
-          , typename T04
-          , typename T05
-          , typename T06
-          , typename T07
-          , typename T08
-          , typename T09
-          , typename T10
-          , typename T11
-          , typename T12
-          , typename T13
-          , typename T14
-          , typename T15
-          , typename T16
-          , typename T17
-          , typename T18
-          , typename T19
-          , typename T20
-          >
-  struct Split<TyOLD< T01,T02,T03,T04,T05
-                    , T06,T07,T08,T09,T10
-                    , T11,T12,T13,T14,T15
-                    , T16,T17,T18,T19,T20
-                    > >
-  {
-    typedef typename
-            TyOLD< T01,T02,T03,T04,T05
-                 , T06,T07,T08,T09,T10
-                 , T11,T12,T13,T14,T15
-                 , T16,T17,T18,T19,T20
-                 >::List                 List;
-    
-    typedef        T01                   Head;
-    typedef TyOLD< T01                 > First;
-    typedef TyOLD<     T02,T03,T04,T05
-                 , T06,T07,T08,T09,T10
-                 , T11,T12,T13,T14,T15
-                 , T16,T17,T18,T19,T20 > Tail;
-
-    // for finding the end we need the help of typelist-util.hpp
-    
-    typedef typename PickLast<List>::List   PrefixList;
-    typedef typename Tail::List             TailList;
-    
-    typedef typename TyOLD<PrefixList>::Seq Prefix;
-    typedef typename PickLast<List>::Type   End;
-    typedef TyOLD<End>                      Last;
   };
   
   
@@ -362,14 +200,9 @@ namespace meta {
    * @see typelist-manip.hpp
    */
   template<typename...TYPES, size_t i>
-  struct Pick<TyOLD<TYPES...>, i>
+  struct Pick<Types<TYPES...>, i>
     {
-      using Type = typename lib::meta::Shifted<TyOLD<TYPES...>, i>::Head;
-    };
-  template<typename...TYPES, size_t i>
-  struct Pick<TySeq<TYPES...>, i>
-    {
-      using Type = typename Shifted<TySeq<TYPES...>, i>::Head;
+      using Type = typename Shifted<Types<TYPES...>, i>::Head;
     };
   
   
@@ -388,7 +221,7 @@ namespace meta {
   template<typename T>
   struct Repeat<T,0>
     {
-      using Seq = TySeq<>;
+      using Seq = Types<>;
     };
   
   

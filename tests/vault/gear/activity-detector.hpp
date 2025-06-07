@@ -292,10 +292,9 @@ namespace test {
       template<typename SIG>
       struct _DiagnosticFun
         {
-          using Ret = typename lib::meta::_Fun<SIG>::Ret;
-          using Args = typename lib::meta::_Fun<SIG>::Args;
-          using ArgsX = typename lib::meta::StripNil<Args>::Seq;    ////////////////////////////////////TICKET #987 : make lib::meta::Types<TYPES...> variadic
-          using SigTypes = typename lib::meta::Prepend<Ret, ArgsX>::Seq;
+          using Ret      = typename lib::meta::_Fun<SIG>::Ret;
+          using Args     = typename lib::meta::_Fun<SIG>::Args;
+          using SigTypes = typename lib::meta::Prepend<Ret, Args>::Seq;
           
           using Type  = typename RebindVariadic<DiagnosticFun, SigTypes>::Type;
         };

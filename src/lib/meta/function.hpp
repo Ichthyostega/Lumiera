@@ -2,7 +2,7 @@
   FUNCTION.hpp  -  metaprogramming utilities for transforming function types
 
    Copyright (C)
-     2009,            Hermann Vosseler <Ichthyostega@web.de>
+     2009-2025,       Hermann Vosseler <Ichthyostega@web.de>
 
   **Lumiera** is free software; you can redistribute it and/or modify it
   under the terms of the GNU General Public License as published by the
@@ -13,25 +13,66 @@
 
 
 /** @file function.hpp
- ** Metaprogramming tools for transforming functor types.
+ ** Metaprogramming tools for detecting and transforming function types.
  ** Sometimes it is necessary to build and remould a function signature, e.g. for
  ** creating a functor or a closure based on an existing function of function pointer.
- ** This is a core task of functional programming, but sadly C++ in its current shape
- ** is still lacking in this area. (C++11 significantly improved this situation).
- ** As an \em pragmatic fix, we define here a collection of templates, specialising
- ** them in a very repetitive way for up to 9 function arguments. Doing so enables
- ** us to capture a function, access the return type and argument types as a typelist,
- ** eventually to manipulate them and re-build a different signature, or to create
- ** specifically tailored bindings.
+ ** Functors, especially in the form of Lambdas, can be used to parametrise a common
+ ** skeleton of computation logic to make it work with concrete implementation parts
+ ** tied directly to the actual usage. A _functor centric_ approach places the focus
+ ** on the _computation structure_ and often complements the more _object centric_ one,
+ ** where relations and responsibilities are structured and built from building blocks
+ ** with fixed type relations.
  ** 
- ** If the following code makes you feel like vomiting, please look away,
- ** and rest assured: you aren't alone.
+ ** However, handling arbitrary functions as part of a common structure scheme requires
+ ** to cope with generally unknown argument and result types. Notably the number and
+ ** sequence of the expected arguments of an unknown function can be arbitrary, which
+ ** places the onus upon the handling and receiving context to adapt to actual result
+ ** types and to provide suitable invocation arguments. Typically, failure to do so
+ ** will produce a sway of almost impenetrable compilation failure messages, making
+ ** the reason of the failure difficult to spot. So to handle this challenge, ways
+ ** to inspect and isolate parts of the function's _signature_ become essential.
  ** 
- ** @todo get rid of the repetitive specialisations
- **       and use variadic templates to represent the arguments             /////////////////////////////////TICKET #994
+ ** The _trait template_ [_Fun](\ref lib::meta::_Fun) is the entrance point to
+ ** extract information regarding the function signature at compile time. Defined as
+ ** a series partial template specialisations, it allows to create a level playing field
+ ** and abstract over the wide array of different flavours of »invokable entities«:
+ ** this can be direct references to some function in the code, function pointers,
+ ** pointers to function members of an object, generally any object with an _function call_
+ ** `operator()`, and especially the relevant features of the standard library, which are
+ ** the generic function adapter `std::function` and the _binder_ objects created when
+ ** _partially closing_ (binding) some function arguments ahead of the actual invocation.
+ ** And last but not least the _Lambda functions_, which represent an abstracted, opaque
+ ** and anonymous function and are supported by a special syntactical construct, allowing
+ ** to pass _blocks of C++ code_ directly as argument to some other function or object.
  ** 
+ ** Code to control the process of compilation, by detecting some aspects of the involved
+ ** types and react accordingly, is a form of **metaprogramming** — and allows for dynamic
+ ** **code generation** right from the ongoing compilation process. The flexible and open
+ ** nature of function arguments often directly leads into such metaprogramming tasks.
+ ** While the contemporary C++ language offers the language construct of _variadics_,
+ ** such variadic template argument packs can only be dissected and processed further
+ ** by instantiating another template with the argument pack and then exploiting
+ ** _partial template specialisation_ to perform a _pattern match_ against the variadic
+ ** arguments. Sometimes this approach comes in natural, yet in many commonplace situations
+ ** if feels kind of »backwards« and leads to very tricky, hard to decipher template code.
+ ** The Lumiera support library thus offers special features to handle _type sequences_
+ ** and _type lists_ directly, allowing to process by recursive list programming patterns
+ ** as known from the LISP language. The `_Fun` trait mentioned above directly provides
+ ** an entrance point to this kind of in-compilation programming, as it exposes a nested
+ ** type definition `_Fun<F>::Args`, which is an instance of the **type sequence** template
+ ** \ref lib::meta::Types. This in turn exposes a nested type definition `List`, leading
+ ** to the [Loki Type Lists](\ref typelist.hpp).
  ** 
- ** @see control::CommandDef usage example
+ ** Furthermore, this header defines some very widely used abbreviations for the most
+ ** common tasks of detecting aspects of a function. These are often used in conjunction
+ ** with the _constexpr if_ available since C++17:
+ ** - _FunRet is a templated type definition to extract the return type
+ ** - _FunArg extracts the type of single-arg function and fails compilation else
+ ** - has_Arity<N> is a _meta-function_ to check for a specific number of arguments
+ ** - is_NullaryFun,  is_UnaryFun, is_BinaryFun, is_TernaryFun (common abbreviations)
+ ** - the metafunction has_Sig is often placed close to the entrance point of an
+ **   elaborate, template based ecosystem and helps to produce better error messages
+ ** 
  ** @see function-closure.hpp generic function application
  ** @see typelist.hpp
  ** @see tuple.hpp
@@ -55,24 +96,25 @@ namespace meta{
   using std::function;
   
   
-  /**
-   * Helper for uniform access to function signature types.
-   * Extract the type information contained in a function or functor type,
+  /**************************************************************************//**
+   * Trait template for uniform access to function signature types.
+   * Extracts the type information contained in a function or functor type,
    * so it can be manipulated by metaprogramming. This template works on
    * anything _function like_, irrespective if the parameter is given
    * as function reference, function pointer, member function pointer,
    * functor object, `std::function` or lambda. The embedded typedefs
-   * allow to pick up
+   * allow to expose
    * - `Ret` : the return type
    * - `Args`: the sequence of argument types as type sequence `Types<ARGS...>`
    * - `Sig` : the bare function signature type
    * - `Functor` : corresponding Functor type which can be instantiated or copied.
+   * - `ARITY` : number of arguments
    * 
    * This template can also be used in metaprogramming with `enable_if` to enable
    * some definition or specialisation only if a function-like type was detected; thus
    * the base case holds no nested type definitions and inherits from std::false_type.
-   * The primary, catch-all case gets activated whenever on functor objects, i.e. anything
-   * with an `operator()`.
+   * The primary, catch-all case gets activated whenever used on functor objects
+   * proper, i.e. anything with an `operator()`.
    * The following explicit specialisations handle the other cases, which are
    * not objects, but primitive types (function (member) pointers and references).
    * @remarks The key trick of this solution is to rely on `decltype` of `operator()`
@@ -86,6 +128,7 @@ namespace meta{
    *          - when there are several overloads of `operator()`
    *          - when the function call operator is templated
    *          - on *generic lambdas*
+   *          - on results of std::bind
    *          All these cases will activate the base (false) case, as if the
    *          tested subject was not a function at all. Generally speaking,
    *          it is _not possible_ to probe a generic lambda or templated function,
@@ -116,7 +159,7 @@ namespace meta{
     : std::true_type
     {
       using Ret  = RET;
-      using Args = TySeq<ARGS...>;
+      using Args = Types<ARGS...>;
       using Sig  = RET(ARGS...);
       using Functor = std::function<Sig>;
       enum { ARITY = sizeof...(ARGS) };
@@ -177,6 +220,29 @@ namespace meta{
   struct _Fun<FUN (C::*)>
     : _Fun<FUN>
     { };
+  
+  
+  
+  
+  
+  /**
+   * Build function types from given Argument types.
+   * As embedded typedefs, you'll find a std::function #Func
+   * and the bare function signature #Sig
+   * @param RET the function return type
+   * @param ARGS a type sequence describing the arguments
+   */
+  template<typename RET, typename ARGS>
+  struct BuildFunType;
+  
+  template<typename RET, typename...ARGS>
+  struct BuildFunType<RET, Types<ARGS...>>
+  {
+    using Sig = RET(ARGS...);
+    using Fun = _Fun<Sig>;
+    using Func = function<Sig>;
+    using Functor = Func;
+  };
   
   
   
@@ -326,188 +392,6 @@ namespace meta{
                     };
     return std::apply (splice, std::forward<TUP> (invocation));
   }
-  
-  
-  
-  
-  
-  
-  
-  /**
-   * Build function types from given Argument types.
-   * As embedded typedefs, you'll find a tr1 functor #Func
-   * and the bare function signature #Sig
-   * @param RET the function return type
-   * @param ARGS a type sequence describing the arguments
-   */                                  //////////////////////////////////////////////////////////////////////TICKET #987 : make lib::meta::Types<TYPES...> variadic, then replace this by a single variadic template
-  template<typename RET, typename ARGS>
-  struct BuildFunType;
-  
-                          ///////////////////////////////////////////////////////////////////////////////////TICKET #987 : this specialisation handles the variadic case and will be the only definition in future
-  template<typename RET, typename...ARGS>
-  struct BuildFunType<RET, TySeq<ARGS...>>
-  {
-    using Sig = RET(ARGS...);
-    using Fun = _Fun<Sig>;
-    using Func = function<Sig>;
-    using Functor = Func;
-  };
-  
-                          ///////////////////////////////////////////////////////////////////////////////////TICKET #987 : the following specialisations become obsolete with the old-style type-sequence
-  template< typename RET>
-  struct BuildFunType<RET, TyOLD<> >
-  {
-    using Sig = RET(void);
-    using Fun = _Fun<Sig>;
-    using Func = function<Sig>;
-    using Functor = Func;
-  };
-  
-  
-  template< typename RET
-          , typename A1
-          >
-  struct BuildFunType<RET, TyOLD<A1>>
-  {
-    using Sig = RET(A1);
-    using Fun = _Fun<Sig>;
-    using Func = function<Sig>;
-    using Functor = Func;
-  };
-  
-  
-  template< typename RET
-          , typename A1
-          , typename A2
-          >
-  struct BuildFunType<RET, TyOLD<A1,A2>>
-  {
-    using Sig = RET(A1,A2);
-    using Fun = _Fun<Sig>;
-    using Func = function<Sig>;
-    using Functor = Func;
-  };
-  
-  
-  template< typename RET
-          , typename A1
-          , typename A2
-          , typename A3
-          >
-  struct BuildFunType<RET, TyOLD<A1,A2,A3>>
-  {
-    using Sig = RET(A1,A2,A3);
-    using Fun = _Fun<Sig>;
-    using Func = function<Sig>;
-    using Functor = Func;
-  };
-  
-  
-  template< typename RET
-          , typename A1
-          , typename A2
-          , typename A3
-          , typename A4
-          >
-  struct BuildFunType<RET, TyOLD<A1,A2,A3,A4>>
-  {
-    using Sig = RET(A1,A2,A3,A4);
-    using Fun = _Fun<Sig>;
-    using Func = function<Sig>;
-    using Functor = Func;
-  };
-  
-  
-  template< typename RET
-          , typename A1
-          , typename A2
-          , typename A3
-          , typename A4
-          , typename A5
-          >
-  struct BuildFunType<RET, TyOLD<A1,A2,A3,A4,A5>>
-  {
-    using Sig = RET(A1,A2,A3,A4,A5);
-    using Fun = _Fun<Sig>;
-    using Func = function<Sig>;
-    using Functor = Func;
-  };
-  
-  
-  template< typename RET
-          , typename A1
-          , typename A2
-          , typename A3
-          , typename A4
-          , typename A5
-          , typename A6
-          >
-  struct BuildFunType<RET, TyOLD<A1,A2,A3,A4,A5,A6>>
-  {
-    using Sig = RET(A1,A2,A3,A4,A5,A6);
-    using Fun = _Fun<Sig>;
-    using Func = function<Sig>;
-    using Functor = Func;
-  };
-  
-  
-  template< typename RET
-          , typename A1
-          , typename A2
-          , typename A3
-          , typename A4
-          , typename A5
-          , typename A6
-          , typename A7
-          >
-  struct BuildFunType<RET, TyOLD<A1,A2,A3,A4,A5,A6,A7>>
-  {
-    using Sig = RET(A1,A2,A3,A4,A5,A6,A7);
-    using Fun = _Fun<Sig>;
-    using Func = function<Sig>;
-    using Functor = Func;
-  };
-  
-  
-  template< typename RET
-          , typename A1
-          , typename A2
-          , typename A3
-          , typename A4
-          , typename A5
-          , typename A6
-          , typename A7
-          , typename A8
-          >
-  struct BuildFunType<RET, TyOLD<A1,A2,A3,A4,A5,A6,A7,A8>>
-  {
-    using Sig = RET(A1,A2,A3,A4,A5,A6,A7,A8);
-    using Fun = _Fun<Sig>;
-    using Func = function<Sig>;
-    using Functor = Func;
-  };
-  
-  
-  template< typename RET
-          , typename A1
-          , typename A2
-          , typename A3
-          , typename A4
-          , typename A5
-          , typename A6
-          , typename A7
-          , typename A8
-          , typename A9
-          >
-  struct BuildFunType<RET, TyOLD<A1,A2,A3,A4,A5,A6,A7,A8,A9>>
-  {
-    using Sig = RET(A1,A2,A3,A4,A5,A6,A7,A8,A9);
-    using Fun = _Fun<Sig>;
-    using Func = function<Sig>;
-    using Functor = Func;
-  };
-  
-  
   
   
   

@@ -36,8 +36,6 @@
  ** when the provided arguments don't fit the (hidden) function signature embedded
  ** within the CommandMutation (functor).
  ** 
- ** @todo switch to variadic templates. Requires a rework of Types<...> /////////////////////////////////////TICKET #967
- ** 
  ** @see Command
  ** @see CommandDef
  ** @see argument-tuple-accept-test.cpp
@@ -69,19 +67,14 @@ namespace control {
     using std::make_tuple;
     
     
-      //
-     // _______________________________________________________________________________________________________________
-    /** @internal mix in a function operator
-     *  @todo variadic type-seq        //////////////////////////////////////////////////////////////////////TICKET #987 : make lib::meta::Types<TYPES...> variadic, then replace this by a single variadic template
-     */
+    /** @internal mix in a function operator */
     template< class TAR, class BA, class RET
             , typename TYPES
             >
     struct AcceptArgs ;
     
-                          ///////////////////////////////////////////////////////////////////////////////////TICKET #987 : this specialisation handles the variadic case and will be the only definition in future
     template<class TAR, class BA, class RET, typename...ARGS>
-    struct AcceptArgs<TAR,BA,RET, TySeq<ARGS...> >
+    struct AcceptArgs<TAR,BA,RET, Types<ARGS...> >
       : BA
       {
         RET
@@ -92,201 +85,15 @@ namespace control {
       };
     
     
-                          ///////////////////////////////////////////////////////////////////////////////////TICKET #987 : the following specialisations become obsolete with the old-style type-sequence
-    /* specialisations for 0...9 Arguments.... */
     
-    template< class TAR, class BA, class RET
-            >                                                                        //____________________________________
-    struct AcceptArgs<TAR,BA,RET, TyOLD<> >                                         ///< Accept dummy binding (0 Arguments)
-      : BA
-      {
-        RET
-        operator() ()
-          {
-            return static_cast<TAR*> (this) -> bindArg (std::tuple<>() );
-          }
-      };
-    
-    
-    template< class TAR, class BA, class RET
-            , typename T1
-            >                                                                        //_______________________________
-    struct AcceptArgs<TAR,BA,RET, TyOLD<T1> >                                       ///< Accept binding for 1 Argument
-      : BA
-      {
-        RET
-        operator() (T1 a1)
-          {
-            return static_cast<TAR*> (this) -> bindArg (make_tuple (a1));
-          }
-      };
-    
-    
-    template< class TAR, class BA, class RET
-            , typename T1
-            , typename T2
-            >                                                                        //________________________________
-    struct AcceptArgs<TAR,BA,RET, TyOLD<T1,T2> >                                    ///< Accept binding for 2 Arguments
-      : BA
-      {
-        RET
-        operator() (T1 a1, T2 a2)
-          {
-            return static_cast<TAR*> (this) -> bindArg (make_tuple (a1,a2));
-          }
-      };
-    
-    
-    template< class TAR, class BA, class RET
-            , typename T1
-            , typename T2
-            , typename T3
-            >                                                                        //________________________________
-    struct AcceptArgs<TAR,BA,RET, TyOLD<T1,T2,T3> >                                 ///< Accept binding for 3 Arguments
-      : BA
-      {
-        RET
-        operator() (T1 a1, T2 a2, T3 a3)
-          {
-            return static_cast<TAR*> (this) -> bindArg (make_tuple (a1,a2,a3));
-          }
-      };
-    
-    
-    template< class TAR, class BA, class RET
-            , typename T1
-            , typename T2
-            , typename T3
-            , typename T4
-            >                                                                        //________________________________
-    struct AcceptArgs<TAR,BA,RET, TyOLD<T1,T2,T3,T4> >                              ///< Accept binding for 4 Arguments
-      : BA
-      {
-        RET
-        operator() (T1 a1, T2 a2, T3 a3, T4 a4)
-          {
-            return static_cast<TAR*> (this) -> bindArg (make_tuple (a1,a2,a3,a4));
-          }
-      };
-    
-    
-    template< class TAR, class BA, class RET
-            , typename T1
-            , typename T2
-            , typename T3
-            , typename T4
-            , typename T5
-            >                                                                        //________________________________
-    struct AcceptArgs<TAR,BA,RET, TyOLD<T1,T2,T3,T4,T5> >                           ///< Accept binding for 5 Arguments
-      : BA
-      {
-        RET
-        operator() (T1 a1, T2 a2, T3 a3, T4 a4, T5 a5)
-          {
-            return static_cast<TAR*> (this) -> bindArg (make_tuple (a1,a2,a3,a4,a5));
-          }
-      };
-    
-    
-    template< class TAR, class BA, class RET
-            , typename T1
-            , typename T2
-            , typename T3
-            , typename T4
-            , typename T5
-            , typename T6
-            >                                                                        //________________________________
-    struct AcceptArgs<TAR,BA,RET, TyOLD<T1,T2,T3,T4,T5,T6> >                        ///< Accept binding for 6 Arguments
-      : BA
-      {
-        RET
-        operator() (T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6)
-          {
-            return static_cast<TAR*> (this) -> bindArg (make_tuple (a1,a2,a3,a4,a5,a6));
-          }
-      };
-    
-    
-    template< class TAR, class BA, class RET
-            , typename T1
-            , typename T2
-            , typename T3
-            , typename T4
-            , typename T5
-            , typename T6
-            , typename T7
-            >                                                                        //________________________________
-    struct AcceptArgs<TAR,BA,RET, TyOLD<T1,T2,T3,T4,T5,T6,T7> >                     ///< Accept binding for 7 Arguments
-      : BA
-      {
-        RET
-        operator() (T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7)
-          {
-            return static_cast<TAR*> (this) -> bindArg (make_tuple (a1,a2,a3,a4,a5,a6,a7));
-          }
-      };
-    
-    
-    template< class TAR, class BA, class RET
-            , typename T1
-            , typename T2
-            , typename T3
-            , typename T4
-            , typename T5
-            , typename T6
-            , typename T7
-            , typename T8
-            >                                                                        //________________________________
-    struct AcceptArgs<TAR,BA,RET, TyOLD<T1,T2,T3,T4,T5,T6,T7,T8> >                  ///< Accept binding for 8 Arguments
-      : BA
-      {
-        RET
-        operator() (T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8)
-          {
-            return static_cast<TAR*> (this) -> bindArg (make_tuple (a1,a2,a3,a4,a5,a6,a7,a8));
-          }
-      };
-    
-    
-    template< class TAR, class BA, class RET
-            , typename T1
-            , typename T2
-            , typename T3
-            , typename T4
-            , typename T5
-            , typename T6
-            , typename T7
-            , typename T8
-            , typename T9
-            >                                                                        //________________________________
-    struct AcceptArgs<TAR,BA,RET, TyOLD<T1,T2,T3,T4,T5,T6,T7,T8,T9> >               ///< Accept binding for 9 Arguments
-      : BA
-      {
-        RET
-        operator() (T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9)
-          {
-            return static_cast<TAR*> (this) -> bindArg (make_tuple (a1,a2,a3,a4,a5,a6,a7,a8,a9));
-          }
-      };
-    
-    
-    
-    
-    
-    
-      //
-     // _______________________________________________________________________________________________________________
-    /** @internal mix in a \c bind() function
-     *  @todo variadic type-seq        //////////////////////////////////////////////////////////////////////TICKET #987 : make lib::meta::Types<TYPES...> variadic, then replace this by a single variadic template
-     */
+    /** @internal mix in a \c bind() function */
     template< class TAR, class BA, class RET
             , typename TYPES
             >
     struct AcceptBind ;
     
-                          ///////////////////////////////////////////////////////////////////////////////////TICKET #987 : this specialisation handles the variadic case and will be the only definition in future
     template<class TAR, class BA, class RET, typename...ARGS>
-    struct AcceptBind<TAR,BA,RET, TySeq<ARGS...> >
+    struct AcceptBind<TAR,BA,RET, Types<ARGS...> >
       : BA
       {
         RET
@@ -297,191 +104,10 @@ namespace control {
       };
     
     
-                          ///////////////////////////////////////////////////////////////////////////////////TICKET #987 : the following specialisations become obsolete with the old-style type-sequence
-    /* specialisations for 0...9 Arguments.... */
-    
-    template< class TAR, class BA, class RET
-            >                                                                        //____________________________________
-    struct AcceptBind<TAR,BA,RET, TyOLD<> >                                         ///< Accept dummy binding (0 Arguments)
-      : BA
-      {
-        RET
-        bind ()
-          {
-            return static_cast<TAR*> (this) -> bindArg (std::tuple<>() );
-          }
-      };
-    
-    
-    template< class TAR, class BA, class RET
-            , typename T1
-            >                                                                        //_______________________________
-    struct AcceptBind<TAR,BA,RET, TyOLD<T1> >                                       ///< Accept binding for 1 Argument
-      : BA
-      {
-        RET
-        bind (T1 a1)
-          {
-            return static_cast<TAR*> (this) -> bindArg (make_tuple (a1));
-          }
-      };
-    
-    
-    template< class TAR, class BA, class RET
-            , typename T1
-            , typename T2
-            >                                                                        //________________________________
-    struct AcceptBind<TAR,BA,RET, TyOLD<T1,T2> >                                    ///< Accept binding for 2 Arguments
-      : BA
-      {
-        RET
-        bind (T1 a1, T2 a2)
-          {
-            return static_cast<TAR*> (this) -> bindArg (make_tuple (a1,a2));
-          }
-      };
-    
-    
-    template< class TAR, class BA, class RET
-            , typename T1
-            , typename T2
-            , typename T3
-            >                                                                        //________________________________
-    struct AcceptBind<TAR,BA,RET, TyOLD<T1,T2,T3> >                                 ///< Accept binding for 3 Arguments
-      : BA
-      {
-        RET
-        bind (T1 a1, T2 a2, T3 a3)
-          {
-            return static_cast<TAR*> (this) -> bindArg (make_tuple (a1,a2,a3));
-          }
-      };
-    
-    
-    template< class TAR, class BA, class RET
-            , typename T1
-            , typename T2
-            , typename T3
-            , typename T4
-            >                                                                        //________________________________
-    struct AcceptBind<TAR,BA,RET, TyOLD<T1,T2,T3,T4> >                              ///< Accept binding for 4 Arguments
-      : BA
-      {
-        RET
-        bind (T1 a1, T2 a2, T3 a3, T4 a4)
-          {
-            return static_cast<TAR*> (this) -> bindArg (make_tuple (a1,a2,a3,a4));
-          }
-      };
-    
-    
-    template< class TAR, class BA, class RET
-            , typename T1
-            , typename T2
-            , typename T3
-            , typename T4
-            , typename T5
-            >                                                                        //________________________________
-    struct AcceptBind<TAR,BA,RET, TyOLD<T1,T2,T3,T4,T5> >                           ///< Accept binding for 5 Arguments
-      : BA
-      {
-        RET
-        bind (T1 a1, T2 a2, T3 a3, T4 a4, T5 a5)
-          {
-            return static_cast<TAR*> (this) -> bindArg (make_tuple (a1,a2,a3,a4,a5));
-          }
-      };
-    
-    
-    template< class TAR, class BA, class RET
-            , typename T1
-            , typename T2
-            , typename T3
-            , typename T4
-            , typename T5
-            , typename T6
-            >                                                                        //________________________________
-    struct AcceptBind<TAR,BA,RET, TyOLD<T1,T2,T3,T4,T5,T6> >                        ///< Accept binding for 6 Arguments
-      : BA
-      {
-        RET
-        bind (T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6)
-          {
-            return static_cast<TAR*> (this) -> bindArg (make_tuple (a1,a2,a3,a4,a5,a6));
-          }
-      };
-    
-    
-    template< class TAR, class BA, class RET
-            , typename T1
-            , typename T2
-            , typename T3
-            , typename T4
-            , typename T5
-            , typename T6
-            , typename T7
-            >                                                                        //________________________________
-    struct AcceptBind<TAR,BA,RET, TyOLD<T1,T2,T3,T4,T5,T6,T7> >                     ///< Accept binding for 7 Arguments
-      : BA
-      {
-        RET
-        bind (T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7)
-          {
-            return static_cast<TAR*> (this) -> bindArg (make_tuple (a1,a2,a3,a4,a5,a6,a7));
-          }
-      };
-    
-    
-    template< class TAR, class BA, class RET
-            , typename T1
-            , typename T2
-            , typename T3
-            , typename T4
-            , typename T5
-            , typename T6
-            , typename T7
-            , typename T8
-            >                                                                        //________________________________
-    struct AcceptBind<TAR,BA,RET, TyOLD<T1,T2,T3,T4,T5,T6,T7,T8> >                  ///< Accept binding for 8 Arguments
-      : BA
-      {
-        RET
-        bind (T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8)
-          {
-            return static_cast<TAR*> (this) -> bindArg (make_tuple (a1,a2,a3,a4,a5,a6,a7,a8));
-          }
-      };
-    
-    
-    template< class TAR, class BA, class RET
-            , typename T1
-            , typename T2
-            , typename T3
-            , typename T4
-            , typename T5
-            , typename T6
-            , typename T7
-            , typename T8
-            , typename T9
-            >                                                                        //________________________________
-    struct AcceptBind<TAR,BA,RET, TyOLD<T1,T2,T3,T4,T5,T6,T7,T8,T9> >               ///< Accept binding for 9 Arguments
-      : BA
-      {
-        RET
-        bind (T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9)
-          {
-            return static_cast<TAR*> (this) -> bindArg (make_tuple (a1,a2,a3,a4,a5,a6,a7,a8,a9));
-          }
-      };
     
     
     
-    
-    
-    
-      //
-     // _______________________________________________________________________________________________________________
-    /** @internal mix in complete set of templated \c bind() functions
+    /** @internal mix in complete set of templated `bind()` functions
      */
     template< class TAR, class BA, class RET>
     struct AcceptAnyBind
@@ -524,7 +150,7 @@ namespace control {
     template<typename...TYPES>
     struct _Type<std::tuple<TYPES...> >
       {
-        using Args = typename TyOLD<TYPES...>::Seq;
+        using Args = typename Types<TYPES...>::Seq;
         using Ret  = void;
         using Sig  = typename BuildFunType<void, Args>::Sig;
         using ArgTuple = std::tuple<TYPES...>;

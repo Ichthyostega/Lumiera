@@ -41,7 +41,7 @@ namespace test    {
   namespace { // what follows is a simulated (simplified) version
              //  of the complete Session + SessionManager setup.....
     
-    using lib::meta::TySeq;
+    using lib::meta::Types;
     using lib::meta::InstantiateChained;
     
     
@@ -161,7 +161,7 @@ namespace test    {
     
     struct TSessManagerImpl;
     
-    using SessionImplAPI = TSessionServices< TySeq<InternalAPI_1,InternalAPI_2>
+    using SessionImplAPI = TSessionServices< Types<InternalAPI_1,InternalAPI_2>
                                            , TSessManagerImpl
                                            , TSessionImpl
                                            >;

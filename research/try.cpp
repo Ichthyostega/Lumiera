@@ -121,7 +121,7 @@ main (int, char**)
     using Fut = decltype(fun);
     SHOW_TYPE (_Fun<Fut>::Sig)
     
-    auto wup = buildInvokableWrapper<lib::meta::TySeq<int>>(bup);
+    auto wup = buildInvokableWrapper<lib::meta::Types<int>>(bup);
     
     using Wup = decltype(wup);
     using WupSig = _Fun<Wup>::Sig;
@@ -130,7 +130,7 @@ main (int, char**)
     SHOW_EXPR (sizeof(bup))
     SHOW_EXPR (sizeof(wup))
     
-    auto waua = buildInvokableWrapper<lib::meta::TySeq<>> (std::bind (fun, 55));
+    auto waua = buildInvokableWrapper<lib::meta::Types<>> (std::bind (fun, 55));
     waua ();
     SHOW_TYPE (_Fun<decltype(waua)>::Sig)
     

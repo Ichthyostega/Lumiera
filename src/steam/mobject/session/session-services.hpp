@@ -78,7 +78,7 @@ namespace mobject {
 namespace session {
   
   using lib::meta::InstantiateChained;
-  using lib::meta::TySeq;
+  using lib::meta::Types;
   
   
   /**

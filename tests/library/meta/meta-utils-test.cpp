@@ -203,7 +203,7 @@ namespace test {
       
       
       //-------------------------------------------------TEST-types--
-      using TheList = TySeq<int
+      using TheList = Types<int
                            ,uint
                            ,int64_t
                            ,uint64_t

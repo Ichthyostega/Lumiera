@@ -41,7 +41,7 @@ namespace test    {
       using session::Clip;
       using session::AbstractMO;
       using namespace mobject::test;
-  
+      
       using MediaAccessMock = lib::DependInject<vault::MediaAccessFacade>
                                     ::Local<vault::test::MediaAccessMock>;
       
@@ -49,7 +49,7 @@ namespace test    {
       
       /**
        * BuilderTool implementation for checking the invocation of the correct
-       * \c treat() function and for accessing the original Placement from 
+       * \c treat() function and for accessing the original Placement from
        * within this invocation. It is declared to be applicable to Clip
        * and DummyMO objects (wrapped into any acceptable shared-ptr).
        * Intentionally, we omit to declare it applicable to TestSubMO2 instances.
@@ -58,14 +58,14 @@ namespace test    {
        * which, due to this omission can't find a dispatcher entry when invoked,
        * so it will call the \c onUnknown(Buildable&) instead
        */
-      class TestTool 
-        : public Applicable<TestTool, TySeq<Clip, DummyMO>::List>
+      class TestTool
+        : public Applicable<TestTool, Types<Clip, DummyMO>::List>
         {
         public:
           string log_;
           
-          void treat (Clip& c)    
-            { 
+          void treat (Clip& c)
+            {
               Placement<Clip>& pC = getPlacement<Clip>();
               cout << "Clip on media : "<< pC->getMedia() <<"\n";
               CHECK (pC->operator==(c));
@@ -77,7 +77,7 @@ namespace test    {
               log_ = string (getPlacement<MObject>());
             }
           void onUnknown (Buildable&)
-            { 
+            {
               cout << "catch-all-function called...\n";
               log_ = string (getPlacement<MObject>());
             }
@@ -112,7 +112,7 @@ namespace test    {
               
               TestTool t1;
               BuilderTool& tool = t1;
-                                
+              
               Placement<Clip> clip = asset::Media::create("test-1", asset::VIDEO)->createClip();
               TestPlacement<> test1(*new TestSubMO1);
               TestPlacement<> test2(*new TestSubMO2);
@@ -123,16 +123,16 @@ namespace test    {
               INFO (test, "got Wrapper = %s", t1.log_.c_str());
               CHECK (t1.log_ == string(clip));
               
-              cout << "apply (tool, test1);\n"; 
+              cout << "apply (tool, test1);\n";
               apply (tool, test1);
               INFO (test, "got Wrapper = %s", t1.log_.c_str());
               CHECK (t1.log_ == string(test1));
               
-              cout << "apply (tool, test2);\n"; 
+              cout << "apply (tool, test2);\n";
               apply (tool, test2);
               INFO (test, "got Wrapper = %s", t1.log_.c_str());
               CHECK (t1.log_ == string(test2));
-            } 
+            }
         };
       
       

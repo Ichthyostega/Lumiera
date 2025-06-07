@@ -159,7 +159,7 @@ namespace mobject {
       { }
       ;
       
-    using lib::meta::TySeq;  // convenience for the users of "Applicable"
+    using lib::meta::Types;  // convenience for the users of "Applicable"
   
   }// namespace mobject::builder
   

@@ -168,10 +168,10 @@ namespace test   {
           CHECK (com);
           CHECK (not com->canExec());
           
-          using ArgType = TySeq<int>;
+          using ArgTuple = std::tuple<int>;
           const int ARGR{1 + rani (1000)};
-          Tuple<ArgType> tuple(ARGR);
-          TypedArguments<Tuple<ArgType>> arg(tuple);
+          ArgTuple argTup{ARGR};
+          TypedArguments<ArgTuple> arg{argTup};
           com->setArguments(arg);
           
           CHECK (com->canExec());

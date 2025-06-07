@@ -71,12 +71,12 @@ namespace test {
           using S1 = ElmTypes<T1>;
           CHECK (2 == S1::SIZ);
           CHECK (showType< S1      >() ==           "ElmTypes<tuple<int, double>, void>"_expect);
-          CHECK (showType< S1::Seq >() ==                           "TySeq<int, double>"_expect);
+          CHECK (showType< S1::Seq >() ==                           "Types<int, double>"_expect);
           CHECK (showType< S1::Tup >() ==                           "tuple<int, double>"_expect);
           CHECK (showType< S1::Idx >() ==            "integer_sequence<ulong, 0ul, 1ul>"_expect);
           
           using S1A = S1::Apply<std::is_pointer>;
-          CHECK (showType< S1A     >() ==  "TySeq<is_pointer<int>, is_pointer<double> >"_expect);
+          CHECK (showType< S1A     >() ==  "Types<is_pointer<int>, is_pointer<double> >"_expect);
           
           using S1AR = ElmTypes<S1A>::Rebind<std::__and_>;
           CHECK (showType< S1AR    >() == "__and_<is_pointer<int>, is_pointer<double> >"_expect);
@@ -98,12 +98,12 @@ namespace test {
           using S0 = ElmTypes<T0>;
           CHECK (1 == S0::SIZ);
           CHECK (showType< S0      >() ==         "ElmTypes<int*, void>"_expect);
-          CHECK (showType< S0::Seq >() ==                  "TySeq<int*>"_expect);
+          CHECK (showType< S0::Seq >() ==                  "Types<int*>"_expect);
           CHECK (showType< S0::Tup >() ==                  "tuple<int*>"_expect);
           CHECK (showType< S0::Idx >() == "integer_sequence<ulong, 1ul>"_expect);
           
           using S0A = S0::Apply<std::is_pointer>;
-          CHECK (showType< S0A     >() ==     "TySeq<is_pointer<int*> >"_expect);
+          CHECK (showType< S0A     >() ==     "Types<is_pointer<int*> >"_expect);
           
           using S0AA = S0::AndAll<std::is_pointer>;
           CHECK (showType< S0AA    >() ==    "__and_<is_pointer<int*> >"_expect);
@@ -121,12 +121,12 @@ namespace test {
           using S2 = ElmTypes<T2>;
           CHECK (3 == S2::SIZ);
           CHECK (showType< S2      >() ==         "ElmTypes<array<int*, 3ul>, void>"_expect);
-          CHECK (showType< S2::Seq >() ==                  "TySeq<int*, int*, int*>"_expect);
+          CHECK (showType< S2::Seq >() ==                  "Types<int*, int*, int*>"_expect);
           CHECK (showType< S2::Tup >() ==                  "tuple<int*, int*, int*>"_expect);
           CHECK (showType< S2::Idx >() ==   "integer_sequence<ulong, 0ul, 1ul, 2ul>"_expect);
           
           using S2A = S2::Apply<std::is_pointer>;
-          CHECK (showType< S2A     >() ==  "TySeq<is_pointer<int*>, is_pointer<int*>, is_pointer<int*> >"_expect);
+          CHECK (showType< S2A     >() ==  "Types<is_pointer<int*>, is_pointer<int*>, is_pointer<int*> >"_expect);
           
           using S2AA = S2::AndAll<std::is_pointer>;
           CHECK (showType< S2AA    >() == "__and_<is_pointer<int*>, is_pointer<int*>, is_pointer<int*> >"_expect);
@@ -144,11 +144,11 @@ namespace test {
           using S3 = ElmTypes<T3>;
           CHECK (3 == S3::SIZ);
           CHECK (showType< S3      >() ==                  "ElmTypes<HeteroData<int*, long, double*>, void>"_expect);
-          CHECK (showType< S3::Seq >() ==                                       "TySeq<int*, long, double*>"_expect);
+          CHECK (showType< S3::Seq >() ==                                       "Types<int*, long, double*>"_expect);
           CHECK (showType< S3::Idx >() ==                           "integer_sequence<ulong, 0ul, 1ul, 2ul>"_expect);
           
           using S3A = S3::Apply<std::is_pointer>;
-          CHECK (showType< S3A     >() ==  "TySeq<is_pointer<int*>, is_pointer<long>, is_pointer<double*> >"_expect);
+          CHECK (showType< S3A     >() ==  "Types<is_pointer<int*>, is_pointer<long>, is_pointer<double*> >"_expect);
           
           using S3AA = S3::AndAll<std::is_pointer>;
           CHECK (showType< S3AA    >() == "__and_<is_pointer<int*>, is_pointer<long>, is_pointer<double*> >"_expect);

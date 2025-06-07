@@ -45,11 +45,11 @@ namespace test {
       
       namespace { // type-lists to test with
         
-        using List1 = TySeq< Num<1>
+        using List1 = Types< Num<1>
                            , Num<2>
                            , Num<3>
                            >::List;
-        using List2 = TySeq< Num<5>
+        using List2 = Types< Num<5>
                            , Num<6>
                            , Num<7>
                            >::List;
@@ -158,7 +158,7 @@ namespace test {
               using    Elm = PickLast<List1>::Type;
               using Prefix = PickLast<List1>::List;
               
-              using   ElmL = TySeq<Elm>::List;
+              using   ElmL = Types<Elm>::List;
               
               EXPECT (Prefix,  "-<1>-<2>-");
               EXPECT (ElmL  ,  "-<3>-"    );
@@ -166,7 +166,7 @@ namespace test {
               using    Elm1 = PickLast<ElmL>::Type;
               using NPrefix = PickLast<ElmL>::List;
               
-              EXPECT (TySeq<Elm1>, "-<3>-");
+              EXPECT (Types<Elm1>, "-<3>-");
               EXPECT (NPrefix    ,     "-");
               
               using NilSplit = PickLast<Nil>::Type;
@@ -204,16 +204,16 @@ namespace test {
           void
           verify_splice ()
             { // various base lists
-              using BaLi1 = TySeq<Num<1>>::List;                EXPECT (BaLi1, "-<1>-");
-              using BaLi2 = TySeq<Num<1>,Num<2>>::List;         EXPECT (BaLi2, "-<1>-<2>-");
-              using BaLi3 = TySeq<Num<1>,Num<2>,Num<3>>::List;  EXPECT (BaLi3, "-<1>-<2>-<3>-");
-              using BaLi5 = TySeq<Num<1>,Num<2>,Num<3>,Num<4>,Num<5>>::List;
+              using BaLi1 = Types<Num<1>>::List;                EXPECT (BaLi1, "-<1>-");
+              using BaLi2 = Types<Num<1>,Num<2>>::List;         EXPECT (BaLi2, "-<1>-<2>-");
+              using BaLi3 = Types<Num<1>,Num<2>,Num<3>>::List;  EXPECT (BaLi3, "-<1>-<2>-<3>-");
+              using BaLi5 = Types<Num<1>,Num<2>,Num<3>,Num<4>,Num<5>>::List;
                                                                 EXPECT (BaLi5, "-<1>-<2>-<3>-<4>-<5>-");
               
               // will "paste" those overlay lists "on top" the base typelists...
-              using OLi1 = TySeq<Num<9>>::List;                 EXPECT (OLi1, "-<9>-");
-              using OLi2 = TySeq<Num<9>,Num<8>>::List;          EXPECT (OLi2, "-<9>-<8>-");
-              using OLi3 = TySeq<Num<9>,Num<8>,Num<7>>::List;   EXPECT (OLi3, "-<9>-<8>-<7>-");
+              using OLi1 = Types<Num<9>>::List;                 EXPECT (OLi1, "-<9>-");
+              using OLi2 = Types<Num<9>,Num<8>>::List;          EXPECT (OLi2, "-<9>-<8>-");
+              using OLi3 = Types<Num<9>,Num<8>,Num<7>>::List;   EXPECT (OLi3, "-<9>-<8>-<7>-");
               
               
                ///////////////////////////////////////////////////
@@ -472,7 +472,7 @@ namespace test {
               using Head   = Dissect<LL>::Head;
               using End    = Dissect<LL>::End;
               
-              using HeadEnd = TySeq<Head,End>;      EXPECT (HeadEnd, "-<1>-<7>-");
+              using HeadEnd = Types<Head,End>;      EXPECT (HeadEnd, "-<1>-<7>-");
             }
           
           
@@ -538,7 +538,7 @@ namespace test {
               // Notably this can also be used to distribute into an already nested structure,
               // since the implementation is based on Append, which will actually concatenate lists
               // To demonstrate this, we first create a mixed list, where some elements are nested lists
-              using List_of_Lists = TySeq<List1::List
+              using List_of_Lists = Types<List1::List
                                          ,Num<0>             // ◁—————————————— this one is a regular element
                                          ,List2::List>::List;
               EXPECT (List_of_Lists,
@@ -573,7 +573,7 @@ namespace test {
                               "\n\t"  "+---<11>-<2>-+"
                               "\n\t"  "+---<11>-<3>-+-");
               
-              using Prefixes = TySeq<Num<11>,Num<22>,Num<33>>::List;
+              using Prefixes = Types<Num<11>,Num<22>,Num<33>>::List;
               using  Dist2 = Distribute<Prefixes, Num<0>>;
               EXPECT (Dist2,   "\n\t"  "+---<11>-<0>-+"
                                "\n\t"  "+---<22>-<0>-+"
@@ -590,7 +590,7 @@ namespace test {
                                "\n\t"  "+---<33>-<2>-+"
                                "\n\t"  "+---<33>-<3>-+-");
               
-              using LioLi = TySeq<List1::List,List2::List>::List;
+              using LioLi = Types<List1::List,List2::List>::List;
               EXPECT (LioLi,   "\n\t"  "+---<1>-<2>-<3>-+"
                                "\n\t"  "+---<5>-<6>-<7>-+-");
               using Dist4 = Distribute<Prefixes, LioLi>;

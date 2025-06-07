@@ -190,7 +190,7 @@ namespace test    {
           // when the CommandDef is complete, it issues the
           // allocation call to the registry behind the scenes....
           
-          typedef shared_ptr<CommandImpl> PImpl;
+          using PImpl = shared_ptr<CommandImpl>;
           
           PImpl pImpl = registry.newCommandImpl(o_Fun,c_Fun,u_Fun);
           CHECK (1+cnt_inst == registry.instance_count());
@@ -210,8 +210,8 @@ namespace test    {
           CHECK (!isSameObject (*pImpl, *clone));
           
           CHECK (!pImpl->canExec());
-          using ArgType = TySeq<int>;
-          TypedArguments<Tuple<ArgType>> arg{Tuple<ArgType>(98765)};
+          using ArgTuple = std::tuple<int>;
+          TypedArguments<ArgTuple> arg{ArgTuple{98765}};
           pImpl->setArguments(arg);
           CHECK (pImpl->canExec());
           

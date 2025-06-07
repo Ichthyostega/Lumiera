@@ -31,7 +31,7 @@ namespace lib {
 namespace test{
   
   using ::Test;
-  using meta::TySeq;
+  using meta::Types;
   using lib::time::Time;
   using lib::time::TimeVar;
   
@@ -43,7 +43,7 @@ namespace test{
   
   
   // Test fixture...
-  using TestVariant = Variant<TySeq<bool,int,string,Time>>;
+  using TestVariant = Variant<Types<bool,int,string,Time>>;
   
   
   

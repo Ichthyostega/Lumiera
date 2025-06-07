@@ -58,7 +58,7 @@ namespace steam   {
 namespace mobject {
 namespace builder {
   
-    using BuilderTargetTypes = TySeq< session::Root
+    using BuilderTargetTypes = Types< session::Root
                                     , session::Clip
                                     , session::Effect
                                     , session::Binding
