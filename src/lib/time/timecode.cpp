@@ -451,28 +451,28 @@ namespace time {
   int
   HmsTC::getSecs() const
   {         /////////////////////////////////////////////////////////////////////////////////////////////////TICKET #750 we do not want numeric accessors her — rather we want Digxel members
-    return (raw_time_64(tpoint_) / TIME_SCALE_sec) % 60;
+    return (_raw (tpoint_) / TIME_SCALE_sec) % 60;
   }
   
   /** @deprecated 5/25 : no numeric computations in this class! use Digxel instead! */
   int
   HmsTC::getMins() const
   {
-    return (raw_time_64(tpoint_) / TIME_SCALE_sec / 60) % 60;
+    return (_raw (tpoint_) / TIME_SCALE_sec / 60) % 60;
   }
   
   /** @deprecated 5/25 : no numeric computations in this class! use Digxel instead! */
   int
   HmsTC::getHours() const
   {
-    return raw_time_64(tpoint_) / TIME_SCALE_sec / 60 / 60;
+    return _raw (tpoint_) / TIME_SCALE_sec / 60 / 60;
   }
   
   /** @deprecated 5/25 : no numeric computations in this class! use Digxel instead! */
   double
   HmsTC::getMillis() const
   {
-    return (raw_time_64(tpoint_) / TIME_SCALE_ms) % 1000;
+    return (_raw (tpoint_) / TIME_SCALE_ms) % 1000;
   }
   
   /** */

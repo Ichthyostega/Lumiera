@@ -82,9 +82,7 @@ namespace gear {
   using lib::time::FSecs;
   using lib::time::Time;
   using std::atomic;
-  using std::memory_order::memory_order_relaxed;
-  using std::memory_order::memory_order_acquire;
-  using std::memory_order::memory_order_release;
+  using std::memory_order;
   using std::chrono_literals::operator ""us;
   using std::chrono::microseconds;
   
@@ -129,8 +127,8 @@ namespace gear {
         {
           ThreadID expect_noThread;                   // expect no one else to be in...
           return groomingToken_.compare_exchange_strong (expect_noThread, thisThread()
-                                                        ,memory_order_acquire // success also constitutes an acquire barrier
-                                                        ,memory_order_relaxed // failure has no synchronisation ramifications
+                                                        ,memory_order::acquire // success also constitutes an acquire barrier
+                                                        ,memory_order::relaxed // failure has no synchronisation ramifications
                                                         );
         }
       
@@ -145,7 +143,7 @@ namespace gear {
         {          // expect that this thread actually holds the Grooming-Token
           REQUIRE (groomingToken_.load(memory_order_relaxed) == thisThread());
           const ThreadID noThreadHoldsIt;
-          groomingToken_.store (noThreadHoldsIt, memory_order_release);
+          groomingToken_.store (noThreadHoldsIt, memory_order::release);
         }
       
       /**

@@ -22,8 +22,6 @@
 
 #include "lib/p.hpp"
 
-#include <boost/operators.hpp>
-
 
 
 namespace lib {
@@ -37,15 +35,13 @@ namespace test{
   
   
   struct X
-    : boost::totally_ordered<X>
     {
       long x_;
       
-      X(long x=0)  : x_(x) {}
+      explicit X(long x=0) : x_(x) {}
       operator long () { return x_; }
       
-      bool operator<  (const X& ox)  const { return x_ <  ox.x_; }
-      bool operator== (const X& ox)  const { return x_ == ox.x_; }
+      std::strong_ordering operator<=>(X const&) const = default;
       
       virtual ~X() {} // using RTTI
     };

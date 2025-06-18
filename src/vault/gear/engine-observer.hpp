@@ -59,7 +59,7 @@ namespace gear {
   class EngineEvent
     {
     protected:
-      static size_t constexpr RAW_SIZ = 3;
+      static constexpr size_t RAW_SIZ = 3;
       using Storage = std::array<int64_t, RAW_SIZ>;
       
       template<class DAT>

@@ -31,9 +31,10 @@ namespace session {
   /** default/fallback implementation of equality
    *  using literal object identity (same address).
    *  Required to enable handling by lumiera::P
+   * @deprecated 2025, see comment in MObject    ////////////////////////////////////////////////////////////TICKET #501 : clarify Placement and MObject identity
    */
   bool
-  AbstractMO::operator== (const MObject& oo)  const
+  AbstractMO::isEquivalentTo (const MObject& oo)  const
   {
     return (this == &oo);
   }

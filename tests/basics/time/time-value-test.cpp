@@ -142,7 +142,7 @@ namespace test{
           CHECK (var < Time::MAX);
           CHECK (var > Time::MIN);
           
-          raw_time_64 raw (var);
+          raw_time_64 raw = _raw(var);
           CHECK (raw == org);
           CHECK (raw >  org - two);
           

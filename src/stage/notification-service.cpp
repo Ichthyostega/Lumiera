@@ -85,7 +85,7 @@ namespace stage {
   void
   NotificationService::dispatchMsg (ID uiElement, lib::diff::GenNode&& uiMessage)
   {
-    dispatch_->event ([=]()
+    dispatch_->event ([=,this]
                       {
                         ctrl::BusTerm::mark (uiElement, uiMessage);
                       });
@@ -136,7 +136,7 @@ namespace stage {
   void
   NotificationService::mutate (ID uiElement, MutationMessage&& diff)
   {
-    dispatch_->event ([=]()
+    dispatch_->event ([=,this]
                       { // apply and consume diff message stored within closure
                         this->change (uiElement, move(unConst(diff)));
                       });

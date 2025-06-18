@@ -101,7 +101,7 @@ namespace test{
           CHECK (!(var <  ref) );
           CHECK ( (var >  ref) );
           
-          raw_time_64 rat(var);
+          raw_time_64 rat = _raw(var);
           CHECK (!(rat == ref) );
           CHECK ( (rat != ref) );
           CHECK ( (rat >= ref) );

@@ -68,7 +68,7 @@ namespace test    {
             {
               Placement<Clip>& pC = getPlacement<Clip>();
               cout << "Clip on media : "<< pC->getMedia() <<"\n";
-              CHECK (pC->operator==(c));
+              CHECK (pC->isEquivalentTo(c));
               log_ = string (pC);
             }
           void treat (AbstractMO&)

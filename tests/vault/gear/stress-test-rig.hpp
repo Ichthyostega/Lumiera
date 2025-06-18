@@ -209,7 +209,7 @@ namespace test {
       bool showRes  = true;     ///< print result data
       bool showRef  = true;     ///< calculate single threaded reference time
       
-      static uint constexpr REPETITIONS{20};
+      static constexpr uint REPETITIONS{20};
 
       BlockFlowAlloc bFlow{};
       EngineObserver watch{};

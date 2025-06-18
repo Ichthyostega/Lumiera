@@ -83,7 +83,7 @@ namespace test {
           
           AssetManager& aMang = AssetManager::instance();
           CHECK (aMang.getAsset (mm1->getID()) == mm2); // record of mm1 was replaced by mm2
-          CHECK (aMang.getAsset (mm2->getID()) == mm2);
+          CHECK (aMang.getAsset (mm2->getID()) == mm2);                              ////////////////////////TICKET #501 : clarify Placement and MObject identity
           
           CHECK (aMang.known (mm1->getID()));
           CHECK (aMang.known (mm2->getID()));

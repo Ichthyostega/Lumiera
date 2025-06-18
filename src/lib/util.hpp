@@ -40,9 +40,9 @@ namespace std {// forward declarations to avoid pervasive includes
   class set;
   
   template<typename IT, typename V>
-  IT find (IT, IT, V const&);
+  constexpr IT find (IT, IT, V const&);
   template<typename IT, typename V>
-  IT remove (IT, IT, V const&);
+  constexpr IT remove (IT, IT, V const&);
 }
 
 
@@ -57,21 +57,21 @@ namespace util {
   
   
   template <class NUM>
-  inline int constexpr
+  inline constexpr int
   sgn (NUM n)
   {
     return (n==0)? 0 :((n<0)? -1:+1 );
   }
   
   template <class N1, class N2>
-  inline N1 constexpr
+  inline constexpr N1
   min (N1 n1, N2 n2)
   {
     return n2 < n1? N1(n2) : n1;
   }
   
   template <class N1, class N2>
-  inline N1 constexpr
+  inline constexpr N1
   max (N1 n1, N2 n2)
   {
     return n1 < n2? N1(n2) : n1;
@@ -79,7 +79,7 @@ namespace util {
   
   /** cut a numeric value to be >=0 */
   template <typename NUM>
-  inline NUM constexpr
+  inline constexpr NUM
   noneg (NUM val)
   {
     return (0<val? val : 0);
@@ -87,7 +87,7 @@ namespace util {
   
   /** force a numeric to be within bounds, inclusively */
   template <typename NUM, typename NB>
-  inline NUM constexpr
+  inline constexpr NUM
   limited (NB lowerBound, NUM val, NB upperBound)
   {
     return min ( max (val, lowerBound)
@@ -95,7 +95,7 @@ namespace util {
   }
   
   template <typename NUM, typename NB>
-  inline bool constexpr
+  inline constexpr bool
   isLimited (NB lowerBound, NUM val, NB upperBound)
   {
     return lowerBound <= val
@@ -103,7 +103,7 @@ namespace util {
   }
   
   template <typename UN, typename N2>
-  inline UN constexpr
+  inline constexpr UN
   positiveDiff (N2 newVal, UN refVal)
   {
     return UN(newVal) > refVal? UN(newVal) - refVal

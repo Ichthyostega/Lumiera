@@ -121,8 +121,8 @@ namespace lib {
      ~AllocationCluster ()  noexcept;
       
       /** hard wired size of storage extents */
-      static size_t constexpr EXTENT_SIZ = 256;
-      static size_t constexpr max_size();
+      static constexpr size_t EXTENT_SIZ = 256;
+      static constexpr size_t max_size();
       
       
       /* === diagnostics === */

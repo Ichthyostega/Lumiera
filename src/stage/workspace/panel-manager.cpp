@@ -131,7 +131,7 @@ namespace workspace {
   bool
   PanelManager::hasPanel (const int description_index)
   {
-    return util::has_any (panels_, [=](panel::Panel* panel)
+    return util::has_any (panels_, [&](panel::Panel* panel)
                                     {
                                       return getPanelType(panel) == description_index;
                                     });

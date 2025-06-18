@@ -94,9 +94,9 @@ namespace play {
       {
         shutdown_initiated_ = true;
         launchDetached ("Output shutdown supervisor"
-                       ,[=]{
-                             bringDown (completedSignal);
-                           });
+                       ,[=,this]{
+                                  bringDown (completedSignal);
+                                });
       }
   }
   

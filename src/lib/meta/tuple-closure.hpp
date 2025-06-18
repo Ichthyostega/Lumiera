@@ -44,6 +44,7 @@
 #define LIB_META_TUPLE_CLOSURE_H
 
 #include "lib/meta/function-closure.hpp"
+#include "lib/meta/tuple-helper.hpp"
 #include "lib/util.hpp"
 
 #include <utility>
@@ -140,7 +141,7 @@ namespace meta{
                     auto
                     operator() (RemainingParams remPar)  const
                       {
-                        return std::apply (unConst(this)->partialClosure_, remPar);
+                        return apply (unConst(this)->partialClosure_, remPar);
                       };
 
                     CLO partialClosure_;

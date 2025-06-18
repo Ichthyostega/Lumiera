@@ -112,7 +112,7 @@ namespace test{
           quant (int testPoint)
             {
               TimeVar quantised = this->gridLocal(TimeValue(testPoint));
-              return int(quantised);
+              return _raw(quantised);
             }
         };
       

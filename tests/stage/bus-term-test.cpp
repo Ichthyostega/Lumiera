@@ -660,7 +660,7 @@ namespace test {
                */
               SessionThread(function<void(DiffSource*)> notifyGUI)
                 : ThreadJoinable{"BusTerm_test: asynchronous diff mutation"
-                                , [=]
+                                , [this,notifyGUI]
                                     {
                                       uint cnt       = randGen_.i(MAX_RAND_BORGS);
                                       for (uint i=0; i<cnt; ++i)
@@ -719,8 +719,9 @@ namespace test {
               usleep (100);
               uiDispatcher.invoke();
             }
-          session.join();
+          auto ok = session.join();
           //------end-multithreaded-mutation---
+          CHECK (ok);
           
           // on rare occasions we (consumer thread)
           // prematurely empty the queue...

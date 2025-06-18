@@ -234,8 +234,8 @@ namespace lib {
               return Tar{floor (val)};
             }
         }                             //----headroom to accommodate low probabilities
-      static size_t constexpr QUANTISER   = 1 << 4 + util::ilog2 (Tar::maxVal()-Tar::minVal());
-      static double constexpr CAP_EPSILON = 1/(2.0 * QUANTISER);
+      static constexpr size_t QUANTISER   = 1 << 4 + util::ilog2 (Tar::maxVal()-Tar::minVal());
+      static constexpr double CAP_EPSILON = 1/(2.0 * QUANTISER);
       
       
       /** @internal draw from source of randomness */

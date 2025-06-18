@@ -42,6 +42,7 @@
 
 #include <tuple>
 #include <utility>
+#include <functional>
 
 
 namespace util { // forward declaration
@@ -78,6 +79,56 @@ namespace meta {
   using disable_if_Tuple = lib::meta::disable_if<lib::meta::is_Tuple<std::remove_reference_t<TUP>>>;
   
   
+  
+  namespace { // apply to tuple-like : helpers...
+    
+    /** @internal invocation helper similar to C++17 — but preferring a custom `get` impl */
+    template<typename FUN, typename TUP, size_t...Idx>
+    constexpr decltype(auto)
+    __unpack_and_apply (FUN&& f, TUP&& tup, std::index_sequence<Idx...>)
+    {         // ▽▽▽ ADL
+      using std::get;
+      return std::invoke (std::forward<FUN> (f)
+                         ,get<Idx> (std::forward<TUP>(tup))...
+                         );
+    }
+    
+    
+    /** @internal invoke a metafunction with \a FUN and all element types from \a TUP */
+    template<template<typename...> class META, class FUN, class TUP>
+    struct _InvokeMetafunTup
+      {
+        using Tupl = std::decay_t<TUP>;
+        using Elms = typename ElmTypes<Tupl>::Seq;
+        using Args = typename Prepend<FUN, Elms>::Seq;
+        using Type = typename RebindVariadic<META, Args>::Type;
+      };
+    
+    template<class FUN, class TUP>
+    inline constexpr bool can_nothrow_invoke_tup = _InvokeMetafunTup<std::is_nothrow_invocable,FUN,TUP>::Type::value;
+  }
+  
+  /**
+   * Replacement for `std::apply` — yet applicable to _tuple-like custom types_.
+   * For unclear reasons, the standard chooses to reject such custom types, and
+   * only allows a fixed set of explicitly defined facilities from the Stdlib
+   * (tuple, pair, array, and some ranges stuff).
+   * @todo 6/2025 as a first step, this replicates the implementation from C++17;
+   *       the second step would be to constrain this to a concept `tuple_like`
+   */
+  template<class FUN, class TUP>
+  constexpr decltype(auto)
+  apply (FUN&& f, TUP&& tup)  noexcept (can_nothrow_invoke_tup<FUN,TUP> )
+  {
+    using Indices = std::make_index_sequence<std::tuple_size_v<std::remove_reference_t<TUP>>>;
+    
+    return __unpack_and_apply (std::forward<FUN> (f)
+                              ,std::forward<TUP> (tup)
+                              ,Indices{}
+                              );
+  }
+  
+  
   /**
    * Tuple iteration: perform some arbitrary operation on each element of a tuple.
    * @note the given functor must be generic, since each position of the tuple
@@ -87,7 +138,7 @@ namespace meta {
    *       then employ a fold expression with the comma operator.
    */
   template<class TUP, class FUN, typename = enable_if_Tuple<TUP>>
-  void
+  constexpr void
   forEach (TUP&& tuple, FUN fun)
   {
            std::apply ([&fun](auto&&... elms)
@@ -112,7 +163,7 @@ namespace meta {
    *          is used, which is guaranteed to evaluate from left to right.
    */
   template<class TUP, class FUN, typename = enable_if_Tuple<TUP>>
-  auto
+  constexpr auto
   mapEach (TUP&& tuple, FUN fun)
   {
     return std::apply ([&fun](auto&&... elms)

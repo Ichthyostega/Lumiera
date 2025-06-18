@@ -213,7 +213,7 @@ namespace test{
               commandHandler_ = newHandler;
             else
               commandHandler_ =
-                [=](GenNode const& cmd)
+                [this](GenNode const& cmd)
                   {
                     log_.warn(_Fmt("NOT handling command-message %s in test-mode") % cmd);
                   };
@@ -226,7 +226,7 @@ namespace test{
               stateMarkHandler_ = newHandler;
             else
               stateMarkHandler_ =
-                [=](ID subject, GenNode const& mark)
+                [this](ID subject, GenNode const& mark)
                   {
                     log_.warn(_Fmt("NOT handling state-mark %s passed from %s in test-mode")
                                                             % mark         % subject);

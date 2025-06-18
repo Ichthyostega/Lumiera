@@ -82,7 +82,7 @@ namespace test    {
             return element_;
           }
         
-        operator string()  const { return element_; }
+        operator string()  const { return util::toString(element_); }
         
         
         friend bool

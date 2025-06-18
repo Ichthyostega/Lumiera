@@ -62,9 +62,9 @@ namespace test{
           {
             TimeValue parsed = FMT::parse (timeSpec_, *grid_);
             CHECK (parsed == expected, "parsing '%s' resulted in %s instead of %s"
-                                     , cStr(timeSpec_)
-                                     , cStr(Time(parsed))
-                                     , cStr(Time(expected)));
+                                     , timeSpec_.c_str()
+                                     , string{Time(parsed)}.c_str()
+                                     , string{Time(expected)}.c_str());
           }
         
         void

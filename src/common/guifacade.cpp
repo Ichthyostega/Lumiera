@@ -115,7 +115,7 @@ namespace stage {
             
             facade.reset (   //  trigger loading of the GuiStarterPlugin...
               new GuiRunner (
-                    [=] (string* problemMessage)
+                    [=,this] (string* problemMessage)
                         { //     will be invoked when the UI thread exits
                           closeGuiModule();
                           termNotification(problemMessage);

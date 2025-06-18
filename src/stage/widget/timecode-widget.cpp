@@ -231,7 +231,7 @@ namespace widget {
     ms_seconds_ebox.set_can_focus(true);
     
     
-    auto connect_motion_event = [=](Gtk::EventBox& guiElm, Field fieldID)
+    auto connect_motion_event = [=,this](Gtk::EventBox& guiElm, Field fieldID)
       {
         auto handlerSlot = bind (mem_fun(this, &TimeCode::field_motion_notify_event), fieldID);
         guiElm.signal_motion_notify_event().connect (handlerSlot);
@@ -249,7 +249,7 @@ namespace widget {
     connect_motion_event (ms_seconds_ebox, MS_Seconds);
     
     
-    auto connect_button_press = [=](Gtk::EventBox& guiElm, Field fieldID)
+    auto connect_button_press = [=,this](Gtk::EventBox& guiElm, Field fieldID)
       {
         auto handlerSlot = bind (mem_fun(this, &TimeCode::field_button_press_event), fieldID);
         guiElm.signal_button_press_event().connect (handlerSlot);
@@ -267,7 +267,7 @@ namespace widget {
     connect_button_press (ms_seconds_ebox, MS_Seconds);
     
     
-    auto connect_button_release = [=](Gtk::EventBox& guiElm, Field fieldID)
+    auto connect_button_release = [=,this](Gtk::EventBox& guiElm, Field fieldID)
       {
         auto handlerSlot = bind (mem_fun(this, &TimeCode::field_button_release_event), fieldID);
         guiElm.signal_button_release_event().connect (handlerSlot);
@@ -285,7 +285,7 @@ namespace widget {
     connect_button_release (ms_seconds_ebox, MS_Seconds);
     
     
-    auto connect_scroll_event = [=](Gtk::EventBox& guiElm, Field fieldID)
+    auto connect_scroll_event = [=,this](Gtk::EventBox& guiElm, Field fieldID)
       {
         auto handlerSlot = bind (mem_fun(this, &TimeCode::field_button_scroll_event), fieldID);
         guiElm.signal_scroll_event().connect (handlerSlot);
@@ -303,7 +303,7 @@ namespace widget {
     connect_scroll_event (ms_seconds_ebox, MS_Seconds);
     
     
-    auto connect_key_press = [=](Gtk::EventBox& guiElm, Field fieldID)
+    auto connect_key_press = [=,this](Gtk::EventBox& guiElm, Field fieldID)
       {
         auto handlerSlot = bind (mem_fun(this, &TimeCode::field_key_press_event), fieldID);
         guiElm.signal_key_press_event().connect (handlerSlot);
@@ -321,7 +321,7 @@ namespace widget {
     connect_key_press (ms_seconds_ebox, MS_Seconds);
     
     
-    auto connect_key_release = [=](Gtk::EventBox& guiElm, Field fieldID)
+    auto connect_key_release = [=,this](Gtk::EventBox& guiElm, Field fieldID)
       {
         auto handlerSlot = bind (mem_fun(this, &TimeCode::field_key_release_event), fieldID);
         guiElm.signal_key_release_event().connect (handlerSlot);
@@ -339,7 +339,7 @@ namespace widget {
     connect_key_release (ms_seconds_ebox, MS_Seconds);
     
     
-    auto connect_focus_gain = [=](Gtk::EventBox& guiElm, Field fieldID)
+    auto connect_focus_gain = [=,this](Gtk::EventBox& guiElm, Field fieldID)
       {
         auto handlerSlot = bind (mem_fun(this, &TimeCode::field_focus_gain_event), fieldID);
         guiElm.signal_focus_in_event().connect (handlerSlot);
@@ -357,7 +357,7 @@ namespace widget {
     connect_focus_gain (ms_seconds_ebox, MS_Seconds);
     
     
-    auto connect_focus_loss = [=](Gtk::EventBox& guiElm, Field fieldID)
+    auto connect_focus_loss = [=,this](Gtk::EventBox& guiElm, Field fieldID)
       {
         auto handlerSlot = bind (mem_fun(this, &TimeCode::field_focus_loss_event), fieldID);
         guiElm.signal_focus_out_event().connect (handlerSlot);
@@ -1108,7 +1108,7 @@ namespace widget {
         if (frames  != 0 &&  frames * drag_accum < (_raw(current_time())))
           {
             // minus because up is negative in computer-land
-            pos = TimeValue (floor (pos - drag_accum * frames));
+            pos = TimeValue (floor (_raw(pos) - drag_accum * frames));
             set (pos, false);
           }
         else

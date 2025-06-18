@@ -31,6 +31,13 @@
  ** the corresponding operators on the pointee and by allowing to specify a base class smart-ptr
  ** as template parameter.
  **
+ ** @deprecated 2025 : smells like an overly zealous design, while fundamental traits of the
+ **             involved entities remain nebulous. Who is the »entity«? The pointer or the pointee?
+ **             Why do we even want to delegate relational operators, while we do not even know that
+ **             the target supports them? And why to we need an virtual equality? If these objects have
+ **             reference semantics, then a base class should compare the identity. And there should not
+ **             be any ordering on such elements. So the whole motivation of rolling a specialised
+ **             shard-ptr seems moot.                   /////////////////////////////////////////////////////TICKET #501 : clarify Placement and MObject identity
  ** @see asset.hpp
  ** @see custom-shared-ptr-test.cpp
  ** @see orderingofassetstest.cpp
@@ -94,11 +101,11 @@ namespace lib {
       
       
     private: /* === friend operators injected into enclosing namespace for ADL === */
-                                                                                          //////////////////TICKET #932 Clang is unable to fill in the default template argument. Resolved in newer versions of Clang. Temporary workaround: add second parameter B
+                                                                                          ///////////////////TICKET #932 Clang is unable to fill in the default template argument. Resolved in newer versions of Clang. Temporary workaround: add second parameter B
       template<typename _O_,typename B>
       friend inline bool
       operator== (P const& p, P<_O_, B> const& q) { return (p and q)? (*p == *q) : (!p and !q); }
-      
+                                                                                      ///////////////////////TICKET #501 : clarify Placement and MObject identity
       template<typename _O_,typename B>
       friend inline bool
       operator!= (P const& p, P<_O_, B> const& q) { return (p and q)? (*p != *q) : !(!p and !q); }

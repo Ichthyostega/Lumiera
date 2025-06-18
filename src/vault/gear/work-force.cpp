@@ -66,7 +66,7 @@ namespace gear {
   work::performRandomisedSpin (size_t stepping, size_t randFact)
   {
     size_t degree = CONTEND_SOFT_FACTOR * (1+randFact) * stepping;
-    for (volatile size_t i=0; i<degree; ++i) {/*SPIN*/}
+    for (volatile size_t i=0; i<degree; ) { i=i+1; /*SPIN*/}
   }
   
   /**

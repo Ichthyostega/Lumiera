@@ -293,17 +293,17 @@ namespace lib {
           
           template<class FUN>
           explicit
-          Local (FUN&& buildInstance)
+          Local (FUN&& _buildInstance)
             {
               __assert_compatible<MOC>();
               __assert_compatible<typename SubclassFactoryType<FUN>::Subclass>();
               
               temporarilyInstallAlternateFactory (origInstance_, origFactory_
-                                                 ,[=]()
-                                                     {
-                                                        mock_.reset (buildInstance());
-                                                        return mock_.get();
-                                                     });
+                                                 ,[this, buildInstance=forward<FUN> (_buildInstance)]
+                                                    {
+                                                      mock_.reset (buildInstance());
+                                                      return mock_.get();
+                                                    });
             }
          ~Local()
             {

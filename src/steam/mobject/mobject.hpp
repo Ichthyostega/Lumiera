@@ -37,7 +37,6 @@
 #include "lib/p.hpp"
 #include "lib/time/timevalue.hpp"
 
-#include <boost/operators.hpp>
 #include <string>
 
 
@@ -69,8 +68,7 @@ namespace mobject {
    */
   class MObject
     : public Buildable,
-      util::NonCopyable,
-      boost::equality_comparable< MObject >
+      util::NonCopyable
     {
     protected:
       typedef lib::time::Duration Duration;
@@ -97,12 +95,21 @@ namespace mobject {
       /** MObject self-test (usable for asserting) */
       virtual bool isValid()  const =0;
       
-      virtual Duration& getLength() =0;                                           ////////////////////TICKET #448
-            
-      virtual bool operator== (const MObject& oo)  const =0;  ///< needed for handling by lumiera::P
+      virtual Duration& getLength() =0;                                           ///////////////////////////TICKET #448
+      
+      /** needed for handling by lumiera::P
+       * @deprecated 2025 this seems not well motivated. lumiera::P was created
+       *  to support comparisons, and now we do not know how to implement them,
+       *  and thus we make the operation virtual. Are MObjects conceived as
+       *  having value semantics? For reference semantics, comparing the
+       *  »identity« should be sufficient
+       * @note 2025 changed to a predicate to cope with C++20 reversed operators.
+       */
+      virtual bool isEquivalentTo (const MObject& oo)  const =0;     ////////////////////////////////////////TICKET #501 : clarify Placement and MObject identity
+      
+      friend bool operator== (MObject const& o1, MObject const& o2) { return o1.isEquivalentTo(o2); }
       
     protected:
-      
       virtual string initShortID()  const =0;
       
     };

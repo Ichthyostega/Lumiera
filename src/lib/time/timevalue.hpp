@@ -191,7 +191,7 @@ namespace time {
       static TimeValue buildRaw_(raw_time_64);
       
       /** @internal diagnostics */
-      operator std::string ()  const;
+      explicit operator std::string()  const;
       
       /** @return is in-domain, not a boundary value */
       bool isRegular()  const;
@@ -265,8 +265,6 @@ namespace time {
           return *this;
         }
       
-      /// Support mixing with plain 64bit int arithmetics
-      operator raw_time_64()  const { return t_; }
       /// Support for micro-tick precise time arithmetics
       operator FSecs()  const { return FSecs{t_, TimeValue::SCALE}; }
       
@@ -342,7 +340,7 @@ namespace time {
            );
       
       /** @internal diagnostics */
-      operator std::string ()  const;
+      explicit operator std::string()  const;
       
       /** convenience start for time calculations */
       TimeVar operator+ (TimeValue const& tval)  const { return TimeVar(*this) + tval; }
@@ -405,7 +403,7 @@ namespace time {
       Offset stretchedByFloatFactor    (double)  const;
       
       /** @internal diagnostics, indicating ∆ */
-      operator std::string ()  const;
+      explicit operator std::string()  const;
       
       // Supporting sign flip
       Offset operator- ()  const;
@@ -522,7 +520,7 @@ namespace time {
       
       
       /** @internal diagnostics */
-      operator std::string ()  const;
+      explicit operator std::string()  const;
 
       /// Supporting backwards use as offset
       Offset operator- ()  const;
@@ -651,7 +649,7 @@ namespace time {
       void accept (Mutation const&);
       
       /** @internal diagnostics */
-      operator std::string ()  const;
+      explicit operator std::string()  const;
       
       /// Supporting extended total order, based on start and interval length
       friend bool operator== (TimeSpan const& t1, TimeSpan const& t2)  { return t1.t_==t2.t_ && t1.dur_==t2.dur_; }
@@ -689,7 +687,10 @@ namespace time {
       /** duration of one frame */
       Duration duration() const;
       
-      operator std::string() const;
+      /** derive total ordering from base class */
+      std::strong_ordering operator<=>(FrameRate const&) const = default;
+      
+      explicit operator std::string() const;
     };
   
   /** convenient conversion to duration in fractional seconds */

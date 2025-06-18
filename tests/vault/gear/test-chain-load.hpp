@@ -1394,7 +1394,7 @@ namespace test {
           for ( ; 0 < round; --round)
             lib::hash::combine (scree,scree);
           sink = scree;
-          sink++;
+          sink = sink + 1;
         }
       
       void
@@ -1408,7 +1408,7 @@ namespace test {
             for (size_t i=0; i<memBlock.size()-1; ++i)
               memBlock[i+1] += memBlock[i];
           sink = *memBlock.back();
-          sink++;
+          sink = sink + 1;
         }
       
       double

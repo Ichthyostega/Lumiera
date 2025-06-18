@@ -59,7 +59,7 @@ namespace session {
           return length_; 
         }
       
-      bool operator== (const MObject& oo)  const;
+      bool isEquivalentTo (const MObject& oo)  const override;
       
     protected:
       void

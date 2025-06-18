@@ -356,7 +356,7 @@ namespace control {
     
     runningLoop_ =
          make_unique<DispatcherLoop>(
-            [=](string* problemIndicator)
+            [=,this](string* problemIndicator)
                 { // when the Session thread ends....
                   SteamDispatcher::endRunningLoopState();
                   termNotification (problemIndicator);

@@ -157073,6 +157073,115 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
 </node>
 </node>
 <node CREATED="1617648902994" ID="ID_276316646" MODIFIED="1617648906362" TEXT="C++20">
+<node CREATED="1749407118772" ID="ID_1741477135" MODIFIED="1750347983055" TEXT="C++20 kennenlernen">
+<linktarget COLOR="#5b78d0" DESTINATION="ID_1741477135" ENDARROW="Default" ENDINCLINATION="-1445;183;" ID="Arrow_ID_120232332" SOURCE="ID_160865224" STARTARROW="None" STARTINCLINATION="714;86;"/>
+<node CREATED="1749407144792" ID="ID_1869633875" MODIFIED="1749407148565" TEXT="Richtlinien">
+<node CREATED="1749407149503" ID="ID_824791307" LINK="https://quuxplusone.github.io/blog/2021/04/03/static-constexpr-whittling-knife/" MODIFIED="1749407166664" TEXT="Reihenfolge der Deklarations-Qualifier">
+<node CREATED="1749407219192" ID="ID_1604663290" MODIFIED="1749407248162" TEXT="attributes-friendness-storage-constness-virtualness-explicitness-signedness-length-type id">
+<font NAME="SansSerif" SIZE="11"/>
+</node>
+<node CREATED="1749408969914" ID="ID_728351519" MODIFIED="1749409045835" TEXT=".. id &lt;CV&gt; &lt;Ref&gt; noexcept &lt;trailing ret&gt; override, final, requires ">
+<font NAME="SansSerif" SIZE="11"/>
+</node>
+</node>
+</node>
+<node CREATED="1749426838083" ID="ID_231743623" MODIFIED="1749426848317" TEXT="Deprecations">
+<node CREATED="1749426849409" ID="ID_1591980207" LINK="https://www.nextptr.com/tutorial/ta1430524603/capture-this-in-lambda-expression-timeline-of-change" MODIFIED="1749427037270" TEXT="&#x3bb;-this capture">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das behebt in der Tat eine <i>sonderbare Asymmetrie</i>&#160;und erm&#246;glicht einen wichtigen Fall: wenn man transparent auf einer Kopie von *this arbeiten m&#246;chte (was stets der Fall sein d&#252;rfte, wenn man einen &#955;-Dispatch in einen anderen Thread macht)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1749432400380" ID="ID_1422603149" MODIFIED="1749432404143" TEXT="Neuerungen">
+<node CREATED="1749432405584" ID="ID_1749311235" MODIFIED="1749432412017" TEXT="Spaceship und comparisons">
+<node CREATED="1749432593306" ID="ID_786839752" MODIFIED="1749432670131" TEXT="C++20 leitet alle weiteren Vergleichsoperatoren ab">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <ul>
+      <li>
+        man mu&#223; selber eigentlich nur noch einen Spaceship-Operator implementieren
+      </li>
+      <li>
+        oder f&#252;r rein equality-comparables: einen operator==
+      </li>
+      <li>
+        Boost::Operators wird damit praktisch obsolet
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<node CREATED="1749434681222" ID="ID_1398333577" LINK="https://en.cppreference.com/w/cpp/language/default_comparisons.html" MODIFIED="1749436254291" TEXT="C++20 kann aufgefordert werden, Vergleichsoperatoren zu synthetisieren">
+<icon BUILTIN="idea"/>
+<node CREATED="1749434705968" ID="ID_1291911297" MODIFIED="1750202013218" TEXT="man deklariert einen der Basis-Operatoren"/>
+<node CREATED="1749434720796" ID="ID_872664851" MODIFIED="1749434728166" TEXT="und markiert ihn als =default"/>
+<node CREATED="1749436185923" ID="ID_1831503076" MODIFIED="1749436216983" TEXT="R&#xfc;ckgabetyp kann auto sein &#x27f9; Vergleichskategorie wird erschlossen">
+<linktarget COLOR="#7fc6d2" DESTINATION="ID_1831503076" ENDARROW="Default" ENDINCLINATION="89;0;" ID="Arrow_ID_1373101959" SOURCE="ID_1719430366" STARTARROW="None" STARTINCLINATION="89;0;"/>
+</node>
+<node CREATED="1749434728960" ID="ID_1896131812" MODIFIED="1749434755885" TEXT="dann wird der Vergleich systematisch aufgebaut">
+<node CREATED="1749434758537" ID="ID_1999943693" MODIFIED="1749434764689" TEXT="Vergleiche auf Basisklassen"/>
+<node CREATED="1749434765382" ID="ID_1150778473" MODIFIED="1749434775123" TEXT="ggfs. Vergleiche der nicht-statischen Member"/>
+<node CREATED="1749434775862" ID="ID_1068760217" MODIFIED="1749434780155" TEXT="in Definitions-Reihenfolge"/>
+</node>
+<node CREATED="1749436059836" ID="ID_1719430366" MODIFIED="1749436731144" TEXT="auch vorhandene einfache Operatoren k&#xf6;nnen verwendet werden">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      aber nur wenn es eindeutig ist; typischerweise mu&#223; dazu die Vergleichs-Kategorie mit angegeben werden. Also z.B. <font face="Monospaced">std::strong_ordering</font>
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#7e92a9" DESTINATION="ID_870431449" ENDARROW="Default" ENDINCLINATION="310;0;" ID="Arrow_ID_242937654" STARTARROW="None" STARTINCLINATION="341;15;"/>
+<arrowlink COLOR="#7fc6d2" DESTINATION="ID_1831503076" ENDARROW="Default" ENDINCLINATION="89;0;" ID="Arrow_ID_1373101959" STARTARROW="None" STARTINCLINATION="89;0;"/>
+</node>
+</node>
+<node CREATED="1749436264765" ID="ID_1427981784" LINK="https://brevzin.github.io/c++/2019/07/28/comparisons-cpp20/#rewriting-secondary-operators" MODIFIED="1749436283531" TEXT="Blog-Artikel mit vielen Beispielen">
+<icon BUILTIN="info"/>
+</node>
+</node>
+<node CREATED="1749432700280" ID="ID_480528951" MODIFIED="1749432724323" TEXT="Vergleichs-Operatoren mit gemischten Typen werden auch gespiegelt versucht">
+<node CREATED="1749432729777" ID="ID_879932827" MODIFIED="1749432736510" TEXT="das kann zu Endlosschleifen f&#xfc;hren">
+<node CREATED="1749432875877" ID="ID_1742284953" LINK="https://github.com/boostorg/utility/issues/65" MODIFIED="1749432888625" TEXT="Beispiel Bug #65 aus Boost::Operators"/>
+<node CREATED="1749432916352" ID="ID_1831441725" LINK="https://stackoverflow.com/a/65649022/444796" MODIFIED="1749432925310" TEXT="Stackoverflow"/>
+</node>
+<node CREATED="1749432737878" ID="ID_1502179182" MODIFIED="1749432861995" TEXT="Grund sind i.d.R &#xbb;trickreiche&#xab; minimalisitische Implementierungen aus fr&#xfc;heren Versionen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      fr&#252;her hat man oft einen Basis-Operator in der Klasse definiert, und dann einen freistehenden gemischten Operator (z.B. mit einem Integral-Datentyp) dazu. Oder umgekehrt: in der Klasse den Vergleich mit dem Integraltyp plus eine implizite Konvertierung. Solche Konstrukte f&#252;hren jetzt oft entweder zu Ambivalenzen (Compile-Fehler), oder zur Endlos-Rekursion
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#fefc4e" COLOR="#351d75" CREATED="1749436772478" ID="ID_1147026563" MODIFIED="1749436837516">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <u>L&#246;sung</u>: Basis-Operatoren oder Spaceship direkt implementieren
+    </p>
+  </body>
+</html></richcontent>
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1749436815699" ID="ID_1904107220" MODIFIED="1749436818471" TEXT="....und C++20 den Rest machen lassen"/>
+<node BACKGROUND_COLOR="#c3d2a9" COLOR="#338800" CREATED="1749436841427" ID="ID_904592270" MODIFIED="1749436886521" TEXT="C++20 beginnt mir zu gefallen">
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+</node>
+<node CREATED="1749482827627" ID="ID_1979932613" MODIFIED="1749482839265" TEXT="using &lt;enum class&gt;"/>
+</node>
+</node>
 <node CREATED="1617648907316" FOLDED="true" ID="ID_899199723" MODIFIED="1617650703506" TEXT="Coroutine">
 <node COLOR="#435e98" CREATED="1617648912609" ID="ID_996261679" LINK="https://lewissbaker.github.io/2017/09/25/coroutine-theory" MODIFIED="1617648936772" TEXT="Theorie und Definitionen">
 <icon BUILTIN="info"/>
@@ -157190,6 +157299,15 @@ class Something
 <node CREATED="1698089508382" ID="ID_77108316" LINK="https://pdimov.github.io/blog/2020/09/07/named-parameters-in-c20/" MODIFIED="1698089771312" TEXT="Workaround(seit C++20): die &#xbb;designated initializers&#xab; aus C99 nutzen"/>
 <node CREATED="1698089910225" ID="ID_1931488391" LINK="https://www.fluentcpp.com/2018/12/14/named-arguments-cpp/" MODIFIED="1698089942787" TEXT="Typsystem + variadic Templates: &#xbb;strong Types&#xab;"/>
 <node CREATED="1698089963610" ID="ID_1710977423" MODIFIED="1698089968637" TEXT="Builder"/>
+</node>
+<node CREATED="1749389174897" ID="ID_1479169191" MODIFIED="1749389178341" TEXT="Module">
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1749389179923" ID="ID_98625024" MODIFIED="1749389187929" TEXT="sind sie schon brauchbar?">
+<icon BUILTIN="help"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1749389190780" ID="ID_1998652005" MODIFIED="1749389205149" TEXT="Zweifel am Design und der Implementierbarkeit">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1749389220519" ID="ID_1525107695" LINK="https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2019/p1427r0.pdf" MODIFIED="1749389248260" TEXT="Concerns about module toolability (2018)"/>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1687648927947" ID="ID_1380476359" MODIFIED="1687648930939" TEXT="Library">
@@ -165636,6 +165754,877 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="flag-pink"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1742175640613" ID="ID_671098760" MODIFIED="1742175658639" TEXT="Ma&#xdf;gabe: erst mal nur hochschalten">
 <icon BUILTIN="yes"/>
+<node CREATED="1749398875084" ID="ID_111777702" MODIFIED="1749398907481" TEXT="GCC-14 unterst&#xfc;tzt (experimentell) -std=gnu++23">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1749398913463" ID="ID_1082283652" MODIFIED="1749398941779" TEXT="&#xbb;C++23 experimentell&#xab;">
+<font NAME="SansSerif" SIZE="14"/>
+</node>
+<node CREATED="1749399058324" ID="ID_1541446715" MODIFIED="1749399066070" TEXT="Setting">
+<node CREATED="1749399067413" ID="ID_1662032512" MODIFIED="1749399089514" TEXT="CXXFLAGS in Setup.py"/>
+<node CREATED="1749399090329" ID="ID_282168012" MODIFIED="1749399127174" TEXT="Eclipse: CDT GCC Built-in Compiler Settings"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1749409857247" ID="ID_160865224" MODIFIED="1750347985612" TEXT="woot??  kennenlernen...">
+<arrowlink COLOR="#5b78d0" DESTINATION="ID_1741477135" ENDARROW="Default" ENDINCLINATION="-1445;183;" ID="Arrow_ID_120232332" STARTARROW="None" STARTINCLINATION="714;86;"/>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1749398984021" ID="ID_798560819" MODIFIED="1749399023650" TEXT="Anpassungen">
+<icon BUILTIN="pencil"/>
+<node CREATED="1749399005532" ID="ID_73997136" MODIFIED="1749399015821" TEXT="Error">
+<node COLOR="#435e98" CREATED="1749405279128" FOLDED="true" ID="ID_64791896" MODIFIED="1749427637085" TEXT="constexpr auf Forwards in util.hpp">
+<node CREATED="1749405304985" ID="ID_1781845772" MODIFIED="1749405322772" TEXT="util.hpp verwendet filter() und remove()"/>
+<node CREATED="1749405323462" ID="ID_553685849" MODIFIED="1749405346376" TEXT="aber includiert nicht &lt;algorithm&gt;">
+<node CREATED="1749405349914" ID="ID_464374778" MODIFIED="1749405360445" TEXT="weil das effektiv gloabl f&#xfc;r ganz Lumiera w&#xe4;re"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1749405361200" ID="ID_123906463" MODIFIED="1749405376320" TEXT="zweifelhaft ob sowas einen Unterschied macht">
+<icon BUILTIN="help"/>
+<node CREATED="1749405377503" ID="ID_79511157" MODIFIED="1749405385443" TEXT="hatte ein &#xe4;hnliches Problem in Yoshimi verursacht"/>
+<node CREATED="1749405390533" ID="ID_1942820461" MODIFIED="1749405416366" TEXT="allerdings war es dort &lt;set&gt;, was letztlich praktisch &#xfc;berall in Yoshimi includiert wird"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1749405421337" ID="ID_422444620" MODIFIED="1749405455803" TEXT="trotzdem zweifelhaft, weil ich da optimiere, ohne je nachgemessen zu haben">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1749405466464" ID="ID_1621362966" MODIFIED="1749427631657" TEXT="und meine Forward-Deklarationen sind (noch nicht) constexpr">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1749427638738" FOLDED="true" ID="ID_1508362139" MODIFIED="1750294484443" TEXT="ambiguous comparison operator in FrameRate::duration()">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1749427693586" ID="ID_537536661" MODIFIED="1749427787215" TEXT="die erste Alternative ist hier beabsichtigt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      weil *this tats&#228;chlich von boost::rational&lt;uint&gt; erbt; der Check soll ja eine division-by-Zero verhindern, also *this soll nicht 0 fps sein
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1749427788631" ID="ID_725909785" MODIFIED="1749427820982" TEXT="alarmierend: C++20 findet Vergleiche mit Symbol und LIteral als Alternativen">
+<icon BUILTIN="clanbomber"/>
+<node COLOR="#435e98" CREATED="1749428273463" ID="ID_1640565416" MODIFIED="1749483079899" TEXT="Tja: FrameRate::operator string() ist nicht explicit">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      daf&#252;r gibt es eigentlich keine Entschuldigung bei Typen, die auch arithmetisch sein sollen; denn leider wird int(0) implizit in CStr promoted, und von dort weiter in Literal bzw Symbol
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#9e335b" DESTINATION="ID_1502394581" ENDARROW="Default" ENDINCLINATION="553;-29;" ID="Arrow_ID_227291299" STARTARROW="None" STARTINCLINATION="-98;111;"/>
+<arrowlink COLOR="#b34c4c" DESTINATION="ID_148773936" ENDARROW="Default" ENDINCLINATION="111;5;" ID="Arrow_ID_1593058392" STARTARROW="None" STARTINCLINATION="-166;190;"/>
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
+<node CREATED="1749428094924" ID="ID_654505518" MODIFIED="1749428263252" TEXT="und dazu noch den Vergleich mit einem safe-bool">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <font color="#ff0000" face="Bitstream Vera Sans Mono">boost::rational&lt;unsigned int&gt;::bool_type</font>
+    </p>
+    <p>
+      sollte nicht <i>eben dieser fehlgeleitete Vergleich</i>&#160;durch ein save-bool vermieden werden...?
+    </p>
+    <p>
+      ...wobei, das Ergebnis w&#228;re hier auch korrekt (da 0 auch false)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1749429877535" ID="ID_338362919" MODIFIED="1749436565713" TEXT="L&#xf6;sung: stattdessen vergleichen HALTED &gt;= *this">
+<icon BUILTIN="idea"/>
+<node CREATED="1749436568459" ID="ID_912890937" MODIFIED="1749436584433" TEXT="w&#xe4;re sowiso klarer (und korrekter)">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node COLOR="#435e98" CREATED="1749433316472" ID="ID_1636670599" MODIFIED="1749436704407" TEXT="geht (noch) gar nicht">
+<arrowlink COLOR="#2a99d5" DESTINATION="ID_276485756" ENDARROW="Default" ENDINCLINATION="-4;-53;" ID="Arrow_ID_235238582" STARTARROW="None" STARTINCLINATION="-9;45;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1749433352269" ID="ID_1136541784" MODIFIED="1749433423143" TEXT="er findet keinen passenden Kandidaten">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      wobei vor allem relevant w&#228;ren die Vergleiche via &quot;compatible integer types&quot;.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1749433655090" ID="ID_593325948" MODIFIED="1749433673805" TEXT="im Overload-Set ist kein Vergleich zwischen zwei Rationals dabei">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1749433584761" ID="ID_438302978" MODIFIED="1749433602295" TEXT="was mich wundert: wie w&#xfc;rde Vergleich zwischen Rationals funktionieren?">
+<node CREATED="1749435016223" ID="ID_344208140" MODIFIED="1749435027288" TEXT="Implementierung wurde ge&#xe4;ndert">
+<node CREATED="1749435029215" ID="ID_926070218" MODIFIED="1749435075506" TEXT="siehe Kommentar im Header (hier v1.83)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <div style="background-color: #eee0b5; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 2px">
+      <div style="color: #202020; background-color: #eee0b5; font-family: Bitstream Vera Sans Mono; font-size: 9pt; white-space: pre">
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#977b75">//</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#977b75">// Non-member operators: previously these were provided by Boost.Operator, but these had a number of</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#977b75">// drawbacks, most notably, that in order to allow inter-operability with IntType code such as this:</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#977b75">//</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#977b75">// rational&lt;int&gt; r(3);</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#977b75">// assert(r == 3.5); // compiles and passes!!</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#977b75">//</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#977b75">// Happens to be allowed as well :-(</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#977b75">//</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#977b75">// There are three possible cases for each operator:</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#977b75">// 1) rational op rational.</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#977b75">// 2) rational op integer</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#977b75">// 3) integer op rational</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#977b75">// Cases (1) and (2) are folded into the one function.</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#977b75">//</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          
+        </p>
+      </div>
+    </div>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1749435084894" ID="ID_1927778255" MODIFIED="1749435105103" TEXT="d.h. &#xbb;fr&#xfc;her&#xab; hat sich boost::rational einfach boost::operators reingezogen"/>
+<node CREATED="1749435105874" ID="ID_1101111740" MODIFIED="1749435121331" TEXT="und davon war ich ausgegangen (da Timevalue ohnehin boost::operators verwendet)"/>
+<node CREATED="1749435136002" ID="ID_1955226819" MODIFIED="1749435165731" TEXT="nun sollte is_compatible_integer&lt;Arg, IntType&gt; implizit das Gleiche bewirken"/>
+</node>
+<node CREATED="1749435234674" ID="ID_407457915" MODIFIED="1749435535993" TEXT="der Fallback scheitert, weil er generisch arbeitet">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...und nicht (mehr) per Vererbung.
+    </p>
+    <p>
+      Erl&#228;uterung:
+    </p>
+    <p>
+      Die Implementierung von <font color="#635e96" face="Bitstream Vera Sans Mono" size="9pt"><b>is_compatible_integer</b></font> &#160;kombiniert mehrere compile-Time Trait-Checks. <b>Grunds&#228;tzlich</b>&#160;gilt f&#252;r alle Traits, da&#223; sie nur direkt auf dem jeweiligen Template-Argument arbeiten, nicht aber eine eventuelle Basisklasse heranziehen. Das Problem ist mir bekannt; die Sprache C++ gibt das <i>einfach nicht her...</i>&#160; (Kann mich an die genaue Begr&#252;ndung im Moment nicht erinnern, m&#252;&#223;te irgendwo in dieser Mindmap hier stehen ... war das beim Parser?)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1749435977023" ID="ID_1650168859" MODIFIED="1749435995313" TEXT="man kann C++20 die Vergleichsoperatoren synthetisieren lassen">
+<node CREATED="1749436005267" ID="ID_911440067" MODIFIED="1749436015641" TEXT="w&#xfc;rde die vorhandenen == und &gt; verwenden"/>
+<node CREATED="1749436016280" ID="ID_870431449" MODIFIED="1749436715296" TEXT="dazu mu&#xdf; aber die Vergleichskategorie (std::strong_ordering) explizit gegeben sein">
+<linktarget COLOR="#7e92a9" DESTINATION="ID_870431449" ENDARROW="Default" ENDINCLINATION="310;0;" ID="Arrow_ID_242937654" SOURCE="ID_1719430366" STARTARROW="None" STARTINCLINATION="341;15;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e5e5b6" CREATED="1749436600004" ID="ID_276485756" MODIFIED="1749436699340" TEXT="also in FrameRate nachtragen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <div style="background-color: #eee0b5; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 2px">
+      <div style="color: #202020; background-color: #eee0b5; font-family: Bitstream Vera Sans Mono; font-size: 9pt; white-space: pre">
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">/** derive total ordering from base class */</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#535773">std</font><font color="#65533c">::</font><font color="#59253b">strong_ordering</font><font color="#3a1f18">&#160;</font><font color="#632d2d"><b>operator&lt;=&gt;</b></font><font color="#11123a">(</font><font color="#635e96"><b>FrameRate</b></font><font color="#3a1f18">&#160; </font><font color="#4a1a65"><b>const</b></font><font color="#65533c">&amp;</font><font color="#11123a">)</font><font color="#3a1f18">&#160;</font><font color="#4a1a65"><b>const</b></font><font color="#3a1f18">&#160;</font><font color="#65533c">=</font><font color="#3a1f18">&#160; </font><font color="#4a1a65"><b>default</b></font><font color="#65533c">;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          
+        </p>
+      </div>
+    </div>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#2a99d5" DESTINATION="ID_276485756" ENDARROW="Default" ENDINCLINATION="-4;-53;" ID="Arrow_ID_235238582" SOURCE="ID_1636670599" STARTARROW="None" STARTINCLINATION="-9;45;"/>
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1749436520798" FOLDED="true" ID="ID_84309509" MODIFIED="1749482988989" TEXT="scheduler-commutator.hpp : die Atomic-memory-orders werden nicht gefunden">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1749480211477" ID="ID_1017598916" MODIFIED="1749480307660" TEXT="std::memory_order ist jetzt eine Enum-Klasse">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1749480224749" ID="ID_1886872541" MODIFIED="1749480256920" TEXT="und die freien Konstanten sind explizit definiert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      std::memory_order_release = std::memory_order::release
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1749480258933" ID="ID_1565249066" MODIFIED="1749480301358" TEXT="man mu&#xdf; also nur das using-Statement anders formulieren">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1749480277498" ID="ID_1195195900" MODIFIED="1749480312774" TEXT="und hat die Wahl zwischen memory_order_xxx und memory_order::xxx">
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1749483008800" ID="ID_148773936" MODIFIED="1750294473991" TEXT="Konsequenz: mu&#xdf; nun Time-Entit&#xe4;ten explizit nach string wandeln">
+<arrowlink COLOR="#922a4a" DESTINATION="ID_100003680" ENDARROW="Default" ENDINCLINATION="-432;-26;" ID="Arrow_ID_1043741176" STARTARROW="None" STARTINCLINATION="-60;291;"/>
+<linktarget COLOR="#b34c4c" DESTINATION="ID_148773936" ENDARROW="Default" ENDINCLINATION="111;5;" ID="Arrow_ID_1593058392" SOURCE="ID_1640565416" STARTARROW="None" STARTINCLINATION="-166;190;"/>
+<icon BUILTIN="smiley-neutral"/>
+<node COLOR="#435e98" CREATED="1749483108933" HGAP="36" ID="ID_216815165" MODIFIED="1749483116800" TEXT="CommandArgument_test" VSHIFT="16"/>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1749519033788" ID="ID_732774928" MODIFIED="1750183175217" TEXT="Concept-Error:  not __tuple_like&lt;ArrayAdapt&lt;uint...&gt;&gt; ">
+<icon BUILTIN="pencil"/>
+<node CREATED="1749519322166" ID="ID_1060720125" MODIFIED="1749519379854" TEXT="requires-expression evaluated to false">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <font color="#4a2626" face="Bitstream Vera Sans Mono" size="9pt">__is_tuple_like_v&lt;typename std::remove_cvref&lt;_Tp&gt;::type&gt; [with _Tp = lib::meta::ArrayAdapt&lt;unsigned int, unsigned int, unsigned int, unsigned int&gt;&amp;]</font>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1750172945389" ID="ID_384571142" MODIFIED="1750173073164" TEXT="TupleClosureBuilder::wrapBuilder() &#x27f6; std::apply()">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...with
+    </p>
+    <p>
+      <font color="#4a2626" face="Bitstream Vera Sans Mono" size="9pt">with _Tuple = lib::meta::ArrayAdapt&lt;uint, uint, uint, uint&gt;&amp;</font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1749519808861" ID="ID_428532679" MODIFIED="1749519817508" TEXT="was mu&#xdf; denn erf&#xfc;llt sein??">
+<node CREATED="1749519818343" ID="ID_537804072" LINK="https://stackoverflow.com/q/68443804/444796" MODIFIED="1749519826325" TEXT="Stackoverflow: eine Menge Hinweise"/>
+<node CREATED="1749519875187" ID="ID_1865811788" MODIFIED="1749519897553" TEXT="Implementierung gefunden: in &lt;type_traits&gt; line 2813">
+<node CREATED="1749519954597" ID="ID_1716273705" MODIFIED="1749519973829" TEXT="w&#xe4;&#xe4;... die greifen auf __is_tuple_like_impl zur&#xfc;ck"/>
+<node CREATED="1749519974474" ID="ID_1687845215" MODIFIED="1749519990515" TEXT="und das wird einfach von allen relevanten Typen zu true spezialisiert"/>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1749520993859" ID="ID_1113321640" LINK="https://en.cppreference.com/w/cpp/utility/tuple/tuple-like.html" MODIFIED="1749521018933">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Problem: &#187;tuple_like&#171; ist <i>exposition-only</i>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1750081551660" ID="ID_197841200" LINK="https://stackoverflow.com/a/79660783/444796" MODIFIED="1750081679795" TEXT="selber auf Stackoverflow gefragt &#x27f9; vom Standard nicht unterst&#xfc;tzt">
+<node CREATED="1750173520136" ID="ID_1897180784" MODIFIED="1750173904471">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <u><font color="#dc0a0a">&#196;rgernis-1</font></u>&#160;: das <i>exposition-only</i>&#160;concept &#187;tuple_like&#171;
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Anscheinend wollte man da bessere Fehlermeldungen und dann wurden nur die Stakeholder aus dem Standard bzw. der Stdlib ber&#252;cksichtigt; der Standard ist in der Tat so formuliert, da&#223; er eigentlich nur auf eine feste Liste von bekannten <i>Tuple-likes</i>&#160;abstellt. Wei&#223; nicht ob man sich &#252;berhaupt einen Gedanken gemacht hat, ein generisches <font face="Monospaced" color="#614040">tuple_like</font>&#160; bereitzustellen; so wie man das Mindset der Kommittee-Mitglieder kennt, scheitert sowas daran, da&#223; man definitiv nicht alles erfassen kann, was per <i>Structured Binding</i>&#160;greifbar ist.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1750173520136" ID="ID_1223113132" MODIFIED="1750174196876">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <u><font color="#dc0a0a">&#196;rgernis-2</font></u>&#160;: die <font color="#574242" face="Monospaced">std::apply</font>&#160;Impl.&#160;&#160;ruft explizit<font color="#574242" face="Monospaced">&#160;std::get</font>
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das ist ein weiteres Problem, und bestand bereits in C++17; und es zwingt dazu, eine eigene Spezialisierung von <font face="Monospaced" color="#5d4848"><b>get</b></font>&#160;in den Namespace<font face="Monospaced" color="#5d4848">&#160;std::</font>&#160;einzuf&#252;gen &#8212; was nun mit C++20 explizit verboten wird. Was dann bedeutet, da&#223; die restriktive Auslegung r&#252;ckwirkend als &quot;immer schon beabsichtigt&quot; erscheint (und ich trau mir aber wetten, da&#223; das Problem anf&#228;nglich nicht gesehen wurde)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1750173383627" ID="ID_1798398621" MODIFIED="1750181755584" TEXT="und Tsch&#xfc;&#xdf; &#x27f9; selber machen">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1750173412198" ID="ID_145552849" MODIFIED="1750183190374" TEXT="Schritt-1 : C++17 - apply-bereitstellen">
+<icon BUILTIN="full-1"/>
+<node CREATED="1750174385397" ID="ID_479819820" MODIFIED="1750174431702" TEXT="in tuple-helper.hpp">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      dort k&#246;nnte dann auch das Concept bereitgestellt werden, und eine Ausweitung auf diverse weitere Verwendungen (forEach etc...)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1750174301504" ID="ID_23336126" MODIFIED="1750174319488" TEXT="die alte Implementierung aus der libStdc++"/>
+<node CREATED="1750174320296" ID="ID_940943622" MODIFIED="1750174375979">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      allerdings dann korrekt f&#252;r einen Erweiterungspunkt <font face="Monospaced" color="#5f4a4a">get</font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1750173439337" ID="ID_1832825819" MODIFIED="1750173477173" TEXT="Schritt-2 : concept tuple_like einf&#xfc;hren">
+<icon BUILTIN="full-2"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1750182957454" ID="ID_319310125" MODIFIED="1750183335238" TEXT="Instantiieren von non-copyable-Objekten">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1750182983241" ID="ID_162769760" MODIFIED="1750182992885" TEXT="aufgetreten bei:  ParamWeavingPattern::Feed"/>
+<node CREATED="1750200330494" ID="ID_605009478" MODIFIED="1750200385831" TEXT="ohne user-provided default-ctor: rejected as non-accessible">
+<icon BUILTIN="broken-line"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1750201601058" ID="ID_230327461" MODIFIED="1750201616690" TEXT="lt. Doku nicht nachvollziehbar">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1750201617519" ID="ID_184461569" MODIFIED="1750201626715" TEXT="Untersuchung">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1750183336531" ID="ID_75715335" MODIFIED="1750201590066" TEXT="string{nullptr} scheitert nun im Compile">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1750183359883" ID="ID_1519503856" MODIFIED="1750183448877" TEXT="format-helper-test.hpp, 113">
+<icon BUILTIN="info"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1750183405234" ID="ID_1847983915" MODIFIED="1750201587268" TEXT="std::string{nullptr_t} ist nun disabled">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1750183383340" ID="ID_33288706" MODIFIED="1750201565823" TEXT="will eigentlich nur eine Exception provozieren">
+<icon BUILTIN="idea"/>
+</node>
+<node BACKGROUND_COLOR="#b6c8c1" COLOR="#338800" CREATED="1750201546961" ID="ID_642650527" MODIFIED="1750201579120" TEXT="dann werfen wir halt eine Bombe und gut is">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1750206284267" ID="ID_1521572010" MODIFIED="1750258942070" TEXT="Folgefehler: time-parsing-test">
+<linktarget COLOR="#6e688e" DESTINATION="ID_1521572010" ENDARROW="Default" ENDINCLINATION="-216;21;" ID="Arrow_ID_703106001" SOURCE="ID_1165283590" STARTARROW="None" STARTINCLINATION="-265;17;"/>
+<node CREATED="1750206365195" ID="ID_286820049" MODIFIED="1750206370843" TEXT="sehr alter Test...."/>
+<node CREATED="1750206371431" ID="ID_956474320" MODIFIED="1750206415553" TEXT="hatte mir dort eine Check-Syntax geschaffen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Parsing(...).should_yield()
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1750206415545" ID="ID_1464585471" MODIFIED="1750206433131" TEXT="das verwendete die implizite String-Konvergierung der Time-Entit&#xe4;ten"/>
+<node CREATED="1750206433561" ID="ID_981445233" MODIFIED="1750206442489" TEXT="diese habe ich nun auf explicit umgestellt"/>
+<node COLOR="#5b280f" CREATED="1750206443269" ID="ID_1400164284" MODIFIED="1750257329362" TEXT="auf  ExpectString umformulieren?">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1750257349125" ID="ID_1554228757" MODIFIED="1750257401275" TEXT="nicht sinnvoll...">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      hier wird die <i>expectation</i>&#160;als Zeitangabe gesetzt, und dann nur zur Fehlermeldung gerendert
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1749399011329" ID="ID_243543281" MODIFIED="1750294502118" TEXT="Warning">
+<icon BUILTIN="messagebox_warning"/>
+<node COLOR="#338800" CREATED="1749403794667" FOLDED="true" ID="ID_397135724" MODIFIED="1749405185195" TEXT="Symbol: ambiguous reversed ==">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1749403820387" ID="ID_1906806161" MODIFIED="1749403826818" TEXT="getriggert von Symbol::empty()"/>
+<node CREATED="1749403828053" ID="ID_545902733" MODIFIED="1749403842336" TEXT="ruft auf Literal::operator== (CStr)"/>
+<node CREATED="1749404038827" ID="ID_1194205444" MODIFIED="1749404062266" TEXT="C++20 pr&#xfc;ft Vergleichs-Operatoren nun auch mit reversed arguments"/>
+<node CREATED="1749404311340" ID="ID_93018873" MODIFIED="1749404371641" TEXT="eigentliches Problem: Definitions-Ordnung">
+<node CREATED="1749404395472" ID="ID_1215830672" MODIFIED="1749404595307">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Symbol::empty() ist direkt inline <i>definiert</i>
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...eine Frage der Code-Anordnung;
+    </p>
+    <p>
+      ich hab das so gemacht, weil es kompakter und lesbarer ist, die Definition diretkt in den Klassen zu sehen; das geht nur, weil dann eben hilfsweise der Vergleich mit einem CStr genommen wird, in den sich ein Literal oder Symbol implizit stets konvertieren l&#228;&#223;t. Effektiv l&#228;uft damit ohnehin der gleich Code, n&#228;mlich ein einfacher Pointer-Vergleich.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1749404374489" ID="ID_546591652" MODIFIED="1749404650780" TEXT="es g&#xe4;be n&#xe4;mlich auch einen symmetrischen Vergleichs-Operator">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...der ganz regul&#228;r als freie Funktion definiert ist; und zwar verschieden f&#252;r den Vergleich von zwei Literals und zwei Symbols.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1749404658487" ID="ID_136745911" MODIFIED="1749404744236">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      ...und jetzt kommt C++20 und will <i>hilfreich sein</i>
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ... und merkt dabei, da&#223; diese implizite Konvertierung auf beide Seiten anwendbar w&#228;re
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="smiley-oh"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#360f69" CREATED="1749404954198" ID="ID_132764839" MODIFIED="1749405178580" TEXT="mir ist wichtiger da&#xdf; die Definition von empty() in der Klasse bleibt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Sauber w&#228;re es, diese Definition erst nach der Definition der Vergleichsoperatoren zu geben, als inline-Funktion. Denn dann w&#252;rde der Compiler den direkten Vergleichsoperator sehen. Aber der <b>menschliche Leser</b>&#160;k&#246;nnte <b>&#252;bersehen</b>&#160;da&#223; Symbol::empty() <b>sich unterscheidet</b>&#160;von Literal::empty(). Es soll n&#228;mlich auch das Symbol{<font color="#996e62" face="Bitstream Vera Sans Mono" size="9pt"><i>&quot;&#10178;&quot;</i></font>} als &#187;empty&#171; gelten
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#338800" CREATED="1749405157522" ID="ID_927992372" MODIFIED="1749405171760" TEXT="also l&#xf6;sen wir es durch expliziten Zugriff auf den C-pointer">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1749423018634" FOLDED="true" ID="ID_1775268810" MODIFIED="1749426015401" TEXT="AbstractMO : ambiguous reversed ==">
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#d7a993" COLOR="#690f14" CREATED="1749425033837" ID="ID_855979432" MODIFIED="1749426010998">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      grrrr... das Design von MObject ist <i>planlos</i>
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      wei&#223; nicht, wozu die Vergleichsoperatoren &#252;berhaupt gut sein sollen; das sieht nach Value-Semantik aus, aber andererseits hat doch ein MObject wohl eine klar definierte Identit&#228;t?
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="smiley-angry"/>
+</node>
+<node CREATED="1749425136854" ID="ID_635627339" MODIFIED="1749425164830" TEXT="Vergleichsoperator mu&#xdf; Member sein, weil er virtuell sein soll">
+<icon BUILTIN="idea"/>
+<node CREATED="1749425167032" ID="ID_759203800" MODIFIED="1749425190275" TEXT="und aus dem Member erzeugt dann C++20 zwei ambivalente Instantiierungen"/>
+<node COLOR="#435e98" CREATED="1749425191256" ID="ID_1430992818" MODIFIED="1749425304838" TEXT="L&#xf6;sung: nur ein &#xe4;quivalenz-Pr&#xe4;dikat als virtuelle Funktion definieren">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#338800" CREATED="1749425212438" ID="ID_1287547854" MODIFIED="1749425296142" TEXT="und dann einen ganz gew&#xf6;hnlichen friend-Operator">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1749425233691" ID="ID_1116171203" MODIFIED="1749425293295" TEXT="Boost-Operators kann dann hier auch gleich weg">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...denn das zahlt sich nur bei komplexeren Relationen aus; eine Negation wird man ja wohl noch schreiben k&#246;nnen, ohne da&#223; ein Zacken aus der Krone bricht
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1749485911204" FOLDED="true" ID="ID_1165283590" MODIFIED="1750294431255" TEXT="TimeVar : narrowing conversion to string">
+<arrowlink COLOR="#6e688e" DESTINATION="ID_1521572010" ENDARROW="Default" ENDINCLINATION="-216;21;" ID="Arrow_ID_703106001" STARTARROW="None" STARTINCLINATION="-265;17;"/>
+<icon BUILTIN="clanbomber"/>
+<node CREATED="1749485941703" ID="ID_54272533" MODIFIED="1749485947033" TEXT="in command-argument-test"/>
+<node CREATED="1749485947670" ID="ID_760759895" MODIFIED="1749485969963" TEXT="class Tracker&lt;T&gt; with T &#x2254; TimeVar"/>
+<node CREATED="1749485980855" ID="ID_1992854549" MODIFIED="1749486357633" TEXT="mir schwant &#xdc;bles....">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...warum wird das erst jetzt mit C++20 sichtbar??
+    </p>
+    <p>
+      ......anscheined wird hier direkt der Conversion-Operator nach raw_time_64 genommen (und von dort in einen char)
+    </p>
+  </body>
+</html></richcontent>
+<node COLOR="#5b280f" CREATED="1749486789365" ID="ID_1147144345" MODIFIED="1750290801511" TEXT="mache narrowing-conversions sichtbar in meta/util StringConv">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      indem man <font color="#61352a" face="Nimbus Mono PS">string</font><font color="#de0d52" face="Nimbus Mono PS">{</font><font color="#61352a" face="Nimbus Mono PS">val</font><font color="#de0d52" face="Nimbus Mono PS">}</font>&#160;konstruiert
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_cancel"/>
+<icon BUILTIN="broken-line"/>
+<node CREATED="1750290804721" ID="ID_1458428033" MODIFIED="1750290808898" TEXT="das war keine gute Idee"/>
+<node CREATED="1750290809440" ID="ID_1971426444" MODIFIED="1750290827810" TEXT="denn std::string akzeptiert eine initializer_list&lt;char&gt;"/>
+<node BACKGROUND_COLOR="#d9af8f" COLOR="#690f14" CREATED="1750290828768" ID="ID_540246284" MODIFIED="1750294324575" TEXT="damit &#xf6;ffnet man u.U. einen numerischen Konversionspfad">
+<arrowlink COLOR="#ff000b" DESTINATION="ID_1825399000" ENDARROW="Default" ENDINCLINATION="-224;-13;" ID="Arrow_ID_1154818646" STARTARROW="None" STARTINCLINATION="-457;20;"/>
+<icon BUILTIN="broken-line"/>
+</node>
+<node CREATED="1750290846731" ID="ID_1245413169" MODIFIED="1750290866093" TEXT="der dann bevorzugt wird &#xfc;ber einen operator string() des Arguments"/>
+</node>
+<node COLOR="#435e98" CREATED="1749486697814" ID="ID_808204342" MODIFIED="1749488910569" TEXT="w&#xe4;hlt tats&#xe4;chlich den Weg von int64_t -&gt; char">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <font color="#ff0000" face="Bitstream Vera Sans Mono" size="9pt">narrowing conversion of '(&amp; val)-&gt;lib::time::TimeVar::operator lib::time::raw_time_64()' from 'lib::time::raw_time_64' {aka 'long int'} to 'char'</font>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="broken-line"/>
+<node CREATED="1749488218518" ID="ID_1611537045" MODIFIED="1749488262116" TEXT="es hilft nix die String-conversion auf TimeVar explizit nochmal zu deklarieren"/>
+<node CREATED="1749488262910" ID="ID_1696655722" MODIFIED="1749488277211" TEXT="es hilft nur, den operator raw_time_64() explizit zu machen"/>
+<node CREATED="1749488278206" ID="ID_27951843" MODIFIED="1749488387335">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <i>eigentlich</i>&#160;sollte es diesen Konversionspfad auch nicht geben
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...erscheint mir als ein &#220;berbleibsel von den Anf&#228;ngen, wo ich dachte, TimeVar w&#228;re eine Ausnahme, und es w&#228;re sinnvoll, diese Ausnahme bequem zu gestalten und auch gleich noch eine Hintert&#252;r einzubauen &#8212; keine gute Idee...
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" CREATED="1749488390325" ID="ID_1315399350" MODIFIED="1749488915688">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      also dann &#10233; weg damit (<i>und&#160;&#160;<font color="#bc0606" face="Monospaced"><b>_raw</b></font><font color="#5b2929" face="Monospaced">(</font>var<font color="#5b2929" face="Monospaced">)</font>&#160;explizit verwenden</i>)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1749486359483" FOLDED="true" ID="ID_1730810221" MODIFIED="1750294434690" TEXT="&apos;++&apos; expression of &apos;volatile&apos;-qualified type">
+<icon BUILTIN="flag-pink"/>
+<node CREATED="1749486390810" ID="ID_357008158" MODIFIED="1749486489516" TEXT="&apos;++&apos; expression of &apos;volatile&apos;-qualified type">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <div style="background-color: #f5f8c6; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 2px">
+      <div style="color: #202020; background-color: #f5f8c6; font-family: Bitstream Vera Sans Mono; font-size: 9pt; white-space: pre-wrap">
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a2626">src/vault/gear/work-force.cpp: In function 'void vault::gear::work::performRandomisedSpin(size_t, size_t)':</font>
+        </p>
+        <p style="background-color: #fef3da; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a2626">src/vault/gear/work-force.cpp:69:43: warning: '++' expression of 'volatile'-qualified type is deprecated [-Wvolatile]</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a2626">69 | for (</font><font color="#d5054c">volatile size_t</font><font color="#4a2626">&#160;i=0; i&lt;degree; ++i) {/*SPIN*/}</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          
+        </p>
+      </div>
+    </div>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1749490114434" ID="ID_185178544" LINK="https://stackoverflow.com/a/59225783/444796" MODIFIED="1749490233206">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Motivation war: irregeleitete Verwendungen von <font face="Monospaced" color="#9e1313">volatile</font>&#160;verhindern
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Insgesamt bleibt <font face="Monospaced" color="#bd0959">volatile</font>&#160;erhalten, ist aber nur noch an wenigen Stellen erlaubt, und zwingt dazu, Zugriffe explizit auszuschreiben (keine compound-assignment-Operatoren mehr). Einige dieser Einschr&#228;nkungen wurden (nach Kritik aus der Embedded-community) in C++23 wieder zur&#252;ckgenomm
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1749490235015" ID="ID_813342860" MODIFIED="1749490258968" TEXT="typischerweise ++vola  &#x27fc; vola = vola + 1">
+<node CREATED="1749506110669" ID="ID_209511466" MODIFIED="1749506118988" TEXT="hilft hier aber nicht"/>
+<node CREATED="1749506119672" ID="ID_411516499" MODIFIED="1749506124812" TEXT="sieht nach einem GCC-Bug aus">
+<node CREATED="1749506165266" ID="ID_1796730325" LINK="https://stackoverflow.com/a/65541660/444796" MODIFIED="1749506185365" TEXT="wurde schon vor 4 Jahren auf Stackoverflow berichtet"/>
+<node CREATED="1749506186652" ID="ID_285168941" MODIFIED="1749506339511" TEXT="es sollte nicht gewarnt werden">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...weil es eine &quot;discarded value expression&quot; ist; wenn man die gleiche Zuweisung im Schleifenrumpf schreibt, gibt es keine Warnung (da erkennt der Compiler das) &#8212; nur in der for-expression erkennt er es nicht
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1749506340618" ID="ID_1401759479" MODIFIED="1749506353749" TEXT="GCC Bug suchen">
+<icon BUILTIN="help"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1749506362198" ID="ID_137075095" MODIFIED="1749506386646" TEXT="schreibe die Zuweisung vorerst mal in den Schleifenrumpf">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1750203238186" FOLDED="true" ID="ID_309603717" MODIFIED="1750203571164" TEXT="custom-shared-ptr-test : ambiguous comparison">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Zeile 220:
+    </p>
+    <p>
+      <font color="#95271a" face="Bitstream Vera Sans Mono" size="9pt">CHECK</font><font color="#3a1f18" face="Bitstream Vera Sans Mono" size="9pt">&#160;</font><font color="#11123a" face="Bitstream Vera Sans Mono" size="9pt">(</font><font color="#29466b" face="Bitstream Vera Sans Mono" size="9pt">5</font><font color="#3a1f18" face="Bitstream Vera Sans Mono" size="9pt">&#160;</font><font color="#65533c" face="Bitstream Vera Sans Mono" size="9pt">==</font><font color="#3a1f18" face="Bitstream Vera Sans Mono" size="9pt">&#160;</font><font color="#874a15" face="Bitstream Vera Sans Mono" size="9pt"><b>*</b></font><font color="#3a1f18" face="Bitstream Vera Sans Mono" size="9pt">pX</font><font color="#11123a" face="Bitstream Vera Sans Mono" size="9pt">)</font><font color="#65533c" face="Bitstream Vera Sans Mono" size="9pt">;</font><font color="#3a1f18" face="Bitstream Vera Sans Mono" size="9pt">&#160; </font><font color="#977b75" face="Bitstream Vera Sans Mono" size="9pt">// implicit conversion from X to long</font>
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1750203296971" ID="ID_558323428" MODIFIED="1750203381001" TEXT="jaaaaa ich wei&#xdf;!!">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...von diesem speziellen shared-ptr m&#246;chte ich nur noch wegrennen...
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="smiley-angry"/>
+</node>
+<node COLOR="#435e98" CREATED="1750203382909" ID="ID_9986317" MODIFIED="1750203566871" TEXT="und die Test-Klasse X ist auch problematisch">
+<icon BUILTIN="back"/>
+<node COLOR="#5b280f" CREATED="1750203396102" ID="ID_898046253" MODIFIED="1750203444367" TEXT="verwendet boost::operators">
+<icon BUILTIN="button_cancel"/>
+<node COLOR="#338800" CREATED="1750203447559" ID="ID_476859667" MODIFIED="1750203457798" TEXT="stattdessen: Spaceship!">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1750203402395" ID="ID_1577260038" MODIFIED="1750203441747" TEXT="ist implizit konstruierbar aus long">
+<icon BUILTIN="broken-line"/>
+<node COLOR="#338800" CREATED="1750203462037" ID="ID_1228755167" MODIFIED="1750203471067" TEXT="einmal explicit dr&#xfc;ber und gut is">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1750203415979" ID="ID_1370237035" MODIFIED="1750203560614" TEXT="letzteres ist das eigentliche Problem hier">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      denn nur so entsteht die 2. Variante, die f&#252;r die Intention des Testsfalles hier v&#246;llig daneben liegt (unbeschadet der Tatsache, da&#223; der Testfall selber d&#228;mlich ist, und das, was ich hier teste (den lumiear::P), schleunigst auf den M&#252;ll geh&#246;rte)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1749409958440" ID="ID_1480897729" MODIFIED="1750347835425" TEXT="deprecated: implicit this-capture in &#x3bb;">
+<node COLOR="#435e98" CREATED="1749410049894" ID="ID_792680680" MODIFIED="1749428402037" TEXT="depend-inject"/>
+<node COLOR="#435e98" CREATED="1749428351232" ID="ID_1288444603" MODIFIED="1749428402037" TEXT="SteamDispatcher"/>
+<node COLOR="#435e98" CREATED="1749428359058" ID="ID_125462398" MODIFIED="1749428402036" TEXT="Guifacade"/>
+<node COLOR="#435e98" CREATED="1750294531358" ID="ID_966118080" MODIFIED="1750294546512" TEXT="ui-dispatcher"/>
+<node COLOR="#435e98" CREATED="1750294536841" ID="ID_555876447" MODIFIED="1750294546513" TEXT="notification-service"/>
+<node COLOR="#435e98" CREATED="1750203733673" ID="ID_499762430" MODIFIED="1750203739256" TEXT="test-nexus"/>
+<node COLOR="#435e98" CREATED="1750203856640" ID="ID_1009227254" MODIFIED="1750203868458" TEXT="bus-term-test (Borg-Generator)"/>
+<node COLOR="#435e98" CREATED="1750204166421" ID="ID_1262649165" MODIFIED="1750204254001" TEXT="panel-manager / dock-area">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      in beiden F&#228;llen der gleiche Fehler, man sollte hier per Referenz capturen, da wir ohnehin direkt im Callstack bleiben
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#435e98" CREATED="1750205625190" ID="ID_343844004" MODIFIED="1750294508885" TEXT="call-queue-test (Worker)"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1750258367488" ID="ID_1994104758" MODIFIED="1750294458755" TEXT="failed Tests">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1750258372358" FOLDED="true" ID="ID_1636357587" MODIFIED="1750259096090" TEXT="alle!!!">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1750258399633" ID="ID_1147900298" MODIFIED="1750258413405" TEXT="Fehler in statischer Initialisierung"/>
+<node CREATED="1750258460244" ID="ID_475692713" MODIFIED="1750258473084" TEXT="static Timings::DISABLED(FrameRate::HALTED);"/>
+<node CREATED="1750258481641" ID="ID_603283514" MODIFIED="1750258512681" TEXT="FrameRate.duration() pr&#xfc;ft gegen HALTED">
+<icon BUILTIN="info"/>
+</node>
+<node COLOR="#338800" CREATED="1750258501166" ID="ID_363624764" MODIFIED="1750258509721" TEXT="sollte pr&#xfc;fen: kleiner als HALTED">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1750258516278" ID="ID_614429944" MODIFIED="1750294452548" TEXT="drei &#x2014; alle mit Bezug zur Zeiten">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1750258558309" ID="ID_1990160319" MODIFIED="1750258559374" TEXT="TimeFormats_test">
+<node CREATED="1750259088225" ID="ID_1042900715" MODIFIED="1750259094491" TEXT="showTimeCode (frames1);"/>
+<node CREATED="1750259114335" ID="ID_967331157" MODIFIED="1750259117780" TEXT="cout &lt;&lt; timecode.describe()&lt;&lt;&quot;=\&quot;&quot;&lt;&lt;timecode&lt;&lt; ...."/>
+</node>
+<node CREATED="1750258573336" ID="ID_1605147574" MODIFIED="1750258574821" TEXT="Digxel_test"/>
+<node CREATED="1750258581860" ID="ID_1289652728" MODIFIED="1750258582839" TEXT="DigxelConfigurations_test"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1750258953474" FOLDED="true" ID="ID_100003680" MODIFIED="1750294428138" TEXT="hat wohl mit der String-Konvergierung zu tun">
+<linktarget COLOR="#922a4a" DESTINATION="ID_100003680" ENDARROW="Default" ENDINCLINATION="-432;-26;" ID="Arrow_ID_1043741176" SOURCE="ID_148773936" STARTARROW="None" STARTINCLINATION="-60;291;"/>
+<icon BUILTIN="idea"/>
+<node COLOR="#435e98" CREATED="1750259131086" ID="ID_7315735" MODIFIED="1750294399548" TEXT="TimeFormats_test mit Debugger beobachten">
+<icon BUILTIN="info"/>
+<node CREATED="1750288966969" ID="ID_912815347" MODIFIED="1750289009636" TEXT="Aufruf &lt;&lt; timecode &#x27fc; util::StringConv&lt;X&gt;::invoke (obj)"/>
+<node CREATED="1750289028823" ID="ID_453919628" MODIFIED="1750289040161" TEXT="StringConv&lt;X,  enable_CustomStringConversion&lt;X&gt; ...">
+<node CREATED="1750289043203" ID="ID_271653422" MODIFIED="1750289047327" TEXT="bis hierher korrekt"/>
+<node CREATED="1750289064856" ID="ID_1770865136" MODIFIED="1750289083082" TEXT="val &#x2261; lib::time::FrameNr const&amp;"/>
+</node>
+<node CREATED="1750289321382" ID="ID_1035079096" MODIFIED="1750289323936" TEXT="aber dann...">
+<node CREATED="1750289190213" ID="ID_79093285" MODIFIED="1750289434096" TEXT="ruft die numerische Konvertierung des Digxel auf">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Digxel&lt;long, digxel::CountFormatter&gt;::operator long() at /Werk/devel/lumi/src/lib/time/digxel.hpp:257 0x7ffff48f62b4
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink DESTINATION="ID_27267271" ENDARROW="Default" ENDINCLINATION="67;0;" ID="Arrow_ID_660574653" STARTARROW="None" STARTINCLINATION="67;0;"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1750289328517" ID="ID_1182242053" MODIFIED="1750289956128" TEXT="String-Konstruktor von initializer_list&lt;char&gt;">
+<icon BUILTIN="broken-line"/>
+</node>
+<node CREATED="1750289406179" ID="ID_27267271" MODIFIED="1750289681306" TEXT="ein Element (char), das letzte Byte aus dem long-Wert">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_27267271" ENDARROW="Default" ENDINCLINATION="67;0;" ID="Arrow_ID_660574653" SOURCE="ID_79093285" STARTARROW="None" STARTINCLINATION="67;0;"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#dcc975" COLOR="#fa002a" CREATED="1750290020305" ID="ID_1825399000" MODIFIED="1750294388663" TEXT="f&#xfc;r Digxel wird nicht der operator string() genommen">
+<linktarget COLOR="#ff000b" DESTINATION="ID_1825399000" ENDARROW="Default" ENDINCLINATION="-224;-13;" ID="Arrow_ID_1154818646" SOURCE="ID_540246284" STARTARROW="None" STARTINCLINATION="-457;20;"/>
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
+<node CREATED="1750289980495" ID="ID_1316056853" MODIFIED="1750289990006" TEXT="&#xc4;nderungen in diesem Changeset">
+<node CREATED="1750290562865" ID="ID_1206666958" MODIFIED="1750290569714" TEXT="lib/meta/util.hpp"/>
+<node CREATED="1750290570844" ID="ID_1104889196" MODIFIED="1750290609253" TEXT="string(val) &#x27fc; string{val}"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1750294340619" ID="ID_502266393" LINK="#ID_1147144345" MODIFIED="1750294365423" TEXT="zur&#xfc;cknehmen!">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1750294419963" ID="ID_1679241877" MODIFIED="1750294424654" TEXT="Test wieder OK">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node CREATED="1749399035206" ID="ID_1949114637" MODIFIED="1749399038099" TEXT="clean-up">
+<node CREATED="1749399040718" ID="ID_1669273438" MODIFIED="1749399043457" TEXT="Variant-o"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1749428622377" ID="ID_1502394581" MODIFIED="1749428716314" TEXT="soll Literal / Symbol weiterhin implizit aus CStr erstellbar sein">
+<linktarget COLOR="#9e335b" DESTINATION="ID_1502394581" ENDARROW="Default" ENDINCLINATION="553;-29;" ID="Arrow_ID_227291299" SOURCE="ID_1640565416" STARTARROW="None" STARTINCLINATION="-98;111;"/>
+<icon BUILTIN="help"/>
+<node CREATED="1749428768562" HGAP="34" ID="ID_1963341770" MODIFIED="1749429203699" TEXT="eigentlich schon ...." VSHIFT="6">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...denn das ist ein wichtiges Argument; speziell Literal soll die CStr eigentlich &#252;berall verdr&#228;ngen k&#246;nnen, und zwar ohne viel Zeremonie. Denn f&#252;r std::string verh&#228;lt es sich genauso
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1749429205528" ID="ID_137106237" MODIFIED="1749429326462" TEXT="was kann schon schiefgehen...?">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...Solange es keine automatische Konvertierung gibt, die eine <i>Br&#252;cke in ein anderes &#214;kosystem</i>&#160;baut. Also (wie im Beispiel, das diese Diskussion ausl&#246;st) eine implizite Konvertierung von etwas Arrithmetischem in etwas String-artiges
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1749437085707" ID="ID_586550649" MODIFIED="1749437096722" TEXT="Boost-Operators k&#xf6;nnte man komplett loswerden">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1749437103284" ID="ID_1755401449" MODIFIED="1749437118098" TEXT="da nun C++20 die selber Aufgabe automatisch erledigt"/>
+<node CREATED="1749437120518" ID="ID_19153367" LINK="#ID_1398333577" MODIFIED="1749437148111" TEXT="ggfs kann es die L&#xf6;sung sogar synthetisieren"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1750205495310" ID="ID_1294224400" MODIFIED="1750205508850" TEXT="result.hpp : failsafeInvoke vereinfachen">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1750205510479" ID="ID_1628543116" MODIFIED="1750205527616" TEXT="siehe Kommentar dort">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <font color="#b88b63" face="Bitstream Vera Sans Mono" size="9pt">* </font><font color="#b76746" face="Bitstream Vera Sans Mono" size="9pt">@todo</font><font color="#b88b63" face="Bitstream Vera Sans Mono" size="9pt">&#160;with C++20 the body of the implementation can be replaced by std::invoke_r //////////////////////</font><font color="#7f9fbf" face="Bitstream Vera Sans Mono" size="9pt"><b>TICKET</b></font><font color="#b88b63" face="Bitstream Vera Sans Mono" size="9pt">&#160; #1245</font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1750205529209" ID="ID_1420683356" MODIFIED="1750205590911" TEXT="k&#xf6;nnte vmtl. auch die warnung (&quot;no return&quot;) beseitigen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      hier fasse ich mit constexpr-if die zwei F&#228;lle zusammen (void-Funktion und R&#252;ckgabewert)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -166735,7 +167724,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node CREATED="1446505444775" FOLDED="true" HGAP="106" ID="ID_721807850" MODIFIED="1561311686974" TEXT="Buildsystem" VSHIFT="-5">
+<node CREATED="1446505444775" FOLDED="true" HGAP="106" ID="ID_721807850" MODIFIED="1749395199755" TEXT="Buildsystem" VSHIFT="-5">
 <icon BUILTIN="go"/>
 <node CREATED="1446505367113" ID="ID_335245102" LINK="http://issues.lumiera.org/ticket/971" MODIFIED="1557498707242">
 <richcontent TYPE="NODE"><html>

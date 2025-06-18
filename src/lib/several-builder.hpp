@@ -147,7 +147,7 @@ namespace lib {
      * elements of type \a TY in memory _with proper alignment_.
      */
     template<typename TY>
-    size_t inline constexpr
+    inline constexpr size_t
     reqSiz()
       {
         size_t quant = alignof(TY);
@@ -159,7 +159,7 @@ namespace lib {
       }
     
     /** determine size of a reserve buffer to place with proper alignment */
-    size_t inline constexpr
+    inline constexpr size_t
     alignRes (size_t alignment)
       {
         return positiveDiff (alignment, alignof(void*));

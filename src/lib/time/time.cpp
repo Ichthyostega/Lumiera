@@ -285,7 +285,7 @@ namespace time {
   Duration
   FrameRate::duration() const
   {
-    if (0 == *this)
+    if (HALTED > *this)
       throw error::Logic ("Impossible to quantise to an zero spaced frame grid"
                          , error::LUMIERA_ERROR_BOTTOM_VALUE);
     

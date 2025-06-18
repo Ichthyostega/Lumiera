@@ -113,8 +113,8 @@ namespace ctrl {
         : queue_{}
         , dispatcher_{}
         {
-          dispatcher_.connect(
-                         [=]() {try {
+          dispatcher_.connect([=,this]
+                               {try {
                                       queue_.invoke();
                                     }
                                   catch (std::exception& problem)

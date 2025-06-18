@@ -30,7 +30,7 @@
 namespace util {
   
   template<typename N>
-  inline bool constexpr
+  inline constexpr bool
   isPow2 (N n)
     {
       return n > 0 and !(n & (n-1));

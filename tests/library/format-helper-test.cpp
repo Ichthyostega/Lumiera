@@ -27,6 +27,7 @@
 #include <string>
 
 
+using lumiera::error::Fatal;
 using lib::transformIterator;
 using lib::iter_stl::snapshot;
 using lib::iter_stl::eachElm;
@@ -51,6 +52,12 @@ namespace test {
       {
       public:
         operator string()  const { return "hey Joe!"; }
+      };
+    
+    class Bomb
+      {
+      public:
+        operator string()  const { throw Fatal{"mistake"}; }
       };
     
     
@@ -110,7 +117,7 @@ namespace test {
           CHECK (toString (chatterer)   ==   "hey Joe!"_expect);
           
           CHECK (toString (&chatterer)  ==  "↗hey Joe!"_expect); // pointer indicated
-          CHECK (toString (nullptr)     ==          "↯"_expect); // runtime exception, caught
+          CHECK (toString (Bomb{})      ==          "↯"_expect); // runtime exception, caught
           
           CHECK (toString (true)        ==       "true"_expect); // special handling for bool
           CHECK (toString (2+2 == 5)    ==      "false"_expect);

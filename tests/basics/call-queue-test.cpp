@@ -197,7 +197,7 @@ namespace test{
                                 for (uint i=0; i<cnt; ++i)
                                   {
                                     uint increment = rand_.i(MAX_RAND_INCMT);
-                                    queue.feed ([=]() { countConsumerCall(increment); });
+                                    queue.feed ([=,this]{ countConsumerCall(increment); });
                                     producerSum += increment;
                                     usleep (delay);
                                     queue.invoke();  // NOTE: dequeue one functor added during our sleep
