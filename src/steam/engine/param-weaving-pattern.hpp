@@ -307,8 +307,6 @@ namespace engine {
             {
               builder.emplaceParamDataBlock (&block(), turnoutSys);
             }
-          ///////////////OOO
-          Feed()= default;
         };
       
       
@@ -324,7 +322,7 @@ namespace engine {
       Feed
       mount (TurnoutSystem&)
         {
-          return Feed{};
+          return Feed();
         }
       
       /** Invoke the parameter-functors to create the basic parameter data */

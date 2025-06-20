@@ -166109,17 +166109,121 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1750182957454" ID="ID_319310125" MODIFIED="1750183335238" TEXT="Instantiieren von non-copyable-Objekten">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#5b280f" CREATED="1750182957454" ID="ID_319310125" MODIFIED="1750433749812" TEXT="Instantiieren von non-copyable-Objekten">
+<icon BUILTIN="button_cancel"/>
+<icon BUILTIN="messagebox_warning"/>
 <node CREATED="1750182983241" ID="ID_162769760" MODIFIED="1750182992885" TEXT="aufgetreten bei:  ParamWeavingPattern::Feed"/>
 <node CREATED="1750200330494" ID="ID_605009478" MODIFIED="1750200385831" TEXT="ohne user-provided default-ctor: rejected as non-accessible">
 <icon BUILTIN="broken-line"/>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1750201601058" ID="ID_230327461" MODIFIED="1750201616690" TEXT="lt. Doku nicht nachvollziehbar">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1750201601058" ID="ID_230327461" MODIFIED="1750433762723" TEXT="lt. Doku nicht nachvollziehbar">
 <icon BUILTIN="messagebox_warning"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1750201617519" ID="ID_184461569" MODIFIED="1750201626715" TEXT="Untersuchung">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#ff0000" CREATED="1750201617519" ID="ID_184461569" MODIFIED="1750433758903" TEXT="Untersuchung">
 <icon BUILTIN="yes"/>
+<node CREATED="1750431808678" ID="ID_1965718984" MODIFIED="1750433611399" TEXT="reproduzierbar auf Minimum reduziert">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <div style="background-color: #eee0b5; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 2px">
+      <div style="color: #202020; background-color: #eee0b5; font-family: Bitstream Vera Sans Mono; font-size: 9pt; white-space: pre">
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a1a65"><b>class</b></font><font color="#3a1f18">&#160;</font><font color="#635e96"><b>Base</b></font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#11123a">{</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a1a65"><b>protected</b></font><font color="#65533c">:</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#632d2d"><b>Base</b></font><font color="#11123a">()</font><font color="#3a1f18">&#160;</font><font color="#65533c">=</font><font color="#3a1f18">&#160;</font><font color="#4a1a65"><b>default</b></font><font color="#65533c">;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#11123a">}</font><font color="#65533c">;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <br />
+          
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a1a65"><b>struct</b></font><font color="#3a1f18">&#160;</font><font color="#635e96"><b>Feed</b></font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#65533c">:</font><font color="#3a1f18">&#160;</font><font color="#635e96"><b>Base</b></font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#11123a">{</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#11123a">}</font><font color="#65533c">;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <br />
+          
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#7f004c"><b>int</b></font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#000000"><b>main</b></font><font color="#3a1f18">&#160;</font><font color="#11123a">(</font><font color="#7f004c"><b>int</b></font><font color="#65533c">,</font><font color="#3a1f18">&#160;</font><font color="#7f004c"><b>char</b></font><font color="#65533c">**</font><font color="#11123a">)</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#11123a">{</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#635e96"><b><u>Feed</u></b></font><u><font color="#3a1f18">&#160;</font><font color="#814422">f1</font><font color="#65533c">;</font></u>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#977b75">// Feed f1{}; /// does not compile with GCC 14.2</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a1a65"><b>return</b></font><font color="#3a1f18">&#160;</font><font color="#29466b">0</font><font color="#65533c">;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#11123a">}</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1750431987479" ID="ID_1874210875" MODIFIED="1750431993919" TEXT="der reine Konstruktor-Aufruf"/>
+<node CREATED="1750431994699" ID="ID_36138667" MODIFIED="1750432009276" TEXT="Basisklasse mu&#xdf; public inherited sein"/>
+<node CREATED="1750431861506" ID="ID_349299837" MODIFIED="1750433803907" TEXT="wird nur getriggert mit initialiser-List-Syntax">
+<arrowlink COLOR="#2f63ca" DESTINATION="ID_1697745986" ENDARROW="Default" ENDINCLINATION="375;0;" ID="Arrow_ID_742156199" STARTARROW="None" STARTINCLINATION="-217;14;"/>
 </node>
+</node>
+<node CREATED="1750433613200" ID="ID_715564880" MODIFIED="1750433623941" TEXT="nicht reproduzierbar auf Godbolt.org">
+<node CREATED="1750433625092" ID="ID_372282359" MODIFIED="1750433632707" TEXT="weder mit irgend einem der neueren GCC"/>
+<node CREATED="1750433633463" ID="ID_184140701" MODIFIED="1750433641934" TEXT="noch mit CLang"/>
+</node>
+</node>
+</node>
+<node CREATED="1750433674672" ID="ID_1918452895" MODIFIED="1750436510834">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      vermutlich ein <i>sehr spezieller</i>&#160;Compiler-Bug
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="clanbomber"/>
+</node>
+<node COLOR="#338800" CREATED="1750433708917" ID="ID_1697745986" MODIFIED="1750436517188" TEXT="einfacher Workaround: keine initialiser-List-Syntax verwenden">
+<linktarget COLOR="#2f63ca" DESTINATION="ID_1697745986" ENDARROW="Default" ENDINCLINATION="375;0;" ID="Arrow_ID_742156199" SOURCE="ID_349299837" STARTARROW="None" STARTINCLINATION="-217;14;"/>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1750183336531" ID="ID_75715335" MODIFIED="1750201590066" TEXT="string{nullptr} scheitert nun im Compile">
