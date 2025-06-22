@@ -1,6 +1,7 @@
 /* try.cpp  -  to try out and experiment with new features....
  *             scons will create the binary bin/try
  */
+// 06/25 - provide a concept to accept _tuple-like_ objects
 // 06/25 - investigate function type detection of std::bind Binders
 // 12/24 - investigate problem when perfect-forwarding into a binder
 // 12/24 - investigate overload resolution on a templated function similar to std::get
@@ -9,130 +10,123 @@
 
 
 /** @file try.cpp
- * Investigate ambiguities regarding the function type of standard binders.
- * The Binder objects returned from `std::bind` provide a set of overloaded
- * function call `operator()` (with variants for c/v). Unfortunately this defeats
- * the common techniques to detect a function signature from a callable, when
- * only a concrete instance of such a binder is given. Furthermore, looking
- * at the definition of `class _Bind_result<_Result, _Functor(_Bound_args...)>`
- * in my implementation of the C++ Stdlib, it seems we are pretty much out
- * of luck, and even `std::function` fails with the template argument detection.
- * A possible workaround could be to wrap the Binder object immediately into
- * a lambda, but only if the actual types for the argument list can be
- * provided directly to a template to generate this λ-wrapper.
- * @note there is a nasty twist regarding const-correctness, which almost made
- *       this workaround fail altogether. The overloaded operator() from std::bind
- *       serves the same purpose (to deal with const/volatile), and this is the
- *       very reason that defeats the detection of the function signature.
- *       The workaround attempts to expose precisely one function call operator,
- *       and this becomes problematic as soon as the resulting object is processed
- *       further, and maybe bound into another lambda capture. Thus we define the
- *       wrapper class explicitly, so that any const-ness can be cast away.
- *       This turns out to be necessary in tuple-closure.hpp.
+ * Develop a concept to detect _tuple-like_ classes, based on the requirements
+ * of the »tuple protocol«. Using some ideas from [Stackoverflow] as starting point.
+ * [Stackoverflow]: https://stackoverflow.com/q/68443804/444796
  */
 
 
 #include "lib/format-cout.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/test/diagnostic-output.hpp"
-#include "lib/meta/function.hpp"
-#include "lib/meta/variadic-rebind.hpp"
+#include "lib/meta/tuple-helper.hpp"
+#include "lib/hetero-data.hpp"
 #include "lib/util.hpp"
 
-#include <functional>
+#include <concepts>
 
-using std::forward;
-using std::placeholders::_1;
-using lib::meta::_Fun;
+using std::string;
 
+namespace lib {
+namespace meta {
+  
+  template<class TUP>
+  concept tuple_sized = requires
+    {
+      { std::tuple_size<TUP>::value } -> std::convertible_to<size_t>;
+    };
+  
 
-void
-fun (int& a)
-  {
-    std::cout << a << std::endl;
-  }
-
-short
-fup (long l, long long ll)
-  {
-    return short(l - ll);
-  }
-
-
-
-/** WORKAROUND: wrap a binder to yield clear function signature */
-template<typename...ARGS>
-struct AdaptInvokable
-  {
-    template<class FUN>
-    static auto
-    buildWrapper (FUN&& fun)
-      {
-
-        struct Wrap
-          {
-            FUN fun_;
-            
-            Wrap(FUN&& f) : fun_{forward<FUN>(f)} { }
-            
-            auto
-            operator() (ARGS... args)
-              {
-                return fun_(forward<ARGS>(args)...);
-              }
-          };
-        
-        return Wrap{forward<FUN>(fun)};
-///////////////////////////////////////////////////////////// NOTE
-///////////////////////////////////////////////////////////// can not use a Lambda, since we're then trapped        
-///////////////////////////////////////////////////////////// in an unsurmountable mixture of const and non-const        
-//      return [functor = forward<FUN>(fun)]
-//             (ARGS... args) mutable
-//              {
-//                return functor (forward<ARGS> (args)...);
-//              };
-      }
-  };
-
-template<class TYPES, class FUN>
-auto
-buildInvokableWrapper (FUN&& fun)
-  {
-    using ArgTypes = typename TYPES::Seq;
-    using Builder = typename lib::meta::RebindVariadic<AdaptInvokable, ArgTypes>::Type;
+  template<class TUP, std::size_t N>
+  concept tuple_adl_accessible = requires(TUP tup)
+    {
+      typename std::tuple_element_t<N, TUP>;
+      { get<N>(tup) } -> std::convertible_to<std::tuple_element_t<N, TUP>&>;
+    };
     
-    return Builder::buildWrapper (forward<FUN> (fun));
+  template<class TUP, std::size_t N>
+  concept tuple_mem_accessible = requires(TUP tup)
+    {
+      typename std::tuple_element_t<N, TUP>;
+      { tup.template get<N>() } -> std::convertible_to<std::tuple_element_t<N, TUP>&>;
+    };
+    
+  template<class TUP, std::size_t N>
+  concept tuple_accessible = tuple_mem_accessible<TUP,N> or tuple_adl_accessible<TUP,N>;
+  
+  template<class TUP>
+  class AndAll
+    {
+      template<size_t...idx>
+      static constexpr bool
+      canAccessAll (std::index_sequence<idx...>)
+        {
+          return (tuple_accessible<TUP, idx> and ...);
+        }
+      
+      using IdxSeq = typename ElmTypes<TUP>::Idx;
+      
+    public:
+      static constexpr bool can_AccessElement = canAccessAll(IdxSeq{});
+    };
+    
+    
+    template<class TUP>
+    concept tuple_like = not is_reference_v<TUP>
+                     and tuple_sized<remove_cv_t<TUP>>
+                     and AndAll<remove_cv_t<TUP>>::can_AccessElement;
+  
+}}//namespace lib::meta
+
+
+
+template<typename X>
+void
+show()
+  {
+    SHOW_TYPE(X)
   }
 
+template<lib::meta::tuple_like X>
+void
+show()
+  {
+    cout << "Tup!! "<< lib::test::showType<X>() <<endl;
+    lib::meta::forEachIDX<X> ([](auto i)
+                                {
+                                  using Elm = std::tuple_element_t<i, X>;
+                                  cout <<"  "<<uint(i)<<": "<< lib::test::showType<Elm>() <<endl;
+                                });
+  }
 
 
 int
 main (int, char**)
   {
-    SHOW_EXPR (fup(2,3))
-    auto bup = std::bind (fup, _1, 5);
-    SHOW_EXPR (bup)
-    using Bup = decltype(bup);
-    using Fub = _Fun<Bup>;
-    SHOW_TYPE (Bup)
-    SHOW_TYPE (Fub)
-//  using Sub = Fub::Sig;    ////////////////Problem: does not compile
+    using Tup = std::tuple<long>;
+    using Arr = std::array<int,3>;
+    using Hetero = lib::HeteroData<int,string>::Chain<short>::ChainExtent<bool,lib::meta::Nil>::ChainType;
     
-    using Fut = decltype(fun);
-    SHOW_TYPE (_Fun<Fut>::Sig)
+    SHOW_EXPR((lib::meta::tuple_sized<Tup> ))
+    SHOW_EXPR((lib::meta::tuple_sized<Arr> ))
+    SHOW_EXPR((lib::meta::tuple_sized<Hetero> ))
+    SHOW_EXPR((lib::meta::tuple_sized<int> ))
     
-    auto wup = buildInvokableWrapper<lib::meta::Types<int>>(bup);
+    SHOW_EXPR((lib::meta::tuple_accessible<Tup,0>))
+//  SHOW_EXPR((lib::meta::tuple_accessible<Tup,2>))
+    SHOW_EXPR((lib::meta::tuple_accessible<Hetero,0>))
+    SHOW_EXPR((lib::meta::AndAll<Tup>::can_AccessElement))
+    SHOW_EXPR((lib::meta::AndAll<Hetero>::can_AccessElement))
     
-    using Wup = decltype(wup);
-    using WupSig = _Fun<Wup>::Sig;
-    SHOW_TYPE (WupSig);
-    SHOW_EXPR (wup(3))
-    SHOW_EXPR (sizeof(bup))
-    SHOW_EXPR (sizeof(wup))
+    SHOW_EXPR((lib::meta::tuple_like<Tup> ))
+    SHOW_EXPR((lib::meta::tuple_like<Arr> ))
+    SHOW_EXPR((lib::meta::tuple_like<Hetero> ))
+    SHOW_EXPR((lib::meta::tuple_like<int> ))
     
-    auto waua = buildInvokableWrapper<lib::meta::Types<>> (std::bind (fun, 55));
-    waua ();
-    SHOW_TYPE (_Fun<decltype(waua)>::Sig)
+    show<Tup>();
+    show<Arr>();
+    show<Hetero>();
+    show<int>();
     
     cout <<  "\n.gulp." <<endl;
     return 0;

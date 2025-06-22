@@ -187,19 +187,19 @@ namespace test{
           using Front = lib::HeteroData<uint,double>;
           using Cons2 = Front::Chain<bool,string>;
           using Data2 = Cons2::NewFrame;
-          using List2 = Cons2::ChainType;
+          using HeDa2 = Cons2::ChainType;
           using Acc4  = Cons2::AccessorFor<string>;
           using Acc3  = Cons2::AccessorFor<bool>;
           using Acc2  = Front::Accessor<1>;
           using Acc1  = Front::Accessor<0>;
           using Cons3 = Cons2::ChainExtent<CStr,string>;
           using Data3 = Cons3::NewFrame;
-          using List3 = Cons3::ChainType;
+          using HeDa3 = Cons3::ChainType;
           using Acc5  = Cons3::AccessorFor<CStr>;
           using Acc6  = Cons3::AccessorFor<string>;
           CHECK (2 == Front::size());
-          CHECK (4 == List2::size());
-          CHECK (6 == List3::size());
+          CHECK (4 == HeDa2::size());
+          CHECK (6 == HeDa3::size());
           //
           // Note: up to now, not a single actual data element has been created
           // Moreover, individual blocks can be created in any order...
@@ -278,7 +278,7 @@ namespace test{
           CHECK (not isSameAdr (d2,    v3));
           CHECK (not isSameAdr (d3,    v5));
           // we can directly re-cast into another typed front-end
-          List3& fullChain = Cons3::recast(front);
+          HeDa3& fullChain = Cons3::recast(front);
           CHECK (isSameAdr (fullChain.get<2>(), std::get<0>(d2)));
           CHECK (isSameAdr (fullChain.get<3>(), std::get<1>(d2)));
           CHECK (isSameAdr (fullChain.get<4>(), std::get<0>(d3)));
@@ -290,7 +290,7 @@ namespace test{
           CHECK (isSameAdr (fullChain.get<4>(), v5));
           CHECK (isSameAdr (fullChain.get<5>(), v6));
           // we can even use partially specified chains
-          List2& partChain = Cons2::recast(fullChain);
+          HeDa2& partChain = Cons2::recast(fullChain);
           CHECK (isSameAdr (partChain.get<0>(), v1));
           CHECK (isSameAdr (partChain.get<1>(), v2));
           CHECK (isSameAdr (partChain.get<2>(), v3));

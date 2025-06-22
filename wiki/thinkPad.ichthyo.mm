@@ -91601,7 +91601,7 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1733946409913" FOLDED="true" ID="ID_766490392" MODIFIED="1734041937846" TEXT="C++ &#xbb;Tuple-Protocol&#xab;">
+<node COLOR="#338800" CREATED="1733946409913" FOLDED="true" ID="ID_766490392" MODIFIED="1750556525752" TEXT="C++ &#xbb;Tuple-Protocol&#xab;">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1733946436854" ID="ID_1279626510" LINK="https://en.cppreference.com/w/cpp/utility/tuple/tuple-like" MODIFIED="1733946454891" TEXT="exposition-only concept &#xbb;tuple-like&#xab;"/>
 <node CREATED="1733946456354" ID="ID_1814813251" MODIFIED="1733946486589">
@@ -91643,7 +91643,7 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
   </body>
 </html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1733946713943" FOLDED="true" ID="ID_1873953043" MODIFIED="1734020418870" TEXT="funktioniert nicht .... Compiler nimmt Overload f&#xfc;r std::tuple">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1733946713943" FOLDED="true" ID="ID_1873953043" MODIFIED="1750556525770" TEXT="funktioniert nicht .... Compiler nimmt Overload f&#xfc;r std::tuple">
 <icon BUILTIN="broken-line"/>
 <node COLOR="#5b280f" CREATED="1733946765784" ID="ID_1087783493" MODIFIED="1734020236696" TEXT="das bekannte Problem mit Funktion Overloads??">
 <icon BUILTIN="button_cancel"/>
@@ -91782,6 +91782,9 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
     </p>
   </body>
 </html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1750605910739" ID="ID_734827065" MODIFIED="1750605957925" TEXT="Problem besteht weiterhin mit GCC-14 (2025)">
+<icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
 </node>
@@ -156835,6 +156838,7 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
 <node CREATED="1733950377664" ID="ID_242038986" LINK="https://en.cppreference.com/w/cpp/utility/tuple/tuple-like" MODIFIED="1733950483299" TEXT="verwendbar f&#xfc;r alles was das &#xbb;tuple protocoll&#xab; erf&#xfc;llt"/>
 <node COLOR="#435e98" CREATED="1734017209791" ID="ID_141049889" LINK="https://en.cppreference.com/w/cpp/language/structured_binding#Binding_process" MODIFIED="1734017690782" TEXT="unterst&#xfc;tzt dar&#xfc;ber hinaus aber noch weitere F&#xe4;lle">
 <linktarget COLOR="#608fc7" DESTINATION="ID_141049889" ENDARROW="Default" ENDINCLINATION="-1267;70;" ID="Arrow_ID_1556834813" SOURCE="ID_1154017972" STARTARROW="None" STARTINCLINATION="-716;33;"/>
+<linktarget COLOR="#4989d4" DESTINATION="ID_141049889" ENDARROW="Default" ENDINCLINATION="-494;29;" ID="Arrow_ID_789791822" SOURCE="ID_1129626446" STARTARROW="None" STARTINCLINATION="-1100;-64;"/>
 <icon BUILTIN="idea"/>
 <node CREATED="1734017307143" ID="ID_533210041" MODIFIED="1734017312267" TEXT="klassische C-Arrays"/>
 <node CREATED="1734017328298" ID="ID_897952923" MODIFIED="1734017340750" TEXT="das tuple-protocol">
@@ -157075,6 +157079,24 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
 <node CREATED="1617648902994" ID="ID_276316646" MODIFIED="1617648906362" TEXT="C++20">
 <node CREATED="1749407118772" ID="ID_1741477135" MODIFIED="1750347983055" TEXT="C++20 kennenlernen">
 <linktarget COLOR="#5b78d0" DESTINATION="ID_1741477135" ENDARROW="Default" ENDINCLINATION="-1445;183;" ID="Arrow_ID_120232332" SOURCE="ID_160865224" STARTARROW="None" STARTINCLINATION="714;86;"/>
+<node CREATED="1750442180561" ID="ID_1483771731" MODIFIED="1750442186844" TEXT="Tooling / Eclipse">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1750442188215" ID="ID_26311727" MODIFIED="1750442206176" TEXT="der klassische Editor unterst&#xfc;tzt kein C++20">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1750442208883" ID="ID_639319394" MODIFIED="1750443928132" TEXT="ein neue LSP-basierter Editor ist eingebunden (unfertig)">
+<icon BUILTIN="idea"/>
+<node CREATED="1750442236141" ID="ID_1373598733" MODIFIED="1750442259870">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      dazu im OS: <font face="Monospaced"><b>clangd</b></font>&#160;installieren
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
 <node CREATED="1749407144792" ID="ID_1869633875" MODIFIED="1749407148565" TEXT="Richtlinien">
 <node CREATED="1749407149503" ID="ID_824791307" LINK="https://quuxplusone.github.io/blog/2021/04/03/static-constexpr-whittling-knife/" MODIFIED="1749407166664" TEXT="Reihenfolge der Deklarations-Qualifier">
 <node CREATED="1749407219192" ID="ID_1604663290" MODIFIED="1749407248162" TEXT="attributes-friendness-storage-constness-virtualness-explicitness-signedness-length-type id">
@@ -166104,8 +166126,141 @@ Since then others have made contributions, see the log for the history.</font></
 </html></richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1750173439337" ID="ID_1832825819" MODIFIED="1750173477173" TEXT="Schritt-2 : concept tuple_like einf&#xfc;hren">
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1750173439337" ID="ID_1832825819" MODIFIED="1750437317253" TEXT="Schritt-2 : concept tuple_like einf&#xfc;hren">
 <icon BUILTIN="full-2"/>
+<node CREATED="1750603208092" ID="ID_1027099855" MODIFIED="1750603215948" TEXT="Design-Fragen">
+<node BACKGROUND_COLOR="#d2a99c" COLOR="#683b31" CREATED="1750603078830" ID="ID_1129626446" MODIFIED="1750606092989" TEXT="Basis f&#xfc;r Concept tuple_like ?">
+<arrowlink COLOR="#4989d4" DESTINATION="ID_141049889" ENDARROW="Default" ENDINCLINATION="-494;29;" ID="Arrow_ID_789791822" STARTARROW="None" STARTINCLINATION="-1100;-64;"/>
+<icon BUILTIN="help"/>
+<node CREATED="1750603270220" ID="ID_1796957923" MODIFIED="1750603293611" TEXT="minimal-Heuristik : tuple_size"/>
+<node CREATED="1750603306121" ID="ID_1429160230" MODIFIED="1750603318670" TEXT="hinreichend vollst&#xe4;ndig: Zugriff"/>
+<node CREATED="1750603344042" ID="ID_1866646887" MODIFIED="1750603365810" TEXT="Zweck: Datenzugriff">
+<node CREATED="1750603367100" ID="ID_730035620" MODIFIED="1750603395784" TEXT="per structured Binding"/>
+<node CREATED="1750603384299" ID="ID_1020038748" MODIFIED="1750603392055" TEXT="per meta-Iteratrion"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1750603402218" ID="ID_470643972" MODIFIED="1750606109292" TEXT="Hindernisse">
+<icon BUILTIN="clanbomber"/>
+<node CREATED="1750603406649" ID="ID_722727058" MODIFIED="1750604154381" TEXT="die Element-Typen sind heterogen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das limitiert die Nutzbarkeit ohnehin sehr stark, da man mit <i>unlimitiert generischen</i>&#160;Typen wenig Gemeinsames anfangen kann
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1750604156028" ID="ID_1521006525" MODIFIED="1750604169583" TEXT="structued Bindings sind f&#xfc;r den konkreten Einhzelfall gedacht"/>
+<node CREATED="1750604220710" ID="ID_440079383" MODIFIED="1750604274377" TEXT="structured Bindings und das Tupel-Protokoll sind zweierlei"/>
+<node CREATED="1750604614495" ID="ID_1340240394" MODIFIED="1750606165686" TEXT="es ist unklar wohin das &#xfc;berhaupt f&#xfc;hrt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...auch der Standard gibt keine klaren Ziele an &#8212; vermutlich deshalb auch diese Diskrepanz, da&#223; &#187;tuple-like&#171; nun doch nur f&#252;r bestimmte STL-Klassen gelten soll; f&#252;r diese engere Auswahl synthetisiert der Compiler nun (C++20) auch Vergleichsoperatoren. Aber dar&#252;ber hinaus? es bleibt eine Art Parameter-Satz oder generischer Datensatz, mit dem man letztlich wenig anfangen kann ohne zus&#228;tzliche Anhaltspunkte (Referenzen, Kopierbarkeit, semantisches...)
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#845a67" DESTINATION="ID_326674613" ENDARROW="Default" ENDINCLINATION="21;-52;" ID="Arrow_ID_1130948047" STARTARROW="None" STARTINCLINATION="-77;5;"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1750606050049" ID="ID_326674613" MODIFIED="1750606165686" TEXT="als Experiment / Erweiterung betrachten">
+<linktarget COLOR="#845a67" DESTINATION="ID_326674613" ENDARROW="Default" ENDINCLINATION="21;-52;" ID="Arrow_ID_1130948047" SOURCE="ID_1340240394" STARTARROW="None" STARTINCLINATION="-77;5;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1750606352138" ID="ID_395333940" MODIFIED="1750606364459" TEXT="m&#xf6;glichst neben die bestehenden Strukturen bauen"/>
+<node CREATED="1750606379162" ID="ID_1298795914" MODIFIED="1750606392271" TEXT="beobachten was auf dieser Basis entsteht"/>
+<node CREATED="1750606452227" ID="ID_1156552141" MODIFIED="1750606760885" TEXT="an structured Bindings anlehnen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      aber nur auf den einen Fall, der <i>allgemeine Typen</i>&#160;betrifft...
+    </p>
+    <p>
+      d.h. wir unterst&#252;tzen auch eine Memberfunktion get&lt;i&gt;()
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1750606686156" ID="ID_900094987" MODIFIED="1750606706321" TEXT="get()-Adapter bereitstellen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      mit duck-typing
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1750443947483" ID="ID_58139169" MODIFIED="1750443961178" TEXT="schrittweise...">
+<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1750443954960" ID="ID_750458131" MODIFIED="1750443959664" TEXT="has_tuple_size">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1750527186585" ID="ID_1525384931" MODIFIED="1750608058172" TEXT="Zugriff auf tuple_element_t">
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1750527194686" ID="ID_505645521" MODIFIED="1750607802335" TEXT="Problem: CV-Varianten">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1750527215075" ID="ID_160799608" MODIFIED="1750527224453" TEXT="werden in der STL unterst&#xfc;tzt"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#940109" CREATED="1750527225378" ID="ID_934892679" MODIFIED="1750607814794" TEXT="typischerweise nicht f&#xfc;r custom-Typen?">
+<icon BUILTIN="help"/>
+<node CREATED="1750527281789" ID="ID_270337751" MODIFIED="1750608012143" TEXT="eigentlich k&#xf6;nnte das generisch sein">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...wenn man selber Typen f&#252;r das &#187;tuple-protocol&#171; einrichtet, hat man i.d.R nicht die Zeit, sich um alle CV-Varianten + RValues zu k&#252;mmern (es gibt ja einen konkreten Use-case); allerdings spielen die CV-Varianten nur f&#252;r eine get&lt;i&gt;()-Funktion tats&#228;chlich eine Rolle, denn dort mu&#223; sich diese Variante auf den Ergebnistyp auswirken; man k&#246;nnte diese Varianten komplett genersich per Library-Funktion aus einer Basis-Impl ableiten...
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1750527289637" ID="ID_416596147" MODIFIED="1750527297966" TEXT="sehe aber nicht, da&#xdf; die STL sowas definiert"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1750527261050" ID="ID_11850475" MODIFIED="1750527277291" TEXT="sollte auf das Minimal-Kriterium beschr&#xe4;nken">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1750608204631" ID="ID_228997425" MODIFIED="1750608220478" STYLE="fork" TEXT="get()-Adapter entwerfen">
+<icon BUILTIN="pencil"/>
+</node>
+<node COLOR="#338800" CREATED="1750608171148" ID="ID_645315221" MODIFIED="1750608181337" TEXT="experimental-Test funktioniert">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1750608083733" ID="ID_801317220" MODIFIED="1750608187648" TEXT="Schritt-3 : bestehende Heuristiken ersetzen">
+<icon BUILTIN="full-3"/>
+<node CREATED="1750608225207" ID="ID_1091625286" MODIFIED="1750608242780" TEXT="auf tuple-helper.hpp konzentrieren">
+<node CREATED="1750608253290" ID="ID_1066975990" MODIFIED="1750608258692" TEXT="bestehendes is_Structured f&#xe4;llt weg"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1750613310659" ID="ID_1955387309" MODIFIED="1750613325702" TEXT="kann man forEachIDX erweitern auf AndAll ?">
+<icon BUILTIN="help"/>
+<node CREATED="1750613329800" ID="ID_737752412" MODIFIED="1750613379696" TEXT="es st&#xf6;rt mich, wenn ich jetzt den Namen AndAll verwende">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      und doch nur einen fest verdrahteten Spezialfall definiere, blo&#223; weil's jetzt grade convenient ernscheint
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1750613385497" ID="ID_1466450048" MODIFIED="1750613415281" TEXT="k&#xf6;nnte gehen &#x27f9; dazu die Arit&#xe4;ts-Erkennung in das Impl-Template"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1750613423187" ID="ID_1618598998" MODIFIED="1750613435979" TEXT="gef&#xe4;hrlich: erst mal als Prototyp ausarbeiten">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node CREATED="1750608261914" ID="ID_235249081" MODIFIED="1750608264567" TEXT="abl&#xf6;sen">
+<node CREATED="1750608267425" ID="ID_1368025835" MODIFIED="1750608268258" TEXT="is_Structured"/>
+<node CREATED="1750608320496" ID="ID_575832691" MODIFIED="1750608321852" TEXT="enable_if_TupleProtocol"/>
+</node>
 </node>
 </node>
 </node>
@@ -166122,9 +166277,7 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="yes"/>
 <node CREATED="1750431808678" ID="ID_1965718984" MODIFIED="1750433611399" TEXT="reproduzierbar auf Minimum reduziert">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <div style="background-color: #eee0b5; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 2px">
       <div style="color: #202020; background-color: #eee0b5; font-family: Bitstream Vera Sans Mono; font-size: 9pt; white-space: pre">
@@ -166209,9 +166362,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node CREATED="1750433674672" ID="ID_1918452895" MODIFIED="1750436510834">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       vermutlich ein <i>sehr spezieller</i>&#160;Compiler-Bug

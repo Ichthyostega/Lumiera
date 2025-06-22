@@ -24,7 +24,7 @@
  ** So what is provided here is _not a parser library_ — yet aims at »making
  ** simple things simple« and let you implement the complicated ones yourselves.
  ** Several decisions were taken accordingly, like only supporting std::string_view
- ** and automatically consuming any leading whitespace. And notably the focus was
+ ** and to consume any leading whitespace automatically. And notably the focus was
  ** _not placed_ on the challenging aspects of parsing — while still allowing a
  ** pathway towards definition of arbitrarily recursive grammars, if so desired.
  ** 
@@ -40,7 +40,7 @@
  ** the C++ matcher object as result — and thus essentially some pointers into
  ** the original sequence, which has to be passed in as C++ string_view.
  ** 
- ** An essential concept of this parsing support framework is that each parser
+ ** An essential feature of this parsing support framework is that each parser
  ** can be decorated by a _model transformation functor,_ which gets the result
  ** of the wrapped parser and can return _any arbitrary value object._ In essence,
  ** this framework does not provide the notion of an _abstract syntax tree_ — yet
@@ -57,7 +57,7 @@
  **  - `accept_opt` builds a clause to optionally accept in accordance
  **    to the given definition; if no match is found, parsing backtracks.
  **  - `accept_repeated` builds a clause to accept a repetition of the
- **    structure accepted by its argument, optionally with an explicit delimiter
+ **    structure accepted by its argument, optionally with an explicit separator
  **    and possibly with a limited number of instances. The result values are
  **    obviously all from the same type and will be collected into a IterModel,
  **    which essentially is a std::vector<RES> (note: heap storage!).
@@ -68,24 +68,26 @@
  **    described by the SPEC _after_ the structure already described by the syntax.
  **    Both parts must succeed for the parse to be successful. The result value
  **    is packaged into a parse::SeqModel, which essentially is a tuple; when
- **    attaching several .seq() specifications, it can become a N-ary tuple.
+ **    attaching several .seq() specifications, it is extended to a N-ary tuple.
  **  - `<syntax>.alt(SPEC)` adds an _alternative branch_ to the existing syntax.
  **    Either part alone is sufficient for a successful parse. First the existing
  **    branch(es) are tried, and only if those do not succeed, backtracking is
  **    performed and then the alternative branch is tried. Once some match is
  **    found, further branches will _not be attempted._ (short-circuit).
- **    Thus there is _always one_ result model, is placed into an AltModel,
+ **    Thus there is _always one_ result model, placed into an AltModel,
  **    which is a _variant data type_ with a common inline result buffer.
  **    The _selector field_ must be checked to find out which branch of the
  **    syntax succeeded, and then the result must be handled with its appropriate
  **    type, because the various branches can possibly yield entirely different
  **    result value types.
- **  - `<syntax>.repeat()` _sequentially adds_ a repeated clause be accepted
- **    _after_ what the existing syntax accepts. The result is thus a SeqModel.
+ **  - `<syntax>.repeat()` _sequentially adds_ a repeated clause to be accepted
+ **    _after_ what the existing syntax accepts. The result is thus a SeqModel,
+ **    with the result-model from the repetition in the last tuple element;
+ **    the repetition itself yields an IterModel.
  **  - `<syntax>.bracket()` _sequentially adds_ a bracketing clause to be
  **    accepted _after_ parsing with the existing syntax. Again, the result
- **    is a SeqModel, with the result-model from the repetition in the last
- **    tuple element. The repetition itself yields an IterModel.
+ **    is a SeqModel, with the result-model from the bracket contents
+ **    packaged into the last tuple element.
  **  - `<syntax>.bind(FUN)` is a postfix-operator and decorates the existing
  **    syntax with a result-binding functor `FUN`: The syntax's result value
  **    is passed into this functor and whatever this functor returns will
@@ -99,8 +101,8 @@
  ** A _recursive syntax definition_ is what unleashes the parsing technique's
  ** full strength; but recursive grammars can be challenging to master at times
  ** and may in fact lead to deadlock due to unlimited recursion. Since this
- ** framework is focused on ease of use in simple situations, recursion is
- ** considered an advanced usage and thus supported in a way that requires
+ ** framework is focused on ease of use for the simple situations, recursion
+ ** is considered an advanced usage and thus supported in a way that requires
  ** some preparation and help by the user. In essence...
  ** - a syntax clause to be referred recursively _must be pre-declared_
  ** - this pre-declaration gives it a known, fixed result type and will

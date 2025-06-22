@@ -201,9 +201,9 @@ namespace lib {
       template<size_t slot>
       Elm_t<slot> const&
       get()  const noexcept
-      {
-        return const_cast<HeteroData*>(this)->get<slot>();
-      }
+        {
+          return const_cast<HeteroData*>(this)->get<slot>();
+        }
       
       
       /**
