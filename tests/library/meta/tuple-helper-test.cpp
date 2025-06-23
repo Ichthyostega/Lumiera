@@ -27,12 +27,17 @@
 #include "lib/meta/tuple-helper.hpp"
 #include "meta/typelist-diagnostics.hpp"
 #include "meta/tuple-diagnostics.hpp"
+#include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"
+#include "lib/test/diagnostic-output.hpp"////////////////TODO
 
 #include <string>
 
 using lib::test::showSizeof;
 using util::toString;
+using util::_Fmt;
+using std::is_same_v;
+using std::make_tuple;
 using std::get;
 
 namespace lib  {
@@ -57,7 +62,88 @@ namespace test {
     
   } // (End) test data
   
+////////////////////////////////////////OOO
+  template<class TTX>
+  class WithIdxSeq2
+    {
+      template<class FUN, size_t...idx>
+      static void
+      invoke_forEach (FUN&& fun, std::index_sequence<idx...>)
+        {
+          (fun (std::integral_constant<size_t,idx>{}), ...);
+        }
+      
+      template<class FUN, size_t...idx>
+      static bool
+      and_forEach (FUN&& fun, std::index_sequence<idx...>)
+        {
+          return (fun (std::integral_constant<size_t,idx>{}) and ...);
+        }
+      
+      template<class FUN, size_t...idx>
+      static bool
+      or_forEach (FUN&& fun, std::index_sequence<idx...>)
+        {
+          return (fun (std::integral_constant<size_t,idx>{}) or ...);
+        }
+      
+      using IdxSeq = typename ElmTypes<TTX>::Idx;
+      
+    public:
+      template<class FUN>
+      static void
+      invoke (FUN&& fun)
+        {
+          invoke_forEach (std::forward<FUN>(fun), IdxSeq{});
+        }
+      
+      template<class FUN>
+      static bool
+      andAll (FUN&& fun)
+        {
+          return and_forEach (std::forward<FUN>(fun), IdxSeq{});
+        }
+      
+      template<class FUN>
+      static bool
+      orAny (FUN&& fun)
+        {
+          return or_forEach (std::forward<FUN>(fun), IdxSeq{});
+        }
+    };
   
+  /**
+   * Invoke a function (or λ) with index numbers derived from some variadic count.
+   * Notably this construct can be used for compile-time iteration over a structure.
+   * Instances of `std::integral_constant` are passed in sequence to the functor.
+   * The _size_ of the index sequence is derived from the following sources
+   * - if the type \a TTX is _tuple-like,_ then std::tuple_size<TTX> is used
+   * - otherwise, if the type is a loki-style type sequence or type list,
+   *   the number of type nodes is used
+   * - otherwise, as fall-back the number of template parameters is used
+   */
+  template<class TTX, class FUN>
+  inline void
+  forEachIDX2 (FUN&& fun)
+  {
+    WithIdxSeq2<TTX>::invoke (std::forward<FUN> (fun));
+  }
+  
+  template<class TTX, class FUN>
+  inline bool
+  andAllIDX2 (FUN&& fun)
+  {
+    return WithIdxSeq2<TTX>::andAll (std::forward<FUN> (fun));
+  }
+  
+  template<class TTX, class FUN>
+  inline bool
+  orAnyIDX2 (FUN&& fun)
+  {
+    return WithIdxSeq2<TTX>::orAny (std::forward<FUN> (fun));
+  }
+
+////////////////////////////////////////OOO
   
   
   /*********************************************************************//**
@@ -74,6 +160,7 @@ namespace test {
         {
           check_diagnostics();
           check_tuple_from_Typelist();
+          demonstrate_generic_iteration();
         }
       
       
@@ -161,6 +248,66 @@ namespace test {
                << showSizeof(nulL) <<endl;
           
           CHECK (sizeof(prep) == sizeof(int)+sizeof(Num<1>)+sizeof(Num<3>)+sizeof(Num<5>));
+        }
+      
+      
+      /** @test demonstrate generic tuple iteration mechanisms
+       *      - apply a generic lambda to each element of a tuple
+       *      - iterate over all index numbers of a tuple (or tuple-like)
+       * @remark the _iteration_ happens at compile-time, i.e. the given
+       *      lambda-template is instantiated for each type of the tuple;
+       *      however, at runtime, each of these instantiations is invoked
+       *      in sequence, performing the body of the λ-function, which may
+       *      access the actual data value for each of the tuple elements.
+       */
+      void
+      demonstrate_generic_iteration()
+        {
+          auto tup = make_tuple (1, 2.3, '4');
+          using Tup = decltype(tup);
+          CHECK (toString(tup) == "«tuple<int, double, char>»──(1,2.3,4)"_expect);
+          
+          string dump{};
+          CHECK (dump == "");
+          // apply λ-generic to each element...
+          forEach (tup, [&](auto elm){ dump += "|"+toString(elm); });
+          CHECK (dump == "|1|2.3|4"_expect);
+
+          // apply λ-generic to each element and build new tuple from results
+          auto tupStr = mapEach (tup, [](auto const& elm){ return toString(elm); });
+          CHECK (tupStr == "«tuple<string, string, string>»──(1,2.3,4)"_expect);
+          
+          _Fmt showElm{"|%d|▷%s◁"};
+          dump = "";
+          // apply λ-generic with (constexpr) index
+          forEachIDX2<Tup> ([&](auto idx)
+                            {
+                              using Idx = decltype(idx);
+                              using Iii = std::integral_constant<size_t, idx.value>;
+                              CHECK ((is_same_v<Idx, Iii>));
+                              dump += showElm % uint(idx) % get<idx>(tup);
+                            });
+          CHECK (dump == "|0|▷1◁|1|▷2.3◁|2|▷4◁"_expect);
+          
+          
+          // apply λ-generic and combine results
+          auto boolFun = [&](auto idx){ return bool(get<idx>(tup)); };
+          
+          CHECK (    andAllIDX2<Tup> (boolFun));
+          get<0>(tup) = 0;                     // ◁————————————————————— demonstrate that a run-time evaluation happens
+          CHECK (not andAllIDX2<Tup> (boolFun));
+          CHECK (    orAnyIDX2<Tup> (boolFun));
+          
+          // can use this mechanism also for sole compile-time computation
+          auto integralCheckFun = [](auto idx){ return std::is_integral_v<std::tuple_element_t<idx,Tup>>;};
+          
+          CHECK (not andAllIDX2<Tup> (integralCheckFun));
+          CHECK (    orAnyIDX2<Tup> (integralCheckFun));
+          
+          // Note however, the same can also be achieved simpler,
+          // using any meta-function which takes a single type argument...
+          CHECK (not ElmTypes<Tup>::AndAll<std::is_integral>());  //   ... __and_<is_integral<int>,is_integral<double>,is_integral<char>>
+          CHECK (    ElmTypes<Tup>::OrAll<std::is_integral>());
         }
     };
   

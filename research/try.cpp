@@ -128,6 +128,10 @@ main (int, char**)
     show<Hetero>();
     show<int>();
     
+    SHOW_EXPR(bool(std::is_integral_v<int>))
+    SHOW_EXPR(bool(std::is_integral_v<char>))
+    SHOW_EXPR(bool(std::is_integral_v<double>))
+    
     cout <<  "\n.gulp." <<endl;
     return 0;
   }

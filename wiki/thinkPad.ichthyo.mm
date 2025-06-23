@@ -166216,8 +166216,7 @@ Since then others have made contributions, see the log for the history.</font></
       ...wenn man selber Typen f&#252;r das &#187;tuple-protocol&#171; einrichtet, hat man i.d.R nicht die Zeit, sich um alle CV-Varianten + RValues zu k&#252;mmern (es gibt ja einen konkreten Use-case); allerdings spielen die CV-Varianten nur f&#252;r eine get&lt;i&gt;()-Funktion tats&#228;chlich eine Rolle, denn dort mu&#223; sich diese Variante auf den Ergebnistyp auswirken; man k&#246;nnte diese Varianten komplett genersich per Library-Funktion aus einer Basis-Impl ableiten...
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1750527289637" ID="ID_416596147" MODIFIED="1750527297966" TEXT="sehe aber nicht, da&#xdf; die STL sowas definiert"/>
 </node>
@@ -166253,8 +166252,78 @@ Since then others have made contributions, see the log for the history.</font></
 </html></richcontent>
 </node>
 <node CREATED="1750613385497" ID="ID_1466450048" MODIFIED="1750613415281" TEXT="k&#xf6;nnte gehen &#x27f9; dazu die Arit&#xe4;ts-Erkennung in das Impl-Template"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1750613423187" ID="ID_1618598998" MODIFIED="1750613435979" TEXT="gef&#xe4;hrlich: erst mal als Prototyp ausarbeiten">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1750613423187" ID="ID_1618598998" MODIFIED="1750645085262" TEXT="gef&#xe4;hrlich: erst mal als Prototyp ausarbeiten">
+<icon BUILTIN="yes"/>
+<node CREATED="1750644668800" ID="ID_1281176074" MODIFIED="1750644964850" TEXT="es gibt nur eine Verwendung">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      in der FeedManifold (spielt dort aber eine essentielle Rolle, weil nur auf diesem Weg die v&#246;llige Flexibilit&#228;t in allen Argumenten erreicht wird)
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1750644685406" ID="ID_1212918834" MODIFIED="1750645047284" TEXT="diese arbeitet auf einem std::tuple">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ElmTypes&lt;TUP&gt;::Tup macht ein <i>variadic rebind</i>&#160;von einer Typ-Sequenz in ein std::tuple
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1750644713169" ID="ID_516674271" MODIFIED="1750644829139" TEXT="kann daher die anderen F&#xe4;lle auf ElmTypes&lt;TUP&gt; aufbauen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...das bedeutet, der Fall einer reinen Loki-Typliste f&#228;llt erst mal weg (wird ja derzeit nicht verwendet), und der sonderbare &#187;fallback&#171; &#228;ndert nun sein Veralten und w&#252;rde zu einem 1-Tupel. Daf&#252;r kann die gesamte constexpr-if-Logik wegfallen, weil ElmTypes&lt;Tup&gt; bereits eine Index-Sequenz fertig bereitstellt.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1750644831088" ID="ID_242745821" MODIFIED="1750644856938" TEXT="in dem so umgebauten Impl-Template lassen sich die AND / OR -F&#xe4;lle dann leicht unterbringen"/>
+<node COLOR="#338800" CREATED="1750644870205" ID="ID_1710911939" MODIFIED="1750644878073" TEXT="funktioniert im Test">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1750645066536" ID="ID_668574243" MODIFIED="1750645077745" TEXT="nun in der Codebasis schwenken">
+<icon BUILTIN="flag-pink"/>
+</node>
+<node CREATED="1750645117460" ID="ID_1103267230" MODIFIED="1750645177258" TEXT="nett ... aber">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      siehe Entdeckung, die ich im Test dokumentiert habe: eine reine Compile-Time evaluation kann man zwar so machen, das w&#228;re aber <i>von hinten durch die Brust ins Auge...</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="smiley-oh"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1750645178948" ID="ID_1910704680" MODIFIED="1750645270253" TEXT="es gibt n&#xe4;mlich bereits ein ElmTypes&lt;TUP&gt;::AndAll">
+<icon BUILTIN="idea"/>
+<node CREATED="1750645202768" ID="ID_839783730" MODIFIED="1750645212812" TEXT="das nimmt eine Metafunktion mit einem Typ-Argument"/>
+<node CREATED="1750645213479" ID="ID_854944912" MODIFIED="1750645228717" TEXT="also m&#xfc;&#xdf;te man den Check f&#xfc;r das concept nur entsprechend verpacken"/>
+<node CREATED="1750645229565" ID="ID_1427627425" MODIFIED="1750645242030" TEXT="das w&#xfc;rde gehen per templated typedef"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1750645244779" ID="ID_1784615021" MODIFIED="1750645258874" TEXT="wird es dadurch lesbar / klar genug?">
+<icon BUILTIN="help"/>
+</node>
 </node>
 </node>
 <node CREATED="1750608261914" ID="ID_235249081" MODIFIED="1750608264567" TEXT="abl&#xf6;sen">
@@ -166346,8 +166415,7 @@ Since then others have made contributions, see the log for the history.</font></
       </div>
     </div>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1750431987479" ID="ID_1874210875" MODIFIED="1750431993919" TEXT="der reine Konstruktor-Aufruf"/>
 <node CREATED="1750431994699" ID="ID_36138667" MODIFIED="1750432009276" TEXT="Basisklasse mu&#xdf; public inherited sein"/>
 <node CREATED="1750431861506" ID="ID_349299837" MODIFIED="1750433803907" TEXT="wird nur getriggert mit initialiser-List-Syntax">
@@ -166368,8 +166436,7 @@ Since then others have made contributions, see the log for the history.</font></
       vermutlich ein <i>sehr spezieller</i>&#160;Compiler-Bug
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="clanbomber"/>
 </node>
 <node COLOR="#338800" CREATED="1750433708917" ID="ID_1697745986" MODIFIED="1750436517188" TEXT="einfacher Workaround: keine initialiser-List-Syntax verwenden">
