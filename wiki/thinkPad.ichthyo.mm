@@ -166126,21 +166126,21 @@ Since then others have made contributions, see the log for the history.</font></
 </html></richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1750173439337" ID="ID_1832825819" MODIFIED="1750437317253" TEXT="Schritt-2 : concept tuple_like einf&#xfc;hren">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1750173439337" ID="ID_1832825819" MODIFIED="1750719257089" STYLE="fork" TEXT="Schritt-2 : concept tuple_like einf&#xfc;hren">
 <icon BUILTIN="full-2"/>
-<node CREATED="1750603208092" ID="ID_1027099855" MODIFIED="1750603215948" TEXT="Design-Fragen">
-<node BACKGROUND_COLOR="#d2a99c" COLOR="#683b31" CREATED="1750603078830" ID="ID_1129626446" MODIFIED="1750606092989" TEXT="Basis f&#xfc;r Concept tuple_like ?">
+<node COLOR="#435e98" CREATED="1750603208092" ID="ID_1027099855" MODIFIED="1750719264060" TEXT="Design-Fragen">
+<node BACKGROUND_COLOR="#d2a99c" COLOR="#683b31" CREATED="1750603078830" ID="ID_1129626446" MODIFIED="1750719254728" TEXT="Basis f&#xfc;r Concept tuple_like ?">
 <arrowlink COLOR="#4989d4" DESTINATION="ID_141049889" ENDARROW="Default" ENDINCLINATION="-494;29;" ID="Arrow_ID_789791822" STARTARROW="None" STARTINCLINATION="-1100;-64;"/>
 <icon BUILTIN="help"/>
-<node CREATED="1750603270220" ID="ID_1796957923" MODIFIED="1750603293611" TEXT="minimal-Heuristik : tuple_size"/>
-<node CREATED="1750603306121" ID="ID_1429160230" MODIFIED="1750603318670" TEXT="hinreichend vollst&#xe4;ndig: Zugriff"/>
-<node CREATED="1750603344042" ID="ID_1866646887" MODIFIED="1750603365810" TEXT="Zweck: Datenzugriff">
-<node CREATED="1750603367100" ID="ID_730035620" MODIFIED="1750603395784" TEXT="per structured Binding"/>
-<node CREATED="1750603384299" ID="ID_1020038748" MODIFIED="1750603392055" TEXT="per meta-Iteratrion"/>
+<node CREATED="1750603270220" ID="ID_1796957923" MODIFIED="1750719254728" TEXT="minimal-Heuristik : tuple_size"/>
+<node CREATED="1750603306121" ID="ID_1429160230" MODIFIED="1750719254728" TEXT="hinreichend vollst&#xe4;ndig: Zugriff"/>
+<node CREATED="1750603344042" ID="ID_1866646887" MODIFIED="1750719254728" TEXT="Zweck: Datenzugriff">
+<node CREATED="1750603367100" ID="ID_730035620" MODIFIED="1750719254728" TEXT="per structured Binding"/>
+<node CREATED="1750603384299" ID="ID_1020038748" MODIFIED="1750719254728" TEXT="per meta-Iteratrion"/>
 </node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1750603402218" ID="ID_470643972" MODIFIED="1750606109292" TEXT="Hindernisse">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1750603402218" ID="ID_470643972" MODIFIED="1750719254728" TEXT="Hindernisse">
 <icon BUILTIN="clanbomber"/>
-<node CREATED="1750603406649" ID="ID_722727058" MODIFIED="1750604154381" TEXT="die Element-Typen sind heterogen">
+<node CREATED="1750603406649" ID="ID_722727058" MODIFIED="1750719254728" TEXT="die Element-Typen sind heterogen">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -166150,9 +166150,9 @@ Since then others have made contributions, see the log for the history.</font></
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1750604156028" ID="ID_1521006525" MODIFIED="1750604169583" TEXT="structued Bindings sind f&#xfc;r den konkreten Einhzelfall gedacht"/>
-<node CREATED="1750604220710" ID="ID_440079383" MODIFIED="1750604274377" TEXT="structured Bindings und das Tupel-Protokoll sind zweierlei"/>
-<node CREATED="1750604614495" ID="ID_1340240394" MODIFIED="1750606165686" TEXT="es ist unklar wohin das &#xfc;berhaupt f&#xfc;hrt">
+<node CREATED="1750604156028" ID="ID_1521006525" MODIFIED="1750719254728" TEXT="structued Bindings sind f&#xfc;r den konkreten Einhzelfall gedacht"/>
+<node CREATED="1750604220710" ID="ID_440079383" MODIFIED="1750719254728" TEXT="structured Bindings und das Tupel-Protokoll sind zweierlei"/>
+<node CREATED="1750604614495" ID="ID_1340240394" MODIFIED="1750719254728" TEXT="es ist unklar wohin das &#xfc;berhaupt f&#xfc;hrt">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -166165,13 +166165,13 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1750606050049" ID="ID_326674613" MODIFIED="1750606165686" TEXT="als Experiment / Erweiterung betrachten">
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1750606050049" ID="ID_326674613" MODIFIED="1750719254728" TEXT="als Experiment / Erweiterung betrachten">
 <linktarget COLOR="#845a67" DESTINATION="ID_326674613" ENDARROW="Default" ENDINCLINATION="21;-52;" ID="Arrow_ID_1130948047" SOURCE="ID_1340240394" STARTARROW="None" STARTINCLINATION="-77;5;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
-<node CREATED="1750606352138" ID="ID_395333940" MODIFIED="1750606364459" TEXT="m&#xf6;glichst neben die bestehenden Strukturen bauen"/>
-<node CREATED="1750606379162" ID="ID_1298795914" MODIFIED="1750606392271" TEXT="beobachten was auf dieser Basis entsteht"/>
-<node CREATED="1750606452227" ID="ID_1156552141" MODIFIED="1750606760885" TEXT="an structured Bindings anlehnen">
+<node CREATED="1750606352138" ID="ID_395333940" MODIFIED="1750719254728" TEXT="m&#xf6;glichst neben die bestehenden Strukturen bauen"/>
+<node CREATED="1750606379162" ID="ID_1298795914" MODIFIED="1750719254728" TEXT="beobachten was auf dieser Basis entsteht"/>
+<node CREATED="1750606452227" ID="ID_1156552141" MODIFIED="1750719254728" TEXT="an structured Bindings anlehnen">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -166184,7 +166184,7 @@ Since then others have made contributions, see the log for the history.</font></
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1750606686156" ID="ID_900094987" MODIFIED="1750606706321" TEXT="get()-Adapter bereitstellen">
+<node CREATED="1750606686156" ID="ID_900094987" MODIFIED="1750719254728" TEXT="get()-Adapter bereitstellen">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -166196,19 +166196,19 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1750443947483" ID="ID_58139169" MODIFIED="1750443961178" TEXT="schrittweise...">
-<icon BUILTIN="pencil"/>
-<node COLOR="#338800" CREATED="1750443954960" ID="ID_750458131" MODIFIED="1750443959664" TEXT="has_tuple_size">
+<node COLOR="#338800" CREATED="1750443947483" ID="ID_58139169" MODIFIED="1750719254728" TEXT="schrittweise...">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1750443954960" ID="ID_750458131" MODIFIED="1750719254728" TEXT="has_tuple_size">
 <icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#338800" CREATED="1750527186585" ID="ID_1525384931" MODIFIED="1750608058172" TEXT="Zugriff auf tuple_element_t">
+<node COLOR="#338800" CREATED="1750527186585" ID="ID_1525384931" MODIFIED="1750719254728" TEXT="Zugriff auf tuple_element_t">
 <icon BUILTIN="button_ok"/>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1750527194686" ID="ID_505645521" MODIFIED="1750607802335" TEXT="Problem: CV-Varianten">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1750527194686" ID="ID_505645521" MODIFIED="1750719254728" TEXT="Problem: CV-Varianten">
 <icon BUILTIN="messagebox_warning"/>
-<node CREATED="1750527215075" ID="ID_160799608" MODIFIED="1750527224453" TEXT="werden in der STL unterst&#xfc;tzt"/>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#940109" CREATED="1750527225378" ID="ID_934892679" MODIFIED="1750607814794" TEXT="typischerweise nicht f&#xfc;r custom-Typen?">
+<node CREATED="1750527215075" ID="ID_160799608" MODIFIED="1750719254728" TEXT="werden in der STL unterst&#xfc;tzt"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#940109" CREATED="1750527225378" ID="ID_934892679" MODIFIED="1750719254728" TEXT="typischerweise nicht f&#xfc;r custom-Typen?">
 <icon BUILTIN="help"/>
-<node CREATED="1750527281789" ID="ID_270337751" MODIFIED="1750608012143" TEXT="eigentlich k&#xf6;nnte das generisch sein">
+<node CREATED="1750527281789" ID="ID_270337751" MODIFIED="1750719254728" TEXT="eigentlich k&#xf6;nnte das generisch sein">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -166218,18 +166218,18 @@ Since then others have made contributions, see the log for the history.</font></
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1750527289637" ID="ID_416596147" MODIFIED="1750527297966" TEXT="sehe aber nicht, da&#xdf; die STL sowas definiert"/>
+<node CREATED="1750527289637" ID="ID_416596147" MODIFIED="1750719254728" TEXT="sehe aber nicht, da&#xdf; die STL sowas definiert"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1750527261050" ID="ID_11850475" MODIFIED="1750527277291" TEXT="sollte auf das Minimal-Kriterium beschr&#xe4;nken">
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1750527261050" ID="ID_11850475" MODIFIED="1750719254728" TEXT="sollte auf das Minimal-Kriterium beschr&#xe4;nken">
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1750608204631" ID="ID_228997425" MODIFIED="1750608220478" STYLE="fork" TEXT="get()-Adapter entwerfen">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1750608204631" ID="ID_228997425" MODIFIED="1750719254728" TEXT="get()-Adapter entwerfen">
+<icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#338800" CREATED="1750608171148" ID="ID_645315221" MODIFIED="1750608181337" TEXT="experimental-Test funktioniert">
+<node COLOR="#338800" CREATED="1750608171148" ID="ID_645315221" MODIFIED="1750719254728" TEXT="experimental-Test funktioniert">
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -166239,7 +166239,8 @@ Since then others have made contributions, see the log for the history.</font></
 <node CREATED="1750608225207" ID="ID_1091625286" MODIFIED="1750608242780" TEXT="auf tuple-helper.hpp konzentrieren">
 <node CREATED="1750608253290" ID="ID_1066975990" MODIFIED="1750608258692" TEXT="bestehendes is_Structured f&#xe4;llt weg"/>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1750613310659" ID="ID_1955387309" MODIFIED="1750613325702" TEXT="kann man forEachIDX erweitern auf AndAll ?">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1750613310659" ID="ID_1955387309" MODIFIED="1750716425187" TEXT="kann man forEachIDX erweitern auf AndAll ?">
+<arrowlink COLOR="#3658ba" DESTINATION="ID_237548671" ENDARROW="Default" ENDINCLINATION="-339;14;" ID="Arrow_ID_280040051" STARTARROW="None" STARTINCLINATION="26;159;"/>
 <icon BUILTIN="help"/>
 <node CREATED="1750613329800" ID="ID_737752412" MODIFIED="1750613379696" TEXT="es st&#xf6;rt mich, wenn ich jetzt den Namen AndAll verwende">
 <richcontent TYPE="NOTE"><html>
@@ -166299,8 +166300,8 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1750645066536" ID="ID_668574243" MODIFIED="1750645077745" TEXT="nun in der Codebasis schwenken">
-<icon BUILTIN="flag-pink"/>
+<node COLOR="#338800" CREATED="1750645066536" ID="ID_668574243" MODIFIED="1750716334876" TEXT="nun in der Codebasis schwenken">
+<icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1750645117460" ID="ID_1103267230" MODIFIED="1750645177258" TEXT="nett ... aber">
 <richcontent TYPE="NOTE"><html>
@@ -166316,17 +166317,50 @@ Since then others have made contributions, see the log for the history.</font></
 </richcontent>
 <icon BUILTIN="smiley-oh"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1750645178948" ID="ID_1910704680" MODIFIED="1750645270253" TEXT="es gibt n&#xe4;mlich bereits ein ElmTypes&lt;TUP&gt;::AndAll">
+<node COLOR="#5b280f" CREATED="1750645178948" ID="ID_1910704680" MODIFIED="1750716337917" TEXT="es gibt n&#xe4;mlich bereits ein ElmTypes&lt;TUP&gt;::AndAll">
 <icon BUILTIN="idea"/>
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1750645202768" ID="ID_839783730" MODIFIED="1750645212812" TEXT="das nimmt eine Metafunktion mit einem Typ-Argument"/>
 <node CREATED="1750645213479" ID="ID_854944912" MODIFIED="1750645228717" TEXT="also m&#xfc;&#xdf;te man den Check f&#xfc;r das concept nur entsprechend verpacken"/>
 <node CREATED="1750645229565" ID="ID_1427627425" MODIFIED="1750645242030" TEXT="das w&#xfc;rde gehen per templated typedef"/>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1750645244779" ID="ID_1784615021" MODIFIED="1750645258874" TEXT="wird es dadurch lesbar / klar genug?">
-<icon BUILTIN="help"/>
+<node COLOR="#5b280f" CREATED="1750696441576" ID="ID_600415424" MODIFIED="1750696600642" TEXT="NEIN! Henne oder Ei">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das ist n&#228;mlich eine Spezialisierung, die dann bereits auf dieses Concept aufsetzen w&#252;rde...
+    </p>
+    <p>
+      und die interne Impl ist mehr oder weniger genau dasselbe, als wir zu Fu&#223; auch machen w&#252;rden, nur da&#223; wir dann an die Index-Seq gar nicht rankommen
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="closed"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1750697347620" ID="ID_1370775457" MODIFIED="1750697369572" TEXT="das ist sogar ein allgemeiner Einwand">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1750697373038" ID="ID_1486097802" MODIFIED="1750697405359" TEXT="sollte mein neues WithIdxSeq-Temlate nochmal umgestalten">
+<node CREATED="1750697407507" ID="ID_272465602" MODIFIED="1750697427532" TEXT="es macht keinen Sinn, da den Sequenz-Typ als Parameter zu verwenden"/>
+<node CREATED="1750697428362" ID="ID_401452341" MODIFIED="1750697437147" TEXT="denn tats&#xe4;chlich wird lediglich das N gebraucht"/>
+</node>
+<node CREATED="1750698200935" ID="ID_1509191948" MODIFIED="1750698231910" TEXT="dann k&#xf6;nnte ich als &#xbb;Seiteneingang&#xab; f&#xfc;r das Concept die tuple_size direkt angeben"/>
+<node BACKGROUND_COLOR="#aeadcf" COLOR="#4b4398" CREATED="1750716354122" ID="ID_237548671" MODIFIED="1750716474614" TEXT="damit wird die Formulierung letztlich hinreichend sauber und generisch">
+<linktarget COLOR="#3658ba" DESTINATION="ID_237548671" ENDARROW="Default" ENDINCLINATION="-339;14;" ID="Arrow_ID_280040051" SOURCE="ID_1955387309" STARTARROW="None" STARTINCLINATION="26;159;"/>
+<font NAME="SansSerif" SIZE="13"/>
 </node>
 </node>
 </node>
-<node CREATED="1750608261914" ID="ID_235249081" MODIFIED="1750608264567" TEXT="abl&#xf6;sen">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1750716493566" ID="ID_1613585978" MODIFIED="1750716519435" TEXT="umziehen">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1750716497115" ID="ID_93053322" MODIFIED="1750716502874" TEXT="in tuple-helper.hpp"/>
+<node CREATED="1750716503530" ID="ID_1060825027" MODIFIED="1750716516319" TEXT="abdeckein in TupleHelper_test"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1750608261914" ID="ID_235249081" MODIFIED="1750716524783" TEXT="abl&#xf6;sen">
+<icon BUILTIN="flag-yellow"/>
 <node CREATED="1750608267425" ID="ID_1368025835" MODIFIED="1750608268258" TEXT="is_Structured"/>
 <node CREATED="1750608320496" ID="ID_575832691" MODIFIED="1750608321852" TEXT="enable_if_TupleProtocol"/>
 </node>
