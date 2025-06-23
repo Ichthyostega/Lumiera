@@ -244,23 +244,56 @@ namespace meta {
   
   /** helper to invoke a functor, passing instances of std::integral_constant
    * @tparam N size of the index-sequence to use for instantiation
+   * @remark the functor is given for...
+   *  - to be invoked either (as void) for each index
+   *  - or as a predicate, combining the results with AND / OR
    */
   template<size_t N>
   class WithIdxSeq
     {
       template<class FUN, size_t...idx>
-      static void
-      invoke (FUN&& fun, std::index_sequence<idx...>)
+      static constexpr void
+      invoke_forEach (FUN&& fun, std::index_sequence<idx...>)
         {
           (fun (std::integral_constant<size_t,idx>{}), ...);
         }
       
+      template<class FUN, size_t...idx>
+      static constexpr bool
+      and_forEach (FUN&& fun, std::index_sequence<idx...>)
+        {
+          return (fun (std::integral_constant<size_t,idx>{}) and ...);
+        }
+      
+      template<class FUN, size_t...idx>
+      static constexpr bool
+      or_forEach (FUN&& fun, std::index_sequence<idx...>)
+        {
+          return (fun (std::integral_constant<size_t,idx>{}) or ...);
+        }
+      
+      using IdxSeq = std::make_index_sequence<N>;
+      
     public:
       template<class FUN>
-      static void
+      static constexpr void
       invoke (FUN&& fun)
         {
-          invoke (std::forward<FUN>(fun), std::make_index_sequence<N>{});
+          invoke_forEach (std::forward<FUN>(fun), IdxSeq{});
+        }
+      
+      template<class FUN>
+      static constexpr bool
+      andAll (FUN&& fun)
+        {
+          return and_forEach (std::forward<FUN>(fun), IdxSeq{});
+        }
+      
+      template<class FUN>
+      static constexpr bool
+      orAny (FUN&& fun)
+        {
+          return or_forEach (std::forward<FUN>(fun), IdxSeq{});
         }
     };
   
@@ -268,30 +301,31 @@ namespace meta {
    * Invoke a function (or λ) with index numbers derived from some variadic count.
    * Notably this construct can be used for compile-time iteration over a structure.
    * Instances of `std::integral_constant` are passed in sequence to the functor.
-   * The _size_ of the index sequence is derived from the following sources
+   * The _size_ of the index sequence is derived using a \ref ElmTypes specialisation
    * - if the type \a TTX is _tuple-like,_ then std::tuple_size<TTX> is used
-   * - otherwise, if the type is a loki-style type sequence or type list,
-   *   the number of type nodes is used
-   * - otherwise, as fall-back the number of template parameters is used
+   * - otherwise, if the type is a _type sequence_ (`Types<T...>`), then
+   *   the size of this meta sequence is used
+   * - otherwise, sequence-size ≡ 1 is used as fall-back
    */
   template<class TTX, class FUN>
   inline void
   forEachIDX (FUN&& fun)
   {
-    auto N = []{
-                  if constexpr (is_Structured<TTX>())
-                    return size_t(std::tuple_size<TTX>::value);
-                  else
-                  if constexpr (lib::meta::is_Typelist<TTX>::value)
-                    return lib::meta::count<typename TTX::List>();
-                  else
-                    { // Fallback: rebind template arguments into a type sequence
-                      using Seq = typename RebindVariadic<Types, TTX>::Type;
-                      return size_t(count<Seq>());
-                    }
-               };
-    
-    WithIdxSeq<N()>::invoke (std::forward<FUN> (fun));
+    WithIdxSeq<ElmTypes<TTX>::SIZ>::invoke (std::forward<FUN> (fun));
+  }
+  
+  template<class TTX, class FUN>
+  inline bool
+  andAllIDX (FUN&& fun)
+  {
+    return WithIdxSeq<ElmTypes<TTX>::SIZ>::andAll (std::forward<FUN> (fun));
+  }
+  
+  template<class TTX, class FUN>
+  inline bool
+  orAnyIDX (FUN&& fun)
+  {
+    return WithIdxSeq<ElmTypes<TTX>::SIZ>::orAny (std::forward<FUN> (fun));
   }
   
   

@@ -62,88 +62,6 @@ namespace test {
     
   } // (End) test data
   
-////////////////////////////////////////OOO
-  template<class TTX>
-  class WithIdxSeq2
-    {
-      template<class FUN, size_t...idx>
-      static void
-      invoke_forEach (FUN&& fun, std::index_sequence<idx...>)
-        {
-          (fun (std::integral_constant<size_t,idx>{}), ...);
-        }
-      
-      template<class FUN, size_t...idx>
-      static bool
-      and_forEach (FUN&& fun, std::index_sequence<idx...>)
-        {
-          return (fun (std::integral_constant<size_t,idx>{}) and ...);
-        }
-      
-      template<class FUN, size_t...idx>
-      static bool
-      or_forEach (FUN&& fun, std::index_sequence<idx...>)
-        {
-          return (fun (std::integral_constant<size_t,idx>{}) or ...);
-        }
-      
-      using IdxSeq = typename ElmTypes<TTX>::Idx;
-      
-    public:
-      template<class FUN>
-      static void
-      invoke (FUN&& fun)
-        {
-          invoke_forEach (std::forward<FUN>(fun), IdxSeq{});
-        }
-      
-      template<class FUN>
-      static bool
-      andAll (FUN&& fun)
-        {
-          return and_forEach (std::forward<FUN>(fun), IdxSeq{});
-        }
-      
-      template<class FUN>
-      static bool
-      orAny (FUN&& fun)
-        {
-          return or_forEach (std::forward<FUN>(fun), IdxSeq{});
-        }
-    };
-  
-  /**
-   * Invoke a function (or λ) with index numbers derived from some variadic count.
-   * Notably this construct can be used for compile-time iteration over a structure.
-   * Instances of `std::integral_constant` are passed in sequence to the functor.
-   * The _size_ of the index sequence is derived from the following sources
-   * - if the type \a TTX is _tuple-like,_ then std::tuple_size<TTX> is used
-   * - otherwise, if the type is a loki-style type sequence or type list,
-   *   the number of type nodes is used
-   * - otherwise, as fall-back the number of template parameters is used
-   */
-  template<class TTX, class FUN>
-  inline void
-  forEachIDX2 (FUN&& fun)
-  {
-    WithIdxSeq2<TTX>::invoke (std::forward<FUN> (fun));
-  }
-  
-  template<class TTX, class FUN>
-  inline bool
-  andAllIDX2 (FUN&& fun)
-  {
-    return WithIdxSeq2<TTX>::andAll (std::forward<FUN> (fun));
-  }
-  
-  template<class TTX, class FUN>
-  inline bool
-  orAnyIDX2 (FUN&& fun)
-  {
-    return WithIdxSeq2<TTX>::orAny (std::forward<FUN> (fun));
-  }
-
-////////////////////////////////////////OOO
   
   
   /*********************************************************************//**
@@ -280,7 +198,7 @@ namespace test {
           _Fmt showElm{"|%d|▷%s◁"};
           dump = "";
           // apply λ-generic with (constexpr) index
-          forEachIDX2<Tup> ([&](auto idx)
+          forEachIDX<Tup> ([&](auto idx)
                             {
                               using Idx = decltype(idx);
                               using Iii = std::integral_constant<size_t, idx.value>;
@@ -293,16 +211,16 @@ namespace test {
           // apply λ-generic and combine results
           auto boolFun = [&](auto idx){ return bool(get<idx>(tup)); };
           
-          CHECK (    andAllIDX2<Tup> (boolFun));
+          CHECK (    andAllIDX<Tup> (boolFun));
           get<0>(tup) = 0;                     // ◁————————————————————— demonstrate that a run-time evaluation happens
-          CHECK (not andAllIDX2<Tup> (boolFun));
-          CHECK (    orAnyIDX2<Tup> (boolFun));
+          CHECK (not andAllIDX<Tup> (boolFun));
+          CHECK (    orAnyIDX<Tup> (boolFun));
           
           // can use this mechanism also for sole compile-time computation
           auto integralCheckFun = [](auto idx){ return std::is_integral_v<std::tuple_element_t<idx,Tup>>;};
           
-          CHECK (not andAllIDX2<Tup> (integralCheckFun));
-          CHECK (    orAnyIDX2<Tup> (integralCheckFun));
+          CHECK (not andAllIDX<Tup> (integralCheckFun));
+          CHECK (    orAnyIDX<Tup> (integralCheckFun));
           
           // Note however, the same can also be achieved simpler,
           // using any meta-function which takes a single type argument...
