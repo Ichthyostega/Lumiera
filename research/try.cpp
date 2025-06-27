@@ -29,76 +29,6 @@
 
 using std::string;
 
-namespace lib {
-namespace meta {
-  
-  template<class TUP>
-  concept tuple_sized = requires
-    {
-      { std::tuple_size<TUP>::value } -> std::convertible_to<size_t>;
-    };
-  
-  
-  template<class TUP, std::size_t idx>
-  concept tuple_adl_accessible = requires(TUP tup)
-    {
-      typename std::tuple_element_t<idx, TUP>;
-      { get<idx>(tup) } -> std::convertible_to<std::tuple_element_t<idx, TUP>&>;
-    };
-  
-  template<class TUP, std::size_t idx>
-  concept tuple_mem_accessible = requires(TUP tup)
-    {
-      typename std::tuple_element_t<idx, TUP>;
-      { tup.template get<idx>() } -> std::convertible_to<std::tuple_element_t<idx, TUP>&>;
-    };
-  
-  template<class TUP, std::size_t idx>
-  concept tuple_element_accessible = tuple_mem_accessible<TUP,idx> or tuple_adl_accessible<TUP,idx>;
-  
-  template<class TUP>
-  concept tuple_accessible =
-    tuple_sized<TUP> and
-    WithIdxSeq<std::tuple_size_v<TUP>>::andAll([](auto idx)
-                                                {
-                                                 return tuple_element_accessible<TUP,idx>;
-                                                });
-  
-  
-  template<class TUP>
-  concept tuple_like = not is_reference_v<TUP>
-                   and tuple_sized<remove_cv_t<TUP>>
-                   and tuple_accessible<remove_cv_t<TUP>>;
-  
-  
-  template<std::size_t idx, class TUP>
-                            requires(tuple_like<std::remove_reference_t<TUP>>)
-  decltype(auto)
-  get (TUP&& tup)
-  {
-    using Tup = std::remove_reference_t<TUP>;
-    static_assert (0 < std::tuple_size_v<Tup>);
-    if constexpr (tuple_mem_accessible<Tup,0>)
-      {
-        if constexpr (std::is_reference_v<TUP>)
-          return tup.template get<idx>();
-        else
-          { // return value copy when tuple given as RValue
-            using Elm = std::tuple_element_t<idx, TUP>;
-            Elm elm(tup.template get<idx>());
-            return elm;
-          }
-      }
-    else
-      {
-        using std::get;
-        return get<idx> (std::forward<TUP> (tup));
-      }
-  }
-  
-}}//namespace lib::meta
-
-
 
 template<typename X>
 void
@@ -154,18 +84,18 @@ main (int, char**)
     using TupConstSeq = lib::meta::ElmTypes<const Tup>::Seq;
     SHOW_TYPE(TupConstSeq)
     
-    using T1 = decltype(lib::meta::get<0> (std::declval<Tup>()));
+    using T1 = decltype(lib::meta::getElm<0> (std::declval<Tup>()));
     SHOW_TYPE(T1)
-    using T2 = decltype(lib::meta::get<0> (std::declval<Tup&>()));
+    using T2 = decltype(lib::meta::getElm<0> (std::declval<Tup&>()));
     SHOW_TYPE(T2)
-    using T3 = decltype(lib::meta::get<0> (std::declval<Tup const&>()));
+    using T3 = decltype(lib::meta::getElm<0> (std::declval<Tup const&>()));
     SHOW_TYPE(T3)
     
-    using H1 = decltype(lib::meta::get<4> (std::declval<Hetero>()));
+    using H1 = decltype(lib::meta::getElm<4> (std::declval<Hetero>()));
     SHOW_TYPE(H1)
-    using H2 = decltype(lib::meta::get<4> (std::declval<Hetero&>()));
+    using H2 = decltype(lib::meta::getElm<4> (std::declval<Hetero&>()));
     SHOW_TYPE(H2)
-    using H3 = decltype(lib::meta::get<4> (std::declval<Hetero const&>()));
+    using H3 = decltype(lib::meta::getElm<4> (std::declval<Hetero const&>()));
     SHOW_TYPE(H3)
     
     cout <<  "\n.gulp." <<endl;

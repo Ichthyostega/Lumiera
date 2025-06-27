@@ -66,9 +66,8 @@ namespace test {
   /* ===== printing Tuple types and contents ===== */ 
   
   
-  template<typename TUP>
-  inline                enable_if<is_Tuple<TUP>,
-  string                >
+  template<tuple_like TUP>
+  inline string
   showType ()
   {
     using TypeList = typename RebindTupleTypes<TUP>::List;

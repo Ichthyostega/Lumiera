@@ -29,6 +29,7 @@
 #include "meta/tuple-diagnostics.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"
+#include "lib/hetero-data.hpp"
 #include "lib/test/diagnostic-output.hpp"////////////////TODO
 
 #include <string>
@@ -79,6 +80,7 @@ namespace test {
           check_diagnostics();
           check_tuple_from_Typelist();
           demonstrate_generic_iteration();
+          verify_tuple_like_concept();
         }
       
       
@@ -226,6 +228,106 @@ namespace test {
           // using any meta-function which takes a single type argument...
           CHECK (not ElmTypes<Tup>::AndAll<std::is_integral>());  //   ... __and_<is_integral<int>,is_integral<double>,is_integral<char>>
           CHECK (    ElmTypes<Tup>::OrAll<std::is_integral>());
+        }
+      
+      
+      
+      template<typename X>
+      string
+      render()
+        {
+          return lib::test::showType<X>();
+        }
+      
+      template<tuple_like X>
+      string
+      render()
+        {
+          string res{"Tup"};
+          res +="("+toString(std::tuple_size_v<X>)+") : "+ lib::test::showType<X>();
+          lib::meta::forEachIDX<X> ([&](auto i)
+                                      {
+                                        using Elm = std::tuple_element_t<i, X>;
+                                        res += " ▷"+ toString(uint(i)) + ": " + lib::test::showType<Elm>();
+                                      });
+          return res;
+        }
+
+      /** @test verify construction of a concept to detect _tuple-like_ classes,
+       *        which conform to the »tuple protocol« and can thus be used
+       *        in structural bindings
+       *      - the size of such an entity can be detected at compile time
+       *      - essentially, these can be considered as _product types_ — which implies
+       *        that there are N element types
+       *      - access to the corresponding member data is possible either through a
+       *        `get` member function or free function detected by ADL
+       */
+      void
+      verify_tuple_like_concept()
+        {
+          using Tup = std::tuple<long,short>;
+          using Arr = std::array<int,3>;
+          using Het = lib::HeteroData<int,string>::Chain<short>::ChainExtent<bool,lib::meta::Nil>::ChainType;
+          
+          CHECK (    tuple_sized<Tup> );
+          CHECK (    tuple_sized<Arr> );
+          CHECK (    tuple_sized<Het> );
+          CHECK (not tuple_sized<int> );
+          
+          CHECK (   (tuple_element_accessible<Tup,0>));
+      //  CHECK (   (tuple_element_accessible<Tup,2>));
+          CHECK (   (tuple_element_accessible<Het,0>));
+          CHECK (    tuple_accessible<Tup> );
+          CHECK (    tuple_accessible<Arr> );
+          CHECK (    tuple_accessible<Het> );
+          CHECK (not tuple_accessible<int> );
+          
+          CHECK (    tuple_like<Tup> );
+          CHECK (    tuple_like<Arr> );
+          CHECK (    tuple_like<Het> );
+          CHECK (not tuple_like<int> );
+          
+          // the tuple, the array and the HeteroData are tuple-like,
+          // and will be handled by a special overload, exploiting the additional features
+          CHECK (render<Tup>() == "Tup(2) : tuple<long, short> ▷0: long ▷1: short"_expect);
+          CHECK (render<Arr>() == "Tup(3) : array<int, 3ul> ▷0: int ▷1: int ▷2: int"_expect);
+          CHECK (render<Het>() == "Tup(5) : HeteroData<Node<StorageFrame<0ul, int, string>, "
+                                           "Node<StorageFrame<1ul, short>, "
+                                           "Node<StorageFrame<2ul, bool, Nil>, Nil> > > > "
+                                  "▷0: int ▷1: string ▷2: short ▷3: bool ▷4: Nil"_expect);
+          // the plain type `int` is not tuple-like and thus the fallback case is picked
+          CHECK (render<int>() == "int"_expect);
+          
+          CHECK (std::tuple_size_v<const Tup> == 2 );
+          
+          using Elm1 = std::tuple_element_t<1, const Tup>;
+          CHECK (lib::test::showType<Elm1>() == "const short"_expect);
+          
+          // note: a const tuple will add const qualification to each element type
+          using TupConstSeq = lib::meta::ElmTypes<const Tup>::Seq;
+          CHECK (lib::test::showType<TupConstSeq>() == "Types<long const, short const>"_expect);
+          
+          
+          // a unified access function `getElm`
+          // which works both with access by member or free function
+          
+          using T1 = decltype(lib::meta::getElm<0> (std::declval<Tup>()));
+          CHECK (lib::test::showType<T1>() == "long &&"_expect);
+          
+          using T2 = decltype(lib::meta::getElm<0> (std::declval<Tup&>()));
+          CHECK (lib::test::showType<T2>() == "long&"_expect);
+          
+          using T3 = decltype(lib::meta::getElm<0> (std::declval<Tup const&>()));
+          CHECK (lib::test::showType<T3>() == "long const&"_expect);
+          
+          using H1 = decltype(lib::meta::getElm<4> (std::declval<Het>()));
+          CHECK (lib::test::showType<H1>() == "Nil"_expect);
+          
+          using H2 = decltype(lib::meta::getElm<4> (std::declval<Het&>()));
+          CHECK (lib::test::showType<H2>() == "Nil&"_expect);
+          
+          using H3 = decltype(lib::meta::getElm<4> (std::declval<Het const&>()));
+          CHECK (lib::test::showType<H3>() == "Nil const&"_expect);
         }
     };
   
