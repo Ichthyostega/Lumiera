@@ -230,17 +230,17 @@ namespace func{
    *         argument positions marked with `std::_Placeholder<N>` instances
    *         will remain _open_ to accept arguments on the resulting function.
    */
-  template<class FUN, class TUP, typename = enable_if_Tuple<TUP>>
+  template<class FUN, class TUP>        requires(tuple_like<remove_reference_t<TUP>>)
   auto
   bindArgTuple (FUN&& fun, TUP&& tuple)
   {
-    return std::apply ([functor = forward<FUN>(fun)]
-                       (auto&&... args)
-                            {
-                              return std::bind (move(functor)
-                                               ,forward<decltype(args)> (args) ...);
-                            }
-                      ,std::forward<TUP> (tuple));
+    return lib::meta::apply ([functor = forward<FUN>(fun)]
+                             (auto&&... args)
+                                  {
+                                    return std::bind (move(functor)
+                                                     ,forward<decltype(args)> (args) ...);
+                                  }
+                            ,std::forward<TUP> (tuple));
   }
   
   /**

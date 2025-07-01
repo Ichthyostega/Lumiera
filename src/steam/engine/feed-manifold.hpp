@@ -81,10 +81,9 @@
 #include "lib/meta/trait.hpp"
 #include "lib/meta/typeseq-util.hpp"
 #include "lib/meta/variadic-helper.hpp"
+#include "lib/meta/tuple-helper.hpp"
 #include "lib/meta/generator.hpp"
 #include "lib/test/test-helper.hpp"
-
-#include <tuple>
 
 
 namespace steam {
@@ -97,7 +96,7 @@ namespace engine {
     using lib::meta::is_UnaryFun;
     using lib::meta::is_BinaryFun;
     using lib::meta::is_TernaryFun;
-    using lib::meta::is_Structured;
+    using lib::meta::tuple_like;
     using lib::meta::forEachIDX;
     using lib::meta::ElmTypes;
     using lib::meta::Tagged;
@@ -475,8 +474,8 @@ namespace engine {
       auto&
       accessArg (ARG& arg)
         {
-          if constexpr (is_Structured<ARG>())
-            return std::get<i> (arg);
+          if constexpr (tuple_like<ARG>)
+            return lib::meta::getElm<i> (arg);
           else
             return arg;
         }

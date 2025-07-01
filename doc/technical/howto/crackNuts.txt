@@ -184,8 +184,44 @@ pick and manipulate individually::
   can be programmed recursively, similar to LISP. The »bridge« is to unpack the variadic argument pack
   into the `lib::meta::Types<ARGS...>`
 +
+meta-manipulations::
+  When you need to rebind and manipulate a variadic sequence, it helps to transform the sequence
+  into one of our meta sequence representations (`lib::meta::Types` or the Loki typelists).
+  In `variadic-helper.hpp`, we define a convenient rebinding template `lib::meta::Elms<>`,
+  which can work transparently on any type sequence or any tuple-like entity
++
+  - to get at the variadics in a sequence representation
+  - to get a matching index sequence
+  - to rebind into another variadic template, using the same variadic sequence
+  - to apply a meta-function on each of the variadic types
+  - to compute a conjunction or disjunction of meta-predicates over the sequence
++
+tuple-like::
+  This is a concept to match on any type in compliance with the »tuple protocol«
++
+  - such a type must inject a specialisation of `std::tuple_size<TY>`
+  - and it must likewise support `std::tuple_element_t<N, TY>`
+  - and, based on that, expose a constexpr _getter function_
+  - together this also implies, that such a type can be used in _structured bindings_
+    (but note, structured bindings also work on plain arrays and on simple structs,
+     which are _not_ considered _tuple-like_ by themselves)
++
+apply to tuple-likes::
+  Unfortunately, the standard has a glaring deficiency here, insofar it defines an _exposition only_
+  concept, which is then hard mapped to support only some fixed types from the STL (tuples, pairs,
+  std::array and some range stuff). This was one of the main reasons to define our own `concept tuple_like`
++
+  - but unfortunately, `std::apply` was fixed with C++20 to allow only the above mentioned fixed set of
+    types from the STL, while in theory there is no reason why not to allow any _tuple-like_ entity
+  - this forces us to define our own `lib::meta::apply` as a drop-in replacement for `std::apply`
+  - in addition to that, we also define a `lib::meta::getElm<N, TY>`, which is an universal getter
+    to work on any _tuple-like_, either with a `get` member function or a free-ADL function `get`
+  - note that starting with C++20 it is forbidden to inject function overloads into namespace std,
+    and thus a free `get` function must be injected as friend via ADL and used appropriately, i.e.
+    unqualified.
++
 apply functor to each tuple element::
-  A common trick is to use `std::apply` in combination with a _fold-expression_
+  A common trick is to use `apply` in combination with a _fold-expression_
 +
 - provided as `lib::meta::forEach` in 'lib/meta/tuple-helper.hpp
 - The design of the `DataTable` with CSV-Formatting is based on this technique, see 'lib/stat/data.hpp'

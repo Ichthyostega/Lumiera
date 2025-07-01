@@ -55,7 +55,6 @@ namespace test {
           verify_genericTypeDisplay();
           
           detect_stringConversion();
-          detect_tupleProtocol();
           detect_typeList();
         }
       
@@ -162,42 +161,6 @@ namespace test {
           CHECK ( can_convert (stringy));
           CHECK ( can_convert (subsub));
           CHECK ( can_convert (subRef));
-        }
-      
-      
-      void
-      detect_tupleProtocol()
-        {
-          // verify arbitrary non-structured types
-          CHECK ((not is_Structured<void                 >()));
-          CHECK ((not is_Structured<void*                >()));
-          CHECK ((not is_Structured<const void*          >()));
-          CHECK ((not is_Structured<const int            >()));
-          CHECK ((not is_Structured<int                  >()));
-          CHECK ((not is_Structured<int &                >()));
-          CHECK ((not is_Structured<int const &          >()));
-          CHECK ((not is_Structured<int const *          >()));
-          CHECK ((not is_Structured<int *                >()));
-          CHECK ((not is_Structured<int * const          >()));
-          CHECK ((not is_Structured<int * const &        >()));
-          CHECK ((not is_Structured<int * &              >()));
-          CHECK ((not is_Structured<int * &&             >()));
-          CHECK ((not is_Structured<int &&               >()));
-          CHECK ((not is_Structured<int const &&         >()));
-          CHECK ((not is_Structured<double               >()));
-          CHECK ((not is_Structured<string               >()));
-          CHECK ((not is_Structured<Node<short,Nil>      >()));
-          
-          // the following indeed support C++ tuple protocol
-          CHECK ((    is_Structured<tuple<int>           >()));
-          CHECK ((    is_Structured<tuple<int,char,long> >()));
-          CHECK ((    is_Structured<tuple<>              >()));
-          CHECK ((    is_Structured<pair<short,long>     >()));
-          CHECK ((    is_Structured<array<short,5>       >()));
-          CHECK ((    is_Structured<array<long,0>        >()));
-          CHECK ((    is_Structured<HeteroData<size_t>   >()));
-          CHECK ((    is_Structured<HeteroData<int,char> >()));
-          CHECK ((    is_Structured<HeteroData<>         >()));
         }
       
       

@@ -51,7 +51,7 @@ namespace lib {
      * Building block for a tupeled-iterator.
      * exposes the iterator API lifted to the product type (tuple).
      */
-    template<class ITUP>
+    template<meta::tuple_like ITUP>
     class ProductCore
       {
         ITUP iters_;
@@ -76,8 +76,8 @@ namespace lib {
         bool
         checkPoint()  const
           {                                        //note: short-circuit
-            return std::apply ([](auto&... its) { return (bool(its) and ...); }
-                              , iters_);
+            return meta::apply ([](auto&... its) { return (bool(its) and ...); }
+                               , iters_);
           }
         
         ITUP&
@@ -137,7 +137,7 @@ namespace lib {
   inline auto
   zip (ITS&& ...iters)
   {
-    auto access_result = [](auto& it)->decltype(auto){ return *it; };               // Note: pass-through result type (maybe reference)
+    auto access_result = [ ](auto& it)->decltype(auto){ return *it; };               // Note: pass-through result type (maybe reference)
     auto tuple_results = [&](auto& it){ return meta::mapEach (*it, access_result); };
     //
     auto core = iter::ProductCore{iter::buildIterTuple (std::forward<ITS> (iters)...)};

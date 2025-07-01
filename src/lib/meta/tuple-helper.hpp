@@ -18,6 +18,12 @@
  ** to the tuple type provided by the standard library, including traits and
  ** helpers to build tuple types from metaprogramming and to pretty-print tuples.
  ** 
+ ** Notably, a `concept tuple_like` is provided, which is satisfied for any type in compliance
+ ** with the »tuple protocol«. Together with a [generic accessor][\ref lib::meta::getElm),
+ ** this allows to handle all _tuple-like_ types uniformly.
+ ** @note Due to an unfortunate limitation of the standard, we're forced to provide our own alternative
+ **       implementation to replace `std::apply`, so that a function can be applied to any _tuple-like_
+ ** 
  ** Furthermore, a generic iteration construct is provided, to instantiate
  ** a generic Lambda for each element of a given tuple, which allows to write
  ** generic code »for each tuple element«.
@@ -71,17 +77,13 @@ namespace meta {
   struct is_Tuple<const std::tuple<TYPES...>>
     : std::true_type
     { };
-
-  template<class TUP>
-  using enable_if_Tuple = lib::meta::enable_if<lib::meta::is_Tuple<std::remove_reference_t<TUP>>>;
-
-  template<class TUP>
-  using disable_if_Tuple = lib::meta::disable_if<lib::meta::is_Tuple<std::remove_reference_t<TUP>>>;
   
   using std::remove_cv_t;
   using std::is_reference_v;
+  using std::remove_reference_t;
   
   
+  /** @internal building-block: a type supporting the `tuple_size` metafunction */
   template<class TUP>
   concept tuple_sized = requires
     {
@@ -89,6 +91,7 @@ namespace meta {
     };
   
   
+  /** @internal building-block: a type where elements can be accessed through a `get` friend function */
   template<class TUP, std::size_t idx>
   concept tuple_adl_accessible = requires(TUP tup)
     {
@@ -96,6 +99,7 @@ namespace meta {
       { get<idx>(tup) } -> std::convertible_to<std::tuple_element_t<idx, TUP>&>;
     };
   
+  /** @internal building-block: a type where elements can be accessed through a `get` member function */
   template<class TUP, std::size_t idx>
   concept tuple_mem_accessible = requires(TUP tup)
     {
@@ -115,12 +119,20 @@ namespace meta {
                                                 });
   
   
+  /**
+   * Concept to mark any type compliant to the »tuple protocol«
+   */
   template<class TUP>
   concept tuple_like = not is_reference_v<TUP>
                    and tuple_sized<remove_cv_t<TUP>>
                    and tuple_accessible<remove_cv_t<TUP>>;
   
   
+  /**
+   * Helper for abstracted / unified access to member elements of any _tuple-like_
+   * @remark preferably uses a `get<i>` member function, falling back to a
+   *         free function `get`, which is found by ADL.
+   */
   template<std::size_t idx, class TUP>
                             requires(tuple_like<std::remove_reference_t<TUP>>)
   decltype(auto)
@@ -157,17 +169,25 @@ namespace meta {
     __unpack_and_apply (FUN&& f, TUP&& tup, std::index_sequence<Idx...>)
     {
       return std::invoke (std::forward<FUN> (f)
-                         ,get<Idx> (std::forward<TUP>(tup))...
+                         ,getElm<Idx> (std::forward<TUP>(tup))...
                          );
     }
     
     
-    /** @internal invoke a metafunction with \a FUN and all element types from \a TUP */
+    /** @internal invoke a metafunction with \a FUN and all element types from the _tuple-like_ \a TUP */
     template<template<typename...> class META, class FUN, class TUP>
     struct _InvokeMetafunTup
       {
         using Tupl = std::decay_t<TUP>;
         using Elms = typename ElmTypes<Tupl>::Seq;
+        using Args = typename Prepend<FUN, Elms>::Seq;
+        using Type = typename RebindVariadic<META, Args>::Type;
+      };
+    template<template<typename...> class META, class FUN, class TUP>
+    struct _InvokeMetafunTup<META, FUN, TUP&>
+      {
+        using Tupl = std::decay_t<TUP>;
+        using Elms = typename ElmTypes<Tupl>::Apply<std::add_lvalue_reference_t>;
         using Args = typename Prepend<FUN, Elms>::Seq;
         using Type = typename RebindVariadic<META, Args>::Type;
       };
@@ -184,7 +204,7 @@ namespace meta {
    * @todo 6/2025 as a first step, this replicates the implementation from C++17;
    *       the second step would be to constrain this to a concept `tuple_like`
    */
-  template<class FUN, class TUP>
+  template<class FUN, class TUP>   requires(tuple_like<remove_reference_t<TUP>>)
   constexpr decltype(auto)
   apply (FUN&& f, TUP&& tup)  noexcept (can_nothrow_invoke_tup<FUN,TUP> )
   {
@@ -205,15 +225,15 @@ namespace meta {
    *       std::apply to unpack the tuple's contents into an argument pack and
    *       then employ a fold expression with the comma operator.
    */
-  template<class TUP, class FUN, typename = enable_if_Tuple<TUP>>
+  template<class TUP, class FUN>   requires(tuple_like<remove_reference_t<TUP>>)
   constexpr void
   forEach (TUP&& tuple, FUN fun)
   {
-           std::apply ([&fun](auto&&... elms)
-                            {
-                              (fun (std::forward<decltype(elms)> (elms)), ...);
-                            }
-                      ,std::forward<TUP> (tuple));
+           lib::meta::apply ([&fun]<typename...ELMS>(ELMS&&... elms)
+                                  {
+                                    (fun (std::forward<ELMS>(elms)), ...);
+                                  }
+                            ,std::forward<TUP> (tuple));
   }
   
   /**
@@ -230,17 +250,53 @@ namespace meta {
    *          Notably this differs from #forEach, where a fold-expression with comma-operator
    *          is used, which is guaranteed to evaluate from left to right.
    */
-  template<class TUP, class FUN, typename = enable_if_Tuple<TUP>>
+  template<class TUP, class FUN>   requires(tuple_like<remove_reference_t<TUP>>)
   constexpr auto
   mapEach (TUP&& tuple, FUN fun)
   {
-    return std::apply ([&fun](auto&&... elms)
-                            {  //..construct the type explicitly (make_tuple would decay fun result types)
-                              using Tuple = std::tuple<decltype(fun (std::forward<decltype(elms)> (elms))) ...>;
-                              return Tuple (fun (std::forward<decltype(elms)> (elms)) ...);
-                            }
-                      ,std::forward<TUP> (tuple));
+    return lib::meta::apply ([&fun]<typename...ELMS>(ELMS&&... elms)
+                                  {  //..construct the type explicitly (make_tuple would decay fun result types)
+                                    using Tuple = std::tuple<decltype(fun (std::forward<ELMS>(elms))) ...>;
+                                    return Tuple (fun (std::forward<ELMS>(elms)) ...);
+                                  }
+                            ,std::forward<TUP> (tuple));
   }
+  
+  
+  
+  /**
+   * Specialisation of variadic access for any tuple-like
+   * @see variadic-helper.hpp
+   */
+  template<tuple_like TUP>
+  struct ElmTypes<TUP>
+    {
+      template<typename>
+      struct Extract;
+      template<size_t...idx>
+      struct Extract<std::index_sequence<idx...>>
+        {
+          using ElmTypes = Types<std::tuple_element_t<idx,TUP> ...>;
+        };
+      
+      static constexpr size_t SIZ = std::tuple_size_v<TUP>;
+      
+      using Idx = std::make_index_sequence<SIZ>;
+      using Seq = typename Extract<Idx>::ElmTypes;
+      using Tup = typename RebindVariadic<std::tuple, Seq>::Type;
+      
+      template<template<class> class META>
+      using Apply = typename ElmTypes<Seq>::template Apply<META>;
+      
+      template<template<typename...> class O>
+      using Rebind = typename RebindVariadic<O, Seq>::Type;
+      
+      template<template<class> class PRED>
+      using AndAll = typename ElmTypes<Apply<PRED>>::template Rebind<std::__and_>;
+      
+      template<template<class> class PRED>
+      using OrAll  = typename ElmTypes<Apply<PRED>>::template Rebind<std::__or_>;
+    };
   
   
   

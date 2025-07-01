@@ -58587,6 +58587,13 @@
 <node CREATED="1573230287134" ID="ID_1958309835" MODIFIED="1573230291318" TEXT="Concepts">
 <icon BUILTIN="hourglass"/>
 <node CREATED="1573230307678" ID="ID_1856823830" MODIFIED="1573230336518" TEXT="&#xbb;Lumiera Forward Iterator&#xab; integrieren"/>
+<node COLOR="#338800" CREATED="1751414140665" ID="ID_399045198" MODIFIED="1751414287217" TEXT="concept tuple_like">
+<arrowlink COLOR="#397ed0" DESTINATION="ID_1832825819" ENDARROW="Default" ENDINCLINATION="-696;-52;" ID="Arrow_ID_1181418543" STARTARROW="None" STARTINCLINATION="-1550;197;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1751414204056" ID="ID_1967920089" MODIFIED="1751414220030" TEXT="spricht an f&#xfc;r jeden Typ, der das &#xbb;tuple protocol&#xab; unterst&#xfc;tzt"/>
+<node CREATED="1751414220382" ID="ID_623897833" MODIFIED="1751414269549" TEXT="damit l&#xe4;&#xdf;t sich die unn&#xf6;tige Einschr&#xe4;nkung von std::apply umgehen"/>
+<node CREATED="1751414247721" ID="ID_1171949349" MODIFIED="1751414277013" TEXT="&#x27f9; lib::meta::apply als Ersatz  (und lib::meta::getElm)"/>
+</node>
 </node>
 <node CREATED="1540682664865" ID="ID_1702211999" MODIFIED="1557498707236" TEXT="Metaprogramming">
 <node CREATED="1739742552923" ID="ID_606595417" MODIFIED="1739742563204" TEXT="Typsequenzen und Typlisten">
@@ -165792,7 +165799,8 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1749398984021" ID="ID_798560819" MODIFIED="1749399023650" TEXT="Anpassungen">
 <icon BUILTIN="pencil"/>
-<node CREATED="1749399005532" ID="ID_73997136" MODIFIED="1749399015821" TEXT="Error">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1749399005532" ID="ID_73997136" MODIFIED="1751414539557" TEXT="Error">
+<icon BUILTIN="broken-line"/>
 <node COLOR="#435e98" CREATED="1749405279128" FOLDED="true" ID="ID_64791896" MODIFIED="1749427637085" TEXT="constexpr auf Forwards in util.hpp">
 <node CREATED="1749405304985" ID="ID_1781845772" MODIFIED="1749405322772" TEXT="util.hpp verwendet filter() und remove()"/>
 <node CREATED="1749405323462" ID="ID_553685849" MODIFIED="1749405346376" TEXT="aber includiert nicht &lt;algorithm&gt;">
@@ -166017,8 +166025,8 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="smiley-neutral"/>
 <node COLOR="#435e98" CREATED="1749483108933" HGAP="36" ID="ID_216815165" MODIFIED="1749483116800" TEXT="CommandArgument_test" VSHIFT="16"/>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1749519033788" ID="ID_732774928" MODIFIED="1750183175217" TEXT="Concept-Error:  not __tuple_like&lt;ArrayAdapt&lt;uint...&gt;&gt; ">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1749519033788" FOLDED="true" ID="ID_732774928" MODIFIED="1751414517314" TEXT="Concept-Error:  not __tuple_like&lt;ArrayAdapt&lt;uint...&gt;&gt; ">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1749519322166" ID="ID_1060720125" MODIFIED="1749519379854" TEXT="requires-expression evaluated to false">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -166099,7 +166107,7 @@ Since then others have made contributions, see the log for the history.</font></
 </html></richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1750173383627" ID="ID_1798398621" MODIFIED="1750181755584" TEXT="und Tsch&#xfc;&#xdf; &#x27f9; selber machen">
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1750173383627" FOLDED="true" ID="ID_1798398621" MODIFIED="1751414514941" TEXT="und Tsch&#xfc;&#xdf; &#x27f9; selber machen">
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 <node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1750173412198" ID="ID_145552849" MODIFIED="1750183190374" TEXT="Schritt-1 : C++17 - apply-bereitstellen">
@@ -166126,7 +166134,9 @@ Since then others have made contributions, see the log for the history.</font></
 </html></richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1750173439337" ID="ID_1832825819" MODIFIED="1750719257089" STYLE="fork" TEXT="Schritt-2 : concept tuple_like einf&#xfc;hren">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1750173439337" ID="ID_1832825819" MODIFIED="1751414505423" STYLE="fork" TEXT="Schritt-2 : concept tuple_like einf&#xfc;hren">
+<linktarget COLOR="#397ed0" DESTINATION="ID_1832825819" ENDARROW="Default" ENDINCLINATION="-696;-52;" ID="Arrow_ID_1181418543" SOURCE="ID_399045198" STARTARROW="None" STARTINCLINATION="-1550;197;"/>
+<linktarget COLOR="#6d7988" DESTINATION="ID_1832825819" ENDARROW="Default" ENDINCLINATION="-92;603;" ID="Arrow_ID_946891187" SOURCE="ID_1079280970" STARTARROW="None" STARTINCLINATION="216;14;"/>
 <icon BUILTIN="full-2"/>
 <node COLOR="#435e98" CREATED="1750603208092" ID="ID_1027099855" MODIFIED="1750719264060" TEXT="Design-Fragen">
 <node BACKGROUND_COLOR="#d2a99c" COLOR="#683b31" CREATED="1750603078830" ID="ID_1129626446" MODIFIED="1750719254728" TEXT="Basis f&#xfc;r Concept tuple_like ?">
@@ -166234,7 +166244,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1750608083733" ID="ID_801317220" MODIFIED="1750608187648" TEXT="Schritt-3 : bestehende Heuristiken ersetzen">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1750608083733" ID="ID_801317220" MODIFIED="1751414046800" TEXT="Schritt-3 : bestehende Heuristiken ersetzen">
 <icon BUILTIN="full-3"/>
 <node CREATED="1750608225207" ID="ID_1091625286" MODIFIED="1750608242780" TEXT="auf tuple-helper.hpp konzentrieren">
 <node CREATED="1750608253290" ID="ID_1066975990" MODIFIED="1750608258692" TEXT="bestehendes is_Structured f&#xe4;llt weg"/>
@@ -166257,43 +166267,34 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="yes"/>
 <node CREATED="1750644668800" ID="ID_1281176074" MODIFIED="1750644964850" TEXT="es gibt nur eine Verwendung">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       in der FeedManifold (spielt dort aber eine essentielle Rolle, weil nur auf diesem Weg die v&#246;llige Flexibilit&#228;t in allen Argumenten erreicht wird)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1750644685406" ID="ID_1212918834" MODIFIED="1750645047284" TEXT="diese arbeitet auf einem std::tuple">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ElmTypes&lt;TUP&gt;::Tup macht ein <i>variadic rebind</i>&#160;von einer Typ-Sequenz in ein std::tuple
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1750644713169" ID="ID_516674271" MODIFIED="1750644829139" TEXT="kann daher die anderen F&#xe4;lle auf ElmTypes&lt;TUP&gt; aufbauen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...das bedeutet, der Fall einer reinen Loki-Typliste f&#228;llt erst mal weg (wird ja derzeit nicht verwendet), und der sonderbare &#187;fallback&#171; &#228;ndert nun sein Veralten und w&#252;rde zu einem 1-Tupel. Daf&#252;r kann die gesamte constexpr-if-Logik wegfallen, weil ElmTypes&lt;Tup&gt; bereits eine Index-Sequenz fertig bereitstellt.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1750644831088" ID="ID_242745821" MODIFIED="1750644856938" TEXT="in dem so umgebauten Impl-Template lassen sich die AND / OR -F&#xe4;lle dann leicht unterbringen"/>
 <node COLOR="#338800" CREATED="1750644870205" ID="ID_1710911939" MODIFIED="1750644878073" TEXT="funktioniert im Test">
@@ -166305,16 +166306,13 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node CREATED="1750645117460" ID="ID_1103267230" MODIFIED="1750645177258" TEXT="nett ... aber">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       siehe Entdeckung, die ich im Test dokumentiert habe: eine reine Compile-Time evaluation kann man zwar so machen, das w&#228;re aber <i>von hinten durch die Brust ins Auge...</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="smiley-oh"/>
 </node>
 <node COLOR="#5b280f" CREATED="1750645178948" ID="ID_1910704680" MODIFIED="1750716337917" TEXT="es gibt n&#xe4;mlich bereits ein ElmTypes&lt;TUP&gt;::AndAll">
@@ -166325,9 +166323,7 @@ Since then others have made contributions, see the log for the history.</font></
 <node CREATED="1750645229565" ID="ID_1427627425" MODIFIED="1750645242030" TEXT="das w&#xfc;rde gehen per templated typedef"/>
 <node COLOR="#5b280f" CREATED="1750696441576" ID="ID_600415424" MODIFIED="1750696600642" TEXT="NEIN! Henne oder Ei">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       das ist n&#228;mlich eine Spezialisierung, die dann bereits auf dieses Concept aufsetzen w&#252;rde...
@@ -166336,8 +166332,7 @@ Since then others have made contributions, see the log for the history.</font></
       und die interne Impl ist mehr oder weniger genau dasselbe, als wir zu Fu&#223; auch machen w&#252;rden, nur da&#223; wir dann an die Index-Seq gar nicht rankommen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="closed"/>
 </node>
 </node>
@@ -166354,20 +166349,102 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1750716493566" ID="ID_1613585978" MODIFIED="1750716519435" TEXT="umziehen">
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1750716497115" ID="ID_93053322" MODIFIED="1750716502874" TEXT="in tuple-helper.hpp"/>
-<node CREATED="1750716503530" ID="ID_1060825027" MODIFIED="1750716516319" TEXT="abdeckein in TupleHelper_test"/>
+<node COLOR="#338800" CREATED="1750716493566" ID="ID_1613585978" MODIFIED="1751382278192" TEXT="umziehen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1750716497115" ID="ID_93053322" MODIFIED="1751382274609" TEXT="in tuple-helper.hpp">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1750608261914" ID="ID_235249081" MODIFIED="1750716524783" TEXT="abl&#xf6;sen">
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1750608267425" ID="ID_1368025835" MODIFIED="1750608268258" TEXT="is_Structured"/>
-<node CREATED="1750608320496" ID="ID_575832691" MODIFIED="1750608321852" TEXT="enable_if_TupleProtocol"/>
+<node COLOR="#338800" CREATED="1750716503530" ID="ID_1060825027" MODIFIED="1751382276212" TEXT="abdecken in TupleHelper_test">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
+<node COLOR="#338800" CREATED="1750608261914" ID="ID_235249081" MODIFIED="1751389582133" TEXT="abl&#xf6;sen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1750608267425" ID="ID_1368025835" MODIFIED="1751387262397" TEXT="is_Structured">
+<node COLOR="#5b280f" CREATED="1751384154339" ID="ID_796458847" MODIFIED="1751387259697" TEXT="nur eine Verwendung in FeedManifold">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#338800" CREATED="1751384168224" ID="ID_101574171" MODIFIED="1751387242305" TEXT="MetaUtils_test::detect_tupleProtocol() in TupleHelper_test integrieren">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node COLOR="#5b280f" CREATED="1750182957454" ID="ID_319310125" MODIFIED="1750433749812" TEXT="Instantiieren von non-copyable-Objekten">
+<node COLOR="#435e98" CREATED="1751383916083" ID="ID_1797886759" MODIFIED="1751389547470" TEXT="enable_if_Tuple">
+<arrowlink COLOR="#bf1242" DESTINATION="ID_295436672" ENDARROW="Default" ENDINCLINATION="46;4;" ID="Arrow_ID_1109285430" STARTARROW="None" STARTINCLINATION="172;29;"/>
+</node>
+<node COLOR="#435e98" CREATED="1750608320496" ID="ID_575832691" MODIFIED="1751387598999" TEXT="enable_if_TupleProtocol"/>
+<node CREATED="1751382946845" ID="ID_1931421874" MODIFIED="1751382956824" TEXT="is_Tuple : k&#xf6;nnte man erhalten">
+<node CREATED="1751382973572" ID="ID_566724770" MODIFIED="1751382973572">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      n&#252;tzlich f&#252;r Tests
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1751384222661" ID="ID_295436672" MODIFIED="1751389553056" TEXT="std::apply &#x27fc; lib::meta::apply">
+<linktarget COLOR="#bf1242" DESTINATION="ID_295436672" ENDARROW="Default" ENDINCLINATION="46;4;" ID="Arrow_ID_1109285430" SOURCE="ID_1797886759" STARTARROW="None" STARTINCLINATION="172;29;"/>
+<node COLOR="#435e98" CREATED="1751389555321" HGAP="26" ID="ID_121110475" MODIFIED="1751389576520" TEXT="nur dort wo die zus&#xe4;tzliche Abstraktion sinnvoll ist" VSHIFT="14">
+<font NAME="SansSerif" SIZE="9"/>
+</node>
+<node COLOR="#435e98" CREATED="1751398015921" FOLDED="true" ID="ID_983176159" MODIFIED="1751413323675" STYLE="fork" TEXT="Problem mit der nothrow-Klausel">
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="broken-line"/>
+<node CREATED="1751398032092" ID="ID_781720764" MODIFIED="1751413310002" TEXT="Vorlage: std::apply">
+<node CREATED="1751398055936" ID="ID_1131910144" MODIFIED="1751413310002" TEXT="noexcept(__unpack_std_tuple&lt;is_nothrow_invocable, _Fn, _Tuple&gt;)"/>
+<node CREATED="1751398072378" ID="ID_898701935" MODIFIED="1751413310002" TEXT="__unpack_std_tuple hat da eine Spezialbehandlung"/>
+<node CREATED="1751398082408" ID="ID_634442458" MODIFIED="1751413310002" TEXT="wenn das Tupel als cv&amp; gegeben wird..."/>
+<node CREATED="1751398109556" ID="ID_98144987" MODIFIED="1751413310002" TEXT="...dann werden die Argumente ebenfalls als cv&amp; weitergereicht"/>
+</node>
+<node COLOR="#5b280f" CREATED="1751398197752" ID="ID_1322730700" MODIFIED="1751413310002" TEXT="ich wollte einfacher implementieren">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...und jetzt wei&#223; ich, warum das Pendant f&#252;r std::apply so kompliziert implementiert ist!!!
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1751398203882" ID="ID_805105045" MODIFIED="1751413310002" TEXT="_InvokeMetafunTup zu lib::meta::apply"/>
+<node COLOR="#5b280f" CREATED="1751398225132" ID="ID_285344281" MODIFIED="1751413310003" TEXT="das wendet zuerst an std::decay_t&lt;TUP&gt;">
+<icon BUILTIN="stop-sign"/>
+</node>
+<node CREATED="1751412838555" ID="ID_1659970928" MODIFIED="1751413310003" TEXT="hier gibt es offensichtlich eine zus&#xe4;tzliche Konvention">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      und zwar bildet das das Verhalten nach, das die Sprache automatisch bei Funktions-Anwendung vollzieht: wenn konkrete Parameter eine im Scope sichtbare Variable bezeichnen, dann bekommt die Funktion automatisch eine Referenz
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1751412862167" ID="ID_669707946" MODIFIED="1751413310003" TEXT="wenn das Argument-Tuple per Referenz gegeben"/>
+<node CREATED="1751412873092" ID="ID_779934768" MODIFIED="1751413310003" TEXT="&#x27f9; dann sollen die Argument-Typen per Referenz in die Funktion gehen"/>
+<node CREATED="1751412979752" ID="ID_1942561908" MODIFIED="1751413310003" TEXT="std::get&lt;i&gt;(tup) macht das so, und entsprechend mein lib::meta::getElm ebenfalls"/>
+<node COLOR="#338800" CREATED="1751413010428" ID="ID_496733209" MODIFIED="1751413310003" TEXT="nur beim Check is_nothrow_invocable mu&#xdf; man explizit daf&#xfc;r sorgen">
+<icon BUILTIN="yes"/>
+<node CREATED="1751413206806" ID="ID_789047562" MODIFIED="1751413310003" TEXT="f&#xfc;ge eine partielle Spezialisierung hinzu"/>
+<node CREATED="1751413221307" ID="ID_1930564712" MODIFIED="1751413310003" TEXT="f&#xfc;r diese &#x27f6; std::add_lvalue_reference_t auf jeden Argument-Typ"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#9ec4d1" COLOR="#435e98" CREATED="1751414412103" ID="ID_1079280970" MODIFIED="1751414510679" TEXT="eigenes concept tuple_like als Abstraktion">
+<arrowlink COLOR="#6d7988" DESTINATION="ID_1832825819" ENDARROW="Default" ENDINCLINATION="-92;603;" ID="Arrow_ID_946891187" STARTARROW="None" STARTINCLINATION="216;14;"/>
+<icon BUILTIN="info"/>
+</node>
+<node COLOR="#338800" CREATED="1751414426166" ID="ID_18901669" MODIFIED="1751414453698" TEXT="lib::meta::apply auf dieser Basis redefiniert">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node COLOR="#5b280f" CREATED="1750182957454" FOLDED="true" ID="ID_319310125" MODIFIED="1750433749812" TEXT="Instantiieren von non-copyable-Objekten">
 <icon BUILTIN="button_cancel"/>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1750182983241" ID="ID_162769760" MODIFIED="1750182992885" TEXT="aufgetreten bei:  ParamWeavingPattern::Feed"/>
@@ -166478,7 +166555,7 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1750183336531" ID="ID_75715335" MODIFIED="1750201590066" TEXT="string{nullptr} scheitert nun im Compile">
+<node COLOR="#338800" CREATED="1750183336531" FOLDED="true" ID="ID_75715335" MODIFIED="1750201590066" TEXT="string{nullptr} scheitert nun im Compile">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1750183359883" ID="ID_1519503856" MODIFIED="1750183448877" TEXT="format-helper-test.hpp, 113">
 <icon BUILTIN="info"/>
@@ -166493,7 +166570,7 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node COLOR="#435e98" CREATED="1750206284267" ID="ID_1521572010" MODIFIED="1750258942070" TEXT="Folgefehler: time-parsing-test">
+<node COLOR="#435e98" CREATED="1750206284267" FOLDED="true" ID="ID_1521572010" MODIFIED="1750258942070" TEXT="Folgefehler: time-parsing-test">
 <linktarget COLOR="#6e688e" DESTINATION="ID_1521572010" ENDARROW="Default" ENDINCLINATION="-216;21;" ID="Arrow_ID_703106001" SOURCE="ID_1165283590" STARTARROW="None" STARTINCLINATION="-265;17;"/>
 <node CREATED="1750206365195" ID="ID_286820049" MODIFIED="1750206370843" TEXT="sehr alter Test...."/>
 <node CREATED="1750206371431" ID="ID_956474320" MODIFIED="1750206415553" TEXT="hatte mir dort eine Check-Syntax geschaffen">

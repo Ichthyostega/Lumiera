@@ -141,7 +141,7 @@ namespace meta{
                     auto
                     operator() (RemainingParams remPar)  const
                       {
-                        return apply (unConst(this)->partialClosure_, remPar);
+                        return lib::meta::apply (unConst(this)->partialClosure_, remPar);
                       };
 
                     CLO partialClosure_;

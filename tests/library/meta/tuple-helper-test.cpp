@@ -267,7 +267,7 @@ namespace test {
         {
           using Tup = std::tuple<long,short>;
           using Arr = std::array<int,3>;
-          using Het = lib::HeteroData<int,string>::Chain<short>::ChainExtent<bool,lib::meta::Nil>::ChainType;
+          using Het = lib::HeteroData<int,string>::Chain<short>::ChainExtent<bool,Nil>::ChainType;
           
           CHECK (    tuple_sized<Tup> );
           CHECK (    tuple_sized<Arr> );
@@ -282,10 +282,42 @@ namespace test {
           CHECK (    tuple_accessible<Het> );
           CHECK (not tuple_accessible<int> );
           
+          // verify the concept detects various tuple-like types
           CHECK (    tuple_like<Tup> );
           CHECK (    tuple_like<Arr> );
           CHECK (    tuple_like<Het> );
-          CHECK (not tuple_like<int> );
+          CHECK ((   tuple_like<Tuple<Types<int,float>::List>>));
+          CHECK ((   tuple_like<std::tuple<int>              >));
+          CHECK ((   tuple_like<std::tuple<int,char,long>    >));
+          CHECK ((   tuple_like<std::tuple<>                 >));
+          CHECK ((   tuple_like<std::pair<short,long>        >));
+          CHECK ((   tuple_like<std::array<short,5>          >));
+          CHECK ((   tuple_like<std::array<long,0>           >));
+          CHECK ((   tuple_like<HeteroData<size_t>           >));
+          CHECK ((   tuple_like<HeteroData<int,char>         >));
+          CHECK ((   tuple_like<HeteroData<>                 >));
+          
+          // verify arbitrary non-structured types
+          CHECK (not tuple_like<int            >);
+          CHECK (not tuple_like<void           >);
+          CHECK (not tuple_like<void*          >);
+          CHECK (not tuple_like<const void*    >);
+          CHECK (not tuple_like<const int      >);
+          CHECK (not tuple_like<int            >);
+          CHECK (not tuple_like<int &          >);
+          CHECK (not tuple_like<int const &    >);
+          CHECK (not tuple_like<int const *    >);
+          CHECK (not tuple_like<int *          >);
+          CHECK (not tuple_like<int * const    >);
+          CHECK (not tuple_like<int * const &  >);
+          CHECK (not tuple_like<int * &        >);
+          CHECK (not tuple_like<int * &&       >);
+          CHECK (not tuple_like<int &&         >);
+          CHECK (not tuple_like<int const &&   >);
+          CHECK (not tuple_like<double         >);
+          CHECK (not tuple_like<string         >);
+          CHECK((not tuple_like<Nil            >));
+          CHECK((not tuple_like<Node<short,Nil>>));
           
           // the tuple, the array and the HeteroData are tuple-like,
           // and will be handled by a special overload, exploiting the additional features
