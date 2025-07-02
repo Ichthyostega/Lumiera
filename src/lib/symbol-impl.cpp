@@ -2,7 +2,7 @@
   Symbol(impl)  -  helpers for working with literal string IDs
 
    Copyright (C)
-     2009,            Hermann Vosseler <Ichthyostega@web.de>
+     2009,2017        Hermann Vosseler <Ichthyostega@web.de>
 
   **Lumiera** is free software; you can redistribute it and/or modify it
   under the terms of the GNU General Public License as published by the
@@ -12,15 +12,10 @@
 * *****************************************************************/
 
 /** @file symbol-impl.cpp
- ** Collection of helpers for working with the lib::Symbol.
- ** 
- ** @todo currently as of 9/09 this is more of a placeholder.
- ** And maybe a location for collecting small bits of implementation,
- ** which could be usable later for real Symbol and Literal datatypes.
- ** 
- ** lib::Symbol
- ** control::CommandRegistry for usage example of the hash function.
- ** 
+ ** Implementation functionality to support definition of lib::Symbol.
+ ** @see lib::Symbol
+ ** @see control::CommandRegistry for usage example of the hash function.
+ ** @see symbol-table.hpp for the implementation of _interned strings_
  */
 
 
@@ -45,7 +40,6 @@ namespace lib {
   
   const size_t STRING_MAX_RELEVANT = LUMIERA_IDSTRING_MAX_RELEVANT;
   
-  
   namespace { // global symbol table
     
     SymbolTable&
@@ -53,12 +47,6 @@ namespace lib {
     {
       static SymbolTable theSymbolTable;
       return theSymbolTable;  // Meyer's Singleton
-    }
-    
-    inline int
-    strNcmp (CStr a, CStr b, size_t len)
-    {
-      return a == b ? 0 : std::strncmp (a?a:"", b?b:"", len);
     }
   }
   
@@ -87,14 +75,6 @@ namespace lib {
   
   
   
-  /** equality on Literal and Symbol values is defined
-   *  based on the content, not the address. */
-  bool
-  Literal::operator== (CStr charPtr)  const
-  {
-    return 0 == strNcmp (this->str_, charPtr, STRING_MAX_RELEVANT);
-  }
-  
   
   /** generate hash value based on the Literal's contents.
    *  This function is intended to be picked up by ADL, and should be usable
@@ -107,7 +87,7 @@ namespace lib {
     if (literal)
       {
         size_t cnt = 1;
-        const char *pos = literal;
+        CStr   pos = literal;
         for ( ; cnt <= STRING_MAX_RELEVANT and *pos ; ++cnt, ++pos )
           hash_combine (hash, *pos);
       }

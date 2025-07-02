@@ -238,7 +238,7 @@ namespace test{
       EventMatch& attrib (string key, string valueMatch);
       EventMatch& id (string classifier);
       EventMatch& on (string targetID);
-      EventMatch& on (const char* targetID);
+      EventMatch& on (CStr targetID);
       
       template<typename X>
       EventMatch& on (const X *const targetObj)
@@ -298,7 +298,7 @@ namespace test{
       EventLog (string logID);
       
       explicit
-      EventLog (const char* logID)
+      EventLog (CStr logID)
         : EventLog(string(logID))
         { }
       
@@ -331,7 +331,7 @@ namespace test{
       /** purge log contents while retaining just the original Header-ID */
       EventLog& clear();
       EventLog& clear (string alteredLogID);
-      EventLog& clear (const char* alteredLogID);
+      EventLog& clear (CStr alteredLogID);
       
       template<class X>
       EventLog&
@@ -372,7 +372,7 @@ namespace test{
       /** Log a function call with a sequence of stringified arguments */
       EventLog& call (string target, string function, ArgSeq&& args);
       
-      EventLog& call (const char* target, const char* function, ArgSeq&& args);
+      EventLog& call (CStr target, CStr function, ArgSeq&& args);
       
       /** Log a function call with arbitrary arguments */
       template<typename...ARGS>
@@ -392,7 +392,7 @@ namespace test{
       
       template<typename...ARGS>
       EventLog&
-      call (const char* target, string function, ARGS const& ...args)
+      call (CStr target, string function, ARGS const& ...args)
         {
           return call (string(target), function, args...);
         }

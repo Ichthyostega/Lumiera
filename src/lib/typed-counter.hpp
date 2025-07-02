@@ -236,7 +236,7 @@ namespace lib {
       }
       
       friend string
-      operator+ (const char* prefix, FamilyMember id)
+      operator+ (CStr prefix, FamilyMember id)
       {
         return string(prefix)+id;
       }

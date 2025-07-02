@@ -119,7 +119,7 @@ namespace test {
           CHECK (sizeof(def_empty) == sizeof(Literal));
           CHECK (sizeof(def_empty) == sizeof(char*));
           
-          const char* actualContent = reinterpret_cast<char*&>(def_empty);
+          CStr actualContent = reinterpret_cast<char*&>(def_empty);
           CHECK (actualContent == empty_text);
           
           // for convenience a string conversion is provided...

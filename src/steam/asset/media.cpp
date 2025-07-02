@@ -192,28 +192,6 @@ namespace asset {
     Category cat(kind);
     return operator() (file, cat);
   }
-
-  
-  MediaFactory::PType
-  MediaFactory::operator() (const char* file, const Category& cat)
-  {
-    if (!file) file = "";
-    return operator() (string(file),cat);
-  }
-  
-  MediaFactory::PType 
-  MediaFactory::operator() (const char* file, asset::Kind kind)
-  {
-    if (!file) file = "";
-    return operator() (string(file),kind);
-  }
-  
-  MediaFactory::PType
-  MediaFactory::operator() (Asset::Ident& key, const char* file)
-  {
-    if (!file) file = "";
-    return operator() (key, string(file));
-  }
   
   
   /** Factory method for creating a Clip asset based

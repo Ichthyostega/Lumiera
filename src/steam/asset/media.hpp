@@ -141,10 +141,6 @@ namespace asset {
       PType operator() (const string& file, const Category& cat);
       PType operator() (const string& file, asset::Kind);
       
-      PType operator() (Asset::Ident& key, const char* file);  ///< convenience overload using C-String
-      PType operator() (const char* file, const Category& cat);
-      PType operator() (const char* file, asset::Kind);
-      
       lib::P<Clip>
       operator() (Media& mediaref);
 

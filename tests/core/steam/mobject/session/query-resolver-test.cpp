@@ -66,7 +66,7 @@ namespace test{
         string*
         next ()
           {
-            static const char* lumi ="Lumiera";
+            static Literal lumi{"Lumiera"};
             currentText_ = string (lumi + *DummySolutions<int>::next());
             return &currentText_;
           }

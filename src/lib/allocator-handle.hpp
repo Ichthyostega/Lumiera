@@ -334,7 +334,7 @@ namespace lib {
             {
               storage_.erase (pos); // EX_FREE
               
-              const char* errID = lumiera_error();
+              CStr errID = lumiera_error();
               ERROR (memory, "Allocation failed with unknown exception. "
                              "Lumiera errorID=%s", errID?errID:"??");
               throw;

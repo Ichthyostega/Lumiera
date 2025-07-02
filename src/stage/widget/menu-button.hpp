@@ -95,7 +95,7 @@ namespace widget {
        * @param callback The signal handler when clicked
        * @param toggle
        */
-      void append (const char* slug, const char* title, sigc::slot<void>& callback, bool toggle=false);
+      void append (CStr slug, CStr title, sigc::slot<void>& callback, bool toggle=false);
       
       
       /** Append a Gtk::SeparatorMenuItem to the Menu */

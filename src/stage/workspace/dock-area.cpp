@@ -261,7 +261,7 @@ namespace workspace {
   
   
   int
-  DockArea::findPanelDescription (const char* class_name)
+  DockArea::findPanelDescription (CStr class_name)
   {
     REQUIRE(class_name);
     
@@ -313,7 +313,7 @@ namespace workspace {
   
   
   panel::Panel*
-  DockArea::createPanel_by_name (const char* class_name)
+  DockArea::createPanel_by_name (CStr class_name)
   {
     REQUIRE(class_name);
     const int index = findPanelDescription(class_name);

@@ -83,7 +83,7 @@ namespace ctrl {
   namespace {
     /** @note reads and clears the lumiera error flag */
     inline string
-    generateErrorResponse (const char* problem = "unexpected problem")
+    generateErrorResponse (lib::Literal problem = "unexpected problem")
     {
       static _Fmt messageTemplate{"asynchronous UI response failed: %s (error flag was: %s)"};
       string response{messageTemplate % problem % lumiera_error()};

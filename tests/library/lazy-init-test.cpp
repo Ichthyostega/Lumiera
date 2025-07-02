@@ -152,7 +152,7 @@ namespace test{
       verify_inlineStorage()
         {
 //        char payload[24];// ◁─────────────────────────────── use this to make the test fail....
-          const char* payload = "please look elsewhere";
+          const char* payload = "I am innocent as a lamb";
           auto lambda = [payload]{ return RawAddr(&payload); };
           
           RawAddr location = lambda();

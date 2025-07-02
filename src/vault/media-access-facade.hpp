@@ -113,7 +113,7 @@ namespace vault {
        *  for the media asset corresponding to this channel.
        *  May be NULL or empty and need not be unique.
        */
-      const char* chanID;
+      CStr chanID;
       
       /** identifier characterising the access method (or codec)
        *  needed to get at the media data. This should be rather
@@ -121,15 +121,16 @@ namespace vault {
        *  e.g. "H264" -- anyhow, it will be used to find a 
        *  codec asset for this channel.
        */
-      const char* codecID;
+      CStr codecID;
       
       /** opaque handle, which will be used later to open this
        *  channel and retrieve some frames from it
        */
       MediaAccessFacade::ChanHandle handle;
       
-      ChanDesc (const char* chanName=0, const char* codec=0,
-                MediaAccessFacade::ChanHandle h=0)
+      ChanDesc (CStr chanName                   =nullptr
+               ,CStr codec                      =nullptr
+               ,MediaAccessFacade::ChanHandle h =nullptr)
         : chanID(chanName),
           codecID(codec),
           handle(h)

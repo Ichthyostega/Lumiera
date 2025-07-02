@@ -226,7 +226,6 @@ namespace lib {
     {
       static_assert (0 < chunk_size, "PathArray chunk_size must be nonempty");
       
-      using CcP          = const char*;
       using LiteralArray = std::array<Literal, chunk_size>;
       
       LiteralArray elms_;
@@ -245,8 +244,8 @@ namespace lib {
       PathArray (IndexSeq<prefix...>
                 ,IndexSeq<rest...>
                 ,ARGS&& ...args)
-        : elms_{pickInit<prefix,CcP> (forward<ARGS>(args)...) ...}
-        , tail_{pickArg<rest>        (forward<ARGS>(args)...) ...}
+        : elms_{pickInit<prefix, CStr> (forward<ARGS>(args)...) ...}
+        , tail_{pickArg<rest>          (forward<ARGS>(args)...) ...}
         {
           this->normalise();
         }
@@ -492,7 +491,7 @@ namespace lib {
       normalise()
         {
           if (size() == 0) return;
-          const char* fill = Symbol::EMPTY;
+          CStr fill = Symbol::EMPTY;
           
           Literal* end = elms_.end();
           Literal* pos = elms_.begin();

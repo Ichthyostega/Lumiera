@@ -39,18 +39,19 @@
 #include <exception>
 #include <string>
 
+using CStr = const char*;
+
 
 #define LERR_(_NAME_) lumiera::error::LUMIERA_ERROR_##_NAME_
 
 namespace lumiera {
-  
-  using std::string;
-  using CStr = const char*;
-  
   namespace error {
     /** error-ID for unspecified exceptions */
     LUMIERA_ERROR_DECLARE(EXCEPTION);
   }
+  
+  using std::string;
+  
   
   
   /**
@@ -266,13 +267,13 @@ namespace lumiera {
 #define ERROR_LOG_AND_IGNORE(_FLAG_,_OP_DESCR_) \
   catch (std::exception& problem)                \
     {                                             \
-      const char* errID = lumiera_error();         \
+      CStr errID = lumiera_error();                \
       WARN (_FLAG_, "%s failed: %s", _OP_DESCR_, problem.what()); \
       TRACE (debugging, "Error flag was: %s", errID);\
     }                                                 \
   catch (...)                                          \
     {                                                   \
-      const char* errID = lumiera_error();               \
+      CStr errID = lumiera_error();               \
       ERROR (_FLAG_, "%s failed with unknown exception; " \
                      "error flag is: %s"                   \
                    , _OP_DESCR_, errID?errID:"??");         \
@@ -281,14 +282,14 @@ namespace lumiera {
 #define ERROR_LOG_AND_RETHROW(_FLAG_,_OP_DESCR_) \
   catch (std::exception& problem)                 \
     {                                              \
-      const char* errID = lumiera_error();          \
+      CStr errID = lumiera_error();                 \
       WARN (_FLAG_, "%s failed: %s", _OP_DESCR_, problem.what()); \
       TRACE (debugging, "Error flag was: %s", errID); \
       throw;                                           \
     }                                                   \
   catch (...)                                            \
     {                                                     \
-      const char* errID = lumiera_error();                 \
+      CStr errID = lumiera_error();                        \
       ERROR (_FLAG_, "%s failed with unknown exception; "   \
                      "error flag is: %s"                     \
                    , _OP_DESCR_, errID?errID:"??");           \
@@ -304,7 +305,7 @@ namespace lumiera {
 #define ON_EXCEPTION_RETURN(_VAL_,_OP_DESCR_)   \
   catch (std::exception& problem)                \
     {                                             \
-      const char* errID = lumiera_error();         \
+      CStr errID = lumiera_error();                \
       WARN (stage, "%s (Handler) failed: %s",       \
                    _OP_DESCR_, problem.what());      \
       TRACE (debugging, "Error flag was: %s", errID); \
@@ -312,7 +313,7 @@ namespace lumiera {
     }                                                   \
   catch (...)                                            \
     {                                                     \
-      const char* errID = lumiera_error();                 \
+      CStr errID = lumiera_error();                        \
       ERROR (stage, "(Handler) %s failed with "             \
                     "unknown exception; error flag is: %s"   \
                    , _OP_DESCR_, errID?errID:"??");           \

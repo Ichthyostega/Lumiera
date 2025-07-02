@@ -84,7 +84,7 @@ namespace mobject {
    *        session should register their basic setup functions using this hook, which can be
    *        done via the C interface functions defined in lifecycle.h
    */
-  const char* ON_SESSION_START = "ON_SESSION_START";
+  CStr ON_SESSION_START = "ON_SESSION_START";
   
   /**
    *  LifecycleHook, to perform any initialisation, wiring and registrations necessary
@@ -92,7 +92,7 @@ namespace mobject {
    *  and configuration has already be loaded. Any subsystems requiring to build some indices
    *  or wiring to keep track of the session's content should register here.
    */
-  const char* ON_SESSION_INIT = "ON_SESSION_INIT";
+  CStr ON_SESSION_INIT = "ON_SESSION_INIT";
   
   /**
    *  LifecycleHook, to perform post loading tasks, requiring an already completely usable
@@ -103,7 +103,7 @@ namespace mobject {
    *  fully functional client side APIs. Examples would be statistics gathering, validation
    *  or auto-correction of the session's contents.
    */
-  const char* ON_SESSION_READY = "ON_SESSION_READY";
+  CStr ON_SESSION_READY = "ON_SESSION_READY";
   
   /**
    *  LifecycleHook, to commence any activity relying on an opened and fully operative session.
@@ -112,7 +112,7 @@ namespace mobject {
    *  sequence will be initiated, by detaching the engine interfaces and signalling the
    *  scheduler to cease running render jobs.
    */
-  const char* ON_SESSION_CLOSE ="ON_SESSION_CLOSE";
+  CStr ON_SESSION_CLOSE ="ON_SESSION_CLOSE";
   
   /**
    *  LifecycleHook, to perform any state saving, deregistration or de-activation necessary
@@ -122,7 +122,7 @@ namespace mobject {
    *        specific/internal information into the persisted state, besides actually attaching
    *        data to objects within the session?
    */
-  const char* ON_SESSION_END ="ON_SESSION_END";
+  CStr ON_SESSION_END ="ON_SESSION_END";
   
   
   

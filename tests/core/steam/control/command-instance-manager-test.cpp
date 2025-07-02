@@ -249,7 +249,7 @@ namespace test {
           
           Symbol i11 = iManager.newInstance (COMMAND_PROTOTYPE, "i1");
           CHECK (i11 == i1);
-          CHECK ((const char*)i11 == (const char*) i1);
+          CHECK (CStr(i11) == CStr(i1));
           
           // but the instances themselves are disjoint
           Command c13 = iManager.getInstance (i1);

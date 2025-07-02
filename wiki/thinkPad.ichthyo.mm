@@ -167002,9 +167002,10 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node CREATED="1749399035206" ID="ID_1949114637" MODIFIED="1749399038099" TEXT="clean-up">
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1749399035206" ID="ID_1949114637" MODIFIED="1751487101003" TEXT="clean-up">
+<icon BUILTIN="pencil"/>
 <node CREATED="1749399040718" ID="ID_1669273438" MODIFIED="1749399043457" TEXT="Variant-o"/>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1749428622377" ID="ID_1502394581" MODIFIED="1749428716314" TEXT="soll Literal / Symbol weiterhin implizit aus CStr erstellbar sein">
+<node COLOR="#435e98" CREATED="1749428622377" ID="ID_1502394581" MODIFIED="1751479815831" TEXT="soll Literal / Symbol weiterhin implizit aus CStr erstellbar sein">
 <linktarget COLOR="#9e335b" DESTINATION="ID_1502394581" ENDARROW="Default" ENDINCLINATION="553;-29;" ID="Arrow_ID_227291299" SOURCE="ID_1640565416" STARTARROW="None" STARTINCLINATION="-98;111;"/>
 <icon BUILTIN="help"/>
 <node CREATED="1749428768562" HGAP="34" ID="ID_1963341770" MODIFIED="1749429203699" TEXT="eigentlich schon ...." VSHIFT="6">
@@ -167027,6 +167028,23 @@ Since then others have made contributions, see the log for the history.</font></
   </body>
 </html></richcontent>
 <icon BUILTIN="ksmiletris"/>
+</node>
+<node COLOR="#338800" CREATED="1751487056673" ID="ID_1177999705" MODIFIED="1751487077626">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      aber Literal kann komplett <b>constexpr</b>&#160;sein
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1751487078974" ID="ID_145911599" MODIFIED="1751487096003" TEXT="und die meisten Vergleichsoperatoren sind &#xfc;berfl&#xfc;ssig">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1749437085707" ID="ID_586550649" MODIFIED="1749437096722" TEXT="Boost-Operators k&#xf6;nnte man komplett loswerden">

@@ -2,7 +2,7 @@
   SYMBOL.hpp  -  symbolic constant datatype
 
    Copyright (C)
-     2008,            Hermann Vosseler <Ichthyostega@web.de>
+     2008,2017        Hermann Vosseler <Ichthyostega@web.de>
 
   **Lumiera** is free software; you can redistribute it and/or modify it
   under the terms of the GNU General Public License as published by the
@@ -16,21 +16,22 @@
  ** Instead of working just with pointers, which could represent pretty much anything,
  ** it is prudent to express the meaning at interfaces and for variables and members explicitly.
  ** 
- ** On concept level, while a string is just some sequence of characters and nothing can be said
- ** about mutability or lifetime, a Literal on the contrary is meant to be _static._ It is fixed
- ** and assumed to exist literally as is during the whole lifetime of the execution. The concept
- ** of a Symbol is related, yet slightly different: it is meant to be a distinguishable fixed,
- ** unique token. _Identical sequence_ of characters means we have exactly the _same Symbol._
+ ** On conceptual level, while a **string** is just some sequence of characters and nothing can be
+ ** said about its mutability or lifetime, a **Literal** is explicitly meant to be _static._ It is
+ ** a fixed sequence of characters placed in a stable memory location and assumed to exist during
+ ** the whole lifetime of the execution. The concept of a **Symbol** is slightly different: it is
+ ** meant to be a distinguishable, fixed, unique token. An _Identical sequence_ of characters means
+ ** we have _exactly the same Symbol_.
  ** 
  ** These concepts can be fused by treating Symbol as a specialisation of Literal, additionally
  ** maintaining an automatically populated, static [symbol table](\ref symbol-table.hpp), and
  ** we close the circle by allowing Symbol instances to be created from strings at runtime.
  ** 
- ** @remark this started on occasion 11/2008, just with a typedef to mark assumption on interfaces
- **   for rules based configuration in the Steam-Layer. Over time, conversions, comparison and
- **   hashcode implementation were added. It turned out that the most smooth integration in
- **   coding practice is achieved when allowing transparent conversion for Literal, but not
- **   for Symbol or std::string.
+ ** @remark this abstraction was first used occasionally 11/2008, at that time just as a typedef
+ **   to mark assumption on the new interfaces for rules based configuration in the Steam-Layer.
+ **   Over time, conversions, comparison and hashcode implementation were added. It turned out
+ **   that the most smooth integration in coding practice is achieved when allowing transparent
+ **   conversion between Literal ⟷ CStr, but not for Symbol or std::string.
  ** @todo 9/2017 consider this mostly as settled, but might require some finishing touches
  ** - maybe improve interoperation of Symbol and std::string
  ** - investigate performance of the automatic symbol table
@@ -64,7 +65,7 @@ cStr (std::string const& rendered)
 
 namespace lib {
   
-  /** inline string literal
+  /** Inline string literal.
    *  This is a _marker type_ to indicate that
    *  - the string was given literally
    *  - storage is _somewhere_, not managed by Literal,
@@ -75,37 +76,38 @@ namespace lib {
    */
   class Literal
     {
-       CStr str_;
-       
+      CStr str_;
+      
     public:
-       /** empty string by default */
-       Literal()  noexcept;
-       
-       Literal (const char* literal) noexcept
-         : str_(literal)
-         { }
-       
-       Literal (Literal const&)            noexcept = default;
-       Literal& operator= (Literal const&) noexcept = default;
-       
-       operator CStr()  const { return str_; }
-       const char* c()  const { return str_; }
-       
-       bool
-       empty()  const
-         {
-           return not str_ or 0 == std::strlen(str_);
-         }
-       
-       bool operator== (CStr cString)  const;
+      /** empty string by default */
+      constexpr Literal()  noexcept;
+      
+      constexpr Literal (CStr literal) noexcept
+        : str_(literal)
+        { }
+      
+      constexpr Literal (Literal const&)            noexcept = default;
+      constexpr Literal& operator= (Literal const&) noexcept = default;
+      
+      constexpr operator CStr()  const { return str_; }
+      constexpr const char* c()  const { return str_; }
+      
+      constexpr bool
+      empty()  const
+        {
+          return not str_ or 0 == std::strlen(str_);
+        }
+      
+      constexpr bool operator== (CStr cString)  const;
+      constexpr size_t length()  const;
 
     protected:
-       /** Assignment generally prohibited */
-       Literal& operator= (CStr newStr) noexcept
-         {
-           str_ = newStr;
-           return *this;
-         }
+      /** Assignment generally prohibited */
+      Literal& operator= (CStr newStr) noexcept
+        {
+          str_ = newStr;
+          return *this;
+        }
     };
   
   
@@ -140,31 +142,50 @@ namespace lib {
       Symbol (Literal const& base, CStr ext)
         : Symbol{base, std::string(ext)}
         { }
-       
-       Symbol (Symbol const&) = default;
-       Symbol (Symbol &&)     = default;
-       
-       Symbol& operator= (Symbol const&) = default;
-       Symbol& operator= (Symbol &&)     = default;
-       
-       explicit operator bool()  const { return not empty(); }
-       bool empty()              const { return *this == BOTTOM.c() or *this == EMPTY.c(); }
-       
-       size_t
-       length()  const
-         {
-           return std::strlen(c());
-         }
+      
+      Symbol (Symbol const&) = default;
+      Symbol (Symbol &&)     = default;
+      
+      Symbol& operator= (Symbol const&) = default;
+      Symbol& operator= (Symbol &&)     = default;
+      
+      explicit operator bool()  const { return not empty(); }
+      bool empty()              const { return *this == BOTTOM.c() or *this == EMPTY.c(); }
     };
   
+  
+  /** @note storage guaranteed to exist */
+  constexpr inline Literal::Literal() noexcept : str_(Symbol::EMPTY) { }
+
+  namespace{
+    constexpr inline int
+    strNcmp (CStr a, CStr b, size_t len)
+    {
+      return a == b ? 0 : std::strncmp (a?a:"", b?b:"", len);
+    }
+  }
   
   /** safety guard: maximum number of chars to process.
    *  For comparisons, hash calculations etc., when dealing
    *  with raw char ptrs (typically literal values) */
   extern const size_t STRING_MAX_RELEVANT;
   
-  /** @note storage guaranteed to exist */
-  inline Literal::Literal() noexcept : str_(Symbol::EMPTY) { }
+  /** equality on Literal and Symbol values is defined
+   *  based on the content, not the address. */
+  constexpr inline bool
+  Literal::operator== (CStr charPtr)  const
+  {
+    return 0 == strNcmp (this->str_, charPtr, STRING_MAX_RELEVANT);
+  }
+  
+  constexpr inline size_t
+  Literal::length()  const
+  {
+    return std::strlen(c());
+  }
+  
+  
+  
   
   
   /* ===== to be picked up by ADL ===== */
@@ -175,35 +196,16 @@ namespace lib {
 
   /* === equality comparisons === */
 
-  inline bool operator== (Literal const& s1, Literal const& s2) { return s1.operator== (s2.c()); }
-  inline bool operator== (Symbol const& s1,  Symbol const& s2)  { return s1.c() == s2.c(); } ///< @note comparison of symbol table entries
+  constexpr inline bool operator== (Literal const& s1, Literal const& s2) { return s1.operator== (s2.c()); }
+  constexpr inline bool operator== (Symbol const& s1,  Symbol const& s2)  { return s1.c() == s2.c(); } ///< @note comparison of symbol table entries
   
   /* === mixed comparisons === */
   
-  inline bool operator== (CStr s1,           Literal s2)        { return s2.operator== (s1); }
-  inline bool operator== (Symbol s1,         CStr s2)           { return s1.operator== (s2); }
-  inline bool operator== (CStr s1,           Symbol      s2)    { return s2.operator== (s1); }
-  inline bool operator== (Literal s1,        Symbol  s2)        { return s1.operator== (s2.c()); }
-  inline bool operator== (Symbol s1,         Literal s2)        { return s2.operator== (s1.c()); }
-  inline bool operator== (Literal s1,        std::string s2)    { return s1.operator== (s2.c_str()); }
-  inline bool operator== (std::string s1,    Literal     s2)    { return s2.operator== (s1.c_str()); }
-  inline bool operator== (Symbol s1,         std::string s2)    { return s1.operator== (s2.c_str()); }
-  inline bool operator== (std::string s1,    Symbol      s2)    { return s2.operator== (s1.c_str()); }
-  
-  /* === negations === */
-  
-  inline bool operator!= (Literal const& s1, Literal const& s2) { return not s1.operator== (s2.c()); }
-  inline bool operator!= (Symbol const& s1,  Symbol const& s2)  { return not (s1.c() == s2.c()); }
-  inline bool operator!= (Literal s1,        CStr s2)           { return not s1.operator== (s2); }
-  inline bool operator!= (CStr s1,           Literal s2)        { return not s2.operator== (s1); }
-  inline bool operator!= (Symbol s1,         CStr s2)           { return not s1.operator== (s2); }
-  inline bool operator!= (CStr s1,           Symbol      s2)    { return not s2.operator== (s1); }
-  inline bool operator!= (Literal s1,        Symbol  s2)        { return not s1.operator== (s2.c()); }
-  inline bool operator!= (Symbol s1,         Literal s2)        { return not s2.operator== (s1.c()); }
-  inline bool operator!= (Literal s1,        std::string s2)    { return not s1.operator== (s2.c_str()); }
-  inline bool operator!= (std::string s1,    Literal     s2)    { return not s2.operator== (s1.c_str()); }
-  inline bool operator!= (Symbol s1,         std::string s2)    { return not s1.operator== (s2.c_str()); }
-  inline bool operator!= (std::string s1,    Symbol      s2)    { return not s2.operator== (s1.c_str()); }
+  constexpr inline bool operator== (CStr    s1,            Literal s2)    { return s2.operator== (s1); }
+  constexpr inline bool operator== (Symbol  s1,               CStr s2)    { return s1.operator== (s2); }
+  constexpr inline bool operator== (Literal s1,             Symbol s2)    { return s1.operator== (s2.c()); }
+  constexpr inline bool operator== (Literal s1, std::string const& s2)    { return s1.operator== (s2.c_str()); }
+  constexpr inline bool operator== (Symbol  s1, std::string const& s2)    { return s1.operator== (s2.c_str()); }
   
   
   

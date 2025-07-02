@@ -182,11 +182,11 @@ namespace util {
       friend std::ostream&
       operator<< (std::ostream& os, _Fmt const&);
       
-      friend bool operator== (_Fmt const&,        _Fmt const&);
-      friend bool operator== (_Fmt const&,      string const&);
-      friend bool operator== (_Fmt const&, const char * const);
-      friend bool operator== (string const&     , _Fmt const&);
-      friend bool operator== (const char * const, _Fmt const&);
+      friend bool operator== (_Fmt const&,   _Fmt const&);
+      friend bool operator== (_Fmt const&, string const&);
+      friend bool operator== (_Fmt const&,   CStr const );
+      friend bool operator== (string const&, _Fmt const&);
+      friend bool operator== (CStr const,    _Fmt const&);
       
       template<typename X>
       friend bool operator != (_Fmt const& fmt, X const& x) { return not (fmt == x); }
@@ -299,7 +299,7 @@ namespace util {
     inline void
     _clear_errorflag()
     {
-      const char* errID = lumiera_error();
+      CStr errID = lumiera_error();
       TRACE_IF (errID, progress, "Lumiera errorstate '%s' cleared.", errID);
     }
     
@@ -318,7 +318,7 @@ namespace util {
     inline string
     _log_unknown_exception()
     {
-      const char* errID = lumiera_error();
+      CStr errID = lumiera_error();
       if (errID)
         ERROR (progress, "Unknown error while invoking custom string conversion. Lumiera error flag = %s", errID);
       else
@@ -368,10 +368,10 @@ namespace util {
     };
   
   template<>
-  struct _Fmt::Converter<const char *>
+  struct _Fmt::Converter<CStr>
     {
       static void
-      dump (const char* cString, Implementation& impl)
+      dump (CStr cString, Implementation& impl)
         {
           format (cString? cString : BOTTOM_INDICATOR, impl);
         }
@@ -473,7 +473,7 @@ namespace util {
   }
   
   inline bool
-  operator== (_Fmt const& fmt, const char * const cString)
+  operator== (_Fmt const& fmt, CStr const cString)
   {
     return string(fmt) == string(cString);
   }
@@ -485,7 +485,7 @@ namespace util {
   }
   
   inline bool
-  operator== (const char * const cString, _Fmt const& fmt)
+  operator== (CStr const cString, _Fmt const& fmt)
   {
     return fmt == cString;
   }

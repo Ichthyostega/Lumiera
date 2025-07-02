@@ -361,7 +361,7 @@ namespace ctrl {
       
       // Temporary Junk
       void
-      unimplemented (const char* todo)
+      unimplemented (Literal todo)
         {
           WARN (stage, "%s is not yet implemented. So sorry.", todo);
         }

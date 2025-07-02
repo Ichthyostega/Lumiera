@@ -46,14 +46,14 @@ namespace std {// forward declarations to avoid pervasive includes
 }
 
 
-const char* cStr (std::string  const&);
+using CStr = const char*;
+CStr cStr (std::string  const&);
 
 
 
 namespace util {
   
   using std::string;
-  using CStr = const char*;
   
   
   template <class NUM>

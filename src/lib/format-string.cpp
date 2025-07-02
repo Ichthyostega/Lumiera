@@ -76,7 +76,7 @@ namespace util {
     /** in case the formatting of a (primitive) value fails,
      *  we try to supply an error indicator instead */
     void
-    pushFailsafeReplacement (std::byte* formatter, const char* errorMsg =NULL)
+    pushFailsafeReplacement (std::byte* formatter, CStr errorMsg =nullptr)
     try {
         string placeholder("<Error");
         if (errorMsg){

@@ -45,7 +45,7 @@ namespace control {
   ExecResult
   HandlingPattern::invoke (CommandImpl& command, string id, Action action)  const
   {
-    const char* cmdName = cStr(id);
+    CStr cmdName = cStr(id);
     TRACE (proc_dbg, "invoking %s...", cmdName);
     static _Fmt err_pre ("Error state detected, %s *NOT* invoked.");
     static _Fmt err_post ("Error state after %s invocation.");

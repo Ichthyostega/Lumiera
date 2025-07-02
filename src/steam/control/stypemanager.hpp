@@ -90,7 +90,7 @@ namespace control {
       ImplFacade const& fetchImpl (StreamType::ImplFacade::TypeTag);
     };
   
-  extern const char* ON_STREAMTYPES_RESET;  ///< triggered to load the generic pristine default
+  extern CStr ON_STREAMTYPES_RESET;  ///< triggered to load the generic pristine default
   
   
   template<class TY>

@@ -171,7 +171,7 @@ namespace interact {
         {
           if (depth<maxDepth and path.isPresent(depth))
             {
-              const char* pathElm = resolveElm (path, depth);
+              CStr pathElm = resolveElm (path, depth);
               if (hasNode (tree, pathElm, depth))
                 {
                   ++depth;
@@ -189,7 +189,7 @@ namespace interact {
        *  when navigating the widgets of a real-world UI toolkit set
        */
       static bool
-      hasNode (Rec const& tree, const char* pathElm, size_t depth)
+      hasNode (Rec const& tree, CStr pathElm, size_t depth)
         {
           return depth==UIC_PERSP? pathElm == tree.getType()
                                  : tree.hasAttribute(pathElm);
@@ -197,7 +197,7 @@ namespace interact {
       
       /** within `tree` _at level_ `depth` descend into the child element designated by `pathElm` */
       static Rec const&
-      descendInto (Rec const& tree, size_t depth, const char* pathElm)
+      descendInto (Rec const& tree, size_t depth, CStr pathElm)
         {
           return depth==UIC_PERSP? tree // perspective info is attached as type at the parent node
                                  : tree.get(pathElm).data.get<Rec>();

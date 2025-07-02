@@ -166,7 +166,7 @@ namespace workspace {
        * @return Returns the index of the panel description found, or -1
        * if no description was found for this type.
        */
-      static int findPanelDescription (const char* class_name);
+      static int findPanelDescription (CStr class_name);
       
       /**
        * Creates a panel by description index.
@@ -188,7 +188,7 @@ namespace workspace {
        * @param class_name The name of the object class to create.
        * @return Returns a pointer to the new instantiated panel object.
        */
-      panel::Panel* createPanel_by_name (const char* class_name);
+      panel::Panel* createPanel_by_name (CStr class_name);
       
       /**
        * Gets the type of a given panel.

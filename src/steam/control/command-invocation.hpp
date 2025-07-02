@@ -137,7 +137,7 @@ namespace control {
   
   inline
   com::RuntimeCheckedCommandInvoker
-  invoke (const char* cmdID)
+  invoke (CStr cmdID)
   {
     return invoke(Symbol(cmdID));
   }

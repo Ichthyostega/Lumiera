@@ -279,10 +279,10 @@ namespace interact {
 
       struct Resolution
         {
-          const char* anchor = nullptr;
-          size_t depth       = 0;
+          CStr  anchor      = nullptr;
+          size_t depth      = 0;
           unique_ptr<UICoord> covfefe{};
-          bool isResolved    = false;
+          bool isResolved   = false;
         };
       
       LocationQuery& query_;

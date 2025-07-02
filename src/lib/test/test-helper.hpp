@@ -105,7 +105,7 @@ namespace test{
    */
   template<typename T>
   inline string
-  showSizeof (T const* obj =0, const char* name =0)
+  showSizeof (T const* obj =0, CStr name =0)
   {
     return showSizeof (obj?  sizeof(*obj) : sizeof(T),
                        name? name : util::typeStr(obj));
@@ -114,14 +114,14 @@ namespace test{
   template<typename T>
   inline                                      meta::disable_if<std::is_pointer<T>,
   string                                      >                                 // note:: force invocations with pointer to the first overload
-  showSizeof (T const& obj, const char* name=0)
+  showSizeof (T const& obj, CStr name =nullptr)
   {
     return showSizeof (&obj, name);
   }
   
   template<typename T>
   inline string
-  showSizeof (const char* name)
+  showSizeof (CStr name)
   {
     return showSizeof<T> (nullptr, name);
   }
@@ -375,7 +375,7 @@ namespace test{
  * \endcode
  */
 inline lib::test::ExpectString
-operator""_expect (const char* lit, size_t siz)
+operator""_expect (CStr lit, size_t siz)
 {
   return lib::test::ExpectString{lit, siz};
 }

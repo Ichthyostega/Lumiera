@@ -588,7 +588,7 @@ namespace test{
   }
   
   EventMatch&
-  EventMatch::on (const char* targetID)
+  EventMatch::on (CStr targetID)
   {
     refineSerach (solution_, matchAttribute("this",targetID));
     evaluateQuery ("match-this(\""+string(targetID)+"\")");
@@ -663,7 +663,7 @@ namespace test{
   }
   
   EventLog&
-  EventLog::clear (const char* alteredLogID)
+  EventLog::clear (CStr alteredLogID)
   {
     return clear (string{alteredLogID});
   }
@@ -700,7 +700,7 @@ namespace test{
   }
   
   EventLog&
-  EventLog::call (const char* target, const char* function, ArgSeq&& args)
+  EventLog::call (CStr target, CStr function, ArgSeq&& args)
   {
     return call (string(target), string(function), std::forward<ArgSeq>(args));
   }

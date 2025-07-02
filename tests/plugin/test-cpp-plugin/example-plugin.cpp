@@ -69,7 +69,7 @@ class ExamplePlugin_de
       }
     
     static void
-    servus (const char* m)
+    servus (CStr m)
       {
         cout << "Tschüss " << m << endl;
       }
@@ -87,7 +87,7 @@ class ExamplePlugin_en
       }
     
     static void
-    bye (const char* m)
+    bye (CStr m)
       {
         cout << "Bye " << m << endl;
       }

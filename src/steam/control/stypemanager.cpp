@@ -59,7 +59,7 @@ namespace control {
    *        their basic setup functions using this hook, which can be done via
    *        the C interface functions
    */
-  const char* ON_STREAMTYPES_RESET ("ON_STREAMTYPES_RESET");
+  CStr ON_STREAMTYPES_RESET ("ON_STREAMTYPES_RESET");
   
   
   

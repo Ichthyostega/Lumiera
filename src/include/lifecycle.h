@@ -41,11 +41,11 @@ namespace lumiera {
   using lib::Symbol;
   
   //defined in liblumiera.so
-  extern const char * ON_BASIC_INIT;      ///< automatic static init. treated specially to run as soon as possible
-  extern const char * ON_GLOBAL_INIT;     ///< to be triggered in main()             @note no magic!
-  extern const char * ON_GLOBAL_SHUTDOWN; ///< to be triggered at the end of main()  @note no magic!
+  extern CStr ON_BASIC_INIT;      ///< automatic static init. treated specially to run as soon as possible
+  extern CStr ON_GLOBAL_INIT;     ///< to be triggered in main()             @note no magic!
+  extern CStr ON_GLOBAL_SHUTDOWN; ///< to be triggered at the end of main()  @note no magic!
   
-  extern const char * ON_EMERGENCY;       ///< activated on shutdown after premature failure of a subsystem
+  extern CStr ON_EMERGENCY;       ///< activated on shutdown after premature failure of a subsystem
 
   
   // client code is free to register and use additional lifecycle events

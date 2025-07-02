@@ -34,7 +34,7 @@ namespace test   {
   void basicInitHook () { ++basicInit; }
   void myCallback() { ++customCallback; }
   
-  const char* MY_DEADLY_EVENT = "dial M for murder";
+  CStr MY_DEADLY_EVENT = "dial M for murder";
   
   
   namespace // register them to be invoked by lifecycle event id

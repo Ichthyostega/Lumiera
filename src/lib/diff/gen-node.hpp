@@ -269,11 +269,11 @@ namespace diff{
         , data(std::forward<X>(val))
         { }
       
-      GenNode(string const& symbolicID, const char* text)
+      GenNode(string const& symbolicID, CStr text)
         : GenNode(symbolicID, string(text))
         { }
       
-      GenNode(const char* text)
+      GenNode(CStr text)
         : GenNode(string(text))
         { }
       

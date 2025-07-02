@@ -315,7 +315,7 @@ namespace test{
             }
           catch(...)
             {
-              const char* errID = lumiera_error();
+              CStr errID = lumiera_error();
               if (errID)
                 cerr << "Error while logging shutdown of Mock-UI-Element: " << errID <<endl;
               else

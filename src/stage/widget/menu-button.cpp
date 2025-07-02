@@ -113,11 +113,11 @@ namespace widget{
   
   
   void
-  MenuButton::append (const char *slug, const char* title,
+  MenuButton::append (CStr slug, CStr title,
                       sigc::slot<void>& callback, bool toggle)
   {
-    uString uSlug (slug);
-    uString uTitle (_(title));
+    uString uSlug{slug};
+    uString uTitle{_(title)};
     append (uSlug, uTitle, callback, toggle);
   }
   

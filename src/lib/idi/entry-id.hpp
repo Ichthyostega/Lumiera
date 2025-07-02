@@ -234,7 +234,7 @@ namespace idi {
         : BareEntryID (util::sanitise(symbolID), getTypeHash<TY>())
         { }
       explicit
-      EntryID (const char* symbolID)
+      EntryID (CStr symbolID)
         : BareEntryID (util::sanitise(symbolID), getTypeHash<TY>())
         { }
       
@@ -296,7 +296,7 @@ namespace idi {
       RandID (string const& symbolID)
         : BareEntryID{util::sanitise (symbolID)}
         { }
-      RandID (const char* symbolID)
+      RandID (CStr symbolID)
         : BareEntryID{util::sanitise (symbolID)}
         { }
       RandID (Symbol const& internalSymbol)

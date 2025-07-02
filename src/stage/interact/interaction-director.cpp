@@ -117,7 +117,7 @@ namespace interact {
   
   namespace { // Temporary Junk
     inline void
-    unimplemented (const char* todo)
+    unimplemented (Literal todo)
     {
       WARN (stage, "%s is not yet implemented. So sorry.", todo);
     }

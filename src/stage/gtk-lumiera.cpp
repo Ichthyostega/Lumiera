@@ -145,7 +145,7 @@ namespace stage {
       }
     catch(...)
       {
-        const char* errID = lumiera_error(); // clear C-style error flag
+        CStr errID = lumiera_error(); // clear C-style error flag
         WARN (stage, "Unexpected error while starting the GUI thread.");
         if (errID)
           TRACE (stage, "Error flag was: %s", errID);

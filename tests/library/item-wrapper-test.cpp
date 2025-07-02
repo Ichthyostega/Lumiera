@@ -108,7 +108,7 @@ namespace test{
           ulong l2 (rani (1000));
           string s1 (randStr(50));
           string s2 (randStr(50));
-          const char* cp (s1.c_str());
+          CStr   cp (s1.c_str());
           
           verifyWrapper<ulong> (l1, l2);
           verifyWrapper<ulong&> (l1, l2);
@@ -121,7 +121,7 @@ namespace test{
           verifyWrapper<string&> (s1, s2);
           verifyWrapper<string*> (&s1, &s2);
           
-          verifyWrapper<const char*> (cp, "Lumiera");
+          verifyWrapper<CStr> (cp, "Lumiera");
           
           
           verifySaneInstanceHandling();

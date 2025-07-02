@@ -76,11 +76,11 @@ namespace lumiera {
   
   
   
-  const char * ON_BASIC_INIT      ("ON_BASIC_INIT");
-  const char * ON_GLOBAL_INIT     ("ON_GLOBAL_INIT");
-  const char * ON_GLOBAL_SHUTDOWN ("ON_GLOBAL_SHUTDOWN");
+  CStr ON_BASIC_INIT      ("ON_BASIC_INIT");
+  CStr ON_GLOBAL_INIT     ("ON_GLOBAL_INIT");
+  CStr ON_GLOBAL_SHUTDOWN ("ON_GLOBAL_SHUTDOWN");
   
-  const char * ON_EMERGENCY       ("ON_EMERGENCY");
+  CStr ON_EMERGENCY       ("ON_EMERGENCY");
   
   
 } // namespace lumiera
