@@ -49,7 +49,7 @@
 #include "steam/asset/pipe.hpp"
 #include "common/query.hpp"
 
-#include <boost/operators.hpp>
+#include <compare>
 #include <map>
 
 
@@ -121,7 +121,7 @@ namespace mobject {
   class OutputMapping
     : public DEF
     {
-      typedef _def<DEF> Setup;
+      using Setup = _def<DEF>;
       
       using PId   = asset::ID<asset::Pipe>;
       using PPipe = asset::PPipe;
@@ -148,10 +148,11 @@ namespace mobject {
        * of the specific resolution functor, embedded in the definition context `DEF`,
        * which was given when instantiating the OutputMapping template.
        * @note depends on the template parameter of the enclosing OutputMapping type!
+       * @remarks
+       *  - final mapping result can be compared to Target
+       *  - Resolvers (mapping values) can be compared based on the Pipe-hash
        */
       class Resolver
-        : public boost::equality_comparable<Resolver, Target   //  final mapping result can be compared to Target...
-        , boost::equality_comparable<Resolver>>               //   mapping values can be compared.
         {
           OutputMapping& thisMapping_;
           HashVal& pID_;

@@ -45,7 +45,6 @@
 //#include "lib/util.hpp"
 #include "lib/symbol.hpp"
 
-//#include <boost/operators.hpp>
 #include <memory>
 
 namespace lumiera{  ///////TODO: shouldn't that be namespace lib? or steam?

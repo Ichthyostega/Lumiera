@@ -76,9 +76,9 @@
 #include "lib/util.hpp"
 
 #include <boost/lexical_cast.hpp>
-#include <boost/operators.hpp>
-#include <memory>
 #include <typeinfo>
+#include <compare>
+#include <memory>
 #include <cctype>
 #include <string>
 
@@ -136,6 +136,8 @@ namespace lumiera {
             : kind(k)
             , type(t)
             { }
+          
+          auto operator<=> (QueryID const&) const  =default;
         };
       
       QueryID const&
@@ -184,26 +186,6 @@ namespace lumiera {
       
     };
   
-  
-  inline bool
-  operator< (Goal::QueryID const& id1, Goal::QueryID const& id2)
-  {
-    return id1.kind < id2.kind
-        or(id1.kind == id2.kind and id1.type < id2.type);
-  }
-  
-  inline bool
-  operator== (Goal::QueryID const& id1, Goal::QueryID const& id2)
-  {
-    return id1.kind == id2.kind
-       and id1.type == id2.type;
-  }
-  
-  inline bool
-  operator!= (Goal::QueryID const& id1, Goal::QueryID const& id2)
-  {
-    return not (id1  == id2);
-  }
   
   
   
@@ -386,7 +368,6 @@ namespace lumiera {
    * Implicitly convertible to and from Query instances.
    */
   class QueryKey
-    : boost::totally_ordered<QueryKey>
     {
       Goal::QueryID id_;
       lib::QueryText def_;
@@ -442,21 +423,19 @@ namespace lumiera {
         }
       
       
-      friend bool
-      operator< (QueryKey const& q1, QueryKey const& q2)
+      friend std::strong_ordering
+      operator<=> (QueryKey const& q1, QueryKey const& q2)
       {
         uint d1 = q1.degree();
         uint d2 = q2.degree();
-        return d1 < d2
-            or(d1 == d2 and (   q1.def_ < q2.def_
-                            or (q1.def_ == q2.def_ and q1.id_ < q2.id_)));
+        if (auto o1 = d1 <=> d2; o1 != 0)
+          return o1;
+        if (auto o2 = q1.def_ <=> q2.def_; o2 != 0)
+          return o2;
+        else
+          return q1.id_ <=> q2.id_;
       }
-      
-      friend bool
-      operator== (QueryKey const& q1, QueryKey const& q2)
-      {
-        return q1.def_ == q2.def_;
-      }
+      bool operator== (QueryKey const&) const  =default;
       
       friend size_t
       hash_value (QueryKey const& q)

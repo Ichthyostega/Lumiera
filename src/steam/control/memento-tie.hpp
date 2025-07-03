@@ -38,7 +38,6 @@
 #include "lib/format-obj.hpp"
 #include "lib/util.hpp"
 
-#include <boost/operators.hpp>
 #include <functional>
 #include <string>
 
@@ -47,7 +46,6 @@ namespace steam {
 namespace control {
   namespace err = lumiera::error;
   
-  using boost::equality_comparable;
   using lib::meta::func::bindLast;
   using lib::meta::func::chained;
   using lib::meta::equals_safeInvoke;
@@ -77,7 +75,6 @@ namespace control {
    */
   template<typename SIG, typename MEM>
   class MementoTie
-    : public equality_comparable<MementoTie<SIG,MEM>>
     {
       typedef typename CommandSignature<SIG,MEM>::CaptureSig SIG_cap;
       typedef typename CommandSignature<SIG,MEM>::UndoOp_Sig SIG_undo;
@@ -195,7 +192,7 @@ namespace control {
   template<typename SIG, typename MEM>
   MementoTie<SIG,MEM>::operator std::string()  const
   {
-    if (!undo_ or !capture_)
+    if (not undo_ or not capture_)
       return "·noUNDO·";
     
     if (not isCaptured_)

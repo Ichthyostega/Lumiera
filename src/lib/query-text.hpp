@@ -77,6 +77,7 @@ namespace lib {
           return definition_;
         }
       
+      auto operator<=> (QueryText const&) const  =default;
       
       bool
       empty()  const
@@ -105,19 +106,6 @@ namespace lib {
       
     private:
       string normalise (string const& rawDefinition);
-      
-            
-      friend bool
-      operator== (QueryText const& q1, QueryText const& q2)
-      {
-        return q1.definition_ == q2.definition_;
-      }
-      friend bool
-      operator<  (QueryText const& q1, QueryText const& q2)
-      {
-        return q1.definition_ < q2.definition_;
-      }
-      
       friend HashVal hash_value (QueryText const& entry);
     };
   

@@ -84,17 +84,17 @@ namespace test {
           CHECK (key4 != key5);
           CHECK (key1 != key5);
           
-          CHECK ( 0 > key2.compare(key3));
-          CHECK ( 0 < key3.compare(key2));
+          CHECK ( 0 > key2 <=> key3 );
+          CHECK ( 0 < key3 <=> key2 );
           
-          CHECK ( 0 > key3.compare(key4));
-          CHECK ( 0 > key4.compare(key5));
-          CHECK ( 0 > key1.compare(key5));
-          CHECK ( 0 > key2.compare(key5));
-          CHECK ( 0 > key3.compare(key5));
-          CHECK ( 0 > key1.compare(key3));
-          CHECK ( 0 > key1.compare(key4));
-          CHECK ( 0 > key2.compare(key4));
+          CHECK ( 0 > key3 <=> key4 );
+          CHECK ( 0 > key4 <=> key5 );
+          CHECK ( 0 > key1 <=> key5 );
+          CHECK ( 0 > key2 <=> key5 );
+          CHECK ( 0 > key3 <=> key5 );
+          CHECK ( 0 > key1 <=> key3 );
+          CHECK ( 0 > key1 <=> key4 );
+          CHECK ( 0 > key2 <=> key4 );
           
           
           // ordering of Asset smart ptrs

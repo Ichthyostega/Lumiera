@@ -60,7 +60,6 @@
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
 
-#include <boost/operators.hpp>
 #include <boost/lexical_cast.hpp>
 #include <functional>
 #include <string>
@@ -215,7 +214,6 @@ namespace time {
             , class FMT  = digxel::Formatter<NUM>
             >
   class Digxel
-    : public boost::totally_ordered<Digxel<NUM,FMT>>
     {
       mutable
       FMT buffer_;
@@ -297,9 +295,9 @@ namespace time {
       NUM     operator++  (int)      { NUM p(value_); *this =p+1; return p;}
       NUM     operator--  (int)      { NUM p(value_); *this =p-1; return p;}
       
-      //---Supporting-totally_ordered---------
-      bool operator<  (Digxel const& o)  const { return value_ <  NUM(o); }
-      bool operator== (Digxel const& o)  const { return value_ == NUM(o); }
+      //---Supporting-total-ordering----------
+      auto operator<=>(Digxel const& o)  const { return value_ <=> NUM(o); }
+      bool operator== (Digxel const& o)  const { return value_ ==  NUM(o); }
     };
   
   

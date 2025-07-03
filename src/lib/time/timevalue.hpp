@@ -99,6 +99,7 @@
 
 #include <boost/operators.hpp>
 #include <boost/rational.hpp>
+#include <compare>
 #include <cstdlib>
 #include <string>
 
@@ -139,8 +140,6 @@ namespace time {
    * @see TimeVar when full arithmetics are required
    */
   class TimeValue
-    : boost::totally_ordered<TimeValue,
-      boost::totally_ordered<TimeValue, raw_time_64>>
     {
     protected:
       /** the raw (internal) time value
@@ -196,12 +195,12 @@ namespace time {
       /** @return is in-domain, not a boundary value */
       bool isRegular()  const;
       
-      // Supporting totally_ordered
-      friend bool operator<  (TimeValue const& t1, TimeValue const& t2)  { return t1.t_ <  t2.t_; }
-      friend bool operator<  (TimeValue const& t1, raw_time_64 t2)       { return t1.t_ <  t2   ; }
-      friend bool operator>  (TimeValue const& t1, raw_time_64 t2)       { return t1.t_ >  t2   ; }
-      friend bool operator== (TimeValue const& t1, TimeValue const& t2)  { return t1.t_ == t2.t_; }
-      friend bool operator== (TimeValue const& t1, raw_time_64 t2)       { return t1.t_ == t2   ; }
+      // Supporting strong total ordering
+      std::strong_ordering operator<=> (TimeValue const&) const  =default;
+      bool                 operator==  (TimeValue const&) const  =default;
+      
+      std::strong_ordering operator<=> (raw_time_64 tt)   const { return t_ <=> tt; }
+      bool                 operator==  (raw_time_64 tt)   const { return t_ ==  tt; }
     };
   
   
@@ -582,7 +581,6 @@ namespace time {
    */
   class TimeSpan
     : public Time
-    , boost::totally_ordered<TimeSpan>
     {
       Duration dur_;
       
@@ -651,10 +649,15 @@ namespace time {
       /** @internal diagnostics */
       explicit operator std::string()  const;
       
-      /// Supporting extended total order, based on start and interval length
-      friend bool operator== (TimeSpan const& t1, TimeSpan const& t2)  { return t1.t_==t2.t_ && t1.dur_==t2.dur_; }
-      friend bool operator<  (TimeSpan const& t1, TimeSpan const& t2)  { return t1.t_< t2.t_ ||
-                                                                               (t1.t_==t2.t_ && t1.dur_< t2.dur_);}
+      /// Supporting extended strong total ordering, based on start and interval length
+      std::strong_ordering
+      operator<=> (TimeSpan const& ts)  const
+        {
+          auto ord{ t_ <=> ts.t_ };
+          return ord != 0? ord
+                         : dur_ <=> ts.dur_;
+        }
+      bool operator== (TimeSpan const& ts) const  =default;
     };
   
   

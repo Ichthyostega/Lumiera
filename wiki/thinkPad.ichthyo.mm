@@ -157128,7 +157128,80 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
 </node>
 </node>
 <node CREATED="1749432400380" ID="ID_1422603149" MODIFIED="1749432404143" TEXT="Neuerungen">
-<node CREATED="1749432405584" ID="ID_1749311235" MODIFIED="1749432412017" TEXT="Spaceship und comparisons">
+<node CREATED="1749432405584" ID="ID_1749311235" MODIFIED="1751556699132" TEXT="Spaceship und comparisons">
+<node CREATED="1751553920416" ID="ID_1478329508" MODIFIED="1751553933142" TEXT="zwei Basis-Operatoren">
+<node CREATED="1751553934321" ID="ID_1726777708" MODIFIED="1751553952618" TEXT="== : equality"/>
+<node CREATED="1751553936994" ID="ID_1994276563" MODIFIED="1751553948379" TEXT="&lt;=&gt; : three-way-comparison">
+<node CREATED="1751553984307" ID="ID_1643176892" MODIFIED="1751554000442" TEXT="Ergebnis mu&#xdf; eine Enum-Konstante der richtigen Ordnungs-Art sein"/>
+<node CREATED="1751553955550" ID="ID_1484075829" MODIFIED="1751554006373" TEXT="drei Arten der Ordnung">
+<node CREATED="1751554010040" ID="ID_1842008800" MODIFIED="1751554068180" TEXT="strong_ordering">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      strong_ordering::greater
+    </p>
+    <p>
+      strong_ordering::equal
+    </p>
+    <p>
+      strong_ordering::less
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1751554096475" ID="ID_1089124286" MODIFIED="1751554101370" TEXT="impliziert totale Ordnung"/>
+<node CREATED="1751554102047" ID="ID_36198234" MODIFIED="1751554190744" TEXT="equal elements k&#xf6;nnen f&#xfc;reinander eintreten und ersetzt werden"/>
+<node CREATED="1751554145248" ID="ID_97756971" MODIFIED="1751554160948" TEXT="d.h. es gibt keine dar&#xfc;ber hinaus gehende Identit&#xe4;t oder verdeckte Eigenschaften"/>
+</node>
+<node CREATED="1751554194661" ID="ID_1067364226" MODIFIED="1751554229304" TEXT="weak_ordering">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      weak_ordering::greater
+    </p>
+    <p>
+      weak_ordering::equivalent
+    </p>
+    <p>
+      weak_ordering::less
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1751554230529" ID="ID_448000781" MODIFIED="1751554235908" TEXT="ebenfalls eine totale Ordnung"/>
+<node CREATED="1751554237304" ID="ID_1965186589" MODIFIED="1751554252370" TEXT="aber Elemente sind nur &#xe4;quivalent">
+<node CREATED="1751554309536" ID="ID_135054244" MODIFIED="1751554316835" TEXT="beachte: deshalb auch der andere Enum-Name"/>
+</node>
+<node CREATED="1751554253930" ID="ID_514319325" MODIFIED="1751554268254" TEXT="d.h. sie bleiben dar&#xfc;berhinaus unterscheidbar"/>
+</node>
+<node CREATED="1751554322326" ID="ID_1289562331" MODIFIED="1751554365777" TEXT="partial_ordering">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      partial_ordering::greater
+    </p>
+    <p>
+      partial_ordering::equivalent
+    </p>
+    <p>
+      partial_ordering::less
+    </p>
+    <p>
+      partial_ordering::unordered
+    </p>
+    <p>
+      
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1751554391336" ID="ID_550783219" MODIFIED="1751554414393" TEXT="d.h. es gibt Elemente, zwischen denen die Ordnung nicht feststellbar ist"/>
+<node CREATED="1751554414933" ID="ID_1463703629" MODIFIED="1751554423224" TEXT="Beispiel NaN f&#xfc;r floating-point"/>
+</node>
+</node>
+</node>
+<node CREATED="1751556597785" ID="ID_983998863" LINK="https://brevzin.github.io/c++/2019/07/28/comparisons-cpp20/#a-new-ordering-primitive-" MODIFIED="1751556696561" TEXT="sehr gute Beschreibung in Barry&apos;s Blog"/>
+</node>
 <node CREATED="1749432593306" ID="ID_786839752" MODIFIED="1749432670131" TEXT="C++20 leitet alle weiteren Vergleichsoperatoren ab">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -157148,7 +157221,12 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
 </html></richcontent>
 <node CREATED="1749434681222" ID="ID_1398333577" LINK="https://en.cppreference.com/w/cpp/language/default_comparisons.html" MODIFIED="1749436254291" TEXT="C++20 kann aufgefordert werden, Vergleichsoperatoren zu synthetisieren">
 <icon BUILTIN="idea"/>
-<node CREATED="1749434705968" ID="ID_1291911297" MODIFIED="1750202013218" TEXT="man deklariert einen der Basis-Operatoren"/>
+<node CREATED="1749434705968" ID="ID_1291911297" MODIFIED="1750202013218" TEXT="man deklariert einen der Basis-Operatoren">
+<node CREATED="1751559096839" ID="ID_1404716274" MODIFIED="1751559105257" TEXT="im einfachsten Fall gen&#xfc;gt Spaceship"/>
+<node COLOR="#845646" CREATED="1751559106173" ID="ID_701868379" MODIFIED="1751559126409" TEXT="auto operator&lt;=&gt;(const Person&amp; rhs) const = default;">
+<font NAME="Monospaced" SIZE="12"/>
+</node>
+</node>
 <node CREATED="1749434720796" ID="ID_872664851" MODIFIED="1749434728166" TEXT="und markiert ihn als =default"/>
 <node CREATED="1749436185923" ID="ID_1831503076" MODIFIED="1749436216983" TEXT="R&#xfc;ckgabetyp kann auto sein &#x27f9; Vergleichskategorie wird erschlossen">
 <linktarget COLOR="#7fc6d2" DESTINATION="ID_1831503076" ENDARROW="Default" ENDINCLINATION="89;0;" ID="Arrow_ID_1373101959" SOURCE="ID_1719430366" STARTARROW="None" STARTINCLINATION="89;0;"/>
@@ -167031,9 +167109,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node COLOR="#338800" CREATED="1751487056673" ID="ID_1177999705" MODIFIED="1751487077626">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       aber Literal kann komplett <b>constexpr</b>&#160;sein
@@ -167047,10 +167123,343 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1749437085707" ID="ID_586550649" MODIFIED="1749437096722" TEXT="Boost-Operators k&#xf6;nnte man komplett loswerden">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#5b280f" CREATED="1749437085707" ID="ID_586550649" MODIFIED="1751592221545" TEXT="Boost-Operators k&#xf6;nnte man komplett loswerden">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <i>immerhin</i>: konnte alle komplexen Vergleichsoperatoren viel einfacher per Spaceship darstellen...
+    </p>
+    <p>
+      Trotzdem verwenden wir weiterhin boost::operators (und das ist nicht wirklich problematisch, da header-only)
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#6f304d" DESTINATION="ID_276624692" ENDARROW="Default" ENDINCLINATION="-158;11;" ID="Arrow_ID_620986048" STARTARROW="None" STARTINCLINATION="18;97;"/>
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1749437103284" ID="ID_1755401449" MODIFIED="1749437118098" TEXT="da nun C++20 die selber Aufgabe automatisch erledigt"/>
 <node CREATED="1749437120518" ID="ID_19153367" LINK="#ID_1398333577" MODIFIED="1749437148111" TEXT="ggfs kann es die L&#xf6;sung sogar synthetisieren"/>
+<node CREATED="1751552247615" ID="ID_338103952" MODIFIED="1751552276601" TEXT="Umstellung meist einfach">
+<icon BUILTIN="idea"/>
+<node CREATED="1751552253435" ID="ID_1008670578" MODIFIED="1751552259503" TEXT="Boost-Include entfernen"/>
+<node CREATED="1751552260280" ID="ID_372321151" LINK="#ID_1749311235" MODIFIED="1751556701625" TEXT="ggfs Spaceship einf&#xfc;hren"/>
+</node>
+<node COLOR="#338800" CREATED="1751552283384" ID="ID_1633449896" MODIFIED="1751591964107" TEXT="umgestellt">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1751552290375" FOLDED="true" ID="ID_1407680365" MODIFIED="1751591966896" TEXT="advice/index.hpp">
+<node COLOR="#338800" CREATED="1751552361016" ID="ID_1667765810" MODIFIED="1751563032026" TEXT="equality">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1751560642996" ID="ID_1715268793" MODIFIED="1751563032027" TEXT="aber auch mixed equality mit Point-of-Advice">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Template-Parameter POA
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1751552310106" FOLDED="true" ID="ID_1129876969" MODIFIED="1751591968416" TEXT="common/query.hpp">
+<node CREATED="1751552369239" ID="ID_152823874" MODIFIED="1751552372766" TEXT="totally-ordered"/>
+<node CREATED="1751556782618" ID="ID_1988422773" MODIFIED="1751556815960" TEXT="das ist Platzhalter-Code &#x2014; die Ordnung ist &#x201e;halbseiden&#x201c;"/>
+<node CREATED="1751556770160" ID="ID_1827164681" MODIFIED="1751557044345" TEXT="inhaltlich kann das eigentlich nur eine weak-order sein">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      denn was bedeutet es schon, wenn eine Query &#187;kleiner&#171; ist als eine andere &#8212; und dann im Bezug dazu, wenn zwei Queries &#187;gleich&#171; sind?
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1751557045180" ID="ID_1205416278" MODIFIED="1751557100864" TEXT="allerdings ist es als totale und starke Ordnung definiert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      und zwar weil letztlich das Pr&#228;dikaten-Symbol und dann noch zus&#228;tzlich die Typ-ID die Entscheidung f&#228;llt
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node COLOR="#338800" CREATED="1751557449797" ID="ID_933075599" MODIFIED="1751563026280" TEXT="Umbau">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1751557454296" ID="ID_1552704056" LINK="#ID_1398333577" MODIFIED="1751557550130" TEXT="zun&#xe4;chst QueryID mit einer synthetisierten Ordnung versehen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      d.h. die drei explizit definieren Operatoren k&#246;nnen weg, und daf&#252;r wird ein defaulted Spaceship eingef&#252;hrt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1751560176892" ID="ID_369759026" MODIFIED="1751560190590" TEXT="ebenso auch f&#xfc;r QueryText notwendig"/>
+<node CREATED="1751560191651" ID="ID_1596139878" MODIFIED="1751560210324" TEXT="dann sinngem&#xe4;&#xdf; ein Spaceship f&#xfc;r den QueryKey"/>
+<node CREATED="1751560460438" ID="ID_1488282756" MODIFIED="1751560467360" TEXT="die equality kann man defaulten">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1751560478393" HGAP="23" ID="ID_76680899" MODIFIED="1751560583423" TEXT="Vorsicht: das ist eine Versch&#xe4;rfung" VSHIFT="5">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      bisher wurde die Kategorie f&#252;r die Gleichheit ignoriert, d.h. es wurde nur die Pr&#228;dikation verglichen; das ist inkonsistent mit der Ordnung, welche diesbez&#252;glich noch differenziert (gleiche Pr&#228;dikation bei verschiedener Kategorie ist nicht &#228;quivalent)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#5e0f69" CREATED="1751560496449" ID="ID_132413636" MODIFIED="1751560512504" TEXT="Tests laufen aber dennoch....">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1751560720870" FOLDED="true" ID="ID_1591405502" MODIFIED="1751591971299" TEXT="idi/entry-id.hpp">
+<node CREATED="1751560734728" ID="ID_1800468880" MODIFIED="1751560742260" TEXT="BareEntryID ist equality-comparable"/>
+<node CREATED="1751560768722" ID="ID_876884067" MODIFIED="1751560777862" TEXT="EntryID&lt;TY&gt; is toatlly-ordered"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1751560916514" ID="ID_840626307" MODIFIED="1751563019577" TEXT="Vorsicht: trickreich">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1751560926198" ID="ID_1166552107" MODIFIED="1751560939704" TEXT="die Ordnung nutzt geschickt die Hash-Konstruktion aus">
+<node CREATED="1751560973552" ID="ID_223440522" MODIFIED="1751560983578" TEXT="Gleichheit auf BareEntryID vergleicht nur den Hash"/>
+<node CREATED="1751560984118" ID="ID_824628881" MODIFIED="1751560999404" TEXT="in diesen aber flie&#xdf;t der Typ-Parameter von EntryID als seed ein"/>
+<node CREATED="1751561129233" ID="ID_554871288" MODIFIED="1751561140188" TEXT="wir erlauben keine gemischten Vergleiche f&#xfc;r verschiedene Typen"/>
+<node CREATED="1751561484193" ID="ID_168639766" MODIFIED="1751561543072" TEXT="&#x27f9; wenn das Symbol gleich ist, mu&#xdf; auch der Hash gleich sein">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...weil wir stets die 2-Argument-Konstruktoren von BareEntryID aufrufen, und getTypeHash&lt;TY&gt;() dabei als Seed injizieren
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1751561558207" ID="ID_1882142011" MODIFIED="1751563022873" TEXT="Umbau">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1751561569765" ID="ID_1905437203" MODIFIED="1751561584927" TEXT="Equality bleibt wie sie ist"/>
+<node CREATED="1751561615159" ID="ID_221059577" MODIFIED="1751561634944" TEXT="Spaceship f&#xfc;r EntryID&lt;TY&gt; auf den Symbol-String delegieren"/>
+</node>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1751582919770" FOLDED="true" ID="ID_757343510" MODIFIED="1751591973655" TEXT="frameid.hpp">
+<node CREATED="1751582926400" ID="ID_181720145" MODIFIED="1751582997628" TEXT="ist eine Platzhalter-Impl">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <div style="background-color: #eee0b5; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 2px">
+      <div style="color: #202020; background-color: #eee0b5; font-family: Bitstream Vera Sans Mono; font-size: 9pt; white-space: pre">
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">/**</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* Identification tuple for addressing frames unambiguously.</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* </font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* </font><font color="#b76746">@todo</font><font color="#b88b63">&#160;currently (7/08) this is a dummy implementation to find out</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* what interface the Steam layer needs. Probably the vault layer will</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* later on define what is actually needed; this header should then</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* be replaced by a combined C/C++ header</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">*/</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a1a65"><b>class</b></font><font color="#3a1f18">&#160;</font><font color="#635e96"><b>FrameID</b></font><font color="#3a1f18">&#160;</font><font color="#65533c">:</font><font color="#3a1f18">&#160;</font><font color="#535773">boost</font><font color="#65533c">::</font><font color="#635e96"><b>totally_ordered</b></font><font color="#65533c">&lt;</font><font color="#635e96"><b>FrameID</b></font><font color="#65533c">&gt;</font><font color="#3a1f18">&#160; </font><font color="#ab815c">////////////</font><font color="#7f9fbf"><b>TODO</b></font><font color="#ab815c">&#160;it seems we don't need total ordering, only comparison. Clarify this!</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#11123a">{</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#7f004c"><b>long</b></font><font color="#3a1f18">&#160;</font><font color="#1a1ac4">dummy</font><font color="#65533c">;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a1a65"><b>public</b></font><font color="#65533c">:</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#632d2d"><b>FrameID</b></font><font color="#11123a">(</font><font color="#7f004c"><b>long</b></font><font color="#3a1f18">&#160;dum</font><font color="#65533c">=</font><font color="#29466b">0</font><font color="#11123a">)</font><font color="#3a1f18">&#160; </font><font color="#65533c">:</font><font color="#3a1f18">&#160;</font><font color="#1a1ac4">dummy</font><font color="#11123a">(</font><font color="#3a1f18">dum</font><font color="#11123a">)</font><font color="#3a1f18">&#160;</font><font color="#11123a">{}</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#632d2d"><b>operator&#160;long</b></font><font color="#3a1f18">&#160;</font><font color="#11123a">()</font><font color="#3a1f18">&#160;</font><font color="#11123a">{</font><font color="#3a1f18">&#160;</font><font color="#4a1a65"><b>return</b></font><font color="#3a1f18">&#160; </font><font color="#1a1ac4">dummy</font><font color="#65533c">;</font><font color="#3a1f18">&#160;</font><font color="#11123a">}</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#7f004c"><b>bool</b></font><font color="#3a1f18">&#160;</font><font color="#632d2d"><b>operator&lt;</b></font><font color="#3a1f18">&#160;</font><font color="#11123a">(</font><font color="#4a1a65"><b>const</b></font><font color="#3a1f18">&#160; </font><font color="#635e96"><b>FrameID</b></font><font color="#65533c">&amp;</font><font color="#3a1f18">&#160;other</font><font color="#11123a">)</font><font color="#3a1f18">&#160;</font><font color="#4a1a65"><b>const</b></font><font color="#3a1f18">&#160; </font><font color="#11123a">{</font><font color="#3a1f18">&#160;</font><font color="#4a1a65"><b>return</b></font><font color="#3a1f18">&#160;</font><font color="#1a1ac4">dummy</font><font color="#3a1f18">&#160;</font><font color="#65533c">&lt;</font><font color="#3a1f18">&#160; other</font><font color="#65533c">.</font><font color="#1a1ac4">dummy</font><font color="#65533c">;</font><font color="#3a1f18">&#160;</font><font color="#11123a">}</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#7f004c"><b>bool</b></font><font color="#3a1f18">&#160;</font><font color="#632d2d"><b>operator==</b></font><font color="#3a1f18">&#160;</font><font color="#11123a">(</font><font color="#4a1a65"><b>const</b></font><font color="#3a1f18">&#160; </font><font color="#635e96"><b>FrameID</b></font><font color="#65533c">&amp;</font><font color="#3a1f18">&#160;other</font><font color="#11123a">)</font><font color="#3a1f18">&#160;</font><font color="#4a1a65"><b>const</b></font><font color="#3a1f18">&#160; </font><font color="#11123a">{</font><font color="#3a1f18">&#160;</font><font color="#4a1a65"><b>return</b></font><font color="#3a1f18">&#160;</font><font color="#1a1ac4">dummy</font><font color="#3a1f18">&#160;</font><font color="#65533c">==</font><font color="#3a1f18">&#160; other</font><font color="#65533c">.</font><font color="#1a1ac4">dummy</font><font color="#65533c">;</font><font color="#3a1f18">&#160;</font><font color="#11123a">}</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#11123a">}</font><font color="#65533c">;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          
+        </p>
+      </div>
+    </div>
+  </body>
+</html></richcontent>
+<node CREATED="1751582935753" ID="ID_500316306" MODIFIED="1751582943794" TEXT="war als totally-ordered markiert"/>
+<node CREATED="1751582946446" ID="ID_1086354182" MODIFIED="1751582953273" TEXT="aber mit TODO">
+<node CREATED="1751583101682" ID="ID_943889944" MODIFIED="1751583123466" TEXT="und wird nur noch in rendergraph.cpp includiert"/>
+<node CREATED="1751583124158" ID="ID_684265294" MODIFIED="1751583138456" TEXT="welches ebenfalls ein (mutma&#xdf;lich) obsoleter Platzhalter ist"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1751583003422" ID="ID_5954555" MODIFIED="1751583423285" TEXT="kann strong-ordering einfach synthetisieren">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#5b280f" CREATED="1751583488788" FOLDED="true" ID="ID_594929411" MODIFIED="1751591975999" TEXT="time/timequant.hpp">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1751583495715" ID="ID_1101814606" MODIFIED="1751583503388" TEXT="war bereits auskommentiert"/>
+<node CREATED="1751583503978" ID="ID_1031816074" MODIFIED="1751583509621" TEXT="verwendet keine Ordnung mehr"/>
+</node>
+<node COLOR="#435e98" CREATED="1751583525775" FOLDED="true" ID="ID_1170129897" MODIFIED="1751591978410" TEXT="time/timevalue.hpp">
+<node CREATED="1751583598799" ID="ID_1671566697" MODIFIED="1751584040879">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <u>STOP</u>: wir verwenden auch <font color="#3b1690" face="Monospaced">boost::additive </font>und<font color="#3b1690" face="Monospaced">&#160;boost::multipliable</font>
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#db0328" DESTINATION="ID_1671566697" ENDARROW="Default" ENDINCLINATION="122;5;" ID="Arrow_ID_157787687" SOURCE="ID_570890729" STARTARROW="None" STARTINCLINATION="288;16;"/>
+<icon BUILTIN="stop-sign"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#4424a4" CREATED="1751584069704" ID="ID_248891493" MODIFIED="1751585722934" TEXT="also &#xd83e;&#xdc32; nur partiell abl&#xf6;sen">
+<node COLOR="#338800" CREATED="1751584101169" ID="ID_1534501862" MODIFIED="1751585737091" TEXT="TimeValue ist totally-ordered">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1751584111711" ID="ID_1474501470" MODIFIED="1751585737092" TEXT="und das auch gemischt mit raw_time_64">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1751584614198" ID="ID_1249598763" MODIFIED="1751585737092" TEXT="TimeSpan ist ebenfalls totally-ordered">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#437c98" CREATED="1751585743190" ID="ID_1041121656" MODIFIED="1751585769596" TEXT="(das meiste davon geht per default)">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+</node>
+</node>
+<node COLOR="#5b280f" CREATED="1751585846306" FOLDED="true" ID="ID_125859069" MODIFIED="1751591980806" TEXT="time/timecode.hpp">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1751585861903" ID="ID_1407795930" MODIFIED="1751585969624">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      verwendet <font face="Monospaced" color="#7d3838">boost::unit_steppable&lt;SmpteTC&gt;</font>
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#7f304d" DESTINATION="ID_1407795930" ENDARROW="Default" ENDINCLINATION="94;6;" ID="Arrow_ID_313835238" SOURCE="ID_1554403748" STARTARROW="None" STARTINCLINATION="252;22;"/>
+</node>
+<node COLOR="#435e98" CREATED="1751585888342" ID="ID_1623985034" MODIFIED="1751585908975" TEXT="ebenfalls ein anderer boost-Operator">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1751586111847" FOLDED="true" ID="ID_721791278" MODIFIED="1751591982070" TEXT="time/digxel.hpp">
+<node CREATED="1751586119734" ID="ID_1155522883" MODIFIED="1751586130545" TEXT="Digxel&lt;NUM&gt; ist totally-ordered"/>
+<node CREATED="1751586131253" ID="ID_133554672" MODIFIED="1751586152980" TEXT="zur&#xfc;ckgef&#xfc;hrt auf den numerischen Vergleich auf NUM"/>
+</node>
+<node COLOR="#5b280f" CREATED="1751586625236" FOLDED="true" ID="ID_361355610" MODIFIED="1751591985389" TEXT="control/memento-tie.hpp">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1751586632520" ID="ID_1896663401" MODIFIED="1751586808364" TEXT="markiert als equality-comparable"/>
+<node CREATED="1751586647964" ID="ID_641737739" MODIFIED="1751586816572" TEXT="aber kein Vergleichsoperator definiert"/>
+<node CREATED="1751586849934" ID="ID_367037572" MODIFIED="1751586935182" TEXT="macht auch inhaltlich nicht viel Sinn">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <ul>
+      <li>
+        was ist ein &#187;&#228;quivalentes&#171; Memento?
+      </li>
+      <li>
+        wozu w&#252;rde man das brauchen?
+      </li>
+    </ul>
+    <p>
+      normalerweise interessiert nur der Zustand, <i>ob &#252;berhaupt</i>&#160;ein Memento gespeichert wurde
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1751586819278" ID="ID_285242922" MODIFIED="1751586833808" TEXT="insofern kann das wegfallen"/>
+</node>
+<node COLOR="#435e98" CREATED="1751587097560" FOLDED="true" ID="ID_853815003" MODIFIED="1751591988757" TEXT="mobject/output-mapping.hpp">
+<node CREATED="1751587156625" ID="ID_518165993" MODIFIED="1751587435902" TEXT="der Resolver ist equality-comparable"/>
+<node CREATED="1751587412042" ID="ID_4756012" MODIFIED="1751587445118" TEXT="das ist ein lazy-evaluation-Context"/>
+<node CREATED="1751587478525" ID="ID_1812032958" MODIFIED="1751587490790" TEXT="insofern gibt es zwei Stufen">
+<node CREATED="1751587491723" ID="ID_948473991" MODIFIED="1751587523490" TEXT="Resolver sind durch einen Pipe-Hash markiert (und damit vergleichbar)"/>
+<node CREATED="1751587524761" ID="ID_1411774757" MODIFIED="1751587568676" TEXT="mit einem Target-Value kann verglichen werden, indem die Resolution ausgel&#xf6;st wird"/>
+<node COLOR="#435e98" CREATED="1751587575905" ID="ID_1052214780" MODIFIED="1751587606598" TEXT="das Schema kann ohne Anpassungen auf C++20 umgestellt werden">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1751587868631" FOLDED="true" ID="ID_1054681292" MODIFIED="1751591990893" TEXT="steam/asset.hpp">
+<node CREATED="1751587879112" ID="ID_527791853" MODIFIED="1751587908799" TEXT="Assets und Asset::Ident sind totally-ordered"/>
+<node CREATED="1751587962923" ID="ID_1933474838" MODIFIED="1751587989795" TEXT="basierend auf (name, category, org)"/>
+<node CREATED="1751587990623" ID="ID_1118152386" MODIFIED="1751588003490" TEXT="spezieller Twist: Versions-Info wird ignoriert"/>
+<node CREATED="1751588094889" ID="ID_509211341" MODIFIED="1751588123159" TEXT="bestehende Implementierung baut auf einer compare()-Funktion auf">
+<icon BUILTIN="idea"/>
+<node CREATED="1751588124781" ID="ID_1226225987" MODIFIED="1751589241202" TEXT="das ist bereits ein 3-Wege-Vergleich">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...und er verh&#228;lt sich wie typischweise in den funktionalen Sprachen; daher ist der Spaceship-Operator ein drop-in replacement, da dessen Ergebnis ja auch mit dem Literal <font face="Monospaced" color="#4133c7">0</font>&#160;verglichen werden kann
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1751588139307" ID="ID_1212669809" MODIFIED="1751588149197" TEXT="schlie&#xdf;t auch asset::Category mit ein"/>
+</node>
+<node CREATED="1751588387105" ID="ID_360869172" MODIFIED="1751588411860" TEXT="bei der Gelegenheit: auch boost::type_traits abl&#xf6;sen">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+<node COLOR="#5b280f" CREATED="1751583739027" ID="ID_276624692" MODIFIED="1751592174479" TEXT="brauchen boost::operators weiterhin">
+<linktarget COLOR="#6f304d" DESTINATION="ID_276624692" ENDARROW="Default" ENDINCLINATION="-158;11;" ID="Arrow_ID_620986048" SOURCE="ID_586550649" STARTARROW="None" STARTINCLINATION="18;97;"/>
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1751583748723" ID="ID_939403813" MODIFIED="1751583762907" TEXT="wir k&#xf6;nnen zwar alle Vergleiche durch C++20 ersetzen"/>
+<node CREATED="1751583763495" ID="ID_892134310" MODIFIED="1751584033572" TEXT="aber boost::operators bietet auch lineare Verkn&#xfc;pfung">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      additive und multipliable
+    </p>
+    <p>
+      Und diese sind mit die massivsten Definition in boost::operators &#8212; also sicherlich nichts, was man von Hand nachimplementieren m&#246;chte
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1751583822863" ID="ID_570890729" MODIFIED="1751584040879" TEXT="und wir verwenden dies explizit f&#xfc;r die Time-Entit&#xe4;ten">
+<arrowlink COLOR="#db0328" DESTINATION="ID_1671566697" ENDARROW="Default" ENDINCLINATION="122;5;" ID="Arrow_ID_157787687" STARTARROW="None" STARTINCLINATION="288;16;"/>
+</node>
+<node CREATED="1751585934583" ID="ID_1554403748" MODIFIED="1751585976234" TEXT="und unit-steppable f&#xfc;r SmpteTC">
+<arrowlink COLOR="#7f304d" DESTINATION="ID_1407795930" ENDARROW="Default" ENDINCLINATION="94;6;" ID="Arrow_ID_313835238" STARTARROW="None" STARTINCLINATION="252;22;"/>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1750205495310" ID="ID_1294224400" MODIFIED="1750205508850" TEXT="result.hpp : failsafeInvoke vereinfachen">
 <icon BUILTIN="flag-yellow"/>

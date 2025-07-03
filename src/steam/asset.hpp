@@ -54,10 +54,8 @@
 #include "lib/hash-value.h"
 #include "lib/p.hpp"
 
-#include <boost/type_traits/is_base_of.hpp>
-#include <boost/operators.hpp>
-
-#include <cstddef>
+#include <type_traits>
+#include <compare>
 #include <string>
 #include <vector>
 #include <set>
@@ -137,8 +135,7 @@ namespace asset {
    * @author Ichthyo
    */
   class Asset 
-    : public boost::totally_ordered1< Asset
-    , util::NonCopyable             >
+    : util::NonCopyable
     {
     public:
 
@@ -147,7 +144,6 @@ namespace asset {
        *  sufficiently identifying any given Asset.
        */
       struct Ident
-        : boost::totally_ordered<Ident>
         {
           /** element ID, comprehensible but sanitised.
            *  The tuple (category, name, org) is unique.
@@ -181,11 +177,13 @@ namespace asset {
                 ,const uint ver=1);
           
           
-          int compare (Ident const& other)   const;
-
-          /** @note equality ignores version differences */
-          bool operator== (Ident const& oi)  const { return compare (oi) ==0; }
-          bool operator<  (Ident const& oi)  const { return compare (oi) < 0; }
+          /** ordering of Assets is based on the ordering of Ident tuples,
+           *  descending from Category to origin and finally to the asset element ID.
+           *  @note version info is ignored for this comparison */
+          auto operator<=>(Ident const& oi)  const { return std::tie (   category,   org,   name)
+                                                        <=> std::tie (oi.category,oi.org,oi.name); }
+          bool operator== (Ident const& oi)  const { return 0 == *this <=> oi; }
+          
           
           operator string ()  const;
           
@@ -201,8 +199,8 @@ namespace asset {
       virtual const ID<Asset>& getID()   const { return id; }
       
       
-      bool operator== (Asset const& oa)  const { return ident == oa.ident; }
-      bool operator<  (Asset const& oa)  const { return ident <  oa.ident; }
+      bool operator== (Asset const& oa)  const { return ident  == oa.ident; }
+      auto operator<=>(Asset const& oa)  const { return ident <=> oa.ident; }
       
       virtual operator string ()  const;
       
@@ -300,24 +298,6 @@ namespace asset {
     
     
     
-  /* ====== ordering of Assets and Asset-Pointers ====== */
-  
-  /** ordering of Assets is based on the ordering
-   *  of Ident tuples, which are supposed to be unique.
-   *  By using our customised lumiera::P as smart ptr,
-   *  comparison on P<Asset> ptrs will be automatically
-   *  forwarded to the Asset comparison operators.
-   *  @note version info is irrelevant */
-  inline int
-  Asset::Ident::compare (Asset::Ident const& oi)  const
-  {
-    int res;
-    if (0 != (res=category.compare (oi.category)))  return res;
-    if (0 != (res=org.compare (oi.org)))            return res;
-    return name.compare (oi.name);
-  }
-  
-  
   /** promote subtype-ptr to PAsset, e.g. for comparing */
   template<class A>
   inline const PcAsset
@@ -329,11 +309,11 @@ namespace asset {
   
   /** type trait for detecting a shared-ptr-to-asset */
   template <class X>
-  struct is_pAsset : boost::false_type {};
+  struct is_pAsset : std::false_type { };
   
   template <class A>
   struct is_pAsset<shared_ptr<A>>
-    : boost::is_base_of<Asset, A>      {};
+    : std::is_base_of<Asset, A>      { };
   
   
   /** marker constant denoting a NIL asset */

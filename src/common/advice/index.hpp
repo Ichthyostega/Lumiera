@@ -21,7 +21,7 @@
  ** 
  ** This header is intended to be incorporated as part of the advice system implementation (advice.cpp).
  ** It is \em not usable as an external interface. But it is written in a rather self-contained manner,
- ** in order to be testable in isolation. To this end, the actual PointOfAdvice entities being organised
+ ** in order to be testable in isolation. To this end, the actual PointOfAdvice entities \a POA organised
  ** by this index datastructure remain abstract (defined as template parameter), and are only manipulated
  ** through the following functions:
  ** - \c hash_value(POA)
@@ -87,7 +87,6 @@
 #include "lib/util.hpp"
 #include "common/advice/binding.hpp"
 
-#include <boost/operators.hpp>
 #include <unordered_map>
 #include <string>
 
@@ -122,6 +121,7 @@ namespace advice {
    * by invoking the \c setSolution() function on the
    * corresponding PointOfAdvice entity.
    * 
+   * @tparam POA _point-of-advice_ exposing a matcher and solution
    * @note element \em identity is defined in terms of pointing
    *       to the same memory location of a POA (point of advice).
    *       Thus e.g. #hasProvision means this index holds an entry
@@ -141,12 +141,8 @@ namespace advice {
   class Index
     {
       
-      
       struct Entry
         : pair<Binding::Matcher, POA*>
-        , boost::equality_comparable<Entry, POA,
-          boost::equality_comparable<Entry>
-        >
         {
           explicit
           Entry (POA& elm)

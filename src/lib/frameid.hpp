@@ -24,6 +24,8 @@
  ** @deprecated 10/2024 seems very likely that similar functionality moves down
  **       into the render-engine implementation and will no longer be considered
  **       a constituent of the public interface.
+ ** @todo 6/2025 basically everything here is unused or will likely be done
+ **       in a different way — expect this and rendergraph.cpp to be obsolete
  */
 
 
@@ -31,7 +33,8 @@
 #define LUMIERA_FRAMEID_H
 
 
-#include <boost/operators.hpp>
+#include "lib/integral.hpp"
+#include <compare>
 
 namespace lumiera {
   
@@ -73,15 +76,14 @@ namespace lumiera {
    *       later on define what is actually needed; this header should then
    *       be replaced by a combined C/C++ header
    */
-  class FrameID : boost::totally_ordered<FrameID>  ////////////TODO it seems we don't need total ordering, only comparison. Clarify this!
+  class FrameID
     {
       long dummy;
     public:
       FrameID(long dum=0) : dummy(dum) {}
       operator long () { return dummy; }
       
-      bool operator<  (const FrameID& other)  const { return dummy <  other.dummy; }
-      bool operator== (const FrameID& other)  const { return dummy == other.dummy; }
+      auto operator<=> (FrameID const&) const  =default;
     };
   
   

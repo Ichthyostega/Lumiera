@@ -100,25 +100,25 @@ namespace test {
           Category c5 (STRUCT);
           Category c6 (META);
           
-          CHECK (0 > c1.compare(c2));
-          CHECK (0 > c2.compare(c3));
-          CHECK (0 > c3.compare(c4));
-          CHECK (0 > c4.compare(c5));
-          CHECK (0 > c5.compare(c6));
+          CHECK (0 > c1 <=> c2 );
+          CHECK (0 > c2 <=> c3 );
+          CHECK (0 > c3 <=> c4 );
+          CHECK (0 > c4 <=> c5 );
+          CHECK (0 > c5 <=> c6 );
           
-          CHECK (0 ==c1.compare(c1));
-          CHECK (0 > c1.compare(c6));
+          CHECK (0 ==c1 <=> c1 );
+          CHECK (0 > c1 <=> c6 );
           
           Category c21 (VIDEO,"bin1");
           Category c22 (VIDEO,"bin2");
           Category c23 (VIDEO,"bin2/sub");
           
-          CHECK (0 > c1.compare(c21));
-          CHECK (0 > c2.compare(c21));
-          CHECK (0 < c22.compare(c21));
-          CHECK (0 < c23.compare(c22));
-          CHECK (0 < c23.compare(c21));
-          CHECK ( 0==c22.compare(c22));
+          CHECK (0 > c1  <=> c21 );
+          CHECK (0 > c2  <=> c21 );
+          CHECK (0 < c22 <=> c21 );
+          CHECK (0 < c23 <=> c22 );
+          CHECK (0 < c23 <=> c21 );
+          CHECK (0 ==c22 <=> c22 );
           
           
           CHECK ( c2 == c2 );

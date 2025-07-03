@@ -24,6 +24,7 @@
 #include "lib/hash-standard.hpp"
 
 #include <string>
+#include <compare>
 #include <boost/functional/hash.hpp>
 
 
@@ -73,29 +74,15 @@ namespace asset {
       Category (const Kind root, Literal subfolder ="")
         : kind_(root), path_(subfolder) {};
       
-      bool operator== (Category const& other) const { return kind_== other.kind_ and path_== other.path_; }
-      bool operator!= (Category const& other) const { return kind_!= other.kind_ or  path_!= other.path_; }
+      auto operator<=> (Category const&) const  =default;
       
       bool hasKind  (Kind refKind)    const         { return kind_ == refKind; }
       bool isWithin (Category const&) const;
       void setPath  (string const& newpath)         { this->path_ = newpath; }
       
-      
       operator string ()  const;
       
       friend size_t hash_value (Category const&);
-      
-      
-      int
-      compare (Category const& co)  const
-        {
-          int res = int(kind_) - int(co.kind_);
-          if (0 != res)
-            return res;
-          else
-            return path_.compare (co.path_);
-        }
-      
     };
   
   

@@ -47,7 +47,7 @@
 #include "lib/util.hpp"
 
 #include <boost/functional/hash.hpp>
-#include <boost/operators.hpp>
+#include <compare>
 #include <string>
 
 
@@ -131,7 +131,6 @@ namespace idi {
    * for building a combined hash and symbolic ID.
    */
   class BareEntryID
-    : public boost::equality_comparable<BareEntryID>
     {
       
       string symbol_;
@@ -217,7 +216,6 @@ namespace idi {
   template<class TY>
   struct EntryID
     : BareEntryID
-    , boost::totally_ordered< EntryID<TY> >
     {
       
       /** case-1: auto generated symbolic ID */
@@ -272,15 +270,17 @@ namespace idi {
       explicit
       operator string()  const;
       
-      friend bool operator<  (EntryID const& i1, EntryID const& i2) { return i1.getSym()  < i2.getSym(); }
+      friend auto operator<=> (EntryID const& i1, EntryID const& i2) { return i1.getSym() <=> i2.getSym(); }
     };
-    
   
   inline bool
   operator== (BareEntryID const& i1, BareEntryID const& i2)
   {
     return i1.getHash() == i2.getHash();
   }
+  // Note: since we allow comparison only between EntryIDs of same type
+  //       and also feed-down the symbol into the hash value, both equality
+  //       and (total) ordering mesh up perfectly.
   
   
   
