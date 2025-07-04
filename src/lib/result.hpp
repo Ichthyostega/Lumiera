@@ -30,6 +30,7 @@
  **       this kind of API design however is anything than trivial, given that
  **       any value can be thrown as exception in C++
  ** @see vault::ThreadJoinable usage example
+ ** @see Result_test
  */
 
 
@@ -40,7 +41,6 @@
 #include "lib/error.hpp"
 #include "lib/item-wrapper.hpp"
 #include "lib/meta/util.hpp"
-#include "lib/null-value.hpp"
 
 #include <type_traits>
 #include <exception>
@@ -51,43 +51,13 @@
 namespace lib {
   
   namespace error = lumiera::error;
-
-  /**
-   * Helper to invoke an arbitrary callable in a failsafe way.
-   * @param capturedFailure *reference* to a std::exeption_ptr served by side-effect
-   * @param callable anything std::invoke can handle
-   * @return _if_ the invokable has a return type, the result is returned,
-   *         _otherwise_ this is a void function
-   * @todo with C++20 the body of the implementation can be replaced by std::invoke_r  //////////////////////TICKET #1245
-   */
-  template<class FUN, typename...ARGS>
-  inline auto
-  failsafeInvoke (std::exception_ptr& capturedFailure
-                 ,FUN&& callable
-                 ,ARGS&& ...args)  noexcept
-  {
-    using Res = std::invoke_result_t<FUN,ARGS...>;
-    try {
-        capturedFailure = nullptr;
-        if constexpr (std::is_void_v<Res>)
-          std::invoke (std::forward<FUN>(callable), std::forward<ARGS>(args)...);
-        else
-          return std::invoke (std::forward<FUN>(callable), std::forward<ARGS>(args)...);
-      }
-    catch(...)
-      {
-        capturedFailure = std::current_exception();
-        if constexpr (not std::is_void_v<Res>)
-          return lib::NullValue<Res>::get();
-      }
-  }
-  
   
   
   /**
    * Representation of the result of some operation, _EITHER_ a value or a failure.
    * It can be created for passing a result produced by the operation, or the failure
    * to do so. The value can be retrieved by implicit or explicit conversion.
+   * @tparam RES the nominal result type to be captured from the function invocation.
    * @throw error::State on any attempt to access the value in case of failure
    * @warning this class has a lot of implicit conversions;
    *          care should be taken when defining functions
@@ -123,9 +93,16 @@ namespace lib {
       Result (FUN&& callable, ARGS&& ...args)     noexcept
         : failure_{}
         {
-          failsafeInvoke (failure_
-                         ,std::forward<FUN> (callable)
-                         ,std::forward<ARGS>(args)...);
+          try {
+              static_assert (std::is_invocable_v<FUN,ARGS...>);
+              std::invoke (std::forward<FUN>(callable)
+                          ,std::forward<ARGS>(args)...
+                          );
+            }
+          catch(...)
+            {
+              failure_ = std::current_exception();
+            }
         }
       
       explicit
@@ -173,10 +150,19 @@ namespace lib {
       template<class FUN, typename...ARGS,          typename=lib::meta::enable_if<std::is_invocable<FUN,ARGS...>>>
       Result (FUN&& callable, ARGS&& ...args)       noexcept
         : Result<void>{true}
-        , value_{failsafeInvoke (failure_
-                                ,std::forward<FUN> (callable)
-                                ,std::forward<ARGS>(args)...)}
-        { }
+        , value_{}
+        {
+          try {
+              static_assert (std::is_invocable_r_v<RES,FUN,ARGS...>);
+              value_ = std::invoke_r<RES> (std::forward<FUN>(callable)
+                                          ,std::forward<ARGS>(args)...
+                                          );
+            }
+          catch(...)
+            {
+              failure_ = std::current_exception();
+            }
+        }
       
       // is or is not copyable depending on RES
       
@@ -220,7 +206,7 @@ namespace lib {
   /** deduction guide: find out about result value to capture from a generic callable. */
   template<typename FUN, typename...ARGS>
   Result (FUN&&, ARGS&&...) -> Result<std::invoke_result_t<FUN,ARGS...>>;
-
+  
   
   
 } // namespace lib

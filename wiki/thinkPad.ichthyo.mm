@@ -76032,6 +76032,42 @@
 </node>
 </node>
 <node CREATED="1720141000407" ID="ID_301474820" MODIFIED="1720141011879" TEXT="gesammelte Pl&#xe4;ne und Skizzen">
+<node COLOR="#415566" CREATED="1751643957882" ID="ID_1161768536" MODIFIED="1751643982518" TEXT="die ersten Entw&#xfc;rfe von 2008">
+<icon BUILTIN="licq"/>
+<node CREATED="1751644273050" ID="ID_1394090653" MODIFIED="1751644278439" TEXT="meine Vorstellung">
+<node CREATED="1751644280914" ID="ID_1045927774" MODIFIED="1751644299634" TEXT="man hat &#x201e;irgendwie&#x201c; einen Syntax-Baum"/>
+<node CREATED="1751644303810" ID="ID_1146723673" MODIFIED="1751644309499" TEXT="&#xfc;ber diesen macht man Passes"/>
+<node CREATED="1751644310885" ID="ID_1214279478" MODIFIED="1751644316456" TEXT="das ist organisiert als Visitor"/>
+</node>
+<node CREATED="1751644378485" ID="ID_1383026689" MODIFIED="1751646258159" TEXT="steckengeblieben aus Mangel an Bezugspunkten">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Es k&#246;nnte in der Tat so funktionieren;
+    </p>
+    <p>
+      ....mir fehlte aber komplett der Widerhalt und Anker in dem, was denn vom Builder gebaut werden soll. F&#252;r einen klassischen Compiler dagegen ist <i>genau dieser Teil </i>ganz fest vorgegeben, in der Form des Maschinencodes, der vom Compiler erzeugt werden mu&#223;. Ein Compiler ist eine Maschinerie, insofern er eine eigene Innen-Logik hat, welche nur lose mit dem Zweck verbunden ist, dem sie dient. So etwas baut man, indem man von Bekanntem ausgeht, und es daraufhin pr&#252;ft, ob es passend gemacht werden kann. Fest steht dabei eine Grundstruktur, hier das Schema aus Integrations-Schritten, die jewelis als Durchgang &#252;ber die gesamte Datenstruktur zu bewerkstelligen sind. Auch bez&#252;glich der Methode, eine Abstraktion einzuziehen zwischen der <i>Mechanik der Daten-Traversierung</i>&#160;und der eigentlichen <i>Daten-Transformation</i>&#160;&#8212; diese Methode steht au&#223;er Zweifel....
+    </p>
+    <p>
+      Was bisher fehlte, war einfach die M&#246;glichkeit, mit der echten Arbeit an diesem Thema beginnen zu k&#246;nnen; daher bleibt der bestehende Code auf dem Rang einer Programmier-&#220;bung stehen (und es war angemessen, ihn einfach liegenzulassen)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1751644006446" ID="ID_533603423" MODIFIED="1751644097407" TEXT="eine Altlast: Variant-o">
+<arrowlink COLOR="#713242" DESTINATION="ID_1669273438" ENDARROW="Default" ENDINCLINATION="-1232;-260;" ID="Arrow_ID_781923707" STARTARROW="None" STARTINCLINATION="-1428;186;"/>
+<node CREATED="1751644159330" ID="ID_1929628432" MODIFIED="1751644248425" TEXT="damals aus eine Notlage entstanden">
+<font NAME="SansSerif" SIZE="8"/>
+</node>
+<node CREATED="1751644166153" ID="ID_1037855759" MODIFIED="1751644248426" TEXT="inzwischen abgekoppelt und deaktiviert">
+<font NAME="SansSerif" SIZE="8"/>
+</node>
+<node CREATED="1751644208627" ID="ID_1496278199" MODIFIED="1751644248426" TEXT="verschwindet zusammen mit dem ersten Entwurf">
+<font NAME="SansSerif" SIZE="8"/>
+</node>
+</node>
+</node>
 <node CREATED="1720141066223" ID="ID_1879448068" MODIFIED="1720141072690" TEXT="Schrittweiser Aufbau des Graphen">
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1736104360185" ID="ID_196365148" LINK="https://issues.lumiera.org/ticket/1389" MODIFIED="1736104653706" TEXT="#1389: Prototyping a processing builder">
 <linktarget COLOR="#cc025a" DESTINATION="ID_196365148" ENDARROW="Default" ENDINCLINATION="-1116;71;" ID="Arrow_ID_1248947905" SOURCE="ID_1974639046" STARTARROW="None" STARTINCLINATION="-883;48;"/>
@@ -162197,7 +162233,7 @@ actively maintained upstream. Please remove gdl from Debian.</pre>
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1439176875682" ID="ID_1482098521" MODIFIED="1742175232490" TEXT="Debian/Trixie">
 <icon BUILTIN="pencil"/>
-<node CREATED="1742175232490" ID="ID_1849121366" MODIFIED="1749341104677" TEXT="Aufgaben">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1742175232490" ID="ID_1849121366" MODIFIED="1751656516018" TEXT="Aufgaben">
 <icon BUILTIN="yes"/>
 <node COLOR="#338800" CREATED="1742175284498" ID="ID_381697845" MODIFIED="1745722043514" TEXT="Scons-Build migrieren">
 <icon BUILTIN="button_ok"/>
@@ -165857,8 +165893,8 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1742175299968" ID="ID_1393531242" MODIFIED="1742175305316" TEXT="C++20">
-<icon BUILTIN="flag-pink"/>
+<node BACKGROUND_COLOR="#bfd7c3" COLOR="#338800" CREATED="1742175299968" ID="ID_1393531242" MODIFIED="1751656532990" TEXT="C++20">
+<icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1742175640613" ID="ID_671098760" MODIFIED="1742175658639" TEXT="Ma&#xdf;gabe: erst mal nur hochschalten">
 <icon BUILTIN="yes"/>
 <node CREATED="1749398875084" ID="ID_111777702" MODIFIED="1749398907481" TEXT="GCC-14 unterst&#xfc;tzt (experimentell) -std=gnu++23">
@@ -165875,8 +165911,8 @@ Since then others have made contributions, see the log for the history.</font></
 <node COLOR="#435e98" CREATED="1749409857247" ID="ID_160865224" MODIFIED="1750347985612" TEXT="woot??  kennenlernen...">
 <arrowlink COLOR="#5b78d0" DESTINATION="ID_1741477135" ENDARROW="Default" ENDINCLINATION="-1445;183;" ID="Arrow_ID_120232332" STARTARROW="None" STARTINCLINATION="714;86;"/>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1749398984021" ID="ID_798560819" MODIFIED="1749399023650" TEXT="Anpassungen">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1749398984021" ID="ID_798560819" MODIFIED="1751656462181" TEXT="Anpassungen">
+<icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1749399005532" ID="ID_73997136" MODIFIED="1751414539557" TEXT="Error">
 <icon BUILTIN="broken-line"/>
 <node COLOR="#435e98" CREATED="1749405279128" FOLDED="true" ID="ID_64791896" MODIFIED="1749427637085" TEXT="constexpr auf Forwards in util.hpp">
@@ -166991,7 +167027,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1749409958440" ID="ID_1480897729" MODIFIED="1750347835425" TEXT="deprecated: implicit this-capture in &#x3bb;">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1749409958440" FOLDED="true" ID="ID_1480897729" MODIFIED="1750347835425" TEXT="deprecated: implicit this-capture in &#x3bb;">
 <node COLOR="#435e98" CREATED="1749410049894" ID="ID_792680680" MODIFIED="1749428402037" TEXT="depend-inject"/>
 <node COLOR="#435e98" CREATED="1749428351232" ID="ID_1288444603" MODIFIED="1749428402037" TEXT="SteamDispatcher"/>
 <node COLOR="#435e98" CREATED="1749428359058" ID="ID_125462398" MODIFIED="1749428402036" TEXT="Guifacade"/>
@@ -167012,7 +167048,7 @@ Since then others have made contributions, see the log for the history.</font></
 <node COLOR="#435e98" CREATED="1750205625190" ID="ID_343844004" MODIFIED="1750294508885" TEXT="call-queue-test (Worker)"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1750258367488" ID="ID_1994104758" MODIFIED="1750294458755" TEXT="failed Tests">
+<node COLOR="#338800" CREATED="1750258367488" FOLDED="true" ID="ID_1994104758" MODIFIED="1750294458755" TEXT="failed Tests">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1750258372358" FOLDED="true" ID="ID_1636357587" MODIFIED="1750259096090" TEXT="alle!!!">
 <icon BUILTIN="button_cancel"/>
@@ -167080,9 +167116,32 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1749399035206" ID="ID_1949114637" MODIFIED="1751487101003" TEXT="clean-up">
-<icon BUILTIN="pencil"/>
-<node CREATED="1749399040718" ID="ID_1669273438" MODIFIED="1749399043457" TEXT="Variant-o"/>
+<node COLOR="#338800" CREATED="1749399035206" ID="ID_1949114637" MODIFIED="1751656454129" TEXT="clean-up">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#5b280f" CREATED="1749399040718" ID="ID_1669273438" MODIFIED="1751644097407" TEXT="Variant-o">
+<linktarget COLOR="#713242" DESTINATION="ID_1669273438" ENDARROW="Default" ENDINCLINATION="-1232;-260;" ID="Arrow_ID_781923707" SOURCE="ID_533603423" STARTARROW="None" STARTINCLINATION="-1428;186;"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1751643365329" ID="ID_1563338952" MODIFIED="1751643750493" TEXT="daran h&#xe4;ngt der erste Entwurf des Builders">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Der erste Entwurf f&#252;r eine Infrastruktur f&#252;r den Builder/Compiler (der Kern von Lumiera) h&#228;ngt v&#246;llig in der Luft, und war von Phantasie-Vorstellungen getragen, wie ich mir diesen Kern gerne vorstellen w&#252;rde. Ich war (und bin eigentlich immer noch) vom Visitor fasziniert, hab aber den Verdacht, da&#223; das gar nicht das ist, was ich darunter verstehe. Soweit so gut. Habe dann seinerzeit rein auf Verdacht einen eigenen Visitor implementiert, und dann beim Integrationsversuch gemerkt, da&#223; er gar nicht auf mein Modell pa&#223;t. Die Notrettung war ein &#187;wrapper-pointer&#171;, und der brauchte eine Variant-Storage. Boost zieht die ganze MPL mit rein, keine Ahnung warum, aber ich kann das besser. Der zweite Versuch, das Gleiche zu bauen wurde dann nur noch eine halb-Katastrofe und ist jetzt in unserer Support-Lib (und hie und da im Einsatz)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1751643400500" ID="ID_435058407" MODIFIED="1751643868734" TEXT="damit mu&#xdf; ich mich wieder besch&#xe4;ftigen &#x2014; aber nicht jetzt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ....und zwar sehr bald, wenn ich den Builder in Angriff nehme &#8212; was ich nun nicht mehr hinausschieben kann. Aber dieses aktuelle &#187;Vertical Slice&#171; geht noch ohne, und damit lasse ich die Finger davon; es zeichnet sich bereits ab, da&#223; ich mein high-Level-Model nochmal komplett umkrempele und nicht mehr auf Shared-Pointer aufbauen werde, und so k&#246;nnte das mit dem Visitor ja vielleicht doch noch klappen.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
 <node COLOR="#435e98" CREATED="1749428622377" ID="ID_1502394581" MODIFIED="1751479815831" TEXT="soll Literal / Symbol weiterhin implizit aus CStr erstellbar sein">
 <linktarget COLOR="#9e335b" DESTINATION="ID_1502394581" ENDARROW="Default" ENDINCLINATION="553;-29;" ID="Arrow_ID_227291299" SOURCE="ID_1640565416" STARTARROW="None" STARTINCLINATION="-98;111;"/>
 <icon BUILTIN="help"/>
@@ -167115,15 +167174,14 @@ Since then others have made contributions, see the log for the history.</font></
       aber Literal kann komplett <b>constexpr</b>&#160;sein
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1751487078974" ID="ID_145911599" MODIFIED="1751487096003" TEXT="und die meisten Vergleichsoperatoren sind &#xfc;berfl&#xfc;ssig">
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node COLOR="#5b280f" CREATED="1749437085707" ID="ID_586550649" MODIFIED="1751592221545" TEXT="Boost-Operators k&#xf6;nnte man komplett loswerden">
+<node COLOR="#5b280f" CREATED="1749437085707" FOLDED="true" ID="ID_586550649" MODIFIED="1751656491059" TEXT="Boost-Operators k&#xf6;nnte man komplett loswerden">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -167183,8 +167241,7 @@ Since then others have made contributions, see the log for the history.</font></
       und zwar weil letztlich das Pr&#228;dikaten-Symbol und dann noch zus&#228;tzlich die Typ-ID die Entscheidung f&#228;llt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node COLOR="#338800" CREATED="1751557449797" ID="ID_933075599" MODIFIED="1751563026280" TEXT="Umbau">
 <icon BUILTIN="button_ok"/>
@@ -167461,8 +167518,8 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1750205495310" ID="ID_1294224400" MODIFIED="1750205508850" TEXT="result.hpp : failsafeInvoke vereinfachen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1750205495310" FOLDED="true" ID="ID_1294224400" MODIFIED="1751656493562" TEXT="result.hpp : failsafeInvoke vereinfachen">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1750205510479" ID="ID_1628543116" MODIFIED="1750205527616" TEXT="siehe Kommentar dort">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -167472,8 +167529,18 @@ Since then others have made contributions, see the log for the history.</font></
     </p>
   </body>
 </html></richcontent>
+<node CREATED="1751652596327" ID="ID_666664756" MODIFIED="1751652705204" TEXT="Ja! macht den Code tats&#xe4;chlich robuster">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...weil wir nun n&#228;mlich den gew&#252;nschten Return-Typ von oben durchgeben k&#246;nnen, und nicht mehr per Type-Trait inferieren m&#252;ssen; au&#223;erdem ist das ganze Thema Invoke / convert nun in die Standardlibrary ausgelagert (und ja, die hat deswegen ganz sch&#246;n zu rudern)
+    </p>
+  </body>
+</html></richcontent>
 </node>
-<node CREATED="1750205529209" ID="ID_1420683356" MODIFIED="1750205590911" TEXT="k&#xf6;nnte vmtl. auch die warnung (&quot;no return&quot;) beseitigen">
+</node>
+<node COLOR="#5b280f" CREATED="1750205529209" ID="ID_1420683356" MODIFIED="1751656335779" TEXT="k&#xf6;nnte vmtl. auch die warnung (&quot;no return&quot;) beseitigen">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -167482,6 +167549,46 @@ Since then others have made contributions, see the log for the history.</font></
     </p>
   </body>
 </html></richcontent>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1751652557708" ID="ID_958385432" MODIFIED="1751652566551" TEXT="die Warnung stammt vom Eclipse Code-Analyzer"/>
+<node CREATED="1751652567190" ID="ID_1465260171" MODIFIED="1751652583235" TEXT="der Compiler erkennt die Situation und gibt keinerlei Warnung aus"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1751652742051" ID="ID_1040436879" MODIFIED="1751656344110" TEXT="das einzige verbleibende (Rand)Problem ist NullValue&lt;RES&gt;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...wir brauchen diesen Aufruf n&#228;mlich nie, aber wir brauchen ihn, damit die Funktion durch den Compiler geht. Die einzige Alternative, die ich sehe, w&#228;re, die Invocation wieder in die Hauptklasse zu integrieren, incl. try/catch. Dann m&#252;&#223;te ich aber das Ergebnis auch stets an einen zun&#228;chst leer konstruierten ItemWrapper zuweisen &#8212; was dank der speziellen Konstruktion des ItemWrappers tats&#228;chlich m&#246;glich w&#228;re (er mach in diesem Fall eine Move-Konstruktion)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1751654142390" ID="ID_1557062105" MODIFIED="1751656348992" TEXT="weitere Vereinfachung versuchen">
+<icon BUILTIN="yes"/>
+<node CREATED="1751654164210" ID="ID_1487448224" MODIFIED="1751654306597" TEXT="die failsafeInvoke-Funktion nun ganz eliminieren">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...denn diese war ja nur notwendig geworden, um den void-Fall mit zu integrieren; also genau das, was nun invoke_r aus der STDLib auch leistet. Damit h&#228;tten wir dann zweimal das try-catch-Konstrukt, aber das verbessert hier eigentlich die Lesbarkeit, da man nun direkt sehen kann, was passiert.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1751654175489" ID="ID_1868401826" MODIFIED="1751656400930" TEXT="kann dann von der Fallunterscheidung in den Template-Spezialisierungen profitieren">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Damit wird der Aufruf ein Einzeiler, und das Problem mit der void-Fallunterscheidung f&#228;llt ebenfalls flach
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#474398" CREATED="1751656419966" ID="ID_89574478" MODIFIED="1751656446041" TEXT="damit ist diese Implementierung nun tats&#xe4;chlich &#xbb;rund&#xab;">
+<icon BUILTIN="ksmiletris"/>
+</node>
 </node>
 </node>
 </node>
