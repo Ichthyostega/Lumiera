@@ -523,13 +523,13 @@ namespace lib {
                 static_assert(1 == _Fun<FUN>::ARITY);
                 static_assert(1 >= _Fun<HOOK>::ARITY);
                 // argument type expected by the hooks down in the policy class
-                using Arg = typename _Fun<FUN>::Args::List::Head;
+                using Arg =  _Fun<FUN>::Args::List::Head;
                 // distinguish if user provided functor takes zero or one argument
                 if constexpr (0 == _Fun<HOOK>::ARITY)
                   return [hook = forward<HOOK>(hook)](Arg){ hook(); };
                 else
                   { // instance type expected by the user-provided hook
-                    using Target = typename _Fun<HOOK>::Args::List::Head;
+                    using Target = _Fun<HOOK>::Args::List::Head;
                     return [hook = forward<HOOK>(hook)]
                            (Arg& threadWrapper)
                               { // build a two-step cast path from the low-level wrapper to user type
@@ -764,7 +764,7 @@ namespace lib {
   inline void
   launchDetached (string const& threadID, INVO&& ...args)
   {
-    using Launch = typename TAR::Launch;
+    using Launch = TAR::Launch;
     launchDetached<TAR> (Launch{forward<INVO> (args)...}
                           .threadID (threadID));
   }
@@ -774,7 +774,7 @@ namespace lib {
   inline void
   launchDetached (string const& threadID, void (TAR::*memFun) (ARGS...), ARGS ...args)
   {
-    using Launch = typename TAR::Launch;
+    using Launch = TAR::Launch;
     launchDetached<TAR> (Launch{std::move (memFun)
                                ,lib::meta::InstancePlaceholder<TAR>{}
                                ,forward<ARGS> (args)...

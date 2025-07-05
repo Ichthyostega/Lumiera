@@ -34,13 +34,13 @@
  ** template<typename...CASES>
  ** struct MyModel
  **   {
- **     using SubSeq = typename _Vari<MyModel, CASES...>::Prefix;
+ **     using SubSeq = _Vari<MyModel, CASES...>::Prefix;
  **
  **     // adapt a predecessor sequence
  **     MyModel (SubSeq&& subModel);
  **
  **
- **     using Tuple = typename RebindVariadic<std::tuple, CASES...>::Type;
+ **     using Tuple = RebindVariadic<std::tuple, CASES...>::Type;
  **   }
  ** \endcode
  ** @see param-weaving-pattern.hpp "usage example"
@@ -138,15 +138,15 @@ namespace meta {
   template<template<class...> class L, typename X, typename...XS>
   struct _Vari<L, X,XS...>
     {
-      using Penult = typename _Vari<L,XS...>::Penult;
-      using Ultima = typename _Vari<L,XS...>::Ultima;
+      using Penult = _Vari<L,XS...>::Penult;
+      using Ultima = _Vari<L,XS...>::Ultima;
       
-      using _Tail_Pre_ = typename _Vari<L,XS...>::Prefix;
-      using _Tail_Rev_ = typename _Vari<L,XS...>::Revers;
+      using _Tail_Pre_ = _Vari<L,XS...>::Prefix;
+      using _Tail_Rev_ = _Vari<L,XS...>::Revers;
       
       using Remain = L<XS...>;
-      using Prefix = typename _Vari<L, X,      _Tail_Pre_>::Prepend;
-      using Revers = typename _Vari<L, Ultima, _Tail_Rev_>::Prepend;
+      using Prefix = _Vari<L, X,      _Tail_Pre_>::Prepend;
+      using Revers = _Vari<L, Ultima, _Tail_Rev_>::Prepend;
     };
   
 }} // namespace lib::meta

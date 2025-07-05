@@ -86,7 +86,7 @@ namespace test{
       {
         DummySolutions<TY> solutions_;
         
-        typedef typename Query<TY>::Cursor Cursor;
+        using Cursor = Query<TY>::Cursor;
         
         Result
         prepareResolution()

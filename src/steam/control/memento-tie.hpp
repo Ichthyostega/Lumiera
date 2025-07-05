@@ -76,8 +76,8 @@ namespace control {
   template<typename SIG, typename MEM>
   class MementoTie
     {
-      typedef typename CommandSignature<SIG,MEM>::CaptureSig SIG_cap;
-      typedef typename CommandSignature<SIG,MEM>::UndoOp_Sig SIG_undo;
+      using SIG_cap = CommandSignature<SIG,MEM>::CaptureSig;
+      using SIG_undo = CommandSignature<SIG,MEM>::UndoOp_Sig;
       
       ItemWrapper<MEM> memento_; ///< storage holding the captured state for undo
       

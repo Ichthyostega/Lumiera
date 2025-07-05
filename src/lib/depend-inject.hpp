@@ -148,8 +148,8 @@ namespace lib {
   class DependInject
     : util::NoInstance
     {
-      using Factory = typename Depend<SRV>::Factory;
-      using Lock    = typename Depend<SRV>::Lock;
+      using Factory = Depend<SRV>::Factory;
+      using Lock    = Depend<SRV>::Lock;
       
     public:
       /** configure dependency-injection for type SRV to build a subclass singleton.
@@ -178,8 +178,8 @@ namespace lib {
       static void
       useSingleton (FUN&& ctor)
         {
-          using Sub = typename SubclassFactoryType<FUN>::Subclass;
-          using Fun = typename SubclassFactoryType<FUN>::Functor;
+          using Sub = SubclassFactoryType<FUN>::Subclass;
+          using Fun = SubclassFactoryType<FUN>::Functor;
           
           __assert_compatible<Sub>();
           installFactory<Sub,Fun> (forward<FUN> (ctor));
@@ -372,9 +372,9 @@ namespace lib {
           static_assert (meta::_Fun<FUN>(),
                          "Need a Lambda or Function object to create a heap allocated instance");
           
-          using Functor   = typename meta::_Fun<FUN>::Functor; // suitable type to store for later invocation
-          using ResultVal = typename meta::_Fun<FUN>::Ret;
-          using Subclass  = typename meta::Strip<ResultVal>::TypePlain;
+          using Functor   = meta::_Fun<FUN>::Functor; // suitable type to store for later invocation
+          using ResultVal = meta::_Fun<FUN>::Ret;
+          using Subclass  = meta::Strip<ResultVal>::TypePlain;
           
           static_assert (std::is_pointer<ResultVal>::value,
                          "Function must yield a pointer to a heap allocated instance");

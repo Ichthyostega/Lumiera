@@ -179,7 +179,7 @@ namespace lib {
       generateTrap (DEL* delegate)
         {
           static_assert (_Fun<DEL>(), "Delegate must be function-like");
-          using Ret = typename _Fun<DEL>::Ret;
+          using Ret =    _Fun<DEL>::Ret;
           static_assert (_Fun<Ret>(), "Result from invoking delegate must also be function-like");
           static_assert (has_Sig<Ret, SIG>(), "Result from delegate must expose target signature");
           

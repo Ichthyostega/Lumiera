@@ -133,13 +133,13 @@ namespace lib {
       using Args = std::tuple<ARGS...>;
       
       /** meta-sequence to pick argument values from the storage tuple */
-      using SequenceIterator = typename meta::BuildIdxIter<ARGS...>::Ascending;
+      using SequenceIterator = meta::BuildIdxIter<ARGS...>::Ascending;
       
       /** Storage for the argument tuple */
       Args args_;
       
       template<typename...PARS>
-      VerbHolder (typename Verb::Handler handlerRef, Literal verbID, PARS&&... args)
+      VerbHolder (Verb::Handler handlerRef, Literal verbID, PARS&&... args)
         : Verb{handlerRef, verbID}
         , args_{std::forward<PARS> (args)...}
         { }
@@ -203,7 +203,7 @@ namespace lib {
         };
       
       template<typename FUN>
-      using PayloadType = typename HandlerTypeDetector<FUN>::Payload *;
+      using PayloadType = HandlerTypeDetector<FUN>::Payload *;
       
       
     public:

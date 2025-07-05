@@ -243,9 +243,9 @@ namespace test {
           
           cout << fun (n0,n1,n2,n3) << endl;
           
-          using Backwards = typename BuildIndexSeq<4>::Descending;    // 3,2,1,0
-          using Back2     = typename BuildIndexSeq<2>::Descending;    // 1,0
-          using After2    = typename BuildIndexSeq<4>::After<2>;      // 2,3
+          using Backwards = BuildIndexSeq<4>::Descending;    // 3,2,1,0
+          using Back2     = BuildIndexSeq<2>::Descending;    // 1,0
+          using After2    = BuildIndexSeq<4>::After<2>;      // 2,3
           
           cout << call_with_reversed_arguments (Backwards(), n0,n1,n2,n3)  <<endl;
           cout << call_with_reversed_arguments (Back2()    , n0,n1,n2,n3)  <<endl;

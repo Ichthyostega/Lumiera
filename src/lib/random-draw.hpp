@@ -175,11 +175,11 @@ namespace lib {
     : public LazyInit<POL>
     {
       using Lazy = LazyInit<POL>;
-      using Disabled = typename Lazy::MarkDisabled;
+      using Disabled = Lazy::MarkDisabled;
       
-      using Sig = typename _Fun<POL>::Sig;
-      using Fun = function<Sig>;
-      using Tar = typename _Fun<POL>::Ret;
+      using Sig = _Fun<POL>::Sig;
+      using Fun =  function<Sig>;
+      using Tar = _Fun<POL>::Ret;
       
       Tar    maxResult_{Tar::maxVal()};      ///< maximum result val actually to produce < max
       Tar    minResult_{Tar::minVal()};      ///< minimum result val actually to produce > min
@@ -363,16 +363,16 @@ namespace lib {
           using _Fun = lib::meta::_Fun<FUN>;
           static_assert (_Fun(), "Need something function-like.");
           
-          using Sig     = typename _Fun::Sig;
-          using Args    = typename _Fun::Args;
-          using BaseIn  = typename lib::meta::_Fun<POL>::Args;
+          using Sig     = _Fun::Sig;
+          using Args    = _Fun::Args;
+          using BaseIn  = lib::meta::_Fun<POL>::Args;
           
           if constexpr (std::is_same_v<Args, BaseIn>)
              // function accepts same arguments as this RandomDraw
             return forward<FUN> (fun); // pass-through directly
           else
             {// attempt to find a custom adaptor via Policy template
-              using Adaptor = typename POL::template Adaptor<Sig>;
+              using Adaptor = POL::template Adaptor<Sig>;
               return Adaptor::build (forward<FUN> (fun));
             }
         }
@@ -392,7 +392,7 @@ namespace lib {
         {
           static_assert (lib::meta::_Fun<FUN>(), "Need something function-like.");
           
-          using Res = typename lib::meta::_Fun<FUN>::Ret;
+          using Res = lib::meta::_Fun<FUN>::Ret;
           using lib::meta::func::chained;
           using lib::meta::_FunRet;
           

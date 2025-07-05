@@ -167591,6 +167591,27 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
+<node COLOR="#338800" CREATED="1751727825395" FOLDED="true" ID="ID_589911106" MODIFIED="1751764027814">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      viele <font color="#483fc9" face="Monospaced">typename</font>&#160;und <font color="#483fc9" face="Monospaced">template</font>&#160;-Qualifier werden &#252;berfl&#252;ssig
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1751727949501" ID="ID_916817615" MODIFIED="1751727951794" TEXT="Quellen">
+<node CREATED="1751727952694" ID="ID_1631559568" LINK="https://stackoverflow.com/a/77195126/444796" MODIFIED="1751727960667" TEXT="Erl&#xe4;uterung auf SO"/>
+<node CREATED="1751727979514" ID="ID_1828329273" LINK="https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0634r3.html" MODIFIED="1751727998353" TEXT="P0634: Down with typename! (C++20)"/>
+<node CREATED="1751727990184" ID="ID_566333760" LINK="https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2020/p1787r6.html" MODIFIED="1751728020860" TEXT="P1787: Declarations and where to find them (C++23)"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1751763900510" ID="ID_118193340" MODIFIED="1751763928464" TEXT="GCC settzt noch nicht alles um...">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1751763929901" ID="ID_751509228" MODIFIED="1751764008831" TEXT="Typen in Funktionsargumenten"/>
+<node CREATED="1751764009520" ID="ID_68918245" MODIFIED="1751764021957" TEXT="der template-Qualifier in Typedefs"/>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -169457,8 +169478,8 @@ Since then others have made contributions, see the log for the history.</font></
 <node CREATED="1447978388930" ID="ID_78828927" MODIFIED="1582315355090" TEXT="Clang 3.5">
 <icon BUILTIN="licq"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1742176160188" ID="ID_1556896913" MODIFIED="1742176165819" TEXT="GCC-14">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1742176160188" ID="ID_1556896913" MODIFIED="1751723341087" TEXT="GCC-14">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1742176174909" ID="ID_237072824" MODIFIED="1742176177576" TEXT="Build-Fixes">
 <node CREATED="1742176179747" ID="ID_1353266444" MODIFIED="1742176275192" TEXT="hat Benny f&#xfc;r GCC-8 gemacht">
 <richcontent TYPE="NOTE"><html>
@@ -169472,13 +169493,65 @@ Since then others have made contributions, see the log for the history.</font></
 <arrowlink COLOR="#2a999f" DESTINATION="ID_22551307" ENDARROW="Default" ENDINCLINATION="682;41;" ID="Arrow_ID_344918215" STARTARROW="None" STARTINCLINATION="885;-71;"/>
 </node>
 <node CREATED="1744664547020" ID="ID_976309473" MODIFIED="1744664561969" TEXT="minimale weitere Fixes f&#xfc;r GCC-14"/>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1744664562802" ID="ID_1255291765" MODIFIED="1744664569721" TEXT="noch viele Warnings offfen">
-<icon BUILTIN="messagebox_warning"/>
+<node COLOR="#338800" CREATED="1744664562802" ID="ID_1255291765" MODIFIED="1751723337731" TEXT="alle derzeit relevanten Warnings behandelt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Einige lasse ich bewu&#223;t offen, weil es sich um Code handelt, der mit dem n&#228;chsten &#187;Vertical Slice&#171; komplett &#252;berarbeitet wird
+    </p>
+    <ul>
+      <li>
+        diverse Warnings zu Vergleichs-Operatoren &#252;ber Assets und MObjects, im Besonderen mit dem speziellen Smart-Ptr lumiera::P (den will ich loswerden)
+      </li>
+      <li>
+        Warnungen zur <i>pessimisation</i>&#160;durch std::move im Return. Das betrifft vor allem die View-Spec-DSL im GUI, und dort ist die Warnung sogar fehlgeleitet (d.h. der Code w&#252;rde brechen, wenn man das std::move entfernt); deutet das als Hinweis auf ein Design-Problem, das <i>aber derzeit nicht auf der Agenda steht</i>
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1582315356166" ID="ID_568554401" MODIFIED="1742176158810" TEXT="Clang-20">
-<icon BUILTIN="bell"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#ce0000" CREATED="1582315356166" ID="ID_568554401" MODIFIED="1751726801807" TEXT="Clang-20">
+<icon BUILTIN="hourglass"/>
+<node COLOR="#5b280f" CREATED="1751726752829" ID="ID_1722544232" MODIFIED="1751726785071" TEXT="derzeit problematisch : C++23 unvollst&#xe4;ndig">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1751726822508" ID="ID_1846851759" MODIFIED="1751726878666" TEXT="Blocker: dependent-names">
+<icon BUILTIN="info"/>
+<node CREATED="1751726843776" ID="ID_1865718184" MODIFIED="1751726963239" TEXT="GCC ist hier deutlich weiter">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      tats&#228;chlich hat GCC das bereits im Vorgriff, im C++17 Modus teilweise unterst&#252;tzt, und ich habe beonnen, es zu nutzen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1751726851254" ID="ID_788832" MODIFIED="1751726935341" TEXT="damit kann der Code drastisch verschlankt werden">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Nach Sprachstandard k&#246;nnen die allermeisten &quot;typename&quot; und &quot;template&quot; Qualifier wegfallen; notfalls mithilfe einer weiteren, dazwischengeschalteten Typedef....
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1751726860621" ID="ID_1705611911" MODIFIED="1751727785590" TEXT="ich bin nicht willens, darauf wegen CLang zu verzichten">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Diese&#160;redundanten <font face="Monospaced" color="#84102c">typename</font>&#160;und <font face="Monospaced" color="#84102c">template</font>&#160;-Qualifier sind einer der Hauptgr&#252;nde, warum Metaprogramming-Code in C++ so schwer lesbar ist...
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1731199725257" HGAP="106" ID="ID_1040358172" MODIFIED="1731199778693" TEXT="Code-Basis" VSHIFT="23">

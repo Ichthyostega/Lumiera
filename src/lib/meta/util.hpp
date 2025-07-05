@@ -84,10 +84,10 @@ namespace meta {
    * @see [std::enable_if](http://en.cppreference.com/w/cpp/types/enable_if)
    */
   template <class Cond, class T = void>
-  using enable_if = typename enable_if_c<Cond::value, T>::type;
+  using enable_if = enable_if_c<Cond::value, T>::type;
   
   template <class Cond, class T = void>
-  using disable_if = typename enable_if_c<not Cond::value, T>::type;
+  using disable_if = enable_if_c<not Cond::value, T>::type;
   
   
   
@@ -114,9 +114,9 @@ namespace meta {
     class _DetectNested_TypeResult
       {
         template<class ZZ>
-        static Yes_t check(typename ZZ::type *);
+        static Yes_t check(ZZ::type *);
         template<class X>
-        static Yes_t check(typename X::Type *);
+        static Yes_t check(X::Type *);
         template<class>
         static No_t  check(...);
         
@@ -145,7 +145,7 @@ namespace meta {
   }
   /** helper to extract the first argument from a variadic arg pack, if any */
   template<typename...XS>
-  using extractFirst_t = typename _ExtractFirst<XS...>::Type;
+  using extractFirst_t = _ExtractFirst<XS...>::Type;
   
   
   
@@ -204,7 +204,7 @@ namespace meta {
   class is_Typelist
     {
       template<class X>
-      static Yes_t check(typename X::List *);
+      static Yes_t check(X::List *);
       template<class>
       static No_t  check(...);
       
@@ -492,7 +492,7 @@ namespace util {
   inline std::string
   showSmartPtr (SP const& smPtr, std::string label = "smP")
   {
-    using TargetType = typename SP::element_type;
+    using TargetType = SP::element_type;
     
     return smPtr? label+"("+showAdr(smPtr.get()) + ") ↗" + StringConv<TargetType>::invoke(*smPtr)
                 : BOTTOM_INDICATOR + " «" + typeStr(smPtr) + "»";

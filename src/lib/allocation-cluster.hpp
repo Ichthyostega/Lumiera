@@ -347,14 +347,14 @@ namespace lib {
     struct SetupSeveral<std::void_t, lib::AllocationCluster&>
       {
         template<typename X>
-        using Adapter = typename AllocationCluster::template Allocator<X>;
+        using Adapter = AllocationCluster::template Allocator<X>;
         
         template<class I, class E>
         struct Policy
           : AllocationPolicy<I,E,Adapter>
           {
             using Base = AllocationPolicy<I,E,Adapter>;
-            using Bucket = typename Base::Bucket;
+            using Bucket = Base::Bucket;
             
             /** @warning allocation size is severely limited in AllocationCluster. */
             size_t static constexpr ALLOC_LIMIT = AllocationCluster::max_size();

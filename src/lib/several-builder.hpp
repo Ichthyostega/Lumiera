@@ -185,7 +185,7 @@ namespace lib {
         using Bucket = ArrayBucket<I>;
         
         template<typename X>
-        using XAlloT = typename AlloT::template rebind_traits<std::remove_cv_t<X>>;
+        using XAlloT = AlloT::template rebind_traits<std::remove_cv_t<X>>;
         
         Allo& baseAllocator() { return *this; }
         
@@ -193,7 +193,7 @@ namespace lib {
         auto
         adaptAllocator()
           {
-            using XAllo = typename XAlloT<X>::allocator_type;
+            using XAllo = XAlloT<X>::allocator_type;
             if constexpr (std::is_constructible_v<XAllo, Allo>)
               return XAllo{baseAllocator()};
             else
@@ -401,7 +401,7 @@ namespace lib {
       using Policy = POL<I,E>;
       
       using Bucket = several::ArrayBucket<I>;
-      using Deleter = typename Bucket::Deleter;
+      using Deleter = Bucket::Deleter;
       
     public:
       SeveralBuilder() = default;
@@ -477,7 +477,7 @@ namespace lib {
       SeveralBuilder&&
       appendAll (std::initializer_list<X> ili)
         {
-          using Val = typename meta::Strip<X>::TypeReferred;
+          using Val = meta::Strip<X>::TypeReferred;
           for (Val const& x : ili)
             emplaceNewElm<Val> (x);
           return move(*this);
@@ -507,7 +507,7 @@ namespace lib {
       SeveralBuilder&&
       emplace (ARGS&& ...args)
         {
-          using Val = typename meta::Strip<TY>::TypeReferred;
+          using Val = meta::Strip<TY>::TypeReferred;
           emplaceNewElm<Val> (forward<ARGS> (args)...);
           return move(*this);
         }
@@ -549,7 +549,7 @@ namespace lib {
       void
       emplaceCopy (IT& dataSrc)
         {
-          using Val = typename IT::value_type;
+          using Val = IT::value_type;
           emplaceNewElm<Val> (*dataSrc);
         }
       
@@ -557,7 +557,7 @@ namespace lib {
       void
       emplaceMove (IT& dataSrc)
         {
-          using Val = typename IT::value_type;
+          using Val = IT::value_type;
           emplaceNewElm<Val> (move (*dataSrc));
         }
       
@@ -737,9 +737,9 @@ namespace lib {
       Deleter
       selectDestructor()
         {
-          using IVal = typename lib::meta::Strip<I>::TypeReferred;
-          using EVal = typename lib::meta::Strip<E>::TypeReferred;
-          using TVal = typename lib::meta::Strip<TY>::TypeReferred;
+          using IVal = lib::meta::Strip<I>::TypeReferred;
+          using EVal = lib::meta::Strip<E>::TypeReferred;
+          using TVal = lib::meta::Strip<TY>::TypeReferred;
           
           typename Policy::Fac& factory(*this);
           
@@ -783,8 +783,8 @@ namespace lib {
       void
       probeMoveCapability()
         {
-          using TVal = typename lib::meta::Strip<TY>::TypeReferred;
-          using EVal = typename lib::meta::Strip<E>::TypeReferred;
+          using TVal = lib::meta::Strip<TY>::TypeReferred;
+          using EVal = lib::meta::Strip<E>::TypeReferred;
           
           if (not (is_same_v<TVal,EVal> or is_trivially_copyable_v<TVal>))
             lock_move = true;
@@ -793,7 +793,7 @@ namespace lib {
       bool
       canWildMove()
         {
-          using EVal = typename lib::meta::Strip<E>::TypeReferred;
+          using EVal = lib::meta::Strip<E>::TypeReferred;
           return is_trivially_copyable_v<EVal> and not lock_move;
         }
       

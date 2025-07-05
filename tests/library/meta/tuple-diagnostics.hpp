@@ -70,7 +70,7 @@ namespace test {
   inline string
   showType ()
   {
-    using TypeList = typename RebindTupleTypes<TUP>::List;
+    using TypeList    = RebindTupleTypes<TUP>::List;
     using DumpPrinter = InstantiateChained<TypeList, Printer, NullP>;
     
     return "TUPLE"

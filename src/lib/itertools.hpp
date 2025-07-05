@@ -137,9 +137,9 @@ namespace lib {
           return bool(source_);
         }
       
-      using pointer    = typename IT::pointer;
-      using reference  = typename IT::reference;
-      using value_type = typename IT::value_type;
+      using pointer    = IT::pointer;
+      using reference  = IT::reference;
+      using value_type = IT::value_type;
     };
   
   
@@ -186,9 +186,9 @@ namespace lib {
       
       
     public:
-      using pointer    = typename CORE::pointer;
-      using reference  = typename CORE::reference;
-      using value_type = typename CORE::value_type;
+      using pointer    = CORE::pointer;
+      using reference  = CORE::reference;
+      using value_type = CORE::value_type;
       
       
       IterTool (CORE&& setup)
@@ -341,7 +341,7 @@ namespace lib {
       typedef IterTool<_Filter> _Impl;
       
     public:
-      static bool acceptAll(typename _Filter::Val) { return true; }
+      static bool acceptAll(_Filter::Val) { return true; }
       
       
       FilterIter ()
@@ -378,7 +378,7 @@ namespace lib {
   inline auto
   filterIterator (IT&& src, PRED filterPredicate)
   {
-    using SrcIT  = typename std::remove_reference<IT>::type;
+    using SrcIT  = std::remove_reference<IT>::type;
     return FilterIter<SrcIT>{forward<IT>(src), filterPredicate};
   }
   
@@ -411,7 +411,7 @@ namespace lib {
     : public FilterIter<IT>
     {
       using _Filter = FilterCore<IT>;
-      using     Val = typename _Filter::Val;
+      using     Val = _Filter::Val;
       
       void
       reEvaluate()
@@ -739,9 +739,9 @@ namespace lib {
           return bool(source_);
         }
       
-      using pointer =  typename ValueTypeBinding<VAL>::pointer;
-      using reference = typename ValueTypeBinding<VAL>::reference;
-      using value_type = typename ValueTypeBinding<VAL>::value_type;
+      using pointer =  ValueTypeBinding<VAL>::pointer;
+      using reference = ValueTypeBinding<VAL>::reference;
+      using value_type = ValueTypeBinding<VAL>::value_type;
     };
   
   
@@ -787,7 +787,7 @@ namespace lib {
   inline auto
   transformIterator (IT const& src, FUN processingFunc)
   {
-    using OutVal = typename lib::meta::_Fun<FUN>::Ret;
+    using OutVal = lib::meta::_Fun<FUN>::Ret;
     return TransformIter<IT,OutVal>{src,processingFunc};
   }
   
@@ -795,8 +795,8 @@ namespace lib {
   inline auto
   transformIterator (IT&& src, FUN processingFunc)
   {
-    using SrcIT  = typename std::remove_reference<IT>::type;
-    using OutVal = typename lib::meta::_Fun<FUN>::Ret;
+    using SrcIT  = std::remove_reference<IT>::type;
+    using OutVal = lib::meta::_Fun<FUN>::Ret;
     return TransformIter<SrcIT,OutVal>{forward<IT>(src), processingFunc};
   }
   
@@ -815,10 +815,10 @@ namespace lib {
   
   
   template<class IT>
-  inline typename IT::value_type
+  inline IT::value_type
   pull_last (IT iter)
     {
-      using Val = typename IT::value_type;
+      using Val = IT::value_type;
       using Item = wrapper::ItemWrapper<Val>;
       
       Item lastElm;
@@ -845,7 +845,7 @@ namespace lib {
   inline auto
   filterRepetitions (IT const& source)
   {
-    using Val   = typename meta::ValueTypeBinding<IT>::value_type;
+    using Val   = meta::ValueTypeBinding<IT>::value_type;
     return filterIterator (source, SkipRepetition<Val>());
   }
   
@@ -853,7 +853,7 @@ namespace lib {
   inline auto
   filterRepetitions (IT&& source)
   {
-    using Val   = typename meta::ValueTypeBinding<IT>::value_type;
+    using Val   = meta::ValueTypeBinding<IT>::value_type;
     return filterIterator (forward<IT>(source), SkipRepetition<Val>() );
   }
   

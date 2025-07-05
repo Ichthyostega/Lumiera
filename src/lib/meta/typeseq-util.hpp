@@ -94,7 +94,7 @@ namespace meta {
   struct Prepend<T, Types<TYPES...>>
   {
     using Seq  = Types<T, TYPES...>;
-    using List = typename Types<T, TYPES...>::List;
+    using List = Types<T, TYPES...>::List;
   };
   
   
@@ -108,9 +108,9 @@ namespace meta {
   struct Types< Node<H,T> >
     {
       using List = Node<H,T>;
-      using Seq  = typename Prepend< H
-                                   , typename Types<T>::Seq
-                                   >::Seq;
+      using Seq  = Prepend< H
+                          , typename Types<T>::Seq
+                          >::Seq;
     };
   template<>
   struct Types<Nil>
@@ -135,7 +135,7 @@ namespace meta {
   template<typename T1, typename...TS>
   struct Split<Types<T1,TS...> >
   {
-    using List = typename Types<T1,TS...>::List;
+    using List = Types<T1,TS...>::List;
     
     using Head  = T1;
     using First = Types<T1>;
@@ -143,11 +143,11 @@ namespace meta {
     
     // for finding the end we need the help of typelist-util.hpp
     
-    using PrefixList = typename PickLast<List>::List;
-    using TailList   = typename Tail::List;
+    using PrefixList = PickLast<List>::List;
+    using TailList   = Tail::List;
     
-    using Prefix     = typename Types<PrefixList>::Seq;
-    using End        = typename PickLast<List>::Type;
+    using Prefix     = Types<PrefixList>::Seq;
+    using End        = PickLast<List>::Type;
     using Last       = Types<End>;
   };
   
@@ -180,17 +180,17 @@ namespace meta {
   template<class TYPES, uint i=1>
   class Shifted
     {
-      using Tail = typename Split<TYPES>::Tail;
+      using Tail = Split<TYPES>::Tail;
     public:
-      using Type = typename Shifted<Tail,i-1>::Type;
-      using Head = typename Split<Type>::Head;
+      using Type = Shifted<Tail,i-1>::Type;
+      using Head = Split<Type>::Head;
     };
   
   template<class TYPES>
   struct Shifted<TYPES,0>
     {
       using Type = TYPES;
-      using Head = typename Split<Type>::Head;       ///< @warning may be Nil in case of an empty list
+      using Head = Split<Type>::Head;       ///< @warning may be Nil in case of an empty list
     };
   
   
@@ -202,7 +202,7 @@ namespace meta {
   template<typename...TYPES, size_t i>
   struct Pick<Types<TYPES...>, i>
     {
-      using Type = typename Shifted<Types<TYPES...>, i>::Head;
+      using Type = Shifted<Types<TYPES...>, i>::Head;
     };
   
   
@@ -214,8 +214,8 @@ namespace meta {
   template<typename T, size_t N>
   struct Repeat
     {
-      using Rem = typename Repeat<T, N-1>::Seq;
-      using Seq = typename Prepend<T,Rem>::Seq;
+      using Rem = Repeat<T, N-1>::Seq;
+      using Seq = Prepend<T,Rem>::Seq;
     };
   
   template<typename T>

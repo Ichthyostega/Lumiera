@@ -91,7 +91,7 @@ namespace engine {
   constexpr bool
   _verify_usable_as_WeavingPattern()
   {
-    using Feed = typename PAT::Feed;
+    using Feed = PAT::Feed;
     ASSERT_MEMBER_FUNCTOR (&PAT::mount, Feed(TurnoutSystem&));
     ASSERT_MEMBER_FUNCTOR (&PAT::pull, void(Feed&, TurnoutSystem&));
     ASSERT_MEMBER_FUNCTOR (&PAT::shed, void(Feed&, TurnoutSystem&, OptionalBuff));
@@ -117,7 +117,7 @@ namespace engine {
     {
       static_assert (_verify_usable_as_WeavingPattern<PAT>());
       
-      using Feed = typename PAT::Feed;
+      using Feed = PAT::Feed;
       
     public:
       template<typename...INIT>

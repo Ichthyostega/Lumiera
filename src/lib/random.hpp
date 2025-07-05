@@ -280,7 +280,7 @@ namespace lib {
       public:
       using GEN::GEN;
       
-      typename GEN::result_type
+      GEN::result_type
       operator()()
         {
           if constexpr (GEN::max() < std::numeric_limits<typename GEN::result_type>::max())

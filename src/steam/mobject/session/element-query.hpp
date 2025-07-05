@@ -50,25 +50,25 @@ namespace session {
     template<class MO>
     struct _PickRes<function<bool(Placement<MO> const&)> >
       {
-        typedef MO Type;
-        typedef MORef<MO> Result;
-        typedef typename ScopeQuery<MO>::iterator Iterator;
+        using Type = MO;
+        using Result = MORef<MO>;
+        using Iterator = ScopeQuery<MO>::iterator;
       };
     
     template<class MO>
     struct _PickRes<bool(&)(Placement<MO> const&)>
       {
-        typedef MO Type;
-        typedef MORef<MO> Result;
-        typedef typename ScopeQuery<MO>::iterator Iterator;
+        using Type = MO;
+        using Result = MORef<MO>;
+        using Iterator = ScopeQuery<MO>::iterator;
       };
     
     template<class MO>
     struct _PickRes<bool(*)(Placement<MO> const&)>
       {
-        typedef MO Type;
-        typedef MORef<MO> Result;
-        typedef typename ScopeQuery<MO>::iterator Iterator;
+        using Type = MO;
+        using Result = MORef<MO>;
+        using Iterator = ScopeQuery<MO>::iterator;
       };
   }
   
@@ -106,11 +106,11 @@ namespace session {
        *         compiler error "no suitable function pick(.....)"
        */
       template<typename PRED>
-      typename _PickRes<PRED>::Result
+      _PickRes<PRED>::Result
       pick (PRED const& searchPredicate)
         {
-          typedef typename _PickRes<PRED>::Result ResultRef;
-          typedef typename _PickRes<PRED>::Iterator Iterator;
+          using ResultRef = _PickRes<PRED>::Result;
+          using Iterator = _PickRes<PRED>::Iterator;
           
           Iterator iter (pickAllSuitable ( SessionServiceExploreScope::getScopeRoot()
                                          , searchPredicate

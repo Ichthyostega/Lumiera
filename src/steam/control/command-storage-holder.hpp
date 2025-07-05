@@ -77,8 +77,8 @@ namespace control {
       using ArgumentBuff = InPlaceBuffer<ArgHolder>;
       using  MementoBuff = InPlaceBuffer<MemHolder>;
       
-      using ArgTuple = typename ArgHolder::ArgTuple;
-      using Args     = typename lib::meta::RebindTupleTypes<ArgTuple>::Seq; // std::tuple<ARGS...> to Types<ARGS...>
+      using ArgTuple = ArgHolder::ArgTuple;
+      using Args     = lib::meta::RebindTupleTypes<ArgTuple>::Seq; // std::tuple<ARGS...> to Types<ARGS...>
       
       
       /* ====== in-place storage buffers ====== */
@@ -215,9 +215,9 @@ namespace control {
         }
       
       
-      typedef typename CommandSignature<SIG,MEM>::OperateSig SIG_op;
-      typedef typename CommandSignature<SIG,MEM>::CaptureSig SIG_cap;
-      typedef typename CommandSignature<SIG,MEM>::UndoOp_Sig SIG_undo;
+      using SIG_op = CommandSignature<SIG,MEM>::OperateSig;
+      using SIG_cap = CommandSignature<SIG,MEM>::CaptureSig;
+      using SIG_undo = CommandSignature<SIG,MEM>::UndoOp_Sig;
       
       /** create a new memento storage wiring, discarding existing memento state.
        *  @note any bound undo/capture functions based on the previously held MementoTie

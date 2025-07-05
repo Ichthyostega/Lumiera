@@ -456,7 +456,7 @@ namespace stat{
                                                      % csv.getParsedFieldCnt() % columnCnt % line};
                         }
                       
-                      using Value = typename std::remove_reference<decltype(col)>::type::ValueType;
+                      using Value = std::remove_reference<decltype(col)>::type::ValueType;
                       col.get() = parseAs<Value>(*csv);
                       ++csv;
                     });

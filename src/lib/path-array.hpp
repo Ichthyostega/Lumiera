@@ -259,8 +259,8 @@ namespace lib {
       template<typename...ARGS>
       struct Split
         {
-          using Prefix = typename meta::BuildIndexSeq<chunk_size>::Ascending;
-          using Rest   = typename meta::BuildIdxIter<ARGS...>::template After<chunk_size>;
+          using Prefix = meta::BuildIndexSeq<chunk_size>::Ascending;
+          using Rest   = meta::BuildIdxIter<ARGS...>::template After<chunk_size>;
         };
       
     public:
@@ -560,8 +560,8 @@ namespace lib {
   {
     if (l.size() != r.size()) return false;
     
-    typename PathArray<cl>::iterator lp = l.begin();
-    typename PathArray<cl>::iterator rp = r.begin();
+    auto lp = l.begin();
+    auto rp = r.begin();
     while (lp and rp)
       {
         if (*lp != *rp) return false;

@@ -200,7 +200,7 @@ namespace lib {
     >
   class InPlaceAnyHolder
     {
-      using BaseP = typename AccessPolicy::Base *;
+      using BaseP = AccessPolicy::Base *;
       
       /** Inner capsule managing the contained object (interface) */
       struct Buffer

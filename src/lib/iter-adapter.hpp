@@ -212,9 +212,9 @@ namespace lib {
       using _ValTrait = meta::ValueTypeBinding<std::remove_pointer_t<POS>>;
       
     public:
-      using value_type = typename _ValTrait::value_type;
-      using reference = typename _ValTrait::reference;
-      using pointer = typename _ValTrait::pointer;
+      using value_type = _ValTrait::value_type;
+      using reference = _ValTrait::reference;
+      using pointer = _ValTrait::pointer;
       
       
       IterAdapter (CON src, POS const& startpos)
@@ -302,7 +302,7 @@ namespace lib {
       
       
     protected:
-      using ConRef = typename meta::RefTraits<CON>::Reference;
+      using ConRef = meta::RefTraits<CON>::Reference;
       
       /** allow derived classes to access backing container */
       ConRef       source()       { return                source_; }
@@ -376,9 +376,9 @@ namespace lib {
       ST core_;
       
     public:
-      using value_type = typename meta::RefTraits<T>::Value;
-      using reference  = typename meta::RefTraits<T>::Reference;
-      using pointer    = typename meta::RefTraits<T>::Pointer;
+      using value_type = meta::RefTraits<T>::Value;
+      using reference  = meta::RefTraits<T>::Reference;
+      using pointer    = meta::RefTraits<T>::Pointer;
       
       IterStateWrapper (ST&& initialState)
         : core_(std::forward<ST>(initialState))
@@ -519,7 +519,7 @@ namespace lib {
           return bool(srcIter());
         }
       
-      typename IT::reference
+      IT::reference
       yield()  const
         {
           return *srcIter();
@@ -614,7 +614,7 @@ namespace lib {
   class ContainerCore
     : public CON
     {
-      using Iter = typename CON::iterator;
+      using Iter = CON::iterator;
       
       Iter p_;
       
@@ -694,9 +694,9 @@ namespace lib {
       
     public:
       using YieldRes   = iter::CoreYield<COR>;
-      using value_type = typename meta::RefTraits<YieldRes>::Value;
-      using reference  = typename meta::RefTraits<YieldRes>::Reference;
-      using pointer    = typename meta::RefTraits<YieldRes>::Pointer;
+      using value_type = meta::RefTraits<YieldRes>::Value;
+      using reference  = meta::RefTraits<YieldRes>::Reference;
+      using pointer    = meta::RefTraits<YieldRes>::Pointer;
       
       
       /** by default, pass anything down for initialisation of the core.
@@ -803,11 +803,11 @@ namespace lib {
       using _ValTrait = meta::ValueTypeBinding<meta::remove_pointer_t<IT>>;
       
     public:
-      using pointer    = typename _ValTrait::pointer;
-      using reference  = typename _ValTrait::reference;
+      using pointer    = _ValTrait::pointer;
+      using reference  = _ValTrait::reference;
       
       /// @note special twist, since a STL const_iterator would yield a non-const `value_type`
-      using value_type = typename std::remove_reference<reference>::type;
+      using value_type = std::remove_reference<reference>::type;
       
       
       RangeIter (IT const& start, IT const& end)
@@ -1052,7 +1052,7 @@ namespace lib {
       template<class T2>
       struct SimilarIter  ///< rebind to rewritten Iterator wrapped into RangeIter
         {
-          using WrappedIter = typename IterType<IT>::template SimilarIter<T2>::Type;
+          using WrappedIter = IterType<IT>::template SimilarIter<T2>::Type;
           using        Type = RangeIter<WrappedIter>;
         };
     };
@@ -1067,9 +1067,9 @@ namespace lib {
       
       
     public:
-      using value_type = const typename IT::value_type;
-      using pointer    = const typename IT::pointer   ;
-      using reference  = const typename IT::reference ;
+      using value_type = const IT::value_type;
+      using pointer    = const IT::pointer   ;
+      using reference  = const IT::reference ;
       
       ConstIter (IT srcIter)
         : i_(srcIter)

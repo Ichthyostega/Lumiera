@@ -60,10 +60,10 @@ namespace lib {
       
     public:
       /** this iterator adapter is meant to wrap an iterator yielding pointer values */
-      using pointer    = typename meta::ValueTypeBinding<IT>::value_type;
+      using pointer    = meta::ValueTypeBinding<IT>::value_type;
       static_assert(std::is_pointer_v<pointer>);
       
-      using value_type = typename std::remove_pointer_t<pointer>;
+      using value_type = std::remove_pointer_t<pointer>;
       using reference  = value_type&;
       
       
@@ -72,10 +72,10 @@ namespace lib {
       
       // the purpose of the following typedefs is to support building a correct "const iterator"
       
-      using ValueTypeBase = typename std::remove_const_t<value_type>; // value_type without const
+      using ValueTypeBase = std::remove_const_t<value_type>; // value_type without const
       
-      using WrappedIterType      = typename IterType<IT>::template SimilarIter<      ValueTypeBase* * >::Type;
-      using WrappedConstIterType = typename IterType<IT>::template SimilarIter<const ValueTypeBase* * >::Type;
+      using WrappedIterType      = IterType<IT>::template SimilarIter<      ValueTypeBase* * >::Type;
+      using WrappedConstIterType = IterType<IT>::template SimilarIter<const ValueTypeBase* * >::Type;
       
       using IterType      = PtrDerefIter<WrappedIterType>;
       using ConstIterType = PtrDerefIter<WrappedConstIterType>;
@@ -220,7 +220,7 @@ namespace lib {
   template<class IT>
   class AddressExposingIter
     {
-      using _Ptr = typename IT::pointer;
+      using _Ptr = IT::pointer;
       
       IT i_;  ///< nested source iterator
       
@@ -238,9 +238,9 @@ namespace lib {
       
       
     public:
-      using pointer    = typename IT::pointer const*;
-      using reference  = typename IT::pointer const&;
-      using value_type = typename IT::pointer const ;
+      using pointer    = IT::pointer const*;
+      using reference  = IT::pointer const&;
+      using value_type = IT::pointer const ;
       
       ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (AddressExposingIter);
       

@@ -129,7 +129,7 @@ namespace model {
       template<typename X>                             // note the "backward" use. We pick that base interface
       using canUpcast = std::is_convertible<TAR*, X>; //  into which our desired result type can be upcast, because
                                                      //   we know the then following dynamic_cast (downcast) can succeed
-      using Base = typename RawResult::FirstMatching<canUpcast>::Type;
+      using Base = RawResult::FirstMatching<canUpcast>::Type;
       
       virtual void
       handle (Base& pb)  override

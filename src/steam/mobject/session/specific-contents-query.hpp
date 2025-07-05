@@ -54,11 +54,9 @@ namespace session {
   class SpecificContentsQuery
     : public ContentsQuery<MO>
     {
-      typedef typename ContentsQuery<MO>::ContentFilter ContentFilter;
-      
-      typedef Placement<MO> const& TypedPlacement; 
-      
-      typedef function<bool(TypedPlacement)> SpecialPredicate;
+      using ContentFilter = ContentsQuery<MO>::ContentFilter;
+      using TypedPlacement = Placement<MO> const&; 
+      using SpecialPredicate = function<bool(TypedPlacement)>;
       
       /**
        * Filter functor, built on top of a predicate,
@@ -120,25 +118,25 @@ namespace session {
     template<class MO>
     struct _PickResult<function<bool(Placement<MO> const&)> >
       {
-        typedef MO Type;
-        typedef SpecificContentsQuery<MO> FilterQuery;
-        typedef typename ScopeQuery<MO>::iterator Iterator;
+        using Type = MO;
+        using FilterQuery = SpecificContentsQuery<MO>;
+        using Iterator = ScopeQuery<MO>::iterator;
       };
     
     template<class MO>
     struct _PickResult<bool(&)(Placement<MO> const&)>
       {
-        typedef MO Type;
-        typedef SpecificContentsQuery<MO> FilterQuery;
-        typedef typename ScopeQuery<MO>::iterator Iterator;
+        using Type        = MO;
+        using FilterQuery = SpecificContentsQuery<MO>;
+        using Iterator    = ScopeQuery<MO>::iterator;
       };
     
     template<class MO>
     struct _PickResult<bool(*)(Placement<MO> const&)>
       {
-        typedef MO Type;
-        typedef SpecificContentsQuery<MO> FilterQuery;
-        typedef typename ScopeQuery<MO>::iterator Iterator;
+        using Type        = MO;
+        using FilterQuery = SpecificContentsQuery<MO>;
+        using Iterator    = ScopeQuery<MO>::iterator;
       };
   }
   
@@ -150,10 +148,10 @@ namespace session {
    *  based on the predicate given as parameter
    */
   template<typename FUNC>
-  inline typename _PickResult<FUNC>::FilterQuery
+  inline _PickResult<FUNC>::FilterQuery
   pickAllSuitable(PlacementMO const& scope, FUNC predicate)
   {
-    typedef typename _PickResult<FUNC>::FilterQuery Query;
+    using Query = _PickResult<FUNC>::FilterQuery;
     
     return Query(scope, predicate);
   }
@@ -164,10 +162,10 @@ namespace session {
    *          defined through the parameter of the predicate
    */
   template<typename FUNC>
-  inline typename _PickResult<FUNC>::Iterator
+  inline _PickResult<FUNC>::Iterator
   pickAllSuitable(PlacementMO const& scope, FUNC predicate, QueryResolver const& resolver)
   {
-    typedef typename _PickResult<FUNC>::FilterQuery Query;
+    using Query = _PickResult<FUNC>::FilterQuery;
     
     return Query(scope, predicate ).resolveBy(resolver);
   }

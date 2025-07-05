@@ -364,7 +364,7 @@ namespace diff{
       void
       initDiffApplication()
         {
-          using Target = typename TreeDiffTraits<TAR>::Ret;
+          using Target = TreeDiffTraits<TAR>::Ret;
           
           Target target = mutatorBinding (subject_);
           buildMutator(target)->init();

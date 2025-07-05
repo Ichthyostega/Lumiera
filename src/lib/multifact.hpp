@@ -103,7 +103,7 @@ namespace lib {
     template<typename RAW>
     struct BuildRefcountPtr
       {
-        using RawType    = typename std::remove_pointer<RAW>::type;
+        using RawType    = std::remove_pointer<RAW>::type;
         using BareType   = RawType *;
         using ResultType = std::shared_ptr<RawType>;
         
@@ -210,8 +210,8 @@ namespace lib {
     struct FabConfig
       {
         using WrapFunctor    = Wrapper<TY>;
-        using BareProduct    = typename WrapFunctor::BareType;
-        using WrappedProduct = typename WrapFunctor::ResultType;
+        using BareProduct    = WrapFunctor::BareType;
+        using WrappedProduct = WrapFunctor::ResultType;
         
         typedef BareProduct SIG_Fab(void);
         
@@ -228,8 +228,8 @@ namespace lib {
     struct FabConfig<RET(ARGS...), Wrapper>
       {
         using WrapFunctor    = Wrapper<RET>;
-        using BareProduct    = typename WrapFunctor::BareType;
-        using WrappedProduct = typename WrapFunctor::ResultType;
+        using BareProduct    = WrapFunctor::BareType;
+        using WrappedProduct = WrapFunctor::ResultType;
         
         typedef BareProduct SIG_Fab(ARGS...);
         
@@ -259,14 +259,14 @@ namespace lib {
       : public FabConfig<SIG,Wrapper>::WrapFunctor
       {
         using   _Conf = FabConfig<SIG,Wrapper>;
-        using SIG_Fab = typename _Conf::SIG_Fab;
+        using SIG_Fab = _Conf::SIG_Fab;
         using    _Fab = Fab<SIG_Fab,ID>;
         
         _Fab funcTable_;
         
         
       protected:
-        using Creator = typename _Fab::FactoryFunc;
+        using Creator = _Fab::FactoryFunc;
         
         Creator&
         selectProducer (ID const& id)
@@ -276,7 +276,7 @@ namespace lib {
         
         
       public:
-        using Product = typename _Conf::WrappedProduct;
+        using Product = _Conf::WrappedProduct;
         
         /**
          * Core operation of the factory:

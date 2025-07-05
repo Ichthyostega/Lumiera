@@ -70,20 +70,20 @@ namespace meta {
   template<size_t n>
   struct BuildIndexSeq
     {
-      using Ascending  = typename BuildIndexSeq<n-1>::Ascending::template AppendElm<n-1>;
-      using Descending = typename BuildIndexSeq<n-1>::Descending::template PrependElm<n-1>;
+      using Ascending  = BuildIndexSeq<n-1>::Ascending::template AppendElm<n-1>;
+      using Descending = BuildIndexSeq<n-1>::Descending::template PrependElm<n-1>;
       
       template<size_t d>
-      using OffsetBy   = typename BuildIndexSeq<n-1>::template OffsetBy<d>::template AppendElm<n-1+d>;
+      using OffsetBy   = BuildIndexSeq<n-1>::template OffsetBy<d>::template AppendElm<n-1+d>;
       
       template<size_t x>
-      using FilledWith = typename BuildIndexSeq<n-1>::template FilledWith<x>::template AppendElm<x>;
+      using FilledWith = BuildIndexSeq<n-1>::template FilledWith<x>::template AppendElm<x>;
       
       template<size_t c>
-      using First = typename BuildIndexSeq<std::min(c,n)>::Ascending;
+      using First      = BuildIndexSeq<std::min(c,n)>::Ascending;
       
       template<size_t c>
-      using After = typename BuildIndexSeq< (n>c)? n-c : 0>::template OffsetBy<c>;
+      using After      = BuildIndexSeq< (n>c)? n-c : 0>::template OffsetBy<c>;
     };
   
   template<>
@@ -118,20 +118,20 @@ namespace meta {
       enum {SIZ = sizeof...(TYPES) };
       using Builder = BuildIndexSeq<SIZ>;
       
-      using Ascending  = typename Builder::Ascending;
-      using Descending = typename Builder::Descending;
+      using Ascending  = Builder::Ascending;
+      using Descending = Builder::Descending;
       
       template<size_t d>
-      using OffsetBy   = typename Builder::template OffsetBy<d>;
+      using OffsetBy   = Builder::template OffsetBy<d>;
       
       template<size_t x>
-      using FilledWith = typename Builder::template FilledWith<x>;
+      using FilledWith = Builder::template FilledWith<x>;
       
       template<size_t c>
-      using First = typename Builder::template First<c>;
+      using First      = Builder::template First<c>;
       
       template<size_t c>
-      using After = typename Builder::template After<c>;
+      using After      = Builder::template After<c>;
     };
 
   /** build an index number sequence from a type sequence */
@@ -193,13 +193,13 @@ namespace meta {
       using Apply = Types<META<TYPES>...>;
       
       template<template<typename...> class O>
-      using Rebind = typename lib::meta::RebindVariadic<O, Seq>::Type;
+      using Rebind = lib::meta::RebindVariadic<O, Seq>::Type;
       
       template<template<class> class PRED>
-      using AndAll = typename ElmTypes<Apply<PRED>>::template Rebind<std::__and_>;
+      using AndAll = ElmTypes<Apply<PRED>>::template Rebind<std::__and_>;
       
       template<template<class> class PRED>
-      using OrAll  = typename ElmTypes<Apply<PRED>>::template Rebind<std::__or_>;
+      using OrAll  = ElmTypes<Apply<PRED>>::template Rebind<std::__or_>;
     };
   
   // Note: a further specialisation for any »tuple-like« is defined in tuple-helper.hpp

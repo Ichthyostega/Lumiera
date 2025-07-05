@@ -176,7 +176,7 @@ namespace test {
     {
     public:
       using TestLoad  = TestChainLoad<maxFan>;
-      using TestSetup = typename TestLoad::ScheduleCtx;
+      using TestSetup = TestLoad::ScheduleCtx;
       
       
       /***********************************************************************//**
@@ -268,8 +268,8 @@ namespace test {
     class BreakingPoint
       : public CONF
       {
-        using TestLoad  = typename CONF::TestLoad;
-        using TestSetup = typename TestLoad::ScheduleCtx;
+        using TestLoad  = CONF::TestLoad;
+        using TestSetup = TestLoad::ScheduleCtx;
         
         struct Res
           {
@@ -484,12 +484,12 @@ namespace test {
     class ParameterRange
       : public CONF
       {
-        using TestLoad  = typename CONF::TestLoad;
-        using TestSetup = typename TestLoad::ScheduleCtx;
+        using TestLoad  = CONF::TestLoad;
+        using TestSetup = TestLoad::ScheduleCtx;
         
         // Type binding for data evaluation
-        using Param = typename CONF::Param;
-        using Table = typename CONF::Table;
+        using Param = CONF::Param;
+        using Table = CONF::Table;
         
         
         void

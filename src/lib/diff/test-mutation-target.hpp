@@ -195,8 +195,8 @@ namespace diff{
       
       
     public:
-      using iterator       = typename iter_stl::_SeqT<VecG>::Range;
-      using const_iterator = typename iter_stl::_SeqT<const VecG>::Range;
+      using iterator       = iter_stl::_SeqT<VecG>::Range;
+      using const_iterator = iter_stl::_SeqT<const VecG>::Range;
       
       const_iterator begin() const { return eachElm(content_); }
       const_iterator end()   const { return const_iterator(); }

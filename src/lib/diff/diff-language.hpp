@@ -106,7 +106,7 @@ namespace diff{
   struct InterpreterScheme               ///< base case is to expect typedef I::Val
     {
       using Interpreter = I;
-      using Val = typename I::Val;
+      using Val     = I::Val;
       using Handler = HandlerFun<I,Val>;
     };
   
@@ -188,12 +188,12 @@ namespace diff{
   struct DiffStepBuilder
     {
       using Scheme  = InterpreterScheme<I>;
-      using Handler = typename Scheme::Handler;
-      using Val     = typename Scheme::Val;
+      using Handler = Scheme::Handler;
+      using Val     = Scheme::Val;
       
       using Lang = DiffLanguage<I,Val>;
-      using Step = typename Lang::DiffStep;
-      using Verb = typename Lang::DiffVerb;
+      using Step = Lang::DiffStep;
+      using Verb = Lang::DiffVerb;
       
       Handler handler;
       Literal id;
@@ -239,7 +239,7 @@ namespace diff{
    * @warning use for internal state marking only --
    *          invoking this token produces undefined behaviour */
   template<class I, typename E>
-  const typename DiffLanguage<I,E>::DiffStep DiffLanguage<I,E>::NIL = DiffStep(DiffVerb(), E());
+  const DiffLanguage<I,E>::DiffStep DiffLanguage<I,E>::NIL = DiffStep(DiffVerb(), E());
   
   
   

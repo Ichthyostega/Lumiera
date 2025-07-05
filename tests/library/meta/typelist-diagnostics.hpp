@@ -167,7 +167,7 @@ namespace meta {
         {
           static string show()
             {
-              typedef typename Config<f1,f2,f3,f4,f5>::Flags FlagList;
+              using FlagList = Config<f1,f2,f3,f4,f5>::Flags;
               return string("\n\t+-Conf-[") + printSublist<FlagList>()+"]"
                    + BASE::show(); 
             }
@@ -184,7 +184,7 @@ namespace meta {
     string                  >
     showType ()
     {
-      using TypeList = typename TYPES::List;
+      using TypeList = TYPES::List;
       return printSublist<TypeList>();
     }
     

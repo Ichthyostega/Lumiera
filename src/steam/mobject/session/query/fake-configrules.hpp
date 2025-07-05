@@ -174,7 +174,7 @@ namespace session {
     template<class TY, class BASE>
     class LookupPreconfigured : public BASE
       {
-        typedef typename WrapReturn<TY>::Wrapper Ret;
+        using Ret = WrapReturn<TY>::Wrapper;
         
         /** (dummy) implementation of the QueryHandler interface */
         virtual bool

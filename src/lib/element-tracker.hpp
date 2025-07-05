@@ -82,8 +82,8 @@ namespace lib {
     : public std::vector<P<ELM>>
     {
       using  _Vec = std::vector<P<ELM>>;
-      using  Iter = typename _Vec::iterator;
-      using CIter = typename _Vec::const_iterator;
+      using  Iter = _Vec::iterator;
+      using CIter = _Vec::const_iterator;
       
     public:
      ~ElementTracker()
@@ -226,7 +226,7 @@ namespace lib {
   /** storage for the functor to link an AutoRegistered entity
    *  to the corresponding registration service */
   template<typename TAR>
-  typename AutoRegistered<TAR>::RegistryLink  AutoRegistered<TAR>::getRegistry;
+  AutoRegistered<TAR>::RegistryLink  AutoRegistered<TAR>::getRegistry;
   
   
   

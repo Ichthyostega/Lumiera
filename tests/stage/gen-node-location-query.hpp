@@ -252,7 +252,7 @@ namespace interact {
           // 
           Literal currentChild_ = Symbol::BOTTOM;
           
-          using Pos = typename PAR::Pos;
+          using Pos = PAR::Pos;
           
           virtual Pos
           firstResult ()  override

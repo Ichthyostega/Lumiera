@@ -78,7 +78,7 @@ namespace query  {
     
     /** we maintain an independent defaults registry
      *  for every participating kind of object. */
-    typedef std::vector< P<TableEntry> > Table;
+    using Table = std::vector< P<TableEntry> >;
     
     
     /**
@@ -132,7 +132,7 @@ namespace query  {
     struct Slot
       : public TableEntry
       {
-        typedef std::set<Record<TAR>> Registry;
+        using Registry = std::set<Record<TAR>>;
         
         Registry registry;
         static size_t index; ///< where to find this Slot in every Table
@@ -194,7 +194,7 @@ namespace query  {
         class Iter
           {
             friend class DefsRegistry;
-            typedef typename Slot<TAR>::Registry::iterator II;
+            using II = Slot<TAR>::Registry::iterator;
             
             II p,i,e;
             P<TAR> next, ptr;
@@ -251,12 +251,12 @@ namespace query  {
           {
             P<TAR> dummy;
             Record<TAR> entry (query, dummy);
-            typedef typename Slot<TAR>::Registry Registry;
+            using Registry = Slot<TAR>::Registry;
             Registry& registry = Slot<TAR>::access(table_);
             
             // try to get a possible direct match (same query)
-            typename Registry::iterator pos = registry.find (entry);
-            typename Registry::iterator end = registry.end();
+            auto pos = registry.find (entry);
+            auto end = registry.end();
             
             if (pos==end)
               return Iter<TAR> (registry.begin(), end);        // just enumerate contents
@@ -277,8 +277,8 @@ namespace query  {
         put (P<TAR> const& obj, Query<TAR> const& query)
           {
             Record<TAR> entry (query, obj);
-            typedef typename Slot<TAR>::Registry Registry;
-            typedef typename Registry::iterator RIter;
+            using Registry = Slot<TAR>::Registry;
+            using RIter    = Registry::iterator;
             
             Registry& registry = Slot<TAR>::access(table_);
             RIter pos = registry.lower_bound (entry);
@@ -306,8 +306,8 @@ namespace query  {
         bool
         forget (P<TAR> const& obj)
           {
-            typedef typename Slot<TAR>::Registry Registry;
-            typedef typename Record<TAR>::Search SearchFunc;
+            using Registry = Slot<TAR>::Registry;
+            using SearchFunc = Record<TAR>::Search;
             
             Registry& registry = Slot<TAR>::access(table_);
             return util::remove_if(registry, SearchFunc (obj));

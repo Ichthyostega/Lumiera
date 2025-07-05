@@ -372,10 +372,10 @@ namespace lib {
       class InstanceCore
         {
           using ActionIter = IndexIter<const ActionSeq>;
-          using DataCtxIter = typename SRC::Iter;
+          using DataCtxIter = SRC::Iter;
           using NestedCtx = std::pair<DataCtxIter, SRC>;
           using CtxStack = std::stack<NestedCtx, std::vector<NestedCtx>>;
-          using Value   = typename SRC::Value;
+          using Value   = SRC::Value;
           
           SRC        dataSrc_;
           ActionIter actionIter_;
@@ -826,7 +826,7 @@ namespace lib {
   
   /** Instantiate next Action token and expose its rendering */
   template<class SRC>
-  inline typename SRC::Value
+  inline SRC::Value
   TextTemplate::InstanceCore<SRC>::instantiateNext()
   {
     return actionIter_? actionIter_->instantiate(*this)
@@ -840,7 +840,7 @@ namespace lib {
    * @return the rendering produced by the selected next Action token
    */
   template<class SRC>
-  inline typename SRC::Value
+  inline SRC::Value
   TextTemplate::InstanceCore<SRC>::reInstatiate (Idx nextCode)
   {
     if (nextCode == Idx(-1))
@@ -852,7 +852,7 @@ namespace lib {
   
   /** retrieve a data value from the data source for the indiated key */
   template<class SRC>
-  inline typename SRC::Value
+  inline SRC::Value
   TextTemplate::InstanceCore<SRC>::getContent (string key)
   {
     static Value nil{};

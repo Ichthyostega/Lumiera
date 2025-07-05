@@ -221,9 +221,9 @@ namespace lib {
            };
       
       template<typename RET>
-      using VisitorFunc      = typename variant::VFunc<RET>::template VisitorInterface<TYPES>;
+      using VisitorFunc      = variant::VFunc<RET>::template VisitorInterface<TYPES>;
       template<typename RET>
-      using VisitorConstFunc = typename variant::VFunc<RET>::template VisitorInterface<meta::ConstAll<typename TYPES::List>>;
+      using VisitorConstFunc = variant::VFunc<RET>::template VisitorInterface<meta::ConstAll<typename TYPES::List>>;
       
       /**
        * to be implemented by the client for visitation
@@ -443,7 +443,7 @@ namespace lib {
       
       Variant()
         {
-          using DefaultType = typename TYPES::List::Head;
+          using DefaultType = TYPES::List::Head;
           
           new(storage_) Buff<DefaultType> (DefaultType());
         }
@@ -453,7 +453,7 @@ namespace lib {
         {
           static_assert (variant::CanBuildFrom<X, TYPES>(), "No type in Typelist can be built from the given argument");
           
-          using StorageType = typename variant::CanBuildFrom<X, TYPES>::Type;
+          using StorageType = variant::CanBuildFrom<X, TYPES>::Type;
           
           new(storage_) Buff<StorageType> (forward<X>(x));
         }
@@ -477,7 +477,7 @@ namespace lib {
       Variant&
       operator= (X x)
         {
-          using RawType = typename std::remove_reference<X>::type;
+          using RawType = std::remove_reference<X>::type;
           static_assert (meta::isInList<RawType, typename TYPES::List>(),
                          "Type error: the given variant could never hold the required type");
           static_assert (std::is_copy_assignable<RawType>::value, "target type does not support assignment");

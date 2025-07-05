@@ -98,7 +98,7 @@ namespace control {
       {
         Command& prototype_;
         
-        using CmdArgs = typename _Fun<SIG>::Args;
+        using CmdArgs = _Fun<SIG>::Args;
         
         CompletedDefinition (Command& definedCommand)
           : prototype_(definedCommand)
@@ -109,7 +109,7 @@ namespace control {
           }
         
         
-        typedef HandlingPattern::ID PattID;
+        using PattID = HandlingPattern::ID;
         
         /** allow for defining the default execution pattern,
          *  which is used by Command::operator()  */
@@ -159,15 +159,15 @@ namespace control {
     template<typename SIG, typename MEM>
     struct UndoDefinition
       {
-        typedef CommandSignature<SIG,MEM> CmdType;
-        typedef typename CmdType::OperateSig CommandOperationSig;
-        typedef typename CmdType::UndoOp_Sig UndoOperationSig;
-        typedef typename CmdType::CaptureSig UndoCaptureSig;
-        typedef typename CmdType::CmdArgs    CmdArgs;
+        using CmdType = CommandSignature<SIG,MEM>;
+        using CommandOperationSig = CmdType::OperateSig;
+        using UndoOperationSig = CmdType::UndoOp_Sig;
+        using UndoCaptureSig = CmdType::CaptureSig;
+        using CmdArgs = CmdType::CmdArgs;
         
-        typedef function<CommandOperationSig> OperFunc;
-        typedef function<UndoOperationSig>    UndoFunc;
-        typedef function<UndoCaptureSig>      CaptFunc;
+        using OperFunc = function<CommandOperationSig>;
+        using UndoFunc = function<UndoOperationSig>;
+        using CaptFunc = function<UndoCaptureSig>;
         
         Activation activatePrototype_;
         OperFunc operFunctor_;
@@ -233,9 +233,9 @@ namespace control {
         auto
         captureUndo (FUN2 how_to_capture_UndoState)
           {
-            using Sig2                   = typename _Fun<FUN2>::Sig;
-            using UndoCapSig             = typename UndoSignature<Sig2>::CaptureSig;
-            using SpecificUndoDefinition = typename BuildUndoDefType<UndoSignature<Sig2>>::Type;
+            using Sig2                   = _Fun<FUN2>::Sig;
+            using UndoCapSig             = UndoSignature<Sig2>::CaptureSig;
+            using SpecificUndoDefinition = BuildUndoDefType<UndoSignature<Sig2>>::Type;
             
             function<UndoCapSig> captureOperation (how_to_capture_UndoState);
             return SpecificUndoDefinition (callback_, operation_, captureOperation);
@@ -287,7 +287,7 @@ namespace control {
       auto
       operation (FUN operation_to_define)
         {
-          using Sig = typename _Fun<FUN>::Sig;
+          using Sig = _Fun<FUN>::Sig;
           
           function<Sig> opera1 (operation_to_define);
           Activation callback_when_defined = bind (&CommandDef::activate, this, _1);

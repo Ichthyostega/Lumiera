@@ -206,7 +206,7 @@ namespace lib {
   
   /** storage for the empty data-source constant */
   template<typename TY>
-  typename IterSource<TY>::iterator IterSource<TY>::EMPTY_SOURCE = iterator();
+  IterSource<TY>::iterator IterSource<TY>::EMPTY_SOURCE = iterator();
   
   
   
@@ -226,7 +226,7 @@ namespace lib {
       IT src_;
       
     protected:
-      using Pos = typename ISO::Pos;
+      using Pos = ISO::Pos;
       
       Pos                                                ////////////////////////////////////////////////////TICKET #1125 : this API should use three control functions, similar to IterStateWrapper
       firstResult ()
@@ -276,55 +276,55 @@ namespace lib {
       template<class CON>
       struct _SeqT
         {
-          using Val  = typename CON::iterator::value_type;
-          using Iter = typename IterSource<Val>::iterator;
+          using Val  = CON::iterator::value_type;
+          using Iter = IterSource<Val>::iterator;
         };
       
       template<class IT>
       struct _RangeT
         {
-          using Val  = typename IT::value_type;
-          using Iter = typename IterSource<Val>::iterator;
+          using Val  = IT::value_type;
+          using Iter = IterSource<Val>::iterator;
         };
 
       template<class MAP>
       struct _MapT
         {
-          using Key     = typename MAP::key_type;
-          using Val     = typename MAP::value_type::second_type;
-          using KeyIter = typename IterSource<Key>::iterator;
-          using ValIter = typename IterSource<Val>::iterator;
+          using Key     = MAP::key_type;
+          using Val     = MAP::value_type::second_type;
+          using KeyIter = IterSource<Key>::iterator;
+          using ValIter = IterSource<Val>::iterator;
         };
       
       
       template<class IT>
       struct _IterT
         {
-          using Src  = typename std::remove_reference<IT>::type;
-          using Val  = typename Src::value_type;
-          using Iter = typename IterSource<Val>::iterator;
+          using Src  = std::remove_reference<IT>::type;
+          using Val  = Src::value_type;
+          using Iter = IterSource<Val>::iterator;
         };
       
       template<class IT, class FUN>
       struct _TransformIterT
         {
-          using       Src = typename std::remove_reference<IT>::type;
-          using    ResVal = typename lib::meta::_Fun<FUN>::Ret;
+          using       Src = std::remove_reference<IT>::type;
+          using    ResVal = lib::meta::_Fun<FUN>::Ret;
           using TransIter = TransformIter<Src, ResVal>;
-          using      Iter = typename IterSource<ResVal>::iterator;
+          using      Iter = IterSource<ResVal>::iterator;
         };
       
       template<class IT>
       struct _PairIterT
         {
-          using          Src = typename std::remove_reference<IT>::type;
-          using     PairType = typename Src::value_type;
-          using      ValType = typename PairType::second_type;
-          using ConstKeyType = typename PairType::first_type;
+          using          Src = std::remove_reference<IT>::type;
+          using     PairType = Src::value_type;
+          using      ValType = PairType::second_type;
+          using ConstKeyType = PairType::first_type;
           
           // since we're returning the keys always by value,
           // we can strip the const added by the STL map types
-          using KeyType = typename std::remove_const<ConstKeyType>::type;
+          using KeyType = std::remove_const<ConstKeyType>::type;
           
           using KeyIter = TransformIter<Src, KeyType>;
           using ValIter = TransformIter<Src, ValType>;
@@ -335,14 +335,14 @@ namespace lib {
       
       
       template<class IT>
-      typename _PairIterT<IT>::KeyIter
+      _PairIterT<IT>::KeyIter
       takePairFirst (IT&& source)
       {
         return transformIterator(forward<IT>(source), _PairIterT<IT>::takeFirst );
       }
       
       template<class IT>
-      typename _PairIterT<IT>::ValIter
+      _PairIterT<IT>::ValIter
       takePairSecond (IT&& source)
       {
         return transformIterator(forward<IT>(source), _PairIterT<IT>::takeSecond );
@@ -356,11 +356,11 @@ namespace lib {
      *  exposing just a IterSource based frontend.
      */
     template<class IT>
-    typename _IterT<IT>::Iter
+    _IterT<IT>::Iter
     wrapIter (IT&& source)
     {
-      using Src = typename _IterT<IT>::Src;
-      using Val = typename _IterT<IT>::Val;
+      using Src = _IterT<IT>::Src;
+      using Val = _IterT<IT>::Val;
       
       return IterSource<Val>::build (new WrappedLumieraIter<Src> (forward<IT>(source)));
     }
@@ -376,7 +376,7 @@ namespace lib {
     singleVal (VAL&& something)
     {
       using Src = decltype(singleValIterator (forward<VAL>(something)));
-      using Val = typename _IterT<Src>::Val;
+      using Val = _IterT<Src>::Val;
 
       return IterSource<Val>::build (new WrappedLumieraIter<Src>{singleValIterator (forward<VAL>(something))});
     }
@@ -392,11 +392,11 @@ namespace lib {
      *       function call for every fetched element.
      */
     template<class IT, class FUN>
-    typename _TransformIterT<IT,FUN>::Iter
+    _TransformIterT<IT,FUN>::Iter
     transform (IT&& source, FUN processingFunc)
     {
-      using ValType = typename _TransformIterT<IT,FUN>::ResVal;
-      using TransIT = typename _TransformIterT<IT,FUN>::TransIter;
+      using ValType = _TransformIterT<IT,FUN>::ResVal;
+      using TransIT = _TransformIterT<IT,FUN>::TransIter;
       
       return IterSource<ValType>::build (
           new WrappedLumieraIter<TransIT> (
@@ -408,7 +408,7 @@ namespace lib {
      *          all the keys of the given Map or Hashtable
      */
     template<class MAP>
-    typename _MapT<MAP>::KeyIter
+    _MapT<MAP>::KeyIter
     eachMapKey (MAP& map)
     {
       using Range = RangeIter<typename MAP::iterator>;
@@ -422,7 +422,7 @@ namespace lib {
      *          all the values of the given Map or Hashtable
      */
     template<class MAP>
-    typename _MapT<MAP>::ValIter
+    _MapT<MAP>::ValIter
     eachMapVal (MAP& map)
     {
       using Range = RangeIter<typename MAP::iterator>;
@@ -438,7 +438,7 @@ namespace lib {
      *          the distinct keys
      */
     template<class MAP>
-    typename _MapT<MAP>::KeyIter
+    _MapT<MAP>::KeyIter
     eachDistinctKey (MAP& map)
     {
       using Range = RangeIter<typename MAP::iterator>;
@@ -453,10 +453,10 @@ namespace lib {
      *  @note obviously in case of a Map we'll get at most one result.
      */
     template<class MAP>
-    typename _MapT<MAP>::ValIter
+    _MapT<MAP>::ValIter
     eachValForKey (MAP& map, typename _MapT<MAP>::Key key)
     {
-      using Pos = typename MAP::iterator;
+      using Pos = MAP::iterator;
       using Range = RangeIter<Pos>;
       
       std::pair<Pos,Pos> valuesForKey = map.equal_range(key);
@@ -472,10 +472,10 @@ namespace lib {
      *          starting with \c begin and excluding \c end .
      */
     template<class CON>
-    typename _SeqT<CON>::Iter
+    _SeqT<CON>::Iter
     eachEntry (CON& container)
     {
-      using ValType = typename _SeqT<CON>::Val;
+      using ValType = _SeqT<CON>::Val;
       using Range   = RangeIter<typename CON::iterator>;
       
       Range contents (container.begin(), container.end());
@@ -487,10 +487,10 @@ namespace lib {
      *          defined by a classical Iterator range.
      */
     template<class IT>
-    typename _RangeT<IT>::Iter
+    _RangeT<IT>::Iter
     eachEntry (IT const& begin, IT const& end)
     {
-      using ValType = typename _RangeT<IT>::Val;
+      using ValType = _RangeT<IT>::Val;
       using Range   = RangeIter<IT>;
 
       Range contents (begin, end);

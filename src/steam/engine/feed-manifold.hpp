@@ -157,13 +157,13 @@ namespace engine {
         static_assert(0 <  _Fun<FUN>::ARITY , "function with at least one argument expected");
         static_assert(3 >= _Fun<FUN>::ARITY , "function with up to three arguments accepted");
         
-        using Sig  = typename _Fun<FUN>::Sig;
+        using Sig  = _Fun<FUN>::Sig;
         
         template<size_t i>
-        using _Arg = typename lib::meta::Pick<typename _Fun<Sig>::Args, i>::Type;
+        using _Arg = lib::meta::Pick<typename _Fun<Sig>::Args, i>::Type;
         
         template<size_t i, template<class> class COND>
-        using AllElements = typename ElmTypes<_Arg<i>>::template AndAll<COND>;
+        using AllElements = ElmTypes<_Arg<i>>::template AndAll<COND>;
         
         template<size_t i>
         static constexpr bool nonEmpty   =   ElmTypes<_Arg<i>>::SIZ;
@@ -205,9 +205,9 @@ namespace engine {
         using SigI = _Arg<_Case<Sig>::SLOT_I>;
         using SigO = _Arg<_Case<Sig>::SLOT_O>;
         using SigP = _Arg< 0>;
-        using ArgI = typename ElmTypes<SigI>::Seq;
-        using ArgO = typename ElmTypes<SigO>::Seq;
-        using ArgP = typename ElmTypes<SigP>::Seq;
+        using ArgI = ElmTypes<SigI>::Seq;
+        using ArgO = ElmTypes<SigO>::Seq;
+        using ArgP = ElmTypes<SigP>::Seq;
         
         // Metaprogramming helper for Buffer types (sans pointer)
         using ElmsI = ElmTypes<typename ElmTypes<SigI>::template Apply<remove_pointer_t>>;
@@ -252,7 +252,7 @@ namespace engine {
         using Param = conditional_t<hasParam(), typename _Proc::SigP, std::tuple<>>;
         
         template<class PF>
-        using Res = typename _Fun<PF>::Ret;
+        using Res = _Fun<PF>::Ret;
         template<class PF>
         using SigP = add_pointer_t<typename _Fun<PF>::Sig>;
         
@@ -335,7 +335,7 @@ namespace engine {
       
       using Param = conditional_t<hasParam(), typename _Trait::SigP, std::tuple<>>;
       using ArgI  = conditional_t<hasInput(), typename _Trait::SigI, std::tuple<>>;
-      using ArgO  = typename _Trait::SigO;
+      using ArgO  = _Trait::SigO;
       
       
       /** FeedManifold building block: hold parameter data */
@@ -368,7 +368,7 @@ namespace engine {
         };
       
       template<typename F>
-      using enable_if_hasParam  = typename lib::meta::enable_if_c<_ProcFun<F>::hasParam()>::type;
+      using enable_if_hasParam  = lib::meta::enable_if_c<_ProcFun<F>::hasParam()>::type;
       
       template<class X>
       using NotProvided = Tagged<Nil, X>;
@@ -445,14 +445,14 @@ namespace engine {
     {
       using _T = _ProcFun<FUN>;
       using _S = _StorageSetup<FUN>;
-      using _F = typename _S::Storage;
+      using _F = _S::Storage;
       
       /** pass-through constructor */
       using _S::Storage::Storage;
       
-      using ArgI  = typename _S::ArgI;
-      using ArgO  = typename _S::ArgO;
-      using Param = typename _S::Param;
+      using ArgI  = _S::ArgI;
+      using ArgO  = _S::ArgO;
+      using Param = _S::Param;
       enum{ FAN_I = _S::FAN_I
           , FAN_O = _S::FAN_O
           , FAN_P = _S::FAN_P
@@ -480,8 +480,8 @@ namespace engine {
             return arg;
         }
       
-      using TupI = typename _T::ElmsI::Tup;
-      using TupO = typename _T::ElmsO::Tup;
+      using TupI = _T::ElmsI::Tup;
+      using TupO = _T::ElmsO::Tup;
       
       
       void
@@ -560,13 +560,13 @@ namespace engine {
           , FAN_O = Feed::FAN_O
           , FAN_P = Feed::FAN_P
       };
-      using ElmsI = typename _Proc::ElmsI;
-      using ElmsO = typename _Proc::ElmsO;
+      using ElmsI = _Proc::ElmsI;
+      using ElmsO = _Proc::ElmsO;
       using ElmsP = conditional_t<_Trait::hasParam(), typename _Proc::ArgP, Types<>>;
-      using Param = typename _Proc::SigP; ///////////////////////////////////////////////////////////////////OOO qualify?
+      using Param = _Proc::SigP;
       
       template<template<class> class META>
-      using OutTypesApply = typename ElmsO::template Apply<META>;
+      using OutTypesApply = ElmsO::template Apply<META>;
       
       
       /** setup with processing-functor only */
@@ -680,8 +680,8 @@ namespace engine {
           static_assert (isSuitableParamAdaptor<TRA>(), "Given functor's output not suitable "
                                              "for adapting the proc-functor's 1st argument");
           using SigP = lib::meta::_FunArg<TRA>;
-          using SigI = typename _Proc::SigI;
-          using SigO = typename _Proc::SigO;
+          using SigI = _Proc::SigI;
+          using SigO = _Proc::SigO;
           if constexpr (_Proc::hasInput())
             {
               return [procFun = move(procFun_)

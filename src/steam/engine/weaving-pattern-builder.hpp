@@ -292,7 +292,7 @@ namespace engine {
       
       /** type builder for FeedPrototype adapted to another parameter-fun */
       template<class PFX>
-      using AdaptedPrototype = typename PROT::template Adapted<PFX>;
+      using AdaptedPrototype = PROT::template Adapted<PFX>;
       template<class PFX>
       using Adapted = WeavingBuilder<POL, AdaptedPrototype<PFX>>;
       
@@ -317,7 +317,7 @@ namespace engine {
       
       /** type builder for FeedPrototype with remoulded parameter input */
       template<class DEC>
-      using DecoratedPrototype = typename PROT::template Decorated<DEC>;
+      using DecoratedPrototype = PROT::template Decorated<DEC>;
       template<class DEC>
       using Decorated = WeavingBuilder<POL, DecoratedPrototype<DEC>>;
       
@@ -447,8 +447,8 @@ namespace engine {
             }
         };
       
-      using OutTypesDescriptors = typename PROT::template OutTypesApply<BufferDescriptor>;
-      using OutDescriptorTup = lib::meta::Tuple<OutTypesDescriptors>;
+      using OutTypesDescriptors = PROT::template OutTypesApply<BufferDescriptor>;
+      using OutDescriptorTup  = lib::meta::Tuple<OutTypesDescriptors>;
       
       /** A tuple of BufferDescriptor instances for all output buffer types */
       static constexpr OutDescriptorTup outDescriptors{};

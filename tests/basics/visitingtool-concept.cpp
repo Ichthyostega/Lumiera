@@ -114,8 +114,8 @@ namespace lumiera {
     class Tool
       {
       public:
-        typedef RET ReturnType;
-        typedef Tool<RET> ToolBase; ///< for templating the Tag and Dispatcher
+        using ReturnType = RET;
+        using ToolBase = Tool<RET>; ///< for templating the Tag and Dispatcher
         
         virtual ~Tool()  { };     ///< use RTTI for all visiting tools
         
@@ -130,7 +130,7 @@ namespace lumiera {
     class ToolType
       : public BASE
       {
-        typedef typename BASE::ToolBase ToolBase;
+        using ToolBase = BASE::ToolBase;
         
       public:
         virtual Tag<ToolBase>
@@ -152,7 +152,7 @@ namespace lumiera {
     template<class TAR, class TOOL>
     class Dispatcher
       {
-        typedef typename TOOL::ReturnType ReturnType;
+        using ReturnType = TOOL::ReturnType;
         
         /** generator for Trampoline functions,
          *  used to dispatch calls down to the
@@ -254,8 +254,8 @@ namespace lumiera {
     template<class TAR, class TOOLImpl, class BASE=Tool<void> >
     class Applicable
       {
-        typedef typename BASE::ReturnType Ret;
-        typedef typename BASE::ToolBase ToolBase;
+        using Ret      = BASE::ReturnType;
+        using ToolBase = BASE::ToolBase;
         
       protected:
         Applicable()
@@ -288,8 +288,8 @@ namespace lumiera {
         virtual ~Visitable() { };
         
         /// @note may differ from TOOL
-        typedef typename TOOL::ToolBase ToolBase;
-        typedef typename TOOL::ReturnType ReturnType;
+        using ToolBase   = TOOL::ToolBase;
+        using ReturnType = TOOL::ReturnType;
 
         /** @internal used by the DEFINE_PROCESSABLE_BY macro.
          *            Dispatches to the actual operation on the
@@ -327,7 +327,7 @@ namespace lumiera {
     
     namespace test {
       
-      typedef Tool<void> VisitingTool;
+      using VisitingTool = Tool<void>;
       
       class HomoSapiens : public Visitable<>
         {

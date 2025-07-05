@@ -107,7 +107,7 @@ namespace meta {
                   >
           { };
         
-        using SupportedSourceTypes = typename Filter<DataValues::List, allow_Conversion>::List;
+        using SupportedSourceTypes = Filter<DataValues::List, allow_Conversion>::List;
         
         
         
@@ -193,7 +193,7 @@ namespace meta {
   struct ElementExtractor<lib::diff::Rec, std::tuple<TYPES...>>
     {
       template<size_t i>
-      using TargetType = typename Pick<Types<TYPES...>, i>::Type;
+      using TargetType = Pick<Types<TYPES...>, i>::Type;
       
       
       template<size_t i>

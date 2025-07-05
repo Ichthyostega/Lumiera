@@ -141,7 +141,7 @@ namespace engine {
     {
       using Functors = tuple<FUNZ...>;
       
-      using ResTypes = typename ElmTypes<Functors>::template Apply<lib::meta::_FunRet>;
+      using ResTypes = ElmTypes<Functors>::template Apply<lib::meta::_FunRet>;
       using ParamTup = Tuple<ResTypes>;
       
       Functors functors_;
@@ -185,7 +185,7 @@ namespace engine {
        * @remark HeteroData defines a nested struct `Chain`, and with the help of `RebindVariadic`,
        *         the type sequence from the ParamTup can be used to instantiate this chain constructor.
        */
-      using ChainCons = typename lib::meta::RebindVariadic<ANCH::template Chain, ParamTup>::Type;
+      using ChainCons = lib::meta::RebindVariadic<ANCH::template Chain, ParamTup>::Type;
       
       
       /** a (static) getter functor able to work on the full extended HeteroData-Chain
@@ -196,7 +196,7 @@ namespace engine {
           static auto&
           getParamVal (TurnoutSystem& turnoutSys)
             {
-              using StorageAccessor = typename ChainCons::template Accessor<slot>;
+              using StorageAccessor = ChainCons::template Accessor<slot>;
               return turnoutSys.retrieveData (StorageAccessor());
             }
         };
@@ -221,7 +221,7 @@ namespace engine {
           
         public:
           /** invoke all parameter-functors and _drop off_ the result into a »chain-block« (non-copyable) */
-          typename ChainCons::NewFrame
+          ChainCons::NewFrame
           buildParamDataBlock (TurnoutSystem& turnoutSys)
             {
               return std::apply ([&](auto&&... paramFun)
@@ -284,9 +284,9 @@ namespace engine {
   struct ParamWeavingPattern
     : util::MoveOnly
     {
-      using Functors = typename SPEC::Functors;
-      using DataBlock = typename SPEC::ChainCons::NewFrame;
-      using BlockBuilder = typename SPEC::BlockBuilder;
+      using Functors = SPEC::Functors;
+      using DataBlock = SPEC::ChainCons::NewFrame;
+      using BlockBuilder = SPEC::BlockBuilder;
       using PostProcessor = function<void(TurnoutSystem&)>;
       
       BlockBuilder blockBuilder_;

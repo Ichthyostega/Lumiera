@@ -54,7 +54,7 @@ namespace util {
     template<typename T>
     struct treat_as_STL_Container
       {
-        typedef typename lib::meta::Unwrap<T>::Type TaT;
+        typedef lib::meta::Unwrap<T>::Type TaT;
         
         enum{ value = lib::meta::can_STL_ForEach<TaT>::value
                    &&!lib::meta::can_IterForEach<T>::value
@@ -71,7 +71,7 @@ namespace util {
     template<typename T>
     struct can_direct_access_Last
       {
-        typedef typename lib::meta::Unwrap<T>::Type TaT;
+        typedef lib::meta::Unwrap<T>::Type TaT;
         
         enum{ value = lib::meta::can_STL_backIteration<TaT>::value
             };
@@ -159,7 +159,7 @@ namespace util {
   inline auto
   max (IT&& elms)
   {
-    using Val = typename std::remove_reference_t<IT>::value_type;
+    using Val = std::remove_reference_t<IT>::value_type;
     Val res = std::numeric_limits<Val>::min();
     for (auto const& elm : std::forward<IT> (elms))
       if (elm > res)
@@ -171,7 +171,7 @@ namespace util {
   inline auto
   max (CON const& elms)
   {
-    using Val = typename std::remove_reference_t<CON>::value_type;
+    using Val = std::remove_reference_t<CON>::value_type;
     Val res = std::numeric_limits<Val>::min();
     for (auto const& elm : elms)
       if (elm > res)
@@ -184,7 +184,7 @@ namespace util {
   inline auto
   min (IT&& elms)
   {
-    using Val = typename std::remove_reference_t<IT>::value_type;
+    using Val = std::remove_reference_t<IT>::value_type;
     Val res = std::numeric_limits<Val>::max();
     for (auto const& elm : std::forward<IT> (elms))
       if (elm < res)
@@ -196,7 +196,7 @@ namespace util {
   inline auto
   min (CON const& elms)
   {
-    using Val = typename std::remove_reference_t<CON>::value_type;
+    using Val = std::remove_reference_t<CON>::value_type;
     Val res = std::numeric_limits<Val>::max();
     for (auto const& elm : elms)
       if (elm < res)

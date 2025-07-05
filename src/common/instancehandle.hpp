@@ -112,7 +112,7 @@ namespace lumiera {
     
     /** The ServiceHandle automatically creates and manages the Proxy instance */
     template<class I, class FA>
-    using ServiceHandle = typename lib::DependInject<FA>::template ServiceInstance<Proxy<InstanceHandle<I,FA>>>;
+    using ServiceHandle = lib::DependInject<FA>::template ServiceInstance<Proxy<InstanceHandle<I,FA>>>;
     
     
     /**

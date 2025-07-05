@@ -236,7 +236,7 @@ namespace meta {
    *           reference to an anonymous temporary.
    */
   template<typename X>
-  typename Unwrap<X>::Type&
+  Unwrap<X>::Type&
   unwrap (X const& wrapped)
   {
     return Unwrap<X>::extract(wrapped);
@@ -258,7 +258,7 @@ namespace meta {
       using TypePointee  = remove_pointer_t<TypeReferred>;
       using TypePlain    = remove_cv_t<TypePointee>;
       
-      using Type         = typename Unwrap<TypePlain>::Type;
+      using Type         = Unwrap<TypePlain>::Type;
     };
   
   
@@ -509,7 +509,7 @@ namespace meta {
   template<typename T>
   class can_IterForEach
     {
-      using  Type = typename Strip<T>::Type;
+      using  Type = Strip<T>::Type;
        
       META_DETECT_NESTED(value_type);
       META_DETECT_OPERATOR_DEREF();
@@ -533,7 +533,7 @@ namespace meta {
   template<typename T>
   class is_StateCore
     {
-      using  Type = typename Strip<T>::Type;
+      using  Type = Strip<T>::Type;
      
       META_DETECT_FUNCTION_ARGLESS(checkPoint);
       META_DETECT_FUNCTION_ARGLESS(iterNext);
@@ -554,7 +554,7 @@ namespace meta {
   template<typename T>
   class can_STL_ForEach
     {
-      using Type = typename Strip<T>::Type;
+      using Type = Strip<T>::Type;
       
       struct is_iterable
         {
@@ -618,7 +618,7 @@ namespace meta {
   template<typename T>
   class can_STL_backIteration
     {
-      using Type = typename Strip<T>::Type;
+      using Type = Strip<T>::Type;
       
       struct is_backIterable
         {

@@ -179,17 +179,17 @@ namespace meta {
     struct _InvokeMetafunTup
       {
         using Tupl = std::decay_t<TUP>;
-        using Elms = typename ElmTypes<Tupl>::Seq;
-        using Args = typename Prepend<FUN, Elms>::Seq;
-        using Type = typename RebindVariadic<META, Args>::Type;
+        using Elms = ElmTypes<Tupl>::Seq;
+        using Args = Prepend<FUN, Elms>::Seq;
+        using Type = RebindVariadic<META, Args>::Type;
       };
     template<template<typename...> class META, class FUN, class TUP>
     struct _InvokeMetafunTup<META, FUN, TUP&>
       {
         using Tupl = std::decay_t<TUP>;
-        using Elms = typename ElmTypes<Tupl>::Apply<std::add_lvalue_reference_t>;
-        using Args = typename Prepend<FUN, Elms>::Seq;
-        using Type = typename RebindVariadic<META, Args>::Type;
+        using Elms = typename ElmTypes<Tupl>::template Apply<std::add_lvalue_reference_t>;
+        using Args = Prepend<FUN, Elms>::Seq;
+        using Type = RebindVariadic<META, Args>::Type;
       };
     
     template<class FUN, class TUP>
@@ -282,20 +282,20 @@ namespace meta {
       static constexpr size_t SIZ = std::tuple_size_v<TUP>;
       
       using Idx = std::make_index_sequence<SIZ>;
-      using Seq = typename Extract<Idx>::ElmTypes;
-      using Tup = typename RebindVariadic<std::tuple, Seq>::Type;
+      using Seq = Extract<Idx>::ElmTypes;
+      using Tup = RebindVariadic<std::tuple, Seq>::Type;
       
       template<template<class> class META>
-      using Apply = typename ElmTypes<Seq>::template Apply<META>;
+      using Apply = ElmTypes<Seq>::template Apply<META>;
       
       template<template<typename...> class O>
-      using Rebind = typename RebindVariadic<O, Seq>::Type;
+      using Rebind = RebindVariadic<O, Seq>::Type;
       
       template<template<class> class PRED>
-      using AndAll = typename ElmTypes<Apply<PRED>>::template Rebind<std::__and_>;
+      using AndAll = ElmTypes<Apply<PRED>>::template Rebind<std::__and_>;
       
       template<template<class> class PRED>
-      using OrAll  = typename ElmTypes<Apply<PRED>>::template Rebind<std::__or_>;
+      using OrAll  = ElmTypes<Apply<PRED>>::template Rebind<std::__or_>;
     };
   
   
@@ -318,8 +318,8 @@ namespace meta {
     template<class H, typename TAIL>
     struct BuildTupleType<Node<H, TAIL>>
       {
-        using Seq  = typename Types<Node<H,TAIL>>::Seq;
-        using Type = typename BuildTupleType<Seq>::Type;
+        using Seq  = Types<Node<H,TAIL>>::Seq;
+        using Type = BuildTupleType<Seq>::Type;
       };
     
     template<>
@@ -339,7 +339,7 @@ namespace meta {
    *    over clever re-use of existing types.
    */
   template<typename TYPES>
-  using Tuple = typename BuildTupleType<TYPES>::Type;
+  using Tuple = BuildTupleType<TYPES>::Type;
   
   
   using std::tuple_size;
@@ -351,14 +351,14 @@ namespace meta {
   template<typename...TYPES>
   struct RebindTupleTypes
     {
-      using Seq  = typename Types<TYPES...>::Seq;
-      using List = typename Seq::List;
+      using Seq  = Types<TYPES...>::Seq;
+      using List = Seq::List;
     };
   template<typename...TYPES>
   struct RebindTupleTypes<std::tuple<TYPES...>>
     {
-      using Seq  = typename Types<TYPES...>::Seq;
-      using List = typename Seq::List;
+      using Seq  = Types<TYPES...>::Seq;
+      using List = Seq::List;
     };
   
   
@@ -396,7 +396,7 @@ namespace meta {
     : Tuple<TYPES>
     {
       /** meta-sequence to drive instantiation of the ElmMapper */
-      using SequenceIterator = typename BuildIdxIter<TYPES>::Ascending;
+      using SequenceIterator = BuildIdxIter<TYPES>::Ascending;
       
       template<size_t idx, class SRC>
       static auto
@@ -436,7 +436,7 @@ namespace meta {
   
 
   template<class SRC, class TAR, size_t i>
-  using ExtractArg = typename ElementExtractor<SRC, TAR>::template Access<i>;
+  using ExtractArg = ElementExtractor<SRC, TAR>::template Access<i>;
   
   
   /**
@@ -489,10 +489,10 @@ namespace meta {
   class BuildTupleAccessor
     {
       // prepare recursion...
-      using Head         = typename Split<TYPES>::Head;
-      using Tail         = typename Split<TYPES>::Tail;
+      using Head         = Split<TYPES>::Head;
+      using Tail         = Split<TYPES>::Tail;
       using NextBuilder  = BuildTupleAccessor<_X_, Tail,TUP, i+1>;
-      using NextAccessor = typename NextBuilder::Product;
+      using NextAccessor = NextBuilder::Product;
     public:
       
       /** type of the product created by this template.
@@ -575,7 +575,7 @@ namespace meta {
   dump (std::tuple<TYPES...> const& tuple)
   {
     using BuildAccessor = BuildTupleAccessor<TupleElementDisplayer, Types<TYPES...>>;
-    using Displayer     = typename BuildAccessor::Product ;
+    using Displayer     = BuildAccessor::Product ;
     
     return static_cast<Displayer const&> (tuple)
           .dump();

@@ -56,7 +56,7 @@ namespace control {
     class BasicHandlingPattern
       : public HandlingPattern
       {
-        bool isValid()  const { return true; }
+        bool isValid()  const override { return true; }
         
         void
         performExec (CommandImpl& command)  const override

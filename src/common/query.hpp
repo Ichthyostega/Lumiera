@@ -538,7 +538,7 @@ namespace lumiera {
   
   
   template<class RES>
-  inline typename Query<RES>::Builder
+  inline Query<RES>::Builder
   Query<RES>::build (Kind queryType)
   {
     return Builder(defineQueryTypeID (queryType));
@@ -546,7 +546,7 @@ namespace lumiera {
   
   
   template<class RES>
-  inline typename Query<RES>::Builder
+  inline Query<RES>::Builder
   Query<RES>::rebuild()  const
   {
     return Builder(this->id_, getQueryDefinition());

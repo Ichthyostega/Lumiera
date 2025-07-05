@@ -133,8 +133,8 @@ namespace meta{
       static auto
       wrapBuilder (CLO closureFun)   ///< need to provide the remaining arguments as a tuple
         {
-          using RemainingArgs = typename _Fun<CLO>::Args;
-          using RemainingParams = typename lib::meta::RebindVariadic<TUP, RemainingArgs>::Type;
+          using RemainingArgs = _Fun<CLO>::Args;
+          using RemainingParams = lib::meta::RebindVariadic<TUP, RemainingArgs>::Type;
 
                 struct Wrap
                   {
@@ -186,13 +186,13 @@ namespace meta{
     template<typename T, size_t N>
     struct _Adapt
       {
-        using NFold = typename Repeat<T,N>::Seq;
-        using Array = typename RebindVariadic<ArrayAdapt, NFold>::Type;
+        using NFold = Repeat<T,N>::Seq;
+        using Array = RebindVariadic<ArrayAdapt, NFold>::Type;
         static_assert(N,"attempt to partially close empty array");
       };
     
     template<typename T, size_t N>
-    using _AdaptArray_t = typename _Adapt<T,N>::Array;
+    using _AdaptArray_t = _Adapt<T,N>::Array;
   }
   
   /** @note adding seamless conversion and compount-init */

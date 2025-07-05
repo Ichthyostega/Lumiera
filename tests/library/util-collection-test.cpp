@@ -115,7 +115,7 @@ namespace test {
           
           COL empty;
           
-          using Val = typename COL::value_type;
+          using Val = COL::value_type;
           
           CHECK (max (empty) == std::numeric_limits<Val>::min());
           CHECK (min (empty) == std::numeric_limits<Val>::max());

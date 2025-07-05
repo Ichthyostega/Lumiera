@@ -119,7 +119,7 @@ namespace diff{
   struct RecordSetup<GenNode>
     {
       using Storage = std::vector<GenNode>;
-      using ElmIter = typename Storage::const_iterator;
+      using ElmIter = Storage::const_iterator;
       
       /** using const reference data access
        *  relevant for handling large subtrees */
@@ -516,7 +516,7 @@ namespace diff{
       using No  = lib::meta::No_t;
       
       template<class X>
-      static Yes check(typename variant::CanBuildFrom<X, DataValues>::Type*);
+      static Yes check(variant::CanBuildFrom<X, DataValues>::Type*);
       template<class X>
       static No  check(...);
       

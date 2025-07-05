@@ -257,7 +257,7 @@ namespace test{
   showType()
   {
     using Case = TypeDiagnostics<X>;
-    using Type = typename Case::Type;
+    using Type = Case::Type;
     
     return Case::prefix
          + meta::humanReadableTypeID (typeid(Type).name())

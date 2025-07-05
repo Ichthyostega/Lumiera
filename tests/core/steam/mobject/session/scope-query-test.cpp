@@ -126,7 +126,7 @@ namespace test    {
         }
       
       template<class MO>
-      static typename ScopeQuery<MO>::iterator
+      static ScopeQuery<MO>::iterator
       issue (ScopeQuery<MO> const& query)
         {
           return query.resolveBy(SessionServiceExploreScope::getResolver());

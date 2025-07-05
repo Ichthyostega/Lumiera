@@ -49,8 +49,8 @@ namespace test    {
     template<typename SIG>
     struct _Tup
       {
-        using Args = typename _Fun<SIG>::Args;
-        using Ret = typename _Fun<SIG>::Ret;
+        using Args = _Fun<SIG>::Args;
+        using Ret = _Fun<SIG>::Ret;
         using Ty = Tuple<Args>;
       };
     
@@ -62,8 +62,8 @@ namespace test    {
                                     , typename _Tup<SIG>::Ty  // base class to inherit from
                                     >
       {
-        using ATuple  = typename _Tup<SIG>::Ty;
-        using RetType = typename _Tup<SIG>::Ret;
+        using ATuple  = _Tup<SIG>::Ty;
+        using RetType = _Tup<SIG>::Ret;
         
       public:
         

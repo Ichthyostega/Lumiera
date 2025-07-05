@@ -78,7 +78,7 @@ namespace session {
       template<class STRU>
       AnyPair entry_Struct(Literal caps)
       {
-        using Ptr = typename WrapReturn<STRU>::Wrapper;
+        using Ptr = WrapReturn<STRU>::Wrapper;
         
         string capabilities (caps);
         Query<STRU> query (capabilities);

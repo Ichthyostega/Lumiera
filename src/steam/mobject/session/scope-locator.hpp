@@ -65,15 +65,15 @@ namespace session {
       ScopePath& pushPath();
       
       template<typename MO>
-      typename ScopeQuery<MO>::iterator
+      ScopeQuery<MO>::iterator
       explore (Scope const&);
       
       template<typename MO>
-      typename ScopeQuery<MO>::iterator
+      ScopeQuery<MO>::iterator
       query (Scope const&);
       
       template<typename MO>
-      typename ScopeQuery<MO>::iterator
+      ScopeQuery<MO>::iterator
       getRawPath (Scope const&);
       
       ScopeQuery<MObject>::iterator
@@ -103,7 +103,7 @@ namespace session {
    *  to enumerate the contents (children) of the given scope
    */
   template<typename MO>
-  inline typename ScopeQuery<MO>::iterator
+  inline ScopeQuery<MO>::iterator
   ScopeLocator::explore (Scope const& scope)
   {
     return ScopeQuery<MO> (scope.getTop(), CHILDREN).resolveBy (theResolver());
@@ -114,7 +114,7 @@ namespace session {
    *  to discover depth-first any object within this scope
    */
   template<typename MO>
-  inline typename ScopeQuery<MO>::iterator
+  inline ScopeQuery<MO>::iterator
   ScopeLocator::query (Scope const& scope)
   {
     return ScopeQuery<MO> (scope.getTop(), CONTENTS).resolveBy (theResolver());
@@ -131,7 +131,7 @@ namespace session {
    *        to be "dead ends"
    */
   template<typename MO>
-  inline typename ScopeQuery<MO>::iterator
+  inline ScopeQuery<MO>::iterator
   ScopeLocator::getRawPath (Scope const& scope)
   {
     return ScopeQuery<MO> (scope.getTop(), PATH).resolveBy (theResolver());

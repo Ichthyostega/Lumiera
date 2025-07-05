@@ -432,8 +432,8 @@ namespace engine {
       auto
       attachParamFun (PFX paramFunctor)
         {
-          using AdaptedWeavingBuilder = typename WAB::template Adapted<PFX>;
-          using AdaptedPortBuilder = PortBuilder<POL,DAT,AdaptedWeavingBuilder>;
+          using AdaptedWeavingBuilder = WAB::template Adapted<PFX>;
+          using AdaptedPortBuilder    = PortBuilder<POL,DAT,AdaptedWeavingBuilder>;
           //
           return AdaptedPortBuilder{move(*this)
                                    ,weavingBuilder_.adaptParam (move (paramFunctor))
@@ -490,7 +490,7 @@ namespace engine {
       auto
       adaptParam (ADA&& paramAdaptor)
         {
-          using DecoratedPrototype = typename WAB::template Decorated<ADA>;
+          using DecoratedPrototype = WAB::template Decorated<ADA>;
           using AdaptedPortBuilder = PortBuilder<POL,DAT,DecoratedPrototype>;
           //
           return AdaptedPortBuilder{move(*this)
@@ -598,7 +598,7 @@ namespace engine {
   auto
   PortBuilderRoot<POL,DAT>::invoke (StrView portSpec, FUN fun)
     {
-      using Prototype = typename FeedManifold<FUN>::Prototype;
+      using Prototype          = FeedManifold<FUN>::Prototype;
       using WeavingBuilder_FUN = WeavingBuilder<POL, Prototype>;
       return PortBuilder<POL,DAT, WeavingBuilder_FUN>{move(*this), move(fun), portSpec};
     }
@@ -621,7 +621,7 @@ namespace engine {
     {
       using _Par = PortBuilderRoot<POL,DAT>;
       
-      using BlockBuilder = typename SPEC::BlockBuilder;
+      using BlockBuilder  = SPEC::BlockBuilder;
       using PostProcessor = function<void(TurnoutSystem&)>;
 
       BlockBuilder blockBuilder_;

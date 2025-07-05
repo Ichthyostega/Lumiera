@@ -79,13 +79,13 @@ namespace control {
       template<typename ARG>
       struct _Type
         {
-          typedef typename ARG::SIG_op SIG_op;
-          typedef typename ARG::SIG_cap SIG_cap;
-          typedef typename ARG::SIG_undo SIG_undo;
+          using SIG_op = ARG::SIG_op;
+          using SIG_cap = ARG::SIG_cap;
+          using SIG_undo = ARG::SIG_undo;
           
-          typedef function<SIG_op> Func_op;
-          typedef function<SIG_cap> Func_cap;
-          typedef function<SIG_undo> Func_undo;
+          using Func_op = function<SIG_op>;
+          using Func_cap = function<SIG_cap>;
+          using Func_undo = function<SIG_undo>;
         };
 #define _TY(_ID_) typename _Type<ARG>::_ID_
       
@@ -185,7 +185,7 @@ namespace control {
       
       
       
-      typedef HandlingPattern::ID PattID;
+      using PattID = HandlingPattern::ID;
       
       PattID
       getDefaultHandlingPattern()  const

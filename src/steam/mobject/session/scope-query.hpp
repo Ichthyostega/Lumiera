@@ -65,13 +65,12 @@ namespace session {
   class DiscoveryQuery
     : public Query<Placement<MO>>
     {
-      typedef Query<Placement<MO>> _Query;
+      using _Query = Query<Placement<MO>>;
       
       
     public:
-      typedef typename _Query::iterator iterator;
-      
-      typedef function<bool(PlacementMO const&)> ContentFilter;
+      using iterator      = _Query::iterator;
+      using ContentFilter = function<bool(PlacementMO const&)>;
       
       
       ContentFilter
@@ -135,16 +134,16 @@ namespace session {
   class ScopeQuery
     : public DiscoveryQuery<MO>
     {
-      typedef DiscoveryQuery<MO>   _Parent;
-      typedef Query<Placement<MO>> _Query;
+      using _Parent = DiscoveryQuery<MO>  ;
+      using _Query = Query<Placement<MO>>;
       
       
       PlacementMO::ID    startPoint_;
       ScopeQueryKind    to_discover_;
       
     public:
-      typedef typename _Parent::iterator      iterator;
-      typedef typename _Parent::ContentFilter ContentFilter;
+      using iterator      = _Parent::iterator     ;
+      using ContentFilter = _Parent::ContentFilter;
       
       
       ScopeQuery (PlacementMO  const& scope,

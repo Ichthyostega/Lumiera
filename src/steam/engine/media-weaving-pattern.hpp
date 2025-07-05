@@ -177,7 +177,7 @@ namespace engine {
   struct MediaWeavingPattern
     : util::NonCopyable
     {
-      using Feed = typename INVO::Feed;
+      using Feed = INVO::Feed;
       
       static_assert (_verify_usable_as_InvocationAdapter<Feed>());
       

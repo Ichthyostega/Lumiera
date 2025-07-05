@@ -184,7 +184,7 @@ namespace lib {
        *         discarding of node elements
        */
       explicit
-      LinkedElements (typename ALO::CustomAllocator allo)
+      LinkedElements (ALO::CustomAllocator allo)
         : ALO{allo}
         , head_{nullptr}
         { }

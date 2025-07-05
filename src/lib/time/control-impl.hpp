@@ -151,7 +151,7 @@ namespace mutation {
       TI
       operator() (TI const& changedVal)  const
         {
-          typedef typename ListenerList::const_iterator Iter;
+          using Iter = ListenerList::const_iterator;
           Iter p = listeners_.begin();
           Iter e = listeners_.end();
           

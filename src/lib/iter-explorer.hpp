@@ -133,9 +133,9 @@ namespace lib {
   namespace iter_explorer { // basic iterator wrappers...
     
     template<class CON>
-    using iterator = typename meta::Strip<CON>::TypeReferred::iterator;
+    using iterator = meta::Strip<CON>::TypeReferred::iterator;
     template<class CON>
-    using const_iterator = typename meta::Strip<CON>::TypeReferred::const_iterator;
+    using const_iterator = meta::Strip<CON>::TypeReferred::const_iterator;
     
     /**
      * Adapt STL compliant container.
@@ -190,7 +190,7 @@ namespace lib {
     class IterSourceIter
       : public ISO::iterator
       {
-        using Iterator = typename ISO::iterator;
+        using Iterator = ISO::iterator;
         
       public:
         IterSourceIter()  =default;
@@ -273,8 +273,8 @@ namespace lib {
     template<class SRC>
     struct _DecoratorTraits<SRC,   enable_if<is_StateCore<SRC>>>
       {
-        using SrcRaw  = typename lib::meta::Strip<SRC>::Type;
-        using SrcVal  = typename meta::RefTraits<iter::CoreYield<SrcRaw>>::Value;
+        using SrcRaw  = lib::meta::Strip<SRC>::Type;
+        using SrcVal  = meta::RefTraits<iter::CoreYield<SrcRaw>>::Value;
         using SrcIter = lib::IterableDecorator<lib::CheckedCore<SrcRaw>>;
       };
     
@@ -282,7 +282,7 @@ namespace lib {
     struct _DecoratorTraits<SRC,   enable_if<shall_use_Lumiera_Iter<SRC>>>
       {
         using SrcIter = remove_reference_t<SRC>;
-        using SrcVal  = typename SrcIter::value_type;
+        using SrcVal  = SrcIter::value_type;
       };
     
     template<class SRC>
@@ -291,14 +291,14 @@ namespace lib {
         static_assert (not std::is_rvalue_reference<SRC>::value,
                        "container needs to exist elsewhere during the lifetime of the iteration");
         using SrcIter = iter_explorer::StlRange<SRC>;
-        using SrcVal  = typename SrcIter::value_type;
+        using SrcVal  = SrcIter::value_type;
       };
     
     template<class ISO>
     struct _DecoratorTraits<ISO*,  enable_if<is_base_of<IterSource<typename ISO::value_type>, ISO>>>
       {
         using SrcIter = iter_explorer::IterSourceIter<ISO>;
-        using SrcVal  = typename ISO::value_type;
+        using SrcVal  = ISO::value_type;
       };
     
     template<class ISO>
@@ -324,7 +324,7 @@ namespace lib {
     template<class SRC, class RES>
     struct _ExpanderTraits
       {
-        using ResIter = typename _DecoratorTraits<RES>::SrcIter;
+        using ResIter = _DecoratorTraits<RES>::SrcIter;
         using SrcYield = iter::Yield<SRC>;
         using ResYield = iter::Yield<ResIter>;
         using _CommonT = meta::CommonResultYield<SrcYield,ResYield>;
@@ -336,10 +336,10 @@ namespace lib {
         static_assert (is_const_v<SrcYield> == is_const_v<ResYield>,
                        "source and expanded types differ in const-ness");
         
-        using YieldRes   = typename _CommonT::ResType;
-        using value_type = typename _CommonT::value_type;
-        using reference  = typename _CommonT::reference;
-        using pointer    = typename _CommonT::pointer;
+        using YieldRes   = _CommonT::ResType;
+        using value_type = _CommonT::value_type;
+        using reference  = _CommonT::reference;
+        using pointer    = _CommonT::pointer;
       };
     
   }//(End) IterExplorer traits
@@ -389,22 +389,22 @@ namespace lib {
         template<typename F, typename SEL =void>
         struct FunDetector
           {
-            using Sig = typename _Fun<F>::Sig;
+            using Sig = _Fun<F>::Sig;
           };
         
         /** handle a generic lambda, accepting a reference to the `SRC` iterator */
         template<typename F>
         struct FunDetector<F,  disable_if<_Fun<F>> >
           {
-            using Arg = typename std::add_lvalue_reference<SRC>::type;
+            using Arg = std::add_lvalue_reference<SRC>::type;
             using Ret = decltype(std::declval<F>() (std::declval<Arg>()));
             using Sig = Ret(Arg);
           };
         
         
-        using Sig = typename FunDetector<FUN>::Sig;
-        using Arg = typename _Fun<Sig>::Args::List::Head;  // assuming function with a single argument
-        using Res = typename _Fun<Sig>::Ret;
+        using Sig = FunDetector<FUN>::Sig;
+        using Arg = _Fun<Sig>::Args::List::Head;  // assuming function with a single argument
+        using Res = _Fun<Sig>::Ret;
         static_assert (meta::is_UnaryFun<Sig>());
         
         
@@ -442,7 +442,7 @@ namespace lib {
                                                  , is_base_of<IterSource<typename IT::value_type>, remove_reference_t<Arg>>
                                                  > >>
           {
-            using Source = typename IT::Source;
+            using Source = IT::Source;
             
             static auto
             wrap (function<Sig> rawFun)       ///< extract the (abstracted) IterSource
@@ -466,7 +466,7 @@ namespace lib {
     inline void
     static_assert_isPredicate()
     {
-      using Res = typename _FunTraits<FUN,SRC>::Res;
+      using Res = _FunTraits<FUN,SRC>::Res;
       static_assert(std::is_constructible<bool, Res>::value, "Functor must be a predicate");
     }
     
@@ -477,8 +477,8 @@ namespace lib {
     template<class SRC, class FUN>
     struct _ReduceTraits
       {
-        using Result = typename iter_explorer::_FunTraits<FUN,SRC>::Res;
-        using ResVal = typename lib::meta::RefTraits<Result>::Value;
+        using Result = iter_explorer::_FunTraits<FUN,SRC>::Res;
+        using ResVal = lib::meta::RefTraits<Result>::Value;
       };
     
     
@@ -557,7 +557,7 @@ namespace lib {
         static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source");
         
         using _Trait = _ExpanderTraits<SRC,RES>;
-        using ResIter = typename _Trait::ResIter;
+        using ResIter = _Trait::ResIter;
         using RootExpandFunctor = function<RES(SRC&)>;
         using ChldExpandFunctor = function<RES(ResIter&)>;
         
@@ -621,10 +621,10 @@ namespace lib {
       public: /* === Iteration control API for IterableDecorator === */
         
         /** @note result type bindings based on a common type of source and expanded result */
-        using YieldRes   = typename _Trait::YieldRes;
-        using value_type = typename _Trait::value_type;
-        using reference  = typename _Trait::reference;
-        using pointer    = typename _Trait::pointer;
+        using YieldRes   = _Trait::YieldRes;
+        using value_type = _Trait::value_type;
+        using reference  = _Trait::reference;
+        using pointer    = _Trait::pointer;
         
         
         bool
@@ -791,9 +791,9 @@ namespace lib {
         TransformedItem treated_;
         
       public:
-        using value_type = typename meta::ValueTypeBinding<RES>::value_type;
-        using reference  = typename meta::ValueTypeBinding<RES>::reference;
-        using pointer    = typename meta::ValueTypeBinding<RES>::pointer;
+        using value_type = meta::ValueTypeBinding<RES>::value_type;
+        using reference  = meta::ValueTypeBinding<RES>::reference;
+        using pointer    = meta::ValueTypeBinding<RES>::pointer;
         
         
         template<typename FUN>
@@ -896,7 +896,7 @@ namespace lib {
         
       protected:
         using Group = std::array<RES, grp>;
-        using Iter  = typename Group::iterator;
+        using Iter  = Group::iterator;
         struct Buffer
           : lib::UninitialisedStorage<RES,grp>
           {
@@ -1028,7 +1028,7 @@ namespace lib {
         static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source");
         
       protected:
-        using SrcValue   = typename meta::ValueTypeBinding<SRC>::value_type;
+        using SrcValue   = meta::ValueTypeBinding<SRC>::value_type;
         using Grouping   = function<GRP(SRC&)>;
         using Aggregator = function<void(AGG&, SrcValue&)>;
         
@@ -1038,9 +1038,9 @@ namespace lib {
         Aggregator aggregate_;
         
       public:
-        using value_type = typename meta::RefTraits<AGG>::Value;
-        using reference  = typename meta::RefTraits<AGG>::Reference;
-        using pointer    = typename meta::RefTraits<AGG>::Pointer;
+        using value_type = meta::RefTraits<AGG>::Value;
+        using reference  = meta::RefTraits<AGG>::Reference;
+        using pointer    = meta::RefTraits<AGG>::Pointer;
 
         GroupAggregator() =default;
         // inherited default copy operations
@@ -1152,7 +1152,7 @@ namespace lib {
             return bool(srcIter());
           }
         
-        typename SRC::reference
+        SRC::reference
         yield()  const
           {
             return *srcIter();
@@ -1446,7 +1446,7 @@ namespace lib {
       , public ChildExpandableSource<typename SRC::value_type>
       {
         using Parent = WrappedLumieraIter<SRC>;
-        using Val = typename SRC::value_type;                             ///////////////////////////////////TICKET #1125 : get rid of Val
+        using Val = SRC::value_type;                             ///////////////////////////////////TICKET #1125 : get rid of Val
         
        ~PackagedIterExplorerSource() { }
       public:
@@ -1583,9 +1583,9 @@ namespace lib {
       
       
     public:
-      using value_type = typename meta::ValueTypeBinding<SRC>::value_type;
-      using reference  = typename meta::ValueTypeBinding<SRC>::reference;
-      using pointer    = typename meta::ValueTypeBinding<SRC>::pointer;
+      using value_type = meta::ValueTypeBinding<SRC>::value_type;
+      using reference  = meta::ValueTypeBinding<SRC>::reference;
+      using pointer    = meta::ValueTypeBinding<SRC>::pointer;
       
       using TAG_IterExplorer_Src = SRC; ///< @internal for \ref _PipelineDetector
       
@@ -1640,10 +1640,10 @@ namespace lib {
       auto
       expand (FUN&& expandFunctor)
         {
-          using ExpandedChildren = typename iter_explorer::_FunTraits<FUN,SRC>::Res;
+          using ExpandedChildren = iter_explorer::_FunTraits<FUN,SRC>::Res;
           
           using ResCore = iter_explorer::Expander<SRC, ExpandedChildren>;
-          using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
+          using ResIter = _DecoratorTraits<ResCore>::SrcIter;
           
           return IterExplorer<ResIter> (ResCore {move(*this), forward<FUN>(expandFunctor)});
         }
@@ -1664,7 +1664,7 @@ namespace lib {
       expandAll()
         {
           using ResCore = iter_explorer::AutoExpander<SRC>;
-          using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
+          using ResIter = _DecoratorTraits<ResCore>::SrcIter;
           
           return IterExplorer<ResIter> (ResCore {move(*this)});
         }
@@ -1692,7 +1692,7 @@ namespace lib {
       expandOnIteration()
         {
           using ResCore = iter_explorer::ScheduledExpander<SRC>;
-          using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
+          using ResIter = _DecoratorTraits<ResCore>::SrcIter;
           
           return IterExplorer<ResIter> (ResCore {move(*this)});
         }
@@ -1712,10 +1712,10 @@ namespace lib {
       auto
       transform (FUN&& transformFunctor)
         {
-          using Product = typename iter_explorer::_FunTraits<FUN,SRC>::Res;
+          using Product = iter_explorer::_FunTraits<FUN,SRC>::Res;
           
           using ResCore = iter_explorer::Transformer<SRC, Product>;
-          using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
+          using ResIter = _DecoratorTraits<ResCore>::SrcIter;
           
           return IterExplorer<ResIter> (ResCore {move(*this), forward<FUN>(transformFunctor)});
         }
@@ -1733,9 +1733,9 @@ namespace lib {
       auto
       grouped()
         {
-          using Value   = typename meta::ValueTypeBinding<SRC>::value_type;
+          using Value   = meta::ValueTypeBinding<SRC>::value_type;
           using ResCore = iter_explorer::Grouping<SRC, Value, grp>;
-          using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
+          using ResIter = _DecoratorTraits<ResCore>::SrcIter;
           
           return IterExplorer<ResIter> (ResCore {move(*this)});
         }
@@ -1756,14 +1756,14 @@ namespace lib {
       auto
       groupedBy (FGRP&& groupFun, FAGG&& aggFun)
         {
-          using GroupVal = typename iter_explorer::_FunTraits<FGRP,SRC>::Res;
+          using GroupVal = iter_explorer::_FunTraits<FGRP,SRC>::Res;
           
           static_assert (meta::is_BinaryFun<FAGG>());
-          using ArgType1  = typename _Fun<FAGG>::Args::List::Head;
-          using Aggregate = typename meta::RefTraits<ArgType1>::Value;
+          using ArgType1  = _Fun<FAGG>::Args::List::Head;
+          using Aggregate = meta::RefTraits<ArgType1>::Value;
           
           using ResCore = iter_explorer::GroupAggregator<SRC, Aggregate, GroupVal>;
-          using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
+          using ResIter = _DecoratorTraits<ResCore>::SrcIter;
           
           return IterExplorer<ResIter> (ResCore {move(*this)
                                                 ,forward<FGRP> (groupFun)
@@ -1775,7 +1775,7 @@ namespace lib {
       auto
       groupedBy (FGRP&& groupFun)
         {
-          using Value   = typename meta::ValueTypeBinding<SRC>::value_type;
+          using Value   = meta::ValueTypeBinding<SRC>::value_type;
           return groupedBy (forward<FGRP> (groupFun)
                            ,[](Value& agg, Value const& val){ agg += val; }
                            );
@@ -1792,7 +1792,7 @@ namespace lib {
           iter_explorer::static_assert_isPredicate<FUN,SRC>();
           
           using ResCore = iter_explorer::StopTrigger<SRC>;
-          using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
+          using ResIter = _DecoratorTraits<ResCore>::SrcIter;
           
           return IterExplorer<ResIter> (ResCore {move(*this), forward<FUN>(whileCond)});
         }
@@ -1808,8 +1808,8 @@ namespace lib {
           iter_explorer::static_assert_isPredicate<FUN,SRC>();
           
           using ResCore = iter_explorer::StopTrigger<SRC>;
-          using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
-          using ArgType = typename iter_explorer::_FunTraits<FUN,SRC>::Arg;
+          using ResIter = _DecoratorTraits<ResCore>::SrcIter;
+          using ArgType = iter_explorer::_FunTraits<FUN,SRC>::Arg;
           
           return IterExplorer<ResIter> (ResCore { move(*this)
                                                 ,[whileCond = forward<FUN>(untilCond)](ArgType val)
@@ -1833,7 +1833,7 @@ namespace lib {
           iter_explorer::static_assert_isPredicate<FUN,SRC>();
           
           using ResCore = iter_explorer::Filter<SRC>;
-          using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
+          using ResIter = _DecoratorTraits<ResCore>::SrcIter;
           
           return IterExplorer<ResIter> (ResCore {move(*this), forward<FUN>(filterPredicate)});
         }
@@ -1863,7 +1863,7 @@ namespace lib {
           iter_explorer::static_assert_isPredicate<FUN,SRC>();
           
           using ResCore = iter_explorer::MutableFilter<SRC>;
-          using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
+          using ResIter = _DecoratorTraits<ResCore>::SrcIter;
           
           return IterExplorer<ResIter> (ResCore {move(*this), forward<FUN>(filterPredicate)});
         }
@@ -1893,7 +1893,7 @@ namespace lib {
       processingLayer()
         {
           using ResCore = LAY<SRC>;
-          using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
+          using ResIter = _DecoratorTraits<ResCore>::SrcIter;
           
           return IterExplorer<ResIter> (ResCore {move(*this)});
         }
@@ -1904,7 +1904,7 @@ namespace lib {
       auto
       asPtr()
         {
-          using Val = typename meta::ValueTypeBinding<SRC>::value_type;
+          using Val = meta::ValueTypeBinding<SRC>::value_type;
           static_assert (not std::is_pointer_v<Val>);
           return IterExplorer::transform ([](Val& ref){ return &ref; });
         }
@@ -1913,7 +1913,7 @@ namespace lib {
       auto
       derefPtr()
         {
-          using Ptr = typename meta::ValueTypeBinding<SRC>::value_type;
+          using Ptr = meta::ValueTypeBinding<SRC>::value_type;
           return IterExplorer::transform ([](Ptr ptr){ return *ptr; });
         }
       
@@ -1925,9 +1925,9 @@ namespace lib {
       auto
       deduplicate()
         {
-          using Value   = typename meta::ValueTypeBinding<SRC>::value_type;
+          using Value   = meta::ValueTypeBinding<SRC>::value_type;
           using ResCore = ContainerCore<SET<Value>>;
-          using ResIter = typename _DecoratorTraits<ResCore>::SrcIter;
+          using ResIter = _DecoratorTraits<ResCore>::SrcIter;
           SET<Value> buffer;
           for (auto& val : *this)
             buffer.emplace (val);
@@ -2106,7 +2106,7 @@ namespace lib {
     template<class COR>                // used when actually a CheckedCore was attached
     struct _UnstripAdapter<COR, std::void_t<typename COR::TAG_CheckedCore_Raw> >
       {
-        using RawIter = typename COR::TAG_CheckedCore_Raw;
+        using RawIter = COR::TAG_CheckedCore_Raw;
       };
     
     
@@ -2123,8 +2123,8 @@ namespace lib {
     template<class SRC>
     struct _PipelineDetector<SRC, std::void_t<typename SRC::TAG_IterExplorer_Src> >
       {
-        using _SrcIT  = typename SRC::TAG_IterExplorer_Src;
-        using RawIter = typename _UnstripAdapter<_SrcIT>::RawIter;
+        using _SrcIT  = SRC::TAG_IterExplorer_Src;
+        using RawIter = _UnstripAdapter<_SrcIT>::RawIter;
       };
   }//(End)internal adapter logic
   
@@ -2188,9 +2188,9 @@ namespace lib {
   inline auto
   explore (IT&& srcSeq)
   {
-    using RawIter = typename _PipelineDetector<IT>::RawIter;        // possibly strip an underlying IterExplorer
-    using SrcIter = typename _DecoratorTraits<RawIter>::SrcIter;    // then decide how to adapt the source / iterator
-    using Base    = typename _BaseDetector<SrcIter>::BaseAdapter;   // detect if a BaseAdapter exists or must be added
+    using RawIter = _PipelineDetector<IT>::RawIter;        // possibly strip an underlying IterExplorer
+    using SrcIter = _DecoratorTraits<RawIter>::SrcIter;    // then decide how to adapt the source / iterator
+    using Base    = _BaseDetector<SrcIter>::BaseAdapter;   // detect if a BaseAdapter exists or must be added
     
     return IterExplorer<Base> (std::forward<IT> (srcSeq));
   }

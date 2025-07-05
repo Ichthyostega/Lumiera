@@ -108,7 +108,7 @@ namespace visitor {
   template<class TAR, class TOOL>
   class Dispatcher
     {
-      using ReturnType = typename TOOL::ReturnType;
+      using ReturnType = TOOL::ReturnType;
       
       /** generator for Trampoline functions,
        *  used to dispatch calls down to the

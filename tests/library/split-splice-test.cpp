@@ -213,7 +213,7 @@ namespace test {
     /* ======= Split/Splice-Algo Setup ======= */
     
     using OptInt = std::optional<int>;
-    using Iter = typename SegL::iterator;
+    using Iter   = SegL::iterator;
     
     /**
      * Perform the »SplitSplice« Algorithm to splice a new Segment

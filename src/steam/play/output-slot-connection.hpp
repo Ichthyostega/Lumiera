@@ -197,7 +197,7 @@ namespace play {
           connections_.populate_by (&ConnectionManager::buildConnection, this);
         }
       
-      typedef typename Connections::ElementHolder& ConnectionStorage;
+      using ConnectionStorage = Connections::ElementHolder&;
       
       /** factory function to build the actual
        *  connection handling objects per channel */

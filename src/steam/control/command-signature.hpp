@@ -74,15 +74,15 @@ namespace control {
   template<typename SIG, typename MEM>
   class CommandSignature
     {
-      using Args            = typename _Fun<SIG>::Args;
-      using ArgList         = typename Args::List;
-      using ExtendedArglist = typename Append<ArgList, MEM>::List;
-      using ExtendedArgs    = typename Types<ExtendedArglist>::Seq;
+      using Args            = _Fun<SIG>::Args;
+      using ArgList         = Args::List;
+      using ExtendedArglist = Append<ArgList, MEM>::List;
+      using ExtendedArgs    = Types<ExtendedArglist>::Seq;
       
     public:
-      using OperateSig = typename BuildFunType<void, Args>::Sig;
-      using CaptureSig = typename BuildFunType<MEM,  Args>::Sig;
-      using UndoOp_Sig = typename BuildFunType<void, ExtendedArgs>::Sig;
+      using OperateSig = BuildFunType<void, Args>::Sig;
+      using CaptureSig = BuildFunType<MEM,  Args>::Sig;
+      using UndoOp_Sig = BuildFunType<void, ExtendedArgs>::Sig;
       using CmdArgs    = Args;
       using Memento    = MEM;
     };
@@ -108,8 +108,8 @@ namespace control {
   class UndoSignature
     {
       // preparation:  dissect the function signature into arguments and result
-      using Args = typename _Fun<SIG>::Args;
-      using Ret  = typename _Fun<SIG>::Ret;
+      using Args = _Fun<SIG>::Args;
+      using Ret  = _Fun<SIG>::Ret;
       
       /** Case1: defining the Undo-Capture function */
       template<typename RET, typename ARG>
@@ -117,33 +117,33 @@ namespace control {
         {
           using Memento = RET;
           
-          using ExtendedArglist = typename Append<ARG, Memento>::List;
-          using ExtendedArgs    = typename Types<ExtendedArglist>::Seq;
+          using ExtendedArglist = Append<ARG, Memento>::List;
+          using ExtendedArgs    = Types<ExtendedArglist>::Seq;
           
-          using OperateSig = typename BuildFunType<void, ARG>::Sig;
-          using CaptureSig = typename BuildFunType<Ret,ARG>::Sig;
-          using UndoOp_Sig = typename BuildFunType<void, ExtendedArgs>::Sig;
+          using OperateSig = BuildFunType<void, ARG>::Sig;
+          using CaptureSig = BuildFunType<Ret,ARG>::Sig;
+          using UndoOp_Sig = BuildFunType<void, ExtendedArgs>::Sig;
         };
       /** Case2: defining the actual Undo function */
       template<typename ARG>
       struct Case<void,ARG>
         {
-          using Args = typename ARG::List;
+          using Args = ARG::List;
           
-          using Memento          = typename PickLast<Args>::Type;
-          using OperationArglist = typename PickLast<Args>::List;
-          using OperationArgs    = typename Types<OperationArglist>::Seq;
+          using Memento          = PickLast<Args>::Type;
+          using OperationArglist = PickLast<Args>::List;
+          using OperationArgs    = Types<OperationArglist>::Seq;
           
-          using OperateSig = typename BuildFunType<void, OperationArgs>::Sig;
-          using CaptureSig = typename BuildFunType<Ret,OperationArgs>::Sig;
-          using UndoOp_Sig = typename BuildFunType<void, ARG>::Sig;
+          using OperateSig = BuildFunType<void, OperationArgs>::Sig;
+          using CaptureSig = BuildFunType<Ret,OperationArgs>::Sig;
+          using UndoOp_Sig = BuildFunType<void, ARG>::Sig;
         };
       
     public:
-      using CaptureSig = typename Case<Ret,Args>::CaptureSig;
-      using UndoOp_Sig = typename Case<Ret,Args>::UndoOp_Sig;
-      using OperateSig = typename Case<Ret,Args>::OperateSig;
-      using Memento    = typename Case<Ret,Args>::Memento;
+      using CaptureSig = Case<Ret,Args>::CaptureSig;
+      using UndoOp_Sig = Case<Ret,Args>::UndoOp_Sig;
+      using OperateSig = Case<Ret,Args>::OperateSig;
+      using Memento    = Case<Ret,Args>::Memento;
     };
   
   

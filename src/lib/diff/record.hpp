@@ -140,9 +140,9 @@ namespace diff{
   template<typename VAL>
   class Record
     {
-      using Storage  = typename RecordSetup<VAL>::Storage;
-      using ElmIter  = typename RecordSetup<VAL>::ElmIter;
-      using Access   = typename RecordSetup<VAL>::Access;
+      using Storage  = RecordSetup<VAL>::Storage;
+      using ElmIter  = RecordSetup<VAL>::ElmIter;
+      using Access   = RecordSetup<VAL>::Access;
       
       
       string type_;
@@ -307,7 +307,7 @@ namespace diff{
       /* ==== Exposing scope and contents for iteration ====== */
       
       using iterator  = IterAdapter<ElmIter, const Record*>;
-      using scopeIter = typename iter_stl::_SeqT<const Storage>::Range;
+      using scopeIter = iter_stl::_SeqT<const Storage>::Range;
       using keyIter   = TransformIter<scopeIter, string>;
       using valIter   = TransformIter<scopeIter, Access>;
       
@@ -595,10 +595,10 @@ namespace diff{
    * @see tree-diff-application.hpp
    */
   template<typename VAL>
-  inline typename Record<VAL>::Mutator&
+  inline Record<VAL>::Mutator&
   mutateInPlace (Record<VAL>& record_to_mutate)
   {
-    return reinterpret_cast<typename Record<VAL>::Mutator &> (record_to_mutate);
+    return reinterpret_cast<Record<VAL>::Mutator &> (record_to_mutate);
   }
   
   
@@ -713,8 +713,8 @@ namespace diff{
   struct RecordSetup<string>
     {
       using Storage = std::vector<string>;
-      using ElmIter = typename Storage::const_iterator;
-      using Access  = string;      ///< data access by value copy
+      using ElmIter = Storage::const_iterator;
+      using Access  = string;       ///< data access by value copy
     };
   
   

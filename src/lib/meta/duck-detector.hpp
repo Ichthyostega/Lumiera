@@ -114,7 +114,7 @@
       {                                                          \
                                                                   \
         template<class X>                                          \
-        static Yes_t check(typename X::_TYPE_ *);                   \
+        static Yes_t check(X::_TYPE_ *);                            \
         template<class>                                              \
         static No_t  check(...);                                      \
                                                                        \
@@ -183,30 +183,30 @@
  *  and return type. Yet a non-function member will not trigger this detector.
  * @note this check will fail if there are overloads or similar ambiguity
  */
-#define META_DETECT_FUNCTION_NAME(_FUN_NAME_)              \
-    template<typename TY>                                   \
-    class HasFunName_##_FUN_NAME_                            \
-      {                                                       \
-        template<typename SEL>                                 \
-        struct Probe;                                           \
-        template<class C, typename RET, typename...ARGS>         \
-        struct Probe<RET (C::*) (ARGS...)>                        \
-          {                                                        \
-            using Match = void;                                     \
-          };                                                         \
-        template<class C, typename RET, typename...ARGS>              \
-        struct Probe<RET (C::*) (ARGS...)  const>                      \
-          {                                                             \
-            using Match = void;                                          \
-          };                                                              \
-                                                                           \
-        template<class X>                                                   \
-        static Yes_t check(typename Probe<decltype(&X::_FUN_NAME_)>::Match * ); \
-        template<class>                                                       \
-        static No_t  check(...);                                               \
-                                                                                \
-      public:                                                                    \
-        static const bool value = (sizeof(Yes_t)==sizeof(check<TY>(0)));          \
+#define META_DETECT_FUNCTION_NAME(_FUN_NAME_)            \
+    template<typename TY>                                 \
+    class HasFunName_##_FUN_NAME_                          \
+      {                                                     \
+        template<typename SEL>                               \
+        struct Probe;                                         \
+        template<class C, typename RET, typename...ARGS>       \
+        struct Probe<RET (C::*) (ARGS...)>                      \
+          {                                                      \
+            using Match = void;                                   \
+          };                                                       \
+        template<class C, typename RET, typename...ARGS>            \
+        struct Probe<RET (C::*) (ARGS...)  const>                    \
+          {                                                           \
+            using Match = void;                                        \
+          };                                                            \
+                                                                         \
+        template<class X>                                                 \
+        static Yes_t check(Probe<decltype(&X::_FUN_NAME_)>::Match * );     \
+        template<class>                                                     \
+        static No_t  check(...);                                             \
+                                                                              \
+      public:                                                                  \
+        static const bool value = (sizeof(Yes_t)==sizeof(check<TY>(0)));        \
       };
 
 
@@ -216,22 +216,22 @@
  * @remarks the presence of overloads is irrelevant, since we explicitly
  *          from an invocation to that function (within `decltype`)
  */
-#define META_DETECT_FUNCTION_ARGLESS(_FUN_)                \
-    template<typename TY>                                   \
-    class HasArglessFun_##_FUN_                              \
-      {                                                       \
-        template<typename X,                                   \
+#define META_DETECT_FUNCTION_ARGLESS(_FUN_)                    \
+    template<typename TY>                                       \
+    class HasArglessFun_##_FUN_                                  \
+      {                                                           \
+        template<typename X,                                       \
                  typename SEL = decltype(std::declval<X>()._FUN_())>\
-        struct Probe                                             \
-          { };                                                    \
-                                                                   \
-        template<class X>                                           \
-        static Yes_t check(Probe<X> * );                             \
-        template<class>                                               \
-        static No_t  check(...);                                       \
-                                                                        \
-      public:                                                            \
-        static const bool value = (sizeof(Yes_t)==sizeof(check<TY>(0)));  \
+        struct Probe                                                 \
+          { };                                                        \
+                                                                       \
+        template<class X>                                               \
+        static Yes_t check(Probe<X> * );                                 \
+        template<class>                                                   \
+        static No_t  check(...);                                           \
+                                                                            \
+      public:                                                                \
+        static const bool value = (sizeof(Yes_t)==sizeof(check<TY>(0)));      \
       };
 
 
@@ -245,22 +245,22 @@
  *  type checks, the extension point is assumed to be supported.
  * @warning beware of implicit type conversions
  */
-#define META_DETECT_EXTENSION_POINT(_FUN_)                 \
-    template<typename TY>                                   \
-    class HasExtensionPoint_##_FUN_                          \
-      {                                                       \
-        template<typename X,                                   \
+#define META_DETECT_EXTENSION_POINT(_FUN_)                     \
+    template<typename TY>                                       \
+    class HasExtensionPoint_##_FUN_                              \
+      {                                                           \
+        template<typename X,                                       \
                  typename SEL = decltype( _FUN_(std::declval<X>()))>\
-        struct Probe                                             \
-          { };                                                    \
-                                                                   \
-        template<class X>                                           \
-        static Yes_t check(Probe<X> * );                             \
-        template<class>                                               \
-        static No_t  check(...);                                       \
-                                                                        \
-      public:                                                            \
-        static const bool value = (sizeof(Yes_t)==sizeof(check<TY>(0)));  \
+        struct Probe                                                 \
+          { };                                                        \
+                                                                       \
+        template<class X>                                               \
+        static Yes_t check(Probe<X> * );                                 \
+        template<class>                                                   \
+        static No_t  check(...);                                           \
+                                                                            \
+      public:                                                                \
+        static const bool value = (sizeof(Yes_t)==sizeof(check<TY>(0)));      \
       };
 
 

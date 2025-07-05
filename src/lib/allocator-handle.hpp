@@ -89,7 +89,7 @@ namespace lib {
       {
         using Allo  = ALO;
         using AlloT = std::allocator_traits<Allo>;
-        using BaseType = typename Allo::value_type;
+        using BaseType = Allo::value_type;
         
         Allo& baseAllocator() { return *this; }
         
@@ -97,7 +97,7 @@ namespace lib {
         auto
         adaptAllocator()
           {
-            using XAllo = typename AlloT::template rebind_alloc<X>;
+            using XAllo = AlloT::template rebind_alloc<X>;
             if constexpr (std::is_constructible_v<XAllo, Allo>)
               return XAllo{baseAllocator()};
             else
@@ -105,8 +105,8 @@ namespace lib {
           }
         
         template<class ALOT, typename...ARGS>
-        typename ALOT::pointer
-        construct (typename ALOT::allocator_type& allo, ARGS&& ...args)
+        ALOT::pointer
+        construct (ALOT::allocator_type& allo, ARGS&& ...args)
           {
             auto loc = ALOT::allocate (allo, 1);
             try { ALOT::construct (allo, loc, std::forward<ARGS>(args)...); }
@@ -120,7 +120,7 @@ namespace lib {
         
         template<class ALOT>
         void
-        destroy (typename ALOT::allocator_type& allo, typename ALOT::pointer elm)
+        destroy (ALOT::allocator_type& allo, ALOT::pointer elm)
           {
             ALOT::destroy (allo, elm);
             ALOT::deallocate (allo, elm, 1);
@@ -167,7 +167,7 @@ namespace lib {
               }
             else
               {
-                using XAlloT = typename AlloT::template rebind_traits<TY>;
+                using XAlloT = AlloT::template rebind_traits<TY>;
                 auto xAllo = adaptAllocator<TY>();
                 return construct<XAlloT> (xAllo, std::forward<ARGS>(args)...);
               }
@@ -184,7 +184,7 @@ namespace lib {
               }
             else
               {
-                using XAlloT = typename AlloT::template rebind_traits<TY>;
+                using XAlloT = AlloT::template rebind_traits<TY>;
                 auto xAllo = adaptAllocator<TY>();
                 destroy<XAlloT> (xAllo, elm);
               }

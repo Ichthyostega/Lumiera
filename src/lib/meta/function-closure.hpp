@@ -96,7 +96,7 @@ namespace func{
     template<typename X, typename TAIL, size_t i>
     struct PlaceholderTuple<Node<X,TAIL>, i>
       {
-        using TailPlaceholders = typename PlaceholderTuple<TAIL,i+1>::List;
+        using TailPlaceholders = PlaceholderTuple<TAIL,i+1>::List;
         
         using List = Node<_Placeholder<i>, TailPlaceholders>;
       };
@@ -136,7 +136,7 @@ namespace func{
     struct PartiallyInitTuple
       {
         template<size_t i>
-        using DestType = typename std::tuple_element_t<i, TAR>;
+        using DestType = std::tuple_element_t<i, TAR>;
         
         
         /**
@@ -257,8 +257,8 @@ namespace func{
   buildInvokableWrapper (FUN&& fun)
     {
       static_assert (is_Typelist<TYPES>::value);
-      using ArgTypes = typename TYPES::Seq;
-      using Builder = typename lib::meta::RebindVariadic<AdaptInvokable, ArgTypes>::Type;
+      using ArgTypes = TYPES::Seq;
+      using Builder  = lib::meta::RebindVariadic<AdaptInvokable, ArgTypes>::Type;
       
       return Builder::buildWrapper (forward<FUN> (fun));
     }
@@ -290,11 +290,11 @@ namespace func{
   template<typename SIG, typename VAL>
   class PApply
     {
-      using Args     = typename _Fun<SIG>::Args;
-      using Ret      = typename _Fun<SIG>::Ret;
-      using ArgsList = typename Args::List;
-      using ValList  = typename VAL::List;
-      using ValTypes = typename Types<ValList>::Seq;           // reconstruct a type-seq from a type-list
+      using Args     = _Fun<SIG>::Args;
+      using Ret      = _Fun<SIG>::Ret;
+      using ArgsList = Args::List;
+      using ValList  = VAL::List;
+      using ValTypes = Types<ValList>::Seq;  // reconstruct a type-seq from a type-list
       
       enum { ARG_CNT = count<ArgsList>()
            , VAL_CNT = count<ValList>()
@@ -303,34 +303,34 @@ namespace func{
       
       
       // create list of the *remaining* arguments, after applying the ValList
-      using LeftReduced = typename Splice<ArgsList, ValList>::Back;
-      using RightReduced = typename Splice<ArgsList, ValList, ROFFSET>::Front;
+      using LeftReduced = Splice<ArgsList, ValList>::Back;
+      using RightReduced = Splice<ArgsList, ValList, ROFFSET>::Front;
       
-      using ArgsL = typename Types<LeftReduced>::Seq;
-      using ArgsR = typename Types<RightReduced>::Seq;
+      using ArgsL = Types<LeftReduced>::Seq;
+      using ArgsR = Types<RightReduced>::Seq;
       
       
       // build a list, where each of the *remaining* arguments is replaced by a placeholder marker
-      using TrailingPlaceholders = typename func::PlaceholderTuple<LeftReduced>::List;
-      using LeadingPlaceholders  = typename func::PlaceholderTuple<RightReduced>::List;
+      using TrailingPlaceholders = func::PlaceholderTuple<LeftReduced>::List;
+      using LeadingPlaceholders  = func::PlaceholderTuple<RightReduced>::List;
       
       // ... and splice these placeholders on top of the original argument type list,
       // thus retaining the types to be closed, but setting a placeholder for each remaining argument
-      using LeftReplaced  = typename Splice<ArgsList, TrailingPlaceholders, VAL_CNT>::List;
-      using RightReplaced = typename Splice<ArgsList, LeadingPlaceholders,  0      >::List;
+      using LeftReplaced  = Splice<ArgsList, TrailingPlaceholders, VAL_CNT>::List;
+      using RightReplaced = Splice<ArgsList, LeadingPlaceholders,  0      >::List;
       
-      using LeftReplacedTypes = typename Types<LeftReplaced>::Seq;
-      using RightReplacedTypes = typename Types<RightReplaced>::Seq;
+      using LeftReplacedTypes = Types<LeftReplaced>::Seq;
+      using RightReplacedTypes = Types<RightReplaced>::Seq;
       
       // create a "builder" helper, which accepts exactly the value tuple elements
       // and puts them at the right location, while default-constructing the remaining
       // (=placeholder)-arguments. Using this builder helper, we can finally set up
       // the argument tuples (Left/RightReplacedArgs) used for the std::bind call
       template<class SRC, class TAR, size_t i>
-      using IdxSelectorL = typename PartiallyInitTuple<SRC, TAR, 0>::template IndexMapper<i>;
+      using IdxSelectorL = PartiallyInitTuple<SRC, TAR, 0>::template IndexMapper<i>;
       
       template<class SRC, class TAR, size_t i>
-      using IdxSelectorR = typename PartiallyInitTuple<SRC, TAR, ROFFSET>::template IndexMapper<i>;
+      using IdxSelectorR = PartiallyInitTuple<SRC, TAR, ROFFSET>::template IndexMapper<i>;
       
       using BuildL = TupleConstructor<LeftReplacedTypes, IdxSelectorL>;
       using BuildR = TupleConstructor<RightReplacedTypes, IdxSelectorR>;
@@ -404,31 +404,31 @@ namespace func{
   template<typename SIG, typename X, uint pos>
   class BindToArgument
     {
-      using Args     = typename _Fun<SIG>::Args;
-      using Ret      = typename _Fun<SIG>::Ret;
-      using ArgsList = typename     Args::List;
-      using ValList  = typename Types<X>::List;
+      using Args     = _Fun<SIG>::Args;
+      using Ret      = _Fun<SIG>::Ret;
+      using ArgsList =     Args::List;
+      using ValList  = Types<X>::List;
       
       enum { ARG_CNT = count<ArgsList>() };
 
-      using RemainingFront     = typename Splice<ArgsList, ValList, pos>::Front;
-      using RemainingBack      = typename Splice<ArgsList, ValList, pos>::Back;
-      using PlaceholdersBefore = typename func::PlaceholderTuple<RemainingFront>::List;
-      using PlaceholdersBehind = typename func::PlaceholderTuple<RemainingBack,pos+1>::List;
+      using RemainingFront     = Splice<ArgsList, ValList, pos>::Front;
+      using RemainingBack      = Splice<ArgsList, ValList, pos>::Back;
+      using PlaceholdersBefore = func::PlaceholderTuple<RemainingFront>::List;
+      using PlaceholdersBehind = func::PlaceholderTuple<RemainingBack,pos+1>::List;
       
       using PreparedArgsRaw    = typename Append<typename Append<PlaceholdersBefore    // arguments before the splice: passed-through
                                                                 ,ValList >::List       // splice in the value tuple
                                                 ,PlaceholdersBehind                    // arguments behind the splice: passed-through
                                                 >::List;
       using PreparedArgs     = Prefix<PreparedArgsRaw, ARG_CNT>;
-      using ReducedArgs      = typename Append<RemainingFront, RemainingBack>::List;
+      using ReducedArgs      = Append<RemainingFront, RemainingBack>::List;
       
-      using PreparedArgTypes = typename Types<PreparedArgs>::Seq;
-      using RemainingArgs    = typename Types<ReducedArgs>::Seq;
+      using PreparedArgTypes = Types<PreparedArgs>::Seq;
+      using RemainingArgs    = Types<ReducedArgs>::Seq;
       
       
       template<class SRC, class TAR, size_t i>
-      using IdxSelector = typename PartiallyInitTuple<SRC, TAR, pos>::template IndexMapper<i>;
+      using IdxSelector = PartiallyInitTuple<SRC, TAR, pos>::template IndexMapper<i>;
       
       using BuildPreparedArgs = TupleConstructor<PreparedArgTypes, IdxSelector>;
       
@@ -461,10 +461,10 @@ namespace func{
     template<typename FUN1, typename FUN2>
     struct _Chain
       {
-        using Ret  = typename _Fun<FUN2>::Ret;
-        using Args = typename _Fun<FUN1>::Args;
+        using Ret  = _Fun<FUN2>::Ret;
+        using Args = _Fun<FUN1>::Args;
         
-        using FunType = typename BuildFunType<Ret,Args>::Fun;
+        using FunType = BuildFunType<Ret,Args>::Fun;
         static auto adaptedFunType() { return FunType{}; }
         
         

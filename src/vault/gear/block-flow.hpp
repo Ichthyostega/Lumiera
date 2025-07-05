@@ -224,8 +224,8 @@ namespace gear {
     class Epoch
       : public ALO::Extent
       {
-        using RawIter = typename ALO::iterator;
-        using SIZ     = typename ALO::Extent::SIZ;
+        using RawIter = ALO::iterator;
+        using SIZ     = ALO::Extent::SIZ;
         
         /// @warning will be faked, never constructed
         Epoch()    = delete;
@@ -347,8 +347,8 @@ namespace gear {
     public:
       using Allocator = mem::ExtentFamily<Activity, EPOCH_SIZ>;
       using Strategy  = blockFlow::Strategy<CONF>;
-      using RawIter   = typename Allocator::iterator;
-      using Extent    = typename Allocator::Extent;
+      using RawIter   = Allocator::iterator;
+      using Extent    = Allocator::Extent;
       using Epoch     = blockFlow::Epoch<Allocator>;
       
       using Strategy::config;
@@ -723,7 +723,7 @@ namespace gear {
   template<class CONF>
   class FlowDiagnostic
     {
-      using Epoch = typename BlockFlow<CONF>::Epoch;
+      using Epoch = BlockFlow<CONF>::Epoch;
       
       BlockFlow<CONF>& flow_;
       

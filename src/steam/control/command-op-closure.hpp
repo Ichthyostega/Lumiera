@@ -126,10 +126,10 @@ namespace control {
   template<typename SIG>
   class OpClosure
     {
-      using Args    = typename _Fun<SIG>::Args;
+      using Args    = _Fun<SIG>::Args;
       using Builder = BuildTupleAccessor<ParamAccessor, Args>;
       
-      using ParamStorageTuple = typename Builder::Product;
+      using ParamStorageTuple = Builder::Product;
       
       ParamStorageTuple params_;
       bool activated_;

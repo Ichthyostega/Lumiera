@@ -69,8 +69,8 @@ namespace diff{
       
       /* === forwarded sequence access === */
       
-      using iterator = typename std::vector<VAL>::iterator;
-      using const_iterator = typename std::vector<VAL>::const_iterator;
+      using iterator       = std::vector<VAL>::iterator;
+      using const_iterator = std::vector<VAL>::const_iterator;
       
       iterator       begin()       { return data_.begin(); }
       iterator       end()         { return data_.end();   }

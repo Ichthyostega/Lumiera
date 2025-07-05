@@ -68,13 +68,13 @@ namespace lib {
     : util::MoveAssign
     {
       using _Vec  = std::vector<T*>;
-      using VIter = typename _Vec::iterator;
+      using VIter = _Vec::iterator;
       
       using RIter    = RangeIter<VIter>;
       using IterType = PtrDerefIter<RIter>;
       
-      using ConstIterType = typename IterType::ConstIterType;
-      using RcIter        = typename IterType::WrappedConstIterType;
+      using ConstIterType = IterType::ConstIterType;
+      using RcIter        = IterType::WrappedConstIterType;
       
       _Vec vec_;
       

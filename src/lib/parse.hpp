@@ -203,7 +203,7 @@ namespace util {
         using PFun = FUN;
         PFun parse;
         
-        using Result = typename _Fun<PFun>::Ret::Result;
+        using Result = _Fun<PFun>::Ret::Result;
         
         Connex (FUN pFun)
           : parse{pFun}
@@ -281,7 +281,7 @@ namespace util {
     inline auto
     buildConnex (Syntax<PAR> const& anchor)
     {
-      using Con = typename Syntax<PAR>::Connex;
+      using Con = Syntax<PAR>::Connex;
       return Con{anchor};
     }
     
@@ -336,9 +336,9 @@ namespace util {
     inline auto
     adaptConnex (CON&& connex, BIND&& modelBinding)
     {
-      using RX = typename CON::Result;
+      using RX = CON::Result;
       using Arg = std::add_rvalue_reference_t<RX>;
-      using AdaptedRes = typename _ProbeFunReturn<Arg,BIND>::Ret;
+      using AdaptedRes = _ProbeFunReturn<Arg,BIND>::Ret;
       return Connex{[origConnex = forward<CON>(connex)
                     ,binding = forward<BIND>(modelBinding)
                     ]
@@ -357,7 +357,7 @@ namespace util {
     inline auto
     toStringConnex (CON&& connex, uint part)
     {
-      using Result = typename CON::Result;
+      using Result = CON::Result;
       return Connex([baseConnex = forward<CON>(connex)
                     ,part
                     ]
@@ -442,9 +442,9 @@ namespace util {
         
         /* === Builder functions to mark which side of the combinator to pick === */
         
-        using SubSeq = typename _Vari<AltModel, CASES...>::Prefix;  ///< a nested sub-model to extend
-        using Penult = typename _Vari<AltModel, CASES...>::Penult;  ///< plain value expected for left-branch
-        using Ultima = typename _Vari<AltModel, CASES...>::Ultima;  ///< plain value expected for right-branch
+        using SubSeq = _Vari<AltModel, CASES...>::Prefix;  ///< a nested sub-model to extend
+        using Penult = _Vari<AltModel, CASES...>::Penult;  ///< plain value expected for left-branch
+        using Ultima = _Vari<AltModel, CASES...>::Ultima;  ///< plain value expected for right-branch
         
         static AltModel
         mark_left (SubSeq&& leftCases)
@@ -524,9 +524,9 @@ namespace util {
     inline auto
     sequenceConnex (C1&& connex1, C2&& connex2)
     {
-      using R1 = typename decay_t<C1>::Result;
-      using R2 = typename decay_t<C2>::Result;
-      using ProductResult = typename _Join<SeqModel, R1, R2>::Result;
+      using R1 = decay_t<C1>::Result;
+      using R2 = decay_t<C2>::Result;
+      using ProductResult =  _Join<SeqModel, R1, R2>::Result;
       using ProductEval = Eval<ProductResult>;
       return Connex{[conL = forward<C1>(connex1)
                     ,conR = forward<C2>(connex2)
@@ -558,9 +558,9 @@ namespace util {
     inline auto
     branchedConnex (C1&& connex1, C2&& connex2)
     {
-      using R1 = typename decay_t<C1>::Result;
-      using R2 = typename decay_t<C2>::Result;
-      using SumResult = typename _Join<AltModel, R1, R2>::Result;
+      using R1 = decay_t<C1>::Result;
+      using R2 = decay_t<C2>::Result;
+      using SumResult = _Join<AltModel, R1, R2>::Result;
       using SumEval = Eval<SumResult>;
       return Connex{[conL = forward<C1>(connex1)
                     ,conR = forward<C2>(connex2)
@@ -595,7 +595,7 @@ namespace util {
                    ,C1&& delimConnex
                    ,C2&& bodyConnex)
     {
-      using Res = typename decay_t<C2>::Result;
+      using Res = decay_t<C2>::Result;
       using IterResult = IterModel<Res>;
       using IterEval = Eval<IterResult>;
       return Connex{[sep = forward<C1>(delimConnex)
@@ -636,7 +636,7 @@ namespace util {
     inline auto
     optionalConnex (CNX&& connex)
     {
-      using Res = typename decay_t<CNX>::Result;
+      using Res = decay_t<CNX>::Result;
       using OptResult = optional<Res>;
       using OptEval = Eval<OptResult>;
       return Connex{[body = forward<CNX>(connex)
@@ -661,7 +661,7 @@ namespace util {
                     ,C3&& bodyConnex
                     ,bool isOptional)
     {
-      using Res = typename decay_t<C3>::Result;
+      using Res = decay_t<C3>::Result;
       return Connex{[opening = forward<C1>(openingConnex)
                     ,closing = forward<C2>(closingConnex)
                     ,body    = forward<C3>(bodyConnex)
@@ -704,12 +704,12 @@ namespace util {
     class Parser
       : public CON
       {
-        using PFun = typename CON::PFun;
+        using PFun = CON::PFun;
         static_assert (_Fun<PFun>(), "Connex must define a parse-function");
         
       public:
         using Connex = CON;
-        using Result = typename CON::Result;
+        using Result = CON::Result;
         
         static_assert (has_Sig<PFun, Eval<Result>(StrView)>()
                       ,"Signature of the parse-function not suitable");
@@ -785,8 +785,8 @@ namespace util {
         PAR parse_;
         
       public:
-        using Connex = typename PAR::Connex;
-        using Result = typename PAR::Result;
+        using Connex = PAR::Connex;
+        using Result = PAR::Result;
         
         Syntax()
           : parse_{Nil()}
@@ -826,7 +826,7 @@ namespace util {
         Syntax&
         operator= (Syntax<PX> refSyntax)
           {
-            using ConX = typename PX::Connex;
+            using ConX = PX::Connex;
             ConX& refConnex = refSyntax;
             parse_.parse = move(refConnex.parse);
             return *this;

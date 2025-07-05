@@ -111,8 +111,8 @@ namespace control {
     , util::NonCopyable
     {
       // using a hashtable to implement the index
-      typedef unordered_map<Symbol, Command, hash<Symbol>> CmdIndex;
-      typedef map< const Command*, Symbol, order_by_impl> ReverseIndex;
+      using CmdIndex = unordered_map<Symbol, Command, hash<Symbol>>;
+      using ReverseIndex = map< const Command*, Symbol, order_by_impl>;
       
       TypedAllocationManager allocator_;
       CmdIndex index_;
@@ -236,8 +236,8 @@ namespace control {
           
           // derive the storage type necessary
           // to hold the command arguments and UNDO memento
-          typedef typename UndoSignature<SIG_CAPT>::Memento Mem;
-          typedef StorageHolder<SIG_OPER,Mem> Arguments;
+          using Mem = UndoSignature<SIG_CAPT>::Memento;
+          using Arguments = StorageHolder<SIG_OPER,Mem>;
           
           shared_ptr<Arguments> pArg (allocator_.create<Arguments>());
           

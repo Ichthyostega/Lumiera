@@ -137,7 +137,7 @@ namespace lumiera {
   
   
   template<typename RES>
-  inline typename Query<RES>::iterator
+  inline Query<RES>::iterator
   Query<RES>::resolveBy (QueryResolver const& resolver)  const
   {
     PReso resultSet = resolver.issue (*this);
@@ -150,7 +150,7 @@ namespace lumiera {
   /** notational convenience shortcut,
    *  synonymous to Query<RES>::resolveBy() */
   template<typename RES>
-  inline typename Query<RES>::iterator
+  inline Query<RES>::iterator
   Query<RES>::operator() (QueryResolver const& resolver)  const
   {
     return resolveBy (resolver);

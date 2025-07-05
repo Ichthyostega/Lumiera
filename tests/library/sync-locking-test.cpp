@@ -48,7 +48,7 @@ namespace test{
           size_t hot_sum_{0};
           size_t control_sum_{0};
           
-          using Lock = typename Sync<POLICY>::Lock;
+          using Lock = Sync<POLICY>::Lock;
           
         public:
           bool

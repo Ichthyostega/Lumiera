@@ -428,7 +428,7 @@ namespace lib {
     {
     public:
       void
-      operator() (typename ScopedCollection<I,siz>::ElementHolder& storage)
+      operator() (ScopedCollection<I,siz>::ElementHolder& storage)
         {
           storage.template create<I>();
         }
@@ -440,7 +440,7 @@ namespace lib {
     {
     public:
       void
-      operator() (typename ScopedCollection<I,siz>::ElementHolder& storage)
+      operator() (ScopedCollection<I,siz>::ElementHolder& storage)
         {
           storage.template create<TY>();
         }
@@ -461,7 +461,7 @@ namespace lib {
     {
       IT iter_;
       
-      using ElementType = typename meta::ValueTypeBinding<IT>::value_type;
+      using ElementType = meta::ValueTypeBinding<IT>::value_type;
       
     public:
       PullFrom (IT source)
@@ -469,7 +469,7 @@ namespace lib {
         { }
       
       void
-      operator() (typename ScopedCollection<I,siz>::ElementHolder& storage)
+      operator() (ScopedCollection<I,siz>::ElementHolder& storage)
         {
           storage.template create<ElementType> (*iter_);
           ++iter_;

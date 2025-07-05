@@ -151,7 +151,7 @@ namespace microbenchmark {
     static_assert (lib::meta::_Fun<FUN>(), "Need something function-like.");
     static_assert (lib::meta::_Fun<FUN>::ARITY <=1, "Function with zero or one argument required.");
     
-    using Sig = typename lib::meta::_Fun<FUN>::Sig;
+    using Sig = lib::meta::_Fun<FUN>::Sig;
     
     return Adaptor<Sig>::wrap (std::forward<FUN> (fun));
   }

@@ -271,7 +271,7 @@ namespace util {
   
   /** fetch value from a Map, or return a default if not found */
   template <typename MAP>
-  inline typename MAP::mapped_type
+  inline MAP::mapped_type
   getValue_or_default (MAP& map, typename MAP::key_type const& key
                                , typename MAP::mapped_type defaultVal)
   {
@@ -288,7 +288,7 @@ namespace util {
    * @see lib::NullValue
    */
   template <typename MAP>
-  inline typename MAP::mapped_type const &
+  inline MAP::mapped_type const &
   access_or_default (MAP& map, typename MAP::key_type const& key
                              , typename MAP::mapped_type const&  refDefault)
   {
@@ -302,7 +302,7 @@ namespace util {
   /** shortcut for removing all copies of an Element
    *  in any sequential collection */
   template <typename SEQ>
-  inline typename SEQ::iterator
+  inline SEQ::iterator
   removeall (SEQ& coll, typename SEQ::value_type const& val)
   {
     typename SEQ::iterator collEnd = coll.end();
@@ -318,7 +318,7 @@ namespace util {
   template<class SET, typename FUN>
   bool remove_if (SET& set, FUN test)
     {
-      typedef typename SET::iterator Itor;
+      using Itor =  SET::iterator;
       bool found = false;
       Itor   end = set.end();
       Itor begin = set.begin();

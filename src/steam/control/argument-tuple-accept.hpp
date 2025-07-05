@@ -141,8 +141,8 @@ namespace control {
     template<typename SIG>
     struct _Type
       {
-        using Args = typename _Fun<SIG>::Args;
-        using Ret  = typename _Fun<SIG>::Ret;
+        using Args = _Fun<SIG>::Args;
+        using Ret  = _Fun<SIG>::Ret;
         using Sig  = SIG;
         using ArgTuple = Tuple<Args>;
       };
@@ -150,9 +150,9 @@ namespace control {
     template<typename...TYPES>
     struct _Type<std::tuple<TYPES...> >
       {
-        using Args = typename Types<TYPES...>::Seq;
+        using Args = Types<TYPES...>::Seq;
         using Ret  = void;
-        using Sig  = typename BuildFunType<void, Args>::Sig;
+        using Sig  = BuildFunType<void, Args>::Sig;
         using ArgTuple = std::tuple<TYPES...>;
       };
   

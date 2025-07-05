@@ -116,11 +116,11 @@ namespace mobject {
     , public HashIndexed<Placement<MObject>, lib::hash::LuidH >
     {
     protected:
-      typedef HashIndexed<Placement<MObject>, lib::hash::LuidH> HashInd;
-      typedef shared_ptr<MObject> _SmartPtr;
+      using HashInd = HashIndexed<Placement<MObject>, lib::hash::LuidH>;
+      using _SmartPtr = shared_ptr<MObject>;
       typedef void (*Deleter)(MObject*);
-      typedef lib::time::Time Time;
-      typedef asset::shared_ptr<asset::Pipe> Pipe;   ////TICKET #109 : get rid of this
+      using Time = lib::time::Time;
+      using Pipe = asset::shared_ptr<asset::Pipe>;   ////TICKET #109 : get rid of this
       
       
       
@@ -232,10 +232,10 @@ namespace mobject {
     : public Placement<B>
     {
     protected:
-      typedef Placement<B> _Parent;
-      typedef typename _Parent::template Id<MO> const& _Id;
-      typedef typename _Parent::Deleter Deleter;
-      typedef typename _Parent::_SmartPtr _SmartPtr;
+      using _Parent   = Placement<B>;
+      using _Id       = _Parent::template Id<MO> const&;
+      using Deleter   = _Parent::Deleter;
+      using _SmartPtr = _Parent::_SmartPtr;
       
       
       Placement (MO & mo, Deleter killer)
@@ -262,8 +262,8 @@ namespace mobject {
   
   
   /** @todo cleanup uses of ref-to-placement. See Ticket #115 */
-  typedef Placement<MObject> PlacementMO;
-  typedef Placement<MObject> PMO;
+  using PlacementMO = Placement<MObject>;
+  using PMO         = Placement<MObject>;
   
   
   

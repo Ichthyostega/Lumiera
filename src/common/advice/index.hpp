@@ -171,8 +171,8 @@ namespace advice {
         };
       
       
-      typedef vector<Entry> EntryList;
-      typedef typename EntryList::iterator EIter;
+      using EntryList = vector<Entry>;
+      using EIter     = EntryList::iterator;
       
       
       struct Cluster
@@ -249,7 +249,7 @@ namespace advice {
           POA*
           find_latest_solution (POA& requestElm)
             {
-              typedef typename EntryList::reverse_iterator RIter;
+              using RIter = EntryList::reverse_iterator;
               Binding::Matcher pattern (requestElm.getMatcher());
               for (RIter ii=this->elms_.rbegin();
                    ii!=this->elms_.rend();
@@ -514,8 +514,8 @@ namespace advice {
   bool
   Index<POA>::isValid()  const
   {
-    typedef typename RTable::const_iterator RTIter;
-    typedef typename PTable::const_iterator PTIter;
+    using RTIter = RTable::const_iterator;
+    using PTIter = PTable::const_iterator;
     
     try {
         for (PTIter ii =provisionEntries_.begin();

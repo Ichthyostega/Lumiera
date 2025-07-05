@@ -71,8 +71,8 @@ namespace control {
       using ArgHolder = OpClosure<SIG>;
       using ArgumentBuff = InPlaceBuffer<ArgHolder>;
       
-      using ArgTuple = typename ArgHolder::ArgTuple;
-      using Args     = typename lib::meta::RebindTupleTypes<ArgTuple>::Seq; // std::tuple<ARGS...> to Types<ARGS...>
+      using ArgTuple = ArgHolder::ArgTuple;
+      using Args     = lib::meta::RebindTupleTypes<ArgTuple>::Seq; // std::tuple<ARGS...> to Types<ARGS...>
       
       
       /* ====== in-place argument storage ====== */

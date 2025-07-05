@@ -190,7 +190,7 @@ namespace util {
   inline std::string
   toString (TY const& val)  noexcept
   {
-    using PlainVal = typename lib::meta::Strip<TY>::TypeReferred;
+    using PlainVal = lib::meta::Strip<TY>::TypeReferred;
     return StringConv<PlainVal>::invoke (val);
   }
   

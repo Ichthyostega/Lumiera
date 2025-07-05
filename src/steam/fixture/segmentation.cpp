@@ -68,7 +68,7 @@ namespace fixture {
   Segmentation::splitSplice (OptTime start, OptTime after, engine::ExitNodes&& modelLink)
   {
     ASSERT (!start or !after or start != after);
-    using Iter = typename list<Segment>::iterator;
+    using Iter = list<Segment>::iterator;
     
     auto getStart =  [](Iter elm)                                   -> Time { return elm->start(); };
     auto getAfter =  [](Iter elm)                                   -> Time { return elm->after(); };

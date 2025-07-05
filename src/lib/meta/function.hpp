@@ -250,7 +250,7 @@ namespace meta{
   
   /** abbreviation for referring to a function's return type */
   template<typename FUN>
-  using _FunRet = typename _Fun<FUN>::Ret;
+  using _FunRet = _Fun<FUN>::Ret;
   
   namespace {
     template<typename FUN>
@@ -259,14 +259,14 @@ namespace meta{
         static_assert(_Fun<FUN>()           , "something funktion-like required");
         static_assert(_Fun<FUN>::ARITY == 1 , "function with exactly one argument required");
         
-        using Sig = typename _Fun<FUN>::Sig;
-        using Arg = typename _Fun<Sig>::Args::List::Head;
+        using Sig = _Fun<FUN>::Sig;
+        using Arg = _Fun<Sig>::Args::List::Head;
       };
   }
   
   /** abbreviation for referring to a function's single Argument type */
   template<typename FUN>
-  using _FunArg = typename _DetectSingleArgFunction<FUN>::Arg;
+  using _FunArg = _DetectSingleArgFunction<FUN>::Arg;
   
   
   

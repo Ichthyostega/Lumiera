@@ -50,8 +50,8 @@ namespace lib {
         
         using ResVal = decltype(data_->operator[](0));
         
-        using value_type = typename meta::RefTraits<ResVal>::Value;
-        using reference  = typename meta::RefTraits<ResVal>::Reference;
+        using value_type = meta::RefTraits<ResVal>::Value;
+        using reference  = meta::RefTraits<ResVal>::Reference;
         
         bool
         checkPoint() const
@@ -113,7 +113,7 @@ namespace lib {
     : public iter::IndexAccessCore<PTR>::IterWrapper
     {
       using _Cor = iter::IndexAccessCore<PTR>;
-      using _Par = typename _Cor::IterWrapper;
+      using _Par = _Cor::IterWrapper;
       
     public:
       IndexIter()  = default;

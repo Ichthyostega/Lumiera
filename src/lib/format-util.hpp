@@ -133,7 +133,7 @@ namespace util {
   inline auto
   stringify (IT&& src)
   {
-    using Val = typename lib::meta::ValueTypeBinding<IT>::value_type;
+    using Val = lib::meta::ValueTypeBinding<IT>::value_type;
     
     return lib::transformIterator(forward<IT>(src), util::toString<Val>);
   }
@@ -144,7 +144,7 @@ namespace util {
     template<class CON, typename TOGGLE = void>
     struct _RangeIter
       {
-        using StlIter = typename CON::const_iterator;
+        using StlIter = CON::const_iterator;
         
         lib::RangeIter<StlIter> iter;
         
@@ -193,7 +193,7 @@ namespace util {
   inline string
   join (COLL&& coll, string const& delim =", ")
   {
-    using Coll = typename lib::meta::Strip<COLL>::TypePlain;
+    using Coll = lib::meta::Strip<COLL>::TypePlain;
     _RangeIter<Coll> range(std::forward<COLL>(coll));    // copies when CON is reference
     
     auto strings = stringify (std::move (range.iter));

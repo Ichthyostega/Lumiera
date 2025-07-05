@@ -255,9 +255,9 @@ namespace test {
       struct Node
         : util::MoveOnly
         {
-          using _Arr = std::array<Node*, maxFan>;
-          using Iter = typename _Arr::iterator;
-          using CIter = typename _Arr::const_iterator;
+          using _Arr  =  std::array<Node*, maxFan>;
+          using Iter  = _Arr::iterator;
+          using CIter = _Arr::const_iterator;
           
           /** Table with connections to other Node records */
           struct Tab : _Arr
@@ -364,7 +364,7 @@ namespace test {
         using Rule = lib::RandomDraw<NodeControlBinding>;
       
     private:
-      using NodeTab = typename Node::Tab;
+      using NodeTab = Node::Tab;
       using NodeIT = lib::RangeIter<Node*>;
       
       std::unique_ptr<Node[]> nodes_;
@@ -1579,7 +1579,7 @@ namespace test {
   class RandomChainCalcFunctor
     : public ChainFunctor
     {
-      using Node = typename TestChainLoad<maxFan>::Node;
+      using Node = TestChainLoad<maxFan>::Node;
       using Watch = lib::IncidenceCount;
       
       Node* startNode_;
@@ -1627,7 +1627,7 @@ namespace test {
   class RandomChainPlanFunctor
     : public ChainFunctor
     {
-      using Node = typename TestChainLoad<maxFan>::Node;
+      using Node = TestChainLoad<maxFan>::Node;
       
       function<void(size_t,size_t)>          scheduleCalcJob_;
       function<void(Node*,Node*)>             markDependency_;
@@ -2179,7 +2179,7 @@ namespace test {
    * @note clears hashes and re-propagates seed in the node graph beforehand.
    */
   template<size_t maxFan>
-  typename TestChainLoad<maxFan>::ScheduleCtx
+  TestChainLoad<maxFan>::ScheduleCtx
   TestChainLoad<maxFan>::setupSchedule (Scheduler& scheduler)
   {
     clearNodeHashes();

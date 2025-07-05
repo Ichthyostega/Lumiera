@@ -217,7 +217,7 @@ namespace time {
         static Supported
         formats()
           {
-            typedef typename TY::List SupportedFormats;
+            using SupportedFormats = TY::List;
             return Supported().define(SupportedFormats());
           }
         

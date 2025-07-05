@@ -48,7 +48,7 @@ namespace test {
                                    , Block<2>
                                    , Block<1>
                                    >;
-      using ListOfTypes = typename SequenceOfTypes::List;
+      using ListOfTypes = SequenceOfTypes::List;
       
       
       template<class X, class P>

@@ -132,7 +132,7 @@ namespace test {
           
           const uint N = NUM_INVOKES;
           const uint REPEATS = NUM_SAMPLES / threads;
-          using ResVal = typename GEN::result_type;
+          using ResVal =   GEN::result_type;
           ResVal expect = (GEN::max() - GEN::min()) / 2;
           
           /* === Measurement Results === */

@@ -74,7 +74,7 @@ namespace meta {
     template<class TY, class TYPES, size_t i>
     struct Pick<Node<TY,TYPES>, i>
       {
-        using Type = typename Pick<TYPES, i-1>::Type;
+        using Type = Pick<TYPES, i-1>::Type;
       };
     
     
@@ -111,11 +111,11 @@ namespace meta {
     template< class TY, class TYPES
             , template<class> class _P_
             >
-    struct Filter<Node<TY,TYPES>,_P_>      { using List = typename CondNode< _P_<TY>::value
-                                                                           , TY
-                                                                           , typename Filter<TYPES,_P_>::List
-                                                                           >::Next
-                                                                           ; };
+    struct Filter<Node<TY,TYPES>,_P_>      { using List = CondNode< _P_<TY>::value
+                                                                  , TY
+                                                                  , typename Filter<TYPES,_P_>::List
+                                                                  >::Next
+                                                                  ; };
     
     
     /** append (concatenate) lists-of-types */
@@ -157,11 +157,11 @@ namespace meta {
                                              using List = Nil; };
     
     template<class TY, class TYPES>
-    struct PickLast<Node<TY,TYPES>>        { using Type = typename PickLast<TYPES>::Type;
-                                             using List = typename Append< TY
-                                                                         , typename PickLast<TYPES>::List
-                                                                         >::List
-                                                                         ; };
+    struct PickLast<Node<TY,TYPES>>        { using Type = PickLast<TYPES>::Type;
+                                             using List = Append< TY
+                                                                , typename PickLast<TYPES>::List
+                                                                >::List
+                                                                ; };
     
     
     
@@ -203,11 +203,11 @@ namespace meta {
     
     /** extract prefix of given length */
     template<class LI, uint l>
-    using Prefix = typename Splice<LI, Nil, l>::Front;
+    using Prefix = Splice<LI, Nil, l>::Front;
     
     /** extract suffix starting at given pos */
     template<class LI, uint p>
-    using Suffix = typename Splice<LI, Nil, p>::Back;
+    using Suffix = Splice<LI, Nil, p>::Back;
     
     
     
@@ -222,13 +222,13 @@ namespace meta {
     template<class T, class TYPES>
     struct Dissect<Node<T,TYPES>>
       {
-        using   List = Node<T,TYPES>;                    ///< the complete list
-        using   Head = T;                                ///< first element
-        using  First = Node<T,Nil>;                      ///< a list containing the first element
-        using   Tail = TYPES;                            ///< remainder of the list starting with the second elm.
-        using Prefix = typename PickLast<List>::List;    ///< all of the list, up to but excluding the last element
-        using    End = typename PickLast<List>::Type;    ///< the last element
-        using   Last = Node<End,Nil>;                    ///< a list containing the last element
+        using   List = Node<T,TYPES>;                     ///< the complete list
+        using   Head = T;                                 ///< first element
+        using  First = Node<T,Nil>;                       ///< a list containing the first element
+        using   Tail = TYPES;                             ///< remainder of the list starting with the second elm.
+        using Prefix = PickLast<List>::List;              ///< all of the list, up to but excluding the last element
+        using    End = PickLast<List>::Type;              ///< the last element
+        using   Last = Node<End,Nil>;                     ///< a list containing the last element
       };
     
     template<>
@@ -276,7 +276,7 @@ namespace meta {
      * sources, i.e. the Cartesian product.
      */
     template<class TY1,class TY2>
-    struct Distribute                      { using List = typename PrefixAll<TY1,TY2>::List; };
+    struct Distribute                      { using List = PrefixAll<TY1,TY2>::List; };
     
     template<class TY>
     struct Distribute<Nil,TY>              { using List = Nil; };
@@ -284,10 +284,10 @@ namespace meta {
     template< class TY, class TYPES
             , class TAIL
             >
-    struct Distribute<Node<TY,TYPES>,TAIL> { using List = typename Append< typename PrefixAll<TY,TAIL>::List
-                                                                         , typename Distribute<TYPES,TAIL>::List
-                                                                         >::List
-                                                                         ; };
+    struct Distribute<Node<TY,TYPES>,TAIL> { using List = Append< typename PrefixAll<TY,TAIL>::List
+                                                                , typename Distribute<TYPES,TAIL>::List
+                                                                >::List
+                                                                ; };
     
     
     
@@ -306,17 +306,17 @@ namespace meta {
      */
     template< class X
             , template<class> class _ENUM_>
-    struct Combine                         { using List = typename Distribute< typename _ENUM_<X>::List
-                                                                             , NilNode
-                                                                             >::List; };
+    struct Combine                         { using List = Distribute< typename _ENUM_<X>::List
+                                                                    , NilNode
+                                                                    >::List; };
     template< template<class> class _ENUM_>
     struct Combine<Nil, _ENUM_ >           { using List = NilNode; };
     
     template< class TY, class TYPES
             , template<class> class _ENUM_>
-    struct Combine<Node<TY,TYPES>,_ENUM_>  { using List = typename Distribute< typename _ENUM_<TY>::List
-                                                                             , typename Combine<TYPES,_ENUM_>::List
-                                                                             >::List; };
+    struct Combine<Node<TY,TYPES>,_ENUM_>  { using List = Distribute< typename _ENUM_<TY>::List
+                                                                    , typename Combine<TYPES,_ENUM_>::List
+                                                                    >::List; };
     
     /** enumeration generator for the Combine metafunction,
      *  yielding an "on" and "off" case; the latter is
@@ -334,7 +334,7 @@ namespace meta {
     template<class FLAGS>
     struct CombineFlags
       {
-        using List = typename Combine<FLAGS, FlagOnOff>::List;
+        using List = Combine<FLAGS, FlagOnOff>::List;
       };
     
     

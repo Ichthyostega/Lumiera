@@ -121,8 +121,8 @@ namespace diff{
     struct ContainerTraits<V,  IF_is_vector<V> >
       {
         using Vec = _AsVector<V>;
-        using Elm = typename Vec::value_type;
-        using Itr = typename Vec::iterator;
+        using Elm = Vec::value_type;
+        using Itr = Vec::iterator;
         
         static Itr
         recentElmRawIter (Vec& vec)
@@ -141,8 +141,8 @@ namespace diff{
     struct ContainerTraits<M,  IF_is_map<M> >
       {
         using Map = _AsMap<M>;
-        using Key = typename Map::key_type;
-        using Val = typename Map::mapped_type;
+        using Key = Map::key_type;
+        using Val = Map::mapped_type;
         using Elm = std::pair<const Key, Val>;
         
         /** heuristic for `std::map`: lookup via reverse iterator.
@@ -188,12 +188,12 @@ namespace diff{
     struct CollectionBinding
       : util::MoveOnly
       {
-        using Coll = typename Strip<COLL>::TypeReferred;
-        using Elm  = typename Coll::value_type;
+        using Coll  = Strip<COLL>::TypeReferred;
+        using Elm   = Coll::value_type;
         using Trait = ContainerTraits<Coll>;
         
-        using iterator       = typename lib::iter_stl::_SeqT<Coll>::Range;
-        using const_iterator = typename lib::iter_stl::_SeqT<const Coll>::Range;
+        using iterator       = lib::iter_stl::_SeqT<Coll>::Range;
+        using const_iterator = lib::iter_stl::_SeqT<const Coll>::Range;
         
         
         ASSERT_VALID_SIGNATURE (MAT, bool(GenNode const& spec, Elm const& elm))
@@ -306,7 +306,7 @@ namespace diff{
     class ChildCollectionMutator
       : public PAR
       {
-        using Iter = typename BIN::iterator;
+        using Iter = BIN::iterator;
         
         BIN binding_;
         Iter pos_;
@@ -582,7 +582,7 @@ namespace diff{
     inline auto
     createCollectionBindingBuilder (COLL& coll, MAT m, CTR c, SEL s, ASS a, MUT u)
     {
-      using Coll = typename Strip<COLL>::TypeReferred;
+      using Coll = Strip<COLL>::TypeReferred;
 
       return CollectionBindingBuilder<Coll, MAT,CTR,SEL,ASS,MUT> {coll, m,c,s,a,u};
     }
@@ -738,7 +738,7 @@ namespace diff{
     inline auto
     collection (COLL& coll)
     {
-      using Elm  = typename COLL::value_type;
+      using Elm = COLL::value_type;
       
       return _DefaultBinding<Elm>::attachTo(coll);
     }

@@ -81,7 +81,7 @@ namespace mobject {
         using Rebinder = Rebind<OutputMappingMemberFunc>;
         
       public:
-        using Target = typename Rebinder::Res;
+        using Target = Rebinder::Res;
         
       };
   }//(End) type rebinding helper
@@ -130,7 +130,7 @@ namespace mobject {
       std::map<HashVal,HashVal> table_;
       
     public:
-      using Target = typename Setup::Target;
+      using Target = Setup::Target;
       
       // using default ctor and copy operations
       
@@ -317,7 +317,7 @@ namespace mobject {
    *        stored. Thus the yielded Resolver should be checked, if in doubt.
    */
   template<class DEF>
-  inline typename OutputMapping<DEF>::Resolver
+  inline OutputMapping<DEF>::Resolver
   OutputMapping<DEF>::operator[] (PId sourcePipeID)
   {
     if (not contains (sourcePipeID))
@@ -333,7 +333,7 @@ namespace mobject {
   /** similar to the standard map-style access, but accepts
    *  a source pipe object instead of just a pipe-ID */
   template<class DEF>
-  inline typename OutputMapping<DEF>::Resolver
+  inline OutputMapping<DEF>::Resolver
   OutputMapping<DEF>::operator[] (PPipe const& pipe)
   {
     REQUIRE (pipe);
@@ -372,7 +372,7 @@ namespace mobject {
    *        if in doubt.
    */
   template<class DEF>
-  inline typename OutputMapping<DEF>::Resolver
+  inline OutputMapping<DEF>::Resolver
   OutputMapping<DEF>::operator[] (Query<asset::Pipe> query4pipe)
   {
     HashVal hash4query = _mapping::slot (query4pipe);

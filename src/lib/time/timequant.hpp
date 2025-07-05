@@ -101,7 +101,7 @@ namespace time {
       bool supports()  const;                              ///< does our implicit time grid support building that timecode format?
       
       template<class FMT>
-      typename format::Traits<FMT>::TimeCode
+      format::Traits<FMT>::TimeCode
       formatAs()  const;                                   ///< create new time code instance, then #castInto
       
       template<class TC>
@@ -133,10 +133,10 @@ namespace time {
   
   
   template<class FMT>
-  inline typename format::Traits<FMT>::TimeCode
+  inline format::Traits<FMT>::TimeCode
   QuTime::formatAs()  const
   {
-    using TC = typename format::Traits<FMT>::TimeCode;
+    using TC = format::Traits<FMT>::TimeCode;
     return TC(*this);
   }
   
@@ -154,7 +154,7 @@ namespace time {
   inline void
   QuTime::castInto (TC& timecode)  const
   {
-    using Format = typename TC::Format;
+    using Format = TC::Format;
     REQUIRE (supports<Format>());
     
     Format::rebuild (timecode, *quantiser_, TimeValue(*this));

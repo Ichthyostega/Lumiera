@@ -64,7 +64,7 @@ namespace diff{
     : public ListDiffInterpreter<E>
     {
       using Vec = vector<E,ARGS...>;
-      using Iter = typename Vec::iterator;
+      using Iter = Vec::iterator;
       
       Vec orig_;
       Vec& seq_;

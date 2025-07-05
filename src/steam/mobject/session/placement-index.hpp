@@ -226,7 +226,7 @@ namespace session {
       bool remove (ID);
       
       template<class PLA>
-      typename BuildID<PLA>::Type insert (PLA const&, ID);
+      BuildID<PLA>::Type insert (PLA const&, ID);
       
       
       
@@ -318,10 +318,10 @@ namespace session {
    *  @todo is this API used in application code? or just used in tests?
    */
   template<class PLA>
-  typename BuildID<PLA>::Type
+  BuildID<PLA>::Type
   PlacementIndex::insert (PLA const& newObj, ID targetScope)
   {
-    typedef typename BuildID<PLA>::Target TargetMO;
+    using TargetMO = BuildID<PLA>::Target;
     PlacementMO const& genericPlacement(newObj);
     
     return find (insert (genericPlacement, targetScope))

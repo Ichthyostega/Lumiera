@@ -152,7 +152,7 @@ namespace visitor {
     : public Applicable<TOOLImpl, TYPES, BASE>
     {
       
-      using ToolBase = typename BASE::ToolBase;
+      using ToolBase = BASE::ToolBase;
       
     protected:
       virtual ~Applicable () {}
@@ -188,7 +188,7 @@ namespace visitor {
   class Visitable
     {
     public:
-      using ReturnType = typename TOOL::ReturnType;
+      using ReturnType = TOOL::ReturnType;
       
       /** to be defined by the DEFINE_PROCESSABLE_BY macro
        *  in all classes wanting to be treated by some tool */
@@ -199,7 +199,7 @@ namespace visitor {
       virtual ~Visitable () { };
       
       /// @note may differ from TOOL
-      using ToolBase = typename TOOL::ToolBase;
+      using ToolBase = TOOL::ToolBase;
       
       /** @internal used by the #DEFINE_PROCESSABLE_BY macro.
        *            Dispatches to the actual operation on the

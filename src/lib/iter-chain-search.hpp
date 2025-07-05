@@ -150,11 +150,11 @@ namespace iter {
     : public _IterChainSetup<SRC>::Pipeline
     {
       using _Trait = _IterChainSetup<SRC>;
-      using _Base  = typename _Trait::Pipeline;
+      using _Base  = _Trait::Pipeline;
       
-      using Value  = typename _Base::value_type;
-      using Filter = typename _Trait::Filter;
-      using Step   = typename _Trait::StepFunctor;
+      using Value  = _Base::value_type;
+      using Filter = _Trait::Filter;
+      using Step   = _Trait::StepFunctor;
       
       /** Storage for a sequence of filter configuration functors */
       std::vector<Step> stepChain_;

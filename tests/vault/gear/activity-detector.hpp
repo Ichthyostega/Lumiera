@@ -292,11 +292,11 @@ namespace test {
       template<typename SIG>
       struct _DiagnosticFun
         {
-          using Ret      = typename lib::meta::_Fun<SIG>::Ret;
-          using Args     = typename lib::meta::_Fun<SIG>::Args;
-          using SigTypes = typename lib::meta::Prepend<Ret, Args>::Seq;
+          using Ret      = lib::meta::_Fun<SIG>::Ret;
+          using Args     = lib::meta::_Fun<SIG>::Args;
+          using SigTypes = lib::meta::Prepend<Ret, Args>::Seq;
           
-          using Type  = typename RebindVariadic<DiagnosticFun, SigTypes>::Type;
+          using Type  = RebindVariadic<DiagnosticFun, SigTypes>::Type;
         };
       
       using Logger = _DiagnosticFun<void(string)>::Type;
@@ -308,7 +308,7 @@ namespace test {
       class MockJobFunctor
         : public NopJobFunctor
         {
-          using MockOp = typename _DiagnosticFun<SIG_JobDiagnostic>::Type;
+          using MockOp = _DiagnosticFun<SIG_JobDiagnostic>::Type;
           
           MockOp mockOperation_;
           
@@ -510,7 +510,7 @@ namespace test {
       auto
       buildDiagnosticFun (string id)
         {
-          using Functor = typename _DiagnosticFun<SIG>::Type;
+          using Functor = _DiagnosticFun<SIG>::Type;
           return Functor{id, eventLog_, invocationSeq_};
         }
       

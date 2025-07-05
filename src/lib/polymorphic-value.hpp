@@ -366,8 +366,8 @@ namespace lib {
     {
     private:
       typedef polyvalue::Trait<CPY>     _Traits;
-      typedef typename _Traits::CopyAPI _CopyHandlingAdapter;
-      typedef typename _Traits::Assignment _AssignmentPolicy;                     /////////////////TICKET #1197 : confusingly indirect decision logic
+      typedef _Traits::CopyAPI _CopyHandlingAdapter;
+      typedef _Traits::Assignment _AssignmentPolicy;                              /////////////////TICKET #1197 : confusingly indirect decision logic
       enum{
         siz = storage + _Traits::ADMIN_OVERHEAD
       };

@@ -183,7 +183,7 @@ namespace lib {
       
       /** access type to reside in the given slot of the _complete chain_ */
       template<size_t slot>
-      using Elm_t = typename PickType<slot>::type;
+      using Elm_t = PickType<slot>::type;
       
       
       /** access data elements within _complete chain_ by index pos */
@@ -272,10 +272,10 @@ namespace lib {
             }
           
           template<typename...XVALS>
-          using ChainExtent = typename ChainType::template Chain<XVALS...>;
+          using ChainExtent = ChainType::template Chain<XVALS...>;
           
           template<size_t slot>
-          using Accessor = typename ChainType::template Accessor<_Self::size()+slot>;
+          using Accessor = ChainType::template Accessor<_Self::size()+slot>;
           
           template<typename X>
           using AccessorFor = Accessor<meta::indexOfType<X,VALS...>()>;
@@ -310,7 +310,7 @@ namespace lib {
       using _FrontBlock = HeteroData<meta::Node<StorageFrame<0, DATA...>, meta::Nil>>;
       
     public:
-      using NewFrame = typename _FrontBlock::Frame;
+      using NewFrame = _FrontBlock::Frame;
       using ChainType = _FrontBlock;
       using _FrontBlock::_FrontBlock;
       
@@ -434,7 +434,7 @@ namespace std { // Specialisation to support C++ »Tuple Protocol« and structur
   template<size_t I, typename...DATA>
   struct tuple_element<I, lib::HeteroData<DATA...> >
     {
-      using type = typename lib::HeteroData<DATA...>::template Elm_t<I>;
+      using type = lib::HeteroData<DATA...>::template Elm_t<I>;
     };
   template<size_t I>
   struct tuple_element<I, lib::HeteroData<lib::meta::Nil> >

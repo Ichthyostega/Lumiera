@@ -78,14 +78,14 @@ namespace diff{
   class DiffDetector
     : util::NonCopyable
     {
-      using Val = typename SEQ::value_type;
+      using Val = SEQ::value_type;
       using Idx = IndexTable<Val>;
       
       Idx refIdx_;
       SEQ const& currentData_;
       
       
-      using DiffStep = typename ListDiffLanguage<Val>::DiffStep;
+      using DiffStep = ListDiffLanguage<Val>::DiffStep;
       
       /** @internal state frame for diff detection and generation. */
       class DiffFrame;

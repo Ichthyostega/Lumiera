@@ -119,11 +119,11 @@ namespace session {
       
       
       template<class MO>
-      typename ScopeQuery<MO>::iterator
+      ScopeQuery<MO>::iterator
       query()  const;
       
       template<class MO>
-      typename ScopeQuery<MO>::iterator
+      ScopeQuery<MO>::iterator
       explore()  const;
       
       lib::IterSource<const Scope>::iterator
@@ -175,7 +175,7 @@ namespace session {
    *  within \em current focus. Resolution is
    *  delegated to the \em current session */
   template<class MO>
-  inline typename ScopeQuery<MO>::iterator
+  inline ScopeQuery<MO>::iterator
   QueryFocus::query()  const
   {
     return ScopeLocator::instance().query<MO> (*this);
@@ -186,7 +186,7 @@ namespace session {
    *  as immediate Child within \em current focus.
    *  Resolution through \em current session */
   template<class MO>
-  inline typename ScopeQuery<MO>::iterator
+  inline ScopeQuery<MO>::iterator
   QueryFocus::explore()  const
   {
     return ScopeLocator::instance().explore<MO> (*this);

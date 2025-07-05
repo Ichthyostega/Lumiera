@@ -53,7 +53,7 @@ namespace wrapper {
     : public function<SIG>
     , util::NonCopyable
     {
-      using Res = typename _Fun<SIG>::Ret;
+      using Res        = _Fun<SIG>::Ret;
       using ResWrapper = ItemWrapper<Res>;
       
       ResWrapper lastResult_;

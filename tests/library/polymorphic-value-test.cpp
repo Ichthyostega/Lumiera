@@ -242,7 +242,7 @@ namespace test{
         {
           using Holder  = PV;
           using ImpType = IMP;
-          using Api     = typename PV::Interface ;
+          using Api     = PV::Interface ;
           
           long prevSum = _checkSum;
           uint prevCnt = _created;
