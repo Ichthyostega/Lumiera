@@ -2,6 +2,9 @@ Code Base Organisation
 ======================
 
 //Menu: label Code Base
+//Menu: prepend child CodingGuidelines
+//Menu: put child LinkingStructure after CodingGuidelines
+//Menu: put child GitBranching after LinkingStructure
 
 
 This section of Lumiera's technical documentation deals with the code base as such,

@@ -1,0 +1,44 @@
+#!/bin/bash
+#
+# setVersion - place the version info given as argument
+#              into all the necessary places in the Lumiera tree
+#
+#
+set -e
+
+function fail() {
+    echo -e "\nFAIL: $1\n\n"
+    exit -1
+}
+
+PROJ_ROOT=$(git rev-parse --show-toplevel)
+cd $PROJ_ROOT
+[ $# -eq 1 ] || fail "need version as argument\n\nsetVersion <ver>"
+[ -n "$1"  ] || fail "need a nonemty version spec"
+VER="$1"
+
+function rewrite() {
+    # Process the indicated file with sed and replace the existing version spec
+    # The PREFIX argument must match everything from line start before the version;
+    # then the _remainder_ of this line will be replaced by the NEWVER
+    FILE="$1"
+    PREFIX="$2"
+    NEWVER="$3"
+    echo "rewrite..... $FILE"
+    egrep -q "^$PREFIX" $FILE        || fail "not found in $FILE : $PREFIX"
+    #
+    sed -r -f - -i "$FILE" <<END_SCRIPT
+    /^$PREFIX/ {
+       s/(^$PREFIX).+/\1 $NEWVER/
+    }
+END_SCRIPT
+}
+
+
+rewrite data/config/setup.ini     'version\s*='        "$VER"
+rewrite doc/devel/Doxyfile        'PROJECT_NUMBER\s*=' "$VER"
+rewrite doc/devel/Doxyfile.browse 'PROJECT_NUMBER\s*=' "$VER"
+rewrite admin/scons/Setup.py      'VERSION\s*='        "\'$VER\'"
+rewrite README                    'Version:'           "$VER"
+
+echo -e "\nSUCCESSFULLY rewritten version $VER\ncheck git diff\n\n"

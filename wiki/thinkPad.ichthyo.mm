@@ -160223,8 +160223,6 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1664058018889" HGAP="70" ID="ID_1933523990" MODIFIED="1664058038958" TEXT="Leit-Aufgaben" VSHIFT="13">
 <font NAME="SansSerif" SIZE="14"/>
 <node CREATED="1664058052677" ID="ID_671587918" MODIFIED="1664058055024" TEXT="aktiv">
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1664059317203" ID="ID_995858352" MODIFIED="1679784026877" TEXT="#1221 Playback Vertical Slice">
-<icon BUILTIN="back"/>
 <node BACKGROUND_COLOR="#fefc4e" COLOR="#351d75" CREATED="1679082378934" HGAP="90" ID="ID_1513396947" MODIFIED="1679082411019" TEXT="hier spielt die Musik" VSHIFT="-28">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="knotify"/>
@@ -160244,6 +160242,8 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <arrowlink COLOR="#f6e1c2" DESTINATION="ID_1193884706" ENDARROW="Default" ENDINCLINATION="-1219;87;" ID="Arrow_ID_1874016721" STARTARROW="None" STARTINCLINATION="-2320;315;"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1664059317203" ID="ID_995858352" MODIFIED="1679784026877" TEXT="#1221 Playback Vertical Slice">
+<icon BUILTIN="back"/>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1679783158745" HGAP="36" ID="ID_25937632" MODIFIED="1679783197261" TEXT="Definition" VSHIFT="11">
 <icon BUILTIN="pencil"/>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1679783214377" ID="ID_749983123" MODIFIED="1679783224010" TEXT="Leitbild">
@@ -160713,12 +160713,12 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 </node>
 </node>
-<node CREATED="1664630921300" FOLDED="true" HGAP="183" ID="ID_1033335255" MODIFIED="1698184443300" TEXT="Dokumentation" VSHIFT="40">
+<node CREATED="1664630921300" FOLDED="true" HGAP="183" ID="ID_1033335255" MODIFIED="1751804893858" TEXT="Dokumentation" VSHIFT="40">
 <edge COLOR="#815b70"/>
 <cloud COLOR="#d7c3a8"/>
 <font NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="list"/>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1664630997672" FOLDED="true" ID="ID_237099051" MODIFIED="1698184439278" STYLE="bubble" TEXT="mitf&#xfc;hren">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1664630997672" FOLDED="true" ID="ID_237099051" MODIFIED="1751804900616" STYLE="bubble" TEXT="mitf&#xfc;hren">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -161012,7 +161012,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <arrowlink COLOR="#684e97" DESTINATION="ID_417783849" ENDARROW="Default" ENDINCLINATION="-182;50;" ID="Arrow_ID_321858822" STARTARROW="None" STARTINCLINATION="143;23;"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1681004448374" FOLDED="true" HGAP="14" ID="ID_1536537244" MODIFIED="1681004503408" TEXT="Theorie / allgemein" VSHIFT="5">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1681004448374" FOLDED="true" HGAP="14" ID="ID_1536537244" MODIFIED="1751930704893" TEXT="Theorie / allgemein" VSHIFT="5">
 <edge COLOR="#5e537f"/>
 <icon BUILTIN="bell"/>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1681004288570" ID="ID_641232618" MODIFIED="1681004362635">
@@ -161037,11 +161037,498 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </html></richcontent>
 <icon BUILTIN="hourglass"/>
 </node>
+<node CREATED="1751930717131" ID="ID_985128582" MODIFIED="1751930721898" TEXT="Clean-Code-Development"/>
+<node COLOR="#435e98" CREATED="1751930725076" ID="ID_638212914" MODIFIED="1751930774625" TEXT="Git-Flow: Begriffsbestimmung">
+<arrowlink COLOR="#3245d9" DESTINATION="ID_417154358" ENDARROW="Default" ENDINCLINATION="-158;-13;" ID="Arrow_ID_583484888" STARTARROW="None" STARTINCLINATION="459;47;"/>
+</node>
+</node>
+</node>
+<node CREATED="1751833021246" HGAP="10" ID="ID_1501497638" MODIFIED="1751833031779" TEXT="Struktur" VSHIFT="-2">
+<node CREATED="1751833032755" ID="ID_1065210302" MODIFIED="1751833034848" TEXT="Gliederung">
+<node CREATED="1751833463677" ID="ID_525672736" MODIFIED="1751833474810" TEXT="Dukumentation im Haupt-Repo">
+<node CREATED="1751833072752" ID="ID_1145154527" MODIFIED="1751833078387" TEXT="Design und Architektur"/>
+<node CREATED="1751833079436" ID="ID_642172480" MODIFIED="1751833126152" TEXT="Technik und Specs"/>
+<node CREATED="1751833127300" ID="ID_711513974" MODIFIED="1751833142309" TEXT="User-Doku und Anleitungen"/>
+</node>
+<node CREATED="1751833044724" ID="ID_1172026712" MODIFIED="1751833065808" TEXT="Theorie und Hintergrund">
+<node CREATED="1751833428785" ID="ID_1822857886" MODIFIED="1751833440228" TEXT="gilt als &#xbb;Publikation via Lumiera.org&#xab;">
+<node CREATED="1751833545584" ID="ID_1635950952" MODIFIED="1751834043712" TEXT="kann allgemeinte Themen umfassen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Hier sollen Inhalte ver&#246;ffentlicht werden, die &#252;ber eine reine technische Dokumentation hinausgehen. Das reicht von einer Darstellung der Projekthistorie, &#252;ber Recherche und gesammeltem thematischen Wissen bis zur Aufs&#228;tzen zu allgemeinen Begriffsbestimmungen und Ma&#223;st&#228;ben.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1751833562831" ID="ID_1558026872" MODIFIED="1751852202196" TEXT="l&#xe4;ngerfristig als Quelle geplant">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Da Lumiera.org explizit daf&#252;r sorgt, l&#228;ngerfristig im Internet-Archiv pr&#228;sent zu sein, und zudem l&#228;ngerfristig auf Verlinkung hoffen kann, sollten hier abgelegte Texte stabil sein und k&#246;nnten ggfs. extern als Quellen referenziert werden; im Besonderen denke ich hier an eine Sammlung von Wissen, Methoden und Verfahren.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1751833554361" ID="ID_720432349" MODIFIED="1751833862995" TEXT="hier schreibe und publiziere ich selber">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das hei&#223;t, hier bewege ich mich auf einem schmalen Grat
+    </p>
+    <ul>
+      <li>
+        erhoffe mir Sichtbarkeit f&#252;r meine eigenen Einsichten
+      </li>
+      <li>
+        kann aber auch Richtlinien und Ma&#223;st&#228;be verbindlich setzen
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1751833441031" ID="ID_84753404" MODIFIED="1751833447879" TEXT="liegt im Website-Repo"/>
+<node CREATED="1751833450623" ID="ID_1739966239" MODIFIED="1751833455736" TEXT="project/background"/>
+</node>
+<node CREATED="1751833206927" ID="ID_1185194688" MODIFIED="1751833273069" TEXT="Medien/Zusatz-Content">
+<node CREATED="1751833215336" ID="ID_501578718" MODIFIED="1751833405006" TEXT="gilt als volatil">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      da dieser Content unweigerlich w&#228;chst, ist die Historie des Website-Repos nicht f&#252;r die Ewikeit und k&#246;nnte rewritten werden
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1751833344925" ID="ID_940474063" MODIFIED="1751833355121" TEXT="ggfs. Unterverzeichnisse nicht im Git"/>
+</node>
+<node CREATED="1751833285249" ID="ID_1700191768" MODIFIED="1751833291868" TEXT="liegt im Website-Repo"/>
+<node CREATED="1751833292432" ID="ID_474145968" MODIFIED="1751833338342" TEXT="aber wird in den Doku-Bereich abgebildet">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      per hart gecodeter Mapping-Regel in menugen.py &#8212; addPredefined()
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
 </node>
 </node>
 </node>
 <node CREATED="1694377578353" HGAP="-45" ID="ID_1404856663" MODIFIED="1694377611360" TEXT=" Projekt-Navigation" VSHIFT="26">
 <font NAME="SansSerif" SIZE="16"/>
+<node CREATED="1751808189155" ID="ID_244632795" MODIFIED="1751808208012" TEXT="Schritte">
+<node CREATED="1751808295862" ID="ID_3929483" MODIFIED="1751808300246" TEXT="2025">
+<node CREATED="1751808407776" ID="ID_933658454" MODIFIED="1751808421683" TEXT="Aktualisierung">
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1751808424465" ID="ID_1551937148" MODIFIED="1751808496563" TEXT="Referenz-Sytem &#xd83e;&#xdc32; Debian/Trixie">
+<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1751808501237" ID="ID_797899561" MODIFIED="1751808518138" TEXT="Upgrade PC">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1751808526562" ID="ID_388867150" MODIFIED="1751808533249" TEXT="Build erm&#xf6;glichen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1751808534961" ID="ID_1104418213" MODIFIED="1751808550847" TEXT="Dokumentation Dependencies">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1751808559518" ID="ID_1590821025" MODIFIED="1751808566749" TEXT="DEB-Paket bereitgestellt">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1751808439333" ID="ID_1898277701" MODIFIED="1751808838590" TEXT="Language-Level &#xd83e;&#xdc32; C++23">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1751808577339" ID="ID_1386811789" MODIFIED="1751808866622" TEXT="Upgrade compile">
+<arrowlink COLOR="#33a8ce" DESTINATION="ID_1393531242" ENDARROW="Default" ENDINCLINATION="-1152;286;" ID="Arrow_ID_601399477" STARTARROW="None" STARTINCLINATION="602;101;"/>
+</node>
+<node COLOR="#435e98" CREATED="1751808588114" ID="ID_961765189" MODIFIED="1751808866622" TEXT="Folgeprobleme">
+<arrowlink COLOR="#269585" DESTINATION="ID_732774928" ENDARROW="Default" ENDINCLINATION="-311;16;" ID="Arrow_ID_1400216359" STARTARROW="None" STARTINCLINATION="305;54;"/>
+</node>
+<node COLOR="#435e98" CREATED="1751808596797" ID="ID_291903572" MODIFIED="1751809541871" TEXT="Clean-Up">
+<arrowlink COLOR="#12b218" DESTINATION="ID_1949114637" ENDARROW="Default" ENDINCLINATION="8;67;" ID="Arrow_ID_1615607150" STARTARROW="None" STARTINCLINATION="318;87;"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1751808460706" ID="ID_1046283899" MODIFIED="1751808483781" TEXT="Release: 0.pre.04">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1751808878589" ID="ID_577995027" MODIFIED="1751809060269" TEXT="Umstellung auf Git-Flow">
+<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1751809002677" ID="ID_656514968" MODIFIED="1752198726663" TEXT="Schema ausarbeiten">
+<arrowlink COLOR="#208ad3" DESTINATION="ID_1853540136" ENDARROW="Default" ENDINCLINATION="-443;-37;" ID="Arrow_ID_1316442709" STARTARROW="None" STARTINCLINATION="-1044;119;"/>
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1751930891976" ID="ID_666097997" MODIFIED="1752198710521" TEXT="Vorbereitung: nochmal gedanklich durchdringen">
+<arrowlink COLOR="#4281cc" DESTINATION="ID_417154358" ENDARROW="Default" ENDINCLINATION="9;-72;" ID="Arrow_ID_1457330837" STARTARROW="None" STARTINCLINATION="1;58;"/>
+<font NAME="SansSerif" SIZE="11"/>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1752198593308" ID="ID_1172686686" MODIFIED="1752198705897">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      auf lange Sicht werde <i>ich selber</i>&#160;diese Arbeiten ausf&#252;hren
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ....und deshalb mu&#223; das Schema nicht so elaboriert sein, wie es f&#252;r einen Release-Train mit vielen Projekten notwendig w&#228;re; wichtiger ist, da&#223; das Ergebnis selbsterkl&#228;rend ist. Sp&#228;ter kann man diese Prozedur wohl komplett skripten
+    </p>
+  </body>
+</html></richcontent>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#aea3cb" COLOR="#435e98" CREATED="1752198191279" ID="ID_1695263403" MODIFIED="1752198453212" TEXT="wo der Version-bump passiert">
+<icon BUILTIN="yes"/>
+<node CREATED="1752198230049" ID="ID_428196178" MODIFIED="1752198241399" TEXT="n&#xe4;chste-Version: direkt nach dem Release-branch"/>
+<node CREATED="1752198250942" ID="ID_253815327" MODIFIED="1752198271537" TEXT="Release-Ver: per amend auf dem Release-Commit"/>
+<node CREATED="1752198476239" ID="ID_1285563370" MODIFIED="1752198500437" TEXT="der Merge-Conflikt wird erwartet und akzeptiert">
+<node CREATED="1752198502140" ID="ID_124135181" MODIFIED="1752198515839" TEXT="die Version kann man mit dem Versions-Skript reparieren"/>
+<node CREATED="1752198516636" ID="ID_326800945" MODIFIED="1752198524365" TEXT="alles andere mu&#xdf; man ohnehin stets manuell machen"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#aea3cb" COLOR="#435e98" CREATED="1752198207962" ID="ID_1639023270" MODIFIED="1752198453212" TEXT="wohin die Tags kommen">
+<icon BUILTIN="yes"/>
+<node CREATED="1752198312680" ID="ID_447502505" MODIFIED="1752198320866" TEXT="stets auf den Merge-commit(auf master)"/>
+<node CREATED="1752198327067" ID="ID_592482023" MODIFIED="1752198371916" TEXT="Tags verwenden f&#xfc;r Versions-Skripting">
+<arrowlink COLOR="#2e65d5" DESTINATION="ID_1402604027" ENDARROW="Default" ENDINCLINATION="161;-200;" ID="Arrow_ID_455010002" STARTARROW="None" STARTINCLINATION="246;18;"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#aea3cb" COLOR="#435e98" CREATED="1752198215075" ID="ID_99180924" MODIFIED="1752198453212" TEXT="Namenskonvention">
+<icon BUILTIN="yes"/>
+<node CREATED="1752198379053" ID="ID_1913429705" MODIFIED="1752198388390" TEXT="production: master"/>
+<node CREATED="1752198389315" ID="ID_1107137735" MODIFIED="1752198395783" TEXT="development: integration"/>
+<node CREATED="1752198396540" ID="ID_875394343" MODIFIED="1752198405998" TEXT="Branches">
+<node CREATED="1752198407312" ID="ID_983462319" MODIFIED="1752198410901" TEXT="rel/#.#.#"/>
+<node CREATED="1752198411888" ID="ID_1882486344" MODIFIED="1752198418004" TEXT="fix/#.#.#"/>
+<node CREATED="1752198419203" ID="ID_1610653190" MODIFIED="1752198422955" TEXT="dev/id"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1751809017154" ID="ID_1881694204" MODIFIED="1752198180005" TEXT="Scripting planen (vorl&#xe4;ufig)">
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1751809216417" ID="ID_1705855350" MODIFIED="1751809241340" TEXT="Zielvorstellung(langfristig)">
+<icon BUILTIN="yes"/>
+<icon BUILTIN="hourglass"/>
+<node CREATED="1751809242737" ID="ID_1531953968" MODIFIED="1751809267118" TEXT="minor-Release komplett automatisiert"/>
+<node CREATED="1751809275240" ID="ID_1563113795" MODIFIED="1751809316154" TEXT="drei Schrite &#x2014; jeweils per Tool angesto&#xdf;en">
+<node CREATED="1751809318219" ID="ID_89001441" MODIFIED="1751809612877" TEXT="Release-bump">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <i>Nachdem</i>&#160;die Code-Basis grunds&#228;tzlich reif ist f&#252;r ein Release, wird hiermit die Konvergenz-Phase eingeleitet, und die Haupt-Entwicklung wieder freigegeben...
+    </p>
+    <ul>
+      <li>
+        ein Release-Branch wird abgezweigt
+      </li>
+      <li>
+        auf dem Integration(Mainline)-Branch findet der Versions-Bump statt
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="full-1"/>
+</node>
+<node CREATED="1751809332241" ID="ID_729402676" MODIFIED="1751810040842" TEXT="Release-close">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <i>Nachdem</i>&#160;die Konvergenz-Phase abgeschlossen wurde, mu&#223; nun das Release nur noch formal vollzogen werden....
+    </p>
+    <ul>
+      <li>
+        (idealerweise schreibt man vorher als letzten Commit die Release-Notes)
+      </li>
+      <li>
+        es findet ein back-Merge statt auf den Integration(Mainline)-Branch
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="full-2"/>
+</node>
+<node CREATED="1751809395161" ID="ID_288522451" MODIFIED="1751812628883" TEXT="Release-mark">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <i>Nachdem</i>&#160;nichts mehr zu committen ist und auch der Build nochmal getestet wurde....
+    </p>
+    <ul>
+      <li>
+        setzt ein letzter formalisierter Commit auf dem Release-Branch die Release-Version
+      </li>
+      <li>
+        der Release-Branch wird auf den Master-Branch geMerged
+      </li>
+      <li>
+        auf diesen Merge wird das Release-Tag gesetzt
+      </li>
+      <li>
+        der Release-Branch wird gel&#246;scht
+      </li>
+      <li>
+        dieser Stand in Git wird publiziert
+      </li>
+      <li>
+        automatisierte CI-Aktionen werden initiiert
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="full-3"/>
+</node>
+</node>
+<node CREATED="1751811805784" ID="ID_1774675880" MODIFIED="1751811842399" TEXT="sinngem&#xe4;&#xdf;es Verfahren f&#xfc;r Hotfix und Feature">
+<node CREATED="1751811876455" ID="ID_624460995" MODIFIED="1751811879250" TEXT="Hotfix">
+<node CREATED="1751811880310" ID="ID_595280315" MODIFIED="1751812119997" TEXT="Hotfix-start">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Ein Hotfix kann jederzeit ohne Vorbedingungen begonnen werden
+    </p>
+    <ul>
+      <li>
+        ein Hotfix-Branch wird vom letzten Release-Commit abgezweigt
+      </li>
+      <li>
+        der Er&#246;ffnungs-Commit ist formalisiert und beinhaltet einen Version-bump &lt; current-devel
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="full-1"/>
+</node>
+<node CREATED="1751811885237" ID="ID_1066552713" MODIFIED="1751813090308" TEXT="Hotfix-close">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <i>Nachdem</i>&#160;Test und Validierung abgeschlossen sind
+    </p>
+    <ul>
+      <li>
+        erfolgt ein Merge-Commit normalerweise auf Integration(mainline)
+      </li>
+      <li>
+        sofern allerdings ein Release-Branch existiert, wird auf diesen gemerged; dabei kommt es zu einem Konflikt mit der Versionsnummer, welcher zugunsten der Release-Version aufzul&#246;sen ist (diese ist stets h&#246;her)
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="full-2"/>
+</node>
+<node CREATED="1751811890669" ID="ID_1637799216" MODIFIED="1751812542546" TEXT="Hotfix-mark">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <i>Nachdem </i>alle Arbeiten abgeschlossen sind und der Code-Stand so publiziert werden k&#246;nnte...
+    </p>
+    <ul>
+      <li>
+        erfolgt direkt ein Merge auf den Master-Branch
+      </li>
+      <li>
+        auf diesen wird ein Tag gesetzt
+      </li>
+      <li>
+        der Hotfix-Branch wird gel&#246;scht
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="full-3"/>
+</node>
+</node>
+<node CREATED="1751811921225" ID="ID_197270821" MODIFIED="1751811924380" TEXT="Feature">
+<node CREATED="1751811925208" ID="ID_599490332" MODIFIED="1751812728335" TEXT="Feature-start">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Ein Feature kann jederzeit begonnen werden und soll regelm&#228;&#223;ig re-based werden
+    </p>
+    <ul>
+      <li>
+        ein formalisierter erster Commit setzt eine dekorierte Version und legt den Branch an
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="full-1"/>
+</node>
+<node CREATED="1751811933808" ID="ID_108752997" MODIFIED="1751812923067" TEXT="Feature-land">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <i>Nachdem</i>&#160;ein Feature so weit ist, da&#223; es den Stand auf Integration(mainline) nicht mehr gef&#228;hrdet...
+    </p>
+    <ul>
+      <li>
+        (sollte ggfs. zun&#228;chst nochmal manuell ein Rebase erfolgen)
+      </li>
+      <li>
+        erfolgt automatisch ein Rebase, welches den Feature-Versions-Commit wegl&#228;&#223;t
+      </li>
+      <li>
+        sofern danach nur maximal zwei Commits &#252;brigbleiben, ka&#246;nnen diese direkt per fast-forward &#252;bernommen werden
+      </li>
+      <li>
+        sonst wird ein no-fast-forward-Merge auf Integration(Mainline) gemacht
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="full-2"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1752077518949" ID="ID_57380146" MODIFIED="1752077525256" TEXT="Versions-Handling">
+<node COLOR="#338800" CREATED="1752077554512" ID="ID_1807385956" MODIFIED="1752198074551" TEXT="buildVersion --bump=maj|min|rev --suffix=spec --snapshot">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1752077683991" ID="ID_1525521230" MODIFIED="1752077691834" TEXT="Python"/>
+<node CREATED="1752077693398" ID="ID_1960248259" MODIFIED="1752077702626" TEXT="Basis-Version aus Git holen">
+<node CREATED="1752081285490" ID="ID_1402604027" MODIFIED="1752198364812" TEXT="git describe --tags --abbrev=0 --match=&apos;v*&apos;">
+<linktarget COLOR="#2e65d5" DESTINATION="ID_1402604027" ENDARROW="Default" ENDINCLINATION="161;-200;" ID="Arrow_ID_455010002" SOURCE="ID_592482023" STARTARROW="None" STARTINCLINATION="246;18;"/>
+</node>
+</node>
+<node CREATED="1752185886526" ID="ID_1654597502" MODIFIED="1752185895609" TEXT="Version per RegExp zerlegen">
+<node CREATED="1752185897054" ID="ID_1910096491" MODIFIED="1752185906863" TEXT="lege hiermit das Format etwas genauer fest"/>
+<node CREATED="1752185909881" ID="ID_1867157597" LINK="https://lumiera.org/documentation/devel/rfc/VersionNumberScheme.html" MODIFIED="1752186028487" TEXT="aber im Grunde nichts, was nicht schon aus der Debian-Policy folgt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das Lumiera-Versionsnummern-Schema baut auf der Debian-Policy f&#252;r Versionsnamen auf, und beinhaltet aber zus&#228;tzlich einige Entscheidungen, wie die ALPHA und BETA-Phase dargestellt wird, und wie man Development-Snapshots markiert
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1752077753814" ID="ID_1116685419" MODIFIED="1752198072870" TEXT="setVersion &lt;Ver&gt;">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1752077763439" ID="ID_464152279" MODIFIED="1752077766409" TEXT="Shellscript"/>
+<node CREATED="1752077767127" ID="ID_1933873303" LINK="#ID_851327829" MODIFIED="1752192770871" TEXT="bringt die Version an fest konfigurierte Stellen"/>
+<node CREATED="1752195812008" ID="ID_1994020658" MODIFIED="1752195820024" TEXT="eigentliche Textersetzung">
+<node CREATED="1752195820882" ID="ID_965373308" MODIFIED="1752195829797" TEXT="sed verwenden"/>
+<node CREATED="1752195830529" ID="ID_1848960791" MODIFIED="1752195838043" TEXT="sed-script als HERE-Document"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1752198078437" ID="ID_799390776" MODIFIED="1752198102479" TEXT="typische Anwendung: Version-bump">
+<icon BUILTIN="info"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1752198103826" ID="ID_1302573058" MODIFIED="1752198111440" TEXT="admin/setVersion `admin/buildVersion.py --bump -s dev`">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1751809040160" ID="ID_1023201938" MODIFIED="1752070079471" TEXT="Dokumentation schreiben">
+<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1751930640337" ID="ID_417154358" MODIFIED="1751930926238" TEXT="allgemeiner Essay zu Git-flow">
+<linktarget COLOR="#3245d9" DESTINATION="ID_417154358" ENDARROW="Default" ENDINCLINATION="-158;-13;" ID="Arrow_ID_583484888" SOURCE="ID_638212914" STARTARROW="None" STARTINCLINATION="459;47;"/>
+<linktarget COLOR="#4281cc" DESTINATION="ID_417154358" ENDARROW="Default" ENDINCLINATION="9;-72;" ID="Arrow_ID_1457330837" SOURCE="ID_666097997" STARTARROW="None" STARTINCLINATION="1;58;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1751930783159" ID="ID_1200044964" MODIFIED="1751930802982" TEXT="keine Anleitung (&#x27f6; Original-Text)"/>
+<node CREATED="1751930804136" ID="ID_1188206698" MODIFIED="1751930811859" TEXT="die Methode abstrakt darstellen"/>
+<node CREATED="1751930813592" ID="ID_1411115239" MODIFIED="1751930834065" TEXT="Klarstellung und Abgrenzung zu CD und &#xbb;trunk-based&#xab;"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1752198742605" ID="ID_129707422" MODIFIED="1752198771472" TEXT="Benny liest derzeit den Text und macht Verbesserungs-Vorschl&#xe4;ge">
+<icon BUILTIN="Mail"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1752070056112" ID="ID_5416271" MODIFIED="1752070065091" TEXT="konkrete Spezifikation f&#xfc;r Lumiera">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1752070068332" ID="ID_457744000" MODIFIED="1752070077044" TEXT="Diagramme hinzuf&#xfc;gen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1751809046079" ID="ID_63478810" MODIFIED="1751809054386" TEXT="Git: Branches angelegt">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1752085949170" ID="ID_1454745363" MODIFIED="1752085953035" TEXT="master">
+<node CREATED="1752085959326" ID="ID_478495732" MODIFIED="1752086003392" TEXT="soll k&#xfc;nftig den alten release-Branch &#xfc;bernehmen"/>
+<node CREATED="1752086004013" ID="ID_880381087" MODIFIED="1752086306109" TEXT="vorerst stehen lassen &#x27f9; fast-forward">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      wenn wir den master vorerst stehen lassen, dann kann er nach dem n&#228;chsten Release nahtlos in die neue Rolle wechseln; d.h. wir mergen das neue release noch in den alten release-Branch, und dann spulen wir master einfach dorthin
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#d30e36" DESTINATION="ID_880381087" ENDARROW="Default" ENDINCLINATION="243;17;" ID="Arrow_ID_1154928928" SOURCE="ID_842534069" STARTARROW="None" STARTINCLINATION="312;0;"/>
+</node>
+</node>
+<node CREATED="1752085758915" ID="ID_818035530" MODIFIED="1752085764066" TEXT="integration"/>
+<node CREATED="1752086108307" ID="ID_613613385" MODIFIED="1752086114422" TEXT="dev/play"/>
+<node CREATED="1752085687010" ID="ID_565825535" MODIFIED="1752086256843" TEXT="alte Versions-Tags">
+<node CREATED="1752085699563" ID="ID_1281651357" MODIFIED="1752085711379" TEXT="nun im Format v?.*">
+<node CREATED="1752085756073" MODIFIED="1752085756073" TEXT="v0.pre.01"/>
+<node CREATED="1752085756073" MODIFIED="1752085756073" TEXT="v0.pre.02"/>
+<node CREATED="1752085756073" MODIFIED="1752085756073" TEXT="v0.pre.03"/>
+</node>
+<node CREATED="1752085713233" ID="ID_1211131308" MODIFIED="1752085720796" TEXT="neu getagged mit aktuellem GPG-Key"/>
+<node CREATED="1752085721528" ID="ID_1531901034" MODIFIED="1752085732242" TEXT="Tag-Datum auf alten Wert gesetzt"/>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1752086244777" ID="ID_1136402096" MODIFIED="1752086252370" TEXT="l&#xf6;schen">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1752086260252" ID="ID_1452897915" MODIFIED="1752086267275" TEXT="0.pre.*"/>
+<node CREATED="1752086268575" ID="ID_1552394617" MODIFIED="1752086271443" TEXT="steam"/>
+<node CREATED="1752086272983" ID="ID_198415949" MODIFIED="1752086275779" TEXT="play"/>
+<node CREATED="1752086276843" ID="ID_128994335" MODIFIED="1752086277865" TEXT="gui"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1752086290892" ID="ID_842534069" MODIFIED="1752086310733" TEXT="release">
+<arrowlink COLOR="#d30e36" DESTINATION="ID_880381087" ENDARROW="Default" ENDINCLINATION="243;17;" ID="Arrow_ID_1154928928" STARTARROW="None" STARTINCLINATION="312;0;"/>
+<icon BUILTIN="hourglass"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1751808890315" ID="ID_1632926954" MODIFIED="1751808916136" TEXT="Dokumentation nachf&#xfc;hren">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1751808926894" ID="ID_590515881" MODIFIED="1751808930641" TEXT="Versionsnr">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1752070238449" ID="ID_1380279991" MODIFIED="1752070248400" TEXT="Clean-up allgemein">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1752070250288" ID="ID_787544102" MODIFIED="1752070280201" TEXT="Fixes von Christian aufsammeln (2018)">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1752070293350" ID="ID_391826628" MODIFIED="1752070305584" TEXT="top-Level-Seiten durchk&#xe4;mmen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1752070265482" ID="ID_927720852" MODIFIED="1752070278585" TEXT="releavnte Links aktualisieren">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1751808931491" ID="ID_1572764059" MODIFIED="1752070235664" TEXT="Build/Dependencies">
+<arrowlink COLOR="#af497b" DESTINATION="ID_1667125104" ENDARROW="Default" ENDINCLINATION="-428;-45;" ID="Arrow_ID_1142158265" STARTARROW="None" STARTINCLINATION="-539;63;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1751808937037" ID="ID_169754287" MODIFIED="1751808945616" TEXT="Debian / DEB-Paket">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1751808966193" ID="ID_739212271" MODIFIED="1751808977712" TEXT="Git: Release markiert">
+<icon BUILTIN="flag-pink"/>
+</node>
+</node>
+</node>
+</node>
+</node>
 <node CREATED="1694378331399" ID="ID_281226841" MODIFIED="1694378333684" TEXT="Themen">
 <node CREATED="1522933444542" ID="ID_1027224176" MODIFIED="1694378339582" TEXT="aktiv">
 <node CREATED="1522933577884" ID="ID_1298252635" MODIFIED="1694378889900" TEXT="Frame-Dispatch">
@@ -162231,7 +162718,7 @@ actively maintained upstream. Please remove gdl from Debian.</pre>
 <icon BUILTIN="button_cancel"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1439176875682" ID="ID_1482098521" MODIFIED="1742175232490" TEXT="Debian/Trixie">
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1439176875682" ID="ID_1482098521" MODIFIED="1751808633098" TEXT="Debian/Trixie">
 <icon BUILTIN="pencil"/>
 <node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1742175232490" ID="ID_1849121366" MODIFIED="1751656516018" TEXT="Aufgaben">
 <icon BUILTIN="yes"/>
@@ -165893,7 +166380,8 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#bfd7c3" COLOR="#338800" CREATED="1742175299968" ID="ID_1393531242" MODIFIED="1751656532990" TEXT="C++20">
+<node BACKGROUND_COLOR="#bfd7c3" COLOR="#338800" CREATED="1742175299968" ID="ID_1393531242" MODIFIED="1751808861433" TEXT="C++20">
+<linktarget COLOR="#33a8ce" DESTINATION="ID_1393531242" ENDARROW="Default" ENDINCLINATION="-1152;286;" ID="Arrow_ID_601399477" SOURCE="ID_1386811789" STARTARROW="None" STARTINCLINATION="602;101;"/>
 <icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1742175640613" ID="ID_671098760" MODIFIED="1742175658639" TEXT="Ma&#xdf;gabe: erst mal nur hochschalten">
 <icon BUILTIN="yes"/>
@@ -166140,6 +166628,7 @@ Since then others have made contributions, see the log for the history.</font></
 <node COLOR="#435e98" CREATED="1749483108933" HGAP="36" ID="ID_216815165" MODIFIED="1749483116800" TEXT="CommandArgument_test" VSHIFT="16"/>
 </node>
 <node COLOR="#338800" CREATED="1749519033788" FOLDED="true" ID="ID_732774928" MODIFIED="1751414517314" TEXT="Concept-Error:  not __tuple_like&lt;ArrayAdapt&lt;uint...&gt;&gt; ">
+<linktarget COLOR="#269585" DESTINATION="ID_732774928" ENDARROW="Default" ENDINCLINATION="-311;16;" ID="Arrow_ID_1400216359" SOURCE="ID_961765189" STARTARROW="None" STARTINCLINATION="305;54;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1749519322166" ID="ID_1060720125" MODIFIED="1749519379854" TEXT="requires-expression evaluated to false">
 <richcontent TYPE="NOTE"><html>
@@ -167117,6 +167606,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 <node COLOR="#338800" CREATED="1749399035206" ID="ID_1949114637" MODIFIED="1751656454129" TEXT="clean-up">
+<linktarget COLOR="#12b218" DESTINATION="ID_1949114637" ENDARROW="Default" ENDINCLINATION="8;67;" ID="Arrow_ID_1615607150" SOURCE="ID_291903572" STARTARROW="None" STARTINCLINATION="318;87;"/>
 <icon BUILTIN="button_ok"/>
 <node COLOR="#5b280f" CREATED="1749399040718" ID="ID_1669273438" MODIFIED="1751644097407" TEXT="Variant-o">
 <linktarget COLOR="#713242" DESTINATION="ID_1669273438" ENDARROW="Default" ENDINCLINATION="-1232;-260;" ID="Arrow_ID_781923707" SOURCE="ID_533603423" STARTARROW="None" STARTINCLINATION="-1428;186;"/>
@@ -168447,7 +168937,8 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1439644368572" ID="ID_1667125104" MODIFIED="1581813253348" TEXT="Doku: Referenz-System">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1439644368572" ID="ID_1667125104" MODIFIED="1752070235664" TEXT="Doku: Referenz-System">
+<linktarget COLOR="#af497b" DESTINATION="ID_1667125104" ENDARROW="Default" ENDINCLINATION="-428;-45;" ID="Arrow_ID_1142158265" SOURCE="ID_1572764059" STARTARROW="None" STARTINCLINATION="-539;63;"/>
 <icon BUILTIN="bell"/>
 <node BACKGROUND_COLOR="#e1d0aa" CREATED="1744938484753" ID="ID_581586255" MODIFIED="1745014676554" TEXT="Website: Aufr&#xe4;um-Arbeiten">
 <icon BUILTIN="bell"/>
@@ -168712,8 +169203,8 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node CREATED="1446505444775" FOLDED="true" HGAP="106" ID="ID_721807850" MODIFIED="1749395199755" TEXT="Buildsystem" VSHIFT="-5">
-<icon BUILTIN="go"/>
+<node CREATED="1446505444775" HGAP="106" ID="ID_721807850" MODIFIED="1751804873305" TEXT="Buildsystem" VSHIFT="-5">
+<icon BUILTIN="prepare"/>
 <node CREATED="1446505367113" ID="ID_335245102" LINK="http://issues.lumiera.org/ticket/971" MODIFIED="1557498707242">
 <richcontent TYPE="NODE"><html>
   <head/>
@@ -168724,7 +169215,7 @@ Since then others have made contributions, see the log for the history.</font></
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1446509415481" ID="ID_180589749" MODIFIED="1557498707242" TEXT="Versionen hochsetzen">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1446509415481" ID="ID_180589749" MODIFIED="1751804858979" TEXT="Versionen hochsetzen">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -168733,38 +169224,38 @@ Since then others have made contributions, see the log for the history.</font></
     </p>
   </body>
 </html></richcontent>
-<icon BUILTIN="button_ok"/>
-<node CREATED="1446509422423" ID="ID_1328716100" MODIFIED="1557498707242" TEXT="gtkmm-3.0 3.10">
-<icon BUILTIN="button_ok"/>
+<icon BUILTIN="flag-pink"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1446509422423" ID="ID_1328716100" MODIFIED="1751804850308" TEXT="gtkmm-3.0 3.10">
+<icon BUILTIN="flag-yellow"/>
 </node>
-<node CREATED="1446509430758" ID="ID_371171235" MODIFIED="1557498707242" TEXT="glibmm-2.4 2.39">
-<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1446509430758" ID="ID_371171235" MODIFIED="1751804850307" TEXT="glibmm-2.4 2.39">
+<icon BUILTIN="flag-yellow"/>
 </node>
-<node CREATED="1446509601271" ID="ID_1477664506" MODIFIED="1557498707242" TEXT="libglib2.0 2.40">
-<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1446509601271" ID="ID_1477664506" MODIFIED="1751804850306" TEXT="libglib2.0 2.40">
+<icon BUILTIN="flag-yellow"/>
 <node CREATED="1446510347931" ID="ID_559552800" MODIFIED="1557498707242" TEXT="direkten Check hierf&#xfc;r"/>
 <node CREATED="1446510354914" ID="ID_1787485177" MODIFIED="1557498707242" TEXT="check f&#xfc;r gthread fraglich"/>
 </node>
-<node CREATED="1446509752707" ID="ID_1392554051" MODIFIED="1557498707242" TEXT="libgdl-3-dev 3.12">
-<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1446509752707" ID="ID_1392554051" MODIFIED="1751804850305" TEXT="libgdl-3-dev 3.12">
+<icon BUILTIN="flag-yellow"/>
 </node>
-<node CREATED="1446509983556" ID="ID_366391443" MODIFIED="1557498707242" TEXT="libcairomm-1.0-dev 1.10">
-<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1446509983556" ID="ID_366391443" MODIFIED="1751804850304" TEXT="libcairomm-1.0-dev 1.10">
+<icon BUILTIN="flag-yellow"/>
 </node>
-<node CREATED="1446510475202" ID="ID_514495017" MODIFIED="1557498707242" TEXT="librsvg2-dev 2.30">
-<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1446510475202" ID="ID_514495017" MODIFIED="1751804850303" TEXT="librsvg2-dev 2.30">
+<icon BUILTIN="flag-yellow"/>
 </node>
-<node CREATED="1446511275302" ID="ID_359693763" MODIFIED="1557498707242" TEXT="libgavl-dev 1.4">
-<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1446511275302" ID="ID_359693763" MODIFIED="1751804850303" TEXT="libgavl-dev 1.4">
+<icon BUILTIN="flag-yellow"/>
 </node>
-<node CREATED="1446510776857" ID="ID_674774779" MODIFIED="1557498707242" TEXT="Kommentar: librt geh&#xf6;rt zu libc 6">
-<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1446510776857" ID="ID_674774779" MODIFIED="1751804850302" TEXT="Kommentar: librt geh&#xf6;rt zu libc 6">
+<icon BUILTIN="flag-yellow"/>
 </node>
-<node CREATED="1446511125266" ID="ID_1198662071" MODIFIED="1557498707242" TEXT="Kommentar zu xv, x11 und xext : TODO videodisplayer obsolet?">
-<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1446511125266" ID="ID_1198662071" MODIFIED="1751804850302" TEXT="Kommentar zu xv, x11 und xext : TODO videodisplayer obsolet?">
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
-<node CREATED="1544239177727" FOLDED="true" HGAP="90" ID="ID_1414932362" MODIFIED="1561827466250" TEXT="Probleme..." VSHIFT="3">
+<node CREATED="1544239177727" FOLDED="true" HGAP="90" ID="ID_1414932362" MODIFIED="1751804827818" TEXT="Probleme..." VSHIFT="3">
 <icon BUILTIN="go"/>
 <node COLOR="#338800" CREATED="1544239202589" ID="ID_1398808684" MODIFIED="1544310874478" TEXT="an neue Layer-Struktur anpassen">
 <icon BUILTIN="button_ok"/>
@@ -169660,10 +170151,95 @@ Since then others have made contributions, see the log for the history.</font></
 <edge WIDTH="1"/>
 <icon BUILTIN="list"/>
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1742176543226" ID="ID_1577966009" MODIFIED="1742176762115" TEXT="TODO: diese Anleitung auf Git-Flow umstellen">
-<icon BUILTIN="flag-pink"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#8f0a26" CREATED="1742176543226" HGAP="3" ID="ID_1577966009" MODIFIED="1752198827231" TEXT="Konzeption" VSHIFT="-35">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1751809117581" ID="ID_1853540136" MODIFIED="1752198795241" TEXT="wir verwenden Git-Flow">
+<linktarget COLOR="#208ad3" DESTINATION="ID_1853540136" ENDARROW="Default" ENDINCLINATION="-443;-37;" ID="Arrow_ID_1316442709" SOURCE="ID_656514968" STARTARROW="None" STARTINCLINATION="-1044;119;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
 </node>
-<node CREATED="1446480601381" ID="ID_1870415321" MODIFIED="1742176762115" TEXT="release prep: clean-up obsolete information">
+<node CREATED="1752192663635" ID="ID_91205380" MODIFIED="1752192678390" TEXT="zun&#xe4;chst nur einfaches Scripting f&#xfc;r die Version">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1752192689053" ID="ID_396429993" MODIFIED="1752192698239" TEXT="Tag direkt auf den Merge-commit auf master"/>
+<node CREATED="1752192699172" ID="ID_113668171" MODIFIED="1752192739179" TEXT="Backmerge auch direkt von diesem Tag (!)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das ist wichtig, denn damit ist das stets das n&#228;chstgelegene Release-Tag, was man f&#252;r Skripting ausn&#252;tzen kann.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1752191264890" ID="ID_248273731" MODIFIED="1752192562227" TEXT="Release-convergence">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Guten Einschnitt finden; abgeschlossene Features landen, m&#246;glichst noch obsoleten Code wegr&#228;umen. Und wichtig: rechtzeitig aufh&#246;ren mit den tiefgreifenden &#196;nderungen; besser Tests schreiben, an Details feilen, Untiefen ausloten.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="full-1"/>
+<node CREATED="1752191571473" ID="ID_1705052884" MODIFIED="1752191572981" TEXT="Code stabilisieren"/>
+<node CREATED="1752191573683" ID="ID_632704978" MODIFIED="1752191808445" TEXT="ggfs die aktuelle Version richtig setzen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Die aktuelle Version, die nun released werden soll; sie sollte zu dem Zeitpunkt noch mit einem ~dev -&#160;&#160;Suffix versehen sein, aber so in-tree selber eingecheckt sein (im Buildsystem oder einer Konfigdatei).
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Manchmal kommt es vor, da&#223; erst kurz vor einem Release feststeht, da&#223; man nun eine minor oder gar eine major-Version machen wird; daher mu&#223; man dann die eingecheckte Konfiguration anpassen und hochziehen. In einem solchen Fall ist es dann auch nicht m&#246;glich, die n&#228;chste Version einfach aus dem letzten Git-Tag zu gewinnen. (TODO: sp&#228;ter mal ein elaborierteres Scripting, das auch die Version in-tree ber&#252;cksichtigt)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1752191410438" ID="ID_589303006" MODIFIED="1752192598788" TEXT="Release-cut">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Hiermit wird der Release-Stand(Features) festgesetzt und die Entwicklung ist wieder freigegeben
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="full-2"/>
+<node CREATED="1752191423636" ID="ID_924664418" MODIFIED="1752191440342" TEXT="Branch: rel/#.#.#"/>
+<node CREATED="1752191441493" ID="ID_1485663917" MODIFIED="1752191457564" TEXT="Version-bump auf integration-branch">
+<node CREATED="1752191497977" ID="ID_1372708229" MODIFIED="1752191525730" TEXT="Skript: admin/buildVersion --bump=maj|min|rev --suffix=dev"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1752198103826" ID="ID_1032878050" MODIFIED="1752198153598" TEXT="admin/setVersion `admin/buildVersion.py --bump -s dev`">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1752191527673" ID="ID_1527355756" MODIFIED="1752191555730">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Klarstellung: das wird die n&#228;chste Version <i>nach</i>&#160;diesem Release
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1752191874208" ID="ID_851327829" MODIFIED="1752191881651" TEXT="davon betroffen">
+<node CREATED="1446480787391" ID="ID_1824008353" MODIFIED="1518487921104" TEXT="admin/scons/Setup.py"/>
+<node CREATED="1446480787392" ID="ID_1638555946" MODIFIED="1518487921104" TEXT="data/config/setup.ini"/>
+<node CREATED="1446480787392" ID="ID_619067196" MODIFIED="1518487921104" TEXT="doc/devel/Doxyfile"/>
+<node CREATED="1446480787392" ID="ID_193733835" MODIFIED="1518487921104" TEXT="doc/devel/Doxyfile.browse"/>
+<node CREATED="1751805649909" ID="ID_779299977" MODIFIED="1751805651448" TEXT="README"/>
+</node>
+</node>
+</node>
+<node CREATED="1752192186775" ID="ID_1536650750" MODIFIED="1752192603431" TEXT="Release-preparation">
+<icon BUILTIN="full-3"/>
+<node CREATED="1446480601381" ID="ID_1870415321" MODIFIED="1752192558494" TEXT="clean-up obsolete information">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -169673,7 +170249,6 @@ Since then others have made contributions, see the log for the history.</font></
   </body>
 </html></richcontent>
 <font NAME="SansSerif" SIZE="12"/>
-<icon BUILTIN="full-1"/>
 <node CREATED="1446482192807" ID="ID_852733328" MODIFIED="1742176762115" TEXT="Debian">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -169708,57 +170283,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node CREATED="1446482485648" ID="ID_718218074" MODIFIED="1518487921104" TEXT="technical/build/Dependencies"/>
 </node>
-<node CREATED="1446480725508" ID="ID_789754974" MODIFIED="1576282357917" TEXT="release prep: bump version number">
-<richcontent TYPE="NOTE"><html>
-  <head/>
-  <body>
-    <p>
-      knappe Kennzeichnung des Releases in den Kommentar
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="full-2"/>
-<node CREATED="1446480787391" ID="ID_1824008353" MODIFIED="1518487921104" TEXT="admin/scons/Setup.py"/>
-<node CREATED="1446480787392" ID="ID_1638555946" MODIFIED="1518487921104" TEXT="data/config/setup.ini"/>
-<node CREATED="1446480787392" ID="ID_619067196" MODIFIED="1518487921104" TEXT="doc/devel/Doxyfile"/>
-<node CREATED="1446480787392" ID="ID_193733835" MODIFIED="1518487921104" TEXT="doc/devel/Doxyfile.browse"/>
-</node>
-<node CREATED="1446481181543" ID="ID_1995398229" MODIFIED="1576282357917" TEXT="R&#xfc;ck-Merge vom Release-Zweig">
-<richcontent TYPE="NOTE"><html>
-  <head/>
-  <body>
-    <p>
-      hier geht es darum, Konsistenz im Git herzustellen.
-    </p>
-    <p>
-      Wenn alles korrekt gemacht wurde, d&#252;rfte es hier keinen R&#252;ckflu&#223; von &#196;nderungen geben.
-    </p>
-    <p>
-      Bitte auch daran denken, zuerst den DEB-Zweig zu pr&#252;fen. Diesen aber nicht zur&#252;ckmergen,
-    </p>
-    <p>
-      denn wir wollen keine DEB-Info im Master haben!
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="full-3"/>
-<node CREATED="1446481302159" ID="ID_1330024662" MODIFIED="1518487921104" TEXT="Release-Zweig"/>
-<node CREATED="1446481305102" ID="ID_1191774545" MODIFIED="1518487921104" TEXT="lfd Fixes von den DEBs"/>
-<node CREATED="1446481314669" ID="ID_477388235" MODIFIED="1518487921104" TEXT="Plattform-Abh&#xe4;ngigkeiten checken"/>
-</node>
-<node CREATED="1446480963028" ID="ID_83763074" MODIFIED="1742176762115" TEXT="Release-commit: Pre-release 0.pre.04">
-<richcontent TYPE="NOTE"><html>
-  <head/>
-  <body>
-    <p>
-      einzeilige Kennzeichnung wiederholen
-    </p>
-    <p>
-      die unmittelbaren Release-Dokumente durchgehen
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="full-4"/>
+<node CREATED="1752192199327" ID="ID_578996702" MODIFIED="1752192205747" TEXT="Release-Notes und Info">
 <node CREATED="1446481123991" ID="ID_1319204482" MODIFIED="1518487921104" TEXT="README"/>
 <node CREATED="1446481126974" ID="ID_537666758" MODIFIED="1518487921104" TEXT="AUTHORS">
 <node CREATED="1446481146548" ID="ID_1310945179" MODIFIED="1518487921104" TEXT="GTK-UI">
@@ -169770,22 +170295,54 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node CREATED="1446481129206" ID="ID_799927356" MODIFIED="1518487921104" TEXT="LICENSE"/>
 </node>
-<node CREATED="1446481516578" ID="ID_552450474" MODIFIED="1742176762115" TEXT="Release-Zweig: upgrade current release to 0.pre.04">
+</node>
+<node CREATED="1752191916036" ID="ID_895545704" MODIFIED="1752192607277" TEXT="Testphase">
+<icon BUILTIN="full-4"/>
+<node CREATED="1752191933801" ID="ID_1967723573" MODIFIED="1752191957155" TEXT="andere Leute testen lassen...."/>
+<node CREATED="1752191957861" ID="ID_1072919639" MODIFIED="1752191967016" TEXT="Release-candidate setzen">
+<node CREATED="1752191968058" ID="ID_1949019642" MODIFIED="1752191974743" TEXT="Suffix ~rc.#"/>
+<node CREATED="1752191981476" ID="ID_12333577" MODIFIED="1752191994454" TEXT="Skript: admin/buildVersion --suffix=rc.#"/>
+</node>
+</node>
+<node CREATED="1752192022076" ID="ID_1939779471" MODIFIED="1752192610817" TEXT="Release">
+<icon BUILTIN="full-5"/>
+<node CREATED="1752192043158" ID="ID_238410955" MODIFIED="1752192049202" TEXT="MERGE in master"/>
+<node CREATED="1752192051222" ID="ID_167076910" MODIFIED="1752192081385" TEXT="Amend: ~dev-Suffix entfernen"/>
+<node CREATED="1752192083412" ID="ID_580036205" MODIFIED="1752192086060" TEXT="Tag setzen">
+<node CREATED="1752192089084" ID="ID_673210992" LINK="https://lumiera.org/documentation/devel/rfc/VersionNumberScheme.html" MODIFIED="1752192134958" TEXT="Lumiera Versions-Schema"/>
+<node CREATED="1752192137035" ID="ID_1159674019" MODIFIED="1752192147304" TEXT="Pre-release: 0.pre.04"/>
+</node>
+<node CREATED="1752192270384" ID="ID_1688965338" MODIFIED="1752192348202" TEXT="Release-branch dorthin vorspulen">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
     <p>
-      Merge-commit auf den Release-Zweig.
-    </p>
-    <p>
-      Sollte konfliktfrei sein
+      der Release-branch sollte zuletzt direkt auf dem Merge-Commit stehen; Grund ist: wir wollen dann von dort nach integration mergen (und automatisch die richtige Commit-Msg bekommen: merging rel/#.#.# into integration)
     </p>
   </body>
 </html></richcontent>
-<icon BUILTIN="full-5"/>
 </node>
-<node CREATED="1446481591568" ID="ID_1120064498" MODIFIED="1742176762115" TEXT="Paketieren">
+<node CREATED="1752192238872" ID="ID_1700101648" MODIFIED="1752192251029" TEXT="Push &#x27f6; LUMIERA-Repo">
+<node CREATED="1752192458998" ID="ID_325827869" MODIFIED="1752192465429" TEXT="master"/>
+<node CREATED="1752192466034" ID="ID_1262771250" MODIFIED="1752192475044" TEXT="das Release-Tag"/>
+</node>
+</node>
+<node CREATED="1752192231185" ID="ID_989006544" MODIFIED="1752192616731" TEXT="Back-Merge">
 <icon BUILTIN="full-6"/>
+<node CREATED="1752192256141" ID="ID_1482197537" MODIFIED="1752192263182" TEXT="git checkout integration"/>
+<node CREATED="1752192352505" ID="ID_984267804" MODIFIED="1752192367626" TEXT="git merge rel/#.#.#"/>
+<node CREATED="1752192378122" ID="ID_819304628" MODIFIED="1752192382282" TEXT="Konflikte aufl&#xf6;sen">
+<node CREATED="1752192385228" ID="ID_1845606792" MODIFIED="1752192421123" TEXT="die Version neu setzen">
+<node CREATED="1752192421805" ID="ID_89237558" MODIFIED="1752192422534" TEXT="Skript buildVersion --bump ... --suffix=dev"/>
+</node>
+<node CREATED="1752192429390" ID="ID_1290472876" MODIFIED="1752192442635" TEXT="Kollisionen zwischen Release-Fixes und Entwicklung"/>
+</node>
+<node CREATED="1752192447128" ID="ID_275026226" MODIFIED="1752192455212" TEXT="Release-Branch l&#xf6;schen">
+<node CREATED="1752192480183" ID="ID_1470682810" MODIFIED="1752192487898" TEXT="ggfs L&#xf6;sch-Push nicht vergessen"/>
+</node>
+</node>
+<node CREATED="1446481591568" ID="ID_1120064498" MODIFIED="1752192624907" TEXT="Paketieren">
+<icon BUILTIN="full-7"/>
 <node CREATED="1446481606134" ID="ID_212330450" MODIFIED="1518487921104" TEXT="Merge release -&gt; deb"/>
 <node CREATED="1446481618196" ID="ID_1882691551" MODIFIED="1518487921104" TEXT="Paket-Beschreibung"/>
 <node CREATED="1446481637738" ID="ID_1002196753" MODIFIED="1518487921104" TEXT="Manpages">
@@ -169794,7 +170351,7 @@ Since then others have made contributions, see the log for the history.</font></
 <node CREATED="1446481646057" ID="ID_262549512" MODIFIED="1518487921104" TEXT="control"/>
 <node CREATED="1446481655743" ID="ID_269337100" MODIFIED="1581813706344" TEXT="rules"/>
 </node>
-<node CREATED="1446481713984" ID="ID_1112453089" MODIFIED="1742180334459" TEXT="ausliefern">
+<node CREATED="1446481713984" ID="ID_1112453089" MODIFIED="1752192631186" TEXT="ausliefern">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -169803,7 +170360,7 @@ Since then others have made contributions, see the log for the history.</font></
     </p>
   </body>
 </html></richcontent>
-<icon BUILTIN="full-7"/>
+<icon BUILTIN="full-8"/>
 <node CREATED="1446482249336" ID="ID_1088469455" MODIFIED="1742180345958" TEXT="Web/Doku aktualisieren">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -170082,8 +170639,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1742179444680" ID="ID_1912717141" MODIFIED="1742179449018" TEXT="0.pre.04">
 <icon BUILTIN="hourglass"/>
-<node CREATED="1742179891597" ID="ID_1606132364" MODIFIED="1742179895103" TEXT="C++17"/>
-<node CREATED="1742179487515" ID="ID_1215839135" MODIFIED="1742179495360" TEXT="C++20"/>
+<node CREATED="1742179487515" ID="ID_1215839135" MODIFIED="1751807929066" TEXT="C++23"/>
 <node CREATED="1742179496779" ID="ID_1474438481" MODIFIED="1742179498944" TEXT="Trixie"/>
 <node CREATED="1742179862409" ID="ID_78256793" MODIFIED="1742179872555" TEXT="Vertical-Slice-1 : GUI-Connection"/>
 <node CREATED="1742179872940" ID="ID_1461261759" MODIFIED="1742179886672" TEXT="Vertical-Slice-2 : Playback(WIP)"/>
@@ -170093,7 +170649,7 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="hourglass"/>
 </node>
 </node>
-<node CREATED="1742177341856" FOLDED="true" HGAP="-24" ID="ID_1882930078" MODIFIED="1743342818972" TEXT="Infrastruktur" VSHIFT="34">
+<node CREATED="1742177341856" HGAP="-24" ID="ID_1882930078" MODIFIED="1751805094573" TEXT="Infrastruktur" VSHIFT="34">
 <edge COLOR="#96695f" WIDTH="2"/>
 <cloud COLOR="#dbd1d6"/>
 <node CREATED="1742177354647" ID="ID_1976409557" MODIFIED="1742177358198" TEXT="GPG-Key">
@@ -170148,6 +170704,34 @@ Since then others have made contributions, see the log for the history.</font></
   </body>
 </html></richcontent>
 </node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1751806553304" ID="ID_1730051039" MODIFIED="1751806557118" TEXT="Automatisierung">
+<node CREATED="1751807321873" ID="ID_25309588" MODIFIED="1751807353146" TEXT="Prinzipien">
+<edge WIDTH="thin"/>
+<node CREATED="1751807336823" ID="ID_664799719" MODIFIED="1751807342249" TEXT="globale Konventionen vermeiden"/>
+<node CREATED="1751807359899" ID="ID_1032593018" MODIFIED="1751807367483" TEXT="dedizierte Tools f&#xfc;r einen Zweck schaffen"/>
+<node CREATED="1751807371769" ID="ID_1639092426" MODIFIED="1751807383725" TEXT="Build-System als Front-End nutzen"/>
+</node>
+<node CREATED="1751806576005" ID="ID_1188754114" MODIFIED="1751806579112" TEXT="Version-bump">
+<node BACKGROUND_COLOR="#e1dfb4" CREATED="1751807399818" ID="ID_1997706434" MODIFIED="1751807793940" TEXT="Bedeutung der Versions-Nr">
+<icon BUILTIN="info"/>
+<node CREATED="1751807415004" ID="ID_1360499102" MODIFIED="1751807431525" TEXT="publiziert f&#xfc;r externe Orientierung"/>
+<node CREATED="1751807488931" ID="ID_1358488888" MODIFIED="1751807507330" TEXT="steht im README und in der Doxygen-Doc"/>
+<node CREATED="1751807603113" ID="ID_845367656" MODIFIED="1751807618611" TEXT="steht in der setup.ini">
+<icon BUILTIN="back"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1751807620500" ID="ID_1189489573" MODIFIED="1751807708542" TEXT="das sollte die zentrale Definition f&#xfc;r Tools sein">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1751807820498" ID="ID_1324490500" MODIFIED="1751807831549" TEXT="wird von dort ins GUI (&quot;about&quot;) &#xfc;bernommen"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1751807543834" ID="ID_1108200363" MODIFIED="1751807568337" TEXT="verf&#xfc;gbar als -DLUMIERA_VERSION im Build">
+<icon BUILTIN="hourglass"/>
+<node CREATED="1751807570254" ID="ID_1758950035" MODIFIED="1751807583175" TEXT="Stand 2025 nicht verwendet"/>
+<node CREATED="1751807584092" ID="ID_1124509700" MODIFIED="1751807597358" TEXT="k&#xf6;nnte als Markierungsstring dienen"/>
 </node>
 </node>
 </node>
