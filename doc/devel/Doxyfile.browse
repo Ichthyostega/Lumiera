@@ -14,7 +14,7 @@
 #---------------------------------------------------------------------------
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = Lumiera
-PROJECT_NUMBER         = 0.pre.03
+PROJECT_NUMBER         = 0.pre.04~rc.1
 PROJECT_LOGO           = draw/rendered/LumiLogo-small.png
 OUTPUT_DIRECTORY       = 
 CREATE_SUBDIRS         = NO
