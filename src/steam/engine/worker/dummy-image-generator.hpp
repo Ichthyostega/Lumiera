@@ -21,6 +21,7 @@
  ** dummy playback service.
  ** 
  ** @todo obsolete since 2010, can be removed once we have a real player in the UI
+ ** @todo revived in 2025 for research of video output techniques; this is test code.
  ** @see stage::controller::PlaybackController
  ** @see steam::play::DummyPlayerService
  ** 

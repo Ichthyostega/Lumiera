@@ -26,6 +26,8 @@
 //#include "lib/format-cout.hpp"
 
 #include <gdk/gdkx.h>
+#include <sys/ipc.h>
+#include <sys/shm.h>
 
 namespace stage {
 namespace output {
@@ -144,8 +146,9 @@ namespace output {
           
           if (gotPort)
             {
-              XGCValues values;
-              memset(&values, 0, sizeof(XGCValues));
+//            XGCValues values;
+//            memset(&values, 0, sizeof(XGCValues));
+///////////////////////////////////////////////////////////////TODO actually pass these to XCreateGC to set line width or fill colour etc.              
               gc = XCreateGC( display, window, 0, NULL );
               
               xvImage = ( XvImage * ) XvShmCreateImage( display, grabbedPort, FORMAT_ID_YUY2, 0, videoWidth, videoHeight, &shmInfo );
@@ -167,8 +170,8 @@ namespace output {
                   }
                   
                   XSync( display, false );
-                  shmctl( shmInfo.shmid, IPC_RMID, 0 );
-                }
+                  shmctl( shmInfo.shmid, IPC_RMID, 0 );   // mark the segment as deleted
+                }                                        //   -- it will be retained until the last client calls shmdt()
             }
         }
       else
@@ -233,6 +236,7 @@ namespace output {
         XvShmPutImage (display, grabbedPort, window, gc, xvImage,
                        0, 0, videoWidth, videoHeight,
                        org_x, org_y, destW, destH, false);
+        XFlush (display);
       }
   }
   

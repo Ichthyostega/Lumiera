@@ -36349,6 +36349,10 @@
 <icon BUILTIN="info"/>
 </node>
 <node CREATED="1533312933850" ID="ID_151434027" LINK="https://developer.gnome.org/gtkmm-tutorial/stable/sec-idle-functions.html.en" MODIFIED="1533312947999" TEXT="Idle / Timeout-Beispiel"/>
+<node CREATED="1752532921592" ID="ID_1641030010" MODIFIED="1752533209820" TEXT="Beispiel-Applikation(ChatGPT) periodische Aktion">
+<arrowlink DESTINATION="ID_214054186" ENDARROW="Default" ENDINCLINATION="-209;-729;" ID="Arrow_ID_1771660362" STARTARROW="None" STARTINCLINATION="-1624;93;"/>
+<icon BUILTIN="wizard"/>
+</node>
 </node>
 <node CREATED="1533312248199" ID="ID_1852545829" MODIFIED="1533314003668" TEXT="was ist mit Glib::SignalIdle und SignalTimeout?">
 <icon BUILTIN="idea"/>
@@ -130333,7 +130337,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
 <icon BUILTIN="full-2"/>
 <node CREATED="1746718064358" ID="ID_1201089630" MODIFIED="1747012941630" TEXT="erst mal sinngem&#xe4;&#xdf; mit den neuen Widget-Parametern verdrahtet"/>
-<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1746718080949" ID="ID_1374647638" MODIFIED="1747012941631" TEXT="Erfolg-2 : die XV-Anzeige funktioniert grunds&#xe4;tzlich">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1746718080949" ID="ID_1374647638" MODIFIED="1752755236239" TEXT="Erfolg-2 : die XV-Anzeige funktioniert grunds&#xe4;tzlich">
+<linktarget COLOR="#4d91c3" DESTINATION="ID_1374647638" ENDARROW="Default" ENDINCLINATION="-711;-37;" ID="Arrow_ID_1957469830" SOURCE="ID_1295178816" STARTARROW="None" STARTINCLINATION="-557;29;"/>
 <icon BUILTIN="full-2"/>
 <node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1746718103627" ID="ID_1187659462" MODIFIED="1747012941631" TEXT="...aber nur, wenn man die Maus &#xfc;ber dem Widget bewegt">
 <icon BUILTIN="broken-line"/>
@@ -130401,6 +130406,42 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1746757057796" ID="ID_1825980418" MODIFIED="1747012941632" TEXT="an diesem Code ist viele unflexibel und hart codiert"/>
 <node CREATED="1746757072453" ID="ID_1065119380" MODIFIED="1747012941632" TEXT="f&#xfc;r einen zuverl&#xe4;ssigeren XV-Displayer m&#xfc;ssen wir die Formate verstehen"/>
 <node CREATED="1746757090333" ID="ID_11791207" MODIFIED="1747012941632" TEXT="sowie das Thema Clipping/Keying/Compositing"/>
+</node>
+<node CREATED="1752755298705" ID="ID_553632518" MODIFIED="1752758892051" TEXT="weitergehende Recherche f&#xfc;r den FrOSCon-Vortrag(25)">
+<arrowlink COLOR="#4d74d8" DESTINATION="ID_442273376" ENDARROW="Default" ENDINCLINATION="-2314;2141;" ID="Arrow_ID_437931140" STARTARROW="None" STARTINCLINATION="-1107;59;"/>
+<node BACKGROUND_COLOR="#e7d8af" COLOR="#543ca7" CREATED="1752755398944" ID="ID_183976574" MODIFIED="1752755449226" TEXT="daf&#xfc;r XJadeo ausgewertet">
+<icon BUILTIN="idea"/>
+<node CREATED="1752755474985" ID="ID_1256103708" MODIFIED="1752755494998" TEXT="sehr gut gegliedert"/>
+<node CREATED="1752755496895" ID="ID_228864534" MODIFIED="1752755503105" TEXT="vollst&#xe4;ndig und robust"/>
+<node CREATED="1752756052954" ID="ID_992065737" MODIFIED="1752756149821" TEXT="display.c ist eine &#xbb;Fundgrube&#xab;">
+<arrowlink COLOR="#5e6f7d" DESTINATION="ID_569856037" ENDARROW="Default" ENDINCLINATION="-2296;0;" ID="Arrow_ID_639892369" STARTARROW="None" STARTINCLINATION="-2427;224;"/>
+</node>
+</node>
+<node CREATED="1752756242076" ID="ID_1820447932" MODIFIED="1752756263093" TEXT="macht praktisch exakt die gleichen Schritte wie unser Code (basierend auf Kino)"/>
+<node CREATED="1752756278137" ID="ID_770047212" MODIFIED="1752756303159" TEXT="es k&#xf6;nnen mehrere verschiedene YUV-Formate unterst&#xfc;tzt/gefordert sein">
+<node CREATED="1752756304877" ID="ID_1602897651" MODIFIED="1752756319837" TEXT="im Besonderen sollte man auch auf planare Formate (I420) vorbereitet sein"/>
+<node CREATED="1752756320641" ID="ID_971616505" MODIFIED="1752756334032" TEXT="es h&#xe4;ngt vom Setup und der Hardware ab, was m&#xf6;glich ist">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1752756431570" ID="ID_688402720" MODIFIED="1752756493104" TEXT="das XWindow-Redraw-Problem">
+<arrowlink COLOR="#58587f" DESTINATION="ID_186084038" ENDARROW="Default" ENDINCLINATION="-929;69;" ID="Arrow_ID_1686448443" STARTARROW="None" STARTINCLINATION="-858;80;"/>
+<node CREATED="1752756530914" ID="ID_625643095" MODIFIED="1752756534698" TEXT="X ist low-level"/>
+<node CREATED="1752756535840" ID="ID_1085313521" MODIFIED="1752756573955" TEXT="redraw macht man &#x2014; indem man selber zeichnet">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...was aber normalerweise passiert bei der Behandlung des &#187;Expose&#171;-Events von X
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1752757333634" ID="ID_1834901153" LINK="https://linux.die.net/man/3/xsync" MODIFIED="1752760278883" TEXT="XSync manpage lesen!">
+<icon BUILTIN="idea"/>
+<node CREATED="1752760156512" ID="ID_1405127808" MODIFIED="1752760292356" TEXT="XFlush(display) nach der Anzeige"/>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -130612,7 +130653,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node COLOR="#435e98" CREATED="1747013068485" ID="ID_51924925" MODIFIED="1747013077621" TEXT="Anzeige funktioniert wieder"/>
 <node COLOR="#435e98" CREATED="1747012995571" ID="ID_850186760" MODIFIED="1747013077621" TEXT="die GTK-3 - bezogenen Themen waren allesamt l&#xf6;sbar"/>
 <node COLOR="#435e98" CREATED="1747013009348" ID="ID_927829887" MODIFIED="1747013077620" TEXT="es zeichnet sich ein Setup ab, bei dem ein Gtk::Image als Arbeitsfl&#xe4;che verwendet wird"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1747013032931" ID="ID_1133235749" MODIFIED="1747013064504" TEXT="nun ist vor allem mehr Verst&#xe4;ndnis des XV-Standards von N&#xf6;ten">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1747013032931" ID="ID_1133235749" MODIFIED="1752766290584" TEXT="nun ist vor allem mehr Verst&#xe4;ndnis des XV-Standards von N&#xf6;ten">
+<arrowlink COLOR="#ff7e4e" DESTINATION="ID_1422823042" ENDARROW="Default" ENDINCLINATION="-75;-87;" ID="Arrow_ID_573069067" STARTARROW="None" STARTINCLINATION="-293;14;"/>
 <icon BUILTIN="yes"/>
 </node>
 </node>
@@ -130659,6 +130701,20 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node CREATED="1746895729204" ID="ID_677582239" MODIFIED="1746895739484" TEXT="Caching und Abk&#xfc;rzungen"/>
 </node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1752765632706" ID="ID_1854321653" MODIFIED="1752765771276" TEXT="Integration von Ausgabe-Zustand/Kontext und Render-Pipeline">
+<arrowlink COLOR="#f10119" DESTINATION="ID_1624002812" ENDARROW="Default" ENDINCLINATION="-151;449;" ID="Arrow_ID_799336299" STARTARROW="None" STARTINCLINATION="-2068;96;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1752766219060" ID="ID_7023523" MODIFIED="1752766233229" TEXT="wir haben Bearbeitungs-Schritte, die eigentlich in eine Pipeline geh&#xf6;ren"/>
+<node CREATED="1752766234001" ID="ID_1356969233" MODIFIED="1752766245995" TEXT="diese brauchen aber einen Ausgabe-Kontext / Grafik-Kontext"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1752765500586" ID="ID_1457956815" MODIFIED="1752765613074" TEXT="Recherche und Dokumentation">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1752765512490" ID="ID_1422823042" MODIFIED="1752767266574" TEXT="darstellen als Vortrag auf der FrOSCon(25)">
+<arrowlink COLOR="#ce0918" DESTINATION="ID_442273376" ENDARROW="Default" ENDINCLINATION="-332;592;" ID="Arrow_ID_1945191941" STARTARROW="None" STARTINCLINATION="-1124;69;"/>
+<linktarget COLOR="#ff7e4e" DESTINATION="ID_1422823042" ENDARROW="Default" ENDINCLINATION="-75;-87;" ID="Arrow_ID_573069067" SOURCE="ID_1133235749" STARTARROW="None" STARTINCLINATION="-293;14;"/>
+<icon BUILTIN="flag-pink"/>
 </node>
 </node>
 </node>
@@ -151816,8 +151872,22 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
 <node CREATED="1746544690363" ID="ID_1351157489" LINK="https://docs.gtk.org/gtk3/" MODIFIED="1746544705768" TEXT="GTK-3(3.24|supported)"/>
 </node>
 <node CREATED="1746287995242" ID="ID_445627802" MODIFIED="1746288001360" TEXT="Programming with Gtkmm">
-<node CREATED="1746288002185" ID="ID_632354219" LINK="https://web.archive.org/web/20200428080214/https://developer.gnome.org/gtkmm-tutorial/stable/index.html.en" MODIFIED="1746289645030" TEXT="Gtkmm-3 (Archive 2020)">
+<node CREATED="1746288002185" ID="ID_632354219" LINK="https://web.archive.org/web/20200806195425/https://developer.gnome.org/gtkmm-tutorial/stable/index.html.en" MODIFIED="1752503423498" TEXT="Gtkmm-3 (Archive 2020)">
 <node CREATED="1746288192067" ID="ID_1226751634" LINK="https://download.gnome.org/sources/gtkmm-documentation/3.24/" MODIFIED="1746288198981" TEXT="download"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1752503613012" ID="ID_891538094" MODIFIED="1752503757729" TEXT="Vorsicht: Archive.org defaultet auf den n&#xe4;chst-neueren Capture">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      was ich hier angebe, ist eine Grenz-Version; viele der Unterseiten wurden schon l&#228;nger nicht ge&#228;ndert, und der letzte Capture in Archive.org liegt schon mehrere Jahre zur&#252;ck; daher wird dann die n&#228;chst-neuere Version geliefert, die typischerweise aus 2021 stammt und bereits auf GTK-4 bezogen ist
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1752503758717" ID="ID_1655015676" LINK="https://web.archive.org/web/20171121112601/https://developer.gnome.org/gtkmm-tutorial/stable/index.html.en" MODIFIED="1752503773862" TEXT="&#xe4;ltere stabile Version von 2017">
+<icon BUILTIN="idea"/>
+</node>
 </node>
 <node CREATED="1746288009436" ID="ID_1259724761" LINK="https://gnome.pages.gitlab.gnome.org/gtkmm-documentation/index.html" MODIFIED="1746288033465" TEXT="Gtkmm-4 (current)"/>
 </node>
@@ -152992,7 +153062,7 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
 <linktarget COLOR="#677ab7" DESTINATION="ID_782313223" ENDARROW="Default" ENDINCLINATION="-981;-106;" ID="Arrow_ID_1912776282" SOURCE="ID_1636078216" STARTARROW="None" STARTINCLINATION="-2111;0;"/>
 <linktarget COLOR="#677ab7" DESTINATION="ID_782313223" ENDARROW="Default" ENDINCLINATION="-1088;-39;" ID="Arrow_ID_234165792" SOURCE="ID_433225506" STARTARROW="None" STARTINCLINATION="-2111;0;"/>
 <linktarget COLOR="#677ab7" DESTINATION="ID_782313223" ENDARROW="Default" ENDINCLINATION="-652;20;" ID="Arrow_ID_315633048" SOURCE="ID_1894791438" STARTARROW="None" STARTINCLINATION="-2111;0;"/>
-<node CREATED="1533388030963" FOLDED="true" ID="ID_1973994334" MODIFIED="1563630809180" TEXT="main context">
+<node CREATED="1533388030963" FOLDED="true" ID="ID_1973994334" MODIFIED="1752532004744" TEXT="main context">
 <node CREATED="1533388053839" ID="ID_970610402" MODIFIED="1533388063674" TEXT="abstrahierte &quot;main loop&quot;">
 <node CREATED="1533388065237" ID="ID_1853196275" MODIFIED="1533388071944" TEXT="es gibt einen default_main_context"/>
 <node CREATED="1533388072628" ID="ID_1382049092" MODIFIED="1533388077743" TEXT="dieser wird on demand erzeugt"/>
@@ -153021,6 +153091,101 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
 <node CREATED="1533388325053" ID="ID_1341702889" MODIFIED="1533388334672" TEXT="Timeout in Millisekunden"/>
 <node CREATED="1533388335188" ID="ID_980760340" MODIFIED="1533388343815" TEXT="bedeutet Delay, nicht pr&#xe4;zises Timing">
 <icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1752532264566" ID="ID_654304406" MODIFIED="1752532273058" TEXT="C++ - API: der Glib::Dispatcher">
+<node CREATED="1752532274646" ID="ID_214054186" MODIFIED="1752533209820" TEXT="Beispiel-Code(AI)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <font face="Monospaced" size="2">#include &lt;gtkmm.h&gt; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">#include &lt;iostream&gt; </font>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <font face="Monospaced" size="2">class MyApp </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;: public Gtk::Application </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;{ </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;protected: </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;// install into the default startup handler </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;void </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;on_startup()&#160;&#160;override </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;{ </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Gtk::Application::on_startup (); </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Glib::signal_timeout ().connect (sigc::ptr_fun (&amp;MyApp::on_timeout), 1000); </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;} </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;static bool </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;on_timeout() </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;{ </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;std::cout &lt;&lt; &quot;Periodic task executed&quot; &lt;&lt; std::endl; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;return true; // Return true to continue calling this function </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;} </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;}; </font>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <font face="Monospaced" size="2">int main (int argc, char *argv[]) </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;{ </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;auto app = MyApp::create (); </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;return app-&gt;run (argc, argv); </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;} </font>
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_214054186" ENDARROW="Default" ENDINCLINATION="-209;-729;" ID="Arrow_ID_1771660362" SOURCE="ID_1641030010" STARTARROW="None" STARTINCLINATION="-1624;93;"/>
+<icon BUILTIN="wizard"/>
+</node>
 </node>
 </node>
 </node>
@@ -155447,6 +155612,15 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
   </body>
 </html></richcontent>
 </node>
+</node>
+</node>
+<node CREATED="1752755119665" ID="ID_183422267" MODIFIED="1752755129548" TEXT="XV (XVideo extension)">
+<node CREATED="1752755162099" ID="ID_1295178816" MODIFIED="1752755244230" TEXT="untersucht f&#xfc;r die Wiederbelebung unseres XV-Displayers">
+<arrowlink COLOR="#4d91c3" DESTINATION="ID_1374647638" ENDARROW="Default" ENDINCLINATION="-711;-37;" ID="Arrow_ID_1957469830" STARTARROW="None" STARTINCLINATION="-557;29;"/>
+</node>
+<node CREATED="1752755298705" ID="ID_1047074231" MODIFIED="1752755395145" TEXT="Recherche f&#xfc;r den FrOSCon-Vortrag(25)">
+<arrowlink COLOR="#4d74d8" DESTINATION="ID_442273376" ENDARROW="Default" ENDINCLINATION="513;-707;" ID="Arrow_ID_738647024" STARTARROW="None" STARTINCLINATION="-1126;76;"/>
+<icon BUILTIN="info"/>
 </node>
 </node>
 </node>
@@ -159501,6 +159675,31 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1745796360697" ID="ID_1993267290" LINK="https://www.linuxjournal.com/article/6735" MODIFIED="1745796385612" TEXT="Linux-Journal: Introduction to Sound-Programming with ALSA"/>
 </node>
 </node>
+<node CREATED="1754177887887" ID="ID_880961774" MODIFIED="1754177904166" STYLE="fork" TEXT="Farbmodelle">
+<edge COLOR="#61617d" STYLE="sharp_bezier" WIDTH="thin"/>
+<node CREATED="1754177927072" ID="ID_813217775" MODIFIED="1754177931601" TEXT="Doku / Referenz"/>
+<node CREATED="1754177932287" ID="ID_1967935881" MODIFIED="1754177934818" TEXT="Diskussion">
+<node CREATED="1754177937479" ID="ID_162495919" MODIFIED="1754177956840" TEXT="Stichpunkt: ist Lab der beste Ansatz f&#xfc;r Displays?">
+<node CREATED="1754177958778" ID="ID_1188275030" LINK="https://gist.github.com/Myndex/47c793f8a054041bd2b52caa7ad5271c" MODIFIED="1754177979876" TEXT="Lab vs Luv">
+<icon BUILTIN="back"/>
+<node CREATED="1754177981665" ID="ID_995088529" LINK="https://gist.github.com/Myndex/10caff6a68e844591e83eadeebfb4347" MODIFIED="1754177993215" TEXT="auch Folgediskussion beachten">
+<node CREATED="1754177998466" ID="ID_411719339" MODIFIED="1754178011357" TEXT="der sagt viele Punkte, die mir auch andaudernd duch den Kopf gehen"/>
+<node CREATED="1754178012220" ID="ID_1393050112" MODIFIED="1754178023607" TEXT="und in der Literatur konnte ich dazu nichts finden"/>
+<node CREATED="1754178024357" ID="ID_782121730" MODIFIED="1754178071174">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      wichtiger Hinweis: <b>OpenColorIO LUT</b>&#160;statt <b>ICC-Profilen</b>&#160; verwenden!
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
 <node CREATED="1745782756562" ID="ID_234538183" MODIFIED="1745782783821" STYLE="fork" TEXT="Video">
 <edge COLOR="#61617d" STYLE="sharp_bezier" WIDTH="thin"/>
 <node CREATED="1745782770967" ID="ID_1146653979" MODIFIED="1745782783815" TEXT="Video-Ausgabe">
@@ -159567,6 +159766,10 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_1459512504" ENDARROW="Default" ENDINCLINATION="228;-10;" ID="Arrow_ID_979502299" SOURCE="ID_1383683758" STARTARROW="None" STARTINCLINATION="343;0;"/>
 </node>
 </node>
+<node CREATED="1752755298705" ID="ID_143193352" MODIFIED="1752758562588" TEXT="genauer untersucht f&#xfc;r den FrOSCon-Vortrag(25)">
+<arrowlink COLOR="#7ba0c9" DESTINATION="ID_442273376" ENDARROW="Default" ENDINCLINATION="862;-547;" ID="Arrow_ID_1600730504" STARTARROW="None" STARTINCLINATION="371;21;"/>
+<icon BUILTIN="info"/>
+</node>
 </node>
 <node CREATED="1745791075321" ID="ID_1681203488" MODIFIED="1745791078290" TEXT="Framebuffer">
 <node CREATED="1745791079095" ID="ID_1998553178" MODIFIED="1745791086392" TEXT="low-level-Abstraktion des Kernels"/>
@@ -159584,13 +159787,36 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node COLOR="#435e98" CREATED="1745782054150" ID="ID_1388778311" MODIFIED="1745782783816" TEXT="2024-04-10T21:58:05">
 <icon BUILTIN="calendar"/>
 </node>
-<node CREATED="1742175921948" ID="ID_913929108" LINK="https://github.com/x42/xjadeo/tree/master/src/xjadeo" MODIFIED="1745782783816" TEXT="xjadeo von Robin Gareus"/>
+<node CREATED="1742175921948" ID="ID_913929108" LINK="https://github.com/x42/xjadeo/tree/master/src/xjadeo" MODIFIED="1745782783816" TEXT="xjadeo von Robin Gareus">
+<node CREATED="1752755611072" ID="ID_1911584421" MODIFIED="1752755620672" TEXT="ein alter Bekannter aus der LAC-Community">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1752755621830" ID="ID_186695311" MODIFIED="1752755900628" TEXT="habe Robin wieder getroffen in Lyon(6/25)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...er ist inzwischen sehr tief in Ardour eingestiegen; xjadeo hat er schon &#8222;viele Jahre nicht mehr angeschaut&#8220; &#8212; da hatte er vor langer Zeit mal beim konsolidieren geholfen; viel von dem Wissen ist dann in Ardour's video-Anzeige in der Timeline eingeflossen.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Nach dem letzten Event, im &#187;le Sucre&#171; an der <i>confluence</i>&#160; von Rh&#244;ne und Sa&#244;ne, sind dann Frank Neumeier, ich, Robin und J&#246;rg Nettingsmeyer zusammen sp&#228;t nachts quer durch Lyon zur&#252;ck ins Hotel gewandert
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
 <node CREATED="1742175904431" ID="ID_1652277690" MODIFIED="1745782783816" TEXT="eine ziemlich alt-etablierte Video-Player-Application">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#450099" CREATED="1742175930588" ID="ID_1772473871" MODIFIED="1745783181212" TEXT="direkter Link auf den relevanten C-Code">
 <icon BUILTIN="idea"/>
-<node CREATED="1745782035173" ID="ID_569856037" LINK="https://github.com/x42/xjadeo/blob/master/src/xjadeo/display.c" MODIFIED="1745782783816" TEXT="https://github.com/x42/xjadeo/blob/master/src/xjadeo/display.c"/>
+<node CREATED="1745782035173" ID="ID_569856037" LINK="https://github.com/x42/xjadeo/blob/master/src/xjadeo/display.c" MODIFIED="1752756218620" TEXT="https://github.com/x42/xjadeo/blob/master/src/xjadeo/display.c">
+<linktarget COLOR="#5e6f7d" DESTINATION="ID_569856037" ENDARROW="Default" ENDINCLINATION="-2296;0;" ID="Arrow_ID_639892369" SOURCE="ID_992065737" STARTARROW="None" STARTINCLINATION="-2427;224;"/>
+<linktarget COLOR="#545a82" DESTINATION="ID_569856037" ENDARROW="Default" ENDINCLINATION="-2296;0;" ID="Arrow_ID_323116011" SOURCE="ID_498575821" STARTARROW="None" STARTINCLINATION="-2524;169;"/>
+</node>
 <node CREATED="1745782098503" ID="ID_1976615984" MODIFIED="1745782783816" TEXT="au&#xdf;erdem sollte man sich Vulcan-Video anschauen...">
 <icon BUILTIN="idea"/>
 <node CREATED="1745782210207" ID="ID_1341192412" LINK="https://vulkan.org/blog/an-introduction-to-vulkan-video" MODIFIED="1745782783816" TEXT="https://vulkan.org/blog/an-introduction-to-vulkan-video"/>
@@ -159600,6 +159826,14 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1745782304018" ID="ID_1602498599" MODIFIED="1745782783817" TEXT="an Caching f&#xfc;r Mem-Bl&#xf6;cke denken">
 <node CREATED="1745782317402" LINK="https://www.man7.org/linux/man-pages/man2/cacheflush.2.html" MODIFIED="1745782783817" TEXT="https://www.man7.org/linux/man-pages/man2/cacheflush.2.html"/>
 <node CREATED="1745782339385" MODIFIED="1745782783817" TEXT="void __builtin___clear_cache(void *begin, void *end);"/>
+</node>
+</node>
+<node CREATED="1752766923202" ID="ID_1587035699" MODIFIED="1752766938265" TEXT="VLC Videolan hat auch ein OpenGL-Ausgabemodul">
+<node CREATED="1752766951162" ID="ID_789441492" MODIFIED="1752766961113" TEXT="Tip von ChatGPT">
+<icon BUILTIN="wizard"/>
+</node>
+<node CREATED="1752766946147" ID="ID_1422212174" LINK="https://code.videolan.org/videolan/vlc/-/tree/master/modules/video_output/opengl?ref_type=heads" MODIFIED="1752767058805" TEXT="Quellcode">
+<arrowlink COLOR="#5d49c9" DESTINATION="ID_1449840365" ENDARROW="Default" ENDINCLINATION="-767;-90;" ID="Arrow_ID_311762700" STARTARROW="None" STARTINCLINATION="514;108;"/>
 </node>
 </node>
 </node>
@@ -159900,6 +160134,40 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
     </p>
   </body>
 </html></richcontent>
+<node CREATED="1752764788591" ID="ID_1790128895" MODIFIED="1752764796787" TEXT="das schlie&#xdf;t die Ausgabe-Pipeline mit ein">
+<node CREATED="1752764814823" ID="ID_1493584501" MODIFIED="1752765001278" TEXT="alles was pro Frame/Block getan werden mu&#xdf;"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1752764982040" ID="ID_1624002812" MODIFIED="1752765771276" TEXT="K&#xe4;rung notwendig: wo zieht man die Grenze?">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      In die Pipeline geh&#246;ren im Besonderen auch Operationen, die spezifisch sind f&#252;r ein bestimmtes Ausgabe-System...
+    </p>
+    <ul>
+      <li>
+        f&#252;r XV: das Skalieren und Umrechnen in den Ausgabe-Farbraum
+      </li>
+      <li>
+        f&#252;r XGL: die Matrix-Operationen um die Textur f&#252;r die Ausgabe aufzubereiten
+      </li>
+    </ul>
+    <p>
+      Allerdings gibt es Schritte, die sind dann an die konkrete Ausgabe-Verbindung gebunden und insofern Zustands-behaftet:
+    </p>
+    <ul>
+      <li>
+        XV: die shared-memory operationen und Kommunikation mit dem X-Server und flush
+      </li>
+      <li>
+        XGL auch hier erzeugt man ja einen Grafix-Kontext
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#f10119" DESTINATION="ID_1624002812" ENDARROW="Default" ENDINCLINATION="-151;449;" ID="Arrow_ID_799336299" SOURCE="ID_1854321653" STARTARROW="None" STARTINCLINATION="-2068;96;"/>
+<icon BUILTIN="help"/>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1737319070929" ID="ID_1581929006" MODIFIED="1737319192871">
@@ -160713,11 +160981,79 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 </node>
 </node>
-<node CREATED="1664630921300" FOLDED="true" HGAP="183" ID="ID_1033335255" MODIFIED="1751804893858" TEXT="Dokumentation" VSHIFT="40">
+<node CREATED="1664630921300" HGAP="183" ID="ID_1033335255" MODIFIED="1752758660511" TEXT="Dokumentation" VSHIFT="40">
 <edge COLOR="#815b70"/>
 <cloud COLOR="#d7c3a8"/>
 <font NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="list"/>
+<node CREATED="1752758672536" HGAP="9" ID="ID_1086481723" MODIFIED="1752758858252" TEXT="Recherche" VSHIFT="-1">
+<cloud COLOR="#c6b0a1"/>
+<node CREATED="1752758687270" ID="ID_587093014" MODIFIED="1752758689409" TEXT="2025">
+<node CREATED="1752755281391" ID="ID_442273376" MODIFIED="1752767266574" TEXT="FrOSCon-Vortrag(25) : Video-Ausgabe">
+<linktarget COLOR="#4d74d8" DESTINATION="ID_442273376" ENDARROW="Default" ENDINCLINATION="513;-707;" ID="Arrow_ID_738647024" SOURCE="ID_1047074231" STARTARROW="None" STARTINCLINATION="-1126;76;"/>
+<linktarget COLOR="#4d74d8" DESTINATION="ID_442273376" ENDARROW="Default" ENDINCLINATION="-2314;2141;" ID="Arrow_ID_437931140" SOURCE="ID_553632518" STARTARROW="None" STARTINCLINATION="-1107;59;"/>
+<linktarget COLOR="#7ba0c9" DESTINATION="ID_442273376" ENDARROW="Default" ENDINCLINATION="862;-547;" ID="Arrow_ID_1600730504" SOURCE="ID_143193352" STARTARROW="None" STARTINCLINATION="371;21;"/>
+<linktarget COLOR="#ce0918" DESTINATION="ID_442273376" ENDARROW="Default" ENDINCLINATION="-332;592;" ID="Arrow_ID_1945191941" SOURCE="ID_1422823042" STARTARROW="None" STARTINCLINATION="-1124;69;"/>
+<node CREATED="1752756052954" ID="ID_498575821" MODIFIED="1752758911124" TEXT="xjadeo von Robin Gareus war sehr hilfreich">
+<arrowlink COLOR="#545a82" DESTINATION="ID_569856037" ENDARROW="Default" ENDINCLINATION="-2296;0;" ID="Arrow_ID_323116011" STARTARROW="None" STARTINCLINATION="-2524;169;"/>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1752756355901" ID="ID_186084038" MODIFIED="1752756486672" TEXT="Thema: &#xbb;redraw&#xab; unter X11 / XWindow">
+<linktarget COLOR="#58587f" DESTINATION="ID_186084038" ENDARROW="Default" ENDINCLINATION="-929;69;" ID="Arrow_ID_1686448443" SOURCE="ID_688402720" STARTARROW="None" STARTINCLINATION="-858;80;"/>
+<node CREATED="1752756709557" ID="ID_1213143090" LINK="https://stackoverflow.com/q/17027993/444796" MODIFIED="1752756718374" TEXT="Stackoverflow"/>
+<node CREATED="1752756875639" ID="ID_257993165" MODIFIED="1752756899976" TEXT="zeichnen ist zeichnen">
+<node CREATED="1752756847593" ID="ID_1100298395" MODIFIED="1752756868387" TEXT="X l&#xe4;uft normalerweise single-threaded und calls sind synchron"/>
+<node CREATED="1752756904707" ID="ID_1727387260" MODIFIED="1752760855908" TEXT="man kann aber partiellen Dispatch einrichten">
+<node CREATED="1752625135241" ID="ID_727778865" MODIFIED="1752761050046" TEXT="XSync(display, False)">
+<icon BUILTIN="back"/>
+</node>
+<node CREATED="1752757068191" ID="ID_1094173051" LINK="https://linux.die.net/man/3/xsync" MODIFIED="1752757851129" TEXT="das ist ein XLib-API">
+<node CREATED="1752760904046" ID="ID_1430470209" MODIFIED="1752760980122" TEXT="2.Parameter steuert Verwerfen von Events"/>
+<node CREATED="1752760983643" ID="ID_167527644" MODIFIED="1752761173972" TEXT="Events, die w&#xe4;rend der Event-Verarbeitung anfallen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      XSync leert die Event-Queue. Wenn sie leer ist, wird per IO nach weiteren Events gesucht. Was so gesammelt wurde, wird als Batch an den XServer gegeben und blockend gewartet, bis dieser diese Events abgearbeitet hat. Zwischenzeitlich k&#246;nnen weitere Events aufgelaufen sein; diese kann man dann einfach wegwerfen (discard = true) oder in der Queue lassen (discard = false) ohne sie zu bearbeiten
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1752757079468" ID="ID_1912692962" MODIFIED="1752760888193" TEXT="oft verwendet f&#xfc;r Video-Ausgabe">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1752760938721" ID="ID_1587207013" LINK="https://stackoverflow.com/a/29001469/444796" MODIFIED="1752760948631" TEXT="man kann auch selber die Event-Loop programmieren"/>
+</node>
+<node CREATED="1752760191309" ID="ID_952103789" MODIFIED="1752760241685" TEXT="es gen&#xfc;gt ein einfaches XFlush (display) nach der Ausgabe eines Frame">
+<icon BUILTIN="idea"/>
+<node CREATED="1752761486778" ID="ID_709363182" MODIFIED="1752761500357" TEXT="XFlush sendet den output buffer an den Server"/>
+<node CREATED="1752761504429" ID="ID_1132927931" MODIFIED="1752761539232" TEXT="passiert normalerweise automatisch in XPending(), XNextEvent(), XWindowEvent()"/>
+</node>
+</node>
+</node>
+<node CREATED="1752756816167" ID="ID_1535841483" MODIFIED="1752756822189" TEXT="OpenGL">
+<node CREATED="1752756740593" ID="ID_1609942874" LINK="https://web.archive.org/web/20130505144136/http://cs.anu.edu.au:80/~Hugh.Fisher/3dteach/" MODIFIED="1752756806705" TEXT="alter OpenGL-Beispielcode von 2013">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      war verlinkt von einer Stackoverflow-Antwort zum Thema &quot;redraw unter X&quot;
+    </p>
+    <p>
+      https://stackoverflow.com/a/17035752/444796
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1752766976293" ID="ID_1449840365" LINK="https://code.videolan.org/videolan/vlc/-/tree/master/modules/video_output/opengl?ref_type=heads" MODIFIED="1752767051563" TEXT="OpenGL-Augabe von VLC">
+<linktarget COLOR="#5d49c9" DESTINATION="ID_1449840365" ENDARROW="Default" ENDINCLINATION="-767;-90;" ID="Arrow_ID_311762700" SOURCE="ID_1422212174" STARTARROW="None" STARTINCLINATION="514;108;"/>
+</node>
+</node>
+</node>
+</node>
+</node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1664630997672" FOLDED="true" ID="ID_237099051" MODIFIED="1751804900616" STYLE="bubble" TEXT="mitf&#xfc;hren">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -161012,7 +161348,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <arrowlink COLOR="#684e97" DESTINATION="ID_417783849" ENDARROW="Default" ENDINCLINATION="-182;50;" ID="Arrow_ID_321858822" STARTARROW="None" STARTINCLINATION="143;23;"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1681004448374" FOLDED="true" HGAP="14" ID="ID_1536537244" MODIFIED="1751930704893" TEXT="Theorie / allgemein" VSHIFT="5">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1681004448374" FOLDED="true" HGAP="14" ID="ID_1536537244" MODIFIED="1752758582306" TEXT="Theorie / allgemein" VSHIFT="5">
 <edge COLOR="#5e537f"/>
 <icon BUILTIN="bell"/>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1681004288570" ID="ID_641232618" MODIFIED="1681004362635">
@@ -161038,8 +161374,8 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <icon BUILTIN="hourglass"/>
 </node>
 <node CREATED="1751930717131" ID="ID_985128582" MODIFIED="1751930721898" TEXT="Clean-Code-Development"/>
-<node COLOR="#435e98" CREATED="1751930725076" ID="ID_638212914" MODIFIED="1751930774625" TEXT="Git-Flow: Begriffsbestimmung">
-<arrowlink COLOR="#3245d9" DESTINATION="ID_417154358" ENDARROW="Default" ENDINCLINATION="-158;-13;" ID="Arrow_ID_583484888" STARTARROW="None" STARTINCLINATION="459;47;"/>
+<node COLOR="#435e98" CREATED="1751930725076" ID="ID_638212914" MODIFIED="1752758589912" TEXT="Git-Flow: Begriffsbestimmung">
+<arrowlink COLOR="#3245d9" DESTINATION="ID_417154358" ENDARROW="Default" ENDINCLINATION="-158;-13;" ID="Arrow_ID_583484888" STARTARROW="None" STARTINCLINATION="515;50;"/>
 </node>
 </node>
 </node>
@@ -161398,9 +161734,12 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 </node>
 <node CREATED="1752077518949" ID="ID_57380146" MODIFIED="1752077525256" TEXT="Versions-Handling">
-<node COLOR="#338800" CREATED="1752077554512" ID="ID_1807385956" MODIFIED="1752198074551" TEXT="buildVersion --bump=maj|min|rev --suffix=spec --snapshot">
+<node COLOR="#338800" CREATED="1752077554512" ID="ID_1807385956" MODIFIED="1753060358875" TEXT="buildVersion --bump=maj|min|rev --suffix=spec --snapshot">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1752077683991" ID="ID_1525521230" MODIFIED="1752077691834" TEXT="Python"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1752077683991" ID="ID_1525521230" MODIFIED="1753060424809" TEXT="Python">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
 <node CREATED="1752077693398" ID="ID_1960248259" MODIFIED="1752077702626" TEXT="Basis-Version aus Git holen">
 <node CREATED="1752081285490" ID="ID_1402604027" MODIFIED="1752198364812" TEXT="git describe --tags --abbrev=0 --match=&apos;v*&apos;">
 <linktarget COLOR="#2e65d5" DESTINATION="ID_1402604027" ENDARROW="Default" ENDINCLINATION="161;-200;" ID="Arrow_ID_455010002" SOURCE="ID_592482023" STARTARROW="None" STARTINCLINATION="246;18;"/>
@@ -161418,6 +161757,10 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
   </body>
 </html></richcontent>
 </node>
+</node>
+<node CREATED="1753060427584" ID="ID_1910500485" MODIFIED="1753060439789" TEXT="--snapshot: Timestamp">
+<node CREATED="1753060440841" ID="ID_522175222" MODIFIED="1753060446724" TEXT="zieht sich Timestamp aus Git"/>
+<node CREATED="1753060448432" ID="ID_1366385733" MODIFIED="1753060456637" TEXT="f&#xfc;gt Suffix an"/>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1752077753814" ID="ID_1116685419" MODIFIED="1752198072870" TEXT="setVersion &lt;Ver&gt;">
@@ -161439,8 +161782,8 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1751809040160" ID="ID_1023201938" MODIFIED="1752070079471" TEXT="Dokumentation schreiben">
 <icon BUILTIN="pencil"/>
-<node COLOR="#338800" CREATED="1751930640337" ID="ID_417154358" MODIFIED="1751930926238" TEXT="allgemeiner Essay zu Git-flow">
-<linktarget COLOR="#3245d9" DESTINATION="ID_417154358" ENDARROW="Default" ENDINCLINATION="-158;-13;" ID="Arrow_ID_583484888" SOURCE="ID_638212914" STARTARROW="None" STARTINCLINATION="459;47;"/>
+<node COLOR="#338800" CREATED="1751930640337" ID="ID_417154358" MODIFIED="1752758589912" TEXT="allgemeiner Essay zu Git-flow">
+<linktarget COLOR="#3245d9" DESTINATION="ID_417154358" ENDARROW="Default" ENDINCLINATION="-158;-13;" ID="Arrow_ID_583484888" SOURCE="ID_638212914" STARTARROW="None" STARTINCLINATION="515;50;"/>
 <linktarget COLOR="#4281cc" DESTINATION="ID_417154358" ENDARROW="Default" ENDINCLINATION="9;-72;" ID="Arrow_ID_1457330837" SOURCE="ID_666097997" STARTARROW="None" STARTINCLINATION="1;58;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1751930783159" ID="ID_1200044964" MODIFIED="1751930802982" TEXT="keine Anleitung (&#x27f6; Original-Text)"/>
@@ -161448,6 +161791,485 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1751930813592" ID="ID_1411115239" MODIFIED="1751930834065" TEXT="Klarstellung und Abgrenzung zu CD und &#xbb;trunk-based&#xab;"/>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1752198742605" ID="ID_129707422" MODIFIED="1752198771472" TEXT="Benny liest derzeit den Text und macht Verbesserungs-Vorschl&#xe4;ge">
 <icon BUILTIN="Mail"/>
+<node CREATED="1752247052118" ID="ID_1015126254" MODIFIED="1752247078519" TEXT="1: f1c47a25f">
+<node CREATED="1752247080052" ID="ID_968432537" MODIFIED="1752247093920" TEXT="i.W. sprachlicher / grammatikalischer Feinschliff"/>
+<node COLOR="#338800" CREATED="1752247461612" ID="ID_1632345075" MODIFIED="1752247477855" TEXT="weitgehend OK und eine deutliche Verbesserung">
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#5b280f" CREATED="1752247094448" ID="ID_55295347" MODIFIED="1752501898765" TEXT="Einleitung jetzt nur noch ein Satz">
+<icon BUILTIN="help"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1752247121741" ID="ID_1681673872" MODIFIED="1752247131547" TEXT="vielleicht doch nur die 2. H&#xe4;lfte zur&#xfc;ckbringen"/>
+<node COLOR="#338800" CREATED="1752247160503" ID="ID_1479795301" MODIFIED="1752501696699" TEXT="ca. Line 56 ein paar Typos von Benny &quot;oone&quot;">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1752501699951" ID="ID_523055137" MODIFIED="1752501905471" TEXT="habe eine k&#xfc;rzere Darstellung gew&#xe4;hlt">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1752501720024" ID="ID_1118797312" MODIFIED="1752501777649" TEXT="weitgehend auf Basis von Benny&apos;s &#xdc;berarbeitung">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das war praktisch der Anfang der Diskussion, Benny sagte, die Einleitung wirke steif, und hat einige Vorschl&#228;ge im Chat skizziert
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1752501780606" ID="ID_1914460010" MODIFIED="1752501892652" TEXT="damit eine gek&#xfc;rzte Synthese">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...aus dem, was ich geschrieben habe, aber nur der 2. H&#228;lfte, und Benny's Formulierung, die um einiges glatter wirkt, da sie mehr an weithin aktzeptierte Formulierungen ankn&#252;pft. Das halte ich aber nun auch f&#252;r besser, da es ja nur zum Thema hinf&#252;hren soll.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1752247201583" ID="ID_348797637" MODIFIED="1752501919638" TEXT="A Code and development centred solution">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1752247232173" ID="ID_917005070" MODIFIED="1752247241593" TEXT="ein Typo &quot;oon&quot;"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1752247250720" ID="ID_546449767" MODIFIED="1752502409151" TEXT="Benny hat den Gedanken nicht erfa&#xdf;t">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      &quot;is established&quot; ist zweifellos eine viel dezentere und neutralere Formulierung, aber weicht eben auch einer Aussage in der Sache aus. Das ist immer wieder der Konflikt zwischen uns Beiden; ich mache die Aussage in der Sache ja, weil ich einen Gedankengang entwickle, anstatt nur bekannte Umst&#228;nde m&#246;glichst gel&#228;ufig anzusprechen; damit ist meine Formulierung meist schwierig und herausfordernd. Nachdem dann Benny einmal alles gegl&#228;ttet hat, st&#246;&#223;t er dann auf die Kernaussage und sagt: das ist jetzt aber komisch, wie kommst Du da drauf? Und in der Tat, nachdem der ganze Gedankengang in der Sache weg ist, ist die Aussage, bei der der Gedankengang ankommen sollte, nur noch beliebig und <i>far fetched</i>.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Da ich diese Erfahrung in der Zusammenarbeit mit Benny nun schon oft gemacht habe, wei&#223; ich, da&#223; ich an zentralen Stellen den Konflikt suchen mu&#223;. Denn letztlich bin<i>&#160;ich</i>&#160;es, der einen Gedanken sieht und einen Entwurf macht. W&#252;rde Benny, auf seine Weise, etwas Entsprechendes tun, ich w&#228;re der letzte das anzugreifen...!
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1752247285123" ID="ID_1088404145" MODIFIED="1752247289074" TEXT="ich: &quot; the history forms as result from this real-world collaboration.&quot;"/>
+<node CREATED="1752247289787" ID="ID_586602634" MODIFIED="1752247304956" TEXT="Benny: &quot;that history that is established as a result of ...&quot;"/>
+<node COLOR="#435e98" CREATED="1752247306099" ID="ID_545003791" MODIFIED="1752501691532" TEXT="Vorschlag: &quot;that history emerges from...&quot;">
+<icon BUILTIN="help"/>
+<node COLOR="#338800" CREATED="1752285348908" ID="ID_493402544" MODIFIED="1752285362563" TEXT="eingebaut...">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1752285354558" ID="ID_1888268930" MODIFIED="1752501684552" TEXT="Review...">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1752499862503" ID="ID_1777158426" MODIFIED="1752499891204" TEXT="hat Benny nicht weiter moniert">
+<font NAME="SansSerif" SIZE="10"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1752247337316" ID="ID_707680401" MODIFIED="1752502307517" TEXT="Order of domains">
+<node CREATED="1752247356346" ID="ID_1155769974" MODIFIED="1752247365916" TEXT="Kleinigkeit bzg. Pr&#xe4;zision">
+<node CREATED="1752247385270" ID="ID_113633123" MODIFIED="1752247387858" TEXT="ich: &quot;issue with the production code&quot;"/>
+<node CREATED="1752247388462" ID="ID_1658443067" MODIFIED="1752247419887" TEXT="Benny &quot;issue in the production code&quot;"/>
+<node COLOR="#435e98" CREATED="1752247421706" ID="ID_1900082964" MODIFIED="1752501655976" TEXT="Vorschlag: &quot;issue related to...&quot;">
+<icon BUILTIN="help"/>
+<node CREATED="1752501656971" ID="ID_1631154574" MODIFIED="1752501662972" TEXT="habe ich so umgesetzt"/>
+<node COLOR="#435e98" CREATED="1752499862503" ID="ID_1657745871" MODIFIED="1752499891204" TEXT="hat Benny nicht weiter moniert">
+<font NAME="SansSerif" SIZE="10"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1752247493039" ID="ID_426609765" MODIFIED="1752247496705" TEXT="2: fc91529">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1752247505228" ID="ID_519859587" MODIFIED="1752259556034" TEXT="Needs fixing: I don&apos;t understand, marked by (??)">
+<icon BUILTIN="flag-pink"/>
+</node>
+<node CREATED="1752247538449" ID="ID_999410701" MODIFIED="1752247554204" TEXT="naja ... harmlos ... das wird sich ergeben aus der Darstellung"/>
+<node COLOR="#338800" CREATED="1752501584335" ID="ID_1651718802" MODIFIED="1752501643449" TEXT="so war es ... wurde durch die inhaltliche &#xdc;berarbeitung gel&#xf6;st">
+<arrowlink COLOR="#3180b8" DESTINATION="ID_251356058" ENDARROW="Default" ENDINCLINATION="-362;-1566;" ID="Arrow_ID_1613121677" STARTARROW="None" STARTINCLINATION="-217;10;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1752247564934" ID="ID_1753784077" MODIFIED="1752247567344" TEXT="3: e52a5e76">
+<node CREATED="1752247628717" ID="ID_835398528" MODIFIED="1752247633883" TEXT="&quot;Fix small typos. Safe to merge&quot;">
+<icon BUILTIN="info"/>
+</node>
+<node COLOR="#435e98" CREATED="1752247635321" ID="ID_1441147360" MODIFIED="1752501574044" TEXT="Benny: hat &quot;mainline&quot; auseinandergenommen">
+<icon BUILTIN="help"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1752247643835" ID="ID_158094907" MODIFIED="1752247653296" TEXT="&quot;mainline&quot; ist ein terminus technicus">
+<node CREATED="1752247734911" ID="ID_775700996" LINK="https://de.wikipedia.org/wiki/Mainline" MODIFIED="1752247757331">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      siehe <b>deutsche</b>&#160;Wikipedia
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1752247822004" ID="ID_489562131" LINK="https://en.wikipedia.org/wiki/Mainline" MODIFIED="1752247833885">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      siehe <i>englische</i>&#160;Wikipedia
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1752247834678" ID="ID_730719841" MODIFIED="1752247841904" TEXT="schreibt fast &#xfc;berall &quot;main line&quot;"/>
+<node CREATED="1752247842545" ID="ID_1730543321" MODIFIED="1752247861906" TEXT="ABER: &quot;Trunk or mainline, the primary branch of a software project&quot;"/>
+<node CREATED="1752247897705" ID="ID_440616166" LINK="https://en.wikipedia.org/wiki/Branching_(version_control)#Trunk" MODIFIED="1752247908686" TEXT="ebenso der Verlinkte Artikel &quot;Trunk&quot;"/>
+</node>
+</node>
+<node COLOR="#5b280f" CREATED="1752247656367" ID="ID_1889339635" MODIFIED="1752247669841" TEXT="wenn schon: main line of history">
+<icon BUILTIN="stop-sign"/>
+</node>
+<node CREATED="1752285794974" ID="ID_943722842" MODIFIED="1752285804598" TEXT="nach Diskussion: neuer Vorschlag von mir">
+<node CREATED="1752285805483" ID="ID_1120699320" MODIFIED="1752285806798" TEXT="&quot;It should not be confused with trunk based releases, where some code from the tip of the development branch is directly transferred into the production system&quot;"/>
+<node COLOR="#338800" CREATED="1752285808954" ID="ID_956706887" MODIFIED="1752285813666" TEXT="mal eingebaut">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1752285814324" ID="ID_1550176104" MODIFIED="1752501547324" TEXT="Review">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1752501548170" ID="ID_1151416263" MODIFIED="1752501564355" TEXT="hat Benny eigens als gelungen hervorgehoben">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1752248242932" ID="ID_657612645" MODIFIED="1752248244788" TEXT="4: f56888f">
+<node CREATED="1752248275063" ID="ID_346864642" MODIFIED="1752248439967" TEXT="&quot;TODO this commit requires a review&quot;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; text-indent: 0px">
+      <font face="DejaVu Sans Mono">TODO this commit requires a review</font>
+    </p>
+    <pre style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; text-indent: 0px"><font face="DejaVu Sans Mono">    </font></pre>
+    <pre style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; text-indent: 0px"><font face="DejaVu Sans Mono">'essence' does not work here. Don't know why, probably gramatical; but I</font></pre>
+    <pre style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; text-indent: 0px"><font face="DejaVu Sans Mono">know what you'd like too say.</font></pre>
+    <pre style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; text-indent: 0px"><font face="DejaVu Sans Mono">The problem with my suggestion, 'core', ist that core has several meanings.</font></pre>
+    <pre style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; text-indent: 0px"><font face="DejaVu Sans Mono">One meaning refers to responsibility or location. So making an insigificant</font></pre>
+    <pre style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; text-indent: 0px"><font face="DejaVu Sans Mono">code modification in this area; which is noot the meaning you intended with</font></pre>
+    <pre style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; text-indent: 0px"><font face="DejaVu Sans Mono">'essence'. However 'core' can also mean 'essence'....so this is ambiguous using</font></pre>
+    <pre style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; text-indent: 0px"><font face="DejaVu Sans Mono">core.</font></pre>
+    <pre style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; text-indent: 0px"><font face="DejaVu Sans Mono">    </font></pre>
+    <pre style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; text-indent: 0px"><font face="DejaVu Sans Mono">    'fundamental operation of the code base' might be better suited; but everyone</font></pre>
+    <pre style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; text-indent: 0px"><font face="DejaVu Sans Mono">    gets 'core' immediately.</font></pre>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1752248440953" ID="ID_740059778" MODIFIED="1752248450193" TEXT="hier geht es nur um ein einziges Wort: &apos;essence&apos;"/>
+<node CREATED="1752248450856" ID="ID_1213994791" MODIFIED="1752248474698" TEXT="Im W&#xf6;rterbuch nachgeschaut: ist anscheinend tats&#xe4;chlich nicht &#xfc;blich im Englischen"/>
+<node CREATED="1752248475357" ID="ID_1832787320" MODIFIED="1752248489837" TEXT="Benny hat richtig bemerkt: &quot;Core&quot; ist nicht das was hier gemeint ist"/>
+<node CREATED="1752248495554" ID="ID_293977408" MODIFIED="1752248507858" TEXT="Vorschlag: fiturativ... &quot;the meat&quot;"/>
+</node>
+<node CREATED="1752256394627" ID="ID_1127829878" MODIFIED="1752256398058" TEXT="5: 3e484467">
+<node CREATED="1752256406204" ID="ID_898320774" MODIFIED="1752256409504" TEXT="&quot;TODO: fix trooublesome text. review required&quot;"/>
+<node CREATED="1752256757903" ID="ID_1524220172" MODIFIED="1752256784286" TEXT="Typo: &quot;oothe&quot; z 187"/>
+<node CREATED="1752256802744" ID="ID_1104841446" MODIFIED="1752256834328" TEXT="nicht &quot;often&quot;, sondern if/when..">
+<node CREATED="1752256816110" ID="ID_1274422754" MODIFIED="1752256838999" TEXT="ich: &quot;when a new solution has to be worked out gradually&quot;"/>
+<node CREATED="1752256855633" ID="ID_584355694" MODIFIED="1752256861229" TEXT="Benny: &quot;when a new solution has to be developed often in gradual phases&quot;"/>
+<node COLOR="#5b280f" CREATED="1752256870735" ID="ID_1226150529" MODIFIED="1752285899839" TEXT="Vorschlag: &quot;often&quot; weglassen">
+<icon BUILTIN="help"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1752285901832" ID="ID_688509098" MODIFIED="1752285906481" TEXT="nein ... lasse es so"/>
+<node CREATED="1752285907043" ID="ID_242375538" MODIFIED="1752285913825" TEXT="ist tats&#xe4;chlich besser">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node CREATED="1752256888071" ID="ID_1935844970" MODIFIED="1752256896366" TEXT="Benny hat mein &quot;shape&quot; nicht verstanden">
+<node CREATED="1752256897005" ID="ID_276530813" MODIFIED="1752256906807" TEXT="er hat es einfach durch &quot;code&quot; ersetzt"/>
+<node CREATED="1752256907378" ID="ID_1472323753" MODIFIED="1752256917285" TEXT="das ist nat&#xfc;rlich banal richtig, aber verfehlt die Aussage"/>
+<node CREATED="1752256917992" ID="ID_305309552" MODIFIED="1752256942665" TEXT="Ich meine &quot;Form&quot; im sinn von forma (lat)"/>
+<node CREATED="1752256944310" ID="ID_1658118188" MODIFIED="1752256965886" TEXT="&quot;form&quot; im Englichen (und auch im modernen Deutsch) ist meist rein-formal"/>
+</node>
+<node COLOR="#338800" CREATED="1752256979553" ID="ID_1725926746" MODIFIED="1752256997562" TEXT="ansonsten grunds&#xe4;tzlich OK">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1752257009066" ID="ID_350131549" MODIFIED="1752257011144" TEXT="6: f14b6b7">
+<node CREATED="1752257012299" ID="ID_161136252" MODIFIED="1752257019497" TEXT="&quot;fix small typos&quot;"/>
+<node CREATED="1752257583334" ID="ID_580123085" MODIFIED="1752257655302" TEXT="interessanterweise hat er hier viele Aspekte von mir weichgesp&#xfc;lt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...will sagen, er hat den generischen Ausdruck gew&#228;hlt, den ich ganz bewu&#223;t nicht genommen habe, der eigentlichen Aussage wegen. Das hatten wir schon mehrfach.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1752257733445" ID="ID_600163755" MODIFIED="1752257738375" TEXT="zulassen">
+<node CREATED="1752257739148" ID="ID_594672780" MODIFIED="1752257742375" TEXT="ich: &quot;allow for various&quot;"/>
+<node CREATED="1752257743931" ID="ID_1533176805" MODIFIED="1752257750862" TEXT="benny: &quot;allow various&quot;"/>
+<node COLOR="#5b280f" CREATED="1752257751522" ID="ID_762648982" MODIFIED="1752499975465" TEXT="Vorschlag: &quot;admit various&quot;">
+<icon BUILTIN="help"/>
+<icon BUILTIN="button_cancel"/>
+</node>
+</node>
+<node COLOR="#5b280f" CREATED="1752257830992" ID="ID_1002335408" MODIFIED="1752499975465" TEXT="sich verwirklichen">
+<icon BUILTIN="help"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1752257835300" ID="ID_1081768612" MODIFIED="1752257841986" TEXT="ich: &quot;come to fruition&quot;"/>
+<node CREATED="1752257843126" ID="ID_1881360221" MODIFIED="1752257858635" TEXT="Benny: &quot;achieve maturity&quot;"/>
+<node CREATED="1752257860348" ID="ID_18035220" MODIFIED="1752257924558" TEXT="&quot;develop&quot; w&#xe4;re zwar richtig, aber mi&#xdf;verst&#xe4;ndlich"/>
+<node COLOR="#5b280f" CREATED="1752499979822" ID="ID_1198027189" MODIFIED="1752500003684" TEXT="Stop: das ist ein Seitengedanke der hier nicht weiterf&#xfc;hrt">
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+<node CREATED="1752257993173" ID="ID_351905300" MODIFIED="1752258001405" TEXT="Open source vs Open source communities">
+<node CREATED="1752258003321" ID="ID_309926527" MODIFIED="1752258031160" TEXT="nein! ich meine die Idee, nicht die Praxis"/>
+</node>
+<node CREATED="1752257950100" ID="ID_138096021" MODIFIED="1752257976904" TEXT="gleicherma&#xdf;en">
+<node CREATED="1752257977642" ID="ID_885649809" MODIFIED="1752257984127" TEXT="Benny hat das &quot;likewise&quot; einfach gel&#xf6;scht"/>
+</node>
+<node CREATED="1752258061041" ID="ID_118868280" MODIFIED="1752258163253" TEXT="stark gegliedert">
+<node CREATED="1752258163916" ID="ID_910200730" MODIFIED="1752258172403" TEXT="ich: &quot;deeply structured&quot;"/>
+<node CREATED="1752258172994" ID="ID_1274442876" MODIFIED="1752258180389" TEXT="Benny: &quot;intricately structured&quot;"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1752287052143" ID="ID_871710676" MODIFIED="1752287061766" TEXT="eigentliches Problem hier: es ist ein neuer Gedanke">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1752287063316" ID="ID_140772507" MODIFIED="1752287098090" TEXT="klar gemacht, indem ich deutlich neu ansetze">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      A complex integration process is also
+    </p>
+    <p>
+      required for large and intricately structured systems: changes will first be accommodated within a subsystem,
+    </p>
+    <p>
+      which is followed by joining subsystem branches into a new state of integration
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1752287099336" ID="ID_492905492" MODIFIED="1752499941794" STYLE="fork" TEXT="Review">
+<edge COLOR="#9e7171" STYLE="linear" WIDTH="thin"/>
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1752499862503" ID="ID_1946933609" MODIFIED="1752499891204" TEXT="hat Benny nicht weiter moniert">
+<font NAME="SansSerif" SIZE="10"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1752258268911" ID="ID_1808368637" MODIFIED="1752258278747" TEXT="erst im subsiysem ist nicht &quot;for example&quot;"/>
+<node CREATED="1752258285014" ID="ID_1973700810" MODIFIED="1752258292400" TEXT="Bedeutung von Reviews">
+<node CREATED="1752258293204" ID="ID_555913632" MODIFIED="1752258300429" TEXT="ich meine tats&#xe4;chlich: den R&#xfc;cken freihalten"/>
+<node CREATED="1752258334998" ID="ID_465053431" MODIFIED="1752258341867" TEXT="ich: &quot;keep your back&quot;"/>
+<node CREATED="1752258342544" ID="ID_1657530902" MODIFIED="1752258349000" TEXT="Benny: &quot;assist from the sidelines&quot;"/>
+<node CREATED="1752258353196" ID="ID_1106706388" MODIFIED="1752258357959" TEXT="das ist aber etwas anderes"/>
+<node CREATED="1752258367715" ID="ID_1190444014" MODIFIED="1752258379501" TEXT="Alternativen: cover your back"/>
+<node CREATED="1752286988527" ID="ID_1619771631" MODIFIED="1752287007950" TEXT="Vorschlag von Benny: &quot;by your side&quot; oder &quot;stand by you&quot;">
+<node COLOR="#338800" CREATED="1752287010892" ID="ID_345868049" MODIFIED="1752287015844" TEXT="versuche es mal damit">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1752287188973" ID="ID_350463706" MODIFIED="1752499964114" TEXT="Review">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node CREATED="1752258520833" ID="ID_1022954618" MODIFIED="1752258524262" TEXT="automated testing">
+<node CREATED="1752258525014" ID="ID_1592100792" MODIFIED="1752258532960" TEXT="ich: &quot;supported&quot;"/>
+<node CREATED="1752258533509" ID="ID_1740679028" MODIFIED="1752258538712" TEXT="Benny: &quot;covered&quot;"/>
+<node CREATED="1752258539566" ID="ID_1654997334" MODIFIED="1752258547534" TEXT="er hat recht, es ist grammatikalisch ein Buch"/>
+<node COLOR="#435e98" CREATED="1752258548639" ID="ID_1737691297" MODIFIED="1752500012478" TEXT="Vorschlag: &quot;with bold moves supported by automated testing&quot;">
+<icon BUILTIN="help"/>
+<node COLOR="#338800" CREATED="1752287184963" ID="ID_1641335747" MODIFIED="1752287188285" TEXT="mal eingebaut">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1752287188973" ID="ID_1900149561" MODIFIED="1752499941794" STYLE="fork" TEXT="Review">
+<edge COLOR="#9e7171" STYLE="linear" WIDTH="thin"/>
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1752499862503" ID="ID_1463232571" MODIFIED="1752499891204" TEXT="hat Benny nicht weiter moniert">
+<font NAME="SansSerif" SIZE="10"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1752258600324" ID="ID_145171679" MODIFIED="1752258604572" TEXT="team vs. crew">
+<node CREATED="1752258605290" ID="ID_456502213" MODIFIED="1752258613358" TEXT="ich habe bewu&#xdf;t &quot;crew&quot; geschrieben"/>
+<node CREATED="1752258613903" ID="ID_1266532842" MODIFIED="1752258616440" TEXT="sogar zweimal"/>
+<node CREATED="1752258616977" ID="ID_232541404" MODIFIED="1752258624900" TEXT="Team ist nichtsagend. Alle sind ein Team"/>
+</node>
+</node>
+<node CREATED="1752258654318" ID="ID_1891751135" MODIFIED="1752258667706" TEXT="7: 9496f1b5">
+<node CREATED="1752258674322" ID="ID_1517268317" MODIFIED="1752258676309" TEXT="&quot;Fix small typos, up to Using Git in Practice&quot;"/>
+<node CREATED="1752259031880" ID="ID_1655978836" MODIFIED="1752259058321">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      ebenso hier: das meiste ist sehr gut,
+    </p>
+    <p>
+      aber manches versteht Benny anscheinend nicht
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1752259084560" ID="ID_1514552007" MODIFIED="1752259180802" TEXT="Belange / Hinsichten">
+<node CREATED="1752259087412" ID="ID_329060177" MODIFIED="1752259090126" TEXT="ich: &quot;allow regards of marketing or communication to interfere&quot;"/>
+<node CREATED="1752259110495" ID="ID_846223599" MODIFIED="1752259114194" TEXT="Benny: &quot;allow marketing or communication to interfere&quot;"/>
+<node CREATED="1752259114830" ID="ID_1219781843" MODIFIED="1752259130096" TEXT="in benny&apos;s variante w&#xe4;rend das andere Departments"/>
+<node CREATED="1752259130924" ID="ID_1588885912" MODIFIED="1752259138228" TEXT="das meine ich aber nicht">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node COLOR="#435e98" CREATED="1752259145091" ID="ID_1472540056" MODIFIED="1752500012478" TEXT="Vorschlag: &quot;considerations&quot;">
+<icon BUILTIN="help"/>
+<node COLOR="#338800" CREATED="1752287371125" ID="ID_1063908837" MODIFIED="1752287373696" TEXT="eingebaut">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1752287188973" ID="ID_1159184218" MODIFIED="1752499875425" TEXT="Review">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1752499862503" ID="ID_1026051158" MODIFIED="1752499891204" TEXT="hat Benny nicht weiter moniert">
+<font NAME="SansSerif" SIZE="10"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1752259193260" ID="ID_1076811537" MODIFIED="1752259196536" TEXT="Release-Phase">
+<node CREATED="1752259197220" ID="ID_622366930" MODIFIED="1752259199167" TEXT="stabilisation"/>
+<node CREATED="1752259199752" ID="ID_1511864497" MODIFIED="1752259203216" TEXT="stability issues"/>
+<node CREATED="1752259203731" ID="ID_764409615" MODIFIED="1752259208854" TEXT="nein, ich meine das erstere"/>
+</node>
+<node CREATED="1752259238964" ID="ID_575485465" MODIFIED="1752259240174" TEXT="Handling Bugfixes in production">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1752259244957" ID="ID_643878439" MODIFIED="1752259251120" TEXT="ein &quot;to&quot; doppelt"/>
+<node CREATED="1752259304141" ID="ID_248805718" MODIFIED="1752259308978" TEXT="mode..">
+<node CREATED="1752259309627" ID="ID_1447396816" MODIFIED="1752259323649" TEXT="Changes done in this mode"/>
+<node CREATED="1752259318978" ID="ID_424103968" MODIFIED="1752259320153" TEXT="Changes done to this code"/>
+</node>
+</node>
+<node COLOR="#5b280f" CREATED="1752259352814" ID="ID_510173925" MODIFIED="1752499631065" TEXT="Sarkasmus nicht verstanden?">
+<icon BUILTIN="help"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1752259377290" ID="ID_1938061688" MODIFIED="1752259383077" TEXT="ich: &quot;If you don&apos;t have any liabilities to care&quot;"/>
+<node CREATED="1752259393968" ID="ID_58093091" MODIFIED="1752259402657" TEXT="Benny: &quot;If you are subject to liabilities&quot;">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1752499668367" ID="ID_968322111" MODIFIED="1752500021261" TEXT="kontroverse Diskussion um einige Begriffe">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1752499679466" ID="ID_1747083578" MODIFIED="1752499721672" TEXT="ich: spreche an mehreren Stellen von der &quot;essence of&quot;"/>
+<node CREATED="1752499722274" ID="ID_1587302794" MODIFIED="1752499748565" TEXT="Benny:">
+<node CREATED="1752499749529" ID="ID_1547151598" MODIFIED="1752499752279" TEXT="so redet man nicht im Englischen"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1752499753176" ID="ID_364236658" MODIFIED="1752499797928">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      was f&#252;r einen native speaker <i>schwierig zu verstehen ist,</i>&#160;l&#228;&#223;t er nicht gelten
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1752499803425" ID="ID_1789446006" MODIFIED="1752499823039">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      interessanterweise beharrt er darauf,
+    </p>
+    <p>
+      das sei rein grammatikalisch
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1752500096451" ID="ID_1398200707" MODIFIED="1752500372317" TEXT="ist es aber nicht &#x2014; ich kenne diesen Konflikt bereits">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das passiert uns immer wieder mal, bei der Arbeit an einem Text. Und es handelt sich immer um Gedanken, die man sehr wohl im Englischen ausdr&#252;cken kann (siehe die &#220;bersetzung philosophischer Werke, daher habe ich es ja) aber die Engl&#228;nder und Amerikaner der Tendenz nach nicht gebrauchen; und das liegt wohl mehr in ihrer eigenen Kultur: die Esssenz, der Wesenskern, ein Begriff der diesen trifft &#8212; so etwas ist ihnen suspekt, das erscheint ihnen wie ein &quot;Label&quot; das man k&#252;nstlich draufklebt
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1752499824456" ID="ID_1881290932" MODIFIED="1752499846527" TEXT="tats&#xe4;chlich nimmt er meine Hinsichten in den nachfolgenden Vorschl&#xe4;gen durchaus auf"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d7dba4" COLOR="#435e98" CREATED="1752500025083" ID="ID_174818811" MODIFIED="1752501268490" TEXT="wir sind uns einig da&#xdf; der polemische Abschnitt nicht gut ist">
+<arrowlink COLOR="#271bdd" DESTINATION="ID_133738158" ENDARROW="Default" ENDINCLINATION="116;-10;" ID="Arrow_ID_1945678305" STARTARROW="None" STARTINCLINATION="-186;9;"/>
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1752500409880" ID="ID_133738158" MODIFIED="1752501257943" TEXT="Polemik zu gegenw&#xe4;rtigen Trends">
+<linktarget COLOR="#271bdd" DESTINATION="ID_133738158" ENDARROW="Default" ENDINCLINATION="116;-10;" ID="Arrow_ID_1945678305" SOURCE="ID_174818811" STARTARROW="None" STARTINCLINATION="-186;9;"/>
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1752500472816" ID="ID_640632970" MODIFIED="1752500484433" TEXT="grunds&#xe4;tzlich halte ich eine Positionierung f&#xfc;r notwendig">
+<node CREATED="1752500587084" ID="ID_1663218640" MODIFIED="1752500602200" TEXT="viele Errungenschaften der letzten 2 Jahrzehnte werden neuerdings abgelehnt"/>
+<node CREATED="1752500602817" ID="ID_1391817718" MODIFIED="1752500795780" TEXT="und zwar nicht von konservativer Seite, sondern seitens der &#xbb;Digitalisierung&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Dieser gegenw&#228;rtige Trend ist kein Pendelschlag in die andere Richtung, und es geht nicht darum, die bew&#228;hrten alten Methoden gegen Neuerungen zu positionieren. Allerdings laufen die propagierten Methoden im Grunde auf eine Restauration hinaus; es werden wieder mal Tools und Technologien propagiert, allerdings unter dem Thema einer aggressiven Beschleunigung und Steigerung
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1752500822131" ID="ID_240146329" MODIFIED="1752500857074" TEXT="ich bin dadurch gezwungen, eine Position zu bezeichnen">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1752500965119" ID="ID_354613990" MODIFIED="1752500978502" TEXT="das hei&#xdf;t : man mu&#xdf; sich notfalls einen Kampf suchen"/>
+<node CREATED="1752500979100" ID="ID_1729120035" MODIFIED="1752500988653" TEXT="sonst ist man automatisch als Opfer und Altlast markiert"/>
+</node>
+</node>
+<node CREATED="1752500994650" ID="ID_806593203" MODIFIED="1752501128012" TEXT="ich wollte das aber nebenbei und von oben herab machen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Rein der Sache nach w&#228;re auch nicht mehr notwendig; was derzeit an Argumenten vorgebracht wird ist vor allem dummes Zeug, formuliert von Leuten, die keine Erfahrung haben, und wieder einem naiven Technik-Glauben anh&#228;ngen....
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1752501129896" ID="ID_467554725" MODIFIED="1752501162454">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      ich vermute aber, dahinter steht eine ernst zu nehmende Tendenz: <b>Industrialisierung</b>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1752501171587" ID="ID_665646187" MODIFIED="1752501192666" TEXT="daher beschlie&#xdf;e ich, dies direkt als These auszusprechen"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#345343" CREATED="1752501208861" ID="ID_251356058" MODIFIED="1752501636158" TEXT="das f&#xfc;hrt insgesamt zu eine erheblichen Verbesserung des Textes">
+<linktarget COLOR="#3180b8" DESTINATION="ID_251356058" ENDARROW="Default" ENDINCLINATION="-362;-1566;" ID="Arrow_ID_1613121677" SOURCE="ID_1651718802" STARTARROW="None" STARTINCLINATION="-217;10;"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1752501294584" ID="ID_172571205" MODIFIED="1752501366356" TEXT="die Darstellung der &#xbb;Patterns of Development&#xab; wird dadurch begr&#xfc;ndet"/>
+<node CREATED="1752501367135" ID="ID_1912017113" MODIFIED="1752501516640">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      und impliziert eine <b>Gegenposition</b>&#160;&#8212; ohne sie direkt zu bezeichnen
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Ich w&#252;rde diese Gegenposition wie folgt charakerisieren: &#8222;egal was von Deiner Industrialisierung zu halten ist &#8212; Erfahrung brauchst Du trotzdem, Entscheidungen wirst Du weiterhin treffen m&#252;ssen, und den Grenzen <i>Deiner</i>&#160;F&#228;higkeiten entgehst Du nicht&#8220;
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1752502423290" ID="ID_648567311" MODIFIED="1752502436031" TEXT="Historie konsolidieren">
+<icon BUILTIN="flag-pink"/>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1752070056112" ID="ID_5416271" MODIFIED="1752070065091" TEXT="konkrete Spezifikation f&#xfc;r Lumiera">

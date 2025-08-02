@@ -71,11 +71,9 @@ namespace widget {
   {
     REQUIRE (videoWidth > 0);
     REQUIRE (videoHeight > 0);
-    /*                                                                        ///////////////////////////////TICKET #1403 : temporarily disabled XV for experimentation with Pixbuf (but XV works and is usable)
     displayer_ = make_unique<XvDisplayer> (*this, videoWidth, videoHeight);
     if (displayer_->usable())
       return;
-    */
     displayer_ = make_unique<PixbufDisplayer> (*this, videoWidth, videoHeight);
     if (displayer_->usable())
       return;
