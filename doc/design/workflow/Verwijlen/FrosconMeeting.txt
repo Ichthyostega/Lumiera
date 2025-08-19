@@ -13,7 +13,7 @@ Endgoal::
   To produce a design document.
 
 This Meeting is based on the document link:TODO[»Lumiera Workflow Proposals«] by Wouter Verwijlen.
-Wouter traveled to FrOSCon to meet the core team in person. This meeting discussed some central points
+Wouter travelled to FrOSCon to meet the core team in person. This meeting discussed some central points
 of the planned workflow support in the Lumiera GUI. We discussed problems, agreed on various points
 and decided to produce a design document. Here we attempt to reconstruct and document the original meeting.
 
@@ -34,32 +34,35 @@ a suitable handling mechanism that can be used naturally throughout all Control 
 
 Taking inspiration from Blender, Hermann proposed a fundamental shift by extending the scope of tool usage
 to the entire UI. To do this, we agreed to introduce a top-level tool to navigate throughout the UI.
-Wouter expressed some concerns on how effect parameters and mixer stripes could be accessd. This
+Wouter expressed some concerns on how effect parameters and mixer stripes could be accessed. This
 remains a problem to be resolved. We agreed that this default navigation tool should map down
 naturally to conventional usage of the mouse.
 
-We discussed that a consequence of that decision might be to introduce a spcial tool dedicated
+We discussed that a consequence of that decision might be to introduce a special tool dedicated
 to dragging and moving clips, but we were concerned that such a mode might hamper fluid working
-with the UI. It seems preferrable to introduce the moving of clips as a sub-mode into the 
+with the UI. It seems preferable to introduce the moving of clips as a sub-mode into the 
 navigation tool, with the option to lock moving of clips.
 
 Wouter introduced a context sensitive tool palette which is rendered as an overlay in the timeline UI.
 The ability of Tools to support sub-modes is a simple extension of this proposal. 
 With this functionality, it would be then be possible to switch between trim-, roll-, slide- and shuffle-edit
-after activating the edit tool. Similarily, the _gear switch_ as proposed in a previous online discussion
+after activating the edit tool. Similarly, the _gear switch_ as proposed in a previous online discussion
 would be integrated as a sub-mode if a user decided to manipulate any setting value.
 
 Internatinalisation
 ~~~~~~~~~~~~~~~~~~~
 The language of the UI is English. This does not mean that we exclude any language
 (all contributions are welcome). Certain words and terminology should never be translated, e.g.,
-Track, Clip, Placement, ... . We allso do not support translations that require a re-ordering
+Track, Clip, Placement, ... . We also do not support translations that require a re-ordering
 of UI elements such as languages written right-to-left. This is due to priorities that we define.
 
 
 Unlimited Placement Constraints
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Agreement on all points [TODO] 
+The use of fine-grained placement constraints is plagued with overwhelming the user with 
+excessive relationships. This can be improved by using a small number of prototype set-ups:
+magnetic, relative and music anchored. Moreover, we require a diagnostic to reveal the reason why 
+a given clip is positioned at where it is.
 
 Routing
 ^^^^^^^
@@ -70,10 +73,39 @@ Mixing-groups can be automatically established if resources are tagged.
 
 Layering order
 ~~~~~~~~~~~~~~
-
+The layering order is usually arranged according to track sequence in the UI.
+To retain this configuration we would have to put some content into a track which can be
+located at a distance from other related content: not an ideal situation. One way to alleviate
+this problem is to allow the user to configure the layer ordering for a single track so that
+all content is always fixed to be above a reference clip. While this promises to be an
+interesting mechanism to improve the track sequence dilemma and provide the user a greater
+track arrangement freedom, further practical tests need to be carried out to determine its
+feasibility.
 
 Grouping Devices
 ~~~~~~~~~~~~~~~~
+One idea presented in Wouters document was the introduction of a light-weight grouping device.
+This would solve some problems, for example, a number of objects can be collectively moved
+as one unit together. Hermann proposed to use placements to achieve the same effect.
+It is yet to be resolved how this grouping can be visually represented.
+
+One important issue proposed by Wouter was to use segments to arrange the narrative at the
+top level. To implement this feature would require on the one hand a considerable effort
+by developers, on the other hand, it does not naturally fit into the Lumiera core design
+as it would be a very specific extension instead of a homogeneous building block in Lumiera.
+Hermann proposes to use nested sequences to implement this feature which is already been
+planned for the session model. All these nested sequences will have their own track structure,
+which is a tree relationship. For example, expanding one structure would not necessarily
+expand neighbouring structures. Another advantage of using this mechanism is that it can
+be used to construct a transition between adjacent chapters of a film while still retaining
+the ability to reshuffle chapters to explore various narratives. We can thus solve two
+problems with the same feature.
+
+Wouter was concerned that it might be tedious to navigate between different chapters,
+especially if it is necessary to expand or collapse these elements repeatedly. One
+countermeasure to releave constant opening and closing elements would be to expand
+the elements stepwise while still retaining the ability to edit the contents.
+
 
 Target audience
 ~~~~~~~~~~~~~~~
