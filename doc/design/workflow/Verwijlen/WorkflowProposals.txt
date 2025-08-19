@@ -1,7 +1,7 @@
 Lumiera Workflow Proposals
 ==========================
 :Author: Wouter Verwijlen
-:Date: 29 June 2025
+:Date: 19 August 2025
 :TOC:
 
 I would like to share a first version of a collection of workflow ideas for Lumiera. These ideas come
@@ -54,9 +54,12 @@ Examples of such personas could be:
 post-production of a film are handled by different people: assisant editors, colorists,
 audio engineers, etc.
 ** The allround contracted editor who handles all aspects of post-production
-** The allround artistic filmmaker who also edits
+
+◦ The freelance editor who does both commisioned work and passion projects
+** The allround artistic/indie filmmaker, who also edits
 ** The allround social media creator who values the use of visual effects, motion graphics
 and sound effects.
+And a few subtypes:
 ** The free-flowing editor who doesn't have a fixed idea of how the edit should be and
 instead wants to play and move things around, and who might not work in a linear
 fashion: they might do a bit of color correction to get a better sense of how a scene feels,
@@ -83,7 +86,9 @@ was, we should make an attempt to understand this reasoning. Some designs might 
 come from technical limitations, and others might have had really clever thinking behind
 them. Let's see what we can learn from that.
 
-* Ideally we should also include workflows for editors using XR headsets in combination with
+•
+
+Ideally we should also include workflows for editors using XR headsets in combination with
 controllers or even hand tracking. While I do have a headset at work that I experiment with,
 we might want someone with actual XR design skills to be involved here.
 
@@ -109,7 +114,7 @@ course.
 The current NLE landscape
 -------------------------
 A few decades ago there was this idea that only a single application could be called ``the best'', in
-other words: the one true NLE to rule them all. Some even went as far as calling it ``the NLE wars''.
+other words: the one true NLE to rule them all. Some even went as far as calling it »the NLE wars«.
 There was fierce competition between Avid Media Composer, Final Cut Pro, and Adobe Premiere
 and each had its fans. Over the years this discussion faded away. Final Cut Pro was disregarded by
 many after the radical rewrite that was released as Final Cut Pro X. Avid Media Composer retained
@@ -217,7 +222,7 @@ later during their development. Final Cut Pro was from its core designed to be u
 It's fast, and in combination with the clip connections and magnetic timeline, it's the least
 destructive way to edit. Trimming and editing by mouse is less precise though, which is why
 even FCP offers many keyboard shortcuts for precise trimming by keyboard. Using a mouse
-feel slightly less tactile than using physical buttons and dials.
+feels slightly less tactile than using physical buttons and dials.
 +
 In this same category we can also mention touch screens (as they offer similar interactions
 as a mouse, with the addition of finger gestures). Editing on a smartphone or tablet, when
@@ -411,6 +416,8 @@ Currently I'm thinking of using this bar on two or three occasions:
    +
    -> See the next subchapter: »Adding clips to the timeline«.
 
+Colors could be used (for example as an outline around the bar) to indicate which contextual mode
+is active.
 A limitation of such a bar is that it might overlap with content that a user wishes to interact with. If
 this is the case, then clicking on the grid with dots will let a user drag this bar out of the way. As an
 extra option I would like to suggest to use a modifier key (Ctrl?) which temporarily hides the
@@ -425,7 +432,8 @@ Adding clips to the timeline
 All NLE's offer multiple ways to get your material in the timeline, and those methods fall into the
 following categories:
 
-* Drag and drop from either the project contents panel or directly from a file browser
+* Drag and drop from either the project contents panel, another timeline, or directly from a file
+browser
 * By creating a timeline out of selected clips in a bin
 * N point editing, of which the most commonly used is three point editing: you load a source
 clip (or timeline) into a (source) viewer/monitor, mark an in point, out point and use one of
@@ -449,21 +457,12 @@ selected duration in the source clip match the selected duration in the timeline
 * Avid features a Replace Edit option: a selected clip on the timeline can be replaced by the
 contents in the source browser with a single click or keystroke.
 
-All of these options make sense, but in general I find it easier to remember two options (insert and
+All of these options make sense, but in general I rarely remember more than two options (insert and
 overwrite) and easily forget any surplus options that NLE's offer. We should also try to limit the
-amount of keyboard shortcuts that a user needs to memorize, so two options seems like a proper
-number. In that case, I would suggest one key/function for an Insert operation.
-
-The second key/function will be a more generic ``Add Clip'' action, which might display a pop-up in
-which we can select which method to use. TAB will cycle between Overwrite, Place on Top,
-Append and Replace, followed by Enter to confirm. It will remember the last used option. Double
-tapping the keyboard shortcut for this action will skip the pop-up.
-
-Having to repeatedly view a pop-up menu (or double tapping a key) might feel cumbersome, so an
-alternative could be to let the ``Add Clip'' action insert a clip by default and show all different
-options via the contextual bar. You can then change the behaviour after the fact, until you commit
-by doing something else. In this case, adding a clip will enter and exit another contextual mode.
-
+amount of keyboard shortcuts that a user needs to memorize, so I would like to propose a single
+``Add Clip'' action. This will insert a clip and will show the different options via the contextual bar.
+You can then change the desired method after the fact, until you commit by doing something else.
+In this case, adding a clip will enter and exit another contextual mode.
 One last thing I would like to address is the destruction that an insert operation can cause. Usually
 this can be prevented by proper track management, but you can wonder why you would ever want
 an insert action to cause the following:
@@ -552,8 +551,9 @@ Premiere you can choose how large the steps are, Resolve only supports single se
 
 Combining mouse and keyboard:
 
-* Adobe Premiere has a "move playhead to cursor" feature that can be bound to a key.
-  Very useful!
+* Adobe Premiere and several DAWs (Ardour, Reaper) have a "move playhead to cursor"
+feature that can be bound to a key. Very useful! Resolve has added this in version 20.1 as
+well.
 
 Using other devices:
 
@@ -633,6 +633,7 @@ increase. This will also work vertically. The playhead will move along as well.
 .Autoscroll widget
 image::{imgg}/wouter/07-2-autoscroll.png[width="100%", alt="A widget for auto-scrolling"]
 
+
 Zoom widget:: moving the mouse left or right from the center will zoom horizontally, up and
 down will zoom vertically.
 +
@@ -710,15 +711,22 @@ good reason to go in this direction.
 image::{imgg}/wouter/08-selection.png[width="100%", alt="selecting clips"]
 
 For selecting, we can introduce an ``add to selection'' key which adds the highlighted clip to the
-current selection (apart from the convention of using Ctrl+mouse click). Selected clips can have a
-differently colored box, yellow, for example.
-
+current selection (apart from the convention of using Ctrl+mouse click). We could also think of
+adding box-select by keyboard, by using a system with grid coordinates.
 One thing to note is that we do still need extra keyboard shortcuts to move the playhead frame by
 frame, indepently from the clip selection. See the navigation subchapter for more details.
 Selection will be one of the previously mentioned _contextual modes._ The user can always return to
 their previous selection until they make a new one, by pressing the corresponding keyboard shortcut
 (S).
 
+Most NLE's have functions for selecting many clips at once, called ‘select forward’ and ‘select
+backward’. In Adobe Premiere these are tools: click and you select all clips to either the left or right
+of the mouse cursor, and using Shift will toggle between selecting all clips on a single track or on
+all tracks (it doesn’t respect track activation status though, which it should). Other NLE's (Resolve,
+Avid, Lightworks) only have keyboard shortcuts for these functions, which do only affect activated
+tracks. This is a bit faster: in Premiere you need to switch to the Select Forward/Backward Tool,
+make your selection, then switch back to your previous tool. With a keyboard shortcut you only
+have to press a single key (if your track selection is correct).
 
 Arranging clips
 ~~~~~~~~~~~~~~~
@@ -821,11 +829,10 @@ on clip connections (this is discussed in the subchapter ``Tracks vs Trackless''
 Let's first examine trim side selection by mouse. This is generally as simple as clicking near the
 edge of a clip, or on the edge between two clips to select both sides for a roll edit.
 
-Adding additional trim sides often works by using modifier like Ctrl + left click (Premiere, Resolve,
+Adding additional trim sides often works by using a modifier like Ctrl + left click (Premiere, Resolve,
 Lightworks, Avid). FCP does not allow the selection of multiple trim sides and therefore does not
-support _asymmetric trimming._ Such trims are still possible, but need to be performed in two steps
-rather than one.
-
+support _asymmetric trimming._ Such trims are still possible, but need to be performed in
+multiple steps rather than one.
 Keyboard selection of trim sides happens in general by providing shortcuts for selecting the left (A)
 side, the right (B) side, or both, of a cut (Avid, Premiere, Resolve and FCP, although the latter does
 not have a shortcut for selecting both sides as it uses a dedicated Trim tool for roll edits). This
@@ -834,13 +841,10 @@ very powerful method: instead of A/B/both, it has four shortcuts:
 
 * Trim last out
 * Trim in
-
-These two apply to all cuts on enabled tracks to the left of the playhead.
-
 * Trim out
 * Trim next in
 
-These two apply to all cuts on enabled tracks to the right of the playhead.
+These apply to all clips (or gaps) on enabled tracks underneath the playhead.
 These commands can be combined: when pressing multiple keys, new trim sides are added to the
 selection. This allows for quickly selecting many trim sides on many tracks.
 
@@ -850,28 +854,30 @@ image::{imgg}/wouter/10-trim-side.png["select trim side"]
 Another feature that was already mentioned in a previous chapter, is FCP's precision editor, which
 can be triggered by double clicking a cut or by keyboard shortcut. This shows how much footage
 from each clip is available for trimming and allows ripple trimming as well as roll edits to be
-performed by mouse or keyboard.
-
+performed by mouse or keyboard. DaVinci Resolve added a similar thing called Trim Editor, but
+positions it at the bottom of the Timeline Viewer.
 
 Performing the trim
 ^^^^^^^^^^^^^^^^^^^
-Usually we see three ways to perform a trim:
+Usually we see four ways to perform a trim:
 
 1. Frame by frame. This can be done by mouse by clicking and dragging the edges of a clip, or
 by keyboard by using shortcuts for ``left one frame'', ``right one frame'', ``left 10/many frames'',
 ``right 10/many frames''. Instead of using keyboard shortcuts, dedicated hardware can be used
 to joggle left or right to perform trimming.
 2. By specifying an exact amount of frames. Pretty much every NLE supports using the plus
-and minus keys on the keypad to enter exact frame numbers. Lightworks does an excellent
-job at this: when not entering any amount (so just plus/minus + enter) it will repeat the last
+and minus keys on the keypad to enter exact frame numbers. Lightworks and Avid do an excellent
+job at this: when not entering any amount (so just plus/minus + enter) they will repeat the last
 entered amount of frames.
-3. Dynamic trimming. This means starting playback of the timeline around the position of the
-cut, and pressing a key to mark a point in realtime where the cut should be placed. Avid and
-Lightworks have dynamic trimming support within their trim modes. Resolve has a separate
-switch for this that needs to be toggled, and Premiere has a separate mode for dynamic
-trimming, simply called ``Trim Mode''. FCP does not seem to support dynamic trimming at
-the time of writing.
+3. Dynamic trimming. This means moving the cut (or slipping or sliding a clip) by using the
+JKL-playback controls. Avid and Lightworks have dynamic trimming support within their
+trim modes. Resolve has a separate switch for this that needs to be toggled, and Premiere has
 
+a separate mode for dynamic trimming, simply called ‘Trim Mode’. FCP does not seem to
+support dynamic trimming at the time of writing - although some people disagree and say
+that the ‘Extend Edit’ function, when used in the Precision Editor, achieves a similar result.
+4. All of the big NLE's have keyboard shortcuts that will trim either the start or the end of a
+clip to the position of the playhead, in ripple and non-ripple flavors.
 
 Previewing the cut
 ^^^^^^^^^^^^^^^^^^
@@ -887,8 +893,7 @@ be closed with the Escape key, as can Avid's trim mode.
 
 Analysis and proposal
 ^^^^^^^^^^^^^^^^^^^^^
-My proposal is to leverage the same system as the clip selection system to highlight a clip, and then
-have three commands:
+My proposal is to use the clip selection system to highlight a clip, and then have three commands:
 
 * Select the clip's in point as trim side
 * Select the clip's out point as trim side
@@ -899,8 +904,8 @@ two shortcuts are pressed once, they select the trim side for ripple trims. When
 will switch to non-ripple trims (and back again with another press). There should be a clear visual
 difference between these two (perhaps through the color of the brackets, as in Avid).
 
-Note that this approach closely resembles Lightworks, and is different from Avid, FCP, Premiere
-and Resolve. Those apps take the cut closest to the playhead as the basis for choosing a trim side.
+Note that this approach resembles Lightworks, and is different from Avid, FCP, Premiere and
+Resolve. Those apps take a cut (closest to the playhead) as the basis for choosing a trim side.
 Lightworks takes the underlying clip as its basis. Since we already have a mechanism for navigating
 clips, we should probably not add another mechanism just for navigating cuts.
 
@@ -924,12 +929,12 @@ we should consider that we need the following keyboard shortcuts:
 These same keys can't double for nudging clips, the way it does in many apps, without using modes.
 Therefore my proposal is indeed to introduce a Trim mode. As said, it should be designed as a
 contextual mode that we fluidly enter and exit and that is visually easy to distinguish from the
-regular mode, which we can call the Position mode. Trim mode can be accentuated by marking the
-part of the timeline we'll be previewing. As in Avid, in trim mode playback could always preview
-the selected cut, so we won't need a special Preview (sometimes called ``Play around'') shortcut. Trim
-mode will be exited automatically whenever the user clicks in an empty spot of the timeline or
-presses the trim mode key (T). This key can also be used to return to the last-used trim
-configuration.
+regular mode, which we can call the Navigation mode. Trim mode can be accentuated by marking
+the part of the timeline we'll be previewing. As in Avid, in trim mode playback could always
+preview the selected cut, so we won't need a special Preview (sometimes called ``Play around'')
+shortcut, (editing transitions should also engage the trim mode, in that case). Trim mode will be
+exited automatically whenever the user clicks in an empty spot of the timeline or presses the trim
+mode key (T). This key can also be used to return to the last-used trim configuration.
 
 .Mockup of the trim mode. The striped area marks the pre- and post-roll that will be previewed.
 image::{imgg}/wouter/11-trim-mode.png[width="100%", alt="using trim mode"]
@@ -941,24 +946,29 @@ Tool-based NLE's offer a Blade or Cut tool that will cut clips wherever a user c
 offer a dedicated keyboard shortcut for creating a cut at the playhead as well.
 
 Merging two timeline clips with so-called ``through edits'' is often possible by selecting the cut for a
-roll edit and pressing the delete key. A through edit is a cut made within a clip, where the start of the
-second clip in the timeline matches the next frame from the source clip that corresponds to the first
-timeline clip.
-
+roll edit and pressing the delete key. A through edit occurs when two successive segments of the
+same source clip are placed directly next to each other in the timeline (so as a result, it looks as if
+there wasn't a cut at all).
 A Blade tool, a shortcut for Add Cut and the ability to remove through edits with backspace seem
 all worth implementing.
 
 
 Removing clips
 ~~~~~~~~~~~~~~
-In general, we find the following options:
+In general, we find the following options to remove clip from a timeline:
 
 * Select a clip, then: backspace or delete key, or (ripple) cut command.
 * In and out points, then lift or extract.
 * Lightworks lets you remove a clip by dragging it outside of the timeline window.
 
+•
+
+Trimming a clip so it will end up with a duration of 0 frames.
+
 These operations are so common that I would not change them.
 
+Dropping another clip on top. This is something that we could consider changing, especially
+when the clips that will be removed are offscreen.
 
 Organising the timeline: sections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
