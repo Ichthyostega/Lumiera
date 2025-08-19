@@ -1,0 +1,9 @@
+Lumiera Workflow Proposals
+==========================
+Date: 2025
+
+//MENU: Workflow Proposals Verwijlen
+
+- TODO include full text of from Wouter
+- link:FrosconMeeting.html[Discussion at FrOSCon 2025]
+ 

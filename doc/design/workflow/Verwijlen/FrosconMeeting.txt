@@ -1,0 +1,84 @@
+Meeting at FrOSCon 2025
+=======================
+Date: 2025-08-17
+Author: Benny Lyons and Hermann Voßeler
+:toc:
+
+Present::
+- Wouter Verwijlen
+- Benny Lyons
+- Hermann Voßeler
+
+Endgoal::
+  To produce a design document.
+
+This Meeting is based on the document link:TODO[»Lumiera Workflow Proposals«] by Wouter Verwijlen.
+Wouter traveled to FrOSCon to meet the core team in person. This meeting discussed some central points
+of the planned workflow support in the Lumiera GUI. We discussed problems, agreed on various points
+and decided to produce a design document. Here we attempt to reconstruct and document the original meeting.
+
+Points discussed
+----------------
+We agreed upon the importance of a _Magnetic Timeline,_ as introduced by Final Cut X. However, our
+Placement concept [TODO Link] which predates FCX's release [TODO source] shares similar goals but
+its scope is more far-reaching. We consider _Magnetic Timeline_ to be an important advancement to
+legacy track oriented GUI schemes; but it is more mouse confined and does not support several Control
+Systems footnote:[Mouse, keyboard, pen, hardware controls] on an equal footing, which is our vision.
+
+Modes, Tools and Views
+~~~~~~~~~~~~~~~~~~~~~~
+Modes are generally frowned upon in the User Interface Design discipline. On the other hand, they enjoy
+popularity in video editing applications. Tools and Views were introduced to improve the usability
+of Modes. We agreed to adopt tools as the more preferable system, but only if we manage to develop
+a suitable handling mechanism that can be used naturally throughout all Control Systems.
+
+Taking inspiration from Blender, Hermann proposed a fundamental shift by extending the scope of tool usage
+to the entire UI. To do this, we agreed to introduce a top-level tool to navigate throughout the UI.
+Wouter expressed some concerns on how effect parameters and mixer stripes could be accessd. This
+remains a problem to be resolved. We agreed that this default navigation tool should map down
+naturally to conventional usage of the mouse.
+
+We discussed that a consequence of that decision might be to introduce a spcial tool dedicated
+to dragging and moving clips, but we were concerned that such a mode might hamper fluid working
+with the UI. It seems preferrable to introduce the moving of clips as a sub-mode into the 
+navigation tool, with the option to lock moving of clips.
+
+Wouter introduced a context sensitive tool palette which is rendered as an overlay in the timeline UI.
+The ability of Tools to support sub-modes is a simple extension of this proposal. 
+With this functionality, it would be then be possible to switch between trim-, roll-, slide- and shuffle-edit
+after activating the edit tool. Similarily, the _gear switch_ as proposed in a previous online discussion
+would be integrated as a sub-mode if a user decided to manipulate any setting value.
+
+Internatinalisation
+~~~~~~~~~~~~~~~~~~~
+The language of the UI is English. This does not mean that we exclude any language
+(all contributions are welcome). Certain words and terminology should never be translated, e.g.,
+Track, Clip, Placement, ... . We allso do not support translations that require a re-ordering
+of UI elements such as languages written right-to-left. This is due to priorities that we define.
+
+
+Unlimited Placement Constraints
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Agreement on all points [TODO] 
+
+Routing
+^^^^^^^
+Hermann explained how the routing in Render Engine is based on Placements.
+All data streams are grouped according to the medium (video, audio,...) by default.
+Mixing-groups can be automatically established if resources are tagged.
+
+
+Layering order
+~~~~~~~~~~~~~~
+
+
+Grouping Devices
+~~~~~~~~~~~~~~~~
+
+Target audience
+~~~~~~~~~~~~~~~
+
+
+Conclusions
+-----------
+

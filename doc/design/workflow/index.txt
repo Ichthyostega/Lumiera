@@ -1,6 +1,9 @@
 Design Documents: Workflow
 ==========================
 
+//MENU: prepend child LumieraWorkflowOutline
+//MENU: put child InterfaceConcept_Varga after LumieraWorkflowOutline
+
 In our discussions, the term *Workflow* denotes specific considerations about _the way_
 a given task can be achieved, within the application, in the most suitable and stringent fashion.
 This effort is closely related to GUI and interface design, but likewise quite integral,
