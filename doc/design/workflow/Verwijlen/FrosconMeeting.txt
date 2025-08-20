@@ -9,7 +9,7 @@ Present::
 - Benny Lyons
 - Hermann Voßeler
 
-Endgoal::
+End goal::
   To produce a design document.
 
 This Meeting is based on the document link:TODO[»Lumiera Workflow Proposals«] by Wouter Verwijlen.
@@ -49,7 +49,7 @@ With this functionality, it would be then be possible to switch between trim-, r
 after activating the edit tool. Similarly, the _gear switch_ as proposed in a previous online discussion
 would be integrated as a sub-mode if a user decided to manipulate any setting value.
 
-Internatinalisation
+Internationalisation
 ~~~~~~~~~~~~~~~~~~~
 The language of the UI is English. This does not mean that we exclude any language
 (all contributions are welcome). Certain words and terminology should never be translated, e.g.,
@@ -103,12 +103,31 @@ problems with the same feature.
 
 Wouter was concerned that it might be tedious to navigate between different chapters,
 especially if it is necessary to expand or collapse these elements repeatedly. One
-countermeasure to releave constant opening and closing elements would be to expand
-the elements stepwise while still retaining the ability to edit the contents.
+countermeasure to relieve constant opening and closing elements would be to expand
+the elements step wise while still retaining the ability to edit the contents.
 
 
 Target audience
 ~~~~~~~~~~~~~~~
+It is important to identify our target audience to be able to obtain a clear
+vision of which features are more preferable to include and those features which
+might be less suitable to incorporate into Lumiera. This will allow us to
+fine-focus into the particular needs of these groups and provide us with a
+mechanism to curtail our long feature list. Eventually we might have a list of
+features ordered according to priority. Other factors are, of course,
+important in determining whether a feature is implemented or not, e.g., effort
+required to implement a feature; but we focus solely on identifying our target
+audience here.
+
+Wouter identified five groups which mould most likely be attracted to Lumiera
+and its goals. During our discussions, we ordered these groups according to, in our
+opinion, those who would be most interested too those he would be less interested.
+
+These groupings are naturally provisional and will mostly likely change--which
+is very good--as we add important features that are deemed essential but fit to
+no group in our selection.
+
+We identified the following groups:
 
 
 Conclusions
