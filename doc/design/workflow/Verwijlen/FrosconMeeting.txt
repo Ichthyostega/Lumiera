@@ -117,34 +117,31 @@ the elements step wise while still retaining the ability to edit the contents.
 
 Target audience
 ~~~~~~~~~~~~~~~
-It is important to identify our target audience to be able to obtain a clear
-vision of which features are more preferable to include and those features which
-might be less suitable to incorporate into Lumiera. This will allow us to
-fine-focus into the particular needs of these groups and provide us with a
-mechanism to curtail our long feature list. Eventually we might have a list of
-features ordered according to priority. Other factors are, of course,
-important in determining whether a feature is implemented or not, e.g., effort
-required to implement a feature; but we focus solely on identifying our target
-audience here.
+It is important to identify our target audience to be able to frame a clear
+picture of which features are more preferable to include and those features which
+might be less suitable to incorporate into Lumiera.
+Define such groups will allow us to fine-focus into the particular needs of these groups
+and provide us with a mechanism to curtail our long feature list. Eventually we might have
+a list of features ordered according to priority.
 
 In his link:WorkflowProposals.html[»Lumiera Workflow Proposals«], _Wouter_
-identified six groups which mould most likely be attracted to Lumiera and its goals.
+identified six groups which would most likely be attracted to Lumiera and its goals.
 
 - The highly specialised editor who works in an environment where different parts of the
   post-production of a film are handled by different people: assistant editors, colourists,
   audio engineers, etc.
-- The allround contracted editor who handles all aspects of post-production
-- The allround artistic filmmaker who also edits
-- The allround social media creator who values the use of visual effects,
+- The all-round contract editor who handles all aspects of post-production
+- The all-round artistic filmmaker who also edits
+- The all-round social media creator who appreciates the use of visual effects,
   motion graphics and sound effects.
-- The free-flowing editor who does not have a fixed idea of how the edit should be
-  and instead wants to play and move things around, and who might not work in a linear
-  fashion: they might do a bit of colour correction to get a better sense of how a scene feels,
-  then go back to editing, etc.
+- The free-flowing editor without a fixed idea of the edit, who prefers to explore the
+  footage and move things around, and who might not work in a linear fashion:
+  they might, for example, do a bit of colour correction to acquire a better feel for a scene
+  and then go back to coarse-grained editing.
 - The editor who has the film already cut in their head and have a very strong sense of
-  what they want to do and work in a very structured way towards accomplishing this vision.
+  what they want to do and progress through structured and precise steps towards realising their vision.
 
-These groupings are naturally provisional and will mostly likely change -- which
+These groupings are naturally provisional and will most likely change -- which
 is very good -- as we add important features that are deemed essential but fit to
 no group in our selection.
 

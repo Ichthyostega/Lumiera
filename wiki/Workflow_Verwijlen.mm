@@ -143,6 +143,254 @@
 <node CREATED="1755556219662" ID="ID_254042943" MODIFIED="1755556223566" POSITION="left" TEXT="Ver&#xf6;ffentlichung">
 <node COLOR="#44169d" CREATED="1755556232186" ID="ID_807805995" MODIFIED="1755556248453" TEXT="&#xbb;Workflow Proposal Verwijlen&#xab;">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1755814442235" ID="ID_368823614" MODIFIED="1755821389719" TEXT="beginne mit der Version von 04 Apr 2025 22:17:43">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Mail-Thread &quot;Workflow and Structure&quot;
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="Mail"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1755896494905" ID="ID_1322570501" MODIFIED="1755912269756" TEXT="zweite Version war vom 2025-06-29 14:33:16 +0200">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Mail-Thread &quot;Workflow document update&quot;
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="Mail"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1755895979863" ID="ID_1992562998" MODIFIED="1755912228416" TEXT="Bilder">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#5b280f" CREATED="1755895982463" ID="ID_1866766141" MODIFIED="1755896010644" TEXT="erste Idee: ein paar gehen noch....">
+<icon BUILTIN="closed"/>
+<node COLOR="#7e0907" CREATED="1755896012707" ID="ID_488706942" MODIFIED="1755896074946" TEXT="es ist nun schon ~1MiB">
+<icon BUILTIN="messagebox_warning"/>
+<icon BUILTIN="clanbomber"/>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1755896032015" ID="ID_828824379" MODIFIED="1755896088513" TEXT="in-Tree nur was wirklich zur technischen Doku von Lumiera ge&#xf6;rt">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1755895992723" ID="ID_1113999129" MODIFIED="1755896023247" TEXT="dann doch wie die anderen GUI-Proposals">
+<icon BUILTIN="yes"/>
+<node CREATED="1755896278579" ID="ID_16865890" MODIFIED="1755896331341">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      desen Bilder liegen im <b>Website-Repository</b>
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      {imgg} = /media/img/design.gui
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1755896336756" ID="ID_39208433" MODIFIED="1755896353737" TEXT="auch mit Christoph Varga bin ich so verfahren"/>
+<node COLOR="#7e074c" CREATED="1755896388437" ID="ID_427454715" MODIFIED="1755896408050" TEXT="auch wenn es dadurch etwas komplexer wird">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="smily_bad"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1755896435671" ID="ID_1829951561" MODIFIED="1755912120885" TEXT="Historie umschreiben">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Noch vor der ersten wirklichen Ver&#246;ffentlichung, so da&#223; die Bilder sich nicht im Core-Git niederschlagen.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+<node COLOR="#435e98" CREATED="1755896822707" ID="ID_541942645" MODIFIED="1755912126617" TEXT="Subdir: wouter"/>
+<node COLOR="#338800" CREATED="1755897079393" ID="ID_151985311" MODIFIED="1755912129713" TEXT="auch f&#xfc;r v1 substituieren">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      In v1 hatte Wouter Bilder in kleinerer Aufl&#246;sung eingebaut, die auch noch manuell in Gimp beschnitten werden mu&#223;ten; jetzt k&#246;nnte ich diese allesamt durch die besseren Bilder aus v2 substituieren (und damit ein paar 110k Storage sparen)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1755896843482" ID="ID_1845937547" MODIFIED="1755912131606" TEXT="bei der Gelegenheit: Screenshot von Joel">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      In <font face="Monospaced" color="#2c47b9">design/gui/GuiDiscussion/TimelineDiscussion.txt</font>&#160;... der zeigt immer noch auf eine externe Adresse
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1755896607779" ID="ID_1633116994" MODIFIED="1755912136569" TEXT="Layout-Fehler im CSS">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1755896623302" ID="ID_1537354999" MODIFIED="1755896781569" TEXT="alle Bilder sind unn&#xf6;tig einger&#xfc;ckt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      &#252;berpr&#252;ft, das gilt f&#252;r alle (es sind bisher nur ganz wenige, in den GUI-Proposals); ich hatte mich einfach darum nie gek&#252;mmert
+    </p>
+    <ul>
+      <li>
+        design/gui/GuiDiscussion/ConceptProposals/RichardSpindler.txt
+      </li>
+      <li>
+        design/gui/GuiDiscussion/ConceptProposals/Alcarinque.txt
+      </li>
+      <li>
+        design/gui/GuiDiscussion/ConceptProposals/AkhiL.txt
+      </li>
+      <li>
+        design/gui/GuiDiscussion/TimelineDiscussion.txt
+      </li>
+      <li>
+        <font color="#5b4ab7">design/workflow/Verwijlen/WorkflowProposals.txt</font>
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1755897191885" ID="ID_614804158" MODIFIED="1755897507724" TEXT="Ursache herausfinden &#xd83e;&#xdc32; asciidoc.css">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <u>Zeile 297</u>:
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <font color="#4c3030" face="Monospaced" size="2">/* -------- Image -------- */ </font>
+    </p>
+    <p>
+      <font color="#4c3030" face="Monospaced" size="2">span.image img { </font>
+    </p>
+    <p>
+      <font color="#4c3030" face="Monospaced" size="2">&#160;&#160;&#160;&#160;border-style: none; </font>
+    </p>
+    <p>
+      <font color="#4c3030" face="Monospaced" size="2">} </font>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <font color="#4c3030" face="Monospaced" size="2">div.imageblock img { </font>
+    </p>
+    <p>
+      <font color="#4c3030" face="Monospaced" size="2">&#160;&#160;&#160;&#160;</font><font color="#b22443" face="Monospaced" size="2">padding-left: 13%;</font><font color="#4c3030" face="Monospaced" size="2">&#160;</font>
+    </p>
+    <p>
+      <font color="#4c3030" face="Monospaced" size="2">&#160;&#160;&#160;&#160;border: 0px solid silver; </font>
+    </p>
+    <p>
+      <font color="#4c3030" face="Monospaced" size="2">} </font>
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1755897880880" ID="ID_6990920" MODIFIED="1755898213727" TEXT="ist irgendwann zwischen 2008 - 2011 eingebaut worden">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <font face="Monospaced" size="2">commit 694ade36042c420efdeface2c80c0906ea3f5fa6 </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">Author: Ichthyostega &lt;prg@ichthyostega.de&gt; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">Date:&#160;&#160;&#160;Mon Feb 21 01:38:15 </font><font face="Monospaced" size="2" color="#740505">2011</font><font face="Monospaced" size="2">&#160;+0100 </font>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;small CSS tweaks/fixes </font>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <font face="Monospaced" size="2">commit ed7a397aecb0c5b3b284663bb09e08494adb087d </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">Author: raffa &lt;raffaella.traniello@livecom.it&gt; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">Date:&#160;&#160;&#160;Sun May 25 17:51:31 </font><font face="Monospaced" size="2" color="#aa1313">2008</font><font face="Monospaced" size="2">&#160;+0200 </font>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;Added tools for building a web page with asciidoc </font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1755898357333" ID="ID_1252592480" MODIFIED="1755898406861" TEXT="Ha! Raffa war die Misset&#xe4;terin">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <font face="Monospaced" size="2">commit 8ee898954a38d9d68ef6fac0a93ceb5ffa587a6e </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">Author: raffa &lt;raffaella.traniello@livecom.it&gt; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">Date:&#160;&#160;&#160;Sat Jan 3 18:41:09 2009 +0100 </font>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;Added 13% padding to images </font>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="ksmiletris"/>
+<node CREATED="1755898427532" ID="ID_777596518" MODIFIED="1755898439361" TEXT="Kontext: Anpassung Website nach Logo-Contest">
+<icon BUILTIN="info"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1755912147300" ID="ID_833260171" MODIFIED="1755912218109" TEXT="besser keine Layout-Angaben im CSS">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...denn diese w&#252;rden eine Angabe direkt im &lt;img...&gt;-Tag &#252;bersteuern &#8212; und damit g&#228;be es keine M&#246;glichkeit mehr, direkt aus dem Asciidoc heraus das Layout von Bildern zu steuern
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
 </node>
 </node>
 </node>
