@@ -12,15 +12,16 @@ Present::
 End goal::
   To produce a design document.
 
-This Meeting is based on the document link:TODO[»Lumiera Workflow Proposals«] by Wouter Verwijlen.
+This Meeting is based on the document link:WorkflowProposals.html[»Lumiera Workflow Proposals«] by Wouter Verwijlen.
 Wouter travelled to FrOSCon to meet the core team in person. This meeting discussed some central points
 of the planned workflow support in the Lumiera GUI. We discussed problems, agreed on various points
 and decided to produce a design document. Here we attempt to reconstruct and document the original meeting.
 
 Points discussed
 ----------------
-We agreed upon the importance of a _Magnetic Timeline,_ as introduced by Final Cut X.
-However, our link:{ldoc}devel/rfc_final/ProcPlacementMetaphor.html[Placement concept (2008)] 
+We agreed upon the importance of a link:WorkflowProposals.html#\_tracks_vs_trackless[magnetic timeline],
+as introduced by Final Cut X.
+However, our link:{ldoc}/devel/rfc_final/ProcPlacementMetaphor.html[Placement concept (2008)] 
 which predates FCPX's release,footnote:[Final Cut Pro X was
 link:https://en.wikipedia.org/wiki/Final_Cut_Pro#Final_Cut_Pro_X[released in 2011], and the »Magnetic
 Timeline« is generally considered a novel concept introduced with this update. The initial reception
@@ -53,7 +54,7 @@ navigation tool, with the option to lock moving of clips.
 
 _Wouter_ introduced a context sensitive tool palette which is rendered as an overlay in the timeline UI.
 The ability of Tools to support sub-modes is a simple extension of this proposal. 
-With this functionality, it would be then be possible to switch between trim-, roll-, slide- and slip-edit
+With this functionality, it would then be possible to switch between trim-, roll-, slide- and slip-edit
 after activating the edit tool. Similarly, the _gear switch_ as proposed in a previous online discussion
 would be integrated as a sub-mode if a user decided to manipulate any setting value.
 
@@ -126,8 +127,8 @@ important in determining whether a feature is implemented or not, e.g., effort
 required to implement a feature; but we focus solely on identifying our target
 audience here.
 
-In his »Lumiera Workflow Proposals«, _Wouter_ identified five groups which mould
-most likely be attracted to Lumiera and its goals.
+In his link:WorkflowProposals.html[»Lumiera Workflow Proposals«], _Wouter_
+identified six groups which mould most likely be attracted to Lumiera and its goals.
 
 - The highly specialised editor who works in an environment where different parts of the
   post-production of a film are handled by different people: assistant editors, colourists,
