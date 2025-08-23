@@ -140,7 +140,8 @@
 <node CREATED="1755559679690" ID="ID_977787374" MODIFIED="1755559691735" TEXT="need diagnostics"/>
 </node>
 </node>
-<node CREATED="1755556219662" ID="ID_254042943" MODIFIED="1755556223566" POSITION="left" TEXT="Ver&#xf6;ffentlichung">
+<node COLOR="#435e98" CREATED="1755556219662" ID="ID_254042943" MODIFIED="1755967707897" POSITION="left" TEXT="Ver&#xf6;ffentlichung">
+<icon BUILTIN="go"/>
 <node COLOR="#44169d" CREATED="1755556232186" ID="ID_807805995" MODIFIED="1755556248453" TEXT="&#xbb;Workflow Proposal Verwijlen&#xab;">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1755814442235" ID="ID_368823614" MODIFIED="1755821389719" TEXT="beginne mit der Version von 04 Apr 2025 22:17:43">
@@ -151,8 +152,7 @@
       Mail-Thread &quot;Workflow and Structure&quot;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="Mail"/>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1755896494905" ID="ID_1322570501" MODIFIED="1755912269756" TEXT="zweite Version war vom 2025-06-29 14:33:16 +0200">
@@ -163,14 +163,71 @@
       Mail-Thread &quot;Workflow document update&quot;
     </p>
   </body>
+</html></richcontent>
+<icon BUILTIN="Mail"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1755963266557" ID="ID_1563736344" MODIFIED="1755967698041" TEXT="dritte Version (Korrekturen) von 19 Aug 2025 19:26:22  +0200">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Mail-Thread &quot;Workflow document update&quot;, direkt nach unserem Treffen auf der FrOSCon
+    </p>
+  </body>
 </html>
 </richcontent>
 <icon BUILTIN="Mail"/>
+<node CREATED="1755963348961" ID="ID_16779925" MODIFIED="1755963350454" TEXT="Bilder">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1755963351258" ID="ID_1848861976" MODIFIED="1755963419217" TEXT="Bild-12 : 05-contextual-bar.png">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      minimale Abweichungen: Wouter hat das Handle der Overlay-Bar schmaler gemacht
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node COLOR="#824398" CREATED="1755963442861" ID="ID_1488390130" MODIFIED="1755963486670" TEXT="Bild-10 : 04-fcp-precision-editor.jpg">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das Bild hatte ich lediglich st&#228;rker komprimiert, um Platz zu sparen
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="stop-sign"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1755963612079" ID="ID_785016548" MODIFIED="1755963654882" TEXT="Bild-32 : 10-trim-side.png">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      hier hat Wouter einen neuen Screenshot gemacht (vermutlich war im alten Screenshot die Position des Cursors falsch)
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1755895979863" ID="ID_1992562998" MODIFIED="1755912228416" TEXT="Bilder">
 <icon BUILTIN="button_ok"/>
-<node COLOR="#5b280f" CREATED="1755895982463" ID="ID_1866766141" MODIFIED="1755896010644" TEXT="erste Idee: ein paar gehen noch....">
+<node COLOR="#5b280f" CREATED="1755895982463" FOLDED="true" ID="ID_1866766141" MODIFIED="1755967722089" TEXT="erste Idee: ein paar gehen noch....">
 <icon BUILTIN="closed"/>
 <node COLOR="#7e0907" CREATED="1755896012707" ID="ID_488706942" MODIFIED="1755896074946" TEXT="es ist nun schon ~1MiB">
 <icon BUILTIN="messagebox_warning"/>
@@ -181,7 +238,7 @@
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node CREATED="1755895992723" ID="ID_1113999129" MODIFIED="1755896023247" TEXT="dann doch wie die anderen GUI-Proposals">
+<node COLOR="#435e98" CREATED="1755895992723" FOLDED="true" ID="ID_1113999129" MODIFIED="1755967718621" TEXT="dann doch wie die anderen GUI-Proposals">
 <icon BUILTIN="yes"/>
 <node CREATED="1755896278579" ID="ID_16865890" MODIFIED="1755896331341">
 <richcontent TYPE="NODE"><html>
@@ -241,7 +298,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#435e98" CREATED="1755896607779" ID="ID_1633116994" MODIFIED="1755912136569" TEXT="Layout-Fehler im CSS">
+<node COLOR="#435e98" CREATED="1755896607779" FOLDED="true" ID="ID_1633116994" MODIFIED="1755967715482" TEXT="Layout-Fehler im CSS">
 <icon BUILTIN="broken-line"/>
 <node CREATED="1755896623302" ID="ID_1537354999" MODIFIED="1755896781569" TEXT="alle Bilder sind unn&#xf6;tig einger&#xfc;ckt">
 <richcontent TYPE="NOTE"><html>

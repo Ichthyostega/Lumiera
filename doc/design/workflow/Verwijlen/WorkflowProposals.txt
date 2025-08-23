@@ -54,17 +54,18 @@ Examples of such personas could be:
 post-production of a film are handled by different people: assisant editors, colorists,
 audio engineers, etc.
 ** The allround contracted editor who handles all aspects of post-production
-
-◦ The freelance editor who does both commisioned work and passion projects
+** The freelance editor who does both commisioned work and passion projects
 ** The allround artistic/indie filmmaker, who also edits
 ** The allround social media creator who values the use of visual effects, motion graphics
 and sound effects.
++
 And a few subtypes:
-** The free-flowing editor who doesn't have a fixed idea of how the edit should be and
++
+*** The free-flowing editor who doesn't have a fixed idea of how the edit should be and
 instead wants to play and move things around, and who might not work in a linear
 fashion: they might do a bit of color correction to get a better sense of how a scene feels,
 then go back to editing, etc.
-** The editor who has the film already cut in their head and have a very strong sense of
+*** The editor who has the film already cut in their head and have a very strong sense of
 what they want to do and work in a very structured way towards accomplishing this
 vision.
 +
@@ -86,9 +87,7 @@ was, we should make an attempt to understand this reasoning. Some designs might 
 come from technical limitations, and others might have had really clever thinking behind
 them. Let's see what we can learn from that.
 
-•
-
-Ideally we should also include workflows for editors using XR headsets in combination with
+* Ideally we should also include workflows for editors using XR headsets in combination with
 controllers or even hand tracking. While I do have a headset at work that I experiment with,
 we might want someone with actual XR design skills to be involved here.
 
@@ -418,6 +417,7 @@ Currently I'm thinking of using this bar on two or three occasions:
 
 Colors could be used (for example as an outline around the bar) to indicate which contextual mode
 is active.
+
 A limitation of such a bar is that it might overlap with content that a user wishes to interact with. If
 this is the case, then clicking on the grid with dots will let a user drag this bar out of the way. As an
 extra option I would like to suggest to use a modifier key (Ctrl?) which temporarily hides the
@@ -551,7 +551,7 @@ Premiere you can choose how large the steps are, Resolve only supports single se
 
 Combining mouse and keyboard:
 
-* Adobe Premiere and several DAWs (Ardour, Reaper) have a "move playhead to cursor"
+* Adobe Premiere and several DAWs (Ardour, Reaper) have a ``move playhead to cursor''
 feature that can be bound to a key. Very useful! Resolve has added this in version 20.1 as
 well.
 
@@ -719,10 +719,10 @@ Selection will be one of the previously mentioned _contextual modes._ The user c
 their previous selection until they make a new one, by pressing the corresponding keyboard shortcut
 (S).
 
-Most NLE's have functions for selecting many clips at once, called ‘select forward’ and ‘select
-backward’. In Adobe Premiere these are tools: click and you select all clips to either the left or right
+Most NLE's have functions for selecting many clips at once, called ``select forward'' and ``select
+backward''. In Adobe Premiere these are tools: click and you select all clips to either the left or right
 of the mouse cursor, and using Shift will toggle between selecting all clips on a single track or on
-all tracks (it doesn’t respect track activation status though, which it should). Other NLE's (Resolve,
+all tracks (it doesn't respect track activation status though, which it should). Other NLE's (Resolve,
 Avid, Lightworks) only have keyboard shortcuts for these functions, which do only affect activated
 tracks. This is a bit faster: in Premiere you need to switch to the Select Forward/Backward Tool,
 make your selection, then switch back to your previous tool. With a keyboard shortcut you only
@@ -780,7 +780,7 @@ pressing the Ctrl modifier will inverse a tool's mode of operation.
 * Resolve talks in terms of modes, not tools, and it has two modes related to trimming: the
 default Selection Mode and Trim Edit Mode. The latter lets you ripple trim (by dragging the
 edges of clips), slip (dragging inside a clip, upper half) and slide (dragging inside a clip,
-lower half) - more on slip and slide edits later.
+lower half) -- more on slip and slide edits later.
 
 * Avid has a trim mode that can be in overwrite trim or ripple trim mode, indicated by the
 color of the trim sides (red or yellow). The timeline will be in either of these modes when
@@ -833,6 +833,7 @@ Adding additional trim sides often works by using a modifier like Ctrl + left cl
 Lightworks, Avid). FCP does not allow the selection of multiple trim sides and therefore does not
 support _asymmetric trimming._ Such trims are still possible, but need to be performed in
 multiple steps rather than one.
+
 Keyboard selection of trim sides happens in general by providing shortcuts for selecting the left (A)
 side, the right (B) side, or both, of a cut (Avid, Premiere, Resolve and FCP, although the latter does
 not have a shortcut for selecting both sides as it uses a dedicated Trim tool for roll edits). This
@@ -872,10 +873,9 @@ entered amount of frames.
 3. Dynamic trimming. This means moving the cut (or slipping or sliding a clip) by using the
 JKL-playback controls. Avid and Lightworks have dynamic trimming support within their
 trim modes. Resolve has a separate switch for this that needs to be toggled, and Premiere has
-
-a separate mode for dynamic trimming, simply called ‘Trim Mode’. FCP does not seem to
-support dynamic trimming at the time of writing - although some people disagree and say
-that the ‘Extend Edit’ function, when used in the Precision Editor, achieves a similar result.
+a separate mode for dynamic trimming, simply called ``Trim Mode''. FCP does not seem to
+support dynamic trimming at the time of writing -- although some people disagree and say
+that the ``Extend Edit'' function, when used in the Precision Editor, achieves a similar result.
 4. All of the big NLE's have keyboard shortcuts that will trim either the start or the end of a
 clip to the position of the playhead, in ripple and non-ripple flavors.
 
@@ -960,10 +960,7 @@ In general, we find the following options to remove clip from a timeline:
 * Select a clip, then: backspace or delete key, or (ripple) cut command.
 * In and out points, then lift or extract.
 * Lightworks lets you remove a clip by dragging it outside of the timeline window.
-
-•
-
-Trimming a clip so it will end up with a duration of 0 frames.
+* Trimming a clip so it will end up with a duration of 0 frames.
 
 These operations are so common that I would not change them.
 
