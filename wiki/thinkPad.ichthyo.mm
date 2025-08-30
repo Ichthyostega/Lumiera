@@ -160990,10 +160990,10 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <cloud COLOR="#c6b0a1"/>
 <node CREATED="1752758687270" ID="ID_587093014" MODIFIED="1752758689409" TEXT="2025">
 <node CREATED="1752755281391" ID="ID_442273376" MODIFIED="1752767266574" TEXT="FrOSCon-Vortrag(25) : Video-Ausgabe">
-<linktarget COLOR="#4d74d8" DESTINATION="ID_442273376" ENDARROW="Default" ENDINCLINATION="513;-707;" ID="Arrow_ID_738647024" SOURCE="ID_1047074231" STARTARROW="None" STARTINCLINATION="-1126;76;"/>
 <linktarget COLOR="#4d74d8" DESTINATION="ID_442273376" ENDARROW="Default" ENDINCLINATION="-2314;2141;" ID="Arrow_ID_437931140" SOURCE="ID_553632518" STARTARROW="None" STARTINCLINATION="-1107;59;"/>
-<linktarget COLOR="#7ba0c9" DESTINATION="ID_442273376" ENDARROW="Default" ENDINCLINATION="862;-547;" ID="Arrow_ID_1600730504" SOURCE="ID_143193352" STARTARROW="None" STARTINCLINATION="371;21;"/>
 <linktarget COLOR="#ce0918" DESTINATION="ID_442273376" ENDARROW="Default" ENDINCLINATION="-332;592;" ID="Arrow_ID_1945191941" SOURCE="ID_1422823042" STARTARROW="None" STARTINCLINATION="-1124;69;"/>
+<linktarget COLOR="#4d74d8" DESTINATION="ID_442273376" ENDARROW="Default" ENDINCLINATION="513;-707;" ID="Arrow_ID_738647024" SOURCE="ID_1047074231" STARTARROW="None" STARTINCLINATION="-1126;76;"/>
+<linktarget COLOR="#7ba0c9" DESTINATION="ID_442273376" ENDARROW="Default" ENDINCLINATION="862;-547;" ID="Arrow_ID_1600730504" SOURCE="ID_143193352" STARTARROW="None" STARTINCLINATION="371;21;"/>
 <node CREATED="1752756052954" ID="ID_498575821" MODIFIED="1752758911124" TEXT="xjadeo von Robin Gareus war sehr hilfreich">
 <arrowlink COLOR="#545a82" DESTINATION="ID_569856037" ENDARROW="Default" ENDINCLINATION="-2296;0;" ID="Arrow_ID_323116011" STARTARROW="None" STARTINCLINATION="-2524;169;"/>
 <icon BUILTIN="idea"/>
@@ -169990,6 +169990,108 @@ Since then others have made contributions, see the log for the history.</font></
 <edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1756566516648" ID="ID_1764254758" MODIFIED="1756588511183" TEXT="alte Git-Repos wegr&#xe4;umen">
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#e99ec5" COLOR="#bd0315" CREATED="1756566525537" ID="ID_1064654099" MODIFIED="1756566606836" TEXT="dringend &#xd83d;&#xdc80;&#xd83d;&#xdc80;&#xd83d;&#xdc80; AI saugt uns zu Tode">
+<icon BUILTIN="clanbomber"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1756567309137" FOLDED="true" ID="ID_1546295064" MODIFIED="1756585350061" TEXT="/gitweb durchk&#xe4;mmen....">
+<icon BUILTIN="yes"/>
+<node COLOR="#435e98" CREATED="1756567314960" ID="ID_863415430" MODIFIED="1756568814237" TEXT="builddrone">
+<node CREATED="1756567330406" ID="ID_695566508" MODIFIED="1756567337261" TEXT="ich habe einen zus&#xe4;tzlichen Commit"/>
+<node CREATED="1756567337997" ID="ID_1437901322" MODIFIED="1756567344013" TEXT="Christian hat einen v2 branch"/>
+<node CREATED="1756567372028" ID="ID_961953117" MODIFIED="1756567380258" TEXT="Mob ist redundant"/>
+<node COLOR="#338800" CREATED="1756567320264" ID="ID_1512180291" MODIFIED="1756568808980" TEXT="zusammenf&#xfc;hren">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1756568365181" ID="ID_1896286340" MODIFIED="1756568432498" TEXT="Christian&apos;s Branch rebase auf meinen master">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      mu&#223;te dabei die scons-Soup zusammenf&#252;hren; trivial &#10230; ich hab zwei neue Funktionen im V1-Stil (Resultat wird zwar nicht funktionieren, <b>aber das ist mir egal</b>)
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1756568445666" ID="ID_1119385953" MODIFIED="1756568806077" TEXT="mein Repo archivieren">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1756568451305" ID="ID_1014234055" MODIFIED="1756568806076" TEXT="Christian&apos;s Repo in seinem Homedir stehen lassen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1756568460927" ID="ID_695794617" MODIFIED="1756568806076" TEXT="Mob-Repo l&#xf6;schen">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1756571474616" ID="ID_309901688" MODIFIED="1756585294244" TEXT="LUMIERA">
+<node CREATED="1756571478767" ID="ID_1323966469" MODIFIED="1756571481993" TEXT="das Master-Repo"/>
+<node CREATED="1756571482678" ID="ID_425024667" MODIFIED="1756571489929" TEXT="das nehme ich jetzt Christian weg">
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1756571498389" ID="ID_1275422749" MODIFIED="1756571507313" TEXT="ich lasse aber seine Permissions drauf">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1756571490477" ID="ID_1310794101" MODIFIED="1756571496425" TEXT="und lege es in mein Home-Directory"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1756574227761" ID="ID_118899915" MODIFIED="1756585294244" TEXT="lumiera_documentation">
+<node CREATED="1756574246094" ID="ID_1963339931" MODIFIED="1756574283846" TEXT="den checkout direkt in den extra-webroot legen"/>
+<node CREATED="1756574236360" ID="ID_745440927" MODIFIED="1756585318940" TEXT="Repo liegt dort lokal"/>
+<node COLOR="#338800" CREATED="1756585319576" ID="ID_62455063" MODIFIED="1756585326167" TEXT="Symlink von /gitweb">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1756571514802" ID="ID_1346225394" MODIFIED="1756571529888" TEXT="debian/sigc &#x27f6; Archiv"/>
+<node COLOR="#435e98" CREATED="1756571546103" ID="ID_1293183134" MODIFIED="1756572175310" TEXT="ardwork &amp; propaganda">
+<node CREATED="1756571552763" ID="ID_352698155" MODIFIED="1756571559256" TEXT="das sind eigentlich Mob-Repos"/>
+<node CREATED="1756571560002" ID="ID_1053118629" MODIFIED="1756571571013" TEXT="da entferne ich lediglich den LInk aus /gitweb"/>
+<node CREATED="1756571572778" ID="ID_1196660100" MODIFIED="1756571579910" TEXT="daf&#xfc;r lege ich Symlinks von meinem Homedir"/>
+</node>
+<node COLOR="#5b280f" CREATED="1756572364574" ID="ID_242979745" MODIFIED="1756572380917" TEXT="gitlabs : unbesehen totmachen">
+<icon BUILTIN="closed"/>
+</node>
+<node COLOR="#435e98" CREATED="1756572730745" ID="ID_1291864985" MODIFIED="1756573615443" TEXT="gmerlin / gavl">
+<node CREATED="1756572739863" ID="ID_1301504156" MODIFIED="1756572749034" TEXT="die Repos liegen in Burkard&apos;s Homedir"/>
+<node CREATED="1756572749598" ID="ID_1872267311" MODIFIED="1756572757700" TEXT="verschieben zu den Archiv-Repos"/>
+<node CREATED="1756573570920" ID="ID_247109546" MODIFIED="1756573577108" TEXT="auch alle weiteren Repos von Burkard">
+<node CREATED="1756573600984" ID="ID_1121612611" MODIFIED="1756573612905" TEXT="Symlinks von seinem Homedir gelegt"/>
+</node>
+<node CREATED="1756573577860" ID="ID_807416090" MODIFIED="1756573597173" TEXT="Ha! der hatte noch einen Cronjob laufen">
+<icon BUILTIN="messagebox_warning"/>
+<node COLOR="#5b280f" CREATED="1756573589119" ID="ID_93445454" MODIFIED="1756573592560" TEXT="totgemacht">
+<icon BUILTIN="button_cancel"/>
+</node>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1756573956726" ID="ID_1287488552" MODIFIED="1756573990345" TEXT="joel">
+<node CREATED="1756573960661" ID="ID_1292577416" MODIFIED="1756573973838" TEXT="nochmal eigens &#xfc;berpr&#xfc;ft: steht auf einem Mainline-Commit"/>
+<node CREATED="1756573974586" ID="ID_593768289" MODIFIED="1756573988268" TEXT="k&#xf6;nnte also weg"/>
+</node>
+<node COLOR="#435e98" CREATED="1756574139708" ID="ID_1429163233" MODIFIED="1756574178663" TEXT="weitere weg....">
+<node CREATED="1756574175062" MODIFIED="1756574175062" TEXT="lumiera/hendrik"/>
+<node CREATED="1756574175062" MODIFIED="1756574175062" TEXT="lumiera/ct"/>
+<node CREATED="1756574175062" MODIFIED="1756574175062" TEXT="lumiera/joel"/>
+<node CREATED="1756574175062" MODIFIED="1756574175062" TEXT="lumiera/mfisher31"/>
+<node CREATED="1756574175062" MODIFIED="1756574175062" TEXT="lumiera/plouj"/>
+<node CREATED="1756574175063" MODIFIED="1756574175063" TEXT="lumiera/skangas"/>
+<node CREATED="1756574175063" MODIFIED="1756574175063" TEXT="lumiera/velmont"/>
+</node>
+<node COLOR="#435e98" CREATED="1756574179717" ID="ID_1083545445" MODIFIED="1756574184663" TEXT="sowie alle xxx-old"/>
+</node>
+<node COLOR="#338800" CREATED="1756585335500" ID="ID_1228484355" MODIFIED="1756585348847" TEXT="Erfolg: der  gr&#xf6;&#xdf;te Teil aller Repos ist jetzt wegger&#xe4;umt">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0adb2" COLOR="#5b280f" CREATED="1756588400632" FOLDED="true" ID="ID_221034450" MODIFIED="1756588489259" TEXT="die meisten alten Accounts deaktiviert">
+<icon BUILTIN="closed"/>
+<node CREATED="1756588456183" ID="ID_701818024" MODIFIED="1756588478004" TEXT="for U in jt serge mano daitheflu alcarinque autobuild builddrone goibhniu raevol velmont dragontamer judget jyakovlev raffa mridkash nasa plouj gorban andrew skangas bjmr savgur fsiddi simeon mfisher31 simon hendrik jibazee joel gmerlin; do echo sed -i &apos;/^ssh-/ s/^/# /;  a # Stale account deactivated 2025-8&apos; $U/.ssh/authorized_keys; done">
+<icon BUILTIN="idea"/>
 </node>
 </node>
 </node>
