@@ -56,13 +56,13 @@ _Wouter_ introduced a context sensitive tool palette which is rendered as an ove
 The ability of Tools to support sub-modes is a simple extension of this proposal. 
 With this functionality, it would then be possible to switch between trim-, roll-, slide- and slip-edit
 after activating the edit tool. Similarly, the _gear switch_ as proposed in a previous online discussion
-would be integrated as a sub-mode if a user decided to manipulate any setting value.
+would be integrated as a sub-mode into various other modes if a user decided to manipulate any setting value.
 
 Internationalisation
 ~~~~~~~~~~~~~~~~~~~
 The language of the UI is English. This does not mean that we exclude any language
 (all contributions are welcome). Certain words and terminology should never be translated, e.g.,
-Track, Clip, Placement, ... . We also do not support translations that require a re-ordering
+Track, Clip, Placement, ... . We have no plans to support translations that require a re-ordering
 of UI elements such as languages written right-to-left. This is due to priorities that we define.
 
 
@@ -70,8 +70,10 @@ Unlimited Placement Constraints
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 The use of fine-grained placement constraints is plagued with overwhelming the user with 
 excessive relationships. This can be improved by using a small number of prototype set-ups:
-magnetic, relative and music anchored. Moreover, we require a diagnostic to reveal the reason why 
-a given clip is positioned at where it is.
+magnetic, relative and music anchored. _Wouter_ points out that a similar scheme can be applied
+here as with the flavours of editing: A _placement prototype_ can be pre-selected for a newly added
+clip -- with the ability for adjustment through the tool palette. Moreover, we require a diagnostic
+to reveal the reason why a given clip is positioned at where it is.
 
 .Routing
 _Hermann_ explained how the routing in Render Engine is based on Placements.
@@ -113,6 +115,8 @@ _Wouter_ was concerned that it might be tedious to navigate between different ch
 especially if it is necessary to expand or collapse these elements repeatedly. One
 countermeasure to relieve constant opening and closing elements would be to expand
 the elements step wise while still retaining the ability to edit the contents.
+Furthermore, rendering a condensed preview of a virtual clip's internal structure
+could help to avoid having to open and expand the clip in many situations.
 
 
 Target audience
