@@ -20,7 +20,7 @@ extension of their body, where interaction with the NLE will ultimately become n
 does not mean that a user should immediately understand everything without there being a
 certain learning curve. Some new concepts might take a while to master.
 
-* An editor should not be able to accidentally overwite part of their work in the timeline when
+* An editor should not be able to accidentally overwrite part of their work in the timeline when
 that part is not within sight (in other words: when it's offscreen). This includes throwing
 things out of sync, losing transitions, or overwriting clips.
 
@@ -44,17 +44,17 @@ approach.
 * A big question is: who is "the user"? We aim to create a tool for professionals, but there are
 many types of professionals working in entirely different parts of the media industry or in
 other fields. In the previous paragraph it was mentioned that different types of content
-require different types of workflows. How to accomodate all of these different people who
+require different types of workflows. How to accommodate all of these different people who
 work on different things?
 +
 I would like to propose a set of personas to keep in mind while designing the application.
 Examples of such personas could be:
 +
 ** The highly specialised editor who works in an environment where different parts of the
-post-production of a film are handled by different people: assisant editors, colorists,
+post-production of a film are handled by different people: assistant editors, colourists,
 audio engineers, etc.
 ** The allround contracted editor who handles all aspects of post-production
-** The freelance editor who does both commisioned work and passion projects
+** The freelance editor who does both commissioned work and passion projects
 ** The allround artistic/indie filmmaker, who also edits
 ** The allround social media creator who values the use of visual effects, motion graphics
 and sound effects.
@@ -63,7 +63,7 @@ And a few subtypes:
 +
 *** The free-flowing editor who doesn't have a fixed idea of how the edit should be and
 instead wants to play and move things around, and who might not work in a linear
-fashion: they might do a bit of color correction to get a better sense of how a scene feels,
+fashion: they might do a bit of colour correction to get a better sense of how a scene feels,
 then go back to editing, etc.
 *** The editor who has the film already cut in their head and have a very strong sense of
 what they want to do and work in a very structured way towards accomplishing this
@@ -72,7 +72,7 @@ vision.
 Of course, there are many more types of people and many people who are a combination of
 personas. These are only meant to paint the spectrum of possibilities.
 
-* Lumiera provides a chance to reimagine how an NLE could work, in other words: how it
+* Lumiera provides a chance to re-imagine how an NLE could work, in other words: how it
 can be designed around modern ways of interacting with computers. In that sense there is
 total freedom to create innovative new solutions to improve how people edit videos. On the
 other hand, if we create paradigms that are too uncommon, new users might not understand
@@ -94,10 +94,10 @@ we might want someone with actual XR design skills to be involved here.
 Initially I would like to focus on the most fundamental tasks that each and every editor has to deal
 with while creating a video:
 
-1. Finding the parts you need out of a lot of source material (logging and organizing footage)
+1. Finding the parts you need out of a lot of source material (logging and organising footage)
 2. The timeline as the editor's canvas: inserting and grouping material, arranging clips,
 trimming and other timeline features
-3. Finishing: audio mixing, color correction, titles, effects, exporting
+3. Finishing: audio mixing, colour correction, titles, effects, exporting
 4. The broader GUI concept
 
 Many of the ideas presented here are not necessarily unique: a lot of these either exist in one NLE
@@ -135,11 +135,11 @@ Then in between sat Premiere Pro, comfortably. It profited massively from being 
 Creative Suite, later the Creative Cloud: for many media companies it was very cost effective to pay
 Adobe a single sum of money (pre-Creative Cloud) and later subscription fees, and receive all the
 tools they could possibly need for media creation. But also the application itself was an all-in-one
-solution for all parts of post-production: it offered many tools for audio mixing, color grading,
+solution for all parts of post-production: it offered many tools for audio mixing, colour grading,
 visual effects, etc. Sure, Media Composer and FCPX also offered tools for these jobs, but were less
 developed in these areas and often required plugins to achieve many of the more advanced tasks.
 
-Then came along DaVinci Resolve, a color grading application that was bought by Blackmagic
+Then came along DaVinci Resolve, a colour grading application that was bought by Blackmagic
 Design and transformed into another all-in-one powerhouse, which slowly started to take a seat next
 to Premiere's throne.
 
@@ -147,7 +147,7 @@ In the meantime the media landscape changed. NLE's became more affordable and ha
 capable, and the result was that editing was no longer a thing only done by professionals: everybody
 became an editor, and everybody could edit any moment, anywhere, on laptops, tablets or
 smartphones. Social media became a huge new platform where many new makers developed their
-own channels and found an audience for their videos. And so came NLE's that were focussed on
+own channels and found an audience for their videos. And so came NLE's that were focused on
 social media content, most notably CapCut. It took FCP's idea of easy to learn even farther and
 offered many one-click visual effects, automatic subtitles and mostly: a lot of effect presets and
 assets (titles, other graphics, music) available within the application.
@@ -199,17 +199,17 @@ Tracks vs trackless
 ~~~~~~~~~~~~~~~~~~~
 In general, we can observe two extremes when it comes to editing:
 
-* On the one hand, there are NLE's modeled to resemble working with analog gear (i.e.
+* On the one hand, there are NLE's modelled to resemble working with analogue gear (i.e.
 classic editing stations from KEM, Steenbeck, Moviola). A lot of terminology in editing
-software (``bins'', ``reels'', ``cut'', ``mark in/out'', among many others) stems from the analog
+software (``bins'', ``reels'', ``cut'', ``mark in/out'', among many others) stems from the analogue
 origins of editing. Lightworks is an example of this. When trimming you ``unjoin'' a cut,
-make changes, and then ``join'' the cut again, as if working with analog film that needs to be
+make changes, and then ``join'' the cut again, as if working with analogue film that needs to be
 taped together. It works best in conjunction with the Lightworks Console, a hardware device
-that was designed specifically to make software editing feel as if editing analog film. Very
+that was designed specifically to make software editing feel as if editing analogue film. Very
 hands-on, very tactile, according to editors who have worked with these consoles
 (unfortunately I haven't had a chance to try this myself).
 +
-Not just Lightworks, but also Avid is said to have been greatly influenced by analog
+Not just Lightworks, but also Avid is said to have been greatly influenced by analogue
 equipment, and Adobe Premiere's predecessor ReelTime was created to work like 3/4" tape
 decks. Blackmagic's Speed Editor (and corresponding Cut Page in Resolve) has also been
 designed according to this principle: to make editing feel like you're operating a machine.
@@ -228,7 +228,7 @@ as a mouse, with the addition of finger gestures). Editing on a smartphone or ta
 not using a pen, feels even further removed from giving you a physical connection between
 your hands and the buttons on the screen.
 
-Because of its analog roots, traditionally, NLE's have been track-based. I'd like to quote Randy
+Because of its analogue roots, traditionally, NLE's have been track-based. I'd like to quote Randy
 Ubillos, original creator of ReelTime and Final Cut Pro:
 ____
 ``In a track based system the layers at the beginning, middle and end all share the exact same tracks
@@ -289,7 +289,7 @@ So naturally, a question would be: what will happen if we would let go of the tr
 is what Final Cut Pro has done, starting from the rewrite of Final Cut Pro X. At the time, a
 disastrous marketing campaign caused many editors to leave the application, although more and
 more people are starting to realise that many of its ideas were way ahead of its time. It's still the
-only big NLE out there that was designed with computers in mind, and not analog hardware.
+only big NLE out there that was designed with computers in mind, and not analogue hardware.
 
 It's not entirely trackless, but it manages to hide the concept of tracks from the user. There are no
 buttons to enable or disable tracks or other track controls, and instead, the tracks are called ``layers''.
@@ -345,7 +345,7 @@ interaction methods would be preferred for Lumiera?
 which mode they're in) and can lead to user errors (an action in one mode might do something
 different than intended in another mode). Another thing about modes is that they require a user
 action for entering and exiting.
-* A *tool*-based approach however, is very mouse-centered. It changes the behaviour of the mouse, not
+* A *tool*-based approach however, is very mouse-centred. It changes the behaviour of the mouse, not
 of keyboard actions, and this change is visible in the cursor. Tools are of little use to the keyboard
 editor.
 * A *view*-based approach is not too different from using modes, with the difference that it drastically
@@ -415,7 +415,7 @@ Currently I'm thinking of using this bar on two or three occasions:
    +
    -> See the next subchapter: »Adding clips to the timeline«.
 
-Colors could be used (for example as an outline around the bar) to indicate which contextual mode
+Colours could be used (for example as an outline around the bar) to indicate which contextual mode
 is active.
 
 A limitation of such a bar is that it might overlap with content that a user wishes to interact with. If
@@ -459,7 +459,7 @@ contents in the source browser with a single click or keystroke.
 
 All of these options make sense, but in general I rarely remember more than two options (insert and
 overwrite) and easily forget any surplus options that NLE's offer. We should also try to limit the
-amount of keyboard shortcuts that a user needs to memorize, so I would like to propose a single
+amount of keyboard shortcuts that a user needs to memorise, so I would like to propose a single
 ``Add Clip'' action. This will insert a clip and will show the different options via the contextual bar.
 You can then change the desired method after the fact, until you commit by doing something else.
 In this case, adding a clip will enter and exit another contextual mode.
@@ -634,7 +634,7 @@ increase. This will also work vertically. The playhead will move along as well.
 image::{imgg}/wouter/07-2-autoscroll.png[width="100%", alt="A widget for auto-scrolling"]
 
 
-Zoom widget:: moving the mouse left or right from the center will zoom horizontally, up and
+Zoom widget:: moving the mouse left or right from the centre will zoom horizontally, up and
 down will zoom vertically.
 +
 .Zoom widget
@@ -654,7 +654,7 @@ image::{imgg}/wouter/07-4-combined.png[width="100%", alt="Overlay widget to comb
 Why popup widgets?
 ^^^^^^^^^^^^^^^^^^
 I can't speak for others, but personally I dislike moving the mouse downwards towards the edge of
-the screen to access scrollbars or zoom sliders. We'd like the mouse to stay in the center of where
+the screen to access scrollbars or zoom sliders. We'd like the mouse to stay in the centre of where
 we're working.
 
 With popup widgets, we might be able to improve navigation speed, but at the cost of familiarity
@@ -714,7 +714,7 @@ For selecting, we can introduce an ``add to selection'' key which adds the highl
 current selection (apart from the convention of using Ctrl+mouse click). We could also think of
 adding box-select by keyboard, by using a system with grid coordinates.
 One thing to note is that we do still need extra keyboard shortcuts to move the playhead frame by
-frame, indepently from the clip selection. See the navigation subchapter for more details.
+frame, independently from the clip selection. See the navigation subchapter for more details.
 Selection will be one of the previously mentioned _contextual modes._ The user can always return to
 their previous selection until they make a new one, by pressing the corresponding keyboard shortcut
 (S).
@@ -783,7 +783,7 @@ edges of clips), slip (dragging inside a clip, upper half) and slide (dragging i
 lower half) -- more on slip and slide edits later.
 
 * Avid has a trim mode that can be in overwrite trim or ripple trim mode, indicated by the
-color of the trim sides (red or yellow). The timeline will be in either of these modes when
+colour of the trim sides (red or yellow). The timeline will be in either of these modes when
 entering trim mode.
 
 * Lightworks has a trim mode that defaults to ripple trimming, unless you specifically use the
@@ -877,7 +877,7 @@ a separate mode for dynamic trimming, simply called ``Trim Mode''. FCP does not 
 support dynamic trimming at the time of writing -- although some people disagree and say
 that the ``Extend Edit'' function, when used in the Precision Editor, achieves a similar result.
 4. All of the big NLE's have keyboard shortcuts that will trim either the start or the end of a
-clip to the position of the playhead, in ripple and non-ripple flavors.
+clip to the position of the playhead, in ripple and non-ripple flavours.
 
 Previewing the cut
 ^^^^^^^^^^^^^^^^^^
@@ -902,7 +902,7 @@ My proposal is to use the clip selection system to highlight a clip, and then ha
 If the latter is pressed a second time, it will take the clip's out point for a roll edit. When the first
 two shortcuts are pressed once, they select the trim side for ripple trims. When pressed again, they
 will switch to non-ripple trims (and back again with another press). There should be a clear visual
-difference between these two (perhaps through the color of the brackets, as in Avid).
+difference between these two (perhaps through the colour of the brackets, as in Avid).
 
 Note that this approach resembles Lightworks, and is different from Avid, FCP, Premiere and
 Resolve. Those apps take a cut (closest to the playhead) as the basis for choosing a trim side.
@@ -964,7 +964,7 @@ In general, we find the following options to remove clip from a timeline:
 
 These operations are so common that I would not change them.
 
-Dropping another clip on top. This is something that we could consider changing, especially
+* Dropping another clip on top. This is something that we could consider changing, especially
 when the clips that will be removed are offscreen.
 
 Organising the timeline: sections
@@ -978,7 +978,7 @@ image::{imgg}/wouter/12-sections.png[width="100%", alt="Timeline with sections"]
 The benefits of sections:
 
 * Creating a broad sense and clear overview of how a timeline is constructed. Background
-colors in the timeline will make it easy to differentiate between different sections.
+colours in the timeline will make it easy to differentiate between different sections.
 
 * Easy navigation between sections by keyboard shortcuts.
 
@@ -1086,7 +1086,7 @@ basic properties of clips in the timeline, such as:
 * orientation
 * rotation
 * opacity and blend mode
-* stabilization
+* stabilisation
 
 Avid is the only NLE out there that still requires adding an effect to change these basic clip
 properties (``3D DVE''). Quick access to such properties saves a lot of time, so enabling this is
