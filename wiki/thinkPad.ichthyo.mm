@@ -156275,7 +156275,7 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
 <node CREATED="1734671154295" ID="ID_1953698300" LINK="https://stackoverflow.com/a/41721337/444796" MODIFIED="1734711708781" TEXT="das ist standardkonform: &#xa7;5.1.2">
 <icon BUILTIN="idea"/>
 </node>
-<node BACKGROUND_COLOR="#e3c373" COLOR="#730114" CREATED="1734711894621" ID="ID_610363906" MODIFIED="1734711936838" TEXT="Collateral damage: &#x3bb; kann bool-convertible sein">
+<node BACKGROUND_COLOR="#e3c373" COLOR="#730114" CREATED="1734711894621" FOLDED="true" ID="ID_610363906" MODIFIED="1734711936838" TEXT="Collateral damage: &#x3bb; kann bool-convertible sein">
 <icon BUILTIN="broken-line"/>
 <node CREATED="1734711954567" ID="ID_259171482" MODIFIED="1734712079067">
 <richcontent TYPE="NODE"><html>
@@ -159529,6 +159529,71 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1711757567732" ID="ID_1637339854" LINK="http://gnuplotting.org/attractive-plots/index.html" MODIFIED="1711757578494" TEXT="Tips for &#xbb;attractive plots&#xab;"/>
 </node>
 </node>
+<node CREATED="1756651446132" ID="ID_376360777" MODIFIED="1756652592528" TEXT="Web / CSS / JS">
+<node CREATED="1756651479758" ID="ID_1166110398" MODIFIED="1756651485145" TEXT="modernes Layout"/>
+<node CREATED="1756651508954" ID="ID_1160159782" MODIFIED="1756651510565" TEXT="CSS"/>
+<node CREATED="1756658704894" ID="ID_1161944435" MODIFIED="1756658708438" TEXT="Linkchecker">
+<node CREATED="1756658710017" ID="ID_624740527" MODIFIED="1756658732611">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      in Debian: <font face="Monospaced" color="#7a2f2f">linkchecker</font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1756679237404" ID="ID_109081118" MODIFIED="1756679415473" TEXT="Tip: lokal laufen lassen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <ul>
+      <li>
+        man verwendet eine lokale Instanz der Website (mit einem micro-httpd)
+      </li>
+      <li>
+        man excluded Lumiera.org und l&#228;&#223;t externe URLs checken
+      </li>
+    </ul>
+    <p>
+      
+    </p>
+    <p>
+      <u>Beispielaufruf</u>:
+    </p>
+    <p>
+      <font color="#343dc1" face="Monospaced">linkchecker http://localhost:8888/ --check-extern --timeout=30 --ignore-url='.*lumiera.org' </font>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1756651511513" ID="ID_1693541099" MODIFIED="1756652599591" TEXT="Problem: Mobile">
+<linktarget COLOR="#5a4bd3" DESTINATION="ID_1693541099" ENDARROW="Default" ENDINCLINATION="-827;144;" ID="Arrow_ID_1160711682" SOURCE="ID_1229858428" STARTARROW="None" STARTINCLINATION="-717;-80;"/>
+<node CREATED="1756651524565" ID="ID_1331185184" MODIFIED="1756651529259" TEXT="Teilproblem: erkennen">
+<node CREATED="1756652891040" ID="ID_532474143" MODIFIED="1756652893959" TEXT="Recherche">
+<node CREATED="1756652908837" ID="ID_474052047" LINK="https://www.geeksforgeeks.org/javascript/how-to-detect-whether-the-website-is-being-opened-in-a-mobile-device-or-a-desktop-in-javascript/" MODIFIED="1756652915228" TEXT="Geeks4Geeks"/>
+<node CREATED="1756652930469" ID="ID_812178910" LINK="https://stackoverflow.com/a/11381730/444796" MODIFIED="1756652935297" TEXT="Stackoverflow"/>
+<node CREATED="1756652956842" ID="ID_271779672" MODIFIED="1756652959484" TEXT="Leitlinien">
+<node CREATED="1756652960415" ID="ID_1919461329" MODIFIED="1756652972011" TEXT="man sollte &#xbb;responsive Design&#xab; verwenden"/>
+<node CREATED="1756652980553" ID="ID_436880496" MODIFIED="1756653001661">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Vorsicht mit dem <font face="Monospaced" color="#5b2929">user agent</font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1756653006854" ID="ID_279946651" MODIFIED="1756653027428" TEXT="besser auf Eigenschaften wie z.B. die Display-Breite abstellen"/>
+</node>
+</node>
+</node>
+<node CREATED="1756651529867" ID="ID_1777329989" MODIFIED="1756651539690" TEXT="Layout-Anpassung"/>
+</node>
+</node>
 </node>
 <node CREATED="1742426048109" ID="ID_1456228468" MODIFIED="1742426050313" TEXT="Debian">
 <node CREATED="1742426051093" ID="ID_1726810255" MODIFIED="1742426052184" TEXT="Info">
@@ -159715,7 +159780,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1745790373229" ID="ID_109392183" MODIFIED="1745790390509" TEXT="alle zwei Jahre: &#xbb;Wayland wird in 2 Jahren da sein&#xab;"/>
 <node CREATED="1745790410789" ID="ID_1978402799" MODIFIED="1745790415607" TEXT="Stand Sommer 2024">
 <node CREATED="1745790416436" ID="ID_1461285444" MODIFIED="1745790422715" TEXT="langsamer als X">
-<node CREATED="1745790576339" ID="ID_991507967" MODIFIED="1745790588285" TEXT="auch wenn man OpenGL oder Vulcan durchreicht"/>
+<node CREATED="1745790576339" ID="ID_991507967" MODIFIED="1756651224708" TEXT="auch wenn man OpenGL oder Vulkan durchreicht"/>
 </node>
 <node CREATED="1745790423367" ID="ID_587999539" MODIFIED="1745790446559" TEXT="ruckelig / Latenzen"/>
 <node CREATED="1745790427630" ID="ID_340721374" MODIFIED="1745790442748" TEXT="Farbkalibrierung funktioniert nicht richtig"/>
@@ -160998,6 +161063,20 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <arrowlink COLOR="#545a82" DESTINATION="ID_569856037" ENDARROW="Default" ENDINCLINATION="-2296;0;" ID="Arrow_ID_323116011" STARTARROW="None" STARTINCLINATION="-2524;169;"/>
 <icon BUILTIN="idea"/>
 </node>
+<node BACKGROUND_COLOR="#b0c2e4" COLOR="#434498" CREATED="1756653086463" ID="ID_468631583" LINK="https://git.lumiera.org/gitweb?p=extra/froscon.git;a=tree;f=ichthyo;hb=refs/heads/main" MODIFIED="1756655882582" TEXT="siehe Mindmap im FrOSCon-Repo">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      git://git.lumiera.org/extra/froscon.git
+    </p>
+    <p>
+      Subdir: ichthyo
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="info"/>
+</node>
 <node CREATED="1752756355901" ID="ID_186084038" MODIFIED="1752756486672" TEXT="Thema: &#xbb;redraw&#xab; unter X11 / XWindow">
 <linktarget COLOR="#58587f" DESTINATION="ID_186084038" ENDARROW="Default" ENDINCLINATION="-929;69;" ID="Arrow_ID_1686448443" SOURCE="ID_688402720" STARTARROW="None" STARTINCLINATION="-858;80;"/>
 <node CREATED="1752756709557" ID="ID_1213143090" LINK="https://stackoverflow.com/q/17027993/444796" MODIFIED="1752756718374" TEXT="Stackoverflow"/>
@@ -161049,6 +161128,85 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 <node CREATED="1752766976293" ID="ID_1449840365" LINK="https://code.videolan.org/videolan/vlc/-/tree/master/modules/video_output/opengl?ref_type=heads" MODIFIED="1752767051563" TEXT="OpenGL-Augabe von VLC">
 <linktarget COLOR="#5d49c9" DESTINATION="ID_1449840365" ENDARROW="Default" ENDINCLINATION="-767;-90;" ID="Arrow_ID_311762700" SOURCE="ID_1422212174" STARTARROW="None" STARTINCLINATION="514;108;"/>
+</node>
+<node CREATED="1756653320634" ID="ID_367831742" MODIFIED="1756653336347" TEXT="API-Stil unterscheiden">
+<node CREATED="1756653337623" ID="ID_1443484619" MODIFIED="1756653356745" TEXT="&#xbb;Legacy&#xab; &#x2261; fixed function pipeline">
+<node CREATED="1756653397404" ID="ID_1930194479" MODIFIED="1756653414721" TEXT="OpenGL war mal eine Grafik-Abstraktion"/>
+<node CREATED="1756653415746" ID="ID_1119351570" MODIFIED="1756653426759" TEXT="dedizierte Funktionen f&#xfc;r Grafik-Primitive"/>
+</node>
+<node CREATED="1756653359599" ID="ID_930271463" MODIFIED="1756653378295" TEXT="&#xbb;core profile&#xab; &#x2261; Shader programming">
+<node CREATED="1756653428531" ID="ID_1724553248" MODIFIED="1756653453208">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      heute ist OpenGL ein Zugang zu einem <i>computation device</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1756653474661" ID="ID_1987362696" MODIFIED="1756653487583" TEXT="man installiert Komponenten in eine generische Pipeline"/>
+<node CREATED="1756653488317" ID="ID_264679602" MODIFIED="1756653493790" TEXT="und man sendet Daten an die GPU"/>
+</node>
+</node>
+<node CREATED="1756653502791" ID="ID_970967915" MODIFIED="1756653507932" TEXT="Plattform-Einbindung">
+<node CREATED="1756653508873" ID="ID_27434185" MODIFIED="1756653517603" TEXT="klassisch: per X-Server mit GLX"/>
+<node CREATED="1756653521891" ID="ID_659941978" MODIFIED="1756653532947" TEXT="modern: libMesa im Client verwenden"/>
+<node CREATED="1756653533633" ID="ID_655992095" MODIFIED="1756653661921" TEXT="plattform-abstrahiert: EGL">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      EGL verwendet ein Extension-Modell: es wird f&#252;r die jeweilige Plattform eine passende Extension installiert. Diese ist nicht komplett neutral, d.h. der Client-Code h&#228;ngt noch von einem allgemeinen Zugriffschema ab: man bekommt <i>irgendwie</i>&#160;eine &#187;Surface&#171; &#8212; die dann aber an verschiedene moderne APIs gebunden werden kann: OpenGL core-profile, OpenGL ES, OpenVG (2D -Grafik), Vulkan
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#b0c2e4" COLOR="#434498" CREATED="1756653670283" ID="ID_425211451" MODIFIED="1756654072174" STYLE="fork" TEXT="Ergebnis: Demo-Code">
+<edge COLOR="#815b70" STYLE="linear" WIDTH="thin"/>
+<icon BUILTIN="back"/>
+<node CREATED="1756653677898" ID="ID_1028657578" MODIFIED="1756654069158" TEXT="gemeinsames Schema zur Darstellung etabliert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <ul>
+      <li>
+        Eine GTK-3 - Applikation &#8212; alles noch unter X11
+      </li>
+      <li>
+        drei Callbacks, in denen die eigentliche Logik demonstriert wird
+      </li>
+      <li>
+        eine Commons-Lib mit einfachen Abstraktionen f&#252;r RGB-Daten
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1756653747353" ID="ID_1779508668" MODIFIED="1756654069159" TEXT="3 voll ausgearbeitete Beispiele">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Zus&#228;tzlich gibt es eine Skizze f&#252;r SDL, die ich aber auf dem Legacy-Level belassen habe (aus Zeitgr&#252;nden). Also SDL 1.x (weithin gebr&#228;uchlich ist SDL v2, aktuell 2025 ist sogar v3 erschienen)
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1756653854678" ID="ID_155307183" MODIFIED="1756654069159" TEXT="XVideo"/>
+<node CREATED="1756653859845" ID="ID_883185958" MODIFIED="1756654069159" TEXT="Legacy-OpenGL + GLX"/>
+<node CREATED="1756653867499" ID="ID_1752879106" MODIFIED="1756654069159" TEXT="core-profile + EGL">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1756653881596" ID="ID_735554780" MODIFIED="1756654069159" TEXT="Hier Beispiel f&#xfc;r Shader-Programmierung">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node CREATED="1756653909651" ID="ID_248919738" LINK="https://lumiera.org/research/videoDisplay/description.html" MODIFIED="1756654069159" TEXT="Ausf&#xfc;hrliche Doku in der &#xbb;ProcSpec&#xab; - Seite"/>
+<node CREATED="1756653994552" ID="ID_175595689" MODIFIED="1756654069159" TEXT="Ausblick: Wayland">
+<node CREATED="1756653999599" ID="ID_203291129" MODIFIED="1756654069159" TEXT="das gleiche Schema wird f&#xfc;r Wayland anwendbar sein"/>
+<node CREATED="1756654019308" ID="ID_1345064867" MODIFIED="1756654069159" TEXT="Wayland verwendet i.d.R. EGL"/>
+<node CREATED="1756654039401" ID="ID_57880489" MODIFIED="1756654069159" TEXT="man bekommt dann von GTK eine &#xbb;Surface&#xab;"/>
 </node>
 </node>
 </node>
@@ -161334,7 +161492,11 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664631986708" ID="ID_1854898414" MODIFIED="1664632010768" TEXT="coding news">
 <icon BUILTIN="bell"/>
 </node>
-<node CREATED="1664632012297" ID="ID_241631213" MODIFIED="1664632016491" TEXT="Interaction Design"/>
+<node CREATED="1664632012297" ID="ID_241631213" MODIFIED="1664632016491" TEXT="Interaction Design">
+<node CREATED="1756651058214" ID="ID_1179963093" MODIFIED="1756651062249" TEXT="Workflow">
+<node CREATED="1756651063357" ID="ID_1976063610" MODIFIED="1756651071680" TEXT="Diskussion mit Wouter Verwijlen"/>
+</node>
+</node>
 <node CREATED="1664632040517" ID="ID_143213655" MODIFIED="1664632043864" TEXT="Interface Layout">
 <node CREATED="1664632066418" ID="ID_782976986" MODIFIED="1664632244719" TEXT="style scheme">
 <richcontent TYPE="NOTE"><html>
@@ -161452,6 +161614,56 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
     </p>
   </body>
 </html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1756651585768" ID="ID_1780831155" MODIFIED="1756651592266" TEXT="Website / Infrastruktur">
+<node CREATED="1756651593543" ID="ID_336711694" MODIFIED="1756651598874" TEXT="Anordnung der Repos">
+<node CREATED="1756651599892" ID="ID_1760498141" MODIFIED="1756652477206" TEXT="Diskussion 2025 &#x27f9; l&#xe4;ngerfristig Git-Submodule">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Die aktuelle Struktur ist aus Kompromissen entstanden und gewachsen, erf&#252;llt aber derzeit noch ihren Zweck. Trotzdem ist die Website-Infrastruktur <i>etwas m&#252;hsam. </i>
+    </p>
+    <ul>
+      <li>
+        Es ist verwirrend, da&#223; Content in mehreren Repos ist
+      </li>
+      <li>
+        Bilder sind in Git eingecheckt und stellen mithin ein latentes Problem dar
+      </li>
+      <li>
+        man ist daher gezwungen, Bilder in einen separaten Bereich zu legen
+      </li>
+      <li>
+        daher ist Content &#8222;kreuz und quer&#8220; verteilt und oft nicht leicht zu finden
+      </li>
+    </ul>
+    <p>
+      Bei der Diskussion (mit Benny, in Bernbach, August 2025) ist uns aufgefallen, da&#223; die Website eigentlich gut auf das Muster von Git-Submodulen passen w&#252;rde. Es werden wohl weitere Module dazukommen, vor allem durch die von mir geplante &#187;Knowledge Base&#171;. Allerdings bedeuten Git-Submodule dann aber auch ein Anheben der Komplexit&#228;t im Umgang mit der Website; man mu&#223; wohl zus&#228;tzliche &#8222;Handgriffe&#8220; sich einpr&#228;gen, oder die Automatisierung weiter treiben. Wir haben beschlossen, damit so lange zu warten, wie der Zustand mit den Bildern/Medien im &#187;website-Repository&#171; noch tragbar ist; perspektivisch werden wir die &#187;documentation&#171;-Struktur dann wohl doch aus dem Haupt-Repository herausl&#246;sen, vielleicht auch nur das eigentliche User-Manual.
+    </p>
+    <p>
+      Die einzige Ma&#223;nahme, die wir nun unmittelbar umsetzen, ist, die Symlinks aus Git herauszunehmen &#8212; so da&#223; man per manueller Einrichtung auf einer Maschine gleichzeitig mehrere Varianten der Website haben kann
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1756652483848" ID="ID_535603356" MODIFIED="1756652519860" TEXT="Problem: Mobile devices">
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1756652524770" ID="ID_1229858428" MODIFIED="1756652599591" TEXT="technologische L&#xf6;sung">
+<arrowlink COLOR="#5a4bd3" DESTINATION="ID_1693541099" ENDARROW="Default" ENDINCLINATION="-827;144;" ID="Arrow_ID_1160711682" STARTARROW="None" STARTINCLINATION="-717;-80;"/>
+<icon BUILTIN="idea"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1756652710750" ID="ID_1979439843" MODIFIED="1756652721355" TEXT="Anpassungen">
+<icon BUILTIN="yes"/>
+<node CREATED="1756652736351" ID="ID_1959375763" MODIFIED="1756652741898" TEXT="Seitenlayout allgemein"/>
+<node CREATED="1756652745898" ID="ID_1980433453" MODIFIED="1756652751185" TEXT="Textlayout Lauftext"/>
+<node CREATED="1756652776089" ID="ID_1697698633" MODIFIED="1756652783534" TEXT="Navigationsmen&#xfc;">
+<node CREATED="1756652847097" ID="ID_312849385" MODIFIED="1756652861278" TEXT="Platzierung: oben rechts f&#xfc;r Mobil"/>
+<node CREATED="1756652861982" ID="ID_1149429321" MODIFIED="1756652875976" TEXT="auto-collapsed f&#xfc;r Mobil"/>
+</node>
 </node>
 </node>
 </node>
@@ -161782,14 +161994,14 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1751809040160" ID="ID_1023201938" MODIFIED="1752070079471" TEXT="Dokumentation schreiben">
 <icon BUILTIN="pencil"/>
-<node COLOR="#338800" CREATED="1751930640337" ID="ID_417154358" MODIFIED="1752758589912" TEXT="allgemeiner Essay zu Git-flow">
+<node COLOR="#338800" CREATED="1751930640337" FOLDED="true" ID="ID_417154358" MODIFIED="1752758589912" TEXT="allgemeiner Essay zu Git-flow">
 <linktarget COLOR="#3245d9" DESTINATION="ID_417154358" ENDARROW="Default" ENDINCLINATION="-158;-13;" ID="Arrow_ID_583484888" SOURCE="ID_638212914" STARTARROW="None" STARTINCLINATION="515;50;"/>
 <linktarget COLOR="#4281cc" DESTINATION="ID_417154358" ENDARROW="Default" ENDINCLINATION="9;-72;" ID="Arrow_ID_1457330837" SOURCE="ID_666097997" STARTARROW="None" STARTINCLINATION="1;58;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1751930783159" ID="ID_1200044964" MODIFIED="1751930802982" TEXT="keine Anleitung (&#x27f6; Original-Text)"/>
 <node CREATED="1751930804136" ID="ID_1188206698" MODIFIED="1751930811859" TEXT="die Methode abstrakt darstellen"/>
 <node CREATED="1751930813592" ID="ID_1411115239" MODIFIED="1751930834065" TEXT="Klarstellung und Abgrenzung zu CD und &#xbb;trunk-based&#xab;"/>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1752198742605" ID="ID_129707422" MODIFIED="1752198771472" TEXT="Benny liest derzeit den Text und macht Verbesserungs-Vorschl&#xe4;ge">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1752198742605" FOLDED="true" ID="ID_129707422" MODIFIED="1756650797500" TEXT="Benny liest derzeit den Text und macht Verbesserungs-Vorschl&#xe4;ge">
 <icon BUILTIN="Mail"/>
 <node CREATED="1752247052118" ID="ID_1015126254" MODIFIED="1752247078519" TEXT="1: f1c47a25f">
 <node CREATED="1752247080052" ID="ID_968432537" MODIFIED="1752247093920" TEXT="i.W. sprachlicher / grammatikalischer Feinschliff"/>
@@ -162158,7 +162370,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1752499679466" ID="ID_1747083578" MODIFIED="1752499721672" TEXT="ich: spreche an mehreren Stellen von der &quot;essence of&quot;"/>
 <node CREATED="1752499722274" ID="ID_1587302794" MODIFIED="1752499748565" TEXT="Benny:">
 <node CREATED="1752499749529" ID="ID_1547151598" MODIFIED="1752499752279" TEXT="so redet man nicht im Englischen"/>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1752499753176" ID="ID_364236658" MODIFIED="1752499797928">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1752499753176" ID="ID_364236658" MODIFIED="1756650727395">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
@@ -162216,7 +162428,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
   </body>
 </html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1752500822131" ID="ID_240146329" MODIFIED="1752500857074" TEXT="ich bin dadurch gezwungen, eine Position zu bezeichnen">
+<node BACKGROUND_COLOR="#e7cfa4" COLOR="#a50125" CREATED="1752500822131" ID="ID_240146329" MODIFIED="1756650721584" TEXT="ich bin dadurch gezwungen, eine Position zu bezeichnen">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1752500965119" ID="ID_354613990" MODIFIED="1752500978502" TEXT="das hei&#xdf;t : man mu&#xdf; sich notfalls einen Kampf suchen"/>
 <node CREATED="1752500979100" ID="ID_1729120035" MODIFIED="1752500988653" TEXT="sonst ist man automatisch als Opfer und Altlast markiert"/>
@@ -162268,8 +162480,8 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </html></richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1752502423290" ID="ID_648567311" MODIFIED="1752502436031" TEXT="Historie konsolidieren">
-<icon BUILTIN="flag-pink"/>
+<node COLOR="#338800" CREATED="1752502423290" ID="ID_648567311" MODIFIED="1756650659581" TEXT="Historie konsolidieren">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1752070056112" ID="ID_5416271" MODIFIED="1752070065091" TEXT="konkrete Spezifikation f&#xfc;r Lumiera">
@@ -162306,7 +162518,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1752085713233" ID="ID_1211131308" MODIFIED="1752085720796" TEXT="neu getagged mit aktuellem GPG-Key"/>
 <node CREATED="1752085721528" ID="ID_1531901034" MODIFIED="1752085732242" TEXT="Tag-Datum auf alten Wert gesetzt"/>
 </node>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1752086244777" ID="ID_1136402096" MODIFIED="1752086252370" TEXT="l&#xf6;schen">
+<node COLOR="#435e98" CREATED="1752086244777" ID="ID_1136402096" MODIFIED="1756650841816" TEXT="l&#xf6;schen">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1752086260252" ID="ID_1452897915" MODIFIED="1752086267275" TEXT="0.pre.*"/>
 <node CREATED="1752086268575" ID="ID_1552394617" MODIFIED="1752086271443" TEXT="steam"/>
@@ -162328,6 +162540,295 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1752070250288" ID="ID_787544102" MODIFIED="1752070280201" TEXT="Fixes von Christian aufsammeln (2018)">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1756657556750" ID="ID_1232269885" MODIFIED="1756657567057" TEXT="das ist ein ganzer Branch (damals auf website-staging)"/>
+<node CREATED="1756657567790" ID="ID_1102007831" MODIFIED="1756657859352" TEXT="Vorsicht: vieles ist gut, manches erscheint mir etwas &#xbb;forsch&#xab;">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1756657860861" ID="ID_1937963620" MODIFIED="1756657863575" TEXT="gut">
+<node CREATED="1756657864828" ID="ID_384847163" MODIFIED="1756657869975" TEXT="verbessertes Logging"/>
+<node CREATED="1756657874426" ID="ID_1487863876" MODIFIED="1756657881127" TEXT="Programmstruktur"/>
+<node CREATED="1756658653520" ID="ID_1926774998" MODIFIED="1756658661424" TEXT="statischer content separat"/>
+<node CREATED="1756658662236" ID="ID_1746529674" MODIFIED="1756658668136" TEXT="diverse broken Links entfernt"/>
+</node>
+<node CREATED="1756657883339" ID="ID_1311585835" MODIFIED="1756657885467" TEXT="fraglich">
+<node CREATED="1756657886737" ID="ID_520462147" MODIFIED="1756657891158" TEXT="mehr Symlinks in Git"/>
+<node CREATED="1756657893228" ID="ID_1274107934" MODIFIED="1756657900299" TEXT="linkchecker bei jedem Lauf"/>
+<node CREATED="1756657927781" ID="ID_299741247" MODIFIED="1756679518652" TEXT="root-relative Links k&#xf6;nnen problematisch sein">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das ist ein Thema mit langer Historie: <i>theoretisch</i>&#160;sollten Root-relative Links auf jeder Website funktionieren, in der Praxis gab es damit immer wieder Probleme. Gilt im Besonderen, wenn man die Website lokal mit einem Mini-HTTPD laufen l&#228;&#223;t. <b>Fazit</b>: sollte eigens getestet werden, auch mit einem lokalen Webserver
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#5b280f" CREATED="1756684799899" ID="ID_270786856" MODIFIED="1756741089435" TEXT="Christian baut build_website.sh zu einem Management-Tool aus">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das widerstrebt mir sofort &#8212; denn um das angemessen zu machen, br&#228;uchte man mehr als ein &#187;pfiffiges bash-script&#171;. Schon nach den ersten zwei Zusatzfeatures beginnen die Probleme und Wechselwirkungen.
+    </p>
+    <p>
+      <b>STOP</b>! Das bisherige Setup war so genial, weil es minimalistisch ist und <i>genau eine Sache</i>&#160;macht; im Grunde war es bereits problematisch, Menugen zu integrieren (aber dennoch sinnvoll).
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <i>Wenn &#252;berhaupt,</i>&#160;dann sollte man das alles durch ein kleines Python-System ersetzen, das die Website-Sources scannt, Asciidoc anst&#246;&#223;t und sonstige Infrastruktur generiert.
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#834249" DESTINATION="ID_1763061961" ENDARROW="Default" ENDINCLINATION="13;-92;" ID="Arrow_ID_170997122" STARTARROW="None" STARTINCLINATION="23;48;"/>
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1756684818511" ID="ID_503371794" MODIFIED="1756684826817" TEXT="kenn jetzt einen git-clean machen"/>
+<node CREATED="1756684827293" ID="ID_1721826258" MODIFIED="1756684831746" TEXT="kann Links checken"/>
+<node CREATED="1756684832677" ID="ID_1895849496" MODIFIED="1756684841443" TEXT="kann auf Teilbereichen arbeiten"/>
+<node CREATED="1756684857948" ID="ID_1678636969" MODIFIED="1756684865865" TEXT="Kenn Men&#xfc;generierung unterdr&#xfc;cken"/>
+</node>
+</node>
+</node>
+<node CREATED="1756682077595" ID="ID_361943000" MODIFIED="1756682084516" TEXT="Review &amp; Integration">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1756682085439" ID="ID_1381638319" MODIFIED="1756769031480" TEXT="Methode: sortieren">
+<icon BUILTIN="yes"/>
+<node COLOR="#338800" CREATED="1756682092737" ID="ID_1201468428" MODIFIED="1756748660340" TEXT="erst mal einen Cehteh-Branch konstruieren">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1756682118743" ID="ID_1709090489" MODIFIED="1756748685527" TEXT="diesen dann sofort konsolidieren">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1756686078655" ID="ID_1103164760" MODIFIED="1756686081386" TEXT="drei Teile">
+<node CREATED="1756686082398" ID="ID_73523769" MODIFIED="1756686093750" TEXT="generische Verbesserungen (build_website)">
+<node CREATED="1756686118571" ID="ID_525568917" MODIFIED="1756686126830" TEXT="diese nach M&#xf6;chlichkeit &#xfc;bernehmen"/>
+</node>
+<node CREATED="1756686094904" ID="ID_1458015074" MODIFIED="1756686103751" TEXT="Einbauen von Zusatzfunktionen">
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1756686128571" ID="ID_1763061961" MODIFIED="1756742627270" TEXT="abgelehnt">
+<linktarget COLOR="#834249" DESTINATION="ID_1763061961" ENDARROW="Default" ENDINCLINATION="13;-92;" ID="Arrow_ID_170997122" SOURCE="ID_270786856" STARTARROW="None" STARTINCLINATION="23;48;"/>
+<linktarget COLOR="#975465" DESTINATION="ID_1763061961" ENDARROW="Default" ENDINCLINATION="-95;161;" ID="Arrow_ID_726928880" SOURCE="ID_614942552" STARTARROW="None" STARTINCLINATION="-110;7;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1756686104745" ID="ID_1732921321" MODIFIED="1756686114886" TEXT="allgemeine Link-Fixes an der Website">
+<node CREATED="1756686179217" ID="ID_995857356" MODIFIED="1756686189965" TEXT="durchsehen inwiefern aktuell noch applikabel"/>
+<node COLOR="#5b280f" CREATED="1756686190585" ID="ID_815294740" MODIFIED="1756686200279" TEXT="Umstellung auf Symlinks nicht">
+<icon BUILTIN="button_cancel"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1756686599143" ID="ID_1872727821" MODIFIED="1756687121599" TEXT="Historie erfolgreich umgeordnet">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#435e98" CREATED="1756686611234" ID="ID_389116637" MODIFIED="1756739178762" TEXT="Tag: Review.Cehteh">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Tagger: Ichthyostega &lt;prg@ichthyostega.de&gt;
+    </p>
+    <p>
+      Date:&#160;&#160;&#160;Mon Sep 1 02:27:12 2025 +0200
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Review: Website infrastructure improvements by Cehteh from 2018
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Regrouped thematically:
+    </p>
+    <p>
+      - generic improvements of build_website.sh
+    </p>
+    <p>
+      - additional features (Linkchecking, cleaning)
+    </p>
+    <p>
+      - website maintainance and fixing of broken links
+    </p>
+    <p>
+      -----BEGIN PGP SIGNATURE-----
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      iHUEABYKAB0WIQTVnM7D++M2pMSFPUOUEG/3stxoAQUCaLToYAAKCRCUEG/3stxo
+    </p>
+    <p>
+      Ad9LAP9rje8hIMWOY6gV5UnrbJ0+wnopy4j6GxRMWxMSoPpWVwD5AQ4HRKh9tdKe
+    </p>
+    <p>
+      cz2r08O5G0ofTTc5fnV0GSXTZZq02g0=
+    </p>
+    <p>
+      =ZDyL
+    </p>
+    <p>
+      -----END PGP SIGNATURE-----
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="info"/>
+</node>
+<node COLOR="#338800" CREATED="1756739185798" ID="ID_1591143945" MODIFIED="1756748651822" TEXT="&#xc4;nderungen im einzelnen durchsehen">
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#590f69" CREATED="1756740940881" ID="ID_1549210352" MODIFIED="1756742573919" TEXT="Improve build_website.sh">
+<icon BUILTIN="button_cancel"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1756740947824" ID="ID_1691961131" MODIFIED="1756740957995" TEXT="zieht eingebettete Argumente heraus"/>
+<node CREATED="1756740959046" ID="ID_715180681" MODIFIED="1756740968849" TEXT="macht die Logik expliziter"/>
+<node CREATED="1756740969562" ID="ID_1951202867" MODIFIED="1756740983178" TEXT="f&#xfc;hrt einige weitere F&#xe4;lle zum Dependency-Tracking hinzu"/>
+<node COLOR="#5b280f" CREATED="1756742579646" ID="ID_614942552" MODIFIED="1756742627270" TEXT="Aber: f&#xfc;gt auch eine &quot;--clean&quot;-Option hinzu">
+<arrowlink COLOR="#975465" DESTINATION="ID_1763061961" ENDARROW="Default" ENDINCLINATION="-95;161;" ID="Arrow_ID_726928880" STARTARROW="None" STARTINCLINATION="-110;7;"/>
+<icon BUILTIN="closed"/>
+</node>
+<node COLOR="#435e98" CREATED="1756742632791" ID="ID_1096012501" MODIFIED="1756748654697" TEXT="ohne die --clean - Option akzeptieren">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d4bdb0" COLOR="#554398" CREATED="1756740290498" ID="ID_1978780122" MODIFIED="1756748626985" TEXT="add some xargs magic for more robustness">
+<linktarget COLOR="#674675" DESTINATION="ID_1978780122" ENDARROW="Default" ENDINCLINATION="0;32;" ID="Arrow_ID_1528697443" SOURCE="ID_950535403" STARTARROW="None" STARTINCLINATION="-40;-7;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#efd280" COLOR="#fa002a" CREATED="1756740295803" ID="ID_1311921517" MODIFIED="1756740385618" TEXT="grenzwertig bez&#xfc;glich Programmierstil">
+<icon BUILTIN="smiley-angry"/>
+<node CREATED="1756740410253" ID="ID_1577163232" MODIFIED="1756740420634" TEXT="&#xfc;ber den xargs-Aufruf mu&#xdf; man 30 Minuten nachdenken"/>
+<node CREATED="1756740421246" ID="ID_1024768237" MODIFIED="1756740431153" TEXT="und selbst dann ist nicht zu sehen, da&#xdf; er wirklich funktioniert"/>
+</node>
+<node CREATED="1756740312213" ID="ID_506400794" MODIFIED="1756740320341" TEXT="was es leistet">
+<node CREATED="1756740321499" ID="ID_1200470993" MODIFIED="1756740334507" TEXT="Filenamen mit Leerzeichen werden (vermutlich) nun unterst&#xfc;tzt"/>
+<node CREATED="1756740335689" ID="ID_1295465753" MODIFIED="1756740354603" TEXT="kein hartcodiertes Limit mehr &#xfc;ber die Anzahl der Asciidoc-Argumente"/>
+</node>
+<node CREATED="1756740442924" ID="ID_503644935" MODIFIED="1756740445365" TEXT="Diskussion">
+<node CREATED="1756740446459" ID="ID_248822112" MODIFIED="1756740577641" TEXT="ehrlich gesagt: dieser fragw&#xfc;rdige Stil gilt f&#xfc;r das ganze Skript">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      bei genauerer Betrachtung ist dieses Skript auch vorher bereits <i>extrem pfiffig</i>&#160;&#8212; es ist ein minimales Build-System in wenigen Zeilen Bash
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1756740476539" ID="ID_1307377177" MODIFIED="1756740523268" TEXT="dieses Changeset f&#xfc;gt lediglich eine weitere Komplikation hinzu"/>
+<node CREATED="1756740580029" ID="ID_1178174976" MODIFIED="1756740704629" TEXT="es dient (angeblich) der Robustheit">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      wirlich &#252;berpr&#252;fen kann ich das nicht, ohne das Skript analtyisch auseinanderzunehmen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1756740715375" ID="ID_218892328" MODIFIED="1756740743621" TEXT="&#x27f9; als &#xbb;status quo&#xab; akzeptabel">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1756742935928" ID="ID_339962038" MODIFIED="1756748601285" TEXT="Author-Name reparieren">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1756742673428" ID="ID_1633876615" MODIFIED="1756742677066" TEXT="some help an cosmetics for the build_website.sh">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1756742701695" ID="ID_1004036267" MODIFIED="1756742703660" TEXT="parametrize asciidoc binary">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1756742764753" ID="ID_1306237638" MODIFIED="1756742771605" TEXT="no need of pwd in asciidoc">
+<icon BUILTIN="help"/>
+<node CREATED="1756742773288" ID="ID_326392594" MODIFIED="1756742788172" TEXT="hat er mit dem &quot;xargs&quot;-Changeset eingef&#xfc;hrt"/>
+<node COLOR="#435e98" CREATED="1756742789091" ID="ID_950535403" MODIFIED="1756748598606" TEXT="Squash">
+<arrowlink COLOR="#674675" DESTINATION="ID_1978780122" ENDARROW="Default" ENDINCLINATION="0;32;" ID="Arrow_ID_1528697443" STARTARROW="None" STARTINCLINATION="-40;-7;"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1756742907454" ID="ID_1321437786" MODIFIED="1756742909434" TEXT="exclude hidden files from website build">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#5b280f" CREATED="1756743321018" ID="ID_146105801" MODIFIED="1756743346740" TEXT="pick 6b10612 better clean handling">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node COLOR="#338800" CREATED="1756743027729" ID="ID_288155048" MODIFIED="1756743030304" TEXT="save (and gitignore) an asciidoc_log">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#435e98" CREATED="1756743075738" ID="ID_1876560338" MODIFIED="1756748637594" TEXT="move early argument parsing to the begin">
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1756743084196" ID="ID_564506012" MODIFIED="1756743105503" TEXT="grunds&#xe4;tzlich in Ordnung">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1756743091467" ID="ID_142348432" MODIFIED="1756743100397" TEXT="aber nur partiell anwendbar">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node COLOR="#5b280f" CREATED="1756743112016" ID="ID_25457617" MODIFIED="1756743183488" TEXT="alle weiteren auslassen">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1756743173390" ID="ID_1007459495" MODIFIED="1756743173390" TEXT="pick 095a98b add linkchecker to the build_website.sh"/>
+<node CREATED="1756743173391" ID="ID_1285965219" MODIFIED="1756743173391" TEXT="pick f251a1b cosmetic"/>
+<node CREATED="1756743173391" ID="ID_1116754793" MODIFIED="1756743173391" TEXT="pick c63e508 suppress linkchecker progress messages"/>
+<node CREATED="1756743173391" ID="ID_1553184466" MODIFIED="1756743173391" TEXT="pick 8abc798 --check option for build_website.sh"/>
+<node CREATED="1756743173391" ID="ID_1465093185" MODIFIED="1756743173391" TEXT="pick 081150e refine the linkchecker invocation"/>
+<node CREATED="1756743173391" MODIFIED="1756743173391" TEXT="pick 9ee1434 dump the linkchecker output to &apos;broken_links&apos; as well"/>
+<node CREATED="1756743173391" MODIFIED="1756743173391" TEXT="pick 1dfc7b6 ignore broken links and document it"/>
+<node CREATED="1756743173391" MODIFIED="1756743173391" TEXT="pick 93010bf save (and gitignore) an asciidoc_log"/>
+<node CREATED="1756743173392" MODIFIED="1756743173392" TEXT="pick 30aa0ac add facility to run menu-less"/>
+<node CREATED="1756743173392" MODIFIED="1756743173392" TEXT="pick 6b10612 better clean handling"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1756687129027" ID="ID_1683033083" MODIFIED="1756748666135" TEXT="nicht akzeptierte &#xc4;nderungen auslassen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1756687144496" ID="ID_1419387988" MODIFIED="1756748680575" TEXT="Historie konsolidieren">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1756682126428" ID="ID_263597986" MODIFIED="1756751472536" TEXT="und dann erst per re-Base aufbringen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1756751474688" ID="ID_734976854" MODIFIED="1756751518976" TEXT="lief dann nach Schema-f">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1756751487319" ID="ID_1531495687" MODIFIED="1756751513691" TEXT="das &#xfc;berarbeitete build_website.sh funktionert">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1756751524203" ID="ID_1398899463" MODIFIED="1756751534564" TEXT="verbleibende Defekte">
+<node COLOR="#435e98" CREATED="1756751535512" ID="ID_96994597" MODIFIED="1756765649916" TEXT="mit die Gitweb-Node im Men&#xfc; stimmt nun etwas nicht mehr">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...ich vermute, da&#223; diese fr&#252;her automatisch den Pfadnamen &quot;gitweb&quot; aufgegriffen hat, und jetzt (durch Christian's Umbenennung) unter einem anderen Namen in der Datenstruktur steht.
+    </p>
+    <p>
+      <b><font color="#c91111">Resultat</font></b>: es sind nun <i>zwei</i>&#160;Nodes in dem Submen&#252;, und einer davon hat eine falsche URL
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="broken-line"/>
+<node CREATED="1756765618122" ID="ID_489630426" MODIFIED="1756765629524" TEXT="L&#xf6;sung: mu&#xdf; id explizit als Argument mitgeben"/>
+<node CREATED="1756765629988" ID="ID_1288516930" MODIFIED="1756765643551" TEXT="(die M&#xf6;glichkeit hatte ich dankenswerterweise vorgesehen)">
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1756751645474" ID="ID_1339753373" MODIFIED="1756768968358" TEXT="der Diagnose-Output mit den Asciidoc-Optionen sollte am Anfang kommen">
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1756751685636" ID="ID_751880756" MODIFIED="1756768972117" TEXT="Links im Footer sind immer noch teilweise nicht in Ordnung">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1756769001457" ID="ID_594869873" MODIFIED="1756769025367" TEXT="teilweise akzeptiert und an aktuellen Stand angepa&#xdf;t">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1752070293350" ID="ID_391826628" MODIFIED="1752070305584" TEXT="top-Level-Seiten durchk&#xe4;mmen">
 <icon BUILTIN="flag-yellow"/>
@@ -170007,16 +170508,13 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1756568365181" ID="ID_1896286340" MODIFIED="1756568432498" TEXT="Christian&apos;s Branch rebase auf meinen master">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       mu&#223;te dabei die scons-Soup zusammenf&#252;hren; trivial &#10230; ich hab zwei neue Funktionen im V1-Stil (Resultat wird zwar nicht funktionieren, <b>aber das ist mir egal</b>)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1756568445666" ID="ID_1119385953" MODIFIED="1756568806077" TEXT="mein Repo archivieren">
@@ -171231,7 +171729,7 @@ Since then others have made contributions, see the log for the history.</font></
 <node CREATED="1752192022076" ID="ID_1939779471" MODIFIED="1752192610817" TEXT="Release">
 <icon BUILTIN="full-5"/>
 <node CREATED="1752192043158" ID="ID_238410955" MODIFIED="1752192049202" TEXT="MERGE in master"/>
-<node CREATED="1752192051222" ID="ID_167076910" MODIFIED="1752192081385" TEXT="Amend: ~dev-Suffix entfernen"/>
+<node CREATED="1752192051222" ID="ID_167076910" MODIFIED="1756648486618" TEXT="Amend: Suffix ~dev bzw, ~rc.# entfernen"/>
 <node CREATED="1752192083412" ID="ID_580036205" MODIFIED="1752192086060" TEXT="Tag setzen">
 <node CREATED="1752192089084" ID="ID_673210992" LINK="https://lumiera.org/documentation/devel/rfc/VersionNumberScheme.html" MODIFIED="1752192134958" TEXT="Lumiera Versions-Schema"/>
 <node CREATED="1752192137035" ID="ID_1159674019" MODIFIED="1752192147304" TEXT="Pre-release: 0.pre.04"/>
@@ -171285,12 +171783,12 @@ Since then others have made contributions, see the log for the history.</font></
   </body>
 </html></richcontent>
 <icon BUILTIN="full-8"/>
-<node CREATED="1446482249336" ID="ID_1088469455" MODIFIED="1742180345958" TEXT="Web/Doku aktualisieren">
+<node CREATED="1446482249336" ID="ID_1088469455" MODIFIED="1756648638412" TEXT="Web/Doku aktualisieren">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
     <p>
-      Wichtig: hier nur was wirklich gebaut ist und funktioniert!
+      Wichtig: auf der Doku-Seite zum Paket nur was wirklich gebaut ist und funktioniert!
     </p>
   </body>
 </html></richcontent>
