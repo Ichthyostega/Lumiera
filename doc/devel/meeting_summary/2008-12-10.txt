@@ -23,12 +23,12 @@ __Participants__
 The Lumiera Logo
 ----------------
 
-The logo contest is a great success: http://www.pipapo.org/pipawiki/Lumiera/Logos[105 entries]. Everyone agrees that a preselection has to be made. Every attendee will have a look at the entries and selects 5 for the preselection list. Finally, 21 logos are selected. Together with a nice collage they are http://www.pipapo.org/pipawiki/Lumiera/Logos/Selection[presented] so that anyone online can vote for his/her favorite one. Voting will be possible from 20 december until 31 december at midnight.
+The logo contest is a great success: *105 entries*. Everyone agrees that a preselection has to be made. Every attendee will have a look at the entries and selects 5 for the preselection list. Finally, 21 logos are selected. Together with a nice collage they are presented ([purple]#`http://www.pipapo.org/pipawiki/Lumiera/Logos/Selection`#) so that anyone online can vote for his/her favorite one. Voting will be possible from 20 december until 31 december at midnight.
 
 
 Recurring Topics
 ----------------
-Discussion of open http://www.pipapo.org/pipawiki/Lumiera/DesignProcess[design process] drafts.
+Discussion of open link:/x/DesignProcess.html[design process] drafts.
 
 
 EDL vs Sequence

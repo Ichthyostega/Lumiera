@@ -51,7 +51,7 @@ the hierarchy,
 ==== The Uppermost Layer
 
 At the highest, uppermost layer is the document
-https://lumiera.org/documentation/user/intro/intro.html[Lumiera (as seen) from Outer Space]. This is the node
+link:user/intro/intro.html[Lumiera (as seen) from Outer Space]. This is the node
 on the left in the illustration above. All new to Lumiera should read this document. You can always return
 to this document later if you are entirely lost and wish to find your bearings before navigating into the
 deeper documentation dungeons.
@@ -76,15 +76,15 @@ section has two main sections:
 [width="90%",frame="topbot",options="header",cols="^,2<"]
 |================================================================================================
 |Sub-System|Remarks
-|https://lumiera.org/documentation/design/architecture/index.html[Architecture]|Structure of Lumiera
-|https://lumiera.org/documentation/design/gui/index.html[GUI]|The Lumiera ⟷ user interaction layer
-|https://lumiera.org/documentation/design/model/index.html[Model]|Low-level and high-level models
-|https://lumiera.org/documentation/design/engine/index.html[Engine]|Renderer, output generation, ...
-|https://lumiera.org/documentation/design/lowlevel/index.html[Low-level]|Low-level and system services
-|https://lumiera.org/documentation/design/application/index.html[Application]|Application framework
-|https://lumiera.org/documentation/design/plugins/index.html[Plugins]|Dynamically loaded Extensions
-|https://lumiera.org/documentation/design/workflow/index.html[Workflow]|Workflow and Interaction Design
-|https://lumiera.org/documentation/design/governance/index.html[Governance]|Meta project concerns
+|link:design/architecture/[Architecture]|Structure of Lumiera
+|link:design/gui/[GUI]|The Lumiera ⟷ user interaction layer
+|link:design/model/[Model]|Low-level and high-level models
+|link:design/engine/[Engine]|Renderer, output generation, ...
+|link:design/lowlevel/[Low-level]|Low-level and system services
+|link:design/application/[Application]|Application framework
+|link:design/plugins/[Plugins]|Dynamically loaded Extensions
+|link:design/workflow/[Workflow]|Workflow and Interaction Design
+|link:design/governance/[Governance]|Meta project concerns
 |================================================================================================
 
 
@@ -94,15 +94,15 @@ section has two main sections:
 [width="90%",frame="topbot",options="header",cols="^,2<"]
 |================================================================================================
 |Sub-System|Remarks
-|https://lumiera.org/documentation/technical/build/index.html[Build System]|Build, Packaging and CI
-|https://lumiera.org/documentation/technical/stage/index.html[Stage]|GUI (technical aspects)
-|https://lumiera.org/documentation/technical/steam/index.html[Steam]|Session and processing coordination
-|https://lumiera.org/documentation/technical/vault/index.html[Vault]|Low-level operations
-|https://lumiera.org/documentation/technical/library/index.html[Support lib]|Interface and support libraries
-|https://lumiera.org/documentation/technical/code/index.html[Code base]|Code management, organisation, ...
-|https://lumiera.org/documentation/technical/infra/index.html[Infrastructure]|Website and developer tooling ...
-|https://lumiera.org/documentation/technical/howto/index.html[Developer HowTos]|Instructions and guides for developers
-|link:/doxy/index.html[API Doc]|Using link:http://doxygen.org[Doxygen] to generate doc from code
+|link:technical/build/[Build System]|Build, Packaging and CI
+|link:technical/stage/[Stage]|GUI (technical aspects)
+|link:technical/steam/[Steam]|Session and processing coordination
+|link:technical/vault/[Vault]|Low-level operations
+|link:technical/library/[Support lib]|Interface and support libraries
+|link:technical/code/[Code base]|Code management, organisation, ...
+|link:technical/infra/[Infrastructure]|Website and developer tooling ...
+|link:technical/howto/[Developer HowTos]|Instructions and guides for developers
+|link:/doxy/[API Doc]|Using https://www.doxygen.nl/[Doxygen] to generate doc from code
 |================================================================================================
 
 
@@ -113,13 +113,13 @@ mostly used as design notebook, featuring day-to-day design sketches, notes but 
 quite some more persistent planning. Finished documentation text is constantly
 moved over to the documentation section(s) of the Lumiera website.
 
--> access the Development link:{l}/wiki/renderengine.html[TiddlyWiki online here]
+-> access the Development link:/wiki/renderengine.html[TiddlyWiki online here]
 
 
 == Media and Presentations ==
 
 This section holds documents and materials used to present and promote Lumiera,
 articles, summaries and whitepapers
- -> link:/media/index.html[Index]
+ -> link:/media/[Index]
 
 

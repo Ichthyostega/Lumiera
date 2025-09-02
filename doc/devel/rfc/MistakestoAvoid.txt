@@ -262,7 +262,7 @@ Nuff said.
 Comments
 ^^^^^^^^
 
-Quote from Ohloh.net: (http://www.ohloh.net/projects/lumiera)[]
+Quote from https://openhub.net/p/lumiera/[Openhub.net]:
 
 ------------------------------------------------------------
 Extremely well-commented source code

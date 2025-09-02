@@ -3,7 +3,7 @@ Using Boost Libraries
 
 //Menu: label using Boost
 
-_some arbitrary hints and notes regarding the use of link::http://www.boost.org[Boost Libraries] in Lumiera_
+_some arbitrary hints and notes regarding the use of https://www.boost.org/[Boost Libraries] in Lumiera_
 
 Notable Features
 ----------------

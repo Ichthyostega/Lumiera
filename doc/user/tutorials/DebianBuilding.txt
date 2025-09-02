@@ -159,7 +159,8 @@ the package. With the exception of the following:
 - the top entry in the 'debian/changelog' defines the *actual package name and version*
 - the actual build process is conducted by invoking several pre defined targets in the
   'debian/rules' *makefile*. But modern debian packages often make use of the ``common
-  debian build system'' link:http://build-common.alioth.debian.org/cdbs-doc.html[CDBS] --
+  debian build system''
+  https://web.archive.org/web/20170708155303/http://build-common.alioth.debian.org/cdbs-doc.html[CDBS] --
   basically a set of macros allowing to write these _rules_ in a very short and concise fashion
 
 

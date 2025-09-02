@@ -10,7 +10,8 @@ Sometimes help files and tutorials are improvable. Keeping track of which help i
 -- link:JoelHoldsworth[] [[DateTime(2008-07-23T20:47:35Z)]]
 
 * Suggest an improvement Feature - for users to help improvement +
-Just like the "Help" feature suggested elsewhere, in which the user can edit the help file as they go, so could the user be able to make suggestions to improve the program. Able to get a panel or window grab, and draw arrows lines to show "where" they are talking about. Online linking - There could also be the facility to click on an email link to send a request for help (want to engage in dialog, rather than just notify - without need for response). Or a relevant search is automatically generated for the forum, chat room, faqs, helpdesk, documentation. Or get sent to a link:BrainStorming[] page like this one (specifically for the panel they were in).
+Just like the "Help" feature suggested elsewhere, in which the user can edit the help file as they go, so could the user be able to make suggestions to improve the program. Able to get a panel or window grab, and draw arrows lines to show "where" they are talking about. Online linking - There could also be the facility to click on an email link to send a request for help (want to engage in dialog, rather than just notify - without need for response). Or a relevant search is automatically generated for the forum, chat room, faqs, helpdesk, documentation.
+Or get sent to a ``BrainStorming'' page like this one (but marked specifically for the panel they were in).
 -- link:Tree[][[DateTime(2008-05-26T12:01:00NZ)]]
 
   - This isn't really a GUI issue - much of this is more for the website, which the GUI will probably link to from an item in the help menu.

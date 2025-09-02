@@ -85,14 +85,14 @@ Alternatives
 * We only consider auto-vectorization -- GCC is attempting to convert trivial
   loops into common SSE patterns. Newer or Higher level instructions may not be
   supported by GCC. This is turned on
-  http://gcc.gnu.org/projects/tree-ssa/vectorization.html[in GCC4.3 with
+  https://gcc.gnu.org/projects/tree-ssa/vectorization.html[in GCC4.3 with
   specific compiler flags]
 * We can consider assembly but we don't officially support it -- We leave the
   holes there for people to patch up later. Unofficial ports may come up, and
   maybe a few years down the line we can reconsider assembly and start to
   reimplement it down the road.
 * Find a SIMD library for C/C++ -- Intel's ICC and
-  http://gcc.gnu.org/onlinedocs/gcc-3.4.6/gcc/Vector-Extensions.html[GCC] both
+  https://gcc.gnu.org/onlinedocs/gcc-3.4.6/gcc/Vector-Extensions.html[GCC] both
   have non-standard extensions to C that roughly translate to these
   instructions. There is also the
   http://www.pixelglow.com/macstl/valarray/[macstl valarray library] mentioned

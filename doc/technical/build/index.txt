@@ -14,6 +14,6 @@ build -- continuous integration -- packaging
 * link:BuildDependencies.html[Lumiera Build Dependencies]
 * link:BuildDroneDraft.html[»Builddrone« concept from 2008]
 * Packaging: link:LumieraDebianPackage.html[Debian] RPM
-* Lumiera link:../infra/debianDepot.html/[debian depot]
+* Lumiera link:{ldoc}/technical/infra/debianDepot.html[debian depot]
 
 

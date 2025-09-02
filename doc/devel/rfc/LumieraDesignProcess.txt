@@ -35,7 +35,7 @@ planning:
 
 Tasks
 ~~~~~
- * We need to refine link:Lumiera/DesignProcessTemplate[].
+ * We need to refine the `Lumiera/DesignProcessTemplate`.
 
 Pros
 ~~~~

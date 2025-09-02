@@ -38,7 +38,7 @@ from libstdcxx.v6.printers import register_libstdcxx_printers
 register_libstdcxx_printers (None)
 end
 ----
-For more informations link:http://sourceware.org/gdb/wiki/STLSupport[see here..]
+For more informations https://sourceware.org/gdb/wiki/STLSupport[see here..]
 
 .Hello World
 [source,C]

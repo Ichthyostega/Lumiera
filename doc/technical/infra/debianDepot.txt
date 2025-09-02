@@ -6,7 +6,9 @@ Lumiera Debian Package and Depot maintainance
 //Menu: label Debian Depot
 
 This Debian-Depot is part of the Lumiera build infrastructure.
-It is managed automatically, based on the link:http://mirrorer.alioth.debian.org/[reprepro] tool by Bernhard Link
+It is managed automatically, based on the
+https://salsa.debian.org/brlink/reprepro[reprepro] tool by Bernhard Link
+-> https://manpages.debian.org/trixie/reprepro/reprepro.1.en.html[man page]
 
 
 The Lumiera debian package

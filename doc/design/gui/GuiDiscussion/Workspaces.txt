@@ -83,7 +83,7 @@ reach a menu entry. (same for looking around to check information on the status 
 of the window which has focus anyways). And last but not least, the current GDL docks implement thir own drag handles,
 moving windows around has a big performance problem with some window managers, moving windows shall be the job of the
 window manager and not the job of the application, the only thing the application may do is hinting positions to the
-WM. These second class dock windows are neither ICCCM conforming (http://tronche.com/gui/x/icccm/[]) nor do they add any
+WM. These second class dock windows are neither https://tronche.com/gui/x/icccm/[ICCCM] conforming nor do they add any
 extra user experience, instead the user has to learn a new kind of window class. +
 -- link:ct[] [[DateTime(2009-01-29T03:15:03Z)]]
 

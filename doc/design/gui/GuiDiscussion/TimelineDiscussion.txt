@@ -6,10 +6,12 @@ Timeline: Discussion
 This is Joel Holdsworth's attempt to amalgamate all the ideas from all the brainstorming to one consistent idea that makes sense, can be implemented, and seems like it would be nice to use. Comments are welcome.
 
  * Avid vs FCP 2006 - http://www.fini.tv/articles/avidfcp2006.html[]
+   Archived 2008 from https://web.archive.org/web/20071211184722/http://www.fini.tv/articles/avidfcp2006.html[fini.tv]
 
  * Final Cut Pro 5 - A First Look - http://www.kenstone.net/fcp_homepage/fcp_5_new_martin.html[]
 
- * SpeedEdit Tutorials - http://www.newtek.com/speededit/tutorials/index.php[]
+ * SpeedEdit Tutorials +
+   'http://www.newtek.com/speededit/tutorials/index.php' ~[red]#dead link#~
 
 
 Brainstorming

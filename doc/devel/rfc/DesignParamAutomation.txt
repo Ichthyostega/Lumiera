@@ -52,7 +52,7 @@ So...
 
 A closely related issue is the handling of *Automation*. The current draft
 calls for an abstract interface "ParamProvider", which just allows the
-link:Plugin/RenderComponent[] to pull a current value, without knowing if the
+Plugin or RenderComponent to pull a current value, without knowing if the
 ParamProvider is a GUI widget or an automation data set with interpolation. The
 component using the param value should not need to do any interpolation. We
 should re-asses and refine this draft as needed. Note: Render Nodes are

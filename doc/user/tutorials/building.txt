@@ -49,19 +49,19 @@ then usually the build system is right...]
 More specifically, you'll need the GNU C/C\++ compiler with C++17 support (Version >= 7)
 in addition to the following tools and libraries:
 
- * link:http://git-scm.com/[Git] (version management system)
- * link:http://www.scons.org/[SCons build system]
- * link:http://www.boost.org/[Boost libraries]
- * link:http://gmerlin.sourceforge.net/[GAVL library]
- * link:http://nobug.pipapo.org/[NoBug] (see below)
+ * https://git-scm.com/[Git] (version management system)
+ * https://www.scons.org/[SCons build system]
+ * https://www.boost.org/[Boost libraries]
+ * https://github.com/bplaum/gavl[GAVL library]
+ * https://nobug.pipapo.org/[NoBug] (see below)
  * Lumiera source code
 
 The GUI depends on the following:
 
- * link:http://www.gtkmm.org/en/[gtkmm]
- * link:http://cgit.freedesktop.org/xorg/lib/libXv[libXv]
- * link:https://wiki.gnome.org/LibRsvg[lib rSVG]
- * link:https://git.gnome.org/browse/gdl[lib GDL]
+ * https://gtkmm.gnome.org/en/[gtkmm]
+ * https://cgit.freedesktop.org/xorg/lib/libXv[libXv]
+ * https://wiki.gnome.org/Projects/LibRsvg[lib rSVG]
+ * https://gitlab.gnome.org/Archive/gdl.git[lib GDL]
 
 TIP: Generally speaking, when you want to build software, you'll need the
 _development_ version of the packages that contain the headers and pre-built
@@ -213,7 +213,7 @@ Currently, this will bring up the GUI, _without any further functionality_ (!)
 
 You should see something like this:
 
-image:{l}/images/lumiera_gui_small.png[Current Lumiera GUI Screenshot]
+image:/images/lumiera_gui_small.png[Current Lumiera GUI Screenshot]
 
 
 What's next?

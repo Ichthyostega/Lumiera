@@ -23,7 +23,7 @@ Description
 We need to agree on some coding style, IMHO consistency is the most important
 part with this, no matter which style we use.
 
-See http://en.wikipedia.org/wiki/Indent_style[]
+See https://en.wikipedia.org/wiki/Indentation_style[Wikipedia: Indentation Style]
 
 .Notes:
 * no tabs, use spaces!

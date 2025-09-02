@@ -23,7 +23,7 @@ http://lists.lumiera.org/pipermail/lumiera/2008-September/000053.html[] -- the
 main discussion thread
 
 Additionally, a lot of great concepts for how to streamline the interface are
-derived in part from link:KPhotoAlbum[].
+derived in part from https://www.kphotoalbum.org/[KPhotoAlbum].
 
 I use tags, keywords, and metadata almost interchangeably, with the exception
 that metadata includes computer generated metadata as well. These are not tags
@@ -376,7 +376,8 @@ Possible Collaboration with the people from Ardour?
 I guess if the thing can do all the things we talked about here, it would be
 perfectly suitable for sound classification too, and maybe could fill another
 gap in FOSS: Audio Archival Software, like this:
-http://www.soundminer.com/SM_Site/Home.html[] (which is very expensive)...
+https://web.archive.org/web/20100618104752/http://www.soundminer.com/SM_Site/Why_Buy.html[soundminer.com]
+(which is very expensive)...
 maybe the Ardour people would be interested in a collaboration on this?
 
 I like the suggestion of sound classification with a similar (or, even better,

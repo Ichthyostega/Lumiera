@@ -136,7 +136,7 @@ permutation diff. If we thus consider -- in theory -- the _inserts_ and _deletes
 filtered away, what remains is a permutation of index numbers to cause the re-ordering.
 We may describe this re-ordering by the index numbers in the new sequence, given in the order
 of the old sequence. For such a re-ordering permutation, the theoretically optimal result
-can be achieved by http://wikipedia.org/wiki/Cycle_sort[Cycle Sort] in _linear time_.footnote:[
+can be achieved by https://en.wikipedia.org/wiki/Cycle_sort[Cycle Sort] in _linear time_.footnote:[
 assuming random access by index is possible, *Cycle Sort* walks the sequence once. Whenever
 encountering an element out-of order, i.e. new postion != current position, we leap to the
 indicated new position, which necessarily will be out-of-order too, so we can leap from there
@@ -201,7 +201,7 @@ changes in hierarchical data: traverse the structure and account for each elemen
 Such a description of changes won't be _optimal_ though. What appears as a insertion or deletion locally,
 might indeed be just the result of rearranging subtrees as a whole. The _tree diff problem_ in this general
 form is known to be a rather tough challenge. But our goals are different here. Lumiera relies on a
-link:{ldoc}/design/architecture/ExternalTreeDescription.html[»External Tree Description«] for
+link:{ldoc}/design/architecture/ETD.html[»External Tree Description«] for
 _symbolic representation_ of hierarchically structured elements, without actually implementing them.
 The purpose of this ``external'' description is to largely remove the need for a central data model
 to work against. A _symbolic diff message_ allows to propagate data and structure changes,

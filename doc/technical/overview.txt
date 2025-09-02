@@ -67,14 +67,14 @@ website you're reading right now. Besides that, a summary and introduction
 for various components can be found in the file-level doxygen comments, while
 details are usually explained in the class and function level comments.
 
-==== the TiddlyWiki
+==== the Development TiddlyWiki
 Currently, Lumiera is still in the design- and evolution phase. Documentation
 is written as an ongoing effort.
 There is an embedded JavaScript wiki (TiddlyWiki) within the source tree, mostly
 used as design notebook, featuring day-to-day design sketches and notes, but also
 quite some more persistent planning. Finished documentation text is constantly
 moved over to the documentation section(s) of the Lumiera website. +
--> access the development link:{l}/wiki/renderengine.html[TiddlyWiki online here]
+-> access the development link:/wiki/renderengine.html[TiddlyWiki online here]
 
 
 Test Driven Development
@@ -888,7 +888,7 @@ with an type specific access functor. Together, this allows to translate
 transparently and typesafe from symbolic ID to object instance, which
 is an prerequisite for integrating a rules based system. Besides, these
 tables allow unique IDs per type +
--> more details about this concept link:{l}/wiki/renderengine.html#EntryID%20TypedID%20TypedLookup[in the TiddlyWiki]
+-> more details about this concept link:/wiki/renderengine.html#EntryID%20TypedID%20TypedLookup[in the TiddlyWiki]
 
 
 Allocators

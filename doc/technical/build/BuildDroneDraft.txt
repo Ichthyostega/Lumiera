@@ -59,25 +59,25 @@ Ok that above doesnt look good, but would do the job with some efforts
 Now lets factor this to some shell functions:
 
 ------------------------------------------------------------
-function link:AddToReport[]()
+function AddToReport()
 {
   cat >>,build_drone_report
 }
 
-function link:GitPull[]()
+function GitPull()
 {
   local dir="$1"
   local repo="${2:-origin}"
   local branch="${3:-master}"
   ACTION="GitPull $*"
   RESULT=FAILURE
-  cd "$dir" 2>&1 | link:AddToReport[] ,  return 1
-  git pull "$repo" "$branch" 2>&1 | link:AddToReport[] ,  return 1
+  cd "$dir" 2>&1 | AddToReport ,  return 1
+  git pull "$repo" "$branch" 2>&1 | AddToReport ,  return 1
   RESULT=SUCCESS
   return 0
 }
 
-function link:SendMail[]
+function SendMail
 {
   cat ,build_drone_mail <<EOF
 Subject: Build Drone Report
@@ -98,10 +98,10 @@ EOF
 now we can do following: (looks much nicer or?)
 
 ------------------------------------------------------------
-if link:GitPull[] project_dir; then
-  link:SendMail[] foo@bar.com other@blah.net
+if GitPull project_dir; then
+  SendMail foo@bar.com other@blah.net
 else
-  link:SendMail[] boss@bar.com
+  SendMail boss@bar.com
 fi
 ------------------------------------------------------------
 
@@ -113,11 +113,11 @@ for i in "/build_drone/project/*"; do
   (
     source "$i"
   )
-  link:CallTrigger[]
+  CallTrigger
 done
 ------------------------------------------------------------
 
-... ok enough for now, whats needed is the link:CallTrigger[] implementation,
+... ok enough for now, whats needed is the CallTrigger implementation,
 stopping processes waiting (either reading on a pipe or wait for signal (-CONT
 for success, -TERM for failure))
 
@@ -140,7 +140,7 @@ Example:
 
 
 ------------------------------------------------------------
-function link:BatchJob[]()
+function BatchJob()
 {
   batch <<EOF
 
@@ -169,16 +169,16 @@ Actions and Handlers Brainstorming
 
 Ideas, not in order
 
-link:SendMail[]::
+SendMail::
   send report as email
-link:GitPull[]::
+GitPull::
   updates a git checkout +
   Split this in
-  * link:GitFetch[]
+  * GitFetch
     fetch from remote
-  * link:GitHasChanges[]
+  * GitHasChanges
     are there changes between HEAD and remote?
-  * link:GitCheckout[]
+  * GitCheckout
     reset to the remote head and checkout
 Bootstrap::
   autoreconf and configure
@@ -190,10 +190,10 @@ Distcheck::
   runs 'make distcheck'
 Doxygen::
   runs doxygen
-link:StyleCheck[]::
+StyleCheck::
   checks if files violate the style rules, something like:
   'astyle --style=gnu <$FILE.c | diff -u FILE.c - ...'
-link:ToDos[]::
+ToDos::
   greps for TODO (with some -A context) and produces a report
   * beautify (asciidoc) reports
   * publish reports, packages etc to the webserver (scp, rsync)

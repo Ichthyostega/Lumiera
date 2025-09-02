@@ -60,7 +60,7 @@ Scheduler: Interface and requirements
 -------------------------------------
 _Benny_ showed interest to work on that topic. The first step would be to build or use
 a priority queue textbook implementation as starting point. Some time ago, _cehteh_ included
-a suitable implementation in his link:http://git.pipapo.org/?p=cehsrc;a=summary[cehlib],a
+a suitable implementation in his https://git.pipapo.org/cehteh/cehsrc[cehlib],a
 collection of basic C library routines, mostly extracted from Lumiera's library. _ichthyo_
 integrates this priority queue into the Lumiera tree.
 

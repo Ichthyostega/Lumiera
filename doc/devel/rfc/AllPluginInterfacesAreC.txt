@@ -39,7 +39,7 @@ Implementation Proposal
   * first member is a _size_ which will be initialized by the actual
     implementation
   * followed by function pointers defining the interface, see:
-    link:Lumiera/DesignProcess/CCodingStyleGuide[]
+    link:{ldoc}/devel/rfc/CCodingStyleGuide.html[C-coding style guide]
 
   * everything added is considered immutable for this interface version
   * new functions are added to the end (thus changing size)

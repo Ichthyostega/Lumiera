@@ -112,7 +112,8 @@ Can open Windows on different heads of the same server, and is aware of the exis
 --
 * Multi-Head != Xinerama ... This is very important and quite common, We want to support monitors driven at the native Video Format (resolution, framerate, interlacing, overscan, ....). For a professional setup this is really required!
 -- link:ct[] [[DateTime(2008-07-22T07:11:11Z)]] +
-Xinerama and twinView test comparison http://www.phoronix.com/scan.php?page=article&item=387&num=1[]
+
+* Xinerama and twinView test comparison -> https://www.phoronix.com/review/387[see @Phoronix...]
 --
 
 * Automatic Clip Creation based on video content. +
@@ -182,7 +183,7 @@ Widgets
 
 * Generalized Fader
 +
-image:images/fader.png[fader.png]
+image:/images/fader.png[fader.png]
 +
 All faders are the same kind of custom widget, that is:
 
@@ -222,7 +223,7 @@ Partially, this is covered by the Adaptive Mouse Wheel too; but, especially when
   - Comment: This is definitely a problem we need a solution to. Is modifier keys the most discoverable way of doing it - I'm not sure. We need ideas for this (see below).
 -- link:joelholdsworth[] [[DateTime(2008-07-21T21:58:48Z)]]
 
-  - This concept of "magnifying faders", is well explained in http://thorwil.wordpress.com/2007/05/01/fan-sliders/[Thorsten Wilms Fan-sliders Article], the Article also links to an implementation.
+  - This concept of "magnifying faders", is well explained in https://thorwil.wordpress.com/2007/05/01/fan-sliders/[Thorsten Wilms Fan-sliders Article], the Article also links to an implementation.
 -- link:oracle2025[] [[DateTime(2008-02-08T00:40:05Z)]]
 
   - Comment: In one sense this is bad because it's so incredibly non-standard. Bun in other ways it seems to me like a rather ingenious solution to the problem. Aparently Ardour has these. I must investigate.

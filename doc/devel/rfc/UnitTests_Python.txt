@@ -74,9 +74,9 @@ Comments
   use to drive tests, should be something smaller and more sane than python.
   Needs certainly more discussion. For simple unit tests some C/C++ harness and
   bit shell scripting would suffice, I really want to integrate this with
-  link:NoBug[].
+  https://nobug.pipapo.org/[NoBug].
  -- link:ct[] [[DateTime(2007-06-17T17:32:27Z)]]
 
 
 ''''
-Back to link:../DesignProcess[]
+Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]

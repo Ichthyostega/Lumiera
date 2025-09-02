@@ -100,11 +100,11 @@ Rationale
 ~~~~~~~~~
 The purpose of this Design Entry is to give a summary; the questions and the
 details of carrying out the operations are much more involved.
- +
+
 Please see the
-http://www.lumiera.org/wiki/renderengine.html#Rendering[Development internal doc (TiddlyWiki)]
+link/wiki/renderengine.html#Rendering[Development internal doc (TiddlyWiki)]
 and the
-http://www.lumiera.org/gitweb?p=lumiera/ichthyo;a=blob;f=src/proc/engine/procnod.hpp;h=9cf3a2ea8c33091d0ee992ec0fc8f37bb5874d34;hb=refs/heads/proc[Source Code]
+https://git.lumiera.org/?p=LUMIERA;a=blob;f=src/proc/engine/procnode.hpp;h=9cf3a2ea8c33091d0ee992ec0fc8f37bb5874d34;hb=f9452f654cf39a4abbbeecfd81bef51aa347b321[Draft: ProcNode (src)]
 for details
 (and/or contact Ichthyo for in-depth discussion of those technical details)
 

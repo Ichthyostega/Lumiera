@@ -226,7 +226,7 @@ to facilitate automated processing.
 
 Now it is time to take a look at the preliminary Lumiera GUI:
 
-image:{l}/images/lumiera_gui_small.png[Current Lumiera GUI Screenshot]
+image:/images/lumiera_gui_small.png[Current Lumiera GUI Screenshot]
 
 We expect this GUI to change once we are at the point of having feedback from actual users.
 

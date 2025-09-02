@@ -50,8 +50,8 @@ right away and present your first results to the _mob repository_.
 First steps with Git
 ^^^^^^^^^^^^^^^^^^^^
 One very useful place to begin with learning Git is the
-link:http://www.kernel.org/pub/software/scm/git/docs/gittutorial.html[basic Git tutorial at Kernel.org]. +
-For more specific questions, you might consulte a link:http://gitref.org/[Git reference]
+https://www.kernel.org/pub/software/scm/git/docs/gittutorial.html[basic Git tutorial at Kernel.org]. +
+For more specific questions, you might consult a https://git-scm.com/docs[Git reference]
 
 In the following, we assume you have set up Git on your system.  If you are
 experiencing problems with Git, just ask the Lumiera community.
@@ -222,7 +222,7 @@ Besides, the Lumiera community generally meets on the second Thursday of
 each month at 20:00 UTC on IRC. All are more than welcome to join and
 to contribute to the discussions there.
 
--> contact information link:{l}/project/contact.html[Mailing List & IRC]
+-> contact information link:/project/contact.html[Mailing List & IRC]
 
 ''''
 

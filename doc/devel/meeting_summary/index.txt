@@ -327,7 +327,7 @@ Topics
  * organisational (protocol, agenda, leftovers?)
  * Logo Contest progress, discussion about how to do the pre selection
  * rename "EDL" into "Sequence"
- * link:DesignProcess/TimelineSequenceOutput[Project, Timeline(s), Sequence(s) and Output]
+ * link:/documentation/devel/rfc/TimelineSequenceOutput.html[Project, Timeline(s), Sequence(s) and Output]
  * GUI/Proc Interface and collaboration
  * Threading questions regarding gtk-main and main()
 
@@ -522,7 +522,7 @@ Summary
 Topics
 ~~~~~~
  * Who will write the protocol below
- * Discuss the open points in link:Lumiera/DesignProcess[] do we need this formalism?
+ * Discuss the open points in a link:/x/DesignProcess[»Design Process«] -- do we need this formalism?
  * Who works on what, what are the short term goals, what tasks are open
  * State of the new-name search for the was-intended-as-cinelerra-3 project (no name discussion, just how we will progress!)
  * Introduce the development model

@@ -89,7 +89,7 @@ Libraries
 
 * BOOST
 * link:http://nobug.pipapo.org/[NoBug]
-* http://gmerlin.sourceforge.net/gavl.html[GAVL] (for raw media support)
+* https://github.com/bplaum/gavl[GAVL] (for raw media support)
 * ALSA: libasound2-dev
 * for the GUI: (*GTK-3*) gtkmm-3.0 gdlmm-3.0 glibmm-2.4 cairomm-1.0 xv
  - libgtkmm-3.0-dev

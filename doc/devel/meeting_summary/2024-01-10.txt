@@ -4,7 +4,7 @@
 :Date: 2024-01-20
 
 Jan 10, 2024
-on {l}/project/contact.html#_irc[`#lumiera`]
+on link:/project/contact.html#_irc[`#lumiera`]
 20:00 - 23:00 UTC +
 
 __Participants__

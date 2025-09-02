@@ -35,7 +35,7 @@ https://web.archive.org/web/20090129083001/https://www.linux.com/feature/126441[
 and remove a ^[citation needed]^ tag.
 
 -> see the reworked
-{l}/project/index.html[``About''] and {l}/project/faq.html[``FAQ''] pages +
+link:/project/index.html[``About''] and link:/project/faq.html[``FAQ''] pages +
 -> section in the
 https://en.wikipedia.org/wiki/Cinelerra#Lumiera[Wikipedia page for Cinelerra].
 

@@ -100,7 +100,7 @@ are fine though.
 VoIP discussions over Mumble?
 -----------------------------
 
-There seems to be link:http://kitenet.net/~joey/blog/entry/12_hours_of_talking/[ongoing discussions]. on using VoIP more in Debian GNU/Linux.
+There seems to be https://joeyh.name/blog/entry/12_hours_of_talking/[ongoing discussions]. on using VoIP more in Debian GNU/Linux.
 
 It was decided that while the idea is nice, it will not be used for developer
 meetings. We might use it for developer discussions outside meetings if we feel

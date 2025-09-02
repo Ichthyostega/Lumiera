@@ -70,7 +70,7 @@ Conclusion
 ----------
 
 This Design Proposal is 'superseded' by a much more advanced proposal:
-link:DelectusShotEvaluator[Delectus]
+link:/rfc/DelectusShotEvaluator.html[Delectus]
 
 (Dropping it doesn't mean disapproval)
 

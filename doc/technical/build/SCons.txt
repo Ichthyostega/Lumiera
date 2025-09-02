@@ -5,7 +5,7 @@ SCons Build-System
 
 //MENU: label SCons Build
 
-Lumiera uses a build system based on link:http://scons.org[SCons]
+Lumiera uses a build system based on https://scons.org/[SCons]
 
 SCons is an open source software construction tool based on Python build definition scripts.
 Within these build scripts, we define a data structure to describe the parts and dependencies
@@ -14,7 +14,7 @@ the source tree to derive a build strategy, which is then performed.
 
 SCons core concepts
 -------------------
-^_this section is based on the introductory pages on the link:http://www.scons.org/wiki/BasicConcepts[SCons Wiki]_^
+^_this section is based on the introductory pages on the https://github.com/SCons/scons/wiki/BasicConcepts[SCons Wiki]_^
 
 .SCons Environment
 When SCons starts building the project, it creates its own environment with dependency trees,
@@ -127,7 +127,7 @@ are defined as SVG graphics. The build process creates a helper executable (+rsv
 these vector graphics with the help of lib Cairo into icon collections of various sizes.
 
 .documentation
-Largely, the documentation is written in Asciidoc and provided online at link:{ldoc}[the documentation section]
+Largely, the documentation is written in Asciidoc and provided online at link:{ldoc}/[the documentation section]
 of our website. The plain-text sources of this documentation tree is shipped alongside with the code.
 Besides, we build *Doxygen* API documentation there, and we create design and technical specs and drawings
 in SVG and in UML.

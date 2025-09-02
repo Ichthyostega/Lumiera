@@ -16,7 +16,7 @@ releases and bugfixes directly as structure in the Git history, without much nee
 release planning, coordination and management.
 
 TIP: The principles and procedures of *Git-flow* are explained in this
-     ->{nbsp}{l}/project/background/GitFlow.html[Background Article]. First
+     -> link:/project/background/GitFlow.html[Background Article]. First
      link:https://nvie.com/posts/a-successful-git-branching-model/[published in 2010]
      by _Vincent Driessen_, meanwhile it is widely applied in projects with regular releases
      and external liabilities -- and often seen as the counterpoint to trunk centred

@@ -23,7 +23,8 @@ Description
 In the following I'll explain a C coding style I used frequently for other
 projects. Take this as suggestion for parts written in C (it definitely makes
 no sense for C++). We probably don't need to enforce this style for normal C
-code, but for the related link:Lumiera/DesignProcess/AllPluginInterfacesAreC[]
+code, but for the related
+link:/rfc/AllPluginInterfacesAreC.html[Rfc: »All Plugin Interfaces Are C«]
 it really makes sense to have some well defined style.
 
 

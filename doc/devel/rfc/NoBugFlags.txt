@@ -12,14 +12,13 @@ NoBug logging flag hierachy
 link:NoBug[] logging flag hierachy
 ----------------------------------
 
-link:NoBug[] allows hierachical organization of logging flags. Propose a
-documentation/planning about the setup.
+https://nobug.pipapo.org/[NoBug] allows hierachical organization of logging flags.
+Propose a documentation/planning about the setup.
 
 Description
 ~~~~~~~~~~~
 Take a look at my draft at:
-link:http://www.lumiera.org/gitweb?p=lumiera/ct;a=blob;f=doc/devel/nobug_flags.t
-t;h=74471e255e6ebfedb642e450bdfd3f79e346c600;hb=backend[NoBug_flags]
+https://git.lumiera.org/?p=LUMIERA;a=blob;f=doc/devel/nobug_flags.txt;h=325141acb52a7be7f75425359b6057c74ed30253;hb=a03e3c5e73a4c0be2264ac4e4e0f02eb8749837b[nobug_flags.txt]
 
 I've added the things I planning for the backend, others might add their own
 plans there too. So far this is an early draft, comments welcome.
@@ -29,7 +28,7 @@ NOTE: outdated information. Have a look at `include/logging.h`
 Tasks
 ~~~~~
  * Needs a file.c defining the common root see
-   link:Lumiera/DesignProcess/GlobalInitialization[]
+   link:{ldoc}/devel/rfc/GlobalInitialization.html[RfC: Global Initialization]
  * Everyone needs to setup this hierachy by NOBUG_DEFINE_FLAG_PARENT (flag,
    parent_flag);
 
