@@ -1,11 +1,18 @@
 GUI Design and Feature Discussion
 =================================
 
+//Menu: prepend child GuiBrainstormingWontImplement
+//Menu: prepend child GuiBrainstormingReviewed
 //Menu: put child ConceptProposals after GuiBrainstormingWontImplement
-//Menu: put child TimelineDiscussion after ConceptProposals
+//Menu: put child GuiDiscussion/Timeline after ConceptProposals
 
-In the early days of the Lumiera project, there was a lot of debate regarding
-GUI concepts, -features and proposals.
+In the early days of the Lumiera project, there was an extended debate regarding
+GUI concepts and -features, including many proposals from the community.
+Bearing in mind that we have meanwhile gained a clearer understanding what wee
+need to build for the GUI, this _brainstorming phase_ is completed.
+
+However, a more focused discussion regarding »Workflow«
+link:/x/Verweijlen.html[ensued in 2025].
 
 GUI Brainstorming::
   We got a lot of proposed cool features. In order to channel this great influx of ideas,
@@ -22,13 +29,15 @@ GUI Proposals::
   *  link:ConceptProposals/Alcarinque.html[Alcarinque]
   *  link:ConceptProposals/Barnes.html[Clay Barnes]
   *  link:ConceptProposals/RichardSpindler.html[Richard Spindler]
+
+Feature discussion::
+  Some topics spurred some heightened interest and (controversial) discussion
   *  link:Workspaces.html[about Workspace organisation]
-  *  link:scrolling.html[about scrolling..]
-  *  link:MenuAndShortcuts.html[Ideas for menus and shortcuts]
+  *  link:Scrolling.html[about scrolling..]
+  *  link:PieMenu.html[menu / shortcuts]
 
 Timeline Discussion::
   In 2008, Joel reviewed all the available proposals and distilled a more coherent vision
-  especially about the timeline, which certainly is at the heart of any video editor.
-  This page with link:TimelineDiscussion.html[Conclusions by Joel Holdsworth] is
-  _must read_ for anyone engaged into Lumiera GUI development.
+  especially about the timeline, which certainly is at the heart of any video editor. +
+  💡 Note the link:Timeline.html#_joel_conclusions[Conclusions by Joel Holdsworth] as a summary.
 

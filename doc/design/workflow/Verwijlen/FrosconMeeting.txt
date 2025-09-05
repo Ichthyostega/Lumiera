@@ -30,7 +30,7 @@ shares similar goals but its scope is more far-reaching. We consider _Magnetic T
 important advancement to legacy track oriented GUI schemes; but it is more mouse confined and does
 not support several Control Systems footnote:[The term »Control System« refers to one technical
 realisation of an human-computer-interface, which is used coherently and can coexist with other
-such interfaces -> link:{ldoc}/design/gui/InteractionControl.html#_foundation_concepts[more]. +
+such interfaces -> link:/x/InteractionControl.FoundationConcepts.html[more]. +
 The most relevant control systems are: Mouse, keyboard, pen, hardware controls, ...]
 on an equal footing, which is our vision.
 

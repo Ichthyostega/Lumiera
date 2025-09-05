@@ -163213,6 +163213,23 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
+<node COLOR="#338800" CREATED="1757097252163" ID="ID_118274991" MODIFIED="1757097372127" TEXT="vorl&#xe4;ufig in Git einchecken">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1757097261352" ID="ID_1779486987" MODIFIED="1757097378075" TEXT=".gitignore-Trick">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      man kann Exclusions von Exclusions definieren; das klappt aber nur, wenn diese doppel-Exclusions <i>spezieller sind</i>&#160;als die allgemeine ignore-Regel. Insofern wird empfohlen, solche Regeln paarweise zu definieren
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1756773353095" ID="ID_397054568" MODIFIED="1756773366565" TEXT="weitere Fixes">
@@ -163243,6 +163260,65 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <arrowlink COLOR="#882246" DESTINATION="ID_679146016" ENDARROW="Default" ENDINCLINATION="311;0;" ID="Arrow_ID_909744060" STARTARROW="None" STARTINCLINATION="756;65;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
+</node>
+<node COLOR="#338800" CREATED="1757083789187" ID="ID_1562765179" MODIFIED="1757097238141" TEXT="Gui-Discussion etwas aufr&#xe4;umen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1757083926206" ID="ID_1901635357" MODIFIED="1757083934094" TEXT="Einstiegsseite klarer machen"/>
+<node CREATED="1757097219557" ID="ID_1643388033" MODIFIED="1757097235212">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      klar machen: Diskusssion ist <b>abgeschlossen</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1757083913652" ID="ID_400973085" MODIFIED="1757083920330" TEXT="Ordnung im Men&#xfc;"/>
+<node CREATED="1757097206857" ID="ID_640799169" MODIFIED="1757097214542" TEXT="x-Llinks nutzen">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1757109685126" ID="ID_521802643" MODIFIED="1757110116740" TEXT="systematische Fehler">
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1757109693158" ID="ID_1622322952" MODIFIED="1757110124187" TEXT="Diskussionen">
+<icon BUILTIN="pencil"/>
+<node CREATED="1757109706308" ID="ID_1114983808" MODIFIED="1757109718835" TEXT="die waren mal falsch in einem Template definiert"/>
+<node CREATED="1757109749853" ID="ID_377779187" MODIFIED="1757109773176" TEXT="verwenden einen Link um die Person zu rendern &#xd83e;&#xdc32; Link broken"/>
+<node CREATED="1757109773955" ID="ID_1518938728" MODIFIED="1757109800451" TEXT="verwenden ein DateTime-Macro, das nicht funktionert"/>
+<node COLOR="#435e98" CREATED="1757109801198" ID="ID_1348345666" MODIFIED="1757110131089" TEXT="L&#xf6;sung: per RegExp umschreiben">
+<icon BUILTIN="idea"/>
+<node CREATED="1757109809510" ID="ID_1949523296" MODIFIED="1757109850212">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Name + Datum als Asciidoc-<b>Delimited-Block</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      also mit + einleiten und dann mit -- umschlie&#223;en
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1757109851861" ID="ID_1446312028" MODIFIED="1757109870578" TEXT="den Namen als Definitionslisten-Element darstellen"/>
+<node CREATED="1757109872849" ID="ID_1888615594" MODIFIED="1757109891572" TEXT="Antworten dann als tiefere Schachtelungsebene markieren (Handarbeit!)"/>
+</node>
+</node>
 </node>
 <node CREATED="1756773417519" ID="ID_1432896045" MODIFIED="1756773420272" TEXT="Men&#xfc;">
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1756773421004" ID="ID_1536518392" MODIFIED="1756773452193" TEXT="Reihenfolge Technical">

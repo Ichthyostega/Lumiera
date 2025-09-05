@@ -1,20 +1,38 @@
 Design Documents: GUI
 =====================
 
-In the early stages of the project, there was a lot of debate regarding
-GUI concepts and -features and proposals.
+//MENU: append child GuiDiscussion
 
-link:GuiDiscussion/index.html[Here] is a collection of documents from these early
+
+In the early stages of the project, there was a lot of debate regarding
+GUI concepts and -features and proposals. Extended discussions ensued on
+the Mailinglist and several people provided concept drawings.
+
+-> link:GuiDiscussion/index.html[Here] is a collection of documents from these early
 discussions.
 
+''''
 
-.[red]#TODO# more contributions please... ;-)
-We had several additional discussions and contributions on the mailinglist,
-several people did even concept drawings. Collect these and add them here
+In the current phase of the project, the UI conception focuses on a way
+to build the interface in a systematic way, to support complex workflows
+with low friction. The following questions need to be addressed:
+
+- How to use _Perspectives_, Views, Docking Panels and Layout
+- how to adapt the Layout, ranging from a single Laptop screen to multiple monitors
+- how to allocate and place new views and property panes intelligently
+- how to allow for a coherent navigation scheme that works seamlessly
+  and intuitively over a mixture of several _Control Systems_.footnote:[The term »Control System«
+  refers to one technical realisation of an human-computer-interface, which is used coherently and
+  can coexist with other such interfaces
+  -> link:/x/InteractionControl.FoundationConcepts.html[more here]... +
+  The most relevant control systems are: Mouse, keyboard, pen, hardware controls, ...]
+- how to build such a link:/x/InteractionControl.html[Layer of Interaction-Control]
+  without interfering with the evolution of the underlying UI toolkit ⚠ ...
+
 
 NOTE: We use the term *Workflow* in our discussions to denote the more integral
       concerns of how to achieve given tasks within the application in the most
       suitable and stringent fashion. We tend to separate those more global
-      considerations from the discussion of individual GUI features.
-      -> link:../workflow/index.html[read more here...]
+      considerations from the discussion of individual GUI features. +
+      -> link:/x/Workflow.html[more about Workflow...]
 
