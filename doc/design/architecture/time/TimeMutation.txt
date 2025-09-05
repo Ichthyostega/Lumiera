@@ -1,0 +1,48 @@
+Modify Quantised Time Values
+============================
+
+.Challenges
+Temporal data can be complex and given in several flavours; a request to _modify_
+some given time data adds a further layer of complexity, since the required modification
+can itself be specified in various forms. And on top of that, the temporal data can be
+quantised, or can be represented through a quantised view, while also the modification
+can be given in any form of quantification, even based on a different time grid.
+When it comes to resolving this kind of multi-layered complexity, it is crucial
+to stick to the principles of logically sound reasoning; furthermore, especially
+the situation where several disjoint time grids are involved may require some
+additional decision rule to determine which grid has to take priority.
+
+.Problematic choices of design
+While the Lumiera developers immediately recognised the danger of code quality problems,
+there was no consensus how to approach these difficulties. Should everything in the
+Render Engine be based on frame counts? Can questions of grid alignment be pushed out
+to the system's boundaries? Is grid alignment mostly a problem of UI representation?
+An attempt was made to base time handling on simple integral data types, with a plain-C
+library to provide quantisation and timecode functions -- which however could not prevent
+the proliferation of ad-hoc computations at various places, given that temporal data
+seems to be ``just simple numbers''. In an attempt to get this situation under control
+before problems start to accumulate and spread, _Ichthyo_ pushed for a radical approach
+to rely on the _C++ type system_ and use _opaque_ entities with controlled arithmetic.
+Unfortunately, those basic time entities were also defined to be _immutable_ -- following
+a trend towards functional programming, which became increasingly popular at that time.
+
+This new framework proved itself successful as a device to identify and eliminate ad-hoc
+solutions -- yet state, being a part of the real world, can not be eliminated by dictum,
+and will claim it's right sooner or later.
+
+- very soon, a `TimeVar` datatype was introduced, since ``pure'' functional concepts
+  can never compete with the _intuitivity_ of ``just using numbers''
+- from a users point of view, the GUI exposes time-related entities which can be
+  manipulated -- notably the playback position. An attempt was made, to _encapsulate_
+  these manipulations as a `time::Control`
+
+In this (slightly compromised) form, the new framework was able to support all
+time-data related tasks encountered for the first (GTK-2) version of the UI.
+Some more technical explanations can be found in the
+link:/x/fwd/DevWiki.TimeMutation.html[DevWiki: TimeMutation].
+
+In hindsight, using opaque types was very successful -- while the immutability seems
+to be a mistake and induces a lot of unnatural complications. A design change to
+rectify the situation was planned and documented as
+link:/x/ticket/1261.html[#1261 »reconsider (im)mutability of time entities«]
+

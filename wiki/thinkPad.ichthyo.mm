@@ -161542,6 +161542,33 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 </node>
 <node CREATED="1751833021246" HGAP="10" ID="ID_1501497638" MODIFIED="1751833031779" TEXT="Struktur" VSHIFT="-2">
+<node CREATED="1756996752814" HGAP="-2" ID="ID_1879816570" MODIFIED="1756996783991" TEXT="Richtlinien" VSHIFT="8">
+<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#ddceb7" CREATED="1756941531758" HGAP="24" ID="ID_1684054849" LINK="http://localhost:8888/documentation/devel/rfc/DeveloperDocumentationStructure.html" MODIFIED="1756941603712" TEXT="RfC: DeveloperDocumentationStructure" VSHIFT="-10">
+<font NAME="SansSerif" SIZE="11"/>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1756996803277" ID="ID_3828783" MODIFIED="1756996966004" TEXT="Hierarchie schlank und daf&#xfc;r tief">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Wir sollten darauf achten, auf den oberen Ebenen die Anzahl der Kategorien knapp zu halten &#8212; um eine gewisse systematische Auffindbarkeit zu gew&#228;hrleisten; im Gegenzug dazu sind weitere Unterkategorien auf tiefer geschachtelten Ebenen eine praktisch kostenlos verf&#252;gbare Ressource, da die Kapazit&#228;t eines Baumes exponentiell mit der Tiefe w&#228;chst
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1756997359532" ID="ID_1783830780" MODIFIED="1756997509579" TEXT="wichtig: Design abstrakt halten">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Wenn die Design- und Archtektur-Bereiche zu sehr in die Details abgleiten, f&#228;chern sie sich in technische Belange auf, welche nicht mehr so recht systematisch in eine Kategorie passen wollen. F&#252;r die technische Dokumentation ist das kein Problem, denn diese ist ohnehin quantitativ ausgelegt.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
 <node CREATED="1751833032755" ID="ID_1065210302" MODIFIED="1751833034848" TEXT="Gliederung">
 <node CREATED="1751833463677" ID="ID_525672736" MODIFIED="1751833474810" TEXT="Dukumentation im Haupt-Repo">
 <node CREATED="1751833072752" ID="ID_1145154527" MODIFIED="1751833078387" TEXT="Design und Architektur"/>
@@ -161614,6 +161641,190 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
     </p>
   </body>
 </html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1756938847705" ID="ID_103170329" MODIFIED="1756938853153" TEXT="Tagging-System">
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1756938864201" ID="ID_1398390540" MODIFIED="1756941730894" TEXT="Querverbindungen sind wichtiger als die Systematik">
+<linktarget COLOR="#af3956" DESTINATION="ID_1398390540" ENDARROW="Default" ENDINCLINATION="-550;30;" ID="Arrow_ID_1693780597" SOURCE="ID_739075540" STARTARROW="None" STARTINCLINATION="-1134;-80;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1756938903084" ID="ID_1011681098" MODIFIED="1756996665571" TEXT="Grundidee (&#xd83e;&#xdc32; Christian!)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      wie so oft hatte Christian eine ganz pfiffige L&#246;sung, die <i>zu kurz greift</i>&#160;aber in die <i>richtige Richtung</i>&#160;zeigt (und auf die man erst mal kommen mu&#223;!)
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1756939756446" ID="ID_848677930" MODIFIED="1756939768247" TEXT="die Debatte 2012 war kontrovers"/>
+<node CREATED="1756939807269" ID="ID_1623672671" LINK="https://Lumiera.org/documentation/devel/rfc/WebsiteSupportMarkup.html" MODIFIED="1756939852312">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      es gibt einen RfC: &#187;<b>WebsiteSupportMarkup</b>&#171;
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1756941749934" ID="ID_423358953" MODIFIED="1756941796038" TEXT="Implementierung: unklar &#x27f9; inkrementell">
+<node CREATED="1756941807662" ID="ID_1476751063" MODIFIED="1756942071658" TEXT="&#xfc;berschneidet sich mit Menuegen.py (auch problematisch)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Die Implementierung braucht sehr wahrscheinlich einen kompletten Scan &#252;ber alle Dokumente; das zu vermeiden f&#252;hrt direkt in ein DB-basiertes CMS. Daher, gem&#228;&#223; KISS sollte man erst mal versuchen das zu implementieren und beobachten, wie gro&#223; der Schmerz ist. Auch Menuegen selber war mal in zwei Tagen implementiert, ist schwer zu warten, aber erf&#252;llt seinen Zweck inzwischen seit mehr als 10 Jahren
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1756942074622" ID="ID_1205948049" MODIFIED="1756942200762" TEXT="es ist nicht klar was wir letztlich alles brauchen....">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das gr&#246;&#223;te Problem ist wohl, da&#223; wir nicht genau wissen, was wir brauchen (abgesehen von der Vorstellung, <i>irgenwie magisch</i>&#160;funktionierende Cross-Links zu bekommen)...
+    </p>
+    <ul>
+      <li>
+        wir wollen ein Tag-System, welches um weitere Quellen erweitert werden kann
+      </li>
+      <li>
+        wir wollen m&#246;glichst mit dem Taggen anfangen k&#246;nnen, bevor unser Konzept wirklich klar ist
+      </li>
+      <li>
+        es schwirren viele Ideen herum bez&#252;glich generierter &#220;bersichtsseiten; was uns aber tats&#228;chlich weht tut, ist die Schwierigkeit, Cross-Links in der Dokumentation zu verwenden.
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1756942230234" ID="ID_1854153711" MODIFIED="1756944327464" TEXT="Prototyp: manuell angelegte LInkfarm">
+<linktarget COLOR="#fff2d9" DESTINATION="ID_1854153711" ENDARROW="Default" ENDINCLINATION="82;184;" ID="Arrow_ID_789572840" SOURCE="ID_150932933" STARTARROW="None" STARTINCLINATION="-258;-18;"/>
+<icon BUILTIN="idea"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1756942253197" ID="ID_1730148338" MODIFIED="1756942500279" STYLE="bubble">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p style="text-align: right">
+      nun sind wohl 10 Jahre vergangen
+    </p>
+    <p style="text-align: right">
+      und das Problem besteht unver&#228;ndert
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...was aber vor allem daran liegt, da&#223; ich allein bin und <i>f&#252;r mich sowiso alles per Mindmap organisiere;</i>&#160;daher konnte ich das Problem bisher &#187;aussitzen&#171; &#8212; was aber leider dazu gef&#252;hrt hat, da&#223; das TiddlyWiki (und meine Mindmap) ins Unermessliche gewachsen sind. Dennoch ist das Problem <b>eigentlich brennend ernst</b>: au&#223;er mir blickt keiner durch, und ohne mich findet niemand die Ergebnisse der umfangreichen Konzeptionsarbeit.
+    </p>
+  </body>
+</html></richcontent>
+<edge COLOR="#b82c56"/>
+<icon BUILTIN="smiley-angry"/>
+</node>
+<node CREATED="1756942521652" ID="ID_1783168341" MODIFIED="1756942540564" TEXT="man k&#xf6;nnte prototypisch beginnen">
+<node CREATED="1756942581078" ID="ID_1022353279" MODIFIED="1756942594732" TEXT="es gibt einige wenige Seiten, die dringend Querlinks brauchen"/>
+<node CREATED="1756942595480" ID="ID_1806644552" MODIFIED="1756942609160" TEXT="an vielen Stellen w&#xe4;re zudem ein Link ins TiddlyWiki notwendig"/>
+<node CREATED="1756942662255" ID="ID_197073125" MODIFIED="1756942785932" TEXT="&#xbb;Linkfarm&#xab; war bisher die einzige L&#xf6;sung, die nicht doch wieder ein CMS wird">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Dieser Vorschlag stammt von Christian, und (selbst wenn der Vorschlag zun&#228;chst in zweifelhaftem Kontext stand) &#8212; es ist die einzige bisher vorgeschlagene L&#246;sung, die mit einfachen Mitteln umsetzbar ist, <b>letztlich sogar ohne jedwede Automatisierung</b>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1756942563329" ID="ID_75757480" MODIFIED="1756942913708" TEXT="wenn das Konzept aufgeht, mu&#xdf; man sp&#xe4;ter nur die Linkfarm anpassen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...all die weiteren seinerzeit hitzig diskutieren &#187;Killer-Features&#171; sind meines Erachtens Extras, die man oben drauf setzen kann; auch &#220;bersichts- und Kategorieseiten erreicht man letztlich wieder &#252;ber einen ID-Link. Der einzige Knackpunkt ist, das Eingangs-Format der Links so hinzubekommen, da&#223; es tragf&#228;hig ist.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1757001689681" ID="ID_1598113157" MODIFIED="1757001693588" TEXT="Probleme">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1757001726624" ID="ID_1645285100" MODIFIED="1757001767376" TEXT="m&#xfc;ssen HTML-Seiten sein">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Micro-HTTPD expandiert nicht automatisch *.html
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#ecb18c" COLOR="#851038" CREATED="1757001696346" ID="ID_1305308451" MODIFIED="1757002190164" TEXT="URL-Struktur relevant">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Aus mehrerlei Gr&#252;nden
+    </p>
+    <ul>
+      <li>
+        weil wir generell in der Adresszeile die kanonische URL sehen wollen
+      </li>
+      <li>
+        weil das Navigationsmen&#252; nur mit der kanonischen URL funktioniert
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="stop-sign"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#d9010d" CREATED="1757002194873" HGAP="25" ID="ID_292178403" MODIFIED="1757002221112" TEXT="eine reine Linkfarm gen&#xfc;gt nicht" VSHIFT="4">
+<font NAME="SansSerif" SIZE="11"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1757001822110" ID="ID_1072758756" MODIFIED="1757001879840" TEXT="&#x27f9; Trampolin verwenden">
+<arrowlink COLOR="#6a4954" DESTINATION="ID_489453149" ENDARROW="Default" ENDINCLINATION="-21;-91;" ID="Arrow_ID_1222164953" STARTARROW="None" STARTINCLINATION="-146;17;"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1756942924060" ID="ID_1637291888" MODIFIED="1756942936542" TEXT="Entwurf">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1756942938346" ID="ID_559627723" MODIFIED="1756942952354" TEXT="Root-absolute LInks unterhalb /x"/>
+<node CREATED="1756942961742" ID="ID_1442589072" MODIFIED="1756943029121" TEXT="reine ID-Links kommen unmittelbar dort hinein">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      &#187;solange Vorrat reicht&#171; &#8212; die ganze Frage der Duplikat-Resolution kann sp&#228;ter auf technischer Ebene gel&#246;st werden, solange es nur f&#252;r jede verwendete ID einen Link gibt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1756943030167" ID="ID_1762668578" MODIFIED="1756943037296" TEXT="Kategorie-Unterverzeichnisse">
+<node CREATED="1756943038265" ID="ID_273491167" MODIFIED="1756943057343" TEXT="/x/def"/>
+<node CREATED="1756943064425" ID="ID_1085430825" MODIFIED="1756943072037" TEXT="/x/spec"/>
+<node CREATED="1756943097246" ID="ID_476380016" MODIFIED="1756943102889" TEXT="/x/imp"/>
+</node>
+<node CREATED="1756943520804" HGAP="31" ID="ID_489453149" MODIFIED="1757002241293" TEXT="Trampolin" VSHIFT="14">
+<linktarget COLOR="#6a4954" DESTINATION="ID_489453149" ENDARROW="Default" ENDINCLINATION="-21;-91;" ID="Arrow_ID_1222164953" SOURCE="ID_1072758756" STARTARROW="None" STARTINCLINATION="-146;17;"/>
+<node CREATED="1756943525685" ID="ID_1453475345" MODIFIED="1756943626593" TEXT="/x/fwd/&lt;KAT&gt;.&lt;ID&gt;.html"/>
+<node CREATED="1756943628727" ID="ID_76298422" MODIFIED="1756943644273" TEXT="&lt;KAT&gt; ist ein Namensraum">
+<node CREATED="1757002249262" ID="ID_1425806759" MODIFIED="1757002252346" TEXT="Page"/>
+<node CREATED="1756943645452" ID="ID_1064575039" MODIFIED="1756998819278" TEXT="DevWiki"/>
+<node CREATED="1756943652176" ID="ID_734902530" MODIFIED="1756943676548" TEXT="SubHeading"/>
+<node CREATED="1756943686751" ID="ID_1929602439" MODIFIED="1756943693442" TEXT="CodeBrowser"/>
+</node>
+<node CREATED="1756943701469" ID="ID_1882952779" MODIFIED="1757001078102" TEXT="die Seiten dort enthalten ein HTML-Redirect-Tag"/>
+<node CREATED="1756943719634" ID="ID_664718821" MODIFIED="1757001097058" TEXT="im sichtbaren Text: normales Seitenlayout + &quot;Redirect&quot;"/>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -162538,10 +162749,12 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1752070238449" ID="ID_1380279991" MODIFIED="1752070248400" TEXT="Clean-up allgemein">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1752070250288" ID="ID_787544102" MODIFIED="1752070280201" TEXT="Fixes von Christian aufsammeln (2018)">
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1756657556750" ID="ID_1232269885" MODIFIED="1756657567057" TEXT="das ist ein ganzer Branch (damals auf website-staging)"/>
-<node CREATED="1756657567790" ID="ID_1102007831" MODIFIED="1756657859352" TEXT="Vorsicht: vieles ist gut, manches erscheint mir etwas &#xbb;forsch&#xab;">
+<node COLOR="#338800" CREATED="1752070250288" FOLDED="true" ID="ID_787544102" MODIFIED="1756773268522" TEXT="Fixes von Christian aufsammeln (2018)">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1756657556750" ID="ID_1232269885" MODIFIED="1756773266528" TEXT="das ist ein ganzer Branch (damals auf website-staging)">
+<icon BUILTIN="info"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1756657567790" ID="ID_1102007831" MODIFIED="1756773253937" TEXT="Vorsicht: vieles ist gut, manches erscheint mir etwas &#xbb;forsch&#xab;">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1756657860861" ID="ID_1937963620" MODIFIED="1756657863575" TEXT="gut">
 <node CREATED="1756657864828" ID="ID_384847163" MODIFIED="1756657869975" TEXT="verbessertes Logging"/>
@@ -162589,13 +162802,14 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 </node>
 </node>
-<node CREATED="1756682077595" ID="ID_361943000" MODIFIED="1756682084516" TEXT="Review &amp; Integration">
+<node COLOR="#338800" CREATED="1756682077595" ID="ID_361943000" MODIFIED="1756773245324" TEXT="Review &amp; Integration">
+<icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1756682085439" ID="ID_1381638319" MODIFIED="1756769031480" TEXT="Methode: sortieren">
 <icon BUILTIN="yes"/>
 <node COLOR="#338800" CREATED="1756682092737" ID="ID_1201468428" MODIFIED="1756748660340" TEXT="erst mal einen Cehteh-Branch konstruieren">
 <icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#338800" CREATED="1756682118743" ID="ID_1709090489" MODIFIED="1756748685527" TEXT="diesen dann sofort konsolidieren">
+<node COLOR="#338800" CREATED="1756682118743" FOLDED="true" ID="ID_1709090489" MODIFIED="1756748685527" TEXT="diesen dann sofort konsolidieren">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1756686078655" ID="ID_1103164760" MODIFIED="1756686081386" TEXT="drei Teile">
 <node CREATED="1756686082398" ID="ID_73523769" MODIFIED="1756686093750" TEXT="generische Verbesserungen (build_website)">
@@ -162833,8 +163047,211 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1752070293350" ID="ID_391826628" MODIFIED="1752070305584" TEXT="top-Level-Seiten durchk&#xe4;mmen">
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1752070265482" ID="ID_927720852" MODIFIED="1752070278585" TEXT="releavnte Links aktualisieren">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1752070265482" ID="ID_927720852" MODIFIED="1756773347225" TEXT="relevante Links aktualisieren">
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1756817746790" ID="ID_1287550895" MODIFIED="1756817778617" TEXT="Au13.pre &#x27fc; August13">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1756936990537" ID="ID_1030893321" MODIFIED="1756937011089" TEXT="Problem: fehlende Seiten">
+<icon BUILTIN="clanbomber"/>
+<node CREATED="1756937024722" ID="ID_264003249" MODIFIED="1756937032826" TEXT="unendlich viele Einzelthemen"/>
+<node CREATED="1756937033658" ID="ID_1509603645" MODIFIED="1756937047500" TEXT="im TiddlyWiki gibts daf&#xfc;r jeweils einen &#xbb;Tiddler&#xab;"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1756937081422" ID="ID_1473479858" MODIFIED="1756937089530" TEXT="Thematische Anordnung ist ungekl&#xe4;rt">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1756937093722" ID="ID_1318650958" MODIFIED="1756937101284" TEXT="das d&#xfc;rfte der Kern des Problems sein"/>
+<node CREATED="1756937101776" ID="ID_1321628608" MODIFIED="1756937129495" TEXT="die Dokumentation soll trennen nach Design / Technik"/>
+<node CREATED="1756937162192" ID="ID_1004012837" MODIFIED="1756937188806" TEXT="im TiddlyWiki (und w&#xe4;hrend der Entwicklung) vermischt sich das"/>
+</node>
+<node CREATED="1756937211239" ID="ID_1737418933" MODIFIED="1756937233312" TEXT="Art der Verlinkung ist unpraktikabel">
+<node CREATED="1756937234117" ID="ID_35449583" MODIFIED="1756937249911" TEXT="explizite Links sind umst&#xe4;ndlich"/>
+<node CREATED="1756937250554" ID="ID_310222935" MODIFIED="1756937265816" TEXT="Links k&#xf6;nnen instabil werden (Entwicklung)"/>
+<node CREATED="1756937267796" ID="ID_256582368" MODIFIED="1756937290218">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Stichworte allein sind ein <i>flat namespace</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1756937330192" ID="ID_1148465619" MODIFIED="1756937352566" TEXT="Stichwort-System existiert noch nicht">
+<node CREATED="1756937357765" ID="ID_1921358813" MODIFIED="1756937582547" TEXT="es gibt einen pfiffigen Plan (Christian)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das w&#228;re eigentlich eine sch&#246;ne L&#246;sung, die uns weiterhin ein Content-Management-System erspart: wir erzeugen beim Seiten-Rendern eine Linkfarm, und die Links werden anhand von Tags aufgel&#246;st, die in den Seiten als Kommentar stehen (&#228;hnlich wie derzeit die Steuerung des Men&#252;s)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1756937375346" ID="ID_1875286957" MODIFIED="1756937843822" TEXT="die Implementierung w&#xfc;rde sich mit Menuegen &#xfc;berschneiden">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Seinerzeit wollte Christian das <i>mal eben schnell in Lua</i>&#160; implementieren, war aber am n&#228;chsten Tag zur&#252;ckgerudert (als ihm klar wurde, da&#223; die eigentliche Aufgabe schon etwas komplexer ist). Dann wollte sich Benny darum k&#252;mmern, ist aber bei einem Glossary-Generator steckengeblieben. Und ich &#8212; ich w&#252;rde das wohl in 1-2 Wochen hinbekommen, w&#252;rde daf&#252;r aber auch Menuegen neu schreiben, weil beide Aufgaben gleicherma&#223;en eine Traversierung aller Sources erfordern. Meine Sorge dabei ist, da&#223; das ein Performance-Bottleneck wird; denn dann brauchen wir inkrementelle Verarbeitung und damit eine Datenbank &#8212; und w&#252;rden dann selber ein Content-Management-System schreiben.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1756937423192" ID="ID_224270089" MODIFIED="1756937964163" TEXT="das konkrete Tagging-Schema ist eine nicht-triviale Aufgabe">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Und das Problem hierbei ist so <i>typisch Christian:</i>&#160;&#8222;man kann dann ja mit Tags arbeiten!&#8220; &#8212; Junge, ein System von Tags aufbauen, das f&#252;r unsere Zwecke funktionert, das ist <b>die eigentliche Aufgabe</b>.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1756938744163" ID="ID_739075540" MODIFIED="1756941730894" TEXT="irgendwann mu&#xdf; man anfangen">
+<arrowlink COLOR="#af3956" DESTINATION="ID_1398390540" ENDARROW="Default" ENDINCLINATION="-550;30;" ID="Arrow_ID_1693780597" STARTARROW="None" STARTINCLINATION="-1134;-80;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1756938759279" ID="ID_202949599" MODIFIED="1756938772081" TEXT="es bringt nichts immer nur auf die L&#xf6;sung zu warten"/>
+<node CREATED="1756938772847" ID="ID_472407213" MODIFIED="1756938818241" TEXT="mu&#xdf; die M&#xf6;glichkeit zum Reifen dieses Systems schaffen"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1756944222448" ID="ID_150932933" MODIFIED="1756944327464" TEXT="vorl&#xe4;ufig: manuelle Linkfarm-Eintr&#xe4;ge">
+<arrowlink COLOR="#fff2d9" DESTINATION="ID_1854153711" ENDARROW="Default" ENDINCLINATION="82;184;" ID="Arrow_ID_789572840" STARTARROW="None" STARTINCLINATION="-258;-18;"/>
+<icon BUILTIN="bell"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1756997510608" ID="ID_1340206899" LINK="#ID_1783830780" MODIFIED="1756997541478" TEXT="Design-Themen schlank halten">
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#338800" CREATED="1756944334324" ID="ID_1174990115" MODIFIED="1757002780761" TEXT="/x/PlayProcess">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1756997550337" ID="ID_1850622066" MODIFIED="1756997557826" TEXT="geh&#xf6;rt dann wohl in die Engine-Sektion"/>
+<node CREATED="1756997558413" ID="ID_1884692521" MODIFIED="1756997567592" TEXT="behandelt das Thema &#xbb;Processing&#xab;"/>
+<node CREATED="1757002308810" ID="ID_1925498691" MODIFIED="1757002317217" TEXT="vorerst nur verweis auf das DevWiki"/>
+</node>
+<node COLOR="#338800" CREATED="1756944657867" ID="ID_1239322037" MODIFIED="1757035087349" TEXT="Time sollte eine Sub-Kategorie werden">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1757029120123" ID="ID_1975176919" MODIFIED="1757029130074" TEXT="die bestehenden Seiten dorthin schieben"/>
+<node CREATED="1757029130686" ID="ID_1001056146" MODIFIED="1757029134225" TEXT="Links anpassen"/>
+<node COLOR="#338800" CREATED="1757029181082" ID="ID_1804753547" MODIFIED="1757029221815" TEXT="jeweils passende Forwards in das TiddlyWiki">
+<linktarget COLOR="#05df2e" DESTINATION="ID_1804753547" ENDARROW="Default" ENDINCLINATION="252;15;" ID="Arrow_ID_98280388" SOURCE="ID_1513961200" STARTARROW="None" STARTINCLINATION="201;0;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1756944634199" ID="ID_1235503392" MODIFIED="1757035089379" TEXT="/x/TimeMutation">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1756944644615" ID="ID_1067332685" MODIFIED="1757029116927" TEXT="das ist eine echte Architektur-Diskussion">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#338800" CREATED="1757029085884" ID="ID_52868230" MODIFIED="1757029111967" TEXT="neue Seite unter architecture/time">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1757029103921" ID="ID_1420860131" MODIFIED="1757029110919" TEXT="dort die Problematik beschreiben">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1756946990017" ID="ID_150632911" MODIFIED="1757035090412" TEXT="/x/TimecodeFormat">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1756946999712" ID="ID_798298912" MODIFIED="1756947008693" TEXT="geh&#xf6;rt auch diese Sub-Kategorie"/>
+<node COLOR="#338800" CREATED="1756947009348" ID="ID_1592399527" MODIFIED="1757035091650" TEXT="erst mal als Platzhalter-Seite">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1757029147292" ID="ID_1513961200" MODIFIED="1757029221814" TEXT="auch x/TimeCode">
+<arrowlink COLOR="#05df2e" DESTINATION="ID_1804753547" ENDARROW="Default" ENDINCLINATION="252;15;" ID="Arrow_ID_98280388" STARTARROW="None" STARTINCLINATION="201;0;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1756945527094" ID="ID_379568883" MODIFIED="1757035092457" TEXT="/x/Segmentation">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1756945532139" ID="ID_1633726565" MODIFIED="1756945543262" TEXT="Erl&#xe4;uterungs-Seite"/>
+<node CREATED="1756945543849" ID="ID_452364054" MODIFIED="1756945556972" TEXT="geh&#xf6;rt in Design/Model"/>
+<node COLOR="#338800" CREATED="1757032157433" ID="ID_987981180" MODIFIED="1757032178353" TEXT="Ein Absatz einf&#xfc;hrende Erl&#xe4;uterung">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1757032170957" ID="ID_1069780982" MODIFIED="1757032177356" TEXT="dann weiter in das DevWiki verlinkt">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1756945570430" ID="ID_1989630376" MODIFIED="1757035093644" TEXT="/x/FrameDispatcher">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1756945573673" ID="ID_209472146" MODIFIED="1756945577449" TEXT="technisch!"/>
+<node COLOR="#338800" CREATED="1756945578130" ID="ID_671431606" MODIFIED="1757032186781" TEXT="vorl&#xe4;ufig auf das TiddlyWiki">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1756947054848" ID="ID_1133248397" MODIFIED="1757035094836" TEXT="/x/Advice">
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1756947060232" ID="ID_345678908" MODIFIED="1757032034202" TEXT="sollte auf eine Design-Seite verweisen">
+<icon BUILTIN="hourglass"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1756947081429" ID="ID_1352644631" MODIFIED="1757031875263" TEXT="geeignete Kategorie finden">
+<icon BUILTIN="yes"/>
+<icon BUILTIN="hourglass"/>
+<node CREATED="1757031877034" ID="ID_1565516888" MODIFIED="1757031890753" TEXT="f&#xe4;llt in die Kategorie &quot;Application&quot;"/>
+<node CREATED="1757031891420" ID="ID_106217965" MODIFIED="1757031988414" TEXT="(denn ich m&#xf6;chte keine separate Kategorie &quot;Framework&quot;)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Lumiera ist keine Plattform und kein Framework &#8212; wir haben lediglich Framework-artige Infrastruktur wie in jeder gr&#246;&#223;eren Applikation
+    </p>
+  </body>
+</html></richcontent>
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1757032004822" ID="ID_715158297" MODIFIED="1757032029818" TEXT="vorerst: lediglich in das DevWiki weiterleiten">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1757027697483" ID="ID_884614038" MODIFIED="1757035097111" TEXT="x/ticket">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1757028583148" ID="ID_265578975" MODIFIED="1757028598353" TEXT="delegiert an Trampolin-Seiten"/>
+<node CREATED="1757028599749" ID="ID_103722705" MODIFIED="1757029055815" TEXT="x/fwd/Ticket.#.html">
+<icon BUILTIN="info"/>
+</node>
+<node COLOR="#338800" CREATED="1757029037410" ID="ID_1399412065" MODIFIED="1757029047641" TEXT="1261">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1756773353095" ID="ID_397054568" MODIFIED="1756773366565" TEXT="weitere Fixes">
+<icon BUILTIN="bell"/>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1756773369043" ID="ID_252956083" MODIFIED="1756773406409" TEXT="Verlinkung Git-Flow (Codebase)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      hier stimmt was nicht mit dem Link auf das allgemeine Essay
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="broken-line"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1756834117054" ID="ID_718437760" MODIFIED="1756834125609" TEXT="Lizenz-Seiten erneuern">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1756830253426" ID="ID_989483889" MODIFIED="1756830598512" TEXT="Dontations-Page ist obsolet">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Okt.2009 hatten wir eine Kooperation mit der ffis.de vereinbart; in den n&#228;chsten Jahren gab es ein paar Klein-Spenden, die wir aber nicht von der ffis abgerufen haben, da wir damals keinen Bedarf hatten (Idee war z.B. immer gewesen, einem Entwickler die Reise zum Treffen zu zahlen &#8212; aber die Beteiligten konnten die Reise zur FrOSCon immer problemlos selber zahlen). <i>Das ist zwar sch&#246;n f&#252;r uns ....</i>&#160;aber eine <b>derart veraltete Spenden-Seite wirft ein schlechtes Licht auf uns!</b>
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#882246" DESTINATION="ID_679146016" ENDARROW="Default" ENDINCLINATION="311;0;" ID="Arrow_ID_909744060" STARTARROW="None" STARTINCLINATION="756;65;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1756773417519" ID="ID_1432896045" MODIFIED="1756773420272" TEXT="Men&#xfc;">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1756773421004" ID="ID_1536518392" MODIFIED="1756773452193" TEXT="Reihenfolge Technical">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1756773443885" ID="ID_103458183" MODIFIED="1756773452194" TEXT="Reihenfolge Infrastructure">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1751808931491" ID="ID_1572764059" MODIFIED="1752070235664" TEXT="Build/Dependencies">
@@ -174578,6 +174995,21 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1756830145491" ID="ID_1909194712" MODIFIED="1756830156650" TEXT="Website">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1756830158871" ID="ID_207712886" MODIFIED="1756830168645" TEXT="TODO">
+<icon BUILTIN="bell"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1756830177726" ID="ID_534650716" MODIFIED="1756830193831" TEXT="kl&#xe4;ren: Donations-Page">
+<icon BUILTIN="bell"/>
+<node CREATED="1756830202685" ID="ID_1184692288" MODIFIED="1756830217995" TEXT="bei der ffis sind wir schon lange nicht mehr als &quot;aktiv&quot; gef&#xfc;hrt"/>
+<node CREATED="1756830218755" ID="ID_218868534" MODIFIED="1756830228917" TEXT="derzeit brauchen wir keine Donations"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1756830229931" ID="ID_679146016" MODIFIED="1756830559859" TEXT="2025-8 : Seite entfert">
+<linktarget COLOR="#882246" DESTINATION="ID_679146016" ENDARROW="Default" ENDINCLINATION="311;0;" ID="Arrow_ID_909744060" SOURCE="ID_989483889" STARTARROW="None" STARTINCLINATION="756;65;"/>
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 </node>

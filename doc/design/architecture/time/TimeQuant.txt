@@ -44,7 +44,7 @@ changing time::
   Time values are _immutable,_ like numbers.
   +
   Only a *time variable* can be changed -- yet some of the special time entities
-  can recieve link:TimeMutation[mutation messages], allowing e.g. for
+  can receive link:/x/TimeMutation.html[mutation messages], allowing e.g. for
   adjustments to a time interval selection from the GUI
 
 ''''
@@ -99,7 +99,7 @@ frame count::
 timecode::
   Quantisation also is the foundation of all kinds of formalised time specifications
   actually even a frame count is some kind of (informal) timecode -- other timecodes
-  employ a standardised format. //Every// presentation of time values and every
+  employ a standardised format. _Every_ presentation of time values and every
   persistent storage and exchange of such values is based on time codes.
   Yet quantisation and time code aren't identical: a given quantised time value
   typically can be cast into multiple timecode formats.
@@ -202,11 +202,9 @@ There is a common baseclass `TCode` though, which can be used as marker
 or for _type erasure._
 
 -> more on link:TimeUsage.html[usage situations]
-////
-// TODO integrate those cross links
 +
--> Timecode link:TimecodeFormat[format and quantisation]
+-> Timecode link:/x/TimeCode.html[format and quantisation]
 +
--> Quantiser link:QuantiserImpl[implementation details]
-////
+-> Quantiser link:/x/imp/TimeQuantiser.html[implementation details]
+
 
