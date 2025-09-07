@@ -48,7 +48,7 @@ namespace meta {
   /**
    * Find the index of the first incidence of a type in a type-sequence.
    * @note static assertion if the type is not in the type sequence
-   * @see https://stackoverflow.com/a/60868425/444796
+   * @see https://stackoverflow.com/questions/18063451/get-index-of-a-tuple-elements-type/60868425#60868425
    */
   template<class X>
   constexpr size_t

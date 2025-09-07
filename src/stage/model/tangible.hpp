@@ -108,8 +108,8 @@
  ** These slots are defined to be `sigc::trackable` for automated disconnection
  ** see [sigc-track] for an explanation.
  ** 
- ** [MVC-Pattern]: http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller
- ** [sigc-track]: http://issues.lumiera.org/ticket/940#comment:3 "Ticket #940"
+ ** [MVC-Pattern]: https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller
+ ** [sigc-track]: https://issues.lumiera.org/ticket/940#comment:3 "Ticket #940"
  ** 
  ** @see \ref AbstractTangible_test
  ** @see \ref BusTerm_test

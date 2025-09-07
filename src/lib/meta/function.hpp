@@ -135,8 +135,8 @@ namespace meta{
    *          unless you bind it beforehand into a std::function with correct signature.
    * @see FunctionSignature_test
    * 
-   * [kennytm]: http://stackoverflow.com/users/224671/kennytm
-   * [stackoverflow]: http://stackoverflow.com/questions/7943525/is-it-possible-to-figure-out-the-parameter-type-and-return-type-of-a-lambda/7943765#7943765 "figure out parameter and return type of a Lambda"
+   * [kennytm]: https://stackoverflow.com/users/224671/kennytm
+   * [stackoverflow]: https://stackoverflow.com/questions/7943525/is-it-possible-to-figure-out-the-parameter-type-and-return-type-of-a-lambda/7943765#7943765 "figure out parameter and return type of a Lambda"
    */
   template<typename FUN, typename SEL =void>
   struct _Fun

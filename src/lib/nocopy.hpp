@@ -20,7 +20,7 @@
  ** with mutable state and confusion regarding equality.
  ** @remark inspired by [Boost-Noncopyable]
  ** 
- ** [Boost-Noncopyable]: http://www.boost.org/doc/libs/1_55_0/libs/utility/utility.htm#Class_noncopyable
+ ** [Boost-Noncopyable]: https://www.boost.org/doc/libs/1_55_0/libs/utility/utility.htm#Class_noncopyable
  */
 
 

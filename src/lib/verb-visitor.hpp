@@ -64,8 +64,8 @@
  ** special twist that we don't use a pre-bound function, but rather need to combine the
  ** actual invocation target at the moment of the invocation.
  ** 
- ** [member pointer]: https://en.cppreference.com/w/cpp/language/pointer
- ** [std::apply]: https://en.cppreference.com/w/cpp/utility/apply
+ ** [member pointer]: https://en.cppreference.com/w/cpp/language/pointer.html
+ ** [std::apply]: https://en.cppreference.com/w/cpp/utility/apply.html
  ** 
  ** @see [drawing on the track canvas](\ref body-canvas-widget.cpp)
  ** @see VerbVisitorDispatch_test

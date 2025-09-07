@@ -25,7 +25,7 @@
  ** @see IosSavepoint_test
  ** 
  ** [qbert220]: https://stackoverflow.com/users/617617/qbert220
- ** [stackoverflow]: https://stackoverflow.com/a/18822888 "Restore state of `std::cout` after manipulating it"
+ ** [stackoverflow]: https://stackoverflow.com/questions/2273330/restore-the-state-of-stdcout-after-manipulating-it/18822888#18822888 "Restore state of `std::cout` after manipulating it"
  ** 
  ** 
  */

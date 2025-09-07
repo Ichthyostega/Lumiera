@@ -183,8 +183,8 @@ namespace ctrl {
        *    comparator has to define a suitable `operator()` and in addition a marker type
        *    `is_transparent`. See [transparent-cmp] and the [reference][cind-cpp14] for explanation.
        *                                                                            //////////////////////////////////TICKET #991
-       * [find-cpp14]: http://en.cppreference.com/w/cpp/container/set/find
-       * [transparent-cmp]: http://stackoverflow.com/questions/20317413/what-are-transparent-comparators
+       * [find-cpp14]: https://en.cppreference.com/w/cpp/container/set/find
+       * [transparent-cmp]: https://stackoverflow.com/questions/20317413/what-are-transparent-comparators
        */
       static GenNode const&
       getState (Record const& entry, string propertyKey)

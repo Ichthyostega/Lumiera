@@ -108,7 +108,7 @@
  **    C++ standard library. Design and semantics were retained, while implemented
  **    using modern features, notably the new _Atomics_ synchronisation framework.
  **
- ** [syncs-with definition] : https://en.cppreference.com/w/cpp/atomic/memory_order#Synchronizes_with
+ ** [syncs-with definition] : https://en.cppreference.com/w/cpp/atomic/memory_order.html#Synchronizes_with
  */
 
 
