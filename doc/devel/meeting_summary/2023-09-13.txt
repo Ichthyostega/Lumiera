@@ -92,7 +92,7 @@ integrated into the website infrastructure.
 Library solutions for Video Display
 -----------------------------------
 _Benny_ conducted some research regarding library solutions for *video display*, notably
-ffmpeg, GStreamer and libVLC. It was rather easy to code up an "hello world" example based on
+ffmpeg, GStreamer and libVLC. It was rather easy to code up an ``hello world'' example based on
 GStreamer, while it was difficult to find suitable documentation regarding the ffmpeg based
 solution. Moreover, GStreamer seems to have a much more active and helpful community.
 
@@ -116,7 +116,7 @@ support framework.
 Next meeting
 ------------
 
-The next meeting will be Wednesday Oct 11, 20:00 UTC.
+The next meeting will be Wednesday **Oct 11, 20:00 UTC**.
 You are welcome to join.
 
 ''''

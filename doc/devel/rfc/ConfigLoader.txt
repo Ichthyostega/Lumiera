@@ -4,12 +4,12 @@ Config Loader
 
 // please don't remove the //word: comments
 
-[grid="all"]
-`------------`-----------------------
-*State*         _Parked_
-*Date*          _2008-08-07_
-*Proposed by*   **ct**
--------------------------------------
+[options="autowidth"]
+|====================================
+|*State*       | _Parked_
+|*Date*        | _2008-08-07_
+|*Proposed by* | **ct**
+|====================================
 
 ********************************************************************************
 .Abstract
@@ -67,7 +67,7 @@ Ichthyostega:: '2023-10-24' ~<prg@ichthyostega.de>~
 
 //Conclusion
 //----------
-//conclusion: When approbate (this proposal becomes a Final)
+//conclusion: When approved (this proposal becomes a Final)
 //            write some conclusions about its process:
 
 
@@ -147,7 +147,7 @@ API
   - lumiera_config_init (const char* searchpath) searchpath is a buildin-default, can be changed via configure and can be appended and overridden by using a flag, e.g. `--config-path-append=""` or `--config-path=""`
 
 * `lumiera_config_destroy(...)`
-  - frees all space allocated by the link:ConfigLoader[].
+  - frees all space allocated by the ConfigLoader.
 
 * `lumiera_config_load(...)`
   - reads *one* single configuration file that will include all settings from other files.
@@ -205,10 +205,12 @@ API
 .foo.bar
 =======================================
 `integer_set("foo.bar", 123)`
+
 looks up "foo.bar"
-this returns as well file and line
-it will be decided whether it's a system file or a user's config file.
-if systemfile: loop for user's config file, if necessary create it in our RAM but not yet on disk
+
+- this returns as well file and line
+- it will be decided whether it's a system file or a user's config file.
+- if systemfile: loop for user's config file, if necessary create it in our RAM but not yet on disk
 set the value in the line.
 =======================================
 
@@ -236,16 +238,15 @@ anchor:anchor_config[]lumiera_configfile
 anchor:anchor_types[]provided TYPES
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-[grid="all"]
-`--------------.--------------------------------------'------------------------------------------------------------
-config type     C type					semantic (example)
--------------------------------------------------------------------------------------------------------------------
-number		signed long long			also hex and octal (foo.bar = 12345 #comment)
-real		long double				differerent formats as well (foo.bar=1.2345 #comment)
-string		const char*				optionaly quoted string (foo.bar="this string" #this not)
-word		const char*				first optionaly quoted word of the config (foo.bar= first this # not)
-bool		int					common representations for bools (0,1,true,false,yes,no,on,off,set,clear)
--------------------------------------------------------------------------------------------------------------------
+[options="header", cols="^,2^m,6"]
+|====================================
+|config type | C type          | semantic (example)
+|number      |signed long long | also hex and octal (foo.bar = 12345 #comment)
+|real        |long double      | differerent formats as well (foo.bar=1.2345 #comment)
+|string      |const char*      | optionaly quoted string (foo.bar="this string" #this not)
+|word        |const char*      | first optionaly quoted word of the config (foo.bar= first this # not)
+|bool        |int              |common representations for bools (0,1,true,false,yes,no,on,off,set,clear)
+|====================================
 
 ... add more types on demand (ichthyo mentioned a tuple type for color triples etc.)
 
@@ -591,7 +592,7 @@ Discussion on irc
 [02:06] <__nasa__> There should be a callback for a plugin to add a config file for that plugin.
 [02:06] <__nasa__> Ooh
 [02:06] <__nasa__> cool idea
-[02:06] <cehteh> this is not really complicated to do but would give a big usage experience link:JustWorks[][TM]
+[02:06] <cehteh> this is not really complicated to do but would give a big usage experience JustWorks[TM]
 [02:06] <__nasa__> ~/.lumi/config is the main configuration directory
 [02:06] <__nasa__> inside, there is a ~/.lumi/config/config.ini which is main configuration
 [02:07] <cehteh> no callbacks .. the idea is that the config system is independent and nothing else need to register there, that makes it much easier

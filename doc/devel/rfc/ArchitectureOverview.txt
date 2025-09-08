@@ -1,12 +1,12 @@
 Architecure Overview
 ====================
 
-[grid="all"]
-`------------`-----------------------
-*State*         _Final_
-*Date*          _2008-03-06_
-*Proposed by*   link:Ichthyostega[]
--------------------------------------
+[options="autowidth"]
+|====================================
+|*State*       | _Final_
+|*Date*        | _2008-03-06_
+|*Proposed by* | Ichthyostega
+|====================================
 
 Architecure Overview
 --------------------
@@ -15,7 +15,8 @@ This proposal intends to capture envisioned Architecture of the Application.
 image:{ldoc}/devel/draw/rendered/Lumi.Architecture-1.png[Overview of Lumiera Architecture]
 
 ^The SVG source of this drawing is
-link:http://www.lumiera.org/gitweb?p=LUMIERA;a=blob_plain;f=doc/devel/draw/Lumi.Architecture-1.svg;hb=HEAD[maintained in GIT]^
+https://git.lumiera.org/?p=LUMIERA;a=blob_plain;f=doc/devel/draw/Lumi.Architecture-1.svg;hb=HEAD[maintained in GIT(2008)]·
+https://git.lumiera.org/?p=LUMIERA;a=blob_plain;f=doc/devel/draw/Lumi.Architecture-2.svg;hb=HEAD[(current: 2022)]^
 
 
 Description
@@ -33,7 +34,7 @@ Description
  * the user/GUI manipulates a high-level model whereas rendering is based on a
    corresponding low-level model
  * stored Session (state) is comprised of high-level model, a collection of
-   Assets and accompaning configuration
+   Assets and accompanying configuration
  * (possibly) several storage backends, abstracted out by a common interface
 
 
@@ -52,27 +53,29 @@ Comments
    the next scene to appear relative to the last scene played. In the first,
    you want to keep the scenes always synced up against the audio, while in the
    latter, you just want the scenes to appear one after another.
- --- link:PercivalTiglao[] [[DateTime(2008-07-16T05:32:45Z)]]
+
+PercivalTiglao:: '2008-07-16T05:32:45Z'
 
  * Yes, indeed, that is what I am planning. The drawing above just doesn't show
    every connection. The interaction between high-level model and rules system
-   mostly goes via the "session defaults", which are facts ''and'' rules. Thus,
-   in your example, the user would just use the "default placement". My
-   Intention was to use '''tags''' to quite some extent. The user would be able
+   mostly goes via the ``session defaults'"'', which are facts _and_ rules. Thus,
+   in your example, the user would just use the ``default placement'"''. My
+   Intention was to use *tags* to quite some extent. The user would be able
    to tag the source footage, and then rules can kick in when a certain tag
    applies. Incidentally, integrating prolog is immediately on the agenda,
    because first we want to flesh out the very basic system and get to work
-   basic rendering. Until then, I use a "mock" implementation of the
+   basic rendering. Until then, I use a _mock implementation_ of the
    query/rules system, which just returns some hard wired defaults.
- -- link:Ichthyostega[] [[DateTime(2008-09-04T15:38:21Z)]]
+
+Ichthyostega:: '2008-09-04T15:38:21Z'
 
 
 
 Conclusion
 ----------
-Accepted. The drawing was moved into the GIT tree, hopefully it will be
-maintained in future.
+Accepted. The drawing was moved into the GIT tree. +
+It was upgraded and reworked
+https://git.lumiera.org/?p=LUMIERA;a=blob_plain;f=doc/devel/draw/Lumi.Architecture-2.svg;hb=0b9f2e2c3139cad542013caac593cb5972a2e3f6[in 2022]
 
 
-
-Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
+Back to link:/x/DesignProcess.html[Lumiera Design Process overview]

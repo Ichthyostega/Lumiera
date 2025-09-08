@@ -1,16 +1,16 @@
-[grid="all"]
-`------------`-----------------------
-*State*         _Parked_
-*Date*          _2009-01-14_
-*Proposed by*   link:ct[]
--------------------------------------
+[options="autowidth"]
+|====================================
+|*State*       | _Parked_
+|*Date*        | _2009-01-14_
+|*Proposed by* | ct
+|====================================
 
 
 Normalized Device Coordinates
 -----------------------------
 
-AkhIL pointed me out to some blender problem and how renderman fixes that. We
-should use this too.
+_AkhIL_ pointed out to me some blender problem and how ``renderman'' fixes that.
+We should use this too.
 
 
 
@@ -54,33 +54,14 @@ Just snippet from IRC log:
 
 
 
-Tasks
-^^^^^
 
 
-
-
-Discussion
-~~~~~~~~~~
-
-Pros
-^^^^
-
-
-
-Cons
-^^^^
-
-
-
-Alternatives
-^^^^^^^^^^^^
 
 
 
 Rationale
 ~~~~~~~~~
-TBD
+^[red]#to be written#^
 
 
 
@@ -91,22 +72,22 @@ Comments
 
 One issue where I always assumed we'd need to define something of this sort is
 for proxy editing. Especially this is a problem in conjunction with masks.
-Basically, this means a bit more of "vector graphics". With film/video editing,
+Basically, this means a bit more of ``vector graphics''. With film/video editing,
 this was rather unusual, but with the advent of more and new digital video/film
 formats it gets more and more important. Also, our considerations regarding
 time handling and quantisation to single frames somewhat fit into this line of
-thought. Up to now, rather the standard way of thinkin was to use a "project
-framerate" and a fixed resolution in pixels. But we certainly can do better.
+thought. Up to now, rather the standard way of thinking was to use a ``project
+framerate'' and a fixed resolution in pixels. But we certainly can do better.
 
-  -- Ichthyostega 18:09:50
+Ichthyostega:: '2009-01-14 18:09:50'
 
 
 Parked
 ~~~~~~
 deferred for later, generally accepted.
 
-    Do 14 Apr 2011 03:06:42 CEST Christian Thaeter
+Christian Thaeter::   'Thu 14 Apr 2011 03:06:42 CEST'
 
 
-
-Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
+''''
+Back to link:/x/DesignProcess.html[Lumiera Design Process overview]

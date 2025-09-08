@@ -86,7 +86,6 @@ Workflow between the Master and the Documentation repository
 
 There was some confusion how the master and the documentation
 repository relate to each other.
-
 We agreed on merging back and forth between in a bidirectional way,
 but doing this lazy on demand.
 
@@ -104,8 +103,7 @@ information and documentation will appear at
 https://web.archive.org/web/20221205192908/https://builddrone.pipapo.org/[builddrone.pipapo.org]
 soon. Stay tuned.
 
-Thanks to Lenny for helping with the documentation and Simon for the
-Logo.
+Thanks to Lenny for helping with the documentation and Simon for the Logo.
 
 
 

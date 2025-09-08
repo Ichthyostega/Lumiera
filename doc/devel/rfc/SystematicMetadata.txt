@@ -3,16 +3,16 @@ SystematicMetadata
 
 // please don't remove the //word: comments
 
-[grid="all"]
-`------------`-----------------------
-*State*         _Idea_
-*Date*          _Mo 08 Okt 2012 04:39:16 CEST_
-*Proposed by*   Ichthyostega <prg@ichthyostega.de>
--------------------------------------
+[options="autowidth"]
+|====================================
+|*State*       | _Idea_
+|*Date*        | _Mo 08 Okt 2012 04:39:16 CEST_
+|*Proposed by* | Ichthyostega <prg@ichthyostega.de>
+|====================================
 
 ********************************************************************************
 .Abstract
-_give a short summary of this proposal_
+[red]#TODO# _give a short summary of this proposal_
 ********************************************************************************
 
 Lumiera is a metadata processing application: _Data_ is _media data_, and everything
@@ -85,7 +85,8 @@ Tasks
  * define the interaction API [yellow-background]#WIP#
  * scrutinise this concept to find the pitfalls [yellow-background]#WIP#
  * build a demonstration prototype, where the receiver fabricates an object [red yellow-background]#TBD#
-
+   ** the unit tests related to the _Diff System_ could be counted as such a demonstration +
+      Ichthyostega:: '2029-09-13'
 
 Discussion
 ~~~~~~~~~~
@@ -140,7 +141,7 @@ of defining a contract -- is turned into a local problem.
 
 //Conclusion
 //----------
-//conclusion: When approbate (this proposal becomes a Final)
+//conclusion: When approved (this proposal becomes a Final)
 //            write some conclusions about its process:
 
 
@@ -150,8 +151,30 @@ Comments
 --------
 //comments: append below
 
+This RfC seems to be more like a vision statement; it contains some interesting
+ideas, but not much of an actual proposal. At that time, presumably I had hoped
+to spur further discussion or provoke some objection, in order to clarify what
+we should be aiming at.
+
+_During the following years,_ many of the ideas spelled out first in this text
+found their way into the *Diff System*, now used as a foundation for connecting the
+GUI to the Session core in Steam Layer. Especially the discussion of ``Alternatives''
+seem to indicate that an essential motivation for this RfC was to find a viable
+alternative to building the whole Application around a _central data model_ --
+which is in essence what I later transformed into a practical concept with the
+aforementioned ``Diff System''.
+
+-> see the design page regarding link:{ldoc}/design/architecture/ETD.html[»External Tree Description«]
+
+[underline]#Bottom line#: not sure what to do with this RfC; concepts explained therein
+seem still highly relevant and central to what Lumiera is intended to become;
+but this text does not fit into the format of an RfC, nor is there a community
+of developers to discuss such a design vision appropriately.
+
+Ichthyostega:: '2025-09-13'
+
 
 //endof_comments:
 
 ''''
-Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
+Back to link:/x/DesignProcess.html[Lumiera Design Process overview]

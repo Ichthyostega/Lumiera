@@ -1,12 +1,12 @@
 Design Process : Distributed Development Framework
 ==================================================
 
-[grid="all"]
-`------------`-----------------------
-*State*         _Final_
-*Date*          _2007-06-07_
-*Proposed by*   link:ct[]
--------------------------------------
+[options="autowidth"]
+|====================================
+|*State*       | _Final_
+|*Date*        | _2007-06-07_
+|*Proposed by* | ct
+|====================================
 
 
 Distributed Development Framework
@@ -29,20 +29,6 @@ Tasks
 * Serveral (shell?) scripts which ease the use
 
 
-Pros
-~~~~
-
-
-
-Cons
-~~~~
-
-
-
-Alternatives
-~~~~~~~~~~~~
-
-
 
 Rationale
 ~~~~~~~~~
@@ -57,9 +43,27 @@ Rationale
 Comments
 --------
 
-Made this 'final', this proposal got accepted and is already in use without
+Made this `final', this proposal got accepted and is already in use without
 much discussion
- -- link:ct[] [[DateTime(2007-06-27T16:07:13Z)]]
 
+ct:: '2007-06-27T16:07:13Z'
 
-Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
+[underline]#Historical remark#: Not sure what this RfC was meant to propose; +
+During the next year, an ambitious side-project named »*uwiki*« was started,
+with the goal to provide a wiki-like web frontend based on completely self-contained
+storage in a Git repository, without requiring any kind of data base. This project,
+however -- in spite of some compelling prototype implementations -- was abandoned;
+it became clear that such a system can not be bootstrapped from a lightweight,
+minimalist setup and would require a significant amount of web development
+rather -- a task no one was willing to take on.
+
+Yet the Lumiera project succeeded in building a web presence based on
+https://asciidoc-py.github.io/[Asciidoc] sources checked into Git, with a lightweight
+commit-hook script to automatically publish  any changes on git-push -- a scheme
+which comes close to the gist of this RfC.
+
+Ichthyo:: '2025-09-08'
+
+''''
+
+Back to link:/x/DesignProcess.html[Lumiera Design Process overview]

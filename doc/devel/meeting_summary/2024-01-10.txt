@@ -78,7 +78,7 @@ process and resource management within the Lumiera render engine itself.
 Next meeting
 ------------
 
-The next Lumiera meeting is scheduled for Wednesday, Feb 14 at 20:00 UTC.
+The next Lumiera meeting is scheduled for Wednesday, **Feb 14 at 20:00 UTC**.
 Should this be inconvenient for you, please speak up on, for example,
 link:http://lists.lumiera.org/cgi-bin/mailman/listinfo/lumiera[lumiera@lists.lumiera.org]
 and let us know of when you would prefer to attend.

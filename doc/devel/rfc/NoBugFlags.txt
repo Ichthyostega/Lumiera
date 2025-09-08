@@ -1,16 +1,16 @@
 NoBug logging flag hierachy
 ===========================
 
-[grid="all"]
-`------------`-----------------------
-*State*         _Final_
-*Date*          _2008-04-05_
-*Proposed by*   link:ct[]
--------------------------------------
+[options="autowidth"]
+|====================================
+|*State*       | _Final_
+|*Date*        | _2008-04-05_
+|*Proposed by* | ct
+|====================================
 
 
-link:NoBug[] logging flag hierachy
-----------------------------------
+NoBug logging flag hierachy
+---------------------------
 
 https://nobug.pipapo.org/[NoBug] allows hierachical organization of logging flags.
 Propose a documentation/planning about the setup.
@@ -28,9 +28,8 @@ NOTE: outdated information. Have a look at `include/logging.h`
 Tasks
 ~~~~~
  * Needs a file.c defining the common root see
-   link:{ldoc}/devel/rfc/GlobalInitialization.html[RfC: Global Initialization]
- * Everyone needs to setup this hierachy by NOBUG_DEFINE_FLAG_PARENT (flag,
-   parent_flag);
+   link:{rfc}/GlobalInitialization.html[RfC: Global Initialization]
+ * Everyone needs to setup this hierachy by `NOBUG_DEFINE_FLAG_PARENT (flag, parent_flag);`
 
 
 Pros
@@ -62,4 +61,6 @@ Ichthyostega:: 'Di 29 Okt 2013 05:52:34 CET' ~<prg@ichthyostega.de>~
 
 
 //endof_comments:
-Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
+
+''''
+Back to link:/x/DesignProcess.html[Lumiera Design Process overview]

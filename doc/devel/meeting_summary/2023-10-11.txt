@@ -65,7 +65,7 @@ but a replacement solution was identified, which still needs to be integrated.
 Next meeting
 ------------
 
-The next meeting will be Wednesday Nov 8, 20:00 UTC.
+The next meeting will be Wednesday **Nov 8, 20:00 UTC**.
 You are welcome to join.
 
 ''''

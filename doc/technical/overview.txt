@@ -480,7 +480,7 @@ and disjunction.
 Locking
 ~~~~~~~
 General purpose Locking is based on object monitors. Performance critical code
-in the Render Engine relies on ''Atomics'', or may use futures and further
+in the Render Engine relies on __»Atomics«__, or may use futures and further
 synchronisation primitives through the wrappers of the C++ standard library.
 
 NOTE: At the time when Lumiera project started, the standard library provided

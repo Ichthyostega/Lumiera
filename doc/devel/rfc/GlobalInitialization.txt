@@ -3,12 +3,12 @@ GlobalInitialization
 
 // please don't remove the //word: comments
 
-[grid="all"]
-`------------`-----------------------
-*State*         _Dropped_
-*Date*          _2008-04-05_
-*Proposed by*   CT <ct@pipapo.org>
--------------------------------------
+[options="autowidth"]
+|====================================
+|*State*       | _Dropped_
+|*Date*        | _2008-04-05_
+|*Proposed by* | CT <ct@pipapo.org>
+|====================================
 
 ********************************************************************************
 .Abstract
@@ -21,7 +21,7 @@ Description
 Setup a `src/common/lumiera_init.c` file which contains following functions:
 
  * `int lumiera_init(s.b.)` initializes the subsystems, global registries,
-    link:NoBug[] and other things. Must be called once at startup.
+    NoBug and other things. Must be called once at startup.
  * `void lumiera_destroy(void)` shuts down, frees resources, cleans up.
 
 Calling 'lumiera_init()' twice or more should be a fatal abort, calling
@@ -39,7 +39,9 @@ Tasks
 // * first step ([green]#✔ done#)
 // * second step [yellow-background]#WIP#
 // * third step [red yellow-background]#TBD#
-Implement this. [red yellow-background]#it was never implemented this way#
+Implement this.
+
+WARNING: [red yellow-background]#it was never implemented this way#
 
 
 Discussion
@@ -90,7 +92,7 @@ order and makes debugging easier since it is a serial, well defined sequence.
 
 Conclusion
 ----------
-//conclusion: When approbate (this proposal becomes a Final)
+//conclusion: When approved (this proposal becomes a Final)
 //            write some conclusions about its process:
 
 _This RfC was the plan_. We agreed on it, and then we forgot about it.
@@ -104,7 +106,8 @@ scheme:
 - by policy, clean-up and unwinding is always considered _optional_ -- but we
   care to implement a complete shutdown and memory unwinding for sake of sanity.
 
-This RfC is marked as *dropped*, since it doesn't reflect what the implementation does. +
+This RfC is marked as *dropped*, since it doesn't reflect what the implementation does.
+
 Ichthyostega:: 'Mo 08 Sep 2014 01:44:49 CEST' ~<prg@ichthyostega.de>~
 
 
@@ -130,7 +133,8 @@ there too, so it gets issued automatically.
   loading of a existing session will bring the proc layer up into fully
   operational state +
   Ichthyo:: 'DateTime(2008-04-09T02:13:02Z'
-* About link:NoBug[] initialization: I've seen that you made a `nobugcfg` where
+
+* About NoBug initialization: I've seen that you made a `nobugcfg` where
   you centralized all nobug setup. Problem here is that a change in that file
   forces a whole application rebuild. I'd like to factor that out that each
   subsystem and subsubsystem does its own `NOBUG_FLAG_INIT()` initializations,
@@ -158,7 +162,7 @@ Backend tests then only call `lumiera_backend_init()` and don't need to do the
 whole initialization, same could be done for `lumiera_proc_init()` and
 `lumiera_gui_init()`. Note about the library: I think the lib shall not depend
 on such an init, but I would add one if really needed.
-+
+
 CT:: '2008-04-09T19:19:17Z'
 
 
@@ -171,7 +175,7 @@ After reconsidering I think we have several different problems intermixed here.
    usage pattern of the flags (btw. the idea of making a flag hierarchy is very
    good!) will be much different in the backend, the proc layer and the gui.
  - Initialisation of the very basic services is tricky, as always. Seemingly
-   this includes link:NoBug[]. Of course one wants to use assertions and some
+   this includes NoBug. Of course one wants to use assertions and some
    diagnostics logging already in constructor code, and, sadly enough it can't
    be avoided completely to run such already in the static initialisation phase
    before entering main(). My current solution (putting `NOBUG_INIT` it in the
@@ -180,7 +184,7 @@ After reconsidering I think we have several different problems intermixed here.
  - Then there is the initialisation of common services. For these, it's just
    fine to do a dedicated call from main (e.g. to init the backend services and
    for creating the basic empty session for proc and firing off the event loop
-   for the GUI). I think it's no problem to ''disallow'' any IO, any accessing
+   for the GUI). I think it's no problem to __disallow any IO,__ any accessing
    of services in the other layers prior to this point.
  - What is with shutdown? personally, I'd like to call a explicit shutdown hook
    at the end of main and to disallow any IO and usage of services outside each
@@ -188,7 +192,7 @@ After reconsidering I think we have several different problems intermixed here.
    to require every destructor to be called and everything to be deallocated,
    meaning that quite a lot of code is running after the end of main() -- most
    of which is library generated. +
-   Ichthyo:: '2008-04-12T04:56:49Z
+   Ichthyo:: '2008-04-12T04:56:49Z'
 
 Some comments...
 
@@ -202,7 +206,7 @@ Some comments...
 - What is with shutdown?...
 
   * Mostly agreed, I suggest to make all initialization code once-only, a
-    second call shall bail out (under link:NoBug[]), all shutdown code shall be
+    second call shall bail out (under NoBug), all shutdown code shall be
     callable multiple times where subsequent calls are no-ops, this allows us
     to register at least some things in atexit() handlers, while we should add
     an explicit clean shutdown too, whenever that (or the atexit) handlers get
@@ -219,7 +223,7 @@ OK. So now I've done the following:
   - Moved lumiera.h and nobugcfg.h to proc/lumiera.hpp and nobugcfg.hpp (i.e.
     consider them now as Proc-Layer only)
   - Changed Appconfig to support simple lifecycle hooks, especially a
-    `ON_BASIC_INIT`. Rationale is that I don't have a lot of "magic" code in the
+    `ON_BASIC_INIT`. Rationale is that I do not have a lot of ``magic'' code in the
     Appconfig ctor, rather each subsystem in need of a basic initialisation can
     install a small callback. It can do so for other lifecycle events too.
   - Added the usual magic static ctor to install those callbacks in case they
@@ -233,7 +237,7 @@ OK. So now I've done the following:
     for the backend there too, either directly or by registering an callback,
     just as it fits in better.
   - This system is extensible: for example I plan to let the
-    link:SessionManager[] issue `ON_SESSION_INIT` and `ON_SESSION_CLOSE` events.
+    SessionManager issue `ON_SESSION_INIT` and `ON_SESSION_CLOSE` events.
     E.g. AssetManager could now just install his callbacks to clean up the
     internal Asset registry +
     Ichthyo:: '2008-04-14T03:40:54Z'
@@ -243,8 +247,8 @@ absolutely necessary (like flushing the session file, closing display and
 network connections, writing a backup or committing to a database). I see no
 problem with bypassing the standard dtor calls in a release build (they add
 no value besides diagnostics and even may cause a lot of pages to be swapped
-in). We could even make this a policy ("don't rely on destructors or
-automatic shutdown code to do any cleanup of permanent importance")
+in). We could even make this a policy (``don't rely on destructors or
+automatic shutdown code to do any cleanup of permanent importance'')
 
 .State -> Final
 I made this final now, details are still in progress to be worked out, but we
@@ -255,7 +259,7 @@ CT:: '2008-07-26T09:08:11Z'
 
 .State -> Dropped
 //add reason
-Years later, I'm just stumbling accross this RfC, and it looks somewhat
+Years later, I'm just stumbling across this RfC, and it looks somewhat
 outdated and ``misaligned'' IMHO.
 
 * this RfC proposes only one tiny and lightweight feature.
@@ -267,16 +271,16 @@ outdated and ``misaligned'' IMHO.
   did take: today, Lumiera does the _exact opposite_ of this proposal,
   there is *no central init call* -- we use *modularised hooks* instead
   and each subsystem is self contained. We even have a subsystem manager
-  to handle dependencies in startup and shtudown.
+  to handle dependencies in startup and shutdown.
 
 For this reason, I mark this RfC as *dropped* now. +
 In case there is further need of discussion regarding this topic,
 we should preferably start a new RfC.
-  
+
 Ichthyostega:: 'Mo 08 Sep 2014 01:44:49 CEST' ~<prg@ichthyostega.de>~
 
 
 //endof_comments:
 
 ''''
-Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
+Back to link:/x/DesignProcess.html[Lumiera Design Process overview]

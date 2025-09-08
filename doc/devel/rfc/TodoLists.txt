@@ -1,9 +1,9 @@
-[grid="all"]
-`------------`-----------------------
-*State*         _Parked_
-*Date*          _2008-03-05_
-*Proposed by*   link:ct[]
--------------------------------------
+[options="autowidth"]
+|====================================
+|*State*       | _Parked_
+|*Date*        | _2008-03-05_
+|*Proposed by* | ct
+|====================================
 
 Todo Lists
 ----------
@@ -44,6 +44,7 @@ Rationale
 Comments
 --------
 We decided to use a Tiddlywiki for now until this is further worked out
- -- link:ct[] [[DateTime(2008-03-08T03:38:50Z)]]
 
-Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
+ct:: '2008-03-08T03:38:50Z'
+
+Back to link:/x/DesignProcess.html[Lumiera Design Process overview]

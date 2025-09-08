@@ -1,12 +1,12 @@
 Design Process : Lumiera Design Process
 =======================================
 
-[grid="all"]
-`------------`-----------------------
-*State*         _Final_
-*Date*          _2007-06-03_
-*Proposed by*   link:ct[]
--------------------------------------
+[options="autowidth"]
+|====================================
+|*State*       | _Final_
+|*Date*        | _2007-06-03_
+|*Proposed by* | ct
+|====================================
 
 Define a Lumiera design process
 -------------------------------
@@ -17,25 +17,25 @@ Description
 ~~~~~~~~~~~
 Just use this Wiki to make it easy to add proposals in a well defined manner.
 
-I'd like to introduce a slightly formalized process for the ongoing Lumiera
-planning:
- * Every proposal is instantiated as 'Idea', the author gives other people the
+I'd like to introduce a slightly formalized process for the ongoing Lumiera planning:
+
+ * Every proposal is instantiated as `*Idea*', the author gives other people the
    opportunity to review and comment on it with extreme prejudice, while still
    working out details.
- * When the the 'Idea' in a proper form and worked out in most details it
-   becomes a 'Draft'. This 'Draft' need to be carefully reviewed, commented,
-   perhaps corrected and rated by the other Developers.
- * At some point we may decide that a 'Draft' becomes a 'Final' (I leave it
-   open how this decision shall be done for now). 'Final' Documents will be
-   imported into repository.
+ * When the the `Idea' in a proper form and worked out in most details it
+   becomes a `*Draft*' -- such a `Draft' need to be carefully reviewed,
+   commented and perhaps corrected and rated by the other Developers.
+ * At some point we may decide that a `Draft' becomes a `*Final*' (I leave it
+   open how this decision shall be done for now). `Final' RfC documents will be
+   imported into the Git repository.
  * Sometimes proposals will become dropped for some reason, this is indicated
-   by changing their state to 'Dropped', they still stay in the system for
+   by changing their state to `*Dropped*', they still stay in the system for
    further reference.
 
 
 Tasks
 ~~~~~
- * We need to refine the `Lumiera/DesignProcessTemplate`.
+ * We need to build and refine a ``Design Process Template''.
 
 Pros
 ~~~~
@@ -57,8 +57,10 @@ Alternatives
 ~~~~~~~~~~~~
 
  * We could use some forum, Trac, Mailinglist or whatever instead.
- * Just for Design documentation 0I would give http://bouml.free.fr/[Bouml] a
-   try. For myself, I am not very fond of UML Design tools, while Bouml looks
+ * Just for Design documentation I would give
+   https://web.archive.org/web/20070625100128/http://bouml.free.fr/[Bouml] a
+   try. +
+   For myself, I am not very fond of UML Design tools, while Bouml looks
    quite promising and we could maintain the UML model in git repositories
    which would be more favorable than this centralized wiki. The backside is
    that this needs even more agreement between the developers, everyone has to
@@ -68,17 +70,16 @@ Alternatives
 
 Rationale
 ~~~~~~~~~
-Wiki works it is simple to use and just flexible enough to handle the task. I
-don't go to install any other software for such tasks on my server. While the
-design progresses I'd propose to move our work into git repositories and
+Wiki already works, it is simple to use and just flexible enough to handle the task.
+I won't go to install any other software for such tasks on my server. While the
+design progresses I'd propose to move our work into Git repositories and
 eventually phase this wiki pages out anyways. I'd rather like to start out
-distributed/git right away .. but git gives us only a fine storage layer, for a
-design process we need some good presentation layer (later when using git and
+distributed/git right away ... but git gives us only a fine storage layer, for a
+design process we need some good presentation layer (later when using Git and
 starting the implementation everyones favorite editor serves for that) I have
 no better ideas yet to solve the presentation problem other than using this
 wiki (or maybe bouml).
 
-Comments
---------
+''''
 
-Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
+Back to link:/x/DesignProcess.html[Lumiera Design Process overview]

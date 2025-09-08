@@ -1,9 +1,9 @@
-[grid="all"]
-`------------`-----------------------
-*State*         _Parked_
-*Date*          _2008-04-09_
-*Proposed by*   link:ct[]
--------------------------------------
+[options="autowidth"]
+|====================================
+|*State*       | _Parked_
+|*Date*        | _2008-04-09_
+|*Proposed by* | ct
+|====================================
 
 
 Use Git Submodules to organize the project
@@ -14,33 +14,34 @@ work out the details and define a turnover point in time.
 
 Description
 ~~~~~~~~~~~
-There is a git-filter-branch command which helps in doing the dirty work
+There is a `git-filter-branch` command which helps in doing the dirty work
 isolating commits which touch certain dirs. This can moderately easily be used
 to create a new repository with a rewritten history containing only sub parts
 of the original history.
 
 The basic idea is that one developer who wants to works on a certain subsystem
-clones the 'official' master and then updates and tracks only the development
+clones the ``official'' master and then updates and tracks only the development
 state of a certain subsystem.
 
 
 Tasks
 ^^^^^
  * what shall be in the master repository?
-  * boilerplate files, license, build infrastructure
-  * the _admin_ dir with supplemental scripts
+   ** boilerplate files, license, build infrastructure
+   ** the _admin_ dir with supplemental scripts
  * define which submodules shall be defined?
-  * _doc/devel_
-  * _doc/user_
-  * _wiki_
-  * _uml_
-  * _src/backend_
-  * _src/proc_
-  * _src/gui_
-  * _src/lib_
+   ** _doc/devel_
+   ** _doc/user_
+   ** _wiki_
+   ** _uml_
+   ** _src/backend_
+   ** _src/proc_
+   ** _src/gui_
+   ** _src/lib_
 
 Not yet decided:
- * _tests_ move them into the _src/$subsystem_ as symlink?
+
+ * _tests_ move them into the `"src/$subsystem"` as symlink?
  * _src/tool_
 
 
@@ -82,6 +83,8 @@ Comments
 
 We concluded that that submodules are not yet needed with exception for the
 ./doc folder. Parked for now.
- -- ct 2008-07-26 09:09:57
 
-Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
+ct:: '2008-07-26 09:09:57'
+
+''''
+Back to link:/x/DesignProcess.html[Lumiera Design Process overview]

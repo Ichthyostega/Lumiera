@@ -1,23 +1,22 @@
-[grid="all"]
-`------------`-----------------------
-*State*         _Idea_
-*Date*          _2008-03-06_
-*Proposed by*   link:Ichthyostega[]
--------------------------------------
+[options="autowidth"]
+|====================================
+|*State*       | _Idea_
+|*Date*        | _2008-03-06_
+|*Proposed by* | Ichthyostega
+|====================================
 
 
 Design the handling of Parameters and Automation
 ------------------------------------------------
 Parameters of Plugin Components and/or Render Nodes play a role at various
 levels of the application.
- +
 Thus it seems reasonable to do a formal requirements analysis and design prior
 to coding.
 
 
 Description
 ~~~~~~~~~~~
-Regarding components directly participating in the render (which may be
+Regarding components directly participating in the render (which might be
 implemented by plugins), we distinguish between *configuration* (static) and
 *parameters* (dynamic). The point of reference for this distinction is the
 render process: a plugin configuration may well be variable in some manner,
@@ -34,8 +33,7 @@ Tasks
 
  * we need to work out an introspection mechanism for parameters
    - asses what different types of parameters we need
-   - find out how much structured parameters will be (do simple values
-     suffice?)
+   - find out how much structured parameters will be (do simple values suffice?)
    - define how parameters can be discovered/enumerated
    - define a naming scheme for parameters, so they can be addressed
      unambiguously
@@ -46,16 +44,16 @@ Tasks
 
 So...
 
-. find out to which extend we need these properties
+. find out to which extent we need these properties
 . find out what parts of the App will have what requirements?
 . chose a best fitting implementation based on this information
 
 A closely related issue is the handling of *Automation*. The current draft
-calls for an abstract interface "ParamProvider", which just allows the
+calls for an abstract interface `ParamProvider`, which just allows the
 Plugin or RenderComponent to pull a current value, without knowing if the
-ParamProvider is a GUI widget or an automation data set with interpolation. The
-component using the param value should not need to do any interpolation. We
-should re-asses and refine this draft as needed. Note: Render Nodes are
+`ParamProvider` is a GUI widget or an automation data set with interpolation.
+The component using the param value should not need to do any interpolation.
+We should re-asses and refine this draft as needed. Note: Render Nodes are
 stateless; this creates some tricky situations.
 
 
@@ -68,17 +66,38 @@ Alternatives
 ^^^^^^^^^^^^
 ?? (any ideas?)
 
+One alternative would be _not to recognise_ that this is a problematic requirement,
+and just to hack away and ``solve'' each obstacle in an ad-hoc manner.
+Unfortunately I'm unable to take this ``alternative'' seriously.
+
+Another approach could be to reject the idea of ``parameters'' being _something special_
+and rather to treat them as some kind of _different medium_ -- which would subject
+a _parameter stream_ to pull-processing. This seems to be an interesting angle, since
+going that route would remove the topic of parameters and automation from the core
+render engine altogether. However, I am not _bold enough_ to embrace this approach
+as a solution -- since I can not see to what extent such a shift would _actually_
+change anything of the actual functionality to be implemented or remove any overhead.
+
+Ichthyostega:: '2025-09-10'
+
 
 Rationale
 ~~~~~~~~~
-
-
-
+The rationale of this RfC is to conduct some requirement analysis before the
+point where the aforementioned features will actually be required to continue
+with the coding work. In an ideal world, such analysis would be carried out
+in parallel by someone knowledgeable enough to recognise the difficulties.
 
 
 
 Comments
 --------
 
+This seems to be one of those nasty features which do not garner any engagement
+nor spur any creativity. At some point you'll just happen to need it, and then,
+I'm afraid the analysis and planning work will incur significant delay...
 
-Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
+Ichthyostega:: '2025-09-10'
+
+''''
+Back to link:/x/DesignProcess.html[Lumiera Design Process overview]

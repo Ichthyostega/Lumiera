@@ -37,11 +37,11 @@ I've seen different editors using different ways of working.
 So if the aim for Lumiera is to be a general purpose video editing application, then we can
 not force any specific way of doing things and instead we should support many different
 workflows, in other words: provide a platform with possibilities for each editor to make it
-their own (which will arguably be a harder goal to achieve). Instead of a "we know what's
-best for you" approach I propose a "smart defaults with many options for configuration"
+their own (which will arguably be a harder goal to achieve). Instead of a ``we know what's
+best for you'' approach I propose a ``smart defaults with many options for configuration''
 approach.
 
-* A big question is: who is "the user"? We aim to create a tool for professionals, but there are
+* A big question is: who is »the user«? We aim to create a tool for professionals, but there are
 many types of professionals working in entirely different parts of the media industry or in
 other fields. In the previous paragraph it was mentioned that different types of content
 require different types of workflows. How to accommodate all of these different people who

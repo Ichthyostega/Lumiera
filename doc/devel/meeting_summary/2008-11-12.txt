@@ -48,7 +48,7 @@ eg. fader, panner, blur.
 _joelholdsworth_ points out that configurability can't replace real GUI and workflow design.
 He quotes from a recent Blender GUI discussion
 
-[quote, the Belnder UI reviews]
+[quote, the Blender UI reviews]
 ____________________________________________________________________
 Lastly, I’d like to address another misconception, this time about customizability.
 There has been a notion that the solution to most of the UI problems can be solved with added customizability.
@@ -71,7 +71,7 @@ from the defaults to match another 3D application such as Maya or Softimage XSI 
 for users of those applications to adapt to Blender.
 ____________________________________________________________________
 
-Consequently, Joel wants to try just doing the UI _right_, then add a little bit of customization back in here and there.
+Consequently, _Joel_ wants to try just doing the UI _right_, then add a little bit of customization back in here and there.
 Additionally, agreement is to have a kind-of ``perspective switcher'' (like in Eclipse), so saving different
 panel layouts would be covered easily
 

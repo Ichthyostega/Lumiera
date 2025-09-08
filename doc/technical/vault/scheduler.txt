@@ -7,7 +7,7 @@ ordered by priority and observing specific timing constraints.
 NOTE: Subject to [yellow-background]#active design and implementation# work as of 10/2023
 
 Work-in-progress documentation can be found in the
-link:imp/PlaybackVerticalSlice.html[DevWiki: PlaybackVerticalSlice]
+link:/x/imp/PlaybackVerticalSlice.html[DevWiki: PlaybackVerticalSlice]
 
 
 About Jobs

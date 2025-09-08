@@ -1,12 +1,12 @@
 Design Process : Development Framework
 ======================================
 
-[grid="all"]
-`------------`-----------------------
-*State*         _Final_
-*Date*          _2007-06-08_
-*Proposed by*   link:ct[]
--------------------------------------
+[options="autowidth"]
+|====================================
+|*State*       | _Final_
+|*Date*        | _2007-06-08_
+|*Proposed by* | ct
+|====================================
 
 
 
@@ -22,11 +22,11 @@ needed/required for working on lumiera.
 Description
 ~~~~~~~~~~~
 .Tools required:
-* unix like shell environment with standard tools
+* Unix like shell environment with standard tools
 * we don't require a specific linux distribution
-* git 1.5.3 (not out yet, but really soon, we want submodules support)
-* GNU toolchain, autoconf/automake (maybe scons or something else?)
-* bouml (version case unresolved)
+* Git 1.5.3 (not out yet, but really soon, we want submodules support)
+* GNU toolchain, autoconf/automake (maybe SCons or something else?)
+* Bouml (version case unresolved)
 
 .Tools suggested:
 * doxygen
@@ -36,45 +36,44 @@ Description
 
 Tasks
 ^^^^^
-* cehteh will setup a initial repository (see link:RepositorySetup[proposed
-  structure])
-* ichthyo has setup a debian-APT-depot at http://deb/ichthyostega.de[] and will
+* cehteh will setup a initial repository
+  (see -> link:{rfc}/RepositorySetup.html[RfC: proposed repository structure])
+* ichthyo has setup a debian-APT-depot at 'deb/ichthyostega.de' and will
   add backport packages there if necessary so the debian-people can stay near
   Etch/stable in the next time
 * ichthyo volunteers to get the new source into a debian package structure from
   start (same as the current cinelerra is)
 
 .And for later:
-* decide on a Unit Test framework (see link:UnitTests_Python[this Proposal])
+* decide on a Unit Test framework
+  (see -> link:rfc/UnitTestsPython.html[RfC Unit-Tests])
 * can we get some continuous integration running somewhere (nightly builds,
   testsuite)?
 * find a viable toolchain for writing more formal documentation.
-  link:ReStructured[] Text, Docbook etc?
+  ReStructured Text, Docbook etc?
 
 
-Pros
-^^^^
 
 
 Cons
 ^^^^
-* the GIT submodules are just not there atm. we need to come along with one
+* Git submodules are just not usable yet; we need to come along with one
   monolitic large project until they are available.
 
 
 Alternatives
 ^^^^^^^^^^^^
-* use visual studio and .NET :P
+* use visual studio and .NET [big]#😇#
 
 
 
 
 Rationale
 ~~~~~~~~~
-The project will be tied to a distributed infrastructure/git. With recent git
-submodules support it should be easy to let contributors only checkpout/work on
+The project will be tied to a distributed infrastructure based on Git. With recent
+Git submodules support it should be easy to let contributors only checkpout/work on
 parts of the tree (plugins, documentation, i18n, ...). We want to build up a
-set of maintenance scripts in a ./admin dir.
+set of maintenance scripts in an `./admin` directory.
 
 At the moment we go for rather bleeding edge tools, because we want to stay at
 a given version to avoid incompatibility problems. Later on a version switch
@@ -91,12 +90,13 @@ scripting up and running very early in a project. I would like if the project
 would take a rather conservative approach on the required Libs and Tools, so
 that finally, when we get into a beta state, we can run/compile on the major
 distros without too much pain. I wouldn't completely abandon the idea to target
-\*bsd and osx as well later on.
+*bsd and osX as well later on.
 
-I would propose to move Doxygen to "required". The Idea to use scons sounds
-quite appealing to me at the moment. Besides that, I think it could be moved to
-"Draft".
- -- link:Ichthyostega[] [[DateTime(2007-06-17T00:18:40Z)]]
+I would propose to move Doxygen to ``required''. The Idea to use SCons sounds
+quite appealing to me at the moment. Besides that, I think this RfC could be
+moved to ``Draft''.
+
+Ichthyostega:: '2007-06-17T00:18:40Z'
 
 Moved to Draft. For Developer documentation I would prefer doxygen. For user
 documentation we can make a similar/same think like nicolasm did for
@@ -106,26 +106,32 @@ current cin2 docs, i say its rather well done.
 
 We need to factor out some of the proposals from this page to subpages (scons,
 documentation, testing,...)
- -- link:ct[] [[DateTime(2007-06-17T17:27:59Z)]]
 
-It would really suck if we have to go through the experiences described
-http://freshmeat.net/articles/view/889/[here]. I have experienced parts of that
+ct:: '2007-06-17T17:27:59Z'
+
+It would really suck if we have to go through the experiences described in the article
+https://web.archive.org/web/20060427005516/http://freshmeat.net/articles/view/889/[»Stop the autoconf insanity!«].
+I have experienced parts of that
 in the past. I have only some beginner experience with writing autotoolized
 projects (mostly based on trial-and-error) and no experience in any other build
 system (such as scons). As such, I still believe that autotools can be
 manageable (for me personally) once the initial hurdle of learning is overcome.
 
 I all for Doxygen documentation. Related to documentation are
-http://www.splint.org/[splint]
-http://www.splint.org/manual/html/appC.html[annotations] (comments). I suggest
-that we consider using such a tool for QA. Like link:ct[] said, this should be
+http://splint.org/[Splint: Annotation-Assisted Lightweight Static Checking].
+See also http://splint.org/manual/html/appC.html[descriptions of annotations (in comments)].
+I suggest
+that we consider using such a tool for QA. Like ct said, this should be
 discussed in a subpage.
 
 I agree with using currently bleeding-edge tools.
 
+ * _historic remark(Ichthyo):_ who wrote that comment? (neither me nor ct)
 
-We have now a \'compatibility wiki\', finalized this proposal
- -- link:ct[] [[DateTime(2008-03-26T13:43:26Z)]]
+
+We have now a ``compatibility wiki'', finalized this proposal
+
+ct:: '2008-03-26T13:43:26Z'
 
 ''''
-Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
+Back to link:/x/DesignProcess.html[Lumiera Design Process overview]

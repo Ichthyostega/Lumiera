@@ -93,7 +93,7 @@ able to demonstrate running video display in the GUI.
 Next meeting
 ------------
 
-The next meeting will be Wednesday Dec 13, 20:00 UTC.
+The next meeting will be Wednesday **Dec 13, 20:00 UTC**.
 You are welcome to join.
 
 ''''

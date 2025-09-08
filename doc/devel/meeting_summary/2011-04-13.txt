@@ -16,9 +16,12 @@ _Protocol written by Ichthyo_
 
 
 .organisational
-- IRC meeting summaries will be moved into the main Git tree, below 'doc/devel'
-- mostly shortened and tidied IRC logs, plus summary of conclusions \+ decisions
-- ``winter quarterly coding news'': this time just paste _Ichthyo's_ contribution into the website
+- IRC meeting summaries will be moved into the main Git tree, +
+  below 'doc/devel'
+- mostly shortened and tidied IRC logs, +
+  plus summary of conclusions + decisions
+- ``winter quarterly coding news'': +
+  this time just paste _Ichthyo's_ contribution into the website
 - the next ``coding news'' probably in May?
 
 
@@ -344,17 +347,18 @@ _Cehteh_ points out that this new policy should at least be anounced on the Mail
 
 Recurring Topic: Design process entries
 ---------------------------------------
-Discussion of open link:/documentation/devel/rfc.html[design process] drafts.
+Discussion of open link:/x/DesignProcess.html[design process] drafts.
 
 Since some time, no further discussion happened regarding the currently _pending_
 RfC entries. Agreement is that we should again return to the former routine and
 revisit the relevant design process entries in each developer meeting.
 
+-> link:{rfc}/ApplicationInstall.html[RfC: Application Install]
 
 .-- the Application Install proposal --
 [caption="☉Transcript☉ "]
 ----------------------------
-[2011-04-14 00:48:25] <cehteh> link:{ldoc}/devel/rfc_pending/ApplicationInstall.html
+[2011-04-14 00:48:25] <cehteh> the pending ApplicationInstall RfC
 [2011-04-14 00:48:40] <ichthyo> maybe only pick out some interestin ones or some which are quick to decide
 [2011-04-14 00:49:06] <cehteh> well i want to go over all pending .. then we can put notes there "boring for the next meeting"
 [2011-04-14 00:49:42] <cehteh> for example this application install .. is boring .. you did a lot work, imo you can finalize it
@@ -372,7 +376,9 @@ revisit the relevant design process entries in each developer meeting.
 
 Delectus Shot Evaluator
 ~~~~~~~~~~~~~~~~~~~~~~~
-Agreement to _park_ it until someone else comes up to advance this topic further.
+Agreement to _park_ 
+link:{rfc}/DelectusShotEvaluator.html[the »Delectus« RfC], +
+until someone else comes up to advance this topic further.
 
 Clip Cataloging System
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -386,6 +392,7 @@ Keep _pending_ -- _ichthyo_ will expand on that
 
 Lumiera Forward Iterator
 ~~~~~~~~~~~~~~~~~~~~~~~~
+-> link:{rfc}/LumieraForwardIterator.html[RfC]
 
 [caption="☉Transcript☉ "]
 ----------------------------
@@ -405,6 +412,7 @@ Lumiera Forward Iterator
 
 Design the Render Nodes interface
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-> link:{rfc}/DesignRenderNodesInterface.html[RfC]
 
 .-- Discussion of details --
 [caption="☉Transcript☉ "]
@@ -421,7 +429,8 @@ Design the Render Nodes interface
 
 Developer Documentation Structure
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
---> see link:https://issues.lumiera.org/ticket/763[Ticket #763]
+- -> link:{rfc}/DeveloperDocumentationStructure.html[RfC]
+- -> see link:https://issues.lumiera.org/ticket/763[Ticket #763]
 
 .-- Discussion of details --
 [caption="☉Transcript☉ "]
@@ -440,6 +449,7 @@ Developer Documentation Structure
 
 Engine Interface Overview
 ~~~~~~~~~~~~~~~~~~~~~~~~~
+-> link:{rfc}/EngineInterfaceOverview.html[RfC]
 
 .-- Discussion of details --
 [caption="☉Transcript☉ "]
@@ -464,12 +474,14 @@ Engine Interface Overview
 
 Feature Bundle
 ~~~~~~~~~~~~~~
-Expected to be very important in the far future, but we don't have the
+This link:{rfc}/FeatureBundle_PluggableModules.html[RfC: Reature Bundle]
+is expected to be very important in the far future, but we don't have the
 resources to work on that right now, so _park_ it.
 
 
 Marble Mode
 ~~~~~~~~~~~
+-> link:{rfc}/MarbleMode.html[RfC: Marble Mode]
 
 .-- Discussion of details --
 [caption="☉Transcript☉ "]
@@ -492,7 +504,8 @@ Marble Mode
 
 Normalized Device Coordinates
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-still very rough, but basically agreed. +
+The proposal for link:{rfc}/NormalizedDeviceCoordinates.html[Normalized Device Coordinates]
+is still very rough, but basically agreed upon. 
 While it needs more work, it's a bit out of focus right now, so _park it.
 
 
@@ -509,6 +522,8 @@ link:{rfc}/ProcPlacementMetaphor.html[Placement] proposal
 
 Render Optimizer, Resource Management and Profiling
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- -> link:{rfc}/ResourceManagementProfiling.html[RfC: Profiling]
+- -> link:{rfc}/ResourceManagementBudgeting.html[RfC: Budgeting]
 
 .-- Discussion of details --
 [caption="☉Transcript☉ "]
@@ -545,12 +560,13 @@ Render Optimizer, Resource Management and Profiling
 
 Roadmap
 ~~~~~~~
-The link:{rfc}/rfc/Roadmap-first.html[Roadmap document]
+The link:{rfc}/Roadmap-first.html[Roadmap document]
 was erroneously not marked as final; +
 Seemingly it was decided upon in 2009 already ...
 
 Stream Type System
 ~~~~~~~~~~~~~~~~~~
+-> link:{rfc}/StreamTypeSystem.html[RfC]
 
 [caption="☉Transcript☉ "]
 ----------------------------
@@ -577,6 +593,8 @@ Stream Type System
 
 Threads Signals and important management tasks
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-> link:{rfc}/ThreadsSignalsAndImportantManagementTasks.html[RfC]
+
 .-- Discussion of details --
 [caption="☉Transcript☉ "]
 ----------------------------
@@ -620,7 +638,8 @@ in multiple timelines. We pretty much agree on that, thus it counts as _finalise
 
 Use Cases
 ~~~~~~~~~
-This is an heavyweight proposal regarding the high-level design and general handling of the
+-> link:{rfc}/UseCases.html[This RfC]
+is a heavyweight proposal regarding the high-level design and general handling of the
 Application. This would be really a topic to be discussed in conjection with the ``Workflow''
 -- the idea was to have a working group focussed these topics entirely, but there is no one
 in charge of that right now. Thus _park_ it for the time being.

@@ -1,12 +1,12 @@
 Design Process : Interface Namespaces
 =====================================
 
-[grid="all"]
-`------------`-----------------------
-*State*         _Final_
-*Date*          _2008-09-18_
-*Proposed by*   link:ct[]
--------------------------------------
+[options="autowidth"]
+|====================================
+|*State*       | _Final_
+|*Date*        | _2008-09-18_
+|*Proposed by* | ct
+|====================================
 
 Interface Namespaces
 --------------------
@@ -18,17 +18,18 @@ Description
 What are the goals?
 
  * We need unique identifiers.
- * We dont want anyone to register at us, this shall be a free system.
- * There are 2 kinds, one bound to persons and one to projects as whole.
- * Uniquenes, not identity is the goal, plugins could even be provided
+ * We do not require anyone to register with us, this shall be a free system.
+ * There are two kinds, one bound to persons and one to projects as whole.
+ * Uniqueness, not identity is the goal, plugins could even be provided
    anonymously.
  * This is the lowest level interface stuff, usually you'll deal with a
    high-level descriptor interface which provides much better (human readable)
-   metainformation about a plugin.
- * The names should follow C identifier rules and either not to hard to deciper
-   for a human or completely abstracted into a numeric ID like gpg id or uuid
- * Conclusion followed some mailinglist and IRC discussion: (see
-   http://lists.lumiera.org/pipermail/lumiera/2008-September/000054.html)[]
+   meta information about a plugin.
+ * The names should follow C identifier rules and either not to hard to decipher
+   for a human or completely abstracted into a numeric ID like GPG id or UUID
+ * Conclusion followed some discussion on IRC and in the
+   https://lists.lumiera.org/pipermail/lumiera/2008-September/000054.html[Mailinglist(2008-09)]
+
 
 First part: unique prefix
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -36,7 +37,7 @@ First part: unique prefix
 Domain names and emails names encoding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Domain names in lowercase, dots and special chars removed, first char must be a
-aphphanumeric character (if it is numeric, just write it out):
+alphanumeric character (if it is numeric, just write it out):
 
 ------------------------------------------------------------
  lumiera.org -> lumieraorg
@@ -47,7 +48,7 @@ aphphanumeric character (if it is numeric, just write it out):
 These are used when the provider is a project and not an individual person.
 
 If the provider of a interface is a individual person then he encodes his email
-address in a similar way The @ sign is encoded as uppercase "AT":
+address in a similar way The @ sign is encoded as uppercase `"AT"`:
 
 
 ------------------------------------------------------------
@@ -57,8 +58,8 @@ address in a similar way The @ sign is encoded as uppercase "AT":
 Abstract identifiers
 ^^^^^^^^^^^^^^^^^^^^
 
-As alternative method one can use his gpg (or pgp) key ids or full
-fingerprints. These are encoded as uppercase 'PGP' or 'GPG' followed with a
+As alternative method one can use his GPG (or PGP) key ids or full
+fingerprints. These are encoded as uppercase `"PGP"` or `"GPG"` followed with a
 sequence of hex digits (both upper and lower case allowed):
 
 
@@ -67,8 +68,8 @@ sequence of hex digits (both upper and lower case allowed):
  PGP09FF1387811ADFD4AE84310960DEA1B8AC4F4FF4
 ------------------------------------------------------------
 
-Next completely random identifiers (uuid's) are used by prefixing them with
-uppercase "UID" followed by some alphanumeric characters (no underline), no
+Next completely random identifiers (UUIDs) are used by prefixing them with
+uppercase `"UID"` followed by some alphanumeric characters (no underline), no
 encoding is specified but must conform to be a C identifier, shall give a
 entropy of 128 bits:
 
@@ -76,27 +77,28 @@ entropy of 128 bits:
  UIDd557753400ad4ac6912773b1deb4d99d
 ------------------------------------------------------------
 
- Remarks: this are now quite a lot more or less unique encodings, notably  we
- could allow them all, they dont clash with each other. They would be parseable
- if needed, but we never ever need to parse them, they are just taken as whole
- and have no other meaning then being unique.
+.Remarks
+This are now quite a lot more or less unique encoding, notably  we
+could allow them all, they do not clash with each other. They would be parseable
+if needed, but we never ever need to parse them, they are just taken as whole
+and have no other meaning then being unique.
 
 
-Following Parts: hierachic namespace
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Lumiera itself will use some hierachic naming scheme for it interface
+Following Parts: hierarchic namespace
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Lumiera itself will use some hierarchical naming scheme for it interface
 declarations and implementations. The details will be layed out next,
-genereally thinks look like:
+generally thinks look like:
 
 ------------------------------------------------------------
  lumieraorg_backend_frameprovider
  lumieraorg_plugin_video
 ------------------------------------------------------------
 
-it is suggested that anyone providing plugins for lumiera follows this and
+it is suggested that anyone providing plugins for Lumiera follows this and
 extends it with his own identifier:
 
-for examle joecoder``@freevideo.org writes a ultrablur then its identifier
+for example `joecoder@freevideo.org` writes a »ultrablur« then its identifier
 would look like:
 
 ------------------------------------------------------------
@@ -108,7 +110,7 @@ would look like:
 
 Tasks
 ~~~~~
-The above described scheme will be implemented and used by me (cehteh).
+The above described scheme will be implemented and used by _cehteh_.
 
 
 
@@ -117,26 +119,29 @@ Rationale
 ~~~~~~~~~
 I believe that writing plugins for Lumiera shall be simple. We do not want some
 central registry or management. Anyone shall be able to just start to write
-plugins. But that puts some reponsibility on the namespace so that all plugins
+plugins. But that puts some responsibility on the namespace so that all plugins
 can coexist and their names don't clash. The above describes a very simple and
-flexible nameing system which anyone can follow. It produces names which should
+flexible naming system which anyone can follow. It produces names which should
 be sufficiently unique for practical purposes. It leaves alternatives for
-providing plugins as institutuion, individual or even anonymously.
+providing plugins as institution, individual or even anonymously.
 
 
 Conclusion
 ----------
-Accepted by October.2008 developer meeting
+Accepted by the
+link:{ldoc}/devel/meeting_summary/2008-10-10.html#_interface_naming_convention[October.2008 developer meeting]
 
 
-Addendum Internal Interfaces
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Addendum: Internal Interfaces
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Interfaces which are internal and not meant for public use have 2 underscores
-after the prefix (eg: `lumieraorg__`). These interfaces must not be used by
+after the prefix (eg: `lumieraorg__` ). These interfaces must not be used by
 third party plugins, they are subject of unannounced changes or removal and
 make no guarantee about backwards compatibility. When we spot someone using
-this interfaces we ''will break'' his plugin ''intentionally''!
- -- link:ct[] [[DateTime(2008-10-24T03:43:43Z)]]
+this interfaces we will *break this plugin* intentionally!
 
-Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
+ct:: '2008-10-24T03:43:43Z'
+
+''''
+Back to link:/x/DesignProcess.html[Lumiera Design Process overview]

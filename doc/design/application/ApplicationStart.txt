@@ -98,7 +98,7 @@ within the engine independently, relying on worker jobs and a thread pool.
 Initialisation and Lifecycle
 ----------------------------
 After some discussion,footnote:[See the
-link:{ldoc}/devel/rfc/GlobalInitialization.html[GlobalInitialisation] RfC
+link:{rfc}/GlobalInitialization.html[GlobalInitialisation] RfC
 from spring 2008. In the beginning, we all agreed to ``keep matters simple''
 and build an `init()` function within one central piece of code everyone knows
 and hooks into. However, while the outline of the application emerged, there

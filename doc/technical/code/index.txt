@@ -46,7 +46,7 @@ Guidelines
 ////
 
 ''''
- * also see the link:{ldoc}/devel/rfc/index.html[Design Process] for ongoing discussions
+ * also see the link:/x/DesignProcess.html[Design Process] for ongoing discussions
  * see the link:/devs-vault/[Developers Vault] for frequently used developer's resources
 
 

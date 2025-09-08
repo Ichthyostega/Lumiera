@@ -1,20 +1,20 @@
-Design Process: Lumiera Forward Iterator
-========================================
+Design Process: Forward Iterator
+================================
 
-[grid="all"]
-`------------`-----------------------
-*State*         _Final_
-*Date*          _2009-11-01_
-*Proposed by*   link:Ichthyostega[]
--------------------------------------
+[options="autowidth"]
+|====================================
+|*State*       | _Final_
+|*Date*        | _2009-11-01_
+|*Proposed by* | Ichthyostega
+|====================================
 
-The situation focussed by this concept is when an API needs to expose a
+The situation addressed by this concept is when an API needs to expose a
 sequence of results, values or objects, instead of just yielding a function
-result value. As the naive solution of passing an pointer or array creates
-coupling to internals, it was superseded by the GoF
+result value. The naive solution of passing an pointer or array creates
+coupling to internals, and thus was superseded by the GoF
 https://en.wikipedia.org/wiki/Iterator[Iterator pattern]. Iteration can be
-implemented by convention, polymorphically or by generic programming; we use
-the latter approach.
+implemented by _convention_, _polymorphism_ or by _generic programming;_
+we use the latter approach.
 
 
 Lumiera Forward Iterator concept
@@ -24,18 +24,18 @@ An Iterator is a self-contained token value, representing the promise to pull a
 sequence of data
 
  - rather then deriving from an specific interface, anything behaving
-   appropriately _is a Lumiera Forward Iterator._
+   appropriately _can be used as Lumiera Forward Iterator._
  - the client finds a typedef at a suitable, nearby location. Objects of this
-   type can be created, copied and compared.
+   iterator type can be created, copied and compared.
  - any Lumiera forward iterator can be in _exhausted_ (invalid) state, which
-   can be checked by +bool+ conversion.
- - especially, default constructed iterators are fixed to that state.
+   can be checked by `bool` conversion.
+ - Notably, all default constructed iterators are fixed to that state.
    Non-exhausted iterators may only be obtained by API call.
- - the exhausted state is final and can't be reset, meaning that any iterator
+ - the exhausted state is final and can not be reset, implying that any iterator
    is a disposable one-way-off object.
  - when an iterator is _not_ in the exhausted state, it may be _dereferenced_
-   (+*i+), yielding the ``current'' value
- - moreover, iterators may be incremented (+++i+) until exhaustion.
+   (`*i`) to yield the ``current value''
+ - moreover, iterators may be incremented (`++i`) until exhaustion.
 
 
 Discussion
@@ -43,26 +43,24 @@ Discussion
 The Lumiera Forward Iterator concept is a blend of the STL iterators and
 iterator concepts found in Java, C#, Python and Ruby. The chosen syntax should
 look familiar to C++ programmers and indeed is compatible to STL containers and
-ranges. To the contrary, while a STL iterator can be thought off as being just
-a disguised pointer, the semantics of Lumiera Forward Iterators is deliberately
-reduced to a single, one-way-off forward iteration, they can't be reset,
+ranges. However, while a STL iterator can be thought off as being actually ``just
+a disguised pointer'', the semantics of Lumiera Forward Iterators is deliberately
+reduced to a single, one-way-off forward iteration, they can't be reset or
 manipulated by any arithmetic, and the result of assigning to an dereferenced
 iterator is unspecified, as is the meaning of post-increment and stored copies
-in general. You _should not think of an iterator as denoting a position_ --
-just a one-way off promise to yield data.
+in general. You _should not think of an iterator as something to describe a position_ --
+rather it is a one-time promise to pull some data.
 
 Another notable difference to the STL iterators is the default ctor and the
-+bool+ conversion. The latter allows using iterators painlessly within +for+
-and +while+ loops; a default constructed iterator is equivalent to the STL
-container's +end()+ value -- indeed any _container-like_ object exposing
-Lumiera Forward Iteration is encouraged to provide such an +end()+-function,
-additionally enabling iteration by +std::for_each+ (or Lumiera's even more
-convenient
- +util::for_each()+).
+`bool` conversion. The latter allows using iterators painlessly within `for`
+and `while` loops; a default constructed iterator is equivalent to the STL
+container's `end()` value -- and indeed, any _container-like_ object exposing
+Lumiera Forward Iteration is encouraged to provide such an `end()`-function,
+additionally enabling iteration by +std::for_each+.
 
 Implementation notes
 ^^^^^^^^^^^^^^^^^^^^
-*iter-adapter.hpp* provides some helper templates for building Lumiera Forward
+*`iter-adapter.hpp`* provides some helper templates for building Lumiera Forward
  Iterators.
 
  - _IterAdapter_ is the most flexible variant, intended for use by custom
@@ -80,7 +78,7 @@ Implementation notes
 
 Similar to the STL habits, Lumiera Forward Iterators should expose typedefs for
 +pointer+, +reference+ and +value_type+. Additionally, they may be used for
-resource management purposes by ``hiding'' a ref-counting facility, e.g.
+resource management purposes by ``carrying'' a ref-counting facility, e.g.
 allowing to keep a snapshot or restult set around until it can't be accessed
 anymore.
 
@@ -94,7 +92,7 @@ relies on that interface for discovering session contents. Besides that, we
 need more implementation experience.
 
 Some existing iterators or collection-style interfaces should be retro-fitted.
-See https://issues.lumiera.org/ticket/349[Ticket #349]. +
+See https://issues.lumiera.org/ticket/349[Ticket #349]. 
 Moreover, we need to
 gain experience about mapping this concept down into a flat C-style API.
 
@@ -111,17 +109,16 @@ Alternatives
 
 Rationale
 ~~~~~~~~~
-APIs should be written such as not tie them to the current implementation.
+APIs should be written in a way that avoids to tie them to the current implementation.
 Exposing iterators is known to create a strong incentive in this direction and
 thus furthers the creation of clean APIs.
 
-Especially in Steam-Layer we utilise already several iterator implementations,
+Especially in Steam-Layer we employ already several iterator implementations,
 but without an uniform concept, these remain just slightly disguised
-implementation types of a specific container. Moreover, the STL defines various
-and very elaborate iterator concepts. Ichthyo considers most of these an
-overkill and an outdated aproach. Many modern programming languages build with
-success on a very simple iterator concept, which allows once to pull a sequence
-of values -- and nothing more.
+implementation types of a specific container. Furthermore, the STL defines
+several quite elaborate iterator concepts. _Ichthyo_ considers most of these an
+overkill and an outdated implementation-centric approach. Many modern programming
+languages rely on a very simple iterator concept with much success.
 
 Thus the idea is to formulate a concept in compliance with STL's forward
 iterator -- but augmented by an stop-iteration test. This would give us basic
@@ -136,15 +133,15 @@ Comments
 --------
 //comments: append below
 
-Now in use since more then a year, without turning up any serious problems.
-The only _minor concern_ I can see is that this concept, as such, doesn't solve
-the problem with exposing implementation details of the underlying container on the API.
+This scheme is now in use since more then a year, without turning up any serious problems.
+The only _minor concern_ I can see is that this concept, as such, does not solve the
+problem with exposing implementation details of the underlying container on the API.
 Similar to STL Iterators, the actual implementation representation is only disguised
-behind a 'typedef'. But, generally speaking, this is an inevitable consequence of the
+behind a `typedef'. But, generally speaking, this is an inevitable consequence of the
 ``zero overhead'' abstraction. For the cases when an indirection (via VTable) is feasible,
-I've created the 'IterSource' template, which sticks to this Lumiera Forward Iterator
-concept, but provides an opaque frontend, allowing to decouple completely from the
-actual implementation. Besides that, over time I've written several standard adapters
+I've created the **`IterSource`** template, which adheres to this Lumiera Forward Iterator
+concept, yet provides an opaque frontend, allowing to decouple completely from the
+actual implementation. Besides that, over time, I have written several standard adaptors
 for the most common STL containers, plus Map, key and value extractors.
 
 Ichthyostega:: 'Sa 16 Apr 2011 00:20:13 CEST'
@@ -155,19 +152,21 @@ would require a ``deep copy'' of any underlying data structures.
 
 Ichthyostega:: 'Sa 07 Jan 2012 21:49:09 CET' ~<prg@ichthyostega.de>~
 
-NOTE: Lumiera Forward Iterators can be made to work together with the
-      'range for loop', as introduced with C++11. The preferred solution
-      is to define the necessary free functions `begin` and `end` for ADL.
-      This is best done on a per implementation base. We consider a generic
-      solution not worth the effort
+NOTE: Lumiera Forward Iterators can be made to work together conveniently
+      with the »Range-for Loop«, as introduced with C++11. The preferred
+      solution is to define the necessary free functions `begin` and `end`
+      for ADL. This is best done on a per implementation base.
 
-This is to say, these two concepts can be made to work together well. While,
-at a conceptual level, they are not really compatible, and build on a
-different understanding: The standard for-loop assumes ``a container'',
-while our Forward Iterator Concept deals with ``abstract data sources''.
-The user needs to understand the fine points of that conceptual difference:
+Considered at a conceptual level, this may seem surprising, since the
+Range-Iteration from the C++ standard and our Forward-Iteration do not mesh
+up completely, and build upon a different understanding: The standard Range-`for`
+Loop assumes ``a container'', or at least ``a data range'', while our
+Forward Iterator Concept deals with ``abstract data sources''. So
+these are two concepts operating at a different level of abstraction,
+yet able to be stacked upon each other. However, the user needs
+to understand the fine points of those conceptual differences:
 
-- if you apply the range-`for` construct on a container, you can iterate
+- if you apply the Range-`for` construct on a container, you can iterate
   as often as you like. Even if the iterators of that container are
   implemented in compliance with the Lumiera Forward Iterator concept.
 - but if you apply the range-`for` construct on _a given iterator_,
@@ -184,9 +183,17 @@ Ichthyostega:: 'Sa 04 Jul 2015 22:57:51 CEST' ~<prg@ichthyostega.de>~
 
 Final
 ~~~~~
-Accepted on developer meeting
+Accepted on 
+link:{ldoc}/devel/meeting_summary/2011-04-13.html#_lumiera_forward_iterator[developer meeting]
 
-    Do 14 Apr 2011 02:52:30 CEST Christian Thaeter
+Christian Thaeter::  'Thur 14 Apr 2011 02:52:30 CEST'
 
+TIP: The Lumiera Forward Iterator became a widely used scheme.
+     One notable extension built on top is the _filter pipeline_ template `IterExplorer`.
+     Another point worth mentioning is that such an iterator can not only yield values
+     (as described in this RfC), but may also expose a reference into an  underlying
+     _State Core_ -- which makes high-performance collaboration protocols possible,
+     while keeping all participants opaque.
 
-Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
+''''
+Back to link:/x/DesignProcess.html[Lumiera Design Process overview]

@@ -33,7 +33,7 @@ Discussion of open link:/x/DesignProcess.html[design process] drafts.
 
 EDL vs Sequence
 ~~~~~~~~~~~~~~~
-There has been a long discussion on the ML about the term EDL. In the end almost agreed or was at least ok with the Sequence instead of EDL. The Sequence will be the building block and is a collection of media objects and a tree of tracks. A discussion about the UML showed in [wiki:self:../DesignProcess/TimelineSequenceOutput Project, Timeline(s), Sequence(s) and Output] and the relation of Timeline and Sequence follows.
+There has been a long discussion on the ML about the term EDL. In the end almost agreed or was at least ok with the Sequence instead of EDL. The Sequence will be the building block and is a collection of media objects and a tree of tracks. A discussion about the UML showed in link:{rfc}/TimelineSequenceOutput.html[Project, Timeline(s), Sequence(s) and Output] and the relation of Timeline and Sequence follows.
 
 __Conclusion__: the name Sequence will be used instead of EDL
 
@@ -45,7 +45,7 @@ Ichtyo explains that the idea is that between layers only the C Language interfa
 
 Threads
 ~~~~~~~
-The UI will mostly run on a single thread, i.e. gtk_main will run in this GUI thread and when it terminates, the GUI is "done" and signals back that it is done. Cehteh points out that really hard working threads should be managed by the scheduler in the backend. All agree that we should avoid thread cancellation
+The UI will mostly run on a single thread, i.e. »gtk_main« will run in this GUI thread and when it terminates, the GUI __is ``done''__ and signals back that it is done. _Cehteh_ points out that really hard working threads should be managed by the scheduler in the backend. All agree that we should avoid thread cancellation.
 
 
 
@@ -55,12 +55,12 @@ General Topics
 
 Video format
 ~~~~~~~~~~~~
-Kirk asks to what video format footage has to be converted so that it can be used in Lumiera. Ichtyo and cehteh point out that Lumiera will not be nailed down to one single format. A small number of formats that permit precise editing will be supported. Other formats may be available through plugins. The working horse is gmerlin, especially libgavl. Essentially Lumiera will try to figure out a conversion path in a lossless way.
+_Kirk_ asks to what video format footage has to be converted so that it can be used in Lumiera. _Ichtyo_ and _Cehteh_ point out that Lumiera will not be nailed down to one single format. A small number of formats that permit precise editing will be supported. Other formats may be available through plugins. The working horse is gmerlin, especially libgavl. Essentially Lumiera will try to figure out a conversion path in a lossless way.
 
 
 Knowledge base
 ~~~~~~~~~~~~~~
-Kirk has already collected lots of information on video formats, conversion from one into the other, formats supported out of the box by Quicktime, Windows Media Player and so on. The developers agree that this is much needed. Kirk proposes to help in this area.
+_Kirk_ has already collected lots of information on video formats, conversion from one into the other, formats supported out of the box by Quicktime, Windows Media Player and so on. The developers agree that this is much needed. _Kirk_ proposes to help in this area.
 
 
 

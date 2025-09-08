@@ -178,27 +178,27 @@ supported placement directives
 
 
 
-[options="header", width="70%",cols="^m,<m,s<",frame="topbot",grid="all"]
-`------------------------`------------------------------------`---------------------------------------------------
-  internal DSL            Asciidoc source
-  Node(<id>)              -- discover `id.txt` --              create new node or retrieve existing node
-  linkChild(id)                                                basic function for attaching child node
-  linkParent(id)                                               basic function to attach below parent
-  putChildLast(id)        [attach] child <id>                  move child to current end of list
-  appendChild(id)         [append] child <id>
-  putChildFirst(id)                                            move child to current list start
-  prependChild(id)        prepend [child] <id>
-  putChildAfter(id,ref)   [attach|put] child <id> after <ref>  move child after the given ref entry
-  link(url[,id][,label])  [child <id>] link ::<url>[<label>]    attach an entry, holding an external link
-  Node(<id>,label=<lbl>)  label|title <lbl>                    define the visible text in the menu entry
-  sortChildren()          sort [children]                      sort all children currently in list
-  enable(False)           off|disable|deactivate               make node passive; any children/parents added later are ignored
-  enable([True])          on|active|activate                   make node active again (this is the default)
-  detach()                detach                               cut away any parents and children, disable the node
-  discover(srcdirs=...)   include dir <token>[,<token>]        instead of current dir, retrieve children from other dirs (relative)
-  discover(includes=...)  include <token>[,<token>]            explicitly use the listed elements as children
-  discover(excludes=...)  exclude <token>[,<token>]            after discovering, filter names matching the <token> (without extension)
---------------------------------------------------------------------------------------------------------------------
+[options="header",cols="^m,2<m,3<",frame="topbot",grid="all"]
+|==============================================================
+| internal DSL           |Asciidoc source                     |
+| Node(<id>)             |-- discover `id.txt` --             | create new node or retrieve existing node
+| linkChild(id)          |                                    | basic function for attaching child node
+| linkParent(id)         |                                    | basic function to attach below parent
+| putChildLast(id)       |[attach] child <id>                 | move child to current end of list
+| appendChild(id)        |[append] child <id>                 |
+| putChildFirst(id)      |                                    | move child to current list start
+| prependChild(id)       |prepend [child] <id>                |
+| putChildAfter(id,ref)  |[attach\|put] child <id> after <ref>| move child after the given ref entry
+| link(url[,id][,label]) |[child <id>] link ::<url>[<label>]  | attach an entry, holding an external link
+| Node(<id>,label=<lbl>) |label\|title <lbl>                  | define the visible text in the menu entry
+| sortChildren()         |sort [children]                     | sort all children currently in list
+| enable(False)          |off\|disable\|deactivate            | make node passive; any children/parents added later are ignored
+| enable([True])         |on\|active\|activate                | make node active again (this is the default)
+| detach()               |detach                              | cut away any parents and children, disable the node
+| discover(srcdirs=...)  |include dir <token>[,<token>]       | instead of current dir, retrieve children from other dirs (relative)
+| discover(includes=...) |include <token>[,<token>]           | explicitly use the listed elements as children
+| discover(excludes=...) |exclude <token>[,<token>]           | after discovering, filter names matching the <token> (without extension)
+|==============================================================
 
 
 commandline options

@@ -3,12 +3,12 @@ Developer Documentation Structure
 
 // please don't remove the //word: comments
 
-[grid="all"]
-`------------`-----------------------
-*State*         _Draft_
-*Date*          _Mon Aug  2 18:03:25 2010_
-*Proposed by*   Cehteh + Ichthyo
--------------------------------------
+[options="autowidth"]
+|====================================
+|*State*       | _Draft_
+|*Date*        | _Mon Aug  2 18:03:25 2010_
+|*Proposed by* | Cehteh + Ichthyo
+|====================================
 
 ********************************************************************************
 We describe here how to bring the Lumiera Developer Documentation into an simple
@@ -69,14 +69,16 @@ Tasks
 ~~~~~
 // List what would need to be done to implement this Proposal in a few words:
 
- * Go over the existing content and the remainder of the asciidoced tiddlywikis,
-   integrate this content either in directly into the "Lumiera: The inner Core"
+ * Go over the existing content and the remainder of the Asciidoced TiddlyWikis,
+   integrate this content either in directly into the
+   link:{ldoc}/technical/overview.html[»Lumiera: The inner Core«]
    document or write separate documentation pages or RFC's. ([green]#✔ done#)
- * The 'proc' tiddlywiki is a bit special, we need a plan how to integrate this.
-   [red yellow-background]#TBD#
+ * The »Renderengine« TiddlyWiki is a bit special, we need a plan how to integrate this.
  * Create a facility to support the cross-linking between the various kinds of documents
-   [yellow-background]#WIP#
+   [red yellow-background]#TODO#
 
+CAUTION: this issue with stable cross-links
+         -> link:{rfc}/WebsiteSupportMarkup.html[remains a concern]
 
 
 Pros
@@ -121,7 +123,7 @@ developers.
 
 //Conclusion
 //----------
-//conclusion: When approbated (this proposal becomes a Final)
+//conclusion: When approvedd (this proposal becomes a Final)
 //            write some conclusions about its process:
 
 

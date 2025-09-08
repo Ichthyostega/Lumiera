@@ -62,7 +62,7 @@ Rationale
 
 //Conclusion
 //----------
-//conclusion: When approbate (this proposal becomes a Final)
+//conclusion: When approved (this proposal becomes a Final)
 //            write some conclusions about its process:
 
 

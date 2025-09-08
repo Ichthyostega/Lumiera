@@ -326,7 +326,7 @@ Topics
 ~~~~~~
  * organisational (protocol, agenda, leftovers?)
  * Logo Contest progress, discussion about how to do the pre selection
- * rename "EDL" into "Sequence"
+ * rename »EDL« into »Sequence«
  * link:/documentation/devel/rfc/TimelineSequenceOutput.html[Project, Timeline(s), Sequence(s) and Output]
  * GUI/Proc Interface and collaboration
  * Threading questions regarding gtk-main and main()
@@ -500,7 +500,7 @@ Topics
 ~~~~~~
  * boilerplate (protocol, whats left from last meeting, next meeting)
  * Go through Ideas and Drafts in design process
- * "Call for design" for some features relevant for the whole Application:
+ * ``Call for design'' for some features relevant for the whole Application:
    - parameters and automation
    - render node interface
    - handling of compound sessions

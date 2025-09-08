@@ -163213,20 +163213,42 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
+<node COLOR="#338800" CREATED="1757113762879" ID="ID_1196939838" MODIFIED="1757113800674" TEXT="x/rfc">
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1757113768640" ID="ID_1915414109" MODIFIED="1757113785504" TEXT="auch RfC-Links sollte man besser abstrahieren">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1757113803372" ID="ID_1964730812" MODIFIED="1757113917367" TEXT="es gibt ein massives Namensraum-Problem">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...da hatte anfangs niemand von uns dran gedacht; inzwischen haben wir <i>dutzende</i>&#160; RfCs, und so manche gute griffige Namen sind bereis weg; generell sollte man
+    </p>
+    <ul>
+      <li>
+        RfCs mit einem Nummern-Schema versehen
+      </li>
+      <li>
+        im RfC-Subindex auch gewisse qualifizierte Schlagworte mit speichern
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1757113786929" ID="ID_1055142518" MODIFIED="1757113798665" TEXT="fange mal schrittweise damit an"/>
+</node>
 <node COLOR="#338800" CREATED="1757097252163" ID="ID_118274991" MODIFIED="1757097372127" TEXT="vorl&#xe4;ufig in Git einchecken">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1757097261352" ID="ID_1779486987" MODIFIED="1757097378075" TEXT=".gitignore-Trick">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       man kann Exclusions von Exclusions definieren; das klappt aber nur, wenn diese doppel-Exclusions <i>spezieller sind</i>&#160;als die allgemeine ignore-Regel. Insofern wird empfohlen, solche Regeln paarweise zu definieren
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -163234,7 +163256,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1756773353095" ID="ID_397054568" MODIFIED="1756773366565" TEXT="weitere Fixes">
 <icon BUILTIN="bell"/>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1756773369043" ID="ID_252956083" MODIFIED="1756773406409" TEXT="Verlinkung Git-Flow (Codebase)">
+<node COLOR="#435e98" CREATED="1756773369043" ID="ID_252956083" MODIFIED="1757375452980" TEXT="Verlinkung Git-Flow (Codebase)">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -163244,6 +163266,16 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
   </body>
 </html></richcontent>
 <icon BUILTIN="broken-line"/>
+<node CREATED="1757375530629" ID="ID_353096145" MODIFIED="1757375578668" TEXT="war Kollateralschaden vom Merge von Christians Umbau 2018..."/>
+<node CREATED="1757375552149" ID="ID_1100078557" MODIFIED="1757375565206" TEXT="Christian hatte nicht nach {l} im Documentation-Tree gesucht"/>
+</node>
+<node CREATED="1757467120936" ID="ID_1396646253" MODIFIED="1757467126724" TEXT="Footer">
+<node CREATED="1757467128881" ID="ID_536613684" MODIFIED="1757467140201" TEXT="search-Feld?"/>
+<node CREATED="1757467140824" ID="ID_389709958" MODIFIED="1757467150994" TEXT="welche Repos sind sinnvoll?"/>
+<node CREATED="1757467151657" ID="ID_566958065" MODIFIED="1757467158398" TEXT="genauerer Timestamp">
+<node CREATED="1757467159266" ID="ID_599618635" MODIFIED="1757467172806" TEXT="derzeit verwenden wir {localdate} {localtime}"/>
+<node CREATED="1757467173466" ID="ID_726876662" MODIFIED="1757467186928" TEXT="denkbar: {docdate} {doctime}"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1756834117054" ID="ID_718437760" MODIFIED="1756834125609" TEXT="Lizenz-Seiten erneuern">
 <icon BUILTIN="flag-yellow"/>
@@ -163266,16 +163298,13 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1757083926206" ID="ID_1901635357" MODIFIED="1757083934094" TEXT="Einstiegsseite klarer machen"/>
 <node CREATED="1757097219557" ID="ID_1643388033" MODIFIED="1757097235212">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       klar machen: Diskusssion ist <b>abgeschlossen</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1757083913652" ID="ID_400973085" MODIFIED="1757083920330" TEXT="Ordnung im Men&#xfc;"/>
 <node CREATED="1757097206857" ID="ID_640799169" MODIFIED="1757097214542" TEXT="x-Llinks nutzen">
@@ -163293,30 +163322,32 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <icon BUILTIN="idea"/>
 <node CREATED="1757109809510" ID="ID_1949523296" MODIFIED="1757109850212">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Name + Datum als Asciidoc-<b>Delimited-Block</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       also mit + einleiten und dann mit -- umschlie&#223;en
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1757109851861" ID="ID_1446312028" MODIFIED="1757109870578" TEXT="den Namen als Definitionslisten-Element darstellen"/>
 <node CREATED="1757109872849" ID="ID_1888615594" MODIFIED="1757109891572" TEXT="Antworten dann als tiefere Schachtelungsebene markieren (Handarbeit!)"/>
+</node>
+</node>
+<node CREATED="1757297636473" ID="ID_873518682" MODIFIED="1757297640340" TEXT="RfC">
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1757297650576" ID="ID_404195629" MODIFIED="1757297655336" TEXT="markup broken">
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1757297641266" ID="ID_66055677" MODIFIED="1757297645010" TEXT="CStyleGuide">
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 </node>
 </node>
@@ -163326,6 +163357,32 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1756773443885" ID="ID_103458183" MODIFIED="1756773452194" TEXT="Reihenfolge Infrastructure">
 <icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node CREATED="1757122577486" ID="ID_1246513731" MODIFIED="1757122587846" TEXT="Doxygen">
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1757122589092" ID="ID_723885529" MODIFIED="1757122594029" TEXT="Modules-Page fehlt">
+<icon BUILTIN="broken-line"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1757122595259" ID="ID_1861042641" MODIFIED="1757122720646" TEXT="vmtl. &#xc4;nderung in Doxygen">
+<icon BUILTIN="info"/>
+<node CREATED="1757122621984" ID="ID_12344637" LINK="https://github.com/doxygen/doxygen/issues/10562" MODIFIED="1757122633503" TEXT="siehe #10562"/>
+<node CREATED="1757122636775" ID="ID_621368638" MODIFIED="1757122652224" TEXT="demnach w&#xe4;ren das nun &quot;topics&quot;"/>
+</node>
+<node CREATED="1757122654348" ID="ID_1433417097" MODIFIED="1757122671181" TEXT="anpassen">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1757122671938" ID="ID_1127643223" MODIFIED="1757122695607" TEXT="DoxygenLayout: Tab &quot;topics&quot;">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1757122684965" ID="ID_1398251523" MODIFIED="1757122695608" TEXT="pr&#xfc;fen ob Generierung funktioniert">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1757122698309" ID="ID_433552005" MODIFIED="1757122707016" TEXT="Einstiegsseite anpassen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1757122866610" ID="ID_110243952" MODIFIED="1757122901163" TEXT="URL auf doxygen.org &#x27fc; https://www.doxygen.nl/index.html">
+<icon BUILTIN="help"/>
+<node CREATED="1757122902204" ID="ID_313076251" MODIFIED="1757122905207" TEXT="woot??"/>
+<node CREATED="1757122905904" ID="ID_187223135" MODIFIED="1757122914193" TEXT="das ist doch von Doxygen selber generiert..."/>
 </node>
 </node>
 </node>

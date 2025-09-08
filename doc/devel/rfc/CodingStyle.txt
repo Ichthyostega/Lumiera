@@ -1,12 +1,12 @@
 Design Process : Coding Style
 =============================
 
-[grid="all"]
-`------------`-----------------------
-*State*         _Final_
-*Date*          _2007-06-27_
-*Proposed by*   link:ct[]
--------------------------------------
+[options="autowidth"]
+|====================================
+|*State*       | _Final_
+|*Date*        | _2007-06-27_
+|*Proposed by* | ct
+|====================================
 
 
 
@@ -30,10 +30,10 @@ See https://en.wikipedia.org/wiki/Indentation_style[Wikipedia: Indentation Style
 
 .Proposed:
 * K&R by _ichthyo_
-* compact and well known
+** compact and well known
 * GNU by _cehteh_
-* imo the best readability (albeit little strange)
-* Lumiera might apply as official GNU project someday
+** imo the best readability (albeit little strange)
+** Lumiera might apply as official GNU project someday
 
 
 Another question: __how to write identifiers?__
@@ -65,11 +65,11 @@ CT:: '2007-07-03 04:04'
 
 Comments
 --------
-Since link:ct[] called spaces instead of tabs first, we should stick to that. I
+Since ct called spaces instead of tabs first, we should stick to that. I
 think all other reasons will lead us to nowhere!
 
 Although I'm used to a BSD/KNF-like coding style I will try the GNU one. After
-all, the wikipedia page mentions no disadvantages of that style :)
+all, the wikipedia page mentions no disadvantages of that style 😊
 
 MichaelPloujnikov:: '2007-06-27 17:17'
 
@@ -77,12 +77,22 @@ MichaelPloujnikov:: '2007-06-27 17:17'
 I just proposed K&R because it is widely accepted. Personally, I was never very
 fond of K&R style, I always preferred putting opening braces to the left. I
 never used GNU style until now, but it looks somewhat appealing to me. (btw,
-ECLIPSE comes with presets for all this styles :-P ). Anyhow, I can adapt to
+ECLIPSE comes with presets for all this styles 😛 ). Anyhow, I can adapt to
 most any style. The only thing I really dislike is using tabs (with the
-exception of database DDLs and CSound files, where tab are actually helpful) :)
+exception of database DDLs and CSound files, where tab are actually helpful) 😊
 
 Ichthyo:: '2007-06-27 20:55'
 
 
+Many years later -- we are still using GNU style and over time have developed
+a »Lumiera flavour« which plays well with C++, templates and λ-functions.
+A striking consequence is that the code looks light, favours short functions,
+is rather vertically oriented and is easy to skim while scrolling.
+
+-> see our link:/x/CodeStyle.html[Style guide].
+
+Ichthyo:: '2025-09-05'
+
+
 ''''
-Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
+Back to link:/x/DesignProcess.html[Lumiera Design Process overview]

@@ -3,12 +3,12 @@ WebsiteSupportMarkup
 
 // please don't remove the //word: comments
 
-[grid="all"]
-`------------`-----------------------
-*State*         _Idea_
-*Date*          _Sa 06 Okt 2012 16:47:44 CEST_
-*Proposed by*   Ichthyostega <prg@ichthyostega.de>
--------------------------------------
+[options="autowidth"]
+|====================================
+|*State*       | _Draft_
+|*Date*        | _Sa 06 Okt 2012 16:47:44 CEST_
+|*Proposed by* | Ichthyostega <prg@ichthyostega.de>
+|====================================
 
 ********************************************************************************
 .Abstract
@@ -221,7 +221,7 @@ can be considered a one-time investment.
 
 //Conclusion
 //----------
-//conclusion: When approbate (this proposal becomes a Final)
+//conclusion: When approved (this proposal becomes a Final)
 //            write some conclusions about its process:
 
 
@@ -246,7 +246,17 @@ those stuff which matters in practice.
 Ichthyostega:: 'So 07 Okt 2012 07:31:25 CEST' ~<prg@ichthyostega.de>~
 
 
+.State -> Draft
+Unfortunately, nothing has happened with this RfC ever since; the reason is
+lack of developer capacity. Since this RfC is already fairly detailed, and
+no significant objections were pointed out, I am promoting this RfC to
+a __"Draft"__ now, yet leave it pending. Same as with the
+link:WebsiteNavigation.html#_comments[RfC: Website Navigation].
+
+Ichthyostega:: '2025-09-18'
+
+
 //endof_comments:
 
 ''''
-Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
+Back to link:/x/DesignProcess.html[Lumiera Design Process overview]
