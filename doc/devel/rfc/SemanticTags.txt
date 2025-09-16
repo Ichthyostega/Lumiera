@@ -5,7 +5,7 @@ Semantic tags
 
 [options="autowidth"]
 |====================================
-|*State*       | _Idea_
+|*State*       | _Dropped_
 |*Date*        | _Do 30 Aug 2012 21:06:54 CEST_
 |*Proposed by* | Christian Thaeter <ct@pipapo.org>
 |====================================
@@ -13,7 +13,7 @@ Semantic tags
 ********************************************************************************
 .Abstract
 We have a lot documentation which needs to be cross referenced. Adding well the
-known 'tags' concept and extend it slightly with some semantics will aid future
+known `tags' concept and extend it slightly with some semantics will aid future
 automatic processing.
 ********************************************************************************
 
@@ -21,15 +21,15 @@ Description
 -----------
 //description: add a detailed description:
 
-Every document (including sourcecode) could extended with some metadata, aka tags
-which are then used to build automatic crossreferences.
+Every document (including sourcecode) could be extended with some metadata,
+aka. ``tags'', which are then used to build automatic crossreferences.
 
-Commonly tags are just 'words' which are picked up and crossreferenceds. I propose
+Commonly tags are _just words_ which are picked up and cross referenced. I propose
 to extend this scheme slightly.
 
 Overall this scheme must be very natual and easy to use. A user should not need to
-know about the underlying machinery and a tag as in a single lowercase 'word' should
-be sufficient in almost all cases. Moreover Tags should be optional.
+know about the underlying machinery and a tag as in a single lowercase `"word"`
+should be sufficient in almost all cases. Moreover Tags should be optional.
 
 
 .Ontology
@@ -127,10 +127,13 @@ It is very urgent and important that we make our content much easier accessible.
 
 
 
-//Conclusion
-//----------
+Conclusion
+----------
 //conclusion: When approved (this proposal becomes a Final)
 //            write some conclusions about its process:
+⛔ This proposal was never expanded upon.
+While containing some interesting ideas, in its current form
+it is not deemed helpful for the project.
 
 
 
@@ -141,7 +144,7 @@ Comments
 
 //edit comment
 You may recall this proposal created some heated debate at the last developer meeting.
-After thinking it over some time, I can see now more clearly what irritated me.
+After thinking it over some time, I can _see now more clearly what irritated me._
 
 . for me, the proposal seems somewhat to lack focus. Right now we have some shortcomings at
   rather basic operations when *authoring content* at the website. This proposal tends to be more
@@ -192,6 +195,21 @@ reader will somehow ``get it''.
 Ichthyostega:: 'Mi 10 Okt 2012 05:36:35 CEST' ~<prg@ichthyostega.de>~
 
 
+.State -> Dropped
+It is now _many years later,_ and no further discussion happened, nor did
+anyone care to address the urgent practical needs related to stable cross-links
+when authoring the website content.
+
+- -> link:{rfc}/WebsiteSupportMarkup.html[Cross-links and Website support markup]
+- -> link:{rfc}/WebsiteNavigation.html[Website Navigation Menu]
+
+This proposal contains some intriguing ideas -- yet these ideas require more
+dedicated work to transform them into a closed specification, which can be
+judged for practicability. I would rather propose to start from the much
+more concrete issue with the cross-links and develop a matching algorithm
+which is sufficient to generate a ``linkfarm'' entry
+
+Ichthyostega:: '2025-09-17'
 
 //endof_comments:
 

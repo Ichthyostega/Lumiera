@@ -5,7 +5,7 @@ Refactor Liblumiera Out
 
 [options="autowidth"]
 |====================================
-|*State*       | _Idea_
+|*State*       | _Dropped_
 |*Date*        | _Fr 22 Apr 2011 10:46:50 CEST_
 |*Proposed by* | Christian Thaeter <ct@pipapo.org>
 |====================================
@@ -226,8 +226,25 @@ Comments
 --------
 //comments: append below
 
+.State -> Dropped
+Ongoing development over the following years (after 2011) helped to clarify the situation
+regarding the support library in Lumiera. The improved language standards, most notably C++14,
+obsoleted most of the ad-hoc solutions in our library, since many aspects of system
+integration are now handled by language and STL facilities in a satisfactory way.
+On the other hand, by using the heightened capabilities of the language, some solution
+patterns very specific to Lumiera could be established, gradually turning the support
+library into some kind of an application framework.
+
+It is quite common in the field of software development to put great hopes into code
+reuse -- yet it is this very tendency towards a framework which prevents that ideal
+from playing out as anticipated, in practice. What seems to work best is to look
+at some well-made piece of software, understand how it works, and then to copy
+and extract parts in order to transform it into _your own solution._
+
+Ichthyostega:: '2025-09-16'
 
 //endof_comments:
+
 
 ''''
 Back to link:/x/DesignProcess.html[Lumiera Design Process overview]

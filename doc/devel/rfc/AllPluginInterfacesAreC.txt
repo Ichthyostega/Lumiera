@@ -173,8 +173,8 @@ documented in the repository (tiddlywiki/source)
 
 ct:: '2007-07-11 13:10:07'
 
-
-Development took another direction over course of the years;
+.State -> Dropped
+Development took another direction over the course of the years;
 Lumiera is not based on a _generic plug-in Architecture_ and the topic
 of interfaces for _dedicated plugins_ still needs to be worked out
 
@@ -190,12 +190,12 @@ Architecture. Experience with high-profile projects based on such a concept seem
 to show both tremendous possibilities, especially regarding user involvement, but
 at the same time also indicate serious problems with long-term sustainability.
 
-The practical development -- mostly driven ahead by _Ichthyo_ -- thus never really
-embraced that idea; rather structuring by internal interfaces and contracts was
+The practical development -- after some point mostly driven ahead by _Ichthyo_ -- never
+really embraced that idea; rather structuring by internal interfaces and contracts was
 preferred. The basic system for loading of Plug-ins, as indicated by this proposal,
 is still used though to load some dedicated plug-ins, most notably the GUI.
 
-To draw an conclusion: this proposal is now considered as *rejected*.
+To draw a conclusion: this proposal is now considered as *rejected*.
 Instead, Ticket https://issues.lumiera.org/ticket/1212[#1212 »Extension Concept«]
 was added to the list of relevant
 https://issues.lumiera.org/report/17[»Focus Topics«] for further development.

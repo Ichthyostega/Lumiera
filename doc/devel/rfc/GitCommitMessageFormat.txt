@@ -5,7 +5,7 @@ Git Commit Message Format
 
 [options="autowidth"]
 |====================================
-|*State*       | _Final_
+|*State*       | _Dropped_
 |*Date*        | _Fr 31 Aug 2012 03:54:14 CEST_
 |*Proposed by* | Christian Thaeter <ct@pipapo.org>
 |====================================
@@ -20,8 +20,8 @@ Description
 -----------
 //description: add a detailed description:
 
-Git commit messages are almost free form text, the only exception is that git
-threats the first line in a commit message specially to form the header one
+Git commit messages are almost free form text, the only exception is that Git
+treats the first line in a commit message specially to form the header one
 sees in various outputs.
 
 Since we aim to automate some processing we refine the format for commit
@@ -173,6 +173,51 @@ We decided on the sept. 2012 devel meeting to finlize this RFC.
 
 Christian Thaeter:: 'Do 13 Sep 2012 03:57:23 CEST' ~<ct@pipapo.org>~
 
+
+NOTE: This RfC is now superseded by using the _Git-flow branching scheme._
+
+.State -> Dropped
+
+With the recent move to link:{ldoc}/technical/code/GitBranching.html[Git-flow]
+we acknowledge now -- by employing a branch model -- that the project history
+is _built_ and _conducted_ consciously, _by us._ In the current stage,
+it is not the goal of this project to churn out a stream of commits,
+using an automated production line to push some metrics high.
+
+Since any automation comes at a cost and incurs burdens and limitations,
+it should be employed to solve actual problems, but should not
+be introduced prematurely:
+
+- we spend most of our time with finding suitable solutions, not with
+  coding them up. When a part is completed, some time can be spent
+  to document it and to consolidate the history. Thus, leaving
+  formalised WIP and STASH marks is besides the point.
+
+- releases and even bugfixes require forethought, analysis, verification
+  and reflection. The extra time required to set a git tag manually, or
+  even to perform a merge, is negligible in comparison, and does not
+  justify the weight of automation.
+
+- documentation is written in the context of solving actual problems;
+  it is pointless to spot ``documentation commits'' by some markers,
+  because their relevance is already obvious from a meaningful context.
+
+- Git bisect is an essential tool when working with a code base which you
+  do not understand. With a well-crafted yet ambitious system the situation
+  is quite distinct: in such a system, the change which caused the breakage
+  is obvious and easy to spot -- while the actual challenge is to
+  understand _why_ difficulties arose -- not to mention the amount
+  of work required to develop a path of escape from a real dilemma.
+
+This RfC highlights some general considerations however, which remain
+valid anyway: to provide a short commit summary in the first line,
+and then, after an empty line, to provide a description for
+anything that is non-obvious, possibly with cross-references to
+tickets, URLs pointing to external sources and anything that might
+provide meaningful context for someone looking at this change
+years later. And, commit messages should be line-wrapped.
+
+Ichthyostega:: '2025-09-16'
 
 //endof_comments:
 

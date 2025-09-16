@@ -3,7 +3,7 @@ Design Process : C Coding Style Guide
 
 [options="autowidth"]
 |====================================
-|*State*       | _Final_
+|*State*       | _Dropped_
 |*Date*        | _2007-07-03_
 |*Proposed by* | ct
 |====================================
@@ -211,6 +211,33 @@ practice, to have one such common plugin interface on every ``plugin extension
 point'', i.e. every point in the system, that can be extended by plugins.
 
 Ichthyostega:: '2007-07-10T17:23:33Z'
+
+
+.State -> Dropped
+During the last years, I have read this RfC several times, and I am still
+not sure what this proposal wanted to achieve, and what was the intention of
+proposing it this way. +
+A ``C coding style'', a ``naming system'' meant to be very verbose,
+but not intended to be about design, yet ``technically not needed when
+using the plugin system'' -- which all together touches at
+questions of design for sure.
+
+In the early stages of the project, there was a debate revolving around the
+idea of bootstrapping the application from a tiny core, with pretty much
+any functionality assembled from plugins, and internal functions being
+callable directly from Lua code. Combined with a low-ceremony, distributed,
+collaborative working style, such a setup was linked to the promise of
+fluid evolution of ideas in order to try out unconventional solutions
+and see what works best.
+
+Personally, this premise made me feel queasy, because I had a clear vision
+in my head, which required to build some rather advanced and challenging
+structures. Mastering complexity means to segregate and settle parts of a
+problem in order to avoid excess interdependencies. I'd rather attempt
+to deflect and redirect flexibility and differentiation towards the
+periphery and establish stable yet generic structures in the core.
+
+Ichthyostega:: '2025-09-16'
 
 ''''
 Back to link:/x/DesignProcess.html[Lumiera Design Process overview]

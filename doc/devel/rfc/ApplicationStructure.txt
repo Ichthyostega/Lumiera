@@ -62,7 +62,7 @@ Then our application structure looks somewhat like (please refine):
   - ...
 
 Furthermore the interface and plugin system is flexible enough to provide things
-independently of their origin (if it is build in or a plugin/dynamic library).
+independently of their origin (if it is either built-in or a plugin/dynamic library).
 So deployment (where to link these things) is secondary.
 
 `"lumiera"` will then be the executable the user starts up,
