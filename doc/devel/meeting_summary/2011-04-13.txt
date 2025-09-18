@@ -355,6 +355,7 @@ revisit the relevant design process entries in each developer meeting.
 
 -> link:{rfc}/ApplicationInstall.html[RfC: Application Install]
 
+[[application_install_proposal]]
 .-- the Application Install proposal --
 [caption="☉Transcript☉ "]
 ----------------------------

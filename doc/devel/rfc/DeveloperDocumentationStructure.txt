@@ -5,7 +5,7 @@ Developer Documentation Structure
 
 [options="autowidth"]
 |====================================
-|*State*       | _Draft_
+|*State*       | _Final_
 |*Date*        | _Mon Aug  2 18:03:25 2010_
 |*Proposed by* | Cehteh + Ichthyo
 |====================================
@@ -125,7 +125,21 @@ developers.
 //----------
 //conclusion: When approvedd (this proposal becomes a Final)
 //            write some conclusions about its process:
+This RfC had been started initially by _Cehteh_ to propose a _simple structure_ --
+the ensuing discussion however showed that our documentation is already structured
+in a mostly consistent way, which just happens to be not that simple. Some confusing
+redundancies could be removed, as result from that discussion. _Ichthyo_ then edited
+and extended the original RfC to reflect the existing structure.
 
+A serious problem is posed by the rather tedious procedure to define cross-links in the
+Asciidoc based web content. link:WebsiteSupportMarkup.html[Another RfC] was created to
+discuss these problems in detail, leading to a solution proposal, which unfortunately
+was never implemented (due to lack of developer capacity). This _somehow transitory_
+situation had the (adverse) effect that most detailed technical content was authored
+within the Development TiddlyWiki.
+
+These remaining problems do not seem to be related to the _structure_ of the documentation
+however, which seems to fulfil its purpose. So this RfC now counts as de-facto standard.
 
 
 
@@ -174,5 +188,19 @@ documentation in textual form, which is inherentely structured.
 
 Ichthyostega:: 'Mo 09 Sep 2013 01:01:25 CEST' ~<prg@ichthyostega.de>~
 
+
+.State -> Final
+I am using this structure now since several years, without encountering any
+serious mismatch or incompatibility. The situation with the cross-linking
+generator, which still remains to be implemented, is obviously some kind
+of impediment, since it prevents me from migrating more mature content
+from the TiddlyWiki into the documentation section of the website.
+
+Furthermore, I should notice, as a limitation, that I am the _only one_ to
+use this structure actively -- so the fact that I feel comfortable with
+the arrangement should be taken with a grain of salt. Yet, on the other
+hand, we have meanwhile a massive body of information integrated
+into this structure, so that it can be considered more than
+just a ``proposal for discussion''
 
 //endof_comments:
