@@ -6,7 +6,7 @@ Config Loader
 
 [options="autowidth"]
 |====================================
-|*State*       | _Parked_
+|*State*       | _Dropped_
 |*Date*        | _2008-08-07_
 |*Proposed by* | **ct**
 |====================================
@@ -44,8 +44,8 @@ NOTE: (by _Ichthyostega,_ 2023) +
 
 
 
-Parked
-~~~~~~
+
+.State -> Parked
 While the general idea seams adequate, the topic of Configuration
 requires a much more in-depth Requirement Analysis. Moreover, considering
 the state of tooling today (2023), I consider it questionable still to rely
@@ -64,13 +64,35 @@ to be addressed _after achieving the first integration_ of the Engine.
 Ichthyostega:: '2023-10-24' ~<prg@ichthyostega.de>~
 
 
+.State -> Dropped
+Lumiera needs a system for configuration, but it will not work as proposed here.
+The reasons for this decision can be traced back to questions of architecture
+and the intended use of ``Configuration''. This became first clear in a
+discussion between _Cehteh_ and _Ichthyo_, as they were walking together
+through the forest north of the Karlsruhe castle in August 2011.
 
-//Conclusion
-//----------
-//conclusion: When approved (this proposal becomes a Final)
-//            write some conclusions about its process:
+While _Cehteh_ aims at an unified set of configuration data, composed by
+layering system-, user- and further local configuration files, to be combined
+with textual expansion- and replacement mechanisms -- and the ability to
+target a wide array of ``settings'' within the application, the intentions
+of _Ichthyo_ go into an almost antithetical direction: He rather wants
+to split off a very limited set of ``parametrisation'' and ``installation
+configuration'', while handling most of the other possible choices by evaluation
+of _configuration rules,_ which are tightly interwoven with the Session and
+are actively resolved in the Builder, as opposed to being provided by a global
+static _configuration service._ With this model, configuration can be injected
+from various sources as a structured set of _facts._ Furthermore, _Ichthyo_
+wants to isolate the behaviour of the application from ad-hoc tweaks through
+textual replacements and environment variables, rather looking for ways to
+record any application of rules or facts in the global _Event Log._
 
+Ichthyostega:: '2025-09-20'
+....
+​
+​
+....
 
+~What follows below is extended documentation for _Cehteh_'s Config System proposal...~
 
 ''''''''''''''''
 

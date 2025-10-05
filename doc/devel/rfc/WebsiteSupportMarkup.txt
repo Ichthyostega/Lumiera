@@ -251,7 +251,7 @@ Unfortunately, nothing has happened with this RfC ever since; the reason is
 lack of developer capacity. Since this RfC is already fairly detailed, and
 no significant objections were pointed out, I am promoting this RfC to
 a __"Draft"__ now, yet leave it pending. Same as with the
-link:WebsiteNavigation.html#_comments[RfC: Website Navigation].
+link:{rfc}/WebsiteNavigation.html#_comments[RfC: Website Navigation].
 
 Ichthyostega:: '2025-09-18'
 

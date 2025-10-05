@@ -32,7 +32,7 @@ Idea: Design the Render Nodes interface
 link:{rfc}/DesignRenderNodesInterface.html[RfC / Call for a Render Node interface]
 
 _Cehteh_ points out that, as we are in the pre-alpha phase, interfaces may be growing on-demand.
-Later on, interface versions will be numbered. If needed, we could add a special ``draft'' or ``experimenta'' tag,
+Later on, interface versions will be numbered. If needed, we could add a special ``draft'' or ``experimental'' tag,
 or, alternatively, use the common numbering scheme, where odd major version numbers denote the development line of an interface.
 
 _Ichthyo_ agrees, but adds he also meant ``interface'' in this proposal in a wider sense,

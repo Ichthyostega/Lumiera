@@ -175,7 +175,7 @@ ct:: '2007-07-11 13:10:07'
 
 .State -> Dropped
 Development took another direction over the course of the years;
-Lumiera is not based on a _generic plug-in Architecture_ and the topic
+Lumiera is _not_ based on a _generic plug-in Architecture_ and the topic
 of interfaces for _dedicated plugins_ still needs to be worked out
 
 Ichthyostega:: '2023-10-24 22:55:23'

@@ -149,12 +149,15 @@ an architecture based on abstractions and exploiting the proven design
 patterns.
 
 Ichthyo:: '2008-11'
-
++
+--
 It has that flexibility, yes. But that means not that we have to abuse it in
-any way. The main() there and thus the bootstrap of the application is under
+any way. The `main()` there and thus the bootstrap of the application is under
 our tight control, if we want to reject scriptable/highly configurable
 bootstrapping there then we can just do so. Thats more a social than a
-technical decision. I personally don't like if a design is ``nannying'' and puts
+technical decision.
+
+I personally don't like if a design is ``nannying'' and puts
 too much constraints into unforeseen areas. If the computer can do some task
 better than we, it shall do it. This still means that I want to stay very much
 in control, it should only do some tedious, error-prone managing tasks for me.
@@ -167,6 +170,7 @@ we have no control over. But I now realized that we can nicely use that for our
 own internal things too. IMO thats some very valuable service.
 
 ct:: '2008-11-08T06:26:18Z'
+--
 
 Some further minor details: We didn't finish the discussion about namespaces on
 the last meeting. (I know I still have to write up a proposal showing the two
@@ -201,6 +205,25 @@ I _dropped_ this now because we do it somewhat differently now and I don't want
 to document this here 😛
 
 ct:: '2009-02-03T17:28:28Z'
+
+
+💡 +
+[underline]#Historical remark#: this RfC is related to a series of discussions
+and controversies during the early stages of the project -- which eventually
+helped to establish a style of internal organisation within the application.
+
+After exploring various angles, Lumiera eventually became a *modularised Monolith*
+-- using plug-ins for strictly optional parts of the system. Notably, the GUI
+is loaded as a plug-in, and the integration with specific media-handling libraries
+will rely on plug-in components as well. On the other hand, the core comprises
+a small selection of built-in »Subsystems«, which are started with a formalised
+lifecycle and dependency management. Flexibility is not attained by allowing
+to totally reconfigure the application structure -- rather we allow for an
+unusual degree of flexibility by combination and reconfiguration of
+behaviour patterns within the application.
+
+Ichthyotega:: '2025-09-20'
+
 
 ''''
 Back to link:/x/DesignProcess.html[Lumiera Design Process overview]

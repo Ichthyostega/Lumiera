@@ -15,9 +15,11 @@ SystematicMetadata
 [red]#TODO# _give a short summary of this proposal_
 ********************************************************************************
 
-Lumiera is a metadata processing application: _Data_ is _media data_, and everything
+Lumiera is a metadata processing application: the actual _Data_ processed
+is the _media data_, used for rendering and playback, while everything
 else is _metadata_. Since our basic decision is to rely on existing libraries for
-handling data, the ``metadata part'' is what _we are building anew._
+handling the data, the ``metadata part'' is what _actually happens_ within the
+Lumiera application.
 
 This RfC describes a fundamental approach towards metadata handling.
 
@@ -27,7 +29,7 @@ Description
 //description: add a detailed description:
 Metadata is conceived as a huge uniform tree. This tree is conceptual -- it is
 never represented as a whole. In the implemented system, we only ever see parts
-of this virtual tree being cast into concrete data representations. These parts
+of this virtual tree as being cast into concrete data representations. These parts
 are like islands of explicitly defined and typed structure, yet they never need
 to span the whole virtual model, and thus there never needs to be an universal
 model data structure definition. Data structure becomes implementation detail.
@@ -35,11 +37,11 @@ model data structure definition. Data structure becomes implementation detail.
 Parts of the system talk to each other by _describing_ some subtree of metadata.
 This description is transferred _in the form of a tree diff:_ the receiver pulls
 a sequence of diff verbs from a diff iterator, and interpreting these verbs will
-walk him down and expand the tree in question. Sub-scopes are ``opened'' and
-populated, similar to populating a filesystem. It is up to the receiver to
-assemble these information into a suitable representation. Some receiver
-might invoke an object factory, while another serialises data into an
-external textual or binary representation.
+walk him down and expand or transform the tree in question. As part of this
+description of model changes, sub-scopes are ``opened'' and populated, similar
+to populating a filesystem. It is up to the receiver to assemble these information
+into a suitable representation. Some receiver might invoke an object factory,
+while another serialises data into an external textual or binary representation.
 
 
 Abstract Metadata Model
@@ -86,18 +88,22 @@ Tasks
  * scrutinise this concept to find the pitfalls [yellow-background]#WIP#
  * build a demonstration prototype, where the receiver fabricates an object [red yellow-background]#TBD#
    ** the unit tests related to the _Diff System_ could be counted as such a demonstration +
-      Ichthyostega:: '2029-09-13'
+      Ichthyostega:: '2025-09-13'
 
 Discussion
 ~~~~~~~~~~
 
 Pros
 ^^^^
-- the basic implementation is strikingly simple, much simpler than building
-  a huge data structure or any kind of serialisation/deserialisation scheme
-- parts can be combined in an open fashion, we don't need a final concept up-front
-- even complex routing and overlaying strategies become manageable, since they can be
-  treated in isolation, local for a given scope and apart from the storage representation
+- the basic implementation of a meta data structure (a _property tree_) and the
+  representation of a ``Diff'' is comparatively simple -- much simpler than the
+  task to define and build a global data model, and get it properly connected
+  to the various implementation facilities to operate on this data.
+- parts can be combined and can evolve in an open ended way, without requiring
+  a finalised concept up-front,
+- even complex routing and overlaying strategies remain manageable, since routing
+  and data fusion can be treated in isolation, local for a given scope and apart
+  from the storage representation;
 - library implementations for textual representations can be integrated.
 
 
@@ -133,10 +139,12 @@ Basically common (meta) data could take on a lot of shapes between two extremes:
 - the _precise typed structure_, which also is a contract
 - the _open dynamic structure_, which leaves the contract implicit
 
-The concept detailed in this RfC tries to reconcile those extremes by avoiding
-a global concrete representation; +
-this way the actual interaction -- with the necessity
-of defining a contract -- is turned into a local problem.
+The concept explained in this RfC tries to reconcile those extremes by avoiding
+a global concrete representation; instead, several interactions, each local in
+scope, can coexist on top of the abstract structure as backdrop. Each of these
+actual interactions can have its own specialised standard, which actually is
+a collaboration protocol, and is based on a common understanding of the
+_structure,_ instead of sharing actual data implementation.
 
 
 //Conclusion
@@ -161,15 +169,17 @@ found their way into the *Diff System*, now used as a foundation for connecting 
 GUI to the Session core in Steam Layer. Especially the discussion of ``Alternatives''
 seem to indicate that an essential motivation for this RfC was to find a viable
 alternative to building the whole Application around a _central data model_ --
-which is in essence what I later transformed into a practical concept with the
-aforementioned ``Diff System''.
+which is the naive solution and tends to become a major impediment to
+hinder the further evolution within larger software projects.
 
--> see the design page regarding link:{ldoc}/design/architecture/ETD.html[»External Tree Description«]
+- -> see the design page regarding link:{ldoc}/design/architecture/ETD.html[»External Tree Description«]
+- -> and the corresponding technical description
+     regarding the link:{ldoc}/technical/library/DiffFramework.html[Diff Framework]
 
 [underline]#Bottom line#: not sure what to do with this RfC; concepts explained therein
-seem still highly relevant and central to what Lumiera is intended to become;
-but this text does not fit into the format of an RfC, nor is there a community
-of developers to discuss such a design vision appropriately.
+seem still highly relevant and central to what Lumiera is intended to become -- and they
+have already been implemented; hoever, this text does not fit into the format of an RfC,
+nor is there a community of developers to discuss such a design vision appropriately.
 
 Ichthyostega:: '2025-09-13'
 

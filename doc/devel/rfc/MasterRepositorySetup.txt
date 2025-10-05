@@ -51,6 +51,7 @@ ct:: '2008-04-08T21:48:51Z'
 
 ''''
 
+[[historical_remark]]
 [underline]#Historical remark#: This RfC describes the setup we used up to ~2012. +
 After that point, I was working alone basically (not counting occasional small contributions),
 and consequently the current state could be found in the ``ichthyo'' Git repository

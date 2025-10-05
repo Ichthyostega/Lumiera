@@ -26,10 +26,17 @@ Description
 -----------
 //description: add a detailed description:
 The general idea is that we need meta information, and -- more precisely --
-that _we_ need to control the structure of this metadata. Because it has
-immediate consequences on the way the code can test and select the appropriate
-path to deal with some data or a given case. This brings us in a difficult
-situation:
+that _we_ need to be in control with regards to the structure of this metadata.
+Because this structure of metadata has immediate consequences with respect to the
+code's ability to test and select an appropriate path to deal with some data or
+a given clause in the high-level-Model.footnote:[To clarify the context of this
+problem: the »Builder« works like a _compiler,_ while the high-level-Model is
+similar to an attributed syntax tree. And the goal is to generate a low-level
+processing description, which implements the given structure in the Session.
+Drilling down some levels will yield a descriptor of a _medium_ (e.g. video)
+-- and so the actual task becomes to define a formalised processing scheme
+to work on something as unspecific as ``a medium''.]
+This brings us in a difficult situation:
 
  * almost everything regarding media data and media handling is notoriously
    convoluted
@@ -37,13 +44,13 @@ situation:
    solution
  * we want to build on existing libraries rather then re-inventing media
    processing.
- * a library well suited for some processing task not necessarily has a type
-   classification system which fits our needs.
+ * a library well suited for some processing task does not necessarily have
+   a type classification scheme which fits our needs.
 
-The proposed solution is to create an internal Stream Type System which acts as
-a bridge to the detailed (implementation type) classification provided by the
-library(s). Moreover, the approach was chosen especially in a way as to play
-well with the rule based configuration, which is envisioned to play a central
+The proposed solution is to create an internal *Stream Type System* which acts
+as a bridge to the detailed (implementation type) classification provided by the
+library(s). Furthermore, the approach was chosen especially in a way as to mesh
+up well with the rule based configuration, which is envisioned to play a central
 role for some of the more advanced things possible within the session.
 
 
@@ -52,18 +59,18 @@ Terminology
  * *Media* is comprised of a set of streams or channels
  * *Stream* denotes a homogeneous flow of media data of a single kind
  * *Channel* denotes an elementary stream, which -- _in the given context_ --
-   can't be decomposed any further
+   can not be decomposed any further
  * all of these are delivered and processed in a smallest unit called *Frame*.
    Each frame corresponds to a time interval.
  * a *Buffer* is a data structure capable of holding one or multiple Frames of media data.
- * the *Stream Type* describes the kind of media data contained in the stream
+ * the *Stream Type* describes the kind of media data contained in the stream.
 
 
 Concept of a Stream Type
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 The Goal of our Stream Type system is to provide a framework for precisely
-describing the ``kind'' of a media stream at hand. The central idea is to
+describing the ``kind'' of a given media stream. The central idea is to
 structure the description/classification of streams into several levels.
 A complete stream type (implemented by a stream type descriptor) contains
 a tag or selection regarding each of these levels.
@@ -95,7 +102,7 @@ Working with media stream implementations
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 For dealing with media streams of various implementation type, we need
 _library_ routines, which also yield a _type classification system_ suitable
-for their intended use. Most notably, for raw sound and video data we use the
+for their intended use. Notably, for raw sound and video data we use the
 https://github.com/bplaum/gavl[GAVL] library, which defines a fairly complete
 classification system for buffers and streams. For the relevant operations in
 the Steam-Layer, we access each such library by means of a Façade; it may sound

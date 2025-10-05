@@ -111,10 +111,10 @@ project.
 
 Comments
 --------
-[underline]#This document is one of the **first RfC**s# published in *Summer 2007*, +
+[underline]#This document is among the **earliest RfC**s# published in *Summer 2007*, +
 as a new community movement was about to form, with the goal to improve Cinelerra
 for real, in a new version Cinelerra-3.
-Early in 2008, this initiative had turned into a new project, with the
+At the beginning of 2008, this initiative had turned into a new project, with the
 https://web.archive.org/web/20231026200633/https://lists.cinelerra-cv.org/pipermail/cinelerra-skolelinux/2008-March/013474.html[community chosen]
 name »*Lumiera*« -- years later, in 2010, documentation and existing RfC entries
 were migrated from _Cehteh_'s `pipapo.org` Wiki to the

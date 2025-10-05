@@ -1,6 +1,10 @@
+Design Process : Submodules
+===========================
+
+
 [options="autowidth"]
 |====================================
-|*State*       | _Parked_
+|*State*       | _Dropped_
 |*Date*        | _2008-04-09_
 |*Proposed by* | ct
 |====================================
@@ -55,8 +59,8 @@ Pros
 
 Cons
 ^^^^
- * needs some more git-fu to be used by the developers
- * we will host considerably more git repositories (bigger list in gitweb),
+ * needs some more Git-fu to be used by the developers
+ * we will host considerably more Git repositories (bigger list in gitweb),
    this is not a problem but might look more confusing
 
 
@@ -75,16 +79,36 @@ When all people get used to it it allows a cleaner more sane work flow and well
 isolated, less conflicting commits.
 
 
-
+Conclusion: Dropped
+-------------------
+The extended usage of Git Submodules for parts of the code base is not desirable.
 
 
 Comments
 --------
 
+.State -> Parked
 We concluded that that submodules are not yet needed with exception for the
 ./doc folder. Parked for now.
 
 ct:: '2008-07-26 09:09:57'
+
+
+.State -> Dropped
+Git Submodules were a highly anticipated feature at the time when the
+Lumiera project started -- yet the actual implementation was generally
+perceived as a disappointment, since the tooling failed to provide that
+kind of seamless integration into everyday Git usage as was desirable.
+
+There remains one area however, where the Lumiera project might revisit
+the idea of using Submodules: our _Website_ -- which might become a portal
+to integrate several rather loosely coupled efforts eventually, notably
+the public front-end, including some images, a user documentation section,
+the technical documentation and possibly a knowledge base maintained
+separately.
+
+Ichthyostega:: '2025-09-25'
+
 
 ''''
 Back to link:/x/DesignProcess.html[Lumiera Design Process overview]

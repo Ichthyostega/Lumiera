@@ -1,3 +1,7 @@
+Design Process : Optimiser
+==========================
+
+
 [options="autowidth"]
 |====================================
 |*State*       | _Parked_
@@ -55,13 +59,36 @@ The good news is, that:
  always work in both colorspaces directly
 
 
-Parked
-~~~~~~
+
+.State -> Parked
 Generally this is accepted but needs some more polishing when we go over it.
 
 Christian Thaeter::  'Thu 14 Apr 2011 03:06:42 CEST'
 
 
+.Reassessment : remains valid
+[underline]#Relevance confirmed 2025.#
+This RfC is written narrow enough to just define the goal of an optimised
+render pipeline -- which _was_ and _is_ a central goal of the Lumiera project.
+
+Approaching this topic however _requires much more work_ and notably a detailed
+analysis of the possibilities, based on *facts and measurements*. There is the
+real danger to get attached to some implementation idea deemed enticing,
+leading to very specific tweaks which limit the ability to adapt to
+other relevant requirements.
+
+Furthermore, since Lumiera aims at being library / framework agnostic,
+a significant difficulty to overcome first is the build-up of an abstract
+framework to describe and engage viable optimisations, which can then be
+applied as transformations within the Builder -- quite similar to the
+proceedings of an optimising compiler. The description of possible
+optimisations likely involves elements of knowledge representation,
+combined with heuristical aspects, possibly augmented by
+machine learing.
+
+To summarise: this is a *long-term vision*.
+
+Ichthyostega:: '2025-09-20'
 
 
 ''''

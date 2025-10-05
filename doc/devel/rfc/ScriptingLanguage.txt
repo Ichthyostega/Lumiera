@@ -3,7 +3,7 @@ Design Process : Scripting Language
 
 [options="autowidth"]
 |====================================
-|*State*       | _Pending_
+|*State*       | _Dropped_
 |*Date*        | _2008-07-26_
 |*Proposed by* | ct
 |====================================
@@ -201,9 +201,10 @@ Ichthyostega:: '2023-02-04' ~<prg@ichthyostega.de>~
 
 Conclusion
 ----------
-Lua was _accepted_ as the required scripting language by October.2008 dev
-meeting. However, Ichthyo _questions and overrules_ this decision in Feb.2023
-and moves this proposal back into the inception stage.
+Lua was _accepted_ as the required scripting language by the
+link:{ldoc}/devel/meeting_summary/2008-10-10.html#_lua_scripting_language[Oct.2008 dev meeting].
+However, Ichthyo __questions and overrules__ this decision in Feb.2023
+and moves this topic back into the inception stage.
 
 Back to link:/x/DesignProcess.html[Lumiera Design Process overview]
 

@@ -4,7 +4,7 @@ Offering Skills for Help
 
 [options="autowidth"]
 |====================================
-|*State*       | _Parked_
+|*State*       | _Dropped_
 |*Date*        | _2007-06-13_
 |*Proposed by* | ct
 |====================================
@@ -90,7 +90,7 @@ it was discussed shortly and deemed ``...only useful if there are more developer
 
 Reading this RfC today gives me some kind of peculiar melancholic feeling -- it has the vibes of »zero hour«,
 when all hands on deck are needed and everyone wants to help; people write their names on a blackboard
-at the wayside, to get into contact, organise themselves or just to find their beloved ones...
+at the wayside, to get into contact, organise themselves or maybe just to find their beloved ones...
 
 Ichthyostega:: '2025-09-11'
 

@@ -3,7 +3,7 @@ Design Process : Distributed Development Framework
 
 [options="autowidth"]
 |====================================
-|*State*       | _Final_
+|*State*       | _Dropped_
 |*Date*        | _2007-06-07_
 |*Proposed by* | ct
 |====================================
@@ -47,9 +47,18 @@ Made this `final', this proposal got accepted and is already in use without
 much discussion
 
 ct:: '2007-06-27T16:07:13Z'
+....
+​
+​
+​
+....
+[large]#🌑 ​ 🌒 ​ 🌓 ​ 🌔 ​ 🌕 ​ 🌖 ​ 🌗 ​ 🌘 ​ 🌑#
 
-[underline]#Historical remark#: Not sure what this RfC was meant to propose; +
-During the next year, an ambitious side-project named »*uwiki*« was started,
+[underline]#Historical remark#: This was ultimately the first
+_conceptual_ (not process-related) RfC published in this Design-Process
+(note the date!). Thus, _in hindsight,_
+the question arises what this RfC was meant to propose; +
+During the following months, an ambitious side-project named »**uWiki**« was started,
 with the goal to provide a wiki-like web frontend based on completely self-contained
 storage in a Git repository, without requiring any kind of data base. This project,
 however -- in spite of some compelling prototype implementations -- was abandoned;
@@ -58,12 +67,40 @@ minimalist setup and would require a significant amount of web development
 rather -- a task no one was willing to take on.
 
 Yet the Lumiera project succeeded in building a web presence based on
-https://asciidoc-py.github.io/[Asciidoc] sources checked into Git, with a lightweight
-commit-hook script to automatically publish  any changes on git-push -- a scheme
+https://asciidoc-py.github.io/[Asciidoc] sources
+https://git.lumiera.org/?p=website;a=summary[checked into Git],
+with a lightweight
+https://git.lumiera.org/?p=website;a=blob;f=build_website.sh;h=60b90e18d5732d66566baf2c20a217212a5dcece;hb=aefc91e13a95a3c742dc8143c374ec982e0aa56b[commit-hook script]
+to automatically publish any changes on git-push -- a scheme
 which comes close to the gist of this RfC.
 
-Ichthyo:: '2025-09-08'
+Ichthyostega:: '2025-09-08'
+
+
+.State -> Dropped
+After reconsidering this RfC, _many years later,_ it seems prudent to mark it as __`Dropped'.__
+The reasons for this decision are manifold. For one, the project never fully embraced this
+working style, it was a vision from the early days rather. _Parts_ of that vision became a
+practical reality, like the use of a link:{rfc}/MasterRepositorySetup.html[shared master repository],
+or the use of Git and Asciidoc to generate and publish our website directly from a hook-script.
+
+But we did not ``create our own toolset to track issues, tasks, bugs in a distributed manner''.
+This idea might seem enticing for a new experimental project, and, when taken further, it leads to
+a development style where most questions of coordination, and notably the preparation of releases
+and the delivery and roll-out of published code are handled by an automated production line.
+Developers can do what they like most: ``code cool things'' -- while all that
+``nasty other stuff'' is dealt with by an »Invisible Hand«.
+
+I do not consider such a setup healthy on the long run, nor can I see how it would be
+adequate for a project with liabilities to care for: we should not consider the coordination
+of a release cycle as something extraneous, to be ``automated away'' -- it requires the
+full attention of the developers rather, to provide a longtime stable version and not to
+interfere with the work of creative people, using the software in novel ways,
+not foreseeable by the developers.
+For this reason, I moved into the opposite direction and have now switched to the
+link:/project/background/GitFlow.html[Git-flow branching model].
+
+Ichthyostega:: '2025-09-20'
 
 ''''
-
 Back to link:/x/DesignProcess.html[Lumiera Design Process overview]

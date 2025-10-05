@@ -143,5 +143,20 @@ this interfaces we will *break this plugin* intentionally!
 
 ct:: '2008-10-24T03:43:43Z'
 
+
+Clarification of relevance
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+As this RfC touches on the subject of Plug-ins, it should be stated very clearly
+that Lumiera is **not based on a »Plugin Architecture«**. This Architecture Style
+was indeed link:{rfc}/AllPluginInterfacesAreC.html[proposed and considered] during
+the early stages of the project, but rejected later, based on the ensuing discussion
+and experience with existing systems, as well as with our own implementation drafts
+going into this direction.
+
+Lumiera will use Plug-ins however, to add _optional capabilities._
+And thus everything stated in this RfC regarding unique identifiers remains valid.
+
+Ichthyostega:: '2025-09-20'
+
 ''''
 Back to link:/x/DesignProcess.html[Lumiera Design Process overview]

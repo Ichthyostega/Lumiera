@@ -161051,10 +161051,11 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <cloud COLOR="#d7c3a8"/>
 <font NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="list"/>
-<node CREATED="1752758672536" HGAP="9" ID="ID_1086481723" MODIFIED="1752758858252" TEXT="Recherche" VSHIFT="-1">
+<node CREATED="1752758672536" HGAP="9" ID="ID_1086481723" MODIFIED="1757602940041" TEXT="Recherche" VSHIFT="-1">
 <cloud COLOR="#c6b0a1"/>
+<linktarget COLOR="#716888" DESTINATION="ID_1086481723" ENDARROW="Default" ENDINCLINATION="-242;50;" ID="Arrow_ID_930062015" SOURCE="ID_1111957003" STARTARROW="None" STARTINCLINATION="-363;96;"/>
 <node CREATED="1752758687270" ID="ID_587093014" MODIFIED="1752758689409" TEXT="2025">
-<node CREATED="1752755281391" ID="ID_442273376" MODIFIED="1752767266574" TEXT="FrOSCon-Vortrag(25) : Video-Ausgabe">
+<node CREATED="1752755281391" ID="ID_442273376" LINK="https://lumiera.org/research/videoDisplay/index.html" MODIFIED="1757602808059" TEXT="FrOSCon-Vortrag(25) : Video-Ausgabe">
 <linktarget COLOR="#4d74d8" DESTINATION="ID_442273376" ENDARROW="Default" ENDINCLINATION="-2314;2141;" ID="Arrow_ID_437931140" SOURCE="ID_553632518" STARTARROW="None" STARTINCLINATION="-1107;59;"/>
 <linktarget COLOR="#ce0918" DESTINATION="ID_442273376" ENDARROW="Default" ENDINCLINATION="-332;592;" ID="Arrow_ID_1945191941" SOURCE="ID_1422823042" STARTARROW="None" STARTINCLINATION="-1124;69;"/>
 <linktarget COLOR="#4d74d8" DESTINATION="ID_442273376" ENDARROW="Default" ENDINCLINATION="513;-707;" ID="Arrow_ID_738647024" SOURCE="ID_1047074231" STARTARROW="None" STARTINCLINATION="-1126;76;"/>
@@ -161164,8 +161165,12 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#b0c2e4" COLOR="#434498" CREATED="1756653670283" ID="ID_425211451" MODIFIED="1756654072174" STYLE="fork" TEXT="Ergebnis: Demo-Code">
+<node BACKGROUND_COLOR="#e2eab4" CREATED="1752362406520" HGAP="37" ID="ID_1027335076" LINK="https://programm.froscon.org/2025/events/3316.html" MODIFIED="1757602912504" TEXT="16.August 2025 10:00" VSHIFT="-2">
+<icon BUILTIN="info"/>
+</node>
+<node BACKGROUND_COLOR="#b0c2e4" COLOR="#434498" CREATED="1756653670283" ID="ID_425211451" MODIFIED="1757603041508" STYLE="fork" TEXT="Ergebnis: Demo-Code">
 <edge COLOR="#815b70" STYLE="linear" WIDTH="thin"/>
+<linktarget COLOR="#6b839a" DESTINATION="ID_425211451" ENDARROW="Default" ENDINCLINATION="-24;134;" ID="Arrow_ID_596604677" SOURCE="ID_1225550232" STARTARROW="None" STARTINCLINATION="-159;10;"/>
 <icon BUILTIN="back"/>
 <node CREATED="1756653677898" ID="ID_1028657578" MODIFIED="1756654069158" TEXT="gemeinsames Schema zur Darstellung etabliert">
 <richcontent TYPE="NOTE"><html>
@@ -161212,7 +161217,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1664630997672" FOLDED="true" ID="ID_237099051" MODIFIED="1751804900616" STYLE="bubble" TEXT="mitf&#xfc;hren">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1664630997672" FOLDED="true" ID="ID_237099051" MODIFIED="1757604372475" STYLE="bubble" TEXT="mitf&#xfc;hren" VSHIFT="-8">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -161232,7 +161237,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1698169966766" ID="ID_285781159" LINK="file:///Lager/heim/devel/lumi/wiki/renderengine.html#PlaybackVerticalSlice%20RenderEngine%20Scheduler%20SchedulerWorker%20SchedulerMemory%20RenderActivity%20Player%20FrameDispatcher%20JobPlanningPipeline%20PlayProcess%20Rendering%20ProcNode%20NodeOperationProtocol" MODIFIED="1698170020932" TEXT="Themenkomples: Render-Engine">
 <icon BUILTIN="pencil"/>
-<node COLOR="#5b166e" CREATED="1611035555555" HGAP="81" ID="ID_152517956" MODIFIED="1611035586584" STYLE="bubble" TEXT="2023-10 aktiv" VSHIFT="28">
+<node COLOR="#5b166e" CREATED="1611035555555" HGAP="81" ID="ID_152517956" MODIFIED="1757603565570" STYLE="bubble" TEXT="2025-9 aktiv" VSHIFT="28">
 <edge COLOR="#eb1854" STYLE="sharp_linear" WIDTH="2"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="11"/>
 </node>
@@ -161344,11 +161349,11 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681006362667" ID="ID_1972975901" MODIFIED="1681006379321" TEXT="nochmal pr&#xfc;fen ob es &#xc4;nderungen von Benny gab...?">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1681006362667" ID="ID_1972975901" MODIFIED="1757603461041" TEXT="nochmal pr&#xfc;fen ob es &#xc4;nderungen von Benny gab...?">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1664632408539" ID="ID_5303509" MODIFIED="1664632540359" TEXT="Link-Generator notwendig">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1664632408539" ID="ID_5303509" MODIFIED="1757603448306" TEXT="Link-Generator notwendig">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -161368,6 +161373,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
     </ul>
   </body>
 </html></richcontent>
+<arrowlink COLOR="#9d8790" DESTINATION="ID_1730148338" ENDARROW="Default" ENDINCLINATION="578;-66;" ID="Arrow_ID_231884952" STARTARROW="None" STARTINCLINATION="862;81;"/>
 <icon BUILTIN="hourglass"/>
 </node>
 </node>
@@ -161376,6 +161382,25 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1698170208238" ID="ID_966155424" MODIFIED="1698170215726" TEXT="Engine">
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1698170224708" ID="ID_484068209" MODIFIED="1698170248746" TEXT="das inzwischen entwickelte Design dokumentieren">
+<icon BUILTIN="bell"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1757603600075" ID="ID_1055769269" MODIFIED="1757603604124" TEXT="Workflow">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1757603611279" ID="ID_52631420" MODIFIED="1757603648059" TEXT="Diskussion mit Wouter weiter f&#xfc;hren und dokmentieren">
+<linktarget COLOR="#804261" DESTINATION="ID_52631420" ENDARROW="Default" ENDINCLINATION="150;7;" ID="Arrow_ID_549406601" SOURCE="ID_1976063610" STARTARROW="None" STARTINCLINATION="350;33;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1757603663080" ID="ID_551584183" MODIFIED="1757603948022" TEXT="Ziel: eine Workflow-Spezifikation detailliert ausarbeiten">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das erachte ich als <b>dringend</b>, denn <i>wer schreibt, der bleibt:</i>&#160; der typische, durchschnittliche &#187;Techie&#171; hat keine Ahnung vom Arbeiten mit Medien und auch keine Ahnung von Interaction-Design; die typsichen <i>Feature-Requests</i>, mit denen wir geflutet werden, kann man weitgehend ignorieren, es w&#228;re sch&#228;dlich f&#252;r die Applikation, sie umzusetzen, bevor ein vollst&#228;ndiges GUI/Workflow-Konzept mit strikten Richtlinien da ist. Und ein solches Konzept auszuarbeiten, kostet Zeit und Kraft. Es ist strategisch sinnvoll, diesen Aufwand von der laufenden Entwicklungst&#228;tigkeit abzuzweigen, hoffentlich <i>bevor das Thema allgemein bemerkt wird.</i>&#160; Wenn man &#187;die Leute&#171; machen l&#228;&#223;t, dann wird Lumiera die urspr&#252;ngliche Vision verfehlen. Denn <i>man </i>kennt heut nur, worauf einen der industrielle Proze&#223; konditioniert, und <i>man will dann blo&#223; das Gleiche, aber umsonst.</i>
+    </p>
+  </body>
+</html></richcontent>
 <icon BUILTIN="bell"/>
 </node>
 </node>
@@ -161487,14 +161512,29 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1664664602615" HGAP="51" ID="ID_1014621671" MODIFIED="1664664615430" TEXT="Code Base" VSHIFT="7"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#edd9a0" COLOR="#690f14" CREATED="1757604046046" HGAP="-8" ID="ID_118957930" MODIFIED="1757604342031" TEXT="nebenbei / angelegentlich" VSHIFT="13">
+<node CREATED="1757604081344" ID="ID_1943572936" MODIFIED="1757604109714" STYLE="fork" TEXT="recherchieren und aufbereiten">
+<edge COLOR="#8e6074" STYLE="linear" WIDTH="thin"/>
+<node CREATED="1757604111784" ID="ID_615441767" MODIFIED="1757604134057" TEXT="Fachthemen Video und Digitale Medien"/>
+<node CREATED="1757604114432" ID="ID_1381131051" MODIFIED="1757604124602" TEXT="Methodik der Softwareentwicklung"/>
 </node>
-<node CREATED="1664631634178" ID="ID_679126801" MODIFIED="1664631636964" TEXT="Themen">
+<node BACKGROUND_COLOR="#fdc399" COLOR="#690f14" CREATED="1757604137325" ID="ID_97354933" MODIFIED="1757604318506" STYLE="fork" TEXT="die Lumiera-Historie erz&#xe4;hlen">
+<edge COLOR="#5e537f" STYLE="linear" WIDTH="thin"/>
+<linktarget COLOR="#e41435" DESTINATION="ID_97354933" ENDARROW="Default" ENDINCLINATION="23;35;" ID="Arrow_ID_466080442" SOURCE="ID_1395906680" STARTARROW="None" STARTINCLINATION="74;8;"/>
+<linktarget COLOR="#e53b65" DESTINATION="ID_97354933" ENDARROW="Default" ENDINCLINATION="1244;1409;" ID="Arrow_ID_1426119304" SOURCE="ID_1170181843" STARTARROW="None" STARTINCLINATION="-1203;-53;"/>
+<icon BUILTIN="bell"/>
+</node>
+</node>
+</node>
+<node CREATED="1664631634178" HGAP="24" ID="ID_679126801" MODIFIED="1757604363140" TEXT="Themen" VSHIFT="8">
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1664631986708" ID="ID_1854898414" MODIFIED="1664632010768" TEXT="coding news">
 <icon BUILTIN="bell"/>
 </node>
 <node CREATED="1664632012297" ID="ID_241631213" MODIFIED="1664632016491" TEXT="Interaction Design">
 <node CREATED="1756651058214" ID="ID_1179963093" MODIFIED="1756651062249" TEXT="Workflow">
-<node CREATED="1756651063357" ID="ID_1976063610" MODIFIED="1756651071680" TEXT="Diskussion mit Wouter Verwijlen"/>
+<node CREATED="1756651063357" ID="ID_1976063610" MODIFIED="1757603655131" TEXT="Diskussion mit Wouter Verwijlen">
+<arrowlink COLOR="#804261" DESTINATION="ID_52631420" ENDARROW="Default" ENDINCLINATION="150;7;" ID="Arrow_ID_549406601" STARTARROW="None" STARTINCLINATION="350;33;"/>
+</node>
 </node>
 </node>
 <node CREATED="1664632040517" ID="ID_143213655" MODIFIED="1664632043864" TEXT="Interface Layout">
@@ -161510,9 +161550,13 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <arrowlink COLOR="#684e97" DESTINATION="ID_417783849" ENDARROW="Default" ENDINCLINATION="-182;50;" ID="Arrow_ID_321858822" STARTARROW="None" STARTINCLINATION="143;23;"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1681004448374" FOLDED="true" HGAP="14" ID="ID_1536537244" MODIFIED="1752758582306" TEXT="Theorie / allgemein" VSHIFT="5">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1681004448374" HGAP="14" ID="ID_1536537244" MODIFIED="1757603986872" TEXT="Theorie / allgemein" VSHIFT="5">
 <edge COLOR="#5e537f"/>
 <icon BUILTIN="bell"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1757603993627" ID="ID_1395906680" MODIFIED="1757604220611" TEXT="die Lumiera-Geschichte">
+<arrowlink COLOR="#e41435" DESTINATION="ID_97354933" ENDARROW="Default" ENDINCLINATION="23;35;" ID="Arrow_ID_466080442" STARTARROW="None" STARTINCLINATION="74;8;"/>
+<icon BUILTIN="bell"/>
+</node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1681004288570" ID="ID_641232618" MODIFIED="1681004362635">
 <richcontent TYPE="NODE"><html>
   <head/>
@@ -161538,6 +161582,28 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1751930717131" ID="ID_985128582" MODIFIED="1751930721898" TEXT="Clean-Code-Development"/>
 <node COLOR="#435e98" CREATED="1751930725076" ID="ID_638212914" MODIFIED="1752758589912" TEXT="Git-Flow: Begriffsbestimmung">
 <arrowlink COLOR="#3245d9" DESTINATION="ID_417154358" ENDARROW="Default" ENDINCLINATION="-158;-13;" ID="Arrow_ID_583484888" STARTARROW="None" STARTINCLINATION="515;50;"/>
+</node>
+<node CREATED="1757602545338" ID="ID_1111957003" MODIFIED="1757602949795" TEXT="Research">
+<arrowlink COLOR="#716888" DESTINATION="ID_1086481723" ENDARROW="Default" ENDINCLINATION="-242;50;" ID="Arrow_ID_930062015" STARTARROW="None" STARTINCLINATION="-363;96;"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1757602551287" ID="ID_498765712" MODIFIED="1757602568632" TEXT="&lt;neue Sektion | August 25&gt;">
+<font NAME="SansSerif" SIZE="11"/>
+</node>
+<node CREATED="1757602597354" FOLDED="true" ID="ID_1329880089" LINK="https://lumiera.org/research/videoDisplay/index.html" MODIFIED="1757603373405" TEXT="VideoDisplay">
+<node CREATED="1757602606336" ID="ID_1839590604" MODIFIED="1757603373402" TEXT="Ergebnisse des Research-Projekts von Benny und mir">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das ist entstanden, weil Benny zun&#228;chst allgemein helfen/beitragen wollte; ich habe vorgeschlagen, er solle sich mit dem Thema Video-Output besch&#228;ftigen, unter der Ma&#223;gabe, ob es da bereits fertige und einfach nutzbare Frameworks gibt. Er hat dann relativ bald sich auf GStreamer konzentrierte, sehr schnell ein Tutorial-Beispiel gehabt f&#252;r einen Video-Player, ist an der Stelle aber stecken geblieben. Im R&#252;ckblick mu&#223; ich sagen, da&#223; GStreamer f&#252;r unser Thema vermutlich keine gute Quelle ist &#8212; man bekommt nur ein massives Framework zu fassen &#8212; allerdings hat sich Benny auch nicht selbst&#228;ndig <i>lateral bewegt.</i>&#160;Im Fr&#252;hjahr 2025 haben wir &#252;berlegt, was wir zur FrOSCon machen k&#246;nnten; es war bereits beschlossen, da&#223; wir nun jedes Jahr mit mindestens einem Vortrag pr&#228;sent sein wollen. Ich hatte dann die Idee, diese Recherche gemeinsam weiterzuf&#252;hren, da ich die Ergebnisse nun absehbar demn&#228;chst brauche, um die Engine zu testen.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1757602636171" ID="ID_335590089" MODIFIED="1757602648799" TEXT="publiziert zusammen mit dem FrOSCon-Vortrag"/>
+<node CREATED="1757602999819" ID="ID_1225550232" MODIFIED="1757603048855" TEXT="Demo-Code: Anzeige aus einer GTK-3-Applikation">
+<arrowlink COLOR="#6b839a" DESTINATION="ID_425211451" ENDARROW="Default" ENDINCLINATION="-24;134;" ID="Arrow_ID_596604677" STARTARROW="None" STARTINCLINATION="-159;10;"/>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -161707,7 +161773,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1756942230234" ID="ID_1854153711" MODIFIED="1756944327464" TEXT="Prototyp: manuell angelegte LInkfarm">
 <linktarget COLOR="#fff2d9" DESTINATION="ID_1854153711" ENDARROW="Default" ENDINCLINATION="82;184;" ID="Arrow_ID_789572840" SOURCE="ID_150932933" STARTARROW="None" STARTINCLINATION="-258;-18;"/>
 <icon BUILTIN="idea"/>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1756942253197" ID="ID_1730148338" MODIFIED="1756942500279" STYLE="bubble">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1756942253197" ID="ID_1730148338" MODIFIED="1757603431600" STYLE="bubble">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
@@ -161728,6 +161794,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
   </body>
 </html></richcontent>
 <edge COLOR="#b82c56"/>
+<linktarget COLOR="#9d8790" DESTINATION="ID_1730148338" ENDARROW="Default" ENDINCLINATION="578;-66;" ID="Arrow_ID_231884952" SOURCE="ID_5303509" STARTARROW="None" STARTINCLINATION="862;81;"/>
 <icon BUILTIN="smiley-angry"/>
 </node>
 <node CREATED="1756942521652" ID="ID_1783168341" MODIFIED="1756942540564" TEXT="man k&#xf6;nnte prototypisch beginnen">
@@ -161861,8 +161928,9 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </html></richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1756652483848" ID="ID_535603356" MODIFIED="1756652519860" TEXT="Problem: Mobile devices">
+<node BACKGROUND_COLOR="#eed6b6" COLOR="#690f14" CREATED="1756652483848" FOLDED="true" ID="ID_535603356" MODIFIED="1757602505627" TEXT="Problem: Mobile devices">
 <icon BUILTIN="messagebox_warning"/>
+<icon BUILTIN="bell"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1756652524770" ID="ID_1229858428" MODIFIED="1756652599591" TEXT="technologische L&#xf6;sung">
 <arrowlink COLOR="#5a4bd3" DESTINATION="ID_1693541099" ENDARROW="Default" ENDINCLINATION="-827;144;" ID="Arrow_ID_1160711682" STARTARROW="None" STARTINCLINATION="-717;-80;"/>
 <icon BUILTIN="idea"/>
@@ -162655,7 +162723,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1752501129896" ID="ID_467554725" MODIFIED="1752501162454">
+<node CREATED="1752501129896" ID="ID_467554725" MODIFIED="1758428234468">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
@@ -162664,7 +162732,18 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
     </p>
   </body>
 </html></richcontent>
+<linktarget COLOR="#628ec2" DESTINATION="ID_467554725" ENDARROW="Default" ENDINCLINATION="711;22;" ID="Arrow_ID_1134931073" SOURCE="ID_912836504" STARTARROW="None" STARTINCLINATION="1592;72;"/>
 <icon BUILTIN="idea"/>
+<node CREATED="1758428267696" HGAP="37" ID="ID_366319172" MODIFIED="1758428444076" TEXT="das w&#xfc;rde erkl&#xe4;ren warum diese Debatte so leidenschaftlich gef&#xfc;hrt wird" VSHIFT="-7">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das ist ein Geschehen, das nicht &#8222;absichtlich betrieben&#8220; wird, sondern sich den Menschen aufdr&#228;ngt, in der Form eines <b>Anspruches</b>: Sachverhalte und Umst&#228;nde erscheinen pl&#246;tzlich in einem anderen Licht, in einem Zusammenhang, und diejenigen, die das nicht sehen, nimmt man pl&#246;tzlich als <i>unmoralisch</i>&#160;wahr.
+    </p>
+  </body>
+</html></richcontent>
+</node>
 </node>
 <node CREATED="1752501171587" ID="ID_665646187" MODIFIED="1752501192666" TEXT="daher beschlie&#xdf;e ich, dies direkt als These auszusprechen"/>
 </node>
@@ -163269,6 +163348,260 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1757375530629" ID="ID_353096145" MODIFIED="1757375578668" TEXT="war Kollateralschaden vom Merge von Christians Umbau 2018..."/>
 <node CREATED="1757375552149" ID="ID_1100078557" MODIFIED="1757375565206" TEXT="Christian hatte nicht nach {l} im Documentation-Tree gesucht"/>
 </node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1757555774782" ID="ID_834813033" MODIFIED="1757555930575" TEXT="was tun mit den Inhalten &#xbb;ganz vom Anfang&#xab; ?">
+<icon BUILTIN="help"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1757555793338" ID="ID_1410068790" MODIFIED="1757555804354" TEXT="da sind wichtige Seiten verlorengegangen">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1757555810115" ID="ID_648507250" MODIFIED="1757555825899" TEXT="anfangs waren wir in Christian&apos;s Pipawki (Moin-Moin)"/>
+<node CREATED="1757555826816" ID="ID_256316057" MODIFIED="1757555891193" TEXT="Christian hatte seine Seite nicht f&#xfc;r Archive.org freigeschaltet">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...so meine Schlu&#223;folgerung; denn es f&#228;llt auf, da&#223; ich <b>keinen</b>&#160; der noch bestehenden Links in der Wayback-Maschine finde...
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1757555893163" ID="ID_904541300" MODIFIED="1757555922024">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      einige <i>meiner</i>&#160;Texte habe ich als HTML gespeichert
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+<node CREATED="1757555934530" ID="ID_1957147410" MODIFIED="1757555949019" TEXT="die &#xbb;Cinelerra Woes&#xab; habe ich inzwischen auf Asciidoc umgesetzt"/>
+<node CREATED="1757555950028" ID="ID_1125725516" MODIFIED="1757555962368" TEXT="interessant w&#xe4;ren auch die ersten Projektentw&#xfc;rfe">
+<node CREATED="1757555963845" ID="ID_1720127803" MODIFIED="1757555975174" TEXT="einerseits peinlich naiv">
+<icon BUILTIN="smily_bad"/>
+</node>
+<node CREATED="1757555977430" ID="ID_1969473684" MODIFIED="1757555998849">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      andererseits: alle wichtigen Ideen f&#252;r Lumiera <b>waren von Anfang an da</b>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1757556036040" ID="ID_268284049" MODIFIED="1757556045419" TEXT="wie k&#xf6;nnte man diese Seiten erhalten?">
+<icon BUILTIN="help"/>
+<node CREATED="1757556243136" ID="ID_392518514" MODIFIED="1757556264422" TEXT="man k&#xf6;nnte sie ggfs. als externe Resourcen einbinden">
+<node CREATED="1757556210340" ID="ID_535816332" MODIFIED="1757556701298" TEXT="z.B. als self-contained-HTML ablegen?"/>
+<node CREATED="1757556651204" ID="ID_234031412" MODIFIED="1757556666178" TEXT="oder sogar den Snapshot von damals einfach in den Webserver h&#xe4;ngen"/>
+<node CREATED="1757556707231" ID="ID_1694128806" MODIFIED="1757556756087" TEXT="die Storage ist tats&#xe4;chlich minimal (typischerweise &lt; 50 kiB pro Seite)"/>
+<node CREATED="1757556763522" ID="ID_672478474" MODIFIED="1757556782273" TEXT="das w&#xe4;re also mit wenig Aufwand machbar"/>
+</node>
+<node CREATED="1757556268276" ID="ID_1770822545" MODIFIED="1757556277341" TEXT="man k&#xf6;nnte sie in Asciidoc umwandeln">
+<node CREATED="1757556278915" ID="ID_1458467981" MODIFIED="1757556298820" TEXT="Vorteil: bleiben dauerhaft zugreifbar / editierbar"/>
+<node CREATED="1757556300142" ID="ID_1717683381" MODIFIED="1757556390326" TEXT="Nachteil: kein Beweiswert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...denn das ist das ist dann irgend ein Text, der 15 Jahre sp&#228;ter in Git auftaucht; f&#252;r den &#187;Cinelerra_woes&#171;-Text habe ich das wenigstens zeitnah gemacht
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1757556397056" ID="ID_837384599" MODIFIED="1757556608798" TEXT="naja ... haben sie auch sonst nicht">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      einigerma&#223;en beweiskr&#228;ftig ist Publikation, welche
+    </p>
+    <ul>
+      <li>
+        entweder auf Archive.org aufgezeichnet wurde
+      </li>
+      <li>
+        oder zeitnah in einem public-Git-Repo lag
+      </li>
+      <li>
+        oder in einem &#187;geschlossenen Format&#171; (wie PDF) vorliegt
+      </li>
+    </ul>
+    <p>
+      ...denn in diesen F&#228;llen kann man zumindest schon durch den Kontext eine gewisse Beweiskraft ableiten. F&#252;r alle anderen Formate gilt sets, da&#223; man sie im Grunde jederzeit erstellen k&#246;nnte, im Besonderen wenn die eigentliche Formatierung viel sp&#228;ter oder in einem neuen Format stattfindet. Solche Dokumente haben dann nur einen Wert wie eine Zeugenaussage
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1757556789012" ID="ID_1679887573" MODIFIED="1757556801417" TEXT="Frage ist : will man das?">
+<node CREATED="1757556803165" ID="ID_300918604" MODIFIED="1757556816666" TEXT="aktuell verweist nur ein Link  aus einem RfC von Christian darauf"/>
+<node CREATED="1757556817283" ID="ID_1572984729" MODIFIED="1757556878828" TEXT="selbst ich selber hatte diese Seiten vergessen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...au&#223;er &#187;Cinelerra woes&#171; ...
+    </p>
+    <p>
+      ich bin halt ein unverbesserlicher Sammler, und nachdem ich wu&#223;te, wonach ich suchen mu&#223;, hab ich sie auch ganz schnell gefunden
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1757556928604" ID="ID_712370029" MODIFIED="1757557240795" TEXT="f&#xfc;r mich haben diese Seiten erhebliche Bedeutung, weil sie mein Selbstbild st&#xfc;tzen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...ich frage mich n&#228;mlich inzwischen oft, wann ich mir diese Ideen zugezogen habe; diese Seiten belegen f&#252;r mich, da&#223; es ich bei Lumiera im Kern um eine &#187;Vision&#171; handelt, die ich 2007 hatte. Und nicht um ein Konzept, welches ich mir durch endloses Nachdenken &#252;ber viele Jahre ohne Realit&#228;tskontakt &#187;zusammengesponnen&#171; h&#228;tte.<br />Also im Grunde sehr &#228;hnlich, wie bei Christian, der ja wohl auch damals bereits die komplette Plugin-Applikation vor seinem geistigen Auge gesehen hat
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1757557243075" ID="ID_1749084598" MODIFIED="1757557530356" TEXT="allerdings k&#xf6;nnten solche Seiten auch gef&#xe4;hrlich sein, denn sie haben &#xbb;Fallh&#xf6;he&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Sofern Lumiera scheitert, oder zu etwas ganz anderem wird, oder &#252;berhaupt jemand sich die M&#252;he macht, die Historie auszuleuchten &#8212; dann k&#246;nnten solche Seiten auch erheblich negativ ausgedeutet werden: so eine absurde Idee, und sowas von weltfern... und dann h&#228;lt man daran auch noch jahrelang fest, anstatt sich &#187;vern&#252;nftiger Methoden&#171; zu bedienen oder sich &#187;wertvolle Ziele&#171; zu setzen.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1757556960896" ID="ID_473965343" MODIFIED="1757556979645" TEXT="interessiert sich je irgend jemand f&#xfc;r Lumiera, und dann auch noch die Anf&#xe4;nge?"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1757556983029" ID="ID_247103238" MODIFIED="1757557001157" TEXT="das w&#xe4;re nur sinnvoll, wenn ich den Historien-Text weiter schreibe">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1757601856516" ID="ID_237155847" MODIFIED="1757601863105" TEXT="Beschlu&#xdf;">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1757601864415" ID="ID_56859546" MODIFIED="1757601952812" TEXT="alle nicht-redundanten Inhalte werden integriert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      dann sind es n&#228;mlich wohl nur drei Seiten; alle anderen Seiten finden sich nahezu vollst&#228;ndig als erste Versionen sp&#228;terer RfCs
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1757601956011" ID="ID_684707978" MODIFIED="1757601965875" TEXT="und zwar als Git-Historie">
+<icon BUILTIN="idea"/>
+<node CREATED="1757601968375" ID="ID_308288895" MODIFIED="1757601978635" TEXT="beginnend mit dem HTML vom damaligen capture">
+<node CREATED="1757684066672" ID="ID_326733744" MODIFIED="1757684138877" TEXT="die Files haben sogar noch alte Timestamps">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <font face="Monospaced">2008-03-06T06:22:27+01:00 : ProcPlacementMetaphor.html </font>
+    </p>
+    <p>
+      <font face="Monospaced">2008-03-06T06:22:56+01:00 : ProcBuilder.html </font>
+    </p>
+    <p>
+      <font face="Monospaced">2008-03-06T06:23:09+01:00 : ArchitectureOverview.html </font>
+    </p>
+    <p>
+      <font face="Monospaced">2008-03-06T06:23:38+01:00 : Cinelerra_woes.html </font>
+    </p>
+    <p>
+      <font face="Monospaced">2008-03-06T06:23:48+01:00 : best_practices.html </font>
+    </p>
+    <p>
+      <font face="Monospaced">2008-03-06T06:24:05+01:00 : Cin3_Project_Proposal.html </font>
+    </p>
+    <p>
+      <font face="Monospaced">2008-03-06T06:24:22+01:00 : Possibilities_at_hand.html </font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1757684077439" ID="ID_799321817" MODIFIED="1757684148256" TEXT="diese kann man in den Git-commit nehmen">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1757601979306" ID="ID_1581439458" MODIFIED="1757602022434" TEXT="dann manuell umgeschrieben auf Asciidoc">
+<node CREATED="1757727142010" ID="ID_1828736306" MODIFIED="1757727336878" TEXT="Ha! Cinelerra-woes ist eine etwas sp&#xe4;tere Version">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...im zweiten Teil hat dieser Capture vom 2008 deutlich &#252;berarbeitete Inhalte, im Vergleich zu der Version, die ich 2011 f&#252;r die Historien-Seite publiziert habe. &#220;berdies bin ich (lt. Git) damals 2011 von Moin-Moin-Markup ausgegangen. Also&#160;&#160;mu&#223;te ich irgendwo eine noch &#228;ltere Version gespeichert haben, als dieser capture hier von 2008.
+    </p>
+    <p>
+      <b>Beschlu&#223;</b>: f&#252;r die Historien-Seite bleibe ich bei der &#228;lteren (roheren) Fassung, aber ich dokumentiere diese Fassung trotzdem hier in der Git-Historie von dem Seitenbranch, den ich im Moment aufbaue
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1757727342487" ID="ID_493427800" MODIFIED="1757727354622" TEXT="Architecture Overview: fr&#xfc;he Version vom RfC">
+<node CREATED="1757727355926" ID="ID_58391597" MODIFIED="1757727370600" TEXT="fast der gleiche Text"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1757727370987" ID="ID_1579649234" MODIFIED="1757727380092" TEXT="aber das Bild weicht ab">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1757727381324" ID="ID_1976485456" MODIFIED="1757727678322" TEXT="das Bild im Capture entspricht der ersten SVG-Verion im Git">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Taucht erstmals in einem Merge-Commit im Mai 2008 auf (da habe ich das SVG wohl noch mit reingestopft)
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      commit <font color="#8d0b0b">c0d7ae1aa2073e4e5b29f864d32a639c2864e9a1</font>
+    </p>
+    <p>
+      Merge: b5d2e9486 2e58b02b8
+    </p>
+    <p>
+      Author: Ichthyostega &lt;prg@ichthyostega.de&gt;
+    </p>
+    <p>
+      Date:&#160;&#160;&#160;Tue <font color="#8b1b5e">May 27 02:11:35 2008</font>&#160;+0200
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;Merge added builder documentation
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node CREATED="1757601987289" ID="ID_836988099" MODIFIED="1757601998134" TEXT="und per Git-Subtree-merge eingebunden"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1757602036477" ID="ID_1170181843" MODIFIED="1757604403074" TEXT="Aufgabe: den Historien-Text weiterf&#xfc;hren und diese Inhalte reflektieren">
+<arrowlink COLOR="#e53b65" DESTINATION="ID_97354933" ENDARROW="Default" ENDINCLINATION="1244;1409;" ID="Arrow_ID_1426119304" STARTARROW="None" STARTINCLINATION="-1203;-53;"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1757863889391" ID="ID_1377473880" MODIFIED="1757863909562" TEXT="auch alle historischen Dokumente mit einer Notiz versehen"/>
+<node CREATED="1757863910371" ID="ID_93431003" MODIFIED="1757864098041" TEXT="klarstellen woher sie stammen und was ich gemacht habe">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...sie stammen alle (mit Ausnahme von &#187;Cinelerra woes&#171;, von dem ich noch original-MoinMoin-Markup hatte) aus einem HTML-Snapshot im M&#228;rz 2008. Tats&#228;chlich habe an ganz wenigen Stellen nun doch die Grammatik repariert, denn manche S&#228;tze waren nahezu unverst&#228;ndlich in der Originalform. Au&#223;erdem habe ich manuell auf Asciidoc umgeschrieben, und dabei auch bisweilen die Formatierung minimal angepa&#223;t (Umbr&#252;che, Titel-Level vereinheitlicht, an einer Stelle eine Bullet-List aus einer Aufz&#228;hlung gemacht)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1757864099083" ID="ID_589710811" MODIFIED="1757864119953" TEXT="ich habe aber niemals die Formulierung oder den Stil ge&#xe4;ndert">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1757864127099" ID="ID_900111415" MODIFIED="1757864138684" TEXT="auch noch eine Querverlinkung der Seiten geschaffen"/>
+</node>
+</node>
+</node>
 <node CREATED="1757467120936" ID="ID_1396646253" MODIFIED="1757467126724" TEXT="Footer">
 <node CREATED="1757467128881" ID="ID_536613684" MODIFIED="1757467140201" TEXT="search-Feld?"/>
 <node CREATED="1757467140824" ID="ID_389709958" MODIFIED="1757467150994" TEXT="welche Repos sind sinnvoll?"/>
@@ -163311,10 +163644,421 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <icon BUILTIN="yes"/>
 </node>
 </node>
+<node CREATED="1758075269414" ID="ID_1323127198" MODIFIED="1758075276081" TEXT="aufr&#xe4;umen und kl&#xe4;ren">
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1758075279919" ID="ID_1177386217" MODIFIED="1758075295000" TEXT="einige der initialen Diskussionen und Entscheidungen">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1758075296579" ID="ID_1436892672" MODIFIED="1758075557530" TEXT="hier sind seit L&#xe4;ngerem gewisse Klarstellungen angezeigt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Da die RfCs immer noch als eine wichtige Ebene in unserer Dokumentation gelten, sollte ihr Inhalt nicht gleichg&#252;ltig sein, sondern auf Relevanz gepr&#252;ft werden.
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1758075327003" ID="ID_1954270861" MODIFIED="1758075469183" TEXT="manche RfCs sind schlampig formuliert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      bisweilen ist die Formulierung so unbeholfen, da&#223; das Gemeinte kaum verst&#228;ndlich ist; manchmal fehlt etwas Kontext und ein paar Hinweise w&#228;ren sinnvoll
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1758075337573" ID="ID_1676051744" MODIFIED="1758075683129" TEXT="einige sehr wichtige RfCs sollten in Kontext gestellt werden">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Es gibt einige RfCs aus der <i>allerersten Zeit,</i>&#160;die im R&#252;ckblick <i>gradezu vision&#228;r</i>&#160;wirken &#8212; oft aber ist bei diesen Entw&#252;rfen die Tragweite nicht klar. Daher sollten solche RfCs behutsam durch Kommentare und Textredaktion nachgesch&#228;rft und eingeordnet werden. Nicht zuletzt auch deshalb, weil man weiterhin auf diese Eintr&#228;ge wird verlinken m&#252;ssen.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1758075367284" ID="ID_154774574" MODIFIED="1758076160941">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      eine Menge RfCs waren <i>politisch aufgeladen</i>
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Es gab eine Zeit erheblicher Spannungen zwischen mir und Christian, die gekennzeichnet war von einem Ringen um den Stli des Projekts. Stil hier im weiten Sinn. Dem entsprechend finden sich viele doppelb&#246;dige Formulierungen, oder Vorschl&#228;ge, die &#8212; n&#252;chtern betrachtet &#8212; nachgerade durchgeknallt wirken. Auch f&#252;r diese RfCs halte ich eine gewisse Einordnung f&#252;r angezeigt Das kann durch einen historischen Zusatz erfolgen, oder dadruch, da&#223; ich sie <b>in aller Form verwerfe</b>&#160;und mir dadurch das die Deutungshoheit in der Sache aneigne. <i>Das kann bisweilen eine Gratwanderung sein</i>&#160;&#8212; denn es geht mir nicht darum, zu siegen oder Recht zu haben, sondern es geht mir darum, das Projekt der Sache angemessen zu navigieren. Allerdings ist das, &#8222;was Sache ist&#8220;, ein Urteil, das ich f&#228;lle, nachdem ich duch die Sachverhalte durchgegangen bin, und zwar, sein vielen Jahren, <i>allein.</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1758075401128" ID="ID_1708351511" MODIFIED="1758076529112" TEXT="einiges hat sich &#xfc;berholt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Eine ganze Reihe der RfCs aus der allerersten Zeit geh&#246;ren in diese Kategorie: sie entwerfen einen Arbeitsstil im Projekt, oft auch mit einer bestimmten Erwarung und Vorstellung bez&#252;glich Formalismen und Automatisierung. Bezeichnenderweise stammen alle diese RfC von Christian. Einige wenige beschreiben Projekt-Konventionen, die sich tats&#228;chlich auch so gehalten haben (z.B. die Anordnung der Repositories). Einge ganze Reihe weiterer Vorschl&#228;ge erscheint mir komplett weltfremd (wie z.B. da&#223; ein gr&#246;&#223;eres Projekt funktionieren k&#246;nnte, indem einfach jeder in Git eincheckt und nach belieben merged was gef&#228;llt, oder da&#223; man jedwede Projektorganisation auf Git-commits zur&#252;ckf&#252;hren kann). Dem entsprechend hat auch nie jemand ernsthaft versucht, im Projekt so zu arbeiten. Das sollte dann auch im jeweiligen RfC vermerkt sein. Und schlie&#223;lich gibt es einige wenige RfC, die die Organisation aus der Anfangszeit beschreiben; diese sind dadruch obsolet geworden, da&#223; ich nun schon so ewig lange allein bin, und dem entsprechend anders vorgehen kann und mu&#223;.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1758076539994" ID="ID_1369106116" MODIFIED="1758294806326" TEXT="obsolete RfC verwerfen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1758076552265" ID="ID_32877287" MODIFIED="1758076812324" TEXT="All Plugin Interfaces are C">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      explizit wieder in die Design-Phase zur&#252;ck
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#435e98" CREATED="1758076559993" ID="ID_404616666" MODIFIED="1758076812325" TEXT="Lua Scripting language">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      habe ich schon vor einigen Jahren explizit verworfen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#338800" CREATED="1758076735766" ID="ID_32818988" MODIFIED="1758242296315" TEXT="Liblumiera">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1758076573954" ID="ID_831447756" MODIFIED="1758242283993" TEXT="C Coding Style">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1758076594592" ID="ID_1450914959" MODIFIED="1758076799746" TEXT="Git Commit Message Format">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1758242287938" ID="ID_613478524" MODIFIED="1758253668521" TEXT="Semantic Tags">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Dieser RfC ist wieder so <i>typisch Christian:</i>&#160;er besteht aus einem sehr naheliegenden und sinnigen Vorschlag (Tags verwenden, Tags automatisch generieren, Tag-Verzeichnis generieren). Aber dann besteht er gr&#246;&#223;tenteils aus einer teils genialen, teils unausgegorenen Idee, die sofort absolut gesetzt wird: eine Ontology &#252;ber Tags definieren, mit logischen Operationen darauf.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Diese Art Vorschl&#228;ge bringen mich immer wieder in das gleiche Dilemma
+    </p>
+    <ul>
+      <li>
+        dem einfachen Teil w&#252;rde ich gerne zustimmen, er m&#252;&#223;te aber konkret ausgearbeitet werden
+      </li>
+      <li>
+        zu dem weitgreifenden Vorschschlag w&#228;re wohl erst mal ein Prototyp notwendig, aber in eienr Art, die nicht gleich endg&#252;litig Fakten schafft und andere M&#246;glichkeiten verbaut.
+      </li>
+    </ul>
+    <p>
+      Und mit beiden Problemen l&#228;&#223;t einen Christian dann allein; er h&#228;tte nur noch Interesse daran, einen extrem pfiffigen Prototypen f&#252;r den weitreichenden Vorschlag ganz minimalistisch zu implementieren und dann das Thema abzuhaken. Ich finde mich dann immer wieder in dem <b>&#228;rgerlichen Dilemma</b>: entweder ich lasse alle m&#246;glichen Vorschl&#228;ge offen h&#228;ngen, und dann laufe ich Gefahr, da&#223; Christian irgendwann einfordert, das nun einfach mal zu akzeptieren (ohne weiter was f&#252;r zu tun). Oder ich bin derjenige, der seine Vorschl&#228;ge komplett verwirft, oder ich bin derjenige, der seine Vorschl&#228;ge dann runter-strippt und implementiert, und mit den sich dann zeigenden konzeptionellen Problemen allein gelassen wird (so geschehen beim Lock-Cycle-detector, bei den Thread-Wrappern, seinem Interface/Plugin-System oder der Configuration).
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Hier entscheide ich mich daf&#252;r, <b>den Vorschlag komplett zu verwerfen</b>, mit den Argumenten, die ich damals schon als Diskussionsbeitrag geschrieben habe. Und zwar mache ich das aus Sorge, da&#223; sp&#228;ter irgend jemand auf die Idee kommt, den Vorschlag mal zu implementieren &#8212; was bestenfalls nutzlos w&#228;re, schlimmstenfalls aber andere, wichtige Einrichtungen behindert oder verdirbt (man denke nur mal daran, wenn ein Website-Cross-Link-Generator implementiert wird, aber nur limitiert auf die hier vorgeschlagene Semantik)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1758253669474" ID="ID_29014448" MODIFIED="1758254132691" TEXT="Todo Lists">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Dieser RfC ist ein <i>Kuriosum</i>&#160;&#8212; eine &#187;Duftmarke&#171; aus der ersten Zeit.
+    </p>
+    <p>
+      Christian hat das vorgeschlagen im M&#228;rz 2008; damals waren wir schon in einer festen Projekt-Organisation als &#187;<b>Lumiera</b>&#171; unterwegs. Ich kann mich definitiv nicht mehr erinnern, was ich damals von dem Vorschlag gehalten habe. Ich wei&#223; noch, das Christian eine heftige Aversion gegen Bugzilla hatte (und wohl auch gegen jede Art von Ticket-Management).
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Diese Erinnerung schreibe ich jetzt auch in das Ticket rein, denn was soll man sonst damit machen? So f&#252;r sich betrachtet (aus gegenw&#228;rtigem Kontext) erscheint es nur absurd, einen solchen RfC &#252;berhaupt zu formulieren, aber ich sollte Christian den Kredit geben, da&#223; er ein Problem gesehen hat.<br />
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Jedenfalls klar ist, wenig sp&#228;ter hatten wir ein Trac, daf&#252;r habe ich gesorgt, und Christian hat es zwar anfangs auch genutzt, aber letztlich immer f&#252;r &quot;Ichthyos Ding&quot; gehalten.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1758242308025" ID="ID_694478035" MODIFIED="1758242371431" TEXT="RfC als g&#xfc;ltig bestimmen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1758242362284" ID="ID_168390814" MODIFIED="1758242368570" TEXT="ApplicationInstall">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1758242334442" ID="ID_832449286" MODIFIED="1758242339918" TEXT="SchedulerRequirements">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1758242344327" ID="ID_271606513" MODIFIED="1758242355700" TEXT="DeveloperDocumentationStructure">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1758294808615" ID="ID_242970845" MODIFIED="1758469961070" TEXT="RfC neu einordnen">
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1758294822263" ID="ID_1812856045" MODIFIED="1758294830326" TEXT="ich nehme die RfCs erst">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1758294831696" ID="ID_1174119145" MODIFIED="1758294871033">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      daher m&#252;ssen die meisten RfCs aus heutiger Sicht <b>neu beurteilt</b>&#160; werden
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1758296249906" ID="ID_1665843698" MODIFIED="1758296263610" TEXT="Status: dringlich">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1758296279971" ID="ID_679832095" MODIFIED="1758296290786" TEXT="es kostet viel Zeit, die man meist nicht hat"/>
+<node CREATED="1758296384968" ID="ID_1428032308" MODIFIED="1758296414400" TEXT="RfCs sind auff&#xe4;llig und repr&#xe4;sentieren das Projekt"/>
+<node CREATED="1758296293368" ID="ID_1281776033" MODIFIED="1758296309002" TEXT="es besteht die Gefahr, ungekl&#xe4;rte Konflikte zu verschleppen"/>
+<node CREATED="1758296310022" ID="ID_285056606" MODIFIED="1758296348838" TEXT="aktuell habe ich (noch) die M&#xf6;glichkeit, per Dekret f&#xfc;r Klarheit zu sorgen"/>
+<node CREATED="1758296468776" ID="ID_809619612" MODIFIED="1758296490799" TEXT="ich sch&#xe4;rfe meine eigenen Argumente im Blick auf die Zukunft (Stiftung)"/>
+</node>
+<node COLOR="#435e98" CREATED="1758294880859" ID="ID_1358240000" MODIFIED="1758469973260" TEXT="F&#xe4;lle und Formen">
+<icon BUILTIN="info"/>
+<node CREATED="1758294891627" ID="ID_1897244786" MODIFIED="1758295154219" TEXT="historische RfC">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Diese dokumentieren den Stil und das &#187;Mindset&#171; aus der Zeit der entstehenden Bewegung, aus der sp&#228;ter das Lumiera-Projekt wurde. Typisch f&#252;r diese RfCs ist, da&#223; sie ein wesentliches Element des Stils im Projekt bereits vorgreifend darstellen, aber typischwerise auch total &#8222;&#252;ber das Ziel&#8220; hinausschie&#223;en, indem Methoden und Verfahren vorgeschlagen werden, oder gar schon als <i>gelebte Praxis</i>&#160;deklariert werden, welche &#8212; n&#252;chtern betrachtet &#8212; in unserer gegenw&#228;rtigen Zeit nicht funktionieren und ihren Zweck niemals erf&#252;llen k&#246;nnen. <b>Solche RfC m&#252;ssen explizit eingeordnet werden</b>
+    </p>
+  </body>
+</html></richcontent>
+<node COLOR="#5b280f" CREATED="1758331550690" ID="ID_607885496" MODIFIED="1758331558841" TEXT="Git Submodules">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node COLOR="#5b280f" CREATED="1758331994749" ID="ID_1096182228" MODIFIED="1758332000149" TEXT="Skills Collection">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node COLOR="#5b280f" CREATED="1758333544893" ID="ID_503415228" MODIFIED="1758333551507" TEXT="Todo Lists">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node COLOR="#5b280f" CREATED="1758426136437" ID="ID_1183368525" MODIFIED="1758426148577" TEXT="Distributed Development Framework">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1758426152582" ID="ID_1189783746" MODIFIED="1758426165394" TEXT="Hoppla!! das macht einiges klar"/>
+<node CREATED="1758426166350" ID="ID_670429291" MODIFIED="1758426186916" TEXT="das war der ERSTE (inhaltliche) RfC von Christian"/>
+<node CREATED="1758426189155" ID="ID_795522189" MODIFIED="1758426225795">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      &#10233; hei&#223;t: hier hat er eine <b>Vision</b>, die ihm wichtiger als alles andere ist
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1758426226718" ID="ID_940023481" MODIFIED="1758427859758" TEXT="ich Depp hab das bis vor kurzem &#xfc;berhaupt nicht gschnallt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...ich fand Christian's Vorschl&#228;ge in diese Richtung immer nur etwas &#8222;sonderbar&#8220; und realtit&#228;tsfern, meist so v&#246;llig &#252;berzogen, da&#223; ich nur &#8222;ja ja&#8220; gesagt habe (wohl wissend, da&#223; nichts konkretes folgend wird). <b>Dumm gelaufen</b>. Jetzt haben wir ein ganzes B&#252;ndel von solchen RfCs, und alle wurden entweder durchgepresst, oder durchgewunken, ohne weitere Diskussion. Ausnahme: die &#187;Semantic Tags&#171; von 2012. Da habe ich im Dev-Meeting kontra gegeben, und es kam bereits zueiner &#252;berraschend hitzigen Diskussion.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="smiley-oh"/>
+</node>
+<node CREATED="1758426972705" ID="ID_729815199" MODIFIED="1758464493271" TEXT="allerdings kann ich diese Vision nur ungef&#xe4;hr erfassen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      &quot;points define a periphery&quot; ...&#160;&#160;m&#246;glicherweise hilft es, nicht an den jeweiligen Vorschl&#228;gen h&#228;ngen zu bleiben, sondern mich zu fragen: worauf will Christian hinaus?
+    </p>
+    <p>
+      
+    </p>
+    <ul>
+      <li>
+        sein allererster RfC war also, da&#223; wir alle Bugtracker, und sonstigen Orga-Tools durch Git + Automatisierung ersetzen
+      </li>
+      <li>
+        das n&#228;chste war das Manifest. Darin ging es inhaltlich nicht um Cinelerra, sondern darum, ein Projekt &quot;m&#246;glichst einfach und zug&#228;nglich&quot; zu machen. Jeder soll tun was er f&#252;r richtig h&#228;lt, und dadurch l&#246;sen sich alle Probleme von selber (wenn man die Leute nur durch clevere Automatisierung und Git zusammenschaltet &#10233; das ist die Idee der &#187;<b>Unsichtbaren Hand</b>&#171; aus dem Liberalismus)
+      </li>
+      <li>
+        dann hat er x weitere Aktionen und RfCs gestartet, die alle darauf hinauslaufen, eine Infrastruktur zu schaffen (dem Projekt hat das <b>enorm geholfen</b>)
+      </li>
+      <li>
+        und dann hat er monatelang &#252;berhaupt nichts beigetragen, sondern hat sich mit vollem Eifer in das <b>uWiki</b>-Projekt geworfen, aber es <i>exakt in dem Moment aufgegeben, als klar war, da&#223; es nicht gen&#252;gt, alles &#252;ber einen eleganten Bootstrap zu verschalten, sondern da&#223; tats&#228;chliche Knochenarbeit (Webentwicklung) notwendig w&#228;re. Nicht da&#223; Christian nicht hart arbeiten kann, aber wenn man sich durch dicke Bretter bohren mu&#223; und Mengen von Details ordnen, dann ist das nicht seine Vision, sondern wohl ehr eine Bankrotterk&#228;rung.</i>
+      </li>
+      <li>
+        danach hat er eine Menge Infrastruktur im Backend hochgezogen, die nur darauf zielt, die Arbeit f&#252;r den Entwickler <i>m&#246;glichst einfach</i>&#160;zu machen, und daf&#252;r bestimmte Schemata global enforced. Er hat dann immer eingefordert, da&#223; sich alle von jetzt an daran halten m&#252;ssen, denn sonst wirkt das ja nicht
+      </li>
+      <li>
+        als n&#228;chstes kam das Thema &quot;Plug-ins&quot; + Lua. Auch das zielt darauf, alles m&#246;glichst modular, flach und einfach zug&#228;nglich zu machen, um aufgrund jeder neu auftauchenden Idee alles mit allem neu verschalten zu k&#246;nnen
+      </li>
+      <li>
+        kurz darauf hat Christian mehrere Initiativen gestartet, den globalen Applikations-Rahmen &quot;in den Griff&quot; zu bekommen. Mich hat das sehr emp&#246;rt (und ich hab entsprechend <i>giftig reagier</i>), denn er hat meine bereits geleistete Arbeit komplett ignoriert und dann nach meinem Hinweis als &quot;Overengineering&quot; beiseite geschoben. Ich hab das nicht einordnen k&#246;nnen, denn es war offensichtlich nicht pers&#246;nlich gemeint. Sondern er wollte <i>Dinge beiseite schieben, die seine Vision st&#246;ren</i>
+      </li>
+      <li>
+        sehr &#228;hnlich lief's dann beim Config-System, wie ich jetzt aus den Meeting-Summaries rekonstruieren konnte. Alle anderen Devs haben hin darauf hingewiesen, da&#223; es zu dem Thema zig ausgereifte L&#246;sungen gibt. Darauf ist er nicht einmal eingegangen (und hat sich auch nicht erkenntlich mit diesen L&#246;sungen auseinandergesetzt). Was ich so deute, da&#223; er <i>an das Thema grunds&#228;tzlich ganz anders rangehen wollte.</i>&#160;Christian zeigte auch keinerlei Interesse an einer Requirement-Analyse, <i>was ich so deute, da&#223; er das Thema als Vehikel gesehen hat, um seine Vision voranzubringen.</i>&#160;Auch der bestehende Implementation-Draft best&#228;tigt diese Lesart: er ist bez&#252;glich der Nutzbarkeit derart rudiment&#228;r, da&#223; man ihn grade eben mit Tricks durch einen Unit-Test pr&#252;geln kann. Aber ein elaboriertes System von Matching- und Ersetzungregeln direkt in der Stringverarbeitung ist sehr detailliert durchdacht und angelegt worden.
+      </li>
+      <li>
+        Auch sp&#228;ter noch, nachdem Christian schon nicht mehr aktiv beigetragen hat, kamen als Vorschl&#228;ge zu aktuellen Problemen manchmal unglaublich elegante Abk&#252;rzungs-L&#246;sungen (wie die Linkfarm), deren St&#228;rke darin besteht, das eigentliche Problem aus den Angeln heben. Meist aber kamen irgendwelche Vorschl&#228;ge f&#252;r Automatisierung und clevere Textersetzungs-Regeln (Semantic Tags, Git commit message format, Vorschl&#228;ge, Metadata-Hooks als Overlay direkt in die Datenstrukturen im Backend einzubauen, Vorschl&#228;ge f&#252;r Caching an allen m&#246;glichen Stellen, oder die Idee, Tests elaboriert automatisch zu generieren)
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1758427955050" ID="ID_803870559" MODIFIED="1758465585054" TEXT="Speziell dieser RfC wird in aller Form verworfen. Beweggr&#xfc;nde explizit machen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Ich war jetzt lange Zeit allein, und insofern waren die RfC egal, denn ich wei&#223; ja, was geschehen ist. Da ich aber nun das Ziel ins Auge fasse, ein Team aufzubauen, &#228;ndert sich die Situation. Ich mu&#223; nun daf&#252;r sorgen, meine Deutungshoheit zu ratifizieren. Ich habe diese Deutungshoheit durch harte Arbeit erlangt, nicht durch Magie. Alle entscheidenden Durchbr&#252;che in den letzten Jahren beruhen vor allem auf Denkarbeit, also viele Stunden Reflexion, die auch aufgeschrieben und wieder gelesen wird.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Meine Haltung zu dem, was Christian's Vision sein k&#246;nnte (letztlich meine Auslegung!), <b>hat sich in den letzten Jahren ge&#228;ndert</b>. Und zwar von &#8222;schaug' mer mal was es in Beweung setzt&#8220; auf &#8222;ich sehe jetzt wohin das f&#252;hrt und ich will nicht in dieser Zukunft leben, sondern in einer anderen&#8220;.
+    </p>
+    <h1>
+      Konsequenzen
+    </h1>
+    <ul>
+      <li>
+        <b>Ich</b>&#160;*<b>DEUTE</b>* Christians Vision als Teil eines <b>Trends zur Industrialisierung</b>. Das ist etwas, <i>was mit den Menschen geschieht, ohne da&#223; es absichtsvoll geplant wird.</i>
+      </li>
+      <li>
+        <b>Ich</b>&#160;*<b>NAVIGIERE</b>* das Projekt in Richtung einer <i>m&#246;glichen Dialektik dazu</i>&#160;(&#9888; Achtung: nicht in Richtung von Tradition und Konservativismus; ich gebrauche den Begriff &#187;Handwerk&#171; als Vehikel).
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1758428049736" ID="ID_912836504" MODIFIED="1758428240210" TEXT="hier gibt es eine Verbindung zur Debatte Git-Flow vs. Trunk-based">
+<arrowlink COLOR="#628ec2" DESTINATION="ID_467554725" ENDARROW="Default" ENDINCLINATION="711;22;" ID="Arrow_ID_1134931073" STARTARROW="None" STARTINCLINATION="1592;72;"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node CREATED="1758295155556" ID="ID_361906570" MODIFIED="1758295311116" TEXT="Visions-RfC">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Diese forumulieren wesentliche Elemente der Vision aus, unter der das Projekt begonnen wurde. Einige dieser RfC wurden sofort beschlossen &#8212; und die Realit&#228;t in der Codebasis hat sich dann ganz anders entwickelt. Andere RfC wurden erst mal auf &#8222;noch mehr Arbeit erforderlich&#8220; gestellt &#8212; was in jedem Fall realisitischer ist, denn in der Regel ist ein <i>weiter Weg notwendig, um dieser Vision auch nur nahe zu kommen.</i>&#160;<b>Diese RfC m&#252;ssen also explizit von mir neu beurteilt werden</b>
+    </p>
+  </body>
+</html></richcontent>
+<node COLOR="#338800" CREATED="1758333505514" ID="ID_1482900795" MODIFIED="1758333536760" TEXT="Render Optimiser">
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#338800" CREATED="1758428642681" ID="ID_1087760518" MODIFIED="1758428663504" TEXT="Systematic metadata">
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#338800" CREATED="1758428754352" ID="ID_1486051154" MODIFIED="1758428768880" STYLE="fork" TEXT="Resource Profiling">
+<edge COLOR="#9e7171" STYLE="linear" WIDTH="thin"/>
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#5b280f" CREATED="1758428617940" ID="ID_688655053" MODIFIED="1758428625907" TEXT="Semantic Tags">
+<icon BUILTIN="button_cancel"/>
+</node>
+</node>
+<node CREATED="1758295324267" ID="ID_1771740635" MODIFIED="1758296110083" TEXT="W&#xfc;nsche und Ideen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Diese RfC gibt es in verschiedensten Formen, von einer kurz hingeworfenen Idee bis zu einem elaboriert ausgearbeiteten Konzept. Allen gemeinsam ist, da&#223; man sie <i>alsbald beiseite geschoben hat,</i>&#160;da den Entwicklern eigentlich von Anfang an klar war, was f&#252;r ein weiter Weg vor uns liegt. <b>Diese RfC k&#246;nnen getrost liegen bleiben, so wie sie sind.</b>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1758295491802" ID="ID_987531939" MODIFIED="1758296011720" TEXT="Architektur- und Designfragen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Diese RfC sind allesamt mit Konflikten verbunden, und wurden nur deshalb formuliert, weil der Initiator schon ahnte, da&#223; es Widerstand gegen diese Idee geben w&#252;rde. Hier kann man zwei Klassen beobachten
+    </p>
+    <ul>
+      <li>
+        einige RfC sind so verschwurbelt, da&#223; ohne Kenntnis der damaligen Situation &#252;berhaupt nicht erkenntlich ist, worum es &#252;berhaupt geht; diese RfC wurden meist sehr kontrovers diskutiert, bisweilen sogar per Winkelzug durchgepr&#252;gelt und als Konsens dargestellt.
+      </li>
+      <li>
+        die sonstigen RfC dieser Art sind extrem elaboriert geschrieben, so da&#223; man eigentlich nichts mehr dagegen sagen kann; verr&#228;terisch ist nur, da&#223; der Diskussionsteil komplett fehlt, oder nicht ernst gemeint ist.
+      </li>
+    </ul>
+    <p>
+      Der <b>Beschlu&#223;-Status dieser RfC ist fragw&#252;rdig</b>. Tats&#228;chlich wurde &#252;ber alle diese Vorschl&#228;ge eine faktische Entscheidung <b>von mir</b>&#160;getroffen, indem ich eine Richtung eingschlagen habe, die ich f&#252;r richtig halte und begr&#252;nden kann. Die notwendige Diskussion mu&#223;te ich dazu <i>mit mir selber f&#252;hren</i>&#160;und ein formaler Beschlu&#223; war nicht mehr m&#246;glich. Im Ergebnis sind nun praktisch alle charakteristischen Vorschl&#228;ge von Christian <i>von mir verworfen worden</i>&#160;und die allermeisten meiner Vorschl&#228;ge <i>wurden weiterentwickelt und dabei jedoch substantiell ver&#228;ndert.</i>&#160;Insofern ist <b>f&#252;r diese RfC eine Klarstellung notwendig</b>
+    </p>
+  </body>
+</html></richcontent>
+<node COLOR="#5b280f" CREATED="1758325770287" ID="ID_327608537" MODIFIED="1758325783696" TEXT="ConfigLoader">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node COLOR="#5b280f" CREATED="1758330057210" ID="ID_1645873995" MODIFIED="1758330063313" TEXT="Data Backend">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node COLOR="#5b280f" CREATED="1758428588662" ID="ID_136944344" MODIFIED="1758428713883" TEXT="Liblumiera">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1758335720101" ID="ID_836553452" MODIFIED="1758335745801" TEXT="bereits verworfen">
+<icon BUILTIN="closed"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1758335676244" ID="ID_353234353" MODIFIED="1758335750617" TEXT="(Application Structure)">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1758335699839" ID="ID_1540305865" MODIFIED="1758335750617" TEXT="(All Plugin Interfaces are C)">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1758335683680" ID="ID_1244052499" MODIFIED="1758335750597" TEXT="(Global Initialisation)">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+</node>
+<node COLOR="#5b280f" CREATED="1758466843589" ID="ID_362481028" MODIFIED="1758466853937" TEXT="Lua Scripting Language">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1758469753371" ID="ID_699844866" MODIFIED="1758469766379" TEXT="der Text sagt ja bereits &quot;rejected&quot;"/>
+<node CREATED="1758469767181" ID="ID_1909241965" MODIFIED="1758469947916" TEXT="es pa&#xdf;t nicht zum RfC-Format, den offen stehen zu lassen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Der eigentliche RfC schl&#228;gt nur vor, Lua zur verbindlichen Scriptsparche zu machen, und C-Bindings einzurichten. Die Kommentare ergeben dann aber, da&#223; Christian diesen RfC sehr wohl im Zusammenhant mit seiner Plugin-Vision gesehen hat, und tats&#228;chliche alle internen Interfaces &#246;ffnen und von Lua aufrufbar machen wollte.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Dieser Zusammenhang haftet dem RfC nun an, und auch meine Ablehnung stellt darauf ab &#10233; es ist nicht sinnvoll, diesen RfC zu &#8222;reparieren&#8220;
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
 <node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1757109685126" ID="ID_521802643" MODIFIED="1757110116740" TEXT="systematische Fehler">
 <icon BUILTIN="messagebox_warning"/>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1757109693158" ID="ID_1622322952" MODIFIED="1757110124187" TEXT="Diskussionen">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1757109693158" ID="ID_1622322952" MODIFIED="1758463315053" TEXT="Diskussionen">
+<linktarget COLOR="#cf6a57" DESTINATION="ID_1622322952" ENDARROW="Default" ENDINCLINATION="-1;51;" ID="Arrow_ID_317214042" SOURCE="ID_1126185345" STARTARROW="None" STARTINCLINATION="-138;-8;"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1757109706308" ID="ID_1114983808" MODIFIED="1757109718835" TEXT="die waren mal falsch in einem Template definiert"/>
 <node CREATED="1757109749853" ID="ID_377779187" MODIFIED="1757109773176" TEXT="verwenden einen Link um die Person zu rendern &#xd83e;&#xdc32; Link broken"/>
 <node CREATED="1757109773955" ID="ID_1518938728" MODIFIED="1757109800451" TEXT="verwenden ein DateTime-Macro, das nicht funktionert"/>
@@ -163348,6 +164092,99 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1757297641266" ID="ID_66055677" MODIFIED="1757297645010" TEXT="CStyleGuide">
 <icon BUILTIN="flag-yellow"/>
 </node>
+<node COLOR="#338800" CREATED="1757555473647" ID="ID_1126185345" MODIFIED="1758463308876" TEXT="viele Diskussionsbeitr&#xe4;ge ungeschickt formatiert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...das ist vermutlich ein Fehler in der MoinMoin-2-Asciidoc-Konvertierung gewesen: viele Diskussionsbeitr&#228;ge beginnen mit einem &quot;--&quot;, was von Asciidoc u.U. als Beginn eines &#187;delimited block&#171; interpretiert wird
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#cf6a57" DESTINATION="ID_1622322952" ENDARROW="Default" ENDINCLINATION="-1;51;" ID="Arrow_ID_317214042" STARTARROW="None" STARTINCLINATION="-138;-8;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1757555571290" ID="ID_1599540863" MODIFIED="1757555626896" TEXT="f&#xfc;r Aufz&#xe4;hlungen fehlt sehr of die trennende Leerzeile">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...wodurch sie Asciidoc nicht erkennt, sondern dem vorhergehenden Absatz zuschl&#228;gt
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="pencil"/>
+</node>
+<node COLOR="#435e98" CREATED="1757902264667" ID="ID_1801637097" MODIFIED="1757902407010" TEXT="viele nicht-existente Links">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...das geht vermutlich zur&#252;ck auf das Moin-Moin-Wiki von Cehteh: Dort war es &#252;blich, Stichworte mal vorsorglich als Link zu schreiben; in wiki-typischer Weise wurden daraus dann <i>nicht-existente</i>&#160;Seiten, die man sukzessive erstellen konnte. Duch die automatische Umwandlung in Asciidoc sind daraus leider sehr viele Links nach dem Muster <font face="Monospaced">link:blablubb[]</font>&#160; enstanden.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+<node COLOR="#338800" CREATED="1757902395428" ID="ID_644499003" MODIFIED="1757902405284" TEXT="per RegExp aufr&#xe4;umen">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1757890945415" ID="ID_1825214470" MODIFIED="1757890952334" TEXT="Frage der Datierung?">
+<icon BUILTIN="help"/>
+<node CREATED="1757890953685" ID="ID_166676021" MODIFIED="1757891014794" TEXT="der initiale Import aller RfC erfolgte erst 2010-07-23">
+<icon BUILTIN="info"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1757890986237" ID="ID_981868693" MODIFIED="1757891046881" TEXT="Entwicklung der ersten Jahren damit nicht mehr nachvollziebar">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1757891053140" ID="ID_804957014" MODIFIED="1757891123684" TEXT="bisweilen gibt es explizit aufgezeichnete Timestamps &#x2014; widerspr&#xfc;chlich">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...die dann aber dem gekennzeichneten Inhalt widersprechen k&#246;nnen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="smiley-neutral"/>
+<node CREATED="1757891127856" ID="ID_1818921497" MODIFIED="1757891147662" TEXT="Beispiel: AllPluginInterfaces are C"/>
+<node CREATED="1757891148533" ID="ID_1635138325" MODIFIED="1757891163638" TEXT="erster Kommentar: ct:: &apos;2007-07-03 05:51:06&apos;"/>
+<node CREATED="1757891164889" ID="ID_1347213571" MODIFIED="1757891376925" TEXT="der Text redet aber von &#xbb;Lumiera&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <div style="background-color: #eee0b5; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 2px">
+      <div style="color: #202020; background-color: #eee0b5; font-family: Bitstream Vera Sans Mono; font-size: 9pt; white-space: pre">
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          After a talk on IRC ichthyo and me agreed on making lumiera a multi language
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          project where each part can be written in the language which will fit it best.
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          Language <u>purists</u>&#160;might disagree on such a mix, but I believe the benefits
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          outweigh the drawbacks.
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <br />
+          
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          ct:: '2007-07-03 05:51:06'
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          
+        </p>
+      </div>
+    </div>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1757891338937" ID="ID_1848128987" LINK="https://web.archive.org/web/20231026200633/https://lists.cinelerra-cv.org/pipermail/cinelerra-skolelinux/2008-March/013474.html" MODIFIED="1757891363179" TEXT="den Namen Lumiera gabs aber erst seit M&#xe4;rz.2008"/>
+</node>
 </node>
 </node>
 </node>
@@ -163357,6 +164194,11 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1756773443885" ID="ID_103458183" MODIFIED="1756773452194" TEXT="Reihenfolge Infrastructure">
 <icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1757555382155" ID="ID_1747080203" MODIFIED="1757555412873" TEXT="API-Doc in die Dokumentations-Men&#xfc;">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1757555415812" ID="ID_212291886" MODIFIED="1757555420407" TEXT="Vorschlag von Benny"/>
+<node CREATED="1757555422204" ID="ID_1328742717" MODIFIED="1757555428360" TEXT="ist bisher nur in Devs-Vault"/>
 </node>
 </node>
 <node CREATED="1757122577486" ID="ID_1246513731" MODIFIED="1757122587846" TEXT="Doxygen">

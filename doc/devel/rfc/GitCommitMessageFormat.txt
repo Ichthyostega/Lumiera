@@ -204,7 +204,7 @@ be introduced prematurely:
 
 - Git bisect is an essential tool when working with a code base which you
   do not understand. With a well-crafted yet ambitious system the situation
-  is quite distinct: in such a system, the change which caused the breakage
+  is quite different: in such a system, the change which caused the breakage
   is obvious and easy to spot -- while the actual challenge is to
   understand _why_ difficulties arose -- not to mention the amount
   of work required to develop a path of escape from a real dilemma.

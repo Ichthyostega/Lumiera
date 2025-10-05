@@ -132,7 +132,7 @@ there too, so it gets issued automatically.
   probably after parsing the commandline in main (and either this or the
   loading of a existing session will bring the proc layer up into fully
   operational state +
-  Ichthyo:: 'DateTime(2008-04-09T02:13:02Z'
+  Ichthyo:: '2008-04-09T02:13:02Z'
 
 * About NoBug initialization: I've seen that you made a `nobugcfg` where
   you centralized all nobug setup. Problem here is that a change in that file
@@ -199,7 +199,7 @@ Some comments...
 - Regarding organisation of includes:... agreed
 - Initialisation of the very...
 
-  * I won't hesitate to add some C\++ functionality to give *NoBug* an
+  * I won't hesitate to add some C\++ functionality to give *NoBug* a
     singleton initialization in C++
     
 - Then there is the initialisation of common services... _agreed_
@@ -266,7 +266,7 @@ outdated and ``misaligned'' IMHO.
 * Startup and Shutdown of an application like Lumiera requires way more
   than this. More specifically, we have to consider modularisation.
 * in hindsight, I was naiive to agree with this proposal.
-  It can not be that easy.
+  _It can not be that easy._
 * my comments do indeed indicate the direction the further development
   did take: today, Lumiera does the _exact opposite_ of this proposal,
   there is *no central init call* -- we use *modularised hooks* instead
@@ -278,6 +278,18 @@ In case there is further need of discussion regarding this topic,
 we should preferably start a new RfC.
 
 Ichthyostega:: 'Mo 08 Sep 2014 01:44:49 CEST' ~<prg@ichthyostega.de>~
+
+
+💡 +
+[underline]#Historical remark#: This RfC is closely related to discussions
+regarding the link:{rfc}/ApplicationStructure.html[Application Structure]
+and possibly using a link:{rfc}/AllPluginInterfacesAreC.html#_conclusion[Plug-in based Achitecture].
+
+Investigating and debating these possibilities in a productive way was key
+to gain an understanding what is required to build and maintain an Application
+of this dimension and scope.
+
+Ichthyostega:: '2025-09-20'
 
 
 //endof_comments:

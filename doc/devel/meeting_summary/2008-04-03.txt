@@ -65,9 +65,8 @@ in registering to the project in planning/alpha stage to interest people such as
 It was noted that the
 https://web.archive.org/web/20090601174640/http://www.linux.com/archive/feature/126441[article on Linux.com]
 resulted in a lot of people contacting Ichthyo and Cehteh.
-»I believe in Cinelerra«
+https://lists.cinelerra-cv.org/pipermail/cinelerra-skolelinux/2008-January/012806.html[»I believe in Cinelerra«]
 by Leo Germani also generated a lot of traffic by developers.
-[purple]#<lost content at `http://plot.bek.no/pipermail/piksel/2008-January/003328.html`>#
 Some level of presence on mailing lists would be good although not too much just enough to indicate the project is going on.
 
 Conclusion: volunteer needed to coordinate publicity (not overly urgent, but helpful)
