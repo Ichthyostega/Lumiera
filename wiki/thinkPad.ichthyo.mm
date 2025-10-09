@@ -75150,7 +75150,7 @@
 <icon BUILTIN="messagebox_warning"/>
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1743091423731" ID="ID_782853432" MODIFIED="1743091439152" TEXT="zun&#xe4;chst: unklar was das bedeutet">
 <icon BUILTIN="help"/>
-<node CREATED="1743091597060" ID="ID_1622939135" MODIFIED="1743091709774">
+<node CREATED="1743091597060" ID="ID_1622939135" MODIFIED="1760045895659">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
@@ -75162,19 +75162,21 @@
     </p>
   </body>
 </html></richcontent>
+<arrowlink COLOR="#7a224a" DESTINATION="ID_530436147" ENDARROW="Default" ENDINCLINATION="-2031;120;" ID="Arrow_ID_645695046" STARTARROW="None" STARTINCLINATION="-3819;455;"/>
 <linktarget COLOR="#ac858f" DESTINATION="ID_1622939135" ENDARROW="Default" ENDINCLINATION="-227;-9;" ID="Arrow_ID_1337260949" SOURCE="ID_89103091" STARTARROW="None" STARTINCLINATION="185;8;"/>
 <node CREATED="1743091754943" ID="ID_1154146518" MODIFIED="1743091765465" TEXT="zwei M&#xf6;glichkeiten des Umgangs">
-<node CREATED="1743091780481" ID="ID_497944249" MODIFIED="1743092028557" TEXT="kaskadierende Propagation">
+<node CREATED="1743091780481" ID="ID_497944249" MODIFIED="1760046019584" TEXT="kaskadierende Propagation">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
     <p>
-      sofern sich eine Entscheidungsgrundlage &#228;ndert, m&#252;ssen alle davon abh&#228;ngigen Entscheidungen re-evaluiert werden und k&#246;nnten ander ausfallen; ist dies der Fall, so m&#252;ssen rekursiv alle darauf aufbauenden Schritte &#252;berpr&#252;ft und neu aufgespielt werden. Am Ende kann ein drastisch anderer Zustand resultieren, und dies w&#228;re selbst wieder als Event zu dokumentieren.
+      sofern sich eine Entscheidungsgrundlage &#228;ndert, m&#252;ssen alle davon abh&#228;ngigen Entscheidungen re-evaluiert werden und k&#246;nnten anders ausfallen; ist dies der Fall, so m&#252;ssen rekursiv alle darauf aufbauenden Schritte &#252;berpr&#252;ft und neu aufgespielt werden. Am Ende kann ein drastisch anderer Zustand resultieren, und dies w&#228;re selbst wieder als Event zu dokumentieren.
     </p>
   </body>
 </html></richcontent>
+<icon BUILTIN="full-1"/>
 </node>
-<node CREATED="1743091791194" ID="ID_638566721" MODIFIED="1743092278537" TEXT="Zulassen einer Diskrepanz">
+<node CREATED="1743091791194" ID="ID_638566721" MODIFIED="1760046022966" TEXT="Zulassen einer Diskrepanz">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -75183,6 +75185,108 @@
     </p>
   </body>
 </html></richcontent>
+<icon BUILTIN="full-2"/>
+</node>
+</node>
+<node CREATED="1760046001479" ID="ID_631491111" MODIFIED="1760046013475" TEXT="hinter den zwei M&#xf6;glichkeiten stehen zwei Grundhaltungen">
+<node CREATED="1760046032209" ID="ID_1730886706" MODIFIED="1760046103252" TEXT="es werden Verh&#xe4;ltnisse symbolisch repr&#xe4;sentiert">
+<icon BUILTIN="full-1"/>
+</node>
+<node CREATED="1760046058209" ID="ID_253583723" MODIFIED="1760046106429" TEXT="es wird verarbeitet und auf Fehler gepr&#xfc;ft">
+<icon BUILTIN="full-2"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1760046152284" ID="ID_312568019" MODIFIED="1760046162403" TEXT="das ist keine einfache Entscheidung">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1760046184344" ID="ID_293265291" MODIFIED="1760046198442" TEXT="es geht um eine Abw&#xe4;gung die Komplexit&#xe4;t betreffend"/>
+<node CREATED="1760046253807" ID="ID_1213724695" MODIFIED="1760046477061" TEXT="ein reaktiver Ansatz w&#xe4;re durchaus vertretbar &#x2014; sofern man gut pr&#xfc;ft">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das entspricht durchaus der g&#228;ngigen Herangehensweise: Datenverarbeitung ist kein logisch-mathematischer Beweis, sondern der Niederschlag des Handelns in der Wirklichkeit &#8212; insofern kann man alles zulassen, solange kein Schaden offensichtlich wird
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1760046491368" ID="ID_56039117" MODIFIED="1760046620786" TEXT="auch eine Mischform ist denkbar...">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...indem n&#228;mlich eine Regel oder Entscheidungsbasis <i>gesperrt</i>&#160; wird, sobald sie einmal zur Anwendung gekommen ist; so ein Mechanismus lie&#223;e sich mit relativ geringem Aufwand realisieren, und w&#252;rde zumindest stets erm&#246;glichen, da&#223; man das Entstehen eines Konflikts erkennt und dann warnt. Dies w&#228;re sozusagen die &#187;optimistische&#171; Herangehensweise: meist geht ja alles gut....
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1760046656070" ID="ID_1577530879" MODIFIED="1760046694874" TEXT="meine Sorge ist aber, da&#xdf; die Verh&#xe4;ltnism&#xe4;&#xdf;igkeit nicht absch&#xe4;tzbar ist">
+<node CREATED="1760046701821" ID="ID_1385746159" MODIFIED="1760046724950" TEXT="wei&#xdf; aus Erfahrung, da&#xdf; ein Medien-Arrangement extrem komplex werden kann"/>
+<node CREATED="1760046725587" ID="ID_195906882" MODIFIED="1760046763121" TEXT="und die M&#xf6;glichkeiten zur Anpassung sind begrenzt &#x2014; besonders unter Zeitdruck"/>
+<node CREATED="1760046816398" ID="ID_1153759083" MODIFIED="1760046947920" TEXT="hinzu kommt: man verf&#xfc;gt nicht souver&#xe4;n &#xfc;ber die &#xbb;Entscheidungsbasis&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...insofern in diese Umst&#228;nde einflie&#223;en, die sich extern ergeben: wie z.B. das technische Setup, mit dem man arbeitet: es kommt durchaus vor, da&#223; man &#8212; mitten im Projekt &#8212; mit anderem Equippment und Setup zurechtkommen mu&#223;
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1760046958436" ID="ID_1969794624" MODIFIED="1760046998340" TEXT="ich erkenne hier einen Grundsatzkonflikt &#x2014; dem bisherige Software nicht gewachsen war">
+<node CREATED="1760047005702" ID="ID_252830616" MODIFIED="1760047018612" TEXT="gew&#xfc;nscht: einfaches deterministisches Verhalten"/>
+<node CREATED="1760047019322" ID="ID_226463908" MODIFIED="1760047040741" TEXT="gew&#xfc;nscht: m&#xe4;chtige, regelbasierte Verhaltensmuster zur Arbeitserleichterung"/>
+<node CREATED="1760047041475" ID="ID_477774862" MODIFIED="1760047057395" TEXT="gew&#xfc;nscht: maximale Flexibilit&#xe4;t und Anpassung an die Umst&#xe4;nde"/>
+<node CREATED="1760047069053" ID="ID_1956825448" MODIFIED="1760047089454" TEXT="erwartet: zuverl&#xe4;ssige Beherrschung des Ergebnisses"/>
+</node>
+<node CREATED="1760047094769" ID="ID_1778997588" MODIFIED="1760047126010" TEXT="die (viel anspruchsvollere) L&#xf6;sung-1 erscheint mir deshalb der Sache angemessen">
+<node CREATED="1760047131909" ID="ID_704731853" MODIFIED="1760047147325" TEXT="es l&#xe4;uft darauf hinaus, Informationen auf Vorrat zu erfassen"/>
+<node CREATED="1760047148131" ID="ID_1229743471" MODIFIED="1760047174483" TEXT="was wiederum einen aufwendigen Index bedingt, um die Kosten zu beherrschen"/>
+<node CREATED="1760047179743" ID="ID_183270711" MODIFIED="1760047202767" TEXT="man schafft sich M&#xf6;glichkeiten f&#xfc;r die Zukunft, um besser auf Problemsituationen zu reagieren"/>
+<node CREATED="1760047203788" ID="ID_1987056811" MODIFIED="1760047351254" TEXT="die vern&#xfc;nftige Vorbedinung jeder Regel-Anwendung: Beweisweg dokumentieren">
+<arrowlink COLOR="#8d266d" DESTINATION="ID_1661215590" ENDARROW="Default" ENDINCLINATION="-1400;-96;" ID="Arrow_ID_614837711" STARTARROW="None" STARTINCLINATION="-1631;60;"/>
+<icon BUILTIN="forward"/>
+<node CREATED="1760047386713" ID="ID_452860270" MODIFIED="1760047507268" TEXT="leider ist das aber die Schwachstelle des regelbasierten Ansatzes">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...und zwar ist das schon in den 60er-Jahren bemerkt worden &#8212; lange vor jeder &quot;K.I&quot;
+    </p>
+    <p>
+      <img src="images/icons/forward.png" alt="Forward" />
+      die vern&#252;nftige Vorbedinung jeder Regel-Anwendung: Beweisweg dokumentieren
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1760047402460" ID="ID_1414732554" MODIFIED="1760047545714" TEXT="an dieser Stelle gehen die Effizienz-Vorteile unerwarteterweise verloren">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Wenn man einen regelbasierten Ansatz verwendet, weil man sich das klassische, konstruktive Engineering sparen will (Beispiel: selbstfahrende Autos)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1760047437606" ID="ID_1228829604" MODIFIED="1760047599297" TEXT="allerdings: der erweiterte Wirkhorizont bleibt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      mit dem regelbasierten Ansatz lassen sich Strukturen aufbauen, die man nicht deduktiv top-down konstruieren k&#246;nnte
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1760047606737" ID="ID_42686273" MODIFIED="1760047624772" TEXT="ganz ehrlich: es reizt mich">
+<icon BUILTIN="clanbomber"/>
+<node CREATED="1760047659808" ID="ID_31324650" MODIFIED="1760047672024" TEXT="nicht zuletzt, weil ich auf Handwerk ziele"/>
+<node CREATED="1760047672751" ID="ID_1247385266" MODIFIED="1760047677490" TEXT="und nicht an Wunder glaube"/>
+<node CREATED="1760047685917" ID="ID_1820205361" MODIFIED="1760047690848" TEXT="m&#xf6;chte es richtig machen"/>
 </node>
 </node>
 </node>
@@ -159837,9 +159941,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 <node CREATED="1748821196209" ID="ID_1040225824" MODIFIED="1760026533737" TEXT="was es sicher nicht bedeutet: da&#xdf; man die eigentliche Medien-Implementierung manipuliert">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Es wird also definitiv nicht &#187;der Clip&#171; den Code enthalten, wie <i>er sich selber rendert,</i>&#160;oder &#187;der Track&#171; den Code enhalten, mit dem Medien-Inhalte kombiniert und verarbeitet werden.
@@ -159917,13 +160019,29 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </html></richcontent>
 <node CREATED="1737319089055" ID="ID_184966462" MODIFIED="1760031114702" TEXT="Gefahr der &#xbb;pinball-Machine&#xab;">
 <arrowlink COLOR="#fd5447" DESTINATION="ID_162581753" ENDARROW="Default" ENDINCLINATION="-13;-89;" ID="Arrow_ID_971584165" STARTARROW="None" STARTINCLINATION="122;12;"/>
+<node CREATED="1760041167379" ID="ID_1306280282" MODIFIED="1760041175651" TEXT="kann ungewollt entstehen...">
+<node CREATED="1760041212034" ID="ID_589076978" MODIFIED="1760041224787" TEXT="auf dem Hintergrund einer stark gliedernden Architektur"/>
+<node CREATED="1760041316020" ID="ID_778371228" MODIFIED="1760041332406">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      wenn diese durch Messaging <i>komplementiert</i>&#160;wird
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1760041490865" ID="ID_1069794955" MODIFIED="1760041554972" TEXT="Nondeterminism">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1760041556568" ID="ID_895350727" MODIFIED="1760041557822" TEXT="Event interagiert mit implizitem Kontext"/>
+<node CREATED="1760041563890" ID="ID_1072781201" MODIFIED="1760041593095" TEXT="Reaktion is mehr als das Event impliziert"/>
 </node>
 </node>
 <node CREATED="1760027314537" ID="ID_1895812910" MODIFIED="1760027328733">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Ort der <b>Entscheidungs-Logik</b>
@@ -159934,9 +160052,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1760027996136" ID="ID_246985163" MODIFIED="1760028782839" TEXT="wie kann Code &#xbb;verst&#xe4;ndlich&#xab; sein?">
 <node CREATED="1760028044687" ID="ID_847296862" MODIFIED="1760028065429">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       der Code <i>macht was</i>&#160;&#8212; und man wei&#223; darum
@@ -159947,9 +160063,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 <node CREATED="1760028079443" ID="ID_944833118" MODIFIED="1760028162021">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Trennung in <b>Business</b>-Kern, Framework und Library
@@ -159961,9 +160075,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 <node CREATED="1760028675187" ID="ID_1058819561" MODIFIED="1760028714414">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Code ist faktorisiert in <i>getrennte Sachverhalte</i>
@@ -159974,9 +160086,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 <node CREATED="1760029030100" ID="ID_1676355762" MODIFIED="1760029172259">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Code <i>f&#252;hrt aus</i>, delegiert, stellt sicher
@@ -159985,9 +160095,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </html>
 </richcontent>
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Solchen Code sieht man mit <i>gemischten Gef&#252;hlen</i>&#160;&#8212; er ist nicht das, was man gesucht hat, aber er legt einem nahe, ihn zu ignorieren, <i>ohne zu verstehen was er tut</i>
@@ -160004,9 +160112,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1760029376477" ID="ID_933671618" MODIFIED="1760030438355" TEXT="entscheidende Konsequenzen ergeben sich indirekt"/>
 <node CREATED="1760029597633" ID="ID_584653265" MODIFIED="1760030065998" TEXT="Code bezieht sich auf Daten unklarer Bedeutung">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Hiervon gibt es zwei Auspr&#228;gungen
@@ -160025,9 +160131,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 <node CREATED="1760030187157" ID="ID_1184582196" MODIFIED="1760030365670" TEXT="Code macht sich Standard-Verhalten zu Nutze">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       In solchem Code findet man typischerweise nur eine endlose Folge von Abgrenzungen, die Verhalten unterdr&#252;cken, ablenken oder transformieren; das intendierte Verhalten <i>steht grade nicht im Code, </i>sondern bleibt &#252;brig oder f&#228;llt an
@@ -160039,9 +160143,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1760030372735" ID="ID_1528353123" MODIFIED="1760030388923" TEXT="Code wurde vom Einzelresultat r&#xfc;ckw&#xe4;rts gedacht"/>
 <node CREATED="1760030805760" ID="ID_1898675367" MODIFIED="1760031044700" TEXT="Logik wird nur auf einem Zugangsweg ersichtlich">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Hierzu z&#228;hle ich auch den in der Praxis sehr h&#228;ufigen Fall weithin verteilter Entscheidungs-Kaskaden, deren Konsequenz nur sichtbar wird, wenn man in einer ganz bestimmten Weise durch die Codebasis navigiert; jedes Einzelst&#252;ck, das man dabei zu fassen bekommt, ist f&#252;r sich genommen nichtsagend. Eine &#228;hnliche Situation kann aber auch bei hochgradig &#187;algorithmischem&#171; Code auftreten, der zwar ganz kompakt an einer Stelle steht, dessen eigentliche Relevanz sich aber nur erschlie&#223;t, wenn man sein Verhaltensmuster entschl&#252;sselt hat.
@@ -160051,6 +160153,189 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </richcontent>
 </node>
 </node>
+</node>
+<node CREATED="1760042490058" ID="ID_215689337" MODIFIED="1760042496468" TEXT="Arten von Entscheidungen">
+<node CREATED="1760042504351" ID="ID_1739481828" MODIFIED="1760042532757" TEXT="Extern vorgegeben">
+<node CREATED="1760042534780" ID="ID_481982310" MODIFIED="1760042542616" TEXT="diese sind unproblematisch"/>
+<node CREATED="1760042543307" ID="ID_145267189" MODIFIED="1760042559092" TEXT="der Code hat ihnen zu entsprechen"/>
+<node CREATED="1760042569839" ID="ID_1281383216" MODIFIED="1760042581100" TEXT="die Vorgabe wird im Log dokumentiert"/>
+</node>
+<node CREATED="1760042635377" ID="ID_1487180868" MODIFIED="1760044043380" TEXT="auf Limitierungen pr&#xfc;fen">
+<linktarget COLOR="#7a5d88" DESTINATION="ID_1487180868" ENDARROW="Default" ENDINCLINATION="10;43;" ID="Arrow_ID_757765338" SOURCE="ID_923110250" STARTARROW="None" STARTINCLINATION="-93;-5;"/>
+<node CREATED="1760042858892" ID="ID_1433015304" MODIFIED="1760042870675" TEXT="f&#xfc;hrt zu Modifikation oder Ablehnung">
+<node CREATED="1760042882036" ID="ID_184589276" MODIFIED="1760043016000" TEXT="problematisch: Feedback">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      wenn der Fakt der Limitierung nicht bemerkt wird, kann es zu einer impliziten Entscheidung kommen, deren Effekt nicht auf den Ausl&#246;ser zur&#252;ckgeht
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1760042909988" ID="ID_1550019917" MODIFIED="1760043541059" TEXT="M&#xf6;glichkeit bewu&#xdf;ter Anpassung">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Falls es durch die Limitierung zu einem Konflikt kommt, mu&#223; die M&#246;glichkeit gegeben sein, diesen durch bewu&#223;te Anpassung zu l&#246;sen
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#7b8795" DESTINATION="ID_1550019917" ENDARROW="Default" ENDINCLINATION="0;57;" ID="Arrow_ID_434131650" SOURCE="ID_474781586" STARTARROW="Default" STARTINCLINATION="-162;10;"/>
+</node>
+</node>
+<node CREATED="1760043111573" ID="ID_1144002294" MODIFIED="1760043132633" TEXT="die Reihenfolge ist kritisch...">
+<node CREATED="1760043139712" ID="ID_859399451" MODIFIED="1760043155302" TEXT="Vorgabe trifft auf bestehendes Limit">
+<node CREATED="1760043157435" ID="ID_1942228187" MODIFIED="1760043172621" TEXT="ehr unkritisch"/>
+<node CREATED="1760043174263" ID="ID_1920094593" MODIFIED="1760043371505" TEXT="sofern die Limitierung sofort materialisiert wird">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das hei&#223;t
+    </p>
+    <ul>
+      <li>
+        aufgrund der Limitierung mu&#223; sofort eine Modifikation der urspr&#252;nglichen Instruktion erfolgen
+      </li>
+      <li>
+        und die modifizierte Instruktion mu&#223; dauerhaft mit der Limitierung verbunden bleiben
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1760043189278" ID="ID_340711797" MODIFIED="1760043302243" TEXT="gef&#xe4;hrlich w&#xe4;re, den Effekt jeweils dynamisch zu erzeugen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...denn das w&#252;rde einen festen Zustand oder gar eine Entscheidung vort&#228;uschen, die so nicht gegeben sind; es besteht die Gefahr, da&#223; das Resultat instabil wird...
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1760043373860" ID="ID_530436147" MODIFIED="1760045895659" TEXT="ge&#xe4;ndertes Limit trifft auf bestehende Anordnung">
+<linktarget COLOR="#7a224a" DESTINATION="ID_530436147" ENDARROW="Default" ENDINCLINATION="-2031;120;" ID="Arrow_ID_645695046" SOURCE="ID_1622939135" STARTARROW="None" STARTINCLINATION="-3819;455;"/>
+<node CREATED="1760043387180" ID="ID_1420999914" MODIFIED="1760043391088" TEXT="das ist hochproblematisch"/>
+<node CREATED="1760043410948" ID="ID_965281943" MODIFIED="1760043439649">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p style="text-align: right">
+      es k&#246;nnten dadurch viele, teils subtile
+    </p>
+    <p style="text-align: right">
+      pseudo-Entscheidungen fallen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1760043478498" ID="ID_474781586" MODIFIED="1760043541058" TEXT="auch hier: M&#xf6;glichkeit der Anpassung schaffen">
+<arrowlink COLOR="#7b8795" DESTINATION="ID_1550019917" ENDARROW="Default" ENDINCLINATION="0;57;" ID="Arrow_ID_434131650" STARTARROW="Default" STARTINCLINATION="-162;10;"/>
+</node>
+</node>
+</node>
+<node CREATED="1760043552455" ID="ID_1410904918" MODIFIED="1760043566784" TEXT="&#x27f9; Konsequenz">
+<node CREATED="1760043570957" ID="ID_449882656" MODIFIED="1760043588004" TEXT="in jedem Fall ist das Ergebnis festzusetzen"/>
+<node CREATED="1760043588754" ID="ID_1465715991" MODIFIED="1760043924490" TEXT="die Verbindung zum Limit mu&#xdf; dauerhaft aufgezeichnet werden">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ....das ist eine speizelle und versch&#228;rfte Forderung, vor dem Hintergrund, da&#223; wir durch Event-Sourcing explizit die M&#246;glichkeit schaffen, Vorgaben sp&#228;ter abzu&#228;ndern; der Bezug zu einer Limitierung mu&#223; daher sofort und dauerhaft etabliert werden, in dem Moment, wo auch nur die M&#246;glichkeit eines Konflikts eingef&#252;hrt wird.
+    </p>
+    <p>
+      Um das an einem Beispiel zu ilustrieren: wir f&#252;hren ein Objekt ein, mit einer Anfangsposition. Diese Position is zun&#228;chst erlaubt. Dann sp&#228;ter wird das Objekt <i>verschoben,</i>&#160;ebenfalls auf eine erlaubte Position. Wenn wir nun nachtr&#228;glich das Limit so &#228;ndern, da&#223; die urspr&#252;ngliche Position <i>nicht mehr erlaubt w&#228;re</i>, so wird dadruch die zweite &#196;nderung nicht mehr umkehrbar sein, denn ein UNDO w&#252;rde zu einem invaliden Zustand f&#252;hren.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1760043967585" ID="ID_641209228" MODIFIED="1760043983490" TEXT="Klassifizieren und Zuordnen">
+<node CREATED="1760044008692" ID="ID_923110250" MODIFIED="1760044053036" TEXT="betrachte das als eine Verallgemeinerung der &#xbb;Limitierung&#xab;">
+<arrowlink COLOR="#7a5d88" DESTINATION="ID_1487180868" ENDARROW="Default" ENDINCLINATION="10;43;" ID="Arrow_ID_757765338" STARTARROW="None" STARTINCLINATION="-93;-5;"/>
+</node>
+<node CREATED="1760044099392" ID="ID_179280764" MODIFIED="1760044119618">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      das ist die <i>typische</i>&#160;&#187;Regel-Anwendung&#171;
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1760044120877" ID="ID_176492255" MODIFIED="1760044150709" TEXT="ein Kontinuum von Einzelf&#xe4;llen wird auf Verhaltensmuster abgebildet"/>
+</node>
+<node CREATED="1760044649680" ID="ID_227848633" MODIFIED="1760044656371" TEXT="Kontingenzen und Folgen">
+<node CREATED="1760044664470" ID="ID_591069999" MODIFIED="1760044677482" TEXT="Struktur kann sich &#xbb;scheinbar aus Nichts&#xab; ergeben"/>
+<node CREATED="1760044715975" ID="ID_1932792801" MODIFIED="1760044784233" TEXT="dieser Belang ist schwer zu erfassen und einzugrenzen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...denn Struktur wird erkannt, und mu&#223; daher nicht zwangsl&#228;ufig dem direkt ersichtlichen Verarbeitungskontext zuzuordnen sein
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1760044708570" ID="ID_1161122115" MODIFIED="1760044714777" TEXT="Kriterium der Relevanz">
+<node CREATED="1760044787311" ID="ID_1630530571" MODIFIED="1760044815718" TEXT="Element wird vom Benutzer an einem bestimmten Ort zug&#xe4;nglich"/>
+<node CREATED="1760044816715" ID="ID_1912196337" MODIFIED="1760044831620" TEXT="oder das tantible Resultat der Darstellung &#xe4;ndert sich"/>
+</node>
+<node CREATED="1760044834672" ID="ID_695993602" MODIFIED="1760044976332" TEXT="sofern relevant, mu&#xdf; jede Anordnung in einfache Form materialisiert werden">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Beispielsweise indem Elemente direkt in einer Liste fixiert werden. Klassisches Beispiel: Datenformate welche ungeordnete Mengen enthalten, wie z.B. XML, k&#246;nnen dazu f&#252;hren, da&#223; Elemente &#187;springen&#171;; Einf&#252;gen eines Elements kann zu kompletter Umordnung der ganzen Menge f&#252;hren...
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1760045011185" ID="ID_430061026" MODIFIED="1760045017030" TEXT="Schlu&#xdf;folgerungen">
+<icon BUILTIN="back"/>
+<node CREATED="1760045052924" ID="ID_1997211282" MODIFIED="1760045063750" TEXT="Ausl&#xf6;ser, Entscheidung und Verhalten sind zu trennen"/>
+<node CREATED="1760045064818" ID="ID_1161631145" MODIFIED="1760045091995" TEXT="jede Entscheidung ist dauerhaft als Solche zu erfassen"/>
+<node CREATED="1760045093515" ID="ID_1088920487" MODIFIED="1760045117487" TEXT="die Entscheidung stellt eine permanente Verbindung zum Entscheidungsgrund her"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1760045118536" ID="ID_771069218" MODIFIED="1760045163496" TEXT="diese Verbindung mu&#xdf; der Darstellung im Event hinzugef&#xfc;gt werden">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1760045179688" ID="ID_1661215590" MODIFIED="1760047351254" TEXT="diese Einsicht hat weitreichende Folgen">
+<linktarget COLOR="#8d266d" DESTINATION="ID_1661215590" ENDARROW="Default" ENDINCLINATION="-1400;-96;" ID="Arrow_ID_614837711" SOURCE="ID_1987056811" STARTARROW="None" STARTINCLINATION="-1631;60;"/>
+<node CREATED="1760045196809" ID="ID_1542233704" MODIFIED="1760045209507" TEXT="Events sind strukturiert und verkn&#xfc;pft"/>
+<node CREATED="1760045214431" ID="ID_1468489334" MODIFIED="1760045232329" TEXT="auch das Herausnehmen eines Events mu&#xdf; gep&#xfc;ft werden"/>
+<node CREATED="1760045251159" ID="ID_550330416" MODIFIED="1760045324835" TEXT="einfge&#xfc;gte Elemente werden Teil eines Regel-Fakten-Netzwerks">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...das l&#228;uft auf eine &#228;hnliche Idee hinaus, wie der &#187;Rete-Algorithmus&#171; f&#252;r generative Regelsysteme
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1760045390016" ID="ID_1899458772" MODIFIED="1760045419583" TEXT="es entsteht ein Meta-Model der Modell-Anordnung"/>
+</node>
+</node>
+<node CREATED="1760045426784" ID="ID_546284490" MODIFIED="1760047745640">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Folge &#10233; <b>Design-Frage</b>&#160;nach dem <b><font color="#760a0e">Ort</font></b>&#160;dieses Entscheidungs-Niederschlags
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1760045491722" ID="ID_1854950019" MODIFIED="1760045502835" TEXT="man k&#xf6;nnte es als Teil des Event-Logs aufzeichnen"/>
+<node CREATED="1760045503761" ID="ID_336239746" MODIFIED="1760045526698" TEXT="man k&#xf6;nnte eine Sektion im Modell verwenden"/>
+<node CREATED="1760045527782" ID="ID_188911820" MODIFIED="1760045540752" TEXT="man k&#xf6;nnte es in das Modell integrieren &#x27f9; in die Placements"/>
 </node>
 </node>
 <node CREATED="1737319142807" ID="ID_698251911" MODIFIED="1737319218171">

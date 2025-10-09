@@ -2177,6 +2177,28 @@ Similar to an Asset, an identification tuple is available (generated on the fly)
 &amp;rarr; MetaAsset
 </pre>
 </div>
+<div title="EventLog" creator="Ichthyostega" modifier="Ichthyostega" created="202510092241" modified="202510092241" tags="Mutation def design draft" changecount="2">
+<pre>//The global ''Event Log'' records the fact that something ''has happened'' as result from a command or instruction.//
+The EventLog is a central element of the ''CQRS'' architecture model.</pre>
+</div>
+<div title="EventSourcing" creator="Ichthyostega" modifier="Ichthyostega" created="202510092238" modified="202510092239" tags="Concepts Model Mutation discuss draft" changecount="2">
+<pre>//''Event Sourcing'' is an Architecture pattern and used together with ''CQRS''.//
+Over the course of the years, it gradually became clear that the goals defined regarding consistency and fine-grained control of the arrangement in the session seem to converge towards an architecture based on these principles
+
+!Difficulties and Contradictions
+An insidious problem arises from the aspiration to control widespread behaviour through common rules.
+Allowing to change rules and facts seems to be in direct contradiction to the requirement of deterministic and reproducible behaviour.
+Notably, the facts can be a representation of the environment, like e.g. the sound setup in a Studio vs. working on a Laptop.
+
+Since a long time, I used the formula to //separate decisions from the processing logic// in the code.
+
+An analysis of the kinds of decisions relevant for the situation with editing a media arrangement reveals that a dangerous conflict might ensue when the foundation of a past rule application changes, possibly by undo or replay of the EventLog.
+
+!!!Solution: record the relation
+A solution could be not only to apply rules, but also capture and materialise the fact that a rule has been applied and especially to record a connection between the setting and
+the rule it was based on. This amounts to documenting the reasoning why some decision came about. If done correct, such a data model would allow to re-evaluate past decisions
+quickly in case the facts or the rules are changed.</pre>
+</div>
 <div title="ExitNode" modifier="Ichthyostega" created="200706220322" modified="202412221801" tags="def discuss" changecount="2">
 <pre>//The point where to pull the finished output of one Render Pipeline (Tree or Graph).//
 This term is already used in the Cinelerra2 codebase. In Lumiera however it is a distinct term only related to the data retrieval point for a [[job|RenderJob]]. The precise relation to a concrete ProcNode and [[port #|NodePort]] still needs to be worked out {{red{as of 12/2024}}}.
@@ -4535,8 +4557,11 @@ Meta assets are ''immutable'' -- but they can be //superseded.//
 For each meta asset instance, initially a //builder// is created for setting up the properties; when done, the builder will &quot;drop off&quot; the new meta asset instance. The same procedure is used for augmenting or superseding an existing element.
 </pre>
 </div>
-<div title="Model" modifier="Ichthyostega" created="201003210020" modified="201003210021" tags="overview">
-<pre>Lumiera's Steam-Layer is built around //two interconnected models,// mediated by the [[Builder]]. Basically, the &amp;rarr;[[Session]] is an external interface to the HighLevelModel, while the &amp;rarr;RenderEngine operates the structures of the LowLevelModel.</pre>
+<div title="Model" modifier="Ichthyostega" created="201003210020" modified="202510092231" tags="overview" changecount="1">
+<pre>Lumiera's Steam-Layer is built around //two interconnected models,// mediated by the [[Builder]]. Basically, the &amp;rarr;[[Session]] is an external interface to the HighLevelModel, while the &amp;rarr;RenderEngine operates the structures of the LowLevelModel.
+
+! Changing the Model
+An essential question of the design is how the model is changed (through the EditingOperations) and how such changes can be coordinated and propagated. The initial design was based on ''Commands'' -- yet, over time, it became clear that for consistent and predictable behaviour, it is preferably to [[record Events|EventSourcing]] in a global EventLog.</pre>
 </div>
 <div title="ModelDependencies" modifier="Ichthyostega" created="201003020150" modified="201702142325" tags="SessionLogic Model operational spec draft img" changecount="6">
 <pre>Our design of the models (both [[high-level|HighLevelModel]] and [[low-level|LowLevelModel]]) relies partially on dependent objects being kept consistently in sync. Currently (2/2010), __ichthyo__'s assessment is to consider this topic not important and pervasive enough to justify building a dedicated solution, like e.g. a central tracking and registration service. An important point to consider with this assessment is the fact that the session implementation is deliberately kept single-threaded. While this simplifies reasoning, we also lack one central place to handle this issue, and thus care has to be taken to capture and treat all the relevant individual dependencies properly at the implementation level.
