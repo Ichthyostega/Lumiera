@@ -159780,7 +159780,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <linktarget COLOR="#802752" DESTINATION="ID_1289244616" ENDARROW="Default" ENDINCLINATION="-1333;61;" ID="Arrow_ID_657332017" SOURCE="ID_747669722" STARTARROW="None" STARTINCLINATION="-1024;178;"/>
 <linktarget COLOR="#ff0014" DESTINATION="ID_1289244616" ENDARROW="Default" ENDINCLINATION="33;398;" ID="Arrow_ID_974738759" SOURCE="ID_1539358489" STARTARROW="None" STARTINCLINATION="537;-744;"/>
 <icon BUILTIN="help"/>
-<node CREATED="1748737260968" ID="ID_407734575" MODIFIED="1748819321306" TEXT="anders gefragt: gibt es &#xfc;berhaupt &#xbb;Business-Logik&#xab;">
+<node CREATED="1748737260968" ID="ID_407734575" MODIFIED="1760028174225" TEXT="anders gefragt: gibt es &#xfc;berhaupt &#xbb;Business-Logik&#xab;">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -159797,6 +159797,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
     </ul>
   </body>
 </html></richcontent>
+<arrowlink COLOR="#3797e8" DESTINATION="ID_944833118" ENDARROW="Default" ENDINCLINATION="183;-12;" ID="Arrow_ID_481927224" STARTARROW="None" STARTINCLINATION="-184;10;"/>
 <node CREATED="1748820700549" ID="ID_1277609627" MODIFIED="1748820858649" TEXT="wenig bis gar nicht">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -159834,15 +159835,18 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1748821196209" ID="ID_1040225824" MODIFIED="1748821353396" TEXT="was es sicher nicht bedeutet: da&#xdf; man die eigentliche Medien-Implementierung manipuliert">
+<node CREATED="1748821196209" ID="ID_1040225824" MODIFIED="1760026533737" TEXT="was es sicher nicht bedeutet: da&#xdf; man die eigentliche Medien-Implementierung manipuliert">
 <richcontent TYPE="NOTE"><html>
-  <head/>
+  <head>
+    
+  </head>
   <body>
     <p>
-      Es wird also definitiv nicht &#187;der Clip&#171; den Code enthalten, wie <i>er sich selber rendert,</i>&#160;oder &#187;der Track&#171; den Code enhalten, mit dem Mediendaten kombiniert und verarbeitet werden.
+      Es wird also definitiv nicht &#187;der Clip&#171; den Code enthalten, wie <i>er sich selber rendert,</i>&#160;oder &#187;der Track&#171; den Code enhalten, mit dem Medien-Inhalte kombiniert und verarbeitet werden.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1748821580331" ID="ID_586599540" MODIFIED="1748821639455" TEXT="M&#xf6;glichkeit zur Anreicherung mit weiteren Metadaten wird ben&#xf6;tigt">
 <richcontent TYPE="NOTE"><html>
@@ -159911,7 +159915,143 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
     </p>
   </body>
 </html></richcontent>
-<node CREATED="1737319089055" ID="ID_184966462" MODIFIED="1737319101788" TEXT="Gefahr der &#xbb;pinball-Machine&#xab;"/>
+<node CREATED="1737319089055" ID="ID_184966462" MODIFIED="1760031114702" TEXT="Gefahr der &#xbb;pinball-Machine&#xab;">
+<arrowlink COLOR="#fd5447" DESTINATION="ID_162581753" ENDARROW="Default" ENDINCLINATION="-13;-89;" ID="Arrow_ID_971584165" STARTARROW="None" STARTINCLINATION="122;12;"/>
+</node>
+</node>
+<node CREATED="1760027314537" ID="ID_1895812910" MODIFIED="1760027328733">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Ort der <b>Entscheidungs-Logik</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1760027996136" ID="ID_246985163" MODIFIED="1760028782839" TEXT="wie kann Code &#xbb;verst&#xe4;ndlich&#xab; sein?">
+<node CREATED="1760028044687" ID="ID_847296862" MODIFIED="1760028065429">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      der Code <i>macht was</i>&#160;&#8212; und man wei&#223; darum
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1760028079443" ID="ID_944833118" MODIFIED="1760028162021">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Trennung in <b>Business</b>-Kern, Framework und Library
+    </p>
+  </body>
+</html>
+</richcontent>
+<linktarget COLOR="#3797e8" DESTINATION="ID_944833118" ENDARROW="Default" ENDINCLINATION="183;-12;" ID="Arrow_ID_481927224" SOURCE="ID_407734575" STARTARROW="None" STARTINCLINATION="-184;10;"/>
+</node>
+<node CREATED="1760028675187" ID="ID_1058819561" MODIFIED="1760028714414">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Code ist faktorisiert in <i>getrennte Sachverhalte</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1760029030100" ID="ID_1676355762" MODIFIED="1760029172259">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Code <i>f&#252;hrt aus</i>, delegiert, stellt sicher
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Solchen Code sieht man mit <i>gemischten Gef&#252;hlen</i>&#160;&#8212; er ist nicht das, was man gesucht hat, aber er legt einem nahe, ihn zu ignorieren, <i>ohne zu verstehen was er tut</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node BACKGROUND_COLOR="#e0bb97" COLOR="#690f14" CREATED="1760029205453" ID="ID_162581753" MODIFIED="1760031097023" TEXT="problematische Formen">
+<linktarget COLOR="#fd5447" DESTINATION="ID_162581753" ENDARROW="Default" ENDINCLINATION="-13;-89;" ID="Arrow_ID_971584165" SOURCE="ID_184966462" STARTARROW="None" STARTINCLINATION="122;12;"/>
+<font NAME="SansSerif" SIZE="13"/>
+<icon BUILTIN="clanbomber"/>
+<node CREATED="1760029514512" ID="ID_621765519" MODIFIED="1760029543137" TEXT="Code wird von anderem Code &#xbb;ferngesteuert&#xab;"/>
+<node CREATED="1760029376477" ID="ID_933671618" MODIFIED="1760030438355" TEXT="entscheidende Konsequenzen ergeben sich indirekt"/>
+<node CREATED="1760029597633" ID="ID_584653265" MODIFIED="1760030065998" TEXT="Code bezieht sich auf Daten unklarer Bedeutung">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Hiervon gibt es zwei Auspr&#228;gungen
+    </p>
+    <ul>
+      <li>
+        es ist nicht klar, worauf sich der Code &#252;berhaupt bezieht und ob dies konkret relevant ist (beispielsweise bin&#228;r codierte Flags ohne dokumentierte Bedeutung, oder zuf&#228;llig Pattern, die man kennen mu&#223;)
+      </li>
+      <li>
+        der Bezug des Codes l&#228;&#223;t sich nicht in Relation setzen zur aktuellen Situation (weil ein Zusammenhang implizit ist, oder gar rein kontingent, und pragmatisch genutzt wurde)
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1760030187157" ID="ID_1184582196" MODIFIED="1760030365670" TEXT="Code macht sich Standard-Verhalten zu Nutze">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      In solchem Code findet man typischerweise nur eine endlose Folge von Abgrenzungen, die Verhalten unterdr&#252;cken, ablenken oder transformieren; das intendierte Verhalten <i>steht grade nicht im Code, </i>sondern bleibt &#252;brig oder f&#228;llt an
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1760030372735" ID="ID_1528353123" MODIFIED="1760030388923" TEXT="Code wurde vom Einzelresultat r&#xfc;ckw&#xe4;rts gedacht"/>
+<node CREATED="1760030805760" ID="ID_1898675367" MODIFIED="1760031044700" TEXT="Logik wird nur auf einem Zugangsweg ersichtlich">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Hierzu z&#228;hle ich auch den in der Praxis sehr h&#228;ufigen Fall weithin verteilter Entscheidungs-Kaskaden, deren Konsequenz nur sichtbar wird, wenn man in einer ganz bestimmten Weise durch die Codebasis navigiert; jedes Einzelst&#252;ck, das man dabei zu fassen bekommt, ist f&#252;r sich genommen nichtsagend. Eine &#228;hnliche Situation kann aber auch bei hochgradig &#187;algorithmischem&#171; Code auftreten, der zwar ganz kompakt an einer Stelle steht, dessen eigentliche Relevanz sich aber nur erschlie&#223;t, wenn man sein Verhaltensmuster entschl&#252;sselt hat.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
 </node>
 <node CREATED="1737319142807" ID="ID_698251911" MODIFIED="1737319218171">
 <richcontent TYPE="NODE"><html>
