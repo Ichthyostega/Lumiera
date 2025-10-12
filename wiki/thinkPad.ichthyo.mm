@@ -72073,6 +72073,16 @@
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
+<node CREATED="1760290158112" ID="ID_411997680" MODIFIED="1760290160206" TEXT="Aufbau">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1760289434421" ID="ID_449257180" MODIFIED="1760290148379" TEXT="gr&#xfc;nden">
+<linktarget COLOR="#4e2254" DESTINATION="ID_449257180" ENDARROW="Default" ENDINCLINATION="93;401;" ID="Arrow_ID_1541372568" SOURCE="ID_429087289" STARTARROW="Default" STARTINCLINATION="118;-340;"/>
+<icon BUILTIN="stop"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1760289493168" ID="ID_1994509660" MODIFIED="1760289904035" TEXT="wird behandelt im &#xbb;LoadClip Vertical Slice&#xab;">
+<linktarget COLOR="#584786" DESTINATION="ID_1994509660" ENDARROW="Default" ENDINCLINATION="-1547;94;" ID="Arrow_ID_272113141" SOURCE="ID_542201944" STARTARROW="None" STARTINCLINATION="-915;99;"/>
+<icon BUILTIN="hourglass"/>
+</node>
+</node>
+</node>
 </node>
 <node COLOR="#435e98" CREATED="1482524530842" FOLDED="true" ID="ID_606738640" MODIFIED="1573230611958" TEXT="Dependency-Injection">
 <icon BUILTIN="wizard"/>
@@ -75112,6 +75122,70 @@
 <linktarget COLOR="#39203f" DESTINATION="ID_1274218971" ENDARROW="Default" ENDINCLINATION="-2004;321;" ID="Arrow_ID_402250137" SOURCE="ID_1567517561" STARTARROW="None" STARTINCLINATION="-366;34;"/>
 <font NAME="SansSerif" SIZE="14"/>
 <node CREATED="1743090788235" ID="ID_1690109528" MODIFIED="1743090794217" TEXT="EventSequence">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1760289434421" ID="ID_429087289" MODIFIED="1760290591077" TEXT="gr&#xfc;nden">
+<arrowlink COLOR="#4e2254" DESTINATION="ID_449257180" ENDARROW="Default" ENDINCLINATION="93;401;" ID="Arrow_ID_1541372568" STARTARROW="Default" STARTINCLINATION="118;-340;"/>
+<linktarget COLOR="#5a2c64" DESTINATION="ID_429087289" ENDARROW="Default" ENDINCLINATION="-337;717;" ID="Arrow_ID_1229525112" SOURCE="ID_697833271" STARTARROW="Default" STARTINCLINATION="-70;-227;"/>
+<icon BUILTIN="stop"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1760289493168" ID="ID_353677371" MODIFIED="1760289904035" TEXT="wird behandelt im &#xbb;LoadClip Vertical Slice&#xab;">
+<linktarget COLOR="#584786" DESTINATION="ID_353677371" ENDARROW="Default" ENDINCLINATION="-1547;94;" ID="Arrow_ID_1323221919" SOURCE="ID_542201944" STARTARROW="None" STARTINCLINATION="-915;99;"/>
+<icon BUILTIN="hourglass"/>
+</node>
+<node CREATED="1760290612705" ID="ID_1680721674" MODIFIED="1760290621696" TEXT="Vor&#xfc;berlegungen...">
+<node CREATED="1760290636441" ID="ID_1757227376" MODIFIED="1760290643322" TEXT="Anforderungen an die Datenstruktur">
+<node CREATED="1760290647303" ID="ID_511428420" MODIFIED="1760290652188" TEXT="mu&#xdf; massiv performant sein"/>
+<node CREATED="1760290659559" ID="ID_1137179871" MODIFIED="1760290675141" TEXT="mu&#xdf; algebraische Terme darstellen k&#xf6;nnen"/>
+<node CREATED="1760290698375" ID="ID_1806028245" MODIFIED="1760290705116" TEXT="Stuktur ist verzweigt (DAG)">
+<node CREATED="1760290720159" ID="ID_1489858814" LINK="#ID_1366477493" MODIFIED="1760290726438" TEXT="an Git orientiert"/>
+</node>
+<node CREATED="1760290765153" ID="ID_1965009573" MODIFIED="1760290778114" TEXT="wird eingebunden / projiziert in die Session-Storage"/>
+</node>
+<node CREATED="1760290799532" ID="ID_101660410" MODIFIED="1760290805527" TEXT="Einsichten zu den Inhalten">
+<node CREATED="1760290815078" ID="ID_1381159688" MODIFIED="1760290820685" TEXT="es mu&#xdf; Transaktionen geben">
+<node CREATED="1760290827272" ID="ID_601269910" MODIFIED="1760290840162" TEXT="diese werden atomar angewendet"/>
+<node CREATED="1760290841775" ID="ID_84971374" MODIFIED="1760290859371" TEXT="und sind stets auf einen Schlag koh&#xe4;rent"/>
+</node>
+<node CREATED="1760290911685" ID="ID_288871177" MODIFIED="1760290916144" TEXT="Einzel-Events">
+<node CREATED="1760290928529" ID="ID_161648807" MODIFIED="1760290956106" TEXT="m&#xfc;ssen eindeutig referenzierbar sein (wie ein Git-Commit)">
+<node CREATED="1760291338031" ID="ID_647774998" MODIFIED="1760291368571" TEXT="Event hat eine Spezifikations-Version"/>
+<node CREATED="1760291369711" ID="ID_1082525433" MODIFIED="1760291382258" TEXT="und verweist weiter auf eine Transaktion"/>
+</node>
+<node CREATED="1760290964798" ID="ID_338394744" MODIFIED="1760290971118" TEXT="m&#xfc;ssen einfach aufgebaut sein">
+<node CREATED="1760290972596" ID="ID_1660533264" MODIFIED="1760290980623" TEXT="so da&#xdf; man die Basis stets parsen kann"/>
+<node CREATED="1760290985174" ID="ID_1509773064" MODIFIED="1760290996274" TEXT="es gibt also einen Kontrakt / ein Interface"/>
+</node>
+<node CREATED="1760290998998" ID="ID_262909756" MODIFIED="1760291013607" TEXT="m&#xfc;ssen vorw&#xe4;rtskompatibel erweiterbar sein">
+<node CREATED="1760291018814" ID="ID_381563193" MODIFIED="1760291034301" TEXT="hei&#xdf;t: auch eine alte Programmversion kann ein neues Log lesen"/>
+<node CREATED="1760291045043" ID="ID_357414991" MODIFIED="1760291059135" TEXT="folglich mu&#xdf; es opaque Datenbl&#xf6;cke geben"/>
+</node>
+</node>
+</node>
+<node CREATED="1760291458691" ID="ID_1051203255" MODIFIED="1760291471575" TEXT="vom Event zum Datenbestand">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1760291479155" ID="ID_971039308" MODIFIED="1760291489877" TEXT="das ist die &#xbb;Projektion&#xab;">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1760291623073" ID="ID_1229727812" MODIFIED="1760291630671" TEXT="Relevanz dieses Verh&#xe4;ltnisses">
+<node CREATED="1760291632308" ID="ID_349059628" MODIFIED="1760291638390" TEXT="Fehlersuche / &#xbb;blame&#xab;"/>
+<node CREATED="1760291641394" ID="ID_665966975" MODIFIED="1760291722881" TEXT="Relevant f&#xfc;r den Regel-Beweisweg">
+<node CREATED="1760291727774" ID="ID_1414435341" MODIFIED="1760291781021" TEXT="Verh&#xe4;ltnis aber noch nicht klar">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Naiverweise dachte ich zun&#228;chst, da&#223; da eine direkte Verbindung zum Eventlog besteht. Das widerspricht aber der Idee einer Projektion
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1760291866916" ID="ID_1612624181" MODIFIED="1760292073525" TEXT="eine Regel-Anwendung erzeugt ein Binding &#x27f9; das ist ein Event">
+<arrowlink COLOR="#ff694a" DESTINATION="ID_1279149428" ENDARROW="Default" ENDINCLINATION="-3888;-258;" ID="Arrow_ID_1367334728" STARTARROW="None" STARTINCLINATION="-2727;124;"/>
+<linktarget COLOR="#fdeeba" DESTINATION="ID_1612624181" ENDARROW="Default" ENDINCLINATION="-240;11;" ID="Arrow_ID_913478648" SOURCE="ID_1622939135" STARTARROW="None" STARTINCLINATION="-88;-141;"/>
+</node>
+</node>
+</node>
+<node CREATED="1760291809839" ID="ID_1488496327" MODIFIED="1760291819542" TEXT="ein Datenpfad geht in das Event ein"/>
+</node>
+</node>
+</node>
 <node CREATED="1743090850377" ID="ID_1180602920" MODIFIED="1743090852748" TEXT="Struktur">
 <node CREATED="1743090853688" ID="ID_465643814" MODIFIED="1743090858340" TEXT="ist verzweigt als DAG">
 <node CREATED="1743091056973" ID="ID_1420852221" MODIFIED="1743091067998" TEXT="Basis-Entscheidungen entwickeln sich weiter"/>
@@ -75150,7 +75224,7 @@
 <icon BUILTIN="messagebox_warning"/>
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1743091423731" ID="ID_782853432" MODIFIED="1743091439152" TEXT="zun&#xe4;chst: unklar was das bedeutet">
 <icon BUILTIN="help"/>
-<node CREATED="1743091597060" ID="ID_1622939135" MODIFIED="1760045895659">
+<node CREATED="1743091597060" ID="ID_1622939135" MODIFIED="1760291930784">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
@@ -75163,6 +75237,7 @@
   </body>
 </html></richcontent>
 <arrowlink COLOR="#7a224a" DESTINATION="ID_530436147" ENDARROW="Default" ENDINCLINATION="-2031;120;" ID="Arrow_ID_645695046" STARTARROW="None" STARTINCLINATION="-3819;455;"/>
+<arrowlink COLOR="#fdeeba" DESTINATION="ID_1612624181" ENDARROW="Default" ENDINCLINATION="-240;11;" ID="Arrow_ID_913478648" STARTARROW="None" STARTINCLINATION="-88;-141;"/>
 <linktarget COLOR="#ac858f" DESTINATION="ID_1622939135" ENDARROW="Default" ENDINCLINATION="-227;-9;" ID="Arrow_ID_1337260949" SOURCE="ID_89103091" STARTARROW="None" STARTINCLINATION="185;8;"/>
 <node CREATED="1743091754943" ID="ID_1154146518" MODIFIED="1743091765465" TEXT="zwei M&#xf6;glichkeiten des Umgangs">
 <node CREATED="1743091780481" ID="ID_497944249" MODIFIED="1760046019584" TEXT="kaskadierende Propagation">
@@ -75214,7 +75289,7 @@
   <head/>
   <body>
     <p>
-      ...indem n&#228;mlich eine Regel oder Entscheidungsbasis <i>gesperrt</i>&#160; wird, sobald sie einmal zur Anwendung gekommen ist; so ein Mechanismus lie&#223;e sich mit relativ geringem Aufwand realisieren, und w&#252;rde zumindest stets erm&#246;glichen, da&#223; man das Entstehen eines Konflikts erkennt und dann warnt. Dies w&#228;re sozusagen die &#187;optimistische&#171; Herangehensweise: meist geht ja alles gut....
+      ...indem n&#228;mlich eine Regel oder Entscheidungsbasis <i>gesperrt</i>&#160;wird, sobald sie einmal zur Anwendung gekommen ist; so ein Mechanismus lie&#223;e sich mit relativ geringem Aufwand realisieren, und w&#252;rde zumindest stets erm&#246;glichen, da&#223; man das Entstehen eines Konflikts erkennt und dann warnt. Dies w&#228;re sozusagen die &#187;optimistische&#171; Herangehensweise: meist geht ja alles gut....
     </p>
   </body>
 </html></richcontent>
@@ -75703,6 +75778,7 @@
 </node>
 </node>
 </node>
+<node CREATED="1760288791972" HGAP="45" ID="ID_1176765103" MODIFIED="1760288973409" TEXT="Instructor" VSHIFT="4">
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1533400671533" HGAP="45" ID="ID_1357977461" MODIFIED="1557498707237" TEXT="Command-Ausf&#xfc;hrung" VSHIFT="-27">
 <icon BUILTIN="hourglass"/>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1533400693522" ID="ID_217032156" MODIFIED="1557498707237" TEXT="Commands sollen geloggt werden">
@@ -75724,6 +75800,24 @@
 </node>
 <node COLOR="#338800" CREATED="1533400770320" ID="ID_1945470515" MODIFIED="1557498707237" TEXT="solche Commands werden vom Dispatcher direkt ausgef&#xfc;hrt">
 <icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node CREATED="1760288853827" ID="ID_389071890" MODIFIED="1760288862054" TEXT="Verbindung zum Event-Log">
+<node CREATED="1760288929782" ID="ID_1717739696" MODIFIED="1760288944238" TEXT="erfolgreich ausgef&#xfc;hrtes Command &#x27f9; Event"/>
+<node CREATED="1760289226217" ID="ID_612285290" MODIFIED="1760289229892" TEXT="Anordnung">
+<node CREATED="1760289245790" ID="ID_1653102696" MODIFIED="1760289315260" TEXT="das Event-Log-System geh&#xf6;rt zur Application-Core"/>
+<node CREATED="1760289316269" ID="ID_1914314967" MODIFIED="1760289334798" TEXT="der Instructor ist ein Subsystem im Steam-Layer"/>
+<node CREATED="1760289342569" ID="ID_104829051" MODIFIED="1760289363186" TEXT="das konkrete Event-Log ist der Kern der Session-Storage"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1760289434421" ID="ID_697833271" MODIFIED="1760290591077" TEXT="gr&#xfc;nden">
+<arrowlink COLOR="#5a2c64" DESTINATION="ID_429087289" ENDARROW="Default" ENDINCLINATION="-337;717;" ID="Arrow_ID_1229525112" STARTARROW="Default" STARTINCLINATION="-70;-227;"/>
+<linktarget COLOR="#403e5a" DESTINATION="ID_697833271" ENDARROW="Default" ENDINCLINATION="44;193;" ID="Arrow_ID_1022959992" SOURCE="ID_685280794" STARTARROW="Default" STARTINCLINATION="67;-365;"/>
+<icon BUILTIN="stop"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1760289493168" ID="ID_501149716" MODIFIED="1760289904035" TEXT="wird behandelt im &#xbb;LoadClip Vertical Slice&#xab;">
+<linktarget COLOR="#584786" DESTINATION="ID_501149716" ENDARROW="Default" ENDINCLINATION="-1547;94;" ID="Arrow_ID_1734617256" SOURCE="ID_542201944" STARTARROW="None" STARTINCLINATION="-915;99;"/>
+<icon BUILTIN="hourglass"/>
 </node>
 </node>
 </node>
@@ -76130,10 +76224,17 @@
 <node COLOR="#435e98" CREATED="1533401646479" ID="ID_305001887" MODIFIED="1557498707237" TEXT="das gro&#xdf;e wartende MEGA-Integrations-Thema">
 <font NAME="SansSerif" SIZE="12"/>
 </node>
-<node CREATED="1680563617807" ID="ID_1592313170" MODIFIED="1680563626215" TEXT="vorl&#xe4;ufig...">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1760289434421" ID="ID_685280794" MODIFIED="1760290570376" TEXT="Builder: Grundaufbau">
+<arrowlink COLOR="#403e5a" DESTINATION="ID_697833271" ENDARROW="Default" ENDINCLINATION="44;193;" ID="Arrow_ID_1022959992" STARTARROW="Default" STARTINCLINATION="67;-365;"/>
+<icon BUILTIN="stop"/>
+<node CREATED="1680563617807" ID="ID_1592313170" MODIFIED="1760290443774" TEXT="vorl&#xe4;ufig...">
 <node CREATED="1680563627851" ID="ID_804147257" MODIFIED="1680563627851" TEXT="Fake-build: einfacher Clip">
 <linktarget COLOR="#fec499" DESTINATION="ID_804147257" ENDARROW="Default" ENDINCLINATION="-696;77;" ID="Arrow_ID_521000760" SOURCE="ID_573821275" STARTARROW="None" STARTINCLINATION="-206;21;"/>
 </node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1760289493168" HGAP="32" ID="ID_1814100289" MODIFIED="1760290469342" TEXT="wird erstmals behandelt im &#xbb;LoadClip Vertical Slice&#xab;" VSHIFT="2">
+<linktarget COLOR="#584786" DESTINATION="ID_1814100289" ENDARROW="Default" ENDINCLINATION="-1569;86;" ID="Arrow_ID_744418079" SOURCE="ID_542201944" STARTARROW="None" STARTINCLINATION="-915;99;"/>
+<icon BUILTIN="hourglass"/>
 </node>
 <node CREATED="1720141000407" ID="ID_301474820" MODIFIED="1720141011879" TEXT="gesammelte Pl&#xe4;ne und Skizzen">
 <node COLOR="#415566" CREATED="1751643957882" ID="ID_1161768536" MODIFIED="1751643982518" TEXT="die ersten Entw&#xfc;rfe von 2008">
@@ -76255,6 +76356,7 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
+</node>
 </node>
 </node>
 </node>
@@ -110101,9 +110203,10 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="hourglass"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1711548381477" ID="ID_664146362" MODIFIED="1734654370564" TEXT="Buffer-Manager">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1711548381477" ID="ID_664146362" MODIFIED="1760292477862" TEXT="Buffer-Manager">
 <linktarget COLOR="#5a4f77" DESTINATION="ID_664146362" ENDARROW="Default" ENDINCLINATION="-493;1406;" ID="Arrow_ID_297212964" SOURCE="ID_1433806835" STARTARROW="None" STARTINCLINATION="-1768;-2925;"/>
 <linktarget COLOR="#fec499" DESTINATION="ID_664146362" ENDARROW="Default" ENDINCLINATION="-1409;197;" ID="Arrow_ID_616778881" SOURCE="ID_722733788" STARTARROW="None" STARTINCLINATION="-794;96;"/>
+<linktarget COLOR="#ff4400" DESTINATION="ID_664146362" ENDARROW="Default" ENDINCLINATION="-1857;303;" ID="Arrow_ID_1425526052" SOURCE="ID_634625719" STARTARROW="None" STARTINCLINATION="-1363;105;"/>
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1719249646221" ID="ID_403017464" MODIFIED="1719249923835" TEXT="Begriffe klarstellen">
 <arrowlink COLOR="#4b5a6c" DESTINATION="ID_1263834914" ENDARROW="Default" ENDINCLINATION="-668;-90;" ID="Arrow_ID_767640863" STARTARROW="None" STARTINCLINATION="-873;115;"/>
@@ -159947,8 +160050,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
       Es wird also definitiv nicht &#187;der Clip&#171; den Code enthalten, wie <i>er sich selber rendert,</i>&#160;oder &#187;der Track&#171; den Code enhalten, mit dem Medien-Inhalte kombiniert und verarbeitet werden.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1748821580331" ID="ID_586599540" MODIFIED="1748821639455" TEXT="M&#xf6;glichkeit zur Anreicherung mit weiteren Metadaten wird ben&#xf6;tigt">
 <richcontent TYPE="NOTE"><html>
@@ -160047,8 +160149,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
       Ort der <b>Entscheidungs-Logik</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1760027996136" ID="ID_246985163" MODIFIED="1760028782839" TEXT="wie kann Code &#xbb;verst&#xe4;ndlich&#xab; sein?">
 <node CREATED="1760028044687" ID="ID_847296862" MODIFIED="1760028065429">
 <richcontent TYPE="NODE"><html>
@@ -160058,8 +160159,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
       der Code <i>macht was</i>&#160;&#8212; und man wei&#223; darum
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1760028079443" ID="ID_944833118" MODIFIED="1760028162021">
 <richcontent TYPE="NODE"><html>
@@ -160069,8 +160169,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
       Trennung in <b>Business</b>-Kern, Framework und Library
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <linktarget COLOR="#3797e8" DESTINATION="ID_944833118" ENDARROW="Default" ENDINCLINATION="183;-12;" ID="Arrow_ID_481927224" SOURCE="ID_407734575" STARTARROW="None" STARTINCLINATION="-184;10;"/>
 </node>
 <node CREATED="1760028675187" ID="ID_1058819561" MODIFIED="1760028714414">
@@ -160081,8 +160180,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
       Code ist faktorisiert in <i>getrennte Sachverhalte</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1760029030100" ID="ID_1676355762" MODIFIED="1760029172259">
 <richcontent TYPE="NODE"><html>
@@ -160092,8 +160190,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
       Code <i>f&#252;hrt aus</i>, delegiert, stellt sicher
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -160101,8 +160198,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
       Solchen Code sieht man mit <i>gemischten Gef&#252;hlen</i>&#160;&#8212; er ist nicht das, was man gesucht hat, aber er legt einem nahe, ihn zu ignorieren, <i>ohne zu verstehen was er tut</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node BACKGROUND_COLOR="#e0bb97" COLOR="#690f14" CREATED="1760029205453" ID="ID_162581753" MODIFIED="1760031097023" TEXT="problematische Formen">
 <linktarget COLOR="#fd5447" DESTINATION="ID_162581753" ENDARROW="Default" ENDINCLINATION="-13;-89;" ID="Arrow_ID_971584165" SOURCE="ID_184966462" STARTARROW="None" STARTINCLINATION="122;12;"/>
@@ -160126,8 +160222,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1760030187157" ID="ID_1184582196" MODIFIED="1760030365670" TEXT="Code macht sich Standard-Verhalten zu Nutze">
 <richcontent TYPE="NOTE"><html>
@@ -160137,8 +160232,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
       In solchem Code findet man typischerweise nur eine endlose Folge von Abgrenzungen, die Verhalten unterdr&#252;cken, ablenken oder transformieren; das intendierte Verhalten <i>steht grade nicht im Code, </i>sondern bleibt &#252;brig oder f&#228;llt an
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1760030372735" ID="ID_1528353123" MODIFIED="1760030388923" TEXT="Code wurde vom Einzelresultat r&#xfc;ckw&#xe4;rts gedacht"/>
 <node CREATED="1760030805760" ID="ID_1898675367" MODIFIED="1760031044700" TEXT="Logik wird nur auf einem Zugangsweg ersichtlich">
@@ -160149,8 +160243,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
       Hierzu z&#228;hle ich auch den in der Praxis sehr h&#228;ufigen Fall weithin verteilter Entscheidungs-Kaskaden, deren Konsequenz nur sichtbar wird, wenn man in einer ganz bestimmten Weise durch die Codebasis navigiert; jedes Einzelst&#252;ck, das man dabei zu fassen bekommt, ist f&#252;r sich genommen nichtsagend. Eine &#228;hnliche Situation kann aber auch bei hochgradig &#187;algorithmischem&#171; Code auftreten, der zwar ganz kompakt an einer Stelle steht, dessen eigentliche Relevanz sich aber nur erschlie&#223;t, wenn man sein Verhaltensmuster entschl&#252;sselt hat.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -160311,7 +160404,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <linktarget COLOR="#8d266d" DESTINATION="ID_1661215590" ENDARROW="Default" ENDINCLINATION="-1400;-96;" ID="Arrow_ID_614837711" SOURCE="ID_1987056811" STARTARROW="None" STARTINCLINATION="-1631;60;"/>
 <node CREATED="1760045196809" ID="ID_1542233704" MODIFIED="1760045209507" TEXT="Events sind strukturiert und verkn&#xfc;pft"/>
 <node CREATED="1760045214431" ID="ID_1468489334" MODIFIED="1760045232329" TEXT="auch das Herausnehmen eines Events mu&#xdf; gep&#xfc;ft werden"/>
-<node CREATED="1760045251159" ID="ID_550330416" MODIFIED="1760045324835" TEXT="einfge&#xfc;gte Elemente werden Teil eines Regel-Fakten-Netzwerks">
+<node CREATED="1760045251159" ID="ID_550330416" MODIFIED="1760286627966" TEXT="eingef&#xfc;gte Elemente werden Teil eines Regel-Fakten-Netzwerks">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -160333,9 +160426,40 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
     </p>
   </body>
 </html></richcontent>
-<node CREATED="1760045491722" ID="ID_1854950019" MODIFIED="1760045502835" TEXT="man k&#xf6;nnte es als Teil des Event-Logs aufzeichnen"/>
-<node CREATED="1760045503761" ID="ID_336239746" MODIFIED="1760045526698" TEXT="man k&#xf6;nnte eine Sektion im Modell verwenden"/>
-<node CREATED="1760045527782" ID="ID_188911820" MODIFIED="1760045540752" TEXT="man k&#xf6;nnte es in das Modell integrieren &#x27f9; in die Placements"/>
+<node CREATED="1760045491722" ID="ID_1854950019" MODIFIED="1760287094394" TEXT="man k&#xf6;nnte es als Teil des Event-Logs aufzeichnen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das mu&#223; auf jeden Fall sowiso passieren, sobald ein <i>Binding</i>&#160;in den Regeln dauerhaft und global sichtbar etabliert wird &#8212; was schon allein dadurch geschehen kann, da&#223; man eine ganz bestimmte L&#246;sung verwendet. Dieser Vermerk einer etablierten Zuordnung ist es am Ende dann auch, der bei sp&#228;teren Umordnungen und UNDO erkannt und umgekehrt werden mu&#223;, was dann die &#220;berpr&#252;fung aller Konsequenzen nach sich zieht
+    </p>
+  </body>
+</html></richcontent>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1760291970729" ID="ID_1279149428" MODIFIED="1760292073525" TEXT="die Zuordnung ist aber nicht selbst das Event">
+<linktarget COLOR="#ff694a" DESTINATION="ID_1279149428" ENDARROW="Default" ENDINCLINATION="-3888;-258;" ID="Arrow_ID_1367334728" SOURCE="ID_1612624181" STARTARROW="None" STARTINCLINATION="-2727;124;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1760045503761" ID="ID_336239746" MODIFIED="1760287651194" TEXT="man k&#xf6;nnte eine Sektion im Modell verwenden (Meta-Assets)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Die Regeln und Konfigurationsquellen m&#252;ssen ohnehin dort repr&#228;sentiert sein (m&#246;glicherweise nur symbolisch); allerdings: alles, was sich hier niederschl&#228;gt, mu&#223; unter den Begriff einer Projektion passen. Ein weiteres Problem ergibt sich daraus, da&#223; ja eine Verbindung aufgezeichnet werden soll zwischen einer Regelbasis, einem Binding (also einer Auswertung) und einem konkreten Element, dessen Wert dadurch beeinflu&#223;t ist &#8212; dazu m&#252;&#223;te erst noch eine Referenz-Notation geschaffen werden (mutma&#223;lich auf Basis einer EntryID oder AssetID)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1760045527782" ID="ID_188911820" MODIFIED="1760287849426" TEXT="man k&#xf6;nnte es in das Modell integrieren &#x27f9; in die Placements">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Diese Annotation hier zu speichern wirkt auf den ersten Blick etwas k&#252;nstlich, ist aber durchaus m&#246;glich, da wir die Implementierung der Constraints in den Placements komplett unter unserer Kontrolle haben. Dadurch ergibt sich auch noch ein weiterer Vorteil: man k&#246;nnte eine Detail-Einstellung markieren oder attributieren, ohne erst eine Pfad- oder Diff-Notation einf&#252;hren zu m&#252;ssen, denn die Marke w&#228;re direkt in der Kette der Constraints, bereits an der richtigen Stelle...
+    </p>
+  </body>
+</html></richcontent>
+</node>
 </node>
 </node>
 <node CREATED="1737319142807" ID="ID_698251911" MODIFIED="1737319218171">
@@ -160666,6 +160790,13 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node BACKGROUND_COLOR="#e2ce95" COLOR="#ec6b17" CREATED="1742171470865" ID="ID_1473941777" MODIFIED="1742171470865" STYLE="bubble" TEXT="JobTicket-Invocation">
 <arrowlink COLOR="#f6e1c2" DESTINATION="ID_1193884706" ENDARROW="Default" ENDINCLINATION="-1219;87;" ID="Arrow_ID_1874016721" STARTARROW="None" STARTINCLINATION="-2320;315;"/>
 </node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1760289729765" ID="ID_542201944" MODIFIED="1760290458951" TEXT="LoadClip Vertical Slice">
+<arrowlink COLOR="#584786" DESTINATION="ID_501149716" ENDARROW="Default" ENDINCLINATION="-1547;94;" ID="Arrow_ID_1734617256" STARTARROW="None" STARTINCLINATION="-915;99;"/>
+<arrowlink COLOR="#584786" DESTINATION="ID_353677371" ENDARROW="Default" ENDINCLINATION="-1547;94;" ID="Arrow_ID_1323221919" STARTARROW="None" STARTINCLINATION="-915;99;"/>
+<arrowlink COLOR="#584786" DESTINATION="ID_1994509660" ENDARROW="Default" ENDINCLINATION="-1547;94;" ID="Arrow_ID_272113141" STARTARROW="None" STARTINCLINATION="-915;99;"/>
+<arrowlink COLOR="#584786" DESTINATION="ID_1814100289" ENDARROW="Default" ENDINCLINATION="-1569;86;" ID="Arrow_ID_744418079" STARTARROW="None" STARTINCLINATION="-915;99;"/>
+<icon BUILTIN="hourglass"/>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1664059317203" ID="ID_995858352" MODIFIED="1679784026877" TEXT="#1221 Playback Vertical Slice">
 <icon BUILTIN="back"/>
@@ -161950,6 +162081,22 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1751808966193" ID="ID_739212271" MODIFIED="1751808977712" TEXT="Git: Release markiert">
 <icon BUILTIN="flag-pink"/>
 </node>
+</node>
+</node>
+<node CREATED="1760292219756" ID="ID_1353193853" MODIFIED="1760292229846" TEXT="Playback-Vertical-Slice">
+<node COLOR="#338800" CREATED="1760292242655" ID="ID_1999083969" MODIFIED="1760292255527" TEXT="Grundlagen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1760292251396" ID="ID_1733978041" MODIFIED="1760292256543" TEXT="Aufbau">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1760292259390" ID="ID_1221747989" MODIFIED="1760292264742" TEXT="Integration treiben">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1760292268581" ID="ID_634625719" MODIFIED="1760292477862" TEXT="Buffer-Manager zustande bringen">
+<arrowlink COLOR="#ff4400" DESTINATION="ID_664146362" ENDARROW="Default" ENDINCLINATION="-1857;303;" ID="Arrow_ID_1425526052" STARTARROW="None" STARTINCLINATION="-1363;105;"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1760292288690" ID="ID_693794400" MODIFIED="1760292296083" TEXT="Play-Connection"/>
 </node>
 </node>
 </node>

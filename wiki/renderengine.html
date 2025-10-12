@@ -2177,12 +2177,32 @@ Similar to an Asset, an identification tuple is available (generated on the fly)
 &amp;rarr; MetaAsset
 </pre>
 </div>
-<div title="EventLog" creator="Ichthyostega" modifier="Ichthyostega" created="202510092241" modified="202510092241" tags="Mutation def design draft" changecount="2">
-<pre>//The global ''Event Log'' records the fact that something ''has happened'' as result from a command or instruction.//
-The EventLog is a central element of the ''CQRS'' architecture model.</pre>
+<div title="EventCQRS" creator="Ichthyostega" modifier="Ichthyostega" created="202510122028" modified="202510122047" tags="Concepts Model Mutation def" changecount="3">
+<pre>//~Command-and-Query-Responsibility-Separation (CQRS) describes an asynchronous architecture without a central data model.//
+In this arrangement of components, the old guideline to separate the processing of queries and mutations is applied to the relation of interfaces and functional clusters within the system. The chain of //business logic// processing is completely segregated from the date models and is organised essentially as a pipeline, where desired operations are instructed as //commands//. Each command is validated, and then performed within a conditioned environment, which is isolated from the persistent data in the system. The effect of a command execution is then propagated and distributed to various //»projections«// to produce the actual persistent mutation of the data in the system. On the other hand, any interface to query the state and the data content is provided by services altogether unrelated to any //processing// in the system.
+
+An architecture based on CQRS can be challenging to build properly, because any //effect// has to be //represented// instead of //just happening//. Yet this architecture style is known to offer several unique benefits:
+* processing is guaranteed to be side-effect free
+* it is easy to define and verify well-defined behaviour for each command
+* it is possible to maintain several, specialised projections which focus on specific aspects of the effect
+* the data model within some query-oriented service is an implementation detail and can be modified at will, as long as the defined effect is retained.
+
+CQRS is typically combined with EventSourcing to represent the effects of processing as a sequence of //events// in an EventLog
+</pre>
 </div>
-<div title="EventSourcing" creator="Ichthyostega" modifier="Ichthyostega" created="202510092238" modified="202510092239" tags="Concepts Model Mutation discuss draft" changecount="2">
-<pre>//''Event Sourcing'' is an Architecture pattern and used together with ''CQRS''.//
+<div title="EventLog" creator="Ichthyostega" modifier="Ichthyostega" created="202510092241" modified="202510122053" tags="Mutation def design draft" changecount="4">
+<pre>//The global ''Event Log'' records the fact that something ''has happened'' as result from a command or instruction.//
+The EventLog is a central element of the [[CQRS|EventCQRS]] architecture model.
+After some //event has been recorded,// it is propagated to the »projections«, which are listeners to the event log and may mutate their internal state in response to some event. Notably a data model is attached as a projection, and thus the complete content of such a data model can be seen as a materialisation of the event sequence. The entire state of the data in the model can any time be reproduced by //re-playing// the entire event log to a clean slate.
+
+!Structure of Events
+First and foremost, each event must be well defined and can be addressed by an unique identifier (hash based). Furthermore, each event is marked with a specification version -- and the implementation of the the expected effects of a given version is never changed. This allows the system to evolve while in use: improved implementations of some event can coexist with earlier versions of the same event in the same log.
+
+Events serve as foundation to allow corrections and revisions of the history of events: any event can be un-done, by replaying the event log without the event in question. In practice however this requirement can be difficult to uphold, since it might lead to a proliferation of complicated events. It is thus desirable to introduce //transactions// -- defined as a group of events which are considered to happen in compound. Each such group or transactional compound of events is considered itself an event. Notably the processing of some //command// might produce several events, some of which are generated automatically to reflect effects of this command based on the current state of data, rules and configuration. As an example, if the execution of business logic needs to query fro some default, this processing of a rule query might generate a //binding//, which also becomes part of the next state and thus need to be represented as a further event within that command's transactional event group.
+</pre>
+</div>
+<div title="EventSourcing" creator="Ichthyostega" modifier="Ichthyostega" created="202510092238" modified="202510122002" tags="Concepts Model Mutation discuss draft" changecount="3">
+<pre>//''Event Sourcing'' is an Architecture pattern and used together with [[CQRS|EventCQRS]].//
 Over the course of the years, it gradually became clear that the goals defined regarding consistency and fine-grained control of the arrangement in the session seem to converge towards an architecture based on these principles
 
 !Difficulties and Contradictions
