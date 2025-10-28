@@ -15,6 +15,10 @@
 /** @file video-display-widget.cpp
  ** Implementation of video display, embedded into the UI.
  ** @deprecated defunct since the transition to GTK-3
+ ** @warning WIP 2025 — this is demo code, defunct since the transition to GTK-3
+ **          but then upgraded and fixed in 2025, and will be reworked as part of
+ **          the »Playback Vertical Slice« to establish an actual connection
+ **          to the Render Engine
  */
 
 

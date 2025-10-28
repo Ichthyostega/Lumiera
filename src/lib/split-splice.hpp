@@ -53,7 +53,7 @@
  ** - `DELETE`: delete all segments between the given start (incl) and end (excl) POS
  ** 
  ** Moreover, POS (iterators) to indicate the complete domain are required, and a specification
- ** of the ORD values of the new segmen's _start_ and _after_ points -- which however can also
+ ** of the ORD values of the new segment's _start_ and _after_ points -- which however can also
  ** be defined only partially (as optional values), to use contextual information...
  ** - if only the start point is given, then the existing segment containing this point
  **   will be shortened, and the new segment will cover the span until the existing segment's end
