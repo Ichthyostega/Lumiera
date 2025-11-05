@@ -66,7 +66,7 @@ namespace lib {
     /**
      * Data-binding for a tree of GenNode data (ETD).
      * Attributes are accessible as keys, while iteration descends
-     * into the child scope of the attribute indicated in the ${for <key>}` tag.
+     * into the child scope of the attribute indicated in the `${for <key>}` tag.
      * @see TextTemplate_test::verify_ETD_binding()
      */
     template<>

@@ -19,7 +19,7 @@
  ** helpers to build tuple types from metaprogramming and to pretty-print tuples.
  ** 
  ** Notably, a `concept tuple_like` is provided, which is satisfied for any type in compliance
- ** with the »tuple protocol«. Together with a [generic accessor][\ref lib::meta::getElm),
+ ** with the »tuple protocol«. Together with a [generic accessor][\ref lib::meta::getElm],
  ** this allows to handle all _tuple-like_ types uniformly.
  ** @note Due to an unfortunate limitation of the standard, we're forced to provide our own alternative
  **       implementation to replace `std::apply`, so that a function can be applied to any _tuple-like_

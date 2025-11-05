@@ -249,7 +249,7 @@ namespace time {
    * @remark This function reverses building the drop-frame timecode,
    *         and thus maps a time into consecutive frame numbers
    *         at NTSC framerate (i.e. without gaps)
-   * @param  timecode represented as time value in µ-ticks
+   * @param  time represented as time value in µ-ticks
    * @return the absolute frame number as addressed by NTSC drop-frame
    * @todo 2011 I doubt this works correct for negative times!!
    */

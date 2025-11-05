@@ -301,13 +301,8 @@ namespace advice {
    *  into an internal buffer within the AdviceSystem. We then use the
    *  Index to remember the presence of this advice data and to detect
    *  possible matches with existing advice::Request entries.
-   *  @param adviceData pointer to the copied data,
+   *  @param newProvision pointer to the copied data,
    *         actually pointing to an ActiveProvision<AD>
-   *  @return pointer to an superseded old provision entry,
-   *          which the caller then needs to de-allocate.
-   *          The caller is assumed to know the actual type
-   *          and thus the size of the entry to deallocate.
-   *          Returning `NULL` in case no old entry exists.
    */
   void
   AdviceLink::publishProvision (PointOfAdvice* newProvision)
@@ -323,9 +318,6 @@ namespace advice {
    *  after removing the provision index entry
    *  we also need to re-process any requests
    *  which happen to match our binding...
-   *  @return pointer to the existing provision entry,
-   *          to be deallocated by the caller, which
-   *          is assumed to know it's exact type.
    */
   void
   AdviceLink::discardSolutions ()

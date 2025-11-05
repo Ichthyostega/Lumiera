@@ -235,7 +235,7 @@ namespace model {
   
   
   /** convenience shortcut to build a message suitable for command invocation
-   * @param args... sequence of arguments to be packaged into a lib::diff::Rec for invocation
+   * @param args ... sequence of arguments to be packaged into a lib::diff::Rec for invocation
    */
   template<typename...ARGS>
   inline lib::diff::GenNode

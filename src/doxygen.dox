@@ -1,5 +1,5 @@
 /*
-  DOXYGEN.dox  -  font page for the Doxygen API documentation
+  DOXYGEN.dox  -  front page for the Doxygen API documentation
  
 
    Copyright (C)
@@ -46,7 +46,7 @@ with the *ASCIIDOC* tool and published at the [Lumiera website](http://Lumiera.o
   necessary to understand the actual code
 - right now, you are looking at the **API Documentation**, which is the entrance point to the actual code
 - on your exploration path down to the internal details, you might want to follow the overview given
-  + by the [Layer and Subsystem](modules.html) overview
+  + by the [Layer and Subsystem](topics.html) overview
   + the file level comments of relevant interfaces
 
 */
@@ -54,13 +54,24 @@ with the *ASCIIDOC* tool and published at the [Lumiera website](http://Lumiera.o
 /* ==== Layers ==== */
 
 /** @defgroup vault Vault-Layer
-*/
+ *   Provides the technical services for all processing and system access.
+ *   Manages worker pools, schedules jobs, does the memory management for the
+ *   heavy multimedia data. Loads and delegates to external libraries for
+ *   media processing.
+ */
 
 /** @defgroup steam Steam-Layer
-*/
+ *   Keeps the Session, generates the rendering graphs for sequences,
+ *   arranges what to do when and how, coordinates command/event processing,
+ *   playback and rendering.
+ */
 
 /** @defgroup gui Graphical User Interface
-*/
+ *   Interaction and Presentation layer.
+ *   Provides the structures to coordinate navication, presentation state
+ *   and gestures. Defines the widgets and controllers for the UI.
+ *   Loaded as Plug-in.
+ */
 
 /* ==== Subsystems ==== */
 
@@ -86,6 +97,10 @@ with the *ASCIIDOC* tool and published at the [Lumiera website](http://Lumiera.o
 
 /** @defgroup scheduler Scheduler
     @ingroup vault
+    The Scheduler acts as the central hub in the implementation of the RenderEngine
+    and coordinates the processing resources of the application. A Render Job is created
+    for every frame and passed to the Scheduler, marked with a deadline, and connected
+    to _prerequisite_ jobs.
 */
 
 /** @defgroup memory Memory Management

@@ -157,7 +157,8 @@ REFERENCES_LINK_SOURCE = NO
 SOURCE_TOOLTIPS        = YES
 USE_HTAGS              = NO
 VERBATIM_HEADERS       = NO
-CLANG_ASSISTED_PARSING = YES
+#CLANG_ASSISTED_PARSING = YES
+CLANG_ASSISTED_PARSING = NO
 CLANG_OPTIONS          = -DDEBUG -DEBUG_ALPHA
 
 #---------------------------------------------------------------------------

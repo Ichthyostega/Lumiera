@@ -153,7 +153,7 @@ namespace ctrl {
   /**
    * @remarks moves the given operation into our private dispatcher queue and then
    *          schedules dequeuing and invocation into the UI event thread.
-   * @param op a completely closed lambda or functor
+   * @param task a completely closed lambda or functor
    * @warning closure need to be by value or equivalent, since
    *          the operation will be executed within another call stack
    */

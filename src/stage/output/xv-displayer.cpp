@@ -14,7 +14,7 @@
 * *****************************************************************/
 
 
-/** @file xvdisplayer.cpp
+/** @file xv-displayer.cpp
  ** Implementation of video output via XVideo
  ** @todo WIP as of 5/2025 -- attempt to port this component to GTK-3 ///////////////////////////////////////TICKET #1403
  */

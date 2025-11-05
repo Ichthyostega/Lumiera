@@ -272,9 +272,9 @@ namespace diff{
   /**
    * generic builder to apply a diff description to a given target data structure.
    * The usage pattern is as follows
-   * #. construct a DiffApplicator instance, wrapping the target data
-   * #. feed the diff (sequence of diff verbs) to the #consume function
-   * #. the wrapped target data has been altered, to conform to the given diff
+   * -# construct a DiffApplicator instance, wrapping the target data
+   * -# feed the diff (sequence of diff verbs) to the #consume function
+   * -# the wrapped target data has been altered, to conform to the given diff
    * @note a suitable DiffApplicationStrategy will be picked, based on the type
    *       of the concrete target sequence given at construction. (Effectively
    *       this means you need a suitable DiffApplicationStrategy specialisation,

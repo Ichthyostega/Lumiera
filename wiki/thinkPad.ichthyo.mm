@@ -158835,7 +158835,19 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 <node CREATED="1491098340549" ID="ID_938211341" MODIFIED="1557498707240" TEXT="Toolchain">
 <node CREATED="1491098346053" ID="ID_1333373693" MODIFIED="1557498707240" TEXT="Doxygen">
-<node CREATED="1491098370281" ID="ID_1904535196" MODIFIED="1557498707240" TEXT="Konfig"/>
+<node CREATED="1491098370281" ID="ID_1904535196" MODIFIED="1557498707240" TEXT="Konfig">
+<node CREATED="1762545432310" ID="ID_162387292" LINK="https://www.doxygen.nl/manual/customize.html#layout" MODIFIED="1762545552584" TEXT="DoxygenLayout.xml">
+<linktarget COLOR="#6479bd" DESTINATION="ID_162387292" ENDARROW="Default" ENDINCLINATION="-1518;206;" ID="Arrow_ID_710361035" SOURCE="ID_1508387260" STARTARROW="None" STARTINCLINATION="-800;73;"/>
+<node CREATED="1762545509512" ID="ID_1938126875" MODIFIED="1762545511734" TEXT="LAYOUT_FILE = DoxygenLayout.xml"/>
+<node CREATED="1762546543033" ID="ID_194137690" MODIFIED="1762546577552" TEXT="dort ist bereits sehr detailiert die Reihenfolge der Abschnitte vorkonfiguriert">
+<node CREATED="1762547517103" ID="ID_1526373958" MODIFIED="1762547532054" TEXT="Doxygen selber kann einen Default generieren"/>
+<node CREATED="1762547532474" ID="ID_346767563" MODIFIED="1762547543828" TEXT="doxygen -l outfile.xml"/>
+</node>
+<node CREATED="1762546613059" ID="ID_1432165492" MODIFIED="1762546619952" TEXT="Infos zu einzelnen Elementen">
+<node CREATED="1762546620701" ID="ID_922214975" MODIFIED="1762546651346" TEXT="Attribut; &quot;Intro&quot;  ein einleitender Text unter der &#xdc;berschrift und vor dem Content"/>
+</node>
+</node>
+</node>
 <node CREATED="1491098373816" ID="ID_1022990703" MODIFIED="1557498707240" TEXT="Fallen">
 <node CREATED="1491099064125" ID="ID_651937703" MODIFIED="1557498707240" TEXT="Dateien ohne @file werden nicht dokumentiert"/>
 <node CREATED="1491099088362" ID="ID_1507484869" MODIFIED="1576282357934" TEXT="Template-Parameter in Klassennamen">
@@ -158907,7 +158919,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </html></richcontent>
 </node>
 </node>
-<node CREATED="1491098382888" FOLDED="true" ID="ID_1568153886" MODIFIED="1557498707240" TEXT="Probleme">
+<node CREATED="1491098382888" FOLDED="true" ID="ID_1568153886" MODIFIED="1762545318514" TEXT="Probleme">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1491098385823" ID="ID_801230289" MODIFIED="1557498707240" TEXT="Auto-Links">
 <node CREATED="1491098393405" ID="ID_1408589913" MODIFIED="1557498707240" TEXT="funktionieren in vielen F&#xe4;llen nicht"/>
@@ -158945,6 +158957,12 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1611412720896" ID="ID_1416946834" MODIFIED="1611412732531" TEXT="das definierende File einen @file-Kommentar hat"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1762568326629" ID="ID_750916556" MODIFIED="1762568344649" TEXT="Autolinks funktionieren oft nicht wie erwartet">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1762568492951" ID="ID_1801627112" MODIFIED="1762568507697" TEXT="innerhalb einer Klasse scheinen sie zu funktionieren"/>
+<node CREATED="1762568508362" ID="ID_1674648632" MODIFIED="1762568526777" TEXT="kann es sein da&#xdf; das Feature nur im gleichen Scope funktioniert?"/>
+<node CREATED="1762568528945" ID="ID_1729444200" MODIFIED="1762568544364" TEXT="die Beschreibung in der Doku suggeriert eigentlich etwas anderes"/>
+</node>
 </node>
 <node CREATED="1611414193640" ID="ID_1495280173" MODIFIED="1611414203972" TEXT="Markdown">
 <node CREATED="1611414205207" ID="ID_1304449575" MODIFIED="1611414215413" TEXT="funktioniert generell recht zuverl&#xe4;ssig"/>
@@ -158954,7 +158972,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1611414236218" ID="ID_1711467407" MODIFIED="1611414253828" TEXT="sonst werden die btrf. &#xdc;berschriften komplett unterdr&#xfc;ckt"/>
 </node>
 </node>
-<node CREATED="1491098487889" ID="ID_1401713015" MODIFIED="1611412586548" TEXT="Sqlite-Support">
+<node CREATED="1491098487889" FOLDED="true" ID="ID_1401713015" MODIFIED="1611412586548" TEXT="Sqlite-Support">
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1491098494497" ID="ID_1565133197" MODIFIED="1557498707241" TEXT="ist wohl noch sehr vorl&#xe4;ufig"/>
 <node CREATED="1491098499712" ID="ID_1643743799" MODIFIED="1557498707241" TEXT="wenn eine Sqlite-DB gefunden wird...."/>
@@ -161520,9 +161538,9 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1757604114432" ID="ID_1381131051" MODIFIED="1757604124602" TEXT="Methodik der Softwareentwicklung">
 <node BACKGROUND_COLOR="#bae1a4" COLOR="#338800" CREATED="1759014578674" FOLDED="true" ID="ID_1555146086" MODIFIED="1762479183678" TEXT="Abhandlung: Flexibilit&#xe4;t und Erweiterbarkeit">
 <linktarget COLOR="#403fbb" DESTINATION="ID_1555146086" ENDARROW="Default" ENDINCLINATION="180;484;" ID="Arrow_ID_892680715" SOURCE="ID_1161778090" STARTARROW="None" STARTINCLINATION="376;23;"/>
-<linktarget COLOR="#403fbb" DESTINATION="ID_1555146086" ENDARROW="Default" ENDINCLINATION="180;484;" ID="Arrow_ID_848521794" SOURCE="ID_531427945" STARTARROW="None" STARTINCLINATION="403;23;"/>
 <linktarget COLOR="#363cde" DESTINATION="ID_1555146086" ENDARROW="Default" ENDINCLINATION="107;1207;" ID="Arrow_ID_501903819" SOURCE="ID_919379881" STARTARROW="None" STARTINCLINATION="-773;31;"/>
 <linktarget COLOR="#262fc3" DESTINATION="ID_1555146086" ENDARROW="Default" ENDINCLINATION="-87;911;" ID="Arrow_ID_1308723569" SOURCE="ID_255830875" STARTARROW="None" STARTINCLINATION="413;-41;"/>
+<linktarget COLOR="#403fbb" DESTINATION="ID_1555146086" ENDARROW="Default" ENDINCLINATION="180;484;" ID="Arrow_ID_848521794" SOURCE="ID_531427945" STARTARROW="None" STARTINCLINATION="403;23;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1759016171842" ID="ID_527999175" MODIFIED="1759016184330" TEXT="Aufgabe: den Sachverhalt ordnen">
 <node CREATED="1759016196647" ID="ID_939735686" MODIFIED="1759016204125" TEXT="die scheinbaren Widerspr&#xfc;che aufr&#xe4;umen"/>
@@ -161534,9 +161552,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1759078582430" ID="ID_1052508547" MODIFIED="1759078591191" TEXT="essentiell vs. akzidentell"/>
 <node CREATED="1759078596952" ID="ID_1656383143" MODIFIED="1759078733086" TEXT="ggfs. Mythical Man Month zitieren">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       und zwar f&#252;r zwei Dinge
@@ -161590,9 +161606,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1760131297516" ID="ID_754844156" MODIFIED="1760131315174" TEXT="dann mu&#xdf; ich aber ein Antipattern formulieren">
 <node CREATED="1760131317235" ID="ID_1162803803" MODIFIED="1761953114006">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       nenne es &#187;<b>can be solved</b>&#171;
@@ -161602,9 +161616,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 <node CREATED="1760131369596" ID="ID_745294094" MODIFIED="1760131405206">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       deute es als ein Festhalten an einer &#187;einfachen&#171; L&#246;sung
@@ -161617,9 +161629,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 <node CREATED="1760131520281" ID="ID_1342441761" MODIFIED="1760131534180">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       dahinter steckt eine Form des <i>Verfallens</i>
@@ -161637,9 +161647,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1760131713225" ID="ID_953234106" MODIFIED="1760131721046" TEXT="Komplexit&#xe4;t als eine grundlegende Bedingtheit"/>
 <node CREATED="1760131722202" ID="ID_785016134" MODIFIED="1760131755047">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       &#10233; auf <b>Frederick Brooks</b>&#160;zur&#252;ckgreifen
@@ -161654,9 +161662,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1760131842739" ID="ID_412337435" MODIFIED="1760131855320" TEXT="oder diese h&#xe4;tte sich durchaus anders entwickeln k&#xf6;nnen"/>
 <node CREATED="1760131869224" ID="ID_1325757267" LINK="https://spectrum.ieee.org/building-the-system360-mainframe-nearly-destroyed-ibm" MODIFIED="1760131914869">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Recherche: das war ja noch alles <b>viel dramatischer</b>
@@ -161687,9 +161693,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1760839022765" ID="ID_1870863480" MODIFIED="1760839032480" TEXT="gedeutet als &quot;can be solved&quot;"/>
 <node CREATED="1760839081357" ID="ID_937755955" MODIFIED="1760839160274" TEXT="verhindert sogar eine ad&#xe4;quate L&#xf6;sung">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...und darin liegt der Wirkmechanismus: da die Plug-ins von jemandem Anderes geschrieben werden, kann ich jetzt bereits die komplette L&#246;sung deklarieren (und alle Einw&#228;nde werden pariert mit &quot;can be solved as a Plug-in&quot;)
@@ -161706,9 +161710,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 <node CREATED="1760999982139" ID="ID_455070697" MODIFIED="1761000125931" TEXT="Struktur schaffen &#x2014; anstatt bestehenden Strukturen zu verfallen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Das meine ich auf mehreren Ebenen
@@ -161735,9 +161737,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1760994737072" ID="ID_581417194" MODIFIED="1760994892089" TEXT="Vorsicht &#x2014; ich merke da&#xdf; ich eine &#xbb;offene Rechnung&#xab; habe">
 <node CREATED="1760994990106" ID="ID_1192319786" MODIFIED="1760995062589">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Warnung: <i>gef&#252;hlte Realit&#228;t</i>
@@ -161745,9 +161745,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
   </body>
 </html></richcontent>
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...sinnlos dagegen zu <i>argumentieren,</i>&#160;man darf sie aber auch nicht einfach vom Tisch wischen und f&#252;r &#8222;unreal&#8220; erkl&#228;ren
@@ -161757,9 +161755,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 <node CREATED="1760995405735" ID="ID_663715222" MODIFIED="1760995926400" TEXT="ich habe einen Entwurf gemacht &#x2014; und erwartet da&#xdf; man mir folgt">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Ich fand meinen Entwurf nicht sonderlich vision&#228;r, ehr naheliegend, und der Sache angemessen. Mein Entwurf wurde mit Begeisterung aufgenommen &#8212; sonst hatte n&#228;mlich niemand &#252;berhaupt einen Plan, oder auch nur einen Horizont, im HInblick auf Film, Medien und freie Software. Ich habe die Idee ernst genommen, da&#223; man selber gestaltend handeln kann und sollte. Ich hatte mir erhofft, mit anderen zusammen gestaltend zu handeln
@@ -161769,9 +161765,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 <node CREATED="1760995435482" ID="ID_1306796534" MODIFIED="1760996193176" TEXT="stattdessen sind alle nur auf &#xbb;Effekte&#xab; und &#xbb;Plug-ins&#xab; abgegangen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Ich fand mich in einer Bewegung und Gruppendynamik, die ich als widerw&#228;rtig und pupert&#228;r empfunden habe. Das was ich vorgeschlagen habe, wurde allerdings von den Filmemachern und Medien-Leuten sofort verstanden, nicht aber von all diesen &#187;Techies&#171;, auf deren Beitrag ich gerechnet hatte.
@@ -161781,9 +161775,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 <node CREATED="1760996208788" ID="ID_70464696" MODIFIED="1760996616789" TEXT="Ich habe navigiert &#x2014; es kam zu keinem Konflikt &#x2014; und ich bin nun allein">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Aufgrund meiner auch damals schon erheblichen Erfahrung habe ich gesehen, da&#223; mein Entwurf nicht mit allgemeinen W&#252;nschen harmoniert (zumindest nicht anfangs, man mu&#223; einen Fokus setzen f&#252;r ein derart gro&#223;es Projekt). Ich habe daraufhin geschickt navigiert, und tats&#228;chlich die anderen beteiligten Interessen ausman&#246;vriert. Ich ging davon aus, da&#223; mein Entwurf f&#252;r das Projekt so offensichtlich ist, da&#223; sich schon brauchbare Unterst&#252;tzer finden werden. Dann hat sich aber das Klima gedreht, und jetzt sitze ich seit mehr als 10 Jahren allein in dem Projekt, und mu&#223;te mich jahrelang mit den Folgen dieser Man&#246;ver plagen. Es gab keine M&#246;glichkeit mehr, den Konflikt auszutragen (und das Projekt ist sowiso niemals allein zu bew&#228;ltigen, ich allein kann grade verhindern, da&#223; es ganz untergeht)
@@ -161793,9 +161785,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 <node CREATED="1760996635357" ID="ID_1598158200" MODIFIED="1760997415809">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Auseinandersetzung mit der Historie&#160;&#160;&#10233;&#160;&#160;habe <b>Liberalismus</b>&#160; dahinter entdeckt
@@ -161803,9 +161793,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
   </body>
 </html></richcontent>
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Vor dem Hintergrund der ver&#228;nderten Situation (Plan einer Stiftung) habe ich begonnen, Altlasten aufzur&#228;umen; damit sind all diese lang begrabenen Themen wieder hochgekommen. Ich habe die aufgehobenen Dokumente und Protokolle durchgesehen, und die Erz&#228;hlung zur Historie von Lumiera weiter geschrieben. Erst in dem Zusammenhang wurde mir klar, da&#223; hinter dieser Spinnerei mit den Plug-ins eine konsistente Ideologie steckt, welche sich bei n&#228;herer Betrachtung als eine Spielart des liberalistischen Glaubens an unsichtbare Heilkr&#228;fte herausstellt. Im R&#252;ckblick erscheint das plausibel, das war (und ist) der Zeitgeist. Das kann ich aber nicht als L&#246;sung akzeptieren, sondern empfinde es als ungerecht.
@@ -161817,9 +161805,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1760997425953" ID="ID_1657219387" MODIFIED="1760997442115" TEXT="ich m&#xf6;chte meine Haltung als Gedankengang ausformulieren">
 <node CREATED="1760997444343" ID="ID_1632612420" MODIFIED="1760997814850" TEXT="und zwar in einer Form, die sich nicht vom Tisch wischen l&#xe4;&#xdf;t">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Darin steckt mein Verlangen nach Rache: ich habe zig mal die Erfahrung gemacht, da&#223; ich meine Haltung und meinen Entwurf &#252;berhaupt nicht formulieren kann, weil man mir gar nicht zuh&#246;rt, sonder wie verbl&#246;det immer nur seinem Aberglauben an die magischen Kr&#228;fte des Kollektivs fr&#246;nt. Nun schaffe ich mir eine Konstellation, in der alle diese Kollektiv-Schafe ihr bl&#246;des Maul zu halten haben.
@@ -161829,9 +161815,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 <node CREATED="1760998260642" ID="ID_1649180763" MODIFIED="1760999058030" TEXT="stelle fest: ich brauche Zeit und Gelegenheit zur Formulierung">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Meine Haltung war bisher &#8212; ehrlicherweise eingestanden &#8212; auch nur eine intuitive Einsch&#228;tzung &#8222;das kann so nicht funktionieren was ihr euch da so vorstellt&#8220;. Damit allein werde ich keine Debatte bestehen k&#246;nnen, und schon gar nicht gegen einen &#187;Zeitgeist&#171;. Also brauche ich eine bessere Position, die die Frage nach der konkreten Architektur und der Rolle von Plug-ins auf einen Boden stellt, auf dem &#252;berhaupt argumentiert werden kann. Wenn &#252;berhaupt, dann ist die Gelegenheit f&#252;r strategische Weichenstellungen jetzt (auch bez&#252;glich dessen, was ich f&#252;r sp&#228;ter offen lasse)
@@ -161841,9 +161825,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 <node CREATED="1760999077078" ID="ID_616507624" MODIFIED="1760999598732" TEXT="ich verwende das Thema &#xbb;Komplexit&#xe4;t&#xab; als Vehikel">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Das ist ein strategischer Ansatz
@@ -161869,9 +161851,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 <node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1761953650213" ID="ID_1675983875" MODIFIED="1762046217537" TEXT="Gedankengang mu&#xdf; rund sein">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...das war am Ende eine erhebliche Schwierigkeit, und hat mich fast eine Woche Arbeit gekostet. Denn zun&#228;chst einmal bin ich induktiv vorgegangen, und damit meine ich, aus einem Verst&#228;ndnis des Stoffes &#8212; der Text ist nun sehr lang und m&#252;hsam zu lesen. Zwar geht es mir um das, was zwischen den Zeilen steht. Aber beim Lesen mu&#223; man dennoch das Gef&#252;hl haben, da&#223; der Text wohin f&#252;hrt. Und zwar, da es sich um einen Essay handelt, und nicht um einen wissenschaftlichen Artikel, sollte der Text zum Anfang zur&#252;ckf&#252;hren.
@@ -161903,9 +161883,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node COLOR="#435e98" CREATED="1758487692078" ID="ID_85783162" MODIFIED="1762379521517" TEXT="2025-09">
 <node CREATED="1758487698412" ID="ID_1584725666" MODIFIED="1758487718833">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       habe nun alle RfC durchgesehen und <i>verstehe einige Zusammenh&#228;nge besser</i>
@@ -161922,9 +161900,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1758902650328" ID="ID_1741217718" MODIFIED="1758902656206" TEXT="Cehteh">
 <node CREATED="1758902657618" ID="ID_293354624" MODIFIED="1758906905805" TEXT="war seit ca. einem Jahr in der Community">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Erste Mail: Oktober 2006.
@@ -161941,9 +161917,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1758906957049" ID="ID_470489982" MODIFIED="1758906959036" TEXT="Ichthyo">
 <node CREATED="1758906960281" ID="ID_208962778" MODIFIED="1758907038405" TEXT="war seit 2005 in der Community aktiv">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       zun&#228;chst bezogen auf ein Independent-Film Project, f&#252;r das versucht wurde, auf Cinelerra zu editieren, weil Cinelerra damals die erste leicht zug&#228;ngliche Methode war, <b>HDV-Video</b>&#160;zu editieren.
@@ -161956,9 +161930,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1758907079581" ID="ID_687844074" MODIFIED="1758907099978" TEXT="hat sich Fr&#xfc;hjahr 2007 an den Diskussionen beteiligt"/>
 <node CREATED="1758907100820" ID="ID_1537985971" MODIFIED="1760997208161">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       war aber bereits <i>etwas skeptisch,</i>&#160;da er Cinelerra l&#228;nger kannte als Cehteh
@@ -161968,9 +161940,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 <node CREATED="1758907134052" ID="ID_836792356" MODIFIED="1758907411428" TEXT="war zun&#xe4;chst &#xfc;berhaupt nicht an Cehteh&apos;s Initiative mit dem Git-Repo beteiligt">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Und zwar lediglich, weil er davon nichts wu&#223;te. Diese Initiative war n&#228;mlich nirgends angek&#252;ndigt; man mu&#223;te viel auf IRC sein, um mitzubekommen, da&#223; da was lief. Ichthyo hatte sogar Cehteh und Johannes Sixt chatten gesehen, und nicht recht verstanden, worum es ging: sie haben n&#228;mlich versucht, die neueste Version Cinelerra v2.1 mithilfe von Git nochmal gemerged zu bekommen. Cehteh und Ichthyo sind erst im Mai direkt ins Gespr&#228;ch gekommen, und dann hat Cehteh sofort Ichthyo eingeladen, sich auf pipapo.org einzubringen (d.h. Ichthyo bekam Schreibrecht auf das Wiki). Allerdings hatte Cehteh bereits ein halbes Jahr vorher f&#252;r Ichthyo ein Git-Repo auf pipapo.org eingerichtet (mit Schreibrecht), welches Ichthyo genutzt hat, um weitere Patches f&#252;r Cinelerra vorzubereiten und mit Johannes Sixt abzustimmen. Ichthyo hat aber damals noch nicht verstanden, da&#223; da eine Initiative entstand, die unabh&#228;ngig von Cinelerra-CV war. Er dachte zun&#228;chst, dieses Git-Repo w&#228;re eine neue Einrichtung von Jonannes Sixt, f&#252;r Cinelerra-CV
@@ -161986,9 +161956,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1758907455372" ID="ID_886837489" MODIFIED="1758907468792" TEXT="seit 2006 trat er auch oft als Sprecher der Grupe auf der Mailingliste auf"/>
 <node CREATED="1758907469668" ID="ID_549021873" MODIFIED="1758907674561" TEXT="Hat versucht, Leute zusammenzubringen &#x2014; war aber zugleich sehr vorsichtig/konservativ">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...und zwar, im Bezug auf &#196;nderungen, die sich von der Heroine-Version von Cinelerra wegbewegen. Der Grund war offensichtich, da&#223; der die Situation kannte, und keine M&#246;glichkeit sah, sie zu &#228;ndern. Johannes hatte einen full-time Job als Entwickler, und ohnehin wenig Freizeit, die er nicht komplett nur f&#252;r Cinelerra verbraten wollte. Er war es auch, der die Merges &#252;berhaupt zustandegebracht hat, und damit eine ganz kleine M&#246;glichkeit geschaffen hatte, neue Patches zu akzeptieren; aber jeder Patch hat <i>ihm pers&#246;nlich Probleme bereitet (weil er dann den n&#228;chsten Merge &#8222;ausbaaden&#8220;<b>&#160;</b>durfte).</i>
@@ -162003,9 +161971,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1758907725186" ID="ID_1320256978" MODIFIED="1758907735235" TEXT="war sehr aktives Mitglied der Community"/>
 <node CREATED="1758907735989" ID="ID_1115566606" MODIFIED="1758907928726" TEXT="hat sich ausschlie&#xdf;lich als &#xbb;User&#xab; definiert">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Und zwar, obwohl (oder weil) er ein extrem erfahrener Programmierer und Project-Lead war. Er wu&#223;te einfach, da&#223; er keinen Code mehr anfassen w&#252;rde.
@@ -162024,9 +161990,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1758908061732" ID="ID_1888924762" MODIFIED="1758908078872" TEXT="junior developer, Student der Informatk (Ru&#xdf;land?)"/>
 <node CREATED="1758908088362" ID="ID_978094770" MODIFIED="1758908190622" TEXT="war vom allerersten Moment an im Kern-Team">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       hat aber &#8212; mangels Erfahrung &#8212; sich nicht getraut, viel Code beizutragen; er hat den Code gelesen, Typos in Kommentaren korrigiert, Formulierungen in den Wikis verbessert und viele (sehr gute!) Fragen gestellt.
@@ -162037,9 +162001,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1758908194016" ID="ID_1951515794" MODIFIED="1758908202997" TEXT="er blieb mehrere Jahre im Projekt"/>
 <node CREATED="1758908203864" ID="ID_1421496660" MODIFIED="1758908390183" TEXT="hat mit Cehteh zusammen sp&#xe4;ter den Threadpool gebaut">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...und hat dabei sehr viel gelernt, was im Umkehrschlu&#223; bedeutet, da&#223; Cehteh ihn intensiv gementored hat, und ihm viele Programmiertechniken beibringen mu&#223;te, die auf der Uni nicht gelehrt wurden. Er hatte nur ein Semester &quot;systemnahe Programmierung&quot; gehabt, und Spa&#223; daran gefunden, aber die Uni hat nicht mehr geboten, als ein paar Programmieraufgaben in C.
@@ -162049,9 +162011,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 <node CREATED="1758908214556" ID="ID_790142898" MODIFIED="1758908300480">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p style="text-align: right">
       die C++ - Strukturen von Ichthyo hat er bewundert,
@@ -162068,9 +162028,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1758908493442" ID="ID_1122232274" MODIFIED="1758908514383" TEXT="lebte in N&#xfc;rnberg und war vmtl. Student der Informatik in unteren Semestern"/>
 <node CREATED="1758908471379" ID="ID_55227237" MODIFIED="1758908650362" TEXT="hatte technisches Interesse und war schnell bei der Cinelerra-3 Gruppe dabei">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Und zwar &#252;berwiegend in der Rolle eines &#187;Bewunderers&#171;: er war bei allen Diskussionen dabei, hat sich oft nichteinmal getraut, Fragen gestellt, und dann anschlie&#223;end in langen Chat-Sitzungen sich alles im Detail von Ichthyo erkl&#228;ren lassen. Er sagte damals immer wieder, da&#223; er so gerne mit dabei sein wolle, aber was hier gemacht w&#252;rde, sei um &#8222;mehrere Stockwerke zu hoch&#8220; f&#252;r ihn
@@ -162081,9 +162039,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1758908653141" ID="ID_418376405" MODIFIED="1758908661738" TEXT="wurde viele Jahre sp&#xe4;ter wieder aktiv"/>
 <node CREATED="1758908662524" ID="ID_1714566386" MODIFIED="1758908830217" TEXT="hat 2010 / 2011 mit Cehteh dessen Entwurf vom Config-Loader programmiert">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Das war von Cehteh als &#8222;eigentlich ein Anf&#228;nger-Job&#8220; eingestuft. Daher hat Cehteh ihn angehauen, &#8222;Siemon, das packst Du!&#8220;. Tats&#228;chlich hat Simeon den gr&#246;&#223;ten Teil der Implementierung geschrieben, so wie sie dann viele Jahre in der Codebasis verblieb. Allerdings brauchte er permanente Hilfe von Cehteh; die beiden waren beinah t&#228;glich zusammen im Chat und Cehteh hat den Code von SimAV reviewed
@@ -162096,9 +162052,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1758908881977" ID="ID_479995518" MODIFIED="1758908894304" TEXT="war mit Cehteh seit vielen Jahren bekannt (Raum Stuttgart)"/>
 <node CREATED="1758908900244" ID="ID_1394988345" MODIFIED="1758908969847" TEXT="hat als 1-man-Show ein eigenes Video-Handling-Framework gebaut">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Und zwar handelte es sich um Code von hoher Qualitt&#228;t, rein als Library konzipiert, sauber strukturiert, gr&#252;ndlich getestet
@@ -162109,9 +162063,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1758908915978" ID="ID_438669716" MODIFIED="1758908931666" TEXT="war sehr interessiert daran, dieses Framework in das Lumiera-Projekt einzubringen"/>
 <node CREATED="1758908978218" ID="ID_1230010105" MODIFIED="1758909163488" TEXT="war (deshalb) die ersten Jahre als Beobachter / in Wartestellung mit dabei">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...er ist aber nie selber eingestiegen, sondern hat darauf gewartet, da&#223; Cehteh die entsprechenden Teile im Backend implementiert, in denen seine Library eingebunden w&#252;rde; die Developer-Gruppe hate Anfangs in aller Form beschlossen, da&#223; Lumiera auf dem Gmerlin/Gavl-Framework von Burkhard aufbauen sollte. Burkhard hat immer klar gemacht, da&#223; er nicht direkt in das Lumiera-Projekt einsteigt, weil sein eigenes Projekt (der Gmerlin Videoplayer) bereits seine volle Kapazit&#228;t braucht. Und da Christian kaum je etwas f&#252;r das Backend getan hat, sondern Plugins und Frameworks gebaut hat, kam auch Burkhard nie weiter in das Projekt und verschwand irgendwann von der Bildfl&#228;che
@@ -162132,9 +162084,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1758910013950" ID="ID_1419858520" LINK="https://lac.linuxaudio.org/2009/cdm/other/index.html" MODIFIED="1758910022152" TEXT="LAC 2009 (Parma)">
 <node CREATED="1758910089084" ID="ID_1188946014" MODIFIED="1758910117283" TEXT="siehe 2. Bild in der Galerie">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     Richard Spindler found his way through Parma thanks to the great
 
@@ -162149,9 +162099,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 <node CREATED="1758910126736" ID="ID_673971093" MODIFIED="1758910276938">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p style="text-align: center">
       Hatte damals die Idee,
@@ -162168,9 +162116,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
   </body>
 </html></richcontent>
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Die Mailingliste dazu hat Cehteh auf der Infrastruktur von pipapo.org und sp&#228;ter von Lumiera gehostet; leider ist diese Initiative relativ schnell ausgetrocknet (es gab wenig zu besprechen, jeder hat sein Ding gemacht)
@@ -162189,9 +162135,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1758758024121" ID="ID_615796577" MODIFIED="1758758033311" TEXT="und bin darin stecken geblieben"/>
 <node CREATED="1758757965102" ID="ID_333340103" MODIFIED="1762124542939">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Fazit: <b>es hat sich er&#252;brigt</b>
@@ -162205,9 +162149,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1758487968425" ID="ID_610641278" MODIFIED="1758487974913" TEXT="Git anschauen">
 <node CREATED="1758488075111" ID="ID_696869991" MODIFIED="1758488757026" TEXT="angelegt: 18.6.">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       commit 13b963ba5bc39603c1d425752f07d8b3941f01ba
@@ -162229,9 +162171,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 <node CREATED="1758488402716" ID="ID_1377595751" MODIFIED="1758488751973" TEXT="Scons-Build mit einem Helloworld-main.cpp: 3.7.">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       commit 0a9c2599dd49990b8ccf779a44abdaba626bdd86
@@ -162253,9 +162193,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 <node CREATED="1758488570719" ID="ID_204640894" MODIFIED="1758488748679" TEXT="Bouml Code-Generierung konfiguriert: 4.7">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       commit 0a9c2599dd49990b8ccf779a44abdaba626bdd86
@@ -162277,9 +162215,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 <node CREATED="1758487997587" ID="ID_990358350" LINK="https://git.lumiera.org/?p=LUMIERA;a=commit;h=a313ea87a588241a1db72b6cac6e2aee2b512fc7" MODIFIED="1758941970921" TEXT="erster Code-commit: 15.7.">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       commit a313ea87a588241a1db72b6cac6e2aee2b512fc7
@@ -162307,9 +162243,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 <node CREATED="1758488706529" ID="ID_1401490081" MODIFIED="1758488746013" TEXT="Automake-Build eingerichtet: 19.7">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       commit 471148b7db2e41f2c081760cc367710ce6999da9
@@ -162331,9 +162265,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 <node CREATED="1758488838027" ID="ID_18748598" MODIFIED="1758488974336" TEXT="Initiale Codegenerierung: 8.8">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       commit ebb4da6cc738392c015c7d66c54c6483331459f4
@@ -162355,9 +162287,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 <node CREATED="1758489922912" ID="ID_234289459" MODIFIED="1758489959690" TEXT="IRC Transkript in Wiki: 12.8">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       commit ed4decb5de9c6c22bb0f9173e3d239fefe9453e7
@@ -162380,9 +162310,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 <node CREATED="1758490752807" ID="ID_281078939" MODIFIED="1758490782497" TEXT="erster Entwurf Testrunner: 13.8.">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       commit 45c21677009dfc733d0ecd6f26d783c99b2818d5
@@ -162404,9 +162332,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 <node CREATED="1758490835918" ID="ID_1855939203" MODIFIED="1758490884225" TEXT="shell / C basierte Tests: 13.8.">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       commit ce3eb42131b0f8f809b00ef9a7759eb885e684d3
@@ -162427,9 +162353,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </html></richcontent>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1758491042071" ID="ID_865142604" MODIFIED="1758491591293" TEXT="Interessant: hier gab es einen verdeckten Wettbewerb">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Die Git-Historie der ersten Wochen ist im R&#252;ckblick durchaus aufschlu&#223;reich. In der offiziellen Kommunikation haben Cehteh und Ichthyo &#252;ber eine gemeinsame prototypsiche Applikation geredet, w&#228;hrend gleichzeitig jeder auf seinem Branch &#187;Fakten geschaffen&#171; hat, die nicht koordiniert waren, und sich konzeptionell widersprechen. Das hier ist ein gutes Beispiel...
@@ -162460,9 +162384,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1758496952381" ID="ID_519983521" MODIFIED="1758496966103" TEXT="offensichtlich erfolgte die ganze Kommunikation via IRC"/>
 <node CREATED="1758497076062" ID="ID_1021539408" LINK="https://lists.cinelerra-cv.org/pipermail/cinelerra-skolelinux/2007-August/011487.html" MODIFIED="1758498277486" TEXT="erster Thread: &quot;WHERE CINELERRA IS GOING? ...anyone?&quot; 14.08.07, 07:29">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Ein Rant von einem User aus Argentinien. Das &quot;Cinelerra-3&quot;-Projekt war offenbar nur wenigen bekannt. Christian und Hermann Robak haben irgendwann im Thread geantwortet
@@ -162473,9 +162395,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 <node CREATED="1758496971052" ID="ID_1470018654" LINK="https://lists.cinelerra-cv.org/pipermail/cinelerra-skolelinux/2007-August/011498.html" MODIFIED="1758498288048" TEXT="eine Antwort von Herman Robak (15.08.07, 00:21) scheint das zu best&#xe4;tigen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     On Tue, 14 Aug 2007 23:32:01 +0200, Edouard Chalaron 
 
@@ -162518,9 +162438,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 <node CREATED="1758497349882" ID="ID_409127232" LINK="https://lists.cinelerra-cv.org/pipermail/cinelerra-skolelinux/2007-August/011499.html" MODIFIED="1758498301128" TEXT="im gleichen Thread: erstes halb-&#xf6;ffentliche Statement von Christian (15.08.07, 00:28)">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <div http-equiv="content-type" content="text/html; charset=utf-8" class="moz-text-plain" wrap="true" graphical-quote="true" lang="x-western" style="font-family: -moz-fixed; font-size: 12px">
       <pre wrap="" class="moz-quote-pre">marquitux caballero wrote:</pre>
@@ -162591,9 +162509,7 @@ Cinelerra mailing list
 </node>
 <node CREATED="1758497869757" ID="ID_1022143849" LINK="https://lists.cinelerra-cv.org/pipermail/cinelerra-skolelinux/2007-August/011523.html" MODIFIED="1758498315766" TEXT="Christian hat auch kurz darauf seine Vision zur Zusammenarbeit dargelegt (15.08.07, 19:36)">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <pre http-equiv="content-type" content="text/html; charset=utf-8" wrap="" class="moz-quote-pre">This my maybe arguable view how to hive Cinelerra CV out of its
 develoment stall:
@@ -162656,9 +162572,7 @@ Cinelerra mailing list
 <node CREATED="1758498447741" ID="ID_172588720" MODIFIED="1758498459551" TEXT="wir haben Design-Drafts / Specs geschrieben">
 <node CREATED="1758499265288" ID="ID_1741221871" MODIFIED="1758499441917" TEXT="Mitte August war der gesamte bekannte Basis-Content da">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...also der ganze Kreis an einf&#252;hrenden Seiten, die bis heute in meinem Renderengine-TiddlyWiki herumh&#228;ngen. Und alle wesentlichen UML-Diagramme. Sogar &#252;ber die Builder-Entities habe ich mir bereits ausf&#252;hrlich Gedanken gemacht
@@ -162668,9 +162582,7 @@ Cinelerra mailing list
 </node>
 <node CREATED="1758499287934" ID="ID_23248673" MODIFIED="1758499549342" TEXT="die Konzepte einer eigenst&#xe4;ndigen Applikation waren angedeutet">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <ul>
       <li>
@@ -162695,9 +162607,7 @@ Cinelerra mailing list
 <node CREATED="1758501428012" ID="ID_1417321610" MODIFIED="1758501452604" TEXT="bis dahin hat Christian gef&#xfc;hlt 5 mal so viele Commits rausgehauen, als ich"/>
 <node CREATED="1758501453432" ID="ID_1146433048" MODIFIED="1758501603352" TEXT="allerdings hat er nur ein &#xfc;berschaubares Library-Directory aufgebaut">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Error, Locking, Plugin und eine Linked List
@@ -162707,9 +162617,7 @@ Cinelerra mailing list
 </node>
 <node CREATED="1758501485413" ID="ID_1012695351" MODIFIED="1758501949819" TEXT="was ich dagegen gebaut hatte, war sehr unvollst&#xe4;ndig, aber bereits weit ausgreifend">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Zun&#228;chst einmal, ich wu&#223;te mit UML umzugehen, Christian hat nach einem ersten Gehversuch aufgegeben. Daher habe ich per Generierung bereits einen gro&#223;en Haufen Klassen angelegt, d.h. der C++ - Code dominierte absolut. Aber f&#252;r Christian war das einfach durchschaubar (und ich habe das auch betont).
@@ -162733,9 +162641,7 @@ Cinelerra mailing list
 <node CREATED="1758501953453" ID="ID_1468489981" MODIFIED="1758501975022" TEXT="&#xbb;&#xf6;ffentlich&#xab; ist praktisch nur Christian wargenommen worden">
 <node CREATED="1758501975840" ID="ID_1527063455" MODIFIED="1758929080061" TEXT="damit meine ich das Auftreten gegen&#xfc;ber den Usern">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       In diversen Diskussionen, die ich heute gelesen habe, ist immer nur von &quot;CT&quot; die Rede. Auch Herman Robak rehted immer nur von Christians Initiative. Ich sehe Antworten von mir, die wie &quot;5. Rad am Wagen&quot; r&#252;berkommen, oder wie jemand, der sich wichtig machen m&#246;chte, und sehr akademisch redet. Meine wenigen Aussagen wurden in Diskussionen in diesem ersten Herbst praktisch nicht aufgegriffen. Allerdings bin ich in die Threads mit den Usern auch wenig eingestiegen, deren Argumente waren mir zu bl&#246;d, um darauf einzugehen. Das war ganz anders als sonst, ich finde viele Beitr&#228;ge von mir, in denen ich Usern mit Cinelerra geholfen habe, und daraus ist ein Gespr&#228;ch entstanden.
@@ -162745,9 +162651,7 @@ Cinelerra mailing list
 </node>
 <node CREATED="1758501999257" ID="ID_598072369" MODIFIED="1758502109771" TEXT="auf IRC war Christian weithin vernetzt">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ich erinnere mich, da&#223; andere Leute von &quot;Deinem neuen Projekt&quot; geredet haben, und Christian dann immer darauf hingewiesen hat, da&#223; das nicht &quot;sein&quot; Projekt ist. Er wollte es auch nicht auf pipapo.org hosten.
@@ -162761,9 +162665,7 @@ Cinelerra mailing list
 <icon BUILTIN="idea"/>
 <node CREATED="1758502341901" ID="ID_528903816" MODIFIED="1758502701016" TEXT="ich kann mich an endlose und sehr engagierte Diskussionen per Mail + IRC erinnern">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Ich erinnere mich, argumentativ auf die Leute einzugehen, und zwar vor allem auf die Anf&#228;nger. Ich kann mich erinnern, da&#223; Christian grade den Anf&#228;ngern gegen&#252;ber oft von oben herab kam, und schnoddrig war. Ich erinnere mich auch, in Debatten auf IRC stark pr&#228;sent gewesen zu sein, und sehr f&#252;r unser Projekt geworben zuhaben. Ich hatte auch lange, lange Gespr&#228;che mit Raffa und Co. &#252;ber allgemeine Themen und Film. Chistian dagegen hing auf dutzenden anderen Channels herum, und hat dem Cinelerra-Channel nur begrenzte Aufmerksamkeit gewidmet. Er war auf anderen Channels oft in routiniertes Ping-Pong mit unendlich vielen anderen Leuten involviert, die sich alle kannten. Demgegen&#252;ber war ich dort ein kompletter Au&#223;enseiter, und hab mich auf diesen anderen Channels (z.B. Debian, Free Software) auch tunlichst rausgehalten.
@@ -162773,9 +162675,7 @@ Cinelerra mailing list
 </node>
 <node CREATED="1758499569738" ID="ID_22810005" MODIFIED="1758499902479" TEXT="die Einsch&#xe4;tzung: 5. Gang reinhauen und an Weihnachten l&#xe4;uft die Render-Engine">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Also das Gef&#252;hl, da&#223; das alles derma&#223;en gut aufgeht, und wir so unglaublich produktiv sind, da&#223; sich ein laufendes System in ein paar Monaten hinstellen l&#228;&#223;t, wenn man nur <i>wirklich hart arbeitet.</i>&#160; Es bringt mir auch die Erinnerung zur&#252;ck, da&#223; ich nicht hinterfragt habe, wie das Verh&#228;ltnis zu Cinelerra ist. Das hier war &#187;Cinelerra-3&#171; und im &#252;brigen gab es ja meinen Projektplan, mit dem man das irgendwie den ersten Meilensteinen zuordnen k&#246;nnte. Auch das Gef&#252;hl: wie wir dann weiter vorgehen und das in Cinelerra einbauen, &#252;berleg ich mir, wenn die Engine l&#228;uft. Denn eine laufende Engine kann ja schon mal nicht falsch sein.
@@ -162785,9 +162685,7 @@ Cinelerra mailing list
 </node>
 <node CREATED="1758499614708" ID="ID_1765513601" MODIFIED="1758500228153" TEXT="die Erinnerung an einen regnerischen August-Tag, mit Assets + MObjects">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Diese Erinnerung bringt erstmals das Gef&#252;hl einer auszehrenden Schwere. Ich bin einen ganzen Tag dagesessen, drau&#223;en regenete es. Von Zeit zu Zeit war ein r&#228;tselhaftes &quot;Tuuut&quot; auf 1kHz drau&#223;en zu h&#246;ren, das ich nicht verstanden habe, nicht klar ob eine Glocke oder ein Signal. W&#228;hrenddessen habe ich mit mit der Asset- und MObject-Hierarchie herumgeplagt, die Struktur und die Logik wollte nicht aufgehen, ich sah keine M&#246;glichkeit, einen Test zu schreiben, und ich habe vergeblich nach einem Ankerpunkt gesucht, von dem her ich den Code aufrollen konnte. Es war ja letztlich eine Sammlung von UML-generierten Klassen-Skeletten, die ich nun versuchte, zusamenzuh&#228;ngen.
@@ -162812,9 +162710,7 @@ Cinelerra mailing list
 <node CREATED="1758500334554" ID="ID_1237928285" MODIFIED="1758500363003" TEXT="unsere bewu&#xdf;ten Standpunkte lagen aber bereits damals deutlich auseinander">
 <node CREATED="1758500364150" ID="ID_772264720" MODIFIED="1758500962098" TEXT="Christian hat Cinelerra bereits als &#xbb;bottomless pit&#xab; bezeichnet">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Und zwar in den ersten dokumentierten Diskussionen, auf der Cinelerra-Mailingliste mitte August. (Beachte, Adam konnte das lesen &#8212; das zeigt, da&#223; Christian unreflektiert gehandelt hat).
@@ -162836,9 +162732,7 @@ Cinelerra mailing list
 </node>
 <node CREATED="1758500578062" ID="ID_379239058" MODIFIED="1758501203009" TEXT="Ich sah meine Placement + Meta-Clip-Idee, und die setzt Cinelerra vorraus">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Ich wei&#223; ganz sicher, da&#223; ich niemals einem Projekt beigetreten w&#228;re, einen Video-Editor komplett neu zu schreiben. Da h&#228;tte ich eine ganz andere Organisation vorausgesetzt, und eine echte Design-Phase. Ich kann mich auch erinnern, da&#223; ich Christian's Glaube an die &quot;Community&quot; als naiv empfunden habe. Ich sah das, was wir machen, als ein alternatives Basissystem, mit dem man sich in eine bestehende, gro&#223;e Applikation einklinkt.
@@ -162855,9 +162749,7 @@ Cinelerra mailing list
 </node>
 <node BACKGROUND_COLOR="#ddc29f" COLOR="#a50125" CREATED="1762124266818" ID="ID_1144850655" MODIFIED="1762124404645">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       die <b>Plug-in-Kontroverse</b>&#160;war bereits damals, in den ersten Wochen
@@ -162871,9 +162763,7 @@ Cinelerra mailing list
 </node>
 <node COLOR="#4d4398" CREATED="1758567448132" FOLDED="true" ID="ID_895705325" MODIFIED="1762379726463">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       wie kam es da&#223; wir <i>neu gebaut haben?</i>
@@ -162888,9 +162778,7 @@ Cinelerra mailing list
 <icon BUILTIN="yes"/>
 <node CREATED="1758567507220" ID="ID_369597735" MODIFIED="1758568910148" TEXT="auf den ersten Bilck widerspricht es komplett allen &#xbb;Statement-of-intent&#xab;">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <ul>
       <li>
@@ -162963,9 +162851,7 @@ Cinelerra mailing list
 </node>
 <node BACKGROUND_COLOR="#e8c5af" CREATED="1758569176779" ID="ID_1428200148" MODIFIED="1758676482357">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       <u>Einsicht</u>: der Plugin-Streit war bereits <b>in den ersten Wochen</b>
@@ -162973,9 +162859,7 @@ Cinelerra mailing list
   </body>
 </html></richcontent>
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...das habe ich in der Erinnerung komplett anders angebunden: mein Bild war, da&#223; das erst Jahre sp&#228;ter passiert ist, und sich langsam hochgeschaukelt hat
@@ -162986,9 +162870,7 @@ Cinelerra mailing list
 </node>
 <node CREATED="1758570096559" ID="ID_1816963675" MODIFIED="1758570225644" TEXT="anscheinend habe ich diesen Streit &#x201e;vom Zaun gebrochen&#x201c; &#x2014; warum?">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       schon die erste lange Antwortmail (&quot;how to proceed?&quot;) erscheint latent-feindselig. Und die zweite, grunds&#228;tzliche Mail ist <b>eine Kriegserkl&#228;rung</b>.
@@ -163008,9 +162890,7 @@ Cinelerra mailing list
 <icon BUILTIN="idea"/>
 <node CREATED="1758681237087" ID="ID_286260043" MODIFIED="1758929485170" TEXT="Christian zieht pl&#xf6;tzlich eine Agenda durch">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Im R&#252;ckblick waren daf&#252;r die Anzeichen schon viel l&#228;nger da, aber ich habe sie &#252;bersehen, bzw. als Joke abgetan. H&#228;tte Christian gleich von Anfang klar gesagt, da&#223; er sich gegen moderne Methoden definiert, und nur die Imperative Pogrammierung alten Schlages f&#252;r sinnvoll h&#228;lt, dann h&#228;tte ich mich vermutlich &#252;berhaupt nicht n&#228;her auf ihn eingelassen, und das gesamte Projekt w&#228;re nie zustandegekommen. Christian aber war <i>locker-eschmeidig,</i>&#160;und ich war ebenso stets <i>aufgeschlossen und interessiert </i>und habe ebenso nicht gesagt, da&#223; ich einen solchen Ansatz als &quot;oldschool&quot; komplett ablehnen w&#252;rde. Hinzu kommt, da&#223; Chistian selbstbewu&#223;t auftritt, und ich dagegen sehr stark meine eigenen Schw&#228;chen sehe, und daher stets vorsichtig bin und meine Position absichere.
@@ -163020,9 +162900,7 @@ Cinelerra mailing list
 </node>
 <node CREATED="1758681247627" ID="ID_1193197749" MODIFIED="1758682154082" TEXT="er h&#xe4;lt seine Herangehensweise f&#xfc;r angemessen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Und das hat mehrere Quellen
@@ -163043,9 +162921,7 @@ Cinelerra mailing list
 </node>
 <node CREATED="1758681265578" ID="ID_1123057101" MODIFIED="1758682499193" TEXT="ich wei&#xdf; aus Erfahrung: damit w&#xe4;re das Projekt gescheitert">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Und zwar in zweierlei m&#246;glichen Richtungen (ich erinnere mich jetzt, nach Lekt&#252;re der ganzen Dokumente, da&#223; ich das damals bereits so gesehen habe)
@@ -163070,9 +162946,7 @@ Cinelerra mailing list
 <node CREATED="1758828611498" ID="ID_875457354" MODIFIED="1758828626618" TEXT="best&#xe4;tigen aber letztlich was ich bereits geschlu&#xdf;folgert habe"/>
 <node CREATED="1758829873045" ID="ID_1280686997" MODIFIED="1758830552117" TEXT="wir waren beide noch nicht so festgelegt wie sp&#xe4;ter">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Deshalb ist die Beurteilung dieser Kontroverse so schwierig
@@ -163095,9 +162969,7 @@ Cinelerra mailing list
 <node CREATED="1758828631689" ID="ID_1074119275" MODIFIED="1758828634554" TEXT="wichtig">
 <node CREATED="1758828636023" ID="ID_252148310" LINK="http://flaucher:9023/Dreck/wiki/CineGuerillia.Plan.PuginDebatte#CehtehundHermanraufIRC8.7." MODIFIED="1758940109137" TEXT="das Gespr&#xe4;ch zwischen Herman Robak und Christian zeigt dessen Standpunkt ungest&#xf6;rt">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       8.7.
@@ -163107,9 +162979,7 @@ Cinelerra mailing list
 </node>
 <node CREATED="1758828667986" ID="ID_99855279" LINK="http://flaucher:9023/Dreck/wiki/CineGuerillia.Plan.PuginDebatte#PloujIchthyoundHermanraufIRC9.Jul" MODIFIED="1758940130416" TEXT="das Gespr&#xe4;ch zwischen Ichthyo und Plouj + Hermanr zeigt meinen Standpunkt ungest&#xf6;rt">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       9.7.
@@ -163119,9 +162989,7 @@ Cinelerra mailing list
 </node>
 <node CREATED="1758828731302" ID="ID_61079240" LINK="http://flaucher:9023/Dreck/wiki/CineGuerillia.Plan.PuginDebatte#CehtehPloujIchthyohermanrundSimAV-10.7.07" MODIFIED="1758940155118" TEXT="Cehteh und ich haben nur aneinander vorbeigeredet">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Ersichtlich erst schon in den Mails, aber ganz schlagend in der <b>einzigen</b>&#160;Debatte, die ein direktes Gespr&#228;ch war (auf IRC am 10.7):
@@ -163139,9 +163007,7 @@ Cinelerra mailing list
 </node>
 <node CREATED="1758828757496" ID="ID_1991506557" MODIFIED="1758829870503" TEXT="das Ende der Debatte ist diffus">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <ul>
       <li>
@@ -163163,9 +163029,7 @@ Cinelerra mailing list
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <node CREATED="1758682744021" ID="ID_1498307858" MODIFIED="1758682772386" TEXT="und das ist mir gelungen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Christian blieb im Projekt, das Projekt lief weiter, und ich habe von seinem Netzwerk profitiert
@@ -163175,9 +163039,7 @@ Cinelerra mailing list
 </node>
 <node CREATED="1758682773594" ID="ID_745851123" MODIFIED="1758756451874" TEXT="und ist mir nicht gelungen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       das <b>eigentliche Projekt</b>, das grade so hoffnungsvoll begonnen hatte, und das f&#252;r mich so begl&#252;ckend aussah, war <b>mit einer Explosion untergegangen</b>. Ich hatte gehofft, als einer von Gleichen, aufgrund meiner F&#228;higkeiten anerkannt zu werden, und gemeinsam etwas zu schaffen. Das war nun nicht mehr m&#246;glich; stattdessen mu&#223;te ich nun <i>taktieren, lavieren und manipulieren.</i>
@@ -163195,9 +163057,7 @@ Cinelerra mailing list
 <node CREATED="1758675762340" ID="ID_1448474737" LINK="https://git.lumiera.org/?p=LUMIERA;a=commit;h=904c82bba44aa9f087f07ea0dd8b6db4e64e3280" MODIFIED="1758933487252" TEXT="19.6 : Ichthyo legt umfangreiches Klassenmodell in UML an">
 <node CREATED="1758675804112" ID="ID_1595863502" MODIFIED="1758675936714" TEXT="Christian reagiert darauf mit &#xbb;Wow&#xab;">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <pre http-equiv="content-type" content="text/html; charset=utf-8" wrap="" class="moz-quote-pre">Wow Du hast hast m&#228;chtig vorgelegtb mit deiner uml/wiki doc.
 
@@ -163240,9 +163100,7 @@ Vorschlag w&#228;hre das man Bouml nach doc/uml/ generiern l&#228;sst
 </node>
 <node CREATED="1758675596898" ID="ID_998481973" MODIFIED="1758676122629" TEXT="27.6 : Ichthyo experimentiert mit Codegenerierung">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <pre http-equiv="content-type" content="text/html; charset=utf-8" wrap="" class="moz-quote-pre">Vo&#223;eler Hermann wrote:</pre>
     <blockquote type="cite" style="color: #993300">
@@ -163278,9 +163136,7 @@ interessierte davon was mitbekommen anstatt privater mails.
 </node>
 <node CREATED="1758676169587" ID="ID_1610875738" MODIFIED="1758676230043" TEXT="beachte den pl&#xf6;tzlich sehr k&#xfc;hlen Tonfall">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Bis dahin war Christian immer sehr ermutigend, fand alles Toll, hat zu allem weitere (sehr sinnvolle) Vorschl&#228;ge gemacht....
@@ -163290,9 +163146,7 @@ interessierte davon was mitbekommen anstatt privater mails.
 </node>
 <node CREATED="1758676256970" ID="ID_17968709" MODIFIED="1758676477675">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       das war mir damals zwar unbewu&#223;t aufgefallen,
@@ -163303,9 +163157,7 @@ interessierte davon was mitbekommen anstatt privater mails.
   </body>
 </html></richcontent>
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Woher wei&#223; ich das?
@@ -163325,9 +163177,7 @@ interessierte davon was mitbekommen anstatt privater mails.
 </node>
 <node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1758676426208" ID="ID_937027817" MODIFIED="1758676526282" TEXT="BEACHTE: Christian kommt mit UML nicht klar">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <pre http-equiv="content-type" content="text/html; charset=utf-8" wrap="" class="moz-quote-pre"></pre>
     <blockquote type="cite" style="color: #993300">
@@ -163355,9 +163205,7 @@ oder bouml einfach ein paar sachen um bestimmte dinge zu modelliern.
 <node CREATED="1758674924350" ID="ID_1519378955" MODIFIED="1758674961391" TEXT="2/3.7. (nachts) SCons">
 <node CREATED="1758674965329" ID="ID_156975186" LINK="https://git.lumiera.org/?p=LUMIERA;a=commit;h=7719c710ae81ba446cdeddf2573958c197278276" MODIFIED="1758937668658" TEXT="Ichthyo berichtet, da&#xdf; ihm SCons gef&#xe4;llt">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Er hat auf einem separaten 'prototype' branch anscheinend damit schon einen UML-generierten Satz an Klassen gebaut. Von diesem Prototype-Branch gibt es keine Spur mehr (wichtig! denn das zeigt, da&#223; bereits vor Ende Juni mit Experimenten zur Klassengenerierung begonnen wurde)
@@ -163367,9 +163215,7 @@ oder bouml einfach ein paar sachen um bestimmte dinge zu modelliern.
 </node>
 <node CREATED="1758675072050" ID="ID_455952516" MODIFIED="1758675161283" TEXT="Christian antwortet eine Stunde sp&#xe4;ter">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <pre http-equiv="content-type" content="text/html; charset=utf-8" wrap="" class="moz-quote-pre">Ichthyostega wrote:</pre>
     <blockquote type="cite" style="color: #993300">
@@ -163390,9 +163236,7 @@ note about gnu style: (how I/emacs interpret it)</pre>
 <node CREATED="1758675167564" ID="ID_1712720295" MODIFIED="1758675196472" TEXT="k&#xfc;ndigt aber Plugins und C-Interfaces an"/>
 <node CREATED="1758675207661" ID="ID_1449673816" MODIFIED="1758675275998" TEXT="beachte die Formulierung: &quot;I am back ;)&quot;">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ganz klar eine Anspielung an &quot;Terminator&quot;
@@ -163407,9 +163251,7 @@ note about gnu style: (how I/emacs interpret it)</pre>
 </node>
 <node CREATED="1758760665533" ID="ID_232160317" MODIFIED="1758760797301" TEXT="3.7. 5:51 (fr&#xfc;hmorgens): Christian schreibt Kommentar in den RfC ">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <div http-equiv="content-type" content="text/html; charset=utf-8" class="paragraph">
       <p>
@@ -163432,9 +163274,7 @@ note about gnu style: (how I/emacs interpret it)</pre>
 </html></richcontent>
 <node CREATED="1758760810707" ID="ID_513062458" MODIFIED="1758760976203">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       angeblich h&#228;tte er sich mir mir auf ein <b>Multi-Language-Projekt geeinigt</b>
@@ -163447,9 +163287,7 @@ note about gnu style: (how I/emacs interpret it)</pre>
 </node>
 <node CREATED="1758761051697" ID="ID_355683631" MODIFIED="1758761077166">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ist das m&#246;glich oder eine <font color="#a80505">dreiste L&#252;ge</font>?
@@ -163460,9 +163298,7 @@ note about gnu style: (how I/emacs interpret it)</pre>
 <node CREATED="1758761107643" ID="ID_1885625713" MODIFIED="1758761126795" TEXT="ich kann micht nicht explizit an einen Beschlu&#xdf; dieser Art erinnern"/>
 <node CREATED="1758761318690" ID="ID_1901693218" MODIFIED="1758761441470" TEXT="grunds&#xe4;tzlich k&#xf6;nnen wir nat&#xfc;rlich jederzeit geChattet haben. Wir sind beide Nachteulen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Der 3.7 war ein Sonntag, das hei&#223;t, ich mu&#223;te am n&#228;chsten Tag ins B&#252;ro, bin jedoch in diesen Jahren in der Regel erst Mittags dort gewesen. Es war sehr typisch f&#252;r mich, in der Nacht Sonntag &#10230; Montag noch (zu) lange wach zu sein...
@@ -163472,9 +163308,7 @@ note about gnu style: (how I/emacs interpret it)</pre>
 </node>
 <node CREATED="1758761159723" ID="ID_1983958166" MODIFIED="1758761663879" TEXT="erinnern kann ich, da&#xdf; Christian &#x201e;als Witz&#x201c; vorgeschlagen hat, reines C zu verwenden">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Also eindeutig mit Smily, und ich habe entsprechend witzelnd (und wie ich denke, deutlich) geantwortet; Christian hat daraufhin sofort einen R&#252;ckzieher gemacht. Mir erscheint es allerings plausibel, da&#223; eine solche Diskussion in einer fr&#252;heren, lockereren Phase stattfand, nicht in diesem bereits angespannten Moment....
@@ -163509,9 +163343,7 @@ note about gnu style: (how I/emacs interpret it)</pre>
 </node>
 <node CREATED="1758761294904" ID="ID_497923429" MODIFIED="1758930122677" TEXT="es w&#xfc;rde &#xfc;berhaupt nicht mit dem Mail-Austausch am n&#xe4;chsten Tag zusammenpassen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Und zwar in mehrerlei Hinsicht. Zum einen, Christian hat den <b>wichtigeren 
@@ -163553,9 +163385,7 @@ proposals about C nameing rules, plugins and interfaces. (i am back ;))</pre>
 </node>
 <node CREATED="1758762435389" ID="ID_1943189255" MODIFIED="1758930210977">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ich habe C-Funktionen stets nur als <i>eine Konzession</i>&#160;betrachtet
@@ -163563,9 +163393,7 @@ proposals about C nameing rules, plugins and interfaces. (i am back ;))</pre>
   </body>
 </html></richcontent>
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Denn ich war bereits in den 90er Jahren ziemlich ablehnend gegen&#252;ber C (nicht C++). Ich hab die C-Kultur als eine Kultur der Schlaumeier und Taschenspieler betrachtet. Wenn ich also vor diesem Hintergrund nun sage, &quot;es macht nicht Sinn, alles zwingend in Objekte zu packen&quot;, dann war das von mir als Ausdruck von Offenheit und Konzillianz gemeint. Ich wollte ausdr&#252;cken, da&#223; ich kein OO-Fanatiker bin. Ich wei&#223; auch sehr genau, da&#223; meine Vorstellung ehr dain ging, da&#223; man zwar ein *.cpp-File hat, in diesem aber nur Funktionen schreibt, die imperativ mit For-Schleifen etc. implementiert sind. Genau deshalb hat mich dann auch Christian's Versuch, reines C zu etablieren (sp&#228;ter, wie es um main() und das Start-up ging), ziemlich emp&#246;rt. Ich f&#252;hlte mich ausgenutzt und betrogen, denn in meinem Verst&#228;ndnis hatte ich eben nur konzediert, da&#223; man auch rein imperativen Code schreiben kann.
@@ -163575,9 +163403,7 @@ proposals about C nameing rules, plugins and interfaces. (i am back ;))</pre>
 </node>
 <node CREATED="1758762811689" ID="ID_617130724" MODIFIED="1758930270698" TEXT="plausibel w&#xe4;re: Christian hat meine Konzilianz als Zustimmung gedeutet">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Nach dieser Leseart h&#228;tte es also zu dem Zeitpunkt keine entsprechende Diskussion auf IRC gegeben, aber Christian hat sich daran erinnert, da&#223; ich einige Woche fr&#252;her mal gesagt habe, es m&#252;sse ja nicht alles in Klassen gepackt werden, und f&#252;r reine Video-Berechnung w&#252;rde auch C gehen. Er hat das dann als Zustimmung aufgefa&#223;t, und wollte jetzt ehr versuchen, das Gewicht insgesamt Richtung C zu verschieben, weil er sich eigentlich erhofft hatte, ein reines C-Projekt starten zu k&#246;nnen, in das auch seine ganzen C-Tools gut reinpassen. Diese Lesart halte ich im Moment <b>f&#252;r die plausibelste Deutung</b>. Insofern war es keine L&#252;ge, sondern nur ein Manipulationsversuch, der mir zu dem Zeitpunkt sogar entgangen ist
@@ -163591,9 +163417,7 @@ proposals about C nameing rules, plugins and interfaces. (i am back ;))</pre>
 <node CREATED="1758676649447" ID="ID_974913065" MODIFIED="1758676754395" TEXT="Christian weist nochmal auf &quot;Interface / CStyleGuide proposal&quot; hin"/>
 <node CREATED="1758676755282" ID="ID_1736686459" MODIFIED="1758676809149" TEXT="bittet ausdr&#xfc;cklich um rasche Kommentare / Diskussion">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <pre http-equiv="content-type" content="text/html; charset=utf-8" wrap="" class="moz-quote-pre">Btw: seen my Interface / CStyleGuide proposal in the pipapo wiki? please
 review it carefully if it looks ok, I straight go into make a referene
@@ -163607,9 +163431,7 @@ implementation, since this is a very low level building block.
 <node CREATED="1758676824622" ID="ID_1905243146" MODIFIED="1758676833464" TEXT="beachte: er dr&#xe4;ngt uns"/>
 <node CREATED="1758676868647" ID="ID_2906958" MODIFIED="1758756761217" TEXT="verwendet auff&#xe4;llig doppelb&#xf6;dige Formulierung">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       &quot;review it carefully if it looks ok, I straight go into make a referene implementation....&quot;
@@ -163633,9 +163455,7 @@ implementation, since this is a very low level building block.
 </node>
 <node CREATED="1758677042360" ID="ID_504886849" MODIFIED="1758677235178" TEXT="er verschleiert die Tragweite">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       &quot;since this is a very low level building block.&quot;
@@ -163650,9 +163470,7 @@ implementation, since this is a very low level building block.
 </node>
 <node CREATED="1758677313934" ID="ID_1233079889" MODIFIED="1758677387480" TEXT="3.7: abends : ich antworte &quot;CStyleGuide&quot; mit knappen Gegenargumenten">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <div http-equiv="content-type" content="text/html; charset=utf-8" class="moz-text-plain" wrap="true" graphical-quote="true" lang="x-unicode" style="font-family: -moz-fixed; font-size: 12px">
       <pre wrap="" class="moz-quote-pre">Am Dienstag, den 03.07.2007, 20:51 +0200 schrieb Christian Thaeter:
@@ -163700,9 +163518,7 @@ Hermann
 </html></richcontent>
 <node CREATED="1758677406614" ID="ID_574918199" MODIFIED="1758677424427">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       effektiv ist das eine <b>freundlich verpackte Ablehnung</b>
@@ -163712,9 +163528,7 @@ Hermann
 </node>
 <node CREATED="1758677461856" ID="ID_723467705" MODIFIED="1758677525511">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p style="text-align: right">
       hier sage ich explizit, und mir Argument,
@@ -163727,9 +163541,7 @@ Hermann
 </node>
 <node CREATED="1758677555811" ID="ID_703917795" MODIFIED="1758677879751" TEXT="ich habe das verstanden...">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <ul>
       <li>
@@ -163747,9 +163559,7 @@ Hermann
 </node>
 <node CREATED="1758677663100" ID="ID_667494191" MODIFIED="1758677858821" TEXT="hat Christian das &#xfc;berhaupt verstanden?">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Das meine ich als echte Frage, und die ist wichtig, zum Verst&#228;ndnis dessen, was dann geschah.
@@ -163771,9 +163581,7 @@ Hermann
 </node>
 <node CREATED="1758678046333" ID="ID_914695257" MODIFIED="1758678931534">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Christian antwortet am selben Abend <font color="#ce0000">v&#246;llig naiv</font>&#160;und <b>macht klar was er will</b>
@@ -163781,9 +163589,7 @@ Hermann
   </body>
 </html></richcontent>
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <pre http-equiv="content-type" content="text/html; charset=utf-8" wrap="" class="moz-quote-pre">Vo&#223;eler Hermann wrote:</pre>
     <blockquote type="cite" style="color: #993300">
@@ -163889,9 +163695,7 @@ we provide for us, we provide for people extenting it too)
 </html></richcontent>
 <node CREATED="1758679011695" ID="ID_1845246761" MODIFIED="1758679344252" TEXT="ich bin fassungslos wenn ich diese Antwort sehe">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Das geht mir jetzt so, und das ging mir vermutlich damals nicht anders.
@@ -163904,9 +163708,7 @@ we provide for us, we provide for people extenting it too)
 </node>
 <node CREATED="1758679191782" ID="ID_1671081801" MODIFIED="1758680052462" TEXT="jemals eine gr&#xf6;&#xdf;ere Applikation von innen gesehen??">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Und damit meine ich eine Applikation, nicht OS-level Code.
@@ -163924,9 +163726,7 @@ we provide for us, we provide for people extenting it too)
 </node>
 <node CREATED="1758680054651" ID="ID_1475485740" MODIFIED="1758930938967" TEXT="Problem ist: sein Vorschlag ist wohl &#x201e;machbar&#x201c;...">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Er skizziert ja, wie er sich das vorstellt:
@@ -163946,9 +163746,7 @@ we provide for us, we provide for people extenting it too)
 </node>
 <node CREATED="1758680597118" ID="ID_1915767355" MODIFIED="1758682535547" TEXT="Problem ist: nur mit Erfahrung sieht man die Gefahr">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       <i>Das macht diesen Vorschlag so &#187;entwaffnend&#171;:</i>
@@ -163977,9 +163775,7 @@ we provide for us, we provide for people extenting it too)
 </node>
 <node CREATED="1758681069279" ID="ID_299140577" MODIFIED="1758681098669">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       <u>Fazit</u>: ich stecke nun <b>bis &#252;ber die Ohren in der Schei&#223;e</b>
@@ -163995,9 +163791,7 @@ we provide for us, we provide for people extenting it too)
 <node CREATED="1758572563405" ID="ID_146365002" MODIFIED="1758572585063" TEXT="nicht nur ein paar imperative Funktionen verwenden (wie ich gedacht hatte)"/>
 <node CREATED="1758572595280" ID="ID_438469083" MODIFIED="1758574330754" TEXT="und da&#xdf; er C-L&#xf6;sungen einf&#xfc;hren und verbindlich machen m&#xf6;chte">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Er findet Macros gut, ist stolz auf sein Programmierschema mit &quot;goto&quot; und besteht darauf, da&#223; man auf einem gemeinsamen Datenmodell arbeiten mu&#223;, weil was anderes mit C ja nicht geht. (Die beiden letztgenannten Punkte erg&#228;nze ich aus der Erinnerung, sie gehen nicht aus den Mails hervor. Es k&#246;nnte auch sein, da&#223; Christian diese Punkte erst sp&#228;ter ausgef&#252;hrt hat &#8212; aber es war zu diesem Zeitpunkt mit w&#252;nschenswerter Klarheit deutlich, da&#223; er alle die Argumente gegen das imperative Programmieren entweder nicht kennt, oder nicht gelten l&#228;&#223;t.
@@ -164007,9 +163801,7 @@ we provide for us, we provide for people extenting it too)
 </node>
 <node CREATED="1758574347585" ID="ID_281645471" MODIFIED="1758574464440" TEXT="hinzu kommt immer wieder das Ver&#xe4;chtlich machen von C++ im Nebensatz">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       C++ Klassen sind immer &quot;fett&quot;, C-Interfaces sind immer schlank und klar. Abstraktionen und Interfaces werden mit C++ assoziiert und als kompliziert und schwierig dargestellt
@@ -164032,9 +163824,7 @@ we provide for us, we provide for people extenting it too)
 <node CREATED="1758572961789" ID="ID_1976672934" MODIFIED="1758572972104" TEXT="und fokussiere auf die &#xbb;Plugin-Architektur&#xab;"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#88114e" CREATED="1758588085520" ID="ID_304491751" MODIFIED="1758654115886" TEXT="mein Vorgehen ist brutal">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Wenn man diese Mail unvermittelt liest, kann man nur den Kopf sch&#252;tteln. Ich greife mir einen Widerspruch in Christians Aussagen heraus, und leite daraus die Forderung nach Entscheidung ab; aber diese Entscheidung treffe ich sofort selber, auf argumentativer Ebene: Etwa so: <i>Es gibt bei diesem Thema hier nur einen Ansatz, der nicht Unfug ist, und der ist sehr aufwendig und komplex.</i>&#160;Spielraum f&#252;r Abw&#228;gungen und Auslegungen lasse ich keinen.
@@ -164061,9 +163851,7 @@ we provide for us, we provide for people extenting it too)
 <icon BUILTIN="clanbomber"/>
 <node CREATED="1758821101311" HGAP="24" ID="ID_1736709323" MODIFIED="1758821447084" TEXT="Kontext: ich mu&#xdf;te mir Geh&#xf6;r verschaffen" VSHIFT="17">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Christian war einfach nicht zu stoppen. Er labert und labert und labert und h&#246;rt nicht zu. Er hat mich auch etwas von oben herab behandelt, in dem Sinn &quot;hehe, der Typ mit Java und der Bank, die arbeiten doch nur mit bloatware, also sind seine Urteile mit Vorsicht zu genie&#223;en...&quot;
@@ -164089,9 +163877,7 @@ we provide for us, we provide for people extenting it too)
 <node CREATED="1758573018943" ID="ID_292910098" MODIFIED="1758589015165" TEXT="Christian argumentiert nun &#x201e;wie ein Irrer&#x201c;">
 <node CREATED="1758653681569" HGAP="22" ID="ID_802294801" MODIFIED="1758931587857" TEXT="versteht er &#xfc;berhaupt mein Argument?" VSHIFT="-7">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Es k&#246;nnte sein, da&#223; Christian verstanden hat, da&#223; ich angreife, da&#223; er aber meiner Argumentation &#252;berhaupt nicht folgen kann, weil er gedanklich &#8222;anders abbiegt&#8220; (z.B. weil er gewisse Argumentationsschritte von mir nicht versteht, weil ihm der Kontext fehlt, und er sie dann als &#8222;unverst&#228;ndlich&#8220; abtut, und meinen Gedankengang anders &#8222;interpoliert&#8220;). Er macht in dieser Diskussion Statements, die man eigentlich gar nicht mehr so machen kann, wenn man auch nur <i>einen Teil der Disussion der vorausgegangenen 10 Jahre</i>&#160;zum Thema Architektur und Methoden bewu&#223;t gelesen und nachvollzogen hat. <b>Diese Beobachtung ist mir damals komplett entgangen.</b>
@@ -164106,9 +163892,7 @@ we provide for us, we provide for people extenting it too)
 </node>
 <node CREATED="1758573092366" ID="ID_313635366" MODIFIED="1758575196923" TEXT="er wendet rhetorische und psycho-Tricks an">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <ul>
       <li>
@@ -164133,9 +163917,7 @@ we provide for us, we provide for people extenting it too)
 <node CREATED="1758573138514" ID="ID_1119099783" MODIFIED="1758573162288" TEXT="ich verstehe das als &#x201e;fighting like a cornered rat&#x201c;">
 <node CREATED="1758586678681" ID="ID_340145602" MODIFIED="1758931751677" TEXT="empfindlicher Punkt angegriffen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Ich deutet das so, da&#223; ich durch meinen Angriff einer Vision den Boden entzogen habe, die tats&#228;chlich <b>f&#252;r Christian sehr bedeutend</b>&#160;war. Im R&#252;ckblick gibt es dutzende Belege daf&#252;r in den Dokumenten. Mir war das damals jedoch nicht klar, und ich dachte, es w&#252;rde helfen, das Thema nachzusch&#228;rfen; meine vorgetragene Problemanalyse war ja weithin bekannt und diskutiert worden in den vorausgegangenen Jahren. Vermutlich hatte ich sogar damit gerechnet, da&#223; sich eine Diskussion &#252;ber eine Plugin-Architektur besser f&#252;hren l&#228;&#223;t, als eine Diskussion um die grundlegende Haltung zum Programmieren.
@@ -164147,9 +163929,7 @@ we provide for us, we provide for people extenting it too)
 </node>
 <node CREATED="1758573165999" ID="ID_1701812652" MODIFIED="1758932385180" TEXT="ich werde auf teilweise schwierige Positionen gedr&#xe4;ngt">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Bei der Lekt&#252;re jetzt bekomme ich den Eindruck, da&#223; das passiert, weil ich vor der Konsequenz ausgewichen bin, den dahinter liegenden Grundsatz-Streit direkt auszutragen. Ich habe mich stattdessen auf die Frage nach einer Plugin-Architektur konzentriert, was Christian damit gekonntert hat, da&#223; er das ja gar nicht will &#8212; wobei jede seiner sachlichen Ausf&#252;hrungen dem explizit widerspricht. Dadurch war ich durch ein Double-Bind gefesselt (und das war nicht das erste Mal, da&#223; mir das in meinem Leben passiert ist).
@@ -164169,9 +163949,7 @@ we provide for us, we provide for people extenting it too)
 </node>
 <node CREATED="1758573206377" ID="ID_451000980" MODIFIED="1758576104579" TEXT="Michael Ploujnikov versucht zu vermitteln">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Ich bin jetzt erstaunt, welche bedeutende, und auch besonnene Rolle dieser Mann in den ersten Wochen gespielt hat. Das war mir komplett entfallen.
@@ -164180,9 +163958,7 @@ we provide for us, we provide for people extenting it too)
 </html></richcontent>
 <node CREATED="1758573220937" ID="ID_1050052947" MODIFIED="1758573361740" TEXT="Vorschlag: Prototypen bauen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Sein Vorschlag
@@ -164203,9 +163979,7 @@ we provide for us, we provide for people extenting it too)
 </node>
 <node CREATED="1758573234128" ID="ID_1420720378" MODIFIED="1758573449088" TEXT="Ich gehe auf den Vorschlag sofort ein">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Und (daran erinnere ich mich jetzt sogar wieder) das habe ich nicht als Taktik oder Heimt&#252;cke empfunden, denn ich hatte doch meine Argumente in der grunds&#228;tzlichen Mail komplett offen dargelegt; diesen Argumenten zufolge wird dieses Experiment vorhersagbar scheitern.
@@ -164215,9 +163989,7 @@ we provide for us, we provide for people extenting it too)
 </node>
 <node CREATED="1758573243935" ID="ID_727831391" MODIFIED="1758573569175" TEXT="Christian lehnt das rundheraus ab">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Sehr aufschlu&#223;reich <i>wie Christian pariert: </i>das w&#228;re Zeitverschwendung. Er will die Grundsatz-Entscheidung <b>jetzt</b>&#160;(zu dem Zeitpunkt, wo wir, in gemeinsamen Verst&#228;ndnis, tats&#228;chlich zu coden anfangen)
@@ -164228,9 +164000,7 @@ we provide for us, we provide for people extenting it too)
 </node>
 <node CREATED="1758573255854" ID="ID_1459433914" MODIFIED="1758821539190">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Christian will das <b>System jetzt &#246;ffnen</b>&#160;und die Entscheidung dar&#252;ber fixieren
@@ -164241,9 +164011,7 @@ we provide for us, we provide for people extenting it too)
 </node>
 <node CREATED="1758573601422" ID="ID_1216360245" MODIFIED="1758574064020">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       11.7 : Christian erkl&#228;rt den Plugin-RfC <b>einseitig f&#252;r anerkannt</b>
@@ -164251,9 +164019,7 @@ we provide for us, we provide for people extenting it too)
   </body>
 </html></richcontent>
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <div http-equiv="content-type" content="text/html; charset=utf-8" class="paragraph">
       <p>
@@ -164276,9 +164042,7 @@ we provide for us, we provide for people extenting it too)
 </html></richcontent>
 <node CREATED="1758573698947" ID="ID_424460685" MODIFIED="1758821099622" TEXT="Ausz&#xfc;ge aus der IRC-Debatte finden sich gequoted in Christian&apos;s letzer Mail">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Der Grund ist aus den IRC-Logs ersichtlich: Christian und ich hatten uns wiederholt auf IRC nicht getroffen (ich war extrem mit Arbeit &#252;berlastet in der Zeit, Orgel + Cin-2 + Baaderbank). Ich hatte am 10.7. eine Diskussion mit Plouj + Hermanr (aber Christian schlief um die Zeit). Plouj hat das IRC-Log an Christian weitergeleitet, der es dann selektiv in seiner Mail gequotet hat, aber nicht auf meine Argumente eingegangen ist
@@ -164288,9 +164052,7 @@ we provide for us, we provide for people extenting it too)
 </node>
 <node CREATED="1758573726809" ID="ID_1379708741" MODIFIED="1758932139040" TEXT="er behauptet dort immer wieder: ich will doch genau das, was Du forderst">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Chistian nimmt Ausz&#252;ge aus IRC, gequotet in der Mail, und setzt darunter jeweils ein Statement, das das Gegenteil von dem argumentativen Stand einfach affirmiert.
@@ -164308,9 +164070,7 @@ we provide for us, we provide for people extenting it too)
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1758821559038" ID="ID_243431474" MODIFIED="1758932182859" TEXT="einfacher Grund: wir haben am 10.7 auf IRC gesprochen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Das Log dazu habe ich aufgehoben in meinem privaten Trac.
@@ -164324,9 +164084,7 @@ we provide for us, we provide for people extenting it too)
 </node>
 <node CREATED="1758821645571" ID="ID_62181469" MODIFIED="1758821810159" TEXT="Ich habe arguementiert, Christian hat nicht zugeh&#xf6;rt">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Er hat mich selten &#252;berhaupt ausreden lassen. Er hat permanennt auf einzelne Stichworte reaagiert, und diese <i>nach seiner Sicht &#187;entkr&#228;ftet&#171;: </i>
@@ -164344,9 +164102,7 @@ we provide for us, we provide for people extenting it too)
 </node>
 <node CREATED="1758822069299" ID="ID_1121572687" MODIFIED="1758932271476" TEXT="in der Debatte hat Christian scheinbar Konzessionen gemacht">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Nicht wirklich, aber im Zusammenhang war das der Eindruck
@@ -164368,9 +164124,7 @@ we provide for us, we provide for people extenting it too)
 <node CREATED="1758822498858" ID="ID_834926784" MODIFIED="1758822512845" TEXT="ich dachte: wir haben einen Konsens, ich bin ihm entgegengekommen"/>
 <node CREATED="1758822513721" ID="ID_861530302" MODIFIED="1758932366540" TEXT="der uneingeschr&#xe4;nkte Beschlu&#xdf; im RfC war also schon eine Dreistigkeit">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Christian hat wohl geglaubt, mit ein paar m&#252;ndlichen Zusagen hat der diesen &#228;ngstlichen Typen jetzt ruhiggestellt, und sein Ding ist durch. Und es ging ihm vermutlich darum, Code vorlegen zu d&#252;rfen. Er glaubte wohl, wenn man erst mal seinen Code sieht, dann w&#228;ren alle Mi&#223;verst&#228;ndnisse ausger&#228;umt, und es w&#252;rden dann alsbald die Wunder geschehen, von denen er &#252;berzeugt war; daher war <i>vermutlich das sein einziges Ziel,</i>&#160;und deshalb war er auch m&#252;ndlich bereit, so viele Zugest&#228;ndnisse wie m&#246;glich zu machen, bis zu dem Punkt, da&#223; er sich selber komplett widerspricht. Er dachte vermutlich, er mu&#223; dieses Ding jetzt nur reinbekommen, und alles wird gut, alles weitere wird sich dann schon von selber zeigen, Leute werden Plugins in Massen schreiben, die Creativit&#228;t pur bricht aus, und dieser komische Bank-Mensch, wer redet dann noch &#252;ber den...?
@@ -164391,9 +164145,7 @@ we provide for us, we provide for people extenting it too)
 </node>
 <node CREATED="1758574484837" ID="ID_82578651" MODIFIED="1758574532593">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ich kann mich jetzt wieder erinnern,
@@ -164408,9 +164160,7 @@ we provide for us, we provide for people extenting it too)
 </html></richcontent>
 <node CREATED="1758763082041" HGAP="42" ID="ID_1644095561" MODIFIED="1758763376152" TEXT="wei&#xdf; aber nicht mehr genau wann..." VSHIFT="-15">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Im R&#252;ckblick halte ich es f&#252;r wahrscheinlich, da&#223; ich dieses <i>ziemlich dreiste Vorgehen von Christian</i>&#160;nicht sofort und auch (bis jetzt nicht) in vollem Umfang realisiert habe. Den Status des RfC als &quot;final&quot; habe ich nat&#252;rlich irgendwann gesehen, m&#246;glicherweise hat mich Christian sogar darauf hingewiesen. Und ich habe dann wohl geschluckt, und gemerkt, da&#223; mir nach all dem Streit jetzt praktisch nichts anderes &#252;brig bleibt, als so zu tun, als w&#228;re das belanglos
@@ -164420,9 +164170,7 @@ we provide for us, we provide for people extenting it too)
 </node>
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1758823141253" HGAP="33" ID="ID_917884661" MODIFIED="1758823195883" VSHIFT="15">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       im R&#252;ckblick nicht klar: <b>warum habe ich den Kompromi&#223; nicht explizit klargestellt</b>?
@@ -164433,9 +164181,7 @@ we provide for us, we provide for people extenting it too)
 <node CREATED="1758823230141" ID="ID_1263117143" MODIFIED="1758823236076" TEXT="theoretisch h&#xe4;tte ich...">
 <node CREATED="1758823238249" ID="ID_890167074" MODIFIED="1758823641769" TEXT="den Kompromi&#xdf; schriftlich formulieren k&#xf6;nnen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Ich h&#228;tte sofort eine Mail rumschicken k&#246;nnen, in dem ich den Kompromi&#223; aus meiner Sicht zusammenfasse, und die von Christian zugesagten Punkte festnagle.
@@ -164445,9 +164191,7 @@ we provide for us, we provide for people extenting it too)
 </node>
 <node CREATED="1758823248512" ID="ID_1123272024" MODIFIED="1758823798986" TEXT="auf einer Korrektur des RfC bestehen k&#xf6;nnen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...nachdem Christian den RfC unqualifiziert f&#252;r angenommen erkl&#228;rt hat, h&#228;tte ich entweder ihm gegen&#252;ber daruf bestehen k&#246;nnen, da&#223; er die Einschr&#228;nkungen im Text auff&#252;hrt (das w&#228;re ein direkter Affront und Chistian w&#252;rde dann weiter versuchen, zu manipulieren) oder ich h&#228;tte den RfC einfach editieren k&#246;nnen, die Einschr&#228;nkungen im Text vermerken, und das mit einem Kommentar best&#228;tigen &quot;ich habe diesem Vorschlag nur unter den genannten Bedingungen zugestimmt)
@@ -164458,9 +164202,7 @@ we provide for us, we provide for people extenting it too)
 </node>
 <node CREATED="1758823800373" ID="ID_1117897504" MODIFIED="1758932527820" TEXT="Hypothesen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Das ist ausschlie&#223;lich Spekulation bzw. Interpolation.
@@ -164472,9 +164214,7 @@ we provide for us, we provide for people extenting it too)
 </html></richcontent>
 <node CREATED="1758823884625" ID="ID_85875183" MODIFIED="1758932566871" TEXT="habe Christian nicht als Gegner gesehen und war &#xfc;berrumpelt">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...allein schon von dem Umstand, da&#223; wir nun pl&#246;tzlich diese Diskussion haben; m&#246;glicherweise war ich noch voller Begeisterung und Drive und habe das Verh&#228;ltnis zu Christian als kollegial und wohlgesonnen empfunden (was es bis vor kurzem war). Dieser Hypothese zufolge habe ich den Streit aus Notwehr vom Zaun gebrochen und war blo&#223; froh, da&#223; der Tonfall am Ende vers&#246;hnlich war, und es weiterging. Ich wollte zu dem angenehmen Zustand zur&#252;ck
@@ -164484,9 +164224,7 @@ we provide for us, we provide for people extenting it too)
 </node>
 <node CREATED="1758824326334" ID="ID_519265313" MODIFIED="1758932628961" TEXT="ich habe Christian vertraut und den Konflikt nachtr&#xe4;glich abgetan">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Dieser Hypothese zufolge w&#228;re es mir unangenehm gewesen, da&#223; dieser Streit pl&#246;tzlich so eskaliert ist. Ich w&#228;re dann blo&#223; froh gewesen, da&#223; es nochmal &quot;mit einem blauen Auge&quot; abgegagen ist und kein Bruch daraus entstanden ist. Ich w&#228;re froh gewesen, da&#223; das Thema jetzt vom Tisch ist und wir uns m&#252;ndlich auf einen vern&#252;nftigen Kompromi&#223; geeinigt haben. Es h&#228;tte mich dann zwar gewurmt, da&#223; Christian den RfC unqualifiziert als &quot;angenommen&quot; markiert, aber ich h&#228;tte dann gegen mich selber argumentiert, das solle man mal nicht zu w&#246;rtlich nehmen und darauf herumreiten, eigentlich hat er ja nix falsches gesagt. Insgesamt h&#228;tte ich damit geglaubt, wir h&#228;tten einen Dissens gehabt, und uns dann &quot;unter M&#228;nnern&quot; geeinigt, und beide w&#252;rden sich selbstverst&#228;ndlich an die Absprache halten.
@@ -164496,9 +164234,7 @@ we provide for us, we provide for people extenting it too)
 </node>
 <node CREATED="1758824643787" ID="ID_1723227609" MODIFIED="1759621990136" TEXT="ich hatte ein schlechtes Gewissen und wollte mich freundlich zeigen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       F&#252;r diese Hypothese habe ich keinerlei Anhaltspunkt, sie w&#228;re aber durchaus plausibel, gemessen an meinem allgemeinen Verhalten: wenn mir Wertsch&#228;tzung entgegengebracht wird und wenn ersichtlich auf meinen Beitrag geachtet wird, dann erzeugt das bei mir ein starkes Verpflichtungsgef&#252;hl und eine starke emotionale Bindung (weil es mir in meinem Leben bis damels ehr selten zuteil geworden ist, jenseits der Familie). Demnach w&#228;re mir emotional vor allem daran gelegen gewesen, den angenehmen Zustand aufrecht zu erhalten, und ich war froh, den (notwendigerweise gestarteteten) Konfilkt einigerma&#223;en gut wieder losgeworden zu sein. (daf&#252;r w&#252;rde auch sprechen, da&#223; ich grade zu der Zeit von mehreren anderen Seiten erheblich unter Druck stand)
@@ -164508,9 +164244,7 @@ we provide for us, we provide for people extenting it too)
 </node>
 <node CREATED="1758825035949" ID="ID_1164777693" MODIFIED="1758825437150" TEXT="ich habe das Thema als einen Spleen von Christian abgetan">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Dieser Hypothese zufolge h&#228;tte ich die Situation strategisch eingesch&#228;tzt, und mich auf mein professionelles Urteil verlassen, dem zufolge die Versprechungen von Christian zwangsl&#228;ufig an der Wirklichkeit scheitern w&#252;rden. Es w&#228;re mir demnach lediglich darum gegeangen, gen&#252;gend &#187;Bremse&#171; gegeben zu haben, so da&#223; Christian nicht unmittelbar loslegt und ein Kettens&#228;genmassaker anrichtet. F&#252;r den Rest h&#228;tte ich mich darauf verlassen, da&#223; er nicht viel zustande bringen wird und da&#223; ich eventuelle Restprobleme sp&#228;ter schon noch abgebogen bekomme, z.B. indem ich dann im Einzelfall eben ekelhaft auf Qualit&#228;tsmerkmalen bestehe (die er mit seinem Plan niemals wird erf&#252;llen k&#246;nnen). Ich habe keinerlei Anhaltspunkt ob diese Hypothese irgendwie gerechtfertigt ist, und ich damals so gedacht haben k&#246;nnte; jedenfalls im R&#252;ckblick w&#228;re das eine realistische Einsch&#228;tzung gewesen. Es ist ja exakt so gekommen, wie ich in meinem Einwand vorhergesagt habe: es werden immer Wunder versprochen, aber praktisch bleiben diese Art &quot;leichtgewichtigen&quot; Plug-ins praktisch bedeutungslos.
@@ -164520,9 +164254,7 @@ we provide for us, we provide for people extenting it too)
 </node>
 <node CREATED="1758825439297" ID="ID_1203893881" MODIFIED="1759622128867" TEXT="ich wollte einfach endlich mit dem Coden anfangen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Dieser Hypothese zufolge hatte ich mich pl&#246;tzlich in einem spannenden Projekt gefunden (was ich als Gl&#252;cksfall betrachte) und hatte schon Ideen, mit denen ich mich identifiziere und die ich realisieren m&#246;chte. Daher wollte ich blo&#223; diese sich pl&#246;tzlich auftuhenden Hindernisse aus dem Weg haben, und nachdem das &quot;nach Bauchgef&#252;hl&quot; der Fall war, war mir alles egal, solange ich mit dem Zeug weiter machen konnte, was ich wollte. Dieser Hypothese zufolge h&#228;tte ich mich rein opportunistisch verhalten (interesssanterweise exakt genauso wie Christian, wenn man eine &#228;hnlich gelagerte Leseart anwendet, was hei&#223;en w&#252;rde, wir waren uns insgeheim einig) und h&#228;tte keinerlei Bewu&#223;tsein daf&#252;r gehabt, was eine solche Haltung f&#252;r die Zukunft bedeutet. Mein Verhalten im n&#228;chsten halben Jahr w&#252;rde ziemlich gut zu dieser Hypothese passen
@@ -164532,9 +164264,7 @@ we provide for us, we provide for people extenting it too)
 </node>
 <node CREATED="1758825710363" ID="ID_645887561" MODIFIED="1758825881469" TEXT="ich hatte keine andere Wahl">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       dieser Hypothese zufolge w&#228;re ich zu der Einsch&#228;tzung gelangt, da&#223; es unm&#246;glich ist, im Augenblick mehr zu bekommen, als ich konkret hatte: n&#228;mlich die M&#246;glichkeit, ungest&#246;rt weiterzumachen plus eine m&#252;ndliche Zusage von Christian, da&#223; er jetzt nicht durchmarschiert und sich an die Einschr&#228;nkungen h&#228;lt. Im Besonderen w&#228;re meine Einsch&#228;tzung dieser Hypothese zufolge gewesen, da&#223; Christian ein &#187;Festnageln&#171; als ungeheuerlichen Affront versteht, und mich entweder sofort vor die T&#252;r setzt (er hatte die technische Hoheit &#252;ber die ganze Infrastruktur), oder aber sich dann der Streit endlos fortsetzt, mit dem Ergebnis, da&#223; wir anschlie&#223;end auseinandergehen, und das sch&#246;ne Projekt gestorben w&#228;re, bevor es begonnen hat
@@ -164551,9 +164281,7 @@ we provide for us, we provide for people extenting it too)
 </node>
 <node CREATED="1759014518563" HGAP="24" ID="ID_1161778090" MODIFIED="1759014735357" VSHIFT="20">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ich kann <font size="4">jetzt</font>&#160;den Zusammenhang gedanklich fassen
@@ -164569,9 +164297,7 @@ we provide for us, we provide for people extenting it too)
 <arrowlink COLOR="#bc0237" DESTINATION="ID_1062469689" ENDARROW="Default" ENDINCLINATION="-300;-8;" ID="Arrow_ID_825563164" STARTARROW="None" STARTINCLINATION="-125;7;"/>
 <node CREATED="1758574927579" ID="ID_1704200019" MODIFIED="1758756451874" TEXT="sofern das darin bestand, gemeinsam aufzubrechen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Einige erfahrene M&#228;nner, die allesamt ihr Handwerk verstehen, gehen mit einem gemeinsamen Werk vorran und leiten eine Bewegung ein.
@@ -164584,9 +164310,7 @@ we provide for us, we provide for people extenting it too)
 <node CREATED="1758576680000" ID="ID_1159171742" MODIFIED="1758576710386" TEXT="Christian hat noch einen Monat Code beigetragen">
 <node CREATED="1758576711789" ID="ID_1265645655" MODIFIED="1758576732117">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       allerdings <b>nie</b>&#160;irgend etwas zum DataBackend
@@ -164603,9 +164327,7 @@ we provide for us, we provide for people extenting it too)
 <node CREATED="1758576888680" ID="ID_1922035673" MODIFIED="1758576912622" TEXT="er hat sich stets an die Formeln gehalten und mich und Michael immer mit erw&#xe4;hnt"/>
 <node CREATED="1758576916815" ID="ID_396289926" MODIFIED="1758576936162">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       er hat sich dann zu 150% auf das <b>uWiki</b>&#160;geworfen
@@ -164621,9 +164343,7 @@ we provide for us, we provide for people extenting it too)
 <node CREATED="1762123649156" ID="ID_1236822826" MODIFIED="1762123677924" TEXT="kurz nach der Entstehung des &#xbb;Cinelerra-3&#xab; Teams kam es zum &#xbb;storming&#xab;"/>
 <node CREATED="1762123679606" ID="ID_564577875" MODIFIED="1762124376881">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       und zwar passiert <b>hier bereits</b>&#160;der Streit &#252;ber die <b>Plug-in-zentrische Architektur</b>
@@ -164634,9 +164354,7 @@ we provide for us, we provide for people extenting it too)
 </node>
 <node CREATED="1762123722227" ID="ID_1508180333" MODIFIED="1762123946551" TEXT="ich hatte das wohl falsch in Erinnerung">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Ich hatte mir gemerkt, da&#223; wir auf der Terrasse in Karlsruhe sa&#223;en, und das Thema angesprochen haben. Das war aber mindestens ein Jahr sp&#228;ter. Au&#223;erdem habe ich mir gemerkt, da&#223; es irgendwie mit dem Thema Application start-Up zusammenhing. Das w&#228;re sogar zwei Jahre sp&#228;ter.....<br /><br />Wie sich nun eindeutig aus den Quellen ergibt, sind alle diese Erinnerungen zwar korrekt, ich habe aber die falschen Schl&#252;sse gezogen. Der eigentliche Streit ist sofort ausgebrochen, nachdem wir begonnen haben, ernsthaft zusammezuarbeiten. Das ist auch plausibel so. Die sp&#228;teren Erinnerungen h&#228;ngen damit zusammen, da&#223; wir wohl beide (Christian und ich) dem Streit ausgewichen sind, weil wir das Bauchgef&#252;hl hatten, da&#223; er nicht l&#246;sbar ist. Auch diese Einsch&#228;tzung ist wohl korrekt, es stehen Fragen der Weltanschauung dahinter.
@@ -164671,9 +164389,7 @@ we provide for us, we provide for people extenting it too)
 <node CREATED="1758577711493" ID="ID_529295739" MODIFIED="1758577734056" TEXT="jedenfalls kann ich mich nicht an irgend eine Art von Reflexion erinnern"/>
 <node CREATED="1758577734873" ID="ID_1324574865" MODIFIED="1758577871101" TEXT="ich war weiterhin auf dem &#xbb;hart arbeiten&#xab; - Trip ... mit &#x201e;Erfolg&#x201c;">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ....und hab auch tats&#228;chlich Fortschritte gemacht, wenngleich die auch komplett im Mi&#223;verh&#228;ltnis standen zu der Absicht, die urspr&#252;nglich hinter diesem Prototypen stand:
@@ -164696,9 +164412,7 @@ we provide for us, we provide for people extenting it too)
 <icon BUILTIN="idea"/>
 <node CREATED="1758578612021" ID="ID_1633719261" MODIFIED="1758578646454" TEXT="Antwort an Marc Carter, 10.8.07 0:40">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <pre http-equiv="content-type" content="text/html; charset=utf-8" wrap="">mark carter schrieb:</pre>
     <blockquote type="cite" style="color: #993300">
@@ -164725,9 +164439,7 @@ on some aspects of file handling media loading.</pre>
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1758578712090" ID="ID_1286433882" MODIFIED="1758578738572">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <pre wrap=""><font size="2">At the moment I just choose to ignore it and picked me one region, ...</font></pre>
   </body>
@@ -164736,9 +164448,7 @@ on some aspects of file handling media loading.</pre>
 </node>
 <node CREATED="1758580290435" ID="ID_1999648175" MODIFIED="1758580349343" TEXT="im Herbst sprach ich mehrfach in IRC-Diskussionen vom &#xbb;dry sponge&#xab;">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       gemeint war, Lumiera ist ein Projekt, das auch heroischen Einsatz einfach spurlos aufsaugt, wie ein trockener Schwamm
@@ -164748,9 +164458,7 @@ on some aspects of file handling media loading.</pre>
 </node>
 <node CREATED="1758579188607" ID="ID_667900376" MODIFIED="1758587112734" TEXT="zu Weihnachten habe ich mich wie zwanghaft in das &#xbb;Visitor&#xab;-Thema reingebissen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       &#187;Weihnachten&#171; ist insofern wichtig, als ich im Sommer das Gef&#252;hl hatte, bis Weinachten zusammen mit Christian eine lauf&#228;hige Renderengine &#8222;auf die Beine stellen&#8220; zu k&#246;nnen. Ab August wurde die Arbeit bei mir &#8222;z&#228;h&#8220;, jeodoch habe ich diese zeitliche Vorstellung immer noch irgendwie im Kopf gehabt, Stichwort &#187;hart arbeiten&#171;. Das war das Muster: wenn ich wirklich alle Kraft und Entschlossenheit einsetze, dann kann <b>ich</b>&#160;(toller Hecht) das doch nageln. Das war in fr&#252;heren Projekten, seit meiner Studienzeit, immer wieder die Situation gewesen, und es war dann auch jeweils (mit gewissen Einschr&#228;nkungen) erfolgreich; dieses Muster war Teil meines Selbstverst&#228;ndnisses, damals.
@@ -164771,9 +164479,7 @@ on some aspects of file handling media loading.</pre>
 <node CREATED="1758580706091" ID="ID_485352012" MODIFIED="1758580729154" TEXT="es wurde sogar ab August 2007 zunehmend sichtbar"/>
 <node CREATED="1758580750839" ID="ID_892981090" MODIFIED="1758580807750" TEXT="wir bekamen viele gut gemeinte Ratschl&#xe4;ge von Usern">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       z.B. wir sollten doch alles in QT bauen, weil es dadurch viel einfacher wird, und obendrein auch gleich noch portabel
@@ -164788,9 +164494,7 @@ on some aspects of file handling media loading.</pre>
 <node CREATED="1758580977172" ID="ID_251828454" MODIFIED="1758580993158" TEXT="Christian">
 <node CREATED="1758580994006" ID="ID_1582866739" MODIFIED="1758581101464" TEXT="war nach au&#xdf;en weithin der Vertreter dieses Projekts">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Wichtig: er hat sich nie in dieser Rolle &#8222;gesonnt&#8220; &#8212; sondern sets die festgelegten Formeln wiederholt und auf meinen Beitrag eigens hingewiesen
@@ -164801,9 +164505,7 @@ on some aspects of file handling media loading.</pre>
 <node CREATED="1758581005935" ID="ID_1123895185" MODIFIED="1758581017972" TEXT="er wurde zu seiner Initiative begl&#xfc;ckw&#xfc;nscht"/>
 <node CREATED="1758581109574" ID="ID_695098420" MODIFIED="1758581300803" TEXT="er konnte seine Vision vom distributed-Tooling ausbauen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Bis zum Fr&#252;hjahr 2008 hat Christian absolut nichts mehr zum eigentlichen Coding beigetragen, sondern immer mehr seine Vision betont, da&#223; durch distributed Tooling und ein offenes Projekt-Setup die Probleme von Open-Source (die sich damals schon sehr deutlich zeigten) aufgebrochen und gel&#246;st werden k&#246;nnten. Man mu&#223; nur &#8222;die Community enablen&#8220;, damit diese &#8222;als Benevolent Dicatator agieren kann&#8220;
@@ -164815,9 +164517,7 @@ on some aspects of file handling media loading.</pre>
 <node CREATED="1758581308338" ID="ID_44051389" MODIFIED="1758581317649" TEXT="ich">
 <node CREATED="1758581318733" ID="ID_1229403635" MODIFIED="1758581602036" TEXT="habe massivst von Christians Netzwerk profitiert">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Ich bekam Reichweite, die ich mir selber niemals h&#228;tte aufbauen k&#246;nnen: denn bedingt durch den sonderbaren Zustand, da&#223; ich allein weiter gecodet habe, wurde mir regelm&#228;&#223;ig <i>das Wort erteilt</i>&#160;und ich konnte mich als <i>Experte</i>&#160;bewundern lassen
@@ -164828,9 +164528,7 @@ on some aspects of file handling media loading.</pre>
 <node CREATED="1758581502071" ID="ID_1239012802" MODIFIED="1758581512226" TEXT="habe es sehr genossen, Teil einer Bewegung zu sein"/>
 <node CREATED="1758581649099" ID="ID_950040" MODIFIED="1758582510382" TEXT="gleichzeitig konnte ich mich v&#xf6;llig ungest&#xf6;rt in meinem Coding best&#xe4;tigen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...das in diesen Monaten im Herbst vor allem dadurch getragen war, da&#223; man nur hart genug arbeiten mu&#223;, dann kann man es nageln. Niemand hat mehr nach einem Projektplan gefragt, niemand wollte erkl&#228;rt haben, wie das &#252;berhaupt zusammenpa&#223;t (mit Cinelerra). Au&#223;erdem habe ich in der Zeit &#252;berhaupt erst C++ gelernt (das geht bei mir &#252;blicherweise sehr schnell), viele neue Paradigmen aufgegriffen und mich bis Dezember sogar in das (damals total esoterische) Thema &#187;Template-Metaprogramming&#171; hineingebissen. Ich hatte nun in kurzer Zeit einen anderen Horizont gewonnen, und fand meine Ans&#228;tze aus dem Herbst (mit den Assets und MObjects) bereits problematisch, hab davon aber niemanden was gesagt (und es bisweilsen sogar vor mir selbst verborgen)
@@ -164844,9 +164542,7 @@ on some aspects of file handling media loading.</pre>
 <node CREATED="1758582558297" ID="ID_1222121084" MODIFIED="1758582575020" TEXT="seit Juli fand keine grunds&#xe4;tzliche Diskussion mehr statt"/>
 <node CREATED="1758582575896" ID="ID_787475914" MODIFIED="1758582642478" TEXT="es wurden immer wieder die gleichen Formeln wiederholt und affirmiert">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <ul>
       <li>
@@ -164861,9 +164557,7 @@ on some aspects of file handling media loading.</pre>
 </node>
 <node CREATED="1758582687163" ID="ID_632971398" MODIFIED="1758583165795" TEXT="die Vision war in Stein gemei&#xdf;elt und wurde (auf Jahre hinaus) nicht reflektiert">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Zun&#228;chst einmal sogar die Frage, ob das noch Cinelerra ist, oder schon eine neue Applikation; auch die Frage, warum man &#252;berhaupt ein solches Projekt starten sollte (&#8222;the world needs Lumiera&#8220;). Aber auch auf technischer Ebene, wurden <i>Mystifikationen</i>&#160;eingesetzt und durch stetige Wiederholung affirmiert: Da ist zum einen das DataBackend (f&#252;r das, so mu&#223; man jetzt im R&#252;ckblick sagen, fast &#252;berhaupt nichts jemals implementiert wurde, mit Ausnahme der Memory-mapped Files), des Weiteren sind da die Placements, die auf viele Jahre hinaus aus &#8222;da kann man&#8220; bestanden, die Config-Rules waren (f&#252;r mich offensichtlich) ein Fernziel, das ich aber sehr oft in der &#246;ffentlichen Diskussion als Pluspunkt aufgef&#252;hrt habe; ganz &#228;hnlich steht es mit den Plug-ins: Christian hat &#252;ber ein Jahr lang nichts Konkretes mehr zu dem Thema gesagt oder getan, aber die flexiblen Plugins waren weiterhin einer der immer wiederkehrenden Bullet-points. Und den Builder habe ich nach Januar 2008 erst mal liegen gelassen, und das auf verschiedene Weise plausibel gemacht. Damit war effektiv der Prototyp aufgegeben, und es wurde stattdessen die gro&#223;e Architektur gebaut.
@@ -164879,9 +164573,7 @@ on some aspects of file handling media loading.</pre>
 <node CREATED="1758583261051" ID="ID_418032464" MODIFIED="1758583277067" TEXT="damit bestand nun die M&#xf6;glichkeit, effektiv andere Leute ins Projekt einzubinden"/>
 <node CREATED="1758583278014" ID="ID_37445189" MODIFIED="1758583339289">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Raffaella und Odin haben dieses Moment aufgegriffen &#8212;
@@ -164902,9 +164594,7 @@ on some aspects of file handling media loading.</pre>
 <node CREATED="1758583555222" ID="ID_1959752706" MODIFIED="1758583563121" TEXT="und wieder konkreten Abstimmungsbedarf"/>
 <node CREATED="1758583564607" ID="ID_325418568" MODIFIED="1758583669053" TEXT="mein Shift weg vom Builder war weitgehend extrinsisch motiviert">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...das hei&#223;t, ich habe dazu keinen Beschlu&#223; gefa&#223;t, das wei&#223; ich ganz genau; vielmehr brauchte Joel nund einen Gegenpart, und ich hab mir sofort daf&#252;r den Arsch aufgerissen und geliefert.
@@ -164916,9 +164606,7 @@ on some aspects of file handling media loading.</pre>
 <node CREATED="1758583695895" ID="ID_717668218" MODIFIED="1758583710147" TEXT="im Sommer dann spitzte sich der Streit um Plug-ins wieder zu"/>
 <node CREATED="1758583711011" ID="ID_657571874" MODIFIED="1758583917429" TEXT="kurz darauf haben Christian und ich uns zum ersten mal pers&#xf6;nlich getroffen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       August 2008 war ich zum ersten Mal in Karlsruhe (f&#252;r mich ganz besonders magisch, denn ich hat aus meinem fr&#252;heren Leben eine sehr tiefe Beziehung zu Karlsruhe), habe bei Christian &#252;bernachtet, und wir haben so manche Streitigkeiten auf der Terasse sitzend geregelt, &#8222;von Mann zu Mann&#8220;. Das hatte dann auch in vieler Hinsicht den Charakter eines Vertrages, wir haben Claims abgesteckt. Anschlie&#223;end sind wir zusammen zur FrOSCon gefahren, f&#252;r mich das erste Mal. Und anschlie&#223;end habe ich den Kontakt mit meiner Verwandtschaft in Hagen wieder aufgenommen (Hagen hat f&#252;r mich eine &#228;hnlich tiefe Bedeutung, auch da reichen die Bez&#252;ge in meine Schulzeit zur&#252;ck)
@@ -164932,9 +164620,7 @@ on some aspects of file handling media loading.</pre>
 <node CREATED="1759010163217" ID="ID_225673466" MODIFIED="1759010201570" TEXT="&#xbb;wie kam es...&#xab; kann man erz&#xe4;hlen">
 <node CREATED="1759010213058" ID="ID_1074055797" MODIFIED="1759265683611" TEXT="Idee: deute eine Dynamik an">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ohne sie explizit breitzutreten!
@@ -164943,9 +164629,7 @@ on some aspects of file handling media loading.</pre>
 </html></richcontent>
 <node CREATED="1759010278681" ID="ID_994353946" MODIFIED="1759010761597" TEXT="es haben sich zwei Ideen verbunden">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <ul>
       <li>
@@ -164959,9 +164643,7 @@ on some aspects of file handling media loading.</pre>
 </html></richcontent>
 <node CREATED="1759010287249" ID="ID_1817322456" MODIFIED="1759011007829" TEXT="diese haben sich wechselseitig verst&#xe4;rkt">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Wir hatten den &#187;Drive&#171; und wir hatten ein Konzept, das in &#252;berschaubarer Zeit machbar erschien
@@ -164971,9 +164653,7 @@ on some aspects of file handling media loading.</pre>
 </node>
 <node CREATED="1759010296580" ID="ID_1814616445" MODIFIED="1759011126136" TEXT="haben aber nicht zusammengepa&#xdf;t">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Denn die beiden Elemente stammen aus einem komplett unterschiedlichen, und inkompatiblen Hintergrund; das Konzept, das (wenn ungef&#228;hr betrachtet) so plausibel erschien, l&#228;&#223;t sich zwar realisieren, aber nur durch sorgf&#228;ltiges, planvolles Vorgehen und Festhalten an einem Ziel. Also eine extrem lange Zeit ohne &#187;Begeisterung&#171; und &#187;Inspiration&#171;
@@ -164983,9 +164663,7 @@ on some aspects of file handling media loading.</pre>
 </node>
 <node CREATED="1759010318848" ID="ID_1067543695" MODIFIED="1759011202490" TEXT="dadurch blieb eine Au&#xdf;enschale">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Damit meine ich: ein &#187;Mission Statement&#171; und ein &#187;Projektkonzept&#171;, das plausibel und machbar erscheint, und nicht &#8222;v&#246;llig durchgeknallt&#8220;
@@ -164994,9 +164672,7 @@ on some aspects of file handling media loading.</pre>
 </html></richcontent>
 <node CREATED="1759010337909" ID="ID_1400661279" MODIFIED="1759010373463" TEXT="die hat gewirkt, weil sie plausibel erscheint">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...und anfangs auch tats&#228;chlich plausibel war
@@ -165007,9 +164683,7 @@ on some aspects of file handling media loading.</pre>
 <node CREATED="1759010381317" ID="ID_553345422" MODIFIED="1759010391274" TEXT="sie bestand dann aber nur noch aus Formeln"/>
 <node CREATED="1759010419698" ID="ID_1611328265" MODIFIED="1759010576072" TEXT="dadurch war die normale Dynamik erstarrt und gefesselt">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       hier meine ich mit <i>normaler Dynamik:<b>&#160;</b></i>Man geht in einer freien Community auf Nahziele zu, baut, was man sich leicht vorstellen kann und was kurzfristig Spa&#223; machen kann. All das konnte sich in der festgefahrenen Projektstruktur nicht entfalten. Das Projekt war &#8222;langweilig&#8220; und hatte keine Drive
@@ -165022,9 +164696,7 @@ on some aspects of file handling media loading.</pre>
 </node>
 <node CREATED="1759011239712" ID="ID_1303005141" MODIFIED="1759011288110">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p style="text-align: right">
       man hat sich auf einen Weg gemacht,
@@ -165048,9 +164720,7 @@ on some aspects of file handling media loading.</pre>
 </node>
 <node CREATED="1759011490138" ID="ID_1802535888" MODIFIED="1759014163499">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Erz&#228;hlen auf dem Grundton: <i>das kann doch nicht gutgehen...</i>
@@ -165069,9 +164739,7 @@ on some aspects of file handling media loading.</pre>
 <linktarget COLOR="#5f4868" DESTINATION="ID_1036580514" ENDARROW="Default" ENDINCLINATION="13;-10;" ID="Arrow_ID_1029390131" SOURCE="ID_1802535888" STARTARROW="None" STARTINCLINATION="-6;11;"/>
 <node CREATED="1759012575043" ID="ID_1284238362" MODIFIED="1759014480055">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       das Thema der <b>Flexibilit&#228;t</b>
@@ -165084,9 +164752,7 @@ on some aspects of file handling media loading.</pre>
 <node CREATED="1759012626821" ID="ID_152255425" MODIFIED="1759012656439" TEXT="...zu einer Architektur mit lose gekoppelten Datenstrukturen"/>
 <node CREATED="1759012731905" ID="ID_348435010" MODIFIED="1759012848059" TEXT="und quer dazu: vertikale Elemente, die interagieren">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...das ist tats&#228;chlich die Vision, die sich jetzt abzeichnet; mit &#187;vertikal&#171; meine ich, da&#223; sie von low-level bis high-level integriert sind und koh&#228;rent bleiben &#10233; &#187;medium level of abstraction&#171; &#10233; wir schaffen kein Wunderding, sondern ein Werkzeug mit Kraftverst&#228;rkung
@@ -165109,9 +164775,7 @@ on some aspects of file handling media loading.</pre>
 <icon BUILTIN="pencil"/>
 <node CREATED="1760132068731" ID="ID_1903189141" MODIFIED="1760132227214">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p style="text-align: right">
       Benny hatte schon vor Monaten gesagt,
@@ -165122,9 +164786,7 @@ on some aspects of file handling media loading.</pre>
   </body>
 </html></richcontent>
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...und zwar hatte ich angedeutet, da&#223; ich irgendwann den Disput &#252;ber Plug-ins irgendwo als Text fassen mu&#223;; Benny sagte dann, es erscheine ihm plausibel, da&#223; ich das m&#246;chte, aber ich solle bitte den Text von ihm gegenlesen lassen, bevor er irgendwo ver&#246;ffentlicht wird; ich halte das auch f&#252;r angemessen, und war/bin Benny sehr dankbar...
@@ -165136,9 +164798,7 @@ on some aspects of file handling media loading.</pre>
 <node CREATED="1760132056545" ID="ID_262953169" MODIFIED="1760132062285" TEXT="1.Runde">
 <node CREATED="1760132237103" ID="ID_145371975" MODIFIED="1760132361651" TEXT="Text soweit fertig geschrieben (aus meiner Sicht)">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Damit meine ich: soweit der Impetus im Moment tr&#228;gt, also bis in das 1.Jahr. Insgesamt m&#246;chte ich den Text noch weiter f&#252;hren, kann das aber im Moment sicher nicht stemmen. Nun habe ich also den Text erst mal entworfen, dann die Quellen ausgearbeitet und dann den Text ausgefeilt. Er soll schlie&#223;lich <b>mit einem einzigen Commit</b>&#160;online gestellt werden, ohne viel Aufhebens.
@@ -165152,9 +164812,7 @@ on some aspects of file handling media loading.</pre>
 <node CREATED="1760132380185" ID="ID_1782005098" MODIFIED="1760132391018" TEXT="Korrekturen/Vorschl&#xe4;ge">
 <node CREATED="1760132392153" ID="ID_1846211455" MODIFIED="1760132417905" TEXT="die meisten sind so offensichtlich....">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       danke Benny!
@@ -165170,9 +164828,7 @@ on some aspects of file handling media loading.</pre>
 <node CREATED="1760132527108" ID="ID_1393626592" MODIFIED="1760132535805" TEXT="ich hab nach einem passenden Begriff gesucht"/>
 <node CREATED="1760132536826" ID="ID_1891863475" MODIFIED="1760132630481" TEXT="lt.Benny korrekt aber doch ungew&#xf6;hnlich">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; text-indent: 0px">
       <font face="DejaVu Sans Mono">we don't say this in this context. Does transliterate refer to 'meaning',</font>
@@ -165204,9 +164860,7 @@ on some aspects of file handling media loading.</pre>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1760133253588" ID="ID_1217402683" MODIFIED="1760134167716" TEXT="&quot;giving credit properly&quot;">
 <node CREATED="1760133258766" ID="ID_1291326664" MODIFIED="1760133309953" TEXT="Benny sagt: das sei gef&#xe4;hrlich, weil zweideutig">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; text-indent: 0px">
       <font face="DejaVu Sans Mono" size="9pt">Fix because 'properly' is here coloquial because, again, it is</font>
@@ -165227,9 +164881,7 @@ on some aspects of file handling media loading.</pre>
 <node CREATED="1760133344854" ID="ID_318580808" MODIFIED="1760133362528" TEXT="aber wahrscheinlich meinte er tats&#xe4;chlich &quot;adequatly&quot;"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1760133363495" ID="ID_1525399608" MODIFIED="1760133391147">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       also ist Benny's Vorschlag inhaltlich <b>viel bessern</b>
@@ -165243,9 +164895,7 @@ on some aspects of file handling media loading.</pre>
 <node CREATED="1760133439436" ID="ID_394272541" LINK="https://lists.cinelerra-cv.org/pipermail/cinelerra-skolelinux/2007-April/010517.html" MODIFIED="1760133563938" TEXT="es geht darum, da&#xdf; Andraz Tori sich aus dem Cinelerra-Projekt zur&#xfc;ckgezogen hat"/>
 <node CREATED="1760133591047" ID="ID_974739896" MODIFIED="1760133619249" TEXT="Andraz hat es tats&#xe4;chlich nicht direkt ausgesprochen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <pre http-equiv="content-type" content="text/html; charset=utf-8">Lately i had almost no time to hack on cinelerra and it doesn't seem
 that situation will improve in forseeable future.</pre>
@@ -165260,9 +164910,7 @@ that situation will improve in forseeable future.</pre>
 <node CREATED="1762089729461" ID="ID_383274825" MODIFIED="1762089741265" TEXT="2 Wochen sp&#xe4;ger: hab mir das nochmal &#xfc;berlegt"/>
 <node CREATED="1762089742059" ID="ID_1574548822" MODIFIED="1762089854101">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ich <b>mu&#223;</b>&#160;hier eine Deutung machen, um den Sachverhalt klar zu fassen
@@ -165270,9 +164918,7 @@ that situation will improve in forseeable future.</pre>
   </body>
 </html></richcontent>
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Andraz hat es in seiner Mail &quot;durch die Blume&quot; gesagt, und die Community (oder zumindest die aufmerksamen Leser, hehe) haben verstanden, in welche Richtung das geht, ohne konkreter zu werden.
@@ -165286,9 +164932,7 @@ that situation will improve in forseeable future.</pre>
 </node>
 <node CREATED="1762089911420" ID="ID_1335447581" MODIFIED="1762089929988">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       insofern: Benny's Formulierung ist sogar sehr gut, sie ist n&#228;mlich <i>dezent</i>
@@ -165312,9 +164956,7 @@ that situation will improve in forseeable future.</pre>
 <node CREATED="1760133980036" ID="ID_1065140522" MODIFIED="1760133988094" TEXT="das geht so aus dieser Quelle nicht hervor"/>
 <node CREATED="1760133998420" ID="ID_1789316706" MODIFIED="1760134145323" TEXT="sondern das interpoliere ich aus zig anderen Belegen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Christian hat nicht blo&#223; mal ein Git-Repo eingerichtet, sondern er hat sich, <b>so meine Deutung</b>, davon erhofft, da&#223; die Kombination von Technik und &quot;kurzgeschlossener&quot; Community von selber Heilungskr&#228;fte entfaltet. Das w&#252;rde auch erkl&#228;ren, warum er...
@@ -165338,9 +164980,7 @@ that situation will improve in forseeable future.</pre>
 </node>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1762090074951" ID="ID_112896238" MODIFIED="1762090118761" TEXT="jetzt nicht mehr diskutieren">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       es sind jetzt ein paar Wochen vergangen; und ehrlich, f&#252;r diese Einsch&#228;tzung brauche ich Benny nicht. Es w&#228;re nur sch&#246;n gewesen, ihn <i>mitzunehmen...</i>
@@ -165356,9 +164996,7 @@ that situation will improve in forseeable future.</pre>
 <node CREATED="1760133817257" ID="ID_840044126" MODIFIED="1760133826710" TEXT="n&#xe4;mlich er reitet sein Steckenpferd"/>
 <node CREATED="1760133827960" ID="ID_1293545801" MODIFIED="1760133911654" TEXT="ich sehe hier auch kein Eingehen auf die Situation">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Andraz: &quot;Leute, ich kann nicht mehr!&quot;
@@ -165375,9 +165013,7 @@ that situation will improve in forseeable future.</pre>
 </node>
 <node CREATED="1762090123007" ID="ID_1676391215" MODIFIED="1762090320462" TEXT="Benny weist hier letztlich auf ein grammatikalisches Problem hin">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       auch die zweite Korrektur ist wohl stilistischer Natur (w&#228;re interessant, Benny dazu zu befragen! M&#246;glicherweise wieder so ein Fall, in dem sich Pidgin-English breit gemacht hat....)
@@ -165386,9 +165022,7 @@ that situation will improve in forseeable future.</pre>
 </html></richcontent>
 <node CREATED="1762090427487" ID="ID_498684997" MODIFIED="1762091182867">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ich kann nicht einsch&#228;tzen,
@@ -165399,9 +165033,7 @@ that situation will improve in forseeable future.</pre>
   </body>
 </html></richcontent>
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Ich bin immer wieder am Zweifeln, inwiefern Benny mit verschiedenen Sprachebenen umgehen kann. Selbstverst&#228;ndlich kennt er das Konzept, er hat mir oft Beispiele genannt, wie ein Adeliger reden w&#252;rde. Dann macht er mir aber anderseits immer wieder Vorschl&#228;ge, die f&#252;r mein Ohr sehr &quot;literarisch&quot; klingen, und auch sehr &quot;brittisch&quot;. Er korrigiert auch Redewendungen, die in der gedruckten Fachliteratur weit verbreitet sind. Au&#223;erdem habe ich immer wieder gemerkt, da&#223; Benny keinerlei Sinn f&#252;r das Verk&#252;rzen von Formulierungen hat, und sachen klarstellen m&#246;chte, die ich bewu&#223;t zweideutig gehalten habe. Er sagt dann auch immer, das sei grammatikalisch, ist es aber nicht (in dem Sinn, da&#223; es einem in der Schule als Fehler angestrichen w&#252;rde, man aber durchaus so reden und schreiben kann)
@@ -165417,9 +165049,7 @@ that situation will improve in forseeable future.</pre>
 <node CREATED="1762091890662" ID="ID_1041121148" MODIFIED="1762091902440" TEXT="passe die erste Formulierung an: &quot;responds and mentions&quot;"/>
 <node CREATED="1762091904177" ID="ID_143924597" MODIFIED="1762091962482" TEXT="nehme die zweite &#xc4;nderung zur&#xfc;ck">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       eine Qualifikation ist m.E. hier komplett &#252;berfl&#252;ssig, aber es sollte gesagt werden, da&#223; es sich um Git Repos handelt, und nicht um Subversion
@@ -165435,9 +165065,7 @@ that situation will improve in forseeable future.</pre>
 <node COLOR="#435e98" CREATED="1760134345296" ID="ID_1346547450" MODIFIED="1762094061118" TEXT="&quot;all common project management tooling&quot;">
 <node CREATED="1760134371575" ID="ID_1037023430" MODIFIED="1760134424468" TEXT="Benny sagt, das w&#xe4;re abwertend, schl&#xe4;gt &quot;general&quot; vor">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; text-indent: 0px">
       <font face="DejaVu Sans Mono">Please check: i think you mean 'general' here</font>
@@ -165453,9 +165081,7 @@ that situation will improve in forseeable future.</pre>
 <node CREATED="1760134494919" ID="ID_934322746" MODIFIED="1760134514781" TEXT="meine Fassung ist eine Deutung, und versucht Kontext zu geben">
 <node CREATED="1760134516269" ID="ID_1252089804" MODIFIED="1760134945604" TEXT="der RfC selber klingt banal">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Create our own toolset to track issues, tasks, bugs in a distributed manner.
@@ -165465,9 +165091,7 @@ that situation will improve in forseeable future.</pre>
 </node>
 <node CREATED="1760134532659" ID="ID_64576537" MODIFIED="1760134942918" TEXT="aber ich wei&#xdf;, was Christian sp&#xe4;ter mit uWiki wollte">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Und mir f&#228;llt auf, da&#223; dies sein <b>erster inhaltlicher RfC </b>war
@@ -165477,9 +165101,7 @@ that situation will improve in forseeable future.</pre>
 </node>
 <node CREATED="1760134548677" ID="ID_942199754" MODIFIED="1760134906349" TEXT="und er l&#xe4;stert &#xfc;ber jedes bestehende Tool ab">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Er &quot;mag keine Mailinglisten&quot;, er mag keine Foren, er findet Bugtracker eine einzige M&#252;llhalde und sagt, er will nicht damit arbeiten. Er l&#228;stert bei jeder Gelegenheit &#252;ber Spreadsheets, er kotzt &#252;ber Projektplanungstools ab, er findet Wikis nur eine Kr&#252;cke und will sie schnell wieder loswerden, er findet die typischen Buildserver total daneben (Cruise-Control damals, dann Hudson, Jenkins). Und, was mich v&#246;llig von den Socken gehauen hat: vor zwei Jahren wurde er pl&#246;tzlich ganz leidenschaftlich wegen Ethereum, er fand das System sowas von verk&#252;nstelt und overengineered, und gradezu gegen den &quot;spirit&quot; von Blockchain. Auch gegen Bitcoin ist er ehr negativ eingestellt, denn es w&#228;re ja blo&#223; &quot;Kapitalismus pur&quot; ... und dann f&#228;ngt er leidenschaftlich an, seine Vision von einem Geld zu entwickeln, das auf Community-Tasks beruht und Austausch von Hilfe.
@@ -165496,9 +165118,7 @@ that situation will improve in forseeable future.</pre>
 </node>
 <node COLOR="#338800" CREATED="1762093594885" ID="ID_689710468" MODIFIED="1762093787592" TEXT="ich w&#xe4;hle mal &quot;customary&quot; hierf&#xfc;r">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       w&#228;re sch&#246;n wenn man das noch dikutieren k&#246;nnte, aber eigentlich geht es nur um Nuancen in der Bedeutung. Ich bin mir ziemlich sicher, da&#223; Christian nicht &quot;Microsoct Projects&quot; durch Git-Magic abl&#246;sen wollte, sonder ehr der Meinung war, wer MS Projects verwendet, ist sowiso krank
@@ -165532,9 +165152,7 @@ that situation will improve in forseeable future.</pre>
 </node>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1762095397829" ID="ID_1143473147" MODIFIED="1762095431886">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       versuche die grammatikalische Verbesserung aufzunehmen,
@@ -165570,9 +165188,7 @@ that situation will improve in forseeable future.</pre>
 </node>
 <node COLOR="#5b280f" CREATED="1760136490106" ID="ID_925851747" MODIFIED="1762099324353" TEXT="zusammen L&#xf6;sung suchen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Benny hat sich jetzt 3 Wochen nicht mehr gemeldet, daher konzentriere ich mich nun auf das Wesentliche und r&#228;ume solche Nebenthemen einfach ab
@@ -165583,9 +165199,7 @@ that situation will improve in forseeable future.</pre>
 </node>
 <node CREATED="1762099334805" ID="ID_638015248" MODIFIED="1762099483441" TEXT="ich formuliere das Ende vom Satz um, behalte aber das Grundmuster von Benny">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       There appears to be widespread consensus that simple building blocks should be provided as free software, that &#8220;can be used to combine new functionality&#8221;
@@ -165606,9 +165220,7 @@ that situation will improve in forseeable future.</pre>
 <node CREATED="1760137045342" ID="ID_404254746" MODIFIED="1760137051937" TEXT="mir gef&#xe4;llt&apos;s"/>
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1760137053350" ID="ID_1388814797" MODIFIED="1760137139320" TEXT="nochmal &#xfc;berdenken">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Die Frage ist: gehe ich mit dieser Mutma&#223;ung zu weit? Es ist schon starker Tobak
@@ -165636,7 +165248,7 @@ that situation will improve in forseeable future.</pre>
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1762124583263" ID="ID_927060658" MODIFIED="1762309168832" TEXT="Erg&#xe4;nzung: Development-Activity">
+<node COLOR="#338800" CREATED="1762124583263" FOLDED="true" ID="ID_927060658" MODIFIED="1762569813584" TEXT="Erg&#xe4;nzung: Development-Activity">
 <icon BUILTIN="yes"/>
 <node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1762124605363" ID="ID_1560924328" MODIFIED="1762309186045" TEXT="Tabelle: wann ist an was gearbeitet worden?">
 <icon BUILTIN="help"/>
@@ -165645,9 +165257,7 @@ that situation will improve in forseeable future.</pre>
 </node>
 <node CREATED="1762124623992" ID="ID_1430611020" MODIFIED="1762124737517" TEXT="sehr sinnvoll &#x2014; nur ich kann die Commit-Historie deuten">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Ohne ein solches Verzeichnis sieht man nur eine endlose Historie von Git-Commits &#252;ber mehr als 10 Jahre, und kaum ein Thema &#8222;f&#252;hrt zu Ergebnissen&#8220;. Erst in den letzten Jahren ist durch die &#187;Vertical Slices&#171; soetwas wie eine F&#252;rhungslinie gegeben
@@ -165659,9 +165269,7 @@ that situation will improve in forseeable future.</pre>
 <node CREATED="1762142217385" ID="ID_1896418277" MODIFIED="1762142404559" TEXT="2008 war eine Menge von Aktivit&#xe4;t, jeder f&#xfc;r sich"/>
 <node CREATED="1762142261635" ID="ID_1673427492" MODIFIED="1762142494365" TEXT="Anfang 2009 war eine Integrationsphase">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Vorausgegangen war Cehteh's letzter Vorsto&#223; in Richtung einer Plug-in-Architektur, der damit endete, da&#223; Ichthyo sein Konzept der Applikations-Struktur mit den Subsystemen durchgepr&#252;gelt hat. Das m&#252;ndete in eine allgemeine Integrationsphase, in der die Code-Struktur und die Build-Systeme glattgezogen wurden, und das GUI als Plug-in integriert
@@ -165672,9 +165280,7 @@ that situation will improve in forseeable future.</pre>
 <node CREATED="1762142271809" ID="ID_1156056565" MODIFIED="1762142396300" TEXT="danach noch der Player-Prototyp (Joel + Ichthyo)"/>
 <node CREATED="1762142281674" ID="ID_723832546" MODIFIED="1762309261759" TEXT="danach 2009-2010 war Ichthyo praktisch allein t&#xe4;tig">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       und hat begonnen, dicke Bretter zu bohren:
@@ -165698,9 +165304,7 @@ that situation will improve in forseeable future.</pre>
 </node>
 <node CREATED="1762142658015" ID="ID_861634103" MODIFIED="1762142698584" TEXT="2009 h&#xf6;ren auch die regelm&#xe4;&#xdf;igen Meeting-Protokolle auf">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       man hat wohl ein ganzes Jahr lang zwar die Meetings aufrecht erhalten, aber nur sich informell ausgetauscht
@@ -165729,9 +165333,7 @@ that situation will improve in forseeable future.</pre>
 <node CREATED="1762309487219" ID="ID_87160484" MODIFIED="1762309504447" TEXT="man darf aber keineswegs jetzt jede Wendung im Einzelnen &#xbb;breittreten&#xab;"/>
 <node CREATED="1762309546743" ID="ID_904649242" MODIFIED="1762309764087" TEXT="da es keine offenen Konflikte mehr gab, sollte man darauf auch nicht eingehen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Das ist <b>wichtig f&#252;r mich selber</b>: denn <i>ich habe sehr unter diesen Konflikten gelitten.</i>&#160;Nur fanden sie gar nicht wirklich statt, sondern bestanden in einer Diskrepanz zwischen dem Stand, den ich mir erarbeitet habe, und den endlos-eint&#246;nig-immer-gleichen Klischees, die von den anderen Entwicklern und Usern kamen. Insofern habe ich noch eine Rechnung offen mit dieser &#187;Community&#171; &#8212; aber diese Rechnung hat hier nichts zu suchen. Im Grunde habe ich alles Wichtige bereits in meinem Essay &#187;Complexity and Flexibility&#171; gesagt....
@@ -165744,9 +165346,7 @@ that situation will improve in forseeable future.</pre>
 <node CREATED="1762309804861" ID="ID_1387838481" MODIFIED="1762309814163" TEXT="das sollte zur Beschleunigung genutzt werden."/>
 <node CREATED="1762309905443" ID="ID_356130907" MODIFIED="1762309930536">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       die Darstellung k&#246;nnte sich vor allem
@@ -165784,23 +165384,18 @@ that situation will improve in forseeable future.</pre>
 <icon BUILTIN="yes"/>
 <node CREATED="1762377689369" ID="ID_1401124883" MODIFIED="1762378137196" TEXT="Einsicht: dahinter steht eine Spielart des Liberalismus">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Technologie wird dabei eine &#187;Mystifikation&#171; und wird zum &#187;Fetisch&#171; &#8212; aber das ist nur oberfl&#228;chlich. Die Technologie (konket: Git, Automatisierung, Plug-ins) soll n&#228;mlich eine Art Marktplatz der Ideen herstellen. Und der eigentliche, weltanschauliche Kern ist, da&#223; &#187;die Community&#171; wie eine unsichtbare Hand alle Probleme l&#246;st, und man deshalb sich gedanklich nicht weiter anstrengen mu&#223;, ja sogar gar nicht darf, weil man sonst das heilsame Wirken der Marktkr&#228;fte st&#246;rt.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1762377891326" ID="ID_1771503554" MODIFIED="1762378002501">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       verstehe dies Verhalten als ein <b>Anti-Pattern</b>&#160;&#8212; dem man <i>verf&#228;llt</i>
@@ -165810,9 +165405,7 @@ that situation will improve in forseeable future.</pre>
 </node>
 <node CREATED="1762377929838" ID="ID_860693790" MODIFIED="1762378943163" TEXT="damit wird einem essentiellen Problem ausgewichein: Komplexit&#xe4;t">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Die Komplexit&#228;t sorgt daf&#252;r, &#8222;da&#223; die B&#228;ume nicht in den Himmel wachsen&#8220; &#8212; und dem&#252;tigt den sich aus dem Anspruch der Technik ergebenden Herrschaftsanspruch. Der Komplexit&#228;t kann man nur standhalten, durch Verzicht auf Wunder und durch Selbstbeschr&#228;nkung auf einige wenige Themen.
@@ -165823,9 +165416,7 @@ that situation will improve in forseeable future.</pre>
 </node>
 <node CREATED="1762378208636" ID="ID_752412283" MODIFIED="1762378714273">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Lumiera ist entstanden durch <b>meine Verstrickung</b>&#160;in diesen Konflikt
@@ -165833,9 +165424,7 @@ that situation will improve in forseeable future.</pre>
   </body>
 </html></richcontent>
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Ohne diese Verstrickung, und das damit verbundene Verfallen und die fehlende Reflexion, w&#228;re dieses Projekt niemals zustande gekommen. Ich habe eine dialektisch-verhaftete Position eingenommen, die durch diesen Konflikt &#252;berhaupt erst ihre Form bekommen hat. Durch meine Hartn&#228;ckigkeit habe ich dem Projekt in der Anfangsphase den Weg zum &#187;Erfolg&#171; abgeschnitten. Dann aber passierte ein Wechsel des allgemeinen Klimas (der sich im Grunde bereits von Anfang an abgezeichnet hat). Das Resultat ist nun, da&#223; ich, ganz allein, auf dieser Position stehe und &#252;ber den damit verbundenen Anspruch bestimmen kann (solange niemand anders daherkommt &#8212; und auch nur wenn ich diesen Weg entschieden weiterverfolge).
@@ -165845,9 +165434,7 @@ that situation will improve in forseeable future.</pre>
 </node>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1762378999616" ID="ID_1004658448" MODIFIED="1762379019979">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ich sehe <b>jetzt</b>&#160;in dieser Position eine Chance
@@ -165918,9 +165505,7 @@ that situation will improve in forseeable future.</pre>
 <node CREATED="1751930717131" ID="ID_985128582" MODIFIED="1751930721898" TEXT="Clean-Code-Development"/>
 <node COLOR="#413e62" CREATED="1762377577592" ID="ID_255830875" MODIFIED="1762379427896" TEXT="Essay: Komplexit&#xe4;t und Flexibilit&#xe4;t">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Geschrieben 10/2025 infolge der Auseinandersetzung mit den Anf&#228;ngen des Lumiera-Projekts und implizit als Antwort auf den nie wirklich gel&#246;sten Architektur-Streit
@@ -167697,7 +167282,7 @@ that situation will improve in forseeable future.</pre>
 <node CREATED="1757375530629" ID="ID_353096145" MODIFIED="1757375578668" TEXT="war Kollateralschaden vom Merge von Christians Umbau 2018..."/>
 <node CREATED="1757375552149" ID="ID_1100078557" MODIFIED="1757375565206" TEXT="Christian hatte nicht nach {l} im Documentation-Tree gesucht"/>
 </node>
-<node BACKGROUND_COLOR="#aa9cb7" COLOR="#4a4398" CREATED="1757555774782" ID="ID_834813033" MODIFIED="1762374669565" TEXT="was tun mit den Inhalten &#xbb;ganz vom Anfang&#xab; ?">
+<node BACKGROUND_COLOR="#aa9cb7" COLOR="#4a4398" CREATED="1757555774782" FOLDED="true" ID="ID_834813033" MODIFIED="1762374669565" TEXT="was tun mit den Inhalten &#xbb;ganz vom Anfang&#xab; ?">
 <icon BUILTIN="help"/>
 <node BACKGROUND_COLOR="#cda38b" COLOR="#a50125" CREATED="1757555793338" ID="ID_1410068790" MODIFIED="1762374689518" TEXT="da sind wichtige Seiten verlorengegangen">
 <icon BUILTIN="messagebox_warning"/>
@@ -167966,9 +167551,7 @@ that situation will improve in forseeable future.</pre>
 </node>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1762374440115" HGAP="-44" ID="ID_392921566" MODIFIED="1762379624596" STYLE="bubble" VSHIFT="21">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p style="text-align: right">
       das war nun eine
@@ -168454,18 +168037,16 @@ that situation will improve in forseeable future.</pre>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1762382574838" ID="ID_851158544" MODIFIED="1762382602627" TEXT="Konsequenz &#x27f9; die Intro-Seiten durchgehen">
-<icon BUILTIN="pencil"/>
-<node COLOR="#338800" CREATED="1762382603906" ID="ID_1693405287" MODIFIED="1762471040327" TEXT="The Inner Core">
+<node COLOR="#338800" CREATED="1762382574838" ID="ID_851158544" MODIFIED="1762540469830" TEXT="Konsequenz &#x27f9; die Intro-Seiten durchgehen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1762382603906" FOLDED="true" ID="ID_1693405287" MODIFIED="1762540481114" TEXT="The Inner Core">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1762382613385" ID="ID_1906862546" MODIFIED="1762386891271" TEXT="ein paar Klarstellungen zur App-Core">
 <icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#435e98" CREATED="1762383007516" ID="ID_1756912709" MODIFIED="1762390501048" TEXT="Interface-System nicht mehr erw&#xe4;hnen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Effektiv habe ich die &#187;Plugin-Architektur&#171; nun beerdigt. Es wird kein generelles Interface-System geben, sondern nur ein neues Konzept f&#252;r Plugins und Feature-Bundles
@@ -168475,9 +168056,7 @@ that situation will improve in forseeable future.</pre>
 </node>
 <node COLOR="#5b280f" CREATED="1762388180090" ID="ID_980806208" MODIFIED="1762388336900" TEXT="Error handling in C : entf&#xe4;llt">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Ich habe vor 2 Jahren beschlossen, da&#223; das System der C Error-States nur noch mitgef&#252;hrt wird, aber den Exceptions untergeordnet ist. Das bedeutet, perspektivisch werden Ausnahmen nur noch per Exception signalisiert, und es ist nicht mehr akzeptabel einfach mal so eine Flag zu setzen (auch wenn sie Thread-local ist). Man sollte nicht mehr erwarten, da&#223; irgendjemand einen Lumiera-Error-State pr&#252;ft
@@ -168508,9 +168087,7 @@ that situation will improve in forseeable future.</pre>
 <icon BUILTIN="button_ok"/>
 <node COLOR="#5b280f" CREATED="1762383143641" ID="ID_1991025350" MODIFIED="1762390484253" TEXT="bestehenden Content entfernen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Dieser Content erweckt ein falsches Bild. Ich werde daf&#252;r sorgen, da&#223; niemand mehr ein &#187;C-&#214;kosystem&#171; aufmacht. Imperativ programmieren kann man auch in C++, und mithilfe der Standardlibrary. Die wenigen Verwendungen der hier aufgef&#252;hrten Library-Datenstrukturen von Christian werden mit dem Config-Loader wegfallen. Diese C-Library ist aus der Dynamik der Anfangszeit entstanden, aber seit 2010 trage ich nahezu die gesamte Entwicklung allein, und setze daher die Ma&#223;st&#228;be.
@@ -168528,7 +168105,7 @@ that situation will improve in forseeable future.</pre>
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1762383647880" ID="ID_1738802280" MODIFIED="1762477222947" TEXT="Outer Space">
+<node COLOR="#338800" CREATED="1762383647880" FOLDED="true" ID="ID_1738802280" MODIFIED="1762540483159" TEXT="Outer Space">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1762383651863" ID="ID_284905851" MODIFIED="1762383665087" TEXT="Durability &#x27fc; Sustainability"/>
 <node COLOR="#435e98" CREATED="1762384081486" ID="ID_230153089" MODIFIED="1762475876753" TEXT="Abschnitt zum GUI anpassen">
@@ -168687,9 +168264,7 @@ that situation will improve in forseeable future.</pre>
 </node>
 <node COLOR="#338800" CREATED="1758487316015" ID="ID_915486581" MODIFIED="1758487459726" TEXT="Erstellungsdaten und Kommentare sind aber konsistent">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       In die kleine Tabelle im Kopf des RfC wird beim Anlegen ein Timestamp gesetzt; dieses Datum erscheint stets plausibel, Timestamps in Kommentaren sind zeitnah, aber etwas sp&#228;ter. Oft wurden RfC auch in <i>developer-meetings</i>&#160;auf IRC besprochen; auch das ergibt ein schl&#252;ssiges Bild.
@@ -168705,9 +168280,7 @@ that situation will improve in forseeable future.</pre>
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#830a8f" CREATED="1758487513601" ID="ID_1386568911" MODIFIED="1758487648315">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       war trotzdem ein <b>Monster-Aufwand</b>
@@ -168715,9 +168288,7 @@ that situation will improve in forseeable future.</pre>
   </body>
 </html></richcontent>
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ....aber mu&#223;te mal sein; der Zeitpunkt erscheint mir richtig, denn ich ziehe anscheinend nun einige Trennlinien explizit und spreche Entscheidungen aus. Denn <i>wenn es mir gelingt</i>&#160;in dem Projekt wieder etwas in Bewegung zu setzen, werde ich alsbald f&#252;r diese art Arbeit keine Zeit mehr haben!
@@ -168743,9 +168314,7 @@ that situation will improve in forseeable future.</pre>
 <icon BUILTIN="info"/>
 <node CREATED="1762381816284" ID="ID_1949458046" MODIFIED="1762381934880" TEXT="gepr&#xfc;ft .... warum hat das Benny dann nicht gesehen?">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Also es ist definitiv so, und zwar in jeder Installation die ich sehe. Jetzt kann ich mich aber gar nicht mehr erinnern, wie Benny auf diesen Vorschlag kam. War das nur eine rein-theoretische &#220;berlegung, ist es in einer Diskussion passiert, ohne da&#223; wir die Website gesehen haben (ich erinnere mich ganz dunkel, da&#223; wir das in Bernbach besprochen haben)
@@ -168755,9 +168324,7 @@ that situation will improve in forseeable future.</pre>
 </node>
 <node CREATED="1762381961965" ID="ID_1310436669" MODIFIED="1762382015378" TEXT="a32d3e0f7caf">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <div style="background-color: #eee0b5; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 2px">
       <div style="color: #202020; background-color: #eee0b5; font-family: Bitstream Vera Sans Mono; font-size: 9pt; white-space: pre">
@@ -168791,30 +168358,82 @@ that situation will improve in forseeable future.</pre>
 </node>
 </node>
 </node>
-<node CREATED="1757122577486" ID="ID_1246513731" MODIFIED="1757122587846" TEXT="Doxygen">
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1757122589092" ID="ID_723885529" MODIFIED="1757122594029" TEXT="Modules-Page fehlt">
+<node COLOR="#338800" CREATED="1757122577486" FOLDED="true" ID="ID_1246513731" MODIFIED="1762569774996" TEXT="Doxygen">
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#cbb7d2" COLOR="#435e98" CREATED="1762542593062" ID="ID_1271169020" MODIFIED="1762569705363" TEXT="Verbesserungen">
+<node CREATED="1762542598618" ID="ID_610608595" MODIFIED="1762542690206" TEXT="schon bei C++20 angeschaut">
+<arrowlink COLOR="#576c72" DESTINATION="ID_1978721037" ENDARROW="Default" ENDINCLINATION="643;-899;" ID="Arrow_ID_378751694" STARTARROW="None" STARTINCLINATION="-838;77;"/>
+<node CREATED="1762542694056" ID="ID_940234205" MODIFIED="1762542701743" TEXT="war letztlich entt&#xe4;uschend">
+<node CREATED="1762543051216" ID="ID_923039715" MODIFIED="1762543075649" TEXT="viele WikiWordLinks funktionieren noch immer nicht"/>
+<node CREATED="1762543076582" ID="ID_1629060838" MODIFIED="1762543102421" TEXT="CLANG_ASSISTED_PARSING ist schrecklich langsam und ich sehe keine Verbesserung"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1762553190055" ID="ID_1755096507" MODIFIED="1762553217877" TEXT="Im Grunde sind nur die Langbeschreibungen der Files wichtig">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1762545391568" ID="ID_1508387260" MODIFIED="1762553184698" TEXT="Infos zur Steuerung des Layouts">
+<arrowlink COLOR="#6479bd" DESTINATION="ID_162387292" ENDARROW="Default" ENDINCLINATION="-1518;206;" ID="Arrow_ID_710361035" STARTARROW="None" STARTINCLINATION="-800;73;"/>
+<node CREATED="1762545558224" ID="ID_797199409" MODIFIED="1762545593695" TEXT="liegt in dem Verzeichnis wo Doxygen gestartet wird (doc/devel)"/>
+<node CREATED="1762547796438" ID="ID_742445139" MODIFIED="1762547807889" TEXT="Standard-Vorlage von Doxygen neu generieren lassen">
+<node CREATED="1762547809182" ID="ID_767274239" MODIFIED="1762547813771" TEXT="doxygen -l outfile.xml"/>
+</node>
+<node COLOR="#338800" CREATED="1762553067718" ID="ID_1984988352" MODIFIED="1762553086137" TEXT="Anordnung der Elemente mit dem bestehenden Layout abgeglichen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1762553087620" ID="ID_506089753" MODIFIED="1762553092652" TEXT="das meiste pa&#xdf;t bereits"/>
+<node CREATED="1762553093440" ID="ID_479520843" MODIFIED="1762553180571" TEXT="Short-Descriptions brauche ich nicht auf den Detail-Seiten">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Da ich &quot;autobrief&quot; verwende, ist der erste Satz stets auch die Kurzbeschreibung. Zudem stelle ich die Langbeschreibung stets an den Anfang der Seite, weil ich dies f&#252;r die n&#252;tzlichste Info halte. Die ganzen sonstigen Member-Listen sind ehr verwirrend
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1762568561098" ID="ID_1402735978" MODIFIED="1762569718556" TEXT="nochmal die Warnings durchgek&#xe4;mmt">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1762568625849" ID="ID_1593702644" LINK="#ID_750916556" MODIFIED="1762568953392" TEXT="alles geflutet mit nicht aufl&#xf6;sbaren \ref"/>
+<node CREATED="1762568645046" ID="ID_1560586383" MODIFIED="1762568654246" TEXT="viele Warnungen f&#xfc;r partiell dokumentierte Parameter"/>
+</node>
+<node CREATED="1762568993049" ID="ID_689852200" MODIFIED="1762569087386" TEXT="Stand: weiterhin unbefriedigend">
+<arrowlink COLOR="#ab1e49" DESTINATION="ID_672173572" ENDARROW="Default" ENDINCLINATION="-563;-67;" ID="Arrow_ID_1842531700" STARTARROW="None" STARTINCLINATION="-576;50;"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1757122589092" ID="ID_723885529" MODIFIED="1762553324891" TEXT="Modules-Page fehlt">
 <icon BUILTIN="broken-line"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1757122595259" ID="ID_1861042641" MODIFIED="1757122720646" TEXT="vmtl. &#xc4;nderung in Doxygen">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1757122595259" ID="ID_1861042641" MODIFIED="1762553228868" TEXT="vmtl. &#xc4;nderung in Doxygen">
 <icon BUILTIN="info"/>
 <node CREATED="1757122621984" ID="ID_12344637" LINK="https://github.com/doxygen/doxygen/issues/10562" MODIFIED="1757122633503" TEXT="siehe #10562"/>
 <node CREATED="1757122636775" ID="ID_621368638" MODIFIED="1757122652224" TEXT="demnach w&#xe4;ren das nun &quot;topics&quot;"/>
 </node>
-<node CREATED="1757122654348" ID="ID_1433417097" MODIFIED="1757122671181" TEXT="anpassen">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1757122671938" ID="ID_1127643223" MODIFIED="1757122695607" TEXT="DoxygenLayout: Tab &quot;topics&quot;">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1757122654348" ID="ID_1433417097" MODIFIED="1762569749257" TEXT="anpassen">
+<icon BUILTIN="yes"/>
+<node COLOR="#338800" CREATED="1757122671938" ID="ID_1127643223" MODIFIED="1762553239297" TEXT="DoxygenLayout: Tab &quot;topics&quot;">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1757122684965" ID="ID_1398251523" MODIFIED="1757122695608" TEXT="pr&#xfc;fen ob Generierung funktioniert">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1757122684965" ID="ID_1398251523" MODIFIED="1762553243927" TEXT="pr&#xfc;fen ob Generierung funktioniert">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1757122698309" ID="ID_433552005" MODIFIED="1757122707016" TEXT="Einstiegsseite anpassen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1757122698309" ID="ID_433552005" MODIFIED="1762553259942" TEXT="Top-Level Tab-Struktur reorganisiert">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1762553260953" ID="ID_1454544217" MODIFIED="1762553266788" TEXT="mache nur einen Tab Classes"/>
+<node CREATED="1762553267527" ID="ID_537202530" MODIFIED="1762553288559" TEXT="alle weiteren Indices kommen unter einen Tab &quot;Index&quot;"/>
+<node CREATED="1762553289691" ID="ID_243159191" MODIFIED="1762553303144" TEXT="Verwende dort auch jeweils nur die &quot;*list&quot;"/>
+<node CREATED="1762553313999" ID="ID_555375319" MODIFIED="1762553320381" TEXT="Ausnahme: Class-Index"/>
 </node>
 </node>
+<node COLOR="#338800" CREATED="1762569725645" ID="ID_1194591635" MODIFIED="1762569738903" TEXT="sieht jetzt schon besser aus">
+<icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1757122866610" ID="ID_110243952" MODIFIED="1757122901163" TEXT="URL auf doxygen.org &#x27fc; https://www.doxygen.nl/index.html">
+</node>
+<node COLOR="#5b280f" CREATED="1757122866610" FOLDED="true" ID="ID_110243952" MODIFIED="1762556981643" TEXT="URL auf doxygen.org &#x27fc; https://www.doxygen.nl/index.html">
 <icon BUILTIN="help"/>
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1757122902204" ID="ID_313076251" MODIFIED="1757122905207" TEXT="woot??"/>
 <node CREATED="1757122905904" ID="ID_187223135" MODIFIED="1757122914193" TEXT="das ist doch von Doxygen selber generiert..."/>
+<node CREATED="1762556956894" ID="ID_1805657504" MODIFIED="1762556967647" TEXT="kann man nix machen, ist nicht frei konfiguriert"/>
 </node>
 </node>
 </node>
@@ -170322,7 +169941,8 @@ Since then others have made contributions, see the log for the history.</font></
 <node CREATED="1745707663740" ID="ID_944767991" MODIFIED="1745707676207" TEXT="Definitionen im Doxyfile durchgesehen"/>
 <node CREATED="1745707676865" ID="ID_1588763069" MODIFIED="1745707684615" TEXT="obsolete Einstellungen entfernt"/>
 <node CREATED="1745707687223" ID="ID_1637635649" MODIFIED="1745707709082" TEXT="neue Einstellungen sinnvoll gew&#xe4;hlt"/>
-<node CREATED="1745707713980" ID="ID_1978721037" MODIFIED="1745707716671" TEXT="Anpassungen">
+<node CREATED="1745707713980" ID="ID_1978721037" MODIFIED="1762542690206" TEXT="Anpassungen">
+<linktarget COLOR="#576c72" DESTINATION="ID_1978721037" ENDARROW="Default" ENDINCLINATION="643;-899;" ID="Arrow_ID_378751694" SOURCE="ID_610608595" STARTARROW="None" STARTINCLINATION="-838;77;"/>
 <node CREATED="1745707717811" ID="ID_1379881762" MODIFIED="1745707730461" TEXT="habe nun doch EXTRACT_ALL = YES gesetzt">
 <node CREATED="1745707737991" ID="ID_1873527585" MODIFIED="1745707756663" TEXT="vermutlich der Hauptgrund warum Links fehlen"/>
 <node CREATED="1745707757260" ID="ID_146201452" MODIFIED="1745707770831" TEXT="sonst m&#xfc;&#xdf;te ich diverse Namespaces und innere Klasen dokumentieren"/>
@@ -170338,7 +169958,7 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1745721980457" ID="ID_1943182149" MODIFIED="1745722020735" TEXT="funktionieren automatische Links &#xfc;berhaupt irgendwo au&#xdf;erhalb des aktuellen Namespace?">
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1745721980457" ID="ID_1943182149" LINK="#ID_750916556" MODIFIED="1762568350034" TEXT="funktionieren automatische Links &#xfc;berhaupt irgendwo au&#xdf;erhalb des aktuellen Namespace?">
 <icon BUILTIN="help"/>
 </node>
 </node>
@@ -179935,6 +179555,49 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node CREATED="1447985591922" ID="ID_800130211" MODIFIED="1557498707243" TEXT="Frage: wie kann ich ein SFINAE-Br&#xfc;cke bauen"/>
 <node CREATED="1447985637132" ID="ID_1680970111" MODIFIED="1557498707243" TEXT="Problem: wir haben nur einen Typparameter"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1762569034972" ID="ID_672173572" MODIFIED="1762569079495" TEXT="Probleme in der API-Doc">
+<linktarget COLOR="#ab1e49" DESTINATION="ID_672173572" ENDARROW="Default" ENDINCLINATION="-563;-67;" ID="Arrow_ID_1842531700" SOURCE="ID_689852200" STARTARROW="None" STARTINCLINATION="-576;50;"/>
+<icon BUILTIN="help"/>
+<node CREATED="1762569162567" ID="ID_1302458177" MODIFIED="1762569176440" TEXT="die ist seit vielen Jahren unbefriedigend"/>
+<node CREATED="1762569177263" ID="ID_944551607" MODIFIED="1762569299477" TEXT="einige Features scheinen nicht so zu funktionieren wie erwartet">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das Log ist geflutet mit Warnungen, und viele Querverweise funktionieren nicht. Leider sind Probleme mit Doxygen schwer zu diagnostizieren, da der Lauf lange dauert, und die Codebasis riesig ist. Es gibt daher keine klar definierte Agenda, die man sinnvoll abarbeiten k&#246;nnte. Ich kann immer nur von Zeit zu Zeit stichprobenartige Kontrollen machen
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1762569301488" ID="ID_1844653513" MODIFIED="1762569312438" TEXT="ich w&#xfc;rde beliebige Links auf WikiWords erwarten"/>
+<node CREATED="1762569313074" ID="ID_1151417164" MODIFIED="1762569324114" TEXT="m&#xf6;glicherweise funktionieren die aber nur im gleichen Scope"/>
+<node CREATED="1762569331958" ID="ID_1391907400" MODIFIED="1762569455013" TEXT="es wird massienweise &#xfc;ber nicht dokumentierte Parameter gewarnt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...obwohl ich diese Warnung abgeschaltet habe; wahrscheinlich handelt es sich um F&#228;lle, wo ich (gem&#228;&#223; Clean Code) nur einen Parameter dokumentiert habe, der nicht selbsterkl&#228;rend ist.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1762569193106" ID="ID_357016520" MODIFIED="1762569674407" TEXT="wahrscheinlich auch ein strukturelles Problem">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Ich finde die Seiten meist total verwirrend; es sind eigentlich nur die File-Kommentare sinnvoll. Selbst die Typ-Kommentare sind oft verwirrend, weil die Typen <i>irgendwo stehen</i>&#160;und der Kontext nicht so ersichtlich ist wie im Code. Hinzu kommt, da&#223; der allgemeine Scope (auch Namespace) oft geflutet ist mit Metaprogramming-Definitionen, die nicht im richtigen Zusammenhang dargestellt werden. Es ist in dem Zusammenhang total unpraktisch, da&#223; die Template-Parameter mit angegeben werden, und da&#223; zusamengeh&#246;rige Spezialisierungen nicht aufgesammelt werden. Das ist aber vermutlich gar nicht m&#246;glich.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Insgesamt scheint das Prinzip einer API-Doc nicht auf einen modernen, funktionalen Programmierstil zu passen.
+    </p>
+  </body>
+</html></richcontent>
+</node>
 </node>
 </node>
 <node CREATED="1570812024592" ID="ID_1371102521" MODIFIED="1570812029189" TEXT="immerwieder...">

@@ -98,7 +98,7 @@ namespace test{
    * @see GenericRecord_test
    * @see GenNode_test
    * @see DiffListApplication_test
-   * @see diff-tree-application.hpp
+   * @see tree-diff-application.hpp
    * @see tree-diff.hpp
    */
   class DiffTreeApplication_test

@@ -45,7 +45,7 @@ namespace dialog {
        * Creates a name chooser dialog.
        * @param parent The window which will be the parent of this dialog.
        * @param title The string for the title of this dialog.
-       * @param default_name The name that will be shown by default in the
+       * @param defaultName The name that will be shown by default in the
        * edit box of the dialog.
        */
       NameChooser(Gtk::Window &parent, cuString title, cuString defaultName);

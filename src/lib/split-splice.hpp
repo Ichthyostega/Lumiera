@@ -85,7 +85,7 @@ namespace lib {
   namespace error = lumiera::error;
   
   
-  namespace splitsplice {/// Implementation of [»SplitSplice« algorithm](\ref splite-splice.hpp)
+  namespace splitsplice {/// Implementation of [»SplitSplice« algorithm](\ref split-splice.hpp)
     
     
     /**
