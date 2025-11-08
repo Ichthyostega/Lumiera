@@ -130337,10 +130337,10 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
 <icon BUILTIN="full-2"/>
 <node CREATED="1746718064358" ID="ID_1201089630" MODIFIED="1747012941630" TEXT="erst mal sinngem&#xe4;&#xdf; mit den neuen Widget-Parametern verdrahtet"/>
-<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1746718080949" ID="ID_1374647638" MODIFIED="1752755236239" TEXT="Erfolg-2 : die XV-Anzeige funktioniert grunds&#xe4;tzlich">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1746718080949" FOLDED="true" ID="ID_1374647638" MODIFIED="1764619976680" TEXT="Erfolg-2 : die XV-Anzeige funktioniert grunds&#xe4;tzlich">
 <linktarget COLOR="#4d91c3" DESTINATION="ID_1374647638" ENDARROW="Default" ENDINCLINATION="-711;-37;" ID="Arrow_ID_1957469830" SOURCE="ID_1295178816" STARTARROW="None" STARTINCLINATION="-557;29;"/>
 <icon BUILTIN="full-2"/>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1746718103627" ID="ID_1187659462" MODIFIED="1747012941631" TEXT="...aber nur, wenn man die Maus &#xfc;ber dem Widget bewegt">
+<node COLOR="#435e98" CREATED="1746718103627" FOLDED="true" ID="ID_1187659462" MODIFIED="1764619023079" TEXT="...aber nur, wenn man die Maus &#xfc;ber dem Widget bewegt">
 <icon BUILTIN="broken-line"/>
 <node CREATED="1746753368642" ID="ID_907692574" MODIFIED="1747012941631" TEXT="wenn ich einen queue_redraw() f&#xfc;r jeden put() mache, wird unten schwarz dr&#xfc;bergezeichnet"/>
 <node CREATED="1746753425155" ID="ID_893585016" MODIFIED="1747012941631" TEXT="wenn ich den schwarzen HIntergrund weglasse, ist es analog, aber mit default-Background"/>
@@ -130354,6 +130354,10 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1746757140958" ID="ID_1593531865" MODIFIED="1747012941631" TEXT="hier fehlt uns Wissen &#xfc;ber die Schnittstelle">
 <arrowlink COLOR="#b70f3e" DESTINATION="ID_1411409809" ENDARROW="Default" ENDINCLINATION="58;-133;" ID="Arrow_ID_1129084559" STARTARROW="None" STARTINCLINATION="-188;12;"/>
 <icon BUILTIN="yes"/>
+</node>
+<node COLOR="#338800" CREATED="1764618963049" ID="ID_241108760" MODIFIED="1764619020481" TEXT="konnte dieses Problem aber l&#xf6;sen &#x27f8; es fehlte einfach ein XFlush()">
+<arrowlink DESTINATION="ID_1405127808" ENDARROW="Default" ENDINCLINATION="587;0;" ID="Arrow_ID_1977588932" STARTARROW="None" STARTINCLINATION="289;13;"/>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#330f69" CREATED="1746718116512" FOLDED="true" ID="ID_415171245" MODIFIED="1747013242960" TEXT="und die H&#xf6;he der Dekoration ist auch nicht korrekt eingerechnet">
@@ -130390,7 +130394,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1746718129879" ID="ID_1760604400" MODIFIED="1747012941631" TEXT="und eine sonderbare durchsichtige Zone ist im GUI">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1746718129879" FOLDED="true" ID="ID_1760604400" MODIFIED="1764619971384" TEXT="und eine sonderbare durchsichtige Zone ist im GUI">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1746753315931" ID="ID_1431535426" MODIFIED="1747012941632" TEXT="diese umfa&#xdf;t die Kopfzeile des Docking-Pannel"/>
 <node CREATED="1746753343975" ID="ID_1196127587" MODIFIED="1747012941632" TEXT="die Video-Anzeige beginnt ebenfalls in der Kopfzeile"/>
@@ -130400,12 +130404,480 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node CREATED="1746756977623" ID="ID_1960782604" MODIFIED="1747012941632" TEXT="und da das Dock beweglich ist, verwendet es wohl ein eigenes XWindow"/>
 </node>
+<node COLOR="#5b280f" CREATED="1764607990783" ID="ID_1187142087" MODIFIED="1764611550912" TEXT="Aber warum funktioniert dann das Auto-Keying nicht">
+<icon BUILTIN="help"/>
+<icon BUILTIN="button_cancel"/>
+<node BACKGROUND_COLOR="#d7b296" COLOR="#a50125" CREATED="1764608021104" ID="ID_1511227725" MODIFIED="1764611544586" TEXT="beobachte den Code &#x27f9; die btr. Attribute trauchen bei mir gar nicht auf">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#d7b296" COLOR="#a50125" CREATED="1764611123160" ID="ID_373317940" MODIFIED="1764611544586" TEXT="versuche die Attribute explizit zu setzen &#x27f9; sofort Abbruch des Programms">
+<icon BUILTIN="broken-line"/>
+</node>
+<node COLOR="#5b280f" CREATED="1764611447710" ID="ID_1381971728" MODIFIED="1764611523870" TEXT="damit wird das ... schwierig">
+<arrowlink COLOR="#cf062e" DESTINATION="ID_1825980418" ENDARROW="Default" ENDINCLINATION="41;-59;" ID="Arrow_ID_606473970" STARTARROW="None" STARTINCLINATION="-195;19;"/>
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1764611858009" ID="ID_836429115" MODIFIED="1764611880760" TEXT="man m&#xfc;&#xdf;te diesen Fall speziell erkennen und behandeln"/>
+<node CREATED="1764611887246" ID="ID_571356347" MODIFIED="1764611909070" TEXT="und dann wenistens die durchsichtige Fl&#xe4;che einmal komplett zukleistern"/>
+<node CREATED="1764611945482" ID="ID_788857998" MODIFIED="1764612064783" TEXT="au&#xdf;erdem k&#xf6;nnte es Mischf&#xe4;lle geben">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      wenn man beispielsweise zwar einen XV_COLORKEY setzen kann, aber kein XV_AUTOPAINT_COLORKEY
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1764612084627" ID="ID_1390817044" MODIFIED="1764619968097" TEXT="vor allem: wie kann man das Testen (&#x27f9; h&#xe4;ngt von der Grafikkarte ab)">
+<arrowlink COLOR="#f91528" DESTINATION="ID_1986767756" ENDARROW="Default" ENDINCLINATION="1067;0;" ID="Arrow_ID_752741506" STARTARROW="None" STARTINCLINATION="-1;208;"/>
+<icon BUILTIN="closed"/>
+</node>
+</node>
+</node>
+<node COLOR="#5b280f" CREATED="1764613762825" FOLDED="true" ID="ID_724143984" MODIFIED="1764619918728" TEXT="versuche Workaround einbauen">
+<linktarget COLOR="#d5029a" DESTINATION="ID_724143984" ENDARROW="Default" ENDINCLINATION="-4050;-377;" ID="Arrow_ID_952114573" SOURCE="ID_933813579" STARTARROW="None" STARTINCLINATION="-2736;172;"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1764613767921" ID="ID_881940880" MODIFIED="1764613778697" TEXT="damit das Fenster nicht so kaputt aussieht">
+<icon BUILTIN="smiley-oh"/>
+</node>
+<node COLOR="#5b280f" CREATED="1764613787725" ID="ID_1364352704" MODIFIED="1764617451619" TEXT="in dem on_map-Event das Fenster f&#xfc;llen">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1764617455360" ID="ID_1968154895" MODIFIED="1764617464302" TEXT="geht nicht ... hat keinen sichtbaren Effekt">
+<node CREATED="1764617705434" ID="ID_1477749657" MODIFIED="1764617709605" TEXT="unklar warum..."/>
+<node CREATED="1764617712945" ID="ID_825706808" MODIFIED="1764617734129" TEXT="Theorie-1 : in der Phase kann ich noch nicht zeichnen??"/>
+<node CREATED="1764617735197" ID="ID_1615017797" MODIFIED="1764617783074" TEXT="Theorie-2 : Zeichnen im Docking-Panel-Bereich wird von XV gefiltert / der Rest von GTK &#xfc;bermalt"/>
+</node>
+<node CREATED="1764617465258" ID="ID_1236441760" MODIFIED="1764617547847" TEXT="wenn ich den gleichen Zeichencode in der Anzeige-Routine mache, funktionierts">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...dann kann ich das ganze Fenster f&#252;llen, durchaus auch mit beliebigen Farben (wobei hier eine Falle wartet, da die Farbtiefe unterschiedlich sein k&#246;nnte).
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1764617549759" ID="ID_1178119072" MODIFIED="1764617653105" TEXT="Beispielcode an xjadeo angelehnt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      dixplay_x11.c, line 623
+    </p>
+    <p>
+      
+    </p>
+    <div style="background-color: #eee0b5; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 2px">
+      <div style="color: #202020; background-color: #eee0b5; font-family: Bitstream Vera Sans Mono; font-size: 9pt; white-space: pre">
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a1a65"><b>static</b></font><font color="#3a1f18">&#160;</font><font color="#4a1a65"><b>inline</b></font><font color="#3a1f18">&#160;</font><font color="#7f004c"><b>void</b></font><font color="#3a1f18">&#160; </font><font color="#000000"><b>xv_draw_colorkey</b></font><font color="#11123a">(</font><font color="#7f004c"><b>void</b></font><font color="#11123a">)</font><font color="#3a1f18">&#160;</font><font color="#11123a">{</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#642880"><b>XSetForeground</b></font><font color="#11123a">(</font><font color="#3a1f18">&#160;</font><font color="#dd1616"><i>xj_dpy</i></font><font color="#65533c">,</font><font color="#3a1f18">&#160;</font><font color="#dd1616"><i>xj_gc</i></font><font color="#65533c">,</font><font color="#3a1f18">&#160; </font><font color="#29466b">0</font><font color="#3a1f18">&#160;</font><font color="#11123a">)</font><font color="#65533c">;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a1a65"><b>if</b></font><font color="#3a1f18">&#160;</font><font color="#11123a">(</font><font color="#dd1616"><i>xj_box</i></font><font color="#11123a">[</font><font color="#29466b">1</font><font color="#11123a">]</font><font color="#3a1f18">&#160;</font><font color="#65533c">&gt;</font><font color="#3a1f18">&#160; </font><font color="#29466b">0</font><font color="#3a1f18">&#160;</font><font color="#11123a">)</font><font color="#3a1f18">&#160;</font><font color="#11123a">{</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#642880"><b>XFillRectangle</b></font><font color="#11123a">(</font><font color="#3a1f18">&#160;</font><font color="#dd1616"><i>xj_dpy</i></font><font color="#65533c">,</font><font color="#3a1f18">&#160;</font><font color="#dd1616"><i>xj_win</i></font><font color="#65533c">,</font><font color="#3a1f18">&#160; </font><font color="#dd1616"><i>xj_gc</i></font><font color="#65533c">,</font><font color="#3a1f18">&#160;</font><font color="#29466b">0</font><font color="#65533c">,</font><font color="#3a1f18">&#160;</font><font color="#29466b">0</font><font color="#65533c">,</font><font color="#3a1f18">&#160; </font><font color="#dd1616"><i>xj_box</i></font><font color="#11123a">[</font><font color="#29466b">2</font><font color="#11123a">]</font><font color="#65533c">,</font><font color="#3a1f18">&#160;</font><font color="#dd1616"><i>xj_box</i></font><font color="#11123a">[</font><font color="#29466b">1</font><font color="#11123a">])</font><font color="#65533c">;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#642880"><b>XFillRectangle</b></font><font color="#11123a">(</font><font color="#3a1f18">&#160;</font><font color="#dd1616"><i>xj_dpy</i></font><font color="#65533c">,</font><font color="#3a1f18">&#160;</font><font color="#dd1616"><i>xj_win</i></font><font color="#65533c">,</font><font color="#3a1f18">&#160; </font><font color="#dd1616"><i>xj_gc</i></font><font color="#65533c">,</font><font color="#3a1f18">&#160;</font><font color="#29466b">0</font><font color="#65533c">,</font><font color="#3a1f18">&#160;</font><font color="#dd1616"><i>xj_box</i></font><font color="#11123a">[</font><font color="#29466b">1</font><font color="#11123a">]</font><font color="#65533c">+</font><font color="#dd1616"><i>xj_box</i></font><font color="#11123a">[</font><font color="#29466b">3</font><font color="#11123a">]</font><font color="#65533c">,</font><font color="#3a1f18">&#160; </font><font color="#dd1616"><i>xj_box</i></font><font color="#11123a">[</font><font color="#29466b">2</font><font color="#11123a">]</font><font color="#65533c">,</font><font color="#3a1f18">&#160;</font><font color="#dd1616"><i>xj_box</i></font><font color="#11123a">[</font><font color="#29466b">1</font><font color="#11123a">]</font><font color="#65533c">+</font><font color="#dd1616"><i>xj_box</i></font><font color="#11123a">[</font><font color="#29466b">3</font><font color="#11123a">]</font><font color="#65533c">+</font><font color="#dd1616"><i>xj_box</i></font><font color="#11123a">[</font><font color="#29466b">1</font><font color="#11123a">])</font><font color="#65533c">;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#11123a">}</font><font color="#3a1f18">&#160;</font><font color="#b59674">/* else */</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a1a65"><b>if</b></font><font color="#3a1f18">&#160;</font><font color="#11123a">(</font><font color="#dd1616"><i>xj_box</i></font><font color="#11123a">[</font><font color="#29466b">0</font><font color="#11123a">]</font><font color="#3a1f18">&#160;</font><font color="#65533c">&gt;</font><font color="#3a1f18">&#160; </font><font color="#29466b">0</font><font color="#3a1f18">&#160;</font><font color="#11123a">)</font><font color="#3a1f18">&#160;</font><font color="#11123a">{</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#642880"><b>XFillRectangle</b></font><font color="#11123a">(</font><font color="#3a1f18">&#160;</font><font color="#dd1616"><i>xj_dpy</i></font><font color="#65533c">,</font><font color="#3a1f18">&#160;</font><font color="#dd1616"><i>xj_win</i></font><font color="#65533c">,</font><font color="#3a1f18">&#160; </font><font color="#dd1616"><i>xj_gc</i></font><font color="#65533c">,</font><font color="#3a1f18">&#160;</font><font color="#29466b">0</font><font color="#65533c">,</font><font color="#3a1f18">&#160;</font><font color="#29466b">0</font><font color="#65533c">,</font><font color="#3a1f18">&#160; </font><font color="#dd1616"><i>xj_box</i></font><font color="#11123a">[</font><font color="#29466b">0</font><font color="#11123a">]</font><font color="#65533c">,</font><font color="#3a1f18">&#160;</font><font color="#dd1616"><i>xj_box</i></font><font color="#11123a">[</font><font color="#29466b">3</font><font color="#11123a">])</font><font color="#65533c">;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#642880"><b>XFillRectangle</b></font><font color="#11123a">(</font><font color="#3a1f18">&#160;</font><font color="#dd1616"><i>xj_dpy</i></font><font color="#65533c">,</font><font color="#3a1f18">&#160;</font><font color="#dd1616"><i>xj_win</i></font><font color="#65533c">,</font><font color="#3a1f18">&#160; </font><font color="#dd1616"><i>xj_gc</i></font><font color="#65533c">,</font><font color="#3a1f18">&#160;</font><font color="#dd1616"><i>xj_box</i></font><font color="#11123a">[</font><font color="#29466b">0</font><font color="#11123a">]</font><font color="#65533c">+</font><font color="#dd1616"><i>xj_box</i></font><font color="#11123a">[</font><font color="#29466b">2</font><font color="#11123a">]</font><font color="#65533c">,</font><font color="#3a1f18">&#160; </font><font color="#29466b">0</font><font color="#65533c">,</font><font color="#3a1f18">&#160;</font><font color="#dd1616"><i>xj_box</i></font><font color="#11123a">[</font><font color="#29466b">0</font><font color="#11123a">]</font><font color="#65533c">+</font><font color="#dd1616"><i>xj_box</i></font><font color="#11123a">[</font><font color="#29466b">2</font><font color="#11123a">]</font><font color="#65533c">+</font><font color="#dd1616"><i>xj_box</i></font><font color="#11123a">[</font><font color="#29466b">0</font><font color="#11123a">]</font><font color="#65533c">,</font><font color="#3a1f18">&#160; </font><font color="#dd1616"><i>xj_box</i></font><font color="#11123a">[</font><font color="#29466b">3</font><font color="#11123a">])</font><font color="#65533c">;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#11123a">}</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#11123a">}</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          
+        </p>
+      </div>
+    </div>
+    <p>
+      
+    </p>
+    <p>
+      ... verwende dann in XSetForeground ggfs eine andere Farbe, wie 0x00FF00 f&#252;r Gr&#252;n
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="list"/>
+</node>
+<node CREATED="1764617667975" ID="ID_1578397751" MODIFIED="1764617678651" TEXT="flush danach nicht vergessen!"/>
+</node>
+<node CREATED="1764617681481" ID="ID_1200536782" MODIFIED="1764617701931" TEXT="dann f&#xfc;llt sich das Fenster aber erst, wenn man den Playback aktiviert"/>
+</node>
+<node BACKGROUND_COLOR="#f8cbea" COLOR="#a50125" CREATED="1764617803611" ID="ID_1707614223" MODIFIED="1764618894929" TEXT="STOP: ich stochere schon 2 Stunden im Dunkel herum">
+<arrowlink COLOR="#db0ca0" DESTINATION="ID_67157149" ENDARROW="Default" ENDINCLINATION="3;-28;" ID="Arrow_ID_1695210463" STARTARROW="None" STARTINCLINATION="9;37;"/>
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1764617854186" ID="ID_1339058917" MODIFIED="1764617869175" TEXT="die f&#xfc;r diesen Zweck vorgesehende Methode (das Keying) funktioniert nicht"/>
+<node CREATED="1764617872200" ID="ID_1278408205" MODIFIED="1764618468895" TEXT="habe fast keine Doku dazu gefunden">
+<node CREATED="1764618401172" ID="ID_70523827" LINK="https://ftp.halifax.rwth-aachen.de/pub/FreeBSD/doc/de/books/handbook/handbook_de.pdf" MODIFIED="1764618427837" TEXT="Tip: ein altes X-Handbuch f&#xfc;r BSD">
+<node CREATED="1764618428893" ID="ID_706684011" MODIFIED="1764618433228" TEXT="Seite 221"/>
+</node>
+<node CREATED="1764618458218" ID="ID_1834050123" MODIFIED="1764618464333" TEXT="Kommandozeilentool: xvinfo">
+<node CREATED="1764618481934" ID="ID_799063796" MODIFIED="1764618509631" TEXT="gibt bei mir nur 7 Attribute aus">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      &#160;&#160;&#160;&#160;number of attributes: 7
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&quot;XV_SET_DEFAULTS&quot; (range 0 to 0)
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;client settable attribute
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&quot;XV_ITURBT_709&quot; (range 0 to 1)
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;client settable attribute
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;client gettable attribute (current value is 0)
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&quot;XV_SYNC_TO_VBLANK&quot; (range 0 to 1)
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;client settable attribute
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;client gettable attribute (current value is 1)
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&quot;XV_BRIGHTNESS&quot; (range -1000 to 1000)
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;client settable attribute
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;client gettable attribute (current value is 0)
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&quot;XV_CONTRAST&quot; (range -1000 to 1000)
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;client settable attribute
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;client gettable attribute (current value is 0)
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&quot;XV_SATURATION&quot; (range -1000 to 1000)
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;client settable attribute
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;client gettable attribute (current value is 0)
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&quot;XV_HUE&quot; (range -1000 to 1000)
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;client settable attribute
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;client gettable attribute (current value is 0)
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;maximum XvImage size: 16384 x 16384
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;Number of image formats: 4
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;id: 0x32595559 (YUY2)
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;guid: 59555932-0000-0010-8000-00aa00389b71
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;bits per pixel: 16
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;number of planes: 1
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;type: YUV (packed)
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;id: 0x32315659 (YV12)
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;guid: 59563132-0000-0010-8000-00aa00389b71
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;bits per pixel: 12
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;number of planes: 3
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;type: YUV (planar)
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;id: 0x59565955 (UYVY)
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;guid: 55595659-0000-0010-8000-00aa00389b71
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;bits per pixel: 16
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;number of planes: 1
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;type: YUV (packed)
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;id: 0x30323449 (I420)
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;guid: 49343230-0000-0010-8000-00aa00389b71
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;bits per pixel: 12
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;number of planes: 3
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;type: YUV (planar)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1764618511435" ID="ID_1433811673" MODIFIED="1764618556234" TEXT="sollte laut einem Beispiel in Doku wie folgt aussehen...">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      number of attributes: 5
+    </p>
+    <p>
+      &quot;XV_COLORKEY&quot; (range 0 to 16777215)
+    </p>
+    <p>
+      client settable attribute
+    </p>
+    <p>
+      client gettable attribute (current value is 2110)
+    </p>
+    <p>
+      &quot;XV_BRIGHTNESS&quot; (range -128 to 127)
+    </p>
+    <p>
+      client settable attribute
+    </p>
+    <p>
+      client gettable attribute (current value is 0)
+    </p>
+    <p>
+      &quot;XV_CONTRAST&quot; (range 0 to 255)
+    </p>
+    <p>
+      client settable attribute
+    </p>
+    <p>
+      client gettable attribute (current value is 128)
+    </p>
+    <p>
+      &quot;XV_SATURATION&quot; (range 0 to 255)
+    </p>
+    <p>
+      client settable attribute
+    </p>
+    <p>
+      client gettable attribute (current value is 128)
+    </p>
+    <p>
+      &quot;XV_HUE&quot; (range -180 to 180)
+    </p>
+    <p>
+      client settable attribute
+    </p>
+    <p>
+      client gettable attribute (current value is 0)
+    </p>
+    <p>
+      maximum XvImage size: 1024 x 1024
+    </p>
+    <p>
+      Number of image formats: 7
+    </p>
+    <p>
+      id: 0x32595559 (YUY2)
+    </p>
+    <p>
+      guid: 59555932-0000-0010-8000-00aa00389b71
+    </p>
+    <p>
+      bits per pixel: 16
+    </p>
+    <p>
+      number of planes: 1
+    </p>
+    <p>
+      type: YUV (packed)
+    </p>
+    <p>
+      id: 0x32315659 (YV12)
+    </p>
+    <p>
+      guid: 59563132-0000-0010-8000-00aa00389b71
+    </p>
+    <p>
+      bits per pixel: 12
+    </p>
+    <p>
+      number of planes: 3
+    </p>
+    <p>
+      type: YUV (planar)
+    </p>
+    <p>
+      id: 0x30323449 (I420)
+    </p>
+    <p>
+      guid: 49343230-0000-0010-8000-00aa00389b71
+    </p>
+    <p>
+      bits per pixel: 12
+    </p>
+    <p>
+      number of planes: 3
+    </p>
+    <p>
+      type: YUV (planar)
+    </p>
+    <p>
+      id: 0x36315652 (RV16)
+    </p>
+    <p>
+      guid: 52563135-0000-0000-0000-000000000000
+    </p>
+    <p>
+      bits per pixel: 16
+    </p>
+    <p>
+      number of planes: 1
+    </p>
+    <p>
+      type: RGB (packed)
+    </p>
+    <p>
+      depth: 0
+    </p>
+    <p>
+      red, green, blue masks: 0x1f, 0x3e0, 0x7c00
+    </p>
+    <p>
+      id: 0x35315652 (RV15)
+    </p>
+    <p>
+      guid: 52563136-0000-0000-0000-000000000000
+    </p>
+    <p>
+      bits per pixel: 16
+    </p>
+    <p>
+      number of planes: 1
+    </p>
+    <p>
+      type: RGB (packed)
+    </p>
+    <p>
+      depth: 0
+    </p>
+    <p>
+      red, green, blue masks: 0x1f, 0x7e0, 0xf800
+    </p>
+    <p>
+      id: 0x31313259 (Y211)
+    </p>
+    <p>
+      222
+    </p>
+    <p>
+      guid: 59323131-0000-0010-8000-00aa00389b71
+    </p>
+    <p>
+      bits per pixel: 6
+    </p>
+    <p>
+      number of planes: 3
+    </p>
+    <p>
+      type: YUV (packed)
+    </p>
+    <p>
+      id: 0x0
+    </p>
+    <p>
+      guid: 00000000-0000-0000-0000-000000000000
+    </p>
+    <p>
+      bits per pixel: 0
+    </p>
+    <p>
+      number of planes: 0
+    </p>
+    <p>
+      type: RGB (packed)
+    </p>
+    <p>
+      depth: 1
+    </p>
+    <p>
+      red, green, blue masks: 0x0, 0x0, 0x0
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1764617879426" ID="ID_272883847" MODIFIED="1764617895188" TEXT="anscheinend macht aber der Grafikstack bei mir ein Auto-Keying">
+<node CREATED="1764617982277" ID="ID_1041932053" MODIFIED="1764617994909" TEXT="....und f&#xfc;llt dabei das ganze XWindow"/>
+<node CREATED="1764617995919" ID="ID_1670539887" MODIFIED="1764618033047" TEXT="&#x27f9; mit einem manuellen Keying habe ich keine Chance"/>
+</node>
+<node CREATED="1764617896156" ID="ID_749851403" MODIFIED="1764617950684" TEXT="die Lage ist zudem komplex wegen den Docking-Panels">
+<node CREATED="1764617911821" ID="ID_1913388181" MODIFIED="1764617921265" TEXT="wir teilen und das XWindow mit denen"/>
+<node CREATED="1764617922125" ID="ID_141410802" MODIFIED="1764617937055" TEXT="aber haben regul&#xe4;r keinen Zugriff auf diesen Panel-Bereich"/>
+</node>
+</node>
+</node>
 </node>
 <node CREATED="1746757051600" ID="ID_1411409809" MODIFIED="1747012941632" TEXT="Einsch&#xe4;tzung">
 <linktarget COLOR="#b70f3e" DESTINATION="ID_1411409809" ENDARROW="Default" ENDINCLINATION="58;-133;" ID="Arrow_ID_1129084559" SOURCE="ID_1593531865" STARTARROW="None" STARTINCLINATION="-188;12;"/>
-<node CREATED="1746757057796" ID="ID_1825980418" MODIFIED="1747012941632" TEXT="an diesem Code ist viele unflexibel und hart codiert"/>
+<node CREATED="1746757057796" ID="ID_1825980418" MODIFIED="1764611518364" TEXT="an diesem Code ist manches unflexibel und hart codiert">
+<linktarget COLOR="#cf062e" DESTINATION="ID_1825980418" ENDARROW="Default" ENDINCLINATION="41;-59;" ID="Arrow_ID_606473970" SOURCE="ID_1381971728" STARTARROW="None" STARTINCLINATION="-195;19;"/>
+</node>
 <node CREATED="1746757072453" ID="ID_1065119380" MODIFIED="1747012941632" TEXT="f&#xfc;r einen zuverl&#xe4;ssigeren XV-Displayer m&#xfc;ssen wir die Formate verstehen"/>
 <node CREATED="1746757090333" ID="ID_11791207" MODIFIED="1747012941632" TEXT="sowie das Thema Clipping/Keying/Compositing"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1764618601866" ID="ID_940893605" MODIFIED="1764618624199" TEXT="&#x27f9; Grundsatzfrage: unterst&#xfc;tzen wir XV &#xfc;berhaupt noch?">
+<icon BUILTIN="help"/>
+<node CREATED="1764618859447" ID="ID_67157149" MODIFIED="1764618889865" TEXT="...und ist es dann sinnvoll, sich an meiner uralt-Grafikkarte zu orientieren?">
+<linktarget COLOR="#db0ca0" DESTINATION="ID_67157149" ENDARROW="Default" ENDINCLINATION="3;-28;" ID="Arrow_ID_1695210463" SOURCE="ID_1707614223" STARTARROW="None" STARTINCLINATION="9;37;"/>
+</node>
+</node>
 </node>
 <node CREATED="1752755298705" ID="ID_553632518" MODIFIED="1752758892051" TEXT="weitergehende Recherche f&#xfc;r den FrOSCon-Vortrag(25)">
 <arrowlink COLOR="#4d74d8" DESTINATION="ID_442273376" ENDARROW="Default" ENDINCLINATION="-2314;2141;" ID="Arrow_ID_437931140" STARTARROW="None" STARTINCLINATION="-1107;59;"/>
@@ -130439,7 +130911,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node CREATED="1752757333634" ID="ID_1834901153" LINK="https://linux.die.net/man/3/xsync" MODIFIED="1752760278883" TEXT="XSync manpage lesen!">
 <icon BUILTIN="idea"/>
-<node CREATED="1752760156512" ID="ID_1405127808" MODIFIED="1752760292356" TEXT="XFlush(display) nach der Anzeige"/>
+<node CREATED="1752760156512" ID="ID_1405127808" MODIFIED="1752760292356" TEXT="XFlush(display) nach der Anzeige">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1405127808" ENDARROW="Default" ENDINCLINATION="587;0;" ID="Arrow_ID_1977588932" SOURCE="ID_241108760" STARTARROW="None" STARTINCLINATION="289;13;"/>
+</node>
 </node>
 </node>
 </node>
@@ -130451,7 +130925,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1746893095388" ID="ID_542989222" MODIFIED="1746893119924" TEXT="der XV-Code verwendet &#xbb;Yuv&#xab;"/>
 <node CREATED="1746893120700" ID="ID_150794172" MODIFIED="1746893135491" TEXT="der pixbuf-Ansatz braucht RGB-Pixel"/>
 </node>
-<node COLOR="#5b280f" CREATED="1746893143163" ID="ID_728521523" MODIFIED="1747012901592" TEXT="brauche Mechanismus zur Format-Bestimmung">
+<node COLOR="#5b280f" CREATED="1746893143163" FOLDED="true" ID="ID_728521523" MODIFIED="1764619089518" TEXT="brauche Mechanismus zur Format-Bestimmung">
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1747012837462" ID="ID_91647932" MODIFIED="1747012861006" TEXT="das ist eigentlich ein l&#xe4;ngerfristiges Thema">
 <richcontent TYPE="NOTE"><html>
@@ -130475,7 +130949,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1746893172426" ID="ID_252885347" MODIFIED="1747012826665" TEXT="Image-Generator soll mehrere Formate unterst&#xfc;tzen">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1746893172426" FOLDED="true" ID="ID_252885347" MODIFIED="1747012826665" TEXT="Image-Generator soll mehrere Formate unterst&#xfc;tzen">
 <icon BUILTIN="yes"/>
 <node CREATED="1746896060805" ID="ID_307284442" MODIFIED="1747013260678" TEXT="welche sind konkret bekannt?">
 <icon BUILTIN="info"/>
@@ -130653,8 +131127,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node COLOR="#435e98" CREATED="1747013068485" ID="ID_51924925" MODIFIED="1747013077621" TEXT="Anzeige funktioniert wieder"/>
 <node COLOR="#435e98" CREATED="1747012995571" ID="ID_850186760" MODIFIED="1747013077621" TEXT="die GTK-3 - bezogenen Themen waren allesamt l&#xf6;sbar"/>
 <node COLOR="#435e98" CREATED="1747013009348" ID="ID_927829887" MODIFIED="1747013077620" TEXT="es zeichnet sich ein Setup ab, bei dem ein Gtk::Image als Arbeitsfl&#xe4;che verwendet wird"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1747013032931" ID="ID_1133235749" MODIFIED="1752766290584" TEXT="nun ist vor allem mehr Verst&#xe4;ndnis des XV-Standards von N&#xf6;ten">
-<arrowlink COLOR="#ff7e4e" DESTINATION="ID_1422823042" ENDARROW="Default" ENDINCLINATION="-75;-87;" ID="Arrow_ID_573069067" STARTARROW="None" STARTINCLINATION="-293;14;"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1747013032931" ID="ID_1133235749" MODIFIED="1764619118844" TEXT="nun ist vor allem mehr Verst&#xe4;ndnis des XV-Standards von N&#xf6;ten">
+<arrowlink COLOR="#ff7e4e" DESTINATION="ID_1422823042" ENDARROW="Default" ENDINCLINATION="-77;-89;" ID="Arrow_ID_573069067" STARTARROW="None" STARTINCLINATION="-293;13;"/>
 <icon BUILTIN="yes"/>
 </node>
 </node>
@@ -130711,10 +131185,22 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1752765500586" ID="ID_1457956815" MODIFIED="1752765613074" TEXT="Recherche und Dokumentation">
 <icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1752765512490" ID="ID_1422823042" MODIFIED="1752767266574" TEXT="darstellen als Vortrag auf der FrOSCon(25)">
-<arrowlink COLOR="#ce0918" DESTINATION="ID_442273376" ENDARROW="Default" ENDINCLINATION="-332;592;" ID="Arrow_ID_1945191941" STARTARROW="None" STARTINCLINATION="-1124;69;"/>
-<linktarget COLOR="#ff7e4e" DESTINATION="ID_1422823042" ENDARROW="Default" ENDINCLINATION="-75;-87;" ID="Arrow_ID_573069067" SOURCE="ID_1133235749" STARTARROW="None" STARTINCLINATION="-293;14;"/>
-<icon BUILTIN="flag-pink"/>
+<node COLOR="#338800" CREATED="1752765512490" ID="ID_1422823042" MODIFIED="1764619140874" TEXT="darstellen als Vortrag auf der FrOSCon(25)">
+<arrowlink COLOR="#094fce" DESTINATION="ID_442273376" ENDARROW="Default" ENDINCLINATION="-332;592;" ID="Arrow_ID_1945191941" STARTARROW="None" STARTINCLINATION="-1124;69;"/>
+<linktarget COLOR="#ff7e4e" DESTINATION="ID_1422823042" ENDARROW="Default" ENDINCLINATION="-77;-89;" ID="Arrow_ID_573069067" SOURCE="ID_1133235749" STARTARROW="None" STARTINCLINATION="-293;13;"/>
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#9d00fa" CREATED="1764619149977" ID="ID_1986767756" MODIFIED="1764619962730" TEXT="grade bei XVideo bleiben aber viele Fragen offen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Es ist ein sehr alter Standard, durchaus komplex und detailiertere Doku ist kaum noch zu finden (-&gt; Einzelfragen auf Stackoverflow). Manpages sind, wie &#252;blich, nur dann sinnvoll, wenn man schon wei&#223;, worum es geht). Hinzu kommt, da&#223; es wohl erhebliche Streubreite gibt bzgl. der Implementierung. &#187;Beispielsweise&#171; unterst&#252;tzt meine uralt-Nvidia-Karte nicht das automatische Keying (Attribut XV_COLORKEY und XV_AUTOPAINT_COLORKEY sind nicht definiert, aber der X-Treiber macht ein Auto-Keying auf dem gesamten X-Window und das ist problematisch mit den Dockingpanels, die das gleiche XWindow verwenden)
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#f91528" DESTINATION="ID_1986767756" ENDARROW="Default" ENDINCLINATION="1067;0;" ID="Arrow_ID_752741506" SOURCE="ID_1390817044" STARTARROW="None" STARTINCLINATION="-1;208;"/>
+<icon BUILTIN="broken-line"/>
+</node>
 </node>
 </node>
 </node>
@@ -161076,7 +161562,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1752758687270" ID="ID_587093014" MODIFIED="1752758689409" TEXT="2025">
 <node CREATED="1752755281391" ID="ID_442273376" LINK="https://lumiera.org/research/videoDisplay/index.html" MODIFIED="1757602808059" TEXT="FrOSCon-Vortrag(25) : Video-Ausgabe">
 <linktarget COLOR="#4d74d8" DESTINATION="ID_442273376" ENDARROW="Default" ENDINCLINATION="-2314;2141;" ID="Arrow_ID_437931140" SOURCE="ID_553632518" STARTARROW="None" STARTINCLINATION="-1107;59;"/>
-<linktarget COLOR="#ce0918" DESTINATION="ID_442273376" ENDARROW="Default" ENDINCLINATION="-332;592;" ID="Arrow_ID_1945191941" SOURCE="ID_1422823042" STARTARROW="None" STARTINCLINATION="-1124;69;"/>
+<linktarget COLOR="#094fce" DESTINATION="ID_442273376" ENDARROW="Default" ENDINCLINATION="-332;592;" ID="Arrow_ID_1945191941" SOURCE="ID_1422823042" STARTARROW="None" STARTINCLINATION="-1124;69;"/>
 <linktarget COLOR="#4d74d8" DESTINATION="ID_442273376" ENDARROW="Default" ENDINCLINATION="513;-707;" ID="Arrow_ID_738647024" SOURCE="ID_1047074231" STARTARROW="None" STARTINCLINATION="-1126;76;"/>
 <linktarget COLOR="#7ba0c9" DESTINATION="ID_442273376" ENDARROW="Default" ENDINCLINATION="862;-547;" ID="Arrow_ID_1600730504" SOURCE="ID_143193352" STARTARROW="None" STARTINCLINATION="371;21;"/>
 <node CREATED="1752756052954" ID="ID_498575821" MODIFIED="1752758911124" TEXT="xjadeo von Robin Gareus war sehr hilfreich">
@@ -166914,6 +167400,22 @@ that situation will improve in forseeable future.</pre>
 </node>
 </node>
 </node>
+</node>
+<node COLOR="#5b280f" CREATED="1764619497042" ID="ID_933813579" MODIFIED="1764619918727" TEXT="noch ein Bugfix f&#xfc;r den XV-Displayer?">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Weil da nun die Kopfzeile (Docking-Panel) nicht richtig gezeichnet wird, bzw. pseudo-transparent wird.
+    </p>
+    <p>
+      <b>Abbruch</b>. Es zeigt sich, da&#223; meine Grafikkarte das Auto-Keying von XV nicht unterst&#252;tzt, d.h. die Attribute XV_AUTOPAINT_COLORKEY und XV_COLORKEY sind nicht definiert. Habe noch mind. 2 Stunden herumexperimentiert, bin aber auf keinen &#187;gr&#252;nen Zweig&#171; gekommen. Diese Erfahrung l&#228;&#223;t es f&#252;r mich sehr fraglich erscheinen, ob wir XV unterst&#252;tzen sollen....?
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#d5029a" DESTINATION="ID_724143984" ENDARROW="Default" ENDINCLINATION="-4050;-377;" ID="Arrow_ID_952114573" STARTARROW="None" STARTINCLINATION="-2736;172;"/>
+<icon BUILTIN="help"/>
+<icon BUILTIN="button_cancel"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1751808890315" ID="ID_1632926954" MODIFIED="1751808916136" TEXT="Dokumentation nachf&#xfc;hren">
 <icon BUILTIN="flag-yellow"/>

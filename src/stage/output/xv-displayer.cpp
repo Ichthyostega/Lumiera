@@ -142,6 +142,18 @@ namespace output {
                         }
                     }
                 }
+               /* WARNING: some graphic cards (notably my very old NVidia card) do not properly support the XV-Keying feature.
+                *          The above loop is written in a »defensive« way, insofar it is not permitted to set/change X attributes
+                *          that are not provided and supported by your hardware and driver stack.
+                *          It may thus happen (and it happens on my System) that the X driver somehow applies a default keying
+                *          to the complete XWindow. However, if parts of that window are used by other UI elements (as is the case
+                *          with our docking-panels), then these other widgets become "garbled" and will not repaint properly.
+                *          It does not help to attempt to paint explicitly with low-level X functions into that problematic region,
+                *          and I could not figure out why such an attempted fix does not work, when we paint in the on_map()-Event.
+                *          We can paint just fine with the same low-level functions from within the put() call.
+                *
+                *          Anyhow, as such the XV display works correct even in such cases, but it looks "broken" :-(
+                */
             }
           
           if (gotPort)
