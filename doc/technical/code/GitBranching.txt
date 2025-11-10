@@ -32,6 +32,11 @@ extended line into their _personal repository._ However, the _normative state_ o
 is represented by the link:https://git.lumiera.org/gitweb?p=LUMIERA[»Lumiera Repository«]
 `git://git.lumiera.org/LUMIERA`
 
+***************************************************
+image:{img}/pub/GitFlow-branches.svg[
+"Illustration Git-flow branching pattern"]
+***************************************************
+
 The Core Developer(s) can _push_ to this repository, thereby acting as _Gateway._ Automated builds
 will listen to this repository, and any further _downstream processes,_ like e.g. packaging,
 are always based on this state. What is described in the following sections however is a

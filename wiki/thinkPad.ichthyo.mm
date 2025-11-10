@@ -165916,8 +165916,8 @@ that situation will improve in forseeable future.</pre>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1751808460706" ID="ID_1046283899" MODIFIED="1751808483781" TEXT="Release: 0.pre.04">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1751808878589" ID="ID_577995027" MODIFIED="1751809060269" TEXT="Umstellung auf Git-Flow">
-<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#b7d1d3" COLOR="#338800" CREATED="1751808878589" FOLDED="true" ID="ID_577995027" MODIFIED="1762798106323" TEXT="Umstellung auf Git-Flow">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1751809002677" ID="ID_656514968" MODIFIED="1752198726663" TEXT="Schema ausarbeiten">
 <arrowlink COLOR="#208ad3" DESTINATION="ID_1853540136" ENDARROW="Default" ENDINCLINATION="-443;-37;" ID="Arrow_ID_1316442709" STARTARROW="None" STARTINCLINATION="-1044;119;"/>
 <icon BUILTIN="button_ok"/>
@@ -165945,7 +165945,7 @@ that situation will improve in forseeable future.</pre>
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#aea3cb" COLOR="#435e98" CREATED="1752198191279" ID="ID_1695263403" MODIFIED="1752198453212" TEXT="wo der Version-bump passiert">
+<node BACKGROUND_COLOR="#aea3cb" COLOR="#435e98" CREATED="1752198191279" FOLDED="true" ID="ID_1695263403" MODIFIED="1752198524365" TEXT="wo der Version-bump passiert">
 <icon BUILTIN="yes"/>
 <node CREATED="1752198230049" ID="ID_428196178" MODIFIED="1752198241399" TEXT="n&#xe4;chste-Version: direkt nach dem Release-branch"/>
 <node CREATED="1752198250942" ID="ID_253815327" MODIFIED="1752198271537" TEXT="Release-Ver: per amend auf dem Release-Commit"/>
@@ -165962,7 +165962,7 @@ that situation will improve in forseeable future.</pre>
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#aea3cb" COLOR="#435e98" CREATED="1752198215075" ID="ID_99180924" MODIFIED="1752198453212" TEXT="Namenskonvention">
+<node BACKGROUND_COLOR="#aea3cb" COLOR="#435e98" CREATED="1752198215075" FOLDED="true" ID="ID_99180924" MODIFIED="1762797742946" TEXT="Namenskonvention">
 <icon BUILTIN="yes"/>
 <node CREATED="1752198379053" ID="ID_1913429705" MODIFIED="1752198388390" TEXT="production: master"/>
 <node CREATED="1752198389315" ID="ID_1107137735" MODIFIED="1752198395783" TEXT="development: integration"/>
@@ -165975,7 +165975,7 @@ that situation will improve in forseeable future.</pre>
 </node>
 <node COLOR="#338800" CREATED="1751809017154" ID="ID_1881694204" MODIFIED="1752198180005" TEXT="Scripting planen (vorl&#xe4;ufig)">
 <icon BUILTIN="button_ok"/>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1751809216417" ID="ID_1705855350" MODIFIED="1751809241340" TEXT="Zielvorstellung(langfristig)">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1751809216417" FOLDED="true" ID="ID_1705855350" MODIFIED="1751812923067" TEXT="Zielvorstellung(langfristig)">
 <icon BUILTIN="yes"/>
 <icon BUILTIN="hourglass"/>
 <node CREATED="1751809242737" ID="ID_1531953968" MODIFIED="1751809267118" TEXT="minor-Release komplett automatisiert"/>
@@ -166158,8 +166158,60 @@ that situation will improve in forseeable future.</pre>
 </node>
 </node>
 </node>
-<node CREATED="1752077518949" ID="ID_57380146" MODIFIED="1752077525256" TEXT="Versions-Handling">
-<node COLOR="#338800" CREATED="1752077554512" ID="ID_1807385956" MODIFIED="1753060358875" TEXT="buildVersion --bump=maj|min|rev --suffix=spec --snapshot">
+<node COLOR="#435e98" CREATED="1752077518949" ID="ID_57380146" MODIFIED="1762789428757" TEXT="Versions-Handling">
+<icon BUILTIN="button_ok"/>
+<icon BUILTIN="hourglass"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1762788937645" ID="ID_742363980" MODIFIED="1762789391401" TEXT="Versions-Schema">
+<icon BUILTIN="list"/>
+<node CREATED="1762788944776" ID="ID_1609966184" MODIFIED="1762789012297" TEXT="allgemein gem&#xe4;&#xdf; unserem RfC">
+<arrowlink COLOR="#a07881" DESTINATION="ID_1867157597" ENDARROW="Default" ENDINCLINATION="-355;15;" ID="Arrow_ID_124504629" STARTARROW="None" STARTINCLINATION="98;9;"/>
+</node>
+<node CREATED="1762789019358" ID="ID_476631913" MODIFIED="1762789034585" TEXT="Features / Dev-Snapshots">
+<node CREATED="1762789037207" ID="ID_946440960" MODIFIED="1762789042134" TEXT="noch nicht festgelegt"/>
+<node CREATED="1762789042800" ID="ID_248363250" MODIFIED="1762789340839" TEXT="wird erst relevant f&#xfc;r CI">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Wobei allerdings (gem&#228;&#223; meinen Erfahrungen bei der Bank) die CI explizit so aufgesetzt werden mu&#223;, da&#223; sie verschiedene &#187;Linien&#171; nicht vermischt. Es ist nicht m&#246;glich, die CI-Builds allein durch die Versionsnummer zu steuern. Vielmehr mu&#223; es eine dedizierte CI geben f&#252;r
+    </p>
+    <ul>
+      <li>
+        Produktionsstand
+      </li>
+      <li>
+        Releases in Arbeit
+      </li>
+      <li>
+        Fixes in Arbeit
+      </li>
+      <li>
+        Integration
+      </li>
+      <li>
+        Feature-Development
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1762789054823" HGAP="46" ID="ID_735212629" MODIFIED="1762789235547" TEXT="Idee" VSHIFT="1">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...so da&#223; die unqualifizierte Version auf dem Integration-Branch die geringste Prio hat (am &#228;ltesten sortiert), Features danach stehen, und mit Timestamp markierte explizite Snapshots die h&#246;chste Prio haben
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+<node CREATED="1762789061058" ID="ID_329252710" MODIFIED="1762789077437" TEXT="1.2~dev"/>
+<node CREATED="1762789078381" ID="ID_1125424753" MODIFIED="1762789088461" TEXT="1.2~dev+Feature"/>
+<node CREATED="1762789090137" ID="ID_1573891011" MODIFIED="1762789108713" TEXT="1.2~dev.20251224"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1752077554512" FOLDED="true" ID="ID_1807385956" MODIFIED="1753060358875" TEXT="buildVersion --bump=maj|min|rev --suffix=spec --snapshot">
 <icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1752077683991" ID="ID_1525521230" MODIFIED="1753060424809" TEXT="Python">
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
@@ -166181,6 +166233,7 @@ that situation will improve in forseeable future.</pre>
     </p>
   </body>
 </html></richcontent>
+<linktarget COLOR="#a07881" DESTINATION="ID_1867157597" ENDARROW="Default" ENDINCLINATION="-355;15;" ID="Arrow_ID_124504629" SOURCE="ID_1609966184" STARTARROW="None" STARTINCLINATION="98;9;"/>
 </node>
 </node>
 <node CREATED="1753060427584" ID="ID_1910500485" MODIFIED="1753060439789" TEXT="--snapshot: Timestamp">
@@ -166205,8 +166258,8 @@ that situation will improve in forseeable future.</pre>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1751809040160" ID="ID_1023201938" MODIFIED="1752070079471" TEXT="Dokumentation schreiben">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1751809040160" ID="ID_1023201938" MODIFIED="1762797707677" TEXT="Dokumentation schreiben">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1751930640337" FOLDED="true" ID="ID_417154358" MODIFIED="1752758589912" TEXT="allgemeiner Essay zu Git-flow">
 <linktarget COLOR="#3245d9" DESTINATION="ID_417154358" ENDARROW="Default" ENDINCLINATION="-158;-13;" ID="Arrow_ID_583484888" SOURCE="ID_638212914" STARTARROW="None" STARTINCLINATION="515;50;"/>
 <linktarget COLOR="#4281cc" DESTINATION="ID_417154358" ENDARROW="Default" ENDINCLINATION="9;-72;" ID="Arrow_ID_1457330837" SOURCE="ID_666097997" STARTARROW="None" STARTINCLINATION="1;58;"/>
@@ -166711,15 +166764,108 @@ that situation will improve in forseeable future.</pre>
 <node COLOR="#338800" CREATED="1752070056112" ID="ID_5416271" MODIFIED="1752070065091" TEXT="konkrete Spezifikation f&#xfc;r Lumiera">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1752070068332" ID="ID_457744000" MODIFIED="1752070077044" TEXT="Diagramme hinzuf&#xfc;gen">
+<node COLOR="#338800" CREATED="1752070068332" FOLDED="true" ID="ID_457744000" MODIFIED="1762797789971" TEXT="Diagramme hinzuf&#xfc;gen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1762732850338" ID="ID_1733907272" MODIFIED="1762733021091" TEXT="mu&#xdf; diese doch selber zeichnen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Und zwar aus mehrerlei Gr&#252;nden
+    </p>
+    <ul>
+      <li>
+        didaktisch: mein Text operiert auf einem abstrakteren Level als der Original-Text von Vincent Driessen; daher gehe ich auf viele Details nicht ein, arbeite aber die Grundstrukturen und Motivationen st&#228;rker heraus
+      </li>
+      <li>
+        Abweichungen in der Methode: ich setzte die Tags etwas woanders, und ich schlage vor, die back-Merges sets vom Tag aus zu machen
+      </li>
+      <li>
+        Darstellung: ich m&#246;chte den Zeitablauf von unten nach oben darstellen, so wie er auch in fast allen Git-UIs gezeigt wird
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1762734164481" ID="ID_1774909728" MODIFIED="1762734190860" TEXT="&lt;WEB&gt;/imgages/pub/">
+<node COLOR="#435e98" CREATED="1762734206154" ID="ID_1238242863" MODIFIED="1762747533384" TEXT="GitFlow-branches.svg"/>
+<node COLOR="#435e98" CREATED="1762794480869" ID="ID_1368928454" MODIFIED="1762794489299" TEXT="GitFlow-releasebranch.svg"/>
+<node COLOR="#435e98" CREATED="1762734243468" ID="ID_1724860511" MODIFIED="1762794478907" TEXT="GitFlow-release.svg"/>
+<node COLOR="#435e98" CREATED="1762734252231" ID="ID_774298755" MODIFIED="1762797598066" TEXT="GitFlow-fix.svg"/>
+<node COLOR="#435e98" CREATED="1762734283396" ID="ID_1264120959" MODIFIED="1762797601098" TEXT="GitFlow-relfix.svg"/>
+</node>
+<node CREATED="1762733229883" ID="ID_590290450" MODIFIED="1762733243424" TEXT="Namensschema gem&#xe4;&#xdf; Lumiera-Konventionen">
+<node CREATED="1762733244556" ID="ID_600183842" MODIFIED="1762733248231" TEXT="Production: master"/>
+<node CREATED="1762733248891" ID="ID_1590311023" MODIFIED="1762733255053" TEXT="Development: integration"/>
+<node CREATED="1762733255821" ID="ID_218528379" MODIFIED="1762733263606" TEXT="rel/4.20"/>
+<node CREATED="1762733264265" ID="ID_913649319" MODIFIED="1762733270544" TEXT="fix/4.20.1"/>
+<node CREATED="1762733295164" ID="ID_824894362" MODIFIED="1762733298398" TEXT="dev/ID"/>
+</node>
+<node CREATED="1762733023274" ID="ID_768763080" MODIFIED="1762733035956" TEXT="Darstellungs-Schema">
+<node CREATED="1762733038103" ID="ID_1215010562" MODIFIED="1762733043983" TEXT="zeichnen in Inkscape">
+<node CREATED="1762733311979" ID="ID_215657787" MODIFIED="1762733316981" TEXT="Canvas in Pixel eichen">
+<node CREATED="1762733761549" ID="ID_1443206877" MODIFIED="1762733765467" TEXT="300px breit"/>
+<node CREATED="1762733948578" ID="ID_270122510" MODIFIED="1762733952875" TEXT="96dpi"/>
+<node CREATED="1762734050658" ID="ID_136112948" MODIFIED="1762747569823" TEXT="1 px/userUnit"/>
+<node CREATED="1762734063016" ID="ID_854368780" MODIFIED="1762747588308" TEXT="Viewbox &#x2261; Img-Size"/>
+</node>
+<node COLOR="#435e98" CREATED="1762735634605" ID="ID_614900638" MODIFIED="1762747607053" TEXT="Schrift: DejaVu Sans">
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#435e98" CREATED="1762733317638" ID="ID_1114585066" MODIFIED="1762747607053" TEXT="sofort auf Zielgr&#xf6;&#xdf;e skalieren">
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#338800" CREATED="1762733364835" ID="ID_175482859" MODIFIED="1762747601244" TEXT="ein Master-Diagramm machen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1762733373714" ID="ID_1146799284" MODIFIED="1762747610550" TEXT="daraus drei Exzerpte">
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1751809046079" ID="ID_63478810" MODIFIED="1751809054386" TEXT="Git: Branches angelegt">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#435e98" CREATED="1762733053217" ID="ID_250152741" MODIFIED="1762747632135" TEXT="die Branches insgesamt einf&#xe4;rben">
+<icon BUILTIN="yes"/>
+<node CREATED="1762733063807" ID="ID_390623288" MODIFIED="1762747618864" TEXT="gelbgr&#xfc;n: Features"/>
+<node CREATED="1762733081175" ID="ID_649191416" MODIFIED="1762733088827" TEXT="Gr&#xfc;n: Integration"/>
+<node CREATED="1762733090754" ID="ID_622048914" MODIFIED="1762733098638" TEXT="T&#xfc;rkis: Release"/>
+<node CREATED="1762733099822" ID="ID_887901261" MODIFIED="1762733104753" TEXT="Blau: Produktion"/>
+<node CREATED="1762733105391" ID="ID_1235535660" MODIFIED="1762733116977" TEXT="Magenta: Bugfix"/>
+</node>
+<node CREATED="1762733137538" ID="ID_1597789358" MODIFIED="1762733146707" TEXT="Tags als eingerahmte, gelbe Attachments"/>
+<node CREATED="1762733149528" ID="ID_1245031636" MODIFIED="1762733158508" TEXT="Version-Bumps mit Pfeilen und Text anzeigen"/>
+<node CREATED="1762733185228" ID="ID_631439143" MODIFIED="1762733192214" TEXT="Ordnungsschema: dar&#xfc;ber und grau"/>
+</node>
+<node COLOR="#338800" CREATED="1762747637793" ID="ID_297214770" MODIFIED="1762797678652" TEXT="In Text integrieren">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1762747653480" ID="ID_782685874" MODIFIED="1762747728734" TEXT="Tech-Doku: GitBranching">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      nach einigem Herumknobeln: es pa&#223;t neben den einleitenden Text, ab dem 2. Absatz &#10233; daraus ergibt sich eine Beschr&#228;nkung der Zeichnungsgr&#246;&#223;e
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1762797608531" ID="ID_860009120" MODIFIED="1762797624323" TEXT="Background: GitFlow">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1762797628956" ID="ID_1740443180" MODIFIED="1762797635533" TEXT="hier das gleiche Diagramm"/>
+<node BACKGROUND_COLOR="#c8c0b6" CREATED="1762797636166" ID="ID_1728073939" MODIFIED="1762797692529" TEXT="aber aufgeteilt in vier Schritte">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1762797647631" ID="ID_1367890348" MODIFIED="1762797659807" TEXT="jweils sinngem&#xe4;&#xdf; beschnitten"/>
+<node CREATED="1762797660679" ID="ID_1922440379" MODIFIED="1762797672593" TEXT="auch die Versions-Nummern explizit zeigen"/>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1751809046079" FOLDED="true" ID="ID_63478810" MODIFIED="1762798043428" TEXT="Git: Branches angelegt">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1752085949170" ID="ID_1454745363" MODIFIED="1752085953035" TEXT="master">
 <node CREATED="1752085959326" ID="ID_478495732" MODIFIED="1752086003392" TEXT="soll k&#xfc;nftig den alten release-Branch &#xfc;bernehmen"/>
-<node CREATED="1752086004013" ID="ID_880381087" MODIFIED="1752086306109" TEXT="vorerst stehen lassen &#x27f9; fast-forward">
+<node COLOR="#5b280f" CREATED="1752086004013" ID="ID_880381087" MODIFIED="1762797844358" TEXT="vorerst stehen lassen &#x27f9; fast-forward">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -166729,6 +166875,21 @@ that situation will improve in forseeable future.</pre>
   </body>
 </html></richcontent>
 <linktarget COLOR="#d30e36" DESTINATION="ID_880381087" ENDARROW="Default" ENDINCLINATION="243;17;" ID="Arrow_ID_1154928928" SOURCE="ID_842534069" STARTARROW="None" STARTINCLINATION="312;0;"/>
+<icon BUILTIN="button_cancel"/>
+</node>
+<node COLOR="#5b280f" CREATED="1762797848437" ID="ID_355388937" MODIFIED="1762798028896" TEXT="doch nicht &#x27f9; verwirrend">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      rein praktisch gesehen bringt das keinen Mehrwert;
+    </p>
+    <p>
+      wir hatten bisher nur &#187;preview&#171;-Releases, wlche nicht wirklich einen greifbaren Stand verk&#246;rpern. Zudem liegt das letzte solche Release jetzt <font size="2">(R&#228;usper)</font>&#160; zehn Jahre zur&#252;ck... wir w&#252;rden also jetzt &#252;ber 10 Jahre einen leeren Branch ziehen. Da erscheint es mir besser, das Schema jetzt neu aufzusetzen, mit Master von dem Punkt an dem Git-flow eingef&#252;hrt wird
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="closed"/>
 </node>
 </node>
 <node CREATED="1752085758915" ID="ID_818035530" MODIFIED="1752085764066" TEXT="integration"/>
@@ -166748,17 +166909,62 @@ that situation will improve in forseeable future.</pre>
 <node CREATED="1752086268575" ID="ID_1552394617" MODIFIED="1752086271443" TEXT="steam"/>
 <node CREATED="1752086272983" ID="ID_198415949" MODIFIED="1752086275779" TEXT="play"/>
 <node CREATED="1752086276843" ID="ID_128994335" MODIFIED="1752086277865" TEXT="gui"/>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1752086290892" ID="ID_842534069" MODIFIED="1752086310733" TEXT="release">
+<node CREATED="1752086290892" ID="ID_842534069" MODIFIED="1762798034368" TEXT="release">
 <arrowlink COLOR="#d30e36" DESTINATION="ID_880381087" ENDARROW="Default" ENDINCLINATION="243;17;" ID="Arrow_ID_1154928928" STARTARROW="None" STARTINCLINATION="312;0;"/>
-<icon BUILTIN="hourglass"/>
 </node>
 </node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1751808890315" ID="ID_1632926954" MODIFIED="1751808916136" TEXT="Dokumentation nachf&#xfc;hren">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1751808926894" ID="ID_590515881" MODIFIED="1751808930641" TEXT="Versionsnr">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1751808926894" FOLDED="true" ID="ID_590515881" MODIFIED="1762803684786" TEXT="Versionsnr">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1762802803705" ID="ID_1976234738" MODIFIED="1762802840018" TEXT="wird jetzt automatisiert gepflegt">
+<arrowlink COLOR="#4456cd" DESTINATION="ID_799390776" ENDARROW="Default" ENDINCLINATION="-16;92;" ID="Arrow_ID_1808190527" STARTARROW="None" STARTINCLINATION="43;4;"/>
+</node>
+<node COLOR="#435e98" CREATED="1762802920802" ID="ID_1676569264" MODIFIED="1762803471592" TEXT="Kontrolle: alles erfa&#xdf;t?">
+<node CREATED="1762802932575" ID="ID_884854406" MODIFIED="1762802939034" TEXT="nach 0.pre.03 suchen"/>
+<node CREATED="1762803033887" ID="ID_892944353" MODIFIED="1762803038219" TEXT="einige Treffer">
+<node COLOR="#435e98" CREATED="1762803077787" ID="ID_1130173598" MODIFIED="1762803349089" TEXT="Erw&#xe4;hnungen in historischen Texten (sind OK)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <ul>
+      <li>
+        project/news/DevReport-16-11.txt : <font color="#202020" face="Bitstream Vera Sans Mono">by cutting a new ``preview release''</font> (Version `Lumiera-0.pre.03`), and, in the process, updating the packages...
+      </li>
+      <li>
+        project/news/old_news.txt : We published the next &#187;preview release&#171; `0.pre.03`
+      </li>
+      <li>
+        project/background/history/Resources.txt : Erw&#228;hnung in der Zeittafel
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1762803039146" ID="ID_159825352" MODIFIED="1762803066370" TEXT="Beispiel im debianDepot.txt">
+<node CREATED="1762803507343" HGAP="22" ID="ID_834370322" MODIFIED="1762803569440" TEXT="die Seite mu&#xdf; ohnehin &#xfc;berarbeitet werden" VSHIFT="12">
+<arrowlink COLOR="#b5768e" DESTINATION="ID_1198625842" ENDARROW="Default" ENDINCLINATION="102;11;" ID="Arrow_ID_1663167652" STARTARROW="None" STARTINCLINATION="-35;55;"/>
+</node>
+</node>
+</node>
+<node COLOR="#62331f" CREATED="1762803592007" ID="ID_279432696" MODIFIED="1762803627068" TEXT="diese werden sich alle von selbst erledigen">
+<font NAME="SansSerif" SIZE="11"/>
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node COLOR="#435e98" CREATED="1762803456506" ID="ID_75671115" MODIFIED="1762803480640">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <u>Fazit</u>: <b>OK</b>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1752070238449" ID="ID_1380279991" MODIFIED="1752070248400" TEXT="Clean-up allgemein">
 <icon BUILTIN="flag-yellow"/>
@@ -167064,12 +167270,18 @@ that situation will improve in forseeable future.</pre>
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1756817746790" ID="ID_1287550895" MODIFIED="1756817778617" TEXT="Au13.pre &#x27fc; August13">
 <icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1762727848463" ID="ID_185394649" MODIFIED="1762727859659" TEXT="Links darauf umstellen">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1756936990537" ID="ID_1030893321" MODIFIED="1756937011089" TEXT="Problem: fehlende Seiten">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1762727860576" ID="ID_1025720561" MODIFIED="1762728118891" TEXT="Verzeichnis auf dem Server umbenennen">
+<icon BUILTIN="flag-pink"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1756936990537" FOLDED="true" ID="ID_1030893321" MODIFIED="1762728245642" TEXT="Problem: fehlende Seiten">
 <icon BUILTIN="clanbomber"/>
 <node CREATED="1756937024722" ID="ID_264003249" MODIFIED="1756937032826" TEXT="unendlich viele Einzelthemen"/>
 <node CREATED="1756937033658" ID="ID_1509603645" MODIFIED="1756937047500" TEXT="im TiddlyWiki gibts daf&#xfc;r jeweils einen &#xbb;Tiddler&#xab;"/>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1756937081422" ID="ID_1473479858" MODIFIED="1756937089530" TEXT="Thematische Anordnung ist ungekl&#xe4;rt">
+<node BACKGROUND_COLOR="#dfca9f" COLOR="#dd2501" CREATED="1756937081422" ID="ID_1473479858" MODIFIED="1762728144273" TEXT="Thematische Anordnung ist ungekl&#xe4;rt">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1756937093722" ID="ID_1318650958" MODIFIED="1756937101284" TEXT="das d&#xfc;rfte der Kern des Problems sein"/>
 <node CREATED="1756937101776" ID="ID_1321628608" MODIFIED="1756937129495" TEXT="die Dokumentation soll trennen nach Design / Technik"/>
@@ -167129,7 +167341,7 @@ that situation will improve in forseeable future.</pre>
 <node CREATED="1756938772847" ID="ID_472407213" MODIFIED="1756938818241" TEXT="mu&#xdf; die M&#xf6;glichkeit zum Reifen dieses Systems schaffen"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1756944222448" ID="ID_150932933" MODIFIED="1756944327464" TEXT="vorl&#xe4;ufig: manuelle Linkfarm-Eintr&#xe4;ge">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1756944222448" FOLDED="true" ID="ID_150932933" MODIFIED="1756040327464" TEXT="vorl&#xe4;ufig: manuelle Linkfarm-Eintr&#xe4;ge">
 <arrowlink COLOR="#fff2d9" DESTINATION="ID_1854153711" ENDARROW="Default" ENDINCLINATION="82;184;" ID="Arrow_ID_789572840" STARTARROW="None" STARTINCLINATION="-258;-18;"/>
 <icon BUILTIN="bell"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1756997510608" ID="ID_1340206899" LINK="#ID_1783830780" MODIFIED="1756997541478" TEXT="Design-Themen schlank halten">
