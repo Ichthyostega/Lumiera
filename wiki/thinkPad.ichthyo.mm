@@ -166054,6 +166054,42 @@ that situation will improve in forseeable future.</pre>
 </node>
 </node>
 </node>
+<node CREATED="1762902461883" ID="ID_1559550337" MODIFIED="1762902464870" TEXT="Meta">
+<node CREATED="1762902465988" ID="ID_1902716840" MODIFIED="1762902476765" TEXT="Projektorganisation"/>
+<node CREATED="1762902477581" ID="ID_659681075" MODIFIED="1762902520594" TEXT="Authors / Attribution">
+<node CREATED="1762902539136" ID="ID_1999575438" MODIFIED="1762902542906" TEXT="Anfangszeit">
+<node CREATED="1762902544495" ID="ID_1184833585" MODIFIED="1762902648272" TEXT="es wurd mal spa&#xdf;halber ein &#xbb;Abspann&#xab; gebastelt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...der findet sich in der Seite project/credits.html und besteht aus einem speziellen CSS + ein JavaScript, das die Seite langsam scrollt.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Relevant ist hier vor allem der Content, denn das war der erste Versuch, Attribution zu geben (und bisher auch die Basis des AUTHORS file)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1762902649851" ID="ID_1241893815" MODIFIED="1762902652015" TEXT="2025">
+<node CREATED="1762902664705" ID="ID_227524343" MODIFIED="1762902935711" TEXT="sollte diese Info konsolidieren und pr&#xfc;fen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ....anhand der Git-Logs nach Auslassungen suchen; dann aber auch die Darstellung etwas rebalancieren, denn die entspricht mehr dem Eindruck aus der Anfangszeit, als jeder kleine Beitrag bejubelt wurde &#8212; aus heutiger Sicht haben wir einige substantielle Beitr&#228;ge, die in dieser ganzen Masse an Credits untergehen, w&#228;hrend Sachen hervorgehoben werden, die letztlich nie zustandegekommen sind (uWiki, Builddrone, neues Website-Layout, Christian's DataBackend)
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#58509e" DESTINATION="ID_1146586233" ENDARROW="Default" ENDINCLINATION="-216;-14;" ID="Arrow_ID_1813989480" STARTARROW="None" STARTINCLINATION="266;17;"/>
+</node>
+</node>
+</node>
+</node>
+</node>
 </node>
 <node CREATED="1751833021246" HGAP="10" ID="ID_1501497638" MODIFIED="1751833031779" TEXT="Struktur" VSHIFT="-2">
 <node CREATED="1756996752814" HGAP="-2" ID="ID_1879816570" MODIFIED="1756996783991" TEXT="Richtlinien" VSHIFT="8">
@@ -167021,6 +167057,7 @@ that situation will improve in forseeable future.</pre>
 </node>
 </node>
 <node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1752198078437" ID="ID_799390776" MODIFIED="1752198102479" TEXT="typische Anwendung: Version-bump">
+<linktarget COLOR="#4456cd" DESTINATION="ID_799390776" ENDARROW="Default" ENDINCLINATION="-16;92;" ID="Arrow_ID_1808190527" SOURCE="ID_1976234738" STARTARROW="None" STARTINCLINATION="43;4;"/>
 <icon BUILTIN="info"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1752198103826" ID="ID_1302573058" MODIFIED="1752198111440" TEXT="admin/setVersion `admin/buildVersion.py --bump -s dev`">
 <icon BUILTIN="idea"/>
@@ -168578,21 +168615,469 @@ that situation will improve in forseeable future.</pre>
 </node>
 </node>
 </node>
-<node CREATED="1757467120936" ID="ID_1396646253" MODIFIED="1757467126724" TEXT="Footer">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1757467120936" ID="ID_1396646253" MODIFIED="1762822940686" TEXT="Footer">
+<icon BUILTIN="bell"/>
 <node CREATED="1757467128881" ID="ID_536613684" MODIFIED="1757467140201" TEXT="search-Feld?"/>
 <node CREATED="1757467140824" ID="ID_389709958" MODIFIED="1757467150994" TEXT="welche Repos sind sinnvoll?"/>
 <node CREATED="1757467151657" ID="ID_566958065" MODIFIED="1757467158398" TEXT="genauerer Timestamp">
 <node CREATED="1757467159266" ID="ID_599618635" MODIFIED="1757467172806" TEXT="derzeit verwenden wir {localdate} {localtime}"/>
 <node CREATED="1757467173466" ID="ID_726876662" MODIFIED="1757467186928" TEXT="denkbar: {docdate} {doctime}"/>
+<node CREATED="1762825685628" ID="ID_1516458395" LINK="https://asciidoc-py.github.io/userguide.html#X60" MODIFIED="1762825699271" TEXT="siehe User-Manual(&quot;intrinsic attributes&quot;)">
+<node CREATED="1762825702431" ID="ID_512159050" MODIFIED="1762825750039" TEXT="demnach sollte &#xbb;document last modified time&#xab; verwendet werden"/>
+<node CREATED="1762825750860" ID="ID_1853602425" MODIFIED="1762825803273" TEXT="man kann das mit der Env-Variable SOURCE_DATE_EPOCH &#xfc;bersteuern">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      diese greift, wenn die mtime neuer w&#228;re als die angegebene Unix-Epoch. Damit kann man einen Build reproducible machen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1762827148190" ID="ID_337811427" MODIFIED="1762827151533" TEXT="Experiment">
+<node CREATED="1762827152647" ID="ID_1951563714" MODIFIED="1762827191388" TEXT="funktioniert">
+<node CREATED="1762827192665" ID="ID_1529341465" MODIFIED="1762827197256" TEXT="aber build_website.sh macht touch"/>
+<node CREATED="1762827197919" ID="ID_827959527" MODIFIED="1762827230602" TEXT="als &quot;poor man dependency tracking&quot;"/>
+<node CREATED="1762827232932" ID="ID_1296273596" MODIFIED="1762827237162" TEXT="und zwar...">
+<node CREATED="1762827238593" ID="ID_403999783" MODIFIED="1762827246742" TEXT="includes, wie footer.htmlf"/>
+<node CREATED="1762827247436" ID="ID_807677358" MODIFIED="1762827261269" TEXT="das Page-Temlate (page.conf)"/>
+</node>
+</node>
+<node CREATED="1762827264425" ID="ID_1241559972" MODIFIED="1762827277724" TEXT="localdate &#x2259; aktuelle Systemzeit"/>
+<node CREATED="1762827278600" ID="ID_401397454" MODIFIED="1762827295830" TEXT="docdate &#x2259; mtime der Asciidoc-source"/>
+</node>
+<node CREATED="1762827347203" ID="ID_685663386" LINK="http://flaucher:9023/Dreck/wiki/zuGIT#TimestampimWorkdiraufCommitter-Timesetzen" MODIFIED="1762827625639" TEXT="Konsequenz &#x27f9; mtime von Git setzen"/>
 </node>
 <node CREATED="1763487203125" ID="ID_1397178259" MODIFIED="1763487214573" TEXT="HTML-Elemente inkonsistent">
 <node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1763487216248" ID="ID_1383387788" MODIFIED="1763487264069" TEXT="beim Impressum wird &lt;span&gt; ge&#xf6;ffnet und &lt;/font&gt; geschlossen">
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
+<node CREATED="1762822869176" ID="ID_1816572967" MODIFIED="1762822875499" TEXT="Lizenzinfo">
+<node CREATED="1762822876681" ID="ID_1854567985" MODIFIED="1762822886997" TEXT="human-readable &#x27f6; Footer"/>
+<node CREATED="1762822887987" ID="ID_1320812059" MODIFIED="1762823235768" TEXT="machine-readable &#x27f6; HTML-Header">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <ul>
+      <li>
+        &lt;link rel=&quot;license&quot; href=&quot;https://www.gnu.org/licenses/old-licenses/gpl-2.0.html&quot; /&gt;
+      </li>
+      <li>
+        &lt;link rel=&quot;license&quot; href=&quot;https://www.gnu.org/licenses/gpl-3.0&quot; /&gt;
+      </li>
+      <li>
+        &lt;link rel=&quot;license&quot; href=&quot;https://creativecommons.org/licenses/by-sa/4.0/&quot; /&gt;
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#b6556d" DESTINATION="ID_1320812059" ENDARROW="Default" ENDINCLINATION="341;25;" ID="Arrow_ID_1928313648" SOURCE="ID_786194186" STARTARROW="None" STARTINCLINATION="-212;14;"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1756834117054" ID="ID_718437760" MODIFIED="1756834125609" TEXT="Lizenz-Seiten erneuern">
-<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1756834117054" ID="ID_718437760" MODIFIED="1762913965071" TEXT="Lizenz-Seiten erneuern">
+<linktarget COLOR="#444e73" DESTINATION="ID_718437760" ENDARROW="Default" ENDINCLINATION="-118;-1153;" ID="Arrow_ID_1565932104" SOURCE="ID_195415850" STARTARROW="None" STARTINCLINATION="221;24;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1762812389626" ID="ID_627976312" MODIFIED="1762911339152" TEXT="Kette der Lizenz-Statements nochmal pr&#xfc;fen"/>
+<node COLOR="#338800" CREATED="1762812413231" FOLDED="true" ID="ID_403219642" MODIFIED="1762917001157" TEXT="k&#xf6;nnte ein pauschales Update der CC-Lizenz machen mit Stichtag">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Grunds&#228;tzlich kann ich Content von anderen Leuten nicht ohne Weiteres aktualisieren. Aber Seiten, zu denen ich sp&#228;ter Erg&#228;nzungen beigetragen habe, stellen ein abgeleitetes Werk dar, und in dem Zuge kann ich von dem Upgrade-Recht (das CC-Lizenzen stets beinhalten) Gebrauch machen. Das geht aber nur mit einem explizit genannten Stichdatum (oder wenn man sicherstellt, da&#223; jede Seite tats&#228;chlich bearbeitet wurde (Git-Commit) und einen entsprechenden Vermerk tr&#228;gt
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1762812833791" ID="ID_126491828" MODIFIED="1762823355516" TEXT="Upgrade auf CC By SA 4">
+<icon BUILTIN="info"/>
+<node CREATED="1762812844501" ID="ID_1900996838" MODIFIED="1762812853107" TEXT="Haupts&#xe4;tzlich Klarstellungen"/>
+<node CREATED="1762812854023" ID="ID_1708248191" MODIFIED="1762812865793" TEXT="ist jetzt international / keine &quot;ported versions&quot; mehr"/>
+<node CREATED="1762812870162" ID="ID_1834084819" MODIFIED="1762812885094" TEXT="praktische Klarstellung wie die &#xbb;Attribution&#xab; zu erfolgen hat"/>
+<node CREATED="1762812892345" ID="ID_1008199985" MODIFIED="1762823490973" TEXT="deckt jetzt auch &#xbb;sui generis&#xab; database rights mit ab">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Vor allem relevant in der EU: die Datenbank als Ganzes (oder in gro&#223;en Teilen) bleibt gesch&#252;tzt, da sie ein erhebliches Investment darstellt. CC-Lizenzen gelten nur f&#252;r den Abruf und Gebrauch von Einzeldaten
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1762812917071" ID="ID_873092299" MODIFIED="1762823500568" TEXT="Klarstellung da&#xdf; eine implizite Patent-Lizenz erteilt wird, sofern einschl&#xe4;gig"/>
+<node CREATED="1762814014954" ID="ID_1408983473" MODIFIED="1762814052658" TEXT="Klarstellung wie das Werk in Sammlungen aufgenommen werden kann"/>
+<node CREATED="1762812945692" ID="ID_1178967886" MODIFIED="1762813751617" TEXT="Regulierung f&#xfc;r &#xbb;moral rights regime&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das beseitigt eine gef&#228;hrliche Falle. Manche L&#228;nder (z.B. England, Frankreich, Japan) haben ein striktes <i>moral rights regime,</i>&#160;das ohne ensprechende Klarstellung daf&#252;r sorgen k&#246;nnte, da&#223; die per CC gegebenen Rechte durch einen Beitrag abgeschw&#228;cht werden k&#246;nnten. Die neue Lizenz hat eine spezielle &#187;Tunell-Klausel&#171;, der zufolge per &#252;bersteuerndem Recht eingeschr&#228;nkte Rechte wieder aufleben, sofern die Bearbeitung in einen anderen Rechtsraum gelangt. Zu den <b>moral rights</b>&#160;geh&#246;rt das Recht eines Authors, &#252;ber die Art der Repr&#228;sentation seines Werkes vollumf&#228;nglich zu bestimmen. Das bedeutet, da&#223; ein Author das Recht hat, einem abgeleiteten Werk oder einer &#220;bersetzung <b>nicht zuzustimmen</b>&#160; und verlangen kann, da&#223; entsprechende Werke effektiv aus dem Verkehr gezogen werden. Das w&#252;rde auch greifen, wenn ein bisher substantieller Anteil marginalisiert wird, oder die Art und der Stil der Darstellung sich &#228;ndert.
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1762814882646" ID="ID_1218593501" MODIFIED="1762814904947" TEXT="&#xbb;agreement to waive&#xab; : gilt nur f&#xfc;r den Licensor"/>
+<node CREATED="1762814905891" ID="ID_1950938520" MODIFIED="1762814914750" TEXT="die Rechte Dritter sind stets zu beachten"/>
+</node>
+<node CREATED="1762812972253" ID="ID_1819653777" MODIFIED="1762812987891" TEXT="DRM-Verbot sofern die Rechte durch diese Lizenz ber&#xfc;hrt w&#xe4;ren"/>
+<node CREATED="1762812992244" ID="ID_584430994" MODIFIED="1762813049879" TEXT="Kompatibilit&#xe4;t mit anderen Lizenzen (GPL 3 !)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Es gibt jetzt einen Pfad CC By SA 4 &#10230; GPL 3+ (aber nicht umgekehrt!)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1762823357443" HGAP="64" ID="ID_1459485319" MODIFIED="1762824467324" TEXT="stelle mich auf den Standpunkt: das ist eine Collection / Republikation" VSHIFT="6">
+<icon BUILTIN="yes"/>
+<node CREATED="1762823389015" ID="ID_891322505" MODIFIED="1762824236373" TEXT="Risiko dabei ist gering">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <u>Adapted Material:</u>&#160;means material subject to Copyright and Similar Rights that is derived from or based upon the Licensed Material and in which the Licensed Material is translated, altered, arranged, transformed, or otherwise modified in a manner requiring permission under the Copyright and Similar Rights held by the Licensor.
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1762824243555" ID="ID_518571803" MODIFIED="1762824258571" TEXT="Texte und Grafiken aus der Community in den ersten Jahren"/>
+<node CREATED="1762824259346" ID="ID_557894868" MODIFIED="1762824269617" TEXT="diese waren bereits explizit dieser Website hinzugef&#xfc;gt"/>
+<node CREATED="1762824271096" ID="ID_1442038192" MODIFIED="1762824314909" TEXT="es gab m.W. keine zus&#xe4;tzlichen Copyright-Statements"/>
+<node CREATED="1762824328774" ID="ID_304249788" MODIFIED="1762824343836" TEXT="auch keine Links oder Hinweise auf die Lizenz direkt im Content"/>
+<node CREATED="1762824344793" ID="ID_1048255359" MODIFIED="1762824356663" TEXT="lediglich den Namen des Authors (und der bleibt erhalten)"/>
+<node CREATED="1762824357590" ID="ID_89532822" MODIFIED="1762824458744" TEXT="ich habe diesen Content nicht modifiziert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Es geht nach meiner Einsch&#228;tzung vor allem um die Protokolle, die andere Leute geschrieben haben, die RfCs und die Workflow/GUI-Proposals. Alle diese werden mit klarer Author-Angabe reproduziert
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1762824489350" ID="ID_1125732852" MODIFIED="1762824635998" TEXT="Ich &#xe4;ndere nicht die Lizenz-Elemente (sondern upgrade die Version)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      und die neue Version schr&#228;nkt nach meiner Einsch&#228;tzung keine Rechte ein, sondern stellt nur Rechte klar. Der gr&#246;&#223;te Knackpunkt k&#246;nnten <i>moral rights</i>&#160;sein, aber da stelle ich mich auf den Standpunkt, da&#223; ich eine Adaption/Collection mache, und daher gar nicht &#252;ber die <i>moral rights</i>&#160;von Dritten verf&#252;gen kann. Insofern bestehen diese weiter
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1762823408566" ID="ID_1589563291" MODIFIED="1762823445250" TEXT="&gt; 90% des Text-Content stammt von mir">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      bisweilen mit Benny als Co-Author
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#b0a8c6" COLOR="#435e98" CREATED="1762902967484" ID="ID_258070166" MODIFIED="1762903030612" TEXT="Fazit: nun auf GPL 2+ / CC-By-SA 4.0">
+<icon BUILTIN="back"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1762819816068" ID="ID_1282223325" MODIFIED="1762913927075" TEXT="CC-By-SA Lizenzbutton aktualisieren">
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1762819828553" ID="ID_465472618" MODIFIED="1762819842964" TEXT="der Lizenz-Generator erzeugt keinen Button mehr">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node COLOR="#435e98" CREATED="1762819843772" ID="ID_810778960" MODIFIED="1762913920151" TEXT="wo ist der maschinenlesbare Code geblieben?">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Wobei in diesem Kontext zweifelhaft ist, was ein maschinenlesbarer Code auf einer allgemeinen Lizenz-Seite bringen soll. Das w&#252;rde eigentlich nur Sinn machen, wenn der Button auf jeder Seite w&#228;re
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1762820942381" ID="ID_964155791" MODIFIED="1762820954510" TEXT="ChatGPT gefragt">
+<icon BUILTIN="wizard"/>
+<node CREATED="1762820957170" ID="ID_1885929709" MODIFIED="1762821083898" TEXT="es gab wohl einen Policy-Change">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      So stellt es zumindest ChatGPT dar. Demnach habe man die Empfehlungen bei CC vereinfacht, und biete nun einfach Grafiken an, die die User in ihre Website packen k&#246;nnen.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1762820965203" ID="ID_925163391" MODIFIED="1762821001026" TEXT="ChatGPT empfiehlt, &lt;link rel=&quot;license&quot;...&gt; Elemente in den HTML-Header zu packen"/>
+</node>
+<node COLOR="#435e98" CREATED="1762821095657" ID="ID_671178137" MODIFIED="1762821110583" TEXT="dann kann ich die Seite ja wohl nun selber gestalten">
+<icon BUILTIN="idea"/>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1762822789997" ID="ID_786194186" MODIFIED="1762823235768" TEXT="die Idee mit den Header-Links umsetzen">
+<arrowlink COLOR="#b6556d" DESTINATION="ID_1320812059" ENDARROW="Default" ENDINCLINATION="341;25;" ID="Arrow_ID_1928313648" STARTARROW="None" STARTINCLINATION="-212;14;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1762902890626" FOLDED="true" ID="ID_1146586233" MODIFIED="1762917015418" TEXT="Attibutions / Authoren angemessen darstellen">
+<linktarget COLOR="#58509e" DESTINATION="ID_1146586233" ENDARROW="Default" ENDINCLINATION="-216;-14;" ID="Arrow_ID_1813989480" SOURCE="ID_227524343" STARTARROW="None" STARTINCLINATION="266;17;"/>
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1762903040791" ID="ID_680288475" MODIFIED="1762905743077" TEXT="Website: Liste abgleichen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1762903047755" ID="ID_1229250234" MODIFIED="1762903053898" TEXT="es gibt die Liste aus den Credits"/>
+<node CREATED="1762903054539" ID="ID_1425772918" MODIFIED="1762903061906" TEXT="und die Commits im Website-Git-Repo"/>
+<node CREATED="1762903230457" FOLDED="true" ID="ID_1318385168" MODIFIED="1762905751874" TEXT="im Einzelnen">
+<icon BUILTIN="edit"/>
+<node CREATED="1762903235462" ID="ID_1281076147" MODIFIED="1762903242388" TEXT="alcarinque (Rodriguez)">
+<node CREATED="1762903249572" ID="ID_953490668" MODIFIED="1762903254267" TEXT="scrolling credits"/>
+<node CREATED="1762903254765" ID="ID_1194795988" MODIFIED="1762903261525" TEXT="Asciidoc of RfCs"/>
+<node COLOR="#338800" CREATED="1762903267363" ID="ID_1829415490" MODIFIED="1762903476666" TEXT="korrekt repr&#xe4;sentiert">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1762903426988" ID="ID_1877598330" MODIFIED="1762903460639" TEXT="pseudroruprecht (Andreas hermann Braml)">
+<node CREATED="1762903462057" ID="ID_1117228454" MODIFIED="1762903466985" TEXT="Umzug Website"/>
+<node CREATED="1762903467482" ID="ID_87366806" MODIFIED="1762903471152" TEXT="Design neue Website"/>
+<node COLOR="#338800" CREATED="1762903471769" ID="ID_784419461" MODIFIED="1762903474410" TEXT="korrekt">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1762903526073" ID="ID_1670415133" MODIFIED="1762903537660" TEXT="andrewjames  (ANDREW JAMES SWINAMER)">
+<node CREATED="1762903598198" ID="ID_452741682" MODIFIED="1762903604388" TEXT="Setup neue Website-struktur"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1762903672742" ID="ID_21599360" MODIFIED="1762903681963" TEXT="fehlte">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1762903869271" ID="ID_424865395" MODIFIED="1762903898867" TEXT="BJMR (Brian Rytel)">
+<node CREATED="1762903900147" ID="ID_1284575126" MODIFIED="1762903922731" TEXT="wesentlich f&#xfc;r Aufbau neue Website"/>
+<node COLOR="#338800" CREATED="1762903923406" ID="ID_593741674" MODIFIED="1762903925994" TEXT="korrekt">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1762903976528" ID="ID_708438570" MODIFIED="1762903996796" TEXT="Bruce Bertrand">
+<node CREATED="1762903997640" ID="ID_334413258" MODIFIED="1762904001858" TEXT="Asciidoc transition"/>
+<node COLOR="#338800" CREATED="1762904002474" ID="ID_1616447782" MODIFIED="1762904004831" TEXT="korrekt">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1762904023424" ID="ID_557804903" MODIFIED="1762904039015" TEXT="goibhniu (Cillian de Roiste)">
+<node CREATED="1762904093938" ID="ID_1618953420" MODIFIED="1762904095363" TEXT="CSS"/>
+<node COLOR="#338800" CREATED="1762904096050" ID="ID_1415847016" MODIFIED="1762904098229" TEXT="korrekt">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1762904117304" ID="ID_698712881" MODIFIED="1762904120100" TEXT="Clay Barnes">
+<node CREATED="1762904121416" ID="ID_1344190546" MODIFIED="1762904128300" TEXT="nur ein UI-Konzept"/>
+<node CREATED="1762904128955" ID="ID_1324497324" MODIFIED="1762904139970" TEXT="aber qualitativ hochwertig"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1762904140739" ID="ID_1083004022" MODIFIED="1762904144989" TEXT="fehlte">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1762904247771" ID="ID_723525045" MODIFIED="1762904278056" TEXT="daitheflu (FRAN&#xc7;OIS KUBLER )">
+<node CREATED="1762904337423" ID="ID_903107670" MODIFIED="1762904343732" TEXT="Asciidoc transition (RfC)"/>
+<node COLOR="#338800" CREATED="1762904344381" ID="ID_885726753" MODIFIED="1762904347228" TEXT="korrekt">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1762904366612" ID="ID_123699362" MODIFIED="1762904369169" TEXT="Wouter">
+<node COLOR="#338800" CREATED="1762904392291" ID="ID_141889384" MODIFIED="1762904397073" TEXT="Asciidoc (korrekt)">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1762904397882" ID="ID_1239664310" MODIFIED="1762904404137" TEXT="hab aber noch weiter beigetragen">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1762904453101" ID="ID_768684099" MODIFIED="1762904455099" TEXT="fede">
+<node CREATED="1762904456053" ID="ID_608147588" MODIFIED="1762904462337" TEXT="kleiner Beitrag zu Asciidoc"/>
+<node CREATED="1762904462934" ID="ID_1090615150" MODIFIED="1762904469631" TEXT="finde ich nirgends aufgef&#xfc;hrt"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1762904470448" ID="ID_849303034" MODIFIED="1762904478883" TEXT="Voller Name nicht bekannt">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1762904531506" ID="ID_13328433" MODIFIED="1762904536021" TEXT="Francesco Siddi">
+<node CREATED="1762904537098" ID="ID_1444454690" MODIFIED="1762904542998" TEXT="nur neues Website-Design"/>
+<node CREATED="1762904543708" ID="ID_1202901172" MODIFIED="1762904551197" TEXT="ist nie live gegangen"/>
+<node COLOR="#338800" CREATED="1762904553620" ID="ID_333906757" MODIFIED="1762904559761" TEXT="korrekt aufgef&#xfc;hrt">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1762904646530" ID="ID_778576894" MODIFIED="1762904648429" TEXT="Hendrik Boom">
+<node CREATED="1762904649241" ID="ID_137175951" MODIFIED="1762904669635" TEXT="ein einziger Commit: clean-up awkward language"/>
+<node CREATED="1762904684773" ID="ID_774111468" MODIFIED="1762904690791" TEXT="ist unter Dokumentation aufgef&#xfc;hrt"/>
+<node COLOR="#338800" CREATED="1762904691281" ID="ID_544507586" MODIFIED="1762904693529" TEXT="korrekt">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1762904721824" ID="ID_679370808" MODIFIED="1762904724201" TEXT="IgorVladimirsky">
+<node CREATED="1762904725215" ID="ID_886975406" MODIFIED="1762904733010" TEXT="dem habe ich Credit gegeben"/>
+<node CREATED="1762904734742" ID="ID_319954213" MODIFIED="1762904748009" TEXT="hat uns auf inkorrekte URL hingewiesen"/>
+<node CREATED="1762904748691" ID="ID_1412260157" MODIFIED="1762904757183" TEXT="hab die Wikipedia-Seite &#xfc;berarbeitet"/>
+<node CREATED="1762904816953" ID="ID_828378903" MODIFIED="1762904825126" TEXT="pa&#xdf;t eigentlich nirgends rein"/>
+<node COLOR="#435e98" CREATED="1762904825944" ID="ID_1153708308" MODIFIED="1762904886876" TEXT="&#x27f9; special thanks"/>
+</node>
+<node CREATED="1762904922536" ID="ID_764059142" MODIFIED="1762904923794" TEXT="Jon Tibble">
+<node CREATED="1762904924528" ID="ID_724776142" MODIFIED="1762904932939" TEXT="ein Grammar fix, 2008"/>
+<node COLOR="#5b280f" CREATED="1762904934287" ID="ID_496496703" MODIFIED="1762904965587" TEXT="nicht erw&#xe4;hnt, k&#xf6;nnen wir ignorieren">
+<icon BUILTIN="button_cancel"/>
+</node>
+</node>
+<node CREATED="1762904994941" ID="ID_848981003" MODIFIED="1762905645567" TEXT="komputes (auch &quot;ubuntu&quot;)">
+<node CREATED="1762904997696" ID="ID_542530982" MODIFIED="1762905001672" TEXT="Asciidoc"/>
+<node COLOR="#338800" CREATED="1762905002046" ID="ID_1467725487" MODIFIED="1762905004727" TEXT="korrekt">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1762905039299" ID="ID_846605106" MODIFIED="1762905040981" TEXT="Ploujnikov">
+<node CREATED="1762905041859" ID="ID_1287862451" MODIFIED="1762905056026" TEXT="zwei Fixes">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      CSS, falscher Link
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#5b280f" CREATED="1762905058085" ID="ID_801134859" MODIFIED="1762905077561" TEXT="kann man ignorieren f&#xfc;r die Website">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" CREATED="1762905078367" ID="ID_1622977583" MODIFIED="1762905091118" TEXT="(ist n&#xe4;mlich ein Core-Developer, und damit aufgef&#xfc;hrt)"/>
+</node>
+<node CREATED="1762905194727" ID="ID_1306816085" MODIFIED="1762905196336" TEXT="Odin">
+<node CREATED="1762905197239" ID="ID_129256004" MODIFIED="1762905209765" TEXT="ist nur unter PR /Froscon aufgef&#xfc;hrt"/>
+<node CREATED="1762905210691" ID="ID_210554686" MODIFIED="1762905219955" TEXT="hat korrigiert und CSS &#xfc;berarbeitet"/>
+<node COLOR="#435e98" CREATED="1762905220882" ID="ID_1301120191" MODIFIED="1762905232469" TEXT="also dort hinzuf&#xfc;gen">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1762905302760" ID="ID_1052292253" MODIFIED="1762905305234" TEXT="Raffa">
+<node CREATED="1762905306029" ID="ID_461607022" MODIFIED="1762905327830" TEXT="hat 2008-10 viel beigetragen"/>
+<node CREATED="1762905328511" ID="ID_1902442503" MODIFIED="1762905336410" TEXT="Aufgef&#xfc;hrt als Konzeption der Website"/>
+<node COLOR="#338800" CREATED="1762905337087" ID="ID_803685162" MODIFIED="1762905341183" TEXT="erscheint korrekt">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1762905454347" ID="ID_1489402838" MODIFIED="1762905456962" TEXT="Simon Larcher &lt;slarcher86@gmail.com&gt;">
+<node CREATED="1762905479078" ID="ID_1043976417" MODIFIED="1762905482214" TEXT="Asciidoc"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1762905482939" ID="ID_1841638475" MODIFIED="1762905487330" TEXT="fehlt dort">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node COLOR="#435e98" CREATED="1762905489361" ID="ID_1136953314" MODIFIED="1762905492950" TEXT="nachgetragen"/>
+</node>
+<node CREATED="1762905585500" ID="ID_1742787984" MODIFIED="1762905588696" TEXT="Stefan Kangas">
+<node CREATED="1762905589838" ID="ID_104790526" MODIFIED="1762905597005" TEXT="hat sehr viel zur Website beigetragen"/>
+<node CREATED="1762905597856" ID="ID_1068412533" MODIFIED="1762905605148" TEXT="(hehe.... das hab ich vergessen)"/>
+<node COLOR="#338800" CREATED="1762905605811" ID="ID_1165778086" MODIFIED="1762905612116" TEXT="er ist aber prominent aufgef&#xfc;hrt">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node CREATED="1762905759890" ID="ID_1878866736" MODIFIED="1762905768371" TEXT="jetzt alle sinngem&#xe4;&#xdf; korrekt"/>
+</node>
+<node COLOR="#338800" CREATED="1762906051009" ID="ID_54410694" MODIFIED="1762913941314" TEXT="Core-Programmierung">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1762906059388" ID="ID_430051359" MODIFIED="1762906080601" TEXT="hier ist eine andere Gruppierung notwendig"/>
+<node CREATED="1762906084945" ID="ID_1011267948" MODIFIED="1762906122513" TEXT="sinnvollerweise in mehreren Schritten vorgehen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ....und jeweils sehen ob sich das bew&#228;hrt und entsprechend klar ist
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1762906124189" ID="ID_488826279" MODIFIED="1762906200724" TEXT="zun&#xe4;chst einmal: die feingranulare Aufteilung aufgeben">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Denn damit kann man vermeiden, Attribution f&#252;r Dinge zu geben, die nicht vorw&#228;rts gekommen sind
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1762906478497" ID="ID_1293417518" MODIFIED="1762913950467" TEXT="&#xc4;nderungen">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1762906482472" ID="ID_503487864" MODIFIED="1762906489874" TEXT="Design/Architektur">
+<node CREATED="1762906490894" ID="ID_477757044" MODIFIED="1762906501397" TEXT="nur noch Ichthyostega, Cehteh, JoelH"/>
+<node CREATED="1762906505731" ID="ID_594381696" MODIFIED="1762906511681" TEXT="alles Andere w&#xe4;re ein Witz"/>
+</node>
+<node CREATED="1762906633907" ID="ID_1469797507" MODIFIED="1762906638286" TEXT="Workflow-Konzept">
+<node CREATED="1762906639140" ID="ID_1669013838" MODIFIED="1762906672836" TEXT="Mike Provost und Nikola Duper weg">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...die <i>wollten</i>&#160;mal was beitragen, haben sich auch in der Diskussion engagiert, aber nie etwas geliefert
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1762906691880" ID="ID_1569507325" MODIFIED="1762906704813" TEXT="daf&#xfc;r setze ich mich da an die Spitze"/>
+</node>
+<node CREATED="1762906924950" ID="ID_1019022163" MODIFIED="1762906928712" TEXT="Implementierung">
+<node CREATED="1762907023820" ID="ID_608733007" MODIFIED="1762907038990" TEXT="hier reduzieren auf die gro&#xdf;en Beitr&#xe4;ge"/>
+<node CREATED="1762907996969" ID="ID_1890885261" MODIFIED="1762908013275" TEXT="hebe hervor: Core Developers"/>
+<node CREATED="1762908495274" ID="ID_1657055225" MODIFIED="1762908511900" TEXT="alle sonstigen(4): als &quot;Programming&quot;"/>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1762911350449" ID="ID_1075030368" MODIFIED="1762913909154" TEXT="Lizenz-Texte">
+<icon BUILTIN="list"/>
+<node COLOR="#338800" CREATED="1762911363974" ID="ID_643279471" MODIFIED="1762913722098" TEXT="&#xfc;berpr&#xfc;ft: GPL-2">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <ul>
+      <li>
+        ich hatte vor vielen Jahren in Asciidoc-Markup umgewandelt, was hier mit minimalem Aufwand m&#246;glich ist (einziges Problem: ich bekomme <b>Ziffern</b>&#160; in der Aufz&#228;hlung, statt <b>Buchstaben</b>&#160;wie im Original)
+      </li>
+      <li>
+        der eigentliche Text ist <i>komplett</i>&#160;identisch geblieben
+      </li>
+      <li>
+        ge&#228;ndert hat sich, da&#223; jetzt auf die FSF-Website verlinkt wird, und da&#223; ein Beispieltext angepa&#223;t wurde
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1762913668664" ID="ID_1828215643" MODIFIED="1762913683035" TEXT="&#xfc;berpr&#xfc;ft: GPL-3">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      analog
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1762913824635" ID="ID_381618362" MODIFIED="1762913902357" TEXT="LGPL: publiziere nun v3">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Die LGPL hatte ich ohnehin nur der Vollst&#228;ndigkeit halber mit eingeschlossen; sie spielt f&#252;r Lumiera derzeit keine Rolle. Daher kann ich auch gleich die aktuellste Version LGPL-3 nehmen. Auch diese transcodiere ich ganz oberfl&#228;chlich nach Asciidoc
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1762812287104" ID="ID_533255879" MODIFIED="1762812364451" TEXT="Standard-Disclaimer GDPR hinzuf&#xfc;gen">
+<arrowlink COLOR="#673f49" DESTINATION="ID_698375094" ENDARROW="Default" ENDINCLINATION="375;-444;" ID="Arrow_ID_406085929" STARTARROW="None" STARTINCLINATION="733;52;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1756830253426" ID="ID_989483889" MODIFIED="1756830598512" TEXT="Dontations-Page ist obsolet">
 <richcontent TYPE="NOTE"><html>
@@ -182918,9 +183403,85 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="bell"/>
 <node CREATED="1756830202685" ID="ID_1184692288" MODIFIED="1756830217995" TEXT="bei der ffis sind wir schon lange nicht mehr als &quot;aktiv&quot; gef&#xfc;hrt"/>
 <node CREATED="1756830218755" ID="ID_218868534" MODIFIED="1756830228917" TEXT="derzeit brauchen wir keine Donations"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1756830229931" ID="ID_679146016" MODIFIED="1756830559859" TEXT="2025-8 : Seite entfert">
+<node CREATED="1762807182980" ID="ID_745470168" MODIFIED="1762807200534" TEXT="heute w&#xe4;re man auf Patreon">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1756830229931" ID="ID_679146016" MODIFIED="1762807176039" TEXT="2025-11 : Seite entfernt">
 <linktarget COLOR="#882246" DESTINATION="ID_679146016" ENDARROW="Default" ENDINCLINATION="311;0;" ID="Arrow_ID_909744060" SOURCE="ID_989483889" STARTARROW="None" STARTINCLINATION="756;65;"/>
 <icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1762808890286" ID="ID_131015626" MODIFIED="1762808904630" TEXT="kl&#xe4;ren: Kennzeichnungspflichten">
+<icon BUILTIN="bell"/>
+<node CREATED="1762809020022" ID="ID_1893539317" LINK="https://de.wikipedia.org/wiki/Impressumspflicht" MODIFIED="1762809028315" TEXT="Impressumspflicht">
+<node CREATED="1762808996576" ID="ID_1779321871" MODIFIED="1762809032243" TEXT="Telemediengesetz 2007"/>
+<node CREATED="1762809002817" ID="ID_1796099349" MODIFIED="1762809014486" TEXT="Digitale-Dienste-Gesetz 2024"/>
+<node CREATED="1762809047518" ID="ID_563600960" MODIFIED="1762809058211" TEXT="einziege Ausnahme: rein-privater Inhalt"/>
+<node CREATED="1762809059768" ID="ID_8400175" MODIFIED="1762809124491" TEXT="bereits ein Werbebanner oder regelm&#xe4;&#xdf;ige journalistische Aufberetiung begr&#xfc;ndet I.P">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Es ist also im Besonderen nicht notwendig, da&#223; irgend ein gewerblicher &#187;Dienst&#171; angeboten wird, da auch alle Arten von Publikationen mit erfa&#223;t werden sollen.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1762809126303" ID="ID_345761085" MODIFIED="1762809289189" TEXT="Kontaktm&#xf6;glichkeit (eMail) + ladef&#xe4;hige Anschrift notwendig">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Auf eine Telefonnummer kann man verzichten. Aber die eMail mu&#223; regelm&#228;&#223;ig gelesen werden (Reaktionszeit: Stunden). Und f&#252;r die Adresse gilt: man mu&#223; dort pers&#246;nlich einen Verantwortlichen antreffen k&#246;nnen. Beispielsweise f&#252;r eine gerichtliche&#160;&#160;Ladung oder einen Durchsuchungsbeschlu&#223;. Es ist also eine Postbox <b>explizit nicht ausreichend</b>.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1762809344073" ID="ID_402415994" MODIFIED="1762809646070" TEXT="weitere Angaben bei beruflichen / gewerblichen Angeboten">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Umsatzsteuernummer, Name der Zulassungsbeh&#246;rde, bei Freiberuflern der Name der Stelle die den Titel oder das Diplom ausgestellt hat. Bei Unternehmen die Rechtsform. Bei journalistischen Publikationen, die regelm&#228;&#223;ige Aktualisierungen beinhalten und regelm&#228;&#223;ig publizierte Druckerzeugnisse wiedergeben (d.h. Zeitungen, Nachrichtendienste) mu&#223; ein Verantwortlicher benannt werden, der sofort reaktionsf&#228;hig ist (es gen&#252;gt nicht die Angabe eines Firmensitzes)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1762809467125" ID="ID_684915039" MODIFIED="1762809540348" TEXT="das Impressum mu&#xdf; von &#xfc;berall auf der Seite &#x201e;leicht erreichbar&#x201c; sein">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Konkret hei&#223;t das: es mu&#223; ein Link in den Footer, der &#187;Impressum&#171; hei&#223;t und mit h&#246;chstens einem Klick zum Ziel f&#252;hrt. Verlinken auf eine Hompage gen&#252;gt nicht
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1762810372184" ID="ID_1252444758" MODIFIED="1762810374834" TEXT="Beispiele">
+<node CREATED="1762810376862" ID="ID_1332376827" MODIFIED="1762810380575" TEXT="muster-impressum.de"/>
+<node CREATED="1762810390874" ID="ID_1951445612" MODIFIED="1762810391776" TEXT="https://www.rechtssicher.info/best-practice-impressum"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#690f14" CREATED="1762811264663" ID="ID_1239109079" MODIFIED="1762811294252" TEXT="ChatGPT kann diese Texte auch zweisprachig generieren">
+<icon BUILTIN="wizard"/>
+</node>
+</node>
+<node CREATED="1762812073833" ID="ID_698375094" MODIFIED="1762879075157" TEXT="verwende jetzt wenigstens mal einen Mustertext" VSHIFT="9">
+<linktarget COLOR="#673f49" DESTINATION="ID_698375094" ENDARROW="Default" ENDINCLINATION="375;-444;" ID="Arrow_ID_406085929" SOURCE="ID_533255879" STARTARROW="None" STARTINCLINATION="733;52;"/>
+<node CREATED="1762812100633" ID="ID_481966377" MODIFIED="1762812174090" TEXT="bisher hatte ich nur ein Impressum (gem&#xe4;&#xdf; &#xbb;Telemediengesetz&#xab;)"/>
+<node CREATED="1762812191212" ID="ID_1203899987" MODIFIED="1762812225122" TEXT="&#x201e;man wollte sich mal drum k&#xfc;mmern&#x201c; &#x2014; seit fast 10 Jahren"/>
+<node CREATED="1762812226659" ID="ID_390348265" MODIFIED="1762812243381" TEXT="warum mu&#xdf; eigentlich ICH mich um ALLES k&#xfc;mmern">
+<icon BUILTIN="smily_bad"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1762879092575" ID="ID_739016421" MODIFIED="1762879104348" TEXT="dabei offen gelassen">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1762879105873" ID="ID_1407452600" MODIFIED="1762879121747" TEXT="was f&#xfc;r Daten wir ganz genau im Server-Log erfassen"/>
+<node CREATED="1762879122398" ID="ID_1369931904" MODIFIED="1762879142997" TEXT="wie lange wir diese Daten speichern"/>
+<node CREATED="1762879129020" ID="ID_1435012079" MODIFIED="1762879135329" TEXT="wer konkret den Server betreibt"/>
+</node>
+</node>
+<node CREATED="1762879172664" ID="ID_450772311" MODIFIED="1762879298461" TEXT="Lizenz-Fragen">
+<arrowlink COLOR="#6f7dba" DESTINATION="ID_856231519" ENDARROW="Default" ENDINCLINATION="-1342;134;" ID="Arrow_ID_846772487" STARTARROW="None" STARTINCLINATION="-985;-1050;"/>
 </node>
 </node>
 </node>
