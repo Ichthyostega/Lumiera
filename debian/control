@@ -1,33 +1,28 @@
 Source: lumiera
 Section: video
-Priority: extra
+Priority: optional
 Maintainer: Hermann Vosseler <deb@ichthyostega.de>
-Build-Depends: debhelper (>= 7),
-               cdbs (>= 0.4.73),
+Build-Depends: debhelper-compat (= 13),
                scons (>= 2),
-               g++ (>= 4:4.9) | g++-4.9 | clang (>= 3.5),
-               libstdc++6 (>= 4.9) | libstdc++-4.9-dev,
-               pkg-config,
+               g++ (>= 14),
+               pkgconf,
                asciidoc,
-               libboost-dev (>= 1.55)                | libboost1.55-dev,
-               libboost-program-options-dev (>= 1.55)| libboost-program-options1.55-dev,
-               libboost-filesystem-dev (>= 1.55)     | libboost-filesystem1.55-dev,
-               libboost-regex-dev (>= 1.55)          | libboost-regex1.55-dev,
+               libboost-dev (>= 1.83),
+               libboost-program-options-dev (>= 1.83),
                nobug-dev (>= 201008.1),
-               libgavl-dev (>= 1.4),
+               libgavl-dev (>= 2~),
                libasound2-dev,
-               libgtkmm-3.0-dev (>= 3.10),
-               gnome-themes-standard,
-               libglibmm-2.4-dev (>= 2.39),
-               libglib2.0-dev (>= 2.40),
-               libgdl-3-dev (>= 3.8~),
+               libgtkmm-3.0-dev (>= 3.20),
+               libglibmm-2.4-dev (>= 2.66),
+               libglib2.0-dev (>= 2.80),
+               libgdl-3-dev (>= 3.40~),
                libgdlmm-3-dev (>= 3.7.3~),
-               libcairomm-1.0-dev (>= 1.10),
+               libcairomm-1.0-dev (>= 1.14~),
                librsvg2-dev (>=2.40),
                libxv-dev (>= 2:1.0),
                libxext-dev,
                libx11-dev
-Standards-Version: 3.9.6
+Standards-Version: 4.7.2
 Vcs-Git: git://git.lumiera.org/debian/lumiera -b deb
 Vcs-Browser: http://git.lumiera.org/gitweb?p=debian/lumiera;a=shortlog;h=refs/heads/deb
 Homepage: http://Lumiera.org
@@ -51,7 +46,7 @@ Description: nonlinear video editing and compositing tool.
  colour grading, 3D support, full fledged sound montage
  and multiple edit versions prepared in parallel.
  .
- NOTE: as of 11/2015, Lumiera is in early development stage;
+ NOTE: as of 11/2025, Lumiera is in early development stage;
  it is not usable yet. The above describes the Lumiera project
  vision, which will need years to implement. This Debian package
  installs a current development snapshot in pre-alpha stage.
