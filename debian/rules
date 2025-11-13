@@ -1,32 +1,52 @@
 #!/usr/bin/make -f
 
-include /usr/share/cdbs/1/rules/debhelper.mk
-include /usr/share/cdbs/1/class/scons.mk
-
-# Core build options for Lumiera
+# Note: Lumiera runs as bundle from a common package tree and locates
+#       its modules, plugins and config relative to the main executable
+#       and in addition also through search paths defined in lumiera.ini
+#       The *SCons* based build system is FSH aware and installs
+#       into the appropriate directories below PREFIX,
+#       bin/lumiera -> ../lib/lumiera/lumiera
 #
-DEB_SCONS_OPTIONS = \
-    BUILDLEVEL=ALPHA \
-    DEBUG=True       \
-    OPTIMIZE=False   \
-    VALGRIND=False   \
-    PREFIX=usr       \
-    ARCHFLAGS=" -fstack-protector-strong"
+BUILD_OPTIONS = \
+	BUILDLEVEL=ALPHA \
+	DEBUG=True       \
+	OPTIMIZE=False   \
+	VALGRIND=False
     
-DEB_SCONS_INSTALL_OPTIONS = \
-    INSTALLDIR=debian/lumiera
+PACKAGING = \
+	PREFIX=usr \
+	INSTALLDIR=debian/lumiera
 
-DEB_SCONS_BUILD_TARGET = build
-# DEB_SCONS_CHECK_TARGET = check  #####NOTE temporarily deactivated for rebuilding on Stretch
+HARDENING = \
+	ARCHFLAGS=" -fstack-protector-strong"
+
+# use available CPU cores
+CONCURRENCY = $(shell getconf _NPROCESSORS_ONLN )
+
+DEB_SCONS_OPTIONS = \
+	$(BUILD_OPTIONS) \
+	$(PACKAGING)     \
+	$(HARDENING)     \
+	-j$(CONCURRENCY)
 
 
-clean::
+
+%:
+	dh $@
+
+override_dh_auto_clean:
+	dh_auto_clean
+	scons -c
 	rm -rf target/.sconf_temp
 	rm -f admin/scons/*.pyc
 	rm -f optcache
 
+override_dh_auto_build:
+	scons $(DEB_SCONS_OPTIONS) build
 
-# use all available CPU cores
-DEB_BUILD_PARALLEL = true
-DEB_PARALLEL_JOBS = $(shell getconf _NPROCESSORS_ONLN )
+override_dh_auto_test:
+	scons $(DEB_SCONS_OPTIONS) check
+
+override_dh_auto_install:
+	scons $(DEB_SCONS_OPTIONS) install
 
