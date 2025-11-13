@@ -166402,7 +166402,7 @@ that situation will improve in forseeable future.</pre>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1751808460706" ID="ID_1046283899" MODIFIED="1751808483781" TEXT="Release: 0.pre.04">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#b7d1d3" COLOR="#338800" CREATED="1751808878589" FOLDED="true" ID="ID_577995027" MODIFIED="1762798106323" TEXT="Umstellung auf Git-Flow">
+<node BACKGROUND_COLOR="#b7d1d3" COLOR="#338800" CREATED="1751808878589" FOLDED="true" ID="ID_577995027" MODIFIED="1764600339359" TEXT="Umstellung auf Git-Flow">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1751809002677" ID="ID_656514968" MODIFIED="1752198726663" TEXT="Schema ausarbeiten">
 <arrowlink COLOR="#208ad3" DESTINATION="ID_1853540136" ENDARROW="Default" ENDINCLINATION="-443;-37;" ID="Arrow_ID_1316442709" STARTARROW="None" STARTINCLINATION="-1044;119;"/>
@@ -166697,7 +166697,7 @@ that situation will improve in forseeable future.</pre>
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1752077554512" FOLDED="true" ID="ID_1807385956" MODIFIED="1753060358875" TEXT="buildVersion --bump=maj|min|rev --suffix=spec --snapshot">
+<node COLOR="#338800" CREATED="1752077554512" FOLDED="true" ID="ID_1807385956" MODIFIED="1764604204425" TEXT="buildVersion --bump=maj|min|rev --suffix=spec|False --snapshot">
 <icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1752077683991" ID="ID_1525521230" MODIFIED="1753060424809" TEXT="Python">
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
@@ -166721,10 +166721,120 @@ that situation will improve in forseeable future.</pre>
 </html></richcontent>
 <linktarget COLOR="#a07881" DESTINATION="ID_1867157597" ENDARROW="Default" ENDINCLINATION="-355;15;" ID="Arrow_ID_124504629" SOURCE="ID_1609966184" STARTARROW="None" STARTINCLINATION="98;9;"/>
 </node>
+<node CREATED="1764600561856" FOLDED="true" ID="ID_1554904754" MODIFIED="1764601062197" TEXT="Preprocessing: R&#xfc;ck-&#xdc;bersetzung  _ &#x27fc; ~">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...da in Git-Tags keine Tilde erlaubt ist, hat git-buildpackage hier eine &#220;bersetzung in '_' eingef&#252;hrt
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#2e5bd3" DESTINATION="ID_1554904754" ENDARROW="Default" ENDINCLINATION="38;45;" ID="Arrow_ID_1747806623" SOURCE="ID_106400120" STARTARROW="None" STARTINCLINATION="-80;6;"/>
+<node COLOR="#435e98" CREATED="1764600636909" ID="ID_19804173" MODIFIED="1764600996535" TEXT="sinnvollerweise nicht direkt in die Versions-Syntax einbauen">
+<icon BUILTIN="yes"/>
+<node CREATED="1764600661356" ID="ID_1383760866" MODIFIED="1764600691211" TEXT="Grund-1 : es ist ein Overlay und geh&#xf6;rt nicht zur normalen Versions-Syntax gem&#xe4;&#xdf; Debian-Policy"/>
+<node CREATED="1764600695260" ID="ID_439033095" MODIFIED="1764600777665" TEXT="Grund-2 : es geht gar nicht (ohne die Reg-Exp sehr komplex zu machen)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...denn <i>dummerweise</i>&#160;ist '_' ein word-constituent-char, d.h. die vorhergehenden Versions-Komponenten w&#252;rden einen Trenner durch '_' einfach mit konsumieren
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1764600779906" ID="ID_970394184" MODIFIED="1764600856341" TEXT="Grund-3 : &apos;_&apos; ist in Versionsnummer selber gar nicht erlaubt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Gem&#228;&#223; Debian-Policy ist das n&#228;mlich der Trenner zum Paketnamen, und darf daher in der nachfolgenden Versionsnummer nicht nochmal vorkommen (d.h. der letzte Underscore trennt den Namen von der versionsnr)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1764600859918" ID="ID_1457543902" MODIFIED="1764600989210" TEXT="also das Parsen in eine eigene Funktion packen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1764600876008" ID="ID_752886089" MODIFIED="1764600966286" TEXT="zweistufig: erst mal Underscore r&#xfc;ck&#xfc;bersetzen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ist so m&#246;glich, da Underscore anderweitig nicht erlaubt ist (und Grenzf&#228;lle k&#246;nnen hier unber&#252;cksichtigt bleiben, da letztlich in Lumiera nur sinnvolle und valide Versionsnummern vergeben werden d&#252;rfen; als zus&#228;tzilcher Filter dient das mandatory-prefix 'v*' im Tag
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1764600970798" ID="ID_10502720" MODIFIED="1764600977175" TEXT="danach den bestehenden Parser aufrufen"/>
+<node CREATED="1764600984162" ID="ID_7070696" MODIFIED="1764600987173" TEXT="Fehler behandeln"/>
+<node CREATED="1764600977973" ID="ID_602715671" MODIFIED="1764600983103" TEXT="mat-Objekt zur&#xfc;ckgeben"/>
+</node>
+</node>
 </node>
 <node CREATED="1753060427584" ID="ID_1910500485" MODIFIED="1753060439789" TEXT="--snapshot: Timestamp">
 <node CREATED="1753060440841" ID="ID_522175222" MODIFIED="1753060446724" TEXT="zieht sich Timestamp aus Git"/>
 <node CREATED="1753060448432" ID="ID_1366385733" MODIFIED="1753060456637" TEXT="f&#xfc;gt Suffix an"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#4f0f69" CREATED="1764600426526" FOLDED="true" HGAP="12" ID="ID_1835957331" MODIFIED="1764604202901" TEXT="maintainance" VSHIFT="8">
+<icon BUILTIN="edit"/>
+<node COLOR="#435e98" CREATED="1764600469365" ID="ID_800862431" MODIFIED="1764604036976" TEXT="Bug: &#xdc;bersetzung eines Suffix in Git-Tags">
+<linktarget COLOR="#3f4f62" DESTINATION="ID_800862431" ENDARROW="Default" ENDINCLINATION="11;57;" ID="Arrow_ID_783037266" SOURCE="ID_884612404" STARTARROW="None" STARTINCLINATION="9;-43;"/>
+<icon BUILTIN="broken-line"/>
+<node CREATED="1764600496106" ID="ID_340977542" MODIFIED="1764600503289" TEXT="in Git-Tags ist keine Tilde erlaubt"/>
+<node CREATED="1764600504066" ID="ID_308311258" MODIFIED="1764600524970" TEXT="Git-Buildpackage macht daher eine automatische &#xdc;bersetzung ~ &#x27fc; _"/>
+<node CREATED="1764600526884" ID="ID_413321066" MODIFIED="1764600554364" TEXT="der Versions-Parser (wie bisher implementiert) akzeptiert das nicht"/>
+<node CREATED="1764601025165" ID="ID_106400120" MODIFIED="1764601068017" TEXT="also per Preprocessing r&#xfc;ck&#xfc;bersetzen">
+<arrowlink COLOR="#2e5bd3" DESTINATION="ID_1554904754" ENDARROW="Default" ENDINCLINATION="38;45;" ID="Arrow_ID_1747806623" STARTARROW="None" STARTINCLINATION="-80;6;"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1764601080630" FOLDED="true" ID="ID_884612404" MODIFIED="1764604029645" TEXT="Feature: Umgang mit Suffix in Tags">
+<arrowlink COLOR="#3f4f62" DESTINATION="ID_800862431" ENDARROW="Default" ENDINCLINATION="11;57;" ID="Arrow_ID_783037266" STARTARROW="None" STARTINCLINATION="9;-43;"/>
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1764601097690" ID="ID_1189961284" MODIFIED="1764601247155" TEXT="ja das tritt auf....!">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Und zwar tempor&#228;r, w&#228;hrend man auf dem Release-Zweig ist, kann es ein RC-Tag geben. Wenngleich auch die (von mir intendierte) Git-flow policy verlangt, da&#223; solche RC-Tags mit dem Release selber wieder gel&#246;scht werden &#8212; man wird sie aber zulassen m&#252;ssen, damit sp&#228;ter mal eine CI korrekt mit Release-Candidates umgehen kann. <i><font color="#9a0e98">Die Realit&#228;t ist komplex. </font><font size="2" color="#9a0e98">Seufz</font><font color="#9a0e98">.</font></i>
+    </p>
+  </body>
+</html></richcontent>
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1764602060554" ID="ID_1713035708" MODIFIED="1764602240014" TEXT="Beschlu&#xdf; zur Semantik">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Drei Varianten w&#228;ren denkbar, diese hier erscheint mir am praktischten, und nat&#252;rlichsten (und ist einfach umzusetzen, ohne den Parser komplexer zu machen
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1764602069305" ID="ID_1478694889" MODIFIED="1764602076580" TEXT="bestehendes Suffix wird durchgereicht"/>
+<node CREATED="1764602077454" ID="ID_1857200985" MODIFIED="1764602101755" TEXT="man kann das explizit unterdr&#xfc;cken per --suffix=False"/>
+<node CREATED="1764603849017" ID="ID_898047876" LINK="https://stackoverflow.com/questions/53228663/argparse-value-for-optional-positional-argument/53228802#53228802" MODIFIED="1764604013881" TEXT="Hinweis: es g&#xe4;be auch diverse Parser-Tricks">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <ul>
+      <li>
+        man kann argparse.SUPPRESS verwenden
+      </li>
+      <li>
+        man nargs='?' setzen, und zudem einen Default angeben; damit lie&#223;e sich der Wert zur Option seinerseits optional machen...
+      </li>
+    </ul>
+    <p>
+      Dadruch w&#252;rde aber der Aufruf komplexer, da nun der 'suffix' key m&#246;glicherweise nicht mehr im resultierenden dictionary nach Parser-Auswertung enthalten w&#228;re.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1752077753814" ID="ID_1116685419" MODIFIED="1752198072870" TEXT="setVersion &lt;Ver&gt;">
@@ -178045,7 +178155,12 @@ Since then others have made contributions, see the log for the history.</font></
 <node CREATED="1752192022076" ID="ID_1939779471" MODIFIED="1752192610817" TEXT="Release">
 <icon BUILTIN="full-5"/>
 <node CREATED="1752192043158" ID="ID_238410955" MODIFIED="1752192049202" TEXT="MERGE in master"/>
-<node CREATED="1752192051222" ID="ID_167076910" MODIFIED="1756648486618" TEXT="Amend: Suffix ~dev bzw, ~rc.# entfernen"/>
+<node CREATED="1752192051222" ID="ID_167076910" MODIFIED="1756648486618" TEXT="Amend: Suffix ~dev bzw, ~rc.# entfernen">
+<node CREATED="1764604115340" ID="ID_292194510" LINK="#ID_884612404" MODIFIED="1764604189453" TEXT="admin/buildVerson --suffix=False">
+<font NAME="SansSerif" SIZE="11"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
 <node CREATED="1752192083412" ID="ID_580036205" MODIFIED="1752192086060" TEXT="Tag setzen">
 <node CREATED="1752192089084" ID="ID_673210992" LINK="https://lumiera.org/documentation/devel/rfc/VersionNumberScheme.html" MODIFIED="1752192134958" TEXT="Lumiera Versions-Schema"/>
 <node CREATED="1752192137035" ID="ID_1159674019" MODIFIED="1752192147304" TEXT="Pre-release: 0.pre.04"/>
