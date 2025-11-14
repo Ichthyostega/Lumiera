@@ -2,12 +2,22 @@ Lumiera for Debian
 ------------------
 
 This is a preview of the Debian packaging for Lumiera.
-As of 2011, Lumiera is in early development and not usable yet.
+As of 2025, Lumiera is in early development and not usable yet.
+
+The Application will allow to edit footage in the common multimedia formats
+and enable non-destructive editing and compositing.
+
+See
+ - for the Vision: https://Lumiera.org/documentation/user/intro/intro.html
+ - current goals: https://Lumiera.org/documentation/design/governance/integration.html
+ - test/demo functionality in this development preview:
+   https://Lumiera.org/documentation/user/manual.html
 
 The Debian packaging will be maintained by the Lumiera core developer team --
 Indeed, Debian/stable is defined as reference system for Lumiera development.
-When requiring additional libraries not found in Debian/stable, the Lumiera team
-will provide backports or custom debian packages -- stay tuned.
+When additional libraries are required beyond what is available in Debian/stable,
+the Lumiera team will provide backports or custom Debian packages.
+See https://Lumiera.org/debian for our DEB repository.
 
- -- Ichthyostega <deb@ichthyostega.de>  Tue, 11 Jan 2011 23:55:12 +0100
+ -- Ichthyostega <deb@ichthyostega.de>  Wed, 12 Nov 2025 23:55:12 +0100
 
