@@ -97,7 +97,6 @@ Export('testsuite')
 
 # for creating a Valgrind-Suppression file
 vgsuppression = envSuite.Program('vgsuppression',['tool/vgsuppression.c']+list(testLibs)+list(core_lib))   ## for suppressing false valgrind alarms
-tools  += [vgsuppression]
 
 
 #
@@ -144,7 +143,7 @@ Depends(runTests,vgsuppression)
 #  - 'scons testcode' triggers building of the Testsuite
 #  - 'scons check' triggers building and running
 #
-env.Alias('testcode', testsuite )
+env.Alias('testcode', testsuite + vgsuppression)
 env.Alias('check',    runTests )
 
 # allow tempfiles of test.sh to be cleaned  

@@ -42,7 +42,9 @@ installUIRes = '#$DESTDIR/share/lumiera/'
 installConf  = '#$DESTDIR/lib/lumiera/config'
 
 #-------------------------------------------------------Configuration
+
 buildSetup = Record(locals())
+#  passed to LumieraEnvironment() -> env.path.xxxx
 
 
 
