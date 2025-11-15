@@ -10,6 +10,7 @@
 BUILD_OPTIONS = \
 	BUILDLEVEL=ALPHA \
 	DEBUG=True       \
+	VERBOSE=True     \
 	OPTIMIZE=False   \
 	VALGRIND=False
     
