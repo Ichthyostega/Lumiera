@@ -166384,8 +166384,12 @@ that situation will improve in forseeable future.</pre>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1751808534961" ID="ID_1104418213" MODIFIED="1751808550847" TEXT="Dokumentation Dependencies">
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1751808559518" ID="ID_1590821025" MODIFIED="1751808566749" TEXT="DEB-Paket bereitgestellt">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1751808559518" ID="ID_1590821025" MODIFIED="1762963516647" TEXT="DEB-Paket bereitgestellt">
+<arrowlink COLOR="#f20801" DESTINATION="ID_1286202898" ENDARROW="Default" ENDINCLINATION="486;-1619;" ID="Arrow_ID_260471150" STARTARROW="None" STARTINCLINATION="438;44;"/>
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1762957250745" ID="ID_468905309" MODIFIED="1762957288444" TEXT="Anpassen an Git-flow">
+<arrowlink COLOR="#528fc7" DESTINATION="ID_239339457" ENDARROW="Default" ENDINCLINATION="-249;13;" ID="Arrow_ID_1597322291" STARTARROW="None" STARTINCLINATION="-2;186;"/>
+</node>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1751808439333" ID="ID_1898277701" MODIFIED="1751808838590" TEXT="Language-Level &#xd83e;&#xdc32; C++23">
@@ -166446,6 +166450,19 @@ that situation will improve in forseeable future.</pre>
 <node CREATED="1752198327067" ID="ID_592482023" MODIFIED="1752198371916" TEXT="Tags verwenden f&#xfc;r Versions-Skripting">
 <arrowlink COLOR="#2e65d5" DESTINATION="ID_1402604027" ENDARROW="Default" ENDINCLINATION="161;-200;" ID="Arrow_ID_455010002" STARTARROW="None" STARTINCLINATION="246;18;"/>
 <icon BUILTIN="idea"/>
+</node>
+<node CREATED="1762957088019" ID="ID_239339457" MODIFIED="1762959290402">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <u>DEB-Paket</u>: direkt <font face="Monospaced"><b>&lt;</b></font><b><font face="Monospaced" color="#5128a0">v%(version)s</font><font face="Monospaced">&gt;</font></b>-Tag von <font face="Monospaced">master</font>&#160;verwenden
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#528fc7" DESTINATION="ID_239339457" ENDARROW="Default" ENDINCLINATION="-249;13;" ID="Arrow_ID_1597322291" SOURCE="ID_468905309" STARTARROW="None" STARTINCLINATION="-2;186;"/>
+<linktarget COLOR="#528fc7" DESTINATION="ID_239339457" ENDARROW="Default" ENDINCLINATION="-249;13;" ID="Arrow_ID_484064004" SOURCE="ID_1675852546" STARTARROW="None" STARTINCLINATION="878;58;"/>
+<linktarget COLOR="#528fc7" DESTINATION="ID_239339457" ENDARROW="Default" ENDINCLINATION="-249;13;" ID="Arrow_ID_1325916654" SOURCE="ID_481502279" STARTARROW="None" STARTINCLINATION="740;55;"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#aea3cb" COLOR="#435e98" CREATED="1752198215075" FOLDED="true" ID="ID_99180924" MODIFIED="1762797742946" TEXT="Namenskonvention">
@@ -169268,6 +169285,9 @@ that situation will improve in forseeable future.</pre>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1751808937037" ID="ID_169754287" MODIFIED="1751808945616" TEXT="Debian / DEB-Paket">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1762803541300" ID="ID_1198625842" MODIFIED="1762803563377" TEXT="Doku zum debianDepot.txt">
+<linktarget COLOR="#b5768e" DESTINATION="ID_1198625842" ENDARROW="Default" ENDINCLINATION="102;11;" ID="Arrow_ID_1663167652" SOURCE="ID_834370322" STARTARROW="None" STARTINCLINATION="-35;55;"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1751808966193" ID="ID_739212271" MODIFIED="1751808977712" TEXT="Git: Release markiert">
@@ -169792,6 +169812,7 @@ actively maintained upstream. Please remove gdl from Debian.</pre>
     </p>
   </body>
 </html></richcontent>
+<linktarget COLOR="#46c0d4" DESTINATION="ID_1732644986" ENDARROW="Default" ENDINCLINATION="168;608;" ID="Arrow_ID_710986137" SOURCE="ID_598558049" STARTARROW="None" STARTINCLINATION="1263;74;"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1743720059174" ID="ID_1273495924" MODIFIED="1743811646440" TEXT="bestehende debian/rules">
 <node CREATED="1743721288148" ID="ID_929064303" MODIFIED="1743721294141" TEXT="CDBS-Steuervariable">
@@ -169951,7 +169972,7 @@ actively maintained upstream. Please remove gdl from Debian.</pre>
 <node CREATED="1743811667440" ID="ID_383744479" MODIFIED="1743811681017" TEXT="debian/rules ist jetzt nur noch halb so gro&#xdf;">
 <icon BUILTIN="ksmiletris"/>
 </node>
-<node CREATED="1743811687494" ID="ID_1380236984" MODIFIED="1743811694817" TEXT="Buidl sieht immer noch vern&#xfc;nftig aus"/>
+<node CREATED="1743811687494" ID="ID_1380236984" MODIFIED="1743811694817" TEXT="Build sieht immer noch vern&#xfc;nftig aus"/>
 <node CREATED="1743811695465" ID="ID_680473458" MODIFIED="1743865509247" TEXT="Paketinhalte erscheinen plausibel">
 <linktarget COLOR="#4aaf96" DESTINATION="ID_680473458" ENDARROW="Default" ENDINCLINATION="-215;17;" ID="Arrow_ID_313960675" SOURCE="ID_1274696766" STARTARROW="None" STARTINCLINATION="-22;159;"/>
 </node>
@@ -178388,6 +178409,10 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="bookmark"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1762966466047" ID="ID_1371078370" MODIFIED="1762966481613" TEXT="Ubuntu/Noble sollte noch unterst&#xfc;tzt werden">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
 </node>
 <node COLOR="#435e98" CREATED="1567951571719" ID="ID_1891440978" MODIFIED="1742176762117" TEXT="Versionen">
 <edge COLOR="#5a53a0" STYLE="sharp_linear" WIDTH="2"/>
@@ -178512,6 +178537,7 @@ Since then others have made contributions, see the log for the history.</font></
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_906075673" ENDARROW="Default" ENDINCLINATION="825;188;" ID="Arrow_ID_1017484755" SOURCE="ID_190199456" STARTARROW="None" STARTINCLINATION="327;-11;"/>
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_906075673" ENDARROW="Default" ENDINCLINATION="825;188;" ID="Arrow_ID_669632263" SOURCE="ID_1918762549" STARTARROW="None" STARTINCLINATION="327;-11;"/>
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_906075673" ENDARROW="Default" ENDINCLINATION="825;188;" ID="Arrow_ID_1874805688" SOURCE="ID_1339527053" STARTARROW="None" STARTINCLINATION="327;-11;"/>
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_906075673" ENDARROW="Default" ENDINCLINATION="825;188;" ID="Arrow_ID_1594627726" SOURCE="ID_437218651" STARTARROW="None" STARTINCLINATION="327;-11;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1663455720314" ID="ID_998474260" MODIFIED="1663455732300" TEXT="aufwendige Umstellung">
 <icon BUILTIN="smiley-oh"/>
@@ -178951,13 +178977,14 @@ Since then others have made contributions, see the log for the history.</font></
     </p>
   </body>
 </html></richcontent>
-<linktarget COLOR="#784048" DESTINATION="ID_988423857" ENDARROW="Default" ENDINCLINATION="-8;11;" ID="Arrow_ID_519268591" SOURCE="ID_1145933226" STARTARROW="None" STARTINCLINATION="5;-18;"/>
+<linktarget COLOR="#784048" DESTINATION="ID_988423857" ENDARROW="Default" ENDINCLINATION="-2;21;" ID="Arrow_ID_519268591" SOURCE="ID_1145933226" STARTARROW="None" STARTINCLINATION="5;-18;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1742425540176" ID="ID_390243764" MODIFIED="1742692636556" TEXT="Infos">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1742425540176" ID="ID_390243764" MODIFIED="1762959969855" TEXT="Infos">
+<linktarget COLOR="#3b60cb" DESTINATION="ID_390243764" ENDARROW="Default" ENDINCLINATION="-69;269;" ID="Arrow_ID_1527930686" SOURCE="ID_1173936209" STARTARROW="None" STARTINCLINATION="403;21;"/>
 <icon BUILTIN="info"/>
 <node CREATED="1742425542934" ID="ID_495438900" LINK="https://www.debian.org/doc/manuals/debmake-doc/ch14.en.html#autotools-single" MODIFIED="1742425569342" TEXT="dh --with-autoreconf"/>
 <node CREATED="1742430781691" ID="ID_1813107513" MODIFIED="1742692619013" TEXT="als Bezugspunkt: debmake generierte Boilerplate">
@@ -178965,7 +178992,7 @@ Since then others have made contributions, see the log for the history.</font></
 <node CREATED="1742430797828" ID="ID_881504460" MODIFIED="1742430807142" TEXT="Kopie des aktuellen Verzeichnisses"/>
 <node CREATED="1742430808018" ID="ID_77898151" MODIFIED="1742430818189" TEXT="debmake -p nobug -v 200810.1">
 <node CREATED="1742594116843" ID="ID_1145933226" MODIFIED="1742594151124" TEXT="generiert auch eine Vorlage f&#xfc;r debian/copyright">
-<arrowlink COLOR="#784048" DESTINATION="ID_988423857" ENDARROW="Default" ENDINCLINATION="-8;11;" ID="Arrow_ID_519268591" STARTARROW="None" STARTINCLINATION="5;-18;"/>
+<arrowlink COLOR="#784048" DESTINATION="ID_988423857" ENDARROW="Default" ENDINCLINATION="-2;21;" ID="Arrow_ID_519268591" STARTARROW="None" STARTINCLINATION="5;-18;"/>
 </node>
 </node>
 <node CREATED="1742430821360" ID="ID_952925089" MODIFIED="1742430829372" TEXT="dann mit bestehendem Paket vergleichen...">
@@ -179124,7 +179151,7 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1742446839049" ID="ID_1169258114" MODIFIED="1743726252508" TEXT="Tip: dh build --no-act">
+<node CREATED="1742446839049" ID="ID_1169258114" MODIFIED="1762981109751" TEXT="Tip: dh binary --no-act">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -179494,7 +179521,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node BACKGROUND_COLOR="#fdd095" COLOR="#ff1e00" CREATED="1704063600555" ID="ID_1240621927" MODIFIED="1742178666221" TEXT="Upstream markieren">
 <icon BUILTIN="flag-orange"/>
-<node COLOR="#435e98" CREATED="1704063600555" ID="ID_1668722243" MODIFIED="1743343859371" TEXT="upstream/2010.1">
+<node COLOR="#435e98" CREATED="1704063600555" ID="ID_1668722243" MODIFIED="1762956531840" TEXT="upstream/#.#">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="info"/>
 </node>
@@ -179532,7 +179559,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node BACKGROUND_COLOR="#fdd095" COLOR="#ff1e00" CREATED="1578717041052" ID="ID_1180868162" MODIFIED="1743343868842" TEXT="Release-Version paketieren">
 <icon BUILTIN="flag-orange"/>
-<node COLOR="#435e98" CREATED="1578717041052" ID="ID_1236638738" MODIFIED="1743343805703" TEXT="ppp_2010.1-1">
+<node COLOR="#435e98" CREATED="1578717041052" ID="ID_1236638738" MODIFIED="1762956564265" TEXT="ppp_#.#-1">
 <linktarget COLOR="#23a8a3" DESTINATION="ID_1236638738" ENDARROW="Default" ENDINCLINATION="206;27;" ID="Arrow_ID_475172032" SOURCE="ID_1502474315" STARTARROW="None" STARTINCLINATION="1210;-216;"/>
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 </node>
@@ -179728,6 +179755,7 @@ Since then others have made contributions, see the log for the history.</font></
 <node COLOR="#435e98" CREATED="1578717041052" ID="ID_911324857" MODIFIED="1743813726924" STYLE="fork" TEXT="nobug_201008.1-4 ">
 <edge COLOR="#80a2aa" STYLE="bezier" WIDTH="thin"/>
 <linktarget COLOR="#23a8a3" DESTINATION="ID_911324857" ENDARROW="Default" ENDINCLINATION="206;27;" ID="Arrow_ID_1892409677" SOURCE="ID_1502474315" STARTARROW="None" STARTINCLINATION="1210;-216;"/>
+<linktarget COLOR="#23a8a3" DESTINATION="ID_911324857" ENDARROW="Default" ENDINCLINATION="206;27;" ID="Arrow_ID_668352717" SOURCE="ID_926633460" STARTARROW="None" STARTINCLINATION="1210;-216;"/>
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 </node>
 <node COLOR="#338800" CREATED="1578717041052" ID="ID_886669057" MODIFIED="1742693131289" TEXT="das letzte verf&#xfc;gbare Release paketiert">
@@ -179933,6 +179961,7 @@ Since then others have made contributions, see the log for the history.</font></
 <node COLOR="#435e98" CREATED="1578717041052" ID="ID_1708779083" MODIFIED="1743813878298" TEXT="gdl_3.40.0-3lum">
 <linktarget COLOR="#23a8a3" DESTINATION="ID_1708779083" ENDARROW="Default" ENDINCLINATION="228;35;" ID="Arrow_ID_96751245" SOURCE="ID_1502474315" STARTARROW="None" STARTINCLINATION="1210;-216;"/>
 <linktarget COLOR="#23a8a3" DESTINATION="ID_1708779083" ENDARROW="Default" ENDINCLINATION="228;35;" ID="Arrow_ID_104110562" SOURCE="ID_983535405" STARTARROW="None" STARTINCLINATION="701;-75;"/>
+<linktarget COLOR="#23a8a3" DESTINATION="ID_1708779083" ENDARROW="Default" ENDINCLINATION="228;35;" ID="Arrow_ID_831529784" SOURCE="ID_926633460" STARTARROW="None" STARTINCLINATION="1210;-216;"/>
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 </node>
 </node>
@@ -180049,7 +180078,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1704063600555" FOLDED="true" ID="ID_1427579682" MODIFIED="1744664498090" TEXT="GDLmm 2.7.3">
+<node COLOR="#338800" CREATED="1704063600555" FOLDED="true" ID="ID_1427579682" MODIFIED="1762967613683" TEXT="GDLmm 3.7.3">
 <linktarget COLOR="#01c42b" DESTINATION="ID_1427579682" ENDARROW="Default" ENDINCLINATION="510;-3323;" ID="Arrow_ID_2975652" SOURCE="ID_512453931" STARTARROW="None" STARTINCLINATION="-203;1871;"/>
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1704063600555" ID="ID_1318094950" MODIFIED="1743813405591" TEXT="Historie nachf&#xfc;hren">
@@ -180162,6 +180191,7 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1578717041052" ID="ID_99412440" MODIFIED="1743813852437" TEXT="debian/3.7.3-2_trixie">
 <linktarget COLOR="#23a8a3" DESTINATION="ID_99412440" ENDARROW="Default" ENDINCLINATION="206;27;" ID="Arrow_ID_1331578423" SOURCE="ID_1502474315" STARTARROW="None" STARTINCLINATION="1210;-216;"/>
+<linktarget COLOR="#23a8a3" DESTINATION="ID_99412440" ENDARROW="Default" ENDINCLINATION="206;27;" ID="Arrow_ID_214937382" SOURCE="ID_926633460" STARTARROW="None" STARTINCLINATION="1210;-216;"/>
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 </node>
 <node COLOR="#338800" CREATED="1578717041052" ID="ID_1031044142" MODIFIED="1743814017473" TEXT="aktuelles Release paketiert">
@@ -180271,8 +180301,216 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdd095" COLOR="#ff1e00" CREATED="1704063600555" ID="ID_1286202898" MODIFIED="1742401567476" TEXT=" Lumiera #.#.#">
+<node BACKGROUND_COLOR="#fdd095" COLOR="#ff1e00" CREATED="1704063600555" ID="ID_1286202898" MODIFIED="1762963516647" TEXT=" Lumiera #.#.#">
+<linktarget COLOR="#f20801" DESTINATION="ID_1286202898" ENDARROW="Default" ENDINCLINATION="486;-1619;" ID="Arrow_ID_260471150" SOURCE="ID_1590821025" STARTARROW="None" STARTINCLINATION="438;44;"/>
 <icon BUILTIN="hourglass"/>
+<node BACKGROUND_COLOR="#fdd095" COLOR="#ff1e00" CREATED="1704063600555" ID="ID_533506602" MODIFIED="1742178666221" TEXT="Historie nachf&#xfc;hren">
+<icon BUILTIN="flag-orange"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1704063600555" ID="ID_1830700843" MODIFIED="1762958451831" TEXT="Preview-Zwischenrelease C++23/Trixie">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Zehn Jahre Reise ins Ungewisse....
+    </p>
+    <ul>
+      <li>
+        jetzt auf Debian/Trixie angekommen und C++23
+      </li>
+      <li>
+        mitten im &#187;Playback Vertical Slice&#171;
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="info"/>
+</node>
+<node COLOR="#338800" CREATED="1704063600555" ID="ID_231702453" MODIFIED="1762958605736" TEXT="Kompletter Umbau im GUI + halbfertige Render-Engine">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1762957250745" ID="ID_481502279" MODIFIED="1762958646755" TEXT="Tag/Branches an Git-flow orientiert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <ul>
+      <li>
+        <font face="Monospaced" color="#5124b8">master</font>&#160;fungiert direkt als <i>upstream-Branch</i>
+      </li>
+      <li>
+        das Versionsschema angepa&#223;t: <font face="Monospaced" color="#672e2e">upstream-tag = v</font><font face="Monospaced" color="#971236"><b>%(version)</b></font><font face="Monospaced" color="#672e2e">s</font>
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#528fc7" DESTINATION="ID_239339457" ENDARROW="Default" ENDINCLINATION="-249;13;" ID="Arrow_ID_1325916654" STARTARROW="None" STARTINCLINATION="740;55;"/>
+<icon BUILTIN="yes"/>
+<icon BUILTIN="pencil"/>
+</node>
+<node BACKGROUND_COLOR="#fdd095" COLOR="#ff1e00" CREATED="1704063600555" ID="ID_146811021" MODIFIED="1762958683542" TEXT="verwende Git-flow Tag">
+<icon BUILTIN="flag-orange"/>
+<node COLOR="#435e98" CREATED="1704063600555" ID="ID_1452918877" MODIFIED="1762958731680" TEXT="v0.pre.04_rc.1">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="info"/>
+</node>
+<node COLOR="#435e98" CREATED="1704063600555" ID="ID_391386602" MODIFIED="1743343859371" TEXT="upstream/2010.1">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="info"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1704063600555" ID="ID_1733077970" MODIFIED="1762959189539" TEXT="Paket anpassen">
+<icon BUILTIN="pencil"/>
+<node CREATED="1762959194284" ID="ID_340181586" MODIFIED="1762959239961" TEXT="mu&#xdf; umstellen auf dh">
+<arrowlink COLOR="#6a3c80" DESTINATION="ID_118703200" ENDARROW="Default" ENDINCLINATION="799;95;" ID="Arrow_ID_127516976" STARTARROW="None" STARTINCLINATION="580;-41;"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1743343397021" ID="ID_1261819355" MODIFIED="1762959188656" TEXT="Dependencies">
+<icon BUILTIN="info"/>
+<node CREATED="1478644039548" ID="ID_926633460" MODIFIED="1762959188656" TEXT="&lt;DEPENDENCY&gt;">
+<arrowlink COLOR="#23a8a3" DESTINATION="ID_1247657876" ENDARROW="Default" ENDINCLINATION="206;27;" ID="Arrow_ID_358752012" STARTARROW="None" STARTINCLINATION="1210;-216;"/>
+<arrowlink COLOR="#23a8a3" DESTINATION="ID_911324857" ENDARROW="Default" ENDINCLINATION="206;27;" ID="Arrow_ID_668352717" STARTARROW="None" STARTINCLINATION="1210;-216;"/>
+<arrowlink COLOR="#23a8a3" DESTINATION="ID_1708779083" ENDARROW="Default" ENDINCLINATION="228;35;" ID="Arrow_ID_831529784" STARTARROW="None" STARTINCLINATION="1210;-216;"/>
+<arrowlink COLOR="#23a8a3" DESTINATION="ID_99412440" ENDARROW="Default" ENDINCLINATION="206;27;" ID="Arrow_ID_214937382" STARTARROW="None" STARTINCLINATION="1210;-216;"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdd095" COLOR="#ff1e00" CREATED="1704063600555" FOLDED="true" ID="ID_913882256" MODIFIED="1762957635079" STYLE="bubble" TEXT="Patch refresh">
+<edge COLOR="#684477" STYLE="sharp_linear" WIDTH="4"/>
+<icon BUILTIN="help"/>
+<icon BUILTIN="flag-orange"/>
+<node CREATED="1704063600555" ID="ID_45594610" MODIFIED="1727132594336" TEXT="derzeit keine">
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdd095" COLOR="#ff1e00" CREATED="1704063600555" ID="ID_1309846147" MODIFIED="1742178666222" TEXT="Release markieren">
+<icon BUILTIN="flag-orange"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1704063600555" ID="ID_528687554" MODIFIED="1762956411403" TEXT="Preview-Version">
+<icon BUILTIN="pencil"/>
+</node>
+<node BACKGROUND_COLOR="#fdd095" COLOR="#ff1e00" CREATED="1578717041052" ID="ID_45587496" MODIFIED="1743343868842" TEXT="Release-Version paketieren">
+<icon BUILTIN="flag-orange"/>
+<node COLOR="#435e98" CREATED="1578717041052" ID="ID_1247657876" MODIFIED="1743343805703" TEXT="ppp_2010.1-1">
+<linktarget COLOR="#23a8a3" DESTINATION="ID_1247657876" ENDARROW="Default" ENDINCLINATION="206;27;" ID="Arrow_ID_358752012" SOURCE="ID_926633460" STARTARROW="None" STARTINCLINATION="1210;-216;"/>
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdd095" COLOR="#ff1e00" CREATED="1578717041052" ID="ID_1951632864" MODIFIED="1742178666222" TEXT="aktuelles Release paketiert">
+<linktarget COLOR="#23a8a3" DESTINATION="ID_1951632864" ENDARROW="Default" ENDINCLINATION="-570;54;" ID="Arrow_ID_378699979" SOURCE="ID_1817455546" STARTARROW="None" STARTINCLINATION="73;207;"/>
+<icon BUILTIN="flag-orange"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdd095" COLOR="#ff1e00" CREATED="1704063600555" ID="ID_1740441572" MODIFIED="1743299975297" TEXT="build f&#xfc;r Debian(Bookworm/Trixie/Forky/Noble)">
+<icon BUILTIN="flag-orange"/>
+<node COLOR="#435e98" CREATED="1704063600555" ID="ID_437218651" MODIFIED="1742178666223" STYLE="fork" TEXT="seit letztem Herbst: neuer GPG-Schl&#xfc;ssel">
+<arrowlink DESTINATION="ID_906075673" ENDARROW="Default" ENDINCLINATION="825;188;" ID="Arrow_ID_1594627726" STARTARROW="None" STARTINCLINATION="327;-11;"/>
+<icon BUILTIN="info"/>
+</node>
+<node BACKGROUND_COLOR="#fdd095" COLOR="#ff1e00" CREATED="1704063600555" ID="ID_1166406483" MODIFIED="1743299892883" TEXT="Build im Docker">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <ul>
+      <li>
+        git clone in ein Unterverzeichnis vom Paketverzeichnis
+      </li>
+      <li>
+        Paketverzeichnis in den Container gemounted<br />
+
+        <pre><font color="#331e9c">podman run -v /Werk/Gang/pack:/pack -it ichthyo/pack-debian-trixie-20250317</font></pre>
+      </li>
+      <li>
+        im Container....
+      </li>
+      <ul>
+        <li>
+          <font size="1">(ggfs dort equivs installieren)</font>
+        </li>
+        <li>
+          cd /pack
+        </li>
+        <li>
+          mk-build-dep --install --remove
+        </li>
+        <li>
+          gbp buildpackage --git-tag
+        </li>
+      </ul>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="flag-orange"/>
+<node COLOR="#435e98" CREATED="1704063600555" ID="ID_964482016" MODIFIED="1743299952537" TEXT="debian:trixie-20250317">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <u>Vorbereitung</u>:
+    </p>
+    <p>
+      ./build-pack-dock debian:trixie-2025####
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#5ffe1d" DESTINATION="ID_115167288" ENDARROW="Default" ENDINCLINATION="173;0;" ID="Arrow_ID_1656807903" STARTARROW="None" STARTINCLINATION="274;28;"/>
+</node>
+<node COLOR="#435e98" CREATED="1704063600555" ID="ID_1853375699" MODIFIED="1742178666224" TEXT="debian:bookworm-2025####"/>
+<node COLOR="#435e98" CREATED="1704063600555" ID="ID_1296281089" MODIFIED="1742178666224" TEXT="debian:forky-2025####"/>
+<node BACKGROUND_COLOR="#fdd095" COLOR="#ff1e00" CREATED="1708384148912" ID="ID_1991001361" MODIFIED="1743632587117" TEXT="ubuntu:noble-20250127">
+<icon BUILTIN="flag-orange"/>
+<node BACKGROUND_COLOR="#c8c0b6" CREATED="1708384167653" HGAP="27" ID="ID_1109805889" MODIFIED="1742178666224" TEXT="das neue LTS 24" VSHIFT="11">
+<icon BUILTIN="idea"/>
+</node>
+<node BACKGROUND_COLOR="#fdd095" COLOR="#ff1e00" CREATED="1727140529629" ID="ID_1538366632" MODIFIED="1742178666224" TEXT="auch dpkg -i getestet">
+<icon BUILTIN="flag-orange"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdd095" COLOR="#ff1e00" CREATED="1704063600555" ID="ID_115167288" MODIFIED="1742178666224" TEXT="lokal Installation getestet">
+<linktarget COLOR="#5ffe1d" DESTINATION="ID_115167288" ENDARROW="Default" ENDINCLINATION="173;0;" ID="Arrow_ID_1656807903" SOURCE="ID_964482016" STARTARROW="None" STARTINCLINATION="274;28;"/>
+<icon BUILTIN="flag-orange"/>
+<node BACKGROUND_COLOR="#fdd095" COLOR="#ff1e00" CREATED="1727143416876" HGAP="26" ID="ID_1399233982" MODIFIED="1742178666224" TEXT="Smoke-Test" VSHIFT="8">
+<icon BUILTIN="flag-orange"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1704063600555" ID="ID_555152694" MODIFIED="1742178666225" TEXT="PPA-Builds">
+<icon BUILTIN="hourglass"/>
+</node>
+<node BACKGROUND_COLOR="#fdd095" COLOR="#ff1e00" CREATED="1704063600555" ID="ID_374574909" MODIFIED="1742178666225" TEXT="ver&#xf6;ffentlichen">
+<icon BUILTIN="flag-orange"/>
+<node BACKGROUND_COLOR="#fdd095" COLOR="#ff1e00" CREATED="1733453893712" ID="ID_501411488" LINK="#ID_1040384144" MODIFIED="1743344180787" TEXT="lumiera_#.#~trixie">
+<icon BUILTIN="flag-orange"/>
+</node>
+<node BACKGROUND_COLOR="#fdd095" COLOR="#ff1e00" CREATED="1733453893712" ID="ID_120823382" LINK="#ID_1993565514" MODIFIED="1743344180787" TEXT="lumiera_#.#~forky">
+<icon BUILTIN="flag-orange"/>
+</node>
+<node BACKGROUND_COLOR="#fdd095" COLOR="#ff1e00" CREATED="1733453893712" ID="ID_656869111" LINK="#ID_1807456181" MODIFIED="1743344180788" TEXT="lumiera_#.#~noble">
+<icon BUILTIN="flag-orange"/>
+</node>
+<node COLOR="#435e98" CREATED="1578715559245" ID="ID_1787587874" MODIFIED="1742178666226" TEXT="Lumiera-DEB...">
+<icon BUILTIN="bell"/>
+<node BACKGROUND_COLOR="#fdd095" COLOR="#ff1e00" CREATED="1578715605631" ID="ID_7319182" MODIFIED="1742178666226" TEXT="Branches">
+<icon BUILTIN="flag-orange"/>
+<node CREATED="1578715608950" ID="ID_1612951836" MODIFIED="1742178666226" TEXT="deb">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1578715610321" ID="ID_550867974" MODIFIED="1742178666226" TEXT="master">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdd095" COLOR="#ff1e00" CREATED="1578715612791" ID="ID_1254432679" MODIFIED="1742178666226" TEXT="Tags">
+<icon BUILTIN="flag-orange"/>
+<node CREATED="1578715618097" ID="ID_1641794602" MODIFIED="1742178666226" TEXT="upstream/%(version)s"/>
+<node CREATED="1578715653017" ID="ID_1340242233" MODIFIED="1742178666226" TEXT="debian/%(version)s"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1578716151565" ID="ID_557188011" MODIFIED="1742178666227" TEXT="Ank&#xfc;ndigung">
+<icon BUILTIN="hourglass"/>
+<icon BUILTIN="closed"/>
+<node CREATED="1638224682712" ID="ID_492650867" MODIFIED="1742178666227" TEXT="f&#xfc;r Release">
+<icon BUILTIN="closed"/>
+</node>
+</node>
+</node>
 </node>
 <node CREATED="1478878277623" ID="ID_233902084" MODIFIED="1567956578644" TEXT="Update">
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1587592233868" ID="ID_706507639" MODIFIED="1708375950379" TEXT="Kl&#xe4;ren....">
