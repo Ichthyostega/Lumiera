@@ -42,7 +42,7 @@ def defineCmdlineVariables(buildVars):
 #       ,EnumVariable('DIST_TARGET', 'Build target architecture', 'auto',
 #                   allowed_values=('auto', 'i386', 'i686', 'x86_64' ), ignorecase=2)
         ,PathVariable('PREFIX', 'Installation dir prefix', 'usr/local', PathVariable.PathAccept)
-        ,PathVariable('INSTALLDIR', 'Root output directory for install. Final installation will happen in INSTALLDIR/PREFIX/... ', '/', PathVariable.PathIsDir)
+        ,PathVariable('INSTALLDIR', 'Root output directory for install. Final installation will happen in INSTALLDIR/PREFIX/... ', '/', PathVariable.PathAccept)
         ,PathVariable('PKGLIBDIR', 'Installation dir for plugins, defaults to PREFIX/lib/lumiera/modules', '',PathVariable.PathAccept)
         ,PathVariable('PKGDATADIR', 'Installation dir for default config, usually PREFIX/share/lumiera', '',PathVariable.PathAccept)
      )
