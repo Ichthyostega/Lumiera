@@ -152106,7 +152106,7 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
 <node CREATED="1680565613038" ID="ID_1202060017" MODIFIED="1680565616857" TEXT="Content-Generator">
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1680565626147" ID="ID_460039330" MODIFIED="1697737436489" TEXT="Test-Content f&#xfc;r Playback">
 <linktarget COLOR="#6f587c" DESTINATION="ID_460039330" ENDARROW="Default" ENDINCLINATION="-586;-295;" ID="Arrow_ID_48943827" SOURCE="ID_1305412516" STARTARROW="None" STARTINCLINATION="-695;79;"/>
-<linktarget COLOR="#fec499" DESTINATION="ID_460039330" ENDARROW="Default" ENDINCLINATION="-632;68;" ID="Arrow_ID_1437229627" SOURCE="ID_988488968" STARTARROW="None" STARTINCLINATION="-226;13;"/>
+<linktarget COLOR="#fec499" DESTINATION="ID_460039330" ENDARROW="Default" ENDINCLINATION="-632;68;" ID="Arrow_ID_1437229627" SOURCE="ID_988488968" STARTARROW="None" STARTINCLINATION="-92;84;"/>
 <icon BUILTIN="hourglass"/>
 </node>
 </node>
@@ -161311,7 +161311,35 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1679788604226" ID="ID_671337380" MODIFIED="1679788608411" TEXT="Basis-Implementierung"/>
 <node CREATED="1679788608984" ID="ID_1995627934" MODIFIED="1679788618138" TEXT="Grundlagen Dependency-Management"/>
 </node>
-<node CREATED="1679788636636" ID="ID_1242125154" MODIFIED="1679788644742" TEXT="Technologie: Video-Ausgabe im GUI"/>
+<node CREATED="1679788636636" ID="ID_1242125154" MODIFIED="1679788644742" TEXT="Technologie: Video-Ausgabe im GUI">
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1762968419997" ID="ID_77004892" MODIFIED="1762968646668" TEXT="Beschlu&#xdf;: vorerst nur Legacy-Video-Output">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das war eine Richtlinien-Entscheidung, nachdem wir den Vortrag &#187;Video-Output&#171; auf der FrOSCon gehalten haben.
+    </p>
+    <p>
+      Dazu gibt es mehrere Gr&#252;nde
+    </p>
+    <ul>
+      <li>
+        wir sind massiv zur&#252;ckgefallen und haben noch sehr viel zu tun f&#252;r eine minimal funktionsf&#228;hige Applikation
+      </li>
+      <li>
+        das Thema &#187;Shader-Programmierung&#171; ist ein dicker Brocken, und erfordert zus&#228;tzliche Infrastruktur; <b>ja das wird relevant</b>
+      </li>
+      <li>
+        Wayland ist &#187;um die Ecke&#171; (und dann m&#252;ssen wir sowiso nochmal 'ran)
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#6a3747" DESTINATION="ID_1198662071" ENDARROW="Default" ENDINCLINATION="713;-560;" ID="Arrow_ID_561632202" STARTARROW="Default" STARTINCLINATION="1089;67;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
 <node CREATED="1679788655473" ID="ID_1037767417" MODIFIED="1679788661748" TEXT="running Time-display"/>
 </node>
 </node>
@@ -161500,7 +161528,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <icon BUILTIN="hourglass"/>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1680561847832" ID="ID_988488968" MODIFIED="1680566930976" TEXT="Content/Generator">
-<arrowlink COLOR="#fec499" DESTINATION="ID_460039330" ENDARROW="Default" ENDINCLINATION="-632;68;" ID="Arrow_ID_1437229627" STARTARROW="None" STARTINCLINATION="-226;13;"/>
+<arrowlink COLOR="#fec499" DESTINATION="ID_460039330" ENDARROW="Default" ENDINCLINATION="-632;68;" ID="Arrow_ID_1437229627" STARTARROW="None" STARTINCLINATION="-92;84;"/>
 <icon BUILTIN="hourglass"/>
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1680561888985" ID="ID_1736473881" MODIFIED="1713657912388" TEXT="Scheduler">
@@ -166365,6 +166393,135 @@ that situation will improve in forseeable future.</pre>
 </node>
 </node>
 </node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1762879192637" ID="ID_856231519" MODIFIED="1762879298461" TEXT="Feststellungen zur Lizenz">
+<linktarget COLOR="#6f7dba" DESTINATION="ID_856231519" ENDARROW="Default" ENDINCLINATION="-1342;134;" ID="Arrow_ID_846772487" SOURCE="ID_450772311" STARTARROW="None" STARTINCLINATION="-985;-1050;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node COLOR="#435e98" CREATED="1762879301799" ID="ID_195415850" MODIFIED="1762913982501" TEXT="2025-11 eigens bedacht">
+<arrowlink COLOR="#444e73" DESTINATION="ID_718437760" ENDARROW="Default" ENDINCLINATION="-118;-1153;" ID="Arrow_ID_1565932104" STARTARROW="None" STARTINCLINATION="221;24;"/>
+</node>
+<node COLOR="#435e98" CREATED="1762879511835" ID="ID_306881439" MODIFIED="1762879521152" TEXT="Warum eine Dual-License?">
+<node CREATED="1762879532400" ID="ID_1977776786" MODIFIED="1762879561225" TEXT="weil Teile der Dokumentation im Code-Tree liegen &#x27f9; die GPL gilt ohnehin"/>
+<node CREATED="1762879564108" ID="ID_646854274" MODIFIED="1762879773041" TEXT="GPL is eine Source-Licenz und kann f&#xfc;r allgemeinen Content problematisch sein">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...der Grund liegt in der Pflicht zur Bereitstellung der &quot;Quellen&quot;. Das zwingt im Zusammenhang mit allgemeinen Inhalten wie Text, Bild und Video <i>zur Auslegung,</i>&#160;und dadurch wird die Situation rechtlich zweideutig. Theoretisch w&#228;re das kein Problem, aber praktisch kann es ein Hindernis darstellen f&#252;r jemanden, der lediglich <i>gestalterischen Content</i>&#160; weiterverwenden und umgestalten m&#246;chte, also in unserem Fall Texte und Bilder. Daher bieten wir eine Wahlm&#246;gichkeite der Creatvice-Commons-By-SA, denn diese verpflichtet nicht zur Bereitstellung eines Quelltextes.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1762879776488" ID="ID_1319132451" MODIFIED="1762880520970" TEXT="kann unsere Website dauerhaft unter diesem Konstrukt stehen?">
+<linktarget COLOR="#a0274d" DESTINATION="ID_1319132451" ENDARROW="Default" ENDINCLINATION="-34;38;" ID="Arrow_ID_1814687617" SOURCE="ID_316198078" STARTARROW="None" STARTINCLINATION="-216;12;"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1762879806548" ID="ID_339806263" MODIFIED="1762880616224">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Einsch&#228;tzung: <b>ja</b>
+    </p>
+  </body>
+</html></richcontent>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1762879815742" ID="ID_402888765" MODIFIED="1762880038128">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      ABER: das verpflichtet <b>UNS</b>, die CC-By-SA einzuhalten
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Und zwar deshalb, weil es nur einen kompatiblen Pfad gibt von CC-By-SA &#10230; GPL-3.
+    </p>
+    <p>
+      Deshalb m&#252;ssen wir die Vereinigungsmenge der Forderungen beider Lizenzen erf&#252;llen, was aber m&#246;glich ist....
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1762880041685" ID="ID_164385665" MODIFIED="1762880204627" TEXT="CC &#x27f9; Attributierungspflichten">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...hier m&#252;ssen wir aufpassen. Da die CC-By-SA nicht auf Quellcode abstellt, mu&#223; die Attributierungs-Information jeweils auch textuell nahe bei dem jeweiligen Content aufgef&#252;hrt sein.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1762880053201" ID="ID_785456200" MODIFIED="1762880133821" TEXT="GPL &#x27f9; Quellcode bereitstellen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...das tun wir, unser Git-Repo ist &#246;ffentlich und die ver&#246;ffentlichten Webseiten werden aus Asciidoc generiert. F&#252;r Bilder halten wir die bestm&#246;gliche Aufl&#246;sung bereit, bzw. verwenden SVG, wo m&#246;glich
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1762880207240" ID="ID_1051924484" MODIFIED="1762880216034" TEXT="Attributierung &#x27f9; zu beachten">
+<node CREATED="1762880217901" ID="ID_73341680" MODIFIED="1762880237143" TEXT="auf die Rechts-Realit&#xe4;t abstellen (kein nitpicking!)"/>
+<node CREATED="1762880238077" ID="ID_218019714" MODIFIED="1762880288293" TEXT="relevant sind Beitr&#xe4;ge mit eigener Sch&#xf6;pfungsh&#xf6;he">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das hei&#223;t, mal eben den Spell-Checker laufen lassen, oder den Markup reparieren ist noch kein Beitrag, der eine Autorenschaft konstituiert.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1762880291966" ID="ID_578609981" MODIFIED="1762880312203" TEXT="die CC verlangt nur, da&#xdf; vorhandene Autorenschaft &amp; Copyright erhalten bleibt"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1762880313361" ID="ID_1710602060" MODIFIED="1762880348799">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      ABER: jeder relevante Autor eines Textes / Bildes <b>mu&#223; im Text selber aufgef&#252;hrt</b>&#160;sein
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1762880372097" ID="ID_1337139166" MODIFIED="1762880388796" TEXT="Empfehlenswert: Liste der Autoren ver&#xf6;ffentlichen">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node CREATED="1762880421162" ID="ID_68517129" MODIFIED="1762880437519" TEXT="die Website gilt als eine Sammlung und Republikation">
+<node CREATED="1762880438925" ID="ID_692742658" MODIFIED="1762880447875" TEXT="das hei&#xdf;t: die Zusammenstellung selber ist ein Werk"/>
+<node CREATED="1762880449414" ID="ID_1061596327" MODIFIED="1762880475224" TEXT="und der Autor dieses Werks (Ichthyostega) w&#xe4;hlt hierf&#xfc;r eine Lizenz"/>
+<node CREATED="1762880479459" ID="ID_316198078" MODIFIED="1762880528367" TEXT="diese Lizenz mu&#xdf; kompatibel sein (und das ist sie)">
+<arrowlink COLOR="#a0274d" DESTINATION="ID_1319132451" ENDARROW="Default" ENDINCLINATION="-34;38;" ID="Arrow_ID_1814687617" STARTARROW="None" STARTINCLINATION="-216;12;"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1762963584432" FOLDED="true" ID="ID_834262714" MODIFIED="1762963836077" TEXT="wie liefern wir Dokumentation aus?">
+<linktarget COLOR="#7a1d4e" DESTINATION="ID_834262714" ENDARROW="Default" ENDINCLINATION="-1253;90;" ID="Arrow_ID_599268396" SOURCE="ID_1025850273" STARTARROW="None" STARTINCLINATION="1069;73;"/>
+<icon BUILTIN="help"/>
+<icon BUILTIN="hourglass"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1762963732670" ID="ID_154283183" MODIFIED="1762963758622" TEXT="wir brauchen ein System f&#xfc;r Kontext-sensitive Hilfe">
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1762963765135" ID="ID_1123409226" MODIFIED="1762963790159" TEXT="wir publizieren das User-Manual zugleich auch auf der Website">
+<icon BUILTIN="idea"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1762963792131" ID="ID_103150806" MODIFIED="1762963805273" TEXT="Recherche: m&#xf6;gliche Hilfe-Formate">
+<icon BUILTIN="hourglass"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1762963808136" ID="ID_785048838" MODIFIED="1762963819814" TEXT="was ist &#xbb;HTML-Help&#xab;?">
+<icon BUILTIN="help"/>
+</node>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -168428,6 +168585,11 @@ that situation will improve in forseeable future.</pre>
 <node CREATED="1757467159266" ID="ID_599618635" MODIFIED="1757467172806" TEXT="derzeit verwenden wir {localdate} {localtime}"/>
 <node CREATED="1757467173466" ID="ID_726876662" MODIFIED="1757467186928" TEXT="denkbar: {docdate} {doctime}"/>
 </node>
+<node CREATED="1763487203125" ID="ID_1397178259" MODIFIED="1763487214573" TEXT="HTML-Elemente inkonsistent">
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1763487216248" ID="ID_1383387788" MODIFIED="1763487264069" TEXT="beim Impressum wird &lt;span&gt; ge&#xf6;ffnet und &lt;/font&gt; geschlossen">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1756834117054" ID="ID_718437760" MODIFIED="1756834125609" TEXT="Lizenz-Seiten erneuern">
 <icon BUILTIN="flag-yellow"/>
@@ -169287,6 +169449,50 @@ that situation will improve in forseeable future.</pre>
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1762803541300" ID="ID_1198625842" MODIFIED="1762803563377" TEXT="Doku zum debianDepot.txt">
 <linktarget COLOR="#b5768e" DESTINATION="ID_1198625842" ENDARROW="Default" ENDINCLINATION="102;11;" ID="Arrow_ID_1663167652" SOURCE="ID_834370322" STARTARROW="None" STARTINCLINATION="-35;55;"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1763227392438" ID="ID_1661490899" MODIFIED="1763227659040" TEXT="auch SCons/Buildsystem-Doku erg&#xe4;nzen">
+<linktarget COLOR="#e91b19" DESTINATION="ID_1661490899" ENDARROW="Default" ENDINCLINATION="-549;-29;" ID="Arrow_ID_1418896649" SOURCE="ID_1851495604" STARTARROW="None" STARTINCLINATION="-497;37;"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1763227450701" ID="ID_625201328" MODIFIED="1763227464085" TEXT="Erl&#xe4;uterung der Installation fehlt"/>
+<node CREATED="1763227487535" ID="ID_1935413427" MODIFIED="1763227501052" TEXT="Prinzip der Bundle-Installation klarstellen"/>
+<node CREATED="1763227465012" ID="ID_503183649" MODIFIED="1763227483918" TEXT="sollte dabei auch nochmal die $SUBSTVAR erkl&#xe4;ren"/>
+<node CREATED="1763250317834" ID="ID_1201363565" MODIFIED="1763250560534" TEXT="...und wie Build-Variable konfiguriert und eingelesen werden">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Denn ich mu&#223;te mir das heute schon wieder zusammensuchen...
+    </p>
+    <ul>
+      <li>
+        die SCons-Kommando-Argumente werden im Konstruktor des Environment-Objekts geparst
+      </li>
+      <li>
+        die erwartete Argument-Definition kommt dorthin im Keyword-Argument 'variables'
+      </li>
+      <li>
+        wir definieren sie in unserem Options-Objekt
+      </li>
+      <li>
+        weitere key=value-Bindings k&#246;nnen als zus&#228;tzliche KW-Args mitgegeben werden
+      </li>
+      <li>
+        im Besonderen diejenigen, die aus 'optcache' geladen wurden
+      </li>
+      <li>
+        alle diese Variablen (incl. der von der Kommandozeile) werden 'build variables'
+      </li>
+      <li>
+        diese k&#246;nnen per env.subst(string) interpoliert werden
+      </li>
+      <li>
+        bei eingebauten Kommando-Aufrufen macht das SCons automatisch
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#c75069" DESTINATION="ID_1201363565" ENDARROW="Default" ENDINCLINATION="762;36;" ID="Arrow_ID_352999319" SOURCE="ID_177915811" STARTARROW="None" STARTINCLINATION="928;75;"/>
 </node>
 </node>
 </node>
@@ -170890,6 +171096,305 @@ Since then others have made contributions, see the log for the history.</font></
 </html></richcontent>
 <icon BUILTIN="info"/>
 </node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1763245245613" ID="ID_525244825" MODIFIED="1763245734318" TEXT="Python verpflichtend auf 3.0 heben">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1763245607991" ID="ID_1509658805" MODIFIED="1763245615611" TEXT="3.5 ist bereits out-of-life"/>
+<node CREATED="1763245616716" ID="ID_1414068970" MODIFIED="1763245624301" TEXT="3.10 w&#xe4;re derzeit ein gutes LTS"/>
+<node CREATED="1763245625028" ID="ID_1202221499" MODIFIED="1763245636034" TEXT="Debian / Trixie hat 3.13"/>
+<node CREATED="1763245636905" ID="ID_334220089" MODIFIED="1763245642867" TEXT="Ubuntu / Noble hat 3.12"/>
+<node CREATED="1763245644961" ID="ID_914593277" MODIFIED="1763245687701" TEXT="mit 3.10 kamen die pattern-match-cases und Exception-Groups"/>
+<node CREATED="1763245688478" ID="ID_1724219941" MODIFIED="1763245696822" TEXT="kurz vorher die Union-Types"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1763245700172" ID="ID_1564459617" MODIFIED="1763245727447">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Beschlu&#223;: wir gehen auf <b>3.10</b>
+    </p>
+  </body>
+</html></richcontent>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1762998892693" ID="ID_1851495604" MODIFIED="1763227659040" TEXT="Scons: &apos;build&apos; - Target baut die Tests">
+<arrowlink COLOR="#e91b19" DESTINATION="ID_1661490899" ENDARROW="Default" ENDINCLINATION="-549;-29;" ID="Arrow_ID_1418896649" STARTARROW="None" STARTINCLINATION="-497;37;"/>
+<linktarget COLOR="#ae3046" DESTINATION="ID_1851495604" ENDARROW="Default" ENDINCLINATION="691;48;" ID="Arrow_ID_213409665" SOURCE="ID_1534148044" STARTARROW="None" STARTINCLINATION="504;25;"/>
+<icon BUILTIN="broken-line"/>
+<node CREATED="1762999155772" ID="ID_1416667212" MODIFIED="1762999169486" TEXT="Vermutung: &apos;vgsuppression&apos; is the culprit">
+<node CREATED="1762999775812" ID="ID_1852771772" MODIFIED="1762999786923" TEXT="vgsuppression wurde den &apos;tools&apos; hinzugef&#xfc;gt"/>
+<node CREATED="1762999787655" ID="ID_403491226" MODIFIED="1762999794071" TEXT="es h&#xe4;ngt aber von den Test-Libs ab"/>
+<node CREATED="1762999794901" ID="ID_966563514" MODIFIED="1763000417013" TEXT="keine Ahnung warum">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Was war denn &#252;berhaupt der Sinn der vgsuppression? Welche Aufrufe sollten damit ausgenommen werden? warum brauchen die die Tests???
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1762999799379" ID="ID_1885004310" MODIFIED="1763000384082" TEXT="ich verwende es bisher nicht">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Die &#187;klassischen Hacker&#171; waren seinerzeit unbedingt davon &#252;berzeugt, da&#223; wir viel mit Valgrind arbeiten m&#252;ssen, weil wir ja sonst Probleme mit Memory-Leaks &#8222;nie in den Griff bekommen&#8220;. Ich dagegen wollte immer ein deterministisches Memory-Management, und hab mich mit diesem Ansatz durchgef&#252;hrt. Erste Versuche mit Valgrind waren nicht sonderlich hilfreich. Vor allem wegen Dingen wie dem &quot;MPool&quot;, der nicht deterministisch ist. Ebenso hat Christian irgendwann einmal einen &quot;Leak-Checker&quot; geschrieben, und wollte den eingebunden haben. Dann kam heraus, da&#223; sein C-Code leakt, aber der C++-Code nicht, weil die smart-Pointer per Konstruktion &#187;wasserdicht&#171; sind. Daraufhin hat Christian schlagartig das Interesse an dem Thema verloren. Und sich auch nie um eine brauchbare Konfiguration der vgsuppression gek&#252;mmert. Ich hatte darauf auch keinen Bock, denn das ist eine endlose Knobelei, und wozu? Ich wei&#223; ja da&#223; die smart-pointer nicht leaken.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1763000424467" HGAP="40" ID="ID_60083390" MODIFIED="1763000455712" TEXT="L&#xf6;sung: &apos;vgsuppression&apos; aus den &apos;tools&apos; herausnehmen" VSHIFT="-54">
+<icon BUILTIN="yes"/>
+<node CREATED="1763000458529" ID="ID_1185565343" MODIFIED="1763000469947" TEXT="stattdessen direkt mit dem Testcode verkn&#xfc;pfen"/>
+<node CREATED="1763000470813" ID="ID_679231386" MODIFIED="1763000485718" TEXT="das w&#xfc;rde in das bisherige Schema passen"/>
+</node>
+</node>
+<node COLOR="#5b280f" CREATED="1763230685670" ID="ID_1004502438" MODIFIED="1763250736483" TEXT="LUMIERA_CONFIG_PATH wird falsch gesetzt">
+<linktarget COLOR="#fd403c" DESTINATION="ID_1004502438" ENDARROW="Default" ENDINCLINATION="394;27;" ID="Arrow_ID_590201297" SOURCE="ID_1567105707" STARTARROW="None" STARTINCLINATION="740;45;"/>
+<icon BUILTIN="broken-line"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1763230715545" ID="ID_1680047278" MODIFIED="1763230727184" TEXT="LUMIERA_CONFIG_PATH=&quot;//usr/local/share/lumiera/:.&quot;"/>
+<node COLOR="#5b280f" CREATED="1763231062724" ID="ID_729113427" MODIFIED="1763250751132" TEXT="zwei Probleme">
+<icon BUILTIN="yes"/>
+<icon BUILTIN="button_cancel"/>
+<node COLOR="#5b280f" CREATED="1763231078697" ID="ID_115675010" MODIFIED="1763250618809" TEXT="das $PREFIX wird nicht korrekt expandiert">
+<icon BUILTIN="messagebox_warning"/>
+<icon BUILTIN="button_cancel"/>
+<node COLOR="#435e98" CREATED="1763231300673" ID="ID_1557727002" MODIFIED="1763250649035" TEXT="und zudem fehlt das &apos;$&apos; vor ORIGIN">
+<icon BUILTIN="messagebox_warning"/>
+<icon BUILTIN="button_cancel"/>
+<node COLOR="#435e98" CREATED="1763244851880" ID="ID_492042101" MODIFIED="1763244876710" TEXT="Ha! das it ein fauler Trick">
+<icon BUILTIN="smiley-oh"/>
+</node>
+<node CREATED="1763244878064" ID="ID_668694706" MODIFIED="1763250709476" TEXT="das &apos;$&apos;-Pr&#xe4;fix hab ich einfach optional gemacht">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      searchpath.cpp :&#160; <font color="#000000" face="Bitstream Vera Sans Mono" size="9pt"><b>replaceMagicLinkerTokens()</b></font>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1763244892178" ID="ID_986300181" MODIFIED="1763244939385" TEXT="um mir so ein endloses Gew&#xfc;rge mit Escaping in SCons zu sparen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      SCons w&#252;rde n&#228;mlich diese $ORIGIN ebenfalls versuchen, zu expandieren
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1763244190047" ID="ID_1166570537" MODIFIED="1763250594606" TEXT="Untersuchung: Argumentvearbeitung">
+<icon BUILTIN="idea"/>
+<node COLOR="#435e98" CREATED="1763244213281" ID="ID_1722667809" MODIFIED="1763244233061" TEXT="wo wird die Kommandozeile ausgewertet?">
+<icon BUILTIN="help"/>
+<node CREATED="1763244235642" ID="ID_1277868786" MODIFIED="1763244246849" TEXT="im Konstruktor eines SCons-Environment-Objekts"/>
+<node CREATED="1763244264314" ID="ID_358071616" MODIFIED="1763244283705" TEXT="und zwar wird in dem KW-Arg &apos;variables&apos; die Options-Definition gegeben"/>
+<node CREATED="1763244285168" ID="ID_1434521973" MODIFIED="1763244294717" TEXT="diese Options-Definition enth&#xe4;lt u.A. den Default"/>
+<node CREATED="1763244532894" ID="ID_1207214708" MODIFIED="1763244568459" TEXT="au&#xdf;erdem k&#xf6;nnen key=value-Bindings schon direkt mitgegeben werden">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...dies dient dazu, Defaults aus dem 'optcache' zu laden
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1763244404193" ID="ID_782372904" MODIFIED="1763244422289" TEXT="wie sind Build-Variable definiert?">
+<icon BUILTIN="help"/>
+<node CREATED="1763244323764" ID="ID_1101039323" MODIFIED="1763244341187" TEXT="weitere KW-Argumente werden im Environment zu &apos;build variables&apos;"/>
+<node CREATED="1763244355771" ID="ID_1435358895" MODIFIED="1763244381006" TEXT="diese m&#xfc;ssen explizit per env.subst(string) expandiert werden"/>
+<node CREATED="1763244388324" ID="ID_606075458" MODIFIED="1763244401849" TEXT="(was aber Scons bei Kommando-Aufrufen selbst&#xe4;ndig macht)"/>
+</node>
+<node CREATED="1763250200467" ID="ID_177915811" MODIFIED="1763250358624" TEXT="das sollte man dokumentieren....">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...hab heute schon wieder ganzsch&#246;n lang gebraucht, um mir das zusammenzupuzzeln (und ich <i>kenne</i>&#160;SCons und unser Buildsystem)
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#c75069" DESTINATION="ID_1201363565" ENDARROW="Default" ENDINCLINATION="762;36;" ID="Arrow_ID_352999319" STARTARROW="None" STARTINCLINATION="928;75;"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1763250599901" ID="ID_492426631" MODIFIED="1763250798449" TEXT="Falscher Alarm: war nur ein Variablen-Fehler im debian/rules">
+<linktarget COLOR="#2dc0c7" DESTINATION="ID_492426631" ENDARROW="Default" ENDINCLINATION="-299;14;" ID="Arrow_ID_111760374" SOURCE="ID_1782120779" STARTARROW="None" STARTINCLINATION="136;10;"/>
+<icon BUILTIN="button_cancel"/>
+<icon BUILTIN="smiley-oh"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1763231090468" ID="ID_1620912914" MODIFIED="1763252221643" TEXT="PKGLIBDIR und PKGDATADIR sind nicht gesetzt">
+<icon BUILTIN="messagebox_warning"/>
+<node COLOR="#5b280f" CREATED="1763231139276" ID="ID_306175439" MODIFIED="1763250961935" TEXT="das m&#xfc;&#xdf;te debian/rules machen">
+<icon BUILTIN="yes"/>
+<icon BUILTIN="stop-sign"/>
+</node>
+<node CREATED="1763250967332" ID="ID_822134580" MODIFIED="1763250981054" TEXT="Nein! die werden beide nicht (mehr) gebraucht"/>
+<node CREATED="1763250992129" ID="ID_1400451187" MODIFIED="1763252256130" TEXT="das Eincompilieren von LUMIERA_PLUGIN_PATH und LUMIERA_CONFIG_PATH ist obsolet">
+<arrowlink COLOR="#2871c6" DESTINATION="ID_1570476654" ENDARROW="Default" ENDINCLINATION="19;-179;" ID="Arrow_ID_1820496426" STARTARROW="None" STARTINCLINATION="167;197;"/>
+<node CREATED="1763251017639" ID="ID_1648228375" MODIFIED="1763251090583" TEXT="jaja ... das ist die typische C-Programmierer-Denke">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Hauptsache, man hat irgendwas total trickreich eingef&#228;delt, so da&#223; man sich sp&#228;ter von der linken Tasche in die rechte Tasche spielen kann
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1763251032523" ID="ID_1068311835" MODIFIED="1763252289481" TEXT="oh Mann!! was h&#xe4;tte ich mir da f&#xfc;r Aufwand sparen k&#xf6;nnen">
+<arrowlink COLOR="#d60e3b" DESTINATION="ID_1523470153" ENDARROW="Default" ENDINCLINATION="127;8;" ID="Arrow_ID_348260333" STARTARROW="None" STARTINCLINATION="28;159;"/>
+<icon BUILTIN="smiley-angry"/>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1763251092009" ID="ID_1640452810" MODIFIED="1763251107224" TEXT="sowas geh&#xf6;rt in eine Setup-Config">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1763251108190" ID="ID_1699140581" MODIFIED="1763251146741">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      und <b>exakt so</b>&#160;machen wir es bereits
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1763251116390" ID="ID_854945955" MODIFIED="1763251127706" TEXT="setup.ini &#x27f5; per Boost geparst"/>
+<node CREATED="1763251265699" ID="ID_157789497" MODIFIED="1763251284227">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      das Config-System ist nur noch <i>pro forma</i>&#160;da
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1763251285435" ID="ID_506779723" MODIFIED="1763251341159" TEXT="den Plugin-Path setze ich aus configfacade.cpp">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <font color="#000000" face="Bitstream Vera Sans Mono" size="9pt"><b>lumiera_get_plugin_path_default()</b></font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1763250753593" ID="ID_1782120779" MODIFIED="1763250812322" TEXT="war kein Problem sondern Dummheit">
+<arrowlink COLOR="#2dc0c7" DESTINATION="ID_492426631" ENDARROW="Default" ENDINCLINATION="-299;14;" ID="Arrow_ID_111760374" STARTARROW="None" STARTINCLINATION="136;10;"/>
+<icon BUILTIN="smiley-oh"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1763251402580" ID="ID_1570476654" MODIFIED="1763252256130" TEXT="also dann &#x27f9; die eincompilierten Pfade beseitigen">
+<linktarget COLOR="#2871c6" DESTINATION="ID_1570476654" ENDARROW="Default" ENDINCLINATION="19;-179;" ID="Arrow_ID_1820496426" SOURCE="ID_1400451187" STARTARROW="None" STARTINCLINATION="167;197;"/>
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1763251446767" ID="ID_1315071317" MODIFIED="1763251465681" TEXT="PKGLIBDIR und PKGDATADIR werden dann auch obsolset">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node COLOR="#5b280f" CREATED="1763251657464" ID="ID_1968452368" MODIFIED="1763252017495" TEXT="ist das jetzt nicht ein R&#xfc;ckschritt?">
+<icon BUILTIN="help"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1763251699279" ID="ID_229523599" MODIFIED="1763252034415">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <u><font size="4">Nein</font></u><font size="4">!</font>&#160;denn unser Buildsystem ist <b>nicht Autotools oder CMake</b>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1763251748312" ID="ID_1159346873" MODIFIED="1763251769051" TEXT="ich halte diesen ganzen Ansatz mit einem &#xbb;Environment-Interface&#xab; f&#xfc;r verfehlt">
+<node CREATED="1763251769941" ID="ID_1503983494" MODIFIED="1763251786669" TEXT="SCons vertritt diesbez&#xfc;glich den gleichen Standpunkt"/>
+<node CREATED="1763251788802" ID="ID_1173262849" MODIFIED="1763251803731" TEXT="und wird auch deshalb von vielen Entwicklern abgelehnt"/>
+<node CREATED="1763251822416" ID="ID_1642443891" MODIFIED="1763251850317">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      das beruht aber auf einer <b>Mystifikation</b>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1763251851228" ID="ID_1523470153" MODIFIED="1763252284175" TEXT="siehe mein Essay zu &quot;Complexity and Flexibility&quot;">
+<linktarget COLOR="#d60e3b" DESTINATION="ID_1523470153" ENDARROW="Default" ENDINCLINATION="127;8;" ID="Arrow_ID_348260333" SOURCE="ID_1068311835" STARTARROW="None" STARTINCLINATION="28;159;"/>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1763251865867" ID="ID_809818391" MODIFIED="1763251883329" TEXT="nur ein echtes Interface w&#xfc;rde gelten">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1763252099115" ID="ID_730860255" MODIFIED="1763252166921" TEXT="eine solche Environment-Hintert&#xfc;r w&#xfc;rde eine Config sogar untergraben">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...weil es dadurch zus&#228;tzliche Seiteneffekt-Abh&#228;ngigeiten gibt, die man dem System nicht &#187;ansieht&#171;
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1763251888329" ID="ID_1005013045" MODIFIED="1763251937492" TEXT="Stattdessen: wir werden ein angemessenes Config-System bauen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...das dann auch die &#252;blichen Overlay-Ebenen hat (Paket, System, User)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1763251947773" ID="ID_117224104" MODIFIED="1763252013581" TEXT="unser SCons-Build ist FSH-compliant">
+<icon BUILTIN="idea"/>
+<node CREATED="1763251979970" ID="ID_307578585" MODIFIED="1763251995040" TEXT="deshalb mu&#xdf; er nicht mehr erst vom Paketierer hingebogen werden"/>
+<node CREATED="1763251995769" ID="ID_404178203" MODIFIED="1763252010295" TEXT="sondern die richtigen / verbindlichen Pfade stehen bereits in der setup.ini"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1763253905407" ID="ID_683037557" MODIFIED="1763256710085" TEXT="INSTALLDIR mu&#xdf; nicht existieren">
+<linktarget COLOR="#347acc" DESTINATION="ID_683037557" ENDARROW="Default" ENDINCLINATION="-807;74;" ID="Arrow_ID_628482667" SOURCE="ID_316996095" STARTARROW="None" STARTINCLINATION="-124;12;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1763253990153" ID="ID_481586261" MODIFIED="1763254276005" TEXT="und wir sollten hier nichts machen...">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      F&#252;r den normalen Build ist das irrelevant; erst wenn wir das Install-Target aufrufen, passiert da etwas. <b>Und dann</b>&#160;sollte das auf Betriebssystem-Ebene geregelt sein (und das erfordert i.d.R. auch Root-Rechte)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1763253998393" ID="ID_480490513" MODIFIED="1763254360594" TEXT="das f&#xe4;llt definitiv in die Kompetenz des Paket-Builders">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das ist so eine ganz typische Paketbau-Funktionalit&#228;t: pr&#252;fen ob das Zielverzeichnis existiert, richtige Rechte hat und leer ist &#8212; oder eben einige dieser Kriterien <i>grade nicht pr&#252;ftn</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1763514063200" ID="ID_1724121509" MODIFIED="1763514591472" TEXT="unser SCons-Setup geht nicht korrekt mit absolutem Install-Pfad um">
+<arrowlink COLOR="#e2014c" DESTINATION="ID_1983023550" ENDARROW="Default" ENDINCLINATION="-1336;58;" ID="Arrow_ID_1385558508" STARTARROW="None" STARTINCLINATION="1490;59;"/>
+<icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
 </node>
@@ -177084,47 +177589,49 @@ Since then others have made contributions, see the log for the history.</font></
   </body>
 </html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1446509415481" ID="ID_180589749" MODIFIED="1751804858979" TEXT="Versionen hochsetzen">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1446509415481" ID="ID_180589749" MODIFIED="1762968689573" TEXT="Versionen hochsetzen">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
     <p>
-      w&#228;hle Kompatibilt&#228;t genau so, da&#223; Ubuntu-Trusty noch unterst&#252;tzt wird.
+      w&#228;hle Kompatibilt&#228;t genau so, da&#223; Ubuntu-Noble noch unterst&#252;tzt wird, ansonsten den Level f&#252;r &#187;Trixie&#171;
     </p>
   </body>
 </html></richcontent>
 <icon BUILTIN="flag-pink"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1446509422423" ID="ID_1328716100" MODIFIED="1751804850308" TEXT="gtkmm-3.0 3.10">
+<node CREATED="1446509422423" ID="ID_1328716100" MODIFIED="1762968020827" TEXT="gtkmm-3.0 3.20"/>
+<node CREATED="1446509430758" ID="ID_371171235" MODIFIED="1762968053027" TEXT="glibmm-2.4 2.66"/>
+<node CREATED="1446509601271" ID="ID_1477664506" MODIFIED="1762968079346" TEXT="libglib2.0 2.80">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1446510347931" ID="ID_559552800" MODIFIED="1762968075904" TEXT="direkten Check hierf&#xfc;r">
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1446509430758" ID="ID_371171235" MODIFIED="1751804850307" TEXT="glibmm-2.4 2.39">
-<icon BUILTIN="flag-yellow"/>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1446509601271" ID="ID_1477664506" MODIFIED="1751804850306" TEXT="libglib2.0 2.40">
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1446510347931" ID="ID_559552800" MODIFIED="1557498707242" TEXT="direkten Check hierf&#xfc;r"/>
 <node CREATED="1446510354914" ID="ID_1787485177" MODIFIED="1557498707242" TEXT="check f&#xfc;r gthread fraglich"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1446509752707" ID="ID_1392554051" MODIFIED="1751804850305" TEXT="libgdl-3-dev 3.12">
-<icon BUILTIN="flag-yellow"/>
+<node CREATED="1446509752707" ID="ID_1392554051" MODIFIED="1762968117046" TEXT="libgdl-3-dev 3.40"/>
+<node CREATED="1762968094725" ID="ID_142490674" MODIFIED="1762968114842" TEXT="libgdlmm-3 3.7,3"/>
+<node CREATED="1446509983556" ID="ID_366391443" MODIFIED="1762968138061" TEXT="libcairomm-1.0-dev 1.14"/>
+<node CREATED="1446510475202" ID="ID_514495017" MODIFIED="1762968139572" TEXT="librsvg2-dev 2.40"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1446511275302" ID="ID_359693763" MODIFIED="1762968334109" TEXT="libgavl-dev 2.0">
+<icon BUILTIN="hourglass"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1446509983556" ID="ID_366391443" MODIFIED="1751804850304" TEXT="libcairomm-1.0-dev 1.10">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1446511125266" ID="ID_1198662071" MODIFIED="1762968646668" TEXT="xv, x11 und xext vorerst erhalten">
+<linktarget COLOR="#6a3747" DESTINATION="ID_1198662071" ENDARROW="Default" ENDINCLINATION="713;-560;" ID="Arrow_ID_561632202" SOURCE="ID_77004892" STARTARROW="Default" STARTINCLINATION="1089;67;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1762968170299" ID="ID_1715287542" MODIFIED="1762968180724" TEXT="halte mir die Option auf XVideo offen"/>
+<node CREATED="1762968181526" ID="ID_1533261932" MODIFIED="1762968307196" TEXT="wir werden vorherst h&#xf6;chstens Legacy-OpenGL unterst&#xfc;tzen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...das war ein Beschlu&#223; auf dem Entwickler-Meeting im September: auch wenn wir (Benny+ich) jetzt viel Know-How aufgesammelt haben, verschieben wir das Thema &#187;Shader-Programmierung&#171; dann doch noch in die Zukunft, weil es nicht strikt notwendig ist, um die einfachste Form von Playback zu bekommen. Demnach k&#246;nnten wir sogar mit dem bestehenden XVideo-Code weitermachen (oder eben Legacy GL nehmen, sofern noch Motivation daf&#252;r da ist)
+    </p>
+  </body>
+</html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1446510475202" ID="ID_514495017" MODIFIED="1751804850303" TEXT="librsvg2-dev 2.30">
-<icon BUILTIN="flag-yellow"/>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1446511275302" ID="ID_359693763" MODIFIED="1751804850303" TEXT="libgavl-dev 1.4">
-<icon BUILTIN="flag-yellow"/>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1446510776857" ID="ID_674774779" MODIFIED="1751804850302" TEXT="Kommentar: librt geh&#xf6;rt zu libc 6">
-<icon BUILTIN="flag-yellow"/>
-</node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1446511125266" ID="ID_1198662071" MODIFIED="1751804850302" TEXT="Kommentar zu xv, x11 und xext : TODO videodisplayer obsolet?">
-<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
-<node CREATED="1544239177727" FOLDED="true" HGAP="90" ID="ID_1414932362" MODIFIED="1751804827818" TEXT="Probleme..." VSHIFT="3">
+<node CREATED="1544239177727" HGAP="90" ID="ID_1414932362" MODIFIED="1763514226786" TEXT="Probleme..." VSHIFT="3">
 <icon BUILTIN="go"/>
 <node COLOR="#338800" CREATED="1544239202589" ID="ID_1398808684" MODIFIED="1544310874478" TEXT="an neue Layer-Struktur anpassen">
 <icon BUILTIN="button_ok"/>
@@ -177252,6 +177759,74 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1544239360927" ID="ID_1906746912" MODIFIED="1544239423084" TEXT="deckt Folgeproblem im GUI auf">
 <arrowlink COLOR="#7f244b" DESTINATION="ID_626803835" ENDARROW="Default" ENDINCLINATION="193;-461;" ID="Arrow_ID_65546348" STARTARROW="None" STARTINCLINATION="421;19;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1763514105272" ID="ID_1983023550" MODIFIED="1763514591472" TEXT="unser Scons-Setup kann nicht in absolutes INSTALLDIR installieren">
+<linktarget COLOR="#e2014c" DESTINATION="ID_1983023550" ENDARROW="Default" ENDINCLINATION="-1336;58;" ID="Arrow_ID_299855257" SOURCE="ID_1527350389" STARTARROW="None" STARTINCLINATION="624;33;"/>
+<linktarget COLOR="#e2014c" DESTINATION="ID_1983023550" ENDARROW="Default" ENDINCLINATION="-1336;58;" ID="Arrow_ID_1385558508" SOURCE="ID_1724121509" STARTARROW="None" STARTINCLINATION="1490;59;"/>
+<icon BUILTIN="broken-line"/>
+<node CREATED="1763514259978" ID="ID_1685412419" MODIFIED="1763514385866" TEXT="peinlich &#x2014; aber derzeit nicht relevant">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...hei&#223;t n&#228;mlich, da&#223; man Lumiera derzeit nicht nach /usr/local/ installieren k&#246;nnte!
+    </p>
+    <p>
+      Das wenn ein &#187;richtiger&#171; Unix-Hacker mitbekommt, dann haben wir uns ziemlich l&#228;cherlich gemacht: &#8222;mit Autotools w&#228;r das nicht passiert...&#8220;
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1763514276941" ID="ID_1691321590" MODIFIED="1763514477580" TEXT="weil ja nur ich das Ding verwende ... und ich baue DEB-Pakte">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Ich w&#252;rde nie auf die Idee kommen, etwas anders ins System zu installieren, als via DEB-Paket. Und f&#252;r das Debian-Paketieren brauchen wir ja einen Pfad relativ zum Build-Root (n&#228;mlich im debian/lumiera -&#160; Unterverzeichnis, denn dort wird der Content f&#252;r das neue DEB-Paket nach dem Build zusammengestellt....)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1763514839552" ID="ID_239715940" MODIFIED="1763514847562" TEXT="L&#xf6;sungsansatz">
+<node CREATED="1763514848694" ID="ID_1943485717" MODIFIED="1763514892155" TEXT="man k&#xf6;nnte das explizit handhaben wenn $DESTDIR aufgebaut wird">
+<icon BUILTIN="idea"/>
+<node CREATED="1763514983986" ID="ID_990449841" MODIFIED="1763514995284" TEXT="feststellen ob das INSTALLDIR absolut oder relativ ist"/>
+<node CREATED="1763515002708" ID="ID_649796962" MODIFIED="1763515027345" TEXT="wenn relativ &#x27f9; Pr&#xe4;fix &apos;#&apos; davor (&#x2259; relativ zum Buildroot)"/>
+<node CREATED="1763515028291" ID="ID_1534981827" MODIFIED="1763515141358" TEXT="das ist eine Konsequenz der rekursiven SConsscript">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      wie viele Build-Systeme beruht auch der SCons-Build darauf, rekursiv definierte Sub-Builds aus Unterverzeichnissen zu aggregieren. Das bedeutet, da&#223; f&#252;r den eigentlichen Bauvorgang jeweils in das Unterverzeichnis gewechselt wird. Das ist aber problematisch f&#252;r Aktionen im Build-Tree, und deshalb bietet SCons diese spezielle Konvention mit dem '#'-Pr&#228;fix, das den Pfad dann relativ zum Build-Root verankert
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1763514871369" ID="ID_413131724" MODIFIED="1763514884287" TEXT="also im Konstruktor von LumieraEnvironment">
+<node CREATED="1763514896814" ID="ID_1573400508" MODIFIED="1763514908716" TEXT="dort wird zun&#xe4;chst nur ein neuer Platzhalter zusammengesetzt"/>
+<node CREATED="1763514909541" ID="ID_849320964" MODIFIED="1763514931927" TEXT="erst der Basis-Konstruktor (Scons-Environment) parst die cmdline">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1763514960250" ID="ID_1279305087" MODIFIED="1763514980249" TEXT="$DESTDIR w&#xe4;re damit allgemein eine n&#xfc;tzliche Einrichtung"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1763560137355" ID="ID_1362355060" MODIFIED="1763560152772" TEXT="bekannte Probleme">
+<icon BUILTIN="hourglass"/>
+<icon BUILTIN="licq"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1763560039136" ID="ID_241297391" MODIFIED="1763560250681" TEXT="env.DocFile() : &#xfc;berraschendes Verhalten ohne pr&#xe4;fix-Argument">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Nov.2025 beim Erweitern/Debuggen entdeckt: da st&#246;&#223;t das Setup mit der Hilfsfunktion getDirname() an ihre Grenzen. Gilt vermutlich auch f&#252;r den ConfigData()-Builder. <b>So belassen</b>. Also: besser immer ein Pr&#228;fix angeben, es ist ja auch kein optionales Argument
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#904874" DESTINATION="ID_1073265175" ENDARROW="Default" ENDINCLINATION="-547;27;" ID="Arrow_ID_391174476" STARTARROW="None" STARTINCLINATION="538;23;"/>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
@@ -179490,11 +180065,877 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
+<node CREATED="1762959096576" ID="ID_230766167" MODIFIED="1762959099602" TEXT="Lumiera">
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1762957250745" ID="ID_1675852546" MODIFIED="1762959318265" TEXT="Tag+Build-conf an Git-flow angepa&#xdf;t">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <ul>
+      <li>
+        <font face="Monospaced" color="#5124b8">master</font>&#160;fungiert direkt als <i>upstream-Branch</i>
+      </li>
+      <li>
+        das Versionsschema angepa&#223;t: <font face="Monospaced" color="#672e2e">upstream-tag = v</font><font face="Monospaced" color="#971236"><b>%(version)</b></font><font face="Monospaced" color="#672e2e">s</font>
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#528fc7" DESTINATION="ID_239339457" ENDARROW="Default" ENDINCLINATION="-249;13;" ID="Arrow_ID_484064004" STARTARROW="None" STARTINCLINATION="878;58;"/>
+<icon BUILTIN="yes"/>
+<icon BUILTIN="pencil"/>
+</node>
+<node CREATED="1762963148375" ID="ID_926402132" MODIFIED="1762963193756" TEXT="DEB-Paket von mir selber gepflegt : Branch &apos;deb&apos;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      wird ver&#246;ffentlicht in einem separaten Git-Repo debian/lumiera, ist aber auch in meinem 'ichthyo'-Repository
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1763489907534" ID="ID_475004531" MODIFIED="1763489926833" TEXT="Hinweise">
+<icon BUILTIN="edit"/>
+<node CREATED="1763489939752" ID="ID_1493443577" MODIFIED="1763489942457" TEXT="Doku">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1763489943499" ID="ID_1590141460" MODIFIED="1763490076881" TEXT="verwende seit 2025 eine Platzhalter-Seite">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      die stammt eigentlich aus der Lumiera-Webiste und wurde umgeschrieben in ein eigenst&#228;ndiges HTML.... <b>unbedingt per Diff/Merge</b>&#160; aktualisieren vom Website-Content!
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#473fa7" DESTINATION="ID_733347253" ENDARROW="Default" ENDINCLINATION="-163;-266;" ID="Arrow_ID_566966684" STARTARROW="None" STARTINCLINATION="654;39;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+<node CREATED="1762963201064" ID="ID_1726397148" MODIFIED="1762963209708" TEXT="Aktualisierungen">
+<icon BUILTIN="list"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1762963219518" ID="ID_1599809611" MODIFIED="1762963243276" TEXT="f&#xfc;r Trixie+C++23 2025-11">
+<icon BUILTIN="yes"/>
+<node COLOR="#338800" CREATED="1762959102578" ID="ID_45259530" MODIFIED="1762998890186" TEXT="Git-Buildpackage anpassen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1762962662681" ID="ID_789378321" MODIFIED="1762962672821" TEXT="Paketdefinition modernisieren">
+<node CREATED="1762962674115" ID="ID_1194603275" LINK="#ID_31098087" MODIFIED="1762962776165" TEXT="das NoBug-Paket als Bezugspunkt verwenden">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Dort bin ich bereits vor &#189; Jahr durch die ganze Serie von Neuerungen im Debian-Standard gegangen und habe viele Detail-Fragen gekl&#228;rt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1762962814557" ID="ID_1137340345" LINK="https://www.debian.org/doc/debian-policy/upgrading-checklist.html#version-4-7-2" MODIFIED="1762962863684" TEXT="Debian-Standard 3.9.6 &#x27f6; 4.7.2">
+<node CREATED="1762963964177" ID="ID_1973719537" LINK="https://www.debian.org/doc/debian-policy/upgrading-checklist.html#version-4-0-0" MODIFIED="1762963970627" TEXT="v4.0.0">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1762963976524" ID="ID_1281202544" MODIFIED="1762964022980" TEXT="DEB_BUILD_OPTIONS = nodoc">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Soll die Dokumentationsgenerierung &#252;berspringen, aber ein leeres Doumentations-Paket bauen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="hourglass"/>
+</node>
+</node>
+<node CREATED="1762964420303" ID="ID_963723389" LINK="https://www.debian.org/doc/debian-policy/upgrading-checklist.html#version-4-2-0" MODIFIED="1763230279289" TEXT="4.2.0">
+<node CREATED="1762964444527" ID="ID_359156467" MODIFIED="1762964456797" TEXT="package build should be as verbose as reasonably possible"/>
+<node COLOR="#338800" CREATED="1762964457711" ID="ID_1752537536" MODIFIED="1763230264917" TEXT="VERBOSE=True &#xfc;bergeben">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...und wenn das problematisch wird, sollte das DEB-Packaging die DEB_BUILD_OPTIONS &quot;terse&quot; unterst&#252;tzen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1763231695050" ID="ID_1567105707" MODIFIED="1763252535099" TEXT="&#x27f9;Ha! LUMIERA_CONFIG_PATH ist nicht korrekt">
+<arrowlink COLOR="#fd403c" DESTINATION="ID_1004502438" ENDARROW="Default" ENDINCLINATION="394;27;" ID="Arrow_ID_590201297" STARTARROW="None" STARTINCLINATION="740;45;"/>
+<icon BUILTIN="broken-line"/>
+<icon BUILTIN="button_cancel"/>
+</node>
+<node COLOR="#435e98" CREATED="1763252543225" ID="ID_1225378815" MODIFIED="1763252582334">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      war letztlich eine Sackgasse,
+    </p>
+    <p>
+      hat aber wichtige Umst&#228;nde gekl&#228;rt
+    </p>
+  </body>
+</html>
+</richcontent>
+<font NAME="SansSerif" SIZE="11"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1762964559222" ID="ID_39241614" MODIFIED="1762964587036" TEXT="Upstream Release-Notes geh&#xf6;ren in /usr/share/doc/package/NEWS.gz. "/>
+</node>
+<node CREATED="1762965085906" ID="ID_639976365" LINK="https://www.debian.org/doc/debian-policy/upgrading-checklist.html#version-4-5-1" MODIFIED="1762965091169" TEXT="4.5.1">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1762965092310" ID="ID_1143895697" MODIFIED="1762965117410" TEXT="wie/wo liefern wir die Lizenz-Info aus?"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1762965124872" ID="ID_1920300627" MODIFIED="1762965140526" TEXT="was kommt nach /usr/share/doc/lumiera ?">
+<icon BUILTIN="help"/>
+</node>
+</node>
+</node>
+<node CREATED="1762965659250" ID="ID_1678179798" MODIFIED="1762965663145" TEXT="Dependencies">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1762965680451" ID="ID_1540843897" MODIFIED="1762965699266" TEXT="debhelper-compat (= 13)">
+<icon BUILTIN="back"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1762965715260" ID="ID_832850931" MODIFIED="1762965726439" TEXT="Vorsicht! war da nicht was mit Ubuntu?">
+<icon BUILTIN="help"/>
+</node>
+</node>
+<node COLOR="#5b280f" CREATED="1762965664282" ID="ID_1042953624" MODIFIED="1762965669963" TEXT="CDBS aufgeben">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node COLOR="#338800" CREATED="1762965740700" ID="ID_1815042694" MODIFIED="1762965749971" TEXT="nur noch g++-14">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1762965751089" ID="ID_894359521" MODIFIED="1762965781677" TEXT="keine explizite Abh&#xe4;ngigkeit auf eine C++-Stdlib">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#5b280f" CREATED="1762965765891" ID="ID_1972785805" MODIFIED="1762965817810" TEXT="nicht klar warum ich die &#xfc;berhaupt hatte??"/>
+</node>
+<node CREATED="1762965821754" ID="ID_787026580" MODIFIED="1762965829227" TEXT="Boost-Dependencies">
+<node CREATED="1762966584601" ID="ID_528619935" MODIFIED="1762966604723" TEXT="etwas toleranter w&#xe4;hlen (Ubuntu/backport)"/>
+<node CREATED="1762966715149" ID="ID_1185664562" MODIFIED="1762966724500" TEXT="&#xdc;berraschung: auch Debian ist auf 1.83"/>
+<node CREATED="1762966757032" ID="ID_853210654" MODIFIED="1762966774173" TEXT="also k&#xf6;nnen wir das nehmen (aktuell ist 1.88)">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1762967784550" ID="ID_1106823668" MODIFIED="1762967789523" TEXT="GTK / GLib">
+<node CREATED="1762967790585" ID="ID_983071058" MODIFIED="1762967954383" TEXT="verwende m&#xf6;glichst &#x201e;stramme&#x201c; Dependencies">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Speziell GLib ist bekannterma&#223;en buggy, wenngliech auch sich das in den letzten Jahren verbessert hat. Aber die Leute &#228;ndern und modernisieren auch st&#228;ndig ... also gibt es nicht wirklich einen &#187;Kompatibilit&#228;ts-Level&#171;
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1762967806582" ID="ID_772977824" MODIFIED="1762967867929" TEXT="also lege Debian/Trixie zugrunde">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      deshalb ist es ja &#187;Referenz-Platform&#171;, was auch bedeutet, wir orientieren uns nach Vorne, und die Referenz-Platform ist eigentlich der Mindest-Level (mit ein klein wenig Wasser unter dem Kiel, wegen Ubuntu)
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1762967978548" ID="ID_32834542" MODIFIED="1762967984785" TEXT="GLib in Noble: 2.80"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1762959151077" ID="ID_118703200" MODIFIED="1762959231724" TEXT="mu&#xdf; nun CDBS abl&#xf6;sen">
+<linktarget COLOR="#6a3c80" DESTINATION="ID_118703200" ENDARROW="Default" ENDINCLINATION="799;95;" ID="Arrow_ID_127516976" SOURCE="ID_340181586" STARTARROW="None" STARTINCLINATION="580;-41;"/>
+<node CREATED="1762958979706" ID="ID_598558049" MODIFIED="1762959148845" TEXT="Bezug: hab schon GDLmm umgestellt CDBS &#x27f6; dh">
+<arrowlink COLOR="#46c0d4" DESTINATION="ID_1732644986" ENDARROW="Default" ENDINCLINATION="168;608;" ID="Arrow_ID_710986137" STARTARROW="None" STARTINCLINATION="1263;74;"/>
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1762959908059" HGAP="29" ID="ID_1173936209" MODIFIED="1762959976031" TEXT="Infos zu dh auch beim Upgrade von NoBug (vor &#xbd; Jahr)" VSHIFT="-17">
+<arrowlink COLOR="#3b60cb" DESTINATION="ID_390243764" ENDARROW="Default" ENDINCLINATION="-69;269;" ID="Arrow_ID_1527930686" STARTARROW="None" STARTINCLINATION="403;21;"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1762990822800" HGAP="51" ID="ID_134653160" MODIFIED="1762996400052" TEXT="weitere Infos..." VSHIFT="26">
+<node CREATED="1762990837149" ID="ID_432288395" LINK="https://www.debian.org/doc/debian-policy/ch-source.html#s-debianrules" MODIFIED="1762990867323" TEXT="im Policy-Manual steht einiges zu den Build-Tragets"/>
+<node CREATED="1762990882139" ID="ID_343725545" LINK="https://wiki.debian.org/Debhelper" MODIFIED="1762990893240" TEXT="Einstiegsseite Debian-Wiki: Debhelper">
+<node CREATED="1762990900998" HGAP="12" ID="ID_1598190639" LINK="https://manpages.debian.org/trixie/debhelper/dh.1.de.html" MODIFIED="1762990914634" TEXT="verweist auf die &quot;dh&quot;-Manpage" VSHIFT="5"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1762996353305" ID="ID_869569123" MODIFIED="1762996391149" TEXT="w&#xe4;hle direkte und einfache L&#xf6;sung">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1762996436060" ID="ID_954532424" MODIFIED="1762996861842" TEXT="&#xe4;hnlicher Ansatz wie f&#xfc;r CDBS">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...nur mit dem Unterschied, da&#223; wir hier nun die Aufrufe direkt im debian/rules stehen haben; im Grunde hat uns die &quot;magic&quot; gar nicht viel gebracht, nachdem man sich erst mal damit besch&#228;ftigt hat.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1762996407126" ID="ID_1753075854" MODIFIED="1762996789957" TEXT="codiere die Scons-Aufrufe direkt in dh-Hooks">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      override_dh_auto_clean: (hier zus&#228;tzlich optcache und configure-cache wegl&#246;schen)
+    </p>
+    <p>
+      override_dh_auto_build
+    </p>
+    <p>
+      override_dh_auto_test
+    </p>
+    <p>
+      override_dh_auto_install
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1762996422596" ID="ID_1047432902" MODIFIED="1763253873491" TEXT="packe die Argumente in zentral gesetze Variable">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <font face="Monospaced">DEB_SCONS_OPTIONS = \ </font>
+    </p>
+    <p>
+      <font face="Monospaced">BUILDLEVEL=ALPHA \ </font>
+    </p>
+    <p>
+      <font face="Monospaced">DEBUG=True&#160;&#160;&#160;&#160;&#160;&#160;&#160;\ </font>
+    </p>
+    <p>
+      <font face="Monospaced">OPTIMIZE=False&#160;&#160;&#160;\ </font>
+    </p>
+    <p>
+      <font face="Monospaced">VALGRIND=False&#160;&#160;&#160;\ </font>
+    </p>
+    <p>
+      <font face="Monospaced">ARCHFLAGS=&quot; -fstack-protector-strong&quot;</font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1762997171048" ID="ID_1055108179" MODIFIED="1762997177026" TEXT="Feinschliff + Test">
+<node CREATED="1762997178703" ID="ID_1534148044" MODIFIED="1762998975931" TEXT="seltsam: der &apos;scons build&apos;-Aufruf baut auch bereits die Tests">
+<arrowlink COLOR="#ae3046" DESTINATION="ID_1851495604" ENDARROW="Default" ENDINCLINATION="691;48;" ID="Arrow_ID_213409665" STARTARROW="None" STARTINCLINATION="504;25;"/>
+</node>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1763252619641" ID="ID_1700554356" MODIFIED="1763252628415" TEXT="redundanter Bauvorgang">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1763252631355" ID="ID_1845098136" MODIFIED="1763252647397" TEXT="das &apos;install&apos;-Target baut nochmal neu"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1763252649479" ID="ID_267772331" MODIFIED="1763252711731" TEXT="das liegt an dem abweichenden Environment">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      SCons verwendet eine MD5-Summe &#252;ber den Quellcode <b>und au&#223;erdem</b>&#160; auch &#252;ber alle Compiler-Schalter und Environment-Settings
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node COLOR="#338800" CREATED="1763252729534" ID="ID_208216424" MODIFIED="1763252752896">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      sollte daher alle drei Targets <b>mit den gleichen Settings</b>&#160;aufrufen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1763252761605" ID="ID_562981279" MODIFIED="1763252894670">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Folgeproblem:<font size="2">&#160;</font><font color="#a40d0d" face="Monospaced" size="2">*** Directory path for variable 'INSTALLDIR' does not exist: debian/lumiera</font>
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="broken-line"/>
+<node CREATED="1763252919428" ID="ID_1955433422" MODIFIED="1763252946834" TEXT="ist definiert als PathVariable(... PathIsDir)"/>
+<node COLOR="#338800" CREATED="1763253690359" ID="ID_718647850" MODIFIED="1763253817304" TEXT="kann man in SCons konfigurieren">
+<icon BUILTIN="idea"/>
+<node CREATED="1763253697094" ID="ID_316996095" MODIFIED="1763253986530" TEXT="PathVariable.PathAccept">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      pr&#252;ft und Syntax, aber nicht ob das Filesystem-Element existiert
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#347acc" DESTINATION="ID_683037557" ENDARROW="Default" ENDINCLINATION="-807;74;" ID="Arrow_ID_628482667" STARTARROW="None" STARTINCLINATION="-124;12;"/>
+<icon BUILTIN="back"/>
+</node>
+<node CREATED="1763253716322" ID="ID_1286460021" MODIFIED="1763253727576" TEXT="PathVariable.PathIsFile"/>
+<node CREATED="1763253708888" ID="ID_1224977408" MODIFIED="1763253708888" TEXT="PathVariable.PathIsDir"/>
+<node CREATED="1763253725155" ID="ID_127240187" MODIFIED="1763253880859" TEXT="PathVariable.PathIsDirCreate"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1762997197216" ID="ID_1049616938" MODIFIED="1763256797241" TEXT="ein Test scheitert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      NodeDevel_test : hier werden Checksummen &#252;ber Datenbl&#246;cke gebildet und eine daf&#252;r pr&#228;parierte Render-Pipeline geschickt.
+    </p>
+    <p>
+      Dieser Test <i>enth&#228;lt keine concurrency</i>&#160;&#8212; also deutet ein (nicht reproduzierbarer) Fehler hier auf ein Hardware-Problem hin (den Verdacht hab ich schon l&#228;nger)
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#0fc322" DESTINATION="ID_21630419" ENDARROW="Default" ENDINCLINATION="-143;-4;" ID="Arrow_ID_1881402920" STARTARROW="None" STARTINCLINATION="137;199;"/>
+<icon BUILTIN="clanbomber"/>
+<node CREATED="1763002805987" ID="ID_131629953" MODIFIED="1763002809829" TEXT="node-devel-test.cpp:148: thread_1: processing_duplicateMultichan: (not clone[i]-&gt;isSane())"/>
+<node CREATED="1763002873555" ID="ID_724131093" MODIFIED="1763002875315" TEXT="++&gt;&gt;&gt; SEED(rand) &lt;&lt;&lt;: 5616823453636595174"/>
+<node COLOR="#435e98" CREATED="1763002942455" ID="ID_526217545" MODIFIED="1763227675886" TEXT="reproduzierbar (unabh&#xe4;ngig vom Seed)">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1763002986971" ID="ID_1393035653" MODIFIED="1763002997779" TEXT="im normalen Build l&#xe4;uft dieser Test fehlerfrei"/>
+<node CREATED="1763003080169" ID="ID_689176826" MODIFIED="1763003103164">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Unterschied: <font face="Monospaced" color="#7e1bc7">-fstack-protector-strong</font>
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1763003702660" ID="ID_263374911" MODIFIED="1763003720737" TEXT="legt wohl zus&#xe4;tzliche Guard-Canaries auf den Stack"/>
+<node CREATED="1763003721852" ID="ID_879869947" MODIFIED="1763003739186" TEXT="speziell in einem Fall in dem ein Array auf dem Stack liegt"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1763003271627" ID="ID_829577926" MODIFIED="1763256815221" TEXT="was passiert hier?">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <div style="background-color: #eee0b5; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 2px">
+      <div style="color: #202020; background-color: #eee0b5; font-family: Bitstream Vera Sans Mono; font-size: 9pt; white-space: pre">
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#635e96" face="Monospaced"><b>Buffer</b></font><font color="#3a1f18" face="Monospaced">&#160;</font><font color="#814422" face="Monospaced">clone</font><font color="#11123a" face="Monospaced">[</font><font color="#29466b" face="Monospaced">50</font><font color="#11123a" face="Monospaced">]</font><font color="#65533c" face="Monospaced">;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a1a65" face="Monospaced"><b>for</b></font><font color="#3a1f18" face="Monospaced">&#160;</font><font color="#11123a" face="Monospaced">(</font><font color="#8c505c" face="Monospaced"><b>uint</b></font><font color="#3a1f18" face="Monospaced">&#160;</font><font color="#814422" face="Monospaced">i</font><font color="#65533c" face="Monospaced">=</font><font color="#29466b" face="Monospaced">0</font><font color="#65533c" face="Monospaced">;</font><font color="#3a1f18" face="Monospaced">&#160; i</font><font color="#65533c" face="Monospaced">&lt;</font><font color="#3a1f18" face="Monospaced">channels</font><font color="#65533c" face="Monospaced">;</font><font color="#3a1f18" face="Monospaced">&#160;</font><font color="#65533c" face="Monospaced">++</font><font color="#3a1f18" face="Monospaced">i</font><font color="#11123a" face="Monospaced">)</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#95271a" face="Monospaced">CHECK</font><font color="#3a1f18" face="Monospaced">&#160;</font><font color="#11123a" face="Monospaced">(</font><font color="#4a1a65" face="Monospaced"><b>not</b></font><font color="#3a1f18" face="Monospaced">&#160;clone</font><font color="#11123a" face="Monospaced">[</font><font color="#3a1f18" face="Monospaced">i</font><font color="#11123a" face="Monospaced">]</font><font color="#874a15" face="Monospaced"><b>-&gt;</b></font><font color="#753737" face="Monospaced">isSane</font><font color="#11123a" face="Monospaced">())</font><font color="#65533c" face="Monospaced">;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          
+        </p>
+      </div>
+    </div>
+  </body>
+</html></richcontent>
+<icon BUILTIN="help"/>
+<node CREATED="1763003281795" ID="ID_1669445264" MODIFIED="1763003303523" TEXT="warum scheitert das gleiche Konstrukt nicht bereits in processing_generateMultichan()"/>
+<node CREATED="1763003859127" ID="ID_751190029" MODIFIED="1763003873289" TEXT="hier haben wir 2 x 50 Buffer auf dem Stack liegen"/>
+<node CREATED="1763003874092" ID="ID_455887763" MODIFIED="1763003879965" TEXT="ist das nicht ein bischen viel??">
+<node CREATED="1763004712356" ID="ID_1765795348" MODIFIED="1763004730067" TEXT="ChatGPT : wie gro&#xdf; ist der Stack?">
+<icon BUILTIN="wizard"/>
+<node CREATED="1763004733730" ID="ID_1435810404" MODIFIED="1763004741737" TEXT="ulimit -s"/>
+<node CREATED="1763004742446" ID="ID_1923044502" MODIFIED="1763004748282" TEXT="typischerweise 8 MiB"/>
+</node>
+<node CREATED="1763004782531" ID="ID_1986721878" MODIFIED="1763004903031" TEXT="sollte also noch so gehen....">
+<node CREATED="1763004821158" ID="ID_53250042" MODIFIED="1763004830681" TEXT="der Buffer in TestFrame ist 1024 char"/>
+<node CREATED="1763004835313" ID="ID_822280815" MODIFIED="1763004840680" TEXT="kommt noch der Header dazu"/>
+<node CREATED="1763004868463" ID="ID_1258679027" MODIFIED="1763004886378" TEXT="demnach w&#xe4;ren 50 TestFrame &lt; 100 kiB"/>
+</node>
+</node>
+<node CREATED="1763003882691" ID="ID_371137746" MODIFIED="1763003890935" TEXT="das ist uninitialisierte inline-Storage"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1763003921099" ID="ID_449287003" MODIFIED="1763003944646" TEXT="&#x27f9; wir rufen hier istSane() auf uninitialisiertem Stack-Memory">
+<icon BUILTIN="clanbomber"/>
+<node CREATED="1763004140755" ID="ID_1134311399" MODIFIED="1763004266589" TEXT="das kann durchaus true sein...">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ist Sane() pr&#252;ft nur header_.isPlausible() &#10233; das pr&#252;ft ob ein das Marker-Wort im Header liegt &#8212; was durchaus der Fall sein kann, wenn <i>exakt an der gleichen Stelle</i>&#160;vorher schon mal ein Buffer-Header lag....
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1763004151732" ID="ID_759423860" MODIFIED="1763004165945" TEXT="wenn voher exakt die gleiche Struktur auf dem Stack lag"/>
+<node CREATED="1763004425523" ID="ID_983981951" MODIFIED="1763004547571" TEXT="die Stack-Protector-Canaries haben da wohl zu einem Match gef&#xfc;hrt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...vermutlich mit dem tempor&#228;ren TestFrame, der beim vorhergehenden Test w&#228;hrend der Verifikation erzeugt wird. Dieser d&#252;rfte ja in den Bereich fallen, der in dieser Methode vom zweiten Array abgedeckt wird
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1763004268014" ID="ID_1651199827" MODIFIED="1763004282101" TEXT="dieser Test ist hier nicht scharf genug"/>
+</node>
+<node COLOR="#435e98" CREATED="1763004392879" ID="ID_6883694" MODIFIED="1763166481632" TEXT="m&#xfc;&#xdf;te den Speicher vorher ausNULLen">
+<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1763165239821" ID="ID_1225363705" MODIFIED="1763166485543" TEXT="warum ist die Storage nicht initialisiert?">
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="help"/>
+<node CREATED="1763165255504" ID="ID_428429986" MODIFIED="1763165267603" TEXT="Grund hierf&#xfc;r ist nicht ersichtlich"/>
+<node CREATED="1763165274087" ID="ID_1733066561" MODIFIED="1763165551865">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      alle Verwendungen (nur in diesem Test) brauchen einen <i>sauberen Buffer</i>
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Dieses Konstrukt wird (augenscheinlich, habe dies stichprobenhaft gepr&#252;ft) <i>nur in diesem einen Test verwendet</i>. Es werden jeweils ein/mehrere Buffer auf den Stack gelegt. In den meisten F&#228;llen wir dann in diesen Buffer etwas generiert. In einigen Testf&#228;llen wird vorher gepr&#252;ft, da&#223; der Buffer keinen validen Testframe enth&#228;lt, und nachher, da&#223; dies der Fall ist. <b>Die Pr&#252;fung vorher scheitert im vorliegenden Problemfall</b>, vermutlich weil im Stack-Speicher exakt an der gleichen Stelle vorher das gleiche Verarbeitungsmuster stattfand
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1763165553519" ID="ID_901007304" MODIFIED="1763165730725" TEXT="Vermutung: ich hatte zun&#xe4;chst eine generische Hilfsklasse beabsichtigt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      TestFrame selber generiert in seinem Konstruktor stets eine valide Buffer-F&#252;llung und belegt alle Metadaten. M&#246;glicherweise hatte ich die Idee, den &#187;Buffer&#171; &#252;ber beliebige Storage legen zu k&#246;nnen, um sie dann zu begutachten. Diese Verwendung fand dann aber nicht statt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1763165733066" ID="ID_863814465" MODIFIED="1763166799226" TEXT="default-Initialisierung ist trivial einfach hinzuzuf&#xfc;gen">
+<node CREATED="1763165870864" ID="ID_967476684" MODIFIED="1763165886265" TEXT="dadurch wird lediglich der Speicher ausgenullt"/>
+<node CREATED="1763165886911" ID="ID_489648271" MODIFIED="1763165904572" TEXT="es ist weiterhin kein initialisierter TestFrame"/>
+<node CREATED="1763166804800" ID="ID_777497899" MODIFIED="1763166850198" TEXT="verwende std::array statt bare-bone-Array">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das erspart mir das Gew&#252;rge, da std::byte kein numerischer Datentyp ist
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1763227680694" ID="ID_21630419" MODIFIED="1763256792281" TEXT="Problem damit behoben">
+<linktarget COLOR="#0fc322" DESTINATION="ID_21630419" ENDARROW="Default" ENDINCLINATION="-143;-4;" ID="Arrow_ID_1881402920" SOURCE="ID_1049616938" STARTARROW="None" STARTINCLINATION="137;199;"/>
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1763227692777" ID="ID_478360383" MODIFIED="1763227722640" TEXT="per Debugger verifiziert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      hab gesehen da&#223; der Speicher jetzt mit NULL gef&#252;llt wird
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node COLOR="#435e98" CREATED="1763227698062" ID="ID_1066186598" MODIFIED="1763227703601" TEXT="Build l&#xe4;uft jetzt durch"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#174956" COLOR="#8dfd49" CREATED="1763256828263" ID="ID_189947905" MODIFIED="1763256916256" STYLE="bubble" TEXT="Paket-Build erfolgreich">
+<edge COLOR="#61fe5b" STYLE="bezier" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="17"/>
+<node BACKGROUND_COLOR="#9ccac7" COLOR="#235c6e" CREATED="1763256843062" ID="ID_1847260308" MODIFIED="1763256970566" TEXT="l&#xe4;uft durch"/>
+<node BACKGROUND_COLOR="#9ccac7" COLOR="#235c6e" CREATED="1763256847381" ID="ID_1669554494" MODIFIED="1763256970567" TEXT="Paket l&#xe4;&#xdf;t sich installieren"/>
+<node BACKGROUND_COLOR="#9ccac7" COLOR="#235c6e" CREATED="1763256853835" ID="ID_1385909216" MODIFIED="1763256970566" TEXT="Lumiera-UI Smoke-Test OK"/>
+</node>
+<node COLOR="#338800" CREATED="1763231464249" ID="ID_154352881" MODIFIED="1763231480845" TEXT="erzeugtes Paket: Inhalt sieht bereits soweit korrekt aus">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1763231591988" ID="ID_936243550" MODIFIED="1763257617459" TEXT="bis auf die (fehlende) HTML-Hilfe">
+<arrowlink COLOR="#6349c4" DESTINATION="ID_1433247096" ENDARROW="Default" ENDINCLINATION="69;-61;" ID="Arrow_ID_1742637634" STARTARROW="None" STARTINCLINATION="-106;9;"/>
+<linktarget COLOR="#66539c" DESTINATION="ID_936243550" ENDARROW="Default" ENDINCLINATION="154;14;" ID="Arrow_ID_1661227420" SOURCE="ID_789187494" STARTARROW="None" STARTINCLINATION="-213;16;"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1763256990676" ID="ID_1058592543" MODIFIED="1763257004779" TEXT="Lintian-Meldungen">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1763257558347" ID="ID_541406702" MODIFIED="1763257558347" TEXT="doc-base-file-references-missing-file">
+<node CREATED="1763257561911" ID="ID_7430507" MODIFIED="1763257568390" TEXT="README : hei&#xdf;t README.gz"/>
+<node CREATED="1763257593110" ID="ID_789187494" MODIFIED="1763257624702" TEXT="/usr/share/doc/lumiera/html/index.html">
+<arrowlink COLOR="#66539c" DESTINATION="ID_936243550" ENDARROW="Default" ENDINCLINATION="154;14;" ID="Arrow_ID_1661227420" STARTARROW="None" STARTINCLINATION="-213;16;"/>
+</node>
+</node>
+<node CREATED="1763257646440" ID="ID_219972572" LINK="https://lintian.debian.org/tags/helper-templates-in-copyright.html" MODIFIED="1763257826791" TEXT="helper-templates-in-copyright">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Seltsam....
+    </p>
+    <p>
+      Ich sehe keinerlei generische Platzhalter in meinem File...&#160;&#160;Allerdings werde ich das demn&#228;chst ohnehin umstellen auf das maschinenlesbare Format
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1763258013591" ID="ID_991309843" MODIFIED="1763258015747" TEXT="old-fsf-address-in-copyright-file"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1763257667287" ID="ID_1952761575" LINK="https://lintian.debian.org/tags/shared-library-is-executable.html" MODIFIED="1763259455624" TEXT="shared-library-is-executable 0755 [usr/lib/lumiera/modules/gtk_gui.lum]">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1763259348029" ID="ID_886594364" MODIFIED="1763259356317" TEXT="alle Shared-Libs sind executable"/>
+<node CREATED="1763259357075" ID="ID_287173097" MODIFIED="1763259377484" TEXT="ich sehe nichts explizit im LumieraEnvironment"/>
+<node CREATED="1763259773969" ID="ID_1410256140" MODIFIED="1763259825373" TEXT="das Link-Kommando erzeugt Permissions 775">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      g++ -o target/modules/libtest-vault.so -Wl,--no-undefined -Wl,--as-needed -Wl,-soname=libtest-vault.so -Wl,-rpath=\$ORIGIN/../modules,--enable-new-dtags -shared tests/vault/mem/extent-family-test.os tests/vault/gear/activity-detector-test.os tests/vault/gear/scheduler-usage-test.os tests/vault/gear/test-chain-load-test.os tests/vault/gear/scheduler-commutator-test.os tests/vault/gear/scheduler-activity-test.os tests/vault/gear/scheduler-invocation-test.os tests/vault/gear/work-force-test.os tests/vault/gear/block-flow-test.os tests/vault/gear/scheduler-stress-test.os tests/vault/gear/scheduler-service-test.os tests/vault/gear/scheduler-load-control-test.os tests/vault/gear/special-job-fun-test.os -lm -ldl -lpthread -lrt -lnobugmt -lstdc++fs -lboost_program_options -lgavl target/modules/liblumieravault.so target/modules/liblumieracommon.so target/modules/liblumierasupport.so
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="edit"/>
+</node>
+<node CREATED="1763260371730" ID="ID_305095688" LINK="https://unix.stackexchange.com/q/400187" MODIFIED="1763260383475" TEXT="siehe unix.stackexchange.com"/>
+<node CREATED="1763260588724" ID="ID_1857294299" LINK="https://www.scons.org/doc/production/HTML/scons-user/ch12s06.html" MODIFIED="1763260600404" TEXT="man k&#xf6;nnte es explizit so in SCons coden"/>
+</node>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1763257996458" ID="ID_1842405614" MODIFIED="1763258001098" TEXT="lumiera source: build-depends-on-obsolete-package Build-Depends: pkg-config =&gt; pkgconf">
+<icon BUILTIN="broken-line"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1763258035361" ID="ID_479578990" LINK="https://lintian.debian.org/tags/priority-extra-is-replaced-by-priority-optional.html" MODIFIED="1763258080738" TEXT="priority-extra-is-replaced-by-priority-optional">
+<node CREATED="1763258083718" ID="ID_707665141" MODIFIED="1763258113608" TEXT="in debian/control">
+<icon BUILTIN="info"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1763258118917" ID="ID_1912502845" MODIFIED="1763258129633" TEXT="rc-version-greater-than-expected-version 0.pre.04~rc.1 &gt; 0 (consider using 0~pre.04~rc.1)">
+<icon BUILTIN="help"/>
+<node CREATED="1763258182382" ID="ID_1738309570" MODIFIED="1763258258010" TEXT="ich vermute eine fehlgeleitete Heuristik">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Da wir ja ein <i>durchaus spezielles</i>&#160;Versionsnummernschema haben. Die Fehlermeldung sieht so aus, als w&#252;rde das als ein RC f&#252;r eine Version v0 gedeutet
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1763258148813" ID="ID_1740105960" MODIFIED="1763258178208" TEXT="nochmal die Debian-Regeln &#xfc;berpr&#xfc;fen">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1763258319446" ID="ID_973373524" MODIFIED="1763258335196" TEXT="&#xbb;/usr/share/doc-base/lumiera.lumiera&#xab;, Zeile 16: alle &#xbb;Format&#xab;-Abschnitte sind ung&#xfc;ltig.">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1763258386817" ID="ID_1806102500" MODIFIED="1763258395340" TEXT="ist nachvollziehbar"/>
+<node CREATED="1763258396148" ID="ID_1498381529" MODIFIED="1763258489415" TEXT="debian/doc-base.lumiera ist unvollst&#xe4;ndig">
+<arrowlink COLOR="#c90514" DESTINATION="ID_520590054" ENDARROW="Default" ENDINCLINATION="370;18;" ID="Arrow_ID_1493343123" STARTARROW="None" STARTINCLINATION="26;165;"/>
+<arrowlink COLOR="#fd2b1e" DESTINATION="ID_1899535258" ENDARROW="Default" ENDINCLINATION="340;15;" ID="Arrow_ID_532117098" STARTARROW="None" STARTINCLINATION="58;124;"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1763169004238" ID="ID_1903406898" MODIFIED="1763227829011" TEXT="copyright-File im neuen Format">
+<arrowlink COLOR="#7e2e43" DESTINATION="ID_791117820" ENDARROW="Default" ENDINCLINATION="-142;-16;" ID="Arrow_ID_1399617171" STARTARROW="None" STARTINCLINATION="723;58;"/>
+<icon BUILTIN="flag-pink"/>
+</node>
+<node CREATED="1763168982818" ID="ID_1121026746" MODIFIED="1763168997368" TEXT="Paket-Dokumente">
+<node CREATED="1763170279597" ID="ID_520590054" MODIFIED="1763258459329" TEXT="sollte handgeschriebenes Changelog in NEWS pflegen">
+<linktarget COLOR="#c90514" DESTINATION="ID_520590054" ENDARROW="Default" ENDINCLINATION="370;18;" ID="Arrow_ID_1493343123" SOURCE="ID_1498381529" STARTARROW="None" STARTINCLINATION="26;165;"/>
+</node>
+<node CREATED="1763170354467" ID="ID_94538506" MODIFIED="1763170366748" TEXT="README k&#xf6;nnte man aus dem Paket weglassen"/>
+<node CREATED="1763226959818" ID="ID_1117448176" MODIFIED="1763226982802" TEXT="README.debian erg&#xe4;nzen">
+<node CREATED="1763226985237" ID="ID_352359091" MODIFIED="1763227107265" TEXT="sollte das README ersetzen k&#xf6;nnen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      F&#252;r die Installation per DEB-Paket brauchen wir kein allgemeines README, da vor allem die Bau- und Installations-Vorrausetzungen bereits erf&#252;llt sind, und auch die Lizenz anderweitig deklariert wird. Daher sollte hier im README.debian alles <i>f&#252;r den reinen User</i>&#160;Wissenswerte stehen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1763226997274" ID="ID_681125344" MODIFIED="1763227160548" TEXT="sollte auf andere Doku verweisen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <ul>
+      <li>
+        auf die NEWS
+      </li>
+      <li>
+        Auf die Website
+      </li>
+      <li>
+        (geplant: User-Manual)
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1763227165285" ID="ID_1433247096" MODIFIED="1763231633639" TEXT="html/index.html bereitstellen">
+<linktarget COLOR="#6349c4" DESTINATION="ID_1433247096" ENDARROW="Default" ENDINCLINATION="69;-61;" ID="Arrow_ID_1742637634" SOURCE="ID_936243550" STARTARROW="None" STARTINCLINATION="-106;9;"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1763227235963" ID="ID_1228087880" MODIFIED="1763227247216" TEXT="wir registrieren das bereits per doc-base"/>
+<node CREATED="1763227248000" ID="ID_1899535258" MODIFIED="1763258483270" TEXT="sollte also wenigstens eine Platzhalter-Seite bieten">
+<linktarget COLOR="#fd2b1e" DESTINATION="ID_1899535258" ENDARROW="Default" ENDINCLINATION="340;15;" ID="Arrow_ID_532117098" SOURCE="ID_1498381529" STARTARROW="None" STARTINCLINATION="58;124;"/>
+</node>
+<node CREATED="1763426093860" ID="ID_733347253" MODIFIED="1763490063188" TEXT="L&#xf6;ungsidee: User-Manual-Website verwenden">
+<linktarget COLOR="#473fa7" DESTINATION="ID_733347253" ENDARROW="Default" ENDINCLINATION="-163;-266;" ID="Arrow_ID_566966684" SOURCE="ID_1590141460" STARTARROW="None" STARTINCLINATION="654;39;"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1763426111057" ID="ID_1287713714" MODIFIED="1763483724070" TEXT="wir haben eine Platzhalter-Seite auf Lumiera.org">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      /documentation/user/manual.html
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="info"/>
+</node>
+<node COLOR="#338800" CREATED="1763426122674" ID="ID_976168201" MODIFIED="1763483732400" TEXT="diese soweit erg&#xe4;nzen, da&#xdf; sie auch f&#xfc;r sich stehend verst&#xe4;ndlich ist">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1763426219797" ID="ID_139893219" MODIFIED="1763426229828" TEXT="Was ist Lumiera (von der Frontpage)"/>
+<node CREATED="1763426230823" ID="ID_294542685" MODIFIED="1763426242976" TEXT="Screenshot (aus &#xbb;Outer Space&#xab;)"/>
+<node CREATED="1763426243969" ID="ID_930562597" MODIFIED="1763426255346" TEXT="Erl&#xe4;uterung was man aktuell machen kann"/>
+</node>
+<node CREATED="1763426137400" ID="ID_1243719091" MODIFIED="1763426150488" TEXT="dann per Asciidoc &#x27f6; HTML rendern">
+<node CREATED="1763489440911" ID="ID_1127222679" MODIFIED="1763489462961" TEXT="per &quot;Savepage&quot;-Plugin in ein einziges HTML packen"/>
+<node CREATED="1763489463796" ID="ID_1584304212" MODIFIED="1763490091883" TEXT="HTML mit Original abgleichen &#x27f9; erleichtert sp&#xe4;tere Merges">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das war eine Schei&#223;-Arbeit...
+    </p>
+    <ul>
+      <li>
+        das Savepage-Plugin schreibt das DOM komplett neu
+      </li>
+      <li>
+        es f&#252;gt &lt;tbody&gt;-Elemente ein
+      </li>
+      <li>
+        es l&#246;st HTML-Entities auf (was ich definitiv nicht will, obschon es wegen UTF-8 eigentlich m&#246;glich w&#228;re)
+      </li>
+      <li>
+        es f&#252;gt hinter jedem schlie&#223;enden Tag noch whitespace ein (Windows???)
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node CREATED="1763426154135" ID="ID_1647578629" MODIFIED="1763560486421">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      und den Output in <font face="Monospaced">doc/devel/<b>LumieraHelpLandingPage.html</b></font>&#160;einchecken
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#338800" CREATED="1763426174597" ID="ID_129100029" MODIFIED="1763560577009" TEXT="Buildsystem : soll dann diese Seite installieren">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#5b280f" CREATED="1763493609659" ID="ID_1600362665" MODIFIED="1763493628445" TEXT="man k&#xf6;nnte das auch direkt aus dem DEB-Packaging machen">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1763493629534" ID="ID_662712340" MODIFIED="1763560438233" TEXT="aber im Hinblick auf die Zukunft ist es besser, unser Build-System hierf&#xfc;r zu verwenden">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Denn in Zukunft sollt das Buildsystem auch irgendwann mal ein User-Manual generieren und korrekt installieren; diese Platzhalter-Seite markiert mithin bereits den Ort dieser Installation und dient auch als Anker f&#252;r diese zuk&#252;nftige Funktionalit&#228;t
+    </p>
+  </body>
+</html></richcontent>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#338800" CREATED="1763553374479" ID="ID_657450659" MODIFIED="1763560365827" TEXT="also als Gelegenheit nehmen &#x27f9; einen Doc-Builder einbauen (in LumieraEnvironment)">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1763553413925" ID="ID_544975866" MODIFIED="1763553424378" TEXT="schon damit alles nach gleichem Schema geht"/>
+<node CREATED="1763553425249" ID="ID_556545621" MODIFIED="1763553512262" TEXT="und dadurch werden die SConscript auch sch&#xf6;n deklarativ">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ....naja... das ist relativ; wie bei jeder DSL, wenn man mal das Schema verstanden hat, dann ist es konzis und deklarativ, und wenn man das Schema wieder vergessen hat, dann ist es &#187;magisch&#171;
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="smiley-neutral"/>
+</node>
+<node CREATED="1763553529241" ID="ID_1964990957" MODIFIED="1763553540495" TEXT="verwendet gemeinsame Pfad-Konfiguration aus Setup.py"/>
+<node COLOR="#435e98" CREATED="1763553542958" ID="ID_1525400435" MODIFIED="1763560379619" TEXT="erst mal nur: DocFile()">
+<icon BUILTIN="yes"/>
+<node CREATED="1763553553837" ID="ID_1893177063" MODIFIED="1763553559141" TEXT="macht nichts f&#xfc;r den Build"/>
+<node CREATED="1763553559948" ID="ID_718191521" MODIFIED="1763553572558" TEXT="installiert nach &lt;prefix&gt;/share/doc/lumiera/"/>
+<node CREATED="1763559183738" FOLDED="true" ID="ID_1952649170" MODIFIED="1763560425434" TEXT="Logik f&#xfc;r Target-dir analog zu ConfigData">
+<linktarget COLOR="#813648" DESTINATION="ID_1952649170" ENDARROW="Default" ENDINCLINATION="202;-8;" ID="Arrow_ID_856935495" SOURCE="ID_1073265175" STARTARROW="None" STARTINCLINATION="218;11;"/>
+<icon BUILTIN="info"/>
+<node CREATED="1763559208341" ID="ID_1854154266" MODIFIED="1763559216544" TEXT="ist im Detail aber dann doch anders"/>
+<node CREATED="1763559217486" ID="ID_971129950" MODIFIED="1763559274804" TEXT="hier installieren wir stets in die konfigurierte Doc-Location">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      (gem&#228;&#223; FHS) &#10233; &lt;prefix&gt;/share/doc/&lt;paktename&gt;/
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1763559277099" ID="ID_791776620" MODIFIED="1763559287625" TEXT="dann wieder die Logik mit einem Pr&#xe4;fix, das gestrippt wird"/>
+<node CREATED="1763559288608" ID="ID_298198297" MODIFIED="1763559305205" TEXT="aber zus&#xe4;tzlich: kann nun ein Target expizit angeben">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1763559306522" ID="ID_1120680230" MODIFIED="1763559315745" TEXT="Fallunterscheidung notwendig">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1763559322186" ID="ID_1910067898" LINK="https://www.scons.org/doc/production/HTML/scons-user/apb.html" MODIFIED="1763559578830" TEXT="env.Install()  behandelt &apos;target&apos; stets als Directory"/>
+<node CREATED="1763559581156" ID="ID_683593294" MODIFIED="1763559590320" TEXT="f&#xfc;r Umbenennung: mu&#xdf; InstallAs verwenden"/>
+<node CREATED="1763559592884" ID="ID_943171841" MODIFIED="1763559609589" TEXT="spezieller Twist: das Zielverzeichnis existiert oft noch nicht">
+<node CREATED="1763559611602" ID="ID_625489351" MODIFIED="1763559619992" TEXT="also scheiden die Methoden von os.path aus"/>
+<node CREATED="1763559620859" ID="ID_1859506460" MODIFIED="1763559628829" TEXT="bleibt nur: auf trailing &apos;/&apos; pr&#xfc;fen"/>
+</node>
+<node CREATED="1763559634535" ID="ID_126651663" MODIFIED="1763559652566" TEXT="w&#xe4;&#xe4; ... das ist alles blo&#xdf; halbscharig">
+<icon BUILTIN="smiley-angry"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1763559657472" ID="ID_1412800586" MODIFIED="1763559851028" TEXT="Naja ... es ist ja auch &quot;nur f&#xfc;r den internen Gebrauch&quot;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das hier ist ein Buildsystem f&#252;r ein Projekt von &#252;berschaubarem Umfang. Ganz ehrlich, ich erwarte nicht, da&#223; irgendjemand <i>au&#223;er mir</i>&#160; das SCons mag und pflegt. Also geht es h&#246;chstens darum, nach bestehendem Schema die eine oder andere Datei hinzuzuf&#252;gen. &#220;berdies frage ich mich, wie lange wir bei SCons bleiben k&#246;nnen (hoffentlich noch lange, und hoffentlich darf dann nicht ich einen Ersatz programmieren, oder mich mit CMake herum&#228;rgern, das <i>bei Weitem nicht so deklarativ ist</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="smiley-oh"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1763559856538" ID="ID_148228814" MODIFIED="1763560262435" TEXT="etwas getestet: tut (solange man im Rahmen bleibt)">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1763559872678" ID="ID_1073265175" MODIFIED="1763560430850" TEXT="bekanntes Problem: wenn man kein Pr&#xe4;fix angibt...">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      dann wird subdir = &lt;die letzte Pfadkomponente&gt;, und das ist nicht, was man erwartet, sofern die Directories mehr als eine Ebene tief liegen. Kann ich jetzt nicht so ohne Weiteres &#228;ndern, ohne die Hilfsfunktion getDirname() (BuildHelper.py) umzuschreiben. <b>Das ist es mir dann doch nicht wert</b>!
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#813648" DESTINATION="ID_1952649170" ENDARROW="Default" ENDINCLINATION="202;-8;" ID="Arrow_ID_856935495" STARTARROW="None" STARTINCLINATION="218;11;"/>
+<linktarget COLOR="#904874" DESTINATION="ID_1073265175" ENDARROW="Default" ENDINCLINATION="-547;27;" ID="Arrow_ID_391174476" SOURCE="ID_241297391" STARTARROW="None" STARTINCLINATION="538;23;"/>
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
+</node>
+<node CREATED="1763560505994" ID="ID_369483425" MODIFIED="1763560559411">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <u>Installationsziel</u>: <font color="#8a1dd6" face="Monospaced">&lt;prefix&gt;</font><font color="#2d1dd6" face="Monospaced">/share/doc/lumiera/manual-html/index.html</font>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1763514063200" ID="ID_1527350389" MODIFIED="1763514252237" TEXT="SCons: Probleme beim Installieren ins Zielverzeichnis">
+<arrowlink COLOR="#e2014c" DESTINATION="ID_1983023550" ENDARROW="Default" ENDINCLINATION="-1336;58;" ID="Arrow_ID_299855257" STARTARROW="None" STARTINCLINATION="624;33;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1763260669858" ID="ID_499902446" MODIFIED="1763260677984" TEXT="ist das Men&#xfc;-File noch korrekt">
+<icon BUILTIN="help"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1763260680749" ID="ID_1827433708" MODIFIED="1763260722367" TEXT="Lumiera taucht nicht im XFCE-Men&#xfc; auf">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Was aber auch daran liegen k&#246;nnte, da&#223; XFCE nicht Gnome ist
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1763170522531" ID="ID_301822628" MODIFIED="1763170529943" TEXT="debian/copyright">
+<node CREATED="1763170532211" ID="ID_479802280" MODIFIED="1763170545485" TEXT="das wird installiert als /usr/share/doc/lumiera/copyright"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1763170547560" ID="ID_385815750" MODIFIED="1763170552918" TEXT="mandatory">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1763172908773" ID="ID_1201381459" LINK="https://spdx.org" MODIFIED="1763172924346" TEXT="Hinweis: SPDX License-IDs "/>
+<node CREATED="1763170650200" ID="ID_122226375" MODIFIED="1763170887948" TEXT="man kann auf /usr/share/common-licenses verweisen">
+<icon BUILTIN="idea"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1763170554412" ID="ID_1915310617" MODIFIED="1763227796201" TEXT="es gibt eine maschinenlesbare Variante &#x2014; sollen wir die verwenden?">
+<icon BUILTIN="help"/>
+<node CREATED="1763173068727" ID="ID_1875951274" LINK="https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/" MODIFIED="1763173081081" TEXT="Spezifikation: Standard Format-1.0"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1763174706839" ID="ID_791117820" MODIFIED="1763227818290" TEXT="ja ... das Format ist klarer">
+<linktarget COLOR="#7e2e43" DESTINATION="ID_791117820" ENDARROW="Default" ENDINCLINATION="-142;-16;" ID="Arrow_ID_1399617171" SOURCE="ID_1903406898" STARTARROW="None" STARTINCLINATION="723;58;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1763174718285" ID="ID_669175024" MODIFIED="1763174728604" TEXT="man kann Copyrights zusammenfassen">
+<icon BUILTIN="idea"/>
+<node CREATED="1763174755788" ID="ID_227170653" LINK="https://stackoverflow.com/a/24812633/444796" MODIFIED="1763174804161" TEXT="sagt dieser SO-Post">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    Some works meticulously keep track of what copyrights and licenses apply to each particular file when combining source from multiple origins. Some instead apply
+
+    <p>
+      <em http-equiv="content-type" content="text/html; charset=utf-8">all</em>&#160;licenses and <em>all</em>&#160;copyrights of component parts to the entire combined work. Both are generally accepted by the open source community, as long as it's clear that an effort is being made to identify and comply with the original licenses.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1763174805827" ID="ID_1892149528" MODIFIED="1763174817494" TEXT="&#xbb;IANAL&#xab;">
+<icon BUILTIN="smiley-angry"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1763174829050" ID="ID_1682124476" MODIFIED="1763174842812" TEXT="Also: Copyright-Zeitspannen identifizieren">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1763174844808" ID="ID_1962494634" MODIFIED="1763174847240" TEXT="Cehteh"/>
+<node CREATED="1763174847959" ID="ID_1148429062" MODIFIED="1763174852841" TEXT="Joel Holdsworth"/>
+<node CREATED="1763174859825" ID="ID_1738382764" MODIFIED="1763174862463" TEXT="Plouj"/>
+<node CREATED="1763174863285" ID="ID_731676629" MODIFIED="1763174867272" TEXT="SKangas"/>
+<node CREATED="1763174868053" ID="ID_150146046" MODIFIED="1763174870706" TEXT="MFisher"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1762963273020" ID="ID_1565261952" MODIFIED="1762963284017" TEXT="TODO">
+<icon BUILTIN="bell"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1762963294062" ID="ID_1025850273" MODIFIED="1762963836077" TEXT="f&#xfc;r Doku: separates Paket lumiera-doc">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Derzeit(2025) ist noch &#252;berhaupt nicht klar, in welcher Form wir Dokumentation ausliefern; naheliegend w&#228;re es, unser <i>(nicht vorhandenes)</i>&#160;User-Manual aus den Asciidoc-Quellen zu bauen und damit als HTML lokal auszuliefern; das funktioniert aber nicht so ohne Weiteres, da die Seiten auf unsere Website abgestellt sind, und daher die volle Struktur vorraussetzen, und im Besonderen einen Webserver. Diesbez&#252;glich f&#228;llt mir nat&#252;rlich sofort das Stichwort &#187;HTML-Help&#171; ein &#8212; kann Asciidoc sowas generieren?
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#7a1d4e" DESTINATION="ID_834262714" ENDARROW="Default" ENDINCLINATION="-1253;90;" ID="Arrow_ID_599268396" STARTARROW="None" STARTINCLINATION="1069;73;"/>
+<icon BUILTIN="hourglass"/>
+<node COLOR="#435e98" CREATED="1762963863858" HGAP="27" ID="ID_196727781" MODIFIED="1762963884583" TEXT="(so empfohlen von Debian-Standard 3.9.7)" VSHIFT="21">
+<font NAME="SansSerif" SIZE="9"/>
+</node>
+<node CREATED="1762964026122" ID="ID_1602042124" LINK="#ID_1281202544" MODIFIED="1762964049878" TEXT="4.0.0 &#x27f9; Hinweis auf &quot;nodoc&quot;">
+<font NAME="SansSerif" SIZE="11"/>
+</node>
+</node>
+</node>
+</node>
 </node>
 <node CREATED="1478644039548" ID="ID_1817455546" MODIFIED="1743862483091" TEXT="DEB / Depot / PPA">
 <edge COLOR="#80a2aa" STYLE="bezier" WIDTH="thin"/>
 <cloud COLOR="#cad6d0"/>
 <arrowlink COLOR="#23a8a3" DESTINATION="ID_781752765" ENDARROW="Default" ENDINCLINATION="-570;54;" ID="Arrow_ID_1503684987" STARTARROW="None" STARTINCLINATION="73;207;"/>
+<arrowlink COLOR="#23a8a3" DESTINATION="ID_1951632864" ENDARROW="Default" ENDINCLINATION="-570;54;" ID="Arrow_ID_378699979" STARTARROW="None" STARTINCLINATION="73;207;"/>
 <icon BUILTIN="prepare"/>
 <node BACKGROUND_COLOR="#fdd095" COLOR="#ff1e00" CREATED="1742178630541" FOLDED="true" HGAP="-23" ID="ID_929822478" MODIFIED="1743865348533" STYLE="bubble" TEXT="Schablone" VSHIFT="-124">
 <edge COLOR="#684477" STYLE="sharp_linear" WIDTH="4"/>

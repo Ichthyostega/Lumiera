@@ -82,11 +82,7 @@ def defineBuildEnvironment():
     appendVal(env,'OPTIMIZE', 'CCFLAGS',   val=' -O3')
     appendVal(env,'DEBUG',    'CCFLAGS',   val=' -ggdb')
     
-    # setup search path for Lumiera plugins
-    appendCppDefine(env,'PKGLIBDIR','LUMIERA_PLUGIN_PATH=\\"$PKGLIBDIR/:ORIGIN/modules\\"'
-                                   ,'LUMIERA_PLUGIN_PATH=\\"ORIGIN/modules\\"')
-    appendCppDefine(env,'PKGDATADIR','LUMIERA_CONFIG_PATH=\\"$PKGLIBDIR/:.\\"'
-                                    ,'LUMIERA_CONFIG_PATH=\\"$DESTDIR/share/lumiera/:.\\"')
+    # NOTE: could define optional copile features here....
     
     Options.prepareOptionsHelp(buildVars,env)
     buildVars.Save(OPTCACHE, env)
