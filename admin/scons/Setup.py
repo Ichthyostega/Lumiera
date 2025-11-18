@@ -40,6 +40,7 @@ installPlug  = '#$DESTDIR/lib/lumiera/modules'
 installIcon  = '#$DESTDIR/share/lumiera/icons'
 installUIRes = '#$DESTDIR/share/lumiera/'
 installConf  = '#$DESTDIR/lib/lumiera/config'
+installDoc   = '#$DESTDIR/share/doc/lumiera/'
 
 #-------------------------------------------------------Configuration
 

@@ -62,7 +62,7 @@ class LumieraEnvironment(Environment):
                 self.mergeConf(self.libInfo[other])
         else:
             self.Append (LIBS = other.get ('LIBS',[]))
-            self.Append (LIBPATH = other.get ('LIBPATH', []))
+            self.Append (LIBPATH = other.get('LIBPATH', []))
             self.Append (CPPPATH = other.get('CPPPATH', []))
             self.Append (LINKFLAGS = other.get('LINKFLAGS', []))
         
@@ -165,9 +165,11 @@ def register_LumieraResourceBuilder(env):
     
     def ConfigData(env, prefix, source, targetDir=None):
         """ install (copy) configuration- and metadata.
-            target dir is either the install location configured (in SConstruct),
-            or an explicitly given absolute or relative path segment, which might refer
-            to the location of the executable through the $ORIGIN token
+            @param targetDir: when None, then use he install location configured (in SConstruct),
+                otherwise an explicitly given absolute or relative path segment,
+                which might refer to the location of the executable through the $ORIGIN token
+            @param prefix: a prefix relative to the current path (location of SConscript),
+                i.e. typically a subdirectory where to find the source config file
         """
         source = path.join(prefix,str(source))
         subdir = getDirname(source, prefix)  # removes source location path prefix
@@ -188,6 +190,26 @@ def register_LumieraResourceBuilder(env):
         env.Install (toInstall, source)
         return env.Install(toBuild, source)
     
+    def DocFile(env, prefix, source, target=None):
+        """ install (copy) files for documentation.
+            Always places the documentation below the standard location 'installDoc' configured in Setup.py
+            @param prefix: relative to current path (SConscript), will be stripped at destination
+            @param target: when given, the target will be named explicitly, or (when only a directory)
+                placed into a specific subdir, otherwise (when None) the source spec will be placed
+                into the corresponding subdir after stripping the prefix
+        """
+        source = path.join(prefix,str(source))
+        subdir = getDirname(source, prefix)  # removes source location path prefix
+        if not target:
+            target = subdir+'/'
+        elif target.endswith('/'):
+            target = target+subdir+'/'
+        toInstall = path.join(env.path.installDoc, target)
+        if toInstall.endswith('/'):
+            return env.Install(toInstall, source)
+        else:
+            return env.InstallAs(toInstall, source) # this renames at target
+    
     
     buildIcon = env.Builder( action = Action(invokeRenderer, "rendering Icon: $SOURCE --> $TARGETS")
                            , single_source = True
@@ -197,6 +219,7 @@ def register_LumieraResourceBuilder(env):
     env.AddMethod(IconResource)
     env.AddMethod(GuiResource)
     env.AddMethod(ConfigData)
+    env.AddMethod(DocFile)
 
 
 
