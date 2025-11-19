@@ -130,10 +130,10 @@ propagateSetting(testEnv, 'TESTMODE')
 propagateSetting(testEnv, 'LUMIERA_PLUGIN_PATH')
 propagateSetting(testEnv, 'HOME')
 
-testDir = env.Dir('#$TARGDIR')
+testDir = env.Dir('$TARGDIR')
 runTest = env.File("test.sh").abspath
 
-runTests = testEnv.Command('#$TARGDIR/,testlog', testsuite, runTest,  chdir=testDir)
+runTests = testEnv.Command('$TARGDIR/,testlog', testsuite, runTest,  chdir=testDir)
 Depends(runTests,vgsuppression)
 
 

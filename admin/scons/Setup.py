@@ -28,19 +28,19 @@ OPTCACHE     = 'optcache'
 CUSTOPTFILE  = 'custom-options'
 
 # these are accessible via env.path.xxxx
-buildExe     = '#$TARGDIR'
-buildLib     = '#$TARGDIR/modules'
-buildPlug    = '#$TARGDIR/modules'
-buildIcon    = '#$TARGDIR/gui/icons'           # for IconResource() and IconRender()
-buildUIRes   = '#$TARGDIR/gui/'                # for GuiResource()
-buildConf    = '#$TARGDIR/config'              # for ConfigData()
-installExe   = '#$DESTDIR/lib/lumiera'
-installLib   = '#$DESTDIR/lib/lumiera/modules'
-installPlug  = '#$DESTDIR/lib/lumiera/modules'
-installIcon  = '#$DESTDIR/share/lumiera/icons'
-installUIRes = '#$DESTDIR/share/lumiera/'
-installConf  = '#$DESTDIR/lib/lumiera/config'
-installDoc   = '#$DESTDIR/share/doc/lumiera/'
+buildExe     = '$TARGDIR'
+buildLib     = '$TARGDIR/modules'
+buildPlug    = '$TARGDIR/modules'
+buildIcon    = '$TARGDIR/gui/icons'           # for IconResource() and IconRender()
+buildUIRes   = '$TARGDIR/gui/'                # for GuiResource()
+buildConf    = '$TARGDIR/config'              # for ConfigData()
+installExe   = '$DESTDIR/lib/lumiera'
+installLib   = '$DESTDIR/lib/lumiera/modules'
+installPlug  = '$DESTDIR/lib/lumiera/modules'
+installIcon  = '$DESTDIR/share/lumiera/icons'
+installUIRes = '$DESTDIR/share/lumiera/'
+installConf  = '$DESTDIR/lib/lumiera/config'
+installDoc   = '$DESTDIR/share/doc/lumiera/'
 
 #-------------------------------------------------------Configuration
 

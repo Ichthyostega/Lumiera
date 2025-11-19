@@ -29,20 +29,33 @@ class LumieraEnvironment(Environment):
         using global vars. Idea inspired by Ardour.
     """
     def __init__(self, buildSetup, buildVars, **kw):
-        kw.update(VERSION = buildSetup.VERSION
-                 ,TARGDIR = buildSetup.TARGDIR
-                 ,DESTDIR = '$INSTALLDIR/$PREFIX'
-                 ,toolpath = [buildSetup.TOOLDIR ]
-                 ,variables = buildVars
-                 )
-        Environment.__init__ (self, **kw)
-        self.path = Record (extract_localPathDefs(buildSetup))    # e.g. buildExe -> env.path.buildExe
+        Environment.__init__ (self, toolpath = [buildSetup.TOOLDIR ]
+                                  , variables = buildVars          # ◁───── reads settings from the commandline (see Options.py)
+                                  , **kw)
+        #
+        self['TARGDIR'] = buildSetup.TARGDIR
+        self['VERSION'] = buildSetup.VERSION
+        self['DESTDIR'] = '$INSTALLDIR/$PREFIX'
+        self._anchor_relative('INSTALLDIR')
+        self._anchor_relative('TARGDIR')
+        #
+        self.path = Record (extract_localPathDefs(buildSetup))     # ◁───── e.g. buildExe -> env.path.buildExe
         self.libInfo = {}
         self.Tool("BuilderDoxygen")
         self.Tool("ToolDistCC")
         self.Tool("ToolCCache")
         register_LumieraResourceBuilder(self)
         register_LumieraCustomBuilders(self)
+    
+    def _anchor_relative(self, key):
+        """ ensure that a relative path spec becomes anchored at build-root
+            @note: a special convention within scons: '#' implies directory of SConstruct
+        """
+        spec = self[key].strip()
+        if not (spec.startswith('/') or spec.startswith('#')):
+            spec = '#'+spec
+        self[key] = spec
+    
     
     
     def Configure (self, *args, **kw):
@@ -120,12 +133,13 @@ def register_LumieraResourceBuilder(env):
     """
     
     import IconSvgRenderer as renderer  # load Joel's python script for invoking the rsvg-convert (SVG render)
-    renderer.rsvgPath = env.subst("$TARGDIR/rsvg-convert")
+    renderer.rsvgPath = env.subst("$TARGDIR/rsvg-convert").removeprefix('#')
+    #                                                    # the prefix '#' is a SCons specific convention,
+    #                                                    # which the external tool can not handle
     
     def invokeRenderer(target, source, env):
         source = str(source[0])
-        targetdir = env.subst(env.path.buildIcon)
-        if targetdir.startswith('#'): targetdir = targetdir[1:]
+        targetdir = env.subst(env.path.buildIcon).removeprefix('#')
         renderer.main([source,targetdir])
         return 0
         

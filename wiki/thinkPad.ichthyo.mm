@@ -171393,7 +171393,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 <node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1763514063200" ID="ID_1724121509" MODIFIED="1763514591472" TEXT="unser SCons-Setup geht nicht korrekt mit absolutem Install-Pfad um">
-<arrowlink COLOR="#e2014c" DESTINATION="ID_1983023550" ENDARROW="Default" ENDINCLINATION="-1336;58;" ID="Arrow_ID_1385558508" STARTARROW="None" STARTINCLINATION="1490;59;"/>
+<arrowlink COLOR="#017ce2" DESTINATION="ID_1983023550" ENDARROW="Default" ENDINCLINATION="-1336;58;" ID="Arrow_ID_1385558508" STARTARROW="None" STARTINCLINATION="1490;59;"/>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
@@ -177762,9 +177762,9 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1763514105272" ID="ID_1983023550" MODIFIED="1763514591472" TEXT="unser Scons-Setup kann nicht in absolutes INSTALLDIR installieren">
-<linktarget COLOR="#e2014c" DESTINATION="ID_1983023550" ENDARROW="Default" ENDINCLINATION="-1336;58;" ID="Arrow_ID_299855257" SOURCE="ID_1527350389" STARTARROW="None" STARTINCLINATION="624;33;"/>
-<linktarget COLOR="#e2014c" DESTINATION="ID_1983023550" ENDARROW="Default" ENDINCLINATION="-1336;58;" ID="Arrow_ID_1385558508" SOURCE="ID_1724121509" STARTARROW="None" STARTINCLINATION="1490;59;"/>
+<node COLOR="#435e98" CREATED="1763514105272" FOLDED="true" ID="ID_1983023550" MODIFIED="1763592949315" TEXT="unser Scons-Setup kann nicht in absolutes INSTALLDIR installieren">
+<linktarget COLOR="#017ce2" DESTINATION="ID_1983023550" ENDARROW="Default" ENDINCLINATION="-1336;58;" ID="Arrow_ID_299855257" SOURCE="ID_1527350389" STARTARROW="None" STARTINCLINATION="624;33;"/>
+<linktarget COLOR="#017ce2" DESTINATION="ID_1983023550" ENDARROW="Default" ENDINCLINATION="-1336;58;" ID="Arrow_ID_1385558508" SOURCE="ID_1724121509" STARTARROW="None" STARTINCLINATION="1490;59;"/>
 <icon BUILTIN="broken-line"/>
 <node CREATED="1763514259978" ID="ID_1685412419" MODIFIED="1763514385866" TEXT="peinlich &#x2014; aber derzeit nicht relevant">
 <richcontent TYPE="NOTE"><html>
@@ -177789,11 +177789,14 @@ Since then others have made contributions, see the log for the history.</font></
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1763514839552" ID="ID_239715940" MODIFIED="1763514847562" TEXT="L&#xf6;sungsansatz">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1763514839552" ID="ID_239715940" MODIFIED="1763592911129" TEXT="L&#xf6;sungsansatz">
+<icon BUILTIN="yes"/>
 <node CREATED="1763514848694" ID="ID_1943485717" MODIFIED="1763514892155" TEXT="man k&#xf6;nnte das explizit handhaben wenn $DESTDIR aufgebaut wird">
 <icon BUILTIN="idea"/>
 <node CREATED="1763514983986" ID="ID_990449841" MODIFIED="1763514995284" TEXT="feststellen ob das INSTALLDIR absolut oder relativ ist"/>
-<node CREATED="1763515002708" ID="ID_649796962" MODIFIED="1763515027345" TEXT="wenn relativ &#x27f9; Pr&#xe4;fix &apos;#&apos; davor (&#x2259; relativ zum Buildroot)"/>
+<node CREATED="1763515002708" ID="ID_649796962" MODIFIED="1763592746356" TEXT="wenn relativ &#x27f9; Pr&#xe4;fix &apos;#&apos; davor (&#x2259; relativ zum Buildroot)">
+<linktarget COLOR="#7d4963" DESTINATION="ID_649796962" ENDARROW="Default" ENDINCLINATION="393;20;" ID="Arrow_ID_1826598078" SOURCE="ID_38633606" STARTARROW="None" STARTINCLINATION="-390;27;"/>
+</node>
 <node CREATED="1763515028291" ID="ID_1534981827" MODIFIED="1763515141358" TEXT="das ist eine Konsequenz der rekursiven SConsscript">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -177807,11 +177810,51 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node CREATED="1763514871369" ID="ID_413131724" MODIFIED="1763514884287" TEXT="also im Konstruktor von LumieraEnvironment">
 <node CREATED="1763514896814" ID="ID_1573400508" MODIFIED="1763514908716" TEXT="dort wird zun&#xe4;chst nur ein neuer Platzhalter zusammengesetzt"/>
-<node CREATED="1763514909541" ID="ID_849320964" MODIFIED="1763514931927" TEXT="erst der Basis-Konstruktor (Scons-Environment) parst die cmdline">
+<node CREATED="1763514909541" ID="ID_849320964" MODIFIED="1763582749889" TEXT="erst der Basis-Konstruktor (Scons-Environment) parst die cmdline">
+<linktarget COLOR="#d10c35" DESTINATION="ID_849320964" ENDARROW="Default" ENDINCLINATION="135;6;" ID="Arrow_ID_177261555" SOURCE="ID_81167225" STARTARROW="None" STARTINCLINATION="165;0;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1763581968274" ID="ID_760939451" MODIFIED="1763582016888" TEXT="Konsequenz &#x27f9; das Pr&#xe4;fix &apos;#&apos; wandert &#xfc;beral in $Destdir hinein">
+<icon BUILTIN="idea"/>
+<node CREATED="1763582675156" ID="ID_1301177932" MODIFIED="1763582684447" TEXT="technisch genauer: in $INSTALLDIR"/>
+<node CREATED="1763582711998" ID="ID_81167225" MODIFIED="1763582749889" TEXT="spezieller Twist: dazu mu&#xdf;  der Inhalt von $INSTALLDIR bekannt sein">
+<arrowlink COLOR="#d10c35" DESTINATION="ID_849320964" ENDARROW="Default" ENDINCLINATION="135;6;" ID="Arrow_ID_177261555" STARTARROW="None" STARTINCLINATION="165;0;"/>
+<node COLOR="#435e98" CREATED="1763584199820" HGAP="33" ID="ID_1974529952" MODIFIED="1763592560108" TEXT="wie kann man das zugreifen/modifizieren?" VSHIFT="10">
+<icon BUILTIN="help"/>
+<node CREATED="1763584227481" ID="ID_1571316544" MODIFIED="1763584241350" TEXT="env.subst(&apos;$var&apos;)"/>
+<node CREATED="1763584241981" ID="ID_676111192" MODIFIED="1763584284206" TEXT="Internet-Suche &#x27f9; es sollte Dict-Notation auf dem Environment funktionieren"/>
+<node CREATED="1763584285632" ID="ID_712744854" MODIFIED="1763584297698" TEXT="also env[&apos;INSTALLDIR&apos;]">
+<node CREATED="1763585306611" ID="ID_42416116" MODIFIED="1763585324718" TEXT="gepr&#xfc;ft(Debugger) &#x27f6; funktioniert"/>
+</node>
+</node>
+<node CREATED="1763592569917" ID="ID_1405977209" MODIFIED="1763592596856" TEXT="baue Initialisierung im Konstruktor um">
+<node CREATED="1763592684425" ID="ID_140632440" MODIFIED="1763592695810" TEXT="rufe den Basis-Konstrukor zuerst auf"/>
+<node CREATED="1763592696558" ID="ID_1092771804" MODIFIED="1763592702515" TEXT="richte dann erst die Settings ein"/>
+<node CREATED="1763592703995" ID="ID_38633606" MODIFIED="1763592754903" TEXT="Hilfsfunktion: pr&#xfc;fen und Pr&#xe4;fix hinzuf&#xfc;gen">
+<arrowlink COLOR="#7d4963" DESTINATION="ID_649796962" ENDARROW="Default" ENDINCLINATION="393;20;" ID="Arrow_ID_1826598078" STARTARROW="None" STARTINCLINATION="-390;27;"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1763592770120" ID="ID_99261629" MODIFIED="1763592786648" TEXT="hart codiertes &apos;#&apos; an diversen Stellen entfernen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#435e98" CREATED="1763592787725" ID="ID_1162114369" MODIFIED="1763592893593" TEXT="Icon-Renderer scheitert &#x27f9; dort mu&#xdf; das &apos;#&apos;-Pr&#xe4;fix gestrippt werden">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Effektiv ist das '#'-Pr&#228;fix jetzt in $INSTALLDIR und $TARGDIR hineingewandert. Das ist aber eine SCons-spezifische Konvention, mit der der Icon-Renderer nat&#252;rlich nix anfangen kann
+    </p>
+  </body>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
 <node CREATED="1763514960250" ID="ID_1279305087" MODIFIED="1763514980249" TEXT="$DESTDIR w&#xe4;re damit allgemein eine n&#xfc;tzliche Einrichtung"/>
+</node>
+<node COLOR="#338800" CREATED="1763592917788" ID="ID_1687481236" MODIFIED="1763592934213" TEXT="Test mit INSTALLDIR=/home/hiv erfolgreich">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1763560137355" ID="ID_1362355060" MODIFIED="1763560152772" TEXT="bekannte Probleme">
@@ -180105,8 +180148,7 @@ Since then others have made contributions, see the log for the history.</font></
       die stammt eigentlich aus der Lumiera-Webiste und wurde umgeschrieben in ein eigenst&#228;ndiges HTML.... <b>unbedingt per Diff/Merge</b>&#160; aktualisieren vom Website-Content!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#473fa7" DESTINATION="ID_733347253" ENDARROW="Default" ENDINCLINATION="-163;-266;" ID="Arrow_ID_566966684" STARTARROW="None" STARTINCLINATION="654;39;"/>
 <icon BUILTIN="messagebox_warning"/>
 </node>
@@ -180172,8 +180214,7 @@ Since then others have made contributions, see the log for the history.</font></
       hat aber wichtige Umst&#228;nde gekl&#228;rt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font NAME="SansSerif" SIZE="11"/>
 </node>
 </node>
@@ -180325,8 +180366,7 @@ Since then others have made contributions, see the log for the history.</font></
       SCons verwendet eine MD5-Summe &#252;ber den Quellcode <b>und au&#223;erdem</b>&#160; auch &#252;ber alle Compiler-Schalter und Environment-Settings
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node COLOR="#338800" CREATED="1763252729534" ID="ID_208216424" MODIFIED="1763252752896">
@@ -180348,8 +180388,7 @@ Since then others have made contributions, see the log for the history.</font></
       Folgeproblem:<font size="2">&#160;</font><font color="#a40d0d" face="Monospaced" size="2">*** Directory path for variable 'INSTALLDIR' does not exist: debian/lumiera</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="broken-line"/>
 <node CREATED="1763252919428" ID="ID_1955433422" MODIFIED="1763252946834" TEXT="ist definiert als PathVariable(... PathIsDir)"/>
 <node COLOR="#338800" CREATED="1763253690359" ID="ID_718647850" MODIFIED="1763253817304" TEXT="kann man in SCons konfigurieren">
@@ -180362,8 +180401,7 @@ Since then others have made contributions, see the log for the history.</font></
       pr&#252;ft und Syntax, aber nicht ob das Filesystem-Element existiert
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#347acc" DESTINATION="ID_683037557" ENDARROW="Default" ENDINCLINATION="-807;74;" ID="Arrow_ID_628482667" STARTARROW="None" STARTINCLINATION="-124;12;"/>
 <icon BUILTIN="back"/>
 </node>
@@ -180529,8 +180567,7 @@ Since then others have made contributions, see the log for the history.</font></
       hab gesehen da&#223; der Speicher jetzt mit NULL gef&#252;llt wird
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node COLOR="#435e98" CREATED="1763227698062" ID="ID_1066186598" MODIFIED="1763227703601" TEXT="Build l&#xe4;uft jetzt durch"/>
 </node>
@@ -180545,8 +180582,8 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node COLOR="#338800" CREATED="1763231464249" ID="ID_154352881" MODIFIED="1763231480845" TEXT="erzeugtes Paket: Inhalt sieht bereits soweit korrekt aus">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1763231591988" ID="ID_936243550" MODIFIED="1763257617459" TEXT="bis auf die (fehlende) HTML-Hilfe">
-<arrowlink COLOR="#6349c4" DESTINATION="ID_1433247096" ENDARROW="Default" ENDINCLINATION="69;-61;" ID="Arrow_ID_1742637634" STARTARROW="None" STARTINCLINATION="-106;9;"/>
+<node COLOR="#435e98" CREATED="1763231591988" ID="ID_936243550" MODIFIED="1763581876839" TEXT="bis auf die (fehlende) HTML-Hilfe">
+<arrowlink COLOR="#496dc4" DESTINATION="ID_1433247096" ENDARROW="Default" ENDINCLINATION="69;-61;" ID="Arrow_ID_1742637634" STARTARROW="None" STARTINCLINATION="-106;9;"/>
 <linktarget COLOR="#66539c" DESTINATION="ID_936243550" ENDARROW="Default" ENDINCLINATION="154;14;" ID="Arrow_ID_1661227420" SOURCE="ID_789187494" STARTARROW="None" STARTINCLINATION="-213;16;"/>
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1763256990676" ID="ID_1058592543" MODIFIED="1763257004779" TEXT="Lintian-Meldungen">
@@ -180583,8 +180620,7 @@ Since then others have made contributions, see the log for the history.</font></
       g++ -o target/modules/libtest-vault.so -Wl,--no-undefined -Wl,--as-needed -Wl,-soname=libtest-vault.so -Wl,-rpath=\$ORIGIN/../modules,--enable-new-dtags -shared tests/vault/mem/extent-family-test.os tests/vault/gear/activity-detector-test.os tests/vault/gear/scheduler-usage-test.os tests/vault/gear/test-chain-load-test.os tests/vault/gear/scheduler-commutator-test.os tests/vault/gear/scheduler-activity-test.os tests/vault/gear/scheduler-invocation-test.os tests/vault/gear/work-force-test.os tests/vault/gear/block-flow-test.os tests/vault/gear/scheduler-stress-test.os tests/vault/gear/scheduler-service-test.os tests/vault/gear/scheduler-load-control-test.os tests/vault/gear/special-job-fun-test.os -lm -ldl -lpthread -lrt -lnobugmt -lstdc++fs -lboost_program_options -lgavl target/modules/liblumieravault.so target/modules/liblumieracommon.so target/modules/liblumierasupport.so
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="edit"/>
 </node>
 <node CREATED="1763260371730" ID="ID_305095688" LINK="https://unix.stackexchange.com/q/400187" MODIFIED="1763260383475" TEXT="siehe unix.stackexchange.com"/>
@@ -180619,9 +180655,9 @@ Since then others have made contributions, see the log for the history.</font></
 <node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1763258319446" ID="ID_973373524" MODIFIED="1763258335196" TEXT="&#xbb;/usr/share/doc-base/lumiera.lumiera&#xab;, Zeile 16: alle &#xbb;Format&#xab;-Abschnitte sind ung&#xfc;ltig.">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1763258386817" ID="ID_1806102500" MODIFIED="1763258395340" TEXT="ist nachvollziehbar"/>
-<node CREATED="1763258396148" ID="ID_1498381529" MODIFIED="1763258489415" TEXT="debian/doc-base.lumiera ist unvollst&#xe4;ndig">
+<node CREATED="1763258396148" ID="ID_1498381529" MODIFIED="1763593044611" TEXT="debian/doc-base.lumiera ist unvollst&#xe4;ndig">
 <arrowlink COLOR="#c90514" DESTINATION="ID_520590054" ENDARROW="Default" ENDINCLINATION="370;18;" ID="Arrow_ID_1493343123" STARTARROW="None" STARTINCLINATION="26;165;"/>
-<arrowlink COLOR="#fd2b1e" DESTINATION="ID_1899535258" ENDARROW="Default" ENDINCLINATION="340;15;" ID="Arrow_ID_532117098" STARTARROW="None" STARTINCLINATION="58;124;"/>
+<arrowlink COLOR="#5e1efd" DESTINATION="ID_1899535258" ENDARROW="Default" ENDINCLINATION="340;15;" ID="Arrow_ID_532117098" STARTARROW="None" STARTINCLINATION="58;124;"/>
 </node>
 </node>
 </node>
@@ -180664,14 +180700,14 @@ Since then others have made contributions, see the log for the history.</font></
 </html></richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1763227165285" ID="ID_1433247096" MODIFIED="1763231633639" TEXT="html/index.html bereitstellen">
-<linktarget COLOR="#6349c4" DESTINATION="ID_1433247096" ENDARROW="Default" ENDINCLINATION="69;-61;" ID="Arrow_ID_1742637634" SOURCE="ID_936243550" STARTARROW="None" STARTINCLINATION="-106;9;"/>
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1763227165285" ID="ID_1433247096" MODIFIED="1763581859998" TEXT="html/index.html bereitstellen">
+<linktarget COLOR="#496dc4" DESTINATION="ID_1433247096" ENDARROW="Default" ENDINCLINATION="69;-61;" ID="Arrow_ID_1742637634" SOURCE="ID_936243550" STARTARROW="None" STARTINCLINATION="-106;9;"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1763227235963" ID="ID_1228087880" MODIFIED="1763227247216" TEXT="wir registrieren das bereits per doc-base"/>
 <node CREATED="1763227248000" ID="ID_1899535258" MODIFIED="1763258483270" TEXT="sollte also wenigstens eine Platzhalter-Seite bieten">
-<linktarget COLOR="#fd2b1e" DESTINATION="ID_1899535258" ENDARROW="Default" ENDINCLINATION="340;15;" ID="Arrow_ID_532117098" SOURCE="ID_1498381529" STARTARROW="None" STARTINCLINATION="58;124;"/>
+<linktarget COLOR="#5e1efd" DESTINATION="ID_1899535258" ENDARROW="Default" ENDINCLINATION="340;15;" ID="Arrow_ID_532117098" SOURCE="ID_1498381529" STARTARROW="None" STARTINCLINATION="58;124;"/>
 </node>
-<node CREATED="1763426093860" ID="ID_733347253" MODIFIED="1763490063188" TEXT="L&#xf6;ungsidee: User-Manual-Website verwenden">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1763426093860" FOLDED="true" ID="ID_733347253" MODIFIED="1763593031754" TEXT="L&#xf6;ungsidee: User-Manual-Website verwenden">
 <linktarget COLOR="#473fa7" DESTINATION="ID_733347253" ENDARROW="Default" ENDINCLINATION="-163;-266;" ID="Arrow_ID_566966684" SOURCE="ID_1590141460" STARTARROW="None" STARTINCLINATION="654;39;"/>
 <icon BUILTIN="idea"/>
 <node CREATED="1763426111057" ID="ID_1287713714" MODIFIED="1763483724070" TEXT="wir haben eine Platzhalter-Seite auf Lumiera.org">
@@ -180691,7 +180727,8 @@ Since then others have made contributions, see the log for the history.</font></
 <node CREATED="1763426230823" ID="ID_294542685" MODIFIED="1763426242976" TEXT="Screenshot (aus &#xbb;Outer Space&#xab;)"/>
 <node CREATED="1763426243969" ID="ID_930562597" MODIFIED="1763426255346" TEXT="Erl&#xe4;uterung was man aktuell machen kann"/>
 </node>
-<node CREATED="1763426137400" ID="ID_1243719091" MODIFIED="1763426150488" TEXT="dann per Asciidoc &#x27f6; HTML rendern">
+<node COLOR="#338800" CREATED="1763426137400" ID="ID_1243719091" MODIFIED="1763593024882" TEXT="dann per Asciidoc &#x27f6; HTML rendern">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1763489440911" ID="ID_1127222679" MODIFIED="1763489462961" TEXT="per &quot;Savepage&quot;-Plugin in ein einziges HTML packen"/>
 <node CREATED="1763489463796" ID="ID_1584304212" MODIFIED="1763490091883" TEXT="HTML mit Original abgleichen &#x27f9; erleichtert sp&#xe4;tere Merges">
 <richcontent TYPE="NOTE"><html>
@@ -180719,7 +180756,7 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="ksmiletris"/>
 </node>
 </node>
-<node CREATED="1763426154135" ID="ID_1647578629" MODIFIED="1763560486421">
+<node COLOR="#338800" CREATED="1763426154135" ID="ID_1647578629" MODIFIED="1763593026225">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
@@ -180728,8 +180765,9 @@ Since then others have made contributions, see the log for the history.</font></
     </p>
   </body>
 </html></richcontent>
+<icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#338800" CREATED="1763426174597" ID="ID_129100029" MODIFIED="1763560577009" TEXT="Buildsystem : soll dann diese Seite installieren">
+<node COLOR="#338800" CREATED="1763426174597" FOLDED="true" ID="ID_129100029" MODIFIED="1763593009960" TEXT="Buildsystem : soll dann diese Seite installieren">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#5b280f" CREATED="1763493609659" ID="ID_1600362665" MODIFIED="1763493628445" TEXT="man k&#xf6;nnte das auch direkt aus dem DEB-Packaging machen">
 <icon BUILTIN="button_cancel"/>
@@ -180801,8 +180839,7 @@ Since then others have made contributions, see the log for the history.</font></
       Das hier ist ein Buildsystem f&#252;r ein Projekt von &#252;berschaubarem Umfang. Ganz ehrlich, ich erwarte nicht, da&#223; irgendjemand <i>au&#223;er mir</i>&#160; das SCons mag und pflegt. Also geht es h&#246;chstens darum, nach bestehendem Schema die eine oder andere Datei hinzuzuf&#252;gen. &#220;berdies frage ich mich, wie lange wir bei SCons bleiben k&#246;nnen (hoffentlich noch lange, und hoffentlich darf dann nicht ich einen Ersatz programmieren, oder mich mit CMake herum&#228;rgern, das <i>bei Weitem nicht so deklarativ ist</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="smiley-oh"/>
 </node>
 </node>
@@ -180818,8 +180855,7 @@ Since then others have made contributions, see the log for the history.</font></
       dann wird subdir = &lt;die letzte Pfadkomponente&gt;, und das ist nicht, was man erwartet, sofern die Directories mehr als eine Ebene tief liegen. Kann ich jetzt nicht so ohne Weiteres &#228;ndern, ohne die Hilfsfunktion getDirname() (BuildHelper.py) umzuschreiben. <b>Das ist es mir dann doch nicht wert</b>!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#813648" DESTINATION="ID_1952649170" ENDARROW="Default" ENDINCLINATION="202;-8;" ID="Arrow_ID_856935495" STARTARROW="None" STARTINCLINATION="218;11;"/>
 <linktarget COLOR="#904874" DESTINATION="ID_1073265175" ENDARROW="Default" ENDINCLINATION="-547;27;" ID="Arrow_ID_391174476" SOURCE="ID_241297391" STARTARROW="None" STARTINCLINATION="538;23;"/>
 <icon BUILTIN="broken-line"/>
@@ -180834,11 +180870,10 @@ Since then others have made contributions, see the log for the history.</font></
       <u>Installationsziel</u>: <font color="#8a1dd6" face="Monospaced">&lt;prefix&gt;</font><font color="#2d1dd6" face="Monospaced">/share/doc/lumiera/manual-html/index.html</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1763514063200" ID="ID_1527350389" MODIFIED="1763514252237" TEXT="SCons: Probleme beim Installieren ins Zielverzeichnis">
-<arrowlink COLOR="#e2014c" DESTINATION="ID_1983023550" ENDARROW="Default" ENDINCLINATION="-1336;58;" ID="Arrow_ID_299855257" STARTARROW="None" STARTINCLINATION="624;33;"/>
+<node COLOR="#435e98" CREATED="1763514063200" ID="ID_1527350389" MODIFIED="1763592986395" TEXT="SCons: Probleme beim Installieren ins Zielverzeichnis">
+<arrowlink COLOR="#017ce2" DESTINATION="ID_1983023550" ENDARROW="Default" ENDINCLINATION="-1336;58;" ID="Arrow_ID_299855257" STARTARROW="None" STARTINCLINATION="624;33;"/>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
