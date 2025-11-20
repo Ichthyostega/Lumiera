@@ -36,6 +36,7 @@ class LumieraEnvironment(Environment):
         self['TARGDIR'] = buildSetup.TARGDIR
         self['VERSION'] = buildSetup.VERSION
         self['DESTDIR'] = '$INSTALLDIR/$PREFIX'
+        self['SHARE'  ] = '$DESTDIR/share'
         self._anchor_relative('INSTALLDIR')
         self._anchor_relative('TARGDIR')
         #
@@ -169,7 +170,7 @@ def register_LumieraResourceBuilder(env):
         return env.Install(toBuild, source)
     
     def GuiResource(env, source):
-        """ pick up giben source resource and install
+        """ pick up given source resource and install
             them (flat) into the configured target
         """
         toBuild = env.path.buildUIRes
@@ -179,7 +180,7 @@ def register_LumieraResourceBuilder(env):
     
     def ConfigData(env, prefix, source, targetDir=None):
         """ install (copy) configuration- and metadata.
-            @param targetDir: when None, then use he install location configured (in SConstruct),
+            @param targetDir: when None, then use he install location configured (in Setup.py),
                 otherwise an explicitly given absolute or relative path segment,
                 which might refer to the location of the executable through the $ORIGIN token
             @param prefix: a prefix relative to the current path (location of SConscript),

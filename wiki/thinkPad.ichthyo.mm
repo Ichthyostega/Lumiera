@@ -177763,8 +177763,8 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 <node COLOR="#435e98" CREATED="1763514105272" FOLDED="true" ID="ID_1983023550" MODIFIED="1763592949315" TEXT="unser Scons-Setup kann nicht in absolutes INSTALLDIR installieren">
-<linktarget COLOR="#017ce2" DESTINATION="ID_1983023550" ENDARROW="Default" ENDINCLINATION="-1336;58;" ID="Arrow_ID_299855257" SOURCE="ID_1527350389" STARTARROW="None" STARTINCLINATION="624;33;"/>
 <linktarget COLOR="#017ce2" DESTINATION="ID_1983023550" ENDARROW="Default" ENDINCLINATION="-1336;58;" ID="Arrow_ID_1385558508" SOURCE="ID_1724121509" STARTARROW="None" STARTINCLINATION="1490;59;"/>
+<linktarget COLOR="#017ce2" DESTINATION="ID_1983023550" ENDARROW="Default" ENDINCLINATION="-1336;58;" ID="Arrow_ID_299855257" SOURCE="ID_1527350389" STARTARROW="None" STARTINCLINATION="624;33;"/>
 <icon BUILTIN="broken-line"/>
 <node CREATED="1763514259978" ID="ID_1685412419" MODIFIED="1763514385866" TEXT="peinlich &#x2014; aber derzeit nicht relevant">
 <richcontent TYPE="NOTE"><html>
@@ -180626,15 +180626,15 @@ Since then others have made contributions, see the log for the history.</font></
 <node CREATED="1763260371730" ID="ID_305095688" LINK="https://unix.stackexchange.com/q/400187" MODIFIED="1763260383475" TEXT="siehe unix.stackexchange.com"/>
 <node CREATED="1763260588724" ID="ID_1857294299" LINK="https://www.scons.org/doc/production/HTML/scons-user/ch12s06.html" MODIFIED="1763260600404" TEXT="man k&#xf6;nnte es explizit so in SCons coden"/>
 </node>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1763257996458" ID="ID_1842405614" MODIFIED="1763258001098" TEXT="lumiera source: build-depends-on-obsolete-package Build-Depends: pkg-config =&gt; pkgconf">
+<node COLOR="#435e98" CREATED="1763257996458" ID="ID_1842405614" MODIFIED="1763633688544" TEXT="lumiera source: build-depends-on-obsolete-package Build-Depends: pkg-config =&gt; pkgconf">
 <icon BUILTIN="broken-line"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1763258035361" ID="ID_479578990" LINK="https://lintian.debian.org/tags/priority-extra-is-replaced-by-priority-optional.html" MODIFIED="1763258080738" TEXT="priority-extra-is-replaced-by-priority-optional">
+<node COLOR="#435e98" CREATED="1763258035361" ID="ID_479578990" LINK="https://lintian.debian.org/tags/priority-extra-is-replaced-by-priority-optional.html" MODIFIED="1763633697654" TEXT="priority-extra-is-replaced-by-priority-optional">
 <node CREATED="1763258083718" ID="ID_707665141" MODIFIED="1763258113608" TEXT="in debian/control">
 <icon BUILTIN="info"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1763258118917" ID="ID_1912502845" MODIFIED="1763258129633" TEXT="rc-version-greater-than-expected-version 0.pre.04~rc.1 &gt; 0 (consider using 0~pre.04~rc.1)">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1763258118917" ID="ID_1912502845" MODIFIED="1763639280437" TEXT="rc-version-greater-than-expected-version 0.pre.04~rc.1 &gt; 0 (consider using 0~pre.04~rc.1)">
 <icon BUILTIN="help"/>
 <node CREATED="1763258182382" ID="ID_1738309570" MODIFIED="1763258258010" TEXT="ich vermute eine fehlgeleitete Heuristik">
 <richcontent TYPE="NOTE"><html>
@@ -180647,8 +180647,17 @@ Since then others have made contributions, see the log for the history.</font></
 </html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1763258148813" ID="ID_1740105960" MODIFIED="1763258178208" TEXT="nochmal die Debian-Regeln &#xfc;berpr&#xfc;fen">
+<node COLOR="#435e98" CREATED="1763258148813" ID="ID_1740105960" MODIFIED="1763632736206" TEXT="nochmal die Debian-Regeln &#xfc;berpr&#xfc;fen">
 <icon BUILTIN="yes"/>
+<node COLOR="#613951" CREATED="1763632208966" ID="ID_92084296" MODIFIED="1763632732929" TEXT="Tilde vor &lt;leer&gt; vor non-numeric vor numeric">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+<node CREATED="1763632826168" ID="ID_1481444560" MODIFIED="1763632857488" TEXT="+ &lt; - &lt; .">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+<node COLOR="#613951" CREATED="1763632240560" ID="ID_1280840907" MODIFIED="1763632750498" TEXT="also 0 &lt; 0.pre &lt; 0.0">
+<font BOLD="true" NAME="SansSerif" SIZE="10"/>
+</node>
 </node>
 </node>
 </node>
@@ -180891,6 +180900,137 @@ Since then others have made contributions, see the log for the history.</font></
   </body>
 </html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1763639500904" ID="ID_1852228671" LINK="https://manpages.debian.org/testing/debhelper/dh_installmenu.1.en.html" MODIFIED="1763639553640" TEXT="Einstiegspunkt: dh_installmenu (Manpage)">
+<node CREATED="1763639583125" ID="ID_718569356" LINK="https://wiki.ubuntuusers.de/Grundlagen_der_Paketerstellung/Men%C3%BCeintrag/" MODIFIED="1763639592459" TEXT="Ubuntuusers-Wiki"/>
+<node CREATED="1763639661971" ID="ID_1954097276" MODIFIED="1763639683734" TEXT="lt. Manpage soll das File hei&#xdf;en: debian/&lt;package&gt;.meu">
+<node CREATED="1763639686966" ID="ID_1910767186" MODIFIED="1763639697915" TEXT="aber unser Menu-File wird tats&#xe4;chlich installiert"/>
+<node CREATED="1763639698981" ID="ID_1749460503" MODIFIED="1763639724193" TEXT="als Datei /usr/share/menu/lumiera"/>
+<node CREATED="1763639876917" ID="ID_1420292469" MODIFIED="1763639888315" TEXT="auch die postinst/postrm-Skripte wurden installiert">
+<node CREATED="1763639919003" ID="ID_1790661439" MODIFIED="1763639937601" TEXT="die pr&#xfc;fen: command -v update-menus"/>
+<node CREATED="1763639988010" ID="ID_1626326275" MODIFIED="1763640014626" TEXT="update-menus ist bei mir nicht installiert">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1763640075496" ID="ID_248858241" MODIFIED="1763640085657" TEXT="DEB-Paket: menu"/>
+<node CREATED="1763640019561" ID="ID_352796517" MODIFIED="1763640028181" TEXT="ja dann....">
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+</node>
+<node CREATED="1763639791083" ID="ID_1078850307" MODIFIED="1763639801277" TEXT="man menufile beschreibt das Format">
+<node CREATED="1763640167994" ID="ID_269910845" MODIFIED="1763640177026" TEXT="das ist wohl Debian-spezifisch">
+<node CREATED="1763640379665" ID="ID_1496224864" LINK="https://lists.debian.org/debian-devel-announce/2015/09/msg00000.html" MODIFIED="1763640405035" TEXT="seit Jessie: auch Debian stellt um">
+<node CREATED="1763640529078" ID="ID_208766360" MODIFIED="1763640536471" TEXT="Debian sagt jetzt: entweder-oder"/>
+<node CREATED="1763640537230" ID="ID_277653439" MODIFIED="1763640549400" TEXT="und empfiehlt ebenfalls das .desktop-File"/>
+</node>
+</node>
+<node CREATED="1763640177942" ID="ID_1668485577" MODIFIED="1763640341192" TEXT="Ubuntu verwendet stattdessen den Freedesktop-Standard (*.desktop-File)"/>
+<node CREATED="1763640321709" ID="ID_1546340648" MODIFIED="1763640333893" TEXT="diese w&#xfc;rde dann installiert nach /usr/share/applications"/>
+</node>
+<node CREATED="1763654682915" ID="ID_180464078" LINK="https://www.debian.org/doc/debian-policy/ch-opersys.html#menus" MODIFIED="1763654697394" TEXT="Abschnitt &#xa7;9.6 in der Debian-Policy">
+<node CREATED="1763655002915" ID="ID_1003365114" LINK="https://standards.freedesktop.org/desktop-entry-spec/latest/" MODIFIED="1763655008114" TEXT="Freedesktop-Standard"/>
+<node CREATED="1763655015588" ID="ID_266725238" LINK="https://standards.freedesktop.org/menu-spec/latest/" MODIFIED="1763655039503" TEXT="Desktop-Menu-Spec"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1763640557556" ID="ID_969306745" MODIFIED="1763640582571" TEXT="Konsequenz &#x27f9; menu durch lumiera.desktop ersetzen">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1763657988933" ID="ID_508360945" MODIFIED="1763657997443" TEXT="lumiera.desktop"/>
+<node CREATED="1763658000001" ID="ID_328526629" MODIFIED="1763658006329" TEXT="per Build-System installieren">
+<node CREATED="1763658008578" ID="ID_625240718" MODIFIED="1763658024646" TEXT="&lt;pfx&gt;/share/applications/"/>
+<node CREATED="1763658025587" ID="ID_1534340117" MODIFIED="1763658030025" TEXT="Icon dazu">
+<node CREATED="1763665511666" ID="ID_353225738" MODIFIED="1763665664595" TEXT="es gibt noch kein Passendes">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Bei den GUI-Icons gibt es ein app-icon.svg &#8212; aber das sieht unfertig/kaputt aus; vermutlich hat sich da Joel damals daran versucht, aber er ist daran gescheitert, da&#223; das Lumiera-Logo sich nicht ohne Weiteres in ein Icon &#252;bersetzen l&#228;&#223;t. Au&#223;erdem folgen diese SVGs ja einem ganz bestimmten Schema, und enthalten daher mehrere Varianten auf einem gemeinsamen &#187;Canvas&#171;
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1763665666470" ID="ID_265964326" MODIFIED="1763665915326" TEXT="es gibt nur zig Spezial-Einzelfall-Varianten">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Tja... damals hat man zwar ein Lumiera-Logo <i>designt</i>&#160;&#8212; aber dann w&#252;rde noch die Arbeit ausstehen, daraus eine Design-Linie zu entwickeln, die in verschiedensten Gr&#246;&#223;en und in verschiedenem Umfeld konsistent funktioniert. Und ersatzweise hat dann jeder f&#252;r jeden Einzelfall seine Variante gebastelt (und ich mach ja auch nix Anderes)
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1763672887899" ID="ID_1393088776" MODIFIED="1763672902018" TEXT="leite mir ein Desktop-Icon ab"/>
+<node CREATED="1763672902746" ID="ID_1945120747" MODIFIED="1763672909837" TEXT="aus dem Icon-Set von Thorsten Wilms"/>
+</node>
+</node>
+<node CREATED="1763665427122" ID="ID_187263609" MODIFIED="1763665446276" TEXT="keiner der Builder pa&#xdf;t so wirklich....">
+<icon BUILTIN="smiley-neutral"/>
+<node CREATED="1763665472309" ID="ID_1716857284" MODIFIED="1763665501095">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>Deklarativit&#228;t</i>&#160;setzt etablierte Kategorien vorraus
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1763665464089" ID="ID_693368353" MODIFIED="1763665471340" TEXT="dann besser direkt installieren">
+<node CREATED="1763668304877" ID="ID_1080602829" MODIFIED="1763668330947" TEXT="&#x27f9; in gemeinsames Verziechnis (&apos;desktop&apos;) packen"/>
+<node CREATED="1763668361024" ID="ID_1550735012" MODIFIED="1763668370678" TEXT="aus dem data/SConscript installieren"/>
+</node>
+</node>
+</node>
+<node COLOR="#7b3a68" CREATED="1763672939158" ID="ID_1664389965" MODIFIED="1763675204751" TEXT="Probelauf">
+<icon BUILTIN="list"/>
+<node COLOR="#338800" CREATED="1763672944306" ID="ID_369535934" MODIFIED="1763672955796" TEXT="Build + Installation getestet">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#92492d" CREATED="1763672956592" ID="ID_1896881563" MODIFIED="1763675173497" TEXT="lumiera.desktop manuell ins System kopiert">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1763672969866" ID="ID_422590713" MODIFIED="1763672980018" TEXT="nicht im Men&#xfc;">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1763672982237" ID="ID_940902579" MODIFIED="1763673035802" TEXT="sudo update-desktop-database">
+<icon BUILTIN="idea"/>
+<node CREATED="1763673049540" ID="ID_1668349877" MODIFIED="1763673063698" TEXT="sollte doch eigentlich automatisch passieren">
+<icon BUILTIN="help"/>
+</node>
+</node>
+<node CREATED="1763673040286" ID="ID_1806109478" MODIFIED="1763673045945" TEXT="jetzt da ... aber ohne Icon">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#b41a91" CREATED="1763673100125" ID="ID_397325558" MODIFIED="1763673129563" TEXT="endlos lang herumgeknobelt ... ohne Erfolg">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="smiley-angry"/>
+</node>
+<node CREATED="1763673133060" ID="ID_1336416324" MODIFIED="1763673142587" TEXT="schau mir Yoshimi an">
+<node CREATED="1763673143512" ID="ID_640609747" MODIFIED="1763673148228" TEXT="der installiert auch ein SVG"/>
+<node CREATED="1763673149260" ID="ID_808379874" MODIFIED="1763673156800" TEXT="aber auch gerenderte PNG"/>
+</node>
+<node CREATED="1763673161470" ID="ID_1540661277" MODIFIED="1763673187434" TEXT="versuche gerendertes PNG &#x2014; bringt nix">
+<node CREATED="1763673189708" ID="ID_213127920" MODIFIED="1763673212876" TEXT="also jeweils unter /usr/share/icons/hicolor/48x48/apps"/>
+</node>
+<node CREATED="1763673218005" ID="ID_449633421" MODIFIED="1763673239360" TEXT="wenn ich den Pfad f&#xfc;r das SVG explizit in das .desktop-File schreibe &#x27f9; Icon da"/>
+<node CREATED="1763673240766" ID="ID_1871716948" MODIFIED="1763673263612" TEXT="alle Varianten mit update-desktop-database und gtk-update-icon-cache"/>
+<node COLOR="#5b280f" CREATED="1763673267462" ID="ID_1455600514" MODIFIED="1763673295530" TEXT="STOP ... ">
+<font NAME="SansSerif" SIZE="16"/>
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1763673297792" ID="ID_182607468" MODIFIED="1763673305120" TEXT="sollte das erst mal per DEB installieren"/>
+<node CREATED="1763673305957" ID="ID_49825284" MODIFIED="1763673312642" TEXT="sollte dann auch das System mal rebooten"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1763673313403" ID="ID_745161867" MODIFIED="1763673345299" TEXT="sollte dann auf SO / SuperUser fragen">
+<icon BUILTIN="yes"/>
+<icon BUILTIN="hourglass"/>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#32732a" CREATED="1763675215250" ID="ID_1155982963" MODIFIED="1763675258022" TEXT="also erst mal in dem Zustand akzeptiert">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1763658045895" ID="ID_771154654" MODIFIED="1763673363000" TEXT="alten &apos;menu&apos;-Eintrag entfernen"/>
 </node>
 </node>
 <node CREATED="1763170522531" ID="ID_301822628" MODIFIED="1763170529943" TEXT="debian/copyright">
