@@ -132,13 +132,14 @@ sudo make install
 GDL-mm: building and installing
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The *GNOME Docking library* is available through your your package manager,
-but we additionally need the C++ bindings. Since these haven't made it into the
-standard repositories yet, we provide a suitable custom package here;
-the following shows how to build the latter
-
-Version limitation::
-  we rely on GTK-3 and thus need a compatible GDL-3.
+The *GNOME Docking library* was maintained, outside of the Gnome project,
+until 2021, mostly by the Anjuta people. It has dropped out of most distributions
+meanwhile, but is compatible with GTK-3 and can be built for the time being.
+We retain a copy of the repository and maintain a Debian package at Lumiera.org.
+Additionally we need the C++ bindings, which were created by _Fabien Parent_ and
+maintained 2009-2013; we likewise provide a repository and Debian package for
+these at Lumiera.org. These prerequisite libraries can be rebuilt with
+the steps described below.
 
 There is a dependency on `xmlto`, which is an xml converter. To install on Debian:
 
@@ -146,11 +147,22 @@ There is a dependency on `xmlto`, which is an xml converter. To install on Debia
 apt-get install xmlto
 ------------------------------------------------------------
 
+.building GDL
+------------------------------------------------------------
+git clone git://git.lumiera.org/debian/gdl
+cd gdl
+git checkout master
+./autogen.sh
+make
+sudo make install
+------------------------------------------------------------
+
+.building GDL-mm
 ------------------------------------------------------------
 git clone git://git.lumiera.org/debian/gdlmm
 cd gdlmm
-git checkout debian
-./configure
+git checkout master
+./autogen.sh
 make
 sudo make install
 ------------------------------------------------------------

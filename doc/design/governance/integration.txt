@@ -6,12 +6,12 @@ Towards Integration
 //Menu: label Integration
 
 The Lumiera project creates innovative software, geared towards professional, high-quality work;
-it aims at high flexibility, offering user-control over a broad spectrum of configurable parameters,
-and with smooth workflows that scale well to larger and more intricate projects. Building such
-software involves some degree of exploration and search for adequate methods to reconcile
-conflicting goals. There is no ready-made blueprint that just needs implementation -- rather,
-we have to resort to a sequence of integration efforts, aimed at establishing core tenets
-of the envisioned architecture.
+it is characterised by comprehensive flexibility, allowing precise control of a wide range of
+parameters, as well as seamless workflows capable of handling even large and complex projects.
+Building such software involves some degree of exploration and the search for suitable ways to
+reconcile sometimes conflicting goals. There is no ready-made blueprint that simply needs to be
+implemented -- rather, we have to resort to a sequence of integration efforts, to establish the
+core tenets of our envisioned architecture.
 
 
 Vertical Slices

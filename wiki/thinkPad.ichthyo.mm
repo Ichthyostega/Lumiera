@@ -166597,7 +166597,8 @@ that situation will improve in forseeable future.</pre>
 <arrowlink COLOR="#12b218" DESTINATION="ID_1949114637" ENDARROW="Default" ENDINCLINATION="8;67;" ID="Arrow_ID_1615607150" STARTARROW="None" STARTINCLINATION="318;87;"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1751808460706" ID="ID_1046283899" MODIFIED="1751808483781" TEXT="Release: 0.pre.04">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1751808460706" ID="ID_1046283899" MODIFIED="1763769753563" TEXT="Release: 0.pre.04">
+<linktarget COLOR="#3395e4" DESTINATION="ID_1046283899" ENDARROW="Default" ENDINCLINATION="-1782;849;" ID="Arrow_ID_1139599492" SOURCE="ID_1912717141" STARTARROW="None" STARTINCLINATION="-252;45;"/>
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#b7d1d3" COLOR="#338800" CREATED="1751808878589" FOLDED="true" ID="ID_577995027" MODIFIED="1764600339359" TEXT="Umstellung auf Git-Flow">
 <icon BUILTIN="button_ok"/>
@@ -168824,8 +168825,9 @@ that situation will improve in forseeable future.</pre>
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1762902890626" FOLDED="true" ID="ID_1146586233" MODIFIED="1762917015418" TEXT="Attibutions / Authoren angemessen darstellen">
+<node COLOR="#338800" CREATED="1762902890626" FOLDED="true" ID="ID_1146586233" MODIFIED="1763770584067" TEXT="Attibutions / Authoren angemessen darstellen">
 <linktarget COLOR="#58509e" DESTINATION="ID_1146586233" ENDARROW="Default" ENDINCLINATION="-216;-14;" ID="Arrow_ID_1813989480" SOURCE="ID_227524343" STARTARROW="None" STARTINCLINATION="266;17;"/>
+<linktarget COLOR="#0db4af" DESTINATION="ID_1146586233" ENDARROW="Default" ENDINCLINATION="-928;54;" ID="Arrow_ID_730657766" SOURCE="ID_473314528" STARTARROW="None" STARTINCLINATION="-346;0;"/>
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1762903040791" ID="ID_680288475" MODIFIED="1762905743077" TEXT="Website: Liste abgleichen">
 <icon BUILTIN="button_ok"/>
@@ -169930,6 +169932,63 @@ that situation will improve in forseeable future.</pre>
 <arrowlink COLOR="#af497b" DESTINATION="ID_1667125104" ENDARROW="Default" ENDINCLINATION="-428;-45;" ID="Arrow_ID_1142158265" STARTARROW="None" STARTINCLINATION="-539;63;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1763769642111" ID="ID_1051001254" MODIFIED="1763769863349" TEXT="README &#x2014; NEWS(Changelog) &#x2014; AUTHORS &#x2014; LICENSE">
+<linktarget COLOR="#ca1e4c" DESTINATION="ID_1051001254" ENDARROW="Default" ENDINCLINATION="-2411;128;" ID="Arrow_ID_465720111" SOURCE="ID_520590054" STARTARROW="None" STARTINCLINATION="-418;-611;"/>
+<icon BUILTIN="pencil"/>
+<node COLOR="#435e98" CREATED="1763770333709" ID="ID_1395262738" MODIFIED="1763771074500" TEXT="Readme sollte knapper sein">
+<icon BUILTIN="yes"/>
+<node COLOR="#435e98" CREATED="1763770656376" ID="ID_1677999521" MODIFIED="1763770849586" TEXT="Einleitungstext leicht gestrafft">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das ist im Grunde die Formulierung aus der DEB-Paketbeschreibung, also eine <b>knappe Charakterisierung was Lumiera ist</b>, aus Sicht eines prospektiven Benutzers.... <font color="#6e0e0e">Aber der erste Satz wirkt aufgebl&#228;ht und auch der Hinweis auf auf den Status eines Development-Snapshot erscheint aufgebl&#228;ht und etwas redundant.</font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#338800" CREATED="1763770858002" ID="ID_21018768" MODIFIED="1763770877369" TEXT="Daf&#xfc;r die Ziele des aktuellen &#xbb;Vertical-Slice&#xab; in wenigen S&#xe4;tzen darstellen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1763770878454" ID="ID_140906920" MODIFIED="1763770885116" TEXT="Links auf die Lumiera-Website">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1763770889701" ID="ID_832590330" MODIFIED="1763770906766" TEXT="Build-Dependencies mit aktuellen URLs">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#1b4e6a" CREATED="1763770913234" ID="ID_1209096704" MODIFIED="1763771069588" TEXT="(weiterhin keine Bau-Anleitung)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...denn das erscheint mir immer noch ziemlich aus der Zeit gefallen; mit gegenw&#228;rtiger Software kann man nichts sinnvolles anfangen ohne Internet-Connection; daher ist eine ausf&#252;hrliche Bauanleitung viel angebrachter auf der Website. Das README gibt nur eine Zusammenfassung...
+    </p>
+    <ul>
+      <li>
+        mit was man es zu tun hat
+      </li>
+      <li>
+        was man weiter noch braucht um den Code zu bauen
+      </li>
+      <li>
+        wo man mehr Informationen und Anleitungen findet
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1763770358536" ID="ID_203232523" MODIFIED="1763770402465" TEXT="die Versionsbeschreibung in ein handgeschriebenes Changelog &#xfc;berf&#xfc;hren">
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1763770416491" ID="ID_473314528" MODIFIED="1763770591726" TEXT="Autoren- und Lizenzinformation nochmal gr&#xfc;ndlich &#xfc;berpr&#xfc;fen">
+<arrowlink COLOR="#a464b9" DESTINATION="ID_1682124476" ENDARROW="Default" ENDINCLINATION="233;-2422;" ID="Arrow_ID_1163398028" STARTARROW="None" STARTINCLINATION="774;35;"/>
+<arrowlink COLOR="#0db4af" DESTINATION="ID_1146586233" ENDARROW="Default" ENDINCLINATION="-928;54;" ID="Arrow_ID_730657766" STARTARROW="None" STARTINCLINATION="-346;0;"/>
+<icon BUILTIN="pencil"/>
+<node COLOR="#435e98" CREATED="1763771090001" ID="ID_1032564000" MODIFIED="1763771111728" TEXT="AUTHORS jetzt gestrafft und besser fokussiert"/>
+</node>
+</node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1751808937037" ID="ID_169754287" MODIFIED="1751808945616" TEXT="Debian / DEB-Paket">
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1762803541300" ID="ID_1198625842" MODIFIED="1762803563377" TEXT="Doku zum debianDepot.txt">
@@ -170304,7 +170363,7 @@ that situation will improve in forseeable future.</pre>
 <node CREATED="1561736119157" ID="ID_1252132002" MODIFIED="1561736803582" TEXT="Buster(testing): 3.24.5-1"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1743344601364" ID="ID_1474230791" MODIFIED="1743344621487" TEXT="GDL &#xbb;Gnome-Docking-Libary&#xab;">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1743344601364" FOLDED="true" ID="ID_1474230791" MODIFIED="1743344621487" TEXT="GDL &#xbb;Gnome-Docking-Libary&#xab;">
 <icon BUILTIN="clanbomber"/>
 <node CREATED="1743344626266" ID="ID_1482181302" MODIFIED="1743345032181" TEXT="war mal Teil des GTK-Toolbuilders">
 <richcontent TYPE="NOTE"><html>
@@ -171256,7 +171315,7 @@ actively maintained upstream. Please remove gdl from Debian.</pre>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1742175432695" ID="ID_271125011" MODIFIED="1744663656725" TEXT="L&#xf6;sung f&#xfc;r BuilderDoxygen">
+<node COLOR="#338800" CREATED="1742175432695" FOLDED="true" ID="ID_271125011" MODIFIED="1744663656725" TEXT="L&#xf6;sung f&#xfc;r BuilderDoxygen">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1742175442925" ID="ID_776664661" MODIFIED="1742175453375" TEXT="das war ein Plug-in &#xbb;aus dem Netz&#xab;"/>
 <node CREATED="1742175456267" ID="ID_1577214709" MODIFIED="1742175471861" TEXT="ungepflegt &#x2014; nicht Python-3-kompatibel"/>
@@ -171566,8 +171625,8 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1742175483087" ID="ID_40670399" MODIFIED="1742175487035" TEXT="Nacharbeiten">
-<icon BUILTIN="hourglass"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1742175483087" ID="ID_40670399" MODIFIED="1763770261946" TEXT="Nacharbeiten">
+<icon BUILTIN="pencil"/>
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1742175488343" ID="ID_842750245" MODIFIED="1742175503373" TEXT="Listen-Konkatenation: geht es besser?">
 <icon BUILTIN="help"/>
 <node CREATED="1742175505805" ID="ID_1316231941" MODIFIED="1742175579374" TEXT="Benny hat die Standard-Migration gemacht...">
@@ -171603,11 +171662,12 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1762998892693" ID="ID_1851495604" MODIFIED="1763227659040" TEXT="Scons: &apos;build&apos; - Target baut die Tests">
+<node COLOR="#435e98" CREATED="1762998892693" ID="ID_1851495604" MODIFIED="1763769292148" TEXT="Scons: &apos;build&apos; - Target baut die Tests">
 <arrowlink COLOR="#e91b19" DESTINATION="ID_1661490899" ENDARROW="Default" ENDINCLINATION="-549;-29;" ID="Arrow_ID_1418896649" STARTARROW="None" STARTINCLINATION="-497;37;"/>
-<linktarget COLOR="#ae3046" DESTINATION="ID_1851495604" ENDARROW="Default" ENDINCLINATION="691;48;" ID="Arrow_ID_213409665" SOURCE="ID_1534148044" STARTARROW="None" STARTINCLINATION="504;25;"/>
+<linktarget COLOR="#783c4a" DESTINATION="ID_1851495604" ENDARROW="Default" ENDINCLINATION="691;48;" ID="Arrow_ID_213409665" SOURCE="ID_1534148044" STARTARROW="None" STARTINCLINATION="504;25;"/>
 <icon BUILTIN="broken-line"/>
-<node CREATED="1762999155772" ID="ID_1416667212" MODIFIED="1762999169486" TEXT="Vermutung: &apos;vgsuppression&apos; is the culprit">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1762999155772" FOLDED="true" ID="ID_1416667212" MODIFIED="1763769210352" TEXT="Vermutung: &apos;vgsuppression&apos; is the culprit">
+<icon BUILTIN="idea"/>
 <node CREATED="1762999775812" ID="ID_1852771772" MODIFIED="1762999786923" TEXT="vgsuppression wurde den &apos;tools&apos; hinzugef&#xfc;gt"/>
 <node CREATED="1762999787655" ID="ID_403491226" MODIFIED="1762999794071" TEXT="es h&#xe4;ngt aber von den Test-Libs ab"/>
 <node CREATED="1762999794901" ID="ID_966563514" MODIFIED="1763000417013" TEXT="keine Ahnung warum">
@@ -171631,7 +171691,7 @@ Since then others have made contributions, see the log for the history.</font></
 </html></richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1763000424467" HGAP="40" ID="ID_60083390" MODIFIED="1763000455712" TEXT="L&#xf6;sung: &apos;vgsuppression&apos; aus den &apos;tools&apos; herausnehmen" VSHIFT="-54">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1763000424467" FOLDED="true" HGAP="40" ID="ID_60083390" MODIFIED="1763769219459" TEXT="L&#xf6;sung: &apos;vgsuppression&apos; aus den &apos;tools&apos; herausnehmen" VSHIFT="-54">
 <icon BUILTIN="yes"/>
 <node CREATED="1763000458529" ID="ID_1185565343" MODIFIED="1763000469947" TEXT="stattdessen direkt mit dem Testcode verkn&#xfc;pfen"/>
 <node CREATED="1763000470813" ID="ID_679231386" MODIFIED="1763000485718" TEXT="das w&#xfc;rde in das bisherige Schema passen"/>
@@ -171642,7 +171702,7 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="broken-line"/>
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1763230715545" ID="ID_1680047278" MODIFIED="1763230727184" TEXT="LUMIERA_CONFIG_PATH=&quot;//usr/local/share/lumiera/:.&quot;"/>
-<node COLOR="#5b280f" CREATED="1763231062724" ID="ID_729113427" MODIFIED="1763250751132" TEXT="zwei Probleme">
+<node COLOR="#5b280f" CREATED="1763231062724" FOLDED="true" ID="ID_729113427" MODIFIED="1763770234822" TEXT="zwei Probleme">
 <icon BUILTIN="yes"/>
 <icon BUILTIN="button_cancel"/>
 <node COLOR="#5b280f" CREATED="1763231078697" ID="ID_115675010" MODIFIED="1763250618809" TEXT="das $PREFIX wird nicht korrekt expandiert">
@@ -171718,15 +171778,17 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="smiley-oh"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1763231090468" ID="ID_1620912914" MODIFIED="1763252221643" TEXT="PKGLIBDIR und PKGDATADIR sind nicht gesetzt">
+<node COLOR="#5b280f" CREATED="1763231090468" ID="ID_1620912914" MODIFIED="1763770229162" TEXT="PKGLIBDIR und PKGDATADIR sind nicht gesetzt">
 <icon BUILTIN="messagebox_warning"/>
+<icon BUILTIN="button_cancel"/>
 <node COLOR="#5b280f" CREATED="1763231139276" ID="ID_306175439" MODIFIED="1763250961935" TEXT="das m&#xfc;&#xdf;te debian/rules machen">
 <icon BUILTIN="yes"/>
 <icon BUILTIN="stop-sign"/>
 </node>
 <node CREATED="1763250967332" ID="ID_822134580" MODIFIED="1763250981054" TEXT="Nein! die werden beide nicht (mehr) gebraucht"/>
-<node CREATED="1763250992129" ID="ID_1400451187" MODIFIED="1763252256130" TEXT="das Eincompilieren von LUMIERA_PLUGIN_PATH und LUMIERA_CONFIG_PATH ist obsolet">
+<node COLOR="#435e98" CREATED="1763250992129" ID="ID_1400451187" MODIFIED="1763770194553" TEXT="das Eincompilieren von LUMIERA_PLUGIN_PATH und LUMIERA_CONFIG_PATH ist obsolet">
 <arrowlink COLOR="#2871c6" DESTINATION="ID_1570476654" ENDARROW="Default" ENDINCLINATION="19;-179;" ID="Arrow_ID_1820496426" STARTARROW="None" STARTINCLINATION="167;197;"/>
+<icon BUILTIN="yes"/>
 <node CREATED="1763251017639" ID="ID_1648228375" MODIFIED="1763251090583" TEXT="jaja ... das ist die typische C-Programmierer-Denke">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -171785,10 +171847,10 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="smiley-oh"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1763251402580" ID="ID_1570476654" MODIFIED="1763252256130" TEXT="also dann &#x27f9; die eincompilierten Pfade beseitigen">
+<node COLOR="#338800" CREATED="1763251402580" FOLDED="true" ID="ID_1570476654" MODIFIED="1763770251314" TEXT="also dann &#x27f9; die eincompilierten Pfade beseitigen">
 <linktarget COLOR="#2871c6" DESTINATION="ID_1570476654" ENDARROW="Default" ENDINCLINATION="19;-179;" ID="Arrow_ID_1820496426" SOURCE="ID_1400451187" STARTARROW="None" STARTINCLINATION="167;197;"/>
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1763251446767" ID="ID_1315071317" MODIFIED="1763251465681" TEXT="PKGLIBDIR und PKGDATADIR werden dann auch obsolset">
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1763251446767" ID="ID_1315071317" MODIFIED="1763770208516" TEXT="PKGLIBDIR und PKGDATADIR werden dann auch obsolset">
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node COLOR="#5b280f" CREATED="1763251657464" ID="ID_1968452368" MODIFIED="1763252017495" TEXT="ist das jetzt nicht ein R&#xfc;ckschritt?">
@@ -171877,9 +171939,12 @@ Since then others have made contributions, see the log for the history.</font></
 </html></richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1763514063200" ID="ID_1724121509" MODIFIED="1763514591472" TEXT="unser SCons-Setup geht nicht korrekt mit absolutem Install-Pfad um">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1763514063200" ID="ID_1724121509" MODIFIED="1763770120318" TEXT="unser SCons-Setup geht nicht korrekt mit absolutem Install-Pfad um">
 <arrowlink COLOR="#017ce2" DESTINATION="ID_1983023550" ENDARROW="Default" ENDINCLINATION="-1336;58;" ID="Arrow_ID_1385558508" STARTARROW="None" STARTINCLINATION="1490;59;"/>
 <icon BUILTIN="messagebox_warning"/>
+<node COLOR="#29765c" CREATED="1763770127378" ID="ID_935597696" MODIFIED="1763770156664" TEXT="jetzt schon (getestet)">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
 </node>
 </node>
 </node>
@@ -171895,7 +171960,7 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1742168629673" ID="ID_1375289331" MODIFIED="1743900545319" TEXT="lib-GDL">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1742168629673" FOLDED="true" ID="ID_1375289331" MODIFIED="1743900545319" TEXT="lib-GDL">
 <linktarget COLOR="#399bc6" DESTINATION="ID_1375289331" ENDARROW="Default" ENDINCLINATION="-198;59;" ID="Arrow_ID_126209265" SOURCE="ID_1927532119" STARTARROW="None" STARTINCLINATION="-9;-72;"/>
 <node COLOR="#338800" CREATED="1742315618835" ID="ID_1843112182" MODIFIED="1743900350216" TEXT="forward-port GDL-Paket">
 <arrowlink COLOR="#1a37c0" DESTINATION="ID_1667505670" ENDARROW="Default" ENDINCLINATION="808;-56;" ID="Arrow_ID_1103843085" STARTARROW="None" STARTINCLINATION="1108;118;"/>
@@ -175140,7 +175205,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#bfd7c3" COLOR="#338800" CREATED="1742175299968" ID="ID_1393531242" MODIFIED="1751808861433" TEXT="C++20">
+<node BACKGROUND_COLOR="#bfd7c3" COLOR="#338800" CREATED="1742175299968" FOLDED="true" ID="ID_1393531242" MODIFIED="1751808861433" TEXT="C++20">
 <linktarget COLOR="#33a8ce" DESTINATION="ID_1393531242" ENDARROW="Default" ENDINCLINATION="-1152;286;" ID="Arrow_ID_601399477" SOURCE="ID_1386811789" STARTARROW="None" STARTINCLINATION="602;101;"/>
 <icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1742175640613" ID="ID_671098760" MODIFIED="1742175658639" TEXT="Ma&#xdf;gabe: erst mal nur hochschalten">
@@ -177653,15 +177718,15 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1742175264309" ID="ID_1163480280" MODIFIED="1742175329181" TEXT="Preview-Release">
-<icon BUILTIN="hourglass"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1742175264309" ID="ID_1163480280" MODIFIED="1763770089575" TEXT="Preview-Release">
+<icon BUILTIN="pencil"/>
 <node CREATED="1742175666415" ID="ID_1986444286" MODIFIED="1742175670216" TEXT="Git-Flow einf&#xfc;hren">
 <node CREATED="1742175672550" ID="ID_624745919" MODIFIED="1742175678761" TEXT="Namen und Schema definieren"/>
 <node CREATED="1742175679613" ID="ID_781377863" MODIFIED="1742175686624" TEXT="Doku f&#xfc;r die Website anlegen"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1742175254850" ID="ID_1647788626" MODIFIED="1742175331333" TEXT="Lumiera-DEB bauen">
-<icon BUILTIN="hourglass"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1742175254850" ID="ID_1647788626" MODIFIED="1763770083926" TEXT="Lumiera-DEB bauen">
+<icon BUILTIN="pencil"/>
 <node COLOR="#338800" CREATED="1742693350240" ID="ID_153015746" MODIFIED="1742700585301" TEXT="Reprepro aufr&#xe4;umen">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1742693365149" ID="ID_414171020" MODIFIED="1742741330011" TEXT="alle alten Repos wirklich aufgeben">
@@ -179618,8 +179683,9 @@ Since then others have made contributions, see the log for the history.</font></
 <node CREATED="1742179601188" ID="ID_965703684" MODIFIED="1742179603440" TEXT="Jessie"/>
 <node CREATED="1742179787399" ID="ID_837396889" MODIFIED="1742179789410" TEXT="GTK-3"/>
 </node>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1742179444680" ID="ID_1912717141" MODIFIED="1742179449018" TEXT="0.pre.04">
-<icon BUILTIN="hourglass"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1742179444680" ID="ID_1912717141" MODIFIED="1763769753563" TEXT="0.pre.04">
+<arrowlink COLOR="#3395e4" DESTINATION="ID_1046283899" ENDARROW="Default" ENDINCLINATION="-1782;849;" ID="Arrow_ID_1139599492" STARTARROW="None" STARTINCLINATION="-252;45;"/>
+<icon BUILTIN="pencil"/>
 <node CREATED="1742179487515" ID="ID_1215839135" MODIFIED="1751807929066" TEXT="C++23"/>
 <node CREATED="1742179496779" ID="ID_1474438481" MODIFIED="1742179498944" TEXT="Trixie"/>
 <node CREATED="1742179862409" ID="ID_78256793" MODIFIED="1742179872555" TEXT="Vertical-Slice-1 : GUI-Connection"/>
@@ -180646,7 +180712,8 @@ Since then others have made contributions, see the log for the history.</font></
 <node COLOR="#338800" CREATED="1762959102578" ID="ID_45259530" MODIFIED="1762998890186" TEXT="Git-Buildpackage anpassen">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1762962662681" ID="ID_789378321" MODIFIED="1762962672821" TEXT="Paketdefinition modernisieren">
+<node COLOR="#338800" CREATED="1762962662681" FOLDED="true" ID="ID_789378321" MODIFIED="1763770034224" TEXT="Paketdefinition modernisieren">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1762962674115" ID="ID_1194603275" LINK="#ID_31098087" MODIFIED="1762962776165" TEXT="das NoBug-Paket als Bezugspunkt verwenden">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -180837,10 +180904,10 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 <node CREATED="1762997171048" ID="ID_1055108179" MODIFIED="1762997177026" TEXT="Feinschliff + Test">
-<node CREATED="1762997178703" ID="ID_1534148044" MODIFIED="1762998975931" TEXT="seltsam: der &apos;scons build&apos;-Aufruf baut auch bereits die Tests">
-<arrowlink COLOR="#ae3046" DESTINATION="ID_1851495604" ENDARROW="Default" ENDINCLINATION="691;48;" ID="Arrow_ID_213409665" STARTARROW="None" STARTINCLINATION="504;25;"/>
+<node CREATED="1762997178703" ID="ID_1534148044" MODIFIED="1763769306816" TEXT="seltsam: der &apos;scons build&apos;-Aufruf baut auch bereits die Tests">
+<arrowlink COLOR="#783c4a" DESTINATION="ID_1851495604" ENDARROW="Default" ENDINCLINATION="691;48;" ID="Arrow_ID_213409665" STARTARROW="None" STARTINCLINATION="504;25;"/>
 </node>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1763252619641" ID="ID_1700554356" MODIFIED="1763252628415" TEXT="redundanter Bauvorgang">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1763252619641" FOLDED="true" ID="ID_1700554356" MODIFIED="1763769919848" TEXT="redundanter Bauvorgang">
 <icon BUILTIN="broken-line"/>
 <node CREATED="1763252631355" ID="ID_1845098136" MODIFIED="1763252647397" TEXT="das &apos;install&apos;-Target baut nochmal neu"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1763252649479" ID="ID_267772331" MODIFIED="1763252711731" TEXT="das liegt an dem abweichenden Environment">
@@ -180896,7 +180963,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1762997197216" ID="ID_1049616938" MODIFIED="1763256797241" TEXT="ein Test scheitert">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1762997197216" FOLDED="true" ID="ID_1049616938" MODIFIED="1763256797241" TEXT="ein Test scheitert">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -181155,13 +181222,15 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1763169004238" ID="ID_1903406898" MODIFIED="1763227829011" TEXT="copyright-File im neuen Format">
-<arrowlink COLOR="#7e2e43" DESTINATION="ID_791117820" ENDARROW="Default" ENDINCLINATION="-142;-16;" ID="Arrow_ID_1399617171" STARTARROW="None" STARTINCLINATION="723;58;"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1763169004238" ID="ID_1903406898" MODIFIED="1763769956568" TEXT="copyright-File im neuen Format">
+<arrowlink COLOR="#7e2e43" DESTINATION="ID_791117820" ENDARROW="Default" ENDINCLINATION="-157;-17;" ID="Arrow_ID_1399617171" STARTARROW="None" STARTINCLINATION="723;58;"/>
 <icon BUILTIN="flag-pink"/>
 </node>
 <node CREATED="1763168982818" ID="ID_1121026746" MODIFIED="1763168997368" TEXT="Paket-Dokumente">
-<node CREATED="1763170279597" ID="ID_520590054" MODIFIED="1763258459329" TEXT="sollte handgeschriebenes Changelog in NEWS pflegen">
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1763170279597" ID="ID_520590054" MODIFIED="1763769863348" TEXT="sollte handgeschriebenes Changelog in NEWS pflegen">
+<arrowlink COLOR="#ca1e4c" DESTINATION="ID_1051001254" ENDARROW="Default" ENDINCLINATION="-2411;128;" ID="Arrow_ID_465720111" STARTARROW="None" STARTINCLINATION="-418;-611;"/>
 <linktarget COLOR="#c90514" DESTINATION="ID_520590054" ENDARROW="Default" ENDINCLINATION="370;18;" ID="Arrow_ID_1493343123" SOURCE="ID_1498381529" STARTARROW="None" STARTINCLINATION="26;165;"/>
+<icon BUILTIN="pencil"/>
 </node>
 <node CREATED="1763170354467" ID="ID_94538506" MODIFIED="1763170366748" TEXT="README k&#xf6;nnte man aus dem Paket weglassen"/>
 <node CREATED="1763226959818" ID="ID_1117448176" MODIFIED="1763226982802" TEXT="README.debian erg&#xe4;nzen">
@@ -181373,8 +181442,9 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1763260669858" ID="ID_499902446" MODIFIED="1763260677984" TEXT="ist das Men&#xfc;-File noch korrekt">
+<node COLOR="#5b280f" CREATED="1763260669858" ID="ID_499902446" MODIFIED="1763676207071" TEXT="ist das Men&#xfc;-File noch korrekt">
 <icon BUILTIN="help"/>
+<icon BUILTIN="button_cancel"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1763260680749" ID="ID_1827433708" MODIFIED="1763260722367" TEXT="Lumiera taucht nicht im XFCE-Men&#xfc; auf">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -181386,9 +181456,10 @@ Since then others have made contributions, see the log for the history.</font></
 </html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
-<node CREATED="1763639500904" ID="ID_1852228671" LINK="https://manpages.debian.org/testing/debhelper/dh_installmenu.1.en.html" MODIFIED="1763639553640" TEXT="Einstiegspunkt: dh_installmenu (Manpage)">
+<node COLOR="#435e98" CREATED="1763639500904" FOLDED="true" ID="ID_1852228671" LINK="https://manpages.debian.org/testing/debhelper/dh_installmenu.1.en.html" MODIFIED="1763769986721" TEXT="Einstiegspunkt: dh_installmenu (Manpage)">
+<icon BUILTIN="info"/>
 <node CREATED="1763639583125" ID="ID_718569356" LINK="https://wiki.ubuntuusers.de/Grundlagen_der_Paketerstellung/Men%C3%BCeintrag/" MODIFIED="1763639592459" TEXT="Ubuntuusers-Wiki"/>
-<node CREATED="1763639661971" ID="ID_1954097276" MODIFIED="1763639683734" TEXT="lt. Manpage soll das File hei&#xdf;en: debian/&lt;package&gt;.meu">
+<node CREATED="1763639661971" FOLDED="true" ID="ID_1954097276" MODIFIED="1763676293846" TEXT="lt. Manpage soll das File hei&#xdf;en: debian/&lt;package&gt;.menu">
 <node CREATED="1763639686966" ID="ID_1910767186" MODIFIED="1763639697915" TEXT="aber unser Menu-File wird tats&#xe4;chlich installiert"/>
 <node CREATED="1763639698981" ID="ID_1749460503" MODIFIED="1763639724193" TEXT="als Datei /usr/share/menu/lumiera"/>
 <node CREATED="1763639876917" ID="ID_1420292469" MODIFIED="1763639888315" TEXT="auch die postinst/postrm-Skripte wurden installiert">
@@ -181404,7 +181475,8 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node CREATED="1763639791083" ID="ID_1078850307" MODIFIED="1763639801277" TEXT="man menufile beschreibt das Format">
 <node CREATED="1763640167994" ID="ID_269910845" MODIFIED="1763640177026" TEXT="das ist wohl Debian-spezifisch">
-<node CREATED="1763640379665" ID="ID_1496224864" LINK="https://lists.debian.org/debian-devel-announce/2015/09/msg00000.html" MODIFIED="1763640405035" TEXT="seit Jessie: auch Debian stellt um">
+<node CREATED="1763640379665" ID="ID_1496224864" LINK="https://lists.debian.org/debian-devel-announce/2015/09/msg00000.html" MODIFIED="1763676273083" TEXT="seit Jessie: auch Debian stellt um">
+<arrowlink COLOR="#a32f55" DESTINATION="ID_180464078" ENDARROW="Default" ENDINCLINATION="40;-92;" ID="Arrow_ID_600138746" STARTARROW="None" STARTINCLINATION="-123;-26;"/>
 <node CREATED="1763640529078" ID="ID_208766360" MODIFIED="1763640536471" TEXT="Debian sagt jetzt: entweder-oder"/>
 <node CREATED="1763640537230" ID="ID_277653439" MODIFIED="1763640549400" TEXT="und empfiehlt ebenfalls das .desktop-File"/>
 </node>
@@ -181412,22 +181484,30 @@ Since then others have made contributions, see the log for the history.</font></
 <node CREATED="1763640177942" ID="ID_1668485577" MODIFIED="1763640341192" TEXT="Ubuntu verwendet stattdessen den Freedesktop-Standard (*.desktop-File)"/>
 <node CREATED="1763640321709" ID="ID_1546340648" MODIFIED="1763640333893" TEXT="diese w&#xfc;rde dann installiert nach /usr/share/applications"/>
 </node>
-<node CREATED="1763654682915" ID="ID_180464078" LINK="https://www.debian.org/doc/debian-policy/ch-opersys.html#menus" MODIFIED="1763654697394" TEXT="Abschnitt &#xa7;9.6 in der Debian-Policy">
-<node CREATED="1763655002915" ID="ID_1003365114" LINK="https://standards.freedesktop.org/desktop-entry-spec/latest/" MODIFIED="1763655008114" TEXT="Freedesktop-Standard"/>
+<node CREATED="1763654682915" ID="ID_180464078" LINK="https://www.debian.org/doc/debian-policy/ch-opersys.html#menus" MODIFIED="1763676267163" TEXT="Abschnitt &#xa7;9.6 in der Debian-Policy">
+<linktarget COLOR="#a32f55" DESTINATION="ID_180464078" ENDARROW="Default" ENDINCLINATION="40;-92;" ID="Arrow_ID_600138746" SOURCE="ID_1496224864" STARTARROW="None" STARTINCLINATION="-123;-26;"/>
+<node CREATED="1763655002915" ID="ID_1003365114" LINK="https://standards.freedesktop.org/desktop-entry-spec/latest/" MODIFIED="1763676187839" TEXT="Freedesktop-Standard">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1003365114" ENDARROW="Default" ENDINCLINATION="83;-3;" ID="Arrow_ID_716807073" SOURCE="ID_865166332" STARTARROW="None" STARTINCLINATION="75;9;"/>
+</node>
 <node CREATED="1763655015588" ID="ID_266725238" LINK="https://standards.freedesktop.org/menu-spec/latest/" MODIFIED="1763655039503" TEXT="Desktop-Menu-Spec"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1763640557556" ID="ID_969306745" MODIFIED="1763640582571" TEXT="Konsequenz &#x27f9; menu durch lumiera.desktop ersetzen">
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1763657988933" ID="ID_508360945" MODIFIED="1763657997443" TEXT="lumiera.desktop"/>
-<node CREATED="1763658000001" ID="ID_328526629" MODIFIED="1763658006329" TEXT="per Build-System installieren">
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1763640557556" FOLDED="true" ID="ID_969306745" MODIFIED="1763769989478" TEXT="Konsequenz &#x27f9; menu durch lumiera.desktop ersetzen">
+<icon BUILTIN="pencil"/>
+<node COLOR="#435e98" CREATED="1763657988933" ID="ID_508360945" MODIFIED="1763676156580" TEXT="lumiera.desktop">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1763676158179" ID="ID_1090361326" MODIFIED="1763676165918" TEXT="gem&#xe4;&#xdf; Beispiel von yoshimi"/>
+<node CREATED="1763676166675" ID="ID_865166332" MODIFIED="1763676187839" TEXT="+ etwas die Spec lesen...">
+<arrowlink DESTINATION="ID_1003365114" ENDARROW="Default" ENDINCLINATION="83;-3;" ID="Arrow_ID_716807073" STARTARROW="None" STARTINCLINATION="75;9;"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1763658000001" ID="ID_328526629" MODIFIED="1763676151998" TEXT="per Build-System installieren">
+<icon BUILTIN="yes"/>
 <node CREATED="1763658008578" ID="ID_625240718" MODIFIED="1763658024646" TEXT="&lt;pfx&gt;/share/applications/"/>
 <node CREATED="1763658025587" ID="ID_1534340117" MODIFIED="1763658030025" TEXT="Icon dazu">
 <node CREATED="1763665511666" ID="ID_353225738" MODIFIED="1763665664595" TEXT="es gibt noch kein Passendes">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Bei den GUI-Icons gibt es ein app-icon.svg &#8212; aber das sieht unfertig/kaputt aus; vermutlich hat sich da Joel damals daran versucht, aber er ist daran gescheitert, da&#223; das Lumiera-Logo sich nicht ohne Weiteres in ein Icon &#252;bersetzen l&#228;&#223;t. Au&#223;erdem folgen diese SVGs ja einem ganz bestimmten Schema, und enthalten daher mehrere Varianten auf einem gemeinsamen &#187;Canvas&#171;
@@ -181437,9 +181517,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node CREATED="1763665666470" ID="ID_265964326" MODIFIED="1763665915326" TEXT="es gibt nur zig Spezial-Einzelfall-Varianten">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Tja... damals hat man zwar ein Lumiera-Logo <i>designt</i>&#160;&#8212; aber dann w&#252;rde noch die Arbeit ausstehen, daraus eine Design-Linie zu entwickeln, die in verschiedensten Gr&#246;&#223;en und in verschiedenem Umfeld konsistent funktioniert. Und ersatzweise hat dann jeder f&#252;r jeden Einzelfall seine Variante gebastelt (und ich mach ja auch nix Anderes)
@@ -181454,9 +181532,7 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="smiley-neutral"/>
 <node CREATED="1763665472309" ID="ID_1716857284" MODIFIED="1763665501095">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       <i>Deklarativit&#228;t</i>&#160;setzt etablierte Kategorien vorraus
@@ -181475,7 +181551,7 @@ Since then others have made contributions, see the log for the history.</font></
 <node COLOR="#338800" CREATED="1763672944306" ID="ID_369535934" MODIFIED="1763672955796" TEXT="Build + Installation getestet">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#92492d" CREATED="1763672956592" ID="ID_1896881563" MODIFIED="1763675173497" TEXT="lumiera.desktop manuell ins System kopiert">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#92492d" CREATED="1763672956592" FOLDED="true" ID="ID_1896881563" MODIFIED="1763675173497" TEXT="lumiera.desktop manuell ins System kopiert">
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1763672969866" ID="ID_422590713" MODIFIED="1763672980018" TEXT="nicht im Men&#xfc;">
 <icon BUILTIN="messagebox_warning"/>
 </node>
@@ -181515,7 +181591,9 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node CREATED="1763658045895" ID="ID_771154654" MODIFIED="1763673363000" TEXT="alten &apos;menu&apos;-Eintrag entfernen"/>
+<node COLOR="#5b280f" CREATED="1763658045895" ID="ID_771154654" MODIFIED="1763676136438" TEXT="alten &apos;menu&apos;-Eintrag entfernen">
+<icon BUILTIN="button_cancel"/>
+</node>
 </node>
 </node>
 <node CREATED="1763170522531" ID="ID_301822628" MODIFIED="1763170529943" TEXT="debian/copyright">
@@ -181531,8 +181609,8 @@ Since then others have made contributions, see the log for the history.</font></
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1763170554412" ID="ID_1915310617" MODIFIED="1763227796201" TEXT="es gibt eine maschinenlesbare Variante &#x2014; sollen wir die verwenden?">
 <icon BUILTIN="help"/>
 <node CREATED="1763173068727" ID="ID_1875951274" LINK="https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/" MODIFIED="1763173081081" TEXT="Spezifikation: Standard Format-1.0"/>
-<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1763174706839" ID="ID_791117820" MODIFIED="1763227818290" TEXT="ja ... das Format ist klarer">
-<linktarget COLOR="#7e2e43" DESTINATION="ID_791117820" ENDARROW="Default" ENDINCLINATION="-142;-16;" ID="Arrow_ID_1399617171" SOURCE="ID_1903406898" STARTARROW="None" STARTINCLINATION="723;58;"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1763174706839" ID="ID_791117820" MODIFIED="1763227818290" TEXT="...ja ... das Format ist klarer">
+<linktarget COLOR="#7e2e43" DESTINATION="ID_791117820" ENDARROW="Default" ENDINCLINATION="-157;-17;" ID="Arrow_ID_1399617171" SOURCE="ID_1903406898" STARTARROW="None" STARTINCLINATION="723;58;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 </node>
@@ -181556,6 +181634,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1763174829050" ID="ID_1682124476" MODIFIED="1763174842812" TEXT="Also: Copyright-Zeitspannen identifizieren">
+<linktarget COLOR="#a464b9" DESTINATION="ID_1682124476" ENDARROW="Default" ENDINCLINATION="233;-2422;" ID="Arrow_ID_1163398028" SOURCE="ID_473314528" STARTARROW="None" STARTINCLINATION="774;35;"/>
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1763174844808" ID="ID_1962494634" MODIFIED="1763174847240" TEXT="Cehteh"/>
 <node CREATED="1763174847959" ID="ID_1148429062" MODIFIED="1763174852841" TEXT="Joel Holdsworth"/>
