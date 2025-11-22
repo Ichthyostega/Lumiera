@@ -169979,8 +169979,48 @@ that situation will improve in forseeable future.</pre>
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1763770358536" ID="ID_203232523" MODIFIED="1763770402465" TEXT="die Versionsbeschreibung in ein handgeschriebenes Changelog &#xfc;berf&#xfc;hren">
+<node COLOR="#338800" CREATED="1763770358536" ID="ID_203232523" MODIFIED="1763854304767" TEXT="die Versionsbeschreibung in ein handgeschriebenes Changelog &#xfc;berf&#xfc;hren">
 <icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1763828021354" ID="ID_1129284385" MODIFIED="1763828191160" TEXT="grade im Zeitalter von GIt ist das wichtig">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...ein Commit-Log einer gr&#246;&#223;eren Applikation ist f&#252;r sich allein nicht aussagekr&#228;ftig; es mu&#223; in den Kontext gestellt werden durch ein offiziell verbindlich vorgegebenes Urteil wo das Projekt steht und wohin es sich bewegt.
+    </p>
+  </body>
+</html></richcontent>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#435e98" CREATED="1763828212678" ID="ID_375857423" MODIFIED="1763854212036" TEXT="Ein Statement wo das Projekt steht"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1763828240101" ID="ID_662477959" MODIFIED="1763854246013" TEXT="eine Charakterisierung erreichter Meilensteine">
+<icon BUILTIN="hourglass"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1763828267006" ID="ID_266553263" MODIFIED="1763854259112" TEXT="hilfsweise(derzeit): Charakterisierung der preview-Releases">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <i>alle diese Preview-Releases</i>&#160;wurden bisher bedingt durch &#196;nderungen im Kontext, wie z.B. der Umstand, da&#223; ich allein die Z&#252;gel tats&#228;chlich &#252;bernommen habe, oder der Upgrade auf eine neue Refernz-Plattform und h&#246;here Sprachstandards. Zwar wollte ich das immer, aber es ist mir nie gelungen, diese Releases auch mit Erreichen eines Meilensteins zu koppeln. Zudem haben wir noch keinen der gro&#223;en Meilensteine erreicht.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#326c6b" CREATED="1763828480296" ID="ID_1858530934" MODIFIED="1763854280445" TEXT="ganz unten: ein Statemendt zu den Wurzeln des Lumiera-Projekts"/>
+<node COLOR="#304c03" CREATED="1763828501853" ID="ID_633988881" MODIFIED="1763854763276">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      NEWS sollte neben einem Datum auch die <b>Versionsnummer</b>&#160;tragen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1763828549855" ID="ID_1372469186" MODIFIED="1763854770485" TEXT="Header-Feld definieren"/>
+<node COLOR="#435e98" CREATED="1763828556872" ID="ID_1449054144" MODIFIED="1763854770488" TEXT="Skript f&#xfc;r automatisches Update erg&#xe4;nzen"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1763770416491" ID="ID_473314528" MODIFIED="1763770591726" TEXT="Autoren- und Lizenzinformation nochmal gr&#xfc;ndlich &#xfc;berpr&#xfc;fen">
 <arrowlink COLOR="#a464b9" DESTINATION="ID_1682124476" ENDARROW="Default" ENDINCLINATION="233;-2422;" ID="Arrow_ID_1163398028" STARTARROW="None" STARTINCLINATION="774;35;"/>
