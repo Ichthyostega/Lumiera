@@ -3,43 +3,37 @@ Lumiera Authors and Credits
 :Date: 11/2025
 
 
-|==========================================
-|*Architecture*    |
-|                  | HERMANN VOSSELER
-|                  | CHRISTIAN THÄTER
-|                  | JOEL HOLDSWORTH
+Architecture::
+- Hermann Voßeler
+- Christian Thäter
+- Joel Holdsworth
 
-|*Workflow Concept*|
-|                  | HERMANN VOSSELER
-|                  | WOUTER VERWIJLEN
-|                  | CHRISTOPH VARGA
-|                  | BRIAN RYTEL
-|                  | CLAY BARNES
+Workflow Concept::
+- Hermann Voßeler
+- Wouter Verwijlen
+- Christoph Varga
+- Brian Rytel
+- Clay Barnes
 
 
-|                  |
-|                  |
-|*Core Developers* |
-|                  | HERMANN VOSSELER
-|                  | JOEL HOLDSWORTH
-|                  | CHRISTIAN THÄTER
-|*Programming*     |
-|                  | MICHAEL PLOUJNIKOV
-|                  | STEFAN KANGAS
-|                  | MICHAEL FISHER
-|                  | SIMEON VÖLKEL
+Core Developers::
+- Hermann Voßeler
+- Joel Holdsworth
+- Christian Thäter
+Programming::
+- Michael Ploujnikov
+- Stefan Kangas
+- Michael Fisher
+- Simeon Völkel
 
-|                  |
-|                  |
-|*Documentation*   |
-|                  | HERMANN VOSSELER
-|                  | CHRISTIAN THÄTER
-|                  | ODIN HØRTHE OMDAL
-|                  | SIMEON VÖLKEL
-|                  | MANO STIENEN
-|                  | HENDRIK BOOM
-|                  | BENNY LYONS
-|==========================================
+Documentation::
+- Hermann Vosseler
+- Christian Thäter
+- Odin Hørthe Omdal
+- Simeon Völkel
+- Mano Stienen
+- Hendrik Boom
+- Benny Lyons
 
 
 
@@ -61,7 +55,7 @@ The Lumiera project feels especially obliged to::
 
 Further Credits
 ---------------
-- inspirations and some UI components were taken from http://Ardour.org[Ardour]
+- inspirations and some UI components were taken from https://ardour.org/[Ardour]
 
 - https://github.com/x42/xjadeo[xjadeo] by Robin Gareus was very helpful
   for learning how to output raw video from a desktop application

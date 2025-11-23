@@ -169932,9 +169932,9 @@ that situation will improve in forseeable future.</pre>
 <arrowlink COLOR="#af497b" DESTINATION="ID_1667125104" ENDARROW="Default" ENDINCLINATION="-428;-45;" ID="Arrow_ID_1142158265" STARTARROW="None" STARTINCLINATION="-539;63;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1763769642111" ID="ID_1051001254" MODIFIED="1763769863349" TEXT="README &#x2014; NEWS(Changelog) &#x2014; AUTHORS &#x2014; LICENSE">
-<linktarget COLOR="#ca1e4c" DESTINATION="ID_1051001254" ENDARROW="Default" ENDINCLINATION="-2411;128;" ID="Arrow_ID_465720111" SOURCE="ID_520590054" STARTARROW="None" STARTINCLINATION="-418;-611;"/>
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1763769642111" ID="ID_1051001254" MODIFIED="1763860544198" TEXT="README &#x2014; NEWS(Changelog) &#x2014; AUTHORS &#x2014; LICENSE">
+<linktarget COLOR="#199f6d" DESTINATION="ID_1051001254" ENDARROW="Default" ENDINCLINATION="-2411;128;" ID="Arrow_ID_465720111" SOURCE="ID_520590054" STARTARROW="None" STARTINCLINATION="-418;-611;"/>
+<icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1763770333709" ID="ID_1395262738" MODIFIED="1763771074500" TEXT="Readme sollte knapper sein">
 <icon BUILTIN="yes"/>
 <node COLOR="#435e98" CREATED="1763770656376" ID="ID_1677999521" MODIFIED="1763770849586" TEXT="Einleitungstext leicht gestrafft">
@@ -170022,11 +170022,30 @@ that situation will improve in forseeable future.</pre>
 <node COLOR="#435e98" CREATED="1763828556872" ID="ID_1449054144" MODIFIED="1763854770488" TEXT="Skript f&#xfc;r automatisches Update erg&#xe4;nzen"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1763770416491" ID="ID_473314528" MODIFIED="1763770591726" TEXT="Autoren- und Lizenzinformation nochmal gr&#xfc;ndlich &#xfc;berpr&#xfc;fen">
-<arrowlink COLOR="#a464b9" DESTINATION="ID_1682124476" ENDARROW="Default" ENDINCLINATION="233;-2422;" ID="Arrow_ID_1163398028" STARTARROW="None" STARTINCLINATION="774;35;"/>
+<node COLOR="#18727a" CREATED="1763770416491" ID="ID_473314528" MODIFIED="1763860506653" TEXT="Autoren- und Lizenzinformation nochmal gr&#xfc;ndlich &#xfc;berpr&#xfc;fen">
+<arrowlink COLOR="#648db9" DESTINATION="ID_1682124476" ENDARROW="Default" ENDINCLINATION="233;-2422;" ID="Arrow_ID_1163398028" STARTARROW="None" STARTINCLINATION="774;35;"/>
 <arrowlink COLOR="#0db4af" DESTINATION="ID_1146586233" ENDARROW="Default" ENDINCLINATION="-928;54;" ID="Arrow_ID_730657766" STARTARROW="None" STARTINCLINATION="-346;0;"/>
-<icon BUILTIN="pencil"/>
-<node COLOR="#435e98" CREATED="1763771090001" ID="ID_1032564000" MODIFIED="1763771111728" TEXT="AUTHORS jetzt gestrafft und besser fokussiert"/>
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1763771090001" FOLDED="true" ID="ID_1032564000" MODIFIED="1763860453329" TEXT="AUTHORS jetzt gestrafft und besser fokussiert">
+<node CREATED="1763860416125" ID="ID_1265113961" MODIFIED="1763860451003" TEXT="bei der Gelegenheit die Tabelle in eine Liste umgewandelt">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+<node CREATED="1763860432005" ID="ID_1668297952" MODIFIED="1763860451006" TEXT="und alle Authoren in Upper/Lowercase">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+</node>
+<node COLOR="#4a4398" CREATED="1763860161459" HGAP="34" ID="ID_156302972" MODIFIED="1763860414548" TEXT="Lizenz: die Dual-Lizenz lautet jetzt auf CC By SA 4.0" VSHIFT="-22">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Das hab ich neulich schon im Rahmen der Website &#252;berlegt und so beschlossen; ich kann das Aggregat re-lizensieren unter einer kompatiblen Lizenz (eigentlich k&#246;nnte man das auch f&#252;r GPL2+ &#10230; GPL3+ so machen). Auch Stackoverfow hat seine Lizenz f&#252;r &#187;Subscriber Content&#171; auf CC-By-SA 4.0 gehoben
+    </p>
+  </body>
+</html></richcontent>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1751808937037" ID="ID_169754287" MODIFIED="1751808945616" TEXT="Debian / DEB-Paket">
@@ -181267,8 +181286,8 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="flag-pink"/>
 </node>
 <node CREATED="1763168982818" ID="ID_1121026746" MODIFIED="1763168997368" TEXT="Paket-Dokumente">
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1763170279597" ID="ID_520590054" MODIFIED="1763769863348" TEXT="sollte handgeschriebenes Changelog in NEWS pflegen">
-<arrowlink COLOR="#ca1e4c" DESTINATION="ID_1051001254" ENDARROW="Default" ENDINCLINATION="-2411;128;" ID="Arrow_ID_465720111" STARTARROW="None" STARTINCLINATION="-418;-611;"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1763170279597" ID="ID_520590054" MODIFIED="1763860564468" TEXT="sollte handgeschriebenes Changelog in NEWS pflegen">
+<arrowlink COLOR="#199f6d" DESTINATION="ID_1051001254" ENDARROW="Default" ENDINCLINATION="-2411;128;" ID="Arrow_ID_465720111" STARTARROW="None" STARTINCLINATION="-418;-611;"/>
 <linktarget COLOR="#c90514" DESTINATION="ID_520590054" ENDARROW="Default" ENDINCLINATION="370;18;" ID="Arrow_ID_1493343123" SOURCE="ID_1498381529" STARTARROW="None" STARTINCLINATION="26;165;"/>
 <icon BUILTIN="pencil"/>
 </node>
@@ -181674,7 +181693,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1763174829050" ID="ID_1682124476" MODIFIED="1763174842812" TEXT="Also: Copyright-Zeitspannen identifizieren">
-<linktarget COLOR="#a464b9" DESTINATION="ID_1682124476" ENDARROW="Default" ENDINCLINATION="233;-2422;" ID="Arrow_ID_1163398028" SOURCE="ID_473314528" STARTARROW="None" STARTINCLINATION="774;35;"/>
+<linktarget COLOR="#648db9" DESTINATION="ID_1682124476" ENDARROW="Default" ENDINCLINATION="233;-2422;" ID="Arrow_ID_1163398028" SOURCE="ID_473314528" STARTARROW="None" STARTINCLINATION="774;35;"/>
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1763174844808" ID="ID_1962494634" MODIFIED="1763174847240" TEXT="Cehteh"/>
 <node CREATED="1763174847959" ID="ID_1148429062" MODIFIED="1763174852841" TEXT="Joel Holdsworth"/>

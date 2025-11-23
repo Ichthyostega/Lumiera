@@ -31,8 +31,8 @@ the Render Engine, but the connection to the player and UI for output
 is yet unfinished.
 
 As of _11/2015_ (0.pre.03)::
-A lot of long standing maintenance work has been done. The Project upgraded
-to C++11 and in the end even to C++14 and Debian/Jessie as reference platform,
+A lot of long standing maintenance work has been done.
+The Project upgraded to C++14 and Debian/Jessie as reference platform,
 followed by clean-up of workarounds now obsoleted. On the GUI side, we largely
 made the transition to GTK-3, which leads to a rework of our timeline widget,
 which is in progress but not finished yet. This work also spurred an effort
