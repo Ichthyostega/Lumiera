@@ -160419,6 +160419,186 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 <node CREATED="1746546915150" ID="ID_138512802" LINK="https://en.wikipedia.org/wiki/List_of_free_and_open-source_software_packages#Video_editing" MODIFIED="1746546953470" TEXT="List of Free Video Editing Software (Wikipedia)"/>
 </node>
+<node CREATED="1763919279875" ID="ID_139746969" MODIFIED="1763919286303" TEXT="Rechtliche Fragen">
+<node CREATED="1763919291136" ID="ID_1517453499" MODIFIED="1763919295187" TEXT="Anforderungen der GPL">
+<node CREATED="1763919296823" ID="ID_743997801" MODIFIED="1763919303971" TEXT="f&#xfc;r Weitergabe einer Kopie">
+<node CREATED="1763919417814" ID="ID_477682985" MODIFIED="1763919428049" TEXT="sichtbar/prominent an jeder Kopie"/>
+<node CREATED="1763919428639" ID="ID_1427003386" MODIFIED="1763919455246" TEXT="einen angemessenen Copyright-Claim anbringen oder reproduzieren"/>
+<node CREATED="1763919456097" ID="ID_1864972268" MODIFIED="1763919482993" TEXT="dazu ein Statement da&#xdf; das Werk unter der Lizenz steht"/>
+<node CREATED="1763919555980" ID="ID_1803069855" MODIFIED="1763919574013" TEXT="einen Disclaimer of Warranty (oder entsprechende Garantieregelung)"/>
+<node CREATED="1763919574831" ID="ID_213264307" MODIFIED="1763919579651" TEXT="eine Koopie der Lizenz"/>
+</node>
+<node CREATED="1763919305082" ID="ID_1211615" MODIFIED="1763919314902" TEXT="f&#xfc;r ein abgeleitetes Werk">
+<node CREATED="1763919316458" ID="ID_161737125" MODIFIED="1763919323103" TEXT="in Quellform">
+<node CREATED="1763919586417" ID="ID_1847893952" MODIFIED="1763919594551" TEXT="sichtbar/prominent anbringen..."/>
+<node CREATED="1763919595283" ID="ID_935286276" MODIFIED="1763919608959" TEXT="ein Statement da&#xdf;/wann das Werk von wem ge&#xe4;ndert wurde"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1763919754992" ID="ID_356793787" MODIFIED="1763919865700" TEXT="auch die Hinzuf&#xfc;gungen m&#xfc;ssen unter die Lizenz fallen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das ist der <b>virale Mechanismus</b>.
+    </p>
+    <p>
+      Er gilt nicht f&#252;r die Hinzuf&#252;gungen allein, denn diese k&#246;nnen auch sonstwie unter beliebigen Bedingungen lizenziert werden (das hei&#223;t, man verliert nicht sein Copyright an <i>seinem eigenen Werk,</i>&#160;aber man erwirbt auch keine Rechte <i>an den Werken andere Leute, jenseits dieser LIzenz</i>)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1763919867361" ID="ID_43912250" MODIFIED="1763919886013" TEXT="die entsprechenden Markierungen / Erfordernisse f&#xfc;r Weitergabe einer Kopie"/>
+</node>
+<node CREATED="1763919326722" ID="ID_1691982810" MODIFIED="1763919380383" TEXT="als Binary">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...schlie&#223;t den Fall ein da&#223; man lediglich ein Compilat bereitstellt (auch das gilt als abgeleitetes Werk)
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1763919888158" ID="ID_1153339279" MODIFIED="1763920003543" TEXT="die gleichen Pflichten wie f&#xfc;r die Quellform">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      im Besonderen: klarstellen da&#223; das Werk unter diese Lizenz f&#228;llt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1763919901141" ID="ID_1036975527" MODIFIED="1763920171243" TEXT="dazu ein Zugang zum vollst&#xe4;ndigen Quellcode">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Hier gibt es diverse Varianten in der Lizenz, denn die Software kann auch Teil eines Produktes sein, sogar Teil einer Hardware. In diesem Fall mu&#223; ein Service f&#252;r mindestens 3 Jahre geboten werden (oder so lange wie man Wartung und Reparatur bietet), &#252;ber den man erfahren kann, wie man an den Quellcode kommt. Der Quellcode kann auch duch jemand Anderes bereitgestellt werden, aber man selber hat sicherzustellen, da&#223; dies der Fall ist, solange man das Produkt anbietet oder wartet
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1763920184145" ID="ID_4732711" MODIFIED="1763922617436" TEXT="Wie kann man das erf&#xfc;llen?">
+<linktarget COLOR="#352fea" DESTINATION="ID_4732711" ENDARROW="Default" ENDINCLINATION="-3903;394;" ID="Arrow_ID_1968317517" SOURCE="ID_1115428272" STARTARROW="None" STARTINCLINATION="-354;-52;"/>
+<node CREATED="1763920204922" ID="ID_1645512127" MODIFIED="1763920295722" TEXT="ein Gesamt-Copyright + Lizenz ersetzt einzel-Statements pro File">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Aber die Einzel-Statements sind wichtig f&#252;r den Fall, da&#223; jemand einzelne Files aus der Distribution herausnimmt und separat weiterverbreitet. Solange die Files in der Gesamtdistribution bleiben, gen&#252;gt ein einziges zentrales Lizenz-Statement, das jedoch <b>mit allen Einzel-Lizenzen kompatibel sein mu&#223;</b>.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1763920300041" ID="ID_725381684" MODIFIED="1763920491470" TEXT="Erl&#xe4;uterung: der Copyright-Claim verankert die Lizenz und ist mindestens einmal notwendig">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Der Copyright-Claim weist auf das Urheberrecht hin, das man gem&#228;&#223; Konvention von Bern automatisch erlangt, f&#252;r typischerweise 70Jahre nach dem Tod. Dieses Recht bildet das Fundament, warum der Code &#252;berhaupt unter eine Lizenz fallen kann. Deshalb mu&#223; <b>mindestens ein tragf&#228;hriger Copyritght-Claim</b>&#160;gegeben sein
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1763920689932" ID="ID_1947946176" MODIFIED="1763920712577" TEXT="signifikante Modifikationen m&#xfc;ssen in jeder Form nachvollziehbar sein">
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#dfd876" COLOR="#961b30" CREATED="1763920714359" ID="ID_49767322" MODIFIED="1763920756841" TEXT="eine Git-Commit-Historie allein gen&#xfc;gt nicht">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1763921548687" ID="ID_1132293498" MODIFIED="1763921567431" TEXT="daran denken: Quellcode kann jenseits von Git verbreitet werden"/>
+<node CREATED="1763921568264" ID="ID_664221358" MODIFIED="1763921778664" TEXT="und wer einen Tarball von irgendwo bekommt, mu&#xdf; wissen woran er ist">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Diese Regelung zielt erkenntlich auf die &#187;industriselle Praxis&#171;: dort ist den Leuten alles egal,&#160;&#160;wof&#252;r sie nicht bezahlt und wozu sie nicht gepr&#252;gelt wurden. Da bekommt man dann (ist mir selbst oft genug passiert) irdend ein Zip-File hingerotzt, und wei&#223; nicht einmal, ob das Executable, das auf dem Server installiert wurde, wirklich aus diesem Quellcode stammt. Die GPL bietet in diesem Fall einen zus&#228;tzlichen Hebel, nicht zuletzt auch um die Reputation einer Quelle aus FreeSoftware zu sch&#252;tzen.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1763921788138" ID="ID_369987446" MODIFIED="1763921799540" TEXT="Stackoverflow-Fragen zum Thema">
+<icon BUILTIN="info"/>
+<node CREATED="1763921816427" ID="ID_1203623532" LINK="https://opensource.stackexchange.com/questions/7711/is-a-git-repository-enough-to-show-changes-to-the-code-for-gnu-gplv3" MODIFIED="1763921840207" TEXT="Is a git repository enough to show changes"/>
+<node CREATED="1763921856697" ID="ID_1174834006" LINK="Required works to put existing GPLv3 source code on GitHub" MODIFIED="1763921866205" TEXT="Required works to put existing GPLv3 source code on GitHub"/>
+</node>
+<node CREATED="1763920772399" ID="ID_415279031" MODIFIED="1763920804814" TEXT="&#xfc;bliche Praxis: das Git-Repo explizit vom Lizenzstatement referenzieren"/>
+<node CREATED="1763921489280" ID="ID_324978230" MODIFIED="1763921519832" TEXT="es gen&#xfc;gt der Hinweis, da&#xdf;, wann und von wem grunds&#xe4;tzlich modifiziert wurde"/>
+<node CREATED="1763921522835" ID="ID_370492830" MODIFIED="1763921543457" TEXT="typischerweise ist das bereits durch Erg&#xe4;nzen der Copyrights im File-Header erf&#xfc;llt"/>
+<node CREATED="1763921902655" ID="ID_1497600879" MODIFIED="1763921930812" TEXT="ein summarisches Changelog wird empfohlen + summarische Copyright-Spannen"/>
+<node CREATED="1763921936427" ID="ID_1169423451" MODIFIED="1763922063228" TEXT="es geht hier ums Prinzip, nicht die Details">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Man mu&#223; jederzeit erkennen k&#246;nnen...
+    </p>
+    <ul>
+      <li>
+        auf welchem Ursprungsrecht (Copyright-Claim) die Lizenz fu&#223;t
+      </li>
+      <li>
+        welche Lizenz nun effektiv g&#252;ltig ist
+      </li>
+      <li>
+        wer sonst noch &#196;nderungen vorgenommen hat und damit Copyright haben k&#246;nnte
+      </li>
+      <li>
+        Datum der &#196;nderungen summarisch (&#10233; verl&#228;ngert G&#252;ltigkeit der LIzenz 70Jahre nach dem Tod)
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#a0010a" CREATED="1763922633283" ID="ID_1035598004" MODIFIED="1763922650482" TEXT="was droht bei Nichtbeachtung?">
+<icon BUILTIN="help"/>
+<node CREATED="1763922659233" ID="ID_1108909843" MODIFIED="1763923240313" TEXT="man verliert den Schutz durch die Lizenz">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Jede Verletzung einer Pflicht terminiert die Lizenz, zun&#228;chst vorl&#228;ufig. Allerdings handelt es sich um Vertragsrecht, und desshalb m&#252;&#223;te die Aktion von einem Upstream-Rechteinhaber ausgehen...
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1763922834276" ID="ID_910180711" MODIFIED="1763922842169" TEXT="GPL-3 hat spezielle Terminierungs-Regeln"/>
+<node CREATED="1763922843168" ID="ID_1176749773" MODIFIED="1763923154343" TEXT="man kann im Besonderen die Terminierung heilen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Vorrausseztung ist, da&#223; man schnellstm&#246;glich die Vers&#228;umnisse nachholt (in weniger als 30 Tagen nach Bekanntwerden des Mi&#223;standes). Dennoch k&#246;nnen binnen 60 Tagen nach dem Start des Heilversuchs beliebige Upstream-Copyright-Holder ihre Lizenz terminieren und haben dann allerdings nur ihren eigenen Anteil am Werk als Hebel zur Verf&#252;gung. Sofern sie dies nicht (binnen 60 Tagen) von sich aus tun, wird die Lizenz durch den Heilungsversuch automatisch wiederhergestellt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1763922853324" ID="ID_1823790293" MODIFIED="1763922938172" TEXT="&#xbb;downstream&#xab;-user verlieren dadurch nicht ihre Lizenz">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      selbst wenn ich Fehler mache, und dadurch meine Lizenz verliere, k&#246;nnen die Copyright-Holder sich <i>nur bei mir bedienen</i>, aber nicht weitere User in die Pflicht nehmen, die ihre Lizenz durch mich erlangt haben, solange sie im Glauben waren, diese Lizenz sei g&#252;ltig.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1763922683725" ID="ID_864410196" MODIFIED="1763922702845" TEXT="Copyright-Holder k&#xf6;nnen daraufhin beliebige Lizenzbedingungen diktieren"/>
+<node CREATED="1763922704958" ID="ID_913677621" MODIFIED="1763922810287" TEXT="Jeder Zwischennutzer und Contributor kann daraufhin Patent-Claims geltend machen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das gilt nur f&#252;r die GPL-3 und auch nur f&#252;r Patent-Claims, die ein Nutzer oder Contributor geltend machen k&#246;nnte; die Lizenz sch&#252;tzt im Besonderen nicht vor Patent-Claims Dritter
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1522933281517" HGAP="79" ID="ID_1743316782" MODIFIED="1557498707241" POSITION="left" TEXT="Entwicklung" VSHIFT="-6">
@@ -169932,7 +170112,7 @@ that situation will improve in forseeable future.</pre>
 <arrowlink COLOR="#af497b" DESTINATION="ID_1667125104" ENDARROW="Default" ENDINCLINATION="-428;-45;" ID="Arrow_ID_1142158265" STARTARROW="None" STARTINCLINATION="-539;63;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node COLOR="#338800" CREATED="1763769642111" ID="ID_1051001254" MODIFIED="1763860544198" TEXT="README &#x2014; NEWS(Changelog) &#x2014; AUTHORS &#x2014; LICENSE">
+<node COLOR="#338800" CREATED="1763769642111" FOLDED="true" ID="ID_1051001254" MODIFIED="1763938199831" TEXT="README &#x2014; NEWS(Changelog) &#x2014; AUTHORS &#x2014; LICENSE">
 <linktarget COLOR="#199f6d" DESTINATION="ID_1051001254" ENDARROW="Default" ENDINCLINATION="-2411;128;" ID="Arrow_ID_465720111" SOURCE="ID_520590054" STARTARROW="None" STARTINCLINATION="-418;-611;"/>
 <icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1763770333709" ID="ID_1395262738" MODIFIED="1763771074500" TEXT="Readme sollte knapper sein">
@@ -170036,9 +170216,7 @@ that situation will improve in forseeable future.</pre>
 </node>
 <node COLOR="#4a4398" CREATED="1763860161459" HGAP="34" ID="ID_156302972" MODIFIED="1763860414548" TEXT="Lizenz: die Dual-Lizenz lautet jetzt auf CC By SA 4.0" VSHIFT="-22">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Das hab ich neulich schon im Rahmen der Website &#252;berlegt und so beschlossen; ich kann das Aggregat re-lizensieren unter einer kompatiblen Lizenz (eigentlich k&#246;nnte man das auch f&#252;r GPL2+ &#10230; GPL3+ so machen). Auch Stackoverfow hat seine Lizenz f&#252;r &#187;Subscriber Content&#171; auf CC-By-SA 4.0 gehoben
@@ -171700,7 +171878,8 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="info"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1763245245613" ID="ID_525244825" MODIFIED="1763245734318" TEXT="Python verpflichtend auf 3.0 heben">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1763245245613" ID="ID_525244825" MODIFIED="1763940646058" TEXT="Python verpflichtend auf 3.0 heben">
+<arrowlink COLOR="#e1253b" DESTINATION="ID_1681367379" ENDARROW="Default" ENDINCLINATION="-773;-68;" ID="Arrow_ID_835035037" STARTARROW="None" STARTINCLINATION="-19;733;"/>
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1763245607991" ID="ID_1509658805" MODIFIED="1763245615611" TEXT="3.5 ist bereits out-of-life"/>
 <node CREATED="1763245616716" ID="ID_1414068970" MODIFIED="1763245624301" TEXT="3.10 w&#xe4;re derzeit ein gutes LTS"/>
@@ -178239,6 +178418,10 @@ Since then others have made contributions, see the log for the history.</font></
 </html></richcontent>
 </node>
 </node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1763940534858" ID="ID_1681367379" MODIFIED="1763940646059" TEXT="Python 3.10 nun verpflichtend">
+<linktarget COLOR="#e1253b" DESTINATION="ID_1681367379" ENDARROW="Default" ENDINCLINATION="-773;-68;" ID="Arrow_ID_835035037" SOURCE="ID_525244825" STARTARROW="None" STARTINCLINATION="-19;733;"/>
+<icon BUILTIN="flag-pink"/>
+</node>
 </node>
 <node CREATED="1544239177727" HGAP="90" ID="ID_1414932362" MODIFIED="1763514226786" TEXT="Probleme..." VSHIFT="3">
 <icon BUILTIN="go"/>
@@ -179902,10 +180085,34 @@ Since then others have made contributions, see the log for the history.</font></
   </body>
 </html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1478387336953" ID="ID_1320541285" MODIFIED="1557498707243" TEXT="debian/copyright">
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1478387345624" ID="ID_666713431" MODIFIED="1557498707243" TEXT="sollte alle Copyright-statements korrekt zusammenfassen"/>
+<node COLOR="#338800" CREATED="1478387336953" ID="ID_1320541285" MODIFIED="1763930103462" TEXT="debian/copyright">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1478387345624" ID="ID_666713431" MODIFIED="1763861305055" TEXT="sollte alle Copyright-statements korrekt zusammenfassen">
+<arrowlink COLOR="#e2f6bd" DESTINATION="ID_669175024" ENDARROW="Default" ENDINCLINATION="413;-58;" ID="Arrow_ID_477346308" STARTARROW="None" STARTINCLINATION="1132;58;"/>
+</node>
 <node CREATED="1478387362709" ID="ID_1001009846" LINK="#ID_202736659" MODIFIED="1742593360733" TEXT="siehe Debian-Policy"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1763922148929" ID="ID_1115428272" MODIFIED="1763922617436" TEXT="rechtliche Hinweise">
+<arrowlink COLOR="#352fea" DESTINATION="ID_4732711" ENDARROW="Default" ENDINCLINATION="-3903;394;" ID="Arrow_ID_1968317517" STARTARROW="None" STARTINCLINATION="-354;-52;"/>
+<icon BUILTIN="info"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1763922179365" ID="ID_1139127904" MODIFIED="1763922203882" TEXT="Ziel und Zweck beachten">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1763922208078" ID="ID_1254145508" MODIFIED="1763922456699" TEXT="meine Auslegung in der Praxis">
+<icon BUILTIN="back"/>
+<node CREATED="1763922221143" ID="ID_1811822658" MODIFIED="1763922232310" TEXT="jedes File tr&#xe4;gt einen Copyright-Claim im Header"/>
+<node CREATED="1763922233350" ID="ID_463173328" MODIFIED="1763922263065" TEXT="f&#xfc;r jede signifikante Modifikation wird diese Copyright-Liste erg&#xe4;nzt"/>
+<node CREATED="1763922265286" ID="ID_1544365219" MODIFIED="1763922292015" TEXT="zus&#xe4;tzlich gibt es ein Lizenz-Statement f&#xfc;r das ganze Paket">
+<node CREATED="1763922300394" ID="ID_565074766" MODIFIED="1763922315117" TEXT="als LICENSE-File im Baum"/>
+<node CREATED="1763922316005" ID="ID_774845430" MODIFIED="1763922323012" TEXT="auf der Website"/>
+</node>
+<node CREATED="1763922393679" ID="ID_1952648867" MODIFIED="1763922444581" TEXT="das globale Lizenz-Statement bindet weitere Infos ein">
+<node CREATED="1763922409638" ID="ID_1974671610" MODIFIED="1763922414143" TEXT="die Liste der Authoren"/>
+<node CREATED="1763922415089" ID="ID_1172472169" MODIFIED="1763922422904" TEXT="eine summarische Copyright-Liste"/>
+<node CREATED="1763922428659" ID="ID_1834276963" MODIFIED="1763922435411" TEXT="ein Verweis auf das Git-Repo"/>
+</node>
 </node>
 </node>
 <node CREATED="1742399973412" ID="ID_71454243" MODIFIED="1742399987862" TEXT="Zusatz-Pakete">
@@ -181276,20 +181483,20 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1763258386817" ID="ID_1806102500" MODIFIED="1763258395340" TEXT="ist nachvollziehbar"/>
 <node CREATED="1763258396148" ID="ID_1498381529" MODIFIED="1763593044611" TEXT="debian/doc-base.lumiera ist unvollst&#xe4;ndig">
-<arrowlink COLOR="#c90514" DESTINATION="ID_520590054" ENDARROW="Default" ENDINCLINATION="370;18;" ID="Arrow_ID_1493343123" STARTARROW="None" STARTINCLINATION="26;165;"/>
+<arrowlink COLOR="#052cc9" DESTINATION="ID_520590054" ENDARROW="Default" ENDINCLINATION="370;18;" ID="Arrow_ID_1493343123" STARTARROW="None" STARTINCLINATION="26;165;"/>
 <arrowlink COLOR="#5e1efd" DESTINATION="ID_1899535258" ENDARROW="Default" ENDINCLINATION="340;15;" ID="Arrow_ID_532117098" STARTARROW="None" STARTINCLINATION="58;124;"/>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1763169004238" ID="ID_1903406898" MODIFIED="1763769956568" TEXT="copyright-File im neuen Format">
+<node COLOR="#338800" CREATED="1763169004238" ID="ID_1903406898" LINK="#ID_301822628" MODIFIED="1763938235690" TEXT="copyright-File im neuen Format">
 <arrowlink COLOR="#7e2e43" DESTINATION="ID_791117820" ENDARROW="Default" ENDINCLINATION="-157;-17;" ID="Arrow_ID_1399617171" STARTARROW="None" STARTINCLINATION="723;58;"/>
-<icon BUILTIN="flag-pink"/>
+<icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1763168982818" ID="ID_1121026746" MODIFIED="1763168997368" TEXT="Paket-Dokumente">
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1763170279597" ID="ID_520590054" MODIFIED="1763860564468" TEXT="sollte handgeschriebenes Changelog in NEWS pflegen">
+<node COLOR="#338800" CREATED="1763170279597" ID="ID_520590054" MODIFIED="1763861141458" TEXT="sollte handgeschriebenes Changelog in NEWS pflegen">
 <arrowlink COLOR="#199f6d" DESTINATION="ID_1051001254" ENDARROW="Default" ENDINCLINATION="-2411;128;" ID="Arrow_ID_465720111" STARTARROW="None" STARTINCLINATION="-418;-611;"/>
-<linktarget COLOR="#c90514" DESTINATION="ID_520590054" ENDARROW="Default" ENDINCLINATION="370;18;" ID="Arrow_ID_1493343123" SOURCE="ID_1498381529" STARTARROW="None" STARTINCLINATION="26;165;"/>
-<icon BUILTIN="pencil"/>
+<linktarget COLOR="#052cc9" DESTINATION="ID_520590054" ENDARROW="Default" ENDINCLINATION="370;18;" ID="Arrow_ID_1493343123" SOURCE="ID_1498381529" STARTARROW="None" STARTINCLINATION="26;165;"/>
+<icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1763170354467" ID="ID_94538506" MODIFIED="1763170366748" TEXT="README k&#xf6;nnte man aus dem Paket weglassen"/>
 <node CREATED="1763226959818" ID="ID_1117448176" MODIFIED="1763226982802" TEXT="README.debian erg&#xe4;nzen">
@@ -181655,7 +181862,8 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node CREATED="1763170522531" ID="ID_301822628" MODIFIED="1763170529943" TEXT="debian/copyright">
+<node COLOR="#338800" CREATED="1763170522531" FOLDED="true" ID="ID_301822628" MODIFIED="1763938206301" TEXT="debian/copyright">
+<icon BUILTIN="yes"/>
 <node CREATED="1763170532211" ID="ID_479802280" MODIFIED="1763170545485" TEXT="das wird installiert als /usr/share/doc/lumiera/copyright"/>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1763170547560" ID="ID_385815750" MODIFIED="1763170552918" TEXT="mandatory">
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
@@ -181665,7 +181873,7 @@ Since then others have made contributions, see the log for the history.</font></
 <node CREATED="1763170650200" ID="ID_122226375" MODIFIED="1763170887948" TEXT="man kann auf /usr/share/common-licenses verweisen">
 <icon BUILTIN="idea"/>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1763170554412" ID="ID_1915310617" MODIFIED="1763227796201" TEXT="es gibt eine maschinenlesbare Variante &#x2014; sollen wir die verwenden?">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1763170554412" ID="ID_1915310617" MODIFIED="1763937864282" TEXT="es gibt eine maschinenlesbare Variante &#x2014; sollen wir die verwenden?">
 <icon BUILTIN="help"/>
 <node CREATED="1763173068727" ID="ID_1875951274" LINK="https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/" MODIFIED="1763173081081" TEXT="Spezifikation: Standard Format-1.0"/>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1763174706839" ID="ID_791117820" MODIFIED="1763227818290" TEXT="...ja ... das Format ist klarer">
@@ -181673,7 +181881,8 @@ Since then others have made contributions, see the log for the history.</font></
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 </node>
-<node CREATED="1763174718285" ID="ID_669175024" MODIFIED="1763174728604" TEXT="man kann Copyrights zusammenfassen">
+<node CREATED="1763174718285" ID="ID_669175024" MODIFIED="1763861295455" TEXT="man kann Copyrights zusammenfassen">
+<linktarget COLOR="#e2f6bd" DESTINATION="ID_669175024" ENDARROW="Default" ENDINCLINATION="413;-58;" ID="Arrow_ID_477346308" SOURCE="ID_666713431" STARTARROW="None" STARTINCLINATION="1132;58;"/>
 <icon BUILTIN="idea"/>
 <node CREATED="1763174755788" ID="ID_227170653" LINK="https://stackoverflow.com/a/24812633/444796" MODIFIED="1763174804161" TEXT="sagt dieser SO-Post">
 <richcontent TYPE="NOTE"><html>
@@ -181691,15 +181900,116 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="smiley-angry"/>
 </node>
 </node>
+<node CREATED="1763916982481" ID="ID_1199688722" MODIFIED="1763917164397" TEXT="Copyright + Lizenz f&#xfc;r das Paket angeben">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das ist expizit erlaubt und stellt ein Statement f&#252;r die Codebasis als Sammel-Ver&#246;ffentlichung dar; diese Angabe ersetzt nicht die Angaben f&#252;r die Files, aber stellt eine (damit zwingend kompatible) Ver&#246;ffentlichung eines Sammelwerks dar, welches damit ein vereinfachtes Handle bietet f&#252;r die Weiterverbreitung (und insofern dann zumindest die Einzel-Lizenzen &#252;berlagert). Bez&#252;glich der Attributierung ist die GPL ja nicht so streng wie die CC oder Apache
+    </p>
+  </body>
+</html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1763174829050" ID="ID_1682124476" MODIFIED="1763174842812" TEXT="Also: Copyright-Zeitspannen identifizieren">
+</node>
+<node COLOR="#338800" CREATED="1763174829050" ID="ID_1682124476" MODIFIED="1763937845212" TEXT="Also: Copyright-Zeitspannen identifizieren">
 <linktarget COLOR="#648db9" DESTINATION="ID_1682124476" ENDARROW="Default" ENDINCLINATION="233;-2422;" ID="Arrow_ID_1163398028" SOURCE="ID_473314528" STARTARROW="None" STARTINCLINATION="774;35;"/>
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1763174844808" ID="ID_1962494634" MODIFIED="1763174847240" TEXT="Cehteh"/>
-<node CREATED="1763174847959" ID="ID_1148429062" MODIFIED="1763174852841" TEXT="Joel Holdsworth"/>
-<node CREATED="1763174859825" ID="ID_1738382764" MODIFIED="1763174862463" TEXT="Plouj"/>
-<node CREATED="1763174863285" ID="ID_731676629" MODIFIED="1763174867272" TEXT="SKangas"/>
-<node CREATED="1763174868053" ID="ID_150146046" MODIFIED="1763174870706" TEXT="MFisher"/>
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#c58e6d" COLOR="#990033" CREATED="1763936472514" ID="ID_1163157448" MODIFIED="1763937856411" TEXT="wie?">
+<icon BUILTIN="help"/>
+<node CREATED="1763936510423" ID="ID_99948282" MODIFIED="1763936554352" TEXT="git log --format=&quot;\&quot;%an &lt;%ae&gt;\&quot;,%ad&quot; --date=short HEAD|sort -u &gt;autor.csv"/>
+<node CREATED="1763936520477" ID="ID_1320435438" MODIFIED="1763936528288" TEXT="in Libreoffice anschauen und weiter auswerten"/>
+</node>
+<node CREATED="1763174844808" ID="ID_1962494634" MODIFIED="1763174847240" TEXT="Cehteh">
+<node CREATED="1763936297619" ID="ID_269747442" MODIFIED="1763936313257" TEXT="Code-Beitr&#xe4;ge gehen eigentlich nur bis Anfang 2010"/>
+<node CREATED="1763936314201" ID="ID_513549528" MODIFIED="1763936339575" TEXT="aber 2011 war er noch sehr aktiv bei der Umstrukturierung der RfCs"/>
+<node CREATED="1763936340637" ID="ID_206361554" MODIFIED="1763936369027" TEXT="au&#xdf;erdem hat er auch immer noch an Shellscripts / Infrastruktur gearbeitet"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1763936370426" ID="ID_727145309" MODIFIED="1763936386798" TEXT="Kompromi&#xdf;: f&#xfc;hre ich als Autor bis 2011 auf">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1763174847959" ID="ID_1148429062" MODIFIED="1763174852841" TEXT="Joel Holdsworth">
+<node CREATED="1763936393339" ID="ID_677873427" MODIFIED="1763936400061" TEXT="interessanterweise nur 2008-2009"/>
+<node CREATED="1763936400800" ID="ID_129473760" MODIFIED="1763936454136" TEXT="das war mir so nicht klar">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...ist mir aber schon neulich aufgefallen, beim Aufbereiten der Daten f&#252;r die Historien-Seite. Joel war also noch gut 1 1/2 Jahre formal im Projekt mit dabei, und hat an Meetings teilgenommen, bis er sich offiziell verabschiedet hat
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1763174859825" ID="ID_1738382764" MODIFIED="1763174862463" TEXT="Plouj">
+<node CREATED="1763937880219" ID="ID_460761762" MODIFIED="1763937881937" TEXT="2007-2010"/>
+</node>
+<node CREATED="1763174863285" ID="ID_731676629" MODIFIED="1763174867272" TEXT="SKangas">
+<node CREATED="1763937889296" ID="ID_1266410157" MODIFIED="1763937890425" TEXT="2010-2011"/>
+</node>
+<node CREATED="1763174868053" ID="ID_150146046" MODIFIED="1763174870706" TEXT="MFisher">
+<node CREATED="1763937898590" ID="ID_547911641" MODIFIED="1763937899682" TEXT="2010-2012"/>
+</node>
+<node CREATED="1763937913129" ID="ID_342253790" MODIFIED="1763937914936" TEXT="2007-2008 Simeon V&#xf6;lkel"/>
+<node CREATED="1763937420239" ID="ID_135567082" MODIFIED="1763937442724" TEXT="Odin H&#xf8;rthe Omdal">
+<node CREATED="1763937453574" ID="ID_338789830" MODIFIED="1763937457347" TEXT="schwierig..."/>
+<node CREATED="1763937458102" ID="ID_1250859590" MODIFIED="1763937552338" TEXT="es gibt nur eine Code-contribution 2011">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das Alsa-Experiment, was unfertig ist und nur funktioniert wenn die Soundkarte zwei Kan&#228;le hat und 16 Bit erwartet (also bei mir funktioniert es schon mal nicht deshalb). Allerdings ist das Experiment bis heute im Code, als lumiera-output-probe.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1763937554057" ID="ID_1894911235" MODIFIED="1763937572489" TEXT="Nach dem Ma&#xdf;stab, den ich f&#xfc;r Anton Yakovlev angelegt habe..."/>
+<node CREATED="1763937573369" ID="ID_827611825" MODIFIED="1763937586236" TEXT="...sollte man Odin nur als Dokumentations-Author f&#xfc;hren"/>
+</node>
+<node CREATED="1763934469471" ID="ID_1332440666" MODIFIED="1763934476154" TEXT="Anton Yakovlev">
+<node CREATED="1763934477079" ID="ID_288198125" MODIFIED="1763934495612" TEXT="hat nur einmal in 2009 eine LIb-Impl. einer zyklischen linked-List beigetragen"/>
+<node CREATED="1763934496533" ID="ID_1898674582" MODIFIED="1763934506636" TEXT="diese wurde nie weiter verwendet"/>
+<node CREATED="1763934507618" ID="ID_732229093" MODIFIED="1763934521205" TEXT="und von mir 2023 mit der alten Thread-Handling-Impl zusammen entfernt"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1763936038740" ID="ID_1309040866" MODIFIED="1763936295908" TEXT="f&#xfc;hre ihn daher nicht als Code-Autor">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      In der aktuellen Codebasis ist kein Code von ihm (mehr) enthalten, und sein Code wurde nie verwendet. Sein Beitrag ist auf der &#187;Credits&#171; page gew&#252;rdigt, allerdings auch da nur unter &quot;IRC crew&quot;
+    </p>
+  </body>
+</html></richcontent>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1763935837795" ID="ID_18824675" MODIFIED="1763935841019" TEXT="Benny">
+<node CREATED="1763935842292" ID="ID_1518543228" MODIFIED="1763935858389" TEXT="hat WAHNSINNIG viel zu Texten auf der Website beigetragen"/>
+<node CREATED="1763935859264" ID="ID_1192765040" MODIFIED="1763935885089" TEXT="aber einzige Code-contribution: ein python2-&gt;3 Fix am Buildsystem"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1763935886205" ID="ID_827561971" MODIFIED="1763936034040" TEXT="halte es daher f&#xfc;r angemessen, ihn nicht als Code-Author aufzuf&#xfc;hren">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Die Authorschaft am Code hat rechtliche Relevanz, denn sie begr&#252;ndet eine Lizenz und auch ein Veto-Recht im Falle einer intendierten Lizenz-&#196;nderung (z.B. Kommerzialisierung). Auf diesem Hintergrund halte ich es nicht sinnvoll, jemanden als &quot;Code-Author&quot; zu f&#252;hren, der keinen <i>signifikante</i>&#160; <i>Beitrag</i>&#160;zum Code geleistet hat, denn Copyright setzt eine gewisse &#187;Sch&#246;pfungsh&#246;he&#171; vorraus.
+    </p>
+  </body>
+</html></richcontent>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1763937963012" ID="ID_54747850" LINK="#ID_1947946176" MODIFIED="1763938151890" TEXT="auch die sonstige Lizenzinfo nochmal &#xfc;berarbeitet">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Die Zeitr&#228;ume des Copyright mit aufgef&#252;hrt, und explizit auf das Git-Repo verwiesen, den allgemeinen Einsichten gem&#228;&#223;, die ich heute &#252;ber die Wirkungsweise des GPL-Copyright gewonnen habe: Zeitpunkt und Autoren-Namen m&#252;ssen f&#252;r die GPL verbindlich mitgef&#252;hrt werden, es ist aber nicht eigens eine &#187;Attribution&#171; notwendig (jedoch die Git-Historie allein gen&#252;gt nicht, sondern die summarische Info mu&#223; auch irgendwo im Content zu finden sein)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
@@ -181708,7 +182018,19 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1762963273020" ID="ID_1565261952" MODIFIED="1762963284017" TEXT="TODO">
 <icon BUILTIN="bell"/>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1762963294062" ID="ID_1025850273" MODIFIED="1762963836077" TEXT="f&#xfc;r Doku: separates Paket lumiera-doc">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1763916815762" ID="ID_1413240159" MODIFIED="1763916838049" TEXT="Erg&#xe4;nzungen(sp&#xe4;ter)">
+<icon BUILTIN="hourglass"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1763916845404" ID="ID_960368768" MODIFIED="1763916855411" TEXT="debian/copyright">
+<node CREATED="1763916856733" ID="ID_1570983981" MODIFIED="1763916870068" TEXT="Source: k&#xf6;nnte mehr Kontaktinformationen bieten">
+<node CREATED="1763916871933" ID="ID_249931417" MODIFIED="1763916877275" TEXT="Ansprechpartner"/>
+<node CREATED="1763916898539" ID="ID_232791772" MODIFIED="1763916915134" TEXT="Bugtracker-URL"/>
+<node CREATED="1763916878148" ID="ID_1617314912" MODIFIED="1763916881749" TEXT="Mailingliste"/>
+<node CREATED="1763916882643" ID="ID_308388317" MODIFIED="1763916923660" TEXT="Mastodon"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1762963294062" ID="ID_1025850273" MODIFIED="1763916824451" TEXT="f&#xfc;r Doku: separates Paket lumiera-doc">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>

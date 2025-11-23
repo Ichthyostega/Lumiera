@@ -3,6 +3,7 @@
 
    Copyright (C)
      2008,            Joel Holdsworth <joel@airwebreathe.org.uk>
+     2012,            Michael R. Fisher <mfisher31@gmail.com>
 
   **Lumiera** is free software; you can redistribute it and/or modify it
   under the terms of the GNU General Public License as published by the

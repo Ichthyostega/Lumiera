@@ -9,7 +9,11 @@ Lumiera is a non-linear video editing and compositing tool.
 NOTE: as of 11/2025, Lumiera is in early development stage;
 it is not usable yet. This is a preview Release of a
 current development snapshot in pre-alpha stage.
+
+Source code and a list of all contributors can be retrieved
+from `git://git.lumiera.org/LUMIERA`
 *************************************************************
+
 
 
 In the current stage of development, the focus is primarily on the

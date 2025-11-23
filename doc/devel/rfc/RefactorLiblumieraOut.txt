@@ -19,9 +19,9 @@ which is already in use by other projects
 Description
 -----------
 //description: add a detailed description:
-Over the time we've put some efforts into the liblumiera. I have added
+Over the time we've put some efforts into the 'liblumiera'. I have added
 some from my code which predates the Lumiera project and which I am using
-on many other projects. This means that I would have to maintain thsese
+on many other projects. This means that I would have to maintain these
 sources in different unrelated projects and have to cross merge and update
 several copies of the same code when I do updates and fixes somewhere.
 I think its time to factor the re-useable parts out into a independent
@@ -48,13 +48,13 @@ For myself I need the C parts, while there is C\++ code which interfaces to the
 C implementations and also a lot code which does nice C\++ things on its own.
 This possibly means that we should in fact make 2 packages out of this, one C
 and one C\++ library (where the C++ part is more than just the wrappers, but
-also the tools and tricks which are currently in 'src/lib/' and reuseable).
+also the tools and tricks which are currently in 'src/lib/' and reusable).
 
 .Who maintains it
 Despite of being a spin-off I think we don't want to change anything from our
 current practice and maintain it by the Lumiera developers. In part I feel
 responsible for it, while it is really a part of the Lumiera codebase,
-despite of being independently useable.
+despite of being independently usable.
 
 .How to maintain it
 We need to decide about build system and documentation system. As build system
@@ -79,7 +79,7 @@ What belongs to the library
 Containers
 ++++++++++
  * cuckoo hashing (cuckoo.c|h)
- * linked lists (llist.h slist.h)
+ * linked lists (llist.h)
  * cache lists (mrucache.c|h)
  * splay trees (psplay.c|h)
  * priority queues (not done yet)
@@ -87,7 +87,7 @@ Containers
 Runtime tools
 +++++++++++++
  * error handling (error.h error.c) used by the other facilities too
- * clib convinience wrapers (safeclib.c|h) needs better name, maybe refactor
+ * clib convenience wrappers (safeclib.c|h) needs better name, maybe refactor
    into new facilities
 
 Multithreading
@@ -101,7 +101,7 @@ Memory management
 
 Metaprogramming
 +++++++++++++++
-  * preprecessor tools (ppmpl.h) move common preprocessor macros here
+  * preprocessor tools (ppmpl.h) move common preprocessor macros here
   * polymorphic call helper for C (vcall.h)
 
 Interface system and module loader
@@ -183,7 +183,7 @@ Tasks
 // * first step ([green]#✔ done#)
 
  * decide on name, namespaces [,yellow]#WIP#
- * create git repository, setup boilerplace (build system, legalese)
+ * create git repository, setup boilerplate (build system, legalise)
    [,yellow]#WIP#
  * move all code over into the git repos, refactor (namespace renames) ()
    [,yellow]#WIP#

@@ -3,7 +3,7 @@
 
    Copyright (C)
      2008,            Christian Thaeter <ct@pipapo.org>
-                        Hermann Vosseler <Ichthyostega@web.de>
+     2008,            Hermann Vosseler <Ichthyostega@web.de>
 
   **Lumiera** is free software; you can redistribute it and/or modify it
   under the terms of the GNU General Public License as published by the
