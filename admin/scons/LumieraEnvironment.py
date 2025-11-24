@@ -320,7 +320,7 @@ class LumieraModuleBuilder(WrappedStandardExeBuilder):
             Lumiera modules; modules are assumed to reside in a subdirectory below the executable.
         """
         custEnv = lumiEnv.Clone()
-        custEnv.Append(LINKFLAGS = "-Wl,-soname="+self.defineSoname(target,**kw))
+        custEnv.Append( LINKFLAGS = "-Wl,-soname="+self.defineSoname(target,**kw))
         custEnv.Append( LINKFLAGS = "-Wl,-rpath=\\$$ORIGIN/../modules,--enable-new-dtags" )
         if 'addLibs' in kw:
             custEnv.Append(LIBS = kw['addLibs'])
@@ -329,6 +329,26 @@ class LumieraModuleBuilder(WrappedStandardExeBuilder):
     def getBuildDestination(self, lumiEnv):   return lumiEnv.path.buildLib
     def getInstallDestination(self, lumiEnv): return lumiEnv.path.installLib
     
+    
+    def installTarget(self, env, buildTarget, **kw):
+        """ ensure a shared library is not marked executable.
+            The default toolchain on Linux often installs shared libraries as executable, which seems
+            to be necessary on some arcane Unix platforms. However, Debian Policy prohibits that.
+            See https://unix.stackexchange.com/questions/400187/why-should-or-should-not-shared-libraries-be-executable-e-g-red-hat-vs-debian
+        """
+        toInstall = super().installTarget(env, buildTarget, **kw)
+        if toInstall:
+            def _Chmod(target, source, env):
+                """ Workaround since env.Chmod is present only in SCons 4.10 """
+                import os
+                for t in target:
+                    os.chmod(str(t), 0o644)
+                return None
+#           removeExecBit = env.Chmod(toInstall, 0o644)
+            msg = '....... clear exec perm %s' % [str(t) for t in toInstall]
+            removeExecBit = env.Action(_Chmod, msg)
+            env.AddPostAction(toInstall, removeExecBit)
+        return toInstall
     
     def defineSoname (self, target, **kw):
         """ internal helper to extract or guess

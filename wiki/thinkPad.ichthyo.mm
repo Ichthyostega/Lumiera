@@ -159320,6 +159320,34 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 </node>
 <node CREATED="1491098340549" ID="ID_938211341" MODIFIED="1557498707240" TEXT="Toolchain">
+<node CREATED="1764017350940" ID="ID_1070520044" MODIFIED="1764017353708" TEXT="SCons">
+<node CREATED="1764017359298" ID="ID_953636906" MODIFIED="1764017362527" TEXT="Doku">
+<node CREATED="1764017386971" ID="ID_669022261" LINK="https://www.scons.org/doc/production/HTML/scons-user/index.html" MODIFIED="1764017391415" TEXT="User-Manual">
+<node CREATED="1764017403775" ID="ID_1835683090" MODIFIED="1764017405759" TEXT="relevant">
+<node CREATED="1764017409007" ID="ID_1490639186" LINK="https://www.scons.org/doc/production/HTML/scons-user/ch11.html" MODIFIED="1764017434702" TEXT="Install()-Builder"/>
+<node CREATED="1764017442930" ID="ID_576974066" LINK="https://www.scons.org/doc/production/HTML/scons-user/ch12.html" MODIFIED="1764017455880" TEXT="Platform-Independent Filesys-Manip"/>
+<node CREATED="1764017470422" ID="ID_1819012503" LINK="https://www.scons.org/doc/production/HTML/scons-user/ch17.html" MODIFIED="1764017484213" TEXT="Extending SCons: Writing your own Builders"/>
+</node>
+</node>
+<node CREATED="1764017953860" ID="ID_1187462898" LINK="https://scons.org/doc/production/HTML/scons-man.html" MODIFIED="1764017961114" TEXT="SCons-Man"/>
+<node CREATED="1764017505740" ID="ID_171055322" LINK="https://github.com/SCons/scons/wiki/" MODIFIED="1764017511569" TEXT="SCons-Wiki">
+<node CREATED="1764017513609" ID="ID_1609399886" LINK="https://github.com/SCons/scons/wiki/ToolsForFools" MODIFIED="1764017527833" TEXT="ToolsForFools"/>
+</node>
+<node CREATED="1764017681182" ID="ID_1467698267" MODIFIED="1764017694809" TEXT="Einzelthemen">
+<node CREATED="1764020461699" ID="ID_255925261" LINK="https://github.com/SCons/scons/wiki/GoFastButton" MODIFIED="1764020475529" TEXT="SCons schneller machen">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1764017696676" ID="ID_1424643492" MODIFIED="1764017700987" TEXT="Action-Object">
+<node CREATED="1764017702016" ID="ID_1288092237" LINK="https://stackoverflow.com/questions/67480329/python-scons-action" MODIFIED="1764017885395" TEXT="SO"/>
+<node CREATED="1764017927921" ID="ID_861964384" LINK="https://scons.org/doc/production/HTML/scons-man.html#action_objects" MODIFIED="1764017936889" TEXT="Scons-man: Action-Object"/>
+</node>
+<node CREATED="1764021374346" ID="ID_1068770252" LINK="https://scons.org/doc/latest/HTML/scons-user/apd.html" MODIFIED="1764024206582" TEXT="Pre/Post-Action">
+<linktarget COLOR="#6377c3" DESTINATION="ID_1068770252" ENDARROW="Default" ENDINCLINATION="-689;109;" ID="Arrow_ID_718963929" SOURCE="ID_1458418945" STARTARROW="None" STARTINCLINATION="-517;-37;"/>
+<node CREATED="1764024019333" ID="ID_588528493" MODIFIED="1764024031140" TEXT="env.AddPostAction(target, actionObj)"/>
+</node>
+</node>
+</node>
+</node>
 <node CREATED="1491098346053" ID="ID_1333373693" MODIFIED="1557498707240" TEXT="Doxygen">
 <node CREATED="1491098370281" ID="ID_1904535196" MODIFIED="1557498707240" TEXT="Konfig">
 <node CREATED="1762545432310" ID="ID_162387292" LINK="https://www.doxygen.nl/manual/customize.html#layout" MODIFIED="1762545552584" TEXT="DoxygenLayout.xml">
@@ -178649,6 +178677,268 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
+<node COLOR="#338800" CREATED="1764009790473" ID="ID_1637872963" MODIFIED="1764031989915" TEXT="SO-Builder: Libraries sollen nicht executable sein">
+<linktarget COLOR="#1f9cd9" DESTINATION="ID_1637872963" ENDARROW="Default" ENDINCLINATION="-1201;65;" ID="Arrow_ID_957935181" SOURCE="ID_1952761575" STARTARROW="None" STARTINCLINATION="-826;-24;"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1764009925908" ID="ID_1806313650" MODIFIED="1764010011962" TEXT="das ist eigentlich ein Problem von ld.so">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      der verh&#228;lt sich nach dem Motto: &#187;schad ja nix&#171;...
+    </p>
+    <p>
+      Auf einigen esoterischen Platformen m&#252;ssen Shared-Libs tats&#228;chlich executable sein, und auf allen anderen Plattformen wird das Flag ignoriert
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1764010013333" ID="ID_1353176139" MODIFIED="1764010266252" TEXT="aber Debian hat eine dem entgegenstehende Policy">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Es ist n&#228;mlich so: Shared-Libs k&#246;nnen eine <font face="Monospaced" color="#711313">main()</font>-Funktion enthalten; und <i>wenn das der Fall ist,</i>&#160;k&#246;nnen sie auch als Executables aufgerufen werden. <i>Rein theoretisch</i>&#160;k&#246;nnte das ein Baustein in einem komplexen Exploit sein, der aus einer &#252;berraschenden Ecke k&#228;me, da das ein Thema ist, was niemand &#187;auf dem Radar hat&#171;. Manche Libraries haben in der Tat ein Main, und das macht typischerweise gewisse Diagnose-Funktionalit&#228;t.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Klingt alles doch einigerma&#223;en an den Haaren herbeigezogen, aber Debian stellt sich auf den Standpunkt: Unn&#246;tiges verbieten schad' nix
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node COLOR="#435e98" CREATED="1764010269199" FOLDED="true" ID="ID_287582178" MODIFIED="1764032099126" TEXT="wir k&#xf6;nnen das durch explizite Filesystem-Operationen reparieren">
+<icon BUILTIN="idea"/>
+<node CREATED="1763260588724" ID="ID_1857294299" LINK="https://www.scons.org/doc/production/HTML/scons-user/ch12s06.html" MODIFIED="1764032087052" TEXT="man k&#xf6;nnte es explizit so in SCons coden">
+<arrowlink DESTINATION="ID_465246857" ENDARROW="Default" ENDINCLINATION="-142;0;" ID="Arrow_ID_1435910489" STARTARROW="None" STARTINCLINATION="329;21;"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1764015806283" ID="ID_618375602" MODIFIED="1764015945324" TEXT="&#x26a0; Limitierung: ich mu&#xdf; es an einen bestehenden Install()-Builder anh&#xe4;ngen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...das liegt daran, da&#223; ich das Bauen von Executables und Libraries und Plugins bereits hochgradig customised habe, im LumieraEnvironment. Das bedeutet, es gibt bereits einen env.Install()-Aufruf, tief in Lumiera-spezifischem Framework-Code. Genau diesen Aufruf mu&#223; ich nun so modifizieren, da&#223; entweder davor oder danach noch die Permissions ge&#228;ndert werden.
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1764015955453" ID="ID_1951962763" MODIFIED="1764015978509" TEXT="Scons-Doku gelesen &#x27f6; Command() - Builder"/>
+<node BACKGROUND_COLOR="#accdc3" COLOR="#3f4015" CREATED="1764015979351" ID="ID_422855763" MODIFIED="1764024157666" TEXT="SO.ai gefragt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p http-equiv="content-type" content="text/html; charset=utf-8">
+      Use one of these approaches: <strong>chain actions in a single <code>Command</code></strong>, or <strong>install first then attach a post-action</strong>&#160;(via <code>AddPostAction</code>&#160; or <code>Command</code>&#160;on the installed node). Both keep the install and chmod as a single build step.
+    </p>
+    <hr />
+    
+
+    <h3>
+      Examples
+    </h3>
+    <ul>
+      <li>
+        Chain actions in a single <code>Command</code>&#160;(recommended when you want one target built by a composed action):
+      </li>
+    </ul>
+    <pre class="hljs s-code-block" code-as-text="env.Command(
+    target = '$INSTDIR/myfile',
+    source = 'myfile',
+    action = [
+        env.Install('$INSTDIR', '$SOURCE'),
+        SCons.Action.Action('chmod 0644 $TARGET')
+    ]
+)
+"></pre>
+    <div class="d-flex h32">
+      <p class="fc-light langugage-py flex-item w90 fs-body1">
+        py
+      </p>
+    </div>
+    <pre class="hljs s-code-block" code-as-text="env.Command(
+    target = '$INSTDIR/myfile',
+    source = 'myfile',
+    action = [
+        env.Install('$INSTDIR', '$SOURCE'),
+        SCons.Action.Action('chmod 0644 $TARGET')
+    ]
+)
+"><code>env.Command(
+    target = '$INSTDIR/myfile',
+    source = 'myfile',
+    action = [
+        env.Install('$INSTDIR', '$SOURCE'),
+        SCons.Action.Action('chmod 0644 $TARGET')
+    ]
+)</code></pre>
+    <ul>
+      <li>
+        Install then add a post-action to change permissions (clear intent, uses SCons helpers):
+      </li>
+    </ul>
+    <pre class="hljs s-code-block" code-as-text="installed = env.Install('$INSTDIR', 'myfile')
+env.AddPostAction(installed, SCons.Action.Action('chmod 0644 $TARGET'))
+"></pre>
+    <div class="d-flex h32">
+      <p class="fc-light langugage-py flex-item w90 fs-body1">
+        py
+      </p>
+    </div>
+    <pre class="hljs s-code-block" code-as-text="installed = env.Install('$INSTDIR', 'myfile')
+env.AddPostAction(installed, SCons.Action.Action('chmod 0644 $TARGET'))
+"><code>installed = env.Install('$INSTDIR', 'myfile')
+env.AddPostAction(installed, SCons.Action.Action('chmod 0644 $TARGET'))</code></pre>
+    <ul>
+      <li>
+        Install then use the built-in <code>Chmod</code>&#160;builder on the installed node:
+      </li>
+    </ul>
+    <pre class="hljs s-code-block" code-as-text="installed = env.Install('$INSTDIR', 'myfile')
+env.Chmod(installed[0], 0o644)
+"></pre>
+    <div class="d-flex h32">
+      <p class="fc-light langugage-py flex-item w90 fs-body1">
+        py
+      </p>
+    </div>
+    <pre class="hljs s-code-block" code-as-text="installed = env.Install('$INSTDIR', 'myfile')
+env.Chmod(installed[0], 0o644)
+"><code>installed = env.Install('$INSTDIR', 'myfile')
+env.Chmod(installed[0], 0o644)</code></pre>
+    <hr />
+    
+
+    <h3>
+      Tips &amp; Alternatives
+    </h3>
+    <ul>
+      <li>
+        Prefer <code>env.Command</code>&#160;when you need a single atomic step that both installs and changes permissions.
+      </li>
+      <li>
+        Use <code>AddPostAction</code>&#160;when you want to keep the install separate and express a follow-up operation.
+      </li>
+      <li>
+        <code>env.Chmod</code>&#160;is a portable, Python-level builder; string <code>chmod</code>&#160; commands rely on the shell/OS.
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="wizard"/>
+<node CREATED="1764016178264" ID="ID_1731622448" MODIFIED="1764016223910" TEXT="demnach kann man also den Install()-builder im Command-Builder verwenden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das w&#228;re sch&#246;n ... demnach ist ja SCons wirklich so generisch, wie ich gehofft hatte
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1764016225657" ID="ID_784807828" MODIFIED="1764016244566" TEXT="Alternativ-Vorschlag: eine Post-Action verwenden..."/>
+</node>
+<node CREATED="1764024066153" ID="ID_1458418945" MODIFIED="1764024206582" TEXT="die PostAction erscheint mir passender hier">
+<arrowlink COLOR="#6377c3" DESTINATION="ID_1068770252" ENDARROW="Default" ENDINCLINATION="-689;109;" ID="Arrow_ID_718963929" STARTARROW="None" STARTINCLINATION="-517;-37;"/>
+<node CREATED="1764024209743" ID="ID_1027667828" MODIFIED="1764024236064" TEXT="im WrappedStanardBuilder wird bereits ein installTarget() aufgerufen"/>
+<node CREATED="1764024237068" ID="ID_1299073151" MODIFIED="1764024329477">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      die entsprechende Methode hanhabt einen Builder-Parameter <font face="Monospaced" color="#2234d8">install=True</font>
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...den habe ich wohl so eingebaut, damit dieser Umstand auch deklarativ sichtbar wird; zudem gibt es Build-Resultate, die nicht installiert werden (z.B. Tests)
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1764024334534" ID="ID_928823167" MODIFIED="1764032036570" TEXT="dann mu&#xdf; man eben im OO-Stil die installTarget() dekorieren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Es ist klar wie das geht, ich empfinde es aber nach heutigen Standards nicht mehr als besonders sch&#246;n, aber praktisch, da das hier ein letztlich in sich geschlossenes &#214;kosystem ist
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1764032050729" ID="ID_465246857" MODIFIED="1764032087052" TEXT="plattform-independent...">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_465246857" ENDARROW="Default" ENDINCLINATION="-142;0;" ID="Arrow_ID_1435910489" SOURCE="ID_1857294299" STARTARROW="None" STARTINCLINATION="329;21;"/>
+<node CREATED="1764025068584" ID="ID_912174941" MODIFIED="1764025089974" TEXT="env.Chmod(terget, perms)">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#5b280f" CREATED="1764025095238" ID="ID_445688912" MODIFIED="1764025132369" TEXT="aber wohl erst in SCons 4.10">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Debian/Trixie hat 4.8
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1764027864348" ID="ID_178426671" MODIFIED="1764027871347" TEXT="getestet: funktioniert">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#435e98" CREATED="1764027872597" ID="ID_1632098912" MODIFIED="1764031953974" TEXT="Verbesserungen">
+<node COLOR="#5b280f" CREATED="1764027876810" ID="ID_1482699238" MODIFIED="1764031570047" TEXT="das Action-Objekt nur einmal erzeugen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Nein. Macht den Code viel komplexer und steht in keinem Verh&#228;ltnis zum Nutzen, denn die paar Library-Builder invocations werden uns nicht umbringen
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_cancel"/>
+</node>
+<node COLOR="#338800" CREATED="1764027885341" ID="ID_1890347220" MODIFIED="1764031938411" TEXT="eine klarere Meldung ausgeben">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+</node>
+</node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1763560137355" ID="ID_1362355060" MODIFIED="1763560152772" TEXT="bekannte Probleme">
 <icon BUILTIN="hourglass"/>
 <icon BUILTIN="licq"/>
@@ -181166,7 +181456,8 @@ Since then others have made contributions, see the log for the history.</font></
       <font face="Monospaced">ARCHFLAGS=&quot; -fstack-protector-strong&quot;</font>
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 </node>
 <node CREATED="1762997171048" ID="ID_1055108179" MODIFIED="1762997177026" TEXT="Feinschliff + Test">
@@ -181426,7 +181717,8 @@ Since then others have made contributions, see the log for the history.</font></
 </html></richcontent>
 </node>
 <node CREATED="1763258013591" ID="ID_991309843" MODIFIED="1763258015747" TEXT="old-fsf-address-in-copyright-file"/>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1763257667287" ID="ID_1952761575" LINK="https://lintian.debian.org/tags/shared-library-is-executable.html" MODIFIED="1763259455624" TEXT="shared-library-is-executable 0755 [usr/lib/lumiera/modules/gtk_gui.lum]">
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1763257667287" ID="ID_1952761575" LINK="https://lintian.debian.org/tags/shared-library-is-executable.html" MODIFIED="1764032004628" TEXT="shared-library-is-executable 0755 [usr/lib/lumiera/modules/gtk_gui.lum]">
+<arrowlink COLOR="#1f9cd9" DESTINATION="ID_1637872963" ENDARROW="Default" ENDINCLINATION="-1201;65;" ID="Arrow_ID_957935181" STARTARROW="None" STARTINCLINATION="-826;-24;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1763259348029" ID="ID_886594364" MODIFIED="1763259356317" TEXT="alle Shared-Libs sind executable"/>
 <node CREATED="1763259357075" ID="ID_287173097" MODIFIED="1763259377484" TEXT="ich sehe nichts explizit im LumieraEnvironment"/>
@@ -181442,7 +181734,6 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="edit"/>
 </node>
 <node CREATED="1763260371730" ID="ID_305095688" LINK="https://unix.stackexchange.com/q/400187" MODIFIED="1763260383475" TEXT="siehe unix.stackexchange.com"/>
-<node CREATED="1763260588724" ID="ID_1857294299" LINK="https://www.scons.org/doc/production/HTML/scons-user/ch12s06.html" MODIFIED="1763260600404" TEXT="man k&#xf6;nnte es explizit so in SCons coden"/>
 </node>
 <node COLOR="#435e98" CREATED="1763257996458" ID="ID_1842405614" MODIFIED="1763633688544" TEXT="lumiera source: build-depends-on-obsolete-package Build-Depends: pkg-config =&gt; pkgconf">
 <icon BUILTIN="broken-line"/>
@@ -181479,7 +181770,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1763258319446" ID="ID_973373524" MODIFIED="1763258335196" TEXT="&#xbb;/usr/share/doc-base/lumiera.lumiera&#xab;, Zeile 16: alle &#xbb;Format&#xab;-Abschnitte sind ung&#xfc;ltig.">
+<node COLOR="#435e98" CREATED="1763258319446" ID="ID_973373524" MODIFIED="1763945409000" TEXT="&#xbb;/usr/share/doc-base/lumiera.lumiera&#xab;, Zeile 16: alle &#xbb;Format&#xab;-Abschnitte sind ung&#xfc;ltig.">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1763258386817" ID="ID_1806102500" MODIFIED="1763258395340" TEXT="ist nachvollziehbar"/>
 <node CREATED="1763258396148" ID="ID_1498381529" MODIFIED="1763593044611" TEXT="debian/doc-base.lumiera ist unvollst&#xe4;ndig">
