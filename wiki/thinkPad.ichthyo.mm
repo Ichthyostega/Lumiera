@@ -178982,6 +178982,20 @@ env.Chmod(installed[0], 0o644)</code></pre>
 </html></richcontent>
 </node>
 </node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1764032703964" ID="ID_765634393" MODIFIED="1764032782082" TEXT="TICKET #965 hab ich mit Trixie gel&#xf6;st">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...aber derzeit l&#228;uft unser Trac nicht, und ich kann nicht auf das Ticket zugreifen. Hab die Zeile mit dem Workaround einfach wieder rausgenommen
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="bell"/>
+</node>
 </node>
 <node CREATED="1447978374453" HGAP="140" ID="ID_156552320" MODIFIED="1742180980658" TEXT="Compiler" VSHIFT="-10">
 <icon BUILTIN="prepare"/>

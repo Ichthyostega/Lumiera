@@ -300,7 +300,6 @@ class LumieraExeBuilder(WrappedStandardExeBuilder):
         """
         custEnv = lumiEnv.Clone()
         custEnv.Append( LINKFLAGS = "-Wl,-rpath=\\$$ORIGIN/modules,--enable-new-dtags" )
-        custEnv.Append( LINKFLAGS = "-Wl,-rpath-link=target/modules" ) ### Workaround for bug in binutils > 2.23   /////TICKET #965
         if 'addLibs' in kw:
             custEnv.Append(LIBS = kw['addLibs'])
         return custEnv
