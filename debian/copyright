@@ -1,42 +1,39 @@
-This package was debianized by Ichthyostega <deb@ichthyostega.de> on
-Tue, 11 Jan 2011 23:55:12 +0100.
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: Lumiera
+Source: git://git.lumiera.org/LUMIERA
+Upstream-Contact: lumiera@lists.lumiera.org
+Copyright: 2007-2025 Hermann Voßeler
+           2007-2011 Christian Thäter
+           2008-2009 Joel Holdsworth
+License: GPL-2+
 
-The current Debian maintainer is Ichthyostega <deb@ichthyostega.de>
 
-It can be downloaded from git://git.lumiera.org/debian/lumiera
+Files: *
+Copyright: 2007-2025 Hermann Voßeler  <Ichthyostega@web.de>
+           2007-2011 Christian Thäter <ct@pipapo.org>
+           2008-2009 Joel Holdsworth  <joel@airwebreathe.org.uk>
+           2007-2010 Michael Ploujnikov
+           2010-2011 Stefan Kangas
+           2010-2012 Michael Fisher
+           2007-2008 Simeon Völkel
+License: GPL-2+
 
-Upstream Author(s):
+Files: debian/*
+Copyright: 2011-2025 Hermann Voßeler <deb@ichthyostega.de>
+License: GPL-2+
 
-    Joel Holdsworth joel@airwebreathe.org.uk
-    Christian Thäter ct@pipapo.org
-    Hermann Voßeler Ichthyostega@web.de
-    Stefan Kangas, Anton Yakovlev, Simeon Völkel
 
-Copyright:
-
-    Copyright (C) 2008 Joel Holdsworth
-    Copyright (C) 2008 Christian Thäter
-    Copyright (C) 2008 Hermann Voßeler
-
-License:
-
-    This package is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This package is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this package; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
-
-On Debian systems, the complete text of the GNU General
-Public License can be found in `/usr/share/common-licenses/GPL'.
-
-The Debian packaging is (C) 2011, Ichthyostega <deb@ichthyostega.de> and
-is licensed under the GPL, see above.
+License: GPL-2+
+  Lumiera is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License,
+  or (at your option) any later version.
+  .
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  See the GNU General Public License for more details.
+Comment:
+  On Debian systems, the full text of the GNU General Public License
+  version 2 can be found in the file '/usr/share/common-licenses/GPL-2'.
 
