@@ -4,7 +4,7 @@
 ##
 
 #  Copyright (C)
-#    2008,            Hermann Vosseler <Ichthyostega@web.de>
+#    2008-2025        Hermann Vosseler <Ichthyostega@web.de>
 #
 # **Lumiera** is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by the
@@ -16,7 +16,7 @@
 # NOTE: scons -h for help.
 # This script /defines/ the components and how they fit together.
 # SCons will derive dependencies and the necessary build steps.
-# Read more about the SCons build system at: http://www.scons.org
+# Read more about the SCons build system at: https://www.scons.org
 
 
 # NOTE: Lumiera SCons extension modules and plugins
@@ -52,7 +52,6 @@ SConscript(dirs=['data','src','src/tool','research','tests','doc'], exports='env
 
 # additional files to be cleaned when cleaning 'build'
 env.Clean ('build', [ 'scache.conf', '.sconf_temp', '.sconsign.dblite', 'config.log' ])
-env.Clean ('build', [ 'src/pre.gch' ])
 
 
 
@@ -63,8 +62,8 @@ env.Clean ('build', [ 'src/pre.gch' ])
 Import('lumiera plugins tools gui testsuite')
 
 build = env.Alias('build', lumiera + plugins + tools + gui)
+# this defines the SCons **default target**
 env.Default('build')
-# SCons default target
 
 
 #env.Alias ('all', build + testsuite + doxydoc)

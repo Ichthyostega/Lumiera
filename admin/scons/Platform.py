@@ -4,7 +4,7 @@
 ##
 
 #  Copyright (C)
-#    2012,            Hermann Vosseler <Ichthyostega@web.de>
+#    2012-2025        Hermann Vosseler <Ichthyostega@web.de>
 #
 # **Lumiera** is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by the
@@ -140,8 +140,7 @@ def configure(env):
         print("*** unable to build due to the following problems:")
         for isue in problems:
             print(" *  %s" % isue)
-        print()
-        print("build aborted.")
+        print("\nbuild aborted.")
         Exit(1)
     
     print("** Gathered Library Info: %s" % list(conf.env.libInfo.keys()))

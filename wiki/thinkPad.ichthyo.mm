@@ -167947,7 +167947,8 @@ that situation will improve in forseeable future.</pre>
 <icon BUILTIN="help"/>
 <icon BUILTIN="button_cancel"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1751808890315" ID="ID_1632926954" MODIFIED="1751808916136" TEXT="Dokumentation nachf&#xfc;hren">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1751808890315" ID="ID_1632926954" MODIFIED="1764034017617" TEXT="Dokumentation nachf&#xfc;hren">
+<linktarget COLOR="#463451" DESTINATION="ID_1632926954" ENDARROW="Default" ENDINCLINATION="-299;1671;" ID="Arrow_ID_290901015" SOURCE="ID_1856351101" STARTARROW="None" STARTINCLINATION="-169;-46;"/>
 <icon BUILTIN="flag-yellow"/>
 <node COLOR="#338800" CREATED="1751808926894" FOLDED="true" ID="ID_590515881" MODIFIED="1762803684786" TEXT="Versionsnr">
 <icon BUILTIN="button_ok"/>
@@ -169006,8 +169007,7 @@ that situation will improve in forseeable future.</pre>
       Wobei in diesem Kontext zweifelhaft ist, was ein maschinenlesbarer Code auf einer allgemeinen Lizenz-Seite bringen soll. Das w&#252;rde eigentlich nur Sinn machen, wenn der Button auf jeder Seite w&#228;re
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1762820942381" ID="ID_964155791" MODIFIED="1762820954510" TEXT="ChatGPT gefragt">
 <icon BUILTIN="wizard"/>
 <node CREATED="1762820957170" ID="ID_1885929709" MODIFIED="1762821083898" TEXT="es gab wohl einen Policy-Change">
@@ -169018,8 +169018,7 @@ that situation will improve in forseeable future.</pre>
       So stellt es zumindest ChatGPT dar. Demnach habe man die Empfehlungen bei CC vereinfacht, und biete nun einfach Grafiken an, die die User in ihre Website packen k&#246;nnen.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1762820965203" ID="ID_925163391" MODIFIED="1762821001026" TEXT="ChatGPT empfiehlt, &lt;link rel=&quot;license&quot;...&gt; Elemente in den HTML-Header zu packen"/>
 </node>
@@ -169200,8 +169199,7 @@ that situation will improve in forseeable future.</pre>
       ....und jeweils sehen ob sich das bew&#228;hrt und entsprechend klar ist
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1762906124189" ID="ID_488826279" MODIFIED="1762906200724" TEXT="zun&#xe4;chst einmal: die feingranulare Aufteilung aufgeben">
 <richcontent TYPE="NOTE"><html>
@@ -171892,7 +171890,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1742175483087" ID="ID_40670399" MODIFIED="1763770261946" TEXT="Nacharbeiten">
 <icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1742175488343" ID="ID_842750245" MODIFIED="1742175503373" TEXT="Listen-Konkatenation: geht es besser?">
+<node COLOR="#435e98" CREATED="1742175488343" ID="ID_842750245" MODIFIED="1764035205131" TEXT="Listen-Konkatenation: geht es besser?">
 <icon BUILTIN="help"/>
 <node CREATED="1742175505805" ID="ID_1316231941" MODIFIED="1742175579374" TEXT="Benny hat die Standard-Migration gemacht...">
 <richcontent TYPE="NOTE"><html>
@@ -171904,6 +171902,21 @@ Since then others have made contributions, see the log for the history.</font></
   </body>
 </html></richcontent>
 <icon BUILTIN="info"/>
+</node>
+<node CREATED="1764035105537" ID="ID_837953449" MODIFIED="1764035204050" TEXT="in der Tat: fast alle list()-Aufrufe kann man loswerden oder eleganter schreiben">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <ul>
+      <li>
+        wenn ich gleich wieder dar&#252;ber iteriere, ist es nicht notwendig, zu materialisieren
+      </li>
+      <li>
+        und f&#252;r Debendencies gilt: sie m&#252;ssen ohnehin eine Liste sein in SCons, also besser an der Erzeugungsstelle einmal in eine Liste packen
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1763245245613" ID="ID_525244825" MODIFIED="1763940646058" TEXT="Python verpflichtend auf 3.0 heben">
@@ -177986,9 +177999,16 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1742175264309" ID="ID_1163480280" MODIFIED="1763770089575" TEXT="Preview-Release">
 <icon BUILTIN="pencil"/>
-<node CREATED="1742175666415" ID="ID_1986444286" MODIFIED="1742175670216" TEXT="Git-Flow einf&#xfc;hren">
+<node COLOR="#338800" CREATED="1742175666415" ID="ID_1986444286" MODIFIED="1764034071724" TEXT="Git-Flow einf&#xfc;hren">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1742175672550" ID="ID_624745919" MODIFIED="1742175678761" TEXT="Namen und Schema definieren"/>
 <node CREATED="1742175679613" ID="ID_781377863" MODIFIED="1742175686624" TEXT="Doku f&#xfc;r die Website anlegen"/>
+</node>
+<node BACKGROUND_COLOR="#c2c6e6" COLOR="#435e98" CREATED="1764033907681" ID="ID_1856351101" MODIFIED="1764034061668" TEXT="Website putzen">
+<arrowlink COLOR="#463451" DESTINATION="ID_1632926954" ENDARROW="Default" ENDINCLINATION="-299;1671;" ID="Arrow_ID_290901015" STARTARROW="None" STARTINCLINATION="-169;-46;"/>
+<node CREATED="1764033915824" ID="ID_719881939" MODIFIED="1764033922236" TEXT="nach defekten Links suchen"/>
+<node CREATED="1764033923939" ID="ID_1847280993" MODIFIED="1764033931026" TEXT="alte RfCs durchgehen"/>
+<node CREATED="1764033939267" ID="ID_1000584650" MODIFIED="1764033951275" TEXT="Lizenz und Impressum"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1742175254850" ID="ID_1647788626" MODIFIED="1763770083926" TEXT="Lumiera-DEB bauen">
@@ -178446,9 +178466,20 @@ Since then others have made contributions, see the log for the history.</font></
 </html></richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1763940534858" ID="ID_1681367379" MODIFIED="1763940646059" TEXT="Python 3.10 nun verpflichtend">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1763940534858" ID="ID_1681367379" MODIFIED="1764036260885" TEXT="nun verpflichtend">
 <linktarget COLOR="#e1253b" DESTINATION="ID_1681367379" ENDARROW="Default" ENDINCLINATION="-773;-68;" ID="Arrow_ID_835035037" SOURCE="ID_525244825" STARTARROW="None" STARTINCLINATION="-19;733;"/>
-<icon BUILTIN="flag-pink"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1764036266123" ID="ID_1269311547" MODIFIED="1764036269147" TEXT="Python 3.10"/>
+<node CREATED="1764036270057" ID="ID_541648492" MODIFIED="1764036383513" TEXT="SCons 4.0">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...naja, nicht wirklich, denn dazu m&#252;&#223;te ich mal die ganze SCons-Doku durhclesen, um zu sehen, was man modernisieren k&#246;nnte. Aber da ich nun nur noch mit entsprechend neuerer Software arbeite, ist es auch nicht mehr angemessen, eine niedrigere Version zu deklarieren, da ich nicht merke, wenn ich neuere Feature verwende, die irgendwo im Internet beschrieben sind.
+    </p>
+  </body>
+</html></richcontent>
+</node>
 </node>
 </node>
 <node CREATED="1544239177727" HGAP="90" ID="ID_1414932362" MODIFIED="1763514226786" TEXT="Probleme..." VSHIFT="3">
@@ -178682,9 +178713,7 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="yes"/>
 <node CREATED="1764009925908" ID="ID_1806313650" MODIFIED="1764010011962" TEXT="das ist eigentlich ein Problem von ld.so">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       der verh&#228;lt sich nach dem Motto: &#187;schad ja nix&#171;...
@@ -178693,14 +178722,11 @@ Since then others have made contributions, see the log for the history.</font></
       Auf einigen esoterischen Platformen m&#252;ssen Shared-Libs tats&#228;chlich executable sein, und auf allen anderen Plattformen wird das Flag ignoriert
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1764010013333" ID="ID_1353176139" MODIFIED="1764010266252" TEXT="aber Debian hat eine dem entgegenstehende Policy">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Es ist n&#228;mlich so: Shared-Libs k&#246;nnen eine <font face="Monospaced" color="#711313">main()</font>-Funktion enthalten; und <i>wenn das der Fall ist,</i>&#160;k&#246;nnen sie auch als Executables aufgerufen werden. <i>Rein theoretisch</i>&#160;k&#246;nnte das ein Baustein in einem komplexen Exploit sein, der aus einer &#252;berraschenden Ecke k&#228;me, da das ein Thema ist, was niemand &#187;auf dem Radar hat&#171;. Manche Libraries haben in der Tat ein Main, und das macht typischerweise gewisse Diagnose-Funktionalit&#228;t.
@@ -178712,8 +178738,7 @@ Since then others have made contributions, see the log for the history.</font></
       Klingt alles doch einigerma&#223;en an den Haaren herbeigezogen, aber Debian stellt sich auf den Standpunkt: Unn&#246;tiges verbieten schad' nix
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node COLOR="#435e98" CREATED="1764010269199" FOLDED="true" ID="ID_287582178" MODIFIED="1764032099126" TEXT="wir k&#xf6;nnen das durch explizite Filesystem-Operationen reparieren">
 <icon BUILTIN="idea"/>
@@ -178722,23 +178747,18 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1764015806283" ID="ID_618375602" MODIFIED="1764015945324" TEXT="&#x26a0; Limitierung: ich mu&#xdf; es an einen bestehenden Install()-Builder anh&#xe4;ngen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...das liegt daran, da&#223; ich das Bauen von Executables und Libraries und Plugins bereits hochgradig customised habe, im LumieraEnvironment. Das bedeutet, es gibt bereits einen env.Install()-Aufruf, tief in Lumiera-spezifischem Framework-Code. Genau diesen Aufruf mu&#223; ich nun so modifizieren, da&#223; entweder davor oder danach noch die Permissions ge&#228;ndert werden.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1764015955453" ID="ID_1951962763" MODIFIED="1764015978509" TEXT="Scons-Doku gelesen &#x27f6; Command() - Builder"/>
 <node BACKGROUND_COLOR="#accdc3" COLOR="#3f4015" CREATED="1764015979351" ID="ID_422855763" MODIFIED="1764024157666" TEXT="SO.ai gefragt">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p http-equiv="content-type" content="text/html; charset=utf-8">
       Use one of these approaches: <strong>chain actions in a single <code>Command</code></strong>, or <strong>install first then attach a post-action</strong>&#160;(via <code>AddPostAction</code>&#160; or <code>Command</code>&#160;on the installed node). Both keep the install and chmod as a single build step.
@@ -178836,21 +178856,17 @@ env.Chmod(installed[0], 0o644)</code></pre>
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="wizard"/>
 <node CREATED="1764016178264" ID="ID_1731622448" MODIFIED="1764016223910" TEXT="demnach kann man also den Install()-builder im Command-Builder verwenden">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       das w&#228;re sch&#246;n ... demnach ist ja SCons wirklich so generisch, wie ich gehofft hatte
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1764016225657" ID="ID_784807828" MODIFIED="1764016244566" TEXT="Alternativ-Vorschlag: eine Post-Action verwenden..."/>
 </node>
@@ -178859,40 +178875,31 @@ env.Chmod(installed[0], 0o644)</code></pre>
 <node CREATED="1764024209743" ID="ID_1027667828" MODIFIED="1764024236064" TEXT="im WrappedStanardBuilder wird bereits ein installTarget() aufgerufen"/>
 <node CREATED="1764024237068" ID="ID_1299073151" MODIFIED="1764024329477">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       die entsprechende Methode hanhabt einen Builder-Parameter <font face="Monospaced" color="#2234d8">install=True</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...den habe ich wohl so eingebaut, damit dieser Umstand auch deklarativ sichtbar wird; zudem gibt es Build-Resultate, die nicht installiert werden (z.B. Tests)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1764024334534" ID="ID_928823167" MODIFIED="1764032036570" TEXT="dann mu&#xdf; man eben im OO-Stil die installTarget() dekorieren">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Es ist klar wie das geht, ich empfinde es aber nach heutigen Standards nicht mehr als besonders sch&#246;n, aber praktisch, da das hier ein letztlich in sich geschlossenes &#214;kosystem ist
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1764032050729" ID="ID_465246857" MODIFIED="1764032087052" TEXT="plattform-independent...">
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_465246857" ENDARROW="Default" ENDINCLINATION="-142;0;" ID="Arrow_ID_1435910489" SOURCE="ID_1857294299" STARTARROW="None" STARTINCLINATION="329;21;"/>
@@ -178901,9 +178908,7 @@ env.Chmod(installed[0], 0o644)</code></pre>
 </node>
 <node COLOR="#5b280f" CREATED="1764025095238" ID="ID_445688912" MODIFIED="1764025132369" TEXT="aber wohl erst in SCons 4.10">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Debian/Trixie hat 4.8
@@ -178920,16 +178925,13 @@ env.Chmod(installed[0], 0o644)</code></pre>
 <node COLOR="#435e98" CREATED="1764027872597" ID="ID_1632098912" MODIFIED="1764031953974" TEXT="Verbesserungen">
 <node COLOR="#5b280f" CREATED="1764027876810" ID="ID_1482699238" MODIFIED="1764031570047" TEXT="das Action-Objekt nur einmal erzeugen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Nein. Macht den Code viel komplexer und steht in keinem Verh&#228;ltnis zum Nutzen, denn die paar Library-Builder invocations werden uns nicht umbringen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_cancel"/>
 </node>
 <node COLOR="#338800" CREATED="1764027885341" ID="ID_1890347220" MODIFIED="1764031938411" TEXT="eine klarere Meldung ausgeben">
@@ -178984,17 +178986,15 @@ env.Chmod(installed[0], 0o644)</code></pre>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1764032703964" ID="ID_765634393" MODIFIED="1764032782082" TEXT="TICKET #965 hab ich mit Trixie gel&#xf6;st">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...aber derzeit l&#228;uft unser Trac nicht, und ich kann nicht auf das Ticket zugreifen. Hab die Zeile mit dem Workaround einfach wieder rausgenommen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="bell"/>
+<node CREATED="1764033581168" ID="ID_381618987" MODIFIED="1764033597076" TEXT="24.11.25"/>
 </node>
 </node>
 <node CREATED="1447978374453" HGAP="140" ID="ID_156552320" MODIFIED="1742180980658" TEXT="Compiler" VSHIFT="-10">
@@ -181470,8 +181470,7 @@ env.Chmod(installed[0], 0o644)</code></pre>
       <font face="Monospaced">ARCHFLAGS=&quot; -fstack-protector-strong&quot;</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1762997171048" ID="ID_1055108179" MODIFIED="1762997177026" TEXT="Feinschliff + Test">

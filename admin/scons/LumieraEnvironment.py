@@ -4,7 +4,7 @@
 ##
 
 #  Copyright (C)
-#    2008,            Hermann Vosseler <Ichthyostega@web.de>
+#    2008-2025        Hermann Vosseler <Ichthyostega@web.de>
 #
 # **Lumiera** is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by the
@@ -75,9 +75,9 @@ class LumieraEnvironment(Environment):
             if other in self.libInfo:
                 self.mergeConf(self.libInfo[other])
         else:
-            self.Append (LIBS = other.get ('LIBS',[]))
-            self.Append (LIBPATH = other.get('LIBPATH', []))
-            self.Append (CPPPATH = other.get('CPPPATH', []))
+            self.Append (LIBS      = other.get('LIBS',[]))
+            self.Append (LIBPATH   = other.get('LIBPATH', []))
+            self.Append (CPPPATH   = other.get('CPPPATH', []))
             self.Append (LINKFLAGS = other.get('LINKFLAGS', []))
         
         return self
@@ -120,6 +120,7 @@ class LumieraConfigContext(ConfigBase):
         print("Checking for library configuration: %s " % libID)
         # self.Message(self,"Checking for library configuration: %s " % libID)
         return self.env.addLibInfo (libID, minVersion, alias)
+
 
 
 
@@ -343,7 +344,7 @@ class LumieraModuleBuilder(WrappedStandardExeBuilder):
                 for t in target:
                     os.chmod(str(t), 0o644)
                 return None
-#           removeExecBit = env.Chmod(toInstall, 0o644)
+#           removeExecBit = env.Chmod(toInstall, 0o644)                    # ◁◁◁ could use this for SCons > 4.10
             msg = '....... clear exec perm %s' % [str(t) for t in toInstall]
             removeExecBit = env.Action(_Chmod, msg)
             env.AddPostAction(toInstall, removeExecBit)
