@@ -1,7 +1,7 @@
 Build Dependencies
 ==================
 :Author: core-devs
-:Date: 2/2020
+:Date: 11/2025
 :toc:
 
 
@@ -10,26 +10,52 @@ We try to get the best out of modern system programming
 techniques to reach a solid performance and good throughput.
 Lumiera shall scale with the provided Hardware,
 the more RAM and the more/faster CPU's you have the better.
-Nevertheless lower end 32bit machines are supported too.
+Nevertheless lower end 64bit machines are supported too.
 
 Secondary targets will be other free operating systems which offer a decent Posix API.
 Porting to other more or less similar platforms will be possible, if -- by coincidence --
 Someone(TM) helps with porting.
 
-Having said that -- for the time being, the core team won't spend much effort on porting.
+Having said that -- for the time being, the core team won't spend much effort on porting,
+be it to special hardware or some other popular OS.
+
 
 Platform
 --------
-We develop and test on standard PC hardware, 32 and 64 bit.
+We develop and test on standard PC hardware, 64 bit.footnote:[
+  We attempt to write code mostly in a portable way, yet we have encountered
+  several aspects now where our solution effectively assumes 64bit layout --
+  and thus the code might compile on 32bit, but then not perform as expected.
+  A notorious example are _hash values_, which are typed as `size_t` following
+  the C++ idiom. We now use a hash function that is clearly optimised for 64bit,
+  and we know that a 32bit hash would produce collisions on a regular base, while
+  our solution assumes that collisions can be ruled out effectively. This is just
+  one example, which shows that handling such aspects in a portable fashion, while
+  certainly possibly, requires a significant amount of design work and incurs
+  additional complexity.
+  For the time being, we are content to document such cases as tickets.
+]
 It is intended to target other platforms running GNU/Linux eventually.
-Lumiera expects a `standard' desktop installation running a XServer.
+Lumiera expects a ``standard'' desktop installation running a XServer.footnote:[
+  Wayland is ``just around the corner'' since 10 years now. Well, recently it
+  seems it is _really_ just around the corner. We are aware of the necessary
+  changes, which are not very complicated to implement (since we are using
+  GTK-3). However, as long as Wayland simply crashes or hands in our
+  everyday work setup with XFCE, we will not consider this topic
+  a priority. In the meantime, please report any problems
+  you encounter with Lumiera running on XWayland.
+]
 
 Graphics::
-  There are no special requirements for the graphic system.
-  Hardware acceleration will likely be added later through extensions,
-  but will remain strictly optional.footnote:[For the time being, we'll watch
-  the evolution in that area and might revisit that topic when there are more
-  compelling and widely supported solutions available]
+  There are no special requirements for the graphic system, other than
+  some GPU supported for common desktop display in the standard setup.
+  Hardware acceleration for video processing will likely be added later
+  through extensions,  but will remain strictly optional.footnote:[
+    For the time being, we'll watch the evolution in that area
+    and might revisit that topic when there are more compelling
+    and widely supported solutions available. Support for 32bit
+    floating point data formats is considered more important.
+  ]
 
 Disks::
   No special requirements. Video editing requires decent disk speed though,
@@ -41,6 +67,7 @@ Special Hardware::
 * we need access / donations for the hardware
 * Specs and APIs must be open.
 * someone to do the actual interfacing and support needs to join the team
+
 
 Compatibility
 ~~~~~~~~~~~~~
@@ -54,55 +81,101 @@ Languages and Tools
 
 * C / C++
 
- - a C99 / C++17 compatible compiler footnote:[in practice, we build using GCC and
-   occasionally we check using Clang]
- - GCC *7* or Clang *6* should be fine footnote:[basically we try to use just the stock language.
-   On rare occasions in the past, we _did_ use some GCC extensions, like `typeof()`, but we care for
-   workarounds, in case this becomes a problem. Incidentally, `typeof()` is obsoleted by the new
-   C++ standard, which provides `decltype()` for this purpose.].
+ - A C\+\+23 compatible compiler is required.footnote:[
+     In practice, we build using GCC and occasionally we check using Clang.
+     Right now (7/2025) Clang has fallen behind regarding support of type dependent
+     name resolution in templates and does not even comply with C++20 in this respect.
+     We have dropped most usages of the `typename` keyword recently, and as long as
+     Clang can not cope with that, we have to postpone further tests with Clang.
+   ]
+ - GCC-**14** or better should be fine.footnote:[
+     Basically we try to use just the stock language.
+     But we actually compile with the GNU extensions, i.e. `-std=gnu++23` / `-std=gnu99`.
+     And any language feature is used to the degree that it is available and stable
+     in this build environment.
+   ]
 
 * BOOST (listed below are the Debian package names)
- - libboost-dev (at least *1.67*)
- - libboost-program-options-dev
+ - libboost-dev (at least *1.83*)
  - libboost-program-options-dev
 
 * Script languages
- - Python (*2.x*) might still be handy for build scripts.footnote:[SCons supports both Python 2.x
-   and Python 3.x transparently. Basically there is no reason to stick to Python 2.x -- just the standard
-   python is not yet switched on Debian/stable, and so we might miss out on some scripts.]
+ - Python (*3.10*) required for building (->SCons)
  - bash (some test scripts use bash specific extensions)
 
 Build Tools
 ~~~~~~~~~~~
 
-* Git
-* SCons *2.0* footnote:[we build with SCons >= 3.0 since a long time. However, since the times of 2.0,
-  there are no major breaking improvements we rely on -- so chances are that the Build works fine with
-  older versions. In addition, we use some SCons plug-ins, which are all shipped in-tree (`admin/scons`)]
+* https://www.scons.org/[SCons build system] v**4.8** footnote:[
+    Unfortunately, SCons still sets the conceptual standard how a modern build system should be:
+    It is declarative, defines the _what_ and not the _how_ and uses build scripts written in
+    a clean and modern language (Python).
+    Autotools should be considered legacy, and CMake turned out to be rather disappointing and
+    lacks adequate conceptual grounding. Meson has a somewhat more modern appeal, yet seems to
+    require us to do much more work to get even remotely to that level of clarity and flexibility
+    which we enjoy every day when working with SCons. +
+    We are aware of the shortcomings of SCons in practice however, notably that it is not widely
+    known and thus requires additional learning effort, and that it could become prohibitively
+    slow on very large projects. At the current project size, the delay on incremental builds
+    does not really seem relevant in practice, given that C++ compilation as such is slow anyway.
+    We are not aware of using any notable features of SCons beyond v2.0, and we use some SCons
+    plug-ins, which are all shipped in-tree (directory 'admin/scons')]
 * pkg-config
-* Doxygen
+* Doxygen (optional)
+* Asciidoc (optional)
+* Git -> https://git.lumiera.org/?p=LUMIERA;a=summary[git://git.lumiera.org/LUMIERA]
+  footnote:[
+    _Ichthyo_ maintains a repo at https://github.com/Ichthyostega/Lumiera/[Github ^~Ichthyostega/Lumiera^]
+  ]
 
-We maintain a link:/documentation/technical/infra/debianDepot.html[Debian/Ubuntu package] (relying on debhelper, CDBS, git-buildpackage)
+💡 We maintain a link:{ldoc}/technical/infra/debianDepot.html[Debian/Ubuntu package] (based on `git-buildpackage`)
 
 Libraries
 ~~~~~~~~~
 
-* BOOST
-* link:http://nobug.pipapo.org/[NoBug]
+* https://www.boost.org/[Boost libraries]
+* https://nobug.pipapo.org/[NoBug library]
 * https://github.com/bplaum/gavl[GAVL] (for raw media support)
-* ALSA: libasound2-dev
-* for the GUI: (*GTK-3*) gtkmm-3.0 gdlmm-3.0 glibmm-2.4 cairomm-1.0 xv
- - libgtkmm-3.0-dev
- - libcairomm-1.0-dev
- - libglibmm-2.4-dev, requiring at least glib2.0 (2.40 or better) and gthread-2.0
- - libxv-dev footnote:[for the XV viewer widget `gui/output/xvdisplayer.cpp`
-     -- currently obsolete as of [yellow-background]#5/2015#][yellow-background]#TODO 5/2015# and X-lib
- - librsvg-2.0 and librsvg2-dev for rendering Icons
- - libgdl-3 (3.12 or better) through libgdlmm-3 -- the »Gnome Docking Library«footnote:[GDL isn't directly related to GNOME any more.
-   We contributed to the improvement of this library in the past. These improvements went upstream
-   with GDL-2.27. At times, we used to ship our own GDL package. Right now, a recent upstream version
-   together with the corresponding *mm-bindings will do. We provide a debian package for the latter,
-   until they will be available in the official Debian/Ubuntu/Mint repos. But we don't have any
-   special requirements on these `gdlmm` bindings.]
+* https://www.alsa-project.org/[ALSA (libasound2-dev)]
+* for the GUI: (*GTK-3*) gtkmm, glibmm-2.4, cairomm-1, gdlmm-3, Xv
+ - libgtkmm-3.0-dev (`>=3.20`)
+ - libglibmm-2.4-dev (`>= 2.66`), requiring at least glib2.0 (`>=2.80`)
+ - libcairomm-1.0-dev (`>= 1.14`)
+ - librsvg2-dev (`>=2.40`) for rendering Icons
+ - libxv-dev footnote:[
+     For the time being, this is a placeholder and fallback to integrate
+     any technology for displaying video frames on the dektop. It is now used in the
+     XV viewer widget 'stage/output/xv-displayer.hpp|cpp' -- currently expected
+     to be obsolete soon, but it is yet [yellow-background]#undecided as of 11/2025#
+     what we use as starting point for video output from the Lumiera Render Engine.
+     XV might be retained as a fall-back solution, the libraries GLX or EGL might be used...
+   ]
+   and X-lib ^[yellow-background]#TODO 11/2025#^
+ - libgdl-3-dev (`>= 3.40`) through libgdlmm-3 -- the »Gnome Docking Library«footnote:[
+     https://gitlab.gnome.org/Archive/gdl.git[lib GDL] isn't directly related to GNOME any more.
+     We use this library for docking panels in the GUI with GTK-3. This solution was maintained
+     for some time by the »Anjuta« project -- we also contributed to the improvement of this library
+     in the past, and these improvements went upstream with GDL-2.27. Unfortunately, GDL was abandoned
+     meanwhile. and we do not see a clear pathway for the future here, short of upgrading to GTK-4,
+     which is possible, but would require some considerable effort. As of 2025, GDL is still usable,
+     but no longer available through the standard distribution channels. +
+     We provide a Git repository at our Website for
+     https://git.lumiera.org/?p=debian/gdl;a=summary[libGDL (3.40) +git://git.lumiera.org/debian/gdl+]
+     and the
+     https://git.lumiera.org/?p=debian/gdlmm;a=summary[GDL C++ bindings (3.7.3) +git://git.lumiera.org/debian/gdlmm+]
+     and we maintain custom Debian packages for both in our
+     link:/debian/[Debian DEB depot].
+   ]
 
+''''
 
+.Documentation and Resources
+[TIP]
+--
+* Tutorial link:{ldoc}/user/tutorials/building.html[Building Lumiera from source]
+* Tutorial link:{ldoc}/user/tutorials/DebianBuilding.html[Building the »Debian Way«]
+* About the link:{ldoc}/technical/build/LumieraDebianPackage.html[Lumiera Debian Package]
+* About the link:{ldoc}/technical/build/SCons.html[SCons Build-System of Lumiera]
+* About the link:{ldoc}/technical/code/index.html[Code Base Organisation]
+* link:/debian/[Lumiera Debian DEB depot]
+--

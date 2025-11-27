@@ -166815,8 +166815,8 @@ that situation will improve in forseeable future.</pre>
 <node COLOR="#338800" CREATED="1751808526562" ID="ID_388867150" MODIFIED="1751808533249" TEXT="Build erm&#xf6;glichen">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1751808534961" ID="ID_1104418213" MODIFIED="1751808550847" TEXT="Dokumentation Dependencies">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1751808534961" ID="ID_1104418213" MODIFIED="1764298899952" TEXT="Dokumentation Dependencies">
+<icon BUILTIN="button_ok"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1751808559518" ID="ID_1590821025" MODIFIED="1762963516647" TEXT="DEB-Paket bereitgestellt">
 <arrowlink COLOR="#f20801" DESTINATION="ID_1286202898" ENDARROW="Default" ENDINCLINATION="486;-1619;" ID="Arrow_ID_260471150" STARTARROW="None" STARTINCLINATION="438;44;"/>
@@ -170170,9 +170170,9 @@ that situation will improve in forseeable future.</pre>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1751808931491" ID="ID_1572764059" MODIFIED="1752070235664" TEXT="Build/Dependencies">
-<arrowlink COLOR="#af497b" DESTINATION="ID_1667125104" ENDARROW="Default" ENDINCLINATION="-428;-45;" ID="Arrow_ID_1142158265" STARTARROW="None" STARTINCLINATION="-539;63;"/>
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1751808931491" ID="ID_1572764059" MODIFIED="1764298977949" TEXT="Build/Dependencies">
+<arrowlink COLOR="#05af3a" DESTINATION="ID_1667125104" ENDARROW="Default" ENDINCLINATION="-428;-45;" ID="Arrow_ID_1142158265" STARTARROW="None" STARTINCLINATION="-786;94;"/>
+<icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1763769642111" FOLDED="true" ID="ID_1051001254" MODIFIED="1763938199831" TEXT="README &#x2014; NEWS(Changelog) &#x2014; AUTHORS &#x2014; LICENSE">
 <linktarget COLOR="#199f6d" DESTINATION="ID_1051001254" ENDARROW="Default" ENDINCLINATION="-2411;128;" ID="Arrow_ID_465720111" SOURCE="ID_520590054" STARTARROW="None" STARTINCLINATION="-418;-611;"/>
@@ -170690,22 +170690,23 @@ that situation will improve in forseeable future.</pre>
 <node CREATED="1439176872457" HGAP="15" ID="ID_355008543" MODIFIED="1742180968438" POSITION="left" TEXT="Plattform" VSHIFT="41">
 <icon BUILTIN="stop"/>
 <node CREATED="1561736857971" ID="ID_662811521" MODIFIED="1561736871424" TEXT="Dependencies">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1561736649007" FOLDED="true" ID="ID_1295139073" MODIFIED="1583523610926" TEXT="GTK in Debian">
+<node BACKGROUND_COLOR="#e2d190" COLOR="#990000" CREATED="1561736649007" FOLDED="true" ID="ID_1295139073" MODIFIED="1764297607392" TEXT="GTK in Debian">
 <linktarget COLOR="#355ad5" DESTINATION="ID_1295139073" ENDARROW="Default" ENDINCLINATION="-816;0;" ID="Arrow_ID_1376879556" SOURCE="ID_1920301340" STARTARROW="None" STARTINCLINATION="-753;0;"/>
 <icon BUILTIN="info"/>
-<icon BUILTIN="flag-yellow"/>
 <node CREATED="1561733634234" ID="ID_283837231" MODIFIED="1561734827667" TEXT="libcairomm-1.0-dev">
-<node CREATED="1561734539908" ID="ID_1171069121" MODIFIED="1561734577386" TEXT="Stretch(stable): 1.12.0-1+b1"/>
-<node CREATED="1561734579119" ID="ID_261683999" MODIFIED="1561734596480" TEXT="Buster(testing): 1.12.2-4"/>
+<node CREATED="1561734539908" ID="ID_1171069121" MODIFIED="1583523610926" TEXT="Stretch: 1.12.0-1+b1"/>
+<node CREATED="1561734579119" ID="ID_261683999" MODIFIED="1583523610926" TEXT="Buster: 1.12.2-4"/>
 <node CREATED="1561734793676" ID="ID_124869066" MODIFIED="1561734804673" TEXT="Abh&#xe4;ngigkeiten identisch: libcairo2-dev (&gt;= 1.10.0), libsigc++-2.0-dev (&gt;= 2.5.1)"/>
+<node CREATED="1764297359938" ID="ID_1538545199" MODIFIED="1764297371913" TEXT="Trixie: 1,14,5"/>
 </node>
 <node CREATED="1561734821281" ID="ID_1548932504" MODIFIED="1561734822892" TEXT="libcairo2-dev">
-<node CREATED="1561736106556" ID="ID_447781913" MODIFIED="1561736112145" TEXT="Stretch(stable): 1.14.8-1"/>
-<node CREATED="1561736119157" ID="ID_223457676" MODIFIED="1561736124491" TEXT="Buster(testing): 1.16.0-4"/>
+<node CREATED="1561736106556" ID="ID_447781913" MODIFIED="1583523610926" TEXT="Stretch: 1.14.8-1"/>
+<node CREATED="1561736119157" ID="ID_223457676" MODIFIED="1583523610926" TEXT="Buster: 1.16.0-4"/>
+<node CREATED="1764297397401" ID="ID_1879074221" MODIFIED="1764297409420" TEXT="Trixie: 1.18"/>
 </node>
 <node CREATED="1561736244241" ID="ID_21972769" MODIFIED="1561736247507" TEXT="libgtkmm-3.0-dev">
-<node CREATED="1561736106556" ID="ID_1654459671" MODIFIED="1561736267242" TEXT="Stretch(stable): 3.22.0-1"/>
-<node CREATED="1561736119157" ID="ID_302515222" MODIFIED="1561736292712" TEXT="Buster(testing): 3.24.0-2"/>
+<node CREATED="1561736106556" ID="ID_1654459671" MODIFIED="1583523610926" TEXT="Stretch: 3.22.0-1"/>
+<node CREATED="1561736119157" ID="ID_302515222" MODIFIED="1583523610926" TEXT="Buster: 3.24.0-2"/>
 <node CREATED="1561736364329" ID="ID_604772455" MODIFIED="1561736371506" TEXT="Abh&#xe4;ngigkeiten nahezu identisch">
 <node CREATED="1561736372871" ID="ID_1255591782" MODIFIED="1561736389392" TEXT="GTK: libgtk-3-dev (&gt;= 3.22.0)"/>
 <node CREATED="1561736412505" ID="ID_1655385358" MODIFIED="1561736418460" TEXT="GLib">
@@ -170715,10 +170716,15 @@ that situation will improve in forseeable future.</pre>
 <node CREATED="1561736419592" ID="ID_1821608630" MODIFIED="1561736436441" TEXT="Cairo: libcairomm-1.0-dev (&gt;= 1.12.0)"/>
 <node CREATED="1561736440629" ID="ID_851030197" MODIFIED="1561736454086" TEXT="Pango: libpangomm-1.4-dev (&gt;= 2.38.2)"/>
 </node>
+<node CREATED="1764297471092" ID="ID_1232387903" MODIFIED="1764297479715" TEXT="Trixe: 3.24"/>
 </node>
 <node CREATED="1561736766454" ID="ID_1746397592" MODIFIED="1561736768899" TEXT="libgtk-3-dev">
-<node CREATED="1561736106556" ID="ID_957399714" MODIFIED="1561736786976" TEXT="Stretch(stable): 3.22.11-1"/>
-<node CREATED="1561736119157" ID="ID_1252132002" MODIFIED="1561736803582" TEXT="Buster(testing): 3.24.5-1"/>
+<node CREATED="1561736106556" ID="ID_957399714" MODIFIED="1583523610926" TEXT="Stretch: 3.22.11-1"/>
+<node CREATED="1561736119157" ID="ID_1252132002" MODIFIED="1583523610926" TEXT="Buster: 3.24.5-1"/>
+<node CREATED="1764297514331" ID="ID_1984644013" MODIFIED="1764297520624" TEXT="Trixie: 3.24"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1764297584383" ID="ID_1744141494" MODIFIED="1764297606063" TEXT="Fazit(2025): GTK-3 ist im maintenance-mode">
+<icon BUILTIN="back"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1743344601364" FOLDED="true" ID="ID_1474230791" MODIFIED="1743344621487" TEXT="GDL &#xbb;Gnome-Docking-Libary&#xab;">
@@ -171094,20 +171100,51 @@ actively maintained upstream. Please remove gdl from Debian.</pre>
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1583523613062" ID="ID_601841679" MODIFIED="1742176358176" TEXT="f&#xfc;r Debian/Trixie pr&#xfc;fen und aktualisieren">
-<linktarget COLOR="#c35b60" DESTINATION="ID_601841679" ENDARROW="Default" ENDINCLINATION="53;0;" ID="Arrow_ID_198244235" SOURCE="ID_1032664307" STARTARROW="None" STARTINCLINATION="53;0;"/>
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1583523613062" FOLDED="true" ID="ID_601841679" MODIFIED="1764297045687" TEXT="f&#xfc;r Debian/Trixie pr&#xfc;fen und aktualisieren">
+<arrowlink COLOR="#2d3c9c" DESTINATION="ID_180589749" ENDARROW="Default" ENDINCLINATION="-579;-65;" ID="Arrow_ID_1201631883" STARTARROW="None" STARTINCLINATION="-190;12;"/>
+<linktarget COLOR="#c35b60" DESTINATION="ID_601841679" ENDARROW="Default" ENDINCLINATION="68;4;" ID="Arrow_ID_198244235" SOURCE="ID_1032664307" STARTARROW="None" STARTINCLINATION="35;-2;"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1764297007331" ID="ID_1925071909" MODIFIED="1764297021163" TEXT="gem&#xe4;&#xdf; SCons + dokumentierter Liste durchgegangen"/>
+<node CREATED="1764297022138" ID="ID_1594986433" MODIFIED="1764297041259" TEXT="jeweils abgeglichen mit Debian/Trixie und Ubuntu/Noble"/>
 </node>
 </node>
 <node CREATED="1583523694636" HGAP="56" ID="ID_446319704" MODIFIED="1583523704860" TEXT="Build-Umgebung" VSHIFT="6">
 <node COLOR="#338800" CREATED="1583523705722" ID="ID_1278670650" MODIFIED="1583523709609" TEXT="Eclipse-Projekt">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1583523710795" ID="ID_1032664307" MODIFIED="1583523732513" TEXT="wichtige Abh&#xe4;ngigkeiten im Quellcode">
-<arrowlink COLOR="#c35b60" DESTINATION="ID_601841679" ENDARROW="Default" ENDINCLINATION="53;0;" ID="Arrow_ID_198244235" STARTARROW="None" STARTINCLINATION="53;0;"/>
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#3a1559" CREATED="1583523710795" FOLDED="true" ID="ID_1032664307" MODIFIED="1764297618147" TEXT="wichtige Abh&#xe4;ngigkeiten im Quellcode">
+<arrowlink COLOR="#c35b60" DESTINATION="ID_601841679" ENDARROW="Default" ENDINCLINATION="68;4;" ID="Arrow_ID_198244235" STARTARROW="None" STARTINCLINATION="35;-2;"/>
+<icon BUILTIN="info"/>
+<node CREATED="1764296303921" ID="ID_584260845" MODIFIED="1764296324578" TEXT="Python &#x27f9; f&#xfc;r SCons : nun 3.10"/>
+<node CREATED="1764296327582" ID="ID_1546222184" MODIFIED="1764296344015" TEXT="Boost: derzeit nur noch program-options (+ die header-only)"/>
+<node CREATED="1764296351329" ID="ID_716844505" MODIFIED="1764296491738" TEXT="XV und X-Libs : noch erhalten for Output-Demo (und vielleicht dauerhaft als Fallback)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das betrifft auch das Thema &#187;Video-Output&#171;, zu dem Benny und ich einen Vortrag auf der FrOSCon25 gehalten haben. In dem Zusammenhang haben wir uns Basiskenntnisse in OpenGL und Shader-Programmierung angeeignet, aber beschlossen, das Thema vorerst noch nicht zu priorisieren &#8212; f&#252;r die <i>Integration von Lumiera gen&#252;gt es wenn &#187;irgendwie&#171; Video ausgegeben werden kann....</i>
+    </p>
+  </body>
+</html></richcontent>
 </node>
-<node CREATED="1689294635406" FOLDED="true" HGAP="23" ID="ID_1624761863" MODIFIED="1696182854609" TEXT="Test/Debug" VSHIFT="35">
+<node CREATED="1764296492982" ID="ID_210862095" MODIFIED="1764296703546" TEXT="Wayland: derzeit (noch) kein Thema">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...r&#252;ckt jetzt immer n&#228;her, in viele Distributionen wird er derzeit reingedr&#252;ckt; f&#252;r mich selber kommt Wayland aber erst in Frage, wenn er auf XFCE stabil l&#228;uft und mein &#187;pragmatisches Farbmanagement&#171; dadurch nicht gef&#228;rdet wird. Vermutlich bedeutet das, da&#223; ich dazu erst mal mich von meiner <i>UrUrUralten Grafikkarte trennen mu&#223;... </i>(die sowiso nur noch f&#252;r Debian/Trixie ein letztes Mal mit dem Tesla-Treiber unterst&#252;tzt wurde). Haha, ich arbeite immer noch zufrieden und gl&#252;cklich mit Hardware von 2011, das soll mir erst mal jemand nachmachen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1764296712382" ID="ID_1256471980" MODIFIED="1764296731291" TEXT="auch Alsa und GAVL erhalte ich lediglich als Platzhalter"/>
+<node CREATED="1764296744224" ID="ID_1630664132" MODIFIED="1764296784452" TEXT="GTK-3 ist im &#xbb;maintenance mode&#xab;">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#ba0b14" CREATED="1764296791111" HGAP="23" ID="ID_442420462" MODIFIED="1764296819537" TEXT="und GDL h&#xe4;ngt nur noch an diesem einen &#xbb;seidenen Faden&#xab;" VSHIFT="4">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+<node CREATED="1689294635406" FOLDED="true" HGAP="23" ID="ID_1624761863" MODIFIED="1764296266132" TEXT="Test/Debug" VSHIFT="35">
 <cloud COLOR="#e4d4ac"/>
 <icon BUILTIN="info"/>
 <node CREATED="1696182724524" ID="ID_1871189508" MODIFIED="1696182799932" TEXT="Test-parameter">
@@ -171599,7 +171636,7 @@ actively maintained upstream. Please remove gdl from Debian.</pre>
 <icon BUILTIN="pencil"/>
 <node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1742175232490" ID="ID_1849121366" MODIFIED="1751656516018" TEXT="Aufgaben">
 <icon BUILTIN="yes"/>
-<node COLOR="#338800" CREATED="1742175284498" ID="ID_381697845" MODIFIED="1745722043514" TEXT="Scons-Build migrieren">
+<node COLOR="#338800" CREATED="1742175284498" FOLDED="true" ID="ID_381697845" MODIFIED="1745722043514" TEXT="Scons-Build migrieren">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1742175408138" ID="ID_22551307" MODIFIED="1742176275192" TEXT="den gro&#xdf;en Schritt hat bereits Benny gemacht">
 <linktarget COLOR="#2a999f" DESTINATION="ID_22551307" ENDARROW="Default" ENDINCLINATION="682;41;" ID="Arrow_ID_344918215" SOURCE="ID_1353266444" STARTARROW="None" STARTINCLINATION="885;-71;"/>
@@ -171983,9 +172020,9 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1742175483087" ID="ID_40670399" MODIFIED="1763770261946" TEXT="Nacharbeiten">
-<icon BUILTIN="pencil"/>
-<node COLOR="#435e98" CREATED="1742175488343" ID="ID_842750245" MODIFIED="1764035205131" TEXT="Listen-Konkatenation: geht es besser?">
+<node COLOR="#338800" CREATED="1742175483087" ID="ID_40670399" MODIFIED="1764295582910" TEXT="Nacharbeiten">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1742175488343" FOLDED="true" ID="ID_842750245" MODIFIED="1764035205131" TEXT="Listen-Konkatenation: geht es besser?">
 <icon BUILTIN="help"/>
 <node CREATED="1742175505805" ID="ID_1316231941" MODIFIED="1742175579374" TEXT="Benny hat die Standard-Migration gemacht...">
 <richcontent TYPE="NOTE"><html>
@@ -172014,9 +172051,9 @@ Since then others have made contributions, see the log for the history.</font></
 </html></richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1763245245613" ID="ID_525244825" MODIFIED="1763940646058" TEXT="Python verpflichtend auf 3.0 heben">
-<arrowlink COLOR="#e1253b" DESTINATION="ID_1681367379" ENDARROW="Default" ENDINCLINATION="-773;-68;" ID="Arrow_ID_835035037" STARTARROW="None" STARTINCLINATION="-19;733;"/>
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#484398" CREATED="1763245245613" FOLDED="true" ID="ID_525244825" MODIFIED="1764295327934" TEXT="Python verpflichtend auf 3.0 heben">
+<arrowlink COLOR="#562d9a" DESTINATION="ID_1681367379" ENDARROW="Default" ENDINCLINATION="-773;-68;" ID="Arrow_ID_835035037" STARTARROW="None" STARTINCLINATION="-19;733;"/>
+<icon BUILTIN="yes"/>
 <node CREATED="1763245607991" ID="ID_1509658805" MODIFIED="1763245615611" TEXT="3.5 ist bereits out-of-life"/>
 <node CREATED="1763245616716" ID="ID_1414068970" MODIFIED="1763245624301" TEXT="3.10 w&#xe4;re derzeit ein gutes LTS"/>
 <node CREATED="1763245625028" ID="ID_1202221499" MODIFIED="1763245636034" TEXT="Debian / Trixie hat 3.13"/>
@@ -172071,7 +172108,7 @@ Since then others have made contributions, see the log for the history.</font></
 <node CREATED="1763000470813" ID="ID_679231386" MODIFIED="1763000485718" TEXT="das w&#xfc;rde in das bisherige Schema passen"/>
 </node>
 </node>
-<node COLOR="#5b280f" CREATED="1763230685670" ID="ID_1004502438" MODIFIED="1763250736483" TEXT="LUMIERA_CONFIG_PATH wird falsch gesetzt">
+<node COLOR="#5b280f" CREATED="1763230685670" FOLDED="true" ID="ID_1004502438" MODIFIED="1764295617996" TEXT="LUMIERA_CONFIG_PATH wird falsch gesetzt">
 <linktarget COLOR="#fd403c" DESTINATION="ID_1004502438" ENDARROW="Default" ENDINCLINATION="394;27;" ID="Arrow_ID_590201297" SOURCE="ID_1567105707" STARTARROW="None" STARTINCLINATION="740;45;"/>
 <icon BUILTIN="broken-line"/>
 <icon BUILTIN="button_cancel"/>
@@ -172292,7 +172329,7 @@ Since then others have made contributions, see the log for the history.</font></
 <node COLOR="#338800" CREATED="1763253905407" ID="ID_683037557" MODIFIED="1763256710085" TEXT="INSTALLDIR mu&#xdf; nicht existieren">
 <linktarget COLOR="#347acc" DESTINATION="ID_683037557" ENDARROW="Default" ENDINCLINATION="-807;74;" ID="Arrow_ID_628482667" SOURCE="ID_316996095" STARTARROW="None" STARTINCLINATION="-124;12;"/>
 <icon BUILTIN="button_ok"/>
-<node CREATED="1763253990153" ID="ID_481586261" MODIFIED="1763254276005" TEXT="und wir sollten hier nichts machen...">
+<node COLOR="#755237" CREATED="1763253990153" ID="ID_481586261" MODIFIED="1764295665529" TEXT="und wir sollten hier nichts machen...">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -172319,6 +172356,26 @@ Since then others have made contributions, see the log for the history.</font></
 <node COLOR="#29765c" CREATED="1763770127378" ID="ID_935597696" MODIFIED="1763770156664" TEXT="jetzt schon (getestet)">
 <font NAME="SansSerif" SIZE="10"/>
 </node>
+</node>
+<node COLOR="#338800" CREATED="1764295345324" ID="ID_469361862" LINK="#ID_1892741872" MODIFIED="1764295577895" TEXT="&#xc4;rgernis: es werden jedesmal die Icons neu gerendert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Oh weh!
+    </p>
+    <p>
+      H&#228;tte ich das Thema doch blo&#223; nicht angefa&#223;t ... das war jetzt mehr als ein Tag ekelhafte Debugging-Arbeit, und ich hab nun Interna von SCons gesehen, die ich lieber nicht wissen w&#252;rde....
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Meine Einsch&#228;tzung bleibt allerdings trotzdem, da&#223; SCons <i>konzeptionell</i>&#160; eines der modernsten Buildsysteme ist, das ich kenne, und das einzige unter Linux gel&#228;ufige Buildsystem, das auch nur an&#228;hernd zeitgem&#228;&#223; ist. Auch wenn die Implementierung dann sowohl &#187;pythonisch&#171;, alsauch &#8222;hemds&#228;rmelig&#8220; ist.....
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
@@ -172644,7 +172701,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node COLOR="#435e98" CREATED="1742175594109" ID="ID_40053833" MODIFIED="1743901698063" TEXT="brauche">
+<node COLOR="#435e98" CREATED="1742175594109" FOLDED="true" ID="ID_40053833" MODIFIED="1743901698063" TEXT="brauche">
 <icon BUILTIN="yes"/>
 <node COLOR="#338800" CREATED="1742175598752" ID="ID_896528837" MODIFIED="1742175602207" TEXT="Boost-Libraries">
 <icon BUILTIN="button_ok"/>
@@ -172664,8 +172721,8 @@ Since then others have made contributions, see the log for the history.</font></
 <node COLOR="#435e98" CREATED="1742313412377" ID="ID_1229409179" MODIFIED="1742313437600" TEXT="libgavl-dev 2.0.0~svn6298-1+b3 : vorerst mal installiert"/>
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1742168607598" ID="ID_969158272" MODIFIED="1742168698566" TEXT="Alsa">
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1742313534937" ID="ID_229641427" MODIFIED="1742313622707" STYLE="fork" TEXT="fehlt in der Bau-Anleitung">
-<arrowlink COLOR="#fe1f09" DESTINATION="ID_999827151" ENDARROW="Default" ENDINCLINATION="510;0;" ID="Arrow_ID_1650748982" STARTARROW="None" STARTINCLINATION="215;22;"/>
+<node COLOR="#435e98" CREATED="1742313534937" ID="ID_229641427" MODIFIED="1764288775929" STYLE="fork" TEXT="fehlt in der Bau-Anleitung">
+<arrowlink COLOR="#0794c6" DESTINATION="ID_999827151" ENDARROW="Default" ENDINCLINATION="510;0;" ID="Arrow_ID_1650748982" STARTARROW="None" STARTINCLINATION="215;22;"/>
 <font NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="broken-line"/>
 </node>
@@ -178143,9 +178200,9 @@ Since then others have made contributions, see the log for the history.</font></
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1439644368572" ID="ID_1667125104" MODIFIED="1752070235664" TEXT="Doku: Referenz-System">
-<linktarget COLOR="#af497b" DESTINATION="ID_1667125104" ENDARROW="Default" ENDINCLINATION="-428;-45;" ID="Arrow_ID_1142158265" SOURCE="ID_1572764059" STARTARROW="None" STARTINCLINATION="-539;63;"/>
-<icon BUILTIN="bell"/>
+<node BACKGROUND_COLOR="#a3db8b" COLOR="#3a7014" CREATED="1439644368572" ID="ID_1667125104" MODIFIED="1764299038929" TEXT="Doku: Referenz-System">
+<linktarget COLOR="#05af3a" DESTINATION="ID_1667125104" ENDARROW="Default" ENDINCLINATION="-428;-45;" ID="Arrow_ID_1142158265" SOURCE="ID_1572764059" STARTARROW="None" STARTINCLINATION="-786;94;"/>
+<icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#e1d0aa" CREATED="1744938484753" ID="ID_581586255" MODIFIED="1745014676554" TEXT="Website: Aufr&#xe4;um-Arbeiten">
 <icon BUILTIN="bell"/>
 <node BACKGROUND_COLOR="#b3d0c1" COLOR="#435e98" CREATED="1744938498263" FOLDED="true" ID="ID_1741468339" MODIFIED="1745014721994" TEXT="menugen.py auf Python-3 portieren">
@@ -178476,22 +178533,23 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1742313583059" ID="ID_580462484" MODIFIED="1742313592747" TEXT="Dependency-Liste aktualisieren">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1747524067725" ID="ID_219954631" MODIFIED="1747524193833" TEXT="Abh&#xe4;ngigkeit GAVL">
+<node COLOR="#338800" CREATED="1742313583059" ID="ID_580462484" MODIFIED="1764288727038" TEXT="Dependency-Liste aktualisieren">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1747524067725" ID="ID_219954631" MODIFIED="1764288731987" TEXT="Abh&#xe4;ngigkeit GAVL">
 <arrowlink COLOR="#4c3b8b" DESTINATION="ID_1554376708" ENDARROW="Default" ENDINCLINATION="219;519;" ID="Arrow_ID_589652743" STARTARROW="None" STARTINCLINATION="326;-188;"/>
 <linktarget COLOR="#c95974" DESTINATION="ID_219954631" ENDARROW="Default" ENDINCLINATION="813;-128;" ID="Arrow_ID_889384701" SOURCE="ID_1347801315" STARTARROW="None" STARTINCLINATION="1093;150;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1747524076555" ID="ID_1964951178" MODIFIED="1747524084106" TEXT="behalte das vorerst noch bei">
 <icon BUILTIN="yes"/>
 </node>
 <node CREATED="1747524085359" ID="ID_976130232" LINK="https://github.com/bplaum/gavl" MODIFIED="1747524093250" TEXT="Achtung: umgezogen auf Gitub"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1742313577420" ID="ID_527584176" MODIFIED="1742313592746" TEXT="Bau-Anleitung &#xfc;berarbeiten">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1742313598488" ID="ID_999827151" MODIFIED="1742313617121" TEXT="Alsa fehlt">
-<linktarget COLOR="#fe1f09" DESTINATION="ID_999827151" ENDARROW="Default" ENDINCLINATION="510;0;" ID="Arrow_ID_1650748982" SOURCE="ID_229641427" STARTARROW="None" STARTINCLINATION="215;22;"/>
+<node COLOR="#338800" CREATED="1742313577420" ID="ID_527584176" MODIFIED="1764288738964" TEXT="Bau-Anleitung &#xfc;berarbeiten">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1742313598488" ID="ID_999827151" MODIFIED="1764289362949" TEXT="Alsa fehlt">
+<arrowlink DESTINATION="ID_1745124117" ENDARROW="Default" ENDINCLINATION="136;16;" ID="Arrow_ID_1782792670" STARTARROW="None" STARTINCLINATION="-44;187;"/>
+<linktarget COLOR="#0794c6" DESTINATION="ID_999827151" ENDARROW="Default" ENDINCLINATION="510;0;" ID="Arrow_ID_1650748982" SOURCE="ID_229641427" STARTARROW="None" STARTINCLINATION="215;22;"/>
 <icon BUILTIN="broken-line"/>
 <node CREATED="1742313793515" HGAP="26" ID="ID_1161651725" MODIFIED="1742313811416" TEXT="libasound2-dev" VSHIFT="14">
 <richcontent TYPE="NOTE"><html>
@@ -178510,7 +178568,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 <node CREATED="1446505444775" HGAP="106" ID="ID_721807850" MODIFIED="1751804873305" TEXT="Buildsystem" VSHIFT="-5">
 <icon BUILTIN="prepare"/>
-<node CREATED="1446505367113" ID="ID_335245102" LINK="http://issues.lumiera.org/ticket/971" MODIFIED="1557498707242">
+<node CREATED="1446505367113" ID="ID_335245102" LINK="http://issues.lumiera.org/ticket/971" MODIFIED="1764295282429">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
@@ -178519,8 +178577,9 @@ Since then others have made contributions, see the log for the history.</font></
     </p>
   </body>
 </html></richcontent>
+<icon BUILTIN="hourglass"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1446509415481" ID="ID_180589749" MODIFIED="1762968689573" TEXT="Versionen hochsetzen">
+<node BACKGROUND_COLOR="#b9b9ef" COLOR="#20206c" CREATED="1446509415481" ID="ID_180589749" MODIFIED="1764297114630" TEXT="Versionen hochsetzen">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -178529,21 +178588,122 @@ Since then others have made contributions, see the log for the history.</font></
     </p>
   </body>
 </html></richcontent>
-<icon BUILTIN="flag-pink"/>
-<node CREATED="1446509422423" ID="ID_1328716100" MODIFIED="1762968020827" TEXT="gtkmm-3.0 3.20"/>
-<node CREATED="1446509430758" ID="ID_371171235" MODIFIED="1762968053027" TEXT="glibmm-2.4 2.66"/>
-<node CREATED="1446509601271" ID="ID_1477664506" MODIFIED="1762968079346" TEXT="libglib2.0 2.80">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1446510347931" ID="ID_559552800" MODIFIED="1762968075904" TEXT="direkten Check hierf&#xfc;r">
-<icon BUILTIN="flag-yellow"/>
+<linktarget COLOR="#2d3c9c" DESTINATION="ID_180589749" ENDARROW="Default" ENDINCLINATION="-579;-65;" ID="Arrow_ID_1201631883" SOURCE="ID_601841679" STARTARROW="None" STARTINCLINATION="-190;12;"/>
+<icon BUILTIN="yes"/>
+<node COLOR="#338800" CREATED="1764270483081" FOLDED="true" ID="ID_606991947" MODIFIED="1764294515476" TEXT="gcc-14">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das ist derzeit tats&#228;chlich verbindlich ... und auch relativ knapp so, weshalb es im Buildsystem gecheckt werden sollte
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1764291882450" ID="ID_1441097045" MODIFIED="1764294387193" TEXT="das ist grenzwertig">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...im Grunde ist das gegen den Basis-Kontrakt, da&#223; man lediglich &#187;einen Compiler&#171; verlangt...
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
 </node>
-<node CREATED="1446510354914" ID="ID_1787485177" MODIFIED="1557498707242" TEXT="check f&#xfc;r gthread fraglich"/>
+<node COLOR="#543877" CREATED="1764291952623" ID="ID_725890685" MODIFIED="1764294400140" TEXT="man k&#xf6;nnte es zulassen als toleranter Check, falls ein gcc verwendet wird">
+<icon BUILTIN="yes"/>
 </node>
-<node CREATED="1446509752707" ID="ID_1392554051" MODIFIED="1762968117046" TEXT="libgdl-3-dev 3.40"/>
-<node CREATED="1762968094725" ID="ID_142490674" MODIFIED="1762968114842" TEXT="libgdlmm-3 3.7,3"/>
-<node CREATED="1446509983556" ID="ID_366391443" MODIFIED="1762968138061" TEXT="libcairomm-1.0-dev 1.14"/>
-<node CREATED="1446510475202" ID="ID_514495017" MODIFIED="1762968139572" TEXT="librsvg2-dev 2.40"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1764294043769" FOLDED="true" ID="ID_878243132" MODIFIED="1764294351674" TEXT="wie...?">
+<node COLOR="#5b280f" CREATED="1764294047459" ID="ID_1359817947" MODIFIED="1764294054837" TEXT="im Netz suchen...">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node BACKGROUND_COLOR="#accdc3" COLOR="#3f4015" CREATED="1764294056008" ID="ID_18341888" MODIFIED="1764294135518" STYLE="fork" TEXT="SO.ai gefragt">
+<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
+<icon BUILTIN="wizard"/>
+<node CREATED="1764294137842" ID="ID_537338947" MODIFIED="1764294143068" TEXT="ich FASSE es nicht!"/>
+<node CREATED="1764294143799" ID="ID_1507407539" MODIFIED="1764294160573" TEXT="das Ding antwortet auf Chinesisch">
+<icon BUILTIN="smiley-oh"/>
+</node>
+<node CREATED="1764294167181" ID="ID_1322016077" MODIFIED="1764294177582" TEXT="auf Nachfrage spuckt er noch mehr Chinesisch aus"/>
+<node CREATED="1764294178340" ID="ID_936747724" MODIFIED="1764294244505" TEXT="aber da ist ein Python-Code-Schnipsel drin!!!">
+<arrowlink COLOR="#345bcc" DESTINATION="ID_344441713" ENDARROW="Default" ENDINCLINATION="-48;-1;" ID="Arrow_ID_1670152906" STARTARROW="None" STARTINCLINATION="-138;8;"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1764294193607" HGAP="31" ID="ID_344441713" MODIFIED="1764294237217" TEXT="gute Idee: gcc -dumpversion aufrufen" VSHIFT="24">
+<linktarget COLOR="#345bcc" DESTINATION="ID_344441713" ENDARROW="Default" ENDINCLINATION="-48;-1;" ID="Arrow_ID_1670152906" SOURCE="ID_936747724" STARTARROW="None" STARTINCLINATION="-138;8;"/>
+<icon BUILTIN="yes"/>
+<node COLOR="#338800" CREATED="1764294250458" ID="ID_1146149742" MODIFIED="1764294264014" TEXT="das kann man noch etwas verfeinern">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1764294266069" ID="ID_285503925" MODIFIED="1764294282801" TEXT="pr&#xfc;fen ob $CXX mit &quot;g++&quot; anf&#xe4;ngt"/>
+<node CREATED="1764294289592" ID="ID_1598301473" MODIFIED="1764294312745" TEXT="Versionsnummer in ein Tupel zerlegen"/>
+<node CREATED="1764294313384" ID="ID_1556094702" MODIFIED="1764294314400" TEXT="Python&apos;s Tupel-Vergleich nutzen"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1764294352884" ID="ID_634980006" MODIFIED="1764294379124" TEXT="Tests gemacht, auch mit CXX= explizit gesetzt">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#5b280f" CREATED="1764270382430" FOLDED="true" ID="ID_76924393" MODIFIED="1764294449386" TEXT="Boost: definiere 1.83 als Bezugslevel">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das ber&#252;cksichtigt auch Ubuntu-Noble(24.04), ist aber derzeit auch genau der Level, der in Debian-Trixie standardm&#228;&#223;ig zum Einsatz kommt
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#ebfebd" DESTINATION="ID_853210654" ENDARROW="Default" ENDINCLINATION="496;-33;" ID="Arrow_ID_459081610" STARTARROW="None" STARTINCLINATION="582;45;"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1764294418086" ID="ID_1481937007" MODIFIED="1764294428394" TEXT="wir pr&#xfc;fen hier generell keinerlei Versionsnummern"/>
+<node CREATED="1764294429175" ID="ID_927454685" MODIFIED="1764294440638" TEXT="wir pr&#xfc;fen Boost auch nicht via pkg-config"/>
+<node CREATED="1764294441387" ID="ID_876223225" MODIFIED="1764294447359" TEXT="sondern konventionell per Header"/>
+</node>
+<node COLOR="#435e98" CREATED="1446509422423" ID="ID_1328716100" MODIFIED="1764289398816" TEXT="gtkmm-3.0 3.20"/>
+<node COLOR="#435e98" CREATED="1446509430758" ID="ID_371171235" MODIFIED="1764289413717" TEXT="glibmm-2.4 2.66"/>
+<node COLOR="#435e98" CREATED="1764289589544" ID="ID_875684650" MODIFIED="1764289695477" TEXT="libsigc++-2.0-dev 2.12">
+<node COLOR="#26747f" CREATED="1764289629936" ID="ID_694126827" MODIFIED="1764289708816" TEXT="pkgconf sigc++-2.0 &#x27fc; 2.12"/>
+</node>
+<node COLOR="#435e98" CREATED="1446509601271" FOLDED="true" ID="ID_1477664506" MODIFIED="1764294493609" TEXT="libglib2.0 2.80">
+<node COLOR="#338800" CREATED="1446510347931" ID="ID_559552800" MODIFIED="1764289721722" TEXT="direkten Check hierf&#xfc;r">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#5b280f" CREATED="1446510354914" FOLDED="true" ID="ID_1787485177" MODIFIED="1764294486480" TEXT="check f&#xfc;r gthread fraglich">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ist keine direkte Dependency mehr
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1764289966254" ID="ID_1209142530" MODIFIED="1764289982686" TEXT="ist in Debian jetzt in libgio-2.0-dev"/>
+<node CREATED="1764290414687" ID="ID_391429038" MODIFIED="1764290433527" TEXT="dagegen in Ubnutu direkt in libglib2.0-dev"/>
+<node CREATED="1764289985302" ID="ID_1741693426" MODIFIED="1764289998960" TEXT="Version bei mir 2.84.4-3~deb13u1"/>
+<node CREATED="1764290012386" ID="ID_1808103586" MODIFIED="1764290031806" TEXT="pkgconf gthread-2.0 --modversion &#x27fc; 2.84.4"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1764290741594" ID="ID_1421256644" MODIFIED="1764294477601" TEXT="Ubuntu liefert v2.80 f&#xfc;r gthread">
+<linktarget COLOR="#643645" DESTINATION="ID_1421256644" ENDARROW="Default" ENDINCLINATION="-16;72;" ID="Arrow_ID_1828313492" SOURCE="ID_1259059843" STARTARROW="None" STARTINCLINATION="120;10;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1764290762991" ID="ID_1259059843" MODIFIED="1764294484669" TEXT="behalte den Check doch bei">
+<arrowlink COLOR="#643645" DESTINATION="ID_1421256644" ENDARROW="Default" ENDINCLINATION="-16;72;" ID="Arrow_ID_1828313492" STARTARROW="None" STARTINCLINATION="120;10;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#7f264c" CREATED="1446509752707" ID="ID_1392554051" MODIFIED="1764291188283" TEXT="libgdl-3-dev 3.40"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#7f264c" CREATED="1762968094725" ID="ID_142490674" MODIFIED="1764291188279" TEXT="libgdlmm-3 3.7,3"/>
+<node COLOR="#435e98" CREATED="1446509983556" ID="ID_366391443" MODIFIED="1764290899304" TEXT="libcairomm-1.0-dev 1.14"/>
+<node COLOR="#435e98" CREATED="1446510475202" ID="ID_514495017" MODIFIED="1764290924623" TEXT="librsvg2-dev 2.40"/>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1446511275302" ID="ID_359693763" MODIFIED="1762968334109" TEXT="libgavl-dev 2.0">
 <icon BUILTIN="hourglass"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1764289335844" ID="ID_1745124117" MODIFIED="1764289362950" TEXT="alsa 1.2">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1745124117" ENDARROW="Default" ENDINCLINATION="136;16;" ID="Arrow_ID_1782792670" SOURCE="ID_999827151" STARTARROW="None" STARTINCLINATION="-44;187;"/>
 </node>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1446511125266" ID="ID_1198662071" MODIFIED="1762968646668" TEXT="xv, x11 und xext vorerst erhalten">
 <linktarget COLOR="#6a3747" DESTINATION="ID_1198662071" ENDARROW="Default" ENDINCLINATION="713;-560;" ID="Arrow_ID_561632202" SOURCE="ID_77004892" STARTARROW="Default" STARTINCLINATION="1089;67;"/>
@@ -178561,25 +178721,34 @@ Since then others have made contributions, see the log for the history.</font></
 </html></richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1763940534858" ID="ID_1681367379" MODIFIED="1764036260885" TEXT="nun verpflichtend">
-<linktarget COLOR="#e1253b" DESTINATION="ID_1681367379" ENDARROW="Default" ENDINCLINATION="-773;-68;" ID="Arrow_ID_835035037" SOURCE="ID_525244825" STARTARROW="None" STARTINCLINATION="-19;733;"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1763940534858" ID="ID_1681367379" MODIFIED="1764294697164" TEXT="nun verpflichtend">
+<linktarget COLOR="#562d9a" DESTINATION="ID_1681367379" ENDARROW="Default" ENDINCLINATION="-773;-68;" ID="Arrow_ID_835035037" SOURCE="ID_525244825" STARTARROW="None" STARTINCLINATION="-19;733;"/>
 <icon BUILTIN="yes"/>
-<node CREATED="1764036266123" ID="ID_1269311547" MODIFIED="1764036269147" TEXT="Python 3.10"/>
-<node CREATED="1764036270057" ID="ID_541648492" MODIFIED="1764036383513" TEXT="SCons 4.0">
+<node CREATED="1764036266123" ID="ID_1269311547" MODIFIED="1764294694381" TEXT="Python 3.10">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
     <p>
-      ...naja, nicht wirklich, denn dazu m&#252;&#223;te ich mal die ganze SCons-Doku durhclesen, um zu sehen, was man modernisieren k&#246;nnte. Aber da ich nun nur noch mit entsprechend neuerer Software arbeite, ist es auch nicht mehr angemessen, eine niedrigere Version zu deklarieren, da ich nicht merke, wenn ich neuere Feature verwende, die irgendwo im Internet beschrieben sind.
+      explizite Wahl, wegen Ubuntu/Noble
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1764036270057" ID="ID_541648492" MODIFIED="1764294659159" TEXT="SCons 4.0">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...naja, nicht wirklich, denn dazu m&#252;&#223;te ich mal die ganze SCons-Doku durhclesen, um zu sehen, was man modernisieren k&#246;nnte. Aber da ich nun nur noch mit entsprechend neuerer Software arbeite, ist es auch nicht mehr angemessen, eine niedrigere Version zu deklarieren, da ich nicht merke, wenn ich neuere Feature verwende, die irgendwo im Internet beschrieben sind. Konkret bin ich jetzt auf SCons 4.8 (habe 4.10 Features explizit noch nicht verwenden k&#246;nnen). Allerdings ist Ubuntu-Noble erst auf 4.5 (hoffen wir mal da&#223; das alles gut geht...)
     </p>
   </body>
 </html></richcontent>
 </node>
 </node>
 </node>
-<node CREATED="1544239177727" HGAP="90" ID="ID_1414932362" MODIFIED="1763514226786" TEXT="Probleme..." VSHIFT="3">
+<node CREATED="1544239177727" FOLDED="true" HGAP="90" ID="ID_1414932362" MODIFIED="1764295783862" TEXT="Probleme..." VSHIFT="3">
 <icon BUILTIN="go"/>
-<node COLOR="#338800" CREATED="1544239202589" ID="ID_1398808684" MODIFIED="1544310874478" TEXT="an neue Layer-Struktur anpassen">
+<node COLOR="#338800" CREATED="1544239202589" FOLDED="true" ID="ID_1398808684" MODIFIED="1544310874478" TEXT="an neue Layer-Struktur anpassen">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1544239214321" FOLDED="true" ID="ID_953169553" MODIFIED="1561827466253" TEXT="CSS wird in &apos;stage&apos;-Ordner installiert">
 <icon BUILTIN="button_ok"/>
@@ -178703,9 +178872,18 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1544239360927" ID="ID_1906746912" MODIFIED="1544239423084" TEXT="deckt Folgeproblem im GUI auf">
+<node BACKGROUND_COLOR="#eac2ac" COLOR="#990000" CREATED="1544239360927" ID="ID_1906746912" MODIFIED="1764255197579" TEXT="deckt Folgeproblem im GUI auf">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Lifecycle/Start-up ist immer noch nicht failsafe &#10230; auf sp&#228;ter vertagt, da es zus&#228;tzlich verkompliziert ist durch das Design des Subsystem-Runners, das eine zus&#228;tzliche Fehlerbehandlung jenseits der Event-Loop schwierig macht; und ich bin mit diesem Design ohnehin nicht zufrieden, betrachte es aber nicht als ein dringendes Problem
+    </p>
+  </body>
+</html></richcontent>
 <arrowlink COLOR="#7f244b" DESTINATION="ID_626803835" ENDARROW="Default" ENDINCLINATION="193;-461;" ID="Arrow_ID_65546348" STARTARROW="None" STARTINCLINATION="421;19;"/>
 <icon BUILTIN="messagebox_warning"/>
+<icon BUILTIN="hourglass"/>
 </node>
 </node>
 <node COLOR="#435e98" CREATED="1763514105272" FOLDED="true" ID="ID_1983023550" MODIFIED="1763592949315" TEXT="unser Scons-Setup kann nicht in absolutes INSTALLDIR installieren">
@@ -179036,7 +179214,7 @@ env.Chmod(installed[0], 0o644)</code></pre>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1764102029325" ID="ID_1892741872" MODIFIED="1764102046515" TEXT="GUI-Icons werden jedesmal gerendert">
+<node COLOR="#435e98" CREATED="1764102029325" FOLDED="true" ID="ID_1892741872" MODIFIED="1764294129061" TEXT="GUI-Icons werden jedesmal gerendert">
 <icon BUILTIN="broken-line"/>
 <node CREATED="1764102049570" ID="ID_277272095" MODIFIED="1764102134477" TEXT="geht zwar schell ... f&#xfc;hlt sich trotzdem wie ein &#xc4;rgernis an">
 <richcontent TYPE="NOTE"><html>
@@ -179048,7 +179226,7 @@ env.Chmod(installed[0], 0o644)</code></pre>
   </body>
 </html></richcontent>
 </node>
-<node COLOR="#435e98" CREATED="1764102146471" ID="ID_1539179318" MODIFIED="1764208150740" TEXT="Untersuchung: woran kann das liegen?">
+<node COLOR="#435e98" CREATED="1764102146471" FOLDED="true" ID="ID_1539179318" MODIFIED="1764208150740" TEXT="Untersuchung: woran kann das liegen?">
 <icon BUILTIN="help"/>
 <node CREATED="1764101892845" ID="ID_564048283" LINK="#ID_1609399886" MODIFIED="1764101920401" TEXT="Tools for Fools lesen"/>
 <node CREATED="1764101932296" ID="ID_1944545021" LINK="#ID_1819012503" MODIFIED="1764101949118" TEXT="wichtige Abschnitte im User-Manual"/>
@@ -179197,7 +179375,7 @@ env.Chmod(installed[0], 0o644)</code></pre>
 </node>
 </node>
 <node CREATED="1764128507126" ID="ID_1100515931" MODIFIED="1764128512597" TEXT="Zwischenbilanz">
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1764128513896" ID="ID_1457065500" MODIFIED="1764208361818" STYLE="fork" TEXT="die Logik erscheint mir defekt">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1764128513896" FOLDED="true" ID="ID_1457065500" MODIFIED="1764208361818" STYLE="fork" TEXT="die Logik erscheint mir defekt">
 <arrowlink COLOR="#c31078" DESTINATION="ID_1338934186" ENDARROW="Default" ENDINCLINATION="-20;-60;" ID="Arrow_ID_570788323" STARTARROW="None" STARTINCLINATION="42;64;"/>
 <font NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="broken-line"/>
@@ -179239,7 +179417,7 @@ env.Chmod(installed[0], 0o644)</code></pre>
 <node COLOR="#338800" CREATED="1764208414280" ID="ID_591558394" MODIFIED="1764208452038" TEXT="weitere Feststellung: das Persistieren und Laden der Build-Info selber funktioniert fehlerfrei">
 <icon BUILTIN="idea"/>
 </node>
-<node BACKGROUND_COLOR="#dcdda2" COLOR="#435e98" CREATED="1764128918990" ID="ID_948033347" MODIFIED="1764208175091" TEXT="sollte ein Demo-Beispiel &#xbb;auf der gr&#xfc;nen Wiese&#xab; durchspielen">
+<node BACKGROUND_COLOR="#dcdda2" COLOR="#435e98" CREATED="1764128918990" FOLDED="true" ID="ID_948033347" MODIFIED="1764208175091" TEXT="sollte ein Demo-Beispiel &#xbb;auf der gr&#xfc;nen Wiese&#xab; durchspielen">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -179431,7 +179609,7 @@ env.Chmod(installed[0], 0o644)</code></pre>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#e6bf8e" COLOR="#690f14" CREATED="1764170705683" ID="ID_1229473469" MODIFIED="1764208128038" TEXT="Problem identifiziert: Signatur der Builder-Aktion ist nicht stabil">
+<node BACKGROUND_COLOR="#e6bf8e" COLOR="#690f14" CREATED="1764170705683" FOLDED="true" ID="ID_1229473469" MODIFIED="1764208128038" TEXT="Problem identifiziert: Signatur der Builder-Aktion ist nicht stabil">
 <icon BUILTIN="broken-line"/>
 <node BACKGROUND_COLOR="#accdc3" COLOR="#3f4015" CREATED="1764170726054" ID="ID_1680240676" MODIFIED="1764208039498" STYLE="fork" TEXT="SO.ai nach L&#xf6;sung gefragt">
 <richcontent TYPE="NOTE"><html>
@@ -182176,6 +182354,7 @@ env.Command('out.bin', 'in.bin', my_action)</code></pre>
 <node CREATED="1762966584601" ID="ID_528619935" MODIFIED="1762966604723" TEXT="etwas toleranter w&#xe4;hlen (Ubuntu/backport)"/>
 <node CREATED="1762966715149" ID="ID_1185664562" MODIFIED="1762966724500" TEXT="&#xdc;berraschung: auch Debian ist auf 1.83"/>
 <node CREATED="1762966757032" ID="ID_853210654" MODIFIED="1762966774173" TEXT="also k&#xf6;nnen wir das nehmen (aktuell ist 1.88)">
+<linktarget COLOR="#ebfebd" DESTINATION="ID_853210654" ENDARROW="Default" ENDINCLINATION="496;-33;" ID="Arrow_ID_459081610" SOURCE="ID_76924393" STARTARROW="None" STARTINCLINATION="582;45;"/>
 <icon BUILTIN="yes"/>
 </node>
 </node>

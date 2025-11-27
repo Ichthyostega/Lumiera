@@ -57,8 +57,8 @@ def defineBuildEnvironment():
         define locations in source and target tree,
         parse the commandline and pick up options
     """
-    EnsureSConsVersion(2,0)
-    EnsurePythonVersion(2,6)
+    EnsureSConsVersion(4,0)
+    EnsurePythonVersion(3,10)
     Decider('content-timestamp')  # detect changed files by timestamp, then do a MD5
     
     buildVars = Variables([OPTCACHE, CUSTOPTFILE])
@@ -83,7 +83,7 @@ def defineBuildEnvironment():
     appendVal(env,'OPTIMIZE', 'CCFLAGS',   val=' -O3')
     appendVal(env,'DEBUG',    'CCFLAGS',   val=' -ggdb')
     
-    # NOTE: could define optional copile features here....
+    # NOTE: could define optional compile features here....
     
     Options.prepareOptionsHelp(buildVars,env)
     buildVars.Save(OPTCACHE, env)

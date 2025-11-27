@@ -35,6 +35,23 @@ def configure(env):
     if not conf.TryAction('pkg-config --version > $TARGET')[0]:
         problems.append('We need pkg-config for including library configurations, exiting.')
     
+    # A special check in case we are compiling with GCC...
+    compiler = env.subst('$CXX')
+    verGCCmin = (14,)          # note no trailing zero for version ordering check
+    expectedFeature = 'solid C++23 support'
+    if compiler.startswith("g++"):
+        # verify sufficient compiler version
+        try:
+            import subprocess
+            res = subprocess.check_output([compiler,'-dumpversion'], universal_newlines=True).strip()
+            res = tuple(int(x) for x in res.split('.'))
+        except Exception:
+            res = None
+        #
+        if res and res < verGCCmin:
+            problems.append('The compiler "%s" reports version %s, yet we need at least %s for %s.'
+                           % (compiler, res, verGCCmin, expectedFeature))
+    
     if not conf.CheckLibWithHeader('m', 'math.h','C'):
         problems.append('Did not find math.h / libm.')
     
@@ -60,7 +77,7 @@ def configure(env):
         print('Valgrind not found. The use of Valgrind is optional; building without.')
     
     if not conf.CheckPkgConfig('nobugmt', 201008.1):
-        problems.append('Did not find NoBug [http://nobug.pipapo.org/].')
+        problems.append('Did not find NoBug [https://nobug.pipapo.org/].')
     else:
         conf.env.mergeConf('nobugmt')
     
@@ -84,45 +101,45 @@ def configure(env):
             problems.append('We need boost::program_options (including binary lib for linking).')
     
     
-    if not conf.CheckPkgConfig('gavl', '1.4'):
+    if not conf.CheckPkgConfig('gavl', '2.0'):
         problems.append('Did not find Gmerlin Audio Video Lib [https://github.com/bplaum/gavl].')
     else:
         conf.env.mergeConf('gavl')
     
-    if not conf.CheckPkgConfig('alsa', '1.0.23'):
+    if not conf.CheckPkgConfig('alsa', '1.2'):
         problems.append('Support for ALSA sound output is required')
     
-    if not conf.CheckPkgConfig('gtkmm-3.0', '3.10'):
+    if not conf.CheckPkgConfig('gtkmm-3.0', '3.20'):
         problems.append('Unable to configure the mm-bindings for GTK-3')
     
-    if not conf.CheckPkgConfig('glibmm-2.4', '2.39'):
+    if not conf.CheckPkgConfig('glibmm-2.4', '2.66'):
         problems.append('Unable to configure the mm-bindings for Glib')
     
-    if not conf.CheckPkgConfig('sigc++-2.0', '2.2.10'):
+    if not conf.CheckPkgConfig('sigc++-2.0', '2.12'):
         problems.append('Need the signal-slot-binding library SigC++2')
     
-    if not conf.CheckPkgConfig('glib-2.0', '2.40'):
+    if not conf.CheckPkgConfig('glib-2.0', '2.80'):
         problems.append('Need a suitable Glib version.')
     
-    if not conf.CheckPkgConfig('gthread-2.0', '2.40'):
+    if not conf.CheckPkgConfig('gthread-2.0', '2.80'):
         problems.append('Need gthread support lib for Glib based thread handling.')
     
-    if not conf.CheckPkgConfig('cairomm-1.0', '1.10'):
+    if not conf.CheckPkgConfig('cairomm-1.0', '1.14'):
         problems.append('Unable to configure Cairo--')
     
-    verGDL   = '3.8'    # lowered requirements to allow building on Ubuntu/Trusty & Mint (was originally '3.12')
+    verGDL   = '3.40'  # now orphaned and thus directly provided from Lumiera.org -> can require latest available
     verGDLmm = '3.7.3'
-    urlGDLmm = 'http://ftp.gnome.org/pub/GNOME/sources/gdlmm/'
+    urlGDLmm = 'git://git.lumiera.org/debian/gdlmm'
     urlGDLmmDEB = 'http://lumiera.org/debian/'
     if not conf.CheckPkgConfig('gdl-3.0', verGDL):
         problems.append('GNOME Docking Library not found. We need at least GDL %s '
                         'and suitable C++ ("mm")-bindings (GDLmm >=%s)' % (verGDL, verGDLmm))
     if not conf.CheckPkgConfig('gdlmm-3.0', verGDLmm, alias='gdl'):
         problems.append('We need the C++ bindings for GDL by Fabien Parent: GDLmm >=%s '
-                        '(either from GNOME %s or use the debian package from %s)' %
+                        '(either from %s or use the debian package from %s)' %
                         (verGDLmm, urlGDLmm, urlGDLmmDEB))
     
-    if not conf.CheckPkgConfig('librsvg-2.0', '2.30'):
+    if not conf.CheckPkgConfig('librsvg-2.0', '2.40'):
         problems.append('Need rsvg Library for rendering icons.')
     
     if not conf.CheckCHeader(['X11/Xutil.h', 'X11/Xlib.h'],'<>'):

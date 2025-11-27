@@ -1,7 +1,7 @@
 Contributing to Lumiera
 =======================
 :Author: Benny <Benny.Lyons@gmx.net>
-:Date: Oct 2013
+:Date: Oct 2013 · Nov 2025
 :toc:
 
 
@@ -86,12 +86,12 @@ Lumiera. These additional packages are of two kinds:
 
 Packages normally available with your distribution::
   for a Debian based system (including Mint, Ubuntu and similar flavours),
-  you should be able to install the necessary dependencies with the command
+  you should be able to install the necessary dependencies with the command...
 +
 -------------------------------------------------------------------------------------
-sudo apt-get install build-essential scons git-core valgrind intltool \
-libboost-dev libboost-program-options-dev \
-libgavl-dev libgtkmm-3.0-dev libgdl-3-dev librsvg2-dev libxv-dev
+sudo apt-get install build-essential g++ git pkgconf scons intltool \
+libboost-dev libboost-program-options-dev libasound2-dev libgavl-dev \
+libgtkmm-3.0-dev librsvg2-dev libxv-dev
 -------------------------------------------------------------------------------------
 Packages not normally part of your distribution::
   there are two packages most likely not available with your operating system
@@ -101,7 +101,7 @@ Packages not normally part of your distribution::
   - *NoBug* -- a diagnostics library
 +
 ------------------------------------------------------------
-git clone git://git.pipapo.org/nobug
+git clone git://git.lumiera.org/debian/nobug
 cd nobug
 autoreconf -i
 mkdir build && cd build
@@ -109,22 +109,43 @@ mkdir build && cd build
 make
 sudo make install
 ------------------------------------------------------------
-  - **mm**-bindings for *GDL* -- a window docking library footnote:[GDL itself _is_
-    available through the standard package manager, in a version compatible to GTK-3.
-    What is not yet available are the corresponding C++ bindings `gdlmm-3`]
+  - the *libGDL* with **mm**-bindings -- a window docking library footnote:[
+      GDL is compatible with GTK-3 and was available through the standard package manager,
+      but was orphaned in 2021. Since it is currently a prerequisite for building Lumiera,
+      we maintain a clone of the original repository and a Debian package on Lumiera.org.
+      This is relevant both for
+      https://git.lumiera.org/?p=debian/gdl;a=summary[libGDL (3.40) +git://git.lumiera.org/debian/gdl+]
+      and the
+      https://git.lumiera.org/?p=debian/gdlmm;a=summary[GDL C++ bindings (3.7.3) +git://git.lumiera.org/debian/gdlmm+].
+    ]
+
+    * first you have to build libGTL itself...
 +
 ------------------------------------------------------------
-git clone git://git.lumiera.org/debian/gdlmm
-cd gdlmm
-./configure
+git clone git://git.lumiera.org/debian/gdl
+cd gdl
+git checkout master
+./autogen.sh
 make
 sudo make install
 ------------------------------------------------------------
 
+     * then followed by building the C++ bindings...
++
+------------------------------------------------------------
+git clone git://git.lumiera.org/debian/gdlmm
+cd gdlmm
+git checkout master
+./autogen.sh
+make
+sudo make install
+------------------------------------------------------------
+
+
 Start the Lumiera build process::
 ------------------------------------------------------------
 cd LUMIERA
-scons
+scons -j#
 ------------------------------------------------------------
 
 If Lumiera is built correctly on your system, you should be able to shoot up
@@ -197,7 +218,7 @@ Finally you can *push* your changes to the Lumiera server on the 'mob'
 repository:
 
 ------------------------------------------------------------
-$ git push git://git.lumiera.org/lumiera/mob master:refs/heads/YOURNAME
+$ git push git://git.lumiera.org/lumiera/mob master:YOURNAME
 ------------------------------------------------------------
 
 This creates a new branch +YOURNAME+ on the mob repository.

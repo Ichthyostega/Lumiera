@@ -63,7 +63,7 @@ the build. You need to _install_ these packages then using the basic Debian pack
 manager `dpkg`
 +
 ----
-sudo dpkg -i libnobug2_201008.1-1_i386.deb nobug-dev_201008.1-1_i386.deb
+sudo dpkg -i libnobug2_201008.1-4~trixie_amd64.deb nobug-dev_201008.1-4~trixie_amd64.deb
 ----
 +
 of course, the package names, versions and architecture will vary, depending on your

@@ -18,7 +18,7 @@ Synopsis
 --------
 [cols=">,<m,2<",grid="none"]
 |=====================
-| just build Lumiera: | scons -j#            | # ≔ -1 => all cores
+| just build Lumiera: | scons -j#            | # ≔ number of CPUs
 | build + run Tests:  | scons -j# check      | -> see 'target/,testlog'
 | development build:  | scons -j# testcode   | -> `target/test-suite <TestName>`
 | install:            | scons -j# install    | installs below '/usr/local/', ⚠ sudo
