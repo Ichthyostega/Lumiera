@@ -16,7 +16,8 @@
 from os import path
 
 import SCons.SConf
-from SCons.Action import Action
+from SCons.Action import Action, FunctionAction
+from SCons.Script import File as SConsFile
 from SCons.Environment import Environment
 
 from Buildhelper import *
@@ -45,7 +46,8 @@ class LumieraEnvironment(Environment):
         self.Tool("BuilderDoxygen")
         self.Tool("ToolDistCC")
         self.Tool("ToolCCache")
-        register_LumieraResourceBuilder(self)
+        register_LumieraIconBuilder(self)
+        register_LumieraResourceBuilders(self)
         register_LumieraCustomBuilders(self)
     
     def _anchor_relative(self, key):
@@ -124,12 +126,13 @@ class LumieraConfigContext(ConfigBase):
 
 
 
+
 ###############################################################################
 ####### Lumiera custom tools and builders #####################################
 
 
-def register_LumieraResourceBuilder(env):
-    """ Registers Custom Builders for generating and installing Icons.
+def register_LumieraIconBuilder(env):
+    """ Registers a custom Builder for generating and installing Icons from SVG.
         Additionally you need to build the tool (rsvg-convert.c)
         used to generate png from the svg source using librsvg.
     """
@@ -138,13 +141,39 @@ def register_LumieraResourceBuilder(env):
     renderer.rsvgPath = env.subst("$TARGDIR/rsvg-convert").removeprefix('#')
     #                                                    # the prefix '#' is a SCons specific convention,
     #                                                    # which the external tool can not handle
+    #
+    # MD5 signature for this specific python source code...
+    thisCodeSignature = SConsFile(__file__).get_csig() + SConsFile(renderer.__file__).get_csig()
+    thisCodeSignature = bytearray(thisCodeSignature, 'utf-8')
     
-    def invokeRenderer(target, source, env):
-        source = str(source[0])
-        targetdir = env.subst(env.path.buildIcon).removeprefix('#')
-        renderer.main([source,targetdir])
-        return 0
+    
+    class IconRenderAction(FunctionAction):
+        """ SCons Action subclass to provide a controlled cache signature.
+            @note: usually it would be sufficient to pass just a callable to the Builder,
+                   however, our implementation calls into an external Python module and thus
+                   the default signature from SCons would not be stable, since it relies
+                   on a code representation including memory addresses. Without this,
+                   the icons would be frequently rebuilt unnecessarily.
+        """
         
+        def __init__(self):
+            FunctionAction.__init__(self, IconRenderAction.invokeRenderer
+                                        , {'cmdstr' : "rendering Icon: $SOURCE --> $TARGETS"}
+                                   )
+        
+        def get_contents(self, target, source, env):
+            """ a stable signature based on the source code """
+            return thisCodeSignature
+        
+        @staticmethod
+        def invokeRenderer(target, source, env):
+            """ render the SVG icon with libRSVG """
+            source = str(source[0])
+            targetdir = env.subst(env.path.buildIcon).removeprefix('#')
+            renderer.main([source,targetdir])
+            return 0
+    
+    
     def createIconTargets(target,source,env):
         """ parse the SVG to get the target file names """
         source = str(source[0])
@@ -161,6 +190,20 @@ def register_LumieraResourceBuilder(env):
             generateTargets.append(icon)
         
         return (generateTargets, source)
+    
+    
+    buildIcon = env.Builder( action = IconRenderAction()
+                           , single_source = True
+                           , emitter = createIconTargets
+                           )
+    env.Append(BUILDERS = {'IconRender' : buildIcon})
+
+
+
+
+def register_LumieraResourceBuilders(env):
+    """ Registers further Custom Methods for installing various Resources.
+    """
     
     def IconResource(env, source):
         """ copy icon pixmap to corresponding icon dir. """
@@ -227,11 +270,6 @@ def register_LumieraResourceBuilder(env):
             return env.InstallAs(toInstall, source) # this renames at target
     
     
-    buildIcon = env.Builder( action = Action(invokeRenderer, "rendering Icon: $SOURCE --> $TARGETS")
-                           , single_source = True
-                           , emitter = createIconTargets
-                           )
-    env.Append(BUILDERS = {'IconRender' : buildIcon})
     env.AddMethod(IconResource)
     env.AddMethod(GuiResource)
     env.AddMethod(ConfigData)

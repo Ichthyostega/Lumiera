@@ -159345,6 +159345,39 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <linktarget COLOR="#6377c3" DESTINATION="ID_1068770252" ENDARROW="Default" ENDINCLINATION="-689;109;" ID="Arrow_ID_718963929" SOURCE="ID_1458418945" STARTARROW="None" STARTINCLINATION="-517;-37;"/>
 <node CREATED="1764024019333" ID="ID_588528493" MODIFIED="1764024031140" TEXT="env.AddPostAction(target, actionObj)"/>
 </node>
+<node CREATED="1764207716026" FOLDED="true" ID="ID_1341695959" MODIFIED="1764208020158" TEXT="Build-Signaturen">
+<icon BUILTIN="info"/>
+<node CREATED="1764207727765" ID="ID_962463267" MODIFIED="1764207754499" TEXT="Basis ist die Node-Klasse von SCons">
+<node CREATED="1764207800549" ID="ID_845916718" MODIFIED="1764207812525" TEXT="verwendet eine Signatur des Objekts selber"/>
+<node CREATED="1764207813326" ID="ID_729825340" MODIFIED="1764207828653" TEXT="sowie verkette Signaturen aller &#xbb;Quellen&#xab;"/>
+<node CREATED="1764207829812" ID="ID_127065715" MODIFIED="1764207841444" TEXT="siehe FS.Node.is_changed()"/>
+</node>
+<node CREATED="1764207755250" ID="ID_583034890" MODIFIED="1764207780513" TEXT="praktisch relevant: SCons/Script.File / bzw. Dir"/>
+<node CREATED="1764207853363" ID="ID_881837314" MODIFIED="1764207909382" TEXT="speziell f&#xfc;r custom-Builder: auch die Action-Implementierung geht in die Signatur ein">
+<arrowlink COLOR="#597d8e" DESTINATION="ID_923448890" ENDARROW="Default" ENDINCLINATION="76;-515;" ID="Arrow_ID_657949434" STARTARROW="None" STARTINCLINATION="1190;40;"/>
+<node CREATED="1764207929414" HGAP="31" ID="ID_318656375" MODIFIED="1764207974241" TEXT="hier wird der Python-Code selber in eine Signatur &#xfc;bersetzt" VSHIFT="38"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1764207950454" ID="ID_1548024861" LINK="#ID_1471993413" MODIFIED="1764207982580" TEXT="Vorsicht Falle: externe Python-Module machen die Signatur instabil">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1764108132962" ID="ID_1452199598" MODIFIED="1764108840312" TEXT="Build-Diagnostik">
+<linktarget COLOR="#2d68b4" DESTINATION="ID_1452199598" ENDARROW="Default" ENDINCLINATION="-888;146;" ID="Arrow_ID_26997900" SOURCE="ID_427355838" STARTARROW="None" STARTINCLINATION="-182;25;"/>
+<node CREATED="1764108138789" ID="ID_1171380689" LINK="https://scons.org/doc/4.8.0/HTML/scons-user.html#id1526" MODIFIED="1764108141953" TEXT="--tree">
+<node CREATED="1764108229770" ID="ID_690870020" MODIFIED="1764108474372" TEXT="listet den Dependency-Graph">
+<icon BUILTIN="info"/>
+<node CREATED="1764108479472" ID="ID_1985135497" MODIFIED="1764108486647" TEXT="Tip: Target explizit angeben"/>
+</node>
+<node CREATED="1764108239033" ID="ID_442105954" MODIFIED="1764108367975" TEXT="--tree=all : kompletten Graph, nach jedem top-level Target build"/>
+<node CREATED="1764108369318" ID="ID_859936389" MODIFIED="1764108386379" TEXT="--tree=derived : only derived(target) nodes"/>
+<node CREATED="1764108391271" ID="ID_1166635511" MODIFIED="1764108407942" TEXT="status : Modifier, gibt Node-Status mit aus"/>
+<node CREATED="1764108426985" ID="ID_928783325" MODIFIED="1764108457058" TEXT="--prune : gibt nur die erste incidenz im DAG aus, weitere abgek&#xfc;rzt (eckige Klammer)"/>
+</node>
+<node CREATED="1764106864395" ID="ID_1037266835" LINK="https://scons.org/doc/4.8.0/HTML/scons-user.html#id1522" MODIFIED="1764106877130" TEXT="--debug=explain">
+<node CREATED="1764108178428" ID="ID_1600861540" MODIFIED="1764108204300" TEXT="Gibt eine Begr&#xfc;ndung warum jedes Artefakt tats&#xe4;chlich gebaut wird"/>
+<node CREATED="1764108208348" ID="ID_1613894206" MODIFIED="1764108226882" TEXT="nicht gebaute Artefakte hinerlassen keine Spur"/>
 </node>
 </node>
 </node>
@@ -168298,6 +168331,9 @@ that situation will improve in forseeable future.</pre>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1752070293350" ID="ID_391826628" MODIFIED="1752070305584" TEXT="top-Level-Seiten durchk&#xe4;mmen">
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1764037326150" ID="ID_253173738" MODIFIED="1764037351953" TEXT="BuildDrone kann weg">
+<icon BUILTIN="yes"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1752070265482" ID="ID_927720852" MODIFIED="1756773347225" TEXT="relevante Links aktualisieren">
 <icon BUILTIN="flag-yellow"/>
@@ -170257,14 +170293,54 @@ that situation will improve in forseeable future.</pre>
 <node CREATED="1762803541300" ID="ID_1198625842" MODIFIED="1762803563377" TEXT="Doku zum debianDepot.txt">
 <linktarget COLOR="#b5768e" DESTINATION="ID_1198625842" ENDARROW="Default" ENDINCLINATION="102;11;" ID="Arrow_ID_1663167652" SOURCE="ID_834370322" STARTARROW="None" STARTINCLINATION="-35;55;"/>
 </node>
+<node CREATED="1764080462839" ID="ID_40707028" MODIFIED="1764080495980" TEXT="Doku zum Debian-Paket">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      technical/build/LumieraDebianPackage.html
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1764080499102" ID="ID_600067904" MODIFIED="1764080556468">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      enth&#228;lt auch Beschreibung des <i>Installation-Bundle</i>
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      die ist gut und auch n&#252;tzlich dort; k&#246;nnte aber auch &#252;bernommen werden in die Beschreibun des Buildsystems
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1763227392438" ID="ID_1661490899" MODIFIED="1763227659040" TEXT="auch SCons/Buildsystem-Doku erg&#xe4;nzen">
-<linktarget COLOR="#e91b19" DESTINATION="ID_1661490899" ENDARROW="Default" ENDINCLINATION="-549;-29;" ID="Arrow_ID_1418896649" SOURCE="ID_1851495604" STARTARROW="None" STARTINCLINATION="-497;37;"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1764080558767" ID="ID_1614946590" MODIFIED="1764080580506" TEXT="enth&#xe4;lt Beschreibung des Release-Prozesses &#x27f9; obsolet durch Git-Flow">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1764080599920" ID="ID_1082461848" MODIFIED="1764080620395" TEXT="Fehlt: Informationen zum DEB-Packaging selber">
 <icon BUILTIN="flag-yellow"/>
-<node CREATED="1763227450701" ID="ID_625201328" MODIFIED="1763227464085" TEXT="Erl&#xe4;uterung der Installation fehlt"/>
-<node CREATED="1763227487535" ID="ID_1935413427" MODIFIED="1763227501052" TEXT="Prinzip der Bundle-Installation klarstellen"/>
-<node CREATED="1763227465012" ID="ID_503183649" MODIFIED="1763227483918" TEXT="sollte dabei auch nochmal die $SUBSTVAR erkl&#xe4;ren"/>
-<node CREATED="1763250317834" ID="ID_1201363565" MODIFIED="1763250560534" TEXT="...und wie Build-Variable konfiguriert und eingelesen werden">
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1763227392438" FOLDED="true" ID="ID_1661490899" MODIFIED="1764096967295" TEXT="auch SCons/Buildsystem-Doku erg&#xe4;nzen">
+<linktarget COLOR="#2b9293" DESTINATION="ID_1661490899" ENDARROW="Default" ENDINCLINATION="-549;-29;" ID="Arrow_ID_1418896649" SOURCE="ID_1851495604" STARTARROW="None" STARTINCLINATION="-497;37;"/>
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1764081254214" ID="ID_1143188110" MODIFIED="1764081274555" TEXT="die Basis ist gut">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#435e98" CREATED="1764082066790" ID="ID_1241209598" MODIFIED="1764090439442" TEXT="ein How-to w&#xe4;re sinnvoll"/>
+<node COLOR="#435e98" CREATED="1763227450701" ID="ID_625201328" MODIFIED="1764093057004" TEXT="Erl&#xe4;uterung der Installation fehlt"/>
+<node COLOR="#435e98" CREATED="1763227487535" ID="ID_1935413427" MODIFIED="1764090447590" TEXT="Prinzip der Bundle-Installation klarstellen"/>
+<node COLOR="#435e98" CREATED="1763227465012" ID="ID_503183649" MODIFIED="1764096941258" TEXT="sollte dabei auch nochmal die $SUBSTVAR erkl&#xe4;ren"/>
+<node COLOR="#435e98" CREATED="1763250317834" ID="ID_1201363565" MODIFIED="1764096943107" TEXT="...und wie Build-Variable konfiguriert und eingelesen werden">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -170300,6 +170376,25 @@ that situation will improve in forseeable future.</pre>
   </body>
 </html></richcontent>
 <linktarget COLOR="#c75069" DESTINATION="ID_1201363565" ENDARROW="Default" ENDINCLINATION="762;36;" ID="Arrow_ID_352999319" SOURCE="ID_177915811" STARTARROW="None" STARTINCLINATION="928;75;"/>
+</node>
+<node COLOR="#338800" CREATED="1764082130592" HGAP="17" ID="ID_1177524473" MODIFIED="1764096938923" TEXT="&#xdc;berarbeitung" VSHIFT="8">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1764082303931" ID="ID_196512414" MODIFIED="1764083180443" TEXT="bekannte Schw&#xe4;chen von SCons">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1764082153954" ID="ID_782192781" MODIFIED="1764090456393" TEXT="Glossar-Teil mit dem SCons-Wiki abgleichen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1764082164347" ID="ID_1067260880" MODIFIED="1764090470592" TEXT="Howto-Sektion hinzuf&#xfc;gen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1764082216853" ID="ID_90076384" MODIFIED="1764090461520" TEXT="einfach bauen"/>
+<node COLOR="#435e98" CREATED="1764082226945" ID="ID_1595083052" MODIFIED="1764090461519" TEXT="Tests ausf&#xfc;hren"/>
+<node COLOR="#435e98" CREATED="1764082237351" ID="ID_1981359732" MODIFIED="1764090461519" TEXT="Entwickler-Build"/>
+<node COLOR="#435e98" CREATED="1764090466590" ID="ID_884784414" MODIFIED="1764090468765" TEXT="Installation"/>
+</node>
+<node COLOR="#338800" CREATED="1764082185945" ID="ID_285332400" MODIFIED="1764093050186" TEXT="Unterpunkt zur Installation (nach &apos;target directory&apos;)">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 </node>
 </node>
@@ -171942,7 +172037,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 <node COLOR="#435e98" CREATED="1762998892693" ID="ID_1851495604" MODIFIED="1763769292148" TEXT="Scons: &apos;build&apos; - Target baut die Tests">
-<arrowlink COLOR="#e91b19" DESTINATION="ID_1661490899" ENDARROW="Default" ENDINCLINATION="-549;-29;" ID="Arrow_ID_1418896649" STARTARROW="None" STARTINCLINATION="-497;37;"/>
+<arrowlink COLOR="#2b9293" DESTINATION="ID_1661490899" ENDARROW="Default" ENDINCLINATION="-549;-29;" ID="Arrow_ID_1418896649" STARTARROW="None" STARTINCLINATION="-497;37;"/>
 <linktarget COLOR="#783c4a" DESTINATION="ID_1851495604" ENDARROW="Default" ENDINCLINATION="691;48;" ID="Arrow_ID_213409665" SOURCE="ID_1534148044" STARTARROW="None" STARTINCLINATION="504;25;"/>
 <icon BUILTIN="broken-line"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1762999155772" FOLDED="true" ID="ID_1416667212" MODIFIED="1763769210352" TEXT="Vermutung: &apos;vgsuppression&apos; is the culprit">
@@ -178937,6 +179032,717 @@ env.Chmod(installed[0], 0o644)</code></pre>
 <node COLOR="#338800" CREATED="1764027885341" ID="ID_1890347220" MODIFIED="1764031938411" TEXT="eine klarere Meldung ausgeben">
 <icon BUILTIN="button_ok"/>
 </node>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1764102029325" ID="ID_1892741872" MODIFIED="1764102046515" TEXT="GUI-Icons werden jedesmal gerendert">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1764102049570" ID="ID_277272095" MODIFIED="1764102134477" TEXT="geht zwar schell ... f&#xfc;hlt sich trotzdem wie ein &#xc4;rgernis an">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ....und jetzt wird's mal Zeit, das aufzur&#228;umen, da ich nun sowiso schon so viel Aufwand in Clean-up gesteckt habe!!!
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#435e98" CREATED="1764102146471" ID="ID_1539179318" MODIFIED="1764208150740" TEXT="Untersuchung: woran kann das liegen?">
+<icon BUILTIN="help"/>
+<node CREATED="1764101892845" ID="ID_564048283" LINK="#ID_1609399886" MODIFIED="1764101920401" TEXT="Tools for Fools lesen"/>
+<node CREATED="1764101932296" ID="ID_1944545021" LINK="#ID_1819012503" MODIFIED="1764101949118" TEXT="wichtige Abschnitte im User-Manual"/>
+<node BACKGROUND_COLOR="#accdc3" COLOR="#3f4015" CREATED="1764102166992" ID="ID_1393752516" MODIFIED="1764102196706" STYLE="fork" TEXT="SO.ai gefragt">
+<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
+<icon BUILTIN="wizard"/>
+<node CREATED="1764102336344" ID="ID_592095631" MODIFIED="1764102351209" TEXT="klingt so, als sollte das per Default einfach funtionieren"/>
+<node CREATED="1764102211463" ID="ID_1392795416" MODIFIED="1764102220021" TEXT="weist auf einige typische Probleme hin">
+<node CREATED="1764102225751" ID="ID_229316850" MODIFIED="1764102241770" TEXT="Target-Dir gilt als &apos;up-to-date&apos; wenn es existiert"/>
+<node CREATED="1764102246953" ID="ID_1026124011" MODIFIED="1764102268998" TEXT="man sollte Sources/Targets als Nodes im Emitter abliefern, nicht als Pfad-Strings"/>
+</node>
+<node CREATED="1764102295008" ID="ID_1503017324" MODIFIED="1764102335156" TEXT="weitere Empfehlung: Manifest">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      wenn Files als Seiteneffekt erzeugt werden, kann es helfen, explizit ein Manifest-File als HIlfs-Target zu erzeugen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#ddb78a" COLOR="#690f14" CREATED="1764208498479" ID="ID_1904887062" MODIFIED="1764208573875" TEXT="diese Infos sind alle veraltet und f&#xfc;hren in die falsche Richtung">
+<arrowlink COLOR="#d93175" DESTINATION="ID_991502681" ENDARROW="Default" ENDINCLINATION="-1062;46;" ID="Arrow_ID_1837446907" STARTARROW="None" STARTINCLINATION="-347;16;"/>
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
+<node CREATED="1764102360444" ID="ID_1728485875" MODIFIED="1764102370963" TEXT="wie definieren wir den Builder">
+<node CREATED="1764102372078" ID="ID_665581711" LINK="https://scons.org/doc/4.8.0/HTML/scons-user.html#id1452" MODIFIED="1764105292703" TEXT="sieht ganz generisch aus: verwende den Builder-Konstruktor">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...und wir f&#252;gen das erzeugte Objekt per env.Append(BUILDERS=) hinzu. Genau wie in der Doku immer noch dargestellt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#5b280f" CREATED="1764102389416" ID="ID_1774267905" MODIFIED="1764208475708" TEXT="wir definieren einen Emitter ... liefern dort aber tats&#xe4;chlich Strings">
+<icon BUILTIN="messagebox_warning"/>
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1764208477631" ID="ID_285362538" MODIFIED="1764208493954">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Anmerkung: das war alles eine <b>falsche F&#228;hrte</b>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1764106854139" ID="ID_427355838" MODIFIED="1764108840312" TEXT="weitere Diagnostik">
+<arrowlink COLOR="#2d68b4" DESTINATION="ID_1452199598" ENDARROW="Default" ENDINCLINATION="-888;146;" ID="Arrow_ID_26997900" STARTARROW="None" STARTINCLINATION="-182;25;"/>
+<node CREATED="1764106864395" ID="ID_1021754172" LINK="https://scons.org/doc/4.8.0/HTML/scons-user.html#id1522" MODIFIED="1764106877130" TEXT="--debug=explain">
+<node CREATED="1764106904725" ID="ID_1133450" MODIFIED="1764106973082" TEXT="Beobachtung...">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <font face="Monospaced">Parsing icons/svg/track-unlocked.svg </font>
+    </p>
+    <p>
+      <font face="Monospaced">scons: rebuilding `target/gui/icons/24x24/track-unlocked.png' because: </font>
+    </p>
+    <p>
+      <font face="Monospaced">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;`data/icons/svg/track-unlocked.svg' changed </font>
+    </p>
+    <p>
+      <font face="Monospaced">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;`target/rsvg-convert' changed </font>
+    </p>
+    <p>
+      <font face="Monospaced">rendering Icon: data/icons/svg/track-unlocked.svg --&gt; target/gui/icons/24x24/track-unlocked.png target/gui/icons/22x22/track-unlocked.png target/gui/icons/16x16/track-unlocked.png </font>
+    </p>
+    <p>
+      <font face="Monospaced">Parsing data/icons/svg/track-unlocked.svg </font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1764106987789" ID="ID_1940770994" MODIFIED="1764107002835" TEXT="tats&#xe4;chlich: die Quelle gilt immer wieder als &#xbb;changed&#xab;"/>
+<node CREATED="1764107003762" ID="ID_1824541409" MODIFIED="1764107011745" TEXT="auch rsvg-convert ist ein Problem">
+<node CREATED="1764107900295" ID="ID_1256743232" MODIFIED="1764107955825" TEXT="ist das die explizit deklarierte Dependency?">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      in tool/SConscript (letzte Zeile)
+    </p>
+    <div style="background-color: #eee0b5; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 2px">
+      <div style="color: #202020; background-color: #eee0b5; font-family: Bitstream Vera Sans Mono; font-size: 9pt; white-space: pre">
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#be9e7b"># Rendering the SVG Icons depends on rsvg-convert</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#33361c">env.Depends</font><font color="#000000">(</font><font color="#33361c">icons</font><font color="#000000">,</font><font color="#33361c">&#160;rsvg</font><font color="#000000">)</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          
+        </p>
+      </div>
+    </div>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1764108871911" ID="ID_629050370" MODIFIED="1764108889699" TEXT="seltsam: --tree=status zeigt alle Vorl&#xe4;ufer als &apos;C&apos; (current)"/>
+</node>
+<node COLOR="#435e98" CREATED="1764120051287" FOLDED="true" ID="ID_1281293807" MODIFIED="1764208392228" TEXT="Untersuchung(Debugger)">
+<icon BUILTIN="list"/>
+<node CREATED="1764120077297" ID="ID_1524223795" MODIFIED="1764120108553" TEXT="scons --debug=explain target/gui/icons/22x22/track-unlocked.png"/>
+<node CREATED="1764120114236" ID="ID_932264636" MODIFIED="1764162577987" TEXT="Breakpoint in SCons/Node/__init__.py / Funktion explain() (line 1674)">
+<icon BUILTIN="back"/>
+<node CREATED="1764162587324" ID="ID_475643458" MODIFIED="1764163075705" TEXT="oder ebenda: Funktion changed()  (line 1481)">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_475643458" ENDARROW="Default" ENDINCLINATION="621;0;" ID="Arrow_ID_778123323" SOURCE="ID_1876457275" STARTARROW="None" STARTINCLINATION="195;0;"/>
+</node>
+</node>
+<node CREATED="1764120174122" ID="ID_1623195762" MODIFIED="1764120195567" TEXT="ruft den konfigurierten Decider auf">
+<node CREATED="1764120199437" ID="ID_1249854960" MODIFIED="1764163601664" TEXT="diese Auswahl sieht soweit korrekt aus">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1249854960" ENDARROW="Default" ENDINCLINATION="829;61;" ID="Arrow_ID_251631713" SOURCE="ID_544296417" STARTARROW="None" STARTINCLINATION="219;-9;"/>
+</node>
+<node CREATED="1764120218857" ID="ID_637424717" MODIFIED="1764120239569" TEXT="Node/FS.py  Funktion changed_timestamp_then_content()">
+<node CREATED="1764120252593" ID="ID_236911436" MODIFIED="1764120271407" TEXT="mit self == dependency == File: data/icons/svg/track-unlocked.svg"/>
+<node CREATED="1764120284389" ID="ID_681945130" MODIFIED="1764120294463" TEXT="target == File: target/gui/icons/24x24/track-unlocked.png"/>
+<node CREATED="1764120721510" ID="ID_1446560776" MODIFIED="1764120748885" TEXT="holt sich dann &#xbb;stored_info&#xab; == SConsignEntry">
+<node CREATED="1764120763783" ID="ID_1134506067" MODIFIED="1764120774096" TEXT="diese enth&#xe4;lt eine leere &#xbb;build-info&#xab;"/>
+<node CREATED="1764120784372" ID="ID_738175198" MODIFIED="1764120798971" TEXT="das setzt sofort rebuilt=True"/>
+</node>
+<node CREATED="1764120804248" ID="ID_1459693637" MODIFIED="1764120818133" TEXT="Konsequenz: Anfrage steigt mit changed == True sofort aus">
+<node CREATED="1764120845642" ID="ID_1158775294" MODIFIED="1764120856327" TEXT="erzeugt aber vorher noch die get_csig()"/>
+<node CREATED="1764120934093" ID="ID_1961762133" MODIFIED="1764120952854" TEXT="das stellt leddiglich sicher, da&#xdf; eine csig (content-signature) da ist"/>
+</node>
+</node>
+</node>
+<node CREATED="1764162004837" ID="ID_1529143977" MODIFIED="1764162052308" TEXT="Breakpoint in SCons/Script/Main.py  Funktion _build_targets()  (line 1207)">
+<icon BUILTIN="back"/>
+</node>
+<node CREATED="1764125228597" ID="ID_1614548342" MODIFIED="1764125256393" TEXT="anscheinend wird nach dem Build die node-info auch persistiert (incl. der source node info)"/>
+<node CREATED="1764125258571" ID="ID_1065081727" MODIFIED="1764125260157" TEXT="sconsign -e track-unlocked.svg -d data/icons/svg -r">
+<node CREATED="1764125262365" ID="ID_803530123" MODIFIED="1764125276579" TEXT="listet den Eintrag aus .sconssign.dblite"/>
+<node CREATED="1764125491517" ID="ID_813069188" MODIFIED="1764125496444" TEXT="diese Werte sind stabil"/>
+<node COLOR="#338800" CREATED="1764125497222" ID="ID_1325815121" MODIFIED="1764125511176" TEXT="und die Sig ist tats&#xe4;chlich die md5sum">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node CREATED="1764128507126" ID="ID_1100515931" MODIFIED="1764128512597" TEXT="Zwischenbilanz">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1764128513896" ID="ID_1457065500" MODIFIED="1764208361818" STYLE="fork" TEXT="die Logik erscheint mir defekt">
+<arrowlink COLOR="#c31078" DESTINATION="ID_1338934186" ENDARROW="Default" ENDINCLINATION="-20;-60;" ID="Arrow_ID_570788323" STARTARROW="None" STARTINCLINATION="42;64;"/>
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="broken-line"/>
+<node CREATED="1764128555223" ID="ID_1591482768" MODIFIED="1764128577944" TEXT="es ist korrekt, den Check &#xfc;ber die dependency (=source) zu machen"/>
+<node CREATED="1764128676576" ID="ID_1845331114" MODIFIED="1764128695224" TEXT="aber warum schaut man dann in die dependecy-map?">
+<node CREATED="1764128710316" ID="ID_1251285042" MODIFIED="1764128723844" TEXT="eine Original-Src hat niemals Dependencies"/>
+<node CREATED="1764128814671" ID="ID_700997188" MODIFIED="1764128829342" TEXT="und warum geben wir dann True (=changed) zur&#xfc;ck"/>
+</node>
+<node CREATED="1764128831686" ID="ID_1399109213" MODIFIED="1764128844183" TEXT="m&#xf6;glicherweise ist bereits der Aufruf des Deciders falsch"/>
+<node CREATED="1764128849571" ID="ID_1007722672" MODIFIED="1764128872837" TEXT="aber diese Funktion ist im Devault-Environment sowohl f&#xfc;r source als auch f&#xfc;r target eingetragen"/>
+</node>
+<node COLOR="#5b280f" CREATED="1764128891325" ID="ID_1338934186" MODIFIED="1764208368483" TEXT="das sieht nach einer grunds&#xe4;tzlichen Fehlkonfiguration aus">
+<linktarget COLOR="#c31078" DESTINATION="ID_1338934186" ENDARROW="Default" ENDINCLINATION="-20;-60;" ID="Arrow_ID_570788323" SOURCE="ID_1457065500" STARTARROW="None" STARTINCLINATION="42;64;"/>
+<icon BUILTIN="messagebox_warning"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1764208188007" ID="ID_1230230453" MODIFIED="1764208204311" TEXT="tats&#xe4;chlich ist es ein Fehler im explain()-Aufruf"/>
+<node CREATED="1764208205061" ID="ID_1187433069" MODIFIED="1764208315664" TEXT="gepaart mit dem grus&#xe4;tzlichen Problemen dieses Codes">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      da&#223; er n&#228;mlich wenig systematisch aufgebaut ist, und darauf angewiesen, da&#223; alle Daten korrekt normalisiert sind, und die Aufrufe jeweils richtig erfolgen:
+    </p>
+    <ul>
+      <li>
+        aufgerufen werden mu&#223; auf der Dependency
+      </li>
+      <li>
+        aber das 'node'-Argument mu&#223; die Node des davon abh&#228;ngigen Targets liefern
+      </li>
+      <li>
+        denn es werden die Dependencies des Targets mit der Build-Information der Source verglichen
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1764208414280" ID="ID_591558394" MODIFIED="1764208452038" TEXT="weitere Feststellung: das Persistieren und Laden der Build-Info selber funktioniert fehlerfrei">
+<icon BUILTIN="idea"/>
+</node>
+<node BACKGROUND_COLOR="#dcdda2" COLOR="#435e98" CREATED="1764128918990" ID="ID_948033347" MODIFIED="1764208175091" TEXT="sollte ein Demo-Beispiel &#xbb;auf der gr&#xfc;nen Wiese&#xab; durchspielen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...um all die Komplexit&#228;t von unserem SCons-Build auszuschalten; also praktisch das beispiel f&#252;r einen Builder mit Emitter aus der Doku nachbauen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+<node CREATED="1764162769924" ID="ID_952721772" MODIFIED="1764162787110" TEXT="einfaches Beispiel in Python-Projekt &quot;SConsTest&quot;">
+<node CREATED="1764162854632" ID="ID_1434574229" MODIFIED="1764162860375" TEXT="ein SConstruct"/>
+<node CREATED="1764162861217" ID="ID_191819966" MODIFIED="1764162870894" TEXT="konstruiere ein default-Environment"/>
+<node CREATED="1764162871926" ID="ID_200664957" MODIFIED="1764162885203" TEXT="definiere einen Builder von einem Command-String"/>
+</node>
+<node CREATED="1764162887047" ID="ID_1793652240" MODIFIED="1764206664279" TEXT="Fall-1 : Command-String">
+<arrowlink COLOR="#4e81d4" DESTINATION="ID_1815216981" ENDARROW="Default" ENDINCLINATION="17;-267;" ID="Arrow_ID_807332891" STARTARROW="None" STARTINCLINATION="-17;224;"/>
+<node CREATED="1764162894483" ID="ID_207913128" LINK="https://scons.org/doc/4.8.0/HTML/scons-user.html#id1452" MODIFIED="1764162958835" TEXT="Beispiel analog zur Doku">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <div style="background-color: #eee0b5; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 2px">
+      <div style="color: #202020; background-color: #eee0b5; font-family: Bitstream Vera Sans Mono; font-size: 9pt; white-space: pre">
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#116f8c"><b>from</b></font><font color="#33361c">&#160;SCons.Environment </font><font color="#116f8c"><b>import</b></font><font color="#33361c">&#160; Environment</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#116f8c"><b>from</b></font><font color="#33361c">&#160;SCons.Builder </font><font color="#116f8c"><b>import</b></font><font color="#33361c">&#160;Builder</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#116f8c"><b>from</b></font><font color="#33361c">&#160;SCons.Script </font><font color="#116f8c"><b>import</b></font><font color="#33361c">&#160;<u>Decider</u></font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <br />
+          
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <br />
+          
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#33361c">Decider</font><font color="#000000">(</font><font color="#00aa00"><i>'content-timestamp'</i></font><font color="#000000">)</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <br />
+          
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#33361c">env </font><font color="#000000">=</font><font color="#33361c">&#160;Environment</font><font color="#000000">()</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#33361c">bld </font><font color="#000000">=</font><font color="#33361c">&#160;Builder</font><font color="#000000">(</font><font color="#33361c">action</font><font color="#000000">=</font><font color="#00aa00"><i>'(echo -n &quot;FOO `date -<u>Isecond</u>` :&quot;; cat) &lt; $SOURCE &gt; $TARGET'</i></font><font color="#000000">)</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#33361c">env.Append</font><font color="#000000">(</font><font color="#33361c">BUILDERS</font><font color="#000000">={</font><font color="#00aa00"><i>'Foo'</i></font><font color="#33361c">: bld</font><font color="#000000">})</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <br />
+          
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <br />
+          
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#33361c">env.Foo</font><font color="#000000">(</font><font color="#00aa00"><i>'file.foo'</i></font><font color="#000000">,</font><font color="#33361c">&#160;</font><font color="#00aa00"><i>'file.input'</i></font><font color="#000000">)</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#33361c">env.Program</font><font color="#000000">(</font><font color="#00aa00"><i>'hello.c'</i></font><font color="#000000">)</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <br />
+          
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          
+        </p>
+      </div>
+    </div>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1764162971349" ID="ID_1180770235" MODIFIED="1764162977180" TEXT="normaler C-Build dazu"/>
+<node CREATED="1764162977914" ID="ID_1403222674" MODIFIED="1764162997228" TEXT="setze globalen Decider(&apos;content-timestamp&apos;)"/>
+<node COLOR="#338800" CREATED="1764163009516" ID="ID_684044440" MODIFIED="1764163021645" TEXT="verh&#xe4;lt sich korrekt wie erwartet">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1764163038284" ID="ID_1150646608" MODIFIED="1764163046225" TEXT="Untersuchung(Debugger)">
+<node CREATED="1764163049956" ID="ID_1876457275" MODIFIED="1764163075705" TEXT="Breakpoint in Node.changed()">
+<arrowlink DESTINATION="ID_475643458" ENDARROW="Default" ENDINCLINATION="621;0;" ID="Arrow_ID_778123323" STARTARROW="None" STARTINCLINATION="195;0;"/>
+</node>
+<node CREATED="1764163137511" ID="ID_544296417" MODIFIED="1764163627652" TEXT="analoger Callpfad &#x27f6; changed_timestamp_then_content">
+<arrowlink DESTINATION="ID_1249854960" ENDARROW="Default" ENDINCLINATION="829;61;" ID="Arrow_ID_251631713" STARTARROW="None" STARTINCLINATION="219;-9;"/>
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_544296417" ENDARROW="Default" ENDINCLINATION="290;15;" ID="Arrow_ID_1277649333" SOURCE="ID_1249675555" STARTARROW="None" STARTINCLINATION="-133;19;"/>
+</node>
+<node CREATED="1764163225797" ID="ID_461453353" MODIFIED="1764163243537" TEXT="Aber: Parameter node=file.foo (das Target)">
+<node CREATED="1764163374249" ID="ID_180813430" MODIFIED="1764163381459" TEXT="zun&#xe4;chst plausibel"/>
+<node CREATED="1764163382424" ID="ID_1021099649" MODIFIED="1764163388979" TEXT="Check geht erst mal vom Target aus"/>
+<node CREATED="1764163421387" ID="ID_1076321235" MODIFIED="1764165795032" TEXT="Taskmaster/__init__.py  Funktion make_ready_current()">
+<icon BUILTIN="back"/>
+<node CREATED="1764163464623" ID="ID_1242338526" MODIFIED="1764163469428" TEXT="for t in self.targets"/>
+<node CREATED="1764163479356" ID="ID_582435256" MODIFIED="1764163485416" TEXT="t.is_up_to_date">
+<node CREATED="1764163520016" ID="ID_1128757466" MODIFIED="1764163556156" TEXT="self.exists()"/>
+<node CREATED="1764163528199" ID="ID_1586284360" MODIFIED="1764163542743" TEXT="and"/>
+<node CREATED="1764163543566" ID="ID_1249675555" MODIFIED="1764163627652" TEXT="not self.changed()">
+<arrowlink DESTINATION="ID_544296417" ENDARROW="Default" ENDINCLINATION="290;15;" ID="Arrow_ID_1277649333" STARTARROW="None" STARTINCLINATION="-133;19;"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1764163761213" ID="ID_659618360" MODIFIED="1764163789384" TEXT="damit ist die dependecy_map nicht leer">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      sondern enth&#228;lt genau einen Eintrag, n&#228;mlich die SOURCE
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1764166082280" ID="ID_1318166556" MODIFIED="1764166089822" TEXT="Feststellung Unterschied">
+<node CREATED="1764166091380" ID="ID_1611703480" MODIFIED="1764166109958" TEXT="in diesem Aufruf wird f&#xfc;r alle Targets gepr&#xfc;ft, ob sie ge&#xe4;ndert sind"/>
+<node CREATED="1764166111025" ID="ID_1438494767" MODIFIED="1764166128394" TEXT="damit erfolgt der Aufruf Node.changed auf der Target-Node"/>
+<node CREATED="1764166131401" ID="ID_610545269" MODIFIED="1764166148914" TEXT="diese ruft ebenfalls die Pr&#xfc;ffunktion auf der Source-Node auf"/>
+<node CREATED="1764166149693" ID="ID_1404022334" MODIFIED="1764166162015" TEXT="ABER sie &#xfc;bergibt die Target-Node als Parameter &apos;node&apos;"/>
+<node CREATED="1764166163139" ID="ID_1676404223" MODIFIED="1764166212481" TEXT="&#x27f9; es wird die dependency_map vom Target mit der Node-Info der SOURCE abgeglichen"/>
+<node CREATED="1764166213358" ID="ID_299575861" MODIFIED="1764166233343" TEXT="beides enth&#xe4;lt die gleiche Info &#x27f9; gilt als NICHT GE&#xc4;NDERT"/>
+</node>
+<node CREATED="1764167256353" ID="ID_507250618" MODIFIED="1764167281208" TEXT="vergleiche mit Situation in Lumiera(Debugger)">
+<node CREATED="1764167282246" ID="ID_581814259" LINK="#ID_637424717" MODIFIED="1764167332616" TEXT="Breakpoint auf dem Decider changed_timestamp_then_content()"/>
+<node CREATED="1764167295513" ID="ID_1734994444" MODIFIED="1764167307844" TEXT="mit Condition: str(target) == &apos;target/gui/icons/22x22/track-unlocked.png&apos;">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1764167531276" ID="ID_32450596" MODIFIED="1764167550254" TEXT="Trigger -&gt; target.changed()">
+<node CREATED="1764167578662" ID="ID_1502874296" MODIFIED="1764167591881" TEXT="Aufruf nun mit node = target gesetzt"/>
+<node COLOR="#338800" CREATED="1764167878749" ID="ID_1115961542" MODIFIED="1764167887189" TEXT="funktioniert genauso korrekt">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1764167927218" ID="ID_815837870" MODIFIED="1764167951771" TEXT="aber direkt danach:  Mismatch auf die ActSig">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Die Action ist hier ein Python-Objekt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1764168766467" ID="ID_254425297" MODIFIED="1764168783762" TEXT="der Aufruf aus explain() ist unvollst&#xe4;ndig parametrisiert">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1764168785830" ID="ID_1336095597" MODIFIED="1764168794731" TEXT="das hat mich gestern in die Irre geleitet"/>
+<node CREATED="1764168795535" ID="ID_1615193335" MODIFIED="1764168807439" TEXT="der bekommt keinen &apos;node&apos;- Parameter mit"/>
+<node CREATED="1764168820270" ID="ID_1145600715" MODIFIED="1764168898774" TEXT="dagegen der Target-Check macht Node.changed()">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...und hier wird self (=die Target-Node) als 4.Parameter mitgegeben, die Pr&#252;fung erfolgt auf dem child, also der Source-Node
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1764169462470" ID="ID_227063285" MODIFIED="1764169495485" TEXT="wenn man den offensichtlichen Fix machen w&#xfc;rde">
+<icon BUILTIN="idea"/>
+<node CREATED="1764169501214" ID="ID_1563571172" MODIFIED="1764169531671" TEXT="also &apos;self&apos; als 4.Parameter in explain() mitgeben">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      was korrekt wit, da auch explain() auf der Source-Node aufgerufen wird
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1764169533938" ID="ID_1705447477" MODIFIED="1764169581096" TEXT="dann w&#xe4;re die Diagnostik korrekt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      scons: rebuilding `target/gui/icons/24x24/track-unlocked.png' because the contents of the build action changed
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e6bf8e" COLOR="#690f14" CREATED="1764170705683" ID="ID_1229473469" MODIFIED="1764208128038" TEXT="Problem identifiziert: Signatur der Builder-Aktion ist nicht stabil">
+<icon BUILTIN="broken-line"/>
+<node BACKGROUND_COLOR="#accdc3" COLOR="#3f4015" CREATED="1764170726054" ID="ID_1680240676" MODIFIED="1764208039498" STYLE="fork" TEXT="SO.ai nach L&#xf6;sung gefragt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <h3 http-equiv="content-type" content="text/html; charset=utf-8">
+      Short answer
+    </h3>
+    <p>
+      Make the Action expose a <strong>stable, deterministic signature</strong>&#160;by providing an explicit <strong>string function</strong>&#160;(<code>strfunction</code>) and/or an explicit <strong>variable list</strong>&#160;(<code>varlist</code>) when creating the Action, and avoid putting non-deterministic values (timestamps, randoms, VM-specific paths) into that signature.
+    </p>
+    <h3>
+      Why
+    </h3>
+    <p>
+      SCons decides whether to rebuild partly from the Action's <em>signature</em>&#160; (a string representing the action) and from node signatures. A Python Action built without an explicit <code>strfunction</code>&#160;can produce unstable or overly-broad signatures and cause unnecessary rebuilds.
+    </p>
+    <h3>
+      How (concise example)
+    </h3>
+    <ul>
+      <li>
+        Import SCons Action and make the Python function do the work.
+      </li>
+      <li>
+        Provide an explicit <code>strfunction</code>&#160;that returns a deterministic string (or a short label).
+      </li>
+      <li>
+        Optionally provide <code>varlist</code>&#160;to include relevant environment variables in the signature.
+      </li>
+    </ul>
+    <p>
+      Example:
+    </p>
+    <pre class="hljs s-code-block" code-as-text="from SCons.Action import Action
+
+def my_build(target, source, env):
+    # do deterministic build steps
+    with open(str(target[0]), " wb="#DEFAULT" as="#DEFAULT" out="#DEFAULT" out.write="#DEFAULT" open="#DEFAULT" str="#DEFAULT" source="#DEFAULT" rb="rb" read="#DEFAULT" return="#DEFAULT" none="#DEFAULT" deterministic="#DEFAULT" signature="#DEFAULT" string="#DEFAULT" keep="#DEFAULT" it="#DEFAULT" short="#DEFAULT" and="#DEFAULT" stable="#DEFAULT" def="#DEFAULT" my_strfunc="#DEFAULT" act="#DEFAULT" target="#DEFAULT" env="#DEFAULT" my_build="my_build" s="#DEFAULT" join="#DEFAULT" s.path="#DEFAULT" for="#DEFAULT" in="#DEFAULT" t.path="#DEFAULT" t="#DEFAULT" optionally="#DEFAULT" include="#DEFAULT" variables="#DEFAULT" that="#DEFAULT" should="#DEFAULT" affect="#DEFAULT" rebuilds="#DEFAULT" my_action="#DEFAULT" varlist="[MYFLAG," other_var="#DEFAULT" env.command="#DEFAULT" out.bin="#DEFAULT" in.bin="#DEFAULT"></pre>
+    <div class="d-flex h32">
+      <p class="fc-light langugage-python flex-item w90 fs-body1">
+        python
+      </p>
+    </div>
+    <pre class="hljs s-code-block" code-as-text="from SCons.Action import Action
+
+def my_build(target, source, env):
+    # do deterministic build steps
+    with open(str(target[0]), " wb="#DEFAULT" as="#DEFAULT" out="#DEFAULT" out.write="#DEFAULT" open="#DEFAULT" str="#DEFAULT" source="#DEFAULT" rb="rb" read="#DEFAULT" return="#DEFAULT" none="#DEFAULT" deterministic="#DEFAULT" signature="#DEFAULT" string="#DEFAULT" keep="#DEFAULT" it="#DEFAULT" short="#DEFAULT" and="#DEFAULT" stable="#DEFAULT" def="#DEFAULT" my_strfunc="#DEFAULT" act="#DEFAULT" target="#DEFAULT" env="#DEFAULT" my_build="my_build" s="#DEFAULT" join="#DEFAULT" s.path="#DEFAULT" for="#DEFAULT" in="#DEFAULT" t.path="#DEFAULT" t="#DEFAULT" optionally="#DEFAULT" include="#DEFAULT" variables="#DEFAULT" that="#DEFAULT" should="#DEFAULT" affect="#DEFAULT" rebuilds="#DEFAULT" my_action="#DEFAULT" varlist="[MYFLAG," other_var="#DEFAULT" env.command="#DEFAULT" out.bin="#DEFAULT" in.bin="#DEFAULT"><code>from SCons.Action import Action
+
+def my_build(target, source, env):
+    # do deterministic build steps
+    with open(str(target[0]), &quot;wb&quot;) as out:
+        out.write(open(str(source[0]), &quot;rb&quot;).read())
+    return None
+
+# deterministic signature string; keep it short and stable
+def my_strfunc(act, target, source, env):
+    return &quot;my_build: %s -&gt; %s&quot; % (&quot;,&quot;.join([s.path for s in source]), &quot;,&quot;.join([t.path for t in target]))
+
+# optionally include env variables that should affect rebuilds
+my_action = Action(my_build, my_strfunc, varlist=['MYFLAG', 'OTHER_VAR'])
+
+env.Command('out.bin', 'in.bin', my_action)</code></pre>
+    <h3>
+      Practical rules
+    </h3>
+    <ul>
+      <li>
+        <strong>Provide <code>strfunction</code></strong>&#160;(or <code>cmdstr</code>) so the action signature is explicit and stable.
+      </li>
+      <li>
+        <strong>Use <code>varlist</code></strong>&#160;to include only environment variables that legitimately change build output.
+      </li>
+      <li>
+        <strong>Avoid</strong>&#160;including timestamps, absolute temp paths, random values, or local-only data in the signature.
+      </li>
+      <li>
+        Prefer content-based decider (SCons default) for file changes; only make action signature sensitive to what truly affects outputs.
+      </li>
+    </ul>
+    <h3>
+      Tips &amp; Alternatives
+    </h3>
+    <ul>
+      <li>
+        To debug why SCons rebuilds, run SCons with <code>--debug=explain</code>&#160;to see which signature or node change triggered the rebuild.
+      </li>
+      <li>
+        If you need fully content-driven rebuilds, ensure the decider is set appropriately and rely on file content signatures rather than variable-heavy action signatures.
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
+<icon BUILTIN="wizard"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1764208045145" ID="ID_542150981" MODIFIED="1764208053745" TEXT="diese Antwort klingt plausibel"/>
+<node CREATED="1764208066800" ID="ID_377532987" MODIFIED="1764208081349">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      aber ist komplett <b>falsch und irref&#252;hrend</b>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1764208083484" ID="ID_991502681" MODIFIED="1764208573875" TEXT="die String-Repr&#xe4;sentation wird nicht f&#xfc;r die Signatur verwendet">
+<linktarget COLOR="#d93175" DESTINATION="ID_991502681" ENDARROW="Default" ENDINCLINATION="-1062;46;" ID="Arrow_ID_1837446907" SOURCE="ID_1904887062" STARTARROW="None" STARTINCLINATION="-347;16;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1764190327183" ID="ID_1063444485" MODIFIED="1764190337199" TEXT="nicht so klar wie die AI meint....">
+<node CREATED="1764190338591" ID="ID_104855868" MODIFIED="1764190346266" TEXT="denn wir &#xfc;bergeben einen cmdstr."/>
+<node CREATED="1764190348639" ID="ID_923448890" MODIFIED="1764207898908" TEXT="Konstruktur Action (SCons/Action.py 513)">
+<linktarget COLOR="#597d8e" DESTINATION="ID_923448890" ENDARROW="Default" ENDINCLINATION="76;-515;" ID="Arrow_ID_657949434" SOURCE="ID_881837314" STARTARROW="None" STARTINCLINATION="1190;40;"/>
+<node CREATED="1764190409731" ID="ID_1922185391" MODIFIED="1764190434282" TEXT="geht in _do_create_action()  (Z.475)"/>
+<node CREATED="1764190463162" ID="ID_775727694" MODIFIED="1764190474895" TEXT="versucht erst ein Action-Obejekt"/>
+<node CREATED="1764190489751" ID="ID_729736838" MODIFIED="1764190546980" TEXT="falls callable(object) &#x27f6; konstruiert FunctionAction  (Action.py 1370)"/>
+<node CREATED="1764190558724" ID="ID_61269931" MODIFIED="1764190572622" TEXT="das erzeugt die &#xbb;function_contents&#xab; f&#xfc;r die Signatur">
+<node CREATED="1764190641253" ID="ID_790821654" MODIFIED="1764190664780" TEXT="versucht erst _callable_contens() (line 165)"/>
+<node CREATED="1764190671807" ID="ID_1169106586" MODIFIED="1764190697955" TEXT="und ist dann erfolgreich bei _code_contents() (251)"/>
+<node CREATED="1764190699186" ID="ID_934978881" MODIFIED="1764190712411" TEXT="das liefert das Byte-Array, das nicht stabil ist"/>
+</node>
+</node>
+</node>
+<node CREATED="1764190893532" ID="ID_1248473027" MODIFIED="1764190905842" TEXT="Also: Experiment fortsetzen">
+<node CREATED="1764193427492" ID="ID_1815216981" MODIFIED="1764206652140" TEXT="Schritt-1: Python-Funktion">
+<linktarget COLOR="#4e81d4" DESTINATION="ID_1815216981" ENDARROW="Default" ENDINCLINATION="17;-267;" ID="Arrow_ID_807332891" SOURCE="ID_1793652240" STARTARROW="None" STARTINCLINATION="-17;224;"/>
+<node CREATED="1764193437611" ID="ID_1307270771" MODIFIED="1764193442404" TEXT="tja..."/>
+<node CREATED="1764193443017" ID="ID_1498615791" MODIFIED="1764193493199" TEXT="jetzt geht er nicht in die _code_contents sondern die _function_contents">
+<node CREATED="1764194018116" ID="ID_753049596" MODIFIED="1764194032803" TEXT="und zwar weil hier {code.co_argcount}, {len(code.co_varnames)} einen AttibuteError ausl&#xf6;st"/>
+</node>
+<node CREATED="1764193498770" ID="ID_1400585883" MODIFIED="1764196440335" TEXT="und diese liefern in dem Setup hier wohl eine stabile Signatur"/>
+<node CREATED="1764193517390" ID="ID_1326768869" MODIFIED="1764193632669" TEXT="Grr.... dynamische Sprachen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Mu&#223; schon sagen, nach einiger Zeit Debugging bin ich schon wieder am Kotzen. Dieser Stil!!!!
+    </p>
+    <p>
+      Man akzeptiert irgendwas und geht dann durch eine zigfach verschachtelte Kette von Adaptern, solange bis es irgendwann.... wenn ... dann ... eben doch irgendwie pa&#223;t
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="smiley-angry"/>
+</node>
+<node CREATED="1764193651944" ID="ID_116095103" MODIFIED="1764193663740" TEXT="in meinem Lumiera-Fall habe ich eine innere Funktion &#xfc;bergeben"/>
+</node>
+</node>
+<node COLOR="#5b280f" CREATED="1764196448194" ID="ID_233655533" MODIFIED="1764196477064" TEXT="STOP ... einen Schritt zur&#xfc;ck!">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1764196513871" ID="ID_126115733" MODIFIED="1764196525174" TEXT="auch die _function_contents greifen auf die _code_contents zur&#xfc;ck"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1764196525947" ID="ID_1567314752" MODIFIED="1764196542870" TEXT="ich kann nicht sagen warum die Signatur nicht stabil ist">
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1764196749412" FOLDED="true" ID="ID_1471993413" MODIFIED="1764198031733" TEXT="mehrere Aufrufe">
+<icon BUILTIN="edit"/>
+<node CREATED="1764196755951" ID="ID_1421392732" MODIFIED="1764197458583" TEXT="bytearray: bytearray(b&quot;3, 4, 0, 1,({int:builtins}[[[(&lt;class \&apos;object\&apos;&gt;, ()), [(&lt;class \&apos;int\&apos;&gt;, (&lt;class \&apos;object\&apos;&gt;,))]]]]{{}}{{{denominator=1,imag=0,numerator=0,real=0}}},#),(str,subst,path,buildIcon,removeprefix,main),(&gt;\x01\x95\x00[\x01\x00\x00\x00\x00\x00\x00\x00\x00U\x01S\x01\x05\x00\x00\x005\x01\x00\x00\x00\x00\x00\x00n\x01U\x02R\x03\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00U\x02R\x04\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00R\x06\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x005\x01\x00\x00\x00\x00\x00\x00R\t\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00S\x025\x01\x00\x00\x00\x00\x00\x00n\x03T\x04R\x0b\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00X\x13/\x025\x01\x00\x00\x00\x00\x00\x00 \x00g\x01),(),({module:builtins}[[[(&lt;class \&apos;object\&apos;&gt;, ()), [(&lt;class \&apos;module\&apos;&gt;, (&lt;class \&apos;object\&apos;&gt;,))]]]]{{}}{{{artworkLayerPrefix=artwork:,copyMergeDirectory=&lt;function copyMergeDirectory at 0x7f0eeb296ac0&gt;,createDirectory=&lt;function createDirectory at 0x7f0eeb296200&gt;,findChildLayerElement=&lt;function findChildLayerElement at 0x7f0eeb14ff60&gt;,getDocumentSize=&lt;function getDocumentSize at 0x7f0eeb14fec0&gt;,getTargetNames=&lt;function getTargetNames at 0x7f0eeb15c2c0&gt;,getopt=&lt;module \&apos;getopt\&apos; from \&apos;/usr/lib/python3.13/getopt.py\&apos;&gt;,main=&lt;function main at 0x7f0eeb15c4a0&gt;,minidom=&lt;module \&apos;xml.dom.minidom\&apos; from \&apos;/usr/lib/python3.13/xml/dom/minidom.py\&apos;&gt;,os=&lt;module \&apos;os\&apos; (frozen)&gt;,parseArguments=&lt;function parseArguments at 0x7f0eeb15c400&gt;,parseP..."/>
+<node CREATED="1764197669549" ID="ID_856521642" MODIFIED="1764197794611" TEXT="bytearray: bytearray(b&quot;3, 4, 0, 1,({int:builtins}[[[(&lt;class \&apos;object\&apos;&gt;, ()), [(&lt;class \&apos;int\&apos;&gt;, (&lt;class \&apos;object\&apos;&gt;,))]]]]{{}}{{{denominator=1,imag=0,numerator=0,real=0}}},#),(str,subst,path,buildIcon,removeprefix,main),(&gt;\x01\x95\x00[\x01\x00\x00\x00\x00\x00\x00\x00\x00U\x01S\x01\x05\x00\x00\x005\x01\x00\x00\x00\x00\x00\x00n\x01U\x02R\x03\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00U\x02R\x04\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00R\x06\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x005\x01\x00\x00\x00\x00\x00\x00R\t\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00S\x025\x01\x00\x00\x00\x00\x00\x00n\x03T\x04R\x0b\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00X\x13/\x025\x01\x00\x00\x00\x00\x00\x00 \x00g\x01),(),({module:builtins}[[[(&lt;class \&apos;object\&apos;&gt;, ()), [(&lt;class \&apos;module\&apos;&gt;, (&lt;class \&apos;object\&apos;&gt;,))]]]]{{}}{{{artworkLayerPrefix=artwork:,copyMergeDirectory=&lt;function copyMergeDirectory at 0x7f5e85912ac0&gt;,createDirectory=&lt;function createDirectory at 0x7f5e85912200&gt;,findChildLayerElement=&lt;function findChildLayerElement at 0x7f5e857cbf60&gt;,getDocumentSize=&lt;function getDocumentSize at 0x7f5e857cbec0&gt;,getTargetNames=&lt;function getTargetNames at 0x7f5e857d82c0&gt;,getopt=&lt;module \&apos;getopt\&apos; from \&apos;/usr/lib/python3.13/getopt.py\&apos;&gt;,main=&lt;function main at 0x7f5e857d84a0&gt;,minidom=&lt;module \&apos;xml.dom.minidom\&apos; from \&apos;/usr/lib/python3.13/xml/dom/minidom.py\&apos;&gt;,os=&lt;module \&apos;os\&apos; (frozen)&gt;,parseArguments=&lt;function parseArguments at 0x7f5e857d8400&gt;,parseP..."/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1764197821601" ID="ID_179523558" MODIFIED="1764197846225" TEXT="Problem identifiziert">
+<icon BUILTIN="back"/>
+<node CREATED="1764197847709" ID="ID_196667894" MODIFIED="1764198047583">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      die Builder-Funktion in Lumiera ruft ein <b>externes Python-Modul</b>&#160;auf
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1764197874850" ID="ID_183571418" MODIFIED="1764197903532" TEXT="die Signatur-Repr&#xe4;sentation hiervon enth&#xe4;lt konkrete Speicheradressen">
+<node CREATED="1764197939061" ID="ID_748961006" MODIFIED="1764197972163">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      copyMergeDirectory=&lt;function copyMergeDirectory at <font color="#cd0d0d">0x7f0eeb296ac0</font>&gt;
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1764197954229" ID="ID_534450202" MODIFIED="1764197987943">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      copyMergeDirectory=&lt;function copyMergeDirectory at <font color="#bc0296">0x7f5e85912ac0</font>&gt;
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1764198282075" ID="ID_634208700" MODIFIED="1764206575310" TEXT="ein Zugang damit wir selbst den Signatur-Content liefern k&#xf6;nnen">
+<icon BUILTIN="yes"/>
+<node CREATED="1764198351950" ID="ID_145196228" MODIFIED="1764198364229" TEXT="SCons/Action.py lesen">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1764198661099" ID="ID_1034033888" MODIFIED="1764206681267" TEXT="Ansatz: selber get_contents() implementieren, oder get_presig()">
+<icon BUILTIN="back"/>
+<node CREATED="1764199221763" ID="ID_173106382" MODIFIED="1764199230578" TEXT="class FunctionAction">
+<node CREATED="1764199235906" ID="ID_1139807284" MODIFIED="1764199242327" TEXT="definiert eine get_presig"/>
+<node CREATED="1764199243443" ID="ID_1954947952" MODIFIED="1764199414739" TEXT="diese ruft eine Methode gc(target, source, env) auf, die nirgends definiert ist">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      r-grep &#252;ber das ganze SCons-Paket gemacht....
+    </p>
+    <p>
+      Die Klasse erbt von der 'ABC' - Basisklasse (Python-3-Konstrukt). Aber die Argumente von gc(...) sprechen eigentlich daf&#252;r, da&#223; das zu SCons geh&#246;rt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1764199271397" ID="ID_509844765" MODIFIED="1764199288220" TEXT="und f&#xe4;llt ansonsten auf die funccontents zur&#xfc;ck"/>
+<node CREATED="1764199422641" ID="ID_834794941" MODIFIED="1764199436944" TEXT="in get_contents()  wird das in ein byte[] gepackt"/>
+<node CREATED="1764199495026" ID="ID_574609637" MODIFIED="1764199773960" TEXT="h&#xe4;ngt dann die Varlist nochmal drann ... so zur Sicherheit">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Diese Mentalit&#228;t der Leute macht mich w&#252;tend.
+    </p>
+    <p>
+      Kann man mal sein Hirn einschalten, bevor man loshackt??
+    </p>
+    <p>
+      Wenn jemand eine eigene Implementierung liefert, dann hat er Gr&#252;nde daf&#252;r und man kann erwarten, da&#223; dann auch der Kontrakt erf&#252;llt wird. Woher wollen die denn wissen, ob eine custom-Implementierung &#252;berhaupteine &#187;Varlist&#171; eingeschlossen haben m&#246;chte???!!&#160;&#160;Zumal die ABC (ActionBase) <b>gar kein Attribut 'self.varilist' hat</b>... das kommt erst im n&#228;chsten Layer dazu.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="smiley-angry"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1764200774688" ID="ID_1413156316" MODIFIED="1764206588583" TEXT="Kl&#xe4;ren: was mu&#xdf; in die Signatur">
+<icon BUILTIN="yes"/>
+<node CREATED="1764201862994" ID="ID_1140009735" MODIFIED="1764201880707" TEXT="Idealerweise: etwas was die Code-Identit&#xe4;t sicherstellt"/>
+<node CREATED="1764201979874" ID="ID_101268480" MODIFIED="1764202003864" TEXT="wir k&#xf6;nnen hier defensiv sein....">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      es teht ja nur darum, re-Builds der Icons zu vermeiden
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1764202005107" ID="ID_918310175" MODIFIED="1764202018937" TEXT="Ha! SCons selber kann das doch....">
+<icon BUILTIN="idea"/>
+<node CREATED="1764202024797" ID="ID_1499460505" MODIFIED="1764202033279" TEXT="SCons.Node.get_csig()"/>
+<node CREATED="1764202035197" ID="ID_459783361" MODIFIED="1764202045557" TEXT="und von den Modulen das __file__"/>
+<node CREATED="1764202062633" ID="ID_65638174" MODIFIED="1764202064823" TEXT="und zwar">
+<node CREATED="1764202065752" ID="ID_516672702" MODIFIED="1764202073585" TEXT="LumieraEnvironment"/>
+<node CREATED="1764202074452" ID="ID_817485828" MODIFIED="1764202091154" TEXT="IconSvgRenderer"/>
+</node>
+</node>
+<node CREATED="1764206600802" ID="ID_1253894675" MODIFIED="1764206605687" TEXT="gef&#xe4;llt mir ...."/>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1764206692592" ID="ID_1555995629" MODIFIED="1764206698412" TEXT="Problem gel&#xf6;st">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1764206700116" ID="ID_80156061" MODIFIED="1764206712491" TEXT="wir definieren eine eigene Action-Klasse"/>
+<node CREATED="1764206713359" ID="ID_1664434620" MODIFIED="1764207518645" TEXT="diese erbt von SCons/Action &gt; FunctionAction"/>
+<node CREATED="1764206723978" ID="ID_1008781270" MODIFIED="1764207686767" TEXT="und &#xfc;berlagert nur die Signatur-Methode">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...die Standard-Implementierung dieser get_contents()-Methode vewendet ein Rendering der involvierten Code-Objekte, inklusive der Variablen. Hier w&#252;rde der IconSvgRenderer auftauchen. Stattdessen setzen wir eine Pr&#252;fsumme auf den Python-Quellcode; das Executable rsvog-convert ist sowiso auch noch eine Dependency, und auch &#196;nderungen daran w&#252;rden erkannt. Und nat&#252;rlich &#196;nderungen am SVG-Quellcode.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1764206733293" ID="ID_508800749" MODIFIED="1764206776930" TEXT="die Signatur wird statisch generiert aus dem Python-Quellcode">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...und das lassen wir SCons machen, das kann das ja sehr gut...
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#435e98" CREATED="1764208598028" ID="ID_1675714808" MODIFIED="1764208748756" TEXT="Fazit">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node BACKGROUND_COLOR="#d7b2ce" COLOR="#fa002a" CREATED="1764208601891" ID="ID_1165477361" MODIFIED="1764208648491" TEXT="die AI hat mich komplett auf die falsche F&#xe4;hrte gesetzt">
+<icon BUILTIN="clanbomber"/>
+</node>
+<node CREATED="1764208652852" ID="ID_772119116" MODIFIED="1764208670272" TEXT="war aber trotzdem hilfreich, weil ich damit den Einstieg in das Thema gefunden habe"/>
+<node CREATED="1764208671046" ID="ID_410008539" MODIFIED="1764208678702" TEXT="was wirklich geholfen hat....">
+<node CREATED="1764208679605" ID="ID_249393708" MODIFIED="1764208686390" TEXT="das SCons-User-Manual lesen!"/>
+<node CREATED="1764208687186" ID="ID_26827256" MODIFIED="1764208692749" TEXT="die SCons-Manpage lesen"/>
+<node CREATED="1764208693722" ID="ID_1544929700" MODIFIED="1764208704149" TEXT="den Quellcode mit Debugger in Aktion beobachten"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1764208720161" ID="ID_1688037035" MODIFIED="1764208828214" TEXT="und: wirklich gut ist der SCons-Quellcode nicht">
+<icon BUILTIN="smily_bad"/>
+<node CREATED="1764208751388" ID="ID_1273413564" MODIFIED="1764208757054" TEXT="die Konzepte sind gut"/>
+<node CREATED="1764208757962" ID="ID_1945267141" MODIFIED="1764208772637" TEXT="die Implementierung versucht per &#xbb;duck-typing&#xab; zu normalisieren"/>
+<node CREATED="1764208774007" ID="ID_166116148" MODIFIED="1764208786092" TEXT="letztlich ist das alles schon konsistent"/>
+<node CREATED="1764208786877" ID="ID_1237671551" MODIFIED="1764208805285" TEXT="macht aber trotz allem sehr viel Pr&#xfc;fungen"/>
+<node CREATED="1764208806162" ID="ID_1765397466" MODIFIED="1764208821103" TEXT="und baut eine irre gro&#xdf;e und tief vernetzte Datenstruktur auf"/>
 </node>
 </node>
 </node>

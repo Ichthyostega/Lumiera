@@ -59,7 +59,7 @@ def defineBuildEnvironment():
     """
     EnsureSConsVersion(2,0)
     EnsurePythonVersion(2,6)
-    Decider('MD5-timestamp')  # detect changed files by timestamp, then do a MD5
+    Decider('content-timestamp')  # detect changed files by timestamp, then do a MD5
     
     buildVars = Variables([OPTCACHE, CUSTOPTFILE])
     Options.defineCmdlineVariables(buildVars)
