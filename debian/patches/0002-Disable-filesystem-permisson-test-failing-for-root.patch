@@ -1,0 +1,37 @@
+From: Ichthyostega <prg@ichthyostega.de>
+Date: Fri, 28 Nov 2025 20:36:58 +0100
+Subject: Disable filesystem permisson test (failing for 'root')
+
+It is common practice to work as root within a container;
+running as user would be possible, but requires a bit more configuration,
+without any clear benefit.
+
+This test verifies that permissions of a file can be set through a
+conveniencen-wrapper, and then additionally verifies that the read-only state
+actually prevents to write into the file -- which fails for root, since
+permissions are not enforced for root.
+
+This is an ancilliary topic altogether, since it just tests a test helper
+used for acceptance testing of timing measurments...
+
+The test will thus be deactivated for container builds,
+until someone has a better idea how to test this feature in a robust way
+---
+ tests/library/file-support-test.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tests/library/file-support-test.cpp b/tests/library/file-support-test.cpp
+index 42eea6d..264b72d 100644
+--- a/tests/library/file-support-test.cpp
++++ b/tests/library/file-support-test.cpp
+@@ -82,8 +82,8 @@ namespace test{
+           std::ofstream out{f};
+           out << "outch";
+           out.close();
+-          CHECK (not out.good());
+-          CHECK (0 == fs::file_size(f));
++//        CHECK (not out.good());            ////////////////////TODO : deactivated for packaging
++//        CHECK (0 == fs::file_size(f));    /////////////////////TODO : ... test fails when running as root
+         }
+       
+       

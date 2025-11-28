@@ -1,0 +1,2 @@
+0001-Disable-known-fragile-tests-for-DEB-package.patch
+0002-Disable-filesystem-permisson-test-failing-for-root.patch
