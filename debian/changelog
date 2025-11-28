@@ -1,4 +1,17 @@
-lumiera (0.pre.03-3+stretch) Lumiera-stretch; urgency=medium
+lumiera (0.pre.04-1) Lumiera-trixie; urgency=low
+
+  * New upstream (pre Alpha)release 0.pre.04
+  * Switch package build from CDBS to dh
+  * Upgrade Debian standard 3.9.6 -> 4.7.2
+  * Replace old menu system by a desktop file
+  * Maintain copyright in machine readable form
+  * Debian/Trixie is now reference system for Lumiera
+  * Tighten dependencies to require current versions
+  * Use debhelper-compat 13
+
+ -- Hermann Vosseler <deb@ichthyostega.de>  Fri, 28 Nov 2025 23:23:23 +0100
+
+lumiera (0.pre.03-3+stretch) Lumiera-stretch; urgency=low
 
   * Rebuild without change for Debian/Stretch.
   * this is just to prepare upgrading the reference platform
