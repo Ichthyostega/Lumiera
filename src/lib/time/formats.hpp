@@ -211,7 +211,7 @@ namespace time {
         
       public:
         /** build a new Descriptor to denote support for all the Formats,
-         *  @param TY typelist holding all the Format types to support
+         *  @tparam TY typelist holding all the Format types to support
          */
         template<typename TY>
         static Supported

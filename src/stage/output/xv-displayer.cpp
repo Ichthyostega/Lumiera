@@ -14,7 +14,7 @@
 * *****************************************************************/
 
 
-/** @file xvdisplayer.cpp
+/** @file xv-displayer.cpp
  ** Implementation of video output via XVideo
  ** @todo WIP as of 5/2025 -- attempt to port this component to GTK-3 ///////////////////////////////////////TICKET #1403
  */
@@ -26,6 +26,8 @@
 //#include "lib/format-cout.hpp"
 
 #include <gdk/gdkx.h>
+#include <sys/ipc.h>
+#include <sys/shm.h>
 
 namespace stage {
 namespace output {
@@ -140,12 +142,25 @@ namespace output {
                         }
                     }
                 }
+               /* WARNING: some graphic cards (notably my very old NVidia card) do not properly support the XV-Keying feature.
+                *          The above loop is written in a »defensive« way, insofar it is not permitted to set/change X attributes
+                *          that are not provided and supported by your hardware and driver stack.
+                *          It may thus happen (and it happens on my System) that the X driver somehow applies a default keying
+                *          to the complete XWindow. However, if parts of that window are used by other UI elements (as is the case
+                *          with our docking-panels), then these other widgets become "garbled" and will not repaint properly.
+                *          It does not help to attempt to paint explicitly with low-level X functions into that problematic region,
+                *          and I could not figure out why such an attempted fix does not work, when we paint in the on_map()-Event.
+                *          We can paint just fine with the same low-level functions from within the put() call.
+                *
+                *          Anyhow, as such the XV display works correct even in such cases, but it looks "broken" :-(
+                */
             }
           
           if (gotPort)
             {
-              XGCValues values;
-              memset(&values, 0, sizeof(XGCValues));
+//            XGCValues values;
+//            memset(&values, 0, sizeof(XGCValues));
+///////////////////////////////////////////////////////////////TODO actually pass these to XCreateGC to set line width or fill colour etc.              
               gc = XCreateGC( display, window, 0, NULL );
               
               xvImage = ( XvImage * ) XvShmCreateImage( display, grabbedPort, FORMAT_ID_YUY2, 0, videoWidth, videoHeight, &shmInfo );
@@ -167,8 +182,8 @@ namespace output {
                   }
                   
                   XSync( display, false );
-                  shmctl( shmInfo.shmid, IPC_RMID, 0 );
-                }
+                  shmctl( shmInfo.shmid, IPC_RMID, 0 );   // mark the segment as deleted
+                }                                        //   -- it will be retained until the last client calls shmdt()
             }
         }
       else
@@ -233,6 +248,7 @@ namespace output {
         XvShmPutImage (display, grabbedPort, window, gc, xvImage,
                        0, 0, videoWidth, videoHeight,
                        org_x, org_y, destW, destH, false);
+        XFlush (display);
       }
   }
   

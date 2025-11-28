@@ -3,7 +3,7 @@ Design: Playback and Render Control
 :Author: Ichthyostega
 :Date: 5/2011
 
-//MENU: label Player subsystem
+//MENU: label Playback
 
 **************************************************************************************
 This part of the architecture is concerned with how to initiate, coordinate and control
@@ -24,10 +24,12 @@ discussions and brainstorming sessions.
  * discussions regarding time values and timecode handling shed some light on the requirements
    to be fulfilled by a player subsystem
 
-   - link:http://article.gmane.org/gmane.comp.video.lumiera.general/2116[Timecode Widget and Framerates]
-   - link:http://article.gmane.org/gmane.comp.video.lumiera.general/2109[Time, Time-spans, Quatisation and Timecode]
-   - link:{l}/wiki/renderengine.html#TimeQuant[Definition of Time entities]
-     from the implementation notes in the TiddlyWiki
+   - https://lists.lumiera.org/pipermail/lumiera/2010-July/001984.html[Timecode formats and time widget]
+   - https://lists.lumiera.org/pipermail/lumiera/2010-December/002197.html[Timecode Widget and Framerates]
+   - https://lists.lumiera.org/pipermail/lumiera/2010-December/002190.html[Time, Time-spans, Quatisation and Timecode]
+
+ * at the _framework level_ a set of definitions has been created to handle
+   link:/x/TimeUsage.html[time values and quantisation].
 
 
 Reasoning Behind the Player Subsystem's Structure
@@ -152,8 +154,8 @@ reconfigure the vault layer services.
 
 Frame quantisation
 ^^^^^^^^^^^^^^^^^^
-link:../TimeQuant.html[Quantisation] is a kind of rounding; like any kind of rounding, quantisation is
-a dangerous operation because it kills information content.
+link:/x/TimeQuant.html[Quantisation] is a kind of rounding; like any kind of rounding,
+quantisation is a dangerous operation because it kills information content.
 
 Thus, there are three fundamental guidelines when it comes to rounding:
 

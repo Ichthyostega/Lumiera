@@ -1,13 +1,16 @@
-[grid="all"]
-`------------`-----------------------
-*State*         _Pending_
-*Date*          _2008-07-26_
-*Proposed by*   link:ct[]
--------------------------------------
+Design Process : Scripting Language
+===================================
+
+[options="autowidth"]
+|====================================
+|*State*       | _Dropped_
+|*Date*        | _2008-07-26_
+|*Proposed by* | ct
+|====================================
 
 
-Scripting Language
-------------------
+Required Scripting Language
+---------------------------
 Add support for the *Lua* scripting language in Lumiera.
 
 
@@ -21,7 +24,7 @@ as »official« scripting language.
 Tasks
 ^^^^^
  * Investigate Lua's C bindings and integrate it
- * It will attach to the link:Plugin/Interface[] System cehteh is working on
+ * It will attach to the Plugin/Interface System cehteh is working on
 
 
 Pros
@@ -50,7 +53,7 @@ Rationale
 Wee need scripting yet alone for driving the testsuite soon. Later on scripting
 might be used to customize workflows and other application internals. Further
 one might implement a high level / batch interface to lumiera to give it a
-scripting interface similar to link:AviSynth[].
+scripting interface similar to the https://en.wikipedia.org/wiki/AviSynth[Frameserver »AviSynth«].
 
 
 
@@ -105,7 +108,7 @@ ct:: '2008-07-30T16:22:32Z'
 
 
 I have no problems using Lua. It is proven in the industry, well supported,
-fast, efficient, high level and designed for this purpose. My only "complaint"
+fast, efficient, high level and designed for this purpose. My only ``complaint''
 is that Lua isn't my pet language (Scheme). And that really isn't a complaint
 at all.
 
@@ -115,7 +118,7 @@ PercivalTiglao:: '2008-07-28T19:56:25Z'
 I think Python should be reconsidered: it's given that all languages in this
 class are powerful at what they do, however python has particularly well
 developed libraries and is used as the scripting language in the main raster
-(GIMP), vector (Inkscape) and 3D (Blender, link:PythonOgre[], PyCrystal) Apps.
+(GIMP), vector (Inkscape) and 3D (Blender, PythonOgre, PyCrystal) Apps.
 Combinations of these Apps are all going to be working in a stack in
 professional production, so the fact that all the others use python makes a
 more persuasive case for adoption than any micro-benefit in performance or
@@ -126,8 +129,9 @@ get this into professional production houses, then I think having a single
 language from OS admin the whole way through the stack is a massive gain for
 the types of users who will be using it. I personally prefer Ruby. Naturally
 it's your decision to make, all the best, we are looking forward to alphas and
-betas in the future +
- -- *mytwocents*
+betas in the future
+
+mytwocents:: 'Aug.2008'
 
 
 This proposal is about the _required_ scripting language, i.e. when
@@ -197,9 +201,10 @@ Ichthyostega:: '2023-02-04' ~<prg@ichthyostega.de>~
 
 Conclusion
 ----------
-Lua was _accepted_ as the required scripting language by October.2008 dev
-meeting. However, Ichthyo _questions and overrules_ this decision in Feb.2023
-and moves this proposal back into the inception stage.
+Lua was _accepted_ as the required scripting language by the
+link:{ldoc}/devel/meeting_summary/2008-10-10.html#_lua_scripting_language[Oct.2008 dev meeting].
+However, Ichthyo __questions and overrules__ this decision in Feb.2023
+and moves this topic back into the inception stage.
 
-Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
+Back to link:/x/DesignProcess.html[Lumiera Design Process overview]
 

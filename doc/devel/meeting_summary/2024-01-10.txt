@@ -4,7 +4,7 @@
 :Date: 2024-01-20
 
 Jan 10, 2024
-on {l}/project/contact.html#_irc[`#lumiera`]
+on link:/project/contact.html#_irc[`#lumiera`]
 20:00 - 23:00 UTC +
 
 __Participants__
@@ -78,7 +78,7 @@ process and resource management within the Lumiera render engine itself.
 Next meeting
 ------------
 
-The next Lumiera meeting is scheduled for Wednesday, Feb 14 at 20:00 UTC.
+The next Lumiera meeting is scheduled for Wednesday, **Feb 14 at 20:00 UTC**.
 Should this be inconvenient for you, please speak up on, for example,
 link:http://lists.lumiera.org/cgi-bin/mailman/listinfo/lumiera[lumiera@lists.lumiera.org]
 and let us know of when you would prefer to attend.

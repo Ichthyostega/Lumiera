@@ -1,0 +1,21 @@
+Time Handling
+=============
+
+// Menu :  sort children
+// Menu :  attach child TimeQuant after TimeUsage
+// Menu :  append child TimeMutation
+
+
+While Lumiera will be able to handle various kinds of different content and data,
+the task of _editing_ implies to arrange elements into a temporal dimension.
+Thus representation of time and expression of relations in time plays a pivotal role.
+
+At first sight, time seems to we well-known, commonplace and trivial to understand --
+which however is a deception, since anything related to time, timings, duration and
+time scales is notoriously difficult to spell out with precision and tricky to
+handle in the practice of programming. A high-level discussion should thus
+
+- start with an analysis of link:TimeUsage.html[usage situations]
+- alignment to a pre-determined grid scale, the so called
+  link:TimeQuant.html[Time Quantisation] requires careful attention
+- formal representation of link:TimeCode.html[Time Code] is central to film editing.

@@ -44,6 +44,10 @@
  ** and the data storage reside within an `ArrayBucket<I>`, managed by the allocator.
  ** In its simplest form, this storage is heap allocated and automatically deleted.
  ** @see several-builder.hpp
+ ** @warning 2025 The implementation is preliminary and thus wastes a significant
+ **          amount of storage in the data structure header; this is not a fundamental
+ **          problem however and can be mitigated by clever data packing combined
+ **          with some meta programming.
  */
 
 

@@ -145,7 +145,7 @@ namespace lib {
        *  This object will be removed form this collection
        *  and returned as-is; it won't be deleted when the
        *  ScopedPtrVect goes out of scope.
-       * @param obj address of the object in question.
+       * @param objAddress address of the object in question.
        * @return pointer to the object, if found.
        *         Otherwise, NULL will be returned and the
        *         collection of managed objects remains unaltered

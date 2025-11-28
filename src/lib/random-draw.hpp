@@ -17,7 +17,8 @@
  ** value with a limited target domain. The intended usage scenario is to parametrise some
  ** configuration or computation »randomly«, with well defined probabilities and value ranges.
  ** A DSL is provided to simplify the common configuration and value mapping scenarios.
- ** @paragraph The underlying implementation was extracted 11/2023 from (and later used by)
+ ** \par motivation
+ **     The underlying implementation was extracted 11/2023 from (and later used by)
  **     TestChainLoad; there, random numbers are derived from node hash values and must be mapped
  **     to yield control parameters governing the topology of a DAG datastructure. Notably, a
  **     draw is performed on each step to decide if the graph should fork. While numerically

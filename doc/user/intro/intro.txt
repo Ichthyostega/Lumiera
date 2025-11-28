@@ -1,7 +1,8 @@
 Lumiera (as seen) from Outer Space
 ==================================
 :Author: Lumiera_Core_Developers
-:Date: Winter 2012
+:Date: 2012 / 2025
+:webidx:
 :toc:
 
 ******************************************************************************
@@ -83,7 +84,7 @@ aspects film production tools will have to exhibit to aspire to be labelled
         available. From small Laptops to multi-core computers up to render farms,
         Lumiera must be adept to reap the maximum from the hardware at hand.
 
- Durability::
+ Durability and Sustainability::
         The rapid pace at which software and hardware rampage forward is surely
         a warning to new software projects and the dangers of locking into any
         current technological ``fashion'' to achieve a ``cheap'' goal, feature
@@ -198,6 +199,11 @@ cache xref:caching[<-] and profiling xref:profiling[<-].
 // ################################################
 
 ''''''''
+....
+​
+​
+​
+....
 
 
 The visible Universe
@@ -226,25 +232,18 @@ to facilitate automated processing.
 
 Now it is time to take a look at the preliminary Lumiera GUI:
 
-image:{l}/images/lumiera_gui_small.png[Current Lumiera GUI Screenshot]
+.Timeline with nested track structure
+image:{imgg}/lumiera20250823.png["Lumiera GTK UI / Screenshot 2025-08",width=650, link="{imgg}/lumiera20250823.png"]
 
-We expect this GUI to change once we are at the point of having feedback from actual users.
+Since development is currently focused on technical integration, we expect this
+UI to change significantly once we can focus more on the topic of workflow.
+Note furthermore that the interface is themable and we plan to ship a stylesheet
+with a neutral gray colour scheme.
 
-The screenshot of the GUI presented above is more or less the standard GUI when
-it is started for the first time without any user configuration etc.  A second
-viewer is planned for later to be added to the default. We support a much more
-sophisticated screen concept xref:screenconcept[<-] to adapt to different
-workplaces and workflows.
-// TODO
-// The above paragrph isn't all it should be, but I can't tell what it should
-// be without seeing it in the context of the other changes I'm making.
-// I suspect it's better to discuss how rewritable the GUI is rather than
-// the specifics of the GUI presented above. -- hendrik
-
-At a first glance, the GUI might seem somewhat overwhelming, something similar
-to the cockpit in a jumbo jet.  However, nearly all the bells and whistles can
-be subdivided into groups according to their functionality.  The following
-sub-sections discusses the more prominent groupings.
+At first glance, the GUI might seem somewhat overwhelming, something similar
+to the cockpit in a jumbo jet.  However, all the controls and panels can
+be subdivided into groups according to their functionality, as discussed
+in the following subsections.
 
 
 Viewer
@@ -351,6 +350,11 @@ purposes, and the contents of a clip bin can be played like a storyboard.
 // ################################################
 
 ''''''''
+....
+​
+​
+​
+....
 
 
 Dark Matter
@@ -403,13 +407,17 @@ Placements
 
 // Can placements place things in space as well as in time??
 
-Generic mechanism to stitch together media objects. Any placement may contain
-a list of conditions on how to locate the placed object, examples being
-time-absolute/relative, relative to another object, or relative to some
-specific source media frame.
+All the elements and ``media objects'' in the project are stitched together
+by some common ``glue'': the Placements. Any placement may contain a list of
+conditions on how to _locate_ the placed object, examples being time-absolute/relative,
+relative to another object, or relative to some specific source media frame.
+Yet the conditions contained in a placement are not confined to time positions
+alone, they can define other kinds of position, like a sound pan position or some
+hint on data routing. Generally speaking, a placement pins the element into
+various dimensions within a _configuration space_
 
 All of the session model contents are attached by placement, forming a large
-tree. Placements are to be _resolved_ to find out the actual position, output
+tree. Placements need to be _resolved_ to find out the actual position, output
 and further locational properties of an object. Missing placement information
 is _inherited_ from parent placements in the session tree. This causes a lot
 of relational and locational properties to be inherited from more global
@@ -423,7 +431,7 @@ Rendering Engine
 rendering...
 
 [[builder]]
-builder
+Builder
 ^^^^^^^
 The inner workings of Lumiera exhibit some striking similarities to the implementation
 of a programming language compiler. On one side, there is a tree-like data structure
@@ -438,7 +446,7 @@ of the coin: it creates the low-level processing graphs by traversing and evalua
 the relevant parts of the high-level-model. Indirections will be resolved and
 connections will be made explicit by querying the _rules system_.
 
-rules system
+Rules System
 ^^^^^^^^^^^^
 [red]#to be written#
 
@@ -540,44 +548,17 @@ Lumiera will not reinvent the wheel. One major goal is to provide considerable
 functionality via well-designed, external code supplied to Lumiera by plug-ins.
 
 
-How are Plugins Implemented?
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-We can view Lumiera itself as being a slender application with many of the bells
-and whistles being supplied _directly_ by external FOSS tools.  Such tools will
-be made available to the Lumiera code base via the Lumiera Plugin Interface (LPI).
-
-As LPI will be used throughout most layers of Lumiera -- from the low-level
-backend, right up to the GUI -- the interface will have to be compatible to both C
-and C++. In effect, this means that LPI will be implemented in C.
-
-Using LPI a plugin interface can be defined for each external library.  The
-Lumiera code base can then use the external library by including the
-plugin interface for that particular library.
-
-LPI defines a uniform framework of how to manage plugins within Lumiera. It
-declares a number of macros that allow details of a plugin to be defined:
-    - name of the plugin
-    - version of the plugin (include major and minor version numbers)
-    - name each call-back function defined by the plugin and exported by the
-      external library
-    - methods to initialise and destroy the plugin
-
-Defining some plugin interface then entails using LPI to specify the details of
-the plugin.
-
 
 Integration with external libraries, frameworks and applications
 ----------------------------------------------------------------
 [red]#to be written#
 
-____
- .
- .
- .
-____
-
-''''
+''''''''
+....
+​
+​
+​
+....
 
 
 Further reading

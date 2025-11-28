@@ -4,7 +4,7 @@ Menu and Shortcuts
 :Date: 2008-05-14
 
 
-link:Lumiera/GuiBrainstorming/MenuAndShortcuts[] should explain most heavily discussed GUI features being related to Lumiera's GUI.
+This pace is a place where to discuss some of the more controversial GUI features proposed for Lumiera's GUI.
 
 
 3x3 Menus, Version 1

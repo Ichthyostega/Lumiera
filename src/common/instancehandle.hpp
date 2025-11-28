@@ -207,7 +207,7 @@ namespace lumiera {
       /** Set up an InstanceHandle managing the
        *  registration and deregistration of interface(s).
        *  Should be placed at the service providing side.
-       *  @param a (single) interface descriptor, which can be created with
+       *  @param descriptor a (single) interface descriptor, which can be created with
        *         LUMIERA_INTERFACE_INSTANCE and referred to by LUMIERA_INTERFACE_REF
        */
       InstanceHandle (LumieraInterface descriptor)

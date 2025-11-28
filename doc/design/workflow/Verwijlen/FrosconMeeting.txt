@@ -1,0 +1,177 @@
+Meeting at FrOSCon 2025
+=======================
+:Date: 2025-08-17
+:Author: Benny Lyons and Hermann Voßeler
+:toc:
+
+Present::
+- Wouter Verwijlen
+- Benny Lyons
+- Hermann Voßeler
+
+End goal::
+  To produce a design document.
+
+This Meeting is based on the document link:WorkflowProposals.html[»Lumiera Workflow Proposals«] by Wouter Verwijlen.
+Wouter travelled to FrOSCon to meet the core team in person. This meeting discussed some central points
+of the planned workflow support in the Lumiera GUI. We discussed problems, agreed on various points
+and decided to produce a design document. Here we attempt to reconstruct and document the original meeting.
+
+Points discussed
+----------------
+We agreed upon the importance of a link:WorkflowProposals.html#\_tracks_vs_trackless[magnetic timeline],
+as introduced by Final Cut X.
+However, our link:{rfc}/ProcPlacementMetaphor.html[Placement concept (2008)] 
+which predates FCPX's release,footnote:[Final Cut Pro X was
+link:https://en.wikipedia.org/wiki/Final_Cut_Pro#Final_Cut_Pro_X[released in 2011], and the »Magnetic
+Timeline« is generally considered a novel concept introduced with this update. The initial reception
+was rather controversial.]
+shares similar goals but its scope is more far-reaching. We consider _Magnetic Timeline_ to be an
+important advancement to legacy track oriented GUI schemes; but it is more mouse confined and does
+not support several Control Systems footnote:[The term »Control System« refers to one technical
+realisation of an human-computer-interface, which is used coherently and can coexist with other
+such interfaces -> link:/x/InteractionControl.FoundationConcepts.html[more]. +
+The most relevant control systems are: Mouse, keyboard, pen, hardware controls, ...]
+on an equal footing, which is our vision.
+
+Modes, Tools and Views
+~~~~~~~~~~~~~~~~~~~~~~
+Modes are generally frowned upon in the User Interface Design discipline. On the other hand, they enjoy
+popularity in video editing applications. Tools and Views were introduced to improve the usability
+of Modes. We agreed to adopt tools as the more preferable system, but only if we manage to develop
+a suitable handling mechanism that can be used naturally throughout all Control Systems.
+
+Taking inspiration from Blender, _Hermann_ proposed a fundamental shift by extending the scope of tool usage
+to the entire UI. To do this, we agreed to introduce a top-level tool to navigate throughout the UI.
+_Wouter_ expressed some concerns on how effect parameters and mixer stripes could be accessed. This
+remains a problem to be resolved. We agreed that this default navigation tool should map down
+naturally to conventional usage of the mouse.
+
+We discussed that a consequence of that decision might be to introduce a special tool dedicated
+to dragging and moving clips, but we were concerned that such a mode might hamper fluid working
+with the UI. It seems preferable to introduce the moving of clips as a sub-mode into the 
+navigation tool, with the option to lock moving of clips.
+
+_Wouter_ introduced a context sensitive tool palette which is rendered as an overlay in the timeline UI.
+The ability of Tools to support sub-modes is a simple extension of this proposal. 
+With this functionality, it would then be possible to switch between trim-, roll-, slide- and slip-edit
+after activating the edit tool. Similarly, the _gear switch_ as proposed in a previous online discussion
+would be integrated as a sub-mode into various other modes if a user decided to manipulate any setting value.
+
+Internationalisation
+~~~~~~~~~~~~~~~~~~~
+The language of the UI is English. This does not mean that we exclude any language
+(all contributions are welcome). Certain words and terminology should never be translated, e.g.,
+Track, Clip, Placement, ... . We have no plans to support translations that require a re-ordering
+of UI elements such as languages written right-to-left. This is due to priorities that we define.
+
+
+Unlimited Placement Constraints
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The use of fine-grained placement constraints is plagued with overwhelming the user with 
+excessive relationships. This can be improved by using a small number of prototype set-ups:
+magnetic, relative and music anchored. _Wouter_ points out that a similar scheme can be applied
+here as with the flavours of editing: A _placement prototype_ can be pre-selected for a newly added
+clip -- with the ability for adjustment through the tool palette. Moreover, we require a diagnostic
+to reveal the reason why a given clip is positioned at where it is.
+
+.Routing
+_Hermann_ explained how the routing in Render Engine is based on Placements.
+All data streams are grouped according to the medium (video, audio,...) by default.
+Mixing-groups can be automatically established if resources are tagged.
+
+
+Layering order
+~~~~~~~~~~~~~~
+The layering order is usually arranged according to track sequence in the UI.
+To retain this configuration we would have to put some content into a track which can be
+located at a distance from other related content: not an ideal situation. One way to alleviate
+this problem is to allow the user to configure the layer ordering for a single track so that
+all content is always fixed to be above a reference clip. While this promises to be an
+interesting mechanism to improve the track sequence dilemma and provide the user a greater
+track arrangement freedom, further practical tests need to be carried out to determine its
+feasibility.
+
+Grouping Devices
+~~~~~~~~~~~~~~~~
+One idea presented in _Wouter_'s document was the introduction of a light-weight grouping device.
+This would solve some problems, for example, a number of objects can be collectively moved
+as one unit together. _Hermann_ proposed to use placements to achieve the same effect.
+It is yet to be resolved how this grouping can be visually represented.
+
+One important issue proposed by _Wouter_ was to use segments to arrange the narrative at the
+top level. To implement this feature would require on the one hand a considerable effort
+by developers, on the other hand, it does not naturally fit into the Lumiera core design
+as it would be a very specific extension instead of a homogeneous building block in Lumiera.
+_Hermann_ proposes to use nested sequences to implement this feature which is already been
+planned for the session model. All these nested sequences will have their own track structure,
+which is a tree relationship. For example, expanding one structure would not necessarily
+expand neighbouring structures. Another advantage of using this mechanism is that it can
+be used to construct a transition between adjacent chapters of a film while still retaining
+the ability to reshuffle chapters to explore various narratives. We can thus solve two
+problems with the same feature.
+
+_Wouter_ was concerned that it might be tedious to navigate between different chapters,
+especially if it is necessary to expand or collapse these elements repeatedly. One
+countermeasure to relieve constant opening and closing elements would be to expand
+the elements step wise while still retaining the ability to edit the contents.
+Furthermore, rendering a condensed preview of a virtual clip's internal structure
+could help to avoid having to open and expand the clip in many situations.
+
+
+Target audience
+~~~~~~~~~~~~~~~
+It is important to identify our target audience to be able to frame a clear
+picture of which features are more preferable to include and those features which
+might be less suitable to incorporate into Lumiera.
+Define such groups will allow us to fine-focus into the particular needs of these groups
+and provide us with a mechanism to curtail our long feature list. Eventually we might have
+a list of features ordered according to priority.
+
+In his link:WorkflowProposals.html[»Lumiera Workflow Proposals«], _Wouter_
+identified six groups which would most likely be attracted to Lumiera and its goals.
+
+- The highly specialised editor who works in an environment where different parts of the
+  post-production of a film are handled by different people: assistant editors, colourists,
+  audio engineers, etc.
+- The all-round contract editor who handles all aspects of post-production
+- The all-round artistic filmmaker who also edits
+- The all-round social media creator who appreciates the use of visual effects,
+  motion graphics and sound effects.
+- The free-flowing editor without a fixed idea of the edit, who prefers to explore the
+  footage and move things around, and who might not work in a linear fashion:
+  they might, for example, do a bit of colour correction to acquire a better feel for a scene
+  and then go back to coarse-grained editing.
+- The editor who has the film already cut in their head and have a very strong sense of
+  what they want to do and progress through structured and precise steps towards realising their vision.
+
+These groupings are naturally provisional and will most likely change -- which
+is very good -- as we add important features that are deemed essential but fit to
+no group in our selection.
+
+_Benny_ proposed to order these groups according to, in our opinion, those who would be
+most interested to those he would be less interested. In the following discussion, we
+identified the first group (the specialised editor within an industrial work environment)
+and also the social media creators to be a more challenging audience, since these require
+rather specialised tools to perform their tasks.
+
+
+Conclusions
+-----------
+While we reached agreement in many points, the goal is to produce a design document for
+the GUI workflow. This task will require to spell out many details, thereby validating
+the viability of our ideas.
+
+- it remains to be shown that a generic _gesture concept_ can be mapped onto different
+  control systems coherently
+- it is not clear yet to which extent it is possible to include other UI elements like
+  the effect property settings into an overarching _navigation mode_
+- a scheme must be worked out which allows to add a _placement prototype_ to each clip
+  added to the timeline; furthermore we need to develop a representation that exposes
+  the detailed _placement constraints_ in an understandable way
+- the proposed mechanism to control the layering order should be actually implemented
+  and put into practical use to determine its feasibility
+- we need to consider in more detail how the proposed _light-weight grouping_ can be
+  represented graphically and what actual features can be attached to such a new device.
+- a detailed analysis is required to establish gradual steps of expanding / collapsing,
+  so that the overall timeline remains balanced and excess complexity can be hidden.

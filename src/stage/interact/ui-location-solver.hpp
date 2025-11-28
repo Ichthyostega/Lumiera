@@ -243,7 +243,7 @@ namespace interact {
       /**
        * Solve for a location according to the given location rule.
        * @param depth desired kind of UI element (and thus the depth in the UI topology tree)
-       * @param elementType designator of the specific element to be created at that level
+       * @param elementTypeID designator of the specific element to be created at that level
        * @return an explicit location, resolved against the current UI topology. May be empty
        * @remarks the returned path is either empty (no solution exists), or it is "partially covered"
        *        by the existing UI; here, the "covered" part are the already existing UI elements,

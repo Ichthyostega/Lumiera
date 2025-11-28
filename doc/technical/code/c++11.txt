@@ -225,6 +225,11 @@ February 2020::
 
   * still running into problems with perfect forwarding in combination with overload resolution;
     not clear if this is a shortcoming of current compilers, or the current shape of the language
+May 2025::
+  We did the big leap and are now on C\+\+23, with Debian/Trixie as the »reference system«.
+  The new language features, notably the **Concepts** will be adopted gradually and we
+  will certainly have to face some new challenges...
+
 
 
 
@@ -321,3 +326,4 @@ impose some challenging effort to retrofit existing structures.
   much cleaner and high-level than most ``mainstream'' usage of other common build systems out there.footnote:[
   ``hello CMake'', ``hello Autotools'', anyone else? Meson, Ninja? Maven? should maybe consider a switch to WAF?]
 
+NOTE: in May 2025, we achieved that switch and require now C\+\+23 and at least GCC-14.

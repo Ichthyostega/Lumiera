@@ -52,9 +52,11 @@ The Lumiera project uses GNU indentation style with slight adaptations.
     beyond just a short list of names -- especially when including initialisers -- they are
     preferably written on a separate line, directly above the argument list in parenthesis
   * the opening brace of namespaces is placed on the same line. Optionally, the namespace
-    body may be indented, as long as this helps underpinning the nesting structure. But
-    there is no need to use 3 indents on a 3 level nested namespace. One level is enough
-    to highlight the presence of a nesting.
+    body may be indented (by one half-indent), as long as this helps underpinning the
+    nesting structure. But there is no need to use three indents on a 3-level deep
+    nested namespace. One step is enough to highlight the presence of a nesting.
+    Effectively this implies that the majority of code is set apart from the
+    left border by two spaces.
 
 - the shorthand type names `uint`, `ulong`, `uchar`, `short`, `ushort`, `llong`, `ullong`
   are preferred, as it is clearer to write the fundamental type in a single word. Index
@@ -71,12 +73,12 @@ The Lumiera project uses GNU indentation style with slight adaptations.
   to define a type alias for the _function signature_ first.
 - in a similar vein, we distinguish between an ```const object`'' which _is really in-itself_
   unmodifiable, as opposed to _taking a const-reference,_ which is always spelled out
-  post-fix as `object const&`, or a constant-pointer spelled as `const*`.
+  post-fix as `SomeType const&`, or a constant-pointer spelled as `SomeType const*`.
 - we use the textual form of the boolean operators `and`, `or` and `not`, because this
   allows to make the code resemble complete meaningful sentences in human language.
   We _do use_ the »line noise« variant however for all low-level bit manipulation,
   `&`,`|`, `^`, sometimes also for `!` -- using those is taken as an indication of
-  entering the ``danger zone''...
+  having entered the ``danger zone''...
 
 
 Spelling
@@ -133,7 +135,7 @@ General Code Arrangement and Layout
   code size. Avoid unnecessary includes. Use forward declarations where applicable.
   Yet still, _all immediately required direct dependencies should be mentioned_, even if already
   included by another dependency. See the extensive discussion of these
-  link:{ldoc}/technical/code/linkingStructure.html#_imports_and_import_order[issues of code organisation]
+  link:{ldoc}/technical/code/LinkingStructure.html#_imports_and_import_order[issues of code organisation]
 - The include block starts with our own dependencies, followed by a second block with the library
   dependencies. After that, optionally some symbols may be brought into scope (through +using+ clauses).
   Avoid cluttering top-level namespaces. Never import full namespaces.footnote:[No `using namespace gtk;`

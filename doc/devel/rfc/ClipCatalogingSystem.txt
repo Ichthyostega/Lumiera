@@ -1,12 +1,12 @@
 Design Process : Clip Cataloging System
 =======================================
 
-[grid="all"]
-`------------`-----------------------
-*State*         _Parked_
-*Date*          _2008-07-26_
-*Proposed by*   link:JordanN[]
--------------------------------------
+[options="autowidth"]
+|====================================
+|*State*       | _Parked_
+|*Date*        | _2008-07-26_
+|*Proposed by* | JordanN
+|====================================
 
 Clip Cataloging System
 -----------------------
@@ -22,7 +22,7 @@ Organizations that work with video, and even home users, tend to have massive
 collections of stock videos and images that they will need to find and use in
 their projects. A Linux-based system is needed to help them to organize, tag,
 and retrieve assets from those collections. Being able to find the clips the
-user needs and bring them into his timeline, will mean that the user will be
+user needs, and to bring them into his timeline, will mean that the user will be
 able to more rapidly complete his project.
 
 This could be implemented as a separate application, but integrated for use in
@@ -57,8 +57,6 @@ them correctly. Not clip-based, so the entire video must be imported and the
 desired portion selected.
 
 
-Rationale
-~~~~~~~~~
 
 
 Comments
@@ -69,40 +67,49 @@ Comments
   development power to do that now. If someone wants to work on that, please
   contact me. General idea is to put all kinds of resources (Footage, Clips,
   Effects, Subprojects, Sounds ....) into a database with then gets
-  tagged/attributed in different ways (implicit things like 'filename', 'type',
-  'length'; automatic deduceable things like 'Exposure', 'Timecode', ...; And
-  manual tags like: who was on set, location, ....). Then present this all in a
+  tagged/attributed in different ways (implicit things like `filename', `type',
+  `length'; automatic deducible things like `Exposure', `Timecode', ...; And
+  manual tags like: who was on set, location, ...). Then present this all in a
   *good* GUI (by default just showing filesysten like) but one can define
   queries on this database and the generated views will then be storeable.
-Back to Lumiera, for now we will likely just use 'normal' file open dialogs
+  
+Back to Lumiera, for now we will likely just use ``normal'' file open dialogs
 until the above system becomes available.
- -- link:ct[] [[DateTime(2008-07-26T08:31:42Z)]]
-* Yes, it's indeed an important feature we should care for. But cehteh is
+
+ct:: '2008-07-26T08:31:42Z'
+
+* Yes, it's indeed an important feature we should care for. But _cehteh_ is
   right, we have more important things to do first. But feel free to target it.
 * Also, we'd need integration with production support systems, for example
   http://celtx.com/[CELTX].
 * The interface to the Lumiera App would be to populate the asset manager with
   the required assets
-   -- link:Ichthyostega[] [[DateTime(2008-07-27T22:19:38Z)]]
+
+Ichthyostega:: '2008-07-27T22:19:38Z'
 
 
-Videos, Audio, Clips and Resources Manager by using plugins for FOSS GPL
-"Library & Collections Management" programs.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-The video and audio raw material, clips, etc could be managed using code that
-is already available in project that carry out the same tasks. For example as
+Connect to existing FOSS applications by plugin
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+A Video-, Audio-, Clips and Resources Manager can be built by using plugins
+for existing ``Library and Collections Management'' programs available under GPL,
+or at least code from such applications could be used to carry out similar tasks.
+For example as
 library managers, or media  (video, audio or CD) collections, Integrated
 Library Systems (ILS).
 
-Examples of a library management program ;
+Examples of a library management program:
 
-. Kete - http://kete.net.nz/[]
-. Koha - http://www.koha.org/[]
-. link:GreenStone[] - http://www.greenstone.org/[]
-. Evergreen - http://open-ils.org/faq.php[]
+- https://web.archive.org/web/20080514220816/http://www.koha.org/[Koha] 
+  · https://koha-community.org/[2025]
+  · https://en.wikipedia.org/wiki/Koha_(software)[Wikipedia]
+  · https://liblime.com/[LibLime (commercial)]
+- https://web.archive.org/web/20080613192838/http://kete.net.nz/[Kete]
+- https://www.greenstone.org/[GreenStone]
+- https://evergreen-ils.org/frequently-anticipated-questions/[Evergreen]
 
-An additional benefit to using "library" managers, is that it can handle
-interloans, referencing of "other" (people's/organization's) libraries,
+An additional benefit to using ``library'' managers, is that it can handle
+interloans, referencing of ``other'' (people's / organization's) libraries,
 numbering systems, descriptions, and classifications, thousands to millions of
 items, search systems, review and comment systems, plus the benefits of open
 source that allow the expansion of features easily. The use of task oriented
@@ -113,16 +120,18 @@ working with cataloging systems for a long time is likely to do well. Plus it
 can be readily improved, by people who do not have to know the first thing
 about how to design video editing programs. The program also gets improved
 because of it own community, which adds features or performance to Lumiera,
-without even having to "drive" the development..
---link:Tree[][[DateTime(2008-08-27T20:38:00NZ)]].
+without even having to ``drive'' the development..
+
+Tree:: '2008-08-27T20:38:00NZ'
 
 ''''
 
 Parked until someone cares
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
-Decided on Developer meeting
+Decided in link:{ldoc}/devel/meeting_summary/2011-04-13.html#_clip_cataloging_system[Developer meeting]
 
-    Do 14 Apr 2011 02:52:30 CEST Christian Thaeter
+Christian Thaeter::  'Tur 14 Apr 2011 02:52:30 CEST'
 
+''''
 
-Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
+Back to link:/x/DesignProcess.html[Lumiera Design Process overview]

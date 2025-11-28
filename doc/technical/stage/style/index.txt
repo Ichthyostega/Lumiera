@@ -48,23 +48,28 @@ class constructor,_ which makes them more or less hard wired. The `Gtk::Widget` 
 their own naming scheme, apart from the basic GTK+ (C language) names, and it is _basically not possible_ for _custom widgets_
 to expose their distinct type names -- rather they will show up under the name of the base class used from Gtkmm.]
 Widgets may also expose CSS classes for styling -- the standard widgets define a generic set
-of https://developer.gnome.org/gtk3/3.4/GtkStyleContext.html#gtkstylecontext-classes[predefined CSS style classes],
+of https://docs.gtk.org/gtk3/class.StyleContext.html#style-classes-gtkstylecontext-classes[predefined CSS style classes],
 which can be used to establish the foundation for theming. Obviously it is preferable to keep styling rules as
 concise, generic and systematic as possible; yet we may still refer to individual GUI elements by name (`#ID`) though.
 
 Recommended reading
 ~~~~~~~~~~~~~~~~~~~
  * for technically precise coverage, consult the pages
-   https://developer.gnome.org/gtk3/3.4/GtkCssProvider.html[GtkCssProvider]
+   https://docs.gtk.org/gtk3/class.CssProvider.html[GtkCssProvider]
    and
-   https://developer.gnome.org/gtk3/3.4/GtkStyleContext.html#gtkstylecontext-classes[predefined style classes]
+   https://docs.gtk.org/gtk3/class.StyleContext.html#style-classes-gtkstylecontext-classes[predefined style classes]
    in the GTK-3 reference manual.
- * there is an https://developer.gnome.org/gtk3/stable/chap-css-overview.html[overview page in the developer manual],
-   and a https://developer.gnome.org/gtk3/stable/chap-css-properties.html[reference of supported properties].
- * to start, look at this http://thegnomejournal.wordpress.com/2011/03/15/styling-gtk-with-css/[introductory text],
-   or the more http://worldofgnome.org/making-gtk3-themes-part-1-basics/[hands-on series of articles from world of gnome]
- * this http://forums.fedoraforum.org/showthread.php?t=281568[post from fedora forum] features a concise description
-   of the task of theme creation
+ * there is an 
+   https://docs.gtk.org/gtk3/css-overview.html[overview page in the developer manual],
+   and a
+   https://docs.gtk.org/gtk3/css-properties.html[reference of supported properties].
+ * to start, look at this https://thegnomejournal.wordpress.com/2011/03/15/styling-gtk-with-css/[introductory text],
+   or the more
+   https://web.archive.org/web/20201112013720/http://worldofgnome.org/making-gtk3-themes-part-1-basics/[hands-on series of articles from world of gnome]
+ * this 
+   https://forums.fedoraforum.org/showthread.php?281568-Tutorial-for-making-GTK3-themes[post from fedora forum]
+   (https://web.archive.org/web/20250703120330/https://forums.fedoraforum.org/showthread.php?281568-Tutorial-for-making-GTK3-themes[Archive.org])
+   features a concise description of the task of theme creation
  * to understand the old (now obsolete) GTK-2 stylesheets, you might
    http://orford.org/gtk/[look here]
 
@@ -86,7 +91,8 @@ A good recommendation is really to ``probe'' settings by changing them temporari
 the GTK+ inspector
 ~~~~~~~~~~~~~~~~~~
 An essential tool when working with styles and Gtk widgets in general is the
-https://wiki.gnome.org/Projects/GTK%2B/Inspector[GTK+ inspector], which is part of the standard GTK distribution.
+https://developer.gnome.org/documentation/tools/inspector.html[GTK+ inspector]
+, which is part of the standard GTK distribution.
 It allows to inspect all GTK objects with their properties, and to see the actual tree of CSS nodes and the
 corresponding selectors. You can even add a style class or state flag (like ``hover'') dynamically, and you
 may add style rules and verify the effect on the application immediately. To use this ispector, launch the
@@ -96,11 +102,11 @@ application like `GTK_DEBUG=interactive target/lumiera`
 binary themes
 ~~~~~~~~~~~~~
 GTK-3 supports binary theme bundles, which combine CSS style sheets and accompanying images and vector graphics
-into a single archive file. See http://wibblystuff.blogspot.de/2012/06/building-binary-for-gtk3-theme.html[this blog entry]
+into a single archive file. See https://wibblystuff.blogspot.com/2012/06/building-binary-for-gtk3-theme.html[this blog entry]
 for a tutorial. But when it comes to investigating an existing theme, we need a way to 'extract' the original sources
 from such a distribution bundle. This can be achieved with the help of the `gresource` command. The following bash
 script footnote:[published  by mailto:peter@thecodergeek.com[Peter Gordon] to the Public Domain
-http://projects.thecodergeek.com/scripts/gresource-extract[at his blog] in 2012] simplifies this process, allowing
+https://projects.thecodergeek.com/scripts/gresource-extract[at his blog] in 2012] simplifies this process, allowing
 to extract all resource files in a given GResource file, with the given base URL. For example, if a GResource file
 contained the resource with the URL `/org/foo/bar/baz.txt`, and the base URL defined as `"/org/foo/"`, then the resource
 named `/org/foo/bar/baz.txt` in that file would be extracted and written to `bar/baz.txt` in the current directory.

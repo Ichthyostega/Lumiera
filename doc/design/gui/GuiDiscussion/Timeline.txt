@@ -1,15 +1,19 @@
-Timeline: Discussion
-====================
+Timeline: Extended Discussion
+=============================
 :Author: Joel Holdsworth
 :Date: Fall 2008
 
-This is Joel Holdsworth's attempt to amalgamate all the ideas from all the brainstorming to one consistent idea that makes sense, can be implemented, and seems like it would be nice to use. Comments are welcome.
+This is Joel Holdsworth's attempt to amalgamate all the ideas from all the brainstorming
+to one consistent idea that makes sense, can be implemented, and seems like it would be nice to use.
+Comments are welcome.
 
  * Avid vs FCP 2006 - http://www.fini.tv/articles/avidfcp2006.html[]
+   Archived 2008 from https://web.archive.org/web/20071211184722/http://www.fini.tv/articles/avidfcp2006.html[fini.tv]
 
  * Final Cut Pro 5 - A First Look - http://www.kenstone.net/fcp_homepage/fcp_5_new_martin.html[]
 
- * SpeedEdit Tutorials - http://www.newtek.com/speededit/tutorials/index.php[]
+ * SpeedEdit Tutorials +
+   'http://www.newtek.com/speededit/tutorials/index.php' ~[red]#dead link#~
 
 
 Brainstorming
@@ -126,7 +130,7 @@ Joel Conclusions:
 
 Timeline like this:
 
-image::http://www.kenstone6.net/fcp_homepage/images_fcp_5_new_martin/07_fc_studio_new_martin.jpg[]
+image::{imgg}/Joel-Conclusions-UI-layout.jpg[Conclusions for the UI layout]
 
  Tracks
 ''''''''''
@@ -220,14 +224,14 @@ Christian asked "why then not also controlling plugin parameters by placement?".
 I must admit, both of you have a point. Christians proposal goes even beyond
 what I proposed. It is completely straight forward when considered structurally,
 but it is also clearly beyond the meaning of the term/idea/concept "placement".
-But what, if we re-adjust the concepts and think in terms of ''Advice'' ?
+But what, if we re-adjust the concepts and think in terms of _Advice_ ?
 Thus, a placement would bind an media object into the session/sequence and also attach additional advice?
 
 As an example, to apply this re-adjusted Idea to the gain control: When a track
 group head has an gain/fade control this would just denote an advice to set the
-gain. It does ''not'' mean that signal data has to flow "through" this
-track/track group, it does ''not'' mean the gain is actually applied at this
-point and it does ''not'' mean that any routing decision is tied to this gain.
+gain. It does _not_ mean that signal data has to flow "through" this
+track/track group, it does _not_ mean the gain is actually applied at this
+point and it does _not_ mean that any routing decision is tied to this gain.
 Even signal chains being routed to quite different master busses can receive
 this advice, given the source clips are placed within the scope of this track
 group. The only difference needed on the GUI to implement this approach would be
@@ -292,7 +296,7 @@ otherwise just normal effects in a master sequence)?
 
 Regarding effects, I should point out that in our concept, mask, "camera" and
 "projector" (Cinelerra's terms) are just some specific effects. Given that, it
-is clear that effects need to be applicable ''both'' pre transition and post
+is clear that effects need to be applicable _both_ pre transition and post
 transition. But the following limitation seems reasonable to me and seems to
 match the actual use:
 
@@ -312,14 +316,14 @@ Btw. I very much agree with you that putting clips on group head tracks would be
 rather confusing, while I think placing an effect at a group head track is OK
 and feels natural. It will just be applied post-transition to all media within
 the covered range. And, note again the power of the placement+advice concept:
-this does ''not'' mean the data need to be merged together and piped through the
+this does _not_ mean the data need to be merged together and piped through the
 effect at this point. Rather, it means that each signal processing chain in the
 covered range will get an instance of this plugin wired in at a position
 equivalent to the place the effect is found on the group track with respect to
 the track hierarchy. I.e. after wiring in the transition(s), instances for
 effects placed at tracks are wired in order and ascending the track tree, and
 finally the connection will be made to the mixing step or output destination
-according to the output advice found for ''this individual'' object (but in most
+according to the output advice found for _this individual_ object (but in most
 cases this output destination advice will be inherited from the context, i.e.
 some root track)
 

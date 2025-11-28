@@ -247,7 +247,7 @@ namespace control {
   
   /**
    * Helper class used solely for _defining_ a Command-Object.
-   * This technique is known as "fluent API", see http://en.wikipedia.org/wiki/Fluent_interface
+   * This technique is known as "fluent API", see https://en.wikipedia.org/wiki/Fluent_interface
    * The basic idea is for the user to create a disposable instance of this definition helper,
    * only for calling a chain of definition functions, which internally build the actual Command object.
    * Finally, the created Command object will be stored into a registry or handed over to the

@@ -213,7 +213,7 @@ namespace time {
     /** handle the limits of SMPTE timecode range.
      *  This is an extension and configuration point to control how
      *  to handle values beyond the official SMPTE timecode range of
-     *  0:0:0:0 to 23:59:59:##. When this strategy function is invoked,
+     *  `0:0:0:0` to `23:59:59:##`. When this strategy function is invoked,
      *  the frames, seconds, minutes and hours fields have already been processed
      *  and stored into the component digxels, under the assumption the overall
      *  value stays in range.

@@ -4,12 +4,12 @@ Engine Interface Overview
 
 // please don't remove the //word: comments
 
-[grid="all"]
-`------------`-----------------------
-*State*         _Draft_
-*Date*          _2010-04-16_
-*Proposed by*   link:Ichthyostega[]
--------------------------------------
+[options="autowidth"]
+|====================================
+|*State*       | _Draft_
+|*Date*        | _2010-04-16_
+|*Proposed by* | Ichthyostega
+|====================================
 
 
 Overview Engine Interface(s)
@@ -42,7 +42,7 @@ Render Process
 The render process brackets an ongoing calculation as a whole. It is not to be
 confused with a operating system process or thread; rather it is a point of
 reference for the relevant entities in the Stage and Steam-Layer in need to
-connect to such a "rendering", and it holds the specific definitions for this
+connect to such a ``rendering'', and it holds the specific definitions for this
 calculation series. A render process
 _corresponds to a single data stream_ to be rendered. Thus, when the play
  controller of some timeline in the model is
@@ -51,7 +51,7 @@ processes exist.
 
 * there is an displayer- or output slot, which got allocated on creation
   of the process
-* the process disposes calculated data frames "into" this slot
+* the process disposes calculated data frames _into this slot_
 * the process can be paused/started and stopped (aborted, halted).
 * some processes allow for changing parameters dynamically (e.g. speed,
   direction)
@@ -60,7 +60,7 @@ processes exist.
 
 .Process parameters
 A process is linked to a single stream data format (a ->
-link:StreamTypeSystem.html[stream implementation type]). +
+link:{rfc}/StreamTypeSystem.html[stream implementation type]). +
 It is configured with _frame quantisation_ and _timings_, and a _model port_
 identifier and _channel selector_.
 
@@ -246,7 +246,7 @@ Rationale
 
 //Conclusion
 //----------
-//conclusion: When approbate (this proposal becomes a Final)
+//conclusion: When approved (this proposal becomes a Final)
 //            write some conclusions about its process:
 
 
@@ -261,11 +261,33 @@ Requirements and details of the design are sufficiently clear meanwhile.
 Ther seems to be not much room for alternative approaches, given our
 general planning for the application
 
-    Mi 11 Mai 2011 19:27:12 CEST Ichthyostega <prg@ichthyostega.de>
+Ichthyostega::  'Wed 11 Mai 2011 19:27:12 CEST' ~<prg@ichthyostega.de>~
 
 
 //endof_comments:
 
 ''''
-Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
+[underline]#Historical remark#: In hindsight, it seems I did post that RfC
+(and the corresponding link:{rfc}/EngineInterfaceSpec.html[Specification RfC]) not so much
+to ask for input and further ideas, rather as a _call for help_. Last year (2024), I had
+to revisit the code written in 2010/11, and it looks like I was struggling desperately at
+that time to thread a pathway into a void. During the early stages of the project, _Cehteh_
+and myself had agreed to place the boundary between ``Proc'' and ``Backend'' (today designated
+as Steam and Vault) at the entrance to the link:/x/Scheduler.html[Scheduler] -- but there was
+no scheduler yet, not even a design draft at that time, and the scope of what it was assumed to do
+seemed to be ``vanishing'': basically ``the Backend'' wanted a pool of lightweight, stateless,
+unconnected requests, which could be treated as a problem of the ``embarrassingly parallel''
+kind (to use computer science parlance). So nothing to serve as an anchor or point of reference
+for finding a pathway.
+
+This RfC is a summary of design work already completed, asking for validation. I could
+not see if this path would lead to anywhere at that time -- and subsequently abandoned that
+topic in half-finished state. Currently (since 2024) I am picking up that work and it seems
+to be durable. However -- it might be worth mentioning that this RfC indeed spurred an
+link:{ldoc}/devel/meeting_summary/2011-05-11.html#scheduler[extended technical discussion]
+at the May-2011 developer meeting, maybe the last of this kind of inspiring exchanges
+on equal terms.
+
+''''
+Back to link:/x/DesignProcess.html[Lumiera Design Process overview]
 

@@ -2,12 +2,12 @@ Design Process : Unit Tests Python
 ==================================
 
 
-[grid="all"]
-`------------`-----------------------
-*State*         _Dropped_
-*Date*          _2007-06-17_
-*Proposed by*   link:Ichthyostega[]
--------------------------------------
+[options="autowidth"]
+|====================================
+|*State*       | _Dropped_
+|*Date*        | _2007-06-17_
+|*Proposed by* | Ichthyostega
+|====================================
 
 
 UnitTests in Python
@@ -20,7 +20,7 @@ Cinelerra Code via SWIG
 Description
 ~~~~~~~~~~~
 
-Define Test classes in Python, using e.g. the link:PyUnit[] framework of the
+Define Test classes in Python, using e.g. the PyUnit framework of the
 Python Standard lib. The SWIG compiler can generate wrapper code automatically,
 so we can access the C++ Classes and Facilities of Cinelerra as Python Modules
 and Classes. The Classes to be tested in Cinelerra need to provide some
@@ -29,8 +29,7 @@ the whole Test driven aproach).
 
 
 Tasks
-~~~~~
-
+^^^^^
  * Find out how the SWIG generated wrappers play together with Python's List
    and Map types. Without the ability to use the latter in the tests, this
    whole proposal is rather pointless.
@@ -39,9 +38,8 @@ Tasks
 
 
 Pros
-~~~~
-
-Programming Unit and Self tests in a Scripting language facillates this task.
+^^^^
+Programming Unit and Self tests in a Scripting language facilitates this task.
 The X-Language bindings are quite usable today. As a side effect, it helps to
 get a clean program structure, because the tests need some Interface and/or
 some object factories to create the test candidates. Python is proposed,
@@ -49,14 +47,11 @@ because it is fairly mainstream, has a flat learning curve and but is
 moderately modern and functional-style at the same time.
 
 Cons
-~~~~
-
+^^^^
  * Adds to the complexity
  * Some old-style hackers have a quite distinct aversion against Python
 
 
-Alternatives
-~~~~~~~~~~~~
 
 Rationale
 ~~~~~~~~~
@@ -64,19 +59,26 @@ Rationale
 Why am I proposing this? Out of lazyness. Python is there, many devs (on linux)
 have some Python skills, SWIG is not overly complicated to use.
 
-And last but not least: just to get the discussion going... ;-)
+And last but not least: just to get the discussion going... 😉
 
 
 Comments
 --------
 
-* I'd rather consider to use some embedded language in cinelerra which we can
-  use to drive tests, should be something smaller and more sane than python.
-  Needs certainly more discussion. For simple unit tests some C/C++ harness and
-  bit shell scripting would suffice, I really want to integrate this with
-  link:NoBug[].
- -- link:ct[] [[DateTime(2007-06-17T17:32:27Z)]]
+I'd rather consider to use some embedded language in cinelerra which we can
+use to drive tests, should be something smaller and more sane than python.
+needs certainly more discussion. For simple unit tests some C/C++ harness and
+bit shell scripting would suffice, I really want to integrate this with
+https://nobug.pipapo.org/[NoBug].
 
+ct:: '2007-06-17T17:32:27Z'
+
+Since Lumiera is a separate project now, we do no longer need to ``hook''
+into existing code ``from the outside''. Rather, we have created our own
+lightweight unit testing framework in C++.
+This RfC was link:{ldoc}/devel/meeting_summary/2008-03-06.html#_idea_unit_tests_in_python[dropped 3/08]
+
+ichthyo:: '2008-03-06'
 
 ''''
-Back to link:../DesignProcess[]
+Back to link:/x/DesignProcess.html[Lumiera Design Process overview]

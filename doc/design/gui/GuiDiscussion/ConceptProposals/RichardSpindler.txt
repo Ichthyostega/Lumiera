@@ -25,4 +25,4 @@ represent another View, and the connection from the timeline to the
 compositing nodes will be by Name, and not by arrows. Default Names
 would be "Video Track #1", etc.
 
-image::{imgg}/RichardSpindler.proposal.png[]
+image::{imgg}/proposal.RichardSpindler.png[]

@@ -1,107 +1,151 @@
 The Lumiera Debian Package
 ==========================
 :Author: Hermann Voßeler deb@ichthyostega.de
-:Date: 11/2011
+:Date: 11/2011 · 11/2025
 
 //Menu: label Debian Package
 
 Since several of the Lumiera core developers run a Debian flavour as their primary development platform,
-it seems natural to care for the debian packaging of Lumiera ourselves. Moreover, we've declared
-Debian/Stable to be our *reference platform* -- we'll provide any additionally required, more recent
-packages through our own link:http://Lumiera.org/debian[Debian Apt-Repository] (Debian depot).
+it seems obvious also to care for the Debian packaging of Lumiera. Furthermore, we have declared
+Debian/Stable to be our *reference platform* -- and we will provide any required additional
+packages through our own link:/debian[Debian DEB depot] (for the Apt package manager).
 
 TIP: readers new to Debian packages may want to have a look into our
-     link:{ldoc}/user/tutorials/DebianBuilding.html[Debian build tutorial],
+     link:{ldoc}/user/tutorials/DebianBuilding.html[Debian Build Tutorial],
      where we describe the commands for building and explain the structure
      of a Debian (source) package in general
 
 
 Package build process
 ---------------------
-As our whole infrastructure relies heavily on the Git version management tool, it's only natural
-also to organise the (debian) packaging with the help of Git. Fortunately, there is a nifty tool
+As our whole infrastructure relies heavily on the Git version management tool, it seems natural
+to organise also the (Debian) packaging with the help of Git. Fortunately, there is a nifty tool
 called link:https://honk.sigxcpu.org/piki/projects/git-buildpackage/[git-buildpackage], written
 by Guido Günther exactly for this purpose: It treats the _debianisation_ as a branch in the
 Git repository, forking off the mainline at the release point.
+~ -> see also https://wiki.debian.org/PackagingWithGit[Debian packaging with Git (Debian Wiki)]~
 
-For Lumiera, this _debianisation branch_ is called 'deb' and can be found in the
-link:http://git.lumiera.org/gitweb?p=debian/lumiera;a=summary[git:/git.lumiera.org/debian/lumiera] repository.
+For Lumiera, this _debianisation branch_ is called 'deb' and can be found in the Repository
+https://git.lumiera.org/gitweb?p=debian/lumiera;a=summary[git://git.lumiera.org/debian/lumiera].
 
 Installing Lumiera
 ~~~~~~~~~~~~~~~~~~
-The link:SCons.html[SCons build] generates a relocatable distribution directory structure,
-holding the main executable, additional tools and utilities, plus the core libraries and resources.
+The link:SCons.html[SCons build] generates a distribution directory structure, which is relocatable,
+comprising the main executable, additional tools and utilities, plus the core libraries and resources.
 Here _relocatable_ means that this subtree can be moved and placed anywhere on the system.
 As long as the relative directory layout remains intact, the executables will be able to find
-and load the accompanying libraries and resources. By invoking the `scons install` target,
-this directory structure is placed into the installation target directory.
+and load the accompanying libraries and resources. By invoking the `install` target, this
+directory structure is placed into the target installation directory, with an layout
+conforming to the Filesystem Hierarchy Standard.
 
 Actually, this lookup process at application startup is performed in two phases
 
-- in the first phase the main application locates the explicitly linked shared libraries.
-  footnote:[generally speaking, we have to distinguish between dynamic libraries explicitly
-  linked as part of the application, libraries linked as direct library dependencies, other
-  transitive library dependencies, and finally shared objects, which are loaded at runtime
-  through the `dlopen()` call.]
-  Especially those libraries belonging first class to the Lumiera application are built
-  with a relative search path ('rpath' with `$ORIGIN` token). These libraries are placed
-  into the +modules/+ subfolder
+- in the first phase the main application locates the explicitly linked shared libraries.footnote:[
+    Generally speaking, we have to distinguish between dynamic libraries explicitly
+    linked as part of the application, libraries marked and linked as direct library dependencies,
+    other transitive library dependencies, and finally shared objects, which are loaded at runtime
+    as »plug-in« through the `dlopen()` call.
+  ]
+  Some parts of the Lumiera code are built as shared library, but are non the less considered
+  a mandatory part of the application. Especially those libraries are built with a relative
+  search path ('rpath' with `$ORIGIN` token), and will be placed  into the 'modules/' subfolder
+  This implies that the dynamic linker will look for this subfolder in the same directory as
+  the `lumiera` executable and will fail to launch the application unless all those further
+  mandatory application components can be located.
 
-- after successfully launching the executable, the second phase performs a lookup programmatically,
-  starting from the path location of the executable. The goal is to find a +setup.ini+ which defines
-  additional plug-ins and resources to load. Notably, the GUI to launch is loaded as a
-  plug-in through this mechanism. Moreover, this *bootstrap configuration* defines the
+- after successfully launching the executable, the second start-up phase performs a programmatic
+  lookup, starting again from the path location of the executable. The goal is to find a file 'setup.ini'
+  which defines additional plug-ins and resources to load. Notably, the GUI to launch is loaded as
+  a plug-in through this mechanism. Moreover, this *bootstrap configuration* defines the
   additional platform and user configuration to load for further outfitting of the system.
 
-LSB Installation Layout
+
+FHS Installation Layout
 ~~~~~~~~~~~~~~~~~~~~~~~
-This organisation is used as foundation for packaging and installing. The primary application
-distribution structure will be located into a subfolder below +/usr/lib/+. Only the main application
-executable will be symlinked into +/usr/bin/+. The LSB explicitly allows for such a layout, which is
-typically used by large application bundles (OpenOffice, Gimp, Eclipse). Since the application
-startup encompasses two phases, loading the extended configuration programmatically after
-launching the application, extended resources from the application bundle can easily be
-relocated into a separate folder below `/usr/share/`, as required by LSB.
+So this organisation of the application executables and resources into an installation bundle in a
+subdirectory tree is used as foundation for packaging and installing. The primary application
+distribution structure with all the executable code will be placed into a sub-tree below
+'/usr/lib/lumiera'. Only the main application executable `lumiera` will then be symlinked into '/usr/bin/'.
+This pattern is in accordance with the
+https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard[Filesystem Hierarchy Standard (FHS)],
+and it is typically used by large application bundles (e.g. Libreoffice, Firefox-esr).
+Since the application startup of Lumiera encompasses two phases, where loading the extended configuration
+happens programmatically after launching the main application, all extended (platform-independent)
+resources from the application bundle can easily be relocated into a separate folder
+below `/usr/share/lumiera`, as required by FHS.
+
+How the Lumiera Debian package works
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Since we maintain both the Debian package and our build system, we can always try to do
+_the heavy lifting_ in our link:{ldoc}/technical/build/SCons.html[SCons build system],
+as this helps to keep the Debian packaging as simple as possible. Please have a look at the
+-> https://git.lumiera.org/?p=debian/lumiera;a=blob;hb=refs/heads/deb;f=debian/control[control file]
+·  https://git.lumiera.org/?p=debian/lumiera;a=blob;hb=refs/heads/deb;f=debian/rules[debian/rules]
+
+- we rely on the _Debhelper Sequencer_ "`dh_*`" in our 'debian/rules' +
+  -> https://manpages.debian.org/trixie/debhelper/dh.1.en.html[Manpage]
+  ·  https://www.debian.org/doc/debian-policy/ch-source.html#s-debianrules[Debian-Policy §4.9]
+
+- but we define three _override targets_ in order to invoke SCons explicitly,
+  so that it is immediately clear what configuration is passed to the build.
+
+- we configure SCons with `INSTALLDIR=debian/lumiera PREFIX=usr`, and thus
+  the installation will happen below 'debian/lumiera', which is the location
+  expected by the following DEB building steps
+
 
 
 Releases, Branches and Conventions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Official releases are marked by a tag on the master branch. At that point, master should be
-in good shape, release documentation is polished; experimental features are removed or disabled.
-Usually, we'll also fork a  *release branch* at that point, featuring bugfixes only.
-From here we'll merge to the **debian branch**footnote:[the 'release' branch will be merged back at
-times, while the 'debian' branch won't. This 'debian' branch is published through a separate
-link:git://git.lumiera.org/debian/lumiera[debian/lumiera git repository] and not merged back,
-since all tweaks here are strictly for debian packaging. There might be other packaging related
-repositories in the future. Yet still, the 'debian' branch is based on the same common tree
-and can in therory kept in the same git repository. Contrast this to the branch 'depot', which
-is also published through our 'debian/lumiera' git repository. This latter branch corresponds
-to a completely separate tree and holds the administrative part of our
-link:http://Lumiera.org/debian[Debian package depot] (Repository) on Lumiera.org.]
+Lumiera uses the link:{ldoc}/technical/code/GitBranching.html[Git-flow branching pattern]
+to organise releases and patches in the Git history. All official releases are marked by
+_a tag on the master_ branch. This tag is published in the primary Lumiera repository at
+`git://git.lumiera.org/LUMIERA` at the time of the release. Bugfixes are also merged
+into `master` and marked with a tag there.
 
-Typically the release will lead to the discovery of more or less serious bugs, which are
-fixed on the release branch and backported to master. The result is a sequence of point
-releases. At the end of a stable release series, the release branch will be upgraded
-with a single merge commit to the level of the next major release.
+For the actual packaging, we use these release tags as _upstream tag_ and perform a merge
+from that tag into the **debian branch**.footnote:[
+  This _debian branch_ is called `deb` by convention. As mentioned above, it is published through
+  a separate https://git.lumiera.org/?p=debian/lumiera;a=summary[Git repository `git://git.lumiera.org/debian/lumiera`],
+  which is kept separate, since packaging is considered a ``downstream process''.
+]
+This branch carries only the additions and tweaks done for debian packaging. Yet still, this `deb`
+branch is based on the common tree of the codebase and could in theory be kept within the same Git
+repository as the `master` branch. When the packaging process is complete, the published
+DEB version is marked with a tag `debian/<full_debian_version_spec>`
+
+Note however that there is another branch in the aforementioned `debian/lumiera` repository,
+which is called https://git.lumiera.org/?p=debian/lumiera;a=shortlog;h=refs/heads/depot[depot]
+and is related to our link:/debian[DEB package depot] on Lumiera.org. This branch carries a completely
+different directory structure, since it is used with the
+https://wiki.debian.org/DebianRepository/SetupWithReprepro[»reprepro« tool from Debian]
+to manage the contents of that depot.
 
 
 Package build commands
 ~~~~~~~~~~~~~~~~~~~~~~
 To (re)build the debian package
 
-. +git clone git:/git.lumiera.org/lumiera/debian+
-. +mkdir pack.deb+
-. +cd debian+
-. +git-buildpackage --git-upstream-branch=+ _RELEASE-TAG_
+. step into a packaging work directory
+. `git clone git://git.lumiera.org/debian/lumiera -b deb`
+. `cd lumiera`
+. `gbp buildpackage`
 
--- here _RELEASE-TAG_ denotes the point in the Git history, which should become
-the reference source and be packaged into the *.orig.tar.gz. Usually, it's just
-sufficient to use branch 'release' for that purpose.
+Typically you will have to install some _build dependencies_ before you can
+build the package. This can be checked by invoking `dpkg-checkbuilddeps` from
+within the package directory (here 'lumiera'). These dependencies can be
+managed automatically with the Debian tooling, by using one of the following
+two alternative solutions
+
+- `apt-get build-dep lumiera` (requires Lumiera DEB depot in the apt sources)
+- invoking `mk-build-deps` from within the package directory (requires `equivs` package)
+
 
 
 Debian-Depot for installation via Apt
 -------------------------------------
 In addition to the packaging, we maintain a dedicated Apt-Repository for automated
 installation and upgrades. We try to build the package for several Debian derived
-distributions (like Ubuntu). -> link:../infra/debianDepot.html[more on the repository organisation]
+distributions (like Ubuntu).
+-> link:{ldoc}/technical/infra/debianDepot.html[more on the repository organisation]
 

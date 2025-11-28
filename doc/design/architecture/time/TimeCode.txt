@@ -1,0 +1,13 @@
+Handling of Time Code Formats
+=============================
+
+.A Design draft
+Since handling of time values and time code formats is of uttermost importance
+for editing film, a draft concept was created in the early phase of Lumiera design.
+The chosen approach relies heavily on a framework for representation of temporal data
+developed for this purpose in the Lumiera support library. However, the implementation
+of various actual time code formats was deferred for later -- while the viability of
+this design yet needs to be validated by actual usage.
+
+Detailed analysis and planning can be found in the
+link:/x/fwd/DevWiki.TimeCode.html[DevWiki: TimeCode].

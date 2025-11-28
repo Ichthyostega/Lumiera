@@ -1,9 +1,12 @@
-[grid="all"]
-`------------`-----------------------
-*State*         _Parked_
-*Date*          _2008-03-05_
-*Proposed by*   link:ct[]
--------------------------------------
+How to organize work?
+=====================
+
+[options="autowidth"]
+|====================================
+|*State*       | _Dropped_
+|*Date*        | _2008-03-05_
+|*Proposed by* | ct
+|====================================
 
 Todo Lists
 ----------
@@ -12,30 +15,12 @@ We need some way to organize tasks to be done (tiddlywiki, testsuite, ...?)
 
 Description
 ~~~~~~~~~~~
+Cehteh::
+``I want something which doesn’t need much human care and I want one big `milestones' thing
+and a small `mini-task' thing''
 
-
-Tasks
-^^^^^
-
-
-Pros
-^^^^
-
-
-
-Cons
-^^^^
-
-
-
-Alternatives
-^^^^^^^^^^^^
-
-
-
-Rationale
-^^^^^^^^^
-
+Ichthyo::
+could be refined as as `Roadmap' and `Near time task list'
 
 
 
@@ -43,7 +28,51 @@ Rationale
 
 Comments
 --------
-We decided to use a Tiddlywiki for now until this is further worked out
- -- link:ct[] [[DateTime(2008-03-08T03:38:50Z)]]
+Discussed in the link:{ldoc}/devel/meeting_summary/2008-03-06.html#_idea_todo_lists[March.2008 developer meeting]. +
+We decided to use a TiddlyWiki for now until this is further worked out
 
-Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
+ct:: '2008-03-08T03:38:50Z'
+
+....
+​
+​
+​
+​
+​
+....
+
+.looking back at another era...
+What shall I say, just Whew! 😖
+
+For context, I can recall that _Cehteh_ had a very pronounced aversion against bugtrackers
+(and especially Bugzilla), because they are just plain confusing, filled with obsolete
+information and last but not least, they create spurious work without being helpful
+for the developer. Wouldn't it be much better to put everything into the code or
+close to the code (as markup in comments)? Git would propagate this information
+to the community of other contributors, which would decide about what is viable,
+just simply by merging or not merging -- and some clever tool could watch the
+resulting commit stream and extract the minimum necessary accounting to
+supply the developers with that amount of information
+ they need to be actually productive....
+
+.State -> Dropped
+Lumiera is quite another kind of project today. There _is_ a https://issues.lumiera.org/[Bugtracker],
+and I need all kinds of meta-tickets, tags, overview lists, the content in documentation pages plus
+my own personal notes in several mindmaps just to cope with the sheer amount of information and not
+to forget about matters already decided and settled.
+
+_All this meta-work takes a considerable amount of effort,_ for sure. +
+Yet the question remains, how can I ``keep track'' without keeping track?
+How can I judge and decide, without actually performing the judgement to arrive at a decision?
+Would it make any difference to this dilemma, if ``someone else'' were to perform that work??
+
+Can this kind of immaterial mental work be conditioned and commodified into an industrial process,
+so that the individual person might side-step the effort, yet sill remain a sovereign?
+
+[purple]#I do not know the answer to this question.#
+
+Ichthyostega:: '2025-09-18'
+
+
+''''
+Back to link:/x/DesignProcess.html[Lumiera Design Process overview]

@@ -20,7 +20,7 @@ Render Engine Interface
 _Ichthyo_ had prepared a new
 link:/documentation/devel/rfc_pending/EngineInterfaceSpec.html[RfC]
 about the actual interface between the
-link:/documentation/design/architecture/playRender.html[Player subsystem]
+link:/documentation/design/architecture/Playback.html[Player subsystem]
 and the Renderengine/Scheduler.
 The following discussion turned into considering several detaled and technical
 topics regarding the Jobs to be scheduled, how to create and attach new jobs,

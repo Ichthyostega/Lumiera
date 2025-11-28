@@ -1,0 +1,11 @@
+Playback and Render Processing
+==============================
+
+.Prototyping and Exploration
+On a conceptual level, this topic reaches far beyond the mere data processing
+and is undeniably one of the most complex and interwoven aspects of Lumiera.
+As of 2025, most structures in this realm are in a state of prototyping --
+many topics are in flux and what works well needs to be figured out yet.
+
+Many detailed notes can be found in the
+link:/x/fwd/DevWiki.PlayProcess.html[DevWiki: PlayProcess].

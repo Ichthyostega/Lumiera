@@ -55,8 +55,7 @@ Requirement analysis of playback modes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 For the task of editing a piece of media, the following modes of playback presentation can be determined +
 See also the more
-link:wiki/renderengine.html#NonLinearPlayback%20PlayService%20PlayProcess%20CalcStream%20FrameDispatcher%20OutputManagement[
-technical discussion of playback in the TiddlyWiki]
+link:imp/NonLinearPlayback.html[technical discussion of non-linear playback]
 
 
 regular playback::

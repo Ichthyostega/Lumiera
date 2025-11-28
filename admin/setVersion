@@ -40,5 +40,6 @@ rewrite doc/devel/Doxyfile        'PROJECT_NUMBER\s*=' "$VER"
 rewrite doc/devel/Doxyfile.browse 'PROJECT_NUMBER\s*=' "$VER"
 rewrite admin/scons/Setup.py      'VERSION\s*='        "\'$VER\'"
 rewrite README                    'Version:'           "$VER"
+rewrite NEWS                      'Version:'           "$VER"
 
 echo -e "\nSUCCESSFULLY rewritten version $VER\ncheck git diff\n\n"

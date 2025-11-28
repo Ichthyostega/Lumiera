@@ -46,7 +46,7 @@ namespace fixture {
   /**
    * @param start (optional) definition of the new Segment's start point (inclusive)
    * @param after (optional) definition of the end point (exclusive)
-   * @param jobTicket specification of provided render functionality for the new Segment
+   * @param modelLink specification of provided render functionality for the new Segment
    * @remarks missing definitions will be derived or interpolated according to context
    *   - if start point is omitted, the new Segment will start seamlessly after
    *     any preceding Segment's end, in case this preceding Segment ends earlier

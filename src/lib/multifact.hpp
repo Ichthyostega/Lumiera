@@ -283,7 +283,7 @@ namespace lib {
          * Select a production line and invoke the fabrication function.
          * @param id select the actual pre installed fabrication function to use
          * @param args additional arguments to pass to the fabrication.
-         * @note the template parameter #SIG defines the raw or nominal signature
+         * @note the template parameter \a SIG defines the raw or nominal signature
          *       of the fabrication, and especially the number of arguments
          * @return the created product, after passing through the #Wrapper functor
          */

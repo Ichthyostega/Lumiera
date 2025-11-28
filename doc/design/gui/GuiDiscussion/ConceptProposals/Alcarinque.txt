@@ -35,7 +35,7 @@ and add new functions. Of course this modules I am talking about, are not the
 modules described in the architecture overview. This is the gui, which is an
 abstraction of the real program.
 
-image::{imgg}/Alcarinque.proposal.png[Alcarinque's GUI proposal]
+image::{imgg}/proposal.Alcarinque.png[Alcarinque's GUI proposal]
 
 Here I made a sample of the architecture of the UI. Please don't take this too
 seriously, it is just a draft so you can understand the workflow. I haven't

@@ -1,17 +1,53 @@
 Release preparation
 ===================
 :Author: Ichthyo
-:Date: Nov 2015
+:Date: Nov 2025
 
-we have nothing to show and don't provide public releases yet --
+We have nothing to show and don't provide public releases yet --
 but we ought to rehearse and practice the release process.
 This document contains some hints and a checklist of steps
 to perform for a proper release.
 
+IMPORTANT: Lumiera uses link:{ldoc}/technical/code/GitBranching.html[Git-flow]
+           for the organisation of release branches and tags. Releases are still
+           considered ``experimental'' and happen infrequently, so that a full
+           automation of these steps was not yet considered. So please be
+           sure to adhere to the established conventions.
+
+
 Steps to perform for a release
 ------------------------------
 
- . release prep: clean-up obsolete information
+ . Pre-Release _»convergence phase«_
+
+   - care for code stability and refrain from breaking changes
+   - verify that the _current version number_ is already set to
+     the version number expected for the upcoming release, yet
+     decorated with the `~dev` suffix -- if it turns out that
+     the upcoming release shall make a _major version bump,_
+     then the expected version must be set *now*. Once
+     the release branch has been forked, the version
+     must not be changed any more.
+
+ . Release cut
+
+ - create the _Release Branch_ with name `rel/#.#.#`
+ - after that fork, immediately perform the *version bump*
+   on branch `integration`
++
+--
+** use the Script: `admin/buildVersion --bump=maj|min|rev --suffix=dev`
+** typical usage
+----
+admin/setVersion `admin/buildVersion.py --bump -s dev`
+----
+--
++
+[IMPORTANT]
+what you set here *must* be the next version _after the release_
+
+
+ . Release preparation: clean-up obsolete information
 
    - Debian package descriptions
    - Build-Tutorial
@@ -21,55 +57,81 @@ Steps to perform for a release
      * contributing
 
    - technical/build/Dependencies
+   - check and update *Release-Notes*
 
- . release prep: bump version number
+     * check that 'README' is up-to-date
+     * add a new summary entry into 'NEWS'
+     * check the 'AUTHORS' info
 
-   - `admin/scons/Setup.py`
-   - `data/config/setup.ini`
-   - `doc/devel/Doxyfile`
-   - `doc/devel/Doxyfile.browse`
+       ** ensure that the copyright time span
+          mentioned for each relevant contributor
+          is correct and possibly spans the current year
+       ** it is _crucial_ (legally relevant) that at least
+          the person preparing the release and thus acting as
+          publisher is mentioned here with the _current year_
+       ** ensure that a correct summary is presented in the "About"
+          dialog of the GTK-UI. The necessary config is currently (2025)
+          maintained in the file 'setup.ini' (the info displayed here
+          should be the list of all _significant contributors_ and
+          cover the whole time span from 2007 until _NOW_)
 
- . perform a back-merge from the release branch. +
-   It is relevant not to loose any bugfixes. Especially verify
+     * check that the 'LICENSE' file mentions the core authors,
+       again with the correct copyright time span
 
-   - that all ongoing fixes from DEBs and other build activities
-     are properly represented as patches and committed to the release branch
-   - that adjustments to platform dependencies are picked up adequately
+ . Test phase
 
- . perform the *Release-commit*:
-   it should mention the kind of the release and the version number.
-   Typically, with this commit, you'll update some top level stuff in the
-   source tree, like
+   - even while we have automated tests, be sure at least to do
+     some ``smoke test''. Ideally have _someone else_ use the new
+     version on a real-world project.
+   - depending on the circumstances, possibly set a _release candidate_ version, +
+     using a `--suffix=rc.#`
 
-   - `README`
-   - `AUTHORS`
-     
-     * also in the ``about'' box in the GTK-UI
-     * see `setup.ini`
+ . Publish the Release
 
-   - check the `LICENSE` file and add new license
-     declarations and notes, clean obsolete info here.
+   - merge the release branch into `master`
+   - set the version again, this time without any `--suffix`
+   - amend the merge commit to _include that final version_
+   - set the *Release Tag* in accordance with the
+     link:{ldoc}/devel/rfc/VersionNumberScheme.html[Version-Number scheme].
+   - fast forward also the _release branch_ to sit at that tag
+   - *publish* by pushing into git://git/lumiera/org/LUMIERA
 
- . update the *release branch*: ``upgrade current release to ##.##'' +
-   Make sure the release branch now really reflects current master, maybe
-   with the omission of some stuff to be kept out of the packages.
-   Set the *release tag*
+     ** the latest state of `master`
+     ** the release tag
 
- . packaging...
+ . Back-Merge: +
+   **never loose any release work**
 
-   - merge release -> deb
+   - `git checkout integration`
+   - `git merge rel/#.#.#`
+   - work through possible merge conflicts and resolve them
+   - conflicts on the version number *must* be resolved in favour
+     of the _next version number_ -- you can perform that as an
+     extra step, _after the merge_ is otherwise complete:
+     `admin/buildVersion --bump ... --suffix=dev` (and then
+     amend the merge!)
+   - *delete* the release-branch
+   - push this delete to the public repos, incl the main repo!
+
+ . Packaging...
+
+   - merge release-tag -> branch `deb`
    - verify the package description
-   - have a look at manpages and similar packaging documents
-   - update `debian/control` to reflect current version dependencies
-   - have a look into `debian/rules` (e.g. build flags and similar)
+   - have a look at manpages and similar packaging documents; +
+     notably look into 'debian/README.Debian', since we deliver
+     that instead of 'README' for the Debian users, since they
+     do not need instructions how to build the software...
+   - update 'debian/control' to reflect current version dependencies
+   - have a look into 'debian/rules' (e.g. build flags and similar)
+   - update 'debian/copyright' to reflect authors and copyright!
 
- . delivery
+ . Delivery
 
    - use whatever infrastructure is available to build packages.
-   - verify packages can be installed on a pristine VM
+   - verify packages can be installed on a pristine VM / Container
    - upload packages to debian depot or commit them to PPAs
    - clean-up and discard obsoleted old distributions and packages
 
- . close the **release ticket**
+ . Close the **Release Ticket**
 
 

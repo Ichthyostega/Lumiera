@@ -735,7 +735,7 @@ namespace time {
   /** derive a hash from the µ-tick value
    * @return rotation of the raw value to produce a suitable spacing for consecutive time
    * @remark picked up by Boost-hash, or std. hashtables with the help of `hash-standard.h`
-   * @see https://stackoverflow.com/a/31488147
+   * @see https://stackoverflow.com/questions/31387778/near-constant-time-rotate-that-does-not-violate-the-standards/31488147#31488147
    */
   inline HashVal
   hash_value (TimeValue const& time)

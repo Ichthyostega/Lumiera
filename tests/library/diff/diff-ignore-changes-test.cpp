@@ -72,7 +72,7 @@ namespace test{
    * 
    * @see DiffComplexApplication_test test case which _indeed does a lot..._
    * @see TreeMutator_test base operations of the adapter
-   * @see diff-tree-application.hpp
+   * @see tree-diff-application.hpp
    * @see tree-diff.hpp
    */
   class DiffIgnoreChanges_test

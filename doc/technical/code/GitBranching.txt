@@ -16,7 +16,7 @@ releases and bugfixes directly as structure in the Git history, without much nee
 release planning, coordination and management.
 
 TIP: The principles and procedures of *Git-flow* are explained in this
-     ->{nbsp}{l}/project/background/GitFlow.html[Background Article]. First
+     -> link:/project/background/GitFlow.html[Background Article]. First
      link:https://nvie.com/posts/a-successful-git-branching-model/[published in 2010]
      by _Vincent Driessen_, meanwhile it is widely applied in projects with regular releases
      and external liabilities -- and often seen as the counterpoint to trunk centred
@@ -31,6 +31,11 @@ remoulding this history by adding some changes as _commits_ and finally they pub
 extended line into their _personal repository._ However, the _normative state_ of the project
 is represented by the link:https://git.lumiera.org/gitweb?p=LUMIERA[»Lumiera Repository«]
 `git://git.lumiera.org/LUMIERA`
+
+***************************************************
+image:{img}/pub/GitFlow-branches.svg[
+"Illustration Git-flow branching pattern"]
+***************************************************
 
 The Core Developer(s) can _push_ to this repository, thereby acting as _Gateway._ Automated builds
 will listen to this repository, and any further _downstream processes,_ like e.g. packaging,

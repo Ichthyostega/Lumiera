@@ -1,15 +1,18 @@
-[grid="all"]
-`------------`-----------------------
-*State*         _Parked_
-*Date*          _2008-10-31_
-*Proposed by*   link:Ichthyostega[]
--------------------------------------
+Design Process: Use Cases
+=========================
+
+[options="autowidth"]
+|====================================
+|*State*       | _Parked_
+|*Date*        | _2008-10-31_
+|*Proposed by* | Ichthyostega
+|====================================
 
 
 Use Case analysis
 -----------------
 
-The only way to defeat "featuritis" is to build upon a coherent design --
+The only way to defeat ``featuritis'' is to build upon a coherent design --
  +
 which in turn relies upon a more or less explicit understanding what the
 application should be like, and the way the prospective user is thought to work
@@ -287,24 +290,24 @@ Comments
 .Template e.g. for regular TV series
 Constraints to fit all contents within fixed timeline, cover topic, select
 collage of iconic scenes from archived and collected footage. Update intro and
-credit roll for each episode. Add in stopmotion, and 3D model animations with
-vocal commentaries. Gather together separate items from "outworkers".
+credit roll for each episode. Add in stop motion, and 3D model animations with
+vocal commentaries. Gather together separate items from ``outworkers''.
 
 Tree:: '2008-12-27 08:36:36'
+
+
+.State -> Parked
+Discussed at the link:{ldoc}/devel/meeting_summary/2011-04-13.html#_use_cases[April.2011 developer meeting].
+We have to revisit this, possibly someone (or a group) who wants to work on the workflow. +
+For now it is __parked__ until revisited.
+
+Christian Thaeter::  'Thu 14 Apr 2011 03:06:42 CEST'
 
 
 //endof_comments:
 
 
 
-Parked
-~~~~~~
-We have to revisit this, possibly someone (or a group) who wants to work on
-the workflow. For now its parked until revisited.
 
-    Do 14 Apr 2011 03:06:42 CEST Christian Thaeter
-
-
-
-
-Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
+''''
+Back to link:/x/DesignProcess.html[Lumiera Design Process overview]

@@ -25,7 +25,7 @@
  ** various _alternative modes,_ like starting "headless" (without UI), script
  ** driven or as node in a renderfarm network.
  ** 
- ** [Boost program options library] : http://www.boost.org/doc/libs/1_55_0/doc/html/program_options.html
+ ** [Boost program options library] : https://www.boost.org/doc/libs/1_83_0/doc/html/program_options.html
  ** 
  ** @see basic-setup.hpp
  ** @see lumiera::AppState

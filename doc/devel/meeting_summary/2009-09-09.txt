@@ -29,7 +29,7 @@ This success wouldn't be possible without a lot of people helping. +
 So lets say: *Thank you all*!
 
 We plan to be there again next year with another Lumiera meeting (possibly
-all the 3 core devs present). _Ichthyo_ consideres to do a dedicate talk
+all the 3 core devs present). _Ichthyo_ considers to do a dedicate talk
 (in German).
 
 Participation as a group to other possible events has been considered for +
@@ -60,7 +60,7 @@ If later on there will be funding for development (not just covering expenses)
 that would require a different approach and special communication with the
 community.
 
-_daniieel_ proposes to put a price to each request in "buglist". +
+_daniieel_ proposes to put a price to each request in ``buglist''. +
 The proposal is discussed and dismissed.
 
 
@@ -71,7 +71,7 @@ The news in the homepage makes the project look alive. But this is not
 enough to communicate the state of the Lumiera development. Two
 solutions are proposed:
 
-* The website needs to be reorganized and made accessible. andrewjames
+* The website needs to be reorganized and made accessible. _andrewjames_
   volunteers to work on it.
 * Quarterly development news will be published in the devel section of the
   website. The devs will post drafts to the mailing list and encourage the

@@ -3,12 +3,12 @@ Developer Documentation Structure
 
 // please don't remove the //word: comments
 
-[grid="all"]
-`------------`-----------------------
-*State*         _Draft_
-*Date*          _Mon Aug  2 18:03:25 2010_
-*Proposed by*   Cehteh + Ichthyo
--------------------------------------
+[options="autowidth"]
+|====================================
+|*State*       | _Final_
+|*Date*        | _Mon Aug  2 18:03:25 2010_
+|*Proposed by* | Cehteh + Ichthyo
+|====================================
 
 ********************************************************************************
 We describe here how to bring the Lumiera Developer Documentation into an simple
@@ -32,7 +32,7 @@ The Lumiera (developer) documentation shall be organised in the following way:
      link:{ldoc}/user/intro/intro.html[Lumiera from Outer Space],
      which outlines our vision and the fundamental concepts.
    . there is a section holding our link:{ldoc}/design/[design documents].
-     Deliberately, these are written so to omit any technicalities,
+     Deliberately, these are written in a way omitting any technicalities,
      which keeps them valid as the technology evolves.
    . the entrance to the technical documentation is formed by
      link:{ldoc}/technical/overview.html[The inner Core] document.
@@ -69,14 +69,16 @@ Tasks
 ~~~~~
 // List what would need to be done to implement this Proposal in a few words:
 
- * Go over the existing content and the remainder of the asciidoced tiddlywikis,
-   integrate this content either in directly into the "Lumiera: The inner Core"
+ * Go over the existing content and the remainder of the Asciidoced TiddlyWikis,
+   integrate this content either in directly into the
+   link:{ldoc}/technical/overview.html[»Lumiera: The inner Core«]
    document or write separate documentation pages or RFC's. ([green]#✔ done#)
- * The 'proc' tiddlywiki is a bit special, we need a plan how to integrate this.
-   [red yellow-background]#TBD#
+ * The »Renderengine« TiddlyWiki is a bit special, we need a plan how to integrate this.
  * Create a facility to support the cross-linking between the various kinds of documents
-   [yellow-background]#WIP#
+   [red yellow-background]#TODO#
 
+CAUTION: this issue with stable cross-links
+         -> link:{rfc}/WebsiteSupportMarkup.html[remains a concern]
 
 
 Pros
@@ -121,9 +123,23 @@ developers.
 
 //Conclusion
 //----------
-//conclusion: When approbated (this proposal becomes a Final)
+//conclusion: When approvedd (this proposal becomes a Final)
 //            write some conclusions about its process:
+This RfC had been started initially by _Cehteh_ to propose a _simple structure_ --
+the ensuing discussion however showed that our documentation is already structured
+in a mostly consistent way, which just happens to be not that simple. Some confusing
+redundancies could be removed, as result from that discussion. _Ichthyo_ then edited
+and extended the original RfC to reflect the existing structure.
 
+A serious problem is posed by the rather tedious procedure to define cross-links in the
+Asciidoc based web content. link:{rfc}/WebsiteSupportMarkup.html[Another RfC] was created
+to discuss these problems in detail, leading to a solution proposal, which unfortunately
+was never implemented (due to lack of developer capacity). This _somehow transitory_
+situation had the (adverse) effect that most detailed technical content was authored
+within the Development TiddlyWiki.
+
+These remaining problems do not seem to be related to the _structure_ of the documentation
+however, which seems to fulfil its purpose. So this RfC now counts as de-facto standard.
 
 
 
@@ -137,12 +153,12 @@ Comments
   which includes the documentation. Why should we overthrow these results now and
   re-start the discussion? Lets just stick to this agreed on structure!
 * especially I don't like the way this proposal tries to squeeze everything into
-  an completely uniform structure. It is simply not true that the RFCs are just the
+  a completely uniform structure. It is simply not true that the RFCs are just the
   second level, and doxygen would cover the 3^rd^ level. Look at the existing
   documentation to see why.
-  - RFCs are a 'kind' of document, not a 'hierarchy level.' Indeed, our existing
+  - RFCs are a `kind' of document, not a `hierarchy level'. Indeed, our existing
     RFCs span all three hierarchy levels, and this is OK so and should remain this
-    way. (And yes, I like the RFCs much and want to retain them)
+    way. (And, in fact I consider the RFCs relevant and want to retain this formalism)
   - RFCs are well suited to topics requiring discussion and agreement by the whole
     core developer team. I see no point in 'pseudo-RFC-ing' the individual design
     decisions only relevant for an isolated part of the application and without
@@ -154,11 +170,11 @@ Comments
     when asciidocing the content).
 * so my conclusion is rather having one overview text, and then the split into
   *conceptual* and *technical* documentation, each of which has a separate sub
-  structure not necessarily congruent to the structure on the other half. RFCs,
+  structure not necessarily congruent to the structure at the other half. RFCs,
   UML model and doxygen are just separate and consistent bodies of documentation
   and can be referred to from the main documentation. (I agree with the observation
   regarding permanent links into doxygen. But I can't imagine there isn't some
-  existing solution to this problem)
+  existing solution to this problem, waiting to be discovered)
 
 Ichthyostega:: '2010-10-15' ~<prg@ichthyostega.de>~
 
@@ -172,5 +188,21 @@ documentation in textual form, which is inherentely structured.
 
 Ichthyostega:: 'Mo 09 Sep 2013 01:01:25 CEST' ~<prg@ichthyostega.de>~
 
+
+.State -> Final
+I am using this structure since several years now, without encountering any
+serious mismatch or incompatibility. The situation with the cross-linking
+generator, which still remains to be implemented, is obviously some kind
+of impediment, since it prevents me from migrating more mature content
+from the TiddlyWiki into the documentation section of the website.
+
+Furthermore, I should notice, as a limitation, that I am the _only one_ to
+use this structure actively -- so the fact that I feel comfortable with
+the arrangement should be taken with a grain of salt. Yet, on the other
+hand, we have meanwhile a massive body of information structured
+this way, so that it can be considered more than
+just a ``proposal for discussion''
+
+Ichthyostega:: '2025-09-20'
 
 //endof_comments:

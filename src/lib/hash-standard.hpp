@@ -38,7 +38,7 @@
  ** push it aside and plant our own definition instead.
  ** 
  ** @note this trick was proposed by user "enobayram" on Stackoverflow at Oct 5, 2012
- ** http://stackoverflow.com/questions/12753997/check-if-type-is-hashable
+ ** https://stackoverflow.com/questions/12753997/check-if-type-is-hashable
  ** 
  ** @warning this header <b>includes and manipulates</b> the standard header `<functional>`.
  **       Please ensure it is always included _before_ the latter. Failing to do so will result

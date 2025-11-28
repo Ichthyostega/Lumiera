@@ -4,7 +4,7 @@
 ##
 
 #  Copyright (C)
-#    2012,            Hermann Vosseler <Ichthyostega@web.de>
+#    2012-2025        Hermann Vosseler <Ichthyostega@web.de>
 #
 # **Lumiera** is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by the
@@ -22,27 +22,30 @@ import Options
 
 #-------------------------------------------------------Configuration
 TARGDIR      = 'target'
-VERSION      = '0.pre.04~rc.1'
+VERSION      = '0.pre.04'
 TOOLDIR      = './admin/scons'    # SCons plugins
 OPTCACHE     = 'optcache'
 CUSTOPTFILE  = 'custom-options'
 
 # these are accessible via env.path.xxxx
-buildExe     = '#$TARGDIR'
-buildLib     = '#$TARGDIR/modules'
-buildPlug    = '#$TARGDIR/modules'
-buildIcon    = '#$TARGDIR/gui/icons'           # for IconResource() and IconRender()
-buildUIRes   = '#$TARGDIR/gui/'                # for GuiResource()
-buildConf    = '#$TARGDIR/config'              # for ConfigData()
-installExe   = '#$DESTDIR/lib/lumiera'
-installLib   = '#$DESTDIR/lib/lumiera/modules'
-installPlug  = '#$DESTDIR/lib/lumiera/modules'
-installIcon  = '#$DESTDIR/share/lumiera/icons'
-installUIRes = '#$DESTDIR/share/lumiera/'
-installConf  = '#$DESTDIR/lib/lumiera/config'
+buildExe     = '$TARGDIR'
+buildLib     = '$TARGDIR/modules'
+buildPlug    = '$TARGDIR/modules'
+buildIcon    = '$TARGDIR/gui/icons'           # for IconResource() and IconRender()
+buildUIRes   = '$TARGDIR/gui/'                # for GuiResource()
+buildConf    = '$TARGDIR/config'              # for ConfigData()
+installExe   = '$DESTDIR/lib/lumiera'
+installLib   = '$DESTDIR/lib/lumiera/modules'
+installPlug  = '$DESTDIR/lib/lumiera/modules'
+installIcon  = '$DESTDIR/share/lumiera/icons'
+installUIRes = '$DESTDIR/share/lumiera/'
+installConf  = '$DESTDIR/lib/lumiera/config'
+installDoc   = '$DESTDIR/share/doc/lumiera/'
 
 #-------------------------------------------------------Configuration
+
 buildSetup = Record(locals())
+#  passed to LumieraEnvironment() -> env.path.xxxx
 
 
 
@@ -54,9 +57,9 @@ def defineBuildEnvironment():
         define locations in source and target tree,
         parse the commandline and pick up options
     """
-    EnsureSConsVersion(2,0)
-    EnsurePythonVersion(2,6)
-    Decider('MD5-timestamp')  # detect changed files by timestamp, then do a MD5
+    EnsureSConsVersion(4,0)
+    EnsurePythonVersion(3,10)
+    Decider('content-timestamp')  # detect changed files by timestamp, then do a MD5
     
     buildVars = Variables([OPTCACHE, CUSTOPTFILE])
     Options.defineCmdlineVariables(buildVars)
@@ -80,11 +83,7 @@ def defineBuildEnvironment():
     appendVal(env,'OPTIMIZE', 'CCFLAGS',   val=' -O3')
     appendVal(env,'DEBUG',    'CCFLAGS',   val=' -ggdb')
     
-    # setup search path for Lumiera plugins
-    appendCppDefine(env,'PKGLIBDIR','LUMIERA_PLUGIN_PATH=\\"$PKGLIBDIR/:ORIGIN/modules\\"'
-                                   ,'LUMIERA_PLUGIN_PATH=\\"ORIGIN/modules\\"')
-    appendCppDefine(env,'PKGDATADIR','LUMIERA_CONFIG_PATH=\\"$PKGLIBDIR/:.\\"'
-                                    ,'LUMIERA_CONFIG_PATH=\\"$DESTDIR/share/lumiera/:.\\"')
+    # NOTE: could define optional compile features here....
     
     Options.prepareOptionsHelp(buildVars,env)
     buildVars.Save(OPTCACHE, env)
