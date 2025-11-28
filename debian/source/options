@@ -1,0 +1,9 @@
+# Configure generation of source tarball and source changes
+#
+# 11/2025 - special treatment for the SCons signature file,
+#           that may change during build and should be ignored
+#
+
+tar-ignore = .sconsign.dblite
+extend-diff-ignore = "^.sconsign.dblite"
+
