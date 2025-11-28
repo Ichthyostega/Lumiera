@@ -10,7 +10,8 @@
 
 
 = State of the GUI =
-attachment:Lumiera/GuiBrainstorming/screenshot090418.jpg
+`attachment:Lumiera/GuiBrainstorming/screenshot090418.jpg`
+img:{imgg}/screenshot2009-04.jpg[]
 
 Updated 18/04/09
 
@@ -204,7 +205,8 @@ Some people contributed drafts/sketches/ideas/brainstorming...
  * ["alcarinque"] has an idea about defining the '''gui''' in '''different modules'''.[http://telniratha.atspace.com/spec.html see here] Feedback appreciated.
  * Pablo Lizardo made a mockup for the timeline based in the Cinelerra UI elements.[http://farm4.static.flickr.com/3067/3003432151_e30258be3e_o.png see here] .
 == Toward a Concrete Sketch ==
-See this sketch [attachment:GtkGUI-0.1.png attachment:GtkGUI-0.1.png]
+See this sketch +[attachment:GtkGUI-0.1.png]+
+image:{imgg}/lum_gui_mockup-2008.png
 
 The sketch is certainly not complete by any means - this is a v0.1. There are many Avid and Cinelerra features that ought to feature in the final product. However it shows a few ideas that I think would be good.
 
@@ -290,7 +292,7 @@ All the controls are built around the side(s)(perimeter) of the (magnifying) vie
 
 The layout of the keys make sit very easy to move both hands up and down the keyboard, choosing more and less. In the first pass of '''''live adjustments''''', they may not give perfect results, but they certainly make it plain to the user, what it was they were wanting to do, when they return to edit the strip later (in non-linear static time mode). Other toggle/mode of use buttons can be built into the tool. Local "preview"-er can be attached and be of any size. Transition and effects selector can also be attached, if wanted in the set-up set. The user could select actions (buttons/purposes of sliders) to be included in the tool's perimeter, and save the setup (gets named - and can determine what situations it gets used as the assumed default set-up to use) for future re-use. Some attached tools like previewer and resources could be set to minimise when the mouse is moved away from the locality of the tool.
 
-attachment:Screenshot-Cinelerra_trackview-crosshairs_widget_01.jpg
+img:{imgg}/mock.Cinelerra_trackview-crosshairs_widget-tree2008-09.jpg
 
 Widgets can be'''''"connected" in their influence''''', so that adjustments made in one widget are also made (and maybe scaled) in other "connected" widgets at other locations. Edits made within widgets can be saved and re-applied at later times in other places and projects (just another way to collect input data similar to the use of "undo"/macro feature). The track/thumbnail height and width within the magnifier may be increased, and toggeld/switched between levels of magnification.
 
@@ -1186,21 +1188,22 @@ Not only may the view layouts be customizable, but the number of times they appe
 
 All the general program '''''menu items''''''''''''''''''''''''''''' would be '''''placed''''' above the tabs bar. All the process specific menu items (including what might be specific to "some" other processes), get placed below the tab bar, in the process window. Editing widgets can be of common design in each process - e.g. track fine timeline editing, track size. Methods of retrieving nodes designs, transitions and effects.
 
- . attachment:Screenshot-Cinelerra_nodes-view-tree-02.jpg
+ . img:{imgg}/mock.Cinelerra_nodes-view-tree2008-05.jpg
  . Notes on Node display.
- * The node situation is display vertically across the tracks on the timeline in trackview.
- * The node tab can be viewed in short form iconic mode, or expanded network-pipe view mode.
- * The node tab can be used in an edit mode, where the tracks can be selected as input, and output, and effects are added by dragging and dropping from a master list, or local project toolbox, or (right) click and choose what to insert from a drop down list).
- * The node tab is assigned a name (in the example above it is simply a Nxx number). Hovering over the tab name can show the description. The local toolbox/kit of effects is shown even when the '''''tab is displayed in short form (as in N17)''''' , and this allows easy drag and drop to insert and connect the effects. The short form display shows which effects ra ebeing used (and which of the toolbox are not), and roughly to which tracks they are being aplied.
- * The '''''edit mode''''' allows an input or effects "box"/icon to be (right) clicked on to open up the parameters to be altered. There can be an option to allow the alterations to apply to only that clip, the group of clips, or update the node set to apply to the whole project whwere ever it is used, or save as a new option set. An effect (the purple one with the tick) has been selected for adjustment in N16. Nodes junctions can be re-ordered, bypassed (set to null), routes split or deleted by clicking and dragging the connection lines.
- * The '''''camera and projector areas of the inputs''''' can be roughly set directly within the window of the node editor, to allow for fast general concept/sketch of the layout. But can be (right) clicked on to bring up an enlarged view for more accurate positioning (and settings) at a later stage of production.
- * The '''''node settings can be managed''''' by being saved, given a name, description and metatags to assign when assigning the nodeset, so that the effects can be easily applied time and again to clips/timestrips (drag and drop, or select from menu, toolbar, toolbox, drop down list - from full main set or local project kit).
- * The tab can be scrolled along the timeline, and the parameters in the node tab can be shown to vary with time.
- * The node tab shows which tracks are used for input and which are used for output - there is no assumption or forcing the upper tracks to have priority the lower tracks. Each node does not have to send their output to the same output track as other nodes.
- * More than one node tab can be active at any point in time. (a check would be needed that no eternal loops are created when more than one node tab is active at once).
- * The same node tab could be viewed at once in several locations on the timeline, just like keyframes, so the user can immediately see how the states have changed at each of the chosen points in time time.
- * The node tabs used anywhere in the project can all be created,edited, stored and managed in a view tab for nodes management, and could be quickly accessed by some tabs down the right hand side of the track view.
- * The video editor has '''''similarites to an audio mixer''''' . An audio mixer has inputs on left, effects on each channel running down, buses horizontally, and outputs on right. The '''''video editor is similar but rotated sideways''''' . So inputs are on top, effects are applied to tracks or subclips at times (can either be applied to clips/sets, or time positions), output are at bottom, and so '''''nodes/busses''''' which show the path from selected inputs to outputs would sensibly be vertical (as shown above). '''''Groups''''' (as in sets of tracks that get edited, "trimmed" or "moved" as a set from time to time as desired), are also connected vertically, but are probably better placed on the left side, where Cinelerra has previously allowed manual and temporary selection of (one) group (needed to be changed every time you wanted a different combination for a group, and couldn't be saved to easily return to a previous group). ecah groups could be a horizontal tab (choose which groups to be shown as tabs), or as a single column but column title area has a drop down menu to allow user to select which group is currently active. The group management/dropdown list also has options to save, assign name, add description, delete current group, create new group.
+ 
+   * The node situation is display vertically across the tracks on the timeline in trackview.
+   * The node tab can be viewed in short form iconic mode, or expanded network-pipe view mode.
+   * The node tab can be used in an edit mode, where the tracks can be selected as input, and output, and effects are added by dragging and dropping from a master list, or local project toolbox, or (right) click and choose what to insert from a drop down list).
+   * The node tab is assigned a name (in the example above it is simply a Nxx number). Hovering over the tab name can show the description. The local toolbox/kit of effects is shown even when the '''''tab is displayed in short form (as in N17)''''' , and this allows easy drag and drop to insert and connect the effects. The short form display shows which effects ra ebeing used (and which of the toolbox are not), and roughly to which tracks they are being aplied.
+   * The '''''edit mode''''' allows an input or effects "box"/icon to be (right) clicked on to open up the parameters to be altered. There can be an option to allow the alterations to apply to only that clip, the group of clips, or update the node set to apply to the whole project whwere ever it is used, or save as a new option set. An effect (the purple one with the tick) has been selected for adjustment in N16. Nodes junctions can be re-ordered, bypassed (set to null), routes split or deleted by clicking and dragging the connection lines.
+   * The '''''camera and projector areas of the inputs''''' can be roughly set directly within the window of the node editor, to allow for fast general concept/sketch of the layout. But can be (right) clicked on to bring up an enlarged view for more accurate positioning (and settings) at a later stage of production.
+   * The '''''node settings can be managed''''' by being saved, given a name, description and metatags to assign when assigning the nodeset, so that the effects can be easily applied time and again to clips/timestrips (drag and drop, or select from menu, toolbar, toolbox, drop down list - from full main set or local project kit).
+   * The tab can be scrolled along the timeline, and the parameters in the node tab can be shown to vary with time.
+   * The node tab shows which tracks are used for input and which are used for output - there is no assumption or forcing the upper tracks to have priority the lower tracks. Each node does not have to send their output to the same output track as other nodes.
+   * More than one node tab can be active at any point in time. (a check would be needed that no eternal loops are created when more than one node tab is active at once).
+   * The same node tab could be viewed at once in several locations on the timeline, just like keyframes, so the user can immediately see how the states have changed at each of the chosen points in time time.
+   * The node tabs used anywhere in the project can all be created,edited, stored and managed in a view tab for nodes management, and could be quickly accessed by some tabs down the right hand side of the track view.
+   * The video editor has '''''similarites to an audio mixer''''' . An audio mixer has inputs on left, effects on each channel running down, buses horizontally, and outputs on right. The '''''video editor is similar but rotated sideways''''' . So inputs are on top, effects are applied to tracks or subclips at times (can either be applied to clips/sets, or time positions), output are at bottom, and so '''''nodes/busses''''' which show the path from selected inputs to outputs would sensibly be vertical (as shown above). '''''Groups''''' (as in sets of tracks that get edited, "trimmed" or "moved" as a set from time to time as desired), are also connected vertically, but are probably better placed on the left side, where Cinelerra has previously allowed manual and temporary selection of (one) group (needed to be changed every time you wanted a different combination for a group, and couldn't be saved to easily return to a previous group). ecah groups could be a horizontal tab (choose which groups to be shown as tabs), or as a single column but column title area has a drop down menu to allow user to select which group is currently active. The group management/dropdown list also has options to save, assign name, add description, delete current group, create new group.
 -- ["Tree"][[DateTime(2008-05-07T20:54:00NZ)]] updated [[DateTime(2008-09-01T18:29:54:00NZ)]]
 
 == Transition, Levels or Effects Widget remains on top while swapping windows between track view and composer ==
@@ -1341,7 +1344,8 @@ The track can be played underneath the dockable cross tools, or they can be drag
 
 It might be possible to have more than one per track, so the end points of a stretch of video can be worked on, withou having to jump through several labels, or remembering where to "go to". These tools would act as a means to identify areas that are "being" worked on. Very easy for the user to "park" a task and work elsewhere, then come back.
 
- . attachment:Screenshot-Cinelerra_trackview-crosshairs_tool-other_way-synchro_mode-undocked-tree-02.jpg
+img:{imgg}/mock.Cinelerra_trackview-crosshairs_tool-tree2008-05.jpg
+ 
 '''Notes on Mouse Ergonomics'''
 
 1) In the GUI shown above, the buttons in the small camera and projector view are small. They are clickable, but fiddly. These ease of targeting them is improved, by making use of the fact that to their left are'''''"nearby regions that do not need to be active"'''''. The area used to detect the cursors vertical position, can therefore be extended well towards the left of the buttons. This allows for horizontal inaccuracy of the mouse, while concentrating on the targeting the vertical position.
@@ -1842,7 +1846,7 @@ The motion tracker boxes and vectors are not colour code (or line styled) to hel
 == Motion Tracker - Concept for improved features and GUI ==
 The following image is an example of how the panel)s) for the motion tracker could be improved. Note the tabs for workflow left to right. Note the order of decisions from top to bottom. 3 axis separation, reduced confusion as to what setting to use for what purpose.
 
-attachment:motion_tracker-tree_version_03.jpg
+img:{imgg}/mock.motion_tracker-tree2008-05.jpg
 
  . --["Tree"][[DateTime(2008-05-25T23:32:00NZ)]] .
 == Motion Tracker - alternative to manual use of "Blur" and "Histogram" effects to improve result ==
@@ -2028,12 +2032,13 @@ Not shown in the example;
 
 In the tab label or near the top of the tab strip, there could be some icons for easy access to tasks such as ;
 
- 1. dump this transition from the queue.
- 1. execute this transition NOW
- 1. move this transition up the queue.
- 1. move this transition down the queue
- 1. open this transition for viewing and editing The tools, look and feel is in keeping with the rest of the program, and is very similar to the node designer, and usual transition & effects editor.
-attachment:Screenshot-Cinelerra_live-capture-view-tree-01.jpg
+ . dump this transition from the queue.
+ . execute this transition NOW
+ . move this transition up the queue.
+ . move this transition down the queue
+ . open this transition for viewing and editing The tools, look and feel is in keeping with the rest of the program, and is very similar to the node designer, and usual transition & effects editor.
++ 
+img:{imgg}/mock.Cinelerra_live-capture-view-tree2008-09.jpg
 
 ''--["Tree"][[DateTime(2008-09-03T12:58:00NZ)]] .''
 

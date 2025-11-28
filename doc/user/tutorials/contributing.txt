@@ -25,7 +25,7 @@ require considerable experience, some sections require less experience whereas
 certain aspects might be ideal to new programmers. Thus we attempt here to
 describe a number of areas in the project to assist you in selecting an area in
 which you might like to make a contribution.
-Of course, you are more than welcome--and even encouraged--to select other areas
+Of course, you are more than welcome -- and even encouraged -- to select other areas
 in Lumiera towards which you would like to contribute.
 
 
@@ -34,9 +34,10 @@ How to contribute to Lumiera
 
 Git: Essentials for Lumiera
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-All files in the Lumiera project are managed by *Git*, the distributed sourcecode
-management software. Although Git was primarily brought to life to manage source
-code, it plays a fundamental role in the Lumiera project. It is central to
+image:{img}/git.png[title="Git"] All files in the Lumiera project are managed by
+https://git-scm.com/[Git], the distributed sourcecode management software.
+Although Git was primarily brought to life to manage source code,
+it plays a fundamental role in the Lumiera project. It is central to
 communication and contribution in the project. If you'd like to contribute to
 Lumiera, you will have to acquire some understanding of Git at some stage or
 other. Please note, this is not the only way to contribute to Lumiera, you can
@@ -260,20 +261,20 @@ fact, many user interfaces should be possible.
 - the stylesheet has been roughly ported to GTK-3, but needs a lot more polishing
 - we urgently need conceptual (non-coding) contributions
 
-  * work out a coherent UI handling concept, in accordance with model and core
-  * we need a concept for key bindings and focus
-  * we need a concept for integration with control surfaces
-  * we need a concept for pen based handling
+  * work out a
+    http://localhost:8888/documentation/design/workflow/Verwijlen/index.html[coherent UI handling concept]
+
+    ** we need a concept for key bindings and focus
+    ** we need a concept for integration with control surfaces
+    ** we need a concept for pen based handling
 
 
 Steam Layer::
 - external connection systems
 
-  * investigate good ways to output video, both in-window and full screen.
-    Especially, the integration is what counts: it should be a well maintained
-    library, and play well with our intended framework and memory management.
   * expand on the work done for ALSA and Jack audio.
-  * expand on the work done for LADSPA / L2. Make Lumiera a host for these plugin systems
+  * expand on the work done for LADSPA / LV2; +
+    make Lumiera a host for these plugin systems...
   * investigate how to discover sound card properties. Develop a concept how to describe
     these in a generic fashion, independent of the concrete library used for output.
     The purpose is to allow binding with the structure of the session model
@@ -282,12 +283,6 @@ Steam Layer::
 
   * expand on the work done for a pooling small objects allocator.
   * develop a backend for our various allocation schemes to use this allocator.
-
-- Command system at the GUI interface
-
-  * expand on the work done for generic commands
-  * implement a command dispatcher to allow blocking and queuing of commands
-  * develop a scheme how to code the GUI commands in practice
 
 - provide the foundation for symbolic rules and script bindings
 
@@ -314,10 +309,20 @@ Website and infrastructure::
 - help with our continuous integration setup
 
 
+Current goals of development::
+- achive a link:{ldoc}/design/governance/integration.html[first integration] of the application...
+- https://issues.lumiera.org/report/17[»Focus Topics«] for further development.
+
 
 ''''
-''''
+....
+​
+​
+​
+....
 
-Do you have any further ideas?  Please speak up on the mailing list or on IRC.
+Do you have any further ideas?
+
+Please speak up on the mailing list or on IRC. +
 Such are always welcome.
 

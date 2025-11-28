@@ -2,6 +2,7 @@ Lumiera (as seen) from Outer Space
 ==================================
 :Author: Lumiera_Core_Developers
 :Date: 2012 / 2025
+:webidx:
 :toc:
 
 ******************************************************************************

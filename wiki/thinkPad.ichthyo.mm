@@ -159529,10 +159529,58 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 </node>
 </node>
+<node CREATED="1764593425070" ID="ID_1420199278" MODIFIED="1764593520080" TEXT="Asciidoc">
+<node CREATED="1764593429830" ID="ID_1762258712" LINK="https://asciidoc-py.github.io/userguide.html#X18" MODIFIED="1764593851743" TEXT="spezielle Properties / Attribute">
+<node CREATED="1764593548342" ID="ID_1030912007" MODIFIED="1764593572777" TEXT="kann man im Header einzelner Quellen setzen">
+<node CREATED="1764593574671" ID="ID_930609994" MODIFIED="1764593660099" TEXT=":&lt;name&gt;: &lt;value&gt;">
+<font NAME="Monospaced" SIZE="12"/>
+</node>
+</node>
+<node CREATED="1764591968597" ID="ID_1189580536" MODIFIED="1764593473550" TEXT="Datum / Zeit">
+<linktarget COLOR="#4f45dd" DESTINATION="ID_1189580536" ENDARROW="Default" ENDINCLINATION="-380;68;" ID="Arrow_ID_415533818" SOURCE="ID_991639193" STARTARROW="None" STARTINCLINATION="-279;32;"/>
+<icon BUILTIN="info"/>
+<node CREATED="1764591976275" ID="ID_1038015397" MODIFIED="1764592001680" TEXT="{localdate} {localtime} : Systemzeit wenn das File gerendert wird"/>
+<node CREATED="1764592002382" ID="ID_1682231953" MODIFIED="1764592028841" TEXT="{docdate} {doctime} : die mtime der Asciidoc-Quelldatei"/>
+<node CREATED="1764595349118" ID="ID_1635643078" MODIFIED="1764595370062" TEXT="{revdate} : wird automatisch vom Asciidoc-Header gesetzt">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1764595618173" ID="ID_783776991" MODIFIED="1764595657686" TEXT="&#x26a0;Vorsicht: kann leer sein &#x27f9; dann wird die ganze Zeile unterdr&#xfc;ckt">
+<icon BUILTIN="clanbomber"/>
+</node>
+<node CREATED="1764595660835" ID="ID_804390128" LINK="https://asciidoc-py.github.io/userguide.html#_conditional_attribute_references" MODIFIED="1764595698980" TEXT="Tip: {revdate=sonst}"/>
+</node>
+<node CREATED="1764595707047" ID="ID_405331711" MODIFIED="1764595889961">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      {date} : eine lokale Konvention <b>nur f&#252;r Lumiera</b>
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...einfach weil wir dieses Attribut explizit in unserer page.conf verwenden &#8212; und wenn es nicht definiert ist, f&#228;llt die ganze Zeile mit dem umschlie&#223;enden &lt;span&gt;-Element weg!
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_405331711" ENDARROW="Default" ENDINCLINATION="-14;16;" ID="Arrow_ID_1717402688" SOURCE="ID_461472408" STARTARROW="None" STARTINCLINATION="24;8;"/>
+</node>
+</node>
+<node CREATED="1764595853410" ID="ID_794589583" MODIFIED="1764595858268" TEXT="Lumiera-Konventionen">
+<node CREATED="1764595859312" ID="ID_461472408" MODIFIED="1764595889961" TEXT="{date}">
+<arrowlink DESTINATION="ID_405331711" ENDARROW="Default" ENDINCLINATION="-14;16;" ID="Arrow_ID_1717402688" STARTARROW="None" STARTINCLINATION="24;8;"/>
+</node>
+<node CREATED="1764595864928" ID="ID_1245554514" MODIFIED="1764595871356" TEXT="{webidx}">
+<node CREATED="1764595893479" ID="ID_754732923" MODIFIED="1764595905891" TEXT="schaltet Metadaten f&#xfc;r Suchmaschinen zu"/>
+</node>
+</node>
+</node>
+</node>
 <node CREATED="1538838573613" ID="ID_1610361741" MODIFIED="1557498707241" TEXT="Graphic">
 <node CREATED="1538838576956" ID="ID_1174319279" MODIFIED="1665346614450" TEXT="SVG-Icons">
 <linktarget COLOR="#668497" DESTINATION="ID_1174319279" ENDARROW="Default" ENDINCLINATION="-533;-310;" ID="Arrow_ID_1274211300" SOURCE="ID_465159869" STARTARROW="None" STARTINCLINATION="-2393;215;"/>
-<node CREATED="1504201038435" ID="ID_1569870904" MODIFIED="1746488128368" TEXT="Anleitung">
+<node CREATED="1504201038435" FOLDED="true" ID="ID_1569870904" MODIFIED="1746488128368" TEXT="Anleitung">
 <linktarget COLOR="#8697d2" DESTINATION="ID_1569870904" ENDARROW="Default" ENDINCLINATION="-935;-133;" ID="Arrow_ID_421953450" SOURCE="ID_1898190659" STARTARROW="None" STARTINCLINATION="-861;94;"/>
 <linktarget COLOR="#67647f" DESTINATION="ID_1569870904" ENDARROW="Default" ENDINCLINATION="-1095;296;" ID="Arrow_ID_1632100831" SOURCE="ID_406063817" STARTARROW="None" STARTINCLINATION="-1256;195;"/>
 <node CREATED="1504201044122" ID="ID_612955500" MODIFIED="1557498707241" TEXT="SVG in data/icons/svg"/>
@@ -159678,7 +159726,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 </node>
 </node>
-<node CREATED="1710633728708" ID="ID_1898552649" MODIFIED="1710633858137" TEXT="Gnuplot: data visualisation">
+<node CREATED="1710633728708" FOLDED="true" ID="ID_1898552649" MODIFIED="1711839024415" TEXT="Gnuplot: data visualisation">
 <linktarget COLOR="#425fc8" DESTINATION="ID_1898552649" ENDARROW="Default" ENDINCLINATION="-1042;110;" ID="Arrow_ID_1130805562" SOURCE="ID_395770848" STARTARROW="None" STARTINCLINATION="-1030;94;"/>
 <node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1710633903677" ID="ID_1723847579" MODIFIED="1711405628258" TEXT="Doku">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
@@ -160094,10 +160142,10 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1711757567732" ID="ID_1637339854" LINK="http://gnuplotting.org/attractive-plots/index.html" MODIFIED="1711757578494" TEXT="Tips for &#xbb;attractive plots&#xab;"/>
 </node>
 </node>
-<node CREATED="1756651446132" ID="ID_376360777" MODIFIED="1756652592528" TEXT="Web / CSS / JS">
+<node CREATED="1756651446132" FOLDED="true" ID="ID_376360777" MODIFIED="1756679415473" TEXT="Web / CSS / JS">
 <node CREATED="1756651479758" ID="ID_1166110398" MODIFIED="1756651485145" TEXT="modernes Layout"/>
 <node CREATED="1756651508954" ID="ID_1160159782" MODIFIED="1756651510565" TEXT="CSS"/>
-<node CREATED="1756658704894" ID="ID_1161944435" MODIFIED="1756658708438" TEXT="Linkchecker">
+<node CREATED="1756658704894" ID="ID_1161944435" MODIFIED="1756679415473" TEXT="Linkchecker">
 <node CREATED="1756658710017" ID="ID_624740527" MODIFIED="1756658732611">
 <richcontent TYPE="NODE"><html>
   <head/>
@@ -160381,7 +160429,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 <node CREATED="1745782756562" ID="ID_234538183" MODIFIED="1745782783821" STYLE="fork" TEXT="Video">
 <edge COLOR="#61617d" STYLE="sharp_bezier" WIDTH="thin"/>
-<node CREATED="1745782770967" ID="ID_1146653979" MODIFIED="1745782783815" TEXT="Video-Ausgabe">
+<node CREATED="1745782770967" FOLDED="true" ID="ID_1146653979" MODIFIED="1757602808059" TEXT="Video-Ausgabe">
 <node CREATED="1745790344084" ID="ID_1378935901" MODIFIED="1745790352551" TEXT="Frameworks / Technologien">
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1745790353944" ID="ID_1890042435" MODIFIED="1745790605840" TEXT="Wayland">
 <icon BUILTIN="hourglass"/>
@@ -160528,7 +160576,8 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 <node CREATED="1746546915150" ID="ID_138512802" LINK="https://en.wikipedia.org/wiki/List_of_free_and_open-source_software_packages#Video_editing" MODIFIED="1746546953470" TEXT="List of Free Video Editing Software (Wikipedia)"/>
 </node>
-<node CREATED="1763919279875" ID="ID_139746969" MODIFIED="1763919286303" TEXT="Rechtliche Fragen">
+<node BACKGROUND_COLOR="#bca0a5" CREATED="1763919279875" FOLDED="true" ID="ID_139746969" MODIFIED="1764551043963" TEXT="Rechtliche Fragen">
+<icon BUILTIN="clanbomber"/>
 <node CREATED="1763919291136" ID="ID_1517453499" MODIFIED="1763919295187" TEXT="Anforderungen der GPL">
 <node CREATED="1763919296823" ID="ID_743997801" MODIFIED="1763919303971" TEXT="f&#xfc;r Weitergabe einer Kopie">
 <node CREATED="1763919417814" ID="ID_477682985" MODIFIED="1763919428049" TEXT="sichtbar/prominent an jeder Kopie"/>
@@ -161877,7 +161926,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <cloud COLOR="#c6b0a1"/>
 <linktarget COLOR="#716888" DESTINATION="ID_1086481723" ENDARROW="Default" ENDINCLINATION="-242;50;" ID="Arrow_ID_930062015" SOURCE="ID_1111957003" STARTARROW="None" STARTINCLINATION="-363;96;"/>
 <node CREATED="1752758687270" ID="ID_587093014" MODIFIED="1752758689409" TEXT="2025">
-<node CREATED="1752755281391" ID="ID_442273376" LINK="https://lumiera.org/research/videoDisplay/index.html" MODIFIED="1757602808059" TEXT="FrOSCon-Vortrag(25) : Video-Ausgabe">
+<node CREATED="1752755281391" FOLDED="true" ID="ID_442273376" LINK="https://lumiera.org/research/videoDisplay/index.html" MODIFIED="1757602808059" TEXT="FrOSCon-Vortrag(25) : Video-Ausgabe">
 <linktarget COLOR="#4d74d8" DESTINATION="ID_442273376" ENDARROW="Default" ENDINCLINATION="-2314;2141;" ID="Arrow_ID_437931140" SOURCE="ID_553632518" STARTARROW="None" STARTINCLINATION="-1107;59;"/>
 <linktarget COLOR="#094fce" DESTINATION="ID_442273376" ENDARROW="Default" ENDINCLINATION="-332;592;" ID="Arrow_ID_1945191941" SOURCE="ID_1422823042" STARTARROW="None" STARTINCLINATION="-1124;69;"/>
 <linktarget COLOR="#4d74d8" DESTINATION="ID_442273376" ENDARROW="Default" ENDINCLINATION="513;-707;" ID="Arrow_ID_738647024" SOURCE="ID_1047074231" STARTARROW="None" STARTINCLINATION="-1126;76;"/>
@@ -162039,7 +162088,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1664630997672" ID="ID_237099051" MODIFIED="1758487670328" STYLE="bubble" TEXT="mitf&#xfc;hren" VSHIFT="-8">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1664630997672" FOLDED="true" ID="ID_237099051" MODIFIED="1764550949090" STYLE="bubble" TEXT="mitf&#xfc;hren" VSHIFT="-8">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -162342,7 +162391,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node BACKGROUND_COLOR="#bae1a4" COLOR="#338800" CREATED="1759014578674" FOLDED="true" ID="ID_1555146086" MODIFIED="1762479183678" TEXT="Abhandlung: Flexibilit&#xe4;t und Erweiterbarkeit">
 <linktarget COLOR="#403fbb" DESTINATION="ID_1555146086" ENDARROW="Default" ENDINCLINATION="180;484;" ID="Arrow_ID_892680715" SOURCE="ID_1161778090" STARTARROW="None" STARTINCLINATION="376;23;"/>
 <linktarget COLOR="#363cde" DESTINATION="ID_1555146086" ENDARROW="Default" ENDINCLINATION="107;1207;" ID="Arrow_ID_501903819" SOURCE="ID_919379881" STARTARROW="None" STARTINCLINATION="-773;31;"/>
-<linktarget COLOR="#262fc3" DESTINATION="ID_1555146086" ENDARROW="Default" ENDINCLINATION="-87;911;" ID="Arrow_ID_1308723569" SOURCE="ID_255830875" STARTARROW="None" STARTINCLINATION="413;-41;"/>
+<linktarget COLOR="#262fc3" DESTINATION="ID_1555146086" ENDARROW="Default" ENDINCLINATION="-43;308;" ID="Arrow_ID_1308723569" SOURCE="ID_255830875" STARTARROW="None" STARTINCLINATION="406;33;"/>
 <linktarget COLOR="#403fbb" DESTINATION="ID_1555146086" ENDARROW="Default" ENDINCLINATION="180;484;" ID="Arrow_ID_848521794" SOURCE="ID_531427945" STARTARROW="None" STARTINCLINATION="403;23;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1759016171842" ID="ID_527999175" MODIFIED="1759016184330" TEXT="Aufgabe: den Sachverhalt ordnen">
@@ -162683,7 +162732,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <linktarget COLOR="#e41435" DESTINATION="ID_97354933" ENDARROW="Default" ENDINCLINATION="23;35;" ID="Arrow_ID_466080442" SOURCE="ID_1395906680" STARTARROW="None" STARTINCLINATION="74;8;"/>
 <linktarget COLOR="#e53b65" DESTINATION="ID_97354933" ENDARROW="Default" ENDINCLINATION="1244;1409;" ID="Arrow_ID_1426119304" SOURCE="ID_1170181843" STARTARROW="None" STARTINCLINATION="-1203;-53;"/>
 <icon BUILTIN="bell"/>
-<node COLOR="#435e98" CREATED="1758487692078" ID="ID_85783162" MODIFIED="1762379521517" TEXT="2025-09">
+<node COLOR="#435e98" CREATED="1758487692078" FOLDED="true" ID="ID_85783162" MODIFIED="1762379521517" TEXT="2025-09">
 <node CREATED="1758487698412" ID="ID_1584725666" MODIFIED="1758487718833">
 <richcontent TYPE="NODE"><html>
   <head/>
@@ -162695,8 +162744,8 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </html></richcontent>
 </node>
 <node CREATED="1758487720107" ID="ID_1563953063" MODIFIED="1758487745591" TEXT="au&#xdf;erdem habe ich noch einen HTML-Snapshot vom pipapo-Wiki mit integriert"/>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1758487782853" ID="ID_1377600907" MODIFIED="1758487798391" TEXT="ich k&#xf6;nnte nun die Dynamik der ersten Phase erz&#xe4;hlen">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1758487782853" FOLDED="true" ID="ID_1377600907" MODIFIED="1764550837406" TEXT="ich k&#xf6;nnte nun die Dynamik der ersten Phase erz&#xe4;hlen">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1758487821709" ID="ID_443329584" MODIFIED="1758487827662" TEXT="Themen">
 <node COLOR="#435e98" CREATED="1758487894569" FOLDED="true" ID="ID_176634763" MODIFIED="1762124490154" TEXT="was f&#xfc;r Akteure gab es?">
 <icon BUILTIN="list"/>
@@ -165574,8 +165623,9 @@ on some aspects of file handling media loading.</pre>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1760132042218" HGAP="11" ID="ID_1408353418" MODIFIED="1760132054766" TEXT="Text-Revision mit Benny" VSHIFT="9">
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1760132042218" HGAP="11" ID="ID_1408353418" MODIFIED="1764550159181" TEXT="Text-Revision mit Benny" VSHIFT="9">
 <icon BUILTIN="pencil"/>
+<icon BUILTIN="hourglass"/>
 <node CREATED="1760132068731" ID="ID_1903189141" MODIFIED="1760132227214">
 <richcontent TYPE="NODE"><html>
   <head/>
@@ -165612,7 +165662,8 @@ on some aspects of file handling media loading.</pre>
 <node COLOR="#338800" CREATED="1760132364422" ID="ID_209332786" MODIFIED="1760132378930" TEXT="Text auf staging.lumiera.org gestellt">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1760132380185" ID="ID_1782005098" MODIFIED="1760132391018" TEXT="Korrekturen/Vorschl&#xe4;ge">
+<node CREATED="1760132380185" FOLDED="true" ID="ID_1782005098" MODIFIED="1764550431588" TEXT="Korrekturen/Vorschl&#xe4;ge">
+<icon BUILTIN="list"/>
 <node CREATED="1760132392153" ID="ID_1846211455" MODIFIED="1760132417905" TEXT="die meisten sind so offensichtlich....">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -166050,8 +166101,42 @@ that situation will improve in forseeable future.</pre>
 </node>
 </node>
 </node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1764550169703" ID="ID_37675688" MODIFIED="1764550410908" STYLE="fork" TEXT="Benny hat weitere &#xdc;berarbeitung zugesagt &#x2014; kann aber derzeit nicht">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Die Umst&#228;nde sind <i>nicht ganz klar</i>&#160;&#8212; seinem Nachbarn (Fritz) geht es schlecht, und die Heizung ist (jetzt wohl endg&#252;ltig) kaputt, und was sonst noch so durch den Wind is...
+    </p>
+  </body>
+</html></richcontent>
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="hourglass"/>
 </node>
-<node COLOR="#338800" CREATED="1762124583263" FOLDED="true" ID="ID_927060658" MODIFIED="1762569813584" TEXT="Erg&#xe4;nzung: Development-Activity">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1764550453606" ID="ID_444292672" MODIFIED="1764550495065" TEXT="hab die erste Runde jetzt vorl&#xe4;ufig konsolidiert...">
+<icon BUILTIN="idea"/>
+<node CREATED="1764550513047" ID="ID_168437471" MODIFIED="1764550535466" TEXT="die allzu groben Formulierungen bezgl. Adam Williams sind jetzt schon mal gegl&#xe4;ttet"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#ba0610" CREATED="1764550536342" ID="ID_774423251" MODIFIED="1764550573267" TEXT="leider noch kein Review bzg. der Plugin-Fehde mit Christian">
+<icon BUILTIN="smily_bad"/>
+</node>
+<node BACKGROUND_COLOR="#ebd68f" COLOR="#7601a5" CREATED="1764550579340" ID="ID_372657400" MODIFIED="1764550810994" TEXT="ich kann aber die &#xc4;nderungen dummerweise nicht endlos zur&#xfc;ckhalten">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...denn ich habe sie <i>ganz bewu&#223;t in eine gr&#246;&#223;ere Aufr&#228;um-Aktion mit eingebunden;</i>&#160;die Texte m&#252;ssen also in der Git-Historie in diesem Kontext stehen, weil dadurch auch meine Entscheidungen in den RfCs mit in den Kontext gestellt sind. Au&#223;erdem habe ich den <b>sehr gewichtigen Essay zur Komplexit&#228;t</b>&#160;geschrieben, der die ad&#228;qate Antwort auf den Streit zur Plugin-Architektur darstellt. Und all das zusammen ist jetzt &#187;dezent versteckt&#171; in einem riesigen Schall an genereller Aufr&#228;um-Arbeit, die ich nunmehr gut zuende gebracht habe.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1764550812594" ID="ID_528428734" MODIFIED="1764550827095" TEXT="ich werde jetzt ver&#xf6;ffentlichen und zum Code zur&#xfc;ckkehren">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1762124583263" FOLDED="true" HGAP="-8" ID="ID_927060658" MODIFIED="1762569813584" TEXT="Erg&#xe4;nzung: Development-Activity" VSHIFT="10">
 <icon BUILTIN="yes"/>
 <node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1762124605363" ID="ID_1560924328" MODIFIED="1762309186045" TEXT="Tabelle: wann ist an was gearbeitet worden?">
 <icon BUILTIN="help"/>
@@ -166167,7 +166252,7 @@ that situation will improve in forseeable future.</pre>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fefc4e" COLOR="#351d75" CREATED="1762375239204" ID="ID_731380800" MODIFIED="1762379514363" TEXT="das war nun eine tiefgreifende (und aufw&#xfc;hlende) Auseinandersetzung">
+<node BACKGROUND_COLOR="#fefc4e" COLOR="#351d75" CREATED="1762375239204" FOLDED="true" ID="ID_731380800" MODIFIED="1764550854380" TEXT="das war nun eine tiefgreifende (und aufw&#xfc;hlende) Auseinandersetzung">
 <linktarget COLOR="#faffa4" DESTINATION="ID_731380800" ENDARROW="Default" ENDINCLINATION="-133;1594;" ID="Arrow_ID_1848618151" SOURCE="ID_1622857737" STARTARROW="None" STARTINCLINATION="-1505;150;"/>
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="idea"/>
@@ -166276,7 +166361,7 @@ that situation will improve in forseeable future.</pre>
 <arrowlink COLOR="#684e97" DESTINATION="ID_417783849" ENDARROW="Default" ENDINCLINATION="-182;50;" ID="Arrow_ID_321858822" STARTARROW="None" STARTINCLINATION="143;23;"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1681004448374" HGAP="14" ID="ID_1536537244" MODIFIED="1757603986872" TEXT="Theorie / allgemein" VSHIFT="5">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1681004448374" FOLDED="true" HGAP="14" ID="ID_1536537244" MODIFIED="1762379427896" TEXT="Theorie / allgemein" VSHIFT="5">
 <edge COLOR="#5e537f"/>
 <icon BUILTIN="bell"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1757603993627" ID="ID_1395906680" MODIFIED="1757604220611" TEXT="die Lumiera-Geschichte">
@@ -166315,7 +166400,7 @@ that situation will improve in forseeable future.</pre>
     </p>
   </body>
 </html></richcontent>
-<arrowlink COLOR="#262fc3" DESTINATION="ID_1555146086" ENDARROW="Default" ENDINCLINATION="-87;911;" ID="Arrow_ID_1308723569" STARTARROW="None" STARTINCLINATION="413;-41;"/>
+<arrowlink COLOR="#262fc3" DESTINATION="ID_1555146086" ENDARROW="Default" ENDINCLINATION="-43;308;" ID="Arrow_ID_1308723569" STARTARROW="None" STARTINCLINATION="406;33;"/>
 </node>
 <node COLOR="#435e98" CREATED="1751930725076" ID="ID_638212914" MODIFIED="1752758589912" TEXT="Git-Flow: Begriffsbestimmung">
 <arrowlink COLOR="#3245d9" DESTINATION="ID_417154358" ENDARROW="Default" ENDINCLINATION="-158;-13;" ID="Arrow_ID_583484888" STARTARROW="None" STARTINCLINATION="515;50;"/>
@@ -166408,7 +166493,7 @@ that situation will improve in forseeable future.</pre>
 </node>
 </node>
 </node>
-<node CREATED="1751833032755" ID="ID_1065210302" MODIFIED="1751833034848" TEXT="Gliederung">
+<node CREATED="1751833032755" FOLDED="true" ID="ID_1065210302" MODIFIED="1764550963546" TEXT="Gliederung">
 <node CREATED="1751833463677" ID="ID_525672736" MODIFIED="1751833474810" TEXT="Dukumentation im Haupt-Repo">
 <node CREATED="1751833072752" ID="ID_1145154527" MODIFIED="1751833078387" TEXT="Design und Architektur"/>
 <node CREATED="1751833079436" ID="ID_642172480" MODIFIED="1751833126152" TEXT="Technik und Specs"/>
@@ -166543,7 +166628,7 @@ that situation will improve in forseeable future.</pre>
   </body>
 </html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1756942230234" ID="ID_1854153711" MODIFIED="1756944327464" TEXT="Prototyp: manuell angelegte LInkfarm">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1756942230234" FOLDED="true" ID="ID_1854153711" MODIFIED="1764550917209" TEXT="Prototyp: manuell angelegte LInkfarm">
 <linktarget COLOR="#fff2d9" DESTINATION="ID_1854153711" ENDARROW="Default" ENDINCLINATION="82;184;" ID="Arrow_ID_789572840" SOURCE="ID_150932933" STARTARROW="None" STARTINCLINATION="-258;-18;"/>
 <icon BUILTIN="idea"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1756942253197" ID="ID_1730148338" MODIFIED="1757603431600" STYLE="bubble">
@@ -166701,6 +166786,78 @@ that situation will improve in forseeable future.</pre>
 </html></richcontent>
 </node>
 </node>
+<node COLOR="#4c2265" CREATED="1764591854390" FOLDED="true" ID="ID_778774756" MODIFIED="1764595920273" TEXT="Seiten-Timestamps">
+<linktarget COLOR="#77319f" DESTINATION="ID_778774756" ENDARROW="Default" ENDINCLINATION="-1042;139;" ID="Arrow_ID_1555326207" SOURCE="ID_685663386" STARTARROW="None" STARTINCLINATION="-185;13;"/>
+<icon BUILTIN="bell"/>
+<node CREATED="1764591968597" ID="ID_991639193" MODIFIED="1764593491450" TEXT="Asciidoc bietet uns...">
+<arrowlink COLOR="#4f45dd" DESTINATION="ID_1189580536" ENDARROW="Default" ENDINCLINATION="-380;68;" ID="Arrow_ID_415533818" STARTARROW="None" STARTINCLINATION="-279;32;"/>
+<icon BUILTIN="info"/>
+<node CREATED="1764591976275" ID="ID_1931927805" MODIFIED="1764592001680" TEXT="{localdate} {localtime} : Systemzeit wenn das File gerendert wird"/>
+<node CREATED="1764592002382" ID="ID_910865872" MODIFIED="1764592028841" TEXT="{docdate} {doctime} : die mtime der Asciidoc-Quelldatei"/>
+<node CREATED="1764595824738" ID="ID_1386867396" MODIFIED="1764595842229" TEXT="Lokale Konvention f&#xfc;r Lumiera: wir setzen ein :date:-Attribut"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1764591872279" ID="ID_303287190" MODIFIED="1764591881399" TEXT="Vorsicht: Trickserei">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1764591884199" ID="ID_1672793234" MODIFIED="1764591947168" TEXT="Christian hat in build_website ein &quot;poor man&apos;s dependency tracking eingebaut&quot;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...was ich super finde!
+    </p>
+    <p>
+      Denn dadruch wird eine Seite auch neu gerendert, wenn sich ein Include ge&#228;ndert hat, oder das page-Template
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1764592052641" ID="ID_1846779942" MODIFIED="1764592130730" TEXT="das arbeitet, indem ein touch auf die Haupt-Quelldatei gemacht wird">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      wodurch diese neuer wird als das zugeh&#246;rige HTML &#8212; und damit von der eigentlichen Render-Schleife in build_website.sh aufgegriffen...
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#2f0f69" CREATED="1764592861124" ID="ID_1125990440" MODIFIED="1764592884781" STYLE="fork" TEXT="was ich f&#xfc;r Lumiera will">
+<edge COLOR="#9e7171" STYLE="linear" WIDTH="thin"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1764592892486" ID="ID_1591979653" MODIFIED="1764592990887">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      auf jeder Seite steht im Footer das <font color="#920707">Datum der letzten &#196;nderung</font>&#160;<b>gem&#246;&#223; Git</b>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="back"/>
+</node>
+<node CREATED="1764558561617" ID="ID_209856180" MODIFIED="1764558566999" TEXT="Prozedur">
+<node CREATED="1764558569530" ID="ID_366915850" LINK="http://flaucher:9023/Dreck/wiki/zuGIT#TimestampimWorkdiraufCommitter-Timesetzen" MODIFIED="1764593022341" TEXT="Alle Daten von Git neu setzen">
+<icon BUILTIN="full-1"/>
+<node CREATED="1764559901054" ID="ID_1599871" MODIFIED="1764591646503" TEXT="for F in $(git ls-tree -r -t --name-only HEAD) ; do touch -d $(git log --pretty=format:%aI -1 HEAD -- &quot;$F&quot;) &quot;$F&quot;; done">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1764558576916" ID="ID_328049758" MODIFIED="1764593028000" TEXT="page.conf und footer.htmlf k&#xfc;nstlich &#xe4;lter machen">
+<icon BUILTIN="full-2"/>
+<node CREATED="1764560133096" ID="ID_1451561578" MODIFIED="1764560139757" TEXT="touch -d 2010-1-1T12:00:00+0 page.conf footer.htmlf">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1764558601250" ID="ID_1992081064" MODIFIED="1764593034138" TEXT="einmal build_website.sh --all explizit auf dem Server aufrufen">
+<icon BUILTIN="full-3"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1764593121697" ID="ID_1688422158" MODIFIED="1764593154239" TEXT="Vorsicht: nach &#xc4;nderungen am Page-Template &#x27f9; wiederholen">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
 <node BACKGROUND_COLOR="#eed6b6" COLOR="#690f14" CREATED="1756652483848" FOLDED="true" ID="ID_535603356" MODIFIED="1757602505627" TEXT="Problem: Mobile devices">
 <icon BUILTIN="messagebox_warning"/>
 <icon BUILTIN="bell"/>
@@ -166718,7 +166875,7 @@ that situation will improve in forseeable future.</pre>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1762879192637" ID="ID_856231519" MODIFIED="1762879298461" TEXT="Feststellungen zur Lizenz">
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1762879192637" FOLDED="true" ID="ID_856231519" MODIFIED="1764550907076" TEXT="Feststellungen zur Lizenz">
 <linktarget COLOR="#6f7dba" DESTINATION="ID_856231519" ENDARROW="Default" ENDINCLINATION="-1342;134;" ID="Arrow_ID_846772487" SOURCE="ID_450772311" STARTARROW="None" STARTINCLINATION="-985;-1050;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
@@ -168377,13 +168534,159 @@ that situation will improve in forseeable future.</pre>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1752070293350" ID="ID_391826628" MODIFIED="1752070305584" TEXT="top-Level-Seiten durchk&#xe4;mmen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1752070293350" ID="ID_391826628" MODIFIED="1764548519806" TEXT="top-Level-Seiten durchk&#xe4;mmen">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1764037326150" ID="ID_253173738" MODIFIED="1764468674851" TEXT="BuildDrone kann weg">
 <icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1764468693775" ID="ID_1773145355" MODIFIED="1764468711764" TEXT="nochmal nach &quot;Jessie&quot; und &quot;Buster&quot; suchen, sowie nach &quot;apt-get&quot;">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1764468693775" FOLDED="true" ID="ID_1773145355" MODIFIED="1764548516705" TEXT="nochmal nach &quot;Jessie&quot; und &quot;Buster&quot; suchen, sowie nach &quot;apt-get&quot;">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#990e61" CREATED="1764542274953" ID="ID_1578357131" MODIFIED="1764542300425" TEXT="jaja ... die C++11 - Seite....">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1764542303739" ID="ID_1150915323" MODIFIED="1764542319242" TEXT="vermutlich werd&apos; ich demn&#xe4;chst eine C++20-Seite anfangen........">
+<icon BUILTIN="hourglass"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1764473857387" ID="ID_302775822" MODIFIED="1764474566046" TEXT="Project - About">
+<node COLOR="#435e98" CREATED="1764473864111" ID="ID_196622023" MODIFIED="1764519421407" TEXT="ein schwarzes Lumiera-Logo mit Regenbogen in den Kopf eingebaut">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <b><font color="#450e9b">Ha!</font></b>&#160;ich fand diese Seite bisher immer schon lustlos im Design &#8212; so gut der Text auch ist (Benny's Hilfe sei Dank!)
+    </p>
+    <p>
+      Dieses Logo ist eine banal-einfache Idee mit erheblicher Wirkung: nun stehen die zwei Bl&#246;cke oben prominent da, und die drei Textbl&#246;cke darunter setzen sich klarer ab...
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Die Breite der Grafik l&#228;&#223;t sich leider nur
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node COLOR="#104f52" CREATED="1764474025827" ID="ID_1470347954" MODIFIED="1764474562043" TEXT="Historie: nehme den Satz betreffend &#xbb;Cinelerra-3&#xab; heraus">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Diese Geschichte ist nun doch endlos lange her, und eigentlich etwas peinlich (wie meine erneute Unterschung der Anf&#228;nge gezeigt hat). Aus heutiger Sicht k&#246;nnte dieser Text schon knapper sein ... und die beiden Abschnitte schlie&#223;en nun direkt aneinander an, und sind auch insgesamt Abstrakter. Diesen ganzen Schlenker mit dem Namen &quot;Cinelerra-3&quot; brauchts wirklich nicht mehr!
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1764474571434" ID="ID_1763607517" MODIFIED="1764475786100" TEXT="Screenshots: aktuellen verwenden">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#435e98" CREATED="1764537628732" FOLDED="true" ID="ID_315997289" MODIFIED="1764548510266" TEXT="die Website-Grafiken mal aufr&#xe4;umen">
+<icon BUILTIN="yes"/>
+<node CREATED="1764537657350" ID="ID_872861961" MODIFIED="1764537716446" TEXT="da fliegt eine Menge Zeug aus den Anfangsjahren herum">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      auch wenn wir die Storage nicht mehr loswerden k&#246;nnen, immerhin kann man es mal unter den Teppich kehren
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#338800" CREATED="1764537719262" ID="ID_1793190365" MODIFIED="1764537727511" TEXT="alle Grafiken auf Verwendung absuchen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1764537728925" ID="ID_818072708" MODIFIED="1764537894660" TEXT="etwas umsortieren">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1764537736886" ID="ID_1717035071" MODIFIED="1764537759236" TEXT="in /images wirklich nur die relevanten &#xbb;Website-Grafiken&#xab;"/>
+<node CREATED="1764537760071" ID="ID_702650919" MODIFIED="1764537774869" TEXT="Screenshots und Mockups geh&#xf6;ren in /media/img/design.gui"/>
+<node COLOR="#267773" CREATED="1764537777832" ID="ID_513845637" MODIFIED="1764537808643" TEXT="dort auch etwas nach Kategorieren sortiert"/>
+<node COLOR="#435e98" CREATED="1764537786379" ID="ID_1984237033" MODIFIED="1764537890562" TEXT="und auch dort kann M&#xfc;ll weg">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      als &#187;M&#252;ll&#171; gelten Grafiken, hinter denen keine wirkliche Idee steht und auf die niemals aufgebaut wurde; ein Beispiel sind Screenshots aus der Prototypen-Zeit &#8212; da gen&#252;gt es, einen einzigen aufzuheben
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1764537903584" FOLDED="true" ID="ID_173959522" MODIFIED="1764548503239" TEXT="Contribute">
+<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1764537915670" ID="ID_1377612670" MODIFIED="1764538302978" TEXT="ich m&#xf6;chte eigentlich nicht mehr &#xbb;irgendwelche&#xab; Beitr&#xe4;ge ermutigen">
+<icon BUILTIN="smiley-neutral"/>
+</node>
+<node CREATED="1764537989950" ID="ID_807843436" MODIFIED="1764538021057">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      ich teile <b>definitiv nicht</b>&#160;den Glauben an spontane Selbstheilungskr&#228;fte
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1764538326814" ID="ID_816341868" MODIFIED="1764538345099" TEXT="Beschlu&#xdf;: nicht mehr bitten...">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1764538348180" ID="ID_1379479403" MODIFIED="1764538420007" TEXT="Hilfe bei der Website">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das l&#228;uft blo&#223; darauf hinaus, da&#223; wieder mal ein neues &#187;Design&#171; erfunden wird und dann die Umsetzung anderen &#252;berlassen bleibt. Oder mir jemand erz&#228;hlt, wie man heute im Internet kommuniziert (obwohl ich das sehr gut selber wei&#223;)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1764538421885" ID="ID_1601014205" MODIFIED="1764538456126" TEXT="&#xbb;Small Tasks&#xab; halte ich f&#xfc;r eine Illusion">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      sowas funktioniert m&#246;glicherweise bei einem gut eingespielten, professionellen Team.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1764538460421" ID="ID_418930888" MODIFIED="1764538557117" TEXT="ich m&#xf6;chte KEINE DESIGN DISKUSSIONEN">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Es ist mir v&#246;llig klar, da&#223; &#187;Jedermann&#171; vor allem erschlagen und befremdet ist nach Lekt&#252;re der Design-Seiten. Und was ich gleich schon gar nicht mehr haben kann, w&#228;re ein weiteres &#187;GUI brainstorming&#171;
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1764538891458" ID="ID_1865407035" MODIFIED="1764539461800" TEXT="Aber Benny&apos;s allgemeiner Text zur &#xbb;open source attitude&#xab; ist sehr gut &#x2014; das gen&#xfc;gt">
+<icon BUILTIN="back"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#281c95" CREATED="1764539368247" ID="ID_1879683805" MODIFIED="1764539437891" TEXT="ich betone nun mehr...">
+<icon BUILTIN="yes"/>
+<node CREATED="1764539376136" ID="ID_1683134789" MODIFIED="1764539383492" TEXT="da&#xdf; die Beitr&#xe4;ge passen m&#xfc;ssen"/>
+<node CREATED="1764539384197" ID="ID_1094961886" MODIFIED="1764539389412" TEXT="da&#xdf; man vorher mitdenkt"/>
+<node CREATED="1764539390307" ID="ID_1223437830" MODIFIED="1764539396399" TEXT="da&#xdf; ein Review notwendig ist"/>
+<node CREATED="1764539401587" ID="ID_979209326" MODIFIED="1764539409711" TEXT="&#xbb;sieh selber zu...&#xab;"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1764542613912" ID="ID_1464358831" MODIFIED="1764548452187" TEXT="technical/infra/Release">
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1764542661742" ID="ID_1500508774" MODIFIED="1764548442284" TEXT="die mu&#xdf; an Git-flow angepa&#xdf;t werden">
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#435e98" CREATED="1764542673753" ID="ID_1754492165" MODIFIED="1764548445010" TEXT="entsprechende Stichpunkte habe ich zum Gl&#xfc;ck schon &#xfc;berarbeitet">
+<arrowlink COLOR="#205fdd" DESTINATION="ID_1853540136" ENDARROW="Default" ENDINCLINATION="573;-1155;" ID="Arrow_ID_1217271886" STARTARROW="None" STARTINCLINATION="1536;67;"/>
+<icon BUILTIN="idea"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1752070265482" ID="ID_927720852" MODIFIED="1756773347225" TEXT="relevante Links aktualisieren">
@@ -168944,16 +169247,44 @@ that situation will improve in forseeable future.</pre>
 <node CREATED="1762827264425" ID="ID_1241559972" MODIFIED="1762827277724" TEXT="localdate &#x2259; aktuelle Systemzeit"/>
 <node CREATED="1762827278600" ID="ID_401397454" MODIFIED="1762827295830" TEXT="docdate &#x2259; mtime der Asciidoc-source"/>
 </node>
-<node CREATED="1762827347203" ID="ID_685663386" LINK="http://flaucher:9023/Dreck/wiki/zuGIT#TimestampimWorkdiraufCommitter-Timesetzen" MODIFIED="1762827625639" TEXT="Konsequenz &#x27f9; mtime von Git setzen"/>
+<node CREATED="1762827347203" ID="ID_685663386" LINK="http://flaucher:9023/Dreck/wiki/zuGIT#TimestampimWorkdiraufCommitter-Timesetzen" MODIFIED="1762827625639" TEXT="Konsequenz &#x27f9; mtime von Git setzen">
+<arrowlink COLOR="#77319f" DESTINATION="ID_778774756" ENDARROW="Default" ENDINCLINATION="-1042;139;" ID="Arrow_ID_1555326207" STARTARROW="None" STARTINCLINATION="-185;13;"/>
+</node>
 </node>
 <node CREATED="1763487203125" ID="ID_1397178259" MODIFIED="1763487214573" TEXT="HTML-Elemente inkonsistent">
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1763487216248" ID="ID_1383387788" MODIFIED="1763487264069" TEXT="beim Impressum wird &lt;span&gt; ge&#xf6;ffnet und &lt;/font&gt; geschlossen">
+<node COLOR="#435e98" CREATED="1763487216248" ID="ID_1383387788" MODIFIED="1764591853313" TEXT="beim Impressum wird &lt;span&gt; ge&#xf6;ffnet und &lt;/font&gt; geschlossen">
 <icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1764554825371" ID="ID_594102113" MODIFIED="1764554829948" TEXT="Page-Template">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#950a57" CREATED="1764554831009" ID="ID_1021901866" MODIFIED="1764555186734" TEXT="da wird eine Header-Sektion nur conditional eingeschlossen">
+<icon BUILTIN="idea"/>
+<node CREATED="1764554843054" ID="ID_311412042" MODIFIED="1764554855013" TEXT="das steuernde Attribut ist index-only">
+<node COLOR="#5b280f" CREATED="1764555004944" FOLDED="true" ID="ID_362572343" MODIFIED="1764555034654" TEXT="wird das irgendwie magisch gesetzt">
+<icon BUILTIN="help"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1764555022382" ID="ID_486876814" MODIFIED="1764555025193" TEXT="websuche..."/>
+<node CREATED="1764555025860" ID="ID_943470570" MODIFIED="1764555029561" TEXT="Asciidoc-Manual"/>
+<node CREATED="1764555030483" ID="ID_315330728" MODIFIED="1764555032541" TEXT="nix!"/>
+</node>
+<node COLOR="#338800" CREATED="1764555035714" ID="ID_1397634416" MODIFIED="1764555060590" TEXT="also mu&#xdf; man das wohl manuell setzen?">
+<icon BUILTIN="back"/>
+<node CREATED="1764555063985" ID="ID_1010557298" MODIFIED="1764555076899" TEXT="Im Seitenheader (wie Author, Datum)"/>
+<node COLOR="#435e98" CREATED="1764555078907" ID="ID_1123093441" MODIFIED="1764555089029" TEXT="gepr&#xfc;ft: funktioniert"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1764555093075" ID="ID_267268527" MODIFIED="1764555158652" TEXT="Beschlu&#xdf;">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1764555128312" ID="ID_627730406" MODIFIED="1764555136011" TEXT="das Attribut hei&#xdf;t webidx"/>
+<node CREATED="1764555136838" ID="ID_1451374854" MODIFIED="1764555138147" TEXT="wird von mir manuell gepflegt"/>
+<node CREATED="1764555139279" ID="ID_1253422893" MODIFIED="1764555153400" TEXT="f&#xfc;r Seiten die von den Suchmaschinen angesprungen werden sollen"/>
+</node>
 </node>
 </node>
 <node CREATED="1762822869176" ID="ID_1816572967" MODIFIED="1762822875499" TEXT="Lizenzinfo">
 <node CREATED="1762822876681" ID="ID_1854567985" MODIFIED="1762822886997" TEXT="human-readable &#x27f6; Footer"/>
-<node CREATED="1762822887987" ID="ID_1320812059" MODIFIED="1762823235768" TEXT="machine-readable &#x27f6; HTML-Header">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#2f0f69" CREATED="1762822887987" ID="ID_1320812059" MODIFIED="1764555879209" TEXT="machine-readable &#x27f6; HTML-Header">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -168970,14 +169301,16 @@ that situation will improve in forseeable future.</pre>
     </ul>
   </body>
 </html></richcontent>
-<linktarget COLOR="#b6556d" DESTINATION="ID_1320812059" ENDARROW="Default" ENDINCLINATION="341;25;" ID="Arrow_ID_1928313648" SOURCE="ID_786194186" STARTARROW="None" STARTINCLINATION="-212;14;"/>
+<linktarget COLOR="#b6556d" DESTINATION="ID_1320812059" ENDARROW="Default" ENDINCLINATION="336;25;" ID="Arrow_ID_1928313648" SOURCE="ID_786194186" STARTARROW="None" STARTINCLINATION="-212;14;"/>
 </node>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1756834117054" ID="ID_718437760" MODIFIED="1762913965071" TEXT="Lizenz-Seiten erneuern">
 <linktarget COLOR="#444e73" DESTINATION="ID_718437760" ENDARROW="Default" ENDINCLINATION="-118;-1153;" ID="Arrow_ID_1565932104" SOURCE="ID_195415850" STARTARROW="None" STARTINCLINATION="221;24;"/>
 <icon BUILTIN="button_ok"/>
-<node CREATED="1762812389626" ID="ID_627976312" MODIFIED="1762911339152" TEXT="Kette der Lizenz-Statements nochmal pr&#xfc;fen"/>
+<node COLOR="#338800" CREATED="1762812389626" ID="ID_627976312" MODIFIED="1764555871469" TEXT="Kette der Lizenz-Statements nochmal pr&#xfc;fen">
+<icon BUILTIN="button_ok"/>
+</node>
 <node COLOR="#338800" CREATED="1762812413231" FOLDED="true" ID="ID_403219642" MODIFIED="1762917001157" TEXT="k&#xf6;nnte ein pauschales Update der CC-Lizenz machen mit Stichtag">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -169086,7 +169419,7 @@ that situation will improve in forseeable future.</pre>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1762819828553" ID="ID_465472618" MODIFIED="1762819842964" TEXT="der Lizenz-Generator erzeugt keinen Button mehr">
 <icon BUILTIN="messagebox_warning"/>
 </node>
-<node COLOR="#435e98" CREATED="1762819843772" ID="ID_810778960" MODIFIED="1762913920151" TEXT="wo ist der maschinenlesbare Code geblieben?">
+<node COLOR="#435e98" CREATED="1762819843772" FOLDED="true" ID="ID_810778960" MODIFIED="1762913920151" TEXT="wo ist der maschinenlesbare Code geblieben?">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -169113,7 +169446,7 @@ that situation will improve in forseeable future.</pre>
 <icon BUILTIN="idea"/>
 </node>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1762822789997" ID="ID_786194186" MODIFIED="1762823235768" TEXT="die Idee mit den Header-Links umsetzen">
-<arrowlink COLOR="#b6556d" DESTINATION="ID_1320812059" ENDARROW="Default" ENDINCLINATION="341;25;" ID="Arrow_ID_1928313648" STARTARROW="None" STARTINCLINATION="-212;14;"/>
+<arrowlink COLOR="#b6556d" DESTINATION="ID_1320812059" ENDARROW="Default" ENDINCLINATION="336;25;" ID="Arrow_ID_1928313648" STARTARROW="None" STARTINCLINATION="-212;14;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 </node>
@@ -170080,14 +170413,15 @@ that situation will improve in forseeable future.</pre>
 </html></richcontent>
 </node>
 </node>
-<node CREATED="1756773417519" ID="ID_1432896045" MODIFIED="1756773420272" TEXT="Men&#xfc;">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1756773421004" ID="ID_1536518392" MODIFIED="1756773452193" TEXT="Reihenfolge Technical">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1756773417519" ID="ID_1432896045" MODIFIED="1764548470321" TEXT="Men&#xfc;">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1756773421004" ID="ID_1536518392" MODIFIED="1764542434606" TEXT="Reihenfolge Technical">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1756773443885" ID="ID_103458183" MODIFIED="1756773452194" TEXT="Reihenfolge Infrastructure">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1756773443885" ID="ID_103458183" MODIFIED="1764548466665" TEXT="Reihenfolge Infrastructure">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1757555382155" ID="ID_1747080203" MODIFIED="1762381779551" TEXT="API-Doc in das Dokumentations-Men&#xfc;">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1757555382155" FOLDED="true" ID="ID_1747080203" MODIFIED="1762381779551" TEXT="API-Doc in das Dokumentations-Men&#xfc;">
 <icon BUILTIN="button_cancel"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1757555415812" ID="ID_212291886" MODIFIED="1757555420407" TEXT="Vorschlag von Benny"/>
@@ -180159,14 +180493,14 @@ env.Command('out.bin', 'in.bin', my_action)</code></pre>
 </node>
 </node>
 </node>
-<node CREATED="1561237793933" ID="ID_938708757" MODIFIED="1581813532155" TEXT="GCC-6">
+<node CREATED="1561237793933" FOLDED="true" ID="ID_938708757" MODIFIED="1581813532155" TEXT="GCC-6">
 <icon BUILTIN="licq"/>
 <node CREATED="1561237816056" ID="ID_584388122" MODIFIED="1561237823947" TEXT="Debian/Stretch">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 </node>
 <node CREATED="1561237804916" ID="ID_392420321" MODIFIED="1561237815456" TEXT="gegenw&#xe4;rtig (2019) der Referenz-Compiler"/>
 </node>
-<node CREATED="1561237739453" ID="ID_894802950" MODIFIED="1561237784571" TEXT="GCC-7">
+<node CREATED="1561237739453" FOLDED="true" ID="ID_894802950" MODIFIED="1561237784571" TEXT="GCC-7">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1561237754266" ID="ID_646410828" MODIFIED="1561237789149" TEXT="Herbst 2018">
 <richcontent TYPE="NOTE"><html>
@@ -180187,7 +180521,7 @@ env.Command('out.bin', 'in.bin', my_action)</code></pre>
 </node>
 </node>
 </node>
-<node CREATED="1581813455951" ID="ID_1821559366" MODIFIED="1582315344844" TEXT="GCC-8">
+<node CREATED="1581813455951" FOLDED="true" ID="ID_1821559366" MODIFIED="1582315344844" TEXT="GCC-8">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1581813466582" ID="ID_1727015963" MODIFIED="1583523550183" TEXT="Februar 2020">
 <icon BUILTIN="button_ok"/>
@@ -180656,7 +180990,11 @@ env.Command('out.bin', 'in.bin', my_action)</code></pre>
 </node>
 <node COLOR="#338800" CREATED="1742176160188" ID="ID_1556896913" MODIFIED="1751723341087" TEXT="GCC-14">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1742176174909" ID="ID_237072824" MODIFIED="1742176177576" TEXT="Build-Fixes">
+<node CREATED="1764551143566" ID="ID_1748900616" MODIFIED="1764551148454" TEXT="Debian/Trixie">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node BACKGROUND_COLOR="#e0ddaa" COLOR="#690f14" CREATED="1764551170628" ID="ID_205649854" MODIFIED="1764551187060" TEXT="2025: Referenz-Compiler"/>
+<node COLOR="#435e98" CREATED="1742176174909" FOLDED="true" ID="ID_237072824" MODIFIED="1764551169015" TEXT="Build-Fixes">
 <node CREATED="1742176179747" ID="ID_1353266444" MODIFIED="1742176275192" TEXT="hat Benny f&#xfc;r GCC-8 gemacht">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -180690,7 +181028,7 @@ env.Command('out.bin', 'in.bin', my_action)</code></pre>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#ce0000" CREATED="1582315356166" ID="ID_568554401" MODIFIED="1751726801807" TEXT="Clang-20">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#ce0000" CREATED="1582315356166" FOLDED="true" ID="ID_568554401" MODIFIED="1764551131291" TEXT="Clang-20">
 <icon BUILTIN="hourglass"/>
 <node COLOR="#5b280f" CREATED="1751726752829" ID="ID_1722544232" MODIFIED="1751726785071" TEXT="derzeit problematisch : C++23 unvollst&#xe4;ndig">
 <icon BUILTIN="button_cancel"/>
@@ -180839,8 +181177,9 @@ env.Command('out.bin', 'in.bin', my_action)</code></pre>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#8f0a26" CREATED="1742176543226" HGAP="3" ID="ID_1577966009" MODIFIED="1752198827231" TEXT="Konzeption" VSHIFT="-35">
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
-<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1751809117581" ID="ID_1853540136" MODIFIED="1752198795241" TEXT="wir verwenden Git-Flow">
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1751809117581" ID="ID_1853540136" MODIFIED="1764542753726" TEXT="wir verwenden Git-Flow">
 <linktarget COLOR="#208ad3" DESTINATION="ID_1853540136" ENDARROW="Default" ENDINCLINATION="-443;-37;" ID="Arrow_ID_1316442709" SOURCE="ID_656514968" STARTARROW="None" STARTINCLINATION="-1044;119;"/>
+<linktarget COLOR="#205fdd" DESTINATION="ID_1853540136" ENDARROW="Default" ENDINCLINATION="573;-1155;" ID="Arrow_ID_1217271886" SOURCE="ID_1754492165" STARTARROW="None" STARTINCLINATION="1536;67;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 </node>
@@ -180970,6 +181309,9 @@ env.Command('out.bin', 'in.bin', my_action)</code></pre>
 </node>
 <node CREATED="1752192199327" ID="ID_578996702" MODIFIED="1752192205747" TEXT="Release-Notes und Info">
 <node CREATED="1446481123991" ID="ID_1319204482" MODIFIED="1518487921104" TEXT="README"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1764545526904" ID="ID_1064700298" MODIFIED="1764545548489" TEXT="Neuer Eintrag in NEWS">
+<icon BUILTIN="messagebox_warning"/>
+</node>
 <node CREATED="1446481126974" ID="ID_537666758" MODIFIED="1518487921104" TEXT="AUTHORS">
 <node CREATED="1446481146548" ID="ID_1310945179" MODIFIED="1518487921104" TEXT="GTK-UI">
 <icon BUILTIN="help"/>

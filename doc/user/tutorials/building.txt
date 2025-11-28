@@ -220,7 +220,8 @@ scons -j#
 The build process will take some time, so sit back and relax.
 You can use for `#` (at least) the number of cores available on your system
 to speed up the build -- but it will take several minutes even for a debug
-build and significantly more for an optimised release build (-> see `scons -h`)
+build and significantly more for an optimised release build +
+(-> see `scons -h` for build options you can change)
 
 And if you feel like waiting even more, you might build and run the test suite
 by issuing `scons -j# check`...
