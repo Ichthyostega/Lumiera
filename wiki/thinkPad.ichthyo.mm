@@ -160243,9 +160243,21 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 </node>
 <node CREATED="1742426053628" ID="ID_1216371239" MODIFIED="1742426066191" TEXT="Topic">
-<node CREATED="1742426067299" ID="ID_644122291" MODIFIED="1742426076993" TEXT="packaging with dh and scons">
+<node CREATED="1742426067299" FOLDED="true" ID="ID_644122291" MODIFIED="1764352601897" TEXT="packaging with dh and scons">
 <node CREATED="1742426085944" ID="ID_40378417" LINK="https://askubuntu.com/a/245356" MODIFIED="1742426097284" TEXT="SO/Askubuntu"/>
 <node CREATED="1742426078457" ID="ID_1757928499" MODIFIED="1742426085452" TEXT="dh kann mit Scons umgehen"/>
+<node CREATED="1764352377886" ID="ID_1401607739" MODIFIED="1764352406767" TEXT="Aber SCons-Builds sind typischerweise &#xbb;speziell&#xab; &#x27f9; besser explizit aufrufen"/>
+<node CREATED="1764352407642" ID="ID_394995811" LINK="#ID_869569123" MODIFIED="1764352590618" TEXT="das hei&#xdf;t: man verwendet die dh-Override-Targets und ruft SCons direkt auf">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      F&#252;r Lumiera habe ich das letztlich so gemacht, und ich halte es f&#252;r sinnvoll, denn so ist in debian/rules unmittelbar ersichtlich, wie konfiguriert wird ... <i>generell sind implizite Default-Regeln nur dann sinnvoll, wenn der Default einfach und allgegenw&#228;rtig ist</i>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="info"/>
+</node>
 </node>
 <node CREATED="1742656652409" ID="ID_1605755100" MODIFIED="1742656657836" TEXT="Library-Paket">
 <node CREATED="1742656592256" ID="ID_974982396" MODIFIED="1742656681992" TEXT="aufgesammelteInfos zum Umgang mit Lib-Paketen">
@@ -160264,6 +160276,42 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </html></richcontent>
 </node>
 </node>
+</node>
+<node CREATED="1764351998456" ID="ID_1478886777" MODIFIED="1764352305606" TEXT="Build-temporaries ignorieren">
+<linktarget COLOR="#2285d4" DESTINATION="ID_1478886777" ENDARROW="Default" ENDINCLINATION="-1282;116;" ID="Arrow_ID_665398434" SOURCE="ID_554457709" STARTARROW="None" STARTINCLINATION="-904;50;"/>
+<node CREATED="1764352015775" ID="ID_92251086" MODIFIED="1764352149527" TEXT="dpkg-source hat schon eine Default-config f&#xfc;r die h&#xe4;ufigsten Misset&#xe4;ter">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...wie .svn, .git, Autotools-M&#252;ll...
+    </p>
+    <p>
+      Man sieht den Default mit dpkg-source --help
+    </p>
+    <p>
+      <font face="Monospaced" size="2" color="#32177f">&#160;&#160;-i, --diff-ignore[=&lt;regex&gt;] </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2" color="#32177f">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;filter out files to ignore diffs of </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2" color="#32177f">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;(defaults to: '(?:^|/).*~$|(?:^|/)\.#.*$|(?:^|/)\..*\.sw.$|(?:^|/),,.*(?:$|/.*$)|(?:^|/)(?:DEADJOE|\.arch-inventory|\.(?:bzr|cvs|hg|git|mtn-)ignore)$|(?:^|/)(?:CVS|RCS|\.deps|\{arch\}|\.arch-ids|\.svn|\.hg(?:tags|sigs)?|_darcs|\.git(?:attributes|modules|review)?|\.mailmap|\.shelf|_MTN|\.be|\.bzr(?:\.backup|tags)?)(?:$|/.*$)'). </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2" color="#32177f">&#160;&#160;-I, --tar-ignore[=&lt;pattern&gt;] </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2" color="#32177f">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;filter out files when building tarballs </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2" color="#32177f">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;(defaults to: -I*.a -I*.la -I*.o -I*.so -I.*.sw? -I&ast;/&ast;~ -I,,* -I.[#~]* -I.arch-ids -I.arch-inventory -I.be -I.bzr -I.bzr.backup -I.bzr.tags -I.bzrignore -I.cvsignore -I.deps -I.git -I.gitattributes -I.gitignore -I.gitmodules -I.gitreview -I.hg -I.hgignore -I.hgsigs -I.hgtags -I.mailmap -I.mtn-ignore -I.shelf -I.svn -ICVS -IDEADJOE -IRCS -I_MTN -I_darcs -I{arch}). </font>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1764352159164" ID="ID_1246114365" LINK="https://www.debian.org/doc/manuals/maint-guide/dother.en.html#sourcel" MODIFIED="1764352210583" TEXT="man kann Spezialkonfig in debian/source/options hinterlegen"/>
 </node>
 </node>
 </node>
@@ -168331,8 +168379,11 @@ that situation will improve in forseeable future.</pre>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1752070293350" ID="ID_391826628" MODIFIED="1752070305584" TEXT="top-Level-Seiten durchk&#xe4;mmen">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1764037326150" ID="ID_253173738" MODIFIED="1764037351953" TEXT="BuildDrone kann weg">
+<node COLOR="#435e98" CREATED="1764037326150" ID="ID_253173738" MODIFIED="1764468674851" TEXT="BuildDrone kann weg">
 <icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1764468693775" ID="ID_1773145355" MODIFIED="1764468711764" TEXT="nochmal nach &quot;Jessie&quot; und &quot;Buster&quot; suchen, sowie nach &quot;apt-get&quot;">
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1752070265482" ID="ID_927720852" MODIFIED="1756773347225" TEXT="relevante Links aktualisieren">
@@ -169323,7 +169374,7 @@ that situation will improve in forseeable future.</pre>
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1756830253426" ID="ID_989483889" MODIFIED="1756830598512" TEXT="Dontations-Page ist obsolet">
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1756830253426" ID="ID_989483889" MODIFIED="1764371683617" TEXT="Dontations-Page ist obsolet">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -169332,7 +169383,7 @@ that situation will improve in forseeable future.</pre>
     </p>
   </body>
 </html></richcontent>
-<arrowlink COLOR="#882246" DESTINATION="ID_679146016" ENDARROW="Default" ENDINCLINATION="311;0;" ID="Arrow_ID_909744060" STARTARROW="None" STARTINCLINATION="756;65;"/>
+<arrowlink COLOR="#4b2288" DESTINATION="ID_679146016" ENDARROW="Default" ENDINCLINATION="311;0;" ID="Arrow_ID_909744060" STARTARROW="None" STARTINCLINATION="756;65;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 </node>
@@ -170174,7 +170225,7 @@ that situation will improve in forseeable future.</pre>
 <arrowlink COLOR="#05af3a" DESTINATION="ID_1667125104" ENDARROW="Default" ENDINCLINATION="-428;-45;" ID="Arrow_ID_1142158265" STARTARROW="None" STARTINCLINATION="-786;94;"/>
 <icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#338800" CREATED="1763769642111" FOLDED="true" ID="ID_1051001254" MODIFIED="1763938199831" TEXT="README &#x2014; NEWS(Changelog) &#x2014; AUTHORS &#x2014; LICENSE">
+<node COLOR="#338800" CREATED="1763769642111" FOLDED="true" ID="ID_1051001254" MODIFIED="1764374308091" TEXT="README &#x2014; NEWS(Changelog) &#x2014; AUTHORS &#x2014; LICENSE">
 <linktarget COLOR="#199f6d" DESTINATION="ID_1051001254" ENDARROW="Default" ENDINCLINATION="-2411;128;" ID="Arrow_ID_465720111" SOURCE="ID_520590054" STARTARROW="None" STARTINCLINATION="-418;-611;"/>
 <icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1763770333709" ID="ID_1395262738" MODIFIED="1763771074500" TEXT="Readme sollte knapper sein">
@@ -170287,13 +170338,19 @@ that situation will improve in forseeable future.</pre>
 </html></richcontent>
 </node>
 </node>
+<node COLOR="#338800" CREATED="1764353760670" FOLDED="true" ID="ID_1784758876" MODIFIED="1764374289901" TEXT="INSTALL-Symlink kann weg">
+<icon BUILTIN="yes"/>
+<node CREATED="1764353778179" ID="ID_1277613808" MODIFIED="1764353787476" TEXT="der wird als leeres File in den Tarball gepackt"/>
+<node COLOR="#1c215b" CREATED="1764353788130" ID="ID_85727663" MODIFIED="1764374286544" TEXT="stattdessen: Hinweis in README aufnehmen"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1751808937037" ID="ID_169754287" MODIFIED="1751808945616" TEXT="Debian / DEB-Paket">
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1762803541300" ID="ID_1198625842" MODIFIED="1762803563377" TEXT="Doku zum debianDepot.txt">
+</node>
+<node COLOR="#338800" CREATED="1751808937037" ID="ID_169754287" MODIFIED="1764468462560" TEXT="Debian / DEB-Paket">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1762803541300" ID="ID_1198625842" MODIFIED="1764460896183" TEXT="Doku zum debianDepot.txt">
 <linktarget COLOR="#b5768e" DESTINATION="ID_1198625842" ENDARROW="Default" ENDINCLINATION="102;11;" ID="Arrow_ID_1663167652" SOURCE="ID_834370322" STARTARROW="None" STARTINCLINATION="-35;55;"/>
+<icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1764080462839" ID="ID_40707028" MODIFIED="1764080495980" TEXT="Doku zum Debian-Paket">
+<node COLOR="#338800" CREATED="1764080462839" FOLDED="true" ID="ID_40707028" MODIFIED="1764468624561" TEXT="Doku zum Debian-Paket">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -170302,7 +170359,8 @@ that situation will improve in forseeable future.</pre>
     </p>
   </body>
 </html></richcontent>
-<node CREATED="1764080499102" ID="ID_600067904" MODIFIED="1764080556468">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1764080499102" ID="ID_600067904" MODIFIED="1764386720790">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
@@ -170315,17 +170373,77 @@ that situation will improve in forseeable future.</pre>
   <head/>
   <body>
     <p>
-      die ist gut und auch n&#252;tzlich dort; k&#246;nnte aber auch &#252;bernommen werden in die Beschreibun des Buildsystems
+      die ist gut und auch n&#252;tzlich dort; k&#246;nnte aber auch &#252;bernommen werden in die Beschreibung des Buildsystems
     </p>
   </body>
 </html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1764080558767" ID="ID_1614946590" MODIFIED="1764080580506" TEXT="enth&#xe4;lt Beschreibung des Release-Prozesses &#x27f9; obsolet durch Git-Flow">
+<node COLOR="#435e98" CREATED="1764080558767" ID="ID_1614946590" MODIFIED="1764386705695" TEXT="enth&#xe4;lt Beschreibung des Release-Prozesses &#x27f9; obsolet durch Git-Flow">
 <icon BUILTIN="messagebox_warning"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1764080599920" ID="ID_1082461848" MODIFIED="1764080620395" TEXT="Fehlt: Informationen zum DEB-Packaging selber">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1764080599920" ID="ID_1082461848" MODIFIED="1764460881095" TEXT="Fehlt: Informationen zum DEB-Packaging selber">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1764460719241" ID="ID_1488859375" MODIFIED="1764460728018" TEXT="ist aber nicht viel notwendig...."/>
+<node CREATED="1764460728761" ID="ID_172970866" MODIFIED="1764460734872" TEXT="verlinke direkt auf die Blobs im Git">
+<node CREATED="1764460735825" ID="ID_1992636796" LINK="https://git.lumiera.org/?p=debian/lumiera;a=blob;hb=refs/heads/deb;f=debian/control" MODIFIED="1764460821035" TEXT="debian/control"/>
+<node CREATED="1764460740184" ID="ID_488908579" LINK="https://git.lumiera.org/?p=debian/lumiera;a=blob;hb=refs/heads/deb;f=debian/rules" MODIFIED="1764460831004" TEXT="debian/rules"/>
+</node>
+<node CREATED="1764460836728" ID="ID_657830094" MODIFIED="1764460878292">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Verweise auf den Debhalper-Sequencer,
+    </p>
+    <p>
+      mit Manpage und dem Abschnitt in der Policy,
+    </p>
+    <p>
+      in dem die Override-Targets erl&#228;utert sind
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1764459039709" ID="ID_295628068" MODIFIED="1764459284073" TEXT="Tutorial: Building the Debain way &#x27fb; mu&#xdf; komplett &#xfc;berarbeitet werden">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...nicht nur da&#223; diverse Paketnamen <i>peinlich veraltet sind</i>&#160;&#8212; auch die ganze Darstellung ist verwirrend, und inzwischen einseitig....
+    </p>
+    <ul>
+      <li>
+        sollte die grunds&#228;tzliche Prozedur zu Beginn abstrakt darstellen
+      </li>
+      <li>
+        sollte eine kompakte Anleitung f&#252;r den kompletten Bootstrap vom Quellpaket auflisten
+      </li>
+      <li>
+        sollte aber auch die Variante mit <font face="Monospaced" color="#692020">mk-build-deps</font>&#160;darstellen, da hierf&#252;r nicht das Lumiera DEB-Depot ins System konfiguriert werden mu&#223;; in all den letzten Jahren was das n&#228;mlich die einzige Methode, die &#252;berhaupt noch funktioniert hat, auch wenn sie deutlich umst&#228;ndlicher ist als mit dem Apt-Repo
+      </li>
+    </ul>
+    <p>
+      Der allgemeine Teil daf&#252;r kann nun gestrafft werden, da wir mache Information schon woanders breit darstellen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#338800" CREATED="1764468482606" ID="ID_1881350877" MODIFIED="1764468576862" TEXT="auch die Front-Page vom DEB-Depot komplett &#xfc;berarbeitet">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Aktuelle Distributionen und Daten, Text gestrafft und viele xrefs eingebaut, vor allem auf die Apt-Konfiguration und die Anleitung f&#252;r den GPG-Key (denn leider ist das ganze Thema komplexer geworden; fr&#252;her mu&#223;te man nur eine Zeile in die sources.list reinklatschen...)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1764468582778" HGAP="22" ID="ID_566302678" MODIFIED="1764468612912" TEXT="oh diese Seite ist jetzt richtig sch&#xf6;n geworden" VSHIFT="10">
+<icon BUILTIN="ksmiletris"/>
 </node>
 </node>
 </node>
@@ -172762,7 +172880,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1742175611912" ID="ID_16098937" MODIFIED="1749341021068" TEXT="etwas aufr&#xe4;umen">
+<node COLOR="#338800" CREATED="1742175611912" FOLDED="true" ID="ID_16098937" MODIFIED="1749341021068" TEXT="etwas aufr&#xe4;umen">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1742175621250" FOLDED="true" ID="ID_1886919024" MODIFIED="1745860228467" TEXT="boost-filesystem loswerden!">
 <icon BUILTIN="button_ok"/>
@@ -175838,7 +175956,7 @@ Since then others have made contributions, see the log for the history.</font></
     <div style="background-color: #eee0b5; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 2px">
       <div style="color: #202020; background-color: #eee0b5; font-family: Bitstream Vera Sans Mono; font-size: 9pt; white-space: pre">
         <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
-          <font color="#b88b63">/** derive total ordering from base class */</font>
+          <font color="#b88b63">/&ast;* derive total ordering from base class &ast;/</font>
         </p>
         <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
           <font color="#535773">std</font><font color="#65533c">::</font><font color="#59253b">strong_ordering</font><font color="#3a1f18">&#160;</font><font color="#632d2d"><b>operator&lt;=&gt;</b></font><font color="#11123a">(</font><font color="#635e96"><b>FrameRate</b></font><font color="#3a1f18">&#160; </font><font color="#4a1a65"><b>const</b></font><font color="#65533c">&amp;</font><font color="#11123a">)</font><font color="#3a1f18">&#160;</font><font color="#4a1a65"><b>const</b></font><font color="#3a1f18">&#160;</font><font color="#65533c">=</font><font color="#3a1f18">&#160; </font><font color="#4a1a65"><b>default</b></font><font color="#65533c">;</font>
@@ -176671,7 +176789,7 @@ Since then others have made contributions, see the log for the history.</font></
           <font color="#4a2626">src/vault/gear/work-force.cpp:69:43: warning: '++' expression of 'volatile'-qualified type is deprecated [-Wvolatile]</font>
         </p>
         <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
-          <font color="#4a2626">69 | for (</font><font color="#d5054c">volatile size_t</font><font color="#4a2626">&#160;i=0; i&lt;degree; ++i) {/*SPIN*/}</font>
+          <font color="#4a2626">69 | for (</font><font color="#d5054c">volatile size_t</font><font color="#4a2626">&#160;i=0; i&lt;degree; ++i) {/&ast;SPIN&ast;/}</font>
         </p>
         <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
           
@@ -177056,7 +177174,7 @@ Since then others have made contributions, see the log for the history.</font></
     <div style="background-color: #eee0b5; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 2px">
       <div style="color: #202020; background-color: #eee0b5; font-family: Bitstream Vera Sans Mono; font-size: 9pt; white-space: pre">
         <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
-          <font color="#b88b63">/**</font>
+          <font color="#b88b63">/&ast;*</font>
         </p>
         <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
           <font color="#b88b63">* Identification tuple for addressing frames unambiguously.</font>
@@ -177077,7 +177195,7 @@ Since then others have made contributions, see the log for the history.</font></
           <font color="#b88b63">* be replaced by a combined C/C++ header</font>
         </p>
         <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
-          <font color="#b88b63">*/</font>
+          <font color="#b88b63">&ast;/</font>
         </p>
         <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
           <font color="#4a1a65"><b>class</b></font><font color="#3a1f18">&#160;</font><font color="#635e96"><b>FrameID</b></font><font color="#3a1f18">&#160;</font><font color="#65533c">:</font><font color="#3a1f18">&#160;</font><font color="#535773">boost</font><font color="#65533c">::</font><font color="#635e96"><b>totally_ordered</b></font><font color="#65533c">&lt;</font><font color="#635e96"><b>FrameID</b></font><font color="#65533c">&gt;</font><font color="#3a1f18">&#160; </font><font color="#ab815c">////////////</font><font color="#7f9fbf"><b>TODO</b></font><font color="#ab815c">&#160;it seems we don't need total ordering, only comparison. Clarify this!</font>
@@ -177715,7 +177833,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#d0e6a4" COLOR="#338800" CREATED="1742175249127" ID="ID_1185124760" MODIFIED="1745628094269" STYLE="fork" TEXT="Testsuite GR&#xdc;N">
+<node BACKGROUND_COLOR="#d0e6a4" COLOR="#338800" CREATED="1742175249127" FOLDED="true" ID="ID_1185124760" MODIFIED="1745628094269" STYLE="fork" TEXT="Testsuite GR&#xdc;N">
 <edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="yes"/>
@@ -177863,7 +177981,7 @@ Since then others have made contributions, see the log for the history.</font></
           <font color="#b88b63">* which in turn becomes the only child of the new Record.</font>
         </p>
         <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
-          <font color="#b88b63">*/</font>
+          <font color="#b88b63">&ast;/</font>
         </p>
         <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
           <font color="#632d2d"><b>Record</b></font><font color="#3a1f18">&#160;</font><font color="#11123a">(</font><font color="#635e96"><b>Mutator</b></font><font color="#3a1f18">&#160;</font><font color="#4a1a65"><b>const</b></font><font color="#65533c">&amp;</font><font color="#3a1f18">&#160; mut</font><font color="#11123a">)</font>
@@ -178203,7 +178321,7 @@ Since then others have made contributions, see the log for the history.</font></
 <node BACKGROUND_COLOR="#a3db8b" COLOR="#3a7014" CREATED="1439644368572" ID="ID_1667125104" MODIFIED="1764299038929" TEXT="Doku: Referenz-System">
 <linktarget COLOR="#05af3a" DESTINATION="ID_1667125104" ENDARROW="Default" ENDINCLINATION="-428;-45;" ID="Arrow_ID_1142158265" SOURCE="ID_1572764059" STARTARROW="None" STARTINCLINATION="-786;94;"/>
 <icon BUILTIN="button_ok"/>
-<node BACKGROUND_COLOR="#e1d0aa" CREATED="1744938484753" ID="ID_581586255" MODIFIED="1745014676554" TEXT="Website: Aufr&#xe4;um-Arbeiten">
+<node BACKGROUND_COLOR="#e1d0aa" CREATED="1744938484753" FOLDED="true" ID="ID_581586255" MODIFIED="1745014676554" TEXT="Website: Aufr&#xe4;um-Arbeiten">
 <icon BUILTIN="bell"/>
 <node BACKGROUND_COLOR="#b3d0c1" COLOR="#435e98" CREATED="1744938498263" FOLDED="true" ID="ID_1741468339" MODIFIED="1745014721994" TEXT="menugen.py auf Python-3 portieren">
 <icon BUILTIN="yes"/>
@@ -178579,7 +178697,7 @@ Since then others have made contributions, see the log for the history.</font></
 </html></richcontent>
 <icon BUILTIN="hourglass"/>
 </node>
-<node BACKGROUND_COLOR="#b9b9ef" COLOR="#20206c" CREATED="1446509415481" ID="ID_180589749" MODIFIED="1764297114630" TEXT="Versionen hochsetzen">
+<node BACKGROUND_COLOR="#b9b9ef" COLOR="#20206c" CREATED="1446509415481" FOLDED="true" ID="ID_180589749" MODIFIED="1764297114630" TEXT="Versionen hochsetzen">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -180667,7 +180785,7 @@ env.Command('out.bin', 'in.bin', my_action)</code></pre>
   <head/>
   <body>
     <p>
-      <font face="Monospaced">/* </font>
+      <font face="Monospaced">/&ast; </font>
     </p>
     <p>
       <font face="Monospaced">&#160;&#160;INDEX-ITER.hpp&#160;&#160;-&#160;&#160;iterator with indexed random-access to referred container </font>
@@ -180700,7 +180818,7 @@ env.Command('out.bin', 'in.bin', my_action)</code></pre>
       
     </p>
     <p>
-      <font face="Monospaced">*/ </font>
+      <font face="Monospaced">&ast;/ </font>
     </p>
   </body>
 </html></richcontent>
@@ -181250,7 +181368,7 @@ env.Command('out.bin', 'in.bin', my_action)</code></pre>
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1663455760715" ID="ID_1127631792" MODIFIED="1742177522929" TEXT="Paketbau-Docker-Skripte?">
 <icon BUILTIN="help"/>
 </node>
-<node CREATED="1663461276569" ID="ID_35078961" MODIFIED="1742177542669" TEXT="Signing-Key definiert">
+<node CREATED="1663461276569" FOLDED="true" ID="ID_35078961" MODIFIED="1742177542669" TEXT="Signing-Key definiert">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -181294,7 +181412,7 @@ env.Command('out.bin', 'in.bin', my_action)</code></pre>
 <node CREATED="1751807371769" ID="ID_1639092426" MODIFIED="1751807383725" TEXT="Build-System als Front-End nutzen"/>
 </node>
 <node CREATED="1751806576005" ID="ID_1188754114" MODIFIED="1751806579112" TEXT="Version-bump">
-<node BACKGROUND_COLOR="#e1dfb4" CREATED="1751807399818" ID="ID_1997706434" MODIFIED="1751807793940" TEXT="Bedeutung der Versions-Nr">
+<node BACKGROUND_COLOR="#e1dfb4" CREATED="1751807399818" FOLDED="true" ID="ID_1997706434" MODIFIED="1751907793940" TEXT="Bedeutung der Versions-Nr">
 <icon BUILTIN="info"/>
 <node CREATED="1751807415004" ID="ID_1360499102" MODIFIED="1751807431525" TEXT="publiziert f&#xfc;r externe Orientierung"/>
 <node CREATED="1751807488931" ID="ID_1358488888" MODIFIED="1751807507330" TEXT="steht im README und in der Doxygen-Doc"/>
@@ -182383,7 +182501,7 @@ env.Command('out.bin', 'in.bin', my_action)</code></pre>
 </node>
 </node>
 </node>
-<node CREATED="1762959151077" ID="ID_118703200" MODIFIED="1762959231724" TEXT="mu&#xdf; nun CDBS abl&#xf6;sen">
+<node COLOR="#435e98" CREATED="1762959151077" FOLDED="true" ID="ID_118703200" MODIFIED="1764372798393" TEXT="habe nun CDBS abgel&#xf6;st">
 <linktarget COLOR="#6a3c80" DESTINATION="ID_118703200" ENDARROW="Default" ENDINCLINATION="799;95;" ID="Arrow_ID_127516976" SOURCE="ID_340181586" STARTARROW="None" STARTINCLINATION="580;-41;"/>
 <node CREATED="1762958979706" ID="ID_598558049" MODIFIED="1762959148845" TEXT="Bezug: hab schon GDLmm umgestellt CDBS &#x27f6; dh">
 <arrowlink COLOR="#46c0d4" DESTINATION="ID_1732644986" ENDARROW="Default" ENDINCLINATION="168;608;" ID="Arrow_ID_710986137" STARTARROW="None" STARTINCLINATION="1263;74;"/>
@@ -182458,7 +182576,8 @@ env.Command('out.bin', 'in.bin', my_action)</code></pre>
 </html></richcontent>
 </node>
 </node>
-<node CREATED="1762997171048" ID="ID_1055108179" MODIFIED="1762997177026" TEXT="Feinschliff + Test">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1762997171048" ID="ID_1055108179" MODIFIED="1764371340510" TEXT="Feinschliff + Test">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1762997178703" ID="ID_1534148044" MODIFIED="1763769306816" TEXT="seltsam: der &apos;scons build&apos;-Aufruf baut auch bereits die Tests">
 <arrowlink COLOR="#783c4a" DESTINATION="ID_1851495604" ENDARROW="Default" ENDINCLINATION="691;48;" ID="Arrow_ID_213409665" STARTARROW="None" STARTINCLINATION="504;25;"/>
 </node>
@@ -182687,7 +182806,7 @@ env.Command('out.bin', 'in.bin', my_action)</code></pre>
 <node BACKGROUND_COLOR="#9ccac7" COLOR="#235c6e" CREATED="1763256847381" ID="ID_1669554494" MODIFIED="1763256970567" TEXT="Paket l&#xe4;&#xdf;t sich installieren"/>
 <node BACKGROUND_COLOR="#9ccac7" COLOR="#235c6e" CREATED="1763256853835" ID="ID_1385909216" MODIFIED="1763256970566" TEXT="Lumiera-UI Smoke-Test OK"/>
 </node>
-<node COLOR="#338800" CREATED="1763231464249" ID="ID_154352881" MODIFIED="1763231480845" TEXT="erzeugtes Paket: Inhalt sieht bereits soweit korrekt aus">
+<node COLOR="#338800" CREATED="1763231464249" FOLDED="true" ID="ID_154352881" MODIFIED="1764371309717" TEXT="erzeugtes Paket: Inhalt sieht bereits soweit korrekt aus">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1763231591988" ID="ID_936243550" MODIFIED="1763581876839" TEXT="bis auf die (fehlende) HTML-Hilfe">
 <arrowlink COLOR="#496dc4" DESTINATION="ID_1433247096" ENDARROW="Default" ENDINCLINATION="69;-61;" ID="Arrow_ID_1742637634" STARTARROW="None" STARTINCLINATION="-106;9;"/>
@@ -182715,7 +182834,7 @@ env.Command('out.bin', 'in.bin', my_action)</code></pre>
 </html></richcontent>
 </node>
 <node CREATED="1763258013591" ID="ID_991309843" MODIFIED="1763258015747" TEXT="old-fsf-address-in-copyright-file"/>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1763257667287" ID="ID_1952761575" LINK="https://lintian.debian.org/tags/shared-library-is-executable.html" MODIFIED="1764032004628" TEXT="shared-library-is-executable 0755 [usr/lib/lumiera/modules/gtk_gui.lum]">
+<node COLOR="#435e98" CREATED="1763257667287" ID="ID_1952761575" LINK="https://lintian.debian.org/tags/shared-library-is-executable.html" MODIFIED="1764357473257" TEXT="shared-library-is-executable 0755 [usr/lib/lumiera/modules/gtk_gui.lum]">
 <arrowlink COLOR="#1f9cd9" DESTINATION="ID_1637872963" ENDARROW="Default" ENDINCLINATION="-1201;65;" ID="Arrow_ID_957935181" STARTARROW="None" STARTINCLINATION="-826;-24;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1763259348029" ID="ID_886594364" MODIFIED="1763259356317" TEXT="alle Shared-Libs sind executable"/>
@@ -182766,6 +182885,37 @@ env.Command('out.bin', 'in.bin', my_action)</code></pre>
 <font BOLD="true" NAME="SansSerif" SIZE="10"/>
 </node>
 </node>
+<node COLOR="#c5491c" CREATED="1764371268124" ID="ID_171473073" MODIFIED="1764371299137" TEXT="(als &#xbb;falscher Alarm&#xab; klassifiziert)">
+<font NAME="SansSerif" SIZE="9"/>
+</node>
+</node>
+<node CREATED="1764357469452" ID="ID_1091054108" MODIFIED="1764357784271">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      doc-base-file-references-missing-file /usr/share/doc/lumiera/README.<b><font color="#e51616">d</font></b>ebian
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      d&#228;mlicher Typo
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1764357469453" ID="ID_994389541" MODIFIED="1764359540258" TEXT="W: lumiera source: missing-field-in-dep5-copyright License [debian/copyright:21]">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1764357853462" ID="ID_474366810" MODIFIED="1764357876480" TEXT="ja ja .... da ist eine File-Stanza unvollst&#xe4;ndig">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node COLOR="#338800" CREATED="1764357877942" ID="ID_1422312446" MODIFIED="1764359542961" TEXT="auch die Debianisierung ist GPL2+">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 </node>
 <node COLOR="#435e98" CREATED="1763258319446" ID="ID_973373524" MODIFIED="1763945409000" TEXT="&#xbb;/usr/share/doc-base/lumiera.lumiera&#xab;, Zeile 16: alle &#xbb;Format&#xab;-Abschnitte sind ung&#xfc;ltig.">
@@ -182781,7 +182931,8 @@ env.Command('out.bin', 'in.bin', my_action)</code></pre>
 <arrowlink COLOR="#7e2e43" DESTINATION="ID_791117820" ENDARROW="Default" ENDINCLINATION="-157;-17;" ID="Arrow_ID_1399617171" STARTARROW="None" STARTINCLINATION="723;58;"/>
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1763168982818" ID="ID_1121026746" MODIFIED="1763168997368" TEXT="Paket-Dokumente">
+<node COLOR="#338800" CREATED="1763168982818" FOLDED="true" ID="ID_1121026746" MODIFIED="1764371325088" TEXT="Paket-Dokumente: nun OK">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1763170279597" ID="ID_520590054" MODIFIED="1763861141458" TEXT="sollte handgeschriebenes Changelog in NEWS pflegen">
 <arrowlink COLOR="#199f6d" DESTINATION="ID_1051001254" ENDARROW="Default" ENDINCLINATION="-2411;128;" ID="Arrow_ID_465720111" STARTARROW="None" STARTINCLINATION="-418;-611;"/>
 <linktarget COLOR="#052cc9" DESTINATION="ID_520590054" ENDARROW="Default" ENDINCLINATION="370;18;" ID="Arrow_ID_1493343123" SOURCE="ID_1498381529" STARTARROW="None" STARTINCLINATION="26;165;"/>
@@ -183047,8 +183198,9 @@ env.Command('out.bin', 'in.bin', my_action)</code></pre>
 <node CREATED="1763655015588" ID="ID_266725238" LINK="https://standards.freedesktop.org/menu-spec/latest/" MODIFIED="1763655039503" TEXT="Desktop-Menu-Spec"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1763640557556" FOLDED="true" ID="ID_969306745" MODIFIED="1763769989478" TEXT="Konsequenz &#x27f9; menu durch lumiera.desktop ersetzen">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1763640557556" FOLDED="true" ID="ID_969306745" MODIFIED="1764359117552" TEXT="Konsequenz &#x27f9; menu durch lumiera.desktop ersetzen">
+<linktarget COLOR="#319dc0" DESTINATION="ID_969306745" ENDARROW="Default" ENDINCLINATION="23;72;" ID="Arrow_ID_1206414200" SOURCE="ID_1930291382" STARTARROW="None" STARTINCLINATION="83;5;"/>
+<icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1763657988933" ID="ID_508360945" MODIFIED="1763676156580" TEXT="lumiera.desktop">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <node CREATED="1763676158179" ID="ID_1090361326" MODIFIED="1763676165918" TEXT="gem&#xe4;&#xdf; Beispiel von yoshimi"/>
@@ -183150,6 +183302,10 @@ env.Command('out.bin', 'in.bin', my_action)</code></pre>
 <icon BUILTIN="button_cancel"/>
 </node>
 </node>
+</node>
+<node COLOR="#095754" CREATED="1764359066370" ID="ID_1930291382" MODIFIED="1764359129175" TEXT="Test mit RC2 : jetzt taucht das Icon im Men&#xfc; auf">
+<arrowlink COLOR="#319dc0" DESTINATION="ID_969306745" ENDARROW="Default" ENDINCLINATION="23;72;" ID="Arrow_ID_1206414200" STARTARROW="None" STARTINCLINATION="83;5;"/>
+<icon BUILTIN="idea"/>
 </node>
 <node COLOR="#338800" CREATED="1763170522531" FOLDED="true" ID="ID_301822628" MODIFIED="1763938206301" TEXT="debian/copyright">
 <icon BUILTIN="yes"/>
@@ -183302,6 +183458,202 @@ env.Command('out.bin', 'in.bin', my_action)</code></pre>
 </node>
 </node>
 </node>
+<node COLOR="#435e98" CREATED="1764350949125" FOLDED="true" ID="ID_1549086829" MODIFIED="1764356838464" TEXT="Aua! .sconsign.dblite &#xe4;ndert sich f&#xfc;r clean-build">
+<icon BUILTIN="broken-line"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1764351026882" ID="ID_1604394775" MODIFIED="1764356834155" TEXT="dpkg-source erkennt das als &#xc4;nderung der Quellen">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1764351013228" ID="ID_219025627" MODIFIED="1764356827769" TEXT="warum ist mir das bisher nie aufgefallen?">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Hypothese: ich hab bisher nie aus einem komplett gecleanten Git-Tree heraus gebaut, sondern das Signaturfile war bereits da und es wurden daher zumindest die Plattform-Tests gecached. Vielleicht lag es aber auch daran, da&#223; bisher CDBS das SCons clean erst nach der Source-Erstellung aufgerufen hat?
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#338800" CREATED="1764351754531" ID="ID_554457709" MODIFIED="1764356771295" TEXT="L&#xf6;sung: man kan dpkg-source speziell konfigurieren">
+<arrowlink COLOR="#2285d4" DESTINATION="ID_1478886777" ENDARROW="Default" ENDINCLINATION="-1282;116;" ID="Arrow_ID_665398434" STARTARROW="None" STARTINCLINATION="-904;50;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1764352620013" ID="ID_464710745" MODIFIED="1764352628641" TEXT="lege debian/source/options an"/>
+<node CREATED="1764353828541" ID="ID_133874045" MODIFIED="1764353839455" TEXT="dort .sconsign.dblite ausnehmen">
+<node CREATED="1764353857008" ID="ID_830318781" MODIFIED="1764353873756" TEXT="tar-ignore = .sconsign.dblite">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      soll nicht in den Orig-Source-Tarball
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1764353857009" ID="ID_1302939766" MODIFIED="1764353893233" TEXT="extend-diff-ignore = &quot;^.sconsign.dblite&quot;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      &#196;nderungen daran sollen ignoriert werden, da sonst der Paketbau nach dem ersten Clean abbrechen w&#252;rde
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1764356856976" FOLDED="true" ID="ID_742536531" MODIFIED="1764371587481" TEXT="die bekannten Scheduler-Tests scheitern wieder mal">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      WorkForce_test und SchedulerStress_test
+    </p>
+    <p>
+      Der Paket-Build ist eine schwierige Ausgangssituation, da kurz vorher das System unter Vollast stand. Es ist mir zwar gelungen, die Tests im normalen Entwicklungs-Setup weithin zuverl&#228;ssig zu bekommen, aber es ist nahezu unm&#246;glich, herauszufinden, was genau beim Paketbuild dann doch anders l&#228;uft
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="broken-line"/>
+<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1764357038772" ID="ID_1002666567" MODIFIED="1764357055800" TEXT="Beschlu&#xdf;: diese vorerst herausgenommen">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1764357056699" ID="ID_55125005" MODIFIED="1764357065206" TEXT="diese Tests dienen einem anderen Zweck"/>
+<node CREATED="1764357070374" ID="ID_720241731" MODIFIED="1764357085231" TEXT="wir br&#xe4;uchten eigentlich mehrere Testsuiten und Kategorien"/>
+</node>
+<node COLOR="#435e98" CREATED="1764360009884" ID="ID_1025914144" MODIFIED="1764366875358" TEXT="Container-Testl&#xe4;ufe">
+<node COLOR="#5b280f" CREATED="1764360020402" FOLDED="true" ID="ID_1285822876" MODIFIED="1764362755935" TEXT="debian:forky-20251117&#x2060;">
+<icon BUILTIN="button_cancel"/>
+<icon BUILTIN="hourglass"/>
+<node CREATED="1764361077474" ID="ID_1244067494" MODIFIED="1764361100304" TEXT="Ooops ... hier fehlen mir ja die nobug und GDL-Pakete"/>
+<node BACKGROUND_COLOR="#e3be99" COLOR="#690f14" CREATED="1764362578023" ID="ID_406858656" MODIFIED="1764362751128" TEXT="Abbruch: Bauen auf Forky hat derzeit keinen Sinn">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Forky ist im Moment noch weitgehend identisch zu Trixie; daher hatte ich es ja auch (noch) nicht als unterst&#252;tzte Platform definiert. Das wird erst in etwa einem Jahr sinnvoll sein, wenn sich Forky deutlich weiterentwickelt hat. Insofern ist es jetzt auch (noch) nicht sinnvoll, die Vorl&#228;uferpakte zu bauen, denn sie werden in einem Jahr obsolet sein
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1764360941976" FOLDED="true" ID="ID_446182876" MODIFIED="1764371644141" TEXT="ubuntu:noble-20251013">
+<icon BUILTIN="button_ok"/>
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1764361573825" ID="ID_1418745104" MODIFIED="1764361594502" TEXT="Fix:Lumiera-Paketspeck f&#xfc;r Ubuntu/noble verwenden">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node COLOR="#338800" CREATED="1764361603522" ID="ID_1626483670" MODIFIED="1764361612277" TEXT="mk-build-dep funktioniert">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#435e98" CREATED="1764362085126" ID="ID_102171633" MODIFIED="1764362905038" TEXT="Noble hat standardm&#xe4;&#xdf;ig gcc-13">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1764362104099" ID="ID_1374260351" MODIFIED="1764362115502" TEXT="apt install gcc-14 g++-14"/>
+<node CREATED="1764362124241" ID="ID_1231047399" MODIFIED="1764362127060" TEXT="update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-14 60 --slave /usr/bin/g++ g++ /usr/bin/g++-14"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1764362906713" ID="ID_1059101542" MODIFIED="1764366829099" TEXT="FileSupport_test .. FAILED">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      0000000515: CHECK: file-support-test.cpp:85: thread_1: simplifiedPermissionAccess: (not out.good())
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="broken-line"/>
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1764363179723" ID="ID_967575911" MODIFIED="1764363187999" TEXT="reproduzierbar bei Einzelaufruf"/>
+<node COLOR="#5b280f" CREATED="1764363189842" ID="ID_488646700" MODIFIED="1764363455031" TEXT="Vermutung: Status-Handling verh&#xe4;lt sich anders">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1764363457519" ID="ID_173910291" MODIFIED="1764363462897" TEXT="das ist es nicht..."/>
+<node CREATED="1764363463750" ID="ID_766902710" MODIFIED="1764363470622" TEXT="auch wenn ich das File nachher erst schlie&#xdf;e"/>
+</node>
+<node CREATED="1764363479076" ID="ID_1286526631" MODIFIED="1764363493353" TEXT="Permissions im Filesystem angeschaut (unter /tmp/LUX....)">
+<node CREATED="1764363498902" ID="ID_722308373" MODIFIED="1764363508447" TEXT="Gruppe darf ja alles!"/>
+<node CREATED="1764363509119" ID="ID_1013697687" MODIFIED="1764363520662" TEXT="das soll auch so sein lt. Test"/>
+</node>
+<node CREATED="1764363569912" ID="ID_1522071383" MODIFIED="1764363624511" TEXT="wir laufen hier als &quot;root&quot; mit Gruppe &quot;root&quot;  ...">
+<node CREATED="1764363626064" ID="ID_3037566" MODIFIED="1764363643302" TEXT="... und deshalb k&#xf6;nnen wir via Gruppe schreiben"/>
+<node CREATED="1764363644190" ID="ID_88609728" MODIFIED="1764363662258" TEXT="&#x27f9; der Test w&#xe4;re d&#xe4;mlich">
+<icon BUILTIN="smiley-oh"/>
+</node>
+<node COLOR="#5b280f" CREATED="1764364040573" ID="ID_263551379" MODIFIED="1764364059766" TEXT="versuche mal &quot;group&quot; und &quot;others&quot; auszutauschen">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1764364060950" ID="ID_570395681" MODIFIED="1764364065628" TEXT="bringt nix">
+<icon BUILTIN="smily_bad"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1764364072672" ID="ID_756182727" MODIFIED="1764364102443" TEXT="versuche in der Shell in diese Datei zu schreiben.... &#x27f9; geht">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1764364105136" ID="ID_1855997710" MODIFIED="1764364119426" TEXT="ich bin ein Trottel! Root darf alles!!!!">
+<node CREATED="1764364125037" ID="ID_345849106" MODIFIED="1764364133544" TEXT="ja dann KANNs gar icht funktionieren"/>
+<node CREATED="1764364797034" ID="ID_107586346" MODIFIED="1764364815488" TEXT="das kann ich nicht einfach fixen"/>
+</node>
+<node COLOR="#5b280f" CREATED="1764364817527" ID="ID_1553387755" MODIFIED="1764364840354" TEXT="Test deaktivieren &#x27f9; auf sp&#xe4;ter vertagt">
+<icon BUILTIN="button_cancel"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1764365369121" ID="ID_1414943353" MODIFIED="1764365398221" TEXT="das ist kein Kern-Thema"/>
+<node CREATED="1764365399119" ID="ID_1106358115" MODIFIED="1764365415511" TEXT="es geht um einen Convenience-Wrapper f&#xfc;r File-Permissions"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1764365027035" ID="ID_1081045038" MODIFIED="1764366829099" TEXT="IncidenceCount_test .. FAILED">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      CHECK: incidence-count-test.cpp:127: thread_1: verify_incidentCount: (isLimited ( 5500, stat.timeCase(1), 6800))
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="broken-line"/>
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1764365273311" ID="ID_10629902" MODIFIED="1764365280625" TEXT="wieder so ein Timing-Test"/>
+<node CREATED="1764365320742" ID="ID_1476763575" MODIFIED="1764365362252" TEXT="auch das ist ein Randthema ... Test-Hilfsmittel"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1764365482037" ID="ID_807549421" MODIFIED="1764365490685" TEXT="Failure ist nicht reproduzierbar">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1764366835781" ID="ID_284083757" MODIFIED="1764366842450" TEXT="danach l&#xe4;uft der Paketbuild durch">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1764366843304" ID="ID_866301475" MODIFIED="1764366855292" TEXT="Paket l&#xe4;&#xdf;t sich installieren (dpkg -i )">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#174956" COLOR="#8dfd49" CREATED="1764371095103" ID="ID_1369130568" MODIFIED="1764371243253" STYLE="bubble" TEXT="Stand: alle bekannten Probleme adressiert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das DEB-Paket ist nun <b>reif f&#252;r das Release</b>
+    </p>
+    <ul>
+      <li>
+        Paketinhalt ist nun so wie definiert
+      </li>
+      <li>
+        alle relevanten Lintian-Meldungen wurden behoben
+      </li>
+      <li>
+        Lumiera wird nun korrekt ins Men&#252; eingebunden
+      </li>
+      <li>
+        einige instabile Tests (von marginaler Bedeutung) wurden per Patch deaktiviert
+      </li>
+      <li>
+        Paketbau auch auf Ubuntu/Noble best&#228;tigt
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<edge COLOR="#61fe5b" STYLE="bezier" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="16"/>
+</node>
 </node>
 </node>
 </node>
@@ -183316,6 +183668,81 @@ env.Command('out.bin', 'in.bin', my_action)</code></pre>
 <node CREATED="1763916898539" ID="ID_232791772" MODIFIED="1763916915134" TEXT="Bugtracker-URL"/>
 <node CREATED="1763916878148" ID="ID_1617314912" MODIFIED="1763916881749" TEXT="Mailingliste"/>
 <node CREATED="1763916882643" ID="ID_308388317" MODIFIED="1763916923660" TEXT="Mastodon"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1764358259303" FOLDED="true" ID="ID_938804811" MODIFIED="1764358876931" TEXT="wie k&#xf6;nnte man das verbessern?">
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="help"/>
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1764358284378" ID="ID_1742014935" MODIFIED="1764358310787" TEXT="unsere internen SO-Libs haben keinen f&#xfc;r Debian sinnvollen SONAME">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      dpkg-shlibdeps: Warnung: Name und Version k&#246;nnen nicht aus Bibliotheksnamen &#187;liblumierasteam.so&#171; entnommen werden
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1764358424262" ID="ID_1864933492" MODIFIED="1764358509225" TEXT="wir haben bisher nur einen Fallback auf den Library-Filenamen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      LumieraEnvironment.py, Line 391:
+    </p>
+    <p>
+      
+    </p>
+    <div style="background-color: #eee0b5; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 2px">
+      <div style="color: #202020; background-color: #eee0b5; font-family: Bitstream Vera Sans Mono; font-size: 9pt; white-space: pre">
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#116f8c"><b>def</b></font><font color="#33361c">&#160;</font><font color="#00b479"><b>defineSoname</b></font><font color="#33361c">&#160;</font><font color="#000000">(</font><font color="#1f6065"><i>self</i></font><font color="#000000">,</font><font color="#33361c">&#160; target</font><font color="#000000">,</font><font color="#33361c">&#160;</font><font color="#000000">**</font><font color="#33361c">kw</font><font color="#000000">)</font><font color="#33361c">:</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#00aa00"><i>&quot;&quot;&quot; internal helper to extract or guess</i></font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#00aa00"><i>a suitable library SONAME, either using an</i></font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#00aa00"><i>explicit spec, falling back on the lib filename</i></font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#00aa00"><i>&quot;&quot;&quot;</i></font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#116f8c"><b>if</b></font><font color="#33361c">&#160;</font><font color="#00aa00"><i>'<u>soname</u>'</i></font><font color="#33361c">&#160;</font><font color="#116f8c"><b>in</b></font><font color="#33361c">&#160; kw:</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#33361c">soname </font><font color="#000000">=</font><font color="#33361c">&#160;</font><font color="#1f6065"><i>self</i></font><font color="#33361c">.subst</font><font color="#000000">(</font><font color="#33361c">kw</font><font color="#000000">[</font><font color="#00aa00"><i>'<u>soname</u>'</i></font><font color="#000000">])</font><font color="#33361c">&#160; </font><font color="#be9e7b"># explicitly defined by user</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#116f8c"><b>else</b></font><font color="#33361c">: </font><font color="#be9e7b"># else: use the library filename as DT_SONAME</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          
+        </p>
+      </div>
+    </div>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1764358519239" ID="ID_1934407664" MODIFIED="1764358544359" TEXT="es ist noch nicht klar ob/was wir jemals mit Shared-Libs machen">
+<icon BUILTIN="stop-sign"/>
+<icon BUILTIN="hourglass"/>
+<node CREATED="1764358549207" ID="ID_991774659" MODIFIED="1764358566652" TEXT="werden wir jemals typische &#xbb;Libraries&#xab; produzieren und installieren?"/>
+<node CREATED="1764358789151" ID="ID_287407387" MODIFIED="1764358805178" TEXT="wir k&#xf6;nnten ansonsten intern einen SONAME setzen, der Debian gl&#xfc;cklich macht"/>
+<node CREATED="1764358807060" ID="ID_1139863689" MODIFIED="1764358861714" TEXT="oder man kann dpkg-shlibdeps irgendwie anweisen, bestimmte Libs zu ignorieren?">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Die Manpage ist komplex, und das Thema auch ... so auf die Schnelle verstehe ich nicht, was hier von wem wie ausgewertet wird
+    </p>
+  </body>
+</html></richcontent>
+</node>
 </node>
 </node>
 </node>
@@ -184210,7 +184637,7 @@ env.Command('out.bin', 'in.bin', my_action)</code></pre>
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1704063600555" ID="ID_1733077970" MODIFIED="1762959189539" TEXT="Paket anpassen">
 <icon BUILTIN="pencil"/>
-<node CREATED="1762959194284" ID="ID_340181586" MODIFIED="1762959239961" TEXT="mu&#xdf; umstellen auf dh">
+<node COLOR="#435e98" CREATED="1762959194284" ID="ID_340181586" MODIFIED="1764359330416" TEXT="Paket umgestellt auf dh">
 <arrowlink COLOR="#6a3c80" DESTINATION="ID_118703200" ENDARROW="Default" ENDINCLINATION="799;95;" ID="Arrow_ID_127516976" STARTARROW="None" STARTINCLINATION="580;-41;"/>
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1743343397021" ID="ID_1261819355" MODIFIED="1762959188656" TEXT="Dependencies">
@@ -184317,6 +184744,7 @@ env.Command('out.bin', 'in.bin', my_action)</code></pre>
 <node BACKGROUND_COLOR="#fdd095" COLOR="#ff1e00" CREATED="1704063600555" ID="ID_115167288" MODIFIED="1742178666224" TEXT="lokal Installation getestet">
 <linktarget COLOR="#5ffe1d" DESTINATION="ID_115167288" ENDARROW="Default" ENDINCLINATION="173;0;" ID="Arrow_ID_1656807903" SOURCE="ID_964482016" STARTARROW="None" STARTINCLINATION="274;28;"/>
 <icon BUILTIN="flag-orange"/>
+<node COLOR="#435e98" CREATED="1764359425634" HGAP="37" ID="ID_528720095" MODIFIED="1764359440917" TEXT="zun&#xe4;chst direkt mit dpkg -i" VSHIFT="28"/>
 <node BACKGROUND_COLOR="#fdd095" COLOR="#ff1e00" CREATED="1727143416876" HGAP="26" ID="ID_1399233982" MODIFIED="1742178666224" TEXT="Smoke-Test" VSHIFT="8">
 <icon BUILTIN="flag-orange"/>
 </node>
@@ -184708,6 +185136,25 @@ env.Command('out.bin', 'in.bin', my_action)</code></pre>
 </node>
 </node>
 </node>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1764371407485" ID="ID_1887006763" MODIFIED="1764371418128" STYLE="fork" TEXT="TODO">
+<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
+<icon BUILTIN="bell"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1764371421344" ID="ID_1203247294" MODIFIED="1764371427564" TEXT="Trac l&#xe4;uft nicht">
+<icon BUILTIN="flag-pink"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1764371433737" ID="ID_126616476" MODIFIED="1764371447202" TEXT="dort nachzutragen...">
+<icon BUILTIN="bell"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1764371478768" ID="ID_579277015" LINK="#ID_765634393" MODIFIED="1764371503089" TEXT="#965 hat sich (offensichtlich) durch Platform-Upgrade erledigt">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1764371537907" ID="ID_1328138553" LINK="#ID_742536531" MODIFIED="1764371570340" TEXT="neues Ticket: Timing-Tests sind notorisch unzuverl&#xe4;ssig">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1764371603562" ID="ID_1152573390" LINK="#ID_1059101542" MODIFIED="1764371658299" TEXT="FileSupport_test : Check scheitert wenn als &apos;root&apos; ausgef&#xfc;hrt">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1689610305547" ID="ID_1569437785" MODIFIED="1689610311743" TEXT="QA-testing">
 <icon BUILTIN="hourglass"/>
 <node CREATED="1689610320586" ID="ID_1544042895" MODIFIED="1689610323417" TEXT="Acceptance"/>
@@ -184933,7 +185380,7 @@ env.Command('out.bin', 'in.bin', my_action)</code></pre>
 </node>
 <node CREATED="1561238618311" ID="ID_1197206022" MODIFIED="1561311521089" TEXT="Plattform-Evolution">
 <icon BUILTIN="go"/>
-<node COLOR="#435e98" CREATED="1561238627847" ID="ID_776424925" MODIFIED="1561311477641" TEXT="Juni 2019">
+<node COLOR="#435e98" CREATED="1561238627847" FOLDED="true" ID="ID_776424925" MODIFIED="1561311477641" TEXT="Juni 2019">
 <node COLOR="#338800" CREATED="1561238635358" FOLDED="true" ID="ID_584004962" MODIFIED="1561311515592" TEXT="Ubuntu/Bionic - libboost 1.65">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -185143,24 +185590,43 @@ env.Command('out.bin', 'in.bin', my_action)</code></pre>
 </node>
 </node>
 </node>
+<node COLOR="#435e98" CREATED="1764372414752" FOLDED="true" ID="ID_682909979" MODIFIED="1764372748052" TEXT="Nov 2025">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Regul&#228;res Upgrade der &#187;Referenz-Plattform&#171; &#10236; Debian/Trixie.
+    </p>
+    <p>
+      Diese relevanten Versionen sind allesamt sehr knapp gew&#228;hlt, unterst&#252;zten aber auch noch Ubuntu/Noble (24.04)
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1764372625087" ID="ID_457071137" MODIFIED="1764372633283" TEXT="GCC-14"/>
+<node CREATED="1764372428611" ID="ID_1850778581" MODIFIED="1764372518966" TEXT="Boost 1.83"/>
+<node CREATED="1764372482946" ID="ID_1272740812" MODIFIED="1764372489048" TEXT="Python 3.10"/>
+<node CREATED="1764372490871" ID="ID_1381433382" MODIFIED="1764372504161" TEXT="SCons 4.x &lt; 4.10"/>
 </node>
-<node CREATED="1756830145491" ID="ID_1909194712" MODIFIED="1756830156650" TEXT="Website">
-<icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1756830158871" ID="ID_207712886" MODIFIED="1756830168645" TEXT="TODO">
+</node>
+<node CREATED="1756830145491" FOLDED="true" ID="ID_1909194712" MODIFIED="1764372412621" TEXT="Website">
+<icon BUILTIN="go"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1756830158871" ID="ID_207712886" MODIFIED="1764372377339" TEXT="sp&#xe4;termal...">
 <icon BUILTIN="bell"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1756830177726" ID="ID_534650716" MODIFIED="1756830193831" TEXT="kl&#xe4;ren: Donations-Page">
+<icon BUILTIN="hourglass"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1756830177726" FOLDED="true" ID="ID_534650716" MODIFIED="1764371703194" TEXT="kl&#xe4;ren: Donations-Page">
 <icon BUILTIN="bell"/>
+<icon BUILTIN="hourglass"/>
 <node CREATED="1756830202685" ID="ID_1184692288" MODIFIED="1756830217995" TEXT="bei der ffis sind wir schon lange nicht mehr als &quot;aktiv&quot; gef&#xfc;hrt"/>
 <node CREATED="1756830218755" ID="ID_218868534" MODIFIED="1756830228917" TEXT="derzeit brauchen wir keine Donations"/>
 <node CREATED="1762807182980" ID="ID_745470168" MODIFIED="1762807200534" TEXT="heute w&#xe4;re man auf Patreon">
 <icon BUILTIN="ksmiletris"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1756830229931" ID="ID_679146016" MODIFIED="1762807176039" TEXT="2025-11 : Seite entfernt">
-<linktarget COLOR="#882246" DESTINATION="ID_679146016" ENDARROW="Default" ENDINCLINATION="311;0;" ID="Arrow_ID_909744060" SOURCE="ID_989483889" STARTARROW="None" STARTINCLINATION="756;65;"/>
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1756830229931" ID="ID_679146016" MODIFIED="1764371675149" TEXT="2025-11 : Seite entfernt">
+<linktarget COLOR="#4b2288" DESTINATION="ID_679146016" ENDARROW="Default" ENDINCLINATION="311;0;" ID="Arrow_ID_909744060" SOURCE="ID_989483889" STARTARROW="None" STARTINCLINATION="756;65;"/>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1762808890286" ID="ID_131015626" MODIFIED="1762808904630" TEXT="kl&#xe4;ren: Kennzeichnungspflichten">
+<node COLOR="#435e98" CREATED="1762808890286" FOLDED="true" ID="ID_131015626" MODIFIED="1764372348620" TEXT="kl&#xe4;ren: Kennzeichnungspflichten">
 <icon BUILTIN="bell"/>
 <node CREATED="1762809020022" ID="ID_1893539317" LINK="https://de.wikipedia.org/wiki/Impressumspflicht" MODIFIED="1762809028315" TEXT="Impressumspflicht">
 <node CREATED="1762808996576" ID="ID_1779321871" MODIFIED="1762809032243" TEXT="Telemediengesetz 2007"/>
@@ -185231,6 +185697,41 @@ env.Command('out.bin', 'in.bin', my_action)</code></pre>
 </node>
 <node CREATED="1762879172664" ID="ID_450772311" MODIFIED="1762879298461" TEXT="Lizenz-Fragen">
 <arrowlink COLOR="#6f7dba" DESTINATION="ID_856231519" ENDARROW="Default" ENDINCLINATION="-1342;134;" ID="Arrow_ID_846772487" STARTARROW="None" STARTINCLINATION="-985;-1050;"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1764371734600" ID="ID_228486004" MODIFIED="1764371755555" TEXT="soll ich bei dem Thema &#xbb;Logdateien&#xab; nochmal nachhaken (Christian)?">
+<icon BUILTIN="help"/>
+<node CREATED="1764371757915" ID="ID_1398506323" MODIFIED="1764371987679" TEXT="fraglich ob das was bringt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das inh&#228;rente Problem k&#246;nnen wir nicht l&#246;sen: wir haben n&#228;mlich keinen <i>geordneten Betrieb,</i>&#160;weil wir keine Firma sind, sondern uns irgendwie durchwurschteln. Nur auf dieser Basis funktioniert unser Projekt ... leider kann eine zunehmende Regulierung so etwas nicht gestatten, und treibt damit all die &#187;Kleinen&#171; in die Arme des Plattform-Kapitalismus
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1764371764867" ID="ID_384707897" MODIFIED="1764372317310" TEXT="k&#xf6;nnte kontraproduktiv sein">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <ul>
+      <li>
+        Das ganze Thema Server f&#252;hrt immer zu Spannungen, sobald wir dr&#252;ber reden. Es geht so lange wunderbar gut, wie die Kiste &#8222;irgendwie tut&#8220; und man Christian vertraut...
+      </li>
+      <li>
+        Und noch wichtiger: die Rechtslage ist mir nicht klar. Inwiefern sind wir verpflichtet, unsere Prozeduren &#252;berhaupt zu konkretisieren? Gen&#252;gt es nicht, da&#223; wir&#160;uns pauschal zum Datenschutz verpflichten? Letztlich l&#228;uft unser Setup darauf hinaus, da&#223; irgend jemand diesen Server nach den &#187;Regeln des Handwerks&#171; betreibt und sonst niemand drauf darf. Und letztlich erheben und extrahieren wir ja tats&#228;chlich keine Daten. <i>Auf diese Situation bezogen</i>&#160;hab ich Bedenken, da&#223; wir uns in falsche Tatsachenbehauptungen hineinman&#246;vrieren, wenn wir suggerieren, bestimmte Prozeduren zu haben.
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#435e98" CREATED="1764371793602" ID="ID_1939457320" MODIFIED="1764371821943" TEXT="(im Grunde interessiert das Ganze keine Sau)">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1764372327206" ID="ID_177616317" MODIFIED="1764372346089" TEXT="sagen wir: besser als vorher und vorerst abgehakt">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
 </node>
 </node>
 </node>

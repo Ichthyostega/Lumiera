@@ -8,12 +8,11 @@ As work progresses, we will add more information on the Lumiera build system.
 //Menu: prepend child 'SCons'
 
 
-build -- continuous integration -- packaging
+Topics: build -- continuous integration -- packaging
 
 * link:SCons.html[SCons Buildsystem]
 * link:BuildDependencies.html[Lumiera Build Dependencies]
-* link:BuildDroneDraft.html[»Builddrone« concept from 2008]
-* Packaging: link:LumieraDebianPackage.html[Debian] RPM
+* Packaging: link:LumieraDebianPackage.html[Debian] (⌛ RPM)
 * Lumiera link:{ldoc}/technical/infra/debianDepot.html[debian depot]
 
 
