@@ -1,7 +1,7 @@
 External Tree Description
 =========================
 :Author: Ichthyostega
-:Date:      Fall 2015
+:Date:   Autumn 2015
 
 
 
@@ -17,11 +17,11 @@ Any collaboration requires, as an underlying, some kind of common understanding.
 And any formalised, mechanical collaboration requires to represent that common point of attachment --
 at least as _symbolic representation._ The »External Tree Description« is shaped to fulfil this need:
 _in theory,_ the whole field could be represented, symbolically, as a network of hierarchically
-structured elements. Yet, _in practice,_ all we need is to conceive the presence of such a representation,
+structured elements. Yet, _in practice,_ all we need is to presuppose the presence of such a representation,
 as a backdrop to work against. And we do so -- we work against that symbolic representation,
-by describing *changes* made to the structure and its elements. Thus, the description of changes,
-the link:{ldoc}/technical/library/DiffFramework.html[diff language], refers to and partially embodies
-such symbolically represented elements and relations.
+by describing *changes* made to the structure and its elements. And so the description of changes,
+the link:{ldoc}/technical/library/DiffFramework.html[diff language], thus refers to and partially
+embodies such symbolically represented elements and relations.
 
 Elements, Nodes and Records
 ---------------------------
@@ -29,7 +29,7 @@ We have to deal with _entities and relationships._
 Entities are considered the building blocks, the elements, which are related by directional links.
 Within the symbolic representation, elements are conceived as *generic nodes* (`GenNode`),
 while the directed relations are impersonated as being attached or rooted at the originating side,
-so the target of a relation has no traces or knowledge of being part of that relation. Moreover, each
+so that the target of a relation has no knowledge of being part of that relation. Moreover, each
 of our nodes bears a _relatively clear-cut identity._ That is to say, within the relevant scope in question,
 this identity is unique. Together, these are the building blocks to represent any *graph*.
 
@@ -71,7 +71,7 @@ Basically, we can expect to encounter the following kinds of fundamental data el
 - `diff::Record<GenNode>`
 
 The last option is what makes our representation recursive.footnote:[Regarding the implementation,
-all these data elements are embedded _inline,_ as values. 
+all these data elements are embedded _inline,_ as values.
 With the exception of the record, which, like any `std::vector` implicitly uses heap allocations
 for the members of the collection.]
 

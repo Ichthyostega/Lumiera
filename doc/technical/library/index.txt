@@ -12,7 +12,7 @@ over time.
 Interface Library
 -----------------
 The Lumiera Application is designed deliberately in a way to be controllable by scripts. All of
-the Session, the models and the backend are fully operational without the GUI. Any significant
+the Session, the models and the vault are fully operational without the GUI. Any significant
 functionality can be addressed through the primary Façade Interfaces.
 
 But, in order to make such an open and extensible application a reality, we need to build up

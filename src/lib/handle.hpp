@@ -1,22 +1,13 @@
 /*
   HANDLE.hpp  -  opaque handle to an implementation entity, automatically managing lifecycle
 
-  Copyright (C)         Lumiera.org
-    2009,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2009,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
- 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
 
@@ -35,7 +26,7 @@
  ** of the implementation class the handle points at is necessary only in the
  ** translation unit implementing such an extended handle.
  **
- ** @see proc::DummyPlayer::Process usage example
+ ** @see steam::control::Command usage example
  ** 
  */
 
@@ -44,15 +35,17 @@
 #define LIB_HANDLE_H
 
 #include "lib/nobug-init.hpp"
-#include "lib/bool-checkable.hpp"
 
 #include <memory>
+#include <utility>
 
 
 namespace lib {
   
   using std::shared_ptr;
+  using std::unique_ptr;
   using std::weak_ptr;
+  using std::move;
   
   
   
@@ -67,8 +60,7 @@ namespace lib {
    * the use count.
    */
   template<class IMP>
-  class Handle 
-    : public lib::BoolCheckable<Handle<IMP> >
+  class Handle
     {
     protected:
       typedef std::shared_ptr<IMP> SmPtr;
@@ -81,23 +73,38 @@ namespace lib {
        *  Typically this is followed by activating
        *  the handle by the managing service.
        */
-      Handle ( )
-      : smPtr_()
-      { }
+      Handle()  = default;
       
-                                 Handle (Handle const& r)          : smPtr_(r.smPtr_)   { }
-      template<class Y> explicit Handle (shared_ptr<Y> const& r)   : smPtr_(r)          { }
-      template<class Y> explicit Handle (weak_ptr<Y> const& wr)    : smPtr_(wr)         { }
-      template<class Y> explicit Handle (std::auto_ptr<Y> & ar)    : smPtr_(ar)         { }
+      /** directly establish handle from an implementation,
+       *  which typically way just heap allocated beforehand.
+       */
+      explicit
+      Handle (IMP* imp)
+        : smPtr_{imp}
+        { }
       
-                        Handle& operator=(Handle const& r)         { smPtr_ = r.smPtr_; return *this; }
-      template<class Y> Handle& operator=(shared_ptr<Y> const& sr) { smPtr_ = sr;       return *this; }
-      template<class Y> Handle& operator=(std::auto_ptr<Y> & ar)   { smPtr_ = ar;       return *this; }
+                                 Handle (Handle const& r)          = default;
+                                 Handle (Handle && rr)             = default;
+      template<class Y> explicit Handle (shared_ptr<Y> const& r)   : smPtr_{r}         { }
+      template<class Y> explicit Handle (shared_ptr<Y> && srr)     : smPtr_{move(srr)} { }
+      template<class Y> explicit Handle (weak_ptr<Y> const& wr)    : smPtr_{wr}        { }
+      template<class Y> explicit Handle (unique_ptr<Y> && urr)     : smPtr_{move(urr)} { }
+      
+                        Handle& operator=(Handle const& r)         = default;
+                        Handle& operator=(Handle && rr)            = default;
+      template<class Y> Handle& operator=(shared_ptr<Y> const& sr) { smPtr_ = sr;        return *this; }
+      template<class Y> Handle& operator=(shared_ptr<Y> && srr)    { smPtr_ = move(srr); return *this; }
+      template<class Y> Handle& operator=(unique_ptr<Y> && urr)    { smPtr_ = move(urr); return *this; }
+      
+      
+      explicit operator bool()  const { return bool(smPtr_); }
+      bool isValid()            const { return bool(smPtr_); }
+      
       
       
       /** Activation of the handle by the managing service.
        *  @param impl the implementation object this handle is tied to
-       *  @param whenDead functor to be invoked when reaching end-of-life 
+       *  @param whenDead functor to be invoked when reaching end-of-life
        *  @throw std::bad_alloc, in which case \c whenDead(impl) is invoked
        */
       template<typename DEL>
@@ -117,23 +124,28 @@ namespace lib {
           return *this;
         }
       
+      Handle&
+      activate(shared_ptr<IMP> && impl)
+        {
+          smPtr_ = move (impl);
+          return *this;
+        }
+      
       /** deactivate this handle, so it isn't tied any longer
        *  to the associated implementation or service object.
        *  When all handles have either been deactivated or
        *  went out of scope, the associated implementation
        *  reaches end-of-life.
        */
-      void close ()  { smPtr_.reset(); }
-      
-      
-      /** implicit conversion to bool (BoolCheckable) */
-      bool isValid()  const { return bool(smPtr_);}
-      
+      void close ()
+        {
+          smPtr_.reset();
+        }
       
       
       
     protected:
-      IMP& 
+      IMP&
       impl()  const
         {
           REQUIRE (smPtr_.get(), "Lifecycle-Error");

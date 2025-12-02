@@ -1,24 +1,19 @@
 /*
   OpaqueHolder(Test)  -  check the inline type erasure helper
 
-  Copyright (C)         Lumiera.org
-    2009,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2009,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file opaque-holder-test.cpp
+ ** unit test \ref OpaqueHolder_test
+ */
 
 
 
@@ -26,9 +21,7 @@
 #include "lib/test/test-helper.hpp"
 #include "lib/util.hpp"
 #include "lib/util-foreach.hpp"
-
 #include "lib/opaque-holder.hpp"
-#include "lib/bool-checkable.hpp"
 
 #include <iostream>
 #include <vector>
@@ -41,22 +34,22 @@ namespace test{
   using util::isnil;
   using util::for_each;
   using util::isSameObject;
-  using error::LUMIERA_ERROR_BOTTOM_VALUE;
-  using error::LUMIERA_ERROR_WRONG_TYPE;
-  using error::LUMIERA_ERROR_ASSERTION;
+  using LERR_(BOTTOM_VALUE);
+  using LERR_(WRONG_TYPE);
+  using LERR_(ASSERTION);
   
   using std::vector;
   using std::cout;
   using std::endl;
   
   namespace { // test dummy hierarchy
-             //  Note: common storage but no vtable 
+             //  Note: common storage but no vtable
     
     long _checksum = 0;
     uint _create_count = 0;
     
     
-    struct Base   
+    struct Base
       {
         uint id_;
         
@@ -77,7 +70,6 @@ namespace test{
     
     struct Special
       : DD<7>
-      , BoolCheckable<Special>
       {
         ulong myVal_;
         
@@ -85,8 +77,8 @@ namespace test{
           : myVal_(val)
           { }
         
-        bool
-        isValid ()  const ///< custom boolean "validity" check
+        explicit
+        operator bool()  const  ///< custom boolean "validity" check
           {
             return myVal_ % 2;
           }
@@ -181,7 +173,7 @@ namespace test{
           VERIFY_ERROR (WRONG_TYPE, oo.get<D3>() );
           
           // can get a direct reference to contained object
-          D5 &rd5 (oo.get<D5>()); 
+          D5 &rd5 (oo.get<D5>());
           CHECK (isSameObject (rd5, *oo));
           
           CHECK (!isnil(oo));
@@ -244,7 +236,7 @@ namespace test{
        *  @test Moreover, if the concrete class has a custom operator bool(), it
        *        will be invoked automatically from OpaqueHolder's operator bool()
        * 
-       */ 
+       */
       void
       checkSpecialSubclass ()
         {

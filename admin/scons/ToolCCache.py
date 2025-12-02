@@ -1,24 +1,15 @@
-# -*- python -*-
+# coding: utf-8
 ##
 ## ToolCCache.py  -  SCons tool for integrating with CCache compiler cache
 ##
 
-#  Copyright (C)         Lumiera.org and FreeOrion.org
-#    2008,               Hermann Vosseler <Ichthyostega@web.de>
+#  Copyright (C)      Lumiera.org and FreeOrion.org
+#    2008,            Hermann Vosseler <Ichthyostega@web.de>
 #
-#  This program is free software; you can redistribute it and/or
-#  modify it under the terms of the GNU General Public License as
-#  published by the Free Software Foundation; either version 2 of
-#  the License, or (at your option) any later version.
-#
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with this program; if not, write to the Free Software
-#  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+# **Lumiera** is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by the
+# Free Software Foundation; either version 2 of the License, or (at your
+# option) any later version. See the file COPYING for further details.
 #####################################################################
 
 # This SCons builder was extracted from http://www.freeorion.org/
@@ -43,7 +34,7 @@ def generate(env):
         env['CC'] = env.subst('$CCACHE $CC')
     if not env['CCACHE'] in env['CXX']:
         env['CXX'] = env.subst('$CCACHE $CXX')
-    print env.subst("* Build using $CCACHE")
+    print(env.subst("* Build using $CCACHE"))
     
     for i in ['HOME'
              ,'CCACHE_DIR'
@@ -64,7 +55,7 @@ def generate(env):
              ,'CCACHE_UNIFY'
              ,'CCACHE_EXTENSION'
              ]:
-        if os.environ.has_key(i) and not env.has_key(i):
+        if i in os.environ and i not in env:
             env['ENV'][i] = os.environ[i]
 
 

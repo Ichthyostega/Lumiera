@@ -1,40 +1,40 @@
 /*
-  MetaUtils(Test)  -  check some simple type trait helpers 
+  MetaUtils(Test)  -  check some simple type trait helpers
 
-  Copyright (C)         Lumiera.org
-    2011,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2011,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file meta-utils-test.cpp
+ ** unit test \ref MetaUtils_test
+ */
 
 
+#include "lib/symbol.hpp"
 #include "lib/test/run.hpp"
 #include "lib/meta/util.hpp"
 #include "lib/meta/typelist.hpp"
+#include "lib/hetero-data.hpp"
+#include "lib/test/diagnostic-output.hpp"
 
 #include <string>
-
+#include <array>
+#include <tuple>
 
 namespace lib  {
 namespace meta {
 namespace test {
   
   using std::string;
-  
-  
+  using std::array;
+  using std::tuple;
+  using std::pair;
   
   
   
@@ -43,27 +43,30 @@ namespace test {
    * @test verify basic type trait and metaprogramming helpers.
    *       - marker types to tell which overload the compiler picks
    *       - simple trait to detect the possibility of a string conversion
+   *       - trait to detect (possibly) structured types (»tuple-like«)
    *       - trait to detect a typelist type
    */
   class MetaUtils_test : public Test
     {
       void
-      run (Arg) 
+      run (Arg)
         {
-          verify_basicAssumptions();
+          verify_basicTypeProbing();
+          verify_genericTypeDisplay();
           
           detect_stringConversion();
           detect_typeList();
         }
       
       
-      /** @test demonstrate / verify the
-       * basic type trait detection technique:
-       * By investigating the return type, we can
-       * figure out which overload the compiler picks..
+      /** @test demonstrate the basic type trait detection technique:
+       *  - we have two overloads with differing return type
+       *  - we form a function call expression
+       *  - by investigating the return type,
+       *    we can figure out which overload the compiler picks.
        */
       void
-      verify_basicAssumptions()
+      verify_basicTypeProbing()
         {
           CHECK (sizeof(Yes_t) != sizeof (No_t));
           
@@ -75,6 +78,26 @@ namespace test {
       
       static Yes_t probe (int);
       static No_t  probe (...);
+      
+      
+      
+      void
+      verify_genericTypeDisplay()
+        {
+          cout << typeStr<SubString>() <<endl;
+          
+          struct Lunatic
+            : Test
+            {
+              virtual void run (Arg) {}
+            }
+          lunatic;
+          cout << typeStr(lunatic)     << endl;
+          cout << typeStr(&lunatic)      << endl;
+          cout << typeStr((Test &)lunatic) << endl;
+          cout << typeStr((Test *) &lunatic) << endl;
+          cout << typeStr(&Lunatic::run)       << endl;
+        }
       
       
       
@@ -143,13 +166,13 @@ namespace test {
       
       
       //-------------------------------------------------TEST-types--
-      typedef Types< int
-                   , uint
-                   , int64_t
-                   , uint64_t
-                   >::List     TheList;
+      using TheList = Types<int
+                           ,uint
+                           ,int64_t
+                           ,uint64_t
+                           >::List;
       
-      typedef Types<  >::List  EmptyList;
+      using EmptyList = Nil;
       //-------------------------------------------------TEST-types--
       
       

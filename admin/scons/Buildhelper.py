@@ -1,24 +1,15 @@
-# -*- python -*-
+# coding: utf-8
 ##
 ## Buildhelper.py  -  helpers, custom builders, for SConstruct
 ##
 
-#  Copyright (C)         Lumiera.org
-#    2008,               Hermann Vosseler <Ichthyostega@web.de>
+#  Copyright (C)
+#    2008-2025        Hermann Vosseler <Ichthyostega@web.de>
 #
-#  This program is free software; you can redistribute it and/or
-#  modify it under the terms of the GNU General Public License as
-#  published by the Free Software Foundation; either version 2 of
-#  the License, or (at your option) any later version.
-#
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with this program; if not, write to the Free Software
-#  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+# **Lumiera** is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by the
+# Free Software Foundation; either version 2 of the License, or (at your
+# option) any later version. See the file COPYING for further details.
 #####################################################################
 
 import os
@@ -39,8 +30,8 @@ def isCleanupOperation(env):
 def isHelpRequest():
     """ this is a hack: SCons does all configure tests even if only
         the help message is requested. SCons doesn't export the
-        help option for retrieval by env.GetOption(), 
-        so we scan the commandline directly. 
+        help option for retrieval by env.GetOption(),
+        so we scan the commandline directly.
     """
     return '-h' in sys.argv or '--help' in sys.argv
 
@@ -57,14 +48,13 @@ def srcSubtree(tree, **args):
 SRCPATTERNS = ['*.c','*.cpp','*.cc']
 
 def scanSubtree(roots, patterns=SRCPATTERNS):
-    """ first expand (possible) wildcards and filter out non-dirs. 
-        Then scan the given subtree for source filenames 
+    """ first expand (possible) wildcards and filter out non-dirs.
+        Then scan the given subtree for source filenames
         (python generator function)
     """
     for root in globRootdirs(roots):
         for (d,_,files) in os.walk(root):
-            if d.startswith('./'):
-                d = d[2:]
+            d = stripPrefix(d, './')
             for p in patterns:
                 for f in fnmatch.filter(files, p):
                     yield os.path.join(d,f)
@@ -102,7 +92,7 @@ def findSrcTrees(location, patterns=SRCPATTERNS):
 
 def isSrcDir(path, patterns=SRCPATTERNS):
     """ helper: investigate the given (relative) path
-        @param patterns: list of wildcards to define what counts as "source file" 
+        @param patterns: list of wildcards to define what counts as "source file"
         @return: True if it's a directory containing any source file
     """
     if not os.path.isdir(path):
@@ -111,19 +101,6 @@ def isSrcDir(path, patterns=SRCPATTERNS):
         for p in patterns:
             if glob.glob(path+'/'+p):
                 return True
-
-
-
-def filterNodes(nlist, removeName=None):
-    """ filter out scons build nodes using the given criteria.
-        removeName: if set, remove all nodes with this srcname
-    """
-    if removeName:
-        predicate = lambda n : not fnmatch.fnmatch(os.path.basename(str(n[0])), removeName)
-    else:
-        predicate = lambda n : True
-    
-    return filter(predicate, nlist)
 
 
 
@@ -136,12 +113,17 @@ def getDirname (d, basePrefix=None):
         d,_ = os.path.split(d)
     if basePrefix:
         basePrefix = os.path.realpath(basePrefix)
-        name = str(d)
-        if str(d).startswith(basePrefix):
-            name = name[len(basePrefix):]
+        name = stripPrefix(str(d), basePrefix)
     else:
         _, name = os.path.split(d)
     return name
+
+
+
+def stripPrefix(path, prefix):
+    if path.startswith(prefix):
+        path = path[len(prefix):]
+    return path
 
 
 
@@ -149,7 +131,7 @@ def createPlugins(env, directory, **kw):
     """ investigate the given source directory to identify all contained source trees.
         @return: a list of build nodes defining a plugin for each of these source trees.
     """
-    return [env.LumieraPlugin( getDirname(tree) 
+    return [env.LumieraPlugin( getDirname(tree)
                              , srcSubtree(tree)
                              , **kw
                              )
@@ -172,13 +154,13 @@ def checkCommandOption(env, optID, val=None, cmdName=None):
     
     if val=='True' or val=='true' or val=='yes' or val=='1' or val == 1 :
         if not cmdName:
-            print "WARNING: no default for %s, please specify a full path." % optID
+            print("WARNING: no default for %s, please specify a full path." % optID)
             del env[optID]
             return False
         else:
             val = env.WhereIs(cmdName)
             if not val:
-                print "WARNING: %s not found, please specify a full path" % cmdName
+                print("WARNING: %s not found, please specify a full path" % cmdName)
                 del env[optID]
                 return False
     

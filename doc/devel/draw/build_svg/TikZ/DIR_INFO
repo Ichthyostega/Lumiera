@@ -1,0 +1,4 @@
+LaTeX/TikZ source to build graphics in svg formnat
+To run these, you'll require LaTeX and TikZ
+LateX is available on Debian via the texlive package
+TikZ is available froom the texlive-pictures package

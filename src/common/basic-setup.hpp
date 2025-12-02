@@ -1,24 +1,44 @@
 /*
   BASIC-SETUP.hpp  -  elementary self-configuration of the application
 
-  Copyright (C)         Lumiera.org
-    2011,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2011,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
+
+
+/** @file basic-setup.hpp
+ ** Bootstrap and self-configuration of the application at startup.
+ ** The class BasicSetup represents the very basic self-configuration
+ ** of the application at start-up. This bootstrap is based on some
+ ** conventions for the application to "find its parts".
+ ** 
+ ** # Motivation: why a bootstrap convention?
+ ** We want Lumiera to be usable _without the need of a set-up._
+ ** Since the application is meant to be used in media production, users
+ ** often have to work in temporary and varying environments. In such a
+ ** situation, it is desirable just to "unzip and start" an application
+ ** bundle. On the other hand, obviously we want to create a nice and
+ ** proper, FSH compliant application, which can be packaged and installed
+ ** in a modern Linux distribution as first class citizen. We can fulfil
+ ** both demands by establishing a convention how the application can
+ ** discover the very basic parts necessary to start up into the `main()`
+ ** function and read a setup configuration. This setup configuration
+ ** in turn supports the definition of _search paths_ -- which then
+ ** allows us to deliver the application in a bundle structure which
+ ** both can be run from a single root folder and likewise easily
+ ** be mapped into FSH compliant installation folders by the
+ ** packager.
+ ** 
+ ** @see lumiera::AppState::AppState()
+ ** @see main.cpp
+ ** 
+ */
 
 
 #ifndef COMMON_BASIC_SETUP_H
@@ -26,15 +46,15 @@
 
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/util.hpp"
 
 #include <boost/program_options.hpp>
-#include <boost/noncopyable.hpp>
 #include <string>
 
 
 /** "bootstrapIni" : the basic setup configuration to load */
-#define LUMIERA_LOCATION_OF_BOOTSTRAP_INI  "$ORIGIN/setup.ini" 
+#define LUMIERA_LOCATION_OF_BOOTSTRAP_INI  "$ORIGIN/setup.ini"
 
 
 
@@ -63,10 +83,10 @@ namespace lumiera {
    * configuration as a replacement for the time being.
    * 
    * @see configfacade.hpp
-   * @see AppState 
+   * @see AppState
    */
   class BasicSetup
-    : boost::noncopyable
+    : util::NonCopyable
     {
         opt::options_description syntax;
         opt::variables_map settings;
@@ -97,7 +117,7 @@ namespace lumiera {
             throw error::Logic ("Key \""+key+"\" not found in setup.ini");
         }
     };
- 
+  
   
 } // namespace lumiera
 #endif

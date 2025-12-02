@@ -1,0 +1,55 @@
+Towards Integration
+===================
+:date: Spring 2023
+:author: Ichthyostega
+
+//Menu: label Integration
+
+The Lumiera project creates innovative software, geared towards professional, high-quality work;
+it is characterised by comprehensive flexibility, allowing precise control of a wide range of
+parameters, as well as seamless workflows capable of handling even large and complex projects.
+Building such software involves some degree of exploration and the search for suitable ways to
+reconcile sometimes conflicting goals. There is no ready-made blueprint that simply needs to be
+implemented -- rather, we have to resort to a sequence of integration efforts, to establish the
+core tenets of our envisioned architecture.
+
+
+Vertical Slices
+---------------
+
+TIP: A »https://en.wikipedia.org/wiki/Vertical_slice[vertical slice]« is an integration effort
+     that engages all major software components of a software system. It is defined and used as
+     a tool to further and focus the development activity towards large scale integration goals.
+
+
+Populate the Timeline in the UI
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+✔ link:https://issues.lumiera.org/ticket/1014[#1014 »TimelinePopulation«]: +
+Send a description of the model structure in the form of a _population diff_ from the Session
+in Steam-Layer up through the UI-Bus. When received in the UI-Layer, a new Timeline tab will be
+allocated and populated with appropriate widgets to create a GUI-Timeline-View. The generated
+UI structures will feature several nested tracks and some placeholder clips, which can be
+dragged with the mouse. Moreover, the nested track structure is visualised by _custom drawing_
+onto a _canvas widget,_ and the actual colours and shades for this drawing operations will be
+picked up from the current desktop theme, in combination with an CSS application stylesheet.
+
+
+Commands and State Messages via UI-Bus
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+✔ link:https://issues.lumiera.org/ticket/1099[#1014 »Demo GUI Roundtrip«]: +
+Set up a test dialog in the UI, which issues test/dummy commands. These are propagated
+to a dispatcher in Steam-Layer and by special rigging reflected back as _State Mark Messages_
+over the UI-Bus, causing a visible state change in the _Error Log View_ in the UI.
+
+
+Play a clip
+~~~~~~~~~~~
+🗘  link:https://issues.lumiera.org/ticket/1221[#1221 »PlaybackVerticalSlice«]: +
+This vertical slice drives integration of Playback and Rendering.
+While the actual media content is still mocked and hard wired, we get a simple playback control
+in the GUI connected to some suitable display of video. When activated, an existing _ViewConnection_
+is used to initiate a _Play Process_; the _Fixture_ data structure established between high-level-Model
+(Session) and low-level-Model (Render nodes) will back a _Frame Dispatcher_ to generate _Render Jobs,_
+which are then digested and activated by the _Scheduler_ in the Vault-Layer, thereby
+_operating the render nodes_ to generate video data for display.
+

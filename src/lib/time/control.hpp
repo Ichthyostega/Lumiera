@@ -1,22 +1,13 @@
 /*
-  CONTROL.hpp  -  a life time control for feedback and mutation  
+  CONTROL.hpp  -  a life time control for feedback and mutation
 
-  Copyright (C)         Lumiera.org
-    2011,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2011,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
 
@@ -26,7 +17,7 @@
  ** This is an control- and callback element to handle any kind of "running"
  ** time entities. This element is to be provided by the client and then attached
  ** to the target time entity as a time::Mutation. Internally, a life connection to
- ** the target is built, allowing both to 
+ ** the target is built, allowing both to
  ** - to manipulate the target by invoking the function operator
  ** - to receive change notifications by installing a callback functor.
  ** 
@@ -40,7 +31,9 @@
  ** of time-like entities -- be it the running time display in a GUI widget, a ruler marker
  ** which can be dragged, a modifiable selection or the animated playhead cursor.
  ** 
- ** \par usage scenarios
+ ** 
+ ** # Usage scenarios
+ ** 
  ** The time::Control element provides mediating functionality, but doesn't assume or provide
  ** anything special regarding the usage pattern or the lifecycle, beyond the ability to
  ** attach listeners, attach to a (different) target and to detach from all connections.
@@ -59,10 +52,10 @@
  ** may expose a time::Control, thus allowing to attach target and listeners, while the
  ** actual changes will originate somewhere within the opaque service implementation.
  ** 
- ** Another usage pattern would be to expose a time::Control \c const&, allowing only to
+ ** Another usage pattern would be to expose a `time::Control const&`, allowing only to
  ** impose changes, but not to change the target or listener attachments. To the contrary,
- ** when exposing only a time::Mutation \c const& through an interface allows only to
- ** attach new target elements, but not to change listeners or feed any value changes.
+ ** exposing only a time::Mutation \c const& through some interface allows only to attach
+ ** new target elements, but not to change listeners or feed any value changes.
  ** 
  ** Using time::Control as an implementation building block and just exposing the
  ** change (function) operators or the listener attachment through an forwarding sub
@@ -71,7 +64,7 @@
  ** @note time::Control is default constructible and freely copyable.
  ** 
  ** 
- ** \par changing quantised (grid aligned) time entities
+ ** ## Changing quantised (grid aligned) time entities
  ** 
  ** The time::Control element includes the functionality to handle grid aligned time values,
  ** both as target and as change/notification value. This ability is compiled in conditionally,
@@ -80,7 +73,8 @@
  ** the LIB_TIME_TIMEQUANT_H header guard needs to be defined, which happens automatically
  ** if lib/time/mutation.hpp is included prior to lib/time/control.hpp.
  ** 
- ** \par implementation notes
+ ** 
+ ** # implementation notes
  ** - the validity of a given combination of change and target is checked immediately,
  **   when connecting to the target. Depending on the situation, the actual changes later
  **   are subject to specific treatment (e.g. frame quantisation)
@@ -136,7 +130,7 @@ namespace time {
       virtual void change (Duration&)  const;
       virtual void change (TimeSpan&)  const;
       virtual void change (QuTime&)    const;
-        
+      
     public:
       void operator() (TI const&)      const;
       void operator() (Offset const&)  const;

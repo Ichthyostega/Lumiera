@@ -1,28 +1,19 @@
 /*
   GENFUNC.hpp  -  generic identification functions
 
-  Copyright (C)         Lumiera.org
-    2015,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2015,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
 
 
 /** @file genfunc.hpp
- ** Generic function to build identification schemes.
+ ** Generic functions to build identification schemes.
  ** These template functions are meant as common extension point.
  ** The purpose is to streamline and disentangle the various identification schemes
  ** in use at various places within Lumiera. We strive to cover all the common basic
@@ -55,16 +46,22 @@
 
 
 namespace lib {
+namespace meta{
+  std::string demangleCxx (lib::Literal rawName);
+  std::string humanReadableTypeID (lib::Literal);
+  std::string primaryTypeComponent (lib::Literal);
+  std::string sanitisedFullTypeName(lib::Literal);
+}// implemented in format-obj.cpp
+
 namespace idi {
   
   using lib::HashVal;
   using std::string;
   
   namespace format { // integration helpers...
-    string demangled_innermost_component (const char* rawName);
-    string demangled_sanitised_name      (const char* rawName);
     
-    string instance_formatter (string const& prefix, long instanceNr);
+    string instance_format (string const& prefix, size_t instanceNr);
+    string instance_hex_format (string const& prefix, size_t instanceNr);
     
   } //(End)integration helpers...
   
@@ -73,12 +70,14 @@ namespace idi {
   /** Short readable type identifier, not necessarily unique or complete.
    * @return the innermost component of the demangled C++ type name.
    *         Usually, this is the bare name without any namespaces.
+   * @note this function is also defined in lib/meta/util.hpp,
+   *       both delegating to the same implementation
    */
   template<typename TY>
   inline string
   typeSymbol()
   {
-    return format::demangled_innermost_component (typeid(TY).name());
+    return lib::meta::primaryTypeComponent (typeid(TY).name());
   }
   
   /** Complete unique type identifier
@@ -90,7 +89,7 @@ namespace idi {
   inline string
   typeFullID()
   {
-    return format::demangled_sanitised_name (typeid(TY).name());
+    return lib::meta::sanitisedFullTypeName (typeid(TY).name());
   }
   
   template<typename TY>
@@ -107,6 +106,21 @@ namespace idi {
     return typeSymbol<TY>();
   }
   
+  /** designation of an distinct object instance
+   * @param obj pointer to the memory location of the object
+   * @return a notation "typename.hash", where the hash is given
+   *         as 4 hex digits derived from the memory location
+   */
+  template<typename TY>
+  inline string
+  instanceTypeID(const TY *const obj)
+  {
+    return format::instance_hex_format (namePrefix<TY>(), (size_t(obj) / alignof(TY)) % (1<<16));
+  }
+  
+  
+  TypedCounter& sharedInstanceCounter();
+  
   
   /** build a per-type identifier, with type prefix and running counter.
    * @return a type based prefix, followed by an instance number
@@ -121,19 +135,31 @@ namespace idi {
   inline string
   generateSymbolicID()
   {
-    static TypedCounter instanceCounter;
-    return format::instance_formatter (namePrefix<TY>(), instanceCounter.inc<TY>());
+    return format::instance_format (namePrefix<TY>(), sharedInstanceCounter().inc<TY>());
+  }
+  
+  /** build a long type based identifier, with running counter and custom prefix.
+   * @param prefix optional prefix to prepend to the generated ID
+   * @return a ID string based on the full type, followed by an instance number
+   * @warning for one, like \ref generateSymbolicID(), this operation is not really
+   *          cheap. And then, since the type ID is slightly abbreviated and then
+   *          mangled, there is still the possibility of occasional clashes.
+   */
+  template<class TY>
+  inline string
+  generateExtendedID(string prefix ="")
+  {
+    return format::instance_format (prefix + typeFullID<TY>(), sharedInstanceCounter().inc<TY>());
   }
   
   /**
-   * @return a boost hash value, based on the full (mangled) C++ type name
+   * @return a standard hash value, based on the full (mangled) C++ type name
    */
   template<typename TY>
   inline HashVal
   getTypeHash()
   {
-    Literal rawTypeName (typeid(TY).name());
-    return hash_value (rawTypeName);
+    return typeid(TY).hash_code();
   }
   
   

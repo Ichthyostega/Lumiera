@@ -1,29 +1,20 @@
 /*
   TypeSeqManip(Test)  -  simple manipulations on type sequences
 
-  Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2008,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+* *****************************************************************/
 
 
 /** @file typeseq-manip-test.cpp
  ** verify the proper working of simple type sequence manipulations.
- ** Here, "type sequence" denotes an instance of the template Types<T1,T2,...> from
+ ** Here, "type sequence" stands for an instance of the template Types<T1,T2,...> from
  ** typelist.hpp . While this template is the entry point to type list metaprogramming,
  ** in many cases it is useful on its own for specifying a fixed collection of types, e.g.
  ** for building a tuple type. Thus, while more complicated manipulations typically rely
@@ -42,13 +33,7 @@
 #include "lib/meta/typelist-manip.hpp"
 #include "meta/typelist-diagnostics.hpp"
 
-#include <boost/format.hpp>
-#include <iostream>
-
-using ::test::Test;
 using std::string;
-using std::cout;
-using std::endl;
 
 
 namespace lib  {
@@ -56,21 +41,16 @@ namespace meta {
 namespace test {
   
   
-  namespace { // test data
+  namespace { // type-sequences to test with
     
-    
-    
-    typedef Types< Num<1>
-                 , Num<2>
-                 , Num<3>
-                 >         Types1;
-    typedef Types< Num<7>
-                 , Num<8>
-                 , Num<9>
-                 >         Types2;
-    
-    
-    // see also the CountDown template in typelist-diagnostics.hpp...
+    using Types1 = Types< Num<1>
+                        , Num<2>
+                        , Num<3>
+                        >;
+    using Types2 = Types< Num<7>
+                        , Num<8>
+                        , Num<9>
+                        >;
     
   } // (End) test data
   
@@ -86,11 +66,12 @@ namespace test {
    *       - create shifted sequences
    *       - dissect a sequence to extract head, tail, prefix, last element
    */
-  class TypeSeqManipl_test : public Test
+  class TypeSeqManip_test : public Test
     {
       virtual void
-      run (Arg) 
+      run (Arg)
         {
+          check_indexOf ();
           check_buildSeq();
           check_prepend ();
           check_shift   ();
@@ -99,79 +80,86 @@ namespace test {
       
       
       void
+      check_indexOf()
+        {
+          CHECK ((0 == indexOfType<int,    int, string, string>()));
+          CHECK ((1 == indexOfType<string, int, string, string>()));
+          CHECK ((2 == indexOfType<int,    string, string, int>()));
+//        indexOfType<int>();
+//        indexOfType<int,long,long>();                           // does not compile...
+        }
+      
+      
+      void
       check_buildSeq ()
         {
-          typedef Append<Types1::List, Types2::List>::List LL;
-          DISPLAY (LL);
+          using LL = Append<Types1::List, Types2::List>::List;
+          EXPECT (LL, "-<1>-<2>-<3>-<7>-<8>-<9>-");
           
-          typedef Types<LL>::Seq Seq;
-          typedef Seq::List SeqList;
-          DISPLAY (Seq);
-          DISPLAY (SeqList);
+          using Seq     = Types<LL>::Seq;
+          using SeqList = Seq::List;
+          EXPECT (Seq,     "-<1>-<2>-<3>-<7>-<8>-<9>-");
+          EXPECT (SeqList, "-<1>-<2>-<3>-<7>-<8>-<9>-");
           
-          typedef Types<NodeNull>::Seq NulS;
-          DISPLAY (NulS);
+          using NulS = Types<NilNode>::Seq;
+          EXPECT (NulS, "-");
         }
       
       
       void
       check_prepend ()
         {
-          typedef Prepend<Num<5>, Types1> Prepend1;
-          DISPLAY(Prepend1);
-          
-          typedef Prepend<NullType, Types1> Prepend2;
-          DISPLAY(Prepend2);
-          
-          typedef Prepend<Num<5>,  Types<> > Prepend3;
-          DISPLAY(Prepend3);
-          
-          typedef Prepend<NullType,  Types<> > Prepend4;
-          DISPLAY(Prepend4);
+          using Prepend1 = Prepend<Num<5>, Types1 >;   EXPECT (Prepend1, "-<5>-<1>-<2>-<3>-");
+          using Prepend2 = Prepend<Nil,    Types1 >;   EXPECT (Prepend2, "-<·>-<1>-<2>-<3>-");
+          using Prepend3 = Prepend<Num<5>, Types<>>;   EXPECT (Prepend3, "-<5>-");
+          using Prepend4 = Prepend<Nil,    Types<>>;   EXPECT (Prepend4, "-");
         }
       
       
       void
       check_shift ()
         {
-          typedef Append<Types2::List, Types1::List>::List LL;
-          typedef Types<LL>::Seq Seq;
+          using LL  = Append<Types2::List, Types1::List>::List;
+          using Seq = Types<LL>::Seq;
           
-          typedef Shifted<Seq,0>::Type Seq_0;  DISPLAY (Seq_0);
-          typedef Shifted<Seq,1>::Type Seq_1;  DISPLAY (Seq_1);
-          typedef Shifted<Seq,2>::Type Seq_2;  DISPLAY (Seq_2);
-          typedef Shifted<Seq,3>::Type Seq_3;  DISPLAY (Seq_3);
-          typedef Shifted<Seq,4>::Type Seq_4;  DISPLAY (Seq_4);
-          typedef Shifted<Seq,5>::Type Seq_5;  DISPLAY (Seq_5);
-          typedef Shifted<Seq,6>::Type Seq_6;  DISPLAY (Seq_6);
+          using  Seq_0 =       Shifted<Seq,0>::Type;   EXPECT (Seq_0,  "-<7>-<8>-<9>-<1>-<2>-<3>-");
+          using  Seq_1 =       Shifted<Seq,1>::Type;   EXPECT (Seq_1,  "-<8>-<9>-<1>-<2>-<3>-");
+          using  Seq_2 =       Shifted<Seq,2>::Type;   EXPECT (Seq_2,  "-<9>-<1>-<2>-<3>-");
+          using  Seq_3 =       Shifted<Seq,3>::Type;   EXPECT (Seq_3,  "-<1>-<2>-<3>-");
+          using  Seq_4 =       Shifted<Seq,4>::Type;   EXPECT (Seq_4,  "-<2>-<3>-");
+          using  Seq_5 =       Shifted<Seq,5>::Type;   EXPECT (Seq_5,  "-<3>-");
+          using  Seq_6 =       Shifted<Seq,6>::Type;   EXPECT (Seq_6,  "-");
           
-          typedef Types<Shifted<Seq,0>::Head> Head_0; DISPLAY (Head_0);
-          typedef Types<Shifted<Seq,1>::Head> Head_1; DISPLAY (Head_1);
-          typedef Types<Shifted<Seq,2>::Head> Head_2; DISPLAY (Head_2);
-          typedef Types<Shifted<Seq,3>::Head> Head_3; DISPLAY (Head_3);
-          typedef Types<Shifted<Seq,4>::Head> Head_4; DISPLAY (Head_4);
-          typedef Types<Shifted<Seq,5>::Head> Head_5; DISPLAY (Head_5);
-          typedef Types<Shifted<Seq,6>::Head> Head_6; DISPLAY (Head_6);
+          using Head_0 = Types<Shifted<Seq,0>::Head>;  EXPECT (Head_0, "-<7>-");
+          using Head_1 = Types<Shifted<Seq,1>::Head>;  EXPECT (Head_1, "-<8>-");
+          using Head_2 = Types<Shifted<Seq,2>::Head>;  EXPECT (Head_2, "-<9>-");
+          using Head_3 = Types<Shifted<Seq,3>::Head>;  EXPECT (Head_3, "-<1>-");
+          using Head_4 = Types<Shifted<Seq,4>::Head>;  EXPECT (Head_4, "-<2>-");
+          using Head_5 = Types<Shifted<Seq,5>::Head>;  EXPECT (Head_5, "-<3>-");
+          using Head_6 = Types<Shifted<Seq,6>::Head>;  EXPECT (Head_6, "-"    );
+          using Head_7 = Types<Shifted<Seq,7>::Head>;  EXPECT (Head_7, "-"    );
         }
       
       
       void
       check_split ()
         {
-          typedef Append<Types1::List, Types2::List>::List LL;
-          typedef Types<LL>::Seq Seq;
-          DISPLAY (Seq);
+          using LL  = Append<Types1::List, Types2::List>::List;
+          using Seq = Types<LL>::Seq;           EXPECT (Seq   , "-<1>-<2>-<3>-<7>-<8>-<9>-");
           
-          typedef Split<Seq>::List   List;     DISPLAY(List); 
-          typedef Split<Seq>::First  First;    DISPLAY(First); 
-          typedef Split<Seq>::Tail   Tail;     DISPLAY(Tail);
-          typedef Split<Seq>::Prefix Prefix;   DISPLAY(Prefix);
-          typedef Split<Seq>::Last   Last;     DISPLAY(Last);
+          using List   = Split<Seq>::List;      EXPECT (List  , "-<1>-<2>-<3>-<7>-<8>-<9>-");
+          using First  = Split<Seq>::First;     EXPECT (First , "-<1>-"                    );
+          using Tail   = Split<Seq>::Tail;      EXPECT (Tail  , "-<2>-<3>-<7>-<8>-<9>-"    );
+          using Prefix = Split<Seq>::Prefix;    EXPECT (Prefix, "-<1>-<2>-<3>-<7>-<8>-"    );
+          using Last   = Split<Seq>::Last;      EXPECT (Last  , "-<9>-"                    );
           
-          typedef Split<Seq>::Head   Head;
-          typedef Split<Seq>::End    End;
+          using Head   = Split<Seq>::Head;
+          using End    = Split<Seq>::End;
           
-          typedef Types<Head,End>  HeadEnd;    DISPLAY(HeadEnd);
+          using Ends   = Types<Head,End>;       EXPECT (Ends  , "-<1>-<9>-");
+          
+          using NoList = Split<Types<>>::List;  EXPECT (NoList, "-");
+          using NoHead = Split<Types<>>::Head;  EXPECT (NoHead, "-");
         }
       
       
@@ -179,7 +167,7 @@ namespace test {
   
   
   /** Register this test class... */
-  LAUNCHER (TypeSeqManipl_test, "unit common");
+  LAUNCHER (TypeSeqManip_test, "unit common");
   
   
   

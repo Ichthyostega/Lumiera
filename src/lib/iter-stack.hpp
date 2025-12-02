@@ -1,22 +1,13 @@
 /*
-  ITER-STACK.hpp  -  a stack which can be popped by iterating 
+  ITER-STACK.hpp  -  a stack which can be popped by iterating
 
-  Copyright (C)         Lumiera.org
-    2012,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2012,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
 
@@ -40,8 +31,8 @@
  **          and a container at the same time. Which opens the interesting possibility
  **          to intermix retrieval and feeding of new elements. It can be seen as a
  **          zero overhead adapter to ease the use within Lumiera's library framework.
- ** @note    EX_STRONG, since std::deque gives this guarantee for push and pop operations    
- ** @warning STL containers aren't thread safe. 
+ ** @note    EX_STRONG, since std::deque gives this guarantee for push and pop operations
+ ** @warning STL containers aren't thread safe.
  ** 
  ** @see IterStack_test
  ** @see IterQueue_test
@@ -62,12 +53,14 @@
 #include "lib/util.hpp"
 
 #include <deque>
+#include <utility>
 
 
 namespace lib {
   
-  namespace { 
-    using util::unConst;
+  using util::unConst;
+  
+  namespace iter {
     
     /**
      * Wrapper to mark a std::deque instance for use
@@ -80,27 +73,27 @@ namespace lib {
       {
         /* === Iteration control API for IterStateWrapper == */
         
-        friend bool
-        checkPoint (IterDequeStorage const& elements)
-        {
-          return not elements.empty();
-        }
+        bool
+        checkPoint()  const
+          {
+            return not this->empty();
+          }
         
-        friend TY &
-        yield (IterDequeStorage const& elements)
-        {
-          REQUIRE (not elements.empty());
-          return unConst(elements).back();
-        }
+        TY &
+        yield()  const
+          {
+            REQUIRE (not this->empty());
+            return unConst(this)->back();
+          }
         
-        friend void
-        iterNext (IterDequeStorage & elements)
-        {
-          REQUIRE (not elements.empty());
-          elements.pop_back();
-        }
+        void
+        iterNext()
+          {
+            REQUIRE (not this->empty());
+            this->pop_back();
+          }
       };
-  }//(End) Wrapper/Helper
+  } // namespace lib::iter
   
   
   
@@ -118,7 +111,7 @@ namespace lib {
    */
   template<class TY>
   struct IterStack
-    : IterStateWrapper<TY, IterDequeStorage<TY> >
+    : IterStateWrapper<iter::IterDequeStorage<TY>>
     {
       
       // using default create and copy operations
@@ -127,6 +120,13 @@ namespace lib {
       push (TY const& elm)
         {
           this->stateCore().push_back (elm);
+          return *this;
+        }
+      
+      IterStack&
+      push (TY&& elm)
+        {
+          this->stateCore().emplace_back (std::move (elm));
           return *this;
         }
       
@@ -141,16 +141,37 @@ namespace lib {
       pop()
         {
           this->__throw_if_empty();
-          TY topElement (this->stateCore().back());
+          TY topElement (std::move (this->stateCore().back()));
           this->stateCore().pop_back();
           return topElement;
+        }
+      
+      void
+      clear()
+        {
+          this->stateCore().clear();
+        }
+      
+      
+      /* == diagnostics == */
+      
+      size_t
+      size()  const
+        {
+          return unConst(this)->stateCore().size();
+        }
+      
+      bool
+      empty() const
+        {
+          return 0 == size();
         }
     };
   
   
   
   
-  /** 
+  /**
    * A Queue which can be pulled by iterating.
    * As a variation of the IterStack frontend, here the
    * exposed additional interface works like a queue:
@@ -160,12 +181,12 @@ namespace lib {
    * both feed and the iterating operation in amortised
    * constant time, using chunk wise heap allocations.
    * Feeding of new elements into the queue and
-   * retrieving old elements by iteration 
+   * retrieving old elements by iteration
    * may be mixed freely.
    */
   template<class TY>
   struct IterQueue
-    : IterStateWrapper<TY, IterDequeStorage<TY> >
+    : IterStateWrapper<iter::IterDequeStorage<TY>>
     {
       
       // using default create and copy operations
@@ -174,6 +195,13 @@ namespace lib {
       feed (TY const& elm)
         {
           this->stateCore().push_front (elm);
+          return *this;
+        }
+      
+      IterQueue&
+      feed (TY&& elm)
+        {
+          this->stateCore().emplace_front (std::move (elm));
           return *this;
         }
       
@@ -187,19 +215,34 @@ namespace lib {
       pop()
         {
           this->__throw_if_empty();
-          TY firstElement (this->stateCore().back());
+          TY firstElement (std::move (this->stateCore().back()));
           this->stateCore().pop_back();
           return firstElement;
         }
       
       
-      /** 
+      /* == diagnostics == */
+      
+      size_t
+      size()  const
+        {
+          return unConst(this)->stateCore().size();
+        }
+      
+      bool
+      empty() const
+        {
+          return 0 == size();
+        }
+      
+      
+      /**
        * Adapter for use as opaque sequence.
        * This builder exposes generic operations
        * to prepare and pre-fill a sequence
        */
       struct Builder
-        : util::no_copy_by_client
+        : util::NonCopyable
         {
           Builder(IterQueue& initialElements)
             : queue_(initialElements)
@@ -233,7 +276,7 @@ namespace lib {
        * @param initial the initial contents of the queue
        *        to start with, maybe empty. This parameter
        *        also acts as type tag to pick this \c build()
-       *        function by ADL 
+       *        function by ADL
        */
       friend IterQueue::Builder
       build (IterQueue& initial)

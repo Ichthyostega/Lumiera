@@ -1,24 +1,19 @@
 /*
   SymbolHashtable(Test)  -  building a hashtable with Symbol (id) keys
 
-  Copyright (C)         Lumiera.org
-    2009,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2009,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file symbol-hashtable-test.cpp
+ ** unit test \ref SymbolHashtable_test
+ */
 
 
 
@@ -54,7 +49,7 @@ namespace test{
     
   }
   
-  typedef std::unordered_map< Symbol, string, hash<Symbol> > HTable;
+  typedef std::unordered_map< Symbol, string, hash<Symbol>> HTable;
   
   
   /*********************************************************//**
@@ -69,6 +64,7 @@ namespace test{
       virtual void
       run (Arg)
         {
+          seedRand();
           checkHashFunction();
           
           HTable table;
@@ -110,10 +106,10 @@ namespace test{
           copy1[5] = '\0';      // truncate the c-String to 5 chars
           
           string copy2(random);
-          copy2[rand() % STRING_MAX_RELEVANT] = '*';  // modify a random position
+          copy2[rani (STRING_MAX_RELEVANT)] = '*';  // modify a random position
           
           string copy3(copy2);
-          copy3[STRING_MAX_RELEVANT]          = '*';  // modify behind observation limit
+          copy3[STRING_MAX_RELEVANT]        = '*';  // modify behind observation limit
           
           Symbol  l0;
           Literal l51 (copy1.c_str());

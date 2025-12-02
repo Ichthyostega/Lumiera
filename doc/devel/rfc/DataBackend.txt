@@ -1,12 +1,12 @@
 Design Process : Data Backend
 =============================
 
-[grid="all"]
-`------------`-----------------------
-*State*         _Final_
-*Date*          _2007-06-04_
-*Proposed by*   link:ct[]
--------------------------------------
+[options="autowidth"]
+|====================================
+|*State*       | _Dropped_
+|*Date*        | _2007-06-04_
+|*Proposed by* | ct
+|====================================
 
 DataBackend
 -----------
@@ -17,59 +17,100 @@ Description
 ~~~~~~~~~~~
 This just starts as braindump, I will refine it soon:
 
-. handle all files lumiera uses at runtime (media, edl, temp data)
-. manage filehandles, lumiera might use more more files than available
-  filehandles
-. manage temporary data
-. do caching
-. io will be blocked where the backend tells the core where it can expect the
-  data (not read()/write() like)
-. kindof garbage collector
-. do prefetching
-. no/low latency for the core the prefetcher and other things ensure that data
-  is available in time
-. translate any input into a format which the lumiera core understands (demux,
-  decode)
-. same for encoding to output formats
-. offer a plugin API for encoders/decoders
-. maybe network backend for serving data to distributed rendernodes
-. can do some load control or management (trigger adaptive rendering if system
-  is idle etc)
-. pull based arch
+- handle all files lumiera uses at runtime (media, edl, temp data)
+- manage filehandles, lumiera might use more more files than available filehandles
+- manage temporary data
+- do caching
+- IO will be blocked where the backend tells the core where it can expect the data (not `read()`/`write()` like)
+- kindof garbage collector
+- do prefetching
+- no/low latency for the core the prefetcher and other things ensure that data is available in time
+- translate any input into a format which the lumiera core understands (demux, decode)
+- same for encoding to output formats
+- offer a plugin API for encoders/decoders
+- maybe network backend for serving data to distributed rendernodes
+- can do some load control or management (trigger adaptive rendering if system is idle etc)
+- pull based architecture
 
 .Notes:
-* ichthyo wrote also some ideas on
-  http://www.pipapo.org/pipawiki/Cinelerra/Developers/ichthyo/Cinelerra3/Architecture[Architecture] and a sketch/draft about http://www.pipapo.org/pipawiki/Cinelerra/Developers/ichthyo/Possibilities_at_hand[things possible in the middle layer]
+* ichthyo wrote also some ideas regarding
+  link:http://localhost:8888/project/background/history/PossibilitiesAtHand.html[things possible in the middle layer]...
 
 
-Tasks
-^^^^^
+Conclusion: Dropped
+-------------------
+The underlying principles remain valid, yet development took another
+direction during the last years. Special frameworks for high-performance
+asynchronous IO will be used for dedicated use cases. A garbage collector
+is not necessary, since Lumiera relies on deterministic memory management.
+Furthermore, decoding, transcoding and encoding is handled as part of the
+pipeline and not through a separate service.
 
+Ichthyostega:: '2023-10-24' ~<prg@ichthyostega.de>~
 
-Pros
-^^^^
-
-
-Cons
-^^^^
-
-
-Alternatives
-^^^^^^^^^^^^
-
-
-Rationale
-~~~~~~~~~
 
 
 Comments
 --------
 
 Sounds fairly complete to me
- -- link:Ichthyostega[] [[DateTime(2007-06-16T23:19:44Z)]]
+
+Ichthyostega:: '2007-06-16T23:19:44Z'
 
 Developement takes place in the repo now
- -- link:ct[] [[DateTime(2007-06-27T16:14:56Z)]]
+
+ct:: '2007-06-27T16:14:56Z'
+
+.State -> Parked
+Development took another direction over the last years;
+the former »Backend« layer is called »Vault« now and structured differently.
+
+Ichthyostega:: '2023-10-24T22:45:55Z'
+
+
+.State -> Dropped
+The approach to most of the topics listed in this RfC has shifted, and thus
+it is time to draw the conclusion that overall Lumiera will not use a »Backend«
+as an _adaptation layer,_ in the way envisioned here. Notably the idea of
+centralising _any access to resources_ to apply some kind of instrumentation
+and regulation is rejected. Rather, the »Vault« (as it is called now),
+provides specialised low-level services with deep vertical integration;
+this implies rather to establish dedicated control circuits for a small
+number of special resources deemed performance critical.
+
+Most topics touched by this RfC however remain relevant,
+yet will be approached differently...
+
+- while non-blocking, asynchronous I/O is still considered essential,
+  it is acknowledged that getting a grip at the resource usage of
+  external libraries and frameworks, integrated via plug-in, is a
+  non-trivial task, and must be approached at a case-by-case base.
+
+- the Scheduler provides a much more high-level and specialised
+  execution service then intended initially; the majority of
+  resource usage regulation will be achieved by adjusting the
+  job generation, which is connected to high-level structures,
+  while relying on generic resource observation facilities
+  in the Vault.
+
+- the Cache service will require a deep integration with the Builder
+  and the media / asset management; _cache invalidation_ will be
+  based on a _naming and identification scheme,_ which requires
+  explicit support by the high-level metadata management.
+
+- the Vault has no connection to media processing whatsoever,
+  it does not decode / encode data or mark and map parts of
+  media streams; this topic is coordinated at the level of
+  the builder and delegated to external facilities, while
+  the Vault provides some dedicated resource management
+  (notably handling GPU access and shader code)
+
+- file handles and generic file access are considered a non-issue,
+  as is the occasional usage of multithreading -- as long as any
+  substantial parallelism is organised through the scheduler.
+
+Ichthyostega:: '2025-09-20'
+
 
 ''''
-Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
+Back to link:/x/DesignProcess.html[Lumiera Design Process overview]

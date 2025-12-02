@@ -1,33 +1,28 @@
 /*
   MultiFactSingleton(Test)  -  using MultiFact to manage a family of singletons
 
-  Copyright (C)         Lumiera.org
-    2009,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2009,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file multifact-singleton-test.cpp
+ ** unit test \ref MultiFactSingleton_test
+ */
 
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/multifact.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
 #include <boost/lexical_cast.hpp>
-#include <iostream>
 #include <string>
 
 
@@ -41,10 +36,8 @@ namespace test{
   using util::isnil;
   using std::ostream;
   using std::string;
-  using std::cout;
-  using std::endl;
   
-  using lumiera::error::LUMIERA_ERROR_INVALID;
+  using LERR_(INVALID);
   
   
   namespace { // hierarchy of test dummy objects
@@ -52,10 +45,8 @@ namespace test{
     struct Interface
       {
         virtual ~Interface() {};
-        virtual operator string () =0;
+        virtual operator string () const  =0;
       };
-    
-    inline ostream& operator<< (ostream& os, Interface& ifa) { return os << string(ifa); }
     
     
     enum theID
@@ -72,7 +63,7 @@ namespace test{
     class Implementation
       : public Interface
       {
-        operator string()  override
+        operator string()  const override
           {
             return "Impl-"+lexical_cast<string> (ii);
           }
@@ -82,10 +73,10 @@ namespace test{
     TestFactory theFact;
     
     // Configure the products to be fabricated....
-    TestFactory::Singleton<Implementation<ONE> > holder1 (theFact,ONE);
-    TestFactory::Singleton<Implementation<TWO> > holder2 (theFact,TWO);
-    TestFactory::Singleton<Implementation<THR> > holder3 (theFact,THR);
-    TestFactory::Singleton<Implementation<FOU> > holder4 (theFact,FOU);
+    TestFactory::Singleton<Implementation<ONE>> holder1{theFact,ONE};
+    TestFactory::Singleton<Implementation<TWO>> holder2{theFact,TWO};
+    TestFactory::Singleton<Implementation<THR>> holder3{theFact,THR};
+    TestFactory::Singleton<Implementation<FOU>> holder4{theFact,FOU};
   }
   
   
@@ -128,7 +119,7 @@ namespace test{
           CHECK (isnil (anotherFact));
           VERIFY_ERROR (INVALID, anotherFact(ONE) );
           
-          TestFactory::Singleton<Implementation<ONE> > anotherSingletonHolder (anotherFact,ONE);
+          TestFactory::Singleton<Implementation<ONE>> anotherSingletonHolder (anotherFact,ONE);
           Interface & o3 = anotherFact(ONE);
           CHECK (isSameObject(o2,o3));
         } 

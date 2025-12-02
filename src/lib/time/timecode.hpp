@@ -1,24 +1,27 @@
 /*
   TIMECODE.hpp  -  grid aligned and fixed format time specifications
 
-  Copyright (C)         Lumiera.org
-    2010,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2010,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
+
+
+/** @file timecode.hpp
+ ** Timecode handling library
+ ** This header defines the foundation interface TCode to represent a grid aligned
+ ** time specification, given in some well-established time code format. It is complemented
+ ** by implementations of the most relevant practical time code formats
+ ** - frame numbers / frame counting
+ ** - SMPTE (hours, minutes, seconds and frames) -- including drop-frame
+ ** - HMS (hours, minutes, seconds and fractional seconds)
+ ** - fractional seconds as rational number
+ */
 
 
 #ifndef LIB_TIME_TIMECODE_H
@@ -29,7 +32,6 @@
 #include "lib/time/digxel.hpp"
 #include "lib/symbol.hpp"
 
-//#include <iostream>
 #include <boost/operators.hpp>
 #include <boost/lexical_cast.hpp> ///////////////TODO
 #include <string>
@@ -46,7 +48,10 @@ namespace time {
   /**
    * Interface: fixed format timecode specification.
    * @see time::format
-   * @todo WIP-WIP-WIP
+   * @todo as of 2016 this is basically finished since years,
+   *       but still not in any widespread practical use (not by bad intention,
+   *       simply by lack of opportunities). So this core interface still needs
+   *       some feedback from practice in order to be finalised.
    */
   class TCode
     {
@@ -86,7 +91,7 @@ namespace time {
    * (rounded) into a definite integral number, stripping the excess
    * precision contained in the original (raw) TimeValue.
    * As framecount values are implemented as single display field for an
-   * integral value (time::Digxel), they allow for simple presentation. 
+   * integral value (time::Digxel), they allow for simple presentation.
    */
   class FrameNr
     : public TCode
@@ -94,13 +99,16 @@ namespace time {
     {
       
       string show()     const { return string(CountVal::show())+"#"; }
-      Literal tcID()    const { return "Framecount"; } 
+      Literal tcID()    const { return "Framecount"; }
       TimeValue value() const { return Format::evaluate (*this, *quantiser_); }
       
     public:
-      typedef format::Frames Format;
+      using Format = format::Frames;
       
       FrameNr (QuTime const& quantisedTime);
+      
+      /** convenience shortcut: time grid to frame number */
+      static FrameCnt quant (Time const&, Symbol gridID);// defined in common-services.cpp
       
       using TCode::operator string;
      // CountVal implicitly convertible to long      ///////////TICKET #882 : outch! should be a 64bit type!
@@ -145,7 +153,7 @@ namespace time {
       
       
     public:
-      typedef format::Smpte Format;
+      using Format = format::Smpte;
       
       SmpteTC (QuTime const& quantisedTime);
       SmpteTC (SmpteTC const&);
@@ -172,32 +180,38 @@ namespace time {
   
   /**
    * @warning missing implementation
-   */
+   *   - not clear what we need and want
+   *   - because also the use cases for H:M:S are not well defined
+   *   - notable question: do we need/want a milliseconds part?
+   *   - do we even want to go into fractional milliseconds,
+   *     down to the µ-Grid? Or do we want that to be configurable?
+   */        ////////////////////////////////////////////////////////////////////////////////////////////////TICKET #736 implement HMS format
   class HmsTC
     : public TCode
     {
-      TimeVar tpoint_;
+      TimeVar tpoint_;          ///< @deprecated most definitively we do not want numeric computations here in this object
       
       virtual string show()     const { return string(tpoint_); }
-      virtual Literal tcID()    const { return "Timecode"; }        
-      virtual TimeValue value() const { return tpoint_; }        
+      virtual Literal tcID()    const { return "Timecode"; }
+      virtual TimeValue value() const { return tpoint_; }
       
     public:
-      typedef format::Hms Format;
+      using Format = format::Hms;
       
       HmsTC (QuTime const& quantisedTime);
       
+      ///////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #750 we do not want numeric accessors her — rather we want Digxel members
       double getMillis () const;
-      int getSecs      () const; 
-      int getMins      () const; 
-      int getHours     () const; 
+      int getSecs      () const;
+      int getMins      () const;
+      int getHours     () const;
     };
   
   
   
   /**
    * @warning partially missing implementation
-   */
+   */        ////////////////////////////////////////////////////////////////////////////////////////////////TICKET #736 implement Seconds format
   class Secs
     : public TCode
     {
@@ -208,14 +222,14 @@ namespace time {
       virtual TimeValue value() const { return Time(sec_); }
       
     public:
-      typedef format::Seconds Format;
+      using Format = format::Seconds;
       
       Secs (QuTime const& quantisedTime);
       
       operator FSecs()  const;
     };
   
-    
+  
   /** writes time value, formatted as HH:MM:SS:mmm */
   
 

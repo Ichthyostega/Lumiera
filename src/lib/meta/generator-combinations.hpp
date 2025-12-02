@@ -1,22 +1,13 @@
 /*
   GENERATOR-COMBINATIONS.hpp  -  generate combinations and variations
 
-  Copyright (C)         Lumiera.org
-    2011,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2011,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
 
@@ -81,12 +72,12 @@ namespace meta{
    *       Typically you'll define some (static) functions within that
    *       template, which then forward the call to the given BASE
    *       (and of course, that BASE then needs to define this
-   *       function as well). 
+   *       function as well).
    */
   template
     < class TYPES_1, class TYPES_2           ///< the two type collections to pick combinations from
     , template<class,class,class> class _X_  ///< template with two arg types and a base type
-    , class BASE = NullType
+    , class BASE = Nil
     >
   struct InstantiateChainedCombinations
     : InstantiateChained< typename CartesianProduct<TYPES_1,TYPES_2>::List

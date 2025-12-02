@@ -1,24 +1,15 @@
 /*
   Mutation  -  changing and adjusting time values
 
-  Copyright (C)         Lumiera.org
-    2011,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2011,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+* *****************************************************************/
 
 
 /** @file mutation.cpp 
@@ -68,7 +59,7 @@ namespace time {
   
   
   
-  /* Warning: all the classes defined here must be of size below MUTATION_IMPL_SIZE */ 
+  /* Warning: all the classes defined here must be of size below MUTATION_IMPL_SIZE */
   
   /**
    * concrete time value mutation:
@@ -284,7 +275,7 @@ namespace time {
   
   /** Convenience factory to yield a simple Mutation changing the absolute start time.
    *  This whole procedure might look quite inefficient, but actually most of the
-   *  abstractions are removed at runtime, leaving only a single indirection 
+   *  abstractions are removed at runtime, leaving only a single indirection
    *  through the VTable of the Mutation Interface.
    * @throw  error::Logic when attempting to change the (non existent) start time of a Duration
    * @return EncapsulatedMutation, which is an "polymorphic value object",
@@ -357,7 +348,7 @@ namespace time {
    *  value later will be cast into any kind of time code or materialised
    *  otherwise, the quantised value's own grid will apply as well,
    *  resulting in the net result of two quantisation operations
-   *  being applied in sequence.  
+   *  being applied in sequence.
    * @param adjustment number of grid steps to apply as offset
    * @param grid reference to a concrete grid instance
    * @note there is a variant of this function, using just a

@@ -1,40 +1,94 @@
 /*
   TIMEVALUE.hpp  -  basic definitions for time values and time intervals
 
-  Copyright (C)         Lumiera.org
-    2010,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2010,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
 
 /** @file timevalue.hpp
  ** a family of time value like entities and their relationships.
  ** This is the foundation for the Lumiera time handling framework. On the implementation
- ** level, time values are represented as 64bit integer values \c gavl_time_t. But for the
+ ** level, time values are represented as 64bit integer values `raw_time_64`, similar to
+ ** and inspired by `gavl_time_t` from the raw-video handling [Lib-GAVL]. But for the
  ** actual use, we create several kinds of time "values", based on their logical properties.
  ** These time values are considered to be fixed (immutable) values, which may only be
- ** created through some well defined construction paths, and any time based calculation
+ ** created through some limited construction paths, and any time based calculation
  ** is forced to go through our time calculation library. This is prerequisite for
- ** the definition of <i>frame aligned</i> time values and time code representation
+ ** the definition of _frame aligned_ time values and time code representation
  ** implemented as display format based on these frame quantised time values.
+ ** 
+ ** # Time entities
+ ** 
+ ** The value types defined in this header represent time points and time intervals
+ ** based on an internal time scale (µs ticks) and not related to any known fixed time
+ ** zone or time base; rather they are interpreted in usage context, and the intended
+ ** way to retrieve such a value is by formatting it into a time code format.
+ ** 
+ ** The lib::time::TimeValue serves as foundation for all further time calculations;
+ ** in fact it is implemented as a single 64bit µ-tick value (`raw_time_64`). The
+ ** further time entities are implemented as value objects (without virtual functions):
+ ** - lib::time::Time represents a time instant and is the reference for any usage
+ ** - lib::time::TimeVar is a mutable time variable and can be used for calculations
+ ** - lib::time::Offset can be used to express a positive or negative shift on time scale
+ ** - lib::time::Duration represents the extension or an amount of time
+ ** - lib::time::TimeSpan represents a distinct interval, with start time and duration
+ ** - lib::time::FrameRate can be used to mark a number to denote a frames-per-second spec
+ ** - lib::time::FSecs is a rational number to represent seconds or fractions thereof
+ ** 
+ ** # Manipulating time values
+ ** 
+ ** Time values are conceived as fixed, immutable entities, similar to numbers; you can't
+ ** just change the number two, and likewise, two seconds are two seconds. However, for
+ ** many use cases we have to combine time values to perform calculations
+ ** - Time entities can be combined with operators, to form new time entities
+ ** - the TimeVar can be used as accumulator or variable for ongoing calculations
+ ** - since TimeSpan, Duration (and the grid-aligned, "quantised" flavours) will often
+ **   represent some time-like property or entity, e.g. the temporal specification of
+ **   a media Clip with start and duration, there is the concept of an explicit *mutation*,
+ **   which is _accepted_ by these entities. Notably the lib::time::Control can be attached
+ **   to these entities, and can then receive manipulations (nudging, offset); moreover it
+ **   is possible to attach as listener to such a "controller" and be notified by any
+ **   manipulation; this setup is the base for running time display, playback cursors etc.
+ ** 
+ ** # Quantised time
+ ** 
+ ** While these _internal time values_ can be considered _sufficiently precise,_ in practice
+ ** any time specifications in the context of media handling will be aligned to some grid,
+ ** and expressed in a _time code format._ Typically, we want to know the number of frames
+ ** since playback started at the beginning of the timeline, and such a specification also
+ ** relies on some implicitly known _frame rate_ (24fps for film in US, 25fps for film and
+ ** TV in Europe, ...). By _deliberate choice,_ in Lumiera we *do not incorporate* such
+ ** implicit assumptions into the actual time values. Rather, they need to be made explicitly
+ ** in the relevant usage context. This is also the reason why the time entities defined in
+ ** this header _do not offer an API_ to get the "real" time (whatever this means). Rather,
+ ** the user of these time entities should get used to the concept that these abstract
+ ** opaque values are the real thing, and a concrete, human readable time code is only
+ ** a derivation, and any such derivation also incurs information loss. To reiterate that,
+ ** _any time quantisation is a lossy information;_ grid aligned values are not "cleaner",
+ ** they are just easier to handle for humans.
+ ** 
+ ** \par how can I extract a time value?
+ ** Taking the aforementioned into account, it depends on the context what to expect and to get
+ ** - the standard path is to create a lib::time::QuTime by associating the internal time value
+ **   with a pre-defined _time grid._ From there you can call QuTime::formatAs() to build an
+ **   actual timecode instance, which can then be investigated or just printed.
+ ** - for debugging purpose, lib::time::Time defines an `operator string()`, which breaks down
+ **   the internal values into the format `-hh:mm:ss.mss`
+ ** - advanced calculations with the need to access the implementation data in full precision
+ **   should go through lib::time::TimeVar, which offers conversions to raw `int64_t` and the
+ **   even more fine grained `FSec`, which is a rational (fraction) `boost::rational<int64_t>`
  ** 
  ** @see time.h basic time calculation library functions
  ** @see timequant.hpp
  ** @see TimeValue_test
- ** 
+ **  
+ ** [Lib-GAVL]: https://github.com/bplaum/gavl
  */
 
 
@@ -45,13 +99,9 @@
 
 #include <boost/operators.hpp>
 #include <boost/rational.hpp>
+#include <compare>
 #include <cstdlib>
 #include <string>
-
-extern "C" {
-#include <stdint.h>
-#include <gavl/gavltime.h>
-}
 
 
 namespace lib {
@@ -61,30 +111,40 @@ namespace time {
   
   // forwards...
   class FrameRate;
+  class Duration;
   class TimeSpan;
   class Mutation;
+  
+  
+  /**
+   * Raw µ-tick time representation used in Lumiera.
+   * @remark this representation was inspired by [Lib-GAVL].
+   * @todo 2025 a mere type alias is up to debate -- very likely we'll use a wrapper soon   /////////////////TICKET #1258
+   * @warning application logic should avoid handling any raw time value
+   *          directly and rather treat time data as an opaque entity.
+   * [Lib-GAVL]: https://github.com/bplaum/gavl
+   */
+  using raw_time_64 = int64_t;
   
   
   /**
    * basic constant internal time value.
    * These time values provide the implementation base
    * for all further time types. They can be created by
-   * wrapping up a raw micro tick value (gavl_time_t),
+   * wrapping up a raw micro tick value (raw_time_64),
    * are totally ordered, but besides that,
    * they are opaque and non-mutable.
    * @note clients should prefer to use Time instances,
    *       which explicitly denote an Lumiera internal
    *       time value and are easier to use.
-   * @see TimeVar when full arithmetics are required 
+   * @see TimeVar when full arithmetics are required
    */
   class TimeValue
-    : boost::totally_ordered<TimeValue,
-      boost::totally_ordered<TimeValue, gavl_time_t> >
     {
     protected:
       /** the raw (internal) time value
        *  used to implement the time types */
-      gavl_time_t t_;
+      raw_time_64 t_;
       
       
       /** Assigning of time values is not allowed,
@@ -99,14 +159,24 @@ namespace time {
       /** some subclasses may receive modification messages */
       friend class Mutation;
       
-    public:
       /** explicit limit of allowed time range */
-      static gavl_time_t limited (gavl_time_t raw);
+      static raw_time_64 limitedTime (raw_time_64 raw);
+      /** safe calculation of explicitly limited time offset */
+      static raw_time_64 limitedDelta (raw_time_64 origin, raw_time_64 target);
+      
+      /** @internal for Offset and Duration entities built on top */
+      TimeValue (TimeValue const& origin, TimeValue const& target)
+        : t_{limitedDelta (origin.t_, target.t_)}
+        { }
+      
+    public:
+      /** Number of micro ticks (µs) per second as basic time scale */
+      static const raw_time_64 SCALE;
       
       
-      explicit 
-      TimeValue (gavl_time_t val=0)
-        : t_(limited (val))
+      explicit
+      TimeValue (raw_time_64 val)         ///< time given in µ ticks here
+        : t_{limitedTime (val)}
         { }
       
       /** copy initialisation allowed */
@@ -115,71 +185,23 @@ namespace time {
         { }
       
       /** @internal to pass Time values to C functions */
-      friend gavl_time_t _raw (TimeValue const& time) { return time.t_; }
-      static TimeValue buildRaw_(gavl_time_t);
+      friend raw_time_64 _raw (TimeValue const& time) { return time.t_; }
+      friend HashVal hash_value (TimeValue const&);
+      static TimeValue buildRaw_(raw_time_64);
       
       /** @internal diagnostics */
-      operator std::string ()  const;
+      explicit operator std::string()  const;
       
-      // Supporting totally_ordered
-      friend bool operator<  (TimeValue const& t1, TimeValue const& t2)  { return t1.t_ <  t2.t_; }
-      friend bool operator<  (TimeValue const& t1, gavl_time_t t2)       { return t1.t_ <  t2   ; }
-      friend bool operator>  (TimeValue const& t1, gavl_time_t t2)       { return t1.t_ >  t2   ; }
-      friend bool operator== (TimeValue const& t1, TimeValue const& t2)  { return t1.t_ == t2.t_; }
-      friend bool operator== (TimeValue const& t1, gavl_time_t t2)       { return t1.t_ == t2   ; }
+      /** @return is in-domain, not a boundary value */
+      bool isRegular()  const;
+      
+      // Supporting strong total ordering
+      std::strong_ordering operator<=> (TimeValue const&) const  =default;
+      bool                 operator==  (TimeValue const&) const  =default;
+      
+      std::strong_ordering operator<=> (raw_time_64 tt)   const { return t_ <=> tt; }
+      bool                 operator==  (raw_time_64 tt)   const { return t_ ==  tt; }
     };
-  
-  
-  
-  /** a mutable time value,
-   *  behaving like a plain number,
-   *  allowing copy and re-accessing
-   * @note supports scaling by a factor,
-   *       which \em deliberately is chosen 
-   *       as int, not gavl_time_t, because the
-   *       multiplying of times is meaningless.
-   */
-  class TimeVar
-    : public TimeValue
-    , boost::additive<TimeVar,
-      boost::additive<TimeVar, TimeValue,
-      boost::multipliable<TimeVar, int>
-      > >
-    {
-    public:
-      TimeVar (TimeValue const& time = TimeValue())
-        : TimeValue(time)
-        { }
-      
-      // Allowing copy and assignment
-      TimeVar (TimeVar const& o)
-        : TimeValue(o)
-        { }
-      
-      TimeVar&
-      operator= (TimeValue const& o)
-        {
-          t_ = TimeVar(o);
-          return *this;
-        }
-      
-      // Support mixing with plain long int arithmetics
-      operator gavl_time_t ()  const { return t_; }
-      
-      // Supporting additive
-      TimeVar& operator+= (TimeVar const& tx)  { t_ += tx.t_; return *this; }
-      TimeVar& operator-= (TimeVar const& tx)  { t_ -= tx.t_; return *this; }
-      
-      // Supporting multiplication with integral factor
-      TimeVar& operator*= (int64_t fact)       { t_ *= fact;  return *this; }
-      
-      // Supporting sign flip
-      TimeVar  operator-  ()         const     { return TimeVar(*this)*=-1; }
-       
-      // baseclass TimeValue is already totally_ordered 
-    };
-  
-  
   
   
   
@@ -192,20 +214,76 @@ namespace time {
   /** relative framecount or frame number.
    *  Used within the engine at places where the underlying
    *  grid and origin is obvious from the call context.
-   * @warning do not mix up gavl_time_t and FrameCnt.
+   * @warning do not mix up raw_time_64 and FrameCnt.
    * @warning use 64bit consistently.
-   *          beware: \c long is 32bit on i386
+   *          beware: `long` is 32bit on i386
    * @note any conversion to frame numbers should go through
    *       time quantisation followed by conversion to FrameNr
    */
-  typedef int64_t FrameCnt;
+  using FrameCnt = int64_t;
   
   /** rational representation of fractional seconds
-   * @warning do not mix up gavl_time_t and FSecs */
-  typedef boost::rational<long> FSecs;
+   * @warning do not mix up raw_time_64 and FSecs */
+  using FSecs = boost::rational<int64_t>;
   
   
-  /**
+  
+  /** a mutable time value,
+   *  behaving like a plain number,
+   *  allowing copy and re-accessing
+   * @note supports scaling by a factor,
+   *       which _deliberately_ is chosen
+   *       as int, not raw_time_64, because the
+   *       multiplying of times is meaningless.
+   */
+  class TimeVar
+    : public TimeValue
+    , boost::additive<TimeVar,
+      boost::additive<TimeVar, TimeValue,
+      boost::multipliable<TimeVar, int>
+      > >
+    {
+    public:
+      TimeVar (TimeValue const& time = TimeValue(0))
+        : TimeValue(time)
+        { }
+      
+      /** Allow to pick up precise fractional seconds
+       * @warning truncating fractional µ-ticks  */
+      TimeVar (FSecs const&);
+      
+      /// Allowing copy and assignment
+      TimeVar (TimeVar const& o)
+        : TimeValue(o)
+        { }
+      
+      TimeVar& operator= (TimeVar const&) = default;
+      TimeVar& operator= (TimeValue const& o)
+        {
+          *this = TimeVar(o);
+          return *this;
+        }
+      
+      /// Support for micro-tick precise time arithmetics
+      operator FSecs()  const { return FSecs{t_, TimeValue::SCALE}; }
+      
+      /// Supporting additive
+      TimeVar& operator+= (TimeVar const& tx)  { t_ += tx.t_; return *this; }
+      TimeVar& operator-= (TimeVar const& tx)  { t_ -= tx.t_; return *this; }
+      
+      /// Supporting multiplication with integral factor
+      TimeVar& operator*= (int64_t fact)       { t_ *= fact;  return *this; }
+      
+      /// Supporting sign flip
+      TimeVar  operator-  ()         const     { return TimeVar(*this)*=-1; }
+       
+      // baseclass TimeValue is already totally_ordered
+    };
+  
+  
+  
+  
+  /**********************************************************//**
    * Lumiera's internal time value datatype.
    * This is a TimeValue, but now more specifically denoting
    * a point in time, measured in reference to an internal
@@ -213,7 +291,7 @@ namespace time {
    * 
    * Lumiera Time provides some limited capabilities for
    * direct manipulation; Time values can be created directly
-   * from \c (ms,sec,min,hour) specification and there is an
+   * from `(ms,sec,min,hour)` specification and there is an
    * string representation intended for internal use (reporting
    * and debugging). Any real output, formatting and persistent
    * storage should be based on the (quantised) timecode
@@ -245,12 +323,14 @@ namespace time {
         : TimeValue(val)
         { }
       
+      explicit
+      Time (FSecs const& fractionalSeconds);
+      
+      Time (Time const&) = default;
+      
       Time (TimeVar const& calcResult)
         : TimeValue(calcResult)
         { }
-      
-      explicit
-      Time (FSecs const& fractionalSeconds);
       
       Time ( long millis
            , uint secs
@@ -259,7 +339,7 @@ namespace time {
            );
       
       /** @internal diagnostics */
-      operator std::string ()  const;
+      explicit operator std::string()  const;
       
       /** convenience start for time calculations */
       TimeVar operator+ (TimeValue const& tval)  const { return TimeVar(*this) + tval; }
@@ -277,8 +357,10 @@ namespace time {
    * Similar to (basic) time values, offsets can be compared,
    * but are otherwise opaque and immutable. Yet they allow
    * to build derived values, including
-   * - the \em absolute (positive) distance for this offset
+   * - the _absolute (positive) distance_ for this offset: #abs
    * - a combined offset by chaining another offset
+   * @note on construction, Offset values are checked and limited
+   *       to be within [-Duration::MAX ... +Duration::MAX]
    */
   class Offset
     : public TimeValue
@@ -288,32 +370,39 @@ namespace time {
        *  but derived classes allow some limited mutation
        *  through special API calls */
       Offset&
-      operator= (Offset const& o) 
+      operator= (Offset const& o)
         {
           TimeValue::operator= (o);
           return *this;
         }
-
-    public:
-      explicit 
-      Offset (TimeValue const& distance)
-        : TimeValue(distance)
-        { }
       
-      Offset (TimeValue const& origin, TimeValue const& target)
-        : TimeValue(TimeVar(target) -= origin)
-        { }
+    public:
+      explicit
+      Offset (TimeValue const& distance =Time::ZERO);
+      
+      explicit
+      Offset (FSecs const& delta_in_secs);
+      
+      Offset (Offset const&) = default;
       
       Offset (FrameCnt count, FrameRate const& fps);
       
+      Offset (TimeValue const& origin, TimeValue const& target)
+        : TimeValue{origin, target}
+        { }
+      
       static const Offset ZERO;
       
+      /** interpret the distance given by this offset as a time duration */
+      Duration abs()  const;
       
-      TimeValue
-      abs()  const
-        {
-          return TimeValue(std::llabs (t_));
-        }
+      /** @internal stretch offset by a possibly fractional factor,
+       *            and quantise into raw (micro tick) grid */
+      Offset stretchedByRationalFactor (boost::rational<int64_t>)  const;
+      Offset stretchedByFloatFactor    (double)  const;
+      
+      /** @internal diagnostics, indicating ∆ */
+      explicit operator std::string()  const;
       
       // Supporting sign flip
       Offset operator- ()  const;
@@ -329,9 +418,17 @@ namespace time {
     return Offset(distance);
   }
   
-  template<typename INT>
   inline Offset
-  operator* (Offset const& distance, INT factor)
+  operator- (Offset const& start, Offset const& toSubtract)
+  {
+    TimeVar distance(start);
+    distance -= toSubtract;
+    return Offset(distance);
+  }
+  
+  template<typename FAC>
+  inline Offset
+  operator* (Offset const& distance, FAC factor)
   {
     return factor*distance;
   }
@@ -347,21 +444,23 @@ namespace time {
   
   template<typename INTX>
   inline Offset
-  operator* (boost::rational<INTX> factor, Offset const& o)
+  operator* (boost::rational<INTX> factor, Offset const& offset)
   {
-    return boost::rational<int64_t>(factor.numerator(), factor.denominator()) * o;
+    return offset.stretchedByRationalFactor (boost::rational<int64_t>(factor.numerator(), factor.denominator()));
   }
   
-  /** stretch offset by a possibly fractional factor */
-  Offset
-  operator* (boost::rational<int64_t> factor, Offset const& o);
+  inline Offset
+  operator* (double factor, Offset const& offset)
+  {
+    return offset.stretchedByFloatFactor (factor);
+  }
   
   
   /** flip offset direction */
   inline Offset
   Offset::operator- ()  const
   {
-    return -1 * (*this); 
+    return -1 * (*this);
   }
   
   
@@ -371,8 +470,9 @@ namespace time {
    * Duration is the internal Lumiera time metric.
    * It is an absolute (positive) value, but can be
    * promoted from an offset. While Duration generally
-   * is treated as immutable value, there is the 
-   * possibility to send a \em Mutation message.
+   * is treated as immutable value, there is the
+   * possibility to send a _Mutation message_.
+   * @note Duration relies on Offset being limited
    */
   class Duration
     : public TimeValue
@@ -381,33 +481,52 @@ namespace time {
       Duration& operator= (Duration const&);
       
     public:
+      Duration()
+        : TimeValue{Time::ZERO}
+        { }
+      
       Duration (Offset const& distance)
-        : TimeValue(distance.abs())
+        : TimeValue{buildRaw_(llabs (_raw(distance)))}
         { }
       
       explicit
       Duration (TimeValue const& timeSpec)
-        : TimeValue(Offset(timeSpec).abs())
+        : Duration{Offset{timeSpec}}
         { }
       
-      explicit
       Duration (FSecs const& timeSpan_in_secs)
-        : TimeValue(Offset(Time(timeSpan_in_secs)).abs())
+        : Duration{Offset{timeSpan_in_secs}}
+        { }
+      
+      /** duration of the given number of frames.
+       * @note always positive; count used absolute */
+      Duration (FrameCnt count, FrameRate const& fps)
+        : Duration{Offset{count,fps}}
         { }
       
       Duration (TimeSpan const& interval);
-      Duration (FrameCnt count, FrameRate const& fps);
+      
+      Duration (Duration const& o)
+        : TimeValue{o}
+        {// assuming that negative Duration can not be constructed....
+          REQUIRE (t_ >= 0, "Copy rejected: negative Duration %lu", o.t_);
+        }
       
       static const Duration NIL;
+      static const Duration MAX ;
       
       void accept (Mutation const&);
       
+      
+      /** @internal diagnostics */
+      explicit operator std::string()  const;
+
       /// Supporting backwards use as offset
       Offset operator- ()  const;
       
     };
     
-  //-- support using a Duration to build offsets ---------------
+  //-- support combining and Durations ---------------
   
   inline Duration
   operator+ (Duration const& base, Duration const& toAdd)
@@ -415,16 +534,23 @@ namespace time {
     return Offset(base) + Offset(toAdd);
   }
   
-  template<typename INT>
+  inline Duration
+  operator- (Duration const& base, Duration const& toRemove)
+  {
+    return base > toRemove? Offset(base) - Offset(toRemove)
+                          : Duration::NIL;
+  }
+  
+  template<typename NUM>
   inline Offset
-  operator* (INT factor, Duration const& dur)
+  operator* (NUM factor, Duration const& dur)
   {
     return factor * Offset(dur);
   }
   
-  template<typename INT>
+  template<typename NUM>
   inline Offset
-  operator* (Duration const& dur, INT factor)
+  operator* (Duration const& dur, NUM factor)
   {
     return factor*dur;
   }
@@ -432,7 +558,7 @@ namespace time {
   inline Offset
   Duration::operator- ()  const
   {
-    return -1 * (*this); 
+    return -1 * (*this);
   }
   
   
@@ -447,7 +573,7 @@ namespace time {
    * 
    * As an exception to the generally immutable Time
    * entities, a non constant TimeSpan may receive
-   * \em mutation messages, both for the start point
+   * _mutation messages_, both for the start point
    * and the duration. This allows for changing
    * position and length of objects in the timeline.
    * 
@@ -455,7 +581,6 @@ namespace time {
    */
   class TimeSpan
     : public Time
-    , boost::totally_ordered<TimeSpan>
     {
       Duration dur_;
       
@@ -465,30 +590,36 @@ namespace time {
         , dur_(length)
         { }
       
-      TimeSpan(TimeValue const& start, Offset const& reference_distance)
-        : Time(start)
-        , dur_(reference_distance)
-        { }
-      
-      TimeSpan(TimeValue const& start, TimeValue const& end)
-        : Time(start)
-        , dur_(Offset(start,end))
-        { }
-      
       TimeSpan(TimeValue const& start, FSecs(duration_in_secs))
         : Time(start)
         , dur_(duration_in_secs)
         { }
       
+      TimeSpan(TimeValue const& start, TimeValue const& end)
+        : Time(start<=end? start:end)
+        , dur_(Offset(start,end))
+        { }
+      
+      TimeSpan(TimeValue const& start, Offset const& reference_distance)
+        : TimeSpan{start, Time{start} + reference_distance}
+        { }
+      
+      TimeSpan()
+        : TimeSpan(Time::ZERO, Time::ZERO)
+        { }
+      
+      TimeSpan conform()  const;  ///< @return a copy conformed to time domain limits
+      
+      static const TimeSpan ALL;
       
       Duration&
-      duration() 
+      duration()
         {
           return dur_;
         }
       
       Duration
-      duration()  const 
+      duration()  const
         {
           return dur_;
         }
@@ -509,19 +640,24 @@ namespace time {
       contains (TimeValue const& tp)  const
         {
           return *this <= tp
-              && tp < end();
+             and tp < end();
         }
       
       /** may change start / duration */
       void accept (Mutation const&);
       
       /** @internal diagnostics */
-      operator std::string ()  const;
+      explicit operator std::string()  const;
       
-      /// Supporting extended total order, based on start and interval length
-      friend bool operator== (TimeSpan const& t1, TimeSpan const& t2)  { return t1.t_==t2.t_ && t1.dur_==t2.dur_; }
-      friend bool operator<  (TimeSpan const& t1, TimeSpan const& t2)  { return t1.t_< t2.t_ ||
-                                                                               (t1.t_==t2.t_ && t1.dur_< t2.dur_);}
+      /// Supporting extended strong total ordering, based on start and interval length
+      std::strong_ordering
+      operator<=> (TimeSpan const& ts)  const
+        {
+          auto ord{ t_ <=> ts.t_ };
+          return ord != 0? ord
+                         : dur_ <=> ts.dur_;
+        }
+      bool operator== (TimeSpan const& ts) const  =default;
     };
   
   
@@ -532,12 +668,14 @@ namespace time {
   class FrameRate
     : public boost::rational<uint>
     {
-      typedef boost::rational<uint> IFrac;
-      
     public:
       FrameRate (uint fps) ;
       FrameRate (uint num, uint denom);
-      FrameRate (IFrac const& fractionalRate);
+      FrameRate (size_t count, Duration timeReference);
+      explicit
+      FrameRate (boost::rational<uint> fractionalRate);
+      
+      static FrameRate approx(double fps);
       
       // standard copy acceptable;
       
@@ -545,14 +683,25 @@ namespace time {
       
       static const FrameRate PAL;
       static const FrameRate NTSC;
+      static const FrameRate STEP;       ///< 1 frame per second
       
       static const FrameRate HALTED;
       
       /** duration of one frame */
       Duration duration() const;
       
-      operator std::string() const;
+      /** derive total ordering from base class */
+      std::strong_ordering operator<=>(FrameRate const&) const = default;
+      
+      explicit operator std::string() const;
     };
+  
+  /** convenient conversion to duration in fractional seconds */
+  inline FSecs
+  operator/ (int n, FrameRate rate)
+  {
+    return FSecs{ n*rate.denominator(), rate.numerator()};
+  }
   
   
   
@@ -565,49 +714,128 @@ namespace time {
     inline NUM
     __ensure_nonzero (NUM n)
     {
-      if (n == 0)
+      if (n == NUM{0})
         throw error::Logic ("Degenerated frame grid not allowed"
-                           , error::LUMIERA_ERROR_BOTTOM_VALUE);
+                           , LERR_(BOTTOM_VALUE));
       return n;
+    }
+    
+    inline raw_time_64
+    symmetricLimit (raw_time_64 raw, TimeValue lim)
+    {
+      return  raw > lim?  _raw(lim)
+           : -raw > lim? -_raw(lim)
+           :               raw;
     }
   }//(End) implementation helpers
   
+  
+  
+  
+  /** derive a hash from the µ-tick value
+   * @return rotation of the raw value to produce a suitable spacing for consecutive time
+   * @remark picked up by Boost-hash, or std. hashtables with the help of `hash-standard.h`
+   * @see https://stackoverflow.com/questions/31387778/near-constant-time-rotate-that-does-not-violate-the-standards/31488147#31488147
+   */
+  inline HashVal
+  hash_value (TimeValue const& time)
+  {
+    HashVal x = _raw(time);                 // possibly cap to size of hash
+    const uint width = sizeof(HashVal) * CHAR_BIT;
+    const uint mask = width-1;
+    const uint n = width / 2;
+    
+    static_assert (0 < n  and n <= mask);
+    return (x<<n) | (x>>((-n)&mask ));
+  }
   
   
   /** @internal applies a limiter on the provided
    * raw time value to keep it within the arbitrary
    * boundaries defined by (Time::MAX, Time::MIN).
    * While Time entities are \c not a "safeInt"
-   * implementation, we limit new values and
-   * establish this safety margin to prevent
-   * wrap-around during time quantisation */
-  inline gavl_time_t
-  TimeValue::limited (gavl_time_t raw)
+   * implementation, we limit new values to
+   * lower the likelihood of wrap-around */
+  inline raw_time_64
+  TimeValue::limitedTime (raw_time_64 raw)
   {
-    return raw > Time::MAX? Time::MAX.t_ 
-         : raw < Time::MIN? Time::MIN.t_ 
-         :                  raw;
+    return symmetricLimit (raw, Time::MAX);
   }
+  
+  inline raw_time_64
+  TimeValue::limitedDelta (raw_time_64 origin, raw_time_64 target)
+  {
+    if (0 > (origin^target))
+      {// prevent possible numeric wrap
+        origin = symmetricLimit (origin, Duration::MAX);
+        target = symmetricLimit (target, Duration::MAX);
+      }
+    raw_time_64 res = target - origin;
+    return symmetricLimit (res, Duration::MAX);
+  }
+  
+  inline TimeSpan
+  TimeSpan::conform()  const          ///< @note: implicitly capped to Duration::MAX
+  {
+    Offset extension{dur_};
+    TimeValue start{_raw(*this)};
+    return Offset{start} + extension > Time::MAX? TimeSpan{Time::MAX-extension, Time::MAX}
+                                                : TimeSpan{start, extension};
+  }
+  
+  inline bool
+  TimeValue::isRegular()  const
+  {
+    return Time::MIN < *this
+       and *this < Time::MAX;
+  }
+  
+  
+  inline
+  TimeVar::TimeVar (FSecs const& fractionalSeconds)
+    : TimeVar{Time(fractionalSeconds)}
+    { }
+  
+  inline
+  Offset::Offset (TimeValue const& distance)
+    : TimeValue{buildRaw_(symmetricLimit(_raw(distance)
+                                        , Duration::MAX))}
+    { }
   
   inline
   Duration::Duration (TimeSpan const& interval)
-    : TimeValue(interval.duration())
+    : Duration{interval.duration()}
     { }
   
   inline
   FrameRate::FrameRate (uint fps)
-    : IFrac (__ensure_nonzero(fps))
+    : boost::rational<uint> (__ensure_nonzero(fps))
     { }
   
   inline
   FrameRate::FrameRate (uint num, uint denom)
-    : IFrac (__ensure_nonzero(num), denom)
+    : boost::rational<uint> (__ensure_nonzero(num), denom)
     { }
   
   inline
-  FrameRate::FrameRate (IFrac const& fractionalRate)
-    : IFrac (__ensure_nonzero(fractionalRate))
+  FrameRate::FrameRate (boost::rational<uint> fractionalRate)
+    : boost::rational<uint> (__ensure_nonzero(fractionalRate))
     { }
+  
+  boost::rational<uint> __framerate_approximation (size_t, Duration);
+  boost::rational<uint> __framerate_approximation (double);
+  
+  inline
+  FrameRate::FrameRate (size_t count, Duration timeReference)
+    : FrameRate{__framerate_approximation (count, timeReference)}
+    { }
+  
+  inline FrameRate
+  FrameRate::approx (double fps)
+  {
+    return FrameRate{__framerate_approximation (fps)};
+  }
+  
   
   inline double
   FrameRate::asDouble()  const
@@ -615,6 +843,11 @@ namespace time {
     return boost::rational_cast<double> (*this);
   }
   
+  inline Duration
+  Offset::abs()  const
+  {
+    return Duration{*this};
+  }
   
   
   
@@ -622,12 +855,23 @@ namespace time {
 
 
 namespace util {
-    
+  
   inline bool
   isnil (lib::time::Duration const& dur)
   {
     return 0 == dur;
   }
 
+  // repeated or forward declaration, see meta/util.hpp
+  template<typename X, typename COND>
+  struct StringConv;
+  
+  /** specialisation: render fractional seconds (for diagnostics) */
+  template<>
+  struct StringConv<lib::time::FSecs, void>
+    {
+      static std::string
+      invoke (lib::time::FSecs) noexcept;
+    };
 }
-#endif
+#endif /*LIB_TIME_TIMEVALUE_H*/

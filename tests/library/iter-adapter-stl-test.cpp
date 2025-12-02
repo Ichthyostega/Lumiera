@@ -1,36 +1,30 @@
 /*
   IterAdapterSTL(Test)  -  building various custom iterators for a given container
 
-  Copyright (C)         Lumiera.org
-    2010,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2010,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file iter-adapter-stl-test.cpp
+ ** unit test \ref IterAdapterSTL_test
+ */
 
 
 
 #include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
 #include "lib/test/test-coll.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
 #include "lib/iter-adapter-stl.hpp"
 
 #include <boost/lexical_cast.hpp>
-#include <iostream>
 #include <vector>
 
 
@@ -41,8 +35,6 @@ namespace test{
   using ::Test;
   using boost::lexical_cast;
   using util::isnil;
-  using std::cout;
-  using std::endl;
   
   namespace iter = lib::iter_stl;
   
@@ -56,12 +48,7 @@ namespace test{
   
   /** print descriptive separator to STDOUT */
 #define PRINT_FUNC(_F_NAME_, _F_TYPE_) \
-      cout << "-----"<<STRINGIFY(_F_NAME_)<<"---" << showType<_F_TYPE_>() << endl;
-  
-  
-  namespace {
-    uint NUM_ELMS = 10; 
-  }
+      cout << "-----"<<STRINGIFY(_F_NAME_)<<"---" << util::typeStr<_F_TYPE_>() << endl;
   
   
   
@@ -89,11 +76,12 @@ namespace test{
    */
   class IterAdapterSTL_test : public Test
     {
+      uint NUM_ELMS{0};
       
       virtual void
       run (Arg arg)
         {
-          if (0 < arg.size()) NUM_ELMS = lexical_cast<uint> (arg[1]);
+          NUM_ELMS = firstVal (arg, 10);
           
           checkDistinctValIter();
           
@@ -176,9 +164,9 @@ namespace test{
           Snapshot capture1 (vec.begin(), vec.end());
           
           Range range_of_all (vec.begin(), vec.end());
-          Snapshot capture2 (range_of_all);
-          CHECK (range_of_all);                       // snapshot doesn't affect given source iterator pos
-          CHECK (capture2);
+          Snapshot capture2 = iter::snapshot(range_of_all); // NOTE: when specifically taken this way,
+          CHECK (range_of_all);                            //  snapshot doesn't affect given source iterator pos
+          CHECK (capture2);                               //   (but WARNING, the IterSnapshot ctor itself is destructive)
           
           CHECK (vec.begin() == range_of_all.getPos());
           CHECK (vec.end()   == range_of_all.getEnd());
@@ -219,9 +207,9 @@ namespace test{
           CHECK (!capture1);
           CHECK (!capture2);
           CHECK (!capture3);
-          CHECK (capture1 == capture2);
-          CHECK (capture3 != capture1);               // all exhausted, but the difference in contents remains
-          CHECK (capture3 != capture2);
+          CHECK (capture1 == capture2);               // all exhausted iterators count as "equal"
+          CHECK (capture3 == capture1);               // this ensures the idiom while(pos != end) works
+          CHECK (capture3 == capture2);
         }
       
       template<class IT>

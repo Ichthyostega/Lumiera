@@ -1,39 +1,32 @@
 /*
   IterSource(Test)  -  how to build an opaque iterator-based data source
 
-  Copyright (C)         Lumiera.org
-    2010,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2010,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file iter-source-test.cpp
+ ** unit test \ref IterSource_test
+ */
 
 
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "lib/time/diagnostics.hpp"
+#include "lib/format-cout.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/util.hpp"
 
 #include "lib/iter-source.hpp"
 
 #include <boost/lexical_cast.hpp>
-#include <boost/noncopyable.hpp>
 #include <unordered_map>
-#include <iostream>
-#include <cstdlib>
 #include <string>
 #include <list>
 #include <map>
@@ -44,28 +37,28 @@ namespace lib {
 namespace test{
   
   using ::Test;
+  using util::isnil;
   using boost::lexical_cast;
-  using boost::noncopyable;
   using lib::time::TimeVar;
   using lib::test::randStr;
   using lib::test::randTime;
-  using util::isnil;
-  using util::cStr;
   using std::make_pair;
   using std::string;
   using std::list;
-  using std::rand;
-  using std::cout;
-  using std::endl;
+  
+  using LERR_(ITER_EXHAUST);
+  
+  using iter_source::eachEntry;
+  using iter_source::transform;
+  using iter_source::singleVal;
+  using iter_source::eachMapKey;
+  using iter_source::eachMapVal;
+  using iter_source::eachValForKey;
+  using iter_source::eachDistinctKey;
   
   
   
   namespace { // Subject of test
-    
-    
-    uint NUM_ELMS = 10;
-    
-    typedef const char* CStr;
     
     /**
      * Explicit implementation of the IterSource interface (test dummy)
@@ -73,14 +66,14 @@ namespace test{
      */
     class TestSource
       : public IterSource<CStr>
-      , noncopyable
+      , util::NonCopyable
       {
         
         string buffer_;
         CStr current_;
         
-        virtual Pos
-        firstResult ()
+        virtual Pos                                    ////////////////////////////////////////////TICKET #1125 : this iteration control API should use three control functions, similar to IterStateWrapper
+        firstResult ()  override
           {
             current_ = buffer_.c_str();
             ENSURE (current_);
@@ -88,12 +81,12 @@ namespace test{
           }
         
         virtual void
-        nextResult (Pos& pos)
+        nextResult (Pos& pos)  override
           {
-            if (pos && *pos && **pos)
+            if (pos and *pos and **pos)
               ++(*pos);
             
-            if (!(pos && *pos && **pos))
+            if (!(pos and *pos and **pos))
               pos = 0;
           }
         
@@ -131,6 +124,16 @@ namespace test{
         
       };
     
+    
+    /** diagnostics helper */
+    template<class IT>
+    inline void
+    pullOut (IT& iter)
+    {
+      for ( ; iter; ++iter )
+        cout << "::" << *iter;
+      cout << endl;
+    }
   } // (END) impl test dummy containers
   
   
@@ -157,17 +160,20 @@ namespace test{
       typedef IterSource<string>::iterator StringIter;
       typedef IterSource<TimeVar>::iterator TimeIter;
       
-      typedef std::map<string,TimeVar>                TreeMap;
+      typedef std::map<string,TimeVar>           TreeMap;
       typedef std::unordered_map<string,TimeVar> HashMap;
       
-      typedef std::multimap<int,int>               TreeMultimap;
+      typedef std::multimap<int,int>          TreeMultimap;
       typedef std::unordered_multimap<int,int>HashMultimap;
       
+      
+      uint NUM_ELMS{0};
       
       virtual void
       run (Arg arg)
         {
-          if (0 < arg.size()) NUM_ELMS = lexical_cast<uint> (arg[1]);
+          seedRand();
+          NUM_ELMS = firstVal (arg, 10);
           
           verify_simpleIters();
           verify_transformIter();
@@ -206,11 +212,25 @@ namespace test{
         }
       
       
+      /** @test verify transforming an embedded iterator
+       * This test not only wraps a source iterator and packages it behind the
+       * abstracting interface IterSource, but in addition also applies a function
+       * to each element yielded by the source iterator. As demo transformation
+       * we use the values from our custom container (\ref WrappedList) to build
+       * a time value in quarter seconds
+       *
+       */
       void
       verify_transformIter()
         {
           WrappedList customList(NUM_ELMS);
-          WrappedList::iterator sourceValues = customList.begin(); 
+          WrappedList::iterator sourceValues = customList.begin();
+
+          // transformation function
+          auto makeTime = [](int input_sec) -> TimeVar
+                            {
+                              return time::Time (time::FSecs (input_sec, 4));
+                            };
           
           TimeIter tIt (transform (sourceValues, makeTime));
           CHECK (!isnil (tIt));
@@ -218,25 +238,37 @@ namespace test{
           CHECK (!tIt);
         }
       
-      /** transformation function, to be applied for each element:
-       *  just build a time value, using the input as 1/4 seconds
-       */
-      static TimeVar
-      makeTime (int input_sec)
-        {
-          return time::Time (time::FSecs (input_sec, 4));
-        }
       
-      
-      
-      template<class IT>
+      /** @test an IterSouce which returns just a single value once */
       void
-      pullOut (IT& iter)
+      verify_singleValIter()
         {
-          for ( ; iter; ++iter )
-            cout << "::" << *iter;
-          cout << endl;
+          int i{-9};
+
+          IntIter ii = singleVal(12);
+          CHECK (not isnil(ii));
+          CHECK (12 == *ii);
+
+          ++ii;
+          CHECK (isnil (ii));
+          VERIFY_ERROR (ITER_EXHAUST, *ii );
+
+          // IterSource is an abstracting interface,
+          // thus we're able to reassign an embedded iterator
+          // with a different value type (int& instead of int)
+          ii = singleVal(i);
+
+          CHECK (not isnil(ii));
+          CHECK (-9 == *ii);
+
+          // NOTE: since we passed a reference, a reference got wrapped
+          i = 23;
+          CHECK (23 == *ii);
+          ++ii;
+          CHECK (isnil (ii));
         }
+      
+      
       
       
       template<class MAP>
@@ -250,11 +282,11 @@ namespace test{
           StringIter sIter = eachMapKey (testMap);
           TimeIter   tIter = eachMapVal (testMap);
           
-          CHECK (sIter && tIter);
+          CHECK (sIter and tIter);
           pullOut (sIter);
           pullOut (tIter);
           
-          CHECK (!sIter && !tIter);
+          CHECK (not sIter and not tIter);
           
           
           // The each-value-for-given-key-Iterator can be used for a map or multimap.
@@ -284,7 +316,7 @@ namespace test{
           MAP testMap;
           for (uint i=0; i<NUM_ELMS; ++i)
             {
-              uint n = 1 + rand() % 100;
+              uint n = 1 + rani(100);
               do testMap.insert (make_pair (i,n));
               while (--n);
             }

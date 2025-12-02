@@ -1,22 +1,13 @@
 /*
   VERB-TOKEN.hpp  -  double dispatch based on DSL tokens
 
-  Copyright (C)         Lumiera.org
-    2014,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2014,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
 
@@ -38,7 +29,7 @@
  ** the concrete receiver, e.g. `VERB_doit (receiver, arg1, arg2)`
  ** results in the invocation of \c receiver.doit(arg1,arg2)
  ** 
- ** @see ...TODO
+ ** @see [prominent usage: the Diff system](\ref lib::diff::DiffLanguage)
  ** @see VerbFunctionDispatch_test
  ** 
  */
@@ -53,7 +44,6 @@
 
 #include <utility>
 #include <string>
-#include <array>
 
 
 namespace lib {
@@ -63,9 +53,12 @@ namespace lib {
   
   /**
    * Action token implemented by double dispatch to a handler function,
-   * as defined in the "receiver" interface (parameter \c REC).
+   * as defined in the "receiver" interface (parameter `REC`).
    * The token is typically part of a DSL and can be applied
    * to a concrete receiver subclass.
+   * @tparam REC the type receiving the verb invocations
+   * @tparam SIG signature of the actual verb function, expected
+   *             to exist on the receiver (REC) interface
    * @remarks while the included ID Literal is mostly for diagnostics,
    *       it also serves as identity for comparisons. Conceptually what
    *       we want is to compare the function "offset", but this leads
@@ -78,8 +71,10 @@ namespace lib {
   template<class REC, class RET, typename... ARGS>
   class VerbToken<REC, RET(ARGS...)>
     {
+    public:
       typedef RET (REC::*Handler) (ARGS...);
       
+    protected:
       Handler handler_;
       Literal token_;
       
@@ -91,32 +86,34 @@ namespace lib {
           return (receiver.*handler_)(std::forward<ARGS>(args)...);
         }
       
-      operator string()
-        {
-          return string(token_);
-        }
-      
       VerbToken(Handler handlerFunction, Literal token)
         : handler_(handlerFunction)
         , token_(token)
         { }
       
-      VerbToken() : token_("NIL") { }
+      VerbToken()
+        : handler_{}
+        , token_("NIL")
+        { }
       
       /* default copyable */
       
-      
-      bool
-      operator== (VerbToken const& o)  const     ///< @remarks member pointers to virtual functions aren't comparable, for good reason
+      operator string()  const
         {
-          return token_ == o.token_;
+          return string(token_);
         }
       
-      bool
-      operator!= (VerbToken const& o)  const
+      Literal const&
+      getID()  const
         {
-          return token_ != o.token_;
+          return token_;
         }
+      
+      /** equality of VerbToken, based on equality of the #token_ Literal
+       * @remarks member pointers to virtual functions aren't comparable, for good reason
+       */
+      bool operator== (VerbToken const& o)  const { return token_ == o.token_; }
+      bool operator!= (VerbToken const& o)  const { return token_ != o.token_; }
     };
   
 #define VERB(RECEIVER, FUN) VERB_##FUN (&RECEIVER::FUN, STRINGIFY(FUN))
@@ -125,5 +122,5 @@ namespace lib {
   
   
   
-} // namespace lib  
+} // namespace lib
 #endif /*LIB_VERB_TOKEN_H*/

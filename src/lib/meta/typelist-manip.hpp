@@ -1,22 +1,13 @@
 /*
   TYPELIST-MANIP.hpp  -  Utils for working with lists-of-types
 
-  Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2008,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
 
@@ -27,19 +18,26 @@
  ** implementations by combining some basic building blocks. Typically, there
  ** is a number of similar, but not suitably related types involved. We want to
  ** process those types using a common scheme, without being forced to squeeze
- ** all those types into a artificial inheritance relationship. Now, generating
+ ** all those types into a artificial inheritance relationship. Instead, generating
  ** some kind of common factory or adapter, while mixing in pieces of code tailored
  ** specifically to the individual types, allows still to build a common processing
  ** in such situations.
  ** 
  ** The facilities in this header provide the basics of simple functional list
  ** processing (mostly with tail recursion). Usually, there is one template parameter
- ** TYPES, which accepts a \em Type-list. The result of the processing step is then
- ** accessible as an embedded typedef named \c List . Here, all of the 'processing'
- ** to calculate this result is performed by the compiler, as a side-effect of
- ** figuring out the resulting concrete type. At run time, in the generated
- ** code, typically the resulting classes are empty, maybe just
- ** exposing a specifically built-up function. 
+ ** TYPES, which accepts a _type-list_. The result of the processing step is then
+ ** accessible as nested type definition named `List`. Here, all of the „processing“
+ ** to calculate this result is performed by the compiler, as a side-effect set
+ ** off by the need to compute a requested concrete result type. At run time,
+ ** in the generated code, typically the resulting classes are empty, maybe
+ ** just exposing a function outfitted for a specific purpose.
+ ** 
+ ** @remark historically, these functions were developed for the first draft of
+ **         the render engine, which (for other reasons) did not come to fruition.
+ **         Over time, some of these functions were used on and off for various
+ **         purposes; and since (as of 2025) Loki-style type lists are considered
+ **         an integral part of the Lumiera framework, useful meta-functions are
+ **         added and documented here, even when not currently in use.
  ** 
  ** @see generator.hpp
  ** @see typelist-manip-test.cpp
@@ -63,20 +61,20 @@ namespace meta {
     
     
     /** pick the n-th element from a typelist */
-    template<class TYPES, uint i>
+    template<class TYPES, size_t i>
     struct Pick
       {
-        typedef NullType Type;  
+        using Type = Nil;
       };
     template<class TY, class TYPES>
     struct Pick<Node<TY,TYPES>, 0>
       {
-        typedef TY Type;  
+        using Type = TY;
       };
-    template<class TY, class TYPES, uint i>
+    template<class TY, class TYPES, size_t i>
     struct Pick<Node<TY,TYPES>, i>
       {
-        typedef typename Pick<TYPES, i-1>::Type Type;
+        using Type = Pick<TYPES, i-1>::Type;
       };
     
     
@@ -84,121 +82,132 @@ namespace meta {
     
     /** apply a transformation (template) to each type in the list */
     template<class TY, template<class> class _TRANS_>
-    struct Apply                           { typedef TY List; };
+    struct Apply                           { using List = TY; };
     
     template< class TY, class TYPES
             , template<class> class _TRANS_
             >
-    struct Apply<Node<TY,TYPES>, _TRANS_ > { typedef Node< typename _TRANS_<TY>::Type
-                                                         , typename Apply<TYPES,_TRANS_>::List
-                                                         > List; };
+    struct Apply<Node<TY,TYPES>, _TRANS_ > { using List = Node< typename _TRANS_<TY>::Type
+                                                              , typename Apply<TYPES,_TRANS_>::List
+                                                              >;};
     
     
     /** conditional node: skip an element based on evaluating a predicate */
     template<bool, class T, class TAIL>
-    struct CondNode                        { typedef TAIL  Next; };
+    struct CondNode                        { using Next = TAIL; };
     
     template<class T, class TAIL>
-    struct CondNode<true, T, TAIL>         { typedef Node<T,TAIL>  Next; };
+    struct CondNode<true, T, TAIL>         { using Next = Node<T,TAIL>; };
     
     /** filter away those types which don't fulfil a predicate metafunction */
-    template< class TYPES 
+    template< class TYPES
             , template<class> class _P_    ///< a template providing a boolean member \c ::value
             >
     struct Filter;
     
     template<template<class> class _P_>
-    struct Filter<NullType,_P_>            { typedef NullType  List; };
+    struct Filter<Nil,_P_>                 { using List = Nil; };
     
     template< class TY, class TYPES
             , template<class> class _P_
             >
-    struct Filter<Node<TY,TYPES>,_P_>      { typedef typename CondNode< _P_<TY>::value
-                                                                      , TY
-                                                                      , typename Filter<TYPES,_P_>::List
-                                                                      >::Next      
-                                                                      List; };
+    struct Filter<Node<TY,TYPES>,_P_>      { using List = CondNode< _P_<TY>::value
+                                                                  , TY
+                                                                  , typename Filter<TYPES,_P_>::List
+                                                                  >::Next
+                                                                  ; };
     
     
-    /** append lists-of-types */
+    /** append (concatenate) lists-of-types */
     template<class TY1, class TY2>
-    struct Append                          { typedef Node<TY1, typename Append<TY2,NullType>::List>  List; };
+    struct Append                          { using List = Node<TY1, typename Append<TY2,Nil>::List>; };
     
     template< class TY, class TYPES
             , class TAIL
             >
-    struct Append<Node<TY,TYPES>, TAIL>    { typedef Node<TY,  typename Append<TYPES,  TAIL>::List>  List; };
+    struct Append<Node<TY,TYPES>, TAIL>    { using List = Node<TY,  typename Append<TYPES,  TAIL>::List>; };
     
     template<class TY, class TYPES>
-    struct Append<NullType, Node<TY,TYPES> >   { typedef Node<TY,TYPES>   List; };
+    struct Append<Nil, Node<TY,TYPES>>     { using List = Node<TY,TYPES>; };
     
     template<class TY, class TYPES>
-    struct Append<Node<TY,TYPES>, NullType>    { typedef Node<TY,TYPES>   List; };
+    struct Append<Node<TY,TYPES>, Nil>     { using List = Node<TY,TYPES>; };
     
     template<class TY1>
-    struct Append<TY1,NullType>            { typedef Node<TY1,NullType>   List; };
+    struct Append<TY1,Nil>                 { using List = Node<TY1,Nil>; };
     
     template<class TY2>
-    struct Append<NullType,TY2>            { typedef Node<TY2,NullType>   List; };
+    struct Append<Nil,TY2>                 { using List = Node<TY2,Nil>; };
     
     template<>
-    struct Append<NullType,NullType>       { typedef NullType             List; };
+    struct Append<Nil,Nil>                 { using List = Nil; };
     
     
     
     
     /** access the last list element */
     template<class TYPES>
-    struct SplitLast;
+    struct PickLast;
     
     template<>
-    struct SplitLast<NullType>             { typedef NullType Type;
-                                             typedef NullType List; };
+    struct PickLast<Nil>                   { using Type = Nil;
+                                             using List = Nil; };
     template<class TY>
-    struct SplitLast<Node<TY,NullType> >   { typedef TY       Type;
-                                             typedef NullType List; };
+    struct PickLast<Node<TY,Nil>>          { using Type = TY;
+                                             using List = Nil; };
     
     template<class TY, class TYPES>
-    struct SplitLast<Node<TY,TYPES> >      { typedef typename SplitLast<TYPES>::Type Type;
-                                             typedef typename Append< TY,
-                                                                      typename SplitLast<TYPES>::List
-                                                                    >::List 
-                                                                    List; };
+    struct PickLast<Node<TY,TYPES>>        { using Type = PickLast<TYPES>::Type;
+                                             using List = Append< TY
+                                                                , typename PickLast<TYPES>::List
+                                                                >::List
+                                                                ; };
     
     
     
-    /** 
-     * splice a typelist like an overlay
-     * into an base typelist, starting at given index.
+    /**
+     * splice some typelist like an overlay
+     * into a base typelist, starting at given index.
      * @return either the combined (spliced) List, or
      *         the Front/Back part before or after the Overlay
-     * @note using a NullType as OVERLAY allows to extract
+     * @remark can be used to _exchange_ some elements in a list,
+     *         without shifting the position of the other ones.
+     * @note using a Nil-type as OVERLAY allows to extract
      *         an arbitrary Front/Back part of the list
      */
     template<class BASE, class OVERLAY, uint i=0>
     struct Splice;
     
     template<class B, class BS,
-             class OVERLAY, uint i>
-    struct Splice<Node<B,BS>, OVERLAY, i>  { typedef Node<B, typename Splice<BS, OVERLAY, i-1>::List>  List;
-                                             typedef Node<B, typename Splice<BS, OVERLAY, i-1>::Front> Front;
-                                             typedef         typename Splice<BS, OVERLAY, i-1>::Back   Back; };
+             class OVERLAY,
+             uint i>
+    struct Splice<Node<B,BS>, OVERLAY, i>  { using List  = Node<B, typename Splice<BS, OVERLAY, i-1>::List>;
+                                             using Front = Node<B, typename Splice<BS, OVERLAY, i-1>::Front>;
+                                             using Back  =         typename Splice<BS, OVERLAY, i-1>::Back; };
     
     template<class B, class BS,
              class O, class OS >
-    struct Splice<Node<B,BS>,Node<O,OS>,0> { typedef Node<O, typename Splice<BS,OS, 0>::List>          List;
-                                             typedef NullType                                          Front;
-                                             typedef         typename Splice<BS,OS, 0>::Back           Back; };
+    struct Splice<Node<B,BS>,Node<O,OS>,0> { using List  = Node<O, typename Splice<BS,OS, 0>::List>;
+                                             using Front = Nil;
+                                             using Back  =         typename Splice<BS,OS, 0>::Back; };
     
     template<class B, class BS>
-    struct Splice<Node<B,BS>, NullType, 0> { typedef Node<B, BS> List;
-                                             typedef NullType    Front;
-                                             typedef Node<B, BS> Back; };
+    struct Splice<Node<B,BS>, Nil, 0>      { using List  = Node<B, BS>;
+                                             using Front = Nil;
+                                             using Back  = Node<B, BS>; };
     
     template<class XX, uint i>
-    struct Splice<NullType, XX, i>         { typedef NullType    List;
-                                             typedef NullType    Front;
-                                             typedef NullType    Back; };
+    struct Splice<Nil, XX, i>              { using List  = Nil;
+                                             using Front = Nil;
+                                             using Back  = Nil; };
+    
+    /** extract prefix of given length */
+    template<class LI, uint l>
+    using Prefix = Splice<LI, Nil, l>::Front;
+    
+    /** extract suffix starting at given pos */
+    template<class LI, uint p>
+    using Suffix = Splice<LI, Nil, p>::Back;
     
     
     
@@ -211,51 +220,51 @@ namespace meta {
     struct Dissect;
     
     template<class T, class TYPES>
-    struct Dissect<Node<T,TYPES> >
+    struct Dissect<Node<T,TYPES>>
       {
-        typedef Node<T,TYPES>                  List;  ///< the complete list
-        typedef T                              Head;  ///< first element
-        typedef Node<T,NullType>               First; ///< a list containing the first element
-        typedef TYPES                          Tail;  ///< remainder of the list starting with the second elm.
-        typedef typename SplitLast<List>::List Prefix;///< all of the list, up to but excluding the last element
-        typedef typename SplitLast<List>::Type End;   ///< the last element
-        typedef Node<End,NullType>             Last;  ///< a list containing the last element
+        using   List = Node<T,TYPES>;                     ///< the complete list
+        using   Head = T;                                 ///< first element
+        using  First = Node<T,Nil>;                       ///< a list containing the first element
+        using   Tail = TYPES;                             ///< remainder of the list starting with the second elm.
+        using Prefix = PickLast<List>::List;              ///< all of the list, up to but excluding the last element
+        using    End = PickLast<List>::Type;              ///< the last element
+        using   Last = Node<End,Nil>;                     ///< a list containing the last element
       };
     
     template<>
-    struct Dissect<NullType>
+    struct Dissect<Nil>
       {
-        typedef NullType                       List;
-        typedef NullType                       Head;
-        typedef NullType                       First;
-        typedef NullType                       Tail;
-        typedef NullType                       Prefix;
-        typedef NullType                       End;
-        typedef NullType                       Last;
+        using   List = Nil;
+        using   Head = Nil;
+        using  First = Nil;
+        using   Tail = Nil;
+        using Prefix = Nil;
+        using    End = Nil;
+        using   Last = Nil;
       };
     
     
     
     
-    /** 
+    /**
      * prefix each of the elements,
      * yielding a list-of lists-of-types
      */
     template<class T, class TY>
-    struct PrefixAll                       { typedef Node< typename Append<T,TY>::List, NullType>  List; };
+    struct PrefixAll                       { using List = Node< typename Append<T,TY>::List, Nil>; };
     
     template<class T>
-    struct PrefixAll<T, NullType>          { typedef NullType  List; };
+    struct PrefixAll<T, Nil>               { using List = Nil; };
     
     template<class T>
-    struct PrefixAll<T, NodeNull>          { typedef Node< typename Append<T,NodeNull>::List, NullType>  List; };
+    struct PrefixAll<T, NilNode>           { using List = Node< typename Append<T, NilNode>::List, Nil>; };
     
     template< class T
             , class TY, class TYPES
             >
-    struct PrefixAll<T, Node<TY,TYPES> >   { typedef Node< typename Append<T,TY>::List
-                                                         , typename PrefixAll<T,TYPES>::List
-                                                         >     List; };
+    struct PrefixAll<T, Node<TY,TYPES>>    { using List = Node< typename Append<T,TY>::List
+                                                              , typename PrefixAll<T,TYPES>::List
+                                                              >;};
     
     
     
@@ -267,61 +276,65 @@ namespace meta {
      * sources, i.e. the Cartesian product.
      */
     template<class TY1,class TY2>
-    struct Distribute                      { typedef typename PrefixAll<TY1,TY2>::List  List; };
+    struct Distribute                      { using List = PrefixAll<TY1,TY2>::List; };
     
     template<class TY>
-    struct Distribute<NullType,TY>         { typedef NullType List; };
+    struct Distribute<Nil,TY>              { using List = Nil; };
     
     template< class TY, class TYPES
             , class TAIL
             >
-    struct Distribute<Node<TY,TYPES>,TAIL> { typedef typename Append< typename PrefixAll<TY,TAIL>::List
-                                                                    , typename Distribute<TYPES,TAIL>::List
-                                                                    >::List                    
-                                                                    List; };
+    struct Distribute<Node<TY,TYPES>,TAIL> { using List = Append< typename PrefixAll<TY,TAIL>::List
+                                                                , typename Distribute<TYPES,TAIL>::List
+                                                                >::List
+                                                                ; };
     
     
     
-    /** 
-     * build all possible combinations, based on a enumeration of the basic cases.
+    /**
+     * Build all possible combinations, based on a enumeration of the basic cases.
      * For each of the types in the argument list, an "enumeration generator" template is invoked,
-     * yielding a list of the possible base cases. These base cases are then combined with all the
+     * to produce a list of the possible base cases. These base cases are then combined with all the
      * combinations of the rest, yielding all ordered combinations of all cases. Here, "ordered"
      * means that the base cases of the n-th element will appear in the n-th position of the
      * resulting lists,
-     * 
-     * For the typical example, the "base cases" are {flag(on), flag(off)}, so we get a
-     * list-of-lists, featuring all possibilities to combine these distinct toggles. 
+     * @tparam X a type or type list to drive the tabulation process
+     * @tparam _ENUM_ a case generator meta function, which takes one type from the input(list)
+     *                and generates a type-list of cases, which are then feed to `Distribute`
+     * @remark For the typical example, the "base cases" are {flag(on), flag(off)}, so we get a
+     *         list-of-lists, featuring all possibilities to combine these distinct toggles.
      */
     template< class X
             , template<class> class _ENUM_>
-    struct Combine                         { typedef typename Distribute< typename _ENUM_<X>::List
-                                                                        , Node<NullType,NullType>
-                                                                        >::List  List; };
+    struct Combine                         { using List = Distribute< typename _ENUM_<X>::List
+                                                                    , NilNode
+                                                                    >::List; };
     template< template<class> class _ENUM_>
-    struct Combine<NullType, _ENUM_ >      { typedef NodeNull                    List; };
+    struct Combine<Nil, _ENUM_ >           { using List = NilNode; };
     
     template< class TY, class TYPES
             , template<class> class _ENUM_>
-    struct Combine<Node<TY,TYPES>,_ENUM_>  { typedef typename Distribute< typename _ENUM_<TY>::List
-                                                                        , typename Combine<TYPES,_ENUM_>::List
-                                                                        >::List  List; };
+    struct Combine<Node<TY,TYPES>,_ENUM_>  { using List = Distribute< typename _ENUM_<TY>::List
+                                                                    , typename Combine<TYPES,_ENUM_>::List
+                                                                    >::List; };
     
     /** enumeration generator for the Combine metafunction,
-     *  yielding an "on" and "off" case
+     *  yielding an "on" and "off" case; the latter is
+     *  represented by a list with a Nil-Entry
      */
     template<class F>
     struct FlagOnOff
-      { 
-        typedef Node<F, Node<NullType,NullType> >  List;
+      {
+        using List = Node<F, NilNode>;
       };
     
     
-    /** generate all possible on-off combinations of the given flags */
+    /** generate all possible on-off combinations of the given flags.
+     * @remark for the «off» case, the flag entry is not present */
     template<class FLAGS>
     struct CombineFlags
-      { 
-        typedef typename Combine<FLAGS, FlagOnOff>::List  List;
+      {
+        using List = Combine<FLAGS, FlagOnOff>::List;
       };
     
     

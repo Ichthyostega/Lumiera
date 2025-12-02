@@ -1,22 +1,13 @@
 /*
   HASH-STANDARD.hpp  -  allow use both of std and boost hasher implementations
 
-  Copyright (C)         Lumiera.org
-    2014,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2014,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
 
@@ -47,15 +38,15 @@
  ** push it aside and plant our own definition instead.
  ** 
  ** @note this trick was proposed by user "enobayram" on Stackoverflow at Oct 5, 2012
- ** http://stackoverflow.com/questions/12753997/check-if-type-is-hashable
+ ** https://stackoverflow.com/questions/12753997/check-if-type-is-hashable
  ** 
- ** @warning this header <b>includes and manipulates</b> the standard header \c <functional>. Please
- **       ensure it is always included \em before the latter. Failing to do so will result in
- **       mysterious failures.
+ ** @warning this header <b>includes and manipulates</b> the standard header `<functional>`.
+ **       Please ensure it is always included _before_ the latter. Failing to do so will result
+ **       in mysterious failures.
  ** 
  ** @todo 4/2014 doesn't work as expected. My suspicion is that in the actual use case (PlacementIndex),
  **       the type providing the hasher is mixed in through inheritance, and the template specialisation
- **       for this base type is not considered on lookup.  ///////TICKET #722 
+ **       for this base type is not considered on lookup.  ///////TICKET #722
  ** 
  ** @see HashIndexed
  ** @see LUID
@@ -71,8 +62,10 @@
 #endif
 
 
+#include "lib/hash-value.h"
+
 #include <cstddef>
-#include <boost/utility/enable_if.hpp>
+#include <utility>
 
 
 namespace lib {
@@ -123,7 +116,7 @@ namespace std {
    * Specialisation: Bridge from std::hash to boost::hash
    */
   template<typename TY>
-  struct _HashImplementationSelector<TY,   typename boost::enable_if< lib::meta::provides_BoostHashFunction<TY> >::type >
+  struct _HashImplementationSelector<TY,   std::enable_if_t< lib::meta::provides_BoostHashFunction<TY>::value >>
     : public __hash_base<size_t, TY>
     {
       size_t

@@ -1,24 +1,21 @@
 /*
   TEST-INTERFACES  -  test interfaces declaration and implementation
 
-  Copyright (C)         Lumiera.org
-    2008,               Christian Thaeter <ct@pipapo.org>
+   Copyright (C)
+     2008,            Christian Thaeter <ct@pipapo.org>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file test-interfaces.c
+ ** C unit test to cover the basics of our interface and plugin-loading system
+ ** @see interface.h
+ ** @see interfaceregistry.h
+ */
 
 
 #include "common/interface.h"
@@ -28,7 +25,7 @@
 #include "common/config-interface.h"
 
 #include "lib/test/test.h"
-#include "interface/say_hello.h"
+#include "interface/say-hello.h"
 
 /*
   define 2 example interfaces
@@ -87,64 +84,58 @@ LUMIERA_INTERFACE_INSTANCE (lumieraorg_interfacedescriptor, 0,
                             testrelease,
                             LUMIERA_INTERFACE_INLINE (name,
                                                       const char*, (LumieraInterface iface),
-                                                      {return "LumieraTest";}
+                                                      {(void)iface; return "LumieraTest";}
                                                       ),
                             LUMIERA_INTERFACE_INLINE (brief,
                                                       const char*, (LumieraInterface iface),
-                                                      {return "Lumiera Test suite examples";}
+                                                      {(void)iface; return "Lumiera Test suite examples";}
                                                       ),
                             LUMIERA_INTERFACE_INLINE (homepage,
                                                       const char*, (LumieraInterface iface),
-                                                      {return "http://www.lumiera.org/develompent.html";}
+                                                      {(void)iface; return "http://www.lumiera.org/develompent.html";}
                                                       ),
                             LUMIERA_INTERFACE_INLINE (version,
                                                       const char*, (LumieraInterface iface),
-                                                      {return "No Version";}
+                                                      {(void)iface; return "No Version";}
                                                       ),
                             LUMIERA_INTERFACE_INLINE (author,
                                                       const char*, (LumieraInterface iface),
-                                                      {return "Christian Thaeter";}
+                                                      {(void)iface; return "Christian Thaeter";}
                                                       ),
                             LUMIERA_INTERFACE_INLINE (email,
                                                       const char*, (LumieraInterface iface),
-                                                      {return "ct@pipapo.org";}
+                                                      {(void)iface; return "ct@pipapo.org";}
                                                       ),
                             LUMIERA_INTERFACE_INLINE (copyright,
                                                       const char*, (LumieraInterface iface),
                                                       {
+                                                        (void)iface; 
                                                         return
-                                                          "Copyright (C)        Lumiera.org\n"
-                                                          "  2008               Christian Thaeter <ct@pipapo.org>";
+                                                                 "Copyright (C)\n"
+                                                                 "  2008,            Christian Thaeter <ct@pipapo.org>";
                                                       }
                                                       ),
                             LUMIERA_INTERFACE_INLINE (license,
                                                       const char*, (LumieraInterface iface),
                                                       {
+                                                        (void)iface;   
                                                         return
-                                                          "This program is free software; you can redistribute it and/or modify\n"
-                                                          "it under the terms of the GNU General Public License as published by\n"
-                                                          "the Free Software Foundation; either version 2 of the License, or\n"
-                                                          "(at your option) any later version.\n"
-                                                          "\n"
-                                                          "This program is distributed in the hope that it will be useful,\n"
-                                                          "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
-                                                          "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
-                                                          "GNU General Public License for more details.\n"
-                                                          "\n"
-                                                          "You should have received a copy of the GNU General Public License\n"
-                                                          "along with this program; if not, write to the Free Software\n"
-                                                          "Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA";
+                                                                 "**Lumiera** is free software; you can redistribute it and/or modify it\n"
+                                                                 "under the terms of the GNU General Public License as published by the\n"
+                                                                 "Free Software Foundation; either version 2 of the License, or (at your\n"
+                                                                 "option) any later version. See the file COPYING for further details."
+                                                                 ;
                                                       }
                                                       ),
 
                             LUMIERA_INTERFACE_INLINE (state,
                                                       int, (LumieraInterface iface),
-                                                      {return LUMIERA_INTERFACE_EXPERIMENTAL;}
+                                                      {(void)iface; return LUMIERA_INTERFACE_EXPERIMENTAL;}
                                                       ),
 
                             LUMIERA_INTERFACE_INLINE (versioncmp,
                                                       int, (const char* a, const char* b),
-                                                      {return 0;}
+                                                      {(void)a;(void)b;  return 0;}
                                                       )
                             );
 

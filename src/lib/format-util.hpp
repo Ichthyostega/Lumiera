@@ -1,22 +1,13 @@
 /*
   FORMAT-UTIL.hpp  -  helpers for formatting and diagnostics
 
-  Copyright (C)         Lumiera.org
-    2009,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2009,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
 
@@ -25,11 +16,12 @@
  ** Collection of small helpers and convenience shortcuts for diagnostics & formatting.
  ** - util::str() performs a failsafe to-String conversion, thereby preferring a
  **         built-in conversion operator, falling back to just a mangled type string.
- ** - util::tyStr() generates a string corresponding to the type of the given object.
- **         Currently just implemented through the mangled RTTI type string  
+ ** - util::join() generates an enumerating string from elements
+ **         of an arbitrary sequence or iterable. Elements will be passed
+ **         through our [generic string conversion](\ref util::toString)
  ** 
  ** @see FormatHelper_test
- ** @see format-string.hpp frontend for boost::format, printf-style
+ ** @see [frontend for boost::format, printf-style](\ref format-string.hpp)
  ** 
  */
 
@@ -37,121 +29,122 @@
 #ifndef LIB_FORMAT_UTIL_H
 #define LIB_FORMAT_UTIL_H
 
-#include "lib/hash-standard.hpp"
 #include "lib/meta/trait.hpp"
+#include "lib/format-obj.hpp"
 #include "lib/itertools.hpp"
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
 
+#include <array>
 #include <string>
+#include <vector>
 #include <sstream>
-#include <cstring>
+#include <utility>
 #include <typeinfo>
-#include <boost/lexical_cast.hpp>
-#include <boost/utility/enable_if.hpp>
 
-
-namespace lib {
-namespace test{ // see test-helper.cpp
-    std::string demangleCxx (lib::Literal rawName);
-}}
 
 
 namespace util {
   
-  using boost::enable_if;
-  using lib::meta::can_ToString;
-  using lib::meta::can_lexical2string;
   using lib::meta::can_IterForEach;
-  using lib::Symbol;
-  using util::isnil;
   using std::string;
+  using std::forward;
+  using std::move;
   
   
-  namespace { // we need to guard the string conversion
-             //  to avoid a compiler error in case the type isn't convertible....
+  
+  namespace { // helper to convert arbitrary elements toString
+    
+    template<class CON>
+    inline void
+    do_stringify(CON&)
+    { /* do nothing */ }
+    
+    template<class CON, typename X, typename...ELMS>
+    inline void
+    do_stringify(CON& container, X const& elm, ELMS const& ...args)
+    {
+      container += util::toString (elm);
+      do_stringify (container, args...);
+    }
     
     
-    template<typename X>
-    struct use_StringConversion : can_ToString<X> { };
-    
-    template<typename X>
-    struct use_LexicalConversion
+    template<class CON, typename...ELMS>
+    struct SeqContainer
+      : CON
       {
-        enum { value = can_lexical2string<X>::value
-                  &&  !can_ToString<X>::value
-             };
+        void
+        operator+= (string&& s)
+          {
+            CON::push_back (move(s));
+          }
       };
     
+    // most common case: use a vector container...
+    using std::vector;
     
-    /** helper: reliably get some string representation for type X */
-    template<typename X, typename COND =void>
-    struct _InvokeFailsafe
+    template<typename X, typename...ELMS>
+    struct SeqContainer<vector<X>, ELMS...>
+      :vector<X>
       {
-        static string toString (X const&) { return ""; }
+        SeqContainer()
+          {
+            this->reserve(sizeof...(ELMS));
+          }
+        
+        void
+        operator+= (string&& s)
+          {
+            this->emplace_back (move(s));
+          }
       };
-    
-    template<typename X>
-    struct _InvokeFailsafe<X,     typename enable_if< use_StringConversion<X> >::type>
-      {
-        static string
-        toString (X const& val)
-          try        { return string(val); }
-          catch(...) { return ""; }
-      };
-    
-    template<typename X>
-    struct _InvokeFailsafe<X,     typename enable_if< use_LexicalConversion<X> >::type>
-      {
-        static string
-        toString (X const& val)
-          try        { return boost::lexical_cast<string> (val); }
-          catch(...) { return ""; }
-      };
-  }//(End) guards/helpers
+  }//(end) stringify helper
   
   
-  /** @return a string denoting the type. */
-  template<typename TY>
-  inline string
-  tyStr (const TY* =0)
-  {
-    return "«"+ lib::test::demangleCxx (typeid(TY).name())+"»";
-  }
-  
-  template<typename TY>
-  inline string
-  tyStr (TY const& ref)
-  { return tyStr(&ref); }
-  
-
-  /** try to get an object converted to string.
-   *  A custom/standard conversion to string is used,
-   *  if applicable; otherwise, some standard types can be
-   *  converted by a lexical_cast (based on operator<< ).
-   *  Otherwise, either the fallback string is used, or just
-   *  a string based on the (mangled) type.
+  /** convert a sequence of elements to string
+   * @param elms sequence of arbitrary elements
+   * @tparam CON the container type to collect the results
+   * @return a collection of type CON, initialised by the
+   *         string representation of the given elements
    */
-  template<typename TY>
-  inline string
-  str ( TY const& val
-      , Symbol prefix=""      ///< prefix to prepend in case conversion is possible
-      , Symbol fallback =0   /// < replacement text to show if string conversion fails
-      )
+  template<class CON, typename...ELMS>
+  inline CON
+  collectStr(ELMS const& ...elms)
   {
-    string res = _InvokeFailsafe<TY>::toString(val);
-    if (!isnil (res))
-      return string(prefix) + res;
-    else
-      return fallback? string(fallback)
-                     : tyStr(val);
+    SeqContainer<CON,ELMS...> storage;
+    do_stringify (storage, elms...);
+    return CON {move(storage)};
   }
+  
+  /** standard setup: convert to string into a vector */
+  template<typename...ELMS>
+  inline vector<string>
+  stringify (ELMS const& ...elms)
+  {
+    return collectStr<vector<string>> (elms...);
+  }
+  
+  /** convert to string as transforming step in a pipeline
+   * @param src a "Lumiera Forward Iterator" with arbitrary result type
+   * @return a "Lumiera Forward Iterator" with string elements
+   * @see FormatHelper_test::checkStringify()
+   */
+  template<class IT>
+  inline auto
+  stringify (IT&& src)
+  {
+    using Val = lib::meta::ValueTypeBinding<IT>::value_type;
+    
+    return lib::transformIterator(forward<IT>(src), util::toString<Val>);
+  }
+  
+  
   
   namespace { // helper to build range iterator on demand
     template<class CON, typename TOGGLE = void>
     struct _RangeIter
       {
-        using StlIter = typename CON::const_iterator;
+        using StlIter = CON::const_iterator;
         
         lib::RangeIter<StlIter> iter;
         
@@ -161,52 +154,122 @@ namespace util {
       };
     
     template<class IT>
-    struct _RangeIter<IT,   typename enable_if< can_IterForEach<IT> >::type>
+    struct _RangeIter<IT,   lib::meta::enable_if< can_IterForEach<IT>> >
       {
         IT iter;
         
         _RangeIter(IT&& srcIter)
           : iter(std::forward<IT>(srcIter))
           { }
+        _RangeIter(IT const& srcIter)          // note: copy here
+          : iter(srcIter)
+          { }
         
       };
-  }
+  }//(end) join helper
+  
   
   /**
    * enumerate a collection's contents, separated by delimiter.
-   * @param coll something that is standard-iterable
+   * @param coll something that is standard- or Lumiera-iterable
+   * @note Lumiera-iterator is copied when given by ref, otherwise moved,
+   *       while in all other cases the source container is taken by const&
    * @return all contents converted to string and joined into
    *         a single string, with separators interspersed.
-   * @remarks based on the \c boost::join library function,
-   *          which in turn is based on
-   *          additionally, we use our
-   *          \link #str failsafe string conversion \endlink
+   * @remarks based `ostringstream`; additionally, we use our
+   *          [failsafe string conversion](\ref util::str),
    *          which in turn invokes custom string conversion,
    *          or lexical_cast as appropriate.
+   * @remarks alternatively, the `boost::join` library function
+   *          could be used, which works on _arbitrary sequences_,
+   *          which incurs some additional weight (both in terms
+   *          of header include and debug code size). And failures
+   *          on template substitution tend to be hard to understand,
+   *          since this _generic sequence_ concept is just so danm
+   *          absolutely generic (In fact that was the reason why I
+   *          gave up and just rolled our own `join` utility)
    */
-  template<class CON>
+  template<class COLL>
   inline string
-  join (CON&& coll, string const& delim =", ")
+  join (COLL&& coll, string const& delim =", ")
   {
-    using Coll = typename lib::meta::Strip<CON>::Type;
-    using Val =  typename Coll::value_type;
+    using Coll = lib::meta::Strip<COLL>::TypePlain;
+    _RangeIter<Coll> range(std::forward<COLL>(coll));    // copies when CON is reference
     
-    std::function<string(Val const&)> toString = [] (Val const& val) { return str(val); };
-    
-    _RangeIter<Coll> range(std::forward<Coll>(coll));
-    auto strings = lib::transformIterator(range.iter, toString);
-    
+    auto strings = stringify (std::move (range.iter));
     if (!strings) return "";
     
     std::ostringstream buffer;
-    for (string const& elm : strings)
-        buffer << elm << delim;
+    for ( ; strings; ++strings)
+      buffer << *strings << delim;
     
     // chop off last delimiter
     size_t len = buffer.str().length();
-    ASSERT (len > delim.length());
+    ASSERT (len >= delim.length());
     return buffer.str().substr(0, len - delim.length());
   }
+  
+  template<class X>
+  inline string
+  join (std::initializer_list<X> const&& ili, string const& delim =", ")
+  {
+    return join (ili, delim);
+  }
+  
+  // Note: offering a variant of join with var-args would create lots of ambiguities
+  
+  /** shortcut: List in parentheses, separated by comma, using temporary vector */
+  template<typename...ARGS>
+  inline string
+  joinArgList (ARGS const& ...args)
+  {
+    return "("+join (stringify (args...))+")";
+  }
+  
+  /** shortcut: join directly with dashes */
+  template<typename...ARGS>
+  inline string
+  joinDash (ARGS const& ...args)
+  {
+    return join (stringify (args...), "-");
+  }
+  
+  /** shortcut: join directly with dots */
+  template<typename...ARGS>
+  inline string
+  joinDot (ARGS const& ...args)
+  {
+    return join (stringify (args...), ".");
+  }
+  
+  
+  
+  /** one-argument variant that can be forward declared... */
+  template<class COLL>
+  inline string
+  toStringParen (COLL&& coll)
+  {
+    return "("+join (forward<COLL> (coll))+")";
+  }
+  
+  template<class COLL>
+  inline string
+  toStringBracket (COLL&& coll)
+  {
+    return "["+join (forward<COLL> (coll))+"]";
+  }
+
+  
+  /** convenient pretty-printer for std::array instances */
+  template<typename T, std::size_t N>
+  struct StringConv<std::array<T,N>>
+    {
+      static std::string
+      invoke (std::array<T,N> const& arr) noexcept
+      {
+        return util::toStringBracket (arr);
+      }
+    };
   
   
 } // namespace util

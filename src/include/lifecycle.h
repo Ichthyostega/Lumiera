@@ -1,22 +1,13 @@
 /*
-  LIFECYCLE.h  -  interface for registering and triggering lifecycle callbacks 
+  LIFECYCLE.h  -  interface for registering and triggering lifecycle callbacks
 
-  Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2008,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
 
@@ -41,7 +32,7 @@
 #ifdef __cplusplus
 
 #include "lib/symbol.hpp"
-#include <boost/noncopyable.hpp>
+#include "lib/nocopy.hpp"
 
 
 
@@ -50,11 +41,11 @@ namespace lumiera {
   using lib::Symbol;
   
   //defined in liblumiera.so
-  extern const char * ON_BASIC_INIT;      ///< automatic static init. treated specially to run as soon as possible
-  extern const char * ON_GLOBAL_INIT;     ///< to be triggered in main()             @note no magic!
-  extern const char * ON_GLOBAL_SHUTDOWN; ///< to be triggered at the end of main()  @note no magic!
+  extern CStr ON_BASIC_INIT;      ///< automatic static init. treated specially to run as soon as possible
+  extern CStr ON_GLOBAL_INIT;     ///< to be triggered in main()             @note no magic!
+  extern CStr ON_GLOBAL_SHUTDOWN; ///< to be triggered at the end of main()  @note no magic!
   
-  extern const char * ON_EMERGENCY;       ///< activated on shutdown after premature failure of a subsystem
+  extern CStr ON_EMERGENCY;       ///< activated on shutdown after premature failure of a subsystem
 
   
   // client code is free to register and use additional lifecycle events
@@ -64,17 +55,17 @@ namespace lumiera {
   /**
    *  define and register a callback for a specific lifecycle event.
    *  The purpose of this class is to be defined as a static variable in the implementation
-   *  of some subsystem (i.e. in the cpp file), providing the ctor with the pointer to a 
+   *  of some subsystem (i.e. in the cpp file), providing the ctor with the pointer to a
    *  callback function. Thus the specified callback gets enrolled when the corresponding
    *  object file is loaded. The event ON_BASIC_INIT is handled specifically, firing off the
    *  referred callback function as soon as possible. All other labels are just arbitrary (string)
    *  constants and it is necessary that "someone" cares to fire off the lifecycle events
-   *  at the right place. For example, lumiera-main (and the test runner) calls 
+   *  at the right place. For example, lumiera-main (and the test runner) calls
    *  \c LifecycleHook::trigger(ON_GLOBAL_INIT) (and..SHUTDOWN)
-   *  @note duplicate or repeated calls with the same callback are NOP 
+   *  @note duplicate or repeated calls with the same callback are NOP
    */
   class LifecycleHook
-    : private boost::noncopyable
+    : util::NonCopyable
     {
     public:
       typedef void (*Hook)(void);
@@ -105,6 +96,6 @@ extern const char * lumiera_ON_GLOBAL_SHUTDOWN;
 
 void lumiera_LifecycleHook_add (const char* eventLabel, void callbackFun(void));
 void lumiera_Lifecycle_trigger (const char* eventLabel);
-  
+
 #endif
 #endif

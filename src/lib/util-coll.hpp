@@ -1,22 +1,13 @@
 /*
   UTIL-COLL.hpp  -  helpers and convenience shortcuts for working with collections
 
-  Copyright (C)         Lumiera.org
-    2012,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2012,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
 
@@ -26,8 +17,11 @@
  ** collections and sequences (given by iterator). Mostly, these are tiny bits of
  ** existing functionality, just packaged in a more fluent and readable way.
  ** - accessors
- **   - \c first() to get the first element
- **   - \c last() to access the last element
+ **   - util::first() to get the first element
+ **   - util::last() to access the last element
+ ** - aggregate functions
+ **   - util::max() compute the maximum of comparable numbers
+ **   - util::min()
  ** 
  ** @warning some functions only available when including itertools.hpp beforehand
  ** 
@@ -43,14 +37,14 @@
 #include "lib/util.hpp"
 #include "lib/meta/trait.hpp"
 
-#include <boost/utility/enable_if.hpp>
+#include <limits>
 
 
 
 namespace util {
   
-  using boost::enable_if;
-  using boost::disable_if;
+  using lib::meta::enable_if;
+  using lib::meta::disable_if;
   
   namespace { // predicates to pick the right implementation
     
@@ -60,7 +54,7 @@ namespace util {
     template<typename T>
     struct treat_as_STL_Container
       {
-        typedef typename lib::meta::Unwrap<T>::Type TaT;
+        typedef lib::meta::Unwrap<T>::Type TaT;
         
         enum{ value = lib::meta::can_STL_ForEach<TaT>::value
                    &&!lib::meta::can_IterForEach<T>::value
@@ -77,7 +71,7 @@ namespace util {
     template<typename T>
     struct can_direct_access_Last
       {
-        typedef typename lib::meta::Unwrap<T>::Type TaT;
+        typedef lib::meta::Unwrap<T>::Type TaT;
         
         enum{ value = lib::meta::can_STL_backIteration<TaT>::value
             };
@@ -103,9 +97,8 @@ namespace util {
    *  @note the container is taken by \c const& and
    *        the \c const is \em stripped before access.
    */
-  template <typename COLL>
-  inline                    typename enable_if< treat_as_STL_Container<COLL>,
-  typename COLL::reference  >::type
+  template <typename COLL,  typename = enable_if< treat_as_STL_Container<COLL>>>
+  inline auto
   first (COLL const& coll)
   {
     using lib::meta::unwrap;
@@ -119,9 +112,8 @@ namespace util {
    *  @note the container is taken by \c const& and
    *        the \c const is \em stripped before access.
    */
-  template <typename COLL>
-  inline                    typename enable_if< can_direct_access_Last<COLL>,
-  typename COLL::reference  >::type
+  template <typename COLL,  typename = enable_if< can_direct_access_Last<COLL>>>
+  inline auto
   last (COLL const& coll)
   {
     using lib::meta::unwrap;
@@ -135,9 +127,8 @@ namespace util {
   /** extract the first element yielded by an Lumiera Forward Iterator.
    * @warning the iterator is modified.
    */
-  template <typename IT>
-  inline                 typename enable_if< treat_as_LumieraIterator<IT>,
-  typename IT::reference >::type
+  template <typename IT,    typename = enable_if<treat_as_LumieraIterator<IT>>>
+  inline auto
   first (IT ii)
   {
     __ensure_nonempty(ii);
@@ -151,29 +142,67 @@ namespace util {
    * @note returning by-value, contrary to the other tools in this suite
    * @note only available when including itertools.hpp beforehand
    */
-  template <typename IT>
-  inline                  typename enable_if< treat_as_LumieraIterator<IT>,
-  typename IT::value_type >::type
+  template <typename IT,    typename = enable_if<treat_as_LumieraIterator<IT>>>
+  inline auto
   last (IT ii)
   {
     __ensure_nonempty(ii);
     return lib::pull_last (ii);
   }
-#endif  
+#endif
   
   
   
   /* === generic container helpers === */
   
-  struct WeakPtrComparator
-    {
-      template<typename T>
-      bool
-      operator() (std::weak_ptr<T> const& l, std::weak_ptr<T> const& r) const
-        {
-          return l.lock().get() < r.lock().get();
-        }
-    };
+  template<class IT>
+  inline auto
+  max (IT&& elms)
+  {
+    using Val = std::remove_reference_t<IT>::value_type;
+    Val res = std::numeric_limits<Val>::min();
+    for (auto const& elm : std::forward<IT> (elms))
+      if (elm > res)
+        res = elm;
+    return res;
+  }
+  
+  template<class CON>
+  inline auto
+  max (CON const& elms)
+  {
+    using Val = std::remove_reference_t<CON>::value_type;
+    Val res = std::numeric_limits<Val>::min();
+    for (auto const& elm : elms)
+      if (elm > res)
+        res = elm;
+    return res;
+  }
+  
+  
+  template<class IT>
+  inline auto
+  min (IT&& elms)
+  {
+    using Val = std::remove_reference_t<IT>::value_type;
+    Val res = std::numeric_limits<Val>::max();
+    for (auto const& elm : std::forward<IT> (elms))
+      if (elm < res)
+        res = elm;
+    return res;
+  }
+  
+  template<class CON>
+  inline auto
+  min (CON const& elms)
+  {
+    using Val = std::remove_reference_t<CON>::value_type;
+    Val res = std::numeric_limits<Val>::max();
+    for (auto const& elm : elms)
+      if (elm < res)
+        res = elm;
+    return res;
+  }
   
   
   

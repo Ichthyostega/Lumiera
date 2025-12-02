@@ -1,24 +1,19 @@
 /*
   PolymorphicValue(Test)  -  verify handling of opaque polymorphic values
 
-  Copyright (C)         Lumiera.org
-    2011,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2011,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file polymorphic-value-test.cpp
+ ** unit test \ref PolymorphicValue_test
+ */
 
 
 
@@ -117,7 +112,7 @@ namespace test{
         virtual long
         apiFunc()
           {
-            long rr = ii * (1 + rand() % MAX_RAND);
+            long rr = ii * (1 + rani(MAX_RAND));
             mark (rr);
             _callSum += rr;
             return rr;
@@ -153,8 +148,8 @@ namespace test{
     
   }
   
-  typedef PolymorphicValue<Interface, MAX_SIZ> PolyVal;
-  typedef std::vector<PolyVal> TestList;
+  using PolyVal = PolymorphicValue<Interface, MAX_SIZ>;
+  using TestList = std::vector<PolyVal> ;
   
   
   
@@ -176,6 +171,7 @@ namespace test{
           _checkSum = 0;
           _callSum  = 0;
           _created  = 0;
+          seedRand();
           
           verifyBasics();
           
@@ -194,11 +190,11 @@ namespace test{
       createOpaqueValues ()
         {
           TestList list;
-          list.push_back (PolyVal::build<Imp<1> >  () );
-          list.push_back (PolyVal::build<Imp<11> > () );
-          list.push_back (PolyVal::build<Imp<111> >() );
-          list.push_back (PolyVal::build<Imp<23> > () );
-          list.push_back (PolyVal::build<Imp<5> >  () );
+          list.push_back (PolyVal::build<Imp<1>>  () );
+          list.push_back (PolyVal::build<Imp<11>> () );
+          list.push_back (PolyVal::build<Imp<111>>() );
+          list.push_back (PolyVal::build<Imp<23>> () );
+          list.push_back (PolyVal::build<Imp<5>>  () );
           return list;
         } //note: copy
       
@@ -231,10 +227,10 @@ namespace test{
           verifyCreation_and_Copy<PolyVal, MaximumSizedImp>();
           
           // Special case: client objects expose extension point for copy support
-          typedef polyvalue::CopySupport<Interface> CopySupportAPI;                    // Copy support API declared as sub-interface
-          typedef Imp<MAX_ELM,CopySupportAPI> CopySupportingImp;                       // insert this sub-interface between public API and Implementation
-          typedef PolymorphicValue<Interface, MAX_SIZ, CopySupportAPI> OptimalPolyVal; // Make the Holder use this special attachment point
-          CHECK (sizeof(OptimalPolyVal) < sizeof(PolyVal));                            // results in smaller Holder and less implementation overhead
+          using CopySupportAPI    = polyvalue::CopySupport<Interface>;                    // Copy support API declared as sub-interface
+          using CopySupportingImp = Imp<MAX_ELM,CopySupportAPI>;                          // insert this sub-interface between public API and Implementation
+          using OptimalPolyVal    = PolymorphicValue<Interface, MAX_SIZ, CopySupportAPI>; // Make the Holder use this special attachment point
+          CHECK (sizeof(OptimalPolyVal) < sizeof(PolyVal));                               // results in smaller Holder and less implementation overhead
           
           verifyCreation_and_Copy<OptimalPolyVal, CopySupportingImp>();
         }
@@ -244,9 +240,9 @@ namespace test{
       void
       verifyCreation_and_Copy()
         {
-          typedef PV Holder;
-          typedef IMP ImpType;
-          typedef typename PV::Interface Api;
+          using Holder  = PV;
+          using ImpType = IMP;
+          using Api     = PV::Interface ;
           
           long prevSum = _checkSum;
           uint prevCnt = _created;
@@ -256,13 +252,13 @@ namespace test{
           CHECK (prevCnt+1   <= _created);             // Note: usually, the compiler optimises
           CHECK (prevCnt+2   >= _created);             //       and skips the spurious copy-operation
           CHECK (sizeof(Holder) >= sizeof(ImpType));
-          Api& embedded = val;
-          CHECK (isSameObject(embedded,val));
-          CHECK (INSTANCEOF(ImpType, &embedded));
+          Api& api = val;
+          CHECK (isSameObject(api,val));
+          CHECK (INSTANCEOF(ImpType, &api));
           
           prevCnt = _created;
           Holder val2(val);       // invoke copy ctor without knowing the implementation type
-          embedded.apiFunc();
+          api.apiFunc();
           CHECK (val != val2);    // invoking the API function had an sideeffect on the state
           val = val2;             // assignment of copy back to the original...
           CHECK (val == val2);    // cancels the side effect
@@ -282,13 +278,13 @@ namespace test{
         }
       
       
-      /** @Test internally, PolymorphicValue uses some metafunctions
+      /** @test internally, PolymorphicValue uses some metafunctions
        * to pick a suitable code path, based on the presence of helper functions
        * on the API of the embedded objects. Default is no support by these objects,
        * which then requires to use a more expensive implementation. Sometimes it's
-       * desirable to support \em cloning only (copy ctor), but no assignment after
-       * the fact. In this special case, a support API with only a \cloneInto member
-       * can be implemented, causing the PolymorphicValue container to raise an 
+       * desirable to support _cloning only_ (copy ctor), but no assignment after
+       * the fact. In this special case, a support API with only a `cloneInto()` member
+       * can be implemented, causing the PolymorphicValue container to raise an
        * exception in case the copy operator is invoked.
        */
       void

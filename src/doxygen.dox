@@ -1,10 +1,10 @@
 /*
-  DOXYGEN.dox  -  font page for the Doxygen API documentation
+  DOXYGEN.dox  -  front page for the Doxygen API documentation
  
 
-  Copyright (C)         Lumiera.org
-    2013,               Hermann Vosseler <Ichthyostega@web.de>
-                        Christian Thaeter <ct@pipapo.org>
+   Copyright (C)
+     2008,            Christian Thaeter <ct@pipapo.org>
+     2013,            Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -46,42 +46,65 @@ with the *ASCIIDOC* tool and published at the [Lumiera website](http://Lumiera.o
   necessary to understand the actual code
 - right now, you are looking at the **API Documentation**, which is the entrance point to the actual code
 - on your exploration path down to the internal details, you might want to follow the overview given
-  + by the [Layer and Subsystem](modules.html) overview
+  + by the [Layer and Subsystem](topics.html) overview
   + the file level comments of relevant interfaces
 
 */
 
 /* ==== Layers ==== */
 
-/** @defgroup backend Backend-Layer
-*/
+/** @defgroup vault Vault-Layer
+ *   Provides the technical services for all processing and system access.
+ *   Manages worker pools, schedules jobs, does the memory management for the
+ *   heavy multimedia data. Loads and delegates to external libraries for
+ *   media processing.
+ */
 
-/** @defgroup proc Proc-Layer
-*/
+/** @defgroup steam Steam-Layer
+ *   Keeps the Session, generates the rendering graphs for sequences,
+ *   arranges what to do when and how, coordinates command/event processing,
+ *   playback and rendering.
+ */
 
 /** @defgroup gui Graphical User Interface
-*/
+ *   Interaction and Presentation layer.
+ *   Provides the structures to coordinate navication, presentation state
+ *   and gestures. Defines the widgets and controllers for the UI.
+ *   Loaded as Plug-in.
+ */
 
 /* ==== Subsystems ==== */
 
 /** @defgroup asset Asset Management
-    @ingroup proc
+    @ingroup steam
 */
 
 /** @defgroup session Session
-    @ingroup proc
+    @ingroup steam
+*/
+
+/** @defgroup fixture Fixture and low-level-Model
+    @ingroup steam
 */
 
 /** @defgroup player Playback and Render Control
-    @ingroup proc
+    @ingroup steam
 */
 
 /** @defgroup engine Render Engine
-    @ingroup proc
+    @ingroup vault
 */
 
 /** @defgroup scheduler Scheduler
-    @ingroup backend
+    @ingroup vault
+    The Scheduler acts as the central hub in the implementation of the RenderEngine
+    and coordinates the processing resources of the application. A Render Job is created
+    for every frame and passed to the Scheduler, marked with a deadline, and connected
+    to _prerequisite_ jobs.
+*/
+
+/** @defgroup memory Memory Management
+    @ingroup vault
 */
 
 
@@ -99,3 +122,46 @@ implementation namespaces within \c lumiera::
 Implementation namespace for support and library code.
 */
 
+
+
+/* ==== Test Namespaces ==== */
+
+/** @namespace test
+Test runner and basic definitions for tests.
+*/
+
+/** @namespace lib::test
+Unit tests for the Lumiera support library.
+*/
+
+/** @namespace lib::test::test */
+/** @namespace lib::time::test */
+/** @namespace lib::diff::test */
+/** @namespace lib::hash::test */
+/** @namespace lib::idi::test  */
+/** @namespace lib::iter::test */
+/** @namespace lib::meta::test */
+
+/** @namespace util::test */
+
+/** @namespace vault::test */
+/** @namespace vault::mem::test */
+/** @namespace vault::gear::test */
+
+/** @namespace steam::test */
+/** @namespace steam::play:test */
+/** @namespace steam::engine::test */
+/** @namespace steam::fixture::test */
+/** @namespace steam::asset::test */
+/** @namespace steam::asset::meta::test */
+/** @namespace steam::control::test */
+/** @namespace steam::session::test */
+/** @namespace steam::builder::test */
+
+/** @namespace stage::test */
+/** @namespace stage::ctrl::test */
+/** @namespace stage::model::test */
+/** @namespace stage::interact::test */
+
+// Remark: for some unclear reason, cross-links to test-class names do not work in Doxygen;
+//         even after declaring these namespaces, or after setting EXTRACT_ALL = YES

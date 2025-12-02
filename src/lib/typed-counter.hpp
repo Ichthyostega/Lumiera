@@ -1,22 +1,13 @@
 /*
-  TYPED-COUNTER.hpp  -  maintain a set of type based contexts 
+  TYPED-COUNTER.hpp  -  maintain a set of type based contexts
 
-  Copyright (C)         Lumiera.org
-    2009,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2009,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
 
@@ -44,7 +35,10 @@
  **       actually to verify this by real measurements (as of 2011)
  ** @todo 2010 ... this is the first, preliminary version of a facility,
  **       which is expected to get quite important for custom allocation management.
- ** 
+ ** @remark in 2023 changed partially to use atomics; measurements indicate however
+ **       that the impact of locking technology is negligible. In concurrent use,
+ **       the wait times are dominating. In single threaded use, both using Atomics
+ **       or a nonrecursive mutex yield amortised invocation times around 60ns.
  ** @see typed-counter-test.cpp
  ** @see TypedAllocationManager
  ** @see AllocationCluster (custom allocation scheme using a similar idea inline)
@@ -59,26 +53,34 @@
 #include "lib/error.hpp"
 #include "lib/sync-classlock.hpp"
 
-#include <vector>
+#include <atomic>
+#include <string>
+#include <deque>
 
 
+namespace util {
+  std::string showSize (size_t)   noexcept;
+}
 
 namespace lib {
   
   typedef size_t IxID;              //////////////////////TICKET #863
   
-  using std::vector;
+  using std::deque;
+  using std::string;
   
   
-  /** 
+  /**
    * Provide type-IDs for a specific context.
    * This facility allows to access a numeric ID for each
    * given distinct type. Type-IDs may be used e.g. for
-   * dispatcher tables or for custom allocators. 
+   * dispatcher tables or for custom allocators.
    * The type-IDs generated here are not completely global though.
    * Rather, they are tied to a specific type context, e.g. a class
    * implementing a custom allocator. These typed contexts are
    * considered to be orthogonal and independent of each other.
+   * @remark 2023: allocation of global ID counters are protected by
+   *         double-checked locking with mutex, which is deemed adequate.
    */
   template<class CX>
   class TypedContext
@@ -125,13 +127,19 @@ namespace lib {
   
   
   
-  /** 
-   * Helper providing a set of counters, each tied to a specific type.
+  /**
+   * Utility providing a set of counters, each tied to a specific type.
+   * The actual allocation of id numbers is delegated to TypedContext.
+   * Such a counter is used to build [symbolic instance IDs](\ref lib::meta::generateSymbolicID)
+   * with a per-type running counter. Such IDs are used for lib::idi::EntryID and for lib::diff::GenNode.
+   * @warning the index space for typeIDs is application global; the more distinct types are used, the more
+   *          slots will be present in _each instance of TypedCounter._ As of 2023 we are using < 30 distinct
+   *          types for these use cases, and thus the wasted memory is not much of a concern.
    */
   class TypedCounter
     : public Sync<>
     {
-      mutable vector<long> counters_;
+      mutable deque<std::atomic_int64_t> counters_;
       
       template<typename TY>
       IxID
@@ -139,42 +147,37 @@ namespace lib {
         {
           IxID typeID = TypedContext<TypedCounter>::ID<TY>::get();
           if (size() < typeID)
-            counters_.resize (typeID);
+            {       // protect against concurrent slot allocations
+              Lock sync{this};
+              if (size() < typeID)
+                counters_.resize (typeID);
+            }
           
-          ENSURE (counters_.capacity() >= typeID);
+          ENSURE (counters_.size() >= typeID);
           return (typeID - 1);
         }
       
       
     public:
-      TypedCounter()
-        {
-          counters_.reserve(5);  // pre-allocated 5 slots
-        }
-      
-      
       template<class X>
-      long 
+      int64_t
       get()  const
         {
-          Lock sync(this);
-          return counters_[slot<X>()];
+          return counters_[slot<X>()].load(std::memory_order_relaxed);
         }
       
       template<class X>
-      long 
+      int64_t
       inc()
-        {
-          Lock sync(this);
-          return ++counters_[slot<X>()];
+        {                                 // yields the value seen previously
+          return 1 + counters_[slot<X>()].fetch_add(+1, std::memory_order_relaxed);
         }
       
       template<class X>
-      long 
+      int64_t
       dec()
         {
-          Lock sync(this);
-          return --counters_[slot<X>()];
+          return -1 + counters_[slot<X>()].fetch_add(-1, std::memory_order_relaxed);
         }
       
       
@@ -183,6 +186,65 @@ namespace lib {
       size_t size() const { return counters_.size(); }
       bool empty()  const { return counters_.empty();}
     };
+  
+  
+  
+  /**
+   * Utility to produce member IDs
+   * for objects belonging to a "Family",
+   * as defined by a distinguishing type.
+   * Within each family, each new instance of
+   * FamilyMember holds a new distinct id number.
+   * @remark this builds a structure similar to TypedContext,
+   *         however the second level is not assigned _per type_
+   *         but rather _per instance_ of FamilyMember<TY>
+   */
+  template<typename TY>
+  class FamilyMember
+    {
+      const size_t id_;
+      
+      /** member counter shared per template instance */
+      static std::atomic_size_t memberCounter;
+      
+      /** threadsafe allocation of member ID */
+      static size_t
+      allocateNextMember()
+        {                       // Note : returning previous value before increment
+          return memberCounter.fetch_add(+1, std::memory_order_relaxed);
+        }
+      
+    public:
+      FamilyMember()
+        : id_{allocateNextMember()}
+        { }
+      
+      operator size_t()  const
+        {
+          return id_;
+        }
+      
+      operator string()  const
+        {
+          return util::showSize (this->id_);
+        }
+      
+      friend string
+      operator+ (string const& prefix, FamilyMember id)
+      {
+        return prefix+string(id);
+      }
+      
+      friend string
+      operator+ (CStr prefix, FamilyMember id)
+      {
+        return string(prefix)+id;
+      }
+    };
+  
+  /** allocate storage for the counter per type family */
+  template<typename TY>
+  std::atomic_size_t FamilyMember<TY>::memberCounter{0};
   
   
   

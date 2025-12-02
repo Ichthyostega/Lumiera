@@ -1,43 +1,33 @@
 /*
   Digxel(Test)  -  cover behaviour of a generic number-element holder
 
-  Copyright (C)         Lumiera.org
-    2011,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2011,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file digxel-test.cpp
+ ** unit test \ref Digxel_test
+ */
 
 
 #include "lib/test/run.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/format-string.hpp"
 #include "lib/test/test-helper.hpp"
-#include "lib/time/display.hpp"
 #include "lib/time/digxel.hpp"
+#include "lib/random.hpp"
 #include "lib/util.hpp"
-
-#include <time.h>
-#include <cstdlib>
-#include <iostream>
 
 using lumiera::error::LUMIERA_ERROR_ASSERTION;
 using util::isSameObject;
 using util::isnil;
-using std::rand;
-using std::cout;
-using std::endl;
+using lib::rani;
 
 
 namespace lib {
@@ -54,8 +44,8 @@ namespace test{
     inline double
     randomFrac()
       {
-        double arbitrary = (1 + rand() % RAND_RANGE);
-        arbitrary /= (1 + rand() % RAND_DENOM);
+        double arbitrary = 1 + rani(RAND_RANGE);
+        arbitrary /= 1 + rani(RAND_DENOM);
         
         static double prevVal;
         if (arbitrary != prevVal)
@@ -147,8 +137,10 @@ namespace test{
   class Digxel_test : public Test
     {
       virtual void
-      run (Arg arg) 
+      run (Arg arg)
         {
+          seedRand();
+          
           checkSimpleUsage();
           checkMutation ();
           verifyMutatorInfluence();
@@ -159,7 +151,7 @@ namespace test{
           
           if (!isnil (arg))
             timingMeasurements();
-        } 
+        }
       
       
       void
@@ -243,28 +235,28 @@ namespace test{
           digi.installMutator (protocollingMutator, digi);
           
           digi = 12.3;
-          CHECK ( 0.0 == preval && 12.3 == newval);
+          CHECK ( 0.0 == preval and 12.3 == newval);
           digi += 10;
-          CHECK (12.3 == preval && 22.3 == newval);
+          CHECK (12.3 == preval and 22.3 == newval);
           digi -= 5;
-          CHECK (22.3 == preval && 17.3 == newval);
+          CHECK (22.3 == preval and 17.3 == newval);
           ++digi;
-          CHECK (17.3 == preval && 18.3 == newval);
+          CHECK (17.3 == preval and 18.3 == newval);
           digi++;
-          CHECK (18.3 == preval && 19.3 == newval);
+          CHECK (18.3 == preval and 19.3 == newval);
           --digi;
-          CHECK (19.3 == preval && 18.3 == newval);
+          CHECK (19.3 == preval and 18.3 == newval);
           digi--;
-          CHECK (18.3 == preval && 17.3 == newval);
+          CHECK (18.3 == preval and 17.3 == newval);
           
           double val = ++digi;
-          CHECK (18.3 == digi && 18.3 == val);
+          CHECK (18.3 == digi and 18.3 == val);
           val = digi++;
-          CHECK (19.3 == digi && 18.3 == val);
+          CHECK (19.3 == digi and 18.3 == val);
           val = --digi;
-          CHECK (18.3 == digi && 18.3 == val);
+          CHECK (18.3 == digi and 18.3 == val);
           val = digi--;
-          CHECK (17.3 == digi && 18.3 == val);
+          CHECK (17.3 == digi and 18.3 == val);
         }
       
       
@@ -305,7 +297,7 @@ namespace test{
           
           TestDigxel d2(d1);
           CHECK (d2 == someValue);
-          CHECK (!isSameObject (d1, d2));
+          CHECK (not isSameObject (d1, d2));
           
           d1 = randomFrac();
           CHECK (d1 != d2);

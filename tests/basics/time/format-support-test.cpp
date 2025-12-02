@@ -1,24 +1,19 @@
 /*
   FormatSupport(Test)  -  verify the configuration to support a specific format
 
-  Copyright (C)         Lumiera.org
-    2011,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2011,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file format-support-test.cpp
+ ** unit test \ref FormatSupport_test
+ */
 
 
 #include "lib/test/run.hpp"
@@ -41,7 +36,7 @@ namespace test {
   class FormatSupport_test : public Test
     {
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           SupportStandardTimecode just_fine;
           Supported just_smpte  = Supported::formats< Types<Smpte> >();
@@ -68,7 +63,7 @@ namespace test {
           
           // format support descriptors are assignable
           just_smpte = just_simple;
-          CHECK (support2.check<Hms>()     == support3.check<Hms>());  
+          CHECK (support2.check<Hms>()     == support3.check<Hms>());
           CHECK (support2.check<Smpte>()   == support3.check<Smpte>());
           CHECK (support2.check<Frames>()  == support3.check<Frames>());
           CHECK (support2.check<Seconds>() == support3.check<Seconds>());

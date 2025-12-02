@@ -1,22 +1,13 @@
 /*
   ERROR.hpp  -  Lumiera Exception Interface (C++)
 
-  Copyright (C)         Lumiera.org
+   Copyright (C)
     2008,2010           Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
 
@@ -28,7 +19,7 @@
  ** Within Lumiera, C-style error states and C++-style exceptions
  ** are tightly integrated. Creating an exception sets the error flag,
  ** and there are helpers available to throw an exception automatically
- ** when a non-cleare error state is detected.
+ ** when a unclear error state is detected.
  ** 
  ** @see error-state.c
  ** @see error.hpp
@@ -39,69 +30,114 @@
 #ifndef LUMIERA_ERROR_HPP_
 #define LUMIERA_ERROR_HPP_
 
+#define _STDBOOL_H // prevent <atomic> from including stdbool.h
+
 #include "include/logging.h"
-#include "include/lifecycle.h"
+#include "lib/hash-standard.hpp"
 #include "lib/error.h"
+
+#include <exception>
 #include <string>
 
+using CStr = const char*;
+
+
+#define LERR_(_NAME_) lumiera::error::LUMIERA_ERROR_##_NAME_
+
 namespace lumiera {
+  namespace error {
+    /** error-ID for unspecified exceptions */
+    LUMIERA_ERROR_DECLARE(EXCEPTION);
+  }
   
   using std::string;
   
   
   
-  /** error-ID for unspecified exceptions */
-  LUMIERA_ERROR_DECLARE(EXCEPTION);  
-  
   /**
-   * Interface and Base class of all Exceptions thrown
-   * from within Lumiera (C++) code. Common operations
-   * for getting an diagnostic message and for obtaining
-   * the root cause, i.e. the first exception encountered
-   * in a chain of exceptions.
+   * Interface and Base definition for all Lumiera Exceptions.
+   * Provides common operations for getting a diagnostic message
+   * and to obtain the _root cause_ message, i.e. the message
+   * from the first exception encountered in a chain of exceptions.
    */
-  class Error : public std::exception
+  class Error
+    : public std::exception
     {
+      lumiera_err const id_;  ///< an LUMIERA_ERROR id, which is set as errorstate on construction
+      string           msg_;  ///< friendly message intended for users (to be localised)
+      string          desc_;  ///< detailed description of the error situation for the developers
+      mutable string  what_;  ///< buffer for generating the detailed description on demand
+      const string   cause_;  ///< description of first exception encountered in the chain
+      
+      
     public:
-      Error (string description="", const char* const id=LUMIERA_ERROR_EXCEPTION) throw();
-      Error (std::exception const& cause,
-             string description="", const char* const id=LUMIERA_ERROR_EXCEPTION) throw();
+      virtual ~Error ()   noexcept { };  ///< this is an interface
       
-      Error (const Error&) throw();
-      virtual ~Error () throw() {};
       
-      /** yield a diagnostic message characterising the problem */
-      virtual const char* what () const throw();
+      Error (string description=""
+                   ,lumiera_err const id =LERR_(EXCEPTION))  noexcept;
+      Error (std::exception const& cause
+                   ,string description=""
+                   ,lumiera_err const id =LERR_(EXCEPTION))  noexcept;
       
-      /** the internal Lumiera-error-ID (was set as C-errorstate in ctor) */
-      const char* getID () const throw() { return this->id_; }
+      Error (Error &&)                = default;
+      Error (Error const&)            = default;
+      Error& operator= (Error &&)     = delete;
+      Error& operator= (Error const&) = delete;
+      
+      /** std::exception interface : yield a diagnostic message */
+      virtual CStr
+      what ()  const noexcept override;
+      
+      /** the internal Lumiera-error-ID
+       * (was set as C-errorstate in ctor) */
+      lumiera_err
+      getID ()  const noexcept
+        {
+          return id_;
+        }
       
       /** extract the message to be displayed for the user */
-      const string& getUsermsg () const throw();
+      string const&
+      getUsermsg ()  const noexcept
+        {
+          return msg_;
+        }
       
       /** If this exception was caused by a chain of further exceptions,
        *  return the description of the first one registered in this throw sequence.
-       *  This works only if every exceptions thrown as a consequence of another exception 
+       *  This works only if every exceptions thrown as a consequence of another exception
        *  is properly constructed by passing the original exception to the constructor
        *  @return the description string, maybe empty (if there is no known root cause)
        */
-      const string& rootCause () const throw()  { return this->cause_; }
+      string const&
+      rootCause ()  const noexcept
+        {
+          return cause_;
+        }
       
-      /** replace the previous or default friendly message for the user. To be localised. */
-      Error& setUsermsg (const string& newMsg) throw() { this->msg_ = newMsg; return *this; }
+      /** replace the previous or default friendly message for the user.
+       * @note to be localised / translated.
+       */
+      Error&
+      setUsermsg (string const& newMsg)  noexcept
+        {
+          msg_ = newMsg;
+          return *this;
+        }
       
       /** give additional developer info. Typically used at intermediate handlers to add context. */
-      Error& prependInfo (const string& text) throw() { this->desc_.insert (0,text); return *this; }
+      Error&
+      prependInfo (string const& text)  noexcept
+        {
+          desc_.insert (0, text);
+          return *this;
+        }
       
       
     private:
-      const char* id_;       ///< an LUMIERA_ERROR id, which is set as errorstate on construction
-      string msg_;           ///< friendly message intended for users (to be localised)
-      string desc_;          ///< detailed description of the error situation for the developers
-      mutable string what_;  ///< buffer for generating the detailed description on demand
-      const string cause_;   ///< description of first exception encountered in the chain
-      
-      static const string extractCauseMsg (std::exception const&)  throw();
+      static const string
+      extractCauseMsg (std::exception const&)  noexcept;
     };
   
   
@@ -114,12 +150,12 @@ namespace lumiera {
   namespace error {
     
     /** global function for handling unknown exceptions
-     *  encountered at functions declaring not to throw 
+     *  encountered at functions declaring not to throw
      *  this kind of exception. Basically, any such event
      *  can be considered a severe design flaw; we can just
      *  add some diagnostics prior to halting.
      */
-    void lumiera_unexpectedException ()  throw();
+    void lumiera_unexpectedException ()  noexcept;
     
     /** throw an error::Fatal indicating "assertion failure" */
     void assertion_terminate (const string& location);
@@ -140,6 +176,7 @@ namespace lumiera {
     LUMIERA_ERROR_DECLARE (WRONG_TYPE);   ///< runtime type mismatch
     LUMIERA_ERROR_DECLARE (ITER_EXHAUST); ///< end of sequence reached
     LUMIERA_ERROR_DECLARE (CAPACITY);     ///< predefined fixed storage capacity
+    LUMIERA_ERROR_DECLARE (SAFETY_LIMIT); ///< exceeding fixed internal safety limit
     LUMIERA_ERROR_DECLARE (INDEX_BOUNDS); ///< index out of bounds
     LUMIERA_ERROR_DECLARE (BOTTOM_VALUE); ///< invalid or NIL value
     LUMIERA_ERROR_DECLARE (UNCONNECTED);  ///< missing connection
@@ -147,43 +184,41 @@ namespace lumiera {
     
     
     
-/** Macro for creating derived exception classes properly
- *  integrated into Lumiera's exception hierarchy. Using
- *  this macro assures that the new class will get the full
- *  set of constructors and behaviour common to all exception
- *  classes, so it should be used when creating an derived
- *  exception type for more then strictly local purposes
- */
-#define LUMIERA_EXCEPTION_DECLARE(CLASS, PARENT, _ID_) \
-    class CLASS : public PARENT                         \
-      {                                                 \
-      public:                                           \
-        CLASS (std::string description="",              \
-               const char* id=_ID_) throw()             \
-        : PARENT (description, id)  {}                  \
-                                                        \
-        CLASS (std::exception const& cause,             \
-               std::string description="",              \
-               const char* id=_ID_) throw()             \
-        : PARENT (cause, description, id)   {}          \
+    /**
+     * Derived specific exceptions within Lumiera's exception hierarchy.
+     */
+    template<lumiera_err const& eID, class PAR =Error>
+    class LumieraError
+      : public PAR
+      {
+      public:
+        LumieraError (std::string description=""
+                     ,lumiera_err const id=eID)  noexcept
+          : PAR{description, id? id:eID}
+        { }
+        LumieraError (std::exception const& cause
+                     ,std::string description=""
+                     ,lumiera_err const id=eID)  noexcept
+          : PAR{cause, description, id? id:eID}
+        { }
       };
     
-    //-------------------------CLASS-----PARENT--ID----------------------
-    LUMIERA_EXCEPTION_DECLARE (Logic,    Error,  LUMIERA_ERROR_LOGIC);
-    LUMIERA_EXCEPTION_DECLARE (Fatal,    Logic,  LUMIERA_ERROR_FATAL);
-    LUMIERA_EXCEPTION_DECLARE (Config,   Error,  LUMIERA_ERROR_CONFIG);
-    LUMIERA_EXCEPTION_DECLARE (State,    Error,  LUMIERA_ERROR_STATE);
-    LUMIERA_EXCEPTION_DECLARE (Flag,     State,  LUMIERA_ERROR_FLAG);
-    LUMIERA_EXCEPTION_DECLARE (Invalid,  Error,  LUMIERA_ERROR_INVALID);
-    LUMIERA_EXCEPTION_DECLARE (External, Error,  LUMIERA_ERROR_EXTERNAL);
+    //----CLASS-------------------ID--------------PARENT------
+    using Logic    = LumieraError<LERR_(LOGIC)>;
+    using Fatal    = LumieraError<LERR_(FATAL),   Logic>;
+    using State    = LumieraError<LERR_(STATE)>;
+    using Flag     = LumieraError<LERR_(FLAG),    State>;
+    using Invalid  = LumieraError<LERR_(INVALID)>;
+    using Config   = LumieraError<LERR_(CONFIG),  Invalid>;
+    using External = LumieraError<LERR_(EXTERNAL)>;
     
     
     /** install our own handler for undeclared exceptions. Will be
      *  called automatically ON_BASIC_INIT when linking exception.cpp */
-    void install_unexpectedException_handler ();
+    void install_unexpectedException_handler();
     
     /** @return error detail-info if currently set, a default message else */
-    const char* detailInfo ();
+    CStr detailInfo();
     
   } // namespace error
   
@@ -193,7 +228,7 @@ namespace lumiera {
    * Check the lumiera error state, which maybe was set by C-code.
    * @throw Errorflag exception to signal an detected lumiera error
    * @note specific error code and information is enclosed in
-   *       the raised exception; the error state is \em not cleared.
+   *       the raised exception; the error state is _not cleared_.
    */
   inline void
   throwOnError()
@@ -202,7 +237,7 @@ namespace lumiera {
       {
         throw error::Flag( error::detailInfo()
                          , errorFlag);
-  }   }                  //causes the error state to be set
+  }   }
   
   /** Check the lumiera error state and throw a specific exception
    *  in case a non-cleared errorflag is detected. No-op else.
@@ -212,21 +247,13 @@ namespace lumiera {
    */
   template<class EX>
   inline void
-  maybeThrow(string description)
+  maybeThrow (string description ="")
   {
     if (lumiera_err errorFlag =lumiera_error())
       {
-        throw EX (error::Flag( error::detailInfo()
-                             , errorFlag)
+        throw EX (error::Flag{error::detailInfo(), errorFlag}
                  ,description);
   }   }
-  
-  template<class EX>
-  inline void
-  maybeThrow()
-  {
-    maybeThrow<EX>("");
-  }
   
   
 } // namespace lumiera
@@ -240,22 +267,63 @@ namespace lumiera {
 #define ERROR_LOG_AND_IGNORE(_FLAG_,_OP_DESCR_) \
   catch (std::exception& problem)                \
     {                                             \
-      const char* errID = lumiera_error();         \
+      CStr errID = lumiera_error();                \
       WARN (_FLAG_, "%s failed: %s", _OP_DESCR_, problem.what()); \
       TRACE (debugging, "Error flag was: %s", errID);\
     }                                                 \
   catch (...)                                          \
     {                                                   \
-      const char* errID = lumiera_error();               \
+      CStr errID = lumiera_error();               \
       ERROR (_FLAG_, "%s failed with unknown exception; " \
                      "error flag is: %s"                   \
-                   , _OP_DESCR_, errID);                    \
+                   , _OP_DESCR_, errID?errID:"??");         \
+    }
+
+#define ERROR_LOG_AND_RETHROW(_FLAG_,_OP_DESCR_) \
+  catch (std::exception& problem)                 \
+    {                                              \
+      CStr errID = lumiera_error();                 \
+      WARN (_FLAG_, "%s failed: %s", _OP_DESCR_, problem.what()); \
+      TRACE (debugging, "Error flag was: %s", errID); \
+      throw;                                           \
+    }                                                   \
+  catch (...)                                            \
+    {                                                     \
+      CStr errID = lumiera_error();                        \
+      ERROR (_FLAG_, "%s failed with unknown exception; "   \
+                     "error flag is: %s"                     \
+                   , _OP_DESCR_, errID?errID:"??");           \
+      throw;                                                   \
+    }
+
+/******************************************************//**
+ * convenience shortcut to catch and absorb any exception,
+ * then returning a default value instead. This scheme is
+ * typically used within signal handlers in the GTK UI,
+ * since GTK (written in C) can not propagate exceptions
+ */
+#define ON_EXCEPTION_RETURN(_VAL_,_OP_DESCR_)   \
+  catch (std::exception& problem)                \
+    {                                             \
+      CStr errID = lumiera_error();                \
+      WARN (stage, "%s (Handler) failed: %s",       \
+                   _OP_DESCR_, problem.what());      \
+      TRACE (debugging, "Error flag was: %s", errID); \
+      return (_VAL_);                                  \
+    }                                                   \
+  catch (...)                                            \
+    {                                                     \
+      CStr errID = lumiera_error();                        \
+      ERROR (stage, "(Handler) %s failed with "             \
+                    "unknown exception; error flag is: %s"   \
+                   , _OP_DESCR_, errID?errID:"??");           \
+      return (_VAL_);                                          \
     }
 
 
 
 /**************************************************//**
- * if NoBug is used, redefine some macros 
+ * if NoBug is used, redefine some macros
  * to rather throw Lumiera Errors instead of aborting
  */
 #if 0 ///////////////////////////////////TODO disabled for now. NoBug aborts are hard and may hold some locks. There are hooks to allow throwing from NoBug  TODO use them....

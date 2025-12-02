@@ -34,9 +34,9 @@ NOTE: Draft, please help rephrase/review and shorten explanations!
 
  anchor:ControllerGui[] link:#ControllerGui[->]Controller Gui::
         This can be either a full Software implementation for a Transport
-        control (Widgets for Start/Stop/Rev/Ffw etc) or some Gui managing an
+        control (Widgets for Start/Stop/Rev/Ffw etc) or some GUI managing an
         Input Device. They share some feature to attach them to controllable
-        gui-entities (Viewers, Timeline Views)
+        GUI-entities (Viewers, Timeline Views)
 
  anchor:Cursor[] link:#Cursor[->]Cursor::
         Playback- or edit position
@@ -61,9 +61,9 @@ NOTE: Draft, please help rephrase/review and shorten explanations!
 
  anchor:InputDevice[] link:#InputDevice[->]Input Device::
         Some hardware controler, like an extra keyboard, midi mixer, Jog, ..
-        TODO: we still need to decide on whether we can treat the main keyboard 
-        as special global state or whether we can handle the keyboard as a generic 
-        input devide. 
+        TODO: we still need to decide on whether we can treat the main keyboard
+        as special global state or whether we can handle the keyboard as a generic
+        input devide.
 
  anchor:LowLevelModel[] link:#LowLevelModel[->]Low Level Model::
         The generated Processing Graph, to be ``performed'' within the engine
@@ -80,7 +80,7 @@ NOTE: Draft, please help rephrase/review and shorten explanations!
         A specification denoting where to connect the output of a pipe.
         It might either be given _absoulutely_, i.e as a Pipe-ID,
         or by a _relative_ or an _indirect_ specification
-        
+
  anchor:OutputManager[] link:#OutputManager[->]OutputManager::
         Manages all external outputs of the application and provides output
         slots targetting these.
@@ -126,7 +126,7 @@ NOTE: Draft, please help rephrase/review and shorten explanations!
         The top-level context in which all editing is done over an extended
         period of time. A Project can be saved and re-opened. It consists of
         various things a user is working on: user-information, assets, state and
-        objects to be edited. 
+        objects to be edited.
 
  anchor:RenderTask[] link:#RenderTask[->]RenderTask::
         This is basically a PlayController, but directly collects output without
@@ -138,7 +138,7 @@ NOTE: Draft, please help rephrase/review and shorten explanations!
         some logic and knowledge about handling/converting data. This may be
         configued with this Rules System. Typically Lumiera will provide sane
         defaults for most purposes but may extended/refined for site specific
-        things.  
+        things.
 
  anchor:Sequence[] link:#Sequence[->]Sequence::
         A collection of *Media Objects* (clips, effects, transitions, labels,
@@ -213,7 +213,7 @@ NOTE: Draft, please help rephrase/review and shorten explanations!
         elements contained within this track, unfold nested tracks and so on.
         To a large extent, it corresponds to the placement of this track and
         allows to manipulate this placement
-        
+
         - *TODO*: better term for this
         - Note by Ichthyo: while I like the term "patchbay", my concern with
           this is that it has already a very specific meaning in audio
@@ -233,4 +233,10 @@ NOTE: Draft, please help rephrase/review and shorten explanations!
         (partially) which would enable user comparison or it might even be
         possible to allow the Viewer to be collapsed to a control, thus,
         allowing a video to be sent to a dedicated monitor, e.g., to a separate
-        X/-display or to a firewire. 
+        X/-display or to a firewire.
+
+ anchor:ViewerSwitchBoard[] link:#Viewer-Switch-Board[->]Viewer Switch Board::
+        A control panel attached to the viewer, allowing to select dynamically
+        between various possible inputs. With the help of the Switch Board,
+        ``A vs B'' comparisons can be done, optionally in split screen mode.
+

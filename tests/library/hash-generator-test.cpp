@@ -1,24 +1,19 @@
 /*
   HashGenerator(Test)  -  hash value generation details
 
-  Copyright (C)         Lumiera.org
-    2011,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2011,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file hash-generator-test.cpp
+ ** unit test \ref HashGenerator_test
+ */
 
 
 #include "lib/test/run.hpp"
@@ -49,7 +44,7 @@ namespace test{
    *       - weakness of boost::hash
    *       
    * @see HashIndexed_test
-   * @see EntryID_test 
+   * @see EntryID_test
    */
   class HashGenerator_test : public Test
     {
@@ -57,6 +52,7 @@ namespace test{
       virtual void
       run (Arg)
         {
+          seedRand();
           demonstrate_boost_hash_weakness();
           verify_Knuth_workaround();
         }
@@ -74,6 +70,7 @@ namespace test{
        * 
        * This problem is especially dangerous when storing objects keyed
        * by a string-id, which is generated from running numbers.
+       * @remark as of 2018 the boost::hash function does not show this weakness anymore
        */
       void
       demonstrate_boost_hash_weakness ()
@@ -102,7 +99,10 @@ namespace test{
                 }
               hashValues[hashVal] = candidate;
             }
-          CHECK (0 < collisions, "boost::hash for strings is expected to produce collisions");
+          if  (0 < collisions)
+            cout << "boost::hash for strings produced "<<collisions<<" collisions. This is a known problem."<<endl;
+          else
+            cout << "SURPRISE. No collisions with the boost::hash function." <<endl;
         }
       
       
@@ -125,7 +125,7 @@ namespace test{
         {
           StringsTable hashValues;
           string prefix = "Entry.";
-          const size_t seed = rand();
+          const size_t seed = rani();
           
           const size_t KNUTH_MAGIC = 2654435761;
           

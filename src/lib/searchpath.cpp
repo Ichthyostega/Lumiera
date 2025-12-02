@@ -1,28 +1,25 @@
 /*
   Searchpath  -  helpers for searching directory lists and locating modules
 
-  Copyright (C)         Lumiera.org
-    2011,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2011,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-* *****************************************************/
+/** @file searchpath.cpp
+ ** Implementation of helpers to handle directory search paths.
+ */
 
 
 #include "lib/error.hpp"
 #include "lib/searchpath.hpp"
+#include "lib/format-string.hpp"
 #include "lib/symbol.hpp"
 
 
@@ -35,45 +32,38 @@
 
 namespace lib {
   
-  LUMIERA_ERROR_DEFINE (FILE_NOT_DIRECTORY, "path element points at a file instead of a directory");
+  using util::_Fmt;
+  using std::regex;
+  using std::regex_replace;
   
-  
-  
-  const regex SearchPathSplitter::EXTRACT_PATHSPEC   ("[^:]+");
+  const regex SearchPathSplitter::ACCEPT_PATHELEMENT{"(^|:)\\s*([^:]+)", regex::optimize};
   
   
   /** @internal helper to figure out the installation directory,
    *  as given by the absolute path of the currently executing program
    *  @warning this is Linux specific code */
-  string
+  fs::path
   findExePath()
   {
-    static string buff(lib::STRING_MAX_RELEVANT+1, '\0' );
-    if (!buff[0])
-      {
-        ssize_t chars_read = readlink (GET_PATH_TO_EXECUTABLE, &buff[0], lib::STRING_MAX_RELEVANT);
-        
-        if (0 > chars_read || chars_read == ssize_t(lib::STRING_MAX_RELEVANT))
-          throw error::Fatal ("unable to discover path of running executable");
-        
-        buff.resize(chars_read);
-      }
-    return buff;
+    fs::path selfExe{GET_PATH_TO_EXECUTABLE};
+    if (not fs::exists (selfExe))
+      throw error::Fatal ("unable to discover path of running executable");
+    return fs::canonical (selfExe);
   }
   
   
   /** @internal helper to replace all $ORIGIN prefixes in a given string
    *   by the directory holding the current executable
-   *  @note also picks ORIGIN, $ORIGIN/, ORIGIN/ 
+   *  @note also picks ORIGIN, $ORIGIN/, ORIGIN/
    */
   string
   replaceMagicLinkerTokens (string const& src)
   {
-    static const regex PICK_ORIGIN_TOKEN ("\\$?ORIGIN/?");
-    static const string expandedOriginDir  
-      = fsys::path (findExePath()).parent_path().string() + "/";          ///////////TICKET #896
+    static const regex PICK_ORIGIN_TOKEN{"\\$?ORIGIN/?", regex::optimize};
+    static const string expandedOriginDir
+      = findExePath().parent_path().generic_string() + "/";
     
-    return boost::regex_replace(src, PICK_ORIGIN_TOKEN, expandedOriginDir);
+    return regex_replace (src, PICK_ORIGIN_TOKEN, expandedOriginDir);
   }
   
   
@@ -81,23 +71,24 @@ namespace lib {
   
   
   string
-  resolveModulePath (fsys::path moduleName, string searchPath)
+  resolveModulePath (fs::path moduleName, string searchPath)
   {
-    fsys::path modulePathName (moduleName);
-    SearchPathSplitter searchLocation(searchPath);                        ///////////TICKET #896
+    fs::path modulePathName (moduleName);
+    SearchPathSplitter searchLocation(searchPath);
     
-    while (!fsys::exists (modulePathName))
+    while (not fs::exists (modulePathName))
       {
         // try / continue search path
-        if (searchLocation.isValid())
-          modulePathName = fsys::path() / searchLocation.next() / moduleName;
-        else
-          throw error::Config ("Module \""+moduleName.string()+"\" not found"   /////TICKET #896
-                              + (searchPath.empty()? ".":" in search path: "+searchPath));
+        if (not searchLocation)
+          throw error::Config{_Fmt{"Module %s not found%s"}
+                                  % moduleName
+                                  %(searchPath.empty()? ".":" in search path: "+searchPath)};
+        modulePathName = *searchLocation / moduleName;
+        ++searchLocation;
       }
     
-    INFO (config, "found module %s", modulePathName.string().c_str());
-    return modulePathName.string();                                       ///////////TICKET #896
+    TRACE (config, "found module %s", cStr(modulePathName.generic_string()));
+    return modulePathName.generic_string();
   }
   
   

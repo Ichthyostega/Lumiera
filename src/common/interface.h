@@ -1,22 +1,13 @@
 /*
   INTERFACE.h  -  Lumiera interface macros and structures
 
-  Copyright (C)         Lumiera.org
-    2008,               Christian Thaeter <ct@pipapo.org>
+   Copyright (C)
+     2008,            Christian Thaeter <ct@pipapo.org>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
 
@@ -30,20 +21,20 @@
  ** versioned to provide forward and backward compatibility for both source and
  ** binary deployment of modules.
  **
- ** \par Overview
+ ** # Overview
  **
  ** To make an interface available to code so that the code can use the
  ** interface, the interface needs to be declared and then defined. We provide a
  ** number of macros here which ease this process.
  **
  ** The interface is declared by placing the following macro in a
- ** header file: 
+ ** header file:
  ** \code
  **  LUMIERA_INTERFACE_DECLARE(name, version,
  **                            LUMIERA_INTERFACE_SLOT(ret, name, params),
  **                            ...
  **                           )
- ** 
+ **
  ** \endcode
  ** Any code that wants to use this interface must then include the header file.
  **
@@ -60,7 +51,7 @@
  **
  ** A collection of interfaces can be defined in 2 different ways depending on
  ** where whether the interface is exported by the core, or by a plugin:
- ** \code 
+ ** \code
  ** LUMIERA_EXPORT(queryfunc,
  **                LUMIERA_INTERFACE_DEFINE(...),
  **                ...
@@ -72,7 +63,7 @@
  **                 ) // Exporting from an interface
  ** \endcode
  **
- ** \par Naming and Versioning
+ ** # Naming and Versioning
  **
  ** Interfaces have unique names and a major and minor version. The name and the major version
  ** is used to construct a C identifier for the interface, the minor version is implicitly defined

@@ -1,43 +1,35 @@
 /*
   TimeValue(Test)  -  working with time values and time intervals in C++...
 
-  Copyright (C)         Lumiera.org
-    2010,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2010,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file time-value-test.cpp
+ ** unit test \ref TimeValue_test
+ */
 
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/time/timevalue.hpp"
-#include "lib/time/display.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
 #include <boost/lexical_cast.hpp>
-#include <iostream>
 #include <string>
 
 using boost::lexical_cast;
 using util::isnil;
-using std::cout;
-using std::endl;
 using std::string;
 
-using lumiera::error::LUMIERA_ERROR_BOTTOM_VALUE;
+using LERR_(BOTTOM_VALUE);
 
 namespace lib {
 namespace time{
@@ -52,23 +44,27 @@ namespace test{
    */
   class TimeValue_test : public Test
     {
-      gavl_time_t
+      raw_time_64
       random_or_get (Arg arg)
         {
           if (isnil(arg))
-            return 1 + (rand() % 10000);
+            {// use random time value for all tests
+              seedRand();
+              return 1 + rani(10000);
+            }
           else
-            return lexical_cast<gavl_time_t> (arg[1]);
+            return lexical_cast<raw_time_64> (arg[1]);
         }
       
       
       virtual void
-      run (Arg arg) 
+      run (Arg arg)
         {
           TimeValue ref (random_or_get(arg));
           
           checkBasicTimeValues (ref);
           checkMutableTime (ref);
+          checkTimeHash (ref);
           checkTimeConvenience (ref);
           verify_invalidFramerateProtection();
           createOffsets (ref);
@@ -76,8 +72,9 @@ namespace test{
           buildTimeSpan (ref);
           compareTimeSpan (Time(ref));
           relateTimeIntervals (ref);
+          verify_extremeValues();
           verify_fractionalOffset();
-        } 
+        }
       
       
       /** @test creating some time values and performing trivial comparisons.
@@ -87,7 +84,7 @@ namespace test{
       void
       checkBasicTimeValues (TimeValue org)
         {
-          TimeValue zero;
+          TimeValue zero(0);
           TimeValue one (1);
           TimeValue max (Time::MAX);
           TimeValue min (Time::MIN);
@@ -104,7 +101,7 @@ namespace test{
           CHECK (val  < max);
           
           // mixed comparisons with raw numeric time
-          gavl_time_t g2 (-2);
+          raw_time_64 g2 (-2);
           CHECK (zero > g2);
           CHECK (one  > g2);
           CHECK (one >= g2);
@@ -145,7 +142,7 @@ namespace test{
           CHECK (var < Time::MAX);
           CHECK (var > Time::MIN);
           
-          gavl_time_t raw (var);
+          raw_time_64 raw = _raw(var);
           CHECK (raw == org);
           CHECK (raw >  org - two);
           
@@ -170,20 +167,20 @@ namespace test{
           
           // time in seconds
           Time t1(FSecs(1));
-          CHECK (t1 == TimeValue(GAVL_TIME_SCALE));
+          CHECK (t1 == TimeValue(TimeValue::SCALE));
           
           // create from fractional seconds
           FSecs halve(1,2);
           CHECK (0.5 == boost::rational_cast<double> (halve));
           Time th(halve);
-          CHECK (th == TimeValue(GAVL_TIME_SCALE/2));
+          CHECK (th == TimeValue(TimeValue::SCALE/2));
           
           Time tx1(500,0);
           CHECK (tx1 == th);
           Time tx2(1,2);
-          CHECK (tx2 == TimeValue(2.001*GAVL_TIME_SCALE));
+          CHECK (tx2 == TimeValue(2.001*TimeValue::SCALE));
           Time tx3(1,1,1,1);
-          CHECK (tx3 == TimeValue(GAVL_TIME_SCALE*(0.001 + 1 + 60 + 60*60)));
+          CHECK (tx3 == TimeValue(TimeValue::SCALE*(0.001 + 1 + 60 + 60*60)));
           
           CHECK ("1:01:01.001" == string(tx3));
           
@@ -194,8 +191,27 @@ namespace test{
           CHECK (th-th == TimeValue(0));
           
           // that was indeed a temporary and didn't affect the originals
-          CHECK (t1 == TimeValue(GAVL_TIME_SCALE));
-          CHECK (th == TimeValue(GAVL_TIME_SCALE/2));
+          CHECK (t1 == TimeValue(TimeValue::SCALE));
+          CHECK (th == TimeValue(TimeValue::SCALE/2));
+        }
+      
+      
+      /** @test calculate a generic hash value from a time spec*/
+      void
+      checkTimeHash (TimeValue org)
+        {
+          std::hash<TimeValue> hashFunc;
+          CHECK (0 == hashFunc (Time::ZERO));
+          size_t hh = sizeof(size_t)*CHAR_BIT/2;
+          CHECK (size_t(1)<<hh == hashFunc (TimeValue{1}));
+          CHECK (size_t(1)     == hashFunc (TimeValue(size_t(1)<<hh)));
+          
+          size_t h1 = hashFunc (org);
+          size_t h2 = hashFunc (Time{org} + TimeValue{1});
+          size_t h3 = hashFunc (TimeValue(h1));
+          CHECK (h1 > 0 or org == Time::ZERO);
+          CHECK (h2 - h1 == size_t(1)<<hh);
+          CHECK (h3 == size_t(_raw(org)));
         }
       
       
@@ -207,6 +223,27 @@ namespace test{
           
           CHECK (isnil (Duration (0, FrameRate::PAL)));
           CHECK (isnil (Duration (0, FrameRate(123))));
+          
+          CHECK (FrameRate::approx(2000) ==       "2000FPS"_expect);
+          CHECK (FrameRate::approx(1e05) ==     "100000FPS"_expect);
+          CHECK (FrameRate::approx(1e06) ==    "1000000FPS"_expect);      // exact
+          CHECK (FrameRate::approx(1e12) ==    "4194303FPS"_expect);      // limited (≈4.2e+6)
+          CHECK (FrameRate::approx(1e14) ==    "4194303FPS"_expect);      // limited   + numeric overflow prevented
+          CHECK (FrameRate::approx(1e-5) == "14/1398101FPS"_expect);      // quantised ≈ 1.00135827e-5
+          CHECK (FrameRate::approx(1e-6) ==  "4/4194303FPS"_expect);      // quantised ≈ 0.95367454e-6
+          CHECK (FrameRate::approx(1e-7) ==  "1/4194303FPS"_expect);      // limited   ≈ 2.38418636e-7
+          CHECK (FrameRate::approx(1e-9) ==  "1/4194303FPS"_expect);      // limited   ≈ 2.38418636e-7
+          
+          CHECK (FrameRate(      20'000, Duration{Time{0,10}}) ==           "2000FPS"_expect);  // exact
+          CHECK (FrameRate(      20'000, Duration{Time::MAX }) ==      "1/4194303FPS"_expect);  // limited
+          
+          CHECK (FrameRate(size_t(2e10), Duration{Time::MAX }) == "272848/4194303FPS"_expect);  // quantised ≈ 6.5052048e-2
+          CHECK (FrameRate(size_t(2e14), Duration{Time::MAX }) ==   "3552496/5461FPS"_expect);  // quantised ≈ 650.52115   exact:650.521
+          CHECK (FrameRate(size_t(2e15), Duration{Time::MAX }) ==    "3324163/511FPS"_expect);  // quantised ≈ 6505.2114   exact:6505.21
+          CHECK (FrameRate(size_t(2e16), Duration{Time::MAX }) ==     "4098284/63FPS"_expect);  // quantised ≈ 65052,127   exact:65052.1
+          CHECK (FrameRate(size_t(2e17), Duration{Time::MAX }) ==         "650521FPS"_expect);  //                         exact:650521
+          CHECK (FrameRate(size_t(2e18), Duration{Time::MAX }) ==        "4194303FPS"_expect);  // limited (≈4.2e+6)       exact:6.50521e+06
+          CHECK (FrameRate(size_t(2e20), Duration{Time::MAX }) ==        "4194303FPS"_expect);  // limited                 exact:6.50521e+08
         }
       
       
@@ -247,7 +284,7 @@ namespace test{
       void
       buildDuration (TimeValue org)
         {
-          TimeValue zero;
+          TimeValue zero(0);
           TimeVar point(org);
           point += TimeValue(5);
           CHECK (org < point);
@@ -288,7 +325,48 @@ namespace test{
       
       
       void
-      verify_fractionalOffset ()
+      verify_extremeValues()
+        {
+          CHECK (Time::MIN < Time::MAX);
+          CHECK (_raw(Time::MAX) < std::numeric_limits<int64_t>::max());
+          CHECK (_raw(Time::MIN) > std::numeric_limits<int64_t>::min());
+          
+          // Values are limited at construction, but not in calculations
+          CHECK (Time::MAX - Time(0,1) < Time::MAX);
+          CHECK (Time::MAX - Time(0,1) + Time(0,3) > Time::MAX);
+          CHECK (TimeValue{_raw(Time::MAX-Time(0,1)+Time(0,3))} == Time::MAX);  // clipped at max
+          CHECK (TimeValue{_raw(Time::MIN+Time(0,5)-Time(0,9))} == Time::MIN);  // clipped at min
+          
+          TimeValue outlier{Time::MIN - TimeValue(1)};
+          CHECK (outlier < Time::MIN);
+          
+          CHECK (Duration::MAX > Time::MAX);
+          CHECK (_raw(Duration::MAX) < std::numeric_limits<int64_t>::max());
+          CHECK (Duration::MAX == Time::MAX - Time::MIN);
+          CHECK (-Duration::MAX == Offset{Time::MIN - Time::MAX});
+          CHECK (Duration{3*Offset{Time::MAX}} == Duration::MAX);
+          
+          CHECK (                Time::MAX + Duration::MAX    >  Duration::MAX);
+          CHECK (                Time::MIN - Duration::MAX    < -Duration::MAX);
+          CHECK (         Offset{Time::MAX + Duration::MAX}  ==  Duration::MAX); // clipped at max
+          CHECK (         Offset{Time::MIN - Duration::MAX}  == -Duration::MAX); // clipped at min
+          CHECK (Duration{Offset{Time::MIN - Duration::MAX}} ==  Duration::MAX); // duration is absolute
+          
+          CHECK (TimeSpan(Time::MIN, Time::MAX) == TimeSpan(Time::MAX, Time::MIN));
+          CHECK (TimeSpan(Time::MAX, Duration::MAX).start()    == Time::MAX);
+          CHECK (TimeSpan(Time::MAX, Duration::MAX).end()      == Time::MAX + Duration::MAX); // note: end() can yield value beyond [Time::MIN...Time::MAX]
+          CHECK (TimeSpan(Time::MAX, Duration::MAX).duration() == Duration::MAX);
+          CHECK (TimeSpan(Time::MAX, Duration::MAX).conform()  == TimeSpan(Time::MIN,Duration::MAX));
+          CHECK (TimeSpan(outlier,   Duration::MAX).conform()  == TimeSpan(Time::MIN,Duration::MAX));
+          CHECK (TimeSpan(Time::MAX, Offset(FSecs(-1)))        == TimeSpan(Time::MAX-Offset(FSecs(1)), FSecs(1)));
+          CHECK (TimeSpan(Time::MAX, FSecs(5)).start()         == Time::MAX);
+          CHECK (TimeSpan(Time::MAX, FSecs(5)).duration()      == Duration(FSecs(5)));
+          CHECK (TimeSpan(Time::MAX, FSecs(5)).conform()       == TimeSpan(Time::MAX-Offset(FSecs(5)), FSecs(5)));
+        }
+      
+      
+      void
+      verify_fractionalOffset()
         {
           typedef boost::rational<FrameCnt> Frac;
           
@@ -312,7 +390,6 @@ namespace test{
       void
       buildTimeSpan (TimeValue org)
         {
-          TimeValue zero;
           TimeValue five(5);
           
           TimeSpan interval (Time(org), Duration(Offset (org,five)));
@@ -334,16 +411,16 @@ namespace test{
                << "  Interval-2: " << successor
                << "  End point: "  << successor.end()
                << endl;
-        }          
+        }
       
       
       void
       compareTimeSpan (Time const& org)
         {
           TimeSpan span1 (org, org+org);                  // using the distance between start and end point
-          TimeSpan span2 (org, Offset(org, Time::ZERO));  // note: the offset is taken absolute, as Duration
+          TimeSpan span2 (org+org, org);                  // note: TimeSpan is oriented automatically
           TimeSpan span3 (org, FSecs(5,2));               // Duration given explicitly, in seconds
-          TimeSpan span4 (org, FSecs(5,-2));              // again: the Duration is taken absolute
+          TimeSpan span4 (org, FSecs(5,-2));              // note: fractional seconds taken absolute, as Duration
           
           CHECK (span1 == span2);
           CHECK (span2 == span1);
@@ -359,8 +436,7 @@ namespace test{
           CHECK (span2 != span4);
           CHECK (span4 != span2);
           
-          // especially note that creating a TimeSpan
-          // based on offset will take the offset absolute
+          // note that TimeSpan is oriented at creation
           CHECK (span1.end() == span2.end());
           CHECK (span3.end() == span4.end());
           

@@ -1,24 +1,19 @@
 /*
   FunctionErasure(Test)  -  verify the wrapping of functor object with type erasure
 
-  Copyright (C)         Lumiera.org
-    2009,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2009,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file function-erasure-test.cpp
+ ** unit test \ref FunctionErasure_test
+ */
 
 
 #include "lib/test/run.hpp"
@@ -66,7 +61,7 @@ namespace test {
   class FunctionErasure_test : public Test
     {
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           function<void(int,char)> bindFunc = bind (testFunc,_1,_2);
           function<void(int     )> pAplFunc = bind (testFunc,_1,'x');
@@ -83,27 +78,6 @@ namespace test {
           
           check_FunctPtrHolder(Efp(testFunc),Efp(&testFunc), Efp(returnIt));
           check_VoidPtrHolder(Evoid(testFunc),Evoid(&testFunc),Evoid(returnIt));
-          
-          check_Comparisons (Efun(testFunc), Efun(bindFunc));
-          check_Comparisons (Efun(testFunc), Efun(pAplFunc));
-          check_Comparisons (Efun(testFunc), Efun(membFunc));
-          check_Comparisons (Efun(testFunc), Efun(getterFunc));
-          check_Comparisons (Efun(bindFunc), Efun(pAplFunc));
-          check_Comparisons (Efun(bindFunc), Efun(membFunc));
-          check_Comparisons (Efun(bindFunc), Efun(getterFunc));
-          check_Comparisons (Efun(pAplFunc), Efun(membFunc));
-          check_Comparisons (Efun(pAplFunc), Efun(getterFunc));
-          check_Comparisons (Efun(membFunc), Efun(getterFunc));
-          
-          check_Comparisons (Efp(testFunc),   Efp(returnIt));
-          check_Comparisons (Evoid(testFunc), Evoid(returnIt));
-          
-          CHECK ( detect_Clone (Efun(testFunc)));
-          CHECK (!detect_Clone (Efun(bindFunc)));  //note equality not detected when cloning a bind term
-          CHECK (!detect_Clone (Efun(pAplFunc)));  //similarly
-          CHECK (!detect_Clone (Efun(membFunc)));  //analogous for bound member function
-          CHECK ( detect_Clone (Efp(testFunc) ));
-          CHECK ( detect_Clone (Evoid(testFunc)));
           
           detect_unboundFunctor(Efun(testFunc), Efun(getterFunc), Efun(membFunc));
           detect_unboundFunctor(Efp(testFunc),Efp(&testFunc), Efp(returnIt));
@@ -126,7 +100,7 @@ namespace test {
           typedef int  (Sig4) ();
           
           _sum_ = 0;
-          f1.getFun<Sig1>() (-11,'M');                // invoke stored tr1::function...
+          f1.getFun<Sig1>() (-11,'M');                // invoke stored std::function...
           CHECK (_sum_ == 'M'-11);
           
           _sum_ = 0;
@@ -190,11 +164,6 @@ namespace test {
           CHECK (_sum_ == 10+'a'+20+'b'+30+'c');
           
           CHECK (_sum_ == (f3.getFun<int(void)>()) () );
-          
-#if false ////////////////////////////////////////////////////////TODO: restore throwing ASSERT
-          VERIFY_ERROR (ASSERTION, f1.getFun<int(int)>() );
-#endif////////////////////////////////////////////////////////////
-          
         }
       
       
@@ -229,31 +198,10 @@ namespace test {
       
       template<class HOL>
       void
-      check_Comparisons (HOL h1, HOL h2)
-        {
-          CHECK (h1 == h1); CHECK (!(h1 != h1));
-          CHECK (h2 == h2); CHECK (!(h2 != h2));
-          
-          CHECK (h1 != h2);
-          CHECK (h2 != h1);
-        }
-      
-      
-      template<class HOL>
-      bool
-      detect_Clone (HOL const& h1)
-        {
-          HOL clone (h1);
-          return (clone == h1);
-        }
-      
-      
-      template<class HOL>
-      void
       detect_unboundFunctor (HOL h1, HOL h2, HOL h3)
         {
           // fabricate a suitable, unbound functor to wrap...
-          typedef typename BuildEmptyFunctor<HOL>::Type NoFunc;
+          using NoFunc = BuildEmptyFunctor<HOL>::Type;
           NoFunc noFunction = NoFunc();
           
           // wrap this (actually empty) functor into the holder type

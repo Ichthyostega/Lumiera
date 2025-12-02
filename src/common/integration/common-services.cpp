@@ -1,28 +1,19 @@
 /*
   CommonServices  -  integrate some library facilities with common system services
 
-  Copyright (C)         Lumiera.org
-    2012,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2012,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+* *****************************************************************/
 
 
-/** @file common-serivces.cpp 
- ** Wire library facilities directly into application core services 
+/** @file common-services.cpp
+ ** Wire library facilities directly into application core services
  ** This translation unit serves to complete the definition of some parts of the Lumiera library.
  ** While library facilities usually are written to be self-contained, at places we want "magic"
  ** integration with central services, without incurring tight coupling to the application core.
@@ -56,6 +47,7 @@ namespace error = lumiera::error;
 
 #include "lib/time/timequant.hpp"
 #include "lib/time/quantiser.hpp"
+#include "lib/time/timecode.hpp"
 #include "lib/time/mutation.hpp"
 #include "common/advice.hpp"
 
@@ -84,7 +76,7 @@ namespace time {
   }//(End) implementation helpers
   
   
-  /** 
+  /**
    * build a quantised time value, referring the time grid by-name.
    * This is the preferred standard way of establishing a quantisation,
    * but it requires an existing time scale defined in the Lumiera Session,
@@ -106,6 +98,20 @@ namespace time {
   {
     return retrieveQuantiser (gridID);
   }
+  
+  /**
+   * @remark Handles the common case to determine the frame number relative to some time grid.
+   *         The regular path for this conversion would be to have a quantiser for this grid,
+   *         to construct a QuTime and then a FrameNr instance based on this QuTime. Assuming
+   *         that the grid is actually well-known and was registered via Advice-System with
+   *         a symbolic ID, the quantiser can directly be retrieved and applied to convert.
+   */
+  FrameCnt
+  FrameNr::quant (Time const& time, Symbol gridID)
+  {
+    return Quantiser::retrieve(gridID)->gridPoint (time);
+  }
+  
   
   
   /** build a time mutation to \em nudge the target time value in steps based on a pre-defined grid.

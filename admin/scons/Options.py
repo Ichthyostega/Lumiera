@@ -1,24 +1,15 @@
-# -*- python -*-
+# coding: utf-8
 ##
 ## Options.py  -  SCons build: command line options and help
 ##
 
-#  Copyright (C)         Lumiera.org
-#    2012,               Hermann Vosseler <Ichthyostega@web.de>
+#  Copyright (C)
+#    2012,            Hermann Vosseler <Ichthyostega@web.de>
 #
-#  This program is free software; you can redistribute it and/or
-#  modify it under the terms of the GNU General Public License as
-#  published by the Free Software Foundation; either version 2 of
-#  the License, or (at your option) any later version.
-#
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with this program; if not, write to the Free Software
-#  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+# **Lumiera** is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by the
+# Free Software Foundation; either version 2 of the License, or (at your
+# option) any later version. See the file COPYING for further details.
 #####################################################################
 
 
@@ -31,7 +22,7 @@ from SCons.Script import PathVariable, EnumVariable, BoolVariable, Help
 def defineCmdlineVariables(buildVars):
     """ several toggles and configuration variables can be set on the commandline,
         current settings will be persisted in a options cache file.
-        you may define custom variable settings in a separate file. 
+        you may define custom variable settings in a separate file.
         Commandline will override both.
     """
     buildVars.AddVariables(
@@ -48,12 +39,10 @@ def defineCmdlineVariables(buildVars):
         ,('TESTSUITES', 'Run only test suites matching the given pattern', '')
         ,('TESTMODE',   'test suite error mode for test.sh', '')
 #       ,BoolVariable('OPENGL', 'Include support for OpenGL preview rendering', False)
-#       ,EnumVariable('DIST_TARGET', 'Build target architecture', 'auto', 
+#       ,EnumVariable('DIST_TARGET', 'Build target architecture', 'auto',
 #                   allowed_values=('auto', 'i386', 'i686', 'x86_64' ), ignorecase=2)
         ,PathVariable('PREFIX', 'Installation dir prefix', 'usr/local', PathVariable.PathAccept)
-        ,PathVariable('INSTALLDIR', 'Root output directory for install. Final installation will happen in INSTALLDIR/PREFIX/... ', '/', PathVariable.PathIsDir)
-        ,PathVariable('PKGLIBDIR', 'Installation dir for plugins, defaults to PREFIX/lib/lumiera/modules', '',PathVariable.PathAccept)
-        ,PathVariable('PKGDATADIR', 'Installation dir for default config, usually PREFIX/share/lumiera', '',PathVariable.PathAccept)
+        ,PathVariable('INSTALLDIR', 'Root output directory for install. Final installation will happen in INSTALLDIR/PREFIX/... ', '/', PathVariable.PathAccept)
      )
 
 

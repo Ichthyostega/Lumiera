@@ -1,33 +1,28 @@
 /*
   VisitingToolExtended(Test)  -  check obscure corner cases of visitor lib implementation
 
-  Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2008,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file visitingtool-extended-test.cpp
+ ** unit test \ref VisitingToolExtended_test
+ */
 
 
 #include "lib/test/run.hpp"
 #include "lib/visitor.hpp"
+#include "lib/format-string.hpp"
 
-#include <boost/format.hpp>
 #include <iostream>
 
-using boost::format;
+using util::_Fmt;
 using std::string;
 using std::cout;
 
@@ -64,12 +59,12 @@ namespace test2  {
     protected:
       void talk_to (string guy)
         {
-          cout << format ("Hello %s, nice to meet you...\n") % guy;
+          cout << _Fmt{"Hello %s, nice to meet you...\n"} % guy;
         }
     };
     
   class Babbler
-    : public Applicable< Babbler, 
+    : public Applicable< Babbler,
                          Types<Boss,BigBoss>::List,    // treat this types
                          VerboseVisitor<Tool>         //  intermediary base class
                        >
@@ -80,7 +75,7 @@ namespace test2  {
     };
 
   // the classes above comprise the standard use case,
-  // what follows covers rather exotic corner cases 
+  // what follows covers rather exotic corner cases
   
   
   
@@ -91,7 +86,7 @@ namespace test2  {
       RET onUnknown (HomoSapiens&) { cout << "we-do-everything-for-YOU!\n"; return RET(); }
     };
     
-  /** defines another different visiting tool base */  
+  /** defines another different visiting tool base */
   typedef visitor::Tool<void, Catched> Hastalavista;
   typedef Visitable<Hastalavista> Chief;  ///< another special kind of visitable
 
@@ -118,9 +113,9 @@ namespace test2  {
    *  tailored for the Chief hierarchy
    */  
   class Blatherer
-    : public Applicable< Blatherer, 
-                         Types<Visionary>::List,         // get calls to Visionary dispatched 
-                         VerboseVisitor<Hastalavista>   // note: different tool base class 
+    : public Applicable< Blatherer,
+                         Types<Visionary>::List,         // get calls to Visionary dispatched
+                         VerboseVisitor<Hastalavista>   // note: different tool base class
                        >
     {
     public:
@@ -128,8 +123,8 @@ namespace test2  {
     };
   
   
-        
-
+  
+  
   
   
   
@@ -142,12 +137,13 @@ namespace test2  {
    */
   class VisitingToolExtended_test : public Test
     {
-      virtual void run(Arg) 
+      virtual void
+      run(Arg)
         {
           known_visitor_known_class();
           visitor_not_visiting_some_class();
           visiting_mixed_hierarchy();
-        } 
+        }
       
       void known_visitor_known_class()
         {
@@ -198,7 +194,7 @@ namespace test2  {
           Babbler bab;
           Tool& tool1 (bab);
           cout << "=== Babbler masqueraded as Tool meets Leader and Visionary masqueraded as HomoSapiens ===\n";
-          homo1.apply (tool1); // because just going through the VTable, the dispatch works as expected 
+          homo1.apply (tool1); // because just going through the VTable, the dispatch works as expected
           homo2.apply (tool1); // same here (in both cases, the call is resolved to treat(Boss&) as expected)
           
           cout << "=== Babbler masqueraded as Tool meets Leader and Visionary masqueraded as Leader ===\n";
@@ -207,8 +203,8 @@ namespace test2  {
           
           // note: the following doesn't compile (an this is a feature, not a bug):
           
-          // "Chief chief"           : is abstract, because the Visitable-Template enforces implementing 
-          //                           the "apply(TOOL&)" function, either directly or via the 
+          // "Chief chief"           : is abstract, because the Visitable-Template enforces implementing
+          //                           the "apply(TOOL&)" function, either directly or via the
           //                           DEFINE_PROCESSABLE_BY macro
 
         }

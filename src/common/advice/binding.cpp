@@ -1,42 +1,42 @@
 /*
   Binding  -  pattern defining a specific attachment to the Advice system
 
-  Copyright (C)         Lumiera.org
-    2010,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2010,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+* *****************************************************************/
 
 
-#include "lib/util.hpp"
-#include "lib/symbol.hpp"
+/** @file advice/binding.cpp
+ ** Implementation of a binding record to represent a match between two patterns.
+ ** This is used for the Advice System, to record existing connections between
+ ** advice providers and consumers. But as such, Binding is a generic mechanism
+ ** and looks like it could be of wider use within the Lumiera application.
+ ** This is the reason why Binding got a separate implementation `cpp` file.
+ */
+
+
 #include "common/advice/binding.hpp"
+#include "lib/symbol.hpp"
+#include "lib/util.hpp"
 
 #include <boost/functional/hash.hpp>
 #include <boost/lexical_cast.hpp>
-#include <boost/regex.hpp>
+#include <regex>
 
 
 using lib::Literal;
 using util::isnil;
 
-using boost::regex;
-using boost::smatch;
-using boost::sregex_iterator;
-using boost::match_continuous;
+using std::regex;
+using std::smatch;
+using std::sregex_iterator;
+using std::regex_constants::match_continuous;
 using boost::hash_combine;
 using boost::lexical_cast;
 
@@ -54,10 +54,10 @@ namespace advice {
   namespace{  // Implementation details
     
     const string matchSym = "(\\w+(?:[\\.\\-]\\w+)*)";
-    const string matchArg = "\\(\\s*"+matchSym+"?\\s*\\)"; 
+    const string matchArg = "\\(\\s*"+matchSym+"?\\s*\\)";
     regex findPredicate ("\\s*"+matchSym+"("+matchArg+")?\\s*,?");    ///< \c sym(arg), groups: [symbol, parenthesis, argument symbol]
     
-    /** detect the \em arity of an predicate, as matched by #findPredicate.
+    /** detect the _arity_ of an predicate, as matched by #findPredicate.
      *  Currently, we don't really parse predicate logic notation and thus we
      *  just distinguish nullary predicates (no argument) and predicates with
      *  one single constant argument. */
@@ -75,12 +75,12 @@ namespace advice {
   
   void
   Binding::parse_and_append (Literal lit)
-  {      
+  {
     string def(lit);
     string::const_iterator end_of_last_match = def.begin();
     
     sregex_iterator end;
-    sregex_iterator pos (def.begin(),def.end(), findPredicate, 
+    sregex_iterator pos (def.begin(),def.end(), findPredicate,
                                                 match_continuous);    // continuous: don't allow garbage *not* matched by the RegExp
     while (pos != end)
       {
@@ -91,8 +91,8 @@ namespace advice {
       }
     
     if (  end_of_last_match !=def.end()
-       && *end_of_last_match !='.'
-       ) // if the match did *not stop at the end of the pattern definition list 
+       and *end_of_last_match !='.'
+       ) // if the match did *not stop at the end of the pattern definition list
       throw lumiera::error::Invalid ("Trailing garbage in binding pattern definition"                 ///////////////TICKET #197  should include the garbage, i.e. where the parsing stops
                                     , LUMIERA_ERROR_BINDING_PATTERN_SYNTAX);
   }

@@ -1,22 +1,13 @@
 /*
   ACCESS-CASTED.hpp  -  util template to access a value using conversion or cast as appropriate
 
-  Copyright (C)         Lumiera.org
-    2008, 2015          Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2008, 2015       Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
 
@@ -24,7 +15,7 @@
 /** @file access-casted.hpp
  ** Helper for accessing a value, employing either a conversion or downcast,
  ** depending on the relation of the source type (type of the original value)
- ** and the target type (type we need within the usage context). 
+ ** and the target type (type we need within the usage context).
  ** When instantiating AcessCasted<TAR>, we get a template static function
  ** \c AcessCasted<TAR>::access<SRC>(SRC&& elm), where the actual implementation
  ** is chosen using based on our type traits. If no sensible implementation can be
@@ -43,6 +34,7 @@
  **   values, references and pointers-to-const are supported as well.
  ** 
  ** @see lib::InPlaceAnyHolder usage example to access a subclass in embedded storage
+ ** @warning to state the obvious — usage of such a facility raises questions...
  ** 
  */
 

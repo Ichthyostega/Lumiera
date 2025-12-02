@@ -1,22 +1,13 @@
 /*
   GENERATOR.hpp  -  metaprogramming utilities for generating classes and interfaces
 
-  Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2008,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
- 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 ====================================================================
 This code is heavily inspired by  
@@ -39,7 +30,7 @@ This code is heavily inspired by
 
 
 /** @file generator.hpp
- ** Helpers for working with lib::meta::Types (i.e. lists-of-types). 
+ ** Helpers for working with lib::meta::Types (i.e. lists-of-types).
  ** The main purpose is to build interfaces and polymorphic implementations
  ** (using virtual functions) based on templated Types or Collections of types,
  ** which is not possible without Template Metaprogramming.
@@ -47,7 +38,7 @@ This code is heavily inspired by
  ** The facilities in this header work by instantiating another template,
  ** which is passed in as (template template) parameter, for each of a
  ** given sequence of types. What varies is the way how this "for each"
- ** instantiation is mixed or inherited into the resulting product. 
+ ** instantiation is mixed or inherited into the resulting product.
  ** 
  ** @see generator-test.cpp
  ** @see lumiera::query::ConfigRules usage example
@@ -66,42 +57,42 @@ This code is heavily inspired by
 namespace lib {
 namespace meta{
     
-    /** 
-     * Apply a template to a collection of types. 
+    /**
+     * Apply a template to a collection of types.
      * The resulting class ends up inheriting from an instantiation
      * of the template for each of the types in the list. The inheritance
-     * graph is built in a "mixin" (multiple inheritance) style. 
+     * graph is built in a "mixin" (multiple inheritance) style.
      */
     template
-      < class TYPES                  // List of Types 
+      < class TYPES                  // List of Types
       , template<class> class _X_   //  your-template-goes-here
-      , class BASE = NullType      //   Base class at end of chain
+      , class BASE = Nil           //   Base class at end of chain
       >
     class InstantiateForEach;
     
     
     template<template<class> class _X_, class BASE>
-    class InstantiateForEach<NullType, _X_, BASE>
+    class InstantiateForEach<Nil, _X_, BASE>
       : public BASE
-      { 
+      {
       public:
-        typedef BASE     Unit;
-        typedef NullType Next;
+        using Unit = BASE;
+        using Next = Nil;
       };
     
-      
+    
     template
       < class TY, typename TYPES
       , template<class> class _X_
       , class BASE
       >
-    class InstantiateForEach<Node<TY, TYPES>, _X_, BASE> 
+    class InstantiateForEach<Node<TY, TYPES>, _X_, BASE>
       : public _X_<TY>,
         public InstantiateForEach<TYPES, _X_, BASE>
       { 
       public:
-        typedef _X_<TY> Unit;
-        typedef InstantiateForEach<TYPES,_X_> Next;
+        using Unit = _X_<TY>;
+        using Next = InstantiateForEach<TYPES,_X_>;
       };
     
     
@@ -113,50 +104,50 @@ namespace meta{
     
     
     
-    /** 
+    /**
      * Build a single inheritance chain of template instantiations.
      * Needs the help of the user provided Template, which now has
-     * to take a second parameter and use this as Base class. 
-     * The resulting class ends up (single) inheriting from an 
+     * to take a second parameter and use this as Base class.
+     * The resulting class ends up (single) inheriting from an
      * instantiation of the template for each of the types, while
      * overriding/implementing the provided base class.
      */
     template
-      < class TYPES                      // List of Types 
+      < class TYPES                      // List of Types
       , template<class,class> class _X_ //  your-template-goes-here
-      , class BASE = NullType          //   Base class at end of chain
+      , class BASE = Nil          //   Base class at end of chain
       >
     class InstantiateChained;
     
     
     template<template<class,class> class _X_, class BASE>
-    class InstantiateChained<NullType, _X_, BASE>
+    class InstantiateChained<Nil, _X_, BASE>
       : public BASE
-      { 
+      {
       public:
-        typedef BASE     Unit;
-        typedef NullType Next;
+        using Unit = BASE;
+        using Next = Nil;
       };
     
-      
+    
     template
       < class TY, typename TYPES
       , template<class,class> class _X_
       , class BASE
       >
-    class InstantiateChained<Node<TY, TYPES>, _X_, BASE> 
+    class InstantiateChained<Node<TY, TYPES>, _X_, BASE>
       : public _X_< TY
                   , InstantiateChained<TYPES, _X_, BASE>
                   >
-      { 
+      {
       public:
-        typedef InstantiateChained<TYPES,_X_,BASE> Next;
-        typedef _X_<TY,Next> Unit;
+        using Next = InstantiateChained<TYPES,_X_,BASE>;
+        using Unit = _X_<TY,Next>;
       };
     
     
     
-    /** 
+    /**
      * A Variation of InstantiateChained providing an incremented
      * Index value template parameter. This index can e.g. be used
      * to store pointers in a dispatcher table in the Base class.
@@ -168,7 +159,7 @@ namespace meta{
     template
       < class TYPES                           // List of Types
       , template<class,class,uint> class _X_ //  your-template-goes-here
-      , class BASE = NullType               //   Base class at end of chain
+      , class BASE = Nil                    //   Base class at end of chain
       , uint i = 0                         //    incremented on each instantiation
       >
     class InstantiateWithIndex;
@@ -178,12 +169,12 @@ namespace meta{
             , class BASE
             , uint i
             >
-    class InstantiateWithIndex<NullType, _X_, BASE, i>
+    class InstantiateWithIndex<Nil, _X_, BASE, i>
       : public BASE
-      { 
+      {
       public:
-        typedef BASE     Unit;
-        typedef NullType Next;
+        using Unit = BASE;
+        using Next = Nil;
         enum{ COUNT = i };
       };
     
@@ -194,15 +185,15 @@ namespace meta{
       , class BASE
       , uint i
       >
-    class InstantiateWithIndex<Node<TY, TYPES>, _X_, BASE, i> 
+    class InstantiateWithIndex<Node<TY, TYPES>, _X_, BASE, i>
       : public _X_< TY
                   , InstantiateWithIndex<TYPES, _X_, BASE, i+1 >
                   , i
                   >
-      { 
+      {
       public:
-        typedef InstantiateWithIndex<TYPES,_X_,BASE,i+1> Next;
-        typedef _X_<TY,Next,i> Unit;
+        using Next = InstantiateWithIndex<TYPES,_X_,BASE,i+1>;
+        using Unit = _X_<TY,Next,i>;
         enum{ COUNT = Next::COUNT };
       };
     

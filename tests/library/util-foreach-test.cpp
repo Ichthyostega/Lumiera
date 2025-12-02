@@ -1,24 +1,19 @@
 /*
   UtilForeach(Test)  -  helpers to perform something for each element
 
-  Copyright (C)         Lumiera.org
-    2009,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2009,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file util-foreach-test.cpp
+ ** unit test \ref UtilForeach_test
+ */
 
 
 #include "lib/test/run.hpp"
@@ -54,8 +49,6 @@ namespace test {
   
   
   namespace{ // Test data and operations
-    
-    uint NUM_ELMS = 10;
     
     // Placeholder for argument in bind-expressions
     std::_Placeholder<1> _1;
@@ -105,7 +98,7 @@ namespace test {
   /*****************************************************************//**
    * @test Invoking an operation for each element of a collection.
    *       Covers the various flavours of these convenience helpers:
-   *       They might operate either on a STL container (providing 
+   *       They might operate either on a STL container (providing
    *       \c begin() and \c end() functions), or at a "Lumiera
    *       Forward Iterator", which is incremented and dereferenced
    *       for each value it yields, until exhaustion.
@@ -113,17 +106,17 @@ namespace test {
    *       Moreover for each of these cases, there are additional
    *       overloads allowing to create a bind-expression on-the fly.
    *       As a further variation of this scheme, an predicate can be
-   *       evaluated for each element, either with universal quantisation 
+   *       evaluated for each element, either with universal quantisation
    *       (results are && combined), or with existential quantisation.
    */
   class UtilForeach_test : public Test
     {
+      uint NUM_ELMS{0};
       
-      void
+      virtual void
       run (Arg arg)
         {
-          if (0 < arg.size()) NUM_ELMS = lexical_cast<uint> (arg[1]);
-          
+          NUM_ELMS = firstVal (arg, 10);
           VecI container = buildTestNumberz (NUM_ELMS);
           RangeI iterator(container.begin(), container.end());
           
@@ -236,7 +229,6 @@ namespace test {
        *        the changes go through to the original container, in spite of
        *        passing the iterator by value. This behaviour is correct, as
        *        an iterator is an reference-like object
-       * 
        */
       template<typename CO>
       void
@@ -373,9 +365,9 @@ namespace test {
           CHECK ( and_all (coll, [] (uint elm) { return 0 < elm; }));
           CHECK (!and_all (coll, [] (uint elm) { return 1 < elm; }));
           
-          CHECK ( has_any (coll, [] (uint elm) { return 0 < elm; }));
-          CHECK ( has_any (coll, [] (uint elm) { return elm >= NUM_ELMS; }));
-          CHECK (!has_any (coll, [] (uint elm) { return elm >  NUM_ELMS; }));
+          CHECK ( has_any (coll, []    (uint elm) { return 0 < elm; }));
+          CHECK ( has_any (coll, [this](uint elm) { return elm == NUM_ELMS; }));
+          CHECK (!has_any (coll, [this](uint elm) { return elm >  NUM_ELMS; }));
         }
       
       

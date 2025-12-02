@@ -1,24 +1,19 @@
 /*
   FunctionComposition(Test)  -  functional composition and partial application
 
-  Copyright (C)         Lumiera.org
-    2009,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2009,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file function-composition-test.cpp
+ ** unit test \ref FunctionComposition_test
+ */
 
 
 #include "lib/test/run.hpp"
@@ -28,17 +23,21 @@
 #include "lib/meta/function-closure.hpp"
 #include "meta/typelist-diagnostics.hpp"
 
+#include <tuple>
 
 namespace lib  {
 namespace meta {
 namespace test {
   
   using ::test::Test;
-  using func::applyFirst;
-  using func::applyLast;
+  using lib::test::showType;
+  using lib::meta::_Fun;
+  using func::bindFirst;
   using func::bindLast;
   using func::PApply;
   using func::BindToArgument;
+  using std::make_tuple;
+  using std::get;
   
   
   namespace { // test functions
@@ -135,10 +134,12 @@ namespace test {
       virtual void
       run (Arg)
         {
-          check_diagnostics ();
-          check_partialApplication ();
-          check_functionalComposition ();
-          check_bindToArbitraryParameter ();
+          check_diagnostics();
+          check_partialApplication();
+          check_functionalComposition();
+          check_bindToArbitraryParameter();
+          
+          verify_referenceHandling();
         }
       
       
@@ -171,57 +172,61 @@ namespace test {
           typedef Num<1> Sig123(Num<1>, Num<2>, Num<3>);             // signature of the original function
           
           typedef Num<1> Sig23(Num<2>, Num<3>);                      // signature after having closed over the first argument
-          typedef function<Sig23> F23;                               // and a tr1::function object to hold such a function
+          using F23 = function<Sig23>;                               // and a std::function object to hold such a function
           
-          Sig123& f =fun13<1,2,3>;                                   // the actual input: a reference to the bare function
+          Sig123& f = fun13<1,2,3>;                                  // the actual input: a reference to the bare function
           
           
           // Version1: do a direct argument binding----------------- //
           
-          typedef std::_Placeholder<1> PH1;                     // tr1::function argument placeholders
-          typedef std::_Placeholder<2> PH2;
+          using PH1 = std::_Placeholder<1>;                          // std::function argument placeholders
+          using PH2 = std::_Placeholder<2>;
           
           PH1 ph1;                                                   // these empty structs are used to mark the arguments to be kept "open"
           PH2 ph2;
           Num<1> num18 (18);                                         // ...and this value is for closing the first function argument
           
-          F23 fun_23 = std::bind (f, num18                      // do the actual binding (i.e. close the first argument with a constant value)
-                                        , ph1
-                                        , ph2
-                                      );
+          F23 fun_23 = std::bind (f, num18                           // do the actual binding (i.e. close the first argument with a constant value)
+                                   , ph1
+                                   , ph2
+                                 );
           
-          int res = 0;
-          res = fun_23 (_2_,_3_).o_;                                 // and invoke the resulting functor ("closure"), providing the remaining arguments
-          CHECK (23 == res);
+          int r1 = fun_23 (_2_,_3_).o_;                              // and invoke the resulting functor ("closure"), providing the remaining arguments
+          CHECK (23 == r1);                                          // result ≡ num18 + _2_ + _3_  ≙ 18 + 2 + 3
           
           
           
           // Version2: extract the binding arguments from a tuple--- //
           
-          typedef Tuple<Types<Num<1>, PH1, PH2> > PartialArg;        // Tuple type to hold the binding values. Note the placeholder types
-          PartialArg arg(num18);                                     // Value for partial application (the placeholders are default constructed)
+          using PartialArg =  Tuple<Types<Num<1>, PH1, PH2>>;        // Tuple type to hold the binding values. Note the placeholder types
+          PartialArg arg{num18, PH1(), PH2()};                       // Value for partial application (the placeholders are default constructed)
           
-          fun_23 = std::bind (f, tuple::element<0>(arg)         // now extract the values to bind from this tuple
-                                    , tuple::element<1>(arg)
-                                    , tuple::element<2>(arg)
-                                  );
-          res = 0;
-          res = fun_23 (_2_,_3_).o_;                                 // and invoke the resulting functor....
-          CHECK (23 == res);
+          fun_23 = std::bind (f, get<0>(arg)                         // now extract the values to bind from this tuple
+                               , get<1>(arg)
+                               , get<2>(arg)
+                             );
           
+          int r2 = fun_23 (_2_,_3_).o_;                              // and invoke the resulting functor....
+          CHECK (23 == r2);
+          
+          // function-closure.hpp defines a shorthand for this operation
+          fun_23 = func::bindArgTuple (f, arg);
+          
+          int r3 = fun_23 (_2_,_3_).o_;
+          CHECK (23 == r3);
           
           
           
           // Version3: let the PApply-template do the work for us--- //
           
-          typedef Types<Num<1> > ArgTypes;                           // now package just the argument(s) to be applied into a tuple
-          Tuple<ArgTypes> args_to_bind (Num<1>(18));
+          using ArgTypes = Types<Num<1>>;                            // now package just the argument(s) to be applied into a tuple
+          Tuple<ArgTypes> args_to_bind{Num<1>(18)};
           
           fun_23 = PApply<Sig123, ArgTypes>::bindFront (f , args_to_bind);
                                                                      // "bindFront" will close the parameters starting from left....
-          res = 0;
-          res = fun_23 (_2_,_3_).o_;                                 // invoke the resulting functor...
-          CHECK (23 == res);
+          
+          int r4 = fun_23 (_2_,_3_).o_;                              // invoke the resulting functor...
+          CHECK (23 == r4);
           
           
           
@@ -230,65 +235,63 @@ namespace test {
           
           // Version4: as you'd typically do it in real life-------- //
           
-          fun_23 = func::applyFirst (f, Num<1>(18));                 // use the convenience function API to close over a single value
+          fun_23 = func::bindFirst (f, Num<1>(18));                  // use the convenience function API to close over a single value
           
-          res = 0;
-          res = fun_23 (_2_,_3_).o_;                                 // invoke the resulting functor...
-          CHECK (23 == res);
+          int r5 = fun_23(_2_,_3_).o_;                               // invoke the resulting functor...
+          CHECK (23 == r5);
           
           
           
           // what follows is the real unit test...
-          function<Sig123> func123 (f);                              // alternatively do it with an tr1::function object
-          fun_23 = func::applyFirst (func123, Num<1>(19));
-          res = fun_23 (_2_,_3_).o_;
-          CHECK (24 == res);
+          function<Sig123> func123{f};                               // alternatively do it with an std::function object
+          fun_23 = func::bindFirst (func123, Num<1>(19));
+          int r6 = fun_23(_2_,_3_).o_;
+          CHECK (24 == r6);
           
-          typedef function<Num<1>(Num<1>, Num<2>)> F12;
-          F12 fun_12 = func::applyLast(f, Num<3>(20));               // close the *last* argument of a function
-          res = fun_12 (_1_,_2_).o_;
-          CHECK (23 == res);
+          using F12 = function<Num<1>(Num<1>, Num<2>)>;
+          F12 fun_12 = func::bindLast (f, Num<3>(20));               // close the *last* argument of a function
+          int r7 = fun_12(_1_,_2_).o_;
+          CHECK (23 == r7);
           
-          fun_12 = func::applyLast(func123, Num<3>(21));             // alternatively use a function object
-          res = fun_12 (_1_,_2_).o_;
-          CHECK (24 == res);
+          fun_12 = func::bindLast (func123, Num<3>(21));             // alternatively use a function object
+          int r8 = fun_12(_1_,_2_).o_;
+          CHECK (24 == r8);
           
-          Sig123 *fP = &f;                                           // a function pointer works too
-          fun_12 = func::applyLast( fP, Num<3>(22));
-          res = fun_12 (_1_,_2_).o_;
-          CHECK (25 == res);
+          Sig123* fP = &f;                                           // a function pointer works too
+          fun_12 = func::bindLast (fP, Num<3>(22));
+          int r9 = fun_12(_1_,_2_).o_;
+          CHECK (25 == r9);
                                                                      // cover more cases....
           
-          CHECK (1         == (func::applyLast (fun11<1>        , _1_ ) ( )              ).o_);
-          CHECK (1+3       == (func::applyLast (fun12<1,3>      , _3_ ) (_1_)            ).o_);
-          CHECK (1+3+5     == (func::applyLast (fun13<1,3,5>    , _5_ ) (_1_,_3_)        ).o_);
-          CHECK (1+3+5+7   == (func::applyLast (fun14<1,3,5,7>  , _7_ ) (_1_,_3_,_5_)    ).o_);
-          CHECK (1+3+5+7+9 == (func::applyLast (fun15<1,3,5,7,9>, _9_ ) (_1_,_3_,_5_,_7_)).o_);
+          CHECK (1         == (func::bindLast (fun11<1>        , _1_ ) ( )              ).o_);
+          CHECK (1+3       == (func::bindLast (fun12<1,3>      , _3_ ) (_1_)            ).o_);
+          CHECK (1+3+5     == (func::bindLast (fun13<1,3,5>    , _5_ ) (_1_,_3_)        ).o_);
+          CHECK (1+3+5+7   == (func::bindLast (fun14<1,3,5,7>  , _7_ ) (_1_,_3_,_5_)    ).o_);
+          CHECK (1+3+5+7+9 == (func::bindLast (fun15<1,3,5,7,9>, _9_ ) (_1_,_3_,_5_,_7_)).o_);
           
-          CHECK (9+8+7+6+5 == (func::applyFirst(fun15<9,8,7,6,5>, _9_ ) (_8_,_7_,_6_,_5_)).o_);
-          CHECK (  8+7+6+5 == (func::applyFirst(  fun14<8,7,6,5>, _8_ )     (_7_,_6_,_5_)).o_);
-          CHECK (    7+6+5 == (func::applyFirst(    fun13<7,6,5>, _7_ )         (_6_,_5_)).o_);
-          CHECK (      6+5 == (func::applyFirst(      fun12<6,5>, _6_ )             (_5_)).o_);
-          CHECK (        5 == (func::applyFirst(        fun11<5>, _5_ )               ( )).o_);
+          CHECK (9+8+7+6+5 == (func::bindFirst(fun15<9,8,7,6,5>, _9_ ) (_8_,_7_,_6_,_5_)).o_);
+          CHECK (  8+7+6+5 == (func::bindFirst(  fun14<8,7,6,5>, _8_ )     (_7_,_6_,_5_)).o_);
+          CHECK (    7+6+5 == (func::bindFirst(    fun13<7,6,5>, _7_ )         (_6_,_5_)).o_);
+          CHECK (      6+5 == (func::bindFirst(      fun12<6,5>, _6_ )             (_5_)).o_);
+          CHECK (        5 == (func::bindFirst(        fun11<5>, _5_ )               ( )).o_);
           
           
           
           // Finally a more convoluted example
           // covering the general case of partial function closure:
-          typedef Num<5> Sig54321(Num<5>, Num<4>, Num<3>, Num<2>, Num<1>);   // Signature of the 5-argument function
-          typedef Num<5> Sig54   (Num<5>, Num<4>);                           // ...closing the last 3 arguments should yield this 2-argument function
-          typedef Types<Num<3>,Num<2>,Num<1> > Args2Close;                   // Tuple type to hold the 3 argument values used for the closure
+          typedef Num<5> Sig54321 (Num<5>, Num<4>, Num<3>, Num<2>, Num<1>);  // Signature of the 5-argument function
+          typedef Num<5> Sig54    (Num<5>, Num<4>);                          // ...closing the last 3 arguments should yield this 2-argument function
+          using Args2Close = Types<Num<3>, Num<2>, Num<1>>;                  // Tuple type to hold the 3 argument values used for the closure
           
           // Close the trailing 3 arguments of the 5-argument function...
-          function<Sig54> fun_54 = PApply<Sig54321, Args2Close>::bindBack(fun15<5,4,3,2,1>,
-                                                                          tuple::make(_3_,_2_,_1_)
+          function<Sig54> fun_54 = PApply<Sig54321,Args2Close>::bindBack (fun15<5,4,3,2,1>
+                                                                         ,make_tuple (_3_,_2_,_1_)
                                                                          );
           
           // apply the remaining argument values
-          Num<5> resN5 = fun_54 (_5_,_4_);
+          Num<5> resN5 = fun_54(_5_,_4_);
           CHECK (5+4+3+2+1 == resN5.o_);
         }
-      
       
       
       
@@ -340,13 +343,12 @@ namespace test {
           
           Sig15& f = fun15<1,2,3,4,5>;
           SigA5& f5 = fun11<5>;
-          Tuple<Types<char> > argT(55);
           
-          function<SigR1> f_bound_1 = BindToArgument<Sig15,char,0>::reduced (f, argT);
-          function<SigR2> f_bound_2 = BindToArgument<Sig15,char,1>::reduced (f, argT);
-          function<SigR3> f_bound_3 = BindToArgument<Sig15,char,2>::reduced (f, argT);
-          function<SigR4> f_bound_4 = BindToArgument<Sig15,char,3>::reduced (f, argT);
-          function<SigR5> f_bound_5 = BindToArgument<Sig15,char,4>::reduced (f, argT);
+          function<SigR1> f_bound_1 = BindToArgument<Sig15,char,0>::reduced (f, 55);
+          function<SigR2> f_bound_2 = BindToArgument<Sig15,char,1>::reduced (f, 55);
+          function<SigR3> f_bound_3 = BindToArgument<Sig15,char,2>::reduced (f, 55);
+          function<SigR4> f_bound_4 = BindToArgument<Sig15,char,3>::reduced (f, 55);
+          function<SigR5> f_bound_5 = BindToArgument<Sig15,char,4>::reduced (f, 55);
           
           CHECK (55+2+3+4+5 == f_bound_1 (    _2_,_3_,_4_,_5_) );
           CHECK (1+55+3+4+5 == f_bound_2 (_1_,    _3_,_4_,_5_) );
@@ -357,7 +359,7 @@ namespace test {
           
           // degenerate case: specify wrong argument position (behind end of argument list)
           // causes the argument to be simply ignored and no binding to happen
-          function<Sig15> f_bound_X = BindToArgument<Sig15,char,5>::reduced (f, argT);
+          function<Sig15> f_bound_X = BindToArgument<Sig15,char,5>::reduced (f, 88);
           CHECK (1+2+3+4+5  == f_bound_X (_1_,_2_,_3_,_4_,_5_) );
           
           
@@ -376,6 +378,56 @@ namespace test {
           CHECK (1+2+3+4+88 == f_bound_5 (_1_,_2_,_3_,_4_   ) );
         }
       
+      
+      /** @internal static function to pass as reference for test */
+      static long floorIt (float it) { return long(floor (it)); }
+      
+      
+      /** @test ensure reference types and arguments are handled properly */
+      void
+      verify_referenceHandling()
+        {
+          int   ii = 99;
+          float ff = 88;
+          auto fun = std::function{[](float& f, int& i, long l) -> double { return f + i + l; }};
+          auto& f1 = fun;
+          
+          // build chained and a partially applied functors
+          auto chain = func::chained(f1,floorIt);
+          auto pappl = func::bindFirst (f1, ff);
+          
+          using Sig1 = _Fun<decltype(f1)>::Sig;
+          using SigC = _Fun<decltype(chain)>::Sig;
+          using SigP = _Fun<decltype(pappl)>::Sig;
+          
+          CHECK (showType<Sig1>() == "double (float&, int&, long)"_expect);
+          CHECK (showType<SigC>() ==   "long (float&, int&, long)"_expect);
+          CHECK (showType<SigP>() ==         "double (int&, long)"_expect);
+          
+          CHECK (220 == f1   (ff,ii,33));
+          CHECK (220 == chain(ff,ii,33));
+          CHECK (220 == pappl(   ii,33));
+
+          // change original values to prove that references were
+          // passed and stored properly in the adapted functors
+          ii = 22;
+          ff = 42;
+          
+          CHECK ( 97 == f1   (ff,ii,33));
+          CHECK ( 97 == chain(ff,ii,33));
+          
+          // NOTE: the partial-application generates a std::bind (Binder object),
+          //       which deliberately _decays_ arguments to values.
+          CHECK (143 == pappl(   ii,33));     // --> uses original *value* for f, but the int-ref (88+22+33)
+          
+          // can even exchange the actual function, since f1 was passed as reference
+          fun =  [](float& f, int& i, size_t s) -> double { return f - i - s; };
+          
+          CHECK (-13 == f1   (ff,ii,33));
+          CHECK (-13 == chain(ff,ii,33));
+          
+          CHECK (143 == pappl(   ii,33));     // Note again: uses original value for the function and the float
+        }
     };
   
   

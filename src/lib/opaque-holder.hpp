@@ -1,22 +1,13 @@
 /*
-  OPAQUE-HOLDER.hpp  -  buffer holding an object inline while hiding the concrete type 
+  OPAQUE-HOLDER.hpp  -  buffer holding an object inline while hiding the concrete type
 
-  Copyright (C)         Lumiera.org
-    2009,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2009,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
 
@@ -29,13 +20,15 @@
  ** an inline buffer holding an object of the concrete subclass. Typically,
  ** this situation arises when dealing with functor objects.
  ** 
+ ** # Managed opaque placement buffer
+ ** 
  ** These templates help with building custom objects and wrappers based on
  ** this pattern: lib::InPlaceAnyHolder provides a buffer for target objects
  ** and controls access through a two-layer capsule; while the outer container
  ** exposes a neutral interface, the inner container keeps track of the actual
  ** type by means of a vtable. OpaqueHolder is built on top of InPlaceAnyHolder
  ** additionally to support a "common base interface" and re-access of the
- ** embedded object through this interface. For this to work, all of the 
+ ** embedded object through this interface. For this to work, all of the
  ** stored types need to be derived from this common base interface.
  ** OpaqueHolder then may be even used like a smart-ptr, exposing this
  ** base interface. To the contrary, InPlaceAnyHolder has lesser requirements
@@ -47,9 +40,16 @@
  ** object requires knowledge of the actual type, similar to boost::any
  ** (but contrary to OpaqueHolder the latter uses heap storage).
  ** 
+ ** # Lightweight passively managed opaque holder buffer
+ ** 
  ** As a supplement, a more lightweight implementation is provided as
  ** lib::InPlaceBuffer, requiring just the object storage and lacking the
- ** ability to track the actual type of the embedded object.
+ ** ability to track the actual type of the embedded object, and the buffer
+ ** can not be empty with this model -- which turns out to be adequate in
+ ** most usage scenarios. This kind of lightweight "inline buffer" can even
+ ** be exposed on API through a lib::PlantingHandle, allowing an arbitrary
+ ** client to plant an likewise opaque implementation subclass into the
+ ** buffer, as long as the storage size constraint is observed.
  ** 
  ** Using this approach is bound to specific stipulations regarding the
  ** properties of the contained object and the kind of access needed.
@@ -57,9 +57,11 @@
  ** and you need to re-discover their concrete type, then maybe
  ** a visitor or variant record might be a better solution.
  ** 
+ ** TICKET #1204 : proper alignment verified 10/2019
+ ** 
  ** @see opaque-holder-test.cpp
  ** @see function-erasure.hpp usage example
- ** @see variant.hpp 
+ ** @see variant.hpp
  */
 
 
@@ -68,39 +70,45 @@
 
 
 #include "lib/error.hpp"
-#include "lib/bool-checkable.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/access-casted.hpp"
+#include "lib/meta/util.hpp"
 #include "lib/util.hpp"
 
+#include <boost/lexical_cast.hpp>
+
 #include <type_traits>
-#include <boost/noncopyable.hpp>
+#include <utility>
 
 
 namespace lib {
   
   namespace error = lumiera::error;
+  using LERR_(BOTTOM_VALUE);
+  using LERR_(WRONG_TYPE);
   
   using util::isSameObject;
+  using util::isSameAdr;
   using util::unConst;
   
   
   namespace { // implementation helpers...
     
-    using boost::enable_if;
-    using boost::disable_if;
+    using lib::meta::enable_if;
+    using lib::meta::disable_if;
     using std::is_constructible;
     
     template<typename X>
-         typename enable_if< is_constructible<bool,X>,
-    bool >::type
+                       enable_if< is_constructible<bool,X>,
+    bool              >
     validitySelfCheck (X const& boolConvertible)
       {
         return bool(boolConvertible);
       }
     
     template<typename X>
-         typename disable_if< is_constructible<bool,X>,
-    bool >::type
+                       disable_if< is_constructible<bool,X>,
+    bool              >
     validitySelfCheck (X const&)
       {
         return true; // just pass if this type doesn't provide a validity check...
@@ -113,7 +121,7 @@ namespace lib {
   /* ==== Policy classes controlling re-Access ==== */
   
   /**
-   * Standard policy for accessing the contents via 
+   * Standard policy for accessing the contents via
    * a common base class interface. Using this policy
    * causes static or dynamic casts or direct conversion
    * to be employed as appropriate.
@@ -121,7 +129,7 @@ namespace lib {
   template<class BA>
   struct InPlaceAnyHolder_useCommonBase
     {
-      typedef BA Base;
+      using Base = BA;
       
       template<class SUB>
       static Base*
@@ -129,11 +137,11 @@ namespace lib {
         {
           SUB* oPtr = &obj;
           BA* asBase = util::AccessCasted<BA*>::access (oPtr);
-          if (asBase) 
+          if (asBase)
             return asBase;
           
           throw error::Logic ("Unable to convert concrete object to Base interface"
-                             , error::LUMIERA_ERROR_WRONG_TYPE
+                             , LERR_(WRONG_TYPE)
                              );
         }
     };
@@ -141,17 +149,17 @@ namespace lib {
   /**
    * Alternative policy for accessing the contents without
    * a common interface; use this policy if the intention is
-   * to use OpaqueHolder with a family of similar classes, 
-   * \em without requiring all of them to be derived from
-   * a common base class. (E.g. tr1::function objects).
+   * to use OpaqueHolder with a family of similar classes,
+   * _without requiring all of them_ to be derived from
+   * a _common base_ class. (E.g. std::function objects).
    * In this case, the "Base" type will be defined to void*
    * As a consequence, we loose all type information and
    * no conversions are possible on re-access. You need
-   * to know the \em exact type to get back at the object.
+   * to know the _exact_ type to get back at the object.
    */
   struct InPlaceAnyHolder_unrelatedTypes
     {
-      typedef void Base;
+      using Base = void;
       
       template<class SUB>
       static void*
@@ -175,8 +183,8 @@ namespace lib {
    * as a template parameter. InPlaceAnyHolder may be created empty
    * or cleared afterwards, and this #empty() state may be detected
    * at runtime. In a similar vein, when the stored object has a
-   * \c bool validity check, this can be accessed though #isValid().
-   * Moreover `!empty() && isValid()` may be tested as by `bool`
+   * `bool` validity check, this can be accessed though #isValid().
+   * Moreover `not empty() and isValid()` may be tested as by `bool`
    * conversion of the Holder object. The whole compound
    * is copyable if and only if the contained object is copyable.
    * 
@@ -191,14 +199,14 @@ namespace lib {
                            ///< how to access the contents via a common interface?
     >
   class InPlaceAnyHolder
-    : public BoolCheckable<InPlaceAnyHolder<siz, AccessPolicy> >
     {
-      typedef typename AccessPolicy::Base * BaseP;
+      using BaseP = AccessPolicy::Base *;
       
       /** Inner capsule managing the contained object (interface) */
       struct Buffer
         {
-          char content_[siz];
+          alignas(size_t) std::byte content_[siz];
+          
           void* ptr() { return &content_; }
           
           virtual ~Buffer() {}           ///< this is an ABC with VTable
@@ -219,7 +227,7 @@ namespace lib {
           getBase()  const
             {
               throw error::Invalid("accessing empty holder"
-                                  , error::LUMIERA_ERROR_BOTTOM_VALUE);
+                                  , LERR_(BOTTOM_VALUE));
             }
           
           virtual void
@@ -240,7 +248,7 @@ namespace lib {
           SUB&
           get()  const  ///< core operation: target is contained within the inline buffer
             {
-              return *reinterpret_cast<SUB*> (unConst(this)->ptr());
+              return * std::launder (reinterpret_cast<SUB*> (unConst(this)->ptr()));
             }
           
           ~Buff()
@@ -313,17 +321,17 @@ namespace lib {
       Buffer&
       buff()
         {
-          return *reinterpret_cast<Buffer*> (&storage_);
+          return * std::launder (reinterpret_cast<Buffer*> (&storage_));
         }
       const Buffer&
       buff()  const
         {
-          return *reinterpret_cast<const Buffer *> (&storage_);
+          return * std::launder (reinterpret_cast<const Buffer *> (&storage_));
         }
       
       
       void
-      killBuffer()                          
+      killBuffer()
         {
           buff().~Buffer();
         }
@@ -374,7 +382,7 @@ namespace lib {
       
       
       InPlaceAnyHolder()
-        { 
+        {
           make_emptyBuff();
         }
       
@@ -392,7 +400,7 @@ namespace lib {
       InPlaceAnyHolder&
       operator= (InPlaceAnyHolder const& ref)
         {
-          if (!isSameObject (*this, ref))
+          if (not isSameObject (*this, ref))
             {
               killBuffer();
               try
@@ -412,8 +420,8 @@ namespace lib {
       InPlaceAnyHolder&
       operator= (SUB const& newContent)
         {
-          if (  empty() 
-             || !isSameObject (*buff().getBase(), newContent)
+          if (empty()
+             or not isSameAdr (buff().getBase(), &newContent)    // caution: BaseP may be void* and SUB might be a pointer
              )
             {
               killBuffer();
@@ -443,8 +451,8 @@ namespace lib {
       template<class SUB>
       SUB& get()  const
         {
-          typedef const Buffer* Iface;
-          typedef const Buff<SUB> * Actual;
+          using Iface = const Buffer *;
+          using Actual = const Buff<SUB> *;
           Iface interface = &buff();
           Actual actual = dynamic_cast<Actual> (interface);
           if (actual)
@@ -452,11 +460,11 @@ namespace lib {
           
           if (this->empty())
             throw error::Invalid("accessing empty holder"
-                                , error::LUMIERA_ERROR_BOTTOM_VALUE);
+                                ,LERR_(BOTTOM_VALUE));
           else
             throw error::Logic ("Attempt to access OpaqueHolder's contents "
                                 "specifying incompatible target type"
-                               , error::LUMIERA_ERROR_WRONG_TYPE
+                               , LERR_(WRONG_TYPE)
                                );
         }
       
@@ -474,6 +482,12 @@ namespace lib {
         {
           return buff().isValid();
         }
+      
+      explicit
+      operator bool() const
+        {
+          return isValid();
+        }
     };
   
   
@@ -489,7 +503,7 @@ namespace lib {
    * The whole compound is copyable if and only if the contained
    * object is copyable.
    *
-   * \par using OpaqueHolder
+   * # using OpaqueHolder
    * OpaqueHolder instances are copyable value objects. They are created
    * either empty, by copy from an existing OpaqueHolder, or by directly
    * specifying the concrete object to embed. This target object will be
@@ -499,21 +513,24 @@ namespace lib {
    * Later on, the embedded value might be accessed
    * - using the smart-ptr-like access through the common base interface BA
    * - when knowing the exact type to access, the templated #get might be an option
-   * - the empty state of the container and a \c isValid() on the target may be checked
-   * - a combination of both is available as a \c bool check on the OpaqueHolder instance.
-   *  
-   * For using OpaqueHolder, several \b assumptions need to be fulfilled
+   * - the empty state of the container and a `isValid()` on the target may be checked
+   * - a combination of both is available as a `bool` check on the OpaqueHolder instance.
+   * 
+   * For using OpaqueHolder, several *assumptions* need to be fulfilled
    * - any instance placed into OpaqueHolder is below the specified maximum size
    * - the caller cares for thread safety. No concurrent get calls while in mutation!
+   * 
+   * @tparam BA  the nominal Base/Interface class for a family of types
+   * @tparam siz maximum storage required for the targets to be held inline
    */
   template
-    < class BA                   ///< the nominal Base/Interface class for a family of types
-    , size_t siz = sizeof(BA)    ///< maximum storage required for the targets to be held inline
+    < class BA
+    , size_t siz = sizeof(BA)
     >
   class OpaqueHolder
-    : public InPlaceAnyHolder<siz, InPlaceAnyHolder_useCommonBase<BA> >
+    : public InPlaceAnyHolder<siz, InPlaceAnyHolder_useCommonBase<BA>>
     {
-      typedef InPlaceAnyHolder<siz, InPlaceAnyHolder_useCommonBase<BA> > InPlaceHolder;
+      typedef InPlaceAnyHolder<siz, InPlaceAnyHolder_useCommonBase<BA>> InPlaceHolder;
       
     public:
       OpaqueHolder() : InPlaceHolder() {}
@@ -542,7 +559,7 @@ namespace lib {
           return *InPlaceHolder::buff().getBase();
         }
       
-      BA* 
+      BA*
       operator-> ()  const
         {
           ASSERT (!InPlaceHolder::empty());
@@ -556,6 +573,9 @@ namespace lib {
   
   
   
+  template<class BA, class DEFAULT>
+  class PlantingHandle;
+  
   /**
    * Buffer to place and maintain an object instance privately within another object.
    * Variation of a similar concept as with OpaqueHolder, but implemented here
@@ -564,32 +584,43 @@ namespace lib {
    * allows to place new objects there. It has no way to keep track of the
    * actual object living currently in the buffer. Thus, using InPlaceBuffer
    * requires the placed class(es) themselves to maintain their lifecycle,
-   * and especially it is mandatory for the base class to provide a 
+   * and especially it is mandatory for the base class to provide a
    * virtual dtor. On the other hand, just the (alignment rounded)
    * storage for the object(s) placed into the buffer is required.
+   * @remarks as a complement, PlantingHandle may be used on APIs to offer
+   *         a lightweight way for clients to provide a callback.
+   * @warning InPlaceBuffer really takes ownership, and even creates a
+   *         default constructed instance of the base class right away.
+   *         Yet the requirement for a virtual dtor is deliberately not
+   *         enforced here, to allow use for types without VTable.
+   * 
+   * @tparam BA the nominal Base/Interface class for a family of types
+   * @tparam siz maximum storage required for the targets to be held inline
+   * @tparam DEFAULT the default instance to place initially
    */
   template
-    < class BA                   ///< the nominal Base/Interface class for a family of types
-    , size_t siz = sizeof(BA)    ///< maximum storage required for the targets to be held inline
-    , class DEFAULT = BA         ///< the default instance to place initially
+    < class BA
+    , size_t siz = sizeof(BA)
+    , class DEFAULT = BA
     >
   class InPlaceBuffer
-    : boost::noncopyable
+    : util::NonCopyable
     {
       
-      mutable char buf_[siz];
+      alignas(BA) mutable
+        std::byte buf_[siz];
       
       
       BA&
       getObj()  const
         {
-          return reinterpret_cast<BA&> (buf_);
+          return * std::launder (reinterpret_cast<BA*> (&buf_));
         }
       
       void
       placeDefault()
         {
-          static_assert (siz >= sizeof(DEFAULT), "InPlaceBuffer to small");
+          static_assert (siz >= sizeof(DEFAULT), "InPlaceBuffer too small");
           
           new(&buf_) DEFAULT();
         }
@@ -602,97 +633,93 @@ namespace lib {
       
       
     public:
-      InPlaceBuffer ()
-        {
-          placeDefault();
-        }
-      
      ~InPlaceBuffer ()
         {
           destroy();
         }
       
+      InPlaceBuffer ()
+        {
+          placeDefault();
+        }
       
-      /** Abbreviation for placement new */ 
-#define LIB_InPlaceBuffer_CTOR(_CTOR_CALL_) \
-          destroy();                         \
-          try                                 \
-            {                                  \
-              static_assert (siz >= sizeof(TY), "InPlaceBuffer to small");\
-                                                 \
-              return *new(&buf_) _CTOR_CALL_;     \
-            }                                      \
-          catch (...)                               \
-            {                                        \
-              placeDefault();                         \
-              throw;                                   \
-            }
+      /** immediately move-emplace an embedded subclass type */
+      template<class SUB>
+      InPlaceBuffer (SUB&& instance)
+        {
+          static_assert (siz >= sizeof(SUB), "InPlaceBuffer too small");
+          
+          new(&buf_) SUB (std::forward<SUB> (instance));
+        }
+      
+      template<typename TY>
+      struct TypeTag{ };
+      /** helper to mark the subclass type to create.
+       * @remarks we can not specify explicit template arguments on ctor calls,
+       *  so the only way is to use a dummy marker argument to pass the type.
+       *  Use as `InPlaceBuffer(embedType<XYZ>, arg1, arg2, arg3)` */
+      template<typename SUB>
+      static auto embedType() { return TypeTag<SUB>{}; }
+      
+      /** immediately emplace an embedded subclass type */
+      template<class TY, typename...ARGS>
+      InPlaceBuffer (TypeTag<TY>, ARGS&& ...args)
+        {
+          static_assert (siz >= sizeof(TY), "InPlaceBuffer too small");
+          
+          new(&buf_) TY (std::forward<ARGS> (args)...);
+        }
       
       
-      template<class TY>
+      
+      /** a "planting handle" can be used to expose an opaque InPlaceBuffer through an API */
+      using Handle = PlantingHandle<BA, DEFAULT>;
+      
+      
+      /** Abbreviation for placement new */
+      template<class TY, typename...ARGS>
       TY&
-      create ()
+      create (ARGS&& ...args)
         {
-          LIB_InPlaceBuffer_CTOR ( TY() )
+          static_assert (siz >= sizeof(TY), "InPlaceBuffer too small");
+          
+          destroy();
+          try {
+              return *new(&buf_) TY {std::forward<ARGS> (args)...};
+            }
+          catch (...)
+            {
+              placeDefault();
+              throw;
+            }
         }
       
-      
-      template<class TY, typename A1>
-      TY&                                               //___________________________________________
-      create (A1& a1)                                  ///< place object of type TY, using 1-arg ctor
+      /** move-construct an instance of subclass into the opaque buffer */
+      template<class SUB>
+      SUB&
+      emplace (SUB&& implementation)
         {
-          LIB_InPlaceBuffer_CTOR ( TY(a1) )
+          static_assert (siz >= sizeof(SUB), "InPlaceBuffer too small");
+          
+          destroy();
+          try {
+              return *new(&buf_) SUB {std::forward<SUB> (implementation)};
+            }
+          catch (...)
+            {
+              placeDefault();
+              throw;
+            }
         }
       
-      
-      template< class TY
-              , typename A1
-              , typename A2
-              >
-      TY&                                               //___________________________________________
-      create (A1& a1, A2& a2)                          ///< place object of type TY, using 2-arg ctor
+      DEFAULT&
+      reset()
         {
-          LIB_InPlaceBuffer_CTOR ( TY(a1,a2) )
+          destroy();
+          placeDefault();
+          return static_cast<DEFAULT&> (getObj());
         }
       
-      
-      template< class TY
-              , typename A1
-              , typename A2
-              , typename A3
-              >
-      TY&                                               //___________________________________________
-      create (A1& a1, A2& a2, A3& a3)                  ///< place object of type TY, using 3-arg ctor
-        {
-          LIB_InPlaceBuffer_CTOR ( TY(a1,a2,a3) )
-        }
-      
-      
-      template< class TY
-              , typename A1
-              , typename A2
-              , typename A3
-              , typename A4
-              >
-      TY&                                               //___________________________________________
-      create (A1& a1, A2& a2, A3& a3, A4& a4)          ///< place object of type TY, using 4-arg ctor
-        {
-          LIB_InPlaceBuffer_CTOR ( TY(a1,a2,a3,a4) )
-        }
-      
-      
-      template< class TY
-              , typename A1
-              , typename A2
-              , typename A3
-              , typename A4
-              , typename A5
-              >
-      TY&                                               //___________________________________________
-      create (A1& a1, A2& a2, A3& a3, A4& a4, A5& a5)  ///< place object of type TY, using 5-arg ctor
-        {
-          LIB_InPlaceBuffer_CTOR ( TY(a1,a2,a3,a4,a5) )
-        }
       
       
       
@@ -704,7 +731,7 @@ namespace lib {
           return getObj();
         }
       
-      BA* 
+      BA*
       operator-> ()  const
         {
           return &getObj();
@@ -721,6 +748,111 @@ namespace lib {
         }     // NOTE: might be null.
     };
   
+  
+  
+  /**
+   * A handle to allow for safe _»remote implantation«_
+   * of an unknown subclass into a given opaque InPlaceBuffer,
+   * without having to disclose the concrete buffer type or size.
+   * @remarks this copyable value object is especially geared towards use
+   *    as handle in APIs, allowing a not yet known implementation to implant
+   *    an agent or collaboration partner into the likewise undisclosed innards
+   *    of the service exposed.
+   * @warning the type BA must expose a virtual dtor, since the targeted
+   *    InPlaceBuffer has to take ownership of the implanted object.
+   * @note the `siz` (buffer size) template parameter from #InPlaceBuffer
+   *    is deliberately not part of the `PlantingHandle<BA,DEFAULT>` type,
+   *    since buffer size can be considered an opaque implementation detail.
+   *    As a consequence, we must capture this size information at construction
+   *    time and store it at runtime #maxSiz_, to protect against buffer overrun.
+   * @see OpaqueUncheckedBuffer_test
+   */
+  template<class BA, class DEFAULT = BA>
+  class PlantingHandle
+    {
+      void* buffer_;
+      size_t maxSiz_;
+      
+      static_assert (std::has_virtual_destructor<BA>(),
+                     "target interface BA must provide virtual dtor, "
+                     "since InPlaceBuffer needs to take ownership.");
+      
+      template<class SUB>
+      void __ensure_can_create();
+      
+      
+    public:
+      template<size_t maxSiz>
+      PlantingHandle (InPlaceBuffer<BA, maxSiz, DEFAULT>& targetBuffer)
+        : buffer_(&targetBuffer)
+        , maxSiz_(maxSiz)
+        { }
+      
+      // default copy acceptable...
+      
+      
+      template<class SUB>
+      bool
+      canCreate()  const
+        {
+          static_assert(std::is_base_of<BA,SUB>(), "concrete object implanted into the opaque "
+                                                   "buffer must implement the defined interface");
+          return sizeof(SUB) <= maxSiz_;
+        }
+      
+      /** move-construct an instance of a subclass into the opaque buffer */
+      template<class SUB>
+      SUB&
+      emplace (SUB&& implementation)
+        {
+          __ensure_can_create<SUB>();
+          
+          using Holder = InPlaceBuffer<BA, sizeof(SUB), DEFAULT>;
+          Holder& holder = *static_cast<Holder*> (buffer_);
+          
+          return holder.template emplace (std::forward<SUB> (implementation));
+        }
+      
+      /** Abbreviation for placement new of a subclass SUB into the opaque buffer*/
+      template<class SUB, typename...ARGS>
+      SUB&
+      create (ARGS&& ...args)
+        {
+          __ensure_can_create<SUB>();
+          
+          using Holder = InPlaceBuffer<BA, sizeof(SUB), DEFAULT>;
+          Holder& holder = *static_cast<Holder*> (buffer_);
+          
+          return holder.template create<SUB> (std::forward<ARGS> (args)...);
+        }
+      
+      
+      BA*
+      get()  const
+        {
+          ENSURE (buffer_);
+          BA& bufferContent = **static_cast<InPlaceBuffer<BA>*> (buffer_);
+          return &bufferContent;
+        }
+    };
+  
+  
+  
+  /** @internal Helper to ensure the opaque buffer provides sufficient storage
+   *  @tparam SUB actual subclass type to be implanted into the opaque buffer
+   */
+  template<class BA, class B0>
+  template<class SUB>
+  inline void
+  PlantingHandle<BA,B0>::__ensure_can_create()
+  {
+    if (not this->canCreate<SUB>())
+      throw error::Fatal("Unable to implant implementation object of size "
+                         "exceeding the pre-established storage buffer capacity. "
+                         +boost::lexical_cast<std::string>(sizeof(SUB)) + " > "
+                         +boost::lexical_cast<std::string>(maxSiz_)
+                        ,error::LUMIERA_ERROR_CAPACITY);
+  }
   
   
   

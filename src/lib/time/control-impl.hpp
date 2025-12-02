@@ -1,22 +1,13 @@
 /*
-  CONTROL-IMPL.hpp  -  time::control implementation building blocks  
+  CONTROL-IMPL.hpp  -  time::control implementation building blocks
 
-  Copyright (C)         Lumiera.org
-    2011,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2011,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
 
@@ -31,7 +22,7 @@
  ** - the actual Mutator to apply the changes to the target entity
  ** - a Propagator to register listeners and forward the changes.
  ** 
- ** \par implementation technique
+ ** # implementation technique
  ** 
  ** The Mutator uses functor objects to encapsulate the actual modification
  ** operations. When attaching to a target time entity to be manipulated, these
@@ -76,7 +67,7 @@ namespace mutation {
    * which then will be subject to any received value changes,
    * offsets and grid nudging. The actual attachment is to be
    * performed in a subclass, by using the Mutation interface.
-   * When attaching to a target, the Mutator will be outfitted 
+   * When attaching to a target, the Mutator will be outfitted
    * with a set of suitable functors, incorporating the specific
    * behaviour for the concrete combination of input changes
    * ("source values") and target object type. This works by
@@ -84,7 +75,7 @@ namespace mutation {
    * guided by a templated policy class. After installing
    * these functors, these decisions remains opaque and
    * encapsulated within the functor objects, so the
-   * mutator object doesn't need to carry this 
+   * mutator object doesn't need to carry this
    * type information on the interface
    */
   template<class TI>
@@ -129,7 +120,7 @@ namespace mutation {
    * besides exposing a function-call operator to feed the changed
    * time value to. Both Mutator and Propagator employ one primary
    * template parameter, which is the type of the time values
-   * to be fed in and propagated. 
+   * to be fed in and propagated.
    */
   template<class TI>
   class Propagator
@@ -160,7 +151,7 @@ namespace mutation {
       TI
       operator() (TI const& changedVal)  const
         {
-          typedef typename ListenerList::const_iterator Iter;
+          using Iter = ListenerList::const_iterator;
           Iter p = listeners_.begin();
           Iter e = listeners_.end();
           
@@ -171,7 +162,6 @@ namespace mutation {
       
       // using default construction and copy
     };
-  
 }}} // lib::time::mutation
 
 

@@ -1,41 +1,35 @@
 /*
   UtilFloordiv(Test)  -  verify integer rounding function
 
-  Copyright (C)         Lumiera.org
-    2011,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2011,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file util-floordiv-test.cpp
+ ** unit test \ref UtilFloordiv_test
+ */
 
 
 #include "lib/test/run.hpp"
 #include "lib/util-quant.hpp"
 #include "lib/util.hpp"
 
+#include "lib/format-cout.hpp"
+#include "lib/format-string.hpp"
+
 #include <cmath>
 #include <time.h>
 #include <vector>
-#include <iostream>
-#include <boost/format.hpp>
 
 using ::Test;
-using std::cout;
-using std::rand;
 using util::isnil;
-using boost::format;
+using util::_Fmt;
 
 
 namespace util {
@@ -56,8 +50,8 @@ namespace test {
         VecI data;
         for (uint i=0; i<cnt; ++i)
           {
-            int someNumber (rand() % (2*NUMBER_LIMIT) -NUMBER_LIMIT);
-            if (!someNumber) someNumber -=(1 +rand() % NUMBER_LIMIT);
+            int someNumber = -int(NUMBER_LIMIT)+rani(2*NUMBER_LIMIT);
+            if (!someNumber) someNumber -= 1 +  rani(NUMBER_LIMIT);
             
             data.push_back (someNumber);
           }
@@ -82,8 +76,8 @@ namespace test {
     floordiv_alternate (long num, long den)
       {
         ldiv_t res = ldiv(num,den);
-        return (0 >= res.quot && res.rem)? res.quot-1
-                                         : res.quot;
+        return (0 >= res.quot and res.rem)? res.quot-1
+                                          : res.quot;
       }
     
   } // (End) test data and operations
@@ -103,7 +97,7 @@ namespace test {
    * @note if invoked with an non empty parameter, this test performs
    *       some interesting timing comparisons, which initially were
    *       used to tweak the implementation a bit.
-   * @see util.hpp
+   * @see lib/util.hpp
    * @see QuantiserBasics_test
    */
   class UtilFloordiv_test : public Test
@@ -112,15 +106,17 @@ namespace test {
       virtual void
       run (Arg arg)
         {
+          seedRand();
+          
           verifyBehaviour ();
           
           verifyIntegerTypes<int>();
           verifyIntegerTypes<long>();
           verifyIntegerTypes<short>();
           verifyIntegerTypes<int64_t>();
-          verifyIntegerTypes<long long int>();
+          verifyIntegerTypes<llong>();
           
-          if (!isnil (arg))
+          if (not isnil (arg))
             runPerformanceTest();
         }
       
@@ -206,7 +202,7 @@ namespace test {
        * \c fdiv() function also to divide the positive results,
        * performs only slightly worse. So this implementation
        * was chosen mainly because it seems to state its
-       * intent more clearly in code.  
+       * intent more clearly in code.
        */
       void
       runPerformanceTest ()
@@ -215,9 +211,9 @@ namespace test {
           typedef VecI::const_iterator I;
           
           clock_t start(0), stop(0);
-          format resultDisplay("timings(%s)%|30T.|%5.3fsec\n");
+          _Fmt resultDisplay{"timings(%s)%|30T.|%5.3fsec\n"};
           
-#define   START_TIMINGS start=clock();          
+#define   START_TIMINGS start=clock();
 #define   DISPLAY_TIMINGS(ID) \
           stop = clock();      \
           cout << resultDisplay % STRINGIFY (ID) % (double(stop-start)/CLOCKS_PER_SEC) ;

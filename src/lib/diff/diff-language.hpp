@@ -1,22 +1,13 @@
 /*
   DIFF-LANGUAGE.hpp  -  language to describe differences in linearised form
 
-  Copyright (C)         Lumiera.org
-    2014,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2014,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
 
@@ -33,7 +24,8 @@
  ** Such an architecture allows for tight cooperation between strictly separated
  ** components, without the need of a fixed, predefined and shared data structure.
  ** 
- ** \par Basic Assumptions
+ ** # Basic Assumptions
+ ** 
  ** While the \em linearisation folds knowledge about the underlying data structure
  ** down into the actual diff, we deliberately assume that the data to be diffed is
  ** \em structured data. Moreover, we'll assume implicitly that this data is \em typed,
@@ -44,7 +36,8 @@
  ** send the actual content data this way, or to serve as redundancy to verify
  ** proper application of the changes at the diff receiver downstream.
  ** 
- ** \par Solution Pattern
+ ** # Solution Pattern
+ ** 
  ** The representation of this linearised diff language relies on a specialised form
  ** of the <b>visitor pattern</b>: We assume the vocabulary of the diff language to be
  ** relatively fixed, while the actual effect when consuming the stream of diff tokens
@@ -85,20 +78,23 @@
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/verb-token.hpp"
 #include "lib/util.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <tuple>
 
 
+namespace lumiera {
+namespace error {
+  LUMIERA_ERROR_DECLARE(DIFF_STRUCTURE); ///< Invalid diff structure: implicit rules and assumptions violated.
+  LUMIERA_ERROR_DECLARE(DIFF_CONFLICT); ///<  Collision in diff application: contents of target not as expected.
+}}
 
 namespace lib {
 namespace diff{
   
   namespace error = lumiera::error;
-  
-  LUMIERA_ERROR_DECLARE(DIFF_CONFLICT); ///< Collision in diff application: contents of target not as expected.
   
   
   template<class I, typename E>
@@ -110,7 +106,7 @@ namespace diff{
   struct InterpreterScheme               ///< base case is to expect typedef I::Val
     {
       using Interpreter = I;
-      using Val = typename I::Val;
+      using Val     = I::Val;
       using Handler = HandlerFun<I,Val>;
     };
   
@@ -167,13 +163,13 @@ namespace diff{
           
           operator string()  const
             {
-              return string(verb()) + "("+string(elm())+")";
+              return string(unConst(this)->verb())
+               + "("+string(unConst(this)->elm())+")";
             }
           
           void
           applyTo (Interpreter& interpreter)
             {
-              using util::cStr;
               TRACE (diff, "verb %4s(%s)", cStr(verb()), cStr(elm()) );
               verb().applyTo (interpreter, elm());
             }
@@ -192,12 +188,12 @@ namespace diff{
   struct DiffStepBuilder
     {
       using Scheme  = InterpreterScheme<I>;
-      using Handler = typename Scheme::Handler;
-      using Val     = typename Scheme::Val;
+      using Handler = Scheme::Handler;
+      using Val     = Scheme::Val;
       
       using Lang = DiffLanguage<I,Val>;
-      using Step = typename Lang::DiffStep;
-      using Verb = typename Lang::DiffVerb;
+      using Step = Lang::DiffStep;
+      using Verb = Lang::DiffVerb;
       
       Handler handler;
       Literal id;
@@ -243,7 +239,7 @@ namespace diff{
    * @warning use for internal state marking only --
    *          invoking this token produces undefined behaviour */
   template<class I, typename E>
-  const typename DiffLanguage<I,E>::DiffStep DiffLanguage<I,E>::NIL = DiffStep(DiffVerb(), E());
+  const DiffLanguage<I,E>::DiffStep DiffLanguage<I,E>::NIL = DiffStep(DiffVerb(), E());
   
   
   
@@ -261,36 +257,41 @@ namespace diff{
    * @remarks the actual diff fed to the DiffApplicator
    *          assumes that this DiffApplicationStrategy is
    *          an Interpreter for the given diff language.
+   * @remarks the second template parameter allows for
+   *          `std::enable_if` based on the concrete
+   *          target type `TAR` (1st template arg)
    * @warning the actual language remains unspecified;
    *          it is picked from the visible context.
+   * @see tree-diff-application.hpp
+   * @see list-diff-application.hpp
    */
-  template<class CON>
+  template<class TAR, typename SEL =void>
   class DiffApplicationStrategy;
   
   
   /**
    * generic builder to apply a diff description to a given target data structure.
    * The usage pattern is as follows
-   * #. construct a DiffApplicator instance, wrapping the target data
-   * #. feed the diff (sequence of diff verbs) to the #consume function
-   * #. the wrapped target sequence has been altered, to conform to the given diff
+   * -# construct a DiffApplicator instance, wrapping the target data
+   * -# feed the diff (sequence of diff verbs) to the #consume function
+   * -# the wrapped target data has been altered, to conform to the given diff
    * @note a suitable DiffApplicationStrategy will be picked, based on the type
    *       of the concrete target sequence given at construction. (Effectively
    *       this means you need a suitable DiffApplicationStrategy specialisation,
    *       e.g. for a target sequence within a vector)
    */
-  template<class SEQ>
+  template<class TAR>
   class DiffApplicator
-    : boost::noncopyable
+    : util::NonCopyable
     {
-      using Interpreter = DiffApplicationStrategy<SEQ>;
+      using Interpreter = DiffApplicationStrategy<TAR>;
       
       Interpreter target_;
       
     public:
       explicit
-      DiffApplicator(SEQ& targetSeq)
-        : target_(targetSeq)
+      DiffApplicator(TAR& targetStructure)
+        : target_(targetStructure)
         { }
       
       template<class DIFF>
@@ -300,6 +301,7 @@ namespace diff{
           target_.initDiffApplication();
           for ( ; diff; ++diff )
             diff->applyTo(target_);
+          target_.completeDiffApplication();
         }
     };
   

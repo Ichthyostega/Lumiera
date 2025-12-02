@@ -1,24 +1,14 @@
 /*
     llist.h - simple intrusive cyclic double linked list
 
-  Copyright (C)
-    2003, 2005          Christian Thaeter <chth@gmx.net>
-  Copyright (C)         Lumiera.org
-    2008,               Christian Thaeter <ct@pipapo.org>
+   Copyright (C)
+     2003, 2005       Christian Thaeter <chth@gmx.net>
+     2008,            Christian Thaeter <ct@pipapo.org>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 */
 
 #ifndef LLIST_H
@@ -40,8 +30,8 @@
  *
  * This header can be used in 2 different ways:
  * 1) (preferred) just including it provides all functions as static inlined functions. This is the default
- * 2) #define LLIST_INTERFACE before including this header gives only the declarations
- *    #define LLIST_IMPLEMENTATION before including this header yields in definitions
+ * 2) `#define LLIST_INTERFACE` before including this header gives only the declarations
+ *    `#define LLIST_IMPLEMENTATION` before including this header yields in definitions
  *    this can be used to generate a library. This is currently untested and not recommended.
  * The rationale for using inlined functions is that most functions are very small and likely to be used in performance critical parts.
  * Inlining can give a huge performance and optimisation improvement here.

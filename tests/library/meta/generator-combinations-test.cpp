@@ -1,24 +1,19 @@
 /*
   GeneratorCombinations(Test)  -  verify generating case combinations
 
-  Copyright (C)         Lumiera.org
-    2011,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2011,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file generator-combinations-test.cpp
+ ** unit test \ref GeneratorCombinations_test
+ */
 
 
 #include "lib/test/run.hpp"
@@ -26,13 +21,11 @@
 #include "lib/meta/generator-combinations.hpp"
 #include "meta/typelist-diagnostics.hpp"
 #include "lib/format-string.hpp"
+#include "lib/format-cout.hpp"
 
-#include <iostream>
 
 using ::test::Test;
 using std::string;
-using std::cout;
-using std::endl;
 
 
 namespace lib  {
@@ -75,7 +68,7 @@ namespace test {
       };
     
     template<>
-    struct TestCase<void,void,NullType>
+    struct TestCase<void,void,Nil>
       {
         static string
         visitAll()
@@ -83,7 +76,7 @@ namespace test {
             return "-|";
           }
       };
-    typedef TestCase<void,void,NullType> IterationEnd;
+    typedef TestCase<void,void,Nil> IterationEnd;
     
   } // (End) test data
   
@@ -102,7 +95,7 @@ namespace test {
   class GeneratorCombinations_test : public Test
     {
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           checkCartesian();
           checkCaseInstantiation();
@@ -120,9 +113,9 @@ namespace test {
       void
       checkCaseInstantiation ()
         {
-          typedef InstantiateChainedCombinations< Types1,Types2
-                                                , TestCase
-                                                , IterationEnd > CombnationCases;
+          using CombnationCases = InstantiateChainedCombinations< Types1,Types2
+                                                                , TestCase
+                                                                , IterationEnd >;
           
           cout << "All-Test-Combinations-" << CombnationCases::visitAll() << endl;
         }

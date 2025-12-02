@@ -1,288 +1,305 @@
 /*
   AllocationCluster  -  allocating and owning a pile of objects
 
-  Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2008,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-* *****************************************************/
+/** @file allocation-cluster.cpp
+ ** Implementation of [memory management helper functions](\ref allocation-cluster.hpp)
+ ** for the render engine model. Here, in the actual translation unit, the generic part
+ ** of these functions is emitted, while the corresponding header provides a strictly
+ ** typed front-end, based on templates, which forward to the implementation eventually.
+ ** \par low-level trickery
+ **      The StorageManager implementation exploits object layout knowledge in order to
+ **      operate with the bare minimum of administrative overhead; notably the next allocation
+ **      is always located _within_ the current extent and by assuming that the remaining size
+ **      is tracked correctly, the start of the current extent can always be re-discovered;
+ **      the sequence of extents is managed as a linked list, where the `next*` resides in the
+ **      first »slot« within each Extent; this pointer is _dressed up_ (reinterpreted) as a
+ **      lib::LinkedElements with a heap allocator, which ends up performing the actual
+ **      allocation in blocks of EXTENT_SIZ.
+ */
 
 
 #include "lib/allocation-cluster.hpp"
-#include "lib/error.hpp"
+#include "lib/linked-elements.hpp"
+#include "lib/format-string.hpp"
+#include "lib/util-quant.hpp"
 #include "lib/util.hpp"
-#include "lib/sync.hpp"
 
+
+using util::unConst;
+using util::isPow2;
 using util::isnil;
+using util::_Fmt;
+using std::byte;
 
 
 namespace lib {
+  namespace {// Internals...
+    
+    /**
+     * Special allocator-policy for lib::LinkedElements
+     * - does not allow to allocate new elements
+     * - can hook up elements allocated elsewhere
+     * - ensure the destructor of all elements is invoked
+     */
+    struct PolicyInvokeDtor
+      : lib::linked_elements::NoOwnership
+      {
+        /**
+         * while this policy doesn't take ownership,
+         * it ensures the destructor is invoked
+         */
+        template<class X>
+        void
+        dispose (X* elm)
+          {
+            REQUIRE (elm);
+            elm->~X();
+          }
+      };
+
+  }//(End)configuration and internals
+  
+  
+  
+  
   
   /**
-   * "Low-level" Memory manager for allocating small objects of a fixed size.
-   * The usage pattern is definite: Objects will be allocated in the course of
-   * a build process and then live until all Objects will be purged in one sway.
-   * Allocations will be requested one by one and immediately committed after
-   * successful ctor call of the object being allocated. Allocations and commits
-   * can be assumed to come in pairs, thus if an allocation immediately follows
-   * another one (without commit), the previous allocation can be considered
-   * a failure and can be dropped silently. After an allocation succeeds
-   * (i.e. was committed), the MemoryManager is in charge for the lifecycle
-   * of the object within the allocated space and has to guarantee calling
-   * it's dtor, either on shutdown or on explicit #purge() -- the type info
-   * structure handed in on initialisation provides a means for invoking
-   * the dtor without actually knowing the object's type.
-   * 
-   * @todo this is a preliminary or pseudo-implementation based on 
-   * a vector of raw pointers,  i.e. actually the objects are heap 
-   * allocated. What actually should happen is for the MemoryManager to
-   * allocate raw memory chunk wise, sub partition it and place the objects
-   * into this private memory buffer. Further, possibly we could maintain
-   * a pool of raw memory chunks used by all MemoryManager instances. I am
-   * skipping those details for now (10/2008) because they should be based
-   * on real-world measurements, not guessing.
+   * An _overlay view_ for the AllocationCluster to add functionality
+   * for adding / clearing extents and registering optional deleter functions.
+   * @warning this is a tricky construct to operate each Allocation Cluster
+   *          with the absolute minimum of organisational overhead necessary.
+   *          The key point to note is that StorageManager is layout compatible
+   *          with AllocationCluster itself — achieved through use of the union
+   *          ManagementView, which holds a Storage descriptor member, but
+   *          also an alternate view to manage a chain of extents as
+   *          intrusive linked list (lib::LinkedElements).
+   * @remark  this trick relies on `std::align(pos,rest)` to manage the storage
+   *          coordinates coherently, allowing to re-establish the begin
+   *          of each storage block always, using pointer arithmetics.
    */
-  class AllocationCluster::MemoryManager
-    : public Sync<RecursiveLock_NoWait>
+  class AllocationCluster::StorageManager
     {
-      typedef std::vector<char*> MemTable;
-      TypeInfo type_;
-      MemTable mem_;
-      size_t top_;   ///< index of the next slot available for allocation
+      
+      using Destructors = lib::LinkedElements<Destructor, PolicyInvokeDtor>;
+      
+      /** Block of allocated storage */
+      struct Extent
+        : util::NonCopyable
+        {
+          Extent* next;
+          Destructors dtors;
+          std::byte storage[max_size()];
+        };
+      using Extents = lib::LinkedElements<Extent>;
+      
+      static_assert (sizeof(Destructors) == sizeof(void*));
+      static_assert (sizeof(Extents)     == sizeof(void*));
+      
+      union ManagementView
+        {
+          Storage storage;
+          Extents extents;
+        };         //Note: storage.pos and extents.head_ reside at the same location
+      
+      ManagementView view_;
+      
+      StorageManager()  = delete;    ///< @note used as _overlay view_ only, never created
       
     public:
-      MemoryManager(TypeInfo info) : top_(0) { reset(info); }
-      ~MemoryManager()                       { purge(); }
+      static StorageManager&
+      access (AllocationCluster& clu)
+        {
+          return reinterpret_cast<StorageManager&> (clu);
+        }
       
-      size_t size()  const;
+      void
+      addBlock()
+        {
+          closeCurrentBlock();
+          prependNextBlock();
+        }
       
-      void purge();
-      void reset(TypeInfo info);
+      void
+      discardAll()
+        {
+          closeCurrentBlock();
+          view_.extents.clear();
+        }
       
-      void* allocate();
+      void
+      attach (Destructor& dtor)
+        {
+          getCurrentBlockStart()->dtors.push (dtor);
+        }
       
-      void commit (void* pendingAlloc);
+      
+      bool
+      empty()  const
+        {
+          return nullptr == view_.storage.pos;
+        }
+      
+      size_t
+      determineExtentCnt()  const
+        {
+          return empty()? 0
+                        : lib::asLinkedElements (getCurrentBlockStart())
+                              .size();
+        }
+      
+      size_t
+      calcAllocInCurrentBlock()  const
+        {
+          ENSURE (max_size() >= view_.storage.rest);
+          return max_size() - view_.storage.rest;
+        }
+      
       
     private:
-      void clearStorage();
+      Extent*
+      getCurrentBlockStart()  const
+        {
+          REQUIRE (not empty());
+          void* pos = static_cast<byte*>(view_.storage.pos)
+                                       + view_.storage.rest
+                                       - EXTENT_SIZ;
+          return static_cast<Extent*> (pos);
+        }
+      
+      void
+      closeCurrentBlock()
+        {
+          if (empty()) return;
+          // relocate the pos-pointer to the start of the block
+          view_.storage.pos = getCurrentBlockStart();
+          view_.storage.rest = 0;
+        }
+      
+      void
+      prependNextBlock()
+        {
+          view_.extents.emplace();
+          view_.storage.pos = & view_.extents.top().storage;
+          view_.storage.rest = max_size();
+        }
     };
   
   
   
-  /** the top_ index always points at the next slot 
-   *  not yet holding a finished, committed allocation.
-   *  Index is zero based, thus top_ == count of living objects
-   */
-  size_t
-  AllocationCluster::MemoryManager::size()  const
-  {
-    return top_;
-  }
   
   
-  void
-  AllocationCluster::MemoryManager::reset (TypeInfo info)
-  {
-    Lock sync(this);
-    
-    if (0 < mem_.size()) purge();
-    type_ = info;
-    
-    ENSURE (0==top_);
-    ENSURE (isnil (mem_));
-    ENSURE (0 < type_.allocSize);
-    ENSURE (type_.killIt);
-  }
-  
-  
-  void
-  AllocationCluster::MemoryManager::purge()
-  {
-    Lock sync(this);
-    
-    REQUIRE (type_.killIt, "we need a deleter function");
-    REQUIRE (0 < type_.allocSize, "allocation size unknown");
-    REQUIRE (top_ == mem_.size() || (top_+1) == mem_.size());
-    
-    while (top_)
-      type_.killIt (mem_[--top_]);
-    clearStorage();
-  }// note: unnecessary to kill pending allocations
-  
-  
-  inline void
-  AllocationCluster::MemoryManager::clearStorage()
-  {
-    for (size_t i=mem_.size(); 0 < i; )
-      delete[] mem_[--i];
-    mem_.clear();
-  }
-  
-  
-  inline void*
-  AllocationCluster::MemoryManager::allocate()
-  {
-    Lock sync(this);
-    
-    REQUIRE (0 < type_.allocSize);
-    REQUIRE (top_ <= mem_.size());
-    
-    if (top_==mem_.size())
-      mem_.resize(top_+1);
-    
-    if (!mem_[top_]) // re-use existing allocation, if any
-      mem_[top_] = new char[type_.allocSize];
-    
-    ENSURE (top_ < mem_.size());
-    ENSURE (mem_[top_]);
-    return mem_[top_];
-  }
-  
-  
-  inline void
-  AllocationCluster::MemoryManager::commit (void* pendingAlloc)
-  {
-    Lock sync(this);
-    
-    REQUIRE (pendingAlloc);
-    ASSERT (top_ < mem_.size());
-    ASSERT (pendingAlloc == mem_[top_], "allocation protocol violated");
-    
-    ++top_;
-    
-    ENSURE (top_ == mem_.size());
-  }
-  
-  
-  
-  /** storage for static bookkeeping of type allocation slots */
-  size_t AllocationCluster::maxTypeIDs;
-  
-  
-  /** creating a new AllocationCluster prepares a table capable
-   *  of holding the individual object families to come. Each of those
-   *  is managed by a separate instance of the low-level memory manager.
+  /**
+   * Prepare a new clustered allocation to be expanded by extents of size
+   * EXTENT_SIZ, yet discarded all at once when the dtor is called.
+   * The constructor does not allocate anything immediately.
    */
   AllocationCluster::AllocationCluster()
-  {
-    TRACE (memory, "new AllocationCluster");
-  }
+    : storage_{}
+    {
+      TRACE (memory, "new AllocationCluster");
+    }
   
   
-  /** On shutdown of the AllocationCluster we need to assure a certain
-   *  destruction order is maintained by explicitly invoking a cleanup
-   *  operation on each of the low-level memory manager objects. 
+  /**
+   * The shutdown of an AllocationCluster walks all extents and invokes all
+   * registered deleter functions and then discards the complete storage.
+   * @note it is possible to allocate objects as _disposable_ — meaning
+   *       that no destructors will be enrolled and called for such objects.
    */
-  AllocationCluster::~AllocationCluster()  throw()
+  AllocationCluster::~AllocationCluster()  noexcept
+  try
+    {
+      TRACE (memory, "shutting down AllocationCluster");
+      StorageManager::access(*this).discardAll();
+    }
+  ERROR_LOG_AND_IGNORE (progress, "discarding AllocationCluster")
+  
+  
+  /** virtual dtor to cause invocation of the payload's dtor on clean-up */
+  AllocationCluster::Destructor::~Destructor() { };
+  
+  
+  
+  /**
+   * Expand the alloted storage pool by a block,
+   * suitable to accommodate at least the indicated request.
+   * @remark Storage blocks are organised as linked list,
+   *         allowing to de-allocate all blocks together.
+   */
+  void
+  AllocationCluster::expandStorage (size_t allocRequest)
   {
-    try
-      {                                         // avoiding a per-instance lock for now.
-        ClassLock<AllocationCluster> guard;    //  (see note in the class description)
-        
-        TRACE (memory, "shutting down AllocationCluster");
-        for (size_t i = typeHandlers_.size(); 0 < i; --i)
-          if (handler(i))
-            handler(i)->purge();
-        
-        typeHandlers_.clear();
-        
-      }
-    catch (lumiera::Error & ex)
-      {
-        WARN (progress, "Exception while closing AllocationCluster: %s", ex.what());
-      }
-    catch (...)
-      {
-        ALERT (progress, "Unexpected fatal Exception while closing AllocationCluster.");
-        lumiera::error::lumiera_unexpectedException(); // terminate
-      }
-  }
-  
-  
-  
-  void*
-  AllocationCluster::initiateAlloc (size_t& slot)
-  {
-    if (!slot || slot > typeHandlers_.size() || !handler(slot) )
-      return 0; // Memory manager not yet initialised
-    else
-      return handler(slot)->allocate();
-  }
-  
-  
-  void*
-  AllocationCluster::initiateAlloc (TypeInfo type, size_t& slot)
-  {
-    ASSERT (0 < slot);
-    
-      {                                         // avoiding a per-instance lock for now.
-        ClassLock<AllocationCluster> guard;    //  (see note in the class description)
-        
-        if (slot > typeHandlers_.size())
-          typeHandlers_.resize(slot);
-        if (!handler(slot))
-          handler(slot).reset (new MemoryManager (type));
-        
-      }
-    
-    ASSERT (handler(slot));
-    return initiateAlloc(slot);
+    ENSURE (allocRequest <= max_size());
+    StorageManager::access(*this).addBlock();
   }
   
   
   void
-  AllocationCluster::finishAlloc (size_t& slot, void* allocatedObj)
+  AllocationCluster::registerDestructor (Destructor& dtor)
   {
-    ASSERT (handler(slot));
-    ASSERT (allocatedObj);
-    
-    handler(slot)->commit(allocatedObj);
+    StorageManager::access(*this).attach (dtor);
   }
+  
+  
+  
+  /**
+   * Allocation cluster uses a comparatively small tile size for its extents,
+   * which turns out to be a frequently encountered limitation in practice.
+   * This was deemed acceptable, due to its orientation towards performance.
+   * @throws err::Fatal when a desired allocation can not be accommodated
+   */
+  void
+  AllocationCluster::__enforce_limits (size_t allocSiz, size_t align)
+  {
+    REQUIRE (allocSiz);
+    REQUIRE (align);
+    REQUIRE (isPow2 (align));
+    
+    if (allocSiz > max_size())
+      throw err::Fatal{_Fmt{"AllocationCluster: desired allocation of %d bytes "
+                            "exceeds the fixed extent size of %d"} % allocSiz % max_size()
+                      ,LERR_(CAPACITY)};
+    
+    if (align > max_size())
+      throw err::Fatal{_Fmt{"AllocationCluster: data requires alignment at %d bytes, "
+                            "which is beyond the fixed extent size of %d"} % align % max_size()
+                      ,LERR_(CAPACITY)};
+  }
+  
   
   
   /* === diagnostics helpers === */
   
-  /** @return total number of objects
-   *          currently managed by this allocator */
   size_t
-  AllocationCluster::size()  const
+  AllocationCluster::numExtents()  const
   {
-    size_t size(0);
-    typedef ManagerTable::const_iterator Iter;
-    
-    for (Iter ii= typeHandlers_.begin(); ii != typeHandlers_.end(); ++ii )
-      if (*ii)
-        size += (*ii)->size();
-    
-    return size;
+    return StorageManager::access (unConst(*this)).determineExtentCnt();
   }
-  
-  
+
+  /**
+   * @warning whenever there are more than one extent,
+   *   the returned byte count is guessed only (upper bound), since
+   *   actually allocated size is not tracked to save some overhead.
+   */
   size_t
-  AllocationCluster::countActiveInstances (size_t& slot)  const
+  AllocationCluster::numBytes()  const
   {
-    if (handler (slot))
-      return handler(slot)->size();
-    else
-      return 0;
+    size_t extents = numExtents();
+    if (not extents) return 0;
+    size_t bytes = StorageManager::access (unConst(*this)).calcAllocInCurrentBlock();
+    return (extents - 1) * max_size() + bytes;
   }
-  
-  
-  
-  
   
   
 } // namespace lib

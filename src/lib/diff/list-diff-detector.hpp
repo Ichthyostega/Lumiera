@@ -1,22 +1,13 @@
 /*
   LIST-DIFF-DETECTOR.hpp  -  language to describe differences in linearised form
 
-  Copyright (C)         Lumiera.org
-    2015,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2015,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
 
@@ -61,8 +52,8 @@
 #include "lib/diff/list-diff.hpp"
 #include "lib/diff/index-table.hpp"
 #include "lib/iter-adapter.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <utility>
 
 
@@ -85,16 +76,16 @@ namespace diff{
    */
   template<class SEQ>
   class DiffDetector
-    : boost::noncopyable
+    : util::NonCopyable
     {
-      using Val = typename SEQ::value_type;
+      using Val = SEQ::value_type;
       using Idx = IndexTable<Val>;
       
       Idx refIdx_;
       SEQ const& currentData_;
       
       
-      using DiffStep = typename ListDiffLanguage<Val>::DiffStep;
+      using DiffStep = ListDiffLanguage<Val>::DiffStep;
       
       /** @internal state frame for diff detection and generation. */
       class DiffFrame;
@@ -127,7 +118,7 @@ namespace diff{
       
       
       /** Diff is a iterator to yield a sequence of DiffStep elements */
-      using Diff = lib::IterStateWrapper<DiffStep, DiffFrame>;
+      using Diff = lib::IterStateWrapper<DiffFrame>;
       
       /** Diff generation core operation.
        * Take a snapshot of the \em current state of the underlying sequence
@@ -187,24 +178,24 @@ namespace diff{
       
       /* === Iteration control API for IterStateWrapper === */
       
-      friend bool
-      checkPoint (DiffFrame const& frame)
-      {
-        return token.NIL != frame.currentStep_;
-      }
+      bool
+      checkPoint()  const
+        {
+          return token.NIL != currentStep_;
+        }
       
-      friend DiffStep&
-      yield (DiffFrame const& frame)
-      {
-        REQUIRE (checkPoint (frame));
-        return unConst(frame).currentStep_;
-      }
+      DiffStep&
+      yield()  const
+        {
+          REQUIRE (checkPoint());
+          return unConst(this)->currentStep_;
+        }
       
-      friend void
-      iterNext (DiffFrame & frame)
-      {
-        frame.currentStep_ = frame.establishNextState();
-      }
+      void
+      iterNext()
+        {
+          currentStep_ = this->establishNextState();
+        }
       
     private:
       DiffStep

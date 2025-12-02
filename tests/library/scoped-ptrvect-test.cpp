@@ -1,24 +1,19 @@
 /*
   ScopedPtrVect(Test)  -  holding and owning a collection of noncopyable objects
 
-  Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2008,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file scoped-ptrvect-test.cpp
+ ** unit test \ref ScopedPtrVect_test
+ */
 
 
 
@@ -27,7 +22,7 @@
 #include "lib/util.hpp"
 
 #include "lib/scoped-ptrvect.hpp"
-#include "lib/test/testdummy.hpp"
+#include "lib/test/tracking-dummy.hpp"
 
 
 namespace lib {
@@ -56,6 +51,7 @@ namespace test{
           simpleUsage();
           iterating();
           detaching();
+          moving();
         }
       
       
@@ -130,7 +126,7 @@ namespace test{
             
             
             // Verify correct behaviour of iteration end
-            CHECK (! (holder.end()));
+            CHECK (not holder.end());
             CHECK (isnil (holder.end()));
             
             VERIFY_ERROR (ITER_EXHAUST, *holder.end() );
@@ -150,7 +146,7 @@ namespace test{
       detaching()
         {
           int id2, id3;
-          Dummy* extracted(0);
+          Dummy* extracted{nullptr};
           CHECK (0 == Dummy::checksum());
           {
             VectD holder;
@@ -180,6 +176,47 @@ namespace test{
           CHECK (id2+id3 == Dummy::checksum());
           
           delete extracted;
+          CHECK (0 == Dummy::checksum());
+        }
+      
+      
+      void
+      moving()
+        { {
+            VectD org;
+            VectD left;
+            CHECK (0 == Dummy::checksum());
+            
+            org.manage (new Dummy);
+            org.manage (new Dummy);
+            org.manage (new Dummy);
+            
+            CHECK (not isnil (org));
+            CHECK (    isnil (left));
+            auto sum = Dummy::checksum();
+            CHECK (sum > 0);
+            int id0 = org[0].getVal(),
+                id1 = org[1].getVal(),
+                id2 = org[2].getVal();
+            
+            // create by move
+            VectD right{std::move (org)};
+            CHECK (    isnil (org));
+            CHECK (    isnil (left));
+            CHECK (not isnil (right));
+            CHECK (sum == Dummy::checksum());
+            
+            // move-assignment
+            left = std::move (right);
+            CHECK (    isnil (org));
+            CHECK (not isnil (left));
+            CHECK (    isnil (right));
+            CHECK (sum == Dummy::checksum());
+            CHECK (id0 == left[0].getVal());
+            CHECK (id1 == left[1].getVal());
+            CHECK (id2 == left[2].getVal());
+            
+          }
           CHECK (0 == Dummy::checksum());
         }
     };

@@ -1,29 +1,23 @@
 /*
   Config-typed  -  Lumiera configuration high-level interface
 
-  Copyright (C)         Lumiera.org
-    2008,               Christian Thaeter <ct@pipapo.org>
+   Copyright (C)
+     2008,            Christian Thaeter <ct@pipapo.org>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+* *****************************************************************/
 
 
-/** @file config-type.d
- ** Implementation: high level typed configuration interfaces.
+/** @file config-typed.c
+ ** Implementation draft for a configuration system (2008).
+ ** This file implements high level typed configuration interfaces.
  ** @note unfinished draft from 2008
+ ** @todo as of 2016 this code is unused and
+ **       likely to be replaced by a different approach.
  */
 
 #include "include/logging.h"

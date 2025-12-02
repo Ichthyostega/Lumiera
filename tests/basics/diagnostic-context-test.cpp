@@ -1,34 +1,35 @@
 /*
-  DiagnosticContext(Test)  -  verify thread local stack for collecting diagnostics 
+  DiagnosticContext(Test)  -  verify thread local stack for collecting diagnostics
 
-  Copyright (C)         Lumiera.org
-    2011,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2011,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file diagnostic-context-test.cpp
+ ** unit test \ref DiagnosticContext_test
+ */
 
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 
-#include "backend/thread-wrapper.hpp"
 #include "lib/diagnostic-context.hpp"
+#include "lib/iter-explorer.hpp"
+#include "lib/thread.hpp"
 
-#include <cstdlib>
 #include <vector>
+#include <chrono>
+#include <array>
+
+using std::this_thread::sleep_for;
+using std::chrono_literals::operator ""us;
+
 
 
 
@@ -43,20 +44,16 @@ namespace test{
     const uint NUM_THREADS = 75;
     const uint MAX_RAND    = 100*1000;
     
-    inline bool
-    isOdd (uint val)
-    {
-      return bool (val % 2);
-    }
+    auto isOdd = [](auto val) { return bool (val % 2); };
     
   } // (End) test setup....
   
-  using backend::ThreadJoinable;
-  using error::LUMIERA_ERROR_LOGIC;
+  using lib::ThreadJoinable;
+  using LERR_(LOGIC);
   using std::rand;
   
   
-  /** 
+  /**
    * Subject of this test:
    * a thread-local stack of int values
    */
@@ -73,13 +70,11 @@ namespace test{
    *       DiagnosticContext frames are placed into automatic storage (as local
    *       variable within some function scope). Based on thread-local storage,
    *       the next reachable frame can be accessed from anywhere within
-   *       the callstack. This feature is useful for collecting 
+   *       the callstack. This feature is useful for collecting
    *       information regarding features cross-cutting
    *       the usual dependency hierarchy.
-   * 
    * @see lib::DiagnosticContext
-   * @see lib::ThreadLocal
-   * @see backend::Thread
+   * @see lib::ThreadJoinable
    */
   class DiagnosticContext_test : public Test
     {
@@ -108,7 +103,7 @@ namespace test{
           CHECK (0 == zero);
           CHECK (0 == Marker::access());
           
-          { // nested scope 
+          { // nested scope
             CHECK (0 == Marker::access());
             
             Marker one(1);
@@ -153,45 +148,47 @@ namespace test{
        *          we frequently got aborts even with 40 threads.
        *          This is surprising, since all of the lists
        *          generated in the individual threads are
-       *          of size below 20 elements. 
+       *          of size below 20 elements.
        */
       void
       verify_heavilyParallelUsage()
         {
-          TestThread testcase[NUM_THREADS]    SIDEEFFECT;
+          seedRand();
+          auto verifyResult = [](VecI sequence)
+                               {
+                                  uint prev = 0;
+                                  for (uint val : sequence)
+                                    {
+                                      CHECK (isOdd(val) and val > prev);
+                                      prev = val;
+                                    }
+                               };
           
-          for (uint i=0; i < NUM_THREADS; ++i)
-            CHECK (testcase[i].join().isValid() );
+          std::array<TestThread, NUM_THREADS> testcases;
+          
+          auto results = lib::explore(testcases)
+                             .transform([](TestThread& t){ return t.join(); })
+                             .effuse();
+          
+          for (auto& res : results)
+            verifyResult (res);
         }
       
       
+      /**
+       * Build a call stack within separate thread and capture diagnostics.
+       * The actual test operation produces a descending number sequence,
+       * and only odd values will be captured into the diagnostic stack-
+       */
       struct TestThread
-        : ThreadJoinable
+        : ThreadJoinable<VecI>
         {
           TestThread()
-            : ThreadJoinable("test diagnostic context stack"
-                            ,verifyDiagnosticStack)
+            : ThreadJoinable{"test context stack"
+                            ,[seed = 1+rani(MAX_RAND)]
+                             { return descend (seed); }}
             { }
         };
-      
-        
-      /** the actual test operation running in a separate thread */
-      static void
-      verifyDiagnosticStack()
-        {
-          uint seed (1 + rand() % MAX_RAND);
-          
-          VecI sequence = descend (seed);
-          
-          uint prev = 0;
-          for (uint i=0; i < sequence.size(); ++i)
-            {
-              uint val = sequence[i];
-              if (! (isOdd(val) && seed >= val && val > prev ))
-                throw error::Fatal ("thread-local diagnostic stack");
-              prev = val;
-            }
-        }
       
       static VecI
       descend (uint current)
@@ -199,8 +196,9 @@ namespace test{
           if (current < 2)
             return Marker::extractStack();
           
-          usleep (500);
-          if (isOdd(current))
+          sleep_for (500us);
+          
+          if (isOdd (current))
             {
               Marker remember(current);
               return descend (current+1);
@@ -217,4 +215,4 @@ namespace test{
   
   
   
-}} // namespace backend::test
+}} // namespace vault::test

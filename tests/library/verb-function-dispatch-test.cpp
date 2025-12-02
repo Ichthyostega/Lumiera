@@ -1,56 +1,53 @@
 /*
   VerbFunctionDispatch(Test)  -  Concept to dispatch according to the verbs of a DSL
 
-  Copyright (C)         Lumiera.org
-    2014,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2014,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file verb-function-dispatch-test.cpp
+ ** Demonstrate the concept of a _verb language_ based on double dispatch.
+ ** @see diff-language.hpp
+ */
 
 
 #include "lib/test/run.hpp"
 #include "lib/verb-token.hpp"
 #include "lib/format-string.hpp"
+#include "lib/format-cout.hpp"
 
-#include <iostream>
 #include <string>
 #include <vector>
 
 using std::string;
 using util::_Fmt;
 using std::vector;
-using std::cout;
 
 
 namespace lib {
 namespace test{
   
   
-  class Receiver
-    {
-    public:
-      virtual ~Receiver() { } ///< this is an interface
-      
-      virtual string woof()   =0;
-      virtual string honk()   =0;
-      virtual string moo()    =0;
-      virtual string meh()    =0;
-    };
-  
-  namespace {
+  namespace { // Test Fixture
+    
+    /** the "visitor" interface to invoke */
+    class Receiver
+      {
+      public:
+        virtual ~Receiver() { } ///< this is an interface
+        
+        virtual string woof()   =0;
+        virtual string honk()   =0;
+        virtual string moo()    =0;
+        virtual string meh()    =0;
+      };
+    
     const string BEGINNING("silence");
     
     using Verb = VerbToken<Receiver, string(void)>;
@@ -61,67 +58,68 @@ namespace test{
     Verb VERB(Receiver, honk);
     Verb VERB(Receiver, moo);
     Verb VERB(Receiver, meh);
-  }
+    
+    
+    /**
+     * a receiver of verb-tokens,
+     * which renders them verbosely
+     */
+    class VerboseRenderer
+      : public Receiver
+      {
+        string woof() { return "Woof-Woof!"; }
+        string honk() { return "Honk-Honk!"; }
+        string moo()  { return "Moo-Moo!";   }
+        string meh()  { return "Meh!";       }
+      };
+    
+    
+    /**
+     * Statefull receiver of verb-tokens.
+     */
+    class RecollectingReceiver
+      : public Receiver
+      {
+        string verb_;
+        _Fmt fmt_;
+        
+        string
+        buildResultTerm (string nextToken)
+          {
+            string resultExpression (fmt_ % verb_ % nextToken);
+            verb_ = nextToken;
+            return resultExpression;
+          }
+        
+        
+        string woof() { return buildResultTerm (VERB_woof); }
+        string honk() { return buildResultTerm (VERB_honk); }
+        string moo()  { return buildResultTerm (VERB_moo);  }
+        string meh()  { return buildResultTerm (VERB_meh);  }
+        
+        
+      public:
+        RecollectingReceiver()
+          : verb_(BEGINNING)
+          , fmt_("%s followed by %s")
+          { }
+      };
+    
+  }//(End) Test fixture
   
   
-  /**
-   * a receiver of verb-tokens,
-   * which renders them verbosely
-   */
-  class VerboseRenderer
-    : public Receiver
-    {
-      string woof() { return "Woof-Woof!"; }
-      string honk() { return "Honk-Honk!"; }
-      string moo()  { return "Moo-Moo!";   }
-      string meh()  { return "Meh!";       }
-    };
-  
-  
-  /**
-   * Statefull receiver of verb-tokens.
-   */
-  class RecollectingReceiver
-    : public Receiver
-    {
-      string verb_;
-      _Fmt fmt_;
-      
-      string
-      buildResultTerm (string nextToken)
-        {
-          string resultExpression (fmt_ % verb_ % nextToken);
-          verb_ = nextToken;
-          return resultExpression;
-        }
-      
-      
-      string woof() { return buildResultTerm (VERB_woof); }
-      string honk() { return buildResultTerm (VERB_honk); }
-      string moo()  { return buildResultTerm (VERB_moo);  }
-      string meh()  { return buildResultTerm (VERB_meh);  }
-      
-      
-    public:
-      RecollectingReceiver()
-        : verb_(BEGINNING)
-        , fmt_("%s followed by %s")
-        { }
-    };
   
   
   
   
-  
-  
-  /***********************************************************************//**
+  /**********************************************************************//**
    * @test Demonstration/Concept: dispatch a specific function
    *       based on the given verbs of an embedded custom language.
    *       Actually what we want to achieve here is a specific form
    *       of double dispatch; thus the implementation relies on a
    *       variation of the visitor pattern.
    *       
-   * @see session-structure-mapping-test.cpp
+   * @see DiffListApplication_test
    */
   class VerbFunctionDispatch_test : public Test
     {
@@ -159,7 +157,7 @@ namespace test{
         {
           VerboseRenderer receiver;
           for (Verb verb : tokens)
-              cout << "consuming " << string(verb)
+              cout << "consuming " << verb
                    << " ->  '"
                    << verb.applyTo(receiver)
                    << "'\n";

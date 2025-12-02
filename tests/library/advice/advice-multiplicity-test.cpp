@@ -1,40 +1,34 @@
 /*
   AdviceMultiplicity(Test)  -  verify correctness when dispatching multiple Advices concurrently
 
-  Copyright (C)         Lumiera.org
-    2010,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2010,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file advice-multiplicity-test.cpp
+ ** unit test \ref AdviceMultiplicity_test
+ */
 
 
 #include "lib/test/run.hpp"
 //#include "lib/test/test-helper.hpp"
 
 //#include "lib/p.hpp"
-//#include "proc/assetmanager.hpp"
-//#include "proc/asset/inventory.hpp"
-//#include "proc/mobject/session/clip.hpp"
-//#include "proc/mobject/session/fork.hpp"
+//#include "steam/assetmanager.hpp"
+//#include "steam/asset/inventory.hpp"
+//#include "steam/mobject/session/clip.hpp"
+//#include "steam/mobject/session/fork.hpp"
 //#include "lib/meta/trait-special.hpp"
 //#include "lib/util-foreach.hpp"
 //#include "lib/symbol.hpp"
 #include "common/advice.hpp"
 
-//#include <iostream>
 //#include <string>
 
 //using lib::test::showSizeof;
@@ -47,8 +41,6 @@
 //using lib::Symbol;
 //using lib::P;
 //using std::string;
-//using std::cout;
-//using std::endl;
 
 
 

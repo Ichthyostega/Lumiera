@@ -1,42 +1,30 @@
 /*
   DigxelConfigurations(Test)  -  verify predefined standard Digxel configurations
 
-  Copyright (C)         Lumiera.org
-    2011,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2011,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file digxel-configurations-test.cpp
+ ** unit test \ref DigxelConfigurations_test
+ */
 
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "lib/time/display.hpp"
 #include "lib/time/digxel.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/error.hpp"
 #include "lib/util.hpp"
 
-#include <iostream>
-#include <cstdlib>
-
-using lumiera::error::LUMIERA_ERROR_ASSERTION;
-using util::isSameObject;
-using lib::test::showType;
-using std::rand;
-using std::cout;
-using std::endl;
+using LERR_(ASSERTION);
+using util::typeStr;
 
 
 namespace lib {
@@ -61,15 +49,15 @@ namespace test{
   class DigxelConfigurations_test : public Test
     {
       virtual void
-      run (Arg) 
+      run (Arg)
         {
-          verifyConfiguration<Digxel<int>    > (123);
-          verifyConfiguration<Digxel<double> > (123.4567);
-          verifyConfiguration<SexaDigit      > (42);
-          verifyConfiguration<SexaDigit      > (-5);
-          verifyConfiguration<HexaDigit      > (0xc);
-          verifyConfiguration<HexaDigit      > (0x6f);
-          verifyConfiguration<CountVal       > (-1234567890);
+          verifyConfiguration<Digxel<int>   > (123);
+          verifyConfiguration<Digxel<double>> (123.4567);
+          verifyConfiguration<SexaDigit     > (42);
+          verifyConfiguration<SexaDigit     > (-5);
+          verifyConfiguration<HexaDigit     > (0xc);
+          verifyConfiguration<HexaDigit     > (0x6f);
+          verifyConfiguration<CountVal      > (-1234567890);
           
           verifySignum();
         }
@@ -99,7 +87,7 @@ namespace test{
         {
           DIX digxel;
           CHECK (0 == digxel);
-          cout << showType(digxel) << "--empty--"<<digxel;
+          cout << typeStr(digxel) << "--empty--"<<digxel;
           
           digxel = testval;
           cout << "--(val="<<testval<<")--"<<digxel;

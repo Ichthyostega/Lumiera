@@ -1,23 +1,14 @@
 /*
   LIFECYCLEREGISTRY.hpp  -  registry for application lifecycle callbacks 
 
-  Copyright (C)         Lumiera.org
-    2008,               Christian Thaeter <ct@pipapo.org>
-                        Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2008,            Christian Thaeter <ct@pipapo.org>
+     2008,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
 
@@ -25,7 +16,7 @@
  ** Helper for registering lifecycle event callbacks, which are
  ** provided as a global service by lumiera::AppState. This service
  ** allows to enrol functions under a given label and then to call
- ** all those registered functions. 
+ ** all those registered functions.
  ** @note this is in fact an event mechanism, and if we start using
  ** more than just this basic functionality, we should switch to
  ** boost::signals. (which has the downside of being an binary
@@ -38,22 +29,20 @@
 #ifndef LUMIERA_LIFECYCLEREGISTRY_H
 #define LUMIERA_LIFECYCLEREGISTRY_H
 
-#include <map>
-#include <set>
-#include <string>
-#include <functional>
-#include <boost/scoped_ptr.hpp>
-#include <boost/noncopyable.hpp>
 
 #include "lib/util.hpp"
+#include "lib/nocopy.hpp"
+
+#include <functional>
+#include <string>
+#include <set>
+#include <map>
 
 
 namespace lumiera {
   
-  using boost::scoped_ptr;
-  using boost::noncopyable;
-  using std::function;
   using util::contains;
+  using std::function;
   using std::string;
 
 
@@ -65,7 +54,7 @@ namespace lumiera {
    * to implement the lumiera lifecycle (init, shutdown) hooks.
    */
   class LifecycleRegistry
-    : private noncopyable
+    : util::NonCopyable
     {
     public:
       typedef void (*Hook)(void);
@@ -73,43 +62,37 @@ namespace lumiera {
       typedef Callbacks::iterator Iter;
       
       
-      /** @note only one copy of each distinct callback remembered */ 
+      /** @note only one copy of each distinct callback remembered */
       bool enrol (Symbol label, Hook toCall)
         {
           return table_[label]
                         .insert(toCall)
-                        .second;  // true if actually stored 
+                        .second;  // true if actually stored
         }
       
       void execute (Symbol label)
         {
           Callbacks& cbs (table_[label]);
           Iter e = cbs.end();
-          for (Iter p = cbs.begin(); 
-               p != e; ++p) 
+          for (Iter p = cbs.begin();
+               p != e; ++p)
             (*p)(); // invoke callback
         }
       
       
-      /** get the (single) LifecycleRegistry instance. 
+      /** get the (single) LifecycleRegistry instance.
        *  @warning don't use it after the end of main()! */
-      static LifecycleRegistry& instance()   // Meyer's singleton
-        {
-          static scoped_ptr<LifecycleRegistry> theRegistry_;
-          if (!theRegistry_) theRegistry_.reset (new LifecycleRegistry ());
-          return *theRegistry_;
-        }
+      static LifecycleRegistry& instance();
       
       
     private:
       std::map<Symbol, Callbacks> table_;
       
       LifecycleRegistry ()  {
-        execute (ON_BASIC_INIT);   // just to be sure, typically a NOP, because nothing is registered yet 
+        execute (ON_BASIC_INIT);   // just to be sure, typically a NOP, because nothing is registered yet
       }
       
-      ~LifecycleRegistry () {}
-      friend void boost::checked_delete<LifecycleRegistry>(LifecycleRegistry*);
+     ~LifecycleRegistry () { }
       
     };
 

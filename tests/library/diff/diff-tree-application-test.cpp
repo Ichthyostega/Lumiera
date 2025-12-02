@@ -1,27 +1,28 @@
 /*
-  DiffTreeApplication(Test)  -  demonstrate the basics of tree diff representation
+  DiffTreeApplication(Test)  -  demonstrate the main features of tree diff representation
 
-  Copyright (C)         Lumiera.org
-    2015,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2015,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file diff-tree-application-test.cpp
+ ** unit test \ref DiffTreeApplication_test.
+ ** Demonstrates the most relevant operations for reshaping structured data
+ ** through a tree-diff sequence. Here, we use a lib::diff:Record<GenNode>
+ ** as target data, and the test focuses on demonstrating the possible operations.
+ ** @see [Introductory demonstration](\ref diff-tree-application-simple-test.cpp)
+ ** @see [More complex setup with opaque data](\ref diff-complex-application-test.cpp)
+ */
 
 
 #include "lib/test/run.hpp"
+#include "lib/format-util.hpp"
 #include "lib/diff/tree-diff-application.hpp"
 #include "lib/iter-adapter-stl.hpp"
 #include "lib/time/timevalue.hpp"
@@ -48,8 +49,8 @@ namespace test{
     // define some GenNode elements
     // to act as templates within the concrete diff
     // NOTE: everything in this diff language is by-value
-    const GenNode ATTRIB1("α", 1),                         // attribute α = 1 
-                  ATTRIB2("β", 2L),                        // attribute α = 2L   (int64_t)
+    const GenNode ATTRIB1("α", 1),                         // attribute α = 1
+                  ATTRIB2("β", int64_t(2)),                // attribute α = 2L   (int64_t)
                   ATTRIB3("γ", 3.45),                      // attribute γ = 3.45 (double)
                   TYPE_X("type", "X"),                     // a "magic" type attribute "X"
                   TYPE_Y("type", "Y"),                     // 
@@ -82,17 +83,22 @@ namespace test{
    *         and a nested child-Record.
    *       - the second step demonstrates various diff language constructs
    *         to alter, reshape and mutate this data structure
-   *       After applying those two diff sequences, we verify the data
-   *       is indeed in the expected shape.
+   *       After applying those two diff sequences, we verify that
+   *       the mutated data is indeed in the reordered shape.
    * @remarks to follow this test, you should be familiar both with our
-   *      \link diff::Record generic data record \endlink, as well as with
-   *      the \link diff::GenNode variant data node \endlink. The key point
-   *      to note is the usage of Record elements as payload within GenNode,
-   *      which allows to represent tree shaped object like data structures.
-   * @see GenericRecordRepresentation_test
-   * @see GenNodeBasic_test
+   *       [generic data record](\ref diff::Record), as well as with the
+   *       [variant data node](\ref diff::GenNode). The key point to note
+   *       is the usage of Record elements as payload within GenNode, which
+   *       allows to represent tree shaped object-like data structures.
+   * @note literally the same test case is repeated in MutationMessage_test,
+   *       just there the diff is transported in a MutationMessage capsule,
+   *       as would be the case in the real application.
+   * @see DiffComplexApplication_test handling arbitrary data structures
+   * @see DiffTreeApplicationSimple_test introductory example demonstration
+   * @see GenericRecord_test
+   * @see GenNode_test
    * @see DiffListApplication_test
-   * @see diff-tree-application.hpp
+   * @see tree-diff-application.hpp
    * @see tree-diff.hpp
    */
   class DiffTreeApplication_test
@@ -123,13 +129,17 @@ namespace test{
       DiffSeq
       mutationDiff()
         {
+          // prepare for direct assignment of new value
+          // NOTE: the target ID will be reconstructed, including hash
+          GenNode childA_upper(CHILD_A.idi.getSym(), "A");
+          
           return snapshot({after(Ref::ATTRIBS)      // fast forward to the first child
                          , find(CHILD_T)
                          , pick(CHILD_A)
                          , skip(CHILD_T)
                          , del(CHILD_T)
-                         , pick(Ref::CHILD)         // pick a child anonymously
-                         , mut(Ref::THIS)           // mutate the current element (the one just picked)
+                         , after(Ref::END)          // accept anything beyond as-is
+                         , mut(SUB_NODE)
                            , ins(ATTRIB3)
                            , ins(ATTRIB_NODE)       // attributes can also be nested objects
                            , find(CHILD_A)
@@ -141,12 +151,13 @@ namespace test{
                              , ins(TYPE_Y)
                              , ins(ATTRIB2)
                            , emu(CHILD_NODE)
+                           , set(childA_upper)      // direct assignment, target found by ID (out of order)
                            , mut(ATTRIB_NODE)       // mutation can be out-of order, target found by ID
                              , ins(CHILD_A)
                              , ins(CHILD_A)
                              , ins(CHILD_A)
                            , emu(ATTRIB_NODE)
-                         , emu(Ref::THIS)
+                         , emu(SUB_NODE)
                          });
         }
       
@@ -159,7 +170,7 @@ namespace test{
           DiffApplicator<Rec::Mutator> application(target);
           
           // Part I : apply diff to populate
-          application.consume(populationDiff());
+          application.consume (populationDiff());
           
           CHECK (!isnil (subject));                                    // nonempty -- content has been added
           CHECK ("X" == subject.getType());                            // type was set to "X"
@@ -170,30 +181,32 @@ namespace test{
           CHECK (  *scope == CHILD_A);                                 //   there is CHILD_A
           CHECK (*++scope == CHILD_T);                                 //   followed by a copy of CHILD_T
           CHECK (*++scope == CHILD_T);                                 //   and another copy of CHILD_T
-          CHECK (*++scope == MakeRec().appendChild(CHILD_B)            //   and there is a nested Record 
+          CHECK (*++scope == MakeRec().appendChild(CHILD_B)            //   and there is a nested Record
                                       .appendChild(CHILD_A)            //       with CHILD_B
                               .genNode(SUB_NODE.idi.getSym()));        //       and CHILD_A
           CHECK (isnil(++scope));                                      // thats all -- no more children
           
           // Part II : apply the second diff
-          application.consume(mutationDiff());
-          CHECK (join (subject.keys()) == "α, β, γ");                  // the attributes weren't altered 
+          application.consume (mutationDiff());
+          CHECK (join (subject.keys()) == "α, β, γ");                  // the attributes weren't altered
           scope = subject.scope();                                     // but the scope was reordered
           CHECK (  *scope == CHILD_T);                                 //   CHILD_T
           CHECK (*++scope == CHILD_A);                                 //   CHILD_A
           Rec nested = (++scope)->data.get<Rec>();                     //   and our nested Record, which too has been altered:
             CHECK (nested.get("γ").data.get<double>() == 3.45);        //       it carries now an attribute "δ", which is again
             CHECK (nested.get("δ") == MakeRec().appendChild(CHILD_A)   //           a nested Record with three children CHILD_A
-                                               .appendChild(CHILD_A)   // 
-                                               .appendChild(CHILD_A)   // 
-                                       .genNode("δ"));                 // 
+                                               .appendChild(CHILD_A)   //
+                                               .appendChild(CHILD_A)   //
+                                       .genNode("δ"));                 //
             auto subScope = nested.scope();                            //       and within the nested sub-scope we find
-            CHECK (  *subScope == CHILD_A);                            //           CHILD_A
+            CHECK (  *subScope != CHILD_A);                            //           CHILD_A has been altered by assignment
+            CHECK (CHILD_A.idi == subScope->idi);                      //           ...: same ID as CHILD_A
+            CHECK ("A" == subScope->data.get<string>());               //           ...: but mutated payload
             CHECK (*++subScope == MakeRec().type("Y")                  //           a yet-again nested sub-Record of type "Y"
-                                           .set("β", 2L )              //               with just an attribute "β" == 2L
+                                           .set("β", int64_t(2))       //               with just an attribute "β" == 2L
                                    .genNode(CHILD_NODE.idi.getSym())); //               (and an empty child scope)
             CHECK (*++subScope == CHILD_T);                            //           followed by another copy of CHILD_T
-            CHECK (isnil (++subScope));                                // 
+            CHECK (isnil (++subScope));                                //
           CHECK (isnil (++scope));                                     // and nothing beyond that.
         }
     };

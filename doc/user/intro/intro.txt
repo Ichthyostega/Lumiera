@@ -1,12 +1,13 @@
 Lumiera (as seen) from Outer Space
 ==================================
 :Author: Lumiera_Core_Developers
-:Date: Winter 2012
+:Date: 2012 / 2025
+:webidx:
 :toc:
 
 ******************************************************************************
 .abstract
-The Lumiera Community is in the process of making a non-linear video editing 
+The Lumiera Community is in the process of making a non-linear video editing
 and compositing FOSS application for Linux/Unix/Posix operating systems.  The
 application is geared towards professional, high-quality work; but
 it is equally suitable for low-end users, due to its in-design scalability.
@@ -24,7 +25,7 @@ behind Lumiera to start working with Lumiera quickly.
 
 .About this Document
 Lumiera is innovative video editing software, still under active development
-by an open-source community. This document acts as introduction. We try to start
+by an open-source community. This document acts as an introduction. We try to start
 with a broad overview, then explain some core concepts towards the end.
 We describe planned features here without explicitly tagging them as such and we
 omit technical details.
@@ -70,7 +71,7 @@ aspects film production tools will have to exhibit to aspire to be labelled
         requires crisp-quality results with no concessions made throughout the
         entire workflow that might compromise quality of the final work.
         A common requirement is the ability to reproduce all rendering
-        calculations down to the last bit. 
+        calculations down to the last bit.
 
  Performance and Productivity::
         Professionals want to get things done on time, but
@@ -81,17 +82,17 @@ aspects film production tools will have to exhibit to aspire to be labelled
         Projects and budgets differ, hardware advances; and Lumiera must scale
         in many ways and make optimum use of the resources that are
         available. From small Laptops to multi-core computers up to render farms,
-        Lumiera must be adept in optimum use of the hardware at hand.
+        Lumiera must be adept to reap the maximum from the hardware at hand.
 
- Durability::
-        The rapid pace at which software and hardware rampage forward is surely 
+ Durability and Sustainability::
+        The rapid pace at which software and hardware rampage forward is surely
         a warning to new software projects and the dangers of locking into any
         current technological ``fashion'' to achieve a ``cheap'' goal, feature
         or performance boost.  Once the fad fades, the software woes begin.
         The software must be able to engage new technological developments
         without any compromise to functionality or backward compatibility.
 
-	
+
 
 Fundamental Forces
 ------------------
@@ -119,17 +120,17 @@ driven by finite usage stories.
 Medium Level Abstraction and Project Specific Conventions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-These building blocks within Lumiera create a moderate level of abstraction; a
+The building blocks behind Lumiera combine to create a moderate level of abstraction; a
 user may use the GUI to manipulate several elements directly -- not only the
 clips and effects, but also individual effect parameter automation, masks, layering,
-and even the placements xref:placement[<-] used to stitch the objects together,
+and even placements xref:placement[<-] used to stitch objects together,
 which is comparatively low-level. Such moderate abstraction encourages the user to
-understand the inner workings, while shielding the user from merely technical
+understand the inner workings, while shielding the user from technical
 details such as header format conversion or access to individual channels.
 
 To complement this approach, Lumiera does _not_ rely on hard-wired, global
 conventions -- rather we allow the building up of project specific conventions and
-rules xref:rules[<-] to fit a given requirement and preferred working style. 
+rules xref:rules[<-] to fit a given requirement and preferred working style.
 
 Lumiera will be supplied with a conventional template and a default
 configuration to ease the learning curve for new users.
@@ -172,7 +173,7 @@ At a first glance, it looks fairly natural to set up the graphs xref:graphs[<-]
 as described above.  Data can then be pushed into the system through the input
 nodes and the final result can be seen at the output node. Several multimedia
 frameworks use this approach. However this scheme exhibits a number of
-shortcomings which make it inappropriate for non-linear video editing. 
+shortcomings which make it inappropriate for non-linear video editing.
 
 Lumiera takes a different approach.  Data is pulled through a pipe: any rendering
 request starts at the output node and makes its way back up through the graph to
@@ -183,8 +184,8 @@ the inputs. This scheme offers a number of advantages over the naive scheme.
 Don't waste work
 ~~~~~~~~~~~~~~~~
 
-Rendering A/V data can be computationally intensive.  To avoid duplicated or wasted work and 
-ensure it is possible to render on time, 
+Rendering A/V data can be computationally intensive.  To avoid duplicated or wasted work and
+ensure it is possible to render on time,
 Lumiera employs a sophisticated means of using
 cache xref:caching[<-] and profiling xref:profiling[<-].
 
@@ -198,6 +199,11 @@ cache xref:caching[<-] and profiling xref:profiling[<-].
 // ################################################
 
 ''''''''
+....
+​
+​
+​
+....
 
 
 The visible Universe
@@ -205,15 +211,17 @@ The visible Universe
 
 Lumiera consists of three major parts:
 
-- Graphical User Interface (GUI)
-- Processing layer (``Proc-layer'')
-- Backend for storage and access
+- The Stage layer for user interaction (GUI)
+- The Steam layer for translation and orchestration
+- The Vault layer for adaptation and data processing
 
 In this section, we discuss the user's perspective when working with the GUI.
 
 
 Although Lumiera will initially ship with a standard, default GUI, we do not presume that this GUI will be suitable for all uses.
-We expect there to be multiple, different GUIs, each designed for different kinds of tasks.  We expect that some of these will be written by users, and the proc-layer is designed to make this easy.
+We expect there to be multiple, different GUIs, each designed for different
+kinds of tasks.  We expect that some of these will be written by users, and the
+steam-layer is designed to facilitate this easily.
 
 Indeed, Lumiera can even work
 satisfactorily without a GUI, for example, for special purposes
@@ -224,31 +232,24 @@ to facilitate automated processing.
 
 Now it is time to take a look at the preliminary Lumiera GUI:
 
-image:{l}/images/lumiera_gui_small.png[Current Lumiera GUI Screenshot]
+.Timeline with nested track structure
+image:{imgg}/lumiera20250823.png["Lumiera GTK UI / Screenshot 2025-08",width=650, link="{imgg}/lumiera20250823.png"]
 
-We expect this GUI to change once we are at the point of having feedback from actual users.
+Since development is currently focused on technical integration, we expect this
+UI to change significantly once we can focus more on the topic of workflow.
+Note furthermore that the interface is themable and we plan to ship a stylesheet
+with a neutral gray colour scheme.
 
-The screenshot of the GUI presented above is more or less the standard GUI when
-it is started for the first time without any user configuration etc.  A second
-viewer is planned for later to be added to the default. We support a much more
-sophisticated screen concept xref:screenconcept[<-] to adapt to different
-workplaces and workflows. 
-// TODO
-// The above paragrph isn't all it should be, but I can't tell what it should
-// be without seeing it in the context of the other changes I'm making.
-// I suspect it's better to discuss how rewritable the GUI is rather than
-// the specifics ot the GUI presented above. -- hendrik
-
-At a first glance, the GUI might seem somewhat overwhelming, something similar
-to the cockpit of a jumbo jet.  However, nearly all the bells and whistles can
-be subdivided into groups according to their functionality.  The following
-sub-sections discusses the more prominent groupings.
+At first glance, the GUI might seem somewhat overwhelming, something similar
+to the cockpit in a jumbo jet.  However, all the controls and panels can
+be subdivided into groups according to their functionality, as discussed
+in the following subsections.
 
 
 Viewer
 ~~~~~~
 
-The viewer is an area where footage and the assembled edit can be played back and investigated.
+The viewer is an area where footage and the assembled edit can be played-back and reviewed.
 Obviously, support for audio will also be provided.  As there are many sources that
 can be displayed, a viewer is attached to a source via the viewer switch board.
 Timelines, probe points, wire taps and individual clips are examples of sources
@@ -259,6 +260,11 @@ up to a beamer or monitor.
 
 Transport Controls
 ~~~~~~~~~~~~~~~~~~
+Transport controls are devices that are controlled by widgets or by some input device
+(MIDI, control surface, etc) so the look-and-feel of the transport control
+widget may vary, depending on what the transport controls have been assigned
+to.  Irrespective of their look-and-feel, they are connected to a play
+controller.
 
 The preliminary layout in the current GUI is rather provisional -- a final decision
 has yet to be taken on where the transport controls will be located.  In later
@@ -268,13 +274,6 @@ a possibility that the transport controls will be allocated their own GUI elemen
 // A final decision about where the transport controls are located?
 // Isn't the whole point of enabling multiple GUIs that there won't be
 // final  decisions?  Only provisional ones?
-
-
-Transport controls are devices that are controlled by widgets or by some input device
-(MIDI, control surface, etc) so the look-and-feel of the transport control
-widget may vary, depending on what the transport controls have been assigned
-to.  Irrespective of their look-and-feel, they are connected to a play
-controller.
 
 A _play controller_ coordinates playback, cueing and rewinding.  Transport
 controls are ganged when they attach to the same play controller.
@@ -318,7 +317,7 @@ individual clips, or the pipes collecting output from transitions, from nested
 sequences and from groups of forks (``tracks''). At some point, at the timeline level,
 all processed data is collected within the aforementioned global pipes to form the
 small number of output streams produced by rendering and playback. Each timeline
-uses a separate set of global pipes. 
+uses a separate set of global pipes.
 
 
 Asset View
@@ -334,7 +333,7 @@ There are various kinds of assets available in any project:
   * source media/footage/soundfiles
   * all available effects and transitions
   * user defined ``effect stacks'' and effect collections ("effect palette")
-  * internal artefacts like sequences and automation data sets
+  * internal artifacts like sequences and automation data sets
   * markers, labels, tags and similar kinds of meta data
 
 Actually, the same underlying _fork_ data structure is used to implement the
@@ -351,6 +350,11 @@ purposes, and the contents of a clip bin can be played like a storyboard.
 // ################################################
 
 ''''''''
+....
+​
+​
+​
+....
 
 
 Dark Matter
@@ -360,18 +364,18 @@ The material in this section provides a cursory view of features not required by
 a typical user, but of more importance to people looking under the hood
 (advanced users, software developers)
 
-Most of the material in this section is to be found in the Proc-layer and in the
-Backend.
+Most of the material in this section is to be found in the Steam-Layer and in the
+Vault.
 
 
 
 Session Storage
 ~~~~~~~~~~~~~~~
 
-The current representation of a project resident in memory is internally known 
+The current representation of a project resident in memory is internally known
 as a session, whereas from a GUI user perspective, this is known as a project.
 In this section, we will use the term ``session'' as we are discussing the internals
-of Lumiera here. 
+of Lumiera here.
 
 Everything is stored in a session.  If a user saves a session, then there should
 be no difference to the user whether they continue working or throw all their
@@ -384,7 +388,7 @@ operations on these objects.  For example, unlimited ability to undo previous
 steps, selective undo of previous steps or the possibility of merging various
 steps might even be a possibility.  On a practical note, work on a project at
 the office and work on the same project at home can be merged each morning and
-evening. 
+evening.
 
 Session storage is envisaged to operate similar to a database or journalling
 file system. Any operation will be logged prior to execution. This protects
@@ -403,13 +407,17 @@ Placements
 
 // Can placements place things in space as well as in time??
 
-Generic mechanism to stitch together media objects. Any placement may contain
-a list of conditions on how to locate the placed object, examples being
-time-absolute/relative, relative to another object, or relative to some
-specific source media frame.
+All the elements and ``media objects'' in the project are stitched together
+by some common ``glue'': the Placements. Any placement may contain a list of
+conditions on how to _locate_ the placed object, examples being time-absolute/relative,
+relative to another object, or relative to some specific source media frame.
+Yet the conditions contained in a placement are not confined to time positions
+alone, they can define other kinds of position, like a sound pan position or some
+hint on data routing. Generally speaking, a placement pins the element into
+various dimensions within a _configuration space_
 
 All of the session model contents are attached by placement, forming a large
-tree. Placements are to be _resolved_ to find out the actual position, output
+tree. Placements need to be _resolved_ to find out the actual position, output
 and further locational properties of an object. Missing placement information
 is _inherited_ from parent placements in the session tree. This causes a lot
 of relational and locational properties to be inherited from more global
@@ -423,7 +431,7 @@ Rendering Engine
 rendering...
 
 [[builder]]
-builder
+Builder
 ^^^^^^^
 The inner workings of Lumiera exhibit some striking similarities to the implementation
 of a programming language compiler. On one side, there is a tree-like data structure
@@ -438,7 +446,7 @@ of the coin: it creates the low-level processing graphs by traversing and evalua
 the relevant parts of the high-level-model. Indirections will be resolved and
 connections will be made explicit by querying the _rules system_.
 
-rules system
+Rules System
 ^^^^^^^^^^^^
 [red]#to be written#
 
@@ -449,11 +457,11 @@ Input-Output Subsystem
 
 Lumiera will process large quantities of data and it is of critical importance
 to perform this efficiently.  The input and output subsystem are all processed
-in the backend, in fact, this is one very important function provided by the
+in the vault layer, in fact, this is one very important function provided by the
 back end.
 
 The typical Lumiera user will have many clips, in various configurations located
-at various places.  All this data will have to be stored by the backend,
+at various places.  All this data will have to be stored by the vault layer,
 moreover all this data will have to be rapidly retrieved from storage and
 provided to the user. The demands on memory are high: huge chunks of data,
 that can be quickly stored and equally quickly fetched, even if stored over
@@ -465,11 +473,11 @@ Lumiera will break down processes that need to be processed into smaller units
 called _frame job_. Typically, there will be many hundreds of jobs waiting for
 processing at any one time. These jobs are queued for processing and the order
 in which this is performed is managed by the _scheduler_.
-This is all done in the backend.
+This is all done in the vault layer.
 
-Apart from memory, the backend will be responsible for accessing and saving
+Apart from memory, the vault will be responsible for accessing and saving
 files. It is essential to do this efficiently. This will be carried out
-in the backend using low-level mechanisms.
+in the vault layer using low-level mechanisms.
 
 // file handling
 //  vault, work, cache
@@ -499,7 +507,7 @@ will not reinvent the wheel each time he sits down to programme an
 application. A programmer will typically borrow and use features and
 functionality from other programmers---or even borrow from himself, stuff
 written long ago in the past. Such features are collected together in
-libraries. 
+libraries.
 
 A library is used in an application by _linking_ the library into the
 application. (There are other things to be done, but we'll call these 'details',
@@ -531,7 +539,7 @@ available to an application is known as run-time linking, aka plug-ins.
 Plug-ins offer other benefits: the application can continue to use both the old
 features and the new features together, side-by-side, by using the version
 number associated with the plug-in. This saves the application from the havoc
-of library incompatibility that is 
+of library incompatibility that is
 associated with other linking methods.
 
 Most modern applications use plug-ins, some are heavily dependent on plug-ins
@@ -540,44 +548,17 @@ Lumiera will not reinvent the wheel. One major goal is to provide considerable
 functionality via well-designed, external code supplied to Lumiera by plug-ins.
 
 
-How are Plugins Implemented?
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-We can view Lumiera itself as being a slender application with many of the bells
-and whistles being supplied _directly_ by external FOSS tools.  Such tools will
-be made available to the Lumiera code base via the Lumiera Plugin Interface (LPI).
-
-As LPI will be used throughout most layers of Lumiera -- from the low-level
-backend, right up to the GUI -- the interface will have to be compatible to both C
-and C++. In effect, this means that LPI will be implemented in C.
-
-Using LPI a plugin interface can be defined for each external library.  The
-Lumiera code base can then use the external library by including the 
-plugin interface for that particular library.
-
-LPI defines a uniform framework of how to manage plugins within Lumiera. It
-declares a number of macros that allow details of a plugin to be defined:
-    - name of the plugin
-    - version of the plugin (include major and minor version numbers)
-    - name each call-back function defined by the plugin and exported by the
-      external library 
-    - methods to initialise and destroy the plugin
-
-Defining some plugin interface then entails using LPI to specify the details of
-the plugin.
-
 
 Integration with external libraries, frameworks and applications
 ----------------------------------------------------------------
 [red]#to be written#
 
-____
- .
- .
- .
-____
-
-''''
+''''''''
+....
+​
+​
+​
+....
 
 
 Further reading
@@ -602,6 +583,6 @@ The Inner Core
 ~~~~~~~~~~~~~~
 Developers and Readers curious about the inner workings of the application
 might want to have a look into the overview document of our technical
-documentation section. Learn more about 
+documentation section. Learn more about
 link:{ldoc}/technical/overview.html[The Inner Core]...
 

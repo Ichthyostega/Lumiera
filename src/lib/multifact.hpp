@@ -1,22 +1,13 @@
 /*
   MULTIFACT.hpp  -  flexible family-of-object factory template
 
-  Copyright (C)         Lumiera.org
-    2009,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2009,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
 
@@ -47,12 +38,15 @@
  ** 
  ** @remarks this is the second attempt at building a skeleton of the core factory mechanics.
  **       The first attempt was pre-C++11, relied on partial specialisations and was hard to
- **       understand and maintain. In theory, with C++11 the task should be quite simple now,
- **       relying on rvalue references and variadic templates. Unfortunately, as of 9/2014,
- **       the compiler support is not yet robust enough on Debian/stable really to deal with
- **       \em all the conceivable cases when forwarding arbitrary factory products. Thus
- **       for now we choose to avoid the "perfect forwarding" problem and rather let the
- **       wrapper invoke the fabrication function and handle the result properly.
+ **       understand and maintain. Now, after C++11 the basic task was greatly simplified,
+ **       relying on rvalue references and variadic templates. However, we still need a
+ **       specialised factory template to allow for a _family of factory functions_ with
+ **       common configuration.
+ ** @todo 2025 ...and still not fully convinced this is the way to go;
+ **       admittedly we did not get to a point yet where fabricating lots of elements
+ **       poses any kind of challenge — up to now a dedicated factory function within a service
+ **       was enough to handle this task. Yet this may change, once we have stream types,
+ **       various kinds of assets (notably effects and processors) and lots of queries.
  ** 
  ** @see multifact-test.cpp
  ** @see multifact-singleton-test.cpp
@@ -109,7 +103,7 @@ namespace lib {
     template<typename RAW>
     struct BuildRefcountPtr
       {
-        using RawType    = typename std::remove_pointer<RAW>::type;
+        using RawType    = std::remove_pointer<RAW>::type;
         using BareType   = RawType *;
         using ResultType = std::shared_ptr<RawType>;
         
@@ -206,7 +200,7 @@ namespace lib {
     
     
     
-    /** 
+    /**
      * @internal configuration of the elements
      * to be combined into a MultiFact instance
      */
@@ -216,8 +210,8 @@ namespace lib {
     struct FabConfig
       {
         using WrapFunctor    = Wrapper<TY>;
-        using BareProduct    = typename WrapFunctor::BareType;
-        using WrappedProduct = typename WrapFunctor::ResultType;
+        using BareProduct    = WrapFunctor::BareType;
+        using WrappedProduct = WrapFunctor::ResultType;
         
         typedef BareProduct SIG_Fab(void);
         
@@ -234,8 +228,8 @@ namespace lib {
     struct FabConfig<RET(ARGS...), Wrapper>
       {
         using WrapFunctor    = Wrapper<RET>;
-        using BareProduct    = typename WrapFunctor::BareType;
-        using WrappedProduct = typename WrapFunctor::ResultType;
+        using BareProduct    = WrapFunctor::BareType;
+        using WrappedProduct = WrapFunctor::ResultType;
         
         typedef BareProduct SIG_Fab(ARGS...);
         
@@ -265,14 +259,14 @@ namespace lib {
       : public FabConfig<SIG,Wrapper>::WrapFunctor
       {
         using   _Conf = FabConfig<SIG,Wrapper>;
-        using SIG_Fab = typename _Conf::SIG_Fab;
+        using SIG_Fab = _Conf::SIG_Fab;
         using    _Fab = Fab<SIG_Fab,ID>;
         
         _Fab funcTable_;
         
         
       protected:
-        using Creator = typename _Fab::FactoryFunc;
+        using Creator = _Fab::FactoryFunc;
         
         Creator&
         selectProducer (ID const& id)
@@ -282,14 +276,14 @@ namespace lib {
         
         
       public:
-        using Product = typename _Conf::WrappedProduct;
+        using Product = _Conf::WrappedProduct;
         
         /**
          * Core operation of the factory:
          * Select a production line and invoke the fabrication function.
          * @param id select the actual pre installed fabrication function to use
          * @param args additional arguments to pass to the fabrication.
-         * @note the template parameter #SIG defines the raw or nominal signature
+         * @note the template parameter \a SIG defines the raw or nominal signature
          *       of the fabrication, and especially the number of arguments
          * @return the created product, after passing through the #Wrapper functor
          */

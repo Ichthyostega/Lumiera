@@ -1,22 +1,13 @@
 /*
   ENTRY-ID.hpp  -  plain symbolic and hash ID used for accounting
 
-  Copyright (C)         Lumiera.org
-    2010,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2010,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
 
@@ -32,6 +23,13 @@
  ** @note as of 3/2010 this is an experimental setup and exists somewhat in parallel
  **       to the assets. We're still in the process of finding out what's really required
  **       to keep track of all the various kinds of objects.                 ///////////////////TICKET #739
+ ** @todo as of 11/2018 the basic design seems adequate, but the actual solution looks fishy.
+ **       Even more so, since we now use subclasses of BareEntryID
+ **       - as identity tag within lib::diff::GenNode
+ **       - as identity tag for all [tangible UI elements](\ref stage::model::Tangible)
+ **       There are various quirks and hacks to make all of this happen, and especially
+ **       the hashed-in type information feels gratuitous at places, when all we actually
+ **       need is a distinct identity plus a human readable symbol.
  ** 
  ** @see asset::Asset::Ident
  ** @see entry-id-test.cpp
@@ -49,8 +47,7 @@
 #include "lib/util.hpp"
 
 #include <boost/functional/hash.hpp>
-#include <boost/operators.hpp>
-#include <iostream>
+#include <compare>
 #include <string>
 
 
@@ -102,7 +99,7 @@ namespace idi {
      *        which would require both to yield the same hash values....
      *  @warning there is a weakness in boost::hash for strings of running numbers,
      *        causing collisions already for a small set with less than 100000 entries.
-     *        To ameliorate the problem, we hash in the trailing digits, and
+     *        To mitigate the problem, we hash in the trailing digits, and
      *        spread them by the #KNUTH_MAGIC                                            /////////TICKET #865
      *  @warning this code isn't portable and breaks if sizeof(size_t) < sizeof(void*)
      *  @see HashGenerator_test#verify_Knuth_workaround
@@ -134,22 +131,28 @@ namespace idi {
    * for building a combined hash and symbolic ID.
    */
   class BareEntryID
-    : public boost::equality_comparable<BareEntryID>
     {
       
       string symbol_;
       LuidH hash_;
       
     protected:
-      /** 
+      /**
        * Not to be created stand-alone.
        * derived classes feed down the specific type information
        * encoded into a hash seed. Thus even the same symbolicID
        * generates differing hash-IDs for different type parameters
        */
-      BareEntryID (string const& symbolID, HashVal seed =0)
+      BareEntryID (string const& symbolID, HashVal seed)
         : symbol_(symbolID)
         , hash_(buildHash (symbol_, seed))
+        { }
+      
+      /** store the symbol but use a random hash part */
+      explicit
+      BareEntryID (string const& symbolID)
+        : symbol_(symbolID)
+        , hash_{} // random
         { }
       
     public:
@@ -174,10 +177,11 @@ namespace idi {
           return hash_;
         }
       
+      operator string()  const;
       
-      /** using BareEntryID derived objects as keys within tr1::unordered_map */
+      
+      /** using BareEntryID derived objects as keys within std::unordered_map */
       struct UseEmbeddedHash
-        : public std::unary_function<BareEntryID, size_t>
         {
           size_t operator() (BareEntryID const& obj)  const { return obj.getHash(); }
         };
@@ -212,7 +216,6 @@ namespace idi {
   template<class TY>
   struct EntryID
     : BareEntryID
-    , boost::totally_ordered< EntryID<TY> >
     {
       
       /** case-1: auto generated symbolic ID */
@@ -227,6 +230,19 @@ namespace idi {
       explicit
       EntryID (string const& symbolID)
         : BareEntryID (util::sanitise(symbolID), getTypeHash<TY>())
+        { }
+      explicit
+      EntryID (CStr symbolID)
+        : BareEntryID (util::sanitise(symbolID), getTypeHash<TY>())
+        { }
+      
+      /** case-2b: rely on an internal, already sanitised symbol.
+       *  The symbol string will be passed through as-is, while
+       *  the type information from TY will be hashed in.
+       */
+      explicit
+      EntryID (Symbol const& internalSymbol)
+        : BareEntryID (string(internalSymbol), getTypeHash<TY>())
         { }
       
       
@@ -251,24 +267,42 @@ namespace idi {
           return static_cast<EntryID const&> (bID);
         }
       
+      explicit
+      operator string()  const;
       
-      operator string ()  const
-        {
-          return "ID<"+typeSymbol<TY>()+">-"+EntryID::getSym();
-        }
-      
-      friend ostream& operator<<   (ostream& os, EntryID const& id) { return os << string(id); }
-      friend bool operator<  (EntryID const& i1, EntryID const& i2) { return i1.getSym()  < i2.getSym(); }
+      friend auto operator<=> (EntryID const& i1, EntryID const& i2) { return i1.getSym() <=> i2.getSym(); }
     };
-    
   
   inline bool
   operator== (BareEntryID const& i1, BareEntryID const& i2)
   {
     return i1.getHash() == i2.getHash();
   }
+  // Note: since we allow comparison only between EntryIDs of same type
+  //       and also feed-down the symbol into the hash value, both equality
+  //       and (total) ordering mesh up perfectly.
   
   
+  
+  
+  /**
+   * Entry-ID with a symbolic tag but just a plain random hash part.
+   * @remarks use this flavour when it is _not relevant_ to tag with
+   *    some type information nor to reproduce the hash value.
+   */
+  struct RandID
+    : BareEntryID
+    {
+      RandID (string const& symbolID)
+        : BareEntryID{util::sanitise (symbolID)}
+        { }
+      RandID (CStr symbolID)
+        : BareEntryID{util::sanitise (symbolID)}
+        { }
+      RandID (Symbol const& internalSymbol)
+        : BareEntryID{string{internalSymbol}}
+        { }
+    };
   
   
   /** try to upcast this BareEntryID to a fully typed EntryID.
@@ -287,6 +321,20 @@ namespace idi {
   BareEntryID::recast()  const
   {
     return EntryID<TAR>::recast(*this);
+  }
+  
+  
+  inline
+  BareEntryID::operator string()  const
+  {
+    return "bID-"+lib::idi::format::instance_hex_format(symbol_, hash_);
+  }
+  
+  template<class TY>
+  inline
+  EntryID<TY>::operator string()  const
+  {
+    return "ID<"+typeSymbol<TY>()+">-"+EntryID::getSym();
   }
   
   

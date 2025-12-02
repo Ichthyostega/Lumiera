@@ -1,33 +1,47 @@
 /*
   OPTION.hpp  -  handle cmdline for starting the Lumiera application
 
-  Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2008,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
+
+
+/** @file option.hpp
+ ** front-end for handling the commandline arguments.
+ ** Lumiera uses the [Boost program options library] for commandline parsing
+ ** and handling of a `setup.ini` file. After checking the commandline arguments
+ ** syntactically, the internal options representation is passed to the various
+ ** [Subsystems](\ref subsys.hpp) of the application. This mechanism allows
+ ** individual subsystems to decide if they want and need to start up at all.
+ ** Obviously, starting a subsystem also pulls up its prerequisites.
+ ** 
+ ** The idea behind this structure is to allow operating the application in
+ ** various _alternative modes,_ like starting "headless" (without UI), script
+ ** driven or as node in a renderfarm network.
+ ** 
+ ** [Boost program options library] : https://www.boost.org/doc/libs/1_83_0/doc/html/program_options.html
+ ** 
+ ** @see basic-setup.hpp
+ ** @see lumiera::AppState
+ ** @see lumiera::Config
+ ** 
+ */
 
 
 #ifndef LUMIERA_OPTION_H
 #define LUMIERA_OPTION_H
 
+#include "lib/nocopy.hpp"
 #include "lib/cmdline.hpp"
+#include "lib/format-cout.hpp"
 
 #include <string>
-#include <iostream>
 #include <boost/program_options.hpp>
 #include <boost/utility.hpp>
 
@@ -52,7 +66,7 @@ namespace lumiera {
    * unrecognised parts.
    */
   class Option
-    : boost::noncopyable
+    : util::NonCopyable
     {
     public:
       Option (lib::Cmdline& cmdline);
@@ -75,11 +89,11 @@ namespace lumiera {
       friend ostream& operator<< (ostream&, const Option&);
     };
   
-    
-  /** for outputting the help messages. Forward accumulated 
+  
+  /** for outputting the help messages. Forward accumulated
    *  help messages from all contained option definitions */
   ostream& operator<< (ostream& os, const Option& to);
- 
+  
   
 } // namespace lumiera
 #endif

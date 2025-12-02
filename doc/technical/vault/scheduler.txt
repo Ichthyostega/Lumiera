@@ -1,0 +1,19 @@
+Scheduler and Job handling
+==========================
+
+The purpose of the _Scheduler_ is to run small self contained _Jobs_
+ordered by priority and observing specific timing constraints.
+
+NOTE: Subject to [yellow-background]#active design and implementation# work as of 10/2023
+
+Work-in-progress documentation can be found in the
+link:/x/imp/PlaybackVerticalSlice.html[DevWiki: PlaybackVerticalSlice]
+
+
+About Jobs
+----------
+A job is a closure to run a small and limited action or operation, which
+in itself _should not block_. Job may depend on each other and on resources
+to be provided. A job may be rescheduled prior to invocation, but it is
+activated at most once by an _Scheduler Action._
+

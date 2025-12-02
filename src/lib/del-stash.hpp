@@ -1,22 +1,13 @@
 /*
   DEL-STASH.hpp  -  collect and execute deleter functions
 
-  Copyright (C)         Lumiera.org
-    2010,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2010,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
 
@@ -45,18 +36,15 @@
 
 
 #include "lib/error.hpp"
+#include "lib/symbol.hpp"
+#include "lib/nocopy.hpp"
 
-#include <vector>
 #include <algorithm>
-#include <boost/noncopyable.hpp>
-#include <boost/utility/enable_if.hpp>
-#include <boost/type_traits/is_same.hpp>
+#include <vector>
 
 
 namespace lib {
   
-  using boost::disable_if_c;
-  using boost::is_same;
   
   /**
    * Manage a collection of deleter functions.
@@ -66,7 +54,7 @@ namespace lib {
    * @warning clients must not add a given object more than once
    */
   class DelStash
-    : boost::noncopyable
+    : util::NonCopyable
     {
       
       typedef void KillFun(void*);
@@ -82,14 +70,14 @@ namespace lib {
           
         public:
           Killer(KillFun* f, void* t)
-            : target_(t)
-            , killIt_(f)
+            : target_{t}
+            , killIt_{f}
             {
               REQUIRE(f);
             }
           
           void
-          trigger ()
+          trigger()
             {
               if (target_)
                 killIt_(target_);
@@ -115,7 +103,7 @@ namespace lib {
     public:
       DelStash (size_t elms_to_reserve =0)
         : killers_()
-        { 
+        {
           if (elms_to_reserve)
             {
               killers_.reserve (elms_to_reserve);
@@ -144,14 +132,10 @@ namespace lib {
         }
       
       
-#define __DONT_USE_THIS_OVERLOAD_FOR_VOID_POINTER_      \
-          typename disable_if_c< is_same<TY,void>::value \
-                               ||is_same<TY,void*>::value>::type* =0
-      
       
       template<typename TY>
       void
-      manage (TY* obj,  __DONT_USE_THIS_OVERLOAD_FOR_VOID_POINTER_)
+      manage (TY* obj)//,  __disable_if_voidPtr<TY> =0)
         {
           if (!obj) return;
           REQUIRE (!isRegistered (obj));
@@ -160,19 +144,10 @@ namespace lib {
       
       template<typename TY>
       void
-      manage (TY& obj,  __DONT_USE_THIS_OVERLOAD_FOR_VOID_POINTER_)
+      manage (TY& obj)//,  __disable_if_voidPtr<TY> =0)
         {
           REQUIRE (!isRegistered (&obj));
           killers_.push_back (Killer (how_to_kill<TY>, &obj));
-        }
-      
-      template<typename TY>
-      void
-      manage (void* obj)
-        {
-          if (!obj) return;
-          REQUIRE (!isRegistered (obj));
-          killers_.push_back (Killer (how_to_kill<TY>, obj));
         }
       
       void
@@ -231,7 +206,7 @@ namespace lib {
       findEntry (const void* obj)
         {
           REQUIRE (obj);
-          return std::find(killers_.begin(),killers_.end(), obj);
+          return std::find (killers_.begin(),killers_.end(), obj);
         }
       
       void

@@ -1,0 +1,218 @@
+Git-flow branching pattern
+==========================
+:Date: Summer 2025
+:toc:
+:toclevels: 3
+
+_Lumiera uses Git-flow for branching and release organisation_
+
+.Motivation
+Lumiera is a large project with an elaborate structure.
+Development and integration efforts, refactorings, releases and bugfixes require some degree
+of coordination -- to avoid confusion, collisions and wasted effort. Git is a flexible tool
+and can be adapted to a wide array of organisation styles; by means of a time-proven pattern
+for branches, merges, names and tags, it is possible to represent the activities related to
+releases and bugfixes directly as structure in the Git history, without much need for explicit
+release planning, coordination and management.
+
+TIP: The principles and procedures of *Git-flow* are explained in this
+     -> link:/project/background/GitFlow.html[Background Article]. First
+     link:https://nvie.com/posts/a-successful-git-branching-model/[published in 2010]
+     by _Vincent Driessen_, meanwhile it is widely applied in projects with regular releases
+     and external liabilities -- and often seen as the counterpoint to trunk centred
+     development and continuous delivery.
+
+
+The Framework
+-------------
+The actual entity maintained in Git repositories is _a history line,_ leading to a _Head._
+Developers collaborate by pulling the history from _some other repository,_ extending or
+remoulding this history by adding some changes as _commits_ and finally they publish this
+extended line into their _personal repository._ However, the _normative state_ of the project
+is represented by the link:https://git.lumiera.org/gitweb?p=LUMIERA[»Lumiera Repository«]
+`git://git.lumiera.org/LUMIERA`
+
+***************************************************
+image:{img}/pub/GitFlow-branches.svg[
+"Illustration Git-flow branching pattern"]
+***************************************************
+
+The Core Developer(s) can _push_ to this repository, thereby acting as _Gateway._ Automated builds
+will listen to this repository, and any further _downstream processes,_ like e.g. packaging,
+are always based on this state. What is described in the following sections however is a
+_pattern of naming and branch organisation_ -- and can be seen as orthogonal to the former:
+A structure of branches and tags is assembled, gradually, in some repository; yet whenever the
+Core Developer(s) push this state to the Lumiera Repository, this structure becomes the
+normative state of the project. A release happens when the release tag is published this way.
+
+Development and Production
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+The development is the source of _change._ It builds the application, creates new functionality,
+maintains and evolves the structure of the code. On the other side, the productive use of the
+application requires _stability._ Users must be confident that they can rely on Lumiera for
+reaching deadlines and to build their long-term work. These two poles are represented by the
+two permanent branches: The *development mainline* and the *production master*.
+
+A release process brings change into a stable shape; it is represented by a *release branch*,
+which originates from development, goes through a vetting process and finally _ends_ with
+a *release tag* on production master. Urgent *bugfixes* are based on current production
+master, and released immediately back to production with a *patch tag*.
+
+Every delivery to production is also *back-merged* into the development mainline one way
+or another.footnote:[Some fine points to consider here. These back-merges will typically
+result in merge conflicts, which require manual handling. This is a desired feature,
+because reconciling the release changes with ongoing development is essential integration
+work and also supports the knowledge transfer between developers; it is recommended to
+consult both parties involved to find a long-term solution when resolution becomes
+complicated. Note however that the version bumping both on development and for the
+actual release will cause a spurious conflict, which must always be resolved in favour
+of the version present on the development line. This task can be automated. And finally,
+when a bugfix happens _while a release is in-flight,_ then the back-merge
+*must be done to the release branch*, not the development branch -- because we need the
+bugfix to be present in the next release too. Failure to observe this special rule will
+cause a *regression*, i.e. loosing the fix with the next regular release.]
+This is a distinguishing feature of Git-flow and addresses the quite common problem
+that bugfix work can be lost for the ongoing development.
+
+Naming Convention
+~~~~~~~~~~~~~~~~~
+master::
+  the branch name used for the infinite line of production code
+integration::
+  the branch name used for the infinite ongoing main line of development
+v<ver>::
+  naming pattern for version tags; `<ver>` is the version number string
+  (maybe{nbsp}transliterated to make it valid for Git. Notably `'~'` -> `'_'`)
+rel/<ver>::
+  naming pattern for release branches; `<ver>` is the version number string
+  for the upcoming release. Only a single release branch is allowed at any
+  given time, and will be deleted after the release merge and tag is set.
+fix/<ver>::
+  naming pattern for bugfix branches; here `<ver>` is the patch version
+  string, usually with an incremented revision component (maj.min.rev).
+  Only a single bugfix branch is allowed at any given time; these
+  branches are also deleted after publishing the fix.
+dev/<id>::
+  naming pattern for a development or feature branch; `<id>` is an mnemonic
+  identifier, which must be unique at the time while the branch exists.
+  Development branches are transient and must be deleted after _landing_.footnote:[
+  Sometimes a development effort does not succeed -- or is abandoned for various
+  reasons; if this happens, mark the last state with a tag and _delete_ the branch.
+  A well maintained repository should not contain stale branches.]
+dev/stage dev/steam dev/vault::
+  these development branch names _can_ be used for pre-integration of development
+  within a layer, in a situation where there is a dedicated sub-team and some
+  elaborated yet isolated development is going on.footnote:[As of 2025, this
+  situation is hypothetical; in the early stages of the Lumiera project, we
+  had three developers working in a relatively independent and often quite
+  experimental way, with several further minor contributors. In such a situation,
+  a staged integration can be helpful. Unless the project becomes _very large_
+  eventually, it seems much more likely that long-lived feature branches will
+  be used for changes cross-cutting all layers.]
+documentation::
+  a special branch which is immediately published to the Lumiera website;
+  the ASCIIDOC sources of user, design and technical docs are kept in-tree
+  and often augmented simultaneously on several branches -- for that reason
+  the currently published documentation might diverge at times, and will
+  typically be re-joined with the development mainline during the convergence
+  phase before a release. This branch can be fast-forwarded and merged,
+  but never be re-wound or rebased.
+deb::
+  a special _downstream branch_ which carries the debian packaging, as
+  maintained by the Lumiera team and published through the Lumiera DEB depot.
+  This branch is not visible in the Lumiera project repository, but rather
+  published via a special link:https://git.lumiera.org/gitweb?p=debian/lumiera[DEB repository].
+<email>/<branch>_signature::
+  GPG signed tags from the Core Developer(s); these tags are frequently force-reset
+  to a new position, and indicate that this branch position was reviewed and
+  approved.footnote:[The relevance of such an ongoing reveiw and trust marker
+  is based in a preference for an open and chaotic approach to development.
+  People may try out things, and collaborate directly. We even maintain a
+  link:https://git.lumiera.org/gitweb?p=lumiera/mob[»Mob repository«]
+  that is _world-pushable_ for small ad-hoc contributions. This option was used
+  indeed, and we never had problems with vandalism. Admittedly, since several
+  years now the ongoing development is way too demanding and esoteric to
+  encourage such low-barrier access, but the vision as such is maintained,
+  hoping to reach a state of the project eventually where direct small-scale
+  contributions will be feasible again (e.g. for plug-ins, configuration,
+  tweaks, styling)]
+
+Version numbers
+^^^^^^^^^^^^^^^
+The link:{rfc}/VersionNumberScheme.html[Version Number scheme of Lumiera]
+is based on the Debian
+link:https://www.debian.org/doc/debian-policy/ch-controlfields.html#version[policy for version numbers];
+note that this policy definition even provides a nice algorithm for version number sorting.
+In a nutshell, we alternatingly compare non-numeric and numeric parts of version number strings.
+And `'~'` sorts _before_ anything else, even the empty string, `'+'` sorts before `'.'` and
+`'-'` (dash) is not allowed, because it is reserved for Debian revisions.
+
+Notably we have the convention to mark development snapshots with a version number
+_preceding_ the next expected release, and we do the same with release candiates (`'rc'`);
+in all those cases, we attach a suffix with a tilde, because this orders _before_ the
+decorated number: `1.4~dev` comes before `1.4~rc.1` and again before `1.4`
+
+However, the way we use version tags, a tilde will never show up either on a
+release branch, nor in the tag itself. These fine distinctions will only be used
+in the version definition checked into the source tree and picked up by the build
+system and thus also by the continuous integration.footnote:[as of 2025, we do not
+have (and do not need yet) a continuous integration; so the actual modus operandi
+still needs to be figured out.]
+
+
+Procedures
+----------
+Release process
+~~~~~~~~~~~~~~~
+What follows is a short summary of the stages and procedures for a release.
+
+1. Prior to the release, there is a convergence phase
+   - attempt to land features which should be part of the release
+   - stabilise the code and resolve bugs
+   - keep breaking changes on feature branches
+2. Cut the release, once the code is feature complete
+   - possibly adjust the expected version number based on the current situation
+   - fork the release branch off `integration`, using the expected version number
+   - bump the version number on the `integration` branch, and attach a `~dev` suffix.footnote:[
+     Note there are some scripts in the 'admin' subdirectory to help with version number handling.]
+3. Get the release code to maturity
+   - additional testing, possibly a public beta
+   - directly fix any bugs encountered on the release branch
+   - avoid any breaking changes and refrain from adding further features
+   - release candidates can be used simply by committing them into the version in-tree;
+     indicate the RC in the commit message, but do not tag them
+   - with the last commit, add the release notes and remove the `~rc` suffix
+4. Publish the release
+   - merge the release branch into `master` (this will never create a conflict)
+   - set the release tag on this merge commit
+   - publish this state of the history to the Lumiera project repository
+5. Complete the relase cycle
+   - create a back-merge from the release tag to the `integration` branch
+   - ensure that the integration branch has still the correct verion number, which
+     should be the next one, with a `~dev` suffix.footnote:[...to achieve this, just
+     re-run the script in a similar way as was used to bump the version after forking
+     the release branch.]
+   - resolve any conflicts due to integration of release changes with ongoing development
+   - delete the release branch.
+
+Bugfixes between Releases
+^^^^^^^^^^^^^^^^^^^^^^^^^
+1. initiate bugfix
+   - create a bugfix branch from current `master`; include the bugfix number
+   - the first commit on the bugfix branch sets this bugfix number in-tree,
+     thereby typically adding or increasing the revision component of the version
+2. landing the bugfix
+   - once the problem is resolved and tested, merge back bugfix branch into `master`
+   - merge the bugfix into `integration`
+   - delete the bugfix branch
+
+Bugfix during Release prep
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+1. initiate bugfix
+   - create a bugfix branch from current `master`; include the bugfix number
+   - use a version _prior_ to the ongoing release, but increment the revision component
+   - commit this bugfix number in-tree
+2. landing the bugfix
+   - after resolving the problem, merge directly to `master`
+   - be sure to merge the bugfix then *into the release branch*
+   - delete the bugfix branch

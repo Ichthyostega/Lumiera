@@ -1,43 +1,31 @@
 /*
-  LumiBasics(Test)  -  working with Lumiera's internal Time values
+  TimeBasics(Test)  -  working with Lumiera's internal Time values
 
-  Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2008,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file time-basics-test.cpp
+ ** unit test \ref TimeBasics_test
+ */
 
 
 #include "lib/test/run.hpp"
-
+#include "lib/time/timevalue.hpp"
+#include "lib/test/test-helper.hpp"
+#include "lib/random.hpp"
 #include "lib/util.hpp"
+
 #include <boost/lexical_cast.hpp>
-#include <iostream>
-#include <cstdlib>
 
 using boost::lexical_cast;
 using util::isnil;
-using std::rand;
-using std::cout;
-using std::endl;
-
-
-#include "lib/time/timevalue.hpp"
-#include "lib/time/diagnostics.hpp"
-
 
 
 namespace lib {
@@ -46,6 +34,7 @@ namespace test{
   using time::Time;
   using time::TimeVar;
   using time::FSecs;
+  using time::raw_time_64;
   
   
   /****************************************//**
@@ -62,7 +51,7 @@ namespace test{
           
           checkBasics (org);
           checkComparisons (org);
-          checkComponentDiagnostics();
+          checkComponentBreakdown();
         } 
       
       
@@ -112,59 +101,59 @@ namespace test{
           CHECK (!(var <  ref) );
           CHECK ( (var >  ref) );
           
-          gavl_time_t gat(var);
-          CHECK (!(gat == ref) );
-          CHECK ( (gat != ref) );
-          CHECK ( (gat >= ref) );
-          CHECK (!(gat <= ref) );
-          CHECK (!(gat <  ref) );
-          CHECK ( (gat >  ref) );
+          raw_time_64 rat = _raw(var);
+          CHECK (!(rat == ref) );
+          CHECK ( (rat != ref) );
+          CHECK ( (rat >= ref) );
+          CHECK (!(rat <= ref) );
+          CHECK (!(rat <  ref) );
+          CHECK ( (rat >  ref) );
           
-          CHECK ( (var == gat) );
-          CHECK (!(var != gat) );
-          CHECK ( (var >= gat) );
-          CHECK ( (var <= gat) );
-          CHECK (!(var <  gat) );
-          CHECK (!(var >  gat) );
+          CHECK ( (var == rat) );
+          CHECK (!(var != rat) );
+          CHECK ( (var >= rat) );
+          CHECK ( (var <= rat) );
+          CHECK (!(var <  rat) );
+          CHECK (!(var >  rat) );
         }
       
       
       void
-      checkComponentDiagnostics()
+      checkComponentBreakdown()
         {
-          int millis = rand() % 1000;
-          int secs   = rand() % 60;
-          int mins   = rand() % 60;
-          int hours  = rand() % 100;
+          Time t1(2008,0);
+          CHECK (t1 == "0:00:02.008"_expect);
           
-          Time time(millis,secs,mins,hours);
-          CHECK (Time()  < time);
-          CHECK (millis == getMillis(time));
-          CHECK (secs   == getSecs  (time));
-          CHECK (mins   == getMins  (time));
-          CHECK (hours  == getHours (time));
-          cout << time << endl;
+          Time t2(2008,88);
+          CHECK (t2 == "0:01:30.008"_expect);
           
-          Time t2(2008,0);
-          cout << t2 << endl;
-          CHECK ( 8 == getMillis(t2));
-          CHECK ( 2 == getSecs  (t2));
-          CHECK ( 0 == getMins  (t2));
-          CHECK ( 0 == getHours (t2));
+          Time t3(2008,118,58);
+          CHECK (t3 == "1:00:00.008"_expect);
           
-          Time t3(2008,88);
-          cout << t3 << endl;
-          CHECK ( 8 == getMillis(t3));
-          CHECK (30 == getSecs  (t3));
-          CHECK ( 1 == getMins  (t3));
-          CHECK ( 0 == getHours (t3));
+          Time t4(t2 - t3);
+          CHECK (t4 == "-0:58:30.000"_expect);
           
-          Time t4(2008,118,58);
-          cout << t4 << endl;
-          CHECK ( 8 == getMillis(t4));
-          CHECK ( 0 == getSecs  (t4));
-          CHECK ( 0 == getMins  (t4));
-          CHECK ( 1 == getHours (t4));
+          CHECK (Time::ZERO ==         "0:00:00.000"_expect);
+          CHECK (Time::MAX  ==  "85401592:56:01.825"_expect);
+          CHECK (Time::MIN  == "-85401592:56:01.825"_expect);
+          
+          
+          seedRand();
+          int millis = 1 + rani (999);
+          int secs   =     rani  (60);
+          int mins   =     rani  (60);
+          int hours  =     rani (100);
+          
+          Time randTime(millis,secs,mins,hours);
+          CHECK (Time()  < randTime);
+          
+          const auto TIME_SCALE_sec{lib::time::TimeValue::SCALE       };
+          const auto TIME_SCALE_ms {lib::time::TimeValue::SCALE / 1000};
+          
+          CHECK (millis == (_raw(randTime) / TIME_SCALE_ms )      % 1000);
+          CHECK (secs   == (_raw(randTime) / TIME_SCALE_sec)      % 60);
+          CHECK (mins   == (_raw(randTime) / TIME_SCALE_sec / 60) % 60);
+          CHECK (hours  ==  _raw(randTime) / TIME_SCALE_sec / 60 / 60);
         }
     };
   

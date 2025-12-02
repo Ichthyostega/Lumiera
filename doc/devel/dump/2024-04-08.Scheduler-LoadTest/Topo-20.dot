@@ -1,0 +1,475 @@
+digraph {
+  // Nodes
+  N0[label="0: 37", shape=doublecircle ]
+  N1[label="1: 37", shape=circle ]
+  N2[label="2: 37", shape=circle ]
+  N3[label="3: 4F", shape=box, style=rounded ]
+  N4[label="4: 37", shape=circle ]
+  N5[label="5: 37", shape=circle ]
+  N6[label="6: 4F", shape=box, style=rounded ]
+  N7[label="7: 37", shape=circle ]
+  N8[label="8: 37", shape=circle ]
+  N9[label="9: 4F", shape=box, style=rounded ]
+  N10[label="10: 37", shape=circle ]
+  N11[label="11: 37", shape=circle ]
+  N12[label="12: 4F", shape=box, style=rounded ]
+  N13[label="13: 37", shape=circle ]
+  N14[label="14: 37", shape=circle ]
+  N15[label="15: 4F", shape=box, style=rounded ]
+  N16[label="16: 37", shape=circle ]
+  N17[label="17: 13" ]
+  N18[label="18: 37", shape=circle ]
+  N19[label="19: 37", shape=circle ]
+  N20[label="20: 4F", shape=box, style=rounded ]
+  N21[label="21: 37", shape=circle ]
+  N22[label="22: 37", shape=circle ]
+  N23[label="23: 4F", shape=box, style=rounded ]
+  N24[label="24: 37", shape=circle ]
+  N25[label="25: 61", shape=box, style=rounded ]
+  N26[label="26: 37", shape=circle ]
+  N27[label="27: 37", shape=circle ]
+  N28[label="28: 4F", shape=box, style=rounded ]
+  N29[label="29: 37", shape=circle ]
+  N30[label="30: 37", shape=circle ]
+  N31[label="31: 4F", shape=box, style=rounded ]
+  N32[label="32: 37", shape=circle ]
+  N33[label="33: 40" ]
+  N34[label="34: 37", shape=circle ]
+  N35[label="35: 37", shape=circle ]
+  N36[label="36: 4F", shape=box, style=rounded ]
+  N37[label="37: 37", shape=circle ]
+  N38[label="38: 37", shape=circle ]
+  N39[label="39: 4F", shape=box, style=rounded ]
+  N40[label="40: 37", shape=circle ]
+  N41[label="41: 3A" ]
+  N42[label="42: 37", shape=circle ]
+  N43[label="43: 37", shape=circle ]
+  N44[label="44: 4F", shape=box, style=rounded ]
+  N45[label="45: 37", shape=circle ]
+  N46[label="46: 37", shape=circle ]
+  N47[label="47: 4F", shape=box, style=rounded ]
+  N48[label="48: 37", shape=circle ]
+  N49[label="49: F9", shape=box, style=rounded ]
+  N50[label="50: 37", shape=circle ]
+  N51[label="51: 37", shape=circle ]
+  N52[label="52: 4F", shape=box, style=rounded ]
+  N53[label="53: 37", shape=circle ]
+  N54[label="54: 37", shape=circle ]
+  N55[label="55: 4F", shape=box, style=rounded ]
+  N56[label="56: 37", shape=circle ]
+  N57[label="57: 40" ]
+  N58[label="58: 37", shape=circle ]
+  N59[label="59: 37", shape=circle ]
+  N60[label="60: 4F", shape=box, style=rounded ]
+  N61[label="61: 37", shape=circle ]
+  N62[label="62: 37", shape=circle ]
+  N63[label="63: 4F", shape=box, style=rounded ]
+  N64[label="64: 37", shape=circle ]
+  N65[label="65: 3A" ]
+  N66[label="66: 37", shape=circle ]
+  N67[label="67: 37", shape=circle ]
+  N68[label="68: 4F", shape=box, style=rounded ]
+  N69[label="69: 37", shape=circle ]
+  N70[label="70: 37", shape=circle ]
+  N71[label="71: 4F", shape=box, style=rounded ]
+  N72[label="72: 37", shape=circle ]
+  N73[label="73: F9", shape=box, style=rounded ]
+  N74[label="74: 37", shape=circle ]
+  N75[label="75: 37", shape=circle ]
+  N76[label="76: 4F", shape=box, style=rounded ]
+  N77[label="77: 37", shape=circle ]
+  N78[label="78: 37", shape=circle ]
+  N79[label="79: 4F", shape=box, style=rounded ]
+  N80[label="80: 37", shape=circle ]
+  N81[label="81: 40" ]
+  N82[label="82: 37", shape=circle ]
+  N83[label="83: 37", shape=circle ]
+  N84[label="84: 4F", shape=box, style=rounded ]
+  N85[label="85: 37", shape=circle ]
+  N86[label="86: 37", shape=circle ]
+  N87[label="87: 4F", shape=box, style=rounded ]
+  N88[label="88: 37", shape=circle ]
+  N89[label="89: 3A" ]
+  N90[label="90: 37", shape=circle ]
+  N91[label="91: 37", shape=circle ]
+  N92[label="92: 4F", shape=box, style=rounded ]
+  N93[label="93: 37", shape=circle ]
+  N94[label="94: 37", shape=circle ]
+  N95[label="95: 4F", shape=box, style=rounded ]
+  N96[label="96: 37", shape=circle ]
+  N97[label="97: F9", shape=box, style=rounded ]
+  N98[label="98: 37", shape=circle ]
+  N99[label="99: 37", shape=circle ]
+  N100[label="100: 4F", shape=box, style=rounded ]
+  N101[label="101: 37", shape=circle ]
+  N102[label="102: 37", shape=circle ]
+  N103[label="103: 4F", shape=box, style=rounded ]
+  N104[label="104: 37", shape=circle ]
+  N105[label="105: 40" ]
+  N106[label="106: 37", shape=circle ]
+  N107[label="107: 37", shape=circle ]
+  N108[label="108: 4F", shape=box, style=rounded ]
+  N109[label="109: 37", shape=circle ]
+  N110[label="110: 37", shape=circle ]
+  N111[label="111: 4F", shape=box, style=rounded ]
+  N112[label="112: 37", shape=circle ]
+  N113[label="113: 3A" ]
+  N114[label="114: 37", shape=circle ]
+  N115[label="115: 37", shape=circle ]
+  N116[label="116: 4F", shape=box, style=rounded ]
+  N117[label="117: 37", shape=circle ]
+  N118[label="118: 37", shape=circle ]
+  N119[label="119: 4F", shape=box, style=rounded ]
+  N120[label="120: 37", shape=circle ]
+  N121[label="121: F9", shape=box, style=rounded ]
+  N122[label="122: 37", shape=circle ]
+  N123[label="123: 37", shape=circle ]
+  N124[label="124: 4F", shape=box, style=rounded ]
+  N125[label="125: 37", shape=circle ]
+  N126[label="126: 37", shape=circle ]
+  N127[label="127: 4F", shape=box, style=rounded ]
+  N128[label="128: 37", shape=circle ]
+  N129[label="129: 40" ]
+  N130[label="130: 37", shape=circle ]
+  N131[label="131: 37", shape=circle ]
+  N132[label="132: 4F", shape=box, style=rounded ]
+  N133[label="133: 37", shape=circle ]
+  N134[label="134: 37", shape=circle ]
+  N135[label="135: 4F", shape=box, style=rounded ]
+  N136[label="136: 37", shape=circle ]
+  N137[label="137: 3A" ]
+  N138[label="138: 37", shape=circle ]
+  N139[label="139: 37", shape=circle ]
+  N140[label="140: 4F", shape=box, style=rounded ]
+  N141[label="141: 37", shape=circle ]
+  N142[label="142: 37", shape=circle ]
+  N143[label="143: 4F", shape=box, style=rounded ]
+  N144[label="144: 37", shape=circle ]
+  N145[label="145: F9", shape=box, style=rounded ]
+  N146[label="146: 37", shape=circle ]
+  N147[label="147: 37", shape=circle ]
+  N148[label="148: 4F", shape=box, style=rounded ]
+  N149[label="149: 37", shape=circle ]
+  N150[label="150: 37", shape=circle ]
+  N151[label="151: 4F", shape=box, style=rounded ]
+  N152[label="152: 37", shape=circle ]
+  N153[label="153: 40" ]
+  N154[label="154: 37", shape=circle ]
+  N155[label="155: 37", shape=circle ]
+  N156[label="156: 4F", shape=box, style=rounded ]
+  N157[label="157: 37", shape=circle ]
+  N158[label="158: 37", shape=circle ]
+  N159[label="159: 4F", shape=box, style=rounded ]
+  N160[label="160: 37", shape=circle ]
+  N161[label="161: 3A" ]
+  N162[label="162: 37", shape=circle ]
+  N163[label="163: 37", shape=circle ]
+  N164[label="164: 4F", shape=box, style=rounded ]
+  N165[label="165: 37", shape=circle ]
+  N166[label="166: 37", shape=circle ]
+  N167[label="167: 4F", shape=box, style=rounded ]
+  N168[label="168: 37", shape=circle ]
+  N169[label="169: F9", shape=box, style=rounded ]
+  N170[label="170: 37", shape=circle ]
+  N171[label="171: 37", shape=circle ]
+  N172[label="172: 4F", shape=box, style=rounded ]
+  N173[label="173: 37", shape=circle ]
+  N174[label="174: 37", shape=circle ]
+  N175[label="175: 4F", shape=box, style=rounded ]
+  N176[label="176: 37", shape=circle ]
+  N177[label="177: 40" ]
+  N178[label="178: 37", shape=circle ]
+  N179[label="179: 37", shape=circle ]
+  N180[label="180: 4F", shape=box, style=rounded ]
+  N181[label="181: 37", shape=circle ]
+  N182[label="182: 37", shape=circle ]
+  N183[label="183: 4F", shape=box, style=rounded ]
+  N184[label="184: 37", shape=circle ]
+  N185[label="185: 3A" ]
+  N186[label="186: 37", shape=circle ]
+  N187[label="187: 37", shape=circle ]
+  N188[label="188: 4F", shape=box, style=rounded ]
+  N189[label="189: 37", shape=circle ]
+  N190[label="190: 37", shape=circle ]
+  N191[label="191: 4F", shape=box, style=rounded ]
+  N192[label="192: 37", shape=circle ]
+  N193[label="193: F9", shape=box, style=rounded ]
+  N194[label="194: 37", shape=circle ]
+  N195[label="195: 37", shape=circle ]
+  N196[label="196: 4F", shape=box, style=rounded ]
+  N197[label="197: 37", shape=circle ]
+  N198[label="198: 37", shape=circle ]
+  N199[label="199: 4F", shape=box, style=rounded ]
+  N200[label="200: 37", shape=circle ]
+  N201[label="201: 40" ]
+  N202[label="202: 37", shape=circle ]
+  N203[label="203: 37", shape=circle ]
+  N204[label="204: 4F", shape=box, style=rounded ]
+  N205[label="205: 37", shape=circle ]
+  N206[label="206: 37", shape=circle ]
+  N207[label="207: 4F", shape=box, style=rounded ]
+  N208[label="208: 37", shape=circle ]
+  N209[label="209: 3A" ]
+  N210[label="210: 37", shape=circle ]
+  N211[label="211: 37", shape=circle ]
+  N212[label="212: 4F", shape=box, style=rounded ]
+  N213[label="213: 37", shape=circle ]
+  N214[label="214: 37", shape=circle ]
+  N215[label="215: 4F", shape=box, style=rounded ]
+  N216[label="216: 37", shape=circle ]
+  N217[label="217: F9", shape=box, style=rounded ]
+  N218[label="218: 37", shape=circle ]
+  N219[label="219: 37", shape=circle ]
+  N220[label="220: 4F", shape=box, style=rounded ]
+  N221[label="221: 37", shape=circle ]
+  N222[label="222: 37", shape=circle ]
+  N223[label="223: 4F", shape=box, style=rounded ]
+  N224[label="224: 37", shape=circle ]
+  N225[label="225: 40" ]
+  N226[label="226: 37", shape=circle ]
+  N227[label="227: 37", shape=circle ]
+  N228[label="228: 4F", shape=box, style=rounded ]
+  N229[label="229: 37", shape=circle ]
+  N230[label="230: 37", shape=circle ]
+  N231[label="231: 4F", shape=box, style=rounded ]
+  N232[label="232: 37", shape=circle ]
+  N233[label="233: 3A" ]
+  N234[label="234: 37", shape=circle ]
+  N235[label="235: 37", shape=circle ]
+  N236[label="236: 4F", shape=box, style=rounded ]
+  N237[label="237: 37", shape=circle ]
+  N238[label="238: 37", shape=circle ]
+  N239[label="239: 4F", shape=box, style=rounded ]
+  N240[label="240: 37", shape=circle ]
+  N241[label="241: F9", shape=box, style=rounded ]
+  N242[label="242: 37", shape=circle ]
+  N243[label="243: 37", shape=circle ]
+  N244[label="244: 4F", shape=box, style=rounded ]
+  N245[label="245: 37", shape=circle ]
+  N246[label="246: 37", shape=circle ]
+  N247[label="247: 4F", shape=box, style=rounded ]
+  N248[label="248: 37", shape=circle ]
+  N249[label="249: 40" ]
+  N250[label="250: 37", shape=circle ]
+  N251[label="251: 37", shape=circle ]
+  N252[label="252: 4F", shape=box, style=rounded ]
+  N253[label="253: 37", shape=circle ]
+  N254[label="254: 37", shape=circle ]
+  N255[label="255: 52", shape=box, style=rounded ]
+
+  // Layers
+  { /*0*/ rank=min  N0 }
+  { /*1*/ rank=same N1 N2 N3 }
+  { /*2*/ rank=same N4 N5 N6 N7 N8 N9 }
+  { /*3*/ rank=same N10 N11 N12 N13 N14 N15 N16 N17 }
+  { /*4*/ rank=same N18 N19 N20 N21 N22 N23 N24 N25 }
+  { /*5*/ rank=same N26 N27 N28 N29 N30 N31 N32 N33 }
+  { /*6*/ rank=same N34 N35 N36 N37 N38 N39 N40 N41 }
+  { /*7*/ rank=same N42 N43 N44 N45 N46 N47 N48 N49 }
+  { /*8*/ rank=same N50 N51 N52 N53 N54 N55 N56 N57 }
+  { /*9*/ rank=same N58 N59 N60 N61 N62 N63 N64 N65 }
+  { /*10*/ rank=same N66 N67 N68 N69 N70 N71 N72 N73 }
+  { /*11*/ rank=same N74 N75 N76 N77 N78 N79 N80 N81 }
+  { /*12*/ rank=same N82 N83 N84 N85 N86 N87 N88 N89 }
+  { /*13*/ rank=same N90 N91 N92 N93 N94 N95 N96 N97 }
+  { /*14*/ rank=same N98 N99 N100 N101 N102 N103 N104 N105 }
+  { /*15*/ rank=same N106 N107 N108 N109 N110 N111 N112 N113 }
+  { /*16*/ rank=same N114 N115 N116 N117 N118 N119 N120 N121 }
+  { /*17*/ rank=same N122 N123 N124 N125 N126 N127 N128 N129 }
+  { /*18*/ rank=same N130 N131 N132 N133 N134 N135 N136 N137 }
+  { /*19*/ rank=same N138 N139 N140 N141 N142 N143 N144 N145 }
+  { /*20*/ rank=same N146 N147 N148 N149 N150 N151 N152 N153 }
+  { /*21*/ rank=same N154 N155 N156 N157 N158 N159 N160 N161 }
+  { /*22*/ rank=same N162 N163 N164 N165 N166 N167 N168 N169 }
+  { /*23*/ rank=same N170 N171 N172 N173 N174 N175 N176 N177 }
+  { /*24*/ rank=same N178 N179 N180 N181 N182 N183 N184 N185 }
+  { /*25*/ rank=same N186 N187 N188 N189 N190 N191 N192 N193 }
+  { /*26*/ rank=same N194 N195 N196 N197 N198 N199 N200 N201 }
+  { /*27*/ rank=same N202 N203 N204 N205 N206 N207 N208 N209 }
+  { /*28*/ rank=same N210 N211 N212 N213 N214 N215 N216 N217 }
+  { /*29*/ rank=same N218 N219 N220 N221 N222 N223 N224 N225 }
+  { /*30*/ rank=same N226 N227 N228 N229 N230 N231 N232 N233 }
+  { /*31*/ rank=same N234 N235 N236 N237 N238 N239 N240 N241 }
+  { /*32*/ rank=same N242 N243 N244 N245 N246 N247 N248 N249 }
+  { /*33*/ rank=same N250 N251 N252 N253 N254 N255 }
+
+  // Topology
+  N0 -> N3
+  N1 -> N6
+  N2 -> N9
+  N4 -> N12
+  N5 -> N15
+  N7 -> N17
+  N8 -> N17
+  N10 -> N20
+  N11 -> N23
+  N13 -> N25
+  N14 -> N25
+  N16 -> N25
+  N17 -> N25
+  N18 -> N28
+  N19 -> N31
+  N21 -> N33
+  N22 -> N33
+  N24 -> N33
+  N26 -> N36
+  N27 -> N39
+  N29 -> N41
+  N30 -> N41
+  N32 -> N41
+  N33 -> N41
+  N34 -> N44
+  N35 -> N47
+  N37 -> N49
+  N38 -> N49
+  N40 -> N49
+  N41 -> N49
+  N42 -> N52
+  N43 -> N55
+  N45 -> N57
+  N46 -> N57
+  N48 -> N57
+  N50 -> N60
+  N51 -> N63
+  N53 -> N65
+  N54 -> N65
+  N56 -> N65
+  N57 -> N65
+  N58 -> N68
+  N59 -> N71
+  N61 -> N73
+  N62 -> N73
+  N64 -> N73
+  N65 -> N73
+  N66 -> N76
+  N67 -> N79
+  N69 -> N81
+  N70 -> N81
+  N72 -> N81
+  N74 -> N84
+  N75 -> N87
+  N77 -> N89
+  N78 -> N89
+  N80 -> N89
+  N81 -> N89
+  N82 -> N92
+  N83 -> N95
+  N85 -> N97
+  N86 -> N97
+  N88 -> N97
+  N89 -> N97
+  N90 -> N100
+  N91 -> N103
+  N93 -> N105
+  N94 -> N105
+  N96 -> N105
+  N98 -> N108
+  N99 -> N111
+  N101 -> N113
+  N102 -> N113
+  N104 -> N113
+  N105 -> N113
+  N106 -> N116
+  N107 -> N119
+  N109 -> N121
+  N110 -> N121
+  N112 -> N121
+  N113 -> N121
+  N114 -> N124
+  N115 -> N127
+  N117 -> N129
+  N118 -> N129
+  N120 -> N129
+  N122 -> N132
+  N123 -> N135
+  N125 -> N137
+  N126 -> N137
+  N128 -> N137
+  N129 -> N137
+  N130 -> N140
+  N131 -> N143
+  N133 -> N145
+  N134 -> N145
+  N136 -> N145
+  N137 -> N145
+  N138 -> N148
+  N139 -> N151
+  N141 -> N153
+  N142 -> N153
+  N144 -> N153
+  N146 -> N156
+  N147 -> N159
+  N149 -> N161
+  N150 -> N161
+  N152 -> N161
+  N153 -> N161
+  N154 -> N164
+  N155 -> N167
+  N157 -> N169
+  N158 -> N169
+  N160 -> N169
+  N161 -> N169
+  N162 -> N172
+  N163 -> N175
+  N165 -> N177
+  N166 -> N177
+  N168 -> N177
+  N170 -> N180
+  N171 -> N183
+  N173 -> N185
+  N174 -> N185
+  N176 -> N185
+  N177 -> N185
+  N178 -> N188
+  N179 -> N191
+  N181 -> N193
+  N182 -> N193
+  N184 -> N193
+  N185 -> N193
+  N186 -> N196
+  N187 -> N199
+  N189 -> N201
+  N190 -> N201
+  N192 -> N201
+  N194 -> N204
+  N195 -> N207
+  N197 -> N209
+  N198 -> N209
+  N200 -> N209
+  N201 -> N209
+  N202 -> N212
+  N203 -> N215
+  N205 -> N217
+  N206 -> N217
+  N208 -> N217
+  N209 -> N217
+  N210 -> N220
+  N211 -> N223
+  N213 -> N225
+  N214 -> N225
+  N216 -> N225
+  N218 -> N228
+  N219 -> N231
+  N221 -> N233
+  N222 -> N233
+  N224 -> N233
+  N225 -> N233
+  N226 -> N236
+  N227 -> N239
+  N229 -> N241
+  N230 -> N241
+  N232 -> N241
+  N233 -> N241
+  N234 -> N244
+  N235 -> N247
+  N237 -> N249
+  N238 -> N249
+  N240 -> N249
+  N242 -> N252
+  N243 -> N255
+  N245 -> N255
+  N246 -> N255
+  N248 -> N255
+  N249 -> N255
+}
+

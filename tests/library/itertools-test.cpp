@@ -1,37 +1,31 @@
 /*
   IterTools(Test)  -  building combined and filtering iterators based on the Iterator tools
 
-  Copyright (C)         Lumiera.org
-    2009,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2009,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file itertools-test.cpp
+ ** unit test \ref IterTools_test
+ */
 
 
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "lib/util.hpp"
 #include "lib/util-foreach.hpp"
+#include "lib/format-cout.hpp"
+#include "lib/util.hpp"
 
 #include "lib/itertools.hpp"
 
 #include <boost/lexical_cast.hpp>
-#include <iostream>
-#include <cstdlib>
 #include <vector>
 
 
@@ -44,17 +38,12 @@ namespace test{
   using util::for_each;
   using util::isnil;
   using std::vector;
-  using std::cout;
-  using std::endl;
-  using std::rand;
   
-  using lumiera::error::LUMIERA_ERROR_ITER_EXHAUST;
+  using LERR_(ITER_EXHAUST);
   
   
   
   namespace { // Test data
-    
-    uint NUM_ELMS = 10;
     
     struct TestSource
       {
@@ -94,11 +83,13 @@ namespace test{
       
       typedef TestSource::iterator Iter;
       
+      uint NUM_ELMS{0};
+      
       
       virtual void
       run (Arg arg)
         {
-          if (0 < arg.size()) NUM_ELMS = lexical_cast<uint> (arg[1]);
+          NUM_ELMS = firstVal (arg, 10);
           
           TestSource source(NUM_ELMS);
           
@@ -110,7 +101,10 @@ namespace test{
           Iter ii (source.begin());
           ++++++ii;
           buildFilterIterator (ii);
+          verify_filterExtension();
           verify_filterRepetitions();
+          
+          buildWrappedSingleElement();
           
           buildTransformingIterator (source.begin());
           
@@ -133,6 +127,7 @@ namespace test{
       static bool takeAll (int)   { return true; }
       static bool takeOdd (int i) { return 0 != i % 2; }
       static bool takeEve (int i) { return 0 == i % 2; }
+      static bool takeTrd (int i) { return 0 == i % 3; }
       
       void
       buildFilterIterator (Iter const& ii)
@@ -155,6 +150,81 @@ namespace test{
         }
       
       
+      /** @test verify the ability to extend a filter condition
+       *        while in the middle of an ongoing iteration.
+       * Typically this means sharpening the filter condition
+       * and thus making the filter more restrictive, filtering
+       * away more elements of the source stream. But through
+       * the ability to add disjunctive and negated clauses,
+       * it is also possible to weaken the filter condition
+       * @note in case of a weakened filter condition, there is
+       *       \em no reset of the source iterator, i.e. we don't
+       *       re-evaluate from start, but just from current head.
+       */
+      void
+      verify_filterExtension ()
+        {
+          typedef vector<uint64_t> Src;
+          typedef Src::iterator SrcIter;
+          typedef RangeIter<SrcIter> SeqIter;
+          typedef ExtensibleFilterIter<SeqIter> FilteredSeq;
+          
+          Src src;
+          for (uint i=0; i < 3*NUM_ELMS; ++i)
+            src.push_back(i);
+          
+          SeqIter completeSequence (src.begin(), src.end());
+          FilteredSeq filterIter (completeSequence, takeAll);
+          
+          CHECK (!isnil (filterIter));
+          CHECK (0 == *filterIter);
+          ++filterIter;
+          CHECK (1 == *filterIter);
+          
+          filterIter.andFilter(takeEve);
+          CHECK (!isnil (filterIter));
+          CHECK (2 == *filterIter);
+          ++filterIter;
+          CHECK (4 == *filterIter);
+          
+          // sharpen the condition...
+          filterIter.andFilter(takeTrd);
+          CHECK (!isnil (filterIter));
+          CHECK (6 == *filterIter);   // divisible by two and by three
+          ++filterIter;
+          CHECK (12 == *filterIter);
+          
+          verifyComparisons (filterIter);
+          pullOut (filterIter);
+          
+          // adding a disjunctive clause actually weakens the filter...
+          filterIter = {completeSequence, takeTrd};
+          CHECK (!isnil (filterIter));
+          CHECK (0 == *filterIter);
+          ++filterIter;
+          CHECK (3 == *filterIter);
+          
+          filterIter.orFilter(takeEve);
+          CHECK (3 == *filterIter);
+          ++filterIter;
+          CHECK (4 == *filterIter);
+          ++filterIter;
+          CHECK (6 == *filterIter);
+          verifyComparisons (filterIter);
+          
+          // flip filter logic
+          filterIter.flipFilter();
+          CHECK (7 == *filterIter);   // not even and not divisible by three
+          ++filterIter;
+          CHECK (11 == *filterIter);
+          ++filterIter;
+          CHECK (13 == *filterIter);
+          
+          verifyComparisons (filterIter);
+          pullOut (filterIter);
+        }
+      
+      
       /** @test verify the helper to filter duplicate elements
        *        emitted by an source iterator. This test creates
        *        a sequence of numbers with random repetitions.
@@ -165,7 +235,7 @@ namespace test{
           vector<uint> numberz;
           for (uint i=0; i<NUM_ELMS; ++i)
             {
-              uint n = 1 + rand() % 100;
+              uint n = 1 + rani (100);
               do numberz.push_back(i);
               while (--n);
             }
@@ -179,13 +249,55 @@ namespace test{
           FilteredSeq filtered = filterRepetitions (completeSequence);
           
           uint num=0;
-          for (; num<NUM_ELMS && !isnil(filtered);
+          for (; num<NUM_ELMS and not isnil(filtered);
                ++num,
                ++filtered
               )
             CHECK (num == *filtered);
           
-          CHECK (num == NUM_ELMS && isnil(filtered));
+          CHECK (num == NUM_ELMS and isnil(filtered));
+        }
+      
+      
+      
+      /** @test wrap an arbitrary single element as pseudo-iterator */
+      void
+      buildWrappedSingleElement()
+        {
+          uint i{12};
+          
+          auto i1 = singleValIterator(12);
+          auto i2 = singleValIterator( i);
+          auto i3 = singleValIterator(&i);
+          
+          CHECK (not isnil(i1));
+          CHECK (not isnil(i2));
+          CHECK (not isnil(i3));
+          CHECK (12 == *i1);
+          CHECK (12 == *i2);
+          CHECK (12 == **i3);
+          
+          i = 23;
+          CHECK (12 == *i1);
+          CHECK (23 == *i2);
+          CHECK (23 == **i3);
+          
+          ++i1;
+          ++i2;
+          ++i3;
+          CHECK (isnil(i1));
+          CHECK (isnil(i2));
+          CHECK (isnil(i3));
+          VERIFY_ERROR (ITER_EXHAUST, *i1 );
+          VERIFY_ERROR (ITER_EXHAUST, *i2 );
+          VERIFY_ERROR (ITER_EXHAUST, *i3 );
+          
+          // assignable as any iterator..
+          i1 = singleValIterator(13);
+          CHECK (13 == *i1);
+          
+          i1 = SingleValIter<int>{};
+          CHECK (isnil(i1));
         }
       
       
@@ -212,7 +324,7 @@ namespace test{
               ++idi,++neg)
             CHECK (idi != neg);
           
-          CHECK (!idi && !neg);
+          CHECK (!idi and !neg);
           CHECK (idi == neg);
         }
       

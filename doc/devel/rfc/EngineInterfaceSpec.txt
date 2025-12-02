@@ -3,12 +3,12 @@ Engine Interface Spec
 
 // please don't remove the //word: comments
 
-[grid="all"]
-`------------`-----------------------
-*State*         _Idea_
-*Date*          _Mi 11 Mai 2011 17:53:16 CEST_
-*Proposed by*   Ichthyostega <prg@ichthyostega.de>
--------------------------------------
+[options="autowidth"]
+|====================================
+|*State*       | _Idea_
+|*Date*        | _Mi 11 Mai 2011 17:53:16 CEST_
+|*Proposed by* | Ichthyostega <prg@ichthyostega.de>
+|====================================
 
 [abstract]
 ********************************************************************************
@@ -54,7 +54,7 @@ Requirements Specification
 
 Functionality description in detail
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
--> see the link:EngineInterfaceOverview.html[Engine/Interface overview] for
+-> see the link:{rfc}/EngineInterfaceOverview.html[Engine/Interface overview] for
 a description of the involved entities and for definitions for common terms.
 
 Definitions
@@ -173,8 +173,8 @@ Tasks
 Discussion
 ~~~~~~~~~~
 
-Pros
-^^^^
+//Pros
+//^^^^
 // add a fact list/enumeration which make this suitable:
 //  * foo
 //  * bar ...
@@ -188,8 +188,8 @@ The requirements placed on life changes are quite high
 
 
 
-Alternatives
-^^^^^^^^^^^^
+//Alternatives
+//^^^^^^^^^^^^
 //alternatives: explain alternatives and tell why they are not viable:
 
 
@@ -206,7 +206,7 @@ and break it down into tangible functionality on the implementation level.
 
 //Conclusion
 //----------
-//conclusion: When approbate (this proposal becomes a Final)
+//conclusion: When approved (this proposal becomes a Final)
 //            write some conclusions about its process:
 
 
@@ -216,7 +216,9 @@ Comments
 --------
 //comments: append below
 
-Discussed in the May developers meeting. Seems to be basically acceptable.
+Discussed in the
+link:{ldoc}/devel/meeting_summary/2011-05-11.html#irctranscript[May.2011 developers meeting].
+Seems to be basically acceptable.
 _Cehteh_ proposed some small adjustments:
 
 - making the _QualityOfService_ rather a strategy to be queried
@@ -225,10 +227,11 @@ _Cehteh_ proposed some small adjustments:
 - introducing a separate scheduler/queue for time scheduled tasks, like
   with rater soft realtime requirements
 
-    So 15 Mai 2011 00:55:24 CEST Ichthyostega <prg@ichthyostega.de>
+Ichthyostega::  'Sun 15 Mai 2011 00:55:24 CEST' ~<prg@ichthyostega.de>~
 
+TIP: see also the related link:{rfc}/EngineInterfaceOverview.html#_comments[overview RfC]
 
 //endof_comments:
 
 ''''
-Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
+Back to link:/x/DesignProcess.html[Lumiera Design Process overview]

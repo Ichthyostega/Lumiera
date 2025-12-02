@@ -3,6 +3,7 @@ Transition to C++11
 :Author: Ichthyo
 :Date: 2014
 :toc:
+:toclevels: 3
 
 _this page is a notepad for topics and issues related to the new C++ standard_
 
@@ -12,8 +13,8 @@ language and compiler support wasn't ready for what we consider _state of the cr
 amended deficiencies by rolling our own helper facilities, with a little help from Boost.
 Thus there was no urge for us to adopt the new language standard; we could simply wait for
 the compiler support to mature. In spring 2014, finally, we were able to switch our codebase
-to C++11 with minimal effort.footnote[since 8/2015 -- after the switch to Debian/Jessie
-as a »reference platform«, we even compile with `-std=gnu++14`]
+to C++11 with minimal effort.footnote:[since 2/2020 -- after the switch to Debian/Buster
+as a »reference platform«, we even compile with `-std=gnu++17`]
 Following this switch, we're now able to reap the benefits of
 this approach; we may now gradually replace our sometimes clunky helpers and workarounds
 with the smooth syntax of the ``new language'' -- without being forced to learn or adopt
@@ -67,12 +68,12 @@ funny (char c)
 
 using Funky = function<uint(char)>;      // <1>
 
-int 
+int
 main (int, char**)
   {
     Funky fun(funny);                    // <2>
     Funky empty;                         // <3>
-    
+
     cout << "ASCII 'A' = " << fun('A');
     cout << " defined: " << bool(fun)    // <4>
          << " undefd; " << bool(empty)
@@ -88,7 +89,7 @@ main (int, char**)
     This is idiomatic C usage to check for the validity of an object. In this case, the _bound_
     function object yields `true`, while the _unbound_ function object yields `false`
 <5> but the function object is _not automatically convertible_ to bool
-<6> yet it is possible to _construct_ a `bool` from a funktor (we just did that)
+<6> yet it is possible to _construct_ a `bool` from a functor (we just did that)
 <7> while it is not possible to _construct_ a bool from a string (we'd need to interpret and
     parse the string, which mustn't be confused with a conversion)
 
@@ -99,7 +100,7 @@ ASCII 'A' = 65 defined: 1 undefd; 0 bool-convertible: 0 can build bool: 1 bool f
 
 Moving values
 ~~~~~~~~~~~~~
-Amongst the most prominent improvements brought with C\+\+11 is the addition of *move semantics*. +
+Amongst the most prominent improvements brought with C\+\+11 is the addition of *move semantics*.
 This isn't a fundamental change, though. It doesn't change the fundamental approach like -- say,
 the introduction of function abstraction and lambdas. It is well along the lines C++ developers
 were thinking since ages; it is more like an official affirmation of that style of thinking.
@@ -112,7 +113,9 @@ were thinking since ages; it is more like an official affirmation of that style 
 ********************************************************************************************
 The core idea is that at times you need to 'move' a value due to a change of ownership. Now,
 the explicit support for 'move semantics' allows to decouple this 'conceptual move' from actually
-moving memory contents on the raw implementation level. The whole idea behind C++ seems to be
+moving memory contents on the raw implementation level. If we use a _rvalue reference on a signature,_
+we express that an entiy is or can be  moved on a conceptual level; typically the actual implementation
+of this moving is _delegated_ and done by ``someone else''. The whole idea behind C++ seems to be
 allowing people to think on a conceptual level, while 'retaining' awareness of the gory details
 below the hood. Such is achieved by 'removing' the need to worry about details, confident that
 there is a way to deal with those concerns in an orthogonal fashion.
@@ -121,8 +124,8 @@ Guidlines
 ^^^^^^^^^
  * embrace value semantics. Copies are 'good' not 'evil'
  * embrace fine grained abstractions. Make objects part of your everyday thinking style.
- * embrace `swap` operations to decouple the moving of data from the moving of ownership
- * embrace the abilities of the compiler, abandon the attempt to write ``smart'' implementations
+ * embrace `swap` operations, separate moving of data from transfer of ownership
+ * trust the compiler, stop writing ``smart'' implementations
 
 Thus, in everyday practice, we do not often use rvalue references explicitly. And when we do,
 it is by writing a 'move constructor.' In most cases, we try to cast our objects in such a way
@@ -137,7 +140,61 @@ CAUTION: as soon as there is an explicitly defined copy operation, or even just 
          compromise decision of the C++ committee -- instead of either breaking no code at all or
          boldly breaking code, they settled upon ``somewhat'' breaking existing code...
 
+Perfect forwarding
+^^^^^^^^^^^^^^^^^^
+The ``perfect forwarding'' technique is how we actually pass on and delegate move semantics.
+In conjunction with variadic templates, this technique promises to obsolete a lot of template trickery
+when it comes to implementing custom containers, allocators or similar kinds of managing wrappers.
 
+.a typical example
+[source,c]
+--------------------------------------------------------------------------
+  template<class TY, typename...ARGS>
+  TY&
+  create (ARGS&& ...args)
+    {
+      return *new(&buf_) TY {std::forward<ARGS> (args)...};
+    }
+--------------------------------------------------------------------------
+The result is a `create()` function with the ability to _forward_ an arbitrary number of arguments
+of arbitrary type to the constructor of type `TY`. Note the following details
+
+- the template parameter `ARGS&&` leads to deducing the actual parameters _sans_ rvalue reference
+- we pass each argument through `std::forward<ARGS>`. This is necessary to overcome the basic limitation
+  that a rvalue reference can only bind to _something unnamed_. This is a safety feature; moving destroys
+  the contents at the source location. Thus if we really want to move something known by name (like e.g.
+  the function arguments in this example), we need to indicate so by an explicit call.
+- `std::forward` needs an explicit type parameter to be able to deduce the right target type in any case.
+  It is _crucial to pass this type parameter in the correct way,_ as demonstrated above. Because, if we
+  invoke this function for _copying_ (i.e. with a lvalue reference), this type parameter will _carry on_
+  this reference. Only a rvalue reference is stripped. This is the only way ``downstream'' receivers can
+  tell the copy or move case apart.
+- note how we're allowed to ``wrap'' a function call around the unpacking of the _argument pack_ (`args`):
+  the three dots `...` are _outside_ the parenthesis, and thus the `std::forward` is applied to each of
+  the arguments individually
+
+NOTE: forwarding calls can be chained, but at some point you get to actually _consuming_ the value passed through.
+      To support the maximum flexibility at this point, you typically need to write two flavours of the receiving
+      function or constructor: one version taking a rvalue reference, and one version taking `const&`. Moving is
+      _destructive_, while the `const&` variant deals with all those cases where we copy without affecting the
+      source object.
+
+Forwarding to Constructors can be problematic
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+When combining a generic forwarding factory function with invocation of -- possibly overloaded -- ctor invocations,
+matters can get rather confusing. Several times, we faced a situation where the compiler picked another overload
+as expected, and it is hard trace down what actually happens here. Thus, for the time being, it seems good
+advice to avoid the combination of flexible arguments, forwarding and overload resolution; especially for
+construction objects, when _it is important to avoid spurious copying,_ it is better to have a dedicated
+helper function do the actual ctor invocation.
+
+WARNING: One insidious point to note is the rule that _explicitly defining a destructor_ will automatically
+         _suppress an otherwise automatically defined, implicit move constructor._ In this respect, move constructors behave
+         different than implicitly defined copy constructors; this was an often criticised, unfortunate
+         design decision for C++. So the common advice is to observe the »**rule of five**«: ``whenever you
+         define one of them, then define all of them''.footnote:[And it is sufficient to use `=default`
+         or `=delete`, for copy constructor, move constructor and the assignment operators, and thus
+         observing this rule boils down to adding just some lines of boilerplate]
 
 
 Known bugs and tricky situations
@@ -150,7 +207,7 @@ September 2014::
   which means we're using *GCC-4.7* and *CLang 3.0*. While these compilers both provide a roughly complete
   C++11 support, a lot of fine points were discovered in the follow-up versions of the compilers and standard
   library -- current versions being GCC-3.9 and CLang 3.4
-  
+
   * GCC-4.7 was too liberal and sloppy at some points, where 4.8 rightfully spotted conceptual problems
   * CLang 3.0 turns out to be really immature and even segfaults on some combinations of new language features
   * Thus we've got some kind of a _situation:_ We need to hold back further modernisation and just hope that
@@ -159,31 +216,114 @@ September 2014::
     requirement level_ soon.
 August 2015::
   our »reference system« (platform) is Debian/Jessie from now on.
-  We have switched to **C++14** and use (even require) GCC-4.9 or CLang 3.5 -- we can expect solid support
-  for all C++11 features and most C++14 features.
+  We have switched to **C\+\+14** and use (even require) GCC-4.9 or CLang 3.5 -- we can expect solid support
+  for all C\+\+11 features and most C++14 features.
+February 2020::
+  our »reference system« (platform) is Debian/Buster from now on.
+  We have switched to **C\+\+17** and use (even require) GCC-8 or CLang 7 -- we can expect solid support
+  for all C++17 features.
 
-Perfect forwarding
+  * still running into problems with perfect forwarding in combination with overload resolution;
+    not clear if this is a shortcoming of current compilers, or the current shape of the language
+May 2025::
+  We did the big leap and are now on C\+\+23, with Debian/Trixie as the »reference system«.
+  The new language features, notably the **Concepts** will be adopted gradually and we
+  will certainly have to face some new challenges...
+
+
+
+
+
+New Capabilities
+----------------
+As the support for the new language standard matures, we're able to extend our capabilities to write code
+more succinctly and clearer to read. Sometimes we have to be careful in order to use these new powers the right way...
+
+Variadic Templates
 ~~~~~~~~~~~~~~~~~~
-The ``perfect forwarding'' technique in conjunction with variadic templates promises to obsolete a lot of
-template trickery when it comes to implementing custom containers, allocators or similar kinds of managing wrappers.
-Unfortunately, we ran into nasty problems with both GCC-4.7 and CLang 3.0 here, when chaining several forwarding calls.
+Programming with variadic template arguments can be surprisingly tricky and the resulting code design tends to be confusing.
+This is caused by the fact that a _»variadic argument pack«_ is not a type proper. Rather, it is a syntactic (not lexical)
+macro. It is thus not possible to ``grab'' the type from variadic arguments and pass it directly to some metaprogramming
+helper or metafunction. The only way to dissect and evaluate such types is kind of _going backwards_: pass them to some
+helper function or template with explicit specialisations, thereby performing a pattern match.
 
-- the new _reference collapsing rules_ seem to be unreliably still. Note that even the standard library uses an
-  overload to implement `std::forward`, while in theory, a single definition should work for every case.
-- in one case, the executable generated by GCC passed a reference to an temporary, where it should have
-  passed a rvalue reference (i.e. it should have _moved_ the temporary, instead of referring to the
-  location on stack)
-- CLang is unable to pass a plain-flat rvalue through a chain of templated functions with rvalue references.
-  We get the inspiring error message ``binding of reference to type `std::basic_string<char>` to a value of
-  type `std::basic_string<char>` drops qualifiers''
+A typical example: Let's assume we're about to write a function or constructor to accept flexible arguments, but we
+want to ensure those arguments to conform to some standards. Maybe we can handle only a small selection of types
+sensibly within the given context -- and thus we want to check and produce a compilation failure otherwise.
 
-Thus -- as of 9/2014 -- the _rules of the game_ are as folows
+Unfortunately, this is not possible, at least not directly. If we want to get at the argument types one by one, we need
+to fabricate some variadic template helper type, and then add an explicit specialisation to it, for the sole purpose of
+writing a pattern match `<Arg a, Args...>`. Another common technique is to fabricate a `std::tuple<ARGS...>` and then
+to use the `std::get<i> (std::tuple<ARGS...>)` to grab individual types. Such might be bewildering for the casual
+reader, since we never intend to create a storage tuple anywhere.
 
-- it is OK to take arguments by rvalue reference, when the type is explicit
-- it is OK to use std::forward _once_ to pass-trough a templated argument
-- but the _time is not yet ready_ to get rid of intermediary copies
-- we still prefer returning by value (eligible for RVO) and copy-initialisation
-- we refrain from switching our metaprogramming code from Loki-Typelists and hand-written specialisations
-  to variadic templates and `std::tuple`
+NOTE: we might consider to reshape our typelist to be a real `lib::meta::Types<TYPES...>` and outfit it with some
+      of the most frequently needed accessors. At least the name ``Types'' is somewhat more indicative than ``tuple''.
 
 
+Type inference
+~~~~~~~~~~~~~~
+Generally speaking, the use of `auto` and type inference has the potential to significantly improve readability of
+the code. Indeed, this new language feature is what removed most of the clumsiness regarding use of the Lumiera
+Forward Iterator concept. There are some notable pitfalls to consider, though
+
+- the `decltype(...)` operator is kind-of ``overloaded'', insofar it supports two distinct usages
+
+  * to find out the type of a given _name_
+  * to deduce the type of a given _expression_
+
+- and the `auto` type inference does not just pick up what `decltype` would see -- rather, it applies its own
+  preferences and transformations (which does make much sense from a pragmatic perspective)
+
+  * a definition with `auto` type specification always prefers to create an object or data element. This is very much
+    in contrast to the usual behaviour of the C++ language, which by default prefers a reference as result type of
+    expression evaluation.
+  * return type deduction always _decays_ the inferred type (similar as `std::decay<T>::type` does). Which means,
+    functions and arrays become pointers, and a _reference_ becomes a _value_. Given the danger of returning a
+    dangling reference to local storage, the latter is a sensible default, but certainly not what you'd expect
+    when just passing the result from a delegate function (or lambda!).
+
+
+Generic Lambdas
+~~~~~~~~~~~~~~~
+A generic lambda (i.e. using `auto` on some argument) produces _a template_, not a regular `operator()` function.
+Whenever such a lambda is invoked, this template is instantiated. This has several ramifications. For one, the
+notorious techniques for detecting a function work well on conventional lambdas, but _fail on generic lambdas_.
+And it is not possible to ``probe'' a template with SFINAE: If you instantiate a template, and the result is not
+valid, you've produced a _compilation failure_, not a _substitution failure._ Which means, the compilation aborts,
+instead of just trying the next argument substitution (as you'd might expect). Another consequence is that you
+can not _just accept a generic lambda as argument_ and put it into a `std::function` (which otherwise is the
+idiomatic way of ``just accepting anything function-like''). In order to place a generic lambda into a `std::function`,
+you must decide upon the concrete argument and return type(s) and thus instantiate the template at that point.
+
+The only remedy to get around these serious limitations will be when C++ starts to support *Concepts* -- which
+can be expected to replace the usage of unbounded type inference in many situations: for example, it would then
+be possible to accept just ``an Iterator'' or ``a STL container''...
+
+Future plans
+------------
+C++20 is around the corner now, but there is no pressing need to use the new languages features immediately.
+Even more so, since some of those innovations will certainly help to improve the code base over time, but also
+impose some challenging effort to retrofit existing structures.
+
+- *Concepts* are a game changer. We will gradually start using them, while porting all the existing metraprogramming
+  code will take some time, and will possibly also benefit from compile-time introspection (C++23 ??)
+
+- *Coroutines* are a perfect fit for our jobs and scheduling. At that point, we will likely also switch over to
+  the standard threading and worker pools provided by the language, thereby reducing the amount of bare-bone C
+  code we have to maintain. Our thread management and locking helpers will probably be turned into thin wrappers
+  at that point, just retaining the convenience shortcuts.
+
+- Pipelines and the *range framework* will be a real challenge though. We have developed our own filter and
+  pipeline framework with slightly different (and more powerful) semantics, and getting both aligned will
+  by no means be a small task. The first goal will likely be to make both frameworks compatible, similar
+  to what we've done for C++11 to use our iterators and pipelines with the new standard ``for each'' loops.
+
+- *Modules* do not solve any real problems for the code base in its current shape. A migration to modules is
+  a rather mechanical task largely, while requiring a fairly good understanding of the ``dark corners'' in the
+  code base, like e.g. the size and build time for test code. Such a transition will also raise again the topic
+  of the buildsystem. Unfortunately, what we've built on top of Scons with a little bit of python scripting is
+  much cleaner and high-level than most ``mainstream'' usage of other common build systems out there.footnote:[
+  ``hello CMake'', ``hello Autotools'', anyone else? Meson, Ninja? Maven? should maybe consider a switch to WAF?]
+
+NOTE: in May 2025, we achieved that switch and require now C\+\+23 and at least GCC-14.

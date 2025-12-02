@@ -21,5 +21,9 @@ config  = ( env.ConfigData('config','setup.ini', targetDir='$ORIGIN')
           + env.ConfigData('config','dummy_lumiera.ini')
           )
 
+#further resources...
+env.Install('$SHARE/applications/'               , 'desktop/lumiera.desktop')
+env.Install('$SHARE/icons/hicolor/scalable/apps/', 'desktop/lumiera.svg')
+
 
 Export('icons config')

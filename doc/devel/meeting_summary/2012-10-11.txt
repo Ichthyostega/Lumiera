@@ -11,9 +11,9 @@ __Participants__
  * ichthyo
  * benn
  * mfisher31_
- * skangas 
+ * skangas
 
-Summary of The Meeting 
+Summary of The Meeting
 ----------------------
 
 . _cehteh_ now also cares for Debian packaging of NoBug, as does _ichthyo_.
@@ -27,7 +27,7 @@ Summary of The Meeting
   documents correct while trying to concentrate on content.
   Moreover, we discussed at Froscon the desire of having some
   automatic means of generating a glossary of terms, i.e., automatically
-  generating the glossary.txt files, we decided to do all these things together. 
+  generating the glossary.txt files, we decided to do all these things together.
   _benn_ agreed to write a script that would do the above. The script will be
   called directly by build_website.sh.
 . git://www.lumiera.org/website-staging is for experiments and contained the

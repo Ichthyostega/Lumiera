@@ -1,57 +1,51 @@
 /*
   SEARCHPATH.hpp  -  helpers for searching directory lists and locating modules
 
-  Copyright (C)         Lumiera.org
-    2011,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2011,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
+
+
+/** @file searchpath.hpp
+ ** Helpers to handle directory search paths.
+ ** The SerachPathSplitter allows to evaluate a "path" like specification
+ ** with colon separated components. It is complemented by some magic convenience
+ ** functions to self-discover the currently running executable and to resolve
+ ** the `$ORIGIN` pattern similar to what is known from linker `rpath` / `runpath`
+ */
 
 
 #ifndef COMMON_SEARCHPATH_H
 #define COMMON_SEARCHPATH_H
 
 #include "lib/error.hpp"
-#include "lib/bool-checkable.hpp"
+#include "lib/nocopy.hpp"
+#include "lib/regex.hpp"
+#include "lib/file.hpp"
 
-#include <boost/noncopyable.hpp>
-#include <boost/filesystem.hpp>
-#include <boost/regex.hpp>
 #include <string>
+#include <boost/algorithm/string.hpp>
 
 
 namespace lib {
+  namespace error = lumiera::error;
   
   using std::string;
-  using boost::regex;
-  using boost::smatch;
-  using boost::regex_search;
-  using boost::sregex_iterator;
   
-  typedef smatch::value_type const& SubMatch;
+  using SubMatch = std::smatch::value_type const&;
   
-  namespace error = lumiera::error;
-  namespace fsys = boost::filesystem;
   
-  LUMIERA_ERROR_DECLARE (FILE_NOT_DIRECTORY); ///< path element points at a file instead of a directory
-  using error::LUMIERA_ERROR_ITER_EXHAUST;
+  using LERR_(ITER_EXHAUST);
   
   
   /** retrieve the location of the executable */
-  string findExePath();
+  fs::path findExePath();
   
   /** replace $ORIGIN tokens in the given string
    *  @return copy with expansions applied */
@@ -63,41 +57,35 @@ namespace lib {
    * This iterator class dissects a ':'-separated path list. The individual
    * components may use the symbol \c $ORIGIN to refer to the directory
    * holding the current executable.
-   * @note #next picks the current component and advances the iteration. 
    */
   class SearchPathSplitter
-    : public BoolCheckable<SearchPathSplitter
-    , boost::noncopyable>
+    : public util::RegexSearchIter
     {
-      string pathSpec_;
-      sregex_iterator pos_,
-                      end_;
-      
-      static const regex EXTRACT_PATHSPEC;
+      static const regex ACCEPT_PATHELEMENT;
       
     public:
-      SearchPathSplitter (string const& searchPath)
-        : pathSpec_(replaceMagicLinkerTokens (searchPath))
-        , pos_(pathSpec_.begin(),pathSpec_.end(), EXTRACT_PATHSPEC)
-        , end_()
+      SearchPathSplitter() = default;
+      SearchPathSplitter (string& searchPath)         ///< @warning search path string must exist somewhere else
+        : RegexSearchIter{searchPath, ACCEPT_PATHELEMENT}
         { }
       
-      bool
-      isValid()  const
-        {
-          return pos_ != end_;
-        }
+      LIFT_PARENT_INCREMENT_OPERATOR (std::sregex_iterator);
+      ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (SearchPathSplitter);
+      
+      using value_type = std::string;
+      using reference = value_type&;
+      using pointer =   value_type*;
       
       string
-      next ()
+      operator*()  const
         {
           if (!isValid())
             throw error::Logic ("Search path exhausted."
-                               ,LUMIERA_ERROR_ITER_EXHAUST);
+                               ,LERR_(ITER_EXHAUST));
           
-          string currentPathElement = pos_->str();
-          ++pos_;
-          return currentPathElement;
+          string pathElm = util::RegexSearchIter::operator*()[2];
+          pathElm = boost::algorithm::trim_right_copy(pathElm);
+          return replaceMagicLinkerTokens (pathElm);
         }
     };
   
@@ -109,9 +97,9 @@ namespace lib {
    *  SearchPathSplitter, until encountering an existing file with the
    *  given name.
    *  @return the absolute pathname of the module file found
-   *  @throws error::Config when the resolution fails  
+   *  @throws error::Config when the resolution fails
    */
-  string resolveModulePath (fsys::path moduleName, string searchPath = "");
+  string resolveModulePath (fs::path moduleName, string searchPath = "");
   
   
   

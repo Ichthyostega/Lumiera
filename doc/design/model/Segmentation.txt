@@ -1,0 +1,21 @@
+Segmentation of Timeline
+========================
+
+.A junction between the models
+The term ``Segmentation of the Timeline'' describes both a data structure and a step in the
+build process, which translates the structures of the *high-level-Model* into a corresponding
+graph of Render Nodes. The latter is also known as the *low-level-Model* and can be seen
+as a set of preconfigured render pipelines. When such a pipeline is ``pulled''. the render
+computations are invoked. The _access points_ to all these pipelines are hooked into a
+_backbone_ data structure, designated as the *Fixture* -- which breaks down each top-level
+Timeline into a sequence of temporal segments: what differentiates these segments is the
+topology of the Render Nodes in the pipeline; whenever a change in this topology is
+necessary, a new segment is started. Such a change might e.g. be caused by a transition
+between two clips, which has to cover a range of some frames.
+
+As of 2025, this part of the model is only roughly drafted, mostly using placeholder code
+to achieve some level of functional integration.
+
+Detailed design planning and explanations can be found in the
+link:/x/fwd/DevWiki.Segmentation.html[DevWiki: Segmentation].
+

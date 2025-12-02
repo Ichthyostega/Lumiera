@@ -1,24 +1,25 @@
 /*
   FORMATS.hpp  -  formats for displaying and specifying time
 
-  Copyright (C)         Lumiera.org
-    2010,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2010,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
+
+
+/** @file formats.hpp
+ ** Definition of time code formats
+ ** This header is part of the Lumiera time and timecode handling library
+ ** and defines the interfaces and types to deal with the common set of
+ ** time code formats encountered in video editing. The generic handling
+ ** of _quantised time_ can be parametrised to support and comply to these
+ ** specific time code formats.
+ */
 
 
 #ifndef LIB_TIME_FORMATS_H
@@ -34,6 +35,11 @@
 #include <string>
 #include <bitset>
 
+namespace lumiera {
+namespace error {
+  LUMIERA_ERROR_DECLARE (INVALID_TIMECODE); ///< timecode format error, illegal value encountered.
+}}
+
 
 namespace lib {
 namespace time {
@@ -48,24 +54,22 @@ namespace time {
   
   
   class Quantiser; // API for grid aligning
-  typedef Quantiser const& QuantR;
-  typedef std::shared_ptr<const Quantiser> PQuant;
+  using QuantR = Quantiser const&;
+  using PQuant = std::shared_ptr<const Quantiser>;
   
   
   namespace format {
-    
-    LUMIERA_ERROR_DECLARE (INVALID_TIMECODE); ///< timecode format error, illegal value encountered.
     
     using std::string;
     using lib::meta::NoInstance; // the following types are for metaprogramming only...
     
     
-    /** 
+    /**
      * Frame count as timecode format.
      * An integral number used to count frames
      * can be used as a simple from of time code.
-     * Indeed the Lumiera backend mostly relies on
-     * these frame counts. As with any timecode, the
+     * Indeed the Lumiera vault layer mostly relies
+     * on these frame counts. As with any timecode, the
      * underlying framerate/quantisation remains implicit.
      */
     struct Frames
@@ -137,25 +141,25 @@ namespace time {
     template<>
     struct Traits<Frames>
       {
-        typedef FrameNr TimeCode;
+        using TimeCode = FrameNr;
       };
     
     template<>
     struct Traits<Smpte>
       {
-        typedef SmpteTC TimeCode;
+        using TimeCode = SmpteTC;
       };
     
     template<>
     struct Traits<Hms>
       {
-        typedef HmsTC TimeCode;
+        using TimeCode = HmsTC;
       };
     
     template<>
     struct Traits<Seconds>
       {
-        typedef Secs TimeCode;
+        using TimeCode = Secs;
       };
     
     
@@ -164,7 +168,7 @@ namespace time {
     
     using lib::meta::Types;
     using lib::meta::Node;
-    using lib::meta::NullType;
+    using lib::meta::Nil;
     
     /**
      * Descriptor to denote support for a specific (timecode) format.
@@ -182,7 +186,7 @@ namespace time {
      */
     class Supported
       {
-        enum { MAXID = 8 }; 
+        enum { MAXID = 8 };
         
         std::bitset<MAXID> flags_;
         
@@ -200,20 +204,20 @@ namespace time {
             flags_.set (typeID<F>());
             return define(FS());
           }
-        Supported define(NullType) { return *this;} ///< @internal recursion end
+        Supported define(Nil) { return *this;}  ///< @internal recursion end
         
-        Supported() { } ///< @note use #formats to set up a new descriptor
+        Supported() { }    ///< @note use #formats to set up a new descriptor
         
         
       public:
         /** build a new Descriptor to denote support for all the Formats,
-         *  @param TY typelist holding all the Format types to support
+         *  @tparam TY typelist holding all the Format types to support
          */
         template<typename TY>
         static Supported
         formats()
           {
-            typedef typename TY::List SupportedFormats;
+            using SupportedFormats = TY::List;
             return Supported().define(SupportedFormats());
           }
         

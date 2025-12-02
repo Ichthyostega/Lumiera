@@ -1,37 +1,29 @@
 /*
   AdviceBindingPattern(Test)  -  cover pattern matching used to dispatch Advice
 
-  Copyright (C)         Lumiera.org
-    2010,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2010,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file advice-binding-pattern-test.cpp
+ ** unit test \ref AdviceBindingPattern_test
+ */
 
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
+#include "lib/format-cout.hpp"
 
 #include "lib/time/timevalue.hpp"
 #include "common/advice.hpp"
 
-#include <iostream>
-
 using lib::time::Time;
-using std::cout;
-using std::endl;
 
 
 
@@ -122,8 +114,8 @@ namespace test  {
           CHECK (b0 != b1);  CHECK (b1 != b0);
           CHECK (b0 != b2);  CHECK (b2 != b0);
           
-          b2.addPredicate("cat1()");          // adding the same predicate multiple times has no effect 
-          b2.addPredicate(" cat1 "); 
+          b2.addPredicate("cat1()");          // adding the same predicate multiple times has no effect
+          b2.addPredicate(" cat1 ");
           CHECK (b1 == b2);
           b2.addPredicate("cat3(zzz)");
           CHECK (b1 != b2);

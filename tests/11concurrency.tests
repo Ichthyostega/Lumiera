@@ -1,0 +1,59 @@
+TESTING "Library Test Suite: concurrency helpers" ./test-suite --group=common
+
+
+
+TEST "Multithread Locking by Monitor" SyncLocking_test  <<END
+return: 0
+END
+
+
+TEST "Multithread Locking class level" SyncClasslock_test  <<END
+return: 0
+END
+
+
+TEST "N-fold synchronisation barrier" SyncBarrier_test  <<END
+return: 0
+END
+
+
+TEST "Yield-waiting sync performance" SyncBarrierPerformance_test  <<END
+return: 0
+END
+
+
+TEST "Wait/Notify on Object Monitor" SyncWaiting_test  <<END
+return: 0
+END
+
+
+TEST "Wait/Notify with timeout" SyncTimedwait_test  <<END
+return: 0
+END
+
+
+TEST "Run function concurrently" ThreadWrapper_test  <<END
+return: 0
+END
+
+
+TEST "Waiting on Thread termination" ThreadWrapperJoin_test  <<END
+return: 0
+END
+
+
+TEST "Launch self-contained detached Thread" ThreadWrapperAutonomous_test  <<END
+return: 0
+END
+
+
+TEST "Detect Thread lifecycle state changes" ThreadWrapperLifecycle_test  <<END
+return: 0
+END
+
+
+TEST "Detect running in specific Thread" ThreadWrapperSelfRecognitionTest_test  <<END
+return: 0
+END
+
+

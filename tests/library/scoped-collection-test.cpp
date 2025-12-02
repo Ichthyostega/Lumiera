@@ -1,24 +1,19 @@
 /*
   ScopedCollection(Test)  -  holding and owning a fixed collection of noncopyable objects
 
-  Copyright (C)         Lumiera.org
-    2012,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2012,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file scoped-collection-test.cpp
+ ** unit test \ref ScopedCollection_test
+ */
 
 
 
@@ -27,9 +22,7 @@
 #include "lib/util.hpp"
 
 #include "lib/scoped-collection.hpp"
-#include "lib/test/testdummy.hpp"
-
-#include <cstdlib>
+#include "lib/test/tracking-dummy.hpp"
 
 
 namespace lib {
@@ -51,12 +44,12 @@ namespace test{
          * @param i when zero, the trigger value will be revealed
          */
         virtual long
-        acc (int i)
+        calc (int i)
           {
             if (!i)
               return getVal() + trigger_;
             else
-              return Dummy::acc(i);
+              return Dummy::calc(i);
           }
         
       public:
@@ -65,7 +58,7 @@ namespace test{
           , trigger_(trigger)
           {
             if (trigger == getVal())
-              throw new error::Fatal ("Subversive Bomb", LUMIERA_ERROR_SUBVERSIVE);
+              throw error::Fatal ("Subversive Bomb", LUMIERA_ERROR_SUBVERSIVE);
           }
         
         SubDummy()
@@ -87,7 +80,7 @@ namespace test{
   
   
   using util::isnil;
-  using lumiera::error::LUMIERA_ERROR_ITER_EXHAUST;
+  using LERR_(ITER_EXHAUST);
   
   typedef ScopedCollection<Dummy, sizeof(SubDummy)> CollD;
   
@@ -105,6 +98,7 @@ namespace test{
       virtual void
       run (Arg)
         {
+          seedRand();
           simpleUsage();
           building_RAII_Style();
           building_StackStyle();
@@ -153,14 +147,14 @@ namespace test{
           {
             CollD coll(50);
             for (uint i=0; i<coll.capacity(); ++i)
-              coll.appendNew<Dummy>(i);
+              coll.emplace<Dummy>(i);
             
             int check=0;
             CollD::iterator ii = coll.begin();
             while (ii)
               {
                 CHECK (check == ii->getVal());
-                CHECK (check == ii->acc(+5) - 5);
+                CHECK (check == ii->calc(+5) - 5);
                 ++check;
                 ++ii;
               }
@@ -175,6 +169,21 @@ namespace test{
                 CHECK (check == cii->getVal());
                 ++check;
                 ++cii;
+              }
+            
+            
+            // Test c++11 foreach iteration
+            check = 0;
+            for (auto& entry : coll)
+              {
+                CHECK (check == entry.getVal());
+                ++check;
+              }
+            check = 0;
+            for (auto const& entry : const_coll)
+              {
+                CHECK (check == entry.getVal());
+                ++check;
               }
             
             
@@ -210,47 +219,47 @@ namespace test{
           CHECK (0 == Dummy::checksum());
           {
               
-            int rr = rand() % 100;
+            int rr = rani(100);
             
             CollD coll(3);
             CHECK (0 == coll.size());
             CHECK (0 == Dummy::checksum());
             
-            Dummy& d0 = coll.appendNewElement();
+            Dummy& d0 = coll.emplaceElement();
             CHECK (1 == coll.size());
             
-            Dummy& d1 = coll.appendNew<Dummy> (rr);
+            Dummy& d1 = coll.emplace<Dummy> (rr);
             CHECK (2 == coll.size());
             
             int sum = Dummy::checksum();
             
             // trigger the bomb
-            VERIFY_ERROR (SUBVERSIVE, coll.appendNew<SubDummy>(rr,rr) );
+            VERIFY_ERROR (SUBVERSIVE, coll.emplace<SubDummy>(rr,rr) );
             
             CHECK (  2 == coll.size()); // the other objects survived
             CHECK (sum == Dummy::checksum());
             
-            Dummy& d2 = coll.appendNew<SubDummy> (rr, rr+1);
+            Dummy& d2 = coll.emplace<SubDummy> (rr, rr+1);
             CHECK (3 == coll.size());
             
             CHECK (sum + rr == Dummy::checksum());
             
-            VERIFY_ERROR (CAPACITY, coll.appendNewElement());
-            VERIFY_ERROR (CAPACITY, coll.appendNewElement());
-            VERIFY_ERROR (CAPACITY, coll.appendNewElement());
+            VERIFY_ERROR (CAPACITY, coll.emplaceElement());
+            VERIFY_ERROR (CAPACITY, coll.emplaceElement());
+            VERIFY_ERROR (CAPACITY, coll.emplaceElement());
             
             CHECK (3 == coll.size());
             CHECK (sum + rr == Dummy::checksum());
             
             
-            CHECK (d0.acc(11) == coll[0].getVal() + 11 );
-            CHECK (d1.acc(22) == rr + 22);
-            CHECK (d2.acc(33) == rr + 33);
-            CHECK (d2.acc(0)  == rr + (rr+1) );     // SubDummy's special implementation of the acc()-function
-                                                   //  returns the trigger value, when the argument is zero
+            CHECK (d0.calc(11) == coll[0].getVal() + 11 );
+            CHECK (d1.calc(22) == rr + 22);
+            CHECK (d2.calc(33) == rr + 33);
+            CHECK (d2.calc(0)  == rr + (rr+1) );     // SubDummy's special implementation of the acc()-function
+                                                    //  returns the trigger value, when the argument is zero
             
             coll.clear();
-            coll.appendNew<SubDummy> (11,22);
+            coll.emplace<SubDummy> (11,22);
             
             CHECK ( 1 == coll.size());
             CHECK (11 == Dummy::checksum());
@@ -258,10 +267,10 @@ namespace test{
             // NOTE DANGEROUS:
             // The previously obtained references just point into the object storage.
             // Thus we're now accessing a different object, even a different type!
-            CHECK (d0.acc(0) == 11 + 22);
+            CHECK (d0.calc(0) == 11 + 22);
             
             // The others even point into obsoleted storage holding zombie objects
-            CHECK (d1.acc(44) == rr + 44);
+            CHECK (d1.getVal() == Dummy::DEAD);
             
           }
           CHECK (0 == Dummy::checksum());
@@ -289,8 +298,8 @@ namespace test{
         {
           CHECK (0 == Dummy::checksum());
           {
-            int rr = rand() % 100;
-            int trigger = 101;
+            int rr = rani(100);
+            int trigger = 100 + 5 + 1;   // prevents the bomb from exploding (since rr < 100)
             
             CollD coll (6, Populator(rr, trigger));
             
@@ -298,12 +307,19 @@ namespace test{
             CHECK (6 == coll.size());
             CHECK (0 != Dummy::checksum());
             
-            CHECK (coll[0].acc(0) == 0 + rr);
-            CHECK (coll[1].acc(0) == 1 + rr + trigger);
-            CHECK (coll[2].acc(0) == 2 + rr);
-            CHECK (coll[3].acc(0) == 3 + rr + trigger);
-            CHECK (coll[4].acc(0) == 4 + rr);
-            CHECK (coll[5].acc(0) == 5 + rr + trigger);
+            CHECK (coll[0].calc(0) == 0 + rr);
+            CHECK (coll[1].calc(0) == 1 + rr + trigger);
+            CHECK (coll[2].calc(0) == 2 + rr);
+            CHECK (coll[3].calc(0) == 3 + rr + trigger);
+            CHECK (coll[4].calc(0) == 4 + rr);
+            CHECK (coll[5].calc(0) == 5 + rr + trigger);
+            // what does this check prove?
+            // - the container was indeed populated with DubDummy objects
+            //   since the overridden version of Dummy::acc() did run and
+            //   reveal the trigger value
+            // - the population was indeed done with the anonymous Populator
+            //   instance fed to the ctor, since this object was "marked" with
+            //   the random value rr, and adds this mark to the built values.
             
             coll.clear();
             CHECK (0 == Dummy::checksum());
@@ -337,7 +353,7 @@ namespace test{
           void
           operator() (CollD::ElementHolder& storage)
             {
-              switch (i_ % 2) 
+              switch (i_ % 2)
                 {
                 case 0:
                   storage.create<Dummy> (i_+off_);
@@ -400,10 +416,10 @@ namespace test{
           
           CollI source (25);
           for (uint i=0; i < source.capacity(); ++i)
-            source.appendNew<uint>(i);           // holding the numbers 0..24
+            source.emplace<uint>(i);           // holding the numbers 0..24
           
           CollI coll (20, CollI::pull(source.begin()));
-                                              // this immediately pulls in the first 20 elements 
+                                              // this immediately pulls in the first 20 elements
           CHECK (!isnil (coll));
           CHECK (20 == coll.size());
           CHECK (25 == source.size());
@@ -451,7 +467,7 @@ namespace test{
           ManagerDemo(uint cnt)
             : memberVar_(cnt)
             , my_own_Numbers_(cnt, &ManagerDemo::buildNumbers, this)
-            { 
+            {
               CHECK (0 == memberVar_);
               CHECK (cnt == my_own_Numbers_.size());
             }

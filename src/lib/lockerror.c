@@ -1,24 +1,20 @@
 /*
   lockerror.c  -  error declarations for all locks (mutex, rwlocks, cond vars)
 
-  Copyright (C)         Lumiera.org
-    2010,               Christian Thaeter <ct@pipapo.org>
+   Copyright (C)
+     2010,            Christian Thaeter <ct@pipapo.org>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-* *****************************************************/
+/** @file lockerror.c
+ ** implementation and definitions for error-handling on low-level locking
+ */
 
 
 #include "lib/lockerror.h"
@@ -47,6 +43,10 @@ lumiera_lockerror_set (int err, struct nobug_flag* flag, const struct nobug_cont
     {
     case 0:
       break;
+    case ETIMEDOUT:
+      lumiera_error_set(LUMIERA_ERROR_LOCK_TIMEOUT, ctx.func);
+      // no implicit logging, since timeout can be intentional
+      break;
     case EINVAL:
       LUMIERA_ERROR_SET_ALERT(NOBUG_FLAG_RAW(flag), LOCK_INVAL, ctx.func);
       break;
@@ -58,9 +58,6 @@ lumiera_lockerror_set (int err, struct nobug_flag* flag, const struct nobug_cont
       break;
     case EPERM:
       LUMIERA_ERROR_SET_ALERT(NOBUG_FLAG_RAW(flag), LOCK_PERM, ctx.func);
-      break;
-    case ETIMEDOUT:
-      LUMIERA_ERROR_SET(NOBUG_FLAG_RAW(flag), LOCK_TIMEOUT, ctx.func);
       break;
     case EAGAIN:
       LUMIERA_ERROR_SET_WARNING(NOBUG_FLAG_RAW(flag), LOCK_AGAIN, ctx.func);

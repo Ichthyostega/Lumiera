@@ -1,24 +1,19 @@
 /*
   AdviceIndex(Test)  -  cover the index datastructure used to implement Advice dispatch
 
-  Copyright (C)         Lumiera.org
-    2010,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2010,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file advice-index-test.cpp
+ ** unit test \ref AdviceIndex_test
+ */
 
 
 #include "lib/test/run.hpp"
@@ -339,7 +334,7 @@ namespace test {
           CHECK ( idx.hasRequest (_entry (5,"dog")));
           _entry (5,"dog").changeBinding("cat");       // transmogrify existing request into cat-request
           CHECK (_hasDefault  (5));                    // of course this didn't change the solution
-          CHECK (!idx.hasRequest (_entry (5,"cat")));  // can't find it anymore because of changed binding           
+          CHECK (!idx.hasRequest (_entry (5,"cat")));  // can't find it anymore because of changed binding
           
           idx.modifyRequest (dogHash, _entry (5,"cat"));
           

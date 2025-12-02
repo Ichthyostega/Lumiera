@@ -1,0 +1,122 @@
+/*
+  DUMMY-TICK-SERVICE.hpp  -  issuing timed callbacks
+
+   Copyright (C)
+    2009,               Joel Holdsworth <joel@airwebreathe.org.uk>,
+                        Hermann Vosseler <Ichthyostega@web.de>
+
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
+
+*/
+
+/** @file dummy-tick-service.hpp
+ ** A timer service invoking a given callback periodically.
+ ** This is a rough preliminary implementation as of 1/2009. We use it to
+ ** drive the frame "creation" of a player dummy (the render engine is not
+ ** ready yet). The intention is to use this service as part of a mock engine
+ ** setup, used to verify the construction of engine components. As an integration
+ ** test, we build a "dummy player", delivering some test data frames to the GUI.
+ ** 
+ ** @see steam::play::DummyPlayerService
+ ** 
+ */
+
+
+#ifndef STEAM_PLAY_DUMMY_TICK_SERVICE_H
+#define STEAM_PLAY_DUMMY_TICK_SERVICE_H
+
+
+#include "lib/error.hpp"
+#include "lib/thread.hpp"
+
+#include <unistd.h>   // for usleep()
+
+#include <functional>
+#include <limits>
+#include <atomic>
+
+
+namespace steam {
+namespace node {
+
+  using std::function;
+  using std::bind;
+  
+  
+  
+  /********************************************************//**
+   * Tick generating service for a periodic callback,
+   * with adjustable frequency. Quick'n dirty implementation!
+   */
+  class DummyTickService
+    : lib::ThreadJoinable<>
+    {
+      using Tick = function<void(void)>;
+      std::atomic_uint timespan_;
+      
+      /** poll interval for new settings in wait state */
+      static const uint POLL_TIMEOUT = 10000;
+      
+    public:
+      DummyTickService (Tick callback)
+        : ThreadJoinable("Tick generator (dummy)"
+                        , bind (&DummyTickService::timerLoop, this, callback)
+                        )
+        , timespan_{POLL_TIMEOUT}
+        {
+          INFO (steam, "DummyTickService started.");
+        }
+      
+     ~DummyTickService ()
+        {
+          timespan_ = 0;
+          if (not this->join())
+            WARN (steam, "Failure in DummyTickService");
+          
+          usleep (200000);    // additional delay allowing GTK to dispatch the last output
+          INFO (steam, "DummyTickService shutdown.");
+        }
+      
+      
+      /** set the periodic timer to run with a given frequency,
+       *  starting \em now. Well, not actually now, but at the next
+       *  opportunity. It should be \em now, but this implementation
+       *  is sloppy! setting fps==0 halts (pauses) the timer.
+       */
+      void activate (uint fps)
+        {
+          REQUIRE (  0==fps
+                  or(    1000000/fps < std::numeric_limits<uint>::max()
+                     and 1000000/fps > POLL_TIMEOUT));
+          if (fps)
+            timespan_ = 1000000/fps; // microseconds per tick
+          else
+            timespan_ = POLL_TIMEOUT;
+        }
+      
+      
+    private:
+      void timerLoop(Tick periodicFun)
+        {
+          do
+            {
+              if (timespan_ > POLL_TIMEOUT)
+                periodicFun();
+              
+              usleep (timespan_);
+            }
+          while (timespan_);   //(possible yet very unlikely race with ctor)
+          //
+          TRACE (proc_dbg, "Tick Thread timer loop exiting...");
+        }
+
+    };
+  
+  
+  
+}} // namespace steam::node
+#endif /*STEAM_PLAY_DUMMY_TICK_SERVICE_H*/
+

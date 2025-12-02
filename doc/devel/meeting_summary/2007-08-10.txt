@@ -27,7 +27,7 @@ _Aug 10, 2007 in #lumiera_
 - we have to provide coverter nodes to convert frame formats for accessing different libraries anyway (ffmpeg, v4l, gstreamer, ...)
 - we need a pool of worker threads and associated APIs
 - accessing frames has a _time_ (get until..), _unique frame identifier_ (see below), _policies_ (what to do when out of time, quality required,..) and _hints_ (recursive dependency, must cache, playback speed and direction, ...)
-- for each sequence (configuration) each node has a number (monotonic incrementing), a generation counter (increment on each parameter change), a propagation sum (from parent nodes) 
+- for each sequence (configuration) each node has a number (monotonic incrementing), a generation counter (increment on each parameter change), a propagation sum (from parent nodes)
 - frames are identified by their time (frame number) and node number plus generation number and propagation sum. This allows easily to find out when a frame has to be rerendered
 - no difference between compositor and viewer
 
@@ -42,14 +42,14 @@ _Aug 10, 2007 in #lumiera_
   - they do the mixing of contained things
   - can be recursive, the GUI represents basically a tree
   - we need some ``wiring'' abstraction for the GUI to make it a real graph
-  
+
 - rendering frames, context between frames
 
   - the proc layer _only queries frames_ (by identifier and timeout) the backend tries to serve the best it can do (from cache or let them render)
   - each render job carries some _quality limit_ (as S/N ratio) when previewing or scratching through the project this is used to generate reasonable quality previews
   - individual processing nodes can use additional state for their calculations...
-  
-    * the node objects themselves should stay stateless, i.e. they shouldn't store state internally. 
+
+    * the node objects themselves should stay stateless, i.e. they shouldn't store state internally.
     * they can use special _context frames_, which are provided and managed by the backend (as opaque data blocks).
     * they can depend on previous state, i.e request from the backend a previous context frame, the same way as they can request previous media frames from the bakend, but there is no guarantee that the backend will satisfy this request.
     * on the question who decides what to do after a cache miss, we tend to put the decision into the render node (because this seems to be the simpler approach), but still have to work out the details.

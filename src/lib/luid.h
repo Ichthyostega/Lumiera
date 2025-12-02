@@ -1,22 +1,13 @@
 /*
   LUID.h  -  Lumiera unique identifiers
 
-  Copyright (C)         Lumiera.org
-    2008,               Christian Thaeter <ct@pipapo.org>
+   Copyright (C)
+     2008,            Christian Thaeter <ct@pipapo.org>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 */
 
 
@@ -29,14 +20,14 @@
  ** Due to the extremely huge number space, LUID values can be used as unique identifiers
  ** without the need to check for duplicates or collisions. At various places, LUIDs are
  ** thus used right away on creation of new object instances or elements, in case a
- ** distinguishable <i>object identity</i> is required, e.g.
+ ** distinguishable _object identity_ is required, e.g.
  ** - any new attachment of an object into the session ("placement")
  ** - unique output designation discovered during the translation into a low-level
  **   node graph ("builder")
  ** - interface slots for external binding and plug-ins
  ** 
- ** Moreover, there is a \link luidgen.c Luidgen \endlink tool to generate fixed LUIDs
- ** to be included into source code. It works by replacing the token \c LUIDGEN in the
+ ** Moreover, there is a [Luidgen](\ref luidgen.c) tool to generate fixed LUIDs
+ ** to be included into source code. It works by replacing the token `LUIDGEN` in the
  ** source code text by a newly generated (random) LUID in octal representation.
  ** 
  ** LUIDs can also be used to generate hash values for hash table storage.
@@ -100,7 +91,7 @@
  * Retrieve a generic pointer stored in a luid
  */
 void*
-lumiera_uid_ptr_get (lumiera_uid* luid);
+lumiera_uid_ptr_get (const lumiera_uid* luid);
 
 /**
  * Generate a new luid
@@ -126,13 +117,13 @@ lumiera_uid_copy (lumiera_uid* dest, lumiera_uid* src);
  * Test 2 luid's for equality
  */
 int
-lumiera_uid_eq (lumiera_uid* luida, lumiera_uid* luidb);
+lumiera_uid_eq (const lumiera_uid* luida, const lumiera_uid* luidb);
 
 
 /**
  * Generate a hash sum over an luid
  */
 size_t
-lumiera_uid_hash (lumiera_uid* luid);
+lumiera_uid_hash (const lumiera_uid* luid);
 
 #endif /*LIB_LUID_H*/

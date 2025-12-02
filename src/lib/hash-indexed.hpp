@@ -1,22 +1,13 @@
 /*
   HASH-INDEXED.hpp  -  generic hash based and typed ID
 
-  Copyright (C)         Lumiera.org
-    2009,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2009,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
 
@@ -31,7 +22,7 @@
  ** being almost worthless as an API or interface, causing lots of type casts when using
  ** such a common object management facility. Passing additional context or API information
  ** on a metaprogramming level through the management interface helps avoiding these
- ** shortcomings. 
+ ** shortcomings.
  ** 
  ** Here we build an ID facility with the following properties:
  ** - based on a configurable storage/implementation of the actual hash or index code.
@@ -40,8 +31,8 @@
  ** - establishing an type hierarchy relation between ID related to the base class
  **   and the IDs denoting specific subclasses, such that the latter can stand-in
  **   for the generic ID.
- ** - providing a Mixin, which allows any hierarchy to use this facility without 
- **   much code duplication, including an adapter for tr1::unordered_map
+ ** - providing a Mixin, which allows any hierarchy to use this facility without
+ **   much code duplication, including an adapter for std::unordered_map
  ** - equality comparison
  **
  ** @see HashIndexed_test
@@ -62,16 +53,14 @@ extern "C" {
 #include "lib/luid.h"
 }
 
-#include <functional>
-
 
 namespace lib {
   
   /** Hash implementations usable for the HashIndexed mixin
-   *  as well as key within tr1::unordered_map */
+   *  as well as key within std::unordered_map */
   namespace hash {
     
-    /** 
+    /**
      * simple Hash implementation
      * directly incorporating the hash value.
      * @note currently (3/2010) not used
@@ -97,7 +86,7 @@ namespace lib {
      * Hash implementation based on a lumiera unique object id (LUID)
      * When invoking the default ctor, a new LUID is generated
      */
-    class LuidH 
+    class LuidH
       {
         lumiera_uid luid_;
         
@@ -145,7 +134,7 @@ namespace lib {
           ID (IMP const& ir) : IMP (ir)          {}
         };
       
-      /** 
+      /**
        * Hash based ID, typed to a specific subclass of BA
        */
       template<typename T>
@@ -156,16 +145,14 @@ namespace lib {
         };
       
       
-      /** enables use of BA objects as keys within tr1::unordered_map */
+      /** enables use of BA objects as keys within std::unordered_map */
       struct UseEmbeddedHash
-        : public std::unary_function<BA, HashVal>
         {
           HashVal operator() (BA const& obj)  const { return obj.getID(); }
         };
       
       /** trivial hash functor using the ID as hash */
       struct UseHashID
-        : public std::unary_function<ID, HashVal>
         {
           HashVal operator() (ID const& id)  const { return id; }
         };
@@ -173,8 +160,8 @@ namespace lib {
       
       ID const&
       getID ()  const
-        { 
-          return id_; 
+        {
+          return id_;
         }
       
       /** redefining of the specific type info of the Id is allowed,
@@ -188,7 +175,7 @@ namespace lib {
       
       void
       assignID (HashIndexed const& ref)
-        { 
+        {
           this->id_ = ref.getID();
         }
       

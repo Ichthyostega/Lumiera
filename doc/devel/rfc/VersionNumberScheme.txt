@@ -3,12 +3,12 @@ VersionNumberScheme
 
 // please don't remove the //word: comments
 
-[grid="all"]
-`------------`-----------------------
-*State*         _Final_
-*Date*          _Mi 09 Mär 2011 02:00:41 CET_
-*Proposed by*   Ichthyostega <prg@ichthyostega.de>
--------------------------------------
+[options="autowidth"]
+|====================================
+|*State*       | _Final_
+|*Date*        | _Mi 09 Mär 2011 02:00:41 CET_
+|*Proposed by* | Ichthyostega <prg@ichthyostega.de>
+|====================================
 
 [abstract]
 ********************************************************************************
@@ -29,7 +29,7 @@ be monotonous increasing according to this ordering.
 Version number sequence
 ~~~~~~~~~~~~~~~~~~~~~~~
 ....
-0.pre.## < 0.01~dev.20YYMMDDhhmm < 0.01 < 0.99 < 1.0~dev.20YYMMDDhhmm < 1.0 < 1.0.1 
+0.pre.## < 0.01~dev.20YYMMDDhhmm < 0.01 < 0.99 < 1.0~dev.20YYMMDDhhmm < 1.0 < 1.0.1
 ....
 
 Specifications
@@ -50,29 +50,29 @@ releases, we distinguish *major* and *minor* and *bugfix* releases.
 
 - besides the releases, we create *development snapshot releases*, which
   are just _tagged builds_.
-  
+
   * Not every build/check-in gets promoted to such a tagged build;
     rather there needs to be any reason from the users point of view,
     e.g. a bugfix we expect to be tried out at least by _someone_.
-  
+
   * these _development snapshots_ are an _anticipation_ of the
     upcoming next release and thus get a numbering _derived_ from this
     _next_ release (not the previous one).
-  
+
   * dev snapshots use a _timestamp_ attached with a '~' (tilde char).
     It is common practice to order a tilde _below_ the release it is
     attached to (and debian follows this practice)
 
 - when we decide the application to be stable enough for real use and
   past the _beta_ phase, we switch over to the usual 3-digit version numbering.
-  
+
   * _major_ releases start with 1.0 and feature high impact changes, usually linked
     to some significant breakage of compatibility or some other disruptive event.
-  
+
   * _minor_ releases may include some new features, but can be considered
     evolutionary. Their numbers are incremented on the second digit, like
     1.1, 1.2, 1.3, 1.4, ....
-  
+
   * _bugfix_ releases are created when we have serious bugfixes to publish,
     without any real new features.
 
@@ -142,7 +142,7 @@ when to use what version number.
 
 //Conclusion
 //----------
-//conclusion: When approbate (this proposal becomes a Final)
+//conclusion: When approved (this proposal becomes a Final)
 //            write some conclusions about its process:
 
 
@@ -155,11 +155,27 @@ Comments
 .State -> Final
 considered common practice
 
-    Do 14 Apr 2011 03:46:07 CEST Christian Thaeter <ct@pipapo.org>
+Christian Thaeter::  'Thu 14 Apr 2011 03:46:07 CEST'  ~<ct@pipapo.org>~
+
+
+💡 +
+[underline]#Please Note#: our Git branching model has been switched to
+link:{ldoc}/technical/code/GitBranching.html[Git-flow] recently. On occasion
+of that change, I wrote two helper scripts
+
+- 'admin/buildVersion.py' extracts version info from the latest preceding
+  Git tag, and additionally allows to _bump some component_ of the version-ID
+- 'admin/setVersion' edits a hard-wired small selection of known documents
+  in the tree with `sed` to update a version-ID
+
+These are both related to version numbers, and also our conventions
+for Git-flow refer directly to this RfC.
+
+Ichthyostega:: '2025-09-15'
 
 
 //endof_comments:
 
 ''''
-Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
+Back to link:/x/DesignProcess.html[Lumiera Design Process overview]
 

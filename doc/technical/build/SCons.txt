@@ -1,38 +1,68 @@
 SCons Build-System
 ==================
 :author: Ichthyo
-:date: 2012
+:date: 2012 · 2025
+:toc:
 
 //MENU: label SCons Build
 
-Lumiera uses a build system based on link:http://scons.org[SCons]
+Lumiera uses a build system based on https://scons.org/[SCons]
 
-SCons is an open source software construction tool based on Python build definition scripts.
-Within these build scripts, we define a data structure to describe the parts and dependencies
-of our software. When executed, SCons evaluates those definitions and the actual files in
-the source tree to derive a build strategy, which is then performed.
+SCons is an open source software construction tool based on build definition scripts
+written in Python. Within these build scripts, we define a data structure to describe
+the parts and dependencies of our software. When executed, SCons evaluates those
+definitions and the actual files in the source tree to derive a build strategy,
+which is then performed to actually (re)build the software.
+
+Synopsis
+--------
+[cols=">,<m,2<",grid="none"]
+|=====================
+| just build Lumiera: | scons -j#            | # ≔ number of CPUs
+| build + run Tests:  | scons -j# check      | -> see 'target/,testlog'
+| development build:  | scons -j# testcode   | -> `target/test-suite <TestName>`
+| install:            | scons -j# install    | installs below '/usr/local/', ⚠ sudo
+| see possible config:| scons -h             | ⚠ settings are *sticky* -> see './optcache'
+|=====================
+
+
+
+.Known shortcomings of SCons
+[NOTE]
+--
+* No one knows it
+* It is written in Python
+* It is _declarative_ not _imperative_ +
+  Thus people hate that they can not just figure out some script
+* A SCons build can not be manipulated by setting environment variables
+* SCons has no default interface for package managers. +
+  Each project has to solve that individually...
+* SCons is not a platform-, package- and dependency manager.
+--
 
 SCons core concepts
 -------------------
-^_this section is based on the introductory pages on the link:http://www.scons.org/wiki/BasicConcepts[SCons Wiki]_^
+^_this section is based on the introductory pages on the https://github.com/SCons/scons/wiki/BasicConcepts[SCons Wiki]_^
 
 .SCons Environment
 When SCons starts building the project, it creates its own environment with dependency trees,
-helper functions, builders and other stuff. The SCons environment is created in memory and some parts of it
+helper functions, builders and other stuff. The SCons environment is built in memory and some parts of it
 are saved to disk to speed up things on the next start. The definition of the build happens within this
-artificial build environment. This often confuses people who used Makefiles, where environment is actually
+abstracted build environment. This often confuses people who used Makefiles, where ``environment'' is actually
 the System Environment.
 
 .System Environment
 the familiar operating system container with environment variables such as PATH, HOME etc.
 It is usually accessible via os.environ mapping in Python and therefore in SCons too.
-SCons doesn't import any settings from System Environment automatically (like flags for compilers,
-or paths for tools), because it's designed to be a cross platform tool with _predictable behaviour._
-That's why, if you rely on any system PATHs or environment variables -- you need to extract
+SCons does not automatically import any settings from System Environment automatically
+(like flags for compilers, or paths for tools), because it's designed to be a cross platform tool
+with _predictable behaviour._
+If you rely on any system PATHs or environment variables -- you need to extract
 those settings explicitly in your build definition.
 
+
 .SConstruct
-when SCons executes, it performs a build definition python script written by the user. 
+when SCons executes, it performs a build definition python script written by the user.
 By convention, this main script is called 'SConstruct' and is located in the root of the source tree.
 It is a full featured Python module executed within a specifically prepared environment.
 
@@ -44,10 +74,22 @@ the sub-trees of the project.
 
 .Builder
 The SCons buildsystem revolves around the metaphor of a _Builder_. This is a SCons object that you explicitly
-invoke from the scripts to _define_ that there is something to build, transforming a _source_ into a _target_.
+invoke from the scripts to _define_ that there is something to build, thereby transforming a _source_ into a _target_.
 So the target depends on the sources, and typically those _source nodes_ were created by previous builder invocations.
-The power of SCons is in the fact that dependencies are tracked automatically. When source files change, the system 
-is able to derive which targets to rebuild.
+The use of Builders is _declarative:_ it is a statement _that_ a transformation (build step) has to happen, while
+the knowledge _how_ this can be achieved is kept implicit within the buildsystem.
+
+.Action
+These are are functors that perform something (execute an external command or call a python function, for instance).
+A Builder retains a list of Actions needed to update its targets; those Actions are run when needed.
+
+.Node
+This is the basic building block of the dependency graph, while the arcs are created by using Builders:
+a Node represents a filesystem object, such as a file or directory which can also be a build result and
+as such does not exist yet. There are also Alias nodes and Value nodes which represent setting values.
+The power of SCons is in the fact that dependencies can be tracked and a build strategy can be derived,
+automatically, based on the structure of this dependency graph. And because the building blocks of that
+graph are _abstract,_ users can _represent the specifics of their build_ in an uniform way.
 
 .Scanner
 when defining a builder, SCons relies on modular scanner components to ``understand'' the source of the build step.
@@ -58,26 +100,46 @@ through plug-ins.
 .Tool
 any further, external component that adds Builders, Scanners and other helpers to SCons environments
 for use within scripts. There are special tools for _configuring the platform_ to detect libraries and
-further requirements. Relying on those tools. the build environment will be outfitted to reflect the
-needs of the specific build. Sub-environments with special configuration may be created.
+further requirements. Tools do not operate themselves, rather they will configure the build environment
+to reflect the needs of the specific build.
+
+.Construction Variable
+All key-value settings within a Construction Environment which are used to instruct SCons about builds.
+Construction Variables can describe compiler flags, locations of commands to execute, and many other characteristics.
+They are used for _text substitution_ in command template strings for invocation of external commands, relying on
+the usual `$VARIABLE` syntax. Since the configuration of a SCons environment is defined by its
+Construction Variables, sub-environments with special configuration may be created.
+
+.Signature
+SCons computes a signature for elements on the dependency graph using a cryptographic hash function which
+has the property that the same input repeatably leads to the same signature. The default function is MD5.
+Signatures are used throughout SCons to identify file contents, build command lines, or to identify cached
+build artefacts. Signatures are chained to determine if something needs to be re-built.
 
 .Target
-any _node_ or ``build step'' encountered through the definition of the build is a _target_. The actual build
+any _Node_ or ``build result'' encountered through the definition of the build is a _target_. The actual build
 will be triggered by requesting a target, which typically might be just an executable known to reside at some
-location in the tree. Special _alias targets_ may be defined, based on other targets, to trigger off standard
-build situations. Especially, a _default_ target may be defined.
+location in the tree, or a _target directory_ where the build is assumed to place build results.
+Special _alias targets_ may be defined, based on other targets, to set off standard
+build sequences. Notably, a _default_ target can be defined for the build.
 
 ''''
+....
+​
+​
+​
+....
+
 
 Organisation of the Lumiera SCons build
 ---------------------------------------
-Within our build system, we build upon the power of the Python programming language to create abstractions
-tailored to the needs of our project. Located in the `admin/scons` subdirectory, you'll find a collection
+Within our build system, we leverage the power of the Python programming language to create abstractions
+tailored to the needs of our project. Located in the 'admin/scons' subdirectory, you'll find a collection
 of Python modules to provide these building blocks.
 
 - the *LumieraEnvironment* is created as a subclass of the standard SCons build environment; it is
-  outfitted with pre-configured custom builders for executables, libraries, extension module, Lumiera plug-in
-  and icon resources.
+  outfitted with pre-configured custom builders for executables, libraries, extension modules,
+  Lumiera plug-ins and icon resources.
 - all these *custom builders* implement a set of conventions and directory locations within the tree.
   These are defined (and can be adjusted) in the *Setup.py* module. This way, each builder automatically
   places the generated artefacts at standard build and installation locations.
@@ -89,72 +151,89 @@ Sub-trees
 ~~~~~~~~~
 .the source tree
 All sourcecode of the core application resides below `src/`. Building these components is controlled by
-the SConscript residing in this application source root. By convention, this is also the root for header
+the SConscript located within this application source root. By convention, this is also the root for header
 includes -- _all headers should be included relative_ to `src/`.
 
 .the three layers
 Within this application core tree, there are sub-trees for the main layers comprising the application.
 Each of these sub-trees will be built into a shared library and then linked against the application framework
-and common services residing in `src/common`. These common services in turn are also built into a shared
+and common services residing in 'src/common'. These common services in turn are also built into a shared
 library `liblumieracommon.so`, as is the collection of helper classes and support facilities, known as
-our 'support library' `liblumierasupport.so`. Besides, there is a sub-tree for core plug-ins and helper tools.
+our `support library' `liblumierasupport.so`. Besides, there is a sub-tree for core plug-ins and helper tools.
 
 .the GTK Gui
-one of the sub-trees, residing in `src/gui` forms the _upper layer_ or _user-interaction layer_. Contrary to
-the lower layers, the GUI is _optional_ and the application is fully operational _without Gui._ Thus, the
-GTK Gui is built and loaded as Lumiera a plug-in.
+one of the sub-trees, residing in `src/stage` forms the _upper layer_ or _user-interaction layer_. Contrary to
+the lower layers, the Stage Layer (GUI) is _optional_ and the application is fully operational _without GUI._
+Thus, the GTK Gui is built and loaded as Lumiera a plug-in.
 
 .unit tests
 Since our development is test-driven, about half of the overall code can be found in unit- and integration
-tests, residing below `test/`. There is a separate SConscript file, to define the various
+tests, arranged below 'test/'. There is a separate SConscript file, to define the various
 link:{ldoc}/technical/infra/TestSupport.html[kinds of test artefacts] to be created.
 
-- plain-C tests are defined in _test-collections_, grouped thematically into several subdirectories.
-  Here, each translation unit provides a separate +main()+ function and is linked into a stand-alone
-  executable (yet still linked against the appropriate shared libraries of the main application layers)
-- the tests covering C++ components are organised into test-suites, residing in separate sub-trees.
-  Currently (as of 5/2015), we link each sub-tree into a shared test library. Here
-  individual translation units define individual test case classes. At the end, all these unit tests
+- the tests to cover C++ components are organised into test-suites, residing in separate sub-trees.
+  Currently (as of 11/2025), we link each sub-tree into a shared test library. Here, individual
+  translation units define individual test case classes. At the end, all these test units
   are linked together with a testrunner `main()` into the `test-suite` executable.
+- plain-C tests are defined in _test-collections_, grouped thematically into several subdirectories.
+  Here, each translation unit provides a separate `main()` function and is linked into a stand-alone
+  executable (yet still linked against the appropriate shared libraries of the main application layers)
 
 .research
-There is a separate subtree for research and experiments. The rationale being to avoid re-building most
-of the core application when it comes to experimenting and trying out new technologies.
+There is a separate subtree for research and experiments. The rationale is to provide a simplified
+and flexible dependency structure for investigating fundamental problems and to try out new technologies.
+Notably there is a source file 'try.cpp', which is linked against all of the core libraries and is re-used
+any time some language features need further investigation or when new implementation techniques are pioneered.
 
 .icons and resources
-the +data/+ subtree holds resources, configuration files and icons for the Gui. Most of our icons
-are defined as SVG graphics. The build process creates a helper executable (+rsvg_convert+) to render
+the 'data/' subtree holds resources, configuration files and icons for the GUI. Most of our icons
+are defined as SVG graphics. The build process creates a helper executable (`rsvg_convert`) to render
 these vector graphics with the help of lib Cairo into icon collections of various sizes.
 
 .documentation
-Largely, the documentation is written in Asciidoc and provided online at link:{ldoc}[the documentation section]
-of our website. The plain-text sources of this documentation tree is shipped alongside with the code.
-Besides, we build *Doxygen* API documentation there, and we create design and technical specs and drawings
-in SVG and in UML.
+Largely, the documentation is written in Asciidoc and provided online in the link:{ldoc}/[documentation section]
+of our website. The plain-text sources of this documentation tree are shipped alongside with the code.
+Besides, we build *Doxygen* link:/doxy/[API documentation] there, and we create design and
+technical specs and drawings in SVG and in UML.
 
 .the target directory
 This is where the results of the build process are created. Lumiera is organised into a
-_self contained folder structure_. As long as the relative locations, as found within +target/+, 
+_self contained folder structure_. As long as the relative locations, as found within 'target/',
 are kept intact, the Application will be able to start up and find all its resources. Consequently,
-there is no need to ``install'' Lumiera (and the ``install'' target just copies this folder structure
-into the standard installation locations of a typical Unix system)
+there is no need to ``install'' Lumiera -- in can always be launched from a package bundle placed
+into some directory. In fact, the ``install'' target just copies this folder structure into the
+standard installation locations in accordance with the Filesystem Hierarchy Standard for Unix systems
 
-Unfortunately SCons is a bit weird regarding the object files created during the build process.
-So, for the time being, we're just building in-tree. Apologies for that.
+WARNING: Unfortunately SCons is a bit weird regarding the object files created during the build process.
+         So, for the time being, we're building in-tree. Apologies for that. +
+         [underline]#2025#: this aspect has been improved _upstream,_ yet we did not find the time
+         to rework our build system accordingly. Apologies for that...
+
+.installation
+As described xref:_organisation_of_the_lumiera_scons_build[above], a custom environment
+baseclass `LumieraEnvironment` is used to configure preconfigured builders, which always define
+an installation target alongside with the build target. These installation targets are arranged
+into a subtree with a _prefix,_ which is by default 'usr/local' -- following the conventions of
+the Filesystem Hierarchy Standard. As long as you just build stuff, you won't notice these
+installation targets, since by default they are located outside of the project tree. However,
+by customising the build options `PREFIX` and `INSTALLDIR`, this installation tree can be relocated.
+For example, our DEB package uses `PREFIX=usr INSTALLDIR=debian/lumiera`
+(please note that such settings are cached in './optcache' and that
+changing them causes a full rebuild)
 
 
 Invoking the Build
 ~~~~~~~~~~~~~~~~~~
-All of the build process is launched through the `scons` python script, usually installed into 
-`/usr/bin` when installing the SCons package onto the system. Just invoking
+All of the build processing is launched through the `scons` python script, usually installed into
+`/usr/bin` when installing the SCons package onto the system. And by just invoking
 
  scons -h
- 
-prints a summary of all custom options, targets and toggles defined for our build.
+
+a summary of all custom options is printed, with targets and toggles defined for our build.
 
 Targets
 ^^^^^^^
-- *build* is the default target: it creates the shared libs, the application, core plug-ins and the Gui.
+- *build* is the default target: it creates the shared libs, the application, core plug-ins and the GUI.
 - *testcode* additionally builds the research and unit test code
 - *check* builds test code and runs our test-suites
 - *research* builds just the research tree
@@ -162,15 +241,19 @@ Targets
 - *all* builds the Application, test-suites and documentation
 - *install* builds and installs the Lumiera Application
 
-By convention, invoking `scons -c` <TARGET> will _clean up_ everything the given target _would_ build.
+Cleaning
+^^^^^^^^
+By convention, an invocation of `scons -c` <TARGET> will _clean up_ everything the given target _would_ build.
 Thus, invoking `scons -c /` is the most global clean operation: it will clean up al build artefacts and
 will un-install Lumiera (recall: every defined node, or directory is also a target).
 
 Configure checks
 ^^^^^^^^^^^^^^^^
-SCons does not support the concept of a separate ``configure'' step. The necessary dependency detection is
-performed before each build. Currently, we expect _all dependencies to be installed first-class_ into
-the system. We do not (yet) support custom libraries in strange locations. Please use your package manager.
+By deliberate choice, SCons does not support the concept of a separate ``configure'' stage.
+The necessary dependency detection is performed before each build, but with effective caching
+of detected settings. Currently, we expect _all dependencies to be installed first-class_ into
+the system. Custom packages can be installed at '/usr/local' -- however, we do not (yet) support
+custom libraries in arbitrary locations, passed as configuration. Please use your package manager.
 
 Caching and MD5 sums
 ^^^^^^^^^^^^^^^^^^^^
@@ -191,3 +274,84 @@ We provide several custom configuration options (run `scons -h` to get a summary
 options are *sticky*: once set, the build system will recall them in a file '.optcache' and apply
 them the same way in subsequent builds. It is fine to edit '.optcache' with a text editor.
 
+
+Technical Details
+~~~~~~~~~~~~~~~~~
+The following sections provide additional information helpful when adapting the build system.
+It should be noted that the SCons scripts are _Python modules_, invoked within a special setup.
+Python has a host of specific tweaks and kinks, notably regarding visibility, definition order,
+imports and the use of standard data types like lists, dictionaries and generator functions.
+Python knowledge is widespread nowadays, yet we had ample opportunity to notice that, for
+people not familiar with the Python idiom, the SCons scripts may seem arcane and confusing.
+
+Invocation
+^^^^^^^^^^
+After some basic checks of setup and the given command line, the SCons builder immediately
+loads the 'SConstruct' as module -- and expects that this python DSL code builds a project
+model data structure. The actual build is then driven by evaluating the dependency graph
+as implied by that model.
+
+The individual 'SConscript' definitions for each subfolder must be activated explicitly
+from the 'SConstruct', using the `SConscript(dirs=[...])` builder function. Note furthermore
+that the order of the dirs mentioned in this invocation matters, since each 'SCconscript'
+usually _imports_ some global variables at the beginning and _exports_ other settings
+at the end. Before evaluating a 'SConscript', the working directory is changed.
+
+TIP: you can launch `scons` with a python debugger, using the Lumiera directory as
+     working location and set breakpoints in 'SConstruct' or in any of our custom
+     python modules to investigate problems with some build definition not taking effect
+     as expected. Inspect the dictionary of the `Environment` with the debugger to
+     find out what has actually been configured...
+
+Start-up sequence
+^^^^^^^^^^^^^^^^^
+The Lumiera build system engages in a specific start-up sequence, which is explicitly
+coded and expands beyond the standards of the SCons build system.
+
+- first we add our _tool directory_ below 'admin/scons' to the search path,
+  so that tools and python modules defined there become visible.
+  You _must familiarise yourself_ with the contents of this directory!
+- next we create our custom root `LumieraEnvironment` instance, which is stored
+  and exported in the global variable `env`. This environment setup is done by
+  the python module 'admin/scons/Setup.py'
+- this module has some module-level definitions for standard path locations,
+  and all these settings are imported into a dictionary and placed into the
+  member field `env.path` of the `LumieraEnvironment`. All our custom builders
+  use these central settings as shared configuration.
+- once the base constructor of the SCons `Environment` class is invoked,
+  the command line is evaluated to populate the Construction Variables.
+- next, the constructor of our custom `LumieraEnvironment` installs
+  our custom tools and builder functions.
+- the last step in the start-up sequence is to invoke the `Platform.configure(env)`
+  function, which performs all the library and platform checks. This function
+  also configures the default compiler flags.
+
+Nested Build Environment
+^^^^^^^^^^^^^^^^^^^^^^^^
+Several of the 'SConscript' in subdirectories will create a nested build environment,
+which obviously derives from `LumieraEnvironment`. This way we can configure
+additional link dependencies and build configurations for some subtrees, like
+building the GUI against GTK or handling plug-in modules specifically.
+
+The custom ELF builders
+^^^^^^^^^^^^^^^^^^^^^^^
+These custom builders like `env.Program`, `env.SharedLibrary`, `env.LoadableModule`
+and `env.LumieraPlugin` are also defined in the `LumieraEnvironment.py` module.
+All these classes inherit from the SCons `Environment` through the common baseclass
+`WrappedStandardExeBuilder` -- which defines a special arrangement where an _install target_
+is always defined alongside the build target. This install target is ``dropped off'' as
+a side-effect, while _the build target will be returned._
+
+Composite targets
+^^^^^^^^^^^^^^^^^
+In SCons, a builder returns a list of target nodes, and these can be passed in a flexible
+way to further builders. At several places in our 'SConscript' definitions, we use
+Python functions defined within that script to manipulate and aggregate such
+target lists. Notably, specific sets of targets can be combined into a
+shared object (dynamic library), which is then again a SCons target
+and can be passed to other executable builders as library dependency
+for compilation and linking. Look into 'src/SConscript' or 'test/SConscript'
+to see examples of that technique -- which we also use to define that
+global compound target variables like `core`, `app_lib`, `core_lib`,
+`vault_lib`, and `support_lib`. These in turn are essential for
+building the layered dependency hierarchy in our code.

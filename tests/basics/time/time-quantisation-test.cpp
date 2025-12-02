@@ -1,58 +1,46 @@
 /*
   TimeQuantisation(Test)  -  handling of virtually grid aligned time values
 
-  Copyright (C)         Lumiera.org
-    2010,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2010,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file time-quantisation-test.cpp
+ ** unit test \ref TimeQuantisation_test
+ ** @todo 2024/24 only two of the four timecode formats are implemented /////////////////////////////////////TICKET #736 : HMS and Seconds not implemented
+ */
 
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "proc/asset/meta/time-grid.hpp"
+#include "steam/asset/meta/time-grid.hpp"
 #include "lib/time/timequant.hpp"
-#include "lib/time/display.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
 #include <boost/lexical_cast.hpp>
-#include <boost/algorithm/string/join.hpp>
-#include <iostream>
-#include <cstdlib>
 
 using boost::lexical_cast;
 using util::isnil;
 using util::contains;
-using std::rand;
-using std::cout;
-using std::endl;
-
-using boost::algorithm::join;
 
 
 namespace lib {
 namespace time{
 namespace test{
   
-  using proc::asset::meta::TimeGrid;
+  using steam::asset::meta::TimeGrid;
   
   
   /****************************************************//**
    * @test verify handling of quantised time values.
-   *       - the simple usage, just referring to an 
+   *       - the simple usage, just referring to an
    *         predefined grid by name
    *       - explicitly defining an quantiser
    *       - converting these quantised values into
@@ -65,24 +53,31 @@ namespace test{
       random_or_get (Arg arg)
         {
           if (isnil(arg))
-            return 1 + (rand() % 10000);
-          else
-            return lexical_cast<int> (arg[1]);
+            {// use random time value for all tests
+              seedRand();
+              return 1 + rani(100'000);
+            }
+          else  // use argument as 1/10 seconds
+            return 10 * lexical_cast<int> (arg[1]);
         }
       
       
       
+      /**
+       * @param arg number as 1/10sec
+       * @note  using random time 0..100s if no argument given
+       */
       virtual void
-      run (Arg arg) 
+      run (Arg arg)
         {
-          Time ref (0,random_or_get(arg),0,0);
+          Time ref (random_or_get(arg),0,0,0);
           CHECK (TimeValue(0) < ref);
           
           checkSimpleUsage (ref);
           check_theFullStory (ref);
           checkMultipleGrids (ref);
           checkGridBinding (ref);
-        } 
+        }
       
       
       void
@@ -95,17 +90,20 @@ namespace test{
           FrameNr count(qVal);                      // materialise this quantised time into..
           int n = count;                            // frame count, accessible as plain number
           
-          CHECK (Time(FSecs(n-1, 25)) <= org);      // verify quantisation: the original time
-          CHECK (org < Time(FSecs(n+1, 25)));       // is properly bracketed by (n-1, n+2)
+          CHECK (Time(FSecs(n, 25)) <= org);        // verify quantisation: the original time
+          CHECK (org < Time(FSecs(n+1, 25)));       // is properly bracketed by [n, n+1[
         }
       
       
       void
       check_theFullStory (TimeValue org)
         {
+          cout << "TEST rawTime:"<<Time{org} << endl;
           PQuant fixQ (new FixedFrameQuantiser(25));
           QuTime qVal (org, fixQ);
           
+          CHECK ( qVal == org);                     // Note: stores the raw value, but tagged with a grid
+          CHECK ( fixQ.get() == PQuant(qVal).get());
           CHECK ( qVal.supports<format::Frames>());
           CHECK ( qVal.supports<format::Smpte>());
           
@@ -113,21 +111,21 @@ namespace test{
           showTimeCode (smpteTCode);
           
           HmsTC pureTimeCode = qVal.formatAs<format::Hms>();
-          showTimeCode (pureTimeCode);
+          showTimeCode (pureTimeCode);       ////////////////////////////////////////////////////////////////TICKET #736 : HMS not implemented yet
           
           FrameNr frameTCode = qVal.formatAs<format::Frames>();
           showTimeCode (frameTCode);
           
           Secs seconds  = qVal.formatAs<format::Seconds>();
-          showTimeCode (seconds);
+          showTimeCode (seconds);            ////////////////////////////////////////////////////////////////TICKET #736 : Seconds not implemented yet
         }
       
       template<class TC>
       void
       showTimeCode (TC timecodeValue)
         {
-          cout << timecodeValue.describe() 
-               << " time = "<< timecodeValue.getTime() 
+          cout << timecodeValue.describe()
+               << " time = "<< timecodeValue.getTime()
                << " code = "<< timecodeValue
                << endl;
         }
@@ -160,7 +158,7 @@ namespace test{
           
           QuTime funny (org, "special_funny_grid");      // now OK, grid is known
           int cnt = funny.formatAs<format::Frames>();
-                                                         // and now performing quantisation is OK 
+                                                         // and now performing quantisation is OK
           SmpteTC smpte (funny);                         // also converting into SMPTE (which implies frame quantisation)
           CHECK (0 == smpte.frames);                     // we have 1fps, thus the frame part is always zero!
           CHECK (cnt % 60 == smpte.secs);                // and the seconds part will be in sync with the frame count

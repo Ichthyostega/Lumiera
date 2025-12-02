@@ -3,117 +3,111 @@ Refactor Liblumiera Out
 
 // please don't remove the //word: comments
 
-[grid="all"]
-`------------`-----------------------
-*State*         _Idea_
-*Date*          _Fr 22 Apr 2011 10:46:50 CEST_
-*Proposed by*   Christian Thaeter <ct@pipapo.org>
--------------------------------------
+[options="autowidth"]
+|====================================
+|*State*       | _Dropped_
+|*Date*        | _Fr 22 Apr 2011 10:46:50 CEST_
+|*Proposed by* | Christian Thaeter <ct@pipapo.org>
+|====================================
 
-[abstract]
 ********************************************************************************
-liblumiera contains alot useful and reuseable code which is already in use by
-other projects
+.Abstract
+`liblumiera` contains a lot of useful and re-useable code
+which is already in use by other projects
 ********************************************************************************
 
 Description
 -----------
 //description: add a detailed description:
-Over the time we've put some efforts into the liblumiera. I've added
-some from my code which predates the lumiera project which I am using
-on many other projects. This now caused that I maintain this sources in
-different unrelated projects and have to cross merge and update stuff
-when I do updates and fixes somewhere. I think its time to factor the
-reuseable parts out into a independent library (like glib does for
-gtk), in fact I had this plan long ago.
+Over the time we've put some efforts into the 'liblumiera'. I have added
+some from my code which predates the Lumiera project and which I am using
+on many other projects. This means that I would have to maintain these
+sources in different unrelated projects and have to cross merge and update
+several copies of the same code when I do updates and fixes somewhere.
+I think its time to factor the re-useable parts out into a independent
+library (similar to what Glib does for GTK). In fact, I had this plan long ago.
 
 
 .What parts are eligible for a standalone library
-
 Anything which is something tool alike and useful for other projects and not
 tied to Lumiera only. This are the algorithms/datastructures, allocators, tool
 macros. Additionally some of the src/common things should be moved into the
 library. I give some lists below.
 
 .How to name it
-
-Long time ago my plan was to name it 'ctlib' or 'cehlib' but meanwhile there is
+Long time ago my plan was to name it `ctlib' or `cehlib' but meanwhile there is
 enough code done by others. So I'd propose a more neutral name, still
-'lumieralib' or 'lulib' would be approbiate. The only thing we have to account
+`lumieralib' or `lulib' would be appropriate. The only thing we have to account
 for is that some parts which are too specific for Lumiera and should not be
 integrated into this spinoff need either to stay in a lumiera-internal lib
 (src/lib/) as currently or being moved to the respective subsystems using them
 (src/backend, src/proc, src/common, ...), so the names should not clash.
 
 .C, C++ ...
-
-For myself I need the C parts, while there is C++ code which interfaces to the
-C implementations and also a lot code which does nice C++ things on its own.
+For myself I need the C parts, while there is C\++ code which interfaces to the
+C implementations and also a lot code which does nice C\++ things on its own.
 This possibly means that we should in fact make 2 packages out of this, one C
-and one C++ library (where the C++ part is more than just the wrappers, but
-also the tools and tricks which are currently in src/lib/ and reuseable).
+and one C\++ library (where the C++ part is more than just the wrappers, but
+also the tools and tricks which are currently in 'src/lib/' and reusable).
 
 .Who maintains it
-
-Despite a spin of I think we don't want to change anything from our current
-practice and maintain it by the Lumiera developers. For many parts I feel
-responsible for it, but its really a part of the Lumiera codebase, despite
-independently useable.
+Despite of being a spin-off I think we don't want to change anything from our
+current practice and maintain it by the Lumiera developers. In part I feel
+responsible for it, while it is really a part of the Lumiera codebase,
+despite of being independently usable.
 
 .How to maintain it
-
 We need to decide about build system and documentation system. As build system
-we may right start using scons. For documentation the situation is a but
+we may right start using SCons. For documentation the situation is somewhat
 different since some of my code uses pipadoc/asciidoc and other uses doxygen.
 
 .What not to do
-
 Some of the code is currently quite specific to Lumiera while it could be made
-more generic. This is *NOT* subject of this RFC we may or may not do such a
-refactoring but this RFC and any work resulting from this should only restrict
+more generic. This is _NOT_ subject of this RfC -- we may or may not do such a
+refactoring but this RfC and any work resulting from this should be restricted
 to simple things like necessary namespace and variable renaming and integration
 in the build system.
 
 
 C Parts
--------
+~~~~~~~
 
 Library
-~~~~~~~
+^^^^^^^
 What belongs to the library
 
 Containers
-^^^^^^^^^^
+++++++++++
  * cuckoo hashing (cuckoo.c|h)
- * linked lists (llist.h slist.h)
+ * linked lists (llist.h)
  * cache lists (mrucache.c|h)
  * splay trees (psplay.c|h)
  * priority queues (not done yet)
 
 Runtime tools
-^^^^^^^^^^^^^
++++++++++++++
  * error handling (error.h error.c) used by the other facilities too
- * clib convinience wrapers (safeclib.c|h) needs better name, maybe refactor
+ * clib convenience wrappers (safeclib.c|h) needs better name, maybe refactor
    into new facilities
 
 Multithreading
-^^^^^^^^^^^^^^
+++++++++++++++
  * locking, condition variables etc. (condition.c|h (rec)mutex.c|h, rwlock ...)
 
 Memory management
-^^^^^^^^^^^^^^^^^
++++++++++++++++++
  * Memory pools (mpool.c|h)
  * Temporary buffers (tmpbuf.c|h)
 
 Metaprogramming
-^^^^^^^^^^^^^^^
-  * preprecessor tools (ppmpl.h) move common preprocessor macros here
++++++++++++++++
+  * preprocessor tools (ppmpl.h) move common preprocessor macros here
   * polymorphic call helper for C (vcall.h)
 
 Interface system and module loader
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+++++++++++++++++++++++++++++++++++
 
-except for some hardcoded references to 'lumiera_org' and '.lum' plugin names
+except for some hardcoded references to `lumiera_org' and `.lum' plugin names
 this is quite generic, possibly moving this over could be postponed, but might
 eventually be done.
 
@@ -124,26 +118,26 @@ interfaceregistry.c interfaceregistry.h plugin.c plugin_dynlib.c plugin.h
 ------
 
 
-The 'config' system could become a candidate too if it ever gets finished and
-proved useful, but for the time being its better kept in Lumiera.
+The ``config system'' could become a candidate too if it ever gets finished and
+proves itself useful, but for the time being it's better kept in Lumiera.
 
 
 Not Library
-~~~~~~~~~~~
-Too specific to Lumiera:
+^^^^^^^^^^^
+Tied specifically to Lumiera:
 -----
 luid.c luid.h time.h
 -----
 
 
 C++ Parts
----------
+~~~~~~~~~
 
-For most of the C++ parts I am not sure, ichthyo should decided upon these
+For most of the C++ parts I am not sure, _ichthyo_ should decide upon these
 (please edit this here)
 
 Library
-~~~~~~~
+^^^^^^^
 These look 'generic' or wrap the C parts:
 ------
 singleton-factory.hpp singleton.hpp singleton-policies.hpp
@@ -154,7 +148,7 @@ util.hpp variant.hpp
 ------
 
 Not Sure
-~~~~~~~~
+^^^^^^^^
 ------
 access-casted.hpp advice advice.hpp allocation-cluster.cpp
 allocation-cluster.hpp bool-checkable.hpp cmdline.cpp cmdline.hpp del-stash.hpp
@@ -175,11 +169,13 @@ option.hpp query subsys.cpp subsys.hpp subsystem-runner.hpp
 
 
 Not Library
-~~~~~~~~~~~
+^^^^^^^^^^^
 ------
 logging.cpp nobug-init.cpp nobug-init.hpp streamtype.cpp streamtype.hpp test/*
 time/* time.cpp tree.hpp
 -----
+
+
 
 Tasks
 ~~~~~
@@ -187,7 +183,7 @@ Tasks
 // * first step ([green]#✔ done#)
 
  * decide on name, namespaces [,yellow]#WIP#
- * create git repository, setup boilerplace (build system, legalese)
+ * create git repository, setup boilerplate (build system, legalise)
    [,yellow]#WIP#
  * move all code over into the git repos, refactor (namespace renames) ()
    [,yellow]#WIP#
@@ -213,17 +209,14 @@ Cons
 Alternatives
 ^^^^^^^^^^^^
 //alternatives: explain alternatives and tell why they are not viable:
+Do nothing and handle fixes on a case by case base.
 
-
-Rationale
----------
-//rationale: Give a concise summary why it should be done *this* way:
 
 
 
 //Conclusion
 //----------
-//conclusion: When approbate (this proposal becomes a Final)
+//conclusion: When approved (this proposal becomes a Final)
 //            write some conclusions about its process:
 
 
@@ -233,8 +226,25 @@ Comments
 --------
 //comments: append below
 
+.State -> Dropped
+Ongoing development over the following years (after 2011) helped to clarify the situation
+regarding the support library in Lumiera. The improved language standards, most notably C++14,
+obsoleted most of the ad-hoc solutions in our library, since many aspects of system
+integration are now handled by language and STL facilities in a satisfactory way.
+On the other hand, by using the heightened capabilities of the language, some solution
+patterns very specific to Lumiera could be established, gradually turning the support
+library into some kind of an application framework.
+
+It is quite common in the field of software development to put great hopes into code
+reuse -- yet it is this very tendency towards a framework which prevents that ideal
+from playing out as anticipated, in practice. What seems to work best is to look
+at some well-made piece of software, understand how it works, and then to copy
+and extract parts in order to transform it into _your own solution._
+
+Ichthyostega:: '2025-09-16'
 
 //endof_comments:
 
+
 ''''
-Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
+Back to link:/x/DesignProcess.html[Lumiera Design Process overview]

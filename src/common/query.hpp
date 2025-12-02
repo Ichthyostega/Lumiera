@@ -1,22 +1,13 @@
 /*
   QUERY.hpp  -  interface for generic queries
 
-  Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2008,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
 
@@ -28,10 +19,10 @@
  ** to decouple the parts of the application and allows for a rules based configuration and
  ** orchestration of the internal workings.
  ** 
- ** A Query is a request for just \em someone to come up with a solution, a preconfigured
+ ** A Query is a request for _just someone_ to come up with a solution, a preconfigured
  ** setup, some existing data object or contextual information. In order to be usable,
  ** actually a QueryResolver needs to be available to compute the solution and retrieve
- ** the results. As a common denominator, queries can be <i>generic queries</i> given
+ ** the results. As a common denominator, queries can be _generic queries_ given
  ** in predicate logic syntax; in this case a generic query resolver (Planned feature
  ** as of 1/2013) will be able at least to determine a suitable facility for delegating
  ** the resolution. Besides, specific subsystems are using more specific kinds of
@@ -54,7 +45,7 @@
  ** The QueryResolver returns a result set, actually a Query::Cursor, which can be used to
  ** enumerate multiple solutions, if any.
  ** 
- ** Queries are \em immutable, but it is possible to re-build and remould a query using
+ ** Queries are _immutable_, but it is possible to re-build and remould a query using
  ** a Query<TY>::Builder, accessible via Query#build() and Query#rebuild().
  ** 
  ** @note as of 1/2013 this is rather a concept draft, but some parts of the code base
@@ -62,11 +53,11 @@
  **
  ** @see lumiera::QueryResolver
  ** @see mobject::session::DefsManager
- ** @see asset::StructFactory 
- ** @see config-resolver.hpp specialised setup for the Proc-Layer
+ ** @see asset::StructFactory
+ ** @see config-resolver.hpp specialised setup for the Steam-Layer
  ** @see fake-configrules.hpp currently used dummy-implementation
  ** @see SessionServiceExploreScope
- ** @see PlacementIndexQueryResolver 
+ ** @see PlacementIndexQueryResolver
  ** 
  */
 
@@ -75,20 +66,19 @@
 #define LUMIERA_QUERY_H
 
 
-#include "lib/bool-checkable.hpp"
+#include "lib/hash-combine.hpp"
 #include "lib/typed-counter.hpp"
 #include "lib/iter-adapter.hpp"
 #include "lib/query-text.hpp"
 #include "lib/query-util.hpp"
-#include "lib/hash-value.h"
 #include "lib/nocopy.hpp"
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
 
 #include <boost/lexical_cast.hpp>
-#include <boost/operators.hpp>
-#include <memory>
 #include <typeinfo>
+#include <compare>
+#include <memory>
 #include <cctype>
 #include <string>
 
@@ -108,7 +98,7 @@ namespace lumiera {
   
   class Goal;
   class Resolution;
-  class QueryResolver;      
+  class QueryResolver;
   class QueryKey;
 
   
@@ -124,7 +114,7 @@ namespace lumiera {
    * of the type of query.
    */
   class Goal
-    : util::no_copy_by_client
+    : util::Cloneable
     {
     public:
       virtual ~Goal(); ///< this is a marker baseclass
@@ -146,6 +136,8 @@ namespace lumiera {
             : kind(k)
             , type(t)
             { }
+          
+          auto operator<=> (QueryID const&) const  =default;
         };
       
       QueryID const&
@@ -155,14 +147,13 @@ namespace lumiera {
         }
       
       
-      /** 
+      /**
        * Single Solution, possibly part of a result set.
        * A pointer-like object, usually to be down-casted
        * to a specifically typed Query::Cursor
        * @see Resolution
        */
       class Result
-        : public lib::BoolCheckable<Result>
         {
           void* cur_;
           
@@ -178,7 +169,8 @@ namespace lumiera {
             }
           
         public:
-          bool isValid()  const { return bool(cur_); }
+          explicit operator bool()  const { return isValid(); }
+          bool isValid()            const { return bool(cur_); }
           
           Result() : cur_(0)  { } ///< create an NIL result
         };
@@ -194,26 +186,6 @@ namespace lumiera {
       
     };
   
-  
-  inline bool
-  operator< (Goal::QueryID const& id1, Goal::QueryID const& id2)
-  {
-    return id1.kind < id2.kind
-        ||(id1.kind == id2.kind && id1.type < id2.type);
-  }
-  
-  inline bool
-  operator== (Goal::QueryID const& id1, Goal::QueryID const& id2)
-  {
-    return id1.kind == id2.kind
-        && id1.type == id2.type;
-  }
-  
-  inline bool
-  operator!= (Goal::QueryID const& id1, Goal::QueryID const& id2)
-  {
-    return not (id1  == id2);
-  }
   
   
   
@@ -329,7 +301,7 @@ namespace lumiera {
       Query (QueryID typeID, string querySpec)
         : Goal (defineQueryTypeID(typeID.kind))
         , def_(querySpec)
-        { 
+        {
           REQUIRE (this->getQID().type == typeID.type);
         }
       
@@ -390,15 +362,14 @@ namespace lumiera {
   
   
   
-  /** 
+  /**
    * Wrapper for indexing and ordering.
    * Defines a synthetic totally ordered index value.
    * Implicitly convertible to and from Query instances.
    */
   class QueryKey
-    : boost::totally_ordered<QueryKey>
     {
-      Goal::QueryID id_;      
+      Goal::QueryID id_;
       lib::QueryText def_;
       
     public:
@@ -452,21 +423,19 @@ namespace lumiera {
         }
       
       
-      friend bool
-      operator< (QueryKey const& q1, QueryKey const& q2)
+      friend std::strong_ordering
+      operator<=> (QueryKey const& q1, QueryKey const& q2)
       {
         uint d1 = q1.degree();
         uint d2 = q2.degree();
-        return d1 < d2
-            ||(d1 == d2 && (  q1.def_ < q2.def_ 
-                           ||(q1.def_ == q2.def_ && q1.id_ < q2.id_)));  
+        if (auto o1 = d1 <=> d2; o1 != 0)
+          return o1;
+        if (auto o2 = q1.def_ <=> q2.def_; o2 != 0)
+          return o2;
+        else
+          return q1.id_ <=> q2.id_;
       }
-      
-      friend bool
-      operator== (QueryKey const& q1, QueryKey const& q2)
-      {
-        return q1.def_ == q2.def_;  
-      } 
+      bool operator== (QueryKey const&) const  =default;
       
       friend size_t
       hash_value (QueryKey const& q)
@@ -563,14 +532,13 @@ namespace lumiera {
           this->predicateForm_ = queryPredicates;
           return *this;
         }
-      
     };
   
   
   
   
   template<class RES>
-  inline typename Query<RES>::Builder
+  inline Query<RES>::Builder
   Query<RES>::build (Kind queryType)
   {
     return Builder(defineQueryTypeID (queryType));
@@ -578,7 +546,7 @@ namespace lumiera {
   
   
   template<class RES>
-  inline typename Query<RES>::Builder
+  inline Query<RES>::Builder
   Query<RES>::rebuild()  const
   {
     return Builder(this->id_, getQueryDefinition());
@@ -618,8 +586,6 @@ namespace lumiera {
   {
     return QueryKey (this->id_, getQueryDefinition());
   }
-      
-
   
   
   

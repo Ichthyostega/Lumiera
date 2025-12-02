@@ -1,22 +1,13 @@
 /*
   ERROR.h  -  Lumiera Error handling interface (C-style)
 
-  Copyright (C)         Lumiera.org
-    2008,               Christian Thaeter <ct@pipapo.org>
+   Copyright (C)
+     2008,            Christian Thaeter <ct@pipapo.org>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
 
@@ -69,16 +60,16 @@ typedef const char* lumiera_err;
  * @param err name of the error without the 'LUMIERA_ERROR_' prefix (example: NO_MEMORY)
  */
 #define LUMIERA_ERROR_DECLARE(err) \
-extern lumiera_err LUMIERA_ERROR_##err
+extern lumiera_err const LUMIERA_ERROR_##err
 
 /**
- * Definition and initialization of an error constant.
+ * Definition and initialisation of an error constant.
  * This macro eases the error definition in implementation files
  * @param err name of the error without the 'LUMIERA_ERROR_' prefix (example: NO_MEMORY)
- * @param msg message describing the error in plain english (example: "memory allocation failed")
+ * @param msg message describing the error in plain English (example: "memory allocation failed")
  */
 #define LUMIERA_ERROR_DEFINE(err, msg) \
-lumiera_err LUMIERA_ERROR_##err = "LUMIERA_ERROR_" #err ":" msg
+lumiera_err const LUMIERA_ERROR_##err = "LUMIERA_ERROR_" #err ":" msg
 
 /**
  * Helper macro to raise an error for the current thread.
@@ -128,7 +119,7 @@ lumiera_err LUMIERA_ERROR_##err = "LUMIERA_ERROR_" #err ":" msg
 /**
  * Helper macro to raise an error for the current thread.
  * Same as LUMIERA_ERROR_SET(), but logs at 'LOG_WARNING' level.
- * Use this when a not unexected error happens which can be handled.
+ * Use this when a not unexpected error happens which can be handled.
  * @param flag NoBug flag describing the subsystem where the error was raised
  * @param err name of the error without the 'LUMIERA_ERROR_' prefix (example: NO_MEMORY)
  * @param extra optional string (or NULL) which adds some more context to the error, can be a temporary

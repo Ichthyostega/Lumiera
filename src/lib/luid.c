@@ -1,24 +1,20 @@
 /*
   LUID  -  Lumiera unique identifiers
 
-  Copyright (C)         Lumiera.org
-    2008,               Christian Thaeter <ct@pipapo.org>
+   Copyright (C)
+     2008,            Christian Thaeter <ct@pipapo.org>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-* *****************************************************/
+/** @file luid.c
+ ** Implementation functions for Lumiera's unique object identifier (LUID).
+ */
 
 
 #include "lib/luid.h"
@@ -42,7 +38,7 @@ lumiera_uid_set_ptr (lumiera_uid* luid, void* ptr)
 
 
 void*
-lumiera_uid_ptr_get (lumiera_uid* luid)
+lumiera_uid_ptr_get (const lumiera_uid* luid)
 {
   return *(void**)luid;
 }
@@ -67,7 +63,7 @@ lumiera_uid_gen (lumiera_uid* luid)
       if (fd >= 0)
         fcntl (fd, F_SETFD, FD_CLOEXEC);
       else
-        srand (getpid () + time (NULL));
+        srand (getpid () + time (NULL));   //////////////////////////////////////////////////////////////////TICKET #1381 : entropy source should be configurable
     }
 
   do
@@ -75,7 +71,7 @@ lumiera_uid_gen (lumiera_uid* luid)
       if (fd < 0)
         {
           for (int i = 0; i < 16; ++i)
-            ((unsigned char*)luid)[i] = (unsigned char)(rand()>>7);
+            ((unsigned char*)luid)[i] = (unsigned char)(rand()>>7);   ///////////////////////////////////////TICKET #1381 : this fallback should certainly not happen silently
         }
       else
         {
@@ -98,13 +94,13 @@ lumiera_uid_copy (lumiera_uid* dest, lumiera_uid* src)
 
 
 int
-lumiera_uid_eq (lumiera_uid* luida, lumiera_uid* luidb)
+lumiera_uid_eq (const lumiera_uid* luida, const lumiera_uid* luidb)
 {
   return !memcmp (luida, luidb, 16);
 }
 
 size_t
-lumiera_uid_hash (lumiera_uid* luid)
+lumiera_uid_hash (const lumiera_uid* luid)
 {
   return *(size_t*)luid;
 }

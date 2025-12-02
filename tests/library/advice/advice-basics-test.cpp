@@ -1,33 +1,23 @@
 /*
   AdviceBasics(Test)  -  basic behaviour of the Advice collaboration
 
-  Copyright (C)         Lumiera.org
-    2010,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2010,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file advice-basics-test.cpp
+ ** unit test \ref AdviceBasics_test
+ */
 
 
 #include "lib/test/run.hpp"
 #include "common/advice.hpp"
-
-#include <cstdlib>
-
-using std::rand;
-
 
 
 namespace lumiera {
@@ -112,6 +102,8 @@ namespace test {
       virtual void
       run (Arg)
         {
+          seedRand();
+          
           simpleExchange();
           createCollaboration();
           overwriting_and_retracting();
@@ -129,7 +121,7 @@ namespace test {
           TheAdvisor server;         // implicitly prepares an advice provision
           CHECK (client.got (0));    // but as no advice was provided yet, nothing happens
           
-          int rr (1 + (rand() % 1000));
+          int rr{ 1 + rani(1000)};
           
           server.publish (rr);       // now an match is detected, creating an advice channel
           CHECK (client.got (rr));   // ..so the client can pick up the provided advice value
@@ -143,8 +135,8 @@ namespace test {
           TheAdvised client1 ("topic1()");
           TheAdvisor server2 ("topic2()");
           
-          int r1 (1 + (rand() % 1000));
-          int r2 (1 + (rand() % 1000));
+          int r1{ 1 + rani(1000)};
+          int r2{ 1 + rani(1000)};
           
           server2.publish (r2);
           CHECK (client1.got(0));
@@ -182,8 +174,8 @@ namespace test {
           CHECK (client1.got(0));
           CHECK (client2.got(0));
           
-          int r1 (1 + (rand() % 1000));
-          int r2 (1 + (rand() % 1000));
+          int r1{ 1 + rani(1000)};
+          int r2{ 1 + rani(1000)};
           
           {
             TheAdvisor server("slot1()");

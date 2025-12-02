@@ -1,24 +1,20 @@
 /*
   QueryUtil  -  support for working with terms and queries
 
-  Copyright (C)         Lumiera.org
-    2008, 2012          Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2008, 2012       Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-* *****************************************************/
+/** @file query-util.cpp
+ ** Implementation of helpers for working with predicate queries.
+ */
 
 
 #include "lib/error.hpp"
@@ -26,14 +22,15 @@
 #include "lib/util.hpp"
 
 #include <boost/algorithm/string.hpp>
-#include <boost/regex.hpp>
+#include <functional>
+#include <regex>
 #include <map>
 
 using std::map;
-using boost::regex;
-using boost::smatch;
-using boost::regex_search;
-using boost::sregex_iterator;
+using std::regex;
+using std::smatch;
+using std::regex_search;
+using std::sregex_iterator;
 
 using util::contains;
 using util::isnil;
@@ -44,10 +41,10 @@ namespace lib {
     
     namespace { // local definitions
       
-      typedef boost::function<bool(string::value_type)> ChPredicate;
+      using ChPredicate = std::function<bool(string::value_type)> ;
       
-      ChPredicate is_alpha = boost::algorithm::is_alpha();    
-      ChPredicate is_upper = boost::algorithm::is_upper();    
+      ChPredicate is_alpha = boost::algorithm::is_alpha();
+      ChPredicate is_upper = boost::algorithm::is_upper();
     } // local defs
     
     
@@ -55,7 +52,7 @@ namespace lib {
     normaliseID (string& id)
     {
       id = util::sanitise(id);
-      if (isnil(id) || !is_alpha (id[0]))
+      if (isnil(id) or not is_alpha (id[0]))
         id.insert(0, "o");
       
       
@@ -74,20 +71,20 @@ namespace lib {
       
       map<Symbol, regex> regexTable;
       
-      Literal matchArgument = "\\(\\s*([\\w_\\.\\-]+)\\s*\\),?\\s*"; 
-      regex findPredicate (string("(\\w+)")+matchArgument);
+      Literal MATCH_ARGUMENT = R"~(\(\s*([\w_\.\-]+)\s*\),?\s*)~";
+      const regex FIND_PREDICATE{string{"(\\w+)"} + MATCH_ARGUMENT};
       
       inline regex&
       getTermRegex (Symbol sym)
       {
         if (!contains (regexTable, sym))
-          regexTable[sym] = regex (string(sym)+matchArgument);
+          regexTable[sym] = regex (string(sym)+MATCH_ARGUMENT);
         return regexTable[sym];
       }
     }
     
     /** (preliminary) helper: instead of really parsing and evaluating the terms,
-     *  just do a regular expression match to extract the literal argument 
+     *  just do a regular expression match to extract the literal argument
      *  behind the given predicate symbol. e.g calling
      *  `extractID ("stream", "id(abc), stream(mpeg)")` yields \c "mpeg"
      */
@@ -99,10 +96,10 @@ namespace lib {
         return (match[1]);
       else
         return "";
-    } 
+    }
     
     
-    /** (preliminary) helper: cut a term with the given symbol. 
+    /** (preliminary) helper: cut a term with the given symbol.
      *  The term is matched, removed from the original string and returned
      *  @note parameter termString will be modified!
      *  @todo as it seems we're not using the extracted term anymore,
@@ -129,19 +126,19 @@ namespace lib {
       smatch match;
       return regex_search (queryString, match, getTermRegex (sym));
     }
-  
     
-    /** @note this is a very hackish preliminary implementation. 
-     *  The regex used will flounder when applied to nested terms. 
+    
+    /** @note this is a very hackish preliminary implementation.
+     *  The regex used will flounder when applied to nested terms.
      *  We need a real parser for predicate logic terms (which we
      *  probably get for free when we embed a prolog system)...
      */
-    uint 
+    uint
     countPred (const string& q)
     {
       uint cnt (0);
       sregex_iterator end;
-      for (sregex_iterator i (q.begin(),q.end(), findPredicate); 
+      for (sregex_iterator i (q.begin(),q.end(), FIND_PREDICATE);
            i != end; ++i)
         ++cnt;
       return cnt;

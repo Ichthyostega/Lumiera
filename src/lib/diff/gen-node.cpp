@@ -1,24 +1,15 @@
 /*
   GenNode  -  generic node element for tree like data representation
 
-  Copyright (C)         Lumiera.org
-    2015,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2015,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+* *****************************************************************/
 
 
 /** @file gen-node.cpp
@@ -36,13 +27,12 @@
  ** cases actually of interest. All other cases invoke the default handling, which
  ** returns \c false.
  ** 
- ** @see gen-node-basic-test.cpp
+ ** @see gen-node-test.cpp
  ** 
  */
 
 
 #include "lib/error.hpp"
-#include "lib/format-util.hpp"
 #include "lib/diff/diff-language.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "lib/util-quant.hpp"
@@ -51,8 +41,10 @@
 #include <boost/lexical_cast.hpp>
 
 
+using util::join;
 using boost::lexical_cast;
 using lib::time::TimeValue;
+using lib::transformIterator;
 using util::almostEqual;
 using lib::hash::LuidH;
 
@@ -62,17 +54,19 @@ namespace diff{
   
   /* symbolic marker ID references
    * used within the tree diff language
-   * to mark specific scopes
+   * to mark specific scopes and situations
    */
+  const Ref Ref::I      ("_I_");
+  const Ref Ref::NO     ("_NO_");
   const Ref Ref::END    ("_END_");
-  const Ref Ref::THIS   ("_THIS_");
+  const Ref Ref::THIS   ("_THIS_");     ////////TICKET #996 : Feature of questionable usefulness. Maybe dispensable?
   const Ref Ref::CHILD  ("_CHILD_");
   const Ref Ref::ATTRIBS("_ATTRIBS_");
   
   
   
   
-  /** Implementation of content equality test
+  /** Implementation of content equality test, delgating to content
    * @throws error::Logic when the given other DataCap
    *         does not hold a value of the same type than
    *         this DataCap.
@@ -156,7 +150,7 @@ namespace diff{
   DataCap::matchDbl (double d)  const
   {
     class MatchDouble
-      : public Variant<DataValues>::Predicate
+      : public Variant<DataValues>::Predicate                    //////////////////////////////////TICKET #1360 floating-point precision
       {
         double num_;
 
@@ -198,7 +192,7 @@ namespace diff{
         MATCH_STRING (bool)
         
         virtual bool handle  (string const& str) override { return str == txt_; }
-        virtual bool handle  (char   const& c  ) override { return 1 == txt_.length() && txt_.front() == c; }
+        virtual bool handle  (char   const& c  ) override { return 1 == txt_.length() and txt_.front() == c; }
         
       public:
         MatchString(string const& text)
@@ -243,7 +237,7 @@ namespace diff{
   DataCap::matchBool (bool b)  const
   {
     bool* val = unConst(this)->maybeGet<bool>();
-    return val && (b == *val);
+    return val and (b == *val);
   }
   
   
@@ -251,7 +245,7 @@ namespace diff{
   DataCap::matchLuid (LuidH hash)  const
   {
     LuidH* val = unConst(this)->maybeGet<LuidH>();
-    return val && (hash == *val);
+    return val and (hash == *val);
   }
   
   
@@ -263,7 +257,7 @@ namespace diff{
     else
       {
         RecRef* val = unConst(this)->maybeGet<RecRef>();
-        return val && val->empty();
+        return val and val->empty();
       }
   }
   
@@ -277,7 +271,7 @@ namespace diff{
         RecRef* r = unConst(this)->maybeGet<RecRef>();
         if (r) val = r->get();
       }
-    return val && (rec == *val);
+    return val and (rec == *val);
   }
   
   
@@ -286,6 +280,72 @@ namespace diff{
   DataCap::operator string()  const
   {
     return "DataCap|"+string(this->buffer());
+  }
+  
+  
+  
+  
+  
+  /** compact textual representation of a Record<GenNode> (»object«). */
+  string renderCompact (Rec const& rec)
+  {
+    auto renderChild  = [](diff::GenNode const& n){ return renderCompact(n); };
+    auto renderAttrib = [](diff::GenNode const& n){
+                                                    return (n.isNamed()? n.idi.getSym()+"=" : "")
+                                                         +  renderCompact(n);
+                                                  };
+    
+    return (Rec::TYPE_NIL==rec.getType()? "" : rec.getType())
+         + "{"
+         +  join (transformIterator (rec.attribs(), renderAttrib))
+         + (isnil(rec.scope())?   "" : "|")
+         +  join (transformIterator (rec.scope()  , renderChild))
+         + "}"
+         ;
+  }
+  
+  string
+  renderCompact (RecRef const& ref)
+  {
+    return "Ref->" + (ref.empty()? util::BOTTOM_INDICATOR
+                                 : renderCompact (*ref.get()));
+  }
+  
+  /** @remark presentation is oriented towards readability
+   *   - numbers are slightly rounded (see \ref util::showDouble() )
+   *   - time values are displayed timecode-like
+   *   - nested scopes are displayed recursively, enclosed in curly brackets
+   * @see text-template-gen-node-binding.hpp
+   */
+  string
+  renderCompact (GenNode const& node)
+  {
+        class Renderer
+          : public Variant<diff::DataValues>::Renderer
+          {
+    #define RENDER_CONTENT(_TY_) \
+            virtual string handle  (_TY_ const& val) override { return util::toString(val); }
+            
+            RENDER_CONTENT (int)
+            RENDER_CONTENT (int64_t)
+            RENDER_CONTENT (short)
+            RENDER_CONTENT (char)
+            RENDER_CONTENT (double)
+            RENDER_CONTENT (bool)
+            RENDER_CONTENT (time::Time)
+            RENDER_CONTENT (time::Offset)
+            RENDER_CONTENT (time::Duration)
+            RENDER_CONTENT (time::TimeSpan)
+     #undef RENDER_CONTENT
+            
+            virtual string handle (string const& val) override { return val; }
+            virtual string handle (LuidH const& val)  override { return util::showHash(val, 2);}
+            virtual string handle (RecRef const& ref) override { return renderCompact(ref); }
+            virtual string handle (Rec const& rec)    override { return renderCompact(rec); }
+          };
+    
+    Renderer visitor;
+    return node.data.accept (visitor);
   }
   
   

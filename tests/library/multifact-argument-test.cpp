@@ -1,31 +1,26 @@
 /*
   MultiFactArgument(Test)  -  passing additional invocation arguments to registered factory functions
 
-  Copyright (C)         Lumiera.org
-    2009,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2009,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file multifact-argument-test.cpp
+ ** unit test \ref MultiFactArgument_test
+ */
 
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/multifact.hpp"
 
-#include <iostream>
 #include <functional>
 
 
@@ -33,8 +28,6 @@
 namespace lib {
 namespace test{
   
-  using std::cout;
-  using std::endl;
   using std::bind;
   using std::function;
   using std::placeholders::_1;
@@ -85,7 +78,7 @@ namespace test{
    * @test define a MultiFact (factory with dynamic registration),
    *       which accepts additional arguments and passes them
    *       through to the registered factory function(s).
-   * @note we set up fabrication functions by binding the functions 
+   * @note we set up fabrication functions by binding the functions
    *       in such a way as to match the function signature declared
    *       in the factory; thereby one argument remains unclosed,
    *       which is the argument to be supplied on each

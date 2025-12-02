@@ -1,22 +1,13 @@
 /*
-  TYPED-ALLOCATION-MANAGER.hpp  -  abstract backbone to build custom memory managers 
+  TYPED-ALLOCATION-MANAGER.hpp  -  abstract backbone to build custom memory managers
 
-  Copyright (C)         Lumiera.org
-    2009,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2009,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
 
@@ -55,6 +46,7 @@
  ** 
  ** @todo using a quick-n-dirty heap allocation implementation for now (8/09),
  **       but should write a custom allocator based on cehteh's mpool!
+ ** @warning this quick-n-dirty heap allocation might produce misaligned storage!!
  ** 
  ** @see CommandRegistry
  ** @see AllocationCluster (another custom allocation scheme, which could be united)
@@ -67,13 +59,13 @@
 #define LIB_TYPED_ALLOCATION_MANAGER_H
 
 #include "lib/error.hpp"
-#include "lib/format-util.hpp"
+#include "lib/meta/util.hpp"
 #include "lib/typed-counter.hpp"
 #include "include/logging.h"
 
 
+#include <utility>
 #include <memory>
-
 
 
 namespace lib {
@@ -91,7 +83,7 @@ namespace lib {
    * placing them into the storage maintained by a low-level
    * allocator or pooled storage manager. The created smart-ptr
    * owns the new object and is wired internally to #releaseSlot.
-   * Subclasses may also directly allocate and de-allocate 
+   * Subclasses may also directly allocate and de-allocate
    * such a (typed) storage slot.
    * 
    * @todo currently (as of 8/09) the low-level pooled allocator
@@ -170,93 +162,30 @@ namespace lib {
           friend class TypedAllocationManager;
         };
       
-        
+      
       
       
       /* ==== build objects with managed allocation ==== */
       
-#define _EXCEPTION_SAFE_INVOKE(_CTOR_)                    \
-                                                           \
-          Slot<XX> slot = allocateSlot<XX>();               \
-          try                                                \
-            {                                                 \
-              return slot.build (new(slot.storage_) _CTOR_ );  \
-            }                                                  \
-          catch(...)                                           \
-            {                                                  \
-              releaseSlot<XX>(slot.storage_);                  \
-              throw;                                           \
+      template< class XX, typename...ARGS>
+      shared_ptr<XX>
+      create (ARGS&& ...args)
+        {
+          Slot<XX> slot = allocateSlot<XX>();
+          try {
+              return slot.build (new(slot.storage_) XX (std::forward<ARGS> (args)...) );
             }
-      
-      template< class XX>
-      shared_ptr<XX>                                                                   //_____________________
-      create ()                                                                       ///< invoke default ctor
-        {
-          _EXCEPTION_SAFE_INVOKE ( XX() )
+          catch(...)
+            {
+              releaseSlot<XX>(slot.storage_);
+              throw;
+            }
         }
       
       
-      template< class XX, typename P1>
-      shared_ptr<XX>                                                                   //___________________
-      create (P1& p1)                                                                 ///< invoke 1-arg ctor
-        {
-          _EXCEPTION_SAFE_INVOKE ( XX (p1) )
-        }
       
       
-      template< class XX
-              , typename P1
-              , typename P2
-              >
-      shared_ptr<XX>                                                                   //___________________
-      create (P1& p1, P2& p2)                                                         ///< invoke 2-arg ctor
-        {
-          _EXCEPTION_SAFE_INVOKE ( XX (p1,p2) )
-        }
       
-      
-      template< class XX
-              , typename P1
-              , typename P2
-              , typename P3
-              >
-      shared_ptr<XX>                                                                   //___________________
-      create (P1& p1, P2& p2, P3& p3)                                                 ///< invoke 3-arg ctor
-        {
-          _EXCEPTION_SAFE_INVOKE ( XX (p1,p2,p3) )
-        }
-      
-      
-      template< class XX
-              , typename P1
-              , typename P2
-              , typename P3
-              , typename P4
-              >
-      shared_ptr<XX>                                                                   //___________________
-      create (P1& p1, P2& p2, P3& p3, P4& p4)                                         ///< invoke 4-arg ctor
-        {
-          _EXCEPTION_SAFE_INVOKE ( XX (p1,p2,p3,p4) )
-        }
-      
-      
-      template< class XX
-              , typename P1
-              , typename P2
-              , typename P3
-              , typename P4
-              , typename P5
-              >
-      shared_ptr<XX>                                                                   //___________________
-      create (P1& p1, P2& p2, P3& p3, P4& p4, P5& p5)                                 ///< invoke 5-arg ctor
-        {
-          _EXCEPTION_SAFE_INVOKE ( XX (p1,p2,p3,p4,p5) )
-        }
-      
-#undef _EXCEPTION_SAFE_INVOKE
-
-    
-    
       
     protected: /* ======= Managed Allocation Implementation ========== */
       
@@ -265,7 +194,7 @@ namespace lib {
       allocateSlot ()
         {
           ////////////////////////////////////////////////TICKET #231 :redirect to the corresponding pool allocator
-          TRACE (memory, "allocate %s", util::tyStr<XX>().c_str());
+          TRACE (memory, "allocate «%s»", util::typeStr<XX>().c_str());
           void* space = new char[sizeof(XX)];
           allocCnt_.inc<XX>();
           return Slot<XX> (this, space);
@@ -276,8 +205,8 @@ namespace lib {
       releaseSlot (void* entry)
         {
           ////////////////////////////////////////////////TICKET #231 :redirect to the corresponding pool allocator
-          TRACE (memory, "release %s", util::tyStr<XX>().c_str());
-          typedef char Storage[sizeof(XX)];
+          TRACE (memory, "release «%s»", util::typeStr<XX>().c_str());
+          typedef char Storage[sizeof(XX)]; //////////////TICKET #1204 : WARNING this might produce misaligned storage when the array does not start on a "void* boundary"
           delete[] reinterpret_cast<Storage*> (entry);
           allocCnt_.dec<XX>();
         }
@@ -296,8 +225,8 @@ namespace lib {
           catch(...)
             {
               lumiera_err errorID = lumiera_error();
-              WARN (command_dbg, "dtor of %s failed: %s", util::tyStr(entry).c_str()
-                                                        , errorID );
+              WARN (command_dbg, "dtor of «%s» failed: %s", util::typeStr(entry).c_str()
+                                                          , errorID );
             }
           releaseSlot<XX> (entry);
         }

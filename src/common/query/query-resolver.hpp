@@ -1,24 +1,26 @@
 /*
   QUERY-RESOLVER.hpp  -  framework for resolving generic queries
 
-  Copyright (C)         Lumiera.org
-    2009,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2009,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
+
+
+/** @file query-resolver.hpp
+ ** framework and to resolve logical queries.
+ ** This header defines a family of interfaces and classes
+ ** to integrate resolution of logical, rules based queries into generic
+ ** implementation code. The concrete facility actually to resolve such queries
+ ** is abstracted away as QueryResolver. A prominent usage example is the session,
+ ** which allows to query for elements "somewhere within the model"
+ ** 
+ */
 
 
 #ifndef LUMIERA_QUERY_RESOLVER_H
@@ -26,9 +28,8 @@
 
 #include "lib/iter-adapter.hpp"
 #include "common/query.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
 #include <functional>
 #include <memory>
 #include <string>
@@ -37,8 +38,7 @@ using std::function;
 
 namespace lumiera {
   
-  using boost::noncopyable;
-  using boost::scoped_ptr;
+  using std::unique_ptr;
   using std::string;
   
   
@@ -50,12 +50,12 @@ namespace lumiera {
   typedef std::shared_ptr<Resolution> PReso;
   
   
-  /** 
+  /**
    * ABC representing the result set
    * of an individual query resolution
    */
   class Resolution
-    : boost::noncopyable
+    : util::NonCopyable
     {
     public:
       typedef Goal::Result Result;
@@ -87,7 +87,7 @@ namespace lumiera {
   /**
    * Interface: a facility for resolving (some kind of) queries
    * A concrete subclass has the ability to create Resolution instances
-   * in response to specific queries of some kind, \link #canHandle if applicable \endlink.
+   * in response to specific queries of some kind, [if applicable](\ref QueryResolver::canHandle).
    * Every resolution mechanism is expected to enrol by calling #installResolutionCase.
    * Such a registration is considered permanent; a factory function gets stored,
    * assuming that the entity to implement this function remains available
@@ -96,9 +96,9 @@ namespace lumiera {
    * Thus the implementation might downcast query and resultset.
    */
   class QueryResolver
-    : noncopyable
+    : util::NonCopyable
     {
-      scoped_ptr<QueryDispatcher> dispatcher_;
+      unique_ptr<QueryDispatcher> dispatcher_;
       
       
     public:
@@ -137,7 +137,7 @@ namespace lumiera {
   
   
   template<typename RES>
-  inline typename Query<RES>::iterator
+  inline Query<RES>::iterator
   Query<RES>::resolveBy (QueryResolver const& resolver)  const
   {
     PReso resultSet = resolver.issue (*this);
@@ -148,9 +148,9 @@ namespace lumiera {
   
   
   /** notational convenience shortcut,
-   *  synonymous to #resolveBy */
+   *  synonymous to Query<RES>::resolveBy() */
   template<typename RES>
-  inline typename Query<RES>::iterator
+  inline Query<RES>::iterator
   Query<RES>::operator() (QueryResolver const& resolver)  const
   {
     return resolveBy (resolver);

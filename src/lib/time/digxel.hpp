@@ -1,22 +1,13 @@
 /*
   DIGXEL.hpp  -  grid aligned and fixed format time specifications
 
-  Copyright (C)         Lumiera.org
-    2010,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2010,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
 
@@ -32,7 +23,7 @@
  ** properties to support building such display widgets. It doesn't contain any GUI code, but
  ** can be wrapped up to build a custom widget.
  ** 
- ** \par properties of a "Digxel"
+ ** # properties of a "Digxel"
  ** 
  ** Semantically, it's a number or number component. It holds an internal numeric representation
  ** and is implicitly convertible back to the underlying numeric type (usually int or double).
@@ -53,7 +44,8 @@
  ** this mutation functor should invoke some internal recalculations, maybe resulting in a new
  ** value being pushed to the Digxel for display.
  ** 
- ** \par configuration
+ ** # configuration
+ ** 
  ** the Digxel template can be configured to some degree to adjust the stored numeric data
  ** and the actual format to be applied
  ** 
@@ -68,7 +60,6 @@
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
 
-#include <boost/operators.hpp>
 #include <boost/lexical_cast.hpp>
 #include <functional>
 #include <string>
@@ -83,11 +74,10 @@ namespace time {
   
   namespace digxel {
     
-    using util::cStr;
     using lib::Literal;
     using boost::lexical_cast;
     
-    typedef const char* CBuf;
+    using CBuf = CStr;
     
     
     /**
@@ -118,7 +108,7 @@ namespace time {
         maxlen()  const
           {
             return len;
-          } 
+          }
         
         CBuf
         show (NUM val)
@@ -136,9 +126,9 @@ namespace time {
       };
     
     
-    /** 
+    /**
      * default configured Formatter implementations
-     * for some of the basic numeric types 
+     * for some of the basic numeric types
      */
     template<typename NUM>
     struct Formatter;
@@ -182,11 +172,11 @@ namespace time {
         HourFormatter() : PrintfFormatter<int,9>("%2d") { }
       };
     
-      
+    
     struct SignFormatter
       {
         void clear()          {  }
-        size_t maxlen() const { return 1; }        
+        size_t maxlen() const { return 1; }
         CBuf show (int val)   { return val<0? "-":" "; }
       };
     
@@ -211,20 +201,19 @@ namespace time {
    * - stores and these given value numerically
    * - will then format these numbers and cache the formatted representation
    * - can store and invoke a mutation functor to pre-process values on setting
-   * 
+   *
    * @note comparisons are assumed to be not performance relevant
    * @param NUM numeric type to be used for the value
    * @param FMT a formatter and buffer holder type
    * @see digxel::Formatter default printf based formatter
    * @see lib::time::TCode
    * @see Digxel_test
-   * 
+   *
    */
     template< typename NUM
             , class FMT  = digxel::Formatter<NUM>
             >
   class Digxel
-    : public boost::totally_ordered<Digxel<NUM,FMT> >
     {
       mutable
       FMT buffer_;
@@ -306,20 +295,20 @@ namespace time {
       NUM     operator++  (int)      { NUM p(value_); *this =p+1; return p;}
       NUM     operator--  (int)      { NUM p(value_); *this =p-1; return p;}
       
-      //---Supporting-totally_ordered---------
-      bool operator<  (Digxel const& o)  const { return value_ <  NUM(o); }
-      bool operator== (Digxel const& o)  const { return value_ == NUM(o); }
+      //---Supporting-total-ordering----------
+      auto operator<=>(Digxel const& o)  const { return value_ <=> NUM(o); }
+      bool operator== (Digxel const& o)  const { return value_ ==  NUM(o); }
     };
   
   
   
   /* == predefined Digxel configurations == */
-  typedef Digxel< int, digxel::SexaFormatter> SexaDigit;  ///< for displaying time components (sexagesimal)
-  typedef Digxel<uint, digxel::HexaFormatter> HexaDigit;  ///< for displaying a hex byte
-  typedef Digxel< int, digxel::HourFormatter> HourDigit;  ///< for displaying hours in H:M.S
+  using SexaDigit = Digxel< int, digxel::SexaFormatter>;  ///< for displaying time components (sexagesimal)
+  using HexaDigit = Digxel<uint, digxel::HexaFormatter>;  ///< for displaying a hex byte
+  using HourDigit = Digxel< int, digxel::HourFormatter>;  ///< for displaying hours in H:M:S
   
-  typedef int64_t FrameCnt;
-  typedef Digxel<FrameCnt, digxel::CountFormatter> CountVal;  ///< for displaying a counter
+  using FrameCnt = int64_t;
+  using CountVal = Digxel<FrameCnt, digxel::CountFormatter>;  ///< for displaying a counter
   
   
   /** special Digxel to show a sign.
@@ -333,7 +322,7 @@ namespace time {
       storeSign (int val)
         {
           setValueRaw (val<0? -1:+1);
-        } 
+        }
       
     public:
       Signum()

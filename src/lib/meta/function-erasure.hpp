@@ -1,22 +1,13 @@
 /*
   FUNCTION-ERASURE.hpp  -  wrapping a functor object for inline storage while hiding the signature
 
-  Copyright (C)         Lumiera.org
-    2009,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2009,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
 
@@ -28,27 +19,27 @@
  ** while hiding the actual signature behind an common interface ("type erasure").
  ** The usual solution based on subclassing has the downside of requiring separate
  ** storage for the concrete functor object, which might become problematic when
- ** dealing with lots of functor objects. 
- ** 
- ** Especially when dealing with tr1::function objects, all of the type differences
+ ** dealing with lots of functor objects.
+ **
+ ** Especially when dealing with std::function objects, all of the type differences
  ** are actually encoded into 3 internal pointers, thus yielding the same size for
  ** all various types of functors. Building on this observation, we can create an
  ** common container object to store the varying functors inline, while hiding the
  ** actual signature.
- ** 
+ **
  ** There remains the problem of re-accessing the concrete functor later on. As
  ** C++ has only rudimental introspection capabilities, we can only rely on the
  ** usage context to provide the correct function signature; only when using a
  ** virtual function for the re-access, we can perform at least a runtime-check.
- ** 
+ **
  ** Thus there are various flavours for actually implementing this idea, and
  ** picking a suitable implementation depends largely on the context. Thus we
  ** provide a common frontend for access and expect the client code to pick
  ** a suitable implementation policy.
- ** 
+ **
  ** @see control::Mutation usage example
  ** @see function-erasure-test.cpp
- ** 
+ **
  */
 
 
@@ -57,9 +48,7 @@
 
 #include "lib/util.hpp"
 #include "lib/error.hpp"
-#include "lib/bool-checkable.hpp"
 #include "lib/opaque-holder.hpp"
-#include "lib/functor-util.hpp"
 
 #include <functional>
 
@@ -76,11 +65,11 @@ namespace meta{
    * Generic wrapper carrying a function object
    * while hiding the actual function signature
    * - create it using a function ref or pointer
-   * - the StoreFunction-policy also allows 
+   * - the StoreFunction-policy also allows
    *   creation based on an existing function object
    * - re-access the functor or function ref
    *   using the templated \c getFun()
-   *   
+   *
    * @param FH policy to control the implementation.
    *        In most cases, you should use "StoreFunction"
    * @note not statically typesafe. Depending on
@@ -107,14 +96,14 @@ namespace meta{
   /* ====== Policy classes ====== */
   
   typedef function<void(void)> FunVoid;
-  typedef lib::InPlaceAnyHolder< sizeof(FunVoid)                       // same size for all function objects 
+  typedef lib::InPlaceAnyHolder< sizeof(FunVoid)                       // same size for all function objects
                                , lib::InPlaceAnyHolder_unrelatedTypes  // no common base class!
                                > FunHolder;
-  typedef lib::InPlaceAnyHolder< sizeof(void*) 
+  typedef lib::InPlaceAnyHolder< sizeof(void*)
                                , lib::InPlaceAnyHolder_unrelatedTypes
                                > FunPtrHolder;
   
-                               
+  
   /**
    * Policy for FunErasure: store an embedded std::function
    * Using this policy allows to store arbitrary complex functor objects
@@ -139,15 +128,7 @@ namespace meta{
       function<SIG>&
       getFun ()  const
         {
-          return get<function<SIG> >();
-        }
-      
-      
-      friend bool
-      operator== (StoreFunction const& o1,
-                  StoreFunction const& o2)
-        {
-          return util::rawComparison (o1.asBase(),o2.asBase());
+          return get<function<SIG>>();
         }
     };
   
@@ -156,7 +137,7 @@ namespace meta{
    * Policy for FunErasure: store a bare function pointer.
    * Using this policy allows to store a conventional function ptr,
    * while still being able to re-access it later with run-time type check.
-   * The price to pay is vtable access. 
+   * The price to pay is vtable access.
    */
   class StoreFunPtr
     : public FunPtrHolder
@@ -180,16 +161,6 @@ namespace meta{
           REQUIRE (fun);
           return *fun;
         }
-      
-      
-      friend bool
-      operator== (StoreFunPtr const& o1,
-                  StoreFunPtr const& o2)
-        {
-          void * *fun1 = reinterpret_cast<void**> (o1.asBase());
-          void * *fun2 = reinterpret_cast<void**> (o2.asBase());
-          return *fun1 == *fun2;
-        }
     };
   
   
@@ -199,7 +170,6 @@ namespace meta{
    * and to retrieve it without overhead, but also without safety.
    */
   class StoreUncheckedFunPtr
-    : public lib::BoolCheckable<StoreUncheckedFunPtr>
     {
       void *funP_;
       
@@ -223,18 +193,9 @@ namespace meta{
         }
       
       
-      bool
-      isValid()  const
-        {
-          return funP_;
-        }
+      explicit operator bool() const { return funP_; }
+      bool isValid()           const { return funP_; }
       
-      friend bool
-      operator== (StoreUncheckedFunPtr const& o1,
-                  StoreUncheckedFunPtr const& o2)
-        {
-          return unConst(o1).funP_ == unConst(o2).funP_;
-        }
     };
   
   

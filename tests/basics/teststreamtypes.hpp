@@ -1,24 +1,19 @@
 /*
   TESTSTREAMTYPES.hpp  -  create test (stub) stream type information
 
-  Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2008,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
+
+/** @file teststreamtypes.hpp
+ ** Unit test helper to create fake streamtype information
+ */
 
 
 #ifndef LUMIERA_TEST_TESTSTREAMTYPES_H
@@ -27,23 +22,26 @@
 
 //#include "lib/util.hpp"
 
-#include "proc/streamtype.hpp"
-#include "proc/control/stypemanager.hpp"
+#include "steam/streamtype.hpp"
+#include "steam/control/stypemanager.hpp"
+#include "lib/time/timevalue.hpp"
 
 extern "C" {
 #include <gavl/gavl.h>
 }
 
 
-namespace proc {
+namespace steam {
 namespace test_format {
+  
+  using lib::time::TimeValue;
   
   namespace { // constants used to parametrise tests
   
     const int TEST_IMG_WIDTH = 40;
     const int TEST_IMG_HEIGHT = 30;
     
-    const int TEST_FRAME_DUR = GAVL_TIME_SCALE / 25;
+    const int TEST_FRAME_DUR = TimeValue::SCALE / 25;
   }
   
   Symbol GAVL = "GAVL";
@@ -68,11 +66,11 @@ namespace test_format {
     type.frame_width  = TEST_IMG_WIDTH;   // Width of the frame buffer in pixels, might be larger than image_width 
     type.frame_height = TEST_IMG_WIDTH;   // Height of the frame buffer in pixels, might be larger than image_height
     
-    type.pixel_width  = 1;              // Relative width of a pixel (pixel aspect ratio is pixel_width/pixel_height)
-    type.pixel_height = 1;             // Relative height of a pixel (pixel aspect ratio is pixel_width/pixel_height)
+    type.pixel_width  = 1;                // Relative width of a pixel  (pixel aspect ratio is pixel_width/pixel_height)
+    type.pixel_height = 1;                // Relative height of a pixel (pixel aspect ratio is pixel_width/pixel_height)
     
-    type.frame_duration = TEST_FRAME_DUR; // Duration of a frame in timescale tics. 
-    type.timescale = GAVL_TIME_SCALE;     // Timescale in tics per second  (is defined to be 1000000 as of 9/2008)
+    type.frame_duration = TEST_FRAME_DUR; // Duration of a frame in timescale ticks.
+    type.timescale = TimeValue::SCALE;    // Timescale in ticks per second  (is defined to be 1000000 as of 9/2008)
     
     return type;
   }
@@ -90,5 +88,5 @@ namespace test_format {
   
   
   
-}} // namespace proc::test_format
+}} // namespace steam::test_format
 #endif

@@ -1,22 +1,13 @@
 /*
   INDEX.hpp  -  data structure for organising advice solutions and matching
 
-  Copyright (C)         Lumiera.org
-    2010,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2010,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
 
@@ -30,7 +21,7 @@
  ** 
  ** This header is intended to be incorporated as part of the advice system implementation (advice.cpp).
  ** It is \em not usable as an external interface. But it is written in a rather self-contained manner,
- ** in order to be testable in isolation. To this end, the actual PointOfAdvice entities being organised
+ ** in order to be testable in isolation. To this end, the actual PointOfAdvice entities \a POA organised
  ** by this index datastructure remain abstract (defined as template parameter), and are only manipulated
  ** through the following functions:
  ** - \c hash_value(POA)
@@ -51,22 +42,22 @@
  ** coded explicitly as ProvisionCluster and RequestCluster -- both based on a vector of entries.
  ** In case of the provisions, there is a stack-like order, inasmuch additions happen at the back
  ** and solutions are always searched starting from the end. Because of the basic structure of
- ** a binding match, solutions are possible \only between provision/request - clusters with the
+ ** a binding match, solutions are possible _only_ between provision/request - clusters with the
  ** same hash value (which is based on the predicate symbols within the patterns to match). Thus,
  ** in case of changing an existing request or solution, the internal handling is different,
  ** depending on the new value to belong or don't belong to the same cluster (hash code).
  ** It's possible (for patterns including variables) that an entry leading to a solution with
  ** the old provision doesn't match a new provision (and vice versa); thus we'll have to traverse
  ** the contents of the whole cluster, find all old solutions, match against the new counterpart
- ** and treating those entries \em not matching with the new value as if they where completely
+ ** and treating those entries _not matching_ with the new value as if they where completely
  ** newly added entries. In case we don't find any solution, the entries are supposed to be
  ** implemented such as to fall back to an default solution automatically (when receiving
- ** a \c NULL solution)
+ ** a `NULL` solution)
  ** 
  ** @note as of 4/2010 this is an experimental setup and implemented just enough to work out
  **       the interfaces. Ichthyo expects this collaboration service to play a central role
- **       later at various places within proc-layer.
- ** @note for now, \em only the case of a completely constant (ground) pattern is implemented.
+ **       later at various places within steam-layer.
+ ** @note for now, _only_ the case of a completely constant (ground) pattern is implemented.
  **       Later we may consider to extend the binding patterns to allow variables. The mechanics
  **       of the index are designed right from start to support this case (and indeed the index
  **       could be much simpler if it wasn't to deal with this foreseeable additional complexity:
@@ -91,13 +82,12 @@
 #include "lib/symbol.hpp"
 #include "include/logging.h"
 #include "lib/iter-adapter-stl.hpp"
+#include "lib/format-obj.hpp"
 #include "lib/util-foreach.hpp"
 #include "lib/util.hpp"
 #include "common/advice/binding.hpp"
 
-#include <boost/operators.hpp>
 #include <unordered_map>
-#include <iostream>
 #include <string>
 
 namespace lumiera{
@@ -109,6 +99,7 @@ namespace advice {
   using std::unordered_map;
   using lib::iter_stl::eachVal;
   using lib::iter_stl::eachElm;
+  using util::toString;
   using util::for_each;
   using util::contains;
   using util::unConst;
@@ -116,9 +107,6 @@ namespace advice {
   using std::string;
   using std::vector;
   using std::pair;
-  using std::ostream;
-  using std::cout;
-  using std::endl;
   
   
   
@@ -133,14 +121,15 @@ namespace advice {
    * by invoking the \c setSolution() function on the
    * corresponding PointOfAdvice entity.
    * 
-   * @note element \em identity is defined in terms of pointing 
+   * @tparam POA _point-of-advice_ exposing a matcher and solution
+   * @note element \em identity is defined in terms of pointing
    *       to the same memory location of a POA (point of advice).
    *       Thus e.g. #hasProvision means this index holds an entry
    *       pointing to exactly this given data entity.
    * @note the implementation of modifying a Request entry
    *       explicitly relies on that definition of equality.
    * @note the diagnostic API is mainly intended for unit testing
-   *       and \em not implemented with focus on performance. 
+   *       and \em not implemented with focus on performance.
    * 
    * \par Exception safety
    * Adding new registrations might throw error::Fatal or bad_alloc.
@@ -152,11 +141,8 @@ namespace advice {
   class Index
     {
       
-      
       struct Entry
         : pair<Binding::Matcher, POA*>
-        , boost::equality_comparable<Entry, POA,
-          boost::equality_comparable<Entry> >
         {
           explicit
           Entry (POA& elm)
@@ -164,6 +150,12 @@ namespace advice {
             { }
           
           // using default-copy, thus assuming copy is NO_THROW
+          
+          
+          operator string()  const  ///< diagnostics
+            {
+              return "E-" +hash_value(this->first) +"--> "+ this->second ;
+            }
           
           friend bool
           operator== (Entry const& a, Entry const& b)
@@ -176,17 +168,11 @@ namespace advice {
           {
             return a.second == &p;
           }
-          
-          friend ostream&
-          operator<< (ostream& os, Entry const& ent)
-          {
-            return os << "E-"<<hash_value(ent.first) << "--> " << ent.second ;
-          }
         };
       
       
-      typedef vector<Entry> EntryList;
-      typedef typename EntryList::iterator EIter;
+      using EntryList = vector<Entry>;
+      using EIter     = EntryList::iterator;
       
       
       struct Cluster
@@ -241,12 +227,12 @@ namespace advice {
                return false;
              }
            
-           void
-           dump() ///< debugging helper: Cluster contents --> STDOUT
+           operator string()  const  ///< debugging helper: show Cluster contents
              {
-               cout << "elmList("<< elms_.size()<<")" << endl;
-               for (EIter i=elms_.begin(); i!=elms_.end(); ++i)
-                 cout << "E...:"<< (*i) << endl;
+               string dump{"elmList("+toString(elms_.size())+")\n"};
+               for (auto const& entry : elms_)
+                 dump += "E...:"+entry+"\n";
+               return dump;
              }
            
            lib::RangeIter<EIter>
@@ -263,7 +249,7 @@ namespace advice {
           POA*
           find_latest_solution (POA& requestElm)
             {
-              typedef typename EntryList::reverse_iterator RIter;
+              using RIter = EntryList::reverse_iterator;
               Binding::Matcher pattern (requestElm.getMatcher());
               for (RIter ii=this->elms_.rbegin();
                    ii!=this->elms_.rend();
@@ -335,7 +321,7 @@ namespace advice {
       
       
       
-      /* ==== Index Tables ===== */  
+      /* ==== Index Tables ===== */
       
       typedef unordered_map<HashVal, RequestCluster> RTable;
       typedef unordered_map<HashVal, ProvisionCluster> PTable;
@@ -360,7 +346,7 @@ namespace advice {
        *        Thus we can use the already modified Request to find
        *        the old entry within the index pointing to this Request.
        *  @param oKey the binding hash value prior to modification
-       */      
+       */
       void
       modifyRequest (HashVal oKey, POA& entry)
         {
@@ -469,11 +455,11 @@ namespace advice {
         {
           return provisionEntries_[hash_value(refEntry)].contains (refEntry);
         }                       // note: even just lookup might create a new (empty) cluster;
-                               //        thus the tables are defined as mutable 
+                               //        thus the tables are defined as mutable
       
       
     private:
-      /** internal: sum element count over all 
+      /** internal: sum element count over all
        *  clusters in the given hashtable */
       template<class IT>
       static size_t
@@ -509,8 +495,8 @@ namespace advice {
       : error::Fatal
       {
         SelfCheckFailure (Literal failure)
-          : error::Fatal (string("Failed test: ")+failure
-                         ,LUMIERA_ERROR_INDEX_CORRUPTED)
+          : error::Fatal {string("Failed test: ")+failure
+                         ,LUMIERA_ERROR_INDEX_CORRUPTED}
           { }
       };
   }
@@ -528,8 +514,8 @@ namespace advice {
   bool
   Index<POA>::isValid()  const
   {
-    typedef typename RTable::const_iterator RTIter;
-    typedef typename PTable::const_iterator PTIter;
+    using RTIter = RTable::const_iterator;
+    using PTIter = PTable::const_iterator;
     
     try {
         for (PTIter ii =provisionEntries_.begin();
@@ -579,9 +565,9 @@ namespace advice {
     verify_Entry (e,hash);
     POA& request = *(e.second);
     const POA* solution (request.getSolution());
-    if (solution && hasProvision(*solution))
+    if (solution and hasProvision (*solution))
       {
-        POA* currentSolution = provisionEntries_[hash].find_latest_solution (request); 
+        POA* currentSolution = provisionEntries_[hash].find_latest_solution (request);
         VERIFY (e.first.matches (solution->getMatcher()),"stored advice solution not supported by binding match");
         VERIFY (bool(currentSolution),                   "unable to reproduce stored solution with the current provisions")
         VERIFY (solution == currentSolution,             "stored advice solution isn't the topmost solution for this request")

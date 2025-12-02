@@ -1,6 +1,11 @@
 /*
- * hello.c - demonstrates how to build a standalone tool (C source) 
+ * hello.c - demonstrates how to build a standalone tool (C source)
  *           integrated into the SCons based build system of Lumiera
+ */
+
+
+/** @file hello.c
+ ** Example file to demonstrate integration of stand-alone tools into the build process
  */
 
 #include <stdio.h>

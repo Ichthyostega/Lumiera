@@ -1,22 +1,13 @@
 /*
   VARIANT.hpp  -  lightweight typesafe union record
 
-  Copyright (C)         Lumiera.org
-    2015,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2015,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
 
@@ -28,7 +19,7 @@
  ** but also doesn't deal with alignment issues and is <b>not threadsafe</b>.
  ** 
  ** Deliberately, the design rules out re-binding of the contained type. Thus,
- ** once created, a variant \em must hold a valid element and always an element
+ ** once created, a variant _must hold a valid element_ and always an element
  ** of the same type. Beyond that, variant elements are copyable and mutable.
  ** Direct access requires knowledge of the embedded type (no switch-on type).
  ** Type mismatch is checked at runtime. As a fallback, we provide a visitor
@@ -39,10 +30,11 @@
  ** Likewise, we do not want to support mutations of the variant type at runtime. Basically,
  ** using a variant record is recommended only if either the receiving context has structural
  ** knowledge about the type to expect, or when a visitor implementation can supply a sensible
- ** handling for \em all the possible types. As an alternative, you might consider the
+ ** handling for _all the possible types._ As an alternative, you might consider the
  ** lib::PolymorphicValue to hold types implementing a common interface.
  ** 
- ** \par implementation notes
+ ** # implementation notes
+ ** 
  ** We use a "double capsule" implementation technique similar to lib::OpaqueHolder.
  ** In fact, Variant is almost identical to the latter, just omitting unnecessary flexibility.
  ** The outer capsule exposes the public handling interface, while the inner, private capsule
@@ -61,9 +53,9 @@
  ** 
  ** @note we use a Visitor interface generated through metaprogramming.
  **       This may generate a lot of warnings "-Woverloaded-virtual",
- **       since one \c handle(TX) function may shadow other \c handle(..) functions
+ **       since one `handle(TX)` function may shadow other `handle(..)` functions
  **       from the inherited (generated) Visitor interface. These warnings are besides
- **       the point, since not the \em client uses these functions, but the Variant does,
+ **       the point, since not the _client_ uses these functions, but the Variant does,
  **       after upcasting to the interface. Make sure you define your specialisations with
  **       the override modifier; when done so, it is safe to disable this warning here.
  ** 
@@ -83,9 +75,11 @@
 #include "lib/meta/typelist-util.hpp"
 #include "lib/meta/generator.hpp"
 #include "lib/meta/virtual-copy-support.hpp"
+#include "lib/format-obj.hpp"
 #include "lib/util.hpp"
 
 #include <type_traits>
+#include <cstddef>
 #include <utility>
 #include <string>
 
@@ -101,11 +95,12 @@ namespace lib {
   namespace error = lumiera::error;
   
   
-  namespace { // implementation helpers
+  namespace variant { // implementation metaprogramming helpers
     
     using std::remove_reference;
-    using meta::NullType;
+    using meta::Types;
     using meta::Node;
+    using meta::Nil;
     
     
     template<typename X, typename TYPES>
@@ -117,27 +112,61 @@ namespace lib {
     
     template<typename X, typename TYPES>
     struct CanBuildFrom<X, Node<X, TYPES>>
+      : std::true_type
       {
         using Type = X;
       };
     
     template<typename X, typename TYPES>
     struct CanBuildFrom<const X, Node<X, TYPES>>
+      : std::true_type
       {
         using Type = X;
       };
     
-    template<typename X, typename T,typename TYPES>
-    struct CanBuildFrom<X, Node<T, TYPES>>
+    template<typename TYPES, size_t len>
+    struct CanBuildFrom<const char [len], Node<string, TYPES>> ///< esp. allow to build string from char literal
+      : std::true_type
       {
-        using Type = typename CanBuildFrom<X,TYPES>::Type;
+        using Type = string;
       };
     
+    template<typename X, typename T,typename TYPES>
+    struct CanBuildFrom<X, Node<T, TYPES>>
+      : CanBuildFrom<X,TYPES>
+      { };
+    
     template<typename X>
-    struct CanBuildFrom<X, NullType>
+    struct CanBuildFrom<X, Nil>
+      : std::false_type
+      { };
+    
+    
+    template<typename T>
+    struct Identity { using Type = T; };
+    
+    /**
+     * Helper to pick the first type from a type sequence,
+     * which fulfils the predicate (meta function) given as template
+     * @tparam TYPES a type sequence or type list
+     * @tparam a predicate template or type trait
+     * @note result as embedded typedef `Type`
+     */
+    template<class TYPES, template<class> class _P_>
+    struct FirstMatchingType
       {
-        static_assert (0 > sizeof(X), "No type in Typelist can be built from the given argument");
+        static_assert(not sizeof(TYPES), "None of the possible Types fulfils the condition");
       };
+    
+    template<class...TYPES, template<class> class _P_>
+    struct FirstMatchingType<Types<TYPES...>, _P_>
+      : FirstMatchingType<typename Types<TYPES...>::List, _P_>
+      { };
+    
+    template<class T, class TYPES, template<class> class _P_>
+    struct FirstMatchingType<Node<T,TYPES>, _P_>
+      : std::conditional_t<_P_<T>::value, Identity<T>, FirstMatchingType<TYPES, _P_>>
+      {  };
     
     
     
@@ -180,18 +209,21 @@ namespace lib {
    * @todo we need to define all copy operations explicitly, due to the
    *       templated one-arg ctor to wrap the actual values.
    *       There might be a generic solution for that     ////////////////////////TICKET #963  Forwarding shadows copy operations -- generic solution??
-   *       But -- Beware of unverifiable generic solutions! 
+   *       But -- Beware of unverifiable generic solutions!
    */
   template<typename TYPES>
   class Variant
     {
+      
     public:
-      enum { SIZ = meta::maxSize<typename TYPES::List>::value };
+      enum { SIZ   = meta::maxSize<typename TYPES::List>()
+           , ALIGN = meta::maxAlign<typename TYPES::List>()
+           };
       
       template<typename RET>
-      using VisitorFunc      = typename VFunc<RET>::template VisitorInterface<TYPES>;
+      using VisitorFunc      = variant::VFunc<RET>::template VisitorInterface<TYPES>;
       template<typename RET>
-      using VisitorConstFunc = typename VFunc<RET>::template VisitorInterface<meta::ConstAll<typename TYPES::List>>;
+      using VisitorConstFunc = variant::VFunc<RET>::template VisitorInterface<meta::ConstAll<typename TYPES::List>>;
       
       /**
        * to be implemented by the client for visitation
@@ -211,22 +243,39 @@ namespace lib {
           virtual ~Predicate() { } ///< this is an interface
         };
       
+      class Renderer
+        : public VisitorConstFunc<string>
+        {
+        public:
+          virtual ~Renderer() { } ///< this is an interface
+        };                                                      ///////////////////////////////////TICKET #1361 : unable to make the Visitor fully generic
+      
+      /**
+       * Metafunction to pick the first of the variant's types,
+       * which satisfies the given trait or predicate template
+       * @note result is the embedded typedef `FirstMatching<P>::Type`
+       */
+      template<template<class> class _P_>
+      using FirstMatching = variant::FirstMatchingType<TYPES, _P_>;
+      
       
     private:
       /** Inner capsule managing the contained object (interface) */
       struct Buffer
         : meta::VirtualCopySupportInterface<Buffer>
         {
-          char content_[SIZ];
+          alignas(ALIGN)
+            std::byte content_[SIZ];
           
           void* ptr() { return &content_; }
           
           
           virtual ~Buffer() {}           ///< this is an ABC with VTable
           
-          virtual void dispatch (Visitor&)         =0;
-          virtual bool dispatch (Predicate&) const =0;
-          virtual operator string()          const =0;
+          virtual void   dispatch (Visitor&)         =0;
+          virtual bool   dispatch (Predicate&) const =0;
+          virtual string dispatch (Renderer&)  const =0;
+          virtual operator string()            const =0;
         };
       
       
@@ -240,7 +289,7 @@ namespace lib {
           TY&
           access()  const  ///< core operation: target is contained within the inline buffer
             {
-              return *reinterpret_cast<TY*> (unConst(this)->ptr());
+              return * std::launder (reinterpret_cast<TY*> (unConst(this)->ptr()));
             }
           
          ~Buff()
@@ -290,9 +339,13 @@ namespace lib {
           void
           operator= (TY && rob)
             {
-              this->access() = move(rob);
+              if (&rob != Buffer::ptr())
+                this->access() = move(rob);
             }
           
+          
+          
+          static string indicateTypeMismatch (Buffer&);
           
           
           static Buff&
@@ -301,10 +354,8 @@ namespace lib {
               Buff* buff = dynamic_cast<Buff*> (&b);
               
               if (!buff)
-                throw error::Logic("Variant type mismatch: "
-                                   "the given variant record does not hold "
-                                   "a value of the type requested here"
-                                  ,error::LUMIERA_ERROR_WRONG_TYPE);
+                throw error::Logic(indicateTypeMismatch(b)
+                                  ,LERR_(WRONG_TYPE));
               else
                return *buff;
             }
@@ -312,7 +363,7 @@ namespace lib {
           void
           dispatch (Visitor& visitor)
             {
-              using Dispatcher = VFunc<void>::template ValueAcceptInterface<TY>;
+              using Dispatcher = variant::VFunc<void>::template ValueAcceptInterface<TY>;
               
               Dispatcher& typeDispatcher = visitor;
               typeDispatcher.handle (this->access());
@@ -321,7 +372,16 @@ namespace lib {
           bool
           dispatch (Predicate& visitor)  const
             {
-              using Dispatcher = VFunc<bool>::template ValueAcceptInterface<const TY>;
+              using Dispatcher = variant::VFunc<bool>::template ValueAcceptInterface<const TY>;
+              
+              Dispatcher& typeDispatcher = visitor;
+              return typeDispatcher.handle (this->access());
+            }
+          
+          string
+          dispatch (Renderer& visitor)  const
+            {
+              using Dispatcher = variant::VFunc<string>::template ValueAcceptInterface<const TY>;
               
               Dispatcher& typeDispatcher = visitor;
               return typeDispatcher.handle (this->access());
@@ -347,12 +407,12 @@ namespace lib {
       Buffer&
       buffer()
         {
-          return *reinterpret_cast<Buffer*> (&storage_);
+          return * std::launder (reinterpret_cast<Buffer*> (&storage_));
         }
       Buffer const&
       buffer()  const
         {
-          return *reinterpret_cast<const Buffer*> (&storage_);
+          return * std::launder (reinterpret_cast<const Buffer*> (&storage_));
         }
       
       template<typename X>
@@ -383,7 +443,7 @@ namespace lib {
       
       Variant()
         {
-          using DefaultType = typename TYPES::List::Head;
+          using DefaultType = TYPES::List::Head;
           
           new(storage_) Buff<DefaultType> (DefaultType());
         }
@@ -391,7 +451,9 @@ namespace lib {
       template<typename X>
       Variant(X&& x)
         {
-          using StorageType = typename CanBuildFrom<X, TYPES>::Type;
+          static_assert (variant::CanBuildFrom<X, TYPES>(), "No type in Typelist can be built from the given argument");
+          
+          using StorageType = variant::CanBuildFrom<X, TYPES>::Type;
           
           new(storage_) Buff<StorageType> (forward<X>(x));
         }
@@ -415,10 +477,10 @@ namespace lib {
       Variant&
       operator= (X x)
         {
-          using RawType = typename remove_reference<X>::type;
+          using RawType = std::remove_reference<X>::type;
           static_assert (meta::isInList<RawType, typename TYPES::List>(),
                          "Type error: the given variant could never hold the required type");
-          static_assert (meta::can_use_assignment<RawType>::value, "target type does not support assignment");
+          static_assert (std::is_copy_assignable<RawType>::value, "target type does not support assignment");
           
           buff<RawType>() = forward<X>(x);
           return *this;
@@ -444,6 +506,8 @@ namespace lib {
           rvar.buffer().moveInto (this->buffer());
           return *this;
         }
+      
+      //note: NOT defining a swap operation, because swapping inline storage is pointless!
       
       
       /** diagnostic helper */
@@ -480,6 +544,12 @@ namespace lib {
         {
           return buffer().dispatch (visitor);
         }
+      
+      string
+      accept (Renderer& visitor)  const
+        {
+          return buffer().dispatch (visitor);
+        }
     };
   
   
@@ -497,15 +567,30 @@ namespace lib {
   template<typename TY>
   Variant<TYPES>::Buff<TY>::operator string()  const
   {
-#ifndef LIB_FORMAT_UTIL_H
-    return string("-?-")+typeid(TY).name()+"-?-";
-#else
-    return util::str (this->access(),
-                     (util::tyStr<TY>()+"|").c_str())
-#endif
-                     ;
+    return util::typedString (this->access());
   }
   
+  /**
+   * error message when accessing the variant content with wrong type assumptions.
+   * @remark while this diagnostics can be crucial for finding bugs, we avoid
+   *  including \ref format-string.hpp, since lib::Variant is used pervasively
+   *  as part of lib::diff::GenNode. Especially in development builds, we observed
+   *  a tangible leverage on executable size. Thus we implement the protection
+   *  against follow-up exceptions explicitly here.
+   */
+  template<typename TYPES>
+  template<typename TY>
+  inline string
+  Variant<TYPES>::Buff<TY>::indicateTypeMismatch(Variant<TYPES>::Buffer& target)
+  {
+    try {
+        return "Variant type mismatch: expected value of type «"
+             + lib::meta::typeStr<TY>()+"», "
+             + "however the given variant record is "
+             + string{target};
+      }
+    catch(...) { return lib::meta::FAILURE_INDICATOR; }
+  }
   
   
 }// namespace lib

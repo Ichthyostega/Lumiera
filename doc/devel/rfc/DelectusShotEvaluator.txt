@@ -1,9 +1,12 @@
-[grid="all"]
-`------------`-----------------------
-*State*         _Parked_
-*Date*          _2008-09-21_
-*Proposed by*   link:nasa[]
--------------------------------------
+Design Process : Delectus
+=========================
+
+[options="autowidth"]
+|====================================
+|*State*       | _Parked_
+|*Date*        | _2008-09-21_
+|*Proposed by* | nasa
+|====================================
 
 
 Delectus Shot Evaluator
@@ -14,16 +17,14 @@ This is a brain dump about the shot evaluator subproject.
 Description
 ~~~~~~~~~~~
 
-
-Brainstorm on Delectus
-~~~~~~~~~~~~~~~~~~~~~~
+.A collection of Ideas
 Some (many) of the ideas presented herein come from the various parties
-involved in the Lumiera discussion list and IRC channel #lumiera.
-http://lists.lumiera.org/pipermail/lumiera/2008-September/000053.html[] -- the
-main discussion thread
+involved in the Lumiera Mailing List and IRC channel `#lumiera` -- here is the
+http://lists.lumiera.org/pipermail/lumiera/2008-September/000053.html[main discussion thread].
+
 
 Additionally, a lot of great concepts for how to streamline the interface are
-derived in part from link:KPhotoAlbum[].
+derived in part from https://www.kphotoalbum.org/[KPhotoAlbum].
 
 I use tags, keywords, and metadata almost interchangeably, with the exception
 that metadata includes computer generated metadata as well. These are not tags
@@ -42,7 +43,7 @@ support (please add more!) is:
 As such, the tags themselves can have metadata. You can see where this is
 going...
 
-Also, the tags are applied to "clips" -- which I use interchangeably between
+Also, the tags are applied to ``clips'' -- which I use interchangeably between
 source material imported into the application and slice of that material that
 tags are applied to. Any section of a video or audio source can have tags
 applied to it.
@@ -68,9 +69,9 @@ Some key points:
  * Technically flawed footage can be both manual and computer classified.
  * In some cases (e.g. documentaries, dialog) audio and video clips/footage can
    follow different section processes.
-    It is possible to use video from footage with useless audio or use audio
-    from footage with useless video.
- * "Interesting" is designed to be broad and is explained below.
+   - It is possible to use video from footage with useless audio or use audio
+     from footage with useless video.
+ * ``Interesting'' as a category is meant be broad and is explained below.
  * steps 2-5 can be performed in parallel by numerous people and can span many
    different individual clips.
 
@@ -106,7 +107,7 @@ The key to adequate expressive power is as follows:
  * Connection to on site documentation and pre-production documentation. When
    making decisions about what material to use and how to classify it, it is
    essential to use any tools and resources available. The two most useful are
-   onsite documentation (what worked/didn't work, how the weather was, pictures
+   on-site documentation (what worked/didn't work, how the weather was, pictures
    of the setup, etc all at the shoot) and pre-production (what the ideal scene
    would be, what is intended, etc). Anything else that would be useful should
    be supported as well.
@@ -143,7 +144,7 @@ vice-versa.
 
 Interesting
 ^^^^^^^^^^^
-An "interesting" clip is one that has potential -- either as a metadata piece
+An _interesting clip_ is one that has potential -- either as a metadata piece
 (multimedia note, talent briefing, etc) or footage (for the final product OR
 intermediary step). The main goal of the application is to find and classify
 interesting clips of various types as quickly as possible.
@@ -181,10 +182,10 @@ that by having parts of individual clips, metadata, or other files be specific
 to one aspect of the overall design. This allows for much more successful use
 of the related information and a cleaner, streamlined layout. As an example,
 metadata involving file size has no effect whatsoever on the vast majority of
-most major decisions -- the answer is almost always "whatever it takes." Thus,
+most major decisions -- the answer is almost always ``whatever it takes''. Thus,
 it would not appear most of the time. Content narrowing means that it is easy
-to add back footage -- "widen the view" one step, add it back, and "narrow the
-view" again.
+to add back footage -- ``widen the view'' one step, add it back, and ``narrow
+the view'' again.
 
 
 Multiple cuts
@@ -206,7 +207,7 @@ THE SCENE), take (what is actually going on IN THIS SPECIFIC RUN), and instance
 (what is actually going on IN THIS CLIP). If editing a situation, the other
 referenced clips AUTOMATICALLY add metadata and relevant sections. This can be
 as precise and nested as desired, though rough cuts for level one editing
-(first watchthrough after technically well executed clips have been selected)
+(first watch-through after technically well executed clips have been selected)
 and more accurate ones for higher levels is the recommended method.
 
 
@@ -223,12 +224,12 @@ nasa's Laws of Tagging
   (reasonable) number of tags. This is OK. All that is needed is the minimum
   set of unique tags to progress to the next cycle without losing editing
   intent or the ability to rapidly evaluate many situations.
-. Many tags are used many times. "Outdoors" will be a very, very common tag; so
-  will "redub." If conventional names are decided upon and stuck to, it is
+. Many tags are used many times. `Outdoors` will be a very, very common tag; so
+  will `redub`. If conventional names are decided upon and stuck to, it is
   significantly easier to map the complex interactions between different
   content situations.
-. Avoid compound tags. Do not have "conversation_jill_joe" as a tag; use
-  "conversation," "jill," and "joe" instead. It is very easy to search for
+. Avoid compound tags. Do not have ``conversation_jill_joe'' as a tag; use
+  ``conversation'', ``jill'', and ``joe'' instead. It is very easy to search for
   multiple tags and very hard to link data that doesn't use overlapping tags.
 
 
@@ -257,15 +258,16 @@ sections are allowed.
 
 Prompting Prompting for metadata is a laborious, time-consuming process. There
 is no truly efficient way to do it. This application uses a method similar to
-link:KPhotoAlbum[]. When the space key is held and a letter is pressed, the tag
+_KPhotoAlbum_. When the space key is held and a letter is pressed, the tag
 that corresponds to that letter is assigned to the track for the duration of
 the press. (If the space is pressed and no other key is pressed at the same
 time, it stops the track.) For example, suppose that the following mapping is
 present:
-o = outside
-x = extra
-p = protagonist
-c = closeup
+
+  o ⟼ outside
+  x ⟼ extra
+  p ⟼ protagonist
+  c ⟼ closeup
 
 Then holding SPACE over a section and pressing one of these keys would assign
 the tag to the audio AND video of the section over which the space was held. If
@@ -277,15 +279,18 @@ If LALT is held down instead of SPACE, the audio is effected instead. If RALT
 is held, just the video is effected.
 
 In order to support scenario/take/clip tagging:
-    The default is situation. If the keybinding to x is:
-    x = t:extra ; effect only take
-    x = ts:extra ; effect take and scenario
-    x = c:extra ; extra only visible in this clip!
-    x = tc:extra ; this take and clip show the extra
-    etc
-    
+
+ - The default is situation. If the keybinding to x is:
+ 
+   ** x = t:extra ; effect only take
+   ** x = ts:extra ; effect take and scenario
+   ** x = c:extra ; extra only visible in this clip!
+   ** x = tc:extra ; this take and clip show the extra
+   ** ...
+
 Other keyargs (the part in front of the colon) can be added to account for
-other uses (e.g. l = all taken on the same location).
+other uses +
+(e.g. l = all taken on the same location).
 
 Tab is pressed to add metadata mappings. Tab is pressed to enter metadata edit
 mode; this pauses video. Then press any key to map; and type the tag to
@@ -293,7 +298,7 @@ associate (with space, multiple tags can be added.). The following specials are
 defined:
     [:keyarg:]:TAG is special tagging for scenario/take/clip.
     !TAG removes TAG if it is present. This is useful because it allows huge
-     sections of the clip to be defined as a certain tag, then have parts 
+     sections of the clip to be defined as a certain tag, then have parts
      removed later.
     a:TAG applies TAG only to the audio.
     v:TAG applies TAG only to the video.
@@ -306,12 +311,9 @@ defined:
 If ESC is pressed, all currently ranged tags are ended.
 
 Finally, if single_quote is pressed without SPACE or {L,R}ALT down, it marks an
-"interesting location." Pressing SHIFT+single_quote goes to the next
-"interesting location" and pressing CNTRL+' goes to the previous "interesting
-location." This allows for very quick review of footage.
-
-
-
+``interesting location''. Pressing SHIFT+single_quote goes to the next
+``interesting location'' and pressing CNTRL+' goes to the previous
+``interesting location''. This allows for very quick review of footage.
 
 
 
@@ -335,28 +337,29 @@ The importance/value of the video for various factors uses, can vary through
 the video. It would be helpful to have the ability to create continuous ratings
 over the entire track. Ratings would be numerical. Automatic clip
 selection/suggestion could be generated by using algorithms to compute the
-usefulness of video based on these ratings (aswell as "boolean
-operations"/"binary decisions" done with tags). The ratings could be viewed
+usefulness of video based on these ratings (as well as ``boolean operations''
+rsp. ``binary decisions'' done with tags). The ratings could be viewed
 just like levels are - color coded and ovelayed on track thumbnails.
 
-- Tree 2008-10-25
+Tree:: '2008-10-25'
 
 
-link:MultiView[] - useful for concurrent ratings input
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+MultiView - useful for concurrent ratings input
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 It would be convenient to have an ability to view the different tracks (of the
 same scene/time sequence) at once, so the viewer can input their ratings of the
-video "on the fly", including a priority parameter that helps decide which
+video ``on the fly'', including a priority parameter that helps decide which
 video is better than what other video.See the GUI brainstorming for a viewer
 widget, and key combinations that allow both right and left hand input, that
 could be used for raising/lowing ratings for up to six tracks at once.
 
-- Tree 2008-10-25
+Tree:: 2008-10-25
 
 
 I like the idea of rating clips (or rather, takes) a lot. It would be cool to
-include both "hard," "relative," and "fuzzy" rating. Hard is an exactly defined
+include both `hard', `relative', and `fuzzy' rating. Hard is an exactly defined
 value (scaled 0-1) that puts the clip in an exact location in the queue.
 Relative means that one is higher or lower rated than another. Fuzzy is a
 slider which is approximate value, and there is some randomness. The best part
@@ -367,7 +370,7 @@ sort of heap (think binary heap, at least for the data structure) which
 determines the priorities and decides which clips are played. Then the highest
 rated clips are played first, down to the worst.
 
-- link:NicholasSA[] 2009-01-04
+NicholasSA:: '2009-01-04'
 
 
 Possible Collaboration with the people from Ardour?
@@ -376,14 +379,15 @@ Possible Collaboration with the people from Ardour?
 I guess if the thing can do all the things we talked about here, it would be
 perfectly suitable for sound classification too, and maybe could fill another
 gap in FOSS: Audio Archival Software, like this:
-http://www.soundminer.com/SM_Site/Home.html[] (which is very expensive)...
+https://web.archive.org/web/20100618104752/http://www.soundminer.com/SM_Site/Why_Buy.html[soundminer.com]
+(which is very expensive)...
 maybe the Ardour people would be interested in a collaboration on this?
 
 I like the suggestion of sound classification with a similar (or, even better,
 identical) evaluator. link:SoundMiner[] looks interesting, but like you say
 very expensive. I'm a sound guy, so I feel your pain...
 
-- link:NicholasSA[] 2009-01-04
+NicholasSA:: '2009-01-04'
 
 
 Parked
@@ -391,7 +395,7 @@ Parked
 
 Decided on Developer meeting, until someone wants to investigate this further.
 
-    Do 14 Apr 2011 02:52:30 CEST Christian Thaeter
+ct:: 'Thu 14 Apr 2011 02:52:30 CEST'
 
-
-Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
+''''
+Back to link:/x/DesignProcess.html[Lumiera Design Process overview]

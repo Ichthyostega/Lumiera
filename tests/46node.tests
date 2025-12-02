@@ -1,0 +1,34 @@
+TESTING "Component Test Suite: Render Engine parts" ./test-suite --group=node
+
+
+
+TEST "Proc Node basics" NodeBase_test <<END
+END
+
+
+TEST "Proc Node creation" NodeBuilder_test <<END
+END
+
+
+TEST "Proc Node test setup" NodeDevel_test <<END
+END
+
+
+TEST "Proc Node data feeds" NodeFeed_test <<END
+END
+
+
+TEST "Proc Node connectivity" NodeLink_test <<END
+END
+
+
+TEST "Proc Node metadata key" NodeMeta_test <<END
+END
+
+
+PLANNED "Proc Node operation modes" NodeOpera_test <<END
+END
+
+
+PLANNED "Proc Node engine storage setup" NodeStorage_test <<END
+END

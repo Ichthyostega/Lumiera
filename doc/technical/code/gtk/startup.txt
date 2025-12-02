@@ -1,0 +1,150 @@
+GTK start-up
+============
+:Date: 2018
+
+//Menu: label start-up
+
+_some insights regarding the start-up of GTK and related framework aspects_
+
+As outlined on the link:{ldoc}/technical/code/gtk/index.html[overview page], we need to discern between
+toolkit aspects, and GTK-the-framework. Moreover, we use GTK though the C++ bindings (`gtkmm`), which also
+add a thin layer of software abstractions.
+
+Initialisation
+--------------
+So in order to ``use GTK'' ...
+
+- we need to build our application against the appropriate headers of GTK\--, which also implies to
+  install the corresponding development packages (or a source tree) of the libraries involved.
+- when our main application decides to use the GTK-UI, it loads the GUI plug-in -- at this point
+  the dynamic loader also requires and loads the runtime libraries of GTK, Glib, GDL, Cairo, Pango,
+  plus the runtime libraries of the C++ wrappers (Gtkmm, Glibmm, Gdlmm)
+- at this point, the various layers of software comprising ``the GTK'' will require some very
+  specific initialisation hooks to be invoked. Especially
+
+  ** GTK itself requires the invocation of `gtk_init()` in order to attach to the windowing system.
+     This might also parse additional framework specific command lines and react on some environment
+     variables, init the gettext library and maybe activate interactive UI debugging. But nothing
+     beyond that
+
+  ** the `gtkmm` C\++ wrappers deal with a lot of additional ceremony, required by the plain-C
+     implementation of the GTK core. Especially, they automatically register any ``object type''
+     with the GObject-system of Glib. Moreover, some virtual function tables will be populated
+     and several ``object functions'' and signals need to be wrapped, so client code can invoke
+     the more convenient C++ equivalents. All of this additional initialisation is effected
+     by invoking `Gtk::Main::init_gtkmm_internals()` or the (equivalent) static function within
+     `Gtk::Application`
+
+  ** finally, any features of GTK-the-framework need to be initialised and prepared for use:
+
+     *** lifecycle events need to be issued. GTK uses ``signals'' for this purpose
+         footnote:[not to be confused with the signals on operating system level]
+     *** registration of document types with the desktop environment
+     *** the application instance will connect to the D-bus and install the necessary callbacks,
+         possibly even waiting for an ``activation event''
+     *** depending on the specific way of _activation_, behaviour and error response of the
+         application instance need to be controlled in distinct ways -- maybe just rendering
+         content or even silently terminating altogether after a timeout has passed
+
+For reasons outlined link:{ldoc}/technical/code/gtk/index.html#_the_gtk_application[above],
+Lumiera does not need nor use a `Gtk::Application`.footnote:[In fact, most of the framework
+functionality is actually handled within the base class `Gio::Application`, which corresponds
+to the plain-C type `GApplication`.] Thus, we leave out the third stage and deal with all those
+application global aspects through means appropriate to our specific purpose.
+
+- our link:{ldoc}/design/architecture/Subsystems.html[Subsystem runner] boots the UI subsystem
+  (`stage::GuiFacade`), which in turn loads the UI-plug-in ('target/modules/gtk_gui.lum').
+- within this plug-in, the class `stage::GtkLumiera` governs the complete UI lifecycle.
+- this class holds a member `stage::ctl::UiManager` -- which is our ``UI main object'' and mimics
+  the design of the late `Gtk::Main`.
+- we inherit from our own `stage::ctrl::ApplicationBase` class, to ensure invocation of all the
+  initialisation and clean-up functions required by GTK
+- we instantiate a class `stage::ctrl::GlobalCtx` to hold and provide all global services used
+  throughout the UI layer, including population of the menu and global actions
+- within the global context, there is also `stage::ctrl::WindowLocator`, to keep track of all
+  top-level application windows, and to support direct navigation to relevant entities within
+  the UI, based on _abstracted UI-coordinates_.
+- finally, `GtkLumiera` invokes the functions
+  
+  ** `UiManager::createApplicationWindow()` to create the visible interface frame
+  ** `UiManager::performMainLoop()` to activate `gtk_main()` -- the blocking GTK event loop
+
+
+Running a GTK application
+-------------------------
+The _event processing_ is what makes an UI application ``live''. However, event processing must
+not be confused with graphical presentation. In GTK, it is perfectly valid to create and even
+show a widget prior to entering the event loop. Yet it is a very fundamental design decision
+within GTK to operate all of the UI concerns *synchronously*, from within a single dedicated
+*UI thread*. We consider this a very wise design decision, and expand it to all of Lumiera's
+UI concerns, including the UI-Bus; any ``interaction mechanics'' has to happen within this
+single thread, and is completely decoupled from all other application functionality like
+editing actions and rendering, which happen in separate threads and respond asynchronously
+by _dispatching_ their reactions back into the UI event thread.
+
+Due to the shifted scope between the old-style `Gtk::Main` and the corresponding `gtk_main()`
+C-function on one side, and the newer, more framework-centric `Gtk::Application`, it might seem
+on first sight, that both will perform different tasks. However, a closer look reveals that
+during the redesign for GTK-3, the old ``main'' functionality has been _retrofitted_ to rely
+on the newer, more generic GIO-Framework. More specifically
+
+- the classical `gtk_main()` without much ado invokes `g_main_loop_run()`, which in turn
+  immediately starts to ``pull'' the GIO main context by repeatedly invoking `g_main_context_iterate()`
+
+- whereas the `Gtk::Application::run()` invokes `Gio::Application::run()` and from there the new
+  application-level _main function_ `g_application_run(gobj(), argc, argv)`. Which in turn handles
+  all the above mentioned framework concerns (e.g. D-Bus registration / activation). Then it
+  enters `g_main_context_iteration()` which -- similar to `g_main_loop_run()` -- starts ``pulling''
+  the GIO main context by repeatedly invoking `g_main_context_iterate()`
+
+Thus, once we reach the actual operative state, both paths of activating a GTK application behave
+essentially the same.footnote:[This is the state of affairs during the GTK-3 lifetime cycle,
+as verified in 8/2018 based on the source code of `GTK 3.22`. Note though that GTK-4 is ``around
+the corner'' -- let's see what awesome innovations we have to face then...]
+
+
+The application activation signal
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+However, the old-style approach seems to lack a feature offered by `Gio::Application`:
+the *activation* signal, which is a feature solely present at the ``application-framework'' level
+and used internally for the convenience function to ``run an ApplicationWindow object''
+(-> `Gtk::Application::run(Gtk::Window&)`). In fact, this happens to be a lifecycle event,
+and can be used by connecting a SigC++ slot to the application object's `signal_activation()`.
+Outside the realm of GTK-the-framework this feature turns out to be not so useful; especially, the
+signal is emitted _shortly before_ entering the event loop, and not from within (as you'd might expect).
+
+A better alternative is to rely on the `Glib::signal_idle()` rsp. `Glib::signal_timeout()`. Both allow
+to invoke a slot only once, and both ensure the invocation really happens from within the event loop.
+footnote:[Verified as of 8/2018: uses `g_main_context_default()`, which creates the default context
+on demand. This is also the default context _pulled_ when running the event loop. So indeed we're
+able to attach an ``event source'' (i.e. an action or closure) even before the loop is running.
+Use `Glib::PRIORITY_LOW` to schedule after any (re)drawing activities.]
+
+SigC++ trackable
+~~~~~~~~~~~~~~~~
+Any closure or callback based system of wiring and activation suffers from the inherent danger of invoking
+a dangling reference. Within an interactive UI environment, this problem becomes quite acid, since widgets
+will be created and destroyed through arbitrary interactions, yet still need to be connected to ``live state''.
+When building UI applications with Gtkmm (the C\++ wrapper of GTK), this problem is dealt with by inheriting
+all widget classes from the `sigc::trackable` mix-in. This mechanism automatically detaches a signal slot
+when the corresponding target widget goes out of scope. However, this solution only works reliably when
+all slots are created and connected from within a single thread (the UI event thread!). Moreover, we
+can not possibly ``track'' a slot created from a C\++ language lambda or functor -- which sometimes
+is even the only option, unless we want to incur a dependency on the SigC++ library. In Lumiera,
+we have a strict policy to prohibit any dependency on GTK libraries outside the UI layer.
+
+
+Shutdown
+--------
+The GTK main loop terminates after invocation of `gtk_main_quit()` (or in case of serious internal errors).
+Typically, this function is somehow bound to a widget interaction, like clicking on the ``close'' button.
+In Lumiera, this concern is managed by the `stage::ctrl::WindowLocator`, which keeps track of all top-level
+windows and terminates the UI when the last one is closed. Moreover, the UI can deliberately be closed
+by sending an event over the `GuiNotification::triggerGuiShutdown(message)' call.
+
+After leaving the main loop, the external façade interfaces are closed. By general architectonic reasoning,
+no event can be processed and no signal can be invoked any more -- and thus we're free to destroy all widgets,
+services and the backbone of the UI. After that, the UI subsystem signals termination, which causes all other
+subsystems to shut down as well.footnote:[We are aware that there is a race between closing the façade and actually
+ceasing other subsystem's activities, which might cause those other activities to fail with an exception]
+

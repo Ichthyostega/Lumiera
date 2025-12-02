@@ -1,24 +1,15 @@
 /*
   ERROR-EXCEPTION  -  Lumiera exception classes
 
-  Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2008,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+* *****************************************************************/
 
 
 /** @file error-exception.cpp
@@ -33,6 +24,8 @@
 
 
 #include "lib/error.hpp"
+#include "include/lifecycle.h"
+#include "lib/meta/util.hpp"
 #include "lib/util.hpp"
 
 #include <exception>
@@ -44,35 +37,24 @@ using std::exception;
 
 
 namespace lumiera {
-  
-  typedef const char*       CStr;
-  typedef const char* const CCStr;
-  
-  
   namespace error {
     
     /** the message shown to the user per default
      *  if an exception reaches one of the top-level
      *  catch clauses.
      *  @todo to be localised
+     *  @todo develop a framework to set more specific yet friendly messages
      */
     inline const string
-    default_usermsg (Error* exception_obj)  throw() 
+    default_usermsg (Error*)  noexcept
     {
-      return string("Sorry, Lumiera encountered an internal error. (")
-           + typeid(*exception_obj).name() + ")";
-    }
-    
-    inline CStr
-    default_or_given (CCStr id)
-    {
-      return id? id : LUMIERA_ERROR_STATE;
+      return "Sorry, Lumiera encountered an internal error.";
     }
     
     CStr
     detailInfo ()
     {
-      CCStr detailinfo = lumiera_error_extra();
+      CStr detailinfo = lumiera_error_extra();
       return isnil (detailinfo)? "Lumiera errorstate detected"
                                : detailinfo;
     }
@@ -86,69 +68,55 @@ namespace lumiera {
     LUMIERA_ERROR_DEFINE (FLAG     , "non-cleared lumiera errorstate");
     LUMIERA_ERROR_DEFINE (INVALID  , "invalid input or parameters");
     LUMIERA_ERROR_DEFINE (EXTERNAL , "failure in external service");
+    LUMIERA_ERROR_DEFINE (EXCEPTION, "generic Lumiera exception");
     LUMIERA_ERROR_DEFINE (ASSERTION, "assertion failure");
     
     /* some further generic error situations */
-    LUMIERA_ERROR_DEFINE (LIFECYCLE, "Lifecycle assumptions violated");
-    LUMIERA_ERROR_DEFINE (WRONG_TYPE, "runtime type mismatch");
+    LUMIERA_ERROR_DEFINE (LIFECYCLE,    "Lifecycle assumptions violated");
+    LUMIERA_ERROR_DEFINE (WRONG_TYPE,   "runtime type mismatch");
     LUMIERA_ERROR_DEFINE (ITER_EXHAUST, "end of sequence reached");
     LUMIERA_ERROR_DEFINE (CAPACITY,     "predefined fixed storage capacity");
+    LUMIERA_ERROR_DEFINE (SAFETY_LIMIT, "exceeding fixed internal safety limit");
     LUMIERA_ERROR_DEFINE (INDEX_BOUNDS, "index out of bounds");
     LUMIERA_ERROR_DEFINE (BOTTOM_VALUE, "invalid or NIL value");
-    LUMIERA_ERROR_DEFINE (UNCONNECTED, "missing connection");
-    LUMIERA_ERROR_DEFINE (UNIMPLEMENTED, "using a feature not yet implemented....");
-
-    
+    LUMIERA_ERROR_DEFINE (UNCONNECTED,  "missing connection");
+    LUMIERA_ERROR_DEFINE (UNIMPLEMENTED,"using a feature not yet implemented....");
     
   } // namespace error
   
-  LUMIERA_ERROR_DEFINE (EXCEPTION, "generic Lumiera exception");
   
   
   
-  
-  /** @note we set the C-style errorstate as a side effect */
-  Error::Error (string description, CCStr id) throw()
-    : std::exception (),
-      id_ (error::default_or_given (id)),
-      msg_ (error::default_usermsg (this)),
-      desc_ (description),
-      cause_ ("")
-  {
-    lumiera_error_set (this->id_, description.c_str ());
-  }
+  Error::Error (string description, lumiera_err const id)  noexcept
+    : std::exception{}
+    , id_{id}
+    , msg_{error::default_usermsg (this)}
+    , desc_{description}
+    , cause_{}
+    { }
   
   
-  Error::Error (std::exception const& cause, 
-                string description, CCStr id) throw()
-    : std::exception (),
-      id_ (error::default_or_given (id)),
-      msg_ (error::default_usermsg (this)),
-      desc_ (description),
-      cause_ (extractCauseMsg(cause))
-  {
-    lumiera_error_set (this->id_, description.c_str ());
-  }
+  Error::Error (std::exception const& cause,
+                string description, lumiera_err const id)  noexcept
+    : std::exception{}
+    , id_{id}
+    , msg_{error::default_usermsg (this)}
+    , desc_{description}
+    , cause_{extractCauseMsg(cause)}
+    {
+      string detailInfo{description + (isnil(cause_)? "" : " | cause = "+cause_)};
+    }
   
-  
-  /** @note copy ctor behaves like chaining, i.e setting the cause_. */
-  Error::Error (const Error& ref) throw()
-    : std::exception (),
-      id_ (ref.id_),
-      msg_ (ref.msg_),
-      desc_ (ref.desc_),
-      cause_ (extractCauseMsg(ref))
-  { }
   
   
   
   /** Description of the problem, including the internal char constant
    *  in accordance to Lumiera's error identification scheme.
-   *  If a root cause can be obtained, this will be included in the
-   *  generated output as well. 
+   *  If a root cause can be obtained, this will be included
+   *  in the generated output as well.
    */
   CStr
-  Error::what() const  throw()
+  Error::what()  const noexcept
   {
     if (isnil (this->what_))
       {
@@ -156,17 +124,17 @@ namespace lumiera {
         if (!isnil (desc_))  what_ += " ("+desc_+").";
         if (!isnil (cause_)) what_ += string(" -- caused by: ") + cause_;
       }
-    return what_.c_str(); 
+    return what_.c_str();
   }
   
   
-  /** @internal get at the description message of the 
+  /** @internal get at the description message of the
    *  first exception encountered in a chain of exceptions
    */
   const string
-  Error::extractCauseMsg (const exception& cause)  throw()
+  Error::extractCauseMsg (const exception& cause)  noexcept
   {
-    const Error* err=dynamic_cast<const Error*> (&cause);
+    const Error* err = dynamic_cast<const Error*> (&cause);
     if (err)
       {
         if (isnil (err->cause_))
@@ -174,7 +142,6 @@ namespace lumiera {
         else
           return err->cause_; // cause was caused by another exception
       }
-    
     // unknown other exception type
     return cause.what ();
   }
@@ -185,22 +152,58 @@ namespace lumiera {
   
   
   
-  namespace error
-  {
+  namespace error {
+    namespace {
+      void install_unexpectedException_handler ()
+      {
+        std::set_terminate (lumiera_unexpectedException);
+      }
+      LifecycleHook schedule_ (ON_BASIC_INIT, &install_unexpectedException_handler);
+      
+      std::terminate_handler nextHandler = nullptr;
+    }
+
     
-    void lumiera_unexpectedException ()  throw()
+    void lumiera_unexpectedException ()  noexcept
     {
-      CCStr is_halted 
+      CStr is_halted
         = "### Lumiera halted due to an unexpected Error ###";
       
-      std::cerr << "\n" << is_halted << "\n\n";
       ERROR (NOBUG_ON, "%s", is_halted);
+      std::cerr << "\n" << is_halted << "\n\n";
       
-      if (CCStr errorstate = lumiera_error ())
+      
+      try { // -----find-out-about-any-Exceptions--------
+          auto lastException = std::current_exception();
+          if (lastException) {
+              std::rethrow_exception (lastException);
+          }
+      } catch(const lumiera::Error& lerr) {
+          std::cout << "\n+++ Caught Exception " << lerr.getID() << "\n\n";
+          ERROR (NOBUG_ON, "+++ caught %s\n+++ messg: %s\n+++ descr: %s"
+                         , cStr(util::typeStr(lerr))
+                         , cStr(lerr.getUsermsg())
+                         , cStr(lerr.what())
+                         );
+          if (not isnil(lerr.rootCause()))
+            ERROR (NOBUG_ON, "+++ cause: %s",cStr(lerr.rootCause()));
+          
+      } catch(const std::exception& e) {
+          ERROR (NOBUG_ON, "Generic Exception: %s", e.what());
+          std::cout << "+++ Caught Exception \"" << e.what() << "\"\n";
+      } catch(...) {
+          ERROR (NOBUG_ON, "FATAL -- unknown exception");
+      }
+      
+      if (CStr errorstate = lumiera_error ())
         ERROR (NOBUG_ON, "last registered error was....\n%s", errorstate);
       
-      std::terminate();
+      if (nextHandler)
+        nextHandler();
+      else
+        std::abort();
     }
+    
     
     void assertion_terminate (const string& location)
     {
@@ -209,17 +212,6 @@ namespace lumiera {
                              "an internal consistency check.");
     }
     
-    
-    void install_unexpectedException_handler ()
-    {
-      std::set_unexpected (lumiera_unexpectedException);
-    }
-    
-    namespace {
-      LifecycleHook schedule_ (ON_BASIC_INIT, &install_unexpectedException_handler);
-    }
-  
-  
   } // namespace error
 
 } // namespace lumiera

@@ -1,27 +1,26 @@
 /*
-  rsvg-convert.c  -  Command line utility for exercising rsvg with cairo. 
+  rsvg-convert.c  -  Command line utility for exercising rsvg with cairo.
 
-  Copyright (C)      Red Hat, Inc.
-    2005,            Carl Worth <cworth@cworth.org>
-                     Caleb Moore <c.moore@student.unsw.edu.au>
-                     Dom Lachowicz <cinamod@hotmail.com>
-    2008,            Joel Holdsworth <joel@airwebreathe.org.uk>
+   Copyright (C)   Red Hat, Inc.
+     2005,         Carl Worth <cworth@cworth.org>
+                   Caleb Moore <c.moore@student.unsw.edu.au>
+                   Dom Lachowicz <cinamod@hotmail.com>
+     2008,         Joel Holdsworth <joel@airwebreathe.org.uk>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-* *****************************************************/
+/** @file rsvg-convert.c
+ ** Invoke the rSVG library to render SVG vector graphics with the help of Cairo.
+ ** @note This tool is tightly integrated into the Lumiera build process in order
+ **       to render icons and UI decorations designed as vector graphics, for those
+ **       cases where it is beneficial to use bitmap graphics within the UI toolkit.
+ */
 
 
 #ifndef N_
@@ -60,7 +59,7 @@ struct RsvgSizeCallbackData
     gint height;
   };
 
-struct RsvgSourceRectangle 
+struct RsvgSourceRectangle
   {
     double left;
     double top;
@@ -72,7 +71,7 @@ struct RsvgSourceRectangle
 static void
 display_error (GError * err)
 {
-  if (err) 
+  if (err)
     {
       g_print ("%s\n", err->message);
       g_error_free (err);
@@ -145,10 +144,10 @@ main (int argc, char **argv)
 
   g_option_context_free (g_option_context);
 
-  if (output != NULL) 
+  if (output != NULL)
     {
       output_file = fopen (output, "wb");
-      if (!output_file) 
+      if (!output_file)
         {
           fprintf (stderr, _("Error saving to file: %s\n"), output);
           exit (1);
@@ -157,9 +156,9 @@ main (int argc, char **argv)
   
   if (args[0] != NULL) 
       filename = args[0];
- 
+  
   /* Parse the source rect */
-  if(source_rect_string != NULL) 
+  if(source_rect_string != NULL)
     {
       const int n = sscanf(source_rect_string, "%lg:%lg:%lg:%lg", 
                            &source_rect.left, &source_rect.top,
@@ -170,11 +169,11 @@ main (int argc, char **argv)
           exit(1);
         }
     }
-
+  
   rsvg_init ();
-
+  
   rsvg = rsvg_handle_new_from_file (filename, &error);
-
+  
   if (!rsvg)
     {
       fprintf (stderr, _("Error reading SVG:"));
@@ -182,9 +181,9 @@ main (int argc, char **argv)
       fprintf (stderr, "\n");
       exit (1);
     }
-
+  
   /* if the user did not specify a source rectangle, get the page size from the SVG */
-  if(source_rect_string == NULL) 
+  if(source_rect_string == NULL)
     {
       rsvg_handle_set_size_callback (rsvg, rsvg_cairo_size_callback, &dimensions, NULL);
       source_rect.left = 0;
@@ -192,24 +191,24 @@ main (int argc, char **argv)
       source_rect.width = dimensions.width;
       source_rect.height = dimensions.height;
     }
-
+  
   rsvg_handle_get_dimensions (rsvg, &dimensions);
-
+  
   if (width != -1 && height != -1)
     {
       dimensions.width = width;
       dimensions.height = height;
     }
-  else if(source_rect_string != NULL) 
+  else if(source_rect_string != NULL)
     {
       dimensions.width = source_rect.width;
       dimensions.height = source_rect.height;
     }
-                  
+  
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
                                         dimensions.width,
                                         dimensions.height);
-
+  
   cr = cairo_create (surface);
   
   cairo_translate (cr, -source_rect.left, -source_rect.top);
@@ -220,19 +219,19 @@ main (int argc, char **argv)
                    (double)dimensions.width / (double)source_rect.width,
                    (double)dimensions.height / (double)source_rect.height);
     }
-
+  
   rsvg_handle_render_cairo (rsvg, cr);
-
+  
   cairo_surface_write_to_png_stream (surface, rsvg_cairo_write_func, output_file);
-
+  
   g_object_unref (G_OBJECT (rsvg));
-
+  
   cairo_destroy (cr);
   cairo_surface_destroy (surface);
-
+  
   fclose (output_file);
-
+  
   rsvg_term ();
-
+  
   return 0;
 }

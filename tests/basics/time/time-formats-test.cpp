@@ -1,53 +1,43 @@
 /*
   TimeFormats(Test)  -  timecode handling and formatting
 
-  Copyright (C)         Lumiera.org
-    2010,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2010,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file time-formats-test.cpp
+ ** unit test \ref TimeFormats_test
+ */
 
 
 #include "lib/test/run.hpp"
 //#include "lib/test/test-helper.hpp"
-#include "proc/asset/meta/time-grid.hpp"
+#include "steam/asset/meta/time-grid.hpp"
 #include "lib/time/timequant.hpp"
 #include "lib/time/timecode.hpp"
 #include "lib/time/mutation.hpp"
-#include "lib/time/display.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
-#include <boost/lexical_cast.hpp>
-#include <iostream>
 #include <string>
-#include <cstdlib>
 
 using boost::lexical_cast;
 using util::isnil;
-using std::rand;
 using std::string;
-using std::cout;
-using std::endl;
 
 
 namespace lib {
 namespace time{
 namespace test{
   
-  using proc::asset::meta::TimeGrid;
+  using steam::asset::meta::TimeGrid;
+  using util::toString;
   using format::Frames;
   using format::Smpte;
   
@@ -59,9 +49,9 @@ namespace test{
     {
       FrameCnt frameNr(0);
       while (!frameNr)
-        frameNr = rand() % (2*MAX_FRAME) - MAX_FRAME;
+        frameNr = rani(2*MAX_FRAME) - MAX_FRAME;
       
-      return lexical_cast<string>(frameNr)+"#";
+      return toString(frameNr)+"#";
     }
   }
   
@@ -79,6 +69,7 @@ namespace test{
       virtual void
       run (Arg) 
         {
+          seedRand();
           TimeGrid::build("pal0", FrameRate::PAL);
           
           checkTimecodeUsageCycle ();
@@ -104,11 +95,11 @@ namespace test{
       void
       checkTimecodeUsageCycle ()
         {
-          string quellCode = generateRandomFrameNr();
-          PQuant refScale  = Quantiser::retrieve("pal0");
+          string srcCode  = generateRandomFrameNr();
+          PQuant refScale = Quantiser::retrieve("pal0");
           
           // get internal (raw) time value
-          TimeValue t1 = format::Frames::parse(quellCode, *refScale);
+          TimeValue t1 = format::Frames::parse (srcCode, *refScale);
           ENSURE (0 != t1);
           
           // manipulating
@@ -131,10 +122,10 @@ namespace test{
           CHECK (5 == frames2 - frames1);
           
           q2.accept (Mutation::changeTime(v1));
-          CHECK (30 == q2.formatAs<Frames>() - frames1);
+          CHECK (30 == q2.formatAs<Frames>() - frames1);     // q2 == v1 == t1 + (6*5)/(5*5)sec
           
-          CHECK (quellCode == string(frames1));
-          CHECK (quellCode != string(frames2));
+          CHECK (srcCode == string(frames1));
+          CHECK (srcCode != string(frames2));
           
           showTimeCode (frames1);
           showTimeCode (frames2);

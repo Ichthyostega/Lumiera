@@ -1,38 +1,30 @@
 /*
   Variant(Test)  -  verify the lightweight typesafe union record
 
-  Copyright (C)         Lumiera.org
-    2015,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2015,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file variant-test.cpp
+ ** unit test \ref Variant_test
+ */
 
 
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/time/timevalue.hpp"
-#include "lib/format-util.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/variant.hpp"
 #include "lib/util.hpp"
 
-
-#include <iostream>
 #include <string>
-
 
 
 namespace lib {
@@ -45,15 +37,13 @@ namespace test{
   
   using util::contains;
   using std::string;
-  using std::cout;
-  using std::endl;
   
   using error::LUMIERA_ERROR_WRONG_TYPE;
   using error::LUMIERA_ERROR_LOGIC;
   
   
   // Test fixture...
-  typedef Variant<Types<bool,int,string,Time>> TestVariant;
+  using TestVariant = Variant<Types<bool,int,string,Time>>;
   
   
   
@@ -69,7 +59,7 @@ namespace test{
    * @see lib::Variant
    * @see util::AccessCasted
    * @see lib::OpaqueHolder
-   * @see GenericTreeMutator_test
+   * @see TreeMutator_test
    */
   class Variant_test : public Test
     {
@@ -77,6 +67,7 @@ namespace test{
       virtual void
       run (Arg)
         {
+          seedRand();
           createVariant();
           accessVariant();
           acceptPredicate();
@@ -96,14 +87,14 @@ namespace test{
           //// does not compile....
           // TestVariant evil(3.1415);
           
-          cout << string(v0) <<endl
-               << string(v1) <<endl
-               << string(v2) <<endl
-               << string(v3) <<endl;
+          cout << v0 <<endl
+               << v1 <<endl
+               << v2 <<endl
+               << v3 <<endl;
           
           CHECK (contains (string(v0), "Variant"));
           CHECK (contains (string(v0), "bool"));
-          CHECK (contains (string(v0), "0"));
+          CHECK (contains (string(v0), "false"));
           
           CHECK (contains (string(v1), "Variant"));
           CHECK (contains (string(v1), "int"));
@@ -114,7 +105,7 @@ namespace test{
           CHECK (contains (string(v2), "lololo"));
           
           CHECK (contains (string(v3), "Variant"));
-          CHECK (contains (string(v3), "lib::time::Time"));
+          CHECK (contains (string(v3), "Time"));
           CHECK (contains (string(v3), "0:00:00.000"));
         }
       
@@ -122,7 +113,7 @@ namespace test{
       void
       accessVariant()
         {
-          int    someVal = rand() % 10000;
+          int    someVal = rani(10000);
           string someStr = randStr(55);
           Time  someTime = randTime();
           

@@ -1,24 +1,19 @@
 /*
   FormatString(Test)  -  validate string template formatting (printf style)
 
-  Copyright (C)         Lumiera.org
-    2011,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2011,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file format-string-test.cpp
+ ** unit test \ref FormatString_test
+ */
 
 
 #include "lib/test/run.hpp"
@@ -30,7 +25,6 @@
 
 #include <boost/lexical_cast.hpp>
 #include <iostream>
-#include <cstdlib>
 
 using boost::lexical_cast;
 using std::cout;
@@ -90,7 +84,7 @@ namespace test {
           string formatString = "%p %|20T_| %u";
           _Fmt formatter (formatString);
           
-          uint val = rand() % 100;
+          uint val = rani (100);
           void *pt = &val;
           
           formatter % pt;
@@ -214,19 +208,20 @@ namespace test {
       struct Verbose
         : Silent
         {
-          Verbose(int i) : Silent(i) { }
+          using Silent::Silent;
+          virtual ~Verbose() { }
           
           virtual
           operator string()  const
             {
-              return _Fmt("Number-%03d") % i_; 
+              return _Fmt("Number-%03d") % i_;
             }
         };
       
       struct Explosive
         : Verbose
         {
-          Explosive(int i) : Verbose(i) { }
+          using Verbose::Verbose;
           
           operator string()  const
             {
@@ -250,11 +245,11 @@ namespace test {
           
           Verbose& rv = x;
           
-          string mangledType = _Fmt("%s") % s;
-          cout << mangledType << endl;
-          CHECK (contains (mangledType, "util"));
-          CHECK (contains (mangledType, "test"));
-          CHECK (contains (mangledType, "Silent"));
+          string typeDisplay = _Fmt("%s") % s;
+          cout << typeDisplay << endl;
+          CHECK (contains (typeDisplay, "test"));
+          CHECK (contains (typeDisplay, "FormatString_test"));
+          CHECK (contains (typeDisplay, "Silent"));
           
           CHECK (_Fmt("!!%s!!") % v  == "!!Number-013!!");
           CHECK (_Fmt("!!%s!!") % x  == "!!<string conversion failed: LUMIERA_ERROR_STATE:unforeseen state (encountered Fantomas).>!!");
@@ -287,7 +282,7 @@ namespace test {
           cout << _Fmt("__%d__") % "1234" << endl;
           cout << _Fmt("__%d__") % "0xff" << endl;
           
-          VERIFY_ERROR(FORMAT_SYNTAX, _Fmt("%broken"));
+          VERIFY_ERROR(FORMAT_SYNTAX, _Fmt("%madness"));
         }
       
       
@@ -336,7 +331,7 @@ namespace test {
           
           pv = NULL;
           vv = NULL;
-          CHECK (_Fmt("__%s__") % pv == "__<null>__");
+          CHECK (_Fmt("__%s__") % pv == "__"+BOTTOM_INDICATOR+"__");
           CHECK (_Fmt("__%s__") % vv == "__0__");
         }
     };

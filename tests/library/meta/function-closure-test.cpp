@@ -1,28 +1,19 @@
 /*
   FunctionClosure(Test)  -  appending, mixing and filtering typelists
 
-  Copyright (C)         Lumiera.org
-    2009,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2009,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+* *****************************************************************/
 
 
 /** @file function-closure-test.cpp
- ** Testing a combination of tr1::function objects and metaprogramming.
+ ** Testing a combination of std::function objects and metaprogramming.
  ** Argument types will be extracted and represented as typelist, so they
  ** can be manipulated at compile time. This test uses some test functions
  ** and systematically applies or binds them to corresponding data tuples.
@@ -44,12 +35,8 @@
 #include "meta/typelist-diagnostics.hpp"
 #include "meta/tuple-diagnostics.hpp"
 
-#include <iostream>
 
-using ::test::Test;
 using std::string;
-using std::cout;
-using std::endl;
 
 
 namespace lib  {
@@ -59,16 +46,8 @@ namespace test {
       
       namespace { // test data
         
-        
-        
-        typedef Types< Num<1>
-                     , Num<2>
-                     , Num<3>
-                     >::List List1;
-        typedef Types< Num<5>
-                     , Num<6>
-                     , Num<7>
-                     >::List List2;
+        using List1 = Types<Num<1>, Num<2>, Num<3> >::List;
+        using List2 = Types<Num<5>, Num<6>, Num<7> >::List;
         
         
         /** special test fun 
@@ -91,44 +70,43 @@ namespace test {
   
   
   
-  using func::Apply;
-  using func::TupleApplicator;
-  using func::FunctionClosure;
-  using func::closure;
-  using func::apply;
+  using func::bindArgTuple;
   
   
   /*********************************************************************//**
    * @test building a function closure for a given function or functor,
    *       while arguments are passed in as tuple
    *       - accessing signatures as typelists
-   *       - apply free function to tuple
-   *       - apply functor to tuple 
    *       - bind free function to tuple
    *       - bind functor to tuple
-   *       - build a simple "tuple closure"
+   * @remark this test is _rather low-level_ and documents the construction
+   *         of the implementation; furthermore, most of this construction
+   *         was obsoleted by newer language features, notably std::apply
+   *         and the technique to unpack variadic-λ arguments.
+   *         What remains, is now largely a definition how to handle
+   *         function argument list signatures, to build suitable
+   *         argument tuple types by metaprogramming, and finally
+   *         to pass them to construct a binder.
+   * @see function-composition-test.cpp (advanced features like partial application)
    */
   class FunctionClosure_test : public Test
     {
       virtual void
-      run (Arg) 
+      run (Arg)
         {
-          check_diagnostics ();
-          check_signatureTypeManip ();
-          check_applyFree ();
-          check_applyFunc ();
-          check_bindFree  ();
-          check_bindFunc  ();
-          build_closure ();
+          verify_setup();
+          check_signatureTypeManip();
+          check_bindFree();
+          check_bindFunc();
         }
       
       
       /** verify the test input data
-       *  @see TypeListManipl_test#check_diagnostics()
-       *       for an explanation of the DISPLAY macro
+       *  @see TypeListManipl_test#check_diagnostics() for
+       *       explanation of the DISPLAY and EXPECT macros.
        */
       void
-      check_diagnostics ()
+      verify_setup()
         {
           DISPLAY (List1);
           DISPLAY (List2);
@@ -142,14 +120,14 @@ namespace test {
       check_signatureTypeManip ()
         {
           typedef int someFunc(Num<5>,Num<9>);
-          typedef FunctionSignature<function<someFunc> >::Ret RetType;  // should be int
-          typedef FunctionSignature<function<someFunc> >::Args Args;
+          typedef _Fun<someFunc>::Ret RetType;  // should be int
+          typedef _Fun<someFunc>::Args Args;
           DISPLAY (Args);
           
           typedef Prepend<Num<1>, Args>::Seq NewArgs;               // manipulate the argument type(s)
           DISPLAY (NewArgs);
           
-          typedef FunctionTypedef<RetType,NewArgs>::Sig NewSig;  // re-build a new function signature
+          typedef BuildFunType<RetType,NewArgs>::Sig NewSig;     // re-build a new function signature
           
           NewSig& fun =  getNumberz<1,5,9>;                    //...which is compatible to an existing real function signature!
           
@@ -158,93 +136,25 @@ namespace test {
       
       
       void
-      check_applyFree ()
+      check_bindFree ()
         {
-          cout << "\t:\n\t: ---Apply---\n";
+          cout << "\t:\n\t: ---Bind----\n";
           
-          Tuple<Types<> >            tup0 ;
-          Tuple<Types<int> >         tup1 (11);
-          Tuple<Types<int,int> >     tup2 (11,12);
-          Tuple<Types<int,int,int> > tup3 (11,12,13);
+          Tuple<Types<>>            tup0 ;
+          Tuple<Types<int>>         tup1 (11);
+          Tuple<Types<int,int>>     tup2 (11,12);
+          Tuple<Types<int,int,int>> tup3 (11,12,13);
           DUMPVAL (tup0);
           DUMPVAL (tup1);
           DUMPVAL (tup2);
           DUMPVAL (tup3);
           
-          CHECK (-1       == Apply<0>::invoke<int> (fun0, tup0) );
-          CHECK (11       == Apply<1>::invoke<int> (fun1, tup1) );
-          CHECK (11+12    == Apply<2>::invoke<int> (fun2, tup2) );
-          CHECK (11+12+13 == Apply<3>::invoke<int> (fun3, tup3) );
+          using BoundFun = function<int()>;
           
-          CHECK (-1       == TupleApplicator<int()>            (tup0) (fun0) );
-          CHECK (11       == TupleApplicator<int(int)>         (tup1) (fun1) );
-          CHECK (11+12    == TupleApplicator<int(int,int)>     (tup2) (fun2) );
-          CHECK (11+12+13 == TupleApplicator<int(int,int,int)> (tup3) (fun3) );
-          
-          CHECK (-1       == apply(fun0, tup0) );
-          CHECK (11       == apply(fun1, tup1) );
-          CHECK (11+12    == apply(fun2, tup2) );
-          CHECK (11+12+13 == apply(fun3, tup3) );
-        
-        }
-      
-      
-      void
-      check_applyFunc ()
-        {
-          Tuple<Types<> >            tup0 ;
-          Tuple<Types<int> >         tup1 (11);
-          Tuple<Types<int,int> >     tup2 (11,12);
-          Tuple<Types<int,int,int> > tup3 (11,12,13);
-          function<int()>            functor0 (fun0);
-          function<int(int)>         functor1 (fun1);
-          function<int(int,int)>     functor2 (fun2);
-          function<int(int,int,int)> functor3 (fun3);
-          
-          CHECK (-1       == Apply<0>::invoke<int> (functor0, tup0) );
-          CHECK (11       == Apply<1>::invoke<int> (functor1, tup1) );
-          CHECK (11+12    == Apply<2>::invoke<int> (functor2, tup2) );
-          CHECK (11+12+13 == Apply<3>::invoke<int> (functor3, tup3) );
-          
-          CHECK (-1       == TupleApplicator<int()>            (tup0) (functor0) );
-          CHECK (11       == TupleApplicator<int(int)>         (tup1) (functor1) );
-          CHECK (11+12    == TupleApplicator<int(int,int)>     (tup2) (functor2) );
-          CHECK (11+12+13 == TupleApplicator<int(int,int,int)> (tup3) (functor3) );
-          
-          CHECK (-1       == apply(functor0, tup0) );
-          CHECK (11       == apply(functor1, tup1) );
-          CHECK (11+12    == apply(functor2, tup2) );
-          CHECK (11+12+13 == apply(functor3, tup3) );
-          
-        }
-      
-      
-      void
-      check_bindFree ()
-        {
-          cout << "\t:\n\t: ---Bind----\n";
-          
-          Tuple<Types<> >            tup0 ;
-          Tuple<Types<int> >         tup1 (11);
-          Tuple<Types<int,int> >     tup2 (11,12);
-          Tuple<Types<int,int,int> > tup3 (11,12,13);
-          
-          typedef function<int()> BoundFun;
-          
-          BoundFun functor0 = Apply<0>::bind<BoundFun> (fun0, tup0);
-          BoundFun functor1 = Apply<1>::bind<BoundFun> (fun1, tup1);
-          BoundFun functor2 = Apply<2>::bind<BoundFun> (fun2, tup3);
-          BoundFun functor3 = Apply<3>::bind<BoundFun> (fun3, tup3);
-          
-          CHECK (-1       == functor0() );
-          CHECK (11       == functor1() );
-          CHECK (11+12    == functor2() );
-          CHECK (11+12+13 == functor3() );
-          
-          functor0 = TupleApplicator<int()>            (tup0).bind (fun0);
-          functor1 = TupleApplicator<int(int)>         (tup1).bind (fun1);
-          functor2 = TupleApplicator<int(int,int)>     (tup2).bind (fun2);
-          functor3 = TupleApplicator<int(int,int,int)> (tup3).bind (fun3);
+          BoundFun functor0 = bindArgTuple (fun0, tup0);
+          BoundFun functor1 = bindArgTuple (fun1, tup1);
+          BoundFun functor2 = bindArgTuple (fun2, tup2);
+          BoundFun functor3 = bindArgTuple (fun3, tup3);
           
           CHECK (-1       == functor0() );
           CHECK (11       == functor1() );
@@ -257,92 +167,27 @@ namespace test {
       void
       check_bindFunc ()
         {
-          Tuple<Types<> >            tup0 ;
-          Tuple<Types<int> >         tup1 (11);
-          Tuple<Types<int,int> >     tup2 (11,12);
-          Tuple<Types<int,int,int> > tup3 (11,12,13);
+          Tuple<Types<>>             tup0 ;
+          Tuple<Types<int>>          tup1 (11);
+          Tuple<Types<int,int>>      tup2 (11,12);
+          Tuple<Types<int,int,int>>  tup3 (11,12,13);
           function<int()>            unbound_functor0 (fun0);
           function<int(int)>         unbound_functor1 (fun1);
           function<int(int,int)>     unbound_functor2 (fun2);
           function<int(int,int,int)> unbound_functor3 (fun3);
           
-          typedef function<int()> BoundFun;
+          using BoundFun = function<int()>;
           
-          BoundFun functor0 = Apply<0>::bind<BoundFun> (unbound_functor0, tup0);
-          BoundFun functor1 = Apply<1>::bind<BoundFun> (unbound_functor1, tup1);
-          BoundFun functor2 = Apply<2>::bind<BoundFun> (unbound_functor2, tup3);
-          BoundFun functor3 = Apply<3>::bind<BoundFun> (unbound_functor3, tup3);
+          BoundFun functor0 = bindArgTuple (unbound_functor0, tup0);
+          BoundFun functor1 = bindArgTuple (unbound_functor1, tup1);
+          BoundFun functor2 = bindArgTuple (unbound_functor2, tup2);
+          BoundFun functor3 = bindArgTuple (unbound_functor3, tup3);
           
           CHECK (-1       == functor0() );
           CHECK (11       == functor1() );
           CHECK (11+12    == functor2() );
           CHECK (11+12+13 == functor3() );
           
-          functor0 = TupleApplicator<int()>            (tup0).bind (unbound_functor0);
-          functor1 = TupleApplicator<int(int)>         (tup1).bind (unbound_functor1);
-          functor2 = TupleApplicator<int(int,int)>     (tup2).bind (unbound_functor2);
-          functor3 = TupleApplicator<int(int,int,int)> (tup3).bind (unbound_functor3);
-          
-          CHECK (-1       == functor0() );
-          CHECK (11       == functor1() );
-          CHECK (11+12    == functor2() );
-          CHECK (11+12+13 == functor3() );
-          
-        }
-      
-      
-      void
-      build_closure ()
-        {
-          Tuple<Types<> >            tup0 ;
-          Tuple<Types<int> >         tup1 (11);
-          Tuple<Types<int,int> >     tup2 (11,12);
-          Tuple<Types<int,int,int> > tup3 (11,12,13);
-          
-          FunctionClosure<int()>            clo0 (fun0,tup0);
-          FunctionClosure<int(int)>         clo1 (fun1,tup1);
-          FunctionClosure<int(int,int)>     clo2 (fun2,tup2);
-          FunctionClosure<int(int,int,int)> clo3 (fun3,tup3);
-          
-          CHECK (-1       == clo0() );
-          CHECK (11       == clo1() );
-          CHECK (11+12    == clo2() );
-          CHECK (11+12+13 == clo3() );
-          
-          function<int()>            unbound_functor0 (fun0);
-          function<int(int)>         unbound_functor1 (fun1);
-          function<int(int,int)>     unbound_functor2 (fun2);
-          function<int(int,int,int)> unbound_functor3 (fun3);
-          
-          clo0 = FunctionClosure<int()>            (unbound_functor0,tup0);
-          clo1 = FunctionClosure<int(int)>         (unbound_functor1,tup1);
-          clo2 = FunctionClosure<int(int,int)>     (unbound_functor2,tup2);
-          clo3 = FunctionClosure<int(int,int,int)> (unbound_functor3,tup3);
-          
-          CHECK (-1       == clo0() );
-          CHECK (11       == clo1() );
-          CHECK (11+12    == clo2() );
-          CHECK (11+12+13 == clo3() );
-          
-          CHECK (-1       == closure(fun0,tup0) () );
-          CHECK (11       == closure(fun1,tup1) () );
-          CHECK (11+12    == closure(fun2,tup2) () );
-          CHECK (11+12+13 == closure(fun3,tup3) () );
-          
-          CHECK (-1       == closure(unbound_functor0,tup0) () );
-          CHECK (11       == closure(unbound_functor1,tup1) () );
-          CHECK (11+12    == closure(unbound_functor2,tup2) () );
-          CHECK (11+12+13 == closure(unbound_functor3,tup3) () );
-          
-          
-          // finally combine all techniques....
-          typedef Tuple<List2>::Type NumberzArg;
-          typedef FunctionTypedef<int,NumberzArg>::Sig NumberzSig;
-          Tuple<NumberzArg> numberzTup (Num<5>(22), Num<6>(33), Num<7>(44));
-          
-          FunctionClosure<NumberzSig> numClo (getNumberz<5,6,7>, numberzTup );
-          
-          CHECK (22+33+44 == numClo() );
         }
     };
   

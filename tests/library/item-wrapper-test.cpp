@@ -1,36 +1,34 @@
 /*
   ItemWrapper(Test)  -  wrapping and holding arbitrary values, pointers and references
 
-  Copyright (C)         Lumiera.org
-    2009,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2009,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file item-wrapper-test.cpp
+ ** unit test \ref ItemWrapper_test
+ */
 
 
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
+#include "lib/format-cout.hpp"
+#include "lib/random.hpp"
 #include "lib/util.hpp"
 
-#include "lib/wrapper.hpp"
+#include "lib/item-wrapper.hpp"
+#include "lib/wrapper-function-result.hpp"
 
 #include <functional>
 #include <iostream>
-#include <cstdlib>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -47,11 +45,9 @@ namespace test{
   
   using std::placeholders::_1;
   using std::ref;
+  using std::shared_ptr;
   using std::vector;
   using std::string;
-  using std::rand;
-  using std::cout;
-  using std::endl;
   
   
   
@@ -63,9 +59,9 @@ namespace test{
       {
         uint i_;
         
-        Tracker()                  : i_(rand() % 500) { ++cntTracker; }
-        Tracker(Tracker const& ot) : i_(ot.i_)        { ++cntTracker; }
-       ~Tracker()                                     { --cntTracker; }
+        Tracker()                  : i_(rani(500)) { ++cntTracker; }
+        Tracker(Tracker const& ot) : i_(ot.i_)     { ++cntTracker; }
+       ~Tracker()                                  { --cntTracker; }
       };
     
     bool operator== (Tracker const& t1, Tracker const& t2) { return t1.i_ == t2.i_; }
@@ -106,11 +102,13 @@ namespace test{
       virtual void
       run (Arg)
         {
-          ulong l1 (rand() % 1000);
-          ulong l2 (rand() % 1000);
+          seedRand();
+          
+          ulong l1 (rani (1000));
+          ulong l2 (rani (1000));
           string s1 (randStr(50));
           string s2 (randStr(50));
-          const char* cp (s1.c_str());
+          CStr   cp (s1.c_str());
           
           verifyWrapper<ulong> (l1, l2);
           verifyWrapper<ulong&> (l1, l2);
@@ -123,10 +121,11 @@ namespace test{
           verifyWrapper<string&> (s1, s2);
           verifyWrapper<string*> (&s1, &s2);
           
-          verifyWrapper<const char*> (cp, "Lumiera");
+          verifyWrapper<CStr> (cp, "Lumiera");
           
           
           verifySaneInstanceHandling();
+          verifySaneMoveHandling();
           verifyWrappedRef ();
           
           verifyFunctionResult ();
@@ -217,6 +216,60 @@ namespace test{
         }
       
       
+      /** @test proper handling of move and rvalue references */
+      void
+      verifySaneMoveHandling()
+        {
+          using Data = shared_ptr<int>;
+          using Wrap = ItemWrapper<Data>;
+          
+          Data data{new int(12345)};
+          CHECK (1 == data.use_count());
+          
+          Wrap wrap{data};
+          CHECK (2 == data.use_count());
+          CHECK (12345 == **wrap);
+          CHECK (isSameObject (*data, **wrap));
+          CHECK (!isSameObject (data, *wrap));
+          
+          Wrap wcopy{wrap};
+          CHECK (3 == data.use_count());
+          
+          Wrap wmove{move (wcopy)};
+          CHECK (3 == data.use_count());
+          CHECK (not wcopy);
+          CHECK (wmove);
+          
+          wcopy = move(wmove);
+          CHECK (3 == data.use_count());
+          CHECK (not wmove);
+          CHECK (wcopy);
+          
+          Wrap wmove2{move (data)};
+          CHECK (0 == data.use_count());
+          CHECK (3 == wmove2->use_count());
+          CHECK (not data);
+          CHECK (wmove2);
+          CHECK (wrap);
+          
+          wmove2 = move (wcopy);
+          CHECK (2 == wmove2->use_count());
+          CHECK (not wcopy);
+          CHECK (wmove2);
+          CHECK (wrap);
+          
+          wmove2 = move (wrap);
+          CHECK (1 == wmove2->use_count());
+          CHECK (not wrap);
+          CHECK (wmove2);
+          
+          wmove2 = move (wmove);
+          CHECK (not wcopy);
+          CHECK (not wmove);
+          CHECK (not wmove2);
+        }
+      
+      
       /** @test verify especially that we can wrap and handle
        *        a reference "value" in a pointer-like manner
        */
@@ -243,15 +296,17 @@ namespace test{
         }
       
       
+      static auto produceResult() { return rani(); }
+      
       /** @test verify an extension built on top of the ItemWrapper:
        *        a function which remembers the last result. As a simple test,
-       *        we bind the \c rand() standard lib function and remember the
-       *        last returned random value.
+       *        we bind a static helper function to produce a random value
+       *        and remember the result returned last.
        */
       void
       verifyFunctionResult()
         {
-          FunctionResult<int(void)> randomVal (std::rand);
+          FunctionResult<int(void)> randomVal (produceResult);
           
           // function was never invoked, thus the remembered result is NIL
           CHECK (!randomVal);

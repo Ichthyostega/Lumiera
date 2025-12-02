@@ -1,41 +1,36 @@
 /*
-  ITER-SOURCE.hpp  -  an interface to build an opaque iterator-based data source 
+  ITER-SOURCE.hpp  -  an interface to build an opaque iterator-based data source
 
-  Copyright (C)         Lumiera.org
-    2010,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2010,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
 
 /** @file iter-source.hpp
  ** Extension module to build an opaque data source, accessible as
- ** <i>Lumiera Forward Iterator</i>. It is based on combining an IterAdapter
+ ** **Lumiera Forward Iterator**. It is based on combining an IterAdapter
  ** with classical polymorphism; here, the data source, which is addressed
  ** by IderAdapter through the "iteration control API", is abstracted behind
  ** an interface (with virtual functions). Together this allows to build
  ** a simple data source type, without needing to disclose details of
  ** the implementation.
  ** 
- ** \par Standard Adapters
+ ** @todo the design used for the "iteration control API" is misaligned
+ **       with the purpose of this adapter. Rather, it should be shaped
+ **       similar to IterStateWrapper with three control functions     //////////////////////////////////////TICKET #1125
+ ** 
+ ** # Standard Adapters
  ** As a complement, this header contains a generic implementation
  ** of the IterSource interface by wrapping an existing Lumiera Forward Iterator.
- ** Using this WrappedLumieraIterator, the details of this wrapped source iterator
+ ** Using this WrappedLumieraIter, the details of this wrapped source iterator
  ** remain opaque. To ease the use of this adapter, a selection of free functions
  ** is provided, allowing to build opaque "all elements" or "all keys" iterators
- ** for various STL containers. 
+ ** for various STL containers.
  ** 
  ** @see iter-adapter.hpp
  ** @see itertool.hpp
@@ -48,11 +43,14 @@
 #define LIB_ITER_SOURCE_H
 
 
+#include "lib/meta/util.hpp"
 #include "lib/iter-adapter.hpp"
 #include "lib/itertools.hpp"
+#include "lib/nocopy.hpp"
 
-#include <boost/type_traits/remove_const.hpp>
-#include <boost/noncopyable.hpp>
+#include <type_traits>
+#include <utility>
+#include <string>
 #include <memory>
 
 
@@ -60,7 +58,9 @@
 
 namespace lib {
   
+  using std::string;
   using std::shared_ptr;
+  using std::forward;
   
   
   
@@ -81,17 +81,17 @@ namespace lib {
       
     protected: /* == data source API to implement == */
       
-      typedef TY* Pos;
-      typedef shared_ptr<IterSource> DataHandle;
+      using Pos = TY*;
+      using DataHandle = shared_ptr<IterSource>;
       
-      
+                                                              ///////////////////////////////////////////////TICKET #1125 : this API should use three control functions, similar to IterStateWrapper
       /** iteration start: prepare the first element.
        *  may return NULL in case of empty data source
        */
       virtual Pos firstResult ()         =0;
       
       /** iteration step: switch on to the next element.
-       *  The pos pointer may be set to NULL to report
+       *  The pos pointer should be set to NULL to report
        *  iteration end
        */
       virtual void nextResult(Pos& pos)  =0;
@@ -107,11 +107,18 @@ namespace lib {
       
       
     public:
-      virtual ~IterSource() { }; ///< is ABC
+      virtual ~IterSource() { };  ///< is ABC
+      
+      virtual
+      operator string()  const    ///< subclasses may offer diagnostics
+        {
+          return "IterSource<" + lib::meta::typeStr<TY>()+ ">";
+        }
+      
       
       /* == Iteration control API for IterAdapter frontend == */
       
-      friend bool
+      friend bool                                                    ////////////////////////////////////////TICKET #1125 : this API should use three control functions, similar to IterStateWrapper
       checkPoint (DataHandle const&, Pos const& pos)
         {
           return bool(pos);
@@ -127,7 +134,14 @@ namespace lib {
       
       /* == public builder API to create instances == */
       
-      typedef IterAdapter<Pos, DataHandle> iterator;
+      struct iterator
+        : IterAdapter<Pos, DataHandle>
+        {                                                ////////////////////////////////////////////////////TICKET #1125 : should be build on top of IterStateWrapper rather than IterAdapter!
+          using _I = IterAdapter<Pos, DataHandle>;
+          using _I::IterAdapter;
+          
+          operator string()  const {return _I::source()? string(*_I::source()) : "⟂"; }
+        };
       
       /** build an iterator frontend for the given source,
        *  @note the source is allocated separately and
@@ -136,8 +150,7 @@ namespace lib {
       static iterator
       build (IterSource& sourceImpl)
         {
-          DataHandle sourceHandle (&sourceImpl, &detach_without_destroy);
-          return startIteration(sourceHandle);
+          return startIteration (DataHandle{&sourceImpl, &detach_without_destroy});
         }
       
       /** build an iterator frontend, thereby managing
@@ -149,11 +162,14 @@ namespace lib {
       static iterator
       build (IterSource* sourceImplObject)
         {
-          DataHandle sourceHandle (sourceImplObject, &destroy_managed_source);
-          return startIteration(sourceHandle);
+          return startIteration (DataHandle{sourceImplObject, &destroy_managed_source});
         }
       
       static iterator EMPTY_SOURCE;
+      
+      using value_type = TY;
+      using reference  = TY&;
+      using pointer    = TY*;
       
       
       
@@ -163,7 +179,7 @@ namespace lib {
         {
           REQUIRE (sourceHandle);
           Pos first = sourceHandle->firstResult();
-          return iterator (sourceHandle, first);
+          return {move(sourceHandle), first};
         }
       
       
@@ -190,7 +206,7 @@ namespace lib {
   
   /** storage for the empty data-source constant */
   template<typename TY>
-  typename IterSource<TY>::iterator IterSource<TY>::EMPTY_SOURCE = iterator();
+  IterSource<TY>::iterator IterSource<TY>::EMPTY_SOURCE = iterator();
   
   
   
@@ -202,17 +218,17 @@ namespace lib {
    * is passed to one of the IterSource's builder functions, thereby
    * erasing the specific type information of the template parameter IT
    */
-  template<class IT>
-  class WrappedLumieraIterator
-    : public IterSource<typename IT::value_type>
-    , boost::noncopyable
+  template<class IT,  class ISO = IterSource<typename meta::ValueTypeBinding<IT>::value_type>>
+  class WrappedLumieraIter
+    : public ISO
+    , util::NonCopyable
     {
-      typedef IterSource<typename IT::value_type> _Base;
-      typedef typename _Base::Pos Pos;
-      
       IT src_;
       
-      Pos
+    protected:
+      using Pos = ISO::Pos;
+      
+      Pos                                                ////////////////////////////////////////////////////TICKET #1125 : this API should use three control functions, similar to IterStateWrapper
       firstResult ()
         {
           if (!src_)
@@ -235,9 +251,18 @@ namespace lib {
       
       
     public:
-      WrappedLumieraIterator (IT const& orig)
+      WrappedLumieraIter (IT const& orig)
         : src_(orig)
         { }
+      
+      WrappedLumieraIter (IT&& orig)
+        : src_(forward<IT>(orig))
+        { }
+      
+      
+    protected:
+      IT&       wrappedIter()       { return src_; }
+      IT const& wrappedIter() const { return src_; }
     };
   
   
@@ -251,55 +276,58 @@ namespace lib {
       template<class CON>
       struct _SeqT
         {
-          typedef typename CON::iterator::value_type Val;
-          typedef typename IterSource<Val>::iterator Iter;
+          using Val  = CON::iterator::value_type;
+          using Iter = IterSource<Val>::iterator;
         };
       
       template<class IT>
       struct _RangeT
         {
-          typedef typename IT::value_type Val;
-          typedef typename IterSource<Val>::iterator Iter;
+          using Val  = IT::value_type;
+          using Iter = IterSource<Val>::iterator;
         };
 
       template<class MAP>
       struct _MapT
         {
-          typedef typename MAP::key_type Key;
-          typedef typename MAP::value_type::second_type Val;
-          typedef typename IterSource<Key>::iterator KeyIter;
-          typedef typename IterSource<Val>::iterator ValIter;
+          using Key     = MAP::key_type;
+          using Val     = MAP::value_type::second_type;
+          using KeyIter = IterSource<Key>::iterator;
+          using ValIter = IterSource<Val>::iterator;
         };
       
       
       template<class IT>
       struct _IterT
         {
-          typedef typename IT::value_type Val;
-          typedef typename IterSource<Val>::iterator Iter;
+          using Src  = std::remove_reference<IT>::type;
+          using Val  = Src::value_type;
+          using Iter = IterSource<Val>::iterator;
         };
       
       template<class IT, class FUN>
       struct _TransformIterT
         {
-          typedef typename _ProducedOutput<FUN>::Type ResVal;          
-          typedef TransformIter<IT,ResVal>         TransIter;
-          typedef typename IterSource<ResVal>::iterator Iter;
+          using       Src = std::remove_reference<IT>::type;
+          using    ResVal = lib::meta::_Fun<FUN>::Ret;
+          using TransIter = TransformIter<Src, ResVal>;
+          using      Iter = IterSource<ResVal>::iterator;
         };
       
       template<class IT>
       struct _PairIterT
         {
-          typedef typename IT::value_type PairType;
-          typedef typename PairType::second_type ValType;
-          typedef typename PairType::first_type ConstKeyType;
+          using          Src = std::remove_reference<IT>::type;
+          using     PairType = Src::value_type;
+          using      ValType = PairType::second_type;
+          using ConstKeyType = PairType::first_type;
           
           // since we're returning the keys always by value,
           // we can strip the const added by the STL map types
-          typedef typename boost::remove_const<ConstKeyType>::type KeyType;
+          using KeyType = std::remove_const<ConstKeyType>::type;
           
-          typedef TransformIter<IT,KeyType> KeyIter;
-          typedef TransformIter<IT,ValType> ValIter;
+          using KeyIter = TransformIter<Src, KeyType>;
+          using ValIter = TransformIter<Src, ValType>;
           
           static KeyType  takeFirst (PairType const& pair) { return pair.first; }
           static ValType  takeSecond(PairType const& pair) { return pair.second;}
@@ -307,17 +335,17 @@ namespace lib {
       
       
       template<class IT>
-      typename _PairIterT<IT>::KeyIter
-      takePairFirst (IT const& source)
+      _PairIterT<IT>::KeyIter
+      takePairFirst (IT&& source)
       {
-        return transformIterator(source, _PairIterT<IT>::takeFirst );
+        return transformIterator(forward<IT>(source), _PairIterT<IT>::takeFirst );
       }
       
       template<class IT>
-      typename _PairIterT<IT>::ValIter
-      takePairSecond (IT const& source)
+      _PairIterT<IT>::ValIter
+      takePairSecond (IT&& source)
       {
-        return transformIterator(source, _PairIterT<IT>::takeSecond );
+        return transformIterator(forward<IT>(source), _PairIterT<IT>::takeSecond );
       }
       
     } //(END) type helpers...
@@ -328,12 +356,29 @@ namespace lib {
      *  exposing just a IterSource based frontend.
      */
     template<class IT>
-    typename _IterT<IT>::Iter
-    wrapIter (IT const& source)
+    _IterT<IT>::Iter
+    wrapIter (IT&& source)
     {
-      typedef typename _IterT<IT>::Val ValType;
+      using Src = _IterT<IT>::Src;
+      using Val = _IterT<IT>::Val;
       
-      return IterSource<ValType>::build (new WrappedLumieraIterator<IT> (source));
+      return IterSource<Val>::build (new WrappedLumieraIter<Src> (forward<IT>(source)));
+    }
+    
+    
+    /** an IterSource frontend to return just a single value once.
+     * @warning behind the scenes, a heap allocation is managed by shared_ptr,
+     *          to maintain a copy of the wrapped element. When passing a reference,
+     *          only a reference will be wrapped, but a heap allocation happens nonetheless
+     */
+    template<typename VAL>
+    auto
+    singleVal (VAL&& something)
+    {
+      using Src = decltype(singleValIterator (forward<VAL>(something)));
+      using Val = _IterT<Src>::Val;
+
+      return IterSource<Val>::build (new WrappedLumieraIter<Src>{singleValIterator (forward<VAL>(something))});
     }
     
     
@@ -347,15 +392,15 @@ namespace lib {
      *       function call for every fetched element.
      */
     template<class IT, class FUN>
-    typename _TransformIterT<IT,FUN>::Iter
-    transform (IT const& source, FUN processingFunc)
+    _TransformIterT<IT,FUN>::Iter
+    transform (IT&& source, FUN processingFunc)
     {
-      typedef typename _TransformIterT<IT,FUN>::ResVal    ValType;
-      typedef typename _TransformIterT<IT,FUN>::TransIter TransIT;
+      using ValType = _TransformIterT<IT,FUN>::ResVal;
+      using TransIT = _TransformIterT<IT,FUN>::TransIter;
       
       return IterSource<ValType>::build (
-          new WrappedLumieraIterator<TransIT> (
-              transformIterator (source, processingFunc)));
+          new WrappedLumieraIter<TransIT> (
+              transformIterator (forward<IT>(source), processingFunc)));
     }
     
     
@@ -363,10 +408,10 @@ namespace lib {
      *          all the keys of the given Map or Hashtable
      */
     template<class MAP>
-    typename _MapT<MAP>::KeyIter
+    _MapT<MAP>::KeyIter
     eachMapKey (MAP& map)
     {
-      typedef RangeIter<typename MAP::iterator> Range;
+      using Range = RangeIter<typename MAP::iterator>;
       
       Range contents (map.begin(), map.end());
       return wrapIter (takePairFirst (contents));
@@ -377,10 +422,10 @@ namespace lib {
      *          all the values of the given Map or Hashtable
      */
     template<class MAP>
-    typename _MapT<MAP>::ValIter
+    _MapT<MAP>::ValIter
     eachMapVal (MAP& map)
     {
-      typedef RangeIter<typename MAP::iterator> Range;
+      using Range = RangeIter<typename MAP::iterator>;
       
       Range contents (map.begin(), map.end());
       return wrapIter (takePairSecond(contents));
@@ -393,10 +438,10 @@ namespace lib {
      *          the distinct keys
      */
     template<class MAP>
-    typename _MapT<MAP>::KeyIter
+    _MapT<MAP>::KeyIter
     eachDistinctKey (MAP& map)
     {
-      typedef RangeIter<typename MAP::iterator> Range;
+      using Range = RangeIter<typename MAP::iterator>;
       
       Range contents (map.begin(), map.end());
       return wrapIter (filterRepetitions (takePairFirst(contents)));
@@ -408,11 +453,11 @@ namespace lib {
      *  @note obviously in case of a Map we'll get at most one result.
      */
     template<class MAP>
-    typename _MapT<MAP>::ValIter
+    _MapT<MAP>::ValIter
     eachValForKey (MAP& map, typename _MapT<MAP>::Key key)
     {
-      typedef typename MAP::iterator Pos;
-      typedef RangeIter<Pos> Range;
+      using Pos = MAP::iterator;
+      using Range = RangeIter<Pos>;
       
       std::pair<Pos,Pos> valuesForKey = map.equal_range(key);
       Range contents (valuesForKey.first, valuesForKey.second);
@@ -421,46 +466,37 @@ namespace lib {
     
     
     /** @param container a STL-like container, providing
-     *         - a typedef \c iterator
-     *         - functions \c begin() and \c end()
+     *         - a typedef `iterator`
+     *         - functions `begin()` and `end()`
      *  @return a Lumiera Forward Iterator yielding all values
      *          starting with \c begin and excluding \c end .
      */
     template<class CON>
-    typename _SeqT<CON>::Iter
+    _SeqT<CON>::Iter
     eachEntry (CON& container)
     {
-      typedef typename _SeqT<CON>::Val ValType;
-      typedef RangeIter<typename CON::iterator> Range;
+      using ValType = _SeqT<CON>::Val;
+      using Range   = RangeIter<typename CON::iterator>;
       
       Range contents (container.begin(), container.end());
-      return IterSource<ValType>::build (new WrappedLumieraIterator<Range>(contents)); 
+      return IterSource<ValType>::build (new WrappedLumieraIter<Range>(contents));
     }
     
-
-    /** @return a Lumiera Forward Iterator yielding all values
+    
+    /** @return a Lumiera Forward Iterator to yield all values
      *          defined by a classical Iterator range.
      */
     template<class IT>
-    typename _RangeT<IT>::Iter
+    _RangeT<IT>::Iter
     eachEntry (IT const& begin, IT const& end)
     {
-      typedef typename _RangeT<IT>::Val ValType;
-      typedef RangeIter<IT> Range;
+      using ValType = _RangeT<IT>::Val;
+      using Range   = RangeIter<IT>;
 
       Range contents (begin, end);
-      return IterSource<ValType>::build (new WrappedLumieraIterator<Range>(contents));
+      return IterSource<ValType>::build (new WrappedLumieraIter<Range>(contents));
     }
-
-  }
-  using iter_source::wrapIter;
-  using iter_source::transform;
-  using iter_source::eachMapKey;
-  using iter_source::eachDistinctKey;
-  using iter_source::eachValForKey;
-  using iter_source::eachMapVal;
-  using iter_source::eachEntry;
   
-  
-} // namespace lib
+    
+}} // namespace lib::iter_source
 #endif

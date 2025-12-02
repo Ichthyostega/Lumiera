@@ -1,12 +1,12 @@
 Lumiera: The Inner Core
 =======================
 :Author: Lumiera_Core_Developers
-:Date: Winter 2012
+:Date: 2012 / 2025
 :toc:
 
 [abstract]
 ******************************************************************************
-The Lumiera Developers have a distinct vision about the core of a modern NLE. 
+The Lumiera Developers have a distinct vision about the core of a modern NLE.
 This document outlines some of the basic technical concepts and highlights
 the fundamental design decisions. New Developers may find this Document useful
 to get an idea about how the different components work together.
@@ -22,22 +22,26 @@ the source directory structures.
 
 This three Layers are:
 
- The User Interface::
-     User interfaces are implemented as plug-ins, most commonly one will see
-     the default GUI. But also scripting interfaces or specialized GUI's are
-     possible.
+ The Stage Layer::
+     Interaction and presentation. User interfaces are implemented as plug-ins,
+     and while most commonly one will see the GTK UI, it would be possible to
+     construct a entirely different user interface, a CLI interface, or even
+     operate the application ``headless'', script driven.
 
- The Processing layer::
-     Keeps the Session, generates the rendering graphs for sequences.
+ The Steam Layer::
+     Keeps the Session, generates the rendering graphs for sequences,
+     arranges what to do when and how.
 
- The IO and System interface Backend::
-     Manages thread-queues, schedules jobs, does the memory management for the
-     heavy multimedia data.
+ The Vault Layer::
+     Manages worker pools, schedules jobs, does the memory management for the
+     heavy multimedia data. Loads and delegates to external libraries for
+     media processing.
 
 The extra components are:
 
  Lumiera::
-     The main program itself, basically acts only as loader to pull the rest up.
+     The main program itself, which starts all Subsystems and controls the
+     overall lifecycle.
 
  Common::
      Vital components and common services which must be available for pulling up
@@ -54,7 +58,7 @@ The Lumiera team agreed on using GNU coding style with slight adaptations.
 Generally speaking, we strive to keep the code base consistent and stick to
 widely accepted guidelines and best practices. See our separate
 link:{ldoc}/technical/code/codingGuidelines.html[Coding Guidelines] page.
-Function naming conventions and other details are also described in several RFCs.
+
 
 
 Documentation
@@ -62,16 +66,16 @@ Documentation
 The central location for all design and technical documentation is the Lumiera
 website you're reading right now. Besides that, a summary and introduction
 for various components can be found in the file-level doxygen comments, while
-details are usualy explained in the class and function level comments.
+details are usually explained in the class and function level comments.
 
-==== the TiddlyWiki
+==== the Development TiddlyWiki
 Currently, Lumiera is still in the design- and evolution phase. Documentation
 is written as an ongoing effort.
 There is an embedded JavaScript wiki (TiddlyWiki) within the source tree, mostly
 used as design notebook, featuring day-to-day design sketches and notes, but also
 quite some more persistent planning. Finished documentation text is constantly
 moved over to the documentation section(s) of the Lumiera website. +
--> access the Proy-Layer link:http://lumiera.org/wiki/renderengine.html[TiddlyWiki online here]
+-> access the development link:/wiki/renderengine.html[TiddlyWiki online here]
 
 
 Test Driven Development
@@ -86,10 +90,20 @@ In practice, this approach might not be suitable at times,
 nevertheless we try to stick to it as far as possible
 and maintain fairly complete test coverage.
 
+Furthermore, tests are a vital form of documentation: when done right,
+a test engages the functionality by accessing and combining the interfaces
+of the code. For many central elements of the Lumiera Application, some tests
+are written in a ``narrative style'' to explain how parts are meant to fit
+together and shall be used. This kind of test does not focus on covering
+all corner cases -- rather it is organised like a trail to showcase
+the central ideas and basic assumptions of a component.
+
 
 Releases and Development Process
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Lumiera is developed in a collaborative style. Releases are done ``when ready''.
+Feature development and releases are organised using the
+link:code/GitBranching.html[Git-flow] branching scheme.
 We (the core developers) are always open for comments, new ideas and proposals.
 In fact, there is even a world-pushable ``mob'' Git repository on our server:
 minor contributions can be pushed there right away, we'll notice any changes.
@@ -102,9 +116,9 @@ Porting to other platforms is OK for us, but requires Someone^TM^ to volunteer.
 For development and dependency management, we try to stick close to what
 Debian/stable provides. Whenever we need special or more recent libraries,
 we care for a backport and publish a DEB package for use on Debian/Stable.
-We also run a series of Debian Repositories, and we try to build a Lumiera
-package for an array of Debian-like distributions (Ubuntu, Mint). Through
-these ongoing efforts, we try to keep up with the evolution of platform,
+We also run a series of link:/debian/[Debian Repositories], and we try to build
+a Lumiera package for an array of Debian-like distributions (Ubuntu, Mint).
+Through these ongoing efforts, we try to keep up with the evolution of platform,
 compilers, language and libraries, and we maintain our ability to
 release, even while there are no public releases planned
 for the foreseeable future.
@@ -113,7 +127,7 @@ for the foreseeable future.
 
 Lumiera Application
 -------------------
-Generally speaking, the Application is comprised of several self contained 
+Generally speaking, the Application is comprised of several self contained
 _subsystems_, which may depend on each other. Dependencies between components
 are to be abstracted through interfaces. Based on the current configuration,
 the application framework brings up the necessary subsystems and finally
@@ -122,31 +136,37 @@ passive, yet provides vital services commonly used.
 
 While the core components are linked into a coherent application and may
 utilise each other's services directly based on C/C++ language facilities,
-several important parts of the applications are loaded as plug-ins, starting
+several important parts of the application are loaded as plug-ins, starting
 with the GUI.
 
 
-User Interface(s)
------------------
+Stage: The User Interface(s)
+----------------------------
 
 The purpose of the user interface(s) is to act on the _high-level data model_
-contained within the Session, which belongs to the _processing layer_ below.
+contained within the Session, which belongs to the _steam layer_ below.
 User interfaces are implemented as plug-ins and are pulled up on demand,
 they won't contain any relevant persistent state beyond presentation.
 
-_As of 2011, the one and only interface under active development is
-the Lumiera GTK GUI,_ based on GTK-2 / gtkmm. The sources are in tree
-(directory 'src/gui') and it is integrated into the standard build and
+_As of 2023, the one and only interface under active development is
+the Lumiera GTK GUI,_ based on GTK-3 / gtkmm. The sources are in tree
+(directory 'src/stage') and it is integrated into the standard build and
 installation process. By default, running the 'lumiera' executable will
 load and start this GUI as a Lumiera module from 'modules/gtk_gui.lum'
 
 
 
-Processing Layer
-----------------
+Steam Layer
+-----------
 
 High Level Model
 ~~~~~~~~~~~~~~~~
+All the content of the Project is represented as a tree of symbolic objects,
+connected together through _Placements._ There are some general conventions
+how these objects are expected to be arranged; any content fitting with these
+conventions will be discovered, interpreted and transformed into something
+that can be rendered and thus ``performed''
+
 _tbw_
 
 Assets
@@ -159,10 +179,6 @@ _tbw_
 
 Scoping
 ^^^^^^^
-_tbw_
-
-MObject References
-^^^^^^^^^^^^^^^^^^
 _tbw_
 
 QueryFocus
@@ -195,6 +211,17 @@ _tbw_
 
 Low Level Model
 ~~~~~~~~~~~~~~~
+The content of the current Session (the Project) can be _performed_ by
+pulling from a set of render pipelines. These are generated automatically
+By the Builder and represented as a **D**irected **A**cyclic **G**raph of
+_Render Nodes_, chained together, so that the output of one node becomes the
+input of the next node.
+Each Render Node is backed by a processing function, which is provided by
+a »Media processing library« and typically loaded dynamically, as an extension
+or Plug-in. The Low-level Model is optimised for rendering performance; the
+user can control its structure and contents by re-arranging the objects in
+the High-level Model.
+
 _tbw_
 
 
@@ -207,13 +234,13 @@ Yet it addresses some central concerns:
 
 uniformity::
  All playback and render processes are on equal footing, handled in a similar way.
- 
+
 integration::
  The player cares for the necessary integration with the other subsystems
-+ 
++
 it consults the _Output Management,_ retrieves the necessary informations from the _Session_
-and coordinates the forwarding of Backend calls.
- 
+and coordinates the forwarding of Vault-Layer calls.
+
 time quantisation::
  The player translates continuous time values into discrete frame counts.
 +
@@ -225,27 +252,27 @@ The player service
 ^^^^^^^^^^^^^^^^^^
 Client code accesses the player (subsystem) through the play-facade (`lumiera::Play`).
 The exposed service allows to _set up an output connection for playback or rendering,_
-resulting in a play-controller object. 
+resulting in a play-controller object.
 
 .Play::Controller
-This controller frontend represents the presence of such an active output connection 
+This controller frontend represents the presence of such an active output connection
 and incorporates a state machine supporting the usual things you'd expect to do with
 a player (Play, pause, FFwd, Rew, scrubbing, jumping, looping). This controller object
 is a copyable smart-handle -- all instances act as if wired in parallel.
 
 .time control
 The play-controller frontend makes heavy use of `time::Control`. This is a mediator
-to accept and forward _mutations_ on time values and time ranges, possibly involving 
+to accept and forward _mutations_ on time values and time ranges, possibly involving
 frame quantisation. After attaching it to a target time value, it accepts changes,
 offsets and nudging, translates these into the appropriate target modifications
 and notifies any attached _change listeners_.
 
 .play process
 Ongoing effort to calculate a stream of frames for playback or rendering. +
-The play process is an conceptual entity linking together several activities in the backend
+The play process is an conceptual entity linking together several activities in the vault
 and the render engine. It maintains a registration entry for the process to keep track of
 associated entities, resources allocated and calls dispatched as a consequence. Besides
-each play process is wired to at leas one play-controller acting as frontend interface
+each play process is wired to at least one play-controller acting as frontend interface
 and information hub for the client code.
 
 NOTE: the player is in no way engaged in any of the actual calculation and management tasks
@@ -253,53 +280,21 @@ necessary to make the stream of calculations actually happen. The play process c
 within the player subsystem is largely comprised of organisational concerns and not especially
 performance critical.
 
-- the backend is responsible for dispatching the calculation stream and scheduling calculation jobs
+- the vault is responsible for dispatching the calculation stream and scheduling calculation jobs
 - the render engine has the ability to carry out individual frame calculations
 - the OutputSlot exposed by the output manager is responsible for accepting timed frame delivery
 
 
 
 
-Backend
--------
-
-I/O Subsystem
-~~~~~~~~~~~~~
-
-.OS Filehandles
-as mru cache, round robin reused
-
-.Files
-Lumiera has its own abstract file handles which store the state and name of a
-file. The associated filehandle doesn't need to be kept open and will be
-reopened on demand. Hardlinked files are recognized and opened only once.
-
-.Memory Mapping
-All file access is done by memory mapping to reduce data copies between
-userland and kernel. Moreover the kernel becomes responsible to schedule
-paging (which will be augmented by lumiera) to make the best use of available
-resources. Memory is mapped in larger windows of reasonable sized chunks, possibly
-overlapping each other. Clients may request a specific continuous set of data from
-the file to be accessible as memory block.
-
-
-.Indexing
-
-.Frameprovider
-
-
-Threadpools
-~~~~~~~~~~~
-
-Manages serveral classes of threads in pools. The threadpool is reasonable
-dumb. Higher level management will be done by the Schedulers and Jobs.
-
+Vault Layer
+-----------
 
 Engine Interface
 ~~~~~~~~~~~~~~~~
 While on itself just a thin interface and adaptation layer forwarding calls to
-the primary backend facilities, the Engine Interface is the primary point of service
-accessed by Proc-Layer to use the backend services for rendering content.
+the primary vault facilities, the Engine Interface is the primary point of service
+accessed by Steam-Layer to use the vault layer services for rendering content.
 
 .Calculation Streams
 The Engine Interface is cast in terms of an _calculation stream_ entity. This is
@@ -323,30 +318,48 @@ the job ticket acts as blueprint for the actual jobs to be enqueued
 with the _Scheduler._
 
 
-Schedulers
-~~~~~~~~~~
+Scheduler
+~~~~~~~~~
+The Scheduler serves as the central hub in the implementation of the RenderEngine
+and coordinates the processing resources of the application. Its purpose is to
+invoke and control the dependency and time based execution of the _Render Jobs._
 
-Scheduling Queues for different purposes:
+Regarding architecture, the Scheduler is located in the Vault-Layer and running the Scheduler
+is equivalent to activating the »Vault Subsystem«. An EngineFaçade acts as entrance point,
+providing high-level render services to other parts of the application: render jobs can be
+activated under various timing and dependency constraints, which can be grouped
+into three basic modes of control:
 
-.Deadline
-Higher priority jobs ordered by a deadline time plus some (negative) hysteresis. Jobs are
-started when they approach their deadline. Jobs who miss their deadline are
-never scheduled here.
+Deadline::
+ Higher priority jobs ordered by a deadline time plus some (negative) hysteresis.
+ Jobs are started when they approach their deadline. When it is foreseeable that a
+ jobs will miss the deadline, it will be skipped, preferring to use resources on
+ calculations expected to be successful and on time.
 
-.Background
-Background jobs scheduled by priority and timeout.
+Best Effort::
+ Background calculations will use excess resources of the system;
+ a typical example would be the calculation of preview images and sound waveform
+ outlines for the GUI.
 
+Freewheeling::
+ Calculation for final rendering will use all available resources and never
+ skip any processing, irrespective of the time it takes to complete.
 
-.Realtime
-Timer driven queue which starts jobs at defined absolute times. Timer might be
-also an external synchronization entity.
+Internally, the implementation of the Scheduler is organised in two layers:
 
+Layer-2: Coordination::
+  Maintain a network of interconnected activities, track dependencies and observe
+  timing constraints; coordinate a pool of _active Workers_ to dispatch the next activities.
+
+Layer-1: Invocation::
+  Operates a low-level priority scheduling mechanism for time-bound execution of activities.
 
 Job
 ^^^
-a job can be part of multiple queues, the queue which picks them first runs
-them. When other queues hit a running job they either just drop it or promote
-its priority (to be decided).
+A _Render Job_ is prepared as a self-contained functor, with a well defined time window
+of execution. A job, once triggered, will run to completion unattended and can not be aborted.
+The scheduler is able to observe and maintain dependencies between render jobs, allowing
+to break down an extended calculation into a chain of small steps.
 
 
 Resource Management
@@ -362,37 +375,6 @@ some facilities to monitor and adjust resource usage depending and adapting to
 the system and current circumstances.
 
 
-Profiler
-^^^^^^^^
-
-Collects statistic about resource load, helps to decide if job constraints can
-be fulfilled.
-
-Things to watch:
- * cpu utilization
- * memory usage (swapping, paging)
- * I/O load, latency
-
-
-Budget Manager
-^^^^^^^^^^^^^^
-
-resources need to be distributed among a lot subsystems and jobs. Each of this
-component can become part of a budgeting system which accounts resource usage
-and helps to distribute it. Resource usage is only voluntary managed.
-
-
-Resource collector
-^^^^^^^^^^^^^^^^^^
-
-Handles system errors related to resource shortage. There are several classes
-of resources defined. Other subsystems can hook in functions to free
-resources. Has multiple policies about how aggressive resources should be freed.
-
-If no one cares it does a final abort(). So all systems should hook better
-recovery here in!
-
-
 
 
 
@@ -401,15 +383,40 @@ Common Services
 
 Subsystem runner
 ~~~~~~~~~~~~~~~~
-_tbw_
+Conceptually, the application is structured into layers. However, as actual runtime
+entities we rely on a small number of link:{ldoc}/design/architecture/Subsystems.html[Subsystems],
+which can be started and stopped and have well defined dependencies:
+
+- Engine
+- Session and Builder
+- Play and Render Subsystem
+- Lumiera GUI
+- Script runner [yellow-background small]#planned#
+- Renderfarm node [yellow-background small]#planned#
+
+Lumiera's `main()` function defines an _Application Object_, which in turn operates
+the _Subsystem Runner_. Each Subsystem implements a descriptor with the necessary
+hooks callbacks to be started and stopped when necessary.
 
 Lifecycle events
 ~~~~~~~~~~~~~~~~
-_tbw_
+Beyond parsing the commandline and triggering start of the subsystems, the Application
+Object also issues _Lifecycle Events_. Individual components can register a callback
+to be invoked when this happens. Currently (2018) the following events are known
+(see 'include/lifecycle.h'):
 
-Interface system
-~~~~~~~~~~~~~~~~
-_tbw_
+- ON_BASIC_INIT
+- ON_GLOBAL_INIT
+- ON_GLOBAL_SHUTDOWN
+- ON_EMERGENCY_EXIT
+
+-> see here for
+link:{ldoc}/design/application/SubsystemLifecycle.html#_initialisation_and_lifecycle[explanation in detail]
+[small]#(somewhat preliminary and messy, yet still valid as of [yellow-background]##2018##)# +
+-> more
+link:{ldoc}/design/architecture/Subsystems.html#_lifecycle[documentation]
+[small]#(likewise incomplete, but we're getting there, eventually [yellow-background]##2018##)#
+
 
 Plugin loader
 ~~~~~~~~~~~~~
@@ -444,13 +451,6 @@ Serialiser
 ~~~~~~~~~~
 _tbw_
 
-Config loader
-~~~~~~~~~~~~~
-_tbw_
-
-Lua Scripting
-~~~~~~~~~~~~~
-_tbw_
 
 
 
@@ -475,32 +475,28 @@ contains:: indicate that a value is _somehow contained_ within a collection,
 
 sanitise:: make any string usable as identifier.
 
-In a similar vein, the header 'lib/util-foreach.hpp' provides a generic
-``for-each-element'' mechanism, which works for all STL containers, but
-also for all _Lumiera Forward Iterators_. The loop body is provided
-as a functor. In case this functor is a predicate (boolean result),
-the +and_all+ and +has_any+ functions allow to test for conjunction
-and disjunction.
 
 
 Locking
 ~~~~~~~
 General purpose Locking is based on object monitors. Performance critical code
-in the backend uses mutexes, condition vars and rwlocks direcly.
-Intentionally no semaphores.
+in the Render Engine relies on __»Atomics«__, or may use futures and further
+synchronisation primitives through the wrappers of the C++ standard library.
 
-- C++ locks are managed by scoped automatic variables
-- C code uses macros to wrap critical sections
-
-
+NOTE: At the time when Lumiera project started, the standard library provided
+      no portable support for concurrency and locking. As a remedy, various
+      solutions were built on top of the POSIX primitives. Some of these
+      ad-hoc solutions turned out to be viable and were reworked and adapted,
+      as proper concurrency support became part of the language standard.
+      For new code, the direct use of POSIX primitives is discouraged.
 
 Time
 ~~~~
 Time values are represented by a family of opaque date types
-with overloaded operators. The implementation is based on `gavl_time_t`,
-an integral (µsec) time tick value. Thus, the arithmetic on time values
-and time spans is limited and any Time handling and conversion is
-centralised in library routines.
+with overloaded operators. The implementation was inspired by `gavl_time_t`
+and is thus based on a µ-seccond time grid, represented as 64-bit integer.
+Thus, the arithmetic on time values and time spans is limited and any Time
+handling and conversion is centralised in library routines.
 
 We distinguish between time values and a _quantisation_ into a frame
 or sample grid. In any case, quantisation has to be done once, explicitly
@@ -529,7 +525,7 @@ A time alignment grid is exactly that: a set of functions to perform
 this lossy conversion. Implicitly this involves the definition of an
 _time origin_ (reference point where the external time is zero), and
 typically this also includes the definition of a _frame rate_ (but
-in the most general case, this frame rate might be variable and 
+in the most general case, this frame rate might be variable and
 change at various places of the time axis). Consequently, all time
 grids are Assets and defined as part of the concrete session.
 
@@ -573,7 +569,7 @@ output connection or something similar to establish a frame grid.
 
 Errors
 ~~~~~~
- 
+
  * As a Rule, Exceptions + RAII are to be preferred over error
    codes and manual cleanup. At external interfaces we rely on
    error states though.
@@ -587,8 +583,6 @@ Errors
      case of raising an exception / error state (transactional behaviour).
    - *EX_SANE* functions might leave a partial change, but care to leave
      any involved objects in a sane state.
- * Raising an Exception creates an _error state_ -- error states can also
-   be set directly per thread.
  * Error states are identified by pointers to static strings.
  * Error states are thread local and sticky (a new state can't be set
    unless a pending state got cleared).
@@ -619,76 +613,55 @@ Error states
 Errors states get declared in headers with the `LUMIERA_ERROR_DECLARE(err)` macro.
 A matching definition needs to reside in some translation unit, using the
 `LUMIERA_ERROR_DEFINE(err, msg)` macro. There is no central registry, any component
-can introduce its own errorcodes but must ensure that the error identifier is
-unique.
-
-.Error handling in C
-There are two helper macro forms for setting up error conditions, one is
-`LUMIERA_ERROR_SET..(flag, err, extra)` and the other one is
-`LUMIERA_ERROR_GOTO..(flag, err, extra)`. Each for different logging levels.
-The `SET` form just logs an error and sets it, the `GOTO` form also jumps to
-an error handler. Both take a NoBug flag used for logging and a optional
-`extra` c-string.
-
-
-[source,C]
---------------------------------------------------------------------------------
-const char*
-mayfail()
-{
-  const char* ret = foo();
-  if (!ret)
-    LUMIERA_ERROR_GOTO (flag, FOO_FAILED, 0);
-
-  if (!bar(ret))
-    LUMIERA_ERROR_GOTO (flag, BAR_FAILED, 1,
-                        lumiera_tmpbuf_snprintf (256, "foo was %s", ret));
-
-  return "everything ok";
-
-  /* cleanup in reverse setup order */
- BAR_FAILED1:
-  lumiera_free (ret);
- FOO_FAILED0:
-  return NULL;
-}
---------------------------------------------------------------------------------
+can introduce its own error codes but must ensure that the error identifier is
+unique. An error state is maintained in a thread-local variable, and set automatically
+when throwing an exception. Error states can be helpful when diagnosing unexpected
+failures, and can be used to ``sneak'' an error condition through a call-chain
+of plain-C functions, but are no longer considered a suitable concept for error
+handling in general.
 
 
 
-Singletons
-~~~~~~~~~~
+
+Singletons and Dependencies
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Deliberately, Lumiera stays below the level of utilising a dependency injection framework.
 Consequently, we access most services _by type name_, pulling up a single implementation
-instance on demand. Rather than placing this singleton lifecycle logic into the individual
-implementation classes, we use a _singleton factory_, managing the lifecycle through static
-variables and placing the singleton object into a static memory block. Singleton initialisation
-is protected by a monitor per singleton type, while shutdown is triggered by the clean-up of
-a static variable. This results in the general policy that within Lumiera, performing any
-``business'' code in the application shutdown phase (after exiting +main()+) is _strictly
-prohibited._ Generally speaking, destructors _must not perform any significant work_ and
-are are expected to be failsafe.
+instance on demand. Yet some aspects of the *Singleton Pattern* are known to be problematic.
+Rather than placing this singleton lifecycle logic into the individual implementation classes,
+we use a _singleton factory_, to manage the instance creation and lifecycle of the singleton
+or service instance separate from the singleton class itself, as a *Monostate*. Singleton
+initialisation happens lazily with this approach, and thus needs to be protected in a
+multithreaded environment; we use Double Checked Locking with `std::atomic` for this purpose.
+
+Singletons need to be written in a way to cope with that somewhat nondeterministic environment.
+They will be created on-demand, and be destroyed _eventually,_ in the application shutdown phase.
+This results in the general policy within Lumiera that performing any ``business'' code in the
+application shutdown phase (after exiting `main()`) is _strictly prohibited._ Generally speaking,
+destructors _must not perform any significant work_ and are are expected to be failsafe.
 
 .accessing the singleton instance
 By convention, when clients are expected actively to access the singleton instance,
 the interface class holds the singleton factory as a public static member with the
-name +instance+. This allows clients to write `SomeService::instance()` to get a
+name `instance`. This allows clients to write `SomeService::instance()` to get a
 reference to the implementation.
 
-.subclasses and mock testing support
-There is a mechanism to ``push aside'' the existing singleton instance and shadow
-it temporarily with a mock implementation. Besides, there is a variation of the
-general singleton factory, allowing to fabricate a specific subclass of the 
-exposed interface. Both of these facilities are rather technically involved
-and require some specific set-up -- fortunately it turned out that they are
-used only occasionally and rarely required. (Probably this is a result of
-Lumiera being developed _test-driven_ -- things are being written mostly
-in a unit test friendly fashion).
+.subclasses and services
+Actually, what appears as a mere ``singleton'' here is a form of _Dependency Injection,_
+and can easily be extended to cover other forms of dependencies and other types of lifecycle.
+Our experience indicates that this is rarely necessary, but when it happens, it's essential.
+Lumiera's Dependency-Factory thus offers a configuration mechanism, which allows to switch
+those modes of operation for individual types; the client consuming the ``singleton'' remains
+unaware of such special setup.
 
+.mock testing support
+Moreover, the Dependency-Factory also offers a mechanism to ``push aside'' the existing singleton
+or service instance and shadow it temporarily with a mock implementation. Again, it turned out that
+such mocking mechanisms are used only occasionally and rarely required. Likely this is a result of
+Lumiera being developed _test-driven_ -- things are being written mostly in a unit test friendly way.
 
-Extensible Factory
-~~~~~~~~~~~~~~~~~~
-_tbw_
+-> more about link:{ldoc}/technical/library/Dependencies.html[dependency handling]
+
 
 Visiting Tool
 ~~~~~~~~~~~~~
@@ -712,7 +685,7 @@ _once_. The iterator can be disposed when _exhausted_ -- there is no way of rese
 moving backwards or doing any kind of arithmetic with such an object. The _exhausted
 state can be detected by a +bool+ conversion (contrast this with STL iterators, where
 you need to compare to an +end+ iterator). Beyond that, the usage is quite similar,
-even compatible to +std::for_each+. 
+even compatible to +std::for_each+.
 
 Iterator Adapters
 ^^^^^^^^^^^^^^^^^
@@ -749,13 +722,23 @@ only _unique values,_ to _take a snapshot on-the-fly_ etc. There are convenience
 builder functions for those operations, figuring out the actual source and destination
 types by template metaprogramming.
 
+Pipeline Builder
+^^^^^^^^^^^^^^^^
+As an extension to the iterator framework, the pipeline builder is able
+to wrap arbitrary source iterators, decorate them with filters and transformations
+provided as Lambda, and finally package all together into a self contained new
+iterator (value object). This is a rather new feature [small]#(as of 2017)# and
+we still need to determine its viability, yet it proved helpful when implementing
+certain kinds of search algorithms on top of an abstracted data source exposed
+as iterator. -> 'lib/iter-explorer.hpp'
+
 
 Front-end for boost::format
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Formatting values with `printf` is a notorious source for intricate errors.
 Additionally, using (s|n)`printf` can be clunky in practice, and it doesn't
 support custom defined string conversions, which are an important diagnostic
-aid when working with objects. We might 
+aid when working with objects. We might
 link:{ldoc}/technical/howto/UsingBoost.html[use Boost], which provides the
 `boost::format` library to address those problems. Unfortunately including this
 header-only library solution incurs a significant overhead, both in terms of
@@ -786,6 +769,72 @@ WARNING: `boost::format` is known to be about 10 times slower than `printf` --
          best to avoid it for performance critical code.
 
 
+Text Template Engine
+~~~~~~~~~~~~~~~~~~~~
+While there are a lot of text templating languages and feature-rich
+libraries available, none fulfilled our requirements to be minimalist,
+and support generic structured data bindings, without enforcing some
+specific _property tree_ or ``object'' data type. The solution provided
+in `text-template.hpp` supports substitution with the `${name}` syntax,
+also with conditionals and repeated instantiation. Data is provided
+through a type parameter, which has to fulfil a data binding protocol.
+A ready-to-use implementation is available for `std::map<string>`,
+key-value bindings given in a string (for the purpose of easy testing)
+and for the Lumiera xref:_external_tree_description[»ETD«] framework
+(i.e. structured data encapsulated as `GenNode`).
+
+LL Parser
+~~~~~~~~~
+A similar situation was encountered regarding the requirement to parse
+nested syntax structures. There is an abundance of library solutions
+available, but none fulfilled the requirements of simplicity and
+generic data binding. Some solutions are extremely heavyweight,
+attempt to mimic an EBNF syntax notation, or deliver the result
+model packaged into yet-another object or property tree data format.
+The library solution provided in `parse.hpp` is based on the
+technique of parser combinators, but uses template metaprogramming
+to generate a functor to accept and produce that specific data
+structure needed for each individual use case. The accepted syntax
+is defined with a builder notation. Instead of a lexer,
+regular expressions are used as terminal symbols.
+
+CSV Data Tables
+~~~~~~~~~~~~~~~
+Template Metaprogramming also allows to build a succinct solution
+for tabular data with generic typing, which was developed to support
+performance testing and statistical evaluations. Data is maintained
+in a vector per column, using a generic column definition scheme.
+Data can be persisted and loaded from text files with CSV syntax.
+The header `data.hpp` is complemented by `statistic.hpp` with some
+basic evaluation functions and is used, for example, to generate
+Gnuplot diagrams from timing observations, also relying on
+the Text Template Engine to parametrise a Gnuplot script.
+
+External Tree Description
+~~~~~~~~~~~~~~~~~~~~~~~~~
+It might seem convenient, yet is in fact dangerous to build a larger
+application around a common shared data model. Such a central model
+exhibits a fatal tendency to become an ubiquitous source of truth,
+which would create an ill-guided incentive towards strong coupling.
+According to the principle of subsidiarity, in Lumiera we prefer
+treating a data model as an local detail of the implementation.
+
+However, parts of the application need a way to collaborate by
+exchanging chunks of tree-shaped information. A schematic and
+formalised notation is used for that purpose, designated as
+**E**xternal **T**ree **D**escription, which is structured
+similar to JSON, but uses binary data. The implementation
+is based on a recursive algebraic data type, but the variant
+branches are kept opaque, so that processing can not proceed
+by switch-on-selector and thus either requires knowledge about
+the expected data pattern in advance, or must be rely on a visitor
+implementation otherwise.
+
+This structured data notation is used at various places, notably
+to pass command invocations over the UI-Bus, or to send model changes
+in the form of a »Diff message«.
+
+
 Wrappers and Opaque Holders
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .smart handle
@@ -794,7 +843,7 @@ smart-pointer type of C\++ (`boost::shared_ptr` and C++11). Typically
 this also includes a pointer to some kind of implementation service. +
 Yet still, handles based on `lib::Handle<TY>` should not be confused with
 smart pointers. Rather, we use the ref-counting mechanism to invoke a custom
-clean-up callback when the last handle goes out of scope. Typically, the 
+clean-up callback when the last handle goes out of scope. Typically, the
 implementation service is kept entirely opaque, while the copyable handle
 objects also implement a front-end interface for client access.
 
@@ -816,7 +865,7 @@ are defined non-copyable in Lumiera).
 
 
 .opaque holder
-There is a family of holder objects, all based on placement-new of the 
+There is a family of holder objects, all based on placement-new of the
 contained object into an embedded buffer. The purpose is to ``piggyback''
 an object inline, without the need for heap allocated storage. Frequently
 the motivation for this usage pattern is *type erasure*: the detailed knowledge
@@ -835,22 +884,13 @@ at the usage site.
 To avoid this dilemma, we utilise the technique of the opaque holder to provide
 objects with value semantics, while actually placing the instance of a subclass
 into the inline buffer. Clients access this embedded object by automatic type
-conversion to the interface type, which gives us polymorphism. While the 
+conversion to the interface type, which gives us polymorphism. While the
 definition of such a beast is quite involved, the runtime overhead is
 surprisingly low. When compared with standard polymorphism, creating
 objects and invoking operations has zero overhead, while copying
 and assignment incur the cost of an additional virtual call,
 assuming the target objects cooperate by mixing in a
 copy management interface.
-
-.vector of references
-a minimal interface for an array-like entity, but exposing only references
-to the contained elements. Obviously this means to use a virtual call for
-the subscript operation. This interface allows interfaces to expose something
-_array-like_ without committing to a specific implementation type for the
-exposed elements within the ``array''. The Lumiera library provides a set
-of standard implementations for this +lib::RefArray+ interface, including
-a vector based and a directly array based variant.
 
 
 Unique Identifiers
@@ -876,7 +916,7 @@ with an type specific access functor. Together, this allows to translate
 transparently and typesafe from symbolic ID to object instance, which
 is an prerequisite for integrating a rules based system. Besides, these
 tables allow unique IDs per type +
--> more details about this concept link:{l}/wiki/renderengine.html#EntryID%20TypedID%20TypedLookup[in the TiddlyWiki]
+-> more details about this concept link:/wiki/renderengine.html#EntryID%20TypedID%20TypedLookup[in the TiddlyWiki]
 
 
 Allocators
@@ -889,7 +929,7 @@ WARNING: currently (as of 2011) the low-level pooled allocator within the
          See Ticket #231
 
 .Allocation Cluster
-This allocation scheme is used within the context of the Builder and the 
+This allocation scheme is used within the context of the Builder and the
 Low-Level-Model. The predominant usage trend in this realm is to create
 and wire a family of small objects right after each other, within a build
 process. These objects are intended to work together and will be discarded
@@ -897,37 +937,21 @@ all at once, after hot-swapping a new version of that model segment.
 
 .Typed Allocation Manager
 This allocation framework is used at various places when a large number of
-similar objects is expected to be coming and going. New objects are 
+similar objects is expected to be coming and going. New objects are
 placement-constructed into the allocated space and immediately wrapped
 with a ref-counting smart-ptr to manage ownership.
 
-.Simple Allocator
-Based on the allocator interface of the STL, allowing just for plain
-allocations and de-allocations without any further instance and lifecycle
-management. Currently (as of 2011) this allocator isn't used much -- it is
-conceivable that later we'll detect some specific STL based containers to be 
-performance critical with respect to allocation.
+.BlockFlow (Epoch Allocator)
+A custom memory management scheme for the Scheduler in the Render Engine.
+The scheduler produces a _ongoing flow_ of _Render-Activity_ records, which
+are added and wired, and then activated once based on temporal ordering.
+For each frame calculation job and thus also for each supporting calculation
+a _temporal deadline_ can be defined. This observation is exploited to order
+the allocations into _extents based on deadline._ Once the deadline for such
+an »epoch« has passed, all data records can be discarded without any further
+checks or clean-up work.
 
 
-Memory Pools
-~~~~~~~~~~~~
-
-Fast memory pools for moderately small static sized allocations in highly
-dynamic situations.
-
- * optimized for cache locality
- * supporting a destructor callback to free all objects
-
-
-Temporary Buffers
-~~~~~~~~~~~~~~~~~
-
-Provides a small number of round robin buffers which need not to be freed.
-Must only be used locally when no deep recursion may use tmpbufs. Using these
-wrong (recursively) will result in corrupted data.
-
-Very fast and efficient from smallest too hugest allocations. No need to care
-for 'free()'
 
 
 Template Metaprogramming
@@ -954,107 +978,58 @@ _tbw_
 Preprocessor Metaprogramming
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-ppmpl.h
-
-
-CLib wrappers
-~~~~~~~~~~~~~
-
-Some wrapers for the C memory management functions malloc, calloc, realloc and
-free which never fail. In case of an error the resourcecollector in the
-backend is invoked to free resources or doing an emergency shutdown.
-
-Safe wrapers for some string functions from the C-library which also never
-fail. NULL strings are propagated to "" empty strings.
-
-
-Polymorphic Programming in C
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Just a macro for simplifying vtable function calls
- VCALL(Handle, function, arguments...)
-translates to
- Handle->vtable->function (Handle, arguments...)
-
-The user is responsible for setting up a `vtable` member in his datastructures
-this macro does some NoBug checks that self and function are initialized.
+'ppmpl.h'
 
 
 Algorithms & Datastructures
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Probabilistic Splay Tree
-^^^^^^^^^^^^^^^^^^^^^^^^
 
-Self optimizing splay tree
+Intrusive Linked List
+^^^^^^^^^^^^^^^^^^^^^
+The template `LinkedElements` allows to build intrusive single-linked
+data structures, that can be iterated. They can be configured with a
+_policy baseclass_ to control if the container takes ownership and to
+integrate a custom allocator. The typical usage for such a setup is in
+low-level performance-critical data structures for rendering and playback,
+where data is already arranged with good locality and shall be
+made traversable in some way.
 
-Advantage:
- * can be iterated
- * very fast in situations where few common elements are queried most often
-
-Disadvantages
- * provides no own locking, needs to be locked from outside
- * (almost) every access is a mutation and needs an exclusive lock, bad for concurrency
-
-
-BTree
-^^^^^
-
-Generic B+/B* Tree implementation. Details are provided by a vtable at an
-actual implementation.
-
- * Fine grained (block level) locking with different modes
- * supports cursors to iterate over the data, in both directions
- * exact and inexact searched (what's close before/after something)
-
-
-Cuckoo Hashing
-^^^^^^^^^^^^^^
-_Currently defunct, to be revived someday_
-
-
-Hash functions
-^^^^^^^^^^^^^^
-_planned_
-
-
-Linked Lists
+Split-Splice
 ^^^^^^^^^^^^
+Highly configurable generic algorithm for handling a segmentation
+of an ordered data axis into seamlessly arranged intervals in
+ascending order. The segmentation can be refined with new intervals,
+handling all possible cases of relationship to the existing interval
+structure.
 
-.llist
-
-Cyclic double linked intrusive list.
-
-.slist
-
-Single linked variant.
-
-
-Most Recent used Cachelists
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-A list where old entries are recycled from the tail, used things are removed
-from the list (ownership acquired) and released back to the head.
-
-Items not used propagate towards the tail where they will be reused.
-
+Several Elements
+^^^^^^^^^^^^^^^^
+A generic, abstracted data container with random access, which plays
+a crucial role for the mass allocation of small objects in the Render Engine.
+The template `lib::Several<TY>` provides array-like access to a sequence of
+elements marked as type `TY`, without disclosing the actual data layout or
+data type. Notably this allows to place size-constrained polymorphic data
+objects into a common memory block. The data structure is created with
+the helper template `lib::SeveralBuilder` and can be configured with
+policies to control aspects of allocation, initialisation and destruction.
+In combination with the `AllocationCluster` custom allocator, it is even
+possible to build arbitrary-sized collections, adding and growing the
+structure within very strict limits. The typical, intended usage pattern
+is to build-up a data structure dynamically, driven by a discovery or
+compilation process. The data structure is then finalised and knowledge
+regarding the detail data type can be discarded (``type erasure'').
+Data can be used subsequently with array-style subscript access and is
+finally discarded as a whole, possibly even without invoking any destructor.
 
 //Undocumented
-//access-casted.hpp
-//advice.hpp symbol-impl.cpp
-//allocationcluster.cpp symbol.hpp
-//bool-checkable.hpp
+//symbol.hpp
 //cmdline.cpp
 //cmdline.hpp
 //del-stash.hpp
 //diagnostic-context.hpp
 //element-tracker.hpp
-//external
-//factory.hpp
-//format.hpp
-//frameid.hpp
 //functor-util.hpp
-//handle.hpp
 //hash-indexed.hpp
 //iter-adapter-stl.hpp
 //iter-adapter.hpp
@@ -1064,42 +1039,17 @@ Items not used propagate towards the tail where they will be reused.
 //lifecycleregistry.hpp
 //lumitime-fmt.hpp
 //lumitime.cpp
-//multifact-arg.hpp
-//multifact.hpp
-//nobug-init.cpp <<why here and not in common?
-//nobug-init.hpp
 //null-value.hpp
 //observable-list.hpp
 //opaque-holder.hpp
-//p.hpp
 //query.cpp
 //query.hpp
-//ref-array-impl.hpp
-//ref-array.hpp
 //result.hpp
 //scoped-holder.hpp
-//scoped-ptrvect.hpp
-//scopedholdertransfer.hpp
-//singleton-ref.hpp
-//singleton-subclass.hpp
-//singleton.hpp
-//singletonfactory.hpp
-//singletonpolicies.hpp
-//singletonpreconfigure.hpp
 //streamtype.cpp
-//test
-//thread-local.hpp
-//tree.hpp
-//typed-allocation-manager.hpp
 //typed-counter.hpp
-//util-foreach.hpp
-//util.cpp
-//util.hpp
 //variant.hpp
-//visitor-dispatcher.hpp
-//visitor-policies.hpp
 //visitor.hpp
 //wrapper.hpp
-//wrapperptr.hpp
 
 

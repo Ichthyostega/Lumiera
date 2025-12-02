@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   id="svg2"
+   sodipodi:version="0.32"
+   inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
+   width="48"
+   height="48"
+   version="1.0"
+   sodipodi:docname="lumiera.svg"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   style="display:inline"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <title
+     id="tit">Lumiera Icon</title>
+  <metadata
+     id="metadaz">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:title>Lumiera Icon</dc:title>
+        <dc:date>August 2009</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Thorsten Wilms</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:rights>
+          <cc:Agent>
+            <dc:title>CC By SA</dc:title>
+          </cc:Agent>
+        </dc:rights>
+        <dc:publisher>
+          <cc:Agent>
+            <dc:title>Lumiera project</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:source>Lumiera Logo</dc:source>
+        <dc:description>After the Lumiera Logo contest, several flavours were created for use on posters, T-shirts and desktop icons</dc:description>
+        <dc:contributor>
+          <cc:Agent>
+            <dc:title>Raffaella Traniello, Thorsten Wilms, Odin Hørthe Omdal, Ichthyoste</dc:title>
+          </cc:Agent>
+        </dc:contributor>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defz" />
+  <sodipodi:namedview
+     inkscape:window-height="974"
+     inkscape:window-width="1592"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="1"
+     guidetolerance="10000"
+     gridtolerance="10.0"
+     objecttolerance="10.0"
+     borderopacity="1.0"
+     bordercolor="#666666"
+     pagecolor="#ffffff"
+     id="base"
+     showgrid="false"
+     showguides="false"
+     inkscape:guide-bbox="true"
+     inkscape:zoom="11.313708"
+     inkscape:cx="20.85965"
+     inkscape:cy="16.83798"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
+     inkscape:current-layer="icon"
+     showborder="true"
+     inkscape:snap-global="false"
+     inkscape:object-nodes="true"
+     inkscape:snap-bbox="true"
+     inkscape:showpageshadow="2"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:window-maximized="0">
+    <inkscape:grid
+       type="xygrid"
+       id="pxGrid"
+       visible="true"
+       enabled="true"
+       originx="0"
+       originy="0"
+       spacingy="1"
+       spacingx="1"
+       units="px" />
+  </sodipodi:namedview>
+  <g
+     inkscape:groupmode="layer"
+     id="icon"
+     transform="translate(-564.01849,-192.09436)"
+     style="display:inline">
+    <g
+       id="Logo">
+      <path
+         id="table"
+         sodipodi:nodetypes="cccccc"
+         d="m 564.5112,210.98141 v 0.45786 l 19.5433,18.66438 26.77877,-15.57248 v -0.35188 z"
+         style="fill:black;fill-opacity:1;stroke:none" />
+      <path
+         id="film"
+         sodipodi:nodetypes="ccccc"
+         d="m 564.5112,210.98141 27.27689,-8.35278 19.04518,11.55066 c -10.81551,6.23715 -16.4368,10.39168 -26.15309,10.50704 -7.5443,-2.32704 -11.57683,-5.26501 -20.16898,-13.70492 z"
+         style="fill:#d1d1d1;fill-opacity:1;stroke:none" />
+      <path
+         id="perfL"
+         d="m 571.21142,210.13188 c -0.0729,0.006 -0.15313,0.0206 -0.23949,0.043 l -2.4955,0.77977 c -0.2756,0.0849 -0.46039,0.33284 -0.27813,0.53982 0.36725,0.36067 0.72241,0.70885 1.08164,1.05397 0.27562,0.27689 0.61822,0.34566 1.05846,0.19708 l 2.54958,-0.86546 c 0.23006,-0.076 0.29825,-0.32835 0.0231,-0.56553 -0.37225,-0.3197 -0.74512,-0.63606 -1.13572,-0.97684 -0.17853,-0.15388 -0.34521,-0.22051 -0.56399,-0.20565 z m 4.31112,3.67603 c -0.0885,0.003 -0.1894,0.022 -0.30905,0.0515 l -2.5882,0.95113 c -0.37945,0.17432 -0.41664,0.41959 -0.15452,0.64267 0.41082,0.35306 0.82326,0.69947 1.23615,1.03682 0.3253,0.27284 0.69325,0.36426 1.17435,0.18852 l 2.51867,-0.994 c 0.26139,-0.11106 0.35321,-0.32978 0.0155,-0.6255 -0.403,-0.3185 -0.81248,-0.64841 -1.23615,-0.994 -0.23472,-0.16739 -0.39114,-0.26801 -0.65672,-0.25705 z m 4.84418,3.68456 c -0.13115,-0.002 -0.27234,0.0253 -0.44037,0.0686 -0.81978,0.32109 -1.64079,0.64721 -2.47232,0.96828 -0.33839,0.12938 -0.40659,0.43576 -0.10818,0.64264 0.46137,0.31986 0.95271,0.61389 1.44477,0.9083 0.43164,0.25825 0.81122,0.26759 1.26707,0.10279 0.76545,-0.28673 1.52634,-0.58079 2.28689,-0.87401 0.22929,-0.10256 0.36223,-0.4228 0.054,-0.64266 -0.4836,-0.32072 -0.96137,-0.64731 -1.43703,-0.97684 -0.1915,-0.12324 -0.37631,-0.19421 -0.5949,-0.19709 z m 5.40048,3.63317 c -0.14118,-0.006 -0.29493,0.0273 -0.4713,0.0857 -0.72968,0.24146 -1.35533,0.34032 -2.23279,0.5741 -0.23134,0.0615 -0.34924,0.35275 0.007,0.53983 0.54359,0.2849 1.1162,0.6196 1.80789,0.84831 0.3715,0.12283 0.74511,0.13789 1.21297,0.0686 0.785,-0.11635 1.67732,-0.25709 2.09374,-0.43701 0.41645,-0.17993 0.36535,-0.32115 0.12363,-0.46272 -0.53078,-0.31087 -1.33393,-0.64861 -1.83105,-0.94256 -0.26835,-0.16655 -0.4755,-0.26603 -0.7108,-0.27421 z"
+         style="fill:black;fill-opacity:1;stroke:none" />
+      <path
+         id="perfR" 
+         d="m 591.39172,203.79956 c -0.0494,0.003 -0.10106,0.0183 -0.15453,0.0342 l -1.6688,0.52269 c -0.1848,0.0549 -0.21341,0.22229 -0.0387,0.3342 l 1.29796,0.83974 c 0.15821,0.10145 0.39519,0.13142 0.66444,0.0515 l 1.61473,-0.53983 c 0.16063,-0.0478 0.15627,-0.21697 0,-0.31705 l -1.26707,-0.77976 c -0.16472,-0.10543 -0.30005,-0.15622 -0.4481,-0.14565 z m 4.26475,2.57919 c -0.0823,-0.002 -0.16408,0.0232 -0.26268,0.0686 l -1.62247,0.59981 c -0.11529,0.0738 -0.20069,0.25346 -0.007,0.37704 l 1.38297,0.89113 c 0.25457,0.16303 0.47642,0.17999 0.76485,0.0943 l 1.64564,-0.64265 c 0.11287,-0.0518 0.11599,-0.23121 -0.0851,-0.35989 l -1.38294,-0.84831 c -0.16435,-0.10521 -0.29572,-0.17595 -0.43267,-0.17995 z m 4.65877,2.9648 c -0.0691,0.006 -0.13877,0.0198 -0.21633,0.043 -0.54147,0.22256 -1.08053,0.4462 -1.62246,0.66837 -0.14527,0.0667 -0.14777,0.30413 0.0464,0.42843 l 1.51431,0.97685 c 0.27785,0.17793 0.58465,0.25893 0.84985,0.13709 0.55604,-0.23607 1.11254,-0.47583 1.66881,-0.7112 0.14402,-0.0661 0.14542,-0.26015 -0.0773,-0.40274 l -1.59928,-0.9854 c -0.17828,-0.11417 -0.3566,-0.17156 -0.56399,-0.15424 z m 5.08369,3.13618 c -0.0704,0.007 -0.14072,0.0289 -0.20859,0.0601 -0.53685,0.25639 -1.06191,0.50994 -1.58383,0.76263 -0.15347,0.1306 -0.12594,0.37642 0.11589,0.53126 l 1.67653,1.07967 c 0.34068,0.21815 0.60303,0.25405 0.8576,0.1371 0.5128,-0.28638 1.034,-0.57794 1.56837,-0.88259 0.16221,-0.10393 0.0826,-0.34647 -0.13907,-0.48842 l -1.64564,-1.00255 c -0.21055,-0.13481 -0.42985,-0.21819 -0.64126,-0.19708 z"
+         style="fill:black;fill-opacity:1;stroke:none" />
+    </g>
+  </g>
+</svg>

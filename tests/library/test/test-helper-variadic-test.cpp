@@ -1,24 +1,19 @@
 /*
   TestHelperVariadic(Test)  -  verify variadic template diagnostics helper
 
-  Copyright (C)         Lumiera.org
-    2014,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2014,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file test-helper-variadic-test.cpp
+ ** unit test \ref TestHelperVariadic_test
+ */
 
 
 #include "lib/test/run.hpp"
@@ -99,20 +94,19 @@ namespace test{
       run (Arg)
         {
           double d = makeRvalue();
-          double& dr = d;
+          double const& cr = d;
           
           Impl obj;
           Interface const& ref = obj;
           
-          cout << "--no-arg--\n" << showVariadicTypes() <<"\n";
-          cout << "--value--\n"     << showVariadicTypes<double>(d) <<"\n";
-          cout << "--reference--\n" << showVariadicTypes<double&>(d) <<"\n";
-          cout << "--move--\n"      << showVariadicTypes<double&&>(d) <<"\n";
+          cout << "--no-arg--\n"    << showVariadicTypes() <<"\n";
+          cout << "--reference--\n" << showVariadicTypes(d) <<"\n";
+          cout << "--value--\n"     << showVariadicTypes(makeRvalue()) <<"\n";
           
-          forwardFunction("two values", "foo", 42L);        // passed as REF, MOV
-          forwardFunction("matched", d,dr,std::move(dr));   // passed as REF, REF, MOV
+          forwardFunction("two values", "foo", 42L);         // displayed as char [4] const&, long &&
+          forwardFunction("references", d,cr,std::move(d));  // displayed as double&, double const&, double &&
           
-          forwardFunction<Interface const&>("baseclass", ref);
+          forwardFunction("baseclass", ref);                 // displayed as Interface const&
         }
       
       
@@ -123,10 +117,8 @@ namespace test{
       void
       forwardFunction (string id, ARGS&&... args)
         {
-          // in reality here you'd invoke some factory(<std::forward<ARGS>(args)...)
-          //
           cout << "--"<<id<<"--\n"
-               << showVariadicTypes<ARGS&&...>(args...)
+               << showVariadicTypes (std::forward<ARGS>(args)...)
                << "\n"
                ;
         }

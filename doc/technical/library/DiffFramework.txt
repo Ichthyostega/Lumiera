@@ -44,9 +44,15 @@ diff verb::
   when applied consuming the input sequence, will produce the target sequence of the diff.
 
 diff application::
-  the process of consuming a diff (sequence of diff verbs), with the goal to produce some effect at the 
+  the process of consuming a diff (sequence of diff verbs), with the goal to produce some effect at the
   _target_ of diff application. Typically we want to apply a diff to a data sequence, to mutate it
   into a new shape, conforming with the shape of the diff's ``target sequence''
+
+tree mutator::
+  a customisable intermediary, allowing to apply a diff sequence against an opaque data structure.
+  For the purpose of diff application, the TreeMutator serves as target object, while in fact it is itself
+  attached by a _binding_ to the actual target data structure, which remains a hidden implementation detail.
+  This allows to manipulate the target data structure without knowing its concrete representation.
 
 diff generator::
   a facility producing a diff, which is a sequence of diff verbs.
@@ -75,7 +81,7 @@ diff detection schemes, especially those geared at text diff detection, engage i
 of producing an ``optimal'' diff, which effectively means to build specifically tuned pattern
 or decision tables, from which the final diff can then be pulled or interpreted.
 We acknowledge that in our case building a lookup table index with additional annotations can be
-as bad as O(n^2^) and worse; we might well be able to do better, but likely for the price of
+as bad as O(n^2^) and worse; we _might_ be able to do better, but likely for the price of
 turning the algorithm into some kind of mental challenge.]
 In case this turns out as a performance problem, we might consider integrating the index
 maintenance into the data structure to be diffed, which shifts the additional impact of
@@ -130,7 +136,7 @@ permutation diff. If we thus consider -- in theory -- the _inserts_ and _deletes
 filtered away, what remains is a permutation of index numbers to cause the re-ordering.
 We may describe this re-ordering by the index numbers in the new sequence, given in the order
 of the old sequence. For such a re-ordering permutation, the theoretically optimal result
-can be achieved by http://wikipedia.org/wiki/Cycle_sort[Cycle Sort] in _linear time_.footnote:[
+can be achieved by https://en.wikipedia.org/wiki/Cycle_sort[Cycle Sort] in _linear time_.footnote:[
 assuming random access by index is possible, *Cycle Sort* walks the sequence once. Whenever
 encountering an element out-of order, i.e. new postion != current position, we leap to the
 indicated new position, which necessarily will be out-of-order too, so we can leap from there
@@ -195,18 +201,18 @@ changes in hierarchical data: traverse the structure and account for each elemen
 Such a description of changes won't be _optimal_ though. What appears as a insertion or deletion locally,
 might indeed be just the result of rearranging subtrees as a whole. The _tree diff problem_ in this general
 form is known to be a rather tough challenge. But our goals are different here. Lumiera relies on a
-link:{ldoc}/design/architecture/ExternalTreeDescription.html[»External Tree Description«] for
+link:{ldoc}/design/architecture/ETD.html[»External Tree Description«] for
 _symbolic representation_ of hierarchically structured elements, without actually implementing them.
 The purpose of this ``external'' description is to largely remove the need for a central data model
 to work against. A _symbolic diff message_ allows to propagate data and structure changes,
-without even using the same data representation at both ends.
+without even using the same data representation at both sides of the collaboration.
 
 Generic Node Record
 ~~~~~~~~~~~~~~~~~~~
 For this to work, we need some very generic meta representation. This can be a textual representation
 (e.g. JSON) -- but within the application it seems more appropriate to use an abstracted and unspecific
 typed data representation, akin to ``JSON with typed language data''. It can be considered _symbolic,_
-insofar it isn't the data, it refers to it. For this approach to work, we need the following parts:
+insofar it isn't the data, it refers to it. To make such an approach work, we need the following parts:
 
 - a _generic node_, which has an _identity_ and some payload data. This `GenNode` is treated as elementary value.
 - a _record_ made from a collection of generic nodes, to take on the abstracted role of an object. Such a
@@ -267,15 +273,7 @@ verb `mut(ID)`::
          target structure. The `mut(ID)` verb then opens the designated nested
          record for diff handling, and all subsequent diff verbs are to be
          interpreted relative to this scope, until the corresponding
-         `emu(ID)` verb is encountered. As a special notation, right
-         after handling an element with the list diff verbs (i.e. `ins`
-         or `pick` or `find`), it is allowed immediately to open the
-         nested scope with `mut(Ref::THIS)`footnote:[this shortcut circumvents
-         the problem that it is sometimes difficult to know the precise ID for
-         unnamed children just created at the given scope.
-         We acknowledge that diff messages will sometimes be hand-writtten,
-         especially to populate a target data structure without knowing its
-         implementation. The whole diff language is designed to be human readable.]
+         `emu(ID)` verb is encountered.
 verb `emu(ID)`::
          closing bracketing construct and counterpart to `mut(ID)`. This verb
          must be given precisely at the end of the nested scope.footnote:[it is
@@ -285,4 +283,83 @@ verb `emu(ID)`::
          made at the generation side.] At this point, this child scope is left
          and the parent scope with all existing diff state is _popped from an
          internal stack._
+verb `set(GenNode)`::
+         assign a new value to the designated element. This is primarily intended
+         for primitive data values and requires the payload type to be assignable,
+         without changing the element's identity. The element is identified by the
+         payload's ID and -- similar as with the `mut()` verb -- needs to be present
+         already, i.e. it has to be mentioned by preceding order defining verbs.
 
+In practical application, a diff thus is typically comprised of two parts or ``phases'':
+In a first pass, we have to mention, confirm or supply all the elements, and as second step
+we may assign new values or enter recursive mutation for some child elements. However, it is
+possible to deviate from that general scheme, as long as all elements are _confirmed_ prior to
+mutation. Some typical ``degenerated'' patterns of spelling out a diff are as follows:
+
+- just a ``population diff'' without any `set` or `mut` verbs
+- on the other hand, if we just want to mutate something, with the first verb `after(Ref::END)`
+  we accept all of the content as-is, while the next verbs may mutate some selected elements
+- however, single assignment- or mutation operations can be interspersed into the first phase
+  of sequence confirmation (or re-ordering): because, whenever an element has just been mentioned,
+  it can (in fact without further search) be mutated right away. Thus, e.g. a `pick(ID)` verb can
+  immediately followed by a `set(GenNode)` to assign changed payload data without altering the
+  position or the identity of the element.
+
+
+Representation of objects
+~~~~~~~~~~~~~~~~~~~~~~~~~
+While we are talking about _structured data,_ in fact the entities we are about to handle are *objects*, understood as in
+the standard flavour of object orientation, where an object is the instance of a type and offers a contract. Incidentally,
+this is not the original, ``pure'' meaning of object orientation, but the one that became prolific to bring our daily
+practice closer to the inherent structuring of modern human organisation. And in dealing with this kind of object, we
+sometimes get into conflict with the essentially open and permissive nature of structured data. So we need to establish
+a mapping rule, which translates into additional conventions about how to spell out matters in the diff language.
+
+We choose to leave this largely on the level of stylistic rules, thus stressing the language nature of the diff.
+Even when this bears the danger to raise failures rather late, when it comes to applying the diff to a target
+data structure. The intention behind this whole diff approach is to transform tight coupling with strict rules
+into a loose collaboration based on a common understanding. So generally we'll assume the diff is just right,
+and if not, we'll get what we deserve.footnote:[This gives rise to a tricky discussion about loss of strictness
+and the costs incurred by that choice: Assuming as starting point a fixed global data model, which is strict,
+yet we choose to open the tight connection and rather prefer a collaboration based on a ``common understanding''
+-- which seems _fuzzy_ and might be seen as an unfortunate choice. We should not treat this topic in isolation however;
+we should recall rather that loose coupling was chosen to avoid far more serious problems caused by tight coupling,
+and especially the deteriorating and poisoning effect on architecture and the further dire consequences of a global
+fixed common data model -- which prevail when used in large, and overall heterogeneous systems.
+And _when a system indeed is not homogeneous,_ we better try to make each part open-closed, open for change
+but closed against extension. This is especially true in the case of the UI. And together this implies that
+we have small cohesive units of functionality; a collaboration between such units is _not_ considered
+dangerous, as long as it conforms to a well defined protocol and does not leave the local and cohesive scope.]
+
+
+object representation protocol
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+A diff is created to tell some partner about our data, and the »protocol to describe an object« is defined as follows...
+
+- the ID is the object's identity and is given once, right at start, and never changed
+- we spell out any metadata first (esp. type information), followed by all attributes,
+  and then followed by contents of the object's scope (children).
+- attributes must be spelled out in such a way as not to counteract the more stringent semantics
+  of an object field or property. More specifically...
+
+  * never attempt to re-order or delete such attributes, since their presence is fixed in the class definition
+  * when a field is mandatory _by its nature,_ it shall be required at construction, and the corresponding data
+    needs to be given immediately with the `ins` verb causing the constructor call
+  * on the other hand, the data for an optional field, when present, shall be spelled out by `ins` verb
+    after construction, with the first _population diff._
+  * the diff can address an attribute by its key; in the concrete binding to an object this will
+    cause a linear search through all attribute handlers to find the proper one, responsible for the
+    specific attribute given
+  * we do not support attribute map semantics (or extended ``object properties'' of any kind, as many
+    script languages do). If it is deemed necessary, in special cases, to have a _map_ of `(key ⟼ value)`
+    bindings, then do not represent them as object attributes, rather treat them as nested entity with map
+    semantics.footnote:[The `TreeMutator` provides a ready-made binding to STL containers, with a special
+    case to address a map. But this remains a borderline case and this usage to apply a diff to a map
+    can be tricky (due to the ordering constraints of a map).]
+
+TIP: nothing has been said about _detecting_ differences in object or property trees;
+     it is assumed that solving this especially nasty problem can be avoided, since
+     the _emanation_ of a diff in Lumiera can always be assumed to have additional
+     knowledge regarding the location of the change, and thus does not need to
+     ``find'' the changed data. The reasoning behind this assumption is that
+     the diff messages are generated in response to an _Event._

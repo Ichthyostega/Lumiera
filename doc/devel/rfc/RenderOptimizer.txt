@@ -1,14 +1,18 @@
-[grid="all"]
-`------------`-----------------------
-*State*         _Parked_
-*Date*          _2007-06-07_
-*Proposed by*   link:ct[]
--------------------------------------
+Design Process : Optimiser
+==========================
+
+
+[options="autowidth"]
+|====================================
+|*State*       | _Parked_
+|*Date*        | _2007-06-07_
+|*Proposed by* | ct
+|====================================
 
 Render Optimizer
 ----------------
-Render only parts of a frame which are necessary for the Output; Optimize
-render pipeline for efficiency
+Render only parts of a frame which are necessary for the Output;
+optimize render pipeline for efficiency
 
 
 Description
@@ -28,73 +32,64 @@ output as the original sequence of effects.
 
 
 
-Tasks
-^^^^^
-
-
-
-
-Discussion
-~~~~~~~~~~
-
-Pros
-^^^^
-
-
-
-Cons
-^^^^
-
-
-
-Alternatives
-^^^^^^^^^^^^
-
-
-
-Rationale
-~~~~~~~~~
-
-
-
-
-
-
 Comments
 --------
 
 Possible classification for video filters:
+
  1. The filter only changes the color of each pixel in the same way
  2. The filter deforms the image but leaves the color
  3. The filter makes complex things. The only additional hint it can export is
- the
- number of referenced past frames, if such a limit exists (sometimes it
+ the number of referenced past frames, if such a limit exists (sometimes it
  doesn't).
 
 Filters of type 1 and type 2 never use any previous frames, and are strictly
-one frame in - one frame out. Filters of type 1 can always be swapped with
+one frame in -- one frame out. Filters of type 1 can always be swapped with
 filters of type 2, the output is the same. All other filters cannot be swapped
 in general.
 
 The good news is, that:
 
- 1. All commonly used filters are either type 1 or type 2 
- (type 3 are more the fun effects)
+ 1. All commonly used filters are either type 1 or type 2
+    (type 3 are more the fun effects)
  2. Filters of type 2 are colormodel agnostic
- 3. If a filter of type 1 makes only linear transformations of the color
- vectors (new_color = matrix * old_color), 
- the matrix can be transformed from e.g. RGB to YUV, so these filters can
+ 3. If a filter of type 1 makes only linear transformations of the color vectors +
+    (i.e.: new_color ≔ matrix · old_color),
+ then the matrix can be transformed from e.g. RGB to YUV, so these filters can
  always work in both colorspaces directly
 
 
-Parked
-~~~~~~
+
+.State -> Parked
 Generally this is accepted but needs some more polishing when we go over it.
 
-    Do 14 Apr 2011 03:06:42 CEST Christian Thaeter
+Christian Thaeter::  'Thu 14 Apr 2011 03:06:42 CEST'
 
 
+.Reassessment : remains valid
+[underline]#Relevance confirmed 2025.#
+This RfC is written narrow enough to just define the goal of an optimised
+render pipeline -- which _was_ and _is_ a central goal of the Lumiera project.
+
+Approaching this topic however _requires much more work_ and notably a detailed
+analysis of the possibilities, based on *facts and measurements*. There is the
+real danger to get attached to some implementation idea deemed enticing,
+leading to very specific tweaks which limit the ability to adapt to
+other relevant requirements.
+
+Furthermore, since Lumiera aims at being library / framework agnostic,
+a significant difficulty to overcome first is the build-up of an abstract
+framework to describe and engage viable optimisations, which can then be
+applied as transformations within the Builder -- quite similar to the
+proceedings of an optimising compiler. The description of possible
+optimisations likely involves elements of knowledge representation,
+combined with heuristical aspects, possibly augmented by
+machine learing.
+
+To summarise: this is a *long-term vision*.
+
+Ichthyostega:: '2025-09-20'
 
 
-
-Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
+''''
+Back to link:/x/DesignProcess.html[Lumiera Design Process overview]

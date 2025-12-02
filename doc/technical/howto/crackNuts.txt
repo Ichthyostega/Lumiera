@@ -1,0 +1,238 @@
+how to crack nut #47
+====================
+:toc:
+
+.collection of successfully employed technical solutions
+Some nasty problems are recurring time and again. Maybe a trick could be found somewhere
+in the net, and a library function was created to settle this damn topic once and for all.
+Maybe even a nice test and demo is provided. And then the whole story will be forgotten.
+
+_Sounds familiar?_  => ☹☻☺👻 ~[red]#... then please consider to leave some traces here ...#~
+
+
+Methods
+-------
+Mathematics
+~~~~~~~~~~~
+- some basic descriptive statistics computations are defined in 'lib/stat/statistic.hpp'
+- the simple case for _linear regression_ is also implemented there
+- Gnuplot provides also common statistics functions, which may come in handy when the
+  goal is anyway to create a visualisation (-> see <<_investigation,below>>)
+
+
+
+
+Situations
+----------
+Investigation
+~~~~~~~~~~~~~
+summary test::
+  Reformulate the research and the findings into a test, which can be read top-down like a novel.
+  Start with documenting the basics, package helpers into a tool class, or package setup into a
+  workbench-style class, with individual tool modules. Provide a short version of this test with
+  the basic demo, which should be able to run with the regular test suite. Extended long-running
+  tests can be started conditionally with commandline-arguments. See 'scheduler-stress-test.cpp'
+visualisation::
+  Use code generation to visualise data structures or functions and observation statistics.
+  Typically these generation statements can be packaged into an invocation helper and included
+  into a relevant test, but commented-out there.
++
+- generate Graphviz diagrams: 'lib/dot-gen.hpp' provides a simple DSL. See 'test-chain-load-test.cpp'
+- generate Gnuplot scripts: use the xref:texttemplate[Text-Template] engine to fill in data, possibly
+  from a generated data table
+
+  * 'lib/gnuplot-gen.hpp' provides some pre-canned scripts for statistics plots
+  * used by the 'stress-test-rig.cpp', in combination with 'data.hpp' to collect measurement results
+
+Testing
+~~~~~~~
+verify structured data::
+  build a diagnostic output which shows the nesting
+  - use configuration by template parameters and use simple numbers or strings as part components
+  - render the output and compare it with `""_expect` (the `ExpectStr` -> see 'lib/test/test-helper.hpp')
+  - break the expect-string into parts with indentation, by exploiting the C _string gaps_
+
+However, this works only up to a certain degree of complexity.
+
+A completely different approach is to transform the structured result-data into an ETD (`GenNode` tree)
+and then directly compare it to an ETD that is created in the test fixture with the DSL notation (`MakeRec()`)
+
+verify floating point data::
++
+- either use approximate comparison
+
+  * `almostEqual()` -> see 'lib/test/test-helper.hpp'
+  * 'util-quant.hpp' has also an `almostEqual(a,b, ulp)`
+  * [yellow-background]#TODO 2024# should be sorted out -> https://issues.lumiera.org/ticket/1360[#1360]
+
+- or render the floating point with the diagnostic-output functions, which deliberately employ
+  a built-in rounding to some sensible amount of places (which in most cases helps to weed-out the
+  ``number dust'')
+- simply match it against an `ExpectStr` -- which implicitly converts to string, thereby
+  also applying the aforementioned implicit rounding
++
+-> See also <<_formatting,about formatting>> below; in a nutshell, `#include 'lib/format-output.hpp'`
+
+verify fluctuating values::
+  A first attempt should be made to bring them into some regular band. This can be achieved by
+  automatically calibrating the measurement function (e.g. do a timing calibration beforehand).
+  Then the actual value can be matched by the `isLimited(l, val, u)` notation (see 'lib/uitl.hpp')
+test with random numbers::
++
+- Control the seed! Invoke the seedRand() function once in each test instance.
+  This draws an actually random number as seed and re-seeds the `lib::defaultGen`. The seed is written to the log.
+- But the seed can be set to a fixed value with the `--seed` parameter of the test runner.
+  This is how you reproduce a broken test case.
+- Moreover, be sure either to draw all random values from the `defaultGen` or to build a well organised
+  tree of PRNG instances, which seed from each other. This is especially valuable when the test starts
+  several threads; each thread should use its own generator then (yet this can be handled sloppy if
+  the _quality_ of the random number actually does not matter!)
+
+
+
+Common Tasks
+------------
+Data handling
+~~~~~~~~~~~~~
+persistent data set::
+  use the `lib::stat::DataTable` ('data.hpp') with CSV rendering -> see 'data-csv-test.cpp'
+structured data::
+  represent it as Lumiera ETD, that is as a tree of `GenNode` elements.
++
+- be sure to understand the _essential idea:_ the receiver should act based on _knowledge_
+  about the structure -- not by _introspection and case-switching_
+- however -- for the exceptional case that you _absolutely must discover_ the structure,
+  then use the visitor feature. This has the benefit of concentrating the logic at one place.
+- can represent the notion of a nested scope, with iteration
+- provides a convenient DSL notation, especially for testing, which helps to explain
+  the expected structure visually .
+- also useful as output format, both for debugging and because it can be matched against
+  an expected structure, which is generated with the DSL notation.
+- [yellow-background]#(planned)# will be able to map this from/to JSON easily.
+
+Iterating
+~~~~~~~~~
+Lumiera iterators::
+  They are designed for convenient usage with low boilerplate (even while this means wasting
+  some CPU cycles or memory). They are deliberately much simpler than STL iterators, can be
+  iterated only once, can be bool checked for iteration end, and can be used both in a for-each
+  construct and in while-loops.
+IterExplorer::
+  The function `lib::explore(IT)` builds on top of these features and is meant to basically
+  iterate anything that is iterable -- this can be used to level and abstract away the details.
++
+- can be filtered and transformed
+- can be reduced or collected into a vector
+- can be used to build complex layered search- and evaluation schemes
+STL-adaptors::
+  A set of convenience functions like `eachElm(CON)` -- available in 'iter-adapter-stl.hpp'.
+  Also allows to iterate _each key_ or _value_, and to take snapshots
+IterSource::
+  This is a special Lumiera iterator implementation which delegates through a virtual (OO) interface.
+  Thus the source of the data can be abstracted away and switched transparently at runtime.
+  Especially relevant for APIs, to produce a data sequence once and without coupling to details;
+  even the production-state can be hooked up into the IterSource instance (with a smart-ptr).
+  This allows e.g. to send a Diff to the UI through the UI-Bus, while the actual generation
+  and application both happen demand-driven or _lazy..._
+
+
+Formatting
+~~~~~~~~~~
+- implement a conversion-to-string operator.
+- include the C++ IOStreams via 'lib/format-cout.hpp' -> this magically uses the `util::toString()`
+- for testing, temporarily include 'lib/test/diagnostic-output' and use the `SHOW_EXPR` macro.
+- use 'util::join' ('lib/format-util.hpp') to join arbitrary elements with `util::toString()` conversion
+- use _printf-style formatters_ from Boost-format. We provide a light-weight front-end via 'lib/format-string.hpp'
+
+  * the heavyweight boost-format include is only required once, for 'lib/format-string.cpp'.
+  * the templated front-end passes-through most basic types and types with string-conversion
+  * all invocations are strictly error safe (never throw) and can thus be used from catch-handlers
+
+- use the anchor:texttemplate[lib/text-template]*Text-Template* engine. See 'text-template-test.cpp'.
+  Can be used with simple map bindings, or even a _definition string_ `"x=42, y=why-not?"`, but can also
+  draw data o from a `lib::GenNode` tree, or even from a custom defined `DataSource` template.
+  Supports placeholders, conditionals and simple loops (and that's it --
+  because there are way more capable solutions _out there_ ☺)
+
+
+Language constructs
+-------------------
+Templates
+~~~~~~~~~
+build-from-anything::
+  use a templated constructor, possibly even with varargs
++
+- use a _deduction guide_ to pick the right ctor and arguments -> see
+
+  * `ThreadJoinable` in 'thread.hpp', 698
+  * `DataSource<string>` specialisation only when argument can be converted to string,
+     in 'text-template.hpp', 745
+
+- prevent shadowing of _automatically generated copy operations._
+  See https://issues.lumiera.org/ticket/963[#963]. Based on the ``disable if'' SFINAE technique.
+  A ready-made templated typedef `lib::meta::disable_if_self` can be found in 'lib/meta/util.hpp'
+
+
+Variadics
+~~~~~~~~~
+pick and manipulate individually::
+  The key trick is to define an _index sequence template,_ which can then be matched against
+  a processing template for a single argument; and the latter can have partial specialisations
++
+- see 'variadic-argument-picker-test.cpp'
+- but sometimes it is easier to use the tried and true technique of the Loki-Typelists, which
+  can be programmed recursively, similar to LISP. The »bridge« is to unpack the variadic argument pack
+  into the `lib::meta::Types<ARGS...>`
++
+meta-manipulations::
+  When you need to rebind and manipulate a variadic sequence, it helps to transform the sequence
+  into one of our meta sequence representations (`lib::meta::Types` or the Loki typelists).
+  In `variadic-helper.hpp`, we define a convenient rebinding template `lib::meta::Elms<>`,
+  which can work transparently on any type sequence or any tuple-like entity
++
+  - to get at the variadics in a sequence representation
+  - to get a matching index sequence
+  - to rebind into another variadic template, using the same variadic sequence
+  - to apply a meta-function on each of the variadic types
+  - to compute a conjunction or disjunction of meta-predicates over the sequence
++
+tuple-like::
+  This is a concept to match on any type in compliance with the »tuple protocol«
++
+  - such a type must inject a specialisation of `std::tuple_size<TY>`
+  - and it must likewise support `std::tuple_element_t<N, TY>`
+  - and, based on that, expose a constexpr _getter function_
+  - together this also implies, that such a type can be used in _structured bindings_
+    (but note, structured bindings also work on plain arrays and on simple structs,
+     which are _not_ considered _tuple-like_ by themselves)
++
+apply to tuple-likes::
+  Unfortunately, the standard has a glaring deficiency here, insofar it defines an _exposition only_
+  concept, which is then hard mapped to support only some fixed types from the STL (tuples, pairs,
+  std::array and some range stuff). This was one of the main reasons to define our own `concept tuple_like`
++
+  - but unfortunately, `std::apply` was fixed with C++20 to allow only the above mentioned fixed set of
+    types from the STL, while in theory there is no reason why not to allow any _tuple-like_ entity
+  - this forces us to define our own `lib::meta::apply` as a drop-in replacement for `std::apply`
+  - in addition to that, we also define a `lib::meta::getElm<N, TY>`, which is an universal getter
+    to work on any _tuple-like_, either with a `get` member function or a free-ADL function `get`
+  - note that starting with C++20 it is forbidden to inject function overloads into namespace std,
+    and thus a free `get` function must be injected as friend via ADL and used appropriately, i.e.
+    unqualified.
++
+apply functor to each tuple element::
+  A common trick is to use `apply` in combination with a _fold-expression_
++
+- provided as `lib::meta::forEach` in 'lib/meta/tuple-helper.hpp
+- The design of the `DataTable` with CSV-Formatting is based on this technique, see 'lib/stat/data.hpp'
+- 'lib/iter-zip.hpp' uses this to construct a tuple-of-iterators
++
+unpack iterator into tuple::
+  Under controlled conditions this is possible (even while it seems like time travel from the runtime into
+  the compile-time domain). The number of results to extract from the iterator must be known at compile time,
+  and the possible result types must be limited, so that a visitor can be used for double-dispatch.
++
+- see tuple-record-init-test.cpp
+- used in 'command-simple-closure.hpp' to receive parameter values sent via UI-Bus and package them
+  into a tuple for invocation of a Steam-Layer command.
+

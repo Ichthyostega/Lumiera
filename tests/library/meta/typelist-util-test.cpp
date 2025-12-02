@@ -1,24 +1,19 @@
 /*
-  TypeListUtil(Test)  -  check the simple typelist metaprogramming helpers 
+  TypeListUtil(Test)  -  check the simple typelist metaprogramming helpers
 
-  Copyright (C)         Lumiera.org
-    2011,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2011,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file typelist-util-test.cpp
+ ** unit test \ref TypeListUtil_test
+ */
 
 
 #include "lib/test/run.hpp"
@@ -32,13 +27,13 @@ namespace test {
   
   
   
-  typedef Types< int
-               , uint
-               , int64_t
-               , uint64_t
-               >::List     TheList;
+  using TheList = Types< int
+                       , uint
+                       , int64_t
+                       , uint64_t
+                       >::List;
   
-  typedef Types<  >::List  EmptyList;
+  using EmptyList = Types<  >::List;
   
   
   
@@ -55,23 +50,25 @@ namespace test {
   class TypeListUtil_test : public Test
     {
       void
-      run (Arg) 
+      run (Arg)
         {
-          CHECK (4 == count<TheList>::value);
-          CHECK (0 == count<EmptyList>::value);
+          CHECK (4 == count<TheList>()  );
+          CHECK (0 == count<EmptyList>());
           
-          CHECK (sizeof(int64_t) == maxSize<TheList>::value);
-          CHECK (0               == maxSize<EmptyList>::value);
+          CHECK (sizeof(int64_t)  == maxSize<TheList>()   );
+          CHECK (0                == maxSize<EmptyList>() );
+          CHECK (alignof(int64_t) == maxAlign<TheList>()  );
+          CHECK (0                == maxAlign<EmptyList>());
           
-          CHECK ( bool(IsInList<int     , TheList>::value));
-          CHECK ( bool(IsInList<uint    , TheList>::value));
-          CHECK ( bool(IsInList<int64_t , TheList>::value));
-          CHECK ( bool(IsInList<uint64_t, TheList>::value));
+          CHECK ( bool(isInList<int     , TheList>()));
+          CHECK ( bool(isInList<uint    , TheList>()));
+          CHECK ( bool(isInList<int64_t , TheList>()));
+          CHECK ( bool(isInList<uint64_t, TheList>()));
           
-          CHECK (!bool(IsInList<double  , TheList>::value));
-          CHECK (!bool(IsInList<int     , EmptyList>::value));
-          CHECK (!bool(IsInList<int     , int>::value));         // Note: not-a-typelist yields false too
-        } 
+          CHECK (!bool(isInList<double  , TheList>()));
+          CHECK (!bool(isInList<int     , EmptyList>()));
+          CHECK (!bool(isInList<int     , int>()));         // Note: not-a-typelist yields false too
+        }
     };
   
   

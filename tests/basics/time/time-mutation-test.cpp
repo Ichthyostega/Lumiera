@@ -1,24 +1,19 @@
 /*
   TimeMutation(Test)  -  explicitly changing time specifications
 
-  Copyright (C)         Lumiera.org
-    2011,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2011,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file time-mutation-test.cpp
+ ** unit test \ref TimeMutation_test
+ */
 
 
 #include "lib/test/run.hpp"
@@ -26,7 +21,7 @@
 #include "lib/time/timevalue.hpp"
 #include "lib/time/timequant.hpp"
 #include "lib/time/mutation.hpp"
-#include "proc/asset/meta/time-grid.hpp"
+#include "steam/asset/meta/time-grid.hpp"
 #include "lib/util.hpp"
 
 #include <boost/lexical_cast.hpp>
@@ -41,7 +36,7 @@ namespace lib {
 namespace time{
 namespace test{
   
-  using proc::asset::meta::TimeGrid;
+  using steam::asset::meta::TimeGrid;
   
   namespace {
     inline string
@@ -66,13 +61,13 @@ namespace test{
    */
   class TimeMutation_test : public Test
     {
-      gavl_time_t
+      raw_time_64
       random_or_get (string arg)
         {
           if (isnil(arg))
-            return gavl_time_t (1 + (rand() % 100000)) * GAVL_TIME_SCALE;
+            return raw_time_64(1 + rani (100000)) * TimeValue::SCALE;
           else
-            return lexical_cast<gavl_time_t> (arg);
+            return lexical_cast<raw_time_64> (arg);
         }
       
       struct TestValues
@@ -94,6 +89,8 @@ namespace test{
       virtual void
       run (Arg arg) 
         {
+          if (isnil(arg))
+            seedRand();
           TimeValue o (random_or_get (pop(arg)));
           TimeValue c (random_or_get (pop(arg)));
           CHECK (o != c, "unsuitable testdata");

@@ -1,22 +1,13 @@
 /*
   TYPESEQ-UTIL.hpp  -  basic metaprogramming utilities for type sequences
 
-  Copyright (C)         Lumiera.org
-    2009,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2009,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
 
@@ -34,9 +25,9 @@
  ** @see typeseq-manip-test.cpp
  ** @see typelist.hpp
  ** @see typelist-util.hpp
+ ** @see tuple-helper.hpp
  ** @see function.hpp
  ** @see generator.hpp
- ** @see tuple.hpp
  ** 
  */
 
@@ -54,152 +45,184 @@ namespace lib {
 namespace meta {
   
   
+  /**
+   * Find the index of the first incidence of a type in a type-sequence.
+   * @note static assertion if the type is not in the type sequence
+   * @see https://stackoverflow.com/questions/18063451/get-index-of-a-tuple-elements-type/60868425#60868425
+   */
+  template<class X>
+  constexpr size_t
+  indexOfType()
+  {
+    static_assert (not sizeof(X), "Type not found in type-sequence");
+    return 0;
+  }
   
-  /** 
+  template<class X, class T, class... TYPES>
+  constexpr size_t
+  indexOfType()
+  {
+    if constexpr (std::is_same_v<X,T>)
+      return 0;
+    else
+      return 1 + indexOfType<X,TYPES...>();
+  }
+  
+  /** series of definitions to level across variadics,
+   *  type-sequences and type-lists
+   * @see typelist-util.hpp
+   */
+  template<class... TYPES>
+  struct count
+    : SizConst<sizeof...(TYPES)>
+  { };
+  template<class... TYPES>
+  struct count<Types<TYPES...>>
+    : SizConst<sizeof...(TYPES)>
+  { };
+  
+  
+  /**
    * Helper: prepend a type to an existing type sequence,
-   * thus shifting all elements within the sequence 
+   * thus shifting all elements within the sequence
    * to the right, eventually dropping the last element
    */
   template<class T, class TYPES>
   struct Prepend;
   
-  template< typename T01
-          , typename T02
-          , typename T03
-          , typename T04
-          , typename T05
-          , typename T06
-          , typename T07
-          , typename T08
-          , typename T09
-          , typename T10
-          , typename T11
-          , typename T12
-          , typename T13
-          , typename T14
-          , typename T15
-          , typename T16
-          , typename T17
-          , typename T18
-          , typename T19
-          , typename T20
-          , typename IGN
-          >
-  struct Prepend<T01, Types<     T02,T03,T04,T05
-                           , T06,T07,T08,T09,T10
-                           , T11,T12,T13,T14,T15
-                           , T16,T17,T18,T19,T20
-                           , IGN
-                           > >
+  template<typename T, typename...TYPES>
+  struct Prepend<T, Types<TYPES...>>
   {
-    typedef Types< T01,T02,T03,T04,T05
-                 , T06,T07,T08,T09,T10
-                 , T11,T12,T13,T14,T15
-                 , T16,T17,T18,T19,T20 > Seq;
-    
-    typedef typename Seq::List          List;
+    using Seq  = Types<T, TYPES...>;
+    using List = Types<T, TYPES...>::List;
   };
   
   
   
-  /** 
+  /**
    * Additional specialisation of the basic type sequence type,
-   * allowing to re-create a (flat) type sequence from a typelist. 
+   * allowing to re-create a (flat) type sequence from a typelist.
+   * @remark can now be built with the help of \ref Prepend.
    */
   template<class H, class T>
   struct Types< Node<H,T> >
     {
-      typedef Node<H,T> List;
-      
-      typedef typename Prepend< H
-                              , typename Types<T>::Seq
-                              >::Seq  Seq;
+      using List = Node<H,T>;
+      using Seq  = Prepend< H
+                          , typename Types<T>::Seq
+                          >::Seq;
     };
+  template<>
+  struct Types<Nil>
+    {
+      using List = Nil;
+      using Seq  = Types<>;
+    };
+  template<>
+  struct Types<NilNode>
+    : Types<Nil>
+    { };
   
   
   
   
   
-  
-  /** Helper: separate parts of a type sequence */
+  /** Helper: separate parts of a type sequence
+   */
   template<class TYPES>
   struct Split;
   
-  template< typename T01
-          , typename T02
-          , typename T03
-          , typename T04
-          , typename T05
-          , typename T06
-          , typename T07
-          , typename T08
-          , typename T09
-          , typename T10
-          , typename T11
-          , typename T12
-          , typename T13
-          , typename T14
-          , typename T15
-          , typename T16
-          , typename T17
-          , typename T18
-          , typename T19
-          , typename T20
-          >
-  struct Split<Types< T01,T02,T03,T04,T05
-                    , T06,T07,T08,T09,T10
-                    , T11,T12,T13,T14,T15
-                    , T16,T17,T18,T19,T20
-                    > >
+  template<typename T1, typename...TS>
+  struct Split<Types<T1,TS...> >
   {
-    typedef typename 
-            Types< T01,T02,T03,T04,T05
-                 , T06,T07,T08,T09,T10
-                 , T11,T12,T13,T14,T15
-                 , T16,T17,T18,T19,T20
-                 >::List                 List;
+    using List = Types<T1,TS...>::List;
     
-    typedef        T01                   Head;
-    typedef Types< T01                 > First;
-    typedef Types<     T02,T03,T04,T05
-                 , T06,T07,T08,T09,T10
-                 , T11,T12,T13,T14,T15
-                 , T16,T17,T18,T19,T20 > Tail;
-
+    using Head  = T1;
+    using First = Types<T1>;
+    using Tail  = Types<TS...>;
+    
     // for finding the end we need the help of typelist-util.hpp
     
-    typedef typename SplitLast<List>::List  PrefixList;
-    typedef typename Tail::List             TailList;
+    using PrefixList = PickLast<List>::List;
+    using TailList   = Tail::List;
     
-    typedef typename Types<PrefixList>::Seq Prefix;
-    typedef typename SplitLast<List>::Type  End;
-    typedef Types<End>                      Last;
+    using Prefix     = Types<PrefixList>::Seq;
+    using End        = PickLast<List>::Type;
+    using Last       = Types<End>;
+  };
+  
+  template<>
+  struct Split<Types<>>
+  {
+    using List  = Nil;
+    
+    using Head  = Nil;
+    using First = Types<>;
+    using Tail  = Types<>;
+    
+    // for finding the end we need the help of typelist-util.hpp
+    
+    using PrefixList = Nil;
+    using TailList   = Nil;
+    
+    using Prefix     = Types<>;
+    using Last       = Types<>;
+    using End        = Nil;
   };
   
   
   
   
   /**
-   * Helper: generate a type sequence left shifted 
-   * by i steps, filling in NullType at the end
-   */  
+   * Helper: generate a type sequence left shifted
+   * by i steps, filling in Nil at the end
+   */
   template<class TYPES, uint i=1>
   class Shifted
     {
-      typedef typename Split<TYPES>::Tail Tail;
+      using Tail = Split<TYPES>::Tail;
     public:
-      typedef typename Shifted<Tail,i-1>::Type Type;
-      typedef typename Split<Type>::Head       Head;
+      using Type = Shifted<Tail,i-1>::Type;
+      using Head = Split<Type>::Head;
     };
   
   template<class TYPES>
   struct Shifted<TYPES,0>
-    { 
-      typedef TYPES                      Type;
-      typedef typename Split<Type>::Head Head;
+    {
+      using Type = TYPES;
+      using Head = Split<Type>::Head;       ///< @warning may be Nil in case of an empty list
     };
   
   
+  
+  /**
+   * specialisation: pick n-th element from a type sequence
+   * @see typelist-manip.hpp
+   */
+  template<typename...TYPES, size_t i>
+  struct Pick<Types<TYPES...>, i>
+    {
+      using Type = Shifted<Types<TYPES...>, i>::Head;
+    };
+  
+  
+  
+  /**
+   * Generate a type-sequence filled with
+   * \a N times the same type \a T
+   */
+  template<typename T, size_t N>
+  struct Repeat
+    {
+      using Rem = Repeat<T, N-1>::Seq;
+      using Seq = Prepend<T,Rem>::Seq;
+    };
+  
+  template<typename T>
+  struct Repeat<T,0>
+    {
+      using Seq = Types<>;
+    };
   
   
   

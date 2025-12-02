@@ -1,39 +1,31 @@
 /*
   DuckDetector(Test)  -  detecting properties of a type at compile time
 
-  Copyright (C)         Lumiera.org
-    2010,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2010,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file duck-detector-test.cpp
+ ** unit test \ref DuckDetector_test:
+ ** duck typing through metaprogramming
+ */
 
 
 #include "lib/test/run.hpp"
 #include "lib/meta/duck-detector.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/util.hpp"
-
-#include <iostream>
 
 
 namespace lib {
 namespace meta{
 namespace test{
-  
-  using std::cout;
-  using std::endl;
   
   
   namespace { // some test ducks....
@@ -75,7 +67,7 @@ namespace test{
     
     
       void
-      run (Arg) 
+      run (Arg)
         {
           SHOW_CHECK( HasNested_Core<PropperGander> );
           SHOW_CHECK( HasNested_Core<Propaganda>    );
@@ -85,7 +77,7 @@ namespace test{
           
           SHOW_CHECK( HasFunSig_honk<PropperGander> );
           SHOW_CHECK( HasFunSig_honk<Propaganda>    );
-        } 
+        }
     };
   
   

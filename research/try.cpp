@@ -1,187 +1,103 @@
-/* try.cpp  -  for trying out some language features....
+/* try.cpp  -  to try out and experiment with new features....
  *             scons will create the binary bin/try
- *
  */
-
-// 8/07  - how to control NOBUG??
-//         execute with   NOBUG_LOG='ttt:TRACE' bin/try
-// 1/08  - working out a static initialisation problem for Visitor (Tag creation)
-// 1/08  - check 64bit longs
-// 4/08  - comparison operators on shared_ptr<Asset>
-// 4/08  - conversions on the value_type used for boost::any
-// 5/08  - how to guard a downcasting access, so it is compiled in only if the involved types are convertible
-// 7/08  - combining partial specialisation and subclasses 
-// 10/8  - abusing the STL containers to hold noncopyable values
-// 6/09  - investigating how to build a mixin template providing an operator bool()
-// 12/9  - tracking down a strange "warning: type qualifiers ignored on function return type"
-// 1/10  - can we determine at compile time the presence of a certain function (for duck-typing)?
-// 4/10  - pretty printing STL containers with python enabled GDB?
-// 1/11  - exploring numeric limits
-// 1/11  - integer floor and wrap operation(s)
-// 1/11  - how to fetch the path of the own executable -- at least under Linux?
-// 10/11 - simple demo using a pointer and a struct
-// 11/11 - using the boost random number generator(s)
-// 12/11 - how to detect if string conversion is possible?
-// 1/12  - is partial application of member functions possible?
-// 5/14  - c++11 transition: detect empty function object
-// 7/14  - c++11 transition: std hash function vs. boost hash
-// 9/14  - variadic templates and perfect forwarding
-// 11/14 - pointer to member functions and name mangling
-// 8/15  - Segfault when loading into GDB (on Debian/Jessie 64bit
-// 8/15  - generalising the Variant::Visitor
+// 06/25 - provide a concept to accept _tuple-like_ objects
+// 06/25 - investigate function type detection of std::bind Binders
+// 12/24 - investigate problem when perfect-forwarding into a binder
+// 12/24 - investigate overload resolution on a templated function similar to std::get
+// 11/24 - how to define a bare object location comparison predicate
+// 11/23 - prototype for grouping from iterator
 
 
 /** @file try.cpp
- ** Design: how to generalise the Variant::Visitor to arbitrary return values.
- ** 
- ** Our Variant template allows either for access by known type, or through accepting
- ** a classic GoF visitor. Problem is that in many extended use cases we rather want
- ** to apply \em functions, e.g. for a monadic flatMap on a data structure built from
- ** Variant records. (see our \link diff::GenNode external object representation \endlink).
- ** Since our implementation technique relies on a template generated interface anyway,
- ** a mere extension to arbitrary return values seems feasible.
- **
+ * Develop a concept to detect _tuple-like_ classes, based on the requirements
+ * of the »tuple protocol«. Using some ideas from [Stackoverflow] as starting point.
+ * However, we model both a _friend function_ `get` and a similar member function
+ * as alternatives for element access, and we break down the checks into sub-concepts.
+ * [Stackoverflow]: https://stackoverflow.com/q/68443804/444796
  */
 
-typedef unsigned int uint;
 
-#include "lib/meta/typelist.hpp"
-#include "lib/meta/generator.hpp"
-#include "lib/format-util.hpp"
+#include "lib/format-cout.hpp"
+#include "lib/test/test-helper.hpp"
+#include "lib/test/diagnostic-output.hpp"
+#include "lib/meta/tuple-helper.hpp"
+#include "lib/hetero-data.hpp"
 #include "lib/util.hpp"
 
-#include <iostream>
-#include <cstdarg>
-#include <string>
+#include <concepts>
 
-using util::unConst;
 using std::string;
-using std::cout;
-using std::endl;
 
 
-template<typename RET>
-struct VFunc
+template<typename X>
+void
+show()
   {
+    SHOW_TYPE(X)
+  }
 
-    template<class VAL>
-    struct ValueAcceptInterface
-      {
-        virtual RET handle(VAL&) { /* do nothing */ return RET(); };
-      };
-    
-    template<typename TYPES>
-    using VisitorInterface
-        = lib::meta::InstantiateForEach<typename TYPES::List, ValueAcceptInterface>;
-    
-  };
-
-using lib::meta::NullType;
-using lib::meta::Node;
-
-template<typename TYPES>
-struct ConstAll;
-
-template<>
-struct ConstAll<NullType>
+template<lib::meta::tuple_like X>
+void
+show()
   {
-    typedef NullType List;
-  };
-
-template<typename TY, typename TYPES>
-struct ConstAll<Node<TY,TYPES>>
-  {
-    typedef Node<const TY, typename ConstAll<TYPES>::List> List;
-  };
-
-
-
-template<class A, class B>
-struct Var
-  {
-    A a;
-    B b;
-    
-    using TYPES = lib::meta::Types<A,B>;
-    
-    template<typename RET>
-    using VisitorFunc      = typename VFunc<RET>::template VisitorInterface<TYPES>;
-    template<typename RET>
-    using VisitorConstFunc = typename VFunc<RET>::template VisitorInterface<ConstAll<typename TYPES::List>>;
-    
-    using Visitor = VisitorFunc<void>;
-    using Predicate = VisitorConstFunc<bool>;
-    
-    template<typename RET>
-    RET
-    accept (VisitorFunc<RET>& visitor)
-      {
-        typename VFunc<RET>::template ValueAcceptInterface<A>& visA = visitor;
-        typename VFunc<RET>::template ValueAcceptInterface<B>& visB = visitor;
-        visA.handle (a);
-        return visB.handle (b);
-      }
-    
-    void
-    accept (Visitor& visitor)
-      {
-        accept<void> (visitor);
-      }
-    
-    bool
-    accept (Predicate& visitor)  const
-      {
-        typename VFunc<bool>::template ValueAcceptInterface<const A>& visA = visitor;
-        typename VFunc<bool>::template ValueAcceptInterface<const B>& visB = visitor;
-        return visA.handle (a)
-            && visB.handle (b);
-      }
-
-    
-    operator string()  const
-      {
-        return "Var("
-             + util::str(a)
-             + "|"
-             + util::str(b)
-             + ")";
-      }
-  };
-
-
-using V = Var<int, string>;
-
-class Visi
-  : public V::Visitor
-  {
-    virtual void handle(int& i)    { ++i; }
-    virtual void handle(string& s) { s += "."; }
-  };
-
-class Predi
-  : public V::Predicate
-  {
-    virtual bool handle(int const& i)    { return 0 == i % 2; }
-    virtual bool handle(string const& s) { return 0 == s.length() % 2; }
-  };
+    cout << "Tup!! "<< lib::test::showType<X>() <<endl;
+    lib::meta::forEachIDX<X> ([](auto i)
+                                {
+                                  using Elm = std::tuple_element_t<i, X>;
+                                  cout <<"  "<<uint(i)<<": "<< lib::test::showType<Elm>() <<endl;
+                                });
+  }
 
 
 int
 main (int, char**)
   {
+    using Tup = std::tuple<long,short>;
+    using Arr = std::array<int,3>;
+    using Hetero = lib::HeteroData<int,string>::Chain<short>::ChainExtent<bool,lib::meta::Nil>::ChainType;
     
-    V var{12, "huii"};
-    cout <<  string(var)<<endl;
+    SHOW_EXPR((lib::meta::tuple_sized<Tup> ))
+    SHOW_EXPR((lib::meta::tuple_sized<Arr> ))
+    SHOW_EXPR((lib::meta::tuple_sized<Hetero> ))
+    SHOW_EXPR((lib::meta::tuple_sized<int> ))
     
-    Visi visi;
-    Predi predi;
+    SHOW_EXPR((lib::meta::tuple_element_accessible<Tup,0>))
+//  SHOW_EXPR((lib::meta::tuple_element_accessible<Tup,2>))
+    SHOW_EXPR((lib::meta::tuple_element_accessible<Hetero,0>))
+    SHOW_EXPR((lib::meta::tuple_accessible<Tup>))
+    SHOW_EXPR((lib::meta::tuple_accessible<Hetero>))
     
-    cout << var.accept(predi) <<endl;
-    var.accept(visi);
-    cout << var.accept(predi) <<endl;
-    cout <<  string(var)<<endl;
+    SHOW_EXPR((lib::meta::tuple_like<Tup> ))
+    SHOW_EXPR((lib::meta::tuple_like<Arr> ))
+    SHOW_EXPR((lib::meta::tuple_like<Hetero> ))
+    SHOW_EXPR((lib::meta::tuple_like<int> ))
     
-    cout <<  "\n.gulp.\n";
+    show<Tup>();
+    show<Arr>();
+    show<Hetero>();
+    show<int>();
     
+    SHOW_EXPR((std::tuple_size_v<const Tup>))
+    using Elm1 = std::tuple_element_t<1, const Tup>;
+    SHOW_TYPE(Elm1)
+    using TupConstSeq = lib::meta::ElmTypes<const Tup>::Seq;
+    SHOW_TYPE(TupConstSeq)
+    
+    using T1 = decltype(lib::meta::getElm<0> (std::declval<Tup>()));
+    SHOW_TYPE(T1)
+    using T2 = decltype(lib::meta::getElm<0> (std::declval<Tup&>()));
+    SHOW_TYPE(T2)
+    using T3 = decltype(lib::meta::getElm<0> (std::declval<Tup const&>()));
+    SHOW_TYPE(T3)
+    
+    using H1 = decltype(lib::meta::getElm<4> (std::declval<Hetero>()));
+    SHOW_TYPE(H1)
+    using H2 = decltype(lib::meta::getElm<4> (std::declval<Hetero&>()));
+    SHOW_TYPE(H2)
+    using H3 = decltype(lib::meta::getElm<4> (std::declval<Hetero const&>()));
+    SHOW_TYPE(H3)
+    
+    cout <<  "\n.gulp." <<endl;
     return 0;
   }

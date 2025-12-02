@@ -12,7 +12,7 @@ return: 0
 END
 
 
-PLANNED "Advice constellations" AdviceSituations_test <<END
+TEST "Advice constellations" AdviceSituations_test <<END
 return: 0
 END
 
@@ -37,11 +37,11 @@ out-lit: nullary().	--->Binding[nullary/0()]
 out-lit: nullary( )	--->Binding[nullary/0()]
 out-lit: nullary  .	--->Binding[nullary/0()]
 out-lit: predicate( with-argument )	--->Binding[predicate/1(with-argument)]
-out-lit: Binding[advice.type.n7lumiera6advice4test12_GLOBAL__N_111DummyAdviceE/0(), one/0(), three/1(four), two/0()]
+out-lit: Binding[advice.type.dummyAdvice/0(), one/0(), three/1(four), two/0()]
 out-lit: b0==Binding[]
 out-lit: b1==Binding[cat1/0(), cat2/0()]
 out-lit: b2==Binding[cat1/0(), cat2/0()]
-out-lit: b2==Binding[advice.type.n3lib4time4TimeE/0(), cat1/0(), cat2/0(), cat3/1(zzz)]
+out-lit: b2==Binding[advice.type.time/0(), cat1/0(), cat2/0(), cat3/1(zzz)]
 return: 0
 END
 
@@ -51,42 +51,66 @@ return: 0
 END
 
 
-TEST "LifeCycle_test" LifeCycle_test  <<END
+TEST "Dependency Singleton" Singleton_test 23 <<END
+out-lit: testing TargetObj(23) as Singleton
+out-lit: ctor TargetObj(23) successful
+out-lit: calling a non-static method on the Singleton instance
+out-lit: .....TargetObj(23): data="***********************", array[23]={0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,}
+out-lit: dtor ~TargetObj(23) successful
 return: 0
 END
 
 
-TEST "Multithread Locking by Monitor" SyncLocking_test  <<END
+TEST "Dependency Singleton-Subclass" SingletonSubclass_test 13 <<END
+out-lit: using the Singleton should create TargetObj(13)...
+out-lit: ctor TargetObj(13) successful
+out-lit: calling a non-static method on the Singleton-Implementation
+out-lit: .....TargetObj(13): data="*************", array[13]={0,1,2,3,4,5,6,7,8,9,10,11,12,}
+out-lit: dtor ~TargetObj(13) successful
 return: 0
 END
 
 
-TEST "Multithread Locking whole class" SyncClasslock_test  <<END
+TEST "Dependency Mock Test Support" SingletonTestMock_test <<END
+out-lit: TestSingO::doIt() call=1
+out-lit: TestSingO::doIt() call=2
+out-lit: Mock_1::doIt() call=1
+out-lit: Mock_1::doIt() call=2
+out-lit: Mock_1::doIt() call=3
+out-lit: Mock_1::doIt() call=4
+out-lit: Mock_1::doIt() call=5
+out: Mock_.::doIt\(\) call=1
+out-lit: TestSingO::doIt() call=3
 return: 0
 END
 
 
-TEST "Wrapper thread-local pointers" ThreadLocal_test  <<END
+TEST "Dependency Injection flavours" DependencyFactory_test <<END
+out-lit: ctor TargetObj(0) successful
+out-lit: ctor TargetObj(1) successful
+out-lit: ctor TargetObj(2) successful
+out-lit: ctor TargetObj(3) successful
+out-lit: dtor ~TargetObj(3) successful
+out-lit: ctor TargetObj(4) successful
+out-lit: dtor ~TargetObj(4) successful
+out-lit: dtor ~TargetObj(2) successful
+out-lit: dtor ~TargetObj(1) successful
+out-lit: dtor ~TargetObj(0) successful
 return: 0
 END
 
 
-TEST "Thread-local diagnostic context" DiagnosticContext_test  <<END
+TEST "Dependency Injection configuration" DependencyConfiguration_test <<END
 return: 0
 END
 
 
-TEST "Wait/Notify on Object Monitor" SyncWaiting_test  <<END
+TEST "Dispatch functors into other threads" CallQueue_test  <<END
 return: 0
 END
 
 
-TEST "Create 20 Threads passing context" ThreadWrapper_test  <<END
-return: 0
-END
-
-
-TEST "Waiting on Thread termination" ThreadWrapperJoin_test  <<END
+TEST "Lifecycle events and hooks" LifeCycle_test  <<END
 return: 0
 END
 
@@ -102,7 +126,11 @@ END
 
 
 TEST "Lumiera Time Wrapper" TimeBasics_test  <<END
-out: .?.:..:..\....
+return: 0
+END
+
+
+TEST "NTSC drop-frame calculation" TimeDropframe_test  <<END
 return: 0
 END
 
@@ -123,21 +151,21 @@ END
 
 
 TEST "Life changing time specifications with feedback" TimeControl_test  <<END
-out: Test-Case. Target=.+time.Duration.	 <--feed--- .+time.TimeValue.$
-out: Test-Case. Target=.+time.Duration.	 <--feed--- .+time.Time.$
-out: Test-Case. Target=.+time.Duration.	 <--feed--- .+time.Duration.$
-out: Test-Case. Target=.+time.Duration.	 <--feed--- .+time.TimeSpan.$
-out: Test-Case. Target=.+time.Duration.	 <--feed--- .+time.QuTime.$
-out: Test-Case. Target=.+time.TimeSpan.	 <--feed--- .+time.TimeValue.$
-out: Test-Case. Target=.+time.TimeSpan.	 <--feed--- .+time.Time.$
-out: Test-Case. Target=.+time.TimeSpan.	 <--feed--- .+time.Duration.$
-out: Test-Case. Target=.+time.TimeSpan.	 <--feed--- .+time.TimeSpan.$
-out: Test-Case. Target=.+time.TimeSpan.	 <--feed--- .+time.QuTime.$
-out: Test-Case. Target=.+time.QuTime.	 <--feed--- .+time.TimeValue.$
-out: Test-Case. Target=.+time.QuTime.	 <--feed--- .+time.Time.$
-out: Test-Case. Target=.+time.QuTime.	 <--feed--- .+time.Duration.$
-out: Test-Case. Target=.+time.QuTime.	 <--feed--- .+time.TimeSpan.$
-out: Test-Case. Target=.+time.QuTime.	 <--feed--- .+time.QuTime.$
+out-lit: Test-Case. Target=Duration	 <--feed--- TimeValue
+out-lit: Test-Case. Target=Duration	 <--feed--- Time
+out-lit: Test-Case. Target=Duration	 <--feed--- Duration
+out-lit: Test-Case. Target=Duration	 <--feed--- TimeSpan
+out-lit: Test-Case. Target=Duration	 <--feed--- QuTime
+out-lit: Test-Case. Target=TimeSpan	 <--feed--- TimeValue
+out-lit: Test-Case. Target=TimeSpan	 <--feed--- Time
+out-lit: Test-Case. Target=TimeSpan	 <--feed--- Duration
+out-lit: Test-Case. Target=TimeSpan	 <--feed--- TimeSpan
+out-lit: Test-Case. Target=TimeSpan	 <--feed--- QuTime
+out-lit: Test-Case. Target=QuTime	 <--feed--- TimeValue
+out-lit: Test-Case. Target=QuTime	 <--feed--- Time
+out-lit: Test-Case. Target=QuTime	 <--feed--- Duration
+out-lit: Test-Case. Target=QuTime	 <--feed--- TimeSpan
+out-lit: Test-Case. Target=QuTime	 <--feed--- QuTime
 return: 0
 END
 
@@ -147,7 +175,7 @@ return: 0
 END
 
 
-TEST "Defining Suppport for specific timecode formats" FormatSupport_test  <<END
+TEST "Support for specific timecode formats" FormatSupport_test  <<END
 return: 0
 END
 
@@ -162,6 +190,7 @@ END
 
 
 TEST "Parsing time values" TimeParsing_test  <<END
+return: 0
 END
 
 
@@ -188,6 +217,11 @@ out: === Babbler masqueraded as Tool meets Leader and Visionary masqueraded as H
 out: Hello Boss, nice to meet you...
 out: === Babbler masqueraded as Tool meets Leader and Visionary masqueraded as Leader ===
 out: Hello Boss, nice to meet you...
+return: 0
+END
+
+
+TEST "Zombie tripwire" ZombieCheck_test  <<END
 return: 0
 END
 

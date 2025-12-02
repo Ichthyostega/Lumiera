@@ -1,28 +1,29 @@
 /*
-  AppState  -  application initialisation and behaviour 
+  AppState  -  application initialisation and behaviour
 
-  Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2008,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-* *****************************************************/
+/** @file appstate.cpp
+ ** Implementation of the _main application object_ of Lumiera.
+ ** This is a service to manage some _really global_ state and to
+ ** organise, start and stop the ["Subsystems"](\ref subsys.hpp).
+ ** The AppState object provides the building blocks for the
+ ** `main()` function to control the global lifecycle.
+ ** 
+ ** @see main.cpp
+ */
 
 
 #include "lib/error.hpp"
-#include "include/lifecycle.h"
 #include "common/appstate.hpp"
 #include "common/subsystem-runner.hpp"
 
@@ -38,9 +39,8 @@ extern "C" {
 #include "lib/util.hpp"
 
 
-using util::cStr;
 using lib::Literal;
-
+using std::unique_ptr;
 
 
 
@@ -54,20 +54,12 @@ namespace lumiera {
       if (lumiera_err errorstate = lumiera_error ())
         ALERT (common, "*** Unexpected error: %s\n     Triggering emergency exit.", errorstate);
     }
-    
-    void
-    createAppStateInstance(){
-      AppState::instance();
-    }
-    
-    LifecycleHook schedule_ (ON_BASIC_INIT, &createAppStateInstance);         
-    
   }
   
   
   
   
-  /** perform initialisation triggered on first access. 
+  /** perform initialisation triggered on first access.
    *  Will execute BasicSetup sequence to determine the location
    *  of the executable and read in \c setup.ini  --
    *  Since above a LifecycleHook is installed ON_BASIC_INIT,
@@ -77,23 +69,14 @@ namespace lumiera {
    * @note all further application startup is conducted by \c main.cpp
    */
   AppState::AppState()
-    : setup_(LUMIERA_LOCATION_OF_BOOTSTRAP_INI)
-    , subsystems_(0)
-    , emergency_(false)
-    , core_up_ (false)
+    : setup_{LUMIERA_LOCATION_OF_BOOTSTRAP_INI}
+    , subsystems_{}
+    , emergency_{false}
+    , core_up_{false}
   { }
   
-  
-  
-  
-  AppState& 
-  AppState::instance()  // Meyer's singleton
-  {
-    static scoped_ptr<AppState> theApp_ (0);
-    if (!theApp_) theApp_.reset (new AppState ());
-    return *theApp_;
-  }
-  
+  /** storage for the Appstate Singleton instance */
+  lib::Depend<AppState> AppState::instance;
   
   
   string
@@ -109,7 +92,7 @@ namespace lumiera {
   // ===== Implementation startup and shutdown sequence for main() ========
   
   
-#define _THROW_IF \
+#define _MAYBE_THROW_ \
   maybeThrow<error::Fatal> ("internal failure while initialising the "\
                             "Lumiera application framework");
   
@@ -121,17 +104,17 @@ namespace lumiera {
     TRACE (common, "initialising application core...");
     
     lumiera_interfaceregistry_init ();
-    _THROW_IF
+    _MAYBE_THROW_
     
     lumiera_plugin_discover (lumiera_plugin_load, lumiera_plugin_register);
-    _THROW_IF
+    _MAYBE_THROW_
     
     lumiera_config_interface_init ();
-    _THROW_IF
+    _MAYBE_THROW_
     
     core_up_= true;
     LifecycleHook::trigger (ON_GLOBAL_INIT);
-    _THROW_IF
+    _MAYBE_THROW_
     
     
     subsystems_.reset (new SubsystemRunner (options));
@@ -153,7 +136,7 @@ namespace lumiera {
   typedef AppState::ExitCode ExitCode;
   
   
-  /** @par
+  /** @remark
    *  This function is executed at the end of main(), after the necessary subsystems
    *  have been started, typically in separate threads. Thus, the main thread will
    *  enter a blocking wait, until all activated subsystems have signalled shutdown.
@@ -163,7 +146,7 @@ namespace lumiera {
    *  the termination of all other subsystems is initiated; when detecting this case,
    *  the emergency exit sequence is called. Any error which can't be handled within
    *  this scheme, should be thrown as exception, in which case the abort handler
-   *  is activated.  
+   *  is activated.
    */
   ExitCode
   AppState::maybeWait()
@@ -217,7 +200,7 @@ namespace lumiera {
   
   
   ExitCode
-  AppState::abort ()  throw()
+  AppState::abort ()  noexcept
   {
     log_and_clear_unexpected_errorstate();
     
@@ -239,7 +222,7 @@ namespace lumiera {
   /** anything which should be closed as late as possible and after
    *  the normal shutdown sequence can be placed into the AppState dtor.
    *  But note though, when the application is halted unconditionally,
-   *  not dtors will be executed.
+   *  no dtors will be executed.
    */
   AppState::~AppState()
     {
@@ -254,8 +237,6 @@ namespace lumiera {
       {
         log_and_clear_unexpected_errorstate();
     } }
-  
-  
   
   
   

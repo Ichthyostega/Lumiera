@@ -1,36 +1,32 @@
 /*
   IterAdapter(Test)  -  building various custom iterators for a given container
 
-  Copyright (C)         Lumiera.org
-    2009,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2009,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file iter-adapter-test.cpp
+ ** unit test \ref IterAdapter_test
+ */
 
 
 
 #include "lib/test/run.hpp"
+#include "lib/test/test-helper.hpp"
 #include "lib/util.hpp"
 #include "lib/util-foreach.hpp"
+#include "lib/format-cout.hpp"
 
 #include "lib/iter-adapter.hpp"
 #include "lib/iter-adapter-ptr-deref.hpp"
 
 #include <boost/lexical_cast.hpp>
-#include <iostream>
 #include <vector>
 
 
@@ -39,20 +35,17 @@ namespace lib {
 namespace test{
   
   using ::Test;
+  using LERR_(ITER_EXHAUST);
   using boost::lexical_cast;
   using util::for_each;
   using util::isnil;
   using std::vector;
-  using std::cout;
-  using std::endl;
   
   
   namespace {
-  
-    uint NUM_ELMS = 10;
-    
-    /** example of simply wrapping an STL container
-     *  and exposing a range as Lumiera Forward Iterator
+    /**
+     * example of simply wrapping an STL container
+     * and exposing a range as Lumiera Forward Iterator
      */
     struct WrappedVector
       {
@@ -74,11 +67,10 @@ namespace test{
         iterator       end()         { return       iterator();                          }
         const_iterator begin() const { return const_iterator(data_.begin(),data_.end()); }
         const_iterator end()   const { return const_iterator();                          }
-        
       };
     
     
-    /** 
+    /**
      * Example of a more elaborate custom container exposing an iteration API.
      * While the demo implementation here is based on pointers within a vector,
      * we hand out a IterAdapter, which will call back when used by the client,
@@ -126,18 +118,24 @@ namespace test{
         iterator       end ()             { return iterator();       }
         const_iterator end ()       const { return const_iterator(); }
         
+        size_t         size()  const { return numberz_.size(); }
+        
         
         
       protected: /* ==== API for the IterAdapter ==== */
         
-        /** Implementation of Iteration-logic: pull next element. */
+        /** Implementation of Iteration-logic: pull next element.
+         * @remarks typically the implementation is simplistic,
+         *        since the way this extension point is called from IterAdapter
+         *        ensures that _`pos` is still valid_ and that the `checkPoint()` function
+         *        is invoked immediately afterwards, allowing to adjust `pos` if necessary
+         */
         template<class ITER>
         friend void
-        iterNext (const TestContainer* src, ITER& pos)
-          {
-            ++pos;
-            checkPoint (src,pos);
-          }
+        iterNext (const TestContainer*, ITER& pos)
+        {
+          ++pos;
+        }
         
         /** Implementation of Iteration-logic: detect iteration end.
          *  @note the problem here is that this implementation chooses to use
@@ -152,15 +150,15 @@ namespace test{
         template<class ITER>
         friend bool
         checkPoint (const TestContainer* src, ITER& pos)
-          {
-            REQUIRE (src);
-            if ((pos != ITER()) && (pos != src->numberz_.end()))
-              return true;
-            else
-              {
-                pos = ITER();
-                return false;
-          }   }
+        {
+          REQUIRE (src);
+          if ((pos != ITER()) and (pos != src->numberz_.end()))
+            return true;
+          else
+            {
+              pos = ITER();
+              return false;
+        }   }
       };
     
   } // (END) impl test dummy container
@@ -179,25 +177,59 @@ namespace test{
    * @note see Ticket #182
    * @see IterAdapter
    * @see itertools.hpp
-   * @see IterSource         
+   * @see IterSource
    */
   class IterAdapter_test : public Test
     {
+      uint NUM_ELMS{0};
       
       virtual void
       run (Arg arg)
         {
-          if (0 < arg.size()) NUM_ELMS = lexical_cast<uint> (arg[1]);
+          NUM_ELMS = firstVal (arg, 10);
           
           useSimpleWrappedContainer ();
           
-          wrapIterRange ();
+          enumerate();
+          wrapIterRange();
           TestContainer testElms (NUM_ELMS);
           simpleUsage (testElms);
           
           iterTypeVariations (testElms);
           verifyComparisons (testElms);
           exposeDataAddresses();
+        }
+      
+      
+      /** @test enumerate all number within a range */
+      void
+      enumerate()
+        {
+          long sum=0;
+          const int N = NUM_ELMS;
+          auto i = eachNum(1, N);
+          while (i)
+            {
+              sum += *i;
+              ++i;
+            }
+          
+          CHECK (sum == (N-1)*N / 2);
+          
+          CHECK (!i);
+          VERIFY_ERROR (ITER_EXHAUST, *i );
+          VERIFY_ERROR (ITER_EXHAUST, ++i );
+          
+          i = eachNum (N, 2*N);
+          CHECK (i);
+          CHECK (N == *i);
+          ++i;
+          CHECK (N+1 == *i);
+          for ( ; i; ++i)
+            cout << "++" << *i;
+          cout << endl;
+          
+          CHECK (!i);
         }
       
       
@@ -216,7 +248,7 @@ namespace test{
           typedef RangeIter<I> Range;
           
           Range range (iVec.begin(), iVec.end());
-          CHECK (!isnil (range) || !NUM_ELMS);
+          CHECK (not isnil(range) or not NUM_ELMS);
           
           // now for example the client could....
           while ( range )
@@ -314,6 +346,36 @@ namespace test{
               
              // *iter = i+1;   ///////////TODO this should be const, but it isn't
             }
+          
+          
+          //---- verify support for C++11 element iteration
+          i = 0;
+          for (auto& elm : elms) // NOTE: TestContainer exposes pointers
+            {
+              ++elm; // can indeed modify contents
+              --elm;
+              CHECK (*elm == i);
+              ++i;
+            }
+          CHECK (size_t(i) == elms.size());
+          
+          i = 0;
+          for (auto const& elm : elms)
+            {
+              CHECK (*elm == i);
+              // ++elm; // can not modify contents
+              ++i;
+            }
+          CHECK (size_t(i) == elms.size());
+          
+          i = 0;
+          for (auto const& elm : const_elms)
+            {
+              CHECK (*elm == i);
+              // ++elm; // can not modify contents
+              ++i;
+            }
+          CHECK (size_t(i) == elms.size());
         }
       
       
@@ -342,7 +404,7 @@ namespace test{
           
           // building a const iterator needs to be done in a somewhat weird way;
           // since we're exposing the pointer as value, the solution is to add
-          // the const on the immediately wrapped iterator type 
+          // the const on the immediately wrapped iterator type
           typedef vector<int>::const_iterator     ConstRawIter;
           typedef RangeIter<ConstRawIter>         ConstRange;
           typedef AddressExposingIter<ConstRange> ConstAddrIter;

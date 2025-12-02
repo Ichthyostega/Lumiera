@@ -1,24 +1,19 @@
 /*
   HashIndexed(Test)  -  proof-of-concept test for a hash based and typed ID
 
-  Copyright (C)         Lumiera.org
-    2009,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2009,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file hash-indexed-test.cpp
+ ** unit test \ref HashIndexed_test
+ */
 
 
 #include "lib/test/run.hpp"
@@ -59,15 +54,15 @@ namespace test{
   
   /***********************************************************************//**
    * @test proof-of-concept test for a generic hash based and typed ID struct.
-   *       - check the various ctors 
+   *       - check the various ctors
    *       - check default assignment works properly
    *       - check assumptions about memory layout
    *       - check equality comparison
    *       - extract LUID and then cast LUID back into ID
    *       - use the embedded hash ID (LUID) as hashtable key
-   *       
+   *
    * @see lib::HashIndexed::Id
-   * @see mobject::Placement real world usage example 
+   * @see mobject::Placement real world usage example
    */
   class HashIndexed_test : public Test
     {
@@ -78,7 +73,7 @@ namespace test{
           checkBasicProperties();
           checkLUID_passing();
           
-          //            ---key-type-------+-value-+-hash-function--- 
+          //            ---key-type-------+-value-+-hash-function---
           buildHashtable<TestB::Id<TestDB>, TestDB, TestB::UseHashID> ();
           buildHashtable<TestDB,            TestDB, TestB::UseEmbeddedHash>();
         }
@@ -105,7 +100,7 @@ namespace test{
           TestDA d2;
           CHECK (d1.getID() != d2.getID());   // should be different because LUIDs are random
           
-          d2 = d1; 
+          d2 = d1;
           CHECK (d1.getID() == d2.getID());   // default assignment operator works as expected
         }
       

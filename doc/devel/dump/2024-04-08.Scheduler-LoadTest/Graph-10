@@ -1,0 +1,139 @@
+#
+#
+#   GNUPLOT - data plot from Lumiera
+#
+
+set term wxt size 600,600
+
+
+set datafile separator ",;"
+
+####---------Data--------------------------------
+$RunData << _End_of_Data_
+"load size","result time","concurrency","avg jobtime","avg impeded"
+51,31.508505,3.77477170052975,2332.1061372549,11.0931176470588
+11,15.113527,2.32047588891726,3188.23409090909,270.904363636364
+91,60.137673,3.32792050334239,2199.26807692308,108.090923076923
+62,36.776624,3.75701763707294,2228.55524193548,28.9245806451613
+56,37.566976,3.46145242033854,2322.07678571429,7.68378571428571
+84,51.195113,3.68907840871452,2248.3665,35.0133571428571
+82,46.670306,3.83766328851583,2184.20634146341,15.9964756097561
+53,38.522711,3.30306888318426,2400.81449056604,56.6865094339623
+75,44.26341,3.70152853112763,2184.56366666667,20.02632
+25,21.483284,2.77088740250327,2381.11044,58.22468
+29,24.519575,2.57787946977058,2179.60375862069,203.93924137931
+85,49.605607,3.86992917957843,2258.47277647059,7.47218823529412
+32,22.087341,3.4961801422815,2413.16634375,58.6231875
+91,57.686018,3.38763472978842,2147.46327472527,24.1998461538462
+51,36.34618,3.59277682001245,2560.46496078431,46.9979411764706
+85,51.071262,3.70227610588515,2224.46956470588,4.53978823529412
+91,57.198225,3.61179774372369,2270.20241758242,24.4224175824176
+63,44.510439,3.24747491257051,2294.38942857143,70.2196031746032
+69,45.305855,3.26819608635573,2145.91910144928,90.9167971014493
+66,46.297088,3.23108669383267,2266.51371212121,100.196045454545
+12,16.203749,2.77308541375209,3744.53166666667,158.820666666667
+80,51.0223,3.48960250713903,2225.594325,58.4322
+79,44.409523,3.77631124297372,2122.83773417721,17.5681898734177
+19,22.086871,1.89992855936905,2208.60405263158,560.758578947369
+94,56.200283,3.74721358609529,2240.36663829787,19.4130319148936
+74,42.617805,3.78016983746582,2177.06136486487,16.3727972972973
+30,23.653034,3.06613815377765,2417.449,31.6696333333333
+82,52.824186,3.13727164674151,2021.02220731707,130.852304878049
+96,61.666661,3.37476708849211,2167.8189375,75.4843020833333
+33,28.545792,2.5344397871322,2192.35124242424,347.145878787879
+94,61.217533,3.46707582940332,2257.93435106383,60.4128191489362
+47,31.615499,3.2249519136168,2169.3290212766,144.995489361702
+34,24.878695,2.83428708780746,2073.92247058824,238.106323529412
+85,51.539839,3.70859936136006,2248.71310588235,6.03429411764706
+99,59.961788,3.81605094898104,2311.28523232323,9.85738383838384
+80,47.54972,3.79465279711426,2255.433475,12.9391
+69,47.71155,3.54777755071885,2453.18791304348,5.76101449275362
+81,48.126022,3.73501163258414,2219.15125925926,5.23055555555556
+100,62.899327,3.60512040136773,2267.59647,16.29929
+10,11.845006,2.45327651163706,2905.9075,87.5561
+
+_End_of_Data_
+
+
+#
+#---common-styles-for-plots-from-Lumiera---------
+set style line 1 linetype  1 linewidth 2 linecolor rgb '#240CC3'
+set style line 2 linetype  3 linewidth 2 linecolor rgb '#1149D6'
+set style line 3 linetype  2 linewidth 2 linecolor rgb '#0B7FCC'
+set style line 4 linetype  6 linewidth 2 linecolor rgb '#37999D'
+set style line 5 linetype  7 linewidth 2 linecolor rgb '#248269'
+set style line 6 linetype 13 linewidth 2 linecolor rgb '#00C443'
+set style line 7 linetype 12 linewidth 2 linecolor rgb '#EBE83E'
+set style line 8 linetype  5 linewidth 2 linecolor rgb '#762C14'
+set style line 9 linetype  4 linewidth 2 linecolor rgb '#AA0519'
+
+set style line 10 linetype 1 linewidth 1 linecolor rgb '#303030'
+set style line 11 linetype 0 linewidth 1 linecolor rgb '#A0A0A0' dashtype 3
+#---(End)styles----------------------------------
+
+#
+#---axis-and-grid-setup--------------------------
+unset border
+set tics nomirror
+set grid back linestyle 11
+
+set arrow 10 from graph 0,0 to graph 1.04,0 size screen 0.025,15,60 filled ls 10
+set arrow 11 from graph 0,0 to graph 0,1.08 size screen 0.025,15,60 filled ls 10
+
+
+set xlabel 'load size ⟶ number of jobs'
+set ylabel 'active time ⟶ ms' 
+set key autotitle columnheader tmargin
+
+#
+stats $RunData using 1:2 nooutput
+
+# regression line function derived from data
+regLine(x) = STATS_slope * x + STATS_intercept
+#
+regLabel = sprintf("Model: %3.2f·p + %3.2f", STATS_slope, STATS_intercept)
+
+set key horizontal width -4
+set xtics 5
+
+plots = STATS_columns - 1
+# Adjust layout based on number of data sequences;
+# additional sequences placed into secondary diagram
+#
+if (plots > 1) {
+    set multiplot layout 2,1     # 2 rows 1 column
+    set lmargin at screen 0.12   # fixed margins to align diagrams
+    set rmargin at screen 0.88
+}
+#
+#
+####---------Scatter-Regression-Plot-------------
+plot $RunData using 1:2 with points linestyle 1, \
+     regLine(x)         with line   linestyle 9 title regLabel
+
+if (plots > 1) {
+    # switch off decorations for secondary diagram
+    unset arrow 10
+    unset arrow 11
+    set border 2+8
+    set key bmargin vertical
+
+    unset xlabel
+    set format x ""
+    set ylabel 'concurrent threads ⟶' 
+    if (plots <= 2) {
+        ####---------------------------------
+        plot $RunData using 1:3 with impulses linestyle 3
+
+    } else {
+        # more than one additional data sequence
+        #
+        set y2tics
+        set y2label 'avg job time ⟶ µs'  offset -1.5
+
+        ####---------------------------------------------
+        plot             $RunData using 1:3 with impulses linestyle 3, \
+             for [i=4:*] $RunData using 1:i with points   linestyle 5+(i-4) axes x1y2
+    }
+}
+

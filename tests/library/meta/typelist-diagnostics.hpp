@@ -1,32 +1,23 @@
 /*
   TYPELIST-DIAGNOSTICS  -  helper for testing the typelist based utilities
 
-  Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2008,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+* *****************************************************************/
 
 
 /** @file typelist-diagnostics.hpp
- ** Support for writing metaprogramming unit-tests dealing with typelists and flags.  
+ ** Support for writing metaprogramming unit-tests dealing with typelists and flags.
  ** a Printer template usable for debugging the structure of a typelist built
  ** upon some simple debugging-style types. Examples being a Num<int> template,
  ** or the Flag type. A Printer type generated from this template provides
- ** a static \c print() function. The string returned from this function
+ ** a static `show()` function. The string returned from this function
  ** visualises the structure of the typelist provided as parameter
  ** to the Printer template.
  ** 
@@ -39,21 +30,20 @@
 #define META_TYPELIST_DIAGNOSTICS_H
 
 
+#include "lib/test/test-helper.hpp"
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/generator.hpp"
 #include "lib/format-string.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/meta/util.hpp"
 
-#include <boost/utility/enable_if.hpp>
-#include <string>
-
-
-using std::string;
-using boost::enable_if;
 
 
 namespace lib  {
 namespace meta {
+  
+  using std::string;
+  
   
   /** dummy interface / baseclass for diagnostics */
   struct Numz
@@ -89,69 +79,73 @@ namespace meta {
   
   
   
-  /** helper for generating test lists */      
-  template<class X> struct CountDown          { typedef NullType List; };
-  template<>        struct CountDown<Num<0> > { typedef Node<Num<0>, NullType> List; };
-  template<int I>   struct CountDown<Num<I> > { typedef Node<Num<I>, typename CountDown<Num<I-1> >::List> List; };
+  /** helper for generating test lists */
+  template<class X> struct CountDown         { using List = Nil; };
+  template<>        struct CountDown<Num<0>> { using List = Node<Num<0>, Nil>; };
+  template<int I>   struct CountDown<Num<I>> { using List = Node<Num<I>, typename CountDown<Num<I-1>>::List>; };
   
   
   
   
-  namespace test { //  unit tests covering typelist manipulating templates
-    namespace {   // hidden internals for diagnostics....
+  namespace test{ //  unit tests covering typelist manipulating templates
+    namespace  { // internals to support diagnostics in unit tests....
       
       
       using util::_Fmt;
       
       struct NullP
         {
-          static string print () { return "-"; }
+          static string show() { return "-"; }
         };
       
-      /** debugging template, 
+      /** debugging template,
        *  printing the "number" used for instantiation on ctor call
        */
-      template<class NUM=NullType, class BASE=NullP>
-      struct Printer;
-      
-      template<class BASE>
-      struct Printer<NullType, BASE>
+      template<class T=Nil, class BASE=NullP>
+      struct Printer
         : BASE
         {
-          static string print () { return _Fmt("-<%u>%s") % "·" % BASE::print(); }
+          static string show() { return _Fmt("-<%s>%s") % typeStr<T>() % BASE::show(); }
+        };
+      
+      template<class BASE>
+      struct Printer<Nil, BASE>
+        : BASE
+        {
+          static string show() { return _Fmt("-<%s>%s") % "·" % BASE::show(); }
         };
       
       template<class BASE, int I>
       struct Printer<Num<I>, BASE>    ///< display the presence of a Num instance in the typelist
         : BASE
         {
-          static string print () { return _Fmt("-<%u>%s") % uint(Num<I>::VAL) % BASE::print(); }
+          static string show() { return _Fmt("-<%u>%s") % uint(Num<I>::VAL) % BASE::show(); }
         };
       
       template<class BASE, uint Fl>
       struct Printer<Flag<Fl>, BASE>  ///< display the presence of a Flag in the typelist
         : BASE
         {
-          static string print () { return _Fmt("-<%u>%s") % uint(Fl) % BASE::print(); }
+          static string show() { return _Fmt("-<%u>%s") % uint(Fl) % BASE::show(); }
         };
       
       template<class BASE>
       struct Printer<int, BASE>  ///< display the presence of a plain int in the typelist
         : BASE
         {
-          static string print () { return _Fmt("-<%u>%s") % 'i' % BASE::print(); }
+          static string show() { return _Fmt("-<%s>%s") % 'i' % BASE::show(); }
         };
       
       
       
       /** call the debug-print for a typelist
        *  utilising the Printer template */
-      template<class L>
+      template<class LIST>
       string
       printSublist ()
       {
-        typedef InstantiateChained<L, Printer, NullP> SubList;
-        return SubList::print();
+        using PrinterChain = InstantiateChained<LIST, Printer, NullP>;
+        return PrinterChain::show();
       }
       
       /** Specialisation for debug-printing of a nested sublist */
@@ -159,11 +153,11 @@ namespace meta {
       struct Printer<Node<TY,TYPES>, BASE>
         : BASE
         {
-          static string print () 
+          static string show()
             {
               typedef Node<TY,TYPES> List;
               return string("\n\t+--") + printSublist<List>()+"+"
-                   + BASE::print(); 
+                   + BASE::show();
             }
         };
       
@@ -171,41 +165,45 @@ namespace meta {
       struct Printer<Config<f1,f2,f3,f4,f5>, BASE>
         : BASE
         {
-          static string print () 
+          static string show()
             {
-              typedef typename Config<f1,f2,f3,f4,f5>::Flags FlagList;
+              using FlagList = Config<f1,f2,f3,f4,f5>::Flags;
               return string("\n\t+-Conf-[") + printSublist<FlagList>()+"]"
-                   + BASE::print(); 
+                   + BASE::show(); 
             }
         };
-      
       
     } // (End) internal defs
     
     
     
-    /* ===== printing types and contents ===== */ 
+    /* ===== printing types and contents ===== */
     
     template<typename TYPES>
-    typename enable_if< is_Typelist<TYPES>,
-      string          >::type
+    inline                  enable_if< is_Typelist<TYPES>,
+    string                  >
     showType ()
     {
-      typedef InstantiateChained<typename TYPES::List, Printer, NullP>  DumpPrinter;
-      return DumpPrinter::print();
+      using TypeList = TYPES::List;
+      return printSublist<TypeList>();
     }
     
-    //  Note: we define overloads of this function for other types, especially Tuples
-    
-    
-#define DISPLAY(NAME)  \
-        cout << STRINGIFY(NAME) << "\t:" << showType<NAME>() << endl;
-    
-#define DUMPVAL(NAME)  \
-        cout << STRINGIFY(NAME) << "\t:" << showDump (NAME) << endl;
+    //  Note: we define further overloads of this function for other types, especially Tuples
     
     
     
+    
+    
+    /* ================= convenience macro notation ================= */
+    
+#define DISPLAY(_IT_)  \
+        cout << STRINGIFY(_IT_) << "\t:" << showType<_IT_>() << endl;
+    
+#define DUMPVAL(_IT_)  \
+        cout << STRINGIFY(_IT_) << "\t:" << util::toString(_IT_) << endl;
+    
+#define EXPECT(_TY_, RENDERED_STRUCTURE )  \
+        CHECK (showType<_TY_>() == RENDERED_STRUCTURE ## _expect)
     
     
 }}} // namespace lib::meta::test

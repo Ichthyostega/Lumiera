@@ -3,12 +3,12 @@ WebsiteNavigation
 
 // please don't remove the //word: comments
 
-[grid="all"]
-`------------`-----------------------
-*State*         _Draft_
-*Date*          _Mi 08 Dez 2010 11:32:32 CET_
-*Proposed by*   Ichthyostega <prg@ichthyostega.de>
--------------------------------------
+[options="autowidth"]
+|====================================
+|*State*       | _Draft_
+|*Date*        | _Mi 08 Dez 2010 11:32:32 CET_
+|*Proposed by* | Ichthyostega <prg@ichthyostega.de>
+|====================================
 
 [abstract]
 ********************************************************************************
@@ -131,7 +131,7 @@ these issues.
 
 //Conclusion
 //----------
-//conclusion: When approbate (this proposal becomes a Final)
+//conclusion: When approved (this proposal becomes a Final)
 //            write some conclusions about its process:
 
 
@@ -149,5 +149,18 @@ This is covered by another RfC.
 
 Ichthyostega:: 'So 07 Okt 2012 07:30:17 CEST' ~<prg@ichthyostega.de>~
 
+
+This RfC is in the same state as _many years ago_ -- and frankly, I do not know
+what to do with it. One part (the Menu generator script) was implemented.
+The other parts, which are tagging and cross-link resolution were proposed
+and found general agreement at that time, but no-one did care for expanding
+them into an implementation concept.
+
+Meanwhile, I am working alone and can thus afford to keep the infrastructure
+at the bare minimum, just enough for me to cope. Similar as with the
+link:{rfc}/WebsiteSupportMarkup.html#_comments[cross-links and support markup].
+However, I consider those topics still something for a group of people to decide.
+
+Ichthyostega:: '2025-09-18'
 
 //endof_comments:

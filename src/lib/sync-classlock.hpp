@@ -1,23 +1,14 @@
 /*
   SYNC-CLASSLOCK.hpp  -  special case of object based locking tied directly to a type
 
-  Copyright (C)         Lumiera.org
-    2008,               Christian Thaeter <ct@pipapo.org>
-                        Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2008,            Hermann Vosseler <Ichthyostega@web.de>
+     2023,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
- 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
 
@@ -29,7 +20,8 @@
  **
  ** @note simply using the ClassLock may cause a Monitor object (with a mutex) to be
  **       created at static initialisation and destroyed on application shutdown.
- ** @see singleton-factory.hpp usage example
+ ** @see depend.hpp usage example
+ ** @see SyncClasslock_test
  */
 
 
@@ -37,50 +29,12 @@
 #define LIB_SYNC_CLASSLOCK_H
 
 #include "lib/nobug-init.hpp"
+#include "lib/zombie-check.hpp"
+#include "lib/meta/util.hpp"
 #include "lib/sync.hpp"
 
 
 namespace lib {
-  
-  namespace nifty { // implementation details
-    
-    template<class X>
-    struct Holder 
-      {
-        static uint accessed_;
-        static char content_[sizeof(X)];
-        
-        Holder() 
-          {
-            if (!accessed_)
-              new(content_) X();
-            ++accessed_; 
-          }
-        
-       ~Holder() 
-          {
-            --accessed_; 
-            if (0==accessed_)
-              get().~X();
-          }
-       
-       X&
-       get()
-        { 
-          X* obj = reinterpret_cast<X*> (&content_);
-          ASSERT (obj, "Logic of Schwartz counter broken.");
-          return *obj;
-        }
-      };
-    
-    template<class X>
-    uint Holder<X>::accessed_;
-    
-    template<class X>
-    char Holder<X>::content_[sizeof(X)];
-    
-  } // (End) nifty implementation details
-  
   
   
   /**
@@ -94,33 +48,34 @@ namespace lib {
    *       ClassLock template with differing CONF count as different type.
    *       Actually using two different configurations within for a single
    *       class X should be detected and flagged as error, but actually
-   *       just two non-shared lock instances get created silently. Beware! 
+   *       just two non-shared lock instances get created silently. Beware!
    * @see Sync::Lock the usual simple instance-bound variant
    */
   template<class X, class CONF = RecursiveLock_NoWait>
-  class ClassLock 
+  class ClassLock
     : public Sync<CONF>::Lock
     {
-      typedef typename Sync<CONF>::Lock Lock;
-      typedef typename sync::Monitor<CONF> Monitor;
+      using Lock    = Sync<CONF>::Lock;
+      using Monitor = sync::Monitor<CONF>;
       
       struct PerClassMonitor : Monitor {};
       
       Monitor&
       getPerClassMonitor()
         {
-          static nifty::Holder<PerClassMonitor> __used_here;
-          ASSERT (1==use_count(), "static init broken");
+          static PerClassMonitor classMonitor;
+          static ZombieCheck zombieCheck{util::typeStr(this)};
           
-          return __used_here.get();
+          zombieCheck();
+          return classMonitor;
         }
       
     public:
-      ClassLock() : Lock (getPerClassMonitor()) { }
-      
-      uint use_count() { return nifty::Holder<PerClassMonitor>::accessed_; }
+      ClassLock()
+        : Lock{getPerClassMonitor()}
+        { }
     };
   
   
 } // namespace lib
-#endif
+#endif /*LIB_SYNC_CLASSLOCK_H*/

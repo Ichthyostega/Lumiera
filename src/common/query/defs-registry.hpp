@@ -1,22 +1,13 @@
 /*
   DEFS-REGISTRY.hpp  -  implementation of the default object store
 
-  Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2008,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
 
@@ -31,10 +22,10 @@
  ** Basically, this piece of code defines a specialised index / storage table to hold
  ** Queries-for-default objects. This allows to remember what actually was used as
  ** "default" solution for some query and to oder possible default solutions.
- ** @remarks as of 2012, we're still using a fake implementation of the resolution,
+ ** @remarks as of 2017, we're still using a fake implementation of the resolution,
  **          no real resolution engine. While the basic idea of this "defaults registry"
  **          is likely to stay, the actual order relation and maybe even the components
- **          to be stored in this registry might be subject to change. 
+ **          to be stored in this registry might be subject to change.
  ** 
  ** @see mobject::session::DefsManager
  ** @see DefsRegistryImpl_test
@@ -55,11 +46,11 @@
 #include "lib/format-string.hpp"
 #include "lib/query-util.hpp"
 #include "common/query.hpp"
+#include "lib/nocopy.hpp"
 
 #include <set>
 #include <vector>
 #include <memory>
-#include <boost/noncopyable.hpp>
 
 
 namespace lumiera{
@@ -80,18 +71,18 @@ namespace query  {
     }
     
     
-    struct TableEntry 
+    struct TableEntry
       {
         virtual ~TableEntry() {};
       };
     
     /** we maintain an independent defaults registry
      *  for every participating kind of object. */
-    typedef std::vector< P<TableEntry> > Table;
+    using Table = std::vector< P<TableEntry> >;
     
     
     /**
-     * holding a single "default object" entry 
+     * holding a single "default object" entry
      */
     template<class TAR>
     struct Record
@@ -114,11 +105,11 @@ namespace query  {
             
             P<TAR> const& obj_;
             
-            bool 
+            bool
             operator() (Record const& rec)
             {
               P<TAR> storedObj (rec.objRef.lock());
-              return storedObj && (storedObj == obj_);
+              return storedObj and (storedObj == obj_);
             }
           };
         
@@ -133,7 +124,7 @@ namespace query  {
       };
       
     /** every new kind of object (Type) creates a new
-     *  slot in the main Table holding all registered 
+     *  slot in the main Table holding all registered
      *  default objects. Each slot actually holds a
      *  separate tree (set) of registry entries
      */
@@ -141,7 +132,7 @@ namespace query  {
     struct Slot
       : public TableEntry
       {
-        typedef std::set<Record<TAR> > Registry;
+        using Registry = std::set<Record<TAR>>;
         
         Registry registry;
         static size_t index; ///< where to find this Slot in every Table
@@ -149,12 +140,12 @@ namespace query  {
         static Registry&
         access (Table& table)
           {
-            if ( !index 
-               || index > table.size() 
-               ||!table[index-1])
+            if (  not index
+               or     index > table.size()
+               or not table[index-1])
               createSlot (table);
             
-            ASSERT (0 < index && index<=table.size() && table[index-1]);
+            ASSERT (0 < index and index<=table.size() and table[index-1]);
             Slot* item = static_cast<Slot*> (table[index-1].get());
             return item->registry;
           }
@@ -168,7 +159,7 @@ namespace query  {
               index = ++maxSlots;
             if (index > table.size())
               table.resize (index);
-            table[index-1].reset(new Slot);   
+            table[index-1].reset(new Slot);
           }
       };
       
@@ -193,31 +184,31 @@ namespace query  {
      * exact behaviour has to be defined.
      */
     class DefsRegistry
-      : boost::noncopyable
+      : util::NonCopyable
       {
         Table table_;
         
       public:
         /** used for enumerating solutions */
         template<class TAR>
-        class Iter          
+        class Iter
           {
             friend class DefsRegistry;
-            typedef typename Slot<TAR>::Registry::iterator II;
+            using II = Slot<TAR>::Registry::iterator;
             
             II p,i,e;
             P<TAR> next, ptr;
             
-            Iter (II from, II to) ///< just enumerates the given range 
+            Iter (II from, II to) ///< just enumerates the given range
               : p(from), i(from), e(to)
               {
                 if (i!=e) ++i;  // p is next to be tested, i always one ahead
                 operator++ ();
               }
             
-            Iter (II match, II from, II to) ///< returns direct match first, then enumerates 
+            Iter (II match, II from, II to) ///< returns direct match first, then enumerates
               : p(match), i(from), e(to)
-              { 
+              {
                 operator++ ();  // init to first element (or to null if empty)
               }
             
@@ -236,12 +227,12 @@ namespace query  {
           
           public:
             P<TAR> operator* ()    { return ptr; }
-            bool  hasNext ()       { return next || findNext(); }
+            bool  hasNext ()       { return next or findNext(); }
             Iter& operator++ ()
-              { 
+              {
                 ptr=findNext();
                 next.reset();
-                return *this; 
+                return *this;
               }
           };
         
@@ -260,12 +251,12 @@ namespace query  {
           {
             P<TAR> dummy;
             Record<TAR> entry (query, dummy);
-            typedef typename Slot<TAR>::Registry Registry;
+            using Registry = Slot<TAR>::Registry;
             Registry& registry = Slot<TAR>::access(table_);
             
             // try to get a possible direct match (same query)
-            typename Registry::iterator pos = registry.find (entry);
-            typename Registry::iterator end = registry.end();
+            auto pos = registry.find (entry);
+            auto end = registry.end();
             
             if (pos==end)
               return Iter<TAR> (registry.begin(), end);        // just enumerate contents
@@ -286,13 +277,13 @@ namespace query  {
         put (P<TAR> const& obj, Query<TAR> const& query)
           {
             Record<TAR> entry (query, obj);
-            typedef typename Slot<TAR>::Registry Registry;
-            typedef typename Registry::iterator RIter;
+            using Registry = Slot<TAR>::Registry;
+            using RIter    = Registry::iterator;
             
             Registry& registry = Slot<TAR>::access(table_);
             RIter pos = registry.lower_bound (entry);
-            if (  pos!=registry.end()
-               && pos->queryKey == query)
+            if (pos!=registry.end() and
+                pos->queryKey == query)
               {
                 P<TAR> storedObj (pos->objRef.lock());
                 if (storedObj)
@@ -315,8 +306,8 @@ namespace query  {
         bool
         forget (P<TAR> const& obj)
           {
-            typedef typename Slot<TAR>::Registry Registry;
-            typedef typename Record<TAR>::Search SearchFunc;
+            using Registry = Slot<TAR>::Registry;
+            using SearchFunc = Record<TAR>::Search;
             
             Registry& registry = Slot<TAR>::access(table_);
             return util::remove_if(registry, SearchFunc (obj));

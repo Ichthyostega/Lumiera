@@ -1,22 +1,13 @@
 /*
   LIST-DIFF-APPLICATION.hpp  -  consume and apply a list diff
 
-  Copyright (C)         Lumiera.org
-    2014,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2014,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
 
@@ -25,9 +16,9 @@
  ** Apply a "list diff" to a concrete sequence of elements in a container.
  ** This header provides specialisation(s) of the DiffApplicationStrategy to
  ** actual containers, choosing an implementation approach suitable for this
- ** specific kind of container. Together with a #DiffApplicator, this allows
- ** to receive the description of changes (as a linearised sequence of
- ** DiffStep tokens) and apply them to a given concrete sequence of data
+ ** specific kind of container. Together with a lib::diff::DiffApplicator,
+ ** this allows to receive the description of changes (as a linearised sequence
+ ** of DiffStep tokens) and apply them to a given concrete sequence of data
  ** elements, thereby transforming the contents of this target sequence.
  ** 
  ** @see diff-list-application-test.cpp
@@ -73,7 +64,7 @@ namespace diff{
     : public ListDiffInterpreter<E>
     {
       using Vec = vector<E,ARGS...>;
-      using Iter = typename Vec::iterator;
+      using Iter = Vec::iterator;
       
       Vec orig_;
       Vec& seq_;
@@ -91,12 +82,12 @@ namespace diff{
           if (end_of_target())
             throw error::State(_Fmt("Unable to %s element %s from target as demanded; "
                                     "no (further) elements in target sequence") % oper % elm
-                              , LUMIERA_ERROR_DIFF_CONFLICT);
+                              , LERR_(DIFF_CONFLICT));
           if (*pos_ != elm)
             throw error::State(_Fmt("Unable to %s element %s from target as demanded; "
                                     "found element %s on current target position instead")
                                     % oper % elm % *pos_
-                              , LUMIERA_ERROR_DIFF_CONFLICT);
+                              , LERR_(DIFF_CONFLICT));
         }
       
       void
@@ -105,7 +96,7 @@ namespace diff{
           if (end_of_target())
             throw error::State(_Fmt("Premature end of target sequence, still expecting element %s; "
                                     "unable to apply diff further.") % elm
-                              , LUMIERA_ERROR_DIFF_CONFLICT);
+                              , LERR_(DIFF_CONFLICT));
         }
       
       void
@@ -114,7 +105,7 @@ namespace diff{
           if (targetPos == orig_.end())
             throw error::State(_Fmt("Premature end of sequence; unable to locate "
                                     "element %s in the remainder of the target.") % elm
-                              , LUMIERA_ERROR_DIFF_CONFLICT);
+                              , LERR_(DIFF_CONFLICT));
         }
       
       
@@ -170,6 +161,17 @@ namespace diff{
           swap (seq_, orig_);
           seq_.reserve (orig_.size() * 120 / 100);    // heuristics for storage pre-allocation
           pos_ = orig_.begin();
+        }
+      
+      void
+      completeDiffApplication()
+        {
+          if (not end_of_target())
+            throw error::State(_Fmt("Not all source data consumed after diff application. "
+                                    "Element %s waiting to be consumed") % *pos_
+                              , LERR_(DIFF_STRUCTURE));
+          // discard storage
+          orig_.clear();
         }
     };
   

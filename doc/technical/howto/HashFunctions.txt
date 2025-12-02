@@ -48,7 +48,7 @@ The Boost library *functional-hash* provided the foundation for the definition n
 into the new C++ standard. Yet the boost library provides some additional facilities not
 part of the standard. Thus we're bound to choose
 
-* either including +<tr1/functional>+ and +using std::tr1::hash+
+* either including +<functional>+ and +using std::hash+
 * or including +<boost/functional-hash>+ and +using boost::hash+
 
 The boost version additionally provides pre defined hash functors for STL containers holding
@@ -65,7 +65,6 @@ at the code
 [source,C]
 ----
     template <class T> struct hash
-        : std::unary_function<T, std::size_t>
     {
         std::size_t operator()(T const& val) const
         {
@@ -78,7 +77,15 @@ with the name +hash_value(val)+ -- when instantiating this template for your cus
 class or type, the compiler will search this function not only in the current scope,
 but also in the namespace defining your custom type +T+ (this mechanism is known as
 ``**A**rgument **D**ependant **L**ookup''). Meaning that all we'd need to do is to define a
-free function or friend function named +hash_value+ alongside with our custom data types (classes).
+free function or friend function named +hash_value+ alongside with our custom data types
+(classes).footnote:[Before C++11, such _functor objects_ were typically derived from
+`std::unary_function`, which provided typedefs `argument_type` and `result_type` --
+these were actually picked up to be able to handle such generic function-like objects.
+Such is no longer needed and deprecated with C++17, since library code today either
+relies on _traits templates_ to query for some feature like a function operator,
+and contemporary code even relies on _concepts_ to express such a requirement
+from the code depending on it. Today it is sufficient just to expose an
+accessible function call operator.]
 
 To further facilitate providing custom hash functions, boost defines a function
 +boost::hash_combine(size_t seed, size_t hashValue)+, allowing to _chain up_ the
@@ -90,6 +97,14 @@ calculated hash values of the parts forming a composite data structure.
   uses the standard implementation of a string hash function combining the individual
   character's hashes.
 
+Hash-chaining
+~~~~~~~~~~~~~
+We use a dedicated function `lib::hash::combine(s,h)` to join several source(component) hashes.
+This usage pattern was pioneered by Boost and is based on the
+https://github.com/aappleby/smhasher/blob/master/src/MurmurHash2.cpp[Murmur-2.64A] hash algorithm.
+
+WARNING: as of [yellow-background]#11/2024#, portability of hash values is an unresolved issue;
+         this code does not work on 32bit systems https://issues.lumiera.org/ticket/722#comment:10[see #722]
 
 
 LUID values
@@ -103,9 +118,10 @@ the meltdown of an atomic power plant, which, as we all know, won't ever happen 
 
 Relation to hash values
 ~~~~~~~~~~~~~~~~~~~~~~~
-When objects incorporate sich an unique LUID, this provides for a prime candidate to
+When objects incorporate such an unique LUID, this provides for a prime candidate to
 derive hash values as a side-effect of that design: Since incorporating an LUID typically
 means that this object has an _distinguishable identity_, all objects with the same LUID
 should be considered _equivalent_ and thus hash to the same value. Consequently we can just
 use a +size_t+ prefix of the LUID bitstring as hash value, without any further calculations.
+This relies on LUID being generated from a reliable _entropy source._
 

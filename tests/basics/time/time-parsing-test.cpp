@@ -1,44 +1,38 @@
 /*
   TimeParsing(Test)  -  handling textual time(code) specifications
 
-  Copyright (C)         Lumiera.org
-    2011,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2011,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file time-parsing-test.cpp
+ ** unit test \ref TimeParsing_test
+ */
 
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "proc/asset/meta/time-grid.hpp"
+#include "steam/asset/meta/time-grid.hpp"
 #include "lib/time/quantiser.hpp"
 #include "lib/time/timecode.hpp"
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
 
 using lib::Symbol;
-using util::cStr;
 
 
 namespace lib {
 namespace time{
 namespace test{
   
-  using proc::asset::meta::TimeGrid;
-  using format::LUMIERA_ERROR_INVALID_TIMECODE;
+  using steam::asset::meta::TimeGrid;
+  using LERR_(INVALID_TIMECODE);
   
   
   namespace { // Helper for writing test cases
@@ -68,9 +62,9 @@ namespace test{
           {
             TimeValue parsed = FMT::parse (timeSpec_, *grid_);
             CHECK (parsed == expected, "parsing '%s' resulted in %s instead of %s"
-                                     , cStr(timeSpec_)
-                                     , cStr(Time(parsed))
-                                     , cStr(Time(expected)));
+                                     , timeSpec_.c_str()
+                                     , string{Time(parsed)}.c_str()
+                                     , string{Time(expected)}.c_str());
           }
         
         void
@@ -99,7 +93,7 @@ namespace test{
   class TimeParsing_test : public Test
     {
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           defineTestTimeGrids();
           
@@ -109,7 +103,7 @@ namespace test{
 //        parseHms();
 //        parseSmpte();
 //        parseDropFrame();
-        } 
+        }
       
       
       void
@@ -140,6 +134,7 @@ namespace test{
           Parsing<format::Frames> ("xxx25#xxx")       .should_yield (1);
           Parsing<format::Frames> ("12 25#")          .should_yield (1);
           Parsing<format::Frames> ("12 25#  33#")     .should_yield (1);                // note pitfall: the first valid number is used
+          Parsing<format::Frames> ("12 25# \n 33#")   .should_yield (1);
           Parsing<format::Frames> ("12\n 25# \n 33#") .should_yield (1);
           Parsing<format::Frames> ("12.25#")          .should_fail();                   // rejected because of leading dot (ambiguity)
         }
@@ -157,7 +152,7 @@ namespace test{
           
           Parsing<format::Seconds> ("1/2sec")         .should_yield (Time(500,0)     );
           Parsing<format::Seconds> ("1/25sec")        .should_yield (Time( 40,0)     );
-          Parsing<format::Seconds> ("1/250sec")       .should_yield (Time(  4,0)     ); // no quantisation involved in parsing 
+          Parsing<format::Seconds> ("1/250sec")       .should_yield (Time(  4,0)     ); // no quantisation involved in parsing
           Parsing<format::Seconds> ("1/250sec", OFFSET_GRID).should_yield (Time(4,10)); // ...but the origin of the grid is used
           
           Parsing<format::Seconds> ("10/2sec")        .should_yield (5);

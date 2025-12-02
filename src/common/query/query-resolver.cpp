@@ -1,24 +1,27 @@
 /*
   QueryResolver  -  interface for discovering contents of a scope
 
-  Copyright (C)         Lumiera.org
-    2009,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2009,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-* *****************************************************/
+/** @file query-resolver.cpp
+ ** implementation of a framework to query and discover elements
+ ** based on logical rules. This framework builds on the notion of
+ ** possibly having several QueryResolver facilities to handle various
+ ** kinds of queries in an uniform way. To reflect that design, the
+ ** implementation is built round a DispatcherTable to forward requests
+ ** to concrete entities implementing the QueryResolver interface. The
+ ** actual query resolution mechanism is thus not part of the framework.
+ ** 
+ */
 
 
 #include "lib/multifact.hpp"
@@ -91,13 +94,13 @@ namespace lumiera {
    *  Thus, the individual resolution function can (re)establish a
    *  typed context and downcast the Goal appropriately
    */
-  PReso  
+  PReso
   QueryResolver::issue (Goal const& query)  const
   {
-    REQUIRE (!dispatcher_->empty(), "attempt to issue a query without having installed any resolver (yet)");  
+    REQUIRE (!dispatcher_->empty(), "attempt to issue a query without having installed any resolver (yet)");
     
     if (!canHandle (query))
-      throw lumiera::error::Invalid ("unable to resolve this kind of query"); ////TICKET #197
+      throw lumiera::error::Invalid ("unable to resolve this kind of query"); //////////////////////////////////TICKET #197
     
     return dispatcher_->handle(query);
   }

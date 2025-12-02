@@ -1,22 +1,13 @@
 /*
   ELEMENT-TRACKER.hpp  -  registry for tracking instances automatically
 
-  Copyright (C)         Lumiera.org
-    2010,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2010,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
 
@@ -34,7 +25,7 @@
  ** 
  ** The standard use case for this feature is the management of the structural
  ** facade assets Timeline and Sequence within the session. They're created
- ** automatically to reflect some internal structures within the model; 
+ ** automatically to reflect some internal structures within the model;
  ** with the help of lib::ElementTracker we can expose a list of
  ** all instances as part of the public Session interface.
  ** 
@@ -64,13 +55,11 @@
 #include "lib/p.hpp"
 #include "lib/optional-ref.hpp"
 #include "lib/util-foreach.hpp"
-#include "lib/ref-array-impl.hpp"
 
+#include <vector>
 
 
 namespace lib {
-  
-  using util::isSameObject;
   
   /**
    * Registry for tracking object instances.
@@ -85,16 +74,16 @@ namespace lib {
    *       Depending on the semantics of this equality,
    *       registration might behave surprisingly, as
    *       previously registered \em equivalent instances
-   *       will be deregistered prior to appending the 
-   *       new instance. 
+   *       will be deregistered prior to appending the
+   *       new instance.
    */
   template<typename ELM>
   class ElementTracker
-    : public lib::RefArrayVector<P<ELM> >
+    : public std::vector<P<ELM>>
     {
-      typedef std::vector<P<ELM> > _Vec;
-      typedef typename _Vec::iterator Iter;
-      typedef typename _Vec::const_iterator CIter;
+      using  _Vec = std::vector<P<ELM>>;
+      using  Iter = _Vec::iterator;
+      using CIter = _Vec::const_iterator;
       
     public:
      ~ElementTracker()
@@ -237,7 +226,7 @@ namespace lib {
   /** storage for the functor to link an AutoRegistered entity
    *  to the corresponding registration service */
   template<typename TAR>
-  typename AutoRegistered<TAR>::RegistryLink  AutoRegistered<TAR>::getRegistry;
+  AutoRegistered<TAR>::RegistryLink  AutoRegistered<TAR>::getRegistry;
   
   
   

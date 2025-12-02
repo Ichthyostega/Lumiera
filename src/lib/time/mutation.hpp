@@ -1,22 +1,13 @@
 /*
   MUTATION.hpp  -  changing and adjusting time values
 
-  Copyright (C)         Lumiera.org
-    2011,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2011,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
 
@@ -47,8 +38,8 @@
  ** the message into the target object's own time grid.
  ** 
  ** @note this header is defined such as to be used with or without including the time quantisation
- **      facility, which is a more heavyweight regarding code size and compilation times. For this
- **      toggle to work, the header \c timequant.hpp needs to be included \em prior to \c mutation.hpp
+ **      facility, which is a more heavyweight inclusion regarding code size and compilation times. For
+ **      this toggle to work, the header `timequant.hpp` needs to be included \em prior to `mutation.hpp`
  **      Obviously, you can't define any mutation involving quantised (grid aligned) values without this.
  ** @warning when defining more fancy kinds of concrete mutations using the technique with
  **      the EncapsulatedMutation to hide the implementation, then please be sure to understand
@@ -62,11 +53,11 @@
 #define LIB_TIME_MUTATION_H
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/polymorphic-value.hpp"
 #include "lib/symbol.hpp"
 
-#include <boost/noncopyable.hpp>
 
 
 namespace lib {
@@ -81,7 +72,7 @@ namespace time {
   
   
   /* The following typedefs allow to hand out
-   * "unspecific" mutation value objects from 
+   * "unspecific" mutation value objects from
    * factory functions, without disclosing any
    * implementation details here in this header.
    */
@@ -153,7 +144,7 @@ namespace time {
   inline TimeValue&
   Mutation::imposeChange (TimeValue& target, Offset const& offset)
   {
-    return imposeChange (target, TimeVar(target) += offset); 
+    return imposeChange (target, TimeVar(target) += offset);
   }
   
   /** @internal nudge a target time value by a step wise offset.

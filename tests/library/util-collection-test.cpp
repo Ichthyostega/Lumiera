@@ -1,24 +1,19 @@
 /*
   UtilCollection(Test)  -  helpers and shortcuts for working with collections
 
-  Copyright (C)         Lumiera.org
-    2012,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2012,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file util-collection-test.cpp
+ ** unit test \ref UtilCollection_test
+ */
 
 
 #include "lib/test/run.hpp"
@@ -55,8 +50,6 @@ namespace test {
   
   namespace{ // Test data and operations
     
-    uint NUM_ELMS = 20;
-    
     VecI
     someNumberz (uint count)
     {
@@ -81,19 +74,20 @@ namespace test {
    */
   class UtilCollection_test : public Test
     {
-      
-      void
+      virtual void
       run (Arg arg)
         {
           verify_typeDetectors();
           
-          if (0 < arg.size()) NUM_ELMS = lexical_cast<uint> (arg[0]);
-          
+          uint NUM_ELMS = firstVal (arg, 20);
           VecI container = someNumberz (NUM_ELMS);
           RangeI iterator(container.begin(), container.end());
           
           verify_accessFirstLast (container, NUM_ELMS);
           verify_accessFirstLast (iterator, NUM_ELMS);
+          
+          verify_Min_Max (container, NUM_ELMS);
+          verify_Min_Max (iterator, NUM_ELMS);
         }
       
       
@@ -106,6 +100,25 @@ namespace test {
           
           CHECK (first(col) == theFirst);
           CHECK (last(col) == theLast);
+        }
+      
+      
+      template<class COL>
+      void
+      verify_Min_Max (COL const& col, uint lim)
+        {
+          uint expectedMax = lim;
+          uint expectedMin = 1;
+          
+          CHECK (max (col) == expectedMax);
+          CHECK (min (col) == expectedMin);
+          
+          COL empty;
+          
+          using Val = COL::value_type;
+          
+          CHECK (max (empty) == std::numeric_limits<Val>::min());
+          CHECK (min (empty) == std::numeric_limits<Val>::max());
         }
       
       

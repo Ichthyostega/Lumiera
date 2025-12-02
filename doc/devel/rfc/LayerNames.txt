@@ -1,0 +1,208 @@
+LayerNames
+==========
+
+// please don't remove the //word: comments
+
+[options="autowidth"]
+|====================================
+|*State*       | _Final_
+|*Date*        | _Fr 05 Oct 2018 15:05:58 CET_
+|*Proposed by* | Ichthyostega <prg@ichthyostega.de>
+|====================================
+
+********************************************************************************
+.Abstract
+Change the names of the three Layers into _Stage, Steam_ and _Vault._
+********************************************************************************
+
+
+Description
+-----------
+//description: add a detailed description:
+The Lumiera code base is organised into three software layers, which is considered
+adequate. However, the names we use for these layers, the way they emerged during
+the early days of Lumiera, are not really convincing, given our current understanding
+of the architecture. We treat the layers as a conceptual grouping device, yet as such
+they are not entities within the architecture -- the actual entities are the subsystems.
+Each of the existing layer names is ill-guiding do some degree.
+
+Gui::
+  The graphical user interface seems an obvious pick for a desktop application.
+  However, there could be a command line interface alongside, and there will be
+  a script runner. These might even be active simultaneously. And even within
+  a classical GUI, there is more than just a bunch of widgets: there is some
+  kind of presentation model, there is presentation state and there is a
+  binding and communication facility to connect to the lower layers.
+  So clearly the ``upper layer'' is more than just a GUI,
+  it involves some kind of _backstage machinery._
+
+Proc-Layer::
+  The name implies processing; we might conclude the video is rendered here,
+  while in fact, only metadata is processed and transformed within this layer.
+  Everything revolves around the tension between two models, a user domain
+  model, and a technical processing domain model. Overall, this layer is much
+  akin to a language compiler -- and if you ever encountered the internals
+  of such a compiler, it always remains _somewhat nebulous_ where and
+  when the actual magic happened.
+
+Backend::
+  We all know database backends, distributed storage and graph processing backends.
+  The name implies the backend can be switched, and the application is meant to
+  be backend technology agnostic. And while certainly true -- Lumiera is not
+  tied to any media processing framework -- this is rather not what happens
+  in our Backend layer. Rather, you'll find a very specific processing core
+  and intricate input/output adaptation pipelines, operating within a highly
+  conditioned environment, _deep down_ and shielded from the outside world.
+
+The proposal is thus to abandon those conventional names, and replace them
+by some artificial, yet evocative terms: *Stage* -- *Steam* -- *Vault*
+
+
+Tasks
+~~~~~
+// List what needs to be done to implement this Proposal:
+ * find convincing new names ([green]#✔ done#)
+ * update and add documentation ([green]#✔ done#)
+ * adjust source folders and namespaces ([green]#✔ done#)
+ * adjust build system and library names ([green]#✔ done#)
+ * fix textual usage in code and documentation ([green]#✔ done#)
+
+
+Discussion
+~~~~~~~~~~
+
+Pros
+^^^^
+  * the new names are strange and distinct enough to stick
+  * they allude the bombastic vibes of magic, theatre and horror movie
+  * each can be linked to a quality actually present in the code base, between the lines
+  * the names are compact and of equal length (5 letters)
+  * they sort close together in the alphabet, and in proper order
+  * all names are one-syllable, and yield a smooth cadence
+
+
+
+Cons
+^^^^
+  * bikeshedding
+  * wasting brain cycles on mere names.
+  * changing those names now, in a code base > 100 kLOC, is a lot of work
+  * GUI, processing and backend are well established computing terms
+  * just by themselves, those new names don't imply what they are
+
+
+
+Alternatives
+^^^^^^^^^^^^
+//alternatives: explain alternatives and tell why they are not viable:
+Instead of fancy names, we could try to find precise, descriptive names
+
+- interaction layer
+- translation layer
+- adaptation layer
+
+However, experience shows that most people perceive a repulse towards abstraction
+and prefer not to use a concept at all, over using a concept that feels involved.
+Sweet names can be used as bait to get new concepts into circulation.
+
+Another alternative would be do downgrade the importance of the layers altogether,
+and to rely primarily on the subsystems. Each subsystem would then use its own
+namespace, and reside in a separate subdirectory. The net effect would be to
+flatten the architecture hierarchy altogether.
+
+However, the author of this RfC rejects that idea, because it means to loosen
+the ``architectural grip''. Lumiera is supposed to become a heavyweight and complex
+system, and thus needs a strong presence of architecture, not just a weak pro-forma
+ordering scheme. In the extreme, we could end up with subsystems as plug-ins,
+floating in an amorphous soup where each part calls and uses what seems to fit.
+We had a battle revolving around that architectural idea, and we turned towards
+building a monolith, because building a monolith is heavy-going, not snappy.
+
+Finally, there is always the alternative not to care at all and continue with the
+detail work. This is fine, yet at some point we'll face the necessity to explain
+our structures to other people, and then the names do matter.
+
+
+Rationale
+---------
+//rationale: Give a concise summary why it should be done *this* way:
+Better now than never; changing and readjusting such fundamental structures
+becomes harder with every line of code added. The existing names are a half-way
+misfit, and the new names at least mitigate the situation.
+
+And, after all, it is not a problem to paint the bikeshed. In fact, you should
+do so, to show you care for your stuff. The problem is to discuss the colour of
+the bikeshed. Thus I exploit the opportunity to pull this off, without having
+to consult anyone, since -- right now -- I am working alone on the code base.
+
+
+
+//Conclusion
+//----------
+//conclusion: When approved (this proposal becomes a Final)
+//            write some conclusions about its process:
+
+
+
+
+Comments
+--------
+//comments: append below
+
+.Mail Thread
+[quote]
+____
+
+ Subject: Re: Aw: Re: Session
+ Date: Sat, 15 Sep 2018 10:29:11 +0200
+ From: Benny Lyons <benny.lyons@gmx.net>
+ To: Ichthyostega <prg@ichthyostega.de>
+
+ > On 14.09.2018 22:37, Ichthyostega wrote:
+ > Du bringst hier einen Punkt zur Sprache, der mir auch schon länger durch den
+ > Kopf geht, Benny. Eigentlich sind die Namen für unsere Layer etwas "daneben".
+ > Sie sind nicht wirklich gut. Zum einen klingen sie etwas dröge (vor allem
+ > "Proc"), und etwas, mit dem man so viel arbeitet, sollte doch auch inspirieren ;-)
+...
+ > Ein anderer Ansatz, der mit auch immer mal wieder durch den Kopf geht,
+ > ist, ob wir nicht sogar metaphorische, oder symbolische Namen wählen sollten.
+ > Etwas, was man vielleicht auch nicht gleich versteht, was aber die Phantasie
+ > anregt. Meine Favoriten wären da (Du weißt, was für Filme ich mag....)
+ >
+ > - Stage
+ > - Steam
+ > - Vault
+
+Die finde ich sogar gut, sogar sehr gut. Warum nicht!
+Wenn wir die Meinug sind, dass wir keine zutreffende Beschreibung in
+einem Wort finden können!
+``Stage'' wurde erfogreich in Git von ``Index Area'' umgenannt. 'Stage' und
+'Vault' sind sehr gut, 'Steam' obwohl gut, erreicht nicht die Hohe von 'Stage'
+und 'Vault', meiner Meingung nach.  Können wir etwas finden die eine
+Verbindung zwischen Stage und Vault  herstellt, sowas wie Backstage
+(wollen wir natürlich nicht), Make-up, Props, ... alles natürlich nicht
+gut, aber Du weisst was ich meine.
+
+Aber Du sprichst eine sehr guten Punkt an. Mit ``Backend'' könnte jeder
+etwas darunter vorstellen, aber ``Proc Layer'' war nicht besonders gut.
+Hmm! ist aber wichtig, das können wir nicht nur hier machen. ABER übliche Namen,
+die im alten Schneiderraum benutzt wurden, müssen
+immer fanatisch eingesetzt werden. Alte Profis müssen sich sofort wohl
+finden.
+____
+
+
+.State -> Final
+//add reason
+This is not really a ``RfC'', to be honest. Rather I am pulling this off now.
+I am working solitary on the coding, which has the benefit that I can settle
+such global matters without much further ado...
+
+Ichthyostega:: '2018-11-15 19:38:32 +0100' ~<prg@ichthyostega.de>~
+
+
+//endof_comments:
+
+''''
+Back to link:/x/DesignProcess.html[Lumiera Design Process overview]
+

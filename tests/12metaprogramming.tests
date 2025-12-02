@@ -2,126 +2,87 @@ TESTING "Metaprogramming facilities and techniques" ./test-suite --group=common
 
 
 
-TEST "implicit conversion to bool" BoolCheckable_test <<END
-out: 1
-out: 2
-out: doIt
-out: 4
-out: 5
-out: doIt
-out: 7
-out: 8
-out: doIt
-out: 10
-out: 11
-out: doIt
-out: 13
-out: 14
-out: doIt
-out: sizeof.+lib.+test.+ExampleCustomType123.+ =   [248]
-return: 0
-END
-
-
-TEST "ConfigFlags_test" ConfigFlags_test <<END
-out-lit: Conf0	:-
-out-lit: Conf1	:-<1>-
-out-lit: Conf2	:-<2>-
-out-lit: Conf3	:-<3>-
-out-lit: Conf4	:-<2>-<4>-
-out-lit: AllFlags	:-<1>-<2>-<3>-<4>-
-out-lit: __________________________
-out-lit: __________________________ check_flags()
-out-lit: Flags1	:-<2>-<4>-
-out-lit: Flags2	:-<2>-<4>-
-out-lit: SimpleConfig_defined_by_Typelist	:-<1>-
-out-lit: AnotherConfig_defined_by_Typelist	:-<1>-<2>-<3>-<4>-
-out-lit: __________________________
-out-lit: __________________________ check_instantiation()
-out-lit: defined Conf0? ---> 0
-out-lit: defined Conf1? ---> 1
-out-lit: defined Conf2? ---> 1
-out-lit: defined Conf3? ---> 1
-out-lit: defined Conf4? ---> 1
-out-lit: defined Trash? ---> 0
-out-lit: __________________________
-out-lit: __________________________ check_filter()
-out-lit: SomeFlagsets	:
-out-lit: 	+---<1>-<3>-+
-out-lit: 	+---<2>-<4>-+-
-out-lit: Configs_defined_by_Flagsets	:
-out-lit: 	+-Conf-[-<1>-<3>-]
-out-lit: 	+-Conf-[-<2>-<4>-]-
-out-lit: Filter_possible_Configs	:
-out-lit: 	+-Conf-[-<2>-<4>-]-
-out-lit: AllFlagCombinations	:
-out-lit: 	+---<1>-<2>-<3>-<4>-<·>-+
-out-lit: 	+---<1>-<2>-<3>-<·>-+
-out-lit: 	+---<1>-<2>-<4>-<·>-+
-out-lit: 	+---<1>-<2>-<·>-+
-out-lit: 	+---<1>-<3>-<4>-<·>-+
-out-lit: 	+---<1>-<3>-<·>-+
-out-lit: 	+---<1>-<4>-<·>-+
-out-lit: 	+---<1>-<·>-+
-out-lit: 	+---<2>-<3>-<4>-<·>-+
-out-lit: 	+---<2>-<3>-<·>-+
-out-lit: 	+---<2>-<4>-<·>-+
-out-lit: 	+---<2>-<·>-+
-out-lit: 	+---<3>-<4>-<·>-+
-out-lit: 	+---<3>-<·>-+
-out-lit: 	+---<4>-<·>-+
-out-lit: 	+---<·>-+-
-out-lit: ListAllConfigs	:
-out-lit: 	+-Conf-[-<1>-<2>-<3>-<4>-]
-out-lit: 	+-Conf-[-<1>-<2>-<3>-]
-out-lit: 	+-Conf-[-<1>-<2>-<4>-]
-out-lit: 	+-Conf-[-<1>-<2>-]
-out-lit: 	+-Conf-[-<1>-<3>-<4>-]
-out-lit: 	+-Conf-[-<1>-<3>-]
-out-lit: 	+-Conf-[-<1>-<4>-]
-out-lit: 	+-Conf-[-<1>-]
-out-lit: 	+-Conf-[-<2>-<3>-<4>-]
-out-lit: 	+-Conf-[-<2>-<3>-]
-out-lit: 	+-Conf-[-<2>-<4>-]
-out-lit: 	+-Conf-[-<2>-]
-out-lit: 	+-Conf-[-<3>-<4>-]
-out-lit: 	+-Conf-[-<3>-]
-out-lit: 	+-Conf-[-<4>-]
-out-lit: 	+-Conf-[-]-
-out-lit: Filter_all_possible_Configs	:
-out-lit: 	+-Conf-[-<1>-]
-out-lit: 	+-Conf-[-<2>-<3>-]
-out-lit: 	+-Conf-[-<2>-<4>-]
-out-lit: 	+-Conf-[-<2>-]
-out-lit: 	+-Conf-[-<3>-]-
-out-lit: __________________________
-out-lit: __________________________ check_FlagInfo()
-out-lit: Flags1	:-<1>-<3>-
-out-lit: max bit    : 3
-out-lit: binary code: 10
-out-lit: SomeConfigs	:
-out-lit: 	+-Conf-[-<1>-<3>-]
-out-lit: 	+-Conf-[-<2>-<4>-]-
-out-lit: max bit in [SomeConfigs] : 4
-out-lit: TestVisitor application:
-out-lit: visit(code=10) -->
-out-lit: 	+-Conf-[-<1>-<3>-]-
-out-lit: visit(code=20) -->
-out-lit: 	+-Conf-[-<2>-<4>-]-
-out-lit: __________________________
-out-lit: __________________________ check_ConfigSelector()
-out-lit: Possible_Configs	:
-out-lit: 	+-Conf-[-<1>-]
-out-lit: 	+-Conf-[-<2>-<3>-]
-out-lit: 	+-Conf-[-<2>-<4>-]
-out-lit: 	+-Conf-[-<2>-]
-out-lit: 	+-Conf-[-<3>-]-
-out-lit:  Flag-code = 2 ConfigSelector() ---> 1010
-out-lit:  Flag-code = 12 ConfigSelector() ---> 1023
-out-lit:  Flag-code = 20 ConfigSelector() ---> 1024
-out-lit:  Flag-code = 4 ConfigSelector() ---> 1020
-out-lit:  Flag-code = 8 ConfigSelector() ---> 1030
-out: LUMIERA_ERROR_INVALID:invalid input or parameters.+No preconfigured factory for config-bits=10111
+TEST "casting or converting access helper" AccessCasted_test <<END
+out-lit: can_downcast<B,D>     = 1
+out-lit: can_downcast<B*,D*>   = 1
+out-lit: can_downcast<B&,D&>   = 1
+out-lit: can_downcast<B&,D*>   = 0
+out-lit: can_downcast<B*,D&>   = 0
+out-lit: can_downcast<B*&,D*&> = 1
+out-lit: can_downcast<D*&,D*&> = 1
+out-lit: can_downcast<D*,E*>   = 1
+out-lit: can_downcast<E*,F*>   = 1
+out-lit: has_RTTI<D*> = 0
+out-lit: has_RTTI<E*> = 1
+out-lit: has_RTTI<F*> = 1
+out-lit: is_convertible<D,D&>  = 0
+out-lit: is_convertible<D&,D>  = 1
+out-lit: can_use_dynamic_downcast<D,D&>  = 0
+out-lit: can_use_conversion<D,D&>        = 0
+out-lit: can_use_dynamic_downcast<B*,D*> = 0
+out-lit: can_use_conversion<D*,B*>       = 1
+out-lit: can_use_dynamic_downcast<D*&,D*&> = 0
+out-lit: can_use_conversion<D*&,D*&>       = 1
+out-lit: can_use_conversion<D*,E*>         = 0
+out-lit: can_use_dynamic_downcast<D*&,E*>  = 0
+out-lit: can_use_conversion<E*,F*>         = 0
+out-lit: can_use_dynamic_downcast<E*,F*>   = 1
+out-lit: === standard case: References ===
+out: Access\(D  as D&\) .+D.. adr=╲\w{8} ↗«D»
+out: Access\(D& as D&\) .+D.. adr=╲\w{8} ↗«D»
+out-lit: === build a value object ===
+out: Access.D  as D.    .+D.. adr=╲\w{8} ↗«D»
+out: Access.D& as D.    .+D.. adr=╲\w{8} ↗«D»
+out: Access.D&& as D.   .+D.. adr=╲\w{8} ↗«D»
+out-lit: === take a pointer ===
+out: Access.D  as D\*.  .+╲\w{8}
+out: Access.D& as D\*.  .+╲\w{8}
+out-lit: === dereference a pointer ===
+out: Access.D\* as D&.  .+D.. adr=╲\w{8} ↗«D»
+out: Access.D\* as D.   .+D.. adr=╲\w{8} ↗«D»
+out: Access.D\*&& as D. .+D.. adr=╲\w{8} ↗«D»
+out-lit: === const correctness ===
+out: Access.D  as D const&.       .+D.. adr=╲\w{8} ↗«D»
+out: Access.D& as D const&.       .+D.. adr=╲\w{8} ↗«D»
+out: Access.D  as const D.        .+D.. adr=╲\w{8} ↗«D»
+out: Access.D& as const D.        .+D.. adr=╲\w{8} ↗«D»
+out: Access.D  as const D\*.      .+╲\w{8}
+out: Access.D& as const D\*.      .+╲\w{8}
+out: Access.D\* as D const&.      .+D.. adr=╲\w{8} ↗«D»
+out: Access.D\* as const D.       .+D.. adr=╲\w{8} ↗«D»
+out: Access.const D  as D const&. .+D.. adr=╲\w{8} ↗«D»
+out: Access.D const& as D const&. .+D.. adr=╲\w{8} ↗«D»
+out: Access.const D  as const D.  .+D.. adr=╲\w{8} ↗«D»
+out: Access.D const& as const D.  .+D.. adr=╲\w{8} ↗«D»
+out: Access.const D  as const D\*..+╲\w{8}
+out: Access.D const& as const D\*..+╲\w{8}
+out: Access.const D\* as D const&..+D.. adr=╲\w{8} ↗«D»
+out: Access.const D\* as const D. .+D.. adr=╲\w{8} ↗«D»
+out: Access.D const& as D.        .+D.. adr=╲\w{8} ↗«D»
+out: Access.D const&& as D.       .+D.. adr=╲\w{8} ↗«D»
+out-lit: === work cases: actual conversions ===
+out: Access.B& as B&.             .+B.. adr=╲\w{8} ↗«B»
+out: Access.D& as B&.             .+B.. adr=╲\w{8} ↗«B»
+out: Access.B\* as B\*.           .+╲\w{8}
+out: Access.D\* as B\*.           .+╲\w{8}
+out: Access.D& as B\*.            .+╲\w{8}
+out: Access.D\* as B&.            .+B.. adr=╲\w{8} ↗«B»
+out: Access.B\*& as B\*&.         .+╲\w{8}
+out: Access.D\*& as D\*&.         .+╲\w{8}
+out: Access.D& as const B\*.      .+╲\w{8}
+out: Access.D\* as B const&.      .+B.. adr=╲\w{8} ↗«B»
+out: Access.D const& as const B\*..+╲\w{8}
+out: Access.const D\* as B const&..+B.. adr=╲\w{8} ↗«B»
+out: Access.E\(F\)& as F&.        .+F.. adr=╲\w{8} ↗«F»
+out: Access.E\(F\)\* as F\*.      .+╲\w{8}
+out: Access.E\(F\)\* as F&.       .+F.. adr=╲\w{8} ↗«F»
+out: Access.E\(F\)& as F\*.       .+╲\w{8}
+out: Access.F\\* as X\*.          .+╲\w{8}
+out: Access.X\(F\)\* as X\*.      .+╲\w{8}
+out: Access.F\* as B&.            .+B.. adr=╲\w{8} ↗«B»
+out: Access.F\* as E&*.           .+E.. adr=╲\w{8} ↗«F»
+out-lit: Access(int as double) --->2
+out-lit: Access(float as long) --->3
 return: 0
 END
 
@@ -137,19 +98,22 @@ return: 0
 END
 
 
+TEST "Duck detect extension points" DuckDetectorExtension_test <<END
+return: 0
+END
+
+
 TEST "functional closure" FunctionClosure_test <<END
 out-lit: List1	:-<1>-<2>-<3>-
 out-lit: List2	:-<5>-<6>-<7>-
 out-lit: Args	:-<5>-<9>-
 out-lit: NewArgs	:-<1>-<5>-<9>-
 out-lit: 	:
-out-lit: 	: ---Apply---
-out-lit: tup0	:...Tuple()
-out-lit: tup1	:...Tuple(11)
-out-lit: tup2	:...Tuple(11,12)
-out-lit: tup3	:...Tuple(11,12,13)
-out-lit: 	:
 out-lit: 	: ---Bind----
+out-lit: tup0	:«tuple<>»──()
+out-lit: tup1	:«tuple<int>»──(11)
+out-lit: tup2	:«tuple<int, int>»──(11,12)
+out-lit: tup3	:«tuple<int, int, int>»──(11,12,13)
 return: 0
 END
 
@@ -164,80 +128,121 @@ return: 0
 END
 
 
+TEST "function signature trait" FunctionSignature_test <<END
+return: 0
+END
+
+
+TEST "member function late binding" LateBindInstance_test  <<END
+return: 0
+END
+
+
 TEST "metaprogramming helpers" MetaUtils_test  <<END
 return: 0
 END
 
 
 TEST "Lumiera Iterator Concept" IterAdapter_test 20 <<END
-out: ::20::19::18::17::16::15::14::13::12::11::10::9::8::7::6::5::4::3::2::1
-out: ::0::1::2::3::4::5::6::7::8::9::10::11::12::13::14::15::16::17::18::19
+out-lit: ::20::19::18::17::16::15::14::13::12::11::10::9::8::7::6::5::4::3::2::1
+out-lit: ::20::19::18::17::16::15::14::13::12::11::10::9::8::7::6::5::4::3::2::1
+out-lit: ++21++22++23++24++25++26++27++28++29++30++31++32++33++34++35++36++37++38++39
+out-lit: ::0::1::2::3::4::5::6::7::8::9::10::11::12::13::14::15::16::17::18::19
+out-lit: ::0::1::2::3::4::5::6::7::8::9::10::11::12::13::14::15::16::17::18::19
+return: 0
 END
 
 
 TEST "Lumiera Iterator Adapter for STL" IterAdapterSTL_test <<END
-out: -----filter-distinct-values---.+vector
-out: iter::eachDistinct$
-out: iter::eachDistinct::1$
-out: iter::eachDistinct::1::2::3::1
-out: -----iterateMapKeyVal---.+map
-out: iter::eachKey::0::1::2::3::4::5::6::7::8::9
-out: iter::eachVal::0::2::4::6::8::10::12::14::16::18
-out: iter::eachDistinctKey::0::1::2::3::4::5::6::7::8::9
-out: -----iterateMapKeyVal---.+unordered_map
+out-lit: -----filter-distinct-values---vector<int>
+out-lit: iter::eachDistinct
+out-lit: iter::eachDistinct::1
+out-lit: iter::eachDistinct::1::2::3::1
+out-lit: iter::eachDistinct::1::2::3::1
+out-lit: -----iterateMapKeyVal---map<int, int>
+out-lit: iter::eachKey::0::1::2::3::4::5::6::7::8::9
+out-lit: iter::eachKey::0::1::2::3::4::5::6::7::8::9
+out-lit: iter::eachVal::0::2::4::6::8::10::12::14::16::18
+out-lit: iter::eachVal::0::2::4::6::8::10::12::14::16::18
+out-lit: iter::eachDistinctKey::0::1::2::3::4::5::6::7::8::9
+out-lit: -----iterateMapKeyVal---unordered_map<int, int>
 out: iter::eachKey::.::.::.::.::.::.::.::.::.::.
-out: iter::eachVal::.+
+out: iter::eachVal::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+
 out: iter::eachDistinctKey::.::.::.::.::.::.::.::.::.::.
-out: -----iterateMapKeyVal---.+multimap
-out: iter::eachKey::0::0::0::0::0::0::0::0::0::0::1::1::1::1::1::1::1::1::1::2::2::2::2::2::2::2::2::3::3::3::3::3::3::3::4::4::4::4::4::4::5::5::5::5::5::6::6::6::6::7::7::7::8::8::9
-out: iter::eachVal::10::9::8::7::6::5::4::3::2::1::9::8::7::6::5::4::3::2::1::8::7::6::5::4::3::2::1::7::6::5::4::3::2::1::6::5::4::3::2::1::5::4::3::2::1::4::3::2::1::3::2::1::2::1::1
-out: iter::eachDistinctKey::0::1::2::3::4::5::6::7::8::9
-out: -----iterateMapKeyVal---.+unordered_multimap
+out-lit: -----iterateMapKeyVal---multimap<int, int>
+out-lit: iter::eachKey::0::0::0::0::0::0::0::0::0::0::1::1::1::1::1::1::1::1::1::2::2::2::2::2::2::2::2::3::3::3::3::3::3::3::4::4::4::4::4::4::5::5::5::5::5::6::6::6::6::7::7::7::8::8::9
+out-lit: iter::eachKey::0::0::0::0::0::0::0::0::0::0::1::1::1::1::1::1::1::1::1::2::2::2::2::2::2::2::2::3::3::3::3::3::3::3::4::4::4::4::4::4::5::5::5::5::5::6::6::6::6::7::7::7::8::8::9
+out-lit: iter::eachVal::10::9::8::7::6::5::4::3::2::1::9::8::7::6::5::4::3::2::1::8::7::6::5::4::3::2::1::7::6::5::4::3::2::1::6::5::4::3::2::1::5::4::3::2::1::4::3::2::1::3::2::1::2::1::1
+out-lit: iter::eachVal::10::9::8::7::6::5::4::3::2::1::9::8::7::6::5::4::3::2::1::8::7::6::5::4::3::2::1::7::6::5::4::3::2::1::6::5::4::3::2::1::5::4::3::2::1::4::3::2::1::3::2::1::2::1::1
+out-lit: iter::eachDistinctKey::0::1::2::3::4::5::6::7::8::9
+out-lit: -----iterateMapKeyVal---unordered_multimap<int, int>
 out: iter::eachKey::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.::.
-out: iter::eachVal::.+
+out: iter::eachVal::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+
 out: iter::eachDistinctKey::.::.::.::.::.::.::.::.::.::.
-out: -----iterateValues4Key---.+multimap
-out: iter::eachValForKey::10::9::8::7::6::5::4::3::2::1
-out: -----iterateValues4Key---.+unordered_multimap
-out: iter::eachValForKey::.+
-out: snapshot-0-1-2-3-4-5-6-7-8-9
-out: snapshot-22-44
+out-lit: -----iterateValues4Key---multimap<int, int>
+out-lit: iter::eachValForKey::10::9::8::7::6::5::4::3::2::1
+out-lit: -----iterateValues4Key---unordered_multimap<int, int>
+out: iter::eachValForKey::.+::.+::.+::.+::.+::.+::.+::.+::.+::.+
+out-lit: snapshot-0-1-2-3-4-5-6-7-8-9
+out-lit: snapshot-0-1-2-3-4-5-6-7-8-9
+out-lit: snapshot-22-44
+return: 0
 END
 
 
 TEST "Lumiera Iterator Tools" IterTools_test 20 <<END
-out: ::20::19::18::17::16::15::14::13::12::11::10::9::8::7::6::5::4::3::2::1
-out: ::20::18::16::14::12::10::8::6::4::2
-out: ::19::17::15::13::11::9::7::5::3::1
-out: ::17::16::15::14::13::12::11::10::9::8::7::6::5::4::3::2::1
-out: ::16::14::12::10::8::6::4::2
-out: ::17::15::13::11::9::7::5::3::1
-out: ::10::9::8::7::6::5::4::3::2::1
-out: ::-10::-9::-8::-7::-6::-5::-4::-3::-2::-1
-out: ::12::11::10::9::8::7::6::5::4::3
+out-lit: ::20::19::18::17::16::15::14::13::12::11::10::9::8::7::6::5::4::3::2::1
+out-lit: ::20::19::18::17::16::15::14::13::12::11::10::9::8::7::6::5::4::3::2::1
+out-lit: ::20::18::16::14::12::10::8::6::4::2
+out-lit: ::19::17::15::13::11::9::7::5::3::1
+out-lit: ::17::16::15::14::13::12::11::10::9::8::7::6::5::4::3::2::1
+out-lit: ::16::14::12::10::8::6::4::2
+out-lit: ::17::15::13::11::9::7::5::3::1
+out-lit: ::12::18::24::30::36::42::48::54
+out-lit: ::13::17::19::23::25::29::31::35::37::41::43::47::49::53::55::59
+out-lit: ::20::19::18::17::16::15::14::13::12::11::10::9::8::7::6::5::4::3::2::1
+out-lit: ::-20::-19::-18::-17::-16::-15::-14::-13::-12::-11::-10::-9::-8::-7::-6::-5::-4::-3::-2::-1
+out-lit: ::22::21::20::19::18::17::16::15::14::13::12::11::10::9::8::7::6::5::4::3
+return: 0
+END
+
+
+TEST "Lumiera state-core iteration" IterCoreAdapter_test 20 <<END
+return: 0
+END
+
+
+TEST "forward/backward iterator" IterCursor_test 20 <<END
+return: 0
+END
+
+
+TEST "index-based iterator" IndexIter_test 20 <<END
+return: 0
 END
 
 
 TEST "Iterable data source" IterSource_test 13 <<END
 out: ::13::12::11::10::9::8::7::6::5::4::3::2::1
 out: ::.............::............::...........::..........::.........::........::.......::......::.....::....::...::..::.$
-out-lit: ::0:00:03.250::0:00:03.000::0:00:02.750::0:00:02.500::0:00:02.250::0:00:02.000::0:00:01.750::0:00:01.500::0:00:01.250::0:00:01.000::0:00:00.750::0:00:00.500::0:00:00.250
+out-lit: ::3s250ms::3s::2s750ms::2s500ms::2s250ms::2s::1s750ms::1s500ms::1s250ms::1s::750ms::500ms::250ms
 out: (::X...........){13}$
-out: (::0:0.:..\..00){13}$
+out: (::.+s){13}$
 out: (::X...........){13}$
-out: (::0:0.:..\..00){13}$
+out: (::.+s){13}$
 out: distinct_keys::0::1::2::3::4::5::6::7::8::9::10::11::12
 out: values_4_key(::[0-9]{1,2})+
 out: distinct_keys(::[0-9]{1,2}){13}
 out: values_4_key(::[0-9]{1,2})+
+return: 0
 END
 
 
-TEST "Iterator monad variations" IterExplorer_test <<END
-out-lit: 1-2-3-4-5-6-7-8
-out-lit: 0-1-2-3-4-0-1-2-3-4-5-6-0-1-2-3-4-5-6-7-8
-out-lit: 0-1-2-3-4-5-6-7-8
-out-lit: 0-1-2-3-4-5-6-7-8
+TEST "Iterator tree exploration" IterExplorer_test <<END
+out-lit: 4-3-2-1
+out: Search in random tree: toFind = .....
+out: Protocol of the search: .+\-.+\-.+\-.+\-.+
+return: 0
 END
 
 
@@ -247,6 +252,11 @@ END
 
 
 TEST "Queue-like iterator" IterQueue_test <<END
+return: 0
+END
+
+
+TEST "Tuple-zipped iterators" IterZip_test <<END
 return: 0
 END
 
@@ -272,6 +282,7 @@ out: can_IterForEach<ForwardRangeIter>	 : Yes
 out: can_IterForEach<TransformedForwardIter>	 : Yes
 out: can_IterForEach<FilteredForwardIter>	 : Yes
 out: can_IterForEach<CustomForwardIter>	 : Yes
+return: 0
 END
 
 
@@ -288,43 +299,52 @@ END
 TEST "Variadic template diagnostics" TestHelperVariadic_test <<END
 out-lit: --no-arg--
 out-lit:  :.
-out-lit: --value--
-out: .+#1.+ Type: d  VAL  Address. 0x.+
-out-lit:  :.
 out-lit: --reference--
-out: .+#1.+ Type: d  REF  Address. 0x.+
+out: .+#1.+ Type: double& .+Adr╲.+
 out-lit:  :.
-out-lit: --move--
-out: .+#1.+ Type: d  MOV  Address. 0x.+
+out-lit: --value--
+out: .+#1.+ Type: double && .+Adr╲.+
 out-lit:  :.
 out-lit: --two values--
-out: .+#2.+ Type: A4_c  REF  Address. 0x.+
-out: .+#1.+ Type: l  MOV  Address. 0x.+
+out: .+#2.+ Type: char \[4\] const& .+Adr╲.+
+out: .+#1.+ Type: long && .+Adr╲.+
 out-lit:  :.
-out-lit: --matched--
-out: .+#3.+ Type: d  REF  Address. 0x.+
-out: .+#2.+ Type: d  REF  Address. 0x.+
-out: .+#1.+ Type: d  MOV  Address. 0x.+
+out-lit: --references--
+out: .+#3.+ Type: double& .+Adr╲.+
+out: .+#2.+ Type: double const& .+Adr╲.+
+out: .+#1.+ Type: double && .+Adr╲.+
 out-lit:  :.
 out-lit: --baseclass--
-out: .+#1.+ Type: .+lib.test.test.+Interface.  REF  Address. 0x.+
+out: .+#1.+ Type: Interface const& .+Adr╲.+
 out-lit:  :.
-END
-
-
-TEST "TypeList_test" TypeList_test <<END
-out: - 1 -- 2 -- 3 -- 5 -- 8 -- 13 -- The End -
-out: ..Size of = 1
 return: 0
 END
 
 
-TEST "simple typelist utils" TypeListUtil_test <<END
+TEST "Helper to show demangled C++ names" TypeDemangling_test <<END
+out: .+lib.meta.test.Space.+Outer.+Inner
+out-lit: lib::meta::test::Space const* (*)(lib::meta::test::Outer<lib::meta::test::Space>::Inner const&&)
 return: 0
 END
 
 
-TEST "TypeListGenerator_test" TypeListGenerator_test <<END
+TEST "Helper for human readable type display" TypeDisplay_test <<END
+return: 0
+END
+
+
+TEST "Loki Type-List" TypeList_test <<END
+out-lit: - 21 -- 13 -- 8 -- 5 -- 3 -- 2 -- 1 -- The End -
+return: 0
+END
+
+
+TEST "Simple Type-List utilities" TypeListUtil_test <<END
+return: 0
+END
+
+
+TEST "Type driven class generation" TypeListGenerator_test <<END
 out: ctor DoIt<Block<13> >
 out: ctor DoIt<Block< 8> >
 out: ctor DoIt<Block< 5> >
@@ -345,306 +365,61 @@ return: 0
 END
 
 
-TEST "typelist manipulation" TypeListManip_test <<END
+TEST "Typelist manipulation" TypeListManip_test <<END
 out-lit: List1	:-<1>-<2>-<3>-
 out-lit: List2	:-<5>-<6>-<7>-
-out-lit: Added2	:-<3>-<4>-<5>-
-out-lit: FilterEven	:-<2>-<6>-
-out-lit: Append1	:-
-out-lit: Append2	:-<11>-<22>-
-out-lit: Append3	:-<111>-
-out-lit: Append4	:-<222>-
-out-lit: Append5	:-<1>-<2>-<3>-
-out-lit: Append6	:-<5>-<6>-<7>-
-out-lit: Append7	:-<111>-<5>-<6>-<7>-
-out-lit: Append8	:-<1>-<2>-<3>-<222>-
-out-lit: Append9	:-<1>-<2>-<3>-<5>-<6>-<7>-
-out-lit: Overl01	:-
-out-lit: Overl02	:-
-out-lit: Overl03	:-
-out-lit: Overl04	:-<9>-<8>-<3>-
-out-lit: Overl05	:-<1>-<9>-<8>-
-out-lit: Overl06	:-<1>-<2>-<9>-
-out-lit: Overl07	:-<1>-<2>-<3>-
-out-lit: Overl08	:-<1>-<2>-<3>-
-out-lit: Overl09	:-<1>-<2>-<3>-
-out-lit: Overl10	:-<1>-<1>-<2>-
-out-lit: Overl11	:-<1>-<2>-<3>-
-out-lit: Overl12	:-<1>-<2>-<3>-
-out-lit: Overl13	:-<1>-<2>-<3>-
-out-lit: Front1	:-
-out-lit: Front2	:-<1>-
-out-lit: Front3	:-<1>-<2>-<3>-
-out-lit: Back1	:-<2>-<3>-
-out-lit: Back2	:-<3>-
-out-lit: Back3	:-
-out-lit: Front4	:-<1>-
-out-lit: Back4	:-<2>-<3>-
-out-lit: Prefix	:-<1>-<2>-
-out-lit: ElmL	:-<3>-
-out-lit: NPrefix	:-
-out-lit: Types<Elm1>	:-<3>-
-out-lit: NList	:-
-out-lit: Types<Nil>	:-
-out-lit: LL	:-<1>-<2>-<3>-<5>-<6>-<7>-
-out-lit: List	:-<1>-<2>-<3>-<5>-<6>-<7>-
-out-lit: First	:-<1>-
-out-lit: Tail	:-<2>-<3>-<5>-<6>-<7>-
-out-lit: Prefix	:-<1>-<2>-<3>-<5>-<6>-
-out-lit: Last	:-<7>-
-out-lit: HeadEnd	:-<1>-<7>-
-out-lit: Prefix1	:
-out-lit: 	+---<11>-<22>-+-
-out-lit: Prefix2	:
-out-lit: 	+---<101>-<1>-+
-out-lit: 	+---<101>-<2>-+
-out-lit: 	+---<101>-<3>-+-
-out-lit: Prefix3	:
-out-lit: 	+---<1>-+
-out-lit: 	+---<2>-+
-out-lit: 	+---<3>-+-
-out-lit: Prefix4	:
-out-lit: 	+---<111>-<1>-<2>-<3>-+
-out-lit: 	+---<111>-<0>-+
-out-lit: 	+---<111>-<5>-<6>-<7>-+-
-out-lit: Prefix5	:
-out-lit: 	+---<1>-<2>-<3>-<5>-+
-out-lit: 	+---<1>-<2>-<3>-<6>-+
-out-lit: 	+---<1>-<2>-<3>-<7>-+-
-out-lit: Prefix6	:
-out-lit: 	+---<1>-<2>-<3>-<1>-<2>-<3>-+
-out-lit: 	+---<1>-<2>-<3>-<0>-+
-out-lit: 	+---<1>-<2>-<3>-<5>-<6>-<7>-+-
-out-lit: Dist1	:
-out-lit: 	+---<11>-<1>-+
-out-lit: 	+---<11>-<2>-+
-out-lit: 	+---<11>-<3>-+-
-out-lit: Dist2	:
-out-lit: 	+---<11>-<0>-+
-out-lit: 	+---<22>-<0>-+
-out-lit: 	+---<33>-<0>-+-
-out-lit: Dist3	:
-out-lit: 	+---<11>-<1>-+
-out-lit: 	+---<11>-<2>-+
-out-lit: 	+---<11>-<3>-+
-out-lit: 	+---<22>-<1>-+
-out-lit: 	+---<22>-<2>-+
-out-lit: 	+---<22>-<3>-+
-out-lit: 	+---<33>-<1>-+
-out-lit: 	+---<33>-<2>-+
-out-lit: 	+---<33>-<3>-+-
-out-lit: Dist4	:
-out-lit: 	+---<11>-<1>-<2>-<3>-+
-out-lit: 	+---<11>-<5>-<6>-<7>-+
-out-lit: 	+---<22>-<1>-<2>-<3>-+
-out-lit: 	+---<22>-<5>-<6>-<7>-+
-out-lit: 	+---<33>-<1>-<2>-<3>-+
-out-lit: 	+---<33>-<5>-<6>-<7>-+-
-out-lit: Down	:-<11>-<10>-<9>-<8>-<7>-<6>-<5>-<4>-<3>-<2>-<1>-<0>-
-out-lit: Combi	:
-out-lit: 	+---<1>-<2>-<3>-<·>-+
-out-lit: 	+---<1>-<2>-<2>-<·>-+
-out-lit: 	+---<1>-<2>-<1>-<·>-+
-out-lit: 	+---<1>-<2>-<0>-<·>-+
-out-lit: 	+---<1>-<1>-<3>-<·>-+
-out-lit: 	+---<1>-<1>-<2>-<·>-+
-out-lit: 	+---<1>-<1>-<1>-<·>-+
-out-lit: 	+---<1>-<1>-<0>-<·>-+
-out-lit: 	+---<1>-<0>-<3>-<·>-+
-out-lit: 	+---<1>-<0>-<2>-<·>-+
-out-lit: 	+---<1>-<0>-<1>-<·>-+
-out-lit: 	+---<1>-<0>-<0>-<·>-+
-out-lit: 	+---<0>-<2>-<3>-<·>-+
-out-lit: 	+---<0>-<2>-<2>-<·>-+
-out-lit: 	+---<0>-<2>-<1>-<·>-+
-out-lit: 	+---<0>-<2>-<0>-<·>-+
-out-lit: 	+---<0>-<1>-<3>-<·>-+
-out-lit: 	+---<0>-<1>-<2>-<·>-+
-out-lit: 	+---<0>-<1>-<1>-<·>-+
-out-lit: 	+---<0>-<1>-<0>-<·>-+
-out-lit: 	+---<0>-<0>-<3>-<·>-+
-out-lit: 	+---<0>-<0>-<2>-<·>-+
-out-lit: 	+---<0>-<0>-<1>-<·>-+
-out-lit: 	+---<0>-<0>-<0>-<·>-+-
-out-lit: OnOff	:
-out-lit: 	+---<1>-<2>-<3>-<·>-+
-out-lit: 	+---<1>-<2>-<·>-+
-out-lit: 	+---<1>-<3>-<·>-+
-out-lit: 	+---<1>-<·>-+
-out-lit: 	+---<2>-<3>-<·>-+
-out-lit: 	+---<2>-<·>-+
-out-lit: 	+---<3>-<·>-+
-out-lit: 	+---<·>-+-
 return: 0
 END
 
 
-TEST "type sequence manipulation" TypeSeqManipl_test <<END
-out: LL	:-<1>-<2>-<3>-<7>-<8>-<9>-
-out: Seq	:-<1>-<2>-<3>-<7>-<8>-<9>-
-out: SeqList	:-<1>-<2>-<3>-<7>-<8>-<9>-
-out: NulS	:-
-out: Prepend1	:-<5>-<1>-<2>-<3>-
-out: Prepend2	:-<·>-<1>-<2>-<3>-
-out: Prepend3	:-<5>-
-out: Prepend4	:-
-out: Seq_0	:-<7>-<8>-<9>-<1>-<2>-<3>-
-out: Seq_1	:-<8>-<9>-<1>-<2>-<3>-
-out: Seq_2	:-<9>-<1>-<2>-<3>-
-out: Seq_3	:-<1>-<2>-<3>-
-out: Seq_4	:-<2>-<3>-
-out: Seq_5	:-<3>-
-out: Seq_6	:-
-out: Head_0	:-<7>-
-out: Head_1	:-<8>-
-out: Head_2	:-<9>-
-out: Head_3	:-<1>-
-out: Head_4	:-<2>-
-out: Head_5	:-<3>-
-out: Head_6	:-
-out: Seq	:-<1>-<2>-<3>-<7>-<8>-<9>-
-out: List	:-<1>-<2>-<3>-<7>-<8>-<9>-
-out: First	:-<1>-
-out: Tail	:-<2>-<3>-<7>-<8>-<9>-
-out: Prefix	:-<1>-<2>-<3>-<7>-<8>-
-out: Last	:-<9>-
-out: HeadEnd	:-<1>-<9>-
+TEST "type sequence manipulation" TypeSeqManip_test <<END
 return: 0
 END
 
 
-TEST "TypeTuple_test" TypeTuple_test <<END
+TEST "tuple value pre-binding closure" TupleClosure_test <<END
+return: 0
+END
+
+
+TEST "tuple metaprogramming helpers" TupleHelper_test <<END
 out-lit: L1	:-<1>-<3>-<5>-
 out-lit: L2	:-<2>-<4>-
 out-lit: L3	:-<7>-
-out-lit: Tup1	:TYPES-<>-<1>-<3>-<5>-
-out-lit: Tup1()	:...Tuple((1),(3),(5))
-out-lit: tup1x	:...Tuple({11},(3),(5))
-out-lit: Type1	:-<1>-<3>-<5>-
-out-lit: T_L1	:TYPES-[]-<1>-<3>-<5>-
-out-lit: T1	:TYPES-<>-<1>-<3>-<5>-
-out-lit: tup1	:...Tuple({8},(3),(5))
-out-lit: tup2	:...Tuple({9},(3),(5))
-out-lit: Prepend	:TYPES-[]-<i>-<1>-<3>-<5>-
-out-lit: prepend	:...Tuple(22,{9},(3),(5))
-out-lit: 	:
-out-lit: 	: ---Sub-Tuple-Types----
-out-lit: T_L2	:TYPES-[]-<2>-<4>-<1>-<3>-<5>-
-out-lit: Head	:-<2>-
-out-lit: Tail	:-<4>-<1>-<3>-<5>-
-out-lit: T2	:TYPES-<>-<2>-<4>-<1>-<3>-<5>-
-out-lit: Head2	:-<2>-
-out-lit: Tail2	:-<4>-<1>-<3>-<5>-
-out-lit: T2::Type	:-<2>-<4>-<1>-<3>-<5>-
-out-lit: T2::TailType	:-<4>-<1>-<3>-<5>-
-out-lit: T2::TupleType	:TYPES-<>-<2>-<4>-<1>-<3>-<5>-
-out-lit: T2::ThisType	:TYPES-<>-<2>-<4>-<1>-<3>-<5>-
-out-lit: T2::Tail	:TYPES-<>-<4>-<1>-<3>-<5>-
-out-lit: T2::ArgList	:-<2>-<4>-<1>-<3>-<5>-
-out-lit: T_L2::Type	:-<2>-<4>-<1>-<3>-<5>-
-out-lit: T_L2::TailType	:-<4>-<1>-<3>-<5>-
-out-lit: T_L2::TupleType	:TYPES-<>-<2>-<4>-<1>-<3>-<5>-
-out-lit: T_L2::ThisType	:TYPES-[]-<2>-<4>-<1>-<3>-<5>-
-out-lit: T_L2::Tail	:TYPES-[]-<4>-<1>-<3>-<5>-
-out-lit: T_L2::ArgList	:-<2>-<4>-<1>-<3>-<5>-
-out-lit: NulT::Type	:-
-out-lit: NulT::TailType	:-
-out-lit: NulT::TupleType	:TYPES-<>-
-out-lit: NulT::ThisType	:TYPES-<>-
-out-lit: NulT::Tail	:TYPES-<>-
-out-lit: NulT::ArgList	:-
-out-lit: NulL::Type	:-
-out-lit: NulL::TailType	:-
-out-lit: NulL::TupleType	:TYPES-<>-
-out-lit: NulL::ThisType	:TYPES-[]-
-out-lit: NulL::Tail	:TYPES-[]-
-out-lit: NulL::ArgList	:-
-out-lit: 	:
-out-lit: 	: ---Shifted-Tuple---
-out-lit: Ty_0	:-<2>-<4>-<7>-
-out-lit: Ty_1	:-<4>-<7>-
-out-lit: Ty_2	:-<7>-
-out-lit: Ty_3	:-
-out-lit: Ty_4	:-
-out-lit: T_0	:TYPES-[]-<2>-<4>-<7>-
-out-lit: T_1	:TYPES-[]-<4>-<7>-
-out-lit: T_2	:TYPES-[]-<7>-
-out-lit: T_3	:TYPES-[]-
-out-lit: T_4	:TYPES-[]-
-out-lit: tu3	:...Tuple((2),(4),(7))
-out-lit: tu3_0	:...Tuple((2),(4),(7))
-out-lit: tu3_1	:...Tuple((4),(7))
-out-lit: tu3_2	:...Tuple((7))
-out-lit: tu3_3	:...Tuple()
-out-lit: tu3_4	:...Tuple()
-out-lit: 	:
-out-lit: 	: ---creating-Tuples---
-out-lit: tup1	:...Tuple((1),(3),(5))
-out-lit: tup11	:...Tuple({11},(3),(5))
-out-lit: tup12	:...Tuple((1),{33},(5))
-out-lit: tup13	:...Tuple({11},{33},(5))
-out-lit: Tup2	:TYPES-<>-<i>-<i>-<11>-
-out-lit: tup2	:...Tuple(41,42,{43})
-out-lit: Tup22	:TYPES-<>-<i>-<11>-
-out-lit: tup22	:...Tuple(42,{43})
-out-lit: Tup222	:TYPES-<>-<11>-
-out-lit: tup222	:...Tuple({43})
-out-lit: T0T	:TYPES-<>-
-out-lit: T0L	:TYPES-[]-
-out-lit: nullT	:...Tuple()
-out-lit: nullL	:...Tuple()
-out-lit: nulTcpy	:...Tuple()
-out-lit: nulTref	:...Tuple()
-out-lit: 	:
-out-lit: 	: ---build-from-sub-Tuples---
-out-lit: T1357L	:TYPES-[]-<1>-<3>-<5>-<7>-
-out-lit: T1357T	:TYPES-<>-<1>-<3>-<5>-<7>-
-out-lit: T135L	:TYPES-[]-<1>-<3>-<5>-
-out-lit: T57T	:TYPES-<>-<5>-<7>-
-out-lit: T35T	:TYPES-<>-<3>-<5>-
-out-lit: sub135	:...Tuple((1),(3),(5))
-out-lit: b_135	:...Tuple((1),(3),(5),(7))
-out-lit: b_135	:...Tuple((1),(3),(5),(7))
-out-lit: b_135	:...Tuple((1),(3),(5),(7))
-out-lit: b_135	:...Tuple((1),(3),(5),(7))
-out-lit: sub57	:...Tuple((5),(7))
-out-lit: b_57	:...Tuple((1),(3),(5),(7))
-out-lit: sub35	:...Tuple({8},{8})
-out-lit: b_35	:...Tuple((1),{8},{8},(7))
-out-lit: b_35	:...Tuple((1),(3),(5),(7))
-out-lit: b_35	:...Tuple((1),(3),(5),(7))
-out-lit: sub78	:...Tuple({77},{88})
-out-lit: b_78	:...Tuple((1),(3),(5),{77})
-out-lit: b_nul	:...Tuple((1),(3),(5),(7))
-out-lit: b_nul	:...Tuple((1),(3),(5),(7))
-out-lit: b_nul2	:...Tuple()
-out-lit: b_nul2	:...Tuple()
-out-lit: 	:
-out-lit: 	: ---copy-operations---
-out-lit: tup1	:...Tuple({11},{33},(5))
-out-lit: tup11	:...Tuple({11},{33},{44})
-out-lit: tup1	:...Tuple({11},{33},{44})
-out-lit: tupL	:...Tuple({11},{33},{44})
-out-lit: tup1L	:...Tuple({11},{33},{44})
-out-lit: 	:
-out-lit: 	: ---value-access---
-out-lit: TupX	:TYPES-[]-<2>-<4>-<2>-<4>-
-out-lit: tupX	:...Tuple((2),(4),(2),(4))
-out-lit: tu2	:...Tuple((2),(4))
-out-lit: tu2	:...Tuple({5},{5})
-out-lit: tupX	:...Tuple((2),(4),{5},{5})
-out-lit: T4	:TYPES-<>-<2>-<4>-
-out-lit: t4	:...Tuple({5},{5})
-out-lit: TupX::Type	:-<2>-<4>-<2>-<4>-
-out-lit: TupX::TailType	:-<4>-<2>-<4>-
-out-lit: TupX::ThisType	:TYPES-[]-<2>-<4>-<2>-<4>-
-out-lit: TupX::TupleType	:TYPES-<>-<2>-<4>-<2>-<4>-
-out-lit: TupT::Type	:-<2>-<4>-<2>-<4>-
-out-lit: TupT::TailType	:-<4>-<2>-<4>-
-out-lit: TupT::ThisType	:TYPES-<>-<2>-<4>-<2>-<4>-
-out-lit: TupT::TupleType	:TYPES-<>-<2>-<4>-<2>-<4>-
-out-lit: tupXcopy	:...Tuple((2),(4),{5},{5})
-out-lit: tupXcast	:...Tuple((2),(4),{5},{5})
+out-lit: Tup1	:TUPLE-<1>-<3>-<5>-
+out-lit: Tup1()	:«tuple<Num<1>, Num<3>, Num<5> >»──((1),(3),(5))
+out-lit: tup1x	:«tuple<Num<1>, Num<3>, Num<5> >»──({11},(3),{55})
+out-lit: «tuple<Num<1>, Num<3>, Num<5> >»──((1),(3),(5))
+out-lit: «tuple<int, Num<1>, Num<3>, Num<5> >»──(22,{11},{33},(5))
+out-lit: «tuple<>»──()
+out: sizeof. tuple<Num<1>, Num<3>, Num<5> > . =  12
+out: sizeof. tuple<int, Num<1>, Num<3>, Num<5> > . =  16
+out-lit: sizeof( tuple<> )                       =   1
+out-lit: sizeof( tuple<> )                       =   1
+return: 0
+END
+
+
+TEST "tuple initialisation from GenNode" TupleRecordInit_test <<END
+out: Rec...GenNode.+DataCap.«string».lalü, GenNode.+DataCap.«int».42
+out: Rec...GenNode.+DataCap.«string».lalü, GenNode.+DataCap.«string».lala, GenNode.+DataCap.«int».12, GenNode.+DataCap.«int».34, GenNode.+DataCap.«double».5.6, GenNode.+DataCap.«Time».0:09:08.007
+out-lit: «tuple<string, int>»──(lalü,42)
+out-lit: «tuple<idi::EntryID<long>, Symbol, int, long, double, Duration>»──(ID<long>-lal,lala,12,34,5.6,≺548s7ms≻)
+return: 0
+END
+
+
+TEST "variadic type manipulations" VariadicHelper_test <<END
+return: 0
+END
+
+
+TEST "variadic argument manipulation" VariadicArgumentPicker_test <<END
+out:  4╎N<1>──.─┼N<2>──.─┼N<3>──.─┼N<3>──.─┤
+out:  4╎N<0>──.─┼N<1>──.─┼N<2>──.─┼N<3>──.─┤
+out:  4╎N<3>──.─┼N<2>──.─┼N<1>──.─┼N<0>──.─┤
+out:  2╎N<1>──.─┼N<0>──.─┤
+out:  2╎N<2>──.─┼N<3>──.─┤
 return: 0
 END
 
@@ -666,6 +441,11 @@ END
 
 
 TEST "Type-based contexts" TypedCounter_test <<END
+return: 0
+END
+
+
+TEST "Type-based family member IDs" TypedFamilyMemberID_test <<END
 return: 0
 END
 
@@ -767,6 +547,7 @@ out: :0:1$
 out: :0:1:2:3:4:5
 out: :0$
 out: :0:1$
+return: 0
 END
 
 

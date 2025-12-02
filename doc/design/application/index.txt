@@ -1,8 +1,10 @@
 Design Documents: Application Framework
 =======================================
 
+// Menu :  prepend child ApplicationStart
+
  * link:Config.html[Configuration]
  * link:plugin_loader.html[Plugin Loader]
- * link:SubsystemLifecycle.html[Application Subsystems and Lifecycle]
+ * link:ApplicationStart.html[Application Subsystems and Lifecycle]
 
 

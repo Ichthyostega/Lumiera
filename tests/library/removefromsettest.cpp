@@ -1,38 +1,34 @@
 /*
   RemoveFromSet(Test)  -  algorithm removing predicated elements from set
 
-  Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2008,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file removefromsettest.cpp
+ ** unit test \ref RemoveFromSet_test
+ */
 
 
 #include "lib/test/run.hpp"
 #include "lib/util-foreach.hpp"
+#include "lib/format-cout.hpp"
+#include "lib/format-util.hpp"
 
 #include <boost/lexical_cast.hpp>
 #include <functional>
-#include <iostream>
 #include <string>
 #include <set>
 
-using std::cout;
-using std::string;
+using util::join;
 using std::function;
+using std::string;
 
 
 
@@ -45,18 +41,18 @@ namespace test {
   
   using IntSet = std::set<uint>;
   
-  void 
+  void
   show (IntSet const& coll)
   {
-    cout << "[ ";
-    for_each (coll, [](uint elm) { cout << elm << ", "; });
-    cout << "]\n";
+    cout << "[ "
+         << join (coll)
+         << " ]" <<endl;
   }
   
   function<bool(uint)>
-  select_match (string description) 
+  select_match (string description)
   {
-    return [&](uint candidate) 
+    return [&](uint candidate)
             {
               return string::npos != description.find( lexical_cast<string> (candidate));
             };

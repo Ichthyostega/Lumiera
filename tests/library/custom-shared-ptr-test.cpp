@@ -1,24 +1,19 @@
 /*
   CustomSharedPtr(Test)  -  ref counting, equality and comparisons
 
-  Copyright (C)         Lumiera.org
-    2008, 2010,         Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2008, 2010,      Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file custom-shared-ptr-test.cpp
+ ** unit test \ref CustomSharedPtr_test
+ */
 
 
 #include "lib/test/run.hpp"
@@ -26,8 +21,6 @@
 #include "lib/util.hpp"
 
 #include "lib/p.hpp"
-
-#include <boost/operators.hpp>
 
 
 
@@ -42,15 +35,13 @@ namespace test{
   
   
   struct X
-    : boost::totally_ordered<X>
     {
       long x_;
       
-      X(long x=0)  : x_(x) {}
+      explicit X(long x=0) : x_(x) {}
       operator long () { return x_; }
       
-      bool operator<  (const X& ox)  const { return x_ <  ox.x_; }
-      bool operator== (const X& ox)  const { return x_ == ox.x_; }
+      std::strong_ordering operator<=>(X const&) const = default;
       
       virtual ~X() {} // using RTTI
     };
@@ -141,7 +132,7 @@ namespace test{
           CHECK (0 == pX.use_count());
           CHECK (4 == pX2.use_count());
           
-          P<X, P<X> > pXX (pX2);  // a different type, but compatible pointers
+          P<X, P<X>> pXX (pX2);  // a different type, but compatible pointers
           pX2 = pX;
           CHECK (!pX2);
           CHECK (0 == pX2.use_count());
@@ -166,27 +157,14 @@ namespace test{
       void
       check_ownership_transfer ()
         {
-          std::auto_ptr<X> au (new X(23));
-          CHECK (au.get());
+          std::unique_ptr<X> up (new X(23));
+          CHECK (up.get());
           
-          P<X> pX (std::move(au));
-          CHECK (!au.get());
+          P<X> pX (std::move(up));
+          CHECK (!up.get());
           CHECK (pX);
           CHECK (1 == pX.use_count());
           CHECK (23 == pX->x_);
-          
-          au.reset (new X(21));
-          CHECK (au.get());
-          
-          pX.reset();
-          CHECK (!pX);
-          CHECK (0 == pX.use_count());
-          
-          pX = std::move(au);
-          CHECK (!au.get());
-          CHECK (pX);
-          CHECK (1 == pX.use_count());
-          CHECK (21 == pX->x_);
         }
       
       
@@ -194,13 +172,13 @@ namespace test{
       void
       check_type_relations ()
         {
-          P<X> pX;                    // Base: shared_ptr<X>
-          P<XX> pX1;                  // Base: shared_ptr<XX>
-          P<XX,P<X> > pX2;            // Base: P<X>
-          P<XX,shared_ptr<X> > pX3;   // Base: shared_ptr<X>
-          P<XX,shared_ptr<long> > pLo;// Base: shared_ptr<long>       (rather nonsense, but well...)
-          P<X,string> pLoL;           // Base: std::string
-          P<string> pLoLoL;           // Base: shared_ptr<string>
+          P<X> pX;                   // Base: shared_ptr<X>
+          P<XX> pX1;                 // Base: shared_ptr<XX>
+          P<XX,P<X>> pX2;            // Base: P<X>
+          P<XX,shared_ptr<X>> pX3;   // Base: shared_ptr<X>
+          P<XX,shared_ptr<long>> pLo;// Base: shared_ptr<long>       (rather nonsense, but well...)
+          P<X,string> pLoL;          // Base: std::string
+          P<string> pLoLoL;          // Base: shared_ptr<string>
           
           CHECK (INSTANCEOF (shared_ptr<X>, &pX));
           

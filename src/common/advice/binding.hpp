@@ -1,36 +1,27 @@
 /*
   BINDING.hpp  -  pattern defining a specific attachment to the Advice system
 
-  Copyright (C)         Lumiera.org
-    2010,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2010,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
 
 
-/** @file binding.hpp
+/** @file advice/binding.hpp
  ** A pattern to define and identify a specific attachment to the Advice system.
  ** This pattern is comprised of a predicate list and intended to be matched or unified
  ** against a similar pattern associated with the attachment of a possible collaboration partner.
- ** Semantically, this list of atoms forms an conjunction of predicates to be resolved against 
+ ** Semantically, this list of atoms forms an conjunction of predicates to be resolved against
  ** similar predicates of the partner. Informally, when two entities attach to the Advice system,
  ** each specifying a binding, they can be paired up if any condition included into the binding
  ** holds true for both sides.
  ** 
- ** Typically, a binding includes a \em type-guard predicate \c advice.type.xx where \c xx is an 
+ ** Typically, a binding includes a _type-guard predicate_ `advice.type.xx` where `xx` is an
  ** identifier denoting a type used within an instantiation of the Advice collaboration, i.e. a type
  ** used as advice value in a instantiation of the PointOfAdvice<AD> template. Besides the type guard,
  ** a binding may narrow down the topic of the advice by providing further predicates. This allows for
@@ -41,7 +32,7 @@
  ** the advice type, and another client entity (the advised entity) could pick up this value
  ** without the need to now anything about the advisor.
  ** 
- ** \par implementation notes
+ ** # implementation notes
  ** Any binding will be normalised prior to further processing. This normalisation is based
  ** on ordering by predicate symbol and arity. Patterns just comprised of constant symbols
  ** (nullary atoms) can even be condensed into a single hash value, which allows for fast
@@ -56,10 +47,10 @@
  ** functor, the full pattern definition can be discarded.
  ** 
  ** @remarks while binding is defined in the context of the advice system for now,
- **       obviously this is the foundation of a more generic system to deal with predicate terms. 
+ **       obviously this is the foundation of a more generic system to deal with predicate terms.
  ** @note as of 4/2010 this is an experimental setup and implemented just enough to work out
  **       the interfaces. Ichthyo expects this collaboration service to play a central role
- **       at various places within proc-layer.
+ **       at various places within steam-layer.
  ** @todo for now, \em only the case of a completely constant (ground) pattern is implemented.
  **       Later we may consider to extend the binding patterns to allow variables, which, on match
  **       could be fed as parameters to the bound advice. But this extension requires to extend
@@ -80,9 +71,9 @@
 #include "lib/hash-value.h"
 #include "lib/query-util.hpp"
 
-#include <iostream>
 #include <string>
 #include <set>
+
 
 namespace lumiera{
 namespace advice {
@@ -134,8 +125,8 @@ namespace advice {
           identical (Atom const& oa)  const
             {
               return ari_ == oa.ari_
-                  && sym_ == oa.sym_
-                  && arg_ == oa.arg_;
+                 and sym_ == oa.sym_
+                 and arg_ == oa.arg_;
             }
           
           int
@@ -150,7 +141,7 @@ namespace advice {
           friend bool
           operator< (Atom const& a1, Atom const& a2)
           {
-            return a1.compare(a2) < 0; 
+            return a1.compare(a2) < 0;
           }
         };
       
@@ -220,12 +211,6 @@ namespace advice {
       void parse_and_append (Literal def);
     };
   
-  
-  inline std::ostream&
-  operator<< (std::ostream& os, Binding const& bi)
-  {
-    return os << string(bi);
-  }
   
   template<typename TY>
   inline Binding const&

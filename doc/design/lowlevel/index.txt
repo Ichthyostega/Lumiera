@@ -1,0 +1,16 @@
+Design Documents: Vault
+=======================
+
+What follows is a summary of Lumiera's *Data Handling Backend*
+
+This is the foundation layer responsible for any high performance or high volume
+data access. Within Lumiera, there are two main kinds of data handling:
+
+* The Session and the object models manipulated through the GUI are kept in memory.
+  They are backed by a _storage backend,_ which provides database-like storage and
+  especially logging, replaying and ``Undo'' of all ongoing modifications..
+* Media data is handled _frame wise_ -- prefetching data asynchronously.
+
+The goal is to optimize CPU utilization; large scale data IO will be performed
+asynchronously. Data retrieval and processing of prerequisites will
+be *scheduled* such as to manage the rendering _just in time_.

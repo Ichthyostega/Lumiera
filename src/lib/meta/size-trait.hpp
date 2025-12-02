@@ -1,24 +1,39 @@
 /*
   SIZE-TRAIT.hpp  -  helpers and definitions to deal with the size of some known types
 
-  Copyright (C)         Lumiera.org
-    2011,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2011,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
+
+
+/** @file size-trait.hpp
+ ** Metaprogramming definitions to deal with dependency on implementation size and layout.
+ ** Sometimes we need to build our code based on very specific assumptions regarding the
+ ** implementation data layout of library classes we rely on. Typically such happens when
+ ** we're forced to work around limitations the library provider never intended to be relevant
+ ** for any client. Which places us into the very unfortunate situation either to abandon some
+ ** design concept we prefer to use for some other relevant reason, or to do something very
+ ** evil and nasty (namely to rely on magic numbers, which may break silently when the
+ ** library provider changes implementation).
+ ** 
+ ** While this situation can not be solved in principle, at least we may concentrate all
+ ** these nasty dependencies in a single location. Moreover, we can deal with this situation
+ ** by constructing our _magic numbers_ at least in a systematic way, which allows us to
+ ** intersperse static assertions to trigger an alarm when adjustments need to be made.
+ ** 
+ ** \par typical example
+ ** A prominent example is boost::format, which causes a lot of code size bloat when used
+ ** liberally. For that reason, we built a front-end to encapsulate the boost implementation,
+ ** so any typed flavour of any call needs to be instantiated only once per application.
+ ** This allows us to use type safe formatting in error messages, but unfortunately forces
+ ** us to rely on the precise size of the boost::format implementation.
+ */
 
 
 #ifndef LIB_META_SIZE_TRAIT_H
@@ -82,15 +97,15 @@ namespace meta {
           T    m_storage_;
         };
       
-      enum IOS_Openmode 
-        { 
+      enum IOS_Openmode
+        {
           _S_app        = 1L << 0,
           _S_ate        = 1L << 1,
           _S_bin        = 1L << 2,
           _S_in         = 1L << 3,
           _S_out        = 1L << 4,
           _S_trunc      = 1L << 5,
-          _S_ios_openmode_end = 1L << 16 
+          _S_ios_openmode_end = 1L << 16
         };      
       
       struct BasicStringbuf
@@ -123,16 +138,16 @@ namespace meta {
           int     style_;
           int     cur_arg_;
           int     num_args_;
-          mutable bool   dumped_;
+          mutable bool  dumped_;
           std::string   prefix_;
           unsigned char exceptions;
           BasicAltstringbuf buf_;
-          Optional<Locale> loc_;
+          Optional<Locale>  loc_;
         };
       //-------------------------------------mimicked-definitions--
       
       
-    public:/* ===== Interface: size constants ===== */ 
+    public:/* ===== Interface: size constants ===== */
       
       enum { ALIGNMENT       = sizeof(size_t)
            

@@ -1,37 +1,31 @@
 /*
   SearchPathSplitter(Test)  -  iterating a search path specification
 
-  Copyright (C)         Lumiera.org
-    2011,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2011,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file search-path-splitter-test.cpp
+ ** unit test \ref SearchPathSplitter_test
+ */
 
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
+#include "lib/format-cout.hpp"
+#include "lib/file.hpp"
+#include "lib/util.hpp"
 
 #include "lib/searchpath.hpp"
 
-#include <iostream>
 
-using std::cout;
-using std::endl;
-
-
+using util::isnil;
 
 namespace lib {
 namespace test {
@@ -61,20 +55,21 @@ namespace test {
           walk ("a:");
           walk (":a");
           walk ("a:b");
-          walk (":a:b:c:");
-          walk (" d : e f");
+          walk (":a:b\n:c:");
+          walk (" d : e f ");
           walk ("/usr/bin:/usr/lib");
           
-          SearchPathSplitter sp("");
-          VERIFY_ERROR (ITER_EXHAUST, sp.next() );
+          SearchPathSplitter sp{};
+          CHECK (not sp);
+          VERIFY_ERROR (ITER_EXHAUST, *sp );
         }
       
       void
       walk (string spec)
         {
-          SearchPathSplitter path(spec);
-          while (path)
-            cout << "➢➢" << path.next() << endl;
+          SearchPathSplitter path{spec};
+          for (auto const& pathElm : path)
+            cout <<"▶"<< pathElm <<"◀"<< endl;
         }
       
       
@@ -82,14 +77,18 @@ namespace test {
       void
       resolveEmbeddedOriginToken ()
         {
-          fsys::path exePath (findExePath());
-          string expected = (exePath.remove_leaf() / "modules").string();
+          fs::path exePath{findExePath()};
+          string expected{exePath.parent_path() / "modules"};
           
-          SearchPathSplitter sp("xyz:$ORIGIN/modules:abc");
-          CHECK ("xyz" == sp.next());
-          CHECK (sp.next() == expected);
-          CHECK ("abc" == sp.next());
-          CHECK (!sp.isValid());
+          string searchSpec = "xyz:$ORIGIN/modules:abc";
+          SearchPathSplitter sp{searchSpec};
+          CHECK (*sp == "xyz"_expect);
+          ++sp;
+          CHECK (*sp == ExpectString{expected});
+          ++sp;
+          CHECK (*sp == "abc"_expect);
+          ++sp;
+          CHECK (isnil (sp));
         }
     };
   

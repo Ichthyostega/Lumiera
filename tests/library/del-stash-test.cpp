@@ -1,39 +1,28 @@
 /*
   DelStash(Test)  -  verify a facility to memorise and trigger deleter functions
 
-  Copyright (C)         Lumiera.org
-    2010,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2010,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file del-stash-test.cpp
+ ** unit test \ref DelStash_test
+ */
 
 
 #include "lib/test/run.hpp"
 #include "lib/del-stash.hpp"
 
-#include <cstdlib>
-
 
 
 namespace lib {
 namespace test{
-  
-  using std::rand;
-  
-  
   
   namespace { // probe victims
     
@@ -55,7 +44,7 @@ namespace test{
             REQUIRE (siz);
             for (uint i=0; i<siz; ++i)
               {
-                char c (rand() % 256);
+                char c (rani(256));
                 checksum += c;
                 myCrap_[i] = c;
               }
@@ -106,7 +95,9 @@ namespace test{
       virtual void
       run (Arg)
         {
+          seedRand();
           checksum = 0;
+          
           checkSingleKill();
           checkCustomKill();
           checkMassKill();
@@ -130,7 +121,7 @@ namespace test{
           
           killer.manage (p);
           killer.manage (r);
-          killer.manage<Probe<9> > (v);
+          killer.manage (static_cast<Probe<9>*> (v));
           
           CHECK (3 == killer.size());
           
@@ -209,7 +200,7 @@ namespace test{
       
       
       /** @test use a custom-provided
-       *        deleter function 
+       *        deleter function
        */
       void
       checkCustomKill ()
@@ -221,7 +212,7 @@ namespace test{
            *  bound to mess up the checksum,
            *  unless the random bias is removed
            *  by the custom deleter function
-           */ 
+           */
           class Special
             : Probe<555>
             {
@@ -230,7 +221,7 @@ namespace test{
             public:
               Special()
                 : Probe<555>()
-                , secret_('a' + (rand() % (1+'z'-'a')))
+                , secret_('a' + rani('z'-'a' +1))
                 {
                   checksum += secret_;
                 }

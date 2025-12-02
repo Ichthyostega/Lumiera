@@ -1,24 +1,15 @@
 /*
   Generator(Test)  -  build an interface + implementation directed by a typelis
 
-  Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2008,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+* *****************************************************************/
 
 
 /** @file generator-test.cpp
@@ -47,6 +38,13 @@
 using util::_Fmt;
 using std::string;
 using std::cout;
+
+// GCC > 13 warns at class definition when a new overload shadows an inherited virtual function.
+// While theoretically correct, this warning is besides the point when an interface is assembled
+// by metaprogramming from a chain of template instantiations, driven by a type list
+// See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=109740
+_Pragma("GCC diagnostic push") \
+_Pragma("GCC diagnostic ignored \"-Woverloaded-virtual\"")
 
 
 namespace lib  {
@@ -90,13 +88,13 @@ namespace test {
       using BASE::eat; // prevent shadowing
     };
   
-  typedef Types< Block<1>
-               , Block<2>
-               , Block<3>
-               , Block<5>
-               , Block<8>
-               , Block<13>
-               >::List TheTypes;
+  using TheTypes = Types< Block<1>
+                        , Block<2>
+                        , Block<3>
+                        , Block<5>
+                        , Block<8>
+                        , Block<13>
+                        >::List;
   
   typedef InstantiateForEach<TheTypes,TakeIt>  TheInterface;
   
@@ -131,7 +129,7 @@ namespace test {
           me_can_has_more_numberz.eat (b2);
           me_can_has_more_numberz.eat (b5);
           
-          TakeIt<Block<13> >& subInterface = me_can_has_more_numberz;
+          TakeIt<Block<13>>& subInterface = me_can_has_more_numberz;
           
           subInterface.eat (b13);
           me_can_has_more_numberz.eat();

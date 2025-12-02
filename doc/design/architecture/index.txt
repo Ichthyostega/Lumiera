@@ -1,12 +1,23 @@
 Design Documents: Lumiera Architecture
 ======================================
 
+// Menu :  sort children
+// Menu :  prepend child Subsystems
+// Menu :  prepend child ArchitectureSummary
+
+
 This section will feature some rather high-level considerations regarding
 the architecture of the application.
 
 .Executive Summary
 See link:ArchitectureSummary.html[here] for a short summary of the core architecture
 ideas of the envisioned Lumiera Application.
+
+.Time and Time-code
+link:time/[Handling of time values] and link:time/TimeCode.html[Time Code] is
+essential for an editing application and requires some forethought to avoid
+some of the common inconsistencies and pitfalls; precision can be a challenge,
+given the extremely large range of time scales to cover.
 
 .Rendering and Playback Control
 This part of the architecture is concened with how to initiate, coordinate and control
@@ -15,6 +26,6 @@ media. This design is _not so much_ concerned with the actual calculations; inde
 takes on an ``bird eye's view'', treating the actual render engine mostly just as an
 opaque entity providing some service.
 
--> link:playRender.html[Design: Playback and Rendering]
+-> link:Playback.html[Design: Playback and Rendering]
 
 

@@ -1,24 +1,19 @@
 /*
   TimeControl(Test)  -  mutating time entities with life connection and feedback
 
-  Copyright (C)         Lumiera.org
-    2011,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2011,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+/** @file time-control-test.cpp
+ ** unit test \ref TimeControl_test
+ */
 
 
 #include "lib/test/run.hpp"
@@ -28,21 +23,18 @@
 #include "lib/time/control.hpp"
 
 #include "lib/meta/generator-combinations.hpp"
-#include "proc/asset/meta/time-grid.hpp"
-#include "lib/scoped-holder.hpp"
-#include "lib/meta/util.hpp"
+#include "steam/asset/meta/time-grid.hpp"
+#include "lib/item-wrapper.hpp"
+#include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
 #include <boost/lexical_cast.hpp>
-#include <iostream>
 #include <string>
 #include <limits>
 
-using lib::test::showType;
 using boost::lexical_cast;
+using util::typeStr;
 using util::isnil;
-using std::cout;
-using std::endl;
 using std::string;
 
 
@@ -52,11 +44,11 @@ namespace test{
   
   namespace error = lumiera::error;
   
-  using lib::ScopedHolder;
-  using proc::asset::meta::TimeGrid;
+  using lib::wrapper::ItemWrapper;
+  using steam::asset::meta::TimeGrid;
   using lib::meta::Types;
   using lib::meta::InstantiateChainedCombinations;
-  using error::LUMIERA_ERROR_UNCONNECTED;
+  using LERR_(UNCONNECTED);
   
   
   
@@ -80,27 +72,24 @@ namespace test{
      */
     template<class TI>
     class TestListener
-      : boost::noncopyable
+      : util::NonCopyable
       {
         mutable
-        ScopedHolder<TI> received_;
+        ItemWrapper<TI> received_;
         
       public:
         TestListener()
-          { 
-            received_.create (Time::ZERO); 
-          }
+          : received_{TI{Time::ZERO}}
+          { }
         
         TestListener(TI const& initialValue)
-          { 
-            received_.create (initialValue);
-          }
+          : received_{initialValue}
+          { }
         
         void
         operator() (TI const& changeValue)  const
           {
-            received_.clear();
-            received_.create (changeValue);
+            received_ = changeValue;
           }
         
         TI const&
@@ -131,22 +120,24 @@ namespace test{
    */
   class TimeControl_test : public Test
     {
-      gavl_time_t
+      raw_time_64
       random_or_get (string arg)
         {
           if (isnil(arg))
-            return gavl_time_t (1 + (rand() % 100000)) * GAVL_TIME_SCALE;
+            return raw_time_64(1 + rani (100000)) * TimeValue::SCALE;
           else
-            return lexical_cast<gavl_time_t> (arg);
+            return lexical_cast<raw_time_64> (arg);
         }
       
       
       virtual void
       run (Arg arg) 
         {
+          if (isnil(arg))
+            seedRand();
           TimeValue o (random_or_get (pop(arg)));
           TimeValue c (random_or_get (pop(arg)));
-          CHECK (c!=Time::ZERO && o != c, "unsuitable testdata");
+          CHECK (c!=Time::ZERO and o != c, "unsuitable testdata");
           
           // 25fps-grid, but with an time origin offset by 1/50sec
           TimeGrid::build("test_grid_PAL", FrameRate::PAL, Time(FSecs(1,50)));
@@ -195,20 +186,19 @@ namespace test{
   
   namespace { // Implementation: Matrix of individual test combinations
     
-    using lib::meta::is_sameType;
     
     template<class T>
     inline bool
     isDuration()
       {
-        return is_sameType<T,Duration>::value;
+        return std::is_same<T,Duration>::value;
       }
     
     template<class T>
     inline bool
     isQuTime()
       {
-        return is_sameType<T,QuTime>::value;
+        return std::is_same<T,QuTime>::value;
       }
     
     template<class T>
@@ -356,14 +346,14 @@ namespace test{
     void
     ____verify_nudged (TAR const& target, TAR const& refState, FrameCnt offsetSteps)
     {
-      CHECK (target != refState  || !offsetSteps);
+      CHECK (target != refState  or not offsetSteps);
       CHECK (target == Time(refState)+Time(FSecs(offsetSteps)));
     }
     template<>
     void
     ____verify_nudged (QuTime const& target, QuTime const& refState, FrameCnt offsetSteps)
     {
-      CHECK (target != refState  || !offsetSteps);
+      CHECK (target != refState  or not offsetSteps);
       CHECK (target == Time (materialise(refState))
                      + Offset(offsetSteps, FrameRate::PAL));
     }
@@ -376,7 +366,7 @@ namespace test{
       if (isDuration<SRC>())
         {
           CHECK (materialise(target) == follower.receivedValue()
-                 ||    Duration::NIL == follower.receivedValue() );
+                 or    Duration::NIL == follower.receivedValue() );
         }
       else
       if (isQuTime<TAR>())
@@ -418,8 +408,8 @@ namespace test{
         void
         performTestSequence(TimeValue const& org, TimeValue const& c)
           {
-            cout << "Test-Case. Target=" << showType<TAR>() 
-                 << "\t <--feed--- "     << showType<SRC>() 
+            cout << "Test-Case. Target=" << typeStr<TAR>()
+                 << "\t <--feed--- "     << typeStr<SRC>()
                  << endl;
             
             // test subject
@@ -485,12 +475,12 @@ namespace test{
   void
   TimeControl_test::verifyMatrix_of_MutationCases (TimeValue const& origVal, TimeValue const& change)
   {
-    typedef Types<Duration,TimeSpan,QuTime>                KindsOfTarget;  // time entities to receive value changes
-    typedef Types<TimeValue,Time,Duration,TimeSpan,QuTime> KindsOfSource;  // time entities to be used as change values
-    typedef InstantiateChainedCombinations< KindsOfTarget
-                                          , KindsOfSource
-                                          , TestCase                       // template to be instantiated for each type
-                                          , IterationEnd > TestMatrix;
+    using KindsOfTarget = Types<Duration,TimeSpan,QuTime>               ;  // time entities to receive value changes
+    using KindsOfSource = Types<TimeValue,Time,Duration,TimeSpan,QuTime>;  // time entities to be used as change values
+    using TestMatrix    = InstantiateChainedCombinations< KindsOfTarget
+                                                        , KindsOfSource
+                                                        , TestCase         // template to be instantiated for each type
+                                                        , IterationEnd >;
     
     TestMatrix().performTestSequence(origVal, change);
   }

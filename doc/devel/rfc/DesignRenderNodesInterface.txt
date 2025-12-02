@@ -1,17 +1,18 @@
-[grid="all"]
-`------------`-----------------------
-*State*         _Parked_
-*Date*          _2008-03-06_
-*Proposed by*   link:Ichthyostega[]
--------------------------------------
+[options="autowidth"]
+|====================================
+|*State*       | _Parked_
+|*Date*        | _2008-03-06_
+|*Proposed by* | Ichthyostega
+|====================================
 
 
 Design the Render Nodes interface
 ---------------------------------
-In the current design, the low-level model is comprised of "Render Nodes";
-Proc-Layer and Backend carry out some colaboration based on this node network.
- +
+In the current design, the low-level model is comprised of ``Render Nodes'';
+Steam-Layer and Vault carry out some collaboration based on this node network.
+
 Three different interfaces can be identified
+
  * the node wiring interface
  * the node invocation interface
  * the processing function interface
@@ -19,26 +20,26 @@ Three different interfaces can be identified
 
 Description
 ~~~~~~~~~~~
-Render Nodes are created and wired by the Builder in the Proc-Layer. On the
-other hand, the rendering process is controlled by the backend, which also
+Render Nodes are created and wired by the Builder in the Steam-Layer. On the
+other hand, the rendering process is controlled by the vault layer, which also
 provides the implementation for the individual data processing tasks. To create
-a result, output nodes are ''pulled'' via the invocation interface, resulting
+a result, output nodes are _pulled_ via the invocation interface, resulting
 in the affected nodes to recursively pull their predecessor(s). In the course
 of this call sequence, the nodes activate their processing function to work on
 a given set of buffers. Moreover, we plan to use the render network also for
 gathering statistics.
 
-'''Note''': Render Node is an internal interface used by Proc-Layer and
-   activated by the Backend. Plugins are planned to be added via Adapter nodes.
-   Thus the Render Node interface needs ''not'' to be exported.
+NOTE: Render Node is an internal interface used by Steam-Layer and
+      activated by the Vault. Plugins are planned to be added via Adaptor nodes.
+      Thus the Render Node interface needs _not_ to be exported.
 
 
 the wiring interface
 ^^^^^^^^^^^^^^^^^^^^
 This part of the design defines how nodes can be combined and wired up by the
 builder to form a network usable for rendering. For this purpose, the
-link:ProcNode[] is used as a shell / container, which is then configured by a
-const WiringDescriptor. Thus, the node gets to know its predecessor(s) and is
+`ProcNode' is used as a shell / container, which is then configured by a
+Connectivity descriptor. Thus, the node gets to know its predecessor(s) and is
 preselected to use a combination of specific working modes:
 
  * participate in caching
@@ -59,32 +60,32 @@ corner case.
 
 the invocation interface
 ^^^^^^^^^^^^^^^^^^^^^^^^
-this is intended to be a rather simple "call-style" interface, without much
-possibilites to influence the way things are happening. You pull a node and
+this is intended to be a rather simple ``call-style'' interface, without much
+possibilities to influence the way things are happening. You pull a node and
 will find the results in a provided buffer or the cache, but you can't even
 change the frame data type type of the result. Besides the node invocation,
 functions for collecting statistics will be accessible here too (Probably these
-functions will be ''implemented'' in a classic-OO fashion by virtual functions,
+functions will be _implemented_ in a classic-OO fashion by virtual functions,
 but that's another story)
 
 
 the processing interface
 ^^^^^^^^^^^^^^^^^^^^^^^^
-the individual nodes are configured to call a plain-C {{{process()}}} function
+the individual nodes are configured to call a plain-C `process()` function
 and provide an array of buffer pointers to be used within this function. For
 the purpose of invoking actual data processing, it is irrelevant if this
-function is implemented somewhere in the backend or provided by a plugin. At
-this point, no type- and other meta-information is passed, rather the
+function is implemented somewhere in the vault layer or provided by a plugin.
+At this point, no type- and other meta-information is passed, rather the
 processing function is supposed to do The Right Thing ^TM^
 
 
 
 Tasks
 ^^^^^
- * What services do we expect from Render Nodes. What do we plan to do with a
+ * What services do we expect from Render Nodes? What do we plan to do with a
    render node?
  * What different kinds (if any) of Render Nodes can be foreseen?
- * order the required functionality by Proc / Backend. Find out specific
+ * order the required functionality by Steam / Vault. Find out specific
    implementation constraints.
  * work out a design based on this informations
 
@@ -98,14 +99,14 @@ Tasks
 
 Rationale
 ~~~~~~~~~
-The purpose of this Design Entry is to give a summary; the questions and the
+The purpose of this Design Entry is to give a summary and to spur the discussion
+regarding the responsibilities of Steam vs Vault; the questions and the
 details of carrying out the operations are much more involved.
- +
+
 Please see the
-http://www.lumiera.org/wiki/renderengine.html#Rendering[Proc-Layer impl
-documentation (TiddlyWiki)] and the
-http://www.lumiera.org/gitweb?p=lumiera/ichthyo;a=blob;f=src/proc/engine/procnod
-.hpp;h=9cf3a2ea8c33091d0ee992ec0fc8f37bb5874d34;hb=refs/heads/proc[Source Code]
+link/wiki/renderengine.html#Rendering[Development internal doc (TiddlyWiki)]
+and the
+https://git.lumiera.org/?p=LUMIERA;a=blob;f=src/proc/engine/procnode.hpp;h=9cf3a2ea8c33091d0ee992ec0fc8f37bb5874d34;hb=f9452f654cf39a4abbbeecfd81bef51aa347b321[Draft: ProcNode (src)]
 for details
 (and/or contact Ichthyo for in-depth discussion of those technical details)
 
@@ -114,15 +115,12 @@ for details
 
 
 
-Comments
---------
-
-
 Parked
 ~~~~~~
 We park this until we have time to revisit the details. It is accepted that we
 need to design this interfaces.
 
-    Do 14 Apr 2011 03:06:42 CEST Christian Thaeter
+Christian Thaeter:: 'Thu 14 Apr 2011 03:06:42 CEST' 
 
-Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
+''''
+Back to link:/x/DesignProcess.html[Lumiera Design Process overview]

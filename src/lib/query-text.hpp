@@ -1,22 +1,13 @@
 /*
   QUERY-TEXT.hpp  -  syntactical standard representation for queries
 
-  Copyright (C)         Lumiera.org
-    2012,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2012,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
 
@@ -86,6 +77,7 @@ namespace lib {
           return definition_;
         }
       
+      auto operator<=> (QueryText const&) const  =default;
       
       bool
       empty()  const
@@ -114,19 +106,6 @@ namespace lib {
       
     private:
       string normalise (string const& rawDefinition);
-      
-            
-      friend bool
-      operator== (QueryText const& q1, QueryText const& q2)
-      {
-        return q1.definition_ == q2.definition_;
-      }
-      friend bool
-      operator<  (QueryText const& q1, QueryText const& q2)
-      {
-        return q1.definition_ < q2.definition_;
-      }
-      
       friend HashVal hash_value (QueryText const& entry);
     };
   

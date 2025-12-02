@@ -1,56 +1,55 @@
 /*
   Timecode  -  implementation of fixed grid aligned time specifications
 
-  Copyright (C)         Lumiera.org
-    2010,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2010,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-* *****************************************************/
+/** @file timecode.cpp
+ ** Implementation parts of the timecode handling library.
+ ** @todo a started implementation exists since 2010,
+ **       yet crucial parts still need to be filled in as of 2016
+ */
 
 
 #include "lib/time/timecode.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/time/timequant.hpp"
 #include "lib/time/formats.hpp"
-#include "lib/time.h"
 #include "lib/util.hpp"
 #include "lib/util-quant.hpp"
 
+#include <regex>
 #include <functional>
-#include <boost/regex.hpp>
 #include <boost/lexical_cast.hpp>
 
-using std::string;
 using util::unConst;
 using util::isSameObject;
 using util::floorwrap;
-using boost::regex;
-using boost::smatch;
-using boost::regex_search;
+using std::string;
+using std::regex;
+using std::smatch;
+using std::regex_search;
 using boost::lexical_cast;
 
-namespace error = lumiera::error;
+namespace lumiera {
+namespace error {
+  LUMIERA_ERROR_DEFINE (INVALID_TIMECODE, "timecode format error, illegal value encountered");
+}}
 
 namespace lib {
 namespace time {
+  namespace error = lumiera::error;
   
-  
-  namespace format {  /* ================= Timecode implementation details ======== */ 
+  namespace format {  /* ================= Timecode implementation details ======== */
     
-    LUMIERA_ERROR_DEFINE (INVALID_TIMECODE, "timecode format error, illegal value encountered");
     
     
     /** try to parse a frame number specification
@@ -64,13 +63,13 @@ namespace time {
     TimeValue
     Frames::parse (string const& frameNumber, QuantR frameGrid)
     {
-      static regex frameNr_parser  ("(?<![\\.\\-\\d])(-?\\d+)#");   // no leading [.-\d],  number+'#'
-      smatch match;
+      static regex frameNr_parser{"(?:^|[^\\d\\.\\-])(\\-?\\d+)#"};   // no leading [.-\d],  digit+'#'
+      smatch match;                                                   // note: ECMA regexp does not support lookbehind
       if (regex_search (frameNumber, match, frameNr_parser))
         return frameGrid.timeOf (lexical_cast<FrameCnt> (match[1]));
       else
         throw error::Invalid ("unable to parse framecount \""+frameNumber+"\""
-                             , LUMIERA_ERROR_INVALID_TIMECODE);
+                             , LERR_(INVALID_TIMECODE));
     }
     
     
@@ -94,13 +93,13 @@ namespace time {
      * In any case, the actual number is required to end with a trailing \c 'sec'
      * @par Example specifications
 \verbatim
-       12sec       -->  12     * GAVL_TIME_SCALE
-       -4sec       --> -4      * GAVL_TIME_SCALE
-       5/4sec      -->  1.25   * GAVL_TIME_SCALE
-       -5/25sec    --> -0.2    * GAVL_TIME_SCALE
-       1+1/2sec    -->  1.5    * GAVL_TIME_SCALE
-       1-1/25sec   -->  0.96   * GAVL_TIME_SCALE
-       -12-1/4sec  --> -11.75  * GAVL_TIME_SCALE
+       12sec       -->  12     * TimeValue::SCALE
+       -4sec       --> -4      * TimeValue::SCALE
+       5/4sec      -->  1.25   * TimeValue::SCALE
+       -5/25sec    --> -0.2    * TimeValue::SCALE
+       1+1/2sec    -->  1.5    * TimeValue::SCALE
+       1-1/25sec   -->  0.96   * TimeValue::SCALE
+       -12-1/4sec  --> -11.75  * TimeValue::SCALE
 \endverbatim
      * @param seconds string containing a time spec in seconds
      * @param grid coordinate system the parsed value is based on
@@ -112,17 +111,17 @@ namespace time {
     TimeValue
     Seconds::parse (string const& seconds, QuantR grid)
     {
-      static regex fracSecs_parser ("(?<![\\./\\-\\d])(-?\\d+)(?:([\\-\\+]\\d+)?/(\\d+))?sec");
-                                  //__no leading[./-\d] number    [+-]  number '/' number 'sec'   
+      static regex fracSecs_parser ("(?:^|[^\\./\\d\\-])(\\-?\\d+)(?:([\\-\\+]\\d+)?/(\\d+))?sec");
+                                  //__no leading[./-\d]   number      [+-]  number '/' number 'sec'
       
-      #define SUB_EXPR(N) lexical_cast<long> (match[N])
+      #define SUB_EXPR(N) lexical_cast<int> (match[N])
       smatch match;
       if (regex_search (seconds, match, fracSecs_parser))
         if (match[2].matched)
           {
             // complete spec with all parts
             FSecs fractionalPart (SUB_EXPR(2), SUB_EXPR(3));
-            long fullSeconds (SUB_EXPR(1));
+            int fullSeconds (SUB_EXPR(1));
             return grid.timeOf (fullSeconds + fractionalPart);
           }
         else
@@ -138,26 +137,26 @@ namespace time {
           }
       else
         throw error::Invalid ("unable to parse \""+seconds+"\" as (fractional)seconds"
-                             , LUMIERA_ERROR_INVALID_TIMECODE);
+                             , LERR_(INVALID_TIMECODE));
     }
     
     
     
     
     /** build up a frame count
-     *  by quantising the given time value 
+     *  by quantising the given time value
      */
     void
-    Frames::rebuild (FrameNr& framecnt, QuantR quantiser, TimeValue const& rawTime)
+    Frames::rebuild (FrameNr& frameNr, QuantR quantiser, TimeValue const& rawTime)
     {
-      framecnt.setValueRaw (quantiser.gridPoint (rawTime));
+      frameNr.setValueRaw (quantiser.gridPoint (rawTime));
     }
     
     /** calculate the time point denoted by this frame count */
-    TimeValue 
-    Frames::evaluate (FrameNr const& framecnt, QuantR quantiser)
+    TimeValue
+    Frames::evaluate (FrameNr const& frameNr, QuantR quantiser)
     {
-      return quantiser.timeOf (framecnt);
+      return quantiser.timeOf (frameNr);
     }
 
     
@@ -175,7 +174,7 @@ namespace time {
     
     /** calculate the time point denoted by this SMPTE timecode,
      *  by summing up the timecode's components */
-    TimeValue 
+    TimeValue
     Smpte::evaluate (SmpteTC const& tc, QuantR quantiser)
     {
       uint frameRate = tc.getFps();
@@ -197,8 +196,8 @@ namespace time {
      *       it need to be the actual framerate used by the quantiser.
      *       Especially in case of NTSC drop-frame, the timecode
      *       uses 30fps here, while the quantisation uses 29.97
-     * @todo this design just doesn't feel quite right... 
-     */ 
+     * @todo this design just doesn't feel quite right...
+     */
     uint
     Smpte::getFramerate (QuantR quantiser_, TimeValue const& rawTime)
     {
@@ -214,10 +213,10 @@ namespace time {
     /** handle the limits of SMPTE timecode range.
      *  This is an extension and configuration point to control how
      *  to handle values beyond the official SMPTE timecode range of
-     *  0:0:0:0 to 23:59:59:##. When this strategy function is invoked,
+     *  `0:0:0:0` to `23:59:59:##`. When this strategy function is invoked,
      *  the frames, seconds, minutes and hours fields have already been processed
      *  and stored into the component digxels, under the assumption the overall
-     *  value stays in range. 
+     *  value stays in range.
      * @note currently the range is extended "naturally" (i.e. mathematically).
      *       The representation is flipped around the zero point and the value
      *       of the hours is just allowed to increase beyond 23
@@ -326,7 +325,7 @@ namespace time {
   SmpteTC&
   SmpteTC::operator= (SmpteTC const& o)
     {
-      if (!isSameObject (*this, o))
+      if (not isSameObject (*this, o))
         {
           TCode::operator= (o);
           effectiveFramerate_ = o.effectiveFramerate_;
@@ -343,14 +342,14 @@ namespace time {
   /** */
   HmsTC::HmsTC (QuTime const& quantisedTime)
     : TCode(quantisedTime)
-//  : tpoint_(quantisedTime)           /////////////////////////////TODO bullshit
+//  : tpoint_(quantisedTime)           //////////////////////////////////////////////////////////////////////TICKET #736 implement HMS format
     { }
   
   
   /** */
   Secs::Secs (QuTime const& quantisedTime)
     : TCode(quantisedTime)
-//  : sec_(TimeVar(quantisedTime) / GAVL_TIME_SCALE)   /////////////TODO bullshit
+//  : sec_(TimeVar(quantisedTime) / TimeValue::SCALE)   /////////////////////////////////////////////////////TICKET #736 implement Seconds format
     { }
   
   
@@ -388,10 +387,10 @@ namespace time {
   void
   SmpteTC::invertOrientation()
   {
-    int fr (getFps()); 
+    int fr (getFps());
     int f (fr - frames); // revert orientation
     int s (60 - secs);  //  of the components
-    int m (60 - mins); //   
+    int m (60 - mins); //
     int h = -hours;   //  assumed to be negative
     sgn *= -1;       //   flip sign field
     
@@ -401,7 +400,7 @@ namespace time {
     
     hours.setValueRaw(h);
     mins   = m;  // invoking setters
-    secs   = s; //  ensures normalisation 
+    secs   = s; //  ensures normalisation
     frames = f;
   }
   
@@ -443,33 +442,37 @@ namespace time {
     return *this;
   }
   
-  /** */
+  namespace {
+    const auto TIME_SCALE_sec{lib::time::TimeValue::SCALE        };
+    const auto TIME_SCALE_ms {lib::time::TimeValue::SCALE / 1'000};
+  }
+  
+  /** @deprecated 5/25 : no numeric computations in this class! use Digxel instead! */
   int
   HmsTC::getSecs() const
-  {
-    return lumiera_time_seconds (tpoint_);
+  {         /////////////////////////////////////////////////////////////////////////////////////////////////TICKET #750 we do not want numeric accessors her — rather we want Digxel members
+    return (_raw (tpoint_) / TIME_SCALE_sec) % 60;
   }
   
-  /** */
+  /** @deprecated 5/25 : no numeric computations in this class! use Digxel instead! */
   int
-  HmsTC::getMins() const 
+  HmsTC::getMins() const
   {
-    return lumiera_time_minutes (tpoint_);
+    return (_raw (tpoint_) / TIME_SCALE_sec / 60) % 60;
   }
   
-  /** */
+  /** @deprecated 5/25 : no numeric computations in this class! use Digxel instead! */
   int
-  HmsTC::getHours() const 
+  HmsTC::getHours() const
   {
-    return lumiera_time_hours (tpoint_);
+    return _raw (tpoint_) / TIME_SCALE_sec / 60 / 60;
   }
   
-  /** */
+  /** @deprecated 5/25 : no numeric computations in this class! use Digxel instead! */
   double
   HmsTC::getMillis() const
   {
-    TODO ("Frame-Quantisation");
-    return lumiera_time_millis (tpoint_);
+    return (_raw (tpoint_) / TIME_SCALE_ms) % 1000;
   }
   
   /** */

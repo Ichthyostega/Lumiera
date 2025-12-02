@@ -1,22 +1,13 @@
 /*
-  ITER-ADAPTER-PTR-DEREF.hpp  -  wrapping iterator to dereference pointers automatically 
+  ITER-ADAPTER-PTR-DEREF.hpp  -  wrapping iterator to dereference pointers automatically
 
-  Copyright (C)         Lumiera.org
-    2015,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2015,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
 
@@ -48,32 +39,10 @@
 
 #include "lib/iter-adapter.hpp"
 
-#include <boost/type_traits/remove_const.hpp>
+#include <type_traits>
 
 
 namespace lib {
-  
-  namespace {
-    
-    /** helper to remove pointer,
-     *  while retaining const */
-    template<typename T>
-    struct RemovePtr  { typedef T Type; };
-    
-    template<typename T>
-    struct RemovePtr<T*> { typedef T Type; };
-    
-    template<typename T>
-    struct RemovePtr<const T*> { typedef const T Type; };
-    
-    template<typename T>
-    struct RemovePtr<T* const> { typedef const T Type; };
-    
-    template<typename T>
-    struct RemovePtr<const T* const> { typedef const T Type; };
-    
-  }
-  
   
   
   /**
@@ -85,39 +54,44 @@ namespace lib {
    */
   template<class IT>
   class PtrDerefIter
-    : public lib::BoolCheckable<PtrDerefIter<IT> >
     {
       IT i_;  ///< nested source iterator
       
       
     public:
-      typedef typename IT::value_type           pointer;
-      typedef typename RemovePtr<pointer>::Type value_type;
-      typedef value_type&                       reference;
+      /** this iterator adapter is meant to wrap an iterator yielding pointer values */
+      using pointer    = meta::ValueTypeBinding<IT>::value_type;
+      static_assert(std::is_pointer_v<pointer>);
       
-      // for use with STL algorithms
-      typedef void difference_type;
-      typedef std::forward_iterator_tag iterator_category;
-      
-      
-      // the purpose of the following typedefs is to ease building a correct "const iterator"
-      
-      typedef typename boost::remove_const<value_type>::type ValueTypeBase; // value_type without const
-      
-      typedef typename IterType<IT>::template SimilarIter<      ValueTypeBase* * >::Type WrappedIterType;
-      typedef typename IterType<IT>::template SimilarIter<const ValueTypeBase* * >::Type WrappedConstIterType;
-      
-      typedef PtrDerefIter<WrappedIterType>      IterType;
-      typedef PtrDerefIter<WrappedConstIterType> ConstIterType;
+      using value_type = std::remove_pointer_t<pointer>;
+      using reference  = value_type&;
       
       
+      ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (PtrDerefIter);
       
-      /** PtrDerefIter is always created 
+      
+      // the purpose of the following typedefs is to support building a correct "const iterator"
+      
+      using ValueTypeBase = std::remove_const_t<value_type>; // value_type without const
+      
+      using WrappedIterType      = IterType<IT>::template SimilarIter<      ValueTypeBase* * >::Type;
+      using WrappedConstIterType = IterType<IT>::template SimilarIter<const ValueTypeBase* * >::Type;
+      
+      using IterType      = PtrDerefIter<WrappedIterType>;
+      using ConstIterType = PtrDerefIter<WrappedConstIterType>;
+      
+      
+      
+      /** PtrDerefIter is always created
        *  by wrapping an existing iterator.
        */
       explicit
       PtrDerefIter (IT srcIter)
-        : i_(srcIter)
+        : i_{srcIter}
+        { }
+      
+      PtrDerefIter()
+        : i_{}
         { }
       
       
@@ -129,8 +103,8 @@ namespace lib {
        *  from (TY *)* -- just we know that our intention is to dereference both levels
        *  of pointers, and then the resulting conversion is correct.
        *  @note in case IT == WrappedIterType, this is just a redefinition of the
-       *        default copy ctor. In all other cases, this is an <i>additional
-       *        ctor besides the default copy ctor</i> */
+       *        default copy ctor. In all other cases, this is an _additional
+       *        ctor besides the default copy ctor_. */
       PtrDerefIter (PtrDerefIter<WrappedIterType> const& oIter)
         : i_(reinterpret_cast<IT const&> (oIter.getBase()))
         { }
@@ -142,12 +116,19 @@ namespace lib {
           return *this;
         }
       
+      explicit
+      operator bool() const
+        {
+          return isValid();
+        }
       
-      /** explicit builder to allow creating a const variant from the basic srcIter type. 
+      
+      
+      /** explicit builder to allow creating a const variant from the basic srcIter type.
        *  Again, the reason necessitating this "backdoor" is that we want to swallow one level
        *  of indirection. Generally speaking `const T **` is not the same as `T * const *`,
        *  but in our specific case the API ensures that a `PtrDerefIter<WrappedConstIterType>`
-       *  only exposes const elements. 
+       *  only exposes const elements.
        */
       static PtrDerefIter
       build_by_cast (WrappedIterType const& srcIter)
@@ -217,10 +198,18 @@ namespace lib {
   bool operator!= (PtrDerefIter<I1> const& il, PtrDerefIter<I2> const& ir)  { return not (il == ir); }
   
   
+  /// Convenience shortcut to dereference pointers yielded from the wrapped iterator
+  template<class IT>
+  auto
+  ptrDeref (IT iter)
+  {
+    return PtrDerefIter<IT>{iter};
+  }
   
   
   
-  /** 
+  
+  /**
    * wrapper for an existing Iterator type to expose the address of each value yielded.
    * Typically this can be used to build visitation sequences based on values living
    * within a stable data structure (e.g. unmodifiable STL vector)
@@ -230,9 +219,8 @@ namespace lib {
    */
   template<class IT>
   class AddressExposingIter
-    : public lib::BoolCheckable<AddressExposingIter<IT> >
     {
-      typedef typename IT::pointer _Ptr;
+      using _Ptr = IT::pointer;
       
       IT i_;  ///< nested source iterator
       
@@ -245,17 +233,19 @@ namespace lib {
           if (i_.isValid())
             currPtr_ = & (*i_);
           else
-            currPtr_ = 0;
+            currPtr_ = nullptr;
         }
       
       
     public:
-      typedef typename IT::pointer const* pointer;
-      typedef typename IT::pointer const& reference;
-      typedef typename IT::pointer const  value_type;
+      using pointer    = IT::pointer const*;
+      using reference  = IT::pointer const&;
+      using value_type = IT::pointer const ;
+      
+      ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (AddressExposingIter);
       
       
-      /** AddressExposingIter is always created 
+      /** AddressExposingIter is always created
        *  by wrapping an existing iterator.
        */
       explicit
@@ -265,6 +255,11 @@ namespace lib {
           takeAddress();
         }
       
+      explicit
+      operator bool() const
+        {
+          return isValid();
+        }
       
       
       
@@ -274,7 +269,7 @@ namespace lib {
       /** @return address of the source iteraor's current result
        * @warning exposing a reference to an internal pointer for sake of compatibility.
        *          Clients must not store that reference, but rather use it to initialise
-       *          a copy. The internal pointer exposed here will be changed on increment.  
+       *          a copy. The internal pointer exposed here will be changed on increment.
        */
       reference
       operator*() const

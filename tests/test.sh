@@ -1,20 +1,21 @@
 #!/usr/bin/env bash
-#  Copyright (C)              Lumiera.org
-#    2007, 2008, 2009, 2010,  Christian Thaeter <ct@pipapo.org>
 #
-#  This program is free software; you can redistribute it and/or
-#  modify it under the terms of the GNU General Public License as
-#  published by the Free Software Foundation; either version 2 of the
-#  License, or (at your option) any later version.
+#  Copyright (C)
+#    2007-2010,       Christian Thaeter <ct@pipapo.org>
 #
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 2 of the
+# License, or (at your option) any later version.
 #
-#  You should have received a copy of the GNU General Public License
-#  along with this program; if not, write to the Free Software
-#  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 # TESTMODE=FULL yet unimplemented
 #   run all tests, PLANNED which fail count as error
@@ -246,10 +247,10 @@ function compare_template() # template plainfile
 #tests `TESTSUITES` environment variable.
 #tests
 #tests HEAD~ Testsuites; test files; writing tests
-#tests It is common to start the name of the '.test' files with a 2 digi number to give them a proper
+#tests It is common to start the name of the '.test' files with a 2 digit number to give them a proper
 #tests order: '10foo.test', '20bar.test' and so on. Each such test should only test a certain aspect of
 #tests the system. You have to select the testing binary with the `TESTING` function and then write
-#tests certain TEST's defining how the test should react. Since tests are shell scripts it is possible
+#tests certain TESTs defining how the test should react. Since tests are shell scripts it is possible
 #tests to add some supplemental commands there to set and clean up the given test environment.
 #tests
 #tests HEAD^ TESTING; TESTING; set the test binary

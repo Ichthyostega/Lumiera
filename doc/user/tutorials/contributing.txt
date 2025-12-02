@@ -1,7 +1,7 @@
 Contributing to Lumiera
 =======================
 :Author: Benny <Benny.Lyons@gmx.net>
-:Date: Oct 2013
+:Date: Oct 2013 · Nov 2025
 :toc:
 
 
@@ -25,7 +25,7 @@ require considerable experience, some sections require less experience whereas
 certain aspects might be ideal to new programmers. Thus we attempt here to
 describe a number of areas in the project to assist you in selecting an area in
 which you might like to make a contribution.
-Of course, you are more than welcome--and even encouraged--to select other areas
+Of course, you are more than welcome -- and even encouraged -- to select other areas
 in Lumiera towards which you would like to contribute.
 
 
@@ -34,9 +34,10 @@ How to contribute to Lumiera
 
 Git: Essentials for Lumiera
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-All files in the Lumiera project are managed by *Git*, the distributed sourcecode
-management software. Although Git was primarily brought to life to manage source
-code, it plays a fundamental role in the Lumiera project. It is central to
+image:{img}/git.png[title="Git"] All files in the Lumiera project are managed by
+https://git-scm.com/[Git], the distributed sourcecode management software.
+Although Git was primarily brought to life to manage source code,
+it plays a fundamental role in the Lumiera project. It is central to
 communication and contribution in the project. If you'd like to contribute to
 Lumiera, you will have to acquire some understanding of Git at some stage or
 other. Please note, this is not the only way to contribute to Lumiera, you can
@@ -50,8 +51,8 @@ right away and present your first results to the _mob repository_.
 First steps with Git
 ^^^^^^^^^^^^^^^^^^^^
 One very useful place to begin with learning Git is the
-link:http://www.kernel.org/pub/software/scm/git/docs/gittutorial.html[basic Git tutorial at Kernel.org]. +
-For more specific questions, you might consulte a link:http://gitref.org/[Git reference]
+https://www.kernel.org/pub/software/scm/git/docs/gittutorial.html[basic Git tutorial at Kernel.org]. +
+For more specific questions, you might consult a https://git-scm.com/docs[Git reference]
 
 In the following, we assume you have set up Git on your system.  If you are
 experiencing problems with Git, just ask the Lumiera community.
@@ -86,12 +87,12 @@ Lumiera. These additional packages are of two kinds:
 
 Packages normally available with your distribution::
   for a Debian based system (including Mint, Ubuntu and similar flavours),
-  you should be able to install the necessary dependencies with the command
+  you should be able to install the necessary dependencies with the command...
 +
 -------------------------------------------------------------------------------------
-sudo apt-get install build-essential scons git-core valgrind intltool \
-libboost-dev libboost-program-options-dev libboost-regex-dev libboost-filesystem-dev \
-libgavl-dev libgtkmm-3.0-dev libgdl-3-dev librsvg2-dev libxv-dev
+sudo apt-get install build-essential g++ git pkgconf scons intltool \
+libboost-dev libboost-program-options-dev libasound2-dev libgavl-dev \
+libgtkmm-3.0-dev librsvg2-dev libxv-dev
 -------------------------------------------------------------------------------------
 Packages not normally part of your distribution::
   there are two packages most likely not available with your operating system
@@ -101,7 +102,7 @@ Packages not normally part of your distribution::
   - *NoBug* -- a diagnostics library
 +
 ------------------------------------------------------------
-git clone git://git.pipapo.org/nobug
+git clone git://git.lumiera.org/debian/nobug
 cd nobug
 autoreconf -i
 mkdir build && cd build
@@ -109,22 +110,43 @@ mkdir build && cd build
 make
 sudo make install
 ------------------------------------------------------------
-  - **mm**-bindings for *GDL* -- a window docking library footnote:[GDL itself _is_
-    available through the standard package manager, in a version compatible to GTK-3.
-    What is not yet available are the corresponding C++ bindings `gdlmm-3`]
+  - the *libGDL* with **mm**-bindings -- a window docking library footnote:[
+      GDL is compatible with GTK-3 and was available through the standard package manager,
+      but was orphaned in 2021. Since it is currently a prerequisite for building Lumiera,
+      we maintain a clone of the original repository and a Debian package on Lumiera.org.
+      This is relevant both for
+      https://git.lumiera.org/?p=debian/gdl;a=summary[libGDL (3.40) +git://git.lumiera.org/debian/gdl+]
+      and the
+      https://git.lumiera.org/?p=debian/gdlmm;a=summary[GDL C++ bindings (3.7.3) +git://git.lumiera.org/debian/gdlmm+].
+    ]
+
+    * first you have to build libGTL itself...
 +
 ------------------------------------------------------------
-git clone git://git.lumiera.org/debian/gdlmm
-cd gdlmm
-./configure
+git clone git://git.lumiera.org/debian/gdl
+cd gdl
+git checkout master
+./autogen.sh
 make
 sudo make install
 ------------------------------------------------------------
 
+     * then followed by building the C++ bindings...
++
+------------------------------------------------------------
+git clone git://git.lumiera.org/debian/gdlmm
+cd gdlmm
+git checkout master
+./autogen.sh
+make
+sudo make install
+------------------------------------------------------------
+
+
 Start the Lumiera build process::
 ------------------------------------------------------------
 cd LUMIERA
-scons
+scons -j#
 ------------------------------------------------------------
 
 If Lumiera is built correctly on your system, you should be able to shoot up
@@ -184,7 +206,7 @@ tend to cause difficulties).
 The line following your one line summary should be blank. Then on the third
 line, you can begin your exposition in as much detail as you like on your
 changes.
- 
+
 
 Publishing Your Contribution
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -197,18 +219,18 @@ Finally you can *push* your changes to the Lumiera server on the 'mob'
 repository:
 
 ------------------------------------------------------------
-$ git push git://git.lumiera.org/lumiera/mob master:refs/heads/YOURNAME 
+$ git push git://git.lumiera.org/lumiera/mob master:YOURNAME
 ------------------------------------------------------------
 
 This creates a new branch +YOURNAME+ on the mob repository.
 
-Check that indeed your changes are public by visiting 
+Check that indeed your changes are public by visiting
 link:http://Lumiera.org/gitweb[the Git-Web]: +
 The lumiera/mob repository should indicate
 [green]#right now# as its ``Last Change'' entry.
 
 Thereafter, notify the other developers on the mailing list and they may examine
-your code into the main project line. 
+your code into the main project line.
 
 
 Lumiera Communication Channels
@@ -222,7 +244,7 @@ Besides, the Lumiera community generally meets on the second Thursday of
 each month at 20:00 UTC on IRC. All are more than welcome to join and
 to contribute to the discussions there.
 
--> contact information link:{l}/project/contact.html[Mailing List & IRC]
+-> contact information link:/project/contact.html[Mailing List & IRC]
 
 ''''
 
@@ -236,22 +258,23 @@ fact, many user interfaces should be possible.
 - The initial GUI on which considerable work has already been done has been
   implemented using the GTK toolkit.  However, considerable more work needs to be
   done on this present GUI.
+- the stylesheet has been roughly ported to GTK-3, but needs a lot more polishing
 - we urgently need conceptual (non-coding) contributions
 
-  * work out a coherent UI handling concept, in accordance with model and core
-  * we need a concept for key bindings and focus
-  * we need a concept for integration with control surfaces
-  * we need a concept for pen based handling
+  * work out a
+    http://localhost:8888/documentation/design/workflow/Verwijlen/index.html[coherent UI handling concept]
+
+    ** we need a concept for key bindings and focus
+    ** we need a concept for integration with control surfaces
+    ** we need a concept for pen based handling
 
 
-Proc Layer::
+Steam Layer::
 - external connection systems
 
-  * investigate good ways to output video, both in-window and full screen.
-    Especially, the integration is what counts: it should be a well maintained
-    library, and play well with our intended framework and memory management.
   * expand on the work done for ALSA and Jack audio.
-  * expand on the work done for LADSPA / L2. Make Lumiera a host for these plugin systems
+  * expand on the work done for LADSPA / LV2; +
+    make Lumiera a host for these plugin systems...
   * investigate how to discover sound card properties. Develop a concept how to describe
     these in a generic fashion, independent of the concrete library used for output.
     The purpose is to allow binding with the structure of the session model
@@ -261,13 +284,6 @@ Proc Layer::
   * expand on the work done for a pooling small objects allocator.
   * develop a backend for our various allocation schemes to use this allocator.
 
-- Command system at the GUI interface
-
-  * expand on the work done for generic commands
-  * implement a command dispatcher to allow blocking and queuing of commands
-  * develop a scheme how to code the GUI commands in practice
-
-- implement a symbol table for the `lib::Symbol` datatype
 - provide the foundation for symbolic rules and script bindings
 
   * expand on the work done for symbolic and hash references
@@ -279,9 +295,9 @@ Proc Layer::
 
 
 /////////////////
-Backend::
+Vault::
 
-TODO: where to contribute to the backend??
+TODO: where to contribute to the backend / the vault??
 
 /////////////////
 
@@ -293,10 +309,20 @@ Website and infrastructure::
 - help with our continuous integration setup
 
 
+Current goals of development::
+- achive a link:{ldoc}/design/governance/integration.html[first integration] of the application...
+- https://issues.lumiera.org/report/17[»Focus Topics«] for further development.
+
 
 ''''
-''''
+....
+​
+​
+​
+....
 
-Do you have any further ideas?  Please speak up on the mailing list or on IRC.
+Do you have any further ideas?
+
+Please speak up on the mailing list or on IRC. +
 Such are always welcome.
 

@@ -9,7 +9,7 @@ Design Proposal Pool
 This is the pool of all RfC Design Proposals. +
 Please use the navigation menu to access individual entries.
 ++++
-<br/><br/><br/>    
+<br/><br/><br/>
 ++++
 ''''
 [small]#technically, all the RfC documents are stored within this pool directory; +

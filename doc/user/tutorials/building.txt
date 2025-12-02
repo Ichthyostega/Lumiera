@@ -1,11 +1,11 @@
 Building Lumiera from source
 ============================
-:Date: 2013
+:Date: 2025
 :toc:
 
 At the moment you can build Lumiera, start the standard Lumiera GUI and run the
 Lumiera test suite. The GUI you start might look like a mockup, but in fact is
-_is_ the real application; just there isn't any wiring between GUI, model and
+_is_ the real application; just there isn't much wiring between GUI, model and
 core yet. This will remain the state of affairs for the foreseeable future, since
 we're developing core components against a test suite with unit and integration
 tests. Thus, the growth of our test suite is the only visible indication of
@@ -40,45 +40,41 @@ Requirements
 To build Lumiera, you'll need a _build environment_ together with the
 _development packages_ of the libraries Lumiera depends on.
 footnote:[there is a separate documentation page listing the
-link:{ldoc}/technical/build/Dependencies.html[build dependencies] explicitly.
+link:{ldoc}/technical/build/BuildDependencies.html[build dependencies] explicitly.
 We'll try to keep that information up to date -- but in the end, the really
 authoritative information about the build dependencies is encoded into the
 link:{ldoc}/technical/build/SCons.html[build system]. Thus, when the build
 system aborts, indicating that a never version of some library is required,
 then usually the build system is right...]
-More specifically, you'll need the GNU C/C\++ compiler with C++14 support (Version >= 4.9)
+More specifically, you'll need the GNU C/C\++ compiler with C++23 support (Version >= 14)
 in addition to the following tools and libraries:
 
- * link:http://git-scm.com/[Git] (version management system)
- * link:http://www.scons.org/[SCons build system]
- * link:http://www.boost.org/[Boost libraries]
- * link:http://gmerlin.sourceforge.net/[GAVL library]
- * link:http://nobug.pipapo.org/[NoBug] (see below)
- * Lumiera source code 
+ * https://git-scm.com/[Git] (version management system)
+ * https://www.scons.org/[SCons build system]
+ * https://www.boost.org/[Boost libraries]
+ * https://github.com/bplaum/gavl[GAVL library]
+ * https://nobug.pipapo.org/[NoBug] ~([purple]#⚠ see below#)~
+ * Lumiera https://git.lumiera.org/?p=LUMIERA;a=summary[source code]
 
 The GUI depends on the following:
 
- * link:http://www.gtkmm.org/en/[gtkmm]
- * link:http://cgit.freedesktop.org/xorg/lib/libXv[libXv]
- * link:https://wiki.gnome.org/LibRsvg[lib rSVG]
- * link:https://git.gnome.org/browse/gdl[lib GDL]
- 
+ * https://gtkmm.gnome.org/en/[gtkmm]
+ * https://cgit.freedesktop.org/xorg/lib/libXv[libXv]
+ * https://wiki.gnome.org/Projects/LibRsvg[lib rSVG]
+ * https://gitlab.gnome.org/Archive/gdl.git[lib GDL] ~([purple]#⚠ see below#)~
 
 TIP: Generally speaking, when you want to build software, you'll need the
 _development_ version of the packages that contain the headers and pre-built
 libraries to link against. These packages are usually named `-devel` or `-dev`.
 
-For Debian based systems, e.g. Mint, Ubuntu..., you can install these packages as follows:
+For Debian based systems, e.g. Ubuntu, Mint... you can install these packages as follows:
 
 -------------------------------------------------------------------------------------
-sudo apt-get install build-essential scons git-core valgrind intltool \
-libboost-dev libboost-program-options-dev libboost-regex-dev libboost-filesystem-dev \
-libgavl-dev libgtkmm-3.0-dev libgdl-3-dev librsvg2-dev libxv-dev
+sudo apt-get install build-essential g++ git pkgconf scons intltool \
+libboost-dev libboost-program-options-dev libasound2-dev libgavl-dev \
+libgtkmm-3.0-dev librsvg2-dev libxv-dev
 -------------------------------------------------------------------------------------
 
-Ubuntu note::
-  some people reported you need to install the `intltool` package from the standard
-  Ubuntu repository (for this reason it is included in the above collection)
 
 
 Build Directory
@@ -87,7 +83,7 @@ Build Directory
 You'll need to check out the source code in some directory or other. You'll also
 have to use this directory to build Lumiera. This could be a temporary
 directory, or some "workspace" directory below your home directory. We'll refer
-to this directory as _workspace directory_ . 
+to this directory as _workspace directory_ .
 
 
 Lumiera Specific Libraries
@@ -95,17 +91,23 @@ Lumiera Specific Libraries
 Now that you have your basic build environment prepared, the next step is to care
 for some special libraries required by Lumiera that are not directly part of the
 Lumiera project itself, but aren't readily available through the usual package
-manager of the common distributions either. footnote:[we maintain our own Debian
-package depot at Lumiera.org and provide binary Debian packages for a range of
-distributions; yet this tutorial strives at showing the basic and generic method
-for building. Thus we'll show you here how to build these libraries from source
-yourself] Thus, we'll have to get the source code for these support libraries,
+manager of the common distributions either.footnote:[
+  We maintain our own
+  link:/debian/[Debian package depot at Lumiera.org]
+  and provide binary Debian packages for a range of distributions;
+  yet this tutorial strives at showing the basic and generic method for building.
+  Thus we'll show you here how to build these libraries from source yourself --
+  however, in many cases it can be more convenient to use the DEB packages
+  we provide, if applicable, for these extra library dependencies of Lumiera
+  and just care for building the Lumiera main tree on your system.
+]
+Thus, we'll have to get the source code for these support libraries,
 build and install them before we're able to compile Lumiera.
 
 WARNING: Note that the following procedures will try to install files into your
-base system below `/usr/local`. +
-To do so, you'll need administrative permission for the machine you're working
-on. These additions might interfere with other libraries installed by your
+base system below '/usr/local'. +
+To do so, you'll need [red]#administrative permission# for the machine you're
+working on. These additions might interfere with other libraries installed by your
 package manager (if you get into trouble updating your system later on,
 you might have to manually remove these libraries).
 
@@ -114,7 +116,7 @@ NoBug: building and installing
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 link:http://nobug.pipapo.org/[NoBug] is an instrumentation and diagnostics library. +
-Enter _workspace direcory_ as explained above. 
+Enter _workspace direcory_ as explained above.
 Get the NoBug source code:
 
 ------------------------------------------------------------
@@ -136,19 +138,37 @@ sudo make install
 GDL-mm: building and installing
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The *GNOME Docking library* is available through your your package manager,
-but we additionally need the C++ bindings. Since these haven't made it into the
-standard repositories yet, we provide a suitable custom package here;
-the following shows how to build the latter
+The *GNOME Docking library* was maintained, outside of the Gnome project,
+until 2021, mostly by the Anjuta people. It has dropped out of most distributions
+meanwhile, but is compatible with GTK-3 and can be built for the time being.
+We retain a copy of the repository and maintain a Debian package at Lumiera.org.
+Additionally we need the C++ bindings, which were created by _Fabien Parent_ and
+maintained 2009-2013; we likewise provide a repository and Debian package for
+these at Lumiera.org. These prerequisite libraries can be rebuilt with
+the steps described below.
 
-Version limitation::
-  we rely on GTK-3 and thus need a compatible GDL-3.
+There is a dependency on `xmlto`, which is an xml converter. To install on Debian:
 
+------------------------------------------------------------
+apt-get install xmlto
+------------------------------------------------------------
 
+.building GDL
+------------------------------------------------------------
+git clone git://git.lumiera.org/debian/gdl
+cd gdl
+git checkout master
+./autogen.sh
+make
+sudo make install
+------------------------------------------------------------
+
+.building GDL-mm
 ------------------------------------------------------------
 git clone git://git.lumiera.org/debian/gdlmm
 cd gdlmm
-./configure
+git checkout master
+./autogen.sh
 make
 sudo make install
 ------------------------------------------------------------
@@ -194,24 +214,32 @@ footnote:[more options for building with scons can be found via: `scons -h` ]
 -----------------
 git clone git://git.lumiera.org/LUMIERA
 cd LUMIERA
-scons
+scons -j#
 -----------------
 
-maybe build and run the test suite by issuing `scons check`
-
 The build process will take some time, so sit back and relax.
+You can use for `#` (at least) the number of cores available on your system
+to speed up the build -- but it will take several minutes even for a debug
+build and significantly more for an optimised release build +
+(-> see `scons -h` for build options you can change)
+
+And if you feel like waiting even more, you might build and run the test suite
+by issuing `scons -j# check`...
+
 
 NOTE: you do not need to _install_ Lumiera. It will find all files it requires
 relative to the directory structure it generates, which is freely relocatable
-as a whole. Just invoke the +target/lumiera+ executable. The current
+as a whole. Just invoke the 'target/lumiera' executable. The current
 working directory is not particularly relevant.
 
 After the build has finished successfully, you should be able to start Lumiera.
-Currently, this will bring up the GUI, _without any further functionality_ (!)
+Currently, this will bring up the GUI, _without much further functionality_ (!)
 
 You should see something like this:
 
-image:{l}/images/lumiera_gui_small.png[Current Lumiera GUI Screenshot]
+image:{imgg}/lumiera20250823.png["Current Lumiera GUI Screenshot",width=650]
+
+-> 💡 see link:{ldoc}/user/manual.html#_ui_experiments[here] for some demo features available...
 
 
 What's next?

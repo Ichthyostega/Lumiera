@@ -1,0 +1,73 @@
+TESTING "Component Test Suite: Scheduler" ./test-suite --group=engine
+
+
+
+TEST "Activity observation framework" ActivityDetector_test <<END
+return: 0
+END
+
+
+
+TEST "BlockFlow memory management scheme" BlockFlow_test <<END
+return: 0
+END
+
+
+
+TEST "Scheduler Activity Language" SchedulerActivity_test <<END
+return: 0
+END
+
+
+
+TEST "Scheduler Layer-1" SchedulerInvocation_test <<END
+return: 0
+END
+
+
+
+TEST "Scheduler Layer-2" SchedulerCommutator_test <<END
+return: 0
+END
+
+
+
+TEST "Scheduler Load-Control" SchedulerLoadControl_test <<END
+return: 0
+END
+
+
+
+TEST "Scheduler Integration" SchedulerService_test <<END
+return: 0
+END
+
+
+
+TEST "Self-managed one-time Job" SpecialJobFun_test <<END
+return: 0
+END
+
+
+
+TEST "Synthetic Load for Test" TestChainLoad_test <<END
+return: 0
+END
+
+
+
+TEST "Scheduler Performance" SchedulerStress_test quick <<END
+return: 0
+END
+
+
+
+PLANNED "Scheduler Usage" SchedulerUsage_test <<END
+return: 0
+END
+
+
+
+TEST "Worker Thread Service" WorkForce_test <<END
+return: 0
+END

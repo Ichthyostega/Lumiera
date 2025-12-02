@@ -11,7 +11,7 @@ __Participants__
  * ichthyo
  * Benny
  * Hendrik
- 
+
 _Summary written by ichthyo_
 
 
@@ -52,7 +52,7 @@ Conclusion
 ~~~~~~~~~~
 
  * create a page with some images
- * conclusion about FrOSCon? ``it was fun'' ... 
+ * conclusion about FrOSCon? ``it was fun'' ...
 
 
 
@@ -60,7 +60,7 @@ Scheduler: Interface and requirements
 -------------------------------------
 _Benny_ showed interest to work on that topic. The first step would be to build or use
 a priority queue textbook implementation as starting point. Some time ago, _cehteh_ included
-a suitable implementation in his link:http://git.pipapo.org/?p=cehsrc;a=summary[cehlib],a
+a suitable implementation in his https://git.pipapo.org/cehteh/cehsrc[cehlib],a
 collection of basic C library routines, mostly extracted from Lumiera's library. _ichthyo_
 integrates this priority queue into the Lumiera tree.
 
@@ -169,12 +169,12 @@ IRC Transcript
 ----------------------------
 [2013-09-12 22:59:46] <bennI_> what about the dependent jobs?
 [2013-09-12 23:00:03] <ichthyo> thats the most important question I think, since *that* is something special
-[2013-09-12 23:00:19] <cehteh> yes dependencies need to be handled by the scheduler 
+[2013-09-12 23:00:19] <cehteh> yes dependencies need to be handled by the scheduler
 [2013-09-12 23:00:52] <ichthyo> well... at least the scheduler needs to poll them in some way
 [2013-09-12 23:01:01] <ichthyo> poll or notify or re-try or the like
 [2013-09-12 23:01:03] <cehteh> one question: shall jobs be in the priority queue even if their dependencies
                                are not yet satisfied? ... I'd tend to say yes
-                               
+
 [2013-09-12 23:01:11] <bennI_> so we're not going to have a scheduler with simple jobs
 [2013-09-12 23:01:31] <cehteh> the scheduler must maintain lists of dependencies. Nodes for these lists are likely
                                to be allocated by the small object allocator I've written some time ago;
@@ -195,7 +195,7 @@ IRC Transcript
 [2013-09-12 23:04:21] <ichthyo> on that level indeed, yes
 [2013-09-12 23:04:45] <ichthyo> any more fancy functionality is encapsulated within that simple job abstraction
 [2013-09-12 23:06:18] <cehteh> as long some resource (which can become a prerequisite/dependency of any other job) exists
-                               it has some ultra-lightweight job structure associated with it 
+                               it has some ultra-lightweight job structure associated with it
 
 [2013-09-12 23:06:45] <ichthyo> now, for example, lets consider the loading of data from a file.
                                 How does this work in practice? do we get a callback when the data arrives?
@@ -210,13 +210,13 @@ IRC Transcript
 [2013-09-12 23:08:42] <cehteh> yes
 [2013-09-12 23:08:58] <bennI_> from the schedulers perspective, it's juts a callback, so it is defined elsewhere
                                i.e., data loading and details are implemented elsewhere in the callback itself
-                               
+
 [2013-09-12 23:09:43] <ichthyo> But... there is a problem: not the scheduler invokes that callback,
                                 someone else (triggered by the kernel) invokes this callback, and
                                 this must result in the unblocking of the dependant jobs, right?
 [2013-09-12 23:10:35] <bennI_> the scheduler just has the callback waiting, then when all conditions are met
                                it just gets scheduled
-[2013-09-12 23:10:21] <cehteh> nope 
+[2013-09-12 23:10:21] <cehteh> nope
 [2013-09-12 23:10:54] <cehteh> note: we need a 'polling' state for a job
 [2013-09-12 23:10:57] <ichthyo> so the scheduler polls a variable, signalling that the data is there (or isn't yet)
 [2013-09-12 23:11:14] <cehteh> yes
@@ -256,7 +256,7 @@ IRC Transcript
 [2013-09-12 23:18:22] <cehteh> well the scheduler on the lowest level should be unaware of all that
                                .. just dead dumb scheduling. All logic is rolled on higher levels
                                that allows us for more smart things depending on the actual use case,
-                               different strategies for different things 
+                               different strategies for different things
 [2013-09-12 23:17:50] <bennI_> we could even have only ONE job: it has a linked lists of jobs
                                but why not -- instead of ONE job, it can have a linked list of small jobs
                                once it's scheduled, maybe only one job gets run, i.e. data gets loaded.
@@ -337,12 +337,12 @@ IRC Transcript
 [2013-09-12 23:39:54] <ichthyo> ok, but someone has to do that.
                                 Proc certainly can't do that, it can only give you a whole bunch of jobs
                                 for background rendering
-[2013-09-12 23:40:07] <cehteh> the job function might be aware if its scheduled because of in-time or 
+[2013-09-12 23:40:07] <cehteh> the job function might be aware if its scheduled because of in-time or
                                background queue and adjust itself
 [2013-09-12 23:40:57] <cehteh> we only schedule background jobs if nothing else is to do
 [2013-09-12 23:41:18] <ichthyo> what means "nothing else"?
                                 for example, if we're waiting for data to arrive, can we meanwhile schedule
-                                background calculation (non-IO) jobs? 
+                                background calculation (non-IO) jobs?
 [2013-09-12 23:41:45] <cehteh> and if I/O becomes the bottleneck some logic to throttle background jobs
                                might be implemented on the higher level job functions...
 [2013-09-12 23:42:12] <cehteh> I abstracted "thread classes" in the worker pool remember
@@ -355,7 +355,7 @@ IRC Transcript
 [2013-09-12 23:43:55] <ichthyo> the planning of new jobs happens within jobs
                                 there are some special planning jobs from time to time
                                 but that certainly remains opaque for the scheduler
-                                
+
 [2013-09-12 23:44:15] <cehteh> the scheduler should not be aware/responsible for any other resource managemnt
 [2013-09-12 23:44:38] <bennI_> you can feed a nice to the scheduler, but the scheduler only uses the nice value
                                to reshuffle. Someone else must decide when to issue a nice
@@ -410,7 +410,7 @@ IRC Transcript
 [2013-09-12 23:58:00] <ichthyo> namely, (1) we translate them into dependent jobs (jobs that follow)
                                 and (2) we have conditional jobs, which are polled regularly,
                                 until they signal that a condition is met (or their deadline has passed)
-                                
+
 [2013-09-12 23:58:59] <cehteh> ichthyo: I think job creation is a (at least) 2 step process .. first you create
                                the job structure, fill in any data (jobs it depends on). These 'jobs it depends on'
                                might be just created of course .. and then when done you unleash it to the scheduler
@@ -418,9 +418,9 @@ IRC Transcript
 [2013-09-12 23:59:52] <ichthyo> on high-level, I hand over jobs as "transactions" or batches
                                 then, the scheduler-frontend might do some preprocessing and re-grouping
                                 and finally hands over the right data structures to the low-level interface
-                                
+
 [2013-09-13 00:00:35] <cehteh> after you given it to the scheduler, shall the scheduler dispose it when done
-                               (I mean really done) or give it back to you 
+                               (I mean really done) or give it back to you
 [2013-09-13 00:00:49] <ichthyo> never give it back
 [2013-09-13 00:00:52] <cehteh> OK
 [2013-09-13 00:00:56] <ichthyo> it is really point-and-shot
@@ -464,8 +464,8 @@ IRC Transcript
 [2013-09-13 00:08:57] <ichthyo> well yes. but that is not Proc
                                 not Proc or the Player is doing that, but the scheduler (in the wider sense) is doing that
                                 since in my understanding, only the scheduler has access to the jobs, after they
-                                have been handed over 
-[2013-09-13 00:09:41] <cehteh> well proc creates the job  
+                                have been handed over
+[2013-09-13 00:09:41] <cehteh> well proc creates the job
 [2013-09-13 00:09:47] <cehteh> yes
 [2013-09-13 00:10:12] <cehteh> but you certainly augment the low level job structure with some higher level data
 [2013-09-13 00:10:30] <ichthyo> yes
@@ -475,7 +475,7 @@ IRC Transcript
 [2013-09-13 00:11:16] <ichthyo> I'd like to see that entirely as an implementation detail within the scheduler
 [2013-09-13 00:11:23] <cehteh> the job descriptor must become very small
 [2013-09-13 00:11:28] <ichthyo> since it highly depends on thread management and the like
-[2013-09-13 00:11:50] <cehteh> no need 
+[2013-09-13 00:11:50] <cehteh> no need
 [2013-09-13 00:12:15] <ichthyo> essentially, Proc will try to keep out of that discussion
 [2013-09-13 00:12:16] <cehteh> it can become an implementation detail of some middle layer .. above the scheduler
 ----------------------------
@@ -486,7 +486,7 @@ IRC Transcript
 .-- how to handle aborting/superseding --
 [caption="☉Transcript☉ "]
 ----------------------------
-[2013-09-13 00:12:19] <bennI_> how is the proc going to say 'stop some job' 
+[2013-09-13 00:12:19] <bennI_> how is the proc going to say 'stop some job'
 [2013-09-13 00:12:28] <ichthyo> yes that's the question. That's what I'm getting at
 [2013-09-13 00:12:49] <ichthyo> Proc will certainly never ask you to stop a specific job
                                 this is sure.
@@ -502,7 +502,7 @@ IRC Transcript
 [2013-09-13 00:14:32] <bennI_> 'IT' ?
                                the proc?
 [2013-09-13 00:14:44] <cehteh> why number .. why not the low level job pointer?
-                               that is guaranteed to be a valid unique number for each job 
+                               that is guaranteed to be a valid unique number for each job
 [2013-09-13 00:15:06] <ichthyo> cehteh: since Proc never retains knowledge regarding individual jobs
 [2013-09-13 00:15:17] <cehteh> uhm -- when you create a job it does
 [2013-09-13 00:15:24] <bennI_> 'cause the Proc layer wants to give the job to the scheduler and say goodby,
@@ -523,7 +523,7 @@ IRC Transcript
 [2013-09-13 00:18:18] <ichthyo> anyway, then "the manager" is also part of "the scheduler" damn it ;-)
 [2013-09-13 00:18:26] <bennI_> is it the WALL where the proc thows over the job
 [2013-09-13 00:18:31] <cehteh> it just schedules .. and if a job is canceled then the job-function
-                               has to figure that out and make a no-op 
+                               has to figure that out and make a no-op
 [2013-09-13 00:18:28] <ichthyo> Backend handles that layer. "The scheduler" is a high level thing
                                 it contains multiple low-level schedulers, priqueues and all the management stuff,
                                 and "the scheduler" as a subsystem can arrange this stuff in an optimal way.
@@ -538,7 +538,7 @@ IRC Transcript
 [2013-09-13 00:20:23] <bennI_> its that mystically 'layer' or manager?
 [2013-09-13 00:20:29] <ichthyo> yes
 [2013-09-13 00:20:43] <ichthyo> and this mystical manager needs internal knowledge how the scheduler works
-[2013-09-13 00:20:45] <cehteh> so the logic is all in the job function .. 
+[2013-09-13 00:20:45] <cehteh> so the logic is all in the job function ..
 [2013-09-13 00:20:47] <bennI_> as a client you can expect the manager to do this
 [2013-09-13 00:20:55] <bennI_> but the manager belongs not to the scheduler
 [2013-09-13 00:21:00] <ichthyo> but the client doesn't need internal knowledge how the scheduler works
@@ -550,7 +550,7 @@ IRC Transcript
 
 [2013-09-13 00:21:26] <bennI_> ok, WHO wants to stop or abort jobs?
 [2013-09-13 00:21:46] <cehteh> proc :>
-[2013-09-13 00:21:48] <ichthyo> the player 
+[2013-09-13 00:21:48] <ichthyo> the player
 [2013-09-13 00:22:11] <ichthyo> more precisely: the player doesn't want to stop jobs, but he wants to change the playback mode
 [2013-09-13 00:22:29] <cehteh> ichthyo: do you really need a 'scope' or can you have a 'leader' which you abort
                                This leader is practically implemented as a job which is already finished but others wait on it
@@ -560,7 +560,7 @@ IRC Transcript
                                 Proc can try to support that feature with giving the right information
                                 grouping or tagging would be one option
 [2013-09-13 00:24:26] <ichthyo> just look at the requirement from the player:
-                                consider the pause button or loop playing, while the user moves the loop boundaries 
+                                consider the pause button or loop playing, while the user moves the loop boundaries
 [2013-09-13 00:24:50] <ichthyo> or think at scrubbing where the user drags the "playhead" marker while it move
 [2013-09-13 00:24:19] <cehteh> I opt for the leader implementation
                                because that needs no complicated scope lookup and can be implemented with the facilities

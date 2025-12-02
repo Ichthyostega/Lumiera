@@ -1,36 +1,33 @@
 /*
   OPTIONAL-REF.hpp  -  optional and switchable reference
 
-  Copyright (C)         Lumiera.org
-    2010,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2010,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
- 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
+
+
+/** @file optional-ref.hpp
+ ** a checked, switchable reference.
+ ** Offers semantics similar to a pointer, but throws (not segfaults)
+ ** on invalid dereferentiation
+ */
 
 
 #ifndef LIB_OPTIONAL_REF_H
 #define LIB_OPTIONAL_REF_H
 
 #include "lib/error.hpp"
-#include "lib/bool-checkable.hpp"
 
 
 namespace lib {
   
-  using lumiera::error::LUMIERA_ERROR_BOTTOM_VALUE;
+  using LERR_(BOTTOM_VALUE);
   
   
   
@@ -53,7 +50,6 @@ namespace lib {
    */
   template<typename T>
   class OptionalRef
-    : public lib::BoolCheckable<OptionalRef<T> >
     {
       T* ref_;
       
@@ -75,12 +71,15 @@ namespace lib {
         : ref_(&target)
         { }
       
+      explicit operator bool() const { return isValid(); }
+      
+      
       T&
       operator() ()  const
         {
           if (!isValid())
             throw lumiera::error::Logic ("access to this object is (not/yet) enabled"
-                                        , LUMIERA_ERROR_BOTTOM_VALUE);
+                                        , LERR_(BOTTOM_VALUE));
           return *ref_;
         }
       
@@ -112,7 +111,7 @@ namespace lib {
       points_to (T const& target)  const
         {
           return isValid()
-              && ref_ == &target;
+             and ref_ == &target;
         }
       
       friend bool

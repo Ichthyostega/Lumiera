@@ -1,50 +1,40 @@
 /*
   VisitingTool(Concept)  -  concept draft of a Visitor library implementation
 
-  Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2008,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+* *****************************************************************/
 
 
-/** @file visitingtool-conept.cpp
+/** @file visitingtool-concept.cpp
  ** While laying the foundations for Session and Builder, Ichthyo came across
  ** the necessity to create a custom implementation of the Visitor Pattern
  ** optimally suited for Lumiera's needs. This implementation file was used
  ** for the drafting process and is self-contained. The final solution was
  ** then extracted later as library implementation into visitor.hpp
  **
- ** Basic considerations
- ** <ul><li>cyclic dependencies should be avoided or at least restricted
- **         to some library related place. The responsibilities for
- **         user code should be as small as possible.</li>
- **     <li>Visitor is about <i>double dispatch</i>, thus we can't avoid
- **         using some table lookup implementation, and we can't avoid using
- **         some of the cooperating classes' vtables. Besides that, the
- **         implementation should not be too wasteful...</li>
- **     <li>individual Visiting Tool implementation classes should be able
- **         to opt in or opt out on implementing functions treating some of
- **         the visitable subclasses.</li>
- **     <li>there should be a safe fallback mechanism backed by the
- **         visitable object's hierarchy relations. If some new class declares
- **         to be visitable, existing Visiting Tools not yet treating this new
- **         visitable type should fall back rather to the next best match up the
- **         hierarchy, instead of invoking some almost abstract base class</li>
- ** </ul>
+ ** \par Basic considerations
+ ** - cyclic dependencies should be avoided or at least restricted
+ **   to some library related place. The responsibilities for
+ **   user code should be as small as possible.
+ ** - the purpose of Visitor is to achieve **double dispatch**, thus we
+ **   can not avoid using some table lookup implementation, and we can not
+ **   avoid using some of the cooperating classes' vtables. Besides that,
+ **   the implementation should not be too wasteful...
+ ** - individual Visiting Tool implementation classes should be able
+ **   to opt in or opt out on implementing functions treating some of
+ **   the visitable subclasses.
+ ** - there should be a safe fallback mechanism backed by the
+ **   visitable object's hierarchy relations. If some new class declares
+ **   to be visitable, existing Visiting Tools not yet treating this new
+ **   visitable type should fall back rather to the next best match up the
+ **   hierarchy, instead of invoking some almost abstract base class.
  ** 
  ** @see visitor.hpp the final lib implementation
  ** @see visitingtooltest.cpp test cases using our lib implementation
@@ -54,15 +44,14 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/format-cout.hpp"
+#include "lib/format-string.hpp"
 #include "lib/depend.hpp"
 
-#include <boost/format.hpp>
-#include <iostream>
 #include <vector>
 
-using boost::format;
+using util::_Fmt;
 using std::string;
-using std::cout;
 
 
 namespace lumiera {
@@ -125,8 +114,8 @@ namespace lumiera {
     class Tool
       {
       public:
-        typedef RET ReturnType;
-        typedef Tool<RET> ToolBase; ///< for templating the Tag and Dispatcher
+        using ReturnType = RET;
+        using ToolBase = Tool<RET>; ///< for templating the Tag and Dispatcher
         
         virtual ~Tool()  { };     ///< use RTTI for all visiting tools
         
@@ -141,7 +130,7 @@ namespace lumiera {
     class ToolType
       : public BASE
       {
-        typedef typename BASE::ToolBase ToolBase;
+        using ToolBase = BASE::ToolBase;
         
       public:
         virtual Tag<ToolBase>
@@ -163,7 +152,7 @@ namespace lumiera {
     template<class TAR, class TOOL>
     class Dispatcher
       {
-        typedef typename TOOL::ReturnType ReturnType;
+        using ReturnType = TOOL::ReturnType;
         
         /** generator for Trampoline functions,
          *  used to dispatch calls down to the
@@ -194,7 +183,7 @@ namespace lumiera {
         inline bool
         is_known (size_t id)
           { 
-            return id<=table_.size() && table_[id-1];
+            return id<=table_.size() and table_[id-1];
           }
         
         inline void
@@ -209,7 +198,7 @@ namespace lumiera {
         inline Trampoline
         storedTrampoline (size_t id)
           {
-            if (id<=table_.size() && table_[id-1])
+            if (id<=table_.size() and table_[id-1])
               return table_[id-1];
             else
               return &errorHandler;
@@ -265,8 +254,8 @@ namespace lumiera {
     template<class TAR, class TOOLImpl, class BASE=Tool<void> >
     class Applicable
       {
-        typedef typename BASE::ReturnType Ret;
-        typedef typename BASE::ToolBase ToolBase;
+        using Ret      = BASE::ReturnType;
+        using ToolBase = BASE::ToolBase;
         
       protected:
         Applicable()
@@ -299,8 +288,8 @@ namespace lumiera {
         virtual ~Visitable() { };
         
         /// @note may differ from TOOL
-        typedef typename TOOL::ToolBase ToolBase;
-        typedef typename TOOL::ReturnType ReturnType;
+        using ToolBase   = TOOL::ToolBase;
+        using ReturnType = TOOL::ReturnType;
 
         /** @internal used by the DEFINE_PROCESSABLE_BY macro.
          *            Dispatches to the actual operation on the
@@ -338,7 +327,7 @@ namespace lumiera {
     
     namespace test {
       
-      typedef Tool<void> VisitingTool;
+      using VisitingTool = Tool<void>;
       
       class HomoSapiens : public Visitable<>
         {
@@ -373,7 +362,7 @@ namespace lumiera {
         protected:
           void talk_to (string guy)
             {
-              cout << format ("Hello %s, nice to meet you...\n") % guy;
+              cout << _Fmt{"Hello %s, nice to meet you...\n"} % guy;
             }
         };
       

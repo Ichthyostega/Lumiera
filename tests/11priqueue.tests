@@ -1,6 +1,0 @@
-TESTING "Priority Queue" ./test-priqueue
-
-TEST "fill and clear" <<END
-return: 0
-END
-

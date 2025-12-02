@@ -1,48 +1,42 @@
 /*
-  Cmdline  -  abstraction of the usual commandline, a sequence of strings 
+  Cmdline  -  abstraction of the usual commandline, a sequence of strings
 
-  Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2008,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+* *****************************************************************/
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-* *****************************************************/
+/** @file cmdline.cpp
+ ** Implementation of a wrapper / marker to handle "commandline arguments".
+ */
 
 
 
-#include "lib/util.hpp"
 #include "include/logging.h"
+#include "lib/hash-standard.hpp"
 #include "lib/cmdline.hpp"
+#include "lib/format-util.hpp"
 
-#include <boost/regex.hpp>
-#include <boost/algorithm/string/join.hpp>
+#include <regex>
 
-using boost::regex;
-using boost::smatch;
-using boost::regex_search;
-using boost::algorithm::join;
-
+using std::regex;
+using std::smatch;
+using std::regex_search;
+using util::join;
 using util::noneg;
 
 
-#include <iostream>
 
 namespace lib {
   
   
-  /** create as a tokenised <i>copy</i> of the current commandline.
+  /** create as a tokenised _copy_ of the current commandline.
    *  Note that argv[0] is always ignored. */
   Cmdline::Cmdline (int argc, const char** argv)
     : vector<string> (noneg(argc-1))
@@ -54,18 +48,18 @@ namespace lib {
         }
     }
    
-    
-  /** create by tokenising a string 
-   *  (e.g. "fake" cmdline, separated by whitespace) 
+   
+  /** create by tokenising a string
+   *  (e.g. "fake" cmdline, separated by whitespace)
    */ 
   Cmdline::Cmdline (const string cmdline)
     {
-      regex tokendef("[^ \r\n\t]+");
+      static regex TOKENDEF{"\\S+"};
       smatch match;
       string::const_iterator it = cmdline.begin();
       string::const_iterator end = cmdline.end();
       
-      while (regex_search(it, end, match, tokendef))
+      while (regex_search(it, end, match, TOKENDEF))
         {
           string ss(match[0]);
           this->push_back(ss);

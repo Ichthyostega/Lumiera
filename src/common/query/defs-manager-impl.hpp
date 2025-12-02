@@ -1,22 +1,13 @@
 /*
   DEFS-MANAGER-IMPL.h  -  access to preconfigured default objects and definitions
 
-  Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2008,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
 
@@ -28,11 +19,11 @@
  ** include to create explicit template instantiations with the concrete types to be used
  ** for definition and retrieval of default-configured objects.
  ** 
- ** For the standard use-case within the session / Proc-Layer, this is performed for the
+ ** For the standard use-case within the session / Steam-Layer, this is performed for the
  ** core MObject types, alongside with the definition of the generic config-query-resolver.
  ** 
- ** @see config-resolver.cpp definition of the explicit specialisations for the session 
- ** @see proc::ConfigResolver
+ ** @see config-resolver.cpp definition of the explicit specialisations for the session
+ ** @see steam::ConfigResolver
  **
  */
 
@@ -51,9 +42,8 @@
 
 using util::_Fmt;
 
-using proc::ConfigResolver;
+using steam::ConfigResolver;
 using lumiera::query::QueryHandler;                    ///////TODO preliminary interface defined in config-rules.hpp
-using lumiera::query::LUMIERA_ERROR_CAPABILITY_QUERY;
 
 
 namespace lumiera{
@@ -63,16 +53,17 @@ namespace query  {
   
   
   /** initialise the most basic internal defaults. */
-  DefsManager::DefsManager ()  throw()
+  DefsManager::DefsManager ()  noexcept
     : defsRegistry_(new DefsRegistry)
   {
-    TODO ("setup basic technical defaults of the session?");
+    INFO (session, "Configure technical defaults of the session.");
+    
   }
   
   
   
-  /** @internal causes boost::checked_delete from \c scoped_ptr<DefsRegistry>
-   *  to be placed here, where the declaration of DefsRegistry is available.*/
+  /** @internal causes std::default_delete from `unique_ptr<DefsRegistry>`
+   *  to be emitted here, where the declaration of DefsRegistry is available. */
   DefsManager::~DefsManager() {}
   
   
@@ -103,7 +94,7 @@ namespace query  {
   
   
   template<class TAR>
-  P<TAR> 
+  P<TAR>
   DefsManager::create  (const Query<TAR>& capabilities)
   {
     P<TAR> res;
@@ -116,11 +107,11 @@ namespace query  {
   
   
   template<class TAR>
-  bool 
+  bool
   DefsManager::define  (const P<TAR>& defaultObj, const Query<TAR>& capabilities)
   {
     P<TAR> candidate (defaultObj);
-    QueryHandler<TAR>& typeHandler = ConfigResolver::instance();  
+    QueryHandler<TAR>& typeHandler = ConfigResolver::instance();
     typeHandler.resolve (candidate, capabilities);
     if (!candidate)
       return false;
@@ -142,15 +133,15 @@ namespace query  {
   DefsManager::operator() (const Query<TAR>& capabilities)
   {
     P<TAR> res (search (capabilities));
-    if (res) 
+    if (res)
       return res;
     else
       res = create (capabilities); // not yet known as default, create new
     
     if (!res)
-      throw lumiera::error::Config (_Fmt("The following Query could not be resolved: %s.")
-                                        % capabilities.rebuild().asKey()
-                                   , LUMIERA_ERROR_CAPABILITY_QUERY );
+      throw error::Config (_Fmt("The following Query could not be resolved: %s.")
+                               % capabilities.rebuild().asKey()
+                          , LERR_(CAPABILITY_QUERY) );
     else
       return res;
   }

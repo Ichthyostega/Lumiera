@@ -1,24 +1,15 @@
 /*
-  FormatString  -  string template formatting based on boost::format 
+  FormatString  -  string template formatting based on boost::format
 
-  Copyright (C)         Lumiera.org
-    2011,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2011,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-* *****************************************************/
+* *****************************************************************/
 
 /** @file format-string.cpp
  ** Implementation for printf-style formatting, based on boost::format.
@@ -54,6 +45,8 @@
 #include <boost/static_assert.hpp>
 #include <boost/format.hpp>
 #include <iostream>
+#include <cstddef>
+#include <new>
 
 
 
@@ -67,23 +60,23 @@ namespace util {
   namespace { // implementation details...
     
     inline boost::format&
-    accessImpl (char* buffer)
+    accessImpl (std::byte* buffer)
     {
-      return reinterpret_cast<boost::format&> (*buffer);
+      return * std::launder (reinterpret_cast<boost::format*> (buffer));
     }
     
     
     inline void
-    destroyImpl (char* buffer)
+    destroyImpl (std::byte* buffer)
     {
-      accessImpl(buffer).~format(); 
+      accessImpl(buffer).~format();
     }
     
     
     /** in case the formatting of a (primitive) value fails,
      *  we try to supply an error indicator instead */
     void
-    pushFailsafeReplacement (char* formatter, const char* errorMsg =NULL)
+    pushFailsafeReplacement (std::byte* formatter, CStr errorMsg =nullptr)
     try {
         string placeholder("<Error");
         if (errorMsg){
@@ -98,10 +91,10 @@ namespace util {
     
     
     inline void
-    suppressInsufficientArgumentErrors (char* formatter)
+    suppressInsufficientArgumentErrors (std::byte* formatter)
     {
       using namespace boost::io;
-      accessImpl(formatter).exceptions (all_error_bits ^ too_few_args_bit); 
+      accessImpl(formatter).exceptions (all_error_bits ^ too_few_args_bit);
     }
     
     
@@ -115,11 +108,16 @@ namespace util {
    *  The actual implementation is delegated to an boost::format object,
    *  which is placement-constructed into an opaque buffer embedded into
    *  this object. Defining the necessary size for this buffer relies
-   *  on a implementation details of boost::format (and might break)
+   *  on implementation details of boost::format (and might break)
+   * @see lib::meta::SizeTrait::BOOST_FORMAT
    */
   _Fmt::_Fmt (string formatString)
   try {
-      BOOST_STATIC_ASSERT (sizeof(boost::format) <= FORMATTER_SIZE);
+      static_assert (sizeof(boost::format) <= FORMATTER_SIZE,
+                     "opaque working buffer insufficient "
+                     "to hold a boost::format instance. "
+                     "Maybe boost implementation change. "
+                     "Please verify lib/meta/size-trait.hpp");
       
       new(formatter_) boost::format(formatString);
       suppressInsufficientArgumentErrors (formatter_);
@@ -160,22 +158,22 @@ namespace util {
   
   catch (boost::io::too_many_args& argErr)
     {
-      WARN (progress, "Format: excess argument '%s' of type %s ignored."
-                    , cStr(str(val))
-                    , cStr(tyStr(val)));
+      WARN (progress, "Format: excess argument '%s' of type «%s» ignored."
+                    , cStr(toString(val))
+                    , cStr(typeStr(val)));
     }
   catch (std::exception& failure)
     {
       _clear_errorflag();
       WARN (progress, "Format: Parameter '%s' causes problems: %s"
-                    , cStr(str(val))
+                    , cStr(toString(val))
                     , failure.what());
       pushFailsafeReplacement (formatter, failure.what());
     }
   catch (...)
     {
       _clear_errorflag();
-      WARN (progress, "Format: Unexpected problems accepting format parameter '%s'", cStr(str(val)));
+      WARN (progress, "Format: Unexpected problems accepting format parameter '%s'", cStr(toString(val)));
       pushFailsafeReplacement (formatter);
     }
   

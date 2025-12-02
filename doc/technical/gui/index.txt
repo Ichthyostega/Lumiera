@@ -1,5 +1,0 @@
-Technical Documentation: GUI
-============================
-
-Eventually, this will have technical documentation for the GUI.
-

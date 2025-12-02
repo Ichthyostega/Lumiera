@@ -1,22 +1,13 @@
 /*
-  INSTANCEHANDLE.hpp  -  automatically handling interface lifecycle 
+  INSTANCEHANDLE.hpp  -  automatically handling interface lifecycle
 
-  Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+   Copyright (C)
+     2008,            Hermann Vosseler <Ichthyostega@web.de>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of
-  the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
 
 */
 
@@ -29,10 +20,10 @@
  ** out of scope. Additionally, access via an (existing) interface proxy
  ** may be enabled and disabled alongside with the loading and unloading.
  **
- ** @see gui::GuiFacade usage example
+ ** @see stage::GuiFacade usage example
  ** @see interface.h
  ** @see interfaceproxy.hpp (more explanations)
- ** @see interfaceproxy.cpp (Implementation of the proxies)
+ ** @see session-command-interface-proxy.cpp (Proxy implementation example)
  **
  */
 
@@ -43,14 +34,14 @@
 
 #include "include/logging.h"
 #include "lib/error.hpp"
-#include "include/interfaceproxy.hpp"
+#include "lib/nocopy.hpp"
+#include "lib/depend-inject.hpp"
 
 extern "C" {
 #include "common/interface.h"
 #include "common/interfaceregistry.h"
 }
 
-#include <boost/noncopyable.hpp>
 #include <string>
 
 
@@ -65,20 +56,20 @@ namespace lumiera {
   
   namespace { // implementation details
     
-    void
-    throwIfError() 
+    inline void
+    throwIfError()
     {
       if (lumiera_error_peek())
         throw lumiera::error::Config("failed to open interface or plugin.",lumiera_error());
     }
-  
+    
     /** takes a (single) instance definitions, as typically created
      *  when defining interfaces for external use, and registers it
      *  with the InterfaceSystem. Then uses the data found in the
      *  \em given instance descriptor to open an instance handle.
-     *  @throws error::Config when the registration process fails  
+     *  @throws error::Config when the registration process fails
      */
-    LumieraInterface
+    inline LumieraInterface
     register_and_open (LumieraInterface descriptor)
     {
       if (!descriptor) return NULL;
@@ -93,19 +84,36 @@ namespace lumiera {
     /** do a lookup within the interfaceregistry
      *  using the name/version found within the interface
      *  handle, to ensure it is still valid and registered */
-    bool
+    inline bool
     verify_validity (LumieraInterface ifa)
     {
       REQUIRE (ifa);
-      return (ifa == lumiera_interfaceregistry_interface_find (ifa->interface, 
-                                                               ifa->version, 
+      return (ifa == lumiera_interfaceregistry_interface_find (ifa->interface,
+                                                               ifa->version,
                                                                ifa->name));
     }
-  
-  } // (End) impl details
     
+  } // (End) impl details
+  
+  
+  
   
   namespace facade {
+
+    /**
+     * to be specialised and implemented for each
+     * individual interface and facade interface.
+     * The actual proxy implements the facade interface
+     * and reroutes each call to the corresponding function
+     * on the CL-Interface for the Lumiera interface system.
+     */
+    template<class IHA>
+    class Proxy;
+    
+    /** The ServiceHandle automatically creates and manages the Proxy instance */
+    template<class I, class FA>
+    using ServiceHandle = lib::DependInject<FA>::template ServiceInstance<Proxy<InstanceHandle<I,FA>>>;
+    
     
     /**
      * @internal Helper/Adapter for establishing a link
@@ -118,39 +126,38 @@ namespace lumiera {
      */
     template<class I, class FA>
     struct Link
-      : boost::noncopyable
+      : ServiceHandle<I,FA>
       {
-        typedef InstanceHandle<I,FA> IH;
+        using IH = InstanceHandle<I,FA>;
         
-        Link (IH const& iha) { facade::openProxy(iha); }
-       ~Link()               { facade::closeProxy<IH>(); }
+        Link (IH const& iha);
+       ~Link ();
         
-        FA&
-        operator() (IH const&)  const
-          {
-            return facade::Accessor<FA>()();
-          }
+        FA* operator->()  const;
       };
     
     
     /**
      * @internal when the InstanceHandle isn't associated with a
-     * facade interface, then this specialisation switches 
+     * facade interface, then this specialisation switches
      * the facade::Link into "NOP" mode.
      */
     template<class I>
     struct Link<I,I>
-      : boost::noncopyable
+      : util::NonCopyable
       {
-        typedef InstanceHandle<I,I> IH;
+        using IH = InstanceHandle<I,I>;
         
-        Link (IH const&)     { /* NOP */ }
-       ~Link()               { /* NOP */ }
-       
-        I&
-        operator() (IH const& handle)  const
+        IH& ih_;
+        
+        Link(IH& ih)
+          : ih_{ih}
+        { }
+        
+        I*
+        operator->()  const
           {
-            return handle.get();
+            return & ih_.get();
           }
       };
     
@@ -174,13 +181,11 @@ namespace lumiera {
           , class FA = I    ///< facade interface type to be used by clients
           >
   class InstanceHandle
-    : private boost::noncopyable
-    { 
+    : util::NonCopyable
+    {
       LumieraInterface desc_;
       I*                instance_;
       facade::Link<I,FA> facadeLink_;
-      
-      typedef InstanceHandle<I,FA> _ThisType;
       
     public:
       /** Set up an InstanceHandle representing a plugin.
@@ -192,28 +197,28 @@ namespace lumiera {
        */
       InstanceHandle (string const& iName, uint version, size_t minminor, string const& impName)
         : desc_(0)
-        , instance_(reinterpret_cast<I*> 
+        , instance_(reinterpret_cast<I*>
               (lumiera_interface_open (iName.c_str(), version, minminor, impName.c_str())))
         , facadeLink_(*this)
-        { 
+        {
           throwIfError();
         }
       
-      /** Set up an InstanceHandle managing the 
+      /** Set up an InstanceHandle managing the
        *  registration and deregistration of interface(s).
        *  Should be placed at the service providing side.
-       *  @param a (single) interface descriptor, which can be created with
+       *  @param descriptor a (single) interface descriptor, which can be created with
        *         LUMIERA_INTERFACE_INSTANCE and referred to by LUMIERA_INTERFACE_REF
        */
       InstanceHandle (LumieraInterface descriptor)
         : desc_(descriptor)
         , instance_(reinterpret_cast<I*> (register_and_open (desc_)))
         , facadeLink_(*this)
-        { 
+        {
           throwIfError();
         }
       
-      ~InstanceHandle ()
+     ~InstanceHandle()
         {
           lumiera_interface_close (&instance_->interface_header_);
           if (desc_)
@@ -222,34 +227,45 @@ namespace lumiera {
       
       
       
-      /** act as smart pointer providing access through the facade.
-       *  @note we don't provide operator*                      */
-      FA * operator-> ()  const { return &(facadeLink_(*this)); }
+      /** act as smart pointer to allow access through the facade.
+       *  @note we don't provide `operator*`
+       */
+      FA*
+      operator->()  const
+        {
+          return facadeLink_.operator ->();
+        }
       
       /** directly access the instance via the CL interface */
-      I& get ()  const { ENSURE(instance_); return *instance_; }
+      I&
+      get()  const
+        {
+          ENSURE(instance_);
+          return *instance_;
+        }
       
       
-      
-      typedef I* _ThisType::*unspecified_bool_type;
-      
-      /** implicit conversion to "bool" */
-      operator unspecified_bool_type()  const // never throws
-        { return isValid()?  &_ThisType::instance_ : 0; }
-      
-      bool operator! ()  const { return not isValid();  }
+      explicit
+      operator bool()  const
+        {
+          return isValid();
+        }
+      bool
+      operator!() const
+        {
+          return not isValid();
+        }
       
       
     private:
-      bool 
+      bool
       isValid()  const
-        { 
-          return instance_ 
-              && verify_validity (&instance_->interface_header_);
+        {
+          return instance_
+             and verify_validity (&instance_->interface_header_);
         }
     };
   
   
 } // namespace lumiera
-
-#endif
+#endif /*LUMIERA_INSTANCEHANDLE_H*/

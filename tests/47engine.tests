@@ -1,0 +1,80 @@
+TESTING "Component Test Suite: Render Engine parts" ./test-suite --group=engine
+
+
+
+TEST "Test support: dummy frames" TestFrame_test <<END
+return: 0
+END
+
+
+TEST "Test support: dummy buffer provider" TrackingHeapBlockProvider_test <<END
+return: 0
+END
+
+
+TEST "Buffer provider diagnostics" BufferProviderProtocol_test <<END
+return: 0
+END
+
+
+TEST "Bbuffer metadata type keys" BufferMetadataKey_test <<END
+return: 0
+END
+
+
+TEST "Buffer metadata and state transitions" BufferMetadata_test <<END
+return: 0
+END
+
+
+PLANNED "Proxy Buffer-provider" BufferProxyProvider_test <<END
+return: 0
+END
+
+
+PLANNED "Engine Interface basics" EngineInterface_test <<END
+END
+
+
+PLANNED "Engine calculation streams" CalcStream_test <<END
+END
+
+
+TEST "Frame Dispatcher Interface" DispatcherInterface_test <<END
+END
+
+
+TEST "Render job properties" JobHash_test <<END
+return: 0
+END
+
+
+TEST "Render job planning calculation" JobPlanning_test <<END
+out-lit: Frame #5 @ ∆200ms
+out-lit: real-time-origin : 0:05:00.000
+out-lit: total latency    : ≺30ms≻
+out-lit: deadline         : 0:05:00.170
+out-lit: Prerequisite......
+out-lit: master deadline  : 0:05:00.160
+out-lit: latency          : ≺60ms≻
+out-lit: prereq deadline  : 0:05:00.100
+return: 0
+END
+
+
+TEST "Render job planning pipeline setup" JobPlanningPipeline_test <<END
+return: 0
+END
+
+
+TEST "Mock support for render job planning" MockSupport_test <<END
+return: 0
+END
+
+
+PLANNED "scheduler interface" SchedulerInterface_test <<END
+END
+
+
+TEST "Step timing basics" Timings_test <<END
+END
