@@ -351,7 +351,7 @@ actively step by step
   Gui.resourcepath:: the place where the GTK-UI looks for further resources, most notably...
 
   Gui.stylesheet:: the name of the CSS-stylesheet for GTK-3, which defines the
-    application specific look, link:{ldoc}/technical/stage/style[styling and theme].
+    application specific look, link:{ldoc}/technical/stage/style/[styling and theme].
 
 While the first two steps, the relative locations `$ORIGIN/modules` and `$ORIGIN/setup.ini`
 are hard-wired, the further resolution steps rely on the contents of 'setup.ini' and are
@@ -426,8 +426,8 @@ https://wiki.debian.org/RpathIssue[this Debian page] ] -- with the exception of 
 intended for usage by the given executable or other libraries within the same source package.
 
 In the new system, the precedence order is as follows footnote:[see
-http://linux.die.net/man/8/ld.so[ld.so manpage on die.net] or
-http://manpages.ubuntu.com/manpages/lucid/man8/ld.so.8.html[ld.so manpage ubuntu.com (more recent)] ]
+https://linux.die.net/man/8/ld.so[ld.so manpage on die.net] or
+https://manpages.ubuntu.com/manpages/jammy/man8/ld.so.8.html[ld.so manpage ubuntu.com (more recent)] ]
 
 . `LD_LIBRARY_PATH` entries, unless the executable is `setuid`/`setgid`
 . `DT_RUNPATH` from the `.dynamic` section of that ELF binary, library or executable
@@ -444,9 +444,9 @@ NOTE: The new-style `DT_RUNPATH` is not extended recursively when resolving tran
       visit _only_ the `RUNPATH` given in 'libB.so', but _not_ the `RUNPATH` given in 'libA.so'
       (to the contrary, the old `RPATH` used to visit all these locations). +
       This behaviour was chosen deliberately, in compliance with the ELF spec, as can be seen in this
-      link:https://sourceware.org/bugzilla/show_bug.cgi?id=13945[glibc bug #13945] and the
+      https://sourceware.org/bugzilla/show_bug.cgi?id=13945[glibc bug #13945] and the
       developer comment by
-      link:https://sourceware.org/ml/libc-hacker/2002-11/msg00011.html[Roland McGrath from 2002]
+      https://sourceware.org/legacy-ml/libc-hacker/2002-11/msg00011.html[Roland McGrath from 2002]
       mentioned therein.
 
 

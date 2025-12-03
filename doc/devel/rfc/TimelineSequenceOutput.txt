@@ -1,9 +1,14 @@
-[grid="all"]
-`------------`-----------------------
-*State*         _Final_
-*Date*          _2008-11-03_
-*Proposed by*   link:Ichthyostega[]
--------------------------------------
+Design Process : Timelines
+==========================
+
+//MENU: label Timelines and Sequences in the high-level-Model
+
+[options="autowidth"]
+|====================================
+|*State*       | _Final_
+|*Date*        | _2008-11-03_
+|*Proposed by* | Ichthyostega
+|====================================
 
 
 .Summary
@@ -18,8 +23,9 @@ Relation of Project, Timeline(s), Sequence(s) and Output generation
 -------------------------------------------------------------------
 
 In the course of our discussions it meanwhile became clear, that Lumiera will
-show multiple _timeline-like_ views within one project. Similarly it's clear
-now that we will support link:EDLsAreMetaClips.html[nested Sequences as meta-clips].
+show multiple _timeline-like_ views within one project. Furthermore, support
+for link:{rfc}/EDLsAreMetaClips.html[nested Sequences as meta-clips] is
+considered an essential goal.
 The purpose of this entry is to try to settle on some definitions
 and clarify the relationships between these concepts.
 
@@ -33,7 +39,7 @@ Project:: the top-level context in which all edit work is done over an
 
 Session:: the current in-memory representation of the Project when opened
  within an instance of Lumiera. This is an implementation-internal term. For
- the GUI and the users POV we should always prefer the term "Project" for the
+ the GUI and the users POV we should always prefer the term »Project« for the
  general concept.
 
 Timeline:: the top level element within the Project. It is visible within a
@@ -41,8 +47,9 @@ Timeline:: the top level element within the Project. It is visible within a
  arrangement of media objects, resolved to a finite time axis, to be rendered
  for output or viewed in a Monitor (viewer window). Timeline(s) are top-level
  and may not be further combined. A timeline is comprised of:
-   * a time axis in abolute time (WIP: not clear if this is an entity or just a
-     conceptual definition)
+   * a time axis in absolute time +
+     ^([purple]#WIP#: not clear if this is an entity or just a
+     conceptual definition)^
    * a _PlayController_
    * a list of global _Pipes_ representing the possible outputs (master
      busses)
@@ -50,8 +57,8 @@ Timeline:: the top level element within the Project. It is visible within a
      nested Sequences
 
 Timeline View:: a view in the GUI featuring a given timeline. There might be
- multiple views of the same timeline, all sharing the same !PlayController. A
- proposed extension is the ability to _focus_ a timeline view to a
+ multiple views of the same timeline, all sharing the same `PlayController`.
+ A proposed extension is the ability to _focus_ a timeline view to a
  sub-Sequence contained within the top-level sequence of the underlying
  Timeline. (Intended for editing meta-clips)
 
@@ -81,13 +88,13 @@ PlayController:: coordinating playback, cueing and rewinding of a
  media data needed for playback. Actually, the implementation of the
  PlayController(s) is assumed to live in the application core.
 
-RenderTask:: basically a !PlayController, but collecting output
- directly, without moving a !PlayheadCursor (maybe a progress indicator) and
+RenderTask:: basically a `PlayController`, but collecting output
+ directly, without moving a `PlayheadCursor` (maybe a progress indicator) and
  not operating in a timed fashion, but freewheeling or in background mode
 
 Monitor/Viewer:: a viewer window to be attached to a timeline. When attached, a
- monitor reflects the state of the timeline's PlayController, and it attaches
- to the timeline's global pipes by stream-type match, showing video as monitor
+ monitor reflects the state of the timeline's `PlayController`, and it attaches
+ to the Timeline's global pipes by stream-type match, showing video as monitor
  image and sending audio to the system audio port (Alsa or Jack). Possible
  extensions are for a monitor to be able to attach to probe points within the
  render network, to show a second stream as (partial) overlay for comparison,
@@ -108,36 +115,37 @@ image:{imgd}/ProjectTimelineSequenceUML.png[UML: Relation of Project, Timeline, 
   same time we may have multiple views of the same timeline.
 * all playhead displays within different views linked to the _same_
   underlying timeline are effectively linked together, as are all GUI widgets
-  representing the same !PlayController owned by a single timeline.
+  representing the same `PlayController` owned by a single timeline.
 * I am proposing to do it this way per default, because it seems to be a best
   match to the users expectation (it is well known that multiple playback
   cursors tend to confuse the user)
-* the timeline view is modeled to be a sub-concept of "timeline" and thus can
+* the timeline view is modelled to be a sub-concept of ``Timeline'' and thus can
   stand-in. Thus, to start with, for the GUI it doesn't make any difference if
   it talks to a timeline view or a timeline.
 * each timeline _refers_ to a (top-level) sequence. I.e. the sequences
-  themselves are owned by the project, and theoretically it's possible to refer
+  themselves are owned by the Project, and theoretically it's possible to refer
   to the same sequence from multiple timelines directly and indirectly.
-* besides, it's also possible to create multiple independent timelines -— in
+* besides, it's also possible to create multiple independent timelines -- in
   an extreme case even so when referring to the same top-level sequence. This
   configuration gives the ability to play the same arrangement in parallel with
   multiple independent play controllers (and thus independent playhead
   positions)
-* to complement this possibilities, I'd propose to give the _timeline view_
-  the possibility to be focussed (re-linked) to a sub-sequence. This way, it
+* to complement this possibilities, I'd propose to give the _Timeline View_
+  the possibility to be focused (re-linked) to a sub-sequence. This way, it
   would stay connected to the main play control, but at the same time show a
   sub-sequence _in the way it will be treated as embedded within the top-level
   sequence._ This would be the default operation mode when a meta-clip is
   opened (and showed in a separate tab with such a linked timeline view). The
   reason for this proposed handling is again to give the user the least
-  surprising behaviour. Because, when -— on the contrary -— the
+  surprising behaviour. Because, when -- on the contrary -- the
   sub-sequence would be opened as separate timeline, a different absolute time
   position and a different signal routing may result; doing such should be
   reserved for advanced use, e.g. when multiple editors cooperate on a single
   project and a sequence has to be prepared in isolation prior to being
   integrated in the global sequence (featuring the whole movie).
-* one rather unconventional feature to be noted is that the _tracks_ (forks) are
-  within the _sequences_ and not on the level of the global busses as in most
+* one rather unconventional feature to be noted is that the _Tracks_
+  (actually a _»Fork«_ ≙ a tree of Tracks) are
+  within the _Sequences_ and not on the level of the global busses as in most
   other video and audio editors. The rationale is that this allows for fully
   exploiting the tree-structure, even when working with large and compound
   projects, it allows for sequences being local clusters of objects including
@@ -149,12 +157,12 @@ image:{imgd}/ProjectTimelineSequenceUML.png[UML: Relation of Project, Timeline, 
 Tasks
 ^^^^^
  * Interfaces on the Stage and Steam level need to be fully specified.
-   Especially, "Timeline" is now promoted to be a new top-level entity within
+   Especially, »Timeline« is now promoted to be a new top-level entity within
    the Session
  * communication between the PlayController(s) and the GUI need to be worked
    out
  * the stream type system, which is needed to make this default connection
-   scheme work, currently is just planned and drafted. Doing a exemplaric
+   scheme work, currently is just planned and drafted. Doing a exemplarily
    implementation for GAVL based streams is on my immediate agenda and should
    help to unveil any lurking detail problems in this design.
  * with the proposed focusing of the timeline view to a sub-sequence, there are
@@ -171,8 +179,7 @@ Pros
 ^^^^
  * this design naturally scales down to behave like the expected simple default
    case: one timeline, one track, simple video/audio out.
- * but at the same time it allows for bewildering complex setups for advanced
-   use
+ * but at the same time it allows for bewildering complex setups for advanced use
  * separating signal flow and making the fork (``track tree'') local to the sequence
    solves the problem how to combine independent sub-sequences into a compound
    session
@@ -181,9 +188,8 @@ Pros
 Cons
 ^^^^
  * it is complicated
- * it is partially uncommon, but not fully revolutionary, and thus may be
-   misleading.
- * the control handling in GUI can become difficult (focus? key shortcuts?)
+ * it is partially uncommon, but not fully revolutionary, and thus might be misleading.
+ * the control handling in the GUI can become difficult (focus? key shortcuts?)
  * the ability to have both separate timelines and timeline views can be very
    confusing. We really need to think about suitable UI design
  * because the signal flow is separated from the tracks, we need to re-design
@@ -194,13 +200,13 @@ Cons
 
 Alternatives
 ^^^^^^^^^^^^
- * just one session, a list of tracks and don't cover the organisation of
-   larger projects at all.
- * allow only linear sequences with one track, not cluster-like sequences
- * make the tracks synonymous with the global busses as usual. Use an
-   allocation mechanism when "importing" separate sub-projects
+ * just one Session, a list of Tracks and do not attempt to cover the organisation
+   of larger projects at all.
+ * allow only linear Sequences with one Track, not cluster-like sequences
+ * make the Tracks synonymous with the global busses as usual. Use an
+   allocation mechanism when ``importing'' separate sub-projects
  * rather make compound projects a loosely coupled collection of stand-alone
-   projects, which are just "played" in sequence. Avoid nested referrals.
+   projects, which are just ``played'' in sequence. Avoid nested referrals.
  * don't build nested structures, rather build one large timeline and provide
    flexible means for hiding and collapsing parts of it.
 
@@ -210,7 +216,7 @@ Rationale
 Obviously, the usual solution was found to be limiting and difficult to work
 with in larger projects. On the other hand, the goal is not to rely on external
 project organisation, rather to make Lumiera support more complicated
-structures without complicated "import/export" rules or the need to create a
+structures without complicated ``import/export'' rules or the need to create a
 specific master-document which is different from the standard timeline. The
 solution presented here seems to be more generic and to require fewer treating
 of special cases than the conventional approach would be.
@@ -224,17 +230,17 @@ Comments
 
 
 
-GUI handling could make use of expanded view features like ;
+GUI handling could make use of expanded view features like...
 
 * drop down view of track, that just covers over what was shown below. This may
   be used for quick precise looks, or simple editions, or clicking on a subtrack
   to burrow further down.
 
 * show expanded trackview in new tab. This creates another tabbed view which
-  makes the full window are available for a "magnified" view. It is very easy
+  makes the full window are available for a ``magnified'' view. It is very easy
   to jump back to the main track view, or to other view tabs (edit points).
 
-* The main track view could show highlights for "currently created" views/edit
+* The main track view could show highlights for ``currently created'' views/edit
   points, and whether they are currently being used or not (active/inactive).
 
 * Each tab view could show a miniature view of the main track view (similar
@@ -246,36 +252,38 @@ GUI handling could make use of expanded view features like ;
   positioned very close to the point on the track that was clicked on to
   trigger the drop down. This close proximity means that the mouse motion
   distance to commonly used (next) options, is very minimal. Icons for common
-  options might include ; remove drop down view, create new tab view (active
-  edit point), create edit point (but don't open a new tab - just create the
-  highlight zone on the track), temporarily "maximise" the drop down view to
+  options might include; remove drop down view, create new tab view (active
+  edit point), create edit point (but don't open a new tab -- just create the
+  highlight zone on the track), temporarily ``maximise'' the drop down view to
   the full window size (ie show the equivalent tab view in the current window).
 
-* some of the "matrix" type view methods commonly used in spreadsheets, like
-  lock horizontal and vertical positions (above OR Below, left OR Right of
-  marker) for scrolling - this can also be used for determining limits of
+* some of the ``matrix type'' view methods commonly used in spreadsheets, like
+  lock horizontal and vertical positions (above _or_ below, left _or_ right of
+  marker) for scrolling -- this can also be used for determining limits of
   scroll.
 
 * monitor view could include a toggle between show raw original track , show
   zoomed and other camera/projector render, or show full rendering including
-  effects - this ties in with the idea of being able to link a monitor with
-  viewing anywhere in the node system - but is able to be swiftly changed
+  effects -- this ties in with the idea of being able to link a monitor with
+  viewing anywhere in the node system -- but is able to be swiftly changed
   within the monitor view by icons mounted somewhere on each of the respective
   monitors' perimeter.
 
 * the trackview itself, could be considered as a subview of a
-  total-timeline-trackview, or some other method of "mapping out" the full
+  total-timeline-trackview, or some other method of ``mapping out'' the full
   project (more than one way of mapping it out may be made as optional/default
   views).
 
-* this set of features are going to be very exciting and convenient to work
-  with - a sort of google earth feature for global sized projects.
+This set of features is going to be very exciting and convenient to work
+with -- a sort of google earth feature for global sized projects.
 
-Tree 2008-12-19 22:58:30
+Tree::  '2008-12-19 22:58:30'
+
 
 Final
 ~~~~~
-    Do 14 Apr 2011 03:06:42 CEST Christian Thaeter
+Christian Thaeter::  'Thu 14 Apr 2011 03:06:42 CEST'
 
 
-Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
+''''
+Back to link:/x/DesignProcess.html[Lumiera Design Process overview]

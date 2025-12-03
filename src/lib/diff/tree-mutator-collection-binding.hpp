@@ -38,7 +38,7 @@
  ** - at the bottom we use an adaptation layer in the form of a traits template,
  **   with two concrete specialisations of the ContainerTraits for vector-like
  **   and map-like collections
- ** - on top of this the CollectionBinding is established to establish a kind of
+ ** - on top of this the CollectionBinding is established to provide a kind of
  **   generic access protocol for consuming a collection guided by diff instructions
  ** - the third level then holds the actual TreeMutator implementation, embodied into
  **   the ChildCollectionMutator template, which in fact translates and delegates
@@ -48,7 +48,7 @@
  **   provided by the client of this collection binding. The entrance point to this
  **   DSL layer is the _DefaultBinding, which is established by wrapping the actual
  **   collection into the concrete CollectionBinding at the point where the builder
- **   is created. The further DSL verbs on the CollectionBindingBuilder just server
+ **   is created. The further DSL verbs on the CollectionBindingBuilder just serve
  **   to provide or overlay some lambdas to fill in the flexible parts of the binding.
  ** 
  ** And these flexible parts are mostly concerned with the _actual contents_ of the

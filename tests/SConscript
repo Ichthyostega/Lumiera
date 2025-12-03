@@ -80,8 +80,8 @@ testSrcDirs = globRootdirs('*')
 
 
 testcases  = [testCases(env, dir)  for dir in testSrcDirs if not dir in specialDirs]
-testLibs   = sharedTestLibs.values()
-testrunner = envSuite.Program("test-suite", ["testrunner.cpp"]+list(testLibs)+list(core_lib))
+testLibs   = list(sharedTestLibs.values())
+testrunner = envSuite.Program("test-suite", ["testrunner.cpp"]+testLibs+core_lib)
 
 
 testsuite = ( testcases
@@ -96,8 +96,7 @@ Export('testsuite')
 
 
 # for creating a Valgrind-Suppression file
-vgsuppression = envSuite.Program('vgsuppression',['tool/vgsuppression.c']+list(testLibs)+list(core_lib))   ## for suppressing false valgrind alarms
-tools  += [vgsuppression]
+vgsuppression = envSuite.Program('vgsuppression',['tool/vgsuppression.c']+testLibs+core_lib)   ## for suppressing false valgrind alarms
 
 
 #
@@ -131,20 +130,20 @@ propagateSetting(testEnv, 'TESTMODE')
 propagateSetting(testEnv, 'LUMIERA_PLUGIN_PATH')
 propagateSetting(testEnv, 'HOME')
 
-testDir = env.Dir('#$TARGDIR')
+testDir = env.Dir('$TARGDIR')
 runTest = env.File("test.sh").abspath
 
-runTests = testEnv.Command('#$TARGDIR/,testlog', testsuite, runTest,  chdir=testDir)
+runTests = testEnv.Command('$TARGDIR/,testlog', testsuite, runTest,  chdir=testDir)
 Depends(runTests,vgsuppression)
 
 
 
 #
-# define Phony targets
+# define Alias targets
 #  - 'scons testcode' triggers building of the Testsuite
 #  - 'scons check' triggers building and running
 #
-env.Alias('testcode', testsuite )
+env.Alias('testcode', testsuite + vgsuppression)
 env.Alias('check',    runTests )
 
 # allow tempfiles of test.sh to be cleaned  

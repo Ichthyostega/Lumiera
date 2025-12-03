@@ -17,7 +17,7 @@ link:overview.html[Lumiera the Inner Core]
 
 The technical documentation is split in three parts, one for each of the three
 main layers of Lumiera. You may want to read the
-link:../design/index.html[Design Documents] first to get an overview of all the
+link:{ldoc}/design/index.html[Design Documents] first to get an overview of all the
 components.
 
 * link:stage/index.html[*Stage Layer*] : Documents related to the GTK based Lumiera GUI
@@ -30,13 +30,13 @@ components.
 == Tools
 
 .Development
-* link:http://www.lumiera.org/doxy/[*Doxygen generated documentation*] : API documentation of the Lumiera code.
+* link:/doxy/[*Doxygen* generated documentation] : API documentation of the Lumiera code.
 * organisation of the link:code/index.html[Code Base] in general
-* link:code/codingGuidelines.html[Coding Style] and further guidelines
+* link:/x/CodingGuidelines.html[Coding Style] and further guidelines
 
 .Building
-* link:build/index.html[*Buildsystem*] : Installation & compilation tools, dependencies and packaging.
+* link:build/index.html[Buildsystem] : Installation & compilation tools, dependencies and packaging.
 
 .HOWTO
-* link:howto/index.html[*Developer HOWTOs*] : Collection of instructions, recipes, hints and similar
+* link:/x/DevHowto.html[Developer *HOWTOs*] : Collection of instructions, recipes, hints and similar
   materials intended for developers

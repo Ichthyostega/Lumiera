@@ -19,7 +19,7 @@
  ** For simplified usage, two default instances are exposed as global variable
  ** - lib::defaultGen uses fixed seeding (planned: make this configurable)
  ** - lib::entropyGen always uses true randomness as seed value.
- ** [C++ random number framework]: https://en.cppreference.com/w/cpp/numeric/random
+ ** [C++ random number framework]: https://en.cppreference.com/w/cpp/numeric/random.html
  ** @see Random_test
  */
 

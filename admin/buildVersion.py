@@ -47,7 +47,7 @@ def parseAndBuild():
                         ,choices=['maj','min','rev'], const='rev'
                         ,help='bump the version detected from Git (optionally bump a specific component)')
     parser.add_argument ('--suffix','-s'
-                        ,help='append (or replace) a suffix (by default attached with ~)')
+                        ,help='append (or replace) a suffix (attached with ~); False -> remove suffix')
     parser.add_argument ('--snapshot'
                         ,action='store_true'
                         ,help='mark as development snapshot by appending ~dev.YYYYMMDDhhmm, using UTC date from HEAD commit')
@@ -72,11 +72,30 @@ def getTimestampFromGit():
 
 
 
-def rebuild (version, bump=None, suffix=None, snapshot=False):
-    mat = re.fullmatch (VER_SYNTAX, version)
+def parseVerNr (verStr):
+    """ parse a version spec from a git tag,
+        possibly preprocess to translate _ -> ~
+    """
+    NOT_SFX = r'(?:[^_\W]|[\.\+])+'
+    DECODE  = r'('+NOT_SFX+')(?:_('+NOT_SFX+'))?'
+    #
+    mat = re.fullmatch (DECODE, verStr)
     if not mat:
-        __FAIL ('invalid version syntax in "'+version+'"')
+        __FAIL ('version string contains invalid characters: "'+verStr+'"')
+    verStr = mat.group(1)
+    if mat.group(2):
+        verStr += '~'+mat.group(2)
+    #
+    # check syntax of translated version spec
+    mat = re.fullmatch (VER_SYNTAX, verStr)
+    if not mat:
+        __FAIL ('invalid version syntax in "'+verStr+'"')
+    else:
+        return mat
     
+    
+def rebuild (version, bump=None, suffix=None, snapshot=False):
+    mat = parseVerNr (version)
     maj = mat.group(1)
     min = mat.group(2)
     rev = mat.group(3)
@@ -97,7 +116,10 @@ def rebuild (version, bump=None, suffix=None, snapshot=False):
     if snapshot:
         suf = 'dev.'+getTimestampFromGit()
     elif suffix:
-        suf = suffix
+        if not evalBool(suffix):
+            suf = None
+        else:
+            suf = suffix
     
     version = maj
     if min:
@@ -128,8 +150,24 @@ def runGit (argStr):
         proc = subprocess.run (argList, check=True, capture_output=True, encoding='utf-8', env={'LC_ALL':'C'})
         return proc.stdout.rstrip()                                                        # Note: sanitised env
     except:
-        __FAIL ('invoking git-describe')
+        __FAIL ('invoking git '+argStr)
 
+
+
+def evalBool (val) ->bool:
+    """ evaluate as bool value
+        @author: Tim Poulsen
+        @note: Adapted from the original, published 2023, CC-By-SA-4
+               https://www.timpoulsen.com/2023/python-bool-from-any.html
+    """
+    try:
+        return float(val) > 0
+    except:
+        if type(val) is str:
+            return val.lower() not in ['false', 'no', 'n', 'none', 'null']
+        else:
+            # rely on Python's type coercion rules
+            return bool(val)
 
 
 

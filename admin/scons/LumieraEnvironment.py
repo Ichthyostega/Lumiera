@@ -4,7 +4,7 @@
 ##
 
 #  Copyright (C)
-#    2008,            Hermann Vosseler <Ichthyostega@web.de>
+#    2008-2025        Hermann Vosseler <Ichthyostega@web.de>
 #
 # **Lumiera** is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by the
@@ -16,7 +16,8 @@
 from os import path
 
 import SCons.SConf
-from SCons.Action import Action
+from SCons.Action import Action, FunctionAction
+from SCons.Script import File as SConsFile
 from SCons.Environment import Environment
 
 from Buildhelper import *
@@ -29,20 +30,35 @@ class LumieraEnvironment(Environment):
         using global vars. Idea inspired by Ardour.
     """
     def __init__(self, buildSetup, buildVars, **kw):
-        kw.update(VERSION = buildSetup.VERSION
-                 ,TARGDIR = buildSetup.TARGDIR
-                 ,DESTDIR = '$INSTALLDIR/$PREFIX'
-                 ,toolpath = [buildSetup.TOOLDIR ]
-                 ,variables = buildVars
-                 )
-        Environment.__init__ (self, **kw)
-        self.path = Record (extract_localPathDefs(buildSetup))    # e.g. buildExe -> env.path.buildExe
+        Environment.__init__ (self, toolpath = [buildSetup.TOOLDIR ]
+                                  , variables = buildVars          # ◁───── reads settings from the commandline (see Options.py)
+                                  , **kw)
+        #
+        self['TARGDIR'] = buildSetup.TARGDIR
+        self['VERSION'] = buildSetup.VERSION
+        self['DESTDIR'] = '$INSTALLDIR/$PREFIX'
+        self['SHARE'  ] = '$DESTDIR/share'
+        self._anchor_relative('INSTALLDIR')
+        self._anchor_relative('TARGDIR')
+        #
+        self.path = Record (extract_localPathDefs(buildSetup))     # ◁───── e.g. buildExe -> env.path.buildExe
         self.libInfo = {}
         self.Tool("BuilderDoxygen")
         self.Tool("ToolDistCC")
         self.Tool("ToolCCache")
-        register_LumieraResourceBuilder(self)
+        register_LumieraIconBuilder(self)
+        register_LumieraResourceBuilders(self)
         register_LumieraCustomBuilders(self)
+    
+    def _anchor_relative(self, key):
+        """ ensure that a relative path spec becomes anchored at build-root
+            @note: a special convention within scons: '#' implies directory of SConstruct
+        """
+        spec = self[key].strip()
+        if not (spec.startswith('/') or spec.startswith('#')):
+            spec = '#'+spec
+        self[key] = spec
+    
     
     
     def Configure (self, *args, **kw):
@@ -61,9 +77,9 @@ class LumieraEnvironment(Environment):
             if other in self.libInfo:
                 self.mergeConf(self.libInfo[other])
         else:
-            self.Append (LIBS = other.get ('LIBS',[]))
-            self.Append (LIBPATH = other.get ('LIBPATH', []))
-            self.Append (CPPPATH = other.get('CPPPATH', []))
+            self.Append (LIBS      = other.get('LIBS',[]))
+            self.Append (LIBPATH   = other.get('LIBPATH', []))
+            self.Append (CPPPATH   = other.get('CPPPATH', []))
             self.Append (LINKFLAGS = other.get('LINKFLAGS', []))
         
         return self
@@ -109,26 +125,55 @@ class LumieraConfigContext(ConfigBase):
 
 
 
+
+
 ###############################################################################
 ####### Lumiera custom tools and builders #####################################
 
 
-def register_LumieraResourceBuilder(env):
-    """ Registers Custom Builders for generating and installing Icons.
+def register_LumieraIconBuilder(env):
+    """ Registers a custom Builder for generating and installing Icons from SVG.
         Additionally you need to build the tool (rsvg-convert.c)
         used to generate png from the svg source using librsvg.
     """
     
     import IconSvgRenderer as renderer  # load Joel's python script for invoking the rsvg-convert (SVG render)
-    renderer.rsvgPath = env.subst("$TARGDIR/rsvg-convert")
+    renderer.rsvgPath = env.subst("$TARGDIR/rsvg-convert").removeprefix('#')
+    #                                                    # the prefix '#' is a SCons specific convention,
+    #                                                    # which the external tool can not handle
+    #
+    # MD5 signature for this specific python source code...
+    thisCodeSignature = SConsFile(__file__).get_csig() + SConsFile(renderer.__file__).get_csig()
+    thisCodeSignature = bytearray(thisCodeSignature, 'utf-8')
     
-    def invokeRenderer(target, source, env):
-        source = str(source[0])
-        targetdir = env.subst(env.path.buildIcon)
-        if targetdir.startswith('#'): targetdir = targetdir[1:]
-        renderer.main([source,targetdir])
-        return 0
+    
+    class IconRenderAction(FunctionAction):
+        """ SCons Action subclass to provide a controlled cache signature.
+            @note: usually it would be sufficient to pass just a callable to the Builder,
+                   however, our implementation calls into an external Python module and thus
+                   the default signature from SCons would not be stable, since it relies
+                   on a code representation including memory addresses. Without this,
+                   the icons would be frequently rebuilt unnecessarily.
+        """
         
+        def __init__(self):
+            FunctionAction.__init__(self, IconRenderAction.invokeRenderer
+                                        , {'cmdstr' : "rendering Icon: $SOURCE --> $TARGETS"}
+                                   )
+        
+        def get_contents(self, target, source, env):
+            """ a stable signature based on the source code """
+            return thisCodeSignature
+        
+        @staticmethod
+        def invokeRenderer(target, source, env):
+            """ render the SVG icon with libRSVG """
+            source = str(source[0])
+            targetdir = env.subst(env.path.buildIcon).removeprefix('#')
+            renderer.main([source,targetdir])
+            return 0
+    
+    
     def createIconTargets(target,source,env):
         """ parse the SVG to get the target file names """
         source = str(source[0])
@@ -146,6 +191,20 @@ def register_LumieraResourceBuilder(env):
         
         return (generateTargets, source)
     
+    
+    buildIcon = env.Builder( action = IconRenderAction()
+                           , single_source = True
+                           , emitter = createIconTargets
+                           )
+    env.Append(BUILDERS = {'IconRender' : buildIcon})
+
+
+
+
+def register_LumieraResourceBuilders(env):
+    """ Registers further Custom Methods for installing various Resources.
+    """
+    
     def IconResource(env, source):
         """ copy icon pixmap to corresponding icon dir. """
         subdir = getDirname(str(source))
@@ -155,7 +214,7 @@ def register_LumieraResourceBuilder(env):
         return env.Install(toBuild, source)
     
     def GuiResource(env, source):
-        """ pick up giben source resource and install
+        """ pick up given source resource and install
             them (flat) into the configured target
         """
         toBuild = env.path.buildUIRes
@@ -165,9 +224,11 @@ def register_LumieraResourceBuilder(env):
     
     def ConfigData(env, prefix, source, targetDir=None):
         """ install (copy) configuration- and metadata.
-            target dir is either the install location configured (in SConstruct),
-            or an explicitly given absolute or relative path segment, which might refer
-            to the location of the executable through the $ORIGIN token
+            @param targetDir: when None, then use he install location configured (in Setup.py),
+                otherwise an explicitly given absolute or relative path segment,
+                which might refer to the location of the executable through the $ORIGIN token
+            @param prefix: a prefix relative to the current path (location of SConscript),
+                i.e. typically a subdirectory where to find the source config file
         """
         source = path.join(prefix,str(source))
         subdir = getDirname(source, prefix)  # removes source location path prefix
@@ -188,15 +249,31 @@ def register_LumieraResourceBuilder(env):
         env.Install (toInstall, source)
         return env.Install(toBuild, source)
     
+    def DocFile(env, prefix, source, target=None):
+        """ install (copy) files for documentation.
+            Always places the documentation below the standard location 'installDoc' configured in Setup.py
+            @param prefix: relative to current path (SConscript), will be stripped at destination
+            @param target: when given, the target will be named explicitly, or (when only a directory)
+                placed into a specific subdir, otherwise (when None) the source spec will be placed
+                into the corresponding subdir after stripping the prefix
+        """
+        source = path.join(prefix,str(source))
+        subdir = getDirname(source, prefix)  # removes source location path prefix
+        if not target:
+            target = subdir+'/'
+        elif target.endswith('/'):
+            target = target+subdir+'/'
+        toInstall = path.join(env.path.installDoc, target)
+        if toInstall.endswith('/'):
+            return env.Install(toInstall, source)
+        else:
+            return env.InstallAs(toInstall, source) # this renames at target
     
-    buildIcon = env.Builder( action = Action(invokeRenderer, "rendering Icon: $SOURCE --> $TARGETS")
-                           , single_source = True
-                           , emitter = createIconTargets
-                           )
-    env.Append(BUILDERS = {'IconRender' : buildIcon})
+    
     env.AddMethod(IconResource)
     env.AddMethod(GuiResource)
     env.AddMethod(ConfigData)
+    env.AddMethod(DocFile)
 
 
 
@@ -262,7 +339,6 @@ class LumieraExeBuilder(WrappedStandardExeBuilder):
         """
         custEnv = lumiEnv.Clone()
         custEnv.Append( LINKFLAGS = "-Wl,-rpath=\\$$ORIGIN/modules,--enable-new-dtags" )
-        custEnv.Append( LINKFLAGS = "-Wl,-rpath-link=target/modules" ) ### Workaround for bug in binutils > 2.23   /////TICKET #965
         if 'addLibs' in kw:
             custEnv.Append(LIBS = kw['addLibs'])
         return custEnv
@@ -282,7 +358,7 @@ class LumieraModuleBuilder(WrappedStandardExeBuilder):
             Lumiera modules; modules are assumed to reside in a subdirectory below the executable.
         """
         custEnv = lumiEnv.Clone()
-        custEnv.Append(LINKFLAGS = "-Wl,-soname="+self.defineSoname(target,**kw))
+        custEnv.Append( LINKFLAGS = "-Wl,-soname="+self.defineSoname(target,**kw))
         custEnv.Append( LINKFLAGS = "-Wl,-rpath=\\$$ORIGIN/../modules,--enable-new-dtags" )
         if 'addLibs' in kw:
             custEnv.Append(LIBS = kw['addLibs'])
@@ -291,6 +367,26 @@ class LumieraModuleBuilder(WrappedStandardExeBuilder):
     def getBuildDestination(self, lumiEnv):   return lumiEnv.path.buildLib
     def getInstallDestination(self, lumiEnv): return lumiEnv.path.installLib
     
+    
+    def installTarget(self, env, buildTarget, **kw):
+        """ ensure a shared library is not marked executable.
+            The default toolchain on Linux often installs shared libraries as executable, which seems
+            to be necessary on some arcane Unix platforms. However, Debian Policy prohibits that.
+            See https://unix.stackexchange.com/questions/400187/why-should-or-should-not-shared-libraries-be-executable-e-g-red-hat-vs-debian
+        """
+        toInstall = super().installTarget(env, buildTarget, **kw)
+        if toInstall:
+            def _Chmod(target, source, env):
+                """ Workaround since env.Chmod is present only in SCons 4.10 """
+                import os
+                for t in target:
+                    os.chmod(str(t), 0o644)
+                return None
+#           removeExecBit = env.Chmod(toInstall, 0o644)                    # ◁◁◁ could use this for SCons > 4.10
+            msg = '....... clear exec perm %s' % [str(t) for t in toInstall]
+            removeExecBit = env.Action(_Chmod, msg)
+            env.AddPostAction(toInstall, removeExecBit)
+        return toInstall
     
     def defineSoname (self, target, **kw):
         """ internal helper to extract or guess

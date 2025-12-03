@@ -81,7 +81,7 @@ namespace meta {
    *          variant here, which is slightly stripped down and a tiny bit
    *          more concise than the boost variant. This way, we can avoid
    *          a lot of boost inclusions, which always bear some weight.
-   * @see [std::enable_if](http://en.cppreference.com/w/cpp/types/enable_if)
+   * @see [std::enable_if](https://en.cppreference.com/w/cpp/types/enable_if.html)
    */
   template <class Cond, class T = void>
   using enable_if = enable_if_c<Cond::value, T>::type;

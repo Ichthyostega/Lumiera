@@ -2,5 +2,5 @@ Design Documents: Model
 =======================
 
  * two models: high-level and low-level
- * RfC: link:{rfc}/../rfc/ProcHighLevelModel.html[high-level model basics]
+ * RfC: link:{rfc}/ProcHighLevelModel.html[high-level model basics]
 

@@ -1,17 +1,17 @@
 Design Process : Manifest
 =========================
 
-[grid="all"]
-`------------`-----------------------
-*State*         _Final_
-*Date*          _2007-06-09_
-*Proposed by*   link:ct[]
--------------------------------------
+[options="autowidth"]
+|====================================
+|*State*       | _Final_
+|*Date*        | _2007-06-09_
+|*Proposed by* | ct
+|====================================
 
-Manifest
---------
+A Community Manifest
+--------------------
 
-This Proposal describe the general ideas how the community will work together
+This Proposal describes the general ideas how the community will work together
 to create Lumiera.
 
 
@@ -27,13 +27,17 @@ Background
 ~~~~~~~~~~
 
 Cinelerra is quite an old project, there is an original version from
-heroinewarrior.com and a community fork link:https://cinelerra-cv.wikidot.com/[Cinelerra-CV].
+https://web.archive.org/web/20070519111115/http://heroinewarrior.com/index.php3[»Heroine Virtual« LTD]
+aka »Heroine Warrior« and a community maintained version
+https://web.archive.org/web/20070519204838/http://cv.cinelerra.org/[Cinelerra-CV]. ~(http://cinelerra-cv.wikidot.com/[2025])~
+
 The original author claims that there was no-one producing useable input despite their
-requests while cinelerra was in development, and indeed the Cinelerra-CV community only
+requests while Cinelerra was in development, and indeed the Cinelerra-CV community only
 feeds back the source released by the original author into their SVN repository
 and maintains few fixes. There is not much development going on. Some people
-have created new functionality/features from time to time which have rarely
-been merged into the main repository and maintained by themselves.
+have created new functionality/features from time to time which they need
+to maintain by themselves, since extensions have rarely
+been merged back into the main repository.
 
 The Cinelerra community is a quite loose group of individuals, there is some
 fluctation on the developer base and almost all developers have day jobs which
@@ -49,8 +53,8 @@ But there are some bad things too. Notably there is not much progress on the
 community development. Users don't benefit from new improvements which other
 people have made. There is a endlessly growing list of bugs and feature
 requests, when someone sends a patch to the ML he has to invest quite some time
-to maintain it until it might be merged. Finally we don't know what heroine
-virtual is working on, until we see his next tarball.
+to maintain it until it might be merged. Finally we don't know what ``Heroine
+Virtual'' is working on, until we see his next tarball.
 
 
 Solution for Lumiera
@@ -62,7 +66,7 @@ without maintaining the bad sides again:
 
 . *Make it easy to contribute*
 Even if it is favorable when we have people which are continously working on
-Lumiera, it's a fact that people show up, send a few patches and then
+Cinelerra, it is a fact that people show up, send a few patches and then
 disappear. The development model should be prepared for this by:
 .. Good documentation
 .. Well defined design and interfaces
@@ -104,9 +108,27 @@ things where they are not profound, help each other, make things right instead
 of blaming someone. Everyone should rate himself at what he can do best on the
 project.
 
+
 Comments
 --------
+[underline]#This document is among the **earliest RfC**s# published in *Summer 2007*, +
+as a new community movement was about to form, with the goal to improve Cinelerra
+for real, in a new version Cinelerra-3.
+At the beginning of 2008, this initiative had turned into a new project, with the
+https://web.archive.org/web/20231026200633/https://lists.cinelerra-cv.org/pipermail/cinelerra-skolelinux/2008-March/013474.html[community chosen]
+name »*Lumiera*« -- years later, in 2010, documentation and existing RfC entries
+were migrated from _Cehteh_'s `pipapo.org` Wiki to the
+https://web.archive.org/web/20110513134311/http://lumiera.org/[new Lumiera website],
+thereby mass-renaming all references Cinelerra -> Lumiera
 
+While this »Manifest« captures well the open minded spirit of the new project,
+actual development never happened in the ``community driven'' everyone pulls-from
+everyone style; rather, there were immediately two, later three _core devs,_
+which integrated sometimes large, yet mostly small contributions by other people.
+After 2012, _Ichthyo_ kept the project going as a single developer, backed by
+a small group of supporters.
 
+Ichthyostega:: '2025-09-15'
 
-Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
+''''
+Back to link:/x/DesignProcess.html[Lumiera Design Process overview]

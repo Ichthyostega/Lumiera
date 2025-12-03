@@ -171,7 +171,7 @@ namespace util {
    * @see ZoomWindow_test
    * 
    * [ToddLehman]: https://stackoverflow.com/users/267551/todd-lehman
-   * [stackoverflow]: https://stackoverflow.com/a/24748637 "How to do an integer log2()"
+   * [stackoverflow]: https://stackoverflow.com/questions/994593/how-to-do-an-integer-log2-in-c/24748637#24748637 "How to do an integer log2()"
    */
   template<typename I>
   inline constexpr int

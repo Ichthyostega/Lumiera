@@ -84,6 +84,7 @@
  ** to get the children as traversable collection and to offer a depth-first expansion.
  ** 
  ** @see GenNode_test
+ ** @see record.hpp
  ** @see diff-list-generation-test.cpp
  ** @see DiffDetector
  ** 

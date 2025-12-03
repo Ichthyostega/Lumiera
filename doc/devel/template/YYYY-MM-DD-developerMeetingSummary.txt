@@ -17,12 +17,14 @@ _Summary written by XXXXX_
 
 Recurring Topics
 ----------------
-Discussion of open link:{ldoc}/devel/rfc.html[design process] drafts.
+Discussion of open link:/x/DesignProcess.html[design process] drafts.
 
 
 Prop1
 ~~~~~
+////
 link:{rfc}/SomeProposal[descriptive name]
+////
 Summary what issues are discussed
 ..Details..
 

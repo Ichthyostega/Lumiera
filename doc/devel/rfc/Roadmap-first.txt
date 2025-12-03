@@ -1,28 +1,30 @@
-[grid="all"]
-`------------`-----------------------
-*State*         _Final_
-*Date*          _2009-01-30_
-*Proposed by*   link:Ichthyostega[]
--------------------------------------
+Design Process : Roadmap
+========================
+
+[options="autowidth"]
+|====================================
+|*State*       | _Final_
+|*Date*        | _2009-01-30_
+|*Proposed by* | Ichthyostega
+|====================================
 
 
 
-Roadmap up to Lumiera 1.0
--------------------------
+A Roadmap leading to Lumiera 1.0
+--------------------------------
 
 As the very basic architecture questions seem to settle down now, it seems to
 be time to create a first Roadmap skeleton for the project. A specific approach
 is proposed: we should define criteria allowing us to judge when we've reached
-a certain level plus we should define features to be ''excluded'' at a certain
-level. We should
-''not'' define ''Features'' to go into a certain level.
+a certain level plus we should define features to be _excluded_ at a certain
+level. We should _not_ define _Features_ to go into a certain level.
 
-''the following text is copied from the Lumiera
-  https://issues.lumiera.org/roadmap[Trac]''
+TIP: the following text is copied from the Lumiera
+     https://issues.lumiera.org/roadmap[Trac]
 
 
-Description: Milestones up to first Release
--------------------------------------------
+Description: Milestones up to the first stable Release
+------------------------------------------------------
 
 
 Milestone integration: cooperating parts to render output
@@ -30,16 +32,16 @@ Milestone integration: cooperating parts to render output
 For this milestone to be reached, the basic subsystems of Lumiera need to be
 designed, the most important interfaces between the parts of the application
 exist in a first usable version, and all the facilities on the rendering code
-path are provided at least in a dummy version and are '''capable of cooperating
-to create output'''. Based on Lumiera's design, this also means that the basic
+path are provided at least in a dummy version and are *capable of cooperating
+to create output*. Based on Lumiera's design, this also means that the basic
 frame cache in the vault layer is working. And it means that a media asset and
 a clip can be added to the internal session representation, which is then handed
 over to the builder. Probably it's a good idea to include basic
 playback/display of the rendered frames within the GUI while they are created.
 
 
-Notable features ''not'' included
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Notable features _not_ included
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
  * no saving and loading of sessions
  * no manipulation of objects though the GUI (just display of the session)
  * no adding of arbitrary media or inclusion of arbitrary plugins
@@ -50,18 +52,18 @@ Notable features ''not'' included
 Milestone alpha: operations accessible for users
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 For this milestone to be reached, the fundamental operations you'd expect from
-a video editing software can be '''accessed by a user''' (not a developer!).
-This means that the basic distribution/release model is set up, a ''user'' is
+a video editing software can be *accessed by a user* (not a developer!).
+This means that the basic distribution/release model is set up, a _user_ is
 able to compile Lumiera or install an existing package. Moreover a user should
 be able to create/open a session file (without any quirks), add some media
 (probably only a limited number of media types will be supported), and then
 perform the most basic operations like positioning, trimming, copying, playing
-and finally rendering the timeline integration phase is closed and Lumiera has
-reached alpha level.
+and finally rendering the timeline. Once this level of functionality is
+achieved, the _integration phase_ is closed and Lumiera has reached alpha level.
 
 
-Notable features ''not'' included
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Notable features _not_ included
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
  * advanced configuration
  * complex/compound projects
  * meta-clips, multi-cam, advanced multi channel sound handling
@@ -75,23 +77,23 @@ Notable features ''not'' included
 
 Milestone beta: usable for real work
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-For this milestone to be reached, users should be able to '''get real work done
-with Lumiera'''. Especially, a basic asset management should be in place,
+For this milestone to be reached, users should be able to *get real work done*
+with Lumiera. Especially, a basic asset management should be in place,
 Lumiera should be able to handle the most common media types, the user should
-be able to do common editing tasks (adding, trimming, rolling, splicing
-copying, moving) both by direct manipulation within the timeline, as by using
+be able to perform common editing tasks (add, move, copy, splice, trim, roll,
+slide, slip) both by direct manipulation within the timeline, as by using
 the conventional two-viewer setup with in/out points. Moreover, it should be
 possible to attach effects (probably still just some limited kinds of effects),
 apply simple transitions and control the layering and overlay mode on output.
 Similarily, the elementary routing capabilities and the handling of multiple
 sequences should be suported (probably still with limitations). The framework
 for automation handling should be in place, while there may be still
-limitations on automation/keyframe editing. Having about this feature set
-indicates, that Lumiera entered the beta phase.
+limitations on automation/keyframe editing. Having implemented roughly
+this feature set indicates that Lumiera can enter the beta phase.
 
 
-Notable features ''not'' included
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Notable features _not_ included
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
  * configuration editing through the GUI
  * advanced routing, full support of virtual clips
  * arbitrary wiring, macro effects or similar
@@ -99,25 +101,25 @@ Notable features ''not'' included
  * arbitrary nesting and navigation within projects
  * full multi-cam support, support for non-standard image/sound types
  * plugin libraries and packaging
- * interfaces for plugin authors are not frozen!
+ * interfaces for plugin authors are _not yet_ frozen!
  * fully configurable GUI
  * full support for proxy editing everywhere
- * extended workflow features (like "export to DVD")
+ * extended workflow features (like ``export to DVD'')
 
 
 Milestone release-1.0: usable for productions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-For this milestone to be reached, Lumiera should be a '''reliable tool for
-productions with a deadline'''. Lumiera 1.0 is not the ''dream machine,'' but
-users should be able to do simple productions. We should be able to promote
-Lumiera to professionals without remorse. The GUI should be mature,
+For this milestone to be reached, Lumiera should be a *reliable tool for
+productions with a deadline*. Lumiera 1.0 is not the ``dream machine'', but
+users should be able to complete simple productions. We should be able to
+promote Lumiera to professionals without remorse. The GUI should be mature,
 undo/recovery should work airtight, performance should be ok-ish and output
 quality without any glitches. Plugin authors can rely on stable interfaces and
 backwards compatibility from now on, up to release 2.0
 
 
-Notable features ''not'' included
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Notable features _not_ included
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
  * bangs and whistles
  * render farm, distributed execution, hardware acceleration
  * MIDI and adding of non-standard media kinds yet-to-appear
@@ -126,14 +128,8 @@ Notable features ''not'' included
  * foreign session import/export
  * collaboration features
  * artificial intelligence
+ * saving the world
 
-
-
-
-Tasks
-+++++
-Please review and discuss this proposal, consider if it's of any use setting it
-up this way...
 
 
 
@@ -151,7 +147,7 @@ Pros
 Cons
 ^^^^
 The contents of the roadmap aren't very specific and thus aren't of much help
-for determining ''what has to be done next.''
+for determining _what has to be done next._
 
 
 
@@ -165,18 +161,17 @@ Alternatives
 Rationale
 ~~~~~~~~~
 
-We deliberately don't set any date schedule. Releases happen ''when they are
-ready.'' We may decide to do sprints on a short-term timeframe, but it doesn't
-help promising things we can't calculate for sure. In an commercial setup, you
-have to commit to features and dates, but you also control a certain budget,
-which gives you the means to ''make things happen.'' In Open Source
-development, we've to be patient and wait for the things to happen ;-)
+We deliberately don't set any date schedule. Releases happen ``when they are
+ready''. We may decide to do sprints on a short-term timeframe, but it doesn't
+help promising things we can't plan and calculate reliably. In an commercial setup,
+you have to commit to features and dates, but you also control a certain budget,
+which gives you the means to _make things happen._ In Free Software development,
+we have to be patient and wait for great things to happen 😇
 
-Thus the proposal is to set up just a very coarse and almost self-evident
-roadmap skeleton, but to discuss and define criteria up-front, which allow us
-to determine when we've actually reached a given level. Moreover, the proposal
-is to add a list of features which can be savely ''excluded'' from the given
-milestone
+Thus the proposal aims to set up just a very coarse and almost self-evident
+roadmap skeleton, but also to discuss and define criteria up-front, which allow us
+to determine when we've actually reached a given level. Furthermore, the proposal
+provides a list of features which can be savely _excluded_ from a given milestone.
 
 
 
@@ -186,21 +181,34 @@ milestone
 Comments
 --------
 
-Looks ok to me, the dust is settling ad we can now think about such a roadmap.
+Looks ok to me, the dust is settling and we can now think about such a roadmap.
 Some goals might be shifted between Milestones on collaborative decision, but
 so far I agree. Otherwise I'd like to keep the issue tracker focus on work to
 be done, it shall not become a wishlist tool for non developers, any such
 things are deliberately left out.
- -- link:ct[] 2009-01-31
 
-In ticket #4 (debian packaging) i explained that packaging might be optional
-for 'alpha' and should be moved to 'beta'.
-  -- link:ct[] 2009-02-01
+ct:: '2009-01-31'
+
+In https://issues.lumiera.org/ticket/4[#4 (debian packaging)] i explained that
+packaging might be optional for ``alpha'' and should be moved to ``beta''.
+
+ct:: '2009-02-01'
 
 OK, we should make the packaging optional. I think, for alpha the criterion is
-"accessability for users". If compiling remains so easy as it is now (compared
+``accessability for users''. If compiling remains so easy as it is now (compared
 with other media related projects), than this shouldn't be a barrier.
-  -- link:Ichthyostega[] 2009-02-01
+
+Ichthyostega:: '2009-02-01'
+
+[underline]#Many years later# I can confirm that this approach towards a roadmap
+and release planning stood well the test of time and looks reasonable still.
+
+The joke with ``artificial intelligence'' got a nice ring meanwhile,
+as many people seem to believe that we're close to the AI miracle.
+And since Lumiera might indeed integrate some _tools_ based on
+``machine learning'' eventually, it seems adequate to point out
+that we can not _save the world_ already in Release 1.0
 
 
-Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
+''''
+Back to link:/x/DesignProcess.html[Lumiera Design Process overview]

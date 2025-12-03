@@ -15,6 +15,10 @@
 /** @file video-display-widget.cpp
  ** Implementation of video display, embedded into the UI.
  ** @deprecated defunct since the transition to GTK-3
+ ** @warning WIP 2025 — this is demo code, defunct since the transition to GTK-3
+ **          but then upgraded and fixed in 2025, and will be reworked as part of
+ **          the »Playback Vertical Slice« to establish an actual connection
+ **          to the Render Engine
  */
 
 
@@ -71,11 +75,9 @@ namespace widget {
   {
     REQUIRE (videoWidth > 0);
     REQUIRE (videoHeight > 0);
-    /*                                                                        ///////////////////////////////TICKET #1403 : temporarily disabled XV for experimentation with Pixbuf (but XV works and is usable)
     displayer_ = make_unique<XvDisplayer> (*this, videoWidth, videoHeight);
     if (displayer_->usable())
       return;
-    */
     displayer_ = make_unique<PixbufDisplayer> (*this, videoWidth, videoHeight);
     if (displayer_->usable())
       return;

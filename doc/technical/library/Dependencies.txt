@@ -126,7 +126,7 @@ _assuming full portability and arbitrary target platform._ Since our focus is pr
 this argument seems to lean more to the theoretical side though, since the x86/64 platform is known to employ rather
 strong memory and cache coherency constraints. With the recent advent of ARM systems, the situation has changed however.
 Anyway, since C++11 there
-link:http://preshing.com/20130930/double-checked-locking-is-fixed-in-cpp11[is now a portable solution available]
+https://preshing.com/20130930/double-checked-locking-is-fixed-in-cpp11/[is now a portable solution available]
 for writing a correct DCL implementation, based on `std::atomic`.
 
 The idea underlying Double Checked Locking is to optimise for the access path, which is achieved by moving the
@@ -136,7 +136,7 @@ and lock-free concurrency implement this relation by establishing a *synchronise
 on a common *guard* entity -- for traditional locking, this would be a Lock, Mutex, Monitor or Semaphore, while
 lock-free concurrency uses the notion of a _fence_ connected with some well defined action on a userspace guard variable.
 In modern C++, typically we use _Atomic variables_ as guard. In addition to well defined semantics regarding concurrent
-visibility of changes, these link:http://en.cppreference.com/w/cpp/atomic["atomics"] offer indivisible access and
+visibility of changes, these https://en.cppreference.com/w/cpp/atomic.html["atomics"] offer indivisible access and
 exchange operations. A correct concurrent interaction must involve some kind of well defined handshake to establish
 the aforementioned _synchronises-with_ relation -- otherwise we just can not assume anything. Herein lies the problem
 with Double Checked Locking: when we move all concurrency precautions away from the optimised access path, we get
@@ -177,7 +177,7 @@ the actual costs of object allocation.
 Some observations:
 
 - The numbers obtained pretty much confirm
-  link:http://www.modernescpp.com/index.php/thread-safe-initialization-of-a-singleton[other people's measurments].
+  http://www.modernescpp.com/index.php/thread-safe-initialization-of-a-singleton/[other people's measurments].
 - Synchronisation is indeed necessary;
   the unprotected lazy init crashed several times randomly during multithreaded tests.
 - Contention on concurrent access is very tangible;

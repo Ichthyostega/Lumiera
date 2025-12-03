@@ -1,7 +1,7 @@
 Iterators and Pipelines
 =======================
 
-The link:http://c2.com/cgi/wiki?IteratorPattern[Iterator Pattern] allows to
+The http://wiki.c2.com/?IteratorPattern[Iterator Pattern] allows to
 expose the contents or elements of any kind of collection, set or container
 for use by client code, without exposing the implementation of the underlying
 data structure. Thus, iterators are one of the primary API building blocks.
@@ -14,7 +14,7 @@ Unfortunately the C++ standard library uses a very elaborate and rather low-leve
 notion of iterators, which does not mix well with the task of building clean interfaces.
 
 Thus, within the Lumiera core application, we're using our own Iterator concept,
-initially defined as link:{ldoc}/devel/rfc/LumieraForwardIterator.html[RfC],
+initially defined as link:/x/rfc/LumieraForwardIterator.html[RfC],
 which places the primary focus on interfaces and decoupling, trading off
 readability and simplicity for (lesser) performance.
 

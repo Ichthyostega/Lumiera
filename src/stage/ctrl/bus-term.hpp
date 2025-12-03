@@ -40,8 +40,8 @@
  **       which is constructed in a way to ensure it is always has a
  **       bidirectional communication link to the Nexus.
  ** 
- ** @see [BusTerm_test]
- ** @see Tangible
+ ** @see \ref BusTerm_test
+ ** @see \ref Tangible
  ** 
  */
 

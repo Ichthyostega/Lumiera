@@ -13,7 +13,7 @@
 
 
 /** @file microbenchmark-adaptor.hpp
- ** Helpers and wrappers so simplify usage of \ref micobenchmark.hpp.
+ ** Helpers and wrappers so simplify usage of \ref microbenchmark.hpp.
  ** Notably the benchmark functions expect the actual »test subject« as a
  ** function or lambda with signature `size_t(size_t)`. The argument will be
  ** the loop index and the result value will be added into a checksum, which

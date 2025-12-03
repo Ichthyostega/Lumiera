@@ -11,6 +11,17 @@ spending time on the task of writing a summary.
 Anyone interested in Lumiera development is also encouraged to read mailing list
 archives and other documentation.
 
+2024-2025
+---------
+All meetings were informal in style; usually _Ichthyo_ gave a summary
+of recent achievements and explained some of the problems he was facing.
+Usually this leads into a rather detailed and technical discussion.
+
+Since Spring 2005, _Wouter Verwijlen_ has regularly participated in
+renewed discussions for a
+of a renewed link:{ldoc}/design/workflow/Verwijlen/[Workflow Concept].
+
+
 8 May / 12 June 2024
 --------------------
 Discussion regarding the approach taken towards the next core topic, which
@@ -326,8 +337,8 @@ Topics
 ~~~~~~
  * organisational (protocol, agenda, leftovers?)
  * Logo Contest progress, discussion about how to do the pre selection
- * rename "EDL" into "Sequence"
- * link:DesignProcess/TimelineSequenceOutput[Project, Timeline(s), Sequence(s) and Output]
+ * rename »EDL« into »Sequence«
+ * link:/documentation/devel/rfc/TimelineSequenceOutput.html[Project, Timeline(s), Sequence(s) and Output]
  * GUI/Proc Interface and collaboration
  * Threading questions regarding gtk-main and main()
 
@@ -500,7 +511,7 @@ Topics
 ~~~~~~
  * boilerplate (protocol, whats left from last meeting, next meeting)
  * Go through Ideas and Drafts in design process
- * "Call for design" for some features relevant for the whole Application:
+ * ``Call for design'' for some features relevant for the whole Application:
    - parameters and automation
    - render node interface
    - handling of compound sessions
@@ -522,7 +533,7 @@ Summary
 Topics
 ~~~~~~
  * Who will write the protocol below
- * Discuss the open points in link:Lumiera/DesignProcess[] do we need this formalism?
+ * Discuss the open points in a link:/x/DesignProcess[»Design Process«] -- do we need this formalism?
  * Who works on what, what are the short term goals, what tasks are open
  * State of the new-name search for the was-intended-as-cinelerra-3 project (no name discussion, just how we will progress!)
  * Introduce the development model

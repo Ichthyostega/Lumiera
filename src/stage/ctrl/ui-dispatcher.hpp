@@ -56,8 +56,8 @@
  **       given receiver thread (here the UI event loop thread) will _share a single pipe for signalling._
  **       Under heavy load this queue might fill up and block the sender on dispatch.
  ** 
- ** [Glib-Dispatcher]: https://developer.gnome.org/glibmm/2.42/classGlib_1_1Dispatcher.html
- ** [GTKmm-tutorial]:  https://developer.gnome.org/gtkmm-tutorial/3.12/sec-using-glib-dispatcher.html.en
+ ** [Glib-Dispatcher]: https://web.archive.org/web/20210306110019/https://developer.gnome.org/glibmm/2.42/classGlib_1_1Dispatcher.html
+ ** [GTKmm-tutorial]:  https://gnome.pages.gitlab.gnome.org/gtkmm-documentation/sec-using-glib-dispatcher.html
  ** @see NotificationService
  ** @see CallQueue_test
  */

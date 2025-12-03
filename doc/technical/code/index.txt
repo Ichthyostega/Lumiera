@@ -7,46 +7,53 @@ Code Base Organisation
 //Menu: put child GitBranching after LinkingStructure
 
 
-This section of Lumiera's technical documentation deals with the code base as such,
-not so much with the internals of the Lumiera application. It is targeted towards
-people participating in Lumiera development.
+This section of the Lumiera technical documentation deals with the code base itself,
+and is less concerned with the internals of the Lumiera application. It is primarily
+aimed at people who want to participate in Lumiera development.
 
-The Lumiera source base is huge and expected to grow for some time to come. Just
-judging by the _lines of code_, Lumiera can be considered as a *medium sized system*,
-which gives us some hints towards the adequate practices, conventions and the
-degree of formalism to apply.
+The Lumiera source base is huge already, and expected to grow for some time to come.
+Judging based on the _lines of code_ metric, Lumiera can be considered a
+*medium sized system* -- which gives us some hints towards the adequate practices,
+conventions and the degree of formalism to apply.
 
 Generally speaking, a *small system* doesn't exceed the mental capacity of a single
-knowledgeable human. A single person can know everything and understand everything
-in such a code base. Thus, any formalism and organisational overhead is detrimental;
-we're best off doing away with ``Methods'' and just rely on taste and craftsmanship.
+knowledgeable human person. A single developer can reasonably know everything and
+understand everything in such a code base. Thus, any further formalism and organisational
+overhead is detrimental; we're best off doing away with any kind of ``Method'' and just
+rely on our taste and craftsmanship.
 
-But there is a hard limit for this approach, kind of a _sonic wall_ -- usually somewhere
-around a size of 60000 LoC. At that point, the adequate value system flips around as a
-whole. Since beyond that point, no single person can understand and know everything about
-such a system, _communication and understanding become the primary concerns_ of the
-development process. Suddenly, we _do need_ some organisation, some rituals and
-a methodical approach. Yet still we don't need a high degree of formalism, since
-at least we can easily _know and recall everyone involved_.
+Yet this approach reaches a hard limit, a kind of sonic barrier -- usually somewhere
+at a size of about 60000 LoC. From this point on, the appropriate value system is
+completely reversed: since no single person can _understand and know everything_ about
+such a system, _communication and understanding become the primary concerns_
+of the development process. Suddenly, we _do need_ some organisation, some rituals
+and a methodical approach. Yet still we don't need a high degree of formalism --
+as long as we can at least easily _know and recall everyone involved_.
 
-To give a delineation to the other side, a constantly growing project might eventually
+To create a distinction from the other side, a constantly growing project might eventually
 reach the point where the actual coding of new functionality makes up less than 25%
-of the overall work required. More people might be involved than anyone can recall or
-overlook reasonably. A code size of 1 Million LoC seems to exceed any kind of sufficiently
+of the overall work required. More people might be involved than anyone can reasonably
+recall or survey. A code size of 1 Million LoC seems to exceed any kind of sufficiently
 precise imagination. From that point on, a rigorously formalised organisation is vital
 to keep such a *large scale project* from floundering.
 
-////
 Conventions
 -----------
-_to be written_
+- link:/project/legal/legal.html[Lumiera is **Free Software**] (GPL-2+)
+- link:CodingGuidelines.html[Lumiera code uses]: *GNU style*, 4-space indent, CamelCase and British spelling
+- link:GitBranching.html[Branches and Releases] are organised according to *Git-flow*
 
+////
 Guidelines
 ----------
 ////
 
 ''''
- * also see the link:{ldoc}/devel/rfc.html[Design Process] for ongoing discussions
+[TIP]
+--
+ * link:{ldoc}/devel/meeting_summary/index.html[Developers Meetings] and protocols
+ * also see the link:/x/DesignProcess.html[Design Process] for ongoing discussions
  * see the link:/devs-vault/[Developers Vault] for frequently used developer's resources
+--
 
 

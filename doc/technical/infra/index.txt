@@ -1,12 +1,18 @@
 Infrastructure
 ==============
 
+// Menu :  prepend child Release
+// Menu :  prepend child MenuGen
+// Menu :  prepend child Webserver
+// Menu :  prepend child TestSupport
+// Menu :  prepend child debianDepot
+
 
 Various details, documentation and other pieces of information regarding
 the infrastructure of the Lumiera project. This includes the infrastructure
 used for building and maintaining documentation and website.
 
- * see link:../build/index.html[separate page for the Buildsystem]
+ * see link:{ldoc}/technical/build/index.html[separate page for the Buildsystem]
  * generating the link:MenuGen.html[navigation menu] for the website
  * how to use the link:rfcsh.html[rfc.sh] script for maintaining RFC's
 
@@ -18,14 +24,27 @@ Other tools in the ./admin folder
 There are various other small tools and scripts in the admin folder which are
 not yet fully documented (Read the Source!).
 
-.headercheck
-This is a small tool which checks that all headers are sufficiently standalone
-and include anything they need. In future we might extend this to find out
-bogus includes by predefining (-D) headerguards they include, effectively
-disableing this include for a test.
 
-.render_icon.py
-used by the buildsystem to translate svg icons to bitmaps (png)
+.buildVersion.py
+Uses some Git magic to figure out the current version number
+based on the HEAD revision. In addition, it allows to bump select
+components of this version number, and to append a decoration suffix.
+We use the link:{ldoc}/technical/code/GitBranching.html[Git-flow]
+branching structure, and thus this script is typically used to
+generate an input for the setVersion script,
+immediately after forking off a _Release branch_.
+
+.setVersion
+This shell script uses `sed` to update the current Lumiera version number.
+It contains hard coded knowledge of all relevant locations in the code base
+where this version number is embedded and must be updated.
+
+.rfc.sh
+This shell script (written by Cehteh) was used in the early days of Lumiera
+to create, update and manage the link:{ldoc}/devel/design_process.html[»RfC« entries]
+for the _Lumiera Design Process_. While this formal documentation of design decisions
+is still considered relevant, this formalised process is suspended, as long as _Ichthyo_
+is working basically alone on the project.
 
 .treeinfo.sh
 Generates a report about the projects directory structure by parsing the
@@ -39,9 +58,6 @@ more details.
 A directory containing example git hooks for signing and pushing on commit.
 Only use them when you know what you are doing.
 
-.lumiera_c_skeleton
-A script which instantiates a new pair of .c/.h files.
-
 .vg-run.sh
 convenience wrapper script to run an executable with valgrind
 using "typical options"; output goes to a logfile, which is
@@ -50,9 +66,6 @@ fed to less afterwards.
 A valgrind suppression file is generated automatically, in
 case there is an executable "vgsuppression" located in the same
 directory as the target executable.
-
-.gnu-indent
-call the "indent" tool with parameters suitable for our (GNU derrived) coding style
 
 .testrunner
 Script driving make and running a test, possibly under valgrind. Works only

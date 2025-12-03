@@ -1,60 +1,39 @@
 Lumiera Authors and Credits
 ===========================
-Version: 0.pre.03
-:Date: 11/2015
+:Date: 11/2025
 
 
-|==========================================
-|*Architecture and Design*|
-|graphical
-    user interface | JOEL HOLDSWORTH
-|                  | HERMANN VOSSELER
-|                  | BRIAN RYTEL
-|processing layer  | HERMANN VOSSELER
-|backend           | CHRISTIAN THÄTER
+Architecture::
+- Hermann Voßeler
+- Christian Thäter
+- Joel Holdsworth
 
-|                  |
-|                  |
-|*Workflow design* |
-|concept           | BRIAN RYTEL
-|                  | MIKE PROVOST
-|                  | NIKOLA DUPER
-|                  | CHRISTOPH VARGA
+Workflow Concept::
+- Hermann Voßeler
+- Wouter Verwijlen
+- Christoph Varga
+- Brian Rytel
+- Clay Barnes
 
-|                  |
-|                  |
-|*Programming*|
-|session and engine| HERMANN VOSSELER
-|backend           | CHRISTIAN THÄTER
-|                  | MICHAEL PLOUJNIKOV
-|graphical
-     user interface| JOEL HOLDSWORTH
-|                  | STEFAN KANGAS
-|                  | MICHAEL FISHER
-|library           | HERMANN VOSSELER
-|                  | CHRISTIAN THÄTER
-|                  | ANTON YAKOVLEV
-|                  | STEFAN KANGAS
-|testsuite         | CHRISTIAN THÄTER
-|                  | NICHOLAS SINNOTT-ARMSTRONG
-|                  | HERMANN VOSSELER
 
-|                  |
-|                  |
-|*Programming Documentation*|
-|                  | CHRISTIAN THÄTER
-|                  | HERMANN VOSSELER
-|                  | MICHAEL PLOUJNIKOV
-|                  | ODIN HØRTHE OMDAL
-|                  | SIMEON VÖLKEL
-|                  | MANO STIENEN
-|                  | HENDRIK BOOM
-|                  | BENNY LYONS
-|                  |
-|                  |
-|*Server Administration*|
-|                  | CHRISTIAN THÄTER
-|==========================================
+Core Developers::
+- 2007-2025 Hermann Voßeler
+- 2008-2009 Joel Holdsworth
+- 2007-2011 Christian Thäter
+Programming::
+- 2007-2010 Michael Ploujnikov
+- 2010-2011 Stefan Kangas
+- 2010-2012 Michael Fisher
+- 2007-2008 Simeon Völkel
+
+Documentation::
+- Hermann Vosseler
+- Christian Thäter
+- Odin Hørthe Omdal
+- Simeon Völkel
+- Mano Stienen
+- Hendrik Boom
+- Benny Lyons
 
 
 
@@ -76,7 +55,10 @@ The Lumiera project feels especially obliged to::
 
 Further Credits
 ---------------
-- inspirations and some UI components were taken from http://Ardour.org[Ardour]
+- inspirations and some UI components were taken from https://ardour.org/[Ardour]
+
+- https://github.com/x42/xjadeo[xjadeo] by Robin Gareus was very helpful
+  for learning how to output raw video from a desktop application
 
 - Parts of the Implementation are heavily inspired by +
   *The Loki Library*  (c) 2001 by *Andrei Alexandrescu*

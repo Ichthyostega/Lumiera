@@ -48,7 +48,7 @@ namespace test {
    *         pointers, disregarding any type information, thereby
    *         _»unpacking«_ the address information contained in a
    *         pointer is (i.e. the address of the pointee is used)
-   * [object]: https://en.cppreference.com/w/cpp/language/type
+   * [object]: https://en.cppreference.com/w/cpp/language/type.html
    */
   class UtilIdentity_test : public Test
     {

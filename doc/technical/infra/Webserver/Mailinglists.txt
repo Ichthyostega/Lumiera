@@ -1,0 +1,47 @@
+Mailinglists
+============
+:Author: cehteh
+:Date: Nov 2018
+
+
+The Lumiera related Mailinglists.
+
+Main Webpage:: https://lists.lumiera.org/cgi-bin/mailman/listinfo
+
+Lumiera
+-------
+
+List address:: lumiera@lists.lumiera.org
+
+The main Lumiera Mailinglist. All Discussion, developers and users happens here.
+
+
+Lumiera-work
+------------
+
+List where automatic generated mails by the issue tracker and
+continious integration will go to.
+
+No users may post to this list (gets ignored/dropped).
+
+Lumiera-cc
+----------
+
+List address:: lumiera-cc@lists.lumiera.org
+
+Sometimes we have some emails we want to be archived and distributed
+among the developers. Like conference material/infos,
+invoices etc. These are CC:'ed to this ML. No discussion happens
+here. No public content here, but it's not hidden either.
+
+Server
+------
+
+List address:: server@lists.lumiera.org
+
+The Server we have is shared between multiple people. Administration
+discussion and issues which cover the Server as whole (and are not
+Lumiera specific) happen here. This mailinglist is a closed group of
+people and only people who are related to the server ins some way are
+subscribed.
+

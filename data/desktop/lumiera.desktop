@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Version=1.5
+Name=Lumiera
+Comment=Video editing and compositing (unfinished; development preview)
+GenericName=VideoEditor
+Exec=lumiera
+TryExec=lumiera
+Icon=lumiera
+Terminal=false
+Categories=AudioVideo;Video;AudioVideoEditing;
+Keywords=media;film;editing;compositing;fx;
+

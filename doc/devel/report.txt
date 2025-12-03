@@ -6,28 +6,22 @@ Statistics and Reports
 
 ++++++++++++++++++++++++++++++++++++++
 <div style="float:left">
-<script type='text/javascript' src='https://www.openhub.net/p/lumiera/widgets/project_basic_stats?format=js'></script>
+<script type='text/javascript' src='https://openhub.net/p/lumiera/widgets/project_basic_stats?format=js'></script>
 </div>
 ++++++++++++++++++++++++++++++++++++++
 
 ++++++++++++++++++++++++++++++++++++++
 <div style="float:right; margin-left: 2em;">
-<script type='text/javascript' src='https://www.openhub.net/p/lumiera/widgets/project_cocomo?format=js'></script>
+<script type='text/javascript' src='https://openhub.net/p/lumiera/widgets/project_cocomo?format=js'></script>
 </div>
 <p style="clear:both" />
 ++++++++++++++++++++++++++++++++++++++
 
 ''''
-^Statistics generated automatically by *OpenHub* based on Git master footnote:[»link:https://blog.openhub.net/about/[OpenHub]«,
+^Statistics generated automatically by *OpenHub* based on Git master footnote:[»link:https://openhub.net[OpenHub]«,
 formerly known as »Ohloh« is a public directory and networking site for free and open source software (FOSS),
 offering analytics and search services for evaluating and comparing open source projects.]^
 
-
-Mailing List
-------------
-
-image:http://gmane.org/plot-rate.php?group=gmane.comp.video.lumiera.general[Lumiera Mailinglist activity] +
-^activity stats by link:http://dir.gmane.org/gmane.comp.video.lumiera.general[Gmane.org]^
 
 
 Tickets

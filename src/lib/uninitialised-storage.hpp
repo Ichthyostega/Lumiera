@@ -52,7 +52,7 @@
  ** - an implicit conversion path to the corresponding array type is provided
  ** - subscript operators enable direct access to the raw storage
  ** - helper functions allow for placement new and delete.
- ** [deprecated again]: https://stackoverflow.com/a/71828512
+ ** [deprecated again]: https://stackoverflow.com/questions/71828288/why-is-stdaligned-storage-to-be-deprecated-in-c23-and-what-to-use-instead/71828512#71828512
  ** @see extent-family.hpp
  ** @see vault::gear::TestChainLoad::Rule where this setup matters
  */

@@ -3,20 +3,23 @@ Resource Management: Profiling
 
 // please don't remove the //word: comments
 
-[grid="all"]
-`------------`-----------------------
-*State*         _Idea_
-*Date*          _Fri Jul 23 19:34:29 2010_
-*Proposed by*   Christian Thaeter <ct@pipapo.org>
--------------------------------------
+[options="autowidth"]
+|====================================
+|*State*       | _Idea_
+|*Date*        | _Fri Jul 23 19:34:29 2010_
+|*Proposed by* | Christian Thaeter <ct@pipapo.org>
+|====================================
 
 [abstract]
 ******************************************************************************
-From the beginning on we planned some kind of 'profiling' to adapt dynamically
-to workload and machine capabilities. I describe here how statistic data can be
-gathered in a generic way. This will later work together with other components
+Right from the beginning of the project we planned some kind of _profiling_
+to adapt dynamically to current workload and machine capabilities.
+I describe here how statistic data can be gathered in a generic way.
+This will later work together with other components
 tuning the system automatically.
 ******************************************************************************
+
+-> link:{rfc}/ResourceManagementBudgeting.html[RfC: use gathered data for budgeting...]
 
 
 Description
@@ -24,10 +27,10 @@ Description
 //description: add a detailed description:
 
 I just introduce some ideas about the planned profiling framework here, nothing
-is defined/matured yet this is certainly subject for futher discussion and
+is defined/matured yet this is certainly subject for further discussion and
 refinement.
 
-.Requirements/Evaluation generic::
+ Requirements/Evaluation generic::
         Profiling should be sufficiently abstracted to have a single set of
         datastructures and algorithms to work on a broad range of subjects
         being profiled. Moreover the profiling core just offers unitless
@@ -49,7 +52,7 @@ refinement.
         such false alarms. Workload also changes over time we need to find some
         way to measure the current/recent workload an grand total over the
         whole application runtime is rather uninteresting. While it is also
-        important that we adapt slow enough not to get into some osccilating
+        important that we adapt slow enough not to get into some oscillating
         cycle.
 
  active or passive system::
@@ -59,7 +62,57 @@ refinement.
 
 
 
+Tasks
+~~~~~
+// List what would need to be done to implement this Proposal in a few words:
+ * develop a concept to outline what we actually want to observe ...
+ * refine this into a model to describe the observables
+ * derive an assessment of the specific requirements and challenges of this measurement
+ * use _this_ as the starting-point for an implementation draft ...
 
+
+
+
+Discussion
+~~~~~~~~~~
+
+Pros
+^^^^
+// add just a fact list/enumeration which make this suitable:
+//  * foo
+//  * bar ...
+
+
+
+Cons
+^^^^
+// fact list of the known/considered bad implications:
+
+
+
+Alternatives
+^^^^^^^^^^^^
+//alternatives: if possible explain/link alternatives and tell why they are not viable:
+
+
+
+Rationale
+---------
+//rationale: Describe why it should be done *this* way:
+
+
+
+//Conclusion
+//----------
+//conclusion: When approved (this proposal becomes a Final)
+//            write some conclusions about its process:
+
+
+
+
+Comments
+--------
+//comments: append below
 
 
 
@@ -127,56 +180,45 @@ struct profile
 };
 ------------------------------------------------------------------------------
 
-
-Tasks
-~~~~~
-// List what would need to be done to implement this Proposal in a few words:
-// * item ...
-
-
-
-
-Discussion
-~~~~~~~~~~
-
-Pros
-^^^^
-// add just a fact list/enumeration which make this suitable:
-//  * foo
-//  * bar ...
+ct:: '2010-07-23 20:33:13 CEST'
+....
+​
+​
+​
+....
 
 
+[[caveat]]
+[underline]#Many years later,# I'd like to confirm that we need and want some
+kind of profiling in the engine, for the purpose described in this RfC, which is
+to fine-tune our operation parameters dynamically.
 
-Cons
-^^^^
-// fact list of the known/considered bad implications:
+We should however be _careful_ not to settle down onto an implementation in our
+mind _before_ having conducted a proper *requirement analysis*. Starting from
+the valid idea what can be done with profiling and statistic, the first thing
+to map out is what we actually want to achieve and to which degree this can
+be reasonably achieved. From there we should head towards a model to
+describe what we want to observe, and only from there we'll be able
+to pick suitable measurement methods.
 
+^(I have just added these step to the ``Tasks'' section)^
 
+WARNING: we should drop the pre-established conception that what we capture
+         here is simple, and can be squeezed into a single data representation.
 
-Alternatives
-^^^^^^^^^^^^
-//alternatives: if possible explain/link alternatives and tell why they are not
-  viable:
+If it turns out that we're headed towards high-throughput processing,
+we should keep possible solutions at the architecture level in mind, before
+focusing on details of the implementation. Messaging systems and lock-free
+data structures have made significant progress over the last decade.
 
+-> see also my link:{rfc}/ResourceManagementBudgeting.html#caveat[remark to RfC:Budgeting]
 
-
-Rationale
----------
-//rationale: Describe why it should be done *this* way:
-
-
-
-//Conclusion
-//----------
-//conclusion: When approbate (this proposal becomes a Final) write some
-  conclusions about its process:
-
-
-
-
-Comments
---------
-//comments: append below
-
+Ichthyostega:: '2025-09-17'
 
 //endof_comments:
+
+
+
+
+''''
+Back to link:/x/DesignProcess.html[Lumiera Design Process overview]

@@ -291,7 +291,7 @@ namespace test{
    * @see DiffTreeApplication_test generic variant of tree diff application
    * @see TreeMutatorBinding_test coverage of the "building blocks"
    * @see TreeMutator_test base operations of the adapter
-   * @see diff-tree-application.hpp
+   * @see tree-diff-application.hpp
    * @see tree-diff.hpp
    */
   class DiffComplexApplication_test

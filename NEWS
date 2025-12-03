@@ -1,0 +1,80 @@
+Lumiera -- Significant Changes
+==============================
+Version: 0.pre.05~dev
+:Date: 11/2025
+
+*************************************************************
+Lumiera is a non-linear video editing and compositing tool.
+
+NOTE: as of 11/2025, Lumiera is in early development stage;
+it is not usable yet. This is a preview Release of a
+current development snapshot in pre-alpha stage.
+
+Source code and a list of all contributors can be retrieved
+from `git://git.lumiera.org/LUMIERA`
+*************************************************************
+
+
+
+In the current stage of development, the focus is primarily on the
+overall integration of fundamental functionality at all levels of
+the code base.
+
+
+Lumiera pre-Alpha Versions
+--------------------------
+
+As of _11/2025_ (0.pre.04)::
+This version is again motivated by a series of major upgrades and clean-up.
+Compilation now requires C++23 and Debian/Trixie is considered the reference
+platform. The GUI is connected to the core over an asynchronous messaging
+bus and the timeline display has been reshaped to accommodate flexibly
+nested structures of media content, instructed by the session through
+a series of _diff messages_. A scheduler has been implemented to drive
+the Render Engine, but the connection to the player and UI for output
+is yet unfinished.
+
+As of _11/2015_ (0.pre.03)::
+A lot of long standing maintenance work has been done.
+The Project upgraded to C++14 and Debian/Jessie as reference platform,
+followed by clean-up of workarounds now obsoleted. On the GUI side, we largely
+made the transition to GTK-3, which leads to a rework of our timeline widget,
+which is in progress but not finished yet. This work also spurred an effort
+to reorder the connection and communication between core and the UI, which
+is expected to be asynchronous. Due to the limited developer resources,
+work on the Engine and Player part is stalled.
+
+As of _10/2013_ (0.pre.02)::
+The data models have been elaborated and some significant parts of the session
+are finished. Work has continued with time handling, a draft of the output
+connection framework, a draft of the player subsystem and interfaces to the
+engine and processing network. Unfortunately there was a considerable slowdown
+and decrease in team size, yet still the code base is growing towards 90k LOC.
+No tangible progress regarding the GUI and the backend.
+
+As of _1/2011_ (0.pre.01)::
+The project has created and documented a fairly consistent design,
+and some parts implemented -- progressing from the technical foundations.
+The code base is approaching 65k LOC. Roughly half of this is test code.
+The Application can be installed and started to bring up a GTK GUI framework,
+but the GUI is rather preliminary and not connected to core functionality.
+The video processing pipeline exists only in the blueprints.
+
+As of _2/2008_::
+The project has been separated completely from Cinelerra, the parent project.
+The Community, which at that time was largely identical to the Cinelerra-CV community,
+choose the new project name **Lumiera** through a collaborative selection and vote.
+The basic project infrastructure was established, and work on the new codebase
+was underway. It is clear that no results other than a test suite can be shown
+in the foreseeable future.
+
+As of _7/2007_::
+A group of volunteers has formed to address some longstanding issues and limitations
+of **Cinelerra**, which we all used for video editing tasks requiring professional quality.
+The plan was to restructure some central parts of the render engine: introduce a Builder
+for render pipelines and use Placements to control arrangement of clips and a unified
+Data-Backend to coordinate usage of system resources. These innovations would serve
+as anchor, with the intention to propose the reworked codebase as a new version
+of Cinelerra, in the hope of turning Cinelerra development into a more
+participatory process going forward.
+

@@ -3,19 +3,19 @@ SchedulerRequirements
 
 // please don't remove the //word: comments
 
-[grid="all"]
-`------------`-----------------------
-*State*         _Draft_
-*Date*          _Mi 09 Jan 2013 12:04:03 CET_
-*Proposed by*   Ichthyostega <prg@ichthyostega.de>
--------------------------------------
+[options="autowidth"]
+|====================================
+|*State*       | _Final_
+|*Date*        | _Mi 09 Jan 2013 12:04:03 CET_
+|*Proposed by* | Ichthyostega <prg@ichthyostega.de>
+|====================================
 
 ********************************************************************************
 .Abstract
 Define the expected core properties and requirements of the Scheduler service.
 ********************************************************************************
 
-The rendering and playback subsystem relies on a Scheduler component to invoke
+The rendering and playback subsystem relies on a *Scheduler* component to invoke
 individual frame rendering and resource fetching jobs. This RfC summarises the
 general assumptions and requirements other parts of the application are relying
 on
@@ -77,13 +77,14 @@ knowledge of some specific job's termination. More precisely, we need to find ou
 when a ``stream of calculations'' has left a well defined domain -- and this can
 be modelled by the activation of specific marker jobs. It is possible to obtain
 that knowledge with some timing leeway, but in the end, this information needs
-to arrive with absolutely reliability (violations leading to segfault).
+to arrive with absolutely reliability (memory management will rely on them,
+and thus failure might lead to out-of.memory or segfault).
 
 
 job scheduling modes
 ~~~~~~~~~~~~~~~~~~~~
 The scheduler offers various modes of treatment on a per job base. The default is to
-handle jobs time based with a moderate latency. Alternatively jobs can be handled as
+handle jobs as _time-bound_, with a moderate latency. Alternatively jobs can be handled as
 _background_ jobs, as _freewheeling_ jobs (maximum usage of performance and bandwidth),
 or as _low-latency timed_ jobs.
 
@@ -115,9 +116,9 @@ Tasks
 // List what needs to be done to implement this Proposal:
 // * first step [yellow-background]#WIP#
  * define the job interface ([green]#✔ done#)
- * define a protocol for job state handling [red yellow-background]#TBD#
- * define the representation of dependencies and the notifications in practice [red yellow-background]#TBD#
- * verify the proposed requirements by an scheduler implementation sketch [red yellow-background]#TBD#
+ * define a protocol for job state handling ([green]#✔ done#)
+ * define the representation of dependencies and the notifications in practice  ([green]#✔#)
+ * verify the proposed requirements by an scheduler implementation sketch ([green]#✔#)
 
 
 
@@ -138,7 +139,7 @@ Pros
 Cons
 ^^^^
 // fact list of the known/considered bad implications:
- * there is no ``for-loop'' to base any playback control structures on
+ * there is no ``while-loop'' to base any playback control structures on
  * compliance to externally imposed deadlines and memory management are challenging.
 
 Alternatives
@@ -150,8 +151,8 @@ Alternatives
 
 We do not want (1), since it is tied to an obsolete hardware model and lacks the ability to be
 adapted to the new kinds of hardware available today or to be expected in near future. We do not
-want (2) since it essentially doesn't solve any problem, but rather pushes complexity into the
-higher layers (Session, Stage), which are lacking the information about individual jobs and timing.
+want (2) since it essentially doesn't solve any problem, but rather pushes complexity into the higher
+layers (Session, Stage), which however are lacking information about individual jobs and timing.
 
 
 
@@ -161,17 +162,20 @@ Rationale
 We use a scheduler to gain flexibility in controlling various aspects of computation and I/O usage.
 Moreover, we turn the scheduler into an interface between the Vault and Steam-Layer; while the exact
 outfitting of the individual jobs highly depends on internals of the Session and Engine models,
-the properties of _actual job execution_, closely related to system programming are akin
+the properties of _actual job execution_, closely related to system programming, are linked
 to the Vault. The actual requirements outlined in this RfC are derived from the internals
 of the player implementation, while _the way_ these requirements are defined, and especially
 the aspects _omitted_ from specification are derived from knowledge regarding the possible
 scheduler and vault layer implementation.
 
 
-//Conclusion
-//----------
-//conclusion: When approbate (this proposal becomes a Final)
+Conclusion
+----------
+//conclusion: When approved (this proposal becomes a Final)
 //            write some conclusions about its process:
+A solution closely following this proposal was implemented and became a
+centrepiece of the Lumiera Render Engine. There was no further formal
+decision, since _Ichthyo_ worked alone during the past years.
 
 
 
@@ -189,8 +193,29 @@ can be developed independently of the scheduler implementation
 
 Ichthyostega:: 'Do 19 Sep 2013 21:31:07 CEST' ~<prg@ichthyostega.de>~
 
+.State -> Final
+After an extended intermission, where development was focused at GUI topics, the integration
+work since 2023 strives at achieving an initial integration of the Render Engine. As part of the
+https://issues.lumiera.org/ticket/1221[#1221 »PlaybackVerticalSlice«], an implementation of the
+Scheduler, as proposed by this RfC, was
+link:/x/imp/Scheduler.html[built from scratch and tested extensively]. Practical experience
+during this effort leads to the following refinements:
+
+- the Scheduler does not invoke Jobs, +
+  but processes _verbs_ from an _Activity Language_ rather.
+- this language in turn embodies a primitive to check a dependency count
+- an external event may re-trigger such a chain of Activities within the Scheduler
+- an extent-based memory manager can be based on deadlines of these Activities.
+- the Scheduler becomes a passive management task, pulled by a active Workers.
+- Workers manage their capacity through a statistical distribution of _sleep times._
+
+In this form, the proposal can be considered as implemented. +
+^(see -> https://git.lumiera.org/?p=LUMIERA;a=commit;h=d71eb37[d71eb37]
+and https://issues.lumiera.org/ticket/1344[#1344])^
+
+Ichthyostega:: '2024-04-20 01:55 CEST'
 
 //endof_comments:
 
 ''''
-Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
+Back to link:/x/DesignProcess.html[Lumiera Design Process overview]

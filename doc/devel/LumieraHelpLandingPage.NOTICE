@@ -1,0 +1,16 @@
+NOTE: this is a placeholder -- the intention is to build a user Manual via Asciidoc
+
+As of 2025, Lumiera is not usable, and thus only a placeholder HTML page is provided
+for the DEB-Package. The content on this page is identical to the "User-Manual" page:
+https://Lumiera.org/documentation/user/manual.html
+
+For the delivery
+- this page has been rendered with Asciidoc
+- the resulting HTML has been processed with the "Print Edit WE" plugin of Firefox,
+  which inlines any resources (CSS, images)
+
+This page will be installed by the Lumiera SCons build into $prefix/share/doc/lumiera
+(see doc/SConsscript)
+
+Hint: for updates, re-render the Asciidoc and then use git/diff to combine the
+      new or changed content with the embedded inline images (base64 data)

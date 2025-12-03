@@ -4,12 +4,12 @@ Config Loader
 
 // please don't remove the //word: comments
 
-[grid="all"]
-`------------`-----------------------
-*State*         _Parked_
-*Date*          _2008-08-07_
-*Proposed by*   **ct**
--------------------------------------
+[options="autowidth"]
+|====================================
+|*State*       | _Dropped_
+|*Date*        | _2008-08-07_
+|*Proposed by* | **ct**
+|====================================
 
 ********************************************************************************
 .Abstract
@@ -44,8 +44,8 @@ NOTE: (by _Ichthyostega,_ 2023) +
 
 
 
-Parked
-~~~~~~
+
+.State -> Parked
 While the general idea seams adequate, the topic of Configuration
 requires a much more in-depth Requirement Analysis. Moreover, considering
 the state of tooling today (2023), I consider it questionable still to rely
@@ -64,13 +64,35 @@ to be addressed _after achieving the first integration_ of the Engine.
 Ichthyostega:: '2023-10-24' ~<prg@ichthyostega.de>~
 
 
+.State -> Dropped
+Lumiera needs a system for configuration, but it will not work as proposed here.
+The reasons for this decision can be traced back to questions of architecture
+and the intended use of ``Configuration''. This became first clear in a
+discussion between _Cehteh_ and _Ichthyo_, as they were walking together
+through the forest north of the Karlsruhe castle in August 2011.
 
-//Conclusion
-//----------
-//conclusion: When approbate (this proposal becomes a Final)
-//            write some conclusions about its process:
+While _Cehteh_ aims at an unified set of configuration data, composed by
+layering system-, user- and further local configuration files, to be combined
+with textual expansion- and replacement mechanisms -- and the ability to
+target a wide array of ``settings'' within the application, the intentions
+of _Ichthyo_ go into an almost antithetical direction: He rather wants
+to split off a very limited set of ``parametrisation'' and ``installation
+configuration'', while handling most of the other possible choices by evaluation
+of _configuration rules,_ which are tightly interwoven with the Session and
+are actively resolved in the Builder, as opposed to being provided by a global
+static _configuration service._ With this model, configuration can be injected
+from various sources as a structured set of _facts._ Furthermore, _Ichthyo_
+wants to isolate the behaviour of the application from ad-hoc tweaks through
+textual replacements and environment variables, rather looking for ways to
+record any application of rules or facts in the global _Event Log._
 
+Ichthyostega:: '2025-09-20'
+....
+​
+​
+....
 
+~What follows below is extended documentation for _Cehteh_'s Config System proposal...~
 
 ''''''''''''''''
 
@@ -147,7 +169,7 @@ API
   - lumiera_config_init (const char* searchpath) searchpath is a buildin-default, can be changed via configure and can be appended and overridden by using a flag, e.g. `--config-path-append=""` or `--config-path=""`
 
 * `lumiera_config_destroy(...)`
-  - frees all space allocated by the link:ConfigLoader[].
+  - frees all space allocated by the ConfigLoader.
 
 * `lumiera_config_load(...)`
   - reads *one* single configuration file that will include all settings from other files.
@@ -205,10 +227,12 @@ API
 .foo.bar
 =======================================
 `integer_set("foo.bar", 123)`
+
 looks up "foo.bar"
-this returns as well file and line
-it will be decided whether it's a system file or a user's config file.
-if systemfile: loop for user's config file, if necessary create it in our RAM but not yet on disk
+
+- this returns as well file and line
+- it will be decided whether it's a system file or a user's config file.
+- if systemfile: loop for user's config file, if necessary create it in our RAM but not yet on disk
 set the value in the line.
 =======================================
 
@@ -236,16 +260,15 @@ anchor:anchor_config[]lumiera_configfile
 anchor:anchor_types[]provided TYPES
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-[grid="all"]
-`--------------.--------------------------------------'------------------------------------------------------------
-config type     C type					semantic (example)
--------------------------------------------------------------------------------------------------------------------
-number		signed long long			also hex and octal (foo.bar = 12345 #comment)
-real		long double				differerent formats as well (foo.bar=1.2345 #comment)
-string		const char*				optionaly quoted string (foo.bar="this string" #this not)
-word		const char*				first optionaly quoted word of the config (foo.bar= first this # not)
-bool		int					common representations for bools (0,1,true,false,yes,no,on,off,set,clear)
--------------------------------------------------------------------------------------------------------------------
+[options="header", cols="^,2^m,6"]
+|====================================
+|config type | C type          | semantic (example)
+|number      |signed long long | also hex and octal (foo.bar = 12345 #comment)
+|real        |long double      | differerent formats as well (foo.bar=1.2345 #comment)
+|string      |const char*      | optionaly quoted string (foo.bar="this string" #this not)
+|word        |const char*      | first optionaly quoted word of the config (foo.bar= first this # not)
+|bool        |int              |common representations for bools (0,1,true,false,yes,no,on,off,set,clear)
+|====================================
 
 ... add more types on demand (ichthyo mentioned a tuple type for color triples etc.)
 
@@ -314,7 +337,7 @@ semantics notes:
 anchor:anchor_links[]links
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-http://standards.freedesktop.org/basedir-spec/basedir-spec-0.6.html[]
+https://specifications.freedesktop.org/basedir-spec/0.6/[]
 
 
 anchor:anchor_internals[]internals/implementation sketch
@@ -591,7 +614,7 @@ Discussion on irc
 [02:06] <__nasa__> There should be a callback for a plugin to add a config file for that plugin.
 [02:06] <__nasa__> Ooh
 [02:06] <__nasa__> cool idea
-[02:06] <cehteh> this is not really complicated to do but would give a big usage experience link:JustWorks[][TM]
+[02:06] <cehteh> this is not really complicated to do but would give a big usage experience JustWorks[TM]
 [02:06] <__nasa__> ~/.lumi/config is the main configuration directory
 [02:06] <__nasa__> inside, there is a ~/.lumi/config/config.ini which is main configuration
 [02:07] <cehteh> no callbacks .. the idea is that the config system is independent and nothing else need to register there, that makes it much easier

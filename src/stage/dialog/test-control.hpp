@@ -113,7 +113,7 @@ namespace dialog {
    * struct, which is actually heap allocated and managed automatically. This way, each child page
    * gets its own namespace, and wiring to other components is made explicit by passing named ctor
    * arguments -- while the overall structure  of building and wiring of widgets stays close to the
-   * habits of [programming with GTKmm](https://developer.gnome.org/gtkmm-tutorial/stable/).
+   * habits of [programming with GTKmm](https://gnome.pages.gitlab.gnome.org/gtkmm-documentation/).
    * - define the pages as custom widgets, typically just as locally known struct types
    * - invoke #buildPage passing the type and tab label for each page
    * - define the wiring of the components within a page in the page's ctor
@@ -121,7 +121,7 @@ namespace dialog {
    * @note the page widgets are actually heap allocated and managed automatically
    * @see stage::dialog::TestControl as a usage example
    * 
-   * [Notebook]: https://developer.gnome.org/gtkmm-tutorial/stable/sec-multi-item-containers.html.en#sec-notebook
+   * [Notebook]: https://gnome.pages.gitlab.gnome.org/gtkmm-documentation/sec-multi-item-containers.html#sec-notebook
    */
   class Notebook
     : public Gtk::Notebook

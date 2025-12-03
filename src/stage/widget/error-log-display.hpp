@@ -190,7 +190,7 @@ namespace widget {
        *  but also stores a [Mark] to bookmark the presence of this
        *  error entry. And finally expand the display if collapsed.
        *  
-       * [Mark]: https://developer.gnome.org/gtkmm-tutorial/stable/sec-textview-buffer.html.en#textview-marks
+       * [Mark]: https://gnome.pages.gitlab.gnome.org/gtkmm-documentation/chapter-textview.html#textview-marks
        */
       void
       addError (string text)
@@ -303,9 +303,9 @@ namespace widget {
        *         The handling of marks and tags is described in the [GTKmm tutorial].
        * @warning Each entry creates a new pair of marks. Not sure about the impact on performance...
        * 
-       * [GTKmm tutorial]: https://developer.gnome.org/gtkmm-tutorial/stable/sec-textview-buffer.html.en#textview-marks
-       * [insert-mark]: https://developer.gnome.org/gtkmm/3.22/classGtk_1_1TextMark.html#details
-       * [API doc]: https://developer.gnome.org/gtkmm/3.22/classGtk_1_1TextView.html#a8412941c4da9a71a381052d6049164e4
+       * [GTKmm tutorial]: https://gnome.pages.gitlab.gnome.org/gtkmm-documentation/chapter-textview.html#textview-marks
+       * [insert-mark]: https://web.archive.org/web/20210306120221/https://developer.gnome.org/gtkmm/3.22/classGtk_1_1TextMark.html#details
+       * [API doc]: https://web.archive.org/web/20210306120223/https://developer.gnome.org/gtkmm/3.22/classGtk_1_1TextView.html#a8412941c4da9a71a381052d6049164e4
        */
       Entry
       addEntry (string const& text, Literal markupTagName =nullptr)

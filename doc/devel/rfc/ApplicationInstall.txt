@@ -3,22 +3,22 @@ ApplicationInstall
 
 // please don't remove the //word: comments
 
-[grid="all"]
-`------------`-----------------------
-*State*         _Draft_
-*Date*          _Di 11 Jan 2011 17:00:55 CET_
-*Proposed by*   Ichthyostega <prg@ichthyostega.de>
--------------------------------------
+[options="autowidth"]
+|====================================
+|*State*       | _Final_
+|*Date*        | _Di 11 Jan 2011 17:00:55 CET_
+|*Proposed by* | Ichthyostega <prg@ichthyostega.de>
+|====================================
 
 [abstract]
 *********************************************************************************
-Lumiera should be a _freely relocatable_ application bundle.
+Lumiera should be a _freely relocatable_ application bundle. +
 Relying only on the relative folder structure within this bundle, the application
 will be fully functional at any location, provided that the external library
 dependencies are resolvable using the standard mechanisms of the platform.
-The setup mechanism must be obvious, self-explanatory and must not rely
-on compiled in magic or buildsystem trickery. Yet packaging into a FSH conforming
-installation location should be supported by the same mechanisms.
+This setup mechanism should be obvious and self-explanatory and must not rely
+on compiled-in hidden magic or buildsystem trickery. Yet packaging into a fully
+FSH conforming installation location should be supported by the same mechanisms.
 *********************************************************************************
 
 Description
@@ -66,7 +66,7 @@ In former days, it was common habit to compile-in a hard wired absolute
 policy forbids doing so. This is the result from numerous maintainability
 problems in the past. On the other hand, the GNU linker and other modern
 linkers support a relative resolution of shared modules directly accompanying
-an specific executable. The Debian policy allows this, if and only if these
+a specific executable. The Debian policy allows this, if and only if these
 shared modules are installed with the same binary package and only used by
 this specific executable(s). Together, this is exactly what we need to
 solve our requirement.
@@ -76,7 +76,7 @@ and sets the +DT_RUNPATH+ with an value relative to +$ORIGIN+, which resolves
 to the path of the currently executing binary. Moreover, it is _sufficient_
 to set this on the initial executable _only,_ because this creates a common
 searchpath for all lib resolution events in the scope of that loaded executable.
-Besides that, we need to care that our private libraries have a unique +SONAME+,
+Besides that, we need to care that our private libraries have an unique +SONAME+,
 in this case all starting with the prefix +liblumiera*+. Note moreover that this
 new-style +DT_RUNPATH+ indeed _can_ be overridden by an +LD_LIBRARY_PATH+ in the
 environment, should there be the need for very special experiments.
@@ -121,7 +121,7 @@ Tasks
 * build the executables in a way to allow relative resolution of the
   internal shared modules ([green]#✔ done#)
 * replace the compiled-in path definitions for plugin loading by a
-  configurable bootstrap ([green]#✔#)
+  configurable bootstrap ([green]#✔ done#)
 * add an working library implementation for a config loader ([green]#✔ done#)
 * add a mechanism for establishing the path of the current execubable. +
   This is _non-portable_ ([green]#✔ done#)
@@ -130,7 +130,7 @@ Tasks
 * try to extract the path search code from the existing config loader,
   or build a new solution based on standard libraries ([green]#✔ done#)
 * introduce an output root directory into the buildsystem, allowing
-  for package builds ([green]#✔#)
+  for package builds ([green]#✔ done#)
 * define a _Debian packaging_ as proof-of-concept ([green]#✔ done#)
 
 
@@ -172,10 +172,10 @@ up some very specific problems and constraints, which can be a serious
 threat when discovered late in the development process.
 
 The second alternative isn't really applicable IMHO. The original UNIX philosophy
-breeds on an academic setup and really excels with small nifty commandline utils
+draws from an academic setup and really excels with small nifty commandline utils
 combined by pipes, each specialised to do a single thing very well. These utils
 are more like the objects within our implementation. The concept of large
-application software bundles and desktop software was always a bit alien
+application software bundles and desktop software was always slightly alien
 within the classic UNIX environment.
 
 
@@ -191,17 +191,20 @@ trickery, inline code compiled on-the-fly, relying on very specific and
 un-obvious behaviour of some build script, configuration via environment
 variables and a lot of similar idioms. These practices might be adequate
 in a quickly moving Research & Development setup, but turned out to be
-not so helpful when it comes to industrial strength development,
+not so helpful when it used within large-scale development efforts,
 as they are known to lead to maintenance problems.
 
 
 
 
-//Conclusion
-//----------
-//conclusion: When approbate (this proposal becomes a Final)
+Conclusion
+----------
+//conclusion: When approved (this proposal becomes a Final)
 //            write some conclusions about its process:
-
+All the indicated clean-up was done and the bootstrap sequence could be implemented. +
+The link:{ldoc}/devel/meeting_summary/2011-04-13.html#application_install_proposal[Apr.2011 developer meeting]
+shortly touched on this proposal without raising any objections.
+``... for example this application install .. is boring .. we need it, you did it well'' (_Cehteh_)
 
 
 
@@ -219,7 +222,14 @@ which reminded me of several small issues, which seem to become unhealthy when l
 around unfixed for such a long time. Probably I'll start a clean-up initiative and
 try to bring these points to discussion separately.
 
-   So 13 Feb 2011 20:04:00 CET Ichthyostega <prg@ichthyostega.de>
+Ichthyostega:: 'So 13 Feb 2011 20:04:00 CET' 
 
+.State -> Final
+After being established in 2011, this structure was used ever since. There was once
+a problem with a bug in `ld.so` related to the transitive use of the `$origin` token;
+this bug had been resolved quickly. Other than that, packaging and application start
+always worked as intended -- so I consider this topic as settled.
+
+Ichthyostega:: '2025-09-18'
 
 //endof_comments:

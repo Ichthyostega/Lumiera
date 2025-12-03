@@ -4,7 +4,7 @@
 ##
 
 #  Copyright (C)
-#    2008,            Hermann Vosseler <Ichthyostega@web.de>
+#    2008-2025        Hermann Vosseler <Ichthyostega@web.de>
 #
 # **Lumiera** is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by the
@@ -101,19 +101,6 @@ def isSrcDir(path, patterns=SRCPATTERNS):
         for p in patterns:
             if glob.glob(path+'/'+p):
                 return True
-
-
-
-def filterNodes(nlist, removeName=None):
-    """ filter out scons build nodes using the given criteria.
-        removeName: if set, remove all nodes with this srcname
-    """
-    if removeName:
-        predicate = lambda n : not fnmatch.fnmatch(os.path.basename(str(n[0])), removeName)
-    else:
-        predicate = lambda n : True
-    
-    return list(filter(predicate, nlist))
 
 
 
@@ -218,7 +205,7 @@ def extract_localPathDefs (localDefs):
         pattern and returns them wrapped into a Record for convenient access
     """
     def relevantPathDefs (mapping):
-        for (k,v) in list(mapping.items()):
+        for (k,v) in mapping.items():
             if (k.startswith('src') or k.startswith('build') or k.startswith('install')) and Util.is_String(v):
                 v = v.strip()
                 if not v.endswith('/'): v += '/'

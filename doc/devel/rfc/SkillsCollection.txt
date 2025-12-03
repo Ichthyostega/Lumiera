@@ -1,9 +1,13 @@
-[grid="all"]
-`------------`-----------------------
-*State*         _Parked_
-*Date*          _2007-06-13_
-*Proposed by*   link:ct[]
----------------------------------
+Offering Skills for Help
+========================
+
+
+[options="autowidth"]
+|====================================
+|*State*       | _Dropped_
+|*Date*        | _2007-06-13_
+|*Proposed by* | ct
+|====================================
 
 
 Skills Collection
@@ -18,7 +22,7 @@ Some Page should list different things needed for working on the project and
 users should attach themself when they offer support for it. This is meant that
 people who run into problems know who to ask. In contrast this is not meant
 like these Skill pages on Sourceforge or such. I don't like this rating and
-posing system. We let people assing themself to skill and not skills to people
+posing system. We let people assign themself to skill and not skills to people
 and there is no rating.
 
 Skills shall be anything which is needed like the tools we use, the code we
@@ -39,12 +43,14 @@ Example
 .lumiera/renderpipe
 * ichthyo
 
-... shall this contain emails?
+
+Question: __shall this contain emails?__
 
 
 Tasks
 ^^^^^
- * just set this page up .. either on this wiki or in a tiddlywiki which
+ * just set this page up ... +
+   either on this wiki or in a TiddlyWiki which
    becomes checked into the repo
 
 
@@ -55,13 +61,13 @@ Pros
 
 Cons
 ^^^^
- * privacy concerns, people might not publish what they know or better what
-   they ''not'' know
+ * privacy concerns, people might not publish what they know or, even more,
+   what they _do not_ know
 
 
 Alternatives
 ^^^^^^^^^^^^
-...urgs
+...urgs 😶
 
 
 Rationale
@@ -76,5 +82,17 @@ community and is absolutely voluntary.
 Comments
 --------
 
+[underline]#Historical remark#: This RfC stems from the very first days of the »Cinelerra-3 movment«,
+which turned into the Lumiera project over the course of the following months. The RfC was already
+marked as __parked__ when first imported into the Lumiera Documentation in 2010. Early in 2008 however,
+at the link:{ldoc}/devel/meeting_summary/2008-03-06.html#_draft_skills_collection[March developer meeting],
+it was discussed shortly and deemed ``...only useful if there are more developers working on the project''.
 
-Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
+Reading this RfC today gives me some kind of peculiar melancholic feeling -- it has the vibes of »zero hour«,
+when all hands on deck are needed and everyone wants to help; people write their names on a blackboard
+at the wayside, to get into contact, organise themselves or maybe just to find their beloved ones...
+
+Ichthyostega:: '2025-09-11'
+
+''''
+Back to link:/x/DesignProcess.html[Lumiera Design Process overview]

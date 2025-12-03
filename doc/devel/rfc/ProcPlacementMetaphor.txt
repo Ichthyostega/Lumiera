@@ -1,15 +1,19 @@
-[grid="all"]
-`------------`-----------------------
-*State*         _Final_
-*Date*          _2008-03-06_
-*Proposed by*   link:Ichthyostega[]
--------------------------------------
+Design Process : Placement Metaphor
+====================================
+
+[options="autowidth"]
+|====================================
+|*State*       | _Final_
+|*Date*        | _2008-03-06_
+|*Proposed by* | Ichthyostega
+|====================================
 
 
 Placement Metaphor used within the high-level view of Steam-Layer
 -----------------------------------------------------------------
-besides the [wiki:self:../ProcBuilder Builder], one of the core ideas of the
-``Proc-Layer'' (as being currently implemented by Ichthyo) is to utilize
+
+besides the link:{rfc}/ProcBuilder.html[Builder], one of the core ideas of
+the Lumiera application, as envisioned and implemented currently, is to utilise
 _Placement_ as a single central metaphor for object association, location and
 configuration within the high-level model. The intention is to prefer _rules_
 over fixed _values._ Instead of ``having'' a property for this and that, we
@@ -18,24 +22,24 @@ query for information when it is needed.
 The proposed use of *Placement* within the steam layer spans several,
 closely related ideas:
 
- * use the placement as a universal means to stick the "media objects" together
+ * using the placement as a universal means to stick the ``media objects'' together
    and put them on some location in the timeline, with the consequence of a
    unified and simplified processing.
- * recognize that various _location-like_ degrees of freedom actually form a
+ * recognise that various _location-like_ degrees of freedom actually form a
    single _``configuration space''_ with multiple (more than 3) dimensions.
  * distinguish between _properties_ of an object and qualities, which are
    caused by ``placing'' or ``locating'' the object in _configuration space_
-   - _propetries_ belong to the object, like the blur value, the media source
+   - _properties_ belong to the object, like the blur value, the media source
        file, the sampling/frame rate of a source
    - _location qualities_ exist only because the object is ``at'' a given
        location in the graph or space, most notably the start time, the output
        connection, the layering order, the stereoscopic window depth, the sound
        pan position, the MIDI instrument
  * introduce a _way of placement_ independent of properties and location
-   qualities, describing if the placement _itself_ is _absolute, relative or
+   qualities, describing if the Placement _itself_ is _absolute, relative or
    even derived_
- * open especially the possibility to _derive_ parts of the placement from
-   the context by searching over connected objects and then up the fork (``tree of tracks'');
+ * open especially the possibility to _derive_ parts of the Placement from
+   the context by searching over connected objects and then up the _Fork_ (``tree of tracks'');
    this includes the possibility of having rules for resolving unspecified
    qualities.
 
@@ -71,7 +75,7 @@ On the contrary, using the *Placement* metaphor has the implication of
 switching to a query-driven approach.
 
  * it gives us one single instrument to express the various kinds of relations
- * the _kind of placement_ becomes an internal value of the _placement_ (as
+ * the _kind of placement_ becomes an internal value of the _Placement_ (as
    opposed to the object)
  * some kinds of placement can express rule-like relations in a natural fashion
  * while there remains only one single mechanism for treating a bunch of
@@ -124,7 +128,7 @@ Pros
  * modular and extensible
  * allows much more elaborate handling of media objects then the conventional
    approach, while both the simple standard case and the elaborate special case
-   are "first class citizens" and completely integrated in all object
+   are ``first class citizens'' and completely integrated in all object
    treatment.
 
 
@@ -133,7 +137,7 @@ Cons
 ^^^^
  * difficult to grasp, breaks with some habits
  * requires a separate resolution step
- * requires to ''query'' for object properties instead of just looking up a
+ * requires to _query_ for object properties instead of just looking up a
    fixed value
  * forces the GUI to invent means for handling object placement which may go
    beyond the conventional
@@ -149,13 +153,12 @@ Use the conventional approach
  * media objects are assigned with fixed time positions
  * they are stored directly within a grid (or tree) of tracks
  * layering and pan are hard wired additional properties
- * implement an additional auto-link macro facility to attach sound to video
+ * implement an additional auto-link macro facility to attach sound to a video clip
  * implement a magnetic snap-to for attaching clips seamless after each other
  * implement a splicing/sliding/shuffling mode in the UI
  * provide a output wiring tool in the GUI
- * provide macro features for this and that....
-
-^hopefully I made clear by now _why_ I don't want to take the conventional approach^
+ * provide macro features for this and that.... +
+   ^(hopefully I made clear by now _why_ I don't want to take the conventional approach)^
 
 
 
@@ -171,23 +174,23 @@ the conventional approach was dictated by technological limitations.
  * the ususal layering based on tracks constantly forces the user to place
    clips in a unnatural and unrelated fashion and tear apart clips which belong
    closely together
- * the conventional approach of having a fixed "pan control" in specialized
-   "audio tracks" constantly hinders the development of more natural and
+ * the conventional approach of having a fixed ``pan control'' in specialized
+   ``audio tracks'' constantly hinders the development of more natural and
    convincing sound mixing. It favors a single sound system (intensity based
    stereophony) for no good reason.
  * handling of stereoscopic (3D) video/film is notoriously difficult within the
    conventional, hard wired approach
- * building more elaborate sound scapes and sound design is notoriously
-   difficult to maintain, because the user is forced to use hidden "side
-   chains", magic rules and re-build details in external applications, because
-   of the lack of flexible integration of control data alongside with the main
-   data.
+ * building more elaborate soundscapes and sound design is notoriously
+   difficult to maintain, because the user is forced to use hidden
+   ``side chains'', magic rules and re-build details in external applications,
+   because of the lack of flexible integration of control data alongside
+   with the main data.
 
 The high-level model is close to the problem domain, it should provide means to
 express the (naturally complex) relationships between media objects. Using an
 abstract and unified concept is always better then having a bunch of seemingly
 unrelated features, even if they may be more easy to grasp for beginners.
-Moreover, the Placement concept deliberately brings in an rule based approach,
+Moreover, the Placement concept deliberately leads to a _rule based approach_,
 which well fits into the problem domain. Finally, there is sort-of a visionary
 aspect involved here: _Ichthyo_ thinks that nowadays, after image and sound are
 no longer bound to physical media, there is potential for new workflows to be
@@ -205,7 +208,7 @@ Comments
 
 Placement Metaphor
 ~~~~~~~~~~~~~~~~~~
-Re:
+[quote]
 ``Finally, there is sort-of a visionary aspect involved here:
 Ichthyo thinks that nowadays, after image and sound are no longer bound to
 physical media, there is potential for _new workflows_ to be
@@ -225,13 +228,15 @@ use, and decision rules based on these parameters.
 This feature/capability is likely to stamp the Lumiera project as a flagship
 benchmark in more ways than one, for some time.
 
- . --link:Tree[][[DateTime(2008-08-23T12:54:00NZ)]].
+ Tree:: '2008-08-23T12:54:00NZ'
 
 
 Final
 ~~~~~
-    Do 14 Apr 2011 03:06:42 CEST Christian Thaeter
+Discussed at the link:{ldoc}/devel/meeting_summary/2011-04-13.html#_proc_high_level_model_and_placement_concept[Apr.2011 developer meeting]. +
+
+Christian Thaeter::  'Thu 14 Apr 2011 03:06:42 CEST'
 
 
-
-Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
+''''
+Back to link:/x/DesignProcess.html[Lumiera Design Process overview]

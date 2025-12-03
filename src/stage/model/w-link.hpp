@@ -37,7 +37,7 @@
  **          a dead functor. We make use of the same mechanism here to
  **          install a callback to invalidate this smart-handle.
  ** 
- ** [trackable]: https://developer.gnome.org/libsigc++/stable/structsigc_1_1trackable.html#details "`sigc::trackable`"
+ ** [trackable]: https://libsigcplusplus.github.io/libsigcplusplus/reference/html/structsigc_1_1trackable.html#details "`sigc::trackable`"
  ** 
  ** @see \ref WLink_test
  ** @see \ref NotificationHub (usage example)

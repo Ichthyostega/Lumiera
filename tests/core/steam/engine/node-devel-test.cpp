@@ -26,9 +26,11 @@
 #include "lib/random.hpp"
 
 #include <vector>
+#include <array>
 
 using lib::zip;
 using lib::izip;
+using std::array;
 using std::vector;
 using std::make_tuple;
 using lib::test::showType;
@@ -45,7 +47,7 @@ namespace test  {
       : util::NonCopyable
       {
         alignas(TestFrame)
-          std::byte storage[sizeof(TestFrame)];
+          array<std::byte, sizeof(TestFrame)> storage{}; //zero-init
         
         operator TestFrame*  () { return   std::launder (reinterpret_cast<TestFrame* > (&storage)); }
         TestFrame* operator->() { return   std::launder (reinterpret_cast<TestFrame* > (&storage)); }

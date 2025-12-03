@@ -14,7 +14,8 @@
 
 /** @file video-display-widget.hpp
  ** Widget to create a video display embedded into the UI
- ** @deprecated defunct since the transition to GTK-3
+ ** @warning WIP 2025 — will be reworked as part of the »Playback Vertical Slice«
+ **          to establish an actual connection to the Render Engine
  */
 
 
