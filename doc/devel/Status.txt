@@ -1,0 +1,64 @@
+Development Status
+==================
+:Date: {localdate}
+
+Current Phase::
+    [big green                   ]#Development#
+//  [big purple yellow-background]#Convergence#
+//  [big navy   aqua-background  ]#Release preparation#
+
+-> link:{ldoc}/technical/code/GitBranching.html[Git-flow] +
+-> link:{ldoc}/technical/infra/Release.html[Release]
+
+
+
+
+Objectives
+----------
+At the current stage of development, the focus is primarily on the
+overall integration of fundamental functionality at all levels of
+the code base. A sequence of
+link:{ldoc}/design/governance/integration.html[Integration steps]
+has been defined, each driven by some pivotal functionality,
+to be implemented as a »Vertical Slice«.
+
+Our Goal is to integrate an ongoing render process, with a render
+pipeline in the engine and video output in the UI.
+
+- A network of Render Nodes can now be built and invoked [green]#✔#
+- 🗘 The provisional buffer memory manager needs to be improved next,
+  to resolve a mismatch between the _Buffer Protocol_ and the
+  _Output Sink Protocol_, so that the target buffer of an output
+  sink can be used seamlessly within the Render Node network.
+- Another point to be resolved next is to decide upon the design
+  of the _Vierwer Output Connection_, which shall be used as an
+  anchor point for the running playback process.
+- Next we need a solution how to integrate some _Video Output_ solution
+  into the Lumiera UI (-> see the link:/research/videoDisplay/[recent research]),
+  so that it can be represented as an _Output{nbsp}Slot_.
+- After that, we could look into the integration of _Job Planning_
+  this _Output Slot_ with the _Scheduler_.
+- Once this has been accomplished, it should be possible to fill in
+  the remaining parts into the _Play Process_ implementation.
+- Furthermore we still need some provisional solution how to
+  trigger all this new functionality from the UI.
+
+
+
+
+Current Release
+---------------
+[red]#Lumiera is not usable yet#.
+
+- A »Preview Release« was
+  https://git.lumiera.org/?p=LUMIERA;a=tag;h=refs/tags/v0.pre.04[published at Dec 2, 2025]
+
+- link:/debian[DEB packages]
+  were built for »Trixie« and »Noble«
+
+
+Changelog
+~~~~~~~~~
+
+include::Changelog[lines="26..10000"]
+

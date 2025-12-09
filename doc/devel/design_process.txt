@@ -11,8 +11,17 @@ Design Process
 //Menu: attach child 'rfc'
 
 
-How it Works
-------------
+.Formalized discussions within a group of developers
+The purpose of the ``Lumiera Design Process'' is to coordinate and document
+important discussions and decisions regarding the Architecture, the fundamental
+technologies used, the coding framework and development methods.
+
+CAUTION: Since several years now, _Ichthyo_ is working alone. +
+         The Design process is ``dormant'' currently (2025).
+
+
+Proceedings
+-----------
 Design Process entries (Request for Comment) can be created by anyone.
 Each entry goes through several stages until it's accepted (or rejected).
 All our RfC entries are filed here, either in the  link:rfc_final/index.html[RfC accepted] section,
@@ -21,23 +30,46 @@ or as link:rfc_pending/index.html[pending RfC] or as link:rfc_dropped/index.html
 * Every proposal starts out as _*Idea*_, allowing other people to review and comment on it, while still working out details.
 * When the _Idea_ is in a proper shape and worked out in most details it becomes a _*Draft*_.
   This _Draft_ need to be carefully reviewed, commented, perhaps corrected and rated by the other Developers.
-* We decide on some proposals to talk about that another time, these get a _*Parked*_ state.
-* At some point we may decide that a _*Draft*_ becomes a _*Final*_.
+* We may decide to discuss some proposals at a later date; these will be postponed for now and
+  transition into _*Parked*_ state.
+* At some point we may decide that a _*Draft*_ is accepted and can transition to _*Final*_ state.
   Usually, this happens in our link:/devs-vault/meeting/index.html[monthly developers meetings].
 * Sometimes proposals will become dropped for some reason, this is indicated by changing their state to _*Dropped*_,
   they still stay in the system for further reference.
 
-Generally you should refrain from editing someone others proposals (except for typo and grammar fixes)
-when this is not acknowledged with the original author. Rather only add comments to the pages and please
-care to sign your comments in order to make it easier to find out who is the contact person for some note.
+In general, you should not edit other people's proposals (except to correct typos and grammar mistakes)
+unless this has been agreed upon with the original author. Instead, please only add comments at the end
+of the page and sign them with your name and the date so that it is easier to follow the sequence of
+arguments and to find the contact person for each note. Furthermore, when the ongoing discussion
+happens to transform a proposal into something entirely different, you should not try to amend
+the original proposal to reflect the changes, but rather _drop it_ and open a new one,
+referring back to the original text.
 
-What qualifies as an RfC proposal
----------------------------------
-CAUTION: to be written
+
+What qualifies as RfC proposal
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The RfC documents summarise important decisions where participating developers need to agree
+upon some course of action, going forward. It is not the proper format to bring up ``interesting''
+ideas for general discussion, nor is it meant to document technical details and findings, or to
+promote feature wishes. Prior to opening a RfC entry, an informal discussion should have taken place
+to determine whether the idea has a reasonable chance of receiving support, whether there is a need
+for further discussion, or whether a consensus already exists. It should also be ensured that
+Someone^TM^ will take care of the implementation, or that the topic is considered important enough
+to be defined as a long-term goal.
+
+- The proposal should revolve around a single idea, topic, method or solution
+- It should be specific and describe _one_ proposed _solution approach,_ even while
+  the intention of the proposal might be to discuss the further direction to take,
+  or to achieve a decision regarding various possibilities ahead.
+- The proposal should be well defined and actionable.
+- It should be roughly clear what steps need to be taken to make the proposal happen.
+- It _must_ be possible to underpin the benefits (``pro'') and the drawbacks (``con'')
+  with _valid arguments_, that can be debated by reasoning.
+- It should be possible to examine and reason about at least one alternative.
+
 
 Handling of RfC entries in practice
------------------------------------
-
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .Adding a new Proposal:
 . Check if there is no similar proposal below! If yes, contact it's author and contribute to that one.
 . Think of a good/descriptive _Name-ID_ for the Proposal. It will be used to create a RfC sub-page, so no embedded spaces please.

@@ -16,7 +16,7 @@ from `git://git.lumiera.org/LUMIERA`
 
 
 
-In the current stage of development, the focus is primarily on the
+At the current stage of development, the focus is primarily on the
 overall integration of fundamental functionality at all levels of
 the code base.
 
@@ -36,13 +36,13 @@ is yet unfinished.
 
 As of _11/2015_ (0.pre.03)::
 A lot of long standing maintenance work has been done.
-The Project upgraded to C++14 and Debian/Jessie as reference platform,
-followed by clean-up of workarounds now obsoleted. On the GUI side, we largely
-made the transition to GTK-3, which leads to a rework of our timeline widget,
-which is in progress but not finished yet. This work also spurred an effort
-to reorder the connection and communication between core and the UI, which
-is expected to be asynchronous. Due to the limited developer resources,
-work on the Engine and Player part is stalled.
+The codebase has been upgraded to C++14 and Debian/Jessie as reference platform,
+followed by clean-up of several workarounds now obsoleted. On the GUI side,
+the transition to GTK-3 was accomplished, which however necessitates a rework
+of our timeline widget, which is in progress but not finished yet. This work
+also spurred an effort to reorder the connection and communication between
+the core and the UI, which is expected to be asynchronous. Due to the limited
+developer resources, work on the Engine and Player part is stalled.
 
 As of _10/2013_ (0.pre.02)::
 The data models have been elaborated and some significant parts of the session

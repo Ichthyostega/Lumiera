@@ -3,7 +3,7 @@ Release preparation
 :Author: Ichthyo
 :Date: Nov 2025
 
-We have nothing to show and don't provide public releases yet --
+We have nothing to show yet and don't provide public releases --
 but we ought to rehearse and practice the release process.
 This document contains some hints and a checklist of steps
 to perform for a proper release.
@@ -14,6 +14,18 @@ IMPORTANT: Lumiera uses link:{ldoc}/technical/code/GitBranching.html[Git-flow]
            automation of these steps was not yet considered. So please be
            sure to adhere to the established conventions.
 
+.Each Release has three phases
+- Development
+- Convergence
+- Preparation
+
+During the »convergence phase«, all participants must prioritise code stability.
+After the »release cut«, development can resume freely on branch `integration`,
+while »release preparation« ensues on the _release branch_. The
+published documentation branch and the website will follow suit on the
+release branch. Please mark the current phase on the
+link:{ldoc}/devel/Status.html[Development Status] page.
+
 
 Steps to perform for a release
 ------------------------------
@@ -21,6 +33,7 @@ Steps to perform for a release
  . Pre-Release _»convergence phase«_
 
    - care for code stability and refrain from breaking changes
+   - announce and mark »convergence« on the link:{ldoc}/devel/Status.html[Status] page.
    - verify that the _current version number_ is already set to
      the version number expected for the upcoming release, yet
      decorated with the `~dev` suffix -- if it turns out that
@@ -133,5 +146,5 @@ what you set here *must* be the next version _after the release_
    - clean-up and discard obsoleted old distributions and packages
 
  . Close the **Release Ticket**
-
+   and update the link:{ldoc}/devel/Status.html[Status] page.
 

@@ -1,4 +1,4 @@
-# Doxyfile 1.5.6
+# Doxyfile 1.8.13
 
 # Variation of the Lumiera Doxygen configuration for PDF output
 #
@@ -12,12 +12,15 @@
 #---------------------------------------------------------------------------
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = Lumiera
-PROJECT_NUMBER         = 0.pre.03
-OUTPUT_DIRECTORY       = 
+PROJECT_NUMBER         = 0.pre.05~dev
+PROJECT_BRIEF          = "»edit your freedom«"
+PROJECT_LOGO           = draw/rendered/LumiLogo-small.png
+OUTPUT_DIRECTORY       =
 CREATE_SUBDIRS         = YES
+ALLOW_UNICODE_NAMES    = NO
 OUTPUT_LANGUAGE        = English
 BRIEF_MEMBER_DESC      = YES
-REPEAT_BRIEF           = NO
+REPEAT_BRIEF           = YES
 ABBREVIATE_BRIEF       = "The $name class" \
                          "The $name widget" \
                          "The $name file" \
@@ -33,28 +36,48 @@ ALWAYS_DETAILED_SEC    = NO
 INLINE_INHERITED_MEMB  = NO
 FULL_PATH_NAMES        = YES
 STRIP_FROM_PATH        = ../../src/ \
-STRIP_FROM_INC_PATH    = 
+                         ../../tests/
+STRIP_FROM_INC_PATH    = ../../src/
 SHORT_NAMES            = NO
 JAVADOC_AUTOBRIEF      = YES
 QT_AUTOBRIEF           = NO
 MULTILINE_CPP_IS_BRIEF = NO
-DETAILS_AT_TOP         = NO
+PYTHON_DOCSTRING       = NO
 INHERIT_DOCS           = YES
 SEPARATE_MEMBER_PAGES  = NO
 TAB_SIZE               = 4
+ALIASES                =
 OPTIMIZE_OUTPUT_FOR_C  = NO
+OPTIMIZE_OUTPUT_JAVA   = NO
+EXTENSION_MAPPING      =
+MARKDOWN_SUPPORT       = YES
+MARKDOWN_ID_STYLE      = GITHUB
+TOC_INCLUDE_HEADINGS   = 2
+AUTOLINK_SUPPORT       = YES
 BUILTIN_STL_SUPPORT    = YES
-TYPEDEF_HIDES_STRUCT   = NO
+CPP_CLI_SUPPORT        = NO
+IDL_PROPERTY_SUPPORT   = NO
+DISTRIBUTE_GROUP_DOC   = NO
+GROUP_NESTED_COMPOUNDS = NO
+SUBGROUPING            = YES
+INLINE_GROUPED_CLASSES = NO
+INLINE_SIMPLE_STRUCTS  = YES
+TYPEDEF_HIDES_STRUCT   = YES
+LOOKUP_CACHE_SIZE      = 2
+NUM_PROC_THREADS       = 0
+TIMESTAMP              = DATE
 
 #---------------------------------------------------------------------------
 # Build related configuration options
 #---------------------------------------------------------------------------
 EXTRACT_ALL            = NO
 EXTRACT_PRIVATE        = NO
+EXTRACT_PACKAGE        = NO
 EXTRACT_STATIC         = YES
 EXTRACT_LOCAL_CLASSES  = YES
 EXTRACT_LOCAL_METHODS  = NO
 EXTRACT_ANON_NSPACES   = NO
+RESOLVE_UNNAMED_PARAMS = YES
 HIDE_UNDOC_MEMBERS     = YES
 HIDE_UNDOC_CLASSES     = YES
 HIDE_FRIEND_COMPOUNDS  = NO
@@ -62,21 +85,29 @@ HIDE_IN_BODY_DOCS      = YES
 INTERNAL_DOCS          = NO
 CASE_SENSE_NAMES       = YES
 HIDE_SCOPE_NAMES       = NO
+SHOW_HEADERFILE        = NO
 SHOW_INCLUDE_FILES     = NO
+SHOW_GROUPED_MEMB_INC  = NO
+FORCE_LOCAL_INCLUDES   = YES
 INLINE_INFO            = YES
 SORT_MEMBER_DOCS       = YES
 SORT_BRIEF_DOCS        = YES
+SORT_MEMBERS_CTORS_1ST = YES
 SORT_GROUP_NAMES       = NO
 SORT_BY_SCOPE_NAME     = NO
+STRICT_PROTO_MATCHING  = NO
 GENERATE_TODOLIST      = NO
-GENERATE_TESTLIST      = NO
+GENERATE_TESTLIST      = YES
 GENERATE_BUGLIST       = NO
 GENERATE_DEPRECATEDLIST= NO
-MAX_INITIALIZER_LINES  = 10
+ENABLED_SECTIONS       =
+MAX_INITIALIZER_LINES  = 50
 SHOW_USED_FILES        = NO
-SHOW_DIRECTORIES       = NO
 SHOW_FILES             = YES
 SHOW_NAMESPACES        = YES
+FILE_VERSION_FILTER    =
+LAYOUT_FILE            =
+CITE_BIB_FILES         =
 
 #---------------------------------------------------------------------------
 # Configuration options related to warning and progress messages
@@ -86,6 +117,7 @@ WARNINGS               = YES
 WARN_IF_UNDOCUMENTED   = NO
 WARN_IF_DOC_ERROR      = YES
 WARN_NO_PARAMDOC       = NO
+WARN_AS_ERROR          = NO
 WARN_FORMAT            = "$file:$line: $text"
 WARN_LOGFILE           = doxygen-warnings-pdf.txt
 
@@ -93,35 +125,32 @@ WARN_LOGFILE           = doxygen-warnings-pdf.txt
 # Configuration options related to the input files
 #---------------------------------------------------------------------------
 INPUT_ENCODING         = UTF-8
-INPUT                  = ../../src/
+INPUT                  = ../../src/ \
+                         ../../tests \
+                         ../../admin/scons
 FILE_PATTERNS          = *.c \
                          *.cc \
-                         *.cxx \
                          *.cpp \
-                         *.ii \
-                         *.ixx \
-                         *.ipp \
-                         *.i++ \
-                         *.inl \
                          *.h \
                          *.hh \
-                         *.hxx \
                          *.hpp \
-                         *.h++ \
                          *.inc \
                          *.dox \
-                         *.C \
-                         *.CC \
-                         *.C++ \
-                         *.H \
-                         *.HH \
-                         *.H++ \
-                         *.PY \
                          *.py
 RECURSIVE              = YES
+EXCLUDE                =
 EXCLUDE_SYMLINKS       = YES
+EXCLUDE_PATTERNS       =
+EXCLUDE_SYMBOLS        =
+EXAMPLE_PATH           =
+EXAMPLE_PATTERNS       =
 EXAMPLE_RECURSIVE      = NO
+IMAGE_PATH             =
+INPUT_FILTER           =
+FILTER_PATTERNS        =
 FILTER_SOURCE_FILES    = NO
+FILTER_SOURCE_PATTERNS =
+USE_MDFILE_AS_MAINPAGE =
 
 #---------------------------------------------------------------------------
 # Configuration options related to source browsing
@@ -132,14 +161,15 @@ STRIP_CODE_COMMENTS    = YES
 REFERENCED_BY_RELATION = YES
 REFERENCES_RELATION    = YES
 REFERENCES_LINK_SOURCE = YES
+SOURCE_TOOLTIPS        = NO
 USE_HTAGS              = NO
 VERBATIM_HEADERS       = NO
+CLANG_ASSISTED_PARSING = NO
 
 #---------------------------------------------------------------------------
 # Configuration options related to the alphabetical class index
 #---------------------------------------------------------------------------
 ALPHABETICAL_INDEX     = YES
-COLS_IN_ALPHA_INDEX    = 5
 IGNORE_PREFIX          = lumiera:: \
                          lumiera_ \
                          lumi_ \
@@ -149,11 +179,31 @@ IGNORE_PREFIX          = lumiera:: \
 # Configuration options related to the HTML output
 #---------------------------------------------------------------------------
 GENERATE_HTML          = NO
+HTML_OUTPUT            = html_browse
+HTML_FILE_EXTENSION    = .html
+HTML_HEADER            =
+HTML_FOOTER            =
+HTML_STYLESHEET        =
+HTML_EXTRA_STYLESHEET  =
+HTML_EXTRA_FILES       =
+HTML_COLORSTYLE        = LIGHT
+HTML_DYNAMIC_MENUS     = YES
+HTML_DYNAMIC_SECTIONS  = NO
+HTML_CODE_FOLDING      = NO
+HTML_PROJECT_COOKIE    = DoxyLumiBrow
+HTML_INDEX_NUM_ENTRIES = 500
+GENERATE_DOCSET        = NO
+GENERATE_HTMLHELP      = NO
+GENERATE_ECLIPSEHELP   = NO
+TOC_EXPAND             = NO
 DISABLE_INDEX          = NO
-ENUM_VALUES_PER_LINE   = 4
 GENERATE_TREEVIEW      = YES
 TREEVIEW_WIDTH         = 250
-FORMULA_FONTSIZE       = 10
+ENUM_VALUES_PER_LINE   = 4
+EXT_LINKS_IN_WINDOW    = NO
+HTML_FORMULA_FORMAT    = svg
+FORMULA_FONTSIZE       = 9
+USE_MATHJAX            = NO
 SEARCHENGINE           = NO
 
 #---------------------------------------------------------------------------
@@ -165,16 +215,24 @@ LATEX_CMD_NAME         = latex
 MAKEINDEX_CMD_NAME     = makeindex
 COMPACT_LATEX          = YES
 PAPER_TYPE             = a4wide
-EXTRA_PACKAGES         = 
-LATEX_HEADER           = 
+EXTRA_PACKAGES         =
+LATEX_HEADER           =
+LATEX_FOOTER           =
+LATEX_EXTRA_STYLESHEET =
+LATEX_EXTRA_FILES      =
 PDF_HYPERLINKS         = YES
 USE_PDFLATEX           = YES
 LATEX_BATCHMODE        = YES
 LATEX_HIDE_INDICES     = NO
+LATEX_BIB_STYLE        = plain
 
+#---------------------------------------------------------------------------
+# Configuration options related to the RTF output
+#---------------------------------------------------------------------------
 GENERATE_RTF           = NO
 GENERATE_MAN           = NO
 GENERATE_XML           = NO
+GENERATE_DOCBOOK       = NO
 GENERATE_AUTOGEN_DEF   = NO
 GENERATE_PERLMOD       = NO
 
@@ -185,46 +243,43 @@ ENABLE_PREPROCESSING   = YES
 MACRO_EXPANSION        = NO
 EXPAND_ONLY_PREDEF     = NO
 SEARCH_INCLUDES        = YES
-INCLUDE_PATH           = 
-INCLUDE_FILE_PATTERNS  = 
-PREDEFINED             = 
-EXPAND_AS_DEFINED      = 
+INCLUDE_PATH           =
+INCLUDE_FILE_PATTERNS  =
+PREDEFINED             = __cplusplus DEBUG EBUG_ALPHA
+EXPAND_AS_DEFINED      =
 SKIP_FUNCTION_MACROS   = YES
 
 #---------------------------------------------------------------------------
 # Configuration options related to external references
 #---------------------------------------------------------------------------
-TAGFILES               = 
-GENERATE_TAGFILE       = 
+TAGFILES               =
+GENERATE_TAGFILE       =
 ALLEXTERNALS           = NO
 EXTERNAL_GROUPS        = NO
-PERL_PATH              = /usr/bin/perl
+EXTERNAL_PAGES         = NO
 
 #---------------------------------------------------------------------------
 # Configuration options related to the dot tool
 #---------------------------------------------------------------------------
-CLASS_DIAGRAMS         = NO
-HIDE_UNDOC_RELATIONS   = YES
 HAVE_DOT               = YES
-DOT_FONTNAME           = FreeSans
-DOT_FONTPATH           = 
+DOT_NUM_THREADS        = 0     # use all cores
 CLASS_GRAPH            = NO
 COLLABORATION_GRAPH    = NO
-GROUP_GRAPHS           = NO
-UML_LOOK               = NO
-TEMPLATE_RELATIONS     = NO
+GROUP_GRAPHS           = YES
+HIDE_UNDOC_RELATIONS   = YES
+UML_LOOK               = YES
+UML_LIMIT_NUM_FIELDS   = 12
+TEMPLATE_RELATIONS     = YES
 INCLUDE_GRAPH          = NO
 INCLUDED_BY_GRAPH      = NO
 CALL_GRAPH             = NO
 CALLER_GRAPH           = NO
-GRAPHICAL_HIERARCHY    = NO
 DIRECTORY_GRAPH        = NO
+GRAPHICAL_HIERARCHY    = NO
 DOT_IMAGE_FORMAT       = png
-DOT_PATH               = 
-DOTFILE_DIRS           = 
+INTERACTIVE_SVG        = NO
 DOT_GRAPH_MAX_NODES    = 50
 MAX_DOT_GRAPH_DEPTH    = 10
-DOT_TRANSPARENT        = NO
-DOT_MULTI_TARGETS      = YES
+DOT_MULTI_TARGETS      = NO
 GENERATE_LEGEND        = NO
 DOT_CLEANUP            = YES
