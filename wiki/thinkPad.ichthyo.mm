@@ -99947,8 +99947,9 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 <node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1731889300949" ID="ID_1155189828" MODIFIED="1731889310449" TEXT="unklar: Thema Buffer-Typ">
 <icon BUILTIN="flag-pink"/>
 <icon BUILTIN="messagebox_warning"/>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1731888445853" ID="ID_524425117" MODIFIED="1731888903713" TEXT="Buffer-Provider : Inkonsistenzen bzl. TypeHandler-Idenity">
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1731888445853" ID="ID_524425117" MODIFIED="1765478261779" TEXT="Buffer-Provider : Inkonsistenzen bzl. TypeHandler-Idenity">
 <linktarget COLOR="#db1b5e" DESTINATION="ID_524425117" ENDARROW="Default" ENDINCLINATION="-155;-286;" ID="Arrow_ID_1312365808" SOURCE="ID_1980255586" STARTARROW="None" STARTINCLINATION="90;249;"/>
+<linktarget COLOR="#c7596c" DESTINATION="ID_524425117" ENDARROW="Default" ENDINCLINATION="1052;2301;" ID="Arrow_ID_801538285" SOURCE="ID_1240862138" STARTARROW="None" STARTINCLINATION="568;23;"/>
 <icon BUILTIN="broken-line"/>
 <node CREATED="1731888560357" ID="ID_753867507" MODIFIED="1731888579238" TEXT="es ist eine chained-Hash-ID">
 <icon BUILTIN="info"/>
@@ -100044,6 +100045,12 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 <icon BUILTIN="info"/>
 </node>
 </node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1765478401631" ID="ID_743283525" MODIFIED="1765478432518" TEXT="Vermutung: dahinter steht da&#xdf; wir Raum brauchen f&#xfc;r genauere Metadaten">
+<icon BUILTIN="idea"/>
+<node COLOR="#80456c" CREATED="1765478451368" ID="ID_476569779" MODIFIED="1765478573873" TEXT="wie w&#xe4;re sonst die Situation entstanden, einen Hash von einem Funktor nehmen zu &#x201e;m&#xfc;ssen&#x201c; ??">
+<font NAME="SansSerif" SIZE="10"/>
 </node>
 </node>
 </node>
@@ -110254,7 +110261,88 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node BACKGROUND_COLOR="#c5ac9e" COLOR="#435e98" CREATED="1721958694600" HGAP="37" ID="ID_173016592" MODIFIED="1734654190420" TEXT="Dokumentation: BufferProviderProtocol_test + BufferMetadata_test" VSHIFT="61">
 <arrowlink COLOR="#5387dc" DESTINATION="ID_1661035289" ENDARROW="Default" ENDINCLINATION="-1176;-93;" ID="Arrow_ID_728270522" STARTARROW="None" STARTINCLINATION="-1222;49;"/>
 <icon BUILTIN="list"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1765479194145" ID="ID_1559489831" MODIFIED="1765479251951" TEXT="Kritik Testaufbau">
+<linktarget COLOR="#ee0649" DESTINATION="ID_1559489831" ENDARROW="Default" ENDINCLINATION="-109;13;" ID="Arrow_ID_166502420" SOURCE="ID_1782436035" STARTARROW="None" STARTINCLINATION="285;-20;"/>
+<icon BUILTIN="flag-pink"/>
 </node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1765477795772" ID="ID_1729025521" MODIFIED="1765477801600" TEXT="L&#xf6;sungsweg finden">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#bf0297" CREATED="1765477803087" ID="ID_588438295" MODIFIED="1765477875995" TEXT="Oh weh ... kann mich schon wieder an fast gar nix mehr erinnern">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Wenn ich jetzt keine Mindmap h&#228;tte, w&#228;re ich Gl&#252;cklich und w&#252;rde irgend einen Schei&#223; anfangen. So aber lese ich meine alten Notizen und bekomme Panik...
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="smily_bad"/>
+<node COLOR="#6b2f01" CREATED="1765477893150" ID="ID_1841000105" MODIFIED="1765477957923" TEXT="das sieht nach einem &#xbb;Knoten&#xab; aus...">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+<node COLOR="#6b2f01" CREATED="1765477907884" ID="ID_448618873" MODIFIED="1765477957924" TEXT="ein Uralt-Entwurf ist steckengeblieben">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+<node COLOR="#6b2f01" CREATED="1765477918473" ID="ID_1733827342" MODIFIED="1765477957925">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      zwei Protokolle sind zusammengespannt und <i>sperren sich</i>
+    </p>
+  </body>
+</html></richcontent>
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+<node COLOR="#6b2f01" CREATED="1765478021706" ID="ID_1240862138" MODIFIED="1765478261778" STYLE="fork">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      und es gibt dann wohl auch noch ein verstecktes Problem mit dem <b><font color="#7e1b4a">Type-Handler</font></b>
+    </p>
+  </body>
+</html></richcontent>
+<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
+<arrowlink COLOR="#c7596c" DESTINATION="ID_524425117" ENDARROW="Default" ENDINCLINATION="1052;2301;" ID="Arrow_ID_801538285" STARTARROW="None" STARTINCLINATION="568;23;"/>
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+</node>
+<node CREATED="1765478638604" ID="ID_489487719" MODIFIED="1765478676002" TEXT="Ansatz: Situation schwer zu verstehen &#x27f9; die Protokolle sind fraglich">
+<node CREATED="1765478685540" ID="ID_114610105" MODIFIED="1765478702637">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <i>konzeptionell</i>&#160;m&#246;chte ich an diesen Protokollen festhalten
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1765478711863" ID="ID_1338671558" MODIFIED="1765478761809" TEXT="demnach mu&#xdf; &#xbb;ihre Darstellung&#xab; klarer werden">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Wie man in der Chemie sagt: die Darstellung des Substanz
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1765479107546" ID="ID_1782436035" MODIFIED="1765479258230">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      also beginne ich mit einer <b>Kritik</b>&#160;der Tests
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#ee0649" DESTINATION="ID_1559489831" ENDARROW="Default" ENDINCLINATION="-109;13;" ID="Arrow_ID_166502420" STARTARROW="None" STARTINCLINATION="285;-20;"/>
+<icon BUILTIN="yes"/>
 </node>
 </node>
 </node>
@@ -161973,6 +162061,9 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <arrowlink COLOR="#584786" DESTINATION="ID_1994509660" ENDARROW="Default" ENDINCLINATION="-1547;94;" ID="Arrow_ID_272113141" STARTARROW="None" STARTINCLINATION="-915;99;"/>
 <arrowlink COLOR="#584786" DESTINATION="ID_1814100289" ENDARROW="Default" ENDINCLINATION="-1569;86;" ID="Arrow_ID_744418079" STARTARROW="None" STARTINCLINATION="-915;99;"/>
 <icon BUILTIN="hourglass"/>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1766004559199" ID="ID_1458158737" MODIFIED="1766004593882" TEXT="Vorsicht:  #1331 Builder Vertical Slice -- load a clip ">
+<icon BUILTIN="broken-line"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1664059317203" ID="ID_995858352" MODIFIED="1679784026877" TEXT="#1221 Playback Vertical Slice">
 <icon BUILTIN="back"/>
