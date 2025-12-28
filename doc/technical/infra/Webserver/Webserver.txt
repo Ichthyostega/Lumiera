@@ -18,22 +18,25 @@ The main Website.
 
 - Data is in '/var/www'. The Website is a git repository.
 - Configuration is at '/etc/apache2/sites-available/lumiera.conf'
-- cehteh cares for the administration.
+- cehteh and ichthyo are responsible for the administration.
 - To proprose some changes clone the git repository and send a
   notfication/merge-request to the mailinglist.
 
 Some directories symlink to other directories (see below).
 
 
-https://staging.lumiera.org
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The »staging site«
+~~~~~~~~~~~~~~~~~~
 
-Testing repository for the Website. Web development is done and
-reviewed here before it gets pushed to the main Website.
+Testing repository for the Website. It is configured in Apache
+to be served from a separate virtual host, with an obvious DNS
+name (which _must not_ be mentioned in published content!).
+Web development is done and reviewed here before it gets
+pushed to the main Website.
 
 - Data is in '/var/www-staging'. The Website is a git repository.
 - Configuration is at '/etc/apache2/sites-available/staging.conf'
-- cehteh cares for the administration.
+- cehteh and ichthyo are responsible for the administration.
 - To proprose some changes clone the git repository and send a
   notfication/merge-request to the mailinglist.
 
