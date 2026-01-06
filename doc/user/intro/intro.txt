@@ -144,12 +144,12 @@ Processing video (and audio) data can be conceived as a graph (more precisely
 a _directed acyclic graph_).  In this model of video processing, data flows
 along the edges of the graph and is processed at the nodes.
 
-The following figure depicts manipulating video data as a graph.  The nodes at
-the top of the graph are where data input occurs. From there, the data moves on
-to the next nodes: the direct siblings of the root.  Here, the video data is
-pre-processed.  All other operations on the data can be represented by
-nodes, and data flows from one operation to the next along the nodes of the
-graph.
+The following figure depicts manipulating video data as a graph.
+Input data is retrieved from the source nodes, which are located at the
+top of the figure. From there, the data moves on to the next stage, where
+video and audio data and meta information is pre-processed.  All the further
+operations on data can be represented by nodes, and data flows from one operation
+to the next along the nodes of the graph.
 
 
 image:{imgd}/lumiera_big_graph.png[Example for a graph]
