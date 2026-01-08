@@ -162564,7 +162564,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 </node>
 </node>
-<node CREATED="1664630921300" FOLDED="true" HGAP="183" ID="ID_1033335255" MODIFIED="1752758660511" TEXT="Dokumentation" VSHIFT="40">
+<node CREATED="1664630921300" FOLDED="true" HGAP="183" ID="ID_1033335255" MODIFIED="1765904114183" TEXT="Dokumentation" VSHIFT="40">
 <edge COLOR="#815b70"/>
 <cloud COLOR="#d7c3a8"/>
 <font NAME="SansSerif" SIZE="12"/>
@@ -167400,6 +167400,9 @@ that situation will improve in forseeable future.</pre>
 </node>
 </node>
 </node>
+<node CREATED="1765904221705" ID="ID_168400791" MODIFIED="1765904240857" TEXT="Projektorganisation">
+<node CREATED="1765904243219" ID="ID_762435721" MODIFIED="1765904327595" TEXT="Ticket-System"/>
+</node>
 <node CREATED="1756651585768" ID="ID_1780831155" MODIFIED="1756651592266" TEXT="Website / Infrastruktur">
 <node CREATED="1756651593543" ID="ID_336711694" MODIFIED="1756651598874" TEXT="Anordnung der Repos">
 <node CREATED="1756651599892" ID="ID_1760498141" MODIFIED="1756652477206" TEXT="Diskussion 2025 &#x27f9; l&#xe4;ngerfristig Git-Submodule">
@@ -167433,7 +167436,7 @@ that situation will improve in forseeable future.</pre>
 </html></richcontent>
 </node>
 </node>
-<node COLOR="#4c2265" CREATED="1764591854390" FOLDED="true" ID="ID_778774756" MODIFIED="1764595920273" TEXT="Seiten-Timestamps">
+<node COLOR="#4c2265" CREATED="1764591854390" FOLDED="true" ID="ID_778774756" MODIFIED="1767400221846" TEXT="Seiten-Timestamps">
 <linktarget COLOR="#77319f" DESTINATION="ID_778774756" ENDARROW="Default" ENDINCLINATION="-1042;139;" ID="Arrow_ID_1555326207" SOURCE="ID_685663386" STARTARROW="None" STARTINCLINATION="-185;13;"/>
 <icon BUILTIN="bell"/>
 <node CREATED="1764591968597" ID="ID_991639193" MODIFIED="1764593491450" TEXT="Asciidoc bietet uns...">
@@ -167651,6 +167654,236 @@ that situation will improve in forseeable future.</pre>
 </node>
 </node>
 </node>
+<node CREATED="1765904354232" ID="ID_264350953" MODIFIED="1765904365268" TEXT="Infrastruktur-Technologie">
+<node CREATED="1765904375811" ID="ID_1088849846" MODIFIED="1765904378441" TEXT="Trac">
+<node CREATED="1765904417246" ID="ID_204471697" MODIFIED="1765904449664" TEXT="Evolution">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1765906859536" ID="ID_1389801711" MODIFIED="1765906944249" TEXT="Python-3 : bricht diverse unmaintained Plug-ins">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Wobei eine reine Python-3-Migration mit geringem Aufwand machbar ist, sofern der code nicht Python-Spezialit&#228;ten nutzt
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1765906946421" ID="ID_687986868" MODIFIED="1765907006254" TEXT="Templating-Engine: Genshi &#x27f6; Jinja">
+<node CREATED="1765907014945" ID="ID_1983619826" MODIFIED="1765907062709" TEXT="Genshi wird ab 1.5 nicht mehr unterst&#xfc;tzt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Debian Trixie (2025) hat Trac 1.6
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#edd19f" COLOR="#a50125" CREATED="1765907064845" ID="ID_812255309" MODIFIED="1765908001023" TEXT="Genshi erlaubte post-Processing des Template-Output">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...und das war extrem beliebt bei Plugin-Autoren, da man einfach am bestehenden Template-Output etwas per &quot;Suchen-&amp;-Ersetzen&quot; manipulieren konnte.
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#e50249" DESTINATION="ID_812255309" ENDARROW="Default" ENDINCLINATION="546;28;" ID="Arrow_ID_1452323882" SOURCE="ID_299752540" STARTARROW="None" STARTINCLINATION="233;-14;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1765907164357" ID="ID_1525777762" MODIFIED="1765907187378" TEXT="Jinja ist wesentlich performanter weil es das nicht unterst&#xfc;tzt">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1765907256169" ID="ID_924876747" MODIFIED="1765907393251" TEXT="empfohlener Workaround: mit JavaScript hinbiegen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das wird vom Trac-Projekt selber so empfohlen: man generiert den zus&#228;tzlichen Content irgendwo durch das normale Templating/Processing und liefert ein JavaScript mit aus, das den Content dann an die gew&#252;nschte Stelle im original-Output schiebt...&#160;&#160;(das ist z.B. mit JQuery erstaunlich einfach zu bewerkstelligen, wenn man sich damit auskennt)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1765904423015" ID="ID_1088750004" MODIFIED="1765904428559" TEXT="Setup">
+<node CREATED="1765907476001" FOLDED="true" ID="ID_1495282646" MODIFIED="1767125499703" TEXT="ben&#xf6;tigte Plug-Ins">
+<icon BUILTIN="list"/>
+<node CREATED="1767124933847" ID="ID_984776903" MODIFIED="1767124936761" TEXT="aus DEB">
+<node CREATED="1765985258251" ID="ID_1320902986" MODIFIED="1765985264183" TEXT="trac-accountmanager"/>
+<node CREATED="1765983903498" ID="ID_1891765104" MODIFIED="1765983903498" TEXT="trac-wysiwyg"/>
+<node CREATED="1765983903498" ID="ID_157328057" MODIFIED="1765983903498" TEXT="trac-xmlrpc"/>
+</node>
+<node CREATED="1767124937405" ID="ID_231722117" MODIFIED="1767124945400" TEXT="gebaut">
+<node COLOR="#338800" CREATED="1765985961531" ID="ID_1741276719" MODIFIED="1767125071038" TEXT="TracTags-0.13.dev0-py3.13.egg">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1765996120431" FOLDED="true" ID="ID_1323955970" MODIFIED="1767125068015" TEXT="TracSpamFilter-1.5.5-py3.13.egg">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1765995869875" ID="ID_392357700" LINK="https://trac.edgewall.org/wiki/SpamFilter" MODIFIED="1767125061058" TEXT="Plugin-Doku">
+<node CREATED="1765995997387" ID="ID_364285868" MODIFIED="1765996008895" TEXT="wird sogar von TracHacks dortin umgeleitet">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1765995879751" ID="ID_1174025749" MODIFIED="1765995887964" TEXT="f&#xfc;r Trac 1.6: svn co https://svn.edgewall.org/repos/trac/plugins/trunk/spam-filter"/>
+</node>
+</node>
+<node CREATED="1767125074787" ID="ID_110340839" MODIFIED="1767125085902" TEXT="erweitert">
+<node COLOR="#338800" CREATED="1765986596032" ID="ID_242459240" MODIFIED="1765986632728" TEXT="TracSubTickets-0.5.5.dev0-py3.13.egg">
+<icon BUILTIN="back"/>
+</node>
+<node COLOR="#435e98" CREATED="1767125124944" FOLDED="true" ID="ID_1815331525" MODIFIED="1767125497863" TEXT="l&#xf6;st Matertickets ab">
+<icon BUILTIN="info"/>
+<node CREATED="1767125199760" ID="ID_1271796478" MODIFIED="1767125280390" TEXT="Mastertickets gebrochen durch Genshi &#x27fc; Jinja">
+<arrowlink COLOR="#fe2633" DESTINATION="ID_299752540" ENDARROW="Default" ENDINCLINATION="231;-16;" ID="Arrow_ID_806798427" STARTARROW="None" STARTINCLINATION="205;13;"/>
+</node>
+<node CREATED="1767125308205" ID="ID_1521262396" MODIFIED="1767125316209" TEXT="DB-Migration trivial m&#xf6;glich"/>
+<node CREATED="1767125138045" ID="ID_118308648" MODIFIED="1767125490997" TEXT="Erg&#xe4;nzungen f&#xfc;r Lumiera...">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <ul>
+      <li>
+        ein zus&#228;tzliches custom-field 'children'
+      </li>
+      <li>
+        optimierter Zyklen-Detektor
+      </li>
+      <li>
+        Hanhabung von delete change
+      </li>
+      <li>
+        Markierung wenn Rekursionsbeschr&#228;nkung greift
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#455db3" DESTINATION="ID_889217849" ENDARROW="Default" ENDINCLINATION="-459;43;" ID="Arrow_ID_494483801" STARTARROW="None" STARTINCLINATION="618;56;"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1765915935535" ID="ID_401498744" MODIFIED="1765915947385" TEXT="statischer Content liegt separat">
+<node CREATED="1765915955298" ID="ID_1597914556" MODIFIED="1765915962519" TEXT="/var/local/trac/static/"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1765915964563" ID="ID_187789685" MODIFIED="1765915967544" TEXT="Konfiguration">
+<icon BUILTIN="help"/>
+<node CREATED="1765915974409" ID="ID_380659996" MODIFIED="1765915994930" TEXT="wurde exportiert mit trac-admin &lt;trac-env&gt; deploy &lt;target&gt;"/>
+<node CREATED="1765917673542" ID="ID_415606525" MODIFIED="1766536424640" TEXT="statische Resourcen sind per Apache-Alias eingebunden">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      in <b>sites-available/trac.conf</b>
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;## allow apache to handle some common static resources directly
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Alias /chrome/common /var/local/trac/static/htdocs/common
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Alias /chrome/mastertickets /var/local/trac/static/htdocs/common/mastertickets
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Alias /chrome/tracrpc /var/local/trac/static/htdocs/common/tracrpc
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Alias /chrome/tags /var/local/trac/static/htdocs/tags
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="list"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1765917748060" ID="ID_1230305078" MODIFIED="1765917757859" TEXT="TODO(2025) konsolidieren">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1765917759320" ID="ID_1753883287" MODIFIED="1765917765553" TEXT="was wird gebraucht?">
+<icon BUILTIN="help"/>
+<node CREATED="1766536837648" ID="ID_1062971912" MODIFIED="1766536883303" TEXT="Prade /chrome/common">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das sind die Basis-Ressourcen von Trac, inc. die JavaScripts und die CSS
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1766536897728" ID="ID_325419757" MODIFIED="1766536906172" TEXT="alle /chorme/&lt;plugin&gt;"/>
+</node>
+<node CREATED="1766536908693" ID="ID_507281485" MODIFIED="1766537016757" TEXT="AUA: die waren seit Jahren falsch">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Die Ticket-Resourcen sitzen nicht unter /chrome/common, sondern daneben
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1766537585731" ID="ID_730527320" MODIFIED="1766537687351" TEXT="statische Resoucen(2025)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Alias /chrome/common&#160;&#160;&#160;&#160;&#160;/var/local/trac/static/htdocs/common
+    </p>
+    <p>
+      Alias /chrome/tracrpc&#160;&#160;&#160;&#160;/var/local/trac/static/htdocs/tracrpc
+    </p>
+    <p>
+      Alias /chrome/ticketopt&#160;&#160;/var/local/trac/static/htdocs/ticketopt
+    </p>
+    <p>
+      Alias /chrome/subtickets /var/local/trac/static/htdocs/subtickets
+    </p>
+    <p>
+      Alias /chrome/acct_mgr&#160;&#160;&#160;/var/local/trac/static/htdocs/acct_mgr
+    </p>
+    <p>
+      Alias /chrome/spamfilter /var/local/trac/static/htdocs/spamfilter
+    </p>
+    <p>
+      Alias /chrome/tags&#160;&#160;&#160;&#160;&#160;&#160;&#160;/var/local/trac/static/htdocs/tags
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="list"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1765904451281" ID="ID_1116905113" MODIFIED="1765904457058" TEXT="Betrieb">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1765907487186" ID="ID_1108636619" MODIFIED="1765919828144" TEXT="(2025) derzeit als CGI in Apache eingebunden">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Solange <i>die Welt in Ordnung war, </i>interessiern sich die Benutzer doch nicht f&#252;r ein Ticket-System, das ist stinklangweilig. Daher ging Trac selber und auch unser Setup davon aus, da&#223; hier praktisch keine Last anf&#228;llt. Und nun kommt die KI-Industrie auf der verzweifelten Suche nach Text-Content, und verbringt 80% der Seitenabrufe im Trac...
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1765919780149" ID="ID_183296810" MODIFIED="1765919787481" TEXT="tats&#xe4;chlich verwenden wir WSGI"/>
+<node CREATED="1765919788076" ID="ID_1248399300" LINK="https://trac.edgewall.org/wiki/TracModWSGI" MODIFIED="1765919818393" TEXT="das gilt immer noch als ad&#xe4;quat (sicher/performant)"/>
+</node>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1765907505145" ID="ID_1606727407" MODIFIED="1765907854081" TEXT="Herbst 2025 : Trac vorr&#xfc;bergehend abgeschaltet">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das hab ich als vorr&#252;bergehende Notl&#246;sung im September 25 vorgeschlagen. Christian war der Sacheverhalt &#252;berhaupt gar nicht klar, er wunderte sich nur &#252;ber die Last, die wir auch mit allen m&#246;glichen clevern Blacklisting-Tricks letztlich nicht in den Griff bekommen haben. Aus irgend einem Grund spert sich Christian gegen die Idee, Anubis einzusetzen (vermutlich, weil er von L&#246;sungen &#224; la Radicle tr&#228;umt, und ihm Anubis zu pragmatisch ist, und JavaScript verwendet).
+    </p>
+    <p>
+      Leider ist nun bereits &#188; Jahr vergangen, weil ich in meinem allgemeinen Update steckengeblieben bin. Der weitere Weg ist noch nicht klar; man k&#246;nnte Authentifikation verlangen, oder eben doch Anubis einsetzen, ggfs. nur f&#252;r das Trac.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -167659,7 +167892,7 @@ that situation will improve in forseeable future.</pre>
 <node CREATED="1751808189155" ID="ID_244632795" MODIFIED="1764718150250" TEXT="Schritte">
 <icon BUILTIN="xmag"/>
 <node CREATED="1751808295862" ID="ID_3929483" MODIFIED="1751808300246" TEXT="2025">
-<node BACKGROUND_COLOR="#ece19b" COLOR="#4d0f69" CREATED="1751808407776" FOLDED="true" ID="ID_933658454" MODIFIED="1764729948147" TEXT="Aktualisierung">
+<node BACKGROUND_COLOR="#ece19b" COLOR="#4d0f69" CREATED="1751808407776" FOLDED="true" ID="ID_933658454" MODIFIED="1765904484650" TEXT="Aktualisierung">
 <icon BUILTIN="bookmark"/>
 <node BACKGROUND_COLOR="#c3c8b6" COLOR="#338800" CREATED="1751808424465" ID="ID_1551937148" MODIFIED="1764717353451" TEXT="Referenz-Sytem &#xd83e;&#xdc32; Debian/Trixie">
 <icon BUILTIN="yes"/>
@@ -171531,6 +171764,8763 @@ that situation will improve in forseeable future.</pre>
 </node>
 <node BACKGROUND_COLOR="#174956" COLOR="#8dfd49" CREATED="1751808966193" ID="ID_739212271" MODIFIED="1764717413569" STYLE="bubble" TEXT="Git: Release markiert">
 <font NAME="SansSerif" SIZE="16"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1765904499489" ID="ID_313701965" MODIFIED="1765904509276" TEXT="OS-Upgrade : Lumiera.org">
+<icon BUILTIN="flag-pink"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1765904526074" ID="ID_190795814" MODIFIED="1765905409382" TEXT="ist unendlich weggeschimmelt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Ich hatte mich auf Christian verlassen &#8212; der aber anscheinend das Thema etwas verdr&#228;ngt hat, und damit zufrieden war, die Firewall konfigurieren zu k&#246;nnen. Christian wollte allerdings seit L&#228;ngerem die Website <i>ganz anders aufziehen; </i>in der Diskussion zeigte sich dann wieder eine 180&#176; verschiedene Herangehensweise: Benny und ich w&#252;rden auf eine Containerisierte L&#246;sung setzen (womit sich Christian nicht auseinandersetzen m&#246;chte, &#8222;k&#246;nnt ihr machen &#8212; ich bin dann 'raus&#8220;) w&#228;hrend Christian gerne neue geile Technologien ausprobieren m&#246;chte, wie Radicle)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1765906382754" ID="ID_1050314722" MODIFIED="1765906570969" TEXT="l&#xe4;uft unter Debian-9 (Stretch)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Christian hat einfach die Archiv-URL in die sources-list getan; er hat das nur beil&#228;ufig erw&#228;hnt, und scheint damit gut zu schlafen...
+    </p>
+    <p>
+      Letzten Endes stimme ich ihm dabei zu:
+    </p>
+    <ul>
+      <li>
+        bei uns gibt es sowiso nichts zu stehlen
+      </li>
+      <li>
+        die Website ist ohnehin statisch (Ausnahme: Gitweb, Trac)
+      </li>
+      <li>
+        und wenn die Bandbreite w&#228;chst, merken wir das ja
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1765906579827" ID="ID_729650195" MODIFIED="1765906589874" TEXT="Migration in Schritten notwendig"/>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1765906597233" ID="ID_693494226" MODIFIED="1765906632798" TEXT="Trac-Upgrade ist problematisch">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1765906612504" ID="ID_718026642" MODIFIED="1765906678393" TEXT="weil wir dadruch die Weiterentwicklung von Trac &#xbb;verschlafen&#xab; haben"/>
+<node CREATED="1765906690612" ID="ID_283311144" MODIFIED="1765906711733" TEXT="die L&#xf6;sung f&#xfc;r Child-Tickets / Sub-Tickets ist gebrochen">
+<node CREATED="1765907919935" ID="ID_387270515" MODIFIED="1765907943553" TEXT="und zwar nach meiner Analyse : nicht so einfach zu flicken"/>
+<node CREATED="1765907963331" ID="ID_299752540" MODIFIED="1767125274709" TEXT="Mastertickets-Plugin: seit langem unmaintained, und setzt auf post-processing">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Ich habe versucht, es auf Python-3 zu portieren, was ohne gro&#223;e Umst&#228;nde m&#246;glich ist. Bei mir im lokalen Trac l&#228;uft diese portierte Version, die aber nur noch die Basis-Funktionalit&#228;t unterst&#252;tzt. Im Besondern...
+    </p>
+    <ul>
+      <li>
+        sind jetzt die Parent / Child-Ticket-Nummern keine Links mehr mit mouse-over (das ist eine schwerwiegende Einschr&#228;nkung)
+      </li>
+      <li>
+        der Graphviz-Dependency-Graph ist broken (naja, der war nicht wirklich hilfreich)
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#e50249" DESTINATION="ID_812255309" ENDARROW="Default" ENDINCLINATION="546;28;" ID="Arrow_ID_1452323882" STARTARROW="None" STARTINCLINATION="233;-14;"/>
+<linktarget COLOR="#fe2633" DESTINATION="ID_299752540" ENDARROW="Default" ENDINCLINATION="231;-16;" ID="Arrow_ID_806798427" SOURCE="ID_1271796478" STARTARROW="None" STARTINCLINATION="205;13;"/>
+</node>
+<node CREATED="1765908170030" ID="ID_1348811373" MODIFIED="1765908555509" TEXT="es gibt noch zwei Alternativen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Beide Projekte wurden April 2010 begonnen, wohl unabh&#228;ngig voneinander, und beide als eine Alternative zu Mastertickets, das damals bereits nicht weiterentwickelt wurde. Subtickets ist 14 Tage &#228;lter, ChildTickets hat sich danach aktiver gezeigt und versucht, mit Features sich gegen&#252;ber Subtickets zu profilieren. Die erweiterte Konfigurierbarkeit von ChildTickets wurde sp&#228;ter (ohne das zugeh&#246;rige UI) nach Subtickets portiert. Beide Projekte wurden nach 2014 praktisch inaktiv, wobei Subtickets sp&#228;ter nach Github migriert wurde und noch marginale Aktivit&#228;t zeigt. ChildTickets wurde nur nochmal 2021 angefa&#223;t, um es auf Python-3 und Jinja zu portieren.
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1765908182644" ID="ID_1750578362" MODIFIED="1765908187767" TEXT="Subtickets-Plugin"/>
+<node CREATED="1765908188451" ID="ID_1079914093" MODIFIED="1765908193102" TEXT="ChildTickets-Plugin"/>
+<node CREATED="1740679338013" FOLDED="true" ID="ID_1952967924" LINK="https://trac-hacks.org/wiki/SubticketsPlugin" MODIFIED="1767135296490" TEXT="SubticketsPlugin">
+<node CREATED="1740679399924" ID="ID_124919651" MODIFIED="1740679415071" TEXT="Hinweis in der Beschreibung: &#xc4;quivalente Features wie Mastertickets"/>
+<node COLOR="#5b280f" CREATED="1740679585691" ID="ID_468733518" LINK="https://trac-hacks.org/log/masterticketsplugin/trunk" MODIFIED="1765480497542" TEXT="SVN">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1765480499217" ID="ID_957966694" LINK="https://github.com/trac-hacks/trac-subtickets-plugin" MODIFIED="1765480506085" TEXT="migriert auf Github">
+<node CREATED="1765480519376" ID="ID_287875243" MODIFIED="1765480520538" TEXT="https://github.com/trac-hacks/trac-subtickets-plugin.git"/>
+<node CREATED="1765824185174" ID="ID_1889678441" MODIFIED="1765824201380" TEXT="erster Commit: 7.Apr.2010"/>
+<node CREATED="1765824309146" ID="ID_993479867" MODIFIED="1765824323646" TEXT="aktuell letzter Commit: 20.Apr.2025"/>
+</node>
+<node CREATED="1765483175101" ID="ID_1775884024" MODIFIED="1767135252555" TEXT="2024 wurde ein Pull-Request gemerged f&#xfc;r Python-3 + Jinja"/>
+<node CREATED="1765824559068" ID="ID_383601483" MODIFIED="1767135261758" TEXT="auch Genshi wurde abgel&#xf6;st durch Jinja + JQuery"/>
+</node>
+<node CREATED="1740679355054" FOLDED="true" ID="ID_1879610119" LINK="https://trac-hacks.org/wiki/ChildTicketsPlugin" MODIFIED="1767135295353" TEXT="ChildTicketsPlugin">
+<node CREATED="1740679380919" ID="ID_1276362833" MODIFIED="1740679394353" TEXT="best&#xe4;tigt: portiert auf Python-3">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1765483722583" ID="ID_1245144822" MODIFIED="1765483740741" TEXT="ist auf TracHacks auch mit 1.6 getagged"/>
+<node CREATED="1740679577005" ID="ID_646609217" LINK="https://trac-hacks.org/browser/childticketsplugin" MODIFIED="1740679583299" TEXT="SVN">
+<node CREATED="1765823793086" ID="ID_196478666" LINK="https://trac-hacks.org/browser/childticketsplugin?rev=7866" MODIFIED="1765823955334" TEXT="erster Commit: 19.Apr.2010"/>
+<node CREATED="1765823856963" ID="ID_1542076240" LINK="https://trac-hacks.org/browser/childticketsplugin?rev=18437" MODIFIED="1765823947702" TEXT="aktuell letzter Commit: 9.Jul.2021"/>
+</node>
+<node CREATED="1767135271344" ID="ID_24547419" MODIFIED="1767135294120" TEXT="wurde auf 2021 auf Python-3 migriert und auf Jinja umgestellt"/>
+</node>
+</node>
+<node CREATED="1765908195194" ID="ID_1545970709" MODIFIED="1765908293335" TEXT="beide sind gepflegt und migriert (und nur halbtot)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      d.h. es gibt wohl vereinzelt noch user, und eine Gruppe von Chinesen macht ab- und zu einfache Bugfixes. Manchmal wird nach ein paar Jahren sogar ein Pull-Request akzeptiert (f&#252;r das Subticket-Plugin, das auf Github migriert wurde; ChildTickets ist weiterhin auf Subversion, und das sagt Einiges)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1765908299468" ID="ID_529398187" MODIFIED="1765908309489" TEXT="beide haben ein erweitertes UI f&#xfc;r Child-Tickets">
+<node CREATED="1765908311603" ID="ID_21849888" MODIFIED="1765908320789" TEXT="habe beide bei mir lokal getestet"/>
+<node CREATED="1765908321758" ID="ID_1924817149" MODIFIED="1765908336923" TEXT="Subtickets: minimalistisch, robust"/>
+<node CREATED="1765908337540" ID="ID_1950075640" MODIFIED="1765908357005" TEXT="ChildTickets: mehr UI - Features, fragliche Usability, Buggy"/>
+</node>
+<node BACKGROUND_COLOR="#d1b07f" COLOR="#a50125" CREATED="1765908608691" ID="ID_1011484998" MODIFIED="1765908664383" TEXT="Problem: beide verwenden andere Felder die nicht von Mylyn/Eclipse aufgegriffen werden">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1765908668105" ID="ID_1847381934" MODIFIED="1765908796320" TEXT="das betrifft zwar nur mich">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...und zudem ist nicht klar, wie lange der Trac-Connector f&#252;r Mylyn &#252;berhaupt noch nutzbar ist, denn er ist offiziell aufgegeben.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1765908677949" ID="ID_978175565" MODIFIED="1765908689177" TEXT="im Web-UI w&#xe4;ren beide wohl eine deutliche Verbesserung"/>
+<node CREATED="1765908691950" ID="ID_1467768010" MODIFIED="1765908743025" TEXT="allerdings bin ich der Power-User und sehr von den Suchfunktionen in Mylyn abh&#xe4;ngig"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1765909123899" ID="ID_667489588" MODIFIED="1767201901577" TEXT="Entscheidung f&#xfc;r eine weiterhin tragbare L&#xf6;sung">
+<icon BUILTIN="yes"/>
+<node CREATED="1765909150666" ID="ID_789544228" MODIFIED="1765909173106" TEXT="Migration der Bestandsdaten per SQL einfach m&#xf6;glich">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1765909214826" ID="ID_946734606" MODIFIED="1765909232293" TEXT="mir erscheint das Subtickets-Plugin etwas sympatischer">
+<node CREATED="1765909524794" ID="ID_681392168" MODIFIED="1765909535104" TEXT="Projekt ist auf Github und war 2025 aktiv"/>
+<node CREATED="1765909236264" ID="ID_833102349" MODIFIED="1765909250499" TEXT="habe gestern beim Testen keinen Bug gefunden"/>
+<node CREATED="1765909252564" ID="ID_873557180" MODIFIED="1765910159482" TEXT="bin ohnehin skeptisch gegen&#xfc;ber elaborierten Ticket-Workflows">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das ist sinnvoll in einem gro&#223;en Projekt mit hochspezialisierten Mitarbeitern, oder in einer gro&#223;en Organisation. Also insbesondere dann, wenn es Benutzer gibt, die nur Input liefern und die internen Konventionen nicht kennen. Diesen Fall sehe ich bei uns nicht, auf lange Zeit hin....
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1765909343888" ID="ID_1508348907" MODIFIED="1765909492433">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Aktuell ist das Ticket-System ein Planungswerkzeug <b>f&#252;r mich</b>
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Und zwar ein <b>essentielles</b>; zusammen mit meiner Mindmap bin ich <i>dadurch grade noch im Stande,</i>&#160;den &#220;berblick zu behalten, und das Projekt zu navigieren. Ich kann mir nicht vorstellen, da&#223; irgenjemand anders noch durchblickt (die Person m&#246;chte ich gerne kennenlernen, die w&#228;re interessant...)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1765909539870" ID="ID_916482654" MODIFIED="1765909870940" TEXT="mir erschien die Usability des einfachen UI sogar besser">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Auf den ersten Blick sind die ChildTickets viel sch&#246;ner: sie haben den Child-Tree in einer einklappbaren Pane unterhalb der Ticket-Beschreibung. Allerdings erscheint es mir l&#228;stig, jeweils das aufklappen zu m&#252;ssen, denn entweder es handelt sich um ein Detail-Ticket, dann m&#246;chte ich immer alle Kinder sehen, oder es handelt sich um ein Tracking-Ticket, welches ich sowiso nur der Kinder wegen anschaue. Navigieren durch eine Ticket-Hierarchie erfordert daher in jedem Schritt einmal Scrollen, einmal mit der Maus &#187;zielen&#171; (und dann klappts nicht) und dann erst durch die Kinder suchen.
+    </p>
+    <p>
+      Ein weiterer Punkt ist die Notation im Parents-Feld: das Subtickets-Plugin normalisiert hier, und akzeptiert einfache Zahlen, mit Komma oder Whitespace getrennt. Wohingegen das ChildTickets-Plugin immer ein #-Pr&#228;fix erwaretet, mit Kommata nicht umgehen kann, die Child-Tickets nicht sortiert und bei Duplikaten beim btr. Parent den Kinder-Baum mehrfach zeigt.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1765909872961" ID="ID_899863885" MODIFIED="1765910228770" TEXT="Skeptisch wegen der Tiefenbeschr&#xe4;nkung in ChildTickets">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Die Tiefenbeschr&#228;nkung in der Anzeige w&#228;re dabei durchaus vorteilhaft. Aber es gibt auch eine globale Tiefenbeschr&#228;nkung, die in der Plugin-Konfig gemanaged wird. Angeblich baut die Zyklen-Erkennung darauf auf (ich vermute, das war anf&#228;nglich mal so, da man sich zu fein war, eine richtige Zykluserkennung zu implementieren; inzwischen werden aber Zyklen durchaus explizit benannt, auch wenn sie vor der allgemeinen Tiefenbeschr&#228;nkung wirksam werden). Solange <i>nur ich</i>&#160;hier unterwegs bin (oder einige wenige, gut eingearbeitete Kollegen), gibt es stets einen guten Grund, irgendwo ein Child-Ticket drunter zu h&#228;ngen, aber es gibt niemals einen guten Grund, warum die Kette nur maximal N tief sein sollte
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1765910246678" ID="ID_1317425523" MODIFIED="1767125363211" TEXT="durch einen Probelauf evaluiert">
+<icon BUILTIN="yes"/>
+<node CREATED="1767125374418" ID="ID_719885653" MODIFIED="1767125393368" TEXT="Ergebnis: ist robust und grunds&#xe4;tzlich geeignet"/>
+<node CREATED="1767125394149" ID="ID_1865059168" MODIFIED="1767125401463" TEXT="Performance ist ein massives Problem">
+<node CREATED="1767125420409" ID="ID_1068093345" MODIFIED="1767125432896" TEXT="aber es gibt eine konfigurierbarer Rekursions-Begrenzung"/>
+<node CREATED="1767125433578" ID="ID_1813649780" MODIFIED="1767125441896" TEXT="und der Zyklen-Check l&#xe4;&#xdf;t sich optimieren"/>
+</node>
+<node COLOR="#338800" CREATED="1767125443727" FOLDED="true" ID="ID_889217849" MODIFIED="1767201888656" TEXT="Plug-In angepa&#xdf;t und erweitert">
+<linktarget COLOR="#455db3" DESTINATION="ID_889217849" ENDARROW="Default" ENDINCLINATION="-459;43;" ID="Arrow_ID_494483801" SOURCE="ID_118308648" STARTARROW="None" STARTINCLINATION="618;56;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1767125695021" ID="ID_807050142" MODIFIED="1767125697029" TEXT="DB">
+<node CREATED="1766539987607" ID="ID_82549561" MODIFIED="1767201820720" TEXT="Aufbau der DB">
+<linktarget COLOR="#4c8cd9" DESTINATION="ID_82549561" ENDARROW="Default" ENDINCLINATION="-214;-41;" ID="Arrow_ID_1138165662" SOURCE="ID_938314346" STARTARROW="None" STARTINCLINATION="-112;14;"/>
+<node CREATED="1765834920102" ID="ID_602024943" MODIFIED="1765834927889" TEXT="neue Tabelle &apos;subtickets&apos;">
+<node CREATED="1765835611272" ID="ID_497488693" MODIFIED="1765835625384">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <font size="2" face="Monospaced">sqlite&gt; .schema subtickets </font>
+    </p>
+    <p>
+      <font size="2" face="Monospaced">CREATE TABLE subtickets ( </font>
+    </p>
+    <p>
+      <font size="2" face="Monospaced">&#160;&#160;&#160;&#160;parent integer, </font>
+    </p>
+    <p>
+      <font size="2" face="Monospaced">&#160;&#160;&#160;&#160;child integer, </font>
+    </p>
+    <p>
+      <font size="2" face="Monospaced">&#160;&#160;&#160;&#160;UNIQUE (parent,child) </font>
+    </p>
+    <p>
+      <font size="2" face="Monospaced">); </font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1765835633975" ID="ID_1895244348" MODIFIED="1765835640114" TEXT="zum Vergleich: Mastertickets">
+<node CREATED="1765835653729" ID="ID_1067392863" MODIFIED="1765835663484">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <font face="Monospaced" size="2">sqlite&gt; .schema mastertickets </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">CREATE TABLE mastertickets ( </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;source integer, </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;dest integer, </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;UNIQUE (source,dest) </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">); </font>
+    </p>
+  </body>
+</html></richcontent>
+<node COLOR="#451f56" CREATED="1765835687584" ID="ID_301657053" MODIFIED="1765835724296" TEXT="dest &#x2259; parent"/>
+<node COLOR="#451f56" CREATED="1765835703833" ID="ID_637011044" MODIFIED="1765835724296" TEXT="source &#x2259; child"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1766540817073" ID="ID_938314346" MODIFIED="1767201832692" TEXT="Migration entwickeln">
+<arrowlink COLOR="#4c8cd9" DESTINATION="ID_82549561" ENDARROW="Default" ENDINCLINATION="-214;-41;" ID="Arrow_ID_1138165662" STARTARROW="None" STARTINCLINATION="-112;14;"/>
+<arrowlink COLOR="#4c8cd9" DESTINATION="ID_978158440" ENDARROW="Default" ENDINCLINATION="-214;-41;" ID="Arrow_ID_801820755" STARTARROW="None" STARTINCLINATION="-107;14;"/>
+<linktarget COLOR="#3b7bc7" DESTINATION="ID_938314346" ENDARROW="Default" ENDINCLINATION="-294;37;" ID="Arrow_ID_636339643" SOURCE="ID_1515336382" STARTARROW="None" STARTINCLINATION="39;-612;"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1766540828440" ID="ID_1699827431" MODIFIED="1766540836505" TEXT="Ansatz">
+<node CREATED="1766540839618" ID="ID_591588919" MODIFIED="1766541076011" TEXT="subtickets direkt aus mastertickets bef&#xfc;llen">
+<icon BUILTIN="full-1"/>
+</node>
+<node CREATED="1766540861937" ID="ID_378432798" MODIFIED="1766541085152" TEXT="per Select aus subtickets die Parent-Mengen ermitteln">
+<icon BUILTIN="full-2"/>
+</node>
+<node CREATED="1766540884445" ID="ID_767203528" MODIFIED="1766541092739" TEXT="diese als group_concat in kommaseparierte Liste bekommen">
+<icon BUILTIN="full-3"/>
+</node>
+<node CREATED="1766540919923" ID="ID_389976543" MODIFIED="1766541099385" TEXT="das als Subselect verwenden um die neuen Custom-Felder zu generieren">
+<icon BUILTIN="full-4"/>
+</node>
+<node CREATED="1766540939026" ID="ID_370173484" MODIFIED="1766541105676" TEXT="aus den nun bestehenden Custom-Feldern die ticket_changes synthetisieren">
+<icon BUILTIN="full-5"/>
+</node>
+<node CREATED="1766541007103" ID="ID_1277784008" MODIFIED="1766541112575" TEXT="alte Daten l&#xf6;schen">
+<icon BUILTIN="full-6"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1766541062089" FOLDED="true" ID="ID_1429768965" MODIFIED="1767201659774" TEXT="ausformulieren als SQL">
+<icon BUILTIN="back"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1766541118198" ID="ID_1469906093" MODIFIED="1766542009755" TEXT="Subticket-Daten">
+<icon BUILTIN="full-1"/>
+<node CREATED="1766541497351" ID="ID_91597428" MODIFIED="1766541523614" TEXT="insert aus Select mastertickets"/>
+<node CREATED="1766541524291" ID="ID_1884080439" MODIFIED="1766541543444" TEXT="nur Reihenfolge der Felder umdrehen: dest, source"/>
+<node CREATED="1766541687069" ID="ID_563206218" MODIFIED="1766541688465" TEXT="select dest,source from mastertickets order by dest,source"/>
+<node CREATED="1766541694673" ID="ID_392674887" MODIFIED="1766542002193">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <font face="Monospaced" size="2">insert into subtickets (parent,child) </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;select dest,source from mastertickets order by dest,source ;</font>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="edit"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1766542017599" ID="ID_998914266" MODIFIED="1766544253385" TEXT="Parent-Mengen">
+<icon BUILTIN="full-2"/>
+<node CREATED="1766542127639" ID="ID_570302396" MODIFIED="1766542144901" TEXT="select parent from subtickets where child=8;"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1766542560108" ID="ID_1922990527" MODIFIED="1766544253384" TEXT="Kommasepariertes Aggregat">
+<icon BUILTIN="full-3"/>
+<node CREATED="1766542572839" ID="ID_801619941" LINK="https://sqlite.org/lang_aggfunc.html" MODIFIED="1766542761248" TEXT="SQLite bietet eine group_concat(id, sep) - Funktion"/>
+<node CREATED="1766542598364" ID="ID_873826592" MODIFIED="1766543172863">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <font face="Monospaced" size="2">select </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;t.id </font><font color="#831644" face="Monospaced" size="2">as ticket</font><font face="Monospaced" size="2">, </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;'</font><font face="Monospaced" size="2" color="#c12401">parents</font><font face="Monospaced" size="2">' </font><font color="#831644" face="Monospaced" size="2">as name</font><font face="Monospaced" size="2">,</font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;(select group_concat(parent,', ') </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;from (select distinct parent </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;from subtickets </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;where child=t.id </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;order by parent)) </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160; </font><font color="#831644" face="Monospaced" size="2">as value</font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">from ticket t </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">order by t.id </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;limit 20; </font>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="edit"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1766542774813" ID="ID_748406691" MODIFIED="1766544253363" TEXT="Custom-Felder generieren">
+<icon BUILTIN="full-4"/>
+<node CREATED="1766543190707" ID="ID_897106594" MODIFIED="1766545382223">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <font face="Monospaced" size="2">insert into ticket_custom </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">(ticket, name, value) </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">select ....</font>
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <font face="Monospaced" size="2">insert into ticket_custom </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;(ticket, name, value) </font>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <font face="Monospaced" size="2">select </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;t.id as ticket, </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;'parents' as name, </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;(select group_concat(parent,', ') </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;from (select distinct parent </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;from subtickets </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;where child=t.id </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;order by parent)) </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;as value </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;from ticket t </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;order by t.id </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;; </font>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="edit"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1766543447189" ID="ID_1636953573" MODIFIED="1766543461265" TEXT="Vorsicht: vorher aufr&#xe4;umen">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1766543463572" ID="ID_1769864946" MODIFIED="1766543467001" TEXT="delete from ticket_custom where name=&apos;parents&apos;;">
+<font NAME="SansSerif" SIZE="11"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1767140645211" ID="ID_1754620868" MODIFIED="1767140784477">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      das kann man besser formulieren mit einer <b>common table expression</b>
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Gemeint ist: schrittweise aufbauen aus tempor&#228;ren views und am Ende nur noch das Ergebnis zusammenpacken f&#252;r den INSERT-SELECT
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <font color="#674646" face="Monospaced" size="2">WITH </font>
+    </p>
+    <p>
+      <font color="#674646" face="Monospaced" size="2">&#160;parents as ( </font>
+    </p>
+    <p>
+      <font color="#674646" face="Monospaced" size="2">&#160;&#160;SELECT distinct s.parent as parent </font>
+    </p>
+    <p>
+      <font color="#674646" face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;, t.id as ticket </font>
+    </p>
+    <p>
+      <font color="#674646" face="Monospaced" size="2">&#160;&#160;&#160;&#160;FROM subtickets s </font>
+    </p>
+    <p>
+      <font color="#674646" face="Monospaced" size="2">&#160;&#160;&#160;&#160;JOIN ticket t on s.child = t.id </font>
+    </p>
+    <p>
+      <font color="#674646" face="Monospaced" size="2">) </font>
+    </p>
+    <p>
+      <font color="#674646" face="Monospaced" size="2">, parents_list as ( </font>
+    </p>
+    <p>
+      <font color="#674646" face="Monospaced" size="2">&#160;&#160;SELECT ticket </font>
+    </p>
+    <p>
+      <font color="#674646" face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;, group_concat(parent, ', ') as parents </font>
+    </p>
+    <p>
+      <font color="#674646" face="Monospaced" size="2">&#160;&#160;&#160;&#160;FROM parents </font>
+    </p>
+    <p>
+      <font color="#674646" face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;group by ticket </font>
+    </p>
+    <p>
+      <font color="#674646" face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;order by parent </font>
+    </p>
+    <p>
+      <font color="#674646" face="Monospaced" size="2">) </font>
+    </p>
+    <p>
+      <font color="#674646" face="Monospaced" size="2">, parents_field as ( </font>
+    </p>
+    <p>
+      <font color="#674646" face="Monospaced" size="2">&#160;&#160;SELECT ticket </font>
+    </p>
+    <p>
+      <font color="#674646" face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;,'parents' as name </font>
+    </p>
+    <p>
+      <font color="#674646" face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;, parents as value </font>
+    </p>
+    <p>
+      <font color="#674646" face="Monospaced" size="2">&#160;&#160;&#160;&#160;FROM parents_list </font>
+    </p>
+    <p>
+      <font color="#674646" face="Monospaced" size="2">) </font>
+    </p>
+    <p>
+      <font color="#674646" face="Monospaced" size="2">....</font>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1766545248591" ID="ID_1285412967" MODIFIED="1767201628967" TEXT="ticket_changes">
+<icon BUILTIN="full-5"/>
+<node CREATED="1766546213475" ID="ID_1718121168" MODIFIED="1766546219663" TEXT="Einzel-Komponenten">
+<node CREATED="1766546220722" ID="ID_1479183404" MODIFIED="1766546221889" TEXT="select value from ticket_custom where name=&apos;parents&apos; and ticket=8;"/>
+<node CREATED="1766546235637" ID="ID_1767937192" MODIFIED="1767126001665" TEXT="select value from ticket_custom where name=&apos;children&apos; and ticket=8;"/>
+<node CREATED="1766546250736" ID="ID_1832357618" MODIFIED="1767126073026" TEXT="select value from ticket_custom where name=&apos;blocking&apos; and ticket=8;"/>
+<node CREATED="1766546250736" ID="ID_1035683428" MODIFIED="1767126081445" TEXT="select value from ticket_custom where name=&apos;blockedby&apos; and ticket=8;"/>
+</node>
+<node CREATED="1766547742143" ID="ID_1672508531" MODIFIED="1766548321794" STYLE="bubble" TEXT="Change-S&#xe4;tze">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1766586037795" ID="ID_137856325" MODIFIED="1766586086776" TEXT="insert into ticket_change (ticket,time,author,field,oldvalue,newvalue)"/>
+<node CREATED="1766548280331" ID="ID_269764515" MODIFIED="1766548321796" TEXT="add parents">
+<node CREATED="1766547762916" ID="ID_328521179" MODIFIED="1766586306090">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <font face="Monospaced" size="2">select </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;t.id as ticket, </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;1000000*unixepoch('2025-12-25 00:00:00') as time, </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;'blackdoor' as author, </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;'parents' as field, </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;'' as oldvalue, </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;(select value from ticket_custom </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;where name='parents' and ticket=t.id) as newvalue </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">from ticket t </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;where newvalue is not null and newvalue &lt;&gt;'' </font><font color="#549000" face="Monospaced" size="2">and t.id&lt;10</font><font face="Monospaced" size="2">; </font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1766548291565" FOLDED="true" ID="ID_285130552" MODIFIED="1767201647360" TEXT="remove blocking">
+<node CREATED="1766548211445" ID="ID_1945415817" MODIFIED="1766586294433">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <font face="Monospaced" size="2">select </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;t.id as ticket, </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;1000000*unixepoch('2025-12-25&#160;00:00:00') as time, </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;'blackdoor' as author, </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;'parents' as field, </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;(select value from ticket_custom </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;where name='blocking' and ticket=t.id) as oldvalue, </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;'' as newvalue </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">from ticket t </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;where oldvalue is not null and oldvalue &lt;&gt;'' </font><font color="#549000" face="Monospaced" size="2">and t.id&lt;10</font><font face="Monospaced" size="2">; </font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1766548297419" FOLDED="true" ID="ID_600284490" MODIFIED="1767201648833" TEXT="remove blockedby">
+<node CREATED="1766548239009" ID="ID_1959580737" MODIFIED="1766586232296">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <font face="Monospaced" size="2">select </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;t.id as ticket, </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;1000000*unixepoch('2025-12-25 00:00:00') as time, </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;'blackdoor' as author, </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;'parents' as field, </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;(select value from ticket_custom </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;where name='blockedby' and ticket=t.id) as oldvalue, </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;'' as newvalue </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">from ticket t </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;where oldvalue is not null and oldvalue &lt;&gt;'' </font><font color="#549000" face="Monospaced" size="2">and t.id&lt;10</font><font face="Monospaced" size="2">; </font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1766583922461" ID="ID_546360302" MODIFIED="1766583930518" TEXT="comment">
+<node CREATED="1766584028885" FOLDED="true" ID="ID_926647946" MODIFIED="1766585830727" TEXT="erst mal: Tickets mit relevanten Changes finden">
+<node CREATED="1766583933907" ID="ID_800328196" MODIFIED="1766584015789">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <font face="Monospaced" size="2">select </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;t.id as ticket, </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;(select group_concat(newvalue,'') </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;from ticket_change </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;where field in ('blocking','blockedby') </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;and ticket=t.id) as grp </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">from ticket t </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">where grp is not NULL and grp&lt;&gt;'' </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">and&#160;&#160;t.id &lt;10; </font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1766584147059" FOLDED="true" ID="ID_1658362065" MODIFIED="1767201654817" TEXT="maximale Comment-Nr finden">
+<node CREATED="1766584163490" ID="ID_899719230" MODIFIED="1766584361802">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <font face="Monospaced" size="2">select </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;ticket, </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;max(count(oldvalue), </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;max(cast(oldvalue as integer))) as mxcnt </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">from ticket_change </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">where field='comment' </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">and oldvalue is not null </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">and ticket &lt;10 group by ticket; </font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1766585721093" ID="ID_1631313859" MODIFIED="1766586271405">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <font face="Monospaced" size="2">select </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;t.id as ticket, </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;1000000*unixepoch('2025-12-25 00:00:00') as time, </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;'blackdoor' as author, </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;'comment' as field, </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;(</font><font color="#3d1ab2" face="Monospaced" size="2">select </font>
+    </p>
+    <p>
+      <font color="#3d1ab2" face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;1 + </font>
+    </p>
+    <p>
+      <font color="#3d1ab2" face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;max(count(oldvalue), </font>
+    </p>
+    <p>
+      <font color="#3d1ab2" face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;max(cast(oldvalue as integer))) </font>
+    </p>
+    <p>
+      <font color="#3d1ab2" face="Monospaced" size="2">&#160;&#160;&#160;from ticket_change </font>
+    </p>
+    <p>
+      <font color="#3d1ab2" face="Monospaced" size="2">&#160;&#160;&#160;where field='comment' </font>
+    </p>
+    <p>
+      <font color="#3d1ab2" face="Monospaced" size="2">&#160;&#160;&#160;and ticket = t.id </font>
+    </p>
+    <p>
+      <font color="#3d1ab2" face="Monospaced" size="2">&#160;&#160;&#160;group by ticket</font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;) as oldvalue, </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;('chango') as newvalue </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">from ticket t </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;where t.id in ( </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160; </font><font color="#1066c5" face="Monospaced" size="2">select ticket </font>
+    </p>
+    <p>
+      <font color="#1066c5" face="Monospaced" size="2">&#160;&#160;&#160;from ( </font>
+    </p>
+    <p>
+      <font color="#1066c5" face="Monospaced" size="2">&#160;&#160;&#160;&#160; </font><font color="#066262" face="Monospaced" size="2">select </font>
+    </p>
+    <p>
+      <font color="#066262" face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;ticket, </font>
+    </p>
+    <p>
+      <font color="#066262" face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;group_concat(newvalue,'') as grp </font>
+    </p>
+    <p>
+      <font color="#066262" face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;from ticket_change </font>
+    </p>
+    <p>
+      <font color="#066262" face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;where field in ('blocking','blockedby') </font>
+    </p>
+    <p>
+      <font color="#066262" face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;</font><font color="#549000" face="Monospaced" size="2">and ticket&lt;10</font><font color="#066262" face="Monospaced" size="2">&#160;</font>
+    </p>
+    <p>
+      <font color="#066262" face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;group by ticket</font>
+    </p>
+    <p>
+      <font color="#1066c5" face="Monospaced" size="2">&#160;&#160;&#160;) </font>
+    </p>
+    <p>
+      <font color="#1066c5" face="Monospaced" size="2">&#160;&#160;&#160;where grp is not NULL and grp&lt;&gt;''</font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;); </font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1767147519763" ID="ID_1053539378" MODIFIED="1767147539684">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      besser formulieren mit <b>common table expressions</b>
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1767147549445" ID="ID_253154896" MODIFIED="1767147565030" TEXT="Idee: eine &#xbb;template&#xab;-Zeile aufbauen"/>
+<node CREATED="1767147565845" ID="ID_787700232" MODIFIED="1767147595471" TEXT="die kann aus den ticket_custom-Eintr&#xe4;gen sch&#xf6;pfen"/>
+<node CREATED="1767147596245" ID="ID_1859794701" MODIFIED="1767147610734" TEXT="hier kann man gleich an der Quelle auf &quot;nichtleer&quot; filtern">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1767147620660" ID="ID_1059319549" MODIFIED="1767147642574" TEXT="dann eine Hilfsview f&#xfc;r jede Art Eintrag mit passendem Feldnamen"/>
+<node CREATED="1767147643498" ID="ID_701660179" MODIFIED="1767147653780" TEXT="den Kommentar-Eintrag kann man sofort mit synthetisieren">
+<node CREATED="1767147657942" ID="ID_1517304979" MODIFIED="1767147673930" TEXT="dazu Hilfs-Views f&#xfc;r das Z&#xe4;hlen von Kommentaren"/>
+<node CREATED="1767147674646" ID="ID_906587687" MODIFIED="1767147753245" TEXT="und eine Hilfs-View, die die relevanten custom-fields z&#xe4;hlt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das sind hier: 'parents', 'children', 'blockedby', 'blocking'
+    </p>
+    <p>
+      &#8212; nur wenn ein Ticket f&#252;r eines dieser Felder einen &#187;Treffer&#171; landet, f&#252;gen wir auch einen Kommentar hinzu
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1767147773215" ID="ID_657672546" MODIFIED="1767147804519" TEXT="Puh ... ein Riesen-Oschi">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Aber trotzdem klarer, und auch besser zu debuggen (wie ich gemerkt habe...)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="smiley-neutral"/>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1767148622436" ID="ID_1866254898" MODIFIED="1767149186629" TEXT="Migration testen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1767148629529" ID="ID_64816633" MODIFIED="1767148854238" TEXT="auf frisch eingespielte DB aufspielen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1767148638458" ID="ID_1053665673" MODIFIED="1767148855467" TEXT="stichprobenartig einige Tickets anschauen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#3d0f69" CREATED="1767148646836" FOLDED="true" ID="ID_199807446" MODIFIED="1767201856636" TEXT="nach Diskrepanzen suchen">
+<icon BUILTIN="broken-line"/>
+<node BACKGROUND_COLOR="#dfc295" COLOR="#921231" CREATED="1767148680704" ID="ID_702734349" MODIFIED="1767149224686" TEXT="f&#xfc;r &apos;blocking&apos; vs &apos;parents&apos;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      sqlite&gt; select o.ticket, ov, nv from (select ticket, value as ov from ticket_custom where name='blocking') o join (select ticket, value as nv from ticket_custom where name='parents') u on o.ticket = u.ticket where ov != nv;
+    </p>
+    <p>
+      ticket|ov|nv
+    </p>
+    <p>
+      119|115, 121, 123, 332, 344, 386, 469, 511|115, 121, 123, 332, 344, 386, 469, 511, 517
+    </p>
+    <p>
+      155|150, 514, 637, 692, 578|150, 514, 578, 637, 692
+    </p>
+    <p>
+      202||283
+    </p>
+    <p>
+      258|10,93,247,256|10, 93, 247, 256
+    </p>
+    <p>
+      337|336, 235|235, 336
+    </p>
+    <p>
+      343|79, 354, 340|79, 340, 354
+    </p>
+    <p>
+      345|323, 518|323, 517
+    </p>
+    <p>
+      393|349 373|349, 373
+    </p>
+    <p>
+      394|373,16|16, 373
+    </p>
+    <p>
+      523|284, 77|77, 284
+    </p>
+    <p>
+      553|550, 399, 453|399, 453, 550
+    </p>
+    <p>
+      557|35|35, 964
+    </p>
+    <p>
+      561|540, 505|505, 540
+    </p>
+    <p>
+      583|283, 504, 157|157, 283, 504
+    </p>
+    <p>
+      591|689, 571, 690|571, 689, 690
+    </p>
+    <p>
+      613|612, 283|283, 612
+    </p>
+    <p>
+      680|578, 592, 284|284, 578, 592
+    </p>
+    <p>
+      720|656, 556, 332|332, 556, 656
+    </p>
+    <p>
+      721|720, 238|238, 720
+    </p>
+    <p>
+      724|720, 678|678, 720
+    </p>
+    <p>
+      771|770, 299|299, 770
+    </p>
+    <p>
+      828|88, 648, 254|88, 254, 648
+    </p>
+    <p>
+      832|781, 805, 813, 868, 780|780, 781, 805, 813, 868
+    </p>
+    <p>
+      845|704, 200, 453, 195|195, 200, 453, 704
+    </p>
+    <p>
+      890|889, 888, 213|213, 888, 889
+    </p>
+    <p>
+      899|394, 373|373, 394
+    </p>
+    <p>
+      924|931, 940, 942, 943, 946, 947, 33|33, 931, 940, 942, 943, 946, 947
+    </p>
+    <p>
+      930|929, 87|87, 929
+    </p>
+    <p>
+      972|953, 1159, 1024|953, 1024, 1159
+    </p>
+    <p>
+      979|951, 666, 143|143, 666, 951
+    </p>
+    <p>
+      997|945, 931, 964, 998, 966|931, 945, 964, 966, 998
+    </p>
+    <p>
+      1009|1008, 283, 973|283, 973, 1008
+    </p>
+    <p>
+      1025|951, 666, 999|666, 951, 999
+    </p>
+    <p>
+      1041|Diff Protocol
+    </p>
+    <p>
+      1124, 969|969, 1124
+    </p>
+    <p>
+      1053|399, 704, 698, 200|200, 399, 698, 704
+    </p>
+    <p>
+      1070|1074, 1087, 1075|1074, 1075, 1087
+    </p>
+    <p>
+      1091|979, 770|770, 979
+    </p>
+    <p>
+      1138|943, 1139, 33|33, 943, 1139
+    </p>
+    <p>
+      1148|1146, 518, 399|399, 518, 1146
+    </p>
+    <p>
+      1156|504, 578, 55|55, 504, 578
+    </p>
+    <p>
+      1173|1172, 283|283, 1172
+    </p>
+    <p>
+      1179|1170, 1022|1022, 1170
+    </p>
+    <p>
+      1194|1101, 1081|1081, 1101
+    </p>
+    <p>
+      1214|1101, 979|979, 1101
+    </p>
+    <p>
+      1242|1185, 1025|1025, 1185
+    </p>
+    <p>
+      1251|1227, 1226|1226, 1227
+    </p>
+    <p>
+      1278|8, 1233, 1281, 1347, 1375|8, 1233, 1281, 1375
+    </p>
+    <p>
+      1307|1278, 1298, 1319, 1343, 1344, 1347, 1347|1278, 1298, 1319, 1343, 1344, 1347
+    </p>
+    <p>
+      1385|90, 714, 507, 668, 1328|90, 507, 668, 714, 1328
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#dfc295" COLOR="#921231" CREATED="1767148719851" ID="ID_976760761" MODIFIED="1767149224687" TEXT="f&#xfc;r &apos;blockedby&apos; vs &apos;children&apos;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      sqlite&gt; select o.ticket, ov, nv from (select ticket, value as ov from ticket_custom where name='blockedby') o join (select ticket, value as nv from ticket_custom where name='children') u on o.ticket = u.ticket where ov != nv;
+    </p>
+    <p>
+      ticket|ov|nv
+    </p>
+    <p>
+      77|79, 79, 86, 108, 151, 312, 356, 412, 414, 425, 523, 531, 546, 550, 580, 694, 725|79, 86, 108, 151, 312, 356, 412, 414, 425, 523, 531, 546, 550, 580, 694, 725
+    </p>
+    <p>
+      115|78, 119, 303|78, 119, 303, 398
+    </p>
+    <p>
+      283|73, 74, 90, 99, 141, 158, 159, 166, 175, 177, 179, 180, 182, 188, 190, 271, 276, 284, 285, 347, 349, 388, 470, 478, 486, 528, 583, 613, 614, 625, 675, 722, 817, 849, 862, 874, 891, 938, 963, 968, 973, 1008, 1009, 1051, 1054, 1055, 1056, 1084, 1086, 1113, 1116, 1117, 1131, 1173, 1197, 1262, 1286, 1350, 1352, 1353, 1354, 1359, 1366, 1379|73, 74, 90, 99, 141, 158, 159, 166, 175, 177, 179, 180, 182, 188, 190, 202, 271, 276, 284, 285, 347, 349, 388, 470, 478, 486, 528, 583, 613, 614, 625, 675, 722, 817, 849, 862, 874, 891, 938, 963, 968, 973, 1008, 1009, 1051, 1054, 1055, 1056, 1084, 1086, 1113, 1116, 1117, 1131, 1173, 1197, 1262, 1286, 1350, 1352, 1353, 1354, 1359, 1366, 1379
+    </p>
+    <p>
+      331|321,79|79, 321
+    </p>
+    <p>
+      356|321 302|302, 321
+    </p>
+    <p>
+      393|182 332 93 232|93, 182, 232, 332
+    </p>
+    <p>
+      432|306, 322, 429, 433, 381|306, 322, 381, 429, 433
+    </p>
+    <p>
+      433|429, 412, 428, 284|284, 412, 428, 429
+    </p>
+    <p>
+      440|342, 302, 303|302, 303, 342
+    </p>
+    <p>
+      512|344, 511, 501|344, 501, 511
+    </p>
+    <p>
+      594|593, 579|579, 593
+    </p>
+    <p>
+      595|594, 579|579, 594
+    </p>
+    <p>
+      637|155, 590, 117|117, 155, 590
+    </p>
+    <p>
+      676|339, 319, 424|319, 339, 424
+    </p>
+    <p>
+      685|497, 686, 1042, 1199, 1090, 1327|497, 686, 1042, 1090, 1199, 1327
+    </p>
+    <p>
+      854|834, 782|782, 834
+    </p>
+    <p>
+      890|267, 214|214, 267
+    </p>
+    <p>
+      930|786, 869, 854|786, 854, 869
+    </p>
+    <p>
+      964|35, 110, 117, 178, 477, 492, 566, 963, 968, 969, 976, 981, 983, 997, 1035, 1084, 1116, 1119, 1140, 1172, 1352, 1353, 1358|35, 110, 117, 178, 477, 492, 557, 566, 963, 968, 969, 976, 981, 983, 997, 1035, 1084, 1116, 1119, 1140, 1172, 1352, 1353, 1358
+    </p>
+    <p>
+      977|1063, 1061|1061, 1063
+    </p>
+    <p>
+      998|997, 919|919, 997
+    </p>
+    <p>
+      1020|1021, 1038|1021
+    </p>
+    <p>
+      1163|1010, 1026, 1144, 1164, 1079|1010, 1026, 1079, 1144, 1164
+    </p>
+    <p>
+      1201|1038, 1018|1018, 1038
+    </p>
+    <p>
+      1242|1235, 1238|1235, 1238, 1240
+    </p>
+    <p>
+      1252|1207, 1017|1017, 1207
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1767148657446" ID="ID_565289203" MODIFIED="1767148851470" TEXT="diese m&#xfc;ssen sich bereits im Altbestand befunden haben">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      weil wir ja die 'mastertickets'-Tabelle als ma&#223;geblich behandelt haben und identisch in die neue Tabelle &#252;bernommen haben; die neuen custom-fields wurden sodann synthetisiert. Also kann die Ursache nur sein, da&#223; die alten custom-fields nicht den tats&#228;chlichen Zustand in 'mastertickets' wiederspigeln
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1767149291563" ID="ID_1737940073" MODIFIED="1767149295801" TEXT="stichprobenartig...">
+<node CREATED="1767149296765" ID="ID_957208562" MODIFIED="1767149325382" TEXT="bei vielen handelt es sich nur um die Sortierung">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Auch das Mastertickets-Plugin hat normalisiert, aber nicht stets und sofort bei der Eingabe
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1767149368495" ID="ID_1211304826" MODIFIED="1767149374069" TEXT="manchmal ist es auch Whitespace"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1767149388842" ID="ID_985397740" MODIFIED="1767149421289" TEXT="relevante Abweichungen">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1767149428284" ID="ID_634650484" MODIFIED="1767149430688" TEXT="#202">
+<node CREATED="1767149462944" ID="ID_802703202" MODIFIED="1767149471392" TEXT="Parent-Meta (&quot;Library&quot;) fehlte"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1767149549630" ID="ID_506415888" MODIFIED="1767149561626" TEXT="auch das Gegenst&#xfc;ck der Relation fehlte in den custom-fields">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1767149626254" ID="ID_1631409166" MODIFIED="1767149630386" TEXT="#557">
+<node CREATED="1767149632213" ID="ID_559703700" MODIFIED="1767149643420" TEXT="&#xe4;hnlich; hier fehlte &quot;Coding Framework&quot;"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1767149668389" ID="ID_1438672540" MODIFIED="1767149674535" TEXT="auch hier fehlte das Gegenst&#xfc;ck">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1767149765428" ID="ID_520804474" MODIFIED="1767149768044" TEXT="#1041">
+<node CREATED="1767149822645" ID="ID_1253601881" MODIFIED="1767149838674" TEXT="hier stand in &apos;blocking&apos; zus&#xe4;tzlich &apos;DiffProtocol&apos;"/>
+<node CREATED="1767149840154" ID="ID_1044767073" MODIFIED="1767149851355" TEXT="das ist die Summary vom Ticket 1124"/>
+<node CREATED="1767149852661" ID="ID_1320935655" MODIFIED="1767149865686" TEXT="die Nummern als Solche waren vollst&#xe4;nding"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1767149913330" ID="ID_497923720" MODIFIED="1767149971147" TEXT="vermutlich verursacht von Eclipse Mylyn">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Es gibt den bekannten Defekt, da&#223; Eclipse manchmal nicht die sichtbare Ticket-ID bezieht (obwohl es die DB-ID durchaus speichert). In einem solchen Fall versagt dann die Autocompletion
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#435e98" CREATED="1767149892542" ID="ID_1804661940" MODIFIED="1767149900509" TEXT="die Gegen-Relation war korrekt"/>
+</node>
+<node CREATED="1767150035165" ID="ID_1741357913" MODIFIED="1767150039087" TEXT="#1278">
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1767150060016" ID="ID_979522536" MODIFIED="1767150085195" TEXT="hier ist ein Parent-Link zu #1347 verschwunden">
+<icon BUILTIN="broken-line"/>
+</node>
+<node COLOR="#5b280f" CREATED="1767150300617" ID="ID_661722614" MODIFIED="1767197276304" TEXT="das Gegenst&#xfc;ck war nie da">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1767197396608" ID="ID_1320910991" MODIFIED="1767197410280" TEXT="Zahlendreher-Problem bei &#xe4;hnlichem Ticket-Thema?">
+<icon BUILTIN="help"/>
+<node CREATED="1767197412515" ID="ID_1292239505" MODIFIED="1767197547445">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <font face="Monospaced">#1278 : </font><font face="SansSerif">Schedule Sequence of Jobs</font>
+    </p>
+    <p>
+      <font face="Monospaced">&#160;&#160;#1287 : </font><font face="SansSerif">Invoke Job</font>
+    </p>
+    <p>
+      <font face="Monospaced">&#160;&#160;#1307 : </font><font face="SansSerif">Scheduler implementation</font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1767197565619" ID="ID_824252265" MODIFIED="1767197605438" TEXT="#1347 Engine observer &#x2014; auch Parent der beiden Subtickets"/>
+<node CREATED="1767197607564" ID="ID_1298383454" MODIFIED="1767197633295" TEXT="Anfangs gab es nur #1278 (Sequence of Jobs)"/>
+<node CREATED="1767197634008" ID="ID_1200383784" MODIFIED="1767197819410" TEXT="vermutlich hing Engine Observer mal &#xfc;ber #1278 Sequence of Jobs">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das ist eine typische Situation: im Lauf der Zeit merkt man, da&#223; ein Ober-Ticket nicht so schnell zu erledigen sein wird, und auch eigentlich gar nicht als Ganzes als Vorraussetzung gebraucht wird. So auch hier: um einen EngineObserver zu definieren und grob zu implementieren, gen&#252;gt es, einen einzigen Job ausf&#252;hren zu k&#246;nnen. Das ganze Thema Job-Generierung und Scheduling kann da au&#223;en vor bleiben. Deshalb habe ich vermutlich die Dependency 'runtergeh&#228;ngt' und das wurde vom alten Plug-in aus irgend einem Grund nicht korrekt in das 'blocking'-Feld &#252;bernommen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1767150415777" ID="ID_1380200057" MODIFIED="1767150669039" TEXT="#1307">
+<node CREATED="1767197234266" ID="ID_1555918096" MODIFIED="1767197243103" TEXT="hier sind nur Duplikate verschwunden"/>
+</node>
+<node CREATED="1767150651247" ID="ID_1344278964" MODIFIED="1767150653436" TEXT="#77">
+<node CREATED="1767150654425" ID="ID_1014092705" MODIFIED="1767150665972" TEXT="hatte ein duplikat im &apos;blockedby&apos;-Feld"/>
+</node>
+<node CREATED="1767150690757" ID="ID_1797404687" MODIFIED="1767150693883" TEXT="#115">
+<node CREATED="1767150694960" ID="ID_430632772" MODIFIED="1767150718292" TEXT="es fehlte der Eintrag f&#xfc;r das Child #398"/>
+<node CREATED="1767150821696" ID="ID_1072119633" MODIFIED="1767150826663" TEXT="das Gegenst&#xfc;ck war da"/>
+</node>
+<node CREATED="1767150905095" ID="ID_401464138" MODIFIED="1767150906931" TEXT="#1042">
+<node CREATED="1767150913606" ID="ID_1547605952" MODIFIED="1767150922688" TEXT="es fehlte der Eintrag f&#xfc;r Child #1240"/>
+</node>
+</node>
+<node CREATED="1767151069325" ID="ID_1052001250" MODIFIED="1767151119895" TEXT="diese sind mir aufgefallen &#x2014; es k&#xf6;nnten noch mehr relevante Abweichungen sein">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...hab lediglich die Liste angeschaut auf Pattern-Abweichungen, die ins Auge springen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#338800" CREATED="1767151125205" ID="ID_878564337" MODIFIED="1767151138086" TEXT="in allen F&#xe4;llen ist der neue Zustand korrekter und inhaltlich konsistent">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1766010363498" FOLDED="true" ID="ID_1182224237" MODIFIED="1767126294875" TEXT="Funktionsweise">
+<icon BUILTIN="info"/>
+<node CREATED="1766539987607" ID="ID_978158440" MODIFIED="1766588427136" TEXT="Aufbau der DB">
+<linktarget COLOR="#4c8cd9" DESTINATION="ID_978158440" ENDARROW="Default" ENDINCLINATION="-214;-41;" ID="Arrow_ID_801820755" SOURCE="ID_938314346" STARTARROW="None" STARTINCLINATION="-107;14;"/>
+<node CREATED="1765834920102" ID="ID_176740499" MODIFIED="1765834927889" TEXT="neue Tabelle &apos;subtickets&apos;">
+<node CREATED="1765835611272" ID="ID_1649999140" MODIFIED="1765835625384">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <font size="2" face="Monospaced">sqlite&gt; .schema subtickets </font>
+    </p>
+    <p>
+      <font size="2" face="Monospaced">CREATE TABLE subtickets ( </font>
+    </p>
+    <p>
+      <font size="2" face="Monospaced">&#160;&#160;&#160;&#160;parent integer, </font>
+    </p>
+    <p>
+      <font size="2" face="Monospaced">&#160;&#160;&#160;&#160;child integer, </font>
+    </p>
+    <p>
+      <font size="2" face="Monospaced">&#160;&#160;&#160;&#160;UNIQUE (parent,child) </font>
+    </p>
+    <p>
+      <font size="2" face="Monospaced">); </font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1765835633975" ID="ID_1959040113" MODIFIED="1765835640114" TEXT="zum Vergleich: Mastertickets">
+<node CREATED="1765835653729" ID="ID_1278823253" MODIFIED="1765835663484">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <font face="Monospaced" size="2">sqlite&gt; .schema mastertickets </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">CREATE TABLE mastertickets ( </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;source integer, </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;dest integer, </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;UNIQUE (source,dest) </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">); </font>
+    </p>
+  </body>
+</html></richcontent>
+<node COLOR="#451f56" CREATED="1765835687584" ID="ID_1212023201" MODIFIED="1765835724296" TEXT="dest &#x2259; parent"/>
+<node COLOR="#451f56" CREATED="1765835703833" ID="ID_1152532056" MODIFIED="1765835724296" TEXT="source &#x2259; child"/>
+</node>
+</node>
+</node>
+<node CREATED="1766588488346" ID="ID_818058415" MODIFIED="1766588493868" TEXT="Extension-Points">
+<node CREATED="1766588509476" ID="ID_654063586" MODIFIED="1766588510722" TEXT="tracsubtickets.api = tracsubtickets.api">
+<node CREATED="1766593111249" ID="ID_1615051080" MODIFIED="1766593114877" TEXT="definiert">
+<node CREATED="1766593125415" ID="ID_1218446982" MODIFIED="1766593165358">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <div style="background-color: #eee0b5; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 2px">
+      <div style="color: #202020; background-color: #eee0b5; font-family: Bitstream Vera Sans Mono; font-size: 9pt; white-space: pre">
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#116f8c" face="Monospaced"><b>class</b></font><font color="#33361c" face="Monospaced">&#160;</font><font color="#053bb8" face="Monospaced"><b>SubTicketsSystem</b></font><font color="#000000" face="Monospaced">(</font><font color="#33361c" face="Monospaced">Component</font><font color="#000000" face="Monospaced">)</font><font color="#33361c" face="Monospaced">:</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#33361c" face="Monospaced">&#160;&#160;&#160;&#160;implements</font><font color="#000000" face="Monospaced">(</font><font color="#77383d" face="Monospaced">IEnvironmentSetupParticipant, </font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#77383d" face="Monospaced">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;ITicketChangeListener, </font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#77383d" face="Monospaced">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;ITicketManipulator</font><font color="#000000" face="Monospaced">)</font>
+        </p>
+      </div>
+    </div>
+  </body>
+</html></richcontent>
+<node CREATED="1766593265556" ID="ID_829056115" MODIFIED="1766593268321" TEXT="IEnvironmentSetupParticipant">
+<node CREATED="1766593281789" MODIFIED="1766593281789" TEXT="environment_created"/>
+<node CREATED="1766593286594" MODIFIED="1766593286594" TEXT="environment_needs_upgrade"/>
+<node CREATED="1766593291756" MODIFIED="1766593291756" TEXT="upgrade_environment"/>
+</node>
+<node CREATED="1766593219386" ID="ID_345816757" MODIFIED="1766593220893" TEXT="ITicketChangeListener">
+<node CREATED="1766593226080" MODIFIED="1766593226080" TEXT="ticket_created"/>
+<node CREATED="1766593231828" ID="ID_1959610018" MODIFIED="1766800563991" TEXT="ticket_changed">
+<icon BUILTIN="back"/>
+</node>
+<node CREATED="1766593239612" ID="ID_112421859" MODIFIED="1766593240812" TEXT="ticket_deleted"/>
+<node CREATED="1766593244888" ID="ID_360224403" MODIFIED="1766593246218" TEXT="ticket_comment_modified"/>
+<node CREATED="1766593250291" ID="ID_1145755755" MODIFIED="1766593251633" TEXT="ticket_change_deleted"/>
+</node>
+<node CREATED="1766588691899" ID="ID_838005757" MODIFIED="1766593271900" TEXT="ITicketManipulator">
+<linktarget COLOR="#7fade4" DESTINATION="ID_838005757" ENDARROW="Default" ENDINCLINATION="-97;16;" ID="Arrow_ID_968728766" SOURCE="ID_1429755586" STARTARROW="None" STARTINCLINATION="-94;15;"/>
+<node CREATED="1766588698501" MODIFIED="1766588698501" TEXT="prepare_ticket"/>
+<node CREATED="1766588703252" ID="ID_564674310" MODIFIED="1766800558271" TEXT="validate_ticket">
+<icon BUILTIN="back"/>
+</node>
+<node CREATED="1766588708010" MODIFIED="1766588708010" TEXT="validate_comment"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1766588518067" ID="ID_337729057" MODIFIED="1766588518957" TEXT="tracsubtickets.web_ui = tracsubtickets.web_ui">
+<node CREATED="1766588581987" ID="ID_1000131874" MODIFIED="1766588584396" TEXT="definiert">
+<node CREATED="1766588586534" ID="ID_40782151" MODIFIED="1766588651716">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <div style="background-color: #eee0b5; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 2px">
+      <div style="color: #202020; background-color: #eee0b5; font-family: Bitstream Vera Sans Mono; font-size: 9pt; white-space: pre">
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#116f8c" face="Monospaced"><b>class</b></font><font color="#33361c" face="Monospaced">&#160;</font><font color="#053bb8" face="Monospaced"><b>SubTicketsModule</b></font><font color="#000000" face="Monospaced">(</font><font color="#33361c" face="Monospaced">Component</font><font color="#000000" face="Monospaced">)</font><font color="#33361c" face="Monospaced">:</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#33361c" face="Monospaced">&#160;&#160;&#160;&#160;implements</font><font color="#000000" face="Monospaced">(</font><font color="#67333d" face="Monospaced">IRequestFilter, </font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#67333d" face="Monospaced">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;ITicketManipulator, </font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#67333d" face="Monospaced">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; ITemplateProvider</font><font color="#000000" face="Monospaced">)</font>
+        </p>
+      </div>
+    </div>
+  </body>
+</html></richcontent>
+<node CREATED="1766588732791" ID="ID_1164630160" MODIFIED="1766588753890" TEXT="class trac.core.Component">
+<node CREATED="1766588781712" ID="ID_1722318819" MODIFIED="1766588795196" TEXT="@staticmethod implements(*interfaces)">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1766593184879" ID="ID_1429755586" MODIFIED="1766593201812" TEXT="ITicketManipulator">
+<arrowlink COLOR="#7fade4" DESTINATION="ID_838005757" ENDARROW="Default" ENDINCLINATION="-97;16;" ID="Arrow_ID_968728766" STARTARROW="None" STARTINCLINATION="-94;15;"/>
+</node>
+<node CREATED="1766588912681" ID="ID_233077791" MODIFIED="1766589248087" TEXT="ITemplateProvider">
+<node CREATED="1766588972433" ID="ID_740931072" MODIFIED="1766588973964" TEXT="get_htdocs_dirs"/>
+<node CREATED="1766588979257" ID="ID_483210908" MODIFIED="1766588980703" TEXT="get_templates_dirs"/>
+</node>
+<node CREATED="1766588836513" ID="ID_1107936456" MODIFIED="1766588838725" TEXT="IRequestFilter">
+<node CREATED="1766588843999" ID="ID_1437184249" MODIFIED="1766588843999" TEXT="pre_process_request"/>
+<node CREATED="1766588849974" ID="ID_1933065086" MODIFIED="1766589262039" TEXT="post_process_request">
+<icon BUILTIN="back"/>
+<node CREATED="1766589264476" ID="ID_1505310053" MODIFIED="1766589268279" TEXT="Kern-Logik">
+<node CREATED="1766589273566" ID="ID_4896822" MODIFIED="1766589279693" TEXT="path /ticket oder /newticket">
+<node CREATED="1766589869797" ID="ID_1400361618" MODIFIED="1766589878903" TEXT="holt sich das parents-Feld"/>
+<node CREATED="1766589879738" ID="ID_439106953" MODIFIED="1766589894912" TEXT="parst die Parent Ticket Nrn"/>
+<node CREATED="1766589902905" ID="ID_1210828843" MODIFIED="1766590068661" TEXT=" berechnet children">
+<arrowlink COLOR="#2b63cc" DESTINATION="ID_1691282890" ENDARROW="Default" ENDINCLINATION="71;-76;" ID="Arrow_ID_1945062921" STARTARROW="None" STARTINCLINATION="-172;23;"/>
+</node>
+<node CREATED="1766589981361" ID="ID_1196130851" MODIFIED="1766589982675" TEXT="div = tag.div(class_=&apos;description&apos;)">
+<node CREATED="1766589984152" ID="ID_508994743" MODIFIED="1766589992490" TEXT="&#xbb;yellow ticket box&#xab;"/>
+<node CREATED="1766590096517" MODIFIED="1766590096517" TEXT="tbody = tag.tbody()"/>
+</node>
+<node CREATED="1766589947145" ID="ID_164184247" MODIFIED="1766589955472" TEXT="f&#xfc;gt &quot;Add&quot; Link oder Button hinzu"/>
+<node CREATED="1766589956472" ID="ID_1190508810" MODIFIED="1766589967507" TEXT="F&#xfc;gt Abschnitt &quot;Subtickets&quot; hinzu"/>
+<node CREATED="1766590007708" ID="ID_1719210385" MODIFIED="1766590074598" TEXT="f&#xfc;gt Subtickets-Tabelle hinzu">
+<arrowlink COLOR="#315ac2" DESTINATION="ID_117386312" ENDARROW="Default" ENDINCLINATION="97;-68;" ID="Arrow_ID_783914306" STARTARROW="None" STARTINCLINATION="-164;17;"/>
+</node>
+</node>
+<node CREATED="1766589296709" ID="ID_136935963" MODIFIED="1766589298929" TEXT="path /admin/ticket/type"/>
+</node>
+</node>
+</node>
+<node CREATED="1766589855300" ID="ID_1691282890" MODIFIED="1766590068662" TEXT="self.get_children(ticket.id)">
+<linktarget COLOR="#2b63cc" DESTINATION="ID_1691282890" ENDARROW="Default" ENDINCLINATION="71;-76;" ID="Arrow_ID_1945062921" SOURCE="ID_1210828843" STARTARROW="None" STARTINCLINATION="-172;23;"/>
+<node CREATED="1766590464466" ID="ID_164079357" MODIFIED="1766590466770" TEXT="SELECT parent, child FROM subtickets WHERE parent=%s"/>
+<node CREATED="1766590503614" ID="ID_1953203820" MODIFIED="1766590514423" TEXT="ruft sich dann rekursiv f&#xfc;r jedes gefundene Kind wieder auf"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1766590633144" ID="ID_773193501" MODIFIED="1766590644450" TEXT="man kann hier Rekursion limitieren">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1766590647035" ID="ID_141134119" MODIFIED="1766590654355" TEXT="return">
+<node CREATED="1766590655249" ID="ID_945285481" MODIFIED="1766590660278" TEXT="ein Dict"/>
+<node CREATED="1766590661096" ID="ID_97121853" MODIFIED="1766590670851" TEXT="key = childID"/>
+<node CREATED="1766590671559" ID="ID_317687047" MODIFIED="1766590673240" TEXT="val">
+<node CREATED="1766590674158" ID="ID_227451504" MODIFIED="1766590682426" TEXT="None wenn es keine weiteren Kinder hat"/>
+<node CREATED="1766590682942" ID="ID_1396761504" MODIFIED="1766590694880" TEXT="children Map vom rekursiven Aufruf sonst"/>
+</node>
+</node>
+</node>
+<node CREATED="1766590037462" ID="ID_117386312" MODIFIED="1766592517241" TEXT="self._create_subtickets_table(req, data[&apos;subtickets&apos;], tbody, depth=0)">
+<linktarget COLOR="#315ac2" DESTINATION="ID_117386312" ENDARROW="Default" ENDINCLINATION="97;-68;" ID="Arrow_ID_783914306" SOURCE="ID_1719210385" STARTARROW="None" STARTINCLINATION="-164;17;"/>
+<node CREATED="1766592537550" ID="ID_1422384458" MODIFIED="1766592538965" TEXT="for id in sorted(children, key=lambda x: int(x)):"/>
+<node CREATED="1766592540248" ID="ID_489005985" MODIFIED="1766592548088" TEXT="je nach Konfiguration: eine Zeile"/>
+<node CREATED="1766592548692" ID="ID_891098983" MODIFIED="1766592558122" TEXT="dann: rekursiver Aufruf">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1766588443659" ID="ID_981833664" MODIFIED="1766588447483" TEXT="Seitenaufbau">
+<node CREATED="1766588448487" ID="ID_1942443960" MODIFIED="1766588450736" TEXT="Ticket-Seite">
+<node CREATED="1766010374134" ID="ID_254955075" MODIFIED="1766010395975" TEXT="subtickets.js">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      jQuery(function($) {
+    </p>
+    <p>
+      &#160;&#160;var ticketbox = document.getElementById('ticketbox');
+    </p>
+    <p>
+      &#160;&#160;if (ticketbox === null)
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;ticketbox = document.getElementById('ticket');
+    </p>
+    <p>
+      &#160;&#160;if (ticketbox !== null) {
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;var div = $(document.createElement('div'));
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;div.html(subtickets_div);
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;$(ticketbox).append(div.contents());
+    </p>
+    <p>
+      &#160;&#160;}
+    </p>
+    <p>
+      });
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1766010497882" ID="ID_1219242" MODIFIED="1766010521226" TEXT="das JS sucht sicht die &#xbb;Ticket-Box&#xab;"/>
+<node CREATED="1766010521806" ID="ID_1372839953" MODIFIED="1766010531464" TEXT="und h&#xe4;ngt den Content vom subtickets_div dort an"/>
+</node>
+<node CREATED="1766010400616" ID="ID_1573937442" MODIFIED="1766010467521" TEXT="dazu &lt;trac-subtickets-plugin&gt;/lib/tracsubtickets/web_ui.py">
+<icon BUILTIN="idea"/>
+<node CREATED="1766010470668" ID="ID_1779087834" MODIFIED="1766010486243" TEXT="erzeugt und rendert ein subtickets_div"/>
+<node CREATED="1766010621419" ID="ID_1746699281" MODIFIED="1766010625860" TEXT="in post_process_request(self, req, template, data, content_type)"/>
+<node CREATED="1766011293894" ID="ID_333233354" MODIFIED="1766590342927" TEXT="und zwar wird erst ein Div mit dem Trac-internen API aufgebaut">
+<node CREATED="1766590348856" ID="ID_1827963267" MODIFIED="1766590358612" TEXT="das hat Selector div.description"/>
+<node CREATED="1766590359738" ID="ID_1965069427" MODIFIED="1766590368685" TEXT="in der Ticket-Box gibt es bereits zwei solche"/>
+<node CREATED="1766590391428" ID="ID_1883379540" MODIFIED="1766590414494" TEXT="dieses wird als drittes dazugebaut (&#xbb;Subtickets-Tabelle&#xab;)"/>
+</node>
+<node CREATED="1766011309676" ID="ID_1001434103" MODIFIED="1766011320748" TEXT="und dieses dann per Trac-Utils in Markup gerendert"/>
+<node CREATED="1766011321363" ID="ID_193281904" MODIFIED="1766011341540" TEXT="und als &quot;script data&quot; mit key subtickets_div in die Seite injiziert"/>
+</node>
+</node>
+</node>
+<node CREATED="1766617661232" ID="ID_1593024095" MODIFIED="1766617665136" TEXT="Tests ausf&#xfc;hren">
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1766617666303" FOLDED="true" ID="ID_1156297101" MODIFIED="1767126269272" TEXT="Woot??">
+<icon BUILTIN="help"/>
+<node CREATED="1766617679839" ID="ID_1033868025" MODIFIED="1766617691581" TEXT="das sieht aber nicht nach einer Standard-Testsuite aus"/>
+<node CREATED="1766617697205" ID="ID_1232512031" MODIFIED="1766617708544" TEXT="einzeln aufrufen funktioniert">
+<icon BUILTIN="idea"/>
+<node CREATED="1766617722257" ID="ID_63504605" MODIFIED="1766617727544" TEXT="cd &lt;projectroot&gt;"/>
+<node CREATED="1766617761803" ID="ID_1558677594" MODIFIED="1766620528507" TEXT="python3 -m unittest tracsubtickets.tests.api"/>
+<node CREATED="1766617776298" ID="ID_521855025" MODIFIED="1766620537353" TEXT="python3 -m unittest tracsubtickets.tests.web_ui"/>
+</node>
+<node BACKGROUND_COLOR="#accdc3" COLOR="#3f4015" CREATED="1766619095497" ID="ID_1238337313" MODIFIED="1766620584967" STYLE="fork" TEXT="Launch aus Python-Code">
+<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
+<icon BUILTIN="wizard"/>
+<node CREATED="1766619107243" ID="ID_344897884" MODIFIED="1766620584962">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <pre http-equiv="content-type" content="text/html; charset=utf-8" class="hljs s-code-block" code-as-text="# run_tests.py
+from plugin.tests import test_suite
+import unittest
+
+runner = unittest.TextTestRunner(verbosity=2)
+runner.run(test_suite())
+" code-language="python"><code><font size="2">from plugin.tests import test_suite
+import unittest
+
+runner = unittest.TextTestRunner(verbosity=2)
+runner.run(test_suite())</font></code></pre>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node COLOR="#cb0a88" CREATED="1766620589641" ID="ID_1272988561" MODIFIED="1766620611086" TEXT="das mu&#xdf; doch einfacher gehen.....">
+<icon BUILTIN="smiley-angry"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#dcd399" CREATED="1766620618383" ID="ID_284757706" MODIFIED="1767126260951" TEXT="PyDev (richtig) verwenden...">
+<icon BUILTIN="idea"/>
+<node CREATED="1766620637879" ID="ID_295049272" MODIFIED="1766620650937" TEXT="Test-Paket im Explorer"/>
+<node CREATED="1766620651575" ID="ID_172997792" MODIFIED="1766620680817" TEXT="right-click &gt; run as Python Unit test"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#434a98" CREATED="1766588279722" ID="ID_1581384670" MODIFIED="1767126186432" TEXT="Erweiterungen">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="yes"/>
+<node COLOR="#338800" CREATED="1766597156299" FOLDED="true" ID="ID_1705475023" MODIFIED="1767126226509" TEXT="ein &apos;children&apos;-Feld w&#xe4;re w&#xfc;nschensewert">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1766597181881" ID="ID_1317362470" MODIFIED="1766597292229" TEXT="sollte mit etwas Refactoring leicht zu implementieren sein">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Im Grunde geht es nur um eine einzige Normalisierungs-Methode <font color="#00b479" face="Bitstream Vera Sans Mono"><b>ticket_changed()</b></font>
+    </p>
+    <p>
+      &#10233; Dort werden Custom-Field(s) ausgewertet und &#196;nderungen erkannt und in die Subtickets-Tabelle &#252;bernommen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+<node CREATED="1766597367037" ID="ID_1020330353" MODIFIED="1766597391656" TEXT="die DB-add und /-delete -  Funktionen w&#xfc;rden nun jeweils zweimal gebraucht"/>
+<node CREATED="1766597392303" ID="ID_1181610719" MODIFIED="1766597412079" TEXT="Performance-Impact ist hier irrelevant">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      selber schuld wer Ticket-Relationen editiert!
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1766597294826" ID="ID_1656187269" MODIFIED="1766597360261" TEXT="die Logik f&#xfc;r &apos;parents&apos; und &apos;children&apos; w&#xe4;re komplett disjunkt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...das hei&#223;t, es kann keine Wechselwirkungen geben (abgesehen von Fehlern durch Zyklen-Erkennung)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#338800" CREATED="1766598431064" ID="ID_148512063" MODIFIED="1766598449896" TEXT="Refactoring ticket_changed()">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1766621750186" ID="ID_256017894" MODIFIED="1766628130017" TEXT="&apos;children&apos; Custom-Field einf&#xfc;hren">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1766621779270" ID="ID_1467103758" MODIFIED="1766621791106" TEXT="das Trac-API ist sch&#xf6;n">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1766621793635" ID="ID_983196219" MODIFIED="1766621799792" TEXT="man klopft das einfach dazu..."/>
+<node COLOR="#338800" CREATED="1766628131869" ID="ID_766547852" MODIFIED="1766628168027" TEXT="Methode f&#xfc;r Darstellung als Link: Refactoring">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1766628152475" ID="ID_959805517" MODIFIED="1766628154994" TEXT="aufdoppeln"/>
+<node CREATED="1766628155636" ID="ID_1573473514" MODIFIED="1766628163854" TEXT="Bau der Liste von Links herausl&#xf6;sen"/>
+</node>
+<node COLOR="#338800" CREATED="1766628171468" ID="ID_1082739589" MODIFIED="1766628178009" TEXT="Test: funktoiniert">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1766628188982" ID="ID_669546862" MODIFIED="1766628234324" TEXT="Migrationswarnung spricht an"/>
+<node COLOR="#435e98" CREATED="1766628199912" ID="ID_1727430956" MODIFIED="1766628234325" TEXT="neue Felder werden zu trac.ini hinzugef&#xfc;gt"/>
+<node COLOR="#435e98" CREATED="1766628181934" ID="ID_489175178" MODIFIED="1766628234326" TEXT="kann neue Inhalte hinzuf&#xfc;gen"/>
+<node COLOR="#435e98" CREATED="1766628214214" ID="ID_603902296" MODIFIED="1766628234326" TEXT="wenn valide Ticket-Nr &#x27f9; Link"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1766627370986" ID="ID_1616912778" MODIFIED="1766778564664" TEXT="Validierung">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1766628244287" ID="ID_492965025" MODIFIED="1766628249304" TEXT="hier wird&apos;s m&#xfc;hsam">
+<node CREATED="1766628253241" ID="ID_868434519" MODIFIED="1766628261492" TEXT="Validierung kann vor Speichern aufgerufen werden"/>
+<node CREATED="1766628271602" ID="ID_349681488" MODIFIED="1766628293404" TEXT="gepr&#xfc;ft wird also: lokaler Inhalt der custom-fields + DB-Parent-Links"/>
+</node>
+<node CREATED="1766629092302" ID="ID_224722515" MODIFIED="1766629157706" TEXT="formal gedacht: man m&#xfc;&#xdf;te die Zyklen-Pr&#xfc;fung symmetrisch nach unten machen"/>
+<node CREATED="1766629053865" ID="ID_280824596" MODIFIED="1766629161332" TEXT="aber: mit einem children-Feld sind viele Pr&#xfc;fungen redundant">
+<node CREATED="1766629200898" ID="ID_266385366" MODIFIED="1766629219503" TEXT="Idee: nur pr&#xfc;fen wenn das Kind neu hinzukommt"/>
+<node CREATED="1766629220389" ID="ID_598869821" MODIFIED="1766778463802" TEXT="dann vom Kind aus die Parent-Zyklenpr&#xfc;fung aufrufen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Begr&#252;ndung: wenn ein Zyklus erzeugt wird, dann mu&#223; <i>der Ausgangspunkt</i>&#160;bereits irgendwo weiter unten im Graphen h&#228;ngen, d.h. von dort unten mu&#223; es bereits einen <i>persistenten</i>&#160;Pfad geben zu dem neu anzuh&#228;ngenden Kind
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#3486b6" DESTINATION="ID_432962380" ENDARROW="Default" ENDINCLINATION="-419;-27;" ID="Arrow_ID_1391252969" STARTARROW="None" STARTINCLINATION="-242;13;"/>
+</node>
+</node>
+<node CREATED="1766630157703" ID="ID_183408495" MODIFIED="1766630169826" TEXT="mu&#xdf; dazu restrukturieren">
+<icon BUILTIN="yes"/>
+<node CREATED="1766630172992" ID="ID_1938985515" MODIFIED="1766630219828" TEXT="der Code ist von einem Routinier geschrieben...">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...und daher pa&#223;genau, aber nicht generisch und damit nicht leicht erweiterbar
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="smiley-oh"/>
+</node>
+<node CREATED="1766630225721" ID="ID_356507870" MODIFIED="1766630239694" TEXT="Typ-Normalisierung: es sollte nur auf int-IDs gearbeitet werden">
+<node CREATED="1766674746984" ID="ID_1076161929" MODIFIED="1766674755488" TEXT="ids">
+<node CREATED="1766674784094" ID="ID_1532856201" MODIFIED="1766674806040" TEXT="Extraction">
+<node CREATED="1766674807306" ID="ID_959163921" MODIFIED="1766674808820" TEXT="NUMBERS_RE = re.compile(r&apos;\d+&apos;, re.U)"/>
+</node>
+<node COLOR="#435e98" CREATED="1766678846415" ID="ID_1964795235" MODIFIED="1766678858077" TEXT="in Hilfsfunktion extrahieren">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1766630244324" ID="ID_882109798" MODIFIED="1766674615424" TEXT="der Zyklendetektor sollte (effektiv) eine pure function sein">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      derzeit hat er zwei Ausgabewerte, und einer davon (n&#228;mlich die invalid_ids) passiert per Seiteneffekt
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1766633075046" ID="ID_1240682424" MODIFIED="1766633118048" TEXT="das geht durchaus ...">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      es wird n&#228;mlich auf jedem Level eine neue Liste f&#252;r den Pfad gebildet
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1766633119264" ID="ID_1260388633" MODIFIED="1766633186441" TEXT="man kann im Fehlerfall ein yield path machen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Damit wird die Funktion eine Generatorfunktion und liefert alle Beweispfade f&#252;r Zyklen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1766630917477" ID="ID_1930529181" MODIFIED="1766678842780" TEXT="Fehlermeldungs-Behandlung und Checks sollten getrennt sein">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1766630935630" ID="ID_147856754" MODIFIED="1766678863083" TEXT="es sollte nur jeweils einen Catch-Block geben">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...und zwar f&#252;r <i>unbekannte Probleme</i>&#160;&#8212; man sollte systematisch die bekannten Probleme wegfiltern
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1766678866431" ID="ID_1544233232" MODIFIED="1766766675269" TEXT="Schritt-1 : bestehenden Code in neue Struktur">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1766678884833" ID="ID_195593357" MODIFIED="1766678977413" TEXT="Code wird deutlich kompakter">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Und ich finde, auch klarer duch die Trennung von Fehlermeldungen und Processing. Aber das ist vermutlich Geschmackssache
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node COLOR="#186c81" CREATED="1766678982282" ID="ID_790974152" MODIFIED="1766774986629" TEXT="Test...">
+<node COLOR="#338800" CREATED="1766678991852" ID="ID_1352918761" MODIFIED="1766679002451" TEXT="Selbst-Parent wird erkannt">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1766679003289" ID="ID_535838741" MODIFIED="1766679013650" TEXT="nicht-existierende ID wird erkannt">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1766679249069" ID="ID_1774293999" MODIFIED="1766679264690" TEXT="Sortierung / Normalisierung scheint zu funktionieren">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#435e98" CREATED="1766679265540" ID="ID_807692063" MODIFIED="1766715215302" TEXT="Kind als Parent : wird nicht erkannt">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1766715217981" ID="ID_1107582347" MODIFIED="1766715233778" TEXT="Programmierfehler (formal)"/>
+<node CREATED="1766715234378" ID="ID_266439967" MODIFIED="1766715290628" TEXT="eine Generator-Funktion mu&#xdf; man evaluieren, sonst wird sie nicht aktiv">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      wenn man eine Generator-Funktion <i>aufruft,</i>&#160;so wird lediglich ein Iterator-Objekt erzeugt.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1766715291826" ID="ID_1989299988" MODIFIED="1766715336343">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      seit Python 3.3 gibt es daf&#252;r die Syntax <font face="Monospaced" color="#6a5050">yield from genFunc()</font>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node COLOR="#5b280f" CREATED="1766679291834" ID="ID_482111626" MODIFIED="1766715198715" TEXT="sonderbares Verhalten beim Update?">
+<icon BUILTIN="help"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1766715074774" ID="ID_1213353515" MODIFIED="1766715080867" TEXT="nicht reproduzierbar"/>
+<node CREATED="1766715081661" ID="ID_519660199" MODIFIED="1766715191627" TEXT="lag vmtl. am &#xbb;Form History Control&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Ich hatte mit der Ordnung im Feld gespielt und <i>scheinbar</i>&#160;keine neue &#196;nderung bekommen (was korrekt ist, denn nach Normalisierung hat das System festgestellt, da&#223; die &#196;nderung leer ist). Wollte es nochmal versuchen, und hab das Feld mit dem &#187;Form History Control&#171; Plugin von Mozilla nochmal ausgef&#252;llt; was ich dabei vermutlich &#252;bersehen hatte, war, da&#223; auch andere Felder von diesem Plugin ausgef&#252;llt wurden.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1766717725234" FOLDED="true" ID="ID_952902544" MODIFIED="1766800451790" TEXT="Laufzeit der Verifikation ist laaaang....">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1766717741671" ID="ID_1916602082" MODIFIED="1766717795560" TEXT="Vergleich.... (grob)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Hab die Zeit praktisch per Hand gestoppt
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1766717750517" ID="ID_1422738881" MODIFIED="1766717756180" TEXT="alte Version: 49 sec"/>
+<node COLOR="#5b280f" CREATED="1766717767036" ID="ID_1480721061" MODIFIED="1766721513209" TEXT="neue Version 82 sec">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1766721491945" ID="ID_5035448" MODIFIED="1766721496806" TEXT="das war ein Au&#xdf;rei&#xdf;er"/>
+<node CREATED="1766721497515" ID="ID_828499792" MODIFIED="1766721511354" TEXT="reproduzierbar immer wieder 46-48sec"/>
+</node>
+</node>
+<node CREATED="1766717806956" ID="ID_1989170700" MODIFIED="1766717817837" TEXT="was sind relevante Unterschiede?">
+<node CREATED="1766717818896" ID="ID_748070877" MODIFIED="1766717848959" TEXT="neue Version macht im Cycle-Fall eine Iteration tiefer &#x27f6; vmtl irrelevant"/>
+<node CREATED="1766717850377" ID="ID_476343048" MODIFIED="1766717891642" TEXT="neue Version macht Containment Check auch f&#xfc;r den Einstieg (+1 mal) &#x27f6; irrelevant"/>
+<node CREATED="1766717894934" ID="ID_1839773457" MODIFIED="1766717955831" TEXT="neue Version gibt Pfad-Listen zur&#xfc;ck (die dann erst gerendert werden) &#x27f6; bedenklich">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      bedeutet n&#228;mlich da&#223; wir viele Memory-Allokationen auf dem Heap machen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1766717957629" ID="ID_1513627407" MODIFIED="1766718089912" TEXT="neue Version ist Generator-Funktion &#x27f6; k&#xf6;nnte relevant sein">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      &#187;pull&#171; einer Generator-Funktion ist stets aufwendiger als der direkte Aufruf einer normalen Funktion, da jeder yield wie ein Funktionsaufruf ist, und dann die Continuation mit einem weiteren Aufruf geholt wird. Daf&#252;r kann eine Generator-Funktion Vorteile im Speicher haben....
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Relevanz f&#252;r uns nicht klar, da wir ja nur wenige yields haben (im Konkreten Fall nur einen einzigen)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1766718092507" ID="ID_1431648387" MODIFIED="1766718097727" TEXT="Umbauen und vergleichen">
+<node CREATED="1766718099137" ID="ID_1320548645" MODIFIED="1766718127221" TEXT="Fehler-Pfad sofort rendern (aber yield)"/>
+<node CREATED="1766721269002" ID="ID_1595938543" MODIFIED="1766721285976" TEXT="Fehler ohne yield per Seiteneffekt in eine Liste packen"/>
+<node CREATED="1766721294330" ID="ID_1378720785" MODIFIED="1766721483039" TEXT="&#x27f9; kein relevanter Unterschied">
+<node CREATED="1766721517500" ID="ID_1584488499" MODIFIED="1766721534214" TEXT="die lange Laufzeit war ein nicht reproduzierbarer Au&#xdf;rei&#xdf;er"/>
+<node CREATED="1766721536705" ID="ID_1636374292" MODIFIED="1766721624512" TEXT="keine der Kombinationen zeigt einen signifikanten Unterschied">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Ist dann nach einiger &#220;berlegung auch klar: wir haben ja im Beispiel nur ein einziges yield (und im Allgemeinen nur wenige). Dazwischen ist das eine ganz normale Funktion...
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1766721550673" ID="ID_715991617" MODIFIED="1766721561120" TEXT="auch die alte L&#xf6;sung l&#xe4;uft in der gleichen Gr&#xf6;&#xdf;enordnung"/>
+</node>
+</node>
+<node CREATED="1766721628769" ID="ID_127316246" MODIFIED="1766721645838" TEXT="was hier langsam ist: die schiere Masse der Pfad-Varianten">
+<node CREATED="1766721647674" ID="ID_1434192482" MODIFIED="1766721654496" TEXT="das Beispiel ist &#xbb;gut&#xab;"/>
+<node CREATED="1766724003138" ID="ID_204474975" MODIFIED="1766724016219" TEXT="kann man an den DB-Queries noch etwas machen?"/>
+</node>
+<node CREATED="1766724016996" ID="ID_733404743" MODIFIED="1766724041709" TEXT="&#x27f9; man k&#xf6;nnte einen gemeinsamen Cursor auf einer offenen Verbindung verwenden">
+<node CREATED="1766727506000" ID="ID_1383802470" MODIFIED="1766727542980" TEXT="alle Parents sofort in eine Liste fetchen &#x27f9; bringt 5 sec ~ 10%"/>
+<node CREATED="1766727543768" ID="ID_406298097" MODIFIED="1766728105057" TEXT="F&#xfc;r den ganzen Scope eine offene Connection nutzen &#x27f9; nochmal 5sec"/>
+<node CREATED="1766728106559" ID="ID_1484642359" MODIFIED="1766728118056" TEXT="zusammen 20% Ersparnis"/>
+<node CREATED="1766792195060" ID="ID_1591163576" MODIFIED="1766792213613" TEXT="stelle fest: cursor oder offene connection macht keinen Unterschied">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1766728130256" ID="ID_912600791" MODIFIED="1766728143956" TEXT="38sec statt 48sec ist zwar nicht viel, aber etwas"/>
+</node>
+</node>
+<node CREATED="1766728694064" ID="ID_1274483122" MODIFIED="1766728708548" TEXT="Doku zum DB-API">
+<node CREATED="1766728709615" ID="ID_1673851122" LINK="https://trac.edgewall.org/wiki/TracDev/DatabaseApi" MODIFIED="1766728719800" TEXT="Trac-Docu"/>
+<node CREATED="1766728720434" ID="ID_929158083" MODIFIED="1766728731641" TEXT="das ist ein thin-wrapper &#xfc;ber das Python db-API-2"/>
+<node CREATED="1766766085281" ID="ID_1636903015" MODIFIED="1766766091869" TEXT="siehe hauZu"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1766766676107" ID="ID_945684206" MODIFIED="1766778319709" TEXT="Schritt-2 : Validation f&#xfc;r Child-Tickets">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1766766702645" ID="ID_1580410079" MODIFIED="1766766717738" TEXT="Einschr&#xe4;nkung: pr&#xfc;fe nur neue Links">
+<node CREATED="1766767872452" ID="ID_1496626777" MODIFIED="1766767927573" TEXT="Begr&#xfc;ndung: die Child-Links sind redundant">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...was bedeutet, da&#223; bestehende Links schon vom Kind her gecheckt wurden
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1766768429633" ID="ID_1085035797" MODIFIED="1766768761263" TEXT="theoretisch k&#xf6;nnte man das auch f&#xfc;r die Parent-Links anwenden">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das w&#228;re dann &#228;hnlich wie ein Induktionsbeweis: was bereits in der Subtickets-Tabelle steht, ist verifiziert. Allerdings &#8212; was w&#228;re, wenn diese Annahme sich als falsch herausstellt. Beispielsweise weil ein Bug im Code war, oder weil die Tabelle migriert ist, oder manuell manipuliert wurde? Dann w&#252;rde eine korrupte Struktur u.U. lange nicht bemerkt. Die Konsequenz w&#228;re, da&#223; gewisse externe Auswertungen nicht mehr terminieren; das w&#252;rde auch f&#252;r die Child-Ticket-Tabelle gelten, wenn man keine Tiefenbeschr&#228;nkung konfiguriert.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1766768773966" ID="ID_1037448090" MODIFIED="1766771708273" TEXT="also zus&#xe4;tzliche Auswertung: Abgleich mit Subtickets-Eintrag">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1766772316696" ID="ID_1064048227" MODIFIED="1766772325420" TEXT="DB-Select als Methode extrahiert"/>
+<node COLOR="#435e98" CREATED="1766772326430" ID="ID_160087144" MODIFIED="1766772348381" TEXT="verifiziert: kein Performance-Impact">
+<icon BUILTIN="clanbomber"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1766768805643" ID="ID_709386277" MODIFIED="1766771703338" TEXT="dazu der einfache Test auf selbst-Rekursion">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1766768841433" ID="ID_432962380" MODIFIED="1766778463803" TEXT="angepa&#xdf;ter Zyklen-Check: vom neuen Kind aufw&#xe4;rts">
+<linktarget COLOR="#3486b6" DESTINATION="ID_432962380" ENDARROW="Default" ENDINCLINATION="-419;-27;" ID="Arrow_ID_1391252969" SOURCE="ID_598869821" STARTARROW="None" STARTINCLINATION="-242;13;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1766768868381" ID="ID_1207339385" MODIFIED="1766769047258" TEXT="das kann die bestehende Zyklentest-Funktion">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Und zwar, weil es nur darum geht, ob das <i>neue Kind</i>&#160;bereits irgendwo im Parent-Baum auftritt; sofern die Pfade f&#252;r den Zyklus-Test mit dem neuen Kind beginnen und dann zum aktuellen Knoten fortschreiten, wird der bestehende Zyklustest diese Situation finden
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1766768877221" ID="ID_469511879" MODIFIED="1766768952602" TEXT="aufwerts pr&#xfc;fen ist in der Regel weniger aufwendig">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Unter der Annahme, da&#223; man im Schnitt viel h&#228;ufiger mehrere Child-Tickets definiert, als da&#223; man ein Ticket unter mehrere Parents h&#228;ngt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node COLOR="#186c81" CREATED="1766771727656" ID="ID_1257285193" MODIFIED="1766774995692" STYLE="fork" TEXT="Test">
+<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
+<node COLOR="#338800" CREATED="1766771733328" ID="ID_1899276163" MODIFIED="1766774995689" TEXT="Selbst-Kind">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1766771743883" ID="ID_1251425441" MODIFIED="1766774995689" TEXT="nicht existierendes Kind">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1766771778417" ID="ID_1304414930" MODIFIED="1766774995689" TEXT="direkter Parent als Kind">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1766771783730" ID="ID_488487369" MODIFIED="1766774995689" TEXT="entfernter Parent als Kind">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1766772772988" ID="ID_1541111461" MODIFIED="1766778323875" TEXT="Zusatz: auch nur die neuen Parent-Links pr&#xfc;fen">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1766627377013" ID="ID_1152707067" MODIFIED="1766797053055" TEXT="Daten auswerten und &#xfc;bernehmen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1766779779159" ID="ID_284223843" MODIFIED="1766780052047" TEXT="verwende Hilfsfunktion extract_ticket_ids()">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1766779796750" ID="ID_797434356" LINK="https://docs.python.org/3/library/stdtypes.html#dict.get" MODIFIED="1766779938884" TEXT="&#xfc;berpr&#xfc;ft: Dict::get() ist fehlertolerant &#x27fc; None"/>
+<node CREATED="1766779955101" ID="ID_1345155956" MODIFIED="1766779971608" TEXT="baue in die RE.findall auch einen toleranten Fallback ein"/>
+<node CREATED="1766779941576" ID="ID_740072850" MODIFIED="1766779953519" TEXT="damit fallen diverse weitere Checks weg"/>
+</node>
+<node COLOR="#338800" CREATED="1766779985136" ID="ID_1579473356" MODIFIED="1766800467226" TEXT="dann kommt noch ein weiterer, symmetrischer Block f&#xfc;r die Kinder dazu">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      nur da&#223; wir uns hier direkt das Ticket-Objekt f&#252;r das Kind holen m&#252;ssen (was niemals scheitert, da die vorausgegangene Validation bereits ung&#252;ltige IDs entfernt hat)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1766783409815" ID="ID_792813685" MODIFIED="1766797050728" TEXT="Kaskadierende Updates">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1766783418091" ID="ID_1434319086" MODIFIED="1766783426304" TEXT="das macht den Vorgang komplex"/>
+<node CREATED="1766783427236" ID="ID_44325076" MODIFIED="1766783443316" TEXT="das Kind-Ticket mu&#xdf; auch aktualisiert werden"/>
+<node CREATED="1766783693581" ID="ID_271150133" MODIFIED="1766783712814" TEXT="weitere Komplikation: das ruft die Listener auf (also uns selbst)">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1766783942204" ID="ID_780410473" MODIFIED="1766783965657" TEXT="L&#xf6;sungsansatz: stets auf den Links der &apos;subtickets&apos;-Tabelle aufbauen">
+<node CREATED="1766783967341" ID="ID_1601930403" MODIFIED="1766783977991" TEXT="bereits f&#xfc;r die Erkennung der tats&#xe4;chlichen &#xc4;nderungen"/>
+<node CREATED="1766783981392" ID="ID_1311883929" MODIFIED="1766783995053" TEXT="auch f&#xfc;r die neuen custom-Fields beim parent oder child"/>
+<node CREATED="1766784014255" ID="ID_1935816721" MODIFIED="1766792143500" TEXT="mu&#xdf; daf&#xfc;r die Select-Methode klassenweit zug&#xe4;nglich machen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...aber brauche weiterhin die M&#246;glichkeit, aus Performance-Gr&#252;nden einen allozierte DB-Connection zu &#252;bergeben &#10233; optionaler Parameter
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#505f70" DESTINATION="ID_42722062" ENDARROW="Default" ENDINCLINATION="68;3;" ID="Arrow_ID_1392567191" STARTARROW="None" STARTINCLINATION="68;3;"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1766788122278" ID="ID_944049230" MODIFIED="1766800477531" TEXT="mu&#xdf; dann beim jeweiligen Partner das custom-field aktualisieren">
+<icon BUILTIN="yes"/>
+<node CREATED="1766788144582" ID="ID_550364702" MODIFIED="1766788155916" TEXT="aus &apos;subtickets&apos;-Tabelle"/>
+<node CREATED="1766792043342" ID="ID_42722062" MODIFIED="1766792132526" TEXT="mu&#xdf; db-Connection &#xfc;bergeben wegen schwebender Transaktion">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Meine neue Logik beruht darauf, da&#223; zun&#228;chst die 'subtickets'-Tabelle in den neuen validen Zustand gebracht wird. Der dann folgende Update beim Partner-Ticket jedoch mu&#223; diese &#196;nderung in der schwebenden Transaktion sehen....!
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#505f70" DESTINATION="ID_42722062" ENDARROW="Default" ENDINCLINATION="68;3;" ID="Arrow_ID_1392567191" SOURCE="ID_1935816721" STARTARROW="None" STARTINCLINATION="68;3;"/>
+</node>
+<node CREATED="1766788156577" ID="ID_1336870472" MODIFIED="1766788167157" TEXT="generische update-Methode aufbauen"/>
+<node CREATED="1766788171138" ID="ID_515674255" MODIFIED="1766788225019" TEXT="Kommentare: an i18n denken">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Zwar k&#246;nnte man den Kommentar komplett aus der Logik aufbauen, aber das ber&#252;cksichtigt nicht, da&#223; man den Sachverhalt in anderen Sprachen anders formulieren m&#246;chte; daher besser vier nationalisierbare Strings angeben
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1766780055268" ID="ID_297566823" MODIFIED="1766797043199" TEXT="Test">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1766780062718" ID="ID_595710689" MODIFIED="1766782167471" TEXT="Feld-Normalisierung">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1766780071406" ID="ID_1430439766" MODIFIED="1766792608497" TEXT="neues Kind erstellen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1766780085432" ID="ID_1473899722" MODIFIED="1766792362273" TEXT="frei erstelltes Ticket anh&#xe4;ngen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1766780095110" ID="ID_989624777" MODIFIED="1766780102934" TEXT="bestehenden Kind-Link entfernen"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1766790857235" FOLDED="true" ID="ID_931222597" MODIFIED="1766800490411" TEXT="Problem: R&#xfc;ckg&#xe4;ngigmachen einer L&#xf6;schung">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1766790912272" ID="ID_766187804" MODIFIED="1766790934148" TEXT="wird nicht wieder in die &apos;subtickets&apos;-Tabelle eingetragen"/>
+<node CREATED="1766790880720" ID="ID_1765360514" MODIFIED="1766790896901" TEXT="wird beim Partner nicht entsprechend restauriert"/>
+<node CREATED="1766793433639" ID="ID_839424819" MODIFIED="1766793448245" TEXT="gilt auch f&#xfc;r das Revertieren einer Hinzuf&#xfc;gung"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1766793490298" ID="ID_1153661019" MODIFIED="1766797034560" TEXT="Zugrundeliegendes Problem: Listener nicht implementiert">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1766793865448" ID="ID_1748083120" MODIFIED="1766793876131" TEXT="es g&#xe4;be ITicketChangeListener.ticket_change_deleted()"/>
+<node CREATED="1766793878280" ID="ID_1460184497" MODIFIED="1766793888204" TEXT="aber das Subticket-API implementiert das nicht"/>
+<node COLOR="#338800" CREATED="1766796758725" ID="ID_1805964753" MODIFIED="1766797007479" TEXT="implementieren und delegieren an den change-Handler">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1766796781866" ID="ID_1431653683" MODIFIED="1766796798726" TEXT="stelle fest: dieser l&#xe4;uft schon nach der Haupt-Transaktion"/>
+<node CREATED="1766796799261" ID="ID_1094183818" MODIFIED="1766796807926" TEXT="deshalb d&#xfc;rfte das proglemlos m&#xf6;glich sein...."/>
+<node CREATED="1766796808644" ID="ID_480569789" MODIFIED="1766796817425" TEXT="author=None &#xfc;bergeben"/>
+<node CREATED="1766796818218" ID="ID_858544714" MODIFIED="1766797001801" TEXT="das old_values-Dict kann man synthetisieren">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <font color="#33361c" face="Bitstream Vera Sans Mono" size="9pt">old_values&#160;</font><font color="#000000" face="Bitstream Vera Sans Mono" size="9pt">=</font><font color="#33361c" face="Bitstream Vera Sans Mono" size="9pt">&#160;</font><font color="#000000" face="Bitstream Vera Sans Mono" size="9pt">{(</font><font color="#33361c" face="Bitstream Vera Sans Mono" size="9pt">key</font><font color="#000000" face="Bitstream Vera Sans Mono" size="9pt">,</font><font color="#33361c" face="Bitstream Vera Sans Mono" size="9pt">oldval</font><font color="#000000" face="Bitstream Vera Sans Mono" size="9pt">)</font><font color="#33361c" face="Bitstream Vera Sans Mono" size="9pt">&#160; </font><font color="#116f8c" face="Bitstream Vera Sans Mono" size="9pt"><b>for</b></font><font color="#33361c" face="Bitstream Vera Sans Mono" size="9pt">&#160;</font><font color="#000000" face="Bitstream Vera Sans Mono" size="9pt">(</font><font color="#33361c" face="Bitstream Vera Sans Mono" size="9pt">key </font><font color="#000000" face="Bitstream Vera Sans Mono" size="9pt">,</font><font color="#33361c" face="Bitstream Vera Sans Mono" size="9pt">&#160;</font><font color="#000000" face="Bitstream Vera Sans Mono" size="9pt">(</font><font color="#33361c" face="Bitstream Vera Sans Mono" size="9pt">oldval</font><font color="#000000" face="Bitstream Vera Sans Mono" size="9pt">,</font><font color="#33361c" face="Bitstream Vera Sans Mono" size="9pt">&#160; _</font><font color="#000000" face="Bitstream Vera Sans Mono" size="9pt">))</font><font color="#33361c" face="Bitstream Vera Sans Mono" size="9pt">&#160;</font><font color="#116f8c" face="Bitstream Vera Sans Mono" size="9pt"><b>in</b></font><font color="#33361c" face="Bitstream Vera Sans Mono" size="9pt">&#160;changes.items</font><font color="#000000" face="Bitstream Vera Sans Mono" size="9pt">()}</font>
+    </p>
+  </body>
+</html></richcontent>
+<node COLOR="#435e98" CREATED="1766796833796" ID="ID_1504829633" MODIFIED="1766796889772" TEXT="(obwohl unser Code das eigentlich ignoriert)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Aber Qualtit&#228;ts-Code macht sich sowas nicht zu nutze, denn es k&#246;nnte ja sp&#228;ter doch noch relevant werden
+    </p>
+  </body>
+</html></richcontent>
+<font NAME="SansSerif" SIZE="11"/>
+</node>
+<node CREATED="1766796892027" ID="ID_673755603" MODIFIED="1766796908899" TEXT="wie ging das nochmal in Python3 ....?">
+<icon BUILTIN="idea"/>
+<node CREATED="1766796912724" ID="ID_178331968" MODIFIED="1766796918347" TEXT="comprehension &#xfc;ber ein dict"/>
+<node CREATED="1766796919079" ID="ID_1400920438" MODIFIED="1766796930457" TEXT="nicht iteritems() sondern (Python3) items()"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1766797012979" ID="ID_923352703" MODIFIED="1766797028349" TEXT="Test: jetzt ist es wasserdicht">
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1766879209904" FOLDED="true" ID="ID_1201186727" MODIFIED="1767126230313" TEXT="k&#xf6;nnte man gekappte Kinder-B&#xe4;ume markieren?">
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1766879240181" ID="ID_1766452587" MODIFIED="1766879261489" TEXT="Einschr&#xe4;nkung: daf&#xfc;r m&#xfc;&#xdf;te man jeweils eine DB-Query machen">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1766879264316" ID="ID_1727406992" MODIFIED="1766879281447" TEXT="ohne Query wei&#xdf; man nicht ob es Kinder g&#xe4;be"/>
+<node CREATED="1766879360910" ID="ID_1798079403" MODIFIED="1766879382613" TEXT="das w&#xe4;re ein erheblicher zus&#xe4;tzlicher Aufwand (Baum!)"/>
+<node CREATED="1766879286909" ID="ID_1229422232" MODIFIED="1766879318016">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      aber: wir wissen wenn es ohne Kappung <i>keine</i>&#160;Kinder gibt
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+<node CREATED="1766879320285" ID="ID_720373687" MODIFIED="1766879331665" TEXT="dann ist das Kinder-Element ein leeres Dict"/>
+<node CREATED="1766879332697" ID="ID_106069137" MODIFIED="1766879345620" TEXT="wenn es nicht untersucht wurde (gekappt), ist es None"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1766879390898" ID="ID_1910334583" MODIFIED="1766881251841" TEXT="man k&#xf6;nnte also anzeigen, wo die Suche gekappt wurde">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1766881179770" ID="ID_279573133" MODIFIED="1766881195835" TEXT="sinnvollerweise irgendwo bei der Ticket-Description"/>
+<node CREATED="1766881196401" ID="ID_1297923588" MODIFIED="1766881209132" TEXT="w&#xe4;hle ein unaufdringliches Symbol: &#x22a3;"/>
+<node CREATED="1766881217681" ID="ID_1046546027" MODIFIED="1766881247568">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      setze es an den Anfang der Beschreibung,
+    </p>
+    <p>
+      falls unter diesem Ticket gekappt wurde
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1766973235768" FOLDED="true" ID="ID_865056732" MODIFIED="1767126231738" TEXT="noch ein paar Unit-Tests schreiben....">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1766973245395" ID="ID_212490136" MODIFIED="1766973304357" TEXT="Einstieg einfach: siehte tests/api.py">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#338800" CREATED="1766973271155" ID="ID_218722546" MODIFIED="1766973293304" TEXT="kann ganz nun einfach auch Tickets &#xfc;ber das &apos;children&apos;-Feld verlinken">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1767053107182" ID="ID_556279669" MODIFIED="1767053147595" TEXT="teste Hinzuf&#xfc;gen und Entfernen von Links">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1767053130544" ID="ID_1064554158" MODIFIED="1767053145310" TEXT="teste Zur&#xfc;cknehmen einer &#xc4;nderung (die einen Link entfernt hat)">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1767053149533" ID="ID_1742934992" MODIFIED="1767053157533" TEXT="test ung&#xfc;ltige Ticket-ID">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#5b280f" CREATED="1766973307314" ID="ID_1387933399" MODIFIED="1766973320473" TEXT="Validator testen">
+<icon BUILTIN="stop-sign"/>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1766973322462" ID="ID_1648053201" MODIFIED="1766973340826" TEXT="Test-Setup will ums Verrecken nicht funktionieren">
+<icon BUILTIN="broken-line"/>
+</node>
+<node CREATED="1766973343169" ID="ID_845231753" MODIFIED="1766973363459" TEXT="TicketSystem hat nur eine Liste der manipulatoren"/>
+<node CREATED="1766973364838" ID="ID_202982084" MODIFIED="1766973386541" TEXT="es gelingt mir nicht, selber eine Liste der Validatoren zu bekommen / erzeugen"/>
+<node CREATED="1766973387293" ID="ID_1669540550" MODIFIED="1766973404675" TEXT="der EnvironmentStub ist kein richtiger ComponentManager">
+<icon BUILTIN="broken-line"/>
+</node>
+<node CREATED="1766973410479" ID="ID_1895133600" MODIFIED="1766973423665" TEXT="kann zwar selber eine Instanz vom SubTicketsSystem bekommen">
+<node CREATED="1766973425181" ID="ID_1734947307" MODIFIED="1766973442238" TEXT="das hat eine &#xbb;magische&#xab; Registrierung"/>
+<node CREATED="1766973443032" ID="ID_1612036779" MODIFIED="1766973456970" TEXT="wenn man den aufruft SubTicketsSystem(env)"/>
+<node CREATED="1766973457615" ID="ID_1884657750" MODIFIED="1766973466305" TEXT="...dann bekommt man die bereits erstellte instanz"/>
+</node>
+<node CREATED="1766973470198" ID="ID_1435741153" MODIFIED="1766973491542" TEXT="ABER: auf dieser Instanz kann ich nicht validate_ticket() aufrufen">
+<node CREATED="1766973492991" ID="ID_1961104350" MODIFIED="1766973498221" TEXT="die Methode ist da und gebunden"/>
+<node CREATED="1766973498825" ID="ID_1711792176" MODIFIED="1766973503058" TEXT="aber sie ist einfach NOP"/>
+<node CREATED="1766973503710" ID="ID_1412577250" MODIFIED="1766973515459" TEXT="auch wenn ich sie aus einer anderen Methode im gleichen Objekt aufrufe"/>
+</node>
+<node CREATED="1766973522077" ID="ID_1300325256" MODIFIED="1766973536783" TEXT="auch trac.ticket.web_ui macht nix anderes"/>
+<node CREATED="1766973544594" ID="ID_662911881" MODIFIED="1766973549341" TEXT="oder trac.ticket.batch"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1767053165001" ID="ID_1392856453" MODIFIED="1767053178267" TEXT="ja dann: L.M.I.A">
+<icon BUILTIN="smiley-oh"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1765906736923" ID="ID_278184928" MODIFIED="1765906742956" TEXT="Upgrade-Schritte">
+<node COLOR="#338800" CREATED="1765906752884" ID="ID_1879364610" MODIFIED="1767201598938" TEXT="Trac-Migration vorher testen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1765910272772" ID="ID_1225448467" MODIFIED="1765910285129" TEXT="bei mir lokal auf Debian/Trixie"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#be2801" CREATED="1765910291250" ID="ID_985776649" MODIFIED="1765910400199" TEXT="Aufgaben">
+<icon BUILTIN="yes"/>
+<node COLOR="#338800" CREATED="1765910294066" ID="ID_452402995" MODIFIED="1766535852574" TEXT="Lumiera-Trac mit aktueller Software zum Laufen bringen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1765910333196" ID="ID_667043036" MODIFIED="1765910341536" TEXT="Plug-ins aktualisieren"/>
+<node CREATED="1765910342264" ID="ID_22741246" MODIFIED="1765910345905" TEXT="Konfiguration durchsehen"/>
+<node COLOR="#435e98" CREATED="1766534433644" FOLDED="true" ID="ID_876475413" MODIFIED="1766535388930" TEXT="Stylesheet &#xfc;berarbeiten">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Hier gab es zwischenzeitlich <i>tiefgreifende &#196;nderungen:</i>
+    </p>
+    <ul>
+      <li>
+        alle Gr&#246;&#223;enangaben sind jetzt device-independent
+      </li>
+      <li>
+        leider wurde aber auch das &quot;look &amp; feel&quot; <i>modernisiert</i>
+      </li>
+      <ul>
+        <li>
+          alle Schriften sind jetzt riesengro&#223;
+        </li>
+        <li>
+          an vielen Stellen hat man 3D-Elemente durch &#187;flat-look&#171; ersetzt
+        </li>
+      </ul>
+    </ul>
+    <p>
+      Darunter leidet die Usability &#8212; ich arbeite sehr viel mit Tickets, also gelten meine Ma&#223;st&#228;be.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+<node CREATED="1766534702170" ID="ID_363092693" MODIFIED="1766534706018" TEXT="Ansatz">
+<node CREATED="1766534707745" ID="ID_868466734" MODIFIED="1766534716995" TEXT="Systematisches Gr&#xf6;&#xdf;enschema einf&#xfc;hren"/>
+<node CREATED="1766534717827" ID="ID_204298500" MODIFIED="1766534750673" TEXT="die alte grafische Gestaltung bevorzugen"/>
+</node>
+<node CREATED="1766534752831" ID="ID_1966251598" MODIFIED="1766534777950" TEXT="Verwende einen 96dpi-Monitor als Bezugspunkt"/>
+<node CREATED="1766534778818" ID="ID_1085955130" MODIFIED="1766534789910" TEXT="rechne entsprechend die px-Angaben um"/>
+<node CREATED="1766534793346" ID="ID_104773581" MODIFIED="1766534800937" TEXT="Gr&#xf6;&#xdf;en-Steuerung">
+<node CREATED="1766534802144" ID="ID_1400917111" MODIFIED="1766535165196" TEXT="es gibt nun eine einzige relative Skala im :root">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      font-size: 0.935em
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1766534813241" ID="ID_1441017168" MODIFIED="1766534822426" TEXT="die Seite ist in Zonen eingeteilt"/>
+<node CREATED="1766534823166" ID="ID_140882047" MODIFIED="1766534850914" TEXT="in jede Zone wird eine Standard-Fontgr&#xf6;&#xdf;e injiziert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...die sich nat&#252;rlich relativ aus :root ableitet
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1766534869099" ID="ID_1865056526" MODIFIED="1766534880071" TEXT="die allermeisten lokalen Font-Tweaks entfernen"/>
+</node>
+<node CREATED="1766535191096" ID="ID_1615246716" MODIFIED="1766535193639" TEXT="Selektoren">
+<node CREATED="1766535197380" ID="ID_548639790" MODIFIED="1766535204695" TEXT="KEINERLEI redundante Font-Angaben mehr"/>
+<node CREATED="1766535206842" ID="ID_1532544536" MODIFIED="1766535269349" TEXT="alle Regeln f&#xfc;r Font-Size zu Beginn zusammengefa&#xdf;t">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Ich bringe jetzt eine bestimmte Font-Size in diverse Container-Elemente ein, mit m&#246;glichst geringer Spezifit&#228;t
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1766534854828" ID="ID_1810842900" MODIFIED="1766534863985" TEXT="CSS-Variable f&#xfc;r die Font-Family"/>
+<node CREATED="1766535278473" ID="ID_1139732643" MODIFIED="1766535293913" TEXT="allgemeines hover / select -Styling">
+<node CREATED="1766535295026" ID="ID_1282110357" MODIFIED="1766535298494" TEXT="f&#xfc;r generischen Link"/>
+<node CREATED="1766535299378" ID="ID_1117295323" MODIFIED="1766535303207" TEXT="f&#xfc;r generischen Button"/>
+</node>
+<node CREATED="1766535304637" ID="ID_1647569085" MODIFIED="1766535374231" TEXT="lokal nur noch die &#xbb;sonstigen&#xab; Einstellungen, keine Redundanz mehr">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...auch wenn das bedeutet, den einen oder anderen &#187;Tweak&#171; wegzuwerfen &#8212; am Ende zeigt sich wieder mal, da&#223; im Design &#187;weniger ist mehr&#171; gilt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1766534889700" ID="ID_1866758194" MODIFIED="1766534892281" TEXT="Grafik">
+<node CREATED="1766534893597" ID="ID_172227449" MODIFIED="1766534910705" TEXT="ein einheitliches Basiskonzept f&#xfc;r hover und Buttons"/>
+<node CREATED="1766534911482" ID="ID_734025085" MODIFIED="1766534918867" TEXT="entsprechend alle Form-Elemente einheitlich"/>
+<node CREATED="1766534919861" ID="ID_1307981401" MODIFIED="1766534929099" TEXT="fast &#xfc;berall den gleichen Box-Shadow verwenden"/>
+<node CREATED="1766534942301" ID="ID_593916386" MODIFIED="1766534949952" TEXT="alle Code-Elemente und Tabellen vereinheitlichen"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1766535391305" FOLDED="true" ID="ID_809627256" MODIFIED="1766537919980" TEXT="Dokumentieren: Git-Repo">
+<icon BUILTIN="yes"/>
+<node CREATED="1766535402966" ID="ID_182163102" MODIFIED="1766535411552" TEXT="Historie mit einigen Backups aufgebaut"/>
+<node CREATED="1766535412228" ID="ID_266938505" MODIFIED="1766535489081" TEXT="Verwende Layout analog zur Installation auf Lumiera.org">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      dieses Directory-Layout hat sich im Lauf der Jahre ergeben und ist sehr sinnvoll
+    </p>
+    <ul>
+      <li>
+        top-Ebene: weitere Resourcen, statisches Deployment
+      </li>
+      <li>
+        trac-env : hierher die eigentliche von Trac gemanaged &#187;Umgebung&#171;
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1766535491004" ID="ID_1140053472" MODIFIED="1766535504476" TEXT="Inhalte per DB-Dump erfa&#xdf;t und in Git eingecheckt"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1765910352201" ID="ID_1515336382" MODIFIED="1767201825879" TEXT="die SQL-Migration entwickeln und testen">
+<arrowlink COLOR="#3b7bc7" DESTINATION="ID_938314346" ENDARROW="Default" ENDINCLINATION="-294;37;" ID="Arrow_ID_636339643" STARTARROW="None" STARTINCLINATION="39;-612;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1765910367892" ID="ID_879804203" MODIFIED="1767201454108" TEXT="Performance und Usability der Subtickets einsch&#xe4;tzen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1767201461026" ID="ID_124846447" MODIFIED="1767201589778" TEXT="Usability: in der Web-Oberfl&#xe4;che nun sogar verbessert"/>
+<node COLOR="#435e98" CREATED="1767201477688" ID="ID_1380380519" MODIFIED="1767201589777" TEXT="Performance war problematisch, konnte aber addressiert werden">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <ul>
+      <li>
+        Rekursionstiefe f&#252;r die Subtickets-Tabelle beschr&#228;nkt auf 3 Level
+      </li>
+      <li>
+        Plugin-code erweitert und Zyklus-Detektor optimiert, so da&#223; er nur noch die <i>neu hinzugekommenen</i>&#160;Ticket-Relationen traversiert
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1765906809073" ID="ID_831614566" MODIFIED="1767201911002" TEXT="Backup und Stand dokumentieren">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1765906820590" ID="ID_1227603458" MODIFIED="1766092759604" TEXT="Christian hat ein Backup angesto&#xdf;en (vor 2 Tagen)">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#435e98" CREATED="1765919862425" ID="ID_1996848388" MODIFIED="1767201696307" TEXT="Apache-Konfiguration">
+<node COLOR="#338800" CREATED="1765919868161" ID="ID_953233438" MODIFIED="1766092757052" TEXT="habe mir lokale Kopie gezogen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1765919876572" ID="ID_1853220966" MODIFIED="1766092755333" TEXT="mit Debian-Standard abgleichen">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1767201698203" ID="ID_1218510171" MODIFIED="1767231163013" TEXT="Dokumentation: als Git-Repository">
+<arrowlink COLOR="#3b49c7" DESTINATION="ID_513748595" ENDARROW="Default" ENDINCLINATION="-28;-1028;" ID="Arrow_ID_23715623" STARTARROW="None" STARTINCLINATION="-475;36;"/>
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1218510171" ENDARROW="Default" ENDINCLINATION="169;12;" ID="Arrow_ID_1999549148" SOURCE="ID_1077684516" STARTARROW="None" STARTINCLINATION="97;11;"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1766009053755" ID="ID_49021174" MODIFIED="1766092773339" TEXT="Konfiguration aktualisieren">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1766009064153" ID="ID_1438369230" MODIFIED="1766009165627" TEXT="verwende Installation auf meinem lokalen PC als Bezugspunkt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      mein lokaler PC ist seit April 2025 bereits auf Debian/Trixie &#10233; kann dort Debian-Pakete installieren und dann die daraus ersichtlichen Defaults mit der Konfiguration auf Lumiera.org abgleichen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#338800" CREATED="1766009448399" ID="ID_1892057099" MODIFIED="1767231138978" TEXT="Apache-Konfig abgeglichen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1766009460297" ID="ID_1976282892" MODIFIED="1766009467487" TEXT="offensichtliche Neuerungen &#xfc;bernommen"/>
+<node CREATED="1766009468122" ID="ID_1665969213" MODIFIED="1766009477682" TEXT="keine &#xc4;nderungen der geladenen Module"/>
+<node CREATED="1766009478299" ID="ID_1378906613" MODIFIED="1766009490355" TEXT="Last / Performance-Tweaks von Christian erhalten"/>
+<node CREATED="1767231143458" ID="ID_1077684516" MODIFIED="1767231163013" TEXT="Stand im Git dokumentiert">
+<arrowlink DESTINATION="ID_1218510171" ENDARROW="Default" ENDINCLINATION="169;12;" ID="Arrow_ID_1999549148" STARTARROW="None" STARTINCLINATION="97;11;"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1766009491872" ID="ID_1463618936" MODIFIED="1767563616073" TEXT="Trac.ini abgeglichen"/>
+<node COLOR="#435e98" CREATED="1766009515853" ID="ID_1096586553" MODIFIED="1767563615443" TEXT="Styles / Templates">
+<node CREATED="1766009521767" ID="ID_1399892006" MODIFIED="1766009529279" TEXT="Trac verwendet jetzt Jinja-Templates"/>
+<node CREATED="1766009530713" ID="ID_370432530" LINK="https://trac.edgewall.org/wiki/TracInterfaceCustomization#SiteAppearance" MODIFIED="1766009573210" TEXT="Doku zur Interface-Customisation">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1767126971980" ID="ID_1087109003" MODIFIED="1767126991393" TEXT="Trac-Styles konsolidieren">
+<node CREATED="1767126992670" ID="ID_1401867022" MODIFIED="1767126997388" TEXT="Ziel">
+<node CREATED="1767126998441" ID="ID_235126030" MODIFIED="1767127070886" TEXT="Usability der alten Stylesheets erhalten">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Die Styles vom alten Trac verwende ich seit Jahren und empfinde sie als sehr gelungen im t&#228;glichen Umgang: nicht aufdringlich, stets klar, und wichtige Informationen passen zusammen auf einen Screen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1767127009419" ID="ID_120835334" MODIFIED="1767127100980" TEXT="aber Modernisierungen aufgreifen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das Stylesheet wurde Device-independent gemacht und auf relative Skalierung umgestellt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1767127018678" ID="ID_1527308757" MODIFIED="1767127195083" TEXT="CSS sauberer gliedern">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Viele Regeln erweisen sich als &#187;ad hoc&#171;-Anpassungen; man kann die Seite in wenige Zonen einteilen, und f&#252;r diese globale Basis-Einstellungen etablieren. Die Detail-Stylesheets enthalten dann nur noch relative Angaben f&#252;r das jeweilige Modul. Schriftart-Namen (und Farben?) k&#246;nnten als CSS-Variable herausgezogen werden
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1767128066842" FOLDED="true" ID="ID_1689165001" MODIFIED="1767128403198" TEXT="&#xdc;berarbeitung">
+<icon BUILTIN="list"/>
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1766185663543" ID="ID_330284589" MODIFIED="1767128397522" TEXT="Font-Size einheitlich steuern">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1766185930500" ID="ID_1475324669" MODIFIED="1766185959644" TEXT="ich finde mindestens 16 ungerechtfertigte feste Font-Size specs">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1766188159936" ID="ID_556020227" MODIFIED="1766188166120" TEXT="Schema">
+<node CREATED="1766188167503" ID="ID_1530858640" MODIFIED="1766188182285" TEXT="mein globaler Skalenfaktor soll auch auf rem wirken">
+<node CREATED="1766188188713" ID="ID_464174939" MODIFIED="1766188194983" TEXT="also geh&#xf6;rt er in das &lt;html&gt;"/>
+<node CREATED="1766188211610" ID="ID_1526283186" MODIFIED="1766188229491" TEXT="dann sollte ich f&#xfc;r gewisse Bereiche jeweils einen rem-Wert festlegen"/>
+</node>
+</node>
+<node CREATED="1766186168714" ID="ID_291327235" MODIFIED="1766186174936" TEXT="Bereiche identifizieren">
+<node CREATED="1766188503145" ID="ID_1142878184" MODIFIED="1766188510749" TEXT="Header + Nav">
+<node CREATED="1766188573440" ID="ID_104769565" MODIFIED="1766188575769" TEXT="banner"/>
+<node CREATED="1766188576464" ID="ID_1023504978" MODIFIED="1766188578514" TEXT="mannav"/>
+<node CREATED="1766188579288" ID="ID_167672101" MODIFIED="1766188582531" TEXT="ctxnav"/>
+<node CREATED="1766188606693" ID="ID_743504186" MODIFIED="1766188610922" TEXT="trac-topnav"/>
+</node>
+<node CREATED="1766188511606" ID="ID_328584853" MODIFIED="1766188515516" TEXT="Content">
+<node CREATED="1766188647063" ID="ID_160022614" MODIFIED="1766188652223" TEXT="text-artiger content"/>
+<node CREATED="1766188653012" ID="ID_1996295960" MODIFIED="1766188655762" TEXT="daten-content"/>
+</node>
+<node CREATED="1766188516223" ID="ID_1756410642" MODIFIED="1766188517956" TEXT="Footer">
+<node CREATED="1766188526806" ID="ID_907129499" MODIFIED="1766188531499" TEXT="altlinks"/>
+<node CREATED="1766188523384" ID="ID_1316031435" MODIFIED="1766188526095" TEXT="footer"/>
+</node>
+</node>
+<node CREATED="1766188659276" ID="ID_1905992364" MODIFIED="1766188745562" TEXT="diese Bereiche zentral ansteuern / auch gegen die HTML-Struktur">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Durch Injizieren mit einer Gruppe von Selektoren lassen sich selbst Bereiche einheitlich steuern, die in der Struktur nicht entsprechend aufgeh&#228;ngt sind; <i>allerdings nur, wenn ansonsten alle weiteren Gr&#246;&#223;enangaben entfernt werden</i>
+    </p>
+  </body>
+</html></richcontent>
+<node COLOR="#5b280f" CREATED="1766196113773" ID="ID_1228154579" MODIFIED="1766196279623" TEXT="k&#xf6;nne mit Cascade-Layern arbeiten">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      relativ neues Feature (2022) das f&#252;r solche Zwecke eingef&#252;hrt wurde &#8212; wenn man im CSS gegen eine unsinnige oder inkompatible Struktur arbeiten mu&#223;, und diese Struktur nicht reparieren kann. Beispielsweise, weil Browser-Overrides eingreifen, oder weil ein Framework mit einem unstrukturierten CSS ausgestattet ist.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_cancel"/>
+<node COLOR="#6c1c4b" CREATED="1766196281754" ID="ID_1453598653" MODIFIED="1766196302807" TEXT="sch&#xf6;n &#x2014; w&#xe4;re aber ein noch viel tieferer Eingriff">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+</node>
+<node CREATED="1766196317876" ID="ID_583469450" MODIFIED="1766196366316" TEXT="k&#xf6;nnte die Einstellung mit gruppierten Selektoren in relevante top-Level-Bl&#xf6;cke injizieren">
+<icon BUILTIN="back"/>
+</node>
+<node CREATED="1766196503531" ID="ID_504459108" MODIFIED="1766196529708" TEXT="Vorraussetzung / Ziel : alle anderen Font-size-Angaben eliminieren"/>
+<node CREATED="1766196369213" ID="ID_763656883" MODIFIED="1766196387587" TEXT="Problem Browser-Override">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      betrifft hier vor allem die Form-Elemente
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1766196398041" ID="ID_745361103" MODIFIED="1766196408324" TEXT="aber daf&#xfc;r hat Trac selber schon spezielle Regeln"/>
+<node CREATED="1766196409080" ID="ID_788800781" MODIFIED="1766196500694">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      es gen&#252;gt, dort <font face="Monospaced" color="#693c3c">font-size: inherit;</font>
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...und zwar unter der Vorrausetzung, da&#223; wir den umgebenden Scope beherrschen, d.h. dort dann keine weitere font-size-Angabe ist
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e8dea5" COLOR="#410f69" CREATED="1766248320600" ID="ID_1625759669" LINK="https://wiki.selfhtml.org/wiki/CSS/Custom_properties_(CSS-Variablen)" MODIFIED="1766248406368">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <b>CSS-Variable</b>&#160;eingef&#252;hrt f&#252;r die zwei Font-Familien (sans, mono)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#fefc4e" COLOR="#351d75" CREATED="1766196636618" ID="ID_866446757" MODIFIED="1766196644496" TEXT="wichtige Einsicht gewonnen">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1766196677714" ID="ID_729339313" MODIFIED="1766196684776" TEXT="so bekommt man das Thema in den Griff"/>
+<node CREATED="1766196685570" ID="ID_1929538258" MODIFIED="1766196706234" TEXT="Font-Size nur noch &#xfc;ber wenige Kontrollpunkte einbringen"/>
+<node CREATED="1766196707222" ID="ID_6701455" MODIFIED="1766196723542" TEXT="das als Leitfaden verwenden, um lokale Tweaks zur&#xfc;ckzubauen"/>
+<node CREATED="1766196725398" ID="ID_1475984006" MODIFIED="1766196741015" TEXT="dann die geordnete Font-Size-Struktur f&#xfc;r relative Skalierung verwenden"/>
+</node>
+</node>
+<node CREATED="1766025567937" ID="ID_1662067115" MODIFIED="1766025579091" TEXT="body: font-size: 95%">
+<node CREATED="1766025580696" ID="ID_1594451210" MODIFIED="1766025609739" TEXT="gut als Basis"/>
+<node CREATED="1766025587031" ID="ID_1042612226" MODIFIED="1766025594252" TEXT="Ticket-Text noch zu gro&#xdf;"/>
+</node>
+<node CREATED="1766027949188" ID="ID_791729885" MODIFIED="1767128136538" TEXT="Ticket.css erst mal weitgehend &#xfc;bernommen">
+<node CREATED="1766027959886" ID="ID_293939517" MODIFIED="1766027997406" TEXT="aber einige &#xc4;nderungen nicht"/>
+<node CREATED="1766028005247" ID="ID_1679686324" MODIFIED="1766028029507">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      sieht <i>halb-gut</i>&#160;aus. Text jetzt <b>zu gro&#223;</b>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="back"/>
+</node>
+<node CREATED="1766079100434" ID="ID_1038995918" MODIFIED="1766079107840" TEXT="Herleitung pr&#xfc;fen">
+<node CREATED="1766079109233" ID="ID_1269419192" MODIFIED="1766079120796" TEXT="es it alt / wie neu nur eine einzige Spec">
+<node CREATED="1766079121879" ID="ID_754326938" MODIFIED="1766079132643" TEXT="alt: font-size: 13px"/>
+<node CREATED="1766079133368" ID="ID_1101326620" MODIFIED="1766079146834" TEXT="neu: font-size xx%"/>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1766079149379" ID="ID_1365406963" MODIFIED="1766079179590" TEXT="also mu&#xdf; das jetzt definitiv festgelegt werden">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1766079188151" ID="ID_1700341622" MODIFIED="1766079210419" TEXT="Entscheide mich f&#xfc;r eine ca 1px gr&#xf6;&#xdf;ere Schrift">
+<node CREATED="1766079212560" ID="ID_1167753189" MODIFIED="1766079229395" TEXT="denn die alte Schrift war schon grenzwertig klein"/>
+<node CREATED="1766079230830" ID="ID_1375608428" MODIFIED="1766079240710" TEXT="und es ist noch &#xbb;Luft&#xab; im Seitenlayout"/>
+<node CREATED="1766079250925" ID="ID_663666089" MODIFIED="1766079426600" TEXT="Idee: Berite der &#xbb;Yellow-Ticket-Box&#xab; an die Laufweite der Schrift binden (ch)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Warum? Weil ich m&#246;chte, da&#223; der Textumbruch im Rahmen des M&#246;glichen stabil ist, d.h. wenn etwas bei mir in eine Zeile pa&#223;t, dann soll das auch bei den meisten anderen PC-Nutzern so sein (f&#252;r Mobil wird das nicht gelten, aber das ist zweitrangig)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#881a31" CREATED="1766079443829" ID="ID_409425170" MODIFIED="1766079709110" TEXT="&#x27f9; body setzt jetzt font-size: 93.5%">
+<font NAME="SansSerif" SIZE="13"/>
+</node>
+</node>
+</node>
+<node CREATED="1766164713987" ID="ID_223994054" MODIFIED="1767128153012" TEXT="als n&#xe4;chstes: das Ticket-Formular anschauen">
+<node CREATED="1766164726660" ID="ID_1798841715" MODIFIED="1766164781599" TEXT=" Die Styles in trac.css systematisch aufbauen"/>
+<node CREATED="1766171651743" ID="ID_848215476" MODIFIED="1766171660152" TEXT="Label-Gr&#xf6;&#xdf;e korrigieren"/>
+</node>
+<node CREATED="1766171665306" ID="ID_687774306" MODIFIED="1766171671520" TEXT="Zwischen-Fazit">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#a90090" CREATED="1766171672610" ID="ID_506070608" MODIFIED="1766171699272" TEXT="oh weh ... das ist aufwendig">
+<icon BUILTIN="smily_bad"/>
+</node>
+<node CREATED="1767128209995" ID="ID_501580216" MODIFIED="1767128227468" TEXT="systematisieren">
+<node CREATED="1767128228519" ID="ID_1903191298" MODIFIED="1767128235263" TEXT="alle Form-Elemente durchgehen"/>
+<node CREATED="1767128235895" ID="ID_490693922" MODIFIED="1767128240450" TEXT="alle hover-Regeln durchgehen"/>
+<node CREATED="1767128241198" ID="ID_24962764" MODIFIED="1767128246737" TEXT="alle Box-Shadows durchgehen"/>
+<node CREATED="1767128247397" ID="ID_1796255332" MODIFIED="1767128257980" TEXT="lassen sich allesamt auf wenige Regeln reduzieren">
+<icon BUILTIN="idea"/>
+<node CREATED="1767128268266" ID="ID_1874180492" MODIFIED="1767128280732" TEXT="man mu&#xdf; daf&#xfc;r diverse &#xbb;spezial-Tweaks&#xab; aufgeben"/>
+<node CREATED="1767128281889" ID="ID_224005519" MODIFIED="1767128294266" TEXT="es ist oft m&#xfc;hsam, einen gemeinsamen Kompromi&#xdf; zu finden"/>
+<node CREATED="1767128295037" ID="ID_2007283" MODIFIED="1767128320714">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      das Ergebnis gibt mir Recht: das Layaut wird besser ohne <i>Spezialit&#228;ten</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1766171704309" ID="ID_994547195" MODIFIED="1766171755413">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Ergebnis (Ticketformular) jetzt aber bereits um <b>Lichtjahre</b>&#160;besser
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1766171870502" ID="ID_207282715" MODIFIED="1766353306757" TEXT="n&#xe4;chstes Ziel: davon ausgehend eine Baseline etablieren">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1766171901922" ID="ID_1765387621" MODIFIED="1766171910236" TEXT="alle sinnvollen Neuerungen &#xfc;bernehmen"/>
+<node CREATED="1766171910993" ID="ID_88524832" MODIFIED="1766171926876" TEXT="unn&#xf6;tige Font-Gr&#xf6;&#xdf;en und Tweaks weglassen (ggfs markieren!)"/>
+<node CREATED="1766171938997" ID="ID_646394943" MODIFIED="1766171956179">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      erst <i>danach </i>noch einzelnen Details anschauen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1766270320275" ID="ID_1197723257" MODIFIED="1766353327945" TEXT="&#xdc;berarbeitung Details">
+<node CREATED="1766353333409" ID="ID_1843774041" MODIFIED="1767128368883" TEXT="einen etwas abweichenden Box-Shadow">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      etwas weicher, etwas weniger dunkel, daf&#252;r transparenter
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1766353342056" ID="ID_1051291454" MODIFIED="1766353381156" TEXT="Breite der &#xbb;Yellow-Ticket-Box&#xab; gesetzt f&#xfc;r planbaren Textumbruch"/>
+<node CREATED="1766353385254" ID="ID_1278302667" MODIFIED="1766353426858" TEXT="nur vereinzelt weitere Tweaks (Schrftgr&#xf6;&#xdf;en, Textfarbe)"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1766353436531" ID="ID_643072374" MODIFIED="1766353552956" TEXT="Fazit">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="back"/>
+<node CREATED="1766353441860" ID="ID_1248903308" MODIFIED="1766353454356" TEXT="das systematische Gr&#xf6;&#xdf;enschema hat viel bewirkt"/>
+<node CREATED="1766353455242" ID="ID_711374217" MODIFIED="1766353478474" TEXT="durch Entfernen von lokalen Tweaks ist das Design gradliniger und ruhiger geworden"/>
+<node CREATED="1766353494149" ID="ID_570851401" MODIFIED="1766353542262" TEXT="Usability: habe f&#xfc;r Detail-Elemente die alten Textgr&#xf6;&#xdf;en in das neue (flexible) System &#xfc;bersetzt"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f31" CREATED="1766353612464" ID="ID_1866844393" MODIFIED="1766353630041" TEXT="war trotzdem ~ 2 Tage Arbeit">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c7b6c8" COLOR="#435e98" CREATED="1766882301253" FOLDED="true" ID="ID_204849332" MODIFIED="1767128512287" TEXT="Template-Tweak">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1766883127015" ID="ID_1877692408" MODIFIED="1766883132874" TEXT="mal kurz anschauen">
+<node CREATED="1766883165680" ID="ID_731859566" MODIFIED="1766883169931" TEXT="/usr/lib/python3/dist-packages/trac/templates/"/>
+<node CREATED="1766883184600" ID="ID_926068549" MODIFIED="1766883185793" TEXT="/usr/lib/python3/dist-packages/trac/ticket/templates"/>
+<node CREATED="1766884302633" ID="ID_794493913" MODIFIED="1766884314601" TEXT="es geht doch ziemlich einfach">
+<node CREATED="1766884319711" ID="ID_151531463" MODIFIED="1766884339707" TEXT="Templates werden &#xbb;flach&#xab; nach Namen gefunden"/>
+<node CREATED="1766884340608" ID="ID_702727318" MODIFIED="1766884356382" TEXT="also einfach in das &lt;trac-env&gt;/templates-Dir abkippen"/>
+</node>
+</node>
+<node COLOR="#5b280f" CREATED="1766883188570" ID="ID_1691105483" MODIFIED="1766883202671" TEXT="Finger weg!">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1766883204602" ID="ID_392624188" MODIFIED="1766883227139" TEXT="f&#xfc;r Kleinigkeiten ist das den Aufwand nicht wert"/>
+<node CREATED="1766883227882" ID="ID_831260918" MODIFIED="1766883247147" TEXT="und es ist dann sp&#xe4;ter ein Maintainnance - Problem"/>
+</node>
+<node CREATED="1766884285107" ID="ID_262512145" MODIFIED="1766884300381" TEXT="naja ...">
+<icon BUILTIN="smiley-oh"/>
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node BACKGROUND_COLOR="#ecc4ac" COLOR="#a50125" CREATED="1766884372512" ID="ID_1103205560" MODIFIED="1766884393469" TEXT="Eingriff">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1766884397652" ID="ID_443179803" MODIFIED="1766884407367" TEXT="Ordnung der Felder in der Ticket-Box"/>
+<node CREATED="1766884408000" ID="ID_1832847197" MODIFIED="1766884420860" TEXT="Children vorne und Parents in der gleichen Zeile"/>
+<node COLOR="#435e98" CREATED="1766884421489" ID="ID_584055236" MODIFIED="1766884604175" TEXT="einfache L&#xf6;sung: das &apos;cc&apos;-Feld unterdr&#xfc;cken">
+<icon BUILTIN="idea"/>
+<node CREATED="1766884616552" ID="ID_615570438" MODIFIED="1766884618795" TEXT="&lt;table class=&quot;properties&quot;&gt;"/>
+<node CREATED="1766884638224" ID="ID_1561767123" MODIFIED="1766884639088" TEXT="set fields = fields|selectattr(&apos;name&apos;, &apos;not_in&apos;, (&apos;type&apos;, &apos;owner&apos;, &apos;cc&apos;))">
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1766884646661" ID="ID_973935546" MODIFIED="1766884664447" TEXT="hier habe ich &apos;cc&apos; hinzugef&#xfc;gt">
+<icon BUILTIN="clanbomber"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1767563228493" ID="ID_1937328910" MODIFIED="1767563613966" TEXT="Account-Manager / Login">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1767563236454" ID="ID_226371126" MODIFIED="1767563424628" TEXT="bisher hatten wir &#xbb;bare-bones&#xab; mit HTDigest durch Apache">
+<icon BUILTIN="info"/>
+</node>
+<node COLOR="#435e98" CREATED="1767563399989" ID="ID_1849160133" MODIFIED="1767563435123" TEXT="Account-Manager bietet ein Login-Form und HTDigest-Impl in Python">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#338800" CREATED="1767563441655" ID="ID_62883100" MODIFIED="1767563608161" TEXT="Apache-Konfig dadurch vereinfacht">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...und ich glaube auch, es ist sicherer so, da die Authentifikation konsistent im Python-Code von Trac selber gepr&#252;ft wird. Zudem kann man sich nun leichter ausloggen und explizit als ein anderer User einloggen.
+    </p>
+    <p>
+      Die Umstellung war nicht ganz einfach, da wir eine spezielle Konfiguration in der trac.ini hatten. Es ist aber ein neues Modul <font face="Monospaced" color="#6e4343">AccountNotificationFormatter</font>&#160;hinzugekommen; solange das nicht aktiviert war, funktionierte die Email-Verifikation nicht mehr.
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1766092780442" ID="ID_1047953959" MODIFIED="1766095363115" TEXT="Wartungs-Seite anlegen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1766095419376" ID="ID_545005155" MODIFIED="1766095422939" TEXT="Vorbereitung">
+<node CREATED="1766095424438" ID="ID_1147175053" MODIFIED="1766095428907" TEXT="Paketliste gespeichert"/>
+<node CREATED="1766095429634" ID="ID_1183027470" MODIFIED="1766098189878" TEXT="Pakete ausmisten">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      apt remove cpp cpp-6 cppreference-doc-en-html cvs cvsps dblatex dblatex-doc docbook-dsssl docbook-utils docbook-xml docbook-xsl gcc-4.9-base git-annex git-cvs git-svn jadetex javascript-common libaprutil1 libaprutil1-dbd-sqlite3 libaprutil1-ldap libatm1 libboost-filesystem1.62.0 libboost-iostreams1.55.0 libboost-iostreams1.62.0 libboost-regex1.55.0 libboost-regex1.62.0 libboost-system1.62.0 libcairo2 libgl1-mesa-dri libgl1-mesa-glx libglapi-mesa libhogweed2 libhogweed4 libpaper-utils&#160;&#160;libpaper1 libpq5 libsigc++-2.0-0c2a libsigc++-2.0-0v5 libtexlua52 libtexluajit2 linkchecker lua-bitop lua-expat lua-json lua-lpeg lua-socket openjade opensp preview-latex-style poppler-data ps2eps publicsuffix python-genshi python-pygraphviz python-babel python-babel-localedata python-cffi-backend rake ruby sgml-base subversion t1utils tex-common tex-gyre texlive-base tipa trac trac-mastertickets trac-accountmanager trac-spamfilter trac-tags trac-wysiwyg trac-xmlrpc
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1766098650246" ID="ID_802716574" MODIFIED="1766098653924" TEXT="mit entfernt">
+<node CREATED="1766098655576" MODIFIED="1766098655576" TEXT="apache2"/>
+<node CREATED="1766098665132" MODIFIED="1766098665132" TEXT="libapache2-mod-security2"/>
+<node CREATED="1766098674744" MODIFIED="1766098674744" TEXT="libapache2-mod-wsgi"/>
+<node CREATED="1766098684162" MODIFIED="1766098684162" TEXT="apache2-bin"/>
+<node CREATED="1766098694081" MODIFIED="1766098694081" TEXT="apache2-utils"/>
+</node>
+<node COLOR="#435e98" CREATED="1766098644184" ID="ID_672017293" MODIFIED="1766099972681" TEXT="oops .. das war zu viel">
+<node CREATED="1766098704250" MODIFIED="1766098704250" TEXT="apt-transport-https"/>
+<node CREATED="1766098724421" MODIFIED="1766098724421" TEXT="curl"/>
+<node CREATED="1766098745846" ID="ID_364921345" MODIFIED="1766098745846" TEXT="git-core"/>
+<node CREATED="1766098764576" ID="ID_401899399" MODIFIED="1766098764576" TEXT="gitweb"/>
+<node CREATED="1766098794554" ID="ID_175107531" MODIFIED="1766098794554" TEXT="wget"/>
+<node COLOR="#435e98" CREATED="1766098849256" ID="ID_749727959" MODIFIED="1766099974881" TEXT="libcurl3-gnutls:amd64:">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1766098884233" MODIFIED="1766098884233" TEXT="libgnutls30"/>
+<node CREATED="1766098897567" ID="ID_1313140879" MODIFIED="1766098897567" TEXT="librtmp1:amd64"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1766099016908" FOLDED="true" ID="ID_132106857" MODIFIED="1766099968944" TEXT="was ist los...?">
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1766099022292" ID="ID_1908904151" MODIFIED="1766099029366" TEXT="libnettle6">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1766099045490" ID="ID_1854932446" MODIFIED="1766099124107" TEXT="libhogweed4 : Depends: libnettle6 (= 3.3-1+b2) but 3.3-1+deb9u1 is to be installed">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      low level cryptographic library (symmetric and one-way cryptos)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1766099075489" ID="ID_1163389260" MODIFIED="1766099090014" TEXT="aus dem Debian-Archiv kommt: libnettle6 3.3-1+b2"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1766099250904" ID="ID_1826491912" MODIFIED="1766099269479" TEXT="OK also hier ist ein Security-Update im Archiv, das ein essentielles Paket bricht">
+<icon BUILTIN="broken-line"/>
+</node>
+<node COLOR="#435e98" CREATED="1766099271102" ID="ID_955573526" MODIFIED="1766099289246" TEXT="Downgrade libnettle6">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1766099294500" ID="ID_168608671" MODIFIED="1766099315992" TEXT="Reparatur">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      &#160;&#160;529&#160;&#160;apt --fix-broken install
+    </p>
+    <p>
+      &#160;&#160;534&#160;&#160;apt install libnettle6=3.3-1+b2
+    </p>
+    <p>
+      &#160;&#160;535&#160;&#160;apt install wget
+    </p>
+    <p>
+      &#160;&#160;536&#160;&#160;apt install curl
+    </p>
+    <p>
+      &#160;&#160;537&#160;&#160;apt install apt-transport-https
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1766099931638" ID="ID_1117864629" MODIFIED="1766099964458" TEXT="grade knapp am Abgrund vorbei">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das Debian-Archiv hat eine HTTP-URL
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1766100161561" ID="ID_1790544629" MODIFIED="1766100169216" TEXT="Upgrade">
+<node COLOR="#435e98" CREATED="1766100170238" ID="ID_589987755" MODIFIED="1766105879965" TEXT="Schritt-1 : Bullseye">
+<icon BUILTIN="full-1"/>
+<node CREATED="1766100254919" ID="ID_372876362" MODIFIED="1766100275874" TEXT="alte Apt-Srouces">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      deb http://archive.debian.org/debian/ stretch main contrib
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      #deb http://security.debian.org/ stretch/updates main contrib
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      #deb http://archive.debian.org/debian/ stretch-updates main contrib non-free
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      #deb http://archive.debian.org/debian stretch-backports main
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      ## Ichthyo 9/2018 : need some backports for trac plugins
+    </p>
+    <p>
+      #deb https://lumiera.org/debian/ stretch tool
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1766100179757" ID="ID_181483438" MODIFIED="1766100450987" TEXT="Apt-Sources">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      deb http://deb.debian.org/debian bullseye main contrib non-free
+    </p>
+    <p>
+      deb-src http://deb.debian.org/debian bullseye main contrib non-free
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      deb http://deb.debian.org/debian bullseye-updates main contrib non-free
+    </p>
+    <p>
+      deb-src http://deb.debian.org/debian bullseye-updates main contrib non-free
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      #deb http://deb.debian.org/debian bullseye-backports main contrib non-free
+    </p>
+    <p>
+      #deb-src http://deb.debian.org/debian bullseye-backports main contrib non-free
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      deb http://security.debian.org/debian-security/ bullseye-security main contrib non-free
+    </p>
+    <p>
+      deb-src http://security.debian.org/debian-security/ bullseye-security main contrib non-free
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="list"/>
+</node>
+<node CREATED="1766100489175" ID="ID_1774660229" MODIFIED="1766100522333" TEXT="385 Pakete upgraden">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      385 packages can be upgraded. Run 'apt list --upgradable' to see them.
+    </p>
+    <p>
+      lumiera:~#
+    </p>
+    <p>
+      lumiera:~# apt list --upgradable
+    </p>
+    <p>
+      Listing... Done
+    </p>
+    <p>
+      acl/oldoldstable 2.2.53-10 amd64 [upgradable from: 2.2.52-3+b1]
+    </p>
+    <p>
+      adduser/oldoldstable 3.118+deb11u1 all [upgradable from: 3.115]
+    </p>
+    <p>
+      apt/oldoldstable 2.2.4 amd64 [upgradable from: 1.4.11]
+    </p>
+    <p>
+      apt-transport-https/oldoldstable 2.2.4 amd64 [upgradable from: 1.4.10]
+    </p>
+    <p>
+      apt-utils/oldoldstable 2.2.4 amd64 [upgradable from: 1.4.11]
+    </p>
+    <p>
+      asciidoc/oldoldstable 9.0.0~rc2-1 all [upgradable from: 8.6.9-5]
+    </p>
+    <p>
+      asciidoc-base/oldoldstable 9.0.0~rc2-1 all [upgradable from: 8.6.9-5]
+    </p>
+    <p>
+      asciidoc-common/oldoldstable 9.0.0~rc2-1 all [upgradable from: 8.6.9-5]
+    </p>
+    <p>
+      asciidoc-doc/oldoldstable 9.0.0~rc2-1 all [upgradable from: 8.6.9-5]
+    </p>
+    <p>
+      base-files/oldoldstable 11.1+deb11u11 amd64 [upgradable from: 9.9+deb9u13]
+    </p>
+    <p>
+      base-passwd/oldoldstable 3.5.51 amd64 [upgradable from: 3.5.43]
+    </p>
+    <p>
+      bash/oldoldstable 5.1-2+deb11u1 amd64 [upgradable from: 4.4-5]
+    </p>
+    <p>
+      bash-completion/oldoldstable 1:2.11-2 all [upgradable from: 1:2.1-4.3]
+    </p>
+    <p>
+      bc/oldoldstable 1.07.1-2+b2 amd64 [upgradable from: 1.06.95-9+b3]
+    </p>
+    <p>
+      bsdmainutils/oldoldstable 12.1.7+nmu3 amd64 [upgradable from: 9.0.12+nmu1]
+    </p>
+    <p>
+      bsdutils/oldoldstable,oldoldstable-security 1:2.36.1-8+deb11u2 amd64 [upgradable from: 1:2.29.2-1+deb9u1]
+    </p>
+    <p>
+      bzip2/oldoldstable 1.0.8-4 amd64 [upgradable from: 1.0.6-8.1]
+    </p>
+    <p>
+      ca-certificates/oldoldstable 20210119 all [upgradable from: 20200601~deb9u2]
+    </p>
+    <p>
+      certbot/oldoldstable 1.12.0-2 all [upgradable from: 0.28.0-1~deb9u3]
+    </p>
+    <p>
+      coreutils/oldoldstable 8.32-4+b1 amd64 [upgradable from: 8.26-3]
+    </p>
+    <p>
+      cpio/oldoldstable 2.13+dfsg-7.1~deb11u1 amd64 [upgradable from: 2.11+dfsg-6]
+    </p>
+    <p>
+      cron/oldoldstable 3.0pl1-137 amd64 [upgradable from: 3.0pl1-128+deb9u2]
+    </p>
+    <p>
+      curl/oldoldstable-security 7.74.0-1.3+deb11u15 amd64 [upgradable from: 7.52.1-5+deb9u10]
+    </p>
+    <p>
+      dash/oldoldstable 0.5.11+git20200708+dd9ef66-5 amd64 [upgradable from: 0.5.8-2.4]
+    </p>
+    <p>
+      dbus/oldoldstable 1.12.28-0+deb11u1 amd64 [upgradable from: 1.10.32-0+deb9u1]
+    </p>
+    <p>
+      dc/oldoldstable 1.07.1-2+b2 amd64 [upgradable from: 1.06.95-9+b3]
+    </p>
+    <p>
+      debconf/oldoldstable 1.5.77 all [upgradable from: 1.5.61]
+    </p>
+    <p>
+      debconf-i18n/oldoldstable 1.5.77 all [upgradable from: 1.5.61]
+    </p>
+    <p>
+      debfoster/oldoldstable 2.7-2.1+b2 amd64 [upgradable from: 2.7-2.1+b1]
+    </p>
+    <p>
+      debian-archive-keyring/oldoldstable 2021.1.1+deb11u1 all [upgradable from: 2017.5+deb9u2]
+    </p>
+    <p>
+      debianutils/oldoldstable 4.11.2 amd64 [upgradable from: 4.8.1.1]
+    </p>
+    <p>
+      dh-python/oldoldstable 4.20201102+nmu1 all [upgradable from: 2.20170125]
+    </p>
+    <p>
+      diffutils/oldoldstable 1:3.7-5 amd64 [upgradable from: 1:3.5-3]
+    </p>
+    <p>
+      distro-info-data/oldoldstable-security 0.51+deb11u10 all [upgradable from: 0.36]
+    </p>
+    <p>
+      dmsetup/oldoldstable 2:1.02.175-2.1 amd64 [upgradable from: 2:1.02.137-2]
+    </p>
+    <p>
+      dpkg/oldoldstable 1.20.13 amd64 [upgradable from: 1.18.26]
+    </p>
+    <p>
+      dselect/oldoldstable 1.20.13 amd64 [upgradable from: 1.18.26]
+    </p>
+    <p>
+      e2fsprogs/oldoldstable-security 1.46.2-2+deb11u1 amd64 [upgradable from: 1.43.4-2+deb9u2]
+    </p>
+    <p>
+      ed/oldoldstable 1.17-1 amd64 [upgradable from: 1.10-2.1]
+    </p>
+    <p>
+      etckeeper/oldoldstable 1.18.16-1 all [upgradable from: 1.18.5-1]
+    </p>
+    <p>
+      fail2ban/oldoldstable 0.11.2-2 all [upgradable from: 0.9.6-2]
+    </p>
+    <p>
+      file/oldoldstable,oldoldstable-security 1:5.39-3+deb11u1 amd64 [upgradable from: 1:5.30-1+deb9u3]
+    </p>
+    <p>
+      findutils/oldoldstable 4.8.0-1 amd64 [upgradable from: 4.6.0+git+20161106-2]
+    </p>
+    <p>
+      firehol/oldoldstable 3.1.7+ds-2 all [upgradable from: 3.1.1+ds-1]
+    </p>
+    <p>
+      firehol-common/oldoldstable 3.1.7+ds-2 all [upgradable from: 3.1.1+ds-1]
+    </p>
+    <p>
+      fireqos/oldoldstable 3.1.7+ds-2 all [upgradable from: 3.1.1+ds-1]
+    </p>
+    <p>
+      fontconfig/oldoldstable 2.13.1-4.2 amd64 [upgradable from: 2.11.0-6.7+b1]
+    </p>
+    <p>
+      fontconfig-config/oldoldstable 2.13.1-4.2 all [upgradable from: 2.11.0-6.7]
+    </p>
+    <p>
+      fonts-dejavu/oldoldstable 2.37-2 all [upgradable from: 2.37-1]
+    </p>
+    <p>
+      fonts-dejavu-core/oldoldstable 2.37-2 all [upgradable from: 2.37-1]
+    </p>
+    <p>
+      fonts-dejavu-extra/oldoldstable 2.37-2 all [upgradable from: 2.37-1]
+    </p>
+    <p>
+      fonts-liberation/oldoldstable 1:1.07.4-11 all [upgradable from: 1:1.07.4-2]
+    </p>
+    <p>
+      gawk/oldoldstable 1:5.1.0-1 amd64 [upgradable from: 1:4.1.4+dfsg-1]
+    </p>
+    <p>
+      git/oldoldstable-security 1:2.30.2-1+deb11u5 amd64 [upgradable from: 1:2.11.0-3+deb9u7]
+    </p>
+    <p>
+      git-man/oldoldstable-security 1:2.30.2-1+deb11u5 all [upgradable from: 1:2.11.0-3+deb9u7]
+    </p>
+    <p>
+      gnupg/oldoldstable,oldoldstable-security 2.2.27-2+deb11u2 amd64 [upgradable from: 2.1.18-8~deb9u4]
+    </p>
+    <p>
+      gnupg-agent/oldoldstable,oldoldstable-security 2.2.27-2+deb11u2 amd64 [upgradable from: 2.1.18-8~deb9u4]
+    </p>
+    <p>
+      gnupg-l10n/oldoldstable,oldoldstable-security 2.2.27-2+deb11u2 all [upgradable from: 2.1.18-8~deb9u4]
+    </p>
+    <p>
+      gpgv/oldoldstable,oldoldstable-security 2.2.27-2+deb11u2 amd64 [upgradable from: 2.1.18-8~deb9u4]
+    </p>
+    <p>
+      grep/oldoldstable 3.6-1+deb11u1 amd64 [upgradable from: 2.27-2]
+    </p>
+    <p>
+      groff-base/oldoldstable 1.22.4-6 amd64 [upgradable from: 1.22.3-9]
+    </p>
+    <p>
+      gzip/oldoldstable,oldoldstable-security 1.10-4+deb11u1 amd64 [upgradable from: 1.6-5+deb9u1]
+    </p>
+    <p>
+      hostname/oldoldstable 3.23 amd64 [upgradable from: 3.18+b1]
+    </p>
+    <p>
+      htdig/oldoldstable 1:3.2.0b6-18 amd64 [upgradable from: 1:3.2.0b6-16+b1]
+    </p>
+    <p>
+      ifupdown/oldoldstable 0.8.36 amd64 [upgradable from: 0.8.19]
+    </p>
+    <p>
+      info/oldoldstable 6.7.0.dfsg.2-6 amd64 [upgradable from: 6.3.0.dfsg.1-1+b2]
+    </p>
+    <p>
+      init/oldoldstable 1.60 amd64 [upgradable from: 1.48]
+    </p>
+    <p>
+      init-system-helpers/oldoldstable 1.60 all [upgradable from: 1.48]
+    </p>
+    <p>
+      initscripts/oldoldstable 2.96-7+deb11u1 amd64 [upgradable from: 2.88dsf-59.9]
+    </p>
+    <p>
+      insserv/oldoldstable 1.21.0-1.1 amd64 [upgradable from: 1.14.0-5.4+b1]
+    </p>
+    <p>
+      install-info/oldoldstable 6.7.0.dfsg.2-6 amd64 [upgradable from: 6.3.0.dfsg.1-1+b2]
+    </p>
+    <p>
+      iprange/oldoldstable 1.0.4+ds-2 amd64 [upgradable from: 1.0.3+ds-1]
+    </p>
+    <p>
+      iproute2/oldoldstable 5.10.0-4 amd64 [upgradable from: 4.9.0-1+deb9u1]
+    </p>
+    <p>
+      ipset/oldoldstable 7.10-1 amd64 [upgradable from: 6.30-2]
+    </p>
+    <p>
+      iptables/oldoldstable 1.8.7-1 amd64 [upgradable from: 1.6.0+snapshot20161117-6]
+    </p>
+    <p>
+      iputils-ping/oldoldstable 3:20210202-1 amd64 [upgradable from: 3:20161105-1]
+    </p>
+    <p>
+      isc-dhcp-client/oldoldstable 4.4.1-2.3+deb11u2 amd64 [upgradable from: 4.3.5-3+deb9u2]
+    </p>
+    <p>
+      isc-dhcp-common/oldoldstable 4.4.1-2.3+deb11u2 amd64 [upgradable from: 4.3.5-3+deb9u2]
+    </p>
+    <p>
+      iso-codes/oldoldstable 4.6.0-1 all [upgradable from: 3.75-1]
+    </p>
+    <p>
+      joe/oldoldstable 4.6-1+b1 amd64 [upgradable from: 4.4-1]
+    </p>
+    <p>
+      kmod/oldoldstable 28-1 amd64 [upgradable from: 23-2]
+    </p>
+    <p>
+      krb5-locales/oldoldstable-security 1.18.3-6+deb11u7 all [upgradable from: 1.15-1+deb9u3]
+    </p>
+    <p>
+      less/oldoldstable,oldoldstable-security 551-2+deb11u2 amd64 [upgradable from: 481-2.1]
+    </p>
+    <p>
+      libacl1/oldoldstable 2.2.53-10 amd64 [upgradable from: 2.2.52-3+b1]
+    </p>
+    <p>
+      libapparmor1/oldoldstable 2.13.6-10 amd64 [upgradable from: 2.11.0-3+deb9u2]
+    </p>
+    <p>
+      libapr1/oldoldstable,oldoldstable-security 1.7.0-6+deb11u2 amd64 [upgradable from: 1.5.2-5+deb9u1]
+    </p>
+    <p>
+      libassuan0/oldoldstable 2.5.3-7.1 amd64 [upgradable from: 2.4.3-2]
+    </p>
+    <p>
+      libattr1/oldoldstable 1:2.4.48-6 amd64 [upgradable from: 1:2.4.47-2+b2]
+    </p>
+    <p>
+      libaudit-common/oldoldstable 1:3.0-2 all [upgradable from: 1:2.6.7-2]
+    </p>
+    <p>
+      libaudit1/oldoldstable 1:3.0-2 amd64 [upgradable from: 1:2.6.7-2]
+    </p>
+    <p>
+      libblkid1/oldoldstable,oldoldstable-security 2.36.1-8+deb11u2 amd64 [upgradable from: 2.29.2-1+deb9u1]
+    </p>
+    <p>
+      libbsd0/oldoldstable 0.11.3-1+deb11u1 amd64 [upgradable from: 0.8.3-1+deb9u1]
+    </p>
+    <p>
+      libbz2-1.0/oldoldstable 1.0.8-4 amd64 [upgradable from: 1.0.6-8.1]
+    </p>
+    <p>
+      libc-bin/oldoldstable-security 2.31-13+deb11u13 amd64 [upgradable from: 2.24-11+deb9u4]
+    </p>
+    <p>
+      libc-l10n/oldoldstable-security 2.31-13+deb11u13 all [upgradable from: 2.24-11+deb9u4]
+    </p>
+    <p>
+      libc6/oldoldstable-security 2.31-13+deb11u13 amd64 [upgradable from: 2.24-11+deb9u4]
+    </p>
+    <p>
+      libcap-ng0/oldoldstable 0.7.9-2.2+b1 amd64 [upgradable from: 0.7.7-3+b1]
+    </p>
+    <p>
+      libcap2/oldoldstable-security 1:2.44-1+deb11u1 amd64 [upgradable from: 1:2.25-1]
+    </p>
+    <p>
+      libcap2-bin/oldoldstable-security 1:2.44-1+deb11u1 amd64 [upgradable from: 1:2.25-1]
+    </p>
+    <p>
+      libcurl3-gnutls/oldoldstable-security 7.74.0-1.3+deb11u15 amd64 [upgradable from: 7.52.1-5+deb9u10]
+    </p>
+    <p>
+      libdatrie1/oldoldstable 0.2.13-1 amd64 [upgradable from: 0.2.10-4+b1]
+    </p>
+    <p>
+      libdb5.3/oldoldstable 5.3.28+dfsg1-0.8 amd64 [upgradable from: 5.3.28-12+deb9u1]
+    </p>
+    <p>
+      libdbd-sqlite3-perl/oldoldstable 1.66-1+b1 amd64 [upgradable from: 1.54-1]
+    </p>
+    <p>
+      libdbi-perl/oldoldstable 1.643-3+b1 amd64 [upgradable from: 1.636-1+deb9u2]
+    </p>
+    <p>
+      libdbus-1-3/oldoldstable 1.12.28-0+deb11u1 amd64 [upgradable from: 1.10.32-0+deb9u1]
+    </p>
+    <p>
+      libdebconfclient0/oldoldstable 0.260 amd64 [upgradable from: 0.227]
+    </p>
+    <p>
+      libdevmapper1.02.1/oldoldstable 2:1.02.175-2.1 amd64 [upgradable from: 2:1.02.137-2]
+    </p>
+    <p>
+      libedit2/oldoldstable 3.1-20191231-2+b1 amd64 [upgradable from: 3.1-20160903-3]
+    </p>
+    <p>
+      libelf1/oldoldstable 0.183-1 amd64 [upgradable from: 0.168-1+deb9u1]
+    </p>
+    <p>
+      libencode-locale-perl/oldoldstable 1.05-1.1 all [upgradable from: 1.05-1]
+    </p>
+    <p>
+      liberror-perl/oldoldstable 0.17029-1 all [upgradable from: 0.17024-1]
+    </p>
+    <p>
+      libestr0/oldoldstable 0.1.10-2.1+b1 amd64 [upgradable from: 0.1.10-2]
+    </p>
+    <p>
+      libexpat1/oldoldstable-security 2.2.10-2+deb11u7 amd64 [upgradable from: 2.2.0-2+deb9u5]
+    </p>
+    <p>
+      libfastjson4/oldoldstable-security 0.99.9-1+deb11u1 amd64 [upgradable from: 0.99.4-1]
+    </p>
+    <p>
+      libfdisk1/oldoldstable,oldoldstable-security 2.36.1-8+deb11u2 amd64 [upgradable from: 2.29.2-1+deb9u1]
+    </p>
+    <p>
+      libfile-basedir-perl/oldoldstable 0.08-1 all [upgradable from: 0.07-1]
+    </p>
+    <p>
+      libfile-copy-recursive-perl/oldoldstable 0.45-1 all [upgradable from: 0.38-1]
+    </p>
+    <p>
+      libfile-desktopentry-perl/oldoldstable 0.22-2 all [upgradable from: 0.22-1]
+    </p>
+    <p>
+      libfile-listing-perl/oldoldstable 6.14-1 all [upgradable from: 6.04-1]
+    </p>
+    <p>
+      libfile-mimeinfo-perl/oldoldstable 0.30-1 all [upgradable from: 0.27-1]
+    </p>
+    <p>
+      libfont-afm-perl/oldoldstable 1.20-3 all [upgradable from: 1.20-2]
+    </p>
+    <p>
+      libfontconfig1/oldoldstable 2.13.1-4.2 amd64 [upgradable from: 2.11.0-6.7+b1]
+    </p>
+    <p>
+      libfontenc1/oldoldstable 1:1.1.4-1 amd64 [upgradable from: 1:1.1.3-1+b2]
+    </p>
+    <p>
+      libfreetype6/oldoldstable-security 2.10.4+dfsg-1+deb11u2 amd64 [upgradable from: 2.6.3-3.2+deb9u2]
+    </p>
+    <p>
+      libgcrypt20/oldoldstable 1.8.7-6 amd64 [upgradable from: 1.7.6-2+deb9u4]
+    </p>
+    <p>
+      libglib2.0-0/oldoldstable-security 2.66.8-1+deb11u7 amd64 [upgradable from: 2.50.3-2+deb9u3]
+    </p>
+    <p>
+      libglib2.0-data/oldoldstable-security 2.66.8-1+deb11u7 all [upgradable from: 2.50.3-2+deb9u3]
+    </p>
+    <p>
+      libgmp10/oldoldstable 2:6.2.1+dfsg-1+deb11u1 amd64 [upgradable from: 2:6.1.2+dfsg-1+deb9u1]
+    </p>
+    <p>
+      libgnutls30/oldoldstable-security 3.7.1-5+deb11u8 amd64 [upgradable from: 3.5.8-5+deb9u5]
+    </p>
+    <p>
+      libgpg-error0/oldoldstable 1.38-2 amd64 [upgradable from: 1.26-2]
+    </p>
+    <p>
+      libgpm2/oldoldstable 1.20.7-8 amd64 [upgradable from: 1.20.4-6.2+b1]
+    </p>
+    <p>
+      libgssapi-krb5-2/oldoldstable-security 1.18.3-6+deb11u7 amd64 [upgradable from: 1.15-1+deb9u3]
+    </p>
+    <p>
+      libhtml-form-perl/oldoldstable 6.07-1 all [upgradable from: 6.03-1]
+    </p>
+    <p>
+      libhtml-format-perl/oldoldstable 2.12-1.1 all [upgradable from: 2.12-1]
+    </p>
+    <p>
+      libhtml-parser-perl/oldoldstable 3.75-1+b1 amd64 [upgradable from: 3.72-3]
+    </p>
+    <p>
+      libhtml-tagset-perl/oldoldstable 3.20-4 all [upgradable from: 3.20-3]
+    </p>
+    <p>
+      libhtml-tree-perl/oldoldstable 5.07-2 all [upgradable from: 5.03-2]
+    </p>
+    <p>
+      libhttp-cookies-perl/oldoldstable 6.10-1 all [upgradable from: 6.01-1]
+    </p>
+    <p>
+      libhttp-daemon-perl/oldoldstable 6.12-1+deb11u1 all [upgradable from: 6.01-1]
+    </p>
+    <p>
+      libhttp-date-perl/oldoldstable 6.05-1 all [upgradable from: 6.02-1]
+    </p>
+    <p>
+      libhttp-message-perl/oldoldstable 6.28-1 all [upgradable from: 6.11-1]
+    </p>
+    <p>
+      libhttp-negotiate-perl/oldoldstable 6.01-1 all [upgradable from: 6.00-2]
+    </p>
+    <p>
+      libice6/oldoldstable 2:1.0.10-1 amd64 [upgradable from: 2:1.0.9-2]
+    </p>
+    <p>
+      libidn11/oldoldstable 1.33-3 amd64 [upgradable from: 1.33-1+deb9u1]
+    </p>
+    <p>
+      libidn2-0/oldoldstable 2.3.0-5 amd64 [upgradable from: 0.16-1+deb9u1]
+    </p>
+    <p>
+      libio-html-perl/oldoldstable 1.004-2 all [upgradable from: 1.001-1]
+    </p>
+    <p>
+      libio-socket-ssl-perl/oldoldstable 2.069-1 all [upgradable from: 2.044-1]
+    </p>
+    <p>
+      libipc-system-simple-perl/oldoldstable 1.30-1 all [upgradable from: 1.25-3]
+    </p>
+    <p>
+      libiptc0/oldoldstable 1.8.7-1 amd64 [upgradable from: 1.6.0+snapshot20161117-6]
+    </p>
+    <p>
+      libk5crypto3/oldoldstable-security 1.18.3-6+deb11u7 amd64 [upgradable from: 1.15-1+deb9u3]
+    </p>
+    <p>
+      libkeyutils1/oldoldstable 1.6.1-2 amd64 [upgradable from: 1.5.9-9]
+    </p>
+    <p>
+      libkmod2/oldoldstable 28-1 amd64 [upgradable from: 23-2]
+    </p>
+    <p>
+      libkrb5-3/oldoldstable-security 1.18.3-6+deb11u7 amd64 [upgradable from: 1.15-1+deb9u3]
+    </p>
+    <p>
+      libkrb5support0/oldoldstable-security 1.18.3-6+deb11u7 amd64 [upgradable from: 1.15-1+deb9u3]
+    </p>
+    <p>
+      libksba8/oldoldstable,oldoldstable-security 1.5.0-3+deb11u2 amd64 [upgradable from: 1.3.5-2]
+    </p>
+    <p>
+      libldap-2.4-2/oldoldstable,oldoldstable-security 2.4.57+dfsg-3+deb11u1 amd64 [upgradable from: 2.4.44+dfsg-5+deb9u4]
+    </p>
+    <p>
+      libldap-common/oldoldstable,oldoldstable-security 2.4.57+dfsg-3+deb11u1 all [upgradable from: 2.4.44+dfsg-5+deb9u9]
+    </p>
+    <p>
+      liblocale-gettext-perl/oldoldstable 1.07-4+b1 amd64 [upgradable from: 1.07-3+b1]
+    </p>
+    <p>
+      liblockfile-bin/oldoldstable 1.17-1+b1 amd64 [upgradable from: 1.14-1+b1]
+    </p>
+    <p>
+      liblockfile1/oldoldstable 1.17-1+b1 amd64 [upgradable from: 1.14-1+b1]
+    </p>
+    <p>
+      liblognorm5/oldoldstable 2.0.5-1.1 amd64 [upgradable from: 2.0.1-1.1+b1]
+    </p>
+    <p>
+      liblwp-mediatypes-perl/oldoldstable 6.04-1 all [upgradable from: 6.02-1]
+    </p>
+    <p>
+      liblwp-protocol-https-perl/oldoldstable 6.10-1 all [upgradable from: 6.06-2]
+    </p>
+    <p>
+      liblz4-1/oldoldstable 1.9.3-2 amd64 [upgradable from: 0.0~r131-2+deb9u1]
+    </p>
+    <p>
+      liblzma5/oldoldstable,oldoldstable-security 5.2.5-2.1~deb11u1 amd64 [upgradable from: 5.2.2-1.2+deb9u1]
+    </p>
+    <p>
+      libmagic-mgc/oldoldstable,oldoldstable-security 1:5.39-3+deb11u1 amd64 [upgradable from: 1:5.30-1+deb9u3]
+    </p>
+    <p>
+      libmagic1/oldoldstable,oldoldstable-security 1:5.39-3+deb11u1 amd64 [upgradable from: 1:5.30-1+deb9u3]
+    </p>
+    <p>
+      libmnl0/oldoldstable 1.0.4-3 amd64 [upgradable from: 1.0.4-2]
+    </p>
+    <p>
+      libmount1/oldoldstable,oldoldstable-security 2.36.1-8+deb11u2 amd64 [upgradable from: 2.29.2-1+deb9u1]
+    </p>
+    <p>
+      libncurses5/oldoldstable 6.2+20201114-2+deb11u2 amd64 [upgradable from: 6.0+20161126-1+deb9u2]
+    </p>
+    <p>
+      libncursesw5/oldoldstable 6.2+20201114-2+deb11u2 amd64 [upgradable from: 6.0+20161126-1+deb9u2]
+    </p>
+    <p>
+      libnet-daemon-perl/oldoldstable 0.48-2 all [upgradable from: 0.48-1.1]
+    </p>
+    <p>
+      libnet-dbus-perl/oldoldstable 1.2.0-1+b1 amd64 [upgradable from: 1.1.0-4+b1]
+    </p>
+    <p>
+      libnet-http-perl/oldoldstable 6.20-1 all [upgradable from: 6.12-1]
+    </p>
+    <p>
+      libnet-ssleay-perl/oldoldstable 1.88-3+b1 amd64 [upgradable from: 1.80-1]
+    </p>
+    <p>
+      libnetfilter-acct1/oldoldstable 1.0.3-3 amd64 [upgradable from: 1.0.2-1.1]
+    </p>
+    <p>
+      libnetfilter-conntrack3/oldoldstable 1.0.8-3 amd64 [upgradable from: 1.0.6-2]
+    </p>
+    <p>
+      libnewt0.52/oldoldstable 0.52.21-4+b3 amd64 [upgradable from: 0.52.19-1+b1]
+    </p>
+    <p>
+      libnfnetlink0/oldoldstable 1.0.1-3+b1 amd64 [upgradable from: 1.0.1-3]
+    </p>
+    <p>
+      libnghttp2-14/oldoldstable-security 1.43.0-1+deb11u2 amd64 [upgradable from: 1.18.1-1+deb9u2]
+    </p>
+    <p>
+      libnpth0/oldoldstable 1.6-3 amd64 [upgradable from: 1.3-1]
+    </p>
+    <p>
+      libp11-kit0/oldoldstable 0.23.22-1 amd64 [upgradable from: 0.23.3-2+deb9u1]
+    </p>
+    <p>
+      libpam-cap/oldoldstable-security 1:2.44-1+deb11u1 amd64 [upgradable from: 1:2.25-1]
+    </p>
+    <p>
+      libpam-modules/oldoldstable-security 1.4.0-9+deb11u2 amd64 [upgradable from: 1.1.8-3.6]
+    </p>
+    <p>
+      libpam-modules-bin/oldoldstable-security 1.4.0-9+deb11u2 amd64 [upgradable from: 1.1.8-3.6]
+    </p>
+    <p>
+      libpam-runtime/oldoldstable-security 1.4.0-9+deb11u2 all [upgradable from: 1.1.8-3.6]
+    </p>
+    <p>
+      libpam-systemd/oldoldstable-security 247.3-7+deb11u7 amd64 [upgradable from: 232-25+deb9u14]
+    </p>
+    <p>
+      libpam0g/oldoldstable-security 1.4.0-9+deb11u2 amd64 [upgradable from: 1.1.8-3.6]
+    </p>
+    <p>
+      libpcap0.8/oldoldstable 1.10.0-2 amd64 [upgradable from: 1.8.1-3+deb9u1]
+    </p>
+    <p>
+      libpcre3/oldoldstable 2:8.39-13 amd64 [upgradable from: 2:8.39-3]
+    </p>
+    <p>
+      libpipeline1/oldoldstable 1.5.3-1 amd64 [upgradable from: 1.4.1-2]
+    </p>
+    <p>
+      libpixman-1-0/oldoldstable,oldoldstable-security 0.40.0-1.1~deb11u1 amd64 [upgradable from: 0.34.0-1]
+    </p>
+    <p>
+      libpng16-16/oldoldstable-security 1.6.37-3+deb11u1 amd64 [upgradable from: 1.6.28-1+deb9u1]
+    </p>
+    <p>
+      libpopt0/oldoldstable 1.18-2 amd64 [upgradable from: 1.16-10+b2]
+    </p>
+    <p>
+      libpsl5/oldoldstable 0.21.0-1.2 amd64 [upgradable from: 0.17.0-3]
+    </p>
+    <p>
+      libpython2.7/oldoldstable 2.7.18-8+deb11u1 amd64 [upgradable from: 2.7.13-2+deb9u6]
+    </p>
+    <p>
+      libpython2.7-minimal/oldoldstable 2.7.18-8+deb11u1 amd64 [upgradable from: 2.7.13-2+deb9u6]
+    </p>
+    <p>
+      libpython2.7-stdlib/oldoldstable 2.7.18-8+deb11u1 amd64 [upgradable from: 2.7.13-2+deb9u6]
+    </p>
+    <p>
+      libpython3-stdlib/oldoldstable 3.9.2-3 amd64 [upgradable from: 3.5.3-1]
+    </p>
+    <p>
+      librtmp1/oldoldstable 2.4+20151223.gitfa8646d.1-2+b2 amd64 [upgradable from: 2.4+20151223.gitfa8646d.1-1+b1]
+    </p>
+    <p>
+      libsasl2-2/oldoldstable,oldoldstable-security 2.1.27+dfsg-2.1+deb11u1 amd64 [upgradable from: 2.1.27~101-g0780600+dfsg-3+deb9u2]
+    </p>
+    <p>
+      libsasl2-modules-db/oldoldstable,oldoldstable-security 2.1.27+dfsg-2.1+deb11u1 amd64 [upgradable from: 2.1.27~101-g0780600+dfsg-3+deb9u2]
+    </p>
+    <p>
+      libseccomp2/oldoldstable 2.5.1-1+deb11u1 amd64 [upgradable from: 2.3.1-2.1+deb9u1]
+    </p>
+    <p>
+      libselinux1/oldoldstable 3.1-3 amd64 [upgradable from: 2.6-3+b3]
+    </p>
+    <p>
+      libsemanage-common/oldoldstable 3.1-1 all [upgradable from: 2.6-2]
+    </p>
+    <p>
+      libsemanage1/oldoldstable 3.1-1+b2 amd64 [upgradable from: 2.6-2]
+    </p>
+    <p>
+      libsepol1/oldoldstable-security 3.1-1+deb11u1 amd64 [upgradable from: 2.6-2]
+    </p>
+    <p>
+      libsigsegv2/oldoldstable 2.13-1 amd64 [upgradable from: 2.10-5]
+    </p>
+    <p>
+      libslang2/oldoldstable 2.3.2-5 amd64 [upgradable from: 2.3.1-5]
+    </p>
+    <p>
+      libsm6/oldoldstable 2:1.2.3-1 amd64 [upgradable from: 2:1.2.2-1+b3]
+    </p>
+    <p>
+      libsmartcols1/oldoldstable,oldoldstable-security 2.36.1-8+deb11u2 amd64 [upgradable from: 2.29.2-1+deb9u1]
+    </p>
+    <p>
+      libsqlite3-0/oldoldstable-security 3.34.1-3+deb11u1 amd64 [upgradable from: 3.16.2-5+deb9u3]
+    </p>
+    <p>
+      libss2/oldoldstable-security 1.46.2-2+deb11u1 amd64 [upgradable from: 1.43.4-2+deb9u2]
+    </p>
+    <p>
+      libssh2-1/oldoldstable 1.9.0-2+deb11u1 amd64 [upgradable from: 1.7.0-1+deb9u2]
+    </p>
+    <p>
+      libssl1.1/oldoldstable-security 1.1.1w-0+deb11u4 amd64 [upgradable from: 1.1.0l-1~deb9u6]
+    </p>
+    <p>
+      libstdc++6/oldoldstable 10.2.1-6 amd64 [upgradable from: 6.3.0-18+deb9u1]
+    </p>
+    <p>
+      libsysfs2/oldoldstable 2.1.0+repack-7 amd64 [upgradable from: 2.1.0+repack-4+b2]
+    </p>
+    <p>
+      libsystemd0/oldoldstable-security 247.3-7+deb11u7 amd64 [upgradable from: 232-25+deb9u14]
+    </p>
+    <p>
+      libtasn1-6/oldoldstable-security 4.16.0-2+deb11u2 amd64 [upgradable from: 4.10-1.1+deb9u1]
+    </p>
+    <p>
+      libterm-readkey-perl/oldoldstable 2.38-1+b2 amd64 [upgradable from: 2.37-1]
+    </p>
+    <p>
+      libtext-charwidth-perl/oldoldstable 0.04-10+b1 amd64 [upgradable from: 0.04-7+b5]
+    </p>
+    <p>
+      libtext-iconv-perl/oldoldstable 1.7-7+b1 amd64 [upgradable from: 1.7-5+b4]
+    </p>
+    <p>
+      libtext-wrapi18n-perl/oldoldstable 0.06-9 all [upgradable from: 0.06-7.1]
+    </p>
+    <p>
+      libthai-data/oldoldstable 0.1.28-3 all [upgradable from: 0.1.26-1]
+    </p>
+    <p>
+      libthai0/oldoldstable 0.1.28-3 amd64 [upgradable from: 0.1.26-1]
+    </p>
+    <p>
+      libtie-ixhash-perl/oldoldstable 1.23-2.1 all [upgradable from: 1.23-2]
+    </p>
+    <p>
+      libtimedate-perl/oldoldstable 2.3300-2 all [upgradable from: 2.3000-2+deb9u1]
+    </p>
+    <p>
+      libtinfo5/oldoldstable 6.2+20201114-2+deb11u2 amd64 [upgradable from: 6.0+20161126-1+deb9u2]
+    </p>
+    <p>
+      libudev1/oldoldstable-security 247.3-7+deb11u7 amd64 [upgradable from: 232-25+deb9u14]
+    </p>
+    <p>
+      liburi-perl/oldoldstable 5.08-1 all [upgradable from: 1.71-1]
+    </p>
+    <p>
+      libusb-0.1-4/oldoldstable 2:0.1.12-32 amd64 [upgradable from: 2:0.1.12-30]
+    </p>
+    <p>
+      libutempter0/oldoldstable 1.2.1-2 amd64 [upgradable from: 1.1.6-3]
+    </p>
+    <p>
+      libuuid1/oldoldstable,oldoldstable-security 2.36.1-8+deb11u2 amd64 [upgradable from: 2.29.2-1+deb9u1]
+    </p>
+    <p>
+      libwrap0/oldoldstable 7.6.q-31 amd64 [upgradable from: 7.6.q-26]
+    </p>
+    <p>
+      libwww-perl/oldoldstable 6.52-1 all [upgradable from: 6.15-1]
+    </p>
+    <p>
+      libwww-robotrules-perl/oldoldstable 6.02-1 all [upgradable from: 6.01-1]
+    </p>
+    <p>
+      libx11-6/oldoldstable,oldoldstable-security 2:1.7.2-1+deb11u2 amd64 [upgradable from: 2:1.6.4-3+deb9u4]
+    </p>
+    <p>
+      libx11-data/oldoldstable,oldoldstable-security 2:1.7.2-1+deb11u2 all [upgradable from: 2:1.6.4-3+deb9u4]
+    </p>
+    <p>
+      libx11-protocol-perl/oldoldstable 0.56-7.1 all [upgradable from: 0.56-7]
+    </p>
+    <p>
+      libxau6/oldoldstable 1:1.0.9-1 amd64 [upgradable from: 1:1.0.8-1]
+    </p>
+    <p>
+      libxaw7/oldoldstable 2:1.0.13-1.1 amd64 [upgradable from: 2:1.0.13-1+b2]
+    </p>
+    <p>
+      libxcb-render-util0/oldoldstable 0.3.9-1+b1 amd64 [upgradable from: 0.3.9-1]
+    </p>
+    <p>
+      libxcb-render0/oldoldstable 1.14-3 amd64 [upgradable from: 1.12-1]
+    </p>
+    <p>
+      libxcb1/oldoldstable 1.14-3 amd64 [upgradable from: 1.12-1]
+    </p>
+    <p>
+      libxext6/oldoldstable 2:1.3.3-1.1 amd64 [upgradable from: 2:1.3.3-1+b2]
+    </p>
+    <p>
+      libxft2/oldoldstable 2.3.2-2 amd64 [upgradable from: 2.3.2-1+b2]
+    </p>
+    <p>
+      libxinerama1/oldoldstable 2:1.1.4-2 amd64 [upgradable from: 2:1.1.3-1+b3]
+    </p>
+    <p>
+      libxml-parser-perl/oldoldstable 2.46-2 amd64 [upgradable from: 2.44-2+b1]
+    </p>
+    <p>
+      libxml-twig-perl/oldoldstable 1:3.52-1 all [upgradable from: 1:3.50-1]
+    </p>
+    <p>
+      libxml-xpathengine-perl/oldoldstable 0.14-1 all [upgradable from: 0.13-1]
+    </p>
+    <p>
+      libxml2/oldoldstable-security 2.9.10+dfsg-6.7+deb11u9 amd64 [upgradable from: 2.9.4+dfsg1-2.2+deb9u7]
+    </p>
+    <p>
+      libxml2-utils/oldoldstable-security 2.9.10+dfsg-6.7+deb11u9 amd64 [upgradable from: 2.9.4+dfsg1-2.2+deb9u7]
+    </p>
+    <p>
+      libxmu6/oldoldstable 2:1.1.2-2+b3 amd64 [upgradable from: 2:1.1.2-2]
+    </p>
+    <p>
+      libxpm4/oldoldstable,oldoldstable-security 1:3.5.12-1.1+deb11u1 amd64 [upgradable from: 1:3.5.12-1]
+    </p>
+    <p>
+      libxslt1.1/oldoldstable-security 1.1.34-4+deb11u3 amd64 [upgradable from: 1.1.29-2.1+deb9u2]
+    </p>
+    <p>
+      libxt6/oldoldstable 1:1.2.0-1 amd64 [upgradable from: 1:1.1.5-1]
+    </p>
+    <p>
+      libxtables12/oldoldstable 1.8.7-1 amd64 [upgradable from: 1.6.0+snapshot20161117-6]
+    </p>
+    <p>
+      locales/oldoldstable-security 2.31-13+deb11u13 all [upgradable from: 2.24-11+deb9u4]
+    </p>
+    <p>
+      lockfile-progs/oldoldstable 0.1.18 amd64 [upgradable from: 0.1.17+b1]
+    </p>
+    <p>
+      login/oldoldstable-security 1:4.8.1-1+deb11u1 amd64 [upgradable from: 1:4.4-4.1+deb9u1]
+    </p>
+    <p>
+      logrotate/oldoldstable 3.18.0-2+deb11u2 amd64 [upgradable from: 3.11.0-0.1]
+    </p>
+    <p>
+      lsb-base/oldoldstable 11.1.0 all [upgradable from: 9.20161125]
+    </p>
+    <p>
+      lsb-release/oldoldstable 11.1.0 all [upgradable from: 9.20161125]
+    </p>
+    <p>
+      lsof/oldoldstable 4.93.2+dfsg-1.1 amd64 [upgradable from: 4.89+dfsg-0.1]
+    </p>
+    <p>
+      lzma/oldoldstable 9.22-2.2 amd64 [upgradable from: 9.22-2+b3]
+    </p>
+    <p>
+      m4/oldoldstable 1.4.18-5 amd64 [upgradable from: 1.4.18-1]
+    </p>
+    <p>
+      man-db/oldoldstable 2.9.4-2 amd64 [upgradable from: 2.7.6.1-2]
+    </p>
+    <p>
+      manpages/oldoldstable 5.10-1 all [upgradable from: 4.10-2]
+    </p>
+    <p>
+      mawk/oldoldstable 1.3.4.20200120-2 amd64 [upgradable from: 1.3.3-17+b3]
+    </p>
+    <p>
+      mime-support/oldoldstable 3.66 all [upgradable from: 3.60]
+    </p>
+    <p>
+      mlocate/oldoldstable 0.26-5 amd64 [upgradable from: 0.26-2]
+    </p>
+    <p>
+      mount/oldoldstable,oldoldstable-security 2.36.1-8+deb11u2 amd64 [upgradable from: 2.29.2-1+deb9u1]
+    </p>
+    <p>
+      mysql-common/oldoldstable 5.8+1.0.7 all [upgradable from: 5.8+1.0.2]
+    </p>
+    <p>
+      nano/oldoldstable 5.4-2+deb11u3 amd64 [upgradable from: 2.7.4-1]
+    </p>
+    <p>
+      ncurses-base/oldoldstable 6.2+20201114-2+deb11u2 all [upgradable from: 6.0+20161126-1+deb9u2]
+    </p>
+    <p>
+      ncurses-bin/oldoldstable 6.2+20201114-2+deb11u2 amd64 [upgradable from: 6.0+20161126-1+deb9u2]
+    </p>
+    <p>
+      ncurses-term/oldoldstable 6.2+20201114-2+deb11u2 all [upgradable from: 6.0+20161126-1+deb9u2]
+    </p>
+    <p>
+      net-tools/oldoldstable-security 1.60+git20181103.0eebece-1+deb11u2 amd64 [upgradable from: 1.60+git20161116.90da8a0-1]
+    </p>
+    <p>
+      netbase/oldoldstable 6.3 all [upgradable from: 5.4]
+    </p>
+    <p>
+      netcat/oldoldstable 1.10-46 all [upgradable from: 1.10-41]
+    </p>
+    <p>
+      netcat-traditional/oldoldstable 1.10-46 amd64 [upgradable from: 1.10-41+b1]
+    </p>
+    <p>
+      nfacct/oldoldstable 1.0.2-3 amd64 [upgradable from: 1.0.1-1.1+b1]
+    </p>
+    <p>
+      openbsd-inetd/oldoldstable 0.20160825-5 amd64 [upgradable from: 0.20160825-2]
+    </p>
+    <p>
+      openssh-client/oldoldstable-security 1:8.4p1-5+deb11u5 amd64 [upgradable from: 1:7.4p1-10+deb9u7]
+    </p>
+    <p>
+      openssh-server/oldoldstable-security 1:8.4p1-5+deb11u5 amd64 [upgradable from: 1:7.4p1-10+deb9u7]
+    </p>
+    <p>
+      openssh-sftp-server/oldoldstable-security 1:8.4p1-5+deb11u5 amd64 [upgradable from: 1:7.4p1-10+deb9u7]
+    </p>
+    <p>
+      openssl/oldoldstable-security 1.1.1w-0+deb11u4 amd64 [upgradable from: 1.1.0l-1~deb9u6]
+    </p>
+    <p>
+      passwd/oldoldstable-security 1:4.8.1-1+deb11u1 amd64 [upgradable from: 1:4.4-4.1+deb9u1]
+    </p>
+    <p>
+      patch/oldoldstable 2.7.6-7 amd64 [upgradable from: 2.7.5-1+deb9u2]
+    </p>
+    <p>
+      perl/oldoldstable-security 5.32.1-4+deb11u4 amd64 [upgradable from: 5.24.1-3+deb9u7]
+    </p>
+    <p>
+      perl-base/oldoldstable-security 5.32.1-4+deb11u4 amd64 [upgradable from: 5.24.1-3+deb9u7]
+    </p>
+    <p>
+      perl-openssl-defaults/oldoldstable 5 amd64 [upgradable from: 3]
+    </p>
+    <p>
+      pinentry-curses/oldoldstable 1.1.0-4 amd64 [upgradable from: 1.0.0-2]
+    </p>
+    <p>
+      procps/oldoldstable 2:3.3.17-5 amd64 [upgradable from: 2:3.3.12-3+deb9u1]
+    </p>
+    <p>
+      psmisc/oldoldstable 23.4-2 amd64 [upgradable from: 22.21-2.1+b2]
+    </p>
+    <p>
+      python-apt-common/oldoldstable-security 2.2.1.1 all [upgradable from: 1.4.3]
+    </p>
+    <p>
+      python-pkg-resources/oldoldstable 44.1.1-1 all [upgradable from: 33.1.1-1]
+    </p>
+    <p>
+      python-setuptools/oldoldstable 44.1.1-1 all [upgradable from: 33.1.1-1]
+    </p>
+    <p>
+      python-six/oldoldstable 1.16.0-2 all [upgradable from: 1.10.0-3]
+    </p>
+    <p>
+      python2.7/oldoldstable 2.7.18-8+deb11u1 amd64 [upgradable from: 2.7.13-2+deb9u6]
+    </p>
+    <p>
+      python2.7-minimal/oldoldstable 2.7.18-8+deb11u1 amd64 [upgradable from: 2.7.13-2+deb9u6]
+    </p>
+    <p>
+      python3/oldoldstable 3.9.2-3 amd64 [upgradable from: 3.5.3-1]
+    </p>
+    <p>
+      python3-acme/oldoldstable 1.12.0-2+deb11u1 all [upgradable from: 0.28.0-1~deb9u2]
+    </p>
+    <p>
+      python3-apt/oldoldstable-security 2.2.1.1 amd64 [upgradable from: 1.4.3]
+    </p>
+    <p>
+      python3-bs4/oldoldstable 4.9.3-1 all [upgradable from: 4.5.3-1]
+    </p>
+    <p>
+      python3-certbot/oldoldstable 1.12.0-2 all [upgradable from: 0.28.0-1~deb9u3]
+    </p>
+    <p>
+      python3-cffi-backend/oldoldstable 1.14.5-1 amd64 [upgradable from: 1.9.1-2]
+    </p>
+    <p>
+      python3-chardet/oldoldstable 4.0.0-1 all [upgradable from: 2.3.0-2]
+    </p>
+    <p>
+      python3-configargparse/oldoldstable 1.2.3-1 all [upgradable from: 0.11.0-1]
+    </p>
+    <p>
+      python3-configobj/oldoldstable 5.0.6-4 all [upgradable from: 5.0.6-2]
+    </p>
+    <p>
+      python3-cryptography/oldoldstable-security 3.3.2-1+deb11u1 amd64 [upgradable from: 1.7.1-3+deb9u2]
+    </p>
+    <p>
+      python3-feedparser/oldoldstable 5.2.1-3 all [upgradable from: 5.1.3-3]
+    </p>
+    <p>
+      python3-html2text/oldoldstable 2020.1.16-1 all [upgradable from: 2016.9.19-1]
+    </p>
+    <p>
+      python3-html5lib/oldoldstable 1.1-3 all [upgradable from: 0.999999999-1]
+    </p>
+    <p>
+      python3-idna/oldoldstable 2.10-1+deb11u1 all [upgradable from: 2.2-1]
+    </p>
+    <p>
+      python3-josepy/oldoldstable 1.2.0-2 all [upgradable from: 1.1.0-2~deb9u1]
+    </p>
+    <p>
+      python3-lxml/oldoldstable,oldoldstable-security 4.6.3+dfsg-0.1+deb11u1 amd64 [upgradable from: 3.7.1-1+deb9u5]
+    </p>
+    <p>
+      python3-minimal/oldoldstable 3.9.2-3 amd64 [upgradable from: 3.5.3-1]
+    </p>
+    <p>
+      python3-mock/oldoldstable 4.0.3-1 all [upgradable from: 2.0.0-3]
+    </p>
+    <p>
+      python3-openssl/oldoldstable 20.0.1-1 all [upgradable from: 16.2.0-1]
+    </p>
+    <p>
+      python3-parsedatetime/oldoldstable 2.6-1 all [upgradable from: 2.1-3+deb9u1]
+    </p>
+    <p>
+      python3-pbr/oldoldstable 5.5.0-2 all [upgradable from: 1.10.0-1]
+    </p>
+    <p>
+      python3-pkg-resources/oldoldstable-security 52.0.0-4+deb11u2 all [upgradable from: 33.1.1-1]
+    </p>
+    <p>
+      python3-pyasn1/oldoldstable 0.4.8-1 all [upgradable from: 0.1.9-2]
+    </p>
+    <p>
+      python3-pyinotify/oldoldstable 0.9.6-1.3 all [upgradable from: 0.9.6-1]
+    </p>
+    <p>
+      python3-requests/oldoldstable 2.25.1+dfsg-2 all [upgradable from: 2.12.4-1]
+    </p>
+    <p>
+      python3-requests-toolbelt/oldoldstable 0.9.1-1 all [upgradable from: 0.7.0-1]
+    </p>
+    <p>
+      python3-rfc3339/oldoldstable 1.1-2 all [upgradable from: 1.0-4]
+    </p>
+    <p>
+      python3-setuptools/oldoldstable-security 52.0.0-4+deb11u2 all [upgradable from: 33.1.1-1]
+    </p>
+    <p>
+      python3-six/oldoldstable 1.16.0-2 all [upgradable from: 1.10.0-3]
+    </p>
+    <p>
+      python3-systemd/oldoldstable 234-3+b4 amd64 [upgradable from: 233-1]
+    </p>
+    <p>
+      python3-tz/oldoldstable 2021.1-1 all [upgradable from: 2016.7-0.3]
+    </p>
+    <p>
+      python3-urllib3/oldoldstable-security 1.26.5-1~exp1+deb11u1 all [upgradable from: 1.19.1-1+deb9u1]
+    </p>
+    <p>
+      python3-webencodings/oldoldstable 0.5.1-2 all [upgradable from: 0.5-2]
+    </p>
+    <p>
+      python3-zope.component/oldoldstable 4.3.0-3 all [upgradable from: 4.3.0-1]
+    </p>
+    <p>
+      python3-zope.event/oldoldstable 4.4-3 all [upgradable from: 4.2.0-1]
+    </p>
+    <p>
+      python3-zope.hookable/oldoldstable 5.0.1-1+b2 amd64 [upgradable from: 4.0.4-4+b2]
+    </p>
+    <p>
+      python3-zope.interface/oldoldstable 5.2.0-1 amd64 [upgradable from: 4.3.2-1]
+    </p>
+    <p>
+      readline-common/oldoldstable 8.1-1 all [upgradable from: 7.0-3]
+    </p>
+    <p>
+      rename/oldoldstable 1.13-1 all [upgradable from: 0.20-4]
+    </p>
+    <p>
+      rss2email/oldoldstable 1:3.12.2-2 all [upgradable from: 1:3.9-2.1]
+    </p>
+    <p>
+      rsync/oldoldstable-security 3.2.3-4+deb11u3 amd64 [upgradable from: 3.1.2-1+deb9u3]
+    </p>
+    <p>
+      rsyslog/oldoldstable,oldoldstable-security 8.2102.0-2+deb11u1 amd64 [upgradable from: 8.24.0-1+deb9u3]
+    </p>
+    <p>
+      screen/oldoldstable 4.8.0-6 amd64 [upgradable from: 4.5.0-6+deb9u1]
+    </p>
+    <p>
+      sed/oldoldstable 4.7-1 amd64 [upgradable from: 4.4-1]
+    </p>
+    <p>
+      sensible-utils/oldoldstable 0.0.14 all [upgradable from: 0.0.9+deb9u1]
+    </p>
+    <p>
+      shared-mime-info/oldoldstable 2.0-1 amd64 [upgradable from: 1.8-1+deb9u1]
+    </p>
+    <p>
+      sqlite3/oldoldstable-security 3.34.1-3+deb11u1 amd64 [upgradable from: 3.16.2-5+deb9u3]
+    </p>
+    <p>
+      startpar/oldoldstable 0.64-3 amd64 [upgradable from: 0.59-3.1]
+    </p>
+    <p>
+      strace/oldoldstable 5.10-1 amd64 [upgradable from: 4.15-2]
+    </p>
+    <p>
+      systemd/oldoldstable-security 247.3-7+deb11u7 amd64 [upgradable from: 232-25+deb9u14]
+    </p>
+    <p>
+      systemd-sysv/oldoldstable-security 247.3-7+deb11u7 amd64 [upgradable from: 232-25+deb9u14]
+    </p>
+    <p>
+      sysv-rc/oldoldstable 2.96-7+deb11u1 all [upgradable from: 2.88dsf-59.9]
+    </p>
+    <p>
+      sysvinit-utils/oldoldstable 2.96-7+deb11u1 amd64 [upgradable from: 2.88dsf-59.9]
+    </p>
+    <p>
+      tar/oldoldstable 1.34+dfsg-1+deb11u1 amd64 [upgradable from: 1.29b-1.1+deb9u1]
+    </p>
+    <p>
+      tcpd/oldoldstable 7.6.q-31 amd64 [upgradable from: 7.6.q-26]
+    </p>
+    <p>
+      tcpdump/oldoldstable 4.99.0-2+deb11u1 amd64 [upgradable from: 4.9.3-1~deb9u2]
+    </p>
+    <p>
+      texi2html/oldoldstable 1.82+dfsg1-6 all [upgradable from: 1.82+dfsg1-5]
+    </p>
+    <p>
+      traceroute/oldoldstable 1:2.1.0-2+deb11u1 amd64 [upgradable from: 1:2.1.0-2]
+    </p>
+    <p>
+      tzdata/oldoldstable-security 2025b-0+deb11u2 all [upgradable from: 2021a-0+deb9u4]
+    </p>
+    <p>
+      ucf/oldoldstable-security 3.0043+deb11u2 all [upgradable from: 3.0036]
+    </p>
+    <p>
+      udev/oldoldstable-security 247.3-7+deb11u7 amd64 [upgradable from: 232-25+deb9u14]
+    </p>
+    <p>
+      unattended-upgrades/oldoldstable 2.8 all [upgradable from: 0.93.1+nmu1]
+    </p>
+    <p>
+      unzip/oldoldstable,oldoldstable-security 6.0-26+deb11u1 amd64 [upgradable from: 6.0-21+deb9u2]
+    </p>
+    <p>
+      update-inetd/oldoldstable 4.51 all [upgradable from: 4.44]
+    </p>
+    <p>
+      util-linux/oldoldstable,oldoldstable-security 2.36.1-8+deb11u2 amd64 [upgradable from: 2.29.2-1+deb9u1]
+    </p>
+    <p>
+      vim/oldoldstable-security 2:8.2.2434-3+deb11u3 amd64 [upgradable from: 2:8.0.0197-4+deb9u7]
+    </p>
+    <p>
+      vim-common/oldoldstable-security 2:8.2.2434-3+deb11u3 all [upgradable from: 2:8.0.0197-4+deb9u7]
+    </p>
+    <p>
+      vim-runtime/oldoldstable-security 2:8.2.2434-3+deb11u3 all [upgradable from: 2:8.0.0197-4+deb9u7]
+    </p>
+    <p>
+      vim-tiny/oldoldstable-security 2:8.2.2434-3+deb11u3 amd64 [upgradable from: 2:8.0.0197-4+deb9u7]
+    </p>
+    <p>
+      w3m/oldoldstable 0.5.3+git20210102-6+deb11u1 amd64 [upgradable from: 0.5.3-34+deb9u1]
+    </p>
+    <p>
+      wget/oldoldstable-security 1.21-1+deb11u2 amd64 [upgradable from: 1.18-5+deb9u3]
+    </p>
+    <p>
+      whiptail/oldoldstable 0.52.21-4+b3 amd64 [upgradable from: 0.52.19-1+b1]
+    </p>
+    <p>
+      whois/oldoldstable 5.5.10 amd64 [upgradable from: 5.2.17~deb9u1]
+    </p>
+    <p>
+      x11-common/oldoldstable 1:7.7+22 all [upgradable from: 1:7.7+19]
+    </p>
+    <p>
+      xbitmaps/oldoldstable 1.1.1-2.1 all [upgradable from: 1.1.1-2]
+    </p>
+    <p>
+      xdg-user-dirs/oldoldstable 0.17-2 amd64 [upgradable from: 0.15-2+b1]
+    </p>
+    <p>
+      xdg-utils/oldoldstable 1.1.3-4.1 all [upgradable from: 1.1.1-1+deb9u2]
+    </p>
+    <p>
+      xfonts-encodings/oldoldstable 1:1.0.4-2.1 all [upgradable from: 1:1.0.4-2]
+    </p>
+    <p>
+      xfonts-utils/oldoldstable 1:7.7+6 amd64 [upgradable from: 1:7.7+4]
+    </p>
+    <p>
+      xterm/oldoldstable 366-1+deb11u1 amd64 [upgradable from: 327-2+deb9u3]
+    </p>
+    <p>
+      xxd/oldoldstable-security 2:8.2.2434-3+deb11u3 amd64 [upgradable from: 2:8.0.0197-4+deb9u7]
+    </p>
+    <p>
+      xz-utils/oldoldstable,oldoldstable-security 5.2.5-2.1~deb11u1 amd64 [upgradable from: 5.2.2-1.2+deb9u1]
+    </p>
+    <p>
+      zip/oldoldstable 3.0-12 amd64 [upgradable from: 3.0-11+b1]
+    </p>
+    <p>
+      zlib1g/oldoldstable,oldoldstable-security 1:1.2.11.dfsg-2+deb11u2 amd64 [upgradable from: 1:1.2.8.dfsg-5+deb9u1]
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1766100799067" ID="ID_1559897175" MODIFIED="1766100811055" TEXT="Upgrade-Spec">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      The following packages were automatically installed and are no longer required:
+    </p>
+    <p>
+      &#160;&#160;bsdmainutils dh-python gnupg-agent libcryptsetup4 libdns-export162 libevent-2.0-5 libffi6 libfile-copy-recursive-perl libhogweed4 libicu57 libip4tc0 libip6tc0 libipset3
+    </p>
+    <p>
+      &#160;&#160;libiptc0 libisc-export160 liblogging-stdlog0 libmpdec2 libmpfr4 libnettle6 libprocps6 libpython2.7 libpython3.5-minimal libpython3.5-stdlib libssl1.0.2 libunistring0
+    </p>
+    <p>
+      &#160;&#160;libustr-1.0-1 python-six python3-mock python3-pbr python3-pyasn1 python3.5 python3.5-minimal rename
+    </p>
+    <p>
+      Use 'apt autoremove' to remove them.
+    </p>
+    <p>
+      The following packages will be REMOVED:
+    </p>
+    <p>
+      &#160;&#160;e2fslibs libapt-inst2.0 libapt-pkg5.0 libcomerr2 libcurl3 libgc1c2 libperl5.24 libpython-stdlib perl-modules-5.24 python python-chardet python-debian python-dns
+    </p>
+    <p>
+      &#160;&#160;python-feedparser python-libxml2 python-lockfile python-minimal python-utidylib python-xdg spambayes
+    </p>
+    <p>
+      The following NEW packages will be installed:
+    </p>
+    <p>
+      &#160;&#160;bsdextrautils dirmngr e2fsprogs-l10n exim4-base exim4-config exim4-daemon-light gcc-10-base gir1.2-glib-2.0 gnupg-utils gpg gpg-agent gpg-wks-client gpg-wks-server gpgconf
+    </p>
+    <p>
+      &#160;&#160;gpgsm gsasl-common guile-2.2-libs libapt-pkg6.0 libargon2-1 libbpf0 libbrotli1 libcbor0 libclone-perl libcom-err2 libcrypt1 libcryptsetup12 libcurl4 libdata-dump-perl
+    </p>
+    <p>
+      &#160;&#160;libdns-export1110 libevent-2.1-7 libext2fs2 libffi7 libfido2-1 libfribidi0 libgc1 libgcc-s1 libgdbm-compat4 libgdbm6 libgirepository-1.0-1 libgnutls-dane0 libgpg-error-l10n
+    </p>
+    <p>
+      &#160;&#160;libgsasl7 libhogweed6 libicu67 libio-stringy-perl libip4tc2 libip6tc2 libipset13 libisc-export1105 libjansson4 libjson-c5 libltdl7 libmailutils7 libmariadb3 libmd0
+    </p>
+    <p>
+      &#160;&#160;libmpdec3 libmpfr6 libncurses6 libncursesw6 libnettle8 libnftables1 libnftnl11 libnsl2 libnss-nis libnss-nisplus libnss-systemd libntlm0 libpcre2-8-0 libperl5.32 libprocps8
+    </p>
+    <p>
+      &#160;&#160;libpython2-stdlib libpython3.9 libpython3.9-minimal libpython3.9-stdlib libreadline8 libtinfo6 libtirpc-common libtirpc3 libtry-tiny-perl libuchardet0 libunbound8
+    </p>
+    <p>
+      &#160;&#160;libunistring2 libunwind8 libxxhash0 libzstd1 logsave mailcap mailutils mailutils-common mariadb-common media-types ncal netcat-openbsd nftables perl-modules-5.32 python2
+    </p>
+    <p>
+      &#160;&#160;python2-minimal python3-certifi python3-dbus python3-distro python3-distro-info python3-distutils python3-gi python3-icu python3-lib2to3 python3-soupsieve python3.9
+    </p>
+    <p>
+      &#160;&#160;python3.9-minimal runit-helper systemd-timesyncd xsltproc
+    </p>
+    <p>
+      The following packages will be upgraded:
+    </p>
+    <p>
+      &#160;&#160;acl adduser apt apt-transport-https apt-utils asciidoc asciidoc-base asciidoc-common asciidoc-doc base-files base-passwd bash bash-completion bc bsdmainutils bsdutils bzip2
+    </p>
+    <p>
+      &#160;&#160;ca-certificates certbot coreutils cpio cron curl dash dbus dc debconf debconf-i18n debfoster debian-archive-keyring debianutils dh-python diffutils distro-info-data dmsetup
+    </p>
+    <p>
+      &#160;&#160;dpkg dselect e2fsprogs ed etckeeper fail2ban file findutils firehol firehol-common fireqos fontconfig fontconfig-config fonts-dejavu fonts-dejavu-core fonts-dejavu-extra
+    </p>
+    <p>
+      &#160;&#160;fonts-liberation gawk git git-man gnupg gnupg-agent gnupg-l10n gpgv grep groff-base gzip hostname htdig ifupdown info init init-system-helpers initscripts insserv
+    </p>
+    <p>
+      &#160;&#160;install-info iprange iproute2 ipset iptables iputils-ping isc-dhcp-client isc-dhcp-common iso-codes joe kmod krb5-locales less libacl1 libapparmor1 libapr1 libassuan0
+    </p>
+    <p>
+      &#160;&#160;libattr1 libaudit-common libaudit1 libblkid1 libbsd0 libbz2-1.0 libc-bin libc-l10n libc6 libcap-ng0 libcap2 libcap2-bin libcurl3-gnutls libdatrie1 libdb5.3
+    </p>
+    <p>
+      &#160;&#160;libdbd-sqlite3-perl libdbi-perl libdbus-1-3 libdebconfclient0 libdevmapper1.02.1 libedit2 libelf1 libencode-locale-perl liberror-perl libestr0 libexpat1 libfastjson4
+    </p>
+    <p>
+      &#160;&#160;libfdisk1 libfile-basedir-perl libfile-copy-recursive-perl libfile-desktopentry-perl libfile-listing-perl libfile-mimeinfo-perl libfont-afm-perl libfontconfig1 libfontenc1
+    </p>
+    <p>
+      &#160;&#160;libfreetype6 libgcrypt20 libglib2.0-0 libglib2.0-data libgmp10 libgnutls30 libgpg-error0 libgpm2 libgssapi-krb5-2 libhtml-form-perl libhtml-format-perl libhtml-parser-perl
+    </p>
+    <p>
+      &#160;&#160;libhtml-tagset-perl libhtml-tree-perl libhttp-cookies-perl libhttp-daemon-perl libhttp-date-perl libhttp-message-perl libhttp-negotiate-perl libice6 libidn11 libidn2-0
+    </p>
+    <p>
+      &#160;&#160;libio-html-perl libio-socket-ssl-perl libipc-system-simple-perl libiptc0 libk5crypto3 libkeyutils1 libkmod2 libkrb5-3 libkrb5support0 libksba8 libldap-2.4-2 libldap-common
+    </p>
+    <p>
+      &#160;&#160;liblocale-gettext-perl liblockfile-bin liblockfile1 liblognorm5 liblwp-mediatypes-perl liblwp-protocol-https-perl liblz4-1 liblzma5 libmagic-mgc libmagic1 libmnl0 libmount1
+    </p>
+    <p>
+      &#160;&#160;libncurses5 libncursesw5 libnet-daemon-perl libnet-dbus-perl libnet-http-perl libnet-ssleay-perl libnetfilter-acct1 libnetfilter-conntrack3 libnewt0.52 libnfnetlink0
+    </p>
+    <p>
+      &#160;&#160;libnghttp2-14 libnpth0 libp11-kit0 libpam-cap libpam-modules libpam-modules-bin libpam-runtime libpam-systemd libpam0g libpcap0.8 libpcre3 libpipeline1 libpixman-1-0
+    </p>
+    <p>
+      &#160;&#160;libpng16-16 libpopt0 libpsl5 libpython2.7 libpython2.7-minimal libpython2.7-stdlib libpython3-stdlib librtmp1 libsasl2-2 libsasl2-modules-db libseccomp2 libselinux1
+    </p>
+    <p>
+      &#160;&#160;libsemanage-common libsemanage1 libsepol1 libsigsegv2 libslang2 libsm6 libsmartcols1 libsqlite3-0 libss2 libssh2-1 libssl1.1 libstdc++6 libsysfs2 libsystemd0 libtasn1-6
+    </p>
+    <p>
+      &#160;&#160;libterm-readkey-perl libtext-charwidth-perl libtext-iconv-perl libtext-wrapi18n-perl libthai-data libthai0 libtie-ixhash-perl libtimedate-perl libtinfo5 libudev1
+    </p>
+    <p>
+      &#160;&#160;liburi-perl libusb-0.1-4 libutempter0 libuuid1 libwrap0 libwww-perl libwww-robotrules-perl libx11-6 libx11-data libx11-protocol-perl libxau6 libxaw7 libxcb-render-util0
+    </p>
+    <p>
+      &#160;&#160;libxcb-render0 libxcb1 libxext6 libxft2 libxinerama1 libxml-parser-perl libxml-twig-perl libxml-xpathengine-perl libxml2 libxml2-utils libxmu6 libxpm4 libxslt1.1 libxt6
+    </p>
+    <p>
+      &#160;&#160;libxtables12 locales lockfile-progs login logrotate lsb-base lsb-release lsof lzma m4 man-db manpages mawk mime-support mlocate mount mysql-common nano ncurses-base
+    </p>
+    <p>
+      &#160;&#160;ncurses-bin ncurses-term net-tools netbase netcat netcat-traditional nfacct openbsd-inetd openssh-client openssh-server openssh-sftp-server openssl passwd patch perl
+    </p>
+    <p>
+      &#160;&#160;perl-base perl-openssl-defaults pinentry-curses procps psmisc python-apt-common python-pkg-resources python-setuptools python-six python2.7 python2.7-minimal python3
+    </p>
+    <p>
+      &#160;&#160;python3-acme python3-apt python3-bs4 python3-certbot python3-cffi-backend python3-chardet python3-configargparse python3-configobj python3-cryptography python3-feedparser
+    </p>
+    <p>
+      &#160;&#160;python3-html2text python3-html5lib python3-idna python3-josepy python3-lxml python3-minimal python3-mock python3-openssl python3-parsedatetime python3-pbr
+    </p>
+    <p>
+      &#160;&#160;python3-pkg-resources python3-pyasn1 python3-pyinotify python3-requests python3-requests-toolbelt python3-rfc3339 python3-setuptools python3-six python3-systemd python3-tz
+    </p>
+    <p>
+      &#160;&#160;python3-urllib3 python3-webencodings python3-zope.component python3-zope.event python3-zope.hookable python3-zope.interface readline-common rename rss2email rsync rsyslog
+    </p>
+    <p>
+      &#160;&#160;screen sed sensible-utils shared-mime-info sqlite3 startpar strace systemd systemd-sysv sysv-rc sysvinit-utils tar tcpd tcpdump texi2html traceroute tzdata ucf udev
+    </p>
+    <p>
+      &#160;&#160;unattended-upgrades unzip update-inetd util-linux vim vim-common vim-runtime vim-tiny w3m wget whiptail whois x11-common xbitmaps xdg-user-dirs xdg-utils xfonts-encodings
+    </p>
+    <p>
+      &#160;&#160;xfonts-utils xterm xxd xz-utils zip zlib1g
+    </p>
+    <p>
+      385 upgraded, 111 newly installed, 20 to remove and 0 not upgraded.
+    </p>
+    <p>
+      Need to get 180 MB of archives.
+    </p>
+    <p>
+      After this operation, 219 MB of additional disk space will be used.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1766100813133" ID="ID_837312717" MODIFIED="1766100827662" TEXT="beachte">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1766100816155" ID="ID_524799304" MODIFIED="1766100820923" TEXT="kein Grub-Paket"/>
+<node CREATED="1766100821594" ID="ID_54899700" MODIFIED="1766100825529" TEXT="kein Kernel-paket"/>
+</node>
+<node CREATED="1766100914967" ID="ID_1882835737" MODIFIED="1766100916927" TEXT="Log">
+<node COLOR="#435e98" CREATED="1766100918169" ID="ID_1018241418" MODIFIED="1766104947597" TEXT="Fehler beim Extrahieren einiger Pakete">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      E: Unable to mkstemp /root/tmp/locales.template.0qEZdc - ofstream::ofstream (2: No such file or directory)
+    </p>
+    <p>
+      E: Unable to mkstemp /root/tmp/locales.config.JCDxBW - ofstream::ofstream (2: No such file or directory)
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/openssh-server_1%3a8.4p1-5+deb11u5_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libc6_2.31-13+deb11u13_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libcrypt1_1%3a4.4.18-4_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libc-l10n_2.31-13+deb11u13_all.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libcbor0_0.5.0+dfsg-2_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libssl1.1_1.1.1w-0+deb11u4_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libfido2-1_1.6.0-2_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libcom-err2_1.46.2-2+deb11u1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libgssapi-krb5-2_1.18.3-6+deb11u7_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libkrb5-3_1.18.3-6+deb11u7_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libk5crypto3_1.18.3-6+deb11u7_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libkrb5support0_1.18.3-6+deb11u7_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libpcre2-8-0_10.36-2+deb11u1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libselinux1_3.1-3_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/openssh-client_1%3a8.4p1-5+deb11u5_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/runit-helper_2.10.3_all.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libc-bin_2.31-13+deb11u13_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libblkid1_2.36.1-8+deb11u2_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libext2fs2_1.46.2-2+deb11u1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/e2fsprogs_1.46.2-2+deb11u1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/logsave_1.46.2-2+deb11u1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libbrotli1_1.0.9-2+b2_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libnettle8_3.7.3-1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libhogweed6_3.7.3-1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libunistring2_0.9.10-4_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libidn2-0_2.3.0-5_amd64.deb
+    </p>
+    <p>
+      debconf: apt-extracttemplates failed: No such file or directory
+    </p>
+    <p>
+      Extracting templates from packages: 24%E: Unable to mkstemp /root/tmp/libpam0g.template.TYSkqG - ofstream::ofstream (2: No such file or directory)
+    </p>
+    <p>
+      E: Unable to mkstemp /root/tmp/libpam0g.config.88UINr - ofstream::ofstream (2: No such file or directory)
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libtirpc-common_1.3.1-1+deb11u1_all.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libtirpc3_1.3.1-1+deb11u1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libnsl2_1.3.0-2_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libpam-modules-bin_1.4.0-9+deb11u2_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libpam-modules_1.4.0-9+deb11u2_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libpam-runtime_1.4.0-9+deb11u2_all.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/dbus_1.12.28-0+deb11u1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libdbus-1-3_1.12.28-0+deb11u1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libsepol1_3.1-1+deb11u1_amd64.deb
+    </p>
+    <p>
+      debconf: apt-extracttemplates failed: No such file or directory
+    </p>
+    <p>
+      Extracting templates from packages: 30%E: Unable to mkstemp /root/tmp/adduser.template.TlNdYO - ofstream::ofstream (2: No such file or directory)
+    </p>
+    <p>
+      E: Unable to mkstemp /root/tmp/adduser.config.8LgQyA - ofstream::ofstream (2: No such file or directory)
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/systemd-sysv_247.3-7+deb11u7_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libelf1_0.183-1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libbpf0_1%3a0.3-2+deb11u1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libmd0_1.0.3-3_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libbsd0_0.11.3-1+deb11u1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libcap2_1%3a2.44-1+deb11u1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libmnl0_1.0.4-3_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libip6tc2_1.8.7-1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/update-inetd_4.51_all.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/netbase_6.3_all.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libnfnetlink0_1.0.1-3+b1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libnetfilter-conntrack3_1.0.8-3_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libnftnl11_1.1.9-1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libxtables12_1.8.7-1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/iptables_1.8.7-1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libpam-cap_1%3a2.44-1+deb11u1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libcap2-bin_1%3a2.44-1+deb11u1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/iproute2_5.10.0-4_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/acl_2.2.53-10_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libacl1_2.2.53-10_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/liblzma5_5.2.5-2.1~deb11u1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/kmod_28-1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libkmod2_28-1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/liblz4-1_1.9.3-2_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libedit2_3.1-20191231-2+b1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libncurses6_6.2+20201114-2+deb11u2_amd64.deb
+    </p>
+    <p>
+      debconf: apt-extracttemplates failed: No such file or directory
+    </p>
+    <p>
+      Extracting templates from packages: 36%E: Unable to mkstemp /root/tmp/ucf.template.3KWHlY - ofstream::ofstream (2: No such file or directory)
+    </p>
+    <p>
+      E: Unable to mkstemp /root/tmp/ucf.config.cGHfaK - ofstream::ofstream (2: No such file or directory)
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libwrap0_7.6.q-31_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/tcpd_7.6.q-31_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/tzdata_2025b-0+deb11u2_all.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libpython3.9-stdlib_3.9.2-1+deb11u3_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/python3.9_3.9.2-1+deb11u3_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libpython3-stdlib_3.9.2-3_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/python3-lib2to3_3.9.2-1_all.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/python3-distutils_3.9.2-1_all.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/python3-feedparser_5.2.1-3_all.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/python3-setuptools_52.0.0-4+deb11u2_all.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/python3-pkg-resources_52.0.0-4+deb11u2_all.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/python3-html2text_2020.1.16-1_all.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libicu67_67.1-7+deb11u1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libxml2_2.9.10+dfsg-6.7+deb11u9_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libxslt1.1_1.1.34-4+deb11u3_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/gpgv_2.2.27-2+deb11u2_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libassuan0_2.5.3-7.1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/pinentry-curses_1.1.0-4_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libnpth0_1.6-3_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/gnupg-agent_2.2.27-2+deb11u2_all.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/gpg-agent_2.2.27-2+deb11u2_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/gpgconf_2.2.27-2+deb11u2_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libksba8_1.5.0-3+deb11u2_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/dirmngr_2.2.27-2+deb11u2_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/gnupg-utils_2.2.27-2+deb11u2_amd64.deb
+    </p>
+    <p>
+      debconf: apt-extracttemplates failed: No such file or directory
+    </p>
+    <p>
+      Extracting templates from packages: 42%E: Unable to mkstemp /root/tmp/ca-certificates.template.LHCB57 - ofstream::ofstream (2: No such file or directory)
+    </p>
+    <p>
+      E: Unable to mkstemp /root/tmp/ca-certificates.config.Q0HE8T - ofstream::ofstream (2: No such file or directory)
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libio-socket-ssl-perl_2.069-1_all.deb
+    </p>
+    <p>
+      debconf: apt-extracttemplates failed: No such file or directory
+    </p>
+    <p>
+      Extracting templates from packages: 48%E: Unable to mkstemp /root/tmp/debconf.template.nJRSQg - ofstream::ofstream (2: No such file or directory)
+    </p>
+    <p>
+      E: Unable to mkstemp /root/tmp/debconf.config.8oBV72 - ofstream::ofstream (2: No such file or directory)
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/bash_5.1-2+deb11u1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/dash_0.5.11+git20200708+dd9ef66-5_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/diffutils_1%3a3.7-5_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/findutils_4.8.0-1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/grep_3.6-1+deb11u1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/gzip_1.10-4+deb11u1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/hostname_3.23_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/ncurses-bin_6.2+20201114-2+deb11u2_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/sed_4.7-1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libdebconfclient0_0.260_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/base-passwd_3.5.51_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libslang2_2.3.2-5_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libncurses5_6.2+20201114-2+deb11u2_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libtinfo5_6.2+20201114-2+deb11u2_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libncursesw5_6.2+20201114-2+deb11u2_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/ncurses-base_6.2+20201114-2+deb11u2_all.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/debfoster_2.7-2.1+b2_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/w3m_0.5.3+git20210102-6+deb11u1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libgc1_1%3a8.0.4-3_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libgpm2_1.20.7-8_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/init_1.60_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libjansson4_2.13.1-1.1_amd64.deb
+    </p>
+    <p>
+      debconf: apt-extracttemplates failed: No such file or directory
+    </p>
+    <p>
+      Extracting templates from packages: 54%E: Unable to mkstemp /root/tmp/man-db.template.TpkjOq - ofstream::ofstream (2: No such file or directory)
+    </p>
+    <p>
+      E: Unable to mkstemp /root/tmp/man-db.config.y7PIid - ofstream::ofstream (2: No such file or directory)
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/fireqos_3.1.7+ds-2_all.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libipset13_7.10-1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/ipset_7.10-1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/iprange_1.0.4+ds-2_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libnetfilter-acct1_1.0.3-3_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/nfacct_1.0.2-3_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libpcap0.8_1.10.0-2_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/tcpdump_4.99.0-2+deb11u1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/iputils-ping_3%3a20210202-1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/traceroute_1%3a2.1.0-2+deb11u1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/firehol_3.1.7+ds-2_all.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/firehol-common_3.1.7+ds-2_all.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libmpfr6_4.1.0-3_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/gawk_1%3a5.1.0-1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libevent-2.1-7_2.1.12-stable-1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/openbsd-inetd_0.20160825-5_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libpython2.7_2.7.18-8+deb11u1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/python2.7_2.7.18-8+deb11u1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libpython2.7-stdlib_2.7.18-8+deb11u1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/python2.7-minimal_2.7.18-8+deb11u1_amd64.deb
+    </p>
+    <p>
+      debconf: apt-extracttemplates failed: No such file or directory
+    </p>
+    <p>
+      Extracting templates from packages: 72%E: Unable to mkstemp /root/tmp/certbot.template.lGeKvN - ofstream::ofstream (2: No such file or directory)
+    </p>
+    <p>
+      E: Unable to mkstemp /root/tmp/certbot.config.gsPiGA - ofstream::ofstream (2: No such file or directory)
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/python3-certbot_1.12.0-2_all.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/dc_1.07.1-2+b2_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/dselect_1.20.13_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/e2fsprogs-l10n_1.46.2-2+deb11u1_all.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/ed_1.17-1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/etckeeper_1.18.16-1_all.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/exim4-config_4.94.2-7+deb11u4_all.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/exim4-base_4.94.2-7+deb11u4_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libunbound8_1.13.1-1+deb11u7_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libgnutls-dane0_3.7.1-5+deb11u8_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libidn11_1.33-3_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/exim4-daemon-light_4.94.2-7+deb11u4_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/fail2ban_0.11.2-2_all.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libpng16-16_1.6.37-3+deb11u1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libfreetype6_2.10.4+dfsg-1+deb11u2_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/fonts-dejavu-core_2.37-2_all.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/fonts-liberation_1%3a1.07.4-11_all.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libfontconfig1_2.13.1-4.2_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/fontconfig-config_2.13.1-4.2_all.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/fontconfig_2.13.1-4.2_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/fonts-dejavu-extra_2.37-2_all.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/fonts-dejavu_2.37-2_all.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libglib2.0-0_2.66.8-1+deb11u7_amd64.deb
+    </p>
+    <p>
+      debconf: apt-extracttemplates failed: No such file or directory
+    </p>
+    <p>
+      Extracting templates from packages: 78%E: Unable to mkstemp /root/tmp/htdig.template.7ljvAX - ofstream::ofstream (2: No such file or directory)
+    </p>
+    <p>
+      E: Unable to mkstemp /root/tmp/htdig.config.kJpDYK - ofstream::ofstream (2: No such file or directory)
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/info_6.7.0.dfsg.2-6_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/iso-codes_4.6.0-1_all.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/joe_4.6-1+b1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libapr1_1.7.0-6+deb11u2_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libclone-perl_0.45-1+b1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libdata-dump-perl_1.23-1.1_all.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libdatrie1_0.2.13-1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libipc-system-simple-perl_1.30-1_all.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libfile-basedir-perl_0.08-1_all.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libfile-copy-recursive-perl_0.45-1_all.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libfile-desktopentry-perl_0.22-2_all.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/shared-mime-info_2.0-1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libfile-mimeinfo-perl_0.30-1_all.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libfont-afm-perl_1.20-3_all.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libfontenc1_1%3a1.1.4-1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libfribidi0_1.0.8-2+deb11u1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libglib2.0-data_2.66.8-1+deb11u7_all.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libgpg-error-l10n_1.38-2_all.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libntlm0_1.6-3_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libgsasl7_1.10.0-4+deb11u1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/libhtml-format-perl_2.12-1.1_all.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/x11-common_1%3a7.7+22_all.deb
+    </p>
+    <p>
+      debconf: apt-extracttemplates failed: No such file or directory
+    </p>
+    <p>
+      Extracting templates from packages: 96%E: Unable to mkstemp /root/tmp/unattended-upgrades.template.o50gy7 - ofstream::ofstream (2: No such file or directory)
+    </p>
+    <p>
+      E: Unable to mkstemp /root/tmp/unattended-upgrades.config.HXM95W - ofstream::ofstream (2: No such file or directory)
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/unzip_6.0-26+deb11u1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/whois_5.5.10_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/xbitmaps_1.1.1-2.1_all.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/xdg-user-dirs_0.17-2_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/xdg-utils_1.1.3-4.1_all.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/xfonts-encodings_1%3a1.0.4-2.1_all.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/xfonts-utils_1%3a7.7+6_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/xterm_366-1+deb11u1_amd64.deb
+    </p>
+    <p>
+      E: Prior errors apply to /var/cache/apt/archives/zip_3.0-12_amd64.deb
+    </p>
+    <p>
+      debconf: apt-extracttemplates failed: No such file or directory
+    </p>
+    <p>
+      Extracting templates from packages: 100%
+    </p>
+    <p>
+      (Reading database ... 29131 files and directories currently installed.)
+    </p>
+    <p>
+      Preparing to unpack .../base-files_11.1+deb11u11_amd64.deb ...
+    </p>
+    <p>
+      Unpacking base-files (11.1+deb11u11) over (9.9+deb9u13) ...
+    </p>
+    <p>
+      Setting up base-files (11.1+deb11u11) ...
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#db094c" DESTINATION="ID_1018241418" ENDARROW="Default" ENDINCLINATION="367;24;" ID="Arrow_ID_1086280858" SOURCE="ID_810037618" STARTARROW="None" STARTINCLINATION="298;0;"/>
+<icon BUILTIN="broken-line"/>
+</node>
+<node CREATED="1766100926058" ID="ID_1680745773" MODIFIED="1766100936994" TEXT="Warnung: ssh wird nicht restartet (DANKE)"/>
+<node COLOR="#435e98" CREATED="1766102084872" ID="ID_1905158989" MODIFIED="1766102754767" STYLE="fork" TEXT="Kollision: crontab">
+<node CREATED="1766102724587" ID="ID_472288555" MODIFIED="1766102752982" TEXT="Cehteh hatte nat&#xfc;rlich die Zeiten ge&#xe4;ndert"/>
+<node CREATED="1766102732422" ID="ID_603159301" MODIFIED="1766102752982" TEXT="aber die Kommandos in alter / neuer Version sind gleich"/>
+<node COLOR="#338800" CREATED="1766102743013" ID="ID_1898189715" MODIFIED="1766102752982" TEXT="also an der Shell zusammengef&#xfc;hrt">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1766102828382" ID="ID_886423284" MODIFIED="1766103448998" TEXT="Kollision: logrotate.conf">
+<node CREATED="1766103418866" ID="ID_905426992" MODIFIED="1766103430596" TEXT="zwei Config-Bl&#xf6;cke fallen weg"/>
+<node CREATED="1766103431886" ID="ID_1953460687" MODIFIED="1766103442056" TEXT="zwei Config-Bl&#xf6;ke hatte ich f&#xfc;r das Trac hinzugef&#xfc;gt"/>
+<node CREATED="1766103442939" ID="ID_1795719278" MODIFIED="1766103447625" TEXT="an der Shell zusammengef&#xfc;hrt"/>
+</node>
+<node COLOR="#435e98" CREATED="1766103739731" ID="ID_930610271" MODIFIED="1766108153756" TEXT="Kollision: /etc/ssh/sshd_config">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1766103752141" ID="ID_471998191" MODIFIED="1766105211737" TEXT="erst mal beiseite kopiert"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1766105198755" ID="ID_769309175" MODIFIED="1766105219625" TEXT="keinerlei relevante lokale &#xc4;nderungen">
+<icon BUILTIN="back"/>
+</node>
+<node COLOR="#338800" CREATED="1766105220327" ID="ID_432065673" MODIFIED="1766105228665" TEXT="verwende neue Version">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1766103792438" ID="ID_1827266018" MODIFIED="1766108155023" TEXT="Kollision: /etc/failt2ban/failtoban.config">
+<node CREATED="1766104007979" ID="ID_678584053" MODIFIED="1766104026009" TEXT="Cehteh hatte hier nur einmal auskommentiert #loglevel=DEBUG"/>
+<node COLOR="#338800" CREATED="1766104026756" ID="ID_126062334" MODIFIED="1766104038863" TEXT="kann neue Version unmodifiziert &#xfc;bernehmen">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1766104157444" ID="ID_1093580223" MODIFIED="1766104167261" TEXT="Upgrade Firehol-Service">
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1766104168283" ID="ID_345236399" MODIFIED="1766104172149" TEXT=" FireHOL[17055]: Firewall has been stopped. Policy is ACCEPT EVERYTHING! ">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1766104341495" ID="ID_1990081843" MODIFIED="1766104345097" TEXT="fertig">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#435e98" CREATED="1766104347180" ID="ID_810037618" MODIFIED="1766104947598" TEXT="installiere die Pakete vom Anfang nochmal mit --reinstall">
+<arrowlink COLOR="#db094c" DESTINATION="ID_1018241418" ENDARROW="Default" ENDINCLINATION="367;24;" ID="Arrow_ID_1086280858" STARTARROW="None" STARTINCLINATION="298;0;"/>
+</node>
+<node COLOR="#338800" CREATED="1766104953194" ID="ID_354567700" MODIFIED="1766105731218" TEXT="liefen jetzt ohne Fehler durch">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1766105736809" ID="ID_730893663" MODIFIED="1766105759720" TEXT="bereits die &#xfc;berarbeitete Apache-Config eingespielt">
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#174956" COLOR="#8dfd49" CREATED="1766106591376" ID="ID_1487239313" MODIFIED="1766110547141" STYLE="bubble" TEXT="Reboot ..... FUNKTIONIERT">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <font face="Monospaced">Dec 19 00:58:24 lumiera systemd[1]: Reached target Reboot. </font>
+    </p>
+    <p>
+      <font face="Monospaced">Dec 19 00:58:24 lumiera systemd[1]: Shutting down. </font>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <font face="Monospaced">Dec 19 00:58:33 lumiera firehol[30]: WARNING: </font>
+    </p>
+    <p>
+      <font face="Monospaced">Dec 19 00:58:33 lumiera firehol[30]: -------- </font>
+    </p>
+    <p>
+      <font face="Monospaced">Dec 19 00:58:33 lumiera firehol[30]: FireHOL cannot find your current kernel configuration. </font>
+    </p>
+    <p>
+      <font face="Monospaced">Dec 19 00:58:33 lumiera firehol[30]: Please, either compile your kernel with /proc/config, </font>
+    </p>
+    <p>
+      <font face="Monospaced">Dec 19 00:58:33 lumiera firehol[30]: or make sure there is a valid kernel config in: </font>
+    </p>
+    <p>
+      <font face="Monospaced">Dec 19 00:58:33 lumiera firehol[30]: /usr/src/linux/.config </font>
+    </p>
+    <p>
+      <font face="Monospaced">Dec 19 00:58:36 lumiera systemd[1]: Finished Firehol stateful packet filtering firewall for humans. </font>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <font face="Monospaced">Dec 19 00:58:36 lumiera systemd[1]: Reached target Network (Pre). </font>
+    </p>
+    <p>
+      <font face="Monospaced">Dec 19 00:58:36 lumiera systemd[1]: Starting Raise network interfaces... </font>
+    </p>
+    <p>
+      <font face="Monospaced">Dec 19 00:58:36 lumiera systemd[1]: Reached target Network is Online. </font>
+    </p>
+    <p>
+      <font face="Monospaced">Dec 19 00:58:36 lumiera systemd[1]: Starting Fail2Ban Service... </font>
+    </p>
+    <p>
+      <font face="Monospaced">Dec 19 00:58:36 lumiera systemd[1]: Reached target Login Prompts. </font>
+    </p>
+    <p>
+      <font face="Monospaced">Dec 19 00:58:36 lumiera sshd[359]: Server listening on 0.0.0.0 port 22. </font>
+    </p>
+    <p>
+      <font face="Monospaced">Dec 19 00:58:36 lumiera sshd[359]: Server listening on :: port 22. </font>
+    </p>
+    <p>
+      <font face="Monospaced">Dec 19 00:58:36 lumiera systemd[1]: Started OpenBSD Secure Shell server. </font>
+    </p>
+    <p>
+      <font face="Monospaced">Dec 19 00:58:36 lumiera systemd[1]: Reached target Multi-User System. </font>
+    </p>
+    <p>
+      <font face="Monospaced">Dec 19 00:58:36 lumiera systemd[1]: Startup finished in 4.275s. </font>
+    </p>
+    <p>
+      <font face="Monospaced">Dec 19 00:58:36 lumiera fail2ban-server[353]: Server ready </font>
+    </p>
+  </body>
+</html></richcontent>
+<edge COLOR="#9e7171" STYLE="linear" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="16"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1766106691414" ID="ID_1391425017" MODIFIED="1766110912816" TEXT="Schritt-2 : Bookworm">
+<icon BUILTIN="full-2"/>
+<node CREATED="1766107183801" ID="ID_1442523514" MODIFIED="1766107254693">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Apt: bleibe vorerst auf&#160; <font color="#a80505" face="Monospaced"><b>http</b></font><font face="Monospaced">://deb.debian.org</font>
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Eine Fehlerquelle weniger, und die Pakete sind ja eh signiert
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1766107402513" ID="ID_448303866" MODIFIED="1766107420771" TEXT="Apt-Sources">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      deb http://deb.debian.org/debian bookworm main contrib non-free
+    </p>
+    <p>
+      deb-src http://deb.debian.org/debian bookworm main contrib non-free
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      deb http://deb.debian.org/debian bookworm-updates main contrib non-free
+    </p>
+    <p>
+      deb-src http://deb.debian.org/debian bookworm-updates main contrib non-free
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      deb http://deb.debian.org/debian bookworm-proposed-updates main contrib non-free
+    </p>
+    <p>
+      deb-src http://deb.debian.org/debian bookworm-proposed-updates main contrib non-free
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      deb http://deb.debian.org/debian bookworm-backports main contrib non-free
+    </p>
+    <p>
+      deb-src http://deb.debian.org/debian bookworm-backports main contrib non-free
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      deb http://security.debian.org/debian-security/ bookworm-security main contrib non-free
+    </p>
+    <p>
+      deb-src http://security.debian.org/debian-security/ bookworm-security main contrib non-free
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="list"/>
+</node>
+<node CREATED="1766107618469" ID="ID_1065733670" MODIFIED="1766111418861" TEXT="421 packages can be upgraded">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      acl/oldstable 2.3.1-3 amd64 [upgradable from: 2.2.53-10]
+    </p>
+    <p>
+      adduser/oldstable 3.134 all [upgradable from: 3.118+deb11u1]
+    </p>
+    <p>
+      and/oldstable 1.2.2-4.2 amd64 [upgradable from: 1.2.2-4.1+b2]
+    </p>
+    <p>
+      apt-transport-https/oldstable 2.6.1 all [upgradable from: 2.2.4]
+    </p>
+    <p>
+      apt-utils/oldstable 2.6.1 amd64 [upgradable from: 2.2.4]
+    </p>
+    <p>
+      apt/oldstable 2.6.1 amd64 [upgradable from: 2.2.4]
+    </p>
+    <p>
+      asciidoc-base/oldstable 10.2.0-1 all [upgradable from: 9.0.0~rc2-1]
+    </p>
+    <p>
+      asciidoc-common/oldstable 10.2.0-1 all [upgradable from: 9.0.0~rc2-1]
+    </p>
+    <p>
+      asciidoc/oldstable 10.2.0-1 all [upgradable from: 9.0.0~rc2-1]
+    </p>
+    <p>
+      base-files/oldstable 12.4+deb12u12 amd64 [upgradable from: 11.1+deb11u11]
+    </p>
+    <p>
+      base-passwd/oldstable 3.6.1 amd64 [upgradable from: 3.5.51]
+    </p>
+    <p>
+      bash-completion/oldstable 1:2.11-6 all [upgradable from: 1:2.11-2]
+    </p>
+    <p>
+      bash/oldstable-proposed-updates 5.2.15-2+b10 amd64 [upgradable from: 5.1-2+deb11u1]
+    </p>
+    <p>
+      bc/oldstable 1.07.1-3+b1 amd64 [upgradable from: 1.07.1-2+b2]
+    </p>
+    <p>
+      bsdextrautils/oldstable 2.38.1-5+deb12u3 amd64 [upgradable from: 2.36.1-8+deb11u2]
+    </p>
+    <p>
+      bsdutils/oldstable 1:2.38.1-5+deb12u3 amd64 [upgradable from: 1:2.36.1-8+deb11u2]
+    </p>
+    <p>
+      bzip2/oldstable 1.0.8-5+b1 amd64 [upgradable from: 1.0.8-4]
+    </p>
+    <p>
+      ca-certificates/oldstable,oldstable-updates 20230311+deb12u1 all [upgradable from: 20210119]
+    </p>
+    <p>
+      certbot/oldstable 2.1.0-4 all [upgradable from: 1.12.0-2]
+    </p>
+    <p>
+      coreutils/oldstable 9.1-1 amd64 [upgradable from: 8.32-4+b1]
+    </p>
+    <p>
+      cpio/oldstable 2.13+dfsg-7.1 amd64 [upgradable from: 2.13+dfsg-7.1~deb11u1]
+    </p>
+    <p>
+      cron/oldstable 3.0pl1-162 amd64 [upgradable from: 3.0pl1-137]
+    </p>
+    <p>
+      curl/oldstable 7.88.1-10+deb12u14 amd64 [upgradable from: 7.74.0-1.3+deb11u15]
+    </p>
+    <p>
+      dash/oldstable 0.5.12-2 amd64 [upgradable from: 0.5.11+git20200708+dd9ef66-5]
+    </p>
+    <p>
+      dbus/oldstable 1.14.10-1~deb12u1 amd64 [upgradable from: 1.12.28-0+deb11u1]
+    </p>
+    <p>
+      dc/oldstable 1.07.1-3+b1 amd64 [upgradable from: 1.07.1-2+b2]
+    </p>
+    <p>
+      debconf-i18n/oldstable 1.5.82 all [upgradable from: 1.5.77]
+    </p>
+    <p>
+      debconf/oldstable 1.5.82 all [upgradable from: 1.5.77]
+    </p>
+    <p>
+      debian-archive-keyring/oldstable 2023.3+deb12u2 all [upgradable from: 2021.1.1+deb11u1]
+    </p>
+    <p>
+      debianutils/oldstable 5.7-0.5~deb12u1 amd64 [upgradable from: 4.11.2]
+    </p>
+    <p>
+      diffutils/oldstable 1:3.8-4 amd64 [upgradable from: 1:3.7-5]
+    </p>
+    <p>
+      dirmngr/oldstable 2.2.40-1.1+deb12u1 amd64 [upgradable from: 2.2.27-2+deb11u2]
+    </p>
+    <p>
+      distro-info-data/oldstable-proposed-updates 0.58+deb12u6 all [upgradable from: 0.51+deb11u10]
+    </p>
+    <p>
+      dmsetup/oldstable 2:1.02.185-2 amd64 [upgradable from: 2:1.02.175-2.1]
+    </p>
+    <p>
+      dpkg/oldstable 1.21.22 amd64 [upgradable from: 1.20.13]
+    </p>
+    <p>
+      dselect/oldstable 1.21.22 amd64 [upgradable from: 1.20.13]
+    </p>
+    <p>
+      e2fsprogs-l10n/oldstable 1.47.0-2 all [upgradable from: 1.46.2-2+deb11u1]
+    </p>
+    <p>
+      e2fsprogs/oldstable 1.47.0-2+b2 amd64 [upgradable from: 1.46.2-2+deb11u1]
+    </p>
+    <p>
+      ed/oldstable 1.19-1 amd64 [upgradable from: 1.17-1]
+    </p>
+    <p>
+      etckeeper/oldstable 1.18.20-1 all [upgradable from: 1.18.16-1]
+    </p>
+    <p>
+      exim4-base/oldstable,oldstable-security 4.96-15+deb12u7 amd64 [upgradable from: 4.94.2-7+deb11u4]
+    </p>
+    <p>
+      exim4-config/oldstable,oldstable-security 4.96-15+deb12u7 all [upgradable from: 4.94.2-7+deb11u4]
+    </p>
+    <p>
+      exim4-daemon-light/oldstable,oldstable-security 4.96-15+deb12u7 amd64 [upgradable from: 4.94.2-7+deb11u4]
+    </p>
+    <p>
+      fail2ban/oldstable 1.0.2-2 all [upgradable from: 0.11.2-2]
+    </p>
+    <p>
+      file/oldstable 1:5.44-3 amd64 [upgradable from: 1:5.39-3+deb11u1]
+    </p>
+    <p>
+      findutils/oldstable 4.9.0-4 amd64 [upgradable from: 4.8.0-1]
+    </p>
+    <p>
+      firehol-common/oldstable 3.1.7+ds-2.1 all [upgradable from: 3.1.7+ds-2]
+    </p>
+    <p>
+      firehol/oldstable 3.1.7+ds-2.1 all [upgradable from: 3.1.7+ds-2]
+    </p>
+    <p>
+      fireqos/oldstable 3.1.7+ds-2.1 all [upgradable from: 3.1.7+ds-2]
+    </p>
+    <p>
+      fontconfig-config/oldstable 2.14.1-4 all [upgradable from: 2.13.1-4.2]
+    </p>
+    <p>
+      fontconfig/oldstable 2.14.1-4 amd64 [upgradable from: 2.13.1-4.2]
+    </p>
+    <p>
+      fonts-dejavu-core/oldstable 2.37-6 all [upgradable from: 2.37-2]
+    </p>
+    <p>
+      fonts-dejavu-extra/oldstable 2.37-6 all [upgradable from: 2.37-2]
+    </p>
+    <p>
+      fonts-dejavu/oldstable 2.37-6 all [upgradable from: 2.37-2]
+    </p>
+    <p>
+      gawk/oldstable 1:5.2.1-2 amd64 [upgradable from: 1:5.1.0-1]
+    </p>
+    <p>
+      gir1.2-glib-2.0/oldstable 1.74.0-3 amd64 [upgradable from: 1.66.1-1+b1]
+    </p>
+    <p>
+      git-man/oldstable-proposed-updates 1:2.39.5-0+deb12u3 all [upgradable from: 1:2.30.2-1+deb11u5]
+    </p>
+    <p>
+      git/oldstable-proposed-updates 1:2.39.5-0+deb12u3 amd64 [upgradable from: 1:2.30.2-1+deb11u5]
+    </p>
+    <p>
+      gnupg-l10n/oldstable 2.2.40-1.1+deb12u1 all [upgradable from: 2.2.27-2+deb11u2]
+    </p>
+    <p>
+      gnupg-utils/oldstable 2.2.40-1.1+deb12u1 amd64 [upgradable from: 2.2.27-2+deb11u2]
+    </p>
+    <p>
+      gnupg/oldstable 2.2.40-1.1+deb12u1 all [upgradable from: 2.2.27-2+deb11u2]
+    </p>
+    <p>
+      gpg-agent/oldstable 2.2.40-1.1+deb12u1 amd64 [upgradable from: 2.2.27-2+deb11u2]
+    </p>
+    <p>
+      gpg-wks-client/oldstable 2.2.40-1.1+deb12u1 amd64 [upgradable from: 2.2.27-2+deb11u2]
+    </p>
+    <p>
+      gpg-wks-server/oldstable 2.2.40-1.1+deb12u1 amd64 [upgradable from: 2.2.27-2+deb11u2]
+    </p>
+    <p>
+      gpg/oldstable 2.2.40-1.1+deb12u1 amd64 [upgradable from: 2.2.27-2+deb11u2]
+    </p>
+    <p>
+      gpgconf/oldstable 2.2.40-1.1+deb12u1 amd64 [upgradable from: 2.2.27-2+deb11u2]
+    </p>
+    <p>
+      gpgsm/oldstable 2.2.40-1.1+deb12u1 amd64 [upgradable from: 2.2.27-2+deb11u2]
+    </p>
+    <p>
+      gpgv/oldstable 2.2.40-1.1+deb12u1 amd64 [upgradable from: 2.2.27-2+deb11u2]
+    </p>
+    <p>
+      grep/oldstable 3.8-5 amd64 [upgradable from: 3.6-1+deb11u1]
+    </p>
+    <p>
+      groff-base/oldstable 1.22.4-10 amd64 [upgradable from: 1.22.4-6]
+    </p>
+    <p>
+      gsasl-common/oldstable 2.2.0-1 all [upgradable from: 1.10.0-4+deb11u1]
+    </p>
+    <p>
+      guile-2.2-libs/oldstable 2.2.7+1-9 amd64 [upgradable from: 2.2.7+1-6]
+    </p>
+    <p>
+      gzip/oldstable 1.12-1 amd64 [upgradable from: 1.10-4+deb11u1]
+    </p>
+    <p>
+      hostname/oldstable 3.23+nmu1 amd64 [upgradable from: 3.23]
+    </p>
+    <p>
+      htdig/oldstable 1:3.2.0b6-19+b1 amd64 [upgradable from: 1:3.2.0b6-18]
+    </p>
+    <p>
+      ifupdown/oldstable 0.8.41 amd64 [upgradable from: 0.8.36]
+    </p>
+    <p>
+      info/oldstable 6.8-6+b1 amd64 [upgradable from: 6.7.0.dfsg.2-6]
+    </p>
+    <p>
+      init-system-helpers/oldstable 1.65.2+deb12u1 all [upgradable from: 1.60]
+    </p>
+    <p>
+      init/oldstable 1.65.2+deb12u1 amd64 [upgradable from: 1.60]
+    </p>
+    <p>
+      initscripts/oldstable 3.06-4 all [upgradable from: 2.96-7+deb11u1]
+    </p>
+    <p>
+      insserv/oldstable 1.24.0-1 amd64 [upgradable from: 1.21.0-1.1]
+    </p>
+    <p>
+      install-info/oldstable 6.8-6+b1 amd64 [upgradable from: 6.7.0.dfsg.2-6]
+    </p>
+    <p>
+      iproute2/oldstable 6.1.0-3 amd64 [upgradable from: 5.10.0-4]
+    </p>
+    <p>
+      ipset/oldstable 7.17-1 amd64 [upgradable from: 7.10-1]
+    </p>
+    <p>
+      iptables/oldstable 1.8.9-2 amd64 [upgradable from: 1.8.7-1]
+    </p>
+    <p>
+      iputils-ping/oldstable 3:20221126-1+deb12u1 amd64 [upgradable from: 3:20210202-1]
+    </p>
+    <p>
+      isc-dhcp-client/oldstable 4.4.3-P1-2 amd64 [upgradable from: 4.4.1-2.3+deb11u2]
+    </p>
+    <p>
+      isc-dhcp-common/oldstable 4.4.3-P1-2 amd64 [upgradable from: 4.4.1-2.3+deb11u2]
+    </p>
+    <p>
+      iso-codes/oldstable 4.15.0-1 all [upgradable from: 4.6.0-1]
+    </p>
+    <p>
+      joe/oldstable 4.6-1.1 amd64 [upgradable from: 4.6-1+b1]
+    </p>
+    <p>
+      kmod/oldstable 30+20221128-1 amd64 [upgradable from: 28-1]
+    </p>
+    <p>
+      krb5-locales/oldstable 1.20.1-2+deb12u4 all [upgradable from: 1.18.3-6+deb11u7]
+    </p>
+    <p>
+      less/oldstable,oldstable-security 590-2.1~deb12u2 amd64 [upgradable from: 551-2+deb11u2]
+    </p>
+    <p>
+      libacl1/oldstable 2.3.1-3 amd64 [upgradable from: 2.2.53-10]
+    </p>
+    <p>
+      libapparmor1/oldstable 3.0.8-3 amd64 [upgradable from: 2.13.6-10]
+    </p>
+    <p>
+      libapr1/oldstable 1.7.2-3+deb12u1 amd64 [upgradable from: 1.7.0-6+deb11u2]
+    </p>
+    <p>
+      libapt-pkg6.0/oldstable 2.6.1 amd64 [upgradable from: 2.2.4]
+    </p>
+    <p>
+      libargon2-1/oldstable 0~20171227-0.3+deb12u1 amd64 [upgradable from: 0~20171227-0.2]
+    </p>
+    <p>
+      libassuan0/oldstable 2.5.5-5 amd64 [upgradable from: 2.5.3-7.1]
+    </p>
+    <p>
+      libattr1/oldstable 1:2.5.1-4 amd64 [upgradable from: 1:2.4.48-6]
+    </p>
+    <p>
+      libaudit-common/oldstable 1:3.0.9-1 all [upgradable from: 1:3.0-2]
+    </p>
+    <p>
+      libaudit1/oldstable 1:3.0.9-1 amd64 [upgradable from: 1:3.0-2]
+    </p>
+    <p>
+      libblkid1/oldstable 2.38.1-5+deb12u3 amd64 [upgradable from: 2.36.1-8+deb11u2]
+    </p>
+    <p>
+      libbrotli1/oldstable 1.0.9-2+b6 amd64 [upgradable from: 1.0.9-2+b2]
+    </p>
+    <p>
+      libbsd0/oldstable 0.11.7-2 amd64 [upgradable from: 0.11.3-1+deb11u1]
+    </p>
+    <p>
+      libbz2-1.0/oldstable 1.0.8-5+b1 amd64 [upgradable from: 1.0.8-4]
+    </p>
+    <p>
+      libc-bin/oldstable 2.36-9+deb12u13 amd64 [upgradable from: 2.31-13+deb11u13]
+    </p>
+    <p>
+      libc-l10n/oldstable 2.36-9+deb12u13 all [upgradable from: 2.31-13+deb11u13]
+    </p>
+    <p>
+      libc6/oldstable 2.36-9+deb12u13 amd64 [upgradable from: 2.31-13+deb11u13]
+    </p>
+    <p>
+      libcap-ng0/oldstable 0.8.3-1+b3 amd64 [upgradable from: 0.7.9-2.2+b1]
+    </p>
+    <p>
+      libcap2-bin/oldstable-proposed-updates 1:2.66-4+deb12u2+b2 amd64 [upgradable from: 1:2.44-1+deb11u1]
+    </p>
+    <p>
+      libcap2/oldstable-proposed-updates 1:2.66-4+deb12u2+b2 amd64 [upgradable from: 1:2.44-1+deb11u1]
+    </p>
+    <p>
+      libclone-perl/oldstable 0.46-1 amd64 [upgradable from: 0.45-1+b1]
+    </p>
+    <p>
+      libcom-err2/oldstable 1.47.0-2+b2 amd64 [upgradable from: 1.46.2-2+deb11u1]
+    </p>
+    <p>
+      libcrypt1/oldstable 1:4.4.33-2 amd64 [upgradable from: 1:4.4.18-4]
+    </p>
+    <p>
+      libcryptsetup12/oldstable 2:2.6.1-4~deb12u2 amd64 [upgradable from: 2:2.3.7-1+deb11u1]
+    </p>
+    <p>
+      libcurl3-gnutls/oldstable 7.88.1-10+deb12u14 amd64 [upgradable from: 7.74.0-1.3+deb11u15]
+    </p>
+    <p>
+      libcurl4/oldstable 7.88.1-10+deb12u14 amd64 [upgradable from: 7.74.0-1.3+deb11u15]
+    </p>
+    <p>
+      libdata-dump-perl/oldstable 1.25-1 all [upgradable from: 1.23-1.1]
+    </p>
+    <p>
+      libdatrie1/oldstable 0.2.13-2+b1 amd64 [upgradable from: 0.2.13-1]
+    </p>
+    <p>
+      libdb5.3/oldstable 5.3.28+dfsg2-1 amd64 [upgradable from: 5.3.28+dfsg1-0.8]
+    </p>
+    <p>
+      libdbd-sqlite3-perl/oldstable 1.72-1 amd64 [upgradable from: 1.66-1+b1]
+    </p>
+    <p>
+      libdbi-perl/oldstable 1.643-4 amd64 [upgradable from: 1.643-3+b1]
+    </p>
+    <p>
+      libdbus-1-3/oldstable 1.14.10-1~deb12u1 amd64 [upgradable from: 1.12.28-0+deb11u1]
+    </p>
+    <p>
+      libdebconfclient0/oldstable 0.270 amd64 [upgradable from: 0.260]
+    </p>
+    <p>
+      libdevmapper1.02.1/oldstable 2:1.02.185-2 amd64 [upgradable from: 2:1.02.175-2.1]
+    </p>
+    <p>
+      libedit2/oldstable 3.1-20221030-2 amd64 [upgradable from: 3.1-20191231-2+b1]
+    </p>
+    <p>
+      libelf1/oldstable 0.188-2.1 amd64 [upgradable from: 0.183-1]
+    </p>
+    <p>
+      libencode-locale-perl/oldstable 1.05-3 all [upgradable from: 1.05-1.1]
+    </p>
+    <p>
+      liberror-perl/oldstable 0.17029-2 all [upgradable from: 0.17029-1]
+    </p>
+    <p>
+      libestr0/oldstable 0.1.11-1 amd64 [upgradable from: 0.1.10-2.1+b1]
+    </p>
+    <p>
+      libevent-2.1-7/oldstable 2.1.12-stable-8 amd64 [upgradable from: 2.1.12-stable-1]
+    </p>
+    <p>
+      libexpat1/oldstable 2.5.0-1+deb12u2 amd64 [upgradable from: 2.2.10-2+deb11u7]
+    </p>
+    <p>
+      libext2fs2/oldstable 1.47.0-2+b2 amd64 [upgradable from: 1.46.2-2+deb11u1]
+    </p>
+    <p>
+      libfastjson4/oldstable 1.2304.0-1 amd64 [upgradable from: 0.99.9-1+deb11u1]
+    </p>
+    <p>
+      libfido2-1/oldstable 1.12.0-2+b1 amd64 [upgradable from: 1.6.0-2]
+    </p>
+    <p>
+      libfile-basedir-perl/oldstable 0.09-2 all [upgradable from: 0.08-1]
+    </p>
+    <p>
+      libfile-desktopentry-perl/oldstable 0.22-3 all [upgradable from: 0.22-2]
+    </p>
+    <p>
+      libfile-listing-perl/oldstable 6.15-1 all [upgradable from: 6.14-1]
+    </p>
+    <p>
+      libfile-mimeinfo-perl/oldstable 0.33-1 all [upgradable from: 0.30-1]
+    </p>
+    <p>
+      libfont-afm-perl/oldstable 1.20-4 all [upgradable from: 1.20-3]
+    </p>
+    <p>
+      libfontconfig1/oldstable 2.14.1-4 amd64 [upgradable from: 2.13.1-4.2]
+    </p>
+    <p>
+      libfreetype6/oldstable,oldstable-security 2.12.1+dfsg-5+deb12u4 amd64 [upgradable from: 2.10.4+dfsg-1+deb11u2]
+    </p>
+    <p>
+      libfribidi0/oldstable 1.0.8-2.1 amd64 [upgradable from: 1.0.8-2+deb11u1]
+    </p>
+    <p>
+      libgc1/oldstable 1:8.2.2-3 amd64 [upgradable from: 1:8.0.4-3]
+    </p>
+    <p>
+      libgcc-s1/oldstable 12.2.0-14+deb12u1 amd64 [upgradable from: 10.2.1-6]
+    </p>
+    <p>
+      libgcrypt20/oldstable 1.10.1-3 amd64 [upgradable from: 1.8.7-6]
+    </p>
+    <p>
+      libgdbm-compat4/oldstable 1.23-3 amd64 [upgradable from: 1.19-2]
+    </p>
+    <p>
+      libgdbm6/oldstable 1.23-3 amd64 [upgradable from: 1.19-2]
+    </p>
+    <p>
+      libgirepository-1.0-1/oldstable 1.74.0-3 amd64 [upgradable from: 1.66.1-1+b1]
+    </p>
+    <p>
+      libglib2.0-0/oldstable 2.74.6-2+deb12u7 amd64 [upgradable from: 2.66.8-1+deb11u7]
+    </p>
+    <p>
+      libglib2.0-data/oldstable 2.74.6-2+deb12u7 all [upgradable from: 2.66.8-1+deb11u7]
+    </p>
+    <p>
+      libgmp10/oldstable 2:6.2.1+dfsg1-1.1 amd64 [upgradable from: 2:6.2.1+dfsg-1+deb11u1]
+    </p>
+    <p>
+      libgnutls-dane0/oldstable,oldstable-security 3.7.9-2+deb12u5 amd64 [upgradable from: 3.7.1-5+deb11u8]
+    </p>
+    <p>
+      libgnutls30/oldstable,oldstable-security 3.7.9-2+deb12u5 amd64 [upgradable from: 3.7.1-5+deb11u8]
+    </p>
+    <p>
+      libgpg-error-l10n/oldstable 1.46-1 all [upgradable from: 1.38-2]
+    </p>
+    <p>
+      libgpg-error0/oldstable 1.46-1 amd64 [upgradable from: 1.38-2]
+    </p>
+    <p>
+      libgpm2/oldstable 1.20.7-10+b1 amd64 [upgradable from: 1.20.7-8]
+    </p>
+    <p>
+      libgssapi-krb5-2/oldstable 1.20.1-2+deb12u4 amd64 [upgradable from: 1.18.3-6+deb11u7]
+    </p>
+    <p>
+      libhogweed6/oldstable 3.8.1-2 amd64 [upgradable from: 3.7.3-1]
+    </p>
+    <p>
+      libhtml-form-perl/oldstable 6.11-1 all [upgradable from: 6.07-1]
+    </p>
+    <p>
+      libhtml-format-perl/oldstable 2.16-2 all [upgradable from: 2.12-1.1]
+    </p>
+    <p>
+      libhtml-parser-perl/oldstable 3.81-1 amd64 [upgradable from: 3.75-1+b1]
+    </p>
+    <p>
+      libhtml-tagset-perl/oldstable 3.20-6 all [upgradable from: 3.20-4]
+    </p>
+    <p>
+      libhtml-tree-perl/oldstable 5.07-3 all [upgradable from: 5.07-2]
+    </p>
+    <p>
+      libhttp-daemon-perl/oldstable 6.16-1 all [upgradable from: 6.12-1+deb11u1]
+    </p>
+    <p>
+      libhttp-date-perl/oldstable 6.05-2 all [upgradable from: 6.05-1]
+    </p>
+    <p>
+      libhttp-message-perl/oldstable 6.44-1 all [upgradable from: 6.28-1]
+    </p>
+    <p>
+      libhttp-negotiate-perl/oldstable 6.01-2 all [upgradable from: 6.01-1]
+    </p>
+    <p>
+      libidn2-0/oldstable 2.3.3-1+b1 amd64 [upgradable from: 2.3.0-5]
+    </p>
+    <p>
+      libio-html-perl/oldstable 1.004-3 all [upgradable from: 1.004-2]
+    </p>
+    <p>
+      libio-socket-ssl-perl/oldstable 2.081-2 all [upgradable from: 2.069-1]
+    </p>
+    <p>
+      libip4tc2/oldstable 1.8.9-2 amd64 [upgradable from: 1.8.7-1]
+    </p>
+    <p>
+      libip6tc2/oldstable 1.8.9-2 amd64 [upgradable from: 1.8.7-1]
+    </p>
+    <p>
+      libipc-system-simple-perl/oldstable 1.30-2 all [upgradable from: 1.30-1]
+    </p>
+    <p>
+      libipset13/oldstable 7.17-1 amd64 [upgradable from: 7.10-1]
+    </p>
+    <p>
+      libjansson4/oldstable 2.14-2 amd64 [upgradable from: 2.13.1-1.1]
+    </p>
+    <p>
+      libjson-c5/oldstable 0.16-2 amd64 [upgradable from: 0.15-2+deb11u1]
+    </p>
+    <p>
+      libk5crypto3/oldstable 1.20.1-2+deb12u4 amd64 [upgradable from: 1.18.3-6+deb11u7]
+    </p>
+    <p>
+      libkeyutils1/oldstable 1.6.3-2 amd64 [upgradable from: 1.6.1-2]
+    </p>
+    <p>
+      libkmod2/oldstable 30+20221128-1 amd64 [upgradable from: 28-1]
+    </p>
+    <p>
+      libkrb5-3/oldstable 1.20.1-2+deb12u4 amd64 [upgradable from: 1.18.3-6+deb11u7]
+    </p>
+    <p>
+      libkrb5support0/oldstable 1.20.1-2+deb12u4 amd64 [upgradable from: 1.18.3-6+deb11u7]
+    </p>
+    <p>
+      libksba8/oldstable 1.6.3-2 amd64 [upgradable from: 1.5.0-3+deb11u2]
+    </p>
+    <p>
+      libldap-common/oldstable 2.5.13+dfsg-5 all [upgradable from: 2.4.57+dfsg-3+deb11u1]
+    </p>
+    <p>
+      liblocale-gettext-perl/oldstable 1.07-5 amd64 [upgradable from: 1.07-4+b1]
+    </p>
+    <p>
+      liblognorm5/oldstable 2.0.6-4 amd64 [upgradable from: 2.0.5-1.1]
+    </p>
+    <p>
+      libltdl7/oldstable 2.4.7-7~deb12u1 amd64 [upgradable from: 2.4.6-15]
+    </p>
+    <p>
+      liblwp-mediatypes-perl/oldstable 6.04-2 all [upgradable from: 6.04-1]
+    </p>
+    <p>
+      liblz4-1/oldstable 1.9.4-1 amd64 [upgradable from: 1.9.3-2]
+    </p>
+    <p>
+      liblzma5/oldstable,oldstable-security 5.4.1-1 amd64 [upgradable from: 5.2.5-2.1~deb11u1]
+    </p>
+    <p>
+      libmagic-mgc/oldstable 1:5.44-3 amd64 [upgradable from: 1:5.39-3+deb11u1]
+    </p>
+    <p>
+      libmagic1/oldstable 1:5.44-3 amd64 [upgradable from: 1:5.39-3+deb11u1]
+    </p>
+    <p>
+      libmariadb3/oldstable 1:10.11.14-0+deb12u2 amd64 [upgradable from: 1:10.5.29-0+deb11u1]
+    </p>
+    <p>
+      libmd0/oldstable 1.0.4-2 amd64 [upgradable from: 1.0.3-3]
+    </p>
+    <p>
+      libmount1/oldstable 2.38.1-5+deb12u3 amd64 [upgradable from: 2.36.1-8+deb11u2]
+    </p>
+    <p>
+      libmpfr6/oldstable 4.2.0-1 amd64 [upgradable from: 4.1.0-3]
+    </p>
+    <p>
+      libncurses5/oldstable 6.4-4 amd64 [upgradable from: 6.2+20201114-2+deb11u2]
+    </p>
+    <p>
+      libncurses6/oldstable 6.4-4 amd64 [upgradable from: 6.2+20201114-2+deb11u2]
+    </p>
+    <p>
+      libncursesw5/oldstable 6.4-4 amd64 [upgradable from: 6.2+20201114-2+deb11u2]
+    </p>
+    <p>
+      libncursesw6/oldstable 6.4-4 amd64 [upgradable from: 6.2+20201114-2+deb11u2]
+    </p>
+    <p>
+      libnet-daemon-perl/oldstable 0.49-2 all [upgradable from: 0.48-2]
+    </p>
+    <p>
+      libnet-dbus-perl/oldstable 1.2.0-2 amd64 [upgradable from: 1.2.0-1+b1]
+    </p>
+    <p>
+      libnet-http-perl/oldstable 6.22-1 all [upgradable from: 6.20-1]
+    </p>
+    <p>
+      libnet-ssleay-perl/oldstable 1.92-2+b1 amd64 [upgradable from: 1.88-3+b1]
+    </p>
+    <p>
+      libnetfilter-conntrack3/oldstable 1.0.9-3 amd64 [upgradable from: 1.0.8-3]
+    </p>
+    <p>
+      libnettle8/oldstable 3.8.1-2 amd64 [upgradable from: 3.7.3-1]
+    </p>
+    <p>
+      libnewt0.52/oldstable 0.52.23-1+b1 amd64 [upgradable from: 0.52.21-4+b3]
+    </p>
+    <p>
+      libnfnetlink0/oldstable 1.0.2-2 amd64 [upgradable from: 1.0.1-3+b1]
+    </p>
+    <p>
+      libnftables1/oldstable 1.0.6-2+deb12u2 amd64 [upgradable from: 0.9.8-3.1+deb11u2]
+    </p>
+    <p>
+      libnftnl11/oldstable 1.2.4-2 amd64 [upgradable from: 1.1.9-1]
+    </p>
+    <p>
+      libnghttp2-14/oldstable 1.52.0-1+deb12u2 amd64 [upgradable from: 1.43.0-1+deb11u2]
+    </p>
+    <p>
+      libnss-systemd/oldstable 252.39-1~deb12u1 amd64 [upgradable from: 247.3-7+deb11u7]
+    </p>
+    <p>
+      libntlm0/oldstable 1.6-4 amd64 [upgradable from: 1.6-3]
+    </p>
+    <p>
+      libp11-kit0/oldstable 0.24.1-2 amd64 [upgradable from: 0.23.22-1]
+    </p>
+    <p>
+      libpam-cap/oldstable-proposed-updates 1:2.66-4+deb12u2+b2 amd64 [upgradable from: 1:2.44-1+deb11u1]
+    </p>
+    <p>
+      libpam-modules-bin/oldstable-proposed-updates 1.5.2-6+deb12u2 amd64 [upgradable from: 1.4.0-9+deb11u2]
+    </p>
+    <p>
+      libpam-modules/oldstable-proposed-updates 1.5.2-6+deb12u2 amd64 [upgradable from: 1.4.0-9+deb11u2]
+    </p>
+    <p>
+      libpam-runtime/oldstable-proposed-updates 1.5.2-6+deb12u2 all [upgradable from: 1.4.0-9+deb11u2]
+    </p>
+    <p>
+      libpam-systemd/oldstable 252.39-1~deb12u1 amd64 [upgradable from: 247.3-7+deb11u7]
+    </p>
+    <p>
+      libpam0g/oldstable-proposed-updates 1.5.2-6+deb12u2 amd64 [upgradable from: 1.4.0-9+deb11u2]
+    </p>
+    <p>
+      libpcap0.8/oldstable 1.10.3-1 amd64 [upgradable from: 1.10.0-2]
+    </p>
+    <p>
+      libpcre2-8-0/oldstable 10.42-1 amd64 [upgradable from: 10.36-2+deb11u1]
+    </p>
+    <p>
+      libpcre3/oldstable 2:8.39-15 amd64 [upgradable from: 2:8.39-13]
+    </p>
+    <p>
+      libpipeline1/oldstable 1.5.7-1 amd64 [upgradable from: 1.5.3-1]
+    </p>
+    <p>
+      libpixman-1-0/oldstable 0.42.2-1 amd64 [upgradable from: 0.40.0-1.1~deb11u1]
+    </p>
+    <p>
+      libpng16-16/oldstable-security 1.6.39-2+deb12u1 amd64 [upgradable from: 1.6.37-3+deb11u1]
+    </p>
+    <p>
+      libpopt0/oldstable 1.19+dfsg-1 amd64 [upgradable from: 1.18-2]
+    </p>
+    <p>
+      libpsl5/oldstable 0.21.2-1 amd64 [upgradable from: 0.21.0-1.2]
+    </p>
+    <p>
+      libpython3-stdlib/oldstable 3.11.2-1+b1 amd64 [upgradable from: 3.9.2-3]
+    </p>
+    <p>
+      libreadline8/oldstable 8.2-1.3 amd64 [upgradable from: 8.1-1]
+    </p>
+    <p>
+      libsasl2-2/oldstable 2.1.28+dfsg-10 amd64 [upgradable from: 2.1.27+dfsg-2.1+deb11u1]
+    </p>
+    <p>
+      libsasl2-modules-db/oldstable 2.1.28+dfsg-10 amd64 [upgradable from: 2.1.27+dfsg-2.1+deb11u1]
+    </p>
+    <p>
+      libseccomp2/oldstable 2.5.4-1+deb12u1 amd64 [upgradable from: 2.5.1-1+deb11u1]
+    </p>
+    <p>
+      libselinux1/oldstable 3.4-1+b6 amd64 [upgradable from: 3.1-3]
+    </p>
+    <p>
+      libsemanage-common/oldstable 3.4-1 all [upgradable from: 3.1-1]
+    </p>
+    <p>
+      libsigsegv2/oldstable 2.14-1 amd64 [upgradable from: 2.13-1]
+    </p>
+    <p>
+      libslang2/oldstable 2.3.3-3 amd64 [upgradable from: 2.3.2-5]
+    </p>
+    <p>
+      libsmartcols1/oldstable 2.38.1-5+deb12u3 amd64 [upgradable from: 2.36.1-8+deb11u2]
+    </p>
+    <p>
+      libsqlite3-0/oldstable 3.40.1-2+deb12u2 amd64 [upgradable from: 3.34.1-3+deb11u1]
+    </p>
+    <p>
+      libss2/oldstable 1.47.0-2+b2 amd64 [upgradable from: 1.46.2-2+deb11u1]
+    </p>
+    <p>
+      libssh2-1/oldstable 1.10.0-3+b1 amd64 [upgradable from: 1.9.0-2+deb11u1]
+    </p>
+    <p>
+      libstdc++6/oldstable 12.2.0-14+deb12u1 amd64 [upgradable from: 10.2.1-6]
+    </p>
+    <p>
+      libsysfs2/oldstable 2.1.1-4 amd64 [upgradable from: 2.1.0+repack-7]
+    </p>
+    <p>
+      libsystemd0/oldstable 252.39-1~deb12u1 amd64 [upgradable from: 247.3-7+deb11u7]
+    </p>
+    <p>
+      libtasn1-6/oldstable,oldstable-security 4.19.0-2+deb12u1 amd64 [upgradable from: 4.16.0-2+deb11u2]
+    </p>
+    <p>
+      libterm-readkey-perl/oldstable 2.38-2+b1 amd64 [upgradable from: 2.38-1+b2]
+    </p>
+    <p>
+      libtext-charwidth-perl/oldstable 0.04-11 amd64 [upgradable from: 0.04-10+b1]
+    </p>
+    <p>
+      libtext-iconv-perl/oldstable 1.7-8 amd64 [upgradable from: 1.7-7+b1]
+    </p>
+    <p>
+      libtext-unidecode-perl/oldstable 1.30-3 all [upgradable from: 1.30-1]
+    </p>
+    <p>
+      libtext-wrapi18n-perl/oldstable 0.06-10 all [upgradable from: 0.06-9]
+    </p>
+    <p>
+      libthai-data/oldstable 0.1.29-1 all [upgradable from: 0.1.28-3]
+    </p>
+    <p>
+      libthai0/oldstable 0.1.29-1 amd64 [upgradable from: 0.1.28-3]
+    </p>
+    <p>
+      libtie-ixhash-perl/oldstable 1.23-4 all [upgradable from: 1.23-2.1]
+    </p>
+    <p>
+      libtinfo5/oldstable 6.4-4 amd64 [upgradable from: 6.2+20201114-2+deb11u2]
+    </p>
+    <p>
+      libtinfo6/oldstable 6.4-4 amd64 [upgradable from: 6.2+20201114-2+deb11u2]
+    </p>
+    <p>
+      libtirpc-common/oldstable 1.3.3+ds-1 all [upgradable from: 1.3.1-1+deb11u1]
+    </p>
+    <p>
+      libtirpc3/oldstable 1.3.3+ds-1 amd64 [upgradable from: 1.3.1-1+deb11u1]
+    </p>
+    <p>
+      libtry-tiny-perl/oldstable 0.31-2 all [upgradable from: 0.30-1]
+    </p>
+    <p>
+      libudev1/oldstable 252.39-1~deb12u1 amd64 [upgradable from: 247.3-7+deb11u7]
+    </p>
+    <p>
+      libunbound8/oldstable-proposed-updates 1.17.1-2+deb12u4 amd64 [upgradable from: 1.13.1-1+deb11u7]
+    </p>
+    <p>
+      libunistring2/oldstable 1.0-2 amd64 [upgradable from: 0.9.10-4]
+    </p>
+    <p>
+      libunwind8/oldstable 1.6.2-3 amd64 [upgradable from: 1.3.2-2]
+    </p>
+    <p>
+      liburi-perl/oldstable 5.17-1 all [upgradable from: 5.08-1]
+    </p>
+    <p>
+      libutempter0/oldstable 1.2.1-3 amd64 [upgradable from: 1.2.1-2]
+    </p>
+    <p>
+      libuuid1/oldstable 2.38.1-5+deb12u3 amd64 [upgradable from: 2.36.1-8+deb11u2]
+    </p>
+    <p>
+      libwrap0/oldstable 7.6.q-32 amd64 [upgradable from: 7.6.q-31]
+    </p>
+    <p>
+      libwww-perl/oldstable 6.68-1 all [upgradable from: 6.52-1]
+    </p>
+    <p>
+      libx11-6/oldstable,oldstable-security 2:1.8.4-2+deb12u2 amd64 [upgradable from: 2:1.7.2-1+deb11u2]
+    </p>
+    <p>
+      libx11-data/oldstable,oldstable-security 2:1.8.4-2+deb12u2 all [upgradable from: 2:1.7.2-1+deb11u2]
+    </p>
+    <p>
+      libx11-protocol-perl/oldstable 0.56-9 all [upgradable from: 0.56-7.1]
+    </p>
+    <p>
+      libxaw7/oldstable 2:1.0.14-1 amd64 [upgradable from: 2:1.0.13-1.1]
+    </p>
+    <p>
+      libxcb-render0/oldstable 1.15-1 amd64 [upgradable from: 1.14-3]
+    </p>
+    <p>
+      libxcb1/oldstable 1.15-1 amd64 [upgradable from: 1.14-3]
+    </p>
+    <p>
+      libxext6/oldstable 2:1.3.4-1+b1 amd64 [upgradable from: 2:1.3.3-1.1]
+    </p>
+    <p>
+      libxft2/oldstable 2.3.6-1 amd64 [upgradable from: 2.3.2-2]
+    </p>
+    <p>
+      libxinerama1/oldstable 2:1.1.4-3 amd64 [upgradable from: 2:1.1.4-2]
+    </p>
+    <p>
+      libxml-parser-perl/oldstable 2.46-4 amd64 [upgradable from: 2.46-2]
+    </p>
+    <p>
+      libxml-twig-perl/oldstable 1:3.52-2 all [upgradable from: 1:3.52-1]
+    </p>
+    <p>
+      libxml-xpathengine-perl/oldstable 0.14-2 all [upgradable from: 0.14-1]
+    </p>
+    <p>
+      libxml2-utils/oldstable-proposed-updates 2.9.14+dfsg-1.3~deb12u5 amd64 [upgradable from: 2.9.10+dfsg-6.7+deb11u9]
+    </p>
+    <p>
+      libxml2/oldstable-proposed-updates 2.9.14+dfsg-1.3~deb12u5 amd64 [upgradable from: 2.9.10+dfsg-6.7+deb11u9]
+    </p>
+    <p>
+      libxmu6/oldstable 2:1.1.3-3 amd64 [upgradable from: 2:1.1.2-2+b3]
+    </p>
+    <p>
+      libxpm4/oldstable,oldstable-security 1:3.5.12-1.1+deb12u1 amd64 [upgradable from: 1:3.5.12-1.1+deb11u1]
+    </p>
+    <p>
+      libxrender1/oldstable 1:0.9.10-1.1 amd64 [upgradable from: 1:0.9.10-1]
+    </p>
+    <p>
+      libxslt1.1/oldstable-proposed-updates,oldstable-security 1.1.35-1+deb12u3 amd64 [upgradable from: 1.1.34-4+deb11u3]
+    </p>
+    <p>
+      libxt6/oldstable 1:1.2.1-1.1 amd64 [upgradable from: 1:1.2.0-1]
+    </p>
+    <p>
+      libxtables12/oldstable 1.8.9-2 amd64 [upgradable from: 1.8.7-1]
+    </p>
+    <p>
+      libxxhash0/oldstable 0.8.1-1 amd64 [upgradable from: 0.8.0-2]
+    </p>
+    <p>
+      libzstd1/oldstable 1.5.4+dfsg2-5 amd64 [upgradable from: 1.4.8+dfsg-2.1]
+    </p>
+    <p>
+      locales/oldstable 2.36-9+deb12u13 all [upgradable from: 2.31-13+deb11u13]
+    </p>
+    <p>
+      lockfile-progs/oldstable 0.1.19 amd64 [upgradable from: 0.1.18]
+    </p>
+    <p>
+      login/oldstable 1:4.13+dfsg1-1+deb12u1 amd64 [upgradable from: 1:4.8.1-1+deb11u1]
+    </p>
+    <p>
+      logrotate/oldstable 3.21.0-1 amd64 [upgradable from: 3.18.0-2+deb11u2]
+    </p>
+    <p>
+      logsave/oldstable 1.47.0-2+b2 amd64 [upgradable from: 1.46.2-2+deb11u1]
+    </p>
+    <p>
+      lsb-base/oldstable 11.6 all [upgradable from: 11.1.0]
+    </p>
+    <p>
+      lsb-release/oldstable 12.0-1 all [upgradable from: 11.1.0]
+    </p>
+    <p>
+      lsof/oldstable 4.95.0-1 amd64 [upgradable from: 4.93.2+dfsg-1.1]
+    </p>
+    <p>
+      m4/oldstable 1.4.19-3 amd64 [upgradable from: 1.4.18-5]
+    </p>
+    <p>
+      mailcap/oldstable 3.70+nmu1 all [upgradable from: 3.69]
+    </p>
+    <p>
+      mailutils-common/oldstable 1:3.15-4 all [upgradable from: 1:3.10-3]
+    </p>
+    <p>
+      mailutils/oldstable 1:3.15-4 amd64 [upgradable from: 1:3.10-3+b1]
+    </p>
+    <p>
+      man-db/oldstable 2.11.2-2 amd64 [upgradable from: 2.9.4-2]
+    </p>
+    <p>
+      manpages/oldstable 6.03-2 all [upgradable from: 5.10-1]
+    </p>
+    <p>
+      mariadb-common/oldstable 1:10.11.14-0+deb12u2 all [upgradable from: 1:10.5.29-0+deb11u1]
+    </p>
+    <p>
+      mawk/oldstable 1.3.4.20200120-3.1 amd64 [upgradable from: 1.3.4.20200120-2]
+    </p>
+    <p>
+      media-types/oldstable 10.0.0 all [upgradable from: 4.0.0]
+    </p>
+    <p>
+      mlocate/oldstable 1.1.18-1 amd64 [upgradable from: 0.26-5]
+    </p>
+    <p>
+      mount/oldstable 2.38.1-5+deb12u3 amd64 [upgradable from: 2.36.1-8+deb11u2]
+    </p>
+    <p>
+      mysql-common/oldstable 5.8+1.1.0 all [upgradable from: 5.8+1.0.7]
+    </p>
+    <p>
+      nano/oldstable 7.2-1+deb12u1 amd64 [upgradable from: 5.4-2+deb11u3]
+    </p>
+    <p>
+      ncal/oldstable 12.1.8 amd64 [upgradable from: 12.1.7+nmu3]
+    </p>
+    <p>
+      ncurses-base/oldstable 6.4-4 all [upgradable from: 6.2+20201114-2+deb11u2]
+    </p>
+    <p>
+      ncurses-bin/oldstable 6.4-4 amd64 [upgradable from: 6.2+20201114-2+deb11u2]
+    </p>
+    <p>
+      ncurses-term/oldstable 6.4-4 all [upgradable from: 6.2+20201114-2+deb11u2]
+    </p>
+    <p>
+      net-tools/oldstable,oldstable-security 2.10-0.1+deb12u2 amd64 [upgradable from: 1.60+git20181103.0eebece-1+deb11u2]
+    </p>
+    <p>
+      netbase/oldstable 6.4 all [upgradable from: 6.3]
+    </p>
+    <p>
+      netcat-openbsd/oldstable 1.219-1 amd64 [upgradable from: 1.217-3]
+    </p>
+    <p>
+      netcat-traditional/oldstable 1.10-47 amd64 [upgradable from: 1.10-46]
+    </p>
+    <p>
+      nftables/oldstable 1.0.6-2+deb12u2 amd64 [upgradable from: 0.9.8-3.1+deb11u2]
+    </p>
+    <p>
+      openbsd-inetd/oldstable 0.20221205-2~deb12u1 amd64 [upgradable from: 0.20160825-5]
+    </p>
+    <p>
+      openssh-client/oldstable,oldstable-updates 1:9.2p1-2+deb12u7 amd64 [upgradable from: 1:8.4p1-5+deb11u5]
+    </p>
+    <p>
+      openssh-server/oldstable,oldstable-updates 1:9.2p1-2+deb12u7 amd64 [upgradable from: 1:8.4p1-5+deb11u5]
+    </p>
+    <p>
+      openssh-sftp-server/oldstable,oldstable-updates 1:9.2p1-2+deb12u7 amd64 [upgradable from: 1:8.4p1-5+deb11u5]
+    </p>
+    <p>
+      openssl/oldstable-proposed-updates 3.0.18-1~deb12u1 amd64 [upgradable from: 1.1.1w-0+deb11u4]
+    </p>
+    <p>
+      passwd/oldstable 1:4.13+dfsg1-1+deb12u1 amd64 [upgradable from: 1:4.8.1-1+deb11u1]
+    </p>
+    <p>
+      perl-base/oldstable 5.36.0-7+deb12u3 amd64 [upgradable from: 5.32.1-4+deb11u4]
+    </p>
+    <p>
+      perl-openssl-defaults/oldstable 7+b1 amd64 [upgradable from: 5]
+    </p>
+    <p>
+      perl/oldstable 5.36.0-7+deb12u3 amd64 [upgradable from: 5.32.1-4+deb11u4]
+    </p>
+    <p>
+      pinentry-curses/oldstable 1.2.1-1 amd64 [upgradable from: 1.1.0-4]
+    </p>
+    <p>
+      procps/oldstable 2:4.0.2-3 amd64 [upgradable from: 2:3.3.17-5]
+    </p>
+    <p>
+      psmisc/oldstable 23.6-1 amd64 [upgradable from: 23.4-2]
+    </p>
+    <p>
+      python-apt-common/oldstable 2.6.0 all [upgradable from: 2.2.1.1]
+    </p>
+    <p>
+      python3-acme/oldstable 2.1.0-1 all [upgradable from: 1.12.0-2+deb11u1]
+    </p>
+    <p>
+      python3-apt/oldstable 2.6.0 amd64 [upgradable from: 2.2.1.1]
+    </p>
+    <p>
+      python3-bs4/oldstable 4.11.2-2 all [upgradable from: 4.9.3-1]
+    </p>
+    <p>
+      python3-certbot/oldstable 2.1.0-4 all [upgradable from: 1.12.0-2]
+    </p>
+    <p>
+      python3-certifi/oldstable 2022.9.24-1 all [upgradable from: 2020.6.20-1]
+    </p>
+    <p>
+      python3-cffi-backend/oldstable 1.15.1-5+b1 amd64 [upgradable from: 1.14.5-1]
+    </p>
+    <p>
+      python3-chardet/oldstable 5.1.0+dfsg-2 all [upgradable from: 4.0.0-1]
+    </p>
+    <p>
+      python3-configargparse/oldstable 1.5.3-1 all [upgradable from: 1.2.3-1]
+    </p>
+    <p>
+      python3-configobj/oldstable 5.0.8-1 all [upgradable from: 5.0.6-4]
+    </p>
+    <p>
+      python3-cryptography/oldstable 38.0.4-3+deb12u1 amd64 [upgradable from: 3.3.2-1+deb11u1]
+    </p>
+    <p>
+      python3-dbus/oldstable 1.3.2-4+b1 amd64 [upgradable from: 1.2.16-5]
+    </p>
+    <p>
+      python3-distro-info/oldstable 1.5+deb12u1 all [upgradable from: 1.0+deb11u1]
+    </p>
+    <p>
+      python3-distro/oldstable 1.8.0-1 all [upgradable from: 1.5.0-1]
+    </p>
+    <p>
+      python3-distutils/oldstable 3.11.2-3 all [upgradable from: 3.9.2-1]
+    </p>
+    <p>
+      python3-feedparser/oldstable 6.0.10-1 all [upgradable from: 5.2.1-3]
+    </p>
+    <p>
+      python3-gi/oldstable 3.42.2-3+b1 amd64 [upgradable from: 3.38.0-2]
+    </p>
+    <p>
+      python3-html2text/oldstable 2020.1.16-2 all [upgradable from: 2020.1.16-1]
+    </p>
+    <p>
+      python3-icu/oldstable 2.10.2-1+b3 amd64 [upgradable from: 2.5-1+b2]
+    </p>
+    <p>
+      python3-idna/oldstable 3.3-1+deb12u1 all [upgradable from: 2.10-1+deb11u1]
+    </p>
+    <p>
+      python3-josepy/oldstable 1.13.0-1 all [upgradable from: 1.2.0-2]
+    </p>
+    <p>
+      python3-lib2to3/oldstable 3.11.2-3 all [upgradable from: 3.9.2-1]
+    </p>
+    <p>
+      python3-lxml/oldstable 4.9.2-1+b1 amd64 [upgradable from: 4.6.3+dfsg-0.1+deb11u1]
+    </p>
+    <p>
+      python3-minimal/oldstable 3.11.2-1+b1 amd64 [upgradable from: 3.9.2-3]
+    </p>
+    <p>
+      python3-openssl/oldstable 23.0.0-1 all [upgradable from: 20.0.1-1]
+    </p>
+    <p>
+      python3-parsedatetime/oldstable 2.6-3 all [upgradable from: 2.6-1]
+    </p>
+    <p>
+      python3-pkg-resources/oldstable 66.1.1-1+deb12u2 all [upgradable from: 52.0.0-4+deb11u2]
+    </p>
+    <p>
+      python3-pyinotify/oldstable 0.9.6-2 all [upgradable from: 0.9.6-1.3]
+    </p>
+    <p>
+      python3-requests-toolbelt/oldstable 0.10.1-1 all [upgradable from: 0.9.1-1]
+    </p>
+    <p>
+      python3-requests/oldstable 2.28.1+dfsg-1 all [upgradable from: 2.25.1+dfsg-2]
+    </p>
+    <p>
+      python3-rfc3339/oldstable 1.1-4 all [upgradable from: 1.1-2]
+    </p>
+    <p>
+      python3-setuptools/oldstable 66.1.1-1+deb12u2 all [upgradable from: 52.0.0-4+deb11u2]
+    </p>
+    <p>
+      python3-six/oldstable 1.16.0-4 all [upgradable from: 1.16.0-2]
+    </p>
+    <p>
+      python3-soupsieve/oldstable 2.3.2-1 all [upgradable from: 2.2.1-1]
+    </p>
+    <p>
+      python3-systemd/oldstable 235-1+b2 amd64 [upgradable from: 234-3+b4]
+    </p>
+    <p>
+      python3-tz/oldstable 2022.7.1-4 all [upgradable from: 2021.1-1]
+    </p>
+    <p>
+      python3-urllib3/oldstable 1.26.12-1+deb12u1 all [upgradable from: 1.26.5-1~exp1+deb11u1]
+    </p>
+    <p>
+      python3-webencodings/oldstable 0.5.1-5 all [upgradable from: 0.5.1-2]
+    </p>
+    <p>
+      python3-zope.component/oldstable 5.1.0-1 all [upgradable from: 4.3.0-3]
+    </p>
+    <p>
+      python3-zope.hookable/oldstable 5.1.0-1+b4 amd64 [upgradable from: 5.0.1-1+b2]
+    </p>
+    <p>
+      python3-zope.interface/oldstable 5.5.2-1+b1 amd64 [upgradable from: 5.2.0-1]
+    </p>
+    <p>
+      python3/oldstable 3.11.2-1+b1 amd64 [upgradable from: 3.9.2-3]
+    </p>
+    <p>
+      readline-common/oldstable 8.2-1.3 all [upgradable from: 8.1-1]
+    </p>
+    <p>
+      rss2email/oldstable 1:3.13.1-3 all [upgradable from: 1:3.12.2-2]
+    </p>
+    <p>
+      rsync/oldstable,oldstable-security 3.2.7-1+deb12u2 amd64 [upgradable from: 3.2.3-4+deb11u3]
+    </p>
+    <p>
+      rsyslog/oldstable 8.2302.0-1+deb12u1 amd64 [upgradable from: 8.2102.0-2+deb11u1]
+    </p>
+    <p>
+      runit-helper/oldstable 2.15.2 all [upgradable from: 2.10.3]
+    </p>
+    <p>
+      screen/oldstable 4.9.0-4 amd64 [upgradable from: 4.8.0-6]
+    </p>
+    <p>
+      sed/oldstable 4.9-1 amd64 [upgradable from: 4.7-1]
+    </p>
+    <p>
+      sensible-utils/oldstable 0.0.17+nmu1 all [upgradable from: 0.0.14]
+    </p>
+    <p>
+      shared-mime-info/oldstable 2.2-1 amd64 [upgradable from: 2.0-1]
+    </p>
+    <p>
+      sqlite3/oldstable 3.40.1-2+deb12u2 amd64 [upgradable from: 3.34.1-3+deb11u1]
+    </p>
+    <p>
+      startpar/oldstable 0.65-1+b1 amd64 [upgradable from: 0.64-3]
+    </p>
+    <p>
+      strace/oldstable 6.1-0.1 amd64 [upgradable from: 5.10-1]
+    </p>
+    <p>
+      systemd-sysv/oldstable 252.39-1~deb12u1 amd64 [upgradable from: 247.3-7+deb11u7]
+    </p>
+    <p>
+      systemd-timesyncd/oldstable 252.39-1~deb12u1 amd64 [upgradable from: 247.3-7+deb11u7]
+    </p>
+    <p>
+      systemd/oldstable 252.39-1~deb12u1 amd64 [upgradable from: 247.3-7+deb11u7]
+    </p>
+    <p>
+      sysv-rc/oldstable 3.06-4 all [upgradable from: 2.96-7+deb11u1]
+    </p>
+    <p>
+      sysvinit-utils/oldstable 3.06-4 amd64 [upgradable from: 2.96-7+deb11u1]
+    </p>
+    <p>
+      tar/oldstable 1.34+dfsg-1.2+deb12u1 amd64 [upgradable from: 1.34+dfsg-1+deb11u1]
+    </p>
+    <p>
+      tcpd/oldstable 7.6.q-32 amd64 [upgradable from: 7.6.q-31]
+    </p>
+    <p>
+      tcpdump/oldstable 4.99.3-1 amd64 [upgradable from: 4.99.0-2+deb11u1]
+    </p>
+    <p>
+      texi2html/oldstable 1.82+dfsg1-7 all [upgradable from: 1.82+dfsg1-6]
+    </p>
+    <p>
+      traceroute/oldstable 1:2.1.2-1 amd64 [upgradable from: 1:2.1.0-2+deb11u1]
+    </p>
+    <p>
+      tzdata/oldstable 2025b-0+deb12u2 all [upgradable from: 2025b-0+deb11u2]
+    </p>
+    <p>
+      ucf/oldstable 3.0043+nmu1+deb12u1 all [upgradable from: 3.0043+deb11u2]
+    </p>
+    <p>
+      udev/oldstable 252.39-1~deb12u1 amd64 [upgradable from: 247.3-7+deb11u7]
+    </p>
+    <p>
+      unattended-upgrades/oldstable 2.9.1+nmu3 all [upgradable from: 2.8]
+    </p>
+    <p>
+      unzip/oldstable 6.0-28 amd64 [upgradable from: 6.0-26+deb11u1]
+    </p>
+    <p>
+      update-inetd/oldstable 4.53 all [upgradable from: 4.51]
+    </p>
+    <p>
+      util-linux/oldstable 2.38.1-5+deb12u3 amd64 [upgradable from: 2.36.1-8+deb11u2]
+    </p>
+    <p>
+      vim-common/oldstable 2:9.0.1378-2+deb12u2 all [upgradable from: 2:8.2.2434-3+deb11u3]
+    </p>
+    <p>
+      vim-runtime/oldstable 2:9.0.1378-2+deb12u2 all [upgradable from: 2:8.2.2434-3+deb11u3]
+    </p>
+    <p>
+      vim-tiny/oldstable 2:9.0.1378-2+deb12u2 amd64 [upgradable from: 2:8.2.2434-3+deb11u3]
+    </p>
+    <p>
+      vim/oldstable 2:9.0.1378-2+deb12u2 amd64 [upgradable from: 2:8.2.2434-3+deb11u3]
+    </p>
+    <p>
+      w3m/oldstable 0.5.3+git20230121-2 amd64 [upgradable from: 0.5.3+git20210102-6+deb11u1]
+    </p>
+    <p>
+      wget/oldstable 1.21.3-1+deb12u1 amd64 [upgradable from: 1.21-1+deb11u2]
+    </p>
+    <p>
+      whiptail/oldstable 0.52.23-1+b1 amd64 [upgradable from: 0.52.21-4+b3]
+    </p>
+    <p>
+      whois/oldstable 5.5.17 amd64 [upgradable from: 5.5.10]
+    </p>
+    <p>
+      x11-common/oldstable 1:7.7+23 all [upgradable from: 1:7.7+22]
+    </p>
+    <p>
+      xbitmaps/oldstable 1.1.1-2.2 all [upgradable from: 1.1.1-2.1]
+    </p>
+    <p>
+      xdg-user-dirs/oldstable 0.18-1 amd64 [upgradable from: 0.17-2]
+    </p>
+    <p>
+      xfonts-encodings/oldstable 1:1.0.4-2.2 all [upgradable from: 1:1.0.4-2.1]
+    </p>
+    <p>
+      xsltproc/oldstable-proposed-updates,oldstable-security 1.1.35-1+deb12u3 amd64 [upgradable from: 1.1.34-4+deb11u3]
+    </p>
+    <p>
+      xterm/oldstable 379-1 amd64 [upgradable from: 366-1+deb11u1]
+    </p>
+    <p>
+      xxd/oldstable 2:9.0.1378-2+deb12u2 amd64 [upgradable from: 2:8.2.2434-3+deb11u3]
+    </p>
+    <p>
+      xz-utils/oldstable,oldstable-security 5.4.1-1 amd64 [upgradable from: 5.2.5-2.1~deb11u1]
+    </p>
+    <p>
+      zip/oldstable 3.0-13 amd64 [upgradable from: 3.0-12]
+    </p>
+    <p>
+      zlib1g/oldstable 1:1.2.13.dfsg-1 amd64 [upgradable from: 1:1.2.11.dfsg-2+deb11u2]
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1766107805458" ID="ID_1902131263" MODIFIED="1766107807865" TEXT="Log">
+<node CREATED="1766107851952" ID="ID_176705840" MODIFIED="1766107863165" TEXT="Timezone: Europe/Berlin gew&#xe4;hlt"/>
+<node CREATED="1766107892079" ID="ID_1362796550" MODIFIED="1766107897002" TEXT="ssh restartet"/>
+<node COLOR="#435e98" CREATED="1766108144919" ID="ID_454155354" MODIFIED="1766109067876" TEXT="Kollision: /etc/adduser.conf">
+<node CREATED="1766108499648" ID="ID_1175461041" MODIFIED="1766108524785" TEXT="hier werden feingranularere Einstellungen f&#xfc;r System/User-IDs eingef&#xfc;hrt"/>
+<node CREATED="1766108525478" ID="ID_478587099" MODIFIED="1766108540199" TEXT="und f&#xfc;r alle Settings gibt es nun einen Default, der auch im Kommentar steht"/>
+<node COLOR="#435e98" CREATED="1766108541323" ID="ID_752154970" MODIFIED="1766108591789" TEXT="f&#xfc;r fast alle Einstellungen haben wir bisher diesen Default verwendet">
+<icon BUILTIN="idea"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1766108561464" ID="ID_419874028" MODIFIED="1766108590012" TEXT="&#x27f9; k&#xfc;nftig hier nicht mehr explizit definiert">
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1766108593604" ID="ID_685914708" MODIFIED="1766108874284" TEXT="Ausnahme">
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1766108612443" ID="ID_1460345068" MODIFIED="1766108629567" TEXT="DIR_MODE=0755">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1766108636791" HGAP="28" ID="ID_1416943816" MODIFIED="1766108686390" TEXT="brauchen wir wegen den Git-Repos" VSHIFT="5">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      User greifen sehr h&#228;ufig auch auf gemeinsam genutzte Git-Repos zu, die der Einfachheit halber bei irgend jemandem im Homedir rumliegen
+    </p>
+  </body>
+</html></richcontent>
+<font NAME="SansSerif" SIZE="11"/>
+</node>
+<node CREATED="1766108614477" ID="ID_1849999003" MODIFIED="1766108633955" TEXT="Default w&#xe4;re 0700">
+<icon BUILTIN="info"/>
+</node>
+</node>
+<node CREATED="1766108847393" ID="ID_1769517810" MODIFIED="1766108847393" TEXT="EXTRA_GROUPS=&quot;users git&quot;"/>
+<node CREATED="1766108865384" ID="ID_694750371" MODIFIED="1766108866948" TEXT="ADD_EXTRA_GROUPS=1"/>
+</node>
+<node COLOR="#338800" CREATED="1766109039613" ID="ID_340205714" MODIFIED="1766109066002" TEXT="manuell zusammengef&#xfc;hrte Version installiert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...hinterlasse auch Notiz am Anfang der Datei
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1766109278528" ID="ID_515412336" MODIFIED="1766109361170" TEXT="Kollision: /etc/crontab">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1766109302497" ID="ID_1804088843" MODIFIED="1766109359604" TEXT="schon behandelt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Die Unterschiede betreffen nur die anderen Zeiten, die Cehteh eingetragen hat
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#338800" CREATED="1766109307521" ID="ID_1078243403" MODIFIED="1766109321221" TEXT="kann in dem Fall einfach die installierte Version weiterverwenden">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1766110002475" ID="ID_647068271" MODIFIED="1766110011524" TEXT="erfolgreich durchgelaufen">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1766110012344" ID="ID_1488158383" MODIFIED="1766110035576" TEXT="NOTICE: Repository &apos;Debian bookworm&apos; changed its &apos;non-free component&apos; value from &apos;non-free&apos; to &apos;non-free non-free-firmware&apos;">
+<icon BUILTIN="messagebox_warning"/>
+<node COLOR="#435e98" CREATED="1766110192735" ID="ID_1519510255" MODIFIED="1766110204673" TEXT="gehe davon aus da&#xdf; wir die nicht brauchen">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#174956" COLOR="#8dfd49" CREATED="1766110360990" ID="ID_918445866" MODIFIED="1766110905711" STYLE="bubble" TEXT="Reboot ..... OK">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Dec 19 03:13:14 lumiera systemd-logind[97]: System is rebooting.
+    </p>
+    <p>
+      Dec 19 03:13:18 lumiera systemd[1]: Reached target reboot.target - System Reboot.
+    </p>
+    <p>
+      Dec 19 03:13:18 lumiera systemd[1]: Shutting down.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Dec 19 03:13:26 lumiera systemd-journald[22]: Journal started
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Dec 19 03:13:26 lumiera systemd[1]: Reached target local-fs-pre.target - Preparation for Local File Systems.
+    </p>
+    <p>
+      Dec 19 03:13:26 lumiera systemd[1]: Reached target local-fs.target - Local File Systems.
+    </p>
+    <p>
+      Dec 19 03:13:26 lumiera systemd[1]: Starting firehol.service - Firehol stateful packet filtering firewall for hum&gt;
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Dec 19 03:13:26 lumiera systemd[1]: Started systemd-logind.service - User Login Management.
+    </p>
+    <p>
+      Dec 19 03:13:29 lumiera systemd[1]: Starting exim4.service - LSB: exim Mail Transport Agent...
+    </p>
+    <p>
+      Dec 19 03:13:29 lumiera systemd[1]: Started fail2ban.service - Fail2Ban Service.
+    </p>
+    <p>
+      Dec 19 03:13:29 lumiera systemd[1]: Starting fireqos.service - FireQOS traffic shaping for humans...
+    </p>
+    <p>
+      Dec 19 03:13:29 lumiera systemd[1]: Starting systemd-user-sessions.service - Permit User Sessions...
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Dec 19 03:13:29 lumiera systemd[1]: Reached target getty.target - Login Prompts.
+    </p>
+    <p>
+      Dec 19 03:13:29 lumiera sshd[375]: Server listening on 0.0.0.0 port 22.
+    </p>
+    <p>
+      Dec 19 03:13:29 lumiera sshd[375]: Server listening on :: port 22.
+    </p>
+    <p>
+      Dec 19 03:13:29 lumiera systemd[1]: Started ssh.service - OpenBSD Secure Shell server.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Dec 19 03:13:29 lumiera systemd[1]: Startup finished in 3.020s.
+    </p>
+    <p>
+      Dec 19 03:13:29 lumiera fail2ban-server[348]: Server ready
+    </p>
+  </body>
+</html></richcontent>
+<edge COLOR="#9e7171" STYLE="linear" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="16"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1766110916147" ID="ID_423724431" MODIFIED="1766115348168" TEXT="Schritt-3 : Trixie">
+<icon BUILTIN="full-3"/>
+<node COLOR="#435e98" CREATED="1766111195661" ID="ID_750987865" MODIFIED="1766111244774" TEXT="Was ist: trixie-proposed-updates ?">
+<icon BUILTIN="help"/>
+<node CREATED="1766111203994" ID="ID_776469197" MODIFIED="1766111226087" TEXT="Das sind preview/Test-Versionen von Bugfixes und Updates"/>
+<node CREATED="1766111226990" ID="ID_1799602546" MODIFIED="1766111240330" TEXT="nach erfolgreichem Test werden sie in der normalen Suite ver&#xf6;ffentlicht"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1766111246295" ID="ID_1691165889" MODIFIED="1766111287473" TEXT="&#x27f9; Konsequenz: weg!">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      sowas testet man nicht auf einem Webserver
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node CREATED="1766111289273" ID="ID_63791319" MODIFIED="1766111349715" TEXT="Apt-source">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ### Lumiera.org : Debian package repos&#160;
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      deb http://deb.debian.org/debian trixie main contrib non-free
+    </p>
+    <p>
+      deb-src http://deb.debian.org/debian trixie main contrib non-free
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      deb http://deb.debian.org/debian trixie-updates main contrib non-free
+    </p>
+    <p>
+      deb-src http://deb.debian.org/debian trixie-updates main contrib non-free
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      deb http://deb.debian.org/debian trixie-backports main contrib non-free
+    </p>
+    <p>
+      deb-src http://deb.debian.org/debian trixie-backports main contrib non-free
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      deb http://security.debian.org/debian-security/ trixie-security main contrib non-free
+    </p>
+    <p>
+      deb-src http://security.debian.org/debian-security/ trixie-security main contrib non-free
+    </p>
+    <p>
+      
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="list"/>
+</node>
+<node CREATED="1766111376501" ID="ID_1141529211" MODIFIED="1766111412903" TEXT="423 packages can be upgraded.">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      acl/stable 2.3.2-2+b1 amd64 [upgradable from: 2.3.1-3]
+    </p>
+    <p>
+      adduser/stable 3.152 all [upgradable from: 3.134]
+    </p>
+    <p>
+      and/stable 1.2.2-4.3+b2 amd64 [upgradable from: 1.2.2-4.2]
+    </p>
+    <p>
+      apt-transport-https/stable 3.0.3 all [upgradable from: 2.6.1]
+    </p>
+    <p>
+      apt-utils/stable 3.0.3 amd64 [upgradable from: 2.6.1]
+    </p>
+    <p>
+      apt/stable 3.0.3 amd64 [upgradable from: 2.6.1]
+    </p>
+    <p>
+      asciidoc-base/stable 10.2.1-1 all [upgradable from: 10.2.0-1]
+    </p>
+    <p>
+      asciidoc-common/stable 10.2.1-1 all [upgradable from: 10.2.0-1]
+    </p>
+    <p>
+      asciidoc/stable 10.2.1-1 all [upgradable from: 10.2.0-1]
+    </p>
+    <p>
+      base-files/stable 13.8+deb13u2 amd64 [upgradable from: 12.4+deb12u12]
+    </p>
+    <p>
+      base-passwd/stable 3.6.7 amd64 [upgradable from: 3.6.1]
+    </p>
+    <p>
+      bash-completion/stable 1:2.16.0-7 all [upgradable from: 1:2.11-6]
+    </p>
+    <p>
+      bash/stable 5.2.37-2+b5 amd64 [upgradable from: 5.2.15-2+b10]
+    </p>
+    <p>
+      bc/stable 1.07.1-4 amd64 [upgradable from: 1.07.1-3+b1]
+    </p>
+    <p>
+      bsdextrautils/stable 2.41-5 amd64 [upgradable from: 2.38.1-5+deb12u3]
+    </p>
+    <p>
+      bsdutils/stable 1:2.41-5 amd64 [upgradable from: 1:2.38.1-5+deb12u3]
+    </p>
+    <p>
+      bzip2/stable 1.0.8-6 amd64 [upgradable from: 1.0.8-5+b1]
+    </p>
+    <p>
+      ca-certificates/stable 20250419 all [upgradable from: 20230311+deb12u1]
+    </p>
+    <p>
+      certbot/stable 4.0.0-2 all [upgradable from: 2.1.0-4]
+    </p>
+    <p>
+      coreutils/stable 9.7-3 amd64 [upgradable from: 9.1-1]
+    </p>
+    <p>
+      cpio/stable 2.15+dfsg-2 amd64 [upgradable from: 2.13+dfsg-7.1]
+    </p>
+    <p>
+      cron-daemon-common/stable 3.0pl1-197 all [upgradable from: 3.0pl1-162]
+    </p>
+    <p>
+      cron/stable 3.0pl1-197 amd64 [upgradable from: 3.0pl1-162]
+    </p>
+    <p>
+      curl/stable 8.14.1-2+deb13u2 amd64 [upgradable from: 7.88.1-10+deb12u14]
+    </p>
+    <p>
+      dash/stable 0.5.12-12 amd64 [upgradable from: 0.5.12-2]
+    </p>
+    <p>
+      dbus-bin/stable 1.16.2-2 amd64 [upgradable from: 1.14.10-1~deb12u1]
+    </p>
+    <p>
+      dbus-daemon/stable 1.16.2-2 amd64 [upgradable from: 1.14.10-1~deb12u1]
+    </p>
+    <p>
+      dbus-session-bus-common/stable 1.16.2-2 all [upgradable from: 1.14.10-1~deb12u1]
+    </p>
+    <p>
+      dbus-system-bus-common/stable 1.16.2-2 all [upgradable from: 1.14.10-1~deb12u1]
+    </p>
+    <p>
+      dbus-user-session/stable 1.16.2-2 amd64 [upgradable from: 1.14.10-1~deb12u1]
+    </p>
+    <p>
+      dbus/stable 1.16.2-2 amd64 [upgradable from: 1.14.10-1~deb12u1]
+    </p>
+    <p>
+      dc/stable 1.07.1-4 amd64 [upgradable from: 1.07.1-3+b1]
+    </p>
+    <p>
+      debconf-i18n/stable 1.5.91 all [upgradable from: 1.5.82]
+    </p>
+    <p>
+      debconf/stable 1.5.91 all [upgradable from: 1.5.82]
+    </p>
+    <p>
+      debfoster/stable 2.8-1 amd64 [upgradable from: 2.7-2.1+b2]
+    </p>
+    <p>
+      debian-archive-keyring/stable 2025.1 all [upgradable from: 2023.3+deb12u2]
+    </p>
+    <p>
+      debianutils/stable 5.23.2 amd64 [upgradable from: 5.7-0.5~deb12u1]
+    </p>
+    <p>
+      diffutils/stable 1:3.10-4 amd64 [upgradable from: 1:3.8-4]
+    </p>
+    <p>
+      dirmngr/stable 2.4.7-21+b3 amd64 [upgradable from: 2.2.40-1.1+deb12u1]
+    </p>
+    <p>
+      distro-info-data/stable 0.66+deb13u1 all [upgradable from: 0.58+deb12u6]
+    </p>
+    <p>
+      dmsetup/stable 2:1.02.205-2 amd64 [upgradable from: 2:1.02.185-2]
+    </p>
+    <p>
+      docbook-xml/stable 4.5-13 all [upgradable from: 4.5-12]
+    </p>
+    <p>
+      docbook-xsl/stable 1.79.2+dfsg-7 all [upgradable from: 1.79.2+dfsg-2]
+    </p>
+    <p>
+      dpkg/stable 1.22.21 amd64 [upgradable from: 1.21.22]
+    </p>
+    <p>
+      dselect/stable 1.22.21 amd64 [upgradable from: 1.21.22]
+    </p>
+    <p>
+      e2fsprogs-l10n/stable 1.47.2-3 all [upgradable from: 1.47.0-2]
+    </p>
+    <p>
+      e2fsprogs/stable 1.47.2-3+b3 amd64 [upgradable from: 1.47.0-2+b2]
+    </p>
+    <p>
+      ed/stable 1.21.1-1 amd64 [upgradable from: 1.19-1]
+    </p>
+    <p>
+      etckeeper/stable 1.18.22-2 all [upgradable from: 1.18.20-1]
+    </p>
+    <p>
+      exim4-base/stable 4.98.2-1 amd64 [upgradable from: 4.96-15+deb12u7]
+    </p>
+    <p>
+      exim4-config/stable 4.98.2-1 all [upgradable from: 4.96-15+deb12u7]
+    </p>
+    <p>
+      exim4-daemon-light/stable 4.98.2-1 amd64 [upgradable from: 4.96-15+deb12u7]
+    </p>
+    <p>
+      fail2ban/stable 1.1.0-8 all [upgradable from: 1.0.2-2]
+    </p>
+    <p>
+      file/stable 1:5.46-5 amd64 [upgradable from: 1:5.44-3]
+    </p>
+    <p>
+      findutils/stable 4.10.0-3 amd64 [upgradable from: 4.9.0-4]
+    </p>
+    <p>
+      firehol-common/stable 3.1.8+ds-1 all [upgradable from: 3.1.7+ds-2.1]
+    </p>
+    <p>
+      firehol/stable 3.1.8+ds-1 all [upgradable from: 3.1.7+ds-2.1]
+    </p>
+    <p>
+      fireqos/stable 3.1.8+ds-1 all [upgradable from: 3.1.7+ds-2.1]
+    </p>
+    <p>
+      fontconfig-config/stable 2.15.0-2.3 amd64 [upgradable from: 2.14.1-4]
+    </p>
+    <p>
+      fontconfig/stable 2.15.0-2.3 amd64 [upgradable from: 2.14.1-4]
+    </p>
+    <p>
+      fonts-dejavu-core/stable 2.37-8 all [upgradable from: 2.37-6]
+    </p>
+    <p>
+      fonts-dejavu-extra/stable 2.37-8 all [upgradable from: 2.37-6]
+    </p>
+    <p>
+      fonts-dejavu/stable 2.37-8 all [upgradable from: 2.37-6]
+    </p>
+    <p>
+      fonts-liberation/stable 1:2.1.5-3 all [upgradable from: 1:1.07.4-11]
+    </p>
+    <p>
+      gawk/stable 1:5.2.1-2+b1 amd64 [upgradable from: 1:5.2.1-2]
+    </p>
+    <p>
+      gcc-12-base/stable 12.4.0-5 amd64 [upgradable from: 12.2.0-14+deb12u1]
+    </p>
+    <p>
+      gir1.2-glib-2.0/stable 2.84.4-3~deb13u1 amd64 [upgradable from: 1.74.0-3]
+    </p>
+    <p>
+      git-man/stable 1:2.47.3-0+deb13u1 all [upgradable from: 1:2.39.5-0+deb12u3]
+    </p>
+    <p>
+      git/stable 1:2.47.3-0+deb13u1 amd64 [upgradable from: 1:2.39.5-0+deb12u3]
+    </p>
+    <p>
+      gnupg-l10n/stable 2.4.7-21 all [upgradable from: 2.2.40-1.1+deb12u1]
+    </p>
+    <p>
+      gnupg-utils/stable 2.4.7-21+b3 amd64 [upgradable from: 2.2.40-1.1+deb12u1]
+    </p>
+    <p>
+      gnupg/stable 2.4.7-21 all [upgradable from: 2.2.40-1.1+deb12u1]
+    </p>
+    <p>
+      gpg-agent/stable 2.4.7-21+b3 amd64 [upgradable from: 2.2.40-1.1+deb12u1]
+    </p>
+    <p>
+      gpg-wks-client/stable 2.4.7-21+b3 amd64 [upgradable from: 2.2.40-1.1+deb12u1]
+    </p>
+    <p>
+      gpg-wks-server/stable 2.4.7-21+b3 amd64 [upgradable from: 2.2.40-1.1+deb12u1]
+    </p>
+    <p>
+      gpg/stable 2.4.7-21+b3 amd64 [upgradable from: 2.2.40-1.1+deb12u1]
+    </p>
+    <p>
+      gpgconf/stable 2.4.7-21+b3 amd64 [upgradable from: 2.2.40-1.1+deb12u1]
+    </p>
+    <p>
+      gpgsm/stable 2.4.7-21+b3 amd64 [upgradable from: 2.2.40-1.1+deb12u1]
+    </p>
+    <p>
+      gpgv/stable 2.4.7-21+b3 amd64 [upgradable from: 2.2.40-1.1+deb12u1]
+    </p>
+    <p>
+      grep/stable 3.11-4 amd64 [upgradable from: 3.8-5]
+    </p>
+    <p>
+      groff-base/stable 1.23.0-9 amd64 [upgradable from: 1.22.4-10]
+    </p>
+    <p>
+      gsasl-common/stable 2.2.2-1.1 all [upgradable from: 2.2.0-1]
+    </p>
+    <p>
+      guile-2.2-libs/stable 2.2.7+1-9+b6 amd64 [upgradable from: 2.2.7+1-9]
+    </p>
+    <p>
+      guile-3.0-libs/stable 3.0.10+really3.0.10-4 amd64 [upgradable from: 3.0.8-2]
+    </p>
+    <p>
+      gzip/stable 1.13-1 amd64 [upgradable from: 1.12-1]
+    </p>
+    <p>
+      hostname/stable 3.25 amd64 [upgradable from: 3.23+nmu1]
+    </p>
+    <p>
+      htdig/stable 1:3.2.0b6-21 amd64 [upgradable from: 1:3.2.0b6-19+b1]
+    </p>
+    <p>
+      ifupdown/stable 0.8.44 amd64 [upgradable from: 0.8.41]
+    </p>
+    <p>
+      info/stable 7.1.1-1+b1 amd64 [upgradable from: 6.8-6+b1]
+    </p>
+    <p>
+      init-system-helpers/stable 1.69~deb13u1 all [upgradable from: 1.65.2+deb12u1]
+    </p>
+    <p>
+      init/stable 1.69~deb13u1 amd64 [upgradable from: 1.65.2+deb12u1]
+    </p>
+    <p>
+      initscripts/stable 3.14-4 all [upgradable from: 3.06-4]
+    </p>
+    <p>
+      insserv/stable 1.26.0-1 amd64 [upgradable from: 1.24.0-1]
+    </p>
+    <p>
+      install-info/stable 7.1.1-1+b1 amd64 [upgradable from: 6.8-6+b1]
+    </p>
+    <p>
+      iproute2/stable 6.15.0-1 amd64 [upgradable from: 6.1.0-3]
+    </p>
+    <p>
+      ipset/stable 7.22-1+b1 amd64 [upgradable from: 7.17-1]
+    </p>
+    <p>
+      iptables/stable 1.8.11-2 amd64 [upgradable from: 1.8.9-2]
+    </p>
+    <p>
+      iputils-ping/stable 3:20240905-3 amd64 [upgradable from: 3:20221126-1+deb12u1]
+    </p>
+    <p>
+      isc-dhcp-client/stable 4.4.3-P1-8 amd64 [upgradable from: 4.4.3-P1-2]
+    </p>
+    <p>
+      isc-dhcp-common/stable 4.4.3-P1-8 amd64 [upgradable from: 4.4.3-P1-2]
+    </p>
+    <p>
+      iso-codes/stable 4.18.0-1 all [upgradable from: 4.15.0-1]
+    </p>
+    <p>
+      joe/stable 4.6-2 amd64 [upgradable from: 4.6-1.1]
+    </p>
+    <p>
+      kmod/stable 34.2-2 amd64 [upgradable from: 30+20221128-1]
+    </p>
+    <p>
+      krb5-locales/stable 1.21.3-5 all [upgradable from: 1.20.1-2+deb12u4]
+    </p>
+    <p>
+      less/stable 668-1 amd64 [upgradable from: 590-2.1~deb12u2]
+    </p>
+    <p>
+      libacl1/stable 2.3.2-2+b1 amd64 [upgradable from: 2.3.1-3]
+    </p>
+    <p>
+      libapparmor1/stable 4.1.0-1 amd64 [upgradable from: 3.0.8-3]
+    </p>
+    <p>
+      libargon2-1/stable 0~20190702+dfsg-4+b2 amd64 [upgradable from: 0~20171227-0.3+deb12u1]
+    </p>
+    <p>
+      libattr1/stable 1:2.5.2-3 amd64 [upgradable from: 1:2.5.1-4]
+    </p>
+    <p>
+      libaudit-common/stable 1:4.0.2-2 all [upgradable from: 1:3.0.9-1]
+    </p>
+    <p>
+      libaudit1/stable 1:4.0.2-2+b2 amd64 [upgradable from: 1:3.0.9-1]
+    </p>
+    <p>
+      libblkid1/stable 2.41-5 amd64 [upgradable from: 2.38.1-5+deb12u3]
+    </p>
+    <p>
+      libbpf1/stable 1:1.5.0-3 amd64 [upgradable from: 1:1.1.2-0+deb12u1]
+    </p>
+    <p>
+      libbrotli1/stable 1.1.0-2+b7 amd64 [upgradable from: 1.0.9-2+b6]
+    </p>
+    <p>
+      libbsd0/stable 0.12.2-2 amd64 [upgradable from: 0.11.7-2]
+    </p>
+    <p>
+      libbz2-1.0/stable 1.0.8-6 amd64 [upgradable from: 1.0.8-5+b1]
+    </p>
+    <p>
+      libc-bin/stable 2.41-12 amd64 [upgradable from: 2.36-9+deb12u13]
+    </p>
+    <p>
+      libc-l10n/stable 2.41-12 all [upgradable from: 2.36-9+deb12u13]
+    </p>
+    <p>
+      libc6/stable 2.41-12 amd64 [upgradable from: 2.36-9+deb12u13]
+    </p>
+    <p>
+      libcap-ng0/stable 0.8.5-4+b1 amd64 [upgradable from: 0.8.3-1+b3]
+    </p>
+    <p>
+      libcap2-bin/stable 1:2.75-10+b1 amd64 [upgradable from: 1:2.66-4+deb12u2+b2]
+    </p>
+    <p>
+      libcap2/stable 1:2.75-10+b1 amd64 [upgradable from: 1:2.66-4+deb12u2+b2]
+    </p>
+    <p>
+      libclone-perl/stable 0.47-1+b1 amd64 [upgradable from: 0.46-1]
+    </p>
+    <p>
+      libcom-err2/stable 1.47.2-3+b3 amd64 [upgradable from: 1.47.0-2+b2]
+    </p>
+    <p>
+      libcrypt1/stable 1:4.4.38-1 amd64 [upgradable from: 1:4.4.33-2]
+    </p>
+    <p>
+      libcryptsetup12/stable 2:2.7.5-2 amd64 [upgradable from: 2:2.6.1-4~deb12u2]
+    </p>
+    <p>
+      libdatrie1/stable 0.2.13-3+b1 amd64 [upgradable from: 0.2.13-2+b1]
+    </p>
+    <p>
+      libdbd-sqlite3-perl/stable 1.76-1 amd64 [upgradable from: 1.72-1]
+    </p>
+    <p>
+      libdbi-perl/stable 1.647-1 amd64 [upgradable from: 1.643-4]
+    </p>
+    <p>
+      libdbus-1-3/stable 1.16.2-2 amd64 [upgradable from: 1.14.10-1~deb12u1]
+    </p>
+    <p>
+      libdebconfclient0/stable 0.280 amd64 [upgradable from: 0.270]
+    </p>
+    <p>
+      libdevmapper1.02.1/stable 2:1.02.205-2 amd64 [upgradable from: 2:1.02.185-2]
+    </p>
+    <p>
+      libedit2/stable 3.1-20250104-1 amd64 [upgradable from: 3.1-20221030-2]
+    </p>
+    <p>
+      liberror-perl/stable 0.17030-1 all [upgradable from: 0.17029-2]
+    </p>
+    <p>
+      libestr0/stable 0.1.11-2 amd64 [upgradable from: 0.1.11-1]
+    </p>
+    <p>
+      libexpat1/stable 2.7.1-2 amd64 [upgradable from: 2.5.0-1+deb12u2]
+    </p>
+    <p>
+      libfastjson4/stable 1.2304.0-2 amd64 [upgradable from: 1.2304.0-1]
+    </p>
+    <p>
+      libfdisk1/stable 2.41-5 amd64 [upgradable from: 2.38.1-5+deb12u3]
+    </p>
+    <p>
+      libffi8/stable 3.4.8-2 amd64 [upgradable from: 3.4.4-1]
+    </p>
+    <p>
+      libfido2-1/stable 1.15.0-1+b1 amd64 [upgradable from: 1.12.0-2+b1]
+    </p>
+    <p>
+      libfile-find-rule-perl/stable 0.34-4 all [upgradable from: 0.34-4~deb12u1]
+    </p>
+    <p>
+      libfile-listing-perl/stable 6.16-1 all [upgradable from: 6.15-1]
+    </p>
+    <p>
+      libfile-mimeinfo-perl/stable 0.35-1 all [upgradable from: 0.33-1]
+    </p>
+    <p>
+      libfontconfig1/stable 2.15.0-2.3 amd64 [upgradable from: 2.14.1-4]
+    </p>
+    <p>
+      libfontenc1/stable 1:1.1.8-1+b2 amd64 [upgradable from: 1:1.1.4-1]
+    </p>
+    <p>
+      libfreetype6/stable 2.13.3+dfsg-1 amd64 [upgradable from: 2.12.1+dfsg-5+deb12u4]
+    </p>
+    <p>
+      libfribidi0/stable 1.0.16-1 amd64 [upgradable from: 1.0.8-2.1]
+    </p>
+    <p>
+      libgc1/stable 1:8.2.8-1 amd64 [upgradable from: 1:8.2.2-3]
+    </p>
+    <p>
+      libgcc-s1/stable 14.2.0-19 amd64 [upgradable from: 12.2.0-14+deb12u1]
+    </p>
+    <p>
+      libgcrypt20/stable 1.11.0-7 amd64 [upgradable from: 1.10.1-3]
+    </p>
+    <p>
+      libgirepository-1.0-1/stable 1.84.0-1 amd64 [upgradable from: 1.74.0-3]
+    </p>
+    <p>
+      libglib2.0-data/stable 2.84.4-3~deb13u1 all [upgradable from: 2.74.6-2+deb12u7]
+    </p>
+    <p>
+      libgmp10/stable 2:6.3.0+dfsg-3 amd64 [upgradable from: 2:6.2.1+dfsg1-1.1]
+    </p>
+    <p>
+      libgpg-error-l10n/stable 1.51-4 all [upgradable from: 1.46-1]
+    </p>
+    <p>
+      libgpg-error0/stable 1.51-4 amd64 [upgradable from: 1.46-1]
+    </p>
+    <p>
+      libgpm2/stable 1.20.7-11+b2 amd64 [upgradable from: 1.20.7-10+b1]
+    </p>
+    <p>
+      libgsasl18/stable 2.2.2-1.1 amd64 [upgradable from: 2.2.0-1]
+    </p>
+    <p>
+      libgssapi-krb5-2/stable 1.21.3-5 amd64 [upgradable from: 1.20.1-2+deb12u4]
+    </p>
+    <p>
+      libgssglue1/stable 0.9-1.1 amd64 [upgradable from: 0.7-1.1]
+    </p>
+    <p>
+      libhtml-form-perl/stable 6.12-1 all [upgradable from: 6.11-1]
+    </p>
+    <p>
+      libhtml-parser-perl/stable 3.83-1+b2 amd64 [upgradable from: 3.81-1]
+    </p>
+    <p>
+      libhtml-tagset-perl/stable 3.24-1 all [upgradable from: 3.20-6]
+    </p>
+    <p>
+      libhttp-cookies-perl/stable 6.11-1 all [upgradable from: 6.10-1]
+    </p>
+    <p>
+      libhttp-date-perl/stable 6.06-1 all [upgradable from: 6.05-2]
+    </p>
+    <p>
+      libhttp-message-perl/stable 7.00-2 all [upgradable from: 6.44-1]
+    </p>
+    <p>
+      libice6/stable 2:1.1.1-1 amd64 [upgradable from: 2:1.0.10-1]
+    </p>
+    <p>
+      libidn12/stable 1.43-1 amd64 [upgradable from: 1.41-1]
+    </p>
+    <p>
+      libidn2-0/stable 2.3.8-2 amd64 [upgradable from: 2.3.3-1+b1]
+    </p>
+    <p>
+      libio-socket-ssl-perl/stable 2.089-1 all [upgradable from: 2.081-2]
+    </p>
+    <p>
+      libio-stringy-perl/stable 2.113-2 all [upgradable from: 2.111-3]
+    </p>
+    <p>
+      libip4tc2/stable 1.8.11-2 amd64 [upgradable from: 1.8.9-2]
+    </p>
+    <p>
+      libip6tc2/stable 1.8.11-2 amd64 [upgradable from: 1.8.9-2]
+    </p>
+    <p>
+      libjansson4/stable 2.14-2+b3 amd64 [upgradable from: 2.14-2]
+    </p>
+    <p>
+      libjson-c5/stable 0.18+ds-1 amd64 [upgradable from: 0.16-2]
+    </p>
+    <p>
+      libk5crypto3/stable 1.21.3-5 amd64 [upgradable from: 1.20.1-2+deb12u4]
+    </p>
+    <p>
+      libkeyutils1/stable 1.6.3-6 amd64 [upgradable from: 1.6.3-2]
+    </p>
+    <p>
+      libkmod2/stable 34.2-2 amd64 [upgradable from: 30+20221128-1]
+    </p>
+    <p>
+      libkrb5-3/stable 1.21.3-5 amd64 [upgradable from: 1.20.1-2+deb12u4]
+    </p>
+    <p>
+      libkrb5support0/stable 1.21.3-5 amd64 [upgradable from: 1.20.1-2+deb12u4]
+    </p>
+    <p>
+      libksba8/stable 1.6.7-2+b1 amd64 [upgradable from: 1.6.3-2]
+    </p>
+    <p>
+      libldap-common/stable 2.6.10+dfsg-1 all [upgradable from: 2.5.13+dfsg-5]
+    </p>
+    <p>
+      liblocale-gettext-perl/stable 1.07-7+b1 amd64 [upgradable from: 1.07-5]
+    </p>
+    <p>
+      liblockfile-bin/stable 1.17-2 amd64 [upgradable from: 1.17-1+b1]
+    </p>
+    <p>
+      liblockfile1/stable 1.17-2 amd64 [upgradable from: 1.17-1+b1]
+    </p>
+    <p>
+      liblognorm5/stable 2.0.6-5 amd64 [upgradable from: 2.0.6-4]
+    </p>
+    <p>
+      libltdl7/stable 2.5.4-4 amd64 [upgradable from: 2.4.7-7~deb12u1]
+    </p>
+    <p>
+      liblwp-protocol-https-perl/stable 6.14-1 all [upgradable from: 6.10-1]
+    </p>
+    <p>
+      liblz4-1/stable 1.10.0-4 amd64 [upgradable from: 1.9.4-1]
+    </p>
+    <p>
+      liblzma5/stable 5.8.1-1 amd64 [upgradable from: 5.4.1-1]
+    </p>
+    <p>
+      libmagic-mgc/stable 1:5.46-5 amd64 [upgradable from: 1:5.44-3]
+    </p>
+    <p>
+      libmariadb3/stable 1:11.8.3-0+deb13u1 amd64 [upgradable from: 1:10.11.14-0+deb12u2]
+    </p>
+    <p>
+      libmd0/stable 1.1.0-2+b1 amd64 [upgradable from: 1.0.4-2]
+    </p>
+    <p>
+      libmnl0/stable 1.0.5-3 amd64 [upgradable from: 1.0.4-3]
+    </p>
+    <p>
+      libmount1/stable 2.41-5 amd64 [upgradable from: 2.38.1-5+deb12u3]
+    </p>
+    <p>
+      libmpfr6/stable 4.2.2-1 amd64 [upgradable from: 4.2.0-1]
+    </p>
+    <p>
+      libncurses6/stable 6.5+20250216-2 amd64 [upgradable from: 6.4-4]
+    </p>
+    <p>
+      libncursesw6/stable 6.5+20250216-2 amd64 [upgradable from: 6.4-4]
+    </p>
+    <p>
+      libnet-daemon-perl/stable 0.49-3 all [upgradable from: 0.49-2]
+    </p>
+    <p>
+      libnet-dbus-perl/stable 1.2.0-2+b3 amd64 [upgradable from: 1.2.0-2]
+    </p>
+    <p>
+      libnet-http-perl/stable 6.23-1 all [upgradable from: 6.22-1]
+    </p>
+    <p>
+      libnet-ssleay-perl/stable 1.94-3 amd64 [upgradable from: 1.92-2+b1]
+    </p>
+    <p>
+      libnetfilter-acct1/stable 1.0.3-4+b3 amd64 [upgradable from: 1.0.3-3]
+    </p>
+    <p>
+      libnetfilter-conntrack3/stable 1.1.0-1 amd64 [upgradable from: 1.0.9-3]
+    </p>
+    <p>
+      libnewt0.52/stable 0.52.25-1 amd64 [upgradable from: 0.52.23-1+b1]
+    </p>
+    <p>
+      libnfnetlink0/stable 1.0.2-3 amd64 [upgradable from: 1.0.2-2]
+    </p>
+    <p>
+      libnftables1/stable 1.1.3-1 amd64 [upgradable from: 1.0.6-2+deb12u2]
+    </p>
+    <p>
+      libnftnl11/stable 1.2.9-1 amd64 [upgradable from: 1.2.4-2]
+    </p>
+    <p>
+      libnghttp2-14/stable 1.64.0-1.1 amd64 [upgradable from: 1.52.0-1+deb12u2]
+    </p>
+    <p>
+      libnsl2/stable 1.3.0-3+b3 amd64 [upgradable from: 1.3.0-2]
+    </p>
+    <p>
+      libnss-nis/stable 3.1-5+b1 amd64 [upgradable from: 3.1-4]
+    </p>
+    <p>
+      libnss-nisplus/stable 1.3-5+b2 amd64 [upgradable from: 1.3-4]
+    </p>
+    <p>
+      libnss-systemd/stable 257.9-1~deb13u1 amd64 [upgradable from: 252.39-1~deb12u1]
+    </p>
+    <p>
+      libntlm0/stable 1.8-4 amd64 [upgradable from: 1.6-4]
+    </p>
+    <p>
+      libp11-kit0/stable 0.25.5-3 amd64 [upgradable from: 0.24.1-2]
+    </p>
+    <p>
+      libpam-cap/stable 1:2.75-10+b1 amd64 [upgradable from: 1:2.66-4+deb12u2+b2]
+    </p>
+    <p>
+      libpam-modules-bin/stable 1.7.0-5 amd64 [upgradable from: 1.5.2-6+deb12u2]
+    </p>
+    <p>
+      libpam-modules/stable 1.7.0-5 amd64 [upgradable from: 1.5.2-6+deb12u2]
+    </p>
+    <p>
+      libpam-runtime/stable 1.7.0-5 all [upgradable from: 1.5.2-6+deb12u2]
+    </p>
+    <p>
+      libpam-systemd/stable 257.9-1~deb13u1 amd64 [upgradable from: 252.39-1~deb12u1]
+    </p>
+    <p>
+      libpam0g/stable 1.7.0-5 amd64 [upgradable from: 1.5.2-6+deb12u2]
+    </p>
+    <p>
+      libpcre2-8-0/stable 10.46-1~deb13u1 amd64 [upgradable from: 10.42-1]
+    </p>
+    <p>
+      libpipeline1/stable 1.5.8-1 amd64 [upgradable from: 1.5.7-1]
+    </p>
+    <p>
+      libpixman-1-0/stable 0.44.0-3 amd64 [upgradable from: 0.42.2-1]
+    </p>
+    <p>
+      libpopt0/stable 1.19+dfsg-2 amd64 [upgradable from: 1.19+dfsg-1]
+    </p>
+    <p>
+      libpq5/stable 17.6-0+deb13u1 amd64 [upgradable from: 15.14-0+deb12u1]
+    </p>
+    <p>
+      libproc2-0/stable 2:4.0.4-9 amd64 [upgradable from: 2:4.0.2-3]
+    </p>
+    <p>
+      libpython3-stdlib/stable 3.13.5-1 amd64 [upgradable from: 3.11.2-1+b1]
+    </p>
+    <p>
+      librtmp1/stable 2.4+20151223.gitfa8646d.1-2+b5 amd64 [upgradable from: 2.4+20151223.gitfa8646d.1-2+b2]
+    </p>
+    <p>
+      libsasl2-2/stable 2.1.28+dfsg1-9 amd64 [upgradable from: 2.1.28+dfsg-10]
+    </p>
+    <p>
+      libsasl2-modules-db/stable 2.1.28+dfsg1-9 amd64 [upgradable from: 2.1.28+dfsg-10]
+    </p>
+    <p>
+      libseccomp2/stable 2.6.0-2 amd64 [upgradable from: 2.5.4-1+deb12u1]
+    </p>
+    <p>
+      libselinux1/stable 3.8.1-1 amd64 [upgradable from: 3.4-1+b6]
+    </p>
+    <p>
+      libsemanage-common/stable 3.8.1-1 all [upgradable from: 3.4-1]
+    </p>
+    <p>
+      libsemanage2/stable 3.8.1-1 amd64 [upgradable from: 3.4-1+b5]
+    </p>
+    <p>
+      libsepol2/stable 3.8.1-1 amd64 [upgradable from: 3.4-2.1]
+    </p>
+    <p>
+      libsigsegv2/stable 2.14-1+b2 amd64 [upgradable from: 2.14-1]
+    </p>
+    <p>
+      libslang2/stable 2.3.3-5+b2 amd64 [upgradable from: 2.3.3-3]
+    </p>
+    <p>
+      libsm6/stable 2:1.2.6-1 amd64 [upgradable from: 2:1.2.3-1]
+    </p>
+    <p>
+      libsmartcols1/stable 2.41-5 amd64 [upgradable from: 2.38.1-5+deb12u3]
+    </p>
+    <p>
+      libsodium23/stable 1.0.18-1+b2 amd64 [upgradable from: 1.0.18-1]
+    </p>
+    <p>
+      libsqlite3-0/stable 3.46.1-7 amd64 [upgradable from: 3.40.1-2+deb12u2]
+    </p>
+    <p>
+      libss2/stable 1.47.2-3+b3 amd64 [upgradable from: 1.47.0-2+b2]
+    </p>
+    <p>
+      libstdc++6/stable 14.2.0-19 amd64 [upgradable from: 12.2.0-14+deb12u1]
+    </p>
+    <p>
+      libsysfs2/stable 2.1.1-7 amd64 [upgradable from: 2.1.1-4]
+    </p>
+    <p>
+      libsystemd-shared/stable 257.9-1~deb13u1 amd64 [upgradable from: 252.39-1~deb12u1]
+    </p>
+    <p>
+      libsystemd0/stable 257.9-1~deb13u1 amd64 [upgradable from: 252.39-1~deb12u1]
+    </p>
+    <p>
+      libtasn1-6/stable 4.20.0-2 amd64 [upgradable from: 4.19.0-2+deb12u1]
+    </p>
+    <p>
+      libterm-readkey-perl/stable 2.38-2+b4 amd64 [upgradable from: 2.38-2+b1]
+    </p>
+    <p>
+      libtext-charwidth-perl/stable 0.04-11+b4 amd64 [upgradable from: 0.04-11]
+    </p>
+    <p>
+      libtext-iconv-perl/stable 1.7-8+b4 amd64 [upgradable from: 1.7-8]
+    </p>
+    <p>
+      libthai-data/stable 0.1.29-2 all [upgradable from: 0.1.29-1]
+    </p>
+    <p>
+      libthai0/stable 0.1.29-2+b1 amd64 [upgradable from: 0.1.29-1]
+    </p>
+    <p>
+      libtinfo6/stable 6.5+20250216-2 amd64 [upgradable from: 6.4-4]
+    </p>
+    <p>
+      libtirpc-common/stable 1.3.6+ds-1 all [upgradable from: 1.3.3+ds-1]
+    </p>
+    <p>
+      libtry-tiny-perl/stable 0.32-1 all [upgradable from: 0.31-2]
+    </p>
+    <p>
+      libuchardet0/stable 0.0.8-1+b2 amd64 [upgradable from: 0.0.7-1]
+    </p>
+    <p>
+      libudev1/stable 257.9-1~deb13u1 amd64 [upgradable from: 252.39-1~deb12u1]
+    </p>
+    <p>
+      libunbound8/stable-security 1.22.0-2+deb13u1 amd64 [upgradable from: 1.17.1-2+deb12u4]
+    </p>
+    <p>
+      libunwind8/stable 1.8.1-0.1 amd64 [upgradable from: 1.6.2-3]
+    </p>
+    <p>
+      liburi-perl/stable 5.30-1 all [upgradable from: 5.17-1]
+    </p>
+    <p>
+      liburing2/stable 2.9-1 amd64 [upgradable from: 2.3-3]
+    </p>
+    <p>
+      libusb-0.1-4/stable 2:0.1.12-35+b1 amd64 [upgradable from: 2:0.1.12-32]
+    </p>
+    <p>
+      libutempter0/stable 1.2.1-4 amd64 [upgradable from: 1.2.1-3]
+    </p>
+    <p>
+      libuuid1/stable 2.41-5 amd64 [upgradable from: 2.38.1-5+deb12u3]
+    </p>
+    <p>
+      libwrap0/stable 7.6.q-36 amd64 [upgradable from: 7.6.q-32]
+    </p>
+    <p>
+      libwww-perl/stable 6.78-1 all [upgradable from: 6.68-1]
+    </p>
+    <p>
+      libx11-6/stable 2:1.8.12-1 amd64 [upgradable from: 2:1.8.4-2+deb12u2]
+    </p>
+    <p>
+      libx11-data/stable 2:1.8.12-1 all [upgradable from: 2:1.8.4-2+deb12u2]
+    </p>
+    <p>
+      libxau6/stable 1:1.0.11-1 amd64 [upgradable from: 1:1.0.9-1]
+    </p>
+    <p>
+      libxaw7/stable 2:1.0.16-1 amd64 [upgradable from: 2:1.0.14-1]
+    </p>
+    <p>
+      libxcb-render-util0/stable 0.3.10-1 amd64 [upgradable from: 0.3.9-1+b1]
+    </p>
+    <p>
+      libxcb-render0/stable 1.17.0-2+b1 amd64 [upgradable from: 1.15-1]
+    </p>
+    <p>
+      libxcb1/stable 1.17.0-2+b1 amd64 [upgradable from: 1.15-1]
+    </p>
+    <p>
+      libxdmcp6/stable 1:1.1.5-1 amd64 [upgradable from: 1:1.1.2-3]
+    </p>
+    <p>
+      libxext6/stable 2:1.3.4-1+b3 amd64 [upgradable from: 2:1.3.4-1+b1]
+    </p>
+    <p>
+      libxft2/stable 2.3.6-1+b4 amd64 [upgradable from: 2.3.6-1]
+    </p>
+    <p>
+      libxinerama1/stable 2:1.1.4-3+b4 amd64 [upgradable from: 2:1.1.4-3]
+    </p>
+    <p>
+      libxml-parser-perl/stable 2.47-1+b3 amd64 [upgradable from: 2.46-4]
+    </p>
+    <p>
+      libxml-twig-perl/stable 1:3.52-3 all [upgradable from: 1:3.52-2]
+    </p>
+    <p>
+      libxml2-utils/stable 2.12.7+dfsg+really2.9.14-2.1+deb13u2 amd64 [upgradable from: 2.9.14+dfsg-1.3~deb12u5]
+    </p>
+    <p>
+      libxml2/stable 2.12.7+dfsg+really2.9.14-2.1+deb13u2 amd64 [upgradable from: 2.9.14+dfsg-1.3~deb12u5]
+    </p>
+    <p>
+      libxmu6/stable 2:1.1.3-3+b4 amd64 [upgradable from: 2:1.1.3-3]
+    </p>
+    <p>
+      libxpm4/stable 1:3.5.17-1+b3 amd64 [upgradable from: 1:3.5.12-1.1+deb12u1]
+    </p>
+    <p>
+      libxrender1/stable 1:0.9.12-1 amd64 [upgradable from: 1:0.9.10-1.1]
+    </p>
+    <p>
+      libxslt1.1/stable,stable-security 1.1.35-1.2+deb13u2 amd64 [upgradable from: 1.1.35-1+deb12u3]
+    </p>
+    <p>
+      libxtables12/stable 1.8.11-2 amd64 [upgradable from: 1.8.9-2]
+    </p>
+    <p>
+      libxxhash0/stable 0.8.3-2 amd64 [upgradable from: 0.8.1-1]
+    </p>
+    <p>
+      libzstd1/stable 1.5.7+dfsg-1 amd64 [upgradable from: 1.5.4+dfsg2-5]
+    </p>
+    <p>
+      locales/stable 2.41-12 all [upgradable from: 2.36-9+deb12u13]
+    </p>
+    <p>
+      lockfile-progs/stable 0.2.0 amd64 [upgradable from: 0.1.19]
+    </p>
+    <p>
+      login/stable 1:4.16.0-2+really2.41-5 amd64 [upgradable from: 1:4.13+dfsg1-1+deb12u1]
+    </p>
+    <p>
+      logrotate/stable 3.22.0-1 amd64 [upgradable from: 3.21.0-1]
+    </p>
+    <p>
+      logsave/stable 1.47.2-3+b3 amd64 [upgradable from: 1.47.0-2+b2]
+    </p>
+    <p>
+      lsb-release/stable 12.1-1 all [upgradable from: 12.0-1]
+    </p>
+    <p>
+      lsof/stable 4.99.4+dfsg-2 amd64 [upgradable from: 4.95.0-1]
+    </p>
+    <p>
+      luit/stable 2.0.20240910-1 amd64 [upgradable from: 2.0.20221028-1]
+    </p>
+    <p>
+      lzma/stable 24.08+dfsg-2 amd64 [upgradable from: 9.22-2.2]
+    </p>
+    <p>
+      m4/stable 1.4.19-8 amd64 [upgradable from: 1.4.19-3]
+    </p>
+    <p>
+      mailcap/stable 3.74 all [upgradable from: 3.70+nmu1]
+    </p>
+    <p>
+      mailutils-common/stable 1:3.19-1 all [upgradable from: 1:3.15-4]
+    </p>
+    <p>
+      mailutils/stable 1:3.19-1 amd64 [upgradable from: 1:3.15-4]
+    </p>
+    <p>
+      man-db/stable 2.13.1-1 amd64 [upgradable from: 2.11.2-2]
+    </p>
+    <p>
+      manpages/stable 6.9.1-1 all [upgradable from: 6.03-2]
+    </p>
+    <p>
+      mariadb-common/stable 1:11.8.3-0+deb13u1 all [upgradable from: 1:10.11.14-0+deb12u2]
+    </p>
+    <p>
+      mawk/stable 1.3.4.20250131-1 amd64 [upgradable from: 1.3.4.20200120-3.1]
+    </p>
+    <p>
+      media-types/stable 13.0.0 all [upgradable from: 10.0.0]
+    </p>
+    <p>
+      mount/stable 2.41-5 amd64 [upgradable from: 2.38.1-5+deb12u3]
+    </p>
+    <p>
+      mysql-common/stable 5.8+1.1.1 all [upgradable from: 5.8+1.1.0]
+    </p>
+    <p>
+      nano/stable 8.4-1 amd64 [upgradable from: 7.2-1+deb12u1]
+    </p>
+    <p>
+      ncurses-base/stable 6.5+20250216-2 all [upgradable from: 6.4-4]
+    </p>
+    <p>
+      ncurses-bin/stable 6.5+20250216-2 amd64 [upgradable from: 6.4-4]
+    </p>
+    <p>
+      ncurses-term/stable 6.5+20250216-2 all [upgradable from: 6.4-4]
+    </p>
+    <p>
+      net-tools/stable 2.10-1.3 amd64 [upgradable from: 2.10-0.1+deb12u2]
+    </p>
+    <p>
+      netbase/stable 6.5 all [upgradable from: 6.4]
+    </p>
+    <p>
+      netcat-openbsd/stable 1.229-1 amd64 [upgradable from: 1.219-1]
+    </p>
+    <p>
+      netcat-traditional/stable 1.10-50 amd64 [upgradable from: 1.10-47]
+    </p>
+    <p>
+      nfacct/stable 1.0.2-4 amd64 [upgradable from: 1.0.2-3]
+    </p>
+    <p>
+      nftables/stable 1.1.3-1 amd64 [upgradable from: 1.0.6-2+deb12u2]
+    </p>
+    <p>
+      openbsd-inetd/stable 0.20221205-3+b2 amd64 [upgradable from: 0.20221205-2~deb12u1]
+    </p>
+    <p>
+      openssh-client/stable 1:10.0p1-7 amd64 [upgradable from: 1:9.2p1-2+deb12u7]
+    </p>
+    <p>
+      openssh-server/stable 1:10.0p1-7 amd64 [upgradable from: 1:9.2p1-2+deb12u7]
+    </p>
+    <p>
+      openssh-sftp-server/stable 1:10.0p1-7 amd64 [upgradable from: 1:9.2p1-2+deb12u7]
+    </p>
+    <p>
+      openssl/stable 3.5.4-1~deb13u1 amd64 [upgradable from: 3.0.18-1~deb12u1]
+    </p>
+    <p>
+      passwd/stable 1:4.17.4-2 amd64 [upgradable from: 1:4.13+dfsg1-1+deb12u1]
+    </p>
+    <p>
+      patch/stable 2.8-2 amd64 [upgradable from: 2.7.6-7]
+    </p>
+    <p>
+      perl-base/stable 5.40.1-6 amd64 [upgradable from: 5.36.0-7+deb12u3]
+    </p>
+    <p>
+      perl-openssl-defaults/stable 7+b2 amd64 [upgradable from: 7+b1]
+    </p>
+    <p>
+      perl/stable 5.40.1-6 amd64 [upgradable from: 5.36.0-7+deb12u3]
+    </p>
+    <p>
+      pinentry-curses/stable 1.3.1-2 amd64 [upgradable from: 1.2.1-1]
+    </p>
+    <p>
+      plocate/stable 1.1.23-1 amd64 [upgradable from: 1.1.18-1]
+    </p>
+    <p>
+      procps/stable 2:4.0.4-9 amd64 [upgradable from: 2:4.0.2-3]
+    </p>
+    <p>
+      psmisc/stable 23.7-2 amd64 [upgradable from: 23.6-1]
+    </p>
+    <p>
+      python-apt-common/stable 3.0.0 all [upgradable from: 2.6.0]
+    </p>
+    <p>
+      python3-acme/stable 4.0.0-1 all [upgradable from: 2.1.0-1]
+    </p>
+    <p>
+      python3-apt/stable 3.0.0 amd64 [upgradable from: 2.6.0]
+    </p>
+    <p>
+      python3-bs4/stable 4.13.4-2 all [upgradable from: 4.11.2-2]
+    </p>
+    <p>
+      python3-certbot/stable 4.0.0-2 all [upgradable from: 2.1.0-4]
+    </p>
+    <p>
+      python3-certifi/stable 2025.1.31+ds-1 all [upgradable from: 2022.9.24-1]
+    </p>
+    <p>
+      python3-cffi-backend/stable 1.17.1-3 amd64 [upgradable from: 1.15.1-5+b1]
+    </p>
+    <p>
+      python3-chardet/stable 5.2.0+dfsg-2 all [upgradable from: 5.1.0+dfsg-2]
+    </p>
+    <p>
+      python3-charset-normalizer/stable 3.4.2-1 all [upgradable from: 3.0.1-2]
+    </p>
+    <p>
+      python3-configargparse/stable 1.7-2 all [upgradable from: 1.5.3-1]
+    </p>
+    <p>
+      python3-configobj/stable 5.0.9-1 all [upgradable from: 5.0.8-1]
+    </p>
+    <p>
+      python3-cryptography/stable 43.0.0-3 amd64 [upgradable from: 38.0.4-3+deb12u1]
+    </p>
+    <p>
+      python3-dbus/stable 1.4.0-1 amd64 [upgradable from: 1.3.2-4+b1]
+    </p>
+    <p>
+      python3-distro-info/stable 1.13 all [upgradable from: 1.5+deb12u1]
+    </p>
+    <p>
+      python3-distro/stable 1.9.0-1 all [upgradable from: 1.8.0-1]
+    </p>
+    <p>
+      python3-feedparser/stable 6.0.11-2 all [upgradable from: 6.0.10-1]
+    </p>
+    <p>
+      python3-gi/stable 3.50.0-4+b1 amd64 [upgradable from: 3.42.2-3+b1]
+    </p>
+    <p>
+      python3-html2text/stable 2025.4.15-1 all [upgradable from: 2020.1.16-2]
+    </p>
+    <p>
+      python3-html5lib/stable 1.2-2 all [upgradable from: 1.1-3]
+    </p>
+    <p>
+      python3-icu/stable 2.14-1+b3 amd64 [upgradable from: 2.10.2-1+b3]
+    </p>
+    <p>
+      python3-idna/stable 3.10-1 all [upgradable from: 3.3-1+deb12u1]
+    </p>
+    <p>
+      python3-josepy/stable 2.0.0-1 all [upgradable from: 1.13.0-1]
+    </p>
+    <p>
+      python3-lxml/stable 5.4.0-1 amd64 [upgradable from: 4.9.2-1+b1]
+    </p>
+    <p>
+      python3-minimal/stable 3.13.5-1 amd64 [upgradable from: 3.11.2-1+b1]
+    </p>
+    <p>
+      python3-openssl/stable 25.0.0-1 all [upgradable from: 23.0.0-1]
+    </p>
+    <p>
+      python3-pkg-resources/stable 78.1.1-0.1 all [upgradable from: 66.1.1-1+deb12u2]
+    </p>
+    <p>
+      python3-pyinotify/stable 0.9.6-5 all [upgradable from: 0.9.6-2]
+    </p>
+    <p>
+      python3-requests-toolbelt/stable 1.0.0-4 all [upgradable from: 0.10.1-1]
+    </p>
+    <p>
+      python3-requests/stable 2.32.3+dfsg-5 all [upgradable from: 2.28.1+dfsg-1]
+    </p>
+    <p>
+      python3-rfc3339/stable 2.0.1-1 all [upgradable from: 1.1-4]
+    </p>
+    <p>
+      python3-setuptools/stable 78.1.1-0.1 all [upgradable from: 66.1.1-1+deb12u2]
+    </p>
+    <p>
+      python3-sgmllib3k/stable 1.0.0-5 all [upgradable from: 1.0.0-4]
+    </p>
+    <p>
+      python3-six/stable 1.17.0-1 all [upgradable from: 1.16.0-4]
+    </p>
+    <p>
+      python3-soupsieve/stable 2.7-1 all [upgradable from: 2.3.2-1]
+    </p>
+    <p>
+      python3-systemd/stable 235-1+b6 amd64 [upgradable from: 235-1+b2]
+    </p>
+    <p>
+      python3-tz/stable 2025.2-3 all [upgradable from: 2022.7.1-4]
+    </p>
+    <p>
+      python3-urllib3/stable 2.3.0-3 all [upgradable from: 1.26.12-1+deb12u1]
+    </p>
+    <p>
+      python3-zope.component/stable 6.0-1 all [upgradable from: 5.1.0-1]
+    </p>
+    <p>
+      python3-zope.event/stable 5.0-0.1 all [upgradable from: 4.4-3]
+    </p>
+    <p>
+      python3-zope.hookable/stable 7.0-1+b1 amd64 [upgradable from: 5.1.0-1+b4]
+    </p>
+    <p>
+      python3-zope.interface/stable 7.2-1+b1 amd64 [upgradable from: 5.5.2-1+b1]
+    </p>
+    <p>
+      python3/stable 3.13.5-1 amd64 [upgradable from: 3.11.2-1+b1]
+    </p>
+    <p>
+      readline-common/stable 8.2-6 all [upgradable from: 8.2-1.3]
+    </p>
+    <p>
+      rss2email/stable 1:3.14-1 all [upgradable from: 1:3.13.1-3]
+    </p>
+    <p>
+      rsync/stable 3.4.1+ds1-5 amd64 [upgradable from: 3.2.7-1+deb12u2]
+    </p>
+    <p>
+      rsyslog/stable 8.2504.0-1 amd64 [upgradable from: 8.2302.0-1+deb12u1]
+    </p>
+    <p>
+      runit-helper/stable 2.16.4 all [upgradable from: 2.15.2]
+    </p>
+    <p>
+      screen/stable 4.9.1-3 amd64 [upgradable from: 4.9.0-4]
+    </p>
+    <p>
+      sed/stable 4.9-2 amd64 [upgradable from: 4.9-1]
+    </p>
+    <p>
+      sensible-utils/stable 0.0.25 all [upgradable from: 0.0.17+nmu1]
+    </p>
+    <p>
+      sgml-base/stable 1.31+nmu1 all [upgradable from: 1.31]
+    </p>
+    <p>
+      shared-mime-info/stable 2.4-5+b2 amd64 [upgradable from: 2.2-1]
+    </p>
+    <p>
+      sqlite3/stable 3.46.1-7 amd64 [upgradable from: 3.40.1-2+deb12u2]
+    </p>
+    <p>
+      startpar/stable 0.66-1 amd64 [upgradable from: 0.65-1+b1]
+    </p>
+    <p>
+      strace/stable 6.13+ds-1 amd64 [upgradable from: 6.1-0.1]
+    </p>
+    <p>
+      systemd-sysv/stable 257.9-1~deb13u1 amd64 [upgradable from: 252.39-1~deb12u1]
+    </p>
+    <p>
+      systemd-timesyncd/stable 257.9-1~deb13u1 amd64 [upgradable from: 252.39-1~deb12u1]
+    </p>
+    <p>
+      systemd/stable 257.9-1~deb13u1 amd64 [upgradable from: 252.39-1~deb12u1]
+    </p>
+    <p>
+      sysv-rc/stable 3.14-4 all [upgradable from: 3.06-4]
+    </p>
+    <p>
+      sysvinit-utils/stable 3.14-4 amd64 [upgradable from: 3.06-4]
+    </p>
+    <p>
+      tar/stable 1.35+dfsg-3.1 amd64 [upgradable from: 1.34+dfsg-1.2+deb12u1]
+    </p>
+    <p>
+      tcpd/stable 7.6.q-36 amd64 [upgradable from: 7.6.q-32]
+    </p>
+    <p>
+      tcpdump/stable 4.99.5-2 amd64 [upgradable from: 4.99.3-1]
+    </p>
+    <p>
+      traceroute/stable 1:2.1.6-1 amd64 [upgradable from: 1:2.1.2-1]
+    </p>
+    <p>
+      tzdata/stable 2025b-4+deb13u1 all [upgradable from: 2025b-0+deb12u2]
+    </p>
+    <p>
+      ucf/stable 3.0052 all [upgradable from: 3.0043+nmu1+deb12u1]
+    </p>
+    <p>
+      udev/stable 257.9-1~deb13u1 amd64 [upgradable from: 252.39-1~deb12u1]
+    </p>
+    <p>
+      unattended-upgrades/stable 2.12 all [upgradable from: 2.9.1+nmu3]
+    </p>
+    <p>
+      unzip/stable 6.0-29 amd64 [upgradable from: 6.0-28]
+    </p>
+    <p>
+      usrmerge/stable 39+nmu2 all [upgradable from: 37~deb12u1]
+    </p>
+    <p>
+      util-linux-extra/stable 2.41-5 amd64 [upgradable from: 2.38.1-5+deb12u3]
+    </p>
+    <p>
+      util-linux/stable 2.41-5 amd64 [upgradable from: 2.38.1-5+deb12u3]
+    </p>
+    <p>
+      vim-common/stable 2:9.1.1230-2 all [upgradable from: 2:9.0.1378-2+deb12u2]
+    </p>
+    <p>
+      vim-runtime/stable 2:9.1.1230-2 all [upgradable from: 2:9.0.1378-2+deb12u2]
+    </p>
+    <p>
+      vim-tiny/stable 2:9.1.1230-2 amd64 [upgradable from: 2:9.0.1378-2+deb12u2]
+    </p>
+    <p>
+      vim/stable 2:9.1.1230-2 amd64 [upgradable from: 2:9.0.1378-2+deb12u2]
+    </p>
+    <p>
+      w3m/stable 0.5.3+git20230121-2.1 amd64 [upgradable from: 0.5.3+git20230121-2]
+    </p>
+    <p>
+      wget/stable 1.25.0-2 amd64 [upgradable from: 1.21.3-1+deb12u1]
+    </p>
+    <p>
+      whiptail/stable 0.52.25-1 amd64 [upgradable from: 0.52.23-1+b1]
+    </p>
+    <p>
+      whois/stable 5.6.3 amd64 [upgradable from: 5.5.17]
+    </p>
+    <p>
+      x11-common/stable 1:7.7+24+deb13u1 all [upgradable from: 1:7.7+23]
+    </p>
+    <p>
+      xdg-user-dirs/stable 0.18-2 amd64 [upgradable from: 0.18-1]
+    </p>
+    <p>
+      xdg-utils/stable 1.2.1-2 all [upgradable from: 1.1.3-4.1]
+    </p>
+    <p>
+      xfonts-utils/stable 1:7.7+7 amd64 [upgradable from: 1:7.7+6]
+    </p>
+    <p>
+      xml-core/stable 0.19 all [upgradable from: 0.18+nmu1]
+    </p>
+    <p>
+      xsltproc/stable,stable-security 1.1.35-1.2+deb13u2 amd64 [upgradable from: 1.1.35-1+deb12u3]
+    </p>
+    <p>
+      xterm/stable 398-1 amd64 [upgradable from: 379-1]
+    </p>
+    <p>
+      xxd/stable 2:9.1.1230-2 amd64 [upgradable from: 2:9.0.1378-2+deb12u2]
+    </p>
+    <p>
+      xz-utils/stable 5.8.1-1 amd64 [upgradable from: 5.4.1-1]
+    </p>
+    <p>
+      zip/stable 3.0-15 amd64 [upgradable from: 3.0-13]
+    </p>
+    <p>
+      zlib1g/stable 1:1.3.dfsg+really1.3.1-1+b1 amd64 [upgradable from: 1:1.2.13.dfsg-1]
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1766111422867" ID="ID_464655254" MODIFIED="1766111424241" TEXT="Log">
+<node CREATED="1766111939053" ID="ID_870496225" MODIFIED="1766111942884" TEXT="ssh restart"/>
+<node COLOR="#435e98" CREATED="1766111943477" ID="ID_358149497" MODIFIED="1766112171570" TEXT="Kollision: /etc/adduser.conf">
+<node CREATED="1766112137144" ID="ID_172642170" MODIFIED="1766112147058" TEXT="von Upstream kommen zwei neue Konfigx"/>
+<node CREATED="1766112147654" ID="ID_538813379" MODIFIED="1766112157745" TEXT="und etwas striktere Regexps f&#xfc;r Usernamen"/>
+<node CREATED="1766112158453" ID="ID_1743407347" MODIFIED="1766112161822" TEXT="alles in Kommentaren"/>
+<node COLOR="#338800" CREATED="1766112162467" ID="ID_489402881" MODIFIED="1766112170145" TEXT="zusammengef&#xfc;hrt">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1766112661465" ID="ID_909696006" MODIFIED="1766112924335" TEXT="Kollision: crontab">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1766112667745" ID="ID_28208369" MODIFIED="1766112675436" TEXT="diesmal hat sich auch der PATH ge&#xe4;ndert"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1766112729473" ID="ID_94495268" MODIFIED="1766112741777" TEXT="wichtig; /sbin gibt es ja nicht mehr">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1766112783870" ID="ID_408159687" MODIFIED="1766112832992" TEXT="auch in der shell-Syntax der Kommandos hat sich was ge&#xe4;ndert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      laufen jetzt nicht mehr in einer Subshell
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#338800" CREATED="1766112907441" ID="ID_1523689261" MODIFIED="1766112919207" TEXT="zusammengef&#xfc;hrt mit unseren speziell konfigurierten Zeiten">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1766113007017" ID="ID_585657623" MODIFIED="1766113692384" TEXT="Kollision: /etc/htdig/htdig.conf">
+<node CREATED="1766113657539" ID="ID_661739481" MODIFIED="1766113665981" TEXT="weitgehend neue Kommentare"/>
+<node CREATED="1766113666712" ID="ID_765953752" MODIFIED="1766113682964" TEXT="erhalte aber unsere (vmtl. broken) Config">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node COLOR="#338800" CREATED="1766113685488" ID="ID_504796234" MODIFIED="1766113690351" TEXT="zusammengef&#xfc;hrt">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1766113724138" ID="ID_1687863329" MODIFIED="1766114148659" TEXT="Kollision: /etc/pam.d/sshd">
+<node CREATED="1766113817109" ID="ID_1015426495" MODIFIED="1766113831616" TEXT="sieht nach Upstream-&#xc4;nderungen aus, die man &#xfc;bernehmen sollte"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1766113832490" ID="ID_1839373115" MODIFIED="1766113933207" TEXT="eine Zeile ist auskommentiert">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1766113845687" ID="ID_506664987" MODIFIED="1766113884668" STYLE="bubble">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <font face="Monospaced" size="2">@@ -19,7 +19,7 @@ </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;session [success=ok ignore=ignore module_unknown=ignore default=bad]&#160; &#160;&#160;&#160;&#160;&#160;&#160;pam_selinux.so close </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;# Set the loginuid process attribute. </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">-</font><font face="Monospaced" size="2" color="#bf0707">#</font><font face="Monospaced" size="2">session&#160;&#160;&#160;&#160;required&#160;&#160;&#160;&#160;&#160;pam_loginuid.so </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">+session&#160;&#160;&#160;&#160;required&#160;&#160;&#160;&#160;&#160;pam_loginuid.so </font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1766113890762" ID="ID_1951938559" MODIFIED="1766113931194" TEXT="nehme die Konfig von Upstream (potentiell riskant)">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1766113937862" ID="ID_392462960" MODIFIED="1766114081849" TEXT="aber was soll ich anders machen?">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Verstehe nicht, warum das auskommentiert worden ist...
+    </p>
+    <p>
+      Die btr. SharedLib ist da:
+    </p>
+    <p>
+      <font face="Monospaced" size="2" color="#280f80">-rw-r--r-- 1 root root 14336 Jun 29 19:40 /usr/lib/x86_64-linux-gnu/security/pam_loginuid.so </font>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Wenn irgend ein nachgeschalteter Mechanismus diese loginuid brauchen w&#252;rde, w&#228;re das auch gef&#228;hrlich.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="help"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1766114085220" ID="ID_1720681551" MODIFIED="1766114103555" TEXT="nehme also Version von Upstream">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1766114149449" ID="ID_1140859866" MODIFIED="1766114460770" TEXT="Kollision: /etc/default/firehol">
+<node CREATED="1766114223487" ID="ID_875744191" MODIFIED="1766114236093" TEXT="neue Version ist viel elaborierter, alte war nur wenige Zeilen"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1766114236609" ID="ID_1579681360" MODIFIED="1766114251277" TEXT="ABER: wir m&#xfc;ssen Firehol auf jeden Fall aktivieren">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#338800" CREATED="1766114439336" ID="ID_1217801173" MODIFIED="1766114456725" TEXT="dementsprechend ge&#xe4;ndert (und Notiz hinterlassen)">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1766114671539" ID="ID_911677537" MODIFIED="1766114681946" TEXT="sonst ohne Fehler durchgelaufen">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#174956" COLOR="#8dfd49" CREATED="1766114770311" ID="ID_1096338848" MODIFIED="1766115329689" STYLE="bubble" TEXT="Reboot ..... funktioniert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Dec 19 04:26:30 lumiera systemd-logind[198]: The system will reboot now!
+    </p>
+    <p>
+      Dec 19 04:26:30 lumiera systemd-logind[198]: System is rebooting.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Dec 19 04:26:34 lumiera systemd[1]: Reached target reboot.target - System Reboot.
+    </p>
+    <p>
+      Dec 19 04:26:34 lumiera systemd[1]: Shutting down.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Dec 19 04:26:42 lumiera systemd-journald[26]: Journal started
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Dec 19 04:26:42 lumiera systemd[1]: Starting firehol.service - Firehol stateful packet filtering firewall for hum&gt;
+    </p>
+    <p>
+      Dec 19 04:26:43 lumiera systemd[1]: Started systemd-logind.service - User Login Management.
+    </p>
+    <p>
+      Dec 19 04:26:45 lumiera systemd[1]: Finished networking.service - Raise network interfaces.
+    </p>
+    <p>
+      Dec 19 04:26:45 lumiera systemd[1]: Starting exim4.service - exim Mail Transport Agent...
+    </p>
+    <p>
+      Dec 19 04:26:45 lumiera systemd[1]: Started fail2ban.service - Fail2Ban Service.
+    </p>
+    <p>
+      Dec 19 04:26:45 lumiera systemd[1]: Starting fireqos.service - FireQOS traffic shaping for humans...
+    </p>
+    <p>
+      Dec 19 04:26:45 lumiera systemd[1]: Starting git-daemon.service - LSB: git-daemon service...
+    </p>
+    <p>
+      Dec 19 04:26:45 lumiera systemd[1]: Starting inetd.service - Internet superserver...
+    </p>
+    <p>
+      Dec 19 04:26:45 lumiera systemd[1]: Starting ssh.service - OpenBSD Secure Shell server...
+    </p>
+    <p>
+      Dec 19 04:26:45 lumiera systemd[1]: Starting systemd-user-sessions.service - Permit User Sessions...
+    </p>
+    <p>
+      Dec 19 04:26:45 lumiera sshd[424]: Server listening on 0.0.0.0 port 22.
+    </p>
+    <p>
+      Dec 19 04:26:45 lumiera sshd[424]: Server listening on :: port 22.
+    </p>
+    <p>
+      Dec 19 04:26:45 lumiera systemd[1]: Started ssh.service - OpenBSD Secure Shell server.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Dec 19 04:26:45 lumiera systemd[1]: Startup finished in 3.270s.
+    </p>
+    <p>
+      Dec 19 04:26:45 lumiera fail2ban-server[393]: Server ready
+    </p>
+  </body>
+</html></richcontent>
+<edge COLOR="#9e7171" STYLE="linear" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="16"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1766115044313" ID="ID_1523762680" MODIFIED="1766115307367" TEXT="was ist eigentlich &quot;FireQOS 3.1.8&quot; ?">
+<icon BUILTIN="help"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1766115170341" ID="ID_1696055521" MODIFIED="1766115307367" TEXT="was ist das...?">
+<icon BUILTIN="help"/>
+<node CREATED="1766115177079" ID="ID_1402645314" MODIFIED="1766115307367">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <font face="Monospaced" size="2" color="#a60808">Dec 19 04:26:43 lumiera systemd[1]: System is tainted: unmerged-bin:cgroupsv1 </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2" color="#a60808">Dec 19 04:26:43 lumiera systemd[1]: and.service: Failed to delete controller cgroups /system.slice/and.service, i&gt; </font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1766115506881" ID="ID_1709626807" MODIFIED="1766115519896" TEXT="stelle fest: noch die old-stlye Apt-Konfiguration">
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1766115521196" ID="ID_1817026114" MODIFIED="1766115546044" TEXT="warum wurde das nicht automatisch migriert?">
+<icon BUILTIN="help"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1766115531050" ID="ID_1172975746" MODIFIED="1766115546044" TEXT="wo sind die neuen Archive-Keyrings?">
+<icon BUILTIN="help"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1766115558123" ID="ID_1333277621" MODIFIED="1767201951170" TEXT="Einrichtung">
+<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1766115564978" ID="ID_524346747" MODIFIED="1766116164562" TEXT="Migration Menugen auf Python-3 nun ausrollen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1766116308155" ID="ID_539512905" MODIFIED="1766534410278" TEXT="Apache wieder installiert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      apt install apache2 apache2-utils libapache2-mod-security2 libapache2-mod-wsgi
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+<node COLOR="#5b280f" CREATED="1766116544223" ID="ID_1709738968" MODIFIED="1766116550643" TEXT="Kollision: /etc/apache2/apache2.conf">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1766116552214" ID="ID_1996341810" MODIFIED="1766116564310" TEXT="da nehme ich nat&#xfc;rlich die von mir schon zusammengef&#xfc;hrte Version"/>
+</node>
+<node COLOR="#5b280f" CREATED="1766116566400" ID="ID_1129977095" MODIFIED="1766116914388" TEXT="Kollision: /etc/apache2/conf-available/other-vhosts-access-log.conf ">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1766116843192" ID="ID_235343695" MODIFIED="1766116908454" TEXT="das hatte Cehteh mal auskommentiert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Hier geht es um VirtualHosts, f&#252;r die nicht explizit ein eigenes Log konfiguriert wurde; die Einstellung von Upstram w&#252;rde die dann in ein spezielles Log schieben, wir schicken die btr. Meldungen stattdessen in das Haupt-Log
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="info"/>
+</node>
+<node COLOR="#338800" CREATED="1766116850719" ID="ID_373060135" MODIFIED="1766116855856" TEXT="ich lasse das so">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#5b280f" CREATED="1766117099039" ID="ID_1548734835" MODIFIED="1766117103592" TEXT="Kollision: /etc/apache2/conf-available/security.conf">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node COLOR="#5b280f" CREATED="1766117155393" ID="ID_422801943" MODIFIED="1766117159916" TEXT="Kollision: /etc/apache2/conf-available/serve-cgi-bin.conf">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node COLOR="#5b280f" CREATED="1766117178342" ID="ID_271792378" MODIFIED="1766117182968" TEXT="Kollision: /etc/apache2/mods-available/autoindex.conf">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node COLOR="#5b280f" CREATED="1766117294251" ID="ID_144989152" MODIFIED="1766117298693" TEXT="Kollision: /etc/apache2/mods-available/mpm_event.conf">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node COLOR="#5b280f" CREATED="1766117340688" ID="ID_1742869094" MODIFIED="1766117344997" TEXT="Kollision: /etc/apache2/mods-available/mpm_prefork.conf">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node COLOR="#5b280f" CREATED="1766117364969" ID="ID_951286475" MODIFIED="1766117370703" TEXT="Kollision: /etc/apache2/mods-available/mpm_worker.conf">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node COLOR="#5b280f" CREATED="1766117396405" ID="ID_808436389" MODIFIED="1766117400645" TEXT="Kollision: /etc/apache2/mods-available/reqtimeout.conf">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node COLOR="#5b280f" CREATED="1766117469837" ID="ID_1992174338" MODIFIED="1766117474491" TEXT="Kollision: /etc/apache2/mods-available/ssl.conf">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node COLOR="#5b280f" CREATED="1766117486497" ID="ID_598084506" MODIFIED="1766117491506" TEXT="und nat&#xfc;rlich: /etc/apache2/sites-available/000-default.conf">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node COLOR="#5b280f" CREATED="1766117506556" ID="ID_1868731459" MODIFIED="1766117508922" TEXT="/etc/apache2/sites-available/default-ssl.conf">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1766116931138" ID="ID_975020355" MODIFIED="1766116968407" TEXT="libapache2-mod-wsgi gibt es nicht mehr">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1766116969492" ID="ID_285677693" MODIFIED="1766117055627" TEXT="ist jetzt rein virtuell"/>
+<node CREATED="1766117056457" ID="ID_1482328795" MODIFIED="1766117060695" TEXT="stattdessen: libapache2-mod-wsgi-py3 "/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1767201931032" ID="ID_355913926" MODIFIED="1767563644566" TEXT="Trac-Setup aus Git-Repo neu ausgerollt">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1767204907959" ID="ID_1036463867" MODIFIED="1767204913084" TEXT="git push">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1767205054319" ID="ID_221472145" MODIFIED="1767205061583" TEXT="nur per Root!"/>
+<node CREATED="1767205069745" ID="ID_672364029" MODIFIED="1767205153185" TEXT="Sharing nur &#xfc;ber Gruppe &apos;staff&apos;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das sind: ichthyo, ct, benn
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1767204914004" ID="ID_17873140" MODIFIED="1767204923675" TEXT="DB aus Dump regeneriert">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1767204924389" ID="ID_972722798" MODIFIED="1767204928568" TEXT="Permissions">
+<node CREATED="1767204934668" ID="ID_1787722682" MODIFIED="1767204941616" TEXT="generell: root:www-data"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#d20452" CREATED="1767204942326" ID="ID_446983239" MODIFIED="1767205030173" TEXT="Schreibrechte f&#xfc;r www-data">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1767204947279" ID="ID_1893533250" MODIFIED="1767204954909" TEXT="trac-env/db/trac.db"/>
+<node CREATED="1767204956232" ID="ID_958426496" MODIFIED="1767204963649" TEXT="trac-env/conf/trac.ini"/>
+<node CREATED="1767204964368" ID="ID_740169196" MODIFIED="1767204970506" TEXT="trac-env/files"/>
+<node CREATED="1767204990504" ID="ID_1052487910" MODIFIED="1767205001086" TEXT="trac-authentication/trac.htdigest"/>
+<node CREATED="1767204971214" ID="ID_70838990" MODIFIED="1767204974209" TEXT="eggs"/>
+</node>
+</node>
+</node>
+<node CREATED="1767563646212" ID="ID_1957757189" MODIFIED="1767563651618" TEXT="Apache / Trac-Konfiguration">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1767563653695" ID="ID_1687786454" MODIFIED="1767563705972" TEXT="wir laufen zwar auf WSGI, aber noch mit prefork im Apache">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Christian hat mich darauf aufmerksam gemacht, prefork ist wohl veraltet und beitet nicht optimalen Durchsatz
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1767563709295" ID="ID_198735190" LINK="https://modwsgi.readthedocs.io/en/latest/configuration-directives/WSGIDaemonProcess.html" MODIFIED="1767563740681" TEXT="WSGI w&#xfc;rde einen DaemonProzess unterst&#xfc;tzen">
+<icon BUILTIN="idea"/>
+<node COLOR="#338800" CREATED="1767563745159" ID="ID_868616689" MODIFIED="1767576538129" TEXT="einen separaten Worker-Pool f&#xfc;r das Trac konfigurieren">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1767564852120" ID="ID_1926652649" MODIFIED="1767564863750" TEXT="das ist lediglich eine (elaborierte) Konfig f&#xfc;r WSGI"/>
+<node COLOR="#435e98" CREATED="1767566014104" ID="ID_631209964" MODIFIED="1767667204040" TEXT="Einrichtung">
+<icon BUILTIN="info"/>
+<node CREATED="1767566019112" ID="ID_1677816633" MODIFIED="1767566045856" TEXT="brauche auf jeden fall die WSGIDaemonProcess - Direktive"/>
+<node CREATED="1767566047938" ID="ID_1520527834" MODIFIED="1767566061872" TEXT="mu&#xdf; au&#xdf;erdem eine WSGIProcessGroup mit matching name angeben"/>
+<node CREATED="1767566064074" ID="ID_1897748630" MODIFIED="1767566109472" TEXT="wir brauchen nur eine Konfig (da Port 80 abgebogen wird)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      issues.lumiera.org:80 -&gt; https://www.lumiera.org/
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1767571313144" ID="ID_1862758930" MODIFIED="1767571323771" TEXT="Einstellungen w&#xe4;hlen">
+<node CREATED="1767571324893" ID="ID_1124801719" MODIFIED="1767571331455" TEXT="processes = 10"/>
+<node CREATED="1767571336659" ID="ID_740187832" MODIFIED="1767571340918" TEXT="threads = 8"/>
+<node CREATED="1767571341539" ID="ID_1932425436" MODIFIED="1767571344201" TEXT="nice = 1"/>
+<node CREATED="1767571565604" ID="ID_480674804" MODIFIED="1767571621265" TEXT="request-timeout = 60sec">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Wenn in einem Proze&#223; die Requests im Schnitt l&#228;nger als 60sek brauchen, wird der Proze&#223; get&#246;tet. Einzelne Requests k&#246;nnen also durchaus l&#228;nger brauchen, aber wenn sich die Dinge hochschaukeln, dann Tilt
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1767571356137" ID="ID_1293307608" MODIFIED="1767571421376" TEXT="inactivity-timeout = 10min">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das hei&#223;t, wenn es 10 Minuten f&#252;r einen D&#228;mon-Proze&#223; nix mehr zu tun gab, wird er runtergefahren (was bei erneuten Hochfahren zus&#228;tzliche Boot-Zeit bedeutet)
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1767571442237" ID="ID_1528259191" MODIFIED="1767571543543" TEXT="queue-timeout = 30">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      wenn ein Request f&#252;r 30 sekunden in der Eingangsqueue in WSGI steht, wird er nicht mehr verarbeitet, sondern weggeworfen (da der user sowiso nicht so lange warten wird)
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1767571695140" ID="ID_1045719836" MODIFIED="1767571733898" TEXT="connect-timeout : auf default 15sec belassen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      wie lange Apache wartet, bis er eine Antwort vom WSGI-Dispatcher bekommt
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1767571743365" ID="ID_571857599" MODIFIED="1767571813250" TEXT="socket-timeout : nicht angegeben (&#x27f6; Apache default)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      wie lange auf Read/Writes auf den Sockets geblockt werden darf, bevor Apache abbricht
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1767571824162" ID="ID_458735816" MODIFIED="1767571935376" TEXT="gebe explizit eine WSGIProcessGroup an mit gleichem Namen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das bedetuet, da&#223; alle WSGI-Requests in diesem VServer ausschlie&#223;lich vom Daemon-Process bedient werden. Ich gebe aber bewu&#223;t keine WSGIApplicationGroup an, weil dann der Default greift, da&#223; jede Applikation und jedes unterschiedliche Skript automatisch eine eigene separate Python-Umgebung bekommt
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1767576558306" ID="ID_1543808498" MODIFIED="1767576573750" TEXT="single-user-Test: sieht gut aus">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1767576575983" ID="ID_719006958" MODIFIED="1767576588761" TEXT="Trac reagiert gef&#xfc;hlt schneller"/>
+<node CREATED="1767576595581" ID="ID_285569126" MODIFIED="1767576606955" TEXT="10 Worker mit Name &apos;trac&apos; sind da"/>
+<node CREATED="1767576607555" ID="ID_1296401792" MODIFIED="1767576620317" TEXT="einige haben einen Git-Prozess gespawned"/>
+<node CREATED="1767576621233" ID="ID_1397465230" MODIFIED="1767576648361" TEXT="alle sind normalerweise in &quot;SNl&quot;"/>
+<node CREATED="1767576652765" ID="ID_1986135448" MODIFIED="1767576663437" TEXT="insgesamt nur wenige Sekunden Laufzeit akkumuliert"/>
+<node CREATED="1767582613207" ID="ID_374692791" MODIFIED="1767582631634" TEXT="nach &gt; 10 Minuten: gleiche Worker-Prozesse, aber ihre Zeit ist wieder auf 0:0"/>
+<node CREATED="1767576755263" ID="ID_613815644" MODIFIED="1767576785544" TEXT="an der sonstigen Website keine offensichtlichen Auff&#xe4;lligkeiten">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Im Moment ist es ehr ruhig. Die Seiten reagieren schnell
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1767563759213" ID="ID_1232614613" MODIFIED="1767563780324" TEXT="und dann Apache auf eine moderne Technologie umstellen">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1767733215160" ID="ID_1449275758" LINK="https://httpd.apache.org/docs/2.4/en/mod/prefork.html" MODIFIED="1767733260120">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      wir verweden immer noch <font face="Monospaced"><b>prefork</b></font><b>&#160;MPM</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1767733182291" ID="ID_611157136" MODIFIED="1767733187289" TEXT="in Frage kommen...">
+<node CREATED="1767733188627" ID="ID_541456524" LINK="https://httpd.apache.org/docs/2.4/en/mod/worker.html" MODIFIED="1767733270215" TEXT="worker MPM"/>
+<node CREATED="1767733195581" ID="ID_807657028" LINK="https://httpd.apache.org/docs/2.4/en/mod/event.html" MODIFIED="1767733279366" TEXT="event MPM"/>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1767733288905" ID="ID_1149841453" MODIFIED="1767734090783" TEXT="Beschlu&#xdf;: worker-MPM erscheint passend">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Beide Module sind eine graduelle Erweiterung und verwenden Prozesse <i>und</i>&#160;Threads. Das event-MPM ist erst k&#252;rzlich aus dem <i>&#187;experimental&#171;</i>&#160; - Status raus, und stellt eine Erweiterung zu worker-MPM dar.
+    </p>
+    <ul>
+      <li>
+        prefork: ein Pool von Worker-Prozessen. Jeder Prozess kann einen Request handeln
+      </li>
+      <li>
+        worker: ein Pool von Handler-Prozessen, von denen jeder mehrere Threads startet
+      </li>
+      <li>
+        einen <i>listener</i>-Thread, der den Socket bedient und die Requests weitergibt
+      </li>
+      <li>
+        N <i>worker</i>-Threads. Es wird stets ein pool von <i>mindestens-X</i>&#160;idle worker threads vorgehalten
+      </li>
+      <li>
+        die globale Koordination der Requests auf den Socket ist &#252;ber einen Mutex abgesichert
+      </li>
+      <li>
+        event: eine Weiterentwicklung in Richtung Coroutinen
+      </li>
+      <li>
+        auch hier haben wir mehrere Prozesse mit jeweils N threads, und eine globale Koordination per Mutex
+      </li>
+      <li>
+        aber die <i>listener</i>-Threads &#252;bernehmen nun eine Dispatcher-Rolle
+      </li>
+      <li>
+        eingehende Requests werden an freie worker-Threads &#252;bergeben
+      </li>
+      <li>
+        sobald ein Worker-Thread aber blocken w&#252;rde, gibt er den Socket zur&#252;ck an den Listener
+      </li>
+      <li>
+        der Listener reagiert nun auch auf ein <i>Reaktivierungs-Event</i>&#160;eines Sockets mit keep-alive
+      </li>
+      <li>
+        <i>vermutlich</i>&#160;(die Quellen sind da nicht ganz klar) wird auch das Warten auf Content-Generierung so gehandhabt
+      </li>
+    </ul>
+    <p>
+      Abw&#228;gung
+    </p>
+    <p>
+      Das event-MPM ist besonders abgestimmt auf Web-Applikationen mit elaborierter Client-seitiger Logik, und offen gehaltenen Socket-Connections. Mit dem worker-MPM f&#252;rht das n&#228;mlich zu dem Problem, da&#223; ein Worker-Thread w&#228;hrend der ganzen keep-Alive-Dauer auf einen einzigen Client gebunden bleibt. Da aber in unserer Situation die Mehrzahl der Aufrufe einfachen statischen Content ausliefern, und auch eine Mehrzahl der Bots f&#252;r jeden Request mit einer anderen IP daherkommt, erscheint der (definitiv vorhandene) Overhead von event-MPM nicht gerechtfertigt. Wir sollten ehr darauf zielen, unseren Speicher m&#246;glichst optimal auf m&#246;glichst viele Worker-Threads zu verteilen
+    </p>
+  </body>
+</html>
+</richcontent>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1767734096002" ID="ID_1304037139" MODIFIED="1767734105285" TEXT="Aufgabe: einfaches Monitoring">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1767745616524" ID="ID_1822372227" MODIFIED="1767746541647" TEXT="Vorgabe">
+<icon BUILTIN="yes"/>
+<node CREATED="1767746506262" ID="ID_416374956" MODIFIED="1767746525510" TEXT="&#xbb;low-tech&#xab; : cronjob + zus&#xe4;tzliches Log"/>
+<node CREATED="1767745620227" ID="ID_1475948207" MODIFIED="1767745637387" TEXT="man soll das Log durchschauen k&#xf6;nnen, und Lastspitzen direkt sehen"/>
+<node CREATED="1767745678004" ID="ID_949656373" MODIFIED="1767745699234" TEXT="eine einzelne Zeile soll aber auch kummulativ zeigen wie wir stehen"/>
+</node>
+<node CREATED="1767909198959" ID="ID_1570508005" MODIFIED="1767909220908" TEXT="/var/local/trac/scripts/collect-server-stats">
+<node CREATED="1767909225215" ID="ID_289056673" MODIFIED="1767909242878" TEXT="Bash script, mit Awk und Perl"/>
+<node CREATED="1767909245468" ID="ID_1548740764" MODIFIED="1767909257988" TEXT="Lizenz: freeBSD 2-Clause"/>
+<node CREATED="1767909266870" ID="ID_392449557" MODIFIED="1767909271933" TEXT="eingecheckt ins Trac-Git"/>
+<node CREATED="1767909287385" ID="ID_1362136592" MODIFIED="1767909293118" TEXT="Implementierung">
+<node CREATED="1767909294262" ID="ID_91069052" MODIFIED="1767909305640" TEXT="ps mit grep filtern"/>
+<node BACKGROUND_COLOR="#accdc3" COLOR="#3f4015" CREATED="1767909306468" ID="ID_409505085" MODIFIED="1767909472599" STYLE="fork" TEXT="mit awk Summen bilden">
+<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
+<icon BUILTIN="wizard"/>
+</node>
+<node CREATED="1767909312091" ID="ID_281477803" MODIFIED="1767909325807" TEXT="die /server-status-Seite mit lynx lesen"/>
+<node BACKGROUND_COLOR="#accdc3" COLOR="#3f4015" CREATED="1767909326490" ID="ID_1260259546" MODIFIED="1767909468024" STYLE="fork" TEXT="mit einem Perl-Codeblock einzelne Felder herauspicken">
+<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
+<icon BUILTIN="wizard"/>
+</node>
+<node CREATED="1767909360785" ID="ID_584058553" MODIFIED="1767909379313" TEXT="Ausgabe als CSV in eine Logdatei &apos;lodadwatch.csv&apos;"/>
+</node>
+</node>
+<node CREATED="1767909382623" ID="ID_1552968568" MODIFIED="1767909385058" TEXT="Einrichtung">
+<node BACKGROUND_COLOR="#accdc3" COLOR="#3f4015" CREATED="1767909386783" ID="ID_599889785" MODIFIED="1767909460967" STYLE="fork" TEXT="als systemd-Timer-Unit">
+<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
+<icon BUILTIN="wizard"/>
+<node CREATED="1767909411680" ID="ID_1389936850" MODIFIED="1768089457034" TEXT="/etc/systemd/system/loadwatch.service">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      [Unit]
+    </p>
+    <p>
+      Description=Collect performance statistics of Lumiera webserver
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      [Service]
+    </p>
+    <p>
+      Type=oneshot
+    </p>
+    <p>
+      User=www-data
+    </p>
+    <p>
+      WorkingDirectory=/var/log/apache2
+    </p>
+    <p>
+      ExecStart=/var/local/trac/scripts/collect-server-stats
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="edit"/>
+<node CREATED="1767909523455" ID="ID_682767742" MODIFIED="1767909533477" TEXT="setzt Arbeitsverzeichnis auf /var/log/apache2"/>
+<node CREATED="1767909537437" ID="ID_1659039936" MODIFIED="1767909542177" TEXT="setzt user als www-data"/>
+</node>
+<node CREATED="1767909434041" ID="ID_209267731" MODIFIED="1768089483324" TEXT="/etc/systemd/system/loadwatch.timer">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      [Unit]
+    </p>
+    <p>
+      Description=Capture webserver load statistics (ladwatch.csv) every 2 minutes
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      [Timer]
+    </p>
+    <p>
+      OnCalendar=*-*-* *:0/2:25
+    </p>
+    <p>
+      AccuracySec=5s
+    </p>
+    <p>
+      Persistent=true
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      [Install]
+    </p>
+    <p>
+      WantedBy=timers.target
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="edit"/>
+<node CREATED="1767909550619" ID="ID_1126142845" MODIFIED="1767909563516" TEXT="eingeklinkt in das timers.target"/>
+<node CREATED="1767909943447" ID="ID_157602204" MODIFIED="1767910052908" TEXT="trigger">
+<node CREATED="1767909950418" ID="ID_1558463537" MODIFIED="1767910038959" TEXT="einfach: alle 2 Minuten">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      OnUnitActiveSec=2min
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1767909978826" ID="ID_1170420469" MODIFIED="1767910056602" TEXT="exakt nach Uhr: mit Cron-Ausdruck">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      [Timer]
+    </p>
+    <p>
+      OnCalendar=*-*-* *:0/2:0
+    </p>
+    <p>
+      AccuracySec=1s
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="back"/>
+</node>
+</node>
+</node>
+<node CREATED="1767912347334" ID="ID_1090860475" MODIFIED="1767912347334" TEXT="sudo systemctl daemon-reload"/>
+<node CREATED="1767912347334" ID="ID_1641739136" MODIFIED="1767912347334" TEXT="sudo systemctl enable --now webstats.timer"/>
+<node CREATED="1767912598657" ID="ID_1245546625" MODIFIED="1767912599583" TEXT="systemctl status loadwatch.timer"/>
+<node CREATED="1767912582939" ID="ID_1060101310" MODIFIED="1767912588584" TEXT="journalctl -u webstats.service -e"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1767201982309" HGAP="35" ID="ID_1631001537" MODIFIED="1767201994202" TEXT="Anubis evaluieren" VSHIFT="4">
+<icon BUILTIN="hourglass"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1767201997770" ID="ID_1180600640" MODIFIED="1767202023253" TEXT="das Thema scheint kontrovers zu sein &#x2014; Christian findet es unsympatisch">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1767202074137" ID="ID_1195940156" MODIFIED="1767202107968" TEXT="ich m&#xf6;chte mehr dar&#xfc;ber erfahren">
+<node CREATED="1767202109300" ID="ID_113232221" MODIFIED="1767202121269" TEXT="sehe da&#xdf; es von vielen &#xbb;kleinen Websites&#xab; verwendet wird"/>
+<node CREATED="1767202121976" ID="ID_1816445790" MODIFIED="1767202177702" TEXT="theoretisch klingt der Ansatz angemessen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      man verscheucht die Besucher, die nur Daten abgrasen m&#246;chten, indem man diese Aufgabe teuer macht f&#252;r sie
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1767202179610" ID="ID_1863666852" MODIFIED="1767202260692" TEXT="die Bedrohung ist real &#x2014; und ein Gemeinschaftsprojekt w&#xe4;re w&#xfc;nschenswert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Ich halte diese Bedrohung f&#252;r sehr ernst, und nicht etwas, wo jeder mal so nebenbei herumbasteln sollte.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1767202262464" ID="ID_96362374" MODIFIED="1767202291320" TEXT="Es g&#xe4;be weitere Aspekte: wie erkennt man &#xbb;erw&#xfc;nschte&#xab; Bots (Suchmaschinen, Archive.org)?"/>
+</node>
+</node>
+<node COLOR="#111064" CREATED="1767128566468" ID="ID_513748595" MODIFIED="1767201775003" TEXT="Dokumentation: Git">
+<linktarget COLOR="#3b49c7" DESTINATION="ID_513748595" ENDARROW="Default" ENDINCLINATION="-28;-1028;" ID="Arrow_ID_23715623" SOURCE="ID_1218510171" STARTARROW="None" STARTINCLINATION="-475;36;"/>
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="edit"/>
+<node CREATED="1767128572589" ID="ID_1300621421" MODIFIED="1767128589920" TEXT="f&#xfc;hre ein Git-Repo ein f&#xfc;r Site-Konfiguration + Trac"/>
+<node CREATED="1767128681163" FOLDED="true" ID="ID_1369560532" MODIFIED="1767128967291" TEXT="Struktur">
+<icon BUILTIN="info"/>
+<node CREATED="1766365091736" ID="ID_1638298813" MODIFIED="1766365104841" TEXT="drei Branches">
+<node CREATED="1766365105686" ID="ID_1079553250" MODIFIED="1767128693557" TEXT="trac (Vendor)"/>
+<node CREATED="1766365109392" ID="ID_629811422" MODIFIED="1767128699791" TEXT="lumi (Lumiera.org)"/>
+<node CREATED="1766365113436" ID="ID_1984048293" MODIFIED="1767128746347" TEXT="flaucher (lokaler PC)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      dieser Branch wird nicht publiziert (das ist mein lokaler Saustall)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1766365865520" ID="ID_280464585" MODIFIED="1767128951034" TEXT="Setup">
+<icon BUILTIN="info"/>
+<node CREATED="1766365869418" ID="ID_707608706" MODIFIED="1766365883523" TEXT="unter /Lager/Soft/Trac/Setup"/>
+<node CREATED="1766534220141" ID="ID_1307087769" MODIFIED="1766534229689" TEXT="Git-Repo selber per Symlink (wegen Backup)"/>
+<node CREATED="1766365885386" ID="ID_1502381646" MODIFIED="1766365911502" TEXT="einen Installations-Baum, analog zu Lumiera">
+<node CREATED="1766365949269" ID="ID_1947288398" MODIFIED="1766365956841" TEXT="zus&#xe4;tzlich">
+<node CREATED="1766365957699" ID="ID_424186072" MODIFIED="1766365962507" TEXT="ApacheConfig"/>
+<node CREATED="1766365963166" ID="ID_1666994682" MODIFIED="1766365986776" TEXT="PluginBuild"/>
+</node>
+</node>
+<node CREATED="1766365915121" ID="ID_1268704719" MODIFIED="1766365921157" TEXT="darunter das trac-env">
+<node CREATED="1766365923351" ID="ID_1098422751" MODIFIED="1766365925636" TEXT="ohne DB">
+<node CREATED="1767128764001" ID="ID_839368422" MODIFIED="1767128774515" TEXT="als TracDB.dump einchecken"/>
+</node>
+<node CREATED="1766365926600" ID="ID_1368288763" MODIFIED="1766365930222" TEXT="ohne die Plugins"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1767128802389" FOLDED="true" ID="ID_140683742" MODIFIED="1767128954712" TEXT="Inhalte">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="list"/>
+<node CREATED="1767128807182" ID="ID_1579315045" MODIFIED="1767128824676" TEXT="Default-Installationen aus Docker-Containern + Debian-Archiv"/>
+<node CREATED="1767128828393" ID="ID_720828741" MODIFIED="1767128866356" TEXT="meine alten Snapshots nun hier mit integrieren">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      hab seit vielen Jahren noch Snapshots bei mir auf dem PC herumliegen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1766457516592" ID="ID_1113169154" MODIFIED="1766459195194" TEXT="Kann ich noch die Plug-ins beschaffen?">
+<node CREATED="1766457686770" ID="ID_1464934854" MODIFIED="1766457697612" TEXT="man kann Eggs einfach entpacken"/>
+<node CREATED="1766457698353" ID="ID_1892278582" MODIFIED="1766457705943" TEXT="es ist ein Zipfile">
+<icon BUILTIN="idea"/>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1766457710845" ID="ID_1991468321" MODIFIED="1766457722288" TEXT="also hier nicht verspielen!">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1766458486841" ID="ID_766053625" MODIFIED="1766458502524" TEXT="Struktur:   Setup/PluginBuild/&lt;PluginName&gt;/"/>
+<node CREATED="1766459150742" ID="ID_517660122" MODIFIED="1766459159940" TEXT="Eier von 2013">
+<node CREATED="1766459161205" MODIFIED="1766459161205" TEXT="TracTocMacro-11.0.0.3-py2.7.egg"/>
+<node CREATED="1766459168333" MODIFIED="1766459168333" TEXT="graphviz-0.7.5.1-py2.7.egg"/>
+<node CREATED="1766459174501" MODIFIED="1766459174501" TEXT="ReST-0.3.2-py2.7.egg"/>
+</node>
+<node CREATED="1766458347193" ID="ID_1565093903" MODIFIED="1766459112172" TEXT="au&#xdf;erdem: DEB-Pakete">
+<icon BUILTIN="idea"/>
+<node CREATED="1766458358331" ID="ID_1373534241" MODIFIED="1766459119870" STYLE="fork" TEXT="apt install trac-mastertickets trac-tags trac-wysiwyg trac-xmlrpc">
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="back"/>
+</node>
+<node CREATED="1766458428833" ID="ID_879404061" MODIFIED="1766458435253" TEXT="dann: dpkg -L ...."/>
+<node CREATED="1766458436042" ID="ID_361392414" MODIFIED="1766458531006" TEXT="also jeweils mkdir Setup/PluginBuild/TracTags"/>
+<node CREATED="1766458532043" ID="ID_97733642" MODIFIED="1766458541090" TEXT="rsync -Pavi /usr/lib/python2.7/dist-packages/TracTags-0.9.egg-info /trac/Setup/PluginBuild/TracTags/"/>
+<node CREATED="1766458547889" ID="ID_941668619" MODIFIED="1766458558355" TEXT="rsync -Pavi /usr/lib/python2.7/dist-packages/tractags /trac/Setup/PluginBuild/TracTags/"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1766365291058" ID="ID_1214038071" MODIFIED="1766521010226" TEXT="den alten Lumiera-Baum einchecken">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1766511440565" ID="ID_41146934" MODIFIED="1766517287438" TEXT="Historie der Inhalte">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1766511447479" ID="ID_878589798" MODIFIED="1766517275811" TEXT="ja ... das ist sinnvoll">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      und macht nur ca 30 Minuten Arbeit <font size="2" color="#9e0c62">(...naja war mehr Richtung eine Stunde)</font>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="smiley-neutral"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1766511470400" ID="ID_1524804852" MODIFIED="1766517283422" TEXT="Ich habe alte Backups herumfliegen">
+<icon BUILTIN="idea"/>
+<node CREATED="1766511506429" ID="ID_620734444" MODIFIED="1766521275786" TEXT="2012-10-10">
+<node CREATED="1766512584210" ID="ID_769369825" MODIFIED="1766512590814" TEXT="#895"/>
+</node>
+<node CREATED="1766511516105" ID="ID_1464612388" MODIFIED="1766521267243" TEXT="2014-11-01">
+<node CREATED="1766513519256" ID="ID_1700505730" MODIFIED="1766513523967" TEXT="#957"/>
+</node>
+<node CREATED="1766511524072" ID="ID_2351289" MODIFIED="1766521254314" TEXT="2017-03-10">
+<node CREATED="1766513968501" ID="ID_524883391" MODIFIED="1766513972406" TEXT="#1106"/>
+</node>
+<node CREATED="1766511534402" ID="ID_1897256895" MODIFIED="1766521239471" TEXT="2018-09-21">
+<node CREATED="1766514787155" ID="ID_786522970" MODIFIED="1766514791361" TEXT="#1167"/>
+</node>
+<node CREATED="1766511544800" ID="ID_1985760156" MODIFIED="1766521242462" TEXT="2022-10-29">
+<node CREATED="1766516465822" ID="ID_1408534898" MODIFIED="1766516468247" TEXT="#1272"/>
+</node>
+<node CREATED="1766511556949" ID="ID_1446923946" MODIFIED="1766521210258" TEXT="2024-06-25">
+<node CREATED="1766517010622" ID="ID_629479234" MODIFIED="1766517013429" TEXT="#1368"/>
+</node>
+</node>
+<node CREATED="1766511566364" ID="ID_616104240" MODIFIED="1766511625156" TEXT="Tip: Verzeichnis mu&#xdf; writable sein">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      sonst beschwert sich SQLite mit : <code data-highlighted="yes" class="hljs language-sql">attempt to write a readonly database</code>
+    </p>
+    <pre http-equiv="content-type" content="text/html; charset=utf-8" class="lang-sql s-code-block"></pre>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1766520993618" ID="ID_177751112" MODIFIED="1766521007578" TEXT="Snapshot vor dem Upgrade auf Lumiera.org">
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1766521012343" ID="ID_914127982" MODIFIED="1766521032501" TEXT="enth&#xe4;lt nun auch die Apache-Config">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#435e98" CREATED="1766521036364" ID="ID_1211407848" MODIFIED="1766521047250" TEXT="und einen Dump der statischen Resourcen">
+<font NAME="SansSerif" SIZE="11"/>
+</node>
+<node CREATED="1766521176241" ID="ID_109303821" MODIFIED="1766521191697" TEXT="2025-12-11">
+<node CREATED="1766521192498" ID="ID_1308139214" MODIFIED="1766521195597" TEXT="#1406"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1766521650760" ID="ID_1181128463" MODIFIED="1766534131368" TEXT="Die Stylesheet-&#xc4;nderungen konsolidieren">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1766521922807" FOLDED="true" ID="ID_542609659" MODIFIED="1767128914612" TEXT="rekonstruiere die technische Migration">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Also die &#196;nderungen, die ich direkt vom neuen Upstream-Default &#252;bernommen habe, aber ohne &#196;nderungen, die Anpassungen des alten Stylings darstellen
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1766522023359" ID="ID_1452562593" MODIFIED="1766534140686" TEXT="3-Wege-Merge machen">
+<icon BUILTIN="idea"/>
+<node CREATED="1766522031259" ID="ID_1909398538" MODIFIED="1766522034792" TEXT="links: alt"/>
+<node CREATED="1766522035565" ID="ID_831258178" MODIFIED="1766522043434" TEXT="mitte: mein Stand"/>
+<node CREATED="1766522044109" ID="ID_1126862274" MODIFIED="1766522049850" TEXT="rechts: Upstream"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1766534099998" ID="ID_1459394052" MODIFIED="1766534134279" TEXT="danach meine eigentliche Grafik-Arbeit als separates Changeset">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <i>das was dann mehrere Tage gekostet hat....</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1767129031993" ID="ID_528104021" MODIFIED="1767129038311" TEXT="Hau-zu">
+<node CREATED="1767129055268" ID="ID_1019992925" MODIFIED="1767129078680" TEXT="DB-Dump">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      sqlite3 &lt;path/to/db&gt; .dump &gt;TracDB.dump
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1767129080515" ID="ID_1053410229" MODIFIED="1767129109136" TEXT="Dump laden">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      sqlite3 &lt;path/to/db&gt; &lt; TracDB.dump
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1767129111568" ID="ID_239977067" MODIFIED="1767129134488" TEXT="Plugin bauen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      python3 setup.py bdist_egg
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1767129135636" ID="ID_810218489" MODIFIED="1767129223473" TEXT="Plugins f&#xfc;r Git Archivieren">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <ul>
+      <li>
+        falls aus DEB: man kopiert /usr/lib/python3/dist-packages/trac&lt;pluginname&gt;&#160;&#160;und TracPluginEggInfo
+      </li>
+      <li>
+        falls aus Egg: dieses per unzip entpacken (liefert den Python code in einem Unterverzeichnis + EGG_INFO)
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1767129231611" ID="ID_67152266" MODIFIED="1767129249372" TEXT="Trac lokal ausf&#xfc;hren">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      tracd --port 8000 \
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;--auth trac-env,./trac-authentication/trac.htdigest,trac \
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;/path/to/trac-env
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1767129309329" ID="ID_187833240" MODIFIED="1767129312109" TEXT="Ablage">
+<node COLOR="#338800" CREATED="1767129313761" ID="ID_374055159" MODIFIED="1767204898249" TEXT="/var/local/trac (ist jetzt ein Git-Repo)">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1767129348063" ID="ID_686894179" MODIFIED="1767131493455" TEXT="ChildTicket-Plugin &#x27f9; ins Gitweb">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
 </node>
 </node>
 </node>
