@@ -174429,8 +174429,7 @@ runner.run(test_suite())</font></code></pre>
       Die Umstellung war nicht ganz einfach, da wir eine spezielle Konfiguration in der trac.ini hatten. Es ist aber ein neues Modul <font face="Monospaced" color="#6e4343">AccountNotificationFormatter</font>&#160;hinzugekommen; solange das nicht aktiviert war, funktionierte die Email-Verifikation nicht mehr.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -174438,9 +174437,10 @@ runner.run(test_suite())</font></code></pre>
 <node COLOR="#338800" CREATED="1766092780442" ID="ID_1047953959" MODIFIED="1766095363115" TEXT="Wartungs-Seite anlegen">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1766095419376" ID="ID_545005155" MODIFIED="1766095422939" TEXT="Vorbereitung">
+<node COLOR="#435e98" CREATED="1766095419376" ID="ID_545005155" MODIFIED="1768092892720" TEXT="Vorbereitung">
+<icon BUILTIN="yes"/>
 <node CREATED="1766095424438" ID="ID_1147175053" MODIFIED="1766095428907" TEXT="Paketliste gespeichert"/>
-<node CREATED="1766095429634" ID="ID_1183027470" MODIFIED="1766098189878" TEXT="Pakete ausmisten">
+<node COLOR="#338800" CREATED="1766095429634" FOLDED="true" ID="ID_1183027470" MODIFIED="1768092886161" TEXT="Pakete ausmisten">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -174449,6 +174449,7 @@ runner.run(test_suite())</font></code></pre>
     </p>
   </body>
 </html></richcontent>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1766098650246" ID="ID_802716574" MODIFIED="1766098653924" TEXT="mit entfernt">
 <node CREATED="1766098655576" MODIFIED="1766098655576" TEXT="apache2"/>
 <node CREATED="1766098665132" MODIFIED="1766098665132" TEXT="libapache2-mod-security2"/>
@@ -174525,7 +174526,8 @@ runner.run(test_suite())</font></code></pre>
 </node>
 </node>
 </node>
-<node CREATED="1766100161561" ID="ID_1790544629" MODIFIED="1766100169216" TEXT="Upgrade">
+<node COLOR="#338800" CREATED="1766100161561" ID="ID_1790544629" MODIFIED="1768092906903" TEXT="Upgrade">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1766100170238" ID="ID_589987755" MODIFIED="1766105879965" TEXT="Schritt-1 : Bullseye">
 <icon BUILTIN="full-1"/>
 <node CREATED="1766100254919" ID="ID_372876362" MODIFIED="1766100275874" TEXT="alte Apt-Srouces">
@@ -175946,7 +175948,8 @@ runner.run(test_suite())</font></code></pre>
 <node CREATED="1766100816155" ID="ID_524799304" MODIFIED="1766100820923" TEXT="kein Grub-Paket"/>
 <node CREATED="1766100821594" ID="ID_54899700" MODIFIED="1766100825529" TEXT="kein Kernel-paket"/>
 </node>
-<node CREATED="1766100914967" ID="ID_1882835737" MODIFIED="1766100916927" TEXT="Log">
+<node CREATED="1766100914967" FOLDED="true" ID="ID_1882835737" MODIFIED="1768092867828" TEXT="Log">
+<icon BUILTIN="edit"/>
 <node COLOR="#435e98" CREATED="1766100918169" ID="ID_1018241418" MODIFIED="1766104947597" TEXT="Fehler beim Extrahieren einiger Pakete">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -176639,7 +176642,7 @@ runner.run(test_suite())</font></code></pre>
 </node>
 </node>
 <node CREATED="1766104157444" ID="ID_1093580223" MODIFIED="1766104167261" TEXT="Upgrade Firehol-Service">
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1766104168283" ID="ID_345236399" MODIFIED="1766104172149" TEXT=" FireHOL[17055]: Firewall has been stopped. Policy is ACCEPT EVERYTHING! ">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1766104168283" ID="ID_345236399" MODIFIED="1768092861696" TEXT=" FireHOL[17055]: Firewall has been stopped. Policy is ACCEPT EVERYTHING! ">
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
@@ -178073,7 +178076,8 @@ runner.run(test_suite())</font></code></pre>
 </html></richcontent>
 <icon BUILTIN="info"/>
 </node>
-<node CREATED="1766107805458" ID="ID_1902131263" MODIFIED="1766107807865" TEXT="Log">
+<node CREATED="1766107805458" FOLDED="true" ID="ID_1902131263" MODIFIED="1768092852844" TEXT="Log">
+<icon BUILTIN="edit"/>
 <node CREATED="1766107851952" ID="ID_176705840" MODIFIED="1766107863165" TEXT="Timezone: Europe/Berlin gew&#xe4;hlt"/>
 <node CREATED="1766107892079" ID="ID_1362796550" MODIFIED="1766107897002" TEXT="ssh restartet"/>
 <node COLOR="#435e98" CREATED="1766108144919" ID="ID_454155354" MODIFIED="1766109067876" TEXT="Kollision: /etc/adduser.conf">
@@ -179568,7 +179572,8 @@ runner.run(test_suite())</font></code></pre>
 </html></richcontent>
 <icon BUILTIN="info"/>
 </node>
-<node CREATED="1766111422867" ID="ID_464655254" MODIFIED="1766111424241" TEXT="Log">
+<node CREATED="1766111422867" FOLDED="true" ID="ID_464655254" MODIFIED="1768092829408" TEXT="Log">
+<icon BUILTIN="edit"/>
 <node CREATED="1766111939053" ID="ID_870496225" MODIFIED="1766111942884" TEXT="ssh restart"/>
 <node COLOR="#435e98" CREATED="1766111943477" ID="ID_358149497" MODIFIED="1766112171570" TEXT="Kollision: /etc/adduser.conf">
 <node CREATED="1766112137144" ID="ID_172642170" MODIFIED="1766112147058" TEXT="von Upstream kommen zwei neue Konfigx"/>
@@ -179801,7 +179806,7 @@ runner.run(test_suite())</font></code></pre>
 <node COLOR="#338800" CREATED="1766115564978" ID="ID_524346747" MODIFIED="1766116164562" TEXT="Migration Menugen auf Python-3 nun ausrollen">
 <icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#338800" CREATED="1766116308155" ID="ID_539512905" MODIFIED="1766534410278" TEXT="Apache wieder installiert">
+<node COLOR="#338800" CREATED="1766116308155" FOLDED="true" ID="ID_539512905" MODIFIED="1768092805450" TEXT="Apache wieder installiert">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -179908,8 +179913,7 @@ runner.run(test_suite())</font></code></pre>
       Christian hat mich darauf aufmerksam gemacht, prefork ist wohl veraltet und beitet nicht optimalen Durchsatz
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1767563709295" ID="ID_198735190" LINK="https://modwsgi.readthedocs.io/en/latest/configuration-directives/WSGIDaemonProcess.html" MODIFIED="1767563740681" TEXT="WSGI w&#xfc;rde einen DaemonProzess unterst&#xfc;tzen">
@@ -179929,8 +179933,7 @@ runner.run(test_suite())</font></code></pre>
       issues.lumiera.org:80 -&gt; https://www.lumiera.org/
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1767571313144" ID="ID_1862758930" MODIFIED="1767571323771" TEXT="Einstellungen w&#xe4;hlen">
 <node CREATED="1767571324893" ID="ID_1124801719" MODIFIED="1767571331455" TEXT="processes = 10"/>
@@ -179944,8 +179947,7 @@ runner.run(test_suite())</font></code></pre>
       Wenn in einem Proze&#223; die Requests im Schnitt l&#228;nger als 60sek brauchen, wird der Proze&#223; get&#246;tet. Einzelne Requests k&#246;nnen also durchaus l&#228;nger brauchen, aber wenn sich die Dinge hochschaukeln, dann Tilt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1767571356137" ID="ID_1293307608" MODIFIED="1767571421376" TEXT="inactivity-timeout = 10min">
 <richcontent TYPE="NOTE"><html>
@@ -179955,8 +179957,7 @@ runner.run(test_suite())</font></code></pre>
       das hei&#223;t, wenn es 10 Minuten f&#252;r einen D&#228;mon-Proze&#223; nix mehr zu tun gab, wird er runtergefahren (was bei erneuten Hochfahren zus&#228;tzliche Boot-Zeit bedeutet)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1767571442237" ID="ID_1528259191" MODIFIED="1767571543543" TEXT="queue-timeout = 30">
 <richcontent TYPE="NOTE"><html>
@@ -179966,8 +179967,7 @@ runner.run(test_suite())</font></code></pre>
       wenn ein Request f&#252;r 30 sekunden in der Eingangsqueue in WSGI steht, wird er nicht mehr verarbeitet, sondern weggeworfen (da der user sowiso nicht so lange warten wird)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1767571695140" ID="ID_1045719836" MODIFIED="1767571733898" TEXT="connect-timeout : auf default 15sec belassen">
 <richcontent TYPE="NOTE"><html>
@@ -179977,8 +179977,7 @@ runner.run(test_suite())</font></code></pre>
       wie lange Apache wartet, bis er eine Antwort vom WSGI-Dispatcher bekommt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1767571743365" ID="ID_571857599" MODIFIED="1767571813250" TEXT="socket-timeout : nicht angegeben (&#x27f6; Apache default)">
 <richcontent TYPE="NOTE"><html>
@@ -179988,8 +179987,7 @@ runner.run(test_suite())</font></code></pre>
       wie lange auf Read/Writes auf den Sockets geblockt werden darf, bevor Apache abbricht
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1767571824162" ID="ID_458735816" MODIFIED="1767571935376" TEXT="gebe explizit eine WSGIProcessGroup an mit gleichem Namen">
@@ -180000,8 +179998,7 @@ runner.run(test_suite())</font></code></pre>
       Das bedetuet, da&#223; alle WSGI-Requests in diesem VServer ausschlie&#223;lich vom Daemon-Process bedient werden. Ich gebe aber bewu&#223;t keine WSGIApplicationGroup an, weil dann der Default greift, da&#223; jede Applikation und jedes unterschiedliche Skript automatisch eine eigene separate Python-Umgebung bekommt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1767576558306" ID="ID_1543808498" MODIFIED="1767576573750" TEXT="single-user-Test: sieht gut aus">
@@ -180020,8 +180017,7 @@ runner.run(test_suite())</font></code></pre>
       Im Moment ist es ehr ruhig. Die Seiten reagieren schnell
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -180035,8 +180031,7 @@ runner.run(test_suite())</font></code></pre>
       wir verweden immer noch <font face="Monospaced"><b>prefork</b></font><b>&#160;MPM</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node CREATED="1767733182291" ID="ID_611157136" MODIFIED="1767733187289" TEXT="in Frage kommen...">
@@ -180095,8 +180090,7 @@ runner.run(test_suite())</font></code></pre>
       Das event-MPM ist besonders abgestimmt auf Web-Applikationen mit elaborierter Client-seitiger Logik, und offen gehaltenen Socket-Connections. Mit dem worker-MPM f&#252;rht das n&#228;mlich zu dem Problem, da&#223; ein Worker-Thread w&#228;hrend der ganzen keep-Alive-Dauer auf einen einzigen Client gebunden bleibt. Da aber in unserer Situation die Mehrzahl der Aufrufe einfachen statischen Content ausliefern, und auch eine Mehrzahl der Bots f&#252;r jeden Request mit einer anderen IP daherkommt, erscheint der (definitiv vorhandene) Overhead von event-MPM nicht gerechtfertigt. Wir sollten ehr darauf zielen, unseren Speicher m&#246;glichst optimal auf m&#246;glichst viele Worker-Threads zu verteilen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 </node>
@@ -180159,8 +180153,7 @@ runner.run(test_suite())</font></code></pre>
       ExecStart=/var/local/trac/scripts/collect-server-stats
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="edit"/>
 <node CREATED="1767909523455" ID="ID_682767742" MODIFIED="1767909533477" TEXT="setzt Arbeitsverzeichnis auf /var/log/apache2"/>
 <node CREATED="1767909537437" ID="ID_1659039936" MODIFIED="1767909542177" TEXT="setzt user als www-data"/>
@@ -180200,8 +180193,7 @@ runner.run(test_suite())</font></code></pre>
       WantedBy=timers.target
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="edit"/>
 <node CREATED="1767909550619" ID="ID_1126142845" MODIFIED="1767909563516" TEXT="eingeklinkt in das timers.target"/>
 <node CREATED="1767909943447" ID="ID_157602204" MODIFIED="1767910052908" TEXT="trigger">
@@ -180213,8 +180205,7 @@ runner.run(test_suite())</font></code></pre>
       OnUnitActiveSec=2min
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1767909978826" ID="ID_1170420469" MODIFIED="1767910056602" TEXT="exakt nach Uhr: mit Cron-Ausdruck">
 <richcontent TYPE="NOTE"><html>
@@ -180230,8 +180221,7 @@ runner.run(test_suite())</font></code></pre>
       AccuracySec=1s
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="back"/>
 </node>
 </node>

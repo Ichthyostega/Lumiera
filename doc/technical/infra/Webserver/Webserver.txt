@@ -128,3 +128,45 @@ the CSS styles and the Subtickets-Plugin (Python code).
 - a dump of the TracDB is also checked into that Git
 
 
+
+Setup and Configuration
+-----------------------
+
+- Apache is configured with the `worker'-MPM
+- Trac runs under WSGI configured with a pool of _multithread daemon processes_
+
+Load and Calibration
+~~~~~~~~~~~~~~~~~~~~
+As of 1/2026, we employ a simplistic load monitoring based on evaluating the
+running processes and some server statistics. This is implemented as a bash script,
+checked in as '/var/local/trac/scripts/collect-server-stats' and configured to run
+every two minutes (via SystemD timer). The resulting data trail can be found in
+'/var/log/apache2/loadwatch.csv', with the following columns:
+
+- Timestamp: ISO UTC min
+- Sum webserver...
+  * Processes
+  * Threads
+  * overall resident memory (KiB)
+  * factor of overall memory resident
+- Apache
+  * workload factor
+  * Processes
+  * Threads
+  * resident memory
+- WSGI-Trac
+  * workload factor
+  * Processes
+  * Threads
+  * resident memory
+- Server-statistics
+  * ∅ requests per second
+  * ∅ request duration in ms
+  * currently active slots
+  * currently idle workers
+  * scoreboard of slot allocation
+
+The parameters of the Apache MPM and the WSGI daemon are then tuned such
+as to make good use of the available memory, while avoiding excess idle workers.
+
+
