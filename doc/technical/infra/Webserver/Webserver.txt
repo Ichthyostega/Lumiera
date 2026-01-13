@@ -169,4 +169,55 @@ every two minutes (via SystemD timer). The resulting data trail can be found in
 The parameters of the Apache MPM and the WSGI daemon are then tuned such
 as to make good use of the available memory, while avoiding excess idle workers.
 
+Anubis
+~~~~~~
+https://anubis.techaro.lol/[Anubis] is a service that was discussed controversially
+in the community this year. It was created by a
+https://github.com/Xe[Canadian Open-Source programmer] as an immediate stopgap
+to help protect the _»small internet«_ from the endless storm of requests that
+flood in from AI companies. It is configured as a gateway proxy, which classifies
+incoming requests based on request properties and sends suspicious clients first
+to a JavaScript proof-of-work challenge. After passing Anubis, the client gets
+a Cookie to prevent further challenges for some limited time.
 
+Anubis was reported to be very effective for keeping aggressive scraper bots away,
+yet the bots have adapted already to some degree. So this remains a game of
+cat and mouse. Our first evaluations however indicate very promising numbers,
+by keeping out 92% of PageImpressions and UniqueUsers, thereby reducing
+the traffic deliverey by the Lumiera issue tracker by more than 80%.
+
+Introducing such an entrance gateway may be seen as an extreme measure;
+the rationale is that we have reached such a level of threat that generic rate limits
+would have to be so severe that they practically render those resources useless.
+Without these protective measures, we would no longer be able to provide Lumiera.org
+as a free resource to everyone.
+
+[underline]#Legal stance#: I consider this usage covered by the provisions of GDPR.
+Setting this cookie is justified by our legitimate interest of keeping the service operational;
+we evaluate IP data patterns for the sole purpose of detecting abuse of our website,
+and we state that fact clearly on our GDPR page.
+
+Setup
+^^^^^
+Anubis runs as single-instance SystemD service unit `anubis@lumiera`, with transient
+storage backend only. It is integrated into the Website as a _gateway_ (reverse proxy).
+Anubis is configured by a set of rules in https://cel.dev/[Common Excpression Language].
+The active rule set is configured in '/etc/anubis' and also checked into the
+xref:_var_local_trac[Trac-Git]. Rules are evaluated according to the _commited-choice_
+pattern, i.e. the first rule where the guard condition matches will terminate the
+evaluation and yield a decision. Anubis was installed from a custom DEB package
+and ships with
+https://github.com/TecharoHQ/anubis/tree/main/data[a set of rule building blocks],
+that can be imported from the `(data)` prefix -- which translates into the path
+'/usr/share/doc/anubis/data'
+
+TIP: https://anubis.techaro.lol/[Homepage]
+     · https://anubis.techaro.lol/docs/admin/native-install[Installation]
+     · https://anubis.techaro.lol/docs/admin/environments/apache[Apache-setup]
+     · https://github.com/TecharoHQ/anubis[Github]
+
+As of 1/2026, Anubis protects our
+https://issues.lumiera.org/timeline[Issue tracker],
+the https://git.lumiera.org/[Git repository browser] and the
+https://lumiera.org/doxy/[API-doc] -- which together constitute
+the majority of pages accessible on the website.

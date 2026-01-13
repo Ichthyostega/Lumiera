@@ -162564,7 +162564,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 </node>
 </node>
-<node CREATED="1664630921300" FOLDED="true" HGAP="183" ID="ID_1033335255" MODIFIED="1765904114183" TEXT="Dokumentation" VSHIFT="40">
+<node CREATED="1664630921300" FOLDED="true" HGAP="183" ID="ID_1033335255" MODIFIED="1768187077656" TEXT="Dokumentation" VSHIFT="40">
 <edge COLOR="#815b70"/>
 <cloud COLOR="#d7c3a8"/>
 <font NAME="SansSerif" SIZE="12"/>
@@ -167655,7 +167655,8 @@ that situation will improve in forseeable future.</pre>
 </node>
 </node>
 <node CREATED="1765904354232" ID="ID_264350953" MODIFIED="1765904365268" TEXT="Infrastruktur-Technologie">
-<node CREATED="1765904375811" ID="ID_1088849846" MODIFIED="1765904378441" TEXT="Trac">
+<node CREATED="1765904375811" ID="ID_1088849846" MODIFIED="1768266944347" TEXT="Trac">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <node CREATED="1765904417246" ID="ID_204471697" MODIFIED="1765904449664" TEXT="Evolution">
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1765906859536" ID="ID_1389801711" MODIFIED="1765906944249" TEXT="Python-3 : bricht diverse unmaintained Plug-ins">
 <richcontent TYPE="NOTE"><html>
@@ -167763,9 +167764,10 @@ that situation will improve in forseeable future.</pre>
 </node>
 </node>
 </node>
-<node CREATED="1765915935535" ID="ID_401498744" MODIFIED="1765915947385" TEXT="statischer Content liegt separat">
+<node COLOR="#435e98" CREATED="1765915935535" FOLDED="true" ID="ID_401498744" MODIFIED="1768266983792" TEXT="statischer Content liegt separat">
+<icon BUILTIN="idea"/>
 <node CREATED="1765915955298" ID="ID_1597914556" MODIFIED="1765915962519" TEXT="/var/local/trac/static/"/>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1765915964563" ID="ID_187789685" MODIFIED="1765915967544" TEXT="Konfiguration">
+<node COLOR="#435e98" CREATED="1765915964563" ID="ID_187789685" MODIFIED="1768266976552" TEXT="Konfiguration">
 <icon BUILTIN="help"/>
 <node CREATED="1765915974409" ID="ID_380659996" MODIFIED="1765915994930" TEXT="wurde exportiert mit trac-admin &lt;trac-env&gt; deploy &lt;target&gt;"/>
 <node CREATED="1765917673542" ID="ID_415606525" MODIFIED="1766536424640" TEXT="statische Resourcen sind per Apache-Alias eingebunden">
@@ -167795,9 +167797,9 @@ that situation will improve in forseeable future.</pre>
 <icon BUILTIN="list"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1765917748060" ID="ID_1230305078" MODIFIED="1765917757859" TEXT="TODO(2025) konsolidieren">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1765917759320" ID="ID_1753883287" MODIFIED="1765917765553" TEXT="was wird gebraucht?">
+<node COLOR="#338800" CREATED="1765917748060" ID="ID_1230305078" MODIFIED="1768266959069" TEXT="(2025) konsolidiert">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1765917759320" ID="ID_1753883287" MODIFIED="1768266967002" TEXT="was wird gebraucht?">
 <icon BUILTIN="help"/>
 <node CREATED="1766536837648" ID="ID_1062971912" MODIFIED="1766536883303" TEXT="Prade /chrome/common">
 <richcontent TYPE="NOTE"><html>
@@ -167853,8 +167855,12 @@ that situation will improve in forseeable future.</pre>
 </node>
 </node>
 </node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1767201698203" ID="ID_1931145339" MODIFIED="1768267064638" TEXT="Setup/Dokumentation: als Git-Repository">
+<arrowlink COLOR="#3b49c7" DESTINATION="ID_513748595" ENDARROW="Default" ENDINCLINATION="-28;-1028;" ID="Arrow_ID_1773795285" STARTARROW="None" STARTINCLINATION="-501;33;"/>
+<icon BUILTIN="bookmark"/>
+</node>
 <node CREATED="1765904451281" ID="ID_1116905113" MODIFIED="1765904457058" TEXT="Betrieb">
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1765907487186" ID="ID_1108636619" MODIFIED="1765919828144" TEXT="(2025) derzeit als CGI in Apache eingebunden">
+<node COLOR="#435e98" CREATED="1765907487186" ID="ID_1108636619" MODIFIED="1768264079530" TEXT="(2025) derzeit als CGI in Apache eingebunden">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -167864,10 +167870,23 @@ that situation will improve in forseeable future.</pre>
   </body>
 </html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
-<node CREATED="1765919780149" ID="ID_183296810" MODIFIED="1765919787481" TEXT="tats&#xe4;chlich verwenden wir WSGI"/>
-<node CREATED="1765919788076" ID="ID_1248399300" LINK="https://trac.edgewall.org/wiki/TracModWSGI" MODIFIED="1765919818393" TEXT="das gilt immer noch als ad&#xe4;quat (sicher/performant)"/>
+<icon BUILTIN="button_cancel"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1765919780149" ID="ID_183296810" MODIFIED="1768264094794">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      tats&#228;chlich verwenden wir <b>WSGI</b>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="info"/>
 </node>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1765907505145" ID="ID_1606727407" MODIFIED="1765907854081" TEXT="Herbst 2025 : Trac vorr&#xfc;bergehend abgeschaltet">
+<node CREATED="1765919788076" ID="ID_1248399300" LINK="https://trac.edgewall.org/wiki/TracModWSGI" MODIFIED="1765919818393" TEXT="das gilt immer noch als ad&#xe4;quat (sicher/performant)"/>
+<node CREATED="1768264023036" ID="ID_1524021665" MODIFIED="1768264050656" TEXT="ungeschickt war die in-process-Einbindung + Apache prefork-MPM"/>
+<node CREATED="1768264051538" ID="ID_1692027109" MODIFIED="1768264069785" TEXT="jetzt als Pool von Daemon-Prozessen mit jeweils 10 Threads"/>
+</node>
+<node COLOR="#435e98" CREATED="1765907505145" ID="ID_1606727407" MODIFIED="1768263984645" TEXT="Herbst 2025 : Trac vorr&#xfc;bergehend abgeschaltet">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -167881,6 +167900,1038 @@ that situation will improve in forseeable future.</pre>
 </html></richcontent>
 <icon BUILTIN="broken-line"/>
 </node>
+<node COLOR="#338800" CREATED="1768264114654" ID="ID_1370571215" MODIFIED="1768264236593" TEXT="Jan.2026: Apache nun umgestellt auf worker-MPM">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das erscheint mir ad&#228;quat; das event-MPM ist vor allem von Vorteil bei Web-Applikationen, die viele Socket-Verbindungen offen halten. Zwar haben wir auch einiges an keep-Alive, und das blockiert dann jeweils einen Thread. In den konkreten Last-Messwerten sehe ich jedoch nie einen Engpa&#223;, und wir verwenden jetzt (gegen&#252;ber fr&#252;her) oft nur noch ein viertel des vorhandenen Arbeitsspeichers.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1768263563840" ID="ID_1077423681" MODIFIED="1768263769689" TEXT="einfache Lastmessung per ps-Auswertung">
+<arrowlink COLOR="#1da381" DESTINATION="ID_1304037139" ENDARROW="Default" ENDINCLINATION="-117;-278;" ID="Arrow_ID_1197522278" STARTARROW="None" STARTINCLINATION="-666;43;"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1768263771700" ID="ID_542811061" MODIFIED="1768263780314" TEXT="loadwatch.csv"/>
+<node COLOR="#435e98" CREATED="1767905686353" FOLDED="true" ID="ID_1280088211" MODIFIED="1768263975016" TEXT="Ausgabereihenfolge">
+<icon BUILTIN="list"/>
+<node CREATED="1767905692576" ID="ID_1463476283" MODIFIED="1767905713848" TEXT="Timestamp: ISO UTC min"/>
+<node CREATED="1767905944659" ID="ID_1173119735" MODIFIED="1767905958503" TEXT="all">
+<node CREATED="1767905716848" ID="ID_1839812109" MODIFIED="1767906017800" TEXT="procs"/>
+<node CREATED="1767905819307" ID="ID_1069050512" MODIFIED="1767906034757" TEXT="thrds"/>
+<node CREATED="1767905844865" ID="ID_1220749649" MODIFIED="1767905871523" TEXT="rss"/>
+<node CREATED="1767905872252" ID="ID_1449271556" MODIFIED="1767905875202" TEXT="rss-fac"/>
+</node>
+<node CREATED="1767905968819" ID="ID_1541313620" MODIFIED="1767905994795" TEXT="Apache">
+<node CREATED="1767906003274" ID="ID_921479263" MODIFIED="1768263971145" TEXT="workload">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...basierend auf der %cpu, allerdings gefiltert auf die Threads, die &#252;berhaupt schon aktiv gelaufen sind (da Apache stets einen Pool an idle-Workern vorh&#228;lt); angegeben als Verh&#228;ltniszahl, 1.0 &#8793; 100%, mi&#223;t den durchschnittlichen Anteil an der gesamten Proze&#223;zeit, welchen die Prozesse im &quot;runnable&quot;-State verbringen. Typische Werte sind 10% unter Last und &lt;5% wenn weitgehend Idle
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1767906007299" ID="ID_1944698664" MODIFIED="1767906013055" TEXT="procs"/>
+<node CREATED="1767906025497" ID="ID_329697599" MODIFIED="1767906031002" TEXT="thrds"/>
+<node CREATED="1767906044773" ID="ID_1047315392" MODIFIED="1767906048243" TEXT="rss"/>
+</node>
+<node CREATED="1767906054423" ID="ID_1616004992" MODIFIED="1767906055587" TEXT="Trac">
+<node CREATED="1767906056723" ID="ID_1332450625" MODIFIED="1767906058962" TEXT="workload"/>
+<node CREATED="1767906060569" ID="ID_1173488206" MODIFIED="1767906065128" TEXT="procs"/>
+<node CREATED="1767906065773" ID="ID_1263957229" MODIFIED="1767906068718" TEXT="thrds"/>
+<node CREATED="1767906069346" ID="ID_1928294961" MODIFIED="1767906071873" TEXT="rss"/>
+</node>
+<node CREATED="1767906074653" ID="ID_1185761112" MODIFIED="1767906077908" TEXT="Stat">
+<node CREATED="1767906081305" ID="ID_617393760" MODIFIED="1767906116528" TEXT="req-prosec"/>
+<node CREATED="1767906117871" ID="ID_1419225725" MODIFIED="1767906152590" TEXT="req-dur-ms"/>
+<node CREATED="1767906157428" ID="ID_1216038080" MODIFIED="1767906162710" TEXT="active"/>
+<node CREATED="1767906163392" ID="ID_1380336683" MODIFIED="1767906164996" TEXT="idle"/>
+<node CREATED="1767906165629" ID="ID_1016824719" MODIFIED="1767906186555" TEXT="slots"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1768263987801" ID="ID_1147692183" MODIFIED="1768264016279" TEXT="Jan.2026 : Trac jetzt als WSGI-Daemon und durch Anubis gesch&#xfc;tzt">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node CREATED="1768188696502" ID="ID_19768331" MODIFIED="1768266942194" TEXT="Anubis">
+<linktarget COLOR="#3260d1" DESTINATION="ID_19768331" ENDARROW="Default" ENDINCLINATION="-1011;351;" ID="Arrow_ID_1568526941" SOURCE="ID_1119261794" STARTARROW="None" STARTINCLINATION="-383;24;"/>
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1768001548860" ID="ID_564011996" LINK="https://anubis.techaro.lol/" MODIFIED="1768001571070" TEXT="Homepage">
+<node CREATED="1768001580829" ID="ID_1135867371" LINK="https://anubis.techaro.lol/docs/admin/native-install" MODIFIED="1768001585410" TEXT="Installation"/>
+<node CREATED="1768001597653" ID="ID_274674919" LINK="https://anubis.techaro.lol/docs/admin/environments/apache" MODIFIED="1768001604121" TEXT="Einbindung in Apache"/>
+<node CREATED="1768001614879" ID="ID_1093411618" LINK="https://anubis.techaro.lol/docs/category/configuration" MODIFIED="1768001618482" TEXT="Konfiguration"/>
+<node CREATED="1768001660841" ID="ID_1519534032" LINK="https://github.com/TecharoHQ/anubis" MODIFIED="1768001663874" TEXT="Github">
+<node CREATED="1768001803177" ID="ID_1737583159" MODIFIED="1768001805477" TEXT="Releases">
+<node CREATED="1768001815503" ID="ID_230608936" LINK="https://github.com/TecharoHQ/anubis/releases/tag/v1.24.0" MODIFIED="1768001822067" TEXT="v1.24.0"/>
+</node>
+</node>
+</node>
+<node CREATED="1768189256311" ID="ID_1272242347" MODIFIED="1768189266845" TEXT="implementiert in Golang + JavaScript"/>
+<node COLOR="#435e98" CREATED="1768086978019" FOLDED="true" ID="ID_991878405" MODIFIED="1768266923244" TEXT="Anubis-Regelwerk">
+<icon BUILTIN="info"/>
+<node CREATED="1768087017691" ID="ID_34752622" LINK="https://github.com/TecharoHQ/anubis/tree/main/data" MODIFIED="1768087024927" TEXT="data-Folder">
+<node CREATED="1768087031240" ID="ID_1483269019" MODIFIED="1768187563450" TEXT="wird installiert nach /usr/share/doc/anubis/data"/>
+<node CREATED="1768187572010" ID="ID_259264103" MODIFIED="1768187584569" TEXT="kann in Config direkt als &quot;(data)&quot; referenziert werden"/>
+</node>
+<node CREATED="1768086104670" ID="ID_718967743" LINK="https://cel.dev/" MODIFIED="1768187718418" TEXT="verwendet Google Common Excpression Language">
+<node CREATED="1768086692989" ID="ID_1739762139" MODIFIED="1768086704150" TEXT="das ist ein &#xbb;commited-choice&#xab;-Regelwerk"/>
+<node CREATED="1768086717522" ID="ID_1113456288" MODIFIED="1768086722547" TEXT="Sequenz von Regeln"/>
+<node CREATED="1768086723092" ID="ID_180636755" MODIFIED="1768086729403" TEXT="der erste Match beendet die Auswertung"/>
+</node>
+<node CREATED="1768086997570" ID="ID_1852794855" MODIFIED="1768187739668" TEXT="Einstiegspunkt">
+<node CREATED="1768187744235" ID="ID_658991103" MODIFIED="1768187773919" TEXT="das &#xbb;policy file&#xab;">
+<node CREATED="1768187778934" ID="ID_31360664" MODIFIED="1768187815688" TEXT="definiert per &#xbb;Environment&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      also /etc/anubis/&lt;service&gt;.env
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1768187817113" ID="ID_326661147" MODIFIED="1768187821636" TEXT="POLICY_FNAME=..."/>
+<node BACKGROUND_COLOR="#d6caae" CREATED="1768095839199" FOLDED="true" ID="ID_1072121179" LINK="https://github.com/TecharoHQ/anubis/blob/main/data/botPolicies.yaml" MODIFIED="1768188040821" TEXT="Anubis wird ausgeliefert mit default: botPolicies.yaml">
+<icon BUILTIN="idea"/>
+<node CREATED="1768187858624" FOLDED="true" ID="ID_1054256763" MODIFIED="1768187922340" TEXT="zun&#xe4;chst einige Konifigs was geblockt/erlaubt wird">
+<icon BUILTIN="info"/>
+<node CREATED="1768095878127" ID="ID_1168120096" MODIFIED="1768095878127" TEXT="Pathological bots to deny">
+<node CREATED="1768095900166" MODIFIED="1768095900166" TEXT="import: (data)/bots/_deny-pathological.yaml"/>
+<node CREATED="1768095908695" MODIFIED="1768095908695" TEXT="import: (data)/bots/aggressive-brazilian-scrapers.yaml"/>
+</node>
+<node CREATED="1768095928727" ID="ID_1781225379" MODIFIED="1768187891522" TEXT="import: (data)/meta/ai-block-aggressive.yaml">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Aggressively block AI/LLM related bots/agents by default
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1768095952439" ID="ID_1704450994" MODIFIED="1768095965528" TEXT="Search engine crawlers to allow">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      
+    </p>
+    <p>
+      &#160;&#160;# Search engine crawlers to allow, defaults to:
+    </p>
+    <p>
+      &#160;&#160;#&#160;&#160;&#160;- Google (so they don't try to bypass Anubis)
+    </p>
+    <p>
+      &#160;&#160;#&#160;&#160;&#160;- Apple
+    </p>
+    <p>
+      &#160;&#160;#&#160;&#160;&#160;- Bing
+    </p>
+    <p>
+      &#160;&#160;#&#160;&#160;&#160;- DuckDuckGo
+    </p>
+    <p>
+      &#160;&#160;#&#160;&#160;&#160;- Qwant
+    </p>
+    <p>
+      &#160;&#160;#&#160;&#160;&#160;- The Internet Archive
+    </p>
+    <p>
+      &#160;&#160;#&#160;&#160;&#160;- Kagi
+    </p>
+    <p>
+      &#160;&#160;#&#160;&#160;&#160;- Marginalia
+    </p>
+    <p>
+      &#160;&#160;#&#160;&#160;&#160;- Mojeek
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1768096219412" ID="ID_1243639209" MODIFIED="1768096220792" TEXT="import: (data)/crawlers/_allow-good.yaml"/>
+</node>
+<node CREATED="1768096276409" ID="ID_1453579546" MODIFIED="1768187915288" TEXT="common &quot;keeping the internet working&quot; routes">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Allow common &quot;keeping the internet working&quot; routes (well-known, favicon, robots.txt)
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1768096293392" ID="ID_581263151" MODIFIED="1768096293392" TEXT="(data)/common/keep-internet-working.yaml"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1768096771727" ID="ID_204118170" LINK="https://anubis.techaro.lol/docs/admin/thoth/" MODIFIED="1768096949278" TEXT="dann eine Regeln, die aber eine &#xbb;Thoth&#xab;-Subscription vorraussetzt">
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1768096807622" ID="ID_1942695318" MODIFIED="1768096825926" TEXT="das ist Werbung f&#xfc;r Xi&apos;s Business-Model">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1768096880036" ID="ID_1918737156" MODIFIED="1768096892390" TEXT="diese Regel ist dann vermutl. wirkunslos ohne diese Subscription"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1768096951849" ID="ID_681239727" MODIFIED="1768096967113" TEXT="eine GeoIP-Regel f&#xfc;r Brasilien und China"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1768096963220" ID="ID_1203976832" MODIFIED="1768096967113" TEXT="aggressive-asns-without-functional-abuse-contact"/>
+</node>
+<node CREATED="1768096980858" ID="ID_55790825" MODIFIED="1768096982377" TEXT="Generic catchall rule">
+<node CREATED="1768097004447" ID="ID_1224702736" MODIFIED="1768097010822" TEXT="user_agent_regex: Mozilla|Opera"/>
+<node CREATED="1768097018442" ID="ID_1751704404" MODIFIED="1768097020037" TEXT="action: WEIGH"/>
+<node CREATED="1768097020694" ID="ID_1469997958" MODIFIED="1768097021786" TEXT="+10"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1768097042798" ID="ID_1549297628" MODIFIED="1768097059165" TEXT="sonstige Konfig">
+<icon BUILTIN="back"/>
+<node CREATED="1768097065782" ID="ID_535267592" MODIFIED="1768187979735" TEXT="dnsbl: false">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das ist ein &#220;berbleibsel aus der Anfangszeit; Xena meinte erst, das das was bringt; Reviewer haben sie dann darauf aufmerksam gemacht, da&#223; das IP-Daten <i>leaken</i>&#160;kann. Seither ist es deaktiviert
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1768097074509" ID="ID_371857227" LINK="https://anubis.techaro.lol/docs/admin/configuration/open-graph" MODIFIED="1768097125900" TEXT="openGraph: enabled false">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das erlaubt gewisse &quot;OG&quot;-Urls ohne Challenge durch
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1768097141278" ID="ID_1600172928" LINK="https://anubis.techaro.lol/docs/admin/policies#storage-backends" MODIFIED="1768097216729" TEXT="status_codes">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      # By default, send HTTP 200 back to clients that either get issued a challenge
+    </p>
+    <p>
+      # or a denial. This seems weird, but this is load-bearing due to the fact that
+    </p>
+    <p>
+      # the most aggressive scraper bots seem to really, really, want an HTTP 200 and
+    </p>
+    <p>
+      # will stop sending requests once they get it.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1768097147225" ID="ID_1070469905" MODIFIED="1768097147948" TEXT="CHALLENGE: 200"/>
+<node CREATED="1768097154051" ID="ID_1060856777" MODIFIED="1768097154771" TEXT="DENY: 200"/>
+</node>
+<node CREATED="1768097178712" ID="ID_1826250765" MODIFIED="1768097207627" TEXT="data store">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      # Anubis can store temporary data in one of a few backends. See the storage
+    </p>
+    <p>
+      # backends section of the docs for more information:
+    </p>
+    <p>
+      #
+    </p>
+    <p>
+      # https://anubis.techaro.lol/docs/admin/policies#storage-backends
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1768097194234" ID="ID_1345208350" MODIFIED="1768097195146" TEXT="backend: memory"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e9cd86" COLOR="#690f14" CREATED="1768097222205" ID="ID_236458521" MODIFIED="1768097259417" TEXT="Threshold-Logik">
+<icon BUILTIN="back"/>
+<node CREATED="1768097268994" ID="ID_425758716" MODIFIED="1768097280438" TEXT="hier wird nach &#xbb;Gewicht&#xab; entschieden"/>
+<node CREATED="1768097280984" ID="ID_145391384" MODIFIED="1768097299235" TEXT="sofern nicht bereits eine vorherige Regel eine Entscheidung getroffen hat"/>
+<node CREATED="1768097300053" ID="ID_1204948765" MODIFIED="1768097312403" TEXT="Das soll vor allem f&#xfc;r Custom-Regeln sinnvoll sein"/>
+<node CREATED="1768097314130" ID="ID_564965219" MODIFIED="1768097325157" TEXT="Standard-Schwellen">
+<node CREATED="1768097326248" ID="ID_1626527352" MODIFIED="1768097344397" TEXT="weight &lt; 0 &#x27f9; ALLOW"/>
+<node CREATED="1768097345649" ID="ID_688904311" MODIFIED="1768097376784" TEXT="0 &lt; weight &lt; 10 &#x27f9; CHALLENGE aber nur metarefresh"/>
+<node CREATED="1768097389784" ID="ID_949552239" MODIFIED="1768097437323" TEXT="10 &lt;= weight &lt; 20 &#x27f9; CHALLENGE difficulty = 2"/>
+<node CREATED="1768097437993" ID="ID_1996313129" MODIFIED="1768097465068" TEXT="20 &lt;= weight &lt; 30 &#x27f9; CHALLENGE difficulty = 4"/>
+<node CREATED="1768097474010" ID="ID_796455740" MODIFIED="1768097487767" TEXT="30 &lt; weight &#x27f9; CHALLENGE difficulty = 6"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1768099175238" FOLDED="true" ID="ID_89397351" MODIFIED="1768188063082" TEXT="Regelbausteine">
+<icon BUILTIN="list"/>
+<node CREATED="1768099203061" ID="ID_387047157" MODIFIED="1768099204330" TEXT="apps">
+<node CREATED="1768146236967" ID="ID_1242770561" MODIFIED="1768146257954" TEXT="Ausnahmen f&#xfc;r gel&#xe4;ufige API-Routen"/>
+</node>
+<node CREATED="1768099209488" ID="ID_1752922098" MODIFIED="1768099210624" TEXT="bots">
+<node CREATED="1768146455429" ID="ID_828461004" MODIFIED="1768146461523" TEXT="Heuristiken f&#xfc;r bekannte bots"/>
+<node CREATED="1768146468340" ID="ID_1630930608" MODIFIED="1768146478894" TEXT="_deny_pathological.yaml includiert die meisten davon">
+<node CREATED="1768146662942" ID="ID_1972330809" MODIFIED="1768146696332" TEXT="auch einige aus &apos;crawlers&apos;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      - import: (data)/crawlers/alibaba-cloud.yaml
+    </p>
+    <p>
+      - import: (data)/crawlers/huawei-cloud.yaml
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink DESTINATION="ID_849176719" ENDARROW="Default" ENDINCLINATION="169;-52;" ID="Arrow_ID_39793808" STARTARROW="None" STARTINCLINATION="115;150;"/>
+</node>
+</node>
+<node CREATED="1768157101606" ID="ID_917259524" MODIFIED="1768157111052" TEXT="ai-catchall / ai-robots">
+<node CREATED="1768157111844" ID="ID_1748321777" MODIFIED="1768157115182" TEXT="beide sind identisch"/>
+<node CREATED="1768157115801" ID="ID_926278402" MODIFIED="1768157125431" TEXT="werden von ai-block-aggressive includiert"/>
+</node>
+<node CREATED="1768146529406" ID="ID_939057866" MODIFIED="1768146542877" TEXT="f&#xfc;r AI gibt es mehrere &#xbb;presets&#xab;">
+<node CREATED="1768146549657" ID="ID_264386367" MODIFIED="1768146550233" TEXT="(data)/meta/ai-block-aggressive.yaml "/>
+<node CREATED="1768146561012" ID="ID_909081960" MODIFIED="1768146561954" TEXT="(data)/meta/ai-block-moderate.yaml"/>
+<node CREATED="1768146567349" ID="ID_251126425" MODIFIED="1768146568124" TEXT="(data)/meta/ai-block-permissive.yaml"/>
+</node>
+</node>
+<node CREATED="1768099213862" ID="ID_460702751" MODIFIED="1768099215425" TEXT="clients">
+<node CREATED="1768146893359" ID="ID_49975852" MODIFIED="1768146910866" TEXT="Allow-Regeln f&#xfc;r bekannte Applikationen"/>
+<node CREATED="1768147174615" ID="ID_557872688" MODIFIED="1768147185838" TEXT="relevant hier: AI die im Auftrag des Users unterwegs ist"/>
+<node CREATED="1768147157377" ID="ID_1279097092" MODIFIED="1768147167455" TEXT="ai.yaml ist ein DENY-catch-all f&#xfc;r User-AI"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1768147246400" ID="ID_10540276" MODIFIED="1768161399285" TEXT="f&#xfc;r uns wichtig: Git">
+<arrowlink COLOR="#fdfbc6" DESTINATION="ID_1171295109" ENDARROW="Default" ENDINCLINATION="507;39;" ID="Arrow_ID_1380217319" STARTARROW="None" STARTINCLINATION="1204;0;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1768147291264" ID="ID_1587809782" MODIFIED="1768147307270" TEXT="interessant: small-internet-browsers">
+<icon BUILTIN="help"/>
+<node CREATED="1768147325834" ID="ID_1832018485" MODIFIED="1768147337525" TEXT="netsurf und PaleMoon bekomen einen leichten Bonus"/>
+</node>
+</node>
+<node CREATED="1768099218674" ID="ID_64804431" MODIFIED="1768099220089" TEXT="common">
+<node CREATED="1768147375265" ID="ID_1117139937" MODIFIED="1768148241176" TEXT="eine Sammlung von thematischen ALLOW-Regeln"/>
+<node CREATED="1768147494194" ID="ID_1282848446" MODIFIED="1768147499969" TEXT="acts_like_browser">
+<node CREATED="1768147507730" ID="ID_498380257" MODIFIED="1768147528548" TEXT="Heuristiken um &quot;richtige&quot; Browser zu bevorteilen"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1768147532005" ID="ID_750551690" MODIFIED="1768147682304" TEXT="Achtung: am Ende eine Catch-all-Regel ist wie die generische Catch-All-Regel auf Top-Level">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das hei&#223;t, alles was mit User-Agent &quot;Mozilla|Opera&quot; daherkommt, aber keine andere Regel matcht, bekommt einen Gewichts-Malus von +10
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1768147724693" ID="ID_1672549405" MODIFIED="1768147739313" TEXT="allow-api-like : wie in apps"/>
+<node CREATED="1768147757502" ID="ID_352578063" MODIFIED="1768147762238" TEXT="allow-private-adresses"/>
+<node CREATED="1768147774462" ID="ID_1955478269" MODIFIED="1768147777379" TEXT="json-api"/>
+<node CREATED="1768147794210" ID="ID_1652130709" MODIFIED="1768147801399" TEXT="keep-internet-working"/>
+<node CREATED="1768147810426" ID="ID_65723556" MODIFIED="1768147856053" TEXT="RfC-Violations : nicht regelkonforme Requests">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      derzeit eine Regel: &#252;berhaupt kein UserAgent &#10230; DENY
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1768099223348" ID="ID_849176719" MODIFIED="1768146696332" TEXT="crawlers">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_849176719" ENDARROW="Default" ENDINCLINATION="169;-52;" ID="Arrow_ID_39793808" SOURCE="ID_1972330809" STARTARROW="None" STARTINCLINATION="115;150;"/>
+<node CREATED="1768147897630" ID="ID_411789993" MODIFIED="1768147925127" TEXT="Heuristiken f&#xfc;r bekannte Crawler (meist &#xbb;gut&#xab; eingestuft)"/>
+<node CREATED="1768147931874" ID="ID_1210455217" MODIFIED="1768187530469" TEXT="_allow_good.yaml &#x27f5; von top-Level includiert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      
+    </p>
+    <p>
+      &#160;&#160;# Search engine crawlers to allow, defaults to:
+    </p>
+    <p>
+      &#160;&#160;#&#160;&#160;&#160;- Google (so they don't try to bypass Anubis)
+    </p>
+    <p>
+      &#160;&#160;#&#160;&#160;&#160;- Apple
+    </p>
+    <p>
+      &#160;&#160;#&#160;&#160;&#160;- Bing
+    </p>
+    <p>
+      &#160;&#160;#&#160;&#160;&#160;- DuckDuckGo
+    </p>
+    <p>
+      &#160;&#160;#&#160;&#160;&#160;- Qwant
+    </p>
+    <p>
+      &#160;&#160;#&#160;&#160;&#160;- The Internet Archive
+    </p>
+    <p>
+      &#160;&#160;#&#160;&#160;&#160;- Kagi
+    </p>
+    <p>
+      &#160;&#160;#&#160;&#160;&#160;- Marginalia
+    </p>
+    <p>
+      &#160;&#160;#&#160;&#160;&#160;- Mojeek
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1768099229619" ID="ID_1479657995" MODIFIED="1768099230655" TEXT="meta">
+<node CREATED="1768148246194" ID="ID_4128572" MODIFIED="1768148263237" TEXT="high-level &#xbb;presets&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <div http-equiv="content-type" content="text/html; charset=utf-8" class="markdown-heading" dir="auto">
+      <h1 tabindex="-1" class="heading-element" dir="auto">
+        meta policies
+      </h1>
+      <a id="user-content-meta-policies" class="anchor" aria-label="Permalink: meta policies" href="https://github.com/TecharoHQ/anubis/tree/main/data/meta#meta-policies"><svg class="octicon octicon-link" viewbox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">
+      </svg>
+      </a>
+    </div>
+    <p dir="auto">
+      Contains policies that exclusively reference policies in <em>multiple</em>&#160; other data folders.
+    </p>
+    <p dir="auto">
+      Akin to &quot;stances&quot; that the administrator can take, with reference to various topics, such as AI/LLM systems.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#d2d0b3" CREATED="1768148508085" ID="ID_1837205665" MODIFIED="1768148539212" TEXT="hier steht auch die default_config.yaml">
+<icon BUILTIN="back"/>
+</node>
+<node CREATED="1768148557094" ID="ID_879830242" MODIFIED="1768148562927" TEXT="messengers_preview">
+<node CREATED="1768148563974" ID="ID_1409136589" MODIFIED="1768148582220" TEXT="erlaubt Preview-Features einiger Messenger-Networks"/>
+</node>
+</node>
+<node CREATED="1768099233295" ID="ID_869348539" MODIFIED="1768099235007" TEXT="services">
+<node CREATED="1768149275222" ID="ID_796326657" MODIFIED="1768149292432" TEXT="Allow-Regeln f&#xfc;r bekannte (kommerzielle?) Services"/>
+<node CREATED="1768149292988" ID="ID_697110470" MODIFIED="1768149299455" TEXT="derzeit nur uptimerobot.com"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1768008547828" ID="ID_1074903682" MODIFIED="1768188482727" TEXT="Service steuern">
+<icon BUILTIN="idea"/>
+<node CREATED="1768008584029" ID="ID_989146124" MODIFIED="1768008594184" TEXT="systemctl enable --now anubis@lumiera.service"/>
+<node CREATED="1768008713292" ID="ID_1195022245" MODIFIED="1768008714200" TEXT="systemctl status anubis@lumiera"/>
+<node CREATED="1768008701673" ID="ID_4982712" MODIFIED="1768008702817" TEXT="journalctl -u anubis@lumiera.service"/>
+<node CREATED="1768008957892" ID="ID_51137083" MODIFIED="1768008959459" TEXT="curl http://localhost:1223/metrics">
+<node CREATED="1768008960332" ID="ID_879951821" MODIFIED="1768008968542" TEXT="zeigt v.a. go_memstats an"/>
+<node CREATED="1768009001394" ID="ID_1307521324" MODIFIED="1768009051611">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <font face="Monospaced" size="2">S&#160;&#160;&#160;RSS&#160;&#160;&#160;&#160;&#160;VSZ %MEM&#160;&#160;%CUC&#160;&#160;CMD </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">S 29948 1265196&#160;&#160;0.7&#160;&#160;1.506 /usr/bin/anubis</font>
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ps -A&#160;&#160;-o s,rss,vsz,%mem,cuc,cmd
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#a0e2a4" COLOR="#338800" CREATED="1768002583652" FOLDED="true" ID="ID_1283428765" MODIFIED="1768189242128" TEXT="Einrichten">
+<icon BUILTIN="info"/>
+<node COLOR="#435e98" CREATED="1768002587543" ID="ID_1508731352" MODIFIED="1768188881957" TEXT="vom DEB installieren">
+<node CREATED="1768005225290" ID="ID_236231165" MODIFIED="1768005230965" TEXT="sha256 gepr&#xfc;ft"/>
+<node CREATED="1768005231707" ID="ID_1388682123" LINK="https://keyserver.ubuntu.com/pks/lookup?search=833F64161167B501058C394756375DA2DF02ABFF&amp;fingerprint=on&amp;op=index" MODIFIED="1768005242224" TEXT="GPG-Signatur OK"/>
+<node CREATED="1768002611063" FOLDED="true" ID="ID_517187174" MODIFIED="1768189205709" TEXT="was das DEB installiert">
+<icon BUILTIN="list"/>
+<node CREATED="1768005744680" ID="ID_845710846" MODIFIED="1768005751284" TEXT="zwei Exe nach /usr/bin"/>
+<node CREATED="1768005760530" ID="ID_1193732763" MODIFIED="1768005782669" TEXT="anubis@.service nach /usr/lib/systemd/system">
+<node CREATED="1768006517352" ID="ID_1953926996" MODIFIED="1768007018881" TEXT="das ist ein SystemD Template">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      siehe Notiz in hauZu.mm
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1768006524616" ID="ID_231463415" MODIFIED="1768006531451" TEXT="man kann daraus &#xbb;Instanzen&#xab; erzeugen"/>
+<node CREATED="1768007251711" ID="ID_840736785" MODIFIED="1768007284449" TEXT="systemctl cat anubis@.service">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      # /usr/lib/systemd/system/anubis@.service
+    </p>
+    <p>
+      [Unit]
+    </p>
+    <p>
+      Description=&quot;Anubis HTTP defense proxy (instance %i)&quot;
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      [Service]
+    </p>
+    <p>
+      ExecStart=/usr/bin/anubis
+    </p>
+    <p>
+      Restart=always
+    </p>
+    <p>
+      RestartSec=30s
+    </p>
+    <p>
+      EnvironmentFile=/etc/anubis/%i.env
+    </p>
+    <p>
+      LimitNOFILE=infinity
+    </p>
+    <p>
+      DynamicUser=yes
+    </p>
+    <p>
+      CacheDirectory=anubis/%i
+    </p>
+    <p>
+      CacheDirectoryMode=0755
+    </p>
+    <p>
+      StateDirectory=anubis/%i
+    </p>
+    <p>
+      StateDirectoryMode=0755
+    </p>
+    <p>
+      RuntimeDirectory=anubis/%i
+    </p>
+    <p>
+      RuntimeDirectoryMode=0755
+    </p>
+    <p>
+      ReadWritePaths=/run
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      [Install]
+    </p>
+    <p>
+      WantedBy=multi-user.target
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="list"/>
+<node CREATED="1768007456547" ID="ID_1449030646" LINK="https://0pointer.net/blog/dynamic-users-with-systemd.html" MODIFIED="1768007811728" TEXT="verwendet DynamicUser=yes">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      d.h. der Service erstellt einen transienten Unix User-Account, so lange er l&#228;uft, und entfernt diesen automatisch wenn er stoppt; das aktiviert automatisch zus&#228;tzliche Sandboxing-Optionen: der Service darf fast nirgends schreiben, er bekommt ein privates /temp-Dir (das nacher wieder verschwindet), und IPC-Files / Pipes werden automatisch wieder gel&#246;scht. Insofern verbleiben keine Resourcen im System, die diesem pseudo-user <i>geh&#246;ren, nachdem der Service stoppt</i>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1768170393983" ID="ID_471246508" MODIFIED="1768170587650" TEXT="systemctl edit anubis@lumiera">
+<linktarget COLOR="#fdd8ce" DESTINATION="ID_471246508" ENDARROW="Default" ENDINCLINATION="298;503;" ID="Arrow_ID_1987073519" SOURCE="ID_1917871354" STARTARROW="None" STARTINCLINATION="852;30;"/>
+<node CREATED="1768170407189" ID="ID_635220130" MODIFIED="1768170430901" TEXT="erzeugt /etc/systemd/system/anubis@lumiera.d/override.conf"/>
+<node CREATED="1768170431390" ID="ID_1385810934" MODIFIED="1768170544494" TEXT="dort den ReadWritePath=/var/log/apache2">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Wir brauchen das, weil wir ein normales Logfile am gewohnten Ort haben wollen.
+    </p>
+    <p>
+      SystemD betreibt Service-Units aber normalerweise unter Sandboxing; und automatisch (wie hier), wenn wir einen &quot;automatic user&quot; verwenden
+    </p>
+    <p>
+      Hinweis: dieser Override aggregiert sich mit dem Default, der ReadWritePath=/run
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1768005801995" ID="ID_1032082316" MODIFIED="1768005807636" TEXT="/etc/anubis/default.env"/>
+<node CREATED="1768005849545" ID="ID_1976615078" MODIFIED="1768005869259" TEXT="sehr viel Doku und Templates nach /usr/share/doc/anubis">
+<icon BUILTIN="info"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1768005896086" ID="ID_559771604" MODIFIED="1768005973525">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      DEB.control definiert <i>keinerlei dependencies</i>
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Entweder das ist tats&#228;chlich ein AppImage, oder &#187;man&#171; nimmt es mit den Pakten nicht so sonderlich genau (oder verwendet irgend eine Wrapper-Software)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1768002649030" ID="ID_1986937781" MODIFIED="1768189196231" TEXT="Anubis-Config">
+<node COLOR="#338800" CREATED="1768188306582" FOLDED="true" ID="ID_1296887001" MODIFIED="1768189214116" TEXT="Anubis-Service einrichten">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1768188341302" ID="ID_1332731470" MODIFIED="1768188398462" TEXT="das ist ein SystemD-Template-Service">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <ul>
+      <li>
+        erkenntlich an dem '@' im Servicenamen: anubis@.service
+      </li>
+      <li>
+        als Solcher gibt es den nicht, aber man startet dann z.B. anubis@lumiera
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1768007046426" ID="ID_358248549" MODIFIED="1768188435359">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Instanzname: <b><font face="Monospaced" color="#422da9">lumiera</font></b>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1768188323821" ID="ID_1093096857" MODIFIED="1768188334582" TEXT="/etc/anubis/lumiera.env"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1768008238961" ID="ID_1458061924" MODIFIED="1768188412966" TEXT="w&#xe4;hle Ports">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1768008242850" ID="ID_1929368268" MODIFIED="1768008268746" TEXT="LUMI = 12-21-13-9"/>
+<node CREATED="1768008271976" ID="ID_1127027612" MODIFIED="1768008284452" TEXT="Eselsbr&#xfc;cke...">
+<node CREATED="1768008285892" ID="ID_1839226015" MODIFIED="1768008306873" TEXT="bind-in: 1221"/>
+<node CREATED="1768008307508" ID="ID_341481426" MODIFIED="1768008312832" TEXT="target: 1222"/>
+<node CREATED="1768008313412" ID="ID_1854502167" MODIFIED="1768008317752" TEXT="metrics: 1223"/>
+</node>
+</node>
+<node CREATED="1768086003604" ID="ID_291970076" MODIFIED="1768188872419" TEXT="POLICY_FNAME=/etc/anubis/lumiera.botRules.yaml">
+<arrowlink COLOR="#2da1c2" DESTINATION="ID_253667047" ENDARROW="Default" ENDINCLINATION="-128;12;" ID="Arrow_ID_399012411" STARTARROW="None" STARTINCLINATION="-202;12;"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1768150971192" FOLDED="true" ID="ID_767104948" MODIFIED="1768189215643" TEXT="Basisconfig editieren">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1768151026856" ID="ID_1165519916" MODIFIED="1768161415157" TEXT="&#xfc;bersichtlicher kommentieren">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#435e98" CREATED="1768151035343" ID="ID_1935250780" MODIFIED="1768161413627" TEXT="auskommentierte Teile und den Thoth-Service entfernen"/>
+<node CREATED="1768160398405" ID="ID_253667047" MODIFIED="1768188872419" TEXT="zus&#xe4;tzliche Regelbausteine">
+<linktarget COLOR="#2da1c2" DESTINATION="ID_253667047" ENDARROW="Default" ENDINCLINATION="-128;12;" ID="Arrow_ID_399012411" SOURCE="ID_291970076" STARTARROW="None" STARTINCLINATION="-202;12;"/>
+<icon BUILTIN="list"/>
+<node CREATED="1768161123741" MODIFIED="1768161123741" TEXT="- import: (data)/crawlers/_allow-good.yaml"/>
+<node CREATED="1768161132301" MODIFIED="1768161132301" TEXT="- import: (data)/clients/x-firefox-ai.yaml"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#390f69" CREATED="1768161149054" ID="ID_1171295109" MODIFIED="1768161399285" TEXT="- import: (data)/clients/git.yaml">
+<linktarget COLOR="#fdfbc6" DESTINATION="ID_1171295109" ENDARROW="Default" ENDINCLINATION="507;39;" ID="Arrow_ID_1380217319" SOURCE="ID_10540276" STARTARROW="None" STARTINCLINATION="1204;0;"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1768161155295" ID="ID_1901933121" MODIFIED="1768161155295" TEXT="- import: (data)/common/keep-internet-working.yaml"/>
+<node CREATED="1768161160122" ID="ID_1659151246" MODIFIED="1768161160122" TEXT="- import: (data)/common/allow-private-addresses.yaml"/>
+<node CREATED="1768161171182" ID="ID_58836007" MODIFIED="1768161171182" TEXT="- import: (data)/small-internet-browsers/_permissive.yaml">
+<node CREATED="1768161351499" ID="ID_1896020727" MODIFIED="1768161356010" TEXT="PaleMoon etc"/>
+</node>
+<node CREATED="1768161177960" ID="ID_907603030" MODIFIED="1768161177960" TEXT="- import: (data)/common/acts-like-browser.yaml">
+<node BACKGROUND_COLOR="#d9b087" COLOR="#690f14" CREATED="1768167289878" ID="ID_469485460" MODIFIED="1768167316422" TEXT="im aktuellen Release noch nicht ausgeliefert">
+<icon BUILTIN="broken-line"/>
+</node>
+<node CREATED="1768161289551" ID="ID_1735402680" MODIFIED="1768161342999" TEXT="Heuristik: zus&#xe4;tzliche Merkmale eines echten Browsers &#x27fc; Bonus"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1768161321457" ID="ID_185522508" MODIFIED="1768161347012" TEXT="am Ende Catch-All: nur ein Browser-Agent: &#x27fc; Malus">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1768163533757" FOLDED="true" ID="ID_1888323035" MODIFIED="1768189221090" TEXT="Logging">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1768163537734" ID="ID_1769119390" LINK="https://anubis.techaro.lol/docs/admin/policies#logging-management" MODIFIED="1768164634686" TEXT="Doku: Policy-Seite"/>
+<node CREATED="1768163545002" ID="ID_1576123874" LINK="https://github.com/TecharoHQ/anubis/pull/1299" MODIFIED="1768163552130" TEXT="in den Code geschaut">
+<node CREATED="1768164376721" ID="ID_286177031" LINK="https://github.com/fahedouch/go-logrotate" MODIFIED="1768164393890" TEXT="verwendet ein Go-Paket fahedouch/go-logrotate"/>
+<node CREATED="1768164407196" ID="ID_920486990" MODIFIED="1768164571308" TEXT="die Rotation kann man abschalten mit maxAge: 0  ; maxBytes : -1; maxBackups: 0"/>
+</node>
+<node CREATED="1768164740008" ID="ID_811845290" MODIFIED="1768164903345" TEXT="schicke es in /var/log/apache2/anubis.log">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      logging:
+    </p>
+    <p>
+      &#160;&#160;sink: file
+    </p>
+    <p>
+      &#160;&#160;parameters:
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;file: &quot;/var/log/apache2/anubis.log&quot;
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;maxBackups: 0&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;# disable log-rotation by Golang: fahedouch/go-logrotate
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;maxBytes:&#160;&#160;-1&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;# unlimited size
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;maxAge:&#160;&#160;&#160;&#160;&#160;0&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;# no clean-up (leave this to Linux logrotate)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#338800" CREATED="1768175812679" ID="ID_1653829556" MODIFIED="1768175820925" TEXT="Logrotate-Konfiguration">
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1768175851444" ID="ID_870059881" MODIFIED="1768175866189" TEXT="mu&#xdf; eine postrotate-Aktion machen">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1768175866883" ID="ID_1250816939" MODIFIED="1768175874011" TEXT="sonst schreibt Anubis weiterhin in das alte Log"/>
+<node CREATED="1768175874586" ID="ID_471937445" MODIFIED="1768175884548" TEXT="Anubis unterst&#xfc;tzt kein &apos;reload&apos;"/>
+<node CREATED="1768175886745" ID="ID_1557637423" MODIFIED="1768175944916" TEXT="also /usr/bin/systemctl stop und dann start">
+<node CREATED="1768175902447" ID="ID_1484630349" MODIFIED="1768175914169" TEXT="man sollte im Cron-Kontext besser voll qualifizieren"/>
+</node>
+</node>
+<node CREATED="1768175821921" ID="ID_254302441" MODIFIED="1768176659983" TEXT="f&#xfc;ge die Regel hinzu in: /etc/logrotate.d/apache2">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <font face="Monospaced" size="2"># Anubis JSON log 1/2026 </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">/var/log/apache2/anubis.log { </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">daily </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">rotate 28 </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">extension log </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">dateext </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">dateyesterday </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">dateformat %Y-%m-%d. </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">compress </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">delaycompress </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">missingok </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">notifempty </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">ignoreduplicates </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">create 640 anubis staff </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">postrotate </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;if pgrep -f ^/usr/bin/anubis &gt; /dev/null; then </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;/usr/bin/systemctl stop&#160;&#160;anubis@lumiera 2&gt;&amp;1 | logger -t anubis.logrotate </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;/usr/bin/systemctl start anubis@lumiera 2&gt;&amp;1 | logger -t anubis.logrotate </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;fi </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">endscript </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">}</font>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="list"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1768160410327" FOLDED="true" ID="ID_1336690835" MODIFIED="1768189225473" TEXT="Honeypot?">
+<icon BUILTIN="help"/>
+<node CREATED="1768160419282" ID="ID_495726536" MODIFIED="1768160493371" TEXT="das ist die neueste Idee von Xe">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Noch vor wenigen Monaten war sie skeptisch, aber dann hat sie wohl den Research von Antropic gesehen, dem zufolge bereits eine kleine Anzahl an vergifteten Trainingsdaten gen&#252;gt, ein Modell zu korrumpieren, egal wie gro&#223; das Modell und die Trainingsdaten insgesamt sind
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1768160548809" ID="ID_1278748097" LINK="https://news.ycombinator.com/item?id=46321438" MODIFIED="1768160554795" TEXT="Hackernews-Diskusison"/>
+<node CREATED="1768160534047" ID="ID_1741517874" LINK="https://anubis.techaro.lol/docs/admin/honeypot/overview/" MODIFIED="1768160540893" TEXT="Dokumentation">
+<icon BUILTIN="info"/>
+<node CREATED="1768161050663" ID="ID_742907884" MODIFIED="1768161061983" TEXT="wird also in die Challenge und Fehlerseiten injiziert"/>
+</node>
+<node CREATED="1768160508591" ID="ID_1246010253" LINK="https://github.com/TecharoHQ/anubis/commit/122e4bc072fc1492bcc7dbb7b6622ff042fe458a" MODIFIED="1768160522902" TEXT="in den Code schauen...."/>
+<node CREATED="1768160495581" ID="ID_1482832846" MODIFIED="1768160506821" TEXT="mu&#xdf; man das aktivieren? anscheinend nicht!"/>
+</node>
+<node COLOR="#435e98" CREATED="1768177954882" FOLDED="true" ID="ID_477847312" MODIFIED="1768189236649" TEXT="der Forward geht noch nicht zur richtigen Site">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1768178165238" ID="ID_824679462" MODIFIED="1768178239313" TEXT="Hinwies: Warnung im Logfile">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Direkt nach dem Restart...
+    </p>
+    <p>
+      WARN: REDIRECT_DOMAINS is not set, Anubis will only redirect to the same domain a request is coming from, see https://anubis.techaro.lol/docs/admin/configuration/redirect-domains
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1768178152643" ID="ID_1216260647" LINK="https://anubis.techaro.lol/docs/admin/configuration/redirect-domains/#configuring-allowed-redirect-domains" MODIFIED="1768178182965" TEXT="mu&#xdf; REDIRECT_DOMAIN korrekt setzen"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1768002623192" ID="ID_1790960091" MODIFIED="1768189197583" TEXT="Apache-Config">
+<node CREATED="1768161868137" ID="ID_1330776766" LINK="https://httpd.apache.org/docs/current/mod/mod_proxy.html" MODIFIED="1768161876758" TEXT="Doku: mod_proxy">
+<icon BUILTIN="info"/>
+<node CREATED="1768161880968" ID="ID_949596758" MODIFIED="1768161894642" TEXT="ProxyRequests: aktiviert einen normalen (forward)Proxy"/>
+<node CREATED="1768161898366" ID="ID_1968987612" MODIFIED="1768161917053" TEXT="ProxyPass: aktiviert ein Gateway (&#xbb;reverseProxy&#xab;)">
+<node CREATED="1768161933351" ID="ID_162499711" MODIFIED="1768161948859" TEXT="kann man auch mit der Flag [P] in Rewrite-Rules konfigurieren"/>
+</node>
+</node>
+<node CREATED="1768172142791" ID="ID_173589964" LINK="https://anubis.techaro.lol/docs/admin/environments/apache#configuration" MODIFIED="1768172173788" TEXT="Nach dem Beispiel in der Anubis-Doku aufgebaut"/>
+<node CREATED="1768188540699" ID="ID_1328485083" MODIFIED="1768188555089" TEXT="Proxy korrekt einrichten">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1768172939379" ID="ID_1391503160" LINK="https://stackoverflow.com/questions/760283/apache-proxypass-how-to-preserve-original-ip-address/30784225#30784225" MODIFIED="1768173035341" TEXT="Tip: zus&#xe4;tzlich mod_remoteip einsezten">
+<icon BUILTIN="idea"/>
+<node CREATED="1767960855041" ID="ID_1746842260" LINK="https://httpd.apache.org/docs/trunk/mod/mod_remoteip.html" MODIFIED="1767960865575" TEXT="mod_remoteip"/>
+<node BACKGROUND_COLOR="#f0d296" COLOR="#570f69" CREATED="1768176876863" ID="ID_1411355229" MODIFIED="1768176908984" TEXT="a2enmod remoteip">
+<icon BUILTIN="back"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1768177596829" ID="ID_1697279137" MODIFIED="1768188551536" TEXT="mu&#xdf; aber den Header verwenden, den Anubis braucht/setzt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      &#160;&#160;&#160;&#160;# Retrieve origin IP of the request for logging
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;RemoteIPHeader X-Real-Ip
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;RemoteIPInternalProxy 127.0.0.1
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+<node COLOR="#435e98" CREATED="1768177654604" ID="ID_1087703444" MODIFIED="1768177660790" TEXT="X-Real-Ip">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1768188581488" ID="ID_86272880" MODIFIED="1768188638552" TEXT="UseCanonicalName On">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      damit Apache <i>beim R&#252;ck&#252;bersetzen</i>&#160;den Namen verwendet, der als ServerName im eingehenden VirtualHost steht
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#9695fd" COLOR="#1b246e" CREATED="1768264254952" ID="ID_1862280741" MODIFIED="1768264747345" TEXT="Log-Auswertung">
+<icon BUILTIN="idea"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1768264260155" FOLDED="true" ID="ID_1505575797" MODIFIED="1768264711714" TEXT="Apache access-Logs wie &#xfc;blich mit Unix-Tools">
+<icon BUILTIN="edit"/>
+<node CREATED="1768264271897" ID="ID_1327730319" MODIFIED="1768264703465" TEXT="goaccess --log-format=COMBINED  access.log">
+<icon BUILTIN="penguin"/>
+</node>
+<node CREATED="1768264325866" ID="ID_927574052" MODIFIED="1768264332637" TEXT="PageImpressions">
+<node CREATED="1768246827792" ID="ID_122539110" MODIFIED="1768264703465" TEXT="cat LOGFILE | wc -l">
+<icon BUILTIN="penguin"/>
+</node>
+</node>
+<node CREATED="1768246012515" ID="ID_1276403093" MODIFIED="1768246016107" TEXT="unique visitors">
+<node CREATED="1768246862322" ID="ID_590423778" MODIFIED="1768264703465" TEXT="cat LOGFILE | awk &apos;{print $1}&apos; | sort | uniq | wc -l">
+<icon BUILTIN="penguin"/>
+</node>
+</node>
+<node CREATED="1768246016869" ID="ID_1297845951" MODIFIED="1768246021447" TEXT="data transferred">
+<node CREATED="1768246884033" ID="ID_1519843046" MODIFIED="1768264703465" TEXT="cat LOGFILE | awk &apos;$10 ~ /^[0-9]+$/ {sum += $10} END {printf &quot;%.2f MiB\n&quot;, sum/1024/1024}&apos;">
+<icon BUILTIN="penguin"/>
+</node>
+<node CREATED="1768246925759" ID="ID_1703812069" MODIFIED="1768264703466" TEXT="cat LOGFILE | awk &apos;$10 ~ /^[0-9]+$/ {sum += $10} END {print sum}&apos; ">
+<icon BUILTIN="penguin"/>
+</node>
+</node>
+<node CREATED="1768264440721" ID="ID_1403756977" MODIFIED="1768264445605" TEXT="URLs sorted">
+<node CREATED="1768264485964" ID="ID_550796096" MODIFIED="1768264703466" TEXT="cat LOGFILE | awk &apos;{print $7}&apos; |sort|uniq -c|sort -rn">
+<icon BUILTIN="penguin"/>
+</node>
+</node>
+<node CREATED="1768264555368" ID="ID_770742108" MODIFIED="1768264652171" TEXT="Zeitraum filtern">
+<icon BUILTIN="idea"/>
+<node CREATED="1768264560001" ID="ID_1202761033" MODIFIED="1768264569226" TEXT="COMBINED access log">
+<node BACKGROUND_COLOR="#e3d8aa" CREATED="1768240319020" ID="ID_1108368450" MODIFIED="1768264703465">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      sed -nre '\_\[12/Jan/2026:03:_, \_\[12/Jan/2026:14:_ p' \
+    </p>
+    <p>
+      &#160;&#160;&#160;trac-access.2026-01-12.log &gt;trac.12.log
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="penguin"/>
+</node>
+<node CREATED="1768240343607" ID="ID_1693609117" MODIFIED="1768240355504" TEXT="verwende alternativen Begrenzer f&#xfc;r die RegExp: \_"/>
+<node CREATED="1768240358038" ID="ID_213463308" MODIFIED="1768240364690" TEXT="-n nicht echo"/>
+<node CREATED="1768240365454" ID="ID_535562270" MODIFIED="1768240376304" TEXT="&apos;p&apos;  : print selected lines"/>
+</node>
+<node CREATED="1768240130462" ID="ID_1740650411" MODIFIED="1768264597591" TEXT="Anubis-JSON-Log">
+<node BACKGROUND_COLOR="#e3d8aa" CREATED="1768240145535" ID="ID_965287510" MODIFIED="1768264703465" STYLE="fork">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      jq --arg start &quot;2026-01-12T15:00&quot; --arg end &quot;2026-01-12T17:00&quot; \
+    </p>
+    <p>
+      -s 'map(select(.time[0:16] &gt;= $start and .time[0:16]&lt;= $end))' \ anubis.2026-01-12.log|less
+    </p>
+  </body>
+</html></richcontent>
+<edge COLOR="#7f6872" STYLE="linear" WIDTH="thin"/>
+<icon BUILTIN="penguin"/>
+</node>
+<node CREATED="1768240168372" ID="ID_744932372" MODIFIED="1768240219945" TEXT="wichtig: -s (slurp mode)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      liest eine Folge von JSON-Werten und packt sie in ein Array, das dann in die Pipeline geschickt wird
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1768240230086" ID="ID_330900278" MODIFIED="1768240242282" TEXT="deshalb auch die map()-Funktion"/>
+<node CREATED="1768240248429" ID="ID_1594643958" MODIFIED="1768240256369" TEXT="Ergebnis liegt in einem Array"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1768243296433" FOLDED="true" ID="ID_1826342335" MODIFIED="1768264711720" TEXT="Anubis-Log: Datenauszug als CSV">
+<icon BUILTIN="edit"/>
+<node BACKGROUND_COLOR="#e3d8aa" CREATED="1768243616420" ID="ID_92061552" MODIFIED="1768264703462" STYLE="fork">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <font face="Monospaced">jq -r \</font>
+    </p>
+    <p>
+      <font face="Monospaced">'map([.time[0:19] \</font>
+    </p>
+    <p>
+      <font face="Monospaced">&#160;&#160;&#160;&#160;&#160;, .&quot;x-real-ip&quot; \</font>
+    </p>
+    <p>
+      <font face="Monospaced">&#160;&#160;&#160;&#160;&#160;, if .check_result == null \</font>
+    </p>
+    <p>
+      <font face="Monospaced">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;then [&quot;CHALLENGE&quot;,&quot;default&quot;] \</font>
+    </p>
+    <p>
+      <font face="Monospaced">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;else [.check_result.rule, .check_result.name] \</font>
+    </p>
+    <p>
+      <font face="Monospaced">&#160;&#160;&#160;&#160;&#160;&#160;&#160;end \</font>
+    </p>
+    <p>
+      <font face="Monospaced">&#160;&#160;&#160;&#160;&#160;, .path \</font>
+    </p>
+    <p>
+      <font face="Monospaced">&#160;&#160;&#160;&#160;&#160;]|flatten|@csv) \</font>
+    </p>
+    <p>
+      <font face="Monospaced">&#160;|.[]' \</font>
+    </p>
+    <p>
+      <font face="Monospaced">anub.12.json &gt; anub.12.csv</font>
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      jq -r 'map([.time[0:19] , .&quot;x-real-ip&quot; , if .check_result == null then [&quot;CHALLENGE&quot;,&quot;default&quot;] else [.check_result.rule, .check_result.name] end , .path ]|flatten|@csv) |.[]' anub.12.json &gt; anub.12.csv
+    </p>
+  </body>
+</html></richcontent>
+<edge COLOR="#7f6872" STYLE="linear" WIDTH="thin"/>
+<icon BUILTIN="penguin"/>
+<node CREATED="1768243373343" ID="ID_796743491" MODIFIED="1768243412616" TEXT="f&#xfc;r CSV: Daten m&#xfc;ssen ein Array sein &#x27fc; @csv filter"/>
+<node CREATED="1768243417786" ID="ID_1728001768" MODIFIED="1768243440530" TEXT="Array kann man konstuieren mit [ pipeline, pipeline, pipeline ]"/>
+<node CREATED="1768243444446" ID="ID_946105359" MODIFIED="1768243488599">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      bei mir ist ein Element ein <i>nested Array</i>&#160;&#10233; flatten&#160;<i>vor </i>dem CSV-Filter
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1768243544650" ID="ID_1367497456" MODIFIED="1768243558681" TEXT="Fallunterscheidung mit if cond then val1 else val2"/>
+<node CREATED="1768243514686" ID="ID_569834678" MODIFIED="1768243528334" TEXT="aus dem Array eine Folge von JSON-Elementen machen : |.[]"/>
+<node CREATED="1768243490072" ID="ID_1079129105" MODIFIED="1768243510680" TEXT="Ausgabe dann mit -r (raw output)"/>
+</node>
+</node>
+<node CREATED="1768246006463" ID="ID_1132549863" MODIFIED="1768246011920" TEXT="page impressions"/>
 </node>
 </node>
 </node>
@@ -167892,7 +168943,7 @@ that situation will improve in forseeable future.</pre>
 <node CREATED="1751808189155" ID="ID_244632795" MODIFIED="1764718150250" TEXT="Schritte">
 <icon BUILTIN="xmag"/>
 <node CREATED="1751808295862" ID="ID_3929483" MODIFIED="1751808300246" TEXT="2025">
-<node BACKGROUND_COLOR="#ece19b" COLOR="#4d0f69" CREATED="1751808407776" FOLDED="true" ID="ID_933658454" MODIFIED="1765904484650" TEXT="Aktualisierung">
+<node BACKGROUND_COLOR="#ece19b" COLOR="#4d0f69" CREATED="1751808407776" FOLDED="true" ID="ID_933658454" MODIFIED="1768092791512" TEXT="Aktualisierung">
 <icon BUILTIN="bookmark"/>
 <node BACKGROUND_COLOR="#c3c8b6" COLOR="#338800" CREATED="1751808424465" ID="ID_1551937148" MODIFIED="1764717353451" TEXT="Referenz-Sytem &#xd83e;&#xdc32; Debian/Trixie">
 <icon BUILTIN="yes"/>
@@ -179873,7 +180924,7 @@ runner.run(test_suite())</font></code></pre>
 <node CREATED="1766117056457" ID="ID_1482328795" MODIFIED="1766117060695" TEXT="stattdessen: libapache2-mod-wsgi-py3 "/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1767201931032" ID="ID_355913926" MODIFIED="1767563644566" TEXT="Trac-Setup aus Git-Repo neu ausgerollt">
+<node COLOR="#338800" CREATED="1767201931032" FOLDED="true" ID="ID_355913926" MODIFIED="1767563644566" TEXT="Trac-Setup aus Git-Repo neu ausgerollt">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1767204907959" ID="ID_1036463867" MODIFIED="1767204913084" TEXT="git push">
 <icon BUILTIN="button_ok"/>
@@ -179892,7 +180943,8 @@ runner.run(test_suite())</font></code></pre>
 <node COLOR="#338800" CREATED="1767204914004" ID="ID_17873140" MODIFIED="1767204923675" TEXT="DB aus Dump regeneriert">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1767204924389" ID="ID_972722798" MODIFIED="1767204928568" TEXT="Permissions">
+<node COLOR="#435e98" CREATED="1767204924389" ID="ID_972722798" MODIFIED="1768095594700" TEXT="Permissions">
+<icon BUILTIN="info"/>
 <node CREATED="1767204934668" ID="ID_1787722682" MODIFIED="1767204941616" TEXT="generell: root:www-data"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#d20452" CREATED="1767204942326" ID="ID_446983239" MODIFIED="1767205030173" TEXT="Schreibrechte f&#xfc;r www-data">
 <icon BUILTIN="messagebox_warning"/>
@@ -179904,8 +180956,9 @@ runner.run(test_suite())</font></code></pre>
 </node>
 </node>
 </node>
-<node CREATED="1767563646212" ID="ID_1957757189" MODIFIED="1767563651618" TEXT="Apache / Trac-Konfiguration">
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1767563653695" ID="ID_1687786454" MODIFIED="1767563705972" TEXT="wir laufen zwar auf WSGI, aber noch mit prefork im Apache">
+<node COLOR="#338800" CREATED="1767563646212" ID="ID_1957757189" MODIFIED="1768095578484" TEXT="Apache / Trac-Konfiguration">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1767563653695" ID="ID_1687786454" MODIFIED="1768095583873" TEXT="wir laufen zwar auf WSGI, aber noch mit prefork im Apache">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -179916,7 +180969,7 @@ runner.run(test_suite())</font></code></pre>
 </html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1767563709295" ID="ID_198735190" LINK="https://modwsgi.readthedocs.io/en/latest/configuration-directives/WSGIDaemonProcess.html" MODIFIED="1767563740681" TEXT="WSGI w&#xfc;rde einen DaemonProzess unterst&#xfc;tzen">
+<node COLOR="#338800" CREATED="1767563709295" FOLDED="true" ID="ID_198735190" LINK="https://modwsgi.readthedocs.io/en/latest/configuration-directives/WSGIDaemonProcess.html" MODIFIED="1768267132474" TEXT="WSGI w&#xfc;rde einen DaemonProzess unterst&#xfc;tzen">
 <icon BUILTIN="idea"/>
 <node COLOR="#338800" CREATED="1767563745159" ID="ID_868616689" MODIFIED="1767576538129" TEXT="einen separaten Worker-Pool f&#xfc;r das Trac konfigurieren">
 <icon BUILTIN="button_ok"/>
@@ -179936,7 +180989,10 @@ runner.run(test_suite())</font></code></pre>
 </html></richcontent>
 </node>
 <node CREATED="1767571313144" ID="ID_1862758930" MODIFIED="1767571323771" TEXT="Einstellungen w&#xe4;hlen">
-<node CREATED="1767571324893" ID="ID_1124801719" MODIFIED="1767571331455" TEXT="processes = 10"/>
+<node COLOR="#5b280f" CREATED="1767571324893" ID="ID_1124801719" MODIFIED="1768095547941" TEXT="processes = 10">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1768095549101" ID="ID_1506487160" MODIFIED="1768095563815" TEXT="jetzt 5 &#xe0; 10 Threads"/>
+</node>
 <node CREATED="1767571336659" ID="ID_740187832" MODIFIED="1767571340918" TEXT="threads = 8"/>
 <node CREATED="1767571341539" ID="ID_1932425436" MODIFIED="1767571344201" TEXT="nice = 1"/>
 <node CREATED="1767571565604" ID="ID_480674804" MODIFIED="1767571621265" TEXT="request-timeout = 60sec">
@@ -180021,8 +181077,8 @@ runner.run(test_suite())</font></code></pre>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1767563759213" ID="ID_1232614613" MODIFIED="1767563780324" TEXT="und dann Apache auf eine moderne Technologie umstellen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1767563759213" ID="ID_1232614613" MODIFIED="1768263658348" TEXT="und dann Apache auf eine moderne Technologie umstellen">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1767733215160" ID="ID_1449275758" LINK="https://httpd.apache.org/docs/2.4/en/mod/prefork.html" MODIFIED="1767733260120">
 <richcontent TYPE="NODE"><html>
   <head/>
@@ -180094,9 +181150,11 @@ runner.run(test_suite())</font></code></pre>
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1767734096002" ID="ID_1304037139" MODIFIED="1767734105285" TEXT="Aufgabe: einfaches Monitoring">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1767745616524" ID="ID_1822372227" MODIFIED="1767746541647" TEXT="Vorgabe">
+<node COLOR="#338800" CREATED="1767734096002" ID="ID_1304037139" MODIFIED="1768263769689" TEXT="Aufgabe: einfaches Monitoring">
+<linktarget COLOR="#1da350" DESTINATION="ID_1304037139" ENDARROW="Default" ENDINCLINATION="121;379;" ID="Arrow_ID_1254248210" SOURCE="ID_801197024" STARTARROW="None" STARTINCLINATION="473;37;"/>
+<linktarget COLOR="#1da381" DESTINATION="ID_1304037139" ENDARROW="Default" ENDINCLINATION="-117;-278;" ID="Arrow_ID_1197522278" SOURCE="ID_1077423681" STARTARROW="None" STARTINCLINATION="-666;43;"/>
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1767745616524" ID="ID_1822372227" MODIFIED="1768095068982" TEXT="Vorgabe">
 <icon BUILTIN="yes"/>
 <node CREATED="1767746506262" ID="ID_416374956" MODIFIED="1767746525510" TEXT="&#xbb;low-tech&#xab; : cronjob + zus&#xe4;tzliches Log"/>
 <node CREATED="1767745620227" ID="ID_1475948207" MODIFIED="1767745637387" TEXT="man soll das Log durchschauen k&#xf6;nnen, und Lastspitzen direkt sehen"/>
@@ -180233,17 +181291,83 @@ runner.run(test_suite())</font></code></pre>
 </node>
 </node>
 </node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1768095109507" ID="ID_207287810" MODIFIED="1768095387163" TEXT="worker-MPM bew&#xe4;hrt sich">
+<icon BUILTIN="idea"/>
+<node CREATED="1768095118041" ID="ID_1703094543" MODIFIED="1768095412923" TEXT="Speicherverbrauch um 50% gesunken">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      von vorher 1.5 - 2 GiB auf nun 400 - 800 MiB
+    </p>
+  </body>
+</html></richcontent>
 </node>
+<node CREATED="1768095128749" ID="ID_832297798" MODIFIED="1768095520104" TEXT="der Webserver ist jetzt weitgehend idle">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <ul>
+      <li>
+        Ich messe die %CPU, aber nur in den Threads, die &#252;berhaupt etwas gearbeitet haben. Dieser Wert liegt selten &#252;ber 10%
+      </li>
+      <li>
+        Bisher habe ich den Apache f&#252;r maximal 4 Prozesse &#224; 20 Threads konfiguriert; er l&#228;uft die meiste Zeit nur mit 2 Prozessen und mehr als 10 Idle workers
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
 </node>
+<node CREATED="1768095163995" ID="ID_135369462" MODIFIED="1768095377340" TEXT="die Load-Probleme gingen also nur auf veraltete Server-Konfig zur&#xfc;ck">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Es wollte sich halt Niemand<font size="1">(TM)&#160; </font>mit dem l&#228;stigen Thema besch&#228;ftigen, solange bis die H&#252;tte brennt...
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="smiley-neutral"/>
 </node>
-</node>
-</node>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1767201982309" HGAP="35" ID="ID_1631001537" MODIFIED="1767201994202" TEXT="Anubis evaluieren" VSHIFT="4">
-<icon BUILTIN="hourglass"/>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1767201997770" ID="ID_1180600640" MODIFIED="1767202023253" TEXT="das Thema scheint kontrovers zu sein &#x2014; Christian findet es unsympatisch">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1768095350291" ID="ID_1157090269" MODIFIED="1768095371022" TEXT="wir haben aber weiterhin potentiell zu viel Traffic (Scraper-Bots)">
 <icon BUILTIN="messagebox_warning"/>
 </node>
-<node CREATED="1767202074137" ID="ID_1195940156" MODIFIED="1767202107968" TEXT="ich m&#xf6;chte mehr dar&#xfc;ber erfahren">
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1768263546218" ID="ID_473754512" MODIFIED="1768263559737" TEXT="nun Apache und Trac besser konfiguriert">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1768263563840" ID="ID_801197024" MODIFIED="1768263687220" TEXT="einfache Lastmessung entwickelt">
+<arrowlink COLOR="#1da350" DESTINATION="ID_1304037139" ENDARROW="Default" ENDINCLINATION="121;379;" ID="Arrow_ID_1254248210" STARTARROW="None" STARTINCLINATION="473;37;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1767201982309" HGAP="35" ID="ID_1631001537" MODIFIED="1768186908709" TEXT="Anubis evaluieren" VSHIFT="4">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1767201997770" FOLDED="true" ID="ID_1180600640" MODIFIED="1768263516915" TEXT="das Thema scheint kontrovers zu sein &#x2014; Christian findet es unsympatisch">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1768188977411" ID="ID_940549924" MODIFIED="1768188981536" TEXT="nicht nur Christian"/>
+<node CREATED="1768189001818" ID="ID_793274398" MODIFIED="1768189063177" TEXT="die FSF nennt es &#xbb;Malware&#xab;"/>
+<node CREATED="1768188982244" ID="ID_1532464817" MODIFIED="1768188998318" TEXT="jede Menge der &#xbb;Alteingesessenen&#xab; l&#xe4;stert dar&#xfc;ber ab"/>
+<node CREATED="1768189024919" ID="ID_1731995439" MODIFIED="1768189045936" TEXT="die ganzen &#xbb;Richtigen Hacker&#xab; haben seit 1 Jahr viele &quot;man sollte&quot; Vorschl&#xe4;ge"/>
+<node CREATED="1768189047198" ID="ID_209046964" MODIFIED="1768189057506" TEXT="aber niemand macht mehr als fail-2-ban-Regeln"/>
+<node CREATED="1768189073280" ID="ID_1295595157" MODIFIED="1768189107614" TEXT="und dazu kommt: es gibt eine kommerzielle Variante">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Also &#187;Open Core&#171;
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1767202074137" FOLDED="true" ID="ID_1195940156" MODIFIED="1768264991783" TEXT="ich m&#xf6;chte mehr dar&#xfc;ber erfahren">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
 <node CREATED="1767202109300" ID="ID_113232221" MODIFIED="1767202121269" TEXT="sehe da&#xdf; es von vielen &#xbb;kleinen Websites&#xab; verwendet wird"/>
 <node CREATED="1767202121976" ID="ID_1816445790" MODIFIED="1767202177702" TEXT="theoretisch klingt der Ansatz angemessen">
 <richcontent TYPE="NOTE"><html>
@@ -180266,10 +181390,250 @@ runner.run(test_suite())</font></code></pre>
 </html></richcontent>
 </node>
 <node CREATED="1767202262464" ID="ID_96362374" MODIFIED="1767202291320" TEXT="Es g&#xe4;be weitere Aspekte: wie erkennt man &#xbb;erw&#xfc;nschte&#xab; Bots (Suchmaschinen, Archive.org)?"/>
+<node CREATED="1768097908487" ID="ID_673519078" MODIFIED="1768264990718" TEXT="&#xdc;ber die Autorin">
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1768187182844" ID="ID_1731258060" MODIFIED="1768187211273" TEXT="&#xbb;she/her&#xab; or &#xbb;they/them&#xab;?">
+<icon BUILTIN="help"/>
+<node CREATED="1768187213298" ID="ID_258753833" MODIFIED="1768187232688" TEXT="alles was ich sehe sieht f&#xfc;r mich &#xbb;weiblich&#xab; aus...."/>
+<node CREATED="1768187250036" ID="ID_13601260" MODIFIED="1768187257818" TEXT="&quot;my husband is unemployed&quot;"/>
+<node CREATED="1768187303420" ID="ID_1687948790" MODIFIED="1768187319484" TEXT="das Verhalten in Diskussionen"/>
+<node CREATED="1768187258716" ID="ID_992483902" MODIFIED="1768187270312" TEXT="Interesse an Mythologie">
+<node CREATED="1768187280785" ID="ID_229686672" MODIFIED="1768187294490" TEXT="Anubis"/>
+<node CREATED="1768187295841" ID="ID_937431921" MODIFIED="1768187297810" TEXT="Thoth"/>
+</node>
+<node CREATED="1768187271266" ID="ID_120490512" MODIFIED="1768187276989" TEXT="der Schreibstil im Blog"/>
+</node>
+<node CREATED="1768189121165" ID="ID_935820125" MODIFIED="1768189125523" TEXT="lebt in Kanada"/>
+<node CREATED="1768097913871" ID="ID_1073580339" LINK="https://anubis.techaro.lol/blog" MODIFIED="1768187336705" TEXT="Blog"/>
+<node CREATED="1768097916457" ID="ID_472261406" LINK="https://www.reddit.com/r/de_EDV/comments/1li7kj2/webhoster_mit_vorgeschaltetem_anubis_anti_crawler/" MODIFIED="1768097981472" TEXT="Reddit">
+<node CREATED="1768097983737" ID="ID_1832059447" MODIFIED="1768097989132" TEXT="ein deutscher Reddit"/>
+<node CREATED="1768097989436" ID="ID_408230245" MODIFIED="1768097995587" TEXT="aber Xena meldet sich auf englisch"/>
+</node>
+<node CREATED="1768097921937" ID="ID_537124515" LINK="https://news.ycombinator.com/item?id=44914773" MODIFIED="1768097933186" TEXT="Hackernews-Thread">
+<node CREATED="1768097937223" ID="ID_896568103" MODIFIED="1768097945256" TEXT="hier sagt sie etwas &#xfc;ber ihre aktuelle Situation"/>
+<node CREATED="1768097945770" ID="ID_226522986" MODIFIED="1768097952713" TEXT="und warum sie versucht, von Anubis zu leben"/>
+</node>
+<node CREATED="1768098906855" ID="ID_561278613" LINK="https://codeberg.org/forgejo/discussions/issues/319#issuecomment-6382369" MODIFIED="1768098915391" TEXT="Disskussion in Codeberg-Issue"/>
 </node>
 </node>
-<node COLOR="#111064" CREATED="1767128566468" ID="ID_513748595" MODIFIED="1767201775003" TEXT="Dokumentation: Git">
+<node COLOR="#338800" CREATED="1768001411462" ID="ID_1119261794" MODIFIED="1768188950832" TEXT="Anubis in den Lumiera-Webserver integriert">
+<arrowlink COLOR="#3260d1" DESTINATION="ID_19768331" ENDARROW="Default" ENDINCLINATION="-1011;351;" ID="Arrow_ID_1568526941" STARTARROW="None" STARTINCLINATION="-383;24;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1768002656443" ID="ID_1372756102" MODIFIED="1768002657864" TEXT="Test">
+<node COLOR="#338800" CREATED="1768170204232" ID="ID_367238570" MODIFIED="1768170210822" TEXT="Anubis mit erweiterer Config">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#a73111" CREATED="1768170212152" ID="ID_1917871354" MODIFIED="1768170595411" TEXT="brauche SystemD-Unit-Override: damit Anubis in /var/log/apache2 schreiben kann">
+<arrowlink COLOR="#fdd8ce" DESTINATION="ID_471246508" ENDARROW="Default" ENDINCLINATION="298;503;" ID="Arrow_ID_1987073519" STARTARROW="None" STARTINCLINATION="852;30;"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1768171180358" ID="ID_1321864040" MODIFIED="1768171337978" TEXT="Apache mit Proxy durch Anubis">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1768171189077" ID="ID_773874962" MODIFIED="1768171200708" TEXT="ich komme rein: ohne JavaScript"/>
+<node CREATED="1768171201491" ID="ID_926437546" MODIFIED="1768171214461" TEXT="im Anubis.log sind erste DENY-Eintr&#xe4;ge"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1768171343154" ID="ID_557714832" MODIFIED="1768171367411" TEXT="Start: 2026-01-11 23:30 +1"/>
+<node CREATED="1768259201504" FOLDED="true" ID="ID_717683780" MODIFIED="1768263489406">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <u>Ergebnis</u>: <b>drastische</b>&#160;Reduktion aller Lasten
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1768259255351" ID="ID_19719758" MODIFIED="1768260481642" STYLE="bubble">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <h1>
+      Vergleichsmessung mit Anubis/Trac
+    </h1>
+    <p>
+      <font face="Monospaced">Vergleichszeitraum:</font><font color="#3522ab" face="Monospaced">&#160;&#160;9.1.26 13:00-24:00</font>
+    </p>
+    <p>
+      <font face="Monospaced">Me&#223;zeitraum-Anubis:</font><font color="#3522ab" face="Monospaced">&#160;12.1.26 03:00-14:00</font>
+    </p>
+    <p>
+      (jeweils 11 Stunden)
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Heute (Anubis-Messung) war <i>weniger Last</i>&#160;auf dem System:
+    </p>
+    <ul>
+      <li>
+        &#160;nur 34% der UniqueVisitors in Lumiera
+      </li>
+      <li>
+        &#160;nur 68% des Traffic in Lumiera
+      </li>
+    </ul>
+    <p>
+      
+    </p>
+    <p>
+      Deshalb setze ich die Zahlen jeweils ins Verh&#228;ltnis
+    </p>
+    <p>
+      zu der Me&#223;gr&#246;&#223;e in www.lumiera.org (ohne Anubis).
+    </p>
+    <p>
+      
+    </p>
+    <table>
+      <tr>
+        <td align="center">
+          <font color="#800808"><u>Gr&#246;&#223;e</u></font>
+        </td>
+        <th>
+          Vergleich
+        </th>
+        <th>
+          mit Anubis
+        </th>
+      </tr>
+      <tr>
+        <th align="right">
+          Volumen
+        </th>
+        <td>
+          61%
+        </td>
+        <td>
+          0.6%
+        </td>
+      </tr>
+      <tr>
+        <th align="right">
+          PageImpressions
+        </th>
+        <td>
+          117%
+        </td>
+        <td>
+          4%
+        </td>
+      </tr>
+      <tr>
+        <th align="right">
+          UniqueVisitors
+        </th>
+        <td>
+          26%
+        </td>
+        <td>
+          1.6%
+        </td>
+      </tr>
+    </table>
+    <p>
+      
+    </p>
+    <p>
+      UniqueVisitors am Gateway: 17%
+    </p>
+    <p>
+      
+    </p>
+    <h2>
+      Weitere Beobachtungen heute
+    </h2>
+    <p>
+      
+    </p>
+    <p>
+      Am Gateway werden gefiltert (jeweils ohne mich selber)
+    </p>
+    <p>
+      &#160;- <b><font color="#2a44a0">92</font></b>% der PageImpressions
+    </p>
+    <p>
+      &#160;- <b><font color="#2a44a0">92</font></b>% der UniqueVisitors
+    </p>
+    <p>
+      &#160;- <b><font color="#2a44a0">87</font></b>% des Datenvolumens
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Anubis hat 2094 Transaktionen registriert
+    </p>
+    <ul>
+      <li>
+        <font face="Monospaced">1473 DENY</font>
+      </li>
+      <li>
+        <font face="Monospaced">&#160;621 CHALLENGE</font>
+      </li>
+      <li>
+        <font face="Monospaced">&#160;571 davon sind am Challenge gescheitert</font>
+      </li>
+    </ul>
+    <p>
+      
+    </p>
+    <p>
+      H&#228;ufigkeit der Regeln:
+    </p>
+    <p>
+      <font face="Monospaced">&#160;&#160;1099 &quot;bot/alibaba-cloud&quot; </font>
+    </p>
+    <p>
+      <font face="Monospaced">&#160;&#160;&#160;614 &quot;default&quot; </font>
+    </p>
+    <p>
+      <font face="Monospaced">&#160;&#160;&#160;291 &quot;bot/ai-catchall&quot; </font>
+    </p>
+    <p>
+      <font face="Monospaced">&#160;&#160;&#160;&#160;80 &quot;bot/no-user-agent-string&quot; </font>
+    </p>
+    <p>
+      <font face="Monospaced">&#160;&#160;&#160;&#160;&#160;7 &quot;threshold/mild-suspicion&quot; </font>
+    </p>
+    <p>
+      <font face="Monospaced">&#160;&#160;&#160;&#160;&#160;3 &quot;bot/huawei-cloud&quot; </font>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <u>Anmerkung zum Datenvolumen vor dem Gateway</u>:
+    </p>
+    <p>
+      Viele Bots versuchen es immer wieder. Einer hat es 80 mal versucht.
+    </p>
+    <p>
+      Im Schnitt versuchen die Bots 10 mal, reinzukommen.
+    </p>
+  </body>
+</html></richcontent>
+<edge COLOR="#321ad1"/>
+</node>
+<node CREATED="1768263352110" HGAP="5" ID="ID_1164488842" MODIFIED="1768263425462" TEXT="ein normale Browser kommt ohne JavaScript rein" VSHIFT="4">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das ist abh&#228;ngig von der Feinabstimmung der Regeln, und wird nur solange gelten, bis die aggresiveren Bots auch die erweiterten Browser-Eigenschaften zuverl&#228;ssig nachahmen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1768263427082" HGAP="-2" ID="ID_1136613737" LINK="https://web.archive.org/web/20260112205134/https://issues.lumiera.org/ticket/1221" MODIFIED="1768263476069" TEXT="Archive-Org kann einen Snapshot speichern" VSHIFT="4"/>
+</node>
+</node>
+</node>
+<node COLOR="#111064" CREATED="1767128566468" ID="ID_513748595" MODIFIED="1768267043092" TEXT="Dokumentation: Git">
 <linktarget COLOR="#3b49c7" DESTINATION="ID_513748595" ENDARROW="Default" ENDINCLINATION="-28;-1028;" ID="Arrow_ID_23715623" SOURCE="ID_1218510171" STARTARROW="None" STARTINCLINATION="-475;36;"/>
+<linktarget COLOR="#3b49c7" DESTINATION="ID_513748595" ENDARROW="Default" ENDINCLINATION="-28;-1028;" ID="Arrow_ID_1773795285" SOURCE="ID_1931145339" STARTARROW="None" STARTINCLINATION="-501;33;"/>
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="edit"/>
 <node CREATED="1767128572589" ID="ID_1300621421" MODIFIED="1767128589920" TEXT="f&#xfc;hre ein Git-Repo ein f&#xfc;r Site-Konfiguration + Trac"/>
