@@ -6219,7 +6219,7 @@ This is the core service provided by the player subsystem. The purpose is to cre
 :any details of this processing remain opaque for the clients; even the player subsystem just accesses the EngineFaçade
 </pre>
 </div>
-<div title="PlaybackVerticalSlice" creator="Ichthyostega" modifier="Ichthyostega" created="202303272236" modified="202502192215" tags="overview impl discuss draft" changecount="48">
+<div title="PlaybackVerticalSlice" creator="Ichthyostega" modifier="Ichthyostega" created="202303272236" modified="202601230245" tags="overview impl discuss draft" changecount="50">
 <pre>//Integration effort to promote the development of rendering, playback and video display in the GUI//
 This IntegrationSlice was started in {{red{2023}}} as [[Ticket #1221|https://issues.lumiera.org/ticket/1221]] to coordinate the completion and integration of various implementation facilities, planned, drafted and built during the last years; this effort marks the return of development focus to the lower layers (after years of focussed UI development) and will implement the asynchronous and time-bound rendering coordinated by the [[Scheduler]] in the [[Vault|Vault-Layer]]
 
@@ -6263,6 +6263,8 @@ __February.25__: built extended verification mechanisms, including some Node met
 * ✔ invoke render nodes stand-alone, without framework
 * ⌛ introduce a //placeholder link// to connect JobTicket to the actual invocation (without actual [[Fixture]])
 * ✔ rework and complete the existing node invocation code
+
+__January.26__: During the last nine months, unfortunately I was occupied with generic clean-up, upgrade, infrastructure and research work -- and so there was ''no progress'' regarding the PlaybackVerticalSlice. Just before that recess, an important breakthrough was achieved: a complete node graph was built and invoked end to end in a unit test setting. The further integration up to a RenderJob invocation is still blocked by some yet unresolved [[design mismatch (#1395)|https://issues.lumiera.org/ticket/1395]] related to the //»BufferProvider Protocol«// vs the //»OutputSlot Protocol«//; this is where I'll pick up the development work stalled almost a year ago.
 
 !Decisions
 ;Scheduler

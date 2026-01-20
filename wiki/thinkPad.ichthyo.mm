@@ -110214,10 +110214,10 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="hourglass"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1711548381477" ID="ID_664146362" MODIFIED="1760292477862" TEXT="Buffer-Manager">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1711548381477" ID="ID_664146362" MODIFIED="1769124792851" TEXT="Buffer-Manager">
 <linktarget COLOR="#5a4f77" DESTINATION="ID_664146362" ENDARROW="Default" ENDINCLINATION="-493;1406;" ID="Arrow_ID_297212964" SOURCE="ID_1433806835" STARTARROW="None" STARTINCLINATION="-1768;-2925;"/>
-<linktarget COLOR="#fec499" DESTINATION="ID_664146362" ENDARROW="Default" ENDINCLINATION="-1409;197;" ID="Arrow_ID_616778881" SOURCE="ID_722733788" STARTARROW="None" STARTINCLINATION="-794;96;"/>
-<linktarget COLOR="#ff4400" DESTINATION="ID_664146362" ENDARROW="Default" ENDINCLINATION="-1857;303;" ID="Arrow_ID_1425526052" SOURCE="ID_634625719" STARTARROW="None" STARTINCLINATION="-1363;105;"/>
+<linktarget COLOR="#fec499" DESTINATION="ID_664146362" ENDARROW="Default" ENDINCLINATION="-1409;197;" ID="Arrow_ID_616778881" SOURCE="ID_722733788" STARTARROW="None" STARTINCLINATION="-781;71;"/>
+<linktarget COLOR="#ff4400" DESTINATION="ID_664146362" ENDARROW="Default" ENDINCLINATION="-1857;303;" ID="Arrow_ID_1038535963" SOURCE="ID_1831513195" STARTARROW="None" STARTINCLINATION="-1363;105;"/>
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1719249646221" ID="ID_403017464" MODIFIED="1719249923835" TEXT="Begriffe klarstellen">
 <arrowlink COLOR="#4b5a6c" DESTINATION="ID_1263834914" ENDARROW="Default" ENDINCLINATION="-668;-90;" ID="Arrow_ID_767640863" STARTARROW="None" STARTINCLINATION="-873;115;"/>
@@ -161919,6 +161919,93 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1742252371053" ID="ID_722521674" MODIFIED="1742252374992" TEXT="Projektsteuerung">
 <node CREATED="1742253275555" ID="ID_580693288" MODIFIED="1742253279172" TEXT="Weg zur Integration"/>
 <node CREATED="1742253280417" ID="ID_914029660" MODIFIED="1742253285208" TEXT="Auswahl der Focus-Topics"/>
+<node CREATED="1769123127450" ID="ID_1246211025" MODIFIED="1769123131885" TEXT="Fragen der Methodik">
+<node CREATED="1769123136985" ID="ID_1699310991" MODIFIED="1769123177065">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Trac wird derzeit <i>unkonventionell verwendet</i>
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1769123179528" ID="ID_1271969391" MODIFIED="1769123224441" TEXT="das hat sich graduell so entwickelt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...rein aus Verzweiflung; ich hab Trac als M&#246;glichkeit genutzt, Einsichten &#252;ber Themen-Zusammenh&#228;nge dauerhaft und dabei flexibel aufzuzeichnen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1769123228539" ID="ID_596401111" MODIFIED="1769123257524" TEXT="der Dependency-DAG in den Tickets ist ein strategisches Asset">
+<node CREATED="1769123325594" ID="ID_244221937" MODIFIED="1769123338344" TEXT="er stellt ein Netzwerk von Pl&#xe4;nen und Konzepten dar"/>
+<node CREATED="1769123338946" ID="ID_738073333" MODIFIED="1769123353039" TEXT="diese wurden evolution&#xe4;r gefunden und weiterentwickelt"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1769123353795" ID="ID_649188653" MODIFIED="1769123393823" TEXT="das war essentiell daf&#xfc;r, &#xfc;berhaupt so weit zu kommen">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1769123409051" ID="ID_1783277409" MODIFIED="1769123455220" TEXT="ich konnte dadurch voreilige Festlegungen vermeiden und trotzdem weiterarbeiten">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1769123272255" ID="ID_1709126619" MODIFIED="1769123292176" TEXT="derzeit f&#xfc;r mich perfekt &#x2014; aber fraglich, wie ein Team damit arbeiten k&#xf6;nnte">
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1769123509708" ID="ID_1425972493" MODIFIED="1769123567428" TEXT="zusammen mit der Mindmap ist das ein Technischer Hebel f&#xfc;r meine Planungs-F&#xe4;higkeiten">
+<font ITALIC="true" NAME="SansSerif" SIZE="13"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1769123586588" ID="ID_622473844" MODIFIED="1769123643209" TEXT="die Mindmap beruht auf Idiosynkrasie">
+<node CREATED="1769123644549" ID="ID_927427962" MODIFIED="1769123657788" TEXT="sie ist komplett unzug&#xe4;nglich f&#xfc;r Au&#xdf;enstehende"/>
+<node CREATED="1769123682272" ID="ID_950478507" MODIFIED="1769123699338" TEXT="mir pers&#xf6;nlich erlaubt sie eine gewaltige Spannweite meiner &#xdc;berlegungen"/>
+<node CREATED="1769123700049" ID="ID_860377706" MODIFIED="1769123716847" TEXT="das stellt ein erhebliches Risiko dar f&#xfc;r die Weiterentwicklung des Projekts"/>
+</node>
+<node CREATED="1769123720959" ID="ID_761910996" MODIFIED="1769123740899" TEXT="der Ticket-DAG im Trac mildert das etwas ab">
+<node CREATED="1769123742455" ID="ID_1631475713" MODIFIED="1769123754716" TEXT="dort finden sich geschlossene Beschreibungen, auf Englisch"/>
+<node CREATED="1769123755590" ID="ID_990982180" MODIFIED="1769123770231" TEXT="&#xdc;bergeordnete strategische Themen sind dort abgebildet"/>
+<node CREATED="1769123771505" ID="ID_1108626437" MODIFIED="1769123838982" TEXT="es erscheint m&#xf6;glich, diese Struktur forzuf&#xfc;hren"/>
+</node>
+</node>
+<node CREATED="1769123866039" ID="ID_788013537" MODIFIED="1769123879329" TEXT="Anscheinend gibt es derzeit keine Alternative zu Trac">
+<node CREATED="1769123880330" ID="ID_1349368608" MODIFIED="1769123895861" TEXT="moderne Issue-Tracker behandeln Tickets als ein fl&#xfc;chtiges Artefakt"/>
+<node CREATED="1769123899026" ID="ID_839543566" MODIFIED="1769123919852" TEXT="sie bieten keine dauerhafte Darstellung einer Planungs-Struktur"/>
+<node CREATED="1769123925591" ID="ID_556388095" MODIFIED="1769123967909" TEXT="Trac ist besonders, insofern es wenig semantisch festgelegt ist"/>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1769124086091" ID="ID_1266959677" MODIFIED="1769124092585" TEXT="Risiko">
+<icon BUILTIN="clanbomber"/>
+<node CREATED="1769124094201" ID="ID_1960366331" MODIFIED="1769124103380" TEXT="Trac hat eine schwindende User-Basis"/>
+<node CREATED="1769124108678" ID="ID_676691192" MODIFIED="1769124124736" TEXT="das Eclipse-Mylyn-Tooling f&#xe4;llt praktisch weg">
+<node CREATED="1769124168414" ID="ID_1002059680" MODIFIED="1769124359097" TEXT="das Mylyn-Projekt ist in Schwierigkeiten">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      2022 war es schon fast tot, als es (bedingt durch die Java &#10236; Jakarta-Migration) aus dem Eclipse-Simrel herausgefallen war. Eine Gruppe von Freiwilligen hat es am Leben erhalten, k&#228;mpft aber weiterhin mit exzessiven Schwierigkeiten, da die gesamte Eclipse-Infrastruktur kaum noch aufrecht zu erhalten ist. Es fehlt &#252;berall an Resourcen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1769124127579" ID="ID_1391657836" MODIFIED="1769124412141" TEXT="der Trac-Connector wurde aufgegeben">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Es gibt kein Statement, warum. Aber zu vermuten steht, da&#223; man Trac als &quot;tot&quot; empfunden hat, und zudem XML-RPC ein Risiko darstellt (da 10 Jahre kaum noch gepflegt)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1769124440700" ID="ID_1329748730" MODIFIED="1769124462454" TEXT="ich hatte &#xfc;berlegt, zu helfen; aber die Aufgabe erscheint zu gro&#xdf;">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1769124140042" ID="ID_1821996226" MODIFIED="1769124163594" TEXT="ich hatte bisher Mylyn als bequeme Such- und Navigationsfunktion genutzt"/>
+</node>
+</node>
+</node>
+<node CREATED="1769123977823" ID="ID_118953173" MODIFIED="1769124008080" TEXT="L&#xe4;ngerfristige M&#xf6;glichkeit: einen Requirements-DAG mit generischem Tooling aufbauen">
+<node CREATED="1769124010541" ID="ID_1347359872" MODIFIED="1769124018704" TEXT="naheliegende M&#xf6;glichkeit: Org-Mode"/>
+<node CREATED="1769124019271" ID="ID_1703535010" MODIFIED="1769124031104" TEXT="m&#xfc;&#xdf;te dann aber viel mit Skripting erg&#xe4;nzt werden"/>
+</node>
+</node>
+</node>
 <node CREATED="1742253291595" ID="ID_1861799623" MODIFIED="1742253303965" TEXT="Entscheidungen zur Basis-Ausstattung">
 <node CREATED="1742254334660" ID="ID_296076104" MODIFIED="1742254342744" TEXT="Frage der Library-Dependencies">
 <node CREATED="1742254348799" ID="ID_1494840380" MODIFIED="1742254536535">
@@ -162540,8 +162627,8 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <arrowlink COLOR="#fec499" DESTINATION="ID_963236489" ENDARROW="Default" ENDINCLINATION="-464;31;" ID="Arrow_ID_562359741" STARTARROW="None" STARTINCLINATION="-699;62;"/>
 <icon BUILTIN="hourglass"/>
 </node>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1680562698618" ID="ID_722733788" MODIFIED="1711552950392" TEXT="Buffer-Management">
-<arrowlink COLOR="#fec499" DESTINATION="ID_664146362" ENDARROW="Default" ENDINCLINATION="-1409;197;" ID="Arrow_ID_616778881" STARTARROW="None" STARTINCLINATION="-794;96;"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1680562698618" ID="ID_722733788" MODIFIED="1769124792851" TEXT="Buffer-Management">
+<arrowlink COLOR="#fec499" DESTINATION="ID_664146362" ENDARROW="Default" ENDINCLINATION="-1409;197;" ID="Arrow_ID_616778881" STARTARROW="None" STARTINCLINATION="-781;71;"/>
 <icon BUILTIN="hourglass"/>
 </node>
 </node>
@@ -162564,7 +162651,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 </node>
 </node>
-<node CREATED="1664630921300" FOLDED="true" HGAP="183" ID="ID_1033335255" MODIFIED="1768187077656" TEXT="Dokumentation" VSHIFT="40">
+<node CREATED="1664630921300" FOLDED="true" HGAP="183" ID="ID_1033335255" MODIFIED="1769124585023" TEXT="Dokumentation" VSHIFT="40">
 <edge COLOR="#815b70"/>
 <cloud COLOR="#d7c3a8"/>
 <font NAME="SansSerif" SIZE="12"/>
@@ -167403,7 +167490,49 @@ that situation will improve in forseeable future.</pre>
 <node CREATED="1765904221705" ID="ID_168400791" MODIFIED="1765904240857" TEXT="Projektorganisation">
 <node CREATED="1765904243219" ID="ID_762435721" MODIFIED="1765904327595" TEXT="Ticket-System"/>
 </node>
-<node CREATED="1756651585768" ID="ID_1780831155" MODIFIED="1756651592266" TEXT="Website / Infrastruktur">
+<node CREATED="1756651585768" FOLDED="true" ID="ID_1780831155" MODIFIED="1769124577781" TEXT="Website / Infrastruktur">
+<icon BUILTIN="go"/>
+<node BACKGROUND_COLOR="#d4bcb8" COLOR="#435e98" CREATED="1768412090280" FOLDED="true" ID="ID_1149298290" MODIFIED="1769124560527" TEXT="Situation(allgemein)">
+<icon BUILTIN="info"/>
+<node CREATED="1768412101749" ID="ID_455186304" MODIFIED="1768412120774" TEXT="wir legen private Mittel zusammen und betreiben einen dedizierten Server"/>
+<node CREATED="1768412121634" ID="ID_484029329" MODIFIED="1768412179447" TEXT="der Server wird von Hetzner.de gehostet und hat 1TB Traffic inclusive (plus feste IP4)"/>
+<node CREATED="1768412185442" ID="ID_1597020790" MODIFIED="1768412210827" TEXT="Christian hat das organisiert und administriert den Server"/>
+<node CREATED="1768412211843" ID="ID_673867326" MODIFIED="1768412220881" TEXT="wir verwenden Sandboxing mit der libVirt"/>
+<node CREATED="1768412323519" ID="ID_278089123" MODIFIED="1768412333390" TEXT="das Setup ist seit &gt;10 Jahren bew&#xe4;hrt"/>
+<node CREATED="1768412340908" ID="ID_639656795" MODIFIED="1768412355602" TEXT="es gibt kaum nenneswerten &#xbb;echten&#xab; Traffic">
+<icon BUILTIN="info"/>
+</node>
+<node BACKGROUND_COLOR="#ecbf95" COLOR="#990033" CREATED="1768412239522" ID="ID_498513558" MODIFIED="1768413390030" TEXT="Problem AI-Bots">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1768412245865" ID="ID_732806304" MODIFIED="1768412259768" TEXT="seit 2025 ist unser Traffic explosionsartig gestiegen"/>
+<node CREATED="1768412260400" ID="ID_616986835" MODIFIED="1768412309397" TEXT="wir waren mehrfach nah an der 1TB-Grenze">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      und dann w&#252;rde es <b>schmerzhaft</b>&#160;teuer. Zahlen w&#252;rde das dann ich, da ich als einziger die n&#246;tigen Mittel &#252;brig habe
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1768412377184" ID="ID_1305551270" MODIFIED="1768412394551" TEXT="viele &#xbb;kleine&#xab; Betreiber unabh&#xe4;ngiger Websites haben das gleiche Problem"/>
+<node CREATED="1768412395221" ID="ID_1765289714" MODIFIED="1768412404546" TEXT="wir waren uns lange nicht einig, Anubis einzusetzen"/>
+<node CREATED="1768412407492" ID="ID_1639781783" MODIFIED="1768412853430" TEXT="als dann das Trac abgeschaltet werden mu&#xdf;te, hab ich meinen Standpunkt ge&#xe4;ndert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Vorher fand ich Anubis &#8222;interessant&#8220; (im Sinne von: ein Projekt das man beobachten sollte, weil es eine neuartige Initiative darstellt). Die Mehrheit der Entwickler, die ich kenne, lehnen es ab, teilweise sehr entschieden. Ich sah schon auch das Problem, da&#223; man dann verpflichtend JavaScript braucht. Und ich hab es generell so gehalten, in diesen Fragen die Initiative bei Christian zu lassen.
+    </p>
+    <p>
+      Im September dann habe ich bemerkt, da&#223; das so nicht weiter geht, weil Christian unsere Website nicht genau genug kennt, und sich nicht tiefer auf das Thema einlassen m&#246;chte. Er hat lediglich immer cleverere Konstrukte auf der Firewall gebaut, die aber in der Praxis die Seite so einschr&#228;nken, da&#223; man kaum noch sinnvoll damit arbeiten kann. Und dann hab ich ihm gesagt, da&#223; die meiste Last doch vom Trac kommt. Das wu&#223;te er nicht einmal (obwohl wir oft dar&#252;ber geredet hatten). An der Stelle habe ich dann beschlossen, da&#223; Anubis jetzt praktisch erprobt werden sollte. Allerding mu&#223; das ich selber machen, und damit hat sich die Sache bis in den Dezember hinausgez&#246;gert. <i>Wie zu erwarten,</i>&#160; liegt der Sachverhalt wesentlich komplexer, als man auf der Meinungsebene denken k&#246;nnte. Aber mit einigem Investment in Konfiguration und Lernen hab ich jetzt ein Setup, das aus den problematischen Bereichen 90% der PageImpressions raush&#228;lt. Ob dadurch unser Traffic entsprechend stark sinkt, m&#252;ssen wir erst sehen, denn die Bots versuchen nun andauern wieder, reinzukommen. Allerdings habe ich bei der Gelegenheit <i>leider feststellen m&#252;ssen, da&#223; die gesamte Website-Konfiugration von A-Z schlampig und ungepflegt war.<b>&#160;Wir hatten nicht einmal korrekte </b></i><b><font face="Monospaced">robots.txt</font><i>&#160;Regeln.</i></b>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1768696991332" ID="ID_59491871" MODIFIED="1768697013189" TEXT="2026-1 : Anubis ausgerollt &#x27f9; Traffic drastisch reduziert"/>
+</node>
+</node>
 <node CREATED="1756651593543" ID="ID_336711694" MODIFIED="1756651598874" TEXT="Anordnung der Repos">
 <node CREATED="1756651599892" ID="ID_1760498141" MODIFIED="1756652477206" TEXT="Diskussion 2025 &#x27f9; l&#xe4;ngerfristig Git-Submodule">
 <richcontent TYPE="NOTE"><html>
@@ -167655,7 +167784,7 @@ that situation will improve in forseeable future.</pre>
 </node>
 </node>
 <node CREATED="1765904354232" ID="ID_264350953" MODIFIED="1765904365268" TEXT="Infrastruktur-Technologie">
-<node CREATED="1765904375811" ID="ID_1088849846" MODIFIED="1768266944347" TEXT="Trac">
+<node CREATED="1765904375811" FOLDED="true" ID="ID_1088849846" MODIFIED="1768518611569" TEXT="Trac">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <node CREATED="1765904417246" ID="ID_204471697" MODIFIED="1765904449664" TEXT="Evolution">
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1765906859536" ID="ID_1389801711" MODIFIED="1765906944249" TEXT="Python-3 : bricht diverse unmaintained Plug-ins">
@@ -167959,7 +168088,7 @@ that situation will improve in forseeable future.</pre>
 </node>
 </node>
 </node>
-<node CREATED="1768188696502" ID="ID_19768331" MODIFIED="1768266942194" TEXT="Anubis">
+<node CREATED="1768188696502" FOLDED="true" ID="ID_19768331" MODIFIED="1768518616070" TEXT="Anubis">
 <linktarget COLOR="#3260d1" DESTINATION="ID_19768331" ENDARROW="Default" ENDINCLINATION="-1011;351;" ID="Arrow_ID_1568526941" SOURCE="ID_1119261794" STARTARROW="None" STARTINCLINATION="-383;24;"/>
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <node CREATED="1768001548860" ID="ID_564011996" LINK="https://anubis.techaro.lol/" MODIFIED="1768001571070" TEXT="Homepage">
@@ -167973,6 +168102,218 @@ that situation will improve in forseeable future.</pre>
 </node>
 </node>
 <node CREATED="1768189256311" ID="ID_1272242347" MODIFIED="1768189266845" TEXT="implementiert in Golang + JavaScript"/>
+<node CREATED="1768430393952" ID="ID_1925556712" MODIFIED="1768430403126" TEXT="Anubis-Seiten">
+<icon BUILTIN="edit"/>
+<node CREATED="1768430404991" ID="ID_811872512" LINK="https://lumiera.org/rififi/.within.website/x/cmd/anubis/api/pass-challenge" MODIFIED="1768431240287" TEXT="pass-challenge">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <font face="Monospaced" size="2">&lt;!doctype html&gt;&lt;html lang=&quot;en&quot;&gt;&lt;head&gt;&lt;title&gt;Oh noes!&lt;/title&gt; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&lt;link rel=&quot;stylesheet&quot; href=&quot;</font><font color="#c90140" face="Monospaced" size="2">/rififi/.within.website/x/xess/xess.min.css?cachebuster=1.24.0</font><font face="Monospaced" size="2">&quot;&gt; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&lt;meta name=&quot;robots&quot; content=&quot;noindex,nofollow&quot;&gt;&lt;style&gt; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;body, </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;html { </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;height: 100%; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;display: flex; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;justify-content: center; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;align-items: center; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;margin-left: auto; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;margin-right: auto; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;} </font>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;.centered-div { </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;text-align: center; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;} </font>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;#status { </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;font-variant-numeric: tabular-nums; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;} </font>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;#progress { </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;display: none; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;width: 90%; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;width: min(20rem, 90%); </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;height: 2rem; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;border-radius: 1rem; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;overflow: hidden; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;margin: 1rem 0 2rem; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">outline-offset: 2px; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">outline: #b16286 solid 4px; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">} </font>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;.bar-inner { </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;background-color: #b16286; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;height: 100%; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;width: 0; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;transition: width 0.25s ease-in; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;} </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&lt;/style&gt;&lt;script id=&quot;anubis_version&quot; type=&quot;application/json&quot;&gt;&quot;1.24.0&quot; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&lt;/script&gt;&lt;script id=&quot;anubis_challenge&quot; type=&quot;application/json&quot;&gt;null </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&lt;/script&gt;&lt;script id=&quot;anubis_base_prefix&quot; type=&quot;application/json&quot;&gt;&quot;/rififi&quot; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&lt;/script&gt;&lt;script id=&quot;anubis_public_url&quot; type=&quot;application/json&quot;&gt;&quot;&quot; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&lt;/script&gt;&lt;/head&gt;&lt;body id=&quot;top&quot;&gt;&lt;script type=&quot;ignore&quot;&gt; </font>
+    </p>
+    <p>
+      <font color="#960303" face="Monospaced" size="2">&lt;a href=&quot;</font><font color="#ff0045" face="Monospaced" size="2"><b>/.within.website/x/cmd/anubis/api/honeypot/71324fcd-364b-41ed-9f21-e0f65a535d66/init</b></font><font color="#960303" face="Monospaced" size="2">&quot;&gt;Don't click me&lt;/a&gt;</font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&lt;/script&gt;&lt;main&gt;&lt;h1 id=&quot;title&quot; class=&quot;centered-div&quot;&gt;Oh noes!&lt;/h1&gt;&lt;div class=&quot;centered-div&quot;&gt; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&lt;img id=&quot;image&quot; alt=&quot;Sad Anubis&quot; style=&quot;width:100%;max-width:256px;&quot; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;src=&quot;</font><font color="#bc093c" face="Monospaced" size="2">/rififi/.within.website/x/cmd/anubis/static/img/reject.webp?cacheBuster=1.24.0</font><font face="Monospaced" size="2">&quot;&gt;&lt;p&gt;Invalid redirect.&lt;/p&gt;&lt;code&gt;&lt;pre&gt;H4sIAAAAAAAA/ypL </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">TC9KTcyrVChKTU1K </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">tVJIzktNK1JQUrJS </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">KKpKTs9RyEit5AIE </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">AAD//8BP3jUkAAAA </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&lt;/pre&gt;&lt;/code&gt; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&lt;p&gt;&lt;a href=&quot;/&quot;&gt;Go home&lt;/a&gt;&lt;/p&gt;&lt;/div&gt; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&lt;footer&gt;&lt;div class=&quot;centered-div&quot;&gt; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&lt;p&gt;Protected by &lt;a href=&quot;https://github.com/TecharoHQ/anubis&quot;&gt;Anubis&lt;/a&gt; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">From &lt;a href=&quot;https://techaro.lol&quot;&gt;Techaro&lt;/a&gt;. Made with &#10084;&#65039; in .&lt;/p&gt; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&lt;p&gt;Mascot design by &lt;a href=&quot;https://bsky.app/profile/celphase.bsky.social&quot;&gt;CELPHASE&lt;/a&gt;.&lt;/p&gt; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&lt;p&gt;This is a &lt;b&gt;Gateway page&lt;/b&gt; to protect the Lumiera website against abuse by aggressive data scraping &amp;mdash; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">using excess bandwidth beyond fair use and especially disregarding the &lt;tt&gt;robots.txt&lt;/tt&gt; is considered </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">improper use, as it threatens our ability to provide Lumiera.org as open and free resource to everyone.&lt;br/&gt; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">See: &lt;a href=&quot;https://lumiera.org/project/legal/legal.html#GDPR&quot;&gt;GDPR page&lt;/a&gt;.-- </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&lt;a href=&quot;/.within.website/x/cmd/anubis/api/imprint&quot;&gt;Imprint&lt;/a&gt;&lt;/p&gt; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&lt;p&gt;This website is running Anubis version &lt;code&gt;1.24.0&lt;/code&gt;.&lt;/p&gt;&lt;/div&gt; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&lt;/footer&gt;&lt;/main&gt; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&lt;/body&gt;&lt;/html&gt; </font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1768430416653" ID="ID_438822165" LINK="https://lumiera.org/rififi/.within.website/x/cmd/anubis/api/honeypot/94252235-fd82-4c14-8f57-c781a65ab53e/d9a1eedd-7423-4d55-a2b9-73161b9b33e5" MODIFIED="1768430432510" TEXT="eine Honeypot-Seite"/>
+</node>
 <node COLOR="#435e98" CREATED="1768086978019" FOLDED="true" ID="ID_991878405" MODIFIED="1768266923244" TEXT="Anubis-Regelwerk">
 <icon BUILTIN="info"/>
 <node CREATED="1768087017691" ID="ID_34752622" LINK="https://github.com/TecharoHQ/anubis/tree/main/data" MODIFIED="1768087024927" TEXT="data-Folder">
@@ -168349,7 +168690,7 @@ that situation will improve in forseeable future.</pre>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#a0e2a4" COLOR="#338800" CREATED="1768002583652" FOLDED="true" ID="ID_1283428765" MODIFIED="1768189242128" TEXT="Einrichten">
+<node BACKGROUND_COLOR="#a0e2a4" COLOR="#338800" CREATED="1768002583652" FOLDED="true" ID="ID_1283428765" MODIFIED="1768518581673" TEXT="Einrichten">
 <icon BUILTIN="info"/>
 <node COLOR="#435e98" CREATED="1768002587543" ID="ID_1508731352" MODIFIED="1768188881957" TEXT="vom DEB installieren">
 <node CREATED="1768005225290" ID="ID_236231165" MODIFIED="1768005230965" TEXT="sha256 gepr&#xfc;ft"/>
@@ -168498,7 +168839,7 @@ that situation will improve in forseeable future.</pre>
 </node>
 </node>
 <node COLOR="#435e98" CREATED="1768002649030" ID="ID_1986937781" MODIFIED="1768189196231" TEXT="Anubis-Config">
-<node COLOR="#338800" CREATED="1768188306582" FOLDED="true" ID="ID_1296887001" MODIFIED="1768189214116" TEXT="Anubis-Service einrichten">
+<node COLOR="#338800" CREATED="1768188306582" FOLDED="true" ID="ID_1296887001" MODIFIED="1768518305770" TEXT="Anubis-Service einrichten">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1768188341302" ID="ID_1332731470" MODIFIED="1768188398462" TEXT="das ist ein SystemD-Template-Service">
 <richcontent TYPE="NOTE"><html>
@@ -168570,6 +168911,94 @@ that situation will improve in forseeable future.</pre>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1768161321457" ID="ID_185522508" MODIFIED="1768161347012" TEXT="am Ende Catch-All: nur ein Browser-Agent: &#x27fc; Malus">
 <font NAME="SansSerif" SIZE="12"/>
 </node>
+</node>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1768518312513" FOLDED="true" ID="ID_37596058" MODIFIED="1768518576577" TEXT="SystemD-Service">
+<icon BUILTIN="info"/>
+<node CREATED="1768518322865" ID="ID_808777975" MODIFIED="1768518355541" TEXT="eine Template-Config kommt bereits von upstream">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      anubis@.service
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1768518356893" ID="ID_404561094" MODIFIED="1768518505953" TEXT="verwende einen lokalen override">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      [Service]
+    </p>
+    <p>
+      # 2026/1 Ichthyo : use Apache user to simplify log file handling
+    </p>
+    <p>
+      #&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Yet recreate the hardening implied by DynamicUser
+    </p>
+    <p>
+      User=www-data
+    </p>
+    <p>
+      ProtectSystem=strict
+    </p>
+    <p>
+      ProtectHome=yes
+    </p>
+    <p>
+      PrivateTmp=yes
+    </p>
+    <p>
+      PrivateDevices=yes
+    </p>
+    <p>
+      NoNewPrivileges=yes
+    </p>
+    <p>
+      ProtectKernelTunables=yes
+    </p>
+    <p>
+      CapabilityBoundingSet=
+    </p>
+    <p>
+      #
+    </p>
+    <p>
+      # Allow to write into the Apache log dir
+    </p>
+    <p>
+      ReadWritePaths=/var/log/apache2
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="edit"/>
+<node CREATED="1768518367202" ID="ID_1817105520" MODIFIED="1768518382057" TEXT="verwende User www-data"/>
+<node CREATED="1768518382785" ID="ID_188759317" MODIFIED="1768518452034" TEXT="aber erhalte alle weiteren Sandboxing-Features">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das Template konfiguriert DynamicUser=yes
+    </p>
+    <p>
+      Das impliziert protectSystem=strict, das hei&#223;t per Default ist das gesamte System f&#252;r den Service nur read-only. Ausnahmen werden explizit konfiguriert.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1768518453818" ID="ID_50468899" MODIFIED="1768518557414" TEXT="Sandboxing sogar noch etwas versch&#xe4;rft">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Nehme ihm alle erweiterten Capabilities weg (CapabilityBoundingSet= ). Nur das, was ein gew&#246;hnlicher Service braucht (Bind auf nicht-privilegierte Ports)
+    </p>
+  </body>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -168728,6 +169157,21 @@ that situation will improve in forseeable future.</pre>
 </node>
 <node CREATED="1768178152643" ID="ID_1216260647" LINK="https://anubis.techaro.lol/docs/admin/configuration/redirect-domains/#configuring-allowed-redirect-domains" MODIFIED="1768178182965" TEXT="mu&#xdf; REDIRECT_DOMAIN korrekt setzen"/>
 </node>
+<node COLOR="#338800" CREATED="1768414667660" ID="ID_1821555377" MODIFIED="1768438751906" TEXT="Pr&#xe4;fix f&#xfc;r Anubis-Seiten">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1768414677934" ID="ID_1753454463" MODIFIED="1768414730557" TEXT="notwendig, da wir nun ein heterogenes Setup haben">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Anubis behandelt gemeinsam den Zugriff auf verschiedene Virtual Hosts, und auch auf den Pfad &quot;/doxy&quot; auf www.lumiera.org
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1768414764155" ID="ID_918587883" LINK="https://anubis.techaro.lol/docs/admin/installation/#environment-variables" MODIFIED="1768414864782" TEXT="BASE_PREFIX=/rififi"/>
+<node CREATED="1768414883322" ID="ID_26627461" MODIFIED="1768414891853" TEXT="sollte auch: COOKIE_DOMAIN=lumiera.org"/>
+</node>
 </node>
 <node COLOR="#435e98" CREATED="1768002623192" ID="ID_1790960091" MODIFIED="1768189197583" TEXT="Apache-Config">
 <node CREATED="1768161868137" ID="ID_1330776766" LINK="https://httpd.apache.org/docs/current/mod/mod_proxy.html" MODIFIED="1768161876758" TEXT="Doku: mod_proxy">
@@ -168779,9 +169223,14 @@ that situation will improve in forseeable future.</pre>
 </html></richcontent>
 </node>
 </node>
+<node COLOR="#338800" CREATED="1768272428350" ID="ID_1710536879" MODIFIED="1768272438692" TEXT="nach dem gleichen Schema: git.lumiera.org">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1768272450067" ID="ID_527279827" MODIFIED="1768272464436" TEXT="der Eingang hinter Anubis ist wieder ein VirtualHost auf localhost:1222"/>
+<node CREATED="1768272465431" ID="ID_1584163792" MODIFIED="1768272478057" TEXT="das funktioniert, weil der host-Header anders gesetzt ist"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#9695fd" COLOR="#1b246e" CREATED="1768264254952" ID="ID_1862280741" MODIFIED="1768264747345" TEXT="Log-Auswertung">
+</node>
+<node BACKGROUND_COLOR="#9695fd" COLOR="#1b246e" CREATED="1768264254952" FOLDED="true" ID="ID_1862280741" MODIFIED="1768518588654" TEXT="Log-Auswertung">
 <icon BUILTIN="idea"/>
 <node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1768264260155" FOLDED="true" ID="ID_1505575797" MODIFIED="1768264711714" TEXT="Apache access-Logs wie &#xfc;blich mit Unix-Tools">
 <icon BUILTIN="edit"/>
@@ -168930,8 +169379,89 @@ that situation will improve in forseeable future.</pre>
 <node CREATED="1768243514686" ID="ID_569834678" MODIFIED="1768243528334" TEXT="aus dem Array eine Folge von JSON-Elementen machen : |.[]"/>
 <node CREATED="1768243490072" ID="ID_1079129105" MODIFIED="1768243510680" TEXT="Ausgabe dann mit -r (raw output)"/>
 </node>
+<node CREATED="1768421278575" ID="ID_1395771526" MODIFIED="1768421286586" TEXT="Auswertungen">
+<node CREATED="1768421325928" ID="ID_1486842895" MODIFIED="1768421330423" TEXT="Transaktionen">
+<node CREATED="1768421312727" ID="ID_1235322832" MODIFIED="1768421325020" TEXT="cat ANUBIS.csv | wc-l"/>
 </node>
-<node CREATED="1768246006463" ID="ID_1132549863" MODIFIED="1768246011920" TEXT="page impressions"/>
+<node CREATED="1768421336711" ID="ID_1040012828" MODIFIED="1768421510673" TEXT="Responses">
+<node CREATED="1768421512336" ID="ID_424416516" MODIFIED="1768421565989" TEXT="cat ANUBIS.csv | awk -F, &apos;{print $3}&apos; |sort|uniq -c |sort -nr"/>
+</node>
+<node CREATED="1768421539749" ID="ID_1133864255" MODIFIED="1768421548583" TEXT="AppliedRules">
+<node CREATED="1768421550033" ID="ID_1308041156" MODIFIED="1768421559670" TEXT="cat ANUBIS.csv | awk -F, &apos;{print $4}&apos; |sort|uniq -c |sort -nr"/>
+</node>
+<node CREATED="1768423792984" ID="ID_199409271" MODIFIED="1768423806278" TEXT="IP-Frequency">
+<node CREATED="1768423807351" ID="ID_233862939" MODIFIED="1768423974639">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <font face="Monospaced" size="2">cat ANUBIS.csv | awk -F, '{print $2}' |sort|uniq -c | \ </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">awk '{ b = ($1&gt;100 ? &quot;&gt;100&quot;\ </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;: $1&gt;80 ? &quot;&gt;80&quot; \ </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;: $1&gt;60 ? &quot;&gt;60&quot; \ </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;: $1&gt;40 ? &quot;&gt;40&quot; \ </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;: $1&gt;20 ? &quot;&gt;20&quot; \ </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;: $1&gt;10 ? &quot;&gt;10&quot; \ </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;:&#160;&#160;$1&gt;5 ? &quot;&gt;5&quot;&#160;&#160;\ </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;:&#160;&#160;$1&gt;1 ? &quot;&gt;1&quot; : &quot;1&quot;); \ </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;bucket[b]++ } \ </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;END { k=&quot;&gt;100 &gt;80 &gt;60 &gt;40 &gt;20 &gt;10 &gt;5 &gt;1 1&quot;; \ </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;split(k,key); \ </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;for (i=1; i&lt;=length(key); ++i) \ </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;print key[i],bucket[key[i]]+0 }'</font>
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      cat 2026-01-14.anubis.csv | awk -F, '{print $2}' |sort|uniq -c |awk '{ b = ($1&gt;100 ? &quot;&gt;100&quot; : $1&gt;80 ? &quot;&gt;80&quot; : $1&gt;60 ? &quot;&gt;60&quot; : $1&gt;40 ? &quot;&gt;40&quot; : $1&gt;20 ? &quot;&gt;20&quot; : $1&gt;10 ? &quot;&gt;10&quot; : $1&gt;5 ? &quot;&gt;5&quot; : $1&gt;1 ? &quot;&gt;1&quot; : &quot;1&quot;); bucket[b]++ } END { k=&quot;&gt;100 &gt;80 &gt;60 &gt;40 &gt;20 &gt;10 &gt;5 &gt;1 1&quot;; split(k,key); for (i=1; i&lt;=length(key); ++i) print key[i],bucket[key[i]]+0 }'
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1768443086627" FOLDED="true" ID="ID_654151542" MODIFIED="1769124555404" TEXT="Wartung">
+<icon BUILTIN="go"/>
+<node COLOR="#338800" CREATED="1768443017812" ID="ID_438074594" MODIFIED="1769124508929" TEXT="Reste der Systemkonfig vor SystemD : ausputzen">
+<arrowlink COLOR="#9d0c3d" DESTINATION="ID_1709626807" ENDARROW="Default" ENDINCLINATION="-522;-32;" ID="Arrow_ID_725735368" STARTARROW="None" STARTINCLINATION="-305;17;"/>
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1768443255613" ID="ID_603722884" MODIFIED="1768443269605" TEXT="siehe auch Notizen in meiner lokalen System.mm">
+<font NAME="SansSerif" SIZE="9"/>
+</node>
+<node COLOR="#574398" CREATED="1769124516016" ID="ID_323622988" MODIFIED="1769124538955" TEXT="alle init.d-Jobs gepr&#xfc;ft und deaktiviert"/>
+<node COLOR="#574398" CREATED="1769124526446" ID="ID_693128180" MODIFIED="1769124538955" TEXT="alle Crontabs ausger&#xe4;umt"/>
 </node>
 </node>
 </node>
@@ -168943,7 +169473,7 @@ that situation will improve in forseeable future.</pre>
 <node CREATED="1751808189155" ID="ID_244632795" MODIFIED="1764718150250" TEXT="Schritte">
 <icon BUILTIN="xmag"/>
 <node CREATED="1751808295862" ID="ID_3929483" MODIFIED="1751808300246" TEXT="2025">
-<node BACKGROUND_COLOR="#ece19b" COLOR="#4d0f69" CREATED="1751808407776" FOLDED="true" ID="ID_933658454" MODIFIED="1768092791512" TEXT="Aktualisierung">
+<node BACKGROUND_COLOR="#ece19b" COLOR="#4d0f69" CREATED="1751808407776" FOLDED="true" ID="ID_933658454" MODIFIED="1769124608497" TEXT="Aktualisierung">
 <icon BUILTIN="bookmark"/>
 <node BACKGROUND_COLOR="#c3c8b6" COLOR="#338800" CREATED="1751808424465" ID="ID_1551937148" MODIFIED="1764717353451" TEXT="Referenz-Sytem &#xd83e;&#xdc32; Debian/Trixie">
 <icon BUILTIN="yes"/>
@@ -172817,8 +173347,8 @@ that situation will improve in forseeable future.</pre>
 <font NAME="SansSerif" SIZE="16"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1765904499489" ID="ID_313701965" MODIFIED="1765904509276" TEXT="OS-Upgrade : Lumiera.org">
-<icon BUILTIN="flag-pink"/>
+<node COLOR="#338800" CREATED="1765904499489" FOLDED="true" ID="ID_313701965" MODIFIED="1769124595757" TEXT="OS-Upgrade : Lumiera.org">
+<icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1765904526074" ID="ID_190795814" MODIFIED="1765905409382" TEXT="ist unendlich weggeschimmelt">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -172855,10 +173385,11 @@ that situation will improve in forseeable future.</pre>
 </node>
 <node CREATED="1765906579827" ID="ID_729650195" MODIFIED="1765906589874" TEXT="Migration in Schritten notwendig"/>
 </node>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1765906597233" ID="ID_693494226" MODIFIED="1765906632798" TEXT="Trac-Upgrade ist problematisch">
+<node COLOR="#435e98" CREATED="1765906597233" ID="ID_693494226" MODIFIED="1768443199581" TEXT="Trac-Upgrade ist problematisch">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1765906612504" ID="ID_718026642" MODIFIED="1765906678393" TEXT="weil wir dadruch die Weiterentwicklung von Trac &#xbb;verschlafen&#xab; haben"/>
-<node CREATED="1765906690612" ID="ID_283311144" MODIFIED="1765906711733" TEXT="die L&#xf6;sung f&#xfc;r Child-Tickets / Sub-Tickets ist gebrochen">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1765906690612" FOLDED="true" ID="ID_283311144" MODIFIED="1768443218060" TEXT="die L&#xf6;sung f&#xfc;r Child-Tickets / Sub-Tickets ist gebrochen">
+<icon BUILTIN="broken-line"/>
 <node CREATED="1765907919935" ID="ID_387270515" MODIFIED="1765907943553" TEXT="und zwar nach meiner Analyse : nicht so einfach zu flicken"/>
 <node CREATED="1765907963331" ID="ID_299752540" MODIFIED="1767125274709" TEXT="Mastertickets-Plugin: seit langem unmaintained, und setzt auf post-processing">
 <richcontent TYPE="NOTE"><html>
@@ -172947,7 +173478,7 @@ that situation will improve in forseeable future.</pre>
 <node CREATED="1765908691950" ID="ID_1467768010" MODIFIED="1765908743025" TEXT="allerdings bin ich der Power-User und sehr von den Suchfunktionen in Mylyn abh&#xe4;ngig"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1765909123899" ID="ID_667489588" MODIFIED="1767201901577" TEXT="Entscheidung f&#xfc;r eine weiterhin tragbare L&#xf6;sung">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1765909123899" FOLDED="true" ID="ID_667489588" MODIFIED="1767201901577" TEXT="Entscheidung f&#xfc;r eine weiterhin tragbare L&#xf6;sung">
 <icon BUILTIN="yes"/>
 <node CREATED="1765909150666" ID="ID_789544228" MODIFIED="1765909173106" TEXT="Migration der Bestandsdaten per SQL einfach m&#xf6;glich">
 <icon BUILTIN="idea"/>
@@ -174962,7 +175493,8 @@ runner.run(test_suite())</font></code></pre>
 </node>
 </node>
 </node>
-<node CREATED="1765906736923" ID="ID_278184928" MODIFIED="1765906742956" TEXT="Upgrade-Schritte">
+<node BACKGROUND_COLOR="#bbb7ec" COLOR="#435e98" CREATED="1765906736923" FOLDED="true" ID="ID_278184928" MODIFIED="1768443188190" TEXT="Upgrade-Schritte">
+<icon BUILTIN="yes"/>
 <node COLOR="#338800" CREATED="1765906752884" ID="ID_1879364610" MODIFIED="1767201598938" TEXT="Trac-Migration vorher testen">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1765910272772" ID="ID_1225448467" MODIFIED="1765910285129" TEXT="bei mir lokal auf Debian/Trixie"/>
@@ -175579,7 +176111,7 @@ runner.run(test_suite())</font></code></pre>
 </node>
 <node COLOR="#338800" CREATED="1766100161561" ID="ID_1790544629" MODIFIED="1768092906903" TEXT="Upgrade">
 <icon BUILTIN="button_ok"/>
-<node COLOR="#435e98" CREATED="1766100170238" ID="ID_589987755" MODIFIED="1766105879965" TEXT="Schritt-1 : Bullseye">
+<node COLOR="#435e98" CREATED="1766100170238" FOLDED="true" ID="ID_589987755" MODIFIED="1766105879965" TEXT="Schritt-1 : Bullseye">
 <icon BUILTIN="full-1"/>
 <node CREATED="1766100254919" ID="ID_372876362" MODIFIED="1766100275874" TEXT="alte Apt-Srouces">
 <richcontent TYPE="NOTE"><html>
@@ -177786,7 +178318,7 @@ runner.run(test_suite())</font></code></pre>
 <font NAME="SansSerif" SIZE="16"/>
 </node>
 </node>
-<node COLOR="#435e98" CREATED="1766106691414" ID="ID_1391425017" MODIFIED="1766110912816" TEXT="Schritt-2 : Bookworm">
+<node COLOR="#435e98" CREATED="1766106691414" FOLDED="true" ID="ID_1391425017" MODIFIED="1766110912816" TEXT="Schritt-2 : Bookworm">
 <icon BUILTIN="full-2"/>
 <node CREATED="1766107183801" ID="ID_1442523514" MODIFIED="1766107254693">
 <richcontent TYPE="NODE"><html>
@@ -179278,7 +179810,7 @@ runner.run(test_suite())</font></code></pre>
 <font NAME="SansSerif" SIZE="16"/>
 </node>
 </node>
-<node COLOR="#435e98" CREATED="1766110916147" ID="ID_423724431" MODIFIED="1766115348168" TEXT="Schritt-3 : Trixie">
+<node COLOR="#435e98" CREATED="1766110916147" FOLDED="true" ID="ID_423724431" MODIFIED="1766115348168" TEXT="Schritt-3 : Trixie">
 <icon BUILTIN="full-3"/>
 <node COLOR="#435e98" CREATED="1766111195661" ID="ID_750987865" MODIFIED="1766111244774" TEXT="Was ist: trixie-proposed-updates ?">
 <icon BUILTIN="help"/>
@@ -180821,6 +181353,20 @@ runner.run(test_suite())</font></code></pre>
 </html></richcontent>
 <edge COLOR="#9e7171" STYLE="linear" WIDTH="thin"/>
 <font NAME="SansSerif" SIZE="16"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1766115506881" ID="ID_1709626807" MODIFIED="1768443143993" TEXT="stelle fest: wohl noch Reste der alten Config">
+<linktarget COLOR="#9d0c3d" DESTINATION="ID_1709626807" ENDARROW="Default" ENDINCLINATION="-522;-32;" ID="Arrow_ID_725735368" SOURCE="ID_438074594" STARTARROW="None" STARTINCLINATION="-305;17;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1768442983985" ID="ID_106823899" MODIFIED="1768442994290" TEXT="old-stlye Apt-Konfiguration">
+<icon BUILTIN="bell"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1766115521196" ID="ID_1817026114" MODIFIED="1766115546044" TEXT="warum wurde das nicht automatisch migriert?">
+<icon BUILTIN="help"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1766115531050" ID="ID_1172975746" MODIFIED="1766115546044" TEXT="wo sind die neuen Archive-Keyrings?">
+<icon BUILTIN="help"/>
+</node>
+</node>
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1766115044313" ID="ID_1523762680" MODIFIED="1766115307367" TEXT="was ist eigentlich &quot;FireQOS 3.1.8&quot; ?">
 <icon BUILTIN="help"/>
 </node>
@@ -180841,19 +181387,9 @@ runner.run(test_suite())</font></code></pre>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1766115506881" ID="ID_1709626807" MODIFIED="1766115519896" TEXT="stelle fest: noch die old-stlye Apt-Konfiguration">
-<icon BUILTIN="messagebox_warning"/>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1766115521196" ID="ID_1817026114" MODIFIED="1766115546044" TEXT="warum wurde das nicht automatisch migriert?">
-<icon BUILTIN="help"/>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1766115531050" ID="ID_1172975746" MODIFIED="1766115546044" TEXT="wo sind die neuen Archive-Keyrings?">
-<icon BUILTIN="help"/>
-</node>
-</node>
-</node>
-</node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1766115558123" ID="ID_1333277621" MODIFIED="1767201951170" TEXT="Einrichtung">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1766115558123" ID="ID_1333277621" MODIFIED="1768439321407" TEXT="Einrichtung">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1766115564978" ID="ID_524346747" MODIFIED="1766116164562" TEXT="Migration Menugen auf Python-3 nun ausrollen">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -181151,8 +181687,8 @@ runner.run(test_suite())</font></code></pre>
 <icon BUILTIN="yes"/>
 </node>
 <node COLOR="#338800" CREATED="1767734096002" ID="ID_1304037139" MODIFIED="1768263769689" TEXT="Aufgabe: einfaches Monitoring">
-<linktarget COLOR="#1da350" DESTINATION="ID_1304037139" ENDARROW="Default" ENDINCLINATION="121;379;" ID="Arrow_ID_1254248210" SOURCE="ID_801197024" STARTARROW="None" STARTINCLINATION="473;37;"/>
 <linktarget COLOR="#1da381" DESTINATION="ID_1304037139" ENDARROW="Default" ENDINCLINATION="-117;-278;" ID="Arrow_ID_1197522278" SOURCE="ID_1077423681" STARTARROW="None" STARTINCLINATION="-666;43;"/>
+<linktarget COLOR="#1da350" DESTINATION="ID_1304037139" ENDARROW="Default" ENDINCLINATION="121;379;" ID="Arrow_ID_1254248210" SOURCE="ID_801197024" STARTARROW="None" STARTINCLINATION="473;37;"/>
 <icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1767745616524" ID="ID_1822372227" MODIFIED="1768095068982" TEXT="Vorgabe">
 <icon BUILTIN="yes"/>
@@ -181345,8 +181881,8 @@ runner.run(test_suite())</font></code></pre>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1767201982309" HGAP="35" ID="ID_1631001537" MODIFIED="1768186908709" TEXT="Anubis evaluieren" VSHIFT="4">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1767201982309" HGAP="35" ID="ID_1631001537" MODIFIED="1768439311670" TEXT="Anubis evaluieren" VSHIFT="4">
+<icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1767201997770" FOLDED="true" ID="ID_1180600640" MODIFIED="1768263516915" TEXT="das Thema scheint kontrovers zu sein &#x2014; Christian findet es unsympatisch">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1768188977411" ID="ID_940549924" MODIFIED="1768188981536" TEXT="nicht nur Christian"/>
@@ -181419,7 +181955,8 @@ runner.run(test_suite())</font></code></pre>
 <arrowlink COLOR="#3260d1" DESTINATION="ID_19768331" ENDARROW="Default" ENDINCLINATION="-1011;351;" ID="Arrow_ID_1568526941" STARTARROW="None" STARTINCLINATION="-383;24;"/>
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1768002656443" ID="ID_1372756102" MODIFIED="1768002657864" TEXT="Test">
+<node COLOR="#338800" CREATED="1768002656443" ID="ID_1372756102" MODIFIED="1768439315120" TEXT="Test">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1768170204232" ID="ID_367238570" MODIFIED="1768170210822" TEXT="Anubis mit erweiterer Config">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#a73111" CREATED="1768170212152" ID="ID_1917871354" MODIFIED="1768170595411" TEXT="brauche SystemD-Unit-Override: damit Anubis in /var/log/apache2 schreiben kann">
@@ -181432,7 +181969,7 @@ runner.run(test_suite())</font></code></pre>
 <node CREATED="1768171201491" ID="ID_926437546" MODIFIED="1768171214461" TEXT="im Anubis.log sind erste DENY-Eintr&#xe4;ge"/>
 </node>
 <node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1768171343154" ID="ID_557714832" MODIFIED="1768171367411" TEXT="Start: 2026-01-11 23:30 +1"/>
-<node CREATED="1768259201504" FOLDED="true" ID="ID_717683780" MODIFIED="1768263489406">
+<node BACKGROUND_COLOR="#f2e1ba" CREATED="1768259201504" FOLDED="true" ID="ID_717683780" MODIFIED="1768439307227">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
@@ -181629,11 +182166,177 @@ runner.run(test_suite())</font></code></pre>
 </node>
 <node CREATED="1768263427082" HGAP="-2" ID="ID_1136613737" LINK="https://web.archive.org/web/20260112205134/https://issues.lumiera.org/ticket/1221" MODIFIED="1768263476069" TEXT="Archive-Org kann einen Snapshot speichern" VSHIFT="4"/>
 </node>
+<node COLOR="#435e98" CREATED="1768272305278" ID="ID_976940428" MODIFIED="1768438767293" TEXT="git.lumiera.org :: seit 2026-01-13 03:27 +1"/>
+<node COLOR="#435e98" CREATED="1768411363428" ID="ID_1423489733" MODIFIED="1768438767294" TEXT="/doxy :: seit 2026-01-14 09:00 +1"/>
+<node BACKGROUND_COLOR="#f2e1ba" CREATED="1768438780547" FOLDED="true" ID="ID_764225788" MODIFIED="1768439307228">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <u>Ergebnis</u>: weiterhin <i>sehr effektiv</i>
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1768424246011" ID="ID_1797217130" MODIFIED="1768439278179" STYLE="bubble">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <h2>
+      Statistiken heute 2026-01-14
+    </h2>
+    <p>
+      
+    </p>
+    <p>
+      www.lumiera.org:
+    </p>
+    <p>
+      <font face="Monospaced">P.I&#160;&#160;&#160;U.V&#160;&#160;&#160;Data </font>
+    </p>
+    <p>
+      <font color="#1c1faf" face="Monospaced">24331 11541 877.78 MiB </font>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Gateway-Git
+    </p>
+    <p>
+      <font color="#1c1faf" face="Monospaced">66595 56167 494.48 MiB </font>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <font color="#1c1faf" face="Monospaced">Gateway-Trac </font>
+    </p>
+    <p>
+      <font color="#1c1faf" face="Monospaced">&#160;7795&#160;&#160;5676&#160;&#160;81.73 MiB </font>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      hinter Anubis-Git
+    </p>
+    <p>
+      <font color="#1c1faf" face="Monospaced">&#160;&#160;432&#160;&#160;&#160;&#160;74&#160;&#160;26.30 MiB </font>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      hinter Anubis-Trac
+    </p>
+    <p>
+      <font color="#1c1faf" face="Monospaced">&#160;&#160;349&#160;&#160;&#160;134&#160;&#160;&#160;2.72 MiB </font>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      hinter Anubis-Doxy
+    </p>
+    <p>
+      <font color="#1c1faf" face="Monospaced">&#160;&#160;250&#160;&#160;&#160;130&#160;&#160;&#160;1.42 MiB </font>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      
+    </p>
+    <h3>
+      Anubis-Statistik
+    </h3>
+    <p>
+      <font color="#1c1faf" face="Monospaced">71972 Transaktionen </font>
+    </p>
+    <p>
+      <font color="#1c1faf" face="Monospaced">58102 &quot;CHALLENGE&quot; </font>
+    </p>
+    <p>
+      <font color="#1c1faf" face="Monospaced">13870 &quot;DENY&quot; </font>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <font color="#1c1faf" face="Monospaced">58092 &quot;default&quot; </font>
+    </p>
+    <p>
+      <font color="#1c1faf" face="Monospaced">&#160;8283 &quot;bot/alibaba-cloud&quot; </font>
+    </p>
+    <p>
+      <font color="#1c1faf" face="Monospaced">&#160;4667 &quot;bot/huawei-cloud&quot; </font>
+    </p>
+    <p>
+      <font color="#1c1faf" face="Monospaced">&#160;&#160;884 &quot;bot/ai-catchall&quot; </font>
+    </p>
+    <p>
+      <font color="#1c1faf" face="Monospaced">&#160;&#160;&#160;19 &quot;bot/ai-crawlers-training&quot; </font>
+    </p>
+    <p>
+      <font color="#1c1faf" face="Monospaced">&#160;&#160;&#160;13 &quot;bot/ai-crawlers-search&quot; </font>
+    </p>
+    <p>
+      <font color="#1c1faf" face="Monospaced">&#160;&#160;&#160;10 &quot;threshold/mild-suspicion&quot; </font>
+    </p>
+    <p>
+      <font color="#1c1faf" face="Monospaced">&#160;&#160;&#160;&#160;3 &quot;bot/no-user-agent-string&quot; </font>
+    </p>
+    <p>
+      <font color="#1c1faf" face="Monospaced">&#160;&#160;&#160;&#160;1 &quot;bot/ai-clients&quot; </font>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      IP-Frequency Anubis
+    </p>
+    <p>
+      <font color="#1c1faf" face="Monospaced">&gt;100 34 </font>
+    </p>
+    <p>
+      <font color="#1c1faf" face="Monospaced">&#160;&gt;80 21 </font>
+    </p>
+    <p>
+      <font color="#1c1faf" face="Monospaced">&#160;&gt;60 21 </font>
+    </p>
+    <p>
+      <font color="#1c1faf" face="Monospaced">&#160;&gt;40 18 </font>
+    </p>
+    <p>
+      <font color="#1c1faf" face="Monospaced">&#160;&gt;20 27 </font>
+    </p>
+    <p>
+      <font color="#1c1faf" face="Monospaced">&#160;&gt;10 73 </font>
+    </p>
+    <p>
+      <font color="#1c1faf" face="Monospaced">&#160;&#160;&gt;5 126 </font>
+    </p>
+    <p>
+      <font color="#1c1faf" face="Monospaced">&#160;&#160;&gt;1 2281 </font>
+    </p>
+    <p>
+      <font color="#1c1faf" face="Monospaced">&#160;&#160;&#160;1 55720 </font>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Die Pfad-Auswertung aus Anubis zeigt,<br />da&#223; <font color="#c80e0e"><b>nur 15</b></font>&#160;Requests den PoW-Challenge gel&#246;st haben...
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
 </node>
 </node>
 <node COLOR="#111064" CREATED="1767128566468" ID="ID_513748595" MODIFIED="1768267043092" TEXT="Dokumentation: Git">
-<linktarget COLOR="#3b49c7" DESTINATION="ID_513748595" ENDARROW="Default" ENDINCLINATION="-28;-1028;" ID="Arrow_ID_23715623" SOURCE="ID_1218510171" STARTARROW="None" STARTINCLINATION="-475;36;"/>
 <linktarget COLOR="#3b49c7" DESTINATION="ID_513748595" ENDARROW="Default" ENDINCLINATION="-28;-1028;" ID="Arrow_ID_1773795285" SOURCE="ID_1931145339" STARTARROW="None" STARTINCLINATION="-501;33;"/>
+<linktarget COLOR="#3b49c7" DESTINATION="ID_513748595" ENDARROW="Default" ENDINCLINATION="-28;-1028;" ID="Arrow_ID_23715623" SOURCE="ID_1218510171" STARTARROW="None" STARTINCLINATION="-475;36;"/>
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="edit"/>
 <node CREATED="1767128572589" ID="ID_1300621421" MODIFIED="1767128589920" TEXT="f&#xfc;hre ein Git-Repo ein f&#xfc;r Site-Konfiguration + Trac"/>
@@ -181882,16 +182585,22 @@ runner.run(test_suite())</font></code></pre>
 <node COLOR="#338800" CREATED="1760292242655" ID="ID_1999083969" MODIFIED="1760292255527" TEXT="Grundlagen">
 <icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#338800" CREATED="1760292251396" ID="ID_1733978041" MODIFIED="1760292256543" TEXT="Aufbau">
+<node COLOR="#338800" CREATED="1760292251396" ID="ID_1733978041" MODIFIED="1769124807726" TEXT="Aufbau">
+<arrowlink COLOR="#2483a1" DESTINATION="ID_1766933889" ENDARROW="Default" ENDINCLINATION="-3;-17;" ID="Arrow_ID_393233251" STARTARROW="None" STARTINCLINATION="29;7;"/>
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1760292259390" ID="ID_1221747989" MODIFIED="1760292264742" TEXT="Integration treiben">
+</node>
+</node>
+<node CREATED="1769124622406" ID="ID_1897601540" MODIFIED="1769124624517" TEXT="2026">
+<node CREATED="1760292219756" ID="ID_87039008" MODIFIED="1769124638346" TEXT="Playback-Vertical-Slice (...)">
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1760292259390" ID="ID_1766933889" MODIFIED="1769124809285" TEXT="Integration treiben">
+<linktarget COLOR="#2483a1" DESTINATION="ID_1766933889" ENDARROW="Default" ENDINCLINATION="-3;-17;" ID="Arrow_ID_393233251" SOURCE="ID_1733978041" STARTARROW="None" STARTINCLINATION="29;7;"/>
 <icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1760292268581" ID="ID_634625719" MODIFIED="1760292477862" TEXT="Buffer-Manager zustande bringen">
-<arrowlink COLOR="#ff4400" DESTINATION="ID_664146362" ENDARROW="Default" ENDINCLINATION="-1857;303;" ID="Arrow_ID_1425526052" STARTARROW="None" STARTINCLINATION="-1363;105;"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1760292268581" ID="ID_1831513195" MODIFIED="1760292477862" TEXT="Buffer-Manager zustande bringen">
+<arrowlink COLOR="#ff4400" DESTINATION="ID_664146362" ENDARROW="Default" ENDINCLINATION="-1857;303;" ID="Arrow_ID_1038535963" STARTARROW="None" STARTINCLINATION="-1363;105;"/>
 <icon BUILTIN="yes"/>
 </node>
-<node CREATED="1760292288690" ID="ID_693794400" MODIFIED="1760292296083" TEXT="Play-Connection"/>
+<node CREATED="1760292288690" ID="ID_1889884763" MODIFIED="1760292296083" TEXT="Play-Connection"/>
 </node>
 </node>
 </node>
