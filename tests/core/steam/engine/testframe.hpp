@@ -67,11 +67,13 @@ namespace test   {
    */
   class TestFrame
     {
+    public:
       enum StageOfLife {
           CREATED, EMITTED, DISCARDED
         };
-      
       static constexpr size_t BUFFSIZ = 1024;
+      
+    private:
       using _Arr = std::array<char,BUFFSIZ>;
       using _A64 = std::array<uint64_t, BUFFSIZ/sizeof(uint64_t)>;
 
@@ -105,7 +107,7 @@ namespace test   {
       
       /** recompute and store checksum based on current contents */
       HashVal markChecksum();
-      HashVal getChecksum();
+      HashVal getChecksum()  const;
       
       /** Helper to verify that a given memory location holds
        *  an active TestFrame instance (created, not yet destroyed)

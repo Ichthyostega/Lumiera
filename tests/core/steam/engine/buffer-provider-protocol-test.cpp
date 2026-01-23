@@ -22,6 +22,7 @@
 #include "lib/test/tracking-dummy.hpp"
 #include "lib/util-foreach.hpp"
 #include "steam/engine/testframe.hpp"
+#include "steam/engine/test-rand-ontology.hpp"
 #include "steam/engine/diagnostic-buffer-provider.hpp"
 #include "steam/engine/buffhandle-attach.hpp"
 #include "steam/engine/bufftable.hpp"
@@ -43,29 +44,34 @@ namespace test  {
   
   namespace { // Test fixture
     
-    const uint TEST_SIZE = 1024*1024;
     const uint TEST_ELMS = 20;
     
     
-    void
-    do_some_calculations (BuffHandle const& buffer)
+    HashVal
+    do_some_computation (TestFrame const& src, TestFrame& work, int64_t* data)
     {
-      UNIMPLEMENTED ("some verifiable test/dummy buffer accessing operations");
+      REQUIRE (data);
+      ont::Param param = src.getChecksum();
+      ont::manipulateFrame (&work, &src, param);
+      for (uint i=0; i<TestFrame::BUFFSIZ; ++i)
+        *(data+i) = work.data()[i];
+      return work.getChecksum();
     }
     
   }
   
   
   /**************************************************************************//**
-   * @test verify and demonstrate the usage cycle of data buffers for the engine
-   *       based on the BufferProvider interface. This is kind of a "dry run"
-   *       for documentation purposes, because the BufferProvider implementation
-   *       used here is just a diagnostics facility, allowing to investigate
-   *       the state of individual buffers even after "releasing" them.
-   *       
-   *       This test should help understanding the sequence of buffer management
-   *       operations performed at various stages while passing an calculation job
-   *       through the render engine.
+   * @test document the usage patterns of the »Buffer Provider Protocol«
+   * Notably this protocol is used by the Render Engine during recursive `pull()`
+   * calls to claim and release the working buffers for each step; furthermore,
+   * also the output buffers are packaged as `BuffHandle` and used through this
+   * protocol.
+   * 
+   * However, the actual `BufferProvider` implementation used here is instrumented
+   * for diagnostics and does not actually _manage_ buffers; rather each buffer
+   * is allocated on the heap and never released, so that any allocation and
+   * all buffer contents can be verified after the fact.
    */
   class BufferProviderProtocol_test : public Test
     {
@@ -73,7 +79,7 @@ namespace test  {
       run (Arg)
         {
           verifySimpleUsage();
-          verifyStandardCase();
+          verifyRenderingUsage();
           verifyObjectAttachment();
           verifyObjectAttachmentFailure();
         }
@@ -108,40 +114,70 @@ namespace test  {
         }
       
       
+      /** @test demonstrate the full sequence of invocations during rendering
+       */
       void
-      verifyStandardCase()
+      verifyRenderingUsage()
         {
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #829
-          // Create Test fixture.
-          // In real usage, a suitable memory/frame/buffer provider
-          // will be preconfigured, depending on the usage context
+          // Test fixture: allows to track/verify allocations after the fact
           BufferProvider& provider = DiagnosticBufferProvider::build();
           
-          BuffDescr desc1 = provider.getDescriptor<TestFrame>();   // note: implies also sizeof(TestFrame)
-          BuffDescr desc2 = provider.getDescriptorFor(TEST_SIZE);
-          CHECK (desc1.verifyValidity());
-          CHECK (desc2.verifyValidity());
+          using DataBuff = std::array<int64_t, TestFrame::BUFFSIZ>;
+          constexpr auto BUFFSIZ = sizeof(DataBuff);
           
-          uint num1 = provider.announce(TEST_ELMS, desc1);
-          uint num2 = provider.announce(TEST_ELMS, desc2);
+          BuffDescr desc1 = provider.getDescriptor<size_t>();
+          BuffDescr desc2 = provider.getDescriptor<TestFrame>();   // note: implies also sizeof(TestFrame)
+          BuffDescr desc3 = provider.getDescriptorFor(BUFFSIZ);    //       Can also request fixed sized raw storage.
+//        CHECK (desc1.verifyValidity()); /////////////////////////////////////////////////////////////////////////////OOO fails (which is wrong)
+//        CHECK (desc2.verifyValidity());
+//        CHECK (desc3.verifyValidity());
+          
+          uint num1 = desc1.announce(TEST_ELMS);
+          uint num2 = desc1.announce(TEST_ELMS + 1);
+          uint num3 = desc2.announce(TEST_ELMS * 2);
           CHECK (num1 == TEST_ELMS);
-          CHECK (0 < num2 && num2 <=TEST_ELMS);
+          CHECK (num2 == TEST_ELMS + 1);
+          CHECK (num3 == TEST_ELMS * 2);
           
-          const size_t STORAGE_SIZE = BuffTable::Storage<2*TEST_ELMS>::size;
-          char storage[STORAGE_SIZE];
-          BuffTable& tab =
-              BuffTable::prepare(STORAGE_SIZE, storage)
-                        .announce(num1, desc1)
-                        .announce(num2, desc2)
-                        .build();
-          
-          tab.lockBuffers();
-          for_each (tab.buffers(), do_some_calculations);
-          tab.releaseBuffers();
+          // emulate a progressive processing
+          BuffHandle workBuff = desc2.lockBuffer();
+          workBuff.accessAs<TestFrame>() = testData(0);
+          for (uint i=0; i<TEST_ELMS; ++i)
+            {
+              BuffHandle srcBuff = workBuff;
+              workBuff = desc2.lockBuffer();
+              
+              BuffHandle markBuff = desc1.lockBuffer();
+              BuffHandle dataBuff = desc3.lockBuffer();
+              CHECK (srcBuff.isValid());
+              CHECK (markBuff.isValid());
+              CHECK (workBuff.isValid());
+              CHECK (dataBuff.isValid());
+              
+              TestFrame& src  = srcBuff.accessAs<TestFrame>();
+              size_t&    mark = markBuff.accessAs<size_t>();
+              TestFrame& work = workBuff.accessAs<TestFrame>();
+              DataBuff&  data = dataBuff.accessAs<DataBuff>();
+              
+              mark = do_some_computation (src,work, &data[0]);
+              
+              srcBuff.emit();
+              dataBuff.emit();
+              markBuff.emit();
+              
+              srcBuff.release();
+              dataBuff.release();
+              markBuff.release();
+              // note : workBuff passed to next iteration
+            }
+          CHECK (workBuff.isValid());
+          auto endSum = workBuff.accessAs<TestFrame>().getChecksum();
+          workBuff.release(); // note: not every buffer need be emitted.
           
           DiagnosticBufferProvider& checker = DiagnosticBufferProvider::access(provider);
-          CHECK (checker.all_buffers_released());
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #829
+          CHECK (checker.buffer_was_used (0));
+          CHECK (checker.buffer_was_closed (0));
+//        CHECK (checker.all_buffers_released());    ///////////////OOO do we need this API?
         }
       
       

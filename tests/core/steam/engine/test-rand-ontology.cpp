@@ -66,7 +66,7 @@ namespace ont   {
      * @param chanCnt  size of the array of frames to generate
      * @param buffArry pointer to an allocation sufficiently sized to hold `TestFrame[chanCnt]`
      * @param frameNr  the frame of the »source feed« to use commonly on all those frames in the output
-     * @param flavour  a further seed parameter used as starting offest for the output's `family` parameters
+     * @param flavour  a further seed parameter used as starting offset for the output's `family` parameters
      * @remark this is a variation of the [dummy data generator](\ref #generateFrame),
      *         which immediately generates a planar block of related frames with random data,
      *         all seeded with the _same_ `frameNr` and _consecutive_ `family` parameters,
@@ -98,9 +98,9 @@ namespace ont   {
      * @param chanCnt  size of the array of frames to manipulate
      * @param buffArry pointer to an array of several frames (channels)
      * @param param parameter to control or »mark« the data manipulation (hash-combining)
-     * @remark this function in-place processing of several channels in one step: data is processed
-     *         in 64-bit words, by hash-chaining with \a param and then joining in the data items.
-     *         All data buffers will be manipulated and marked with as valid with a new checksum.
+     * @remark this function imitates in-place processing of several channels in one step: data is
+     *         processed in 64-bit words, by hash-chaining with \a param and then joining in the data items.
+     *         All given data buffers will be manipulated and marked as valid with a new checksum.
      */
     void
     manipulateMultichan (TestFrame* buffArry, ChaNo chanCnt, Param param)

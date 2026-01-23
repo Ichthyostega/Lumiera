@@ -99858,7 +99858,9 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1722648096856" ID="ID_1675656022" MODIFIED="1722648117988" TEXT="kann explizit einen Kontext f&#xfc;r die RenderEngine hochfahren"/>
+<node CREATED="1722648096856" ID="ID_1675656022" MODIFIED="1722648117988" TEXT="kann explizit einen Kontext f&#xfc;r die RenderEngine hochfahren">
+<linktarget COLOR="#5c6a7a" DESTINATION="ID_1675656022" ENDARROW="Default" ENDINCLINATION="228;-4;" ID="Arrow_ID_1483227809" SOURCE="ID_1074546502" STARTARROW="None" STARTINCLINATION="9;-85;"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1728654667677" ID="ID_202980797" MODIFIED="1728654672230" TEXT="Implementierung">
@@ -99902,6 +99904,8 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
     </p>
   </body>
 </html></richcontent>
+<arrowlink COLOR="#5c6a7a" DESTINATION="ID_1675656022" ENDARROW="Default" ENDINCLINATION="228;-4;" ID="Arrow_ID_1483227809" STARTARROW="None" STARTINCLINATION="9;-85;"/>
+<linktarget COLOR="#386e8e" DESTINATION="ID_1074546502" ENDARROW="Default" ENDINCLINATION="1491;100;" ID="Arrow_ID_1937669813" SOURCE="ID_151337921" STARTARROW="None" STARTINCLINATION="672;47;"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1728658365910" ID="ID_831264983" MODIFIED="1728658406545" TEXT="brauche L&#xf6;sung um die Referenz-Member direkt auf eine Service-Instanz zu binden">
@@ -100257,7 +100261,9 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1721061573297" ID="ID_1009592243" MODIFIED="1721061586060" TEXT="Variante: einzelne Buffer speziell konfigurieren">
 <icon BUILTIN="hourglass"/>
-<node CREATED="1734139499409" ID="ID_383087571" MODIFIED="1734139513532" TEXT="Verschiedenartige Buffer-Typen unterst&#xfc;tzen"/>
+<node CREATED="1734139499409" ID="ID_383087571" MODIFIED="1769208725027" TEXT="Verschiedenartige Buffer-Typen unterst&#xfc;tzen">
+<linktarget COLOR="#353471" DESTINATION="ID_383087571" ENDARROW="Default" ENDINCLINATION="1230;77;" ID="Arrow_ID_1174608999" SOURCE="ID_971406341" STARTARROW="None" STARTINCLINATION="938;34;"/>
+</node>
 <node BACKGROUND_COLOR="#dfbfac" COLOR="#65253b" CREATED="1734139527342" ID="ID_1142533084" MODIFIED="1734141834818" TEXT="In-place-Processing (In/Out-Buffer) erm&#xf6;glichen">
 <linktarget COLOR="#ae4cec" DESTINATION="ID_1142533084" ENDARROW="Default" ENDINCLINATION="-441;1457;" ID="Arrow_ID_50529769" SOURCE="ID_332982184" STARTARROW="None" STARTINCLINATION="439;36;"/>
 <icon BUILTIN="bell"/>
@@ -109692,6 +109698,10 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
+<node BACKGROUND_COLOR="#174956" COLOR="#8dfd49" CREATED="1769203519150" ID="ID_1427416368" LINK="#ID_666676565" MODIFIED="1769203594556" STYLE="bubble" TEXT="erfolgreich ausgef&#xfc;hrt...">
+<edge COLOR="#61fe5b" STYLE="bezier" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="12"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1713823407007" ID="ID_392149724" MODIFIED="1713823477637" STYLE="bubble" TEXT="&#x25b6; f&#xf6;rdert den Kern des Aufbaus &#x25c0;">
@@ -109992,7 +110002,10 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <linktarget COLOR="#5387dc" DESTINATION="ID_1661035289" ENDARROW="Default" ENDINCLINATION="-1176;-93;" ID="Arrow_ID_1311080426" SOURCE="ID_769985598" STARTARROW="None" STARTINCLINATION="-1176;64;"/>
 <linktarget COLOR="#5387dc" DESTINATION="ID_1661035289" ENDARROW="Default" ENDINCLINATION="-1176;-93;" ID="Arrow_ID_728270522" SOURCE="ID_173016592" STARTARROW="None" STARTINCLINATION="-1222;49;"/>
 <icon BUILTIN="flag-yellow"/>
-<node CREATED="1713824328087" ID="ID_1065671274" MODIFIED="1713824335184" TEXT="Standard-Fall fertigstellen"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1713824328087" ID="ID_1065671274" MODIFIED="1769203375143" TEXT="Standard-Fall fertigstellen">
+<arrowlink COLOR="#ce0632" DESTINATION="ID_1957618964" ENDARROW="Default" ENDINCLINATION="-1185;43;" ID="Arrow_ID_1824415534" STARTARROW="None" STARTINCLINATION="1197;118;"/>
+<icon BUILTIN="pencil"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1719880204169" ID="ID_826687521" MODIFIED="1720538363696" TEXT="Diskussion / offene Fragen">
@@ -110264,6 +110277,427 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1765479194145" ID="ID_1559489831" MODIFIED="1765479251951" TEXT="Kritik Testaufbau">
 <linktarget COLOR="#ee0649" DESTINATION="ID_1559489831" ENDARROW="Default" ENDINCLINATION="-109;13;" ID="Arrow_ID_166502420" SOURCE="ID_1782436035" STARTARROW="None" STARTINCLINATION="285;-20;"/>
 <icon BUILTIN="flag-pink"/>
+<node CREATED="1769137020703" ID="ID_593286874" MODIFIED="1769137022544" TEXT="BufferProviderProtocol_test">
+<node CREATED="1769137037154" ID="ID_642965170" MODIFIED="1769137049707" TEXT="sieht auf den ersten Blick sauber aus"/>
+<node CREATED="1769137073733" ID="ID_1770536933" MODIFIED="1769137087079" TEXT="ist sehr high-level (was mir gut erscheint)"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1769137088697" ID="ID_477590704" MODIFIED="1769137117475" TEXT="verifyStandardCase : unfertig und auskommentiert">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1769137119799" ID="ID_468568886" MODIFIED="1769137128826" TEXT="bezieht sich direkt auf die BuffTable"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1769137129878" ID="ID_1476820134" MODIFIED="1769203133866" TEXT="verwendet eine Builder-Expression auf der BuffTable &#x2014; warum?">
+<icon BUILTIN="help"/>
+<node CREATED="1769202565772" ID="ID_1885870002" MODIFIED="1769202581464" TEXT="Vermutung: ich habe damals einfach phantasiert"/>
+<node CREATED="1769202582578" ID="ID_1113963687" MODIFIED="1769203125305" TEXT="mir war es seinerzeit (2011) nie gelungen, ein Koh&#xe4;rentes Bild vom Rendervorgang zu erlangen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Ich hatte zwar eine Grund-Mechanik deduktiv entwickelt, bin aber daran gescheitert, diese in ein vollst&#228;ndiges Nutzungsmuster zu &#252;berf&#252;hren, denn mir fehlte &#252;berall die Implementierung des Builders, und dahinter stand das Problem, da&#223; mein damaliger Entwurf die Struktur des Rendervorgangs <i>komplett und ersch&#246;pfend im Voraus planen</i>&#160; mu&#223;te, da ich mit einem tabellengetriebenen Ansatz und fertig vorcompilierten Aufruf-Bausteinen gearbeitet habe. Zun&#228;chst konnte ich mich um dieses Problem noch elegant herumnavigieren (und viel labern), aber dann bei der DummyPlayConnection h&#228;tte ich konkret werden m&#252;ssen, und hab dann gemerkt, da&#223; ich nichts konkretes in der Hand habe, und nur sagen kann, da&#223; mu&#223; man dann sehen, wenn alles ausimplementiert ist. Und in diesem Dilemma habe ich wohl begonnen, zu spekulieren, und mir die BuffTable als Hilfsmittel ausgedacht. Im R&#252;ckblick war das der richtige Ansatz, denn er f&#252;hrt zu einem Baukasten-System auf einem niedrigeren Level, das man vermutlich durch allgemeine Analsyse zumindest f&#252;r h&#228;ufige Standard-F&#228;lle schaffen kann. Aber das allgemeine Framework war so verwirrend geworden (auch f&#252;r mich selbst, wie meine Notizen zeigen), da&#223; ich nicht &quot;Tritt fassen&quot; konnte. Sp&#228;ter dann habe ich einen ganz anderen Ansatz verfolgt, der letztlich zielf&#252;hrend war: n&#228;mlich vom Play-Prozess her zu denken (dieser Weg wurde nur f&#252;r mehrere Jahre unterbrochen, da ich mich zun&#228;chst um das GUI und die GUI-Session-Verbindung gek&#252;mmert habe)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1769203135049" ID="ID_1957618964" MODIFIED="1769203375143" TEXT="neuer Ansatz: jetzt die reale Verwendung analysieren und nachbauen">
+<linktarget COLOR="#ce0632" DESTINATION="ID_1957618964" ENDARROW="Default" ENDINCLINATION="-1185;43;" ID="Arrow_ID_1824415534" SOURCE="ID_1065671274" STARTARROW="None" STARTINCLINATION="1197;118;"/>
+<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#eae5a6" COLOR="#300f69" CREATED="1769203163926" ID="ID_1465055003" MODIFIED="1769203203294" TEXT="das ist der gro&#xdf;e Vorteil jetzt: das Node-Network ist implementiert">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1769203793839" ID="ID_1591115832" MODIFIED="1769203863237" TEXT="Einstiegspunkt...">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      die letzten gro&#223;en Errungenschaften vor fast einem Jahr <font size="4" color="#782a59">&#9785;</font>
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1769203821518" ID="ID_1849728565" MODIFIED="1769203827777" TEXT="NodeLink_test::trigger_node_port_invocation"/>
+<node CREATED="1769205087985" ID="ID_847559343" MODIFIED="1769205103146" TEXT="Verdrahtung: Node-Operationen in diesem Test">
+<node CREATED="1769205105468" ID="ID_1571335050" MODIFIED="1769205220609" TEXT="Invocation: belegt einen Buffer f&#xfc;r TestFrame">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...nat&#252;rlich vom DiagnosticBufferProvider....
+    </p>
+    <p>
+      
+    </p>
+    <div style="background-color: #eee0b5; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 2px">
+      <div style="color: #202020; background-color: #eee0b5; font-family: Bitstream Vera Sans Mono; font-size: 9pt; white-space: pre">
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#635e96"><b>BufferProvider</b></font><font color="#65533c">&amp;</font><font color="#3a1f18">&#160;</font><font color="#814422">provider</font><font color="#3a1f18">&#160;</font><font color="#65533c">=</font><font color="#3a1f18">&#160; </font><font color="#635e96"><b>DiagnosticBufferProvider</b></font><font color="#65533c">::</font><font color="#61143c"><i>build</i></font><font color="#11123a">()</font><font color="#65533c">;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a1a65"><b>const</b></font><font color="#3a1f18">&#160;</font><font color="#635e96"><b>BuffDescr</b></font><font color="#3a1f18">&#160;</font><font color="#814422">buffDescr</font><font color="#3a1f18">&#160; </font><font color="#65533c">=</font><font color="#3a1f18">&#160;provider</font><font color="#65533c">.</font><font color="#753737">getDescriptor&lt;TestFrame&gt;</font><font color="#11123a">()</font><font color="#65533c">;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#635e96"><b>BuffHandle</b></font><font color="#3a1f18">&#160;</font><font color="#814422">buff</font><font color="#3a1f18">&#160;</font><font color="#65533c">=</font><font color="#3a1f18">&#160;provider</font><font color="#65533c">.</font><font color="#753737">lockBuffer</font><font color="#11123a">(</font><font color="#3a1f18">buffDescr</font><font color="#11123a">)</font><font color="#65533c">;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          
+        </p>
+      </div>
+    </div>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1769205417498" ID="ID_418128200" MODIFIED="1769205434020" TEXT="Processing: wird von TestRandOntology bereitgestellt">
+<node CREATED="1769205446562" ID="ID_900495829" MODIFIED="1769205468973" TEXT="dabei gen&#xfc;gt es, den Datentyp TestFrame auf der Signatur zu verwenden"/>
+<node CREATED="1769205469994" ID="ID_1553037910" MODIFIED="1769205517543" TEXT="der Test-Generator erzeugt einen neuen TestFrame in den bereitgestellten Buffer">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <div style="background-color: #eee0b5; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 2px">
+      <div style="color: #202020; background-color: #eee0b5; font-family: Bitstream Vera Sans Mono; font-size: 9pt; white-space: pre">
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#7f004c"><b>void</b></font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#000000"><b>generateFrame</b></font><font color="#3a1f18">&#160;</font><font color="#11123a">(</font><font color="#635e96"><b>TestFrame</b></font><font color="#65533c">*</font><font color="#3a1f18">&#160; buff</font><font color="#65533c">,</font><font color="#3a1f18">&#160;</font><font color="#8c505c"><b>FraNo</b></font><font color="#3a1f18">&#160;frameNr</font><font color="#65533c">,</font><font color="#3a1f18">&#160;</font><font color="#8c505c"><b>Flavr</b></font><font color="#3a1f18">&#160; flavour</font><font color="#11123a">)</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#11123a">{</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#95271a">REQUIRE</font><font color="#3a1f18">&#160;</font><font color="#11123a">(</font><font color="#3a1f18">buff</font><font color="#11123a">)</font><font color="#65533c">;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a1a65"><b>new</b></font><font color="#11123a">(</font><font color="#3a1f18">buff</font><font color="#11123a">)</font><font color="#3a1f18">&#160;</font><font color="#635e96"><b>TestFrame</b></font><font color="#11123a">{</font><font color="#8c505c"><b>uint</b></font><font color="#11123a">(</font><font color="#3a1f18">frameNr</font><font color="#11123a">)</font><font color="#65533c">,</font><font color="#3a1f18">&#160; flavour</font><font color="#11123a">}</font><font color="#65533c">;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#11123a">}</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          
+        </p>
+      </div>
+    </div>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1769205865642" ID="ID_229730636" MODIFIED="1769205874189" TEXT="Processing im MediaWeavingPattern">
+<node CREATED="1769205875373" ID="ID_879176100" MODIFIED="1769205900640" TEXT="Result: ein BuffHandle, wird von der vorgelagerten Node erzeugt im fix()-Schritt"/>
+<node CREATED="1769205910344" ID="ID_1345660786" MODIFIED="1769205946428" TEXT="was allerdings ganz einfach das BuffHandle vom Output-Slot zur&#xfc;kggibt (Value Semantics)"/>
+<node CREATED="1769205957778" ID="ID_1003808870" MODIFIED="1769206158804" TEXT="und das wird im shed()-Schritt belegt mit BuffDescr::lockBuffer()">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <div style="background-color: #eee0b5; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 2px">
+      <div style="color: #202020; background-color: #eee0b5; font-family: Bitstream Vera Sans Mono; font-size: 9pt; white-space: pre">
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#7f004c" face="Monospaced"><b>void</b></font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#632d2d" face="Monospaced"><b>shed</b></font><font color="#3a1f18" face="Monospaced">&#160;</font><font color="#11123a" face="Monospaced">(</font><font color="#8c505c" face="Monospaced"><b>Feed</b></font><font color="#65533c" face="Monospaced">&amp;</font><font color="#3a1f18" face="Monospaced">&#160;feed</font><font color="#65533c" face="Monospaced">,</font><font color="#3a1f18" face="Monospaced">&#160; </font><font color="#635e96" face="Monospaced"><b>TurnoutSystem</b></font><font color="#65533c" face="Monospaced">&amp;,</font><font color="#3a1f18" face="Monospaced">&#160;</font><font color="#8c505c" face="Monospaced"><b>OptionalBuff</b></font><font color="#3a1f18" face="Monospaced">&#160; outBuff</font><font color="#11123a" face="Monospaced">)</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#11123a" face="Monospaced">{</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a1a65" face="Monospaced"><b>&#160;&#160;for</b></font><font color="#3a1f18" face="Monospaced">&#160;</font><font color="#11123a" face="Monospaced">(</font><font color="#8c505c" face="Monospaced"><b>uint</b></font><font color="#3a1f18" face="Monospaced">&#160;</font><font color="#814422" face="Monospaced">i</font><font color="#65533c" face="Monospaced">=</font><font color="#29466b" face="Monospaced">0</font><font color="#65533c" face="Monospaced">;</font><font color="#3a1f18" face="Monospaced">&#160; i</font><font color="#65533c" face="Monospaced">&lt;</font><font color="#1a1ac4" face="Monospaced">outTypes_</font><font color="#65533c" face="Monospaced">.</font><font color="#753737" face="Monospaced">size</font><font color="#11123a" face="Monospaced">()</font><font color="#65533c" face="Monospaced">;</font><font color="#3a1f18" face="Monospaced">&#160;</font><font color="#65533c" face="Monospaced">++</font><font color="#3a1f18" face="Monospaced">i</font><font color="#11123a" face="Monospaced">)</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a1a65" face="Monospaced"><b>&#160;&#160;&#160; </b></font><font color="#11123a" face="Monospaced">{</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a1a65" face="Monospaced"><b>&#160;&#160;&#160;&#160;&#160; </b></font><b><font color="#635e96" face="Monospaced">BuffHandle</font></b><font color="#3a1f18" face="Monospaced">&#160;</font><font color="#814422" face="Monospaced">resultData</font><font color="#3a1f18" face="Monospaced">&#160;</font><font color="#65533c" face="Monospaced">=</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a1a65" face="Monospaced"><b>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; </b></font><font color="#3a1f18" face="Monospaced">i </font><font color="#65533c" face="Monospaced">==</font><font color="#3a1f18" face="Monospaced">&#160;</font><font color="#1a1ac4" face="Monospaced">resultSlot_</font><font color="#3a1f18" face="Monospaced">&#160;</font><font color="#4a1a65" face="Monospaced"><b>and</b></font><font color="#3a1f18" face="Monospaced">&#160; outBuff</font><font color="#65533c" face="Monospaced">?</font><font color="#3a1f18" face="Monospaced">&#160;</font><font color="#874a15" face="Monospaced"><b>*</b></font><font color="#3a1f18" face="Monospaced">outBuff</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a1a65" face="Monospaced"><b>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; </b></font><font color="#65533c" face="Monospaced">:</font><font color="#3a1f18" face="Monospaced">&#160;</font><font color="#1a1ac4" face="Monospaced">outTypes_</font><font color="#874a15" face="Monospaced"><b>[</b></font><font color="#3a1f18" face="Monospaced">i</font><font color="#874a15" face="Monospaced"><b>]</b></font><font color="#65533c" face="Monospaced">.</font><font color="#753737" face="Monospaced">lockBuffer</font><font color="#11123a" face="Monospaced">()</font><font color="#65533c" face="Monospaced">;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a1a65" face="Monospaced"><b>&#160;&#160;&#160;&#160;&#160; </b></font><font color="#3a1f18" face="Monospaced">feed</font><font color="#65533c" face="Monospaced">.</font><font color="#59253b" face="Monospaced">outBuff</font><font color="#65533c" face="Monospaced">.</font><font color="#59253b" face="Monospaced">createAt</font><font color="#11123a" face="Monospaced">(</font><font color="#3a1f18" face="Monospaced">i</font><font color="#65533c" face="Monospaced">,</font><font color="#3a1f18" face="Monospaced">&#160;</font><font color="#000000" face="Monospaced">move</font><font color="#11123a" face="Monospaced">(</font><font color="#b45858" face="Monospaced"><b>resultData</b></font><font color="#11123a" face="Monospaced">))</font><font color="#65533c" face="Monospaced">;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a1a65" face="Monospaced"><b>&#160;&#160;&#160; </b></font><font color="#11123a" face="Monospaced">}</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#3a1f18" face="Monospaced">&#160;&#160;feed</font><font color="#65533c" face="Monospaced">.</font><font color="#59253b" face="Monospaced">connect</font><font color="#11123a" face="Monospaced">()</font><font color="#65533c" face="Monospaced">;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#11123a" face="Monospaced">}</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1769206697143" ID="ID_465397682" MODIFIED="1769206725935" TEXT="&#x27f6; also bleibt die Frage: wo und wie ist dieser BufferDescriptor konfiguriert"/>
+</node>
+<node CREATED="1769206727604" ID="ID_612227634" MODIFIED="1769206742049" TEXT="BufferDescriptor wird im NodeBuilder vorbereitet">
+<node CREATED="1769206743282" ID="ID_1949747784" MODIFIED="1769206759179" TEXT="den Ablauf sieht man gut in NodeFeed_test::feedParam()">
+<node CREATED="1769206783101" ID="ID_1949465444" MODIFIED="1769206783101">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      dort wird nat&#252;rlich ein DiagnosticBufferProvider verwendet
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1769206785068" ID="ID_948236250" MODIFIED="1769206842275" TEXT="aber es ist klar: auf dem BufferProvider wird getDescriptor&lt;BufferType&gt;() aufgerufen"/>
+</node>
+<node CREATED="1769206937361" ID="ID_1605962365" MODIFIED="1769206953820" TEXT="Dependency-Injection im WeavingPatternBuilder">
+<icon BUILTIN="forward"/>
+<node CREATED="1769207497757" ID="ID_1556386481" MODIFIED="1769207553216" TEXT="jedes WeavingPattern f&#xfc;r eine Node hat eine Sequenz von BufferDescriptors"/>
+<node CREATED="1769207554298" ID="ID_1396317947" MODIFIED="1769207580650" TEXT="in jedem Node-build-Vorgang k&#xf6;nnte f&#xfc;r jeden Slot ein spezieller BufferProvider konfiguriert sein"/>
+<node CREATED="1769208368709" ID="ID_971406341" MODIFIED="1769208725027" TEXT="verschiedenartige Buffer-Typen sind vorerst jedoch nur geplant (aber vorgesehen)">
+<arrowlink COLOR="#353471" DESTINATION="ID_383087571" ENDARROW="Default" ENDINCLINATION="1230;77;" ID="Arrow_ID_1174608999" STARTARROW="None" STARTINCLINATION="938;34;"/>
+<node CREATED="1769208560316" HGAP="50" ID="ID_580923950" MODIFIED="1769208655965" TEXT="es gibt einen Vector &quot;providers&quot; im WeavingPatternBuilder" VSHIFT="9">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      darin liegen Funktoren, die dann in der terminalen Build-Operation auf einen geeigneten BufferProvider zugreifen, um darauf getDescriptor&lt;BU&gt;() aufzurufen.
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1769207581677" ID="ID_1870219161" MODIFIED="1769207640301" TEXT="falls nicht, dann greift maybeFillDefaultProviders() &#x27f5; DI aus ctx().mem">
+<node CREATED="1769208667405" ID="ID_1771720121" MODIFIED="1769209391756" TEXT="habe einen globalen Service-Kontext geschaffen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Interface: engine-ctx.hpp
+    </p>
+    <p>
+      Impl: engine-ctx-facilities.hpp|cpp
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1769208689722" ID="ID_151337921" MODIFIED="1769209350158" TEXT="dieser stellt einen default-Provider bereit">
+<arrowlink COLOR="#386e8e" DESTINATION="ID_1074546502" ENDARROW="Default" ENDINCLINATION="1491;100;" ID="Arrow_ID_1937669813" STARTARROW="None" STARTINCLINATION="672;47;"/>
+<node CREATED="1769209851246" HGAP="54" ID="ID_1904429278" MODIFIED="1769210006559" TEXT="im Moment eine Instanz vom TrackingHeapBlockProvider" VSHIFT="11">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <div style="background-color: #eee0b5; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 2px">
+      <div style="color: #202020; background-color: #eee0b5; font-family: Bitstream Vera Sans Mono; font-size: 9pt; white-space: pre">
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#632d2d" face="Monospaced"><b>EngineCtx::Facilities::Facilities</b></font><font color="#11123a" face="Monospaced">()</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#65533c" face="Monospaced">&#160;&#160;:</font><font color="#3a1f18" face="Monospaced">&#160;</font><font color="#1a1ac4" face="Monospaced">memProvider_</font><font color="#11123a" face="Monospaced">{</font><font color="#000000" face="Monospaced">make_unique</font><font color="#65533c" face="Monospaced">&lt;</font><font color="#635e96" face="Monospaced"><b>TrackingHeapBlockProvider</b></font><font color="#65533c" face="Monospaced">&gt;</font><font color="#11123a" face="Monospaced">()}</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#65533c" face="Monospaced">&#160;&#160;,</font><font color="#3a1f18" face="Monospaced">&#160;</font><font color="#1a1ac4" face="Monospaced">cacheProvider_</font><font color="#11123a" face="Monospaced">{}&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; </font><font color="#ab815c" face="Monospaced">////////////////////////////////</font><font color="#7f9fbf" face="Monospaced"><b>TICKET</b></font><font color="#ab815c" face="Monospaced">&#160; #1367 : only suitable for first prototype</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#11123a" face="Monospaced">&#160;&#160;{</font><font color="#3a1f18" face="Monospaced">&#160;</font><font color="#11123a" face="Monospaced">}</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1769209888364" HGAP="57" ID="ID_588101971" MODIFIED="1769209913352" TEXT="hier fehlt eindeutig noch die M&#xf6;glichkeit f&#xfc;r ein globales Setup" VSHIFT="-2"/>
+</node>
+<node CREATED="1769210129617" ID="ID_614644839" MODIFIED="1769210146850" TEXT="Ach ja &#x2014; &#x2014; hier wieder dieses Wirrwarr....">
+<node CREATED="1769210192768" ID="ID_1143688053" MODIFIED="1769210192768">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      der DiagnosticBufferProvider verwendet als PImpl einen TrackingHeapBlockProvider
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1769210195936" ID="ID_785723050" MODIFIED="1769210231737" TEXT="im EngineCtx::Facilities wird also eine weitere Instanz des TrackingHeapBlockProviders gehalten"/>
+<node CREATED="1769210232767" ID="ID_1391982724" MODIFIED="1769210265735" TEXT="damit sind auch keine aussagekr&#xe4;ftigen Tests mehr m&#xf6;glich">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      weil der DiagnosticBufferProvider nur &#187;seine&#171; Instanz beobachtet
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node COLOR="#4e2b52" CREATED="1769210269486" ID="ID_1653845059" MODIFIED="1769210299973" TEXT="das mu&#xdf; jetzt anders werden">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="smiley-oh"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1769210344307" ID="ID_1168667446" MODIFIED="1769212514131" TEXT="Zusammenfassung">
+<icon BUILTIN="forward"/>
+<node CREATED="1769210350675" ID="ID_1886102355" MODIFIED="1769210360885" TEXT="es erfolgt D.I &#xfc;ber den EngineCtx"/>
+<node CREATED="1769210361722" ID="ID_1978794114" MODIFIED="1769210391951" TEXT="dieser stellt per lib::Depend&lt;EngineCtx&gt;().mem() eine Referenz auf einen BufferProvider bereit"/>
+<node CREATED="1769210440121" ID="ID_1461990132" MODIFIED="1769210491075" TEXT="die terminale NodeBuilder-Operation erzeugt &#xfc;ber diesen BufferProvider die BufferDescriptors"/>
+<node CREATED="1769210500951" ID="ID_737803187" MODIFIED="1769210529652" TEXT="anhand der Buffer-Typen, die von der Processing-Funktionssignatur abgenommen werden"/>
+<node CREATED="1769210396861" ID="ID_33849003" MODIFIED="1769210412551" TEXT="in den eigentlichen top-level pull()-Aufruf wird direkt ein BuffHandle reingegeben"/>
+<node CREATED="1769210556985" ID="ID_1705896329" MODIFIED="1769210571583" TEXT="die shed()-Operation macht lockBuffer()"/>
+<node CREATED="1769210596779" ID="ID_192039671" MODIFIED="1769210601781" TEXT="die fix()-Operation">
+<node CREATED="1769210602790" ID="ID_1538561282" MODIFIED="1769210615765" TEXT="macht inBuff.release()"/>
+<node CREATED="1769210616684" ID="ID_1951731323" MODIFIED="1769210622011" TEXT="dann outBuff.emit()"/>
+<node CREATED="1769210629270" ID="ID_1574624046" MODIFIED="1769210646412">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      und f&#252;r alle <i>nicht-output-buffer</i>&#160;auch release()
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1769210670799" ID="ID_1012322558" MODIFIED="1769210679230" TEXT="mehr passiert nicht">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1769210686565" ID="ID_1536189770" MODIFIED="1769210695813" TEXT="dieses Muster nun im Testfall nachbauen">
+<icon BUILTIN="pencil"/>
+<node CREATED="1769213063666" ID="ID_1804838536" MODIFIED="1769213930429" TEXT="auch bereits incl. der anounce()-Operation">
+<icon BUILTIN="yes"/>
+<node CREATED="1769213076631" ID="ID_977495368" MODIFIED="1769213479644" TEXT="ich halte die l&#xe4;ngerfristig f&#xfc;r sehr wichtig">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      und zwar wegen der concurrency; wir k&#246;nnen es uns nicht leisten, gro&#223;e Reserve-Speicherbl&#246;cke in jedem Thread zu haben; daher m&#252;ssen wir zu einem gewissen Grad den Buffer-Speicher zwischen den Threads ausgleichen. Sinnvollerweise passiert das &#252;ber asynchrones Messaging, und deshalb ist es sinnvoll, zu Beginn der Call-Sequenz eine Vorwarnung abzusetzen; in einer sp&#228;teren, elaborierteren Version des Buffer-Managements k&#246;nnte dann eine Heuristik entscheiden, ob man im aktuellen Thread (der ja exclusiv diesen Job bearbeitet) eine neue Allokation beginnt, oder ob man einen Request an einen generischen Speicherpool absetzt, der dann ggfs. aber eine gewisse Laufzeit hat, und asynchron ankommt. Das ist nat&#252;rlich dann ein ziemlich komplexes Schema &#8212; aber eines, bei dem sich genaue Beobachtung und Feinjustierung lohnt
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1769213086494" ID="ID_565088436" MODIFIED="1769213153030" TEXT="wird aber derzeit noch gar nicht verwendet">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      derzeit wird direkt auf der Descriptor das lock() aufgerufen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1769213098612" ID="ID_230346059" MODIFIED="1769213895247" TEXT="w&#xfc;rde eine Operation auf der ProcNode erfordern">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Und zwar m&#252;&#223;te die Proc-Node den Callgraphen <i>evaluieren, </i>um dadurch die maximal <i>zu einem Zeitpunkt gleichzeitig erforderliche</i>&#160; Allokation zu ermitteln. Es geht ja nicht darum, naiv die Zahl der Eing&#228;nge / Ausg&#228;nge zu summieren, da Daten in erheblichem Umfang direkt von Node zu Node weitergereicht werden.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1769213115026" ID="ID_632981582" MODIFIED="1769213926505" TEXT="sinnvollerweise zum Start der Job-Invocation">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das w&#228;re erst mal naheliegend so; wann und wie tats&#228;chlich diese Evaluierung stattfinden kann (zur Build-Zeit oder erst zur Aufruf-Zeit) ist noch v&#246;llig offen. Zu bedenken ist auch, da&#223; der Cache eine &#228;nliche Vorbereitungs-Anfrage braucht; m&#246;glicherweise werden wir sogar diese Vorbereitung als eigenen Job im Vorausgang absetzen, oder zumindest in einen IO-Job mit integrieren
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1769214081767" ID="ID_1745370491" MODIFIED="1769214292849" TEXT="hier aber keine Integration mit der RenderNode-Logik">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...das war der Fehler beim ersten Anlauf (deshalb die BuffTable);
+    </p>
+    <p>
+      ....aktuell w&#228;re eine solche Integration im <font color="#635e96" face="Bitstream Vera Sans Mono"><b>NodeStorage_test</b></font>&#160;zu zeigen.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1769214707438" ID="ID_809661873" MODIFIED="1769214720603" TEXT="was aber zus&#xe4;tzlich zum einfachen Fall zu zeigen ist...">
+<node CREATED="1769214722267" ID="ID_1888815970" MODIFIED="1769214729606" TEXT="es geht mit einem Mix mehrerer Typen"/>
+<node CREATED="1769214730378" ID="ID_778233744" MODIFIED="1769214739291" TEXT="es geht mit einer gr&#xf6;&#xdf;eren Anzahl an Buffern"/>
+<node COLOR="#5b280f" CREATED="1769214740273" ID="ID_682815858" MODIFIED="1769216979554" TEXT="Daten in den Buffern werden nicht korrumpiert">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1769216981006" ID="ID_633824902" MODIFIED="1769217553758" TEXT="das ist hier kein sinvolles Test-Ziel">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      zum einen, weil dann tats&#228;chlich auch die Struktur nachgebildet werden m&#252;&#223;te, in der die Buffer belegt, bef&#252;llt, weitergereicht, ausgewertet und verworfen werden, alles auch noch verschachtelt. Und zum anderen arbeiten wir hier mit dem DiagnosticBufferProvider, der alle Buffer einmal im Heap alloziert und niemals Buffer verwirft; das Testziel w&#228;re hierdurch trivial gegeben, und dennoch w&#228;re die eigentliche Zusicherung des Protokolls nicht &#252;berpr&#252;ft, abgesehen von dem Grenzfall, da&#223; Buffer verwechselt und dadurch korrumpiert w&#252;rden
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1769216998420" ID="ID_1036779491" MODIFIED="1769217620769" TEXT="m&#xfc;&#xdf;te man eigens zeigen mit einer pooling-Implementation">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      und auch dann m&#252;&#223;te es ein Test sein, der das System <i>unter Druck setzt,</i>&#160;um die Wahrscheinlichkeit des Versagens zu erh&#246;hen; typischerweise w&#252;rde ich das auch gleich mit concurrency-Tests verbinden.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1769217660348" ID="ID_874516866" MODIFIED="1769217718220" TEXT="&#x27f9; damit f&#xe4;llt hier f&#xfc;r diesen Testfall auch das Verketten von Berechnungen weg">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...was den Test enorm vereinfacht; das Verketten haben wir bereits im NodeLink_test gepr&#252;ft, und werden es wohl im Operations-Test noch mehr und unter Druck pr&#252;fen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1769273843983" ID="ID_750810589" MODIFIED="1769273855167" TEXT="wirklich wichtig ist">
+<icon BUILTIN="forward"/>
+<node CREATED="1769273857237" ID="ID_1538058225" MODIFIED="1769273877454" TEXT="das Announcing der Allokation"/>
+<node CREATED="1769273878090" ID="ID_1739884810" MODIFIED="1769273914463" TEXT="das Belegen auf den BufferDescriptors"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1769137033531" ID="ID_1591116095" MODIFIED="1769137035508" TEXT="OutputSlotProtocol_test">
+<node CREATED="1769137192783" ID="ID_1017293617" MODIFIED="1769137202600" TEXT="sieht ebenfalls auf den ersten Blick sauber aus"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1769137203560" ID="ID_277684649" MODIFIED="1769137287028" TEXT="enth&#xe4;lt direkt den unpassenden Aufruf">
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1769137237778" ID="ID_332744930" MODIFIED="1769137282521" TEXT="sink1.emit (frameNr-1, buff00)">
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="broken-line"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1769137240854" ID="ID_1824102967" MODIFIED="1769137269642" TEXT="das m&#xfc;&#xdf;te sein: buff11.emit()">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -110344,6 +110778,12 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <arrowlink COLOR="#ee0649" DESTINATION="ID_1559489831" ENDARROW="Default" ENDINCLINATION="-109;13;" ID="Arrow_ID_166502420" STARTARROW="None" STARTINCLINATION="285;-20;"/>
 <icon BUILTIN="yes"/>
 </node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1769135365556" ID="ID_1910921801" MODIFIED="1769135371900" TEXT=" #1387 new todo Memory handling scheme for render buffers ">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1769134503678" ID="ID_1525655107" MODIFIED="1769134511862" TEXT=" #1395 resolve integration of BufferProvider with DataSink ">
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 </node>

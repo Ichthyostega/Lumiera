@@ -367,9 +367,9 @@ namespace test  {
   }
   /** access current checksum without recomputing. */
   HashVal
-  TestFrame::getChecksum()
+  TestFrame::getChecksum()  const
   {
-    return accessHeader().checksum;
+    return unConst(this)->accessHeader().checksum;
   }
   
   bool

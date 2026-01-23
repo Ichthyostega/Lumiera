@@ -37,16 +37,12 @@
 #include "steam/engine/buffhandle.hpp"
 #include "lib/nocopy.hpp"
 
-//#include <utility>
 #include <memory>
 
 
 namespace steam {
 namespace engine {
   
-//  using lib::Literal;
-//  using std::unique_ptr;
-//  using std::forward;
   
   class EngineCtx
     : util::NonCopyable
@@ -57,7 +53,6 @@ namespace engine {
     public:
       BufferProvider& mem;
       BufferProvider& cache;
-//      BufferProvider& output;  /////////////////////////OOO presumably no longer necessary
       
       static lib::Depend<EngineCtx> access;
       
