@@ -389,7 +389,7 @@ namespace test  {
   
   
   /** Register this test class... */
-  LAUNCHER (BufferMetadataKey_test, "unit player");
+  LAUNCHER (BufferMetadataKey_test, "unit engine");
   
   
   

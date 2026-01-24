@@ -110275,7 +110275,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <arrowlink COLOR="#5387dc" DESTINATION="ID_1661035289" ENDARROW="Default" ENDINCLINATION="-1176;-93;" ID="Arrow_ID_728270522" STARTARROW="None" STARTINCLINATION="-1222;49;"/>
 <icon BUILTIN="list"/>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1765479194145" ID="ID_1559489831" MODIFIED="1765479251951" TEXT="Kritik Testaufbau">
-<linktarget COLOR="#ee0649" DESTINATION="ID_1559489831" ENDARROW="Default" ENDINCLINATION="-109;13;" ID="Arrow_ID_166502420" SOURCE="ID_1782436035" STARTARROW="None" STARTINCLINATION="285;-20;"/>
+<linktarget COLOR="#5e06ee" DESTINATION="ID_1559489831" ENDARROW="Default" ENDINCLINATION="-109;13;" ID="Arrow_ID_166502420" SOURCE="ID_1782436035" STARTARROW="None" STARTINCLINATION="285;-20;"/>
 <icon BUILTIN="flag-pink"/>
 <node CREATED="1769137020703" ID="ID_593286874" MODIFIED="1769137022544" TEXT="BufferProviderProtocol_test">
 <node CREATED="1769137037154" ID="ID_642965170" MODIFIED="1769137049707" TEXT="sieht auf den ersten Blick sauber aus"/>
@@ -110429,8 +110429,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       </div>
     </div>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1769206697143" ID="ID_465397682" MODIFIED="1769206725935" TEXT="&#x27f6; also bleibt die Frage: wo und wie ist dieser BufferDescriptor konfiguriert"/>
 </node>
@@ -110444,8 +110443,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       dort wird nat&#252;rlich ein DiagnosticBufferProvider verwendet
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1769206785068" ID="ID_948236250" MODIFIED="1769206842275" TEXT="aber es ist klar: auf dem BufferProvider wird getDescriptor&lt;BufferType&gt;() aufgerufen"/>
 </node>
@@ -110463,8 +110461,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       darin liegen Funktoren, die dann in der terminalen Build-Operation auf einen geeigneten BufferProvider zugreifen, um darauf getDescriptor&lt;BU&gt;() aufzurufen.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -110480,8 +110477,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       Impl: engine-ctx-facilities.hpp|cpp
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1769208689722" ID="ID_151337921" MODIFIED="1769209350158" TEXT="dieser stellt einen default-Provider bereit">
 <arrowlink COLOR="#386e8e" DESTINATION="ID_1074546502" ENDARROW="Default" ENDINCLINATION="1491;100;" ID="Arrow_ID_1937669813" STARTARROW="None" STARTINCLINATION="672;47;"/>
@@ -110509,8 +110505,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       </div>
     </div>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1769209888364" HGAP="57" ID="ID_588101971" MODIFIED="1769209913352" TEXT="hier fehlt eindeutig noch die M&#xf6;glichkeit f&#xfc;r ein globales Setup" VSHIFT="-2"/>
 </node>
@@ -110523,8 +110518,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       der DiagnosticBufferProvider verwendet als PImpl einen TrackingHeapBlockProvider
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1769210195936" ID="ID_785723050" MODIFIED="1769210231737" TEXT="im EngineCtx::Facilities wird also eine weitere Instanz des TrackingHeapBlockProviders gehalten"/>
 <node CREATED="1769210232767" ID="ID_1391982724" MODIFIED="1769210265735" TEXT="damit sind auch keine aussagekr&#xe4;ftigen Tests mehr m&#xf6;glich">
@@ -110535,8 +110529,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       weil der DiagnosticBufferProvider nur &#187;seine&#171; Instanz beobachtet
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node COLOR="#4e2b52" CREATED="1769210269486" ID="ID_1653845059" MODIFIED="1769210299973" TEXT="das mu&#xdf; jetzt anders werden">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
@@ -110566,8 +110559,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       und f&#252;r alle <i>nicht-output-buffer</i>&#160;auch release()
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1769210670799" ID="ID_1012322558" MODIFIED="1769210679230" TEXT="mehr passiert nicht">
@@ -110587,8 +110579,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       und zwar wegen der concurrency; wir k&#246;nnen es uns nicht leisten, gro&#223;e Reserve-Speicherbl&#246;cke in jedem Thread zu haben; daher m&#252;ssen wir zu einem gewissen Grad den Buffer-Speicher zwischen den Threads ausgleichen. Sinnvollerweise passiert das &#252;ber asynchrones Messaging, und deshalb ist es sinnvoll, zu Beginn der Call-Sequenz eine Vorwarnung abzusetzen; in einer sp&#228;teren, elaborierteren Version des Buffer-Managements k&#246;nnte dann eine Heuristik entscheiden, ob man im aktuellen Thread (der ja exclusiv diesen Job bearbeitet) eine neue Allokation beginnt, oder ob man einen Request an einen generischen Speicherpool absetzt, der dann ggfs. aber eine gewisse Laufzeit hat, und asynchron ankommt. Das ist nat&#252;rlich dann ein ziemlich komplexes Schema &#8212; aber eines, bei dem sich genaue Beobachtung und Feinjustierung lohnt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1769213086494" ID="ID_565088436" MODIFIED="1769213153030" TEXT="wird aber derzeit noch gar nicht verwendet">
 <richcontent TYPE="NOTE"><html>
@@ -110598,8 +110589,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       derzeit wird direkt auf der Descriptor das lock() aufgerufen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1769213098612" ID="ID_230346059" MODIFIED="1769213895247" TEXT="w&#xfc;rde eine Operation auf der ProcNode erfordern">
 <richcontent TYPE="NOTE"><html>
@@ -110609,8 +110599,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       Und zwar m&#252;&#223;te die Proc-Node den Callgraphen <i>evaluieren, </i>um dadurch die maximal <i>zu einem Zeitpunkt gleichzeitig erforderliche</i>&#160; Allokation zu ermitteln. Es geht ja nicht darum, naiv die Zahl der Eing&#228;nge / Ausg&#228;nge zu summieren, da Daten in erheblichem Umfang direkt von Node zu Node weitergereicht werden.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1769213115026" ID="ID_632981582" MODIFIED="1769213926505" TEXT="sinnvollerweise zum Start der Job-Invocation">
 <richcontent TYPE="NOTE"><html>
@@ -110620,8 +110609,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       Das w&#228;re erst mal naheliegend so; wann und wie tats&#228;chlich diese Evaluierung stattfinden kann (zur Build-Zeit oder erst zur Aufruf-Zeit) ist noch v&#246;llig offen. Zu bedenken ist auch, da&#223; der Cache eine &#228;nliche Vorbereitungs-Anfrage braucht; m&#246;glicherweise werden wir sogar diese Vorbereitung als eigenen Job im Vorausgang absetzen, oder zumindest in einen IO-Job mit integrieren
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1769214081767" ID="ID_1745370491" MODIFIED="1769214292849" TEXT="hier aber keine Integration mit der RenderNode-Logik">
@@ -110635,8 +110623,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       ....aktuell w&#228;re eine solche Integration im <font color="#635e96" face="Bitstream Vera Sans Mono"><b>NodeStorage_test</b></font>&#160;zu zeigen.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1769214707438" ID="ID_809661873" MODIFIED="1769214720603" TEXT="was aber zus&#xe4;tzlich zum einfachen Fall zu zeigen ist...">
 <node CREATED="1769214722267" ID="ID_1888815970" MODIFIED="1769214729606" TEXT="es geht mit einem Mix mehrerer Typen"/>
@@ -110651,8 +110638,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       zum einen, weil dann tats&#228;chlich auch die Struktur nachgebildet werden m&#252;&#223;te, in der die Buffer belegt, bef&#252;llt, weitergereicht, ausgewertet und verworfen werden, alles auch noch verschachtelt. Und zum anderen arbeiten wir hier mit dem DiagnosticBufferProvider, der alle Buffer einmal im Heap alloziert und niemals Buffer verwirft; das Testziel w&#228;re hierdurch trivial gegeben, und dennoch w&#228;re die eigentliche Zusicherung des Protokolls nicht &#252;berpr&#252;ft, abgesehen von dem Grenzfall, da&#223; Buffer verwechselt und dadurch korrumpiert w&#252;rden
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1769216998420" ID="ID_1036779491" MODIFIED="1769217620769" TEXT="m&#xfc;&#xdf;te man eigens zeigen mit einer pooling-Implementation">
 <richcontent TYPE="NOTE"><html>
@@ -110681,6 +110667,12 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1769273878090" ID="ID_1739884810" MODIFIED="1769273914463" TEXT="das Belegen auf den BufferDescriptors"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1769303330470" ID="ID_1333832891" MODIFIED="1769303334708" TEXT="Verifikationen">
+<icon BUILTIN="hourglass"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1769303336197" ID="ID_1486480192" MODIFIED="1769303349894" TEXT="(wartet auf neue Backend-Implementierung)">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -110699,7 +110691,68 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
+<node CREATED="1769303363648" ID="ID_452649338" MODIFIED="1769303374804" TEXT="Neu: Tests f&#xfc;r die Implementierungs-Komponenten">
+<node CREATED="1769303376398" ID="ID_1546764124" MODIFIED="1769303430662" TEXT="das reflektiert die Wurzel des Problems: es gab keine Komponenten">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      sondern nur ein einziges koh&#228;sives B&#252;ndel an Implementierungs-Code, der direkt hinter dem Interface klebt
+    </p>
+  </body>
+</html></richcontent>
 </node>
+</node>
+</node>
+<node CREATED="1769303576693" ID="ID_623188672" MODIFIED="1769303591585" TEXT="die Zustands&#xfc;berg&#xe4;nge der Metadaten wurden damals nicht richtig bedacht">
+<icon BUILTIN="idea"/>
+<node CREATED="1769303593435" ID="ID_895728856" MODIFIED="1769303610989" TEXT="vermutlich ist das die Wurzel der Probleme mit den Buffer-Metadaten"/>
+<node CREATED="1769303611584" ID="ID_1319373371" MODIFIED="1769303665723" TEXT="hier ist aber der &#xbb;Zustand&#xab; st&#xe4;rker an die Implementierung gebunden">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das hei&#223;t, dieser &#187;Zustand&#171; wird nicht auf Protokoll-Ebene sichtbar (und genau desshalb entsteht die Verwirrung auf Protokoll-Ebene)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1769303675209" ID="ID_683493550" MODIFIED="1769303921057" TEXT="Einsicht: Metadaten-Lifecylce h&#xe4;ngt mit dem Memory/Thread-Management zusammen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Denn es verh&#228;lt sich so, da&#223; ein Metadaten-Prototyp irgendwann (&quot;eventually&quot;) in einer zentralen Metadaten-Registry auftauchen mu&#223;; dagegen die daraus abgeleiteten lokalen Zust&#228;nde k&#246;nnten im aktuellen Thread bleiben. Die Frage ist, auf welchen &quot;Typ&quot; verweist ein BuffHandle? Wozu ist dieser Verweis &#252;berhaupt notwendig? <i>Von da aus (also ein operationaler Gesichtspunkt) bestimmt sich, wie wir Metadaten &#252;berhaupt speichern</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1769303977673" ID="ID_105336756" MODIFIED="1769306583888" TEXT="zu kl&#xe4;ren ist in welcher Weise ein OutputSlot ein BuffHandle braucht">
+<icon BUILTIN="yes"/>
+<node CREATED="1769304014980" ID="ID_1365956476" MODIFIED="1769304033686" TEXT="denn daran h&#xe4;ngt, wie die Protokolle aufeinander aufbauen k&#xf6;nnen"/>
+<node CREATED="1769304034546" ID="ID_1802954526" MODIFIED="1769304123751" TEXT="es gab sicherlich einen Grund daf&#xfc;r, warum ich sie damals nicht konkruent gemacht habe">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...ich wei&#223; sogar noch (von meiner ersten Untersuchung vor einem Jahr), da&#223; vonseiten der Implementierung relativ klar ist, warum man nicht direkt delegieren kann; also mu&#223; der Grund gefunden werden, warum ich in diese Sackgasse gegangen bin...
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1769304142533" ID="ID_1886652999" MODIFIED="1769304259236" TEXT="au&#xdf;erdem hatte ich beim Design des Protokolls das Thema &#xbb;Concurrency&#xab; &#xfc;bersehen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das allein entwertet nicht die Protokolle als Solche &#8212; aber es macht deutlich, da&#223; die Implementierung (zumindest des BufferProvider) komplett auseinandergenommen werden mu&#223;; ich hatte mich seinerzeit vom DiagnosticBufferProvider treiben lassen, und dann einfach alles was noch offen war, irgendwie hingebogen (zumindest sieht der Code danach aus)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
 </node>
@@ -110766,7 +110819,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1765479107546" ID="ID_1782436035" MODIFIED="1765479258230">
+<node COLOR="#435e98" CREATED="1765479107546" ID="ID_1782436035" MODIFIED="1769303478769">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
@@ -110775,15 +110828,48 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
     </p>
   </body>
 </html></richcontent>
-<arrowlink COLOR="#ee0649" DESTINATION="ID_1559489831" ENDARROW="Default" ENDINCLINATION="-109;13;" ID="Arrow_ID_166502420" STARTARROW="None" STARTINCLINATION="285;-20;"/>
+<arrowlink COLOR="#5e06ee" DESTINATION="ID_1559489831" ENDARROW="Default" ENDINCLINATION="-109;13;" ID="Arrow_ID_166502420" STARTARROW="None" STARTINCLINATION="285;-20;"/>
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1769135365556" ID="ID_1910921801" MODIFIED="1769135371900" TEXT=" #1387 new todo Memory handling scheme for render buffers ">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1769135365556" ID="ID_1910921801" MODIFIED="1769303490534" TEXT=" #1387 Memory handling scheme for render buffers ">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1769304281305" ID="ID_273146716" MODIFIED="1769304289668" TEXT="mu&#xdf; hier erst mal das Konzept formulieren"/>
+<node CREATED="1769304291655" ID="ID_825339932" MODIFIED="1769304307953" TEXT="dann ein vorl&#xe4;ufiger Entwurf f&#xfc;r die Implementierung"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1769304308686" ID="ID_220755582" MODIFIED="1769304323354" TEXT="diese mu&#xdf; aber zukunftsf&#xe4;hig sein!">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1769304337817" ID="ID_355803017" MODIFIED="1769304360937" TEXT="&#x27f9; erst daraus ergeben sich notwendige Justierungen der Protokolle">
+<icon BUILTIN="hourglass"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1769134503678" ID="ID_1525655107" MODIFIED="1769134511862" TEXT=" #1395 resolve integration of BufferProvider with DataSink ">
 <icon BUILTIN="flag-yellow"/>
+</node>
+<node CREATED="1769310540214" ID="ID_1005260492" MODIFIED="1769310544850" TEXT="Allokations-Schema">
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1769310548133" ID="ID_98767082" MODIFIED="1769310727903" TEXT="Ansatzpunkt: Requirements">
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="forward"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1769310572218" ID="ID_320895633" MODIFIED="1769310684591" TEXT="mu&#xdf; per DI eingebracht werden">
+<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1769310586327" ID="ID_1386377456" MODIFIED="1769310697384" TEXT="EngineCtx : M&#xf6;glichkeit f&#xfc;r eine Service-Instanz schaffen">
+<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1769310605533" ID="ID_1532935661" MODIFIED="1769310614222" TEXT="brauche erst mal einen Unit-Test">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1769310701150" ID="ID_1034034754" MODIFIED="1769310706047" TEXT="la la la...">
+<icon BUILTIN="flag-pink"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1769310628330" ID="ID_842629477" MODIFIED="1769310692535" TEXT="mu&#xdf; mit einem custom-Allocator hinterlegt werden">
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1769310640271" ID="ID_718178819" MODIFIED="1769310692535" TEXT="mu&#xdf; in massively-concurrent-Environment funktionieren">
+<icon BUILTIN="yes"/>
+</node>
+</node>
 </node>
 </node>
 </node>

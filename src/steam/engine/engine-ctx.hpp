@@ -21,9 +21,11 @@
  ** provides a naive self-contained implementation suitable for demonstration and test.
  ** @todo who is responsible for setup of the services for the actual render engine?
  **       Might be closely related to brining up façade interfaces.
- ** @todo WIP-WIP 2/2025 provide actual service implementation and find a way
- **       how to populate the Facilities with these actual services...
+ ** @todo WIP-WIP 1/2026 provide a default implementation for test
+ **       and find a way to populate the Facilities with the
+ **       production variant of the services...
  ** 
+ ** @see engine-ctx-test.cpp
  ** @see engine-ctx-facilities.hpp implementation
  ** @see buffer-provider.hpp
  ** @see buffhandle.hpp

@@ -403,7 +403,7 @@ namespace test  {
   
   
   /** Register this test class... */
-  LAUNCHER (BufferMetadata_test, "unit player");
+  LAUNCHER (BufferMetadata_test, "unit engine");
   
   
   

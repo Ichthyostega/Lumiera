@@ -31,7 +31,7 @@ using util::isSameObject;
 using util::for_each;
 
 
-namespace steam  {
+namespace steam {
 namespace engine{
 namespace test  {
   
@@ -260,7 +260,7 @@ namespace test  {
   
   
   /** Register this test class... */
-  LAUNCHER (BufferProviderProtocol_test, "unit player");
+  LAUNCHER (BufferProviderProtocol_test, "unit engine");
   
   
   
