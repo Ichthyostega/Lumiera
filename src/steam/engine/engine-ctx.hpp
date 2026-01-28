@@ -19,6 +19,9 @@
  ** The EngineCtx itself is meant to be [dependency injected](\ref lib::Depend), so that
  ** tests can use suitably adapted variants for verifications. The default instantiation
  ** provides a naive self-contained implementation suitable for demonstration and test.
+ ** For productive use within the Lumiera Render Engine, a much more elaborate setup
+ ** is necessary, including setup of a frame cache, and of timing strategies; these
+ ** are configured as part of starting the steam::engine::RenderEnvironment.
  ** @todo who is responsible for setup of the services for the actual render engine?
  **       Might be closely related to brining up façade interfaces.
  ** @todo WIP-WIP 1/2026 provide a default implementation for test
@@ -26,7 +29,7 @@
  **       production variant of the services...
  ** 
  ** @see engine-ctx-test.cpp
- ** @see engine-ctx-facilities.hpp implementation
+ ** @see engine-ctx.cpp base implementation
  ** @see buffer-provider.hpp
  ** @see buffhandle.hpp
  */

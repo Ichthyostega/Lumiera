@@ -1,5 +1,5 @@
 /*
-  EngineCtxFacilities  -  Implementation of global render engine operational services
+  EngineCtx  -  Base implementation of global render engine operational services
 
    Copyright (C)
      2024,            Hermann Vosseler <Ichthyostega@web.de>
@@ -12,12 +12,13 @@
 * *****************************************************************/
 
 
-/** @file engine-ctx-facilities.hpp
- ** Implementation parts of render engine operational services.
- ** @warning as of 10/2024 a preliminary integration of Render-Engine underway ////////////////////////////////////////TICKET #1367
+/** @file engine-ctx.cpp
+ ** Base implementation of render engine operational service configuration.
+ ** @warning as of 1/2026 a preliminary integration of Render-Engine underway ////////////////////////////////////////TICKET #1367
  */
 
 
+#include "steam/engine/engine-ctx.hpp"
 #include "steam/engine/engine-ctx-facilities.hpp"
 #include "steam/engine/tracking-heap-block-provider.hpp"
 

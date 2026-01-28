@@ -1,5 +1,5 @@
 /*
-  ENGINE-CTX-FACILITIES.hpp  -  Implementation of global render engine operational services
+  ENGINE-FACILITIES.hpp  -  Access and coordination of global render engine operational services
 
    Copyright (C)
      2024,            Hermann Vosseler <Ichthyostega@web.de>
@@ -11,7 +11,7 @@
 
 */
 
-/** @file engine-ctx-facilities.hpp
+/** @file engine-facilities.hpp
  ** Implementation of render engine operational configuration and services.
  ** Without further setup, [dependency injection](\ref depend.hpp) will establish a
  ** minimalistic default instantiation of these services, sufficient for demonstration
@@ -19,14 +19,15 @@
  ** created and managed actively.
  ** @todo and we'll have yet to »figure out« what specifically to do for these
  **       services and how to start an active render engine for productive use.
- ** @todo WIP-WIP 10/2024 strive at first complete prototypical engine usage   ////////////////////////////////////////TICKET #1367
+ ** @deprecated 1/2026 I'm unhappy with this convoluted structure;
+ **             my intention is to fuse that with the engine-ctx.cpp implementation.
  ** 
  ** @see engine-ctx.hpp
  ** @see weaving-pattern-builder.hpp
  */
 
-#ifndef STEAM_ENGINE_ENGINE_CTX_FACILITIES_H
-#define STEAM_ENGINE_ENGINE_CTX_FACILITIES_H
+#ifndef STEAM_ENGINE_ENGINE_FACILITIES_H
+#define STEAM_ENGINE_ENGINE_FACILITIES_H
 
 
 #include "steam/engine/engine-ctx.hpp"
