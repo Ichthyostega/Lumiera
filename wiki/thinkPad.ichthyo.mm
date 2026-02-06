@@ -77418,6 +77418,15 @@
 <node CREATED="1681519851664" ID="ID_1426982855" MODIFIED="1681519854742" TEXT="Engine-Service">
 <node CREATED="1681519855695" ID="ID_1479404578" MODIFIED="1681519922674" TEXT="&#x201e;die Renderengine&#x201c; &#x27f7; &#xbb;renderConfig&#xab;"/>
 <node CREATED="1681519892562" ID="ID_1833190140" MODIFIED="1681519916866" TEXT="die gleiche Closure hei&#xdf;t aber auch &#xbb;engineCallback&#xab;"/>
+<node CREATED="1770422125958" ID="ID_1312274450" MODIFIED="1770422829441" TEXT="als Platzhalter gibt es eine class RenderEnvironment">
+<linktarget COLOR="#7d3f56" DESTINATION="ID_1312274450" ENDARROW="Default" ENDINCLINATION="1349;71;" ID="Arrow_ID_712022247" SOURCE="ID_463396735" STARTARROW="None" STARTINCLINATION="711;26;"/>
+<node CREATED="1770422514748" HGAP="45" ID="ID_1975678868" MODIFIED="1770422571873" TEXT="seinerzeit angelegt in render-drive.hpp" VSHIFT="-7">
+<font NAME="SansSerif" SIZE="11"/>
+</node>
+<node COLOR="#514398" CREATED="1770422539297" HGAP="79" ID="ID_1384111904" MODIFIED="1770422916570" TEXT="1/2026 f&#xfc;r zentral befunden und herausgel&#xf6;st" VSHIFT="-9">
+<arrowlink COLOR="#fef9a9" DESTINATION="ID_859104368" ENDARROW="Default" ENDINCLINATION="-1632;0;" ID="Arrow_ID_694058089" STARTARROW="None" STARTINCLINATION="617;39;"/>
+</node>
+</node>
 </node>
 <node CREATED="1681596404095" ID="ID_582234271" MODIFIED="1681596416421" TEXT="&#x201e;nominal time&#x201c;">
 <node CREATED="1681596418090" ID="ID_1704128775" MODIFIED="1681596439782" TEXT="die Bedeutung von &#x201e;nominal&#x201c; ist zweifelhaft"/>
@@ -99842,13 +99851,17 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 </html></richcontent>
 <icon BUILTIN="smily_bad"/>
 </node>
+<node CREATED="1770422409907" ID="ID_463396735" MODIFIED="1770422908439" TEXT="tats&#xe4;chlich g&#xe4;be es auch das RenderEnvironment &#x2014; h&#xe4;ngt irgendwie zusammen">
+<arrowlink COLOR="#7d3f56" DESTINATION="ID_1312274450" ENDARROW="Default" ENDINCLINATION="1349;71;" ID="Arrow_ID_712022247" STARTARROW="None" STARTINCLINATION="711;26;"/>
+<arrowlink COLOR="#512590" DESTINATION="ID_859104368" ENDARROW="Default" ENDINCLINATION="-2147;102;" ID="Arrow_ID_1419091745" STARTARROW="None" STARTINCLINATION="957;36;"/>
+</node>
 </node>
 <node CREATED="1722647413798" ID="ID_1607895967" MODIFIED="1722647418305" TEXT="Struktur">
 <linktarget COLOR="#626f93" DESTINATION="ID_1607895967" ENDARROW="Default" ENDINCLINATION="54;426;" ID="Arrow_ID_1301744172" SOURCE="ID_478319632" STARTARROW="None" STARTINCLINATION="720;24;"/>
 <node CREATED="1722647419605" ID="ID_1700431737" MODIFIED="1722647426928" TEXT="ein Front-End mit Referenzen"/>
 <node CREATED="1722647429699" ID="ID_1374967687" MODIFIED="1722647484152" TEXT="ein (opaque) Services-Objekt"/>
 <node CREATED="1722647819006" ID="ID_1544083902" MODIFIED="1722647825463" TEXT="Anforderungen">
-<node CREATED="1722647826990" ID="ID_1595414802" MODIFIED="1722647863118" TEXT="EngineCtx soll default-konstruierbar sein">
+<node CREATED="1722647826990" ID="ID_1595414802" MODIFIED="1770423053443" TEXT="EngineCtx soll default-konstruierbar sein">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -99857,6 +99870,7 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
     </p>
   </body>
 </html></richcontent>
+<arrowlink COLOR="#344288" DESTINATION="ID_1611882096" ENDARROW="Default" ENDINCLINATION="774;-55;" ID="Arrow_ID_1168301029" STARTARROW="None" STARTINCLINATION="287;20;"/>
 </node>
 <node CREATED="1722648096856" ID="ID_1675656022" MODIFIED="1722648117988" TEXT="kann explizit einen Kontext f&#xfc;r die RenderEngine hochfahren">
 <linktarget COLOR="#5c6a7a" DESTINATION="ID_1675656022" ENDARROW="Default" ENDINCLINATION="228;-4;" ID="Arrow_ID_1483227809" SOURCE="ID_1074546502" STARTARROW="None" STARTINCLINATION="9;-85;"/>
@@ -110507,7 +110521,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1769209888364" HGAP="57" ID="ID_588101971" MODIFIED="1769209913352" TEXT="hier fehlt eindeutig noch die M&#xf6;glichkeit f&#xfc;r ein globales Setup" VSHIFT="-2"/>
+<node CREATED="1769209888364" HGAP="57" ID="ID_588101971" MODIFIED="1770421572276" TEXT="hier fehlt eindeutig noch die M&#xf6;glichkeit f&#xfc;r ein globales Setup" VSHIFT="-2">
+<arrowlink COLOR="#b50061" DESTINATION="ID_1653845059" ENDARROW="Default" ENDINCLINATION="234;-11;" ID="Arrow_ID_1207990015" STARTARROW="None" STARTINCLINATION="315;15;"/>
+</node>
 </node>
 <node CREATED="1769210129617" ID="ID_614644839" MODIFIED="1769210146850" TEXT="Ach ja &#x2014; &#x2014; hier wieder dieses Wirrwarr....">
 <node CREATED="1769210192768" ID="ID_1143688053" MODIFIED="1769210192768">
@@ -110531,7 +110547,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
-<node COLOR="#4e2b52" CREATED="1769210269486" ID="ID_1653845059" MODIFIED="1769210299973" TEXT="das mu&#xdf; jetzt anders werden">
+<node COLOR="#4e2b52" CREATED="1769210269486" ID="ID_1653845059" MODIFIED="1770421629522" TEXT="das mu&#xdf; jetzt anders werden">
+<arrowlink COLOR="#7f2472" DESTINATION="ID_1386377456" ENDARROW="Default" ENDINCLINATION="174;-1962;" ID="Arrow_ID_246209401" STARTARROW="None" STARTINCLINATION="-1022;78;"/>
+<linktarget COLOR="#b50061" DESTINATION="ID_1653845059" ENDARROW="Default" ENDINCLINATION="234;-11;" ID="Arrow_ID_1207990015" SOURCE="ID_588101971" STARTARROW="None" STARTINCLINATION="315;15;"/>
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="smiley-oh"/>
 </node>
@@ -110732,7 +110750,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1769303977673" ID="ID_105336756" MODIFIED="1769306583888" TEXT="zu kl&#xe4;ren ist in welcher Weise ein OutputSlot ein BuffHandle braucht">
 <icon BUILTIN="yes"/>
 <node CREATED="1769304014980" ID="ID_1365956476" MODIFIED="1769304033686" TEXT="denn daran h&#xe4;ngt, wie die Protokolle aufeinander aufbauen k&#xf6;nnen"/>
-<node CREATED="1769304034546" ID="ID_1802954526" MODIFIED="1769304123751" TEXT="es gab sicherlich einen Grund daf&#xfc;r, warum ich sie damals nicht konkruent gemacht habe">
+<node CREATED="1769304034546" ID="ID_1802954526" MODIFIED="1769304123751" TEXT="es gab sicherlich einen Grund daf&#xfc;r, warum ich sie damals nicht kongruent gemacht habe">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -110853,7 +110871,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="forward"/>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1769310572218" ID="ID_320895633" MODIFIED="1769310684591" TEXT="mu&#xdf; per DI eingebracht werden">
 <icon BUILTIN="yes"/>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1769310586327" ID="ID_1386377456" MODIFIED="1769310697384" TEXT="EngineCtx : M&#xf6;glichkeit f&#xfc;r eine Service-Instanz schaffen">
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1769310586327" ID="ID_1386377456" MODIFIED="1770421620338" TEXT="EngineCtx : M&#xf6;glichkeit f&#xfc;r eine Service-Instanz schaffen">
+<linktarget COLOR="#7f2472" DESTINATION="ID_1386377456" ENDARROW="Default" ENDINCLINATION="174;-1962;" ID="Arrow_ID_246209401" SOURCE="ID_1653845059" STARTARROW="None" STARTINCLINATION="-1022;78;"/>
 <icon BUILTIN="pencil"/>
 <node COLOR="#338800" CREATED="1769310605533" ID="ID_1532935661" MODIFIED="1769310614222" TEXT="brauche erst mal einen Unit-Test">
 <icon BUILTIN="button_ok"/>
@@ -110861,13 +110880,345 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1769310701150" ID="ID_1034034754" MODIFIED="1769310706047" TEXT="la la la...">
 <icon BUILTIN="flag-pink"/>
 </node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1770415033015" ID="ID_1710866424" MODIFIED="1770415064080" TEXT="EngineCtx::access w&#xe4;re ein lib::Depend">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1770415066215" ID="ID_1719444645" MODIFIED="1770415104294" TEXT="warum aber habe ich dann diese EngineCtx::Facilities eingef&#xfc;hrt?"/>
+<node CREATED="1770415105210" ID="ID_900701495" MODIFIED="1770415175073" TEXT="ist das der Versuch, ein bereits gel&#xf6;stes Problem nochmal &#x201e;besonders geschickt&#x201c; zu l&#xf6;sen??"/>
+<node CREATED="1770415211053" ID="ID_1343493721" MODIFIED="1770415231397" TEXT="m&#xf6;glicher Twist: eine Subklasse und VTable-Indirektion vermeiden">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1770415254651" ID="ID_87693298" MODIFIED="1770415274805" TEXT="access() greift &#xfc;ber eine globale statische ptr-Variable zu"/>
+<node CREATED="1770415318629" ID="ID_1520847329" MODIFIED="1770415331371" TEXT="diese, sowie ihr Target k&#xf6;nnte im L2/L3 Cache liegen"/>
+<node COLOR="#5b280f" CREATED="1770415334342" ID="ID_1721528104" MODIFIED="1770415356583" TEXT="jede weitere Indirektion w&#xe4;re Verschwendung">
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+<node CREATED="1770415389956" ID="ID_1909621689" MODIFIED="1770415404030" TEXT="kann ich hier wirklich etwas einsparen?">
+<node CREATED="1770415454435" ID="ID_1028877664" MODIFIED="1770415467229" TEXT="der BufferProvider hat seinerseits auch eine VTable"/>
+<node CREATED="1770415472257" ID="ID_1000448368" MODIFIED="1770415540699" TEXT="einzelne VTable-Zugriffe sind durchaus akzeptabel in diesem Kontext">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...denn dieser Code-Pfad ist zu betrachten im Verh&#228;ltnis zu einer Media-Processing-Funciton, die Millionen von Iterationen macht
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1770415660943" ID="ID_514320767" MODIFIED="1770415884319" TEXT="so wie die Referenzen hier verwendet werden, k&#xf6;nnen sie nicht ge-Inlined werden">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...weil ich eine echte, dynamische Wahlm&#246;glichkeit schaffen m&#246;chte (wenngleich auch im realen Betrieb immer eine einzige feste Implementierungsklasse zum Einsatz kommen d&#252;rfte) &#8212; deshalb kann der Compiler keine Monomorphic-Optimisation machen, sondern mu&#223; die Referenz als Pointer implementieren
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1770415921509" ID="ID_1065325978" MODIFIED="1770415965378" TEXT="also letztlich: EngineCtx::access (ptr) &#x27fc; ctx.mem (ptr) &#x27fc; BufferProvider &#x27fc; VTable"/>
+<node CREATED="1770417583634" ID="ID_985038261" MODIFIED="1770417609053">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <i>f&#252;r die Performance</i>&#160;ist nichts gewonnen &#8212; aber auch nichts verloren
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1770417614308" ID="ID_806541675" MODIFIED="1770418018822" TEXT="der Sinn ist ein Anderer: wir verbergen (und vertagen) die Details des Setup">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das k&#246;nnte man auch in einer Subklasse tun; mir erschien aber die Schreibweise klarer: <font face="Monospaced" color="#6d4545">EngineCtx::access().mem.lockBufferFor&lt;Type&gt;() </font>anstatt einem <font face="Monospaced" color="#6d4545">getBufferProvider() </font>&#8212; das hei&#223;t, ich m&#246;chte die Abstraktion &#187;Buffer Provider&#171; oder &#187;Cache Provider&#171; nicht eigens hervorheben; au&#223;erdem kann so die ganze Implementierung in einem File beieinander stehen, und man spart sich ein weiteres <i>leeres, nichtsagendes</i>&#160; Interface, welches nur aus Gettern besteht. Ja, <i>Getter halte ich inzwischen f&#252;r ein Antipattern</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node BACKGROUND_COLOR="#f0c3ab" COLOR="#a50125" CREATED="1770432676989" ID="ID_1067427175" MODIFIED="1770502775329" TEXT="au&#xdf;erdem: es geht hier um einen &#xbb;virtuellen Konstruktur&#xab;">
+<icon BUILTIN="messagebox_warning"/>
+<node COLOR="#5b280f" CREATED="1770432721991" ID="ID_823794124" MODIFIED="1770502751324" TEXT="das l&#xe4;&#xdf;t sich nicht direkt mit einfacher Polymorphie ausdr&#xfc;cken">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...weil zum Zeitpunkt des Basis-Konstruktor-Aufrufs die VTable der abgeleiteten Klasse noch gar nicht definiert ist
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#e5273b" DESTINATION="ID_823794124" ENDARROW="Default" ENDINCLINATION="-9;194;" ID="Arrow_ID_980223480" SOURCE="ID_1551691272" STARTARROW="None" STARTINCLINATION="249;-98;"/>
+<icon BUILTIN="clanbomber"/>
+</node>
+</node>
+<node CREATED="1770419863186" ID="ID_1523382666" MODIFIED="1770419883009" TEXT="&#x27f9; dann sollte aber tats&#xe4;chlich nur EngineCtx flexibel sein">
+<node CREATED="1770419896867" ID="ID_37414574" MODIFIED="1770419909806" TEXT="eine Subklasse k&#xf6;nnte eine abweichend Konstruktor-Implementierung haben"/>
+<node COLOR="#5b280f" CREATED="1770419930695" ID="ID_594554640" MODIFIED="1770419971444" TEXT="dagegen die Facilities sollten kein Konfigurations-Punkt sein">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1770420555451" ID="ID_1161637995" MODIFIED="1770420573995" TEXT="Beobachtung: engine-ctx-facilities.hpp wird nur von der Impl includiert">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#971571" CREATED="1770419974790" ID="ID_1600145986" MODIFIED="1770503639789" TEXT="Kritik: das bestehende Design ist &#xfc;berm&#xe4;&#xdf;ig flexibel">
+<icon BUILTIN="smily_bad"/>
+<node CREATED="1770420004181" ID="ID_1964207644" MODIFIED="1770420018989" TEXT="man k&#xf6;nnte mit einer Subklasse den Konstruktor manipulieren"/>
+<node CREATED="1770420022731" ID="ID_1691530462" MODIFIED="1770420038474" TEXT="man k&#xf6;nnte aber auch eine Subklasse der Faciities verwenden"/>
+<node CREATED="1770420040505" ID="ID_504163818" MODIFIED="1770420050963" TEXT="man k&#xf6;nnte das sogar dynamisch konfigurierbar machen"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1770432826023" ID="ID_1551691272" MODIFIED="1770502751324" TEXT="Problem &quot;virtual Constructor&quot;">
+<arrowlink COLOR="#e5273b" DESTINATION="ID_823794124" ENDARROW="Default" ENDINCLINATION="-9;194;" ID="Arrow_ID_980223480" STARTARROW="None" STARTINCLINATION="249;-98;"/>
+<icon BUILTIN="broken-line"/>
+<node CREATED="1770502540037" ID="ID_1385647372" MODIFIED="1770502598466" TEXT="das Konstrukt is so komplex weil ich Unm&#xf6;gliches wollte">
+<node CREATED="1770502600507" ID="ID_1917634592" MODIFIED="1770502607915" TEXT="Zugriff &#xfc;ber direkte Referenzen"/>
+<node CREATED="1770502615401" ID="ID_817078241" MODIFIED="1770502621841" TEXT="alle Interna verbergen"/>
+<node CREATED="1770502608818" ID="ID_1897787658" MODIFIED="1770502614341" TEXT="flexible Konfiguration"/>
+</node>
+<node COLOR="#5b280f" CREATED="1770502567719" ID="ID_1167899742" MODIFIED="1770502725819">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      so wie gebaut geht es grade eben,
+    </p>
+    <p>
+      aber ist nicht wirklich konfigurierbar,
+    </p>
+    <p>
+      und sehr verwirrend...
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+<node CREATED="1770420145480" ID="ID_846728126" MODIFIED="1770503646889" TEXT="Verbesserungsvorschlag...">
+<icon BUILTIN="forward"/>
+<node CREATED="1770420157331" ID="ID_861714017" MODIFIED="1770503028758" TEXT="EngineCtx sollte nur ein Front-End sein"/>
+<node CREATED="1770420433021" ID="ID_113590275" MODIFIED="1770503301248" TEXT="die Facilities sollten ein (abstraktes?) Interface sein"/>
+<node CREATED="1770420470027" ID="ID_1690605102" MODIFIED="1770420486863" TEXT="das Konfigurieren der Facilities sollte komplett in eine Subklasse wandern"/>
+<node CREATED="1770420488100" ID="ID_811767293" MODIFIED="1770503353377" TEXT="&#xd83d;&#xdca1; das geht &#x27f9; mit VTable + Dependency-Injection">
+<node COLOR="#5b280f" CREATED="1770420808009" ID="ID_1375885980" MODIFIED="1770420999542" TEXT="k&#xf6;nnte sogar eine ABC sein...">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Ja <i>k&#246;nnte... </i>
+    </p>
+    <p>
+      <i>ABER</i>&#160;dann k&#246;nnte man nicht mehr ohne weitere Vorbereitung den Accessor lib::Depend&lt;EngineCtx&gt; verwenden. Er w&#252;rde dann n&#228;mlich einen Fehler werfen (weil man die ABC gar nicht instantiieren kann). Grunds&#228;tzlich so machbar; dann m&#252;&#223;te aber jeder Test irgend etwas explizit tun, oder man m&#252;&#223;te irgendwo auf Ebene der Library-Linkage spezielle <i>magische Tricks anwenden...</i>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1770420816960" ID="ID_1611882096" MODIFIED="1770423053443" TEXT="trotzdem besser: default-Implementierung">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <u>&#187;Principle of least Surprise&#171;</u>:
+    </p>
+    <ul>
+      <li>
+        lib::Debpend&lt;EngineCtx&gt; kann man <i>without much ado</i>&#160;einfach verwenden.
+      </li>
+      <li>
+        die Default-Implementierung sollte <b>nicht</b>&#160;speziell instrumentiert sein, sondern grade gut genug f&#252;r Demo- und Test-Code
+      </li>
+      <li>
+        f&#252;r Tests mit Verifikation sollte man eine konfigurierbare Subklasse einsetzen, und dort in Instrumentierung injizieren
+      </li>
+      <li>
+        f&#252;r den Produktiv-Betrieb kann eine ander Subklasse verwendet werden, die man an geeigneter Stelle mit viel Trara erzeugt und in die Dependency-Factory installiert
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#344288" DESTINATION="ID_1611882096" ENDARROW="Default" ENDINCLINATION="774;-55;" ID="Arrow_ID_1168301029" SOURCE="ID_1595414802" STARTARROW="None" STARTINCLINATION="287;20;"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1770420596604" ID="ID_363795542" MODIFIED="1770426133237" TEXT="neue Implementierungs-Struktur">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1770420604316" ID="ID_168788558" MODIFIED="1770503402337" TEXT="EngineCtx wird &#xbb;thin access layer&#xab;">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1770420629697" ID="ID_544649557" MODIFIED="1770503429988" TEXT="der Konstruktor greift per lib::Depend auf die &#xbb;Facilities&#xab; zu"/>
+<node CREATED="1770421167593" ID="ID_636455555" MODIFIED="1770503493728" TEXT="Konfigurierbarkeit / Erweiterkeit wird gesperrt"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1770421246262" ID="ID_1036641254" MODIFIED="1770503521611" TEXT="die Facilities werden ein separates Interface">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1770503687513" ID="ID_541900484" MODIFIED="1770503700355" TEXT="im Code werden sie komplett abgetrennt">
+<node CREATED="1770503815216" ID="ID_1588117494" MODIFIED="1770503822626" TEXT="der Header definiert nur noch das API"/>
+<node CREATED="1770503823710" ID="ID_834618072" MODIFIED="1770503846119" TEXT="Implementierung wandert ins RenderEnvironment"/>
+</node>
+<node CREATED="1770503701336" ID="ID_1711453106" MODIFIED="1770503737691">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      der Zugriff per lib::Depend&lt;Facilities&gt; ist der <b>eigentliche Konfigurationspunkt</b>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1770503567944" ID="ID_137274365" MODIFIED="1770503589300" TEXT="die default-Implementierung verwendet einen &#xbb;naiven&#xab; Memory-Manager">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1770421270713" ID="ID_1540227811" MODIFIED="1770503604448" TEXT="f&#xfc;r Tests gibt es eine einfache Konfigurations-Variante (Template)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...mit dieser kann man <i>einen konkreten Sub-Typ instantiieren; </i>das sollte f&#252;r alle Test-Belange ausreichen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node CREATED="1770421220703" ID="ID_1342562566" MODIFIED="1770421238601">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      das Nutzungs-Interface <b>bleibt komplett unver&#228;ndert</b>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1770422601672" ID="ID_859104368" MODIFIED="1770422916570" TEXT="die produktiv-Konfiguration steckt im RenderEnvironment">
+<linktarget COLOR="#fef9a9" DESTINATION="ID_859104368" ENDARROW="Default" ENDINCLINATION="-1632;0;" ID="Arrow_ID_694058089" SOURCE="ID_1384111904" STARTARROW="None" STARTINCLINATION="617;39;"/>
+<linktarget COLOR="#512590" DESTINATION="ID_859104368" ENDARROW="Default" ENDINCLINATION="-2147;102;" ID="Arrow_ID_1419091745" SOURCE="ID_463396735" STARTARROW="None" STARTINCLINATION="957;36;"/>
+</node>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1769310628330" ID="ID_842629477" MODIFIED="1769310692535" TEXT="mu&#xdf; mit einem custom-Allocator hinterlegt werden">
 <icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1769310640271" ID="ID_718178819" MODIFIED="1769310692535" TEXT="mu&#xdf; in massively-concurrent-Environment funktionieren">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1769310640271" ID="ID_718178819" MODIFIED="1770413532585" TEXT="mu&#xdf; in massively-concurrent-Environment funktionieren">
+<arrowlink COLOR="#4562b1" DESTINATION="ID_764817619" ENDARROW="Default" ENDINCLINATION="-1;-13;" ID="Arrow_ID_1089281127" STARTARROW="None" STARTINCLINATION="-76;4;"/>
 <icon BUILTIN="yes"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1770412906590" ID="ID_764817619" MODIFIED="1770413532585" STYLE="fork" TEXT="Ansatzpunkt: Implementierungs-Schwierigkeiten">
+<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
+<linktarget COLOR="#4562b1" DESTINATION="ID_764817619" ENDARROW="Default" ENDINCLINATION="-1;-13;" ID="Arrow_ID_1089281127" SOURCE="ID_718178819" STARTARROW="None" STARTINCLINATION="-76;4;"/>
+<icon BUILTIN="forward"/>
+<node CREATED="1770412962641" ID="ID_18778731" MODIFIED="1770413029456" TEXT="das ist die wichtigste Neuerung: wir &#x201e;wissen jetzt&#x201c; was in der Engine passiert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      &#187;damals&#171; hatten &#8222;wir&#8220; nur Vorstellungen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1770413053612" ID="ID_496482617" MODIFIED="1770413068060" TEXT="der Buffer-Descriptor ist ein Angelpunkt">
+<node CREATED="1770413071360" ID="ID_1304247140" MODIFIED="1770413189634" TEXT="er wird in einem &#xbb;gutm&#xfc;tigen&#xab; Environment erzeugt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...n&#228;mlich im Builder, welcher per Architektur-Beschlu&#223; als einfache Operation ablaufen soll, soweit &#252;berhaupt m&#246;glich in einem einzigen Thread.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1770413096071" ID="ID_38979164" MODIFIED="1770413266295" TEXT="der Zugriff erfolgt aber aus einem &#xbb;giftigen&#xab; Kontext">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <ul>
+      <li>
+        hochgradig concurrent
+      </li>
+      <li>
+        nicht-deterministische Zeitfolge
+      </li>
+      <li>
+        jede Latenz ist potentiell gef&#228;hrlich, vor allem Cache-Misses
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1770413110227" ID="ID_544701583" MODIFIED="1770413475005" TEXT="als Puffer habe ich mir das &#xbb;Announcment&#xab; geschaffen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das ist inspiriert von einer &#228;hnlichen Idee in <b>Christian's Mem-Mapping</b>-Backend: F&#252;r die latenz gef&#228;hrliche Vorbereitungen schickt man mit einem gewissen Vorlauf bereits auf den Weg, so da&#223; h&#246;chstwahrscheinlich nur noch ein Fence notwenig ist, um das vorbereitete Ergebnis aufzugreifen. In meinem Fall k&#246;nnte inzwischen eine asynchrone Resourcen-Anfrage bearbeitet werden.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1770413475793" ID="ID_1422513265" MODIFIED="1770413487548" TEXT="dahinter steht das ungel&#xf6;ste Problem mit den Typ-Deskriptoren">
+<node CREATED="1770413540811" ID="ID_188277969" MODIFIED="1770413885000" TEXT="an der Stelle ist das alte Design in einen &#xbb;Kn&#xe4;uel&#xab; gelaufen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Es gibt da einen &#187;Key&#171; und einen &#187;Entry&#171;, welcher ein erweiterter Key ist, und auf <i>magische Weise</i>&#160;am Hash h&#228;ngt; meiner Einsch&#228;tzung nach Bauchgef&#252;hl zufolge liegt<i>&#160;hier</i>&#160;das Problem, und nicht sosehr darin, da&#223; zus&#228;tzliche Metadaten im Hash erfa&#223;t werden m&#252;ssen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1770413556615" ID="ID_1988017453" MODIFIED="1770413732755" TEXT="hier tut sich ein eigenst&#xe4;ndiger Lebenszyklus auf (nicht deduzierbar vom API)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das API bzw. das dazugeh&#246;rige Protokoll diktiert lediglich eine gewisse <i>Sequenzierung:</i>&#160; ab einem gewissen Punkt geht es um einen konkreten Buffer diesen Typs, &#252;ber dessen weitere Relevanz nichts bekannt ist
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1770413594840" ID="ID_1663571326" MODIFIED="1770413626018" TEXT="dessen &#xd6;konomie h&#xe4;ngt an der Balance der inneren Abl&#xe4;ufe in der Engine">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1770414244449" ID="ID_432061684" MODIFIED="1770414268086" TEXT="die Type-Registry sollte eigenst&#xe4;ndig werden &#x2014; mit definiertem Protokoll">
+<node CREATED="1770414295774" ID="ID_1087577796" MODIFIED="1770414313168" TEXT="...das spiegelt zun&#xe4;chst das PufferProvider-Protokoll"/>
+<node CREATED="1770414676298" ID="ID_1431726465" MODIFIED="1770414701056">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      ich sehe das aber als Gelegenheit, das alte Design &#187;<b>aus den Angeln zu heben</b>&#171;
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1770414314373" ID="ID_864311296" MODIFIED="1770414338896" TEXT="aber es stellt sich die Frage: wo wird das asynchrone Messaging eingeschleift?">
+<icon BUILTIN="help"/>
+<node CREATED="1770414343810" ID="ID_1425459555" MODIFIED="1770414356044" TEXT="f&#xfc;r Tests des Protokolls brauchen wir das nicht"/>
+<node CREATED="1770414356945" ID="ID_345073886" MODIFIED="1770414372248" TEXT="es sollte sich auch nicht wirklich in der logischen Sicht niederchlagen"/>
+<node CREATED="1770414373612" ID="ID_758316693" MODIFIED="1770414579523">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      aber in der realen Engine gibt es <i>&#187;unvollst&#228;ndige Information&#171;</i>
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      n&#228;mlich wenn jemand in irgend einem Thread <i>jetzt sofort</i>&#160;einen Buffer braucht, oder zu rasch nach dem Anouncement den konkreten Buffer belegen m&#246;chte: dann m&#252;ssen wir n&#228;mlich <i>lokal handeln </i>&#8212; und es <i>k&#246;nnte sein,</i>&#160;da&#223; uns dazu wichtige Informationen fehlen (wiewohl sich das rein aus Interna der Implementierung ergibt und am Ende irrelevant sein k&#246;nnte)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -163177,7 +163528,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 </node>
 </node>
-<node CREATED="1664630921300" FOLDED="true" HGAP="183" ID="ID_1033335255" MODIFIED="1769124585023" TEXT="Dokumentation" VSHIFT="40">
+<node CREATED="1664630921300" FOLDED="true" HGAP="183" ID="ID_1033335255" MODIFIED="1770408007155" TEXT="Dokumentation" VSHIFT="40">
 <edge COLOR="#815b70"/>
 <cloud COLOR="#d7c3a8"/>
 <font NAME="SansSerif" SIZE="12"/>
@@ -168016,7 +168367,7 @@ that situation will improve in forseeable future.</pre>
 <node CREATED="1765904221705" ID="ID_168400791" MODIFIED="1765904240857" TEXT="Projektorganisation">
 <node CREATED="1765904243219" ID="ID_762435721" MODIFIED="1765904327595" TEXT="Ticket-System"/>
 </node>
-<node CREATED="1756651585768" FOLDED="true" ID="ID_1780831155" MODIFIED="1769124577781" TEXT="Website / Infrastruktur">
+<node CREATED="1756651585768" FOLDED="true" ID="ID_1780831155" MODIFIED="1770407261033" TEXT="Website / Infrastruktur">
 <icon BUILTIN="go"/>
 <node BACKGROUND_COLOR="#d4bcb8" COLOR="#435e98" CREATED="1768412090280" FOLDED="true" ID="ID_1149298290" MODIFIED="1769124560527" TEXT="Situation(allgemein)">
 <icon BUILTIN="info"/>
@@ -168310,7 +168661,7 @@ that situation will improve in forseeable future.</pre>
 </node>
 </node>
 <node CREATED="1765904354232" ID="ID_264350953" MODIFIED="1765904365268" TEXT="Infrastruktur-Technologie">
-<node CREATED="1765904375811" FOLDED="true" ID="ID_1088849846" MODIFIED="1768518611569" TEXT="Trac">
+<node CREATED="1765904375811" FOLDED="true" ID="ID_1088849846" MODIFIED="1770407266602" TEXT="Trac">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <node CREATED="1765904417246" ID="ID_204471697" MODIFIED="1765904449664" TEXT="Evolution">
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1765906859536" ID="ID_1389801711" MODIFIED="1765906944249" TEXT="Python-3 : bricht diverse unmaintained Plug-ins">
@@ -168508,6 +168859,10 @@ that situation will improve in forseeable future.</pre>
 <icon BUILTIN="list"/>
 </node>
 </node>
+</node>
+<node BACKGROUND_COLOR="#c6acc9" COLOR="#690f14" CREATED="1770407934032" ID="ID_1400122597" MODIFIED="1770408000853" TEXT="wir verwenden nun eigens angepa&#xdf;te stylesheets">
+<arrowlink COLOR="#3e3faa" DESTINATION="ID_876475413" ENDARROW="Default" ENDINCLINATION="-324;-706;" ID="Arrow_ID_1444835927" STARTARROW="None" STARTINCLINATION="938;53;"/>
+<icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1767201698203" ID="ID_1931145339" MODIFIED="1768267064638" TEXT="Setup/Dokumentation: als Git-Repository">
@@ -176058,6 +176413,8 @@ runner.run(test_suite())</font></code></pre>
     </p>
   </body>
 </html></richcontent>
+<arrowlink COLOR="#4f3cc4" DESTINATION="ID_1689165001" ENDARROW="Default" ENDINCLINATION="-5;-578;" ID="Arrow_ID_1871245844" STARTARROW="None" STARTINCLINATION="316;723;"/>
+<linktarget COLOR="#3e3faa" DESTINATION="ID_876475413" ENDARROW="Default" ENDINCLINATION="-324;-706;" ID="Arrow_ID_1444835927" SOURCE="ID_1400122597" STARTARROW="None" STARTINCLINATION="938;53;"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1766534702170" ID="ID_363092693" MODIFIED="1766534706018" TEXT="Ansatz">
 <node CREATED="1766534707745" ID="ID_868466734" MODIFIED="1766534716995" TEXT="Systematisches Gr&#xf6;&#xdf;enschema einf&#xfc;hren"/>
@@ -176253,6 +176610,8 @@ runner.run(test_suite())</font></code></pre>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1767128066842" FOLDED="true" ID="ID_1689165001" MODIFIED="1767128403198" TEXT="&#xdc;berarbeitung">
+<linktarget COLOR="#4f3cc4" DESTINATION="ID_1689165001" ENDARROW="Default" ENDINCLINATION="-5;-578;" ID="Arrow_ID_1871245844" SOURCE="ID_876475413" STARTARROW="None" STARTINCLINATION="316;723;"/>
+<linktarget COLOR="#43395c" DESTINATION="ID_1689165001" ENDARROW="Default" ENDINCLINATION="-387;1094;" ID="Arrow_ID_1201031513" SOURCE="ID_1407807350" STARTARROW="None" STARTINCLINATION="421;26;"/>
 <icon BUILTIN="list"/>
 <icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1766185663543" ID="ID_330284589" MODIFIED="1767128397522" TEXT="Font-Size einheitlich steuern">
@@ -198494,6 +198853,26 @@ env.Command('out.bin', 'in.bin', my_action)</code></pre>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1764372327206" ID="ID_177616317" MODIFIED="1764372346089" TEXT="sagen wir: besser als vorher und vorerst abgehakt">
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1770407459216" ID="ID_241204127" MODIFIED="1770407482341" TEXT="Trac-Styles: &#xbb;Draft-Markierung&#xab; verlorengegangen">
+<icon BUILTIN="broken-line"/>
+<icon BUILTIN="hourglass"/>
+<node CREATED="1770407486724" ID="ID_1407807350" MODIFIED="1770407740215" TEXT="vermutlich bei der &#xdc;berarbeitung der Templates">
+<arrowlink COLOR="#43395c" DESTINATION="ID_1689165001" ENDARROW="Default" ENDINCLINATION="-387;1094;" ID="Arrow_ID_1201031513" STARTARROW="None" STARTINCLINATION="421;26;"/>
+</node>
+<node CREATED="1770407754650" ID="ID_903116581" MODIFIED="1770407771330" TEXT="&lt;div id=&quot;preview&quot; class=&quot;wikipage&quot;&gt;...">
+<node CREATED="1770407778133" ID="ID_1439134061" MODIFIED="1770407790589" TEXT="hier war immer ein Background-Marker gesetzt worden"/>
+<node CREATED="1770407791335" ID="ID_266393470" MODIFIED="1770407893077" TEXT="m&#xfc;&#xdf;te man im Diff der Styles suchen, wo das abgeblieben ist">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      im Trac-Git-Repo: 1dd6a9cc60684504a95b3ec0280714f27756dbff&#160;&#160;(22.12.2025)
+    </p>
+  </body>
+</html></richcontent>
+</node>
 </node>
 </node>
 </node>

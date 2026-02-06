@@ -12,17 +12,19 @@
 */
 
 /** @file engine-facilities.hpp
- ** Implementation of render engine operational configuration and services.
+ ** Interface to setup and access the render engine configuration and services.
  ** Without further setup, [dependency injection](\ref depend.hpp) will establish a
  ** minimalistic default instantiation of these services, sufficient for demonstration
  ** and tests. For the real render engine however, dedicated service instances will be
- ** created and managed actively.
+ ** created and managed actively, by the [»Render Environment«](\ref RenderEnvironment).
  ** @todo and we'll have yet to »figure out« what specifically to do for these
  **       services and how to start an active render engine for productive use.
- ** @deprecated 1/2026 I'm unhappy with this convoluted structure;
- **             my intention is to fuse that with the engine-ctx.cpp implementation.
+ ** @remark this seemingly convoluted setup with several layers of abstraction is
+ **       necessary to allow for "simple use without much ado" in a test scenario,
+ **       while having a fully controlled lifecycle for the actual Render Engine.
  ** 
  ** @see engine-ctx.hpp
+ ** @see engine-service.hpp
  ** @see weaving-pattern-builder.hpp
  */
 
@@ -31,44 +33,22 @@
 
 
 #include "steam/engine/engine-ctx.hpp"
-#include "steam/engine/buffer-provider.hpp"
 #include "lib/nocopy.hpp"
-
-//#include <utility>
-#include <memory>
 
 
 namespace steam {
-namespace engine {
+namespace engine{
   
-//  using lib::Literal;
-  using std::unique_ptr;
-//  using std::forward;
-  
-  class EngineCtx::Facilities
+  class EngineFacilities
     : util::NonCopyable
     {
-      unique_ptr<BufferProvider> memProvider_;
-      unique_ptr<BufferProvider> cacheProvider_;
       
     public:
-      Facilities();
+      virtual ~EngineFacilities() { }  ///< this is an interface
       
-      BufferProvider&
-      getMemProvider()
-        {
-          REQUIRE (memProvider_);
-          return *memProvider_;
-        }
-      
-      BufferProvider&
-      getCacheProvider()
-        {
-          return cacheProvider_? *cacheProvider_
-                               : *memProvider_;
-        }
+      virtual BufferProvider& setupBufferProvider();
+      virtual BufferProvider& setupCacheProvider();   ///////////////////////////////////////////////////////TICKET #1223 : very likely super interface required for the CacheService
     };
-  
   
   
 }} // namespace steam::engine

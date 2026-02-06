@@ -16,9 +16,12 @@
  ** Notably the services to provide access to working buffers are linked directly into the
  ** render node connectivity, where they are used for each invocation of a render job.
  ** 
- ** The EngineCtx itself is meant to be [dependency injected](\ref lib::Depend), so that
- ** tests can use suitably adapted variants for verifications. The default instantiation
- ** provides a naive self-contained implementation suitable for demonstration and test.
+ ** The EngineCtx itself is meant to be [dependency injected](\ref lib::Depend), and acts
+ ** as a front-end for the support facilities of the render engine — which are likewise
+ ** dependency-injected, so that tests can use suitably adapted variants for verification.
+ ** The default instantiation provides a naive self-contained implementation suitable for
+ ** demonstration and test.
+ ** 
  ** For productive use within the Lumiera Render Engine, a much more elaborate setup
  ** is necessary, including setup of a frame cache, and of timing strategies; these
  ** are configured as part of starting the steam::engine::RenderEnvironment.
@@ -42,8 +45,6 @@
 #include "steam/engine/buffhandle.hpp"
 #include "lib/nocopy.hpp"
 
-#include <memory>
-
 
 namespace steam {
 namespace engine {
@@ -52,22 +53,17 @@ namespace engine {
   class EngineCtx
     : util::NonCopyable
     {
-      class Facilities;
-      std::unique_ptr<Facilities> services_;
       
     public:
       BufferProvider& mem;
-      BufferProvider& cache;
+      BufferProvider& cache;    /////////////////////////////////////////////////////////////////////////////TICKET #1223 : very likely a super interface for the CacheService
       
       static lib::Depend<EngineCtx> access;
       
     private:
-     ~EngineCtx();
       EngineCtx();
-      
       friend class lib::DependencyFactory<EngineCtx>;
     };
-  
   
   
 }} // namespace steam::engine

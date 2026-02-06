@@ -19,6 +19,7 @@
 
 
 #include "steam/engine/engine-service.hpp"
+#include "steam/engine/render-environment.hpp"
 #include "lib/itertools.hpp"
 
 //#include <string>
