@@ -13,15 +13,14 @@
 
 
 /** @file render-environment.hpp
- ** The active core within a CalcStream, causing the render mechanism to re-trigger repeatedly.
- ** Rendering is seen as an open-ended, ongoing process, and thus the management and planning
- ** of the render process itself is performed chunk wise and embedded into the other rendering
- ** calculations. The _"rendering-as-it-is-planned-right-now"_ can be represented as a closure
- ** to the jobs, which perform and update this plan on the go. And in fact, the head of the
- ** planning process, the CalcStream, maintains this closure instance, as parametrised
- ** with the appropriate configuration for the specific playback/render process underway.
- ** Enclosed into this instance lives the actual job planning pipeline, connected at the
- ** rear to the dispatcher and thus to the fixture and the low-level model
+ ** A configuration context for processing within the Render Engine.
+ ** This context can be accessed from within the ongoing render processes to query
+ ** strategy settings; actually, all the global support facilities within the Render Engine
+ ** are attached here. Thus it might also be used to control the lifecycle (2026 not clear yet)
+ ** @todo 2026 the concept is quite old, but I have reestablished it now to use it as an anchor.
+ **       it is not clear yet if there will be several sub environments for different playback
+ **       configurations; effectively, this is a conceptual placeholder now and needs to be
+ **       put into actual use to see where this leads us to....  ////////////////////////////////////////////TICKET #1409
  ** 
  ** @todo 4/2023 »Playback Vertical Slice« -- effort towards first integration of render process ////////////TICKET #1221
  */
@@ -37,7 +36,7 @@
 
 
 namespace steam {
-namespace engine {
+namespace engine{
   
   
   

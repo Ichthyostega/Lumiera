@@ -25,7 +25,7 @@
 #include "steam/engine/render-environment.hpp"
 #include "steam/engine/engine-facilities.hpp"
 #include "steam/engine/buffer-provider.hpp"
-#include "steam/engine/tracking-heap-block-provider.hpp"
+#include "steam/engine/heap-mem-provider.hpp"
 
 
 namespace steam {
@@ -46,12 +46,12 @@ namespace engine{
   /* ===== Render Environment Implementation ===== */
   
   
-  /////////////////////////////////////////////////////////////TODO
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1409 : actually build that! right now (1/2026) it is a conceptual placeholder
   /// The real Render Engine needs a well defined life cycle;
   /// services must be booted and shut down.
   /// Notably a dedicated serivce-like subclass of EngineCtx
   /// must be created here and installed for lib::Depend<EngineCtx>
-  /// 
+  ///
   
   
   /* ===== Access to Render Engine Facilities ===== */

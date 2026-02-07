@@ -1,5 +1,5 @@
 /*
-  TrackingHeapBlockProvider  -  plain heap allocating BufferProvider implementation for tests
+  HeapMemProvider  -  plain heap allocating BufferProvider implementation for tests
 
    Copyright (C)
      2011,            Hermann Vosseler <Ichthyostega@web.de>
@@ -12,7 +12,7 @@
 * *****************************************************************/
 
 
-/** @file tracking-heap-block-provider.cpp
+/** @file heap-mem-provider.cpp
  ** Implementation details of a mock engine::BufferProvider for unit testing
  */
 
@@ -22,7 +22,7 @@
 #include "lib/scoped-ptrvect.hpp"
 #include "lib/util-foreach.hpp"
 
-#include "steam/engine/tracking-heap-block-provider.hpp"
+#include "steam/engine/heap-mem-provider.hpp"
 
 #include <algorithm>
 #include <vector>

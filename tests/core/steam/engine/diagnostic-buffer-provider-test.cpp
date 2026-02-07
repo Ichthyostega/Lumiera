@@ -1,5 +1,5 @@
 /*
-  TrackingHeapBlockProvider(Test)  -  verify a support facility for diagnostic/test purposes
+  DiagnosticBufferProvider(Test)  -  verify a support facility for diagnostic/test purposes
 
    Copyright (C)
      2011,            Hermann Vosseler <Ichthyostega@web.de>
@@ -12,13 +12,13 @@
 * *****************************************************************/
 
 /** @file tracking-heap-block-provider-test.cpp
- ** unit test \ref TrackingHeapBlockProvider_test
+ ** unit test \ref DiagnosticBufferProvider_test
  */
 
 
 #include "lib/error.hpp"
 #include "lib/test/run.hpp"
-#include "steam/engine/tracking-heap-block-provider.hpp"
+#include "steam/engine/heap-mem-provider.hpp"
 #include "steam/engine/buffhandle-attach.hpp"
 #include "steam/engine/testframe.hpp"
 
@@ -59,13 +59,13 @@ namespace test  {
   
   
   /******************************************************************//**
-   * @test verify a test support facility, used to write mock components
-   *       to test the lumiera engine. The TrackingHeapBlockProvider is a
-   *       braindead implementation of the BufferProvider interface: it just
-   *       claims new heap blocks and never de-allocates them, allowing other
-   *       test and mock objects to verify allocated buffers after the fact.
+   * @test verify support to write mock components for buffer management.
+   *     - HeapMemProvider is a „braindead“ implementation of the BufferProvider
+   *       interface: it just claims new heap blocks and never de-allocates them.
+   *     - adding a layer of instrumentation, the DiagnosticBufferProvider allows
+   *       to count and verify allocated buffers and their content after the fact.
    */
-  class TrackingHeapBlockProvider_test : public Test
+  class DiagnosticBufferProvider_test : public Test
     {
       virtual void
       run (Arg)
@@ -210,7 +210,7 @@ namespace test  {
   
   
   /** Register this test class... */
-  LAUNCHER (TrackingHeapBlockProvider_test, "unit player");
+  LAUNCHER (DiagnosticBufferProvider_test, "unit player");
   
   
   

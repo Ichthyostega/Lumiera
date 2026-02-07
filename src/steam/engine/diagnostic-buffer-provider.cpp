@@ -24,7 +24,7 @@
 #include "lib/meta/function.hpp"
 
 #include "steam/engine/diagnostic-buffer-provider.hpp"
-#include "steam/engine/tracking-heap-block-provider.hpp"
+#include "steam/engine/heap-mem-provider.hpp"
 
 
 namespace steam {

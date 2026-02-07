@@ -29,7 +29,7 @@
 #include "steam/play/output-slot-connection.hpp"
 #include "steam/asset/meta/time-grid.hpp"
 #include "steam/engine/buffhandle.hpp"
-#include "steam/engine/tracking-heap-block-provider.hpp"
+#include "steam/engine/heap-mem-provider.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/scoped-ptrvect.hpp"
 #include "lib/iter-source.hpp"

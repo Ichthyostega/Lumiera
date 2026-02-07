@@ -16,6 +16,8 @@
  ** Implementation functionality to bridge between engine::PlayService and engine::EngineService.
  ** The former allows to start playback (or rendering) as a high-level activity, while the latter
  ** can manage and perform [calculation streams](\ref CalcStream)
+ ** 
+ ** @todo 2026 : the concept seems valid, but needs to be refined and integrated with play processing ///////TICKET #868
  */
 
 

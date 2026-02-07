@@ -232,7 +232,7 @@ namespace test{
             mockDumm->response = 11;
             CHECK (11 == dumm().probe() );       // NOTE: now returning the response changed on the mock instance
             
-            CHECK (!mockDummy3);                 // the second mock is still in not yet created state...
+            CHECK (!mockDummy3);                 // the second mock is still in 'not yet created' state...
             CHECK ((1+5+7+3) == checksum );
             CHECK (-1 == depp().probe() );
             CHECK ((1+5+7+3+3) == checksum );    // ...and now we got a second mock instance!

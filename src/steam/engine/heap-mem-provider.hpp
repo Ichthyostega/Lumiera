@@ -1,5 +1,5 @@
 /*
-  TRACKING-HEAP-BLOCK-PROVIDER.hpp  -  plain heap allocating BufferProvider implementation for tests
+  HEAP-MEM-PROVIDER.hpp  -  plain heap allocating BufferProvider implementation for tests
 
    Copyright (C)
      2011,            Hermann Vosseler <Ichthyostega@web.de>
@@ -11,27 +11,27 @@
 
 */
 
-/** @file tracking-heap-block-provider.hpp
+/** @file heap-mem-provider.hpp
  ** Dummy implementation of the BufferProvider interface to support writing unit tests.
- ** This BufferProvider is especially straight forward and brain dead: it just claims
- ** more and more heap blocks and never releases any memory dynamically. This allows
- ** to investigate additional tracking status flags for each allocated block after
- ** the fact.
+ ** This BufferProvider implementation is notably straight forward and silly: it just
+ ** claims more and more heap blocks and never releases any memory dynamically. This allows
+ ** to investigate additional tracking status flags for each allocated block after the fact.
  ** 
- ** The allocated buffers are numbered with a simple ascending sequence of integers,
- ** used as LocalTag (see BufferMetadata). Clients can just request a Buffer with the
- ** given number, causing that block to be allocated. There is a "backdoor", allowing
- ** to access any allocated block, even if it is considered "released" by the terms
- ** of the usual lifecycle. Only when the provider object itself gets destroyed,
- ** all allocated blocks will be discarded.
+ ** @todo 1/2026 for sake of implementation clarity, the following instrumentation functionality
+ **       must be relocated into the DiagnosticOutputProvider: Allocated buffers are numbered
+ **       with a simple ascending sequence of integers, used as LocalTag (see BufferMetadata).
+ **       Clients can request a Buffer with the given number, causing that block to be allocated.
+ **       There is a "backdoor", allowing  to access any allocated block, even if it is considered
+ **       "released" by the terms of the usual lifecycle. Only when the provider object itself
+ **       gets destroyed, all allocated blocks will be discarded.
  ** 
  ** @see DiagnosticOutputSlot
  ** @see DiagnosticBufferProvider
  ** @see buffer-provider-protocol-test.cpp
  */
 
-#ifndef STEAM_ENGINE_TRACKING_HEAP_BLOCK_PROVIDER_H
-#define STEAM_ENGINE_TRACKING_HEAP_BLOCK_PROVIDER_H
+#ifndef STEAM_ENGINE_HEAP_MEM_PROVIDER_H
+#define STEAM_ENGINE_HEAP_MEM_PROVIDER_H
 
 
 #include "lib/error.hpp"
@@ -178,4 +178,4 @@ namespace engine {
   
   
 }} // namespace steam::engine
-#endif
+#endif /*STEAM_ENGINE_HEAP_MEM_PROVIDER_H*/
