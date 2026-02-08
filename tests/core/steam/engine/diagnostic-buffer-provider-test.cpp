@@ -81,7 +81,7 @@ namespace test  {
       void
       simpleExample()
         {
-          TrackingHeapBlockProvider provider;
+          HeapMemProvider provider; /////////////////////////////////////OOO should be DiagnosticBufferProvider
           
           BuffHandle testBuff = provider.lockBufferFor<TestFrame>();
           CHECK (testBuff);
@@ -101,7 +101,7 @@ namespace test  {
       void
       verifyStandardCase()
         {
-          TrackingHeapBlockProvider provider;
+          HeapMemProvider provider; /////////////////////////////////////OOO should be DiagnosticBufferProvider
           
           BuffDescr buffType = provider.getDescriptorFor(TEST_ELM_SIZE);
           uint numElms = provider.announce(MAX_ELMS, buffType);
@@ -126,7 +126,7 @@ namespace test  {
       void
       verifyTestProtocol()
         {
-          TrackingHeapBlockProvider provider;
+          HeapMemProvider provider; /////////////////////////////////////OOO should be DiagnosticBufferProvider
           
           BuffDescr buffType = provider.getDescriptorFor(TEST_ELM_SIZE);
           

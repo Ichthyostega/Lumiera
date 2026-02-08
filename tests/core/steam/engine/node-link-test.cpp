@@ -17,6 +17,7 @@
 
 
 #include "lib/test/run.hpp"
+#include "steam/engine/engine-ctx.hpp"
 #include "steam/engine/proc-node.hpp"
 #include "steam/engine/node-builder.hpp"
 #include "steam/engine/test-rand-ontology.hpp"
@@ -301,10 +302,9 @@ namespace test  {
            //________________________________________________________
           // for sake of completeness: all these nodes can be invoked
           
-          BufferProvider& provider = DiagnosticBufferProvider::build();
           auto invoke = [&](ProcNode& node, uint port)
                             { // Sequence to invoke a Node...
-                              BuffHandle buff = provider.lockBufferFor<int> (-55);
+                              BuffHandle buff = EngineCtx::access().mem.lockBufferFor<int> (-55);
                               CHECK (-55 == buff.accessAs<int>());
                               buff = node.pull (port, buff, Time::ZERO, ProcessKey{0});
                               int result = buff.accessAs<int>();
@@ -350,6 +350,7 @@ namespace test  {
           auto testGen = testRand().setupGenerator();
           auto testMan = testRand().setupManipulator();
           auto testMix = testRand().setupCombinator();
+          /////////////////////////////////////////////////OOO install DiagnosticBufferProvider here...
           
 
           // Prepare for Time-Quantisation --> Frame-# or Offset parameter
@@ -482,7 +483,7 @@ namespace test  {
                               return f1.getChecksum();
                             };
           
-          BufferProvider& provider = DiagnosticBufferProvider::build();
+          BufferProvider& provider = EngineCtx::access().mem;
           const BuffDescr buffDescr = provider.getDescriptor<TestFrame>();
           
           auto invoke = [&](Time nomTime, uint port)
@@ -508,6 +509,7 @@ namespace test  {
               // Invoke -- and compare checksum with direct computation
               CHECK (invoke (nomTime,port) == verify (nomTime,port));
             }
+          //////////////////////OOO verify no leaked buffer here
         }
     };
   

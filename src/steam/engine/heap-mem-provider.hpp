@@ -116,7 +116,7 @@ namespace engine {
    * is discarded as a whole. There is an additional testing/diagnostics API to access the
    * tracked usage information, even when blocks are already marked as "released".
    */
-  class TrackingHeapBlockProvider
+  class HeapMemProvider
     : public BufferProvider
     {
       unique_ptr<diagn::PoolTable> pool_;
@@ -131,8 +131,8 @@ namespace engine {
       virtual void detachBuffer (HashVal, LocalTag const&, Buff&) override;
       
     public:
-      TrackingHeapBlockProvider();
-      virtual ~TrackingHeapBlockProvider();
+      HeapMemProvider();
+      virtual ~HeapMemProvider();
       
       size_t emittedCnt()  const;
       
@@ -162,7 +162,7 @@ namespace engine {
    */
   template<typename TY>
   TY&
-  TrackingHeapBlockProvider::accessAs (uint bufferID)
+  HeapMemProvider::accessAs (uint bufferID)
   {
     if (!withinOutputSequence (bufferID))
       throw error::Invalid ("Buffer with the given ID not yet emitted");

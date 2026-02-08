@@ -64,12 +64,12 @@ namespace engine {
   
   
   
-  TrackingHeapBlockProvider&
+  HeapMemProvider&
   DiagnosticBufferProvider::reset()
   {
     if (pImpl_)
       pImpl_->markAllEmitted();
-    pImpl_.reset(new TrackingHeapBlockProvider());
+    pImpl_.reset(new HeapMemProvider());
     return *pImpl_;
   }
   

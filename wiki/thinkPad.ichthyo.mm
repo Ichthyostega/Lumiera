@@ -86133,7 +86133,7 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 </node>
 </node>
 <node CREATED="1733431522849" ID="ID_1650778246" MODIFIED="1735321833734" TEXT="ParamNode: Auswertung">
-<linktarget COLOR="#0d7dd1" DESTINATION="ID_1650778246" ENDARROW="Default" ENDINCLINATION="-1710;1813;" ID="Arrow_ID_720477782" SOURCE="ID_796632095" STARTARROW="None" STARTINCLINATION="4744;-200;"/>
+<linktarget COLOR="#0d7dd1" DESTINATION="ID_1650778246" ENDARROW="Default" ENDINCLINATION="-1710;1813;" ID="Arrow_ID_720477782" SOURCE="ID_796632095" STARTARROW="None" STARTINCLINATION="4733;-123;"/>
 <linktarget COLOR="#6c6489" DESTINATION="ID_1650778246" ENDARROW="Default" ENDINCLINATION="-274;1070;" ID="Arrow_ID_1212360945" SOURCE="ID_113807641" STARTARROW="None" STARTINCLINATION="1789;61;"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1735322445124" ID="ID_77949868" MODIFIED="1735322738864">
 <richcontent TYPE="NODE"><html>
@@ -92928,7 +92928,7 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 </html></richcontent>
 </node>
 </node>
-<node CREATED="1734657650997" ID="ID_597301148" MODIFIED="1734657671746" TEXT="die BufferMetadat-Registry zeigt auch noch eine Warnung an">
+<node CREATED="1734657650997" ID="ID_597301148" MODIFIED="1734657671746" TEXT="die BufferMetadata-Registry zeigt auch noch eine Warnung an">
 <icon BUILTIN="idea"/>
 <node CREATED="1734657680261" ID="ID_514547250" MODIFIED="1734657685362" TEXT="das ist m.E. in Ordnung"/>
 <node CREATED="1734657686334" ID="ID_1651262657" MODIFIED="1734657700402">
@@ -104545,7 +104545,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="yes"/>
 </node>
 <node COLOR="#435e98" CREATED="1735317659721" ID="ID_796632095" MODIFIED="1736090913867" TEXT="Builder-API f&#xfc;r ParamAgentNode festlegen">
-<arrowlink COLOR="#0d7dd1" DESTINATION="ID_1650778246" ENDARROW="Default" ENDINCLINATION="-1710;1813;" ID="Arrow_ID_720477782" STARTARROW="None" STARTINCLINATION="4744;-200;"/>
+<arrowlink COLOR="#0d7dd1" DESTINATION="ID_1650778246" ENDARROW="Default" ENDINCLINATION="-1710;1813;" ID="Arrow_ID_720477782" STARTARROW="None" STARTINCLINATION="4733;-123;"/>
 <arrowlink COLOR="#0d7dd1" DESTINATION="ID_1513206906" ENDARROW="Default" ENDINCLINATION="42;240;" ID="Arrow_ID_1322946134" STARTARROW="None" STARTINCLINATION="385;-13;"/>
 <icon BUILTIN="yes"/>
 </node>
@@ -110708,6 +110708,98 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1770577592295" ID="ID_343232968" MODIFIED="1770579989926" TEXT="verwirrend: TrackingHeapBlockProvider vs. DiagnosticBufferProvider">
+<linktarget COLOR="#fe5f1d" DESTINATION="ID_343232968" ENDARROW="Default" ENDINCLINATION="-656;28;" ID="Arrow_ID_170574613" SOURCE="ID_903075201" STARTARROW="None" STARTINCLINATION="489;-805;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1770577675217" ID="ID_1600894378" MODIFIED="1770577698914" TEXT="hier sind zwei Dinge explizit als &#xbb;Test-Instrumentierung&#xab; markiert">
+<node CREATED="1770577701302" ID="ID_372371015" MODIFIED="1770577719951" TEXT="dabei sind es gar nicht zwei verschiedene Sachen"/>
+<node CREATED="1770577721175" ID="ID_483993135" MODIFIED="1770577740877" TEXT="DiagnosticBufferProvider verwendet n&#xe4;mlich einen TrackingHeapBlockProvider"/>
+<node CREATED="1770578260520" ID="ID_1111681111" MODIFIED="1770578290298" TEXT="die Instrumentierung ist in den TrackingHeapBlockProvider eingebaut"/>
+<node CREATED="1770578291319" ID="ID_503459914" MODIFIED="1770578313117" TEXT="DiagnosticBufferProvier hat davon ein Singleton"/>
+<node CREATED="1770577972307" ID="ID_675982462" MODIFIED="1770578218590" TEXT="da wird nur ein Diagnose-API daneben gestellt"/>
+<node CREATED="1770578406447" ID="ID_1725900046" MODIFIED="1770578425104" TEXT="Zugriff und Lifecycle sind ad-hoc gebaut">
+<node CREATED="1770578428751" ID="ID_1978643118" MODIFIED="1770578488221" TEXT="dieser Code ist ziemlich alt: 11/2011"/>
+<node CREATED="1770578558718" ID="ID_1082197746" MODIFIED="1770578602124" TEXT="interessant a88ccd219: per Refactoring auseinandergenommen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      commit a88ccd219d3d2b3e9c158771a6e7195435563286
+    </p>
+    <p>
+      Author: Ichthyostega &lt;prg@ichthyostega.de&gt;
+    </p>
+    <p>
+      Date:&#160;&#160;&#160;Mon Nov 7 00:07:53 2011 +0100
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;extract the diagnostic BufferProvider into separate header
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1770578925142" ID="ID_989873767" MODIFIED="1770578940590" TEXT="vorher gabs in der Impl. einen HeapMemProvider"/>
+<node CREATED="1770578941568" ID="ID_734864442" MODIFIED="1770578954644" TEXT="und das Tracking stand komplett daneben"/>
+<node CREATED="1770579250738" ID="ID_1236427610" MODIFIED="1770579402069" TEXT="im R&#xfc;ckblick eine Verschlechterung">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Diese Betrachtung ist allerdings ungerecht:
+    </p>
+    <ul>
+      <li>
+        ich dachte, da&#223; das Tracking eine Schl&#252;sselrolle spielen w&#252;rde
+      </li>
+      <li>
+        ich plante eine Buff-Table, die direkt auf dem BufferProvider aufsetzen sollte
+      </li>
+      <li>
+        es war damals (im 1.Anlauf, 2011) die Rolle und Problematik der Type-Registry nicht klar
+      </li>
+      <li>
+        das Tracking und der zugeh&#246;rige Test waren eine wichtige Best&#228;tigung f&#252;r mich, da ich sonst &#252;berhaupt nichts zu Greifen bekam und die weitere Entwicklung der Engine ins Bodenlose zu entgleiten drohte
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1770578621019" ID="ID_1599120936" MODIFIED="1770578724878" TEXT="das Dependency-Injection-Framework wurde erst 2018 erweitert/ausgebaut">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...und erst damit gab es eine Standard-Methode, wie man Test-Mocks verwenden sollte; vor diesem Zeitpunkt habe ich &#246;fters solche ad-hoc-Frameworks gebaut, mit statischen Zugriffsfunktionen (&#252;brigens auch danach noch habe ich deses Pattern weiter verwendet, vmtl. ohne diesen Widerspruch zu bemerken)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node COLOR="#5b280f" CREATED="1770578002141" ID="ID_923298769" MODIFIED="1770579857026" TEXT="fast alle Verwendungen von DiagnosticBufferProvider brauchen gar keine Instrumentierung">
+<icon BUILTIN="stop-sign"/>
+<icon BUILTIN="idea"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#840852" CREATED="1770580081970" ID="ID_571468068" MODIFIED="1770580173170" TEXT="...diese Vermischung tr&#xe4;gt viel zur Unverst&#xe4;ndlichkeit der Implementierung bei">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...und zwar, weil dieser TrackingHeapBlockProvider gleichzeitig auch <i>die einzige Implementierung ist, </i>und daher auch als Referenz zum Verst&#228;ndnis beitr&#228;gt (oder eben nicht)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1770580018037" ID="ID_1895645138" MODIFIED="1770580057614" TEXT="Instrumentierung und Diagnostik sollten klar als add-On forumliert sein">
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#58156d" CREATED="1770580802815" ID="ID_1033145238" MODIFIED="1770580826376" TEXT="(und sich an das DI-Schema halten)">
+<font NAME="SansSerif" SIZE="11"/>
+</node>
+</node>
 </node>
 <node CREATED="1769303363648" ID="ID_452649338" MODIFIED="1769303374804" TEXT="Neu: Tests f&#xfc;r die Implementierungs-Komponenten">
 <node CREATED="1769303376398" ID="ID_1546764124" MODIFIED="1769303430662" TEXT="das reflektiert die Wurzel des Problems: es gab keine Komponenten">
@@ -110934,8 +111026,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       das k&#246;nnte man auch in einer Subklasse tun; mir erschien aber die Schreibweise klarer: <font face="Monospaced" color="#6d4545">EngineCtx::access().mem.lockBufferFor&lt;Type&gt;() </font>anstatt einem <font face="Monospaced" color="#6d4545">getBufferProvider() </font>&#8212; das hei&#223;t, ich m&#246;chte die Abstraktion &#187;Buffer Provider&#171; oder &#187;Cache Provider&#171; nicht eigens hervorheben; au&#223;erdem kann so die ganze Implementierung in einem File beieinander stehen, und man spart sich ein weiteres <i>leeres, nichtsagendes</i>&#160; Interface, welches nur aus Gettern besteht. Ja, <i>Getter halte ich inzwischen f&#252;r ein Antipattern</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node BACKGROUND_COLOR="#f0c3ab" COLOR="#a50125" CREATED="1770432676989" ID="ID_1067427175" MODIFIED="1770502775329" TEXT="au&#xdf;erdem: es geht hier um einen &#xbb;virtuellen Konstruktur&#xab;">
 <icon BUILTIN="messagebox_warning"/>
@@ -111051,6 +111142,17 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1770421246262" ID="ID_1036641254" MODIFIED="1770503521611" TEXT="die Facilities werden ein separates Interface">
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1770503687513" ID="ID_541900484" MODIFIED="1770503700355" TEXT="im Code werden sie komplett abgetrennt">
+<node CREATED="1770503940640" ID="ID_1461045007" MODIFIED="1770503975752">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <u>Name</u>: <font face="Monospaced" color="#57486f">EngineFacilities</font>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="info"/>
+</node>
 <node CREATED="1770503815216" ID="ID_1588117494" MODIFIED="1770503822626" TEXT="der Header definiert nur noch das API"/>
 <node CREATED="1770503823710" ID="ID_834618072" MODIFIED="1770503846119" TEXT="Implementierung wandert ins RenderEnvironment"/>
 </node>
@@ -111093,6 +111195,261 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1770422601672" ID="ID_859104368" MODIFIED="1770422916570" TEXT="die produktiv-Konfiguration steckt im RenderEnvironment">
 <linktarget COLOR="#fef9a9" DESTINATION="ID_859104368" ENDARROW="Default" ENDINCLINATION="-1632;0;" ID="Arrow_ID_694058089" SOURCE="ID_1384111904" STARTARROW="None" STARTINCLINATION="617;39;"/>
 <linktarget COLOR="#512590" DESTINATION="ID_859104368" ENDARROW="Default" ENDINCLINATION="-2147;102;" ID="Arrow_ID_1419091745" SOURCE="ID_463396735" STARTARROW="None" STARTINCLINATION="957;36;"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1770579895252" ID="ID_1446919050" MODIFIED="1770580787019" TEXT="Neben-Anforderung: Test-Instrumentierung">
+<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1770579908226" ID="ID_903075201" MODIFIED="1770580671407" TEXT="der aktuelle Zustand erscheint verwirrend">
+<arrowlink COLOR="#fe5f1d" DESTINATION="ID_343232968" ENDARROW="Default" ENDINCLINATION="-656;28;" ID="Arrow_ID_170574613" STARTARROW="None" STARTINCLINATION="489;-805;"/>
+<icon BUILTIN="closed"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1770580686379" ID="ID_372794836" MODIFIED="1770580697997" TEXT="das rechtfertigt einen vorgreifenden Umbau">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#950422" CREATED="1770580709981" ID="ID_983235803" MODIFIED="1770580771238" STYLE="fork" TEXT="...hoffe da&#xdf; dadurch das Entwirren der restlichen Struktur einfacher wird...">
+<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="8"/>
+</node>
+</node>
+<node CREATED="1770580208636" ID="ID_1230394576" MODIFIED="1770580236902">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <i>theoretisch </i>k&#246;nnte die Instrumentierung weiterhin hilfreich sein f&#252;r Integrationstests
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1770580238647" ID="ID_95315291" MODIFIED="1770580311892" TEXT="die allermeisten Tests brauchen eigentlich nur eine naive Implementierung des Protokolls"/>
+<node CREATED="1770580329489" ID="ID_274736183" MODIFIED="1770580362335" TEXT="Zusammenfassung der Anforderungen">
+<node CREATED="1770580368548" ID="ID_857803990" MODIFIED="1770580396379" TEXT="f&#xfc;r viele Tests spielt die Konsistenz des BufferProviders gar keine Rolle"/>
+<node CREATED="1770580397427" ID="ID_466313776" MODIFIED="1770580417443" TEXT="eine Minderheit von Tests profitiert von einem Check am Ende: &#xbb;alles freigegeben&#xab;"/>
+<node CREATED="1770580418750" ID="ID_1499903439" MODIFIED="1770588929750" TEXT="(eigentlich bisher gar kein Test) braucht wirklich die volle Introspektion"/>
+<node CREATED="1770580456994" ID="ID_1742130131" MODIFIED="1770580609905" TEXT="diese volle Instrospektion ist jedoch beruhigend und didaktisch wertvoll">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...denn damit kann man zeigen
+    </p>
+    <ul>
+      <li>
+        wir haben die Implementierung voll im Griff
+      </li>
+      <li>
+        unser informmeles Verst&#228;ndnis der Abl&#228;ufe ist auch im Detail zutreffend und best&#228;tigbar
+      </li>
+      <li>
+        Buffer-Speicher wird nicht korrumpiert (das ist tats&#228;chlich relevant und kann anders nicht gezeigt werden)
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1770580842058" ID="ID_1092071064" MODIFIED="1770580848921" TEXT="Verbesserungsvorschlag">
+<node CREATED="1770580861010" ID="ID_569005501" MODIFIED="1770580873018" TEXT="den HeapMemProvider wieder aufleben lassen">
+<node CREATED="1770580875370" ID="ID_148441127" MODIFIED="1770582188832" TEXT="k&#xf6;nnte man wohl aus bestehender Implementierung unten herausl&#xf6;sen"/>
+<node CREATED="1770580907554" ID="ID_182811732" MODIFIED="1770580924246" TEXT="das k&#xf6;nnte dann die automatisch bereitgestellte Default-Implementierung werden"/>
+</node>
+<node CREATED="1770580981868" ID="ID_609182842" MODIFIED="1770580997034" TEXT="DiagnosticBufferProvider als echten Dekorator formulieren"/>
+<node CREATED="1770581298298" ID="ID_196316257" MODIFIED="1770581311188" TEXT="daf&#xfc;r einen zus&#xe4;tzlichen Diagnose-Adapter bereitstellen"/>
+</node>
+<node CREATED="1770582195640" ID="ID_1493677271" MODIFIED="1770582201333" TEXT="Umsetzung">
+<node BACKGROUND_COLOR="#e9dba9" COLOR="#e50cc3" CREATED="1770582202961" ID="ID_1011419192" MODIFIED="1770582247305" TEXT="zOMG !!!">
+<icon BUILTIN="smiley-angry"/>
+<node COLOR="#7f3d53" CREATED="1770582252642" ID="ID_266967583" MODIFIED="1770582377162">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <font size="5">WER</font>&#160;<font size="4">schreibt</font>&#160;<font size="3">denn</font>&#160;<font size="2">solchen</font>&#160;<font size="1">Schei&#223;</font>&#160;<font size="1">Code</font>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1770582397289" ID="ID_127254698" MODIFIED="1770582469122">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      schon das Interface <font face="Monospaced" color="#5d0ecc">BufferProvider</font>&#160;hat sehr viel &#187;code behind&#171;
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...das aber ist erst das &#252;bern&#228;chste Thema (und ist wohl den Problemen mit der Type-Registry geschuldet)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1770582477380" ID="ID_999127053" MODIFIED="1770582546759" TEXT="der TrackingHeapBlockProvider baut sein eigenes &#x201e;Interface&#x201c; daneben">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...wobei es sich gr&#246;&#223;tenteils um eine <i>aufgebohrte Kapsel</i>&#160; handelt, so da&#223; externder Diagnose-Code in den Inereien rumpfuschen kann
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1770582551131" ID="ID_1978239251" MODIFIED="1770582565261" TEXT="das wird aber nicht nur vom DiagnosticBufferProvider verwendet..."/>
+<node CREATED="1770582566788" ID="ID_309963921" MODIFIED="1770582574595" TEXT="sondern auch vom DiagnosticOutputSlot"/>
+<node CREATED="1770582988539" ID="ID_634916995" MODIFIED="1770582999790" TEXT="und auch noch direkt von den Tests"/>
+<node CREATED="1770582581564" ID="ID_623786907" MODIFIED="1770582680777" TEXT="die &#xbb;bufferNr&#xab; wird von diesem Code &#xfc;bergreifend verwendet">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...und zwar als Identit&#228;t des konkreten Speicherblocks, der ja von der Implementierung hier nicht verworfen wird &#8212; dieses Konzept <i>kann es aber gar nicht geben</i>&#160;im Rahmen des Interfaces/Protokolls
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1770583936275" ID="ID_320191045" MODIFIED="1770583976444">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      und die interne, instrumentierte <font face="Monospaced" color="#563a3a">class <b>Block</b></font>&#160;spielt auch noch eine wesentliche Rolle
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#df1456" CREATED="1770583500836" ID="ID_243154132" MODIFIED="1770583520520" TEXT="was mich am meisten schockiert...">
+<icon BUILTIN="forward"/>
+<node CREATED="1770583527006" ID="ID_806087423" MODIFIED="1770583541448" TEXT="es gibt gar keine Type-Manager-Impl"/>
+<node CREATED="1770586966167" ID="ID_1748567894" MODIFIED="1770587197658" TEXT="analog f&#xfc;r die OutputSlot::Connection-Impl...">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...also die <font color="#635e96" face="Bitstream Vera Sans Mono"><b>TrackingInMemoryBlockSequence </b></font>&#8212; dort sollte eine &#220;bersetzung von einer Frame-ID in interne Mechanismen stattfinden, aber stattdessen wird der Aufruf direkt an den Block-Pool durchgereicht, und dort <i>geschickt auf die </i><font face="Monospaced" color="#853c3c">bufferNr</font><i>&#160;zur&#252;ckgef&#252;hrt... </i><font size="2" color="#2b1e6c">(ja, kann man so machen, ist erst mal gar nicht falsch, aber keine gute Architektur f&#252;r eine Prototyp-Implementierung, weil sich daraus die tats&#228;hclichen Strukturen nicht ableiten lassen...)</font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1770583542477" ID="ID_197128431" MODIFIED="1770583553849" TEXT="stattdessen wurde der Block-Pool dazu umfunktioniert"/>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1770583558262" ID="ID_1573197333" MODIFIED="1770583587550" TEXT="das hei&#xdf;t: &#xbb;tracking&#xab; (Test) und Buffer-Type wurden vermengt">
+<icon BUILTIN="clanbomber"/>
+</node>
+<node CREATED="1770587908966" ID="ID_1686109027" MODIFIED="1770587935300" TEXT="sonderbar: im Einzelnen nachvollzogen sieht das alles sinnvoll aus">
+<icon BUILTIN="smiley-oh"/>
+<node CREATED="1770587974688" ID="ID_1308647462" MODIFIED="1770587986437" TEXT="wenn man die Implementierung kennt..."/>
+<node CREATED="1770587987406" ID="ID_471559778" MODIFIED="1770588015371" TEXT="dann &#xbb;sieht&#xab; man die Funktionalit&#xe4;t(abstrakt) die hier implementiert wird"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1770583768187" ID="ID_1646969889" MODIFIED="1770583787269" TEXT="ist &#xbb;wegwerfen und neu bauen&#xab; eine Option?">
+<icon BUILTIN="help"/>
+<node CREATED="1770583796245" ID="ID_1726318827" MODIFIED="1770583887055" TEXT="Gefahr: ich wei&#xdf; nicht was ich bauen soll">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      die verworrene alte Implementierung ist die einzige Spezifikation, im Besonderen bez&#252;glich des Type-management. Es gibt daf&#252;r einen speziellen Test, der ist aber oberfl&#228;chlich
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1770586541815" ID="ID_1015358849" MODIFIED="1770586562282" TEXT="Spezifikation lesen: oh die sind wirklich gut">
+<icon BUILTIN="idea"/>
+<node CREATED="1770586568739" ID="ID_844790374" MODIFIED="1770586578930" TEXT="die Situation sehr gr&#xfc;ndlich erfa&#xdf;t und durchdacht"/>
+<node CREATED="1770586580113" ID="ID_686640562" MODIFIED="1770586746844" TEXT="legen keine Details der Implementierung fest">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das ist <b>angemessen</b>&#160;so, und vermutlich habe ich es deshalb auch unterlassen, mehr zur Implementierung zu schreiben. <i>Und hier d&#252;rfte die Wurzel des aktuellen Problems liegen:</i>&#160;das Protokoll allein deckt noch nicht die besonderen Schwierigkeiten der Situation in der Render-Engine ab; und zudem wu&#223;te ich damals von diesen Problemen nichts, und hab daher <i>die zu erwartende Realit&#228;t interpoliert...</i>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fefc4e" COLOR="#351d75" CREATED="1770588022608" ID="ID_998237505" MODIFIED="1770588051869" TEXT="jetzt wird mir ein strukturelles Problem von damals klar">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1770588060011" ID="ID_355380610" MODIFIED="1770588099090" TEXT="ich kannte noch nicht die Anforderungen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...weil diese Implementierung <i>selber explorativ war,</i>&#160;das hei&#223;t, ihr Zweck war, diese Anforderungen herauszufinden
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1770588101007" ID="ID_1792566875" MODIFIED="1770588118185" TEXT="aber ich habe schnell gesehen, da&#xdf; alles auf wenigen Primitiven aufbaut"/>
+<node CREATED="1770588119699" ID="ID_1061144049" MODIFIED="1770588134782" TEXT="daher konnte ich die Implementierung rasch hochziehen"/>
+<node CREATED="1770588136512" ID="ID_373692115" MODIFIED="1770588154076" TEXT="leider wurde damit dreierlei verschmolzen">
+<node CREATED="1770588155574" ID="ID_149147491" MODIFIED="1770588164026" TEXT="das &#xbb;Tracking&#xab; f&#xfc;r die Diagnose-Tests"/>
+<node CREATED="1770588165530" ID="ID_883891804" MODIFIED="1770588188437" TEXT="das Memory-Management Buffer-Provider"/>
+<node CREATED="1770588189451" ID="ID_98204728" MODIFIED="1770588211289" TEXT="die Zuordnung der Buffer-Typen (auch ein &#xbb;tracking&#xab;)"/>
+<node CREATED="1770588212396" ID="ID_735989781" MODIFIED="1770588228362" TEXT="die Zuordnung von Output-Buffern zu Frame-Nrn"/>
+</node>
+<node CREATED="1770588232554" ID="ID_646365978" MODIFIED="1770588472010" TEXT="das k&#xf6;nnte ein Grund sein, warum ich die Protokolle nicht orthogonal angelegt habe">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das w&#252;rde hei&#223;en: w&#228;hrend der Arbeit an diesen Protokollen habe ich immer in den gleichen Strukturen gedacht, die letztlich Implementierungs-Primitive waren. Dadurch sind Implementierungs-Konzepte in die Standard-Implementierung der Protokolle ge&#187;leaked&#171; &#8212; und da es nur diese eine Referenz-Implementierung gab, ist diese Vermischung auch in den &#187;code behind&#171; der Protokoll-Implementierungen eingedrungen. Damit war ich schnell fertig (und stand zudem unter Druck, weil ich nicht vorw&#228;rts gekommen bin). Infolgedessen unterblieb eine Kritik, und das herausdestilieren einer abstrakteren Form des Typ-Managers; im Fall der Output-Slots ist es sogar noch schlimmer, denn dort ist eine abstrahierte Implementierung relativ sinnnlos (und w&#252;rde Vorgriffe machen bez&#252;glich der Technologie, also z.B. dann nur gut passen f&#252;r Audio-Buffer)
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1770588480684" ID="ID_1868317169" MODIFIED="1770588497291">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      demnach sollte ich <b>aufr&#228;umen</b>, nicht neubauen
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1770588498566" ID="ID_1222578115" MODIFIED="1770588507676" TEXT="der bestehende Code ist nicht schlecht"/>
+<node CREATED="1770588508728" ID="ID_1754817280" MODIFIED="1770588514881" TEXT="sondern nur verdorben"/>
+</node>
+<node CREATED="1770588523315" ID="ID_1846831481" MODIFIED="1770588557111">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Ansatz &#10233; die <b>Test-Instrumentierung neu dar&#252;ber bauen</b>
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1770588564590" ID="ID_1371010303" MODIFIED="1770588572076" TEXT="das f&#xfc;hrt erhebliche Redundanz ein"/>
+<node CREATED="1770588573009" ID="ID_1866006860" MODIFIED="1770588599864" TEXT="danach verbleibt im alten Code aber nur das sachlich Notwendige &#xbb;tracking&#xab;"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1770588606131" ID="ID_1497389688" MODIFIED="1770588643562" TEXT="vielleicht kann man in einem weiteren Schritt schon BufferProvider und OutputSlot trennen?">
+<icon BUILTIN="help"/>
+</node>
+</node>
+</node>
+<node CREATED="1770588842579" ID="ID_1904463931" MODIFIED="1770588849981" TEXT="Schritt-1 : Code trennen">
+<node CREATED="1770588964880" ID="ID_692469584" MODIFIED="1770588990867" TEXT="TrackingHeapBlockProvider &#x27fc; HeapMemProvider"/>
+<node CREATED="1770590017550" ID="ID_1783096429" MODIFIED="1770590027209" TEXT="einfache Verwendungen direkt darauf abstellen"/>
+</node>
+<node CREATED="1770590030827" ID="ID_995145745" MODIFIED="1770590039031" TEXT="Schritt-2 : Tracking abstrahieren">
+<node CREATED="1770590041763" ID="ID_707087059" MODIFIED="1770590078026" TEXT="DiagnosticBufferProvider als Wrapper redefinieren"/>
+<node CREATED="1770590087037" ID="ID_1369431211" MODIFIED="1770590102087" TEXT="alle tats&#xe4;chlichen Diagnose-Aufrufe identifizieren"/>
+<node CREATED="1770590107914" ID="ID_1076311206" MODIFIED="1770590121912" TEXT="daf&#xfc;r die Implementierung aufdoppeln"/>
+</node>
+<node CREATED="1770590137705" ID="ID_775309144" MODIFIED="1770590147875" TEXT="Schritt-3 : auftrennen">
+<node CREATED="1770590149154" ID="ID_560066313" MODIFIED="1770590174661" TEXT="das verbleibende Buffer-Provider-Interface &#xfc;berpr&#xfc;fen"/>
+<node CREATED="1770590206837" ID="ID_933010628" MODIFIED="1770590228576" TEXT="den DiagnosticOutputSlot seitw&#xe4;rts abspalten"/>
+<node CREATED="1770590176675" ID="ID_1189656993" MODIFIED="1770590203848" TEXT="nicht mehr ben&#xf6;tigte Instrumentierung im HeapMemProvider zur&#xfc;ckbauen"/>
 </node>
 </node>
 </node>
@@ -151799,7 +152156,7 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
 </node>
 </node>
 <node CREATED="1719249067047" ID="ID_860520674" MODIFIED="1719249077469" TEXT="OutputManager">
-<node CREATED="1719249078625" ID="ID_1793577189" MODIFIED="1719269049808" TEXT="Definition: ein konkreter Service zur Verwaltung externer Ausgaben">
+<node CREATED="1719249078625" ID="ID_1793577189" MODIFIED="1770582360879" TEXT="Definition: ein konkreter Service zur Verwaltung externer Ausgaben">
 <arrowlink COLOR="#890814" DESTINATION="ID_599503027" ENDARROW="Default" ENDINCLINATION="-447;649;" ID="Arrow_ID_1542547570" STARTARROW="None" STARTINCLINATION="-1299;-27;"/>
 <linktarget COLOR="#5e0222" DESTINATION="ID_1793577189" ENDARROW="Default" ENDINCLINATION="648;-26;" ID="Arrow_ID_329940341" SOURCE="ID_1133348458" STARTARROW="None" STARTINCLINATION="-75;593;"/>
 </node>
@@ -198286,13 +198643,13 @@ env.Command('out.bin', 'in.bin', my_action)</code></pre>
 </node>
 </node>
 </node>
-<node CREATED="1570812308345" FOLDED="true" ID="ID_595212266" MODIFIED="1734652811311" TEXT="Review">
+<node CREATED="1570812308345" ID="ID_595212266" MODIFIED="1770577103886" TEXT="Review">
 <icon BUILTIN="bell"/>
 <node CREATED="1570812319615" ID="ID_587624101" MODIFIED="1570812352560" TEXT="buffhandle.hpp">
 <arrowlink COLOR="#6997ce" DESTINATION="ID_572329221" ENDARROW="Default" ENDINCLINATION="-312;0;" ID="Arrow_ID_558667540" STARTARROW="None" STARTINCLINATION="241;-25;"/>
 <node CREATED="1570812358786" ID="ID_1531404447" MODIFIED="1570812369421" TEXT="2019-10">
 <node CREATED="1570812369993" ID="ID_1647231897" MODIFIED="1570812373524" TEXT="noch nicht verwendet"/>
-<node CREATED="1570812373920" ID="ID_1210803090" MODIFIED="1734653131163" TEXT="Testcode (TrackingHeapBlockProvider)">
+<node CREATED="1570812373920" ID="ID_1210803090" MODIFIED="1770577104001" TEXT="Testcode (TrackingHeapBlockProvider)">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -198300,7 +198657,7 @@ env.Command('out.bin', 'in.bin', my_action)</code></pre>
       sieht aber soweit sauber aus...
     </p>
     <p>
-      Wenngleich auch ziemlich elaboriert; all diese Tracking-Funktionalit&#xe4;t war seinerzeit angelegt worden, aber nur oberfl&#xe4;chlich getestet, weil der Render-Engine-Entwurf von 2012 letztlich steckengeblieben ist. Jetzt, 2024 beginne ich, den TrackingHeapBlockProvider zu f&#xfc;r Tests zu nutzen, einfach weil er da ist &#x2014; und stelle fest, da&#xdf; einige Details unfertig und etwas unausgereift wirken....
+      Wenngleich auch ziemlich elaboriert; all diese Tracking-Funktionalit&#228;t war seinerzeit angelegt worden, aber nur oberfl&#228;chlich getestet, weil der Render-Engine-Entwurf von 2012 letztlich steckengeblieben ist. Jetzt, 2024 beginne ich, den TrackingHeapBlockProvider zu f&#252;r Tests zu nutzen, einfach weil er da ist &#8212; und stelle fest, da&#223; einige Details unfertig und etwas unausgereift wirken....
     </p>
   </body>
 </html></richcontent>

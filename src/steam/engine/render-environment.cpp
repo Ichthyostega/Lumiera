@@ -38,7 +38,7 @@ namespace engine{
     BufferProvider&
     getNaiveBufferManager()
     {
-      static TrackingHeapBlockProvider buffProvider;       //////////////////////////////////////////////////TICKET #1367 : only suitable for first prototype; should implement a bare bone memory manager instead
+      static HeapMemProvider buffProvider;               ////////////////////////////////////////////////////TICKET #1367 : only suitable for first prototype; should implement a bare bone memory manager instead
       return buffProvider;
     }
   }

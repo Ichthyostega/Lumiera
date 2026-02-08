@@ -222,13 +222,13 @@ namespace engine {
   /**
    * @internal create a memory tracking BufferProvider,
    */
-  TrackingHeapBlockProvider::TrackingHeapBlockProvider()
+  HeapMemProvider::HeapMemProvider()
     : BufferProvider ("Diagnostic_HeapAllocated")
     , pool_(new diagn::PoolTable)
     , outSeq_()
     { }
   
-  TrackingHeapBlockProvider::~TrackingHeapBlockProvider()
+  HeapMemProvider::~HeapMemProvider()
     {
       INFO (proc_mem, "discarding %zu diagnostic buffer entries", outSeq_.size());
     }
@@ -237,7 +237,7 @@ namespace engine {
   /* ==== Implementation of the BufferProvider interface ==== */
   
   uint
-  TrackingHeapBlockProvider::prepareBuffers(uint requestedAmount, HashVal typeID)
+  HeapMemProvider::prepareBuffers(uint requestedAmount, HashVal typeID)
   {
     diagn::BlockPool& responsiblePool = getBlockPoolFor (typeID);
     return responsiblePool.prepare_for (requestedAmount);
@@ -245,7 +245,7 @@ namespace engine {
 
   
   BuffHandle
-  TrackingHeapBlockProvider::provideLockedBuffer(HashVal typeID)
+  HeapMemProvider::provideLockedBuffer(HashVal typeID)
   {
     diagn::BlockPool& blocks = getBlockPoolFor (typeID);
     diagn::Block& newBlock = blocks.createBlock();
@@ -254,7 +254,7 @@ namespace engine {
   
   
   void
-  TrackingHeapBlockProvider::mark_emitted (HashVal typeID, LocalTag const& specifics)
+  HeapMemProvider::mark_emitted (HashVal typeID, LocalTag const& specifics)
   {
     diagn::Block* block4buffer = locateBlock (typeID, specifics);
     if (!block4buffer)
@@ -275,7 +275,7 @@ namespace engine {
   
   /** mark a buffer as officially discarded */
   void
-  TrackingHeapBlockProvider::detachBuffer (HashVal typeID, LocalTag const& specifics, Buff& storage)
+  HeapMemProvider::detachBuffer (HashVal typeID, LocalTag const& specifics, Buff& storage)
   {
     diagn::Block* block4buffer = locateBlock (typeID, specifics);
     REQUIRE (block4buffer, "releasing a buffer not allocated through this provider");
@@ -288,20 +288,20 @@ namespace engine {
   /* ==== Implementation details ==== */
   
   size_t
-  TrackingHeapBlockProvider::emittedCnt()  const
+  HeapMemProvider::emittedCnt()  const
   {
     return outSeq_.size();
   }
   
   void
-  TrackingHeapBlockProvider::markAllEmitted()
+  HeapMemProvider::markAllEmitted()
   {
     for (auto& [_, blockPool] : *pool_)
          blockPool.discard();
   }
   
   diagn::Block&
-  TrackingHeapBlockProvider::access_emitted (uint bufferID)
+  HeapMemProvider::access_emitted (uint bufferID)
   {
     if (!withinOutputSequence (bufferID))
       return emptyPlaceholder;                                                ////////////////////////////////TICKET #856
@@ -310,7 +310,7 @@ namespace engine {
   }
   
   bool
-  TrackingHeapBlockProvider::withinOutputSequence (uint bufferID)  const
+  HeapMemProvider::withinOutputSequence (uint bufferID)  const
   {
     if (bufferID >= MAX_BUFFERS)
       throw error::Fatal ("hardwired internal limit for test buffers exceeded");
@@ -319,7 +319,7 @@ namespace engine {
   }
   
   diagn::BlockPool&
-  TrackingHeapBlockProvider::getBlockPoolFor (HashVal typeID)
+  HeapMemProvider::getBlockPoolFor (HashVal typeID)
   {
     diagn::BlockPool& pool = (*pool_)[typeID];
     if (!pool)
@@ -328,7 +328,7 @@ namespace engine {
   }
   
   diagn::Block*
-  TrackingHeapBlockProvider::locateBlock (HashVal typeID, void* storage)
+  HeapMemProvider::locateBlock (HashVal typeID, void* storage)
   {
     diagn::BlockPool& pool = getBlockPoolFor (typeID);
     diagn::Block* block4buffer = pool.find (storage);                         ////////////////////////////////TICKET #856
@@ -337,7 +337,7 @@ namespace engine {
   }
   
   diagn::Block*
-  TrackingHeapBlockProvider::searchInOutSeqeuence (void* blockLocation)
+  HeapMemProvider::searchInOutSeqeuence (void* blockLocation)
   {
     return pick_Block_by_storage (outSeq_, blockLocation);                    ////////////////////////////////TICKET #856
   }

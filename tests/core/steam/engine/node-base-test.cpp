@@ -20,12 +20,12 @@
 #include "lib/iter-zip.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/several-builder.hpp"
+#include "steam/engine/engine-ctx.hpp"
 #include "steam/engine/proc-node.hpp"
 #include "steam/engine/turnout.hpp"
 #include "steam/engine/turnout-system.hpp"
 #include "steam/engine/feed-manifold.hpp"
 #include "steam/engine/node-builder.hpp"
-#include "steam/engine/diagnostic-buffer-provider.hpp"
 #include "steam/engine/buffhandle-attach.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/util.hpp"
@@ -187,8 +187,7 @@ namespace test  {
           
           
           // prepare for invoking the node....
-          BufferProvider& provider = DiagnosticBufferProvider::build();
-          BuffHandle buff = provider.lockBufferFor<long> (-55);
+          BuffHandle buff = EngineCtx::access().mem.lockBufferFor<long> (-55);
           CHECK (-55 == buff.accessAs<long>());            // allocated some data buffer for the result, with a marker-value
           
           Time nomTime{Time::ZERO};
@@ -208,7 +207,7 @@ namespace test  {
       /** @test the FeedManifold as adapter between Engine and processing library...
        *      - bind local λ with various admissible signatures
        *      - construct specifically tailored FeedManifold types
-       *      - use the DiagnosticBufferProvider for test buffers
+       *      - use the default BufferProvider (from EngineCtx) to get test buffers
        *      - create FeedManifold instance, passing the λ and additional parameters
        *      - connect BuffHandle for these buffers into the FeedManifold instance
        *      - trigger invocation of the function
@@ -248,7 +247,7 @@ namespace test  {
 //        CHECK (m1.inArgs );                              // does not compile because storage field is not provided
 //        CHECK (m1.param );
           
-          BufferProvider& provider = DiagnosticBufferProvider::build();
+          BufferProvider& provider = EngineCtx::access().mem;
           BuffHandle buff = provider.lockBufferFor<Buffer> (-55);
           CHECK (buff.isValid());
           CHECK (buff.accessAs<long>() == -55);
@@ -458,8 +457,7 @@ namespace test  {
         {
           // Prepare setup to build a suitable FeedManifold...
           using Buffer = long;
-          BufferProvider& provider = DiagnosticBufferProvider::build();
-          BuffHandle buff = provider.lockBufferFor<Buffer> (-55);
+          BuffHandle buff = EngineCtx::access().mem.lockBufferFor<Buffer> (-55);
           
           
            //_______________________________________

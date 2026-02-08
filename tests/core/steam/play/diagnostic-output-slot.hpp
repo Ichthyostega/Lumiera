@@ -57,7 +57,7 @@ namespace play {
   using steam::asset::meta::TimeGrid;
   using steam::engine::BuffDescr;
   using steam::engine::test::TestFrame;
-  using steam::engine::TrackingHeapBlockProvider;
+  using steam::engine::HeapMemProvider;
   namespace diagn = steam::engine::diagn;
 
 //using std::vector;
@@ -94,7 +94,7 @@ namespace play {
       typedef std::unordered_set<FrameID> FrameTrackingInfo;
       
       
-      TrackingHeapBlockProvider buffProvider_;
+      HeapMemProvider buffProvider_;
       BuffDescr bufferType_;
       
       FrameTrackingInfo frameTrackingIndex_;

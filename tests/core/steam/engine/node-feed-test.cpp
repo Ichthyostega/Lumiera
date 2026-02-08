@@ -106,6 +106,7 @@ namespace test  {
           BuffHandle result = port.weave (turnoutSys);                // ◁————————— paramFun invoked here, then procFun
           CHECK (LIFE_AND_UNIVERSE_4EVER == result.accessAs<uint>());//             and procFun wrote param-value into result buffer
           result.release();
+          //////////////////////OOO verify no leaked buffer here
         }
       
       
@@ -228,7 +229,7 @@ namespace test  {
                                 .build()};
 
           // Prepare result buffer for invocation
-          BufferProvider& provider = DiagnosticBufferProvider::build();
+          BufferProvider& provider = DiagnosticBufferProvider::build();  ////////////////OOO should rather switch whole pipeline to a DiagnosticBufferProvider here
           BuffHandle buff = provider.lockBufferFor<long> (-55);
           CHECK (-55 == buff.accessAs<long>());
           
@@ -237,6 +238,7 @@ namespace test  {
           CHECK (v0+v1 == buff.accessAs<long>());
           
           buff.release();
+          //////////////////////OOO verify no leaked buffer here
         }
     };
   

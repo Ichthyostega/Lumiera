@@ -19,9 +19,9 @@
 #include "lib/test/run.hpp"
 #include "lib/hash-combine.hpp"
 #include "lib/test/test-helper.hpp"
+#include "steam/engine/engine-ctx.hpp"
 #include "steam/engine/node-builder.hpp"
 #include "steam/engine/test-rand-ontology.hpp"
-#include "steam/engine/diagnostic-buffer-provider.hpp"
 #include "lib/iter-zip.hpp"
 #include "lib/random.hpp"
 
@@ -321,7 +321,7 @@ namespace test  {
           CHECK (watch(node).getNodeSpec() == "Test:generate-◎"_expect);
           CHECK (watch(node).getPortSpec(0) == "generate(TestFrame)"_expect);
           
-          BufferProvider& provider = DiagnosticBufferProvider::build();
+          BufferProvider& provider = EngineCtx::access().mem;
           BuffHandle buffHandle = provider.lockBuffer (provider.getDescriptorFor(sizeof(TestFrame)));
           uint port{0};
           
@@ -415,7 +415,7 @@ namespace test  {
           CHECK (watch(nFilt).getPortSpec(0) == "manipulate(TestFrame)(TestFrame)"_expect );
           
           // prepare to invoke this Node chain...
-          BufferProvider& provider = DiagnosticBufferProvider::build();
+          BufferProvider& provider = EngineCtx::access().mem;
           BuffHandle buffHandle = provider.lockBuffer (provider.getDescriptorFor(sizeof(TestFrame)));
           uint port{0};
           
@@ -473,7 +473,7 @@ namespace test  {
           CHECK (watch(nMix).getPortSpec(0) == "combine(TestFrame/2)(TestFrame)"_expect );
           
           // prepare to invoke this Node chain...
-          BufferProvider& provider = DiagnosticBufferProvider::build();
+          BufferProvider& provider = EngineCtx::access().mem;
           BuffHandle buffHandle = provider.lockBuffer (provider.getDescriptorFor(sizeof(TestFrame)));
           CHECK (not buffHandle.accessAs<TestFrame>().isValid());
           uint port{0};

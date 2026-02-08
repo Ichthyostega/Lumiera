@@ -41,7 +41,7 @@ namespace engine {
    * simple BufferProvider implementation
    * with additional allocation tracking
    */
-  class TrackingHeapBlockProvider;
+  class HeapMemProvider;
   
   
   /****************************************************************//**
@@ -53,11 +53,11 @@ namespace engine {
     : util::NonCopyable
     {
       
-      std::unique_ptr<TrackingHeapBlockProvider>   pImpl_;
+      std::unique_ptr<HeapMemProvider>             pImpl_;
       static lib::Depend<DiagnosticBufferProvider> diagnostics;
       
       
-      TrackingHeapBlockProvider& reset();
+      HeapMemProvider& reset();
       bool isCurrent (BufferProvider const&);
       
       

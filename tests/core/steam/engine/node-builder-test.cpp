@@ -17,8 +17,8 @@
 
 
 #include "lib/test/run.hpp"
+#include "steam/engine/engine-ctx.hpp"
 #include "steam/engine/node-builder.hpp"
-#include "steam/engine/diagnostic-buffer-provider.hpp"
 #include "steam/asset/meta/time-grid.hpp"
 #include "lib/test/diagnostic-output.hpp"
 #include "lib/time/timequant.hpp"
@@ -92,7 +92,7 @@ namespace test  {
       
       /**
        * @internal Helper for Render Node invocation
-       *  - use a DiagnosticBufferProvider to allocate a result buffer
+       *  - use default config of EngineCtx (≙test setup) to allocate a result buffer
        *  - assuming that the Node internally does not allocate further buffers
        *  - pull from Port #0 of the given node, passing the \a nomTime as argument
        *  - expect the buffer to hold a single `uint` value after invocation
@@ -100,8 +100,7 @@ namespace test  {
       uint
       invokeRenderNode (ProcNode& theNode, Time nomTime =Time::ZERO)
         {
-          BufferProvider& provider = DiagnosticBufferProvider::build();
-          BuffHandle buff = provider.lockBufferFor<long> (-55);
+          BuffHandle buff = EngineCtx::access().mem.lockBufferFor<long> (-55);
           ProcessKey key{0};
           uint port{0};
           
