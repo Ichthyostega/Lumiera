@@ -91,7 +91,7 @@ namespace test  {
           // Create Test fixture.
           // In real usage, a suitable memory/frame/buffer provider
           // will be preconfigured, depending on the usage context
-          BufferProvider& provider = DiagnosticBufferProvider::build();
+          DiagnosticBufferProvider provider;
           
           BuffHandle buff = provider.lockBufferFor<TestFrame>();
           CHECK (buff.isValid());
@@ -106,11 +106,11 @@ namespace test  {
           CHECK (!buff.isValid());
           VERIFY_ERROR (LIFECYCLE, buff.accessAs<TestFrame>() );
           
-          DiagnosticBufferProvider& checker = DiagnosticBufferProvider::access(provider);
-          CHECK (checker.buffer_was_used (0));
-          CHECK (checker.buffer_was_closed (0));
+          auto diagnostic = watch(provider);
+          CHECK (diagnostic.buffer_was_used (0));
+          CHECK (diagnostic.buffer_was_closed (0));
           
-          CHECK (testData(0) == checker.accessMemory (0));
+          CHECK (testData(0) == diagnostic.accessMemory (0));
         }
       
       
@@ -120,7 +120,7 @@ namespace test  {
       verifyRenderingUsage()
         {
           // Test fixture: allows to track/verify allocations after the fact
-          BufferProvider& provider = DiagnosticBufferProvider::build();
+          DiagnosticBufferProvider provider;
           
           using DataBuff = std::array<int64_t, TestFrame::BUFFSIZ>;
           constexpr auto BUFFSIZ = sizeof(DataBuff);
@@ -174,17 +174,17 @@ namespace test  {
           auto endSum = workBuff.accessAs<TestFrame>().getChecksum();
           workBuff.release(); // note: not every buffer need be emitted.
           
-          DiagnosticBufferProvider& checker = DiagnosticBufferProvider::access(provider);
-          CHECK (checker.buffer_was_used (0));
-          CHECK (checker.buffer_was_closed (0));
-//        CHECK (checker.all_buffers_released());    ///////////////OOO do we need this API?
+          auto diagnostic = watch(provider);
+          CHECK (diagnostic.buffer_was_used (0));
+          CHECK (diagnostic.buffer_was_closed (0));
+//        CHECK (diagnostic.all_buffers_released());    ///////////////OOO do we need this API?
         }
       
       
       void
       verifyObjectAttachment()
         {
-          BufferProvider& provider = DiagnosticBufferProvider::build();
+          DiagnosticBufferProvider provider;
           BuffDescr type_A = provider.getDescriptorFor(sizeof(TestFrame));
           BuffDescr type_B = provider.getDescriptorFor(sizeof(int));
           BuffDescr type_C = provider.getDescriptor<int>();
@@ -221,7 +221,7 @@ namespace test  {
       void
       verifyObjectAttachmentFailure()
         {
-          BufferProvider& provider = DiagnosticBufferProvider::build();
+          DiagnosticBufferProvider provider;
           BuffDescr type_D = provider.getDescriptorFor(sizeof(Dummy));
           
           Dummy::checksum() = 0;

@@ -111268,8 +111268,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       <font size="5">WER</font>&#160;<font size="4">schreibt</font>&#160;<font size="3">denn</font>&#160;<font size="2">solchen</font>&#160;<font size="1">Schei&#223;</font>&#160;<font size="1">Code</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1770582397289" ID="ID_127254698" MODIFIED="1770582469122">
 <richcontent TYPE="NODE"><html>
@@ -111279,8 +111278,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       schon das Interface <font face="Monospaced" color="#5d0ecc">BufferProvider</font>&#160;hat sehr viel &#187;code behind&#171;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -111403,8 +111401,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       das w&#252;rde hei&#223;en: w&#228;hrend der Arbeit an diesen Protokollen habe ich immer in den gleichen Strukturen gedacht, die letztlich Implementierungs-Primitive waren. Dadurch sind Implementierungs-Konzepte in die Standard-Implementierung der Protokolle ge&#187;leaked&#171; &#8212; und da es nur diese eine Referenz-Implementierung gab, ist diese Vermischung auch in den &#187;code behind&#171; der Protokoll-Implementierungen eingedrungen. Damit war ich schnell fertig (und stand zudem unter Druck, weil ich nicht vorw&#228;rts gekommen bin). Infolgedessen unterblieb eine Kritik, und das herausdestilieren einer abstrakteren Form des Typ-Managers; im Fall der Output-Slots ist es sogar noch schlimmer, denn dort ist eine abstrahierte Implementierung relativ sinnnlos (und w&#252;rde Vorgriffe machen bez&#252;glich der Technologie, also z.B. dann nur gut passen f&#252;r Audio-Buffer)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -111416,8 +111413,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       demnach sollte ich <b>aufr&#228;umen</b>, nicht neubauen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1770588498566" ID="ID_1222578115" MODIFIED="1770588507676" TEXT="der bestehende Code ist nicht schlecht"/>
 <node CREATED="1770588508728" ID="ID_1754817280" MODIFIED="1770588514881" TEXT="sondern nur verdorben"/>
 </node>
@@ -111437,16 +111433,66 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node CREATED="1770588842579" ID="ID_1904463931" MODIFIED="1770588849981" TEXT="Schritt-1 : Code trennen">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1770588842579" ID="ID_1904463931" MODIFIED="1770595353062" TEXT="Schritt-1 : Code trennen">
+<icon BUILTIN="full-1"/>
 <node CREATED="1770588964880" ID="ID_692469584" MODIFIED="1770588990867" TEXT="TrackingHeapBlockProvider &#x27fc; HeapMemProvider"/>
 <node CREATED="1770590017550" ID="ID_1783096429" MODIFIED="1770590027209" TEXT="einfache Verwendungen direkt darauf abstellen"/>
 </node>
-<node CREATED="1770590030827" ID="ID_995145745" MODIFIED="1770590039031" TEXT="Schritt-2 : Tracking abstrahieren">
-<node CREATED="1770590041763" ID="ID_707087059" MODIFIED="1770590078026" TEXT="DiagnosticBufferProvider als Wrapper redefinieren"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1770590030827" ID="ID_995145745" MODIFIED="1770595364605" TEXT="Schritt-2 : Tracking abstrahieren">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1770590041763" ID="ID_707087059" MODIFIED="1770602327047" TEXT="DiagnosticBufferProvider als Wrapper redefinieren">
+<icon BUILTIN="pencil"/>
+<node COLOR="#435e98" CREATED="1770595708980" ID="ID_1149174165" MODIFIED="1770602338550" TEXT="der PImpl kann direkt eine Subkomponente werden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wir haben hier nix zu verbergen
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#435e98" CREATED="1770595736588" ID="ID_600664388" MODIFIED="1770602338551" TEXT="daf&#xfc;r mu&#xdf; der statische Instanz-Mechanismus weg">
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#338800" CREATED="1770595752923" ID="ID_671198609" MODIFIED="1770602341064" TEXT="stattdessen einen Separaten Diagnose-Kontext schaffen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1770598425427" ID="ID_1286763449" MODIFIED="1770598433928" TEXT="analog zu ProcNodeDiagnostics"/>
+<node CREATED="1770598434991" ID="ID_1549210941" MODIFIED="1770598446402" TEXT="also free function watch(provider)"/>
+</node>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1770602342349" ID="ID_1881815645" MODIFIED="1770602353899" TEXT="Konsistenzfehler im BufferProviderProtocol_test">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1770602368655" ID="ID_1117824947" MODIFIED="1770602374829" TEXT="&quot;Attempt to access an unknown buffer metadata entry&quot;"/>
+<node CREATED="1770602551031" ID="ID_676354463" MODIFIED="1770602557156" TEXT="Beobachtungen">
+<icon BUILTIN="forward"/>
+<node CREATED="1770602559312" ID="ID_382452027" MODIFIED="1770602582593" TEXT="verifySimpleUsage() &#x25b6; provider.lockBufferFor&lt;TestFrame&gt;();"/>
+<node CREATED="1770603040838" ID="ID_455451498" MODIFIED="1770603086284" TEXT="passiert in HeapMemProvider::provideLockedBuffer()">
+<node CREATED="1770603133792" ID="ID_1371565303" MODIFIED="1770603137180" TEXT="getBlockPoolFor (typeID)"/>
+<node CREATED="1770603138596" ID="ID_205556727" MODIFIED="1770603144836" TEXT="findet die typeID nicht"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#c50b16" CREATED="1770603145825" ID="ID_1161678376" MODIFIED="1770603165421" TEXT="&#xd83d;&#xddf2; AUA"/>
+</node>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1770603168537" ID="ID_1244643866" MODIFIED="1770603186894" TEXT="wir haben jetzt mehrere Metadata-Registries">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1770603253041" ID="ID_413919416" MODIFIED="1770603262458" TEXT="steckt in der BufferProvider-Basisklasse">
+<node CREATED="1770603292796" ID="ID_66726358" MODIFIED="1770603349010" TEXT="registriert wird im Basis-Objekt von DiagnosticBufferProvider"/>
+<node CREATED="1770603312138" ID="ID_684915175" MODIFIED="1770603334946" TEXT="aufgerufen wird im Basis-Objekt von HeapMemProvider"/>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1770603263559" ID="ID_303293123" MODIFIED="1770603392871" TEXT="jetzt r&#xe4;cht sich, da&#xdf; das ganze Type-Handling dort eingebaut wurde">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+</node>
+</node>
 <node CREATED="1770590087037" ID="ID_1369431211" MODIFIED="1770590102087" TEXT="alle tats&#xe4;chlichen Diagnose-Aufrufe identifizieren"/>
 <node CREATED="1770590107914" ID="ID_1076311206" MODIFIED="1770590121912" TEXT="daf&#xfc;r die Implementierung aufdoppeln"/>
 </node>
-<node CREATED="1770590137705" ID="ID_775309144" MODIFIED="1770590147875" TEXT="Schritt-3 : auftrennen">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1770590137705" ID="ID_775309144" MODIFIED="1770595373702" TEXT="Schritt-3 : auftrennen">
+<icon BUILTIN="hourglass"/>
 <node CREATED="1770590149154" ID="ID_560066313" MODIFIED="1770590174661" TEXT="das verbleibende Buffer-Provider-Interface &#xfc;berpr&#xfc;fen"/>
 <node CREATED="1770590206837" ID="ID_933010628" MODIFIED="1770590228576" TEXT="den DiagnosticOutputSlot seitw&#xe4;rts abspalten"/>
 <node CREATED="1770590176675" ID="ID_1189656993" MODIFIED="1770590203848" TEXT="nicht mehr ben&#xf6;tigte Instrumentierung im HeapMemProvider zur&#xfc;ckbauen"/>

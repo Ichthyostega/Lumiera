@@ -20,8 +20,9 @@
  */
 
 
-#include "lib/error.hpp"
-#include "lib/meta/function.hpp"
+//#include "lib/error.hpp"
+//#include "include/logging.h"
+//#include "lib/meta/function.hpp"
 
 #include "steam/engine/diagnostic-buffer-provider.hpp"
 #include "steam/engine/heap-mem-provider.hpp"
@@ -31,54 +32,14 @@ namespace steam {
 namespace engine {
   
   
-  /** Storage for the diagnostics frontend */
-  lib::Depend<DiagnosticBufferProvider> DiagnosticBufferProvider::diagnostics;
-  
-  
-  
-  
   DiagnosticBufferProvider::DiagnosticBufferProvider()
-    : pImpl_()
+    : BufferProvider{"Diagnostic_HeapAllocated"}
     { }
   
-  DiagnosticBufferProvider::~DiagnosticBufferProvider() { }
-  
-  
-  BufferProvider&
-  DiagnosticBufferProvider::build()
-  {
-    return diagnostics().reset();
-  }
-  
-  
-  DiagnosticBufferProvider&
-  DiagnosticBufferProvider::access (BufferProvider const& provider)
-  {
-    if (!diagnostics().isCurrent (provider))
-      throw error::Invalid("given Provider doesn't match (current) diagnostic data record."
-                           "This might be an lifecycle error. Did you build() this instance beforehand?");
-    
-    return diagnostics();
-  }
-  
-  
-  
-  
-  HeapMemProvider&
-  DiagnosticBufferProvider::reset()
-  {
-    if (pImpl_)
-      pImpl_->markAllEmitted();
-    pImpl_.reset(new HeapMemProvider());
-    return *pImpl_;
-  }
-  
-  bool
-  DiagnosticBufferProvider::isCurrent (BufferProvider const& implInstance)
-  {
-    return &implInstance == pImpl_.get();
-  }
-  
+  DiagnosticBufferProvider::~DiagnosticBufferProvider()
+    {
+//    INFO (proc_mem, "discarding %zu diagnostic buffer entries", outSeq_.size());   ////////////OOO implement based on dedicated tracking information in-object
+    }
   
   
   
@@ -86,23 +47,23 @@ namespace engine {
   /* === diagnostic API === */
   
   bool
-  DiagnosticBufferProvider::buffer_was_used (uint bufferID)  const
+  BufferDiagnostic::buffer_was_used (uint bufferID)
     {
-      return pImpl_->access_emitted(bufferID).was_used();
+      return dbp_.heapMemProvider_.access_emitted(bufferID).was_used();
     }
   
   
   bool
-  DiagnosticBufferProvider::buffer_was_closed (uint bufferID)  const
+  BufferDiagnostic::buffer_was_closed (uint bufferID)
     {
-      return pImpl_->access_emitted(bufferID).was_closed();
+      return dbp_.heapMemProvider_.access_emitted(bufferID).was_closed();
     }
   
   
   void*
-  DiagnosticBufferProvider::accessMemory (uint bufferID)  const
+  BufferDiagnostic::accessMemory (uint bufferID)
     {
-      return pImpl_->access_emitted(bufferID).accessMemory();
+      return dbp_.heapMemProvider_.access_emitted(bufferID).accessMemory();
     }
   
 

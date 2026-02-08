@@ -223,15 +223,13 @@ namespace engine {
    * @internal create a memory tracking BufferProvider,
    */
   HeapMemProvider::HeapMemProvider()
-    : BufferProvider ("Diagnostic_HeapAllocated")
+    : BufferProvider ("Naive_HeapAllocated")
     , pool_(new diagn::PoolTable)
     , outSeq_()
     { }
   
-  HeapMemProvider::~HeapMemProvider()
-    {
-      INFO (proc_mem, "discarding %zu diagnostic buffer entries", outSeq_.size());
-    }
+  
+  HeapMemProvider::~HeapMemProvider() { /* emit dtor of BlockPool here */ }
   
   
   /* ==== Implementation of the BufferProvider interface ==== */

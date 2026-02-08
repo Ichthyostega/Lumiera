@@ -1,5 +1,5 @@
 /*
-  DIAGNOSTIC-BUFFER-PROVIDER.hpp  -  helper for testing against the BufferProvider interface
+  DIAGNOSTIC-BUFFER-PROVIDER.hpp  -  helper for testing against the BufferProvider interf,ttace
 
    Copyright (C)
      2011,            Hermann Vosseler <Ichthyostega@web.de>
@@ -22,10 +22,9 @@
 
 
 #include "lib/error.hpp"
-#include "lib/depend.hpp"
 #include "lib/util.hpp"
-#include "steam/engine/type-handler.hpp"
-#include "steam/engine/buffer-provider.hpp"
+#include "steam/engine/type-handler.hpp"  ///////////////OOO warum?
+#include "steam/engine/heap-mem-provider.hpp"
 #include "lib/nocopy.hpp"
 
 #include <memory>
@@ -36,12 +35,8 @@ namespace engine {
   
   namespace error = lumiera::error;
   
+  class BufferDiagnostic;
   
-  /**
-   * simple BufferProvider implementation
-   * with additional allocation tracking
-   */
-  class HeapMemProvider;
   
   
   /****************************************************************//**
@@ -50,52 +45,49 @@ namespace engine {
    * @todo write type comment
    */
   class DiagnosticBufferProvider
-    : util::NonCopyable
+    : public BufferProvider
     {
-      
-      std::unique_ptr<HeapMemProvider>             pImpl_;
-      static lib::Depend<DiagnosticBufferProvider> diagnostics;
+      HeapMemProvider heapMemProvider_;
       
       
-      HeapMemProvider& reset();
-      bool isCurrent (BufferProvider const&);
+      /* === delegate BufferProvider API === */
+      
+      uint prepareBuffers (uint count, HashVal typeID)          override { return heapMemProvider_.prepareBuffers (count,typeID);}
+      BuffHandle provideLockedBuffer  (HashVal typeID)          override { return heapMemProvider_.provideLockedBuffer (typeID); }
+      void mark_emitted (HashVal h, LocalTag const& t)          override { heapMemProvider_.mark_emitted(h,t);   }
+      void detachBuffer (HashVal h, LocalTag const& t, Buff& b) override { heapMemProvider_.detachBuffer(h,t,b); }
       
       
-      DiagnosticBufferProvider();
-     ~DiagnosticBufferProvider();
-     
-      friend class lib::DependencyFactory<DiagnosticBufferProvider>;
-     
     public:
-      /** build a new Diagnostic Buffer Provider instance,
-       *  discard the existing one. Use the static query API
-       *  for investigating collected data. */
-      static BufferProvider& build();
-      
-      
-      /** access the diagnostic API of the buffer provider
-       * @throw error::Invalid if the given provider doesn't allow
-       *        for diagnostic access or wasn't registered beforehand.
-       */
-      static DiagnosticBufferProvider&
-      access (BufferProvider const& );
-      
-      
-      
-      
-      /* === diagnostic API === */
-      
-      bool buffer_was_used (uint bufferID)  const;
-      bool buffer_was_closed (uint bufferID) const;
-      void* accessMemory (uint bufferID)   const;
-      bool all_buffers_released()          const;
-      
-      
+     ~DiagnosticBufferProvider();
+      DiagnosticBufferProvider();
       
     private:
-      
+      /// „backdoor“ to watch instrumentation from tests
+      friend class BufferDiagnostic;
     };
   
+  class BufferDiagnostic
+    : util::MoveOnly
+    {
+      DiagnosticBufferProvider& dbp_;
+    public:
+      BufferDiagnostic (DiagnosticBufferProvider& thePro)
+        : dbp_{thePro}
+        { }
+      
+      
+      bool buffer_was_used (uint bufferID);
+      bool buffer_was_closed (uint bufferID);
+      void* accessMemory (uint bufferID);
+      bool all_buffers_released();
+    };
+  
+  inline BufferDiagnostic
+  watch (BufferProvider& thePro)
+  {
+    return BufferDiagnostic{dynamic_cast<DiagnosticBufferProvider&> (thePro)};
+  }
   
   
 }} // namespace steam::engine

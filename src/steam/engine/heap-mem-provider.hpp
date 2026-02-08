@@ -131,8 +131,8 @@ namespace engine {
       virtual void detachBuffer (HashVal, LocalTag const&, Buff&) override;
       
     public:
+     ~HeapMemProvider();
       HeapMemProvider();
-      virtual ~HeapMemProvider();
       
       size_t emittedCnt()  const;
       

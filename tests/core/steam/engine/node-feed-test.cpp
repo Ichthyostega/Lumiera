@@ -17,6 +17,8 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/depend-inject.hpp"
+#include "steam/engine/engine-ctx.hpp"
 #include "steam/engine/proc-node.hpp"
 #include "steam/engine/node-builder.hpp"
 #include "steam/engine/media-weaving-pattern.hpp"
@@ -86,10 +88,10 @@ namespace test  {
           using WeavingPattern = MediaWeavingPattern<Prototype>;
           using TurnoutWeaving = Turnout<WeavingPattern>;
 
-          BufferProvider& provider = DiagnosticBufferProvider::build();
+          DiagnosticBufferProvider bufferProvider;
           
           Several<PortRef> noLeadPorts;                               // ◁————————— empty predecessor-port-sequence
-          Several<BuffDescr> outBuffDescr = makeSeveral({provider.getDescriptor<uint>()})
+          Several<BuffDescr> outBuffDescr = makeSeveral({bufferProvider.getDescriptor<uint>()})
                                               .build();             //   ◁————————— a single output buffer to hold an `uint`
           uint resultSlot{0};
           
@@ -229,7 +231,7 @@ namespace test  {
                                 .build()};
 
           // Prepare result buffer for invocation
-          BufferProvider& provider = DiagnosticBufferProvider::build();  ////////////////OOO should rather switch whole pipeline to a DiagnosticBufferProvider here
+          DiagnosticBufferProvider provider;    /////////////////////////OOO should rather switch whole pipeline to a DiagnosticBufferProvider here
           BuffHandle buff = provider.lockBufferFor<long> (-55);
           CHECK (-55 == buff.accessAs<long>());
           
