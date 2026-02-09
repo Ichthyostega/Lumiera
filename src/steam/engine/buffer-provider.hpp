@@ -70,26 +70,12 @@ namespace engine {
    * @warning all of BufferProvider is assumed to run within a threadsafe environment.
    * 
    * @todo as of 6/2011 buffer management within the engine is still a bit vague
-   * @todo as of 11/11 thread safety within the engine remains to be clarified   ///////////////////////////TICKET #854
+   * @todo as of 11/11 thread safety within the engine remains to be clarified   ////////////////////////////TICKET #854
    */
   class BufferProvider
     : util::NonCopyable
     {
-      unique_ptr<BufferMetadata> meta_;
-      
-      
     protected: /* === for Implementation by concrete providers === */
-      
-      /// placeholder marker type for an actual data buffer
-      using Buff = StreamType::ImplFacade::DataBuffer;
-      
-      BufferProvider (Literal implementationID);
-      
-      virtual uint prepareBuffers (uint count, HashVal typeID)    =0;
-      
-      virtual BuffHandle provideLockedBuffer  (HashVal typeID)    =0;
-      virtual void mark_emitted (HashVal, LocalTag const&)        =0;
-      virtual void detachBuffer (HashVal, LocalTag const&, Buff&) =0;
       
       
     public:
@@ -126,9 +112,39 @@ namespace engine {
       size_t getBufferSize (HashVal typeID)   const;
       
     protected:
+      BufferProvider (Literal implementationID);
+      
+      /// placeholder marker type for an actual data buffer
+      using Buff = StreamType::ImplFacade::DataBuffer;
+      
       BuffHandle buildHandle (HashVal typeID, Buff* storage, LocalTag const& =LocalTag::UNKNOWN);
       
       bool was_created_by_this_provider (BuffDescr const&)  const;
+      
+///////////////////////////////////////////////////////////////////////////////OOO
+      virtual uint prepareBuffers (uint count, HashVal typeID)    =0;
+      
+      virtual BuffHandle provideLockedBuffer  (HashVal typeID)    =0;
+      virtual void mark_emitted (HashVal, LocalTag const&)        =0;
+      virtual void detachBuffer (HashVal, LocalTag const&, Buff&) =0;
+///////////////////////////////////////////////////////////////////////////////OOO
+      
+      class BufferStore
+        : util::NonCopyable
+        {
+        public:
+          virtual ~BufferStore() { } ///< this is an interface
+        protected:
+          BufferStore() = default;
+          
+          virtual uint prepareBuffers (uint count, HashVal typeID)    =0;
+          virtual BuffHandle provideLockedBuffer  (HashVal typeID)    =0;
+          virtual void mark_emitted (HashVal, LocalTag const&)        =0;
+          virtual void detachBuffer (HashVal, LocalTag const&, Buff&) =0;
+        };
+      
+      unique_ptr<BufferMetadata> bufferStage_;      /////////////////////////////////////////////////////////TICKET #1410 : must be turned into an internal interface
+      unique_ptr<BufferStore>    bufferStore_;
     };
   
   

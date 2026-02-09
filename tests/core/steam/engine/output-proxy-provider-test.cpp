@@ -37,6 +37,9 @@ namespace test  {
    *       output data buffers provided from _some implementation._
    * @todo WIP-WIP 12/2024 this turned out to be impossible,
    *       due to inconsistencies in the default implementation.  /////////////////////////////////////////////TICKET #1387 : need to consolidate BufferProvider default implementation
+   * @todo 2/2026 broken by refactoring of BufferProvider        //////////////////////////////////////////////TICKET #1410 : refactoring to separate external and implementation API
+   * @todo however, something along this lines *must*
+   *       be made possible, somehow, for OutputSlot...
    */
   class OutputProxyProvider_test : public Test
     {

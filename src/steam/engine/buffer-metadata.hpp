@@ -36,6 +36,9 @@
  ** configuration tag attached to the buffer access, allowing to re-access a context
  ** within the buffer provider implementation.
  ** 
+ ** @todo 2/2026 This code has gotten overly tricky and driven by expected effect.
+ **       It is mandatory to factor-out an interface!  //////////////////////////////////////////////////////TICKET #1410 : clean-up BufferProvider base implementation
+ ** 
  ** @see buffer-provider.hpp
  ** @see BufferMetadata_test
  ** @see BufferProviderProtocol_test
@@ -530,7 +533,9 @@ namespace engine {
    * represented as hierarchically linked hash keys. The implementation
    * may bind a TypeHandler to a specific type, allowing automatic invocation
    * of a "constructor" and "destructor" function on each buffer of this type,
-   * when \em locking or \em freeing the corresponding buffer.
+   * when _locking_ or _freeing_ the corresponding buffer.
+   * @todo 2/2026 must extract an interface here.....  //////////////////////////////////////////////////////TICKET #1410 : clean-up BufferProvider base implementation
+   * 
    */
   class BufferMetadata
     : util::NonCopyable

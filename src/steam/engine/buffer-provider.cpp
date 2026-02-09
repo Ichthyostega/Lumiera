@@ -47,7 +47,7 @@ namespace engine {
    * @param implementationID symbolic ID setting these family of buffers apart.
    */
   BufferProvider::BufferProvider (Literal implementationID)
-    : meta_(new BufferMetadata (implementationID))
+    : bufferStage_(new BufferMetadata (implementationID))
     { }
   
   BufferProvider::~BufferProvider() { }
@@ -60,28 +60,28 @@ namespace engine {
   bool
   BufferProvider::verifyValidity (BuffDescr const& bufferID)  const
   {
-    return meta_->isLocked (bufferID);
+    return bufferStage_->isLocked (bufferID);
   }
   
   
   BuffDescr
   BufferProvider::getDescriptorFor (size_t storageSize)
   {
-    return BuffDescr (*this, meta_->key (storageSize));
+    return BuffDescr (*this, bufferStage_->key (storageSize));
   }
   
   
   BuffDescr
   BufferProvider::getDescriptorFor(size_t storageSize, TypeHandler specialTreatment)
   {
-    return BuffDescr (*this, meta_->key (storageSize, specialTreatment));
+    return BuffDescr (*this, bufferStage_->key (storageSize, specialTreatment));
   }
   
   
   size_t
   BufferProvider::getBufferSize (HashVal typeID)  const
   {
-    metadata::Key& typeKey = meta_->get (typeID);
+    metadata::Key& typeKey = bufferStage_->get (typeID);
     return typeKey.storageSize();
   }
   
@@ -95,8 +95,8 @@ namespace engine {
   BuffHandle
   BufferProvider::buildHandle (HashVal typeID, Buff* storage, LocalTag const& localTag)
   {
-    metadata::Key& typeKey = meta_->get (typeID);
-    metadata::Entry& entry = meta_->markLocked(typeKey, storage, localTag);
+    metadata::Key& typeKey = bufferStage_->get (typeID);
+    metadata::Entry& entry = bufferStage_->markLocked(typeKey, storage, localTag);
     
     return BuffHandle (BuffDescr(*this, entry), storage);
   }
@@ -162,7 +162,7 @@ namespace engine {
   void
   BufferProvider::emitBuffer (BuffHandle const& handle)
   {
-    metadata::Entry& metaEntry = meta_->get (handle.entryID());
+    metadata::Entry& metaEntry = bufferStage_->get (handle.entryID());
     mark_emitted (metaEntry.parentKey(), metaEntry.localTag());
     metaEntry.mark(EMITTED);
   }
@@ -179,10 +179,10 @@ namespace engine {
   void
   BufferProvider::releaseBuffer (BuffHandle const& handle)
   try {
-    metadata::Entry& metaEntry = meta_->get (handle.entryID());
+    metadata::Entry& metaEntry = bufferStage_->get (handle.entryID());
     metaEntry.mark(FREE);   // might invoke embedded dtor function
     detachBuffer (metaEntry.parentKey(), metaEntry.localTag(), *handle);
-    meta_->release (metaEntry);
+    bufferStage_->release (metaEntry);
   }
   ERROR_LOG_AND_IGNORE (engine, "releasing a buffer from BufferProvider")
   
@@ -201,8 +201,8 @@ namespace engine {
   void
   BufferProvider::attachTypeHandler (BuffHandle const& target, BuffDescr const& reference)
   {
-    metadata::Entry& metaEntry = meta_->get (target.entryID());
-    metadata::Entry& refEntry = meta_->get (reference);
+    metadata::Entry& metaEntry = bufferStage_->get (target.entryID());
+    metadata::Entry& refEntry = bufferStage_->get (reference);
     REQUIRE (refEntry.isTypeKey());
     REQUIRE (!metaEntry.isTypeKey());
     if (!metaEntry.isLocked())
@@ -223,10 +223,10 @@ namespace engine {
   void
   BufferProvider::emergencyCleanup (BuffHandle const& target, bool invokeDtor)
   try {
-    metadata::Entry& metaEntry = meta_->get (target.entryID());
+    metadata::Entry& metaEntry = bufferStage_->get (target.entryID());
     metaEntry.invalidate (invokeDtor);
     detachBuffer (metaEntry.parentKey(), metaEntry.localTag(), *target);
-    meta_->release (metaEntry);
+    bufferStage_->release (metaEntry);
   }
   ERROR_LOG_AND_IGNORE (engine, "cleanup of buffer metadata while handling an error")
   

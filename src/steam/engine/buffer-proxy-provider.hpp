@@ -17,6 +17,7 @@
  ** with the buffer lifecycle protocol as defined by BufferProvider.
  ** @todo BROKEN as of 12/2024 //////////////////////////////////////////////////////////////////////////////TICKET #1387 : can not properly compose BufferProvider
  ** @see output-slot.hpp
+ ** @see output-proxy-provider-test.cpp
  */
 
 #ifndef STEAM_ENGINE_BUFFER_PROXY_PROVIDER_H
@@ -52,6 +53,7 @@ namespace engine {
   /**
    * Adapter to expose access to data blocks via BuffHandle and the BufferProvider protocol.
    * @todo WIP-WIP 12/2024 this is a design sketch to explore extension capabilities of BufferProvider
+   * @todo 2/2026 broken by refactoring of BufferProvider        //////////////////////////////////////////////TICKET #1410 : refactoring to separate external and implementation API
    */
   class BufferProxyProvider
     : util::NonCopyable
