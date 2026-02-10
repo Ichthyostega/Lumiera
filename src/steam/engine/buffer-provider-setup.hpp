@@ -50,50 +50,30 @@ namespace engine {
   
   
   /**
-   * Framework for configuring the actual BufferPovider backeind implementation.
+   * Framework for configuring the actual BufferPovider backend implementation.
    * 
    * @todo WIP-WIP-WIP as of 2/2026 -- reworking BufferProvider implementation   ////////////////////////////TICKET #1410
    */
   class BufferProviderSetup
-    : util::NonCopyable
+    : public BufferProvider
     {
     public:
       BufferProviderSetup (Literal implementationID);
-      
-      
-      uint announce (uint count, BuffDescr const&);
-      
-      BuffHandle lockBuffer (BuffDescr  const&);
-      void       emitBuffer (BuffHandle const&);
-      void    releaseBuffer (BuffHandle const&);
-      
-      template<typename BU, typename...ARGS>
-      BuffHandle lockBufferFor (ARGS ...args);
-      
-      /** allow for attaching and owing an object within an already created buffer */
-      void attachTypeHandler (BuffHandle const& target, BuffDescr const& reference);
-      
-      void emergencyCleanup (BuffHandle const& target, bool invokeDtor =false);
-      
-      
-      /** describe the kind of buffer managed by this provider */
-      BuffDescr getDescriptorFor(size_t storageSize=0);
-      BuffDescr getDescriptorFor(size_t storageSize, TypeHandler specialTreatment);
-      
-      template<typename BU, typename...ARGS>
-      BuffDescr getDescriptor (ARGS ...args);
-      
-      
-      
-      /* === API for BuffHandle internal access === */
-      
-      bool verifyValidity (BuffDescr const&)  const;
-      size_t getBufferSize (HashVal typeID)   const;
+
+      class Stage
+        : protected BufferStage
+        {
+          
+        };
+
+      class Store
+        : protected BufferStore
+        {
+          
+        };
+
       
     protected:
-      BuffHandle buildHandle (HashVal typeID, Buff* storage, LocalTag const& =LocalTag::UNKNOWN);
-      
-      bool was_created_by_this_provider (BuffDescr const&)  const;
     };
   
   

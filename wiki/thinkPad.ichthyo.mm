@@ -110713,8 +110713,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 <node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1770577592295" ID="ID_343232968" MODIFIED="1770675210511" TEXT="verwirrend: TrackingHeapBlockProvider vs. DiagnosticBufferProvider">
-<linktarget COLOR="#fe5f1d" DESTINATION="ID_343232968" ENDARROW="Default" ENDINCLINATION="-656;28;" ID="Arrow_ID_170574613" SOURCE="ID_903075201" STARTARROW="None" STARTINCLINATION="489;-805;"/>
 <linktarget COLOR="#970f69" DESTINATION="ID_343232968" ENDARROW="Default" ENDINCLINATION="139;518;" ID="Arrow_ID_1217877891" SOURCE="ID_1625465015" STARTARROW="None" STARTINCLINATION="1159;-107;"/>
+<linktarget COLOR="#fe5f1d" DESTINATION="ID_343232968" ENDARROW="Default" ENDINCLINATION="-656;28;" ID="Arrow_ID_170574613" SOURCE="ID_903075201" STARTARROW="None" STARTINCLINATION="489;-805;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1770577675217" ID="ID_1600894378" MODIFIED="1770577698914" TEXT="hier sind zwei Dinge explizit als &#xbb;Test-Instrumentierung&#xab; markiert">
 <node CREATED="1770577701302" ID="ID_372371015" MODIFIED="1770577719951" TEXT="dabei sind es gar nicht zwei verschiedene Sachen"/>
@@ -111488,8 +111488,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       wir haben hier nix zu verbergen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
 <node COLOR="#435e98" CREATED="1770595736588" ID="ID_600664388" MODIFIED="1770602338551" TEXT="daf&#xfc;r mu&#xdf; der statische Instanz-Mechanismus weg">
@@ -111656,7 +111655,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1770686578314" ID="ID_1612189460" MODIFIED="1770686589577" TEXT="Vorteil: es funktioniert erst mall alles weiter"/>
 <node CREATED="1770686590531" ID="ID_1259367729" MODIFIED="1770686603008" TEXT="Nachteil: viel formal-methodische Folge-Arbeiten"/>
 </node>
-<node CREATED="1770686437464" ID="ID_786050828" MODIFIED="1770686887146" TEXT="aggresiv: gewaltsam in den BufferStore dr&#xfc;cken">
+<node CREATED="1770686437464" ID="ID_786050828" MODIFIED="1770753257403" TEXT="aggresiv: gewaltsam in den BufferStore dr&#xfc;cken">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -111665,15 +111664,17 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
     </p>
   </body>
 </html></richcontent>
-<linktarget COLOR="#772943" DESTINATION="ID_786050828" ENDARROW="Default" ENDINCLINATION="-10;18;" ID="Arrow_ID_390054105" SOURCE="ID_794162213" STARTARROW="None" STARTINCLINATION="37;3;"/>
+<linktarget COLOR="#772943" DESTINATION="ID_786050828" ENDARROW="Default" ENDINCLINATION="-2;15;" ID="Arrow_ID_390054105" SOURCE="ID_794162213" STARTARROW="None" STARTINCLINATION="37;3;"/>
 <icon BUILTIN="forward"/>
+<icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1770686792833" ID="ID_794162213" MODIFIED="1770686887146" TEXT="(Entscheidung nach Bauchgef&#xfc;hl)">
-<arrowlink COLOR="#772943" DESTINATION="ID_786050828" ENDARROW="Default" ENDINCLINATION="-10;18;" ID="Arrow_ID_390054105" STARTARROW="None" STARTINCLINATION="37;3;"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1770686792833" ID="ID_794162213" MODIFIED="1770753257403" TEXT="(Entscheidung nach Bauchgef&#xfc;hl)">
+<arrowlink COLOR="#772943" DESTINATION="ID_786050828" ENDARROW="Default" ENDINCLINATION="-2;15;" ID="Arrow_ID_390054105" STARTARROW="None" STARTINCLINATION="37;3;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
-<node COLOR="#5b280f" CREATED="1770687816060" HGAP="42" ID="ID_1712436041" MODIFIED="1770687867359" TEXT="geht aber gar nicht ohne weiteres" VSHIFT="15">
+<node BACKGROUND_COLOR="#e1b0b2" COLOR="#903001" CREATED="1770687816060" HGAP="66" ID="ID_1712436041" MODIFIED="1770753328699" TEXT="geht aber gar nicht ohne weiteres" VSHIFT="41">
+<edge COLOR="#7a2635"/>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1770687870590" ID="ID_1950334584" MODIFIED="1770688110332" TEXT="weil die Implementierungs-Interfaces protected sein sollen">
 <richcontent TYPE="NOTE"><html>
@@ -111707,6 +111708,39 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1770689042943" ID="ID_1618738867" MODIFIED="1770689064669" TEXT="und das wird dann gleich ein Setup-Template">
 <icon BUILTIN="yes"/>
 </node>
+<node CREATED="1770751825670" ID="ID_70021354" MODIFIED="1770751894905" TEXT="dann ziehen die Standard-Implementierungen der Komponenten hierher"/>
+<node CREATED="1770751896021" ID="ID_1260395349" MODIFIED="1770751981141" TEXT="diese stehen dort in der public-Zone">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...was bedeutet, da&#223; sie auch durch frei stehende Klassen implementiert werden k&#246;nnen
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1770752044191" ID="ID_1057884130" MODIFIED="1770752086379">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      hei&#223;en: <font face="Monospaced" color="#753030">Stage</font>&#160;und <font face="Monospaced" color="#753030">Store</font>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1770751989067" ID="ID_967625869" MODIFIED="1770752002967" TEXT="idealerweise gibt es aber Sub-Interfaces"/>
+<node CREATED="1770753141181" ID="ID_1388834339" MODIFIED="1770753158064" TEXT="das bisherige BufferMetadata k&#xf6;nnte dorthin wandern"/>
+<node CREATED="1770753161507" ID="ID_725701199" MODIFIED="1770753175833" TEXT="aber auch ein StorageBackend-Interface ist denkbar"/>
+</node>
+</node>
+<node COLOR="#843d1b" CREATED="1770753348503" ID="ID_1827483330" MODIFIED="1770753386434" TEXT="....also Rettung durch &#x201e;alles viel komplexer machen&#x201c;...">
+<icon BUILTIN="smiley-neutral"/>
 </node>
 </node>
 </node>

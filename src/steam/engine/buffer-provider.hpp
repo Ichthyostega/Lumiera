@@ -40,6 +40,7 @@
 //#include "steam/engine/engine-ctx.hpp"
 #include "steam/engine/type-handler.hpp"
 #include "steam/engine/buffer-local-tag.hpp"
+#include "steam/engine/buffer-metadata.hpp"  /////////////////////////OOO must be removed from here
 #include "lib/nocopy.hpp"
 
 #include <utility>
@@ -129,22 +130,30 @@ namespace engine {
       virtual void detachBuffer (HashVal, LocalTag const&, Buff&) =0;
 ///////////////////////////////////////////////////////////////////////////////OOO
       
+      class BufferStage
+        : public BufferMetadata         /////////////////////////////////////////////////////////////////////TICKET #1410 : mix-in exiting old implementation -- for sake of refactoring only!
+        {
+        public:
+          virtual ~BufferStage() { } ///< this is an interface
+          
+          using BufferMetadata::BufferMetadata;   ///////////////////////////////////////////////////////////TICKET #1410 : actual implementation structures should move down into this classes implementation
+        protected:
+        };
+      
       class BufferStore
         : util::NonCopyable
         {
         public:
           virtual ~BufferStore() { } ///< this is an interface
         protected:
-          BufferStore() = default;
-          
           virtual uint prepareBuffers (uint count, HashVal typeID)    =0;
           virtual BuffHandle provideLockedBuffer  (HashVal typeID)    =0;
           virtual void mark_emitted (HashVal, LocalTag const&)        =0;
           virtual void detachBuffer (HashVal, LocalTag const&, Buff&) =0;
         };
       
-      unique_ptr<BufferMetadata> bufferStage_;      /////////////////////////////////////////////////////////TICKET #1410 : must be turned into an internal interface
-      unique_ptr<BufferStore>    bufferStore_;
+      unique_ptr<BufferStage> bufferStage_;       ///////////////////////////////////////////////////////////TICKET #1410 : must be turned into an internal interface
+      unique_ptr<BufferStore> bufferStore_;
     };
   
   

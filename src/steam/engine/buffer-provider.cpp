@@ -19,7 +19,7 @@
 
 #include "lib/error.hpp"
 #include "steam/engine/buffer-provider.hpp"
-#include "steam/engine/buffer-metadata.hpp"
+#include "steam/engine/buffer-metadata.hpp"  /////////////////////////OOO must be removed from here
 #include "lib/util.hpp"
 
 using util::isSameAdr;
@@ -47,7 +47,7 @@ namespace engine {
    * @param implementationID symbolic ID setting these family of buffers apart.
    */
   BufferProvider::BufferProvider (Literal implementationID)
-    : bufferStage_(new BufferMetadata (implementationID))
+    : bufferStage_(new BufferStage{implementationID})
     { }
   
   BufferProvider::~BufferProvider() { }

@@ -573,9 +573,9 @@ namespace engine {
        *  always created as children of a known type key.
        */
       Key
-      key ( size_t storageSize
-          , TypeHandler instanceFunc =TypeHandler::RAW
-          , LocalTag specifics       =LocalTag::UNKNOWN)
+      key (size_t storageSize
+          ,TypeHandler instanceFunc =TypeHandler::RAW
+          ,LocalTag specifics       =LocalTag::UNKNOWN)
         {
           REQUIRE (storageSize);
           Key typeKey = trackKey (family_, storageSize);
