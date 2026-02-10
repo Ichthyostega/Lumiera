@@ -25,7 +25,7 @@
 //#include "lib/meta/function.hpp"
 
 #include "steam/engine/diagnostic-buffer-provider.hpp"
-#include "steam/engine/heap-mem-provider.hpp"
+#include "steam/engine/heap-mem-buffer-store.hpp"
 
 
 namespace steam {
@@ -33,7 +33,8 @@ namespace engine {
   
   
   DiagnosticBufferProvider::DiagnosticBufferProvider()
-    : BufferProvider{"Diagnostic_HeapAllocated"}
+    : NaiveBufferSetup{}
+    , heapStore_{dynamic_cast<HeapMemProvider&> (*bufferStore_)}
     { }
   
   DiagnosticBufferProvider::~DiagnosticBufferProvider()
@@ -49,21 +50,21 @@ namespace engine {
   bool
   BufferDiagnostic::buffer_was_used (uint bufferID)
     {
-      return dbp_.heapMemProvider_.access_emitted(bufferID).was_used();
+      return dbp_.heapStore_.access_emitted(bufferID).was_used();
     }
   
   
   bool
   BufferDiagnostic::buffer_was_closed (uint bufferID)
     {
-      return dbp_.heapMemProvider_.access_emitted(bufferID).was_closed();
+      return dbp_.heapStore_.access_emitted(bufferID).was_closed();
     }
   
   
   void*
   BufferDiagnostic::accessMemory (uint bufferID)
     {
-      return dbp_.heapMemProvider_.access_emitted(bufferID).accessMemory();
+      return dbp_.heapStore_.access_emitted(bufferID).accessMemory();
     }
   
 

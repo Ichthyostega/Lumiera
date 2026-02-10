@@ -111619,8 +111619,50 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1770670620982" ID="ID_1374029931" MODIFIED="1770670637618" TEXT="bisheriges &#xbb;meta&#xab; wird zu BufferStage"/>
 <node CREATED="1770670643410" ID="ID_1778176571" MODIFIED="1770670684703" STYLE="fork" TEXT="bisheriges protected-Interface &#x27f6; als BufferStore herausziehen">
 <font NAME="SansSerif" SIZE="12"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1770769772202" ID="ID_528640678" MODIFIED="1770769794715" TEXT="hier gibt es ein Problem: BufferProvider::buildHandle">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1770769806729" ID="ID_6936764" MODIFIED="1770769894796" TEXT="BuffHandle provideLockedBuffer(HashVal typeID) &#x27f6; sollte einen buildHandle() tail-call machen"/>
+<node CREATED="1770769796738" ID="ID_734223464" MODIFIED="1770769804669" TEXT="das war immer schon ein verwirrendes Ping-Pong"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1770769951879" ID="ID_1852318741" MODIFIED="1770769977165" TEXT="noch schlimmer: es vermischt die Zonen der Implementierung">
+<icon BUILTIN="clanbomber"/>
 </node>
-<node CREATED="1770686248066" ID="ID_1851008076" MODIFIED="1770686264665" TEXT="Problem: Direktzugriffe auf die Implementierung">
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1770769896480" ID="ID_426983823" MODIFIED="1770770474699" TEXT="und jetzt geht das nicht mehr: es w&#xe4;re in einem anderen Objekt">
+<linktarget COLOR="#fe474d" DESTINATION="ID_426983823" ENDARROW="Default" ENDINCLINATION="387;17;" ID="Arrow_ID_1775599184" SOURCE="ID_1432411040" STARTARROW="None" STARTINCLINATION="57;-420;"/>
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1770771226721" ID="ID_1487577652" MODIFIED="1770771248247" TEXT="auch der DiagnosticBufferProvider verwendet ein Basis_API: getBufferSize()">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1770770126934" ID="ID_850948251" MODIFIED="1770770161242" TEXT="&#x27f9;  API-Anpassung notwendig">
+<icon BUILTIN="yes"/>
+<node COLOR="#5b280f" CREATED="1770770251820" ID="ID_415070649" MODIFIED="1770770275197" TEXT="das bisherge API vermischt ohnehin die Themen">
+<icon BUILTIN="closed"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#8a050d" CREATED="1770770278057" ID="ID_1578952294" MODIFIED="1770770325897" TEXT="da mu&#xdf; noch mehr aufger&#xe4;umt werden">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#b9010b" CREATED="1770770286619" ID="ID_7825032" MODIFIED="1770770342689">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      auch <font face="Monospaced"><b>mark_emitted</b></font>&#160;ist gar nicht die Aufgabe des Store!
+    </p>
+  </body>
+</html>
+</richcontent>
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1770770350662" ID="ID_1511113078" MODIFIED="1770770378417" TEXT="L&#xf6;sung ist offensichtlich: auseinander-f&#xe4;deln">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1770686248066" ID="ID_1851008076" MODIFIED="1770757878094" TEXT="Problem: Direktzugriffe auf die Implementierung">
+<icon BUILTIN="messagebox_warning"/>
 <node CREATED="1770686275053" ID="ID_209445247" MODIFIED="1770686293057" TEXT="DiagnosticBufferProvider"/>
 <node CREATED="1770686294571" ID="ID_863555746" MODIFIED="1770686305232" TEXT="die Unit-Tests, auch der Default-Impl"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1770686306406" ID="ID_1827512455" MODIFIED="1770686326442" TEXT="der DiagnosticOutputSlot">
@@ -111743,6 +111785,163 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="smiley-neutral"/>
 </node>
 </node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1770757859605" ID="ID_163465122" MODIFIED="1770757872278" TEXT="HeapMemProvider umbauen">
+<icon BUILTIN="pencil"/>
+<node CREATED="1770757895680" ID="ID_1960520353" MODIFIED="1770757908583" TEXT="Vorgabe: soll weiterhin einfach default-konstruierbar sein"/>
+<node CREATED="1770757909670" ID="ID_899228213" MODIFIED="1770757919979" TEXT="in zwei Klassen zerlegen">
+<node CREATED="1770757938096" ID="ID_1866831594" MODIFIED="1770757943634" TEXT="NaiveBufferSetup">
+<node CREATED="1770757989787" ID="ID_618017726" MODIFIED="1770757995233" TEXT="header-only"/>
+<node CREATED="1770757996216" ID="ID_1198089703" MODIFIED="1770758004237" TEXT="lediglich ein Config-Record"/>
+</node>
+<node CREATED="1770757944571" ID="ID_1207399538" MODIFIED="1770757950804" TEXT="HeapMemBufferStore">
+<node CREATED="1770757971118" ID="ID_1706663250" MODIFIED="1770757975834" TEXT="hpp|cpp"/>
+<node CREATED="1770762597016" ID="ID_1432411040" MODIFIED="1770770474699" TEXT="gl&#xfc;cklicher Zufall: die Implementierung greift fast nicht auf BufferProvider-Interna durch">
+<arrowlink COLOR="#fe474d" DESTINATION="ID_426983823" ENDARROW="Default" ENDINCLINATION="387;17;" ID="Arrow_ID_1775599184" STARTARROW="None" STARTINCLINATION="57;-420;"/>
+<linktarget COLOR="#feeace" DESTINATION="ID_1432411040" ENDARROW="Default" ENDINCLINATION="-12;81;" ID="Arrow_ID_76937966" SOURCE="ID_100975131" STARTARROW="None" STARTINCLINATION="-199;19;"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1770762458610" ID="ID_875010759" MODIFIED="1770762816021" TEXT="DiagnosticBufferProvider anpassen">
+<icon BUILTIN="pencil"/>
+<node CREATED="1770762470929" ID="ID_424124774" MODIFIED="1770762479035" TEXT="das bleibt definitiv ein BufferProvider"/>
+<node CREATED="1770762480074" ID="ID_491907312" MODIFIED="1770762498009" TEXT="&#x27f9; mu&#xdf; nun von BufferProviderSetup erben"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1770762499600" ID="ID_578552888" MODIFIED="1770762808614" TEXT="wird sich dann aber in die Implementierungen einschleifen">
+<icon BUILTIN="yes"/>
+<icon BUILTIN="hourglass"/>
+<node CREATED="1770762537848" ID="ID_744233976" MODIFIED="1770762552653" TEXT="zun&#xe4;chst noch delegiert er direkt an HeapMemBufferStore">
+<node CREATED="1770762554389" ID="ID_1159011250" MODIFIED="1770762561380" TEXT="das war ja fr&#xfc;her mal ein BufferProvider"/>
+<node CREATED="1770762562345" ID="ID_1608322135" MODIFIED="1770762574873" TEXT="und hat ein (ungeschickt) verbreitertes API"/>
+<node CREATED="1770762576523" ID="ID_100975131" MODIFIED="1770766811720" TEXT="hatte aber Gl&#xfc;ck im Ungl&#xfc;ck">
+<arrowlink COLOR="#feeace" DESTINATION="ID_1432411040" ENDARROW="Default" ENDINCLINATION="-12;81;" ID="Arrow_ID_76937966" STARTARROW="None" STARTINCLINATION="-199;19;"/>
+</node>
+</node>
+<node CREATED="1770762675673" ID="ID_246224479" MODIFIED="1770762789759" TEXT="soll dann aber im n&#xe4;chsten Schritt das Tracking selber implementieren">
+<icon BUILTIN="hourglass"/>
+</node>
+<node CREATED="1770762688231" ID="ID_1626867644" MODIFIED="1770762782204" TEXT="und wird sich daf&#xfc;r vstl. Dekoratoren &#xfc;ber die Implementierungs-Klassen legen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      idealerweise funktioniert das sogar ohne dynamic-cast: denn die Dekoratoren k&#246;nnten direkt per&#160;callback-&#955; verdrahtet sein
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1770765035161" ID="ID_763895589" MODIFIED="1770765044567" TEXT="wie generisch wird das sein?">
+<icon BUILTIN="help"/>
+<node CREATED="1770765047151" ID="ID_1369329762" MODIFIED="1770765133094">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <u><font color="#210aa6">Frage</font></u><font color="#210aa6">:</font>&#160;kann <font face="Monospaced" color="#5b3535">ProviderBufferProvider</font>&#160;einen <i>beliebigen</i>&#160; <font face="Monospaced" color="#5b3535">DiagnosticBuffer</font>&#160;instrumentieren?
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1770765146770" ID="ID_763561545" MODIFIED="1770765167773" TEXT="&#x27f9; gewisse Limitierungen sind zwangsl&#xe4;ufig">
+<node CREATED="1770765183203" ID="ID_798928441" MODIFIED="1770765202678" TEXT="die Instrumentierung mu&#xdf; vor dem Einsatz aufgebaut werden"/>
+<node CREATED="1770765205184" ID="ID_1324258640" MODIFIED="1770765221801" TEXT="insofern mu&#xdf; die DiagnosticBufferProvider-Instanz vorher existieren"/>
+<node CREATED="1770765224298" ID="ID_20191492" MODIFIED="1770765244749" TEXT="aus Gr&#xfc;nden der Einfachheit soll DiagnosticProvider selber der BufferProvider sein"/>
+<node CREATED="1770765260219" ID="ID_901586804" MODIFIED="1770765300102" TEXT="&#x27f9; das bedeutet: das Ziel der Instrumentierung mu&#xdf; &#xbb;kanibalisiert&#xab; werden">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1770765321000" ID="ID_1181670397" MODIFIED="1770765383761">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      &#10233; jedweder State des BufferProvider <b>mu&#223;</b>&#160;in den zwei Implementierungs-S&#228;ulen liegen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1770765436568" ID="ID_149178331" MODIFIED="1770765532514">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      (alternativ m&#252;&#223;te <i>ausschlie&#223;lich</i>&#160;ein Diagnose-Accessor erzeugt werden)
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das sagt auch der Name, es w&#228;re dann kein <font face="Monospaced">BufferProvider</font>...
+    </p>
+    <p>
+      Und ein solches <i>alternatives</i>&#160;Nutz-Szenario w&#228;re in der Tat denkbar, m&#252;&#223;te dann aber eigens und daneben stehend implementiert werden
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1770765542064" ID="ID_33780277" MODIFIED="1770765572176" TEXT="idealerweise sollte aber DiagnosticBufferProvider nicht von der konkreten Impl abh&#xe4;ngig sein">
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1770765576724" ID="ID_1961847255" MODIFIED="1770765581656" TEXT="Beschlu&#xdf;">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1770765583502" ID="ID_1200358280" MODIFIED="1770765677346" TEXT="wir halten diese M&#xf6;glichkeiten alle explizit offen">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1770765595718" ID="ID_962837679" MODIFIED="1770766950666" TEXT="zun&#xe4;chst wird aber nur die einfachste L&#xf6;sung implementiert (KISS)">
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1770765611528" ID="ID_930758460" MODIFIED="1770766965294" TEXT="und das w&#xe4;re, direkt von NaiveBufferSetup zu erben">
+<icon BUILTIN="forward"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1770765634549" ID="ID_802045878" MODIFIED="1770765677346" TEXT="Konsequenz &#x27f9; BufferProviderSetup mu&#xdf; die Dekorations-Mechanik generisch anbieten">
+<icon BUILTIN="yes"/>
+<node CREATED="1770765700160" ID="ID_1579675471" LINK="https://en.cppreference.com/w/cpp/language/access.html#Protected_member_access" MODIFIED="1770766571232" TEXT="Thema: Sichtbarkeit von protected elements">
+<arrowlink COLOR="#4f5d8f" DESTINATION="ID_1070045765" ENDARROW="Default" ENDINCLINATION="-1154;119;" ID="Arrow_ID_484648111" STARTARROW="None" STARTINCLINATION="-1340;84;"/>
+</node>
+<node CREATED="1770766854965" ID="ID_164565147" MODIFIED="1770766871197" TEXT="man mu&#xdf; einen unique_ptr eines Dekorators erzeugen k&#xf6;nnen"/>
+<node CREATED="1770766872225" ID="ID_1590901542" MODIFIED="1770766901998" TEXT="dieser Dekorator mu&#xdf; den urspr&#xfc;nglichen unique_ptr &#x201e;huckepack&#x201c; nehmen"/>
+<node CREATED="1770766910933" ID="ID_1255549720" MODIFIED="1770766930079" TEXT="damit kann sich eine abgeleitete Klasse in bestehende Chains &#xbb;einschleifen&#xab;"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1770771357183" ID="ID_1793741597" MODIFIED="1770771891888" TEXT="DiagnosticBufferProviderTest anpassen">
+<icon BUILTIN="flag-pink"/>
+<node COLOR="#d70247" CREATED="1770771371541" ID="ID_318424657" MODIFIED="1770771443467" TEXT="der hat bisher gar nicht auf dem DiagnosticBufferProvider gearbeitet">
+<icon BUILTIN="broken-line"/>
+</node>
+<node COLOR="#5b280f" CREATED="1770771385939" ID="ID_1071035672" MODIFIED="1770771428112" TEXT="sondern &#x201e;wild&#x201c; auf das HeapMemProvider-API daneben zugegriffen">
+<icon BUILTIN="closed"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1770771747922" ID="ID_246706757" MODIFIED="1770771768414" TEXT="gilt auch f&#xfc;r DiagnosticOutputSlot">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1770771469374" ID="ID_733817882" MODIFIED="1770771479444" TEXT="problematische Zugriffe">
+<node CREATED="1770771484104" ID="ID_833241344" MODIFIED="1770771491247" TEXT="provider.accessEmitted(nr)"/>
+<node CREATED="1770771513515" ID="ID_1719397050" MODIFIED="1770771523955" TEXT="provider.accessAs&lt;Type&gt;(nr)"/>
+<node CREATED="1770771552023" ID="ID_1783764547" MODIFIED="1770771558695" TEXT="provider.emittedCnt()"/>
 </node>
 </node>
 </node>
@@ -158620,7 +158819,7 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
 <node CREATED="1734709116112" ID="ID_1235302182" MODIFIED="1734709126137" TEXT="unterscheide explizit und implizit">
 <icon BUILTIN="messagebox_warning"/>
 </node>
-<node CREATED="1734708975355" ID="ID_1311116905" MODIFIED="1734712892968" TEXT="explicit convertible">
+<node CREATED="1734708975355" FOLDED="true" ID="ID_1311116905" MODIFIED="1734712892968" TEXT="explicit convertible">
 <linktarget COLOR="#8c85c9" DESTINATION="ID_1311116905" ENDARROW="Default" ENDINCLINATION="-3938;658;" ID="Arrow_ID_974872159" SOURCE="ID_1098163848" STARTARROW="None" STARTINCLINATION="-405;33;"/>
 <node CREATED="1734708872513" ID="ID_179340258" MODIFIED="1734709676425" TEXT="es ist nicht ganz klar was damit gemeint ist....">
 <icon BUILTIN="messagebox_warning"/>
@@ -158653,6 +158852,61 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
 <node CREATED="1734709647758" ID="ID_750660875" MODIFIED="1734709668994" TEXT="aber nur static_cast handhabt Klassen mit Mehrfachvererbung korrekt"/>
 </node>
 </node>
+</node>
+</node>
+</node>
+<node CREATED="1770766014454" ID="ID_1109377879" MODIFIED="1770766020966" TEXT="rules...">
+<node CREATED="1770766044584" ID="ID_397656010" MODIFIED="1770766178305" TEXT="private member access">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Gilt stets auch f&#252;r <i>andere Objekt-Instanzen</i>&#160;des gleichen Typs. Gilt auch f&#252;r nested Classes, und member functions, und nested Classes in member functions; wobei allerdings, die Instanz mu&#223; man explizit in der Hand haben (es gibt hier keine solche &#187;magic&#171; wie in Java, wo eine non-static nested class automatisch auch einen outer.this-ptr bekommt)
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1770765867372" ID="ID_1070045765" MODIFIED="1770766571232" TEXT="protected member access">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      konzeptionell: das ist ein separates API f&#252;r abgeleitete Klassen
+    </p>
+  </body>
+</html>
+</richcontent>
+<linktarget COLOR="#4f5d8f" DESTINATION="ID_1070045765" ENDARROW="Default" ENDINCLINATION="-1154;119;" ID="Arrow_ID_484648111" SOURCE="ID_1579675471" STARTARROW="None" STARTINCLINATION="-1340;84;"/>
+<node CREATED="1770765894191" ID="ID_399765269" MODIFIED="1770766423176" TEXT="nur auf Instanzen des gleichen, abgeleiteten Typs">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Man mu&#223; unterscheiden zwischen Deklarationen und dem Zugang zu konkreten Members. <i>Deklarationen</i>&#160;sieht jede abgeleitete Klasse. Aber auf <i>protected Members</i>&#160;in einer Basisklasse zugreifen kann man <b>nur</b>&#160;durch eine Instanz einer abgeleiteten Klasse; und zwar mu&#223; der Typ dieser Instanz <b>gleich</b>&#160;(oder abgeleitet) sein wie der Typ, aus dem heraus der Code zugreift. Konkret: auf base.member kann ich nur durch eine derived&amp; zugreifen (das schlie&#223;t *this ein). Aber nicht durch irgend ein anderes Objekt oder eine base&amp;
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1770765911615" ID="ID_247300867" MODIFIED="1770766562132" TEXT="sonst k&#xf6;nnte eine abgeleitete Klasse eine fremde abgeleitete Klasse manipulieren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Ohne diese Regel w&#228;ren wilde Kreuz-Zugriffe auf komplett andere Vererbungslinien m&#246;glich; man bedenke im Besonderen, da&#223; die Situation durch Mehrfachvererbung ziemlich komplex sein kann; zudem kann eine andere abgeleitete Klasse die Basis auf komplexe Weise instrumentiert haben, und ein solcher Kreuz-Zugriff k&#246;nnte das alles unterlaufen. Es ist ja ohnehin ein Zugest&#228;ndnis, da&#223; man auf was anderes als *this &#252;berhaupt zugreifen darf.
+    </p>
+  </body>
+</html>
+</richcontent>
 </node>
 </node>
 </node>

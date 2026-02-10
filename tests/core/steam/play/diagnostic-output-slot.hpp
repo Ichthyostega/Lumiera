@@ -29,7 +29,7 @@
 #include "steam/play/output-slot-connection.hpp"
 #include "steam/asset/meta/time-grid.hpp"
 #include "steam/engine/buffhandle.hpp"
-#include "steam/engine/heap-mem-provider.hpp"
+#include "steam/engine/naive-buffer-setup.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/scoped-ptrvect.hpp"
 #include "lib/iter-source.hpp"
@@ -57,7 +57,7 @@ namespace play {
   using steam::asset::meta::TimeGrid;
   using steam::engine::BuffDescr;
   using steam::engine::test::TestFrame;
-  using steam::engine::HeapMemProvider;
+  using steam::engine::NaiveBufferSetup;
   namespace diagn = steam::engine::diagn;
 
 //using std::vector;
@@ -94,7 +94,7 @@ namespace play {
       typedef std::unordered_set<FrameID> FrameTrackingInfo;
       
       
-      HeapMemProvider buffProvider_;
+      NaiveBufferSetup buffProvider_;
       BuffDescr bufferType_;
       
       FrameTrackingInfo frameTrackingIndex_;
@@ -205,19 +205,21 @@ namespace play {
       TestFrame const *
       accessEmittedFrame (uint frameNr)  const
         {
-          if (frameNr < buffProvider_.emittedCnt())
-            return & accessFrame(frameNr);
-          else
-            return 0;                                               ////////////////////////////////TICKET #856
+          UNIMPLEMENTED ("suitable diagnostic API");
+//        if (frameNr < buffProvider_.emittedCnt())      ///////////////////////////////OOO provide suitable diagnostic API!
+//          return & accessFrame(frameNr);
+//        else
+//          return 0;                                               ////////////////////////////////TICKET #856
         }
       
       diagn::Block const *
       accessEmittedBuffer (uint bufferNr)  const
         {
-          if (bufferNr < buffProvider_.emittedCnt())
-            return & accessBlock(bufferNr);
-          else
-            return 0;
+          UNIMPLEMENTED ("suitable diagnostic API");
+//        if (bufferNr < buffProvider_.emittedCnt())      ///////////////////////////////OOO provide suitable diagnostic API!
+//          return & accessBlock(bufferNr);
+//        else
+//          return 0;
         }
       
       bool
@@ -232,13 +234,15 @@ namespace play {
       TestFrame const&
       accessFrame (uint frameNr)  const
         {
-          return unConst(this)->buffProvider_.accessAs<TestFrame> (frameNr);
+          UNIMPLEMENTED ("suitable diagnostic API");
+//        return unConst(this)->buffProvider_.accessAs<TestFrame> (frameNr);      ///////////////////////////////OOO provide suitable diagnostic API!
         }
       
       diagn::Block const&
       accessBlock (uint bufferNr)  const
         {
-          return unConst(this)->buffProvider_.access_emitted (bufferNr);
+          UNIMPLEMENTED ("suitable diagnostic API");
+//        return unConst(this)->buffProvider_.access_emitted (bufferNr);      ///////////////////////////////OOO provide suitable diagnostic API!
         }
     };
   

@@ -25,10 +25,8 @@
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
 #include "lib/hash-value.h"
-#include "steam/engine/buffhandle.hpp"
+#include "steam/engine/buffer-provider.hpp"
 //#include "steam/engine/engine-ctx.hpp"
-#include "steam/engine/type-handler.hpp"
-#include "steam/engine/buffer-local-tag.hpp"
 #include "lib/nocopy.hpp"
 
 #include <utility>
@@ -40,13 +38,11 @@ namespace engine {
   
   using lib::Literal;
   using std::unique_ptr;
-  using std::forward;
+//  using std::forward;
+  using std::move;
   
   
-  class BufferMetadata;
   
-  
-  LUMIERA_ERROR_DECLARE (BUFFER_MANAGEMENT); ///< Problem providing working buffers
   
   
   /**
@@ -58,18 +54,34 @@ namespace engine {
     : public BufferProvider
     {
     public:
-      BufferProviderSetup (Literal implementationID);
+      /**
+       * Build a new BufferProvider setup to manage a number of buffers.
+       * The metadata of these buffers is organised hierarchically based on
+       * chained hash values, using an `implementationID` as a seed.
+       * The \a CONF configuration record controls the actual implementation
+       * of lifecycle transitions and storage management.
+       */
+      template<class CONF>
+      BufferProviderSetup (CONF&& confRec)
+        : BufferProvider{}
+        {
+          bufferStage_ = move (confRec.buildStage());
+          bufferStore_ = move (confRec.buildStore());
+        }
 
       class Stage
-        : protected BufferStage
+        : public BufferStage
         {
+        public:
+          using BufferStage::BufferStage;         ///////////////////////////////////////////////////////////TICKET #1410 : actual implementation structures should move down into this classes implementation
           
         };
 
       class Store
-        : protected BufferStore
+        : public BufferStore
         {
-          
+        protected:
+          using Buff = BufferProvider::Buff;
         };
 
       

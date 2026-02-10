@@ -24,7 +24,7 @@
 #include "lib/error.hpp"
 #include "lib/util.hpp"
 #include "steam/engine/type-handler.hpp"  ///////////////OOO warum?
-#include "steam/engine/heap-mem-provider.hpp"
+#include "steam/engine/naive-buffer-setup.hpp"
 #include "lib/nocopy.hpp"
 
 #include <memory>
@@ -35,6 +35,7 @@ namespace engine {
   
   namespace error = lumiera::error;
   
+  class HeapMemProvider;
   class BufferDiagnostic;
   
   
@@ -45,17 +46,9 @@ namespace engine {
    * @todo write type comment
    */
   class DiagnosticBufferProvider
-    : public BufferProvider
+    : public NaiveBufferSetup
     {
-      HeapMemProvider heapMemProvider_;
-      
-      
-      /* === delegate BufferProvider API === */
-      
-      uint prepareBuffers (uint count, HashVal typeID)          override { return heapMemProvider_.prepareBuffers (count,typeID);}
-      BuffHandle provideLockedBuffer  (HashVal typeID)          override { return heapMemProvider_.provideLockedBuffer (typeID); }
-      void mark_emitted (HashVal h, LocalTag const& t)          override { heapMemProvider_.mark_emitted(h,t);   }
-      void detachBuffer (HashVal h, LocalTag const& t, Buff& b) override { heapMemProvider_.detachBuffer(h,t,b); }
+      HeapMemProvider& heapStore_;
       
       
     public:

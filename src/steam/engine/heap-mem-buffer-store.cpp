@@ -1,8 +1,8 @@
 /*
-  HeapMemProvider  -  plain heap allocating BufferProvider implementation for tests
+  HeapMemBufferStore  -  plain heap allocating BufferProvider storage implementation for tests
 
    Copyright (C)
-     2011,            Hermann Vosseler <Ichthyostega@web.de>
+     2011,2026        Hermann Vosseler <Ichthyostega@web.de>
 
   **Lumiera** is free software; you can redistribute it and/or modify it
   under the terms of the GNU General Public License as published by the
@@ -12,8 +12,8 @@
 * *****************************************************************/
 
 
-/** @file heap-mem-provider.cpp
- ** Implementation details of a mock engine::BufferProvider for unit testing
+/** @file heap-mem-buffer-store.cpp
+ ** Implementation details of simple heap based engine::BufferProvider storage.
  */
 
 
@@ -22,7 +22,7 @@
 #include "lib/scoped-ptrvect.hpp"
 #include "lib/util-foreach.hpp"
 
-#include "steam/engine/heap-mem-provider.hpp"
+#include "steam/engine/heap-mem-buffer-store.hpp"
 
 #include <algorithm>
 #include <vector>
@@ -223,8 +223,7 @@ namespace engine {
    * @internal create a memory tracking BufferProvider,
    */
   HeapMemProvider::HeapMemProvider()
-    : BufferProvider ("Naive_HeapAllocated")
-    , pool_(new diagn::PoolTable)
+    : pool_(new diagn::PoolTable)
     , outSeq_()
     { }
   
@@ -247,7 +246,8 @@ namespace engine {
   {
     diagn::BlockPool& blocks = getBlockPoolFor (typeID);
     diagn::Block& newBlock = blocks.createBlock();
-    return buildHandle (typeID, asBuffer(newBlock.accessMemory()), &newBlock);
+    UNIMPLEMENTED ("Separate tasks into two distinct APIs");
+//  return buildHandle (typeID, asBuffer(newBlock.accessMemory()), &newBlock); /////////////////////////////OOO instead return a tuple (buffer, localTag)
   }
   
   
@@ -320,8 +320,9 @@ namespace engine {
   HeapMemProvider::getBlockPoolFor (HashVal typeID)
   {
     diagn::BlockPool& pool = (*pool_)[typeID];
-    if (!pool)
-        pool.initialise(getBufferSize(typeID));
+    UNIMPLEMENTED ("Separate tasks into two distinct APIs");
+//  if (!pool)
+//      pool.initialise(getBufferSize(typeID));   //////////////////////////OOO getBufferSize is a helper function in the BufferProvider protected API. Need to be "here"
     return pool;
   }
   

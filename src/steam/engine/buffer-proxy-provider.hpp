@@ -62,10 +62,11 @@ namespace engine {
       using Listener = std::function<void(size_t,BufferState)>;
       
       class ForwardingBufferProvider
-        : public BufferProvider
+        : public BufferProvider                 /////////////////////////////////////////////////////////////TICKET #1410 : its clear now (2/26) that this must be some other base type; maybe we'll offer the ability to decorate, directly through BufferProviderSetup?
         {
           Listener listener_;
             
+#if false  //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : disabled code to while BufferProvider is being refactored...
             /* === BufferProvider API === */
             
             uint
@@ -93,9 +94,10 @@ namespace engine {
               {
                   
               }
+#endif  /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : (end) disabled code
         public:
           ForwardingBufferProvider (Listener listener)
-            : BufferProvider{"BufferProxyProvider"}
+            : BufferProvider{}
             , listener_{std::move (listener)}
             { }
         };

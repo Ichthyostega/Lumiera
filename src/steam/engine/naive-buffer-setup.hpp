@@ -1,8 +1,8 @@
 /*
-  HEAP-MEM-PROVIDER.hpp  -  plain heap allocating BufferProvider implementation for tests
+  NAIVE-BUFFER_SETUP.hpp  -  plain heap allocating BufferProvider implementation for tests
 
    Copyright (C)
-     2011,            Hermann Vosseler <Ichthyostega@web.de>
+     2026,            Hermann Vosseler <Ichthyostega@web.de>
 
   **Lumiera** is free software; you can redistribute it and/or modify it
   under the terms of the GNU General Public License as published by the
@@ -11,11 +11,12 @@
 
 */
 
-/** @file heap-mem-provider.hpp
+/** @file naive-buffer-setup.hpp
  ** Dummy implementation of the BufferProvider interface to support writing unit tests.
- ** This BufferProvider implementation is notably straight forward and silly: it just
- ** claims more and more heap blocks and never releases any memory dynamically. This allows
- ** to investigate additional tracking status flags for each allocated block after the fact.
+ ** This setup for a BufferProvider is notably straight forward and basically allocates
+ ** a new heap block for any buffer, without deallocating memory ever. This allows to
+ ** attach additional tracking status flags for each allocated block and validate
+ ** allocator behaviour after the fact.
  ** 
  ** @todo 1/2026 for sake of implementation clarity, the following instrumentation functionality
  **       must be relocated into the DiagnosticOutputProvider: Allocated buffers are numbered
@@ -30,13 +31,14 @@
  ** @see buffer-provider-protocol-test.cpp
  */
 
-#ifndef STEAM_ENGINE_HEAP_MEM_PROVIDER_H
-#define STEAM_ENGINE_HEAP_MEM_PROVIDER_H
+#ifndef STEAM_ENGINE_NAIVE_BUFFER_STEUP_H
+#define STEAM_ENGINE_NAIVE_BUFFER_STEUP_H
 
 
 #include "lib/error.hpp"
 #include "lib/hash-value.h"
-#include "steam/engine/buffer-provider.hpp"
+#include "steam/engine/buffer-provider-setup.hpp"
+#include "steam/engine/heap-mem-buffer-store.hpp"
 #include "lib/scoped-ptrvect.hpp"
 
 #include <unordered_map>
@@ -48,9 +50,9 @@ namespace engine {
   
   namespace error = lumiera::error;
   
-  using lib::ScopedPtrVect;
-  using lib::HashVal;
+//  using lib::HashVal;
   
+#if false  //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : disabled code to disentangle BufferProvider implementation
   namespace diagn {
     
     using std::unique_ptr;
@@ -105,6 +107,7 @@ namespace engine {
     
     using PoolTable = std::unordered_map<HashVal,BlockPool>;
   }
+#endif  /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : (end) disabled code
   
   
   /**
@@ -116,6 +119,19 @@ namespace engine {
    * is discarded as a whole. There is an additional testing/diagnostics API to access the
    * tracked usage information, even when blocks are already marked as "released".
    */
+  class NaiveBufferSetup
+    : public BufferProviderSetup
+    {
+    public:
+      NaiveBufferSetup()
+        : BufferProviderSetup{*this}
+        { }
+        
+        auto buildStage() { return std::make_unique<Stage> ("Naive_HeapAllocated"); }
+        auto buildStore() { return std::make_unique<HeapMemProvider>(); }   /////////////////////////////////TICKET #1410 : turn into a subclass of BufferSetup::Store and push down implementation
+    };
+  
+#if false  //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : disabled code to disentangle BufferProvider implementation
   class HeapMemProvider
     : public BufferProvider
     {
@@ -173,9 +189,9 @@ namespace engine {
     REQUIRE (converted);
     return *converted;
   }
-  
+#endif  /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : (end) disabled code
   
   
   
 }} // namespace steam::engine
-#endif /*STEAM_ENGINE_HEAP_MEM_PROVIDER_H*/
+#endif /*STEAM_ENGINE_NAIVE_BUFFER_STEUP_H*/

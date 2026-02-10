@@ -24,8 +24,8 @@
 
 #include "steam/engine/render-environment.hpp"
 #include "steam/engine/engine-facilities.hpp"
+#include "steam/engine/naive-buffer-setup.hpp"
 #include "steam/engine/buffer-provider.hpp"
-#include "steam/engine/heap-mem-provider.hpp"
 
 
 namespace steam {
@@ -38,7 +38,7 @@ namespace engine{
     BufferProvider&
     getNaiveBufferManager()
     {
-      static HeapMemProvider buffProvider;               ////////////////////////////////////////////////////TICKET #1367 : only suitable for first prototype; should implement a bare bone memory manager instead
+      static NaiveBufferSetup buffProvider;               ///////////////////////////////////////////////////TICKET #1367 : only suitable for first prototype; should implement a bare bone memory manager instead
       return buffProvider;
     }
   }

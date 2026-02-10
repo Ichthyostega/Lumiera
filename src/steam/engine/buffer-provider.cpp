@@ -41,14 +41,6 @@ namespace engine {
   LUMIERA_ERROR_DEFINE (BUFFER_MANAGEMENT, "Problem providing working buffers");
   
   
-  /** build a new provider instance, managing a family of buffers.
-   *  The metadata of these buffers is organised hierarchically based on
-   *  chained hash values, using the #implementationID as a seed.
-   * @param implementationID symbolic ID setting these family of buffers apart.
-   */
-  BufferProvider::BufferProvider (Literal implementationID)
-    : bufferStage_(new BufferStage{implementationID})
-    { }
   
   BufferProvider::~BufferProvider() { }
   
@@ -117,7 +109,7 @@ namespace engine {
   uint
   BufferProvider::announce (uint count, BuffDescr const& type)
   {
-    uint actually_possible = prepareBuffers (count, type);
+    uint actually_possible = bufferStore_->prepareBuffers (count, type);
     if (!actually_possible)
       throw error::State ("unable to fulfil request for buffers"
                          ,LUMIERA_ERROR_BUFFER_MANAGEMENT);
@@ -143,7 +135,7 @@ namespace engine {
   {
     REQUIRE (was_created_by_this_provider (type));
     
-    return provideLockedBuffer (type);
+    return bufferStore_->provideLockedBuffer (type);
   }     // is expected to call buildHandle() --> state transition
   
   
@@ -163,7 +155,7 @@ namespace engine {
   BufferProvider::emitBuffer (BuffHandle const& handle)
   {
     metadata::Entry& metaEntry = bufferStage_->get (handle.entryID());
-    mark_emitted (metaEntry.parentKey(), metaEntry.localTag());
+    bufferStore_->mark_emitted (metaEntry.parentKey(), metaEntry.localTag());
     metaEntry.mark(EMITTED);
   }
   
@@ -181,7 +173,7 @@ namespace engine {
   try {
     metadata::Entry& metaEntry = bufferStage_->get (handle.entryID());
     metaEntry.mark(FREE);   // might invoke embedded dtor function
-    detachBuffer (metaEntry.parentKey(), metaEntry.localTag(), *handle);
+    bufferStore_->detachBuffer (metaEntry.parentKey(), metaEntry.localTag(), *handle);
     bufferStage_->release (metaEntry);
   }
   ERROR_LOG_AND_IGNORE (engine, "releasing a buffer from BufferProvider")
@@ -225,7 +217,7 @@ namespace engine {
   try {
     metadata::Entry& metaEntry = bufferStage_->get (target.entryID());
     metaEntry.invalidate (invokeDtor);
-    detachBuffer (metaEntry.parentKey(), metaEntry.localTag(), *target);
+    bufferStore_->detachBuffer (metaEntry.parentKey(), metaEntry.localTag(), *target);
     bufferStage_->release (metaEntry);
   }
   ERROR_LOG_AND_IGNORE (engine, "cleanup of buffer metadata while handling an error")

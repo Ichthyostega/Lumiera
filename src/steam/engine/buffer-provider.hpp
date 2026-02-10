@@ -113,8 +113,6 @@ namespace engine {
       size_t getBufferSize (HashVal typeID)   const;
       
     protected:
-      BufferProvider (Literal implementationID);
-      
       /// placeholder marker type for an actual data buffer
       using Buff = StreamType::ImplFacade::DataBuffer;
       
@@ -122,13 +120,6 @@ namespace engine {
       
       bool was_created_by_this_provider (BuffDescr const&)  const;
       
-///////////////////////////////////////////////////////////////////////////////OOO
-      virtual uint prepareBuffers (uint count, HashVal typeID)    =0;
-      
-      virtual BuffHandle provideLockedBuffer  (HashVal typeID)    =0;
-      virtual void mark_emitted (HashVal, LocalTag const&)        =0;
-      virtual void detachBuffer (HashVal, LocalTag const&, Buff&) =0;
-///////////////////////////////////////////////////////////////////////////////OOO
       
       class BufferStage
         : public BufferMetadata         /////////////////////////////////////////////////////////////////////TICKET #1410 : mix-in exiting old implementation -- for sake of refactoring only!
@@ -137,7 +128,6 @@ namespace engine {
           virtual ~BufferStage() { } ///< this is an interface
           
           using BufferMetadata::BufferMetadata;   ///////////////////////////////////////////////////////////TICKET #1410 : actual implementation structures should move down into this classes implementation
-        protected:
         };
       
       class BufferStore
@@ -145,7 +135,7 @@ namespace engine {
         {
         public:
           virtual ~BufferStore() { } ///< this is an interface
-        protected:
+          
           virtual uint prepareBuffers (uint count, HashVal typeID)    =0;
           virtual BuffHandle provideLockedBuffer  (HashVal typeID)    =0;
           virtual void mark_emitted (HashVal, LocalTag const&)        =0;
