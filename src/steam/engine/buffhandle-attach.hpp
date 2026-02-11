@@ -28,6 +28,10 @@
  ** header and compilation footprint low, the implementation of the functions supporting
  ** this special case was split out of the basic buffhandle.hpp
  ** 
+ ** @deprecated 2026-01 this extension-API does not fit into the overall concept.
+ **             It was created under the impression that the Render Engine will work "with void pointers"
+ **             Meanwhile, the BuffHandle::accessAs<TY>() turned into a core-API now;
+ **             all the other functionality was never used and is considered pointless //////////////////////TICKET 1410 : remove unnecessary API
  ** @see BuffHandle
  ** @see BufferProviderProtocol_test usage demonstration
  */
@@ -71,13 +75,13 @@ namespace engine {
    *        in charge of managing the buffer contents, or when the object to create
    *        would not fit into this buffer.
    */
-  template<typename BU>
-  inline BU&
-  BuffHandle::create()
-  {
-    takeOwnershipFor<BU>();
-    _EXCEPTION_SAFE_INVOKE (BU());
-  }
+//  template<typename BU>
+//  inline BU&
+//  BuffHandle::create()
+//  {
+//    takeOwnershipFor<BU>();
+//    _EXCEPTION_SAFE_INVOKE (BU());
+//  }
   
 #undef _EXCEPTION_SAFE_INVOKE
   
@@ -90,14 +94,14 @@ namespace engine {
    *        in charge of managing the buffer contents, or when the object to create
    *        would not fit into this buffer.
    */
-  template<typename BU>
-  inline void
-  BuffHandle::takeOwnershipFor()
-  {
-    BuffDescr howto_attach_object_automatically
-      = descriptor_.provider_->getDescriptor<BU>();
-    takeOwnershipFor (howto_attach_object_automatically); // EX_STRONG
-  }
+//  template<typename BU>
+//  inline void
+//  BuffHandle::takeOwnershipFor()
+//  {
+//    BuffDescr howto_attach_object_automatically
+//      = descriptor_.provider_->getDescriptor<BU>();
+//    takeOwnershipFor (howto_attach_object_automatically); // EX_STRONG
+//  }
   
   
   /** convenience shortcut: access the buffer contents casted to a specific type.

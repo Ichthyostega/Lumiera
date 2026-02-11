@@ -136,7 +136,7 @@
 #include "steam/engine/proc-id.hpp"
 #include "steam/engine/engine-ctx.hpp"
 #include "steam/engine/buffer-provider.hpp"
-#include "steam/engine/buffhandle-attach.hpp"  /////////////////OOO why do we need to include this? we need the accessAs<TY>() template function
+#include "steam/engine/buffhandle-attach.hpp"     ///////////////////////////////////////////////////////////TICKET 1410 : unnecessary API -- only accessAs<TY>() needs to be retained!
 #include "steam/engine/media-weaving-pattern.hpp"
 #include "lib/meta/tuple-closure.hpp"
 #include "lib/meta/tuple-helper.hpp"

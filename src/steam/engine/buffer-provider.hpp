@@ -13,20 +13,87 @@
 
 /** @file buffer-provider.hpp
  ** Abstraction to represent buffer management and lifecycle within the render engine.
- ** It turns out that -- throughout the render engine implementation -- we never need
- ** direct access to the buffers holding media data. Buffers are just some entity to be \em managed,
- ** i.e. "allocated", "locked" and "released"; the actual meaning of these operations is an implementation detail.
- ** The code within the render engine just pushes around BufferHandle objects, which act as a front-end,
- ** being created by and linked to a BufferProvider implementation. There is no need to manage the lifecycle
- ** of buffers automatically, because the use of buffers is embedded into the render calculation cycle,
- ** which follows a rather strict protocol anyway. Relying on the capabilities of the scheduler,
- ** the sequence of individual jobs in the engine ensures...
- ** - that the availability of a buffer was ensured prior to planning a job ("buffer allocation")
+ ** When looking at the render engine implementation at a high level, buffers are a scarce
+ ** resource to be managed. Looking into the implementation in detail however reveals — maybe
+ ** surprisingly — that we never need _direct access_ to the buffers holding media data. This is
+ ** a consequence of the Engine's design, which treats _actual media processing_ as an external concern,
+ ** handled by specialised libraries and Plug-ins. Buffers are thus treated as some entity to be _managed_,
+ ** i.e. "allocated", "locked" and "released"; the actual meaning of these operations is considered a detail
+ ** of the implementation.
+ ** 
+ ** The code within the Render Engine is centred around _invocation_ and the transport of data; the latter is
+ ** marked and represented as BufferHandle, that can be passed form invocation to invocation. For this to work,
+ ** the _type_ of the buffers must be compatible with the data and the processing functions — and this condition
+ ** is accommodated already in the preparation of the rendering, which is the purpose of the Builder. In this
+ ** framework, BufferHandle objects act as a front-end, as being created by and linked to a BufferProvider
+ ** implementation. There is no need to manage the lifecycle of buffers explicitly because the use of buffers
+ ** is embedded into the fabric of the render calculation, which follows a rather strict protocol anyway.
+ ** Relying on the capabilities of the scheduler, the sequence of individual jobs in the engine ensures...
+ ** - that the availability of sufficient buffer memory was accommodated as part of the planning
+ ** - that overall buffer capacity will be announced at start of the actual render invocation
  ** - that a buffer handle was obtained ("locked") prior to any operation requiring a buffer
  ** - that buffers are marked as free ("released") after doing the actual calculations.
  ** 
- ** @see state.hpp
+ ** # Buffer Provider Protocol
+ ** 
+ ** BufferProvider is a public interface, that also defines an interaction protocol.
+ ** This implies that any usage of _buffer memory_ has to proceed through the stages of a process,
+ ** which is flexible enough however to accommodate the various usage situations. At the bare minimum,
+ ** a buffer can be _obtained and locked_, to get a fixed amount of memory, accessible through a BuffHandle.
+ ** After usage, the buffer _must be released._ There is no tracking and no automatisation to ensure this
+ ** duty is fulfilled — failure to release will block the buffer memory indeterminately. Usually this
+ ** simple arrangement does not cause any serious problems, as the process of rendering media is
+ ** bound to operate within very precisely defined boundaries anyway. Furthermore, the C++
+ ** language offers various general-purpose capabilities to automate resource clean-up.
+ ** 
+ ** For the general case, the usage cycle is defined to be more elaborate and flexible:
+ ** - in a pre-planning step, a [Buffer Type Descriptor](\ref BuffDescr) can be obtained
+ **   + this descriptor is copyable and embeds a back-link to the BufferProvider
+ **   + obtaining such a descriptor implies a _type registration_
+ **   + in this context a **Buffer Type** describes at least a fixed amount of storage,
+ **     and optionally also an _access type,_ or even an attached _object creation_ and
+ **     automatic _destruction_.
+ ** - from a given BuffDescr, the usage of a number of buffers can optionally be _announced;_
+ **   doing so is highly recommended, since it confirms the availability of an actual number
+ **   of buffers (which can be lower than requested); these buffers are guaranteed to be
+ **   available, and this availability will even be pre-arranged for the actual thread,
+ **   as an asynchronous process
+ ** - for the actual usage, individual buffers can be _locked_ on the BuffDescr, thereby
+ **   providing a BuffHandle. The number of actually obtained buffers need not match the
+ **   announced number (yet obviously it should, overall). Buffers exceeding the announced
+ **   capacity _can_ be obtained, if possible — in that case the operation may block or
+ **   even fail with an exception.
+ ** - a BuffHandle, once obtained, represents the client's ownership and liability
+ ** - optionally, the client may _emit_ on the BuffHandle, to indicate that data
+ **   in the Buffer is complete and will not be touched anymore. The interpretation
+ **   of this call is reserved to special services attached behind the BufferProvider
+ **   interface, e.g. a Cache service or an DataSink.
+ ** - as the last step, a BuffHandle _must_ be _released_. It must not be used further
+ **   after that point, since the buffer memory might have been re-assigned to another
+ **   client, or way even released altogether.
+ ** 
+ ** # Providing an Implementation
+ ** 
+ ** The class BufferProvider is abstract, yet contains some orchestration and clue code
+ ** to provide the high-level operations. Functionality is broken down in terms of
+ ** two _implementation interfaces:_
+ ** - BufferProvider::BufferStage describes the type registration and state transitions
+ ** - BufferProvider::BufferStore handles coordination of memory access
+ ** 
+ ** For creating actual implementations, buffer-provider-setup.hpp defines a framework.
+ ** A simplistic heap-based implementation for demonstration and unit test usage is
+ ** available through NaiveBufferSetup. This can be extended with tracking functionality
+ ** to verify actual operations from a test setup, with the help of DiagnosticBufferProvider.
+ ** The [Render Engine setup](\ref engine-facilities.hpp) includes a suitable BufferProvider
+ ** implementation; when used from the actual [Render Environment](\ref render-environment.hpp),
+ ** this will be backed by a production-strenght and concurrency-safe implementation.
+ ** 
+ ** @see buffer-provider-protocol-test.cpp
  ** @see output-slot.hpp
+ ** @see engine-ctx.hpp
+ ** @see proc-node.hpp
+ ** @see media-weaving-pattern.hpp
+ ** @see weaving-pattern-builder.hpp
  */
 
 #ifndef STEAM_ENGINE_BUFFR_PROVIDER_H

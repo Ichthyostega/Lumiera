@@ -136,7 +136,7 @@ namespace engine {
       
       
       template<typename BU>
-      BU& create();
+      BU& create();        /////////////////////TICKET #1410 : this API needs to be retracted; it does not fit into the concept!
       
       template<typename BU>
       BU& accessAs();
@@ -159,7 +159,7 @@ namespace engine {
         }
       
       HashVal
-      entryID()  const
+      entryID()  const   ///////////////////////TICKET 1410 : why can't we just expose operator HashVal() ??
         {
           return HashVal(descriptor_);
         }
