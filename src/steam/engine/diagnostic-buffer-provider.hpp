@@ -25,9 +25,11 @@
 #include "lib/util.hpp"
 #include "steam/engine/type-handler.hpp"  ///////////////OOO warum?
 #include "steam/engine/naive-buffer-setup.hpp"
+#include "lib/result.hpp"
 #include "lib/nocopy.hpp"
 
 #include <memory>
+#include <vector>
 
 
 namespace steam {
@@ -40,22 +42,34 @@ namespace engine {
   
   namespace diagn {// state descriptors for diagnostics....
     
+    /** represent the status of one allocation */
     struct Block
-      : BuffHandle
-      , util::NonCopyable
       {
+        BuffHandle handle;
+        void* storage{nullptr};
+        void* accessMemory()  const { return storage; }
         
-        Block(BuffHandle const& handle) : BuffHandle{handle} { }
-        Block(BuffDescr const&  descr)  : BuffHandle{descr}  { }
+        Block (BuffHandle const&);
+        Block (BuffDescr const&);
+        operator HashVal()  const { return handle; }
       };
+    
     
     class StateReg
       : util::NonCopyable
       {
+        using Registry = std::vector<std::shared_ptr<Block>>;
+        Registry reg_;
+        
       public:
+        /* ========= Information API ========= */
+        using Result = lib::Result<Block const&>;
+        Result operator[] (size_t  seqNr)  const;
+        Result byHandle   (HashVal handle) const;
         size_t cnt()  const;
-        Block const& operator[] (size_t  seqNr)  const;
-        Block const& byHandle   (HashVal handle) const;
+        
+        /* ========= Accounting  API ========= */
+        void record (BuffHandle const&);
       };
     
   }//(End)diagnostic descriptors.
@@ -71,7 +85,7 @@ namespace engine {
     : public NaiveBufferSetup
     {
       HeapMemProvider& heapStore_;  //////////////////////////////OOO fällt dann weg nach dem Umbau
-      class BlockTracker;
+      struct BlockTracker;
       std::unique_ptr<BlockTracker> tracker_;
       
     public:
@@ -83,23 +97,22 @@ namespace engine {
       friend class BufferDiagnostic;
     };
   
+  
+  /** Accessor-proxy to investigate transactions */
   class BufferDiagnostic
     : util::MoveOnly
     {
       DiagnosticBufferProvider& dbp_;
     public:
-      BufferDiagnostic (DiagnosticBufferProvider& thePro)
-        : dbp_{thePro}
-        { }
-      
+      BufferDiagnostic (DiagnosticBufferProvider&);
       
       bool buffer_was_used (uint bufferID);   ///< @deprecated       ////////////////////////////////////////TICKET 1410
       bool buffer_was_closed (uint bufferID); ///< @deprecated       ////////////////////////////////////////TICKET 1410
       void* accessMemory (uint bufferID);     ///< @deprecated       ////////////////////////////////////////TICKET 1410
       bool all_buffers_released();
-      diagn::StateReg& created ();
-      diagn::StateReg& emitted ();
-      diagn::StateReg& released();
+      diagn::StateReg const& created;
+      diagn::StateReg const& emitted;
+      diagn::StateReg const& released;
     };
   
   inline BufferDiagnostic

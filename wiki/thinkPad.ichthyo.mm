@@ -111992,8 +111992,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1770836045059" ID="ID_1655786726" MODIFIED="1770836048921" TEXT="diagn::Block">
 <node CREATED="1770836069885" ID="ID_998362757" MODIFIED="1770836082283" TEXT="kann darauf zugreifen...">
 <node CREATED="1770836083623" ID="ID_753602945" MODIFIED="1770836090579" TEXT="&#xe4;hnlich wie mit einem BuffHandle"/>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1770836091716" ID="ID_1447673270" MODIFIED="1770836099726" TEXT="warum ist das nicht ein BuffHandle?">
+<node COLOR="#5b280f" CREATED="1770836091716" ID="ID_1447673270" MODIFIED="1770922028835" TEXT="warum ist das nicht ein BuffHandle?">
 <icon BUILTIN="help"/>
+<icon BUILTIN="button_cancel"/>
 <node COLOR="#5b280f" CREATED="1770859546724" ID="ID_860424314" MODIFIED="1770859978928" TEXT="m&#xfc;&#xdf;te dazu nur die Logik minimal erweitern">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -112008,8 +112009,39 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 <icon BUILTIN="button_cancel"/>
 </node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1770859982196" ID="ID_1152522813" MODIFIED="1770861013664" TEXT="mu&#xdf; beachten, da&#xdf; diagn::Block ganz klar Referenz-Semantik hat">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1770859982196" ID="ID_1152522813" MODIFIED="1770921648034" TEXT="mu&#xdf; inhaltlichen Konflikt beachten bzgl. Value/Referenz-Semantik">
+<arrowlink COLOR="#8c3a3e" DESTINATION="ID_1760077956" ENDARROW="Default" ENDINCLINATION="49;-76;" ID="Arrow_ID_366613644" STARTARROW="None" STARTINCLINATION="-340;-17;"/>
 <icon BUILTIN="messagebox_warning"/>
+<node CREATED="1770921692922" ID="ID_1434529048" MODIFIED="1770921803421" TEXT="der Block verfolgt und reflektiert einen mutable State">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      technisch wird das realisiert, indem wir den Block nur einmal erzeugen und dann in verschiedene Registries eintragen und aktualisieren; eingetragen wird er als shared-ptr, aber das API verbirgt das
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1770921712807" ID="ID_1486134831" MODIFIED="1770921885192" TEXT="er wird aber als Value-Objekt herausgegeben">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Im Block(descriptor) selber stehen nur Protokoll-Werte, wie z.B. ein Status-ENUM; das ist alles potentiell fehleranf&#228;llig, denn naheliegenderweise zieht sich der user davon eine Kopie; eine solche Kopie bekommt aber keine Updates mehr mit
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1770921727435" ID="ID_692037066" MODIFIED="1770921984908" TEXT="und ein Sub-Objekt ist ein Handle">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...und hier wird die Sache noch verwirrender: das Buff-Handle selber ist zwar ein Value-Objekt, repr&#228;sentiert aber eine Referenz-Semantik. Das bedeutet, die Informations-Funktionen k&#246;nnten einen aktualisierten Status-Wert sehen, der den materialisierten Feldern im Block(descriptor) wirderspricht
+    </p>
+  </body>
+</html></richcontent>
+</node>
 </node>
 <node CREATED="1770861029055" ID="ID_613764848" MODIFIED="1770861056078" TEXT="darf also immer nur per const&amp; herausgegeben werden (non-copyable)">
 <icon BUILTIN="yes"/>
@@ -112046,12 +112078,36 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
+<node COLOR="#5b280f" CREATED="1770922014959" ID="ID_135797923" MODIFIED="1770922896178" TEXT="also: besser nicht!">
+<arrowlink COLOR="#fe8419" DESTINATION="ID_1674103969" ENDARROW="Default" ENDINCLINATION="150;8;" ID="Arrow_ID_791536754" STARTARROW="None" STARTINCLINATION="313;40;"/>
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+<node CREATED="1770922043317" ID="ID_1609215542" MODIFIED="1770922812505" TEXT="wird explizit ausimplementiert als Value-Objekt">
+<linktarget COLOR="#86504f" DESTINATION="ID_1609215542" ENDARROW="Default" ENDINCLINATION="1055;66;" ID="Arrow_ID_4759514" SOURCE="ID_833595275" STARTARROW="None" STARTINCLINATION="420;31;"/>
+<node COLOR="#f44f49" CREATED="1770922832547" HGAP="34" ID="ID_1362014913" MODIFIED="1770923336302" TEXT="(auch wegen lib::Result...)" VSHIFT="-2">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...deshalb mu&#223; man n&#228;mlich h&#228;ufig in eine explizit getypte lokale Kopie materialisieren, da ich lib::Result mit einem Target-Typ-Operator ausgestattet habe &#8212; und nicht mit operator*(). Hier greifen also die Regeln f&#252;r implizite Konversionen in C++, und diese sind inzwischen (C++17) deutlich restriktiver geworden; sie werden nur noch in einem <i>getypten Zielkontext</i>&#160;wirksam, also wenn sich aus dem Empf&#228;nger des Wertes der erwartete Typ ergibt; der Aufruf einer Funktion geh&#246;rt da wohl nicht dazu.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1770922058008" ID="ID_1674103969" MODIFIED="1770922885175" TEXT="das API bietet aber &#xe4;hnliche Zugriffe wie ein BuffHandle">
+<linktarget COLOR="#fe8419" DESTINATION="ID_1674103969" ENDARROW="Default" ENDINCLINATION="150;8;" ID="Arrow_ID_791536754" SOURCE="ID_135797923" STARTARROW="None" STARTINCLINATION="313;40;"/>
 </node>
 </node>
 <node CREATED="1770859611807" ID="ID_456313294" MODIFIED="1770859630657" TEXT="stellt eine Einzel-Resource dar (incl.Lebenszyklus)"/>
 </node>
-<node CREATED="1770860961496" ID="ID_1760077956" MODIFIED="1770861001380" TEXT="technisch: Referenz-Semantik">
-<node CREATED="1770861069029" ID="ID_1893898325" MODIFIED="1770861083427" TEXT="per shared-ptr in diverse Registries eintragen"/>
+<node CREATED="1770860961496" ID="ID_1760077956" MODIFIED="1770921635616" TEXT="technisch: Referenz-Semantik">
+<linktarget COLOR="#8c3a3e" DESTINATION="ID_1760077956" ENDARROW="Default" ENDINCLINATION="49;-76;" ID="Arrow_ID_366613644" SOURCE="ID_1152522813" STARTARROW="None" STARTINCLINATION="-340;-17;"/>
+<node CREATED="1770861069029" ID="ID_1893898325" MODIFIED="1770921599567" TEXT="per shared-ptr in diverse Registries eintragen">
+<arrowlink COLOR="#24699b" DESTINATION="ID_629461762" ENDARROW="Default" ENDINCLINATION="249;-22;" ID="Arrow_ID_933021141" STARTARROW="None" STARTINCLINATION="324;20;"/>
+</node>
 <node CREATED="1770861098209" ID="ID_456581264" MODIFIED="1770861177491" TEXT="diese m&#xfc;ssen nun allesamt an den DiagnosticBufferProvider gebunden sein">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -112310,7 +112366,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1770868131597" ID="ID_1295543035" MODIFIED="1770868160578" TEXT="habe noch versucht, den alten Typ Block als nested Class nach innnen zu nehmen"/>
 <node CREATED="1770868161778" ID="ID_1543563276" MODIFIED="1770868240346" TEXT="das ging auch weitgehend gut..."/>
 <node CREATED="1770868241494" ID="ID_775490250" MODIFIED="1770868250655" TEXT="w&#xfc;rde mich aber nicht wundern, wenn es nicht funktioniert"/>
-<node CREATED="1770868252533" ID="ID_1628545446" MODIFIED="1770868267575" TEXT="oh Mann ... diese Implementierung ist sowas von verworren jetzt"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1770868252533" ID="ID_1628545446" MODIFIED="1770922598089" TEXT="oh Mann ... diese Implementierung ist sowas von verworren jetzt">
+<icon BUILTIN="smiley-angry"/>
+</node>
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1770868269667" ID="ID_1888267992" MODIFIED="1770868289979" TEXT="Vermutung: ich werde sie am Ende einfach wegholzen">
 <icon BUILTIN="help"/>
 <node CREATED="1770868292343" ID="ID_54159548" MODIFIED="1770868300647" TEXT="bevor ich nochmal versuche, das alles zu verstehen"/>
@@ -112325,6 +112383,116 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1770868498116" ID="ID_1625162119" MODIFIED="1770868508672" TEXT="die kritische Logik steckt in der Type-Registry"/>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1770868509834" ID="ID_1753146390" MODIFIED="1770868535191" TEXT="&#x27f9; auch die LIfecycle-Transitions m&#xfc;ssen dorthin umziehen"/>
 </node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1770917116413" ID="ID_40466555" MODIFIED="1770923603445" TEXT="Diagnosefunktionen">
+<icon BUILTIN="yes"/>
+<node CREATED="1770917149090" ID="ID_838709024" MODIFIED="1770917152832" TEXT="Registries">
+<node CREATED="1770917154433" ID="ID_526257573" MODIFIED="1770917163302" TEXT="das hier mu&#xdf; KISS sein">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1770917168005" ID="ID_629461762" MODIFIED="1770917221830" TEXT="verwende einen Vector mit shared-ptrs">
+<linktarget COLOR="#24699b" DESTINATION="ID_629461762" ENDARROW="Default" ENDINCLINATION="249;-22;" ID="Arrow_ID_933021141" SOURCE="ID_1893898325" STARTARROW="None" STARTINCLINATION="324;20;"/>
+</node>
+<node CREATED="1770917229953" ID="ID_1113251211" MODIFIED="1770917248324" TEXT="Aufgabe: Lookup per Hash-ID">
+<node CREATED="1770917250906" ID="ID_677085503" MODIFIED="1770917266150">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      m&#246;chte ich bieten <i>weil man's machen kann</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1770917304605" ID="ID_550989117" MODIFIED="1770917317154" TEXT="KISS: letztlich in der &#xbb;created&#xab;-Registry suchen">
+<node CREATED="1770917320828" ID="ID_1484374326" MODIFIED="1770917456931" TEXT="weil es sinnlos ist, nach einem Buffer-Descriptor zu suchen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <i>wenn man diese M&#246;glichkeit &#252;berhaupt bieten m&#246;chte,</i>&#160;dann besser als dedizierte Funktion, denn die Status-Abfragen f&#252;r einen Descriptor sind notwendigerweise nicht kongruent mit denen eines Handles (der Descriptor kann sowohl einen &#187;Typ&#171; repr&#228;sentieren, alsauch eine konkrete Allokation)i
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1770917459113" ID="ID_681600898" MODIFIED="1770917474790" TEXT="und alle konkreten Handles mindestens einmal erzeugt wurden"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1770917476143" ID="ID_1568881043" MODIFIED="1770917490784" TEXT="es sei denn &#x2014; sie sind invalide">
+<icon BUILTIN="messagebox_warning"/>
+<node COLOR="#6e102b" CREATED="1770917496962" ID="ID_1414953401" MODIFIED="1770917536405" TEXT="und das ist ein Problem...">
+<icon BUILTIN="clanbomber"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1770917506113" ID="ID_247376903" MODIFIED="1770923361030" TEXT="wie antworten wir dann?">
+<icon BUILTIN="help"/>
+<node CREATED="1770917541179" ID="ID_393562182" MODIFIED="1770917546758" TEXT="einfach w&#xe4;re eine Exception"/>
+<node CREATED="1770917547870" ID="ID_1763295517" MODIFIED="1770917567497">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      aber damit ist das Feature nur noch <b>halb so n&#252;tzlich</b>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#5b280f" CREATED="1770917569906" ID="ID_1843295277" MODIFIED="1770917587918" TEXT="man k&#xf6;nnte an einen Null-Value denken">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1770917591842" ID="ID_1962292037" MODIFIED="1770917601786" TEXT="geht zwar prinzipiell"/>
+<node CREATED="1770917602957" ID="ID_798472255" MODIFIED="1770917822227" TEXT="ist aber ekelig und aufwendig zu implementieren">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...weil ich mich nun <i>dummerweise</i>&#160;darauf festgelegt habe, den Block(descriptor) kongruent zu einem BuffHandle zu machen; das bedetuet, der Descriptor hat eine Back-Referenz auf einen BufferProvider, und verwendet diese auch zur Implementierung von Informationsfunktionen. Oder er k&#246;nnte es tun (dies ist dann naheliegend &#10233; Wartungsproblem <font color="#ce01fa">&#8623;</font>). Da der Null-Value aus den Suchfunktionen der Registry erzeugt wird, brauchen wir einen Backlink auf die zugeh&#246;rige Instanz des DiagnosticBufferProvider. <i><font size="2" color="#980a75">Jaaa, das ist machbar....</font></i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1770917619314" ID="ID_1788971308" MODIFIED="1770917632678" TEXT="au&#xdf;erdem: was schreibt man dann in die Datenfelder?"/>
+</node>
+<node CREATED="1770918469457" ID="ID_1831394123" MODIFIED="1770923443396" TEXT="L&#xf6;sung: ein Either-Result liefern">
+<linktarget COLOR="#4070d3" DESTINATION="ID_1831394123" ENDARROW="Default" ENDINCLINATION="-126;11;" ID="Arrow_ID_223483799" SOURCE="ID_403539127" STARTARROW="None" STARTINCLINATION="241;-135;"/>
+<icon BUILTIN="idea"/>
+<node COLOR="#4b4398" CREATED="1770918501430" HGAP="27" ID="ID_1729233921" MODIFIED="1770922756313" TEXT="wie gut da&#xdf; ich mir daf&#xfc;r mal die Zeit genommen hatte..." VSHIFT="15">
+<font ITALIC="true" NAME="SansSerif" SIZE="10"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1770922734931" HGAP="35" ID="ID_833595275" MODIFIED="1770922812505" TEXT="ist auch nicht ganz unproblematisch..." VSHIFT="1">
+<arrowlink COLOR="#86504f" DESTINATION="ID_1609215542" ENDARROW="Default" ENDINCLINATION="1055;66;" ID="Arrow_ID_4759514" STARTARROW="None" STARTINCLINATION="420;31;"/>
+<font NAME="SansSerif" SIZE="11"/>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1770922671079" ID="ID_267372442" MODIFIED="1770922718519" TEXT="d&#xe4;mliche lineare Suche gen&#xfc;gt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      std::ranges::find_if mit Zugriffs-&#955;
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1770923391246" ID="ID_403539127" MODIFIED="1770923481144" STYLE="fork" TEXT="Suche liefert lib::Result">
+<arrowlink COLOR="#4070d3" DESTINATION="ID_1831394123" ENDARROW="Default" ENDINCLINATION="-126;11;" ID="Arrow_ID_223483799" STARTARROW="None" STARTINCLINATION="241;-135;"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1770923400575" ID="ID_1931478017" MODIFIED="1770923481144" TEXT="wirft bei out-of-bounds"/>
+<node CREATED="1770923418466" ID="ID_1875722112" MODIFIED="1770923481144" TEXT="wirft bei nicht gefundenem Hash"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1770923537976" ID="ID_377154413" MODIFIED="1770923576533" TEXT="BlockTracker: pImpl f&#xfc;r die Registries">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1770923506886" ID="ID_1357520947" MODIFIED="1770923513693" TEXT="drei Registries bieten">
+<node CREATED="1770923514549" ID="ID_1515553777" MODIFIED="1770923517021" TEXT="created"/>
+<node CREATED="1770923518029" ID="ID_1772560536" MODIFIED="1770923520830" TEXT="emitted"/>
+<node CREATED="1770923523535" ID="ID_1351841539" MODIFIED="1770923526850" TEXT="released"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1770917107132" ID="ID_1518034296" MODIFIED="1770923603446" TEXT="Tracking">
+<icon BUILTIN="yes"/>
 </node>
 </node>
 </node>
@@ -112410,8 +112578,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1770412906590" ID="ID_764817619" MODIFIED="1770413532585" STYLE="fork" TEXT="Ansatzpunkt: Implementierungs-Schwierigkeiten">
 <edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
-<linktarget COLOR="#4562b1" DESTINATION="ID_764817619" ENDARROW="Default" ENDINCLINATION="-1;-13;" ID="Arrow_ID_1089281127" SOURCE="ID_718178819" STARTARROW="None" STARTINCLINATION="-76;4;"/>
 <linktarget COLOR="#3619c3" DESTINATION="ID_764817619" ENDARROW="Default" ENDINCLINATION="-1253;-970;" ID="Arrow_ID_702150784" SOURCE="ID_1947911633" STARTARROW="None" STARTINCLINATION="1019;65;"/>
+<linktarget COLOR="#4562b1" DESTINATION="ID_764817619" ENDARROW="Default" ENDINCLINATION="-1;-13;" ID="Arrow_ID_1089281127" SOURCE="ID_718178819" STARTARROW="None" STARTINCLINATION="-76;4;"/>
 <icon BUILTIN="forward"/>
 <node CREATED="1770412962641" ID="ID_18778731" MODIFIED="1770413029456" TEXT="das ist die wichtigste Neuerung: wir &#x201e;wissen jetzt&#x201c; was in der Engine passiert">
 <richcontent TYPE="NOTE"><html>

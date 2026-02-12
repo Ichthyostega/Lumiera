@@ -151,6 +151,8 @@ namespace engine {
           return *pBuffer_;
         }
       
+      operator HashVal()  const { return descriptor_; }
+      
       bool
       isValid()  const
         {

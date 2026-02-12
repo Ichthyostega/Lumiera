@@ -21,6 +21,7 @@
 #include "steam/engine/diagnostic-buffer-provider.hpp"
 #include "steam/engine/buffhandle-attach.hpp"     ///////////////////////////////////////////////////////////TICKET 1410 : remove unnecessary API
 #include "steam/engine/testframe.hpp"
+#include "lib/test/diagnostic-output.hpp"//////////////////TODO
 
 #include <vector>
 
@@ -97,8 +98,14 @@ namespace test  {
           provider.emitBuffer   (testBuff);
           provider.releaseBuffer(testBuff);
           
-//        diagn::Block& block0 = provider.access_emitted(0);      ///////////////////////////////OOO provide suitable diagnostic API!
-//        CHECK (testData(dataID) == block0.accessMemory());
+SHOW_EXPR(watch(provider).created.cnt())
+SHOW_EXPR(watch(provider).emitted.cnt())
+SHOW_EXPR(watch(provider).released.cnt())
+          CHECK (1 == watch(provider).created.cnt());
+          CHECK (1 == watch(provider).emitted.cnt());
+          CHECK (1 == watch(provider).released.cnt());
+          diagn::Block block0 = watch(provider).emitted[0];
+          CHECK (testData(dataID) == block0.accessMemory());
         }
       
       

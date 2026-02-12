@@ -126,7 +126,7 @@ namespace test   {
       bool isValid()    const;
       bool isPristine() const;
       
-      bool operator== (void* memLocation) const;
+      bool operator== (void const* memLocation) const;
       
       friend bool operator== (TestFrame const& f1, TestFrame const& f2) { return  f1.contentEquals(f2); }
       friend bool operator!= (TestFrame const& f1, TestFrame const& f2) { return !f1.contentEquals(f2); }

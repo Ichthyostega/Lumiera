@@ -133,11 +133,11 @@ namespace test  {
     }
     
     
-    TestFrame&
-    accessAsTestFrame (void* memoryLocation)
+    TestFrame const&
+    accessAsTestFrame (void const* memoryLocation)
     {
       REQUIRE (memoryLocation);
-      return *reinterpret_cast<TestFrame*> (memoryLocation);
+      return *reinterpret_cast<TestFrame const*> (memoryLocation);
     }
     
     
@@ -304,9 +304,9 @@ namespace test  {
   }
   
   bool
-  TestFrame::operator== (void* memLocation)  const
+  TestFrame::operator== (void const* memLocation)  const
   {
-    TestFrame& candidate (accessAsTestFrame (memLocation));
+    TestFrame const& candidate (accessAsTestFrame (memLocation));
     return candidate.isSane()
        and candidate == *this;
   }
@@ -420,14 +420,14 @@ namespace test  {
   bool
   TestFrame::isAlive (void* memLocation)
   {
-    TestFrame& candidate (accessAsTestFrame (memLocation));
+    TestFrame const& candidate (accessAsTestFrame (memLocation));
     return candidate.isAlive();
   }
   
   bool
   TestFrame::isDead (void* memLocation)
   {
-    TestFrame& candidate (accessAsTestFrame (memLocation));
+    TestFrame const& candidate (accessAsTestFrame (memLocation));
     return candidate.isDead();
   }
   
