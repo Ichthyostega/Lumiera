@@ -288,13 +288,13 @@ namespace engine {
   }
 
   
-  Buff&
-  HeapMemProvider::provideBuffer (size_t buffSiz, HashVal typeID, LocalTag&)
+  BufferProviderSetup::Store::Slot
+  HeapMemProvider::provideBuffer (size_t buffSiz, HashVal typeID, LocalTag)
   {
     BlockPool& blocks = getBlockPoolFor (buffSiz, typeID);
     Block& newBlock = blocks.createBlock();
     LocalTag specifics{&newBlock}; // used by this implementation to find the storage to release later
-    return * asBuffer(newBlock.accessMemory());
+    return std::make_tuple (asBuffer(newBlock.accessMemory()), specifics);
   }
   
   
@@ -320,8 +320,9 @@ namespace engine {
   
   /** mark a buffer as officially discarded */
   void
-  HeapMemProvider::detachBuffer (size_t buffSiz, HashVal typeID, LocalTag specifics, Buff& storage)
+  HeapMemProvider::detachBuffer (size_t buffSiz, HashVal typeID, Slot alloc)
   {
+    auto& [storage, specifics] = alloc;
     Block* block4buffer = locateBlock (buffSiz, typeID, specifics);
     REQUIRE (block4buffer, "releasing a buffer not allocated through this provider");
     REQUIRE (util::isSameAdr (storage, block4buffer->accessMemory()));

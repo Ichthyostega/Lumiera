@@ -112,6 +112,7 @@
 
 #include <utility>
 #include <memory>
+#include <tuple>
 
 
 namespace steam {
@@ -200,13 +201,15 @@ namespace engine {
       class BufferStore
         : util::NonCopyable
         {
+        protected:
+          using Slot = std::tuple<Buff*,LocalTag>;
         public:
           virtual ~BufferStore() { } ///< this is an interface
           
-          virtual uint prepareBuffers (uint cnt, size_t,HashVal typeID)  =0;
-          virtual Buff& provideBuffer (size_t,HashVal typeID, LocalTag&) =0;
-          virtual void mark_emitted (size_t,HashVal, LocalTag const&)    =0;
-          virtual void detachBuffer (size_t,HashVal, LocalTag, Buff&)    =0;
+          virtual uint prepareBuffers (uint cnt, size_t,HashVal typeID) =0;
+          virtual Slot provideBuffer (size_t,HashVal typeID, LocalTag)  =0;
+          virtual void mark_emitted (size_t,HashVal, LocalTag const&)   =0;
+          virtual void detachBuffer (size_t,HashVal, Slot alloc)        =0;
         };
       
       unique_ptr<BufferStage> bufferStage_;       ///////////////////////////////////////////////////////////TICKET #1410 : must be turned into an internal interface

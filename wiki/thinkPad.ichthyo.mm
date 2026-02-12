@@ -111868,8 +111868,11 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1770835660209" ID="ID_1699942357" MODIFIED="1770835664104" TEXT="BufferProviderProtocol_test">
 <icon BUILTIN="broken-line"/>
 </node>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1770935307254" ID="ID_1256898924" MODIFIED="1770935316691" TEXT="DiagnosticBufferProvider_test">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1770935307254" ID="ID_1256898924" MODIFIED="1770947504816" TEXT="DiagnosticBufferProvider_test">
 <icon BUILTIN="broken-line"/>
+<node BACKGROUND_COLOR="#eae2af" COLOR="#690f14" CREATED="1770947507396" ID="ID_1663548893" MODIFIED="1770947541484" TEXT="l&#xe4;uft nun bis auf fehlendes Tracking...">
+<font NAME="SansSerif" SIZE="11"/>
+</node>
 </node>
 <node COLOR="#2c619a" CREATED="1770835671749" ID="ID_661880079" MODIFIED="1770939247723" TEXT="der buildHandle()-Aufruf mu&#xdf; entflochten werden">
 <arrowlink COLOR="#3a91fe" DESTINATION="ID_1511113078" ENDARROW="Default" ENDINCLINATION="243;15;" ID="Arrow_ID_1668459979" STARTARROW="None" STARTINCLINATION="820;0;"/>
@@ -112689,6 +112692,17 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html>
 </richcontent>
 </node>
+</node>
+<node COLOR="#435e98" CREATED="1770947363915" ID="ID_1352298488" MODIFIED="1770947427286" TEXT="aber ein Zwischending...">
+<icon BUILTIN="yes"/>
+<node CREATED="1770947376890" ID="ID_2121271" MODIFIED="1770947388988" TEXT="Slot = tuple&lt;Buffer*, LocalTag&gt;">
+<node CREATED="1770947436245" ID="ID_1453619086" MODIFIED="1770947451096" TEXT="damit generell: Buffer* verwenden">
+<font NAME="SansSerif" SIZE="11"/>
+</node>
+<node CREATED="1770947452831" ID="ID_263962280" MODIFIED="1770947477138" TEXT="BuffHandle::rawStorage()"/>
+</node>
+<node CREATED="1770947390336" ID="ID_1722157621" MODIFIED="1770947419160" TEXT="das wird von der Allokation erzeugt..."/>
+<node CREATED="1770947399557" ID="ID_1598745754" MODIFIED="1770947411455" TEXT="und der de-Allokation wieder angeliefert"/>
 </node>
 </node>
 </node>

@@ -138,10 +138,10 @@ namespace engine {
   BufferProvider::lockBuffer (BuffDescr const& type)
   {
     REQUIRE (was_created_by_this_provider (type));
-    size_t buffSiz = getBufferSize (type);
-    LocalTag implMarker;
-    Buff& storage  = bufferStore_->provideBuffer (buffSiz, type, implMarker);
-    return buildHandle (type, &storage, implMarker);
+    metadata::Entry& metaEntry = bufferStage_->get (type);
+    size_t buffSiz = metaEntry.storageSize();
+    auto [storage, implMarker] = bufferStore_->provideBuffer (buffSiz, type, metaEntry.localTag());
+    return buildHandle (type, storage, implMarker);
   }
   
   
@@ -181,7 +181,8 @@ namespace engine {
     metadata::Entry& metaEntry = bufferStage_->get (handle.entryID());
     size_t buffSiz = metaEntry.storageSize();
     metaEntry.mark(FREE);   // might invoke embedded dtor function
-    bufferStore_->detachBuffer (buffSiz, metaEntry.parentKey(), metaEntry.localTag(), *handle);
+    bufferStore_->detachBuffer (buffSiz, metaEntry.parentKey()
+                               ,std::make_tuple (handle.rawStorage(), metaEntry.localTag()));
     bufferStage_->release (metaEntry);
   }
   ERROR_LOG_AND_IGNORE (engine, "releasing a buffer from BufferProvider")
@@ -226,7 +227,8 @@ namespace engine {
     metadata::Entry& metaEntry = bufferStage_->get (target.entryID());
     size_t buffSiz = metaEntry.storageSize();
     metaEntry.invalidate (invokeDtor);
-    bufferStore_->detachBuffer (buffSiz, metaEntry.parentKey(), metaEntry.localTag(), *target);
+    bufferStore_->detachBuffer (buffSiz, metaEntry.parentKey()
+                               ,std::make_tuple (target.rawStorage(), metaEntry.localTag()));
     bufferStage_->release (metaEntry);
   }
   ERROR_LOG_AND_IGNORE (engine, "cleanup of buffer metadata while handling an error")

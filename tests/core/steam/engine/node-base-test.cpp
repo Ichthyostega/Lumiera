@@ -257,7 +257,7 @@ namespace test  {
           CHECK (m1.outBuff[0].accessAs<long>() == -55);
           
           m1.connect();                                    // instruct the manifold to connect buffers to arguments
-          CHECK (isSameAdr (m1.outArgs, *buff));
+          CHECK (isSameAdr (m1.outArgs, buff.rawStorage()));
           CHECK (*m1.outArgs == -55);
           
           m1.invoke();                                     // invoke the adapted processing function (fun_singleOut)
@@ -295,8 +295,8 @@ namespace test  {
           
           // connect arguments to buffers
           m2.connect();
-          CHECK (isSameAdr (m2.inArgs,  *buff));
-          CHECK (isSameAdr (m2.outArgs, *buffOut));
+          CHECK (isSameAdr (m2.inArgs,  buff.rawStorage()));
+          CHECK (isSameAdr (m2.outArgs, buffOut.rawStorage()));
           CHECK (*m2.outArgs == -55);                      ////////////////////////////////OOO should be -99
           
           m2.invoke();

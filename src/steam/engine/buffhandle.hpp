@@ -141,14 +141,11 @@ namespace engine {
       template<typename BU>
       BU& accessAs();
       
-      
-      //////////////////////////////////////////TICKET #249 this operator looks obsolete. The Buff type is a placeholder type,
-      //////////////////////////////////////////TODO         it should never be accessed directly from within Lumiera engine code
-      Buff&
-      operator* ()  const
+      Buff*
+      rawStorage()  const
         {
           ENSURE (pBuffer_);
-          return *pBuffer_;
+          return  pBuffer_;
         }
       
       operator HashVal()  const { return descriptor_; }
