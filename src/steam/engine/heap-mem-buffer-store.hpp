@@ -83,10 +83,10 @@ namespace engine {
     public:
       /* === BufferStore interface === */
       
-      virtual uint prepareBuffers (uint count, HashVal typeID)    override;
-      virtual BuffHandle provideLockedBuffer  (HashVal typeID)    override;
-      virtual void mark_emitted (HashVal, LocalTag const&)        override;
-      virtual void detachBuffer (HashVal, LocalTag const&, Buff&) override;
+      virtual uint prepareBuffers (uint cnt, size_t,HashVal typeID)      override;
+      virtual BuffHandle provideBuffer (size_t,HashVal typeID)           override;
+      virtual void mark_emitted (size_t,HashVal, LocalTag const&)        override;
+      virtual void detachBuffer (size_t,HashVal, LocalTag const&, Buff&) override;
       
     public:
      ~HeapMemProvider();
@@ -103,8 +103,8 @@ namespace engine {
       
     private:
       bool withinOutputSequence (uint bufferID)  const;
-      BlockPool& getBlockPoolFor (HashVal typeID);
-      Block* locateBlock (HashVal typeID, void*);
+      BlockPool& getBlockPoolFor (size_t,HashVal typeID);
+      Block* locateBlock (size_t,HashVal typeID, void*);
       Block* searchInOutSeqeuence (void* storage);
     };
   

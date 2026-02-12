@@ -107,9 +107,10 @@ namespace engine {
    * @note the returned count may differ from the requested count.
    */
   uint
-  BufferProvider::announce (uint count, BuffDescr const& type)
+  BufferProvider::announce (uint cnt, BuffDescr const& type)
   {
-    uint actually_possible = bufferStore_->prepareBuffers (count, type);
+    size_t buffSiz = getBufferSize (type);
+    uint actually_possible = bufferStore_->prepareBuffers (cnt, buffSiz, type);
     if (!actually_possible)
       throw error::State ("unable to fulfil request for buffers"
                          ,LUMIERA_ERROR_BUFFER_MANAGEMENT);
@@ -134,8 +135,8 @@ namespace engine {
   BufferProvider::lockBuffer (BuffDescr const& type)
   {
     REQUIRE (was_created_by_this_provider (type));
-    
-    return bufferStore_->provideLockedBuffer (type);
+    size_t buffSiz = getBufferSize (type);
+    return bufferStore_->provideBuffer (buffSiz, type);
   }     // is expected to call buildHandle() --> state transition
   
   
@@ -155,13 +156,14 @@ namespace engine {
   BufferProvider::emitBuffer (BuffHandle const& handle)
   {
     metadata::Entry& metaEntry = bufferStage_->get (handle.entryID());
-    bufferStore_->mark_emitted (metaEntry.parentKey(), metaEntry.localTag());
+    size_t buffSiz = metaEntry.storageSize();
+    bufferStore_->mark_emitted (buffSiz, metaEntry.parentKey(), metaEntry.localTag());
     metaEntry.mark(EMITTED);
   }
   
   
   /** BufferProvider API: declare done and detach.
-   *  Client code is required to release \em each previously locked buffer eventually.
+   *  Client code is required to release _each previously locked buffer_ eventually.
    * @warning invalidates the BuffHandle, clients mustn't access the buffer anymore.
    *          Right after releasing, an access through the handle will throw;
    *          yet the buffer might be re-used and the handle become valid
@@ -172,8 +174,9 @@ namespace engine {
   BufferProvider::releaseBuffer (BuffHandle const& handle)
   try {
     metadata::Entry& metaEntry = bufferStage_->get (handle.entryID());
+    size_t buffSiz = metaEntry.storageSize();
     metaEntry.mark(FREE);   // might invoke embedded dtor function
-    bufferStore_->detachBuffer (metaEntry.parentKey(), metaEntry.localTag(), *handle);
+    bufferStore_->detachBuffer (buffSiz, metaEntry.parentKey(), metaEntry.localTag(), *handle);
     bufferStage_->release (metaEntry);
   }
   ERROR_LOG_AND_IGNORE (engine, "releasing a buffer from BufferProvider")
@@ -216,8 +219,9 @@ namespace engine {
   BufferProvider::emergencyCleanup (BuffHandle const& target, bool invokeDtor)
   try {
     metadata::Entry& metaEntry = bufferStage_->get (target.entryID());
+    size_t buffSiz = metaEntry.storageSize();
     metaEntry.invalidate (invokeDtor);
-    bufferStore_->detachBuffer (metaEntry.parentKey(), metaEntry.localTag(), *target);
+    bufferStore_->detachBuffer (buffSiz, metaEntry.parentKey(), metaEntry.localTag(), *target);
     bufferStage_->release (metaEntry);
   }
   ERROR_LOG_AND_IGNORE (engine, "cleanup of buffer metadata while handling an error")

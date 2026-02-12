@@ -203,10 +203,10 @@ namespace engine {
         public:
           virtual ~BufferStore() { } ///< this is an interface
           
-          virtual uint prepareBuffers (uint count, HashVal typeID)    =0;
-          virtual BuffHandle provideLockedBuffer  (HashVal typeID)    =0;
-          virtual void mark_emitted (HashVal, LocalTag const&)        =0;
-          virtual void detachBuffer (HashVal, LocalTag const&, Buff&) =0;
+          virtual uint prepareBuffers (uint cnt, size_t,HashVal typeID)      =0;
+          virtual BuffHandle provideBuffer (size_t,HashVal typeID)           =0;
+          virtual void mark_emitted (size_t,HashVal, LocalTag const&)        =0;
+          virtual void detachBuffer (size_t,HashVal, LocalTag const&, Buff&) =0;
         };
       
       unique_ptr<BufferStage> bufferStage_;       ///////////////////////////////////////////////////////////TICKET #1410 : must be turned into an internal interface

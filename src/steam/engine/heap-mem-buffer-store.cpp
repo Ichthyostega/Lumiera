@@ -281,17 +281,17 @@ namespace engine {
   /* ==== Implementation of the BufferProvider interface ==== */
   
   uint
-  HeapMemProvider::prepareBuffers(uint requestedAmount, HashVal typeID)
+  HeapMemProvider::prepareBuffers (uint numBuffers, size_t buffSiz, HashVal typeID)
   {
-    BlockPool& responsiblePool = getBlockPoolFor (typeID);
-    return responsiblePool.prepare_for (requestedAmount);
+    BlockPool& responsiblePool = getBlockPoolFor (buffSiz, typeID);
+    return responsiblePool.prepare_for (numBuffers);
   }
 
   
   BuffHandle
-  HeapMemProvider::provideLockedBuffer(HashVal typeID)
+  HeapMemProvider::provideBuffer (size_t buffSiz, HashVal typeID)
   {
-    BlockPool& blocks = getBlockPoolFor (typeID);
+    BlockPool& blocks = getBlockPoolFor (buffSiz, typeID);
     Block& newBlock = blocks.createBlock();
     UNIMPLEMENTED ("Separate tasks into two distinct APIs");
 //  return buildHandle (typeID, asBuffer(newBlock.accessMemory()), &newBlock); /////////////////////////////OOO instead return a tuple (buffer, localTag)
@@ -299,13 +299,13 @@ namespace engine {
   
   
   void
-  HeapMemProvider::mark_emitted (HashVal typeID, LocalTag const& specifics)
+  HeapMemProvider::mark_emitted (size_t buffSiz, HashVal typeID, LocalTag const& specifics)
   {
-    Block* block4buffer = locateBlock (typeID, specifics);
+    Block* block4buffer = locateBlock (buffSiz, typeID, specifics);
     if (!block4buffer)
       throw error::Logic ("Attempt to emit a buffer not known to this BufferProvider"
                          , LUMIERA_ERROR_BUFFER_MANAGEMENT);
-    BlockPool& pool = getBlockPoolFor (typeID);
+    BlockPool& pool = getBlockPoolFor (buffSiz, typeID);
     Block* active = pool.transferResponsibility (block4buffer);
     if (active)
       outSeq_.manage (active);
@@ -320,9 +320,9 @@ namespace engine {
   
   /** mark a buffer as officially discarded */
   void
-  HeapMemProvider::detachBuffer (HashVal typeID, LocalTag const& specifics, Buff& storage)
+  HeapMemProvider::detachBuffer (size_t buffSiz, HashVal typeID, LocalTag const& specifics, Buff& storage)
   {
-    Block* block4buffer = locateBlock (typeID, specifics);
+    Block* block4buffer = locateBlock (buffSiz, typeID, specifics);
     REQUIRE (block4buffer, "releasing a buffer not allocated through this provider");
     REQUIRE (util::isSameAdr (storage, block4buffer->accessMemory()));
     block4buffer->markReleased();
@@ -364,19 +364,18 @@ namespace engine {
   }
   
   HeapMemProvider::BlockPool&
-  HeapMemProvider::getBlockPoolFor (HashVal typeID)
+  HeapMemProvider::getBlockPoolFor (size_t buffSiz, HashVal typeID)
   {
     BlockPool& pool = (*pool_)[typeID];
-    UNIMPLEMENTED ("Separate tasks into two distinct APIs");
-//  if (!pool)
-//      pool.initialise(getBufferSize(typeID));   //////////////////////////OOO getBufferSize is a helper function in the BufferProvider protected API. Need to be "here"
+    if (not pool)
+      pool.initialise (buffSiz);
     return pool;
   }
   
   HeapMemProvider::Block*
-  HeapMemProvider::locateBlock (HashVal typeID, void* storage)
+  HeapMemProvider::locateBlock (size_t buffSiz, HashVal typeID, void* storage)
   {
-    BlockPool& pool = getBlockPoolFor (typeID);
+    BlockPool& pool = getBlockPoolFor (buffSiz, typeID);
     Block* block4buffer = pool.find (storage);                                ////////////////////////////////TICKET #856
     return block4buffer? block4buffer
                        : searchInOutSeqeuence (storage);

@@ -111662,7 +111662,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="broken-line"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1770771226721" ID="ID_1487577652" MODIFIED="1770771248247" TEXT="auch der DiagnosticBufferProvider verwendet ein Basis_API: getBufferSize()">
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1770771226721" ID="ID_1487577652" MODIFIED="1770929553915" TEXT="die Provider-Implementierungen verwendet ein Basis_API: getBufferSize()">
+<linktarget COLOR="#fd583f" DESTINATION="ID_1487577652" ENDARROW="Default" ENDINCLINATION="-484;20;" ID="Arrow_ID_1256483946" SOURCE="ID_831737885" STARTARROW="None" STARTINCLINATION="-70;-57;"/>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1770770126934" ID="ID_850948251" MODIFIED="1770770161242" TEXT="&#x27f9;  API-Anpassung notwendig">
@@ -111687,6 +111688,14 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1770770350662" ID="ID_1511113078" MODIFIED="1770835721461" TEXT="L&#xf6;sung ist offensichtlich: auseinander-f&#xe4;deln">
 <linktarget COLOR="#fe3e3a" DESTINATION="ID_1511113078" ENDARROW="Default" ENDINCLINATION="243;15;" ID="Arrow_ID_1668459979" SOURCE="ID_661880079" STARTARROW="None" STARTINCLINATION="636;0;"/>
 <icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1770929471826" ID="ID_472477187" MODIFIED="1770934001172" TEXT="Buffer-Store rein auf die Allokationen fokussieren">
+<arrowlink COLOR="#616d7c" DESTINATION="ID_1572913456" ENDARROW="Default" ENDINCLINATION="433;33;" ID="Arrow_ID_1937407092" STARTARROW="None" STARTINCLINATION="1162;357;"/>
+<linktarget COLOR="#692bc7" DESTINATION="ID_472477187" ENDARROW="Default" ENDINCLINATION="304;203;" ID="Arrow_ID_396413173" SOURCE="ID_756237025" STARTARROW="None" STARTINCLINATION="347;19;"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1770932643675" ID="ID_1799354299" MODIFIED="1770932643675" TEXT="provideBuffer (size_t,HashVal typeID)"/>
+<node CREATED="1770933709677" MODIFIED="1770933709677" TEXT="prepareBuffers (uint cnt, size_t,HashVal typeID)"/>
+<node CREATED="1770933720241" MODIFIED="1770933720241" TEXT="detachBuffer (size_t,HashVal, LocalTag const&amp;, Buff&amp;)"/>
+</node>
 </node>
 </node>
 </node>
@@ -111835,6 +111844,56 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1770835671749" ID="ID_661880079" MODIFIED="1770835730443" TEXT="der buildHandle()-Aufruf mu&#xdf; entflochten werden">
 <arrowlink COLOR="#fe3e3a" DESTINATION="ID_1511113078" ENDARROW="Default" ENDINCLINATION="243;15;" ID="Arrow_ID_1668459979" STARTARROW="None" STARTINCLINATION="636;0;"/>
 <icon BUILTIN="flag-pink"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1770926260075" ID="ID_831737885" MODIFIED="1770929560653" TEXT="interner Zugriff auf buffer-size">
+<arrowlink COLOR="#fd583f" DESTINATION="ID_1487577652" ENDARROW="Default" ENDINCLINATION="-484;20;" ID="Arrow_ID_1256483946" STARTARROW="None" STARTINCLINATION="-70;-57;"/>
+<icon BUILTIN="flag-pink"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1770926385056" ID="ID_1327594403" MODIFIED="1770926436770" TEXT="verwendet von getBlockPoolFor(HashVal) &#x27f5; in sehr vielen Aufrufen der erste Schritt">
+<icon BUILTIN="clanbomber"/>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1770926280226" ID="ID_1629789719" MODIFIED="1770926305170" TEXT="bisher &#xfc;ber Hilfsfunktion auf der BufferProvider Basis-impl">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1770926311965" ID="ID_1256083121" MODIFIED="1770926337047" TEXT="dies verletzt jetzt die Verschachtelung"/>
+<node CREATED="1770926338187" ID="ID_788003404" MODIFIED="1770926343457" TEXT="und die Trennung der Themen"/>
+<node CREATED="1770926346025" ID="ID_817787716" MODIFIED="1770926361362" TEXT="ist n&#xe4;mlich implementiert durch Zugriff auf die Type-Registry"/>
+</node>
+<node CREATED="1770929023368" ID="ID_448168342" MODIFIED="1770929048141" TEXT="Einsch&#xe4;tzung: mu&#xdf; ohnehin ge&#xe4;ndert werden">
+<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1770929095659" ID="ID_374106644" MODIFIED="1770929259555" TEXT="wir vermerken die Size nur einmal: im Typ-descriptor">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...hier liegt ein potentiell gef&#228;hrlicher Hebel &#8212; wenngleich auch im Fall von Buffern vermutlich nicht besonders relevant (da Buffer gro&#223; sind)
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1770929050952" ID="ID_1844454362" MODIFIED="1770929066192" TEXT="ein typischer Allokator mu&#xdf; die Gr&#xf6;&#xdf;e wissen">
+<node CREATED="1770929067315" ID="ID_1319809000" MODIFIED="1770929074957" TEXT="vor allem auch zur de-Allokation"/>
+<node CREATED="1770929216403" ID="ID_1022871277" MODIFIED="1770929358425" TEXT="ein bekanntes Problem mit vielen Workarounds und Kniffen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      F&#252;r small-objects-Allokatoren kann dieses Problem einen <i>drastischen</i>&#160;Einflu&#223; auf die Performance haben. Im konkreten Fall ist die Situation so komplex, da&#223; ich tunlichst jedwede Art von Absch&#228;tzung und Optimierung vermeiden sollte.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1770929365917" ID="ID_756237025" MODIFIED="1770929600076" TEXT="Konsequenz &#x27f9; API in dieser Hinsicht sofort anpassen">
+<arrowlink COLOR="#692bc7" DESTINATION="ID_472477187" ENDARROW="Default" ENDINCLINATION="304;203;" ID="Arrow_ID_396413173" STARTARROW="None" STARTINCLINATION="347;19;"/>
+</node>
+<node CREATED="1770934037162" ID="ID_1977306902" MODIFIED="1770934049026" TEXT="getBlockPoolFor(size,HashVal)"/>
 </node>
 </node>
 </node>
@@ -112560,6 +112619,18 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1770859485339" ID="ID_834373171" MODIFIED="1770859494334" TEXT="Buffer-Speicher ist zug&#xe4;nglich">
 <node CREATED="1770859498975" ID="ID_1377114926" MODIFIED="1770859505962" TEXT="also bereits alloziert und initialisiert"/>
 <node CREATED="1770859506933" ID="ID_757349315" MODIFIED="1770859520599" TEXT="aber noch nicht &#xbb;emitted&#xab; oder &#xbb;discarded&#xab;"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1770933762544" ID="ID_389070880" MODIFIED="1770933775068" TEXT="Tendenzen zeichnen sich ab...">
+<icon BUILTIN="idea"/>
+<node CREATED="1770933776885" ID="ID_1667378564" MODIFIED="1770933789787" TEXT="f&#xfc;r das Store-Interface">
+<node CREATED="1770933791395" ID="ID_1572913456" MODIFIED="1770934001172" TEXT="...wird &#xfc;berall die buffSize mitgegeben">
+<linktarget COLOR="#616d7c" DESTINATION="ID_1572913456" ENDARROW="Default" ENDINCLINATION="433;33;" ID="Arrow_ID_1937407092" SOURCE="ID_472477187" STARTARROW="None" STARTINCLINATION="1162;357;"/>
+</node>
+<node CREATED="1770933799954" ID="ID_1059437311" MODIFIED="1770933811425" TEXT="denkbar auch, das LocalTag &#xfc;berall durchzuf&#xe4;deln"/>
+<node CREATED="1770933813057" ID="ID_1110032982" MODIFIED="1770933835165" TEXT="man k&#xf6;nnte das in eine BuffInfo packen">
+<icon BUILTIN="idea"/>
 </node>
 </node>
 </node>
