@@ -35,9 +35,31 @@ namespace engine {
   
   namespace error = lumiera::error;
   
-  class HeapMemProvider;
+  class HeapMemProvider;  //////////////////////////////OOO fällt dann weg nach dem Umbau
   class BufferDiagnostic;
   
+  namespace diagn {// state descriptors for diagnostics....
+    
+    struct Block
+      : BuffHandle
+      , util::NonCopyable
+      {
+        
+        Block(BuffHandle const& handle) : BuffHandle{handle} { }
+        Block(BuffDescr const&  descr)  : BuffHandle{descr}  { }
+      };
+    
+    class StateReg
+      : util::NonCopyable
+      {
+      public:
+        size_t cnt()  const;
+        Block const& operator[] (size_t  seqNr)  const;
+        Block const& byHandle   (HashVal handle) const;
+      };
+    
+  }//(End)diagnostic descriptors.
+
   
   
   /****************************************************************//**
@@ -48,8 +70,9 @@ namespace engine {
   class DiagnosticBufferProvider
     : public NaiveBufferSetup
     {
-      HeapMemProvider& heapStore_;
-      
+      HeapMemProvider& heapStore_;  //////////////////////////////OOO fällt dann weg nach dem Umbau
+      class BlockTracker;
+      std::unique_ptr<BlockTracker> tracker_;
       
     public:
      ~DiagnosticBufferProvider();
@@ -70,10 +93,13 @@ namespace engine {
         { }
       
       
-      bool buffer_was_used (uint bufferID);
-      bool buffer_was_closed (uint bufferID);
-      void* accessMemory (uint bufferID);
+      bool buffer_was_used (uint bufferID);   ///< @deprecated       ////////////////////////////////////////TICKET 1410
+      bool buffer_was_closed (uint bufferID); ///< @deprecated       ////////////////////////////////////////TICKET 1410
+      void* accessMemory (uint bufferID);     ///< @deprecated       ////////////////////////////////////////TICKET 1410
       bool all_buffers_released();
+      diagn::StateReg& created ();
+      diagn::StateReg& emitted ();
+      diagn::StateReg& released();
     };
   
   inline BufferDiagnostic

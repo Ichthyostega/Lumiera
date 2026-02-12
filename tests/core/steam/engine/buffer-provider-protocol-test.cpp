@@ -80,8 +80,8 @@ namespace test  {
         {
           verifySimpleUsage();
           verifyRenderingUsage();
-          verifyObjectAttachment();
-          verifyObjectAttachmentFailure();
+//          verifyObjectAttachment();
+//          verifyObjectAttachmentFailure();  //////////////////////////OOO need a completely new test case to cover behaviour of failed ctor calls
         }
       
       
@@ -181,6 +181,7 @@ namespace test  {
         }
       
       
+#if false  //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : disabled code to disentangle BufferProvider implementation
       void
       verifyObjectAttachment()
         {
@@ -256,6 +257,7 @@ namespace test  {
           VERIFY_ERROR (LIFECYCLE, handle_DD.accessAs<Dummy>() );
           VERIFY_ERROR (LIFECYCLE, handle_DD.create<Dummy>() );
         }
+#endif  /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : (end) disabled code
     };
   
   

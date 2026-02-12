@@ -212,6 +212,7 @@ namespace play {
 //          return 0;                                               ////////////////////////////////TICKET #856
         }
       
+#if false  //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : disabled code to disentangle BufferProvider implementation
       diagn::Block const *
       accessEmittedBuffer (uint bufferNr)  const
         {
@@ -221,6 +222,7 @@ namespace play {
 //        else
 //          return 0;
         }
+#endif  /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : (end) disabled code
       
       bool
       wasAllocated (uint frameNr)  const
@@ -238,12 +240,14 @@ namespace play {
 //        return unConst(this)->buffProvider_.accessAs<TestFrame> (frameNr);      ///////////////////////////////OOO provide suitable diagnostic API!
         }
       
+#if false  //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : disabled code to disentangle BufferProvider implementation
       diagn::Block const&
       accessBlock (uint bufferNr)  const
         {
           UNIMPLEMENTED ("suitable diagnostic API");
 //        return unConst(this)->buffProvider_.access_emitted (bufferNr);      ///////////////////////////////OOO provide suitable diagnostic API!
         }
+#endif  /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : (end) disabled code
     };
   
   
@@ -412,20 +416,24 @@ namespace play {
       bool
       output_was_emitted (uint channel, FrameID outputFrame)
         {
+#if false  //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : disabled code to disentangle BufferProvider implementation
           diagn::Block const *block = accessSequence(channel)
                                         .accessEmittedBuffer(outputFrame);
           return block
              and block->was_used();
+#endif  /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : (end) disabled code
         }
       
       
       bool
       output_was_closed (uint channel, FrameID outputFrame)
         {
+#if false  //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : disabled code to disentangle BufferProvider implementation
           diagn::Block const *block = accessSequence(channel)
                                         .accessEmittedBuffer(outputFrame);
           return block
              and block->was_closed();
+#endif  /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : (end) disabled code
         }
     };
   

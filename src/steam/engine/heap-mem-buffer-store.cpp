@@ -41,6 +41,51 @@ namespace engine {
   using Buff = StreamType::ImplFacade::DataBuffer;
   
   
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 1410 : need to question what implementation structures are needed, after »tracking« was extracted...
+    /**
+     * Helper for implementing a diagnostic BufferProvider:
+     * A block of heap allocated storage, with the capability
+     * to store some additional tracking information.
+     */
+    class HeapMemProvider::Block
+      : util::NonCopyable
+      {
+        unique_ptr<char[]> storage_;
+        
+        bool was_released_;
+        
+      public:
+        explicit
+        Block(size_t bufferSize)
+          : storage_(bufferSize? new char[bufferSize] : NULL)
+          , was_released_(false)
+          { }
+        
+        bool
+        was_used()  const
+          {
+            return bool(storage_);
+          }
+        
+        bool
+        was_closed()  const
+          {
+            return was_released_;
+          }
+        
+        void*
+        accessMemory()  const
+          {
+            REQUIRE (storage_, "Block was never prepared for use");
+            return storage_.get();
+          }
+        
+        void
+        markReleased()
+          {
+            was_released_ = true;
+          }
+      };
   namespace { // implementation helpers...
     
     inline Buff*
@@ -50,7 +95,7 @@ namespace engine {
       }
     
     
-    using diagn::Block;
+    using Block = HeapMemProvider::Block;
     
     /** helper to find Block entries
      *  based on their raw memory address */
@@ -82,10 +127,11 @@ namespace engine {
   }
   
   
-  
-  namespace diagn {
+
+      
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 1410 : need to question what implementation structures are needed, after »tracking« was extracted...
     
-    using PoolBlocks = ScopedPtrVect<Block>;
+    using PoolBlocks = ScopedPtrVect<HeapMemProvider::Block>;
     
     /**
      * @internal Pool of allocated buffer Blocks of a specific size.
@@ -98,10 +144,11 @@ namespace engine {
      * and later gets "emitted" to an output sequence, where it remains for
      * later investigation and diagnostics.
      */
-    class BlockPool
+    class HeapMemProvider::BlockPool
       {
         uint maxAllocCount_;
         size_t memBlockSize_;
+        using PoolBlocks = ScopedPtrVect<Block>;
         PoolBlocks blockList_;
         
       public:
@@ -205,7 +252,7 @@ namespace engine {
               return not block.was_used() or block.was_closed();
             }
       };
-  }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 1410 : need to question what implementation structures are needed, after »tracking« was extracted...
   
   
   
@@ -213,7 +260,7 @@ namespace engine {
     
     const uint MAX_BUFFERS = 50;
     
-    diagn::Block emptyPlaceholder(0);
+    Block emptyPlaceholder(0);
   
   } // (END) Details of allocation and accounting
   
@@ -223,7 +270,7 @@ namespace engine {
    * @internal create a memory tracking BufferProvider,
    */
   HeapMemProvider::HeapMemProvider()
-    : pool_(new diagn::PoolTable)
+    : pool_(new PoolTable)
     , outSeq_()
     { }
   
@@ -236,7 +283,7 @@ namespace engine {
   uint
   HeapMemProvider::prepareBuffers(uint requestedAmount, HashVal typeID)
   {
-    diagn::BlockPool& responsiblePool = getBlockPoolFor (typeID);
+    BlockPool& responsiblePool = getBlockPoolFor (typeID);
     return responsiblePool.prepare_for (requestedAmount);
   }
 
@@ -244,8 +291,8 @@ namespace engine {
   BuffHandle
   HeapMemProvider::provideLockedBuffer(HashVal typeID)
   {
-    diagn::BlockPool& blocks = getBlockPoolFor (typeID);
-    diagn::Block& newBlock = blocks.createBlock();
+    BlockPool& blocks = getBlockPoolFor (typeID);
+    Block& newBlock = blocks.createBlock();
     UNIMPLEMENTED ("Separate tasks into two distinct APIs");
 //  return buildHandle (typeID, asBuffer(newBlock.accessMemory()), &newBlock); /////////////////////////////OOO instead return a tuple (buffer, localTag)
   }
@@ -254,11 +301,11 @@ namespace engine {
   void
   HeapMemProvider::mark_emitted (HashVal typeID, LocalTag const& specifics)
   {
-    diagn::Block* block4buffer = locateBlock (typeID, specifics);
+    Block* block4buffer = locateBlock (typeID, specifics);
     if (!block4buffer)
       throw error::Logic ("Attempt to emit a buffer not known to this BufferProvider"
                          , LUMIERA_ERROR_BUFFER_MANAGEMENT);
-    diagn::BlockPool& pool = getBlockPoolFor (typeID);
+    BlockPool& pool = getBlockPoolFor (typeID);
     Block* active = pool.transferResponsibility (block4buffer);
     if (active)
       outSeq_.manage (active);
@@ -275,7 +322,7 @@ namespace engine {
   void
   HeapMemProvider::detachBuffer (HashVal typeID, LocalTag const& specifics, Buff& storage)
   {
-    diagn::Block* block4buffer = locateBlock (typeID, specifics);
+    Block* block4buffer = locateBlock (typeID, specifics);
     REQUIRE (block4buffer, "releasing a buffer not allocated through this provider");
     REQUIRE (util::isSameAdr (storage, block4buffer->accessMemory()));
     block4buffer->markReleased();
@@ -298,7 +345,7 @@ namespace engine {
          blockPool.discard();
   }
   
-  diagn::Block&
+  HeapMemProvider::Block&
   HeapMemProvider::access_emitted (uint bufferID)
   {
     if (!withinOutputSequence (bufferID))
@@ -316,26 +363,28 @@ namespace engine {
     return bufferID < outSeq_.size();
   }
   
-  diagn::BlockPool&
+  HeapMemProvider::BlockPool&
   HeapMemProvider::getBlockPoolFor (HashVal typeID)
   {
-    diagn::BlockPool& pool = (*pool_)[typeID];
+    BlockPool& pool = (*pool_)[typeID];
     UNIMPLEMENTED ("Separate tasks into two distinct APIs");
 //  if (!pool)
 //      pool.initialise(getBufferSize(typeID));   //////////////////////////OOO getBufferSize is a helper function in the BufferProvider protected API. Need to be "here"
     return pool;
   }
   
-  diagn::Block*
+  HeapMemProvider::Block*
   HeapMemProvider::locateBlock (HashVal typeID, void* storage)
   {
-    diagn::BlockPool& pool = getBlockPoolFor (typeID);
-    diagn::Block* block4buffer = pool.find (storage);                         ////////////////////////////////TICKET #856
+    BlockPool& pool = getBlockPoolFor (typeID);
+    Block* block4buffer = pool.find (storage);                                ////////////////////////////////TICKET #856
     return block4buffer? block4buffer
                        : searchInOutSeqeuence (storage);
   }
   
-  diagn::Block*
+  
+  
+  HeapMemProvider::Block*
   HeapMemProvider::searchInOutSeqeuence (void* blockLocation)
   {
     return pick_Block_by_storage (outSeq_, blockLocation);                    ////////////////////////////////TICKET #856

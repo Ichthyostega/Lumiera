@@ -57,54 +57,6 @@ namespace engine {
     using std::unique_ptr;
 
     
-    /**
-     * Helper for implementing a diagnostic BufferProvider:
-     * A block of heap allocated storage, with the capability
-     * to store some additional tracking information.
-     */
-    class Block
-      : util::NonCopyable
-      {
-        unique_ptr<char[]> storage_;
-        
-        bool was_released_;
-        
-      public:
-        explicit
-        Block(size_t bufferSize)
-          : storage_(bufferSize? new char[bufferSize] : NULL)
-          , was_released_(false)
-          { }
-        
-        bool
-        was_used()  const
-          {
-            return bool(storage_);
-          }
-        
-        bool
-        was_closed()  const
-          {
-            return was_released_;
-          }
-        
-        void*
-        accessMemory()  const
-          {
-            REQUIRE (storage_, "Block was never prepared for use");
-            return storage_.get();
-          }
-        
-        void
-        markReleased()
-          {
-            was_released_ = true;
-          }
-      };
-      
-    class BlockPool;
-    
-    using PoolTable = std::unordered_map<HashVal,BlockPool>;
   }
   
   
@@ -120,8 +72,13 @@ namespace engine {
   class HeapMemProvider
     : public BufferProviderSetup::Store
     {
-      unique_ptr<diagn::PoolTable> pool_;
-      ScopedPtrVect<diagn::Block> outSeq_;
+    public: /////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : looks like I'll re-implement the storage from scratch, since »tracking« is no longer required here
+      class Block;
+      class BlockPool;
+    private:
+      using PoolTable = std::unordered_map<HashVal,BlockPool>;
+      unique_ptr<PoolTable> pool_;
+      ScopedPtrVect<Block> outSeq_;
       
     public:
       /* === BufferStore interface === */
@@ -137,7 +94,7 @@ namespace engine {
       
       size_t emittedCnt()  const;
       
-      diagn::Block& access_emitted (uint bufferID);
+      Block& access_emitted (uint bufferID);
       
       template<typename TY>
       TY&  accessAs (uint bufferID);
@@ -146,9 +103,9 @@ namespace engine {
       
     private:
       bool withinOutputSequence (uint bufferID)  const;
-      diagn::BlockPool& getBlockPoolFor (HashVal typeID);
-      diagn::Block* locateBlock (HashVal typeID, void*);
-      diagn::Block* searchInOutSeqeuence (void* storage);
+      BlockPool& getBlockPoolFor (HashVal typeID);
+      Block* locateBlock (HashVal typeID, void*);
+      Block* searchInOutSeqeuence (void* storage);
     };
   
   
@@ -168,11 +125,12 @@ namespace engine {
     if (!withinOutputSequence (bufferID))
       throw error::Invalid ("Buffer with the given ID not yet emitted");
     
-    diagn::Block& memoryBlock = access_emitted (bufferID);
-    TY* converted = std::launder (reinterpret_cast<TY*> (memoryBlock.accessMemory()));
+    Block& memoryBlock = access_emitted (bufferID);
+    NOTREACHED ("TICKET #1410 : tracking implementation -> DiagnosticBufferProvider");
+//  TY* converted = std::launder (reinterpret_cast<TY*> (memoryBlock.accessMemory()));  /////////////////////TICKET 1410 : my assumption is that Block will be implemented differently -- at least not used this way...
     
-    REQUIRE (converted);
-    return *converted;
+//  REQUIRE (converted);
+//  return *converted;
   }
   
   

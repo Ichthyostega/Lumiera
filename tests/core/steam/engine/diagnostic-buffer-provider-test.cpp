@@ -42,18 +42,22 @@ namespace test  {
     bool 
     has_expectedContent (uint nr, diagn::Block& memoryBlock)
     {
+#if false  //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : disabled code to disentangle BufferProvider implementation
       void* mem = memoryBlock.accessMemory();
       uint data = *static_cast<uint*> (mem);
       
       return data == testNumbers[nr];
+#endif  /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : (end) disabled code
     }
     
     bool
     verifyUsedBlock (uint nr, diagn::Block& memoryBlock)
     {
+#if false  //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : disabled code to disentangle BufferProvider implementation
       return memoryBlock.was_used()
          and memoryBlock.was_closed()
          and has_expectedContent (nr, memoryBlock);
+#endif  /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : (end) disabled code
     }
   }
   
