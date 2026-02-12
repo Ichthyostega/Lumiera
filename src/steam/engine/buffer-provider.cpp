@@ -78,17 +78,20 @@ namespace engine {
   }
   
   
-  /** callback from implementation to build and enrol a BufferHandle,
+  /**
+   * Callback from implementation to build and enrol a BufferHandle,
    * to be returned to the client as result of the #lockBuffer call.
    * Performs the necessary metadata state transition leading from an
    * abstract buffer type to a metadata::Entry corresponding to an
    * actual buffer, which is locked for exclusive use by one client.
+   * @note the implementation is free to provide an opaque \a implMarker,
+   *       which becomes part of the key to designate this specific buffer.
    */
   BuffHandle
-  BufferProvider::buildHandle (HashVal typeID, Buff* storage, LocalTag const& localTag)
+  BufferProvider::buildHandle (HashVal typeID, Buff* storage, LocalTag implMarker)
   {
     metadata::Key& typeKey = bufferStage_->get (typeID);
-    metadata::Entry& entry = bufferStage_->markLocked(typeKey, storage, localTag);
+    metadata::Entry& entry = bufferStage_->markLocked (typeKey, storage, implMarker);
     
     return BuffHandle (BuffDescr(*this, entry), storage);
   }
@@ -136,8 +139,10 @@ namespace engine {
   {
     REQUIRE (was_created_by_this_provider (type));
     size_t buffSiz = getBufferSize (type);
-    return bufferStore_->provideBuffer (buffSiz, type);
-  }     // is expected to call buildHandle() --> state transition
+    LocalTag implMarker;
+    Buff& storage  = bufferStore_->provideBuffer (buffSiz, type, implMarker);
+    return buildHandle (type, &storage, implMarker);
+  }
   
   
   /** BufferProvider API: state transition to \em emitted state.

@@ -111530,8 +111530,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1770598425427" ID="ID_1286763449" MODIFIED="1770598433928" TEXT="analog zu ProcNodeDiagnostics"/>
 <node CREATED="1770598434991" ID="ID_1549210941" MODIFIED="1770598446402" TEXT="also free function watch(provider)"/>
 </node>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1770602342349" ID="ID_1881815645" MODIFIED="1770602353899" TEXT="Konsistenzfehler im BufferProviderProtocol_test">
+<node COLOR="#5b280f" CREATED="1770602342349" ID="ID_1881815645" MODIFIED="1770936048345" TEXT="Konsistenzfehler im BufferProviderProtocol_test">
 <icon BUILTIN="broken-line"/>
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1770602368655" ID="ID_1117824947" MODIFIED="1770602374829" TEXT="&quot;Attempt to access an unknown buffer metadata entry&quot;"/>
 <node CREATED="1770602551031" ID="ID_676354463" MODIFIED="1770602557156" TEXT="Beobachtungen">
 <icon BUILTIN="forward"/>
@@ -111541,8 +111542,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1770603138596" ID="ID_205556727" MODIFIED="1770603144836" TEXT="findet die typeID nicht"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#c50b16" CREATED="1770603145825" ID="ID_1161678376" MODIFIED="1770603165421" TEXT="&#xd83d;&#xddf2; AUA"/>
 </node>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1770603168537" ID="ID_1244643866" MODIFIED="1770603186894" TEXT="wir haben jetzt mehrere Metadata-Registries">
+<node COLOR="#435e98" CREATED="1770603168537" ID="ID_1244643866" MODIFIED="1770936057383" TEXT="wir haben jetzt mehrere Metadata-Registries">
 <icon BUILTIN="broken-line"/>
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1770603253041" ID="ID_413919416" MODIFIED="1770603262458" TEXT="steckt in der BufferProvider-Basisklasse">
 <node CREATED="1770603292796" ID="ID_66726358" MODIFIED="1770603349010" TEXT="registriert wird im Basis-Objekt von DiagnosticBufferProvider"/>
 <node CREATED="1770603312138" ID="ID_684915175" MODIFIED="1770603334946" TEXT="aufgerufen wird im Basis-Objekt von HeapMemProvider"/>
@@ -111566,6 +111568,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="stop-sign"/>
 </node>
 </node>
+</node>
+<node COLOR="#435e98" CREATED="1770936063999" ID="ID_1870081813" MODIFIED="1770936089783" TEXT="hab das zum Anla&#xdf; genommen, sofort in das eigentliche Refactoring einzusteigen">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1770666195192" ID="ID_1019250135" MODIFIED="1770666228322" TEXT="wir rennen also bereits in eines der strukturellen Probleme">
@@ -111650,20 +111655,33 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1770670620982" ID="ID_1374029931" MODIFIED="1770670637618" TEXT="bisheriges &#xbb;meta&#xab; wird zu BufferStage"/>
 <node CREATED="1770670643410" ID="ID_1778176571" MODIFIED="1770670684703" STYLE="fork" TEXT="bisheriges protected-Interface &#x27f6; als BufferStore herausziehen">
 <font NAME="SansSerif" SIZE="12"/>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1770769772202" ID="ID_528640678" MODIFIED="1770769794715" TEXT="hier gibt es ein Problem: BufferProvider::buildHandle">
+<node COLOR="#435e98" CREATED="1770769772202" ID="ID_528640678" MODIFIED="1770939122777" TEXT="hier gibt es ein Problem: BufferProvider::buildHandle">
 <icon BUILTIN="messagebox_warning"/>
-<node CREATED="1770769806729" ID="ID_6936764" MODIFIED="1770769894796" TEXT="BuffHandle provideLockedBuffer(HashVal typeID) &#x27f6; sollte einen buildHandle() tail-call machen"/>
-<node CREATED="1770769796738" ID="ID_734223464" MODIFIED="1770769804669" TEXT="das war immer schon ein verwirrendes Ping-Pong"/>
+<node CREATED="1770769806729" ID="ID_6936764" MODIFIED="1770935512015" TEXT="BuffHandle provideLockedBuffer(HashVal typeID) &#x27f6; soll mit buildHandle() tail-call enden"/>
+<node COLOR="#843412" CREATED="1770769796738" ID="ID_734223464" MODIFIED="1770935649200" TEXT="das war immer schon ein verwirrendes Ping-Pong">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      zumal das nirgends im Code dokumentiert ist, und diese implizite Annahme nichts zum Begreifen beitr&#228;gt (da sich hier zwei Layer vermischen, und man Informationen durch den Implementierungs-Call durchf&#228;deln mu&#223;)
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="smily_bad"/>
+</node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1770769951879" ID="ID_1852318741" MODIFIED="1770769977165" TEXT="noch schlimmer: es vermischt die Zonen der Implementierung">
 <icon BUILTIN="clanbomber"/>
 </node>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1770769896480" ID="ID_426983823" MODIFIED="1770770474699" TEXT="und jetzt geht das nicht mehr: es w&#xe4;re in einem anderen Objekt">
-<linktarget COLOR="#fe474d" DESTINATION="ID_426983823" ENDARROW="Default" ENDINCLINATION="387;17;" ID="Arrow_ID_1775599184" SOURCE="ID_1432411040" STARTARROW="None" STARTINCLINATION="57;-420;"/>
+<node BACKGROUND_COLOR="#e9e4b7" COLOR="#8300fa" CREATED="1770769896480" ID="ID_426983823" MODIFIED="1770939154992" TEXT="und jetzt geht das nicht mehr: es w&#xe4;re in einem anderen Objekt">
+<linktarget COLOR="#8361ab" DESTINATION="ID_426983823" ENDARROW="Default" ENDINCLINATION="387;17;" ID="Arrow_ID_1775599184" SOURCE="ID_1432411040" STARTARROW="None" STARTINCLINATION="57;-420;"/>
 <icon BUILTIN="broken-line"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1770771226721" ID="ID_1487577652" MODIFIED="1770929553915" TEXT="die Provider-Implementierungen verwendet ein Basis_API: getBufferSize()">
-<linktarget COLOR="#fd583f" DESTINATION="ID_1487577652" ENDARROW="Default" ENDINCLINATION="-484;20;" ID="Arrow_ID_1256483946" SOURCE="ID_831737885" STARTARROW="None" STARTINCLINATION="-70;-57;"/>
+<node BACKGROUND_COLOR="#d0b8ae" COLOR="#435e98" CREATED="1770771226721" ID="ID_1487577652" MODIFIED="1770935464776" TEXT="die Provider-Implementierungen verwenden ein Basis_API: getBufferSize()">
+<linktarget COLOR="#3f4efd" DESTINATION="ID_1487577652" ENDARROW="Default" ENDINCLINATION="-490;19;" ID="Arrow_ID_1256483946" SOURCE="ID_831737885" STARTARROW="None" STARTINCLINATION="-70;-57;"/>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1770770126934" ID="ID_850948251" MODIFIED="1770770161242" TEXT="&#x27f9;  API-Anpassung notwendig">
@@ -111685,13 +111703,19 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <font NAME="SansSerif" SIZE="10"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1770770350662" ID="ID_1511113078" MODIFIED="1770835721461" TEXT="L&#xf6;sung ist offensichtlich: auseinander-f&#xe4;deln">
-<linktarget COLOR="#fe3e3a" DESTINATION="ID_1511113078" ENDARROW="Default" ENDINCLINATION="243;15;" ID="Arrow_ID_1668459979" SOURCE="ID_661880079" STARTARROW="None" STARTINCLINATION="636;0;"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1770770350662" ID="ID_1511113078" MODIFIED="1770939247723" TEXT="L&#xf6;sung ist offensichtlich: auseinander-f&#xe4;deln">
+<linktarget COLOR="#3a91fe" DESTINATION="ID_1511113078" ENDARROW="Default" ENDINCLINATION="243;15;" ID="Arrow_ID_1668459979" SOURCE="ID_661880079" STARTARROW="None" STARTINCLINATION="820;0;"/>
 <icon BUILTIN="yes"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1770929471826" ID="ID_472477187" MODIFIED="1770934001172" TEXT="Buffer-Store rein auf die Allokationen fokussieren">
+<node COLOR="#5b280f" CREATED="1770937517365" ID="ID_255640086" MODIFIED="1770937555910" TEXT="mark_emitted f&#xe4;llt nach Abschlu&#xdf; des Refactorings weg">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#435e98" CREATED="1770937567914" ID="ID_936563940" MODIFIED="1770937594750" TEXT="LocalTag dient als zus&#xe4;tzlicher Informationskanal (f&#xfc;r die Implementierung)">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#338800" CREATED="1770929471826" HGAP="45" ID="ID_472477187" MODIFIED="1770939117047" TEXT="Buffer-Store rein auf die Allokationen fokussieren" VSHIFT="-17">
 <arrowlink COLOR="#616d7c" DESTINATION="ID_1572913456" ENDARROW="Default" ENDINCLINATION="433;33;" ID="Arrow_ID_1937407092" STARTARROW="None" STARTINCLINATION="1162;357;"/>
-<linktarget COLOR="#692bc7" DESTINATION="ID_472477187" ENDARROW="Default" ENDINCLINATION="304;203;" ID="Arrow_ID_396413173" SOURCE="ID_756237025" STARTARROW="None" STARTINCLINATION="347;19;"/>
-<icon BUILTIN="flag-yellow"/>
+<linktarget COLOR="#333ebb" DESTINATION="ID_472477187" ENDARROW="Default" ENDINCLINATION="304;203;" ID="Arrow_ID_396413173" SOURCE="ID_756237025" STARTARROW="None" STARTINCLINATION="347;19;"/>
+<icon BUILTIN="forward"/>
 <node CREATED="1770932643675" ID="ID_1799354299" MODIFIED="1770932643675" TEXT="provideBuffer (size_t,HashVal typeID)"/>
 <node CREATED="1770933709677" MODIFIED="1770933709677" TEXT="prepareBuffers (uint cnt, size_t,HashVal typeID)"/>
 <node CREATED="1770933720241" MODIFIED="1770933720241" TEXT="detachBuffer (size_t,HashVal, LocalTag const&amp;, Buff&amp;)"/>
@@ -111753,7 +111777,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <arrowlink COLOR="#772943" DESTINATION="ID_786050828" ENDARROW="Default" ENDINCLINATION="-2;15;" ID="Arrow_ID_390054105" STARTARROW="None" STARTINCLINATION="37;3;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
-<node BACKGROUND_COLOR="#e1b0b2" COLOR="#903001" CREATED="1770687816060" HGAP="66" ID="ID_1712436041" MODIFIED="1770753328699" TEXT="geht aber gar nicht ohne weiteres" VSHIFT="41">
+<node BACKGROUND_COLOR="#e1b0b2" COLOR="#903001" CREATED="1770687816060" HGAP="69" ID="ID_1712436041" MODIFIED="1770935563778" TEXT="geht aber gar nicht ohne weiteres" VSHIFT="49">
 <edge COLOR="#7a2635"/>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1770687870590" ID="ID_1950334584" MODIFIED="1770688110332" TEXT="weil die Implementierungs-Interfaces protected sein sollen">
@@ -111783,9 +111807,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1770688812682" ID="ID_23970061" MODIFIED="1770688826931" TEXT="sehe aber keinen guten Ausweg">
 <icon BUILTIN="smily_bad"/>
 </node>
-<node CREATED="1770688830796" ID="ID_1400325113" MODIFIED="1770689071243" TEXT="dann wenigstens:  BufferProviderSetup &#x2014;&#x2014;&#x25b7; BufferProvider ">
+<node COLOR="#111a6e" CREATED="1770688830796" ID="ID_1400325113" MODIFIED="1770935402128" TEXT="dann wenigstens:  BufferProviderSetup &#x2014;&#x2014;&#x25b7; BufferProvider ">
 <icon BUILTIN="idea"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1770689042943" ID="ID_1618738867" MODIFIED="1770689064669" TEXT="und das wird dann gleich ein Setup-Template">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1770689042943" ID="ID_1618738867" MODIFIED="1770935333257" TEXT="und das wird dann gleich ein Setup-Template">
 <icon BUILTIN="yes"/>
 </node>
 <node CREATED="1770751825670" ID="ID_70021354" MODIFIED="1770751894905" TEXT="dann ziehen die Standard-Implementierungen der Komponenten hierher"/>
@@ -111817,6 +111841,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="smiley-neutral"/>
 </node>
 </node>
+<node COLOR="#435e98" CREATED="1770935357327" HGAP="16" ID="ID_1914241373" MODIFIED="1770935374074" TEXT="(inzwischen nicht mehr)">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1770757859605" ID="ID_163465122" MODIFIED="1770757872278" TEXT="HeapMemProvider umbauen">
@@ -111829,8 +111856,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node CREATED="1770757944571" ID="ID_1207399538" MODIFIED="1770757950804" TEXT="HeapMemBufferStore">
 <node CREATED="1770757971118" ID="ID_1706663250" MODIFIED="1770757975834" TEXT="hpp|cpp"/>
-<node CREATED="1770762597016" ID="ID_1432411040" MODIFIED="1770770474699" TEXT="gl&#xfc;cklicher Zufall: die Implementierung greift fast nicht auf BufferProvider-Interna durch">
-<arrowlink COLOR="#fe474d" DESTINATION="ID_426983823" ENDARROW="Default" ENDINCLINATION="387;17;" ID="Arrow_ID_1775599184" STARTARROW="None" STARTINCLINATION="57;-420;"/>
+<node CREATED="1770762597016" ID="ID_1432411040" MODIFIED="1770939175287" TEXT="gl&#xfc;cklicher Zufall: die Implementierung greift fast nicht auf BufferProvider-Interna durch">
+<arrowlink COLOR="#8361ab" DESTINATION="ID_426983823" ENDARROW="Default" ENDINCLINATION="387;17;" ID="Arrow_ID_1775599184" STARTARROW="None" STARTINCLINATION="57;-420;"/>
 <linktarget COLOR="#feeace" DESTINATION="ID_1432411040" ENDARROW="Default" ENDINCLINATION="-12;81;" ID="Arrow_ID_76937966" SOURCE="ID_100975131" STARTARROW="None" STARTINCLINATION="-199;19;"/>
 <icon BUILTIN="idea"/>
 </node>
@@ -111841,23 +111868,26 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1770835660209" ID="ID_1699942357" MODIFIED="1770835664104" TEXT="BufferProviderProtocol_test">
 <icon BUILTIN="broken-line"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1770835671749" ID="ID_661880079" MODIFIED="1770835730443" TEXT="der buildHandle()-Aufruf mu&#xdf; entflochten werden">
-<arrowlink COLOR="#fe3e3a" DESTINATION="ID_1511113078" ENDARROW="Default" ENDINCLINATION="243;15;" ID="Arrow_ID_1668459979" STARTARROW="None" STARTINCLINATION="636;0;"/>
-<icon BUILTIN="flag-pink"/>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1770935307254" ID="ID_1256898924" MODIFIED="1770935316691" TEXT="DiagnosticBufferProvider_test">
+<icon BUILTIN="broken-line"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1770926260075" ID="ID_831737885" MODIFIED="1770929560653" TEXT="interner Zugriff auf buffer-size">
-<arrowlink COLOR="#fd583f" DESTINATION="ID_1487577652" ENDARROW="Default" ENDINCLINATION="-484;20;" ID="Arrow_ID_1256483946" STARTARROW="None" STARTINCLINATION="-70;-57;"/>
-<icon BUILTIN="flag-pink"/>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1770926385056" ID="ID_1327594403" MODIFIED="1770926436770" TEXT="verwendet von getBlockPoolFor(HashVal) &#x27f5; in sehr vielen Aufrufen der erste Schritt">
+<node COLOR="#2c619a" CREATED="1770835671749" ID="ID_661880079" MODIFIED="1770939247723" TEXT="der buildHandle()-Aufruf mu&#xdf; entflochten werden">
+<arrowlink COLOR="#3a91fe" DESTINATION="ID_1511113078" ENDARROW="Default" ENDINCLINATION="243;15;" ID="Arrow_ID_1668459979" STARTARROW="None" STARTINCLINATION="820;0;"/>
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#435e98" CREATED="1770926260075" ID="ID_831737885" MODIFIED="1770935447074" TEXT="interner Zugriff auf buffer-size">
+<arrowlink COLOR="#3f4efd" DESTINATION="ID_1487577652" ENDARROW="Default" ENDINCLINATION="-490;19;" ID="Arrow_ID_1256483946" STARTARROW="None" STARTINCLINATION="-70;-57;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#d7a493" COLOR="#990033" CREATED="1770926385056" ID="ID_1327594403" MODIFIED="1770935237071" TEXT="verwendet von getBlockPoolFor(HashVal) &#x27f5; in sehr vielen Aufrufen der erste Schritt">
 <icon BUILTIN="clanbomber"/>
 </node>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1770926280226" ID="ID_1629789719" MODIFIED="1770926305170" TEXT="bisher &#xfc;ber Hilfsfunktion auf der BufferProvider Basis-impl">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1770926280226" ID="ID_1629789719" MODIFIED="1770935218876" TEXT="bisher &#xfc;ber Hilfsfunktion auf der BufferProvider Basis-impl">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1770926311965" ID="ID_1256083121" MODIFIED="1770926337047" TEXT="dies verletzt jetzt die Verschachtelung"/>
 <node CREATED="1770926338187" ID="ID_788003404" MODIFIED="1770926343457" TEXT="und die Trennung der Themen"/>
 <node CREATED="1770926346025" ID="ID_817787716" MODIFIED="1770926361362" TEXT="ist n&#xe4;mlich implementiert durch Zugriff auf die Type-Registry"/>
 </node>
-<node CREATED="1770929023368" ID="ID_448168342" MODIFIED="1770929048141" TEXT="Einsch&#xe4;tzung: mu&#xdf; ohnehin ge&#xe4;ndert werden">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1770929023368" ID="ID_448168342" MODIFIED="1770935249591" TEXT="Einsch&#xe4;tzung: mu&#xdf; ohnehin ge&#xe4;ndert werden">
 <icon BUILTIN="yes"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1770929095659" ID="ID_374106644" MODIFIED="1770929259555" TEXT="wir vermerken die Size nur einmal: im Typ-descriptor">
 <richcontent TYPE="NOTE"><html>
@@ -111890,10 +111920,18 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node CREATED="1770929365917" ID="ID_756237025" MODIFIED="1770929600076" TEXT="Konsequenz &#x27f9; API in dieser Hinsicht sofort anpassen">
-<arrowlink COLOR="#692bc7" DESTINATION="ID_472477187" ENDARROW="Default" ENDINCLINATION="304;203;" ID="Arrow_ID_396413173" STARTARROW="None" STARTINCLINATION="347;19;"/>
+<node COLOR="#435e98" CREATED="1770929365917" ID="ID_756237025" MODIFIED="1770935269959" TEXT="Konsequenz &#x27f9; API in dieser Hinsicht sofort anpassen">
+<arrowlink COLOR="#333ebb" DESTINATION="ID_472477187" ENDARROW="Default" ENDINCLINATION="304;203;" ID="Arrow_ID_396413173" STARTARROW="None" STARTINCLINATION="347;19;"/>
 </node>
-<node CREATED="1770934037162" ID="ID_1977306902" MODIFIED="1770934049026" TEXT="getBlockPoolFor(size,HashVal)"/>
+<node COLOR="#338800" CREATED="1770934037162" ID="ID_1977306902" MODIFIED="1770935255121" TEXT="getBlockPoolFor(size,HashVal)">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1770939260201" ID="ID_286141064" MODIFIED="1770939288845" TEXT="geht jetzt wieder durch den Compiler (ohne auskommentierten Code)">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node COLOR="#3c3b57" CREATED="1770939291503" ID="ID_1883366865" MODIFIED="1770939333332" TEXT="Implementierung ist immer noch ein schreckliches Wirrwarr...">
+<icon BUILTIN="smiley-neutral"/>
 </node>
 </node>
 </node>
@@ -112252,7 +112290,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1770838291269" ID="ID_401032103" MODIFIED="1770838323384" TEXT="&#x201e;to attach an TypeHandler after-the fact&#x201c;">
 <icon BUILTIN="smiley-oh"/>
-<node CREATED="1770838361227" ID="ID_765319520" MODIFIED="1770838381338" TEXT="offensichtlich fand ich das angemessen, 2012"/>
+<node CREATED="1770838361227" ID="ID_765319520" MODIFIED="1770935898760" TEXT="offensichtlich fand ich das angemessen, 2012">
+<arrowlink COLOR="#899097" DESTINATION="ID_608985526" ENDARROW="Default" ENDINCLINATION="81;-7;" ID="Arrow_ID_59002244" STARTARROW="None" STARTINCLINATION="450;28;"/>
+</node>
 <node CREATED="1770838335382" ID="ID_826676645" MODIFIED="1770839031149" TEXT="da sehe ich eine Seite von mir &#x2014; die in weiter Ferne liegt">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -112288,7 +112328,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1770839695480" ID="ID_644844801" MODIFIED="1770851507372" TEXT="wird includiert in weaving-pattern-builder.hpp">
 <node CREATED="1770839712638" ID="ID_236933523" MODIFIED="1770839722175" TEXT="dort steht ein Warnungs-Kommentar von 10/2024"/>
 <node CREATED="1770839738362" ID="ID_595295798" MODIFIED="1770839755931" TEXT="denn das definiert die BuffHandle::accessAs&lt;TY&gt;()"/>
-<node CREATED="1770839785138" ID="ID_608985526" MODIFIED="1770851600868" TEXT="anscheinend hatte ich das zun&#xe4;chst als &#xbb;Extra-Feature&#xab; betrachtet">
+<node CREATED="1770839785138" ID="ID_608985526" MODIFIED="1770935893102" TEXT="anscheinend hatte ich das zun&#xe4;chst als &#xbb;Extra-Feature&#xab; betrachtet">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -112304,6 +112344,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 <arrowlink COLOR="#feded2" DESTINATION="ID_211253816" ENDARROW="Default" ENDINCLINATION="51;-168;" ID="Arrow_ID_1480603828" STARTARROW="None" STARTINCLINATION="-359;15;"/>
+<linktarget COLOR="#899097" DESTINATION="ID_608985526" ENDARROW="Default" ENDINCLINATION="81;-7;" ID="Arrow_ID_59002244" SOURCE="ID_765319520" STARTARROW="None" STARTINCLINATION="450;28;"/>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -112629,8 +112670,25 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <linktarget COLOR="#616d7c" DESTINATION="ID_1572913456" ENDARROW="Default" ENDINCLINATION="433;33;" ID="Arrow_ID_1937407092" SOURCE="ID_472477187" STARTARROW="None" STARTINCLINATION="1162;357;"/>
 </node>
 <node CREATED="1770933799954" ID="ID_1059437311" MODIFIED="1770933811425" TEXT="denkbar auch, das LocalTag &#xfc;berall durchzuf&#xe4;deln"/>
-<node CREATED="1770933813057" ID="ID_1110032982" MODIFIED="1770933835165" TEXT="man k&#xf6;nnte das in eine BuffInfo packen">
+<node COLOR="#5b280f" CREATED="1770933813057" ID="ID_1110032982" MODIFIED="1770937493733" TEXT="man k&#xf6;nnte das in eine Buffer-Info packen">
 <icon BUILTIN="idea"/>
+<icon BUILTIN="stop-sign"/>
+<node COLOR="#5b280f" CREATED="1770937367609" ID="ID_1139287782" MODIFIED="1770937403005" TEXT="das mache ich aber nicht!">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1770937374809" ID="ID_1526985092" MODIFIED="1770937478969" TEXT="es hat keinen Abstraktionswert">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      auf dem BufferStore-API werden <i>lediglich drei Aufrufe</i>&#160;&#252;brig bleiben. Von denen zudem zwei speziell sind. Und jede Implementierung wird lediglich dieses Tupel wieder auseinandernehmen...
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 </node>
 </node>
 </node>

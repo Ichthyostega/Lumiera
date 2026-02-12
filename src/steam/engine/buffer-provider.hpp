@@ -183,7 +183,7 @@ namespace engine {
       /// placeholder marker type for an actual data buffer
       using Buff = StreamType::ImplFacade::DataBuffer;
       
-      BuffHandle buildHandle (HashVal typeID, Buff* storage, LocalTag const& =LocalTag::UNKNOWN);
+      BuffHandle buildHandle (HashVal typeID, Buff* storage, LocalTag =LocalTag::UNKNOWN);
       
       bool was_created_by_this_provider (BuffDescr const&)  const;
       
@@ -203,10 +203,10 @@ namespace engine {
         public:
           virtual ~BufferStore() { } ///< this is an interface
           
-          virtual uint prepareBuffers (uint cnt, size_t,HashVal typeID)      =0;
-          virtual BuffHandle provideBuffer (size_t,HashVal typeID)           =0;
-          virtual void mark_emitted (size_t,HashVal, LocalTag const&)        =0;
-          virtual void detachBuffer (size_t,HashVal, LocalTag const&, Buff&) =0;
+          virtual uint prepareBuffers (uint cnt, size_t,HashVal typeID)  =0;
+          virtual Buff& provideBuffer (size_t,HashVal typeID, LocalTag&) =0;
+          virtual void mark_emitted (size_t,HashVal, LocalTag const&)    =0;
+          virtual void detachBuffer (size_t,HashVal, LocalTag, Buff&)    =0;
         };
       
       unique_ptr<BufferStage> bufferStage_;       ///////////////////////////////////////////////////////////TICKET #1410 : must be turned into an internal interface

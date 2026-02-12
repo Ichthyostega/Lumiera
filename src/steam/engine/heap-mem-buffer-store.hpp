@@ -83,10 +83,10 @@ namespace engine {
     public:
       /* === BufferStore interface === */
       
-      virtual uint prepareBuffers (uint cnt, size_t,HashVal typeID)      override;
-      virtual BuffHandle provideBuffer (size_t,HashVal typeID)           override;
-      virtual void mark_emitted (size_t,HashVal, LocalTag const&)        override;
-      virtual void detachBuffer (size_t,HashVal, LocalTag const&, Buff&) override;
+      virtual uint prepareBuffers (uint cnt, size_t,HashVal typeID) override;
+      virtual Buff& provideBuffer (size_t,HashVal, LocalTag&)       override;
+      virtual void mark_emitted (size_t,HashVal, LocalTag const&)   override;
+      virtual void detachBuffer (size_t,HashVal, LocalTag, Buff&)   override;
       
     public:
      ~HeapMemProvider();
