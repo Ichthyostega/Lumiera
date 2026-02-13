@@ -78,25 +78,6 @@ namespace engine {
   }
   
   
-  /**
-   * Callback from implementation to build and enrol a BufferHandle,
-   * to be returned to the client as result of the #lockBuffer call.
-   * Performs the necessary metadata state transition leading from an
-   * abstract buffer type to a metadata::Entry corresponding to an
-   * actual buffer, which is locked for exclusive use by one client.
-   * @note the implementation is free to provide an opaque \a implMarker,
-   *       which becomes part of the key to designate this specific buffer.
-   */
-  BuffHandle
-  BufferProvider::buildHandle (HashVal typeID, Buff* storage, LocalTag implMarker)
-  {
-    metadata::Key& typeKey = bufferStage_->get (typeID);
-    metadata::Entry& entry = bufferStage_->markLocked (typeKey, storage, implMarker);
-    
-    return BuffHandle (BuffDescr(*this, entry), storage);
-  }
-  
-  
   /** BufferProvider API: declare in advance the need for working buffers.
    *  This optional call allows client code to ensure the availability of the
    *  necessary working space, prior to starting the actual operations. The
@@ -123,10 +104,15 @@ namespace engine {
   
   /** BufferProvider API: retrieve a single buffer for exclusive use.
    *  This call actually claims a buffer of this type and marks it for
-   *  use by client code. The returned handle allows for convenient access,
-   *  but provides no automatic tracking or memory management. The client is
-   *  explicitly responsible to invoke #releaseBuffer (which can be done directly
-   *  on the BuffHandle).
+   *  use by client code. Performs the necessary metadata state transition
+   *  leading from an abstract buffer type to a derived metadata::Entry
+   *  that corresponds to an actual buffer and has a lifecycle state.
+   *  This entry is marked as _locked_ for exclusive use by one client.
+   *  The returned handle allows to query state and perform further
+   *  state transitions (_emitted_, _released_), yet provides no
+   *  automatic tracking and clean-up. The client is explicitly
+   *  responsible to invoke #releaseBuffer (either on the
+   *  BufferProvider, or directly on the BuffHandle).
    * @return a copyable handle, representing this buffer and this usage transaction.
    * @throw error::State when unable to provide this buffer
    * @note this function may be used right away, without prior announcing, but then
@@ -138,10 +124,11 @@ namespace engine {
   BufferProvider::lockBuffer (BuffDescr const& type)
   {
     REQUIRE (was_created_by_this_provider (type));
-    metadata::Entry& metaEntry = bufferStage_->get (type);
-    size_t buffSiz = metaEntry.storageSize();
-    auto [storage, implMarker] = bufferStore_->provideBuffer (buffSiz, type, metaEntry.localTag());
-    return buildHandle (type, storage, implMarker);
+    metadata::Key& typeKey = bufferStage_->get (type);
+    auto [storage, implMarker] = bufferStore_->provideBuffer (typeKey.storageSize(), type, typeKey.localTag());
+    metadata::Entry& entry = bufferStage_->markLocked (typeKey, storage, implMarker);
+    
+    return BuffHandle (BuffDescr(*this, entry), storage);
   }
   
   

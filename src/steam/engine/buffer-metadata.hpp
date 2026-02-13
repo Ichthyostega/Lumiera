@@ -377,7 +377,7 @@ namespace engine {
             __buffer_required();
             if (nontrivial (instanceFunc_))
               instanceFunc_.destroyAttached (buffer_);
-            buffer_ = 0;
+            buffer_ = nullptr;
           }
         
       private:

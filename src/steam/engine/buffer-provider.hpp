@@ -180,8 +180,6 @@ namespace engine {
       /// placeholder marker type for an actual data buffer
       using Buff = StreamType::ImplFacade::DataBuffer;
       
-      BuffHandle buildHandle (HashVal typeID, Buff* storage, LocalTag =LocalTag::UNKNOWN);
-      
       bool was_created_by_this_provider (BuffDescr const&)  const;
       
       
