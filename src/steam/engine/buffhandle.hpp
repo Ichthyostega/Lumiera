@@ -41,7 +41,7 @@
  ** @see BufferProvider
  ** @see BufferProviderProtocol_test usage demonstration
  ** @see OutputSlot
- ** @see bufftable.hpp      storage for the buffer table /////////////////////OOO where to point into the new structure for documentation?
+ ** @see heap-mem-buffer-store.hpp  demo implementation of storage backend
  ** @see engine::RenderInvocation
  */
 
@@ -170,12 +170,42 @@ namespace engine {
         }
       
     private:
-      template<typename BU>
-      void takeOwnershipFor();
-      void takeOwnershipFor(BuffDescr const& type);
-      
       void emergencyCleanup();
     };
+  
+  
+  /**
+   * Access the memory in the buffer by overlaying a specific type.
+   * @warning this is a **blind cast**, there is _no type safety_.
+   * @remark In the common usage pattern, a client has created a BuffDescr
+   *       with suitable typing; it is assumed thus that the call context
+   *       of the client ensures a a seamless link of type information
+   *       at compile time (it's the clients responsibility to ensure that).
+   *       Two flavours of this usage are conceivable:
+   *       - the client [creates a descriptor](\ref BufferProvider::getDescriptorFor(size_t))
+   *         that only reserves raw storage of sufficient size, e.g. `sizeof(TY)`. When
+   *         accessing the raw storage subsequently through this accessor function,
+   *         the effect is to have a _virtual overlay_ — without actually creating
+   *         a new instance of the type within the storage.
+   *       - the client also [registers a constructor functor](\ref BufferProvider::getDescriptor),
+   *         which implies that a new instance of the target type is constructed into the buffer
+   *         at the moment when the buffer is locked (and is destroyed on `release()`). This
+   *         allows to setup elaborate structures, possibly even with a _back link_, by binding
+   *         additional constructor arguments into the TypeHandler.
+   * @note while clients can not access the internal type metadata, the _implementation_
+   *       of BufferProvider can use the HashVal to access the type registry, and can even
+   *       attach additional information as metadata::LocalTag to keep track of some
+   *       specific property of the buffer, like e.g. the type of object.
+   */
+  template<typename BU>
+  inline BU&
+  BuffHandle::accessAs()
+  {
+    if (!pBuffer_)
+      throw error::Logic ("buffer not (yet) locked for access by clients"
+                         , LERR_(LIFECYCLE));
+    return *reinterpret_cast<BU*> (pBuffer_);
+  }
   
   
   

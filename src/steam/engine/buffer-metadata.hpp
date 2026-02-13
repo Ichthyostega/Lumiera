@@ -231,15 +231,6 @@ namespace engine {
             return newKey;
           }
         
-        void
-        useTypeHandlerFrom (Key const& ref)
-          {
-            if (nontrivial(this->instanceFunc_))
-              throw error::Logic ("unable to supersede an already attached TypeHandler"
-                                 , LERR_(LIFECYCLE));
-            instanceFunc_ = ref.instanceFunc_;
-          }
-        
         
         LocalTag const& localTag() const { return specifics_;}
         size_t storageSize() const { return storageSize_; }

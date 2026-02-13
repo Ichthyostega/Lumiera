@@ -26,7 +26,7 @@
 #include "steam/engine/turnout-system.hpp"
 #include "steam/engine/feed-manifold.hpp"
 #include "steam/engine/node-builder.hpp"
-#include "steam/engine/buffhandle-attach.hpp"     ///////////////////////////////////////////////////////////TICKET 1410 : remove unnecessary API
+#include "steam/engine/buffhandle.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/util.hpp"
 

@@ -20,7 +20,6 @@
 
 #include "steam/play/diagnostic-output-slot.hpp"
 #include "steam/engine/buffhandle.hpp"
-#include "steam/engine/buffhandle-attach.hpp"     ///////////////////////////////////////////////////////////TICKET 1410 : remove unnecessary API
 #include "steam/engine/testframe.hpp"
 
 

@@ -111706,8 +111706,13 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1770770350662" ID="ID_1511113078" MODIFIED="1770939247723" TEXT="L&#xf6;sung ist offensichtlich: auseinander-f&#xe4;deln">
 <linktarget COLOR="#3a91fe" DESTINATION="ID_1511113078" ENDARROW="Default" ENDINCLINATION="243;15;" ID="Arrow_ID_1668459979" SOURCE="ID_661880079" STARTARROW="None" STARTINCLINATION="820;0;"/>
 <icon BUILTIN="yes"/>
-<node COLOR="#5b280f" CREATED="1770937517365" ID="ID_255640086" MODIFIED="1770937555910" TEXT="mark_emitted f&#xe4;llt nach Abschlu&#xdf; des Refactorings weg">
+<node COLOR="#5b280f" CREATED="1770937517365" ID="ID_255640086" MODIFIED="1770950659803" TEXT="mark_emitted f&#xe4;llt nach Abschlu&#xdf; des Refactorings weg">
+<arrowlink COLOR="#e3460e" DESTINATION="ID_705928599" ENDARROW="Default" ENDINCLINATION="2487;-117;" ID="Arrow_ID_1584976619" STARTARROW="None" STARTINCLINATION="1663;76;"/>
 <icon BUILTIN="idea"/>
+<icon BUILTIN="button_cancel"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#d75a0c" CREATED="1770950663478" HGAP="35" ID="ID_1201738190" MODIFIED="1770950700271" TEXT="Nein! vorschneller Schlu&#xdf;" VSHIFT="-1">
+<edge COLOR="#fe6022"/>
+</node>
 </node>
 <node COLOR="#435e98" CREATED="1770937567914" ID="ID_936563940" MODIFIED="1770937594750" TEXT="LocalTag dient als zus&#xe4;tzlicher Informationskanal (f&#xfc;r die Implementierung)">
 <icon BUILTIN="idea"/>
@@ -112282,7 +112287,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <arrowlink COLOR="#0f67cf" DESTINATION="ID_673584101" ENDARROW="Default" ENDINCLINATION="-174;115;" ID="Arrow_ID_1615598709" STARTARROW="None" STARTINCLINATION="-145;8;"/>
 <icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1770838094032" ID="ID_1661720394" MODIFIED="1770838144132" TEXT="&#xbb;finde&#xab; den Header buffhandle-attach.hpp">
+<node BACKGROUND_COLOR="#bc9283" COLOR="#6d3d31" CREATED="1770838094032" ID="ID_1661720394" MODIFIED="1771012699683" STYLE="fork" TEXT="&#xbb;finde&#xab; den Header buffhandle-attach.hpp">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -112291,12 +112296,12 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
     </p>
   </body>
 </html></richcontent>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1770838291269" ID="ID_401032103" MODIFIED="1770838323384" TEXT="&#x201e;to attach an TypeHandler after-the fact&#x201c;">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1770838291269" ID="ID_401032103" MODIFIED="1771012699684" TEXT="&#x201e;to attach an TypeHandler after-the fact&#x201c;">
 <icon BUILTIN="smiley-oh"/>
-<node CREATED="1770838361227" ID="ID_765319520" MODIFIED="1770935898760" TEXT="offensichtlich fand ich das angemessen, 2012">
+<node CREATED="1770838361227" ID="ID_765319520" MODIFIED="1771012699684" TEXT="offensichtlich fand ich das angemessen, 2012">
 <arrowlink COLOR="#899097" DESTINATION="ID_608985526" ENDARROW="Default" ENDINCLINATION="81;-7;" ID="Arrow_ID_59002244" STARTARROW="None" STARTINCLINATION="450;28;"/>
 </node>
-<node CREATED="1770838335382" ID="ID_826676645" MODIFIED="1770839031149" TEXT="da sehe ich eine Seite von mir &#x2014; die in weiter Ferne liegt">
+<node CREATED="1770838335382" ID="ID_826676645" MODIFIED="1771012699684" TEXT="da sehe ich eine Seite von mir &#x2014; die in weiter Ferne liegt">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -112306,32 +112311,32 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1770838460409" ID="ID_1373165487" MODIFIED="1770838477959" TEXT="es k&#xf6;nnte aber doch sein da&#xdf; man es genau anders herum braucht">
+<node CREATED="1770838460409" ID="ID_1373165487" MODIFIED="1771012699684" TEXT="es k&#xf6;nnte aber doch sein da&#xdf; man es genau anders herum braucht">
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
-<node CREATED="1770838518678" ID="ID_1437694840" MODIFIED="1770838524984" TEXT="ist das eine Mentalit&#xe4;t?"/>
-<node CREATED="1770838525986" ID="ID_224361866" MODIFIED="1770838540471" TEXT="oder ist es das Bestreben, &#xbb;Pfl&#xf6;cke einzuschlagen&#xab;?"/>
+<node CREATED="1770838518678" ID="ID_1437694840" MODIFIED="1771012699684" TEXT="ist das eine Mentalit&#xe4;t?"/>
+<node CREATED="1770838525986" ID="ID_224361866" MODIFIED="1771012699685" TEXT="oder ist es das Bestreben, &#xbb;Pfl&#xf6;cke einzuschlagen&#xab;?"/>
 </node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1770839087670" ID="ID_1322493117" MODIFIED="1770839121053" TEXT="Allerdings: heute habe ich einen Hass auf Leute, die alles &#xbb;ganz einfach machen&#xab;">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1770839087670" ID="ID_1322493117" MODIFIED="1771012699685" TEXT="Allerdings: heute habe ich einen Hass auf Leute, die alles &#xbb;ganz einfach machen&#xab;">
 <icon BUILTIN="broken-line"/>
 </node>
 </node>
-<node COLOR="#5b280f" CREATED="1770839241501" ID="ID_887145561" MODIFIED="1770839279631" TEXT="das untergr&#xe4;bt das Buffer-Protokoll im Kern">
+<node COLOR="#5b280f" CREATED="1770839241501" ID="ID_887145561" MODIFIED="1771012699685" TEXT="das untergr&#xe4;bt das Buffer-Protokoll im Kern">
 <icon BUILTIN="stop-sign"/>
-<node CREATED="1770839283040" ID="ID_1215761103" MODIFIED="1770839302667" TEXT="kein Wunder da&#xdf; ich mir mit der Type-Registry so schwer getan habe">
+<node CREATED="1770839283040" ID="ID_1215761103" MODIFIED="1771012699685" TEXT="kein Wunder da&#xdf; ich mir mit der Type-Registry so schwer getan habe">
 <icon BUILTIN="smiley-oh"/>
 </node>
-<node CREATED="1770839373803" ID="ID_1452106816" MODIFIED="1770839395813" TEXT="es w&#xfc;rde implizieren, da&#xdf; ein BuffHandle eigenst&#xe4;ndig ist"/>
-<node CREATED="1770839408182" ID="ID_1723828077" MODIFIED="1770839425128" TEXT="also etwa wie ein shared-ptr, den man neu belegen kann"/>
-<node CREATED="1770839446717" ID="ID_511992087" MODIFIED="1770839454219" TEXT="Kurz gesagt: ich wu&#xdf;te nicht was ich wollte"/>
-<node CREATED="1770839465895" ID="ID_1971787626" MODIFIED="1770839473684" TEXT="und wollte mir selbst nicht im Weg stehen"/>
+<node CREATED="1770839373803" ID="ID_1452106816" MODIFIED="1771012699685" TEXT="es w&#xfc;rde implizieren, da&#xdf; ein BuffHandle eigenst&#xe4;ndig ist"/>
+<node CREATED="1770839408182" ID="ID_1723828077" MODIFIED="1771012699686" TEXT="also etwa wie ein shared-ptr, den man neu belegen kann"/>
+<node CREATED="1770839446717" ID="ID_511992087" MODIFIED="1771012699686" TEXT="Kurz gesagt: ich wu&#xdf;te nicht was ich wollte"/>
+<node CREATED="1770839465895" ID="ID_1971787626" MODIFIED="1771012699686" TEXT="und wollte mir selbst nicht im Weg stehen"/>
 </node>
-<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1770839482869" ID="ID_1977655709" MODIFIED="1770839488236" TEXT="das mu&#xdf; weg">
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1770839482869" ID="ID_1977655709" LINK="#ID_614570936" MODIFIED="1771012736056" TEXT="das mu&#xdf; weg">
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
-<node CREATED="1770839695480" ID="ID_644844801" MODIFIED="1770851507372" TEXT="wird includiert in weaving-pattern-builder.hpp">
-<node CREATED="1770839712638" ID="ID_236933523" MODIFIED="1770839722175" TEXT="dort steht ein Warnungs-Kommentar von 10/2024"/>
-<node CREATED="1770839738362" ID="ID_595295798" MODIFIED="1770839755931" TEXT="denn das definiert die BuffHandle::accessAs&lt;TY&gt;()"/>
-<node CREATED="1770839785138" ID="ID_608985526" MODIFIED="1770935893102" TEXT="anscheinend hatte ich das zun&#xe4;chst als &#xbb;Extra-Feature&#xab; betrachtet">
+<node CREATED="1770839695480" ID="ID_644844801" MODIFIED="1771012699686" TEXT="wird includiert in weaving-pattern-builder.hpp">
+<node CREATED="1770839712638" ID="ID_236933523" MODIFIED="1771012699687" TEXT="dort steht ein Warnungs-Kommentar von 10/2024"/>
+<node CREATED="1770839738362" ID="ID_595295798" MODIFIED="1771012699687" TEXT="denn das definiert die BuffHandle::accessAs&lt;TY&gt;()"/>
+<node COLOR="#435e98" CREATED="1770839785138" ID="ID_608985526" MODIFIED="1771012699687" TEXT="anscheinend hatte ich das zun&#xe4;chst als &#xbb;Extra-Feature&#xab; betrachtet">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -112351,18 +112356,18 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node CREATED="1770839685232" ID="ID_514447363" MODIFIED="1770839694516" TEXT="wird erst mal includiert in alle Tests...">
-<node CREATED="1770847706049" ID="ID_1332199024" MODIFIED="1770847715980" TEXT="BuffHandle::takeOwnershipFor&lt;TY&gt;() wird gar nicht verwendet"/>
-<node CREATED="1770849077190" ID="ID_379928752" MODIFIED="1770849077190" TEXT="BuffHandle::create()">
-<node CREATED="1770849080395" ID="ID_1691573670" MODIFIED="1770849100076" TEXT="wird getestet im BufferProviderProtocol_test">
-<node CREATED="1770849108348" MODIFIED="1770849108348" TEXT="verifyObjectAttachment"/>
-<node CREATED="1770849113871" MODIFIED="1770849113871" TEXT="verifyObjectAttachmentFailure"/>
+<node CREATED="1770839685232" ID="ID_514447363" MODIFIED="1771012699687" TEXT="wird erst mal includiert in alle Tests...">
+<node CREATED="1770847706049" ID="ID_1332199024" MODIFIED="1771012699687" TEXT="BuffHandle::takeOwnershipFor&lt;TY&gt;() wird gar nicht verwendet"/>
+<node CREATED="1770849077190" ID="ID_379928752" MODIFIED="1771012699687" TEXT="BuffHandle::create()">
+<node CREATED="1770849080395" ID="ID_1691573670" MODIFIED="1771012699688" TEXT="wird getestet im BufferProviderProtocol_test">
+<node CREATED="1770849108348" MODIFIED="1771012699688" TEXT="verifyObjectAttachment"/>
+<node CREATED="1770849113871" MODIFIED="1771012699688" TEXT="verifyObjectAttachmentFailure"/>
 </node>
-<node CREATED="1770849117450" ID="ID_1557101993" MODIFIED="1770849125597" TEXT="wird sonst nirgends verwendet">
-<node CREATED="1770849291733" ID="ID_1815291397" MODIFIED="1770849299436" TEXT="was Wunder....">
+<node CREATED="1770849117450" ID="ID_1557101993" MODIFIED="1771012699688" TEXT="wird sonst nirgends verwendet">
+<node CREATED="1770849291733" ID="ID_1815291397" MODIFIED="1771012699688" TEXT="was Wunder....">
 <icon BUILTIN="smiley-oh"/>
 </node>
-<node CREATED="1770849303036" ID="ID_1205278978" MODIFIED="1770849763279" TEXT="allerdings: so v&#xf6;llig abwegig ist die Idee nicht (theoretisch)....">
+<node CREATED="1770849303036" ID="ID_1205278978" MODIFIED="1771012699689" TEXT="allerdings: so v&#xf6;llig abwegig ist die Idee nicht (theoretisch)....">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -112378,7 +112383,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1770849771181" ID="ID_287508686" MODIFIED="1770850182114" TEXT="Feststellung: Verst&#xe4;ndnis und Rahmen haben sich inzwischen grundlegend ge&#xe4;ndert">
+<node CREATED="1770849771181" ID="ID_287508686" MODIFIED="1771012699689" TEXT="Feststellung: Verst&#xe4;ndnis und Rahmen haben sich inzwischen grundlegend ge&#xe4;ndert">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -112389,10 +112394,10 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 </node>
 </node>
-<node COLOR="#5b280f" CREATED="1770850196539" ID="ID_1323788152" MODIFIED="1770851451211" TEXT="denkbar w&#xe4;re eine reduzierte Variante">
+<node COLOR="#5b280f" CREATED="1770850196539" ID="ID_1323788152" MODIFIED="1771012699689" TEXT="denkbar w&#xe4;re eine reduzierte Variante">
 <icon BUILTIN="idea"/>
 <icon BUILTIN="button_cancel"/>
-<node CREATED="1770850209210" ID="ID_713808924" MODIFIED="1770850378331" TEXT="n&#xe4;mlich auf dem Buffer-Descriptor, nicht auf einem bestehenden BuffHandle">
+<node CREATED="1770850209210" ID="ID_713808924" MODIFIED="1771012699689" TEXT="n&#xe4;mlich auf dem Buffer-Descriptor, nicht auf einem bestehenden BuffHandle">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -112402,7 +112407,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1770850381762" ID="ID_258766109" MODIFIED="1770850910483" TEXT="des fragt sich aber: ist daf&#xfc;r &#xfc;berhaupt Raum gegeben?">
+<node CREATED="1770850381762" ID="ID_258766109" MODIFIED="1771012699689" TEXT="des fragt sich aber: ist daf&#xfc;r &#xfc;berhaupt Raum gegeben?">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -112412,7 +112417,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1770850950951" ID="ID_238302985" MODIFIED="1770851127904" TEXT="meine Haltung zur Architektur ist differenzierter">
+<node CREATED="1770850950951" ID="ID_238302985" MODIFIED="1771012699690" TEXT="meine Haltung zur Architektur ist differenzierter">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -112422,7 +112427,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1770851130079" ID="ID_1133045538" MODIFIED="1770851434495" TEXT="Typen sind fluider geworden">
+<node CREATED="1770851130079" ID="ID_1133045538" MODIFIED="1771012699690" TEXT="Typen sind fluider geworden">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -112435,7 +112440,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1770851437338" ID="ID_1687515941" MODIFIED="1770851496643" TEXT="also: brauchen wir nicht">
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1770851437338" ID="ID_1687515941" MODIFIED="1771012699690" TEXT="also: brauchen wir nicht">
 <arrowlink COLOR="#936170" DESTINATION="ID_614570936" ENDARROW="Default" ENDINCLINATION="734;-44;" ID="Arrow_ID_10269322" STARTARROW="None" STARTINCLINATION="-461;50;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
@@ -112443,6 +112448,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#9f119e" CREATED="1771012490903" ID="ID_116473726" MODIFIED="1771012705746" STYLE="bubble" TEXT="&#xd83d;&#xdc80; totgemacht">
+<edge COLOR="#e902d4"/>
 </node>
 </node>
 </node>
@@ -112596,6 +112604,91 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1770917107132" ID="ID_1518034296" MODIFIED="1770923603446" TEXT="Tracking">
 <icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1770949936866" ID="ID_1114022707" MODIFIED="1770949946920" TEXT="geeignete Tracking-Punkte identifizieren">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1770949948582" ID="ID_808227487" MODIFIED="1770949983379" TEXT="idealerweise sitzen die auf dem BufferStore-API">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      weil <i>dort</i>&#160;die tats&#228;chlichen Zustands&#252;berg&#228;nge stattfinden...
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1770949985342" ID="ID_1826916276" MODIFIED="1770950002859" TEXT="und zudem sollte man an alle Daten f&#xfc;r das BuffHandle gelangen k&#xf6;nnen"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1770950008410" ID="ID_1843260494" MODIFIED="1770950105874" TEXT="konkret ist das noch nicht der Fall">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1770950020300" ID="ID_1046414776" MODIFIED="1770950042077" TEXT="es gibt nur State-Transitions auf dem Store-API"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1770950043240" ID="ID_1352986332" MODIFIED="1770950068389" TEXT="vorher wird direkt per Seiteneffekt auf den Type-Registry-Entry zugegriffen">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1770950078043" ID="ID_1126044596" MODIFIED="1770950096275" TEXT="und bisweilen hat man das Handle nur auf dem front-End-Interface">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1770950250610" ID="ID_1856993589" MODIFIED="1770950370620" TEXT="API-Umbauten anlegen">
+<arrowlink COLOR="#da0a3e" DESTINATION="ID_853313306" ENDARROW="Default" ENDINCLINATION="-78;-118;" ID="Arrow_ID_1809426775" STARTARROW="None" STARTINCLINATION="-315;35;"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1770950897150" ID="ID_1423801932" MODIFIED="1770950902060" TEXT="BufferProvider::lockBuffer (BuffDescr)">
+<node CREATED="1770950938273" ID="ID_252841945" MODIFIED="1770950942530" TEXT="holt sich den Typ-Entry"/>
+<node CREATED="1770950943851" ID="ID_543062847" MODIFIED="1770950985286" TEXT="entnimmt Size und loalKey &#x27f6; store.provideBuffer()"/>
+<node CREATED="1770950988149" ID="ID_583610733" MODIFIED="1770950994093" TEXT="ruft dann buildHandle auf">
+<node CREATED="1770951021736" ID="ID_1519122680" MODIFIED="1770951021736" TEXT="bufferStage_-&gt;markLocked (typeKey, storage, implMarker)"/>
+<node CREATED="1770951023690" ID="ID_10082173" MODIFIED="1770951033928" TEXT="das erzeugt den Detail-Entry"/>
+<node CREATED="1770951051706" ID="ID_61884098" MODIFIED="1770951061905" TEXT="das BuffHandle wird direkt aus diesen Daten gebaut">
+<node CREATED="1770951083655" ID="ID_1754215609" MODIFIED="1770951087729" TEXT="Detail-Entry"/>
+<node CREATED="1770951088988" ID="ID_616545498" MODIFIED="1770951091534" TEXT="Storage"/>
+</node>
+</node>
+</node>
+<node CREATED="1770950391834" ID="ID_342050575" MODIFIED="1770950395940" TEXT="BufferProvider::emitBuffer (BuffHandle)">
+<node CREATED="1770950417399" ID="ID_572237980" MODIFIED="1770951342867" TEXT="holt sich den Detail-Entry (zum BuffHandle)"/>
+<node CREATED="1770950504106" ID="ID_155003695" MODIFIED="1770950542657" TEXT="store-&gt;mark_emitted (size, typ, localKey)">
+<node CREATED="1770950544262" ID="ID_1083216675" MODIFIED="1771010265261" TEXT="Achtung: hier Typ &#x2259; parentKey">
+<arrowlink COLOR="#b10e16" DESTINATION="ID_1576060790" ENDARROW="Default" ENDINCLINATION="33;-68;" ID="Arrow_ID_1649427563" STARTARROW="Default" STARTINCLINATION="70;4;"/>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1770950580157" ID="ID_705928599" MODIFIED="1770950873207" TEXT="Vorsicht: dieser Aufruf wird mutma&#xdf;lich doch dauerhaft gebraucht">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Und zwar weil das BufferProvider-Interface auch erweiterte Funktionalit&#228;t ansteuern soll, wie den Cache oder die OutputSink. Diese brauchen zwingend den emit()-Aufruf. Zwar k&#246;nnte man jetzt versuchen, diese Delegation aus beiden Zonen zusammenzubauen &#8212; aber das widerspricht der Idee dieses Refactorings zur Trennung der Zonen. Also l&#228;uft es darauf hinaus, da&#223; solche Spezial-Implementierungen die generische Metadaten/Zustands-Implementierung verwenden, aber einen speziellen BufferStore. Somit m&#252;ssen alle Zustands&#252;berg&#228;nge tats&#228;chlich an beide Implementierungs-S&#228;ulen propagiert werden
+    </p>
+  </body>
+</html>
+</richcontent>
+<linktarget COLOR="#e3460e" DESTINATION="ID_705928599" ENDARROW="Default" ENDINCLINATION="2487;-117;" ID="Arrow_ID_1584976619" SOURCE="ID_255640086" STARTARROW="None" STARTINCLINATION="1663;76;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1770950463921" ID="ID_1567481328" MODIFIED="1770951209300" TEXT="macht direkt metaEntry.mark(EMITTED)">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1770951123696" ID="ID_130775850" MODIFIED="1770951126843" TEXT="BufferProvider::releaseBuffer (BuffHandle)">
+<node CREATED="1770950417399" ID="ID_123312886" MODIFIED="1770951335447" TEXT="holt sich den Detail-Entry (zum BuffHandle)"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1770951191103" ID="ID_381220092" MODIFIED="1770951201974" TEXT="macht direkt metaEntry.mark(FREE)">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1770951226506" ID="ID_1640268027" MODIFIED="1770951249726" TEXT="store-&gt;detachBuffer (size, typ, Slot(storage, localKey))">
+<node CREATED="1770951267068" ID="ID_1576060790" MODIFIED="1771010265261" TEXT="Achtung auch hier Typ &#x2259; parentKey">
+<linktarget COLOR="#b10e16" DESTINATION="ID_1576060790" ENDARROW="Default" ENDINCLINATION="33;-68;" ID="Arrow_ID_1649427563" SOURCE="ID_1083216675" STARTARROW="Default" STARTINCLINATION="70;4;"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1770950134226" ID="ID_210815021" MODIFIED="1770950145147" TEXT="mu&#xdf; die korrekte Tracker-Registry ansprechen">
+<node CREATED="1770950151506" ID="ID_1595932224" MODIFIED="1770950161653" TEXT="eigentlich immer zuerst die created-Registry"/>
+<node CREATED="1770950167400" ID="ID_1883755499" MODIFIED="1770950182484" TEXT="die Tracking-Funktion mu&#xdf; den Zustands&#xfc;bergang erkennen"/>
+<node CREATED="1770950209162" ID="ID_1174437807" MODIFIED="1770950232620" TEXT="und dann den Block aktualisieren und in die emitted/released-Registry &#xfc;bernehmen"/>
+</node>
 </node>
 </node>
 </node>
@@ -112618,13 +112711,14 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 <arrowlink COLOR="#ed132c" DESTINATION="ID_432061684" ENDARROW="Default" ENDINCLINATION="23;-191;" ID="Arrow_ID_148621556" STARTARROW="None" STARTINCLINATION="-377;24;"/>
 <icon BUILTIN="yes"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1770839495603" ID="ID_614570936" MODIFIED="1770851488643" TEXT="buffhandle-attach.hpp ersatzlos zur&#xfc;ckbauen">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1770839495603" ID="ID_614570936" MODIFIED="1771012571486" TEXT="buffhandle-attach.hpp ersatzlos zur&#xfc;ckbauen">
 <linktarget COLOR="#936170" DESTINATION="ID_614570936" ENDARROW="Default" ENDINCLINATION="734;-44;" ID="Arrow_ID_10269322" SOURCE="ID_1687515941" STARTARROW="None" STARTINCLINATION="-461;50;"/>
 <icon BUILTIN="yes"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1770851518039" HGAP="35" ID="ID_211253816" MODIFIED="1770851580967" TEXT="BuffHandle::accessAs&lt;TY&gt;() zieht in die Kern-Implementierung um" VSHIFT="17">
+<node COLOR="#338800" CREATED="1770851518039" HGAP="35" ID="ID_211253816" MODIFIED="1771012540872" TEXT="BuffHandle::accessAs&lt;TY&gt;() zieht in die Kern-Implementierung um" VSHIFT="17">
 <linktarget COLOR="#feded2" DESTINATION="ID_211253816" ENDARROW="Default" ENDINCLINATION="51;-168;" ID="Arrow_ID_1480603828" SOURCE="ID_608985526" STARTARROW="None" STARTINCLINATION="-359;15;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 </node>
+<node BACKGROUND_COLOR="#b7c4da" COLOR="#435e98" CREATED="1771012551876" HGAP="35" ID="ID_335656320" MODIFIED="1771012599378" TEXT="auch unterliegende Implementierung entfernt" VSHIFT="-1"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1770857874819" ID="ID_17538120" MODIFIED="1770859527690" TEXT="Test-Pr&#xe4;dikate auf den Handles nachsch&#xe4;rfen">
 <icon BUILTIN="flag-yellow"/>
@@ -112704,6 +112798,10 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1770947390336" ID="ID_1722157621" MODIFIED="1770947419160" TEXT="das wird von der Allokation erzeugt..."/>
 <node CREATED="1770947399557" ID="ID_1598745754" MODIFIED="1770947411455" TEXT="und der de-Allokation wieder angeliefert"/>
 </node>
+</node>
+<node CREATED="1770950337384" ID="ID_853313306" MODIFIED="1770950365227" TEXT="Vorgriff auf das Stage-API">
+<linktarget COLOR="#da0a3e" DESTINATION="ID_853313306" ENDARROW="Default" ENDINCLINATION="-78;-118;" ID="Arrow_ID_1809426775" SOURCE="ID_1856993589" STARTARROW="None" STARTINCLINATION="-315;35;"/>
+<node CREATED="1771010303963" ID="ID_1721405713" MODIFIED="1771010319964" TEXT="alle relevanten Zustands&#xfc;berg&#xe4;nge laufen &#xfc;ber diese Schnittstelle"/>
 </node>
 </node>
 </node>

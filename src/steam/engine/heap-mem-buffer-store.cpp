@@ -43,11 +43,13 @@ namespace engine {
   
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 1410 : need to question what implementation structures are needed, after »tracking« was extracted...
     /**
-     * Helper for implementing a diagnostic BufferProvider:
-     * A block of heap allocated storage, with the capability
-     * to store some additional tracking information.
+     * Simplistic implementation of buffer storage.
+     * Allocates a block of heap memory for buffers and never deallocates.
+     * This strange behaviour can be used to investigate and demonstrate
+     * buffer usage from a unit test setup.
+     * @see DiagnosticBufferProvider
      */
-    class HeapMemProvider::Block
+    class HeapMemBufferStore::Block
       : util::NonCopyable
       {
         unique_ptr<char[]> storage_;
@@ -95,7 +97,7 @@ namespace engine {
       }
     
     
-    using Block = HeapMemProvider::Block;
+    using Block = HeapMemBufferStore::Block;
     
     /** helper to find Block entries
      *  based on their raw memory address */
@@ -131,7 +133,7 @@ namespace engine {
       
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 1410 : need to question what implementation structures are needed, after »tracking« was extracted...
     
-    using PoolBlocks = ScopedPtrVect<HeapMemProvider::Block>;
+    using PoolBlocks = ScopedPtrVect<HeapMemBufferStore::Block>;
     
     /**
      * @internal Pool of allocated buffer Blocks of a specific size.
@@ -144,7 +146,7 @@ namespace engine {
      * and later gets "emitted" to an output sequence, where it remains for
      * later investigation and diagnostics.
      */
-    class HeapMemProvider::BlockPool
+    class HeapMemBufferStore::BlockPool
       {
         uint maxAllocCount_;
         size_t memBlockSize_;
@@ -269,19 +271,19 @@ namespace engine {
   /**
    * @internal create a memory tracking BufferProvider,
    */
-  HeapMemProvider::HeapMemProvider()
+  HeapMemBufferStore::HeapMemBufferStore()
     : pool_(new PoolTable)
     , outSeq_()
     { }
   
   
-  HeapMemProvider::~HeapMemProvider() { /* emit dtor of BlockPool here */ }
+  HeapMemBufferStore::~HeapMemBufferStore() { /* emit dtor of BlockPool here */ }
   
   
   /* ==== Implementation of the BufferProvider interface ==== */
   
   uint
-  HeapMemProvider::prepareBuffers (uint numBuffers, size_t buffSiz, HashVal typeID)
+  HeapMemBufferStore::prepareBuffers (uint numBuffers, size_t buffSiz, HashVal typeID)
   {
     BlockPool& responsiblePool = getBlockPoolFor (buffSiz, typeID);
     return responsiblePool.prepare_for (numBuffers);
@@ -289,7 +291,7 @@ namespace engine {
 
   
   BufferProviderSetup::Store::Slot
-  HeapMemProvider::provideBuffer (size_t buffSiz, HashVal typeID, LocalTag)
+  HeapMemBufferStore::provideBuffer (size_t buffSiz, HashVal typeID, LocalTag)
   {
     BlockPool& blocks = getBlockPoolFor (buffSiz, typeID);
     Block& newBlock = blocks.createBlock();
@@ -299,7 +301,7 @@ namespace engine {
   
   
   void
-  HeapMemProvider::mark_emitted (size_t buffSiz, HashVal typeID, LocalTag const& specifics)
+  HeapMemBufferStore::mark_emitted (size_t buffSiz, HashVal typeID, LocalTag const& specifics)
   {
     Block* block4buffer = locateBlock (buffSiz, typeID, specifics);
     if (!block4buffer)
@@ -320,7 +322,7 @@ namespace engine {
   
   /** mark a buffer as officially discarded */
   void
-  HeapMemProvider::detachBuffer (size_t buffSiz, HashVal typeID, Slot alloc)
+  HeapMemBufferStore::detachBuffer (size_t buffSiz, HashVal typeID, Slot alloc)
   {
     auto& [storage, specifics] = alloc;
     Block* block4buffer = locateBlock (buffSiz, typeID, specifics);
@@ -333,30 +335,32 @@ namespace engine {
   
   /* ==== Implementation details ==== */
   
+#if false    ////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : this additional tracking API is obsolete and need to be removed
   size_t
-  HeapMemProvider::emittedCnt()  const
+  HeapMemBufferStore::emittedCnt()  const
   {
     return outSeq_.size();
   }
   
   void
-  HeapMemProvider::markAllEmitted()
+  HeapMemBufferStore::markAllEmitted()
   {
     for (auto& [_, blockPool] : *pool_)
          blockPool.discard();
   }
   
-  HeapMemProvider::Block&
-  HeapMemProvider::access_emitted (uint bufferID)
+  HeapMemBufferStore::Block&
+  HeapMemBufferStore::access_emitted (uint bufferID)
   {
     if (!withinOutputSequence (bufferID))
       return emptyPlaceholder;                                                ////////////////////////////////TICKET #856
     else
       return outSeq_[bufferID];
   }
+#endif       ////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : (End) obsoleted API
   
   bool
-  HeapMemProvider::withinOutputSequence (uint bufferID)  const
+  HeapMemBufferStore::withinOutputSequence (uint bufferID)  const
   {
     if (bufferID >= MAX_BUFFERS)
       throw error::Fatal ("hardwired internal limit for test buffers exceeded");
@@ -364,8 +368,8 @@ namespace engine {
     return bufferID < outSeq_.size();
   }
   
-  HeapMemProvider::BlockPool&
-  HeapMemProvider::getBlockPoolFor (size_t buffSiz, HashVal typeID)
+  HeapMemBufferStore::BlockPool&
+  HeapMemBufferStore::getBlockPoolFor (size_t buffSiz, HashVal typeID)
   {
     BlockPool& pool = (*pool_)[typeID];
     if (not pool)
@@ -373,8 +377,8 @@ namespace engine {
     return pool;
   }
   
-  HeapMemProvider::Block*
-  HeapMemProvider::locateBlock (size_t buffSiz, HashVal typeID, void* storage)
+  HeapMemBufferStore::Block*
+  HeapMemBufferStore::locateBlock (size_t buffSiz, HashVal typeID, void* storage)
   {
     BlockPool& pool = getBlockPoolFor (buffSiz, typeID);
     Block* block4buffer = pool.find (storage);                                ////////////////////////////////TICKET #856
@@ -384,8 +388,8 @@ namespace engine {
   
   
   
-  HeapMemProvider::Block*
-  HeapMemProvider::searchInOutSeqeuence (void* blockLocation)
+  HeapMemBufferStore::Block*
+  HeapMemBufferStore::searchInOutSeqeuence (void* blockLocation)
   {
     return pick_Block_by_storage (outSeq_, blockLocation);                    ////////////////////////////////TICKET #856
   }

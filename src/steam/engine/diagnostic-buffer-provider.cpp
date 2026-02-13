@@ -102,7 +102,7 @@ namespace engine {
   
   DiagnosticBufferProvider::DiagnosticBufferProvider()
     : NaiveBufferSetup{}
-    , heapStore_{dynamic_cast<HeapMemProvider&> (*bufferStore_)}
+    , heapStore_{dynamic_cast<HeapMemBufferStore&> (*bufferStore_)}   //////////////////////////////////////////TICKET 1410 : obsolete after switch to newtracking-API
     , tracker_{std::make_unique<BlockTracker>()}
     { }
   

@@ -188,32 +188,6 @@ namespace engine {
   ERROR_LOG_AND_IGNORE (engine, "releasing a buffer from BufferProvider")
   
   
-  
-  /** @warning this operation locally modifies the metadata entry of a single buffer
-   *           to attach a TypeHandler taking ownership of an object embedded within the buffer.
-   *           The client is responsible for actually placement-constructing the object; moreover
-   *           the client is responsible for any damage done to already existing buffer content.
-   *  @note the buffer must be in locked state and the underlying buffer type must not define
-   *        an non-trivial TypeDescriptor, because there is no clean way of superseding an
-   *        existing TypeDescriptor, which basically is just a functor and possibly
-   *        could perform any operation on buffer clean-up.
-   *  @note EX_STRONG
-   */
-  void
-  BufferProvider::attachTypeHandler (BuffHandle const& target, BuffDescr const& reference)
-  {
-    metadata::Entry& metaEntry = bufferStage_->get (target.entryID());
-    metadata::Entry& refEntry = bufferStage_->get (reference);
-    REQUIRE (refEntry.isTypeKey());
-    REQUIRE (!metaEntry.isTypeKey());
-    if (!metaEntry.isLocked())
-      throw error::Logic{"unable to attach an object because buffer isn't locked for use"
-                        , LERR_(LIFECYCLE)};
-    
-    metaEntry.useTypeHandlerFrom (refEntry); // EX_STRONG
-  }
-  
-  
   /** @internal abort normal lifecycle, reset the underlying buffer and detach from it.
    *  This allows to break out of normal usage and reset the handle to _invalid state_
    * @param invokeDtor if possibly the clean-up function of an TypeHandler registered with
@@ -306,31 +280,6 @@ namespace engine {
     descriptor_.provider_->emergencyCleanup(*this); // EX_FREE
     pBuffer_ = 0;
   }
-  
-  
-  /** Install a standard TypeHandler for an already locked buffer.
-   *  This causes the dtor function to be invoked when releasing this buffer.
-   *  The assumption is that client code will placement-construct an object
-   *  into this buffer right away, and thus we're taking ownership on that object.
-   * @param type a reference BuffDescr defining an embedded TypeHandler to use
-   *        A copy of this TypeHandler will be stored into the local metadata for
-   *        this buffer only, not altering the basic buffer type in any way
-   * @throw lifecycle error when attempting to treat an buffer not in locked state
-   * @throw error::Logic in case of insufficient buffer space to hold the
-   *        intended target object
-   * @note EX_STRONG
-   */
-  void
-  BuffHandle::takeOwnershipFor(BuffDescr const& type)
-  {
-    if (!this->isValid())
-      throw error::Logic ("attaching an object requires an buffer in locked state", LERR_(LIFECYCLE));
-    if (this->size() < type.determineBufferSize())
-      throw error::Logic ("insufficient buffer size to hold an instance of that type");
-    
-    descriptor_.provider_->attachTypeHandler(*this, type); // EX_STRONG
-  }
-  
   
   
   

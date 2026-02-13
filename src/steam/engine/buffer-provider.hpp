@@ -104,7 +104,6 @@
 #include "lib/symbol.hpp"
 #include "lib/hash-value.h"
 #include "steam/engine/buffhandle.hpp"
-//#include "steam/engine/engine-ctx.hpp"
 #include "steam/engine/type-handler.hpp"
 #include "steam/engine/buffer-local-tag.hpp"
 #include "steam/engine/buffer-metadata.hpp"  /////////////////////////OOO must be removed from here
@@ -159,9 +158,6 @@ namespace engine {
       
       template<typename BU, typename...ARGS>
       BuffHandle lockBufferFor (ARGS ...args);
-      
-      /** allow for attaching and owing an object within an already created buffer */
-      void attachTypeHandler (BuffHandle const& target, BuffDescr const& reference);
       
       void emergencyCleanup (BuffHandle const& target, bool invokeDtor =false);
       

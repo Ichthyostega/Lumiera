@@ -37,7 +37,7 @@ namespace engine {
   
   namespace error = lumiera::error;
   
-  class HeapMemProvider;  //////////////////////////////OOO fällt dann weg nach dem Umbau
+  class HeapMemBufferStore;  //////////////////////////////OOO fällt dann weg nach dem Umbau
   class BufferDiagnostic;
   
   namespace diagn {// state descriptors for diagnostics....
@@ -84,7 +84,7 @@ namespace engine {
   class DiagnosticBufferProvider
     : public NaiveBufferSetup
     {
-      HeapMemProvider& heapStore_;  //////////////////////////////OOO fällt dann weg nach dem Umbau
+      HeapMemBufferStore& heapStore_;  //////////////////////////////OOO fällt dann weg nach dem Umbau
       struct BlockTracker;
       std::unique_ptr<BlockTracker> tracker_;
       

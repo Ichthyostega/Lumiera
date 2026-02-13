@@ -58,7 +58,6 @@ namespace play {
   using steam::engine::BuffDescr;
   using steam::engine::test::TestFrame;
   using steam::engine::NaiveBufferSetup;
-  namespace diagn = steam::engine::diagn;
 
 //using std::vector;
   using std::shared_ptr;
