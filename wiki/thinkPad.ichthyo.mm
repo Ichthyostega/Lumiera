@@ -111660,16 +111660,13 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1770769806729" ID="ID_6936764" MODIFIED="1770935512015" TEXT="BuffHandle provideLockedBuffer(HashVal typeID) &#x27f6; soll mit buildHandle() tail-call enden"/>
 <node COLOR="#843412" CREATED="1770769796738" ID="ID_734223464" MODIFIED="1770935649200" TEXT="das war immer schon ein verwirrendes Ping-Pong">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       zumal das nirgends im Code dokumentiert ist, und diese implizite Annahme nichts zum Begreifen beitr&#228;gt (da sich hier zwei Layer vermischen, und man Informationen durch den Implementierungs-Call durchf&#228;deln mu&#223;)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="smily_bad"/>
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1770769951879" ID="ID_1852318741" MODIFIED="1770769977165" TEXT="noch schlimmer: es vermischt die Zonen der Implementierung">
@@ -111851,7 +111848,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1770757859605" ID="ID_163465122" MODIFIED="1770757872278" TEXT="HeapMemProvider umbauen">
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1770757859605" ID="ID_163465122" MODIFIED="1771017441409" TEXT="HeapMemProvider umbauen">
+<arrowlink COLOR="#92939c" DESTINATION="ID_1207399538" ENDARROW="Default" ENDINCLINATION="-98;13;" ID="Arrow_ID_828210497" STARTARROW="None" STARTINCLINATION="94;9;"/>
 <icon BUILTIN="pencil"/>
 <node CREATED="1770757895680" ID="ID_1960520353" MODIFIED="1770757908583" TEXT="Vorgabe: soll weiterhin einfach default-konstruierbar sein"/>
 <node CREATED="1770757909670" ID="ID_899228213" MODIFIED="1770757919979" TEXT="in zwei Klassen zerlegen">
@@ -111859,7 +111857,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1770757989787" ID="ID_618017726" MODIFIED="1770757995233" TEXT="header-only"/>
 <node CREATED="1770757996216" ID="ID_1198089703" MODIFIED="1770758004237" TEXT="lediglich ein Config-Record"/>
 </node>
-<node CREATED="1770757944571" ID="ID_1207399538" MODIFIED="1770757950804" TEXT="HeapMemBufferStore">
+<node CREATED="1770757944571" ID="ID_1207399538" MODIFIED="1771017424543" TEXT="HeapMemBufferStore">
+<linktarget COLOR="#92939c" DESTINATION="ID_1207399538" ENDARROW="Default" ENDINCLINATION="-98;13;" ID="Arrow_ID_828210497" SOURCE="ID_163465122" STARTARROW="None" STARTINCLINATION="94;9;"/>
 <node CREATED="1770757971118" ID="ID_1706663250" MODIFIED="1770757975834" TEXT="hpp|cpp"/>
 <node CREATED="1770762597016" ID="ID_1432411040" MODIFIED="1770939175287" TEXT="gl&#xfc;cklicher Zufall: die Implementierung greift fast nicht auf BufferProvider-Interna durch">
 <arrowlink COLOR="#8361ab" DESTINATION="ID_426983823" ENDARROW="Default" ENDINCLINATION="387;17;" ID="Arrow_ID_1775599184" STARTARROW="None" STARTINCLINATION="57;-420;"/>
@@ -111899,32 +111898,26 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="yes"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1770929095659" ID="ID_374106644" MODIFIED="1770929259555" TEXT="wir vermerken die Size nur einmal: im Typ-descriptor">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...hier liegt ein potentiell gef&#228;hrlicher Hebel &#8212; wenngleich auch im Fall von Buffern vermutlich nicht besonders relevant (da Buffer gro&#223; sind)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node CREATED="1770929050952" ID="ID_1844454362" MODIFIED="1770929066192" TEXT="ein typischer Allokator mu&#xdf; die Gr&#xf6;&#xdf;e wissen">
 <node CREATED="1770929067315" ID="ID_1319809000" MODIFIED="1770929074957" TEXT="vor allem auch zur de-Allokation"/>
 <node CREATED="1770929216403" ID="ID_1022871277" MODIFIED="1770929358425" TEXT="ein bekanntes Problem mit vielen Workarounds und Kniffen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       F&#252;r small-objects-Allokatoren kann dieses Problem einen <i>drastischen</i>&#160;Einflu&#223; auf die Performance haben. Im konkreten Fall ist die Situation so komplex, da&#223; ich tunlichst jedwede Art von Absch&#228;tzung und Optimierung vermeiden sollte.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -112296,7 +112289,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
     </p>
   </body>
 </html></richcontent>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1770838291269" ID="ID_401032103" MODIFIED="1771012699684" TEXT="&#x201e;to attach an TypeHandler after-the fact&#x201c;">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1770838291269" FOLDED="true" ID="ID_401032103" MODIFIED="1771015868048" TEXT="&#x201e;to attach an TypeHandler after-the fact&#x201c;">
 <icon BUILTIN="smiley-oh"/>
 <node CREATED="1770838361227" ID="ID_765319520" MODIFIED="1771012699684" TEXT="offensichtlich fand ich das angemessen, 2012">
 <arrowlink COLOR="#899097" DESTINATION="ID_608985526" ENDARROW="Default" ENDINCLINATION="81;-7;" ID="Arrow_ID_59002244" STARTARROW="None" STARTINCLINATION="450;28;"/>
@@ -112320,7 +112313,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="broken-line"/>
 </node>
 </node>
-<node COLOR="#5b280f" CREATED="1770839241501" ID="ID_887145561" MODIFIED="1771012699685" TEXT="das untergr&#xe4;bt das Buffer-Protokoll im Kern">
+<node COLOR="#5b280f" CREATED="1770839241501" FOLDED="true" ID="ID_887145561" MODIFIED="1771012699685" TEXT="das untergr&#xe4;bt das Buffer-Protokoll im Kern">
 <icon BUILTIN="stop-sign"/>
 <node CREATED="1770839283040" ID="ID_1215761103" MODIFIED="1771012699685" TEXT="kein Wunder da&#xdf; ich mir mit der Type-Registry so schwer getan habe">
 <icon BUILTIN="smiley-oh"/>
@@ -112330,7 +112323,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1770839446717" ID="ID_511992087" MODIFIED="1771012699686" TEXT="Kurz gesagt: ich wu&#xdf;te nicht was ich wollte"/>
 <node CREATED="1770839465895" ID="ID_1971787626" MODIFIED="1771012699686" TEXT="und wollte mir selbst nicht im Weg stehen"/>
 </node>
-<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1770839482869" ID="ID_1977655709" LINK="#ID_614570936" MODIFIED="1771012736056" TEXT="das mu&#xdf; weg">
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1770839482869" FOLDED="true" ID="ID_1977655709" LINK="#ID_614570936" MODIFIED="1771012736056" TEXT="das mu&#xdf; weg">
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1770839695480" ID="ID_644844801" MODIFIED="1771012699686" TEXT="wird includiert in weaving-pattern-builder.hpp">
@@ -112608,16 +112601,13 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1770949948582" ID="ID_808227487" MODIFIED="1770949983379" TEXT="idealerweise sitzen die auf dem BufferStore-API">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       weil <i>dort</i>&#160;die tats&#228;chlichen Zustands&#252;berg&#228;nge stattfinden...
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1770949985342" ID="ID_1826916276" MODIFIED="1770950002859" TEXT="und zudem sollte man an alle Daten f&#xfc;r das BuffHandle gelangen k&#xf6;nnen"/>
 <node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1770950008410" ID="ID_1843260494" MODIFIED="1770950105874" TEXT="konkret ist das noch nicht der Fall">
@@ -112644,6 +112634,20 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1770951088988" ID="ID_616545498" MODIFIED="1770951091534" TEXT="Storage"/>
 </node>
 </node>
+<node COLOR="#5b280f" CREATED="1771033064803" ID="ID_1950669747" MODIFIED="1771033087879" TEXT="buildHandle verwirrt hier die Struktur">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1771033090401" ID="ID_1180898133" MODIFIED="1771033119221" TEXT="es war mal notwendig, als erwarteter call-back aus der Implementierung"/>
+<node CREATED="1771033120513" ID="ID_1386614804" MODIFIED="1771033140835" TEXT="mit dem Umbau gestern ist es lediglich eine unn&#xf6;tige interne Funktion geworden"/>
+<node COLOR="#435e98" CREATED="1771033142050" ID="ID_887955367" MODIFIED="1771035814393" TEXT="inlinen und beseitigen!">
+<icon BUILTIN="yes"/>
+<icon BUILTIN="button_cancel"/>
+</node>
+</node>
+<node CREATED="1771035852218" ID="ID_100167531" MODIFIED="1771035865614" TEXT="&#xd83e;&#xdc46; neue Kurzfassung">
+<node CREATED="1770950943851" ID="ID_1415993978" MODIFIED="1771035896298" TEXT="type(Descriptor) &#x27f9; Size und loalKey &#x27f6; store.provideBuffer()"/>
+<node CREATED="1771035970732" ID="ID_856755789" MODIFIED="1771036300409" TEXT="LOCKED(typeKey, storage, localKey) &#x27f9; Entry(&#x27fc;hashKey)"/>
+<node CREATED="1771036053719" ID="ID_1581736705" MODIFIED="1771036090040" TEXT="Entry-hashKey + storage &#x27f9; BuffHandle"/>
+</node>
 </node>
 <node CREATED="1770950391834" ID="ID_342050575" MODIFIED="1770950395940" TEXT="BufferProvider::emitBuffer (BuffHandle)">
 <node CREATED="1770950417399" ID="ID_572237980" MODIFIED="1770951342867" TEXT="holt sich den Detail-Entry (zum BuffHandle)"/>
@@ -112653,16 +112657,13 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1770950580157" ID="ID_705928599" MODIFIED="1770950873207" TEXT="Vorsicht: dieser Aufruf wird mutma&#xdf;lich doch dauerhaft gebraucht">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Und zwar weil das BufferProvider-Interface auch erweiterte Funktionalit&#228;t ansteuern soll, wie den Cache oder die OutputSink. Diese brauchen zwingend den emit()-Aufruf. Zwar k&#246;nnte man jetzt versuchen, diese Delegation aus beiden Zonen zusammenzubauen &#8212; aber das widerspricht der Idee dieses Refactorings zur Trennung der Zonen. Also l&#228;uft es darauf hinaus, da&#223; solche Spezial-Implementierungen die generische Metadaten/Zustands-Implementierung verwenden, aber einen speziellen BufferStore. Somit m&#252;ssen alle Zustands&#252;berg&#228;nge tats&#228;chlich an beide Implementierungs-S&#228;ulen propagiert werden
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <linktarget COLOR="#e3460e" DESTINATION="ID_705928599" ENDARROW="Default" ENDINCLINATION="2487;-117;" ID="Arrow_ID_1584976619" SOURCE="ID_255640086" STARTARROW="None" STARTINCLINATION="1663;76;"/>
 <icon BUILTIN="messagebox_warning"/>
 </node>
@@ -112682,6 +112683,75 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
+<node CREATED="1771019736596" ID="ID_237612170" MODIFIED="1771019753098" TEXT="BufferProvider::emergencyCleanup (BuffHandle, invokeDtor)">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1771019755474" ID="ID_1838086923" MODIFIED="1771019773564" TEXT="wird derzeit nicht (mehr) verwendet">
+<icon BUILTIN="help"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#a7062b" CREATED="1771019774845" ID="ID_863025217" MODIFIED="1771019810251" TEXT="soll grunds&#xe4;tzlich aber erhalten bleiben">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1771019819242" ID="ID_125419742" MODIFIED="1771019835291" TEXT="Unterschiede zum normalen release()">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1771019836663" ID="ID_1993805445" MODIFIED="1771019847459" TEXT="fast keine ... viel duplizierter Code">
+<icon BUILTIN="smily_bad"/>
+</node>
+<node CREATED="1771019850226" ID="ID_1825850676" MODIFIED="1771019899967" TEXT="metaEntry.invalidate(invokeDtor) statt metaEntry.mark(FREE)">
+<node CREATED="1771020151701" ID="ID_1531194378" MODIFIED="1771020159878" TEXT="geht an der State-Machine vorbei">
+<node CREATED="1771020295945" ID="ID_84266242" MODIFIED="1771020559265" TEXT="die State-Machine ist minimalistisch">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...sie pr&#252;ft zwar auf valide &#220;berg&#228;nge, aber andere Bedingungen werden nurch durch (in Subroutinen versteckte) Konsistenz-Checks sichergestellt; sieht also nach typischem, koh&#228;sivem Implementierungs-Code aus, der in Ordnung ist, sofern er nicht auf einem API zug&#228;nglich gemacht wird
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1771020344354" ID="ID_1619931526" MODIFIED="1771020384639" TEXT="hier gibt es leichte Redundanzen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      auch die lock()-Funktion macht nochmal &#228;quivalente checks, aber nur die lock()-Funktion stellt sicher da&#223; es einen Buffer gibt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1771020413776" ID="ID_1836003651" MODIFIED="1771020463063" TEXT="letztlich ist aber alles konsistent">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      konkret: man k&#246;nnte zwar mark(LOCKED) aufrufen, ohne einen Buffer zu setzen; das w&#252;rde aber dann pr&#252;fen, ob ein ctor aufgerufen werden mu&#223;, und an der Stelle eine Exception werfen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1771020244675" ID="ID_1859232995" MODIFIED="1771020633298" TEXT="kann ohne Vorbedingung aus jedem State getriggert werden">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...also ohne zu wissen wo man steht; im Besonderen kann man es aus dem state FREE aufrufen (alle anderen Transitions w&#228;ren auch &#252;ber die State-Machine &#228;quivalent m&#246;glich).
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1771020161323" ID="ID_1785198324" MODIFIED="1771020784911" TEXT="macht eigene Checks um den dtor aufzurufen wenn gew&#xfc;nscht">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      schafft damit die M&#246;glichkeit, den dtor-Aufruf extern zu steuern; wird er gefordert, dann werden alle Vorbedingungen gepr&#252;ft, und wenn es einen registrierten dtor gibt, wird er aufgerufen; letztlich hei&#223;t das aber nur, da&#223; man hier explizit w&#228;lhen kann, denn dtor <b>nicht</b>&#160; aufzurufen (und tats&#228;chlich ist das sogar der default f&#252;r diesen Aufruf-Pfad)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1771032666980" ID="ID_782188811" MODIFIED="1771032679305" TEXT="hinzu kommen Informations-Funktionen"/>
+<node CREATED="1771032680433" ID="ID_49382511" MODIFIED="1771032697968" TEXT="und die Typ-Registrierung via Buffer-Descriptor"/>
 </node>
 </node>
 <node CREATED="1770950134226" ID="ID_210815021" MODIFIED="1770950145147" TEXT="mu&#xdf; die korrekte Tracker-Registry ansprechen">
@@ -112740,7 +112810,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1721239003353" HGAP="21" ID="ID_820345541" MODIFIED="1770859090339" STYLE="fork" TEXT="wir erzeugen einen Hash-Key aufgrund reproduzierbarer Eigenschaften" VSHIFT="8">
 <font NAME="SansSerif" SIZE="8"/>
 </node>
-<node CREATED="1770858948751" ID="ID_1471620114" MODIFIED="1770858974517" STYLE="fork" TEXT="jeder weitere Zugrif l&#xe4;uft dar&#xfc;ber">
+<node CREATED="1770858948751" ID="ID_1471620114" MODIFIED="1770858974517" STYLE="fork" TEXT="jeder weitere Zugriff l&#xe4;uft dar&#xfc;ber">
 <edge COLOR="#ff5d00" STYLE="sharp_linear" WIDTH="thin"/>
 <font NAME="SansSerif" SIZE="8"/>
 </node>
@@ -112775,16 +112845,13 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node CREATED="1770937374809" ID="ID_1526985092" MODIFIED="1770937478969" TEXT="es hat keinen Abstraktionswert">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       auf dem BufferStore-API werden <i>lediglich drei Aufrufe</i>&#160;&#252;brig bleiben. Von denen zudem zwei speziell sind. Und jede Implementierung wird lediglich dieses Tupel wieder auseinandernehmen...
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node COLOR="#435e98" CREATED="1770947363915" ID="ID_1352298488" MODIFIED="1770947427286" TEXT="aber ein Zwischending...">
@@ -112802,6 +112869,117 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1770950337384" ID="ID_853313306" MODIFIED="1770950365227" TEXT="Vorgriff auf das Stage-API">
 <linktarget COLOR="#da0a3e" DESTINATION="ID_853313306" ENDARROW="Default" ENDINCLINATION="-78;-118;" ID="Arrow_ID_1809426775" SOURCE="ID_1856993589" STARTARROW="None" STARTINCLINATION="-315;35;"/>
 <node CREATED="1771010303963" ID="ID_1721405713" MODIFIED="1771010319964" TEXT="alle relevanten Zustands&#xfc;berg&#xe4;nge laufen &#xfc;ber diese Schnittstelle"/>
+<node CREATED="1771018683269" ID="ID_778980845" MODIFIED="1771018692947" TEXT="zudem: f&#xfc;r das Tracking/Diagnose brauchen wir...">
+<node CREATED="1771018695111" ID="ID_1593141461" MODIFIED="1771018712314" TEXT="eindeutig was der n&#xe4;chste Zustand sein wird"/>
+<node CREATED="1771018723092" ID="ID_576208572" MODIFIED="1771018734050" TEXT="(und nat&#xfc;rlich auch ob der &#xdc;bergang erfolgreich war)"/>
+<node CREATED="1771018743305" ID="ID_925617518" MODIFIED="1771018767629" TEXT="das BuffHandle (oder &#xe4;quivaltente Informationen)"/>
+</node>
+<node CREATED="1771038466433" ID="ID_524662243" MODIFIED="1771038482566" TEXT="Design-Problem: der bestehende Code ist &#xbb;Implementierungs-Level&#xab;">
+<node CREATED="1771038487040" ID="ID_1287561311" MODIFIED="1771038508646" TEXT="der ist direkt verwoben mit Strukturen und Verhalten von BufferMetadata"/>
+<node CREATED="1771038532734" ID="ID_712287813" MODIFIED="1771038555465" TEXT="zudem m&#xfc;ssen die Aufrufe jeweils speziell verzahnt werden">
+<node CREATED="1771038575366" ID="ID_152644907" MODIFIED="1771038584629" TEXT="es ist sehr relevant f&#xfc;r die Robustheit..."/>
+<node CREATED="1771038587041" ID="ID_780528555" MODIFIED="1771038594236" TEXT="wann genau ein Sub-Entry angelegt wird"/>
+<node CREATED="1771038562951" ID="ID_1008372888" MODIFIED="1771038573663" TEXT="wann genau die State-Transition stattfindet"/>
+<node CREATED="1771038597655" ID="ID_127793572" MODIFIED="1771038608579" TEXT="wann dadurch u.U ein ctor/dtor aufgerufen wird"/>
+<node CREATED="1771038609830" ID="ID_1216842022" MODIFIED="1771038619284" TEXT="wann wir den Sub-Entry aus der Tabelle werfen k&#xf6;nnen"/>
+</node>
+</node>
+<node CREATED="1771039868568" ID="ID_613741544" MODIFIED="1771039899799" TEXT="man k&#xf6;nnte versuchen die Aufrufe abstrakter zu machen">
+<node CREATED="1771039911602" ID="ID_1415866875" MODIFIED="1771039921380" TEXT="den metadata::Entry ganz verbergen"/>
+<node CREATED="1771039922505" ID="ID_350927682" MODIFIED="1771039956512" TEXT="den metadata::Key als Typ-Alias oder partiell definierte Struct anlegen"/>
+<node CREATED="1771039965762" ID="ID_1373564217" MODIFIED="1771039974804" TEXT="es g&#xe4;be dann nur noch eine Lookup-Funktion">
+<node CREATED="1771039979313" ID="ID_989760593" MODIFIED="1771039997202" TEXT="HashVal &#x27fc; Key"/>
+<node CREATED="1771040003185" ID="ID_467157947" MODIFIED="1771040018942" TEXT="die w&#xfc;rde mithin auf BuffDescr und BuffHandle anwendbar sein"/>
+<node CREATED="1771040020465" ID="ID_858537717" MODIFIED="1771040028802" TEXT="je nach Kontext w&#xfc;rde man dann...">
+<node CREATED="1771040031822" ID="ID_522018198" MODIFIED="1771040037881" TEXT="Descriptor &#x27fc; typeKey"/>
+<node CREATED="1771040038941" ID="ID_1745916839" MODIFIED="1771040044723" TEXT="Handle &#x27fc; stateKey"/>
+</node>
+</node>
+<node CREATED="1771040084190" ID="ID_1001550987" MODIFIED="1771040103692" TEXT="die Transition-Funktionen liefern stets einen (state)Key">
+<icon BUILTIN="idea"/>
+<node CREATED="1771040114053" ID="ID_1059443787" MODIFIED="1771040125779" TEXT="mark_locked &#x27fc; den neuen stateKey">
+<node CREATED="1771040277632" ID="ID_1589821398" MODIFIED="1771040286390" TEXT="vorher hat man einen lookup gemacht"/>
+<node CREATED="1771040295293" ID="ID_830537177" MODIFIED="1771040313812" TEXT="und damit bereits provideBuffer() aufgerufen"/>
+<node CREATED="1771040268672" ID="ID_390853280" MODIFIED="1771040293715" TEXT="erst zuletzt passiert hier das Locking"/>
+<node CREATED="1771040315539" ID="ID_205593393" MODIFIED="1771040338499" TEXT="das Resultat (stateKey-Hash) &#x27f6; BuffHandle"/>
+</node>
+<node CREATED="1771040129714" ID="ID_1542390741" MODIFIED="1771040138137" TEXT="mark_emitted &#x27fc; bestehenden stateKey">
+<node CREATED="1771040351386" ID="ID_1429995684" MODIFIED="1771040356321" TEXT="hier kann man tricksen"/>
+<node CREATED="1771040357875" ID="ID_793949987" MODIFIED="1771040472280" TEXT="es kommt nicht auf die Reihenfolge an">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      denn wir gehen davon aus da&#223; die &#187;emit&#171;-Operation immer nur eine Flag setzt und letztlich nicht scheitern kann. Insofern k&#246;nnen wir durchaus die State-Transition zuerst markieren, und dann erst den externen Effekt auf dem Store-API ausl&#246;sen. Hier hilft uns, da&#223; auf Buffer im Render-Proze&#223; <i>grunds&#228;tzlich nicht concurrent zugegriffen wird</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1771040482296" ID="ID_471168315" MODIFIED="1771040506449" TEXT="&#x27f9; d.h. mit dem Resultat vom Stage (stateKey) kann man den Store bedienen"/>
+</node>
+<node CREATED="1771040139903" ID="ID_1397103582" MODIFIED="1771040181381" TEXT="mark_released &#x27fc; den (noch) bestehenden stateKey">
+<node CREATED="1771040515997" ID="ID_337492162" MODIFIED="1771040583783" TEXT="auch hier kann man die State-Transition mit dem Lookup zu Beginn verschmelzen"/>
+<node CREATED="1771040636379" ID="ID_1749469977" MODIFIED="1771040776376" TEXT="wenn eine Deallokation scheitert, ist das zwar traurig, aber irrelevant">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ....f&#252;r die Metadaten im Besonderen, denn diese <i>folgen insofern stets dem BufferStore,</i>&#160;als die konkrete Adresse und das LocalTag in den Key eingehen. Daher macht es nie Sinn, einen metadata::Entry zu erhalten. Ganz anders f&#252;r Buffer, die bleiben im Allokations-Pool, aber das ist rein ein Detail der Allokator-Implementierung.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1771040778397" ID="ID_1267296072" MODIFIED="1771040995304" TEXT="diese Sequenz ist sogar hart konsistent">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Denn wir erlauben nicht, da&#223; ein bereits LOCKED Entry nochmal geLOCKED wird. Derzeit erzwingen wir sogar, da&#223; der Entry noch gar nicht existiert, aber dieses Kriterium w&#228;re eigentlich nicht notwendig: auf den gleichen Entry k&#246;nnen wir nur kommen, wenn die Store-Implementierung die gleiche Adresse und das gleiche LocalTag angeliefert hat. Insofern h&#228;ngt die Konsistenz rein an der internen Konsistenz im Store; wenn bei dem die de-Allokation scheitert, aber er dann damit klar kommt, die gleiche Storage-Adresse wieder zu verwenden, f&#252;r die gleiche Allokations-Gr&#246;&#223;e, dann soll uns das egal sein
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1771117541849" ID="ID_1494781008" MODIFIED="1771117561620" TEXT="KL&#xc4;REN: wer setzt den storage-ptr. im Handle auf NULL?">
+<icon BUILTIN="help"/>
+</node>
+</node>
+<node CREATED="1771040196671" ID="ID_952067605" MODIFIED="1771040209557" TEXT="release(stateKey) verwirft diesen">
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1771116086464" ID="ID_1151511037" MODIFIED="1771116133806" TEXT="Problem mit Type-Mapping">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1771116137414" ID="ID_13506948" MODIFIED="1771116158973" TEXT="entweder zus&#xe4;tzlicher Hashtable-Lookup"/>
+<node CREATED="1771116160984" ID="ID_1585303726" MODIFIED="1771116180128" TEXT="oder aber Verzicht auf Santiy-Check"/>
+<node CREATED="1771116196349" ID="ID_900328170" MODIFIED="1771116289514" TEXT="(oder auf den Optimiser hoffen)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      es handelt sich hier um eine Implementierungs-Delegierung, und keinen virtual method call; unter den Annahme, da&#223; auch die Hashtable-Implementierung geinlined wird, d&#252;rfte der Optimiser im Stande sein, die <i>common subexpression extraciton</i>&#160;zu machen, da ja auch das L&#246;schen einen erfolgreichen Lookup voraussetzt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1771116293701" ID="ID_16326265" MODIFIED="1771116362641" TEXT="erst mal &#xbb;unter den Teppich kehren&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Klarheit des API geht vor! denn vermutlich spielt der Performance-Unterschied gar keine Rolle &#8212; zumindest solange bis wir diese Aspekte alle unter Real-Bedingungen beobachten k&#246;nnen...
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+<node CREATED="1771118137345" ID="ID_315166171" MODIFIED="1771118153438" TEXT="bleibt zu l&#xf6;sen bei diesem Ansatz...">
+<node CREATED="1771118154825" ID="ID_1441684417" MODIFIED="1771118177093" TEXT="lookup mit unbekannter Hash-ID">
+<node CREATED="1771118178245" ID="ID_877974485" MODIFIED="1771118185152" TEXT="wirft bisher eine Exception"/>
+<node CREATED="1771118190407" ID="ID_1178898246" MODIFIED="1771118207348" TEXT="problematisch f&#xfc;r Informations-Funktionen"/>
+</node>
+<node CREATED="1771118235061" ID="ID_307563520" MODIFIED="1771118247998" TEXT="Mapping der Typ-Registrierung entsprechend erg&#xe4;nzen"/>
+</node>
+</node>
 </node>
 </node>
 </node>

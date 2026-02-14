@@ -73,7 +73,7 @@ namespace engine {
   size_t
   BufferProvider::getBufferSize (HashVal typeID)  const
   {
-    metadata::Key& typeKey = bufferStage_->get (typeID);
+    auto& typeKey = bufferStage_->lookup (typeID);
     return typeKey.storageSize();
   }
   
@@ -124,11 +124,11 @@ namespace engine {
   BufferProvider::lockBuffer (BuffDescr const& type)
   {
     REQUIRE (was_created_by_this_provider (type));
-    metadata::Key& typeKey = bufferStage_->get (type);
-    auto [storage, implMarker] = bufferStore_->provideBuffer (typeKey.storageSize(), type, typeKey.localTag());
-    metadata::Entry& entry = bufferStage_->markLocked (typeKey, storage, implMarker);
+    auto& typeKey = bufferStage_->lookup (type);
+    auto [storage, localTag] = bufferStore_->provideBuffer (typeKey.storageSize(), type, typeKey.localTag());
+    auto& stateKey = bufferStage_->mark_locked (typeKey, storage, localTag);
     
-    return BuffHandle (BuffDescr(*this, entry), storage);
+    return BuffHandle (BuffDescr(*this, HashVal(stateKey)), storage);
   }
   
   
@@ -147,13 +147,12 @@ namespace engine {
   void
   BufferProvider::emitBuffer (BuffHandle const& handle)
   {
-    metadata::Entry& metaEntry = bufferStage_->get (handle);
-    bufferStore_->mark_emitted (metaEntry.storageSize(), metaEntry.parentKey(), metaEntry.localTag());
-    metaEntry.mark(EMITTED);
+    auto& stateKey = bufferStage_->mark_emitted (handle);
+    bufferStore_->mark_emitted (stateKey.storageSize(), stateKey.parentKey(), stateKey.localTag());
   }
   
   
-  /** BufferProvider API: declare done and detach.
+  /** BufferProvider API: declare buffer usage as completed and detach from storage.
    *  Client code is required to release _each previously locked buffer_ eventually.
    * @warning invalidates the BuffHandle, clients mustn't access the buffer anymore.
    *          Right after releasing, an access through the handle will throw;
@@ -163,13 +162,11 @@ namespace engine {
    */
   void
   BufferProvider::releaseBuffer (BuffHandle const& handle)
-  try {
-    metadata::Entry& metaEntry = bufferStage_->get (handle);
-    size_t buffSiz = metaEntry.storageSize();
-    metaEntry.mark(FREE);   // might invoke embedded dtor function
-    bufferStore_->detachBuffer (buffSiz, metaEntry.parentKey()
-                               ,std::make_tuple (handle.rawStorage(), metaEntry.localTag()));
-    bufferStage_->release (metaEntry);
+  try {                         // might invoke embedded dtor function
+    auto& stateKey = bufferStage_->mark_released (handle);
+    bufferStore_->detachBuffer (stateKey.storageSize(), stateKey.parentKey()
+                               ,std::make_tuple (handle.rawStorage(), stateKey.localTag()));
+    bufferStage_->discard (handle);
   }
   ERROR_LOG_AND_IGNORE (engine, "releasing a buffer from BufferProvider")
   
@@ -184,12 +181,10 @@ namespace engine {
   void
   BufferProvider::emergencyCleanup (BuffHandle const& handle, bool invokeDtor)
   try {
-    metadata::Entry& metaEntry = bufferStage_->get (handle);
-    size_t buffSiz = metaEntry.storageSize();
-    metaEntry.invalidate (invokeDtor);
-    bufferStore_->detachBuffer (buffSiz, metaEntry.parentKey()
-                               ,std::make_tuple (handle.rawStorage(), metaEntry.localTag()));
-    bufferStage_->release (metaEntry);
+    auto& stateKey = bufferStage_->abandon (handle, invokeDtor);
+    bufferStore_->detachBuffer (stateKey.storageSize(), stateKey.parentKey()
+                               ,std::make_tuple (handle.rawStorage(), stateKey.localTag()));
+    bufferStage_->discard (handle);
   }
   ERROR_LOG_AND_IGNORE (engine, "cleanup of buffer metadata while handling an error")
   

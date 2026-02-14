@@ -1228,26 +1228,28 @@ there are only limited sanity checks, and they can be expected to be optimised a
 Basically the client is responsible for sane buffer access.
 </pre>
 </div>
-<div title="BufferManagement" modifier="Ichthyostega" created="201109151420" modified="202412221803" tags="Rendering Player spec draft" changecount="1">
+<div title="BufferManagement" modifier="Ichthyostega" created="201109151420" modified="202602150137" tags="Rendering Player spec draft" changecount="3">
 <pre>Buffers are used to hold the media data for processing and output. Within the Lumiera RenderEngine and [[Player]] subsystem, we use some common concepts to handle the access and allocation of working buffers. Yet this doesn't imply having only one central authority in charge of every buffer -- such an approach wouldn't be possible (due to collaboration with external systems) and wouldn't be desirable either. Rather, there are some common basic usage //patterns// -- and there are some core interfaces used throughout the organisation of the rendering process.
 
-Mostly, the //client code,// i.e. code in need of using buffers, can access some BufferProvider, thereby delegating the actual buffer management. This binds the client to adhere to kind of a //buffer access protocol,// comprised of the ''announcing'', ''locking'', optionally ''attaching'' and finally the ''releasing'' steps. Here, the actual buffer management within the provider is a question of implementation and will be configured during build-up of the scope in question.
+Mostly, the //client code,// i.e. code in need of using buffers, can access some BufferProvider, thereby delegating the actual buffer management. This binds the client to adhere to kind of a //buffer access protocol,// comprised of the ''announcing'', ''locking'', optionally ''attaching'' and finally the ''releasing'' steps. The actual implementation backing these operations is a matter of configuration, which will be setup as part of the ''build process'', when the Render Node network is created.
 
 !usage situations
 ;rendering
-:any calculations and transformations of media data typically require an input- and output buffer. To a large extent, these operations will be performed by specialised libraries, resulting in a call to some plain-C function receiving pointers to the required working buffers. Our invocation code has the liability to prepare and provide those pointers, relying on a BufferProvider in turn.
+:any calculations and transformations of media data typically require an input- and output buffer. To a large extent, these operations will be performed by specialised libraries, often implemented by invoking some plain-C function that receives pointers to working buffers. For each such external processing library, Lumiera need to provide some //glue code//, which is typically loaded as a plug-in. This binding has to ensure that the external library gets the necessary amount of memory for its working buffers -- which can be ensured by registering a suitable ''buffer type'' on the BufferProvider component configured for the Render Engine.
 ;output
-:most any of the existing libraries for handling external output require the client to adhere to some specific protocol. Often, this involves some kind of callback invoked at the external library's discretion, thus forcing our engine to prepare data within an intermediary buffer. Alternatively, the output system might provide some mechanism to gain limited direct access to the output buffers, and such an access can again be exposed to our internal client code through the BufferProvider abstraction.
+:presumably every framework for handling external system output requires the client to adhere to some specific protocol. Often, this involves some kind of callback invoked at the external library's discretion, thus forcing our engine to prepare data within an intermediary buffer. Alternatively, the output system might provide some mechanism to gain limited direct access to the output buffers, and such an access can again be exposed to our internal client code through the BufferProvider abstraction.
+;unit testing
+:the interactions within the Render Engine can be elaborate -- and the unit tests provide the most complete technical documentation, and demonstrate how the components are assumed to collaborate. For this purpose we need simple demo-type implementations, which are easy to reason about, and will often leave out some of the advanced cross-cutting concerns, like concurrency or error handling. Furthermore, some tests need to show that buffers were used the way they are assumed to be used -- and thus require some kind of instrumentation facility to verify actions taken by the BufferProvider
 
 !primary implementations
 ;memory pool
-:in all those situations, where we just need a working buffer for some time, we can rely on our internal custom memory allocator.
-:{{red{only partially implemented as of 12/2024}}} -- as a fallback we just rely on heap allocations through the language runtime
+:in all those situations, where we just need a working buffer for some time, a dedicated custom allocator will be used within the Render Engine. Access to this allocator from the actual worker threads is another, quite advanced topic, since we can not effort to contact a central manager component for each buffer access.
 ;frame cache
 :whenever a calculated result may be of further interest, beyond the immediate need triggering the calculation, it might be eligible for caching.
 :The Lumiera ''frame cache'' is a special BufferProvider, maintaining a larger pool of buffers which can be pinned and kept around for some time,
-:accomodating limited resources and current demand for fresh result buffers.
-
+:accommodating limited resources and current demand for fresh result buffers.
+;test setup
+:a //naive// implementation is used for unit-tests: each buffer request is simply allocated from the heap and this memory is not released or re-used, which allows to verify memory content after invoking the test subject.
 </pre>
 </div>
 <div title="BufferMetadata" modifier="Ichthyostega" created="201109240004" modified="201109240026" tags="spec Rendering draft">
@@ -1262,13 +1264,13 @@ Beyond that, it can be necessary to associate at least a state flag with //indiv
 __Note__: while the API to access this service is uniform, conceptually there is a difference between just using the (shared) type information and associating individual metadata, like the buffer state. Type-~IDs, once allocated, will never be discarded (within the lifetime of an Lumiera application instance -- buffer associations aren't persistent). To the contrary, individual metadata //will be discarded,// when releasing the corresponding buffer. According to the ''prototype pattern'', individual metadata is treated as a one-way-off specialisation.
 </pre>
 </div>
-<div title="BufferProvider" modifier="Ichthyostega" created="201107082330" modified="202601250231" tags="Rendering spec draft" changecount="10">
+<div title="BufferProvider" modifier="Ichthyostega" created="201107082330" modified="202602150142" tags="Rendering spec draft" changecount="12">
 <pre>Analysis of requirement shows that direct access to the buffers holding actual media data is not necessary -- at leas within the entire implementation of the Render Nodes Network. This finding is based on the assumption, that Lumiera does not perform any media processing on its own; all processing is delegated to external libraries. When taking this approach, buffers can be reduced to just some entity to be //managed,// i.e. &quot;allocated&quot;, &quot;locked&quot; and &quot;released&quot;; the //actual meaning of these operations can be left to the implementation.// So the code within the render engine just pushes around ''smart-ptr like handles''. These [[buffer handles|BuffHandle]] act as a front-end, being created by and are linked to a {{{BufferProvider}}} implementation. There is no need to manage the lifecycle of buffers automatically, because the use of buffers is embedded into the render calculation cycle, which follows a strict call scheme, which ensures that all buffers are provided before invoking an operation and that buffers are released afterwards. Buffer management can thus be reduced to the following primitive operations...
-* declaring the &quot;type&quot;, i.e. the size of a buffer
-* (optionally) a pre-announcement that a given amount of buffers will be required soon
-* the next step is to ensure the necessary buffers are available, by obtaining (&quot;locking&quot;) a buffer handle
-* (optionally) the contents of a buffer can be marked as complete (&quot;emitting&quot; a buffer handle)
-* finally the buffer is marked as free (&quot;released&quot;) and client code will not touch the buffer handle thereafter.
+* declaring the ''type'', i.e. the size of a buffer, and optionally an object to construct into the buffer storage
+* (optionally) an ''announcement'' that a given amount of buffers will be required soon
+* the next step is to ensure the necessary buffers are available, by obtaining (''locking'') a buffer handle
+* (optionally) the contents of a buffer can be marked as complete (''emitting'' a buffer handle)
+* finally the buffer is marked as free (''released'') and client code will not touch the buffer handle thereafter.
 
 !operations
 While BufferProvider is an interface meant to be backed by various and diverse kinds of buffer and memory management approaches, there is a common set of operations to be supported by any conceivable implementation
@@ -1277,7 +1279,7 @@ While BufferProvider is an interface meant to be backed by various and diverse k
 ;locking
 :this operation actually makes a buffer available for a specific client (thread) and returns a [[buffer handle|BuffHandle]]. The corresponding buffer is marked as used and can't be locked again unless released. If necessary, at that point the BufferProvider might allocate memory to accommodate (especially when the buffers weren't announced beforehand). The locking may fail and raise an exception. Such a failure will be unlikely when buffers have been //announced beforehand.//
 ;attaching
-:optionally the client may attach an object to a locked buffer. This object is placement-constructed into the buffer and will be destroyed automatically when releasing the buffer. Alternatively, the client may provide a pair of constructor- / destructor-functors, to be invoked in a similar way. This allows e.g. to install descriptor structures within the buffer, as required by an external media handling library. Notably, these lifecycle functions are considered part of the »buffer type«
+:optionally the client may request that an object is constructed into the buffer, when the latter is dedicated and locked for this client. Such an object instance will be placement-constructed into the buffer and will be destroyed automatically when releasing the buffer. The client may either specify a C++ language type to construct, possibly with constructor arguments -- or, alternatively, the client may provide a pair of constructor- / destructor-functors, to be invoked in a similar way. This allows e.g. to install descriptor structures within the buffer, as required by an external media handling library. Notably, these lifecycle functions are considered part of the »buffer type«
 ;emitting
 :the client //may optionally mark a state transition// -- whose precise meaning remains implicit and implementation dependent. From the client's perspective, emitting and releasing may seem equivalent, since the buffer content should not be altered after that point. However, conceivably there are usages where it matters for //the consumer// to be sure an expected result was actually achieved, since the producer may well acquire the buffer and then fail to complete the required work, prompting some clean-up safety mechanism to merely release the resources.
 ;releasing
