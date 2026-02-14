@@ -37,6 +37,7 @@ namespace engine {
   
   namespace error = lumiera::error;
   
+  using metadata::Buff;
 //  using std::unique_ptr;
 //  using lib::HashVal;
   
@@ -49,8 +50,50 @@ namespace engine {
     : public BufferProviderSetup::Stage
     {
       ///////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 1410 : rather hold BufferMetatdata object here
-    public:
+
       /* === BufferStage interface === */
+      
+      ID
+      lookup (HashVal key)  override
+        {
+          return this->get (key);
+        }
+      
+      ID
+      mark_locked (ID typeKey, Buff* storage, LocalTag implMark)  override
+        {
+          return this->markLocked (typeKey, storage, implMark);
+        }
+      
+      ID
+      mark_emitted (HashVal stateKey)  override
+        {
+          metadata::Entry& metaEntry = this->get (stateKey);
+          metaEntry.mark(EMITTED);
+          return metaEntry;   // contains also the key
+        }
+      
+      ID
+      mark_released (HashVal stateKey)  override
+        {
+          metadata::Entry& metaEntry = this->get (stateKey);
+          metaEntry.mark(FREE);   // might invoke embedded dtor function
+          return metaEntry;
+        }
+      
+      ID
+      abandon (HashVal stateKey, bool invokeDtor)  override
+        {
+          metadata::Entry& metaEntry = this->get (stateKey);
+          metaEntry.invalidate (invokeDtor);
+          return metaEntry;
+        }
+      
+      void
+      discard (HashVal stateKey)  override
+        {
+          this->release (stateKey);
+        }
       
       
     public:

@@ -181,23 +181,30 @@ namespace engine {
     protected:
       bool was_created_by_this_provider (BuffDescr const&)  const;
       
+      using Buff = StreamType::ImplFacade::DataBuffer;  ///< marker type for an actual data buffer
+      
       
       class BufferStage
         : public BufferMetadata         /////////////////////////////////////////////////////////////////////TICKET #1410 : mix-in exiting old implementation -- for sake of refactoring only!
         {
         protected:
-          using Key = metadata::Key;
+          using ID = metadata::Key const&;
         public:
           virtual ~BufferStage() { } ///< this is an interface
-          
           using BufferMetadata::BufferMetadata;   ///////////////////////////////////////////////////////////TICKET #1410 : actual implementation structures should move down into this classes implementation
+          
+          virtual ID lookup (HashVal)                          =0;
+          virtual ID mark_locked (ID typeKey, Buff*, LocalTag) =0;
+          virtual ID mark_emitted (HashVal stateKey)           =0;
+          virtual ID mark_released (HashVal stateKey)          =0;
+          virtual ID abandon (HashVal, bool destroy=false)     =0;
+          virtual void discard (HashVal stateKey)              =0;
         };
       
       class BufferStore
         : util::NonCopyable
         {
         protected:
-          using Buff = StreamType::ImplFacade::DataBuffer;  ///< marker type for an actual data buffer
           using Slot = std::tuple<Buff*,LocalTag>;
         public:
           virtual ~BufferStore() { } ///< this is an interface
