@@ -80,8 +80,6 @@ namespace engine {
       class Store
         : public BufferStore
         {
-        protected:
-          using Buff = BufferProvider::Buff;
         };
 
       

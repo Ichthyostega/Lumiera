@@ -50,6 +50,7 @@ namespace play {
 
 //using std::string;
   using lib::Symbol;
+  using lib::HashVal;
   using util::unConst;
   using util::contains;
   using lib::time::FrameRate;
@@ -106,7 +107,7 @@ namespace play {
       trackFrame (FrameID frameNr, BuffHandle const& newBuffer)
         {
           TRACE (test, "Con=%p : track buffer %zu for frame-#%lu"
-                     , this, newBuffer.entryID(), frameNr);
+                     , this, HashVal(newBuffer), frameNr);
           REQUIRE (!contains (frameTrackingIndex_,frameNr),
                    "attempt to lock already used frame %lu", frameNr);
           
@@ -154,7 +155,7 @@ namespace play {
       transfer (BuffHandle const& filledBuffer)
         {
           TRACE (test, "Con=%p : transfer buffer %zu"
-                     , this, filledBuffer.entryID());
+                     , this, HashVal(filledBuffer));
           REQUIRE (!closed_);
           
           pushout (filledBuffer);

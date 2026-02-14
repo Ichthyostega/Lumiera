@@ -1,0 +1,67 @@
+/*
+  SIMPLE-BUFFER-STATE-REGISTRY.hpp  -  naively tracking buffer states in a central hash table
+
+   Copyright (C)
+     2026             Hermann Vosseler <Ichthyostega@web.de>
+
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
+
+*/
+
+/** @file simple-buffer-state-registry.hpp
+ ** Demo implementation of engine::BufferProvider state coordination, suitable for unit tests.
+ ** Based on a shared metadata table, accessed directly, disregarding concurrency.
+ ** 
+ ** @see buffer-provider.hpp
+ ** @see buffer-provider-protocol-test.cpp
+ ** @see naive-buffer-setup.hpp
+ */
+
+#ifndef STEAM_ENGINE_SIMPLE_BUFFER_STATE_REGISTRY_H
+#define STEAM_ENGINE_SIMPLE_BUFFER_STATE_REGISTRY_H
+
+
+#include "lib/error.hpp"
+//#include "lib/hash-value.h"
+#include "steam/engine/buffer-provider-setup.hpp"
+#include "steam/engine/buffer-metadata.hpp"
+
+#include <memory>
+
+
+namespace steam {
+namespace engine {
+  
+  namespace error = lumiera::error;
+  
+//  using std::unique_ptr;
+//  using lib::HashVal;
+  
+  
+  /**
+   * Simple Buffer type and state tracking registry, for test and demonstration.
+   * Relies on a central hashtable, without considering any concurrency concerns.
+   */
+  class SimpleBufferStateRegistry
+    : public BufferProviderSetup::Stage
+    {
+      ///////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 1410 : rather hold BufferMetatdata object here
+    public:
+      /* === BufferStage interface === */
+      
+      
+    public:
+      SimpleBufferStateRegistry (Literal implementationID)
+        : BufferProviderSetup::Stage{implementationID}     //////////////////////////////////////////////////TICKET 1410 : rather init BufferMetatdata
+        { }
+      
+    private:
+    };
+  
+  
+  
+}} // namespace steam::engine
+#endif /*STEAM_ENGINE_SIMPLE_BUFFER_STATE_REGISTRY_H*/

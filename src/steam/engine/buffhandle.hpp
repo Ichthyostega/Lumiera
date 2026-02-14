@@ -92,7 +92,7 @@ namespace engine {
       // using standard copy operations
       
       bool verifyValidity()  const;
-      size_t determineBufferSize() const;
+      size_t buffSize() const;
       
       operator HashVal()  const { return subClassification_; }
       
@@ -117,13 +117,11 @@ namespace engine {
       
       
     public:
-      using PBuff = Buff*;
-      
       /** @internal a buffer handle may be obtained by "locking"
        *  a buffer from the corresponding BufferProvider */
       BuffHandle(BuffDescr const& typeInfo, void* storage = 0)
         : descriptor_(typeInfo)
-        , pBuffer_(static_cast<PBuff>(storage))
+        , pBuffer_(static_cast<Buff*>(storage))
         { }
       
       // using standard copy operations
@@ -157,16 +155,10 @@ namespace engine {
              and descriptor_.verifyValidity();
         }
       
-      HashVal
-      entryID()  const   ///////////////////////TICKET 1410 : why can't we just expose operator HashVal() ??
-        {
-          return HashVal(descriptor_);
-        }
-      
       size_t
       size()  const
         {
-          return descriptor_.determineBufferSize();
+          return descriptor_.buffSize();
         }
       
     private:

@@ -147,9 +147,8 @@ namespace engine {
   void
   BufferProvider::emitBuffer (BuffHandle const& handle)
   {
-    metadata::Entry& metaEntry = bufferStage_->get (handle.entryID());
-    size_t buffSiz = metaEntry.storageSize();
-    bufferStore_->mark_emitted (buffSiz, metaEntry.parentKey(), metaEntry.localTag());
+    metadata::Entry& metaEntry = bufferStage_->get (handle);
+    bufferStore_->mark_emitted (metaEntry.storageSize(), metaEntry.parentKey(), metaEntry.localTag());
     metaEntry.mark(EMITTED);
   }
   
@@ -165,7 +164,7 @@ namespace engine {
   void
   BufferProvider::releaseBuffer (BuffHandle const& handle)
   try {
-    metadata::Entry& metaEntry = bufferStage_->get (handle.entryID());
+    metadata::Entry& metaEntry = bufferStage_->get (handle);
     size_t buffSiz = metaEntry.storageSize();
     metaEntry.mark(FREE);   // might invoke embedded dtor function
     bufferStore_->detachBuffer (buffSiz, metaEntry.parentKey()
@@ -183,13 +182,13 @@ namespace engine {
    * @note EX_FREE
    */
   void
-  BufferProvider::emergencyCleanup (BuffHandle const& target, bool invokeDtor)
+  BufferProvider::emergencyCleanup (BuffHandle const& handle, bool invokeDtor)
   try {
-    metadata::Entry& metaEntry = bufferStage_->get (target.entryID());
+    metadata::Entry& metaEntry = bufferStage_->get (handle);
     size_t buffSiz = metaEntry.storageSize();
     metaEntry.invalidate (invokeDtor);
     bufferStore_->detachBuffer (buffSiz, metaEntry.parentKey()
-                               ,std::make_tuple (target.rawStorage(), metaEntry.localTag()));
+                               ,std::make_tuple (handle.rawStorage(), metaEntry.localTag()));
     bufferStage_->release (metaEntry);
   }
   ERROR_LOG_AND_IGNORE (engine, "cleanup of buffer metadata while handling an error")
@@ -217,7 +216,7 @@ namespace engine {
   
   
   size_t
-  BuffDescr::determineBufferSize() const
+  BuffDescr::buffSize() const
   {
     ENSURE (provider_);
     return provider_->getBufferSize (*this);

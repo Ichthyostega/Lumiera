@@ -121,8 +121,10 @@ namespace engine {
   using std::unique_ptr;
   using std::forward;
   
-  
   class BufferMetadata;
+  namespace metadata {
+    class Key;
+  }
   
   
   LUMIERA_ERROR_DECLARE (BUFFER_MANAGEMENT); ///< Problem providing working buffers
@@ -177,15 +179,14 @@ namespace engine {
       size_t getBufferSize (HashVal typeID)   const;
       
     protected:
-      /// placeholder marker type for an actual data buffer
-      using Buff = StreamType::ImplFacade::DataBuffer;
-      
       bool was_created_by_this_provider (BuffDescr const&)  const;
       
       
       class BufferStage
         : public BufferMetadata         /////////////////////////////////////////////////////////////////////TICKET #1410 : mix-in exiting old implementation -- for sake of refactoring only!
         {
+        protected:
+          using Key = metadata::Key;
         public:
           virtual ~BufferStage() { } ///< this is an interface
           
@@ -196,6 +197,7 @@ namespace engine {
         : util::NonCopyable
         {
         protected:
+          using Buff = StreamType::ImplFacade::DataBuffer;  ///< marker type for an actual data buffer
           using Slot = std::tuple<Buff*,LocalTag>;
         public:
           virtual ~BufferStore() { } ///< this is an interface

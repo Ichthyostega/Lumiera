@@ -12,7 +12,7 @@
 */
 
 /** @file heap-mem-provider.hpp
- ** Dummy implementation engine::BufferProvider storage, for sake of conceptual
+ ** Dummy engine::BufferProvider storage implementation, for sake of conceptual
  ** demonstration and unit testing. This BufferProvider implementation is notably straight forward,
  ** if not outright silly: it happily claims more and more heap blocks and never releases any memory
  ** dynamically. This both demonstrates the simplest possible implementation of storage handling, and

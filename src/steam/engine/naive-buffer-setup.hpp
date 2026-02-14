@@ -31,6 +31,7 @@
 #include "lib/error.hpp"
 #include "steam/engine/buffer-provider-setup.hpp"
 #include "steam/engine/heap-mem-buffer-store.hpp"
+#include "steam/engine/simple-buffer-state-registry.hpp"
 
 #include <memory>
 
@@ -58,7 +59,7 @@ namespace engine {
         : BufferProviderSetup{*this}
         { }
         
-        auto buildStage() { return std::make_unique<Stage> ("Naive_HeapAllocated"); }
+        auto buildStage() { return std::make_unique<SimpleBufferStateRegistry> ("Naive_HeapAllocated"); }
         auto buildStore() { return std::make_unique<HeapMemBufferStore>(); }   /////////////////////////////////TICKET #1410 : turn into a subclass of BufferSetup::Store and push down implementation
     };
   
