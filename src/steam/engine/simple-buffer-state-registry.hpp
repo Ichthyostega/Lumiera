@@ -60,6 +60,12 @@ namespace engine {
                                    : metadata::Key::INVALID;
         }
       
+      bool
+      isUsageAllowed (HashVal stateKey)  const override
+        {
+          return this->isAccessible (stateKey);
+        }
+      
       ID
       defineBufferType (size_t buffSiz, TypeHandler handlerFunctions)
         {

@@ -51,9 +51,15 @@ namespace engine {
    *          currently locked and usable by client code
    */
   bool
-  BufferProvider::verifyValidity (HashVal id)  const
+  BufferProvider::isValid (HashVal id)  const
   {
     return bool (bufferStage_->lookup (id));
+  }
+
+  bool
+  BufferProvider::isAccessible (HashVal id)  const
+  {
+    return bufferStage_->isUsageAllowed (id);
   }
   
   size_t
@@ -214,12 +220,14 @@ namespace engine {
   BuffDescr::isValid()  const
   {
     ENSURE (provider_);
-    return provider_->verifyValidity (*this);
+    return provider_->isValid (*this);
   }
   
   /**
    * A concrete Buffer Handle is considered valid,
-   * iff it is currently registered in the buffer metadata table.
+   * iff it is currently registered in the buffer metadata table,
+   * and the corresponding metadata::Entry indicates LOCKED state,
+   * but not yet emitted (or released).
    * @note this implies also that it is in some active state, and
    *       indirectly (due to the _Buffer Provider Protocol_) also
    *       that the _parent type_ is valid, which means that it was
@@ -233,7 +241,7 @@ namespace engine {
   {
     ENSURE (descriptor_.provider_);
     return bool(pBuffer_)
-       and descriptor_.provider_->verifyValidity (*this);
+       and descriptor_.provider_->isAccessible (*this);
   }
   
   

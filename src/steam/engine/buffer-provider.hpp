@@ -175,8 +175,9 @@ namespace engine {
       
       /* === API for BuffHandle internal access === */
       
-      bool verifyValidity (BuffDescr const&)  const;
-      size_t getBufferSize (HashVal typeID)   const;
+      bool isValid         (HashVal) const;
+      bool isAccessible    (HashVal) const;
+      size_t getBufferSize (HashVal) const;
       
     protected:
       bool was_created_by_this_provider (BuffDescr const&)  const;
@@ -200,6 +201,7 @@ namespace engine {
           virtual ID mark_released (HashVal stateKey)          =0;
           virtual ID abandon (HashVal, bool destroy=false)     =0;
           virtual void discard (HashVal stateKey)              =0;
+          virtual bool isUsageAllowed (HashVal stateKey) const =0;
         };
       
       class BufferStore

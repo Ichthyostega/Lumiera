@@ -112867,9 +112867,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1771188353739" ID="ID_809940304" MODIFIED="1771188423612" TEXT="die bool-Checks / Test-Pr&#xe4;dikate....">
-<arrowlink COLOR="#6b5f81" DESTINATION="ID_17538120" ENDARROW="Default" ENDINCLINATION="107;-147;" ID="Arrow_ID_196819766" STARTARROW="None" STARTINCLINATION="253;20;"/>
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1771188353739" ID="ID_809940304" MODIFIED="1771202629145" TEXT="die bool-Checks / Test-Pr&#xe4;dikate....">
+<arrowlink COLOR="#5f6c81" DESTINATION="ID_17538120" ENDARROW="Default" ENDINCLINATION="107;-147;" ID="Arrow_ID_196819766" STARTARROW="None" STARTINCLINATION="261;19;"/>
+<icon BUILTIN="button_ok"/>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1771195835031" ID="ID_465237496" MODIFIED="1771195857844" TEXT="BufferProvider &#x27f6; in Vault umziehen">
 <icon BUILTIN="yes"/>
@@ -112877,8 +112877,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1771196057238" ID="ID_1561084245" MODIFIED="1771196061567" TEXT="LocalTag ebenfalls"/>
 <node CREATED="1771196092641" ID="ID_1744271206" MODIFIED="1771196101419" TEXT="selbst BufferMetadata w&#xe4;re denkbar">
 <node CREATED="1771196102899" ID="ID_840400814" MODIFIED="1771196126219" TEXT="es h&#xe4;ngt nur an dem Typ Buffer (opaque marker)"/>
-<node CREATED="1771196377439" ID="ID_505136785" MODIFIED="1771196409447" TEXT="die Idee gef&#xe4;lt mir immer besser....">
-<linktarget COLOR="#2016a3" DESTINATION="ID_505136785" ENDARROW="Default" ENDINCLINATION="-51;243;" ID="Arrow_ID_407734805" SOURCE="ID_1008519841" STARTARROW="None" STARTINCLINATION="-44;3;"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1771196377439" ID="ID_505136785" MODIFIED="1771201867569" TEXT="die Idee gef&#xe4;lt mir immer besser....">
+<linktarget COLOR="#2016a3" DESTINATION="ID_505136785" ENDARROW="Default" ENDINCLINATION="-51;243;" ID="Arrow_ID_407734805" SOURCE="ID_1008519841" STARTARROW="None" STARTINCLINATION="-49;3;"/>
+<icon BUILTIN="flag-pink"/>
 </node>
 </node>
 </node>
@@ -112908,10 +112909,10 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#b7c4da" COLOR="#435e98" CREATED="1771012551876" HGAP="35" ID="ID_335656320" MODIFIED="1771012599378" TEXT="auch unterliegende Implementierung entfernt" VSHIFT="-1"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1770857874819" ID="ID_17538120" MODIFIED="1771188423612" TEXT="Test-Pr&#xe4;dikate auf den Handles nachsch&#xe4;rfen">
-<linktarget COLOR="#6b5f81" DESTINATION="ID_17538120" ENDARROW="Default" ENDINCLINATION="107;-147;" ID="Arrow_ID_196819766" SOURCE="ID_809940304" STARTARROW="None" STARTINCLINATION="253;20;"/>
-<linktarget COLOR="#f03963" DESTINATION="ID_17538120" ENDARROW="Default" ENDINCLINATION="-605;990;" ID="Arrow_ID_600202029" SOURCE="ID_200153250" STARTARROW="None" STARTINCLINATION="-309;23;"/>
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1770857874819" ID="ID_17538120" MODIFIED="1771202621823" TEXT="Test-Pr&#xe4;dikate auf den Handles nachsch&#xe4;rfen">
+<linktarget COLOR="#5f6c81" DESTINATION="ID_17538120" ENDARROW="Default" ENDINCLINATION="107;-147;" ID="Arrow_ID_196819766" SOURCE="ID_809940304" STARTARROW="None" STARTINCLINATION="261;19;"/>
+<linktarget COLOR="#39bef0" DESTINATION="ID_17538120" ENDARROW="Default" ENDINCLINATION="-605;990;" ID="Arrow_ID_600202029" SOURCE="ID_200153250" STARTARROW="None" STARTINCLINATION="-326;19;"/>
+<icon BUILTIN="yes"/>
 <node CREATED="1770857900164" ID="ID_65421257" MODIFIED="1770857904935" TEXT="Buffer-Descriptor">
 <node CREATED="1770857906234" ID="ID_1594660218" MODIFIED="1770857923105" TEXT="bool &#x2259; isValid"/>
 <node CREATED="1770857924208" ID="ID_1460398514" MODIFIED="1770859075080" TEXT="wenn der Typ-Lookup m&#xf6;glich ist">
@@ -112923,6 +112924,28 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
     </p>
   </body>
 </html></richcontent>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1771196181512" ID="ID_439294427" MODIFIED="1771201827875" TEXT="Vergleich mit einem NULL-Key">
+<icon BUILTIN="idea"/>
+<node COLOR="#454398" CREATED="1771196200054" ID="ID_490691423" MODIFIED="1771201813920" STYLE="fork" TEXT="war erst mal als Implementierungs-Hilfe eingef&#xfc;hrt worden">
+<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
+<arrowlink COLOR="#9e6ea2" DESTINATION="ID_1402715106" ENDARROW="Default" ENDINCLINATION="265;-43;" ID="Arrow_ID_905107215" STARTARROW="None" STARTINCLINATION="1147;55;"/>
+</node>
+<node COLOR="#435e98" CREATED="1771196277955" ID="ID_1934796966" MODIFIED="1771201819898" TEXT="w&#xfc;rde aber durch bool()-Evaluation zus&#xe4;tzlich ratifiziert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...damit schreiben wir auch immer mehr die Bedeutung der BufferMetadata auf einer abstrakten Ebene fest; das halte ich f&#252;r eine gute Tendenz
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#3a6ae9" DESTINATION="ID_1934796966" ENDARROW="Default" ENDINCLINATION="-302;16;" ID="Arrow_ID_1829822624" SOURCE="ID_1603489467" STARTARROW="None" STARTINCLINATION="88;7;"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1771196340916" ID="ID_1008519841" MODIFIED="1771201850494" TEXT="das srpicht auch daf&#xfc;r dies alles &#x27f6; Vault">
+<arrowlink COLOR="#2016a3" DESTINATION="ID_505136785" ENDARROW="Default" ENDINCLINATION="-51;243;" ID="Arrow_ID_407734805" STARTARROW="None" STARTINCLINATION="-49;3;"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1721238837562" HGAP="155" ID="ID_1105815886" MODIFIED="1770859097538" STYLE="bubble" TEXT="ungel&#xf6;st: Hash-Kollisionen in der Type-Registry" VSHIFT="47">
 <edge COLOR="#ff5d00" STYLE="sharp_linear"/>
 <arrowlink COLOR="#fe512a" DESTINATION="ID_149038061" ENDARROW="Default" ENDINCLINATION="1101;-48;" ID="Arrow_ID_680474771" STARTARROW="None" STARTINCLINATION="-891;49;"/>
@@ -112946,10 +112969,13 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node COLOR="#338800" CREATED="1770859477409" ID="ID_516152791" MODIFIED="1771199260220" TEXT="Lookup per Key">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1770859485339" ID="ID_834373171" MODIFIED="1771199569873" STYLE="fork" TEXT="Buffer-Speicher ist zug&#xe4;nglich">
-<icon BUILTIN="flag-pink"/>
-<node CREATED="1770859498975" ID="ID_1377114926" MODIFIED="1771199273091" TEXT="also bereits alloziert und initialisiert"/>
-<node CREATED="1770859506933" ID="ID_757349315" MODIFIED="1771199273091" TEXT="aber noch nicht &#xbb;emitted&#xab; oder &#xbb;discarded&#xab;"/>
+<node COLOR="#338800" CREATED="1770859485339" ID="ID_834373171" MODIFIED="1771200958650" STYLE="fork" TEXT="Buffer-Speicher ist zug&#xe4;nglich">
+<icon BUILTIN="yes"/>
+<node COLOR="#435e98" CREATED="1770859498975" ID="ID_1377114926" MODIFIED="1771200982760" TEXT="also bereits alloziert und initialisiert"/>
+<node COLOR="#435e98" CREATED="1770859506933" ID="ID_757349315" MODIFIED="1771200982760" TEXT="aber noch nicht &#xbb;emitted&#xab; oder &#xbb;discarded&#xab;"/>
+<node COLOR="#338800" CREATED="1771200966610" ID="ID_46605593" MODIFIED="1771200979975" TEXT="hierf&#xfc;r zus&#xe4;tzliche Logik von vorn bis hinten durchtgezogen">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 </node>
 <node COLOR="#435e98" CREATED="1771199175381" ID="ID_525994985" MODIFIED="1771199244429" TEXT="size-Pr&#xe4;dikate"/>
@@ -113138,7 +113164,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 <icon BUILTIN="button_cancel"/>
 </node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#9901b9" CREATED="1771177595187" ID="ID_1402715106" MODIFIED="1771177827345" TEXT="Obwohl &#x27f6; statisch k&#xf6;nnte gehen....">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#9901b9" CREATED="1771177595187" ID="ID_1402715106" MODIFIED="1771196254060" TEXT="Obwohl &#x27f6; statisch k&#xf6;nnte gehen....">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -113147,6 +113173,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
     </p>
   </body>
 </html></richcontent>
+<linktarget COLOR="#9e6ea2" DESTINATION="ID_1402715106" ENDARROW="Default" ENDINCLINATION="265;-43;" ID="Arrow_ID_905107215" SOURCE="ID_490691423" STARTARROW="None" STARTINCLINATION="1147;55;"/>
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1771176917030" ID="ID_1025575839" MODIFIED="1771176962418" TEXT="im Objekt ist nur h&#xe4;sslich, tut aber nicht weh">
@@ -113206,7 +113233,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 <arrowlink COLOR="#fe6636" DESTINATION="ID_345513083" ENDARROW="Default" ENDINCLINATION="-1626;55;" ID="Arrow_ID_1491353300" STARTARROW="None" STARTINCLINATION="1146;36;"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1771179494648" ID="ID_1680308687" MODIFIED="1771187573319">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1771179494648" ID="ID_1680308687" MODIFIED="1771201001889">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
@@ -113215,7 +113242,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
     </p>
   </body>
 </html></richcontent>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="forward"/>
 <node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1771184140448" ID="ID_1116588636" MODIFIED="1771184498183">
 <richcontent TYPE="NODE"><html>
   <head/>
@@ -113243,7 +113270,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1771185797480" ID="ID_470195697" MODIFIED="1771185832497" TEXT="Oh Kacke! kann hier keine Referenz aufs API schreiben">
+<node BACKGROUND_COLOR="#aa7691" COLOR="#ffc0cb" CREATED="1771185797480" ID="ID_470195697" MODIFIED="1771201028958" TEXT="Oh Kacke! kann hier keine Referenz aufs API schreiben">
 <icon BUILTIN="smiley-angry"/>
 <node COLOR="#cd0a93" CREATED="1771185834616" ID="ID_236779315" MODIFIED="1771185896490" TEXT="was mich das wieder ankotzt!!!">
 <richcontent TYPE="NOTE"><html>
@@ -113281,9 +113308,39 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 <node CREATED="1771174242074" ID="ID_926200360" MODIFIED="1771174255852" TEXT="man k&#xf6;nnte das separate release() durch ein Lambda los werden"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1771187666261" ID="ID_200153250" MODIFIED="1771187733513" TEXT="die Validit&#xe4;ts-Checks sind noch offen">
-<arrowlink COLOR="#f03963" DESTINATION="ID_17538120" ENDARROW="Default" ENDINCLINATION="-605;990;" ID="Arrow_ID_600202029" STARTARROW="None" STARTINCLINATION="-309;23;"/>
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1771187666261" ID="ID_200153250" MODIFIED="1771201072828" TEXT="die Validit&#xe4;ts-Checks nun konsistent gemacht">
+<arrowlink COLOR="#39bef0" DESTINATION="ID_17538120" ENDARROW="Default" ENDINCLINATION="-605;990;" ID="Arrow_ID_600202029" STARTARROW="None" STARTINCLINATION="-326;19;"/>
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1771201075623" ID="ID_671517621" MODIFIED="1771201734890" TEXT="Formulierung symmetrisch"/>
+<node COLOR="#435e98" CREATED="1771201084684" ID="ID_780380455" MODIFIED="1771201734890" TEXT="alle im &#xbb;code behind&#xab; implementiert..."/>
+<node COLOR="#435e98" CREATED="1771201106254" ID="ID_998698779" MODIFIED="1771201734889" TEXT="bauen nun alle direkt auf Registry-Lookup auf"/>
+<node COLOR="#338800" CREATED="1771201118841" ID="ID_989890193" MODIFIED="1771201730919" TEXT="Check f&#xfc;r BuffHandle eigens und stringenter formuliert">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1771201200464" ID="ID_1691337868" MODIFIED="1771201745352" TEXT="mu&#xdf; nun im LOCKED-State sein">
+<icon BUILTIN="info"/>
+</node>
+<node COLOR="#435e98" CREATED="1771201207613" ID="ID_1008372684" MODIFIED="1771201745353" TEXT="also nur wenn der Client wirklich zugreifen darf">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      denn das ist es, wof&#252;r man einen bool-Check macht
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#435e98" CREATED="1771201235442" ID="ID_402383761" MODIFIED="1771201745353" TEXT="hierf&#xfc;r nehme ich deutlich h&#xf6;heren Aufwand in Kauf">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...im normalen Nutzungsmuster tritt dieses Pr&#228;dikat n&#228;mlich nicht auf, denn wenn man sich brav an das Protokoll h&#228;lt, ist man garantiert auf der sicheren Seite. Daher sehe ich das als ein Investment in die Zukunft &#8212; da ich inzwischen gelernt habe, da&#223; hinreichend generisch formulierter Code <i>immer irgendwann mi&#223;braucht wird</i>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+</node>
 </node>
 </node>
 </node>

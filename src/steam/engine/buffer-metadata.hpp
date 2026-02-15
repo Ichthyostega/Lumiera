@@ -302,6 +302,16 @@ namespace engine {
             return bool(buffer_);
           }
         
+        /** is the client currently allowed to access the buffer memory?
+         * @remark implies #isLocked() but is more narrow */
+        bool
+        isAccessible()  const
+          {
+            ENSURE (isLocked());
+            return bool(buffer_)
+               and LOCKED == state_;
+          }
+        
         /** is this Entry just an (abstract) placeholder for a type?
          * @return false if it's a real entry corresponding to a concrete buffer
          */
@@ -707,6 +717,14 @@ namespace engine {
           const Entry* entry = table_.fetch (key);
           return entry
              and entry->isLocked();
+        }
+      
+      bool
+      isAccessible (HashVal key)  const
+        {
+          const Entry* entry = table_.fetch (key);
+          return entry
+             and entry->isAccessible();
         }
       
       
