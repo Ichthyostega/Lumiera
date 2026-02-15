@@ -149,6 +149,10 @@ namespace engine {
         
         
       public:
+        /** Generic marker for an impossible / rejected type */
+        static const Key INVALID;
+        
+        
         /** build a standard basic key describing a kind of Buffer.
          * @param familyID basic hash seed value to distinguish
          *                 families of buffer types managed by
@@ -237,6 +241,19 @@ namespace engine {
         
         HashVal parentKey()  const { return parent_;}
         operator HashVal()   const { return hashID_;}
+        
+        friend bool
+        operator== (Key const& k1, Key const& k2)
+          {
+            return k1.hashID_ == k2.hashID_
+               and k1.parent_ == k2.parent_;
+          }
+        
+        explicit
+        operator bool()  const
+          {
+            return *this != INVALID;
+          }
       };
     
     

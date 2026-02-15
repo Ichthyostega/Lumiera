@@ -126,9 +126,9 @@ namespace test  {
           BuffDescr desc1 = provider.getDescriptor<size_t>();
           BuffDescr desc2 = provider.getDescriptor<TestFrame>();   // note: implies also sizeof(TestFrame)
           BuffDescr desc3 = provider.getDescriptorFor(BUFFSIZ);    //       Can also request fixed sized raw storage.
-//        CHECK (desc1.verifyValidity()); /////////////////////////////////////////////////////////////////////////////OOO fails (which is wrong)
-//        CHECK (desc2.verifyValidity());
-//        CHECK (desc3.verifyValidity());
+          CHECK (desc1.isValid());
+          CHECK (desc2.isValid());
+          CHECK (desc3.isValid());
           
           uint num1 = desc1.announce(TEST_ELMS);
           uint num2 = desc1.announce(TEST_ELMS + 1);
@@ -171,6 +171,7 @@ namespace test  {
           CHECK (workBuff.isValid());
           auto endSum = workBuff.accessAs<TestFrame>().getChecksum();
           workBuff.release(); // note: not every buffer need be emitted.
+          CHECK (!workBuff);
           
           auto diagnostic = watch(provider);
           CHECK (diagnostic.buffer_was_used (0));

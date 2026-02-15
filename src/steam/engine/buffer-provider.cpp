@@ -31,7 +31,7 @@ namespace engine {
   // storage for the default-marker constants
   const TypeHandler TypeHandler::RAW{};
   const LocalTag LocalTag::UNKNOWN{};
-  const metadata::Key SimpleBufferStateRegistry::NULL_KEY{HashVal(0), size_t(0)};  //////OOO try to make this init into a constexpr and then do it in-class!
+  const metadata::Key metadata::Key::INVALID{HashVal(0), size_t(0)};  //////OOO consider to relocate those marker constants to somewhere more obvious
   
   namespace { // impl. details and definitions
     
@@ -51,10 +51,18 @@ namespace engine {
    *          currently locked and usable by client code
    */
   bool
-  BufferProvider::verifyValidity (BuffDescr const& bufferID)  const
+  BufferProvider::verifyValidity (HashVal id)  const
   {
-    return bufferStage_->isLocked (bufferID);
+    return bool (bufferStage_->lookup (id));
   }
+  
+  size_t
+  BufferProvider::getBufferSize (HashVal id)  const
+  {
+    auto& key = bufferStage_->lookup (id);
+    return key.storageSize();
+  }
+  
   
   
   BuffDescr
@@ -70,14 +78,6 @@ namespace engine {
   {
     auto& typeKey = bufferStage_->defineBufferType (storageSize, move (specialTreatment));
     return BuffDescr (*this, typeKey);
-  }
-  
-  
-  size_t
-  BufferProvider::getBufferSize (HashVal typeID)  const
-  {
-    auto& typeKey = bufferStage_->lookup (typeID);
-    return typeKey.storageSize();
   }
   
   
@@ -132,7 +132,7 @@ namespace engine {
     auto& stateKey = bufferStage_->mark_locked (typeKey, storage, localTag);
     
     return BuffHandle (BuffDescr(*this, HashVal(stateKey)), storage);
-  }
+  }                      // NOTE: not the underlying parent descriptor!
   
   
   /** BufferProvider API: state transition to \em emitted state.
@@ -205,11 +205,35 @@ namespace engine {
   
   /* === BuffDescr and BuffHandle === */
   
+  /**
+   * A Buffer Descriptor is considered _valid_
+   * iff it represents a registered buffer type.
+   * @note this implies that the buffer size is not zero.
+   */
   bool
-  BuffDescr::verifyValidity()  const
+  BuffDescr::isValid()  const
   {
     ENSURE (provider_);
-    return provider_->verifyValidity(*this);
+    return provider_->verifyValidity (*this);
+  }
+  
+  /**
+   * A concrete Buffer Handle is considered valid,
+   * iff it is currently registered in the buffer metadata table.
+   * @note this implies also that it is in some active state, and
+   *       indirectly (due to the _Buffer Provider Protocol_) also
+   *       that the _parent type_ is valid, which means that it was
+   *       created from a valid BuffDescr. But note that we can not
+   *       see this parent type without lookup by the BufferProvider;
+   *       The embedded #descriptor_ is synthetic, and reflects the
+   *       handle's _state-key_ (⟶ registry Entry) not the type-key.
+   */
+  bool
+  BuffHandle::isValid()  const
+  {
+    ENSURE (descriptor_.provider_);
+    return bool(pBuffer_)
+       and descriptor_.provider_->verifyValidity (*this);
   }
   
   
@@ -220,6 +244,11 @@ namespace engine {
     return provider_->getBufferSize (*this);
   }
   
+  size_t
+  BuffHandle::size()  const
+  {
+    return descriptor_.buffSize();
+  }
   
   uint
   BuffDescr::announce (uint count)

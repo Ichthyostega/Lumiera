@@ -91,7 +91,7 @@ namespace engine {
     public:
       // using standard copy operations
       
-      bool verifyValidity()  const;
+      bool isValid()  const;
       size_t buffSize() const;
       
       operator HashVal()  const { return subClassification_; }
@@ -126,15 +126,16 @@ namespace engine {
       
       // using standard copy operations
       
-      explicit operator bool()  const { return isValid(); }
+      explicit
+      operator bool()     const { return isValid(); }
+      operator HashVal()  const { return descriptor_; }
+      
+      bool isValid()  const;
+      size_t size()  const;
       
       
       void emit();
       void release();
-      
-      
-      template<typename BU>
-      BU& create();        /////////////////////TICKET #1410 : this API needs to be retracted; it does not fit into the concept!
       
       template<typename BU>
       BU& accessAs();
@@ -144,21 +145,6 @@ namespace engine {
         {
           ENSURE (pBuffer_);
           return  pBuffer_;
-        }
-      
-      operator HashVal()  const { return descriptor_; }
-      
-      bool
-      isValid()  const
-        {
-          return bool(pBuffer_)
-             and descriptor_.verifyValidity();
-        }
-      
-      size_t
-      size()  const
-        {
-          return descriptor_.buffSize();
         }
       
     private:

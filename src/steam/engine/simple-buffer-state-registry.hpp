@@ -50,7 +50,6 @@ namespace engine {
     : public BufferProviderSetup::Stage
     {
       ///////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 1410 : rather hold BufferMetatdata object here
-      static const metadata::Key NULL_KEY;   ////////////////////////////OOO better init directly here as constexpr (to keep it really an implementation detail)
 
       /* === BufferStage interface === */
 
@@ -58,7 +57,7 @@ namespace engine {
       lookup (HashVal key)  override
         {
           return this->isKnown(key)? this->get (key)
-                                   : NULL_KEY;
+                                   : metadata::Key::INVALID;
         }
       
       ID

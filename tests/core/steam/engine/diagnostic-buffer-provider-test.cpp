@@ -97,6 +97,7 @@ namespace test  {
           provider.emitBuffer   (testBuff);
           provider.releaseBuffer(testBuff);
           
+          CHECK (not testBuff);
 SHOW_EXPR(watch(provider).created.cnt())
 SHOW_EXPR(watch(provider).emitted.cnt())
 SHOW_EXPR(watch(provider).released.cnt())
