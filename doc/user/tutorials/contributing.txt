@@ -115,9 +115,9 @@ sudo make install
       but was orphaned in 2021. Since it is currently a prerequisite for building Lumiera,
       we maintain a clone of the original repository and a Debian package on Lumiera.org.
       This is relevant both for
-      https://git.lumiera.org/?p=debian/gdl;a=summary[libGDL (3.40) +git://git.lumiera.org/debian/gdl+]
+      https://git.lumiera.org/gitweb?p=debian/gdl;a=summary[libGDL (3.40) +git://git.lumiera.org/debian/gdl+]
       and the
-      https://git.lumiera.org/?p=debian/gdlmm;a=summary[GDL C++ bindings (3.7.3) +git://git.lumiera.org/debian/gdlmm+].
+      https://git.lumiera.org/gitweb?p=debian/gdlmm;a=summary[GDL C++ bindings (3.7.3) +git://git.lumiera.org/debian/gdlmm+].
     ]
 
     * first you have to build libGTL itself...

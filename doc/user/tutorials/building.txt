@@ -54,7 +54,7 @@ in addition to the following tools and libraries:
  * https://www.boost.org/[Boost libraries]
  * https://github.com/bplaum/gavl[GAVL library]
  * https://nobug.pipapo.org/[NoBug] ~([purple]#⚠ see below#)~
- * Lumiera https://git.lumiera.org/?p=LUMIERA;a=summary[source code]
+ * Lumiera https://git.lumiera.org/gitweb?p=LUMIERA;a=summary[source code]
 
 The GUI depends on the following:
 

@@ -18,7 +18,7 @@ Propose a documentation/planning about the setup.
 Description
 ~~~~~~~~~~~
 Take a look at my draft at:
-https://git.lumiera.org/?p=LUMIERA;a=blob;f=doc/devel/nobug_flags.txt;h=325141acb52a7be7f75425359b6057c74ed30253;hb=a03e3c5e73a4c0be2264ac4e4e0f02eb8749837b[nobug_flags.txt]
+https://git.lumiera.org/gitweb?p=LUMIERA;a=blob;f=doc/devel/nobug_flags.txt;h=325141acb52a7be7f75425359b6057c74ed30253;hb=a03e3c5e73a4c0be2264ac4e4e0f02eb8749837b[nobug_flags.txt]
 
 I've added the things I planning for the backend, others might add their own
 plans there too. So far this is an early draft, comments welcome.

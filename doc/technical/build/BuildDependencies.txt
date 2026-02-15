@@ -123,7 +123,7 @@ Build Tools
 * pkg-config
 * Doxygen (optional)
 * Asciidoc (optional)
-* Git -> https://git.lumiera.org/?p=LUMIERA;a=summary[git://git.lumiera.org/LUMIERA]
+* Git -> https://git.lumiera.org/gitweb?p=LUMIERA;a=summary[git://git.lumiera.org/LUMIERA]
   footnote:[
     _Ichthyo_ maintains a repo at https://github.com/Ichthyostega/Lumiera/[Github ^~Ichthyostega/Lumiera^]
   ]
@@ -160,9 +160,9 @@ Libraries
      which is possible, but would require some considerable effort. As of 2025, GDL is still usable,
      but no longer available through the standard distribution channels. +
      We provide a Git repository at our Website for
-     https://git.lumiera.org/?p=debian/gdl;a=summary[libGDL (3.40) +git://git.lumiera.org/debian/gdl+]
+     https://git.lumiera.org/gitweb?p=debian/gdl;a=summary[libGDL (3.40) +git://git.lumiera.org/debian/gdl+]
      and the
-     https://git.lumiera.org/?p=debian/gdlmm;a=summary[GDL C++ bindings (3.7.3) +git://git.lumiera.org/debian/gdlmm+]
+     https://git.lumiera.org/gitweb?p=debian/gdlmm;a=summary[GDL C++ bindings (3.7.3) +git://git.lumiera.org/debian/gdlmm+]
      and we maintain custom Debian packages for both in our
      link:/debian/[Debian DEB depot].
    ]

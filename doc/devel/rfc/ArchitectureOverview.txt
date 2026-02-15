@@ -15,8 +15,8 @@ This proposal intends to capture envisioned Architecture of the Application.
 image:{ldoc}/devel/draw/rendered/Lumi.Architecture-1.png[Overview of Lumiera Architecture]
 
 ^The SVG source of this drawing is
-https://git.lumiera.org/?p=LUMIERA;a=blob_plain;f=doc/devel/draw/Lumi.Architecture-1.svg;hb=HEAD[maintained in GIT(2008)]·
-https://git.lumiera.org/?p=LUMIERA;a=blob_plain;f=doc/devel/draw/Lumi.Architecture-2.svg;hb=HEAD[(current: 2022)]^
+https://git.lumiera.org/gitweb?p=LUMIERA;a=blob_plain;f=doc/devel/draw/Lumi.Architecture-1.svg;hb=HEAD[maintained in GIT(2008)]·
+https://git.lumiera.org/gitweb?p=LUMIERA;a=blob_plain;f=doc/devel/draw/Lumi.Architecture-2.svg;hb=HEAD[(current: 2022)]^
 
 
 Description
@@ -75,7 +75,7 @@ Conclusion
 ----------
 Accepted. The drawing was moved into the GIT tree. +
 It was upgraded and reworked
-https://git.lumiera.org/?p=LUMIERA;a=blob_plain;f=doc/devel/draw/Lumi.Architecture-2.svg;hb=0b9f2e2c3139cad542013caac593cb5972a2e3f6[in 2022]
+https://git.lumiera.org/gitweb?p=LUMIERA;a=blob_plain;f=doc/devel/draw/Lumi.Architecture-2.svg;hb=0b9f2e2c3139cad542013caac593cb5972a2e3f6[in 2022]
 
 
 Back to link:/x/DesignProcess.html[Lumiera Design Process overview]
