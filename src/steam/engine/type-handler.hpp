@@ -118,6 +118,7 @@ namespace engine {
         , destroyAttached()
         , identity{0}
         { }
+      // has value semantics; default copy OK
       
       /** build a TypeHandler
        *  binding to arbitrary constructor and destructor functions.

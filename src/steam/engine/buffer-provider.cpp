@@ -20,6 +20,7 @@
 #include "lib/error.hpp"
 #include "steam/engine/buffer-provider.hpp"
 #include "steam/engine/buffer-metadata.hpp"  /////////////////////////OOO must be removed from here
+#include "steam/engine/simple-buffer-state-registry.hpp" /////////////OOO better use constexpr for hash-chaining?
 #include "lib/util.hpp"
 
 using util::isSameAdr;
@@ -30,7 +31,7 @@ namespace engine {
   // storage for the default-marker constants
   const TypeHandler TypeHandler::RAW{};
   const LocalTag LocalTag::UNKNOWN{};
-  
+  const metadata::Key SimpleBufferStateRegistry::NULL_KEY{HashVal(0), size_t(0)};  //////OOO try to make this init into a constexpr and then do it in-class!
   
   namespace { // impl. details and definitions
     
@@ -59,14 +60,16 @@ namespace engine {
   BuffDescr
   BufferProvider::getDescriptorFor (size_t storageSize)
   {
-    return BuffDescr (*this, bufferStage_->key (storageSize));
+    auto& typeKey = bufferStage_->defineBufferType (storageSize, TypeHandler::RAW);
+    return BuffDescr (*this, typeKey);
   }
   
   
   BuffDescr
   BufferProvider::getDescriptorFor(size_t storageSize, TypeHandler specialTreatment)
   {
-    return BuffDescr (*this, bufferStage_->key (storageSize, specialTreatment));
+    auto& typeKey = bufferStage_->defineBufferType (storageSize, move (specialTreatment));
+    return BuffDescr (*this, typeKey);
   }
   
   

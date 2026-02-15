@@ -50,14 +50,22 @@ namespace engine {
     : public BufferProviderSetup::Stage
     {
       ///////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 1410 : rather hold BufferMetatdata object here
+      static const metadata::Key NULL_KEY;   ////////////////////////////OOO better init directly here as constexpr (to keep it really an implementation detail)
 
       /* === BufferStage interface === */
-      
+
       ID
       lookup (HashVal key)  override
         {
-          return this->get (key);
+          return this->isKnown(key)? this->get (key)
+                                   : NULL_KEY;
         }
+      
+      ID
+      defineBufferType (size_t buffSiz, TypeHandler handlerFunctions)
+        {
+          return lookup (this->key (buffSiz, move (handlerFunctions)));
+        }     // deliberately: create storage, and return reference to it
       
       ID
       mark_locked (ID typeKey, Buff* storage, LocalTag implMark)  override

@@ -193,6 +193,7 @@ namespace engine {
           virtual ~BufferStage() { } ///< this is an interface
           using BufferMetadata::BufferMetadata;   ///////////////////////////////////////////////////////////TICKET #1410 : actual implementation structures should move down into this classes implementation
           
+          virtual ID defineBufferType (size_t, TypeHandler)    =0;
           virtual ID lookup (HashVal)                          =0;
           virtual ID mark_locked (ID typeKey, Buff*, LocalTag) =0;
           virtual ID mark_emitted (HashVal stateKey)           =0;
