@@ -37,6 +37,8 @@ namespace engine {
   
   namespace error = lumiera::error;
   
+  using Buff = StreamType::ImplFacade::DataBuffer;  ///////////TODO consider to define that marker type at some suitable central location
+  
   class HeapMemBufferStore;  //////////////////////////////OOO fällt dann weg nach dem Umbau
   class BufferDiagnostic;
   
@@ -46,10 +48,10 @@ namespace engine {
     struct Block
       {
         BuffHandle handle;
-        void* storage{nullptr};
-        void* accessMemory()  const { return storage; }
+        Buff* storage{nullptr};
+        Buff* accessMemory()  const { return storage; }
         
-        Block (BuffHandle const&);
+        Block (BuffDescr, metadata::Key, Buff* mem);
         Block (BuffDescr const&);
         operator HashVal()  const { return handle; }
       };
@@ -58,7 +60,8 @@ namespace engine {
     class StateReg
       : util::NonCopyable
       {
-        using Registry = std::vector<std::shared_ptr<Block>>;
+        using PBlock   = std::shared_ptr<Block>;
+        using Registry = std::vector<PBlock>;
         Registry reg_;
         
       public:
@@ -66,10 +69,12 @@ namespace engine {
         using Result = lib::Result<Block const&>;
         Result operator[] (size_t  seqNr)  const;
         Result byHandle   (HashVal handle) const;
+        bool   contains   (HashVal handle) const;
         size_t cnt()  const;
         
         /* ========= Accounting  API ========= */
-        void record (BuffHandle const&);
+        void record (Block);
+        void record (PBlock);
       };
     
   }//(End)diagnostic descriptors.

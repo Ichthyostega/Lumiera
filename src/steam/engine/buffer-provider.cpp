@@ -81,7 +81,7 @@ namespace engine {
   BufferProvider::getDescriptorFor (size_t storageSize)
   {
     auto& typeKey = bufferStage_->defineBufferType (storageSize, TypeHandler::RAW);
-    return BuffDescr (*this, typeKey);
+    return buildDescriptor (typeKey);
   }
   
   
@@ -89,7 +89,7 @@ namespace engine {
   BufferProvider::getDescriptorFor(size_t storageSize, TypeHandler specialTreatment)
   {
     auto& typeKey = bufferStage_->defineBufferType (storageSize, move (specialTreatment));
-    return BuffDescr (*this, typeKey);
+    return buildDescriptor (typeKey);
   }
   
   
@@ -143,7 +143,7 @@ namespace engine {
     auto [storage, localTag] = bufferStore_->provideBuffer (typeKey.storageSize(), type, typeKey.localTag());
     auto& stateKey = bufferStage_->mark_locked (typeKey, storage, localTag);
     
-    return BuffHandle (BuffDescr(*this, HashVal(stateKey)), storage);
+    return BuffHandle (buildDescriptor(stateKey), storage);
   }                      // NOTE: not the underlying parent descriptor!
   
   
@@ -210,6 +210,12 @@ namespace engine {
   
   
   /* === BuffDescr and BuffHandle === */
+  
+  BuffDescr
+  BufferProvider::buildDescriptor (HashVal key)
+  {
+    return {*this, key};
+  }
   
   bool
   BufferProvider::was_created_by_this_provider (BuffDescr const& descr)  const

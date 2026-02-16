@@ -112855,6 +112855,26 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1771276666297" ID="ID_80656960" MODIFIED="1771276686235" TEXT="mit dem nun angelegten API gen&#xfc;gt es, die BufferStage zu dekorieren">
 <icon BUILTIN="idea"/>
 </node>
+<node COLOR="#338800" CREATED="1771282492426" ID="ID_1137207493" MODIFIED="1771284960337" TEXT="mu&#xdf; auch die zugeh&#xf6;rige (umschlie&#xdf;ende) DiagnosticBufferProvider-Instanz zug&#xe4;nglich machen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und zwar, weil wir ein BuffHandle speichern wollen, das einen BufferProvider einschlie&#223;t. Dazu brauchen wir die R&#252;ckreferenz auf den Provider. Und das darf eigentlich nur BufferProvider selber...
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1771282534052" ID="ID_1418547018" MODIFIED="1771282553829" TEXT="es gibt eigentlich nur eine Konstruktor-Funktion: beim Locking"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1771282627528" ID="ID_1818084511" MODIFIED="1771282645961" TEXT="Sichtbarkeits-Problem: nur BufferProvider kann einen BuffDescr erzeugen">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1771282651196" ID="ID_1065300465" MODIFIED="1771282682996" TEXT="klarer Fall: mu&#xdf; die Funktion per protected-API zug&#xe4;nglich machen"/>
+<node CREATED="1771282684240" ID="ID_1294774953" MODIFIED="1771282696183" TEXT="kann dann auch &#xfc;berall im BufferProvider selber verwendet werden"/>
 </node>
 </node>
 </node>
@@ -113165,8 +113185,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       Deshalb nenne ich es auch ein &#187;Protocol&#171; &#8212; wollten wir etwas wirklich <i>wasserdichtes,</i>&#160; dann m&#252;&#223;ten wir die Struktur ganz anders anlegen, und vermutlich auch deutlich rigider, und mehr interne Zugriffe verwenden.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#6d4975" DESTINATION="ID_693750944" ENDARROW="Default" ENDINCLINATION="-1078;42;" ID="Arrow_ID_480988688" STARTARROW="None" STARTINCLINATION="-465;29;"/>
 </node>
 </node>

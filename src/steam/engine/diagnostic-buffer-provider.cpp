@@ -30,6 +30,7 @@
 #include "lib/util.hpp"
 
 #include <algorithm>
+#include <utility>
 #include <memory>
 
 
@@ -42,27 +43,34 @@ namespace engine {
   using diagn::StateReg;
   using std::unique_ptr;
   using std::ranges::find_if;
+  using std::move;
+  
+  using metadata::Key;
   
   
-  /**
-   * Implementation of tracking and instrumentation
-   */
-  struct DiagnosticBufferProvider::BlockTracker
-    : util::NonCopyable
-    {
-      StateReg created;
-      StateReg emitted;
-      StateReg released;
-    };
-
-  Block::Block (BuffHandle const& handle)
-    : handle{handle}
+  
+  /* ====== Accounting  API ====== */
+  
+  Block::Block (BuffDescr typeDescriptor, Key stateKey, Buff* mem)
+    : handle{typeDescriptor, mem}
+    , storage{mem}
     { }
     
   Block::Block (BuffDescr const&  descr)
     : handle{descr}
     { }
   
+  void
+  StateReg::record (PBlock blockRef)
+  {
+    reg_.emplace_back (move (blockRef));
+  }
+  
+  void
+  StateReg::record (Block block)
+  {
+    record (std::make_shared<Block> (block));
+  }
   
   size_t
   StateReg::cnt()  const
@@ -93,6 +101,32 @@ namespace engine {
                            , LERR_(BOTTOM_VALUE));
   }
   
+  bool
+  StateReg::contains (HashVal handle) const
+    {
+      return bool(byHandle (handle));
+    }
+  
+  
+  
+  /**
+   * Implementation of tracking and instrumentation
+   */
+  struct DiagnosticBufferProvider::BlockTracker
+    : util::NonCopyable
+    {
+      StateReg created;
+      StateReg emitted;
+      StateReg released;
+      
+      void
+      record_locked (BuffDescr typeDescriptor, Key stateKey, Buff* mem)
+        {
+          REQUIRE (not created.contains (typeDescriptor));
+          created.record (Block{typeDescriptor, stateKey, mem});
+        }
+    };
+  
   
   class DiagnosticBufferProvider::InstrumentedStageProxy
     : public BufferProviderSetup::Stage
@@ -102,6 +136,7 @@ namespace engine {
       
       StageImp stage_;
       Tracker& tracker_;
+      DiagnosticBufferProvider& provider_;
       
       
       /* === BufferStage proxy implementation === */
@@ -127,7 +162,9 @@ namespace engine {
       ID
       mark_locked (ID typeKey, Buff* storage, LocalTag implMark)  override
         {
-          return stage_->mark_locked (typeKey, storage, implMark);
+          ID stateKey = stage_->mark_locked (typeKey, storage, implMark);
+          tracker_.record_locked (provider_.buildDescriptor(stateKey), stateKey, storage);
+          return stateKey;
         }
       
       ID
@@ -155,18 +192,13 @@ namespace engine {
         }
       
     public:
-      InstrumentedStageProxy (StageImp rawImpl, Tracker& tracker)
+      InstrumentedStageProxy (StageImp rawImpl, Tracker& tracker, DiagnosticBufferProvider& provider)
         : stage_{move(rawImpl)}
         , tracker_{tracker}
+        , provider_{provider}
         { }
     };
   
-  /* ====== Accounting  API ====== */
-  void
-  StateReg::record (BuffHandle const& handle)
-  {
-    reg_.emplace_back (std::make_shared<Block> (handle));
-  }
   
   
   DiagnosticBufferProvider::DiagnosticBufferProvider()
@@ -174,7 +206,7 @@ namespace engine {
     , heapStore_{dynamic_cast<HeapMemBufferStore&> (*bufferStore_)}   //////////////////////////////////////////TICKET 1410 : obsolete after switch to newtracking-API
     , tracker_{std::make_unique<BlockTracker>()}
     {
-      decorate<InstrumentedStageProxy> (bufferStage_, *tracker_);
+      decorate<InstrumentedStageProxy> (bufferStage_, *tracker_, *this);
     }
   
   DiagnosticBufferProvider::~DiagnosticBufferProvider()
