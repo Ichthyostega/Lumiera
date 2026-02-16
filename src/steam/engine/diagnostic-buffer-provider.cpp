@@ -13,9 +13,9 @@
 
 
 /** @file diagnostic-buffer-provider.cpp
- ** Implementation details of unit test support regarding internals of the render engine.
+ ** Implementation details for an instrumented BufferProvider to support
+ ** verifying render engine buffer allocation schemes through unit tests.
  ** 
- ** @todo WIP from 2013, half finished, stalled
  ** @see buffer-provider-protocol-test.cpp
  */
 
@@ -30,6 +30,7 @@
 #include "lib/util.hpp"
 
 #include <algorithm>
+#include <memory>
 
 
 namespace steam {
@@ -39,6 +40,7 @@ namespace engine {
   using util::unConst;
   using diagn::Block;
   using diagn::StateReg;
+  using std::unique_ptr;
   using std::ranges::find_if;
   
   
@@ -92,11 +94,78 @@ namespace engine {
   }
   
   
+  class DiagnosticBufferProvider::InstrumentedStageProxy
+    : public BufferProviderSetup::Stage
+    {
+      using StageImp = unique_ptr<BufferProvider::BufferStage>;
+      using Tracker  = DiagnosticBufferProvider::BlockTracker;
+      
+      StageImp stage_;
+      Tracker& tracker_;
+      
+      
+      /* === BufferStage proxy implementation === */
+
+      ID
+      lookup (HashVal key)  override
+        {
+          return stage_->lookup (key);
+        }
+      
+      bool
+      isAccessible (HashVal stateKey)  const override
+        {
+          return stage_->isAccessible (stateKey);
+        }
+      
+      ID
+      defineBufferType (size_t buffSiz, TypeHandler handlerFunctions)
+        {
+          return stage_->defineBufferType (buffSiz, move(handlerFunctions));
+        }
+      
+      ID
+      mark_locked (ID typeKey, Buff* storage, LocalTag implMark)  override
+        {
+          return stage_->mark_locked (typeKey, storage, implMark);
+        }
+      
+      ID
+      mark_emitted (HashVal stateKey)  override
+        {
+          return stage_->mark_emitted (stateKey);
+        }
+      
+      ID
+      mark_released (HashVal stateKey)  override
+        {
+          return stage_->mark_released (stateKey);
+        }
+      
+      ID
+      abandon (HashVal stateKey, bool invokeDtor)  override
+        {
+          return stage_->abandon (stateKey, invokeDtor);
+        }
+      
+      void
+      discard (HashVal stateKey)  override
+        {
+          stage_->discard (stateKey);
+        }
+      
+    public:
+      InstrumentedStageProxy (StageImp rawImpl, Tracker& tracker)
+        : stage_{move(rawImpl)}
+        , tracker_{tracker}
+        { }
+    };
+  
   /* ====== Accounting  API ====== */
   void
   StateReg::record (BuffHandle const& handle)
   {
-    
+    reg_.emplace_back (std::make_shared<Block> (handle));
   }
   
   
@@ -104,7 +173,9 @@ namespace engine {
     : NaiveBufferSetup{}
     , heapStore_{dynamic_cast<HeapMemBufferStore&> (*bufferStore_)}   //////////////////////////////////////////TICKET 1410 : obsolete after switch to newtracking-API
     , tracker_{std::make_unique<BlockTracker>()}
-    { }
+    {
+      decorate<InstrumentedStageProxy> (bufferStage_, *tracker_);
+    }
   
   DiagnosticBufferProvider::~DiagnosticBufferProvider()
     {
@@ -117,7 +188,7 @@ namespace engine {
     , emitted{dbp_.tracker_->emitted}
     , released{dbp_.tracker_->released}
     { }
- 
+  
   
   
   /* === diagnostic API === */

@@ -85,6 +85,7 @@ namespace engine {
     : public NaiveBufferSetup
     {
       HeapMemBufferStore& heapStore_;  //////////////////////////////OOO fällt dann weg nach dem Umbau
+      class InstrumentedStageProxy;
       struct BlockTracker;
       std::unique_ptr<BlockTracker> tracker_;
       

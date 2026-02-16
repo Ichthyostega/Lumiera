@@ -112046,12 +112046,12 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1770765035161" ID="ID_763895589" MODIFIED="1770765044567" TEXT="wie generisch wird das sein?">
 <icon BUILTIN="help"/>
-<node CREATED="1770765047151" ID="ID_1369329762" MODIFIED="1770765133094">
+<node CREATED="1770765047151" ID="ID_1369329762" MODIFIED="1771274464468">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
     <p>
-      <u><font color="#210aa6">Frage</font></u><font color="#210aa6">:</font>&#160;kann <font face="Monospaced" color="#5b3535">ProviderBufferProvider</font>&#160;einen <i>beliebigen</i>&#160; <font face="Monospaced" color="#5b3535">DiagnosticBuffer</font>&#160;instrumentieren?
+      <u><font color="#210aa6">Frage</font></u><font color="#210aa6">:</font>&#160;kann <font face="Monospaced" color="#5b3535">DiagnosticBufferProvider</font>&#160;einen <i>beliebigen</i>&#160; <font face="Monospaced" color="#5b3535">BufferProvider</font>&#160;instrumentieren?
     </p>
   </body>
 </html></richcontent>
@@ -112063,7 +112063,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1770765260219" ID="ID_901586804" MODIFIED="1770765300102" TEXT="&#x27f9; das bedeutet: das Ziel der Instrumentierung mu&#xdf; &#xbb;kanibalisiert&#xab; werden">
 <font NAME="SansSerif" SIZE="12"/>
 </node>
-<node CREATED="1770765321000" ID="ID_1181670397" MODIFIED="1770765383761">
+<node COLOR="#105e49" CREATED="1770765321000" ID="ID_1181670397" MODIFIED="1771274554883">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
@@ -112116,9 +112116,16 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1770765700160" ID="ID_1579675471" LINK="https://en.cppreference.com/w/cpp/language/access.html#Protected_member_access" MODIFIED="1770766571232" TEXT="Thema: Sichtbarkeit von protected elements">
 <arrowlink COLOR="#4f5d8f" DESTINATION="ID_1070045765" ENDARROW="Default" ENDINCLINATION="-1154;119;" ID="Arrow_ID_484648111" STARTARROW="None" STARTINCLINATION="-1340;84;"/>
 </node>
-<node CREATED="1770766854965" ID="ID_164565147" MODIFIED="1770766871197" TEXT="man mu&#xdf; einen unique_ptr eines Dekorators erzeugen k&#xf6;nnen"/>
-<node CREATED="1770766872225" ID="ID_1590901542" MODIFIED="1770766901998" TEXT="dieser Dekorator mu&#xdf; den urspr&#xfc;nglichen unique_ptr &#x201e;huckepack&#x201c; nehmen"/>
-<node CREATED="1770766910933" ID="ID_1255549720" MODIFIED="1770766930079" TEXT="damit kann sich eine abgeleitete Klasse in bestehende Chains &#xbb;einschleifen&#xab;"/>
+<node COLOR="#338800" CREATED="1770766854965" ID="ID_164565147" MODIFIED="1771276504239" TEXT="man mu&#xdf; einen unique_ptr eines Dekorators erzeugen k&#xf6;nnen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1770766872225" ID="ID_1590901542" MODIFIED="1771276650864" TEXT="dieser Dekorator mu&#xdf; den urspr&#xfc;nglichen unique_ptr &#x201e;huckepack&#x201c; nehmen">
+<arrowlink COLOR="#1334c3" DESTINATION="ID_1462598861" ENDARROW="Default" ENDINCLINATION="-63;-1181;" ID="Arrow_ID_169512531" STARTARROW="None" STARTINCLINATION="-588;23;"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1770766910933" ID="ID_1255549720" MODIFIED="1771276508584" TEXT="damit kann sich eine abgeleitete Klasse in bestehende Chains &#xbb;einschleifen&#xab;">
+<icon BUILTIN="idea"/>
+</node>
 </node>
 </node>
 </node>
@@ -112565,7 +112572,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node CREATED="1770868481915" ID="ID_1687235750" MODIFIED="1770868497045" TEXT="dieser Teil ist im Grunde banal: es ist ein dummer Allokator"/>
 <node CREATED="1770868498116" ID="ID_1625162119" MODIFIED="1770868508672" TEXT="die kritische Logik steckt in der Type-Registry"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1770868509834" ID="ID_1753146390" MODIFIED="1770868535191" TEXT="&#x27f9; auch die LIfecycle-Transitions m&#xfc;ssen dorthin umziehen"/>
+<node COLOR="#435e98" CREATED="1770868509834" ID="ID_1753146390" MODIFIED="1771273966571" TEXT="&#x27f9; auch die Lifecycle-Transitions m&#xfc;ssen dorthin umziehen"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1770917116413" ID="ID_40466555" MODIFIED="1770923603445" TEXT="Diagnosefunktionen">
@@ -112840,6 +112847,16 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1770950167400" ID="ID_1883755499" MODIFIED="1770950182484" TEXT="die Tracking-Funktion mu&#xdf; den Zustands&#xfc;bergang erkennen"/>
 <node CREATED="1770950209162" ID="ID_1174437807" MODIFIED="1770950232620" TEXT="und dann den Block aktualisieren und in die emitted/released-Registry &#xfc;bernehmen"/>
 </node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1771276599801" ID="ID_1205105935" MODIFIED="1771276627247" TEXT="Einschleifen der Instrumentierung">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1771276524376" ID="ID_1462598861" MODIFIED="1771276643962" TEXT="Instrumentierungs-Dekorator anlegen">
+<linktarget COLOR="#1334c3" DESTINATION="ID_1462598861" ENDARROW="Default" ENDINCLINATION="-63;-1181;" ID="Arrow_ID_169512531" SOURCE="ID_1590901542" STARTARROW="None" STARTINCLINATION="-588;23;"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1771276666297" ID="ID_80656960" MODIFIED="1771276686235" TEXT="mit dem nun angelegten API gen&#xfc;gt es, die BufferStage zu dekorieren">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -112896,16 +112913,13 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node CREATED="1771267839810" ID="ID_583729267" MODIFIED="1771267977789" TEXT="ich halte das f&#xfc;r &#xfc;bertrieben &#x2014; eingedenk der doch sehr limitierten Verwendung">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Angemessen w&#228;re so was, wenn wir hier &#252;ber einen generischen Memory-Allokator reden w&#252;rden, der &#252;berall in der Applikation zum Einsatz kommt. Siehe als Beispiel das lib::Several, dort habe ich so eine segmentierte Struktur gebaut, denn dort &#252;berwiegt m.E. der Nutzen so eines &#187;insider-APIs&#171;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -113135,22 +113149,17 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1771266770433" ID="ID_347345361" MODIFIED="1771266774908" TEXT="das Handle selber"/>
 <node CREATED="1771266775875" ID="ID_1781625402" MODIFIED="1771266906677" TEXT="niemand sonst kann das tun">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       BuffHandle hat keine Freunde ... das hei&#223;t, wenn man die release(handle) oder emegencyCleanup(handle) auf dem buffer-provider direkt aufruft, dann wird der Pointer im Handle <i>nicht invalidiert!</i>&#160;&#8212; das Handle ist aber danach trotzdem invalid und kann keine weitere State-transition mehr machen, weil der Entry aus den BufferMetada weggeworfen wurde.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1771266908318" ID="ID_19949747" MODIFIED="1771267284665" TEXT="das ist nicht sch&#xf6;n &#x2014; aber pa&#xdf;t ins Konzept">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Deshalb nenne ich es auch ein &#187;Protocol&#171; &#8212; wollten wir etwas wirklich <i>wasserdichtes,</i>&#160; dann m&#252;&#223;ten wir die Struktur ganz anders anlegen, und vermutlich auch deutlich rigider, und mehr interne Zugriffe verwenden.

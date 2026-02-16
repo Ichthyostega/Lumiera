@@ -83,6 +83,39 @@ namespace engine {
 
       
     protected:
+      /**
+       * Enable subclasses to layer a decorator on top of
+       * an already instantiated implementation object
+       * @tparam IMP concrete type of the implementation decorator; must be specified.
+       * @tparam API the API to decorate; the decorator IMP must implement this API
+       * @tparam ARGS (optionally) further constructor arguments for the decorator
+       * @param rawImp the `uniqe_ptr` with an already instantiated implementation of API
+       * @note the decorator subclass is assumed to incorporate an unique_ptr&&, holding
+       *       and managing the underlying implementation from that point on
+       * @warning the new decorator implementation is responsible for the overall sane state,
+       *       starting from that point when it picks up the given unique_ptr. An exception
+       *       emanating after that point will not leak memory, but destroy the original
+       *       implementation and thus leave the whole BufferProvider in undefined state.
+       */
+      template<class IMP, class API, typename...ARGS>
+      void
+      decorate (unique_ptr<API>& rawImp, ARGS&& ...furtherDecoratorArgs)
+        {
+          unique_ptr<API> underlying;
+          try {
+              REQUIRE (rawImp);
+              std::swap (rawImp, underlying);
+              ENSURE (not rawImp);
+              rawImp = make_unique<IMP> (move(underlying), forward<ARGS> (furtherDecoratorArgs)...);
+              ENSURE (rawImp);
+            }
+          catch (...)
+            {
+              REQUIRE (not rawImp);
+              REQUIRE (underlying);
+              std::swap (rawImp, underlying);
+            }
+        }
     };
   
   
