@@ -13,7 +13,16 @@
 
 
 /** @file buffer-provider.cpp
- ** Implementation details related to buffer lifecycle management in the render engine.
+ ** Implementation details related to buffer allocation and lifecycle management in the render engine.
+ ** This translation unit comprises the "back side" of the public front-end, where calls from the
+ ** client are received and relayed to the appropriate part of the implementation back-end.
+ ** Furthermore, some of the API functions on the [Buffer Descriptor](\ref BuffDescr) and the
+ ** [Buffer Handle](\ref BuffHandle) are also directly implemented here, by forwarding them
+ ** through the related implementation APIs. The actual backend implementation however is
+ ** split out and isolated by the internal interfaces BufferProvider::BufferStage (for the
+ ** state and lifecycle management) and BufferProvider::BufferStore (for memory handling).
+ ** 
+ ** The actual backend implementations to use are configured in subclasses.
  */
 
 
@@ -30,14 +39,9 @@ namespace engine {
   
   // storage for the default-marker constants
   const TypeHandler TypeHandler::RAW{};
-  const LocalTag LocalTag::UNKNOWN{};
+  const LocalTag  LocalTag::UNKNOWN{};
   const metadata::Key metadata::Key::INVALID{HashVal(0), size_t(0)};  //////OOO consider to relocate those marker constants to somewhere more obvious
   
-  namespace { // impl. details and definitions
-    
-    const uint DEFAULT_DESCRIPTOR = 0;
-    
-  }
   
   LUMIERA_ERROR_DEFINE (BUFFER_MANAGEMENT, "Problem providing working buffers");
   
@@ -170,7 +174,7 @@ namespace engine {
    * @note EX_FREE
    */
   void
-  BufferProvider::releaseBuffer (BuffHandle const& handle)
+  BufferProvider::releaseBuffer (BuffHandle& handle)
   try {                         // might invoke embedded dtor function
     auto& stateKey = bufferStage_->mark_released (handle);
     bufferStore_->detachBuffer (stateKey.storageSize(), stateKey.parentKey()
@@ -188,7 +192,7 @@ namespace engine {
    * @note EX_FREE
    */
   void
-  BufferProvider::emergencyCleanup (BuffHandle const& handle, bool invokeDtor)
+  BufferProvider::emergencyCleanup (BuffHandle& handle, bool invokeDtor)
   try {
     auto& stateKey = bufferStage_->abandon (handle, invokeDtor);
     bufferStore_->detachBuffer (stateKey.storageSize(), stateKey.parentKey()
@@ -199,17 +203,17 @@ namespace engine {
   
   
   
-  bool
-  BufferProvider::was_created_by_this_provider (BuffDescr const& descr)  const
-  {
-    return isSameAdr (this, descr.provider_);
-  }
-  
   
   
   
   
   /* === BuffDescr and BuffHandle === */
+  
+  bool
+  BufferProvider::was_created_by_this_provider (BuffDescr const& descr)  const
+  {
+    return isSameAdr (this, descr.provider_);
+  }
   
   /**
    * A Buffer Descriptor is considered _valid_

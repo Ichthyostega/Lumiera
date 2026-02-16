@@ -118,7 +118,7 @@ namespace engine {
   inline BufferDiagnostic
   watch (BufferProvider& thePro)
   {
-    return BufferDiagnostic{dynamic_cast<DiagnosticBufferProvider&> (thePro)};
+    return BufferDiagnostic{static_cast<DiagnosticBufferProvider&> (thePro)};
   }
   
   

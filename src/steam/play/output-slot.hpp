@@ -162,7 +162,7 @@ namespace play {
       
     public:
       BuffHandle lockBufferFor(FrameID);
-      void emit(FrameID, BuffHandle const&, TimeValue currentTime = Time::ANYTIME);
+      void emit(FrameID, BuffHandle&, TimeValue currentTime = Time::ANYTIME);
       
       
       friend bool operator== (DataSink const& sink1, DataSink const& sink2)

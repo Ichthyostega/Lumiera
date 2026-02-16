@@ -36,8 +36,15 @@
  ** configuration tag attached to the buffer access, allowing to re-access a context
  ** within the buffer provider implementation.
  ** 
- ** @todo 2/2026 This code has gotten overly tricky and driven by expected effect.
- **       It is mandatory to factor-out an interface!  //////////////////////////////////////////////////////TICKET #1410 : clean-up BufferProvider base implementation
+ ** @todo 2/2026 After refactoring the BufferProvider and splitting up the implementation
+ **       in two realms (state and storage), the purpose of this code her became much
+ **       clearer. The problem remains however, that the BufferMetadata directly links
+ **       to the one central metadata hashtable. We'll have to reconsider this aspect
+ **       once we have to build a metadata store that works well in a massively
+ **       concurrent environment, where requests for state transition emanate
+ **       any time form within all worker threads!
+ ** @todo 2/2026 Do we really have to _store_ the actual buffer address into the
+ **       metadata::Entry, as opposed to just using this information for hash computation?
  ** 
  ** @see buffer-provider.hpp
  ** @see BufferMetadata_test

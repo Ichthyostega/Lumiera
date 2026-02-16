@@ -93,9 +93,9 @@ namespace play {
       
       virtual BuffHandle claimBufferFor(FrameID)  =0;
       virtual bool isTimely (FrameID, TimeValue)  =0;
-      virtual void transfer (BuffHandle const&)   =0;
-      virtual void pushout  (BuffHandle const&)   =0;
-      virtual void discard  (BuffHandle const&)   =0;
+      virtual void transfer (BuffHandle &)        =0;
+      virtual void pushout  (BuffHandle &)        =0;
+      virtual void discard  (BuffHandle &)        =0;
       virtual void shutDown ()                    =0;
     };
   

@@ -68,9 +68,9 @@ namespace test {
     {
       BuffHandle claimBufferFor(FrameID) override { UNIMPLEMENTED ("claimBufferFor(FrameID)");      }
       bool isTimely (FrameID, TimeValue) override { return true;                                    }
-      void transfer (BuffHandle const&)  override { UNIMPLEMENTED ("transfer (BuffHandle const&)"); }
-      void pushout  (BuffHandle const&)  override { UNIMPLEMENTED ("pushout  (BuffHandle const&)"); }
-      void discard  (BuffHandle const&)  override { UNIMPLEMENTED ("discard  (BuffHandle const&)"); }
+      void transfer (BuffHandle &)       override { UNIMPLEMENTED ("transfer (BuffHandle const&)"); }
+      void pushout  (BuffHandle &)       override { UNIMPLEMENTED ("pushout  (BuffHandle const&)"); }
+      void discard  (BuffHandle &)       override { UNIMPLEMENTED ("discard  (BuffHandle const&)"); }
       void shutDown ()                   override { UNIMPLEMENTED ("shutDown() Connection");        }
       
     public:

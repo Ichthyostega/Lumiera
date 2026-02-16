@@ -99,7 +99,7 @@ namespace play {
   
   
   void
-  DataSink::emit (FrameID frameNr, BuffHandle const& data2emit, TimeValue currentTime)
+  DataSink::emit (FrameID frameNr, BuffHandle& data2emit, TimeValue currentTime)
   {
     OutputSlot::Connection& connection = impl();
     if (connection.isTimely(frameNr,currentTime))

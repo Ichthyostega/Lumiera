@@ -152,7 +152,7 @@ namespace play {
         }
       
       void
-      transfer (BuffHandle const& filledBuffer)
+      transfer (BuffHandle & filledBuffer)
         {
           TRACE (test, "Con=%p : transfer buffer %zu"
                      , this, HashVal(filledBuffer));
@@ -162,7 +162,7 @@ namespace play {
         }
       
       void
-      pushout (BuffHandle const& data4output)
+      pushout (BuffHandle & data4output)
         {
           REQUIRE (!closed_);
           buffProvider_.emitBuffer   (data4output);
@@ -170,7 +170,7 @@ namespace play {
         }
       
       void
-      discard (BuffHandle const& superseededData)
+      discard (BuffHandle & superseededData)
         {
           REQUIRE (!closed_);
           buffProvider_.releaseBuffer (superseededData);

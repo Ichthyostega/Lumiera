@@ -147,7 +147,6 @@ namespace engine {
           return  pBuffer_;
         }
       
-    private:
       void emergencyCleanup();
     };
   

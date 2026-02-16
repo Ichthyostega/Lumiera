@@ -112834,7 +112834,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1771032680433" ID="ID_49382511" MODIFIED="1771032697968" TEXT="und die Typ-Registrierung via Buffer-Descriptor"/>
 </node>
 </node>
-<node CREATED="1770950134226" ID="ID_210815021" MODIFIED="1770950145147" TEXT="mu&#xdf; die korrekte Tracker-Registry ansprechen">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1770950134226" ID="ID_210815021" MODIFIED="1771202650391" TEXT="mu&#xdf; die korrekte Tracker-Registry ansprechen">
+<icon BUILTIN="flag-pink"/>
 <node CREATED="1770950151506" ID="ID_1595932224" MODIFIED="1770950161653" TEXT="eigentlich immer zuerst die created-Registry"/>
 <node CREATED="1770950167400" ID="ID_1883755499" MODIFIED="1770950182484" TEXT="die Tracking-Funktion mu&#xdf; den Zustands&#xfc;bergang erkennen"/>
 <node CREATED="1770950209162" ID="ID_1174437807" MODIFIED="1770950232620" TEXT="und dann den Block aktualisieren und in die emitted/released-Registry &#xfc;bernehmen"/>
@@ -112870,6 +112871,43 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node COLOR="#338800" CREATED="1771188353739" ID="ID_809940304" MODIFIED="1771202629145" TEXT="die bool-Checks / Test-Pr&#xe4;dikate....">
 <arrowlink COLOR="#5f6c81" DESTINATION="ID_17538120" ENDARROW="Default" ENDINCLINATION="107;-147;" ID="Arrow_ID_196819766" STARTARROW="None" STARTINCLINATION="261;19;"/>
 <icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#5b280f" CREATED="1771267184811" ID="ID_693750944" MODIFIED="1771267514738" TEXT="man k&#xf6;nnte die API-Funktionen auf BufferProvider etwas restriktiver machen">
+<linktarget COLOR="#6d4975" DESTINATION="ID_693750944" ENDARROW="Default" ENDINCLINATION="-1078;42;" ID="Arrow_ID_480988688" SOURCE="ID_19949747" STARTARROW="None" STARTINCLINATION="-465;29;"/>
+<icon BUILTIN="help"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1771267312969" ID="ID_1046056200" MODIFIED="1771267341952" TEXT="emit(), release() und emergencyCleanup() k&#xf6;nnten nur noch f&#xfc;r friends zug&#xe4;nglich sein"/>
+<node CREATED="1771267347707" ID="ID_371233128" MODIFIED="1771267362974" TEXT="dann w&#xe4;re BuffHandle ein friend"/>
+<node CREATED="1771267368894" ID="ID_722396409" MODIFIED="1771267381129" TEXT="lie&#xdf;e sich auch auf lock() ausweiten">
+<node CREATED="1771267388082" ID="ID_1139758444" MODIFIED="1771267403040" TEXT="dann w&#xfc;rde auch BuffDescriptor ein friend"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1771267438063" ID="ID_228071001" MODIFIED="1771267459433" TEXT="Die Flexibilit&#xe4;t m&#xfc;&#xdf;te dann aber wegfallen">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1771267464709" ID="ID_889141096" MODIFIED="1771267476371" TEXT="bisher kann man einen Buffer direkt LOCKen"/>
+<node CREATED="1771267477309" ID="ID_544155148" MODIFIED="1771267496288" TEXT="k&#xfc;nftig m&#xfc;&#xdf;te man stets zuerst einen Buffer-Descriptor erstellen"/>
+</node>
+</node>
+<node COLOR="#5b280f" CREATED="1771267498644" ID="ID_246739333" MODIFIED="1771267511548" TEXT="Nein! ich bin dagegen....">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1771267518908" ID="ID_1568205940" MODIFIED="1771267530759" TEXT="denn dadurch wird das API nicht klarer"/>
+<node CREATED="1771267531787" ID="ID_254635901" MODIFIED="1771267552756" TEXT="sondern man braucht eine Bedienungsanleitung dazu"/>
+<node CREATED="1771267698117" ID="ID_109470235" MODIFIED="1771267707567" TEXT="besser w&#xfc;rde es mit einem separaten Callback-API">
+<node CREATED="1771267748278" ID="ID_150866207" MODIFIED="1771267764386" TEXT="das w&#xfc;rde nur die BuffDescr / BuffHandle-Implementierung sehen"/>
+<node CREATED="1771267790382" ID="ID_819177459" MODIFIED="1771267825431" TEXT="im Gegenzug m&#xfc;&#xdf;te man BuffDescr / BuffHandle direkt beim Front-end sichtbar machen"/>
+</node>
+<node CREATED="1771267839810" ID="ID_583729267" MODIFIED="1771267977789" TEXT="ich halte das f&#xfc;r &#xfc;bertrieben &#x2014; eingedenk der doch sehr limitierten Verwendung">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Angemessen w&#228;re so was, wenn wir hier &#252;ber einen generischen Memory-Allokator reden w&#252;rden, der &#252;berall in der Applikation zum Einsatz kommt. Siehe als Beispiel das lib::Several, dort habe ich so eine segmentierte Struktur gebaut, denn dort &#252;berwiegt m.E. der Nutzen so eines &#187;insider-APIs&#171;
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1771195835031" ID="ID_465237496" MODIFIED="1771195857844" TEXT="BufferProvider &#x27f6; in Vault umziehen">
 <icon BUILTIN="yes"/>
@@ -113092,12 +113130,40 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1771117541849" ID="ID_1494781008" MODIFIED="1771117561620" TEXT="KL&#xc4;REN: wer setzt den storage-ptr. im Handle auf NULL?">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1771117541849" ID="ID_1494781008" MODIFIED="1771267178579" TEXT="wer setzt den storage-ptr. im Handle auf NULL?">
 <icon BUILTIN="help"/>
+<node CREATED="1771266770433" ID="ID_347345361" MODIFIED="1771266774908" TEXT="das Handle selber"/>
+<node CREATED="1771266775875" ID="ID_1781625402" MODIFIED="1771266906677" TEXT="niemand sonst kann das tun">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      BuffHandle hat keine Freunde ... das hei&#223;t, wenn man die release(handle) oder emegencyCleanup(handle) auf dem buffer-provider direkt aufruft, dann wird der Pointer im Handle <i>nicht invalidiert!</i>&#160;&#8212; das Handle ist aber danach trotzdem invalid und kann keine weitere State-transition mehr machen, weil der Entry aus den BufferMetada weggeworfen wurde.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1771266908318" ID="ID_19949747" MODIFIED="1771267284665" TEXT="das ist nicht sch&#xf6;n &#x2014; aber pa&#xdf;t ins Konzept">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Deshalb nenne ich es auch ein &#187;Protocol&#171; &#8212; wollten wir etwas wirklich <i>wasserdichtes,</i>&#160; dann m&#252;&#223;ten wir die Struktur ganz anders anlegen, und vermutlich auch deutlich rigider, und mehr interne Zugriffe verwenden.
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#6d4975" DESTINATION="ID_693750944" ENDARROW="Default" ENDINCLINATION="-1078;42;" ID="Arrow_ID_480988688" STARTARROW="None" STARTINCLINATION="-465;29;"/>
+</node>
 </node>
 </node>
 <node CREATED="1771040196671" ID="ID_952067605" MODIFIED="1771040209557" TEXT="release(stateKey) verwirft diesen">
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1771116086464" ID="ID_1151511037" MODIFIED="1771116133806" TEXT="Problem mit Type-Mapping">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1771116086464" ID="ID_1151511037" MODIFIED="1771266757146" TEXT="Problem mit Type-Mapping">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1771116137414" ID="ID_13506948" MODIFIED="1771116158973" TEXT="entweder zus&#xe4;tzlicher Hashtable-Lookup"/>
 <node CREATED="1771116160984" ID="ID_1585303726" MODIFIED="1771116180128" TEXT="oder aber Verzicht auf Santiy-Check"/>
@@ -113307,7 +113373,17 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node CREATED="1771174242074" ID="ID_926200360" MODIFIED="1771174255852" TEXT="man k&#xf6;nnte das separate release() durch ein Lambda los werden"/>
+<node COLOR="#5b280f" CREATED="1771174242074" ID="ID_926200360" MODIFIED="1771266319798" TEXT="man k&#xf6;nnte das separate release() durch ein Lambda los werden">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1771264739102" ID="ID_1851042941" MODIFIED="1771264745752" TEXT="geht leider nicht"/>
+<node CREATED="1771264746791" ID="ID_465393386" MODIFIED="1771264760004" TEXT="da liegt ein Interface (VTable) dazwischen"/>
+<node CREATED="1771264797285" ID="ID_836823668" MODIFIED="1771264859535" TEXT="das m&#xfc;&#xdf;te dann eine std::function akzeptieren">
+<icon BUILTIN="smiley-oh"/>
+</node>
+<node CREATED="1771264832993" ID="ID_579998808" MODIFIED="1771264854809" TEXT="und diese bindet mehrere Argumente &#x27f9; Heap storage">
+<icon BUILTIN="smily_bad"/>
+</node>
+</node>
 <node COLOR="#338800" CREATED="1771187666261" ID="ID_200153250" MODIFIED="1771201072828" TEXT="die Validit&#xe4;ts-Checks nun konsistent gemacht">
 <arrowlink COLOR="#39bef0" DESTINATION="ID_17538120" ENDARROW="Default" ENDINCLINATION="-605;990;" ID="Arrow_ID_600202029" STARTARROW="None" STARTINCLINATION="-326;19;"/>
 <icon BUILTIN="button_ok"/>

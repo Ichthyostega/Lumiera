@@ -88,6 +88,18 @@
  ** implementation; when used from the actual [Render Environment](\ref render-environment.hpp),
  ** this will be backed by a production-strenght and concurrency-safe implementation.
  ** 
+ ** \par Design critique
+ ** In its current shape, BufferProvider is both a rather large front-end facade,
+ ** while also containing some »code behind« to translate the API invocations into
+ ** implementation calls. Furthermore, it exposes functions that can both be used
+ ** directly, but are also used by the two handle types. And, last but not least,
+ ** proper usage requires to stick to a _Protocol_ that is not immediately obvious
+ ** from the API alone. It would be conceivable to factor-out a technical or access
+ ** API, and to expose only the handles and a simple factory function to the user.
+ ** Yet given the very limited actual usage situation within the engine, and the
+ ** highly complex setup for the production-grade implementation variant, attempts
+ ** towards such a refactoring were postponed, after re-evaluation 2/2026.
+ ** 
  ** @see buffer-provider-protocol-test.cpp
  ** @see output-slot.hpp
  ** @see engine-ctx.hpp
@@ -137,33 +149,12 @@ namespace engine {
    * - "locking" a buffer to yield a buffer handle
    * - then dereferencing the obtained smart-handle
    * 
-   * @warning all of BufferProvider is assumed to run within a threadsafe environment.
-   * 
-   * @todo as of 6/2011 buffer management within the engine is still a bit vague
    * @todo as of 11/11 thread safety within the engine remains to be clarified   ////////////////////////////TICKET #854
    */
   class BufferProvider
     : util::NonCopyable
     {
-    protected: /* === for Implementation by concrete providers === */
-      
-      
     public:
-      virtual ~BufferProvider();  ///< this is an ABC
-      
-      
-      uint announce (uint count, BuffDescr const&);
-      
-      BuffHandle lockBuffer (BuffDescr  const&);
-      void       emitBuffer (BuffHandle const&);
-      void    releaseBuffer (BuffHandle const&);
-      
-      template<typename BU, typename...ARGS>
-      BuffHandle lockBufferFor (ARGS ...args);
-      
-      void emergencyCleanup (BuffHandle const& target, bool invokeDtor =false);
-      
-      
       /** describe the kind of buffer managed by this provider */
       BuffDescr getDescriptorFor(size_t storageSize=0);
       BuffDescr getDescriptorFor(size_t storageSize, TypeHandler specialTreatment);
@@ -171,6 +162,16 @@ namespace engine {
       template<typename BU, typename...ARGS>
       BuffDescr getDescriptor (ARGS ...args);
       
+      /** give advance notice of the intention to request some buffers */
+      uint announce (uint count, BuffDescr const&);
+      
+      /** claim storage for exclusive use, based on a descriptor */
+      BuffHandle lockBuffer (BuffDescr  const&);
+      
+      /** directly claim storage and construct an object,
+       *  without preparing a descriptor beforehand */
+      template<typename BU, typename...ARGS>
+      BuffHandle lockBufferFor (ARGS ...args);
       
       
       /* === API for BuffHandle internal access === */
@@ -179,7 +180,14 @@ namespace engine {
       bool isAccessible    (HashVal) const;
       size_t getBufferSize (HashVal) const;
       
+      void       emitBuffer (BuffHandle const&);
+      void    releaseBuffer (BuffHandle &);
+      void emergencyCleanup (BuffHandle&, bool invokeDtor =false);
+      
+      
     protected:
+     ~BufferProvider();
+     
       bool was_created_by_this_provider (BuffDescr const&)  const;
       
       using Buff = StreamType::ImplFacade::DataBuffer;  ///< marker type for an actual data buffer
@@ -218,7 +226,7 @@ namespace engine {
           virtual void detachBuffer (size_t,HashVal, Slot alloc)        =0;
         };
       
-      unique_ptr<BufferStage> bufferStage_;       ///////////////////////////////////////////////////////////TICKET #1410 : must be turned into an internal interface
+      unique_ptr<BufferStage> bufferStage_;
       unique_ptr<BufferStore> bufferStore_;
     };
   
