@@ -25,7 +25,6 @@
 
 
 #include "lib/error.hpp"
-//#include "lib/hash-value.h"
 #include "steam/engine/buffer-provider-setup.hpp"
 #include "steam/engine/buffer-metadata.hpp"
 
@@ -38,8 +37,6 @@ namespace engine {
   namespace error = lumiera::error;
   
   using metadata::Buff;
-//  using std::unique_ptr;
-//  using lib::HashVal;
   
   
   /**
@@ -49,39 +46,39 @@ namespace engine {
   class SimpleBufferStateRegistry
     : public BufferProviderSetup::Stage
     {
-      ///////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 1410 : rather hold BufferMetatdata object here
+      BufferMetadata metadata_;
 
       /* === BufferStage interface === */
 
       ID
       lookup (HashVal key)  override
         {
-          return this->isKnown(key)? this->get (key)
-                                   : metadata::Key::INVALID;
+          return metadata_.isKnown(key)? metadata_.get (key)
+                                       : metadata::Key::INVALID;
         }
       
       bool
-      isUsageAllowed (HashVal stateKey)  const override
+      isAccessible (HashVal stateKey)  const override
         {
-          return this->isAccessible (stateKey);
+          return metadata_.isAccessible (stateKey);
         }
       
       ID
       defineBufferType (size_t buffSiz, TypeHandler handlerFunctions)
         {
-          return lookup (this->key (buffSiz, move (handlerFunctions)));
+          return lookup (metadata_.key (buffSiz, move (handlerFunctions)));
         }     // deliberately: create storage, and return reference to it
       
       ID
       mark_locked (ID typeKey, Buff* storage, LocalTag implMark)  override
         {
-          return this->markLocked (typeKey, storage, implMark);
+          return metadata_.markLocked (typeKey, storage, implMark);
         }
       
       ID
       mark_emitted (HashVal stateKey)  override
         {
-          metadata::Entry& metaEntry = this->get (stateKey);
+          metadata::Entry& metaEntry = metadata_.get (stateKey);
           metaEntry.mark(EMITTED);
           return metaEntry;   // contains also the key
         }
@@ -89,7 +86,7 @@ namespace engine {
       ID
       mark_released (HashVal stateKey)  override
         {
-          metadata::Entry& metaEntry = this->get (stateKey);
+          metadata::Entry& metaEntry = metadata_.get (stateKey);
           metaEntry.mark(FREE);   // might invoke embedded dtor function
           return metaEntry;
         }
@@ -97,7 +94,7 @@ namespace engine {
       ID
       abandon (HashVal stateKey, bool invokeDtor)  override
         {
-          metadata::Entry& metaEntry = this->get (stateKey);
+          metadata::Entry& metaEntry = metadata_.get (stateKey);
           metaEntry.invalidate (invokeDtor);
           return metaEntry;
         }
@@ -105,13 +102,13 @@ namespace engine {
       void
       discard (HashVal stateKey)  override
         {
-          this->release (stateKey);
+          metadata_.release (stateKey);
         }
       
       
     public:
       SimpleBufferStateRegistry (Literal implementationID)
-        : BufferProviderSetup::Stage{implementationID}     //////////////////////////////////////////////////TICKET 1410 : rather init BufferMetatdata
+        : metadata_{implementationID}
         { }
       
     private:

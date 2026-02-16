@@ -60,7 +60,7 @@ namespace engine {
         { }
         
         auto buildStage() { return std::make_unique<SimpleBufferStateRegistry> ("Naive_HeapAllocated"); }
-        auto buildStore() { return std::make_unique<HeapMemBufferStore>(); }   /////////////////////////////////TICKET #1410 : turn into a subclass of BufferSetup::Store and push down implementation
+        auto buildStore() { return std::make_unique<HeapMemBufferStore>(); }
     };
   
   

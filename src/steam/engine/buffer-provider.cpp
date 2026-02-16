@@ -29,9 +29,11 @@
 #include "lib/error.hpp"
 #include "steam/engine/buffer-provider.hpp"
 #include "steam/engine/buffer-metadata.hpp"  /////////////////////////OOO must be removed from here
-#include "steam/engine/simple-buffer-state-registry.hpp" /////////////OOO better use constexpr for hash-chaining?
 #include "lib/util.hpp"
 
+#include <utility>
+
+using std::move;
 using util::isSameAdr;
 
 namespace steam {
@@ -63,7 +65,7 @@ namespace engine {
   bool
   BufferProvider::isAccessible (HashVal id)  const
   {
-    return bufferStage_->isUsageAllowed (id);
+    return bufferStage_->isAccessible (id);
   }
   
   size_t

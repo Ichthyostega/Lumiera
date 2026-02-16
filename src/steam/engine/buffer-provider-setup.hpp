@@ -38,6 +38,7 @@ namespace engine {
   
   using lib::Literal;
   using std::unique_ptr;
+  using std::make_unique;
 //  using std::forward;
   using std::move;
   
@@ -68,19 +69,17 @@ namespace engine {
           bufferStage_ = move (confRec.buildStage());
           bufferStore_ = move (confRec.buildStore());
         }
-
+      
+      
+      /* ======== Extension points ======== */
+      
       class Stage
         : public BufferStage
-        {
-        public:
-          using BufferStage::BufferStage;         ///////////////////////////////////////////////////////////TICKET #1410 : actual implementation structures should move down into this classes implementation
-          
-        };
-
+        { };
+      
       class Store
         : public BufferStore
-        {
-        };
+        { };
 
       
     protected:

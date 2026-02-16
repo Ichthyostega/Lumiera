@@ -118,7 +118,6 @@
 #include "steam/engine/buffhandle.hpp"
 #include "steam/engine/type-handler.hpp"
 #include "steam/engine/buffer-local-tag.hpp"
-#include "steam/engine/buffer-metadata.hpp"  /////////////////////////OOO must be removed from here
 #include "lib/nocopy.hpp"
 
 #include <utility>
@@ -194,13 +193,12 @@ namespace engine {
       
       
       class BufferStage
-        : public BufferMetadata         /////////////////////////////////////////////////////////////////////TICKET #1410 : mix-in exiting old implementation -- for sake of refactoring only!
+        : util::NonCopyable
         {
         protected:
           using ID = metadata::Key const&;
         public:
           virtual ~BufferStage() { } ///< this is an interface
-          using BufferMetadata::BufferMetadata;   ///////////////////////////////////////////////////////////TICKET #1410 : actual implementation structures should move down into this classes implementation
           
           virtual ID defineBufferType (size_t, TypeHandler)    =0;
           virtual ID lookup (HashVal)                          =0;
@@ -209,7 +207,7 @@ namespace engine {
           virtual ID mark_released (HashVal stateKey)          =0;
           virtual ID abandon (HashVal, bool destroy=false)     =0;
           virtual void discard (HashVal stateKey)              =0;
-          virtual bool isUsageAllowed (HashVal stateKey) const =0;
+          virtual bool isAccessible (HashVal stateKey) const   =0;
         };
       
       class BufferStore
