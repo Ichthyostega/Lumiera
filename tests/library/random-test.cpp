@@ -96,7 +96,7 @@ namespace test {
       
       
       /** @test demonstrate that random number sequences can be reproduced
-       *      - use a rigged SeedNucleus, always returning a fixed sees
+       *      - use a rigged SeedNucleus, always returning a fixed seed
        *      - build two distinct random sequence generators, yet seeded
        *        from the same source; they will produce the same sequence
        *      - sequences can be re-shuffled by a seed value, so that

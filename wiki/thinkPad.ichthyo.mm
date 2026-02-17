@@ -112019,22 +112019,22 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1770762458610" ID="ID_875010759" MODIFIED="1770762816021" TEXT="DiagnosticBufferProvider anpassen">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1770762458610" ID="ID_875010759" MODIFIED="1771368302291" TEXT="DiagnosticBufferProvider anpassen">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1770762470929" ID="ID_424124774" MODIFIED="1770762479035" TEXT="das bleibt definitiv ein BufferProvider"/>
 <node CREATED="1770762480074" ID="ID_491907312" MODIFIED="1770762498009" TEXT="&#x27f9; mu&#xdf; nun von BufferProviderSetup erben"/>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1770762499600" ID="ID_578552888" MODIFIED="1770762808614" TEXT="wird sich dann aber in die Implementierungen einschleifen">
+<node COLOR="#435e98" CREATED="1770762499600" ID="ID_578552888" MODIFIED="1771368322955" TEXT="soll sich dann aber in die Implementierungen einschleifen">
 <icon BUILTIN="yes"/>
-<icon BUILTIN="hourglass"/>
-<node CREATED="1770762537848" ID="ID_744233976" MODIFIED="1770762552653" TEXT="zun&#xe4;chst noch delegiert er direkt an HeapMemBufferStore">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1770762537848" ID="ID_744233976" MODIFIED="1771368348692" TEXT="zun&#xe4;chst noch delegiert er direkt an HeapMemBufferStore">
+<icon BUILTIN="flag-yellow"/>
 <node CREATED="1770762554389" ID="ID_1159011250" MODIFIED="1770762561380" TEXT="das war ja fr&#xfc;her mal ein BufferProvider"/>
 <node CREATED="1770762562345" ID="ID_1608322135" MODIFIED="1770762574873" TEXT="und hat ein (ungeschickt) verbreitertes API"/>
 <node CREATED="1770762576523" ID="ID_100975131" MODIFIED="1770766811720" TEXT="hatte aber Gl&#xfc;ck im Ungl&#xfc;ck">
 <arrowlink COLOR="#feeace" DESTINATION="ID_1432411040" ENDARROW="Default" ENDINCLINATION="-12;81;" ID="Arrow_ID_76937966" STARTARROW="None" STARTINCLINATION="-199;19;"/>
 </node>
 </node>
-<node CREATED="1770762675673" ID="ID_246224479" MODIFIED="1770762789759" TEXT="soll dann aber im n&#xe4;chsten Schritt das Tracking selber implementieren">
-<icon BUILTIN="hourglass"/>
+<node COLOR="#338800" CREATED="1770762675673" ID="ID_246224479" MODIFIED="1771368336879" TEXT="soll dann aber im n&#xe4;chsten Schritt das Tracking selber implementieren">
+<icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1770762688231" ID="ID_1626867644" MODIFIED="1770762782204" TEXT="und wird sich daf&#xfc;r vstl. Dekoratoren &#xfc;ber die Implementierungs-Klassen legen">
 <richcontent TYPE="NOTE"><html>
@@ -112135,9 +112135,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1770771357183" ID="ID_1793741597" MODIFIED="1771335733911" TEXT="DiagnosticBufferProviderTest anpassen">
+<node COLOR="#338800" CREATED="1770771357183" ID="ID_1793741597" MODIFIED="1771368271862" TEXT="DiagnosticBufferProviderTest anpassen">
 <linktarget COLOR="#445360" DESTINATION="ID_1793741597" ENDARROW="Default" ENDINCLINATION="-253;1171;" ID="Arrow_ID_389390476" SOURCE="ID_832109359" STARTARROW="Default" STARTINCLINATION="512;-1514;"/>
-<icon BUILTIN="flag-pink"/>
+<icon BUILTIN="button_ok"/>
 <node COLOR="#d70247" CREATED="1770771371541" ID="ID_318424657" MODIFIED="1770771443467" TEXT="der hat bisher gar nicht auf dem DiagnosticBufferProvider gearbeitet">
 <icon BUILTIN="broken-line"/>
 </node>
@@ -112159,15 +112159,95 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <linktarget COLOR="#00ce05" DESTINATION="ID_1760377258" ENDARROW="Default" ENDINCLINATION="422;359;" ID="Arrow_ID_1963224116" SOURCE="ID_92329444" STARTARROW="None" STARTINCLINATION="1800;235;"/>
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1771354592102" ID="ID_157531527" MODIFIED="1771354606424" TEXT="Diagnose findet nicht den korrekten Inhalt im Buffer">
+<node COLOR="#435e98" CREATED="1771354592102" FOLDED="true" ID="ID_157531527" MODIFIED="1771359138253" TEXT="Diagnose findet nicht den korrekten Inhalt im Buffer">
 <icon BUILTIN="broken-line"/>
-<node CREATED="1771354620091" ID="ID_789673449" MODIFIED="1771354625918" TEXT="in verifyStandardCase()">
-<node CREATED="1771354633241" ID="ID_1686053511" MODIFIED="1771354683348" TEXT="legt Zufallszahl in einen lokal gehaltenen Vector">
-<icon BUILTIN="info"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1771354620091" ID="ID_789673449" MODIFIED="1771359068230" TEXT="in verifyStandardCase()">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Zufallszahlen in lokal gehaltenem Vektor; m&#252;&#223;ten dann auch im Speicherblock zu finden sein...
+    </p>
+  </body>
+</html>
+</richcontent>
 </node>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1771354649063" ID="ID_1577643970" MODIFIED="1771354680515" TEXT="diese Zufallszahl m&#xfc;&#xdf;te dann im referenzierten Speicherblock zu finden sein">
-<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#ae099e" CREATED="1771359078135" ID="ID_325360151" MODIFIED="1771359118319" TEXT="sind sie auch ... wenn man nicht immer Index &#x2261; 0 anschaut">
+<icon BUILTIN="smiley-oh"/>
 </node>
+</node>
+<node COLOR="#338800" CREATED="1771360379259" ID="ID_1462216817" MODIFIED="1771368274476" TEXT="jetzt noch den letzten Testfall sinngem&#xe4;&#xdf; modernisieren">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#5b280f" CREATED="1771360399235" ID="ID_698277565" MODIFIED="1771360486104" TEXT="sollte nicht mehr von einem &#xbb;Test Protocol&#xab; reden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das zeigt n&#228;mlich gut die Stelle, an der ich in die Falle gefallen bin; stattessen haben wir nun (hoffentlich) <i>deklarative </i>Diagnose-Funktionen
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="stop-sign"/>
+</node>
+<node CREATED="1771360487997" ID="ID_1884248019" MODIFIED="1771360491577" TEXT="Namens-Suche">
+<node BACKGROUND_COLOR="#accdc3" COLOR="#3f4015" CREATED="1771360492740" ID="ID_1633010475" MODIFIED="1771360519425" STYLE="fork" TEXT="ChatGPT gefragt">
+<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
+<icon BUILTIN="wizard"/>
+<node CREATED="1771360526775" ID="ID_628448850" MODIFIED="1771360531180" TEXT="diagnosticDevice"/>
+<node CREATED="1771360532552" ID="ID_332102290" MODIFIED="1771360540449" TEXT="diagnosticAccess"/>
+<node CREATED="1771360573031" ID="ID_1204505149" MODIFIED="1771360582680" TEXT=".... diverse Variationen mit *test*"/>
+<node CREATED="1771360584343" ID="ID_512266484" MODIFIED="1771360589747" TEXT="diagnostics"/>
+<node CREATED="1771360600982" ID="ID_1325259312" MODIFIED="1771360622888" TEXT="soweit alles genau das auf was ich auch gekommen w&#xe4;re">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1771360590747" ID="ID_1532058073" MODIFIED="1771360596087" TEXT="inspector">
+<icon BUILTIN="forward"/>
+</node>
+</node>
+<node CREATED="1771360628879" ID="ID_1525691266" MODIFIED="1771360634274" TEXT="spreche nun von....">
+<node CREATED="1771360635541" ID="ID_161220145" MODIFIED="1771360644073" TEXT="&#xbb;Introspection&#xab;"/>
+<node BACKGROUND_COLOR="#eccda7" CREATED="1771360645205" ID="ID_651488390" MODIFIED="1771360750193" STYLE="bubble">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      benenne die Variable verbal:&#160;
+    </p>
+    <p>
+      <font color="#4a1a65" face="Bitstream Vera Sans Mono" size="9pt"><b>auto</b></font><font color="#3a1f18" face="Bitstream Vera Sans Mono" size="9pt">&#160;</font><font color="#814422" face="Bitstream Vera Sans Mono" size="9pt">inspect</font><font color="#3a1f18" face="Bitstream Vera Sans Mono" size="9pt">&#160;</font><font color="#65533c" face="Bitstream Vera Sans Mono" size="9pt">=</font><font color="#3a1f18" face="Bitstream Vera Sans Mono" size="9pt">&#160;</font><font color="#000000" face="Bitstream Vera Sans Mono" size="9pt">watch</font><font color="#11123a" face="Bitstream Vera Sans Mono" size="9pt">(</font><font color="#b45858" face="Bitstream Vera Sans Mono" size="9pt"><b>provider</b></font><font color="#11123a" face="Bitstream Vera Sans Mono" size="9pt">)</font><font color="#65533c" face="Bitstream Vera Sans Mono" size="9pt">;</font>
+    </p>
+  </body>
+</html>
+</richcontent>
+<edge COLOR="#201ccb"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1771360758940" ID="ID_318818630" MODIFIED="1771368280809">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      au&#223;erdem: <b>TestFrame</b>&#160;kann inzwischen viel mehr ....
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+<node CREATED="1771360784807" ID="ID_1657955100" MODIFIED="1771360797070" TEXT="sollte einen deutlich gr&#xf6;&#xdf;eren Buffer nehmen"/>
+<node CREATED="1771360798301" ID="ID_735423157" MODIFIED="1771360810709" TEXT="sollte aber dann einen TestFrame einpflanzen"/>
+<node CREATED="1771360812417" ID="ID_1616989213" MODIFIED="1771360825356" TEXT="(dieses mal ohne ihn als Typ zu deklarieren)"/>
 </node>
 </node>
 </node>
@@ -112585,7 +112665,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1770590107914" ID="ID_1076311206" MODIFIED="1770868047833" TEXT="daf&#xfc;r die Implementierung aufdoppeln">
 <icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1770868050721" ID="ID_284746248" MODIFIED="1770868068498" TEXT="Problem: ich will den sch&#xf6;nen Namen diagn::Block">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1770868050721" ID="ID_284746248" MODIFIED="1771368369369" TEXT="Problem: ich will den sch&#xf6;nen Namen diagn::Block">
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1770868073742" ID="ID_551184019" MODIFIED="1770868235638" TEXT="Leider h&#xe4;ngt jetzt die Implementierung vom HeapMemProvider praktisch in der Luft">
@@ -112707,15 +112787,23 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="idea"/>
 <node CREATED="1770923400575" ID="ID_1931478017" MODIFIED="1770923481144" TEXT="wirft bei out-of-bounds"/>
 <node CREATED="1770923418466" ID="ID_1875722112" MODIFIED="1770923481144" TEXT="wirft bei nicht gefundenem Hash"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1771368433367" ID="ID_1134908661" MODIFIED="1771368458685" TEXT="unsch&#xf6;n dabei: man kann nicht direkt auf das Resultat als Buffer-Objekt zugreifen">
+<icon BUILTIN="messagebox_warning"/>
+</node>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1770923537976" ID="ID_377154413" MODIFIED="1770923576533" TEXT="BlockTracker: pImpl f&#xfc;r die Registries">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1770923506886" ID="ID_1357520947" MODIFIED="1770923513693" TEXT="drei Registries bieten">
-<node CREATED="1770923514549" ID="ID_1515553777" MODIFIED="1770923517021" TEXT="created"/>
-<node CREATED="1770923518029" ID="ID_1772560536" MODIFIED="1770923520830" TEXT="emitted"/>
-<node CREATED="1770923523535" ID="ID_1351841539" MODIFIED="1770923526850" TEXT="released"/>
+<node COLOR="#338800" CREATED="1770923506886" ID="ID_1357520947" MODIFIED="1771368465149" TEXT="drei Registries bieten">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1770923514549" ID="ID_1515553777" MODIFIED="1771368469387" TEXT="created"/>
+<node COLOR="#435e98" CREATED="1770923518029" ID="ID_1772560536" MODIFIED="1771368469408" TEXT="emitted"/>
+<node COLOR="#435e98" CREATED="1770923523535" ID="ID_1351841539" MODIFIED="1771368469408" TEXT="released"/>
+</node>
+<node COLOR="#435e98" CREATED="1771368492616" ID="ID_962912472" MODIFIED="1771368550973" TEXT="darauf aufsetzend: weitere Such/Auswertungsfunktionen...">
+<arrowlink COLOR="#3b82d5" DESTINATION="ID_1738368338" ENDARROW="Default" ENDINCLINATION="-686;-15;" ID="Arrow_ID_141211857" STARTARROW="None" STARTINCLINATION="57;507;"/>
+<icon BUILTIN="yes"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1770917107132" ID="ID_1518034296" MODIFIED="1770923603446" TEXT="Tracking">
@@ -112894,11 +112982,11 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1771276599801" ID="ID_1205105935" MODIFIED="1771276627247" TEXT="Einschleifen der Instrumentierung">
-<icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1771276524376" ID="ID_1462598861" MODIFIED="1771276643962" TEXT="Instrumentierungs-Dekorator anlegen">
+<node COLOR="#338800" CREATED="1771276599801" ID="ID_1205105935" MODIFIED="1771368755354" TEXT="Einschleifen der Instrumentierung">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1771276524376" ID="ID_1462598861" MODIFIED="1771368696992" TEXT="Instrumentierungs-Dekorator anlegen">
 <linktarget COLOR="#1334c3" DESTINATION="ID_1462598861" ENDARROW="Default" ENDINCLINATION="-63;-1181;" ID="Arrow_ID_169512531" SOURCE="ID_1590901542" STARTARROW="None" STARTINCLINATION="-588;23;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1771276666297" ID="ID_80656960" MODIFIED="1771276686235" TEXT="mit dem nun angelegten API gen&#xfc;gt es, die BufferStage zu dekorieren">
 <icon BUILTIN="idea"/>
 </node>
@@ -112919,7 +113007,11 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="help"/>
 </node>
 </node>
-<node CREATED="1771282534052" ID="ID_1418547018" MODIFIED="1771282553829" TEXT="es gibt eigentlich nur eine Konstruktor-Funktion: beim Locking"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1771282534052" ID="ID_1418547018" MODIFIED="1771368702646" TEXT="es gibt eigentlich nur eine Konstruktor-Funktion: beim Locking">
+<icon BUILTIN="idea"/>
+<node COLOR="#435e98" CREATED="1771368709906" ID="ID_1314516535" MODIFIED="1771368750546" TEXT="die weiteren Schritte kopieren einfach den Block als Ganzes"/>
+<node COLOR="#435e98" CREATED="1771368729065" ID="ID_1249000123" MODIFIED="1771368750546" TEXT="Status ergibt sich dabei ja einfach aus der Registry, in der er liegt"/>
+</node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1771282627528" ID="ID_1818084511" MODIFIED="1771288198657" TEXT="Sichtbarkeits-Problem: nur BufferProvider kann einen BuffDescr erzeugen">
 <linktarget COLOR="#8f3733" DESTINATION="ID_1818084511" ENDARROW="Default" ENDINCLINATION="113;-5;" ID="Arrow_ID_563529884" SOURCE="ID_1137207493" STARTARROW="None" STARTINCLINATION="-19;22;"/>
 <icon BUILTIN="messagebox_warning"/>
@@ -112977,9 +113069,10 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <font NAME="SansSerif" SIZE="15"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1771354374515" ID="ID_1321428037" MODIFIED="1771354395410" TEXT="kann nun wichtigste Diagnose-Pr&#xe4;dikate implementieren">
-<icon BUILTIN="pencil"/>
-<node CREATED="1771354409079" ID="ID_1738368338" MODIFIED="1771354457778" TEXT="als &#xbb;thin layer&#xab; &#xfc;ber den neuen Daten-Records">
+<node COLOR="#338800" CREATED="1771354374515" ID="ID_1321428037" MODIFIED="1771368762431" TEXT="kann nun wichtigste Diagnose-Pr&#xe4;dikate implementieren">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1771354409079" ID="ID_1738368338" MODIFIED="1771368550973" TEXT="als &#xbb;thin layer&#xab; &#xfc;ber den neuen Daten-Records">
+<linktarget COLOR="#3b82d5" DESTINATION="ID_1738368338" ENDARROW="Default" ENDINCLINATION="-686;-15;" ID="Arrow_ID_141211857" SOURCE="ID_962912472" STARTARROW="None" STARTINCLINATION="57;507;"/>
 <icon BUILTIN="idea"/>
 <node COLOR="#435e98" CREATED="1771354438502" ID="ID_968197209" MODIFIED="1771354452311" TEXT="diagn::Block"/>
 <node COLOR="#435e98" CREATED="1771354442770" ID="ID_27714735" MODIFIED="1771354452312" TEXT="diagn::StateReg"/>

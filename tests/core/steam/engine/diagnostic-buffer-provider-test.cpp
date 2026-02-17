@@ -20,8 +20,10 @@
 #include "lib/test/run.hpp"
 #include "steam/engine/diagnostic-buffer-provider.hpp"
 #include "steam/engine/testframe.hpp"
-#include "lib/test/diagnostic-output.hpp"//////////////////TODO
+#include "lib/util.hpp"
 
+#include <algorithm>
+#include <cstddef>
 #include <vector>
 
 
@@ -29,13 +31,13 @@ namespace steam {
 namespace engine{
 namespace test  {
   
+  using util::isSameAdr;
+  using util::isSameObject;
   
   namespace { // Test fixture
     
-    const size_t TEST_ELM_SIZE = sizeof(uint);
-    const uint   MAX_ELMS = 50;
-    
-    std::vector<uint> testNumbers(MAX_ELMS);
+    const uint   NUM_ELMS = 50;
+    std::vector<uint> testNumbers(NUM_ELMS);
   }
   
   
@@ -55,7 +57,7 @@ namespace test  {
           
           simpleExample();
           verifyStandardCase();
-          verifyTestProtocol();
+          verifyIntrospection();
         }
       
       
@@ -88,10 +90,10 @@ namespace test  {
         {
           DiagnosticBufferProvider provider;
           
-          BuffDescr buffType = provider.getDescriptorFor(TEST_ELM_SIZE);
-          uint numElms = provider.announce(MAX_ELMS, buffType);
+          BuffDescr buffType = provider.getDescriptorFor(sizeof(int));
+          uint numElms = provider.announce(NUM_ELMS, buffType);
           CHECK (0 < numElms);
-          CHECK (numElms <= MAX_ELMS);
+          CHECK (numElms <= NUM_ELMS);
           
           for (uint i=0; i<numElms; ++i)
             {
@@ -103,7 +105,7 @@ namespace test  {
           
           for (uint nr=0; nr<numElms; ++nr)
             {
-              diagn::Block block = watch(provider).created[0];
+              diagn::Block block = watch(provider).created[nr];
               CHECK (HashVal(block) == block.stateKey);
               CHECK (HashVal(buffType) == block.typeKey);
               CHECK (testNumbers[nr] == block.accessAs<uint>());
@@ -117,11 +119,13 @@ namespace test  {
       
       
       void
-      verifyTestProtocol()
+      verifyIntrospection()
         {
           DiagnosticBufferProvider provider;
           
-          BuffDescr buffType = provider.getDescriptorFor(TEST_ELM_SIZE);
+          // using large yet untyped buffers this time....
+          const size_t BUFF_SIZ = sizeof(TestFrame) * (1+rani(100));
+          BuffDescr buffType = provider.getDescriptorFor(BUFF_SIZ);
           
           BuffHandle bu1 = provider.lockBuffer (buffType);
           BuffHandle bu2 = provider.lockBuffer (buffType);
@@ -129,23 +133,48 @@ namespace test  {
           BuffHandle bu4 = provider.lockBuffer (buffType);
           BuffHandle bu5 = provider.lockBuffer (buffType);
           
-          // buffers are locked, 
-          // but still within the per-type allocation pool
-          // while the output sequence is still empty
-//        CHECK (!provider.access_emitted(0).was_used());      ///////////////////////////////OOO provide suitable diagnostic API!
-//        CHECK (!provider.access_emitted(1).was_used());
-//        CHECK (!provider.access_emitted(2).was_used());
-//        CHECK (!provider.access_emitted(3).was_used());
-//        CHECK (!provider.access_emitted(4).was_used());
+          // buffers are all locked now;
+          // thus the instrumentation built into DiagnosticBufferProvider
+          // should have encountered and recorded each of them, indexed by hash-ID.
+          auto inspect = watch(provider);
+          CHECK (5 == inspect.created.cnt());
+          CHECK (inspect.was_created(bu1));
+          CHECK (inspect.was_created(bu2));
+          CHECK (inspect.was_created(bu3));
+          CHECK (inspect.was_created(bu4));
+          CHECK (inspect.was_created(bu5));
+          CHECK (inspect.is_in_use  (bu1));
+          CHECK (inspect.is_in_use  (bu2));
+          CHECK (inspect.is_in_use  (bu3));
+          CHECK (inspect.is_in_use  (bu4));
+          CHECK (inspect.is_in_use  (bu5));
+          CHECK (not inspect.was_used(bu1));
+          CHECK (not inspect.was_used(bu2));
+          CHECK (not inspect.was_used(bu3));
+          CHECK (not inspect.was_used(bu4));
+          CHECK (not inspect.was_used(bu5));
+          CHECK (not inspect.was_released(bu1));
+          CHECK (not inspect.was_released(bu2));
+          CHECK (not inspect.was_released(bu3));
+          CHECK (not inspect.was_released(bu4));
+          CHECK (not inspect.was_released(bu5));
           
           // can use the buffers for real
-          bu1.accessAs<uint>() = 1;
-          bu2.accessAs<uint>() = 2;
-          bu3.accessAs<uint>() = 3;
-          bu4.accessAs<uint>() = 4;
-          bu5.accessAs<uint>() = 5;
+          using std::byte;
+          byte* raw = & bu1.accessAs<byte>();
+          std::fill (raw, raw+BUFF_SIZ, byte{0xff});
+          CHECK (bu1.accessAs<uint32_t>() == 0xffffffff);
+          CHECK (not bu1.accessAs<TestFrame>().isSane());
           
-//        CHECK (0 == provider.emittedCnt());      ///////////////////////////////OOO provide suitable diagnostic API!
+          new(bu1.rawStorage()) TestFrame{1};
+          new(bu2.rawStorage()) TestFrame{2};
+          new(bu3.rawStorage()) TestFrame{3};
+          new(bu4.rawStorage()) TestFrame{4};
+          new(bu5.rawStorage()) TestFrame{5};
+          
+          CHECK (bu1.accessAs<TestFrame>().isPristine());
+          
+          CHECK (0 == inspect.emitted.cnt());
           
           // now emit buffers in shuffled order
           provider.emitBuffer (bu3);
@@ -154,41 +183,58 @@ namespace test  {
           provider.emitBuffer (bu4);
           provider.emitBuffer (bu2);
           
-//        CHECK (5 == provider.emittedCnt());      ///////////////////////////////OOO provide suitable diagnostic API!
+          CHECK (5 == inspect.emitted.cnt());
           
-//        CHECK (3 == provider.accessAs<uint>(0));      ///////////////////////////////OOO provide suitable diagnostic API!
-//        CHECK (1 == provider.accessAs<uint>(1));
-//        CHECK (5 == provider.accessAs<uint>(2));
-//        CHECK (4 == provider.accessAs<uint>(3));
-//        CHECK (2 == provider.accessAs<uint>(4));
+          CHECK (testData(3) == inspect.emitted[0].get().storage);
+          CHECK (testData(1) == inspect.emitted[1].get().storage);
+          CHECK (testData(5) == inspect.emitted[2].get().storage);
+          CHECK (testData(4) == inspect.emitted[3].get().storage);
+          CHECK (testData(2) == inspect.emitted[4].get().storage);
+
+          CHECK (0 == inspect.released.cnt());
           
-//        CHECK ( provider.access_emitted(0).was_used());      ///////////////////////////////OOO provide suitable diagnostic API!
-//        CHECK ( provider.access_emitted(1).was_used());
-//        CHECK ( provider.access_emitted(2).was_used());
-//        CHECK ( provider.access_emitted(3).was_used());
-//        CHECK ( provider.access_emitted(4).was_used());
-          
-//        CHECK (!provider.access_emitted(0).was_closed());
-//        CHECK (!provider.access_emitted(1).was_closed());
-//        CHECK (!provider.access_emitted(2).was_closed());
-//        CHECK (!provider.access_emitted(3).was_closed());
-//        CHECK (!provider.access_emitted(4).was_closed());
+          CHECK (inspect.was_emitted(bu1));
+          CHECK (inspect.was_emitted(bu2));
+          CHECK (inspect.was_emitted(bu3));
+          CHECK (inspect.was_emitted(bu4));
+          CHECK (inspect.was_emitted(bu5));
+          // Note fine point: they are in transitory state,
+          // thus usage is neither present, nor in the past...
+          CHECK (not inspect.is_in_use(bu1));
+          CHECK (not inspect.is_in_use(bu2));
+          CHECK (not inspect.is_in_use(bu3));
+          CHECK (not inspect.is_in_use(bu4));
+          CHECK (not inspect.is_in_use(bu5));
+          CHECK (not inspect.was_used (bu1));
+          CHECK (not inspect.was_used (bu2));
+          CHECK (not inspect.was_used (bu3));
+          CHECK (not inspect.was_used (bu4));
+          CHECK (not inspect.was_used (bu5));
           
           bu5.release();
-//        CHECK (!provider.access_emitted(0).was_closed());
-//        CHECK (!provider.access_emitted(1).was_closed());
-//        CHECK ( provider.access_emitted(2).was_closed());
-//        CHECK (!provider.access_emitted(3).was_closed());
-//        CHECK (!provider.access_emitted(4).was_closed());
+          CHECK (not bu5);
+          CHECK (not bu5.isAllotted());
+          CHECK (not inspect.is_in_use(bu5));
+          CHECK (    inspect.was_used (bu5));
+          
+          CHECK (not bu2);
+          CHECK (    bu2.isAllotted());
+          CHECK (not inspect.was_used (bu2));
+          CHECK (not inspect.was_released(bu2));
+          CHECK (1 == inspect.released.cnt());
           
           bu2.release();
           bu2.release();
           bu5.release();
-//        CHECK (!provider.access_emitted(0).was_closed());
-//        CHECK (!provider.access_emitted(1).was_closed());
-//        CHECK ( provider.access_emitted(2).was_closed());
-//        CHECK (!provider.access_emitted(3).was_closed());
-//        CHECK ( provider.access_emitted(4).was_closed());
+          CHECK (2 == inspect.released.cnt());
+          // simply because the redundant call was suppressed
+          CHECK (testData(5) == inspect.released[0].get().storage);
+          CHECK (testData(2) == inspect.released[1].get().storage);
+          
+          // when invoked directly on BufferProvider interface,
+          // redundant call is suppressed with a warning log
+          provider.releaseBuffer(bu5);
+          CHECK (2 == inspect.released.cnt());
           
           CHECK (not bu2.isValid());
           CHECK (not bu3.isValid());
@@ -204,7 +250,25 @@ namespace test  {
           CHECK (not bu3.isAllotted());
           CHECK (not bu4.isAllotted());
           CHECK (not bu5.isAllotted());
-//        CHECK (5 == provider.emittedCnt());      ///////////////////////////////OOO provide suitable diagnostic API!
+          
+          CHECK (5 == inspect.released.cnt());
+          // buffer data is recorded in order of occurrence
+          CHECK (testData(5) == inspect.released[0].get().storage);
+          CHECK (testData(2) == inspect.released[1].get().storage);
+          CHECK (testData(1) == inspect.released[2].get().storage);
+          CHECK (testData(3) == inspect.released[3].get().storage);
+          CHECK (testData(4) == inspect.released[4].get().storage);
+          // Instrumentation keeps separate records for each stage of the protocol
+          CHECK (testData(3) == inspect.emitted[0].get().storage);
+          CHECK (testData(1) == inspect.emitted[1].get().storage);
+          CHECK (testData(5) == inspect.emitted[2].get().storage);
+          CHECK (testData(4) == inspect.emitted[3].get().storage);
+          CHECK (testData(2) == inspect.emitted[4].get().storage);
+          
+          CHECK (not isSameObject (inspect.created[0]              , inspect.emitted[1]));
+          CHECK (not isSameObject (inspect.emitted[1]              , inspect.released[2]));
+          CHECK (    isSameAdr    (inspect.created[0].get().storage, inspect.emitted[1].get().storage));
+          CHECK (    isSameAdr    (inspect.emitted[1].get().storage, inspect.released[2].get().storage));
         }
     };
   
