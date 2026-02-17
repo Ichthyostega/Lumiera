@@ -130,6 +130,7 @@ namespace engine {
       operator bool()     const { return isValid(); }
       operator HashVal()  const { return descriptor_; }
       
+      bool isAllotted() const;
       bool isValid()  const;
       size_t size()  const;
       
@@ -178,7 +179,7 @@ namespace engine {
   inline BU&
   BuffHandle::accessAs()
   {
-    if (!pBuffer_)
+    if (not pBuffer_)
       throw error::Logic ("buffer not (yet) locked for access by clients"
                          , LERR_(LIFECYCLE));
     return *reinterpret_cast<BU*> (pBuffer_);

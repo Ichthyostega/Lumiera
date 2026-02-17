@@ -27,6 +27,7 @@
 #include "steam/engine/diagnostic-buffer-provider.hpp"
 #include "steam/engine/heap-mem-buffer-store.hpp"
 #include "lib/format-string.hpp"
+#include "lib/util-foreach.hpp"
 #include "lib/util.hpp"
 
 #include <algorithm>
@@ -153,6 +154,12 @@ namespace engine {
         }
       
       bool
+      isAllotted (HashVal stateKey)  const override
+        {
+          return stage_->isAllotted (stateKey);
+        }
+      
+      bool
       isAccessible (HashVal stateKey)  const override
         {
           return stage_->isAccessible (stateKey);
@@ -257,7 +264,46 @@ namespace engine {
 //    return dbp_.heapStore_.access_emitted(bufferID).accessMemory(); ///////////////////////////////////////TICKET 1410 : switch to newly defined tracking-API
     }
   
-
+  bool
+  BufferDiagnostic::was_created (HashVal id)
+  {
+    return created.contains (id);
+  }
   
-
+  bool
+  BufferDiagnostic::was_emitted (HashVal id)
+  {
+    return emitted.contains (id);
+  }
+  
+  bool
+  BufferDiagnostic::was_released (HashVal id)
+  {
+    return released.contains (id);
+  }
+  
+  bool
+  BufferDiagnostic::is_in_use (HashVal id)
+  {
+    return was_created (id)
+       and not (was_released (id) or was_emitted (id));
+  }
+  
+  bool
+  BufferDiagnostic::was_used (HashVal id)
+  {
+    return was_created (id)
+       and was_released (id);
+  }
+  
+  bool
+  BufferDiagnostic::all_buffers_released()
+  {
+    return util::and_all (created.each()
+                         ,[this](Block const& entry){ return released.contains(entry); }
+                         );
+  }
+  
+  
+  
 }} // namespace engine

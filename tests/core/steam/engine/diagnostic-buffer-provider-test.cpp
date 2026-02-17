@@ -25,10 +25,9 @@
 #include <vector>
 
 
-namespace steam  {
+namespace steam {
 namespace engine{
 namespace test  {
-  
   
   
   namespace { // Test fixture
@@ -37,28 +36,6 @@ namespace test  {
     const uint   MAX_ELMS = 50;
     
     std::vector<uint> testNumbers(MAX_ELMS);
-    
-    
-    bool 
-    has_expectedContent (uint nr, diagn::Block& memoryBlock)
-    {
-#if false  //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : disabled code to disentangle BufferProvider implementation
-      void* mem = memoryBlock.accessMemory();
-      uint data = *static_cast<uint*> (mem);
-      
-      return data == testNumbers[nr];
-#endif  /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : (end) disabled code
-    }
-    
-    bool
-    verifyUsedBlock (uint nr, diagn::Block& memoryBlock)
-    {
-#if false  //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : disabled code to disentangle BufferProvider implementation
-      return memoryBlock.was_used()
-         and memoryBlock.was_closed()
-         and has_expectedContent (nr, memoryBlock);
-#endif  /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : (end) disabled code
-    }
   }
   
   
@@ -98,9 +75,6 @@ namespace test  {
           provider.releaseBuffer(testBuff);
           
           CHECK (not testBuff);
-SHOW_EXPR(watch(provider).created.cnt())
-SHOW_EXPR(watch(provider).emitted.cnt())
-SHOW_EXPR(watch(provider).released.cnt())
           CHECK (1 == watch(provider).created.cnt());
           CHECK (1 == watch(provider).emitted.cnt());
           CHECK (1 == watch(provider).released.cnt());
@@ -129,7 +103,15 @@ SHOW_EXPR(watch(provider).released.cnt())
           
           for (uint nr=0; nr<numElms; ++nr)
             {
-//            CHECK (verifyUsedBlock (nr, provider.access_emitted(nr)));      ///////////////////////////////OOO provide suitable diagnostic API!
+              diagn::Block block = watch(provider).created[0];
+              CHECK (HashVal(block) == block.stateKey);
+              CHECK (HashVal(buffType) == block.typeKey);
+              CHECK (testNumbers[nr] == block.accessAs<uint>());
+              
+              auto id = HashVal(block);  // that would also be the ID of the BuffHandle
+              CHECK (watch(provider).was_created (id));
+              CHECK (watch(provider).was_released (id));
+              CHECK (not watch(provider).is_in_use (id));
             }
         }
       
@@ -208,13 +190,20 @@ SHOW_EXPR(watch(provider).released.cnt())
 //        CHECK (!provider.access_emitted(3).was_closed());
 //        CHECK ( provider.access_emitted(4).was_closed());
           
-          CHECK (!bu2);
-          CHECK (bu3);
+          CHECK (not bu2.isValid());
+          CHECK (not bu3.isValid());
+          CHECK (not bu2.isAllotted());
+          CHECK (    bu3.isAllotted());
           
           bu1.release();
           bu3.release();
           bu4.release();
           
+          CHECK (not bu1.isAllotted());
+          CHECK (not bu2.isAllotted());
+          CHECK (not bu3.isAllotted());
+          CHECK (not bu4.isAllotted());
+          CHECK (not bu5.isAllotted());
 //        CHECK (5 == provider.emittedCnt());      ///////////////////////////////OOO provide suitable diagnostic API!
         }
     };

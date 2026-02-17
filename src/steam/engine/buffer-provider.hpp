@@ -176,6 +176,7 @@ namespace engine {
       /* === API for BuffHandle internal access === */
       
       bool isValid         (HashVal) const;
+      bool isAllotted      (HashVal) const;
       bool isAccessible    (HashVal) const;
       size_t getBufferSize (HashVal) const;
       
@@ -208,6 +209,7 @@ namespace engine {
           virtual ID mark_released (HashVal stateKey)          =0;
           virtual ID abandon (HashVal, bool destroy=false)     =0;
           virtual void discard (HashVal stateKey)              =0;
+          virtual bool isAllotted   (HashVal stateKey) const   =0;
           virtual bool isAccessible (HashVal stateKey) const   =0;
         };
       

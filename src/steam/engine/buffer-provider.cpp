@@ -61,7 +61,13 @@ namespace engine {
   {
     return bool (bufferStage_->lookup (id));
   }
-
+  
+  bool
+  BufferProvider::isAllotted (HashVal id)  const
+  {
+    return bufferStage_->isAllotted (id);
+  }
+  
   bool
   BufferProvider::isAccessible (HashVal id)  const
   {
@@ -256,6 +262,14 @@ namespace engine {
        and descriptor_.provider_->isAccessible (*this);
   }
   
+  bool
+  BuffHandle::isAllotted()  const
+  {
+    ENSURE (descriptor_.provider_);
+    return bool(pBuffer_)
+       and descriptor_.provider_->isAllotted (*this);
+  }
+  
   
   size_t
   BuffDescr::buffSize() const
@@ -299,7 +313,7 @@ namespace engine {
   {
     if (pBuffer_)
       {
-        REQUIRE (isValid());
+        REQUIRE (isAllotted());
         descriptor_.provider_->releaseBuffer(*this);
         pBuffer_ = 0;
       }

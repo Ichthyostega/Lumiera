@@ -58,6 +58,12 @@ namespace engine {
         }
       
       bool
+      isAllotted (HashVal stateKey)  const override
+        {
+          return metadata_.isLocked (stateKey);
+        }
+      
+      bool
       isAccessible (HashVal stateKey)  const override
         {
           return metadata_.isAccessible (stateKey);

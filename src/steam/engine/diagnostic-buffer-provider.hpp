@@ -25,6 +25,7 @@
 #include "lib/util.hpp"
 #include "steam/engine/type-handler.hpp"  ///////////////OOO warum?
 #include "steam/engine/naive-buffer-setup.hpp"
+#include "lib/iter-adapter-stl.hpp"
 #include "lib/result.hpp"
 #include "lib/nocopy.hpp"
 
@@ -55,6 +56,9 @@ namespace engine {
         
         Block (metadata::Key, Buff* mem);
         operator HashVal()  const { return storage? stateKey:typeKey; }
+        
+        template<typename BU>
+        BU const& accessAs()  const;
       };
     
     
@@ -70,11 +74,29 @@ namespace engine {
         Result operator[] (size_t  seqNr)  const;
         Result byHandle   (HashVal handle) const;
         bool   contains   (HashVal handle) const;
+        auto   each() const;
         size_t cnt()  const;
         
         /* ========= Accounting  API ========= */
         void record (Block);
       };
+      
+      
+      inline auto
+      StateReg::each()  const
+      {
+        return lib::iter_stl::eachElm (reg_);
+      }
+      
+      template<typename BU>
+      inline BU const&
+      Block::accessAs()  const
+      {
+        if (not storage)
+          throw error::Logic ("buffer was never actually locked for access by clients"
+                             , LERR_(LIFECYCLE));
+        return *reinterpret_cast<BU const*> (storage);
+      }
     
   }//(End)diagnostic descriptors.
 
@@ -122,6 +144,11 @@ namespace engine {
       bool buffer_was_used (uint bufferID);   ///< @deprecated       ////////////////////////////////////////TICKET 1410
       bool buffer_was_closed (uint bufferID); ///< @deprecated       ////////////////////////////////////////TICKET 1410
       void* accessMemory (uint bufferID);     ///< @deprecated       ////////////////////////////////////////TICKET 1410
+      bool was_created (HashVal);
+      bool was_emitted (HashVal);
+      bool was_released (HashVal);
+      bool is_in_use    (HashVal);
+      bool was_used     (HashVal);
       bool all_buffers_released();
       diagn::StateReg const& created;
       diagn::StateReg const& emitted;
