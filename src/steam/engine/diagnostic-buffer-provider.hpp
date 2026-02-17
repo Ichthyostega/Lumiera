@@ -47,21 +47,21 @@ namespace engine {
     /** represent the status of one allocation */
     struct Block
       {
-        BuffHandle handle;
+        HashVal typeKey{0};
+        HashVal stateKey{0};
+        size_t buffSize{0};
         Buff* storage{nullptr};
         Buff* accessMemory()  const { return storage; }
         
-        Block (BuffDescr, metadata::Key, Buff* mem);
-        Block (BuffDescr const&);
-        operator HashVal()  const { return handle; }
+        Block (metadata::Key, Buff* mem);
+        operator HashVal()  const { return storage? stateKey:typeKey; }
       };
     
     
     class StateReg
       : util::NonCopyable
       {
-        using PBlock   = std::shared_ptr<Block>;
-        using Registry = std::vector<PBlock>;
+        using Registry = std::vector<Block>;
         Registry reg_;
         
       public:
@@ -74,17 +74,24 @@ namespace engine {
         
         /* ========= Accounting  API ========= */
         void record (Block);
-        void record (PBlock);
       };
     
   }//(End)diagnostic descriptors.
 
   
   
-  /****************************************************************//**
-   * Helper for unit tests: Buffer provider reference implementation.
+  /********************************************************************//**
+   * Helper for unit tests: Buffer provider that tracks state transitions.
+   * This is a variant of the _naive_ heap based BufferProvider implementation,
+   * with additional tracking hooks to record the IDs and further information
+   * of all allocations encountered at a state transition.
    * 
-   * @todo write type comment
+   * Test code should keep track of the BufferProvider instance used, and may
+   * attach through a special [diagnostics access](\ref watch(BufferProvider&)),
+   * to extract the recorded information while or after the allocated buffers
+   * are used. Since the underlying "naive" implementation does not actually
+   * discard any allocated memory block, it is possible to look into memory
+   * contents after invoking the test subject.
    */
   class DiagnosticBufferProvider
     : public NaiveBufferSetup

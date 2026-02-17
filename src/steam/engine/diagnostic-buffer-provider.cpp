@@ -51,25 +51,18 @@ namespace engine {
   
   /* ====== Accounting  API ====== */
   
-  Block::Block (BuffDescr typeDescriptor, Key stateKey, Buff* mem)
-    : handle{typeDescriptor, mem}
+  Block::Block (Key key, Buff* mem)
+    : typeKey{mem? key.parentKey(): HashVal(key)}
+    , stateKey{mem? key : Key::INVALID}
+    , buffSize{key.storageSize()}
     , storage{mem}
     { }
-    
-  Block::Block (BuffDescr const&  descr)
-    : handle{descr}
-    { }
   
-  void
-  StateReg::record (PBlock blockRef)
-  {
-    reg_.emplace_back (move (blockRef));
-  }
   
   void
   StateReg::record (Block block)
   {
-    record (std::make_shared<Block> (block));
+    reg_.emplace_back (move (block));
   }
   
   size_t
@@ -82,7 +75,7 @@ namespace engine {
   StateReg::operator[] (size_t  seqNr)  const
   {
     if (seqNr < cnt())
-      return * reg_[seqNr];
+      return reg_[seqNr];
     else
       return error::Invalid(_Fmt{"no Buffer with seq-nr %d (%d known entries)"}
                                                    % seqNr % cnt()
@@ -92,10 +85,10 @@ namespace engine {
   StateReg::Result
   StateReg::byHandle (HashVal handle) const
   {
-    if (auto pos = find_if (reg_, [&](auto& entry){ return handle == HashVal(*entry); })
+    if (auto pos = find_if (reg_, [&](auto& entry){ return handle == HashVal(entry); })
        ;pos != reg_.end()
        )
-      return **pos;
+      return *pos;
     else
       return error::Invalid("requested Buffer never encountered"
                            , LERR_(BOTTOM_VALUE));
@@ -120,10 +113,22 @@ namespace engine {
       StateReg released;
       
       void
-      record_locked (BuffDescr typeDescriptor, Key stateKey, Buff* mem)
+      record_locked (Key stateKey, Buff* mem)
         {
-          REQUIRE (not created.contains (typeDescriptor));
-          created.record (Block{typeDescriptor, stateKey, mem});
+          REQUIRE (not created.contains (stateKey));
+          created.record (Block{stateKey, mem});
+        }
+      
+      void
+      record_emitted (HashVal id)
+        {
+          emitted.record (created.byHandle (id));
+        }
+      
+      void
+      record_released (HashVal id)
+        {
+          released.record (created.byHandle (id));
         }
     };
   
@@ -163,20 +168,24 @@ namespace engine {
       mark_locked (ID typeKey, Buff* storage, LocalTag implMark)  override
         {
           ID stateKey = stage_->mark_locked (typeKey, storage, implMark);
-          tracker_.record_locked (provider_.buildDescriptor(stateKey), stateKey, storage);
+          tracker_.record_locked (stateKey, storage);
           return stateKey;
         }
       
       ID
-      mark_emitted (HashVal stateKey)  override
+      mark_emitted (HashVal id)  override
         {
-          return stage_->mark_emitted (stateKey);
+          ID stateKey = stage_->mark_emitted (id);
+          tracker_.record_emitted (stateKey);
+          return stateKey;
         }
       
       ID
-      mark_released (HashVal stateKey)  override
+      mark_released (HashVal id)  override
         {
-          return stage_->mark_released (stateKey);
+          ID stateKey = stage_->mark_released (id);
+          tracker_.record_released (stateKey);
+          return stateKey;
         }
       
       ID
