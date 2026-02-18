@@ -21,12 +21,16 @@
 #include "lib/test/test-helper.hpp"
 #include "lib/test/tracking-dummy.hpp"
 #include "lib/util-foreach.hpp"
+#include "lib/iter-zip.hpp"
 #include "steam/engine/testframe.hpp"
 #include "steam/engine/test-rand-ontology.hpp"
 #include "steam/engine/diagnostic-buffer-provider.hpp"
+#include "lib/test/diagnostic-output.hpp"////////////////////TODO
 
 using util::isSameObject;
 using util::for_each;
+using lib::HashVal;
+using lib::zip;
 
 
 namespace steam {
@@ -55,8 +59,8 @@ namespace test  {
         *(data+i) = work.data()[i];
       return work.getChecksum();
     }
-    
   }
+  
   
   
   /**************************************************************************//**
@@ -77,7 +81,7 @@ namespace test  {
       run (Arg)
         {
           verifySimpleUsage();
-          verifyRenderingUsage();
+          verifyRenderingUse();
 //          verifyObjectAttachment();
 //          verifyObjectAttachmentFailure();  //////////////////////////OOO need a completely new test case to cover behaviour of failed ctor calls
         }
@@ -101,21 +105,21 @@ namespace test  {
           
           buff.emit();
           buff.release();
-          CHECK (!buff.isValid());
+          CHECK (not buff.isValid());
           VERIFY_ERROR (LIFECYCLE, buff.accessAs<TestFrame>() );
           
-          auto diagnostic = watch(provider);
-          CHECK (diagnostic.buffer_was_used (0));
-          CHECK (diagnostic.buffer_was_closed (0));
+          auto inspect = watch(provider);
+          CHECK (inspect.was_used (buff));
+          CHECK (inspect.was_released(buff));
           
-          CHECK (testData(0) == diagnostic.accessMemory (0));
+          CHECK (testData(0) == inspect.accessMemory(buff));
         }
       
       
       /** @test demonstrate the full sequence of invocations during rendering
        */
       void
-      verifyRenderingUsage()
+      verifyRenderingUse()
         {
           // Test fixture: allows to track/verify allocations after the fact
           DiagnosticBufferProvider provider;
@@ -131,8 +135,8 @@ namespace test  {
           CHECK (desc3.isValid());
           
           uint num1 = desc1.announce(TEST_ELMS);
-          uint num2 = desc1.announce(TEST_ELMS + 1);
-          uint num3 = desc2.announce(TEST_ELMS * 2);
+          uint num2 = desc2.announce(TEST_ELMS + 1);
+          uint num3 = desc3.announce(TEST_ELMS * 2); // announce more than we actually use (which is tolerated)
           CHECK (num1 == TEST_ELMS);
           CHECK (num2 == TEST_ELMS + 1);
           CHECK (num3 == TEST_ELMS * 2);
@@ -173,10 +177,49 @@ namespace test  {
           workBuff.release(); // note: not every buffer need be emitted.
           CHECK (!workBuff);
           
-          auto diagnostic = watch(provider);
-          CHECK (diagnostic.buffer_was_used (0));
-          CHECK (diagnostic.buffer_was_closed (0));
-//        CHECK (diagnostic.all_buffers_released());    ///////////////OOO do we need this API?
+          auto inspect = watch(provider);
+          CHECK (inspect.created.cnt() == 3*TEST_ELMS + 1);
+          CHECK (inspect.was_used (workBuff));
+          CHECK (inspect.was_released (workBuff));
+          CHECK (not inspect.was_emitted (workBuff));
+          CHECK (inspect.all_buffers_released());
+          
+          // now peek into buffer memory
+          // to prove that that the complete computation chain
+          // was in fact performed, and was using the memory as intended
+          uint last = inspect.released.cnt() - 1;
+          diagn::Block lastWork = inspect.released[last];
+          diagn::Block lastMark = inspect.released[last-1];
+          diagn::Block lastData = inspect.released[last-2];
+          
+          // due to the way this chained-hash dummy computation was defined,
+          // the last data buffer should contain the same random numbers as the last work buffer...
+          auto& workBuffContent = lastWork.accessAs<TestFrame>().data();
+          auto& dataBuffContent = lastData.accessAs<DataBuff>();
+          
+          for (auto [c,v] : zip(workBuffContent,dataBuffContent))
+            CHECK (c == v);
+          
+          // furthermore, the last recorded checksum mark
+          // should match the checksum of the last work buffer,
+          // because that is where the last computation was carried out.
+          CHECK (endSum == lastMark.accessAs<HashVal>());
+          
+          // we can also verify that all data in emitted buffers is correct,
+          // by re-computing the checksum for each step, using data in the buffers
+          for (uint i=0; i<TEST_ELMS; ++i)
+            {
+              diagn::Block srcBuff  = inspect.emitted[i*3 + 0];
+              diagn::Block markBuff = inspect.emitted[i*3 + 2];
+              TestFrame const& src = srcBuff.accessAs<TestFrame>();  // note const -- can not corrupt data in memory
+              ont::Param param = src.getChecksum();
+              TestFrame newWorkBuff;
+              ont::manipulateFrame (&newWorkBuff, &src, param);
+              
+              // the checksum recoded during the test run matches the re-computed sum,
+              // based on combining data in memory for a second time with the same chained-hash function
+              CHECK (markBuff.accessAs<HashVal>() == newWorkBuff.getChecksum());
+            }
         }
       
       

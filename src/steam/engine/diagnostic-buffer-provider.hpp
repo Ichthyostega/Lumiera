@@ -143,12 +143,12 @@ namespace engine {
       
       bool buffer_was_used (uint bufferID);   ///< @deprecated       ////////////////////////////////////////TICKET 1410
       bool buffer_was_closed (uint bufferID); ///< @deprecated       ////////////////////////////////////////TICKET 1410
-      void* accessMemory (uint bufferID);     ///< @deprecated       ////////////////////////////////////////TICKET 1410
       bool was_created (HashVal);
       bool was_emitted (HashVal);
       bool was_released (HashVal);
       bool is_in_use    (HashVal);
       bool was_used     (HashVal);
+      Buff* accessMemory(HashVal);
       bool all_buffers_released();
       diagn::StateReg const& created;
       diagn::StateReg const& emitted;

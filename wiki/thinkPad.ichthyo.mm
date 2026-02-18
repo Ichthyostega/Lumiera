@@ -110365,7 +110365,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1769203135049" ID="ID_1957618964" MODIFIED="1769203375143" TEXT="neuer Ansatz: jetzt die reale Verwendung analysieren und nachbauen">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1769203135049" ID="ID_1957618964" MODIFIED="1771372789015" TEXT="neuer Ansatz: jetzt die reale Verwendung analysieren und nachbauen">
 <linktarget COLOR="#ce0632" DESTINATION="ID_1957618964" ENDARROW="Default" ENDINCLINATION="-1185;43;" ID="Arrow_ID_1824415534" SOURCE="ID_1065671274" STARTARROW="None" STARTINCLINATION="1197;118;"/>
 <icon BUILTIN="yes"/>
 <node BACKGROUND_COLOR="#eae5a6" COLOR="#300f69" CREATED="1769203163926" ID="ID_1465055003" MODIFIED="1769203203294" TEXT="das ist der gro&#xdf;e Vorteil jetzt: das Node-Network ist implementiert">
@@ -110639,8 +110639,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1769210686565" ID="ID_1536189770" MODIFIED="1769210695813" TEXT="dieses Muster nun im Testfall nachbauen">
-<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#cde1be" COLOR="#338800" CREATED="1769210686565" ID="ID_1536189770" MODIFIED="1771372810747" TEXT="dieses Muster nun im Testfall nachbauen">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1769213063666" ID="ID_1804838536" MODIFIED="1769213930429" TEXT="auch bereits incl. der anounce()-Operation">
 <icon BUILTIN="yes"/>
 <node CREATED="1769213076631" ID="ID_977495368" MODIFIED="1769213479644" TEXT="ich halte die l&#xe4;ngerfristig f&#xfc;r sehr wichtig">
@@ -110722,7 +110722,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1769217660348" ID="ID_874516866" MODIFIED="1769217718220" TEXT="&#x27f9; damit f&#xe4;llt hier f&#xfc;r diesen Testfall auch das Verketten von Berechnungen weg">
+<node COLOR="#5b280f" CREATED="1769217660348" ID="ID_874516866" MODIFIED="1771372464849" TEXT="&#x27f9; damit f&#xe4;llt hier f&#xfc;r diesen Testfall auch das Verketten von Berechnungen weg">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -110731,6 +110731,19 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
     </p>
   </body>
 </html></richcontent>
+<icon BUILTIN="button_cancel"/>
+</node>
+<node BACKGROUND_COLOR="#ccdee2" COLOR="#018033" CREATED="1771372466452" ID="ID_711147734" LINK="#ID_79001152" MODIFIED="1771372773336" TEXT="Doch! es ist durchaus sinnvoll hier eine verkettete Berechnung zu machen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Man kann damit n&#228;mlich zeigen, da&#223; tats&#228;chlich Buffer in der gew&#252;nschten Reihenfolge belegt und verwendet werden, indem man anschaut, da&#223; am Ende die Checksumme mit aufgezeichneten Werten &#252;bereinstimmt, und in den zugeh&#246;rigen Dummy-Buffern auch tats&#228;chlich (noch) die Daten der letzten Berechnungsschritte liegen
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#70f07e" DESTINATION="ID_1870433294" ENDARROW="Default" ENDINCLINATION="460;21;" ID="Arrow_ID_303606689" STARTARROW="None" STARTINCLINATION="-9;45;"/>
+<icon BUILTIN="yes"/>
 </node>
 </node>
 <node CREATED="1769273843983" ID="ID_750810589" MODIFIED="1769273855167" TEXT="wirklich wichtig ist">
@@ -110739,10 +110752,15 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1769273878090" ID="ID_1739884810" MODIFIED="1769273914463" TEXT="das Belegen auf den BufferDescriptors"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1769303330470" ID="ID_1333832891" MODIFIED="1769303334708" TEXT="Verifikationen">
-<icon BUILTIN="hourglass"/>
+<node COLOR="#338800" CREATED="1769303330470" ID="ID_1333832891" MODIFIED="1771372677394" TEXT="Verifikationen">
+<icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1769303336197" ID="ID_1486480192" MODIFIED="1769303349894" TEXT="(wartet auf neue Backend-Implementierung)">
 <font NAME="SansSerif" SIZE="10"/>
+</node>
+<node COLOR="#338800" CREATED="1771372329207" ID="ID_1870433294" MODIFIED="1771372898255" TEXT="Nach dem Umbau: nun gibt es ein neues Diagnose-API">
+<arrowlink COLOR="#1a8abc" DESTINATION="ID_613670885" ENDARROW="Default" ENDINCLINATION="779;-28;" ID="Arrow_ID_1032863918" STARTARROW="None" STARTINCLINATION="712;38;"/>
+<linktarget COLOR="#70f07e" DESTINATION="ID_1870433294" ENDARROW="Default" ENDINCLINATION="460;21;" ID="Arrow_ID_303606689" SOURCE="ID_711147734" STARTARROW="None" STARTINCLINATION="-9;45;"/>
+<icon BUILTIN="forward"/>
 </node>
 </node>
 </node>
@@ -112164,16 +112182,13 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1771354620091" ID="ID_789673449" MODIFIED="1771359068230" TEXT="in verifyStandardCase()">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Zufallszahlen in lokal gehaltenem Vektor; m&#252;&#223;ten dann auch im Speicherblock zu finden sein...
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#ae099e" CREATED="1771359078135" ID="ID_325360151" MODIFIED="1771359118319" TEXT="sind sie auch ... wenn man nicht immer Index &#x2261; 0 anschaut">
 <icon BUILTIN="smiley-oh"/>
@@ -112183,16 +112198,13 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="button_ok"/>
 <node COLOR="#5b280f" CREATED="1771360399235" ID="ID_698277565" MODIFIED="1771360486104" TEXT="sollte nicht mehr von einem &#xbb;Test Protocol&#xab; reden">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       das zeigt n&#228;mlich gut die Stelle, an der ich in die Falle gefallen bin; stattessen haben wir nun (hoffentlich) <i>deklarative </i>Diagnose-Funktionen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="stop-sign"/>
 </node>
 <node CREATED="1771360487997" ID="ID_1884248019" MODIFIED="1771360491577" TEXT="Namens-Suche">
@@ -112214,9 +112226,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1771360635541" ID="ID_161220145" MODIFIED="1771360644073" TEXT="&#xbb;Introspection&#xab;"/>
 <node BACKGROUND_COLOR="#eccda7" CREATED="1771360645205" ID="ID_651488390" MODIFIED="1771360750193" STYLE="bubble">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       benenne die Variable verbal:&#160;
@@ -112225,8 +112235,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       <font color="#4a1a65" face="Bitstream Vera Sans Mono" size="9pt"><b>auto</b></font><font color="#3a1f18" face="Bitstream Vera Sans Mono" size="9pt">&#160;</font><font color="#814422" face="Bitstream Vera Sans Mono" size="9pt">inspect</font><font color="#3a1f18" face="Bitstream Vera Sans Mono" size="9pt">&#160;</font><font color="#65533c" face="Bitstream Vera Sans Mono" size="9pt">=</font><font color="#3a1f18" face="Bitstream Vera Sans Mono" size="9pt">&#160;</font><font color="#000000" face="Bitstream Vera Sans Mono" size="9pt">watch</font><font color="#11123a" face="Bitstream Vera Sans Mono" size="9pt">(</font><font color="#b45858" face="Bitstream Vera Sans Mono" size="9pt"><b>provider</b></font><font color="#11123a" face="Bitstream Vera Sans Mono" size="9pt">)</font><font color="#65533c" face="Bitstream Vera Sans Mono" size="9pt">;</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <edge COLOR="#201ccb"/>
 <icon BUILTIN="idea"/>
 </node>
@@ -112234,16 +112243,13 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node COLOR="#435e98" CREATED="1771360758940" ID="ID_318818630" MODIFIED="1771368280809">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       au&#223;erdem: <b>TestFrame</b>&#160;kann inzwischen viel mehr ....
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 <node CREATED="1771360784807" ID="ID_1657955100" MODIFIED="1771360797070" TEXT="sollte einen deutlich gr&#xf6;&#xdf;eren Buffer nehmen"/>
 <node CREATED="1771360798301" ID="ID_735423157" MODIFIED="1771360810709" TEXT="sollte aber dann einen TestFrame einpflanzen"/>
@@ -112253,6 +112259,41 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1771335749973" ID="ID_431521592" MODIFIED="1771335763465" TEXT="BufferProviderProtocol_test ebenfalls vers&#xe4;ubern">
 <icon BUILTIN="flag-yellow"/>
+<node COLOR="#164e8b" CREATED="1771372143101" ID="ID_1013808062" LINK="#ID_1168667446" MODIFIED="1771374369880" TEXT="ich hatte neulich bereits eine sehr viel realistischere Berechnung skizziert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      vorausgegangen war eine Analyse der Nutzmuster in dem letztes Jahr entwickelten Node-Invocation-Code
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#164e8b" CREATED="1771372370739" ID="ID_613670885" MODIFIED="1771374369881" TEXT="hier fehlt aber noch die Verifikation der berechneten Daten im Speicher">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      F&#252;r diesen Testfall hatte ich bereits in einer einfachen Schleife dieses Nutzungsmuster nachtestellt, und daf&#252;r meine neue TestRandOntology verwendet; das hei&#223;t, wir rechnen jetzt wirklich einen vollen Bufferhinhalt durch, und jedes einzelne Datenwort ist am Ende verifizierbar, verm&#246;ge der verketteten Hash-Berechnung
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#1a8abc" DESTINATION="ID_613670885" ENDARROW="Default" ENDINCLINATION="779;-28;" ID="Arrow_ID_1032863918" SOURCE="ID_1870433294" STARTARROW="None" STARTINCLINATION="712;38;"/>
+</node>
+<node COLOR="#164e8b" CREATED="1771372691026" ID="ID_79001152" MODIFIED="1771374369881" TEXT="es gen&#xfc;gt, die Endergebnisse abzugleichen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Da es sich um eine verkettete Hash-Berechnung handelt, m&#252;&#223;te man streng genommen die Berechnung nochmal wiederholen, und die festgestellte Pr&#252;fsumme vergleichen. Mit dem Argument, da&#223; dieses an anderer Stelle bereits getan wurde (NodeLink_test), kann ich argumentieren, da&#223; es hier nur darauf ankommt, da&#223; die korrekten Daten dort im Speicher liegen, wo man sie aufgrund der Logik auch erwarten w&#252;rde
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#174956" COLOR="#8dfd49" CREATED="1771374306703" ID="ID_779094274" MODIFIED="1771374348933" STYLE="bubble" TEXT="Ergebnis: alle Daten matchen">
+<edge COLOR="#61fe5b" STYLE="bezier" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="15"/>
+</node>
 </node>
 </node>
 </node>
@@ -113083,9 +113124,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1771335613418" ID="ID_389403594" MODIFIED="1771354255277" TEXT="an dieser Stelle: Status-quo best&#xe4;tigen">
 <icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1771335628925" ID="ID_832109359" MODIFIED="1771354236488" TEXT="die beiden Test-F&#xe4;lle aufr&#xe4;umen">
+<node COLOR="#338800" CREATED="1771335628925" ID="ID_832109359" MODIFIED="1771372132494" TEXT="die beiden Test-F&#xe4;lle aufr&#xe4;umen">
 <arrowlink COLOR="#445360" DESTINATION="ID_1793741597" ENDARROW="Default" ENDINCLINATION="-253;1171;" ID="Arrow_ID_389390476" STARTARROW="Default" STARTINCLINATION="512;-1514;"/>
-<icon BUILTIN="pencil"/>
+<icon BUILTIN="button_ok"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1771335644345" ID="ID_4824008" MODIFIED="1771335676635" TEXT="beide Tests wieder komplett gr&#xfc;n">
 <icon BUILTIN="flag-yellow"/>
@@ -113114,9 +113155,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node CREATED="1771335383471" ID="ID_1401593839" MODIFIED="1771348112895" TEXT="aber so vollst&#xe4;ndig, da&#xdf; ich nix mehr &#xe4;ndern kann">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Seit 2024 bin ich nun mehrfach durch den Kern der Implementierung durchgegangen, und konnte keine offensichtliche L&#252;cke finden (nur ein paar lokale Inkonsistenzen, wie z.B. da&#223; wir uns den aktuellen Buffer-Pointer im Entry speichern, obwohl es gen&#252;gen w&#252;rde, ihn nur in den Hash einzurechnen). Auch der Zugangs-Funktionen, BufferMetadata::key(...) sind konsistent und korrekt strukturiert: es gibe eine einzige Funktion, mit der man &#187;aus dem Nichts&#171; einsteigen kann (und in dieser Funktion hatte ich 2024 die Reihenfolge der Qualifizierungen in ein verbindliches Schema geordnet). Au&#223;erdem gibt es ein paar weitere Funktionen, mit denen man einen bereits bestehenden Key verfeinern kann, und eine Funktion, die verwendet wird, um daraus einen Entry zu machen.
@@ -113314,9 +113353,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node CREATED="1771349685935" ID="ID_1922129061" MODIFIED="1771349810502" TEXT="die Assertion hat dort didaktischen- und Dokumentations-Wert">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Inhaltlich ist sie redundant, denn Zustands&#252;berg&#228;nge werden auch in den Metadaten gepr&#252;ft. Jedoch ist die ganze Struktur relativ offen, und es gibt sogar die &#187;Unsch&#228;rfe&#171;, da&#223; u.U der Pointer im Handle nicht auf NULL gesetzt wird (hab das gestern durchdacht und bin zu dem Schlu&#223; gekommen, da&#223; sich das nur um den Preis eines kompletten Umbaues beheben lie&#223;e, wozu ich keinen Anla&#223; sehe)
@@ -113328,9 +113365,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node COLOR="#338800" CREATED="1771349832972" ID="ID_1073377063" MODIFIED="1771350841958" TEXT="also: auch daf&#xfc;r einen API-call-Pfad schaffen: isAllotted">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ich halte dieses Pr&#228;dikat f&#252;r sinnvoller, als ein isEmitted(); es bedeutet, da&#223; noch eine Allokation &#187;dran h&#228;ngt&#171;
@@ -113861,9 +113896,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="hourglass"/>
 <node CREATED="1771348130096" HGAP="26" ID="ID_407529567" MODIFIED="1771348251787" VSHIFT="11">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       derzeit <b><font size="4" color="#4a0cce">kann</font></b>&#160;ich gar nix mehr &#228;ndern

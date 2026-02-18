@@ -257,11 +257,10 @@ namespace engine {
     }
   
   
-  void*
-  BufferDiagnostic::accessMemory (uint bufferID)
-    {
-      NOTREACHED ("shall use new API only");
-//    return dbp_.heapStore_.access_emitted(bufferID).accessMemory(); ///////////////////////////////////////TICKET 1410 : switch to newly defined tracking-API
+  Buff*
+  BufferDiagnostic::accessMemory (HashVal id)
+    {                             // may throw when found
+      return created.byHandle(id).get().accessMemory();
     }
   
   bool
