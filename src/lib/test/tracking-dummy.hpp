@@ -161,7 +161,7 @@ namespace test{
         }
       
       Tracker()
-        : val{rani (1000)}
+        : val{1 + rani (999)}
         {
           log.call (this,"ctor");
         }

@@ -112294,6 +112294,100 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <edge COLOR="#61fe5b" STYLE="bezier" WIDTH="thin"/>
 <font NAME="SansSerif" SIZE="15"/>
 </node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1771436783713" ID="ID_193788147" MODIFIED="1771458129212" TEXT="Object-Attachment: Test neu schreiben">
+<icon BUILTIN="yes"/>
+<node CREATED="1771436808099" ID="ID_1875105522" MODIFIED="1771436817968" TEXT="die bestehende Logik wurde aufgegeben"/>
+<node CREATED="1771436819011" ID="ID_1216779511" MODIFIED="1771436846683" TEXT="jedoch weiterhin zu belegen...">
+<node CREATED="1771436848184" ID="ID_71721349" MODIFIED="1771436869562" TEXT="da&#xdf; Konstruktoren / Destruktoren aufgerufen werden (wenn erwartet)"/>
+<node CREATED="1771436873021" ID="ID_282076766" MODIFIED="1771436880834" TEXT="wie Fehler behandelt werden">
+<node COLOR="#5b280f" CREATED="1771436928263" ID="ID_446121201" MODIFIED="1771441543550" TEXT="Exception aus der Allokation">
+<icon BUILTIN="button_cancel"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1771441546352" ID="ID_571861145" MODIFIED="1771441567658" TEXT="das diskutiere ich weg">
+<font ITALIC="true" NAME="SansSerif" SIZE="11"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1771441578989" ID="ID_1186695503" MODIFIED="1771441590495" TEXT="ein solcher Test ist...">
+<node CREATED="1771441592519" ID="ID_206617730" MODIFIED="1771441611094" TEXT="schwer zu realisieren ohne Mock-Instrumentierung"/>
+<node CREATED="1771441613485" ID="ID_972749888" MODIFIED="1771441636565" TEXT="l&#xe4;uft darauf hinaus, die Implementierung im Test aufzudoppeln"/>
+<node CREATED="1771441653055" ID="ID_333922655" MODIFIED="1771441760759" TEXT="testet nicht aktiv implementiertes Verhalten, sondern dokumentiert nur die Struktur">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Das entscheidende Kriterium n&#228;mlich, EX_STRONG, wird in der Regel nicht aktiv hergestellt, sondern dadurch, da&#223; die Schritte der Implementierung logisch pr&#228;zise angeordnet werden. &#220;berdies ist so etwas schwer empirisch zu belegen, dann man m&#252;&#223;te den Beweis f&#252;hren, da&#223; etwas M&#246;gliches <i>nicht passiert</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1771436936743" ID="ID_1363737657" MODIFIED="1771436946781" TEXT="Emergency-Abort">
+<node CREATED="1771436948096" ID="ID_449913080" MODIFIED="1771436951446" TEXT="ohne Dtor"/>
+<node CREATED="1771436952498" ID="ID_131359835" MODIFIED="1771436955830" TEXT="mit Dtor"/>
+</node>
+</node>
+</node>
+<node CREATED="1771442679582" ID="ID_1646361815" MODIFIED="1771442683402" TEXT="Test-Framework">
+<node CREATED="1771442684317" ID="ID_1793773266" MODIFIED="1771442728428" TEXT="verwende den Tracker (Dummy-Objekt mit eingebautem EventLog)">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      siehe test-tracking-test.cpp
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1771445216811" ID="ID_1830844578" MODIFIED="1771445232082" TEXT="f&#xfc;hre mehrere abgeschlossene sub-Tests aus"/>
+<node CREATED="1771445233144" ID="ID_1380577086" MODIFIED="1771445240705" TEXT="pr&#xfc;fe jeweils unmittelbar das Log"/>
+</node>
+<node CREATED="1771445249561" ID="ID_770084282" MODIFIED="1771445253530" TEXT="Test-Inhalte">
+<node CREATED="1771445255165" ID="ID_1398246748" MODIFIED="1771447709003" TEXT="Typen / Descriptoren einrichten">
+<icon BUILTIN="yes"/>
+<node COLOR="#435e98" CREATED="1771445266196" ID="ID_44204253" MODIFIED="1771447715307" TEXT="f&#xfc;r einen roh-Buffer (nur Gr&#xf6;&#xdf;e festgelegt)"/>
+<node COLOR="#435e98" CREATED="1771445279571" ID="ID_560437674" MODIFIED="1771447715307" TEXT="f&#xfc;r einen Buffer mit automatisch erzeugtem Objekt"/>
+<node CREATED="1771445303551" ID="ID_143464891" MODIFIED="1771445326791" TEXT="f&#xfc;r einen Buffer mit explizit angegebener Konstruktor / Destruktor-Funktion"/>
+<node CREATED="1771445331287" ID="ID_467418427" MODIFIED="1771445341928" TEXT="Type-Refinement">
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1771445344331" HGAP="30" ID="ID_1813249595" MODIFIED="1771445458623" TEXT="hoppla &#x2014; dieses Feature wurde nicht auf das BufferProvider-Interface herausgef&#xfc;hrt" VSHIFT="3">
+<arrowlink COLOR="#b43f57" DESTINATION="ID_1703778866" ENDARROW="Default" ENDINCLINATION="-1037;-26;" ID="Arrow_ID_1563102453" STARTARROW="None" STARTINCLINATION="-107;797;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1771445469499" ID="ID_1217260767" MODIFIED="1771447698493" TEXT="Case-1">
+<node CREATED="1771445475727" ID="ID_1387681407" MODIFIED="1771445492202" TEXT="roh-Buffer belegen &#x27f9; kein ctor aufgerufen"/>
+<node CREATED="1771445494472" ID="ID_1296494011" MODIFIED="1771445506683" TEXT="Objekt erzeugen &#x27f9; ctor"/>
+<node CREATED="1771445515166" ID="ID_447921413" MODIFIED="1771445531675" TEXT="roh-Buffer schlie&#xdf;en &#x27f9; kein dtor"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1771445534280" ID="ID_858270212" MODIFIED="1771449157190" TEXT="Case-2">
+<node CREATED="1771445538631" ID="ID_1776783699" MODIFIED="1771445547081" TEXT="Buffer mit Objekt"/>
+<node CREATED="1771445548213" ID="ID_1664695576" MODIFIED="1771445555881" TEXT="ctor und dtor automatisch aufgerufen"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1771445561658" ID="ID_722870223" MODIFIED="1771454491546" TEXT="Case-3">
+<node CREATED="1771445568235" ID="ID_527191809" MODIFIED="1771445576172" TEXT="Emergency Clean-up"/>
+<node CREATED="1771445577130" ID="ID_428883319" MODIFIED="1771445584948" TEXT="Buffer mit Objekt &#x27f9; ctor aufgerufen"/>
+<node CREATED="1771445586568" ID="ID_241080784" MODIFIED="1771445596299" TEXT="clean-up ohne dtor &#x27f9; kein dtor"/>
+<node CREATED="1771445603598" ID="ID_965160552" MODIFIED="1771445612252" TEXT="weiterer Buffer + clean-up mit dtor"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1771445614229" ID="ID_33658292" MODIFIED="1771456881976" TEXT="Case-4">
+<node CREATED="1771445620940" ID="ID_1189233412" MODIFIED="1771445648006" TEXT="ctor/dtor-&#x3bb;"/>
+<node CREATED="1771445682427" ID="ID_1710187908" MODIFIED="1771445718602" TEXT="pflanze mehrere Objekte + Logging"/>
+</node>
+<node CREATED="1771445726309" ID="ID_1153792783" MODIFIED="1771446278063" TEXT="Case-5">
+<node CREATED="1771445734608" ID="ID_1237619577" MODIFIED="1771445895319" TEXT="Refinement mit TypeHandler"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1771445942584" ID="ID_1549365674" MODIFIED="1771445985771" TEXT="zeigt da&#xdf; &#xbb;Basis&#xab; hier nur eine Buffer-Gr&#xf6;&#xdf;e ist">
+<icon BUILTIN="help"/>
+</node>
+</node>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -113164,8 +113258,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       <b>Solange ich mich also nicht aus dem zugrundeliegenden gedanklichen Schema l&#246;se</b><i>, werde ich hier nichts Relevantes in Bewegung bringen k&#246;nnen</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#65343f" DESTINATION="ID_560454050" ENDARROW="Default" ENDINCLINATION="428;-25;" ID="Arrow_ID_267752890" STARTARROW="Default" STARTINCLINATION="-454;26;"/>
 </node>
 <node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1771335394173" ID="ID_1566341422" MODIFIED="1771335450534" TEXT="offene Probleme:">
@@ -113230,6 +113323,10 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 </node>
 </node>
+</node>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1771445380969" ID="ID_1703778866" MODIFIED="1771445458623" TEXT="Type-Refinement fehlt">
+<linktarget COLOR="#b43f57" DESTINATION="ID_1703778866" ENDARROW="Default" ENDINCLINATION="-1037;-26;" ID="Arrow_ID_1563102453" SOURCE="ID_1813249595" STARTARROW="None" STARTINCLINATION="-107;797;"/>
+<icon BUILTIN="broken-line"/>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1771195835031" ID="ID_465237496" MODIFIED="1771195857844" TEXT="BufferProvider &#x27f6; in Vault umziehen">
 <icon BUILTIN="yes"/>
@@ -113359,8 +113456,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       Inhaltlich ist sie redundant, denn Zustands&#252;berg&#228;nge werden auch in den Metadaten gepr&#252;ft. Jedoch ist die ganze Struktur relativ offen, und es gibt sogar die &#187;Unsch&#228;rfe&#171;, da&#223; u.U der Pointer im Handle nicht auf NULL gesetzt wird (hab das gestern durchdacht und bin zu dem Schlu&#223; gekommen, da&#223; sich das nur um den Preis eines kompletten Umbaues beheben lie&#223;e, wozu ich keinen Anla&#223; sehe)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1771349832972" ID="ID_1073377063" MODIFIED="1771350841958" TEXT="also: auch daf&#xfc;r einen API-call-Pfad schaffen: isAllotted">
@@ -113775,8 +113871,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1771180748333" ID="ID_738177995" MODIFIED="1771180765150" TEXT="Fazit">
 <icon BUILTIN="flag-pink"/>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1771180751573" ID="ID_577853070" MODIFIED="1771180760077" TEXT="jetzt sieht die Sache schon klarer aus?">
-<icon BUILTIN="help"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1771180751573" ID="ID_577853070" MODIFIED="1771436757915" TEXT="insgesamt sieht die Sache schon klarer aus">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
 </node>
 <node CREATED="1771347540167" ID="ID_140501031" MODIFIED="1771348112880" TEXT="Habe BufferMetadata im Kern best&#xe4;tigt &#x2014; und (voererst) so belassen">
 <arrowlink COLOR="#634f7d" DESTINATION="ID_1922405500" ENDARROW="Default" ENDINCLINATION="259;1028;" ID="Arrow_ID_1669195374" STARTARROW="None" STARTINCLINATION="550;23;"/>
@@ -113902,8 +113999,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       derzeit <b><font size="4" color="#4a0cce">kann</font></b>&#160;ich gar nix mehr &#228;ndern
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="full-1"/>
 <node COLOR="#734398" CREATED="1771348310745" HGAP="24" ID="ID_842039957" MODIFIED="1771348334164" TEXT="(aus Mangel an Ideen)" VSHIFT="3">
 <font NAME="SansSerif" SIZE="9"/>
@@ -113940,10 +114036,99 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 </node>
 </node>
+<node CREATED="1771430377359" ID="ID_1030710505" MODIFIED="1771430406015" TEXT="Vor&#xfc;berlegung: der Metadaten-Record wird auch vom Speichermanagement mitverwendet">
+<node CREATED="1771430412735" ID="ID_776105206" MODIFIED="1771431080667" TEXT="das beruht auf den Allokator-Grundmustern">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Das sind letztlich immer wieder Variationen von Kachel-Bitmap und Freelist; die Entscheidung ist gepr&#228;gt vom Problem der Fragmentierung und dem Verschwenden von Speicher. Kacheln sind nur sinnvoll, wenn man sie nicht zusammenlegen mu&#223;; Pools brauchen ein gewisses Ma&#223; an &#187;Statistik&#171;, um zu funktionieren.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1771431082049" ID="ID_619351703" MODIFIED="1771431230064" TEXT="der lokale Allokator sollte keine Speicher-Reorganisation machen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Erfahrungsgem&#228;&#223; braucht jede Art von Speicher-Reorganisation einen gewissen Hebel (und ist trotzdem stets sehr aufwendig). Daher sollte der lokale Allokator selber keinen roh-Speicher zuteilen, sondern nur ganze Bl&#246;cke herumschieben
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1771431231469" ID="ID_136832370" MODIFIED="1771431303641" TEXT="Konsequenz: es braucht einen Deskriptor f&#xfc;r den Speicherblock">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ....und dieser Deskriptor kann nicht im Block selber liegen, weil man ihn auch zur de-Allokation braucht, und er damit schlecht ist f&#252;r das Alignment
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1771431304936" ID="ID_479377966" MODIFIED="1771431483895" TEXT="Konsequenz: die Speicherverwaltung ber&#xfc;hrt nicht den Inhalt der Speicherbl&#xf6;cke">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Das h&#228;ngt direkt mit dem CPU-Cache zusammen; Verwaltungs-Strukturen, die oft &#252;berarbeitet werden m&#252;ssen, sollten kompakt liegen. Damit scheidet die klassische, einfache Freelist-Allokation aus, bei der man nur f&#252;r freien Speicher <i>und direkt in diesem</i>&#160;eine Verwaltungsstruktur mitf&#252;hrt
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1771431494416" ID="ID_1111538571" MODIFIED="1771431606417" TEXT="Daher bietet es sich an, alle Verwaltungsinformationen im Metadaten-Record zu konzentrieren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Dadurch entsteht auch ein Hebel, so da&#223; der Speicher f&#252;r diese Metadaten-Records <i>selber</i>&#160;sehr gut auf das Kachel-Schema pa&#223;t
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1770828324568" ID="ID_1432290830" MODIFIED="1770828388601" TEXT="eine massiv parallele Implementierung m&#xf6;glich machen...">
 <arrowlink COLOR="#5e34c1" DESTINATION="ID_1154484414" ENDARROW="Default" ENDINCLINATION="101;-95;" ID="Arrow_ID_1475255011" STARTARROW="None" STARTINCLINATION="-185;9;"/>
 <icon BUILTIN="hourglass"/>
+<node CREATED="1771429539679" ID="ID_567714224" MODIFIED="1771429550678" TEXT="es zeichnet sich bereits das Aufrufmuster ab">
+<node CREATED="1771429557905" ID="ID_1006520101" MODIFIED="1771429572704" TEXT="die Deskriptoren werden vom Builder angelegt"/>
+<node CREATED="1771429923834" ID="ID_593032016" MODIFIED="1771429961826" TEXT="die Render-Steuerung k&#xf6;nnte eine Kapazit&#xe4;tsplanung beitragen"/>
+<node CREATED="1771429966098" ID="ID_620022302" MODIFIED="1771429977216" TEXT="der Worker-Thread macht ein Announcement"/>
+<node CREATED="1771429985051" ID="ID_111399700" MODIFIED="1771430009180" TEXT="in der Node-Invocation werden Buffer sofort und latenzarm erwartet"/>
+</node>
+<node CREATED="1771430060637" ID="ID_49105544" MODIFIED="1771430067772" TEXT="das bedeutet vor allem: Verteilung">
+<node CREATED="1771430069544" ID="ID_300368607" MODIFIED="1771430077276" TEXT="es mu&#xdf; lokale Speicherpools geben"/>
+<node CREATED="1771430078196" ID="ID_579960502" MODIFIED="1771430115450">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <u>besonders wichtig</u>: Metadaten <i>wandern &#252;ber Threadgrenzen</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -113954,6 +114139,19 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="yes"/>
 <node CREATED="1770828236428" ID="ID_669207960" MODIFIED="1770828249582" TEXT="thematisch geh&#xf6;rt das in den Bereich &#xbb;Engine&#xab;"/>
 <node CREATED="1770828250858" ID="ID_177391368" MODIFIED="1770828268013" TEXT="es mu&#xdf; aber im &#xbb;Low-Level-Model&#xab; verankert sein"/>
+<node CREATED="1771430181729" ID="ID_277533122" MODIFIED="1771430334235" TEXT="das Thema umfa&#xdf;t auch den Cache und die Ausgabepuffer">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Vor allem der Cache spielt eine erhebliche Rolle, denn er ist der gr&#246;&#223;te Speicherverbraucher; der aktuelle Speicherbedarf mu&#223; in der Regel &#8222;dem Cache entrissen&#8220; werden &#8212; und man verdr&#228;ngt dabei entweder Inhalte in einen persistenten Cache, oder verliert sie ganz, und mit ihnen die aufgebrachten Renderzeit
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1770668981744" ID="ID_1636601070" MODIFIED="1770674840976" TEXT="Begriffsbildung ordnen">
 <arrowlink COLOR="#2322ad" DESTINATION="ID_1789434340" ENDARROW="Default" ENDINCLINATION="-1059;-157;" ID="Arrow_ID_1470173021" STARTARROW="None" STARTINCLINATION="-1095;118;"/>
@@ -133491,9 +133689,199 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1770828113207" ID="ID_1891198177" MODIFIED="1770828493362" TEXT="Konzeption der Fundemente">
 <linktarget COLOR="#f50221" DESTINATION="ID_1891198177" ENDARROW="Default" ENDINCLINATION="-700;-67;" ID="Arrow_ID_1175301159" SOURCE="ID_1154484414" STARTARROW="None" STARTINCLINATION="-1164;56;"/>
 <icon BUILTIN="pencil"/>
+<node CREATED="1771431677354" ID="ID_315128547" MODIFIED="1771431687124" TEXT="Anforderungen und Nutzungsmuster">
+<node CREATED="1771431689328" ID="ID_723040917" MODIFIED="1771431694993" TEXT="Zielkonflikt">
+<node CREATED="1771431702526" ID="ID_1948404302" MODIFIED="1771431723686" TEXT="Speicher zum Rendern soll schnell und ohne Latenz bereitstehen"/>
+<node CREATED="1771431746896" ID="ID_175515697" MODIFIED="1771431770201" TEXT="Koordination und Verwaltung brauchen einen gewissen Leerlauf"/>
+<node CREATED="1771431771516" ID="ID_1334749334" MODIFIED="1771431799157" TEXT="aber der Cache m&#xf6;chte jeden verf&#xfc;gbaren Speicher langfristig belegen"/>
+</node>
+<node CREATED="1771431847408" ID="ID_1598041479" MODIFIED="1771431857379" TEXT="Latenz / Contention">
+<node CREATED="1771431922937" ID="ID_767766066" MODIFIED="1771431939583" TEXT="jede zentrale Koordinierung erzwingt Speicher-Synchronisation"/>
+<node CREATED="1771432287182" ID="ID_447894612" MODIFIED="1771432315056" TEXT="es mu&#xdf; daher thread-local einen kleinen Pool an Speicherbl&#xf6;cken geben"/>
+<node CREATED="1771432342656" ID="ID_1398418752" MODIFIED="1771432555752" TEXT="das &#xbb;Anouncement&#xab; erm&#xf6;glicht dem Worker eine Vorbereitung"/>
+<node CREATED="1771432559475" ID="ID_870538833" MODIFIED="1771433512945" TEXT="Aber hier tritt das &#xbb;Box-packing&#xab;-Problem auf">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Beispiel: es gibt einen Engpa&#223; in der gegebenen Berechnungs-Pipeline; dort werden 10 Bl&#246;cke &#224; 10 MiB gebraucht, sowie 10 Bl&#246;cke &#224; 1 KiB
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1771433520019" ID="ID_1280671929" MODIFIED="1771433571059" TEXT="&#x27f9; lokale Resourcen-Verwaltung notwendig">
+<node CREATED="1771433596297" ID="ID_530281677" MODIFIED="1771433606524" TEXT="fehlende Resourcen werden sofort bereitgestellt"/>
+<node CREATED="1771433582282" ID="ID_1769179919" MODIFIED="1771433595357" TEXT="mu&#xdf; Ansammeln &#xfc;berfl&#xfc;ssiger Resourcen verhindern"/>
+<node CREATED="1771433622862" ID="ID_195557143" MODIFIED="1771433800961" TEXT="braucht Triggerschwellen und eine Buchhaltung">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      beispielsweise einen Bonus/Malus Z&#228;hler, der inkrementiert wird, wenn ein Block genutzt werden kann, und dekrementiert wird, wenn ein Block &#252;bersprungen werden mu&#223;, weil er zu klein ist. Es mu&#223; denn ein Aufr&#228;um-Zykuls getriggert werden, sobald der erste Block in der Liste eine hohe Bonus-Zahl bekommt; in dem Fall sollten alle Bl&#246;cke unterhalb eines gewissen Score aufgesammelt und an den zentralen Resourcen-Pool zur&#252;ck gesandt werden
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1771433802134" ID="ID_372479446" MODIFIED="1771433890336" TEXT="es entsteht ein Messaging mit Speicher-Deskriptoren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      dabei bekommt jeweils der Empf&#228;nger die alleinige Verf&#252;gungsgewalt &#252;ber den am Deskriptor h&#228;ngenden Block
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1771433907560" ID="ID_1739703978" MODIFIED="1771433914067" TEXT="Verschwendung vs. Pooling">
+<node CREATED="1771433916820" ID="ID_535507584" MODIFIED="1771433937367" TEXT="der Cache m&#xf6;chte Bl&#xf6;cke (mit Inhalt) m&#xf6;glichst langfristig horten"/>
+<node CREATED="1771433962120" ID="ID_584068900" MODIFIED="1771434081814" TEXT="die lokalen Verbraucher arbeiten aber nicht mit ma&#xdf;geschneiderten Zuteilungen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Denn das w&#228;re <i>vermutlich</i>&#160;zu aufwendig (vor allem da es den Code komplex macht).
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1771434083664" ID="ID_548553172" MODIFIED="1771434555672" TEXT="man k&#xf6;nnte Bl&#xf6;cke beim Caching k&#xfc;rzen &#x2014; das interferiert aber mit dem Pooling">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Dabei gehe ich &#8212; vorgreifend &#8212; davon aus, da&#223; wir eine Reihe von Pools mit gestaffelter Kachel-Gr&#246;&#223;e verwenden, als Basis-Allokation. Da wir es allerdings mit ziemlich gro&#223;en Bl&#246;cken zu tun haben, k&#246;nnen wir uns da nur wenige Staffeln leisten, und auch das nur, wenn es eine dynamische Steuerung gibt.
+    </p>
+    <p>
+      Wenn man nun aber in einer solchen Situation einzelne Cacheln f&#252;r lange Zeit in den Cache abgibt, oder gar sogar im Cache dauerhaft die Gr&#246;&#223;e reduziert und den &#220;berschu&#223; freigibt, f&#252;hrt das zu einer wachsenden Fragmentierung und behindert die besagte dynamische Steuerung.
+    </p>
+    <p>
+      Letztlich lassen sich diese Probleme <b>ohne Empirie nicht ad&#228;quat behandeln</b>.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1771434566154" ID="ID_324686771" MODIFIED="1771434602865" TEXT="m&#xf6;glicherweise gibt es eine Garbage-Collection im Cache, als Hintergrundproze&#xdf;"/>
+</node>
+</node>
+<node CREATED="1771435558366" ID="ID_1118141898" MODIFIED="1771435564895" TEXT="Einbindung in das Gesamtsystem">
+<node CREATED="1771435578494" ID="ID_862962078" MODIFIED="1771435581997" TEXT="Aktoren">
+<node CREATED="1771435596799" ID="ID_613614143" MODIFIED="1771435605338" TEXT="konzeptionell ist das alles &#xbb;Die Engine&#xab;"/>
+<node CREATED="1771435619446" ID="ID_1113025098" MODIFIED="1771435646493" TEXT="zun&#xe4;chst gibt es jedoch nur den Session-Thread und die Worker(+Scheduler)"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1771436265516" ID="ID_1393697571" MODIFIED="1771436282468" TEXT="Frage: wer macht die Verwaltungsarbeit?">
+<icon BUILTIN="help"/>
+<node CREATED="1771436284620" ID="ID_308615584" MODIFIED="1771436305104" TEXT="f&#xfc;r das Buffer-Management">
+<node CREATED="1771436339660" ID="ID_1972323467" MODIFIED="1771436356334" TEXT="mu&#xdf; hier sofort beim Auftreten einer Anforderung reagieren"/>
+<node CREATED="1771436361243" ID="ID_539469544" MODIFIED="1771436382995" TEXT="es sind aber blockende Aufgaben involviert, wie Heap-Allokation"/>
+<node CREATED="1771436508078" ID="ID_244113719" MODIFIED="1771436550261">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      &#10233; hierf&#252;r ist ein dedizierter <b>Service-Thread</b>&#160;die einfachste L&#246;sung
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1771436306089" ID="ID_862253994" MODIFIED="1771436308932" TEXT="f&#xfc;r den Cache">
+<node CREATED="1771436577677" ID="ID_636699078" MODIFIED="1771436613780" TEXT="grunds&#xe4;tzlich w&#xe4;re das eine Hintergrund-Aktivit&#xe4;t"/>
+<node CREATED="1771436614824" ID="ID_1860752437" MODIFIED="1771436629094" TEXT="die Frage ist: wie gut ist die Arbeit modularisierbar?"/>
+<node CREATED="1771436633557" ID="ID_327567555" MODIFIED="1771436712053" TEXT="relevant ist auch, wie lange das System ohne diese Verwaltungsarbeit &#xfc;berleben kann...">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      konkret, &#252;berstehen wir einen 10-Stunden-Render unter Druck (whatever it takes)?
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1770828120216" ID="ID_1112258994" MODIFIED="1770828480214" TEXT="vorl&#xe4;ufige Implementierung">
 <icon BUILTIN="hourglass"/>
+<node CREATED="1771434625350" ID="ID_87043838" MODIFIED="1771434634233" TEXT="vorgreifende Vereinfachungen">
+<node CREATED="1771434938648" ID="ID_598910343" MODIFIED="1771435079926" TEXT="Anouncements ignorieren und jeweils per Heap allozieren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das aber in Code, der single-Threaded l&#228;uft; sofern man beim Implementieren darauf Acht gibt, keine &#252;bergreifende Koordinierung zu machen, also nur Aufruf-lokalen State verwendet, kann dieses Muster bereits von einem &#187;naiven&#171; Allokator geleistet werden
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="forward"/>
+</node>
+<node CREATED="1771434732657" ID="ID_1779414160" MODIFIED="1771435551701" TEXT="Verwaltung nur lokal im Thread">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Es gibt bei diesem Modell also bereits Code, der im Worker-Thread abl&#228;uft und einen thread-local-State hat; auch Announcements werden behandelt. Es gibt aber tats&#228;chlich keine Zentrale, und dem entsprechend auch kein asynchrones Messaging
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1771434757430" ID="ID_460264122" MODIFIED="1771434936057" TEXT="es gibt dort bereits ein gewisses Pooling">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Also man implementiert bereits eine Liste vorhandener Bl&#246;cke und auch schon die Verwendungs-Z&#228;hler, aber man kommuniziert nicht mit einer zentralen Renderbuffer-Verwaltung, sondern macht einfach Heap-Allokationen und Deallokationen, schlie&#223;lich ist der Heap bereits ein ziemlich ausgereifter Resourcen-Manager, und wird auch indirekt durch das virtuelle Memory-Mapping unterst&#252;tzt (was Segen und Fluch zugleich sein kann)
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1771434769658" ID="ID_830753719" MODIFIED="1771434796468" TEXT="aber neu-Allokationen und Freigaben passieren direkt per Heap-Memory"/>
+</node>
+<node CREATED="1771435088490" ID="ID_1084049036" MODIFIED="1771435456405" TEXT="Zentraler Pool arbeitet identisch wie die thread-lokale Verwaltung">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Man verwendet also in diesem Schema bereits einen zentralen Pool, der aber nach der gleichen Logik behandelt wird, wie in der lokalen Verwaltung. Einziger Unterschied ist, da&#223; Anfragen hier nicht per API-Aufruf direkt ankommen, sondern &#252;ber asynchrones Messaging. Ansonsten bedient sich dieser zentrale Pool aber ebenfalls direkt von/zum Heap. Man spekuliert bei diesem Modell lediglich auf einen gewissen Aggregations-Effekt
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1702414560197" ID="ID_1321884127" MODIFIED="1702414571124" TEXT="Verhalten unter echter Last beobachten">

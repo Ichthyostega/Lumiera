@@ -20,15 +20,14 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/test/tracking-dummy.hpp"
-#include "lib/util-foreach.hpp"
-#include "lib/iter-zip.hpp"
-#include "steam/engine/testframe.hpp"
-#include "steam/engine/test-rand-ontology.hpp"
 #include "steam/engine/diagnostic-buffer-provider.hpp"
-#include "lib/test/diagnostic-output.hpp"////////////////////TODO
+#include "steam/engine/test-rand-ontology.hpp"
+#include "steam/engine/testframe.hpp"
+#include "lib/iter-zip.hpp"
+
+#include <array>
 
 using util::isSameObject;
-using util::for_each;
 using lib::HashVal;
 using lib::zip;
 
@@ -37,16 +36,12 @@ namespace steam {
 namespace engine{
 namespace test  {
   
-  using lib::test::Dummy;
-  
-  using steam::engine::BuffHandle;
   using LERR_(LIFECYCLE);
-  using LERR_(LOGIC);
   
   
   namespace { // Test fixture
     
-    const uint TEST_ELMS = 20;
+    const uint TEST_ELMS = 50;
     
     
     HashVal
@@ -80,10 +75,11 @@ namespace test  {
       virtual void
       run (Arg)
         {
+          seedRand();
+          
           verifySimpleUsage();
           verifyRenderingUse();
-//          verifyObjectAttachment();
-//          verifyObjectAttachmentFailure();  //////////////////////////OOO need a completely new test case to cover behaviour of failed ctor calls
+          verifyObjectEmbedding();
         }
       
       
@@ -116,7 +112,39 @@ namespace test  {
         }
       
       
-      /** @test demonstrate the full sequence of invocations during rendering
+      /** @test demonstrate the full sequence of invocations encountered during rendering:
+       *      - as a first step, _buffer types_ are declared (usually by the Builder)
+       *      - before start of computations, required amount of buffers is _announced_
+       *      - actual buffers are then claimed from within the ongoing computation
+       *      - buffer handles can be passed on and re-assigned
+       *      - buffers with computed results are _marked emitted_
+       *      - each step not only creates new buffers, but also _releases_ old ones.
+       * @remark while the control structure in this test is represented by a simple `for`-loop,
+       *   instead of the complicated recursive call-down found in the actual Render Engine,
+       *   the actual computations use a test-scheme with chained hash values, which allows
+       *   to prove that all computations happened exactly in the planned order. This
+       *   technique was developed for [verifying render nodes](\ref node-devel-test.cpp)
+       *   and relies on TestFrame objects representing a buffer filled with random yet
+       *   deterministic data. Each step in this [dummy computation](\ref do-some_computation)
+       *   - uses a source data buffer
+       *   - reads the _checksum_ of this source buffer
+       *   - uses this checksum as a _parameter_ for a »filtering operation«
+       *   - this filter or manipulation operation chains each source value with the parameter
+       *   - the resulting result values are then extracted from TestFrame and copied into
+       *     another data buffer (thereby widening from 8bit data to 64bit data)
+       *   - furthermore, each step computes the checksum of the result buffer
+       *   - and stores this checksum into a mark buffer
+       *   - note that the result buffer is passed on as source buffer to the next step.
+       *   Once this computation scheme is carried out, the checksum from the last result buffer
+       *   is retrieved. All buffers are already marked as discarded at that point, yet due to
+       *   the DiagnosticBufferProvider used for the test, the actual memory blocks were not
+       *   really deleted yet, and their contents can be inspected and verified after the fact.
+       *   This verification reinvokes the computation steps to validate the captured checksums,
+       *   which ensures that, overall
+       *   - buffers are not mixed up
+       *   - the buffer identities are maintained in the correct way
+       *   - data in buffers is not corrupted or re-used in uncontrolled ways
+       *   - all protocol steps (locking, emitting, releasing) happen in the expected order
        */
       void
       verifyRenderingUse()
@@ -177,6 +205,7 @@ namespace test  {
           workBuff.release(); // note: not every buffer need be emitted.
           CHECK (!workBuff);
           
+          // Computation complete now — verify buffer management....
           auto inspect = watch(provider);
           CHECK (inspect.created.cnt() == 3*TEST_ELMS + 1);
           CHECK (inspect.was_used (workBuff));
@@ -184,9 +213,9 @@ namespace test  {
           CHECK (not inspect.was_emitted (workBuff));
           CHECK (inspect.all_buffers_released());
           
-          // now peek into buffer memory
-          // to prove that that the complete computation chain
-          // was in fact performed, and was using the memory as intended
+          // peek into buffer memory...
+          // to prove that that the complete computation chain was
+          // in fact performed, and was using the memory as intended
           uint last = inspect.released.cnt() - 1;
           diagn::Block lastWork = inspect.released[last];
           diagn::Block lastMark = inspect.released[last-1];
@@ -223,83 +252,202 @@ namespace test  {
         }
       
       
-#if false  //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : disabled code to disentangle BufferProvider implementation
+      
+      /** @test automatic embedding of structures into a buffer
+       *      - contents of a raw buffer are never touched by the BufferProvider
+       *      - yet it is possible to define a _buffer type_ to _emplace_
+       *        some arbitrary type into the buffer; such an embedded instance
+       *        is then managed alongside with the buffer state transitions
+       *      - we can even define custom handler functions to prepare
+       *        arbitrary structures within the buffer — or engage into
+       *        whatever kind of havoc we like (you have been warned)
+       *      - when invoking an _emergency clean-up_, destructor functors
+       *        can optionally invoked, or skipped (the latter is the default)
+       * @remark this test uses the [tracking test-dummy](\ref lib::test::Tracker),
+       *   which records each ctor and dtor call into an lib::test::EventLog.
+       *   This allows us to play through several scenarios and verify
+       *   that objects are created and (not) destroyed, all as expected.
+       * @see test-tracking-test.cpp
+       * @see event-log-test.cpp
+       */
       void
-      verifyObjectAttachment()
+      verifyObjectEmbedding()
         {
           DiagnosticBufferProvider provider;
-          BuffDescr type_A = provider.getDescriptorFor(sizeof(TestFrame));
-          BuffDescr type_B = provider.getDescriptorFor(sizeof(int));
-          BuffDescr type_C = provider.getDescriptor<int>();
           
-          BuffHandle handle_A = provider.lockBuffer(type_A);
-          BuffHandle handle_B = provider.lockBuffer(type_B);
-          BuffHandle handle_C = provider.lockBuffer(type_C);
+          using lib::test::Tracker;
+          auto& log = Tracker::log;
+          log.clear();
           
-          CHECK (handle_A);
-          CHECK (handle_B);
-          CHECK (handle_C);
+          BuffDescr rawBuff = provider.getDescriptorFor(sizeof(Tracker));
+          BuffDescr objBuff = provider.getDescriptor<Tracker>();
+          CHECK (rawBuff.buffSize() == objBuff.buffSize());
           
-          CHECK (sizeof(TestFrame) == handle_A.size());
-          CHECK (sizeof( int )     == handle_B.size());
-          CHECK (sizeof( int )     == handle_C.size());
           
-          TestFrame& embeddedFrame = handle_A.create<TestFrame>();
-          CHECK (isSameObject (*handle_A, embeddedFrame));
-          CHECK (embeddedFrame.isAlive());
-          CHECK (embeddedFrame.isSane());
+          { // Case-1 : Raw buffer does not create any embedded instance
+            log.event("Case-1");
+            BuffHandle handle = provider.lockBuffer(rawBuff);
+            CHECK (handle.size() >= sizeof(Tracker));
+            CHECK (handle.isAllotted());
+            // But no object has been created yet....
+            CHECK (log.ensureNot("ctor")
+                      .afterEvent("Case-1"));
+            
+            // explicitly placement-construct object into the buffer
+            new(handle.rawStorage()) Tracker{55};
+            Tracker& emplaced = handle.accessAs<Tracker>();
+            CHECK (emplaced.val == 55);
+            CHECK (log.verify("Case-1")
+                      .beforeCall("ctor").on(&emplaced).arg(55));
+            
+            handle.release();
+            CHECK (not handle.isAllotted());
+            
+            // Buffer is disposed now,
+            // but emplaced object was not destroyed automatically
+            CHECK (log.ensureNot("dtor")
+                      .afterCall("ctor").arg(55));
+          }
           
-          VERIFY_ERROR (LOGIC,     handle_B.create<TestFrame>());   // too small to hold a TestFrame
-          VERIFY_ERROR (LIFECYCLE, handle_C.create<int>());         // has already an attached TypeHandler (creating an int)
           
-          handle_A.release();
-          handle_B.release();
-          handle_C.release();
+          { // Case-2 : Buffer with object instance automatically emplaced
+            log.event("Case-2");
+            CHECK (log.ensureNot("ctor").after("Case-2"));
+            
+            // allot buffer and emplace Tracker instance automatically
+            BuffHandle handle = provider.lockBuffer(objBuff);
+            Tracker& emplaced = handle.accessAs<Tracker>();
+            CHECK (log.verify("Case-2")
+                      .beforeCall("ctor").on(&emplaced).arg());
+            
+            int randomVal{emplaced.val};
+            CHECK (0 < randomVal and randomVal < 1000);
+            // NOTE: buffer access is actually an unchecked force-cast!
+            int something = handle.accessAs<int>();
+            CHECK (something == randomVal);
+            CHECK (std::is_standard_layout_v<Tracker>);
+            
+            CHECK (log.ensureNot("dtor").afterEvent("Case-2"));
+            handle.emit();
+            CHECK (not handle);          // no longer accessible
+            CHECK (handle.isAllotted()); // while buffer contents are still alive
+            CHECK (log.ensureNot("dtor").afterEvent("Case-2"));
+            
+            // Emplaced object is destroyed when releasing buffer
+            handle.release();
+            CHECK (not handle.isAllotted());
+            CHECK (log.verify("Case-2")
+                      .beforeCall("ctor").arg()
+                      .beforeCall("dtor").arg(randomVal));
+          }
           
-          CHECK (embeddedFrame.isDead());
-          CHECK (embeddedFrame.isSane());
+          
+          { // Case-3 : Emergency clean-up
+            log.event("Case-3");
+            
+            BuffHandle buf1 = provider.lockBuffer(objBuff);
+            BuffHandle buf2 = provider.lockBuffer(objBuff);
+            
+            auto& o1 = buf1.accessAs<Tracker>();
+            auto& o2 = buf2.accessAs<Tracker>();
+            CHECK (log.verify("Case-3")
+                      .beforeCall("ctor").on(&o1).arg()
+                      .beforeCall("ctor").on(&o2).arg());
+            
+            int i1 = o1.val;
+            CHECK (i1 > 0);
+            o2.val = -1; // so we can tell them apart
+            
+            // Emergency clean-up can optionally invoke the dtor
+            CHECK (buf1.isAllotted());
+            CHECK (buf2.isAllotted());
+            provider.emergencyCleanup(buf1, true); // invoke dtor
+            buf2.emergencyCleanup();               // don't invoke dtor
+            CHECK (not buf1.isAllotted());
+            CHECK (not buf2.isAllotted());
+            
+            // only dtor for o1 was invoked
+            CHECK (log.verify("Case-3")
+                      .beforeCall("ctor")
+                      .beforeCall("dtor").arg(i1));
+            // while buf2 was discarded without invoking dtor of o2
+            CHECK (log.ensureNot("Case-3")
+                      .beforeCall("ctor")
+                      .beforeCall("dtor").arg(-1));
+          }
+          
+          
+          { // Case-4 : explicitly given ctor/dtor-λ
+            log.event("Case-4");
+            using Arr = std::array<Tracker,2>;
+            TypeHandler treat{[](void* buff){ // invoked on each buffer created from that type
+                                              Tracker::log.event("create two...");
+                                              new(buff) Arr{};
+                                            }
+                             ,[](void* buff){ // invoked whenever releasing a buffer of that type
+                                              static_cast<Arr*>(buff)->~Arr();
+                                              Tracker::log.event("both destroyed");
+                                            }
+                             };
+            
+            BuffDescr special = provider.getDescriptorFor(sizeof(Arr), treat);
+            CHECK (special.isValid());
+            CHECK (special.buffSize() == sizeof(Arr));
+            CHECK (HashVal(special) != HashVal(rawBuff));
+            CHECK (HashVal(special) != HashVal(objBuff));
+            
+            // nothing happened yet...
+            CHECK (log.ensureNot("create two..."));
+            
+            // allocate a buffer as »instance« of this buffer type...
+            BuffHandle buff = special.lockBuffer();
+            CHECK (buff.isValid());
+            CHECK (log.verify("Case-4")
+                      .beforeEvent("create two...")
+                      .beforeCall("ctor").arg()
+                      .beforeCall("ctor").arg());
+            // so buffer was called and two objects created, but not destroyed yet
+            CHECK (log.ensureNot("Case-4").before("ctor").before("dtor"));
+            
+            // can use buffer with embedded structure now...
+            Arr& inlay = buff.accessAs<Arr>();
+            CHECK (0 < inlay[0].val);
+            CHECK (0 < inlay[1].val);
+            int i1 = inlay[0].val;
+            inlay[1].val = -55; // so we can identify the dtor call in the log
+            
+            // complete buffer usage cycle...
+            buff.emit();
+            CHECK (not buff);
+            CHECK (buff.isAllotted());
+            // objects are still alive....
+            CHECK (log.ensureNot("Case-4").before("both destroyed"));
+            //
+            buff.release();
+            CHECK (not buff.isAllotted());
+            CHECK (log.verify("Case-4")
+                      .beforeEvent("create two...")
+                      .before("ctor")
+                      .before("ctor")
+                      .before("dtor")
+                      .before("dtor")
+                      .beforeEvent("both destroyed"));
+            // Order of individual ctor/dtor calls is implementation defined,
+            // yet the overall sequence is guaranteed...
+            CHECK (log.verify("Case-4")
+                      .before("ctor")
+                      .before("dtor").arg(i1)
+                      .beforeEvent("both destroyed"));
+            CHECK (log.verify("Case-4")
+                      .before("ctor")
+                      .before("dtor").arg(-55)
+                      .beforeEvent("both destroyed"));
+          }
+          
+          cout << "____Tracker-Log_______________\n"
+               << util::join(Tracker::log,      "\n")
+               << "\n───╼━━━━━━━━━━━╾──────────────"<<endl;
         }
-      
-      
-      void
-      verifyObjectAttachmentFailure()
-        {
-          DiagnosticBufferProvider provider;
-          BuffDescr type_D = provider.getDescriptorFor(sizeof(Dummy));
-          
-          Dummy::checksum() = 0;
-          BuffHandle handle_D = provider.lockBuffer(type_D);
-          CHECK (0 == Dummy::checksum());  // nothing created thus far
-          
-          handle_D.create<Dummy>();
-          CHECK (0 < Dummy::checksum());
-          
-          handle_D.release();
-          CHECK (0 == Dummy::checksum());
-          
-          BuffHandle handle_DD = provider.lockBuffer(type_D);
-          
-          CHECK (0 == Dummy::checksum());
-          Dummy::activateCtorFailure();
-          
-          CHECK (handle_DD.isValid());
-          try
-            {
-              handle_DD.create<Dummy>();
-              NOTREACHED ("Dummy ctor should fail");
-            }
-          catch (int val)
-            {
-              CHECK (!handle_DD.isValid());
-              
-              CHECK (0 < Dummy::checksum());
-              CHECK (val == Dummy::checksum());
-            }
-          
-          VERIFY_ERROR (LIFECYCLE, handle_DD.accessAs<Dummy>() );
-          VERIFY_ERROR (LIFECYCLE, handle_DD.create<Dummy>() );
-        }
-#endif  /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : (end) disabled code
     };
   
   
