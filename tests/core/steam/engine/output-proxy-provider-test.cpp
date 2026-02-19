@@ -19,7 +19,7 @@
 #include "lib/test/run.hpp"
 
 //#include "steam/play/diagnostic-output-slot.hpp"
-#include "steam/engine/buffer-proxy-provider.hpp"
+#include "steam/engine/buffer-proxy-adaptor.hpp"
 #include "steam/engine/test-rand-ontology.hpp"
 
 
@@ -40,6 +40,7 @@ namespace test  {
    * @todo 2/2026 broken by refactoring of BufferProvider        //////////////////////////////////////////////TICKET #1410 : refactoring to separate external and implementation API
    * @todo however, something along this lines *must*
    *       be made possible, somehow, for OutputSlot...
+   * @todo 2/2026 now using this setup for prototyping        /////////////////////////////////////////////////TICKET #1415 : explore this design idea through prototyping
    */
   class OutputProxyProvider_test : public Test
     {
@@ -54,7 +55,7 @@ namespace test  {
                                 lastState = state;
                               };
           // setup with notification callback
-          BufferProxyProvider proxPro{listener};
+          BufferProxyAdaptor proxPro{listener};
           
           // Assuming some data block is »given«
           seedRand();

@@ -1,8 +1,8 @@
 /*
-  BUFFER-PROXY-PROVIDER.hpp  -  Adapter to access existing allocation via buffer handling protocol
+  BUFFER-PROXY-ADAPTOR.hpp  -  Adaptor to access existing allocation via buffer handling protocol
 
    Copyright (C)
-     2024,            Hermann Vosseler <Ichthyostega@web.de>
+     2024,2026        Hermann Vosseler <Ichthyostega@web.de>
 
   **Lumiera** is free software; you can redistribute it and/or modify it
   under the terms of the GNU General Public License as published by the
@@ -11,17 +11,17 @@
 
 */
 
-/** @file buffer-proxy-provider.hpp
+/** @file buffer-proxy-adaptor.hpp
  ** Adapter to expose a given memory block through a BuffHandle.
- ** This allows to integrate a specific data access (e.g. related to input / output)
- ** with the buffer lifecycle protocol as defined by BufferProvider.
+ ** This implementation building-block allows to integrate some specific data access
+ ** (e.g. related to input / output) through the buffer lifecycle protocol as defined by BufferProvider. 
  ** @todo BROKEN as of 12/2024 //////////////////////////////////////////////////////////////////////////////TICKET #1387 : can not properly compose BufferProvider
  ** @see output-slot.hpp
  ** @see output-proxy-provider-test.cpp
  */
 
-#ifndef STEAM_ENGINE_BUFFER_PROXY_PROVIDER_H
-#define STEAM_ENGINE_BUFFER_PROXY_PROVIDER_H
+#ifndef STEAM_ENGINE_BUFFER_PROXY_ADAPTOR_H
+#define STEAM_ENGINE_BUFFER_PROXY_ADAPTOR_H
 
 
 #include "lib/error.hpp"
@@ -51,11 +51,19 @@ namespace engine {
   
   
   /**
-   * Adapter to expose access to data blocks via BuffHandle and the BufferProvider protocol.
-   * @todo WIP-WIP 12/2024 this is a design sketch to explore extension capabilities of BufferProvider
-   * @todo 2/2026 broken by refactoring of BufferProvider        //////////////////////////////////////////////TICKET #1410 : refactoring to separate external and implementation API
+   * Adapter to expose access controlled access to some memory resource
+   * through a [»Buffer Type«](\ref BuffDescr) and a BuffHandle as front-end,
+   * in accordance with the BufferProvider protocol.
+   * 
+   * This template is an implementation building block and needs to be instantiated
+   * with a policy or configuration to define the flexible parts of the behaviour
+   * - what a Buffer Type means
+   * - is there only one resource or is this setup statefull?
+   * - callback functors for the lifecycle stages related to the client's access
+   * @todo WIP-WIP 2/2026 used as prototype to forge a path ahead to resolve
+   *       the structural problems with OutputSlot vs. BufferProvider   ///////////////////////////////////////TICKET #1415 : prototyping to resolve structural mismatch between OutputSlot / DataSink / BufferProvider
    */
-  class BufferProxyProvider
+  class BufferProxyAdaptor
     : util::NonCopyable
     {
       
@@ -106,8 +114,8 @@ namespace engine {
       
       
     public:
-      template<class LIS,                  typename = lib::meta::disable_if_self<BufferProxyProvider, LIS>>
-      BufferProxyProvider (LIS&& listener)
+      template<class LIS,                  typename = lib::meta::disable_if_self<BufferProxyAdaptor, LIS>>
+      BufferProxyAdaptor (LIS&& listener)
         : passThroughProvider_{std::forward<LIS> (listener)}
         { }
       
@@ -130,4 +138,4 @@ namespace engine {
   
   
 }} // namespace steam::engine
-#endif /*STEAM_ENGINE_BUFFER_PROXY_PROVIDER_H*/
+#endif /*STEAM_ENGINE_BUFFER_PROXY_ADAPTOR_H*/

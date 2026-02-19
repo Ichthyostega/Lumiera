@@ -283,7 +283,7 @@ namespace test  {
           // and get a new buffer to capture the output
           BuffHandle buffOut = provider.lockBufferFor<Buffer> (-99);
           CHECK (buff.accessAs<long>()    ==  r1);
-          CHECK (buffOut.accessAs<long>() == -55);  ///////////////////////////////////////OOO should be -99 --> aliasing of buffer meta records due to bug with hash generation
+          CHECK (buffOut.accessAs<long>() == -55);  /////////////////////////////////////////////////////////TICKET #1411 : should be -99 --> aliasing of buffer meta records due to bug with hash generation
           
           // configure the Manifold-2 with this input and output buffer
           m2.inBuff.createAt (0, buff);
@@ -291,13 +291,13 @@ namespace test  {
           CHECK (m2.inBuff[0].isValid());
           CHECK (m2.inBuff[0].accessAs<long>() == r1 );
           CHECK (m2.outBuff[0].isValid());
-          CHECK (m2.outBuff[0].accessAs<long>() == -55);   ////////////////////////////////OOO should be -99
+          CHECK (m2.outBuff[0].accessAs<long>() == -55);   //////////////////////////////////////////////////TICKET #1411 : should be -99
           
           // connect arguments to buffers
           m2.connect();
           CHECK (isSameAdr (m2.inArgs,  buff.rawStorage()));
           CHECK (isSameAdr (m2.outArgs, buffOut.rawStorage()));
-          CHECK (*m2.outArgs == -55);                      ////////////////////////////////OOO should be -99
+          CHECK (*m2.outArgs == -55);                      //////////////////////////////////////////////////TICKET #1411 : should be -99
           
           m2.invoke();
           CHECK (buffOut.accessAs<long>() == r1+1);
@@ -335,12 +335,12 @@ namespace test  {
           BuffHandle buffI2 = provider.lockBufferFor<Buffer> (-22);
           CHECK (buffI0.accessAs<long>() == r1  );         // (result from Example-1)
           CHECK (buffI1.accessAs<long>() == r1+1);         // (result from Example-2)
-          CHECK (buffI2.accessAs<long>() == -55 );  ///////////////////////////////////////OOO should be -22
+          CHECK (buffI2.accessAs<long>() == -55 );  /////////////////////////////////////////////////////////TICKET #1411 : should be -22
           // prepare a compound buffer and an extra buffer for output...
           BuffHandle buffO0 = provider.lockBufferFor<Sequence> (Sequence{-111,-222,-333});
           BuffHandle buffO1 = provider.lockBufferFor<Buffer> (-33);
           CHECK ((buffO0.accessAs<Sequence>() == Sequence{-111,-222,-333}));
-          CHECK (buffO1.accessAs<long>() == -55 );  ///////////////////////////////////////OOO should be -33
+          CHECK (buffO1.accessAs<long>() == -55 );  /////////////////////////////////////////////////////////TICKET #1411 : should be -33
            
           // configure the Manifold-3 with these input and output buffers
           m3.inBuff.createAt (0, buffI0);
@@ -355,20 +355,20 @@ namespace test  {
           auto& [o00,o01,o02] = *oa0;
           CHECK (*ia0 == r1  );
           CHECK (*ia1 == r1+1);
-          CHECK (*ia2 == -55 );       /////////////////////////////////////////////////////OOO should be -22
+          CHECK (*ia2 == -55 );       ///////////////////////////////////////////////////////////////////////TICKET #1411 : should be -22
           CHECK ( o00 == -111);
           CHECK ( o01 == -222);
           CHECK ( o02 == -333);
-          CHECK (*oa1 == -55 );       /////////////////////////////////////////////////////OOO should be -33
+          CHECK (*oa1 == -55 );       ///////////////////////////////////////////////////////////////////////TICKET #1411 : should be -33
           
           m3.invoke();
           CHECK (*ia0 == r1  );                            // Input buffers unchanged
           CHECK (*ia1 == r1+1);
-          CHECK (*ia2 == -55 );       /////////////////////////////////////////////////////OOO should be -22
+          CHECK (*ia2 == -55 );       ///////////////////////////////////////////////////////////////////////TICKET #1411 : should be -22
           CHECK ( o00 == *ia0+1);                          // Output buffers as processed by the function
           CHECK ( o01 == *ia1+1);
           CHECK ( o02 == *ia2+1);
-          CHECK (*oa1 == -55 + *ia0+*ia1+*ia2); ///////////////////////////////////////////OOO should be -33
+          CHECK (*oa1 == -55 + *ia0+*ia1+*ia2); /////////////////////////////////////////////////////////////TICKET #1411 : should be -33
           
           
            //_________________________________
@@ -407,12 +407,12 @@ namespace test  {
           m4.outBuff.createAt(0, buffO1);
           CHECK (*ia0 == r1  );                            // existing values in the buffers....
           CHECK (*ia1 == r1+1);
-          CHECK (*ia2 == -55 );       /////////////////////////////////////////////////////OOO should be -22
-          CHECK (*oa1 == -55 + *ia0+*ia1+*ia2); ///////////////////////////////////////////OOO should be -33
+          CHECK (*ia2 == -55 );       ///////////////////////////////////////////////////////////////////////TICKET #1411 : should be -22
+          CHECK (*oa1 == -55 + *ia0+*ia1+*ia2); /////////////////////////////////////////////////////////////TICKET #1411 : should be -33
           
           m4.connect();
           m4.invoke();                                     // processing combines input buffers with parameters
-          CHECK (*oa1 == (r2+r3) * (r1 + r1+1 -55));  /////////////////////////////////////OOO should be -22
+          CHECK (*oa1 == (r2+r3) * (r1 + r1+1 -55));  ///////////////////////////////////////////////////////TICKET #1411 : should be -22
           
           
            //______________________________________

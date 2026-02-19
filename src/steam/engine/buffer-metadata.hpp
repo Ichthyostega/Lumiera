@@ -43,8 +43,6 @@
  **       once we have to build a metadata store that works well in a massively
  **       concurrent environment, where requests for state transition emanate
  **       any time form within all worker threads!
- ** @todo 2/2026 Do we really have to _store_ the actual buffer address into the
- **       metadata::Entry, as opposed to just using this information for hash computation?
  ** 
  ** @see buffer-provider.hpp
  ** @see BufferMetadata_test
@@ -277,6 +275,9 @@ namespace engine {
      * instance. For the latter, Entry serves as representation and access point
      * to the individual metadata; this includes using the TypeHandler for
      * building and destroying buffer structures.
+     * 
+     * @remark 2/2026 the plan is to use this entry beyond metadata handling
+     *         and especially to describe a buffer within a layered allocator
      */
     class Entry
       : public Key

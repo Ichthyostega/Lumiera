@@ -77,8 +77,8 @@ namespace engine {
       HashVal hash{0};
       boost::hash_combine (hash, typeid(CTOR).hash_code());
       boost::hash_combine (hash, typeid(DTOR).hash_code());
-      return hash;
-    }
+      return hash;               ////////////////////////////////////////////////////////////////////////////TICKET #1411 : this qualification fails to distinguish different bindings of the same type
+    }                                                                                      /////////////////                (notably different constructor argument values for the same class type to emplace)
   }//(End)placement-new helpers
   
   
