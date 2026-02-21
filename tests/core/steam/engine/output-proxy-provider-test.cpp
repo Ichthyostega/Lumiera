@@ -49,13 +49,8 @@ namespace test  {
         {
           size_t seenID{0};
           BufferState lastState{NIL};
-          auto listener = [&](size_t id, BufferState state)
-                              {
-                                seenID = id;
-                                lastState = state;
-                              };
           // setup with notification callback
-          BufferProxyAdaptor proxPro{listener};
+          BufferProxyAdaptor proxPro{};
           
           // Assuming some data block is »given«
           seedRand();

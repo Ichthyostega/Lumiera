@@ -104865,7 +104865,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1734907068755" FOLDED="true" ID="ID_1965236379" MODIFIED="1770859133125" TEXT="nein &#x2014; es ist gar nichts mehr zu tun hier... (naja)">
+<node COLOR="#338800" CREATED="1734907068755" FOLDED="true" ID="ID_1965236379" MODIFIED="1771706826390" TEXT="nein &#x2014; es ist gar nichts mehr zu tun hier... (naja)">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1734907088846" ID="ID_115625291" MODIFIED="1734907104411" TEXT="es gibt zwar bisher noch keine OutputSlot-Implementierung"/>
 <node CREATED="1734907109228" ID="ID_1459547775" MODIFIED="1734907155922" TEXT="nur den DiagnosticOutputSlot &#x27f9; DiagnosticBufferProvider"/>
@@ -104880,7 +104880,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="smily_bad"/>
 </node>
 </node>
-<node COLOR="#5b280f" CREATED="1734903075113" FOLDED="true" ID="ID_579607510" MODIFIED="1735007024903" TEXT="Design-&#xdc;bung: ProxyProvider implementieren">
+<node COLOR="#5b280f" CREATED="1734903075113" FOLDED="true" ID="ID_579607510" MODIFIED="1771706826406" TEXT="Design-&#xdc;bung: ProxyProvider implementieren">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -105062,7 +105062,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1734963612356" ID="ID_595048331" MODIFIED="1734963638965" TEXT="die Bedeutung des LocalTag habe ich schon nachgesch&#xe4;rft"/>
 <node CREATED="1734963640916" ID="ID_1219225733" MODIFIED="1734963697420" TEXT="es sollte ein essentielles Merkmal im Anwendungsfall darstellen"/>
 <node CREATED="1734963699688" ID="ID_1232330574" MODIFIED="1734963719840" TEXT="hier ist das definitiv die bestimmte Speicher-Adresse"/>
-<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1734963767255" ID="ID_194976077" MODIFIED="1734963791910" TEXT="Insofern: das ist ein valider Zugang">
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1734963767255" ID="ID_194976077" MODIFIED="1771707770618" TEXT="Insofern: das ist ein valider Zugang">
+<arrowlink COLOR="#754555" DESTINATION="ID_345438988" ENDARROW="Default" ENDINCLINATION="1059;-47;" ID="Arrow_ID_755732158" STARTARROW="None" STARTINCLINATION="727;54;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 </node>
@@ -112341,8 +112342,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       Das entscheidende Kriterium n&#228;mlich, EX_STRONG, wird in der Regel nicht aktiv hergestellt, sondern dadurch, da&#223; die Schritte der Implementierung logisch pr&#228;zise angeordnet werden. &#220;berdies ist so etwas schwer empirisch zu belegen, dann man m&#252;&#223;te den Beweis f&#252;hren, da&#223; etwas M&#246;gliches <i>nicht passiert</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -112362,8 +112362,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       siehe test-tracking-test.cpp
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1771445216811" ID="ID_1830844578" MODIFIED="1771445232082" TEXT="f&#xfc;hre mehrere abgeschlossene sub-Tests aus"/>
@@ -113381,8 +113380,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       In der Tat hatte ich n&#228;mlich die beiden Protokolle nicht im Zusammenhang entworfen, durchdacht und implementiert, und auch die Parallelen im Ablauf sind mir kaum aufgefallen (nur so ein Gef&#252;hl, da&#223; das nach einem etablierten Schema l&#228;uft). Da ich &#252;berhaupt nie bis zu dem Punkt gekommen bin, Daten ausgeben zu m&#252;ssen (ich hab ja nicht einmal die Nodes gebaut bekommen, sondern nur einige sehr elaborierte Mocks gebaut), ist mir auch nie aufgefallen, da&#223; man ja aus der Engine heraus diesen Lebenszyklus ansto&#223;en mu&#223;. Ich dachte mir vermutlich blo&#223;, &quot;das wird dann der StateProxy schon richten&quot; (den hatte ich mir ja als Blanko-Adapter eingebaut, um &#252;berhaupt vom Boden wegzukommen)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node BACKGROUND_COLOR="#fefc4e" COLOR="#351d75" CREATED="1771534807668" ID="ID_314210533" MODIFIED="1771534909632" TEXT="im R&#xfc;ckblick habe ich hier Gl&#xfc;ck im Ungl&#xfc;ck gehabt">
 <richcontent TYPE="NOTE"><html>
@@ -113589,8 +113587,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1771466969187" ID="ID_1947719146" MODIFIED="1771466979607" TEXT="man bekommt gleich einen Size-Check geschenkt"/>
 <node CREATED="1771467003526" ID="ID_1076486713" MODIFIED="1771467118716" TEXT="die Implementierung ist &#xbb;low hanging fruit&#xab;">
@@ -113613,8 +113610,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       Es ist &#252;berhaupt nicht klar, wie n&#252;tztlich tats&#228;chlich die M&#246;glichkeit w&#228;re, Objekte in Bufer zu pflanzen. <i>Ich selber nat&#252;rlich w&#252;rde das exzessiv nutzen</i>&#160;und k&#246;nnte mir vorstellen, da massiv darauf aufzubauen, um das Library-Binding zu systematisieren. Da das Thema aber immer noch sehr weit weg liegt, kann ich kaum einsch&#228;tzen, ob mir da andere Leute folgen w&#252;rden mit dem Ansatz
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1771467388467" ID="ID_201106461" MODIFIED="1771467458597" TEXT="f&#xfc;r den Fall eines generischen TypeHandlers kann ich keinen Size-Check bieten">
 <richcontent TYPE="NOTE"><html>
@@ -113624,8 +113620,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       ...das gilt zwar auch f&#252;r das schon bestehende API, aber bei diesem mu&#223; man <b>direkt zusammen</b>&#160;mit dem TypeHandler auch einen Size-Parameter angeben
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="clanbomber"/>
 <node CREATED="1771467461806" ID="ID_771339358" MODIFIED="1771467482703" TEXT="das w&#xfc;rde daf&#xfc;r sprechen, die allgemeinere Variante (mit TypeHanlder) nicht anzubieten"/>
 </node>
@@ -113642,8 +113637,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       ...und in dem Fall w&#228;re sogar automatisch f&#252;r die richtige Vererbungs-Ordnung zwischen den Typen gesorgt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1771467739612" ID="ID_1249662828" MODIFIED="1771511477910" TEXT="intern / systematisch gewnninnen wir bisher gar nichts durch hierarchische Typen">
 <richcontent TYPE="NOTE"><html>
@@ -113653,8 +113647,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       ...abgesehen davon, da&#223; wir einen Buffer-Descriptor speichern, und diesem dann viele Einzelbuffer zuordnen k&#246;nnen. Aber der Umstand, da&#223; zwei <i>reine</i>&#160;Buffer-Typen untereinander verkn&#252;pft sind, wirkt sich (im bisher gegebenen Design-Horizont) &#252;berhaupt nirgends aus.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <linktarget COLOR="#9c0e1d" DESTINATION="ID_1249662828" ENDARROW="Default" ENDINCLINATION="-73;91;" ID="Arrow_ID_1598699033" SOURCE="ID_117430395" STARTARROW="Default" STARTINCLINATION="-81;0;"/>
 </node>
 <node COLOR="#5b280f" CREATED="1771468605239" ID="ID_260068451" MODIFIED="1771468785641" TEXT="es k&#xf6;nnte sogar zu zweideutigen Ableitungen kommen...">
@@ -113665,8 +113658,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       Hier denke ich an den Fall, da&#223; duch dieses Feature nun einige F&#228;lle hierarchisch dargestellt werden, andere F&#228;lle aber weiterhin nicht. Das stellt zwar kein tats&#228;chliches Problem dar (weil die Hierarchie egal ist, derzeit).
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1771468674694" ID="ID_382204791" MODIFIED="1771468688943" TEXT="Nein! wenn richtig implementiert, nicht m&#xf6;glich"/>
 <node CREATED="1771468690676" ID="ID_1237762463" MODIFIED="1771468782241" TEXT="dadruch da&#xdf; trackKey in einer bestimmten Reihenfolge aufgerufen wird">
@@ -113677,8 +113669,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       Das hei&#223;t konkret: die beiden beschriebenen F&#228;lle landen beim gleichen Buffer-Type, und der ist tats&#228;chlich immer hierarchisch. Selbst wenn man alles &#187;auf einen Schu&#223;&#171; angegeben hat; denn wir speichern <b>stets zuerst einen generischen Key</b>&#160;nur mit der Size.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1771468791342" ID="ID_1900748420" MODIFIED="1771468853171">
@@ -113689,8 +113680,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       das hei&#223;t: diese Betrachtung spricht sogar <b>f&#252;r dieses Feature</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -113698,8 +113688,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       ...man macht also etwas f&#252;r den user explizit sichtbar, was intern sowiso passiert.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -113722,8 +113711,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       es ist eine L&#252;ge des Zeitgeitstes, da&#223; es nur um &#187;Probleme l&#246;sen&#171; ginge
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 </node>
 </node>
@@ -113737,8 +113725,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       es geht hier <i>nur um die <b>Syntax</b></i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#561fd0" DESTINATION="ID_1612384078" ENDARROW="Default" ENDINCLINATION="452;19;" ID="Arrow_ID_1150129401" STARTARROW="None" STARTINCLINATION="434;0;"/>
 </node>
 <node CREATED="1771511832679" ID="ID_344866318" MODIFIED="1771511887924">
@@ -113749,8 +113736,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       noch genauer: ich halte <i>diese eine Variante</i>&#160;f&#252;r erstrebenswert
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1771511889423" ID="ID_1344811844" MODIFIED="1771511985291" TEXT="das hei&#xdf;t: ich w&#xfc;rde mir w&#xfc;nschen, da&#xdf; man im Library-Binding so vorgeht">
 <richcontent TYPE="NOTE"><html>
@@ -113760,8 +113746,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       ....also die vorgegebene Systematik einer Library noch einpacken in Marker-Typen, und dann sogar noch spezielle Strukturen im Buffer anlegen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1771511996385" ID="ID_1266667275" MODIFIED="1771512237032">
 <richcontent TYPE="NODE"><html>
@@ -113771,8 +113756,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       das ist meine <b>Vorstellung</b>&#160;&#8212; und gr&#252;ndet nicht in <b>Erfahrung</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -113780,8 +113764,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       Ich habe n&#228;mlich selber noch nie mehr mit irgend einer Media-handling-Library gearbeitet, &#252;ber kleine Beispiele und etwas Verwenden der Lib-Soundfile hinausgehend. Ich hab mir nur die Doku und Beipsiele der gro&#223;en Libs mal angeschaut, und hatte dann das Gef&#252;hl, da&#223; ich <i>wei&#223; wie der Hase l&#228;uft</i>&#160;(und au&#223;erdem, da&#223; ich nicht den Kern von Lumiera um solche Libraries herumbauen m&#246;chte, keine einzige von denen &#252;berzeugt mich, ich w&#252;rde es nicht so machen wie &quot;die&quot;. Beachte die &#220;berheblichkeit meinerseits).
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1771512254969" ID="ID_1113270683" MODIFIED="1771512273011" TEXT="also der Kopf sagt &#xbb;nein&#xab; und der Bauch sagt &#xbb;will ich haben&#xab;"/>
 </node>
@@ -113802,8 +113785,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
+<linktarget COLOR="#803929" DESTINATION="ID_94121635" ENDARROW="Default" ENDINCLINATION="3603;175;" ID="Arrow_ID_1932156600" SOURCE="ID_769798096" STARTARROW="None" STARTINCLINATION="271;-15;"/>
 </node>
 <node COLOR="#435e98" CREATED="1771522448010" ID="ID_477462796" LINK="https://issues.lumiera.org/ticket/1412" MODIFIED="1771522578140" TEXT="hab nun gleich noch allgemeines Review- Tickets #1412 angelegt">
 <font NAME="SansSerif" SIZE="10"/>
@@ -113886,13 +113869,12 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       will sagen, hier nicht &#187;nach den Sternen greifen&#171; &#8212; wir wollen kein generisches Diagnose-Tool, das dann sp&#228;ter mal f&#252;r reale Output-Sinks brauchbar w&#228;re (das ist mutma&#223;lich gar nicht m&#246;glich)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1771536576103" ID="ID_580664253" MODIFIED="1771537185987" TEXT="brauche einen Proxy-Buffer-Provider">
-<linktarget COLOR="#b1000a" DESTINATION="ID_580664253" ENDARROW="Default" ENDINCLINATION="-769;59;" ID="Arrow_ID_1374111018" SOURCE="ID_48507847" STARTARROW="None" STARTINCLINATION="366;17;"/>
 <linktarget COLOR="#8f00c1" DESTINATION="ID_580664253" ENDARROW="Default" ENDINCLINATION="181;-320;" ID="Arrow_ID_553405939" SOURCE="ID_1312596627" STARTARROW="None" STARTINCLINATION="-172;19;"/>
+<linktarget COLOR="#b1000a" DESTINATION="ID_580664253" ENDARROW="Default" ENDINCLINATION="-769;59;" ID="Arrow_ID_1374111018" SOURCE="ID_48507847" STARTARROW="None" STARTINCLINATION="366;17;"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1771537210274" ID="ID_1406812048" MODIFIED="1771537219956" TEXT="Aufgaben und Probleme">
 <node CREATED="1771537230222" ID="ID_317567016" MODIFIED="1771537246912" TEXT="er darf nur einige wenige vorgegebene Buffer-Typen unterst&#xfc;tzen"/>
@@ -113970,7 +113952,13 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="help"/>
 <node CREATED="1771539179797" ID="ID_1430381078" MODIFIED="1771539192610" TEXT="Idee: als Template...?">
 <icon BUILTIN="idea"/>
-<node CREATED="1771539206851" ID="ID_578548025" MODIFIED="1771539322098" TEXT="das Ziel w&#xe4;re dann, jedwede weitere Indirektion zu vermeiden"/>
+<node COLOR="#5b280f" CREATED="1771539206851" ID="ID_578548025" MODIFIED="1771703579443" TEXT="das Ziel w&#xe4;re dann, jedwede weitere Indirektion zu vermeiden">
+<icon BUILTIN="button_cancel"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1771703583152" ID="ID_1043344679" MODIFIED="1771703620835" TEXT="das ist nicht so einfach m&#xf6;glich...">
+<arrowlink COLOR="#ad4256" DESTINATION="ID_1901510136" ENDARROW="Default" ENDINCLINATION="526;0;" ID="Arrow_ID_1045473064" STARTARROW="None" STARTINCLINATION="254;20;"/>
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
 <node CREATED="1771539223755" ID="ID_175797871" MODIFIED="1771539235050" TEXT="dann ist das wirklich ein Implementierungs-Baustein"/>
 </node>
 <node CREATED="1771539366906" ID="ID_642488082" MODIFIED="1771539378218" TEXT="Skizze ... wie w&#xfc;rde das aussehen...?">
@@ -113985,6 +113973,383 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1771539807853" ID="ID_1455262817" MODIFIED="1771539852207" TEXT="Prototyping : OutputProxyProvider_test als Experimentierfeld">
 <icon BUILTIN="pencil"/>
+<node CREATED="1771616038792" ID="ID_1389235656" MODIFIED="1771616326306" TEXT="Forschung: Policy konfigurieren">
+<node CREATED="1771616054739" ID="ID_297187964" MODIFIED="1771616315207" TEXT="hab die dunkle Erinnerung da&#xdf; in so was &#xc4;hnliches schon zig mal vergeblich versucht habe">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Ich bin da immer wieder von Scala &#8222;verdorben&#8220; : dort kann man wunderbar ad hoc eine kleine eingebettete Konfigurationssprache schaffen, da man lokale Bindings leicht &#252;berall hin transportieren kann. Aber C++ ist in der Hinsicht sehr defensiv und rigide gestaltet. Das ist auch gut so, denn es gibt keinen Garbage Collector, also kann man auch nich <i>mal eben ein Objekt in die Luft werfen.</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1771624243078" ID="ID_368193064" MODIFIED="1771624430246">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      in der Tat: man rennt hier gegen die <b>compile-time-Barrier</b>
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Meta-Processing passiert im Compiler und resultiert in einer Typ-Definition. Dieses kann sich niemals auf Zustand zur Laufzeit beziehen. Man kann das maximal bis an den Punkt dehnen, wo ein neuer Typ <i>zum Zeitpunkt der Instantiierung</i>&#160;geschaffen wird. Weiter kommt man niemals. Meistens kommt man damit aber trotzdem &#252;ber die Runden, da die Instantiierung auch eine Lambda-Funktion als Argument bekommen kann. Dann wird der resultierende Typ jedoch komplett generisch. Auch daran f&#252;hrt kein Weg vorbei
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1771616329907" ID="ID_418775681" MODIFIED="1771616333794" TEXT="graben....">
+<node CREATED="1771616335259" ID="ID_888848663" MODIFIED="1771616344207" TEXT="Stichwort: BuilderQualifierSupport">
+<node CREATED="1771616696847" ID="ID_153185689" MODIFIED="1771616706752" TEXT="eingesetzt f&#xfc;r das ElementBoxWidget"/>
+<node CREATED="1771616707815" ID="ID_1677828425" LINK="#ID_808167181" MODIFIED="1771620711873" TEXT="auch in Betracht gezogen f&#xfc;r lib::Thread (wohl nicht verwendet)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...weil ich dann dort eine noch speziellere Situation vorgefunden habe, und daf&#252;r ein &#228;u&#223;terst komplexes und pr&#228;zises Gebilde gebaut habe, das in diesem streng abgesteckten Rahmen ad&#228;quat ist. Im Grunde habe ich hier nicht vorgesehen, da&#223; Client-Code dieses Framework verwendet, sondern in der Regel durch die bereitgestellten Front-ends geht. Aber prinzipiell w&#228;re dieser Konfigurations-Builder auch f&#252;r Client-Code offen
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#57789f" DESTINATION="ID_430986675" ENDARROW="Default" ENDINCLINATION="5;-41;" ID="Arrow_ID_815254342" STARTARROW="None" STARTINCLINATION="-113;5;"/>
+</node>
+</node>
+<node CREATED="1771617515665" ID="ID_430986675" MODIFIED="1771617594771" TEXT="ThreadHookable">
+<linktarget COLOR="#57789f" DESTINATION="ID_430986675" ENDARROW="Default" ENDINCLINATION="5;-41;" ID="Arrow_ID_815254342" SOURCE="ID_1677828425" STARTARROW="None" STARTINCLINATION="-113;5;"/>
+<node CREATED="1771619741821" ID="ID_203421993" MODIFIED="1771619754128" TEXT="relevant hier: ThreadLifecycle::Launch"/>
+<node CREATED="1771619757542" ID="ID_1217617479" MODIFIED="1771619769838" TEXT="das ist ein Policy/Configuration-Builder">
+<node CREATED="1771619939435" ID="ID_1247744619" MODIFIED="1771619948510" TEXT="ja ... das ist ziemlich komplex"/>
+<node CREATED="1771619950304" ID="ID_1427950939" MODIFIED="1771620101034" TEXT="In Gesamtschau ist die L&#xf6;sung elegant">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...weil sie erhebliche Komplexit&#228;ten v&#246;llg gradlinig l&#246;st, ohne dabei erstichlich zu &#187;rudern&#171;;<br />das ist aber nicht die Art von &#187;Eleganz&#171;, die sich durch &quot;alles passiert von selber richtig&quot; auszeichnet &#8212; also nichts f&#252;r die Freunde von &#187;Zen&#171; (was auch immer die unter &quot;Zen&quot; verstehen wollen9
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1771620450388" ID="ID_166976806" MODIFIED="1771620582304" TEXT="baut eine Dekorator-Chain &#xfc;ber ein &#x3bb;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Am Ende bekommt der &#228;u&#223;ere ThreadLifecycle - Konstruktor eine Instanz dieses Builders, initialisiert erst alle Basis-Klassen, und ruft dann das Lambda in dem Builder auf, aus dem Konstruktor-Rump. Ganz innen im Lambda befindet sich eine Funktion, die den Thread startet. Aber oben dr&#252;ber werden beliebig viele Dekorator-Schichten gelegt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1771633665571" ID="ID_1540821921" MODIFIED="1771633685674" TEXT="demnach bietet sich BuilderQualifierSupport an"/>
+<node CREATED="1771633809270" ID="ID_1709933015" MODIFIED="1771633814968" TEXT="Alternative: gar nix machen">
+<node CREATED="1771633820329" ID="ID_1049994138" MODIFIED="1771633826417" TEXT="daf&#xfc;r spricht einiges"/>
+<node CREATED="1771633831210" ID="ID_1647049569" MODIFIED="1771634711011" TEXT="die Aufgabe wird auf den &quot;Client&quot; verlagert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      wobei hier nicht die typische Situation f&#252;r Library-Code vorliegt: es ist nicht zu erwarten, da&#223; diese Einrichtung in gro&#223;er Breite und zum Schaffen einer Abstraktion eingesetzt wird. Vielmehr handelt es sich um ein Baukasten-System, das die zu erwartenden 3-5 Anwendungen hoffentlich auf ein gemeinsames Schema bringt und etwas zug&#228;nglicher macht
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1771634200296" ID="ID_1781890966" MODIFIED="1771634221593" TEXT="das ist angemessen; es geht um Implementierungs-Technik"/>
+<node CREATED="1771634718849" ID="ID_158495787" MODIFIED="1771634743108" TEXT="man k&#xf6;nnte zudem die Anforderungen als Concept dokumentieren"/>
+</node>
+</node>
+<node CREATED="1771634755779" ID="ID_1904273320" MODIFIED="1771634765200" TEXT="Skizze: Grundstruktur">
+<node CREATED="1771634766556" ID="ID_1120594617" MODIFIED="1771634791497" TEXT="daraus ergibt sich dann vielleicht auch ein klareres Bild bez&#xfc;glich Policy"/>
+<node CREATED="1771703279221" ID="ID_1542796261" MODIFIED="1771703286375" TEXT="Setup / Indirektionen">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1771703394164" ID="ID_1984712040" MODIFIED="1771703407734" TEXT="Buffer-Provider verwendet eine PImpl-Struktur">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1771703410170" ID="ID_1368342202" MODIFIED="1771703446855" TEXT="das bedingt eine Menge an Indirektionen">
+<icon BUILTIN="clanbomber"/>
+</node>
+<node CREATED="1771703419001" ID="ID_1901510136" MODIFIED="1771703620835" TEXT="das Design ist auf andere Aspekte optimiert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      vor allem Flexibilit&#228;t und Segregation; <i>ohne diesen Fokus zu &#228;ndern ist hier keine Verbesserung m&#246;glich</i>
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#ad4256" DESTINATION="ID_1901510136" ENDARROW="Default" ENDINCLINATION="526;0;" ID="Arrow_ID_1045473064" SOURCE="ID_1043344679" STARTARROW="None" STARTINCLINATION="254;20;"/>
+</node>
+</node>
+<node CREATED="1771703965881" ID="ID_638522487" MODIFIED="1771703978978" TEXT="BufferProvider selber soll privat / intern bleiben">
+<node CREATED="1771703980797" ID="ID_1432681944" MODIFIED="1771703994056" TEXT="erbt von BufferProviderSetup"/>
+<node CREATED="1771703995139" ID="ID_595530945" MODIFIED="1771704010410" TEXT="analog zu NaiveBufferSetup"/>
+<node CREATED="1771704014330" ID="ID_880913031" MODIFIED="1771704031750" TEXT="bindet dort Instanz von zwei nested implementation classes ein"/>
+<node CREATED="1771704047909" ID="ID_442348703" MODIFIED="1771704077105" TEXT="ist selber eine kleine, private Komponente">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      besteht nur aus zwei unique-Ptr, die die PImpls halten
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1771705501545" ID="ID_79262911" MODIFIED="1771705506478" TEXT="Schnittstelle">
+<node CREATED="1771705507309" ID="ID_562114083" MODIFIED="1771705515125" TEXT="was wird eigentlich ben&#xf6;tigt?">
+<node CREATED="1771705536632" ID="ID_310243250" MODIFIED="1771705579435">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <font color="#635e96" face="Bitstream Vera Sans Mono" size="9pt"><b><u>BuffHandle</u></b></font><u><font color="#3a1f18" face="Bitstream Vera Sans Mono" size="9pt">&#160;</font><font color="#814422" face="Bitstream Vera Sans Mono" size="9pt">handle</font><font color="#3a1f18" face="Bitstream Vera Sans Mono" size="9pt">&#160;</font><font color="#65533c" face="Bitstream Vera Sans Mono" size="9pt">=</font><font color="#3a1f18" face="Bitstream Vera Sans Mono" size="9pt">&#160;proxPro</font><font color="#65533c" face="Bitstream Vera Sans Mono" size="9pt">.</font><font color="#753737" face="Bitstream Vera Sans Mono" size="9pt">lockBuffer</font><font color="#3a1f18" face="Bitstream Vera Sans Mono" size="9pt">&#160;</font><font color="#11123a" face="Bitstream Vera Sans Mono" size="9pt">(</font><font color="#b45858" face="Bitstream Vera Sans Mono" size="9pt"><b>dataBlock</b></font><font color="#11123a" face="Bitstream Vera Sans Mono" size="9pt">)</font></u>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1771705602086" ID="ID_71984071" MODIFIED="1771706034744" TEXT="woot?? Ja! es ist tats&#xe4;chlich so">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das war eine Einsicht beim Konstruieren der neuen Render-Node-Implementierung. Siehe <font color="#632d2d" face="Bitstream Vera Sans Mono">MediaWeavingPattern::<b>shed</b></font><font color="#3a1f18" face="Bitstream Vera Sans Mono">&#160;</font><font color="#11123a" face="Bitstream Vera Sans Mono">(</font><font color="#8c505c" face="Bitstream Vera Sans Mono"><b>Feed</b></font><font color="#65533c" face="Bitstream Vera Sans Mono">&amp;</font><font color="#3a1f18" face="Bitstream Vera Sans Mono">&#160;feed</font><font color="#65533c" face="Bitstream Vera Sans Mono">,</font><font color="#3a1f18" face="Bitstream Vera Sans Mono">&#160;</font><font color="#635e96" face="Bitstream Vera Sans Mono"><b>TurnoutSystem</b></font><font color="#65533c" face="Bitstream Vera Sans Mono">&amp;,</font><font color="#3a1f18" face="Bitstream Vera Sans Mono">&#160;</font><font color="#8c505c" face="Bitstream Vera Sans Mono"><b>OptionalBuff</b></font><font color="#3a1f18" face="Bitstream Vera Sans Mono">&#160;outBuff</font><font color="#11123a" face="Bitstream Vera Sans Mono">) </font>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Wir ben&#246;tigen den Ausgabepuffer nur an einer einzigen Stelle auf top-Level. Dorthin wird er direkt als Aufrufparameter eingebracht, in einem <font color="#11123a" face="Monospaced">optional&lt;BuffHandle&gt;</font>. Wir brauchen also blo&#223; ein BuffHandle &#187;auf die Faust&#171;
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1771705980824" ID="ID_1686738897" MODIFIED="1771706158844" TEXT="Trotzdem mu&#xdf; das in die Systematik des BufferProvider-Interfaces integriert werden">
+<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1771706162105" ID="ID_611447212" MODIFIED="1771706168771" TEXT="fragt sich. wie tief?">
+<icon BUILTIN="help"/>
+<node CREATED="1771706171494" ID="ID_1522772740" MODIFIED="1771706182447" TEXT="billigste L&#xf6;sung: Quereinstieg">
+<icon BUILTIN="idea"/>
+<node CREATED="1771706191375" ID="ID_1734959271" MODIFIED="1771706281407" TEXT="analog zu provider.lockBufferFor">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      also ohne vorher &#252;berhaupt erst einen Buffer-Descriptor anzulegen; dieser wird vielmer on-the-fly erzeugt (bzw. wiedergefunden, wenn es ihn in der Registry schon gibt)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1771707790368" ID="ID_1907312359" MODIFIED="1771707829227">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      man w&#252;rde eine <i>alternative Implementierung</i>&#160;machen f&#252;r lockBuffer
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1771707830964" ID="ID_357223417" MODIFIED="1771707852741" TEXT="das geht &#x2014; unter der Ma&#xdf;gabe da&#xdf; es nur ein Implementierungs-Baustein ist"/>
+<node CREATED="1771707854062" ID="ID_354377856" MODIFIED="1771707906600" TEXT="der BufferStore w&#xfc;rde dadurch zu einem reinen Dummy ohne Funktion">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      er w&#252;rde alle Aufrufe als NOP implementieren, ggfs. Exceptions werfen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1771707910370" ID="ID_1509798680" MODIFIED="1771707924174" TEXT="seine einzige Funktion w&#xe4;re, die Callbacks zu binden und aufzurufen"/>
+<node CREATED="1771708254110" ID="ID_977574703" MODIFIED="1771708322401" TEXT="die Metadaten w&#xfc;rden State/Concurrency verwalten">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      und sofern man den Zugrif auf die Metadaten regelt, h&#228;tte man hier den gesamten State (und jeder Client bekommt einen separaten Key)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1771707935389" ID="ID_1214821648" MODIFIED="1771707962630" TEXT="riecht trotzdem alles sehr nach &#xbb;Dog-no-wag-tail&#xab;"/>
+</node>
+<node CREATED="1771708344624" ID="ID_1354666582" MODIFIED="1771719230095" TEXT="Versuch einer Kongruenz">
+<arrowlink COLOR="#2b76ce" DESTINATION="ID_519692328" ENDARROW="Default" ENDINCLINATION="132;-103;" ID="Arrow_ID_1503824025" STARTARROW="None" STARTINCLINATION="-14;40;"/>
+<icon BUILTIN="forward"/>
+<node CREATED="1771708383738" ID="ID_922262838" MODIFIED="1771708403996" TEXT="strebe danach, das API zu verwennden &#x2014; wenngleich auch nur partiell"/>
+<node CREATED="1771706397232" ID="ID_345438988" MODIFIED="1771708419315" TEXT="man w&#xfc;rde hier die tats&#xe4;chliche Adresse im LocalTag transportieren">
+<linktarget COLOR="#754555" DESTINATION="ID_345438988" ENDARROW="Default" ENDINCLINATION="1059;-47;" ID="Arrow_ID_755732158" SOURCE="ID_194976077" STARTARROW="None" STARTINCLINATION="727;54;"/>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1771708423126" ID="ID_483220228" MODIFIED="1771708556141" TEXT="demnach gibt es tats&#xe4;chlich eine vorausgehende Registrierung oder Freischaltung">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      hierbei w&#252;rde ein spezielle Sub-Typ erzeugt, der bereits mit einem LocalTag f&#252;r eine bestimmte Buffer-Adresse markiert ist. In einer Output-Komponente, die einen Satz von Buffern zur Verf&#252;gung hat (z.B. Double-Buffering), w&#228;ren das eben nur die tats&#228;chlich bekannten und vorhandenen Buffer
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1771708560127" ID="ID_411748594" MODIFIED="1771708606702" TEXT="die Store-Implentierung wird einfach, aber voll funktional">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      sie beruht auf einer internen Zusatz-Konvention: den Inhalt des LocalTag als Buffer-Adresse wieder herauszugeben
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1771708608236" ID="ID_973390784" MODIFIED="1771708680590" TEXT="die Metadaten verhindern nun tats&#xe4;chlich eine Doppelbenutzung">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Vorausgesetzt, die Metadaten sind Threadsafe, dann verbieten sie, einen konkreten Entry anzulegen, wenn es genau diesen bereits gibt (weil ein anderer Client exakt diesen Buffer-Typ incl. LocalTag gesperrt hat)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1771708793508" ID="ID_130138146" MODIFIED="1771708810727" TEXT="neu / zus&#xe4;tzlich ben&#xf6;tigt: Qualifizieren eines Typs mit LocalTag">
+<node CREATED="1771711399911" ID="ID_506447084" MODIFIED="1771711419862" TEXT="Metadaten-Operation hierf&#xfc;r w&#xe4;re schon implementiert"/>
+<node CREATED="1771711383939" ID="ID_119796048" MODIFIED="1771711398215" TEXT="mu&#xdf; durch das BufferStore-API gemapped werden"/>
+<node CREATED="1771711431403" ID="ID_38761094" MODIFIED="1771711437426" TEXT="zwei m&#xf6;gliche Ans&#xe4;tze">
+<node CREATED="1771711439336" ID="ID_540429961" MODIFIED="1771711645740" TEXT="die initiale defineBufferType erg&#xe4;nzen (optional)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das w&#252;rde tats&#228;chlich bereits gen&#252;gen, um dieses Feature umzuseten, denn die interne Implementierung erzeugt (seit der &#220;berarbeitung 2024) bereits automatisch kaskadierte Datentypen in einer standardisierten Reihenfolge. Man w&#252;rde also jeweils einen neuen BufferType anlegen, der aber ggfs automatisch unter einem Basis-Typ einsortiert wird.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1771711476248" ID="ID_213047492" MODIFIED="1771711774618" TEXT="die beiden denkbaren refining-Operationen eigens mappen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Hierf&#252;r w&#252;rde sprechen, da&#223; es sich, logisch betrachtet, eben um separate &#187;refining&#171;-Schritte handelt, undman das direkt auf dem Implementierungs-API ausdr&#252;ckt (anstatt sich auf eine clevere Implementierung zu verlassen)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1771711775773" ID="ID_704442084" MODIFIED="1771711925459" TEXT="schwierige Entscheidung, da hier ein Zielkonflikt vorliegt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...und im Besonderen noch nicht gekl&#228;rt ist, welche Bedeutung diesen hierarchischen Typen &#252;berhaupt zukommt.
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1771711927727" ID="ID_612279772" MODIFIED="1771712209186" TEXT="Entwicklungs-Pfad-A : Qualifizierung wird obsolet">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Stattdessen soll man immer einen neuen Typ anlegen, der ja implizit eine Qualifizierung in bis zu zwei Schritten macht. Zudem spielt die hierarchische Struktur der Buffer-Types derzeit effektiv keine Rolle.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1771711957964" ID="ID_1776284628" MODIFIED="1771712127459" TEXT="Entwicklungs-Pfad-B : explizite Verfeinerungen werden bedeutsam">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...derzeit sind sie das nicht, sondern sind nur potentiell gef&#228;hrlich, da f&#252;r eine bestimmte Adresse zwei Registrierungen gemacht werden <i>k&#246;nnten.</i>&#160; In der derzeitigen Ausgestaltung des BufferProvider ist das allerdings nicht m&#246;glich, da lockBuffer stets von einem bestimmten Buffer-Descriptor ausgeht.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1771712212106" ID="ID_602415725" MODIFIED="1771712260398" TEXT="hilfsweise eine andere Hinsicht: wie wird zugegriffen?">
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="help"/>
+<node CREATED="1771712263157" ID="ID_2790879" MODIFIED="1771712405342" TEXT="das LocalTag generell auf das &#xf6;ffentliche API herausf&#xfc;hren?">
+<node CREATED="1771712477915" ID="ID_1060779010" MODIFIED="1771712486225" TEXT="daf&#xfc;r ist es nie gedacht gewesen"/>
+<node CREATED="1771712487405" ID="ID_285015399" MODIFIED="1771712536220" TEXT="es entsteht dann ein Konflikt um den Code-Raum">
+<linktarget COLOR="#c20668" DESTINATION="ID_285015399" ENDARROW="Default" ENDINCLINATION="0;39;" ID="Arrow_ID_120611600" SOURCE="ID_242083706" STARTARROW="None" STARTINCLINATION="119;5;"/>
+</node>
+</node>
+<node CREATED="1771712415919" ID="ID_242083706" MODIFIED="1771712543285" TEXT="bestimmte fest kodifizierte Bedeutungen des LocalTag herausf&#xfc;hren?">
+<arrowlink COLOR="#c20668" DESTINATION="ID_285015399" ENDARROW="Default" ENDINCLINATION="0;39;" ID="Arrow_ID_120611600" STARTARROW="None" STARTINCLINATION="119;5;"/>
+</node>
+<node CREATED="1771712441179" ID="ID_537265649" MODIFIED="1771712585905" TEXT="als einen Implementierungs-Ansatz im Einzelfall betrachten?">
+<icon BUILTIN="forward"/>
+<node CREATED="1771712588687" ID="ID_799491728" MODIFIED="1771712600088" TEXT="as w&#xfc;rde dann in RIchtung &#xbb;YAGNI&#xab; weisen"/>
+<node CREATED="1771712601958" ID="ID_1764682703" MODIFIED="1771712622919" TEXT="also Pfad-A (das Konzept vorerst nicht ausbauen)"/>
+<node CREATED="1771712624238" ID="ID_769798096" MODIFIED="1771712715932" TEXT="hatte vor wenigen Tagen schon mal genauso entschieden">
+<arrowlink COLOR="#803929" DESTINATION="ID_94121635" ENDARROW="Default" ENDINCLINATION="3603;175;" ID="Arrow_ID_1932156600" STARTARROW="None" STARTINCLINATION="271;-15;"/>
+<icon BUILTIN="idea"/>
+<node BACKGROUND_COLOR="#e7cdb5" COLOR="#c5038c" CREATED="1771712740611" HGAP="34" ID="ID_1428658837" MODIFIED="1771712837702" TEXT="und wei&#xdf; von daher: irgendwie &#xbb;will&#xab; ich dieses Verfeinerungs-Konzept..." VSHIFT="7">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...und kann aber keinen rechten Grund finden, es zu rechtfertigen....
+    </p>
+  </body>
+</html>
+</richcontent>
+<edge COLOR="#f451c4"/>
+<font NAME="SansSerif" SIZE="11"/>
+<icon BUILTIN="smiley-oh"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1771712853464" ID="ID_1615212019" MODIFIED="1771719095962" TEXT="Beschlu&#xdf;">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1771712862746" ID="ID_1469972490" MODIFIED="1771712891270" TEXT="Pfad-A : das LocalTag wird direkt f&#xfc;r die erst-Registrierung auf das Stage-API gebracht"/>
+<node CREATED="1771712893587" ID="ID_446434016" MODIFIED="1771712905953" TEXT="das Konzept Type-Refining ist &#xbb;on hold&#xab;"/>
+<node CREATED="1771712909957" ID="ID_1714428831" MODIFIED="1771712924567" TEXT="es gibt kein Front-End-API daf&#xfc;r"/>
+<node CREATED="1771712925979" ID="ID_500369618" MODIFIED="1771712995933" TEXT="die spezielle BufferProvider-Impl bekommt ein spezial-API"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1771719110564" ID="ID_519692328" MODIFIED="1771719224911" TEXT="jetzt geht die Sache auf">
+<linktarget COLOR="#2b76ce" DESTINATION="ID_519692328" ENDARROW="Default" ENDINCLINATION="132;-103;" ID="Arrow_ID_1503824025" SOURCE="ID_1354666582" STARTARROW="None" STARTINCLINATION="-14;40;"/>
+</node>
+<node CREATED="1771719121320" ID="ID_1296228121" MODIFIED="1771719201907" TEXT="hab aber trotzdem ein schlechtes &#xbb;Bauchgef&#xfc;hlt&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      was ich hier mache ist Implementation-Reuse, und nicht das Verwenden eines Kontrakts. Wenngleich auch alle Aspekte des Kontrakts formal erf&#252;llt sind
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1771719247697" ID="ID_1277905446" MODIFIED="1771719262138" TEXT="biete also f&#xfc;r diese Skizze erst mal nur ein Spezial-API"/>
+</node>
+<node CREATED="1771719274535" ID="ID_1815060462" MODIFIED="1771719385960" TEXT="Implementierung zusammenschalten...">
+<node CREATED="1771719283904" ID="ID_270233023" MODIFIED="1771719295702" TEXT="es gibt schon einen bestehenden Test, der sogar was verifiziert"/>
+<node CREATED="1771719296937" ID="ID_113976281" MODIFIED="1771719310660" TEXT="kann jetzt durch-implementieren">
+<icon BUILTIN="ksmiletris"/>
+<node CREATED="1771719368035" ID="ID_1596630516" MODIFIED="1771719381183" TEXT="geht gut">
+<icon BUILTIN="smiley-oh"/>
+</node>
+<node CREATED="1771719337142" ID="ID_1438749510" MODIFIED="1771719352671" TEXT="es f&#xe4;llt jetzt alles direkt an seinen Platz"/>
+<node CREATED="1771719312958" ID="ID_1439242903" MODIFIED="1771719327096" TEXT="das zeigt doch schon mal, da&#xdf; ich in der letzten Woche etwas geleistet habe"/>
+</node>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1771719388571" ID="ID_518110024" MODIFIED="1771719406796" STYLE="fork" TEXT="error::Logic(Underlying buffer type already defines a nontrivial LocalTag)">
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -114693,8 +115058,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       Das sind letztlich immer wieder Variationen von Kachel-Bitmap und Freelist; die Entscheidung ist gepr&#228;gt vom Problem der Fragmentierung und dem Verschwenden von Speicher. Kacheln sind nur sinnvoll, wenn man sie nicht zusammenlegen mu&#223;; Pools brauchen ein gewisses Ma&#223; an &#187;Statistik&#171;, um zu funktionieren.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1771431082049" ID="ID_619351703" MODIFIED="1771431230064" TEXT="der lokale Allokator sollte keine Speicher-Reorganisation machen">
 <richcontent TYPE="NOTE"><html>
@@ -114704,8 +115068,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       Erfahrungsgem&#228;&#223; braucht jede Art von Speicher-Reorganisation einen gewissen Hebel (und ist trotzdem stets sehr aufwendig). Daher sollte der lokale Allokator selber keinen roh-Speicher zuteilen, sondern nur ganze Bl&#246;cke herumschieben
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1771431231469" ID="ID_136832370" MODIFIED="1771431303641" TEXT="Konsequenz: es braucht einen Deskriptor f&#xfc;r den Speicherblock">
 <richcontent TYPE="NOTE"><html>
@@ -114715,8 +115078,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       ....und dieser Deskriptor kann nicht im Block selber liegen, weil man ihn auch zur de-Allokation braucht, und er damit schlecht ist f&#252;r das Alignment
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1771431304936" ID="ID_479377966" MODIFIED="1771431483895" TEXT="Konsequenz: die Speicherverwaltung ber&#xfc;hrt nicht den Inhalt der Speicherbl&#xf6;cke">
 <richcontent TYPE="NOTE"><html>
@@ -114726,8 +115088,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       Das h&#228;ngt direkt mit dem CPU-Cache zusammen; Verwaltungs-Strukturen, die oft &#252;berarbeitet werden m&#252;ssen, sollten kompakt liegen. Damit scheidet die klassische, einfache Freelist-Allokation aus, bei der man nur f&#252;r freien Speicher <i>und direkt in diesem</i>&#160;eine Verwaltungsstruktur mitf&#252;hrt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1771431494416" ID="ID_1111538571" MODIFIED="1771431606417" TEXT="Daher bietet es sich an, alle Verwaltungsinformationen im Metadaten-Record zu konzentrieren">
 <richcontent TYPE="NOTE"><html>
@@ -114737,8 +115098,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       Dadurch entsteht auch ein Hebel, so da&#223; der Speicher f&#252;r diese Metadaten-Records <i>selber</i>&#160;sehr gut auf das Kachel-Schema pa&#223;t
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -114761,8 +115121,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       <u>besonders wichtig</u>: Metadaten <i>wandern &#252;ber Threadgrenzen</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#6a587a" DESTINATION="ID_1364138768" ENDARROW="Default" ENDINCLINATION="591;0;" ID="Arrow_ID_559168401" STARTARROW="None" STARTINCLINATION="956;46;"/>
 </node>
 </node>
@@ -114776,8 +115135,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1771532702299" ID="ID_1332714293" MODIFIED="1771532711704" TEXT="dokumentiert durch OutputSlotProtocol_test">
 <node CREATED="1771532730104" ID="ID_874519449" MODIFIED="1771532748289" TEXT="im bestehenden Code lief der Test (mit einer Dummy-Implementierung)"/>
 <node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1771532716678" ID="ID_459952316" MODIFIED="1771533105051" TEXT="dieser Test ist nun gebrochen">
-<linktarget COLOR="#f90134" DESTINATION="ID_459952316" ENDARROW="Default" ENDINCLINATION="-843;75;" ID="Arrow_ID_1183488081" SOURCE="ID_690666245" STARTARROW="None" STARTINCLINATION="345;27;"/>
 <linktarget COLOR="#fe1909" DESTINATION="ID_459952316" ENDARROW="Default" ENDINCLINATION="75;-1691;" ID="Arrow_ID_176448794" SOURCE="ID_158180438" STARTARROW="None" STARTINCLINATION="-554;79;"/>
+<linktarget COLOR="#f90134" DESTINATION="ID_459952316" ENDARROW="Default" ENDINCLINATION="-843;75;" ID="Arrow_ID_1183488081" SOURCE="ID_690666245" STARTARROW="None" STARTINCLINATION="345;27;"/>
 <icon BUILTIN="broken-line"/>
 </node>
 </node>
@@ -114807,8 +115166,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       Vor allem der Cache spielt eine erhebliche Rolle, denn er ist der gr&#246;&#223;te Speicherverbraucher; der aktuelle Speicherbedarf mu&#223; in der Regel &#8222;dem Cache entrissen&#8220; werden &#8212; und man verdr&#228;ngt dabei entweder Inhalte in einen persistenten Cache, oder verliert sie ganz, und mit ihnen die aufgebrachten Renderzeit
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1770668981744" ID="ID_1636601070" MODIFIED="1770674840976" TEXT="Begriffsbildung ordnen">
@@ -134454,8 +134812,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       konkret, &#252;berstehen wir einen 10-Stunden-Render unter Druck (whatever it takes)?
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>

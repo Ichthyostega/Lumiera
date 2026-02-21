@@ -166,9 +166,9 @@ namespace engine {
         }
       
       ID
-      defineBufferType (size_t buffSiz, TypeHandler handlerFunctions)
+      defineBufferType (size_t buffSiz, TypeHandler handlerFunctions, LocalTag localTag)
         {
-          return stage_->defineBufferType (buffSiz, move(handlerFunctions));
+          return stage_->defineBufferType (buffSiz, move(handlerFunctions), localTag);
         }
       
       ID

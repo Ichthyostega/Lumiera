@@ -70,9 +70,9 @@ namespace engine {
         }
       
       ID
-      defineBufferType (size_t buffSiz, TypeHandler handlerFunctions)
+      defineBufferType (size_t buffSiz, TypeHandler handlerFunctions, LocalTag localTag)
         {
-          return lookup (metadata_.key (buffSiz, move (handlerFunctions)));
+          return lookup (metadata_.key (buffSiz, move (handlerFunctions), localTag));
         }     // deliberately: create storage, and return reference to it
       
       ID

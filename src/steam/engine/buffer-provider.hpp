@@ -202,7 +202,7 @@ namespace engine {
         public:
           virtual ~BufferStage() { } ///< this is an interface
           
-          virtual ID defineBufferType (size_t, TypeHandler)    =0;
+          virtual ID defineBufferType (size_t, TypeHandler =TypeHandler::RAW, LocalTag =LocalTag::UNKNOWN) =0;
           virtual ID lookup (HashVal)                          =0;
           virtual ID mark_locked (ID typeKey, Buff*, LocalTag) =0;
           virtual ID mark_emitted (HashVal stateKey)           =0;

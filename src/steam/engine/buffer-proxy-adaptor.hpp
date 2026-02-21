@@ -29,7 +29,9 @@
 #include "lib/meta/util.hpp"
 //#include "lib/hash-value.h"
 #include "steam/engine/buffer-provider.hpp"
-#include "steam/engine/buffer-metadata.hpp"
+#include "steam/engine/buffer-provider-setup.hpp"
+#include "steam/engine/heap-mem-buffer-store.hpp"
+#include "steam/engine/simple-buffer-state-registry.hpp"
 //#include "steam/engine/engine-ctx.hpp"
 //#include "steam/engine/type-handler.hpp"
 //#include "steam/engine/buffer-local-tag.hpp"
@@ -67,64 +69,91 @@ namespace engine {
     : util::NonCopyable
     {
       
-      using Listener = std::function<void(size_t,BufferState)>;
-      
-      class ForwardingBufferProvider
-        : public BufferProvider                 /////////////////////////////////////////////////////////////TICKET #1410 : its clear now (2/26) that this must be some other base type; maybe we'll offer the ability to decorate, directly through BufferProviderSetup?
+      class PreRiggedBufferStage
+        : public SimpleBufferStateRegistry
         {
-          Listener listener_;
-            
-#if false  //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : disabled code to while BufferProvider is being refactored...
-            /* === BufferProvider API === */
-            
-            uint
-            prepareBuffers (uint, HashVal)  override
-              {
-                NOTREACHED ("this part of the API should not be used");
-                return 1; // can not sensibly do anything for "pre-allocation",
-              }          //  other than telling the caller that we only "have one buffer to provide"
-            
-            BuffHandle
-            provideLockedBuffer (HashVal typeID)  override
-              {
-                        /////////////////////////////////////////////////////////////////////////////////////TICKET #1387 : BufferProvider default impl. is lacking means to compose and delegate
-//              return buildHandle (typeID, asBuffer(newBlock.accessMemory()), &newBlock);
-              }
-            
-            void
-            mark_emitted (HashVal, LocalTag const&)  override
-              {
-                  
-              }
-
-            void
-            detachBuffer (HashVal, LocalTag const&, Buff&)  override
-              {
-                  
-              }
-#endif  /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : (end) disabled code
         public:
-          ForwardingBufferProvider (Listener listener)
-            : BufferProvider{}
-            , listener_{std::move (listener)}
+          PreRiggedBufferStage()
+            : SimpleBufferStateRegistry{"ResourceProxy"}
             { }
         };
       
-      ForwardingBufferProvider passThroughProvider_;
+      class ProxyBufferStore
+        : public BufferProviderSetup::Store
+        {
+          Buff*
+          asBuffer (LocalTag targetMarker)
+            {
+              void* buffMem{targetMarker};
+              return static_cast<Buff*> (buffMem);
+            }
+          
+          uint
+          prepareBuffers (uint,size_t,HashVal)  override
+            {
+              WARN (engine, "Announce invoked on a Proxy Buffer Provider; "
+                            "Implies misuse as generic BufferProvider");
+              return 1;
+            }
+          
+          Slot
+          provideBuffer (size_t,HashVal, LocalTag targetMarker)  override
+            {
+              TODO ("invoke LOCK callback");
+              return {asBuffer(targetMarker), targetMarker};
+            }
+          
+          void
+          mark_emitted (size_t,HashVal, LocalTag const&)  override
+            {
+              TODO ("invoke EMIT callback");
+            }
+          
+          void
+          detachBuffer (size_t,HashVal,Slot)  override
+            {
+              TODO ("invoke RELEASE callback");
+            }
+          
+        };
+      
+      class PassThroughBufferProvider
+        : public BufferProviderSetup
+        {
+            
+        public:
+          PassThroughBufferProvider ()
+            : BufferProviderSetup{*this}
+            { }
+            
+            auto buildStage() { return std::make_unique<PreRiggedBufferStage>(); }
+            auto buildStore() { return std::make_unique<ProxyBufferStore>(); }
+            
+            BuffDescr
+            registerBuffer (void* buff, size_t siz)
+              {
+                REQUIRE (siz);
+                REQUIRE (buff);
+                auto& typeKey = bufferStage_->defineBufferType (siz, TypeHandler::RAW, LocalTag(buff));
+                return buildDescriptor (typeKey);
+              }
+        };
+      
+      PassThroughBufferProvider proxyProvider_;
       
       
     public:
-      template<class LIS,                  typename = lib::meta::disable_if_self<BufferProxyAdaptor, LIS>>
-      BufferProxyAdaptor (LIS&& listener)
-        : passThroughProvider_{std::forward<LIS> (listener)}
+      BufferProxyAdaptor()
+        : proxyProvider_{}
         { }
       
       template<typename TAR>
       BuffHandle
       lockBuffer (TAR& dataBlock)
         {
-           //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1387 : impossible due to inner contradictions in BufferProvider and OutputSlot
-          UNIMPLEMENTED ("setup type handler and then create a locked BuffHandle");
+          BuffDescr buffType = proxyProvider_.registerBuffer(&dataBlock, sizeof(TAR));
+          ENSURE (buffType.isValid());
+          return buffType.lockBuffer();
         }
       
     };
