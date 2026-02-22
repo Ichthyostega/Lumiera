@@ -21,7 +21,7 @@
 //#include "steam/play/diagnostic-output-slot.hpp"
 #include "steam/engine/buffer-proxy-adaptor.hpp"
 #include "steam/engine/test-rand-ontology.hpp"
-
+#include "lib/test/diagnostic-output.hpp"
 
 
 namespace steam {
@@ -35,11 +35,6 @@ namespace test  {
    * @test verify the design of OutputSlot and BufferProvider by
    *       implementing a delegating BufferProvider to expose
    *       output data buffers provided from _some implementation._
-   * @todo WIP-WIP 12/2024 this turned out to be impossible,
-   *       due to inconsistencies in the default implementation.  /////////////////////////////////////////////TICKET #1387 : need to consolidate BufferProvider default implementation
-   * @todo 2/2026 broken by refactoring of BufferProvider        //////////////////////////////////////////////TICKET #1410 : refactoring to separate external and implementation API
-   * @todo however, something along this lines *must*
-   *       be made possible, somehow, for OutputSlot...
    * @todo 2/2026 now using this setup for prototyping        /////////////////////////////////////////////////TICKET #1415 : explore this design idea through prototyping
    */
   class OutputProxyProvider_test : public Test
@@ -47,10 +42,15 @@ namespace test  {
       virtual void
       run (Arg)
         {
-          size_t seenID{0};
-          BufferState lastState{NIL};
+          struct Callback
+            {
+              void on_lock() { cout << "LOCK" << endl; }
+              void on_emit() { cout << "EMIT" << endl; }
+              void on_release() { cout << "RELEASE" << endl; }
+            };
+          
           // setup with notification callback
-          BufferProxyAdaptor proxPro{};
+          BufferProxyAdaptor proxPro{Callback()};
           
           // Assuming some data block is »given«
           seedRand();
@@ -58,7 +58,7 @@ namespace test  {
           TestFrame dataBlock (frameNr);
           CHECK (    dataBlock.isPristine());
           
-          BuffHandle handle = proxPro.lockBuffer (dataBlock); ///////////////////////////////////////////////TICKET #1387 : unable to implement this
+          BuffHandle handle = proxPro.lockBuffer (dataBlock);
           
           // Now a »client« can do awful things to the buffer...
           CHECK (handle.isValid());

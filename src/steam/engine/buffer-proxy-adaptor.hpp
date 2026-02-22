@@ -48,6 +48,7 @@ namespace engine {
   using lib::Literal;
 //  using std::unique_ptr;
 //  using std::forward;
+  using std::move;
   
   
   
@@ -65,6 +66,7 @@ namespace engine {
    * @todo WIP-WIP 2/2026 used as prototype to forge a path ahead to resolve
    *       the structural problems with OutputSlot vs. BufferProvider   ///////////////////////////////////////TICKET #1415 : prototyping to resolve structural mismatch between OutputSlot / DataSink / BufferProvider
    */
+  template<class CONF>
   class BufferProxyAdaptor
     : util::NonCopyable
     {
@@ -81,6 +83,8 @@ namespace engine {
       class ProxyBufferStore
         : public BufferProviderSetup::Store
         {
+          CONF& callback_;
+          
           Buff*
           asBuffer (LocalTag targetMarker)
             {
@@ -99,35 +103,37 @@ namespace engine {
           Slot
           provideBuffer (size_t,HashVal, LocalTag targetMarker)  override
             {
-              TODO ("invoke LOCK callback");
+              callback_.on_lock();
               return {asBuffer(targetMarker), targetMarker};
             }
           
           void
           mark_emitted (size_t,HashVal, LocalTag const&)  override
             {
-              TODO ("invoke EMIT callback");
+              callback_.on_emit();
             }
           
           void
           detachBuffer (size_t,HashVal,Slot)  override
             {
-              TODO ("invoke RELEASE callback");
+              callback_.on_release();
             }
           
+        public:
+          ProxyBufferStore (CONF& policy)
+            : callback_{policy}
+            { }
         };
       
       class PassThroughBufferProvider
         : public BufferProviderSetup
         {
-            
+          
         public:
-          PassThroughBufferProvider ()
-            : BufferProviderSetup{*this}
+          template<class SETUP>
+          PassThroughBufferProvider (SETUP& setup)
+            : BufferProviderSetup{setup}
             { }
-            
-            auto buildStage() { return std::make_unique<PreRiggedBufferStage>(); }
-            auto buildStore() { return std::make_unique<ProxyBufferStore>(); }
             
             BuffDescr
             registerBuffer (void* buff, size_t siz)
@@ -139,12 +145,21 @@ namespace engine {
               }
         };
       
+      struct Setup
+        : CONF
+        {
+          auto buildStage() { return std::make_unique<PreRiggedBufferStage>(); }
+          auto buildStore() { return std::make_unique<ProxyBufferStore>(*this); }
+        };
+      Setup setup_;
+      
       PassThroughBufferProvider proxyProvider_;
       
       
     public:
-      BufferProxyAdaptor()
-        : proxyProvider_{}
+      BufferProxyAdaptor(CONF policy)
+        : setup_{move(policy)}
+        , proxyProvider_{setup_}
         { }
       
       template<typename TAR>

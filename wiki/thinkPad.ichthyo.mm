@@ -61678,41 +61678,32 @@
 <node COLOR="#435e98" CREATED="1771788793398" FOLDED="true" ID="ID_1642148991" MODIFIED="1771803623517" TEXT="2026/02 re-seeding-Hook schaffen">
 <node CREATED="1771788805420" ID="ID_1256962982" MODIFIED="1771789656478" TEXT="Begr&#xfc;ndung">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Es wird in Zukunft immer wieder Einrichtungen geben, die neu re-seeded werden m&#252;ssen, um deterministisch zu sein. Dieses re-Seeding mu&#223; zuverl&#228;ssig und reproduzierbar erfolgen, nachdem der globale PRNG neu initialisiert wurde.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1771789666980" ID="ID_981389862" MODIFIED="1771789803408" TEXT="relevant f&#xfc;r...">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...jede Art von Einrichtung, die in komplexer Weise vom Random-Seed abh&#228;ngt, und bei korrektem Setup deterministisch gemacht werden kann; also immer dann, wenn dieses Setup &#187;schwierig&#171; wird! Als Kontrast: f&#252;r einen banalen Test zieht man sich einfach eine Zufallszahl und gut is; inwiefern das Test-Ergabnis von dieser Zufallszahl abh&#228;ngt, ist in einem solchen Fall komplett offensichtlich.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1771789805546" ID="ID_400533719" MODIFIED="1771790039049" TEXT="TestFrame">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       TestFrame definiert nicht nur einen Mechanismus, einen Datenblock von Zufallszahlen zu erzeugen, sondern er definiert auch deterministische Sequenzen und Familien solcher Sequenzen. Diese werden aus einem &#187;Diskriminator&#171; gebildet. Per TestFrame::reseed() verwirft man <b>alle bestehenden Testframes<i>&#160;</i></b>und zieht einen neuen Diskriminator. Sofern ein Test mit Test-Frames <i>einzeln</i>&#160;reproduzierbar sein soll, mu&#223; dieres reseed() aufgerufen werden. Das &#252;bersieht man nat&#252;rlich leicht, denn normalerweise will man solche Tests nicht deterministisch wiederholen (was solange gilt, bis es mal ein ernstes Problem gibt)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <linktarget COLOR="#422ac0" DESTINATION="ID_400533719" ENDARROW="Default" ENDINCLINATION="560;-60;" ID="Arrow_ID_1144401880" SOURCE="ID_1471348244" STARTARROW="None" STARTINCLINATION="59;634;"/>
 <node COLOR="#338800" CREATED="1771803415569" HGAP="27" ID="ID_1924672804" MODIFIED="1771803444630" TEXT="registriert sich jetzt automatisch f&#xfc;r random-reseed" VSHIFT="13">
 <icon BUILTIN="idea"/>
@@ -61725,29 +61716,23 @@
 <node CREATED="1771790075663" ID="ID_199419157" MODIFIED="1771790086593" TEXT="soll nicht &#xbb;global&#xab; sein"/>
 <node CREATED="1771790095335" ID="ID_1384451064" MODIFIED="1771790139494" TEXT="ist keine Vorgabe f&#xfc;r die Applikation selber">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Wenn die Lumiera-Applikation mal etwas Vergleichbares braucht, mu&#223; es anderweitig an den Application-Lifecycle gebunden werden
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1771790141343" ID="ID_82436164" MODIFIED="1771790159436">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       soll aber <i>ohne Weiteres</i>&#160;stets f&#252;r jeden Test verf&#252;gbar sein
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1771790162692" ID="ID_1146500637" MODIFIED="1771790172217" TEXT="&#x27f9; geh&#xf6;rt ins Test-Framework"/>
 </node>
@@ -61759,9 +61744,7 @@
 <node CREATED="1771790516661" ID="ID_240891815" MODIFIED="1771790530643" TEXT="wie &#xbb;flexibel&#xab; und &#xbb;aufwendig&#xab; k&#xf6;nnen wir uns leisten?">
 <node CREATED="1771790541501" ID="ID_6099611" MODIFIED="1771790592906" TEXT="klarer Fall von YAGNI !">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Explizit ausformuliert:
@@ -61775,70 +61758,55 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1771790594730" ID="ID_57250862" MODIFIED="1771790600805" TEXT="denkbare Spannbreite">
 <node CREATED="1771790773155" ID="ID_1631916355" MODIFIED="1771790890048" TEXT="eine zentrale Implementierungs-Funktion mit hart gecodeten Aufrufen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Jede Einrichtung, die am re-Seeding teilnehmen mu&#223;, hat sich da selbst in den Code zu integrieren. Sobald sich diese Integrierung &#228;ndert, &#228;ndert sich der Seed f&#252;r alle Beteiligten. Aufgrund der Layer-Ordnung k&#246;nnen nur Library-Einrichtungen an einem solchen Setup teilnehmen; alles oberhalb mu&#223; dann auf weitere, verteilte Random-Generatoren aufbauen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1771790606212" ID="ID_1443915290" MODIFIED="1771791021498" TEXT="ein Reseeding-System, mit dem eine feste Reihenfolge garantiert wird">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       irgend ein Koordiniertungs-System, entweder compile-time oder run-time. Es mu&#223; sicherstellen, da&#223; Partizipatoren leicht hinzukonfiguriert werden k&#246;nnen, idealerweise automatisch, indem man einen Header includiert. Weiterhin mu&#223; aber sichergestellt werden, da&#223; die Ordnung der Zuteilung stabil bleibt. Konsequenz: das wird aufwendiger als es auf den ersten Blick aussieht; daf&#252;r ist die Aufgabe f&#252;r die Konsumenten des Random-Seed sehr einfach
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1771790638283" ID="ID_847997173" MODIFIED="1771791176690" TEXT="lediglich einen Master-Seed bereitstellen &#x2014; jeder mu&#xdf; seinen eigenen Generator verwalten">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Auch bei dieser Variante gibt es einen Registrierungs-Hook, der sehr bequem automatisiert wird. Allerdings liefert er nur <i>einen einzigen Seed-Wert identisch an alle Konsumenten.</i>&#160;Jeder Konsument mu&#223; daher zwingend seinen eigenen, lokalen Random-Generator verwalten und darf nirgends lib::defaultGen verwenden. Wenn mehr als ein einziger Client diese Regel mi&#223;achtet, bricht das System zusammen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1771790731312" ID="ID_1007624727" MODIFIED="1771791752741" TEXT="eine Registrierung auf ein Application-Event">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Dieser Ansatz ist mit den beiden zuvor genannten Varianten kombinierbar. Es erlaubt dann beliebigen Komponenten in verschiedensten Setups, automatisch am re-Seeding teilzunehmen. Effektiv l&#228;uft das aber darauf hinaus, auch getrennte Generatoren f&#252;r jeden Konsumenten zu verlangen, also keine bequeme Library-Funktion mehr!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
 <node CREATED="1771791759624" ID="ID_459999408" MODIFIED="1771791773321" TEXT="ich sehe folgende Stufen">
 <node CREATED="1771791777380" ID="ID_928787324" MODIFIED="1771794166900" TEXT="nichts tun! jeder Test ist selbst verantwortlich" VSHIFT="4">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       <u>Vorteil</u>: in den meisten Tests ist die Situation so einfach, da&#223; sich all die schwierigeren Fragen &#252;berhaupt nicht stellen
@@ -61847,17 +61815,14 @@
       <u>Nachteil</u>: das Thema ist nicht offensichtlich und wird deshalb leicht &#252;bersehen, so da&#223; man dann im Ernstfall vor einem nicht-reproduzierbaren Problem steht
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node COLOR="#435e98" CREATED="1771792328036" HGAP="25" ID="ID_1177735425" MODIFIED="1771792411958" TEXT="so habe ich das bisher gehalten" VSHIFT="-10">
 <font NAME="SansSerif" SIZE="10"/>
 </node>
 </node>
 <node CREATED="1771791855035" ID="ID_1248754284" MODIFIED="1771794227272" TEXT="zentrale Reseed-Funktion f&#xfc;r alle problematischen Komponenten">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       <u>Vorteil</u>: man k&#252;mmert sich nur um das, was wirklich ein Problem darstellt, und l&#228;&#223;t alles andere laufen
@@ -61866,8 +61831,7 @@
       <u>Nachteil</u>: das Problembewu&#223;tsein mu&#223; da sein, sonst funktioniert der Ansatz nicht
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <linktarget COLOR="#a71043" DESTINATION="ID_1248754284" ENDARROW="Default" ENDINCLINATION="-130;5;" ID="Arrow_ID_1619567275" SOURCE="ID_1809491977" STARTARROW="None" STARTINCLINATION="10;-13;"/>
 </node>
 <node CREATED="1771792007414" ID="ID_937121719" MODIFIED="1771792019688" TEXT="was &#xbb;feineres&#xab;">
@@ -61888,57 +61852,45 @@
 <icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#bb1490" CREATED="1771794484488" ID="ID_1866843924" MODIFIED="1771794530803">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       tja ... alles sch&#246;n ges&#252;ltzt bis jetzt &#8212; <b>geht aber am Problem vorbei</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="smiley-angry"/>
 <node BACKGROUND_COLOR="#fafe99" COLOR="#980d32" CREATED="1771794537160" ID="ID_1578449818" MODIFIED="1771794672517" TEXT="&#xd83e;&#xdc46; Problem ist...">
 <node CREATED="1771794554047" ID="ID_1793181159" MODIFIED="1771794571808" TEXT="ich habe (bisher) exakt einen Use-Case"/>
 <node CREATED="1771794572796" ID="ID_1762569226" MODIFIED="1771794596493">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       und der pa&#223;t nicht ins Schema: der sitzt n&#228;mlich <b>NICHT</b>&#160;in der lib-Lumiera
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1771794643571" ID="ID_870959085" MODIFIED="1771794649046" TEXT="sondern in libtest-core.so"/>
 </node>
 <node CREATED="1771794721112" ID="ID_339259825" MODIFIED="1771795424036">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       wir haben auch schon ein App-Event-System &#8212; das ist aber <i><font color="#a70202">leider zu knapp definiert</font></i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...es kann nur einfachste void(void)-Funktionen aufrufen, und auch nicht in definierter Reihenfolge. Zudem gibt es keine Scopes, d.h. wir m&#252;&#223;ten ein globales Lifecycle-Event definieren ON_RESEED. Das ist <b>genau das was ich definitiv nicht will</b>&#160;&#8212; weil wir damit in ein viel anspruchsvolleres Feature einsteigen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1771795425474" ID="ID_114413932" MODIFIED="1771803342428" TEXT="also hilft nur: basteln">
 <icon BUILTIN="yes"/>
@@ -61979,9 +61931,7 @@
 </node>
 <node COLOR="#338800" CREATED="1771803502493" ID="ID_1580946206" MODIFIED="1771803620895" TEXT="manuell getestet">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       <i>Explizit nicht sinnvoll</i>&#160;hierf&#252;r einen Unit-Test zu schreiben!
@@ -62007,8 +61957,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -114336,7 +114285,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1771539807853" ID="ID_1455262817" MODIFIED="1771539852207" TEXT="Prototyping : OutputProxyProvider_test als Experimentierfeld">
 <icon BUILTIN="pencil"/>
-<node CREATED="1771616038792" ID="ID_1389235656" MODIFIED="1771616326306" TEXT="Forschung: Policy konfigurieren">
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1771616038792" ID="ID_1389235656" MODIFIED="1771809186526" TEXT="Forschung: Policy konfigurieren">
+<icon BUILTIN="pencil"/>
 <node CREATED="1771616054739" ID="ID_297187964" MODIFIED="1771616315207" TEXT="hab die dunkle Erinnerung da&#xdf; in so was &#xc4;hnliches schon zig mal vergeblich versucht habe">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -114423,6 +114373,65 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node CREATED="1771634200296" ID="ID_1781890966" MODIFIED="1771634221593" TEXT="das ist angemessen; es geht um Implementierungs-Technik"/>
 <node CREATED="1771634718849" ID="ID_158495787" MODIFIED="1771634743108" TEXT="man k&#xf6;nnte zudem die Anforderungen als Concept dokumentieren"/>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1771807890857" ID="ID_44174155" MODIFIED="1771809182613" TEXT="Experiment zur Policy">
+<icon BUILTIN="pencil"/>
+<node CREATED="1771807898504" ID="ID_1896427982" MODIFIED="1771807909962" TEXT="einfachste Form: eine Policy als Baseclass"/>
+<node CREATED="1771807911166" ID="ID_1166005757" MODIFIED="1771807924271" TEXT="die Policy selber soll moveable sein"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1771807934449" ID="ID_292154472" MODIFIED="1771807951937" TEXT="Problem: ich brauch die Policy in der Store-Implementierung">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1771808870215" ID="ID_1799682600" MODIFIED="1771808894898" TEXT="damit verbundenes Problem: Konfiguration des BufferProviderSetup">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1771808897410" ID="ID_1165872773" MODIFIED="1771808913796" TEXT="den m&#xfc;ssen wir ebenfalls per Policy konfigurieren">
+<node CREATED="1771808914975" ID="ID_1601123928" MODIFIED="1771808929187" TEXT="damit wir die Spezialisierung erst im Konstruktor-Rumpf brauchen"/>
+<node CREATED="1771808930291" ID="ID_180591398" MODIFIED="1771808947529" TEXT="denn sonst w&#xfc;rde die Policy auf den Typ des BufferProvider-Interfaces durchschlagen"/>
+</node>
+<node CREATED="1771808957102" ID="ID_266948865" MODIFIED="1771808988313">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das macht die sache nun <font size="4" color="#aa0707">extrem ekelhaft und verworren</font>
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="smiley-angry"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1771808997763" ID="ID_251025614" MODIFIED="1771809261721" TEXT="irgendwie durchpr&#xfc;geln">
+<linktarget COLOR="#4198b7" DESTINATION="ID_251025614" ENDARROW="Default" ENDINCLINATION="280;452;" ID="Arrow_ID_1811648927" SOURCE="ID_357384264" STARTARROW="None" STARTINCLINATION="230;-772;"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1771809030317" ID="ID_888890635" MODIFIED="1771809050553" TEXT="mache einen weiteren Setup-Kontext im umschlie&#xdf;enden BufferProxyAdaptor"/>
+<node CREATED="1771809051767" ID="ID_741792921" MODIFIED="1771809068353" TEXT="lasse diesen von der Policy erben, aber auch die Konfiguration der Backends machen"/>
+<node CREATED="1771809073468" ID="ID_1644352238" MODIFIED="1771809093437" TEXT="dann kann man die Policy dort zur Initialisierung reinschieben"/>
+<node CREATED="1771809094897" ID="ID_1954503680" MODIFIED="1771809099725" TEXT="Einschr&#xe4;nkungen">
+<node CREATED="1771809101214" ID="ID_398957418" MODIFIED="1771809112001" TEXT="die Store-Implementierung hat jetzt eine Back-Referenz"/>
+<node CREATED="1771809113111" ID="ID_300180321" MODIFIED="1771809161169">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      in der einfachsten Form mu&#223; der Aufrufer herumtricksen,
+    </p>
+    <p>
+      weil die Policy mit <b>drei Lambdas<i>&#160;</i></b>konfiguriert wird...
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="smily_bad"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1771809163667" ID="ID_792139119" MODIFIED="1771809168991" TEXT="immerhin: das tut">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1771634755779" ID="ID_1904273320" MODIFIED="1771634765200" TEXT="Skizze: Grundstruktur">
@@ -114660,8 +114669,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       ...und kann aber keinen rechten Grund finden, es zu rechtfertigen....
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <edge COLOR="#f451c4"/>
 <font NAME="SansSerif" SIZE="11"/>
 <icon BUILTIN="smiley-oh"/>
@@ -114707,9 +114715,60 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1771719337142" ID="ID_1438749510" MODIFIED="1771719352671" TEXT="es f&#xe4;llt jetzt alles direkt an seinen Platz"/>
 <node CREATED="1771719312958" ID="ID_1439242903" MODIFIED="1771719327096" TEXT="das zeigt doch schon mal, da&#xdf; ich in der letzten Woche etwas geleistet habe"/>
 </node>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1771719388571" ID="ID_518110024" MODIFIED="1771719406796" STYLE="fork" TEXT="error::Logic(Underlying buffer type already defines a nontrivial LocalTag)">
+<node COLOR="#435e98" CREATED="1771719388571" ID="ID_518110024" MODIFIED="1771786539566" STYLE="fork" TEXT="error::Logic(Underlying buffer type already defines a nontrivial LocalTag)">
 <font NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="broken-line"/>
+<node CREATED="1771786421323" ID="ID_1428649903" MODIFIED="1771786443496" TEXT="da scheitert ein sinnvoller Konsistenz-Check"/>
+<node CREATED="1771786444987" ID="ID_863321778" MODIFIED="1771786502619">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      ...der hier nicht zugrifft, denn kein <i>anderes</i>&#160;LocalTag
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1771786504118" ID="ID_1195397068" MODIFIED="1771786527551" TEXT="wir definieren hier lediglich das gleiche LocalTag bereits im &#xbb;Buffer Type&#xab;">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1771787699562" ID="ID_1338445084" MODIFIED="1771803643108" TEXT="Nebenschauplatz: Fehler im Random-reseeding entdeckt">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1771788175302" ID="ID_1889273920" MODIFIED="1771788356892" TEXT="f&#xe4;llt mir nur auf wegen &#xbb;Prokrastination&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      wei&#223; nicht recht warum ich so &#252;berhaupt keinen Antrieb hab, meine eigentliche Aufgabe voranzutreiben ... vielleicht weil ich zehn andere Verpflichtungen habe, die ich nur wegen Lumiera zur&#252;ckstelle, obwohl sie einfacher zu erledigen w&#228;ren?
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1771788359811" ID="ID_1797609498" MODIFIED="1771788445962" TEXT="jedenfalls ist da ganz klar eine L&#xfc;cke, die schnell behoben werden sollte">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...bevor sich ein Workaround festsetzt, den man dann immer wieder vergi&#223;t, oder das ganze Thema wird insgesamt vergessen und f&#252;hrt dann zu Bugs.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1771788450555" ID="ID_262212223" MODIFIED="1771803693549" TEXT="also: fixen">
+<arrowlink COLOR="#a00e3d" DESTINATION="ID_1995924412" ENDARROW="Default" ENDINCLINATION="-2471;146;" ID="Arrow_ID_1407537427" STARTARROW="None" STARTINCLINATION="-636;133;"/>
+<icon BUILTIN="yes"/>
+<node COLOR="#984392" CREATED="1771803653032" HGAP="25" ID="ID_1693381367" MODIFIED="1771803688021" TEXT="( wieder mal erflogreich prokrastiniert )" VSHIFT="11">
+<font NAME="SansSerif" SIZE="8"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1771809197740" ID="ID_1401631162" MODIFIED="1771809206379" TEXT="l&#xe4;uft im einfachsten Test">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#257162" CREATED="1771809207859" ID="ID_357384264" MODIFIED="1771809261721" TEXT="zusammen mit Hack f&#xfc;r die Policy">
+<arrowlink COLOR="#4198b7" DESTINATION="ID_251025614" ENDARROW="Default" ENDINCLINATION="280;452;" ID="Arrow_ID_1811648927" STARTARROW="None" STARTINCLINATION="230;-772;"/>
+<icon BUILTIN="idea"/>
+</node>
 </node>
 </node>
 </node>

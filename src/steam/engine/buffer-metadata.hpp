@@ -225,7 +225,8 @@ namespace engine {
             Key newKey{parent};  // copy of parent as baseline
             if (nontrivial(localTag))
               {
-                if (nontrivial(parent.specifics_))
+                if (nontrivial(parent.specifics_)
+                    and localTag != parent.specifics_)
                   throw error::Logic{"Implementation defined local key should not be overridden. "
                                      "Underlying buffer type already defines a nontrivial LocalTag"};
                 newKey.parent_ = HashVal(parent);
