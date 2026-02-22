@@ -20,6 +20,7 @@
 
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
+#include "lib/random-reseed.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/test/suite.hpp"
 #include "lib/test/run.hpp"
@@ -210,7 +211,7 @@ namespace test {
   void
   Test::seedRand()
   {
-    lib::defaultGen.reseed (suiteSeed);
+    lib::reseed_for_test (suiteSeed);
   }
   
   

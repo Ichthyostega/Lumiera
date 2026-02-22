@@ -70,8 +70,7 @@ namespace test  {
       virtual void
       run (Arg)
         {
-          seedRand();
-          TestFrame::reseed();
+          seedRand();   //     ◁—————————————————————————— Note: TestFrame::reseed() automatically invoked here
           
           simpleUsage();
           verifyDataContent();

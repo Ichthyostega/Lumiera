@@ -60350,6 +60350,32 @@
 </html></richcontent>
 <arrowlink COLOR="#7e8fc5" DESTINATION="ID_39230986" ENDARROW="Default" ENDINCLINATION="-219;12;" ID="Arrow_ID_1543995286" STARTARROW="None" STARTINCLINATION="616;34;"/>
 </node>
+<node COLOR="#435e98" CREATED="1771788116588" ID="ID_1995924412" MODIFIED="1771803485608" TEXT="2/2026 re-Seeding mu&#xdf; automatisiert werden">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das ist nicht eigentlich ein Bug, aber etwas, was man nat&#252;rlicherweise erwarten w&#252;rde; bisher habe ich mich auf den Standpunkt gestellt, da&#223; man sich da schon selber darum k&#252;mmern sollte. Wenn ich jetzt aber durch alle Tests suche, die TestFrame verwenden, finde ich fast keinen, der ein korrektes re-Seeding macht, aber die meisten haben immerhin ein Test::seedRand()
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#a00e3d" DESTINATION="ID_1995924412" ENDARROW="Default" ENDINCLINATION="-2471;146;" ID="Arrow_ID_1407537427" SOURCE="ID_262212223" STARTARROW="None" STARTINCLINATION="-636;133;"/>
+<node CREATED="1771788718816" ID="ID_1308819378" MODIFIED="1771788732388" TEXT="TestFrame::reseed() zieht einen neuen Diskriminator"/>
+<node CREATED="1771788734069" ID="ID_1418590090" MODIFIED="1771788755081">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      das mu&#223; <i>nach</i>&#160;dem Herstellen eines deterministischen Master-Seed passieren
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#35648a" CREATED="1771788763842" ID="ID_1471348244" MODIFIED="1771803475338" TEXT="dieser Zusammenhang ist alles andere als offensichtlich &#x27f9; automatisieren">
+<arrowlink COLOR="#422ac0" DESTINATION="ID_400533719" ENDARROW="Default" ENDINCLINATION="560;-60;" ID="Arrow_ID_1144401880" STARTARROW="None" STARTINCLINATION="59;634;"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
 </node>
 <node CREATED="1729979079809" ID="ID_1106549131" MODIFIED="1729979157169" TEXT="Eigenschaften">
 <icon BUILTIN="info"/>
@@ -61646,6 +61672,343 @@
 </node>
 </node>
 </node>
+</node>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1771788793398" FOLDED="true" ID="ID_1642148991" MODIFIED="1771803623517" TEXT="2026/02 re-seeding-Hook schaffen">
+<node CREATED="1771788805420" ID="ID_1256962982" MODIFIED="1771789656478" TEXT="Begr&#xfc;ndung">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Es wird in Zukunft immer wieder Einrichtungen geben, die neu re-seeded werden m&#252;ssen, um deterministisch zu sein. Dieses re-Seeding mu&#223; zuverl&#228;ssig und reproduzierbar erfolgen, nachdem der globale PRNG neu initialisiert wurde.
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1771789666980" ID="ID_981389862" MODIFIED="1771789803408" TEXT="relevant f&#xfc;r...">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...jede Art von Einrichtung, die in komplexer Weise vom Random-Seed abh&#228;ngt, und bei korrektem Setup deterministisch gemacht werden kann; also immer dann, wenn dieses Setup &#187;schwierig&#171; wird! Als Kontrast: f&#252;r einen banalen Test zieht man sich einfach eine Zufallszahl und gut is; inwiefern das Test-Ergabnis von dieser Zufallszahl abh&#228;ngt, ist in einem solchen Fall komplett offensichtlich.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1771789805546" ID="ID_400533719" MODIFIED="1771790039049" TEXT="TestFrame">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      TestFrame definiert nicht nur einen Mechanismus, einen Datenblock von Zufallszahlen zu erzeugen, sondern er definiert auch deterministische Sequenzen und Familien solcher Sequenzen. Diese werden aus einem &#187;Diskriminator&#171; gebildet. Per TestFrame::reseed() verwirft man <b>alle bestehenden Testframes<i>&#160;</i></b>und zieht einen neuen Diskriminator. Sofern ein Test mit Test-Frames <i>einzeln</i>&#160;reproduzierbar sein soll, mu&#223; dieres reseed() aufgerufen werden. Das &#252;bersieht man nat&#252;rlich leicht, denn normalerweise will man solche Tests nicht deterministisch wiederholen (was solange gilt, bis es mal ein ernstes Problem gibt)
+    </p>
+  </body>
+</html>
+</richcontent>
+<linktarget COLOR="#422ac0" DESTINATION="ID_400533719" ENDARROW="Default" ENDINCLINATION="560;-60;" ID="Arrow_ID_1144401880" SOURCE="ID_1471348244" STARTARROW="None" STARTINCLINATION="59;634;"/>
+<node COLOR="#338800" CREATED="1771803415569" HGAP="27" ID="ID_1924672804" MODIFIED="1771803444630" TEXT="registriert sich jetzt automatisch f&#xfc;r random-reseed" VSHIFT="13">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1771790054409" ID="ID_357338456" MODIFIED="1771803328757" TEXT="Design-Fragen">
+<icon BUILTIN="help"/>
+<node CREATED="1771790065853" ID="ID_1743155131" MODIFIED="1771790072136" TEXT="wie tief soll das sitzen?">
+<node CREATED="1771790075663" ID="ID_199419157" MODIFIED="1771790086593" TEXT="soll nicht &#xbb;global&#xab; sein"/>
+<node CREATED="1771790095335" ID="ID_1384451064" MODIFIED="1771790139494" TEXT="ist keine Vorgabe f&#xfc;r die Applikation selber">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Wenn die Lumiera-Applikation mal etwas Vergleichbares braucht, mu&#223; es anderweitig an den Application-Lifecycle gebunden werden
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1771790141343" ID="ID_82436164" MODIFIED="1771790159436">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      soll aber <i>ohne Weiteres</i>&#160;stets f&#252;r jeden Test verf&#252;gbar sein
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1771790162692" ID="ID_1146500637" MODIFIED="1771790172217" TEXT="&#x27f9; geh&#xf6;rt ins Test-Framework"/>
+</node>
+<node CREATED="1771790176570" ID="ID_1357084707" MODIFIED="1771790190212" TEXT="wie &#xbb;deterministisch&#xab; soll es sein?">
+<node CREATED="1771790191983" ID="ID_1480062449" MODIFIED="1771790209296" TEXT="eigentlich m&#xf6;chte man blo&#xdf; einen gescheiterten Test wiederholen k&#xf6;nnen"/>
+<node CREATED="1771790290929" ID="ID_1202418399" MODIFIED="1771790309172" TEXT="kleine L&#xf6;sung: ich werfe den Test nochmal per Debugger an...."/>
+<node CREATED="1771790309974" ID="ID_420047653" MODIFIED="1771790327300" TEXT="gro&#xdf;e L&#xf6;sung: ich reproduziere auf einer anderen Plattform, oder mit Release/Debug-Build"/>
+</node>
+<node CREATED="1771790516661" ID="ID_240891815" MODIFIED="1771790530643" TEXT="wie &#xbb;flexibel&#xab; und &#xbb;aufwendig&#xab; k&#xf6;nnen wir uns leisten?">
+<node CREATED="1771790541501" ID="ID_6099611" MODIFIED="1771790592906" TEXT="klarer Fall von YAGNI !">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Explizit ausformuliert:
+    </p>
+    <ul>
+      <li>
+        in der Tat sich Probleme absehbar
+      </li>
+      <li>
+        aber wir warten mit der L&#246;sung bis sich diese erwartbaren Probleme tats&#228;chlich manifestieren
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1771790594730" ID="ID_57250862" MODIFIED="1771790600805" TEXT="denkbare Spannbreite">
+<node CREATED="1771790773155" ID="ID_1631916355" MODIFIED="1771790890048" TEXT="eine zentrale Implementierungs-Funktion mit hart gecodeten Aufrufen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Jede Einrichtung, die am re-Seeding teilnehmen mu&#223;, hat sich da selbst in den Code zu integrieren. Sobald sich diese Integrierung &#228;ndert, &#228;ndert sich der Seed f&#252;r alle Beteiligten. Aufgrund der Layer-Ordnung k&#246;nnen nur Library-Einrichtungen an einem solchen Setup teilnehmen; alles oberhalb mu&#223; dann auf weitere, verteilte Random-Generatoren aufbauen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1771790606212" ID="ID_1443915290" MODIFIED="1771791021498" TEXT="ein Reseeding-System, mit dem eine feste Reihenfolge garantiert wird">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      irgend ein Koordiniertungs-System, entweder compile-time oder run-time. Es mu&#223; sicherstellen, da&#223; Partizipatoren leicht hinzukonfiguriert werden k&#246;nnen, idealerweise automatisch, indem man einen Header includiert. Weiterhin mu&#223; aber sichergestellt werden, da&#223; die Ordnung der Zuteilung stabil bleibt. Konsequenz: das wird aufwendiger als es auf den ersten Blick aussieht; daf&#252;r ist die Aufgabe f&#252;r die Konsumenten des Random-Seed sehr einfach
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1771790638283" ID="ID_847997173" MODIFIED="1771791176690" TEXT="lediglich einen Master-Seed bereitstellen &#x2014; jeder mu&#xdf; seinen eigenen Generator verwalten">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Auch bei dieser Variante gibt es einen Registrierungs-Hook, der sehr bequem automatisiert wird. Allerdings liefert er nur <i>einen einzigen Seed-Wert identisch an alle Konsumenten.</i>&#160;Jeder Konsument mu&#223; daher zwingend seinen eigenen, lokalen Random-Generator verwalten und darf nirgends lib::defaultGen verwenden. Wenn mehr als ein einziger Client diese Regel mi&#223;achtet, bricht das System zusammen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1771790731312" ID="ID_1007624727" MODIFIED="1771791752741" TEXT="eine Registrierung auf ein Application-Event">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Dieser Ansatz ist mit den beiden zuvor genannten Varianten kombinierbar. Es erlaubt dann beliebigen Komponenten in verschiedensten Setups, automatisch am re-Seeding teilzunehmen. Effektiv l&#228;uft das aber darauf hinaus, auch getrennte Generatoren f&#252;r jeden Konsumenten zu verlangen, also keine bequeme Library-Funktion mehr!
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1771791759624" ID="ID_459999408" MODIFIED="1771791773321" TEXT="ich sehe folgende Stufen">
+<node CREATED="1771791777380" ID="ID_928787324" MODIFIED="1771794166900" TEXT="nichts tun! jeder Test ist selbst verantwortlich" VSHIFT="4">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <u>Vorteil</u>: in den meisten Tests ist die Situation so einfach, da&#223; sich all die schwierigeren Fragen &#252;berhaupt nicht stellen
+    </p>
+    <p>
+      <u>Nachteil</u>: das Thema ist nicht offensichtlich und wird deshalb leicht &#252;bersehen, so da&#223; man dann im Ernstfall vor einem nicht-reproduzierbaren Problem steht
+    </p>
+  </body>
+</html>
+</richcontent>
+<node COLOR="#435e98" CREATED="1771792328036" HGAP="25" ID="ID_1177735425" MODIFIED="1771792411958" TEXT="so habe ich das bisher gehalten" VSHIFT="-10">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+</node>
+<node CREATED="1771791855035" ID="ID_1248754284" MODIFIED="1771794227272" TEXT="zentrale Reseed-Funktion f&#xfc;r alle problematischen Komponenten">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <u>Vorteil</u>: man k&#252;mmert sich nur um das, was wirklich ein Problem darstellt, und l&#228;&#223;t alles andere laufen
+    </p>
+    <p>
+      <u>Nachteil</u>: das Problembewu&#223;tsein mu&#223; da sein, sonst funktioniert der Ansatz nicht
+    </p>
+  </body>
+</html>
+</richcontent>
+<linktarget COLOR="#a71043" DESTINATION="ID_1248754284" ENDARROW="Default" ENDINCLINATION="-130;5;" ID="Arrow_ID_1619567275" SOURCE="ID_1809491977" STARTARROW="None" STARTINCLINATION="10;-13;"/>
+</node>
+<node CREATED="1771792007414" ID="ID_937121719" MODIFIED="1771792019688" TEXT="was &#xbb;feineres&#xab;">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#f7000e" CREATED="1771792428766" HGAP="23" ID="ID_846403897" MODIFIED="1771792451865" TEXT="YAGNI" VSHIFT="5">
+<font NAME="SansSerif" SIZE="13"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1771792036558" ID="ID_1809491977" MODIFIED="1771794227272" TEXT="Beschlu&#xdf;: zentrale Reseed-Funktion verwenden">
+<arrowlink COLOR="#a71043" DESTINATION="ID_1248754284" ENDARROW="Default" ENDINCLINATION="-130;5;" ID="Arrow_ID_1619567275" STARTARROW="None" STARTINCLINATION="10;-13;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1771792165521" ID="ID_1770432641" MODIFIED="1771792197425" TEXT="eigentlich gibt es diese Funktion bereits: in suite.cpp"/>
+<node CREATED="1771792223499" ID="ID_208804929" MODIFIED="1771792240827" TEXT="zur besseren Dokumentation: random-reseed.hpp|cpp"/>
+</node>
+<node COLOR="#338800" CREATED="1771794038416" ID="ID_1190475268" MODIFIED="1771803309859" TEXT="Implementierung">
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#bb1490" CREATED="1771794484488" ID="ID_1866843924" MODIFIED="1771794530803">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      tja ... alles sch&#246;n ges&#252;ltzt bis jetzt &#8212; <b>geht aber am Problem vorbei</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="smiley-angry"/>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#980d32" CREATED="1771794537160" ID="ID_1578449818" MODIFIED="1771794672517" TEXT="&#xd83e;&#xdc46; Problem ist...">
+<node CREATED="1771794554047" ID="ID_1793181159" MODIFIED="1771794571808" TEXT="ich habe (bisher) exakt einen Use-Case"/>
+<node CREATED="1771794572796" ID="ID_1762569226" MODIFIED="1771794596493">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      und der pa&#223;t nicht ins Schema: der sitzt n&#228;mlich <b>NICHT</b>&#160;in der lib-Lumiera
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1771794643571" ID="ID_870959085" MODIFIED="1771794649046" TEXT="sondern in libtest-core.so"/>
+</node>
+<node CREATED="1771794721112" ID="ID_339259825" MODIFIED="1771795424036">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wir haben auch schon ein App-Event-System &#8212; das ist aber <i><font color="#a70202">leider zu knapp definiert</font></i>
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...es kann nur einfachste void(void)-Funktionen aufrufen, und auch nicht in definierter Reihenfolge. Zudem gibt es keine Scopes, d.h. wir m&#252;&#223;ten ein globales Lifecycle-Event definieren ON_RESEED. Das ist <b>genau das was ich definitiv nicht will</b>&#160;&#8212; weil wir damit in ein viel anspruchsvolleres Feature einsteigen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1771795425474" ID="ID_114413932" MODIFIED="1771803342428" TEXT="also hilft nur: basteln">
+<icon BUILTIN="yes"/>
+<node CREATED="1771795443654" ID="ID_509998029" MODIFIED="1771795450218" TEXT="einen neuen Service erfinden"/>
+<node COLOR="#338800" CREATED="1771795452478" ID="ID_18529675" MODIFIED="1771803398097" TEXT="mu&#xdf; aus statischem Kontext verwendbar sein">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#435e98" CREATED="1771803366239" ID="ID_305992027" MODIFIED="1771803380166" TEXT="m&#xf6;glichst alle Dependencies vermeiden">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node COLOR="#435e98" CREATED="1771803380956" ID="ID_1114520881" MODIFIED="1771803392770" TEXT="Meyer&apos;s Singleton">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1771795466134" ID="ID_1551562740" MODIFIED="1771803316573" TEXT="RandReseed-Service">
+<icon BUILTIN="forward"/>
+<node CREATED="1771795516102" ID="ID_142736564" MODIFIED="1771799570153" TEXT="Zugang....">
+<node CREATED="1771795548826" ID="ID_1707648492" MODIFIED="1771799578695" TEXT="register_at_seq(i, Hook)"/>
+<node CREATED="1771795584944" ID="ID_613198098" MODIFIED="1771800275490" TEXT="reseed_for_test (SeedNucleus)"/>
+</node>
+<node CREATED="1771795595092" ID="ID_1616947725" MODIFIED="1771795598001" TEXT="Verhalten">
+<node CREATED="1771795599287" ID="ID_1800784713" MODIFIED="1771795622633" TEXT="duplikate Registrierungen werfen error::Fatal"/>
+<node CREATED="1771795626134" ID="ID_256372633" MODIFIED="1771795664062" TEXT="die Hooks werden sortiert"/>
+<node CREATED="1771797091710" ID="ID_852981887" MODIFIED="1771797094793" TEXT="Aufruf">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1771797095881" ID="ID_1268487725" MODIFIED="1771803320183" TEXT="einfachste L&#xf6;sung: vorhandene Callbacks, sortiert">
+<icon BUILTIN="forward"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1771797115401" ID="ID_964151813" MODIFIED="1771797141314" TEXT="sp&#xe4;terer Ausbau: Zuteilung eines Seed f&#xfc;r jeden Slot">
+<icon BUILTIN="hourglass"/>
+</node>
+</node>
+</node>
+<node CREATED="1771795740790" ID="ID_1333995474" MODIFIED="1771795743516" TEXT="Begr&#xfc;ndung">
+<node CREATED="1771795744520" ID="ID_1130706569" MODIFIED="1771795757504" TEXT="will nicht jetzt in etwas Elaborierteres einsteigen"/>
+<node CREATED="1771795759519" ID="ID_291198746" MODIFIED="1771795781299" TEXT="m&#xf6;chte weiterhin einfach lib::rani(x) verwenden"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1771803502493" ID="ID_1580946206" MODIFIED="1771803620895" TEXT="manuell getestet">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>Explizit nicht sinnvoll</i>&#160;hierf&#252;r einen Unit-Test zu schreiben!
+    </p>
+    <ul>
+      <li>
+        bin mit dem Debugger durch eine komplette Verwendungs-Sequenz gesteppt
+      </li>
+      <li>
+        hab das gleiche mit einem komplett anderen Test wiederholt
+      </li>
+      <li>
+        habe zus&#228;tzliche Test-Hooks installiert
+      </li>
+      <li>
+        verifiziert da&#223; duplikate Slot-Nummern eine Exception werfen
+      </li>
+      <li>
+        verifiziert da&#223; Slots in aufsteigender Sortier-Reihenfolge aufgerufen werden
+      </li>
+      <li>
+        verifiziert da&#223; die absolute Nummer keine Rolle spielt
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
 </node>
 </node>
 </node>

@@ -78,7 +78,6 @@ namespace test  {
       run (Arg)
         {
           seedRand();
-          TestFrame::reseed();
           
           processing_generateFrame();
           processing_generateMultichan();

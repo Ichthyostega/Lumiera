@@ -54,7 +54,6 @@ namespace test  {
           
           // Assuming some data block is »given«
           seedRand();
-          TestFrame::reseed();
           size_t frameNr = defaultGen.u64();
           TestFrame dataBlock (frameNr);
           CHECK (    dataBlock.isPristine());

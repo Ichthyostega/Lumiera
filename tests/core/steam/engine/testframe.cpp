@@ -33,6 +33,7 @@
 
 #include "lib/error.hpp"
 #include "lib/random.hpp"
+#include "lib/random-reseed.hpp"
 #include "lib/hash-standard.hpp"
 #include "lib/hash-combine.hpp"
 #include "steam/engine/testframe.hpp"
@@ -192,11 +193,13 @@ namespace test  {
 
   
   /**
-   * @remark this function should be invoked at the start of any test
-   *         which requires reproducible data values in the TestFrame.
+   * @remark this function can be invoked whenever either completely new
+   *         or reproducible data values are required in TestFrame instances.
    *         It generates a new base seed to distinguish individual data frames.
    *         The seed is drawn from the \ref lib::defaultGen, and thus will be
    *         reproducible if the latter has been reseeded beforehand.
+   * @note   A default registration setup ensures this function is invoked
+   *         from each call of test::Test::seedRand()
    * @warning after invoking reseed(), the validity of previously generated
    *         frames can no longer be verified.
    */
@@ -205,6 +208,11 @@ namespace test  {
   {
     testFrames.reset(); // discard existing test data repository
     dataSeed = drawSeed (lib::defaultGen);
+  }
+  
+  namespace {  // ---------------automatic-registration-for-uint-tests-----------------
+    const uint RESEED_SLOT{1};
+    static uint _registration_ = lib::register_at_seq (RESEED_SLOT, &TestFrame::reseed );
   }
   
   
