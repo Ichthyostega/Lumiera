@@ -71,19 +71,10 @@ namespace engine {
     : util::NonCopyable
     {
       
-      class PreRiggedBufferStage
-        : public SimpleBufferStateRegistry
-        {
-        public:
-          PreRiggedBufferStage()
-            : SimpleBufferStateRegistry{"ResourceProxy"}
-            { }
-        };
-      
       class ProxyBufferStore
         : public BufferProviderSetup::Store
+        , private CONF
         {
-          CONF& callback_;
           
           Buff*
           asBuffer (LocalTag targetMarker)
@@ -103,35 +94,41 @@ namespace engine {
           Slot
           provideBuffer (size_t,HashVal, LocalTag targetMarker)  override
             {
-              callback_.on_lock();
+              CONF::on_lock();
               return {asBuffer(targetMarker), targetMarker};
             }
           
           void
           mark_emitted (size_t,HashVal, LocalTag const&)  override
             {
-              callback_.on_emit();
+              CONF::on_emit();
             }
           
           void
           detachBuffer (size_t,HashVal,Slot)  override
             {
-              callback_.on_release();
+              CONF::on_release();
             }
           
         public:
-          ProxyBufferStore (CONF& policy)
-            : callback_{policy}
+          ProxyBufferStore (CONF policy)
+            : CONF{move(policy)}
             { }
         };
+      
+      struct Setup
+        : CONF
+        {
+          auto buildStage() { return std::make_unique<SimpleBufferStateRegistry>("ResourceProxy"); }
+          auto buildStore() { return std::make_unique<ProxyBufferStore> (move(*this)); }
+        };                                                           //  Note: possible since Setup does not use CONF
       
       class PassThroughBufferProvider
         : public BufferProviderSetup
         {
           
         public:
-          template<class SETUP>
-          PassThroughBufferProvider (SETUP& setup)
+          PassThroughBufferProvider (Setup setup)
             : BufferProviderSetup{setup}
             { }
             
@@ -145,21 +142,12 @@ namespace engine {
               }
         };
       
-      struct Setup
-        : CONF
-        {
-          auto buildStage() { return std::make_unique<PreRiggedBufferStage>(); }
-          auto buildStore() { return std::make_unique<ProxyBufferStore>(*this); }
-        };
-      Setup setup_;
-      
       PassThroughBufferProvider proxyProvider_;
       
       
     public:
       BufferProxyAdaptor(CONF policy)
-        : setup_{move(policy)}
-        , proxyProvider_{setup_}
+        : proxyProvider_{Setup{move(policy)}}
         { }
       
       template<typename TAR>

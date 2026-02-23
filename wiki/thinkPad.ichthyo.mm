@@ -114431,6 +114431,72 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
+<node COLOR="#435e98" CREATED="1771857651995" ID="ID_1588748645" MODIFIED="1771857677972" TEXT="das geht noch dreister: &#xbb;schwebwende Config&#xab;">
+<icon BUILTIN="idea"/>
+<node CREATED="1771857680890" ID="ID_1386032779" MODIFIED="1771857785144" TEXT="wir brauchen eine Setup-Hilfsklasse, um die Backend-Implementierungen zu erzeugen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Das ist so vorgegeben durch das Design von BufferProviderSetup (weil ich damit die konkreten Backend-Klassen komplett aus dem Basis-Interface BufferProvider heraushalte)
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1771857787371" ID="ID_1223489355" MODIFIED="1771857849302" TEXT="diese brauchen tats&#xe4;chlich nur w&#xe4;hrend der Dauer des Konstruktur-Aufrufs">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      BufferProviderSetup ruft aus dem Rumpf ihres Konstruktors zwei Setup-Methoden auf; das wars dann, danach wird die Setup-Klasse nicht mehr gebraucht
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1771857855938" ID="ID_468915370" MODIFIED="1771857872747" TEXT="diese Setup-Klasse kann ein Dekorator &#xfc;ber die Policy sein">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1771857897007" ID="ID_1909591340" MODIFIED="1771857918626" TEXT="f&#xfc;r die restliche Lebensdauer brauchen wir die Policy nur im Store-Backend">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1771857921329" ID="ID_233147109" MODIFIED="1771857966470" TEXT="&#x27f9; also kann die Policy letztlich dorthin geschoben werden, als Mix-in (private Basisklasse)"/>
+<node CREATED="1771857999246" ID="ID_142868114" MODIFIED="1771858675941">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <b><u>Hier wird's dreist</u></b>: Policy-Base per move aus der Setup-Hilfsklasse herausschieben !!!
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Und zwar, noch dreister, <i>w&#228;hrend</i>&#160;diese Setup-Klasse grade aufgerufen wird, um die Backends zu konfigurieren. Effektiv f&#252;hrt dieser Aufruf dazu, da&#223; die Setup-Klasse ihre eigenen &#187;Eingeweide&#171; ausweidet und weitergibt. <i><font color="#770d2c">Kein Problem, sie stirbt ja sowiso am Ende des Aufrufts. </font></i>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Noch genauer betrachtet: eine RValue-Referenz ist ja erst mal nur ein &#187;Angebot&#171;: sie macht etwas f&#252;r move-Konstukrion (oder Zuweisung) zug&#228;nglich. <i>Was konkret beim &#187;move&#171; passiert</i>, legt der Konsument fest. Hier ist der Konsument aber tats&#228;chlich nur an der Basis-Klasse interessiert, d.h. er konstruiert eine Kopie der Basisklasse per move-Konstruktur. Und wiederum, was dabei passiert, bestimmen die Member in dieser Policy. Erwartungsgem&#228;&#223; sind das Lambdas, und die k&#246;nnten obtional tats&#228;chlich etwas binden, was dann per Move-Konstruktion verschoben wird (z.B. einenen unique-PImpl). Sehr sch&#246;n, denn Lambdas werden erst aktiv, wenn sie aufgerufen werden. Werden sie aber nicht, w&#228;hrend der Konstruktion. Zusammengefa&#223;t: <i>solange nicht der Konstruktionsvorgang selbst die Callbacks aufruft,</i>&#160;ist das alles wasserdicht. Die einzige (langfristige) Gefahr besteht darin, da&#223; ein &#252;bereifriger Linter/Compiler in Zukunft hier einen use-after-delete markiert, ohne tats&#228;chlich zu belegen, da&#223; der use auftritt.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
 </node>
 </node>
 </node>
