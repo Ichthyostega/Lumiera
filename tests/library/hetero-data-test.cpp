@@ -30,7 +30,7 @@ namespace lib {
 namespace test{
   
   using std::string;
-  using meta::is_Subclass;
+  using meta::is_Subclass_v;
   using util::isSameObject;
   using util::isSameAdr;
   using util::getAdr;
@@ -80,7 +80,7 @@ namespace test{
       verify_FrontBlock()
         {
           using Block1 = HeteroData<uint,double>;
-          CHECK ((is_Subclass<Block1::NewFrame, std::tuple<uint,double>>()));
+          CHECK ((is_Subclass_v<Block1::NewFrame, std::tuple<uint,double>>));
           
           auto b1 = Block1::build (42, 1.61803);
           CHECK (1.61803 == b1.get<1>());
@@ -109,11 +109,11 @@ namespace test{
       verify_ChainBlock()
         {
           using Block1 = HeteroData<uint>;
-          CHECK ((is_Subclass<Block1::NewFrame, std::tuple<uint>>()));
+          CHECK ((is_Subclass_v<Block1::NewFrame, std::tuple<uint>>));
           
           using Constructor = Block1::Chain<double,string>;
           using Block2 = Constructor::NewFrame;
-          CHECK ((is_Subclass<Block2, std::tuple<double, string>>()));
+          CHECK ((is_Subclass_v<Block2, std::tuple<double, string>>));
           
           auto b1 = Block1::build (41);
           auto b2 = Constructor::build (1.61, "Φ");

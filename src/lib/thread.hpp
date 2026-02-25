@@ -741,7 +741,7 @@ namespace lib {
   inline void
   launchDetached (ThreadHookable::Launch&& launchBuilder)
   {
-    static_assert (lib::meta::is_Subclass<TAR, ThreadHookable>());
+    static_assert (lib::meta::is_Subclass_v<TAR, ThreadHookable>);
     
     new TAR{move(launchBuilder)
                  .atExit([](TAR& selfAllocation)

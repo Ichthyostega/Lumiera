@@ -31,7 +31,6 @@
 #include "lib/meta/function-closure.hpp"
 #include "lib/meta/tuple-helper.hpp"
 #include "lib/meta/tuple-record-init.hpp"
-#include "lib/meta/maybe-compare.hpp"
 #include "steam/control/command-closure.hpp"
 #include "steam/control/argument-erasure.hpp"
 #include "lib/typed-allocation-manager.hpp"

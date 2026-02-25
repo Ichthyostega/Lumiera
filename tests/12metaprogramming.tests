@@ -296,6 +296,11 @@ return: 0
 END
 
 
+TEST "Generated data records" PropBuilder_test  <<END
+return: 0
+END
+
+
 TEST "Variadic template diagnostics" TestHelperVariadic_test <<END
 out-lit: --no-arg--
 out-lit:  :.

@@ -58599,6 +58599,69 @@
 <node CREATED="1751414247721" ID="ID_1171949349" MODIFIED="1751414277013" TEXT="&#x27f9; lib::meta::apply als Ersatz  (und lib::meta::getElm)"/>
 </node>
 </node>
+<node CREATED="1772066411633" ID="ID_50275437" MODIFIED="1772066416949" TEXT="Code-Generierung">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1772066190351" ID="ID_940571255" MODIFIED="1772066239070" TEXT="PropBuilder : Record mit benannten Feldern generieren">
+<icon BUILTIN="yes"/>
+<node CREATED="1772066253767" ID="ID_1072763198" MODIFIED="1772067242722" TEXT="Neue Metaprgramming-Technik &#x27f8; f&#xfc;r Policy-based Design">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...das will ich schon seit endlos langer Zeit, und bin aber immer wieder zu dem Schlu&#223; gekommen, da&#223; es in C++ nicht wirklich geht, da uns die Introspektion von Record-Typen fehlt.
+    </p>
+    <p>
+      2026/2 : nun hatte ich wieder so einen Fall, und hab mich drei Tage lang gr&#252;n und blau ge&#228;rgert, weil es so sagenhaft umst&#228;ndlich (und auch verwirrend) ist, wenn man eine Policy definieren m&#246;chte, die <i>mehrere Lambdas</i>&#160;zur Konfiguration verwendet. Konkret war das (nat&#252;rlich) nur ein Nebenschauplatz, und &#187;eigentlich braucht man es nicht&#171; ...
+    </p>
+    <p>
+      jedenfalls hab ich mal wieder ganz locker ein Design gemacht, und mir gedacht &#8222;den Rest konfiguriert man dann ganz einfach per Policy&#8220;. Denkste. Und da ich jetzt schon so viel Zeit vergeudet habe (Hallo &#187;sunken cost fallacy&#171;, nice to meet you again!), hab ich mich auf eine Macro-basierte L&#246;sung eingeschossen. Nachdem ich dann dar&#252;ber zwei Tage gebr&#252;tet hatte, sind mir die &#955;-Template-Parameter eingefallen, die es ja erst seit C++20 gibt. Beim Nachlesen in der Doku bin ich dann zuf&#228;llig auch noch auf die &#187;Explicit object member functions&#171; gesto&#223;en &#8212; ein Feature, das mir komplett entgangen war. Beide zusammen <i>sind ein echter Game-Changer!</i>&#160;Denn damit kann man nun nicht nur einen Typ in einer Funktion generieren (das konnte man schon immer), sondern das per Lambda <b>in einem Ausdruck</b>&#160;machen, ohne noch eine separate Deklaration zu brauchen. Das erscheint mir jetzt als ein Quantensprung, und hebt das &#187;Policy-based-Design&#171; auf einen anderen Level der Expressivit&#228;t.
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#2b57f9" DESTINATION="ID_1072763198" ENDARROW="Default" ENDINCLINATION="2965;140;" ID="Arrow_ID_198810341" SOURCE="ID_1029922863" STARTARROW="None" STARTINCLINATION="-2090;136;"/>
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1772067250896" ID="ID_1640694078" MODIFIED="1772067306544" TEXT="Aufgabe: einen &#xbb;ma&#xdf;geschneiderten&#xab; Daten-Record...">
+<node CREATED="1772067307899" ID="ID_919196456" MODIFIED="1772067410868" TEXT="kompakt und lesbar &#xbb;inline&#xab; definieren">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...das ist die entscheidende Verbesserung; abgesehen davon ist jede Klasse oder Struct ein &#187;ma&#223;geschneiderter Daten-Record&#171; &#8212; aber die <i>boilerplate</i>&#160; allein zum Initialisieren ist so umst&#228;ndlich, da&#223; das Ergebnis nicht mehr <i>selbsterkl&#228;rend ist.</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1772067418044" ID="ID_1314882599" MODIFIED="1772067438651" TEXT="und gleich mit inline-&#x3bb; und Kontext-capture initialisieren"/>
+</node>
+<node CREATED="1772068221512" ID="ID_774607578" MODIFIED="1772070444439" TEXT="Bau-Technik">
+<icon BUILTIN="forward"/>
+<node COLOR="#435e98" CREATED="1772068227431" ID="ID_361097452" MODIFIED="1772070455630" TEXT="ein Builder-Ausdruck"/>
+<node COLOR="#435e98" CREATED="1772068233846" ID="ID_1873632379" MODIFIED="1772070455630" TEXT="ein Lambda, das einen abgeleiteten Typ definiert">
+<node CREATED="1772068272529" ID="ID_57203075" MODIFIED="1772068277732" TEXT="es nimmt ein Basis-Objekt"/>
+<node CREATED="1772068278549" ID="ID_1359999705" MODIFIED="1772068285633" TEXT="plus einen Property-Wert"/>
+<node CREATED="1772068286375" ID="ID_1783360048" MODIFIED="1772068300481" TEXT="und erzeugt eine abgeleitete Klasse mit diesem Property"/>
+</node>
+<node COLOR="#435e98" CREATED="1772068303510" ID="ID_142658280" MODIFIED="1772070460038" TEXT="Definition und Aufruf dieses Lambdas kann man in einen einzigen Ausdruck packen">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#435e98" CREATED="1772068327705" ID="ID_782344387" MODIFIED="1772070455629" TEXT="und diesen Ausdruck kann man dann mit einem Macro generieren">
+<node CREATED="1772068339947" ID="ID_721460446" MODIFIED="1772068350577" TEXT="damit werden neue Feldnamen m&#xf6;glich"/>
+<node CREATED="1772068351334" ID="ID_302440640" MODIFIED="1772068360385" TEXT="und man kann auch den generierten Typ dekorieren"/>
+</node>
+</node>
+<node CREATED="1772068366233" ID="ID_858655013" MODIFIED="1772068376142" TEXT="Implementierung">
+<node CREATED="1772068377138" ID="ID_160543739" MODIFIED="1772068386687" TEXT="lib/meta/prop-builder.hpp"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1772068387673" ID="ID_999468145" MODIFIED="1772068449713" TEXT="PropBuilder_test">
+<icon BUILTIN="pencil"/>
+<node CREATED="1772068394858" ID="ID_1256049272" MODIFIED="1772068407518" TEXT="Aufruf-Syntax zeigen"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1772068408103" ID="ID_452419709" MODIFIED="1772068442634" TEXT="die verwendeten Programmiertechniken dokumentieren">
+<icon BUILTIN="pencil"/>
+</node>
+<node CREATED="1772068421596" ID="ID_1602327531" MODIFIED="1772068435958" TEXT="Beispiel f&#xfc;r ein Policy-based Design darststellen"/>
+</node>
+</node>
+</node>
+</node>
 <node CREATED="1540682664865" ID="ID_1702211999" MODIFIED="1557498707236" TEXT="Metaprogramming">
 <node CREATED="1739742552923" ID="ID_606595417" MODIFIED="1739742563204" TEXT="Typsequenzen und Typlisten">
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1739742570360" ID="ID_1552300649" MODIFIED="1739743026716" TEXT="Grunds&#xe4;tzlich: die Loki-Typlisten / Sequenzen werde ich weiterhin nutzen und erhalten">
@@ -114374,14 +114437,15 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1771634200296" ID="ID_1781890966" MODIFIED="1771634221593" TEXT="das ist angemessen; es geht um Implementierungs-Technik"/>
 <node CREATED="1771634718849" ID="ID_158495787" MODIFIED="1771634743108" TEXT="man k&#xf6;nnte zudem die Anforderungen als Concept dokumentieren"/>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1771807890857" ID="ID_44174155" MODIFIED="1771809182613" TEXT="Experiment zur Policy">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1771807890857" ID="ID_44174155" MODIFIED="1771893611677" TEXT="Experiment zur Policy">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1771807898504" ID="ID_1896427982" MODIFIED="1771807909962" TEXT="einfachste Form: eine Policy als Baseclass"/>
 <node CREATED="1771807911166" ID="ID_1166005757" MODIFIED="1771807924271" TEXT="die Policy selber soll moveable sein"/>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1771807934449" ID="ID_292154472" MODIFIED="1771807951937" TEXT="Problem: ich brauch die Policy in der Store-Implementierung">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1771807934449" ID="ID_292154472" MODIFIED="1771893713330" TEXT="Problem: ich brauch die Policy in der Store-Implementierung">
+<arrowlink COLOR="#5ba4a3" DESTINATION="ID_937919882" ENDARROW="Default" ENDINCLINATION="-525;70;" ID="Arrow_ID_487502478" STARTARROW="None" STARTINCLINATION="111;5;"/>
 <icon BUILTIN="messagebox_warning"/>
 </node>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1771808870215" ID="ID_1799682600" MODIFIED="1771808894898" TEXT="damit verbundenes Problem: Konfiguration des BufferProviderSetup">
+<node BACKGROUND_COLOR="#d7b089" COLOR="#9c0648" CREATED="1771808870215" ID="ID_1799682600" MODIFIED="1771893643654" TEXT="damit verbundenes Problem: Konfiguration des BufferProviderSetup">
 <icon BUILTIN="broken-line"/>
 <node CREATED="1771808897410" ID="ID_1165872773" MODIFIED="1771808913796" TEXT="den m&#xfc;ssen wir ebenfalls per Policy konfigurieren">
 <node CREATED="1771808914975" ID="ID_1601123928" MODIFIED="1771808929187" TEXT="damit wir die Spezialisierung erst im Konstruktor-Rumpf brauchen"/>
@@ -114389,16 +114453,13 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node CREATED="1771808957102" ID="ID_266948865" MODIFIED="1771808988313">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       das macht die sache nun <font size="4" color="#aa0707">extrem ekelhaft und verworren</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="smiley-angry"/>
 </node>
 <node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1771808997763" ID="ID_251025614" MODIFIED="1771809261721" TEXT="irgendwie durchpr&#xfc;geln">
@@ -114411,9 +114472,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1771809101214" ID="ID_398957418" MODIFIED="1771809112001" TEXT="die Store-Implementierung hat jetzt eine Back-Referenz"/>
 <node CREATED="1771809113111" ID="ID_300180321" MODIFIED="1771809161169">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       in der einfachsten Form mu&#223; der Aufrufer herumtricksen,
@@ -114422,8 +114481,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       weil die Policy mit <b>drei Lambdas<i>&#160;</i></b>konfiguriert wird...
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="smily_bad"/>
 </node>
 </node>
@@ -114435,29 +114493,23 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="idea"/>
 <node CREATED="1771857680890" ID="ID_1386032779" MODIFIED="1771857785144" TEXT="wir brauchen eine Setup-Hilfsklasse, um die Backend-Implementierungen zu erzeugen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Das ist so vorgegeben durch das Design von BufferProviderSetup (weil ich damit die konkreten Backend-Klassen komplett aus dem Basis-Interface BufferProvider heraushalte)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1771857787371" ID="ID_1223489355" MODIFIED="1771857849302" TEXT="diese brauchen tats&#xe4;chlich nur w&#xe4;hrend der Dauer des Konstruktur-Aufrufs">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       BufferProviderSetup ruft aus dem Rumpf ihres Konstruktors zwei Setup-Methoden auf; das wars dann, danach wird die Setup-Klasse nicht mehr gebraucht
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1771857855938" ID="ID_468915370" MODIFIED="1771857872747" TEXT="diese Setup-Klasse kann ein Dekorator &#xfc;ber die Policy sein">
 <icon BUILTIN="idea"/>
@@ -114468,20 +114520,15 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1771857921329" ID="ID_233147109" MODIFIED="1771857966470" TEXT="&#x27f9; also kann die Policy letztlich dorthin geschoben werden, als Mix-in (private Basisklasse)"/>
 <node CREATED="1771857999246" ID="ID_142868114" MODIFIED="1771858675941">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       <b><u>Hier wird's dreist</u></b>: Policy-Base per move aus der Setup-Hilfsklasse herausschieben !!!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Und zwar, noch dreister, <i>w&#228;hrend</i>&#160;diese Setup-Klasse grade aufgerufen wird, um die Backends zu konfigurieren. Effektiv f&#252;hrt dieser Aufruf dazu, da&#223; die Setup-Klasse ihre eigenen &#187;Eingeweide&#171; ausweidet und weitergibt. <i><font color="#770d2c">Kein Problem, sie stirbt ja sowiso am Ende des Aufrufts. </font></i>
@@ -114493,9 +114540,101 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       Noch genauer betrachtet: eine RValue-Referenz ist ja erst mal nur ein &#187;Angebot&#171;: sie macht etwas f&#252;r move-Konstukrion (oder Zuweisung) zug&#228;nglich. <i>Was konkret beim &#187;move&#171; passiert</i>, legt der Konsument fest. Hier ist der Konsument aber tats&#228;chlich nur an der Basis-Klasse interessiert, d.h. er konstruiert eine Kopie der Basisklasse per move-Konstruktur. Und wiederum, was dabei passiert, bestimmen die Member in dieser Policy. Erwartungsgem&#228;&#223; sind das Lambdas, und die k&#246;nnten obtional tats&#228;chlich etwas binden, was dann per Move-Konstruktion verschoben wird (z.B. einenen unique-PImpl). Sehr sch&#246;n, denn Lambdas werden erst aktiv, wenn sie aufgerufen werden. Werden sie aber nicht, w&#228;hrend der Konstruktion. Zusammengefa&#223;t: <i>solange nicht der Konstruktionsvorgang selbst die Callbacks aufruft,</i>&#160;ist das alles wasserdicht. Die einzige (langfristige) Gefahr besteht darin, da&#223; ein &#252;bereifriger Linter/Compiler in Zukunft hier einen use-after-delete markiert, ohne tats&#228;chlich zu belegen, da&#223; der use auftritt.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
+<node COLOR="#338800" CREATED="1771858723755" ID="ID_937919882" MODIFIED="1771893682325" TEXT="Test: funktioniert">
+<linktarget COLOR="#5ba4a3" DESTINATION="ID_937919882" ENDARROW="Default" ENDINCLINATION="-525;70;" ID="Arrow_ID_487502478" SOURCE="ID_292154472" STARTARROW="None" STARTINCLINATION="111;5;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1771893568172" ID="ID_465309080" MODIFIED="1771893720003" TEXT="Zweiter Teil der Aufgabe: named-Lambda-Tupel ">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1771893733865" ID="ID_60984394" MODIFIED="1771893764443" TEXT="ich m&#xf6;chte ALLES">
+<icon BUILTIN="yes"/>
+<node CREATED="1771893742904" ID="ID_921712765" MODIFIED="1771893750874" TEXT="einen meta-konfigurierbaren Builder"/>
+<node CREATED="1771893769036" ID="ID_434009909" MODIFIED="1771893878715" TEXT="einzelne Layer mit einem &#x3bb;-Attribut von generischem Typ &#x27f9; MACRO"/>
+<node CREATED="1771893845362" ID="ID_112946042" MODIFIED="1771893872082" TEXT="UND das &#x3bb; soll aber noch lokal gegeben werden k&#xf6;nnen &#x27f9; Kontext-Binding"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1771893896510" ID="ID_771196335" MODIFIED="1771895013673" TEXT="Ideen sammeln">
+<icon BUILTIN="idea"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1771893905186" ID="ID_1241420221" MODIFIED="1771893946302" TEXT="nicht klar ob es geht .... die Teile passen noch nicht recht zusammen (in meinem Kopf)">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1771893948001" ID="ID_898834553" MODIFIED="1771894995111" TEXT="einen Builder, der per Macro generierte nested-Classes zusammenh&#xe4;ngt">
+<icon BUILTIN="full-1"/>
+</node>
+<node CREATED="1771893977920" ID="ID_327025336" MODIFIED="1771894999397" TEXT="ein Tuple mit den Lambdas, und einen named accessor-Layer dar&#xfc;ber (per Macro)">
+<icon BUILTIN="full-2"/>
+</node>
+<node CREATED="1771894975460" ID="ID_1705020209" MODIFIED="1771895021404" TEXT="m&#xf6;glicherweise zusammenbinden per Typ-Sequenz-Applikation">
+<icon BUILTIN="full-3"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1772064586741" ID="ID_1333957843" MODIFIED="1772064712945" TEXT="das Problem ist vor allem syntaktischer Natur">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1772064634844" ID="ID_1613330952" MODIFIED="1772064634844" TEXT="Typen m&#xfc;ssen deklariert werden"/>
+<node CREATED="1772064649488" ID="ID_806205089" MODIFIED="1772064649488" TEXT="Instanzen m&#xfc;ssen definiert werden"/>
+<node CREATED="1772064692061" ID="ID_1021370131" MODIFIED="1772064692061" TEXT="Ich will aber nur EIN Macro pro &#xbb;Layer&#xab;">
+<icon BUILTIN="yes"/>
+<node CREATED="1772064787000" ID="ID_1407594054" MODIFIED="1772064921190" TEXT="eigentlich kann man in C++ keine Typen &#x201e;inline&#x201c; (in einem Ausdruck) deklarieren">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das hei&#223;t: ich kann zwar eine Instanz einens anonymen Typs <i>definieren</i>&#160; &#8212; aber das ist dann kein Ausdruck, und kann schon gleich garnicht ein Template sein
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1772064936748" ID="ID_1768539918" MODIFIED="1772064936748" TEXT="aber ich kann einen lokalen Typ aus einer Funktion heraus &#xbb;abwerfen&#xab;">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1772064976990" ID="ID_1522870120" MODIFIED="1772064976990" TEXT="also einen Spalt breit ist die T&#xfc;r offen &#x2014; aber ich bekomme meinen Fu&#xdf; nicht rein...">
+<icon BUILTIN="smiley-oh"/>
+</node>
+<node CREATED="1772065106974" ID="ID_9798987" MODIFIED="1772065141875" TEXT="Ha! C++20 &#x27f9; Lambdas k&#xf6;nnen Template-Parameter haben">
+<icon BUILTIN="forward"/>
+<node CREATED="1772065144931" ID="ID_1572938824" MODIFIED="1772065185213">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      damit <b>mu&#223;</b>&#160;es gehen
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ich bekomme alle Typen in die Hand und kann damit eine neue Struct generieren
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#bf045e" CREATED="1772065089849" ID="ID_543012886" MODIFIED="1772065208074" TEXT="bekomme es aber seit gestern nicht in den Griff">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
+<node CREATED="1772065296622" ID="ID_1991045470" MODIFIED="1772065345149" TEXT="Ha&#xb2; : kann in C++20 den &#xbb;self&#xab;-Type in einer Member-Funktion abgreifen">
+<icon BUILTIN="forward"/>
+</node>
+<node CREATED="1772065459825" ID="ID_1413726983" MODIFIED="1772065483778" TEXT="&#x27f9; damit kann ich alles in einen einzigen Member-Funktions-Aufruf packen"/>
+</node>
+<node CREATED="1772065364753" ID="ID_1128216728" MODIFIED="1772065409930" TEXT="Das waren jetzt zwei Tage Knobelei">
+<icon BUILTIN="smiley-neutral"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1772065498436" ID="ID_1029922863" MODIFIED="1772066452619" TEXT="Neues generisches Feature: PropBuilder">
+<arrowlink COLOR="#2b57f9" DESTINATION="ID_1072763198" ENDARROW="Default" ENDINCLINATION="2965;140;" ID="Arrow_ID_198810341" STARTARROW="None" STARTINCLINATION="-2090;136;"/>
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1772066464826" ID="ID_534123438" MODIFIED="1772066473089" TEXT="dokumentiert in PropBuilder_test">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1772066474417" ID="ID_1404760011" MODIFIED="1772066498094" TEXT="dort auch direkt diesen use-Case demonstrieren">
+<icon BUILTIN="yes"/>
 </node>
 </node>
 </node>

@@ -64,7 +64,7 @@ namespace model {
   class ZoomMetric
     : public I
     {
-      static_assert(lib::meta::is_Subclass<I, DisplayMetric>());
+      static_assert(lib::meta::is_Subclass_v<I, DisplayMetric>);
       
     protected:
       ZoomWindow zoomWindow_;

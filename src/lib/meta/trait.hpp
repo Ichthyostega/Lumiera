@@ -57,9 +57,6 @@
 
 
 //Forward declarations for the Unwrap helper....
-namespace boost{
-  template<class X> class reference_wrapper;
-}
 namespace std {
   template<class X> class reference_wrapper;
   template<class X> class shared_ptr;
@@ -156,19 +153,6 @@ namespace meta {
         {
           ASSERT (ptr);
           return const_cast<Type&> (*ptr);
-        }
-    };
-  
-  template<typename X>
-  struct Unwrap<boost::reference_wrapper<X>>
-    : std::true_type
-    {
-      using Type = X;
-      
-      static X&
-      extract (boost::reference_wrapper<X> wrapped)
-        {
-          return wrapped;
         }
     };
   
@@ -328,7 +312,11 @@ namespace meta {
            , is_same<I,S>
            >
     { };
-    
+  
+  template<typename S, typename I>
+  inline constexpr bool is_Subclass_v = is_Subclass<S,I>();
+  
+  
   /** compare for unadorned base type, disregarding const and references */
   template<typename S, typename I>
   struct is_basically

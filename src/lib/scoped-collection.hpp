@@ -130,7 +130,7 @@ namespace lib {
           TY&
           create (ARGS&& ...args)
             {
-              static_assert ( meta::is_Subclass<TY,I>()
+              static_assert ( meta::is_Subclass_v<TY,I>
                              && sizeof(TY) <= siz,
                              "ElementHolder buffer too small");
               
