@@ -21,38 +21,20 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/meta/prop-builder.hpp"
-//#include "lib/meta/tuple-helper.hpp"
-//#include "meta/typelist-diagnostics.hpp"
-//#include "meta/tuple-diagnostics.hpp"
-//#include "lib/format-string.hpp"
-//#include "lib/format-cout.hpp"
-//#include "lib/hetero-data.hpp"
-#include "lib/test/diagnostic-output.hpp"////////////////TODO
+#include "lib/format-string.hpp"
 
 #include <string>
 
 using std::string;
-using lib::test::showType;
-//using lib::test::showSizeof;
-//using util::toString;
-//using util::_Fmt;
-//using std::is_same_v;
-//using std::make_tuple;
-//using std::get;
+using util::_Fmt;
 
 namespace lib  {
 namespace meta {
 namespace test {
   
-  
-  
-  namespace { // test data
-    
-    
-  } // (End) test data
-  
+  using lib::test::showType;
   #define TYPE(_TY_) showType<decltype(_TY_)>()
-
+  
   
   
   /*********************************************************************//**
@@ -73,6 +55,9 @@ namespace test {
       
       
       /** @test show syntax and usage
+       *      - create from the PropBuilder
+       *      - add named fields with values as desired
+       *      - the result is a record holding the data values
        */
       void
       simpleUsage()
@@ -115,7 +100,8 @@ namespace test {
       /** @test demonstrate and verify the language features
        *        used to generate arbitrary record data types.
        *      - capture self-type with C++20 _explicit object member function_
-       *      - use generic-λ to generate a derived class with a property field 
+       *      - use generic-λ to generate a derived class with a property field
+       *      - chain-up further layers with named fields by extending self-type
        */
       void
       explain_building_blocks()
@@ -139,12 +125,12 @@ namespace test {
           // local type can be _referred to_ only locally, within this function,
           // it is _not a hidden type_. Data elements using such a local type
           // can be returned by-value — which allows us to "drop off" such
-          // a data record, and this also implicitly its type.
+          // a data record, and thus also implicitly export its type.
           
           // While this seems rather pointless in itself, it can be leveraged
           // with the help of C++20 explicit lambda template parameters: we can
           // move an instance of a base class into a function, thereby pick up
-          // its type, and define a new derived class, and even move the given
+          // its type, then define a new derived class, and even move the given
           // base class instance into the embedded base class sub-object:
           
           auto dropperLambda = []<class BAS, typename VAL>(BAS&& bas, VAL&& val)
@@ -176,53 +162,106 @@ namespace test {
           
           ushort evil = 55;
           auto compoundRecord = dropperLambda (SomeRecord{0.13}, evil);
-          
           // here SomeRecord was created transiently, moved into the dropper-λ,
           // used there as base for a derived struct DataLayer_something, which
           // features an additional property `something`, initialised with an
-          // arbitrary value (and type) also passed on invocation.
+          // arbitrary value (and type), also passed directly on invocation.
           // The result is a record object, which incorporates the base, together
           // with an additional "Layer" holding the new property, stored efficiently.
           
+          CHECK (compoundRecord.something == evil);
+          CHECK (compoundRecord.someData == 0.13f);
           
           using Compound = decltype(compoundRecord);
-SHOW_TYPE(decltype(compoundRecord))
-SHOW_EXPR(TYPE(compoundRecord))
-SHOW_EXPR(sizeof(SomeRecord))
           CHECK (sizeof(SomeRecord) == sizeof(float));
-SHOW_EXPR(sizeof(Compound))
           CHECK (sizeof(Compound)   >= sizeof(float)+sizeof(ushort));
-SHOW_EXPR(alignof(SomeRecord))
-SHOW_EXPR(alignof(Compound))
           CHECK (alignof(Compound) == alignof(SomeRecord));
           CHECK (sizeof(Compound)  == 2 * alignof(float));
 
-SHOW_EXPR(std::is_class_v<Compound>)
-SHOW_EXPR(std::is_trivial_v<Compound>)
-SHOW_EXPR(std::is_trivial_v<SomeRecord>)
-SHOW_EXPR(std::is_trivially_copyable_v<SomeRecord>)
-SHOW_EXPR(std::is_trivially_copyable_v<Compound>)
-SHOW_EXPR(std::is_standard_layout_v<Compound>)
           CHECK (std::is_class_v<Compound>);
           CHECK (std::is_trivial_v<Compound>);
           CHECK (std::is_trivial_v<SomeRecord>);
           CHECK (std::is_trivially_copyable_v<Compound>);
           CHECK (std::is_trivially_copyable_v<SomeRecord>);
           
-          // Yet obviously it is not a POD,
+          // Yet obviously the generated record is not a POD,
           // since non-static members reside at several levels
           CHECK (not std::is_standard_layout_v<Compound>);
           
-SHOW_EXPR((is_Subclass_v<Compound, SomeRecord>))
           CHECK ((is_Subclass_v<Compound, SomeRecord>));
+          
+          
+          // Lastly, a chain of such »property layers« can be built gradually,
+          // with the help of a hook-method, that grabs the _current record_
+          // and passes it to the next extension-layer-λ. As first example,
+          // the dropper-λ defined above can be used here too...
+          auto record1 = PropBuilder()
+                          .define (dropperLambda, 0.23)
+                          ;
+          using Rec1 = decltype(record1);
+          CHECK ((is_Subclass_v<Rec1, PropBuilder>));
+          CHECK (sizeof(Rec1) == sizeof(double));
+          CHECK (TYPE(record1.something) == "double"_expect);
+          CHECK (record1.something == 0.23);
+          
+          // Note that the name of the property field, here `something`,
+          // needs to be hard wired into the builder-λ, due to the nature of C++.
+          // Yet this hurdle can be overcome by generating the builder-λ from a *macro*
+          auto record2 = record1
+                          .define (PROP_FIELD(anything)
+                                  ,[&](auto val){ return val + evil; } // ◁———————————— can pass a Lambda as "value"
+                                  );
+          using Rec2 = decltype(record2);
+          CHECK ((is_Subclass_v<Rec2, Rec1>));
+          CHECK ((is_Subclass_v<Rec2, PropBuilder>));
+          CHECK (record2.something == 0.23);
+          CHECK (record2.anything(11) == 66);
+          evil = 13;
+          CHECK (record2.anything(42) == 55);
+          // note the anything-λ is _generic_
+          CHECK (record2.anything(7.77f) == 20.77f);
+          
+          // Warning: record1 has been moved-away into record2,
+          // so its content is now »undefined«
         }
       
       
-      /** @test show how to use generated records to implement a policy.
+        /** Example for demonstration of possible use-case */
+        template<class POL>
+        class Producer
+          : POL
+          {
+          public:
+            Producer (POL policy)
+              : POL{move(policy)}
+              { }
+            
+            decltype(auto)
+            doIt()
+              {
+                return POL::wrap (POL::feed());
+              }
+          };
+      
+      /** @test show a didactical example how generated records
+       *        can be used to support policy-based design.
+       *      - the Producer template defined above can be configured
+       *        with appropriate actions and operations that fit together
+       *      - the test features a special context-bound producer.
        */
       void
       demonstrate_usage_scenario()
         {
+          uint current{21};
+          _Fmt putIt{"%s tralala"};
+          
+          auto doer = Producer{PropBuilder()
+                                .define (PROP_FIELD(feed), [&]{ return current++; })
+                                .define (PROP_FIELD(wrap), [&](auto it)->string { return putIt % it; })
+                              };
+          
+          CHECK (doer.doIt() == "21 tralala"_expect);
+          CHECK (22 == current);
         }
     };
   

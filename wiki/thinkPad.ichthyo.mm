@@ -58600,9 +58600,9 @@
 </node>
 </node>
 <node CREATED="1772066411633" ID="ID_50275437" MODIFIED="1772066416949" TEXT="Code-Generierung">
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1772066190351" ID="ID_940571255" MODIFIED="1772066239070" TEXT="PropBuilder : Record mit benannten Feldern generieren">
+<node BACKGROUND_COLOR="#c5ebda" COLOR="#2f6877" CREATED="1772066190351" FOLDED="true" ID="ID_940571255" MODIFIED="1772157213950" TEXT="PropBuilder : Record mit benannten Feldern generieren">
 <icon BUILTIN="yes"/>
-<node CREATED="1772066253767" ID="ID_1072763198" MODIFIED="1772067242722" TEXT="Neue Metaprgramming-Technik &#x27f8; f&#xfc;r Policy-based Design">
+<node COLOR="#12109f" CREATED="1772066253767" ID="ID_1072763198" MODIFIED="1772157175603" TEXT="Neue Metaprgramming-Technik &#x27f8; f&#xfc;r Policy-based Design">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -58620,7 +58620,8 @@
 <linktarget COLOR="#2b57f9" DESTINATION="ID_1072763198" ENDARROW="Default" ENDINCLINATION="2965;140;" ID="Arrow_ID_198810341" SOURCE="ID_1029922863" STARTARROW="None" STARTINCLINATION="-2090;136;"/>
 <icon BUILTIN="info"/>
 </node>
-<node CREATED="1772067250896" ID="ID_1640694078" MODIFIED="1772067306544" TEXT="Aufgabe: einen &#xbb;ma&#xdf;geschneiderten&#xab; Daten-Record...">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#434698" CREATED="1772067250896" ID="ID_1640694078" MODIFIED="1772074391901" TEXT="Aufgabe: einen &#xbb;ma&#xdf;geschneiderten&#xab; Daten-Record...">
+<icon BUILTIN="yes"/>
 <node CREATED="1772067307899" ID="ID_919196456" MODIFIED="1772067410868" TEXT="kompakt und lesbar &#xbb;inline&#xab; definieren">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -58633,7 +58634,8 @@
 </node>
 <node CREATED="1772067418044" ID="ID_1314882599" MODIFIED="1772067438651" TEXT="und gleich mit inline-&#x3bb; und Kontext-capture initialisieren"/>
 </node>
-<node CREATED="1772068221512" ID="ID_774607578" MODIFIED="1772070444439" TEXT="Bau-Technik">
+<node COLOR="#435e98" CREATED="1772068221512" ID="ID_774607578" MODIFIED="1772074416160" TEXT="Bau-Technik">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="forward"/>
 <node COLOR="#435e98" CREATED="1772068227431" ID="ID_361097452" MODIFIED="1772070455630" TEXT="ein Builder-Ausdruck"/>
 <node COLOR="#435e98" CREATED="1772068233846" ID="ID_1873632379" MODIFIED="1772070455630" TEXT="ein Lambda, das einen abgeleiteten Typ definiert">
@@ -58644,20 +58646,48 @@
 <node COLOR="#435e98" CREATED="1772068303510" ID="ID_142658280" MODIFIED="1772070460038" TEXT="Definition und Aufruf dieses Lambdas kann man in einen einzigen Ausdruck packen">
 <icon BUILTIN="idea"/>
 </node>
-<node COLOR="#435e98" CREATED="1772068327705" ID="ID_782344387" MODIFIED="1772070455629" TEXT="und diesen Ausdruck kann man dann mit einem Macro generieren">
+<node COLOR="#435e98" CREATED="1772068327705" ID="ID_782344387" MODIFIED="1772074438775" TEXT="und diesen Ausdruck wiederum kann man dann mit einem Macro generieren">
+<icon BUILTIN="idea"/>
 <node CREATED="1772068339947" ID="ID_721460446" MODIFIED="1772068350577" TEXT="damit werden neue Feldnamen m&#xf6;glich"/>
 <node CREATED="1772068351334" ID="ID_302440640" MODIFIED="1772068360385" TEXT="und man kann auch den generierten Typ dekorieren"/>
 </node>
 </node>
-<node CREATED="1772068366233" ID="ID_858655013" MODIFIED="1772068376142" TEXT="Implementierung">
+<node COLOR="#338800" CREATED="1772068366233" ID="ID_858655013" MODIFIED="1772156709954" TEXT="Implementierung">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1772068377138" ID="ID_160543739" MODIFIED="1772068386687" TEXT="lib/meta/prop-builder.hpp"/>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1772068387673" ID="ID_999468145" MODIFIED="1772068449713" TEXT="PropBuilder_test">
-<icon BUILTIN="pencil"/>
-<node CREATED="1772068394858" ID="ID_1256049272" MODIFIED="1772068407518" TEXT="Aufruf-Syntax zeigen"/>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1772068408103" ID="ID_452419709" MODIFIED="1772068442634" TEXT="die verwendeten Programmiertechniken dokumentieren">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1772068387673" ID="ID_999468145" MODIFIED="1772156707171" TEXT="PropBuilder_test">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1772068394858" ID="ID_1256049272" MODIFIED="1772156702859" TEXT="Aufruf-Syntax zeigen">
+<icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1772068421596" ID="ID_1602327531" MODIFIED="1772068435958" TEXT="Beispiel f&#xfc;r ein Policy-based Design darststellen"/>
+<node COLOR="#338800" CREATED="1772068408103" ID="ID_452419709" MODIFIED="1772156704705" TEXT="die verwendeten Programmiertechniken dokumentieren">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1772068421596" ID="ID_1602327531" MODIFIED="1772156705875" TEXT="Beispiel f&#xfc;r ein Policy-based Design darststellen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#5b280f" CREATED="1772156780733" ID="ID_960855659" LINK="https://quuxplusone.github.io/blog/2020/08/10/concepts-cant-do-quantifiers/" MODIFIED="1772157138692" TEXT="auch gleich ein Concept zeigen?">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Nehme davon Abstand.
+    </p>
+    <p>
+      Da ich als Beispiel eine Struktur wie in einer Factory zeigen m&#246;chte, erweist es sich als ausgesprochen schwierig, die erwartete Struktur sauber als Concept zu repr&#228;sentieren. Das liegt darin, da&#223; eine solche generische Factory oft implizit auf eine &#8704;-Quantisierung hinausl&#228;uft; d.h. man m&#246;chte etwas bauen, das <i>&#187;f&#252;r beliebige Typen funktioniert&#171;. </i>Wenngleich auch klar ist, da&#223; man niemals v&#246;llgig allgemeing&#252;ltigen, generischen Code schreiben kann, baut man die Struktur doch dieser Idee entsprechend auf. So etwas l&#228;&#223;t sich jedoch nicht als einfacher, formal pr&#252;fbarerer Constraint formulieren, denn das w&#252;rde eine formalisierte Spezifikations-Sprache und einen Theorem-Beweis erfordern.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Die Concepts in C++ k&#246;nnen jedoch nur <i>f&#252;r einen konkret gegebenen, einzelnen Typ</i>&#160;jeweils pr&#252;fen, ob sich ein valider Ausdruck ergibt; &#187;valide&#171; w&#252;rde sich in diesem Fall auf reine Syntax beschr&#228;nken, und das rechtfertigt nicht den syntaktischen Overhead f&#252;r ein Concept
+    </p>
+  </body>
+</html></richcontent>
+<font NAME="SansSerif" SIZE="11"/>
+<icon BUILTIN="help"/>
+<icon BUILTIN="button_cancel"/>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -114207,6 +114237,36 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1772129298282" ID="ID_1032607524" MODIFIED="1772129491113" TEXT="Implementierungs-API konsistenter gestalten">
+<linktarget COLOR="#71434f" DESTINATION="ID_1032607524" ENDARROW="Default" ENDINCLINATION="-1142;72;" ID="Arrow_ID_1327695220" SOURCE="ID_1927667326" STARTARROW="None" STARTINCLINATION="-295;-14;"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1772129494743" ID="ID_797224940" MODIFIED="1772129626006" TEXT="aufgefallen beim OutputSlot / BufferProxyAdaptor">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...denn dort kommt es zu der Anforderung, bei den State-Transitions jeweils einen Callback aufzurufen; das wirft die Frage nach den Namen und den jeweils &#252;bergebenen Daten auf; die Daten w&#228;ren <i>im Grunde genommen jeweils gleich.</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1772129627997" ID="ID_1533127720" MODIFIED="1772129874152" TEXT="weitere Analyse zeigt: die konkrtete Storage-Size weicht ab (kann gr&#xf6;&#xdf;er sein)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das ist eine Konsequenz aus der Einsicht, da&#223; der metadata::Entry nicht nur der internen Verwaltung dient, sondern die dort aufgezeichneten Informationen auch essentiell sind f&#252;r die Implementierung eines Storage-Backends. Das ist ein weithin bekanntes Pattern (und Problem) f&#252;r Allokatoren: man mu&#223; die Storage-Size kennen, speziell auch zur <i>De-</i>Allokation. Wenn man diese Einsicht verbindet mit &#220;berlegungen zum globalen Speicherblock-Management in der Engine, dann wird schnell klar, da&#223; man bisweilen durchaus einen zu-gro&#223;en-Speicherblock verwenden m&#246;chte; das bedeutet dann, da&#223; die Size-Eintrag f&#252;r den state-Key entsprechend pr&#228;zise ausgef&#252;llt sein mu&#223;.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1772129891226" ID="ID_1405915409" MODIFIED="1772129902229" TEXT="&#xdc;berlegungen zum BuffeStore-API">
+<node CREATED="1772129905244" ID="ID_545569208" MODIFIED="1772129929698" TEXT="eigentlich tritt ein charakteristisches Tupel bei jeder Transition auf"/>
+<node CREATED="1772129931304" ID="ID_1142410309" MODIFIED="1772129958147" TEXT="&#x27f9; man k&#xf6;nnte den &#xbb;Slot&#xab;-Datentyp erweitern...">
+<node CREATED="1772129959849" ID="ID_1378157373" MODIFIED="1772130000767" TEXT="(storage, size, localTag)"/>
+</node>
+</node>
+</node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1771538366852" ID="ID_1595544111" MODIFIED="1771538575391" TEXT="saubere Fehlermeldung wenn keine Allokation m&#xf6;glich ist">
 <linktarget COLOR="#744d8b" DESTINATION="ID_1595544111" ENDARROW="Default" ENDINCLINATION="628;31;" ID="Arrow_ID_378933605" SOURCE="ID_27406270" STARTARROW="None" STARTINCLINATION="221;-288;"/>
 <icon BUILTIN="flag-yellow"/>
@@ -114348,8 +114408,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1771539807853" ID="ID_1455262817" MODIFIED="1771539852207" TEXT="Prototyping : OutputProxyProvider_test als Experimentierfeld">
 <icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1771616038792" ID="ID_1389235656" MODIFIED="1771809186526" TEXT="Forschung: Policy konfigurieren">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1771616038792" FOLDED="true" ID="ID_1389235656" MODIFIED="1772157520866" TEXT="Forschung: Policy konfigurieren">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1771616054739" ID="ID_297187964" MODIFIED="1771616315207" TEXT="hab die dunkle Erinnerung da&#xdf; in so was &#xc4;hnliches schon zig mal vergeblich versucht habe">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -114549,17 +114609,17 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1771893568172" ID="ID_465309080" MODIFIED="1771893720003" TEXT="Zweiter Teil der Aufgabe: named-Lambda-Tupel ">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1771893568172" ID="ID_465309080" MODIFIED="1772157313295" TEXT="Zweiter Teil der Aufgabe: named-Lambda-Tupel ">
+<icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1771893733865" ID="ID_60984394" MODIFIED="1771893764443" TEXT="ich m&#xf6;chte ALLES">
 <icon BUILTIN="yes"/>
 <node CREATED="1771893742904" ID="ID_921712765" MODIFIED="1771893750874" TEXT="einen meta-konfigurierbaren Builder"/>
 <node CREATED="1771893769036" ID="ID_434009909" MODIFIED="1771893878715" TEXT="einzelne Layer mit einem &#x3bb;-Attribut von generischem Typ &#x27f9; MACRO"/>
 <node CREATED="1771893845362" ID="ID_112946042" MODIFIED="1771893872082" TEXT="UND das &#x3bb; soll aber noch lokal gegeben werden k&#xf6;nnen &#x27f9; Kontext-Binding"/>
 </node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1771893896510" ID="ID_771196335" MODIFIED="1771895013673" TEXT="Ideen sammeln">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1771893896510" ID="ID_771196335" MODIFIED="1772157452614" TEXT="Ideen sammeln">
 <icon BUILTIN="idea"/>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1771893905186" ID="ID_1241420221" MODIFIED="1771893946302" TEXT="nicht klar ob es geht .... die Teile passen noch nicht recht zusammen (in meinem Kopf)">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1771893905186" ID="ID_1241420221" MODIFIED="1772157446312" TEXT="nicht klar ob es geht .... die Teile passen noch nicht recht zusammen (in meinem Kopf)">
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node CREATED="1771893948001" ID="ID_898834553" MODIFIED="1771894995111" TEXT="einen Builder, der per Macro generierte nested-Classes zusammenh&#xe4;ngt">
@@ -114572,11 +114632,11 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="full-3"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1772064586741" ID="ID_1333957843" MODIFIED="1772064712945" TEXT="das Problem ist vor allem syntaktischer Natur">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1772064586741" ID="ID_1333957843" MODIFIED="1772157307555" TEXT="das Problem ist vor allem syntaktischer Natur">
 <icon BUILTIN="broken-line"/>
 <node CREATED="1772064634844" ID="ID_1613330952" MODIFIED="1772064634844" TEXT="Typen m&#xfc;ssen deklariert werden"/>
 <node CREATED="1772064649488" ID="ID_806205089" MODIFIED="1772064649488" TEXT="Instanzen m&#xfc;ssen definiert werden"/>
-<node CREATED="1772064692061" ID="ID_1021370131" MODIFIED="1772064692061" TEXT="Ich will aber nur EIN Macro pro &#xbb;Layer&#xab;">
+<node BACKGROUND_COLOR="#cbcff9" COLOR="#1d0194" CREATED="1772064692061" ID="ID_1021370131" MODIFIED="1772157493399" TEXT="Ich will aber nur EIN Macro pro &#xbb;Layer&#xab;">
 <icon BUILTIN="yes"/>
 <node CREATED="1772064787000" ID="ID_1407594054" MODIFIED="1772064921190" TEXT="eigentlich kann man in C++ keine Typen &#x201e;inline&#x201c; (in einem Ausdruck) deklarieren">
 <richcontent TYPE="NOTE"><html>
@@ -114627,15 +114687,25 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="smiley-neutral"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1772065498436" ID="ID_1029922863" MODIFIED="1772066452619" TEXT="Neues generisches Feature: PropBuilder">
+<node COLOR="#338800" CREATED="1772065498436" ID="ID_1029922863" MODIFIED="1772157233364" TEXT="Neues generisches Feature: PropBuilder">
 <arrowlink COLOR="#2b57f9" DESTINATION="ID_1072763198" ENDARROW="Default" ENDINCLINATION="2965;140;" ID="Arrow_ID_198810341" STARTARROW="None" STARTINCLINATION="-2090;136;"/>
-<icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1772066464826" ID="ID_534123438" MODIFIED="1772066473089" TEXT="dokumentiert in PropBuilder_test">
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="idea"/>
+<node COLOR="#338800" CREATED="1772066464826" ID="ID_534123438" MODIFIED="1772157242501" TEXT="dokumentiert in PropBuilder_test">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1772066474417" ID="ID_1404760011" MODIFIED="1772066498094" TEXT="dort auch direkt diesen use-Case demonstrieren">
+<node COLOR="#435e98" CREATED="1772066474417" ID="ID_1404760011" MODIFIED="1772157245259" TEXT="dort auch direkt diesen use-Case demonstrieren">
 <icon BUILTIN="yes"/>
+<node COLOR="#3a109f" CREATED="1772157247895" ID="ID_1241263989" MODIFIED="1772157288387" TEXT="zeige ein einfaches policy-pased-Design">
+<font NAME="SansSerif" SIZE="8"/>
 </node>
+<node COLOR="#3a109f" CREATED="1772157258547" ID="ID_577340727" MODIFIED="1772157288388" TEXT="eine Factory, die ihr Produkt auch gleich noch &#xbb;verpackt&#xab;">
+<font NAME="SansSerif" SIZE="8"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1772157327329" ID="ID_54487483" MODIFIED="1772157434174" TEXT="erfolgreich in den Prototyp f&#xfc;r den OutputProxyProvider integriert">
+<arrowlink COLOR="#1d8abd" DESTINATION="ID_946959732" ENDARROW="Default" ENDINCLINATION="85;-99;" ID="Arrow_ID_1405310375" STARTARROW="None" STARTINCLINATION="189;8;"/>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
@@ -114909,6 +114979,43 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 <node CREATED="1771719247697" ID="ID_1277905446" MODIFIED="1771719262138" TEXT="biete also f&#xfc;r diese Skizze erst mal nur ein Spezial-API"/>
+<node CREATED="1772128789402" ID="ID_858761125" MODIFIED="1772128800353" TEXT="Interface: Callback-Funktionen">
+<node CREATED="1772128802215" ID="ID_258480503" MODIFIED="1772128808917" TEXT="werden per Policy konfiguriert"/>
+<node CREATED="1772128810953" ID="ID_1904023092" MODIFIED="1772128829194" TEXT="f&#xfc;r jede State-Transition eine andere Funktion">
+<node CREATED="1772128834199" ID="ID_1497809945" MODIFIED="1772128839049" TEXT="on_lock"/>
+<node CREATED="1772128840151" ID="ID_430684409" MODIFIED="1772128843792" TEXT="on_emit"/>
+<node CREATED="1772128844960" ID="ID_502402565" MODIFIED="1772129182182" TEXT="on_release">
+<arrowlink COLOR="#86858e" DESTINATION="ID_373327393" ENDARROW="Default" ENDINCLINATION="-28;-43;" ID="Arrow_ID_1002798807" STARTARROW="None" STARTINCLINATION="47;11;"/>
+</node>
+</node>
+<node CREATED="1772129024726" ID="ID_1695408974" MODIFIED="1772129042551" TEXT="weitergegebene Detail-Info">
+<node CREATED="1772129044383" ID="ID_1927667326" MODIFIED="1772129473327" TEXT="das interne Interface ist noch inkonsistent">
+<arrowlink COLOR="#71434f" DESTINATION="ID_1032607524" ENDARROW="Default" ENDINCLINATION="-1142;72;" ID="Arrow_ID_1327695220" STARTARROW="None" STARTINCLINATION="-295;-14;"/>
+<node CREATED="1772129080302" ID="ID_373327393" MODIFIED="1772129287183" TEXT="Namensgebung">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      leichte Uneinheitlichkeit bzgl. der jeweils erreichten States, und auch die implizite Perspektive betreffend (wer sagt wem was); &#187;release&#171; k&#246;nnte auch &#187;free&#171; hei&#223;en
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#86858e" DESTINATION="ID_373327393" ENDARROW="Default" ENDINCLINATION="-28;-43;" ID="Arrow_ID_1002798807" SOURCE="ID_502402565" STARTARROW="None" STARTINCLINATION="47;11;"/>
+</node>
+<node CREATED="1772129084894" ID="ID_598702937" MODIFIED="1772129147835" TEXT="jeweils bereitgestellt Daten">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <i>effektiv</i>&#160;sind es jeweils die gleichen Infos f&#252;r jeden Transition, aber sie sind nicht eindeutig angeordnet
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1772129100438" ID="ID_255962416" MODIFIED="1772129106895" TEXT="Umgang mit der Storage-Size"/>
+</node>
+</node>
+</node>
 </node>
 <node CREATED="1771719274535" ID="ID_1815060462" MODIFIED="1771719385960" TEXT="Implementierung zusammenschalten...">
 <node CREATED="1771719283904" ID="ID_270233023" MODIFIED="1771719295702" TEXT="es gibt schon einen bestehenden Test, der sogar was verifiziert"/>
@@ -114973,6 +115080,10 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node COLOR="#257162" CREATED="1771809207859" ID="ID_357384264" MODIFIED="1771809261721" TEXT="zusammen mit Hack f&#xfc;r die Policy">
 <arrowlink COLOR="#4198b7" DESTINATION="ID_251025614" ENDARROW="Default" ENDINCLINATION="280;452;" ID="Arrow_ID_1811648927" STARTARROW="None" STARTINCLINATION="230;-772;"/>
 <icon BUILTIN="idea"/>
+</node>
+<node COLOR="#338800" CREATED="1772157371762" ID="ID_946959732" MODIFIED="1772157434175" TEXT="...und mit &#x3bb;-gebundener Policy!">
+<linktarget COLOR="#1d8abd" DESTINATION="ID_946959732" ENDARROW="Default" ENDINCLINATION="85;-99;" ID="Arrow_ID_1405310375" SOURCE="ID_54487483" STARTARROW="None" STARTINCLINATION="189;8;"/>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>

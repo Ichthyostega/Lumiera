@@ -21,6 +21,7 @@
 //#include "steam/play/diagnostic-output-slot.hpp"
 #include "steam/engine/buffer-proxy-adaptor.hpp"
 #include "steam/engine/test-rand-ontology.hpp"
+#include "lib/meta/prop-builder.hpp"
 #include "lib/test/diagnostic-output.hpp"
 
 
@@ -28,6 +29,7 @@ namespace steam {
 namespace engine{
 namespace test  {
   
+  using lib::meta::PropBuilder;
   
   
   
@@ -42,38 +44,44 @@ namespace test  {
       virtual void
       run (Arg)
         {
-          struct Callback
-            {
-              void on_lock() { cout << "LOCK" << endl; }
-              void on_emit() { cout << "EMIT" << endl; }
-              void on_release() { cout << "RELEASE" << endl; }
-            };
+          BufferState state{NIL};
           
           // setup with notification callback
-          BufferProxyAdaptor proxPro{Callback()};
+          BufferProxyAdaptor proxPro{PropBuilder()
+                                      .define (PROP_FIELD(on_lock),   [&]{ state = LOCKED; })
+                                      .define (PROP_FIELD(on_emit),   [&]{ state = EMITTED;})
+                                      .define (PROP_FIELD(on_release),[&]{ state = FREE;   })
+                                    };
           
           // Assuming some data block is »given«
           seedRand();
           size_t frameNr = defaultGen.u64();
           TestFrame dataBlock (frameNr);
-          CHECK (    dataBlock.isPristine());
+          CHECK (dataBlock.isPristine());
+          CHECK (state == NIL);
           
           BuffHandle handle = proxPro.lockBuffer (dataBlock);
+          CHECK (state == LOCKED);
           
           // Now a »client« can do awful things to the buffer...
           CHECK (handle.isValid());
           auto& data = handle.accessAs<TestFrame>();
           uint64_t param = defaultGen.u64();
           ont::manipulateFrame (&data, &data, param);
+          HashVal check = data.getChecksum();
 
           // »client« is done...
           handle.emit();
+          CHECK (state == EMITTED);
           
           // end usage cycle
           handle.release();
+          CHECK (state == FREE);
           CHECK (not handle.isValid());
           CHECK (not dataBlock.isPristine());
           CHECK (    dataBlock.isValid());
+          
+          CHECK (check == dataBlock.getChecksum());
         }
     };
   
