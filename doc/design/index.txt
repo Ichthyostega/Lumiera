@@ -7,22 +7,23 @@ Lumiera Design Documents
 // Menu :  prepend child design/gui
 // Menu :  prepend child architecture
 
-// Menu :  append child plugins
+// Menu :  append child extension
 // Menu :  append child workflow
 // Menu :  append child governance
 
-Lumiera is to be a professional tool for video editing on
+Lumiera aspires to be a professional tool for video editing on
 GNU/Linux systems.  The vision of the development team defines a modern design
 for the core of a Non-Linear Editing software.  A key aspect of Lumiera
 is the strong separation between the user interface and the processing core.
-We are developing Lumiera with a GTK GUI but that will in no way be exclusive;
-other GUIs can be written, as well as scripts to drive the core.
+We are developing Lumiera with a general purpose GTK UI -- which is loaded as
+an optional component, so that the core can also be invoked from scripts to
+use the editing and processing capabilities of the engine.
 This becomes possible by an ongoing effort to decrease coupling. Each major
 component in the application strives to be open to extensions, but closed
 against external modification. The presentation, the model and the ``performing''
-of the model are separate and self-contained parts of the application.  Lumiera
-as a processing core will be able to perform any conceivable
-task on video and audio, maybe even tasks entirely unrelated to video editing.
+of the model are separate and self-contained parts of the application.
+Lumiera as a processing core will be able to perform any conceivable task
+on video and audio, maybe even tasks entirely unrelated to video editing.
 
 .Workflow
 *****************
@@ -52,7 +53,8 @@ specialised GUIs.  The interface is the component that is closest to the user. I
 provides purely visual interaction with the user. Within this work environment, the user
 manipulates, organizes, loads, configures all sorts of data, especially MObjects (media
 objects) and Assets. These elements are contained within a structure called the Session. +
--> link:gui/index.html[GUI/Stage-Layer design documents]
+-> link:gui/index.html[GUI/Stage-Layer design documents] +
+-> link:{ldoc}/technical/stage/index.html[GUI technical documentation]
 
 
 Steam: the Transformation Layer
@@ -87,24 +89,23 @@ the screen or to external output. +
 Extra Components
 ----------------
 
-The Application
-~~~~~~~~~~~~~~~
+The Vessel
+~~~~~~~~~~
+A structure that is anchored below all layers, yet contains everything, conceptually.
+Definitions for building common interfaces are located here, as is the mechanism for initialisation
+and shutdown of the application, the loading of bootstrap configuration and optional components.
+It encloses and coordinates all parts to work together as a coherent whole.
+This -> link:application/index.html[Application framework] is complemented by
+a link:{ldoc}/technical/library/index.html[Support-Lbrary] with commonly used components,
+algorithms and data structures.
 
-The application controls the initialization and shutdown procedures as well as
-loading external elements such as plug-ins, which are widely used throughout
-Lumiera. It acts as the framework which supports core component operations. This
-framework is complemented by a library of commonly used components, algorithms and data structures. +
--> link:application/index.html[Application framework]
 
 
-link:plugins/index.html[Plugins]
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Plug-ins play an important role within Lumiera since the application relies
-heavily on current FLOSS implementations and external libraries. Moreover, the
-application will be configurable and can be extended in various
-ways; whenever some extension isn't permanent or will be used only on demand, it
-is packaged as a separate module into a plug-in. For example, the GUI of Lumiera
-is a plugin. +
--> design documents regarding the link:plugins/index.html[Plugins]
-
+Extensions
+~~~~~~~~~~
+Lumiera uses proven and field-tested implementations for the actual media processing,
+which are available as FLOSS or open-source libraries. To avoid extensive external dependencies
+on the main application however, such libraries need to be loaded through _adaptor plug-ins._
+Furthermore, the application will be configurable and it is conceivable that external
+extensions will be created. Designing and building a future-proof framework for configuration
+and extension is an important medium-term goal for further development.

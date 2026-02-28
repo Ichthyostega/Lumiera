@@ -21,7 +21,7 @@
 #include "steam/fixture/model-port-registry.hpp"
 #include "steam/asset/timeline.hpp"
 #include "steam/asset/pipe.hpp"
-#include "common/query.hpp"
+#include "vessel/query.hpp"
 #include "lib/util.hpp"
 
 
@@ -38,7 +38,7 @@ namespace test  {
   using asset::Timeline;
   using asset::PTimeline;
   using mobject::ModelPort;
-  using lumiera::Query;
+  using vessel::Query;
   
   using PID = asset::ID<Pipe>;
   using TID = asset::ID<Struct>;

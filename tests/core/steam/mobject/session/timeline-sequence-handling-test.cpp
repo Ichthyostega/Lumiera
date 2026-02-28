@@ -25,7 +25,7 @@
 #include "steam/asset/timeline.hpp"
 #include "steam/asset/sequence.hpp"
 #include "steam/asset/pipe.hpp"
-#include "common/query.hpp"
+#include "vessel/query.hpp"
 #include "lib/util.hpp"
 
 
@@ -47,7 +47,7 @@ namespace test    {
   using asset::PSequence;
   using asset::Pipe;
   
-  using lumiera::Query;
+  using vessel::Query;
   
   
   /****************************************************************************//**

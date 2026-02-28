@@ -26,7 +26,7 @@
 #include "steam/mobject/session.hpp"
 #include "steam/asset/asset-diagnostics.hpp"
 #include "lib/query-util.hpp"
-#include "common/query.hpp"
+#include "vessel/query.hpp"
 
 
 using util::contains;
@@ -39,7 +39,7 @@ namespace asset {
 namespace test  {
   
   using mobject::Session;
-  using lumiera::Query;
+  using vessel::Query;
   using lib::query::normaliseID;
   
   

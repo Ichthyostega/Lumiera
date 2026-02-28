@@ -24,7 +24,7 @@
 #define VAULT_INTERFACE_SCRIPTRUNNERFACADE_H
 
 
-#include "common/subsys.hpp"
+#include "vessel/subsys.hpp"
 
 
 
@@ -41,10 +41,10 @@ namespace vault {
    */
   struct ScriptRunnerFacade
     {
-      /** provide a descriptor for lumiera::AppState,
+      /** provide a descriptor for the vessel::Voyage,
        *  wired accordingly to allow main to start a script and to
        *  (prematurely) abort a running script. */
-      static lumiera::Subsys& getDescriptor();
+      static vessel::Subsys& getDescriptor();
       
       
       //////////////////TODO: define the access interface for starting a (LUA, C, ...)-script

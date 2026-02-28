@@ -50,7 +50,7 @@
 #include "steam/mobject/session/placement-index.hpp"
 #include "steam/mobject/session/scope-query.hpp"
 
-#include "common/query.hpp"
+#include "vessel/query.hpp"
 
 #include <functional>
 
@@ -60,7 +60,7 @@ namespace mobject {
 namespace session {
   
   using std::function;
-  using lumiera::Goal;
+  using vessel::Goal;
   
   typedef PlacementIndex& IndexLink(void);
   
@@ -79,7 +79,7 @@ namespace session {
    *   * more generally, any ScopeQuery with these properties, in some variations
    */
   class PlacementIndexQueryResolver
-    : public lumiera::QueryResolver
+    : public vessel::QueryResolver
     {
       
       function<IndexLink> _getIndex;
@@ -98,7 +98,7 @@ namespace session {
       void defineHandling();
       
       template<typename MO>
-      lumiera::Resolution* resolutionFunction (Goal const& goal);
+      vessel::Resolution* resolutionFunction (Goal const& goal);
       
       
     public:

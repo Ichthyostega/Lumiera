@@ -21,8 +21,8 @@
 
 #include <stdio.h>
 
-#include "common/interface-descriptor.h"
-#include "common/config-interface.h"
+#include "vessel/interface-descriptor.h"
+#include "vessel/config-interface.h"
 
 #include "interface/say-hello.h"
 

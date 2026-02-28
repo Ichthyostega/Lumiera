@@ -18,13 +18,13 @@
  ** together with this translation unit into the executable `target/test-suite`
  */
 
-#include "include/lifecycle.h"
+#include "include/lifecycle.hpp"
 #include "lib/test/testoption.hpp"
 #include "lib/test/suite.hpp"
 
-using lumiera::LifecycleHook;
-using lumiera::ON_GLOBAL_INIT;
-using lumiera::ON_GLOBAL_SHUTDOWN;
+using vessel::LifecycleHook;
+using vessel::ON_GLOBAL_INIT;
+using vessel::ON_GLOBAL_SHUTDOWN;
 
 
 /** run all tests or any single test specified in the first

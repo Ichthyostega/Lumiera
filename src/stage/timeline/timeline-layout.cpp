@@ -25,7 +25,7 @@
 #include "stage/timeline/timeline-layout.hpp"
 #include "stage/timeline/track-body.hpp"
 
-#include "common/advice.hpp"
+#include "vessel/advice.hpp"
 #include "lib/time/timevalue.hpp"
 
 using lib::time::Time;

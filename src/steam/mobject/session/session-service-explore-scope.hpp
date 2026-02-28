@@ -38,7 +38,7 @@
 #define MOBJECT_SESSION_SESSION_SERVICE_EXPLORE_SCOPE_H
 
 #include "steam/mobject/placement.hpp"
-#include "common/query/query-resolver.hpp"
+#include "vessel/query/query-resolver.hpp"
 
 
 
@@ -59,7 +59,7 @@ namespace session {
    */
   struct SessionServiceExploreScope
     {
-      static lumiera::QueryResolver const& getResolver();
+      static vessel::QueryResolver const& getResolver();
       
       static PlacementMO& getScope (PlacementMO const&);
       static PlacementMO& getScope (PlacementMO::ID const&);

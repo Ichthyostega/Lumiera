@@ -1,5 +1,5 @@
 /*
-  LifeCycle(Test)  -  checking the lifecycle callback hooks provided by AppState
+  LifeCycle(Test)  -  verufy the lifecycle callback hooks
 
    Copyright (C)
      2008,            Hermann Vosseler <Ichthyostega@web.de>
@@ -20,12 +20,12 @@
 #include "lib/test/run.hpp"
 #include "lib/util.hpp"
 
-#include "include/lifecycle.h"
+#include "include/lifecycle.hpp"
 
 
 
 
-namespace lumiera{
+namespace vessel {
 namespace test   {
   
   uint basicInit (0);
@@ -68,5 +68,5 @@ namespace test   {
   
   
   
-}} // namespace util::test
+}}// namespace vessel::test
 

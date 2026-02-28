@@ -5,7 +5,7 @@
 #ifndef TESTS_INCLUDE_SAY_HELLO_H
 #define TESTS_INCLUDE_SAY_HELLO_H
 
-#include "common/interface.h"
+#include "vessel/interface.h"
 
 /** mock interface which can greet in different languages */
 

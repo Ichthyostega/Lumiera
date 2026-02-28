@@ -16,8 +16,8 @@
 /** @file config-keys.hpp
  ** Definition of access keys for global UI configuration.
  ** 
- ** @see lumiera::AppState general Lumiera application main
- ** @see lumiera::Config
+ ** @see vessel::Voyage general Lumiera application main
+ ** @see vessel::spine::Config
  ** 
  */
 

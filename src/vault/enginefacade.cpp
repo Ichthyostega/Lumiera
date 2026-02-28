@@ -33,7 +33,8 @@
 namespace vault {
 
   using std::string;
-  using lumiera::Subsys;
+  using vessel::Subsys;
+  using vessel::Option;
   
   class EngineSubsysDescriptor
     : public Subsys
@@ -41,14 +42,14 @@ namespace vault {
       operator string ()  const { return "Engine"; }
       
       bool
-      shouldStart (lumiera::Option&)  override
+      shouldStart (Option&)  override
         {
           TODO ("determine, if renderengine should be started");
           return false;
         }
       
       bool
-      start (lumiera::Option&, Subsys::SigTerm termination)  override
+      start (Option&, Subsys::SigTerm termination)  override
         {
           UNIMPLEMENTED ("pull up renderengine and register shutdown hook");
           return false;

@@ -282,5 +282,5 @@ namespace lib {
     };
   
   
-} // namespace lumiera
+} // namespace lib::sync
 #endif

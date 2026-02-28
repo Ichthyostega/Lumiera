@@ -237,7 +237,7 @@ Lifecycle Events
 The Application as a whole conducts a well defined lifecycle; whenever transitioning to the next phase,
 a _Lifecycle Event_ is issued. Components may register a notification hook with the central _Lifecycle Manager_
 (see 'include/lifecycle.h') to be invoked whenever a specific event is emitted. The process of registration
-can be simplified by planting a static variable of type `lumiera::LifecycleHook`.
+can be simplified by planting a static variable of type `vessel::LifecycleHook`.
 
 WARNING: A callback enrolled this way needs to be callable at the respective point in the lifecycle,
          otherwise the application will crash.
@@ -246,7 +246,7 @@ WARNING: A callback enrolled this way needs to be callable at the respective poi
   Invoked as early as possible, somewhere in the static initialisation phase prior to entering `main()`.
   In order to install a callback hook for this event, the client must plant a static variable somewhere.
 
-`AppState`::
+`Voyage`::
   This is the Lumiera »Application Object«. It is a singleton, and should be used by `main()` solely.
   While not a lifecycle event in itself, it serves to bring up some very fundamental application services:
 +
@@ -255,7 +255,7 @@ WARNING: A callback enrolled this way needs to be callable at the respective poi
 - the application configuration
 --
 +
-After starting those services within the `AppState::init()` function,
+After starting those services within the `Voyage::init()` function,
 the event `ON_GLOBAL_INIT` is emitted.
  
 `ON_GLOBAL_INIT`::

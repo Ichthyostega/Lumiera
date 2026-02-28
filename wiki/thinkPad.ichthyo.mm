@@ -71658,6 +71658,20 @@
 <node CREATED="1482524641484" ID="ID_1651495185" MODIFIED="1557498707236" TEXT="Architektur">
 <font NAME="SansSerif" SIZE="14"/>
 <node CREATED="1544199543455" ID="ID_970297070" MODIFIED="1557498707236" TEXT="Struktur">
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1772238698464" ID="ID_1464153344" MODIFIED="1772239797648" TEXT="Ma&#xdf;st&#xe4;be">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1772238766395" ID="ID_1344954636" MODIFIED="1772239286000" TEXT="die Applikation ist nicht Kern, sondern Grenze, Form und Bezugssystem">
+<node CREATED="1772239199588" ID="ID_37031016" MODIFIED="1772239209010" TEXT="Lumiera ist keine Plattform"/>
+<node CREATED="1772239210239" ID="ID_991238589" MODIFIED="1772239218582" TEXT="Lumiera ist koh&#xe4;rent und koh&#xe4;siv"/>
+<node CREATED="1772239220066" ID="ID_1143424610" MODIFIED="1772239252250" TEXT="Open-Closed: gesperrt gegen&#xfc;ber Rekonfiguration, offen f&#xfc;r Erweiterung"/>
+</node>
+<node CREATED="1772238783321" ID="ID_140942246" MODIFIED="1772238822307" TEXT="Wechselseitige Bedingtheiten werden durch Abstraktion verankert (Inversion of Control)"/>
+<node CREATED="1772238845993" ID="ID_227856557" MODIFIED="1772238883368" TEXT="&#xbb;Vault&#xab; baut auf der Applikation auf und bietet dom&#xe4;nen-ferne und technische Services"/>
+<node CREATED="1772238901142" ID="ID_980148501" MODIFIED="1772238936650" TEXT="&#xbb;Steam&#xab; realisiert den Kern der Applikation durch Verkn&#xfc;pfung von Subsystemen"/>
+<node CREATED="1772238953308" ID="ID_750037077" MODIFIED="1772239037243" TEXT="das GUI schafft dar&#xfc;ber hinausgehend eine navigierbare Anordnung der Arbeit"/>
+<node CREATED="1772239079164" ID="ID_24481282" MODIFIED="1772239101198" TEXT="die Skript-Schnittstelle macht das Session-Modell programmierbar"/>
+</node>
 <node CREATED="1544199550166" ID="ID_16943853" MODIFIED="1557498707236" TEXT="Layer">
 <node CREATED="1544199559524" ID="ID_1685135526" MODIFIED="1557498707236" TEXT="rein gedankliche Gliederung"/>
 <node BACKGROUND_COLOR="#fefc4e" COLOR="#351d75" CREATED="1544199565372" FOLDED="true" ID="ID_39523665" MODIFIED="1576282357967" TEXT="(neue)Namen">
@@ -71737,7 +71751,27 @@
 <node CREATED="1687556508704" ID="ID_431446810" MODIFIED="1687556579475" TEXT="Namespaces">
 <icon BUILTIN="info"/>
 <node CREATED="1687556588554" ID="ID_329807646" MODIFIED="1687556590245" TEXT="stage"/>
-<node CREATED="1687556584353" ID="ID_1889681441" MODIFIED="1687556586623" TEXT="steam"/>
+<node CREATED="1687556584353" ID="ID_1889681441" MODIFIED="1687556586623" TEXT="steam">
+<node CREATED="1772209818093" ID="ID_1549962495" MODIFIED="1772209826070" TEXT="steam::cmd"/>
+<node CREATED="1772209805211" ID="ID_1545411608" MODIFIED="1772209826071" TEXT="steam::asset"/>
+<node CREATED="1772210789758" ID="ID_652248605" MODIFIED="1772210801397" TEXT="steam::control"/>
+<node COLOR="#5b280f" CREATED="1772209898272" ID="ID_712089921" MODIFIED="1772210803109" TEXT="steam::mobject::session">
+<icon BUILTIN="button_cancel"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1772209885686" ID="ID_619360225" MODIFIED="1772209896797" TEXT="steam::model">
+<icon BUILTIN="help"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1772210137996" ID="ID_195333171" MODIFIED="1772210172828" TEXT="steam::builder">
+<icon BUILTIN="help"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1772210814377" ID="ID_1429381035" MODIFIED="1772210819690" TEXT="steam::query">
+<icon BUILTIN="help"/>
+</node>
+</node>
+<node CREATED="1772209430903" ID="ID_981451079" MODIFIED="1772209436133" TEXT="steam::session"/>
+<node CREATED="1772209436937" ID="ID_763807975" MODIFIED="1772209440852" TEXT="steam::engine"/>
+<node CREATED="1772210142299" ID="ID_1145060386" MODIFIED="1772210148409" TEXT="steam::fixture"/>
+<node CREATED="1772209441752" ID="ID_1847456936" MODIFIED="1772209444924" TEXT="steam::play"/>
+</node>
 <node CREATED="1687556472975" ID="ID_735349056" MODIFIED="1687556555928" TEXT="vault">
 <node CREATED="1687481181547" ID="ID_873971075" MODIFIED="1687481185746" TEXT="vault::io"/>
 <node CREATED="1687481158310" ID="ID_616065524" MODIFIED="1687481178193" TEXT="vault::out"/>
@@ -71746,6 +71780,14 @@
 <node CREATED="1687481191768" ID="ID_12320912" MODIFIED="1687481195319" TEXT="vault::cache"/>
 <node CREATED="1687481220759" ID="ID_568286499" MODIFIED="1687481233535" TEXT="vault::toolkit"/>
 <node CREATED="1687481208317" ID="ID_1663294300" MODIFIED="1687481213324" TEXT="vault::storage"/>
+</node>
+<node CREATED="1772467713314" ID="ID_1260307377" MODIFIED="1772467717464" TEXT="vessel">
+<node CREATED="1772478667252" ID="ID_1873381687" MODIFIED="1772478785290" TEXT="vessel::spine">
+<linktarget COLOR="#785e5b" DESTINATION="ID_1873381687" ENDARROW="Default" ENDINCLINATION="3167;618;" ID="Arrow_ID_790663035" SOURCE="ID_1230702980" STARTARROW="None" STARTINCLINATION="1144;89;"/>
+<node COLOR="#56312d" CREATED="1772478751648" ID="ID_1228838617" MODIFIED="1772478768902" TEXT="&#xfc;bergreifende Definitionen und Schnittstellen"/>
+</node>
+<node CREATED="1772467881056" ID="ID_1519471369" MODIFIED="1772467885264" TEXT="vessel::advice"/>
+<node CREATED="1772468048359" ID="ID_514360291" MODIFIED="1772468051786" TEXT="vessel::query"/>
 </node>
 </node>
 </node>
@@ -71756,6 +71798,9 @@
 <node CREATED="1687475211318" ID="ID_1096951161" MODIFIED="1687475213686" TEXT="Engine"/>
 <node CREATED="1687475229300" ID="ID_768400893" MODIFIED="1687475234772" TEXT="(NetNode)"/>
 <node CREATED="1687475218948" ID="ID_1699167582" MODIFIED="1687475228664" TEXT="(ScriptRunner)"/>
+</node>
+<node CREATED="1772475893789" ID="ID_222283514" MODIFIED="1772475930529" TEXT="Vessel &#x2261; Application realm">
+<arrowlink COLOR="#4084d3" DESTINATION="ID_885335961" ENDARROW="Default" ENDINCLINATION="-52;-171;" ID="Arrow_ID_1465151412" STARTARROW="None" STARTINCLINATION="-10;36;"/>
 </node>
 <node CREATED="1584202146097" ID="ID_876294763" MODIFIED="1584202148362" TEXT="ETD">
 <node CREATED="1584202158174" ID="ID_1136082827" MODIFIED="1584202164409" TEXT="inh&#xe4;rente Einschr&#xe4;nkungen">
@@ -71806,9 +71851,27 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1737318668958" ID="ID_627954659" MODIFIED="1737319274847" TEXT="Design-Entscheidungen">
-<linktarget COLOR="#5f3947" DESTINATION="ID_627954659" ENDARROW="Default" ENDINCLINATION="-1576;173;" ID="Arrow_ID_137322402" SOURCE="ID_1971507664" STARTARROW="None" STARTINCLINATION="-2020;303;"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1737318668958" ID="ID_627954659" MODIFIED="1772477680489" TEXT="Design-Entscheidungen">
 <icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1772239400122" ID="ID_405219834" MODIFIED="1772477602487" TEXT="Lumiera ist ein koh&#xe4;rentes System &#x2014; keine offene Komponenten-Plattform">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Damit stelle ich mich gegen die vorherschende Tendenz meines Zeitalters.
+    </p>
+    <p>
+      Die Bedingtheiten und Umst&#228;nde, die ich nicht wirklich zu vertreten habe, brachten mich in die Position, diese Entscheidung zu f&#228;llen.
+    </p>
+    <p>
+      Grunds&#228;tzlich war dies aber von Beginn an meine Haltung, und diese Haltung hat verhindert, da&#223; sich das Projekt &#187;Lumiera&#171; <i>normal entwickelt hat.</i>
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#4633d8" DESTINATION="ID_405219834" ENDARROW="Default" ENDINCLINATION="-6787;-263;" ID="Arrow_ID_205172039" SOURCE="ID_919379881" STARTARROW="None" STARTINCLINATION="-3603;-163;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
 </node>
 <node CREATED="1531419748046" ID="ID_1791265013" MODIFIED="1557498707236" TEXT="Lebenszyklus">
 <node COLOR="#338800" CREATED="1531419790153" ID="ID_1605635763" MODIFIED="1582443076662" TEXT="#1145 define startup sequence">
@@ -71824,6 +71887,121 @@
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1582443973100" HGAP="47" ID="ID_1989055863" MODIFIED="1582443988612" TEXT="getriggert von InteractionDirector::populateContent_afterStart()" VSHIFT="22">
 <icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node CREATED="1772470795216" ID="ID_885335961" MODIFIED="1772475924713">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      The &#187;<b>Vessel</b>&#171;
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#4084d3" DESTINATION="ID_885335961" ENDARROW="Default" ENDINCLINATION="-52;-171;" ID="Arrow_ID_1465151412" SOURCE="ID_222283514" STARTARROW="None" STARTINCLINATION="-10;36;"/>
+<node CREATED="1772471275504" ID="ID_1767162143" MODIFIED="1772471278601" TEXT="Bestimmung">
+<node CREATED="1772471244038" ID="ID_1514886538" MODIFIED="1772471262166" TEXT="definiert die Grenze"/>
+<node CREATED="1772471263018" ID="ID_892785610" MODIFIED="1772471269159" TEXT="stellt das R&#xfc;ckgrat bereit"/>
+</node>
+<node CREATED="1772471314554" ID="ID_544950513" MODIFIED="1772473440857" TEXT="Abgrenzung: nicht der &#xbb;bootstrap&#xab; einer Platform">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Die Bedeutung dieser Abgrenzung ergibt sich aus der Historie des Projekts.
+    </p>
+    <p>
+      Es gab einmal eine andere Vision. Das war niemals <i>meine Vision</i>&#160;&#8212; aber ich habe sie anfangs, und f&#252;r viel zu lange Zeit <i>mitgetragen.</i>&#160;Meine Gr&#252;nde daf&#252;r sind zweifelhaft. Ich war nicht in der Position, mich offen gegen einen derart emotional besetzten Trend zu stellen. Inzwischen jedoch ist eine solche Position f&#252;r mich in greifbarer N&#228;he, wenngleich ich trotzdem auf der Hut sein sollte und daraus kein eigenes Thema machen.
+    </p>
+    <br/>
+    <p>
+      Diese <i>andere Vision</i>&#160;beruht darin, jedwede Begrenzung zu verachten, und sich vielmehr durch geschicktes Man&#246;vrieren jederzeit unermessliche M&#246;glichkeiten offen zu halten. Dazu sagt &#187;man&#171;, da&#223; nur ein nahezu vernachl&#228;ssigbar kleiner Anker notwendig ist, ein Mikro-Kern, der lediglich die F&#228;higkeit beitet, weitere Elemente dynamisch nachzuladen. Damit k&#246;nnte man &#187;im Prinzip&#171; jederzeit alles Erdenkliche machen, und vor allem jederzeit blitzschnell etwas ganz anderes machen, wenn's denn grad commod ist. Nat&#252;rlich kann &#187;man&#171; das nicht selber machen, schlie&#223;lich sind wir ja alle sterblich, aber im Moment noch nicht. Wei&#223; doch jedes Kind. Aber wenn &#187;die Anderen&#171; einen Drive bekommen, dann k&#246;nnte &#187;man&#171; so viel schaffen. Und den Rest wird man dann schon sehen.
+    </p>
+    <br/>
+    <p>
+      Die Wesensz&#252;ge dieser <i>anderen Vision</i>&#160;sind Folgende:
+    </p>
+    <ul>
+      <li>
+        die prim&#228;re Leistung besteht darin, die Sache als unvorstellbar einfach, billig und geschickt darzustellen
+      </li>
+      <li>
+        das erzeugt ein Gef&#252;hl der Leichtigkeit, das die Umstehenden zum &#187;Mitmachen&#171; ermuntert
+      </li>
+      <li>
+        die Grundeinrichtung mu&#223; so beschaffen sein, da&#223; sich damit vor allem sehr schnell ein sichtbarer Effekt erzeugen l&#228;&#223;t, der Au&#223;enstehende in Staunen versetzt
+      </li>
+      <li>
+        die eigentliche Arbeit an der Inkoh&#228;renz der Realit&#228;t verschiebt man geschickt in die Zukunft (&#8222;das werden wir dann sehen und l&#246;sen, wenns so weit ist&#8220;)
+      </li>
+      <li>
+        der schnell sichtbare Erfolg wird umgem&#252;nzt in einen Beleg einer tats&#228;chlichen Leistung, die auf wunderbare Weise durch die Kr&#228;fte der Gemeinschaft zustande gekommen ist
+      </li>
+      <li>
+        &#187;man&#187; selber hat ganz entschieden keine eigene Vision, sondern nur &#8222;so Ideen&#8220; und betont stets, da&#223; man der Gemeinschaft dient und folgt
+      </li>
+      <li>
+        bei den ersten sich zeigenden Schwierigkeiten wird anderen die Schuld zugewiesen, dumm und vernagelt zu sein, und &#187;man&#171; zieht ver&#228;rgert weiter, auf die n&#228;chste gr&#252;ne Wiese nebenan...
+      </li>
+    </ul>
+    <p>
+      
+    </p>
+    <p>
+      Um deutlicher zu werden: heute haben wir die &#187;KI&#171;. Vor 20 Jahren haben wir von &#187;Plug-ins&#171; getr&#228;umt. Irgendwo dazwischen lag der Hype um Frameworks und Plattformen. Das Grundmuster bleibt das Gleiche: man mu&#223; eine &#187;Wirkung ohne Ursache&#171; erzeugen. Jede Festlegung und Eingrenzung ist zu vermeiden, denn sie beschneidet schon wieder die unendlichen M&#246;glichkeiten!
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="closed"/>
+</node>
+<node CREATED="1772473490993" ID="ID_1253107245" MODIFIED="1772473499756" TEXT="Struktur">
+<node CREATED="1772473500792" ID="ID_1083173205" MODIFIED="1772473525830" TEXT="in der Linkage zwischen Support-Library und den drei Layern angesiedelt"/>
+<node CREATED="1772473548641" ID="ID_1303277356" MODIFIED="1772473574097" TEXT="stellt gleichzeitig eine Interface-Library mit Service-Definitionen bereit"/>
+<node CREATED="1772473588988" ID="ID_967241443" MODIFIED="1772473601432" TEXT="der Lebenszyklus wird an die main()-Funktion gebunden">
+<node CREATED="1772473608068" ID="ID_896868941" MODIFIED="1772473743186" TEXT="hier Abgrenzung zu einem Basis-Kontext">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Ein &#187;Basis-Kontext&#171; w&#228;re durch folgende Eigenschaften gekennzeinet:
+    </p>
+    <ul>
+      <li>
+        er ist stes &#187;einfach da&#171;
+      </li>
+      <li>
+        er hat keinen eigenen Lebenszyklus
+      </li>
+      <li>
+        er ist nach Bedarf zug&#228;nglich
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1772473619679" ID="ID_167917430" MODIFIED="1772474047664" TEXT="letzteren schlie&#xdf;e ich (konsequenterweise) aus">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Wenn man einen solchen Basis-Kontext (der mit gegebenen technischen Mitteln durchaus realisierbar ist) verbindet mit einem &#187;Bootstrap-Mechanismus&#171;, dann gelangt man zu einem Mikro-Kern. Dieser Start-Mechanismus w&#252;rde vor allem eine &#187;Konfiguration&#171; laden aus einer per Konvention festgelegten Quelle. All die eigentlichen Strukturen sind dann in der Konfiguration versteckt, die damit zur eigentlichen Konstruktion des Systems wird.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Unter speziellen gegebenen Umst&#228;nden kann das eine tragf&#228;hige technische L&#246;sung sein. Aber der Mikro-Kern war das Zentrale Element in dem Wunder-Glauben, der vor 20 Jahren mit &#187;Plug-ins&#171; verbunden wurde. Und wo an Wunder geglaubt wird, stelle ich kritische Fragen.
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#7c2122" DESTINATION="ID_736034555" ENDARROW="Default" ENDINCLINATION="271;-1509;" ID="Arrow_ID_1349961812" STARTARROW="None" STARTINCLINATION="-254;15;"/>
+</node>
+</node>
+<node CREATED="1772474550773" ID="ID_184013730" MODIFIED="1772474566779" TEXT="Steuerung von Komponenten, Abh&#xe4;ngikeiten und Lebenszyklus"/>
+<node CREATED="1772474629321" ID="ID_1100159091" MODIFIED="1772474642939" TEXT="per Service werden zentrale Strukturen bereitgestellt">
+<node CREATED="1772474650918" ID="ID_1529856464" MODIFIED="1772474660305" TEXT="Strukturen die die Applikation definieren"/>
+<node CREATED="1772474661141" ID="ID_980230652" MODIFIED="1772474668931" TEXT="Strukturen die die Applikation zusammenbinden"/>
 </node>
 </node>
 </node>

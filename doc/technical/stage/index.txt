@@ -1,5 +1,5 @@
 Technical Documentation: Stage Layer
 ====================================
 
-Eventually, this will have technical documentation for the GUI.
+This section offers a loose collection with detailed information regarding the GUI implementation.
 

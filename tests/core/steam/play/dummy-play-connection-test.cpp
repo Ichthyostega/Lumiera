@@ -19,7 +19,7 @@
 #include "lib/test/run.hpp"
 
 #include "steam/play/dummy-play-connection.hpp"
-#include "include/play-facade.hpp"
+#include "vessel/spine/play-facade.hpp"
 #include "lib/time/control.hpp"
 
 
@@ -34,7 +34,7 @@ namespace test {
 //using steam::engine::test::testData;
 //using steam::engine::test::TestFrame;
   
-  using lumiera::Play;
+  using vessel::spine::Play;
   
   typedef time::Control<time::Duration> DurationControl;
   

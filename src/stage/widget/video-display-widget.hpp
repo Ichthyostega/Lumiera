@@ -33,7 +33,7 @@ namespace stage {
 namespace widget {
   
   using stage::output::Displayer;
-  using lumiera::DisplayerInput;
+  using vessel::spine::DisplayerInput;
   
   
   /**

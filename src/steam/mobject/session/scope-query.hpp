@@ -34,7 +34,7 @@
 
 
 #include "steam/mobject/placement.hpp"
-#include "common/query/query-resolver.hpp"
+#include "vessel/query/query-resolver.hpp"
 #include "lib/format-string.hpp"
 
 #include <functional>
@@ -48,8 +48,8 @@ namespace session {
   using std::function;
   using std::placeholders::_1;
   
-  using lumiera::Goal;
-  using lumiera::Query;
+  using vessel::Goal;
+  using vessel::Query;
   
   
   

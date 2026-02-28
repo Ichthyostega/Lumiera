@@ -25,7 +25,7 @@
  ** 
  ** # configuration and resource search
  ** 
- ** The GUI backbone retrieves the necessary configuration values from lumiera::Config,
+ ** The GUI backbone retrieves the necessary configuration values from vessel::spine::Config,
  ** the config facade in the application core. Currently as of 2/2011 these values are
  ** loaded from setup.ini, because the full-blown config system is not yet implemented.
  ** Amongst others, this configuration defines a _search path_ for icons and a
@@ -39,9 +39,9 @@
  ** @see gtk-lumiera.cpp the plugin to pull up this GUI
  ** @see stage::GuiFacade access point for starting the GUI
  ** @see stage::GuiNotification interface for communication with the gui from the lower layers
- ** @see lumiera::Config
- ** @see lumiera::BasicSetup definition of the acceptable configuration values
- ** @see lumiera::AppState general Lumiera application main
+ ** @see vessel::spine::Config
+ ** @see vessel::BasicSetup definition of the acceptable configuration values
+ ** @see vessel::Voyage general Lumiera application main
  */
 
 

@@ -27,9 +27,9 @@
 #include "steam/mobject/session/binding.hpp"
 #include "steam/asset/clip.hpp"
 #include "steam/asset/effect.hpp"
-#include "common/query/defs-manager.hpp"
+#include "vessel/query/defs-manager.hpp"
 
-using lumiera::query::DefsManager;
+using vessel::query::DefsManager;
 
 namespace steam {
 namespace mobject {

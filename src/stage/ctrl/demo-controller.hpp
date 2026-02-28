@@ -32,7 +32,7 @@
 #define DEMO_CONTROLLER_H
 
 #include "stage/gtk-base.hpp"
-#include "include/display-handles.hpp"
+#include "vessel/spine/display-handles.hpp"
 #include "lib/nocopy.hpp"
 
 #include <memory>
@@ -68,7 +68,7 @@ namespace ctrl {
       void pause();
       void stop();
       
-      void activate (lumiera::DisplayerInput);
+      void activate (vessel::spine::DisplayerInput);
       sigc::signal<void(void* const)> output_;
     private:
       bool playing_;

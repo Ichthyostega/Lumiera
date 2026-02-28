@@ -26,7 +26,7 @@
 
 
 
-namespace lumiera {
+namespace lib {
   
   void
   initialise_NoBug ()

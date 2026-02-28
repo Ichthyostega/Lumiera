@@ -28,7 +28,7 @@
 
 #include "steam/mobject/session/scope-query.hpp"
 #include "steam/mobject/placement.hpp"
-#include "common/query/query-resolver.hpp"
+#include "vessel/query/query-resolver.hpp"
 
 #include <functional>
 
@@ -39,7 +39,7 @@ namespace session {
   
   using std::function;
   
-  using lumiera::QueryResolver;
+  using vessel::QueryResolver;
   
   
   /**

@@ -31,7 +31,7 @@
 #include "lib/nocopy.hpp"
 //#include "include/dummy-player-facade.h"
 //#include "include/display-facade.h"
-//#include "common/instancehandle.hpp"
+//#include "vessel/instancehandle.hpp"
 //#include "lib/singleton-ref.hpp"
 #include "steam/mobject/model-port.hpp"
 #include "steam/play/play-process.hpp"
@@ -50,9 +50,6 @@ namespace steam {
 namespace play {
 
 //    using std::string;
-//    using lumiera::Subsys;
-//    using lumiera::Display;
-//    using lumiera::DummyPlayer;
 //  using util::isnil;
   using std::function;
   using steam::mobject::ModelPort;

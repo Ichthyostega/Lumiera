@@ -36,8 +36,8 @@
 #include "steam/control/steam-dispatcher.hpp"
 #include "steam/config-resolver.hpp"
 #include "steam/asset/timeline.hpp"
-#include "common/query/defs-manager.hpp"
-#include "common/query.hpp"
+#include "vessel/query/defs-manager.hpp"
+#include "vessel/query.hpp"
 
 #include <memory>
 #include <exception>
@@ -119,7 +119,7 @@ namespace session {
                 REQUIRE (0 == session_->timelines.size(), "injecting default timeline, but session isn't pristine");
                 
                 // issue a default query to retrieve or create a Timeline and a default Sequence
-                asset::PTimeline initialTimeline = session_->defaults (lumiera::Query<asset::Timeline> (""));
+                asset::PTimeline initialTimeline = session_->defaults (vessel::Query<asset::Timeline> (""));
                 
                 // these got registered automatically
                 ENSURE (1  == session_->timelines.size());

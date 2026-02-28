@@ -18,14 +18,14 @@
 
 
 #include "lib/error.hpp"
-#include "include/lifecycle.h"
+#include "include/lifecycle.hpp"
 #include "lib/lifecycleregistry.hpp"
 #include "lib/util.hpp"
 
 
 
 
-namespace lumiera {
+namespace vessel {
   
   // ==== implementation Lifecycle Registry =======
   
@@ -64,7 +64,6 @@ namespace lumiera {
     if (isNew and eventLabel == ON_BASIC_INIT)
       callbackFun();  // when this code executes,
                      //  then per definition we are already post "basic init"
-                    //   (which happens in the AppState ctor); thus fire it immediately
   }
   
   
@@ -83,31 +82,4 @@ namespace lumiera {
   CStr ON_EMERGENCY       ("ON_EMERGENCY");
   
   
-} // namespace lumiera
-
-
-extern "C" { /* ==== implementation C interface for lifecycle hooks ======= */
-  
-  
-  const char * lumiera_ON_BASIC_INIT       = lumiera::ON_BASIC_INIT;
-  const char * lumiera_ON_GLOBAL_INIT      = lumiera::ON_GLOBAL_INIT;
-  const char * lumiera_ON_GLOBAL_SHUTDOWN  = lumiera::ON_GLOBAL_SHUTDOWN;
-  
-  const char * lumiera_ON_EMERGENCY        = lumiera::ON_EMERGENCY;
-  
-  
-  
-  void
-  lumiera_LifecycleHook_add (const char* eventLabel, void callbackFun(void))
-  {
-    lumiera::LifecycleHook (eventLabel, callbackFun);
-  }
-  
-  
-  void
-  lumiera_Lifecycle_trigger (const char* eventLabel)
-  {
-    lumiera::LifecycleRegistry::instance().execute (eventLabel);
-  }
-  
-}
+} // namespace vessel

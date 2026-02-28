@@ -43,7 +43,7 @@
 
 #include "steam/mobject/placement.hpp"
 #include "steam/mobject/mobject-ref.hpp"
-#include "common/query/defs-manager.hpp"               ////////////////////////////TICKET #643  forward declare this?
+#include "vessel/query/defs-manager.hpp"               ////////////////////////////TICKET #643  forward declare this?
 #include "lib/depend.hpp"
 #include "lib/symbol.hpp"
 #include "lib/p.hpp"
@@ -101,7 +101,7 @@ namespace mobject {
     : util::NonCopyable
     {
     protected:
-      typedef lumiera::query::DefsManager&         DefaultsAccess;
+      typedef vessel::query::DefsManager&          DefaultsAccess;
       typedef session::ElementQuery&               ElementsAccess;
       typedef std::vector<asset::PTimeline> const& TimelineAccess;
       typedef std::vector<asset::PSequence> const& SequenceAccess;

@@ -39,12 +39,12 @@
 #include "lib/query-util.hpp"
 #include "lib/format-string.hpp"
 #include "include/logging.h"
-#include "common/query.hpp"
+#include "vessel/query.hpp"
 
 using util::_Fmt;
 using lib::Symbol;
 using lib::query::normaliseID;
-using lumiera::query::QueryHandler;
+using vessel::query::QueryHandler;
 using steam::ConfigResolver;
 
 using util::contains;

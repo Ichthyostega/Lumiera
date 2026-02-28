@@ -12,7 +12,7 @@ from Buildhelper import scanSubtree
 from Buildhelper import globRootdirs
 from Buildhelper import createPlugins
 
-Import('env core_lib app_lib vault_lib guimodule tools config')
+Import('env core_lib vessel_lib vault_lib guimodule tools config')
 env = env.Clone()
 env.Append(CPPPATH='include')  # additional headers for tests
 
@@ -23,9 +23,9 @@ sharedTestLibs = {}
 
 def linkContext(id):
     if id.startswith('lib'):
-        return app_lib              # tests in 'lib*' subdirs only linked against application framework
+        return vessel_lib           # tests in 'lib*' subdirs only linked with framework (including support-lib)
     elif id.startswith('vault'):
-        return vault_lib            # tests in 'vault*' subdirs only linked against vault layer
+        return vault_lib            # tests in 'vault*' subdirs only linked against vault layer (including framework)
     elif id.startswith('stage'):
         return guimodule+core_lib   # tests in 'stage*' are additionally linked against the GTK GUI module
     else:

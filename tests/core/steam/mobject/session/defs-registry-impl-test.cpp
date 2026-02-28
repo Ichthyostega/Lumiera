@@ -19,8 +19,8 @@
 #include "lib/test/run.hpp"
 #include "lib/util.hpp"
 
-#include "common/query.hpp"
-#include "common/query/defs-registry.hpp"
+#include "vessel/query.hpp"
+#include "vessel/query/defs-registry.hpp"
 #include "lib/format-string.hpp"
 #include "lib/p.hpp"
 
@@ -39,9 +39,9 @@ using std::map;
 
 
 
-namespace lumiera {
-namespace query   {
-namespace test    {
+namespace vessel {
+namespace query {
+namespace test {
   
   namespace { // Test helpers...
     
@@ -292,4 +292,4 @@ namespace test    {
   
   
   
-}}} // namespace lumiera::query::test
+}}} // namespace vessel::query::test

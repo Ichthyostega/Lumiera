@@ -21,7 +21,7 @@
 #include "lib/util.hpp"
 #include "lib/format-string.hpp"
 #include "lib/query-util.hpp"
-#include "common/query.hpp"
+#include "vessel/query.hpp"
 
 #include "steam/asset.hpp"
 #include "steam/asset/pipe.hpp"
@@ -48,7 +48,7 @@ namespace test    {
   using asset::Pipe;
   using asset::PPipe;
   using asset::Struct;
-  using lumiera::Query;
+  using vessel::Query;
   using lib::query::normaliseID;
   
   

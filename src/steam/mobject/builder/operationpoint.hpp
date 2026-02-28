@@ -28,7 +28,7 @@
 #define MOBJECT_BUILDER_OPERATIONPOINT_H
 
 //#include "steam/engine/proc-node.hpp"         /////TODO can we get rid of this header here?
-//#include "common/query.hpp"
+//#include "vessel/query.hpp"
 #include "lib/hash-standard.hpp"
 
 #include <memory>

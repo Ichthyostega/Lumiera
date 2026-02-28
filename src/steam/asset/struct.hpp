@@ -54,7 +54,7 @@
 
 #include "lib/symbol.hpp"
 #include "steam/asset.hpp"
-#include "common/query.hpp"
+#include "vessel/query.hpp"
 #include "lib/nocopy.hpp"
 
 #include <memory>
@@ -67,7 +67,7 @@ namespace asset {
   
   using std::string;
   using std::unique_ptr;
-  using lumiera::Query;
+  using vessel::Query;
   using lib::Symbol;
   
   class Struct;

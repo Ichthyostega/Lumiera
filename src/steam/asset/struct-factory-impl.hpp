@@ -33,8 +33,8 @@
 #include "steam/mobject/session/element-query.hpp"
 #include "steam/mobject/session/session-query.hpp"
 #include "steam/mobject/session/scope.hpp"
-#include "common/config-rules.hpp"
-#include "common/query.hpp"
+#include "vessel/config-rules.hpp"
+#include "vessel/query.hpp"
 #include "steam/asset/timeline.hpp"
 #include "steam/asset/sequence.hpp"
 #include "steam/asset/procpatt.hpp"
@@ -60,7 +60,7 @@ namespace asset {
   using util::uNum;
   using util::isnil;
   using util::contains;
-  using lumiera::Query;
+  using vessel::Query;
   using LERR_(CAPABILITY_QUERY);
   using lib::query::extractID;
   

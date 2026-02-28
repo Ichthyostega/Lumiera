@@ -322,8 +322,8 @@ actively step by step
     modules of the application will be placed by default
 
 . after the core application has been loaded and all direct dependencies are resolved,
-  but still before entering `main()`, the class `lumiera::AppState` will be initialised,
-  which in turn holds a member of type `lumiera::BasicSetup`. The latter will figure out
+  but still before entering `main()`, the class `vessel::Voyage` will be initialised,
+  which in turn holds a member of type `vessel::BasicSetup`. The latter will figure out
   the location of the executable footnote:[this is a Linux-only trick, using `/proc/self/exe`]
   and require a 'setup.ini' file in the same directory. This setup file is mandatory.
 

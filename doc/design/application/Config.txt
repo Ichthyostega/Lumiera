@@ -1,15 +1,71 @@
-Lumiera Design: Application and Session Configuration
-=====================================================
+Application and Session Configuration
+=====================================
 
-*TODO* : 'write design document'
+.After initial discussion, this topic was postponed.
+[CAUTION]
+In its current form, as of 2026, the Lumiera application is headed towards a first
+integration of the parts developed thus far. A simple configuration file, 'setup.ini'
+is used to supply some minimal parameters for bootstrap of the application; all further
+settings are defined as local constants in the source code.
 
-The Lumiera application uses two quite different sources for configuration
+**Configuration and Parametrisation** of software describe a state of setting, that lies
+between the fixed structure embodied into the code and the transient work state of the
+application. It encompasses all settings and options that determine how a software system
+behaves in a specific environment, without changing its underlying source code.
 
-- individual __settings values__ can be loaded from an application- and user configuration in the conventional way
-- various facilities, especially in the Steam-Layer, base the actual behavour on __queries__, which are
-  to be resolve employing a rules based system '(planned)'. Configuration rules will be provided by the
-  application (defaults), a session template and rules stored in the actual session.
+The purpose of configuration
+----------------------------
+For a video editing application, the scope of ``configuration'' can be far reaching.
+Not only are there numerous parameters in the engine, that must be fine-tuned for optimal
+performance, but also several patterns of behaviour are available that can not be decided by
+first principle alone and must thus be left open for the user to configure to their preference.
+Some of these are linked to the actual user, some to the setup in the system, and some to the
+current project.
+Furthermore, many of these ``settings'' turn out, upon closer inspection, to be a form of
+rule-based knowledge. In a project with the scale of a movie, it is essential for a fluid
+and intuitive working style to handle some default setup and configuration of connections
+and conversions automatically, while the user can have very valid reasons to prohibit
+some other specific class of automatic conversions to be applied without explicit confirmation.
 
--> see also the link:rfc/ConfigLoaderDraft2008.html[Config Loader brainstorming from 2008] (implementation details)
+After some initial, prototyping for a ``config loader'', it was deemed too risky to engage
+into any kind of preliminary design without knowing the possible ramifications. +
+-> link:/x/rfc/ConfigLoaderDraft2008.html[Config Loader brainstorming from 2008]
 
+The following preliminary measures have now been established for the ongoing development:
 
+- whenever a _tweaking parameter_ is discovered, it will be extracted and marked
+  with a **language constant** in the setup or integration header of the software component.
+- whenever a _decision point_ is encountered, that can not be related to technical dependencies,
+  it is marked as a **query call** -- with a corresponding, hard-wired _faked configuration rule_.
+
+The integration of some kind of configuration rule language is considered part of the primary agenda.
+
+Requirements
+------------
+To track any insights gained regarding the requirements for configuration,
+https://issues.lumiera.org/ticket/1224[Ticket #1224 (»Layered Configuration«)]
+was added to the list of medium-term
+https://issues.lumiera.org/report/17[»Focus Topics«]
+
+The following requirements have been identified to date (2026)
+
+- It is pointless to build one huge flat global "configuration file";
+  rather, groups of configuration settings are scoped and closely related to a _local context_
+- the degree of _consistency checking_ must be tied to such a local context, where the
+  situation is reasonably clear: the consumer of specific configuration usually has
+  clear-cut requirements to demand some configuration to be mandatory, while other
+  configuration is optional. Misspelled or misplaced configuration that does not
+  fit in such a category must be flagged as error.
+- such a locally defined set of expected and optional configuration might become
+  subject to versioning (forward- / backward compatibility)
+- Configuration must be assembled from several configuration sources,
+  with clearly defined precedence and shadowing. Notably we have default configuration,
+  system-wide configuration, user specific configuration and project related configuration.
+- a _preferences UI_ must be able to alter configuration settings, thereby intelligently
+  routing the changes into the appropriate configuration source or create a suitable overlay
+- when configuration causes a decision from a rule to flip, this fact must be recorded
+  permanently in the session; the reason for this mechanism is that configuration might
+  change later, and the application must be able then to point out all places
+  affected by the change.
+- Any detected configuration change must be captured and logged as Event and thus
+  be un-doable cleanly, with all possible ripple effects.

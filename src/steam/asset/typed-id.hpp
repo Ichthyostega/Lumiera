@@ -47,7 +47,7 @@
 
 #include <memory>
 
-namespace lumiera{  ///////TODO: shouldn't that be namespace lib? or steam?
+namespace vessel {  ///////TODO: shouldn't that be namespace lib? or steam?
 namespace query  {
   
   /**

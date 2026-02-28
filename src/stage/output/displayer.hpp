@@ -28,12 +28,12 @@
 
 
 #include "lib/nocopy.hpp"
-#include "include/display-handles.hpp"
+#include "vessel/spine/display-handles.hpp"
 
 namespace stage {
 namespace output {
   
-  using lumiera::DisplayerInput;
+  using vessel::spine::DisplayerInput;
   
   
   /**

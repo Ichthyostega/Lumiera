@@ -21,7 +21,7 @@
 #include "steam/fixture/fixture-change-detector.hpp"
 #include "steam/asset/timeline.hpp"
 #include "steam/asset/pipe.hpp"
-#include "common/query.hpp"
+#include "vessel/query.hpp"
 #include "lib/util.hpp"
 
 
@@ -37,7 +37,7 @@ namespace test  {
   using asset::Struct;
   using asset::Timeline;
   using asset::PTimeline;
-  using lumiera::Query;
+  using vessel::Query;
 //  
   typedef asset::ID<Pipe> PID;
   typedef asset::ID<Struct> TID;

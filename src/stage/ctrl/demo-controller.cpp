@@ -37,7 +37,7 @@ namespace ctrl {
   using std::make_unique;
   using steam::node::DummyTickService;
   using steam::node::DummyImageGenerator;
-  using lumiera::DisplayerInput;
+  using vessel::spine::DisplayerInput;
   
   
   DemoController::DemoController()
@@ -54,7 +54,7 @@ namespace ctrl {
    * @param displayFormat format for the frames expected in the passed image buffer.
    */
   void
-  DemoController::activate (lumiera::DisplayerInput displayFormat)
+  DemoController::activate (DisplayerInput displayFormat)
   {
     REQUIRE (imageGen_);
     imageGen_->configure (displayFormat);

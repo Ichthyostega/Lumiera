@@ -71,7 +71,7 @@ class PixbufDisplayer
     
     DisplayerInput format() override
       {
-        return lumiera::DISPLAY_RGB;
+        return vessel::spine::DISPLAY_RGB;
       }
   };
   

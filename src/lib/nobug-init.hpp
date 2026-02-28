@@ -27,17 +27,17 @@
 #ifndef NOBUG_INIT_H
 #define NOBUG_INIT_H
 
-#include "include/lifecycle.h"
+#include "include/lifecycle.hpp"
 
 #include <nobug.h>
 
 
 
-namespace lumiera {
+namespace lib {
   void initialise_NoBug ();
   
   namespace {
-    LifecycleHook trigger_init_ (ON_BASIC_INIT, &initialise_NoBug);
+    vessel::LifecycleHook trigger_init_ (vessel::ON_BASIC_INIT, &initialise_NoBug);
 } }
 
 

@@ -19,7 +19,7 @@
  ** This plugin is linked together with the Lumiera GUI code; when loaded as
  ** Lumiera plugin, it allows to kick off the GTK main event loop and thus to bring
  ** up the GUI. The loading and shutdown process is carried out by stage::GuiFacade and
- ** controlled by lumiera::AppState, which in turn is activated by Lumiera main().
+ ** controlled by the vessel::Voyage, which in turn is activated by Lumiera main().
  ** 
  ** After successfully loading this module, a call to GuiFacade::launchUI is expected to
  ** happen, passing a termination signal (callback) to be executed when the GUI terminates.
@@ -31,7 +31,7 @@
  ** This entails also to open the primary "business" interface(s) of the GUI
  ** (currently as of 1/16 this is the interface stage::GuiNotification.)
  ** 
- ** @see lumiera::AppState
+ ** @see vessel::Voyage
  ** @see stage::GuiFacade
  ** @see guifacade.cpp
  ** @see ui-manager.hpp
@@ -44,19 +44,19 @@
 #include "stage/ui-bus.hpp"
 #include "stage/guifacade.hpp"
 #include "stage/ctrl/ui-manager.hpp"
-#include "common/subsys.hpp"
+#include "vessel/subsys.hpp"
 #include "lib/nocopy.hpp"
 
 extern "C" {
-#include "common/interface.h"
-#include "common/interface-descriptor.h"
+#include "vessel/interface.h"
+#include "vessel/interface-descriptor.h"
 }
 
 #include <string>
 
 
 
-using lumiera::Subsys;
+using vessel::Subsys;
 using lib::launchDetached;
 using lumiera::error::LUMIERA_ERROR_STATE;
 using stage::LUMIERA_INTERFACE_INAME(lumieraorg_Gui, 1);

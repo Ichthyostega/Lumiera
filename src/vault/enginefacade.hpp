@@ -25,7 +25,7 @@
 #define VAULT_INTERFACE_ENGINEFACADE_H
 
 
-#include "common/subsys.hpp"
+#include "vessel/subsys.hpp"
 
 
 
@@ -46,10 +46,10 @@ namespace vault {
    */
   struct EngineFacade
     {
-      /** provide a descriptor for lumiera::AppState,
+      /** provide a descriptor for the vessel::Voyage,
        *  wired accordingly to allow main to pull up and
        *  shut down the renderengine. */
-      static lumiera::Subsys& getDescriptor();
+      static vessel::Subsys& getDescriptor();
       
       
       //////////////////TODO: define the global access interface for the engine
