@@ -1,5 +1,0 @@
-Lumiera Design: Plugin system
-=============================
-
-Eventually, this will have design documentation for the Plugin system.
-

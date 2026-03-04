@@ -24,7 +24,7 @@
 #include "steam/mobject/session.hpp"
 #include "steam/asset/timeline.hpp"
 #include "steam/asset/sequence.hpp"
-#include "common/query.hpp"
+#include "vessel/query.hpp"
 #include "lib/p.hpp"
 
 
@@ -81,7 +81,7 @@ namespace test    {
   
   
   using lib::P;
-  using lumiera::Query;
+  using vessel::Query;
   using asset::Timeline;
   using asset::PTimeline;
   using asset::AssetManager;

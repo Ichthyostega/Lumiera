@@ -24,14 +24,14 @@
 
 
 #include "include/session-command-facade.h"
-#include "include/interfaceproxy.hpp"
+#include "vessel/spine/interfaceproxy.hpp"
 
 namespace steam {
 namespace control{
   /** static storage for the facade access front-end */
   lib::Depend<SessionCommand> SessionCommand::facade;
 }}
-namespace lumiera {
+namespace vessel {
 namespace facade {
   
   
@@ -65,4 +65,4 @@ namespace facade {
   template
   class Link<Interface,Facade>;
   
-}} //namespace facade::lumiera
+}} //namespace vessel::facade

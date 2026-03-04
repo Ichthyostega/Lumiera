@@ -28,8 +28,8 @@
  **          away, some day the real thing will be there, displacing this mess without further notice.
  ** @todo to be removed in Alpha, when integrating a real resolution engine /////////////////TICKET #710
  ** 
- ** @see lumiera::Query
- ** @see lumiera::ConfigRules
+ ** @see vessel::Query
+ ** @see vessel::ConfigRules
  **
  */
 
@@ -64,9 +64,9 @@ namespace session {
     using lib::meta::InstantiateChained;
     using lib::P;
     
-    using lumiera::Query;
-    using lumiera::QueryKey;
-    using lumiera::query::isFakeBypass;      /////////TODO placeholder until there is a real resolution engine
+    using vessel::Query;
+    using vessel::QueryKey;
+    using vessel::query::isFakeBypass;      /////////TODO placeholder until there is a real resolution engine
     
     using util::contains;
     using util::isnil;

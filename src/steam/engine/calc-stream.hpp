@@ -42,7 +42,7 @@
 #include "steam/engine/render-drive.hpp"
 //#include "include/dummy-player-facade.h"
 //#include "include/display-facade.h"
-//#include "common/instancehandle.hpp"
+//#include "vessel/instancehandle.hpp"
 //#include "lib/singleton-ref.hpp"
 //
 //#include <string>
@@ -56,9 +56,9 @@ namespace engine{
   namespace error = lumiera::error;
 
 //    using std::string;
-//    using lumiera::Subsys;
-//    using lumiera::Display;
-//    using lumiera::DummyPlayer;
+//    using vessel::Subsys;
+//    using vessel::Display;
+//    using vessel::DummyPlayer;
 
   class RenderEnvironment;
 

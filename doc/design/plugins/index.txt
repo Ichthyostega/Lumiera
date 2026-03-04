@@ -1,4 +1,0 @@
-Design Documents: Plug-In
-=========================
-
- * link:PluginBrainstorm.html[early draft for the plugin interface]

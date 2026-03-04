@@ -32,7 +32,7 @@ namespace external {
     
     using control::STypeManager;
     using control::ON_STREAMTYPES_RESET;
-    using lumiera::LifecycleHook;
+    using vessel::LifecycleHook;
     
     void
     provide_GAVL_stream_implementation_types ()

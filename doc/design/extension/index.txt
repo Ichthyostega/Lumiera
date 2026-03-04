@@ -1,0 +1,19 @@
+Extending the Application
+=========================
+
+During the inception phase, the link:/x/rfc/AllPluginInterfacesAreC.html[idea was commended]
+to bootstrap the application as a multi-lingual compound of plug-ins, for maximum flexibility
+and ease of contribution. Although this approach garnered much support initially, the ensuing
+discussions questioned its viability, with well-known plugin-based systems and frameworks
+cited as cautionary example.
+
+A prototype implementation
+(-> link:PluginBrainstorm.html[draft for the plugin interface])
+was nevertheless developed, but it proved problematic in practical use.
+The goal of a flexibly expandable application is still maintained,
+but the path to achieving it should be based on actual requirements.
+
+Development of an https://issues.lumiera.org/ticket/1212[Extension Concept #1212]
+was thus placed on the list of medium-term
+https://issues.lumiera.org/report/17[»Focus Topics«]
+

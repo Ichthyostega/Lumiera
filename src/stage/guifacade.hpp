@@ -18,8 +18,8 @@
  ** contained within the GUI dynamic module), because it's job is to load and
  ** activate this module as plug-in and to startup the GUI.
  **
- ** @see lumiera::AppState
- ** @see lumiera::Option
+ ** @see vessel::Voyage
+ ** @see vessel::Option
  ** @see guifacade.cpp
  ** @see main.cpp
  */
@@ -29,11 +29,11 @@
 #define STAGE_FACADE_H
 
 
-#include "common/subsys.hpp"
+#include "vessel/subsys.hpp"
 #include "lib/nocopy.hpp"
 
 extern "C" {
-#include "common/interface.h"
+#include "vessel/interface.h"
 }
 
 
@@ -72,10 +72,10 @@ namespace stage {
     {
     public:
       
-      /** provide a descriptor for lumiera::AppState,
+      /** provide a descriptor for vessel::Voyage,
        *  wired accordingly to allow main to load,
        *  start and stop the Lumiera GTK GUI. */
-      static lumiera::Subsys& getDescriptor();
+      static vessel::Subsys& getDescriptor();
       
       
       /** weather the GUI has been started and all interfaces are opened */

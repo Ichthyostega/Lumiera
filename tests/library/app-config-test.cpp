@@ -1,5 +1,5 @@
 /*
-  Appconfig(Test)  -  accessing the always-available AppState singleton
+  AppConfig(Test)  -  accessing the always-available Voyage singleton
 
    Copyright (C)
      2008,            Hermann Vosseler <Ichthyostega@web.de>
@@ -18,17 +18,21 @@
 
 
 #include "lib/test/run.hpp"
-#include "include/config-facade.h"
+#include "vessel/spine/config-facade.h"
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
+
+#include <string>
 
 using lib::Literal;
 using util::isnil;
 
 
 
-namespace lumiera {
+namespace vessel {
 namespace test {
+  
+  using spine::Config;
   
   
   class Appconfig_test : public Test
@@ -44,8 +48,8 @@ namespace test {
       void fetchSetupValue ()
       {
         Literal key("Lumiera.version");
-        string ver = Config::get(key);
-        CHECK (!isnil(ver));
+        std::string ver = Config::get(key);
+        CHECK (not isnil(ver));
       }
     };
   
@@ -53,5 +57,5 @@ namespace test {
   LAUNCHER (Appconfig_test, "function common");
   
   
-}} // namespace util::test
+}} // namespace vessel::test
 

@@ -21,13 +21,13 @@
 
 
 #include "lib/error.hpp"
-#include "include/lifecycle.h"
+#include "include/lifecycle.hpp"
 #include "steam/config-resolver.hpp"
 #include "steam/mobject/session/query/fake-configrules.hpp"
 #include "lib/depend-inject.hpp"
 
-using lumiera::LifecycleHook;
-using lumiera::ON_GLOBAL_INIT;
+using vessel::LifecycleHook;
+using vessel::ON_GLOBAL_INIT;
 
 
 namespace steam {
@@ -66,7 +66,7 @@ namespace steam {
 
 
 
-#include "common/query/defs-manager-impl.hpp"
+#include "vessel/query/defs-manager-impl.hpp"
 
 
 
@@ -80,7 +80,7 @@ namespace steam {
 #include "steam/asset/sequence.hpp"
 #include "steam/mobject/session/fork.hpp"
 
-namespace lumiera{
+namespace vessel {
 namespace query  {
   
   using steam::asset::Pipe;
@@ -105,4 +105,4 @@ namespace query  {
   template bool DefsManager::forget (PPipe const&);
   
   
-}} // namespace lumiera::query
+}} // namespace vessel::query

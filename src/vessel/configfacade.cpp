@@ -1,0 +1,144 @@
+/*
+  ConfigFacade  -  C++ convenience wrapper and startup of the config system
+
+   Copyright (C)
+     2008,            Hermann Vosseler <Ichthyostega@web.de>
+
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
+
+* *****************************************************************/
+
+
+/** @file configfacade.cpp
+ ** Draft for a facade to access and retrieve configuration values
+ ** This was created as part of a first draft towards an application
+ ** wide configuration system. Later (around 2012) it became clear that
+ ** we can not judge the requirements for such a system yet, so we deferred
+ ** the topic altogether. Meanwhile, this facade is sporadically used to
+ ** mark the necessity to retrieve some "parametrisation values".
+ ** 
+ ** A preliminary implementation is backed by a `setup.ini` file,
+ ** located relative to the application binary.
+ ** 
+ ** @todo as of 2016, this seems not to be used much, if at all.
+ **       The GTK-UI, which in itself is very preliminary, retrieves
+ **       some values from configuration, most notably the name of
+ **       the GTK stylesheet (`lumiera.css` is the default)
+ */
+
+
+#include "include/logging.h"
+#include "include/lifecycle.hpp"
+#include "vessel/spine/config-facade.h"
+#include "vessel/voyage.hpp"
+#include "lib/searchpath.hpp"
+#include "lib/iter-explorer.hpp"
+#include "lib/format-util.hpp"
+#include "lib/util.hpp"
+
+extern "C" {
+  #include "vessel/config.h"
+}
+
+
+/** key to fetch the search path for extended configuration.
+ *  Will corresponding value is defined in the basic setup.ini
+ *  and will be fed to the (planned) full-blown config system
+ *  after the basic application bootstrap was successful.
+ */
+#define KEY_CONFIG_PATH "Lumiera.configpath"
+
+/** Similarly, this key is used to fetch the configured default
+ *  plugin/module search path from the basic setup.ini
+ *  This patch is used by the plugin-loader to discover
+ *  lumiera plugins and extensions.
+ */
+#define KEY_PLUGIN_PATH "Lumiera.modulepath"
+
+
+
+
+namespace vessel {
+namespace spine  {
+  namespace error = lumiera::error;
+  
+  using util::isnil;
+  using lib::Literal;
+  
+
+  /** storage and setup for the single system-wide config facade instance */
+  lib::Depend<Config> Config::instance;
+  
+  
+  namespace {
+    
+    void
+    pull_up_ConfigSystem ()
+    {
+      TRACE (common, "booting up config system");
+      Config::instance();
+    }
+    
+    LifecycleHook trigger__ (ON_BASIC_INIT, &pull_up_ConfigSystem);
+  }
+  
+  
+  
+  
+  Config::Config ()
+  {
+    string extendedConfigSearchPath = Voyage::access().fetchSetupValue (KEY_CONFIG_PATH);
+    lumiera_config_init (cStr(extendedConfigSearchPath));
+    TRACE (config, "Config system ready.");
+  }
+  
+  
+  Config::~Config()
+  {
+    lumiera_config_destroy();
+    TRACE (config, "config system closed.");
+  }
+  
+  
+  
+  /** @note because the full-blown Config system isn't implemented yet
+   *        we retrieve the contents of setup.ini as a preliminary solution
+   */
+  string
+  Config::get (lib::Literal key)
+  {
+    string value = Voyage::access().fetchSetupValue (key);
+    if (isnil (value))
+      throw error::Config ("Configuration value for key=\""+key+"\" is missing");
+    
+    return value;
+  }
+
+
+
+} // namespace vessel
+
+
+extern "C" { /* ==== implementation C interface for accessing setup.ini ======= */
+  
+  
+  using std::string;
+  using vessel::spine::Config;
+  using lib::SearchPathSplitter;
+  using util::isnil;
+  
+  
+  
+  const char*
+  lumiera_get_plugin_path_default ()
+  {            // Meyer's Singleton...
+    static string pathSpec = []{ string pluginPath = Config::get (KEY_PLUGIN_PATH);
+                                 return "plugin.path=" // syntax expected by lumiera_config_setdefault
+                                      + util::join (SearchPathSplitter{pluginPath}, ":");
+                               }();
+    return cStr(pathSpec);
+  }
+}}// namespace vessel::spine

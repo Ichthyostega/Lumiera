@@ -36,7 +36,7 @@
 #include "include/session-command-facade.h"
 #include "steam/control/command-dispatch.hpp"
 #include "steam/control/command-instance-manager.hpp"
-#include "common/instancehandle.hpp"
+#include "vessel/instancehandle.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/symbol.hpp"
@@ -77,9 +77,9 @@ namespace control {
       
       /* === Interface Lifecycle === */
       
-      using ServiceInstanceHandle = lumiera::InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_SessionCommand, 0)
-                                                           , SessionCommand
-                                                           >;
+      using ServiceInstanceHandle = vessel::InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_SessionCommand, 0)
+                                                          , SessionCommand
+                                                          >;
       ServiceInstanceHandle serviceInstance_;
       
     public:

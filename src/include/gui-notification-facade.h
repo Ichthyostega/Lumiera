@@ -122,7 +122,7 @@ extern "C" {
 #endif /* =========================== CL Interface ===================== */
 
   
-#include "common/interface.h"
+#include "vessel/interface.h"
 #include "lib/hash-value.h"
 
 

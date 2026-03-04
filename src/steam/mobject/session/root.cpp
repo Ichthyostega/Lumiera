@@ -19,9 +19,9 @@
 
 
 #include "steam/mobject/session/root.hpp"
-#include "common/query/defs-manager.hpp"
+#include "vessel/query/defs-manager.hpp"
 
-using lumiera::query::DefsManager;
+using vessel::query::DefsManager;
 using lib::idi::EntryID;
 
 namespace steam {

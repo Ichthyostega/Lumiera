@@ -41,7 +41,7 @@ This code is heavily inspired by
  ** instantiation is mixed or inherited into the resulting product.
  ** 
  ** @see generator-test.cpp
- ** @see lumiera::query::ConfigRules usage example
+ ** @see vessel::query::ConfigRules usage example
  ** @see typelist.hpp
  ** 
  */

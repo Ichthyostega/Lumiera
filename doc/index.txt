@@ -1,7 +1,7 @@
 Documentation
 =============
 
-This documentation section contains documentation for both users and developers.
+This documentation section contains documentation for users and developers alike.
 
 == User ==
 
@@ -60,8 +60,8 @@ deeper documentation dungeons.
 
 At the second layer, the reader must make the first major decision on which
 router to pursue: documentation with a heavy code based leaning; or more descriptive
-documentation on the design of Lumiera which avoids a code narrative. This
-section has two main sections:
+documentation on the design of Lumiera, which omits most technical details of the implementation.
+Consequently, the documentation is divided into two main parts:
 
  * link:design/index.html[Lumiera Developer Design Documents]
  * link:technical/index.html[Lumiera Developer Technical Documents]
@@ -75,14 +75,14 @@ section has two main sections:
 
 [width="90%",frame="topbot",options="header",cols="^,2<"]
 |================================================================================================
-|Sub-System|Remarks
+|Section|Remarks
 |link:design/architecture/[Architecture]|Structure of Lumiera
 |link:design/gui/[GUI]|The Lumiera ⟷ user interaction layer
 |link:design/model/[Model]|Low-level and high-level models
 |link:design/engine/[Engine]|Renderer, output generation, ...
 |link:design/lowlevel/[Low-level]|Low-level and system services
 |link:design/application/[Application]|Application framework
-|link:design/plugins/[Plugins]|Dynamically loaded Extensions
+|link:design/extension/[Extension]|Dynamically loaded Extensions
 |link:design/workflow/[Workflow]|Workflow and Interaction Design
 |link:design/governance/[Governance]|Meta project concerns
 |================================================================================================
@@ -93,12 +93,12 @@ section has two main sections:
 
 [width="90%",frame="topbot",options="header",cols="^,2<"]
 |================================================================================================
-|Sub-System|Remarks
+|Section|Remarks
 |link:technical/build/[Build System]|Build, Packaging and CI
 |link:technical/stage/[Stage]|GUI (technical aspects)
 |link:technical/steam/[Steam]|Session and processing coordination
 |link:technical/vault/[Vault]|Low-level operations
-|link:technical/library/[Support lib]|Interface and support libraries
+|link:technical/library/[Library]|Utilities and custom frameworks
 |link:technical/code/[Code base]|Code management, organisation, ...
 |link:technical/infra/[Infrastructure]|Website and developer tooling ...
 |link:technical/howto/[Developer HowTos]|Instructions and guides for developers

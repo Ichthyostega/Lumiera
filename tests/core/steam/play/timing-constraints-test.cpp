@@ -34,15 +34,6 @@ namespace test {
   using lib::time::Duration;
   using lib::time::FrameRate;
 
-//using steam::engine::BuffHandle;
-//using steam::engine::test::testData;
-//using steam::engine::test::TestFrame;
-  
-//using lumiera::Play;
-  
-//typedef time::Control<time::Duration> DurationControl;
-//
-//typedef DummyPlayConnection<PlayTestFrames_Strategy> DummyPlayer;
   
   
   /***************************************************************//**

@@ -30,7 +30,7 @@
  ** 
  ** @see SessManager
  ** @see LifecycleHook
- ** @see lumiera::AppState
+ ** @see vessel::Voyage
  ** @see session.hpp
  ** @see sess-manager-impl.cpp concrete definition of Lifecycle
  ** 
@@ -42,7 +42,7 @@
 
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
-#include "include/lifecycle.h"
+#include "include/lifecycle.hpp"
 #include "steam/mobject/session.hpp"
 #include "lib/symbol.hpp"
 
@@ -119,7 +119,7 @@ namespace session {
       void
       emitEvent (Symbol eventLabel)
         {
-          lumiera::LifecycleHook::trigger (eventLabel);
+          vessel::LifecycleHook::trigger (eventLabel);
         }
       
       

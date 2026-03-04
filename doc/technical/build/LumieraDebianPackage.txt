@@ -79,8 +79,8 @@ How the Lumiera Debian package works
 Since we maintain both the Debian package and our build system, we can always try to do
 _the heavy lifting_ in our link:{ldoc}/technical/build/SCons.html[SCons build system],
 as this helps to keep the Debian packaging as simple as possible. Please have a look at the
--> https://git.lumiera.org/?p=debian/lumiera;a=blob;hb=refs/heads/deb;f=debian/control[control file]
-·  https://git.lumiera.org/?p=debian/lumiera;a=blob;hb=refs/heads/deb;f=debian/rules[debian/rules]
+-> https://git.lumiera.org/gitweb?p=debian/lumiera;a=blob;hb=refs/heads/deb;f=debian/control[control file]
+·  https://git.lumiera.org/gitweb?p=debian/lumiera;a=blob;hb=refs/heads/deb;f=debian/rules[debian/rules]
 
 - we rely on the _Debhelper Sequencer_ "`dh_*`" in our 'debian/rules' +
   -> https://manpages.debian.org/trixie/debhelper/dh.1.en.html[Manpage]
@@ -106,7 +106,7 @@ into `master` and marked with a tag there.
 For the actual packaging, we use these release tags as _upstream tag_ and perform a merge
 from that tag into the **debian branch**.footnote:[
   This _debian branch_ is called `deb` by convention. As mentioned above, it is published through
-  a separate https://git.lumiera.org/?p=debian/lumiera;a=summary[Git repository `git://git.lumiera.org/debian/lumiera`],
+  a separate https://git.lumiera.org/gitweb?p=debian/lumiera;a=summary[Git repository `git://git.lumiera.org/debian/lumiera`],
   which is kept separate, since packaging is considered a ``downstream process''.
 ]
 This branch carries only the additions and tweaks done for debian packaging. Yet still, this `deb`
@@ -115,7 +115,7 @@ repository as the `master` branch. When the packaging process is complete, the p
 DEB version is marked with a tag `debian/<full_debian_version_spec>`
 
 Note however that there is another branch in the aforementioned `debian/lumiera` repository,
-which is called https://git.lumiera.org/?p=debian/lumiera;a=shortlog;h=refs/heads/depot[depot]
+which is called https://git.lumiera.org/gitweb?p=debian/lumiera;a=shortlog;h=refs/heads/depot[depot]
 and is related to our link:/debian[DEB package depot] on Lumiera.org. This branch carries a completely
 different directory structure, since it is used with the
 https://wiki.debian.org/DebianRepository/SetupWithReprepro[»reprepro« tool from Debian]

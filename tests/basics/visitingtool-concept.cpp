@@ -54,7 +54,7 @@ using util::_Fmt;
 using std::string;
 
 
-namespace lumiera {
+namespace lib {
   namespace visitor_concept_draft {
     
     // ================================================================== Library ====
@@ -443,4 +443,4 @@ namespace lumiera {
       
       
       
-}}} // namespace lumiera::visitor_concept_draft::test
+}}} // namespace lib::visitor_concept_draft::test

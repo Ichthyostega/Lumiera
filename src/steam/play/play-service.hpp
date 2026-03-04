@@ -14,7 +14,7 @@
 /** @file play-service.hpp
  ** Primary service of the Player subsystem: Starting and controlling render/playback.
  ** This is the implementation level service interface for the "Player". Client code
- ** should access this service through the lumiera::Play facade interface.
+ ** should access this service through the vessel::spine::Play facade interface.
  ** 
  ** The player and render control subsystem allows to start and control playback and
  ** rendering at any given collection of model ports (the conceptual exit points
@@ -50,7 +50,7 @@
 
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
-#include "include/play-facade.hpp"
+#include "vessel/spine/play-facade.hpp"
 
 #include <memory>
 //#include <string>
@@ -65,9 +65,6 @@ namespace steam {
 namespace play {
 
   using std::string;
-//using lumiera::Subsys;
-//using lumiera::Display;
-//using lumiera::DummyPlayer;
   
   
 //  class DummyImageGenerator;
@@ -91,10 +88,10 @@ namespace play {
    * by the OutputDirector, which acts as a central hub
    * for the Player subsystem. Clients should always
    * access this functionality through the
-   * lumiera::Play facade interface.
+   * vessel::spine::Play facade interface.
    */
   class PlayService
-    : public lumiera::Play
+    : public vessel::spine::Play
     , util::NonCopyable
     {
       std::unique_ptr<ProcessTable>      pTable_;

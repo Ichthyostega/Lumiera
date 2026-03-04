@@ -28,7 +28,7 @@
 #include "steam/streamtype.hpp"
 #include "lib/format-string.hpp"
 #include "lib/query-util.hpp"
-#include "common/query/defs-manager-impl.hpp"
+#include "vessel/query/defs-manager-impl.hpp"
 
 using util::_Fmt;
 using util::isnil;
@@ -47,8 +47,8 @@ namespace test    {
   using asset::PPipe;
   using asset::Struct;
   
-  using lumiera::Query;
-  using lumiera::query::QueryHandler;
+  using vessel::Query;
+  using vessel::query::QueryHandler;
   using lib::query::normaliseID;
   
   using steam::ConfigResolver;
@@ -116,11 +116,11 @@ namespace test    {
           
           // now declare that these objects should be considered "default"
           Query<Pipe> justAnyPipe ("");
-lumiera::query::setFakeBypass(justAnyPipe);  /////////////////////////////////////////////////TODO mock resolution
+vessel::query::setFakeBypass(justAnyPipe);  /////////////////////////////////////////////////////////////////TICKET #1336 mock resolution
           CHECK (Session::current->defaults.define (pipe1, justAnyPipe));   // unrestricted default
           
           Query<Pipe> pipeWithSpecificStream("stream("+sID+")");
-lumiera::query::setFakeBypass(pipeWithSpecificStream); ///////////////////////////////////TODO mock resolution
+vessel::query::setFakeBypass(pipeWithSpecificStream); ///////////////////////////////////////////////////////TICKET #1336 mock resolution
           CHECK (Session::current->defaults.define (pipe2, pipeWithSpecificStream));
           
           CHECK ( find (pipe1->getPipeID()), "failure declaring object as default");

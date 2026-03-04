@@ -1,10 +1,48 @@
-Design Documents: Application Framework
-=======================================
+The Application Realm
+=====================
 
 // Menu :  prepend child ApplicationStart
 
- * link:Config.html[Configuration]
- * link:plugin_loader.html[Plugin Loader]
- * link:ApplicationStart.html[Application Subsystems and Lifecycle]
+Shaping the outside world through software requires a variety of effective mechanisms
+that capture, represent, and transform elements of reality. A well-designed part is
+focused on a single aspect, is coherent and cohesive in itself, with links to other
+parts based on concepts and abstraction rather then on shared technology. Yet this
+structural perspective must be complemented by a meaningful overall arrangement that
+supports the desired workflow and can be adapted to circumstances.
 
+In software systems, such coherency does not emerge spontaneously. It must be supported
+by definition work to establish suitable terms and interfaces, components must be
+interconnected and configured, and the overall state needs coordination.
+An application is therefore more than just a collection of software components.
 
+In the Lumiera Architecture, this application realm is embodied into a structure
+called the »**Vessel**«:
+
+- it is built as a library with only basic linkage to the support library
+- it can be invoked from a `main()` function, with an argument parser
+- at source code level, it provides all the types and definitions
+  required to express the _binding_ between components
+- _conceptually,_ all layers are encased in the application Vessel
+- and while the Vessel can not just ``control'' the configuration of parts
+  on upper layers, it has to bootstrap their ability to adapt to circumstances.
+
+--
+&nbsp;
+--
+
+Dependencies::
+  While the code base is organised into _three layers,_ the actual implementation
+  structures are arranged into **Subsystems** that _depend_ on each other and
+  can be _started and shut down_
++
+-> link:ApplicationStart.html[Subsystems and Lifecycle]
+
+Configuration::
+  As a means to adapt to the environment and enable flexibility,
+  this topic is surprisingly intricate and development has barely scratched
+  the surface: while the effective configuration is assembled from several
+  layered sources, the meaning (and documentation) of individual settings
+  is scoped, and users can expect the ability to override some settings
+  from within the application.
++
+-> link:Config.html[Configuration]

@@ -26,7 +26,7 @@
 #define STEAM_STREAMTYPE_H
 
 #include "lib/symbol.hpp"
-//#include "common/query.hpp"
+//#include "vessel/query.hpp"
 #include "lib/idi/entry-id.hpp"
 
 
@@ -184,10 +184,4 @@ namespace steam {
   
   
 } // namespace steam
-
-
-namespace lumiera {
-  using steam::StreamType;
-}
-
 #endif /*STEAM_STREAMTYPE_H*/

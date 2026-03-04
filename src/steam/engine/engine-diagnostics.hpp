@@ -37,7 +37,7 @@
 //#include "steam/mobject/model-port.hpp"
 #include "steam/play/timings.hpp"
 //#include "steam/play/output-slot.hpp"
-//#include "common/instancehandle.hpp"
+//#include "vessel/instancehandle.hpp"
 //#include "lib/singleton-ref.hpp"
 //#include "lib/polymorphic-value.hpp"
 //#include "lib/depend.hpp"
@@ -49,9 +49,9 @@ namespace steam  {
 namespace engine{
 
 //    using std::string;
-//    using lumiera::Subsys;
-//    using lumiera::Display;
-//    using lumiera::DummyPlayer;
+//    using vessel::Subsys;
+//    using vessel::Display;
+//    using vessel::DummyPlayer;
   using steam::play::Timings;
   
   

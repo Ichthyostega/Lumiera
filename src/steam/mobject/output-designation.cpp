@@ -31,7 +31,7 @@
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
 #include "lib/query-util.hpp"
-#include "common/query/query-resolver.hpp"
+#include "vessel/query/query-resolver.hpp"
 #include "steam/mobject/mobject.hpp"
 #include "steam/mobject/placement-ref.hpp"
 #include "steam/mobject/output-designation.hpp"
@@ -42,8 +42,9 @@
 #include <boost/functional/hash.hpp>
 #include <cstdlib>
 
-using lumiera::Symbol;
-using lumiera::query::QueryHandler;
+using lib::Symbol;
+using vessel::Query;
+using vessel::query::QueryHandler;
 using lib::query::removeTerm;
 using lib::query::extractID;
 using steam::ConfigResolver;
@@ -53,9 +54,9 @@ using util::uNum;
 namespace steam {
 namespace mobject {
   
-  typedef OutputDesignation::PPipe PPipe;
-  typedef OutputDesignation::PID PID;
-  typedef OutputDesignation::TargetSpec TargetSpec;
+  using PPipe = OutputDesignation::PPipe;
+  using PID = OutputDesignation::PID;
+  using TargetSpec = OutputDesignation::TargetSpec;
   
   
   struct AbsoluteSpec

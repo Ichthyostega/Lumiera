@@ -28,7 +28,8 @@
 namespace vault {
   
   using std::string;
-  using lumiera::Subsys;
+  using vessel::Subsys;
+  using vessel::Option;
   
   class NetNodeSubsysDescriptor
     : public Subsys
@@ -36,14 +37,14 @@ namespace vault {
       operator string ()  const { return "Renderfarm node"; }
       
       bool 
-      shouldStart (lumiera::Option&)  override
+      shouldStart (Option&)  override
         {
           TODO ("determine, if render node service should be provided");
           return false;
         }
       
       bool
-      start (lumiera::Option&, SigTerm termination)  override
+      start (Option&, SigTerm termination)  override
         {
           UNIMPLEMENTED ("open a render node server port and register shutdown hook");
           return false;

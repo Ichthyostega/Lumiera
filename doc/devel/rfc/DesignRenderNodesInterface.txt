@@ -106,7 +106,7 @@ details of carrying out the operations are much more involved.
 Please see the
 link/wiki/renderengine.html#Rendering[Development internal doc (TiddlyWiki)]
 and the
-https://git.lumiera.org/?p=LUMIERA;a=blob;f=src/proc/engine/procnode.hpp;h=9cf3a2ea8c33091d0ee992ec0fc8f37bb5874d34;hb=f9452f654cf39a4abbbeecfd81bef51aa347b321[Draft: ProcNode (src)]
+https://git.lumiera.org/gitweb?p=LUMIERA;a=blob;f=src/proc/engine/procnode.hpp;h=9cf3a2ea8c33091d0ee992ec0fc8f37bb5874d34;hb=f9452f654cf39a4abbbeecfd81bef51aa347b321[Draft: ProcNode (src)]
 for details
 (and/or contact Ichthyo for in-depth discussion of those technical details)
 

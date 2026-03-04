@@ -60,7 +60,6 @@
  **       As of 2016, I still consider this design valid and intend to pick up development when
  **       able to address this topic again. At the moment, the UI-Session connection is more urgent.
  ** 
- ** @see lumiera::DummyPlayer
  ** @see stage::PlaybackController usage exampleS
  */
 

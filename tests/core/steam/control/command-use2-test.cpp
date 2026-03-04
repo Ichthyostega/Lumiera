@@ -28,7 +28,7 @@
 #include "steam/control/test-dummy-commands.hpp"
 
 extern "C" {
-#include "common/interfaceregistry.h"
+#include "vessel/interfaceregistry.h"
 }
 #include "steam/control/steam-dispatcher.hpp"
 #include "include/session-command-facade.h"

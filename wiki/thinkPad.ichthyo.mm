@@ -72063,6 +72063,21 @@
 <node CREATED="1482524641484" ID="ID_1651495185" MODIFIED="1557498707236" TEXT="Architektur">
 <font NAME="SansSerif" SIZE="14"/>
 <node CREATED="1544199543455" ID="ID_970297070" MODIFIED="1557498707236" TEXT="Struktur">
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1772238698464" ID="ID_1464153344" MODIFIED="1772239797648" TEXT="Ma&#xdf;st&#xe4;be">
+<linktarget COLOR="#81273b" DESTINATION="ID_1464153344" ENDARROW="Default" ENDINCLINATION="-1706;352;" ID="Arrow_ID_1804262545" SOURCE="ID_994607670" STARTARROW="None" STARTINCLINATION="-1409;123;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1772238766395" ID="ID_1344954636" MODIFIED="1772239286000" TEXT="die Applikation ist nicht Kern, sondern Grenze, Form und Bezugssystem">
+<node CREATED="1772239199588" ID="ID_37031016" MODIFIED="1772239209010" TEXT="Lumiera ist keine Plattform"/>
+<node CREATED="1772239210239" ID="ID_991238589" MODIFIED="1772239218582" TEXT="Lumiera ist koh&#xe4;rent und koh&#xe4;siv"/>
+<node CREATED="1772239220066" ID="ID_1143424610" MODIFIED="1772239252250" TEXT="Open-Closed: gesperrt gegen&#xfc;ber Rekonfiguration, offen f&#xfc;r Erweiterung"/>
+</node>
+<node CREATED="1772238783321" ID="ID_140942246" MODIFIED="1772238822307" TEXT="Wechselseitige Bedingtheiten werden durch Abstraktion verankert (Inversion of Control)"/>
+<node CREATED="1772238845993" ID="ID_227856557" MODIFIED="1772238883368" TEXT="&#xbb;Vault&#xab; baut auf der Applikation auf und bietet dom&#xe4;nen-ferne und technische Services"/>
+<node CREATED="1772238901142" ID="ID_980148501" MODIFIED="1772238936650" TEXT="&#xbb;Steam&#xab; realisiert den Kern der Applikation durch Verkn&#xfc;pfung von Subsystemen"/>
+<node CREATED="1772238953308" ID="ID_750037077" MODIFIED="1772239037243" TEXT="das GUI schafft dar&#xfc;ber hinausgehend eine navigierbare Anordnung der Arbeit"/>
+<node CREATED="1772239079164" ID="ID_24481282" MODIFIED="1772239101198" TEXT="die Skript-Schnittstelle macht das Session-Modell programmierbar"/>
+</node>
 <node CREATED="1544199550166" ID="ID_16943853" MODIFIED="1557498707236" TEXT="Layer">
 <node CREATED="1544199559524" ID="ID_1685135526" MODIFIED="1557498707236" TEXT="rein gedankliche Gliederung"/>
 <node BACKGROUND_COLOR="#fefc4e" COLOR="#351d75" CREATED="1544199565372" FOLDED="true" ID="ID_39523665" MODIFIED="1576282357967" TEXT="(neue)Namen">
@@ -72142,7 +72157,27 @@
 <node CREATED="1687556508704" ID="ID_431446810" MODIFIED="1687556579475" TEXT="Namespaces">
 <icon BUILTIN="info"/>
 <node CREATED="1687556588554" ID="ID_329807646" MODIFIED="1687556590245" TEXT="stage"/>
-<node CREATED="1687556584353" ID="ID_1889681441" MODIFIED="1687556586623" TEXT="steam"/>
+<node CREATED="1687556584353" ID="ID_1889681441" MODIFIED="1687556586623" TEXT="steam">
+<node CREATED="1772209818093" ID="ID_1549962495" MODIFIED="1772209826070" TEXT="steam::cmd"/>
+<node CREATED="1772209805211" ID="ID_1545411608" MODIFIED="1772209826071" TEXT="steam::asset"/>
+<node CREATED="1772210789758" ID="ID_652248605" MODIFIED="1772210801397" TEXT="steam::control"/>
+<node COLOR="#5b280f" CREATED="1772209898272" ID="ID_712089921" MODIFIED="1772210803109" TEXT="steam::mobject::session">
+<icon BUILTIN="button_cancel"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1772209885686" ID="ID_619360225" MODIFIED="1772209896797" TEXT="steam::model">
+<icon BUILTIN="help"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1772210137996" ID="ID_195333171" MODIFIED="1772210172828" TEXT="steam::builder">
+<icon BUILTIN="help"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1772210814377" ID="ID_1429381035" MODIFIED="1772210819690" TEXT="steam::query">
+<icon BUILTIN="help"/>
+</node>
+</node>
+<node CREATED="1772209430903" ID="ID_981451079" MODIFIED="1772209436133" TEXT="steam::session"/>
+<node CREATED="1772209436937" ID="ID_763807975" MODIFIED="1772209440852" TEXT="steam::engine"/>
+<node CREATED="1772210142299" ID="ID_1145060386" MODIFIED="1772210148409" TEXT="steam::fixture"/>
+<node CREATED="1772209441752" ID="ID_1847456936" MODIFIED="1772209444924" TEXT="steam::play"/>
+</node>
 <node CREATED="1687556472975" ID="ID_735349056" MODIFIED="1687556555928" TEXT="vault">
 <node CREATED="1687481181547" ID="ID_873971075" MODIFIED="1687481185746" TEXT="vault::io"/>
 <node CREATED="1687481158310" ID="ID_616065524" MODIFIED="1687481178193" TEXT="vault::out"/>
@@ -72151,6 +72186,14 @@
 <node CREATED="1687481191768" ID="ID_12320912" MODIFIED="1687481195319" TEXT="vault::cache"/>
 <node CREATED="1687481220759" ID="ID_568286499" MODIFIED="1687481233535" TEXT="vault::toolkit"/>
 <node CREATED="1687481208317" ID="ID_1663294300" MODIFIED="1687481213324" TEXT="vault::storage"/>
+</node>
+<node CREATED="1772467713314" ID="ID_1260307377" MODIFIED="1772467717464" TEXT="vessel">
+<node CREATED="1772478667252" ID="ID_1873381687" MODIFIED="1772478785290" TEXT="vessel::spine">
+<linktarget COLOR="#785e5b" DESTINATION="ID_1873381687" ENDARROW="Default" ENDINCLINATION="3167;618;" ID="Arrow_ID_790663035" SOURCE="ID_1230702980" STARTARROW="None" STARTINCLINATION="1144;89;"/>
+<node COLOR="#56312d" CREATED="1772478751648" ID="ID_1228838617" MODIFIED="1772478768902" TEXT="&#xfc;bergreifende Definitionen und Schnittstellen"/>
+</node>
+<node CREATED="1772467881056" ID="ID_1519471369" MODIFIED="1772467885264" TEXT="vessel::advice"/>
+<node CREATED="1772468048359" ID="ID_514360291" MODIFIED="1772468051786" TEXT="vessel::query"/>
 </node>
 </node>
 </node>
@@ -72161,6 +72204,9 @@
 <node CREATED="1687475211318" ID="ID_1096951161" MODIFIED="1687475213686" TEXT="Engine"/>
 <node CREATED="1687475229300" ID="ID_768400893" MODIFIED="1687475234772" TEXT="(NetNode)"/>
 <node CREATED="1687475218948" ID="ID_1699167582" MODIFIED="1687475228664" TEXT="(ScriptRunner)"/>
+</node>
+<node CREATED="1772475893789" ID="ID_222283514" MODIFIED="1772475930529" TEXT="Vessel &#x2261; Application realm">
+<arrowlink COLOR="#4084d3" DESTINATION="ID_885335961" ENDARROW="Default" ENDINCLINATION="-52;-171;" ID="Arrow_ID_1465151412" STARTARROW="None" STARTINCLINATION="-10;36;"/>
 </node>
 <node CREATED="1584202146097" ID="ID_876294763" MODIFIED="1584202148362" TEXT="ETD">
 <node CREATED="1584202158174" ID="ID_1136082827" MODIFIED="1584202164409" TEXT="inh&#xe4;rente Einschr&#xe4;nkungen">
@@ -72211,9 +72257,28 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1737318668958" ID="ID_627954659" MODIFIED="1737319274847" TEXT="Design-Entscheidungen">
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1737318668958" ID="ID_627954659" MODIFIED="1772477680489" TEXT="Design-Entscheidungen">
 <linktarget COLOR="#5f3947" DESTINATION="ID_627954659" ENDARROW="Default" ENDINCLINATION="-1576;173;" ID="Arrow_ID_137322402" SOURCE="ID_1971507664" STARTARROW="None" STARTINCLINATION="-2020;303;"/>
 <icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1772239400122" ID="ID_405219834" MODIFIED="1772477602487" TEXT="Lumiera ist ein koh&#xe4;rentes System &#x2014; keine offene Komponenten-Plattform">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Damit stelle ich mich gegen die vorherschende Tendenz meines Zeitalters.
+    </p>
+    <p>
+      Die Bedingtheiten und Umst&#228;nde, die ich nicht wirklich zu vertreten habe, brachten mich in die Position, diese Entscheidung zu f&#228;llen.
+    </p>
+    <p>
+      Grunds&#228;tzlich war dies aber von Beginn an meine Haltung, und diese Haltung hat verhindert, da&#223; sich das Projekt &#187;Lumiera&#171; <i>normal entwickelt hat.</i>
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#4633d8" DESTINATION="ID_405219834" ENDARROW="Default" ENDINCLINATION="-6787;-263;" ID="Arrow_ID_205172039" SOURCE="ID_919379881" STARTARROW="None" STARTINCLINATION="-3603;-163;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
 </node>
 <node CREATED="1531419748046" ID="ID_1791265013" MODIFIED="1557498707236" TEXT="Lebenszyklus">
 <node COLOR="#338800" CREATED="1531419790153" ID="ID_1605635763" MODIFIED="1582443076662" TEXT="#1145 define startup sequence">
@@ -72229,6 +72294,121 @@
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1582443973100" HGAP="47" ID="ID_1989055863" MODIFIED="1582443988612" TEXT="getriggert von InteractionDirector::populateContent_afterStart()" VSHIFT="22">
 <icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node CREATED="1772470795216" ID="ID_885335961" MODIFIED="1772475924713">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      The &#187;<b>Vessel</b>&#171;
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#4084d3" DESTINATION="ID_885335961" ENDARROW="Default" ENDINCLINATION="-52;-171;" ID="Arrow_ID_1465151412" SOURCE="ID_222283514" STARTARROW="None" STARTINCLINATION="-10;36;"/>
+<node CREATED="1772471275504" ID="ID_1767162143" MODIFIED="1772471278601" TEXT="Bestimmung">
+<node CREATED="1772471244038" ID="ID_1514886538" MODIFIED="1772471262166" TEXT="definiert die Grenze"/>
+<node CREATED="1772471263018" ID="ID_892785610" MODIFIED="1772471269159" TEXT="stellt das R&#xfc;ckgrat bereit"/>
+</node>
+<node CREATED="1772471314554" ID="ID_544950513" MODIFIED="1772473440857" TEXT="Abgrenzung: nicht der &#xbb;bootstrap&#xab; einer Platform">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Die Bedeutung dieser Abgrenzung ergibt sich aus der Historie des Projekts.
+    </p>
+    <p>
+      Es gab einmal eine andere Vision. Das war niemals <i>meine Vision</i>&#160;&#8212; aber ich habe sie anfangs, und f&#252;r viel zu lange Zeit <i>mitgetragen.</i>&#160;Meine Gr&#252;nde daf&#252;r sind zweifelhaft. Ich war nicht in der Position, mich offen gegen einen derart emotional besetzten Trend zu stellen. Inzwischen jedoch ist eine solche Position f&#252;r mich in greifbarer N&#228;he, wenngleich ich trotzdem auf der Hut sein sollte und daraus kein eigenes Thema machen.
+    </p>
+    <br/>
+    <p>
+      Diese <i>andere Vision</i>&#160;beruht darin, jedwede Begrenzung zu verachten, und sich vielmehr durch geschicktes Man&#246;vrieren jederzeit unermessliche M&#246;glichkeiten offen zu halten. Dazu sagt &#187;man&#171;, da&#223; nur ein nahezu vernachl&#228;ssigbar kleiner Anker notwendig ist, ein Mikro-Kern, der lediglich die F&#228;higkeit beitet, weitere Elemente dynamisch nachzuladen. Damit k&#246;nnte man &#187;im Prinzip&#171; jederzeit alles Erdenkliche machen, und vor allem jederzeit blitzschnell etwas ganz anderes machen, wenn's denn grad commod ist. Nat&#252;rlich kann &#187;man&#171; das nicht selber machen, schlie&#223;lich sind wir ja alle sterblich, aber im Moment noch nicht. Wei&#223; doch jedes Kind. Aber wenn &#187;die Anderen&#171; einen Drive bekommen, dann k&#246;nnte &#187;man&#171; so viel schaffen. Und den Rest wird man dann schon sehen.
+    </p>
+    <br/>
+    <p>
+      Die Wesensz&#252;ge dieser <i>anderen Vision</i>&#160;sind Folgende:
+    </p>
+    <ul>
+      <li>
+        die prim&#228;re Leistung besteht darin, die Sache als unvorstellbar einfach, billig und geschickt darzustellen
+      </li>
+      <li>
+        das erzeugt ein Gef&#252;hl der Leichtigkeit, das die Umstehenden zum &#187;Mitmachen&#171; ermuntert
+      </li>
+      <li>
+        die Grundeinrichtung mu&#223; so beschaffen sein, da&#223; sich damit vor allem sehr schnell ein sichtbarer Effekt erzeugen l&#228;&#223;t, der Au&#223;enstehende in Staunen versetzt
+      </li>
+      <li>
+        die eigentliche Arbeit an der Inkoh&#228;renz der Realit&#228;t verschiebt man geschickt in die Zukunft (&#8222;das werden wir dann sehen und l&#246;sen, wenns so weit ist&#8220;)
+      </li>
+      <li>
+        der schnell sichtbare Erfolg wird umgem&#252;nzt in einen Beleg einer tats&#228;chlichen Leistung, die auf wunderbare Weise durch die Kr&#228;fte der Gemeinschaft zustande gekommen ist
+      </li>
+      <li>
+        &#187;man&#187; selber hat ganz entschieden keine eigene Vision, sondern nur &#8222;so Ideen&#8220; und betont stets, da&#223; man der Gemeinschaft dient und folgt
+      </li>
+      <li>
+        bei den ersten sich zeigenden Schwierigkeiten wird anderen die Schuld zugewiesen, dumm und vernagelt zu sein, und &#187;man&#171; zieht ver&#228;rgert weiter, auf die n&#228;chste gr&#252;ne Wiese nebenan...
+      </li>
+    </ul>
+    <p>
+      
+    </p>
+    <p>
+      Um deutlicher zu werden: heute haben wir die &#187;KI&#171;. Vor 20 Jahren haben wir von &#187;Plug-ins&#171; getr&#228;umt. Irgendwo dazwischen lag der Hype um Frameworks und Plattformen. Das Grundmuster bleibt das Gleiche: man mu&#223; eine &#187;Wirkung ohne Ursache&#171; erzeugen. Jede Festlegung und Eingrenzung ist zu vermeiden, denn sie beschneidet schon wieder die unendlichen M&#246;glichkeiten!
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="closed"/>
+</node>
+<node CREATED="1772473490993" ID="ID_1253107245" MODIFIED="1772473499756" TEXT="Struktur">
+<node CREATED="1772473500792" ID="ID_1083173205" MODIFIED="1772473525830" TEXT="in der Linkage zwischen Support-Library und den drei Layern angesiedelt"/>
+<node CREATED="1772473548641" ID="ID_1303277356" MODIFIED="1772473574097" TEXT="stellt gleichzeitig eine Interface-Library mit Service-Definitionen bereit"/>
+<node CREATED="1772473588988" ID="ID_967241443" MODIFIED="1772473601432" TEXT="der Lebenszyklus wird an die main()-Funktion gebunden">
+<node CREATED="1772473608068" ID="ID_896868941" MODIFIED="1772473743186" TEXT="hier Abgrenzung zu einem Basis-Kontext">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Ein &#187;Basis-Kontext&#171; w&#228;re durch folgende Eigenschaften gekennzeinet:
+    </p>
+    <ul>
+      <li>
+        er ist stes &#187;einfach da&#171;
+      </li>
+      <li>
+        er hat keinen eigenen Lebenszyklus
+      </li>
+      <li>
+        er ist nach Bedarf zug&#228;nglich
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1772473619679" ID="ID_167917430" MODIFIED="1772474047664" TEXT="letzteren schlie&#xdf;e ich (konsequenterweise) aus">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Wenn man einen solchen Basis-Kontext (der mit gegebenen technischen Mitteln durchaus realisierbar ist) verbindet mit einem &#187;Bootstrap-Mechanismus&#171;, dann gelangt man zu einem Mikro-Kern. Dieser Start-Mechanismus w&#252;rde vor allem eine &#187;Konfiguration&#171; laden aus einer per Konvention festgelegten Quelle. All die eigentlichen Strukturen sind dann in der Konfiguration versteckt, die damit zur eigentlichen Konstruktion des Systems wird.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Unter speziellen gegebenen Umst&#228;nden kann das eine tragf&#228;hige technische L&#246;sung sein. Aber der Mikro-Kern war das Zentrale Element in dem Wunder-Glauben, der vor 20 Jahren mit &#187;Plug-ins&#171; verbunden wurde. Und wo an Wunder geglaubt wird, stelle ich kritische Fragen.
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#7c2122" DESTINATION="ID_736034555" ENDARROW="Default" ENDINCLINATION="271;-1509;" ID="Arrow_ID_1349961812" STARTARROW="None" STARTINCLINATION="-254;15;"/>
+</node>
+</node>
+<node CREATED="1772474550773" ID="ID_184013730" MODIFIED="1772474566779" TEXT="Steuerung von Komponenten, Abh&#xe4;ngikeiten und Lebenszyklus"/>
+<node CREATED="1772474629321" ID="ID_1100159091" MODIFIED="1772474642939" TEXT="per Service werden zentrale Strukturen bereitgestellt">
+<node CREATED="1772474650918" ID="ID_1529856464" MODIFIED="1772474660305" TEXT="Strukturen die die Applikation definieren"/>
+<node CREATED="1772474661141" ID="ID_980230652" MODIFIED="1772474668931" TEXT="Strukturen die die Applikation zusammenbinden"/>
 </node>
 </node>
 </node>
@@ -74723,7 +74903,7 @@
 <node CREATED="1522454289393" ID="ID_860238388" MODIFIED="1522454304036" TEXT="verwendet ein Meyers Singleton"/>
 <node CREATED="1522454304576" ID="ID_692796029" MODIFIED="1522454312395" TEXT="und damit statische Init"/>
 </node>
-<node COLOR="#338800" CREATED="1522454152941" FOLDED="true" ID="ID_1003385410" MODIFIED="1561827483843" TEXT="lib::Depend">
+<node COLOR="#338800" CREATED="1522454152941" FOLDED="true" ID="ID_1003385410" MODIFIED="1772468604069" TEXT="lib::Depend">
 <arrowlink COLOR="#487bba" DESTINATION="ID_399844845" ENDARROW="Default" ENDINCLINATION="237;509;" ID="Arrow_ID_1393532861" STARTARROW="None" STARTINCLINATION="733;-537;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1522454265837" ID="ID_405478687" MODIFIED="1522454275983" TEXT="braucht ClassLock bis zum bitteren Ende"/>
@@ -74861,15 +75041,15 @@
 <node COLOR="#338800" CREATED="1522547104318" ID="ID_1075985632" MODIFIED="1522547119436" TEXT="nein besser nicht">
 <icon BUILTIN="yes"/>
 </node>
-<node CREATED="1522455507937" FOLDED="true" ID="ID_1029197196" MODIFIED="1561827483843" TEXT="f&#xfc;r wen?">
+<node CREATED="1522455507937" FOLDED="true" ID="ID_1029197196" MODIFIED="1772468284348" TEXT="f&#xfc;r wen?">
 <linktarget COLOR="#512c6f" DESTINATION="ID_1029197196" ENDARROW="Default" ENDINCLINATION="-299;0;" ID="Arrow_ID_845867084" SOURCE="ID_22169859" STARTARROW="None" STARTINCLINATION="1419;0;"/>
 <node CREATED="1522455514361" ID="ID_1288380071" MODIFIED="1522455518148" TEXT="ClassLock"/>
 <node CREATED="1522455519448" ID="ID_77194477" MODIFIED="1522455527347" TEXT="Application-Object?"/>
 <node CREATED="1522455527838" ID="ID_483432379" MODIFIED="1522455530186" TEXT="Nobug?"/>
 </node>
 <node CREATED="1522455653525" FOLDED="true" ID="ID_1606025045" MODIFIED="1561827483843" TEXT="wie?">
-<node CREATED="1522455656181" FOLDED="true" ID="ID_1878626771" MODIFIED="1561827482935" TEXT="Schwartz-Counter">
-<linktarget COLOR="#b12341" DESTINATION="ID_1878626771" ENDARROW="Default" ENDINCLINATION="166;90;" ID="Arrow_ID_1822166267" SOURCE="ID_695551107" STARTARROW="None" STARTINCLINATION="385;46;"/>
+<node CREATED="1522455656181" FOLDED="true" ID="ID_1878626771" MODIFIED="1772468416101" TEXT="Schwartz-Counter">
+<linktarget COLOR="#b12341" DESTINATION="ID_1878626771" ENDARROW="Default" ENDINCLINATION="166;90;" ID="Arrow_ID_1822166267" SOURCE="ID_695551107" STARTARROW="None" STARTINCLINATION="380;32;"/>
 <icon BUILTIN="stop-sign"/>
 <node CREATED="1522557054805" ID="ID_618759088" MODIFIED="1522557106032" TEXT="nein, besser gleich ganz wegwerfen">
 <icon BUILTIN="yes"/>
@@ -74882,6 +75062,46 @@
 <icon BUILTIN="ksmiletris"/>
 </node>
 <node CREATED="1522455672003" ID="ID_1633730200" MODIFIED="1522455677646" TEXT="mit Atomic"/>
+</node>
+<node CREATED="1772469722279" ID="ID_1211965878" MODIFIED="1772504013613" TEXT="Fazit">
+<linktarget COLOR="#2d9bcb" DESTINATION="ID_1211965878" ENDARROW="Default" ENDINCLINATION="-1193;318;" ID="Arrow_ID_880263255" SOURCE="ID_671236738" STARTARROW="None" STARTINCLINATION="1326;81;"/>
+<icon BUILTIN="forward"/>
+<node CREATED="1772469726825" ID="ID_375314912" MODIFIED="1772469739765" TEXT="(2026 nachgetragen damit das Argument klar ist)">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+<node CREATED="1772469751488" ID="ID_1293401461" MODIFIED="1772469972130" TEXT="ein korrekt implementierter Schwartz-Counter w&#xfc;rde dieses Problem zwar abdichten..."/>
+<node CREATED="1772469908538" ID="ID_206603724" MODIFIED="1772470684979" TEXT="allerdings stellt der C++ - Standard bereits &#xe4;quivalentes Verhalten sicher">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Der Schwartz-Counter war hilfreich in einer komplett un&#252;bersichtlichen Situation, wie sie f&#252;r eine portable Library auf POSIX-Basis gegeben war. Heutzutage sind wir weiter, da jede ernstzunehmende Programmiersprache ein formal spezifiziertes Verhaltensmodell hat, das diesen Grenzbereich absteckt. Speziell C++ leistet das durch die Zusicherung einer <b>global verbindlichen</b>&#160;Initialisierungsreihenfolge. Diese gilt f&#252;r jedes Executable, und im Besonderen auch f&#252;r Shared Libraries. Es gibt zwar <i>keine Garantie</i>&#160;in welcher Reihenfolge einzelne Translation-Units initialisiert werden, aber es gibt eine absolute Garantie, da&#223; Destruktoren <b>exakt</b>&#160;in der umgekehrten, konkreten, dynamischen Reihenfolge der Konstruktoren aufgerufen werden. Damit ist alles <i>innerhalb einer statisch verankerten Baueinheit</i>&#160; bereits vollst&#228;ndig gesichert. Ein Meyer's Singleton leistet damit bereits exakt das Gleiche, wie ein Schwartz-Counter. Allerdings werden beide L&#246;sungen niemals sicherstellen k&#246;nnen, da&#223; ein Destruktor noch auf weitere, transitive Abh&#228;ngigkeiten zugreifen kann. Ganz im Gegenteil, diese sind zum Zeitpunkt seines Aufrufs sogar garantiert bereits zerst&#246;rt worden.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#5b280f" CREATED="1772469822729" ID="ID_497733303" MODIFIED="1772469871942" TEXT="ABER das Problem ist grunds&#xe4;tzlich nicht l&#xf6;sbar">
+<icon BUILTIN="closed"/>
+</node>
+<node CREATED="1772469851555" ID="ID_1657072236" MODIFIED="1772470310910" TEXT="dahinter steht ein innerer Widerspruch">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das w&#228;re dann der &#187;Kopf &#252;ber dem Kopf&#171; (oder der Keller unter dem Keller).
+    </p>
+    <p>
+      <u>Grunds&#228;tzlich gilt</u>: ein System hat eine Grenze, und es wird stets etwas geben, das jenseits dieser Grenze liegt. Das l&#228;&#223;t sich nicht <i>rekursiv wegdiskutieren. </i>Man kann allerdings diese Grenze sauber ziehen und sich daran halten.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      F&#252;r Lumiera haben wir das bereits getan: Das AppState-Objekt bezeichnet die Grenze des Systems. Bez&#252;glich Initialisierung gibt es eine schwer zu definierende Ausnahme, da NoBug zum Logging notwendig ist, und man nicht immer klar bestimmen kann, was letztlich in dieser Randzone ben&#246;tigt wird. Jedoch auf der anderen Seite, zu den Destruktoren hin, wo das eigentlich kritische Problem besteht, haben wir alle Mittel in der Hand, in diesem Bereich nichts mehr zu tun. Es gen&#252;gt, sich daran zu halten (und ggfs. einen Konsistenzcheck zu machen. Den habe ich mit dem ZombieCheck geschaffen)
+    </p>
+  </body>
+</html></richcontent>
+</node>
 </node>
 </node>
 </node>
@@ -74977,7 +75197,7 @@
     </p>
   </body>
 </html></richcontent>
-<arrowlink COLOR="#b12341" DESTINATION="ID_1878626771" ENDARROW="Default" ENDINCLINATION="166;90;" ID="Arrow_ID_1822166267" STARTARROW="None" STARTINCLINATION="385;46;"/>
+<arrowlink COLOR="#b12341" DESTINATION="ID_1878626771" ENDARROW="Default" ENDINCLINATION="166;90;" ID="Arrow_ID_1822166267" STARTARROW="None" STARTINCLINATION="380;32;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 </node>
 </node>
@@ -75361,7 +75581,8 @@
 </node>
 </node>
 </node>
-<node COLOR="#990000" CREATED="1522457000411" FOLDED="true" ID="ID_736034555" MODIFIED="1563022234022" TEXT="Basis-System">
+<node COLOR="#990000" CREATED="1522457000411" FOLDED="true" ID="ID_736034555" MODIFIED="1772473696251" TEXT="Basis-System">
+<linktarget COLOR="#7c2122" DESTINATION="ID_736034555" ENDARROW="Default" ENDINCLINATION="271;-1509;" ID="Arrow_ID_1349961812" SOURCE="ID_167917430" STARTARROW="None" STARTINCLINATION="-254;15;"/>
 <linktarget COLOR="#af98b6" DESTINATION="ID_736034555" ENDARROW="Default" ENDINCLINATION="2208;-356;" ID="Arrow_ID_1927977085" SOURCE="ID_1228603701" STARTARROW="None" STARTINCLINATION="448;721;"/>
 <icon BUILTIN="button_cancel"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522457035478" ID="ID_1692167558" MODIFIED="1522556857858" TEXT="#1133 dependable base system">
@@ -75411,7 +75632,7 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1522518973331" ID="ID_136789565" MODIFIED="1522518988634" TEXT="Design-Dilemma">
 <icon BUILTIN="broken-line"/>
 <node CREATED="1522519009127" ID="ID_989945730" MODIFIED="1522519024864" TEXT="einfache Statics &quot;sollten&quot; lokal funktionieren"/>
-<node CREATED="1522519025972" ID="ID_714585131" MODIFIED="1522519142036" TEXT="das Problem ist, wenn man sich auf externe Statics abst&#xfc;tzt">
+<node CREATED="1522519025972" ID="ID_714585131" MODIFIED="1772469685237" TEXT="das Problem ist, wenn man sich auf externe Statics abst&#xfc;tzt">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -75422,7 +75643,10 @@
       Beispiel ist das ClassLock. Das ist ein Front-End, und verwendet verdeckt wieder einen Static.
     </p>
     <p>
-      Und genau <i>daf&#252;r</i>&#160;gibt es anscheinend keine Garantieren
+      Und&#160;genau <i>daf&#252;r</i>&#160;<strike>gibt es anscheinend keine Garantieren</strike>&#160; <font color="#2625c0">&#10229; unzutreffend; </font>
+    </p>
+    <p>
+      <font color="#2625c0">&#160;...vielmehr gibt es eine exakte Spezifikation, die diesem Fall zuwiderl&#228;uft, man <i>darf eine solche statische Dependency explizit nicht im Destruktor verwenden.</i></font>
     </p>
   </body>
 </html></richcontent>
@@ -75451,7 +75675,8 @@
 <node CREATED="1522519161785" ID="ID_608910503" MODIFIED="1522519198800" TEXT="aus Gr&#xfc;nden der Code-Organisation will man aber nicht immer alles in ein Objekt packen"/>
 <node CREATED="1522519253645" ID="ID_1316230973" MODIFIED="1522519267958" TEXT="aber eine wirklich wasserdichte, genersche L&#xf6;sung ist komplex bis unm&#xf6;glich"/>
 <node CREATED="1522519269002" ID="ID_1313794115" MODIFIED="1522519283292" TEXT="und statt einer halb-wasserdichten L&#xf6;sung k&#xf6;nnte man ja einfache Statics verwenden"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1522519308709" ID="ID_1997666438" MODIFIED="1522547255792" TEXT="Beschlu&#xdf;">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1522519308709" ID="ID_1997666438" MODIFIED="1772503891551" TEXT="Beschlu&#xdf;">
+<linktarget COLOR="#fddcce" DESTINATION="ID_1997666438" ENDARROW="Default" ENDINCLINATION="263;3774;" ID="Arrow_ID_519178011" SOURCE="ID_1516911789" STARTARROW="Default" STARTINCLINATION="2312;70;"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1522547261520" ID="ID_539336828" MODIFIED="1522547285145" TEXT="das ist insgesamt eine schlechte Idee">
 <icon BUILTIN="button_cancel"/>
@@ -75467,7 +75692,7 @@
 </html></richcontent>
 <arrowlink COLOR="#9e9bae" DESTINATION="ID_1126260262" ENDARROW="Default" ENDINCLINATION="-1485;213;" ID="Arrow_ID_1269745634" STARTARROW="None" STARTINCLINATION="-1534;0;"/>
 </node>
-<node CREATED="1522547330726" ID="ID_994306275" MODIFIED="1522547749968" TEXT="C++ stellt das eigens sicher -- man mu&#xdf; es nur erst mal verstehen">
+<node CREATED="1522547330726" ID="ID_994306275" MODIFIED="1772469485170" TEXT="C++ stellt das eigens sicher -- man mu&#xdf; es nur erst mal verstehen">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -75478,13 +75703,10 @@
       Desktuktoren werden exakt r&#252;ckw&#228;rts in dieser Reihenfolge aufgerufen.
     </p>
     <p>
-      Statische Objektfelder werden vor der ersten Verwendung der Klassen<b>definition</b>&#160; initialisiert
+      Statische Objektfelder werden vor der ersten Verwendung der Klassen<b>definition</b>&#160;initialisiert
     </p>
     <p>
-      Dagegen Funktions-lokale statische Variablen werden initialisiert, wenn der Kontrollflu&#223; sie zum ersten mal ber&#252;hrt.
-    </p>
-    <p>
-      Wenn ein Konstruktor ein statisches Feld verwendet, dann wird dieses Feld vor dem Konstruktor erzeugt.
+      Dagegen Funktions-lokale statische Variablen werden initialisiert, wenn der Kontrollflu&#223; sie zum ersten mal ber&#252;hrt. Wenn ein Konstruktor ein statisches Feld verwendet, dann wird dieses Feld vor dem Konstruktor erzeugt.
     </p>
     <p>
       
@@ -75496,10 +75718,7 @@
       
     </p>
     <p>
-      <u>Corollar</u>: wenn man ein Meyer's Singleton erst indirekt aus dem Implementierungs-Code verwendet,
-    </p>
-    <p>
-      so wird es garantiert zerst&#246;rt, <i>bevor</i>&#160;der Destruktor des aufrufenden Objekts l&#228;uft.
+      <u>Corollar</u>: wenn man ein Meyer's Singleton erst indirekt aus dem Implementierungs-Code verwendet, so wird es garantiert zerst&#246;rt, <i>bevor</i>&#160;der Destruktor des aufrufenden Objekts l&#228;uft.
     </p>
     <p>
       Hallo ClassLock...
@@ -75523,7 +75742,13 @@
 </node>
 </node>
 <node COLOR="#338800" CREATED="1522547772617" ID="ID_671236738" MODIFIED="1522556847447" TEXT="besser nur einen Zombie-Check bereitstellen">
+<arrowlink COLOR="#2d9bcb" DESTINATION="ID_1211965878" ENDARROW="Default" ENDINCLINATION="-1193;318;" ID="Arrow_ID_880263255" STARTARROW="None" STARTINCLINATION="1326;81;"/>
 <icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1772504034435" HGAP="101" ID="ID_143030529" MODIFIED="1772504096350" TEXT="(Ergebnis der Analyse am Thema Dependency-Factory)" VSHIFT="26">
+<edge COLOR="#1698ce"/>
+<font NAME="SansSerif" SIZE="11"/>
+<icon BUILTIN="info"/>
+</node>
 </node>
 </node>
 <node CREATED="1482524535575" ID="ID_387248900" MODIFIED="1557498707236" TEXT="Extension-System"/>
@@ -75780,7 +76005,65 @@
 </node>
 <node CREATED="1743091201922" ID="ID_758962989" MODIFIED="1743091204317" TEXT="Anforderungen"/>
 </node>
-<node CREATED="1743090747998" ID="ID_414690693" MODIFIED="1743090750514" TEXT="Konfiguration"/>
+<node CREATED="1743090747998" ID="ID_414690693" MODIFIED="1743090750514" TEXT="Konfiguration">
+<node CREATED="1772480228019" ID="ID_1892270195" MODIFIED="1772480237630" TEXT="Status: &#xbb;workaround&#xab;">
+<node COLOR="#5b280f" CREATED="1772480289771" ID="ID_262237092" MODIFIED="1772480323612" TEXT="erster Entwurf f&#xfc;r ein Konfig-System">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1772480326579" ID="ID_1704687505" LINK="https://git.lumiera.org/gitweb?p=LUMIERA;a=shortlog;h=c4e6cd3c5" MODIFIED="1772481567792" TEXT="wurde Ende 2008 energisch von Christian vorangetrieben"/>
+<node CREATED="1772481579923" ID="ID_1159185681" MODIFIED="1772481950289" TEXT="Entwicklung blieb auf dem Level eines &#xbb;Concept-Draft&#xab; stehen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Die Implementierung hat 2008 Simeon V&#246;lkel gemacht, unter der Anleitung von Christian. Ich hab mitbekommen, da&#223; das f&#252;r Simeon alles &#187;ziemlich steil&#171; war, und Christian sich beklagt hat, da&#223; er Simeon quasi &#187;fernsteuern&#171; mu&#223;. Die Grundlagen f&#252;r die Key-Suche und das Overlay-System wurden aber meines Wissens implementiert, so wie Christian sich das vorgestellt hat (also man hat definitiv nicht erst mal mit einem einfachen INI-File-Format angefangen). Der nun vorliegende Code von damals war grade so weit integriert, da&#223; Christian seinen &#187;Plugin-Path&#171; aus dem Config-System beziehen konnte. Allerdings nur pro-forma (also das Interface verwenden), denn der Code kann noch nicht einmal ein Textfile laden (&#8222;das ist aber ganz banal, das kann man mal eben dazuprogrammieren wenn mans braucht&#8220;). Die eigentlich interessante Frage ist f&#252;r mich heute, warum blieb das drei Jahre liegen, bis ich August 2011 explizit klar gemacht habe, da&#223; ich diesen Ansatz ablehne?
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1772481336399" ID="ID_1957806588" MODIFIED="1772483710199" TEXT="ich lehne diesen Design-Entwurf grunds&#xe4;tzlich ab">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Die Frage nach den <b>Gr&#252;nden</b>&#160;ist vielschichtig.
+    </p>
+    <ul>
+      <li>
+        ich wei&#223;, da&#223; mich von Anfang an gest&#246;rt hat, da&#223; das System so <i>extrem trickreich</i>&#160;ist und unglaublich raffinierte Key-&#220;berlagerungen erm&#246;glicht. &#220;ber die Grundidee bestand jedoch Einigkeit (INI-Syntax, System und User-Files die sich &#252;berlagern)
+      </li>
+      <li>
+        sp&#228;ter dann &#8212; aber definitiv nicht bereits 2008 &#8212; hat mich die Sprache C gest&#246;rt. Und zwar, als ich versucht habe, den Code zu lesen. Da wurde mir erst klar, wie abgrundtief alles, was da gemacht wird, meinen eigenen Wertma&#223;st&#228;ben widerspricht. In der ganzen Anfangsphase des Projekts hatte ich das verdr&#228;ngt, und war davon ausgegangen, da&#223; man C ja &#187;sauber verwenden kann&#171; (was auf einer abstrakten Ebene stimmt, aber nicht mit meinem tats&#228;chlichen Verst&#228;ndnis von Handwerk zusammengeht. Christian wollte ja ganz sicher keinen Code f&#252;r &#187;kritische Infrastruktur&#171; schreiben, mit seiner Grundhaltung ist sowas auch nicht m&#246;glich). Ich wei&#223; noch, da&#223; mir irgendwann in 2011 dann der &#187;Kragen geplatzt&#171; ist, d.h. ich habe gegen meine eigene, offizielle Haltung rebelliert.
+      </li>
+      <li>
+        Es gibt aber einen <i>sehr viel tieferen Grund,</i>&#160;warum ich das Konfig-System in dieser Form ablehne. Der jedoch ist mir erst letzten Herbst (2025) klar geworden, als ich mich mit dem Streit um Plug-ins nochmal sehr gr&#252;ndlich auseinandergesetzt habe. Daher vermute ich, da&#223; mir dieser Zusammenhang mehr &#187;nach Bauchgef&#252;hl&#171; deutlich war, so in der Art von &#8222;Vorsicht, diese ganze Richtung gef&#228;llt mir nicht&#8220;
+      </li>
+    </ul>
+    <p>
+      
+    </p>
+    <p>
+      Der <b>tiefere Grund</b>&#160;ist, da&#223; ein solches Config-System das Schl&#252;ssel-Element in einer <b>Plug-in-Architektur</b>&#160;darstellt: ein Wesensmerkmal einer solchen Architektur ist n&#228;mlich, die eigentliche Konstruktion und Implementierung in die Konfiguration und die Metadaten zu verlegen. <i>Nur dadruch schafft es der Plugin-Ansatz, so unglaublich einfach und magisch zu erscheinen: </i>Man mu&#223; &#187;nur&#171; ein paar &#187;ganz einfache&#171; Plug-ins reinschmei&#223;en, und alles andere passiert dann quasi wie von selber &#8212; weil man sich n&#228;mlich hier ganz geschickt von der &#187;linken Tasche in die rechte Tasche spielt&#171;: der Implementator der &#187;ganz einfachen&#171; Plug-ins wei&#223; durchaus, wie die Konfiguration gestrickt ist, und richtet seine Plug-ins so ein, da&#223; sie scheinbar wie von selber &#187;in die gew&#252;nschte Richtung fallen&#171;. Und, was dabei fast noch wichtiger ist, der spezielle Twist einer Konfiguration is praktisch nicht dokumentierbar. Man m&#252;&#223;te einen extrem abstrakten und schwer zu lesenden Text schreiben, was offenstichlich sinnlos ist, denn niemand wird den lesen wollen. Daher bleibt dieses essentielle aber auch hochgradig fragile Kern-Element der ganzen Architektur sicher abgeschirmt vor jeder kritischen Betrachtung (auch sich selbst gegen&#252;ber). Dieses <i>Konfigurations-Wissen</i>&#160;bleibt weitgehend <i>implizites und praktisches Wissen. </i>Es wird weitergegeben durch Anschauen von konkreten Beispielen, und bestenfalls durch ein paar Anf&#228;nger-Tutorials (die aber typsicherweise mehr Marketing als Substanz sind). Diese Aussagen st&#252;tze ich auf meine eigene Erfahrung mit einer ganzen Reihe von Systemen und Frameworks, die Plug-in basiert sind. Dokumentation ist da stets in einem notorisch-hoffnungslosen Zustand, und niemand will im Ernst das Verhalten einer Konfiguration per Unit-Test abdecken. Typischerweise macht man nur einen System-Integrationstest mit einem Standard-Beispiel.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <b>Ich halte diesen Mi&#223;stand inzwischen sogar f&#252;r konstituierend</b>&#160; &#8212; kann ihn aber gedanklich noch nicht voll fassen. In meinem Essy &#187;Complexity and Flexibility&#171; habe ich versucht, das ganze Verhalten als ein Anti-Pattern zu umschreiben. Ich w&#228;hlte daf&#252;r den Name: &#187;can be done&#171; - Antipattern
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#702aab" DESTINATION="ID_1957806588" ENDARROW="Default" ENDINCLINATION="-3501;209;" ID="Arrow_ID_267163801" SOURCE="ID_205034475" STARTARROW="None" STARTINCLINATION="-1284;85;"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1772479891504" ID="ID_987089008" MODIFIED="1772480256485" TEXT="die Config-Facade ist nur ein Platzhalter und wird abgel&#xf6;st">
+<linktarget COLOR="#7b6062" DESTINATION="ID_987089008" ENDARROW="Default" ENDINCLINATION="2019;95;" ID="Arrow_ID_977227421" SOURCE="ID_1500554408" STARTARROW="None" STARTINCLINATION="19;-227;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1772480265262" ID="ID_868594845" MODIFIED="1772480280520" TEXT="bietet derzeit nur Zugang zu Daten der setup.ini"/>
+</node>
+</node>
+</node>
 <node CREATED="1482524569705" ID="ID_1815572475" MODIFIED="1743090754038" TEXT="Parametrisierung"/>
 </node>
 </node>
@@ -113835,6 +114118,77 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1771536280375" ID="ID_511987527" MODIFIED="1771536289148" TEXT="Test mu&#xdf; durch den Compiler, mehr nicht"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1772580027608" ID="ID_17159989" MODIFIED="1772580041236" STYLE="fork" TEXT="NodeDevel_test gebrochen">
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="broken-line"/>
+<node CREATED="1772580043203" ID="ID_1564270895" MODIFIED="1772580049365" TEXT="Testfall: testRand_buildFilterNode()">
+<node CREATED="1772580051298" ID="ID_1770027833" MODIFIED="1772580064370" TEXT="das ist der erste &#xbb;substantielle&#xab; Integrations-Testfall"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1772580065781" ID="ID_981982347" MODIFIED="1772580093881" TEXT="Symptom: invalider Output-Buffer">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1772580113285" ID="ID_880928596" MODIFIED="1772580145403" TEXT="test::ont::manipulateFrame(*out, const* in, Param)"/>
+<node CREATED="1772580147154" ID="ID_72983183" MODIFIED="1772580166374" TEXT="der TestFrame* out zeigt offensichtlich nicht in einen korrekt initialisierten Speicherblock"/>
+<node CREATED="1772580167692" ID="ID_1195830744" MODIFIED="1772580217543" TEXT="daher spricht der Sanity-Check im Header an: TestFrame::accessHeader()">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <div style="background-color: #eee0b5; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 2px">
+      <div style="color: #202020; background-color: #eee0b5; font-family: Bitstream Vera Sans Mono; font-size: 9pt; white-space: pre">
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a1a65"><b>if</b></font><font color="#3a1f18">&#160;</font><font color="#11123a">(</font><font color="#4a1a65"><b>not</b></font><font color="#3a1f18">&#160;</font><font color="#1a1ac4">header_</font><font color="#65533c">.</font><font color="#753737">isPlausible</font><font color="#11123a">())</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a1a65"><b>throw</b></font><font color="#3a1f18">&#160;</font><font color="#535773">err</font><font color="#65533c">::</font><font color="#8c505c"><b>Invalid</b></font><font color="#11123a">{</font><font color="#996e62"><i>&quot;TestFrame: missing or corrupted metadata&quot;</i></font><font color="#11123a">}</font><font color="#65533c">;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          
+        </p>
+      </div>
+    </div>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1772580243636" ID="ID_1772869914" MODIFIED="1772580276111" TEXT="Vermutung: da es der Output-Buffer ist, k&#xf6;nnte es direkt mit dem Umbau zusammenh&#xe4;ngen">
+<icon BUILTIN="idea"/>
+<node CREATED="1772580361639" ID="ID_670863367" MODIFIED="1772580393253" TEXT="der Testfall verwendet den high-level Zugang per EngineCtx">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <font color="#635e96" face="Bitstream Vera Sans Mono" size="9pt"><b>BufferProvider</b></font><font color="#65533c" face="Bitstream Vera Sans Mono" size="9pt">&amp;</font><font color="#3a1f18" face="Bitstream Vera Sans Mono" size="9pt">&#160;</font><font color="#814422" face="Bitstream Vera Sans Mono" size="9pt">provider</font><font color="#3a1f18" face="Bitstream Vera Sans Mono" size="9pt">&#160;</font><font color="#65533c" face="Bitstream Vera Sans Mono" size="9pt">=</font><font color="#3a1f18" face="Bitstream Vera Sans Mono" size="9pt">&#160; </font><font color="#635e96" face="Bitstream Vera Sans Mono" size="9pt"><b>EngineCtx</b></font><font color="#65533c" face="Bitstream Vera Sans Mono" size="9pt">::</font><font color="#0000c0" face="Bitstream Vera Sans Mono" size="9pt"><i>access</i></font><font color="#874a15" face="Bitstream Vera Sans Mono" size="9pt"><b>()</b></font><font color="#65533c" face="Bitstream Vera Sans Mono" size="9pt">.</font><font color="#1a1ac4" face="Bitstream Vera Sans Mono" size="9pt">mem</font><font color="#65533c" face="Bitstream Vera Sans Mono" size="9pt">;</font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1772580396845" ID="ID_1319662992" MODIFIED="1772580413879" TEXT="aber holt sich von diesem BufferProvider direkt ein BuffHandle f&#xfc;r den Output"/>
+<node CREATED="1772580462582" ID="ID_1698761525" MODIFIED="1772580479814" TEXT="die Buffer-Addresse kommt unten im Aufruf korrekt an">
+<icon BUILTIN="idea"/>
+</node>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1772580483689" ID="ID_1718534673" MODIFIED="1772580551967" TEXT="&#x27f9; Buffer vom Test-Setup her nicht initialisiert">
+<icon BUILTIN="clanbomber"/>
+<node CREATED="1772580523957" ID="ID_908318379" MODIFIED="1772580539683" TEXT="das wird sogar Asserted (ist also erwartet)"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1772580556946" ID="ID_1418529434" MODIFIED="1772580582793" TEXT="wo in der Node-pull()-Logik h&#xe4;tte der Buffer initialisiert werden sollen?">
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="help"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1772580613906" ID="ID_1766680714" MODIFIED="1772580674329" TEXT="laut Test-Fixture: gar nicht">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <font color="#3a1f18" face="Bitstream Vera Sans Mono" size="9pt">provider</font><font color="#65533c" face="Bitstream Vera Sans Mono" size="9pt">.</font><font color="#753737" face="Bitstream Vera Sans Mono" size="9pt">getDescriptorFor</font><font color="#11123a" face="Bitstream Vera Sans Mono" size="9pt">(</font><font color="#4a1a65" face="Bitstream Vera Sans Mono" size="9pt"><b>sizeof</b></font><font color="#11123a" face="Bitstream Vera Sans Mono" size="9pt">(</font><font color="#635e96" face="Bitstream Vera Sans Mono" size="9pt"><b>TestFrame</b></font><font color="#11123a" face="Bitstream Vera Sans Mono" size="9pt">)</font>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="smiley-oh"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#e80a30" CREATED="1772580678521" ID="ID_1986916908" MODIFIED="1772580702520" TEXT="??? warum war das bisher kein Problem???">
+<icon BUILTIN="help"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1770590137705" ID="ID_775309144" MODIFIED="1770595373702" TEXT="Schritt-3 : auftrennen">
@@ -114266,8 +114620,16 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1772129959849" ID="ID_1378157373" MODIFIED="1772130000767" TEXT="(storage, size, localTag)"/>
 </node>
 </node>
+<node CREATED="1772209019999" ID="ID_903636266" MODIFIED="1772209035932" TEXT="wirft aber wieder das Problem mit den Marker-Typen auf">
+<node CREATED="1772209038268" ID="ID_212318366" MODIFIED="1772209056973" TEXT="diese waren anfangs rein interne Abk&#xfc;rzungen"/>
+<node CREATED="1772209058069" ID="ID_1404614732" MODIFIED="1772209076956" TEXT="durch Refactoring und Erweierungen m&#xfc;ssen sie nun an verschiedenen Stellen sichtbar sein"/>
+<node CREATED="1772209112564" ID="ID_250526962" MODIFIED="1772209154352" TEXT="es w&#xe4;re denkbar, die Typen lecht erweitert auf Namespace-Ebene zu ziehen"/>
+<node CREATED="1772209164996" ID="ID_691064493" MODIFIED="1772209244110" TEXT="das setzt einen zentralen Header vorraus &#x27f6; buff-handle.hpp w&#xe4;re naheliegend">
+<arrowlink COLOR="#3e92dd" DESTINATION="ID_840400814" ENDARROW="Default" ENDINCLINATION="-13;-19;" ID="Arrow_ID_625861293" STARTARROW="None" STARTINCLINATION="-106;4;"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1771538366852" ID="ID_1595544111" MODIFIED="1771538575391" TEXT="saubere Fehlermeldung wenn keine Allokation m&#xf6;glich ist">
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1771538366852" ID="ID_1595544111" MODIFIED="1772501908170" TEXT="saubere Fehlermeldung wenn keine Allokation m&#xf6;glich ist">
 <linktarget COLOR="#744d8b" DESTINATION="ID_1595544111" ENDARROW="Default" ENDINCLINATION="628;31;" ID="Arrow_ID_378933605" SOURCE="ID_27406270" STARTARROW="None" STARTINCLINATION="221;-288;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
@@ -114276,10 +114638,553 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1771196048101" ID="ID_1022260808" MODIFIED="1771512711373" TEXT="TypeHandler kann auch dort hin"/>
 <node CREATED="1771196057238" ID="ID_1561084245" MODIFIED="1771196061567" TEXT="LocalTag ebenfalls"/>
 <node CREATED="1771196092641" ID="ID_1744271206" MODIFIED="1771196101419" TEXT="selbst BufferMetadata w&#xe4;re denkbar">
-<node CREATED="1771196102899" ID="ID_840400814" MODIFIED="1771196126219" TEXT="es h&#xe4;ngt nur an dem Typ Buffer (opaque marker)"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1771196377439" ID="ID_505136785" MODIFIED="1771201867569" TEXT="die Idee gef&#xe4;lt mir immer besser....">
-<linktarget COLOR="#2016a3" DESTINATION="ID_505136785" ENDARROW="Default" ENDINCLINATION="-51;243;" ID="Arrow_ID_407734805" SOURCE="ID_1008519841" STARTARROW="None" STARTINCLINATION="-49;3;"/>
+<node CREATED="1771196102899" ID="ID_840400814" MODIFIED="1772209237864" TEXT="es h&#xe4;ngt nur an dem Typ Buffer (opaque marker)">
+<linktarget COLOR="#3e92dd" DESTINATION="ID_840400814" ENDARROW="Default" ENDINCLINATION="-13;-19;" ID="Arrow_ID_625861293" SOURCE="ID_691064493" STARTARROW="None" STARTINCLINATION="-106;4;"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1771196377439" ID="ID_505136785" MODIFIED="1772208992889" TEXT="die Idee gef&#xe4;lt mir immer besser....">
+<linktarget COLOR="#2016a3" DESTINATION="ID_505136785" ENDARROW="Default" ENDINCLINATION="-51;243;" ID="Arrow_ID_407734805" SOURCE="ID_1008519841" STARTARROW="None" STARTINCLINATION="-315;21;"/>
 <icon BUILTIN="flag-pink"/>
+<node CREATED="1772213174695" ID="ID_862271536" MODIFIED="1772213186169" TEXT="dann sollte auch OutputSlot mit umziehen">
+<node CREATED="1772213338241" ID="ID_769676942" MODIFIED="1772213350387" TEXT="Vorsicht: h&#xe4;ngt am asset::TimeGrid"/>
+</node>
+<node CREATED="1772213187533" ID="ID_899353853" MODIFIED="1772213226834" TEXT="wohingegen der OutputManager in Steam bleiben mu&#xdf;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Ma&#223;gabe: alles was modelliert oder Logik darstellt, und kein reiner passiver Service ist
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1772213416430" ID="ID_635296620" MODIFIED="1772213425228" TEXT="aber Vorsicht!">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1772213431584" ID="ID_419696826" MODIFIED="1772213447278" TEXT="die OutputSlot-Implementierung braucht ein TimeGrid">
+<node CREATED="1772213804758" ID="ID_796255111" MODIFIED="1772213812037" TEXT="und das ist ein Asset"/>
+<node CREATED="1772213813143" ID="ID_73389338" MODIFIED="1772213830590" TEXT="vmtl bekommen auch die Timings noch Bez&#xfc;ge zum Player"/>
+</node>
+<node CREATED="1772213449627" ID="ID_359458461" MODIFIED="1772213462180" TEXT="und BufferProvider testet man mit TestFrame">
+<node CREATED="1772213557833" ID="ID_869716070" MODIFIED="1772213573373" TEXT="oft in Kombination mit test-rand-ontology"/>
+<node CREATED="1772213579026" ID="ID_1443102065" MODIFIED="1772213601057" TEXT="rein bez&#xfc;glich der Abh&#xe4;ngigkeiten k&#xf6;nnten die in Vault umziehen"/>
+<node CREATED="1772213602389" ID="ID_448460336" MODIFIED="1772213610880" TEXT="aber inhaltlich erscheint das nicht korrekt">
+<node CREATED="1772213629100" ID="ID_1693911811" MODIFIED="1772213680408" TEXT="denn eine Ontology wird ganz sicher mit dem Model verkn&#xfc;pft">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      und zwar bez&#252;glich der Basis-Definitionen, da ja dann Elemente aus der Ontology in das Model abgebildet werden sollen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1772213697113" ID="ID_230462051" MODIFIED="1772213735286" TEXT="auch werden externe Libraries sicher Bez&#xfc;ge zum Builder bekommen"/>
+</node>
+</node>
+</node>
+<node CREATED="1772229938158" ID="ID_1979660164" MODIFIED="1772240083747" TEXT="Diskussion">
+<icon BUILTIN="forward"/>
+<node CREATED="1772229966112" ID="ID_1673093502" MODIFIED="1772229992176" TEXT="schwierige Lage &#x2014; keine klare Pr&#xe4;ferenz erkennbar">
+<node CREATED="1772229994560" ID="ID_343060971" MODIFIED="1772230061783" TEXT="meine Argumente drehen sich im Kreis">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      jedesmal wenn ich ein klares Argument finde, das in die eine oder andere Richtung deuten w&#252;rde, f&#228;llt mir wieder ein unbestreitbares Gegenargument ein ... und nach etwa 5 Schritten bin ich wieder am Ausgangspunkt. Klassisches &#187;tie&#171;.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1772230076911" ID="ID_306145803" MODIFIED="1772230101480" TEXT="dahinter steht: die Aufteilung in Layer ist (bisher) spekulativ">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1772230104747" ID="ID_84428623" MODIFIED="1772230569903" TEXT="die Struktur ist anfangs aus &#xbb;Convey&apos;s Law&#xab; entstanden">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Daran habe ich inzwischen keinerlei Zweifel mehr, nachdem ich mich etwas mit der Historie des Projekts befa&#223;t habe. Heute erscheint es mir sogar als ein &#187;Bilderbuch-Beispiel&#171;:
+    </p>
+    <ul>
+      <li>
+        wie viele Projekte, entstand auch dieses Projekt aus einem logischen Kurzschlu&#223;: weil es XYZ noch nicht gibt, und wir grade was in der Richtung machen wollen, machen wir XYZ.
+      </li>
+      <li>
+        in dieser ersten Phase ist aber keine Teambildung gelungen; andererseits haben alle Beteiligten die Fasade des Projekts aufrecht erhalten, denn man war sich (nur) darin einig, XYZ machen zu wollen
+      </li>
+      <li>
+        Nach dem ersten Jahr hatte sich das Projekt konstituiert, hatte einen Namen und eine sch&#246;n formulierte Vision
+      </li>
+      <li>
+        und es gab <b>drei</b>&#160;aktive Akteure &#10233; jede &#220;berlegung zur Architektur kristallisierte auf <b>drei</b>&#160;Layer, einfach weil dann jeder zu einem Layer ganz entschieden einen Standpunkt hatte
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1772230595886" ID="ID_518260779" MODIFIED="1772230628751" TEXT="Inzwischen bin ich einfach &#xfc;briggeblieben &#x2014; und meine Vision hat ausgegriffen"/>
+<node CREATED="1772230647800" ID="ID_803871254" MODIFIED="1772231205255" TEXT="die Trennung zwischen GUI und Core war immer auch zentraler Bestandteil meiner Planung">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Und zwar insofern ich das GUI von Anfang an komplett asynchron haben wollte. Joel Holdsworth war da sehr deutlich dagegen, und hat sein GUI klassich nach MVC aufgebaut; er hat letztlich das Projekt als aktiver Kontributor verlassen, als er diesen Aufbau abgeschlossen hatte, und mit dem &#187;Model&#171;-Part nicht weiter vorw&#228;rtsgekommen ist. Pro forma war er noch gut 1&#189; Jahre l&#228;nger dabei, und niemand hat das wirklich gemerkt, da&#223; sein Ansatz ausgereitzt war. Mehrere Jahre nachdem Joel offiziell ausgeschieden war (aus anderen Gr&#252;nden, neuer Job, Familie) habe ich das GUI einfach &#252;bernommen, und in meinem Sinn einmal &#187;komplett auf Links gedreht&#171;. Christian, auf der anderen Seite, wollte mit dem GUI nie etwas zu tun haben. Er hatte zwar immer mal wieder gewisse, irrlichternde Ideen zum GUI, wollte aber keinesfalls involviert werden, weil das Thema so &#252;berhaupt nicht sein Ding ist. Insofern pa&#223;te eine strikte Trennung vom GUI gut in Christian's Vorstellungen; mehr noch, es war sogar das Paradebeispiel f&#252;r sein Plug-in-Konzept.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1772231207595" ID="ID_1048636600" MODIFIED="1772232460197" TEXT="wohingegen die Trennung zwischen &#xbb;Proc&#xab; und &#xbb;Backend&#xab; lediglich Konflikte verhinderte.">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      In unserer (gemeinsam geteilten) Vorstellung hat das &#187;Backend&#171; eine Schnittstelle geboten, die aber stets im unklaren und nicht ausformulierten Zwischenraum bestand. <i>Konzeptionell</i>&#160;waren Christian und ich uns v&#246;llig einig (wir wollten einen Scheduler und &#187;Jobs&#171; die wie Coroutinen arbeiten, und wir wollten uns nicht auf eine Library festlegen). Aber eine konkrete Zusammenarbeit war nicht m&#246;glich, wir h&#228;tten zusammen keinen einzigen Nagel in die Wand bekommen, da wir in jeder praktischen und methodischen Hinsicht um 180&#176; unterschiedlich denken. Die einzige Vereinbarung war eine <font face="Monospaced"><b>struct Job</b></font>, die Christian mal schnell hingeschlenzt hatte, und die mir plausibel erschien, solange ich nicht damit h&#228;tte arbeiten m&#252;ssen.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1772232468124" ID="ID_1124277366" MODIFIED="1772232640705" TEXT="was ich praktisch baue und integriere, ist in Subsysteme gegliedert, nicht Layer">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das hat aber zur Konsequenz, da&#223; fast alles, was ich integriert habe, in den &#187;Steam-Layer&#171; gewandert ist. Bisher sind nur drei Komponenten f&#252;r &#187;Vault&#171; &#252;brig geblieben (die aber tats&#228;chlich noch nicht integriert sind): Scheduler, Block-Flow und Work-Force. Alle drei h&#228;ngen zusammen und wandern am Ende in den Player; und wenn ich nicht aufpasse, bin ich m&#246;glicherweise sogar gezwungen, auch den Code daf&#252;r hochzuziehen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1772232651347" ID="ID_1077294356" MODIFIED="1772233109415" TEXT="&#xbb;Vault&#xab; ist f&#xfc;r mich bisher nur negativ definiert">
+<linktarget COLOR="#49607a" DESTINATION="ID_1077294356" ENDARROW="Default" ENDINCLINATION="-49;3;" ID="Arrow_ID_1604013554" SOURCE="ID_429966136" STARTARROW="None" STARTINCLINATION="-18;-55;"/>
+<node CREATED="1772232685712" ID="ID_860441045" MODIFIED="1772232740548" TEXT="es ist irgendwie &#xbb;low-level&#xab; &#x2014; das hei&#xdf;t nicht mit der Dom&#xe4;ne verbunden"/>
+<node CREATED="1772232779036" ID="ID_648046474" MODIFIED="1772232792813" TEXT="es sind irgendwie Komponenten, die nicht in ein &#xd6;kosystem verwoben sind"/>
+<node CREATED="1772232811213" ID="ID_1066607586" MODIFIED="1772232861172" TEXT="es bezieht sich nicht auf Modellierung und Repr&#xe4;sentation (sondern ist &#xbb;technisch&#xab;)">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1772232897349" ID="ID_1074202630" MODIFIED="1772233156976" TEXT="es geht um Sachen mit wenig Gestaltunsspielraum, die extern determiniert sind"/>
+</node>
+</node>
+<node CREATED="1772232935687" ID="ID_429966136" MODIFIED="1772233118786" TEXT="sowohl BufferProvider, alsauch OutputSlot w&#xfc;rden in diese Kategorie passen">
+<arrowlink COLOR="#49607a" DESTINATION="ID_1077294356" ENDARROW="Default" ENDINCLINATION="-49;3;" ID="Arrow_ID_1604013554" STARTARROW="None" STARTINCLINATION="-18;-55;"/>
+<node CREATED="1772233042236" ID="ID_385886235" MODIFIED="1772233058623" TEXT="Aber: in beiden F&#xe4;llen gibt es noch keine echte Implementierung"/>
+<node CREATED="1772232984914" ID="ID_1864671529" MODIFIED="1772233070867" TEXT="und das Test/Entwicklungs-Setup ist relativ fest in &#xbb;Steam&#xab; verankert"/>
+</node>
+<node CREATED="1772235262029" ID="ID_97498482" MODIFIED="1772235280153" TEXT="Formal betrachtet: aufgrund der Gr&#xf6;&#xdf;e des Projekts ist die Aufteilung sinnvoll">
+<node CREATED="1772235389637" ID="ID_1121963343" MODIFIED="1772235401553" TEXT="es besteht die Gefahr einer &#xbb;Komponenten-Suppe&#xab;"/>
+<node CREATED="1772235752100" ID="ID_1563838135" MODIFIED="1772235775173" TEXT="es ist w&#xfc;nschenswert, den Bezug zur &#xbb;Dom&#xe4;ne&#xab; fokussiert zu halten"/>
+<node CREATED="1772235788313" ID="ID_1482046222" MODIFIED="1772235815041" TEXT="insofern ist eine Sammlung dom&#xe4;nen-ferner Services sinnvoll"/>
+<node CREATED="1772235849756" ID="ID_886425940" MODIFIED="1772235860371" TEXT="es ist zu erwarten, da&#xdf; es optionale Technologien gibt"/>
+</node>
+<node CREATED="1772235878240" ID="ID_1240545464" MODIFIED="1772235889614" TEXT="Meine Sorge: der &#xbb;Blob-Effekt&#xab;">
+<node CREATED="1772235891570" ID="ID_688886366" MODIFIED="1772235998183" TEXT="entweder &#xbb;Steam&#xab; saugt alles auf und &#xbb;Vault&#xab; wird zur Support-Library"/>
+<node CREATED="1772235904488" ID="ID_1591764249" MODIFIED="1772235947469" TEXT="oder alle Implementierung wandert in &#xbb;Vault&#xab; und &#xbb;Steam&#xab; ist nur noch &#xbb;Orchestrierung&#xab;"/>
+<node CREATED="1772236022862" ID="ID_1260059489" MODIFIED="1772236230056" TEXT="das Problem ist aktuell: fast alles ist irgendwo mit &#xbb;Modellierung&#xab; verwoben">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Beispiel Output-Slot: der baut auf einem Time-Grid auf. Nun ist die Basis-Technologie, der Quantiser zwar in der Support-Lib, aber die Client-Schnittstelle ist ein Meta-Asset, also &#187;Steam&#171;. Etwas &#228;hnliches zeichnet sich bereits bei der Test-Rand-Ontology ab: fr&#252;her oder sp&#228;ter werde ich ein Asset auf einer Schnittstelle darstellen m&#252;ssen.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1772236248388" ID="ID_994607670" MODIFIED="1772239797647" TEXT="Strategische Neuausrichtung">
+<arrowlink COLOR="#81273b" DESTINATION="ID_1464153344" ENDARROW="Default" ENDINCLINATION="-1706;352;" ID="Arrow_ID_1804262545" STARTARROW="None" STARTINCLINATION="-1409;123;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1772236271213" ID="ID_655461238" MODIFIED="1772236305628" TEXT="Layering im Sinn von Linkage trennen von der Domain-Orientierung"/>
+<node CREATED="1772236314654" ID="ID_16048059" MODIFIED="1772237270280" TEXT="Einsicht: ich habe immer noch nicht Christian&apos;s &#xbb;Micro-Kernel&#xab;-Modell &#xfc;berwunden">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Christian's Vision beruht auf der Idee der &#187;emergent structure&#171;. Er m&#246;chte durch magische Automatisierungs-Tools die geheimen Kr&#228;fte der Community entfalten (&quot;the community shall be the benevolent dictator&quot;). Er hat stets betont, da&#223; es eigentlich keiner Vision bedarf (gemeint ist, &#252;ber rein-technische Fragen hinausgehend, wie den Scheduler oder ob man Git verwendet). Denn die Community wird von selber die beste L&#246;sung finden, wenn man sie nur mit der richtigen Technologie &#187;enabled&#171;.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Dem entsprechend mu&#223; es jederzeit m&#246;glich sein, einfache Bausteine hinzuzuf&#252;gen, die <i>rein zuf&#228;llig genau das machen, was gebraucht wird.</i>&#160;Der Micro-Kernel ist reine Infrastruktur, und sollte stets neutral und dienend sein, und keinerlei Vorgaben und Festlegungen beinhalten.
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1772236360946" ID="ID_849132941" MODIFIED="1772236596805" TEXT="das ging davon aus, isolierte Komponenten durch eine &#xbb;Application-Core&#xab; zu orchestrieren">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Diesen Ansatz habe ich von Anfang an abgelehnt, weil er langfristig auf eine Lebensl&#252;ge hinausl&#228;uft: es kann keine &#187;agnostischen&#171; Komponenten geben.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1772236409864" ID="ID_1705120481" MODIFIED="1772236814239" TEXT="ich verhalte mich immer noch so, als m&#xfc;&#xdf;te ich Herrschaft &#xfc;ber diese &#xbb;Core&#xab; erlangen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Deshalb habe ich meine Komponenten sofort stark miteinander vernetzt und zu einem eigenen Zentrum ausgebaut, und zwar um die Dom&#228;ne gruppiert. Gleichzeitig habe ich die Entwicklung der &#187;Application-Core&#171; verz&#246;gert und hinausgeschoben, und durch Platzhalter ersetzt. Im Besonderen habe ich den Anspruch erhoben, da&#223; die Konfiguration in der Session liegen mu&#223;, was effektiv bedeutet, da&#223; die Session zur Applikation wird.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1772237396112" ID="ID_1795242351" MODIFIED="1772237414217" TEXT="Gegenentwurf: die Applikation wird Form und Bezugssystem">
+<node CREATED="1772237564917" ID="ID_1818262794" MODIFIED="1772237590190" TEXT="die Applikation grenzt ein, was Lumiera ist &#x2014; durch einen Vorentwurf"/>
+<node CREATED="1772237594162" ID="ID_1567177367" MODIFIED="1772237657456" TEXT="die Applikation setzt eine verbindliche Terminologie und das koordinierende Modell"/>
+<node CREATED="1772237703463" ID="ID_1602070379" MODIFIED="1772237726174" TEXT="die Applikation gibt Komponenten-Interfaces vor, die auf h&#xf6;heren Layern implementiert werden"/>
+<node CREATED="1772237727557" ID="ID_248729260" MODIFIED="1772237912192" TEXT="bez&#xfc;glich Linkage liegt die Applikation noch unter der &#xbb;Vault&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das tut sie auch bisher schon, gem&#228;&#223; Microkernel-Modell. Die Neuausrichtung besteht darin, da&#223; die Applikation nun Rahmen-Interfaces und Grundstrukturen vorgibt, die global g&#252;ltig sind. Das hei&#223;t, die Applikation &#252;bernimmt auch den Kern des Modells
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1772237938022" ID="ID_1664963625" MODIFIED="1772238046887" TEXT="Zyklische Abh&#xe4;ngigkeiten werden k&#xfc;nftig durch Abstraktion gel&#xf6;st">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das ist m&#246;glich, indem in jedem Zyklus derjenige Teil identifiziert wird, der Standards setzt. Dieser Teil wandert <b>ganz nach unten</b>, in die Applikation. Ich deute das als eine Spielart der <b>Inversion-of-Control</b>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1772301534722" ID="ID_1294300311" MODIFIED="1772301673526">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      In diesem Sinne: ich nenne die &#187;common services&#171; nun &#187;<b>vessel</b>&#171;
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Damit sei klargestellt, da&#223; es sich nicht um irgend eine &#187;Hausmeister-Abteilung&#171; handelt, sondern um das Gef&#228;&#223; oder Gef&#228;hrt, das das Ganze bildet und formt und die Grenze setzt.
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1772560485913" ID="ID_92248164" MODIFIED="1772560530785" TEXT="und das MAIN-Objekt hei&#xdf;t nun &#xbb;Voyage&#xab;">
+<arrowlink COLOR="#2e83e6" DESTINATION="ID_1419619818" ENDARROW="Default" ENDINCLINATION="291;21;" ID="Arrow_ID_464210861" STARTARROW="None" STARTINCLINATION="-19;125;"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1772239825077" ID="ID_1386677390" MODIFIED="1772240094386" TEXT="dadurch sind nun die Konflikte aufgel&#xf6;st">
+<icon BUILTIN="flag-pink"/>
+<node CREATED="1772239839483" ID="ID_1661215444" MODIFIED="1772239864658" TEXT="sofern eine Definition oder ein Interface zyklisch wird &#x27f6; wandert in die Applikation"/>
+<node CREATED="1772239867646" ID="ID_746993760" MODIFIED="1772239889464" TEXT="die Test-Rand-Ontology kann in &#xbb;Vault&#xab; verlegt werden"/>
+<node CREATED="1772239908767" ID="ID_286828282" MODIFIED="1772240004740">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Time-Grid (und Assets allgemein) bleiben <i>vorerst</i>&#160;in &#187;Steam&#171;
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...wiewohl es nun, nach dieser strategischen Neuordientierung, durchaus denkbar ist, da&#223; das Basis-Interface f&#252;r die vier Arten von Assets in die Applikation gezogen wird
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1772240015637" ID="ID_1048399889" MODIFIED="1772240053070" TEXT="BufferProvider, OutputSlot und Output-Management ziehen in die &#xbb;Vault&#xab;"/>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1772477958773" ID="ID_1191642200" MODIFIED="1772477969130" TEXT="Ausf&#xfc;hrung">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1772477970489" ID="ID_945262676" MODIFIED="1772478233574" TEXT="Vorbereitungen...">
+<icon BUILTIN="yes"/>
+<node CREATED="1772477978051" ID="ID_1145781733" MODIFIED="1772477987770" TEXT="&#xbb;Vessel&#xab; dokumentieren"/>
+<node CREATED="1772560467924" ID="ID_1419619818" MODIFIED="1772560522485" TEXT="und aus AppState wird eine Voyage">
+<linktarget COLOR="#2e83e6" DESTINATION="ID_1419619818" ENDARROW="Default" ENDINCLINATION="291;21;" ID="Arrow_ID_464210861" SOURCE="ID_92248164" STARTARROW="None" STARTINCLINATION="-19;125;"/>
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1772477989246" ID="ID_1526065242" MODIFIED="1772478019620">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Namespace <font face="Monospaced" color="#261bc5">lumiera</font>&#160;weitgehend eliminieren
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1772478028577" ID="ID_157891818" MODIFIED="1772478055118">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      wird fast &#252;berall durch <font face="Monospaced" color="#5b2929">vessel::</font>&#160;ersetzt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1772478063081" ID="ID_878817373" MODIFIED="1772580834117" TEXT="Ausnahmen...">
+<icon BUILTIN="info"/>
+<node CREATED="1772478070876" ID="ID_1569613946" MODIFIED="1772478075428" TEXT="lumiera::error"/>
+<node CREATED="1772489283485" ID="ID_1980110351" MODIFIED="1772489292586" TEXT="ohnehin obsolet">
+<node CREATED="1772489293764" ID="ID_432841852" MODIFIED="1772489298523" TEXT="frameid.hpp">
+<node CREATED="1772489702157" ID="ID_1813306423" MODIFIED="1772489707048" TEXT="auch rendergraph.hpp"/>
+</node>
+<node CREATED="1772489531766" ID="ID_570558035" MODIFIED="1772489536771" TEXT="wrapperptr.hpp"/>
+</node>
+<node BACKGROUND_COLOR="#dbc19e" COLOR="#a50125" CREATED="1772489388343" ID="ID_1991559912" MODIFIED="1772580823669" TEXT="unklar...">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1772489392992" ID="ID_1853852542" MODIFIED="1772489396389" TEXT="lifecycle">
+<node CREATED="1772500122542" ID="ID_1927130295" MODIFIED="1772500132134" TEXT="dieser ist leitend f&#xfc;r die beiden anderen"/>
+<node CREATED="1772501787505" ID="ID_12113433" MODIFIED="1772501804949" TEXT="wird aber auf Library-Ebene nur gebraucht von error-exception.cpp">
+<icon BUILTIN="idea"/>
+<node CREATED="1772501808908" ID="ID_1970326896" MODIFIED="1772501826099" TEXT="und zwar f&#xfc;r die &#xbb;unexpected exception&#xab;"/>
+<node CREATED="1772501841150" ID="ID_934996662" MODIFIED="1772501866243" TEXT="die h&#xe4;ngt mit der sonstigen Exeption-Hierarchie gar nicht zusammen"/>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1772500133338" ID="ID_1690903144" MODIFIED="1772502065979" TEXT="bez&#xfc;glich Linkage liegen diese Komponenten in der Library">
+<linktarget COLOR="#627b9a" DESTINATION="ID_1690903144" ENDARROW="Default" ENDINCLINATION="-60;51;" ID="Arrow_ID_1235244385" SOURCE="ID_1975442148" STARTARROW="None" STARTINCLINATION="95;33;"/>
+<linktarget COLOR="#798798" DESTINATION="ID_1690903144" ENDARROW="Default" ENDINCLINATION="-41;36;" ID="Arrow_ID_424674257" SOURCE="ID_1044105852" STARTARROW="None" STARTINCLINATION="138;-14;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1772500801969" ID="ID_589049015" MODIFIED="1772501323423" TEXT="das ist architektonisch falsch">
+<arrowlink COLOR="#ff0049" DESTINATION="ID_1685673155" ENDARROW="Default" ENDINCLINATION="11;-14;" ID="Arrow_ID_49223896" STARTARROW="Default" STARTINCLINATION="-13;16;"/>
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
+</node>
+<node CREATED="1772499763375" ID="ID_1975442148" MODIFIED="1772501942820" TEXT="logging">
+<arrowlink COLOR="#627b9a" DESTINATION="ID_1690903144" ENDARROW="Default" ENDINCLINATION="-60;51;" ID="Arrow_ID_1235244385" STARTARROW="None" STARTINCLINATION="95;33;"/>
+</node>
+<node CREATED="1772489466015" ID="ID_1044105852" MODIFIED="1772502065979" TEXT="nobug-init">
+<arrowlink COLOR="#798798" DESTINATION="ID_1690903144" ENDARROW="Default" ENDINCLINATION="-41;36;" ID="Arrow_ID_424674257" STARTARROW="None" STARTINCLINATION="138;-14;"/>
+<node CREATED="1772500882106" ID="ID_114576258" MODIFIED="1772501006587" TEXT="wird gebraucht von ...">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      und zwar, weil diese explizit bereits vor/nach main() verwendet werden
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1772500892574" ID="ID_1570431587" MODIFIED="1772502555225" TEXT="lib::Depend">
+<arrowlink DESTINATION="ID_778165341" ENDARROW="Default" ENDINCLINATION="1;-10;" ID="Arrow_ID_1509472237" STARTARROW="None" STARTINCLINATION="19;29;"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1772501242661" ID="ID_1685673155" MODIFIED="1772501323423" TEXT="das geh&#xf6;rt logischerweise auch nicht in die Library">
+<linktarget COLOR="#ff0049" DESTINATION="ID_1685673155" ENDARROW="Default" ENDINCLINATION="11;-14;" ID="Arrow_ID_49223896" SOURCE="ID_589049015" STARTARROW="Default" STARTINCLINATION="-13;16;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node COLOR="#435e98" CREATED="1772501328362" ID="ID_60490226" MODIFIED="1772501348714" TEXT="wird aber aus der Library auch praktisch nicht verwendet">
+<icon BUILTIN="idea"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1772501350414" ID="ID_539476440" MODIFIED="1772502354833" TEXT="nur ganz wenige Ausnahmen...">
+<icon BUILTIN="bell"/>
+<node CREATED="1772501534422" ID="ID_1254219004" MODIFIED="1772501536887" TEXT="die MultiFact"/>
+<node CREATED="1772501544728" ID="ID_682380801" MODIFIED="1772501551820" TEXT="test/tracking-allocator.cpp"/>
+<node CREATED="1772501556561" ID="ID_1698752722" MODIFIED="1772501563086" TEXT="visitor-dispatcher.hpp"/>
+</node>
+</node>
+</node>
+<node CREATED="1772500917202" ID="ID_778165341" MODIFIED="1772502555225" TEXT="lib::SyncClasslock">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_778165341" ENDARROW="Default" ENDINCLINATION="1;-10;" ID="Arrow_ID_1509472237" SOURCE="ID_1570431587" STARTARROW="None" STARTINCLINATION="19;29;"/>
+</node>
+<node CREATED="1772500910906" ID="ID_452612532" MODIFIED="1772501009186" TEXT="lib::Handle">
+<node COLOR="#435e98" CREATED="1772501011245" HGAP="42" ID="ID_551771457" MODIFIED="1772501220196" TEXT="das k&#xf6;nnte man vmtl.wegdiskutieren" VSHIFT="1">
+<font NAME="SansSerif" SIZE="11"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1772503464810" ID="ID_1499658866" MODIFIED="1772503479586" TEXT="&#xdc;berraschung: wird gar nicht (mehr) gebraucht?">
+<icon BUILTIN="help"/>
+<node CREATED="1772503485519" ID="ID_1516911789" LINK="https://issues.lumiera.org/ticket/1133" MODIFIED="1772503891550" TEXT="hier hat sich wohl mit dem ZombieCheck und #1133 die Begr&#xfc;ndung in &#xbb;Luft&#xab; aufgel&#xf6;st">
+<arrowlink COLOR="#fddcce" DESTINATION="ID_1997666438" ENDARROW="Default" ENDINCLINATION="263;3774;" ID="Arrow_ID_519178011" STARTARROW="Default" STARTINCLINATION="2312;70;"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1772507033399" ID="ID_753555895" LINK="https://issues.lumiera.org/ticket/1416" MODIFIED="1772507046892" TEXT="#1416 clarify lifecycle of the &#xbb;Vessel&#xab; ">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1772508264250" ID="ID_1439037571" MODIFIED="1772508277789" TEXT="habe dort mal alle diese Beobachtungen notiert">
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1772508622392" ID="ID_426690721" MODIFIED="1772508665323" TEXT="Vorsicht: Kommentar gespeichert?">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Grade Netzwerk-Wartungsarbeiten bei M-Net. Notfalls sollte der Kommentar in der Form-History sein
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
+<node CREATED="1772508279112" ID="ID_944148147" MODIFIED="1772508282540" TEXT="Idee...">
+<node CREATED="1772508288777" ID="ID_1204563226" MODIFIED="1772508296203" TEXT="ON_BASIC_INIT abschaffen"/>
+<node CREATED="1772508309618" ID="ID_1996440422" MODIFIED="1772508369554" TEXT="danach kl&#xe4;ren, ob wir nobug-init.hpp &#xfc;berhaupt noch brauchen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      man k&#246;nnte stattdessen einen expliziten Init-Hook schaffen, der aufgerufen wird
+    </p>
+    <ul>
+      <li>
+        aus Application-main
+      </li>
+      <li>
+        aus dem Testrunner
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1772508383911" ID="ID_878774523" MODIFIED="1772508407303" TEXT="au&#xdf;erdem: die DependFactory geh&#xf6;rt in das &#xbb;Vessel&#xab;"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1772549468277" ID="ID_1545099072" MODIFIED="1772580791798" TEXT="Beschlu&#xdf; &#x27f9; vorl&#xe4;ufig">
+<icon BUILTIN="yes"/>
+<node CREATED="1772549490174" ID="ID_1383915847" MODIFIED="1772573591754" TEXT="lifecylce vorl&#xe4;ufig justieren...">
+<node CREATED="1772573593075" ID="ID_486451919" MODIFIED="1772573723235" TEXT="zieht bereits vorgreifend um in namespace vessel">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1772573655495" ID="ID_394146189" MODIFIED="1772573708942" TEXT="das C-Interface kann schon zur&#xfc;ckgebaut werden">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1772573606127" ID="ID_1661549881" MODIFIED="1772573703899" TEXT="Haupt-header bleibt in include (wird aber C++)"/>
+<node CREATED="1772573633078" ID="ID_1563650615" MODIFIED="1772573640195" TEXT="Linkage bleibt auf Lib-Level"/>
+</node>
+<node CREATED="1772549509799" ID="ID_807829744" MODIFIED="1772549519654" TEXT="nobug-init zieht komplett in lib"/>
+<node CREATED="1772549522462" ID="ID_764060961" MODIFIED="1772549532143" TEXT="logging bleibt in include (ohne namespace)"/>
+</node>
+</node>
+<node CREATED="1772563670633" ID="ID_1093734074" MODIFIED="1772563675519" TEXT="vorerst mal...">
+<node CREATED="1772478880478" ID="ID_59586129" MODIFIED="1772563703113" TEXT="ui-protocol bleibt in src/include"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1772478483205" ID="ID_1230702980" MODIFIED="1772580850593" TEXT="Neuer Namespace f&#xfc;r Definitionen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Namens-Ideen?
+    </p>
+    <p>
+      <font color="#5d3c3c" face="Monospaced">vessel::glue</font>
+    </p>
+    <p>
+      <font color="#5d3c3c" face="Monospaced">vessel::link</font>
+    </p>
+    <p>
+      <font color="#5d3c3c" face="Monospaced">vessel::spine</font>
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#785e5b" DESTINATION="ID_1873381687" ENDARROW="Default" ENDINCLINATION="3167;618;" ID="Arrow_ID_790663035" STARTARROW="None" STARTINCLINATION="1144;89;"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1772478793204" HGAP="81" ID="ID_619773844" MODIFIED="1772478808375" TEXT="dorthin..." VSHIFT="22">
+<node COLOR="#435e98" CREATED="1772478866834" ID="ID_734568081" MODIFIED="1772580766202" TEXT="play-facade"/>
+<node COLOR="#435e98" CREATED="1772478904274" ID="ID_17815265" MODIFIED="1772580766201" TEXT="display-handles"/>
+<node COLOR="#435e98" CREATED="1772478952638" ID="ID_1163092497" MODIFIED="1772580766201" TEXT="interfaceproxy">
+<node COLOR="#5b280f" CREATED="1772489673080" ID="ID_433916871" MODIFIED="1772499295571" TEXT="Nein! das geht nach vessel::facade">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...ich betrachte die ganze Struktur einfach als @deprecated
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_cancel"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1772479125551" ID="ID_375030905" MODIFIED="1772580766201" TEXT="configfacade">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1772479133694" HGAP="75" ID="ID_1500554408" MODIFIED="1772485020495" TEXT="ganz klar &#x2014; das wird niemals das Interface sein" VSHIFT="1">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...denn das war seinerzeit ein Versucht, Christian's Config-System irgendwie in meine neue Applikations-Struktur einzubinden, ohne die anderen Vorst&#246;&#223;e von Christian bez&#252;glich einer reinen C-Applikation aufzugreifen. Dann (in der heutigen Form) ist es ein Platzhalter, der das Config-System ersetzt, da es niemals auch nur den Level elementarer Nutzbarkeit erreicht hat, weil man effektiv nur Defaults per Environment reinschie&#223;en kann. Tats&#228;chlich ist weit mehr der Funktionalit&#228;t implementiert (die Implementierungsarbeit hat damals Simeon V&#246;lkl gemacht, unter der Anleitung von Christian). Die elementare Integaration hat &#187;man&#171; damals den Clients &#252;berlassen (&#8222;alles ist schon mal im Prinzip implementiert, jetzt mu&#223; halt jeder sehen, was er konkret braucht&#8220;). Und der einzige &quot;Client&quot; (n&#228;mlich ich) hat einen kurzen Blick in den Header geworfen, und hatte dann keinen Bock, sich damit abzugeben. Was <i>definitiv nicht an Simeon lag,</i>&#160;sondern an dem Programmierstil, den Christian vorgegeben hat. Ich hab stattdessen einfach die Ini-Funktion von Boost-Program-Options aufgerufen, was Christian (wohl zurecht) als einen Affront aufgefa&#223;t hat. Der tiefere Grund war aber, da&#223; ich damals schon eine andere Richtung bez&#252;glich der Architektur eingeschlagen hatte, und gar nicht wollte, da&#223; sich so etwas wie ein globales Config-System noch &#8222;festsetzen&#8220; kann. Zun&#228;chst dachte ich, ich k&#246;nnte eines Tages den Entwurf von Christian &#252;bernehmen (vielleicht nach C++ portieren) und dann in das weiterentwickeln, was mir vorschwebt. Das ist aber nie passiert, weil ich die ganzen Jahre mit diesen Vorst&#228;llungen bez&#252;glich Placement und Regeln in der Session nicht vorangekommen bin
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Seit mehreren Jahren habe ich beschlossen, Christian's Config-System komplett zu verwerfen, und habe deshalb ein neues Design-Ticket angelegt (#1224). Der Code mu&#223; aber vorerst im Build bleiben, da der Plugin-Loader das Config-System nutzt, um nicht vorhandene Funktionalit&#228;t zu umgehen.
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#7b6062" DESTINATION="ID_987089008" ENDARROW="Default" ENDINCLINATION="2019;95;" ID="Arrow_ID_977227421" STARTARROW="None" STARTINCLINATION="19;-227;"/>
+<font NAME="SansSerif" SIZE="11"/>
+</node>
+</node>
+<node COLOR="#5b280f" CREATED="1772489109304" ID="ID_1365616474" MODIFIED="1772581462932" TEXT="subsys">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1772581467160" HGAP="32" ID="ID_1025670043" MODIFIED="1772581569060" TEXT="hab ich erst mal im ober-Namespace gelassen...." VSHIFT="6">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Prinzip des geringsten Widerstandes &#8212; da ist n&#228;mlich vieles im Gebrauch noch unklar, und ich m&#246;chte das Thema &#187;Subsystem&#171; ohnehin nochmal &#252;berarbeiten (aber nicht <i>heute</i>&#160;und auch nicht <i>morgen</i>)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="smiley-neutral"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1772478107573" ID="ID_1357120432" MODIFIED="1772586311743" TEXT="Quellcode verschieben">
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1772584502630" ID="ID_1373602101" MODIFIED="1772584531277" TEXT="&apos;appstate.hpp|cpp&apos; wird zu voyage.hpp|cpp"/>
+<node COLOR="#435e98" CREATED="1772583766047" ID="ID_176079965" MODIFIED="1772583842890" TEXT="die ausgew&#xe4;hlten Header in vessel/spine"/>
+<node COLOR="#435e98" CREATED="1772583781583" ID="ID_1229824452" MODIFIED="1772583842892" TEXT="alle commons/-Header nach vessel/"/>
+<node CREATED="1772583800265" ID="ID_1650650184" MODIFIED="1772583803598" TEXT="Tests">
+<node COLOR="#435e98" CREATED="1772583805073" ID="ID_199869515" MODIFIED="1772583842894" TEXT="das Test-Dir &quot;application&quot; wird zu &quot;vessel&quot;"/>
+<node COLOR="#435e98" CREATED="1772583822370" ID="ID_726348646" MODIFIED="1772583842896" TEXT="die advice-Tests wandern von Lib dort hinein"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1772478086218" ID="ID_1820330032" MODIFIED="1772586314894" TEXT="liblumieravessel erzeugen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1772584410672" ID="ID_724954594" MODIFIED="1772586281437" TEXT="benenne auch den SCons-Export um in &apos;vessel_lib&apos;"/>
+<node COLOR="#435e98" CREATED="1772584431134" ID="ID_1799024403" MODIFIED="1772586281437" TEXT="erzeuge nun &apos;liblumieravessel&apos;"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1772584443395" ID="ID_823311690" MODIFIED="1772586046084" TEXT="die vessel-tests sind derzeit weiterhin in libtest-core">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1772586048075" ID="ID_1363531045" MODIFIED="1772586171443" TEXT="das ist dem bekannten Problem mit den Include-Pfaden geschuldet">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...und ich habe daf&#252;r den Trick verwendet, da&#223; es ein dazwischenliegendes Verzeichnis gibt, eben core/ unter dem dann vessel/ , vault/, steam/ liegen. Damit sieht jeder Test wieder die korrekte Include-Folge.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1772586173748" ID="ID_1645396549" MODIFIED="1772586190260" TEXT="der eigentliche Grund f&#xfc;r dieses Problem sind die dedizierten Test-Hilfsmittel">
+<node CREATED="1772586193614" ID="ID_660763011" MODIFIED="1772586200070" TEXT="also dummy-objekte"/>
+<node CREATED="1772586201303" ID="ID_1882883975" MODIFIED="1772586210866" TEXT="oder der notorische test-helper.hpp"/>
+</node>
+<node CREATED="1772586215223" ID="ID_1431676379" MODIFIED="1772586251267" TEXT="die Tests selber includieren einander nicht und k&#xf6;nnten in beliebigen Verzeichnissen liegen">
+<icon BUILTIN="idea"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1772586254019" ID="ID_1101747989" MODIFIED="1772586272421" TEXT="Idee: man k&#xf6;nnte eine separate Sektion f&#xfc;r die Test-Hilfsmittel schaffen">
+<icon BUILTIN="hourglass"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1772586284367" ID="ID_815192684" LINK="#ID_389403594" MODIFIED="1772586333967" TEXT="Testsuite l&#xe4;uft wieder wie vorher (derzeit zwei gebrochene Tests)">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1772478162244" ID="ID_1203250191" MODIFIED="1772478221803" TEXT="Komponenten in Vault verschieben">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1772478171837" ID="ID_1324850294" MODIFIED="1772478177785" TEXT="BufferProvider"/>
+<node CREATED="1772478179206" ID="ID_1477396819" MODIFIED="1772478184401" TEXT="OutputSlot"/>
+<node CREATED="1772478185740" ID="ID_1860322406" MODIFIED="1772478190493" TEXT="OutputManagement"/>
+<node CREATED="1772478191761" ID="ID_1873337000" MODIFIED="1772478204026" TEXT="Test-Rand-Ontology"/>
+<node CREATED="1772478205914" ID="ID_231056050" MODIFIED="1772478212093" TEXT="TestFrame"/>
 </node>
 </node>
 </node>
@@ -114358,7 +115263,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1771537887611" ID="ID_776353376" MODIFIED="1771537900564" TEXT="die Dinge liegen aber einfacher hier">
 <node CREATED="1771538184366" ID="ID_1891391373" MODIFIED="1771538193795" TEXT="es mu&#xdf; kein Kontrakt gebrochen werden"/>
 <node CREATED="1771538195629" ID="ID_1155287670" MODIFIED="1771538207167" TEXT="man darf n&#xe4;mlich error::State werfen">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1771538290874" ID="ID_27406270" MODIFIED="1771538575391" TEXT="sollte die Fehlermeldung verbessern">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1771538290874" ID="ID_27406270" MODIFIED="1772501908170" TEXT="sollte die Fehlermeldung verbessern">
 <arrowlink COLOR="#744d8b" DESTINATION="ID_1595544111" ENDARROW="Default" ENDINCLINATION="628;31;" ID="Arrow_ID_378933605" STARTARROW="None" STARTINCLINATION="221;-288;"/>
 <icon BUILTIN="yes"/>
 </node>
@@ -115070,7 +115975,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1771788450555" ID="ID_262212223" MODIFIED="1771803693549" TEXT="also: fixen">
 <arrowlink COLOR="#a00e3d" DESTINATION="ID_1995924412" ENDARROW="Default" ENDINCLINATION="-2471;146;" ID="Arrow_ID_1407537427" STARTARROW="None" STARTINCLINATION="-636;133;"/>
 <icon BUILTIN="yes"/>
-<node COLOR="#984392" CREATED="1771803653032" HGAP="25" ID="ID_1693381367" MODIFIED="1771803688021" TEXT="( wieder mal erflogreich prokrastiniert )" VSHIFT="11">
+<node COLOR="#984392" CREATED="1771803653032" HGAP="25" ID="ID_1693381367" MODIFIED="1771803688021" TEXT="( wieder mal erfolgreich prokrastiniert )" VSHIFT="11">
 <font NAME="SansSerif" SIZE="8"/>
 </node>
 </node>
@@ -115150,7 +116055,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <linktarget COLOR="#3a6ae9" DESTINATION="ID_1934796966" ENDARROW="Default" ENDINCLINATION="-302;16;" ID="Arrow_ID_1829822624" SOURCE="ID_1603489467" STARTARROW="None" STARTINCLINATION="88;7;"/>
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1771196340916" ID="ID_1008519841" MODIFIED="1771201850494" TEXT="das srpicht auch daf&#xfc;r dies alles &#x27f6; Vault">
-<arrowlink COLOR="#2016a3" DESTINATION="ID_505136785" ENDARROW="Default" ENDINCLINATION="-51;243;" ID="Arrow_ID_407734805" STARTARROW="None" STARTINCLINATION="-49;3;"/>
+<arrowlink COLOR="#2016a3" DESTINATION="ID_505136785" ENDARROW="Default" ENDINCLINATION="-51;243;" ID="Arrow_ID_407734805" STARTARROW="None" STARTINCLINATION="-315;21;"/>
 <icon BUILTIN="yes"/>
 </node>
 </node>
@@ -168619,7 +169524,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 </node>
 </node>
-<node CREATED="1664630921300" FOLDED="true" HGAP="183" ID="ID_1033335255" MODIFIED="1770408007155" TEXT="Dokumentation" VSHIFT="40">
+<node CREATED="1664630921300" FOLDED="true" HGAP="183" ID="ID_1033335255" MODIFIED="1772477229919" TEXT="Dokumentation" VSHIFT="40">
 <edge COLOR="#815b70"/>
 <cloud COLOR="#d7c3a8"/>
 <font NAME="SansSerif" SIZE="12"/>
@@ -168790,7 +169695,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1664630997672" FOLDED="true" ID="ID_237099051" MODIFIED="1764550949090" STYLE="bubble" TEXT="mitf&#xfc;hren" VSHIFT="-8">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1664630997672" FOLDED="true" ID="ID_237099051" MODIFIED="1772477229941" STYLE="bubble" TEXT="mitf&#xfc;hren" VSHIFT="-8">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -168867,7 +169772,9 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1698172411954" ID="ID_1558596731" MODIFIED="1698172528830" TEXT="fragw&#xfc;rdige Entscheidungen kennzeichnen">
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1698172656660" ID="ID_1707252412" MODIFIED="1698172656660" TEXT="Distributed Development Framework"/>
-<node CREATED="1698173627465" ID="ID_510133323" MODIFIED="1698173636930" TEXT="Config System Draft"/>
+<node CREATED="1698173627465" ID="ID_510133323" MODIFIED="1772480577010" TEXT="Config System Draft">
+<arrowlink COLOR="#940119" DESTINATION="ID_205034475" ENDARROW="Default" ENDINCLINATION="347;0;" ID="Arrow_ID_982426165" STARTARROW="None" STARTINCLINATION="399;54;"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1698172530866" ID="ID_1104963418" MODIFIED="1698172543633" TEXT="zus&#xe4;tzliche Kategorie: &#xbb;obsolete&#xab;">
 <icon BUILTIN="flag-pink"/>
@@ -168979,7 +169886,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 </node>
 <node CREATED="1664631471329" ID="ID_1395212182" MODIFIED="1664631559117" TEXT="Technical">
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1698170277259" FOLDED="true" ID="ID_800254076" MODIFIED="1698184383476" TEXT="Vault">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1698170277259" FOLDED="true" ID="ID_800254076" MODIFIED="1772480101579" TEXT="Vault">
 <icon BUILTIN="bell"/>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1698170303291" ID="ID_1001821609" MODIFIED="1698170316232" TEXT="Scheduler">
 <icon BUILTIN="clanbomber"/>
@@ -168992,9 +169899,36 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1698173836465" ID="ID_1042892141" MODIFIED="1698173844663" TEXT="Config Loader">
 <icon BUILTIN="stop-sign"/>
-<node CREATED="1698173846842" ID="ID_164165293" MODIFIED="1698173857352" TEXT="das ist ein &#xbb;draft&#xab;"/>
-<node CREATED="1698173858072" ID="ID_9681986" MODIFIED="1698173867195" TEXT="er wurde nie weitergef&#xfc;hrt"/>
-<node CREATED="1698173867807" ID="ID_205034475" MODIFIED="1698173874138" TEXT="ich m&#xf6;chte in eine andere Richtung gehen"/>
+<node CREATED="1698173846842" ID="ID_164165293" MODIFIED="1772480659743" TEXT="das ist ein &#xbb;draft&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ist zwar &#8222;im Prinzip alles implementiert&#8220; &#8212; kann aber nicht einmal ein Textfile laden, sondern nur einzelne Settings aus dem Environment abgreifen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1698173858072" ID="ID_9681986" MODIFIED="1772481327083" TEXT="er wurde nie weitergef&#xfc;hrt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      F&#252;r mich im R&#252;ckblick schwer zu durchschauen, warum &#8212; historisch liegt da eine erhebliche Zeitspanne dazwischen: die Implementierungsarbeit hat Simeon V&#246;lkl gemacht, unter der Anleitung von Christian, im Herbst 2008 (also im 1. Jahr des Projekts). Kurz vorher hatten Christian und ich uns zum ersten mal pers&#246;nlich getroffen, und es schien (zumindest mir), als w&#228;ren die Risse gekittet und f&#252;r die Kontroversen ein tragf&#228;higer Kompromi&#223; gefunden. Kurz darauf, und dann nochmal im Herbst 2009 hat Cristian einen Vorsto&#223; gestartet bez&#252;glich Application-Bootstrap. Allerdings sind dann <b>zwei Jahre vergangen</b>, wenn ich der Notiz im ConfigLoader-RfC trauen kann (die sich auf Metadaten von meinen Fotos st&#252;tzt). Denn im August 2011 hatten Christian und ich das entscheidende Gespr&#228;ch, im Schlo&#223;wald von Karlsruhe. Oberfl&#228;chlich ging es dabei um den Config-Loader, aber zwischen den Zeilen hat das effektiv klargestellt, da&#223; Christian in Lumiera nicht &#187;landen&#171; kann. Insofern ist es sehr plausibel, da&#223; Christian danach keinerlei substantiellen Beitrag mehr gemacht hat (au&#223;er ein paar sehr n&#252;tzlichen Vorschl&#228;gen).
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Bleibt also die interessante Frage: warum wurde das Config-System nicht im ersten Jahr, September 2008 bereits zur Einsatzreife gebracht. Das w&#228;re locker m&#246;glich gewesen. Aber Christian hat es nicht gemacht. Ich hab es <i>nat&#252;rlich</i>&#160;nicht gemacht (denn ich hatte damals ein ungutes Bauchgef&#252;hl, und es war nicht mein Thema). Allerdings h&#228;tte ich damals (dessen bin ich mir ziemlich sicher) dieses Config-System durchaus toleriert und versucht, es zu nutzen und zu integrieren. Erst in den folgenden Jahren habe ich in Architektur-Fragen klarer gesehen.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1698173867807" ID="ID_205034475" MODIFIED="1772481437510" TEXT="ich m&#xf6;chte in eine andere Richtung gehen">
+<arrowlink COLOR="#702aab" DESTINATION="ID_1957806588" ENDARROW="Default" ENDINCLINATION="-3501;209;" ID="Arrow_ID_267163801" STARTARROW="None" STARTINCLINATION="-1284;85;"/>
+<linktarget COLOR="#940119" DESTINATION="ID_205034475" ENDARROW="Default" ENDINCLINATION="347;0;" ID="Arrow_ID_982426165" SOURCE="ID_510133323" STARTARROW="None" STARTINCLINATION="399;54;"/>
+</node>
 <node COLOR="#338800" CREATED="1698173877046" ID="ID_111961244" MODIFIED="1698184333391" TEXT="Beschlu&#xdf;: in RfC umwandeln">
 <icon BUILTIN="yes"/>
 </node>
@@ -169092,7 +170026,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1757604114432" ID="ID_1381131051" MODIFIED="1757604124602" TEXT="Methodik der Softwareentwicklung">
 <node BACKGROUND_COLOR="#bae1a4" COLOR="#338800" CREATED="1759014578674" FOLDED="true" ID="ID_1555146086" MODIFIED="1762479183678" TEXT="Abhandlung: Flexibilit&#xe4;t und Erweiterbarkeit">
 <linktarget COLOR="#403fbb" DESTINATION="ID_1555146086" ENDARROW="Default" ENDINCLINATION="180;484;" ID="Arrow_ID_892680715" SOURCE="ID_1161778090" STARTARROW="None" STARTINCLINATION="376;23;"/>
-<linktarget COLOR="#363cde" DESTINATION="ID_1555146086" ENDARROW="Default" ENDINCLINATION="107;1207;" ID="Arrow_ID_501903819" SOURCE="ID_919379881" STARTARROW="None" STARTINCLINATION="-773;31;"/>
+<linktarget COLOR="#363cde" DESTINATION="ID_1555146086" ENDARROW="Default" ENDINCLINATION="107;1207;" ID="Arrow_ID_501903819" SOURCE="ID_919379881" STARTARROW="None" STARTINCLINATION="-512;20;"/>
 <linktarget COLOR="#262fc3" DESTINATION="ID_1555146086" ENDARROW="Default" ENDINCLINATION="-43;308;" ID="Arrow_ID_1308723569" SOURCE="ID_255830875" STARTARROW="None" STARTINCLINATION="406;33;"/>
 <linktarget COLOR="#403fbb" DESTINATION="ID_1555146086" ENDARROW="Default" ENDINCLINATION="180;484;" ID="Arrow_ID_848521794" SOURCE="ID_531427945" STARTARROW="None" STARTINCLINATION="403;23;"/>
 <icon BUILTIN="button_ok"/>
@@ -172954,7 +173888,7 @@ that situation will improve in forseeable future.</pre>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fefc4e" COLOR="#351d75" CREATED="1762375239204" FOLDED="true" ID="ID_731380800" MODIFIED="1764550854380" TEXT="das war nun eine tiefgreifende (und aufw&#xfc;hlende) Auseinandersetzung">
+<node BACKGROUND_COLOR="#fefc4e" COLOR="#351d75" CREATED="1762375239204" FOLDED="true" ID="ID_731380800" MODIFIED="1772477249735" TEXT="das war nun eine tiefgreifende (und aufw&#xfc;hlende) Auseinandersetzung">
 <linktarget COLOR="#faffa4" DESTINATION="ID_731380800" ENDARROW="Default" ENDINCLINATION="-133;1594;" ID="Arrow_ID_1848618151" SOURCE="ID_1622857737" STARTARROW="None" STARTINCLINATION="-1505;150;"/>
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="idea"/>
@@ -172968,8 +173902,9 @@ that situation will improve in forseeable future.</pre>
 <node COLOR="#338800" CREATED="1762375287002" ID="ID_141975533" MODIFIED="1762379295195" TEXT="ausf&#xfc;hrliche Materialsammlung angelegt">
 <icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#434598" CREATED="1762375304968" ID="ID_919379881" MODIFIED="1762379312334" TEXT="habe den Archtektur-Konflikt auf eine andere Ebene gehoben">
-<arrowlink COLOR="#363cde" DESTINATION="ID_1555146086" ENDARROW="Default" ENDINCLINATION="107;1207;" ID="Arrow_ID_501903819" STARTARROW="None" STARTINCLINATION="-773;31;"/>
+<node COLOR="#434598" CREATED="1762375304968" ID="ID_919379881" MODIFIED="1772477602486" TEXT="habe den Archtektur-Konflikt auf eine andere Ebene gehoben">
+<arrowlink COLOR="#363cde" DESTINATION="ID_1555146086" ENDARROW="Default" ENDINCLINATION="107;1207;" ID="Arrow_ID_501903819" STARTARROW="None" STARTINCLINATION="-512;20;"/>
+<arrowlink COLOR="#4633d8" DESTINATION="ID_405219834" ENDARROW="Default" ENDINCLINATION="-6787;-263;" ID="Arrow_ID_205172039" STARTARROW="None" STARTINCLINATION="-3603;-163;"/>
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1762377689369" ID="ID_1401124883" MODIFIED="1762378137196" TEXT="Einsicht: dahinter steht eine Spielart des Liberalismus">
@@ -177440,7 +178375,7 @@ that situation will improve in forseeable future.</pre>
 </node>
 </node>
 <node CREATED="1757556789012" ID="ID_1679887573" MODIFIED="1757556801417" TEXT="Frage ist : will man das?">
-<node CREATED="1757556803165" ID="ID_300918604" MODIFIED="1757556816666" TEXT="aktuell verweist nur ein Link  aus einem RfC von Christian darauf"/>
+<node CREATED="1757556803165" ID="ID_300918604" MODIFIED="1757556816666" TEXT="aktuell verweist nur ein Link aus einem RfC von Christian darauf"/>
 <node CREATED="1757556817283" ID="ID_1572984729" MODIFIED="1757556878828" TEXT="selbst ich selber hatte diese Seiten vergessen">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -177631,7 +178566,7 @@ that situation will improve in forseeable future.</pre>
     </p>
   </body>
 </html></richcontent>
-<linktarget COLOR="#d4256f" DESTINATION="ID_392921566" ENDARROW="Default" ENDINCLINATION="-14;61;" ID="Arrow_ID_1219481799" SOURCE="ID_344670682" STARTARROW="None" STARTINCLINATION="-162;-8;"/>
+<linktarget COLOR="#d4256f" DESTINATION="ID_392921566" ENDARROW="Default" ENDINCLINATION="33;71;" ID="Arrow_ID_1219481799" SOURCE="ID_344670682" STARTARROW="None" STARTINCLINATION="-98;-66;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="smiley-oh"/>
 <node COLOR="#742f4d" CREATED="1762374513273" ID="ID_183538635" MODIFIED="1762374567894" STYLE="fork" TEXT="hab mich mehr als einen Monat nur mit diesen Fragen besch&#xe4;ftigt">
@@ -178208,7 +179143,7 @@ that situation will improve in forseeable future.</pre>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#470f69" CREATED="1758075279919" ID="ID_1177386217" MODIFIED="1758487008786" TEXT="einige der initialen Diskussionen und Entscheidungen">
 <icon BUILTIN="messagebox_warning"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1762379570411" ID="ID_344670682" MODIFIED="1762379976663" TEXT="Folge &#x27f9; Ausernandersetzung mit dem Anfang des Projekts">
-<arrowlink COLOR="#d4256f" DESTINATION="ID_392921566" ENDARROW="Default" ENDINCLINATION="-14;61;" ID="Arrow_ID_1219481799" STARTARROW="None" STARTINCLINATION="-162;-8;"/>
+<arrowlink COLOR="#d4256f" DESTINATION="ID_392921566" ENDARROW="Default" ENDINCLINATION="33;71;" ID="Arrow_ID_1219481799" STARTARROW="None" STARTINCLINATION="-98;-66;"/>
 </node>
 </node>
 <node COLOR="#353379" CREATED="1758075296579" ID="ID_1436892672" MODIFIED="1762379961647" TEXT="hier sind seit L&#xe4;ngerem gewisse Klarstellungen angezeigt">

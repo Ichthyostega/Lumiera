@@ -32,7 +32,7 @@
 
 
 #include "include/gui-notification-facade.h"
-#include "common/instancehandle.hpp"
+#include "vessel/instancehandle.hpp"
 #include "stage/ctrl/bus-term.hpp"
 
 #include <memory>
@@ -77,9 +77,9 @@ namespace stage {
       
       /* === Interface Lifecycle === */
       
-      using ServiceInstanceHandle = lumiera::InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_GuiNotification, 0)
-                                                           , GuiNotification
-                                                           > ;
+      using ServiceInstanceHandle = vessel::InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_GuiNotification, 0)
+                                                          , GuiNotification
+                                                          > ;
       ServiceInstanceHandle serviceInstance_;
       
       

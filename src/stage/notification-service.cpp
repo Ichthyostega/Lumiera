@@ -57,7 +57,7 @@
 #include "lib/util.hpp"
 
 extern "C" {
-#include "common/interface-descriptor.h"
+#include "vessel/interface-descriptor.h"
 }
 
 #include <utility>

@@ -1,7 +1,7 @@
 Lumiera: The Inner Core
 =======================
 :Author: Lumiera_Core_Developers
-:Date: 2012 / 2025
+:Date: 2012 / 2026
 :toc:
 
 [abstract]
@@ -30,7 +30,7 @@ This three Layers are:
 
  The Steam Layer::
      Keeps the Session, generates the rendering graphs for sequences,
-     arranges what to do when and how.
+     prearranges elements and decides what to do when and how.
 
  The Vault Layer::
      Manages worker pools, schedules jobs, does the memory management for the
@@ -39,13 +39,11 @@ This three Layers are:
 
 The extra components are:
 
- Lumiera::
-     The main program itself, which starts all Subsystems and controls the
-     overall lifecycle.
-
- Common::
-     Vital components and common services which must be available for pulling up
-     any part of the system.
+ The Vessel::
+     This is the »backbone« of the application, it is rooted below the three
+     layers and encompasses everything. It defines the periphery, starts all
+     Subsystems, controls the overall lifecycle and provides vital services
+     which must be available for engaging any part of the system.
 
  Library::
      A lot of (largely) stateless helper functionality used throughout the code.
@@ -55,9 +53,9 @@ Coding Style
 ~~~~~~~~~~~~
 
 The Lumiera team agreed on using GNU coding style with slight adaptations.
-Generally speaking, we strive to keep the code base consistent and stick to
-widely accepted guidelines and best practices. See our separate
-link:{ldoc}/technical/code/codingGuidelines.html[Coding Guidelines] page.
+In general, we strive to maintain source code consistency and adhere to widely
+accepted guidelines and practices of good craftsmanship. See our separate
+link:{ldoc}/technical/code/CodingGuidelines.html[Coding Guidelines] page.
 
 
 
@@ -148,7 +146,7 @@ contained within the Session, which belongs to the _steam layer_ below.
 User interfaces are implemented as plug-ins and are pulled up on demand,
 they won't contain any relevant persistent state beyond presentation.
 
-_As of 2023, the one and only interface under active development is
+_As of 2026, the one and only interface under active development is
 the Lumiera GTK GUI,_ based on GTK-3 / gtkmm. The sources are in tree
 (directory 'src/stage') and it is integrated into the standard build and
 installation process. By default, running the 'lumiera' executable will
@@ -250,7 +248,7 @@ for each output channel is required.
 
 The player service
 ^^^^^^^^^^^^^^^^^^
-Client code accesses the player (subsystem) through the play-facade (`lumiera::Play`).
+Client code accesses the player (subsystem) through the play-facade (`Play`).
 The exposed service allows to _set up an output connection for playback or rendering,_
 resulting in a play-controller object.
 
@@ -285,11 +283,6 @@ performance critical.
 - the OutputSlot exposed by the output manager is responsible for accepting timed frame delivery
 
 
-
-
-Vault Layer
------------
-
 Engine Interface
 ~~~~~~~~~~~~~~~~
 While on itself just a thin interface and adaptation layer forwarding calls to
@@ -318,16 +311,21 @@ the job ticket acts as blueprint for the actual jobs to be enqueued
 with the _Scheduler._
 
 
+
+Vault Layer
+-----------
 Scheduler
 ~~~~~~~~~
 The Scheduler serves as the central hub in the implementation of the RenderEngine
 and coordinates the processing resources of the application. Its purpose is to
 invoke and control the dependency and time based execution of the _Render Jobs._
 
-Regarding architecture, the Scheduler is located in the Vault-Layer and running the Scheduler
-is equivalent to activating the »Vault Subsystem«. An EngineFaçade acts as entrance point,
-providing high-level render services to other parts of the application: render jobs can be
-activated under various timing and dependency constraints, which can be grouped
+As far as architecture is concerned, the Scheduler is located in the Vault-Layer and
+is a _passive service_ -- like most components in the vault it needs to be put into
+use by some coordinating and integrating facility. An EngineFaçade, itself located
+above, in the »Steam« layer, acts as entrance point, to provide the high-level
+render services to other parts of the application: render jobs can be activated
+under various timing and dependency constraints, which can be grouped 
 into three basic modes of control:
 
 Deadline::
@@ -362,6 +360,29 @@ The scheduler is able to observe and maintain dependencies between render jobs, 
 to break down an extended calculation into a chain of small steps.
 
 
+The Work Force
+~~~~~~~~~~~~~~
+Since the typical work job dimensions can be expected to lie in the range of _some milliseconds,_
+the Lumiera engine can adopt a statistical model of capacity distribution. This is notably
+different to an _operating system scheduler_ where the response times are measured in
+microseconds and the coordination of work approaches hardware limits. These observations
+lead to the (maybe slightly surprising approach) to rely on an _actively pulling_ work force
+combined with a _passive scheduling service._
+
+The _Work Force_ is a **pool of worker threads** with a size typically matching the nominal
+number of independent CPU cores in the system.  Spinning up the Work Force is equivalent to
+activating the »Vault Subsystem«. Deliberately, there is no dedicated ``engine'' or
+``manager'' thread. All workers participate in the coordination work on equal footing.
+An idle worker enters the (passive) scheduling code, and thereby performs management
+work up to the point where the next render job is determined. The worker then leaves
+the management realm and continues with performing this job. However, the scheduling
+code preloads each worker with some random sleep delay in order to distribute the
+``incidence'' of idle workers and to avoid contention. This way, the available
+computing capacity is distributed stochastically into that time window where
+demand is foreseeable, based on the next job's starting time, the currently
+dispatched jobs and the observed load factor.
+
+
 Resource Management
 ~~~~~~~~~~~~~~~~~~~
 
@@ -378,12 +399,12 @@ the system and current circumstances.
 
 
 
-Common Services
----------------
+Vessel: Common Services
+-----------------------
 
 Subsystem runner
 ~~~~~~~~~~~~~~~~
-Conceptually, the application is structured into layers. However, as actual runtime
+Conceptually, the application is structured into layers. However, as the actual runtime
 entities we rely on a small number of link:{ldoc}/design/architecture/Subsystems.html[Subsystems],
 which can be started and stopped and have well defined dependencies:
 
@@ -418,17 +439,14 @@ link:{ldoc}/design/architecture/Subsystems.html#_lifecycle[documentation]
 [small]#(likewise incomplete, but we're getting there, eventually [yellow-background]##2018##)#
 
 
-Plugin loader
-~~~~~~~~~~~~~
-_tbw_
 
 Advice framework
 ~~~~~~~~~~~~~~~~
 This is a ``whiteboard'' system, allowing implementation-level services to _publish_
 some piece of information as _advice_, while other parts of the system may pick up
 this advice just by a name token, without requiring a direct knowledge of the
-original _advisor._ The _Advice System_ is a singleton service maintaining a
-lookup and registration data structure. Individual _piece of advice_ elements
+original _advisor._ The _Advice System_ is a singleton service that maintains
+a lookup and registration data structure. Individual _piece of advice_ elements
 are stored _as value copy_. Publishing new advice requires locking, but accessing
 advice is lock-free (actually there needs to be a memory barrier ``somewhere'',
 otherwise the advice requesting client might not see new advice)
@@ -458,13 +476,27 @@ Library
 -------
 
 The Lumiera support library contains lots of helper functionality
-factored out from the internals and re-used. It is extended as we go.
+factored out from the internals and re-used. Some parts evolved into
+basic frameworks, that are used pervasively throughout the code base.
+
+ - link:{ldoc}/design/architecture/time/index.html[time and timecode]
+   (-> xref:_time[below])
+ - link:Dependencies.html[dependency and service handling]
+   (-> xref:_singletons_and_dependencies[below]),
+ - the link:DiffFramework.html[»Diff framework«]
+ - property trees for link:{ldoc}/design/architecture/ETD.html[»External Tree Description«]
+   (-> xref:_external_tree_description[below])
+ - the link:iterator.html[iterator pipeline builders]
+   (-> xref:_iterators[below])
+ - various metaprogramming helpers (function signatures and generic sequences)
+ - string conversion, parsing and rendering functions
+
 
 practical shortcuts
 ~~~~~~~~~~~~~~~~~~~
-The header 'lib/util.hpp' defines some shortcuts heavily used throughout
-the code base. The idea is to highlight a common semantic meaning, while
-hide differentiation on the technical details.
+The header 'lib/util.hpp' defines some shortcuts that are used almost
+everywhere in the code base. The general idea is to highlight a common semantic meaning,
+while hide the differentiation related to the technical details.
 
 isnil:: indicate a _missing value_, irrespective if this is a NULL pointer,
   an empty string or an empty container. Several of our custom wrappers also
@@ -473,8 +505,29 @@ isnil:: indicate a _missing value_, irrespective if this is a NULL pointer,
 contains:: indicate that a value is _somehow contained_ within a collection,
   irrespective if this is a set, a map, a vector or string (substring test)
 
-sanitise:: make any string usable as identifier.
+limited:: to bracket some value.
 
+unConst:: a functional notation to cast away `const`, which is used typically
+  at the barrier between a type safe front-end and a low-level back-end,
+  and to avoid needless duplication of accessor code implementation
+  for sake of providing `const` information functions.
+
+isSameObject:: identity test based on bare memory location,
+  which is used a lot in assertions and unit tests
+
+string shorthands::
+  trim, startsWith, endsWith, boolVal, sanitise (turn arbitrary string into an identifier)
+
+
+Literals and Symbols
+~~~~~~~~~~~~~~~~~~~~
+Besides the well-known C++ strings (and `string_view`), Lumiera introduces
+two marker types for string tokens
+
+Literal:: a C-string literal directly given in the Source code
+
+Symbol:: an _interned_ token stored in a Symbol table, so that its
+         address hash can be used as unique identity
 
 
 Locking
@@ -891,6 +944,17 @@ objects and invoking operations has zero overhead, while copying
 and assignment incur the cost of an additional virtual call,
 assuming the target objects cooperate by mixing in a
 copy management interface.
+
+.uninitialised storage
+A cornerstone of the C++ language is the deterministic and reliable invocation
+of constructors and destructors. However, when building low-level storage schemes,
+a frequent requirement is to cover the precise storage of an object collection,
+_without_ actually invoking any constructor or destructor. The `UninitialisedStorage`
+template is a building block to support this task. It is parametrised with a type
+and an element count, and provides a force-casted array-like access to the storage cells.
+This can be used either to placement-construct some elements on-demand, or to ``project''
+an object-like view over existing data in the storage.
+
 
 
 Unique Identifiers

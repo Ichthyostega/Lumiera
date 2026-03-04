@@ -33,7 +33,7 @@
 #include "lib/idi/entry-id.hpp"
 
 
-namespace lumiera {
+namespace vessel {
 namespace query {
   class DefsManager;
 }}
@@ -59,7 +59,7 @@ namespace session {
      */
     class Root : public Meta
       {
-        lumiera::query::DefsManager& defaults_;
+        vessel::query::DefsManager& defaults_;
         
         ///////////TODO: timespan fields here or already in class Meta??
         ///////////TODO: any idea about the purpose of root's "timespan"??  ///////TICKET #448
@@ -73,7 +73,7 @@ namespace session {
         virtual bool isValid()  const;
         
       public:
-        Root (lumiera::query::DefsManager&);
+        Root (vessel::query::DefsManager&);
         
         static lib::idi::EntryID<Root> getID();
         static lib::idi::EntryID<Root> getAssetID();

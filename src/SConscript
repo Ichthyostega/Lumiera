@@ -12,16 +12,16 @@ Import('env icons config')
 # define the source file/dirs comprising each artifact to be built.
 
 lLib   = env.SharedLibrary('lumierasupport', srcSubtree('lib'),                             install=True)
-lApp   = env.SharedLibrary('lumieracommon',  srcSubtree('common'), addLibs=lLib,            install=True)
-lVault = env.SharedLibrary('lumieravault',   srcSubtree('vault'),  addLibs=lLib+lApp,       install=True)
-lSteam = env.SharedLibrary('lumierasteam',   srcSubtree('steam'),  addLibs=lLib+lApp+lVault,install=True)
+lApp   = env.SharedLibrary('lumieravessel',  srcSubtree('vessel'),addLibs=lLib,             install=True)
+lVault = env.SharedLibrary('lumieravault',   srcSubtree('vault'), addLibs=lLib+lApp,        install=True)
+lSteam = env.SharedLibrary('lumierasteam',   srcSubtree('steam'), addLibs=lLib+lApp+lVault, install=True)
 
             # in reverse dependency order
 core        = lSteam+lVault+lApp+lLib    # used to build the core application
-app_lib     = lApp+lLib                  # use to link against the platform
-core_lib    = core                       # use to link against the core application
-vault_lib   = lVault+app_lib             # use to link against the low-level backend
 support_lib = lLib                       # use to link against the support lib only
+vessel_lib  = lApp+support_lib           # use to link against the application-framework
+vault_lib   = lVault+vessel_lib          # use to link against the low-level backend
+core_lib    = lSteam+vault_lib           # use to link against the core application
 
 lumiera = ( env.Program('lumiera', ['lumiera/main.cpp'] + core, install=True)
           + config
@@ -49,4 +49,4 @@ gui       = ( guimodule
             )
 
 
-Export('lumiera core core_lib app_lib vault_lib support_lib plugins envGtk guimodule gui')
+Export('lumiera core core_lib vessel_lib vault_lib support_lib plugins envGtk guimodule gui')

@@ -21,14 +21,14 @@
 #include "lib/format-cout.hpp"
 #include "lib/depend.hpp"
 
-#include "common/query/query-resolver.hpp"
+#include "vessel/query/query-resolver.hpp"
 
 #include <string>
 
 
 
-namespace lumiera {
-namespace test{
+namespace vessel {
+namespace test {
   
   using lib::test::showSizeof;
   using std::string;
@@ -215,4 +215,4 @@ namespace test{
   LAUNCHER (QueryResolver_test, "unit session");
   
   
-}} // namespace lumiera::test
+}} // namespace vessel::test

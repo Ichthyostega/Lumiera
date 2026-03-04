@@ -34,7 +34,7 @@
 #include "steam/asset/procpatt.hpp"
 #include "steam/asset/pipe.hpp"
 #include "lib/query-util.hpp"
-#include "common/query.hpp"
+#include "vessel/query.hpp"
 
 #include "include/logging.h"
 #include "lib/symbol.hpp"

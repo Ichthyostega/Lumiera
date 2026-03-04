@@ -25,7 +25,7 @@
 #include "steam/mobject/session.hpp"
 #include "steam/mobject/session/session-impl.hpp"
 #include "steam/mobject/session/sess-manager-impl.hpp"
-//#include "common/query/defs-manager.hpp"
+//#include "vessel/query/defs-manager.hpp"
 
 #include "lib/symbol.hpp"
 #include "lib/depend.hpp"

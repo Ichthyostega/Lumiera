@@ -205,6 +205,7 @@ apologies for that."
                                 "|stage::model"
                                 "|stage::ctrl"
                                 "|lumiera::"
+                                "|vessel::"
                                 , regex::ECMAScript | regex::optimize};
     
     static regex lolong    {"long long"

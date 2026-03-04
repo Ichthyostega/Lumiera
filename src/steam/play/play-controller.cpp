@@ -15,18 +15,17 @@
 /** @file play-controller.cpp
  ** Implementation of the control- / management frontend(s) exposed
  ** to clients for talking to an ongoing PlayProcess. This includes
- ** the implementation of lumiera::Play::Controller, exposed directly
+ ** the implementation of vessel::spine::Play::Controller, exposed directly
  ** from the Player facade interface. Besides that primary control
  ** interface, this translation unit also contains the implementation
  ** for several extended play controllers targeted at special usage
  ** situations
  **
- ** @see lumiera::DummyPlayer
  ** @see stage::PlaybackController usage example
  */
 
 
-#include "steam/play/play-controller.hpp"
+#include "vessel/spine/play-facade.hpp"
 #include "steam/play/play-process.hpp"
 #include "lib/time/timevalue.hpp"
 
@@ -34,7 +33,8 @@
 //#include <memory>
 //#include <functional>
 
-namespace lumiera {
+namespace vessel {
+namespace spine {
   
   using lib::time::Time;
   using lib::time::Duration;
@@ -191,14 +191,14 @@ namespace lumiera {
 
   
   
-}
+}}// namespace vessel::spine
 
 
 namespace steam{
 namespace play{
   
 //    using std::string;
-//    using lumiera::Subsys;
+//    using vessel::Subsys;
 //    using std::bind;
     
     

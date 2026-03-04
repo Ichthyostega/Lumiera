@@ -27,7 +27,7 @@
 #include "steam/asset/struct.hpp"
 #include "steam/asset/procpatt.hpp"
 #include "steam/streamtype.hpp"
-#include "common/query.hpp"
+#include "vessel/query.hpp"
 
 #include <string>
 
@@ -36,7 +36,7 @@
 namespace steam {
 namespace asset {
   
-  using lumiera::Query;
+  using vessel::Query;
   using std::string;
   
   class Pipe;

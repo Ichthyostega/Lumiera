@@ -44,7 +44,7 @@
 #include "steam/play/output-manager.hpp"
 #include "steam/asset/timeline.hpp"
 #include "steam/asset/pipe.hpp"
-#include "common/query.hpp"
+#include "vessel/query.hpp"
 
 #include "lib/iter-source.hpp"
 #include "lib/nocopy.hpp"
@@ -87,7 +87,7 @@ namespace test {
   using mobject::ModelPort;
   using fixture::ModelPortRegistry;
   using util::contains;
-  using lumiera::Query;
+  using vessel::Query;
   
   
   using PID = asset::ID<Pipe>;

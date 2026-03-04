@@ -1,41 +1,70 @@
 Library documentation
 =====================
 
-//Menu: label Support Lib
 
-Alongside with the core Lumiera Application, we're also creating several *Libraries*. +
-This section holds pages with in-depth technical documentation regarding those. Please don't
-expect a coherent or complete coverage for the time being -- library functionality is typically
-``discovered'' while in the middle of the implementation, then factored out, reused and remoulded
-over time.
+Alongside with the core Lumiera Application, and as part of ongoing development work,
+a lot of *Library code* is written. Many of this happens on occasion. Library solutions
+are frequently ``discovered'', while in the middle of the implementation, driven by the
+desire to re-use some code structure that was built just recently and in a similar way.
+
+
+Support Library
+---------------
+Over time, a huge and growing number of generic building blocks has been collected.
+Hoever, not all parts of this collection are equally well maintained and presentable.
+It happened time and again that some pattern extracted into the library turned out
+to be rather some kind or ephemeral habit -- maybe even a bad habit in hindsight --
+and turned into a dead-end eventually. Furthermore, a lot of our library code has
+been superseded by very similar features of newer language standards.footnote:[
+  It seems like developers working on similar problems tend to have similar ideas
+  to improve productivity. Unfortunately, the solutions resulting from this convergence
+  of ideas have a tendency not to ``converge'' so well in practical terms.
+  For example, Lumiera had a tuple type a long time before a mature tuple implementation
+  was available in the Boost libraries, yet in the end, we could retrofit most of our
+  tuple-handling library. However, other cases did not play out so well: we evolved
+  the idea of ``iterators'' to become a lazy processing pipeline, but unfortunately
+  our design leans more into the direction of functional programming and is much
+  more expressive and powerful as abbreviation than the »Range-TS« from C++20.
+]
+The entrance barrier for something to be added to our _Support Library_ is rather low:
+
+- extracting it as a library function _must make the client code clearer_
+- it must be possible to describe its purpose and its usage in _generic terms_ --
+  without referring to data types and definitions from our domain models.
+- it must be _essentially stateless_ and self-contained
+- it must be easy to document with an unit-test.
+
+Over time, parts of the Support Library have evolved into some kind of a framework:
+Notably the link:{ldoc}/design/architecture/time/index.html[time and timecode] handling,
+our link:Dependencies.html[dependency and service handling],
+the link:DiffFramework.html[»Diff framework«], together with the recursive property trees
+used for link:{ldoc}/design/architecture/ETD.html[»External Tree Description«], the
+link:iterator.html[iterator pipeline builders], the metaprogramming helpers for transforming
+function signatures and generic sequences, and our collection of string conversion, parsing
+and rendering functions. These all turned into distinguishing traits of the Lumiera code base.
+
+The link:{ldoc}/technical/overview.html#_library[»Library« section of the »Overview« document]
+contains a long list of short descriptions for relevant features of the Support Library.
+
+
+.how to crack nuts...
+[NOTE]
+In the how-to section, there is a page with a loose collection of
+link:{ldoc}/technical/howto/crackNuts.html[successful solution patterns],
+many of which rely on unique features of our Support Lib.
+
 
 Interface Library
 -----------------
 The Lumiera Application is designed deliberately in a way to be controllable by scripts. All of
 the Session, the models and the vault are fully operational without the GUI. Any significant
-functionality can be addressed through the primary Façade Interfaces.
+functionality shall be usable through the primary Façade Interfaces alone. Yet in order to create
+such an open and extensible application as envisioned, we also need to build up an _interface layer._
+Eventually, this should evolve into a binding library for using Lumiera -- however, none of this
+interface building work has been accomplished yet, as of 2026. We do not even have a complete
+picture how _event sourcing_ meshes together with our UI commands and the configuration rules.
 
-But, in order to make such an open and extensible application a reality, we need to build up
-an 'interface layer' -- provided as library for client code and script adapters to link against.
-This library allows to access the primary external interfaces and exposes everything needed to
-work with the specifics of the application.
-
-[,yellow]#TODO as of 1/2012:# _this is just a nebulous plan for now._ Nothing of the work required
-really to address facilities from the outside has been done. All we've managed to achieve is actually
-to use clean interfaces and decouple the parts of the application appropriately.
-
-- we still need to identify those core concepts which need to be exposed
+- we still need to identify those select core concepts which need to be exposed
 - we need to refactor the corresponding data types to resolve cross dependencies to the implementation
-- then we could think about moving those data types into an _official Lumiera interface_
-
-Support Library
----------------
-There is a huge collection of generic building blocks, re-used more or less frequently.
-The're written in a generic way, but in accordance to the rest of the source base, relying only
-on the general error handling and logging framework used within Lumiera. (Some facilities may depend
-on other parts of the Application; this can be qualified as a bug -- please complain when you've found
-something of that sort).
-
-
-
+- only then we could think about moving those data types into an _official Lumiera interface_
 

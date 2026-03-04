@@ -27,7 +27,7 @@
 #include "steam/mobject/session/testclip.hpp"
 #include "steam/mobject/mobject-ref.hpp"
 #include "steam/mobject/placement.hpp"
-#include "common/query.hpp"
+#include "vessel/query.hpp"
 
 #include <functional>
 #include <set>
@@ -51,7 +51,7 @@ namespace test    {
   using asset::PSequence;
   using asset::Sequence;
   
-  using lumiera::Query;
+  using vessel::Query;
   
   typedef MORef<session::Clip> RClip;
   typedef PlacementMO::ID PID;

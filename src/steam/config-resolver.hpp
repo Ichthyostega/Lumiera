@@ -25,7 +25,7 @@
  ** @note this is placeholder code using a preliminary/mock implementation... don't take this code too literal!
  ** @todo clarify the relation of config query and query-for-defaults   ///////////////TICKET #705
  ** 
- ** @see lumiera::Query
+ ** @see vessel::Query
  ** @see mobject::session::DefsManager
  ** @see asset::StructFactory
  ** @see fake-configrules.hpp currently used dummy-implementation
@@ -37,8 +37,8 @@
 #ifndef STEAM_CONFIG_RESOLVER
 #define STEAM_CONFIG_RESOLVER
 
-#include "common/query.hpp"
-#include "common/config-rules.hpp"
+#include "vessel/query.hpp"
+#include "vessel/config-rules.hpp"
 #include "lib/depend.hpp"
 
 // types for explicit specialisations....
@@ -73,7 +73,7 @@ namespace steam {
    * Configured as Singleton (with hidden Implementation class)
    */
   class ConfigResolver
-    : public lumiera::query::ConfigRules<InterfaceTypes>
+    : public vessel::query::ConfigRules<InterfaceTypes>
     {
   
     public:

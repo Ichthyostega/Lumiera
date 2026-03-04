@@ -93,7 +93,7 @@ namespace session {
       friend class lib::DependencyFactory<ScopeLocator>;
       
     private:
-      lumiera::QueryResolver const& theResolver();
+      vessel::QueryResolver const& theResolver();
     };
   
   

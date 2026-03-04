@@ -1,14 +1,30 @@
-Design Documents: Vault
-=======================
+Low-level Services
+==================
 
-What follows is a summary of Lumiera's *Data Handling Backend*
+Towards the _upper side_ of the Lumiera core, in »Steam Layer«,
+several components and subsystems work together to provide functionality
+that is close to the requirements of the _problem domain_ -- editing and
+rendering of media. The implementation of these features however requires
+a foundation of generic, technical services: Memory needs to be allocated,
+working buffers must be provided and managed, work tasks coordinated.
+It is hard to associate these responsibilities directly to
+some specific domain, other than just _data processing._
 
-This is the foundation layer responsible for any high performance or high volume
-data access. Within Lumiera, there are two main kinds of data handling:
+A common trait of all those special aspects of processing is that they
+require special care and attention to achieve the necessary level of
+performance, while they are _technical_ in nature and do not directly
+reflect and model structures of the real world.
+
+Data Handling
+-------------
+The task of editing video and processing media requires to read and write
+a significant amount of data, while using the capabilities of the hardware
+to the best degree possible. Lumiera thus needs a foundation layer for
+high volume data access; two kinds of data handling can be distinguished:
 
 * The Session and the object models manipulated through the GUI are kept in memory.
-  They are backed by a _storage backend,_ which provides database-like storage and
-  especially logging, replaying and ``Undo'' of all ongoing modifications..
+  They will be backed by a _storage backend,_ which provides database-like storage
+  and especially logging, and controlled execution of _mutating actions._
 * Media data is handled _frame wise_ -- prefetching data asynchronously.
 
 The goal is to optimize CPU utilization; large scale data IO will be performed

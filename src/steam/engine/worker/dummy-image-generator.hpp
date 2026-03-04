@@ -33,7 +33,7 @@
 
 
 #include "lib/error.hpp"
-#include "include/display-handles.hpp"
+#include "vessel/spine/display-handles.hpp"
 
 
 #include <array>
@@ -53,7 +53,7 @@ namespace node {
       static const uint H = 240;
       
       DummyImageGenerator(uint fps);
-      void configure (lumiera::DisplayerInput);
+      void configure (vessel::spine::DisplayerInput);
       
       
       /** generate the next frame and occupy the alternate buffer.

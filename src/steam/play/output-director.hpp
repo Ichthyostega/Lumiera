@@ -30,16 +30,17 @@
 #include "lib/depend.hpp"
 #include "lib/depend-inject.hpp"
 #include "steam/play/output-manager.hpp"
-#include "common/subsys.hpp"
+#include "vessel/subsys.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/sync.hpp"
 
 #include <memory>
 
 
-namespace lumiera {
+namespace vessel {
+namespace spine {
   class Play;
-}
+}}
 namespace steam {
 namespace play {
   
@@ -61,8 +62,8 @@ namespace play {
     : util::NonCopyable
     , public lib::Sync<>
     {
-      using SigTerm = lumiera::Subsys::SigTerm;
-      using PlayServiceHandle = lib::DependInject<lumiera::Play>::ServiceInstance<PlayService>;
+      using SigTerm = vessel::Subsys::SigTerm;
+      using PlayServiceHandle = lib::DependInject<vessel::spine::Play>::ServiceInstance<PlayService>;
       
       PlayServiceHandle player_;
       ///////TODO more components and connections to manage here...

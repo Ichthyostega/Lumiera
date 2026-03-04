@@ -51,7 +51,7 @@ Current Release
 [red]#Lumiera is not usable yet#.
 
 - A »Preview Release« was
-  https://git.lumiera.org/?p=LUMIERA;a=tag;h=refs/tags/v0.pre.04[published at Dec 2, 2025]
+  https://git.lumiera.org/gitweb?p=LUMIERA;a=tag;h=refs/tags/v0.pre.04[published at Dec 2, 2025]
 
 - link:/debian[DEB packages]
   were built for »Trixie« and »Noble«

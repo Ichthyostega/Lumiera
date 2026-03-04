@@ -23,7 +23,7 @@
 #include "lib/time/quantiser.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/format-string.hpp"
-#include "common/advice.hpp"
+#include "vessel/advice.hpp"
 #include "lib/util.hpp"
 
 #include <string>
@@ -62,7 +62,7 @@ namespace meta {
   using lib::time::FixedFrameQuantiser;
   using std::dynamic_pointer_cast;
   
-  namespace advice = lumiera::advice;
+  namespace advice = vessel::advice;
   
   namespace {
     

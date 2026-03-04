@@ -67,7 +67,7 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 extern "C" {
-#include "common/interfaceregistry.h"
+#include "vessel/interfaceregistry.h"
 }
 
 #include "steam/control/steam-dispatcher.hpp"

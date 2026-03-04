@@ -20,8 +20,8 @@
 
 #include "include/logging.h"
 #include "lib/error.hpp"
-#include "common/appstate.hpp"
-#include "common/option.hpp"
+#include "vessel/voyage.hpp"
+#include "vessel/option.hpp"
 
 #include "vault/enginefacade.hpp"
 #include "vault/netnodefacade.hpp"
@@ -30,8 +30,8 @@
 #include "stage/guifacade.hpp"
 
 using lib::Cmdline;
-using lumiera::Subsys;
-using lumiera::AppState;
+using vessel::Subsys;
+using vessel::Voyage;
 
 namespace {
   Subsys& engine  = vault::EngineFacade::getDescriptor();
@@ -49,12 +49,12 @@ main (int argc, const char* argv[])
 {
   NOTICE (main, "*** Lumiera NLE for Linux ***");
   
-  AppState& application = AppState::instance();
+  Voyage& voyage = Voyage::access();
   try
     {
       Cmdline args (argc,argv);
-      lumiera::Option options (args);
-      application.init (options);
+      vessel::Option options (args);
+      voyage.init (options);
       
       netNode.depends (session);
       netNode.depends (engine);
@@ -65,21 +65,21 @@ main (int argc, const char* argv[])
       script.depends (session);
       script.depends (engine);
       
-      application.maybeStart (playOut);
-      application.maybeStart (netNode);
-      application.maybeStart (lumigui);
-      application.maybeStart (script);
+      voyage.maybeStart (playOut);
+      voyage.maybeStart (netNode);
+      voyage.maybeStart (lumigui);
+      voyage.maybeStart (script);
       
-      return application.maybeWait();
+      return voyage.maybeWait();
     }
   
   
   catch (lumiera::Error& problem)
     {
-      return application.abort (problem);
+      return voyage.abort (problem);
     }
   catch (...)
     {
-      return application.abort();
+      return voyage.abort();
     }
 }

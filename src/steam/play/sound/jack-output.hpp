@@ -15,8 +15,6 @@
  ** 
  ** @todo empty placeholder to underpin the claim: yes we will support Jack Audio!
  ** 
- ** @see lumiera::Display
- ** @see lumiera::DummyPlayer
  ** @see stage::PlaybackController usage example
  */
 
@@ -26,7 +24,7 @@
 
 
 //#include "include/display-facade.h"
-//#include "common/instancehandle.hpp"
+//#include "vessel/instancehandle.hpp"
 //#include "lib/singleton-ref.hpp"
 //#include "lib/scoped-ptrvect.hpp"
 //

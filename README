@@ -61,8 +61,8 @@ For building Lumiera, you'll need:
  * https://gtkmm.gnome.org/en/[gtkmm]
  * https://cgit.freedesktop.org/xorg/lib/libXv[libXv]
  * https://wiki.gnome.org/Projects/LibRsvg[lib rSVG]
- * https://git.lumiera.org/?p=debian/gdl;a=summary[lib GDL]
- * https://git.lumiera.org/?p=debian/gdlmm;a=summary[GDL-mm bindings]
+ * https://git.lumiera.org/gitweb?p=debian/gdl;a=summary[lib GDL]
+ * https://git.lumiera.org/gitweb?p=debian/gdlmm;a=summary[GDL-mm bindings]
 
 Further information:
 

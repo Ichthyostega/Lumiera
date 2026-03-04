@@ -65,7 +65,7 @@
 #include "steam/asset/timeline.hpp"
 #include "steam/asset/sequence.hpp"
 #include "steam/mobject/session/element-query.hpp"
-#include "common/query/defs-manager.hpp"
+#include "vessel/query/defs-manager.hpp"
 
 
 
@@ -87,7 +87,7 @@ namespace session {
   struct SessionInterfaceModules
     : util::NonCopyable
     {
-      lumiera::query::DefsManager defaultsManager_;
+      vessel::query::DefsManager defaultsManager_;
       mobject::session::ElementQuery elementQueryAPI_;
       TimelineTracker timelineRegistry_;
       SequenceTracker sequenceRegistry_;

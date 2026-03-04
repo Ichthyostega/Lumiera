@@ -21,13 +21,13 @@
 
 
 
-#include "common/interface-descriptor.h"
-#include "common/config-interface.h"
+#include "vessel/interface-descriptor.h"
+#include "vessel/config-interface.h"
 #include "lib/format-string.hpp"
 
 extern "C" {
-#include "common/interface.h"
-#include "common/interface-descriptor.h"
+#include "vessel/interface.h"
+#include "vessel/interface-descriptor.h"
 
 #include "interface/say-hello.h"
 }
