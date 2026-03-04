@@ -23,8 +23,8 @@ related to configuration, interdependency and lifecyle.
 
 The Vessel
 ----------
-So we treat all these concerns within a small and self contained structure, called the
-»**Vessel**«, and clearly set apart from all the other layers, services and subsystems.
+So we treat all these concerns within a focused and self contained structure, called
+the »**Vessel**«, and clearly set apart from all the other layers, services and subsystems.
 This dedicated _Application Realm_ is organised around the ``Application main object''.footnote:[
   This is the singleton `vessel::Voyage`, which is triggered by the `main` function
   of the Lumiera Application. The sourcecode is kept in a separate folder 'src/vessel'

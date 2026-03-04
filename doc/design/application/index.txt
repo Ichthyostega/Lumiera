@@ -22,7 +22,7 @@ called the »**Vessel**«:
 - it can be invoked from a `main()` function, with an argument parser
 - at source code level, it provides all the types and definitions
   required to express the _binding_ between components
-- _conceptually,_ all layers are encased in the application Vessel
+- _conceptually,_ all layers are encased in the _application vessel_
 - and while the Vessel can not just ``control'' the configuration of parts
   on upper layers, it has to bootstrap their ability to adapt to circumstances.
 

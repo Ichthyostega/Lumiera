@@ -116,7 +116,7 @@ hidden restrictions.
 However, the application strives for a certain degree of internal coherence. +
 Lumiera is not a set of Lego bricks allowing you to build ``just anything''
 (in a clumsy way) -- nor is it the next universal programming platform or
-application framework driven by finite high-level usage stories, where you
+application framework driven by pre-canned success stories, where you
 ``just push the button'' and magic does the rest.
 
 
