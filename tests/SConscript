@@ -14,7 +14,7 @@ from Buildhelper import createPlugins
 
 Import('env core_lib vessel_lib vault_lib test_support guimodule tools config')
 env = env.Clone()
-env.Append(CPPPATH='include')  # additional headers for tests
+env.Append(CPPPATH='.')  # tests/ rootdir (relevant for layer specific test support headers)
 
 # test classes of subcomponents linked in shared objects
 sharedTestLibs = {}
@@ -49,7 +49,6 @@ def testCases(env,dir):
         @note: linking scope chosen based on the name-prefix
     """
     env = env.Clone()
-    env.Append(CPPPATH=dir) # add subdir to Includepath
     if dir.startswith('stage'):
         # additional libs used from GUI tests
         env.mergeConf(['sigc++-2.0'])
@@ -77,7 +76,7 @@ envSuite.Append(LINKFLAGS='-Wl,--no-as-needed')
 
 
 # have to treat some subdirs separately.
-specialDirs = ['plugin','tool','include']
+specialDirs = ['plugin','tool']
 testSrcDirs = globRootdirs('*')
 
 

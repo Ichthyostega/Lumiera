@@ -115255,6 +115255,10 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1772752222480" ID="ID_1909429773" MODIFIED="1772752259275" TEXT="in das SConscript kommt nun fest &lt;Projekt&gt;/test als Include">
 <node CREATED="1772758759407" ID="ID_1272067307" MODIFIED="1772758773603" TEXT="k&#xf6;nnte schwierig zu realisieren sein"/>
 <node CREATED="1772758774765" ID="ID_1624766230" LINK="https://stackoverflow.com/q/9806573/444796" MODIFIED="1772758793881" TEXT="L&#xf6;sung aus Stackoverflow"/>
+<node COLOR="#5b280f" CREATED="1772852096430" ID="ID_195871190" MODIFIED="1772855163080" TEXT="Nein! das Problem war der Versuch, Christian&apos;s Plug-in-Konzept zu integrieren">
+<arrowlink COLOR="#924f56" DESTINATION="ID_1622012206" ENDARROW="Default" ENDINCLINATION="343;11;" ID="Arrow_ID_1997295819" STARTARROW="None" STARTINCLINATION="418;16;"/>
+<icon BUILTIN="button_cancel"/>
+</node>
 </node>
 <node CREATED="1772752266378" ID="ID_714310366" MODIFIED="1772752322365" TEXT="jeder Subfolder wird eine eigene Library und damit isoliert">
 <node CREATED="1772757152527" ID="ID_1027840867" MODIFIED="1772757163253" TEXT="&quot;core&quot; f&#xe4;llt weg"/>
@@ -115267,7 +115271,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1772752342869" ID="ID_1001543443" MODIFIED="1772758997681" TEXT="universelle Test-Komponenten m&#xfc;ssen in die Library">
 <icon BUILTIN="button_cancel"/>
 </node>
-<node CREATED="1772752406382" ID="ID_1284509593" MODIFIED="1772758994194" TEXT="alternativ: separate Test-Komponente">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#434898" CREATED="1772752406382" ID="ID_1284509593" MODIFIED="1772844484083" TEXT="alternativ: separate Test-Komponente">
 <icon BUILTIN="forward"/>
 <node CREATED="1772752442408" ID="ID_106774014" MODIFIED="1772752455213" TEXT="liegt neben oder &#xfc;ber &#xbb;Vessel&#xab;"/>
 <node CREATED="1772756612218" ID="ID_1748402106" MODIFIED="1772756624757" TEXT="eigener top-Namespace test::"/>
@@ -115289,9 +115293,155 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <font NAME="SansSerif" SIZE="11"/>
 </node>
 </node>
-<node CREATED="1772759056034" ID="ID_261195132" MODIFIED="1772759065317" TEXT="die Reorganisation der Test-Folder">
-<node CREATED="1772759066479" ID="ID_1069566157" MODIFIED="1772759072426" TEXT="ist eigentlich nicht schlimm"/>
-<node CREATED="1772759073470" ID="ID_1564401966" MODIFIED="1772759081236" TEXT="k&#xf6;nnte aber auf sp&#xe4;ter verschoben werden"/>
+<node COLOR="#435e98" CREATED="1772759056034" ID="ID_261195132" MODIFIED="1772855383402" TEXT="die Reorganisation der Test-Folder">
+<node COLOR="#5b280f" CREATED="1772850552219" ID="ID_567519443" MODIFIED="1772850581748" TEXT="tests/include pa&#xdf;t nicht in die Architektur">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1772850589211" ID="ID_830433280" MODIFIED="1772850683999" TEXT="das ist ein Rest von der obsoleten Plugin-Architektur">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...wo es gewollt war, da&#223; jedermann jederzeit irgendwelche &#187;Interfaces&#171; sich ausdenken kann, auf die dann jederzeit jedermann mit irgendwelchen Plug-ins zugreifen kann
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1772850686687" ID="ID_1286343909" MODIFIED="1772850706030" TEXT="merkt man auch daran da&#xdf; ich mehrere Spezial-Tweks im Buildsystem nur daf&#xfc;r brauche"/>
+<node CREATED="1772850722357" ID="ID_735273122" MODIFIED="1772850732218" TEXT="tats&#xe4;chlich haben wir nur (noch) ein Demo-Plugin"/>
+<node CREATED="1772850733599" ID="ID_178022834" MODIFIED="1772850835413" TEXT="daf&#xfc;r gen&#xfc;gt ein Demo-Interface in tests/vessel">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wo es konzeptionell auch hingeh&#246;ren w&#252;rde (wenn man erst mal zul&#228;&#223;t, da&#223; es Grenzen gibt, und eine Applikation, die diese umfa&#223;t)
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1772850843285" ID="ID_670641808" MODIFIED="1772851987780" TEXT="damit kollabiert insgesamt der Grund f&#xfc;r die komplexe Include-Struktur in den Tests">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ....was ich <i>wieder einmal als eine Best&#228;tigung meiner Intuition verbuche...</i>
+    </p>
+    <ul>
+      <li>
+        Christian hat seinerzeit meinen Ansatz f&#252;r SCons abgelehnt, weil man daf&#252;r eine globale Struktur in die Codebasis einziehen mu&#223;
+      </li>
+      <li>
+        Chrisitan hat gesagt, nur der Code selber sollte Ma&#223;stab f&#252;r alles sein
+      </li>
+      <li>
+        Christiian war ganz strikt dagegen, da&#223; man in source-Trees denkt; er wollte jederzeit immer alle M&#246;glichkeiten offen haben, und hat daf&#252;r in Kauf genommen, da&#223; jede Datei explizit in Autotools reingeh&#228;ngt werden mu&#223;, mit Flags und Includes wie man grade lustig ist
+      </li>
+      <li>
+        das pa&#223;t konzeptionell exakt auf seine Vorstellung f&#252;r die Plug-in-Architektur: er wollte diese (negativ) unbeschr&#228;nkte Freiheit f&#252;r Jedermann haben, und zwar, damit alles maximal einfach wird, und dadurch die gestaltenden Kr&#228;fte &quot;der community&quot; freigesetzt werden.
+      </li>
+      <li>
+        dem entsprechend war Christian's Basis-Implementierung f&#252;r die Plugins &#8222;ganz einfach&#8220; &#8212; und er hat sich strikt geweigert, sich auf irgendeinen meiner Vorschl&#228;ge f&#252;r Konventionen einzulassen. Seine Standard-Antwort war immer: &#8222;wenn Du es Dir kompliziert machen willst, dann ist das Dein Problem!&#8220;
+      </li>
+      <li>
+        wenn irgend etwas in seinen mehrfachen Anl&#228;ufen f&#252;r den Plug-in-Loader nicht aufgegangen ist, hat er stets den vorherigen Entwurf verworfen und etwas neues erfunden um das jeweilge Problem auszuhebeln.
+      </li>
+      <li>
+        das ist <b>aber keine Arroganz</b>, sondern es ist sein Ansatz, eine L&#246;sung schrittweise und inkrementell zu finden; dem entsprechend erwartet Chistian auch, da&#223; &#187;die Community&#171; genauso vorgeht und dadurch von selber eine gesunde Ordnung entsteht.
+      </li>
+    </ul>
+    <p>
+      
+    </p>
+    <p>
+      Ich dagegen kann in einem solchen Umfeld nicht arbeiten, weil ich strukturierend vorgehe, und Abstraktionen schaffen m&#246;chte, um die Spannweite meines Ausgriffs zu erweitern. Im Besonderen bin ich ganz am Anfang von dem Builder ausgegangen, und hab den als einen Compiler angelegt. Damit bin ich sehr schnell in eine schwierige Situation gekommen, in der ich systematisch, methodisch und langsam vorgehe, und einmal geregelde Sachen verbindlich sein m&#252;ssen. Das hei&#223;t, anders als Christian, arbeite ich explorativ auf der Ebene von Konzepten, nicht auf der Ebene von konkretem Code.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Ich wei&#223; noch, da&#223; ich erst mal einige Zeit Christian's Plugin-Loader gar nicht in den CSons-Build integriert hatte, und dann nur oberfl&#228;chlich. Nachdem dann von Christian nichts mehr kam, habe ich seinen Entwurf ganz unauff&#228;llig etwas refactort, und konnte ihn damit auf ein Schema bringen, das allerdings <i>ziemlich komplex und gar nicht intuitiv ist.</i>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Insofern k&#246;nnen siche beide Seiten jeweils in ihrem Urteil best&#228;tigt sehen.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1772852005446" ID="ID_1622012206" MODIFIED="1772855167667">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      nachdem das nun abger&#228;umt ist, wird die Umstellung des Test-Builds <b>tats&#228;chlich einfach</b>
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Die Hilfsfunktion hatte ich seinerzeit ja nur eingef&#252;hrt, weil ich mit einem Haufen von Unterverzeichnissen konfontiert war, die keiner &#252;bergreifenden Struktur folgen. Und dazu war die Erwartung gesetzt, da&#223; jede Menge weitere solche ad-hoc-Strukturen dazukommen. Ich wollte aber nicht f&#252;r jede neue Idee von Christian wieder ein neues separates SConscript pflegen, denn dann w&#228;re ich effektiv auf dem gleichen Level von Explizitiheit, den ich bei Autotools abgelehnt habe.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Zwar behalte ich jetzt die Hilfsfunktionen noch bei, denn sie tragen in der nun ausgearbeiteten Form zur Lesbarkeit bei, und unterstreichen die systematische Natur der Layer-Linkage. Aber die ich kann nun den Code so anordnen, da&#223; die Wurzel des Teilbaums (in der auch das SConscript liegt), <i>selber der Include-root wird.</i>
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#924f56" DESTINATION="ID_1622012206" ENDARROW="Default" ENDINCLINATION="343;11;" ID="Arrow_ID_1997295819" SOURCE="ID_195871190" STARTARROW="None" STARTINCLINATION="418;16;"/>
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#338800" CREATED="1772855044951" ID="ID_309694168" MODIFIED="1772855142650" TEXT="den media-access-mock &#x27f6; nach steam/test">
+<node CREATED="1772855070688" ID="ID_1495197730" MODIFIED="1772855078491" TEXT="das ist zwar ein obsoletes Konzept"/>
+<node CREATED="1772855079650" ID="ID_858506385" MODIFIED="1772855094135" TEXT="wird aber in vielen Tests &#xbb;der ersten Stunde&#xab; noch verwendet"/>
+<node CREATED="1772855095353" ID="ID_1542915091" MODIFIED="1772855134558" TEXT="sollte das als Platzhalter erhalten....">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...damit ich noch eine Chance habe, sp&#228;ter zu entziffern, was ich mir seinerzeit gedacht habe
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1772855174654" ID="ID_881133970" MODIFIED="1772855348683" TEXT="alle &#xbb;nicht ins schema passenden&#xab; Test-Hilfsmittel zun&#xe4;chst direkt in das jeweilige Paket">
+<icon BUILTIN="yes"/>
+<node CREATED="1772855213445" ID="ID_1705164748" MODIFIED="1772855231525" TEXT="das betrifft nur eine kleine Anzahl an Test-Hilfsmitteln"/>
+<node CREATED="1772855236178" ID="ID_1493611651" MODIFIED="1772855249996" TEXT="diese liegen allesamt bereits im korrekten Verzeichnis"/>
+<node CREATED="1772855251117" ID="ID_1183477361" MODIFIED="1772855272265" TEXT="mu&#xdf;ten aber bisher mit einem &#xbb;unpassenden&#xab; Pfad incluidert werden"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1772855273637" ID="ID_1017771028" MODIFIED="1772855298941" TEXT="Beschlu&#xdf;: erst mal kein separates Test-Pakte pro Layer anfangen">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1772855303715" ID="ID_557832082" MODIFIED="1772855334432" TEXT="das widerspricht der Namespace-Schachtelung"/>
+<node CREATED="1772855315204" ID="ID_1422239206" MODIFIED="1772855327771" TEXT="... und man kann es sp&#xe4;ter nach Bedarf immer noch machen"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#174956" COLOR="#8dfd49" CREATED="1772855351370" HGAP="13" ID="ID_325609871" MODIFIED="1772855380113" STYLE="bubble" TEXT="Build l&#xe4;uft wieder durch" VSHIFT="7">
+<edge COLOR="#61fe5b" STYLE="bezier" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="15"/>
+</node>
 </node>
 </node>
 </node>

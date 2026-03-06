@@ -19,7 +19,7 @@
 #include "test/run.hpp"
 #include "test/test-helper.hpp"
 //#include "stage/interact/view-spec-dsl.hpp"
-#include "test/test-element-access.hpp"
+#include "stage/test/test-element-access.hpp"
 #include "stage/interact/ui-coord.hpp"
 //#include "gen-node-location-query.hpp"
 #include "lib/depend-inject.hpp"

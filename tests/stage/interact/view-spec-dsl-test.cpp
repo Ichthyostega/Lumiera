@@ -21,8 +21,8 @@
 #include "stage/interact/ui-coord.hpp"
 #include "stage/interact/view-locator.hpp"
 #include "stage/interact/view-spec-dsl.hpp"
-#include "gen-node-location-query.hpp"
-#include "test/test-element-access.hpp"
+#include "stage/gen-node-location-query.hpp"
+#include "stage/test/test-element-access.hpp"
 #include "lib/depend-inject.hpp"
 #include "lib/format-cout.hpp"   ////////////////TODO only while this test is under development
 //#include "lib/idi/entry-id.hpp"

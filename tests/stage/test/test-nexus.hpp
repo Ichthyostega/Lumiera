@@ -41,7 +41,7 @@
 #include "stage/ctrl/bus-term.hpp"
 #include "stage/model/tangible.hpp"
 #include "stage/ctrl/state-manager.hpp"
-#include "test/placeholder-command.hpp"
+#include "stage/test/placeholder-command.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "test/event-log.hpp"
 

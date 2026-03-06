@@ -29,7 +29,8 @@ extern "C" {
 #include "vessel/interface.h"
 #include "vessel/interface-descriptor.h"
 
-#include "interface/say-hello.h"
+// Dummy/demonstration plugin-interface
+#include "vessel/say-hello.h"
 }
 
 #include <iostream>

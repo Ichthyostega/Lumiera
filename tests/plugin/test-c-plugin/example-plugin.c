@@ -24,7 +24,8 @@
 #include "vessel/interface-descriptor.h"
 #include "vessel/config-interface.h"
 
-#include "interface/say-hello.h"
+// Dummy/demonstration plugin-interface
+#include "vessel/say-hello.h"
 
 
 LUMIERA_PLUGIN_INTERFACEHANDLE;

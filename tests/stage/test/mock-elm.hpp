@@ -57,7 +57,7 @@
 #include "stage/model/tangible.hpp"
 #include "lib/diff/record.hpp"
 #include "lib/idi/genfunc.hpp"
-#include "test/test-nexus.hpp"
+#include "stage/test/test-nexus.hpp"
 #include "lib/diff/test-mutation-target.hpp"   ///////////TICKET #1009 -- extract the render(DataCap) function?
 #include "lib/format-cout.hpp"
 #include "lib/symbol.hpp"

@@ -38,7 +38,7 @@
 #include "lib/symbol.hpp"
 #include "lib/itertools.hpp"
 #include "test/event-log.hpp"
-#include "test/test-nexus.hpp"
+#include "stage/test/test-nexus.hpp"
 #include "steam/control/command.hpp"
 #include "stage/ctrl/nexus.hpp"
 #include "stage/ctrl/state-recorder.hpp"

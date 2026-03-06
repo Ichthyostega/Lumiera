@@ -20,7 +20,7 @@
 #include "test/test-helper.hpp"
 #include "stage/interact/ui-coord.hpp"
 #include "stage/interact/ui-coord-resolver.hpp"
-#include "gen-node-location-query.hpp"
+#include "stage/gen-node-location-query.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "lib/format-util.hpp"
 #include "lib/util.hpp"
