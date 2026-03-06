@@ -16,7 +16,7 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "lib/util-quant.hpp"
 #include "lib/util.hpp"
 

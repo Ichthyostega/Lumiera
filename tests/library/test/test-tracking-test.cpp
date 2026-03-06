@@ -16,22 +16,25 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
-#include "lib/test/tracking-dummy.hpp"
-#include "lib/test/tracking-allocator.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
+#include "test/tracking-dummy.hpp"
+#include "test/tracking-allocator.hpp"
 #include "lib/allocator-handle.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/format-util.hpp"
 
 #include <string>
+#include <utility>
 
+using std::move;
 using std::string;
 using util::toString;
 using util::join;
+using test::TrackingAllocator;
+using test::TrackingFactory;
 
 
-namespace lib {
 namespace test{
 namespace test{
   
@@ -213,10 +216,10 @@ namespace test{
           { // Test-2 : attach scoped-ownership-front-End
             log.event("Test-2");
             
-            allo::OwnUniqueAdapter<TrackingFactory> uniFab;
+            lib::allo::OwnUniqueAdapter<TrackingFactory> uniFab;
             CHECK (sizeof(uniFab) == sizeof(TrackingFactory));
             CHECK (sizeof(uniFab) == sizeof(std::shared_ptr<byte>));
-            CHECK (not allo::is_Stateless_v<decltype(uniFab)>);
+            CHECK (not lib::allo::is_Stateless_v<decltype(uniFab)>);
             
             CHECK (TrackingAllocator::use_count() == 1);
             CHECK (TrackingAllocator::numAlloc()  == 0);
@@ -416,5 +419,5 @@ namespace test{
   LAUNCHER (TestTracking_test, "unit common");
   
   
-}}} // namespace lib::test::test
+}} // namespace test::test
 

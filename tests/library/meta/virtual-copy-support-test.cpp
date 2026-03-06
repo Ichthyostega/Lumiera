@@ -17,9 +17,9 @@
 
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "lib/format-string.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/test-helper.hpp"
 #include "lib/meta/virtual-copy-support.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"

@@ -16,7 +16,7 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "steam/mobject/session.hpp"
 #include "steam/mobject/session/testclip.hpp"
 #include "steam/mobject/placement.hpp"

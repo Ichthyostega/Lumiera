@@ -16,7 +16,7 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "vault/gear/work-force.hpp"
 #include "lib/thread.hpp"
 #include "lib/sync.hpp"

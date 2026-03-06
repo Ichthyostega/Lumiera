@@ -16,7 +16,7 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "vault/mem/extent-family.hpp"
 #include "lib/iter-explorer.hpp"
 #include "lib/util.hpp"

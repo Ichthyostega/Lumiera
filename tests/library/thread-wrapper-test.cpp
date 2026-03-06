@@ -16,11 +16,11 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "lib/thread.hpp"
 #include "lib/iter-explorer.hpp"
 #include "lib/scoped-collection.hpp"
-#include "lib/test/microbenchmark.hpp"
+#include "test/microbenchmark.hpp"
 
 #include <atomic>
 #include <chrono>
@@ -129,7 +129,7 @@ namespace test{
                                       }
                                   };
             
-            double runTime = benchmarkTime (launchThreads, REPETITIONS);
+            double runTime = ::test::benchmarkTime (launchThreads, REPETITIONS);
             
             CHECK (checkSum == globalSum);           // sum of precomputed random numbers matches sum from threads
             CHECK (runTime < NUM_THREADS * 1000/2);  // random sleep time should be > 500ms on average

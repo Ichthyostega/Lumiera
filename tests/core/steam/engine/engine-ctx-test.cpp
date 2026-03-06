@@ -17,8 +17,8 @@
 
 
 #include "lib/error.hpp"
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "steam/engine/engine-ctx.hpp"
 #include "steam/engine/buffer-provider.hpp"
 //#include "steam/engine/engine-ctx-facilities.hpp" //////////TODO required?

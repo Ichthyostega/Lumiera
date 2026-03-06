@@ -22,11 +22,12 @@
 #include "lib/symbol.hpp"
 #include "lib/random-reseed.hpp"
 #include "lib/format-cout.hpp"
-#include "lib/test/suite.hpp"
-#include "lib/test/run.hpp"
 #include "lib/cmdline.hpp"
 #include "lib/random.hpp"
 #include "lib/util.hpp"
+
+#include "test/suite.hpp"
+#include "test/run.hpp"
 
 #include <boost/algorithm/string.hpp>
 #include <optional>

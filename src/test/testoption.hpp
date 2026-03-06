@@ -17,8 +17,8 @@
  */
 
 
-#ifndef TESTHELPER_TESTOPTION_H
-#define TESTHELPER_TESTOPTION_H
+#ifndef TESTSUPPORT_TESTOPTION_H
+#define TESTSUPPORT_TESTOPTION_H
 
 #include "lib/cmdline.hpp"
 #include "lib/nocopy.hpp"
@@ -74,4 +74,4 @@ namespace test {
   
   
 } // namespace test
-#endif
+#endif /*TESTSUPPORT_TESTOPTION_H*/

@@ -16,7 +16,7 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "steam/control/command-impl.hpp"
 #include "steam/control/command-registry.hpp"
 #include "steam/control/argument-erasure.hpp"

@@ -16,8 +16,8 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "steam/control/argument-tuple-accept.hpp"
 #include "lib/meta/tuple-helper.hpp"
 #include "lib/meta/function.hpp"
@@ -29,10 +29,9 @@
 
 namespace steam {
 namespace control {
-namespace test    {
   
-  using lib::test::showSizeof;
-  using lib::test::randTime;
+  using test::randTime;
+  using test::showSizeof;
   
   using lib::time::TimeVar;
   using std::function;
@@ -116,4 +115,4 @@ namespace test    {
   LAUNCHER (ArgumentTupleAccept_test, "unit controller");
   
   
-}}} // namespace steam::control::test
+}} // namespace steam::control

@@ -16,8 +16,8 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/file.hpp"
 #include "lib/util.hpp"
@@ -26,6 +26,7 @@
 
 
 using util::isnil;
+using test::ExpectString;
 
 namespace lib {
 namespace test {

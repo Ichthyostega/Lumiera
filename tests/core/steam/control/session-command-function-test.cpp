@@ -64,8 +64,8 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 extern "C" {
 #include "vessel/interfaceregistry.h"
 }
@@ -97,7 +97,7 @@ namespace test    {
   using std::chrono::microseconds;
   using namespace std::chrono_literals;
   using steam::control::SessionCommand;
-  using lib::test::randTime;
+  using ::test::randTime;
   using lib::diff::GenNode;
   using lib::diff::Rec;
   using lib::time::Time;

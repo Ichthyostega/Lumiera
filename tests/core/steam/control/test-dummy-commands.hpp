@@ -30,7 +30,7 @@
 #define COMMAND_TEST_DUMMY_COMMANDS_H
 
 #include "lib/error.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/test-helper.hpp"
 #include "steam/control/command-setup.hpp"
 
 #include <functional>

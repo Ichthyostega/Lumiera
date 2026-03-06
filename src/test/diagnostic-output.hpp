@@ -23,12 +23,12 @@
  */
 
 
-#ifndef LIB_TEST_DIAGNOSTIC_OUTPUT_H
-#define LIB_TEST_DIAGNOSTIC_OUTPUT_H
+#ifndef TEST_DIAGNOSTIC_OUTPUT_H
+#define TEST_DIAGNOSTIC_OUTPUT_H
 
 
 #include "lib/format-cout.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/test-helper.hpp"
 
 #include <boost/lexical_cast.hpp>
 #include <string>
@@ -36,10 +36,9 @@
 
 using std::string;
 
-namespace lib {
 namespace test{
   
-}} // namespace lib::test
+}// namespace test
 
 
 
@@ -51,11 +50,11 @@ namespace test{
  * using Lumiera's string conversion framework
  */
 #define SHOW_TYPE(_TY_) \
-    cout << "typeof( " << STRINGIFY(_TY_) << " )= " << lib::test::showType<_TY_>() <<endl;
+    cout << "typeof( " << STRINGIFY(_TY_) << " )= " << ::test::showType<_TY_>() <<endl;
 #define SHOW_EXPR(_XX_) \
     cout << "#--◆--# " << STRINGIFY(_XX_) << " ? = " << util::toString(_XX_) <<endl;
 #define SHOW_EXPL(_XX_) \
     cout << "#--◆--# " << STRINGIFY(_XX_) << " ? = " << boost::lexical_cast<string>(_XX_) <<endl;
 
 
-#endif /*LIB_TEST_DIAGNOSTIC_OUTPUT_H*/
+#endif /*TEST_DIAGNOSTIC_OUTPUT_H*/

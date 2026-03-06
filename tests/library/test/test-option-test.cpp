@@ -16,9 +16,9 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
-#include "lib/test/testoption.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
+#include "test/testoption.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 

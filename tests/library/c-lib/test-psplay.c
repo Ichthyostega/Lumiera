@@ -19,12 +19,12 @@
  */
 
 
+#include "test/test.h"
+#include "lib/psplay.h"
+
 #include <time.h>
 #include <stdlib.h>
 #include <nobug.h>
-
-#include "lib/psplay.h"
-#include "lib/test/test.h"
 
 struct testitem
 {

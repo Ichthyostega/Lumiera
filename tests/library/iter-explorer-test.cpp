@@ -41,8 +41,8 @@
 
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "lib/iter-adapter-stl.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"
@@ -62,18 +62,18 @@
 #include <set>
 
 
+using test::Test;
+using test::showType;
+using util::_Fmt;
+using util::isnil;
+using util::isSameObject;
+using lib::iter_stl::eachElm;
+using LERR_(ITER_EXHAUST);
+using std::vector;
+using std::string;
+
 namespace lib {
 namespace test{
-  
-  using ::Test;
-  using util::_Fmt;
-  using util::isnil;
-  using util::isSameObject;
-  using lib::iter_stl::eachElm;
-  using LERR_(ITER_EXHAUST);
-  using std::vector;
-  using std::string;
-  
   
   namespace { // test substrate: simple number sequence iterator
     
@@ -694,7 +694,7 @@ namespace test{
           CHECK(not ii.getRestElms());
           CHECK (materialise(ii.getGroupedElms()) == "23-22-21-20-19"_expect);
           
-          CHECK ( test::showType<decltype(*ii)>()== "array<uint, 5ul>&"_expect);
+          CHECK (showType<decltype(*ii)>()== "array<uint, 5ul>&"_expect);
           
           uint s = *(ii.getGroupedElms());
           for ( ; ii; ++ii)
@@ -1181,7 +1181,7 @@ namespace test{
                                .resultSum();
           
           using Res = decltype(accumulated);
-          CHECK (lib::test::showType<Res>()  == "int"_expect);
+          CHECK (showType<Res>()  == "int"_expect);
           
           auto expectedSum = [](auto N){ return N*(N+1) / 2; };
           CHECK (accumulated == expectedSum(29));
@@ -1224,7 +1224,7 @@ namespace test{
                                .effuse();
           
           using Res = decltype(solidified);
-          CHECK (lib::test::showType<Res>()  == "vector<double>"_expect);
+          CHECK (showType<Res>()  == "vector<double>"_expect);
           CHECK (util::join(solidified, "|") == "9.5|8.5|7.5|6.5|5.5|4.5|3.5|2.5|1.5|0.5"_expect);
         }
       

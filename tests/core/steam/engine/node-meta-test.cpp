@@ -16,12 +16,12 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "steam/engine/proc-node.hpp"
 #include "steam/engine/node-builder.hpp"
 #include "lib/format-util.hpp"
-#include "lib/test/test-helper.hpp"
-#include "lib/test/diagnostic-output.hpp"/////////////////TODO
+#include "test/test-helper.hpp"
+#include "test/diagnostic-output.hpp"/////////////////TODO
 
 #include <cmath>
 

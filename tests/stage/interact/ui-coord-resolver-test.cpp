@@ -16,8 +16,8 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "stage/interact/ui-coord.hpp"
 #include "stage/interact/ui-coord-resolver.hpp"
 #include "gen-node-location-query.hpp"

@@ -17,8 +17,8 @@
 
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/random.hpp"
 #include "lib/util.hpp"
@@ -33,23 +33,21 @@
 #include <vector>
 
 
+using test::Test;
+using test::randStr;
+using test::showSizeof;
+using util::isSameObject;
+
+using std::placeholders::_1;
+using std::ref;
+using std::shared_ptr;
+using std::vector;
+using std::string;
+
 
 namespace lib {
 namespace wrapper {
 namespace test{
-  
-  using ::Test;
-  using lib::test::randStr;
-  using lib::test::showSizeof;
-  using util::isSameObject;
-  
-  using std::placeholders::_1;
-  using std::ref;
-  using std::shared_ptr;
-  using std::vector;
-  using std::string;
-  
-  
   
   namespace { // Test helper: yet another ctor/dtor counting class
     

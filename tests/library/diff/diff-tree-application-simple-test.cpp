@@ -18,7 +18,7 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "lib/diff/mutation-message.hpp"
 #include "lib/diff/tree-diff-application.hpp"
 #include "lib/format-util.hpp"

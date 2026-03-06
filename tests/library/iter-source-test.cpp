@@ -17,8 +17,8 @@
 
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/util.hpp"
@@ -36,12 +36,11 @@
 namespace lib {
 namespace test{
   
-  using ::Test;
   using util::isnil;
   using boost::lexical_cast;
   using lib::time::TimeVar;
-  using lib::test::randStr;
-  using lib::test::randTime;
+  using ::test::randTime;
+  using ::test::randStr;
   using std::make_pair;
   using std::string;
   using std::list;

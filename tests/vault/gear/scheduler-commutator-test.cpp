@@ -16,10 +16,10 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "activity-detector.hpp"
+#include "test/microbenchmark.hpp"
 #include "vault/gear/scheduler-commutator.hpp"
-#include "lib/test/microbenchmark.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/thread.hpp"
@@ -28,7 +28,7 @@
 #include <chrono>
 
 using test::Test;
-using lib::test::threadBenchmark;
+using test::threadBenchmark;
 
 
 namespace vault{

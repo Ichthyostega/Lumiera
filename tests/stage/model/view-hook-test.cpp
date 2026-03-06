@@ -16,8 +16,8 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "stage/model/view-hook.hpp"
 #include "lib/scoped-collection.hpp"
 #include "lib/iter-explorer.hpp"

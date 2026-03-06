@@ -16,10 +16,10 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "lib/hetero-data.hpp"
 #include "lib/meta/trait.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/test-helper.hpp"
 #include "lib/uninitialised-storage.hpp"
 #include "lib/util.hpp"
 
@@ -30,6 +30,7 @@ namespace lib {
 namespace test{
   
   using std::string;
+  using ::test::showType;
   using meta::is_Subclass_v;
   using util::isSameObject;
   using util::isSameAdr;

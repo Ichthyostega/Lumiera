@@ -17,8 +17,8 @@
 
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "lib/lazy-init.hpp"
 #include "lib/meta/util.hpp"
 #include "lib/util.hpp"

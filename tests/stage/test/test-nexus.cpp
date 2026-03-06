@@ -37,8 +37,8 @@
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
 #include "lib/itertools.hpp"
+#include "test/event-log.hpp"
 #include "test/test-nexus.hpp"
-#include "lib/test/event-log.hpp"
 #include "steam/control/command.hpp"
 #include "stage/ctrl/nexus.hpp"
 #include "stage/ctrl/state-recorder.hpp"
@@ -63,13 +63,13 @@ using lib::diff::GenNode;
 using lib::diff::DataCap;
 using lib::diff::MutationMessage;
 using lib::idi::instanceTypeID;
-using lib::test::EventLog;
 using stage::ctrl::BusTerm;
 using stage::ctrl::StateManager;
 using stage::ctrl::StateRecorder;
 using steam::control::Command;
 using steam::control::CommandImpl;
 using steam::control::HandlingPattern;
+using test::EventLog;
 using util::_Fmt;
 
 namespace stage {
@@ -368,13 +368,13 @@ namespace test{
     return testNexus();
   }
   
-  lib::test::EventLog const&
+  ::test::EventLog const&
   Nexus::getLog()
   {
     return testNexus().getLog();
   }
   
-  lib::test::EventLog const&
+  ::test::EventLog const&
   Nexus::startNewLog()
   {
     return testNexus().getLog().clear();

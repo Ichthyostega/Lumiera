@@ -20,9 +20,9 @@
 
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "lib/format-cout.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/test-helper.hpp"
 #include "lib/util.hpp"
 
 #include "lib/depend.hpp"

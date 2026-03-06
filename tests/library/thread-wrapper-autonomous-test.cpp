@@ -16,14 +16,15 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/tracking-dummy.hpp"
+#include "test/run.hpp"
+#include "test/tracking-dummy.hpp"
 #include "lib/thread.hpp"
 
 #include <atomic>
 #include <chrono>
 
 using test::Test;
+using test::Dummy;
 using std::atomic_bool;
 using std::this_thread::sleep_for;
 using namespace std::chrono_literals;

@@ -28,8 +28,8 @@
  */
 
 
-#ifndef TESTHELPER_SUITE_H
-#define TESTHELPER_SUITE_H
+#ifndef TEST_SUITE_H
+#define TEST_SUITE_H
 
 #include <vector>
 #include <string>
@@ -75,4 +75,4 @@ namespace test {
   
   
 } // namespace test
-#endif
+#endif /*TEST_SUITE_H*/

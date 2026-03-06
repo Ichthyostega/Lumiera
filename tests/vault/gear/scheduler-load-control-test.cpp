@@ -16,7 +16,7 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "vault/gear/load-controller.hpp"
 #include "vault/real-clock.hpp"
 

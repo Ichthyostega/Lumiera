@@ -17,8 +17,8 @@
 
 
 #include "include/logging.h"
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 
 #include "steam/assetmanager.hpp"
 #include "steam/asset/media.hpp"
@@ -35,7 +35,7 @@
 using util::isnil;
 using std::string;
 using lib::time::FrameRate;
-using lib::test::randStr;
+using lib::randStr;
 
 
 namespace steam {

@@ -16,7 +16,7 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "lib/depend-inject.hpp"
 #include "steam/engine/engine-ctx.hpp"
 #include "steam/engine/proc-node.hpp"
@@ -29,8 +29,8 @@
 #include "steam/asset/meta/time-grid.hpp"
 #include "lib/several-builder.hpp"
 #include "lib/time/timecode.hpp"
-#include "lib/test/test-helper.hpp"
-#include "lib/test/diagnostic-output.hpp"/////////////////////TODO
+#include "test/test-helper.hpp"
+#include "test/diagnostic-output.hpp"/////////////////////TODO
 //#include "lib/util.hpp"
 
 
@@ -38,7 +38,7 @@ using lib::Several;
 using lib::makeSeveral;
 using lib::time::Time;
 using lib::time::FrameNr;
-using lib::test::showType;
+using test::showType;
 using std::make_tuple;
 using std::get;
 

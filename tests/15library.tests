@@ -91,7 +91,7 @@ END
 TEST "Diff: Generic recursive mutation with closure binding" TreeMutator_test <<END
 out-lit: |
 out-lit: |  »simpleAttributeBinding«
-out: concrete TreeMutator .+Builder<ChangeOperation<TreeMutator, test::TreeMutator_test::simpleAttributeBinding().+lambda\(string\).+> >
+out: concrete TreeMutator .+Builder<ChangeOperation<TreeMutator, TreeMutator_test::simpleAttributeBinding().+lambda\(string\).+> >
 out-lit: "data" closure received something that would be acceptable
 out-lit: localData changed to: that would be acceptable
 out-lit: |
@@ -355,7 +355,7 @@ END
 TEST "formatting by string template" FormatString_test <<END
 out-lit: --format-template--int=0012--double=+1.23--string=Lumiera  --
 out: 0x....+ _____+ .
-out-lit: «test::FormatString_test::Silent»
+out-lit: «FormatString_test::Silent»
 out-lit: __nix_
 out-lit: ____
 out-lit: __1__

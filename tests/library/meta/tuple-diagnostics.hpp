@@ -68,7 +68,7 @@ namespace test {
   
   template<tuple_like TUP>
   inline string
-  showType ()
+  renderSeq()           ///< @note specialisation of type-sequence printer for tuple-like
   {
     using TypeList    = RebindTupleTypes<TUP>::List;
     using DumpPrinter = InstantiateChained<TypeList, Printer, NullP>;

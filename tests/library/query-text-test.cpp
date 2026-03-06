@@ -17,7 +17,7 @@
 
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "lib/query-util.hpp"
 #include "lib/query-text.hpp"
 #include "lib/util.hpp"

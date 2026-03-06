@@ -16,9 +16,9 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "lib/hash-combine.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/test-helper.hpp"
 #include "steam/engine/engine-ctx.hpp"
 #include "steam/engine/node-builder.hpp"
 #include "steam/engine/test-rand-ontology.hpp"
@@ -33,7 +33,7 @@ using lib::izip;
 using std::array;
 using std::vector;
 using std::make_tuple;
-using lib::test::showType;
+using test::showType;
 
 
 namespace steam {
@@ -294,7 +294,7 @@ namespace test  {
           // generate a binding as processing-functor
           auto procFun = spec.makeFun();
           using Sig = lib::meta::_Fun<decltype(procFun)>::Sig;
-          CHECK (showType<Sig>() == "void (tuple<ulong, uint>, engine::test::TestFrame*)"_expect);
+          CHECK (showType<Sig>() == "void (tuple<ulong, uint>, engine::TestFrame*)"_expect);
 
           // Behaves identical to processing_generateFrame() — see above...
           size_t frameNr = defaultGen.u64();
@@ -373,7 +373,7 @@ namespace test  {
           // generate a binding as processing-functor
           auto procFun = spec.makeFun();
           using Sig = lib::meta::_Fun<decltype(procFun)>::Sig;
-          CHECK (showType<Sig>() == "void (ulong, engine::test::TestFrame const*, engine::test::TestFrame*)"_expect);
+          CHECK (showType<Sig>() == "void (ulong, engine::TestFrame const*, engine::TestFrame*)"_expect);
           
           // Results can be verified by ont::manipulateFrame() — see above
           size_t frameNr = defaultGen.u64();
@@ -447,8 +447,8 @@ namespace test  {
           // generate a binding as processing-functor
           auto procFun = spec.makeFun();
           using Sig = lib::meta::_Fun<decltype(procFun)>::Sig;
-          CHECK (showType<Sig>() == "void (double, array<engine::test::TestFrame const*, 2ul>, "
-                                                  "engine::test::TestFrame*)"_expect);  //^^/////////////////TICKET #1391 needlessly rendered as `long`
+          CHECK (showType<Sig>() == "void (double, array<engine::TestFrame const*, 2ul>, "
+                                                  "engine::TestFrame*)"_expect);  //^^/////////////////TICKET #1391 needlessly rendered as `long`
           size_t frameNr = defaultGen.u64();
           uint flavour   = defaultGen.u64();
           double mix     = defaultGen.uni();

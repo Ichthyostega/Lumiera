@@ -17,23 +17,22 @@
 
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
-#include "lib/util.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
+#include "test/tracking-dummy.hpp"
 
 #include "lib/scoped-ptrvect.hpp"
-#include "lib/test/tracking-dummy.hpp"
+#include "lib/util.hpp"
 
+
+using test::Dummy;
+using util::isnil;
+using lumiera::error::LUMIERA_ERROR_ITER_EXHAUST;
 
 namespace lib {
 namespace test{
   
-  using ::Test;
-  using util::isnil;
-  using lumiera::error::LUMIERA_ERROR_ITER_EXHAUST;
-  
-  
-  typedef ScopedPtrVect<Dummy> VectD;
+  using VectD = ScopedPtrVect<Dummy>;
   
   
   /****************************************************************//**

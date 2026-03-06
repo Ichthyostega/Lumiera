@@ -16,8 +16,8 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "activity-detector.hpp"
 #include "vault/real-clock.hpp"
 #include "lib/time/timevalue.hpp"
@@ -29,8 +29,8 @@ using lib::time::Time;
 using lib::time::FSecs;
 
 using util::isSameObject;
-using lib::test::randStr;
-using lib::test::randTime;
+using test::randTime;
+using test::randStr;
 
 
 namespace vault{

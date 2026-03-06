@@ -16,8 +16,8 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/microbenchmark.hpp"
+#include "test/run.hpp"
+#include "test/microbenchmark.hpp"
 #include "lib/incidence-count.hpp"
 #include "lib/thread.hpp"
 #include "lib/util.hpp"
@@ -163,7 +163,7 @@ namespace test{
                           t2.join();
                         };
           
-          double runTime = test::benchmarkTime (run_parallel);
+          double runTime = ::test::benchmarkTime (run_parallel);
           
           // join ensures visibility of all data changes from within threads,
           // which is a prerequisite for performing the data evaluation safely.
@@ -227,7 +227,7 @@ namespace test{
                         };
           
           // Invoke these two nested activations numerous times in several threads
-          auto [runTime, sum] = test::threadBenchmark<CONCURR> (act, REPETITIONS);
+          auto [runTime, sum] = ::test::threadBenchmark<CONCURR> (act, REPETITIONS);
           
           CHECK (sum == CONCURR*REPETITIONS);      // each invocation contributes +1
           CHECK (isLimited (900, runTime, 1400));  // delay is 500µs on average

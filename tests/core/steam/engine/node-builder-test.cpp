@@ -16,11 +16,10 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "steam/engine/engine-ctx.hpp"
 #include "steam/engine/node-builder.hpp"
 #include "steam/asset/meta/time-grid.hpp"
-#include "lib/test/diagnostic-output.hpp"
 #include "lib/time/timequant.hpp"
 #include "lib/time/timecode.hpp"
 #include "lib/iter-explorer.hpp"

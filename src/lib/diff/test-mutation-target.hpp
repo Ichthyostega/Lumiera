@@ -43,7 +43,7 @@
 #include "lib/idi/genfunc.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-util.hpp"
-#include "lib/test/event-log.hpp"
+#include "test/event-log.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/util.hpp"
 
@@ -58,8 +58,8 @@ namespace diff{
   namespace error = lumiera::error;
   
   using lib::Literal;
-  using lib::test::EventLog;
-  using lib::test::EventMatch;
+  using test::EventLog;
+  using test::EventMatch;
   using iter_stl::eachElm;
   using util::unConst;
   using util::isnil;

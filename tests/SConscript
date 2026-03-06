@@ -12,7 +12,7 @@ from Buildhelper import scanSubtree
 from Buildhelper import globRootdirs
 from Buildhelper import createPlugins
 
-Import('env core_lib vessel_lib vault_lib guimodule tools config')
+Import('env core_lib vessel_lib vault_lib test_support guimodule tools config')
 env = env.Clone()
 env.Append(CPPPATH='include')  # additional headers for tests
 
@@ -23,13 +23,15 @@ sharedTestLibs = {}
 
 def linkContext(id):
     if id.startswith('lib'):
-        return vessel_lib           # tests in 'lib*' subdirs only linked with framework (including support-lib)
+        return test_support + vessel_lib           # tests in 'lib*' subdirs only linked with framework (including support-lib)
+    elif id.startswith('vessel'):
+        return test_support + vessel_lib           # framework tests linked with framework and support-lib
     elif id.startswith('vault'):
-        return vault_lib            # tests in 'vault*' subdirs only linked against vault layer (including framework)
+        return test_support + vault_lib            # tests in 'vault*' subdirs only linked against vault layer (including framework)
     elif id.startswith('stage'):
-        return guimodule+core_lib   # tests in 'stage*' are additionally linked against the GTK GUI module
+        return test_support + guimodule+core_lib   # tests in 'stage*' are additionally linked against the GTK GUI module
     else:
-        return core_lib             # all other tests linked against complete application core
+        return test_support + core_lib             # all other tests linked against complete application core
 
 
 def exeTestName(srcName):
@@ -81,7 +83,7 @@ testSrcDirs = globRootdirs('*')
 
 testcases  = [testCases(env, dir)  for dir in testSrcDirs if not dir in specialDirs]
 testLibs   = list(sharedTestLibs.values())
-testrunner = envSuite.Program("test-suite", ["testrunner.cpp"]+testLibs+core_lib)
+testrunner = envSuite.Program("test-suite", ["testrunner.cpp"]+testLibs+test_support+core_lib)
 
 
 testsuite = ( testcases

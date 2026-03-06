@@ -16,8 +16,8 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "steam/engine/mock-dispatcher.hpp"
 #include "vault/gear/nop-job-functor.hpp"
 #include "lib/iter-explorer.hpp"
@@ -32,6 +32,7 @@ namespace steam {
 namespace engine{
 namespace test  {
   
+  using ::test::randTime;
   using steam::fixture::Segment;
   using lib::singleValIterator;
   using util::isSameObject;
@@ -95,7 +96,7 @@ namespace test  {
       void
       verify_MockJob()
         {
-          Time nominalTime = lib::test::randTime();
+          Time nominalTime{randTime()};
           int additionalKey = rani(5000);
           MockJob mockJob{nominalTime, additionalKey};
           CHECK (mockJob.getNominalTime() == nominalTime);
@@ -119,7 +120,7 @@ namespace test  {
       void
       verify_MockJobTicket()
         {
-          auto frameTime = lib::test::randTime();
+          Time frameTime{randTime()};
           
           // build a render job to do nothing....
           Job nopJob = JobTicket::NOP.createJobFor (frameTime);
@@ -150,7 +151,7 @@ namespace test  {
       void
       verify_MockSegmentation()
         {
-          Time someTime = lib::test::randTime();
+          Time someTime{randTime()};
           //
           //-----------------------------------------------------------------/// Empty default Segmentation
           {
@@ -305,7 +306,7 @@ namespace test  {
       void
       verify_MockPrerequisites()
         {
-          Time someTime = lib::test::randTime();
+          Time someTime{randTime()};
           //-----------------------------------------------------------------/// one Segment with one additional prerequisite
           {
             MockSegmentation mockSegs{MakeRec()

@@ -16,8 +16,8 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
@@ -26,9 +26,10 @@
 #include <string>
 #include <map>
 
+using util::isnil;
 using util::typeStr;
 using util::isSameObject;
-using util::isnil;
+using test::showSizeof;
 using std::string;
 using std::map;
 

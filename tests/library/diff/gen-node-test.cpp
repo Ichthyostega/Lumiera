@@ -16,8 +16,8 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "lib/diff/record.hpp"
@@ -35,7 +35,7 @@ using lib::hash::LuidH;
 using lib::time::FSecs;
 using lib::time::Time;
 using lib::time::TimeSpan;
-using lib::test::randTime;
+using test::randTime;
 using std::string;
 
 

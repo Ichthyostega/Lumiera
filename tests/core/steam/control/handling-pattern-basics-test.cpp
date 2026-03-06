@@ -16,14 +16,14 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "steam/control/command.hpp"
 #include "steam/control/command-impl.hpp"
 #include "steam/control/command-registry.hpp"
 #include "steam/control/argument-erasure.hpp"
 #include "steam/control/handling-pattern.hpp"
-#include "lib/test/event-log.hpp"
 
+#include "test/event-log.hpp"
 #include "steam/control/test-dummy-commands.hpp"
 
 
@@ -43,7 +43,7 @@ namespace test   {
       : public HandlingPattern
       {
         mutable
-        lib::test::EventLog log_{"custom command handler"};
+        ::test::EventLog log_{"custom command handler"};
         
         
         /* ==== HandlingPattern - Interface ==== */

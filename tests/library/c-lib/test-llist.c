@@ -17,10 +17,10 @@
  */
 
 
-#include <nobug.h>
-
+#include "test/test.h"
 #include "lib/llist.h"
-#include "lib/test/test.h"
+
+#include <nobug.h>
 
 TESTS_BEGIN
 

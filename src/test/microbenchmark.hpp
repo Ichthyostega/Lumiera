@@ -41,8 +41,8 @@
  */
 
 
-#ifndef LIB_TEST_MICROBENCHMARK_H
-#define LIB_TEST_MICROBENCHMARK_H
+#ifndef TEST_MICROBENCHMARK_H
+#define TEST_MICROBENCHMARK_H
 
 
 #include "lib/meta/function.hpp"
@@ -50,13 +50,12 @@
 #include "lib/sync-barrier.hpp"
 #include "lib/thread.hpp"
 
-#include "lib/test/microbenchmark-adaptor.hpp"
+#include "test/microbenchmark-adaptor.hpp"
 
 #include <chrono>
 
 
 
-namespace lib {
 namespace test{
   
   namespace {
@@ -146,6 +145,7 @@ namespace test{
   inline auto
   threadBenchmark(FUN const& subject, const size_t repeatCnt = DEFAULT_RUNS)
   {
+    using lib::SyncBarrier;
     using std::chrono::steady_clock;
     using Dur = std::chrono::duration<double, CLOCK_SCALE>;
     
@@ -195,5 +195,5 @@ namespace test{
   
   
   
-}} // namespace lib::test
-#endif /*LIB_TEST_MICROBENCHMARK_H*/
+}// namespace test
+#endif /*TESTSUPPORT_MICROBENCHMARK_H*/

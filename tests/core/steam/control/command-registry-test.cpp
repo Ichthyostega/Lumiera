@@ -16,8 +16,8 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "steam/control/command-def.hpp"
 #include "steam/control/command-registry.hpp"
 #include "lib/symbol.hpp"

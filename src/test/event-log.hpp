@@ -67,8 +67,8 @@
  */
 
 
-#ifndef LIB_TEST_EVENT_LOG_H
-#define LIB_TEST_EVENT_LOG_H
+#ifndef TESTSUPPORT_EVENT_LOG_H
+#define TESTSUPPORT_EVENT_LOG_H
 
 
 #include "lib/error.hpp"
@@ -88,12 +88,13 @@
 
 
 
-namespace lib {
-namespace test{
+namespace test {
   
-  using lib::Symbol;
   using std::string;
+  using lib::Symbol;
+  using lib::Literal;
   using util::collectStr;
+  using lib::idi::instanceTypeID;
   
   namespace {
     using Entry = lib::diff::Record<string>;
@@ -103,7 +104,7 @@ namespace test{
     buildSearchFilter(Log const& srcSeq)
     {
       using Cursor  = lib::iter::CursorGear<Log::const_iterator>;
-      return iter::chainSearch (Cursor{srcSeq.begin(), srcSeq.end()});
+      return lib::iter::chainSearch (Cursor{srcSeq.begin(), srcSeq.end()});
     }
   }
   
@@ -243,7 +244,7 @@ namespace test{
       template<typename X>
       EventMatch& on (const X *const targetObj)
         {
-          string targetID = idi::instanceTypeID (targetObj);
+          string targetID = instanceTypeID (targetObj);
           return this->on(targetID);
         }
       
@@ -305,7 +306,7 @@ namespace test{
       template<class X>
       explicit
       EventLog (const X *const obj)
-        : EventLog(idi::instanceTypeID (obj))
+        : EventLog(instanceTypeID (obj))
         { }
       
       
@@ -337,7 +338,7 @@ namespace test{
       EventLog&
       clear (const X *const obj)
         {
-          return clear (idi::instanceTypeID (obj));
+          return clear (instanceTypeID (obj));
         }
       
       
@@ -387,7 +388,7 @@ namespace test{
       EventLog&
       call (const X *const targetObj, string function, ARGS const& ...args)
         {
-          return call (idi::instanceTypeID (targetObj), function, args...);
+          return call (instanceTypeID (targetObj), function, args...);
         }
       
       template<typename...ARGS>
@@ -532,5 +533,5 @@ namespace test{
   
   
   
-}} // namespace lib::test
-#endif /*LIB_TEST_EVENT_LOG_H*/
+} // namespace test
+#endif /*TESTSUPPORT_EVENT_LOG_H*/

@@ -16,8 +16,8 @@
  */
 
 
-#include "lib/test/run.hpp"
-//#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+//#include "test/test-helper.hpp"
 
 //#include "lib/p.hpp"
 //#include "steam/assetmanager.hpp"
@@ -31,8 +31,8 @@
 
 //#include <string>
 
-//using lib::test::showSizeof;
-//using lib::test::randStr;
+//using test::showSizeof;
+//using test::randStr;
 //using util::isSameObject;
 //using util::and_all;
 //using util::for_each;

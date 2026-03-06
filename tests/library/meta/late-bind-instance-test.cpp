@@ -16,11 +16,11 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
+#include "test/tracking-dummy.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/tuple-helper.hpp"
-#include "lib/test/test-helper.hpp"
-#include "lib/test/tracking-dummy.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/format-util.hpp"
 #include "lib/util.hpp"
@@ -37,7 +37,7 @@ namespace test {
   using std::tuple;
   using std::string;
   using lib::meta::dump;
-  using lib::test::Tracker;
+  using ::test::Tracker;
   
   
   

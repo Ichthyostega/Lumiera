@@ -17,9 +17,9 @@
 
 
 #include "lib/error.hpp"
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
-#include "lib/test/tracking-dummy.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
+#include "test/tracking-dummy.hpp"
 #include "steam/engine/diagnostic-buffer-provider.hpp"
 #include "steam/engine/test-rand-ontology.hpp"
 #include "steam/engine/testframe.hpp"
@@ -275,7 +275,7 @@ namespace test  {
         {
           DiagnosticBufferProvider provider;
           
-          using lib::test::Tracker;
+          using ::test::Tracker;
           auto& log = Tracker::log;
           log.clear();
           

@@ -16,8 +16,8 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "steam/mobject/output-mapping.hpp"
 #include "steam/asset/pipe.hpp"
 #include "lib/format-string.hpp"

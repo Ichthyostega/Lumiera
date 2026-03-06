@@ -17,28 +17,27 @@
 
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
-#include "lib/util.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
+#include "test/tracking-dummy.hpp"
 
 #include "lib/allocation-cluster.hpp"
 #include "lib/linked-elements.hpp"
-#include "lib/test/tracking-dummy.hpp"
 #include "lib/iter-source.hpp"
+#include "lib/util.hpp"
 
 #include <memory>
 
 
+using test::Dummy;
+using util::isnil;
+using util::isSameObject;
+using LERR_(ITER_EXHAUST);
+
 
 namespace lib {
 namespace test{
-  
   namespace error = lumiera::error;
-  
-  using util::isnil;
-  using util::isSameObject;
-  using LERR_(ITER_EXHAUST);
-  
   
   namespace { // test data...
     

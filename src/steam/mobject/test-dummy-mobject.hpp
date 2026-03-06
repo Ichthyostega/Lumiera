@@ -31,7 +31,7 @@
 #ifndef MOBJECT_TEST_DUMMY_MOBJECT_H
 #define MOBJECT_TEST_DUMMY_MOBJECT_H
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 
 #include "steam/mobject/builder/buildertool.hpp"
 #include "steam/mobject/session/abstractmo.hpp"

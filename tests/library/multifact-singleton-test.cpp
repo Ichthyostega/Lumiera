@@ -16,8 +16,8 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "lib/multifact.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/util.hpp"
@@ -31,7 +31,7 @@ namespace lib {
 namespace test{
   
   using boost::lexical_cast;
-  using lib::test::showSizeof;
+  using ::test::showSizeof;
   using util::isSameObject;
   using util::isnil;
   using std::ostream;

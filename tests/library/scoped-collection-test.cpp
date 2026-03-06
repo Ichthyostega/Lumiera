@@ -17,19 +17,19 @@
 
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
-#include "lib/util.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
+#include "test/tracking-dummy.hpp"
 
 #include "lib/scoped-collection.hpp"
-#include "lib/test/tracking-dummy.hpp"
+#include "lib/util.hpp"
 
+
+using test::Dummy;
 
 namespace lib {
 namespace test{
-  
   namespace error = lumiera::error;
-  
   
   namespace { // our explosive special Dummy
     

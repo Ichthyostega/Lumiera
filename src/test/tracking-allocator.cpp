@@ -30,7 +30,7 @@
  */
 
 
-#include "lib/test/tracking-allocator.hpp"
+#include "test/tracking-allocator.hpp"
 #include "lib/uninitialised-storage.hpp"
 #include "lib/iter-explorer.hpp"
 #include "lib/depend.hpp"
@@ -46,9 +46,10 @@ using std::make_pair;
 using util::contains;
 using util::joinDash;
 using util::showAdr;
+using lib::explore;
+using lib::Depend;
 
 
-namespace lib {
 namespace test{
   
   
@@ -69,7 +70,7 @@ namespace test{
       struct Allocation
         : util::MoveOnly
         {
-          UninitialisedDynBlock<byte> buff{};
+          lib::UninitialisedDynBlock<byte> buff{};
           size_t entryID{0};
         };
       
@@ -343,4 +344,4 @@ namespace test{
 
   
   
-}} // namespace lib::test
+} // namespace test

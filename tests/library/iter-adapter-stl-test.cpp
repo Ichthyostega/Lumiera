@@ -17,8 +17,8 @@
 
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-coll.hpp"
+#include "test/run.hpp"
+#include "test/test-coll.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
@@ -28,14 +28,21 @@
 #include <vector>
 
 
+using boost::lexical_cast;
+using util::isnil;
+using test::VecI;
+using test::MapII;
+using test::HMapII;
+using test::MMapII;
+using test::HMMapII;
+using test::pullOut;
+using test::getTestSeq_int;
+using test::getTestMap_int;
+using test::getTestMultiMap_int;
+
 
 namespace lib {
 namespace test{
-  
-  using ::Test;
-  using boost::lexical_cast;
-  using util::isnil;
-  
   namespace iter = lib::iter_stl;
   
   

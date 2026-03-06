@@ -16,17 +16,17 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
+#include "test/tracking-dummy.hpp"
 #include "lib/thread.hpp"
-#include "lib/test/tracking-dummy.hpp"
 
 #include <atomic>
 #include <chrono>
 #include <memory>
 
 using test::Test;
+using test::Dummy;
 using lib::explore;
-using lib::test::Dummy;
 using std::atomic_uint;
 using std::this_thread::yield;
 using std::this_thread::sleep_for;

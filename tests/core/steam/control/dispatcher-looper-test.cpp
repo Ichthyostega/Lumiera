@@ -12,7 +12,7 @@
 * *****************************************************************/
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "steam/control/looper.hpp"
 
 #include <chrono>

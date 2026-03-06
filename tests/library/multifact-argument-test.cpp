@@ -16,8 +16,8 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/multifact.hpp"
 
@@ -31,7 +31,7 @@ namespace test{
   using std::bind;
   using std::function;
   using std::placeholders::_1;
-  using lib::test::showSizeof;
+  using ::test::showSizeof;
   
   
   

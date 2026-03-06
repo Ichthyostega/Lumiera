@@ -16,8 +16,8 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/meta/tuple-record-init.hpp"
 #include "lib/format-cout.hpp"

@@ -22,19 +22,19 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "lib/meta/tuple-helper.hpp"
 #include "meta/typelist-diagnostics.hpp"
 #include "meta/tuple-diagnostics.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/hetero-data.hpp"
-#include "lib/test/diagnostic-output.hpp"////////////////TODO
 
 #include <string>
 
-using lib::test::showSizeof;
+using test::showSizeof;
+using test::showType;
 using util::toString;
 using util::_Fmt;
 using std::is_same_v;
@@ -91,15 +91,15 @@ namespace test {
       void
       check_diagnostics ()
         {
-          typedef Types1::List L1;
-          typedef Types2::List L2;
-          typedef Types3::List L3;
+          using L1 = Types1::List;
+          using L2 = Types2::List;
+          using L3 = Types3::List;
           
           DISPLAY (L1);
           DISPLAY (L2);
           DISPLAY (L3);
           
-          typedef Tuple<Types1> Tup1;
+          using Tup1 = Tuple<Types1>;
           Tup1 tup1x (Num<1>(11), Num<3>(), 55);
           
           DISPLAY (Tup1);     // prints the type
@@ -236,7 +236,7 @@ namespace test {
       string
       render()
         {
-          return lib::test::showType<X>();
+          return showType<X>();
         }
       
       template<tuple_like X>
@@ -244,11 +244,11 @@ namespace test {
       render()
         {
           string res{"Tup"};
-          res +="("+toString(std::tuple_size_v<X>)+") : "+ lib::test::showType<X>();
+          res +="("+toString(std::tuple_size_v<X>)+") : "+ showType<X>();
           lib::meta::forEachIDX<X> ([&](auto i)
                                       {
                                         using Elm = std::tuple_element_t<i, X>;
-                                        res += " ▷"+ toString(uint(i)) + ": " + lib::test::showType<Elm>();
+                                        res += " ▷"+ toString(uint(i)) + ": " + showType<Elm>();
                                       });
           return res;
         }
@@ -333,33 +333,33 @@ namespace test {
           CHECK (std::tuple_size_v<const Tup> == 2 );
           
           using Elm1 = std::tuple_element_t<1, const Tup>;
-          CHECK (lib::test::showType<Elm1>() == "const short"_expect);
+          CHECK (showType<Elm1>() == "const short"_expect);
           
           // note: a const tuple will add const qualification to each element type
           using TupConstSeq = lib::meta::ElmTypes<const Tup>::Seq;
-          CHECK (lib::test::showType<TupConstSeq>() == "Types<long const, short const>"_expect);
+          CHECK (showType<TupConstSeq>() == "Types<long const, short const>"_expect);
           
           
           // a unified access function `getElm`
           // which works both with access by member or free function
           
           using T1 = decltype(lib::meta::getElm<0> (std::declval<Tup>()));
-          CHECK (lib::test::showType<T1>() == "long &&"_expect);
+          CHECK (showType<T1>() == "long &&"_expect);
           
           using T2 = decltype(lib::meta::getElm<0> (std::declval<Tup&>()));
-          CHECK (lib::test::showType<T2>() == "long&"_expect);
+          CHECK (showType<T2>() == "long&"_expect);
           
           using T3 = decltype(lib::meta::getElm<0> (std::declval<Tup const&>()));
-          CHECK (lib::test::showType<T3>() == "long const&"_expect);
+          CHECK (showType<T3>() == "long const&"_expect);
           
           using H1 = decltype(lib::meta::getElm<4> (std::declval<Het>()));
-          CHECK (lib::test::showType<H1>() == "Nil"_expect);
+          CHECK (showType<H1>() == "Nil"_expect);
           
           using H2 = decltype(lib::meta::getElm<4> (std::declval<Het&>()));
-          CHECK (lib::test::showType<H2>() == "Nil&"_expect);
+          CHECK (showType<H2>() == "Nil&"_expect);
           
           using H3 = decltype(lib::meta::getElm<4> (std::declval<Het const&>()));
-          CHECK (lib::test::showType<H3>() == "Nil const&"_expect);
+          CHECK (showType<H3>() == "Nil const&"_expect);
         }
     };
   

@@ -17,23 +17,24 @@
 
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "lib/sync-barrier.hpp"
 #include "lib/random.hpp"
 #include "lib/thread.hpp"
 #include "lib/sync.hpp"
 #include "lib/util.hpp"
 #include "lib/scoped-collection.hpp"
-#include "lib/test/microbenchmark.hpp"
+#include "test/microbenchmark.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"
-#include "lib/test/diagnostic-output.hpp"
 
 #include <deque>
 #include <tuple>
 using std::tuple;
 using std::deque;
 using util::_Fmt;
+using test::microBenchmark;
+using test::threadBenchmark;
 
 namespace lib {
 namespace test {

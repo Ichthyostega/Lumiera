@@ -18,10 +18,10 @@
 
 
 #include "lib/error.hpp"
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "lib/integral.hpp"
 #include "lib/format-cout.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/test-helper.hpp"
 
 #include "lib/rational.hpp"
 

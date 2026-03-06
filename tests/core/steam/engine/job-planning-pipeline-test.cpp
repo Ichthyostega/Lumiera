@@ -16,8 +16,8 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "steam/engine/mock-dispatcher.hpp"
 
 #include "lib/iter-explorer.hpp"
@@ -96,7 +96,7 @@ namespace test  {
       void
       demonstrateScaffolding()
         {
-          Time nominalTime = lib::test::randTime();
+          Time nominalTime = ::test::randTime();
           int additionalKey = rani(5000);
           
           // (1) mocked render Job

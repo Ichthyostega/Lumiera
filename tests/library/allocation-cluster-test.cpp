@@ -17,11 +17,9 @@
 
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "lib/allocation-cluster.hpp"
-#include "lib/test/diagnostic-output.hpp"/////////////////TODO
-#include "lib/format-util.hpp"/////////////TODO
 #include "lib/iter-explorer.hpp"
 #include "lib/util.hpp"
 
@@ -31,9 +29,9 @@
 #include <array>
 #include <set>
 
-using ::Test;
+using test::Test;
+using test::showSizeof;
 using lib::explore;
-using lib::test::showSizeof;
 using util::getAdr;
 using util::isnil;
 
@@ -331,7 +329,7 @@ namespace test {
             CHECK (dtor->next == nullptr);
             
             // any other object with non-trivial destructor....
-            string rands = lib::test::randStr(9);
+            string rands = lib::randStr(9);
             pp = posOffset();
             string& s1 = clu.create<string> (rands);                   // a string that fits into the small-string optimisation
             CHECK (s1 == rands);
@@ -407,7 +405,7 @@ namespace test {
           SetS setS{clu.getAllocator<Strg>()};
 
           for (uint i=0; i<NUM_OBJECTS; ++i)
-            setS.emplace (test::randStr(32), clu.getAllocator<char>());
+            setS.emplace (lib::randStr(32), clu.getAllocator<char>());
           CHECK (setS.size() > 0.9 * NUM_OBJECTS);
           CHECK (clu.numExtents() > 200);
           

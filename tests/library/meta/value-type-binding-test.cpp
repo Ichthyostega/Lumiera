@@ -16,8 +16,8 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "lib/meta/value-type-binding.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/meta/util.hpp"
@@ -25,12 +25,11 @@
 #include <memory>
 
 
+using test::showType;
+
 namespace lib {
 namespace meta{
 namespace test{
-  
-  using lib::test::showType;
-  
 
   namespace { // test fixture
     

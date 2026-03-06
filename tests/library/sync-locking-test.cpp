@@ -16,7 +16,7 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 
 #include "lib/sync.hpp"
 #include "lib/thread.hpp"

@@ -16,8 +16,8 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 
 #include "steam/asset/meta.hpp"
 #include "steam/asset/meta/time-grid.hpp"
@@ -28,7 +28,7 @@
 #include <boost/rational.hpp>
 
 using boost::rational_cast;
-using lib::test::randStr;
+using lib::randStr;
 
 
 

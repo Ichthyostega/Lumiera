@@ -17,9 +17,9 @@
  */
 
 
+#include "test/test.h"
 #include "lib/safeclib.h"
 #include "lib/tmpbuf.h" /* not factored out yet */
-#include "lib/test/test.h"
 
 #include <sys/time.h>
 #include <sys/resource.h>

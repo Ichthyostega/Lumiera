@@ -22,16 +22,15 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "lib/meta/variadic-helper.hpp"
 #include "lib/meta/tuple-helper.hpp"
 #include "lib/hetero-data.hpp"
-#include "lib/test/diagnostic-output.hpp"////////////TODO
 
 #include <array>
 
-using lib::test::showType;
+using test::showType;
 using std::array;
 using std::tuple;
 

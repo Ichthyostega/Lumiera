@@ -16,7 +16,7 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 
 #include "steam/play/dummy-play-connection.hpp"
 #include "vessel/spine/play-facade.hpp"

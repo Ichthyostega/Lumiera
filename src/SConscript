@@ -32,6 +32,10 @@ lumiera = ( env.Program('lumiera', ['lumiera/main.cpp'] + core, install=True)
 env.SymLink('$DESTDIR/bin/lumiera',env.path.installExe+'lumiera','../lib/lumiera/lumiera')
 
 
+# Unit/Integration test support
+test_support = env.SharedLibrary('testsupport', srcSubtree('test'), addLibs=vessel_lib, install=False)
+
+
 # building Lumiera Plugins
 plugins = [] # currently none
 
@@ -49,4 +53,4 @@ gui       = ( guimodule
             )
 
 
-Export('lumiera core core_lib vessel_lib vault_lib support_lib plugins envGtk guimodule gui')
+Export('lumiera core core_lib vessel_lib vault_lib support_lib test_support plugins envGtk guimodule gui')

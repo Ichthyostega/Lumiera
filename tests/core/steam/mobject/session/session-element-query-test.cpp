@@ -16,7 +16,7 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "steam/mobject/session/test-scopes.hpp"
 #include "steam/mobject/session/element-query.hpp"
 #include "steam/mobject/session/scope-path.hpp"

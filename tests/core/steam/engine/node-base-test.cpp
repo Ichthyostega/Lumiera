@@ -16,7 +16,7 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "lib/iter-zip.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/several-builder.hpp"
@@ -27,14 +27,14 @@
 #include "steam/engine/feed-manifold.hpp"
 #include "steam/engine/node-builder.hpp"
 #include "steam/engine/buffhandle.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/test-helper.hpp"
 #include "lib/util.hpp"
 
 
 using std::tuple;
 using std::array;
 using util::isSameAdr;
-using lib::test::showType;
+using ::test::showType;
 using lib::makeSeveral;
 using lib::izip;
 

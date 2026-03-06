@@ -16,7 +16,7 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "lib/diff/list-diff-application.hpp"
 #include "lib/iter-adapter-stl.hpp"
 #include "lib/util.hpp"

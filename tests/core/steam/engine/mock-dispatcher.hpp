@@ -42,7 +42,7 @@
 #define STEAM_ENGINE_TEST_MOCK_DISPATCHER_H
 
 
-#include "lib/test/test-helper.hpp"
+#include "test/test-helper.hpp"
 #include "steam/play/dummy-play-connection.hpp"
 #include "steam/fixture/node-graph-attachment.hpp"
 #include "steam/fixture/segmentation.hpp"

@@ -34,7 +34,7 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "lib/meta/variadic-helper.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"

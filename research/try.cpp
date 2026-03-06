@@ -19,8 +19,8 @@
 
 
 #include "lib/format-cout.hpp"
-#include "lib/test/test-helper.hpp"
-#include "lib/test/diagnostic-output.hpp"
+#include "test/test-helper.hpp"
+#include "test/diagnostic-output.hpp"
 #include "lib/meta/tuple-helper.hpp"
 #include "lib/hetero-data.hpp"
 #include "lib/util.hpp"
@@ -41,11 +41,11 @@ template<lib::meta::tuple_like X>
 void
 show()
   {
-    cout << "Tup!! "<< lib::test::showType<X>() <<endl;
+    cout << "Tup!! "<< ::test::showType<X>() <<endl;
     lib::meta::forEachIDX<X> ([](auto i)
                                 {
                                   using Elm = std::tuple_element_t<i, X>;
-                                  cout <<"  "<<uint(i)<<": "<< lib::test::showType<Elm>() <<endl;
+                                  cout <<"  "<<uint(i)<<": "<< ::test::showType<Elm>() <<endl;
                                 });
   }
 

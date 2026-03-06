@@ -24,14 +24,14 @@
  */
 
 
-#ifndef TESTHELPER_RUN_H
-#define TESTHELPER_RUN_H
+#ifndef TESTSUITE_RUN_H
+#define TESTSUITE_RUN_H
 
 #include "lib/error.hpp"
 #include "lib/random.hpp"
-
-#include "lib/test/suite.hpp"
 #include "lib/util.hpp"
+
+#include "test/suite.hpp"
 
 #include <memory>
 #include <string>
@@ -118,4 +118,4 @@ using lib::defaultGen;
   Launch<_TEST_CLASS_> run_##_TEST_CLASS_##_(STRINGIFY(_TEST_CLASS_), _GROUPS_);
 
 
-#endif /*TESTHELPER_RUN_H*/
+#endif /*TESTSUITE_RUN_H*/

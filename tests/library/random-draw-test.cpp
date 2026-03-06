@@ -17,18 +17,19 @@
 
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "lib/random-draw.hpp"
 #include "lib/format-string.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/test-helper.hpp"
 
 #include <array>
-
+#include <string>
 
 
 namespace lib {
 namespace test{
   
+  using std::string;
   using util::_Fmt;
   using lib::meta::_FunRet;
   using err::LUMIERA_ERROR_LIFECYCLE;

@@ -16,10 +16,10 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
+#include "test/microbenchmark.hpp"
 #include "vault/gear/block-flow.hpp"
-#include "lib/test/microbenchmark.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/format-cout.hpp"
@@ -30,10 +30,10 @@
 #include <tuple>
 
 using test::Test;
-using util::isSameObject;
-using lib::test::randTime;
-using lib::test::showType;
+using test::randTime;
+using test::showType;
 using lib::time::Offset;
+using util::isSameObject;
 
 using std::vector;
 using std::pair;
@@ -448,7 +448,7 @@ namespace test {
           
           auto benchmark = [INSTANCES](auto invokeTest)
                             {         //  does the timing measurement with result in µ-seconds
-                              return lib::test::benchmarkTime(invokeTest, INSTANCES);
+                              return ::test::benchmarkTime(invokeTest, INSTANCES);
                             };
           
           

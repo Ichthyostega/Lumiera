@@ -16,21 +16,18 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
-#include "lib/test/temp-dir.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
+#include "test/temp-dir.hpp"
 #include "lib/file.hpp"
 
 #include <fstream>
 
+using test::TempDir;
 
 namespace lib {
 namespace stat{
 namespace test{
-  
-  using lib::test::TempDir;
-  
-  
   
   
   /********************************************************************//**

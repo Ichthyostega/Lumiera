@@ -17,14 +17,15 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "lib/sync-barrier.hpp"
-#include "lib/test/microbenchmark.hpp"
+#include "test/microbenchmark.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/sync.hpp"
 
 using test::Test;
 using std::array;
+using test::threadBenchmark;
 
 
 namespace lib {

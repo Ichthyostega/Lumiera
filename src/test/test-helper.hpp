@@ -27,14 +27,14 @@
  */
 
 
-#ifndef LIB_TEST_TEST_HELPER_H
-#define LIB_TEST_TEST_HELPER_H
+#ifndef TESTSUPPORT_TEST_HELPER_H
+#define TESTSUPPORT_TEST_HELPER_H
 
 
 #include "lib/symbol.hpp"
 #include "lib/meta/trait.hpp"
 #include "lib/time/timevalue.hpp"
-#include "lib/test/transiently.hpp"
+#include "test/transiently.hpp"
 #include "lib/format-obj.hpp"
 #include "lib/random.hpp"
 
@@ -48,22 +48,25 @@
 
 
 
-namespace lib {
 namespace test{
 
   using lib::Literal;
   using std::string;
+  using lib::randStr;
   using lib::rani;
+  using lib::meta::enable_if;
+  using lib::meta::disable_if;
   using lib::meta::demangleCxx;
+  using lib::meta::humanReadableTypeID;
   
   
-  constexpr auto ROUGH_PRECISION  = pow (10, -3);
-  constexpr auto EPSILON_ULP      = 5;
+  constexpr auto ROUGH_PRECISION = pow (10, -3);
+  constexpr auto EPSILON_ULP     = 5;
   
   
   template<typename F, typename N>
-  constexpr inline                                   meta::enable_if< std::is_floating_point<F>,
-  bool                                                              >
+  constexpr inline                                   enable_if< std::is_floating_point<F>,
+  bool                                                        >
   roughEQ (F val, N target, F limit =ROUGH_PRECISION)
   {
     REQUIRE (0 < limit);
@@ -72,8 +75,8 @@ namespace test{
   
   
   template<typename F>
-  constexpr inline                                   meta::enable_if< std::is_floating_point<F>,
-  F                                                                 >
+  constexpr inline                                   enable_if< std::is_floating_point<F>,
+  F                                                           >
   ulp (F val)
   {
     val = fabs (val);
@@ -86,8 +89,8 @@ namespace test{
   }
   
   template<typename F, typename N>
-  constexpr inline                                   meta::enable_if< std::is_floating_point<F>,
-  bool                                                              >
+  constexpr inline                                   enable_if< std::is_floating_point<F>,
+  bool                                                        >
   epsEQ (F val, N target, uint ulps =EPSILON_ULP)
   {
     return abs (val - target) < ulps * ulp<F> (target);
@@ -112,8 +115,8 @@ namespace test{
   }
   
   template<typename T>
-  inline                                      meta::disable_if<std::is_pointer<T>,
-  string                                      >                                 // note:: force invocations with pointer to the first overload
+  inline                                      disable_if<std::is_pointer<T>,
+  string                                      >                           // note:: force invocations with pointer to the first overload
   showSizeof (T const& obj, CStr name =nullptr)
   {
     return showSizeof (&obj, name);
@@ -260,7 +263,7 @@ namespace test{
     using Type = Case::Type;
     
     return Case::prefix
-         + meta::humanReadableTypeID (typeid(Type).name())
+         + humanReadableTypeID (typeid(Type).name())
          + Case::postfix;
   }
   
@@ -304,17 +307,13 @@ namespace test{
   
   
   
-  /** create a random but not insane Time value between 1s ... 10min + 500ms */
+  /** create a random yet plausible Time value between 1s ... 10min + 500ms */
   inline lib::time::Time
   randTime ()
   {
     return lib::time::Time (500 * rani(2), 1 + rani(600));
   }
   
-  /** create garbage string of given length
-   *  @return string containing arbitrary lower case letters and numbers
-   */
-  string randStr (size_t len);
   
   
   /**
@@ -360,7 +359,7 @@ namespace test{
       bool verify (std::string const& actual)  const;
     };
   
-}} // namespace lib::test
+}// namespace test
 
 
 
@@ -374,10 +373,10 @@ namespace test{
  * CHECK (result23 == "[-100..100]"_expect);
  * \endcode
  */
-inline lib::test::ExpectString
+inline ::test::ExpectString
 operator""_expect (CStr lit, size_t siz)
 {
-  return lib::test::ExpectString{lit, siz};
+  return ::test::ExpectString{lit, siz};
 }
 
 
@@ -390,24 +389,24 @@ operator""_expect (CStr lit, size_t siz)
  * an assertion failure. In case of exception, the #lumiera_error
  * state is checked, cleared and verified.
  */
-#define VERIFY_ERROR(ERROR_ID, ERRONEOUS_STATEMENT)               \
-          try                                                      \
-            {                                                       \
-              ERRONEOUS_STATEMENT ;                                  \
-              NOTREACHED("expected »%s« failure in: %s",              \
-                          #ERROR_ID, #ERRONEOUS_STATEMENT);            \
-            }                                                           \
-          catch (lumiera::Error& ex)                                     \
-            {                                                             \
-              CHECK (ex.getID()                                            \
-                     == lib::test::ExpectString{LUMIERA_ERROR_##ERROR_ID} );\
-              lumiera_error();                                               \
-            }                                                                 \
-          catch (...)                                                          \
-            {                                                                   \
-              CHECK (lumiera_error_peek()                                        \
-                     == lib::test::ExpectString{LUMIERA_ERROR_##ERROR_ID} );      \
-              lumiera_error();                                                     \
+#define VERIFY_ERROR(ERROR_ID, ERRONEOUS_STATEMENT)            \
+          try                                                   \
+            {                                                    \
+              ERRONEOUS_STATEMENT ;                               \
+              NOTREACHED("expected »%s« failure in: %s",           \
+                          #ERROR_ID, #ERRONEOUS_STATEMENT);         \
+            }                                                        \
+          catch (lumiera::Error& ex)                                  \
+            {                                                          \
+              CHECK (ex.getID()                                         \
+                     == ::test::ExpectString{LUMIERA_ERROR_##ERROR_ID} );\
+              lumiera_error();                                            \
+            }                                                              \
+          catch (...)                                                       \
+            {                                                                \
+              CHECK (lumiera_error_peek()                                     \
+                     == ::test::ExpectString{LUMIERA_ERROR_##ERROR_ID} );      \
+              lumiera_error();                                                  \
             }
 
 /**
@@ -443,4 +442,4 @@ operator""_expect (CStr lit, size_t siz)
 #define MARK_TEST_FUN \
           cout << "|" << endl << "|  »"<<__FUNCTION__<<"«" <<endl;
 
-#endif /*LIB_TEST_TEST_HELPER_H*/
+#endif /*TESTSUPPORT_TEST_HELPER_H*/

@@ -17,7 +17,7 @@
 
 
 #include "lib/error.hpp"
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "steam/engine/diagnostic-buffer-provider.hpp"
 #include "steam/engine/testframe.hpp"
 #include "lib/util.hpp"

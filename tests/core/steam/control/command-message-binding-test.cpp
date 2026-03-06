@@ -16,8 +16,8 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "steam/control/command-def.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/diff/gen-node.hpp"
@@ -27,12 +27,12 @@ namespace steam {
 namespace control {
 namespace test    {
   
+  using ::test::randTime;
   using lib::time::Time;
   using lib::time::TimeVar;
   using lib::time::TimeValue;
   using lib::time::TimeSpan;
   using lib::time::Duration;
-  using lib::test::randTime;
   using lib::diff::Rec;
   
   
@@ -88,6 +88,8 @@ namespace test    {
       virtual void
       run (Arg) 
         {
+          seedRand();
+          
           Time five(TimeValue(5));
           implicitTestState = five;
           

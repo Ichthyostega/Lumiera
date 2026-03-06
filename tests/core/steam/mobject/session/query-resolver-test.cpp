@@ -16,8 +16,8 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/depend.hpp"
 
@@ -30,8 +30,8 @@
 namespace vessel {
 namespace test {
   
-  using lib::test::showSizeof;
   using std::string;
+  using ::test::showSizeof;
   
   
   

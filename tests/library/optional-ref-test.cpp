@@ -17,20 +17,18 @@
 
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 
 #include "lib/optional-ref.hpp"
 
 
+using test::Test;
+using lib::randStr;
+using std::string;
 
 namespace lib {
 namespace test{
-  
-  using ::Test;
-  using lib::test::randStr;
-  
-  using std::string;
   
   
   

@@ -16,8 +16,8 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "steam/mobject/session/test-scopes.hpp"
 #include "steam/mobject/session/placement-index.hpp"
 #include "steam/mobject/session/scope-path.hpp"

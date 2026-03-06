@@ -16,17 +16,19 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "lib/stat/statistic.hpp"
 #include "lib/iter-explorer.hpp"
 #include "lib/format-util.hpp"
 #include "lib/random.hpp"
 #include "lib/util.hpp"
 #include "lib/format-cout.hpp"            ///////////////////////TODO
-#include "lib/test/diagnostic-output.hpp" ///////////////////////TODO
+#include "test/diagnostic-output.hpp"    ////////////////////////TODO
 
 
+using test::roughEQ;
+using util::isnil;
 
 namespace lib {
 namespace stat{
@@ -35,9 +37,7 @@ namespace test{
   namespace {
     const size_t NUM_POINTS = 1'000;
   }
-
-  using lib::test::roughEQ;
-  using util::isnil;
+  
   using error::LUMIERA_ERROR_INVALID;
   
   

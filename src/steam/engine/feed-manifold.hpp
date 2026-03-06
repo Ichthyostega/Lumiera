@@ -83,7 +83,7 @@
 #include "lib/meta/variadic-helper.hpp"
 #include "lib/meta/tuple-helper.hpp"
 #include "lib/meta/generator.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/test-helper.hpp"
 
 
 namespace steam {

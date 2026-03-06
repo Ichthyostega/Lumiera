@@ -18,13 +18,13 @@
  */
 
 
+#include "test/test.h"
 #include "vessel/interface.h"
 #include "vessel/interfaceregistry.h"
 #include "vessel/interface-descriptor.h"
 #include "vessel/config.h"
 #include "vessel/config-interface.h"
 
-#include "lib/test/test.h"
 #include "interface/say-hello.h"
 
 /*

@@ -21,8 +21,8 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "lib/meta/tuple-closure.hpp"
 #include "lib/format-util.hpp"
 
@@ -36,7 +36,7 @@ namespace test {
   using std::array;
   using std::make_tuple;
   using lib::meta::_Fun;
-  using lib::test::showType;
+  using ::test::showType;
   
   
   

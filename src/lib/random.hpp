@@ -166,6 +166,14 @@ namespace lib {
   
   
   
+  /* ===== general-purpose utils ===== */
+  
+  /** create garbage string of given length.
+   *  @return string containing arbitrary lower case letters and numbers
+   */
+  std::string randStr (size_t len);
+  
+  
   
   /* ===== Implementation details ===== */
   

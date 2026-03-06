@@ -17,11 +17,11 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/tracking-dummy.hpp"
-#include "lib/test/tracking-allocator.hpp"
-#include "lib/test/test-coll.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-coll.hpp"
+#include "test/test-helper.hpp"
+#include "test/tracking-dummy.hpp"
+#include "test/tracking-allocator.hpp"
 #include "lib/allocation-cluster.hpp"
 #include "lib/iter-explorer.hpp"
 #include "lib/format-util.hpp"
@@ -31,14 +31,19 @@
 
 #include <array>
 
-using ::test::Test;
-using std::array;
+using test::Test;
+using test::Dummy;
+using test::VecI;
+using test::getTestSeq_int;
+using test::TrackingAllocator;
+using test::TrackAlloc;
 
 using lib::explore;
 using util::isLimited;
 using util::toString;
 using util::isnil;
 using util::join;
+using std::array;
 
 
 namespace lib {
@@ -58,7 +63,7 @@ namespace test{
      */
     template<uint i>
     class Num
-      : public test::Dummy
+      : public Dummy
       {
         std::array<int,i> ext_;
         
@@ -562,7 +567,7 @@ namespace test{
           CHECK (0 == TrackingAllocator::use_count());
           {
             auto builder = makeSeveral<Dummy>()
-                              .withAllocator<test::TrackAlloc>()
+                              .withAllocator<TrackAlloc>()
                               .fillElm(55);
             
             size_t elmSiz = sizeof(Dummy);

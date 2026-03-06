@@ -18,9 +18,9 @@
 
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "lib/builder-qualifier-support.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/test-helper.hpp"
 
 #include <string>
 

@@ -19,7 +19,7 @@
 
 #include "lib/error.h"
 #include "lib/error.hpp"
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 

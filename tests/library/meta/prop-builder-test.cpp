@@ -18,8 +18,8 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "lib/meta/prop-builder.hpp"
 #include "lib/format-string.hpp"
 
@@ -32,7 +32,7 @@ namespace lib  {
 namespace meta {
 namespace test {
   
-  using lib::test::showType;
+  using ::test::showType;
   #define TYPE(_TY_) showType<decltype(_TY_)>()
   
   
@@ -116,8 +116,8 @@ namespace test {
           Derived derived;
           Base& baseref{derived};
           
-          CHECK (baseref.showSelfType() == "test::PropBuilder_test::Base"_expect    );
-          CHECK (derived.showSelfType() == "test::PropBuilder_test::Derived"_expect );
+          CHECK (baseref.showSelfType() == "PropBuilder_test::Base"_expect    );
+          CHECK (derived.showSelfType() == "PropBuilder_test::Derived"_expect );
           
           
           // The next building block exploits the fact that C++ allows to define

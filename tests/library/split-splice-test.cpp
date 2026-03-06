@@ -29,8 +29,8 @@
 
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/format-util.hpp"
 #include "lib/format-string.hpp"
@@ -51,6 +51,7 @@ namespace test {
   using util::isnil;
   using util::getAdr;
   using util::isSameObject;
+  using ::test::ExpectString;
   using std::string;
   using std::move;
 

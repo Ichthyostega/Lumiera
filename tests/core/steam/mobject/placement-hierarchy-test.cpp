@@ -16,8 +16,8 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "lib/depend-inject.hpp"
 #include "vault/media-access-mock.hpp"
 #include "steam/mobject/test-dummy-mobject.hpp"
@@ -36,7 +36,7 @@ namespace session {
 namespace test    {
   
   using session::Clip;
-  using lib::test::showSizeof;
+  using ::test::showSizeof;
   using namespace mobject::test;
   using lumiera::error::LUMIERA_ERROR_ASSERTION;
   

@@ -21,8 +21,8 @@
  */
 
 
-#include "lib/test/test-helper.hpp"
-#include "lib/test/tracking-dummy.hpp"
+#include "test/test-helper.hpp"
+#include "test/tracking-dummy.hpp"
 #include "lib/unique-malloc-owner.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"
@@ -33,7 +33,6 @@
 using util::_Fmt;
 using std::string;
 
-namespace lib {
 namespace test{
 
   
@@ -52,23 +51,6 @@ namespace test{
     return fmt % name % siz;
   }
   
-  
-  
-  
-  /** @todo probably this can be done in a more clever way. Anyone...?
-   */
-  string
-  randStr (size_t len)
-  {
-    static const string alpha{"aaaabbccddeeeeffgghiiiijjkkllmmnnooooppqqrrssttuuuuvvwwxxyyyyzz0123456789"};
-    static const size_t MAXAL{alpha.size()};
-    
-    string garbage(len,'\0');
-    size_t p = len;
-    while (p)
-      garbage[--p] = alpha[rani (MAXAL)];
-    return garbage;
-  }
   
   
   
@@ -92,4 +74,4 @@ namespace test{
   }
   
   
-}} // namespace lib::test
+}// namespace test

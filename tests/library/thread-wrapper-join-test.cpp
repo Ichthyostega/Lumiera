@@ -16,8 +16,8 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "lib/thread.hpp"
 #include "lib/error.hpp"
 
@@ -38,7 +38,7 @@ namespace test {
     
     LUMIERA_ERROR_DEFINE(SPECIAL, "007 exception");
     
-    #define Type(_EXPR_) lib::test::showType<decltype(_EXPR_)>()
+    #define Type(_EXPR_) ::test::showType<decltype(_EXPR_)>()
   }
   
   

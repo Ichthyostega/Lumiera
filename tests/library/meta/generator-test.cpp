@@ -28,7 +28,7 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "lib/format-string.hpp"
 #include "lib/meta/generator.hpp"
 

@@ -16,7 +16,7 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "lib/itertools.hpp"
 #include "lib/util-coll.hpp"
 #include "lib/iter-adapter.hpp"

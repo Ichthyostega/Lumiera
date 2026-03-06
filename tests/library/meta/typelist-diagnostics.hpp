@@ -30,7 +30,7 @@
 #define META_TYPELIST_DIAGNOSTICS_H
 
 
-#include "lib/test/test-helper.hpp"
+#include "test/test-helper.hpp"
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/generator.hpp"
 #include "lib/format-string.hpp"
@@ -182,7 +182,7 @@ namespace meta {
     template<typename TYPES>
     inline                  enable_if< is_Typelist<TYPES>,
     string                  >
-    showType ()
+    renderSeq()
     {
       using TypeList = TYPES::List;
       return printSublist<TypeList>();
@@ -197,13 +197,13 @@ namespace meta {
     /* ================= convenience macro notation ================= */
     
 #define DISPLAY(_IT_)  \
-        cout << STRINGIFY(_IT_) << "\t:" << showType<_IT_>() << endl;
+        cout << STRINGIFY(_IT_) << "\t:" << renderSeq<_IT_>() << endl;
     
 #define DUMPVAL(_IT_)  \
         cout << STRINGIFY(_IT_) << "\t:" << util::toString(_IT_) << endl;
     
 #define EXPECT(_TY_, RENDERED_STRUCTURE )  \
-        CHECK (showType<_TY_>() == RENDERED_STRUCTURE ## _expect)
+        CHECK (renderSeq<_TY_>() == RENDERED_STRUCTURE ## _expect)
     
     
 }}} // namespace lib::meta::test

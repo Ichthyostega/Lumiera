@@ -43,25 +43,24 @@
  */
 
 
-#ifndef LIB_TEST_TRACKING_ALLOCATOR_H
-#define LIB_TEST_TRACKING_ALLOCATOR_H
+#ifndef TESTSUPPORT_TRACKING_ALLOCATOR_H
+#define TESTSUPPORT_TRACKING_ALLOCATOR_H
 
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/hash-value.h"
-#include "lib/test/event-log.hpp"
 #include "lib/format-string.hpp"
+#include "test/event-log.hpp"
 
 #include <utility>
 #include <memory>
 
 using std::byte;
+using lib::HashVal;
 
 
-namespace lib {
 namespace test {
-  
   
   namespace {
     const Symbol GLOBAL{"GLOBAL"};
@@ -243,5 +242,5 @@ namespace test {
   
   
   
-}} // namespace lib::test
-#endif /*LIB_TEST_TRACKING_ALLOCATOR_H*/
+}// namespace test
+#endif /*TESTSUPPORT_TRACKING_ALLOCATOR_H*/

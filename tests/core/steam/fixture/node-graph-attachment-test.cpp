@@ -16,7 +16,7 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "steam/fixture/node-graph-attachment.hpp"
 #include "steam/engine/mock-dispatcher.hpp"
 #include "steam/engine/exit-node.hpp"

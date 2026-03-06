@@ -16,8 +16,8 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "steam/control/command-storage-holder.hpp"
 #include "lib/scoped-ptrvect.hpp"
 #include "lib/format-string.hpp"
@@ -46,10 +46,9 @@ using std::rand;
 
 namespace steam {
 namespace control {
-namespace test    {
   
-  using lib::test::showSizeof;
-  using lib::test::randTime;
+  using test::randTime;
+  using test::showSizeof;
   using namespace lib::meta;
   using LERR_(MISSING_MEMENTO);
   
@@ -346,4 +345,4 @@ namespace test    {
   LAUNCHER (CommandArgument_test, "unit controller");
   
   
-}}} // namespace steam::control::test
+}} // namespace steam::control

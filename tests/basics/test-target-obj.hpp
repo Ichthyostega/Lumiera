@@ -22,7 +22,7 @@
 #define LIBRARY_TEST_TARGET_OBJ_H
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"
 

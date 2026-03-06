@@ -16,8 +16,8 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "steam/control/command-def.hpp"
 //#include "lib/format-cout.hpp"
 //#include "lib/util.hpp"
@@ -40,7 +40,7 @@ namespace test    {
 //  using std::bind;
 //  using std::string;
   //using std::rand;
-//  using lib::test::showSizeof;
+//  using test::showSizeof;
 //  using util::isSameObject;
 //  using util::contains;
   

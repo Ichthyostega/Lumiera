@@ -133,8 +133,8 @@
 
 
 #include "test-chain-load.hpp"
+#include "test/transiently.hpp"
 #include "lib/binary-search.hpp"
-#include "lib/test/transiently.hpp"
 
 #include "vault/gear/scheduler.hpp"
 #include "lib/time/timevalue.hpp"

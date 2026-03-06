@@ -20,12 +20,12 @@
  */
 
 
-#ifndef LIB_TEST_TRACKING_DUMMY_H
-#define LIB_TEST_TRACKING_DUMMY_H
+#ifndef TESTSUPPORT_TRACKING_DUMMY_H
+#define TESTSUPPORT_TRACKING_DUMMY_H
 
 
 #include "lib/nocopy.hpp"
-#include "lib/test/event-log.hpp"
+#include "test/event-log.hpp"
 #include "lib/format-string.hpp"
 #include "lib/random.hpp"
 #include "lib/util.hpp"
@@ -34,8 +34,7 @@
 #include <limits>
 
 
-namespace lib {
-namespace test{
+namespace test {
   
   
   /**
@@ -147,7 +146,7 @@ namespace test{
    */
   struct Tracker
     {
-      static lib::test::EventLog log;
+      static EventLog log;
       
       static constexpr int DEFUNCT = std::numeric_limits<int>::min();
       static constexpr int DEAD    = std::numeric_limits<int>::max();
@@ -231,5 +230,5 @@ namespace test{
   
   
   
-}} // namespace lib::test
-#endif /*LIB_TEST_TRACKING_DUMMY_H*/
+}// namespace test
+#endif /*TESTSUPPORT_TRACKING_DUMMY_H*/

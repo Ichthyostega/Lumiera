@@ -16,7 +16,7 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "steam/control/command-def.hpp"
 #include "steam/control/test-dummy-commands.hpp"
 #include "lib/format-cout.hpp"

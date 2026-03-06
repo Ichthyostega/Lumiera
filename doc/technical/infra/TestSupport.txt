@@ -107,7 +107,7 @@ See the following
 .hello-world-test example
 [source,C]
 ----------------------------------------------------------------
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include <iostream>
 
 using std::cout;

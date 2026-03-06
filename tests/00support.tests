@@ -6,16 +6,16 @@ TEST "Test support functions" TestHelper_test <<END
 out: [a-z0-9]{80}$
 out-lit: Displaying types and sizes....
 out-lit: sizeof( just a char )                   =   1
-out-lit: sizeof( test::Murpf )                   =   1
-out-lit: sizeof( test::Wrmrmpft<test::Murpf> )   =   1
-out-lit: sizeof( test::Wrmrmpft<char [2]> )      =   2
-out-lit: sizeof( test::Wrmrmpft<char [3]> )      =   3
+out-lit: sizeof( Murpf )                         =   1
+out-lit: sizeof( Wrmrmpft<Murpf> )               =   1
+out-lit: sizeof( Wrmrmpft<char [2]> )            =   2
+out-lit: sizeof( Wrmrmpft<char [3]> )            =   3
 out-lit: sizeof( Universe )                      =  42
-out-lit: sizeof( test::Wrmrmpft<test::Murpf> )   =   1
-out-lit: sizeof( test::Wrmrmpft<test::Murpf> )   =   1
-out-lit: sizeof( test::Wrmrmpft<test::Murpf> )   =   1
-out-lit: sizeof( test::Wrmrmpft<test::Murpf> )   =   1
-out-lit: sizeof( test::Wrmrmpft<test::Murpf> )   =   1
+out-lit: sizeof( Wrmrmpft<Murpf> )               =   1
+out-lit: sizeof( Wrmrmpft<Murpf> )               =   1
+out-lit: sizeof( Wrmrmpft<Murpf> )               =   1
+out-lit: sizeof( Wrmrmpft<Murpf> )               =   1
+out-lit: sizeof( Wrmrmpft<Murpf> )               =   1
 return: 0
 END
 

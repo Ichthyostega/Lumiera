@@ -17,16 +17,17 @@
 
 
 
-#include "lib/test/run.hpp"
-//#include "lib/test/test-helper.hpp"
-#include "lib/test/tracking-dummy.hpp"
+#include "test/run.hpp"
+#include "test/tracking-dummy.hpp"
 #include "lib/branch-case.hpp"
 #include "lib/format-obj.hpp"
-#include "lib/test/diagnostic-output.hpp"//////////////////TODO
+#include "test/diagnostic-output.hpp"//////////////////TODO
 
+using test::Dummy;
 
 namespace lib {
 namespace test{
+  
   
   
   /********************************************************//**

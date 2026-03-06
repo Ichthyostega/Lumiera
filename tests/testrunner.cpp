@@ -19,8 +19,8 @@
  */
 
 #include "include/lifecycle.hpp"
-#include "lib/test/testoption.hpp"
-#include "lib/test/suite.hpp"
+#include "test/testoption.hpp"
+#include "test/suite.hpp"
 
 using vessel::LifecycleHook;
 using vessel::ON_GLOBAL_INIT;

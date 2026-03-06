@@ -18,8 +18,8 @@
 
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "lib/result.hpp"
 #include "lib/util.hpp"
 
@@ -42,7 +42,7 @@ namespace test{
     const Literal THE_END = "all dead and hero got the girl";
     
     
-    #define Type(_EXPR_) lib::test::showType<decltype(_EXPR_)>()
+    #define Type(_EXPR_) ::test::showType<decltype(_EXPR_)>()
   }
 
   

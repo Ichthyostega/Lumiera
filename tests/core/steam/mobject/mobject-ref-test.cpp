@@ -16,7 +16,7 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "steam/asset/media.hpp"
 #include "steam/mobject/mobject.hpp"
 #include "steam/mobject/mobject-ref.hpp"
@@ -29,14 +29,14 @@
 #include "steam/mobject/test-dummy-mobject.hpp"
 #include "vault/media-access-mock.hpp"
 #include "lib/depend-inject.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/test-helper.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
 #include <string>
 
-using lib::test::showSizeof;
+using test::showSizeof;
 using lib::time::Duration;
 using lib::time::FSecs;
 using lib::time::Time;

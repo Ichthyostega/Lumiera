@@ -16,14 +16,13 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
-#include "lib/test/temp-dir.hpp"
+#include "test/run.hpp"
+#include "test/temp-dir.hpp"
+#include "test/test-helper.hpp"
 
 #include <fstream>
 
 
-namespace lib {
 namespace test{
 namespace test{
   
@@ -117,4 +116,4 @@ namespace test{
   LAUNCHER (TempDir_test, "unit common");
   
   
-}}} // namespace lib::test::test
+}} // namespace test::test

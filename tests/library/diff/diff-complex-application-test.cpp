@@ -21,7 +21,7 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "lib/format-util.hpp"
 #include "lib/diff/tree-diff-application.hpp"
 #include "lib/diff/test-mutation-target.hpp"

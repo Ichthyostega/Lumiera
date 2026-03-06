@@ -16,9 +16,9 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "lib/format-util.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/test-helper.hpp"
 #include "lib/diff/tree-mutator.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/format-util.hpp"

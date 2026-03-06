@@ -20,7 +20,7 @@
  */
 
 
-#include "lib/test/test.h"
+#include "test/test.h"
 #include "lib/mutex.h"
 #include "lib/recmutex.h"
 

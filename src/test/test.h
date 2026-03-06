@@ -21,8 +21,8 @@
  */
 
 
-#ifndef LIB_TEST_TEST_H
-#define LIB_TEST_TEST_H
+#ifndef TESTSUPPORT_TEST_H
+#define TESTSUPPORT_TEST_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -59,7 +59,7 @@ main (int argc, const char** argv)              \
 }
 
 
-#endif
+#endif /*TESTSUPPORT_TEST_H*/
 
 /*
 // Local Variables:

@@ -16,13 +16,13 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 
 //#include "steam/play/diagnostic-output-slot.hpp"
 #include "steam/engine/buffer-proxy-adaptor.hpp"
 #include "steam/engine/test-rand-ontology.hpp"
 #include "lib/meta/prop-builder.hpp"
-#include "lib/test/diagnostic-output.hpp"
+#include "test/diagnostic-output.hpp" ////////////////////TODO
 
 
 namespace steam {

@@ -17,10 +17,9 @@
 
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "lib/random.hpp"
 #include "lib/util.hpp"
-#include "lib/test/diagnostic-output.hpp"
 
 using util::isLimited;
 

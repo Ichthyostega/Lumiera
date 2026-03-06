@@ -16,9 +16,9 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
-#include "lib/test/temp-dir.hpp"
+#include "test/run.hpp"
+#include "test/temp-dir.hpp"
+#include "test/test-helper.hpp"
 #include "lib/stat/data.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/format-cout.hpp"
@@ -30,7 +30,7 @@
 
 using util::isnil;
 using lib::time::Time;
-using lib::test::TempDir;
+using test::TempDir;
 using std::make_tuple;
 using std::string;
 using std::vector;

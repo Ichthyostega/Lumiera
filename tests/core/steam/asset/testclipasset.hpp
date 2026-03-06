@@ -20,7 +20,7 @@
 #define ASSET_TESTCLIPASSET_H
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 //#include "lib/util.hpp"
 
 

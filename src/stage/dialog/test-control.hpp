@@ -40,7 +40,7 @@
 #include "include/gui-notification-facade.h"
 #include "steam/mobject/session/dummy-session-connection.hpp"
 
-#include "lib/test/test-helper.hpp"
+#include "test/test-helper.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "lib/scoped-ptrvect.hpp"
 #include "lib/format-string.hpp"
@@ -285,7 +285,7 @@ namespace dialog {
           pickDummyID()
             {
               string dummyID = sanitise (dummy_.get_text());
-              dummy_.set_text (string{_Fmt{"d%s%02d"} % lib::test::randStr(2) % (1 + lib::rani(99))});
+              dummy_.set_text (string{_Fmt{"d%s%02d"} % lib::randStr(2) % (1 + lib::rani(99))});
               return dummyID;
             }
           

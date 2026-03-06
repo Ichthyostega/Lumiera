@@ -18,11 +18,11 @@
 
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "lib/fun-hash-dispatch.hpp"
 #include "lib/format-obj.hpp"
-#include "lib/test/diagnostic-output.hpp"////////////////////TODO
+#include "test/diagnostic-output.hpp"////////////////////TODO
 //#include "lib/util.hpp"
 
 //#include <cstdlib>

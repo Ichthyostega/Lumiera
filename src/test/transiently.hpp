@@ -24,8 +24,8 @@
  */
 
 
-#ifndef LIB_TEST_TRANSIENTLY_H
-#define LIB_TEST_TRANSIENTLY_H
+#ifndef TEST_TRANSIENTLY_H
+#define TEST_TRANSIENTLY_H
 
 
 #include "lib/nocopy.hpp"
@@ -34,7 +34,6 @@
 
 #include <utility>
 
-namespace lib {
 namespace test{
   
   /**
@@ -107,7 +106,7 @@ namespace test{
   template<typename FUN,                 typename=lib::meta::enable_if<lib::meta::has_Sig<FUN, void(void)>>>
   Transiently (FUN&&) -> Transiently<void(void)>;
   
-}} // namespace lib::test
+}// namespace test
 
 
 
@@ -119,7 +118,7 @@ namespace test{
  * @remark use as `TRANSIENTLY(blah) = moo;`
  */
 #define TRANSIENTLY(_OO_) \
-  lib::test::Transiently PPMPL_CAT(transientlyManipulated_,__LINE__)(_OO_); PPMPL_CAT(transientlyManipulated_,__LINE__)
+  ::test::Transiently PPMPL_CAT(transientlyManipulated_,__LINE__)(_OO_); PPMPL_CAT(transientlyManipulated_,__LINE__)
 
 
-#endif /*LIB_TEST_TRANSIENTLY_H*/
+#endif /*TEST_TRANSIENTLY_H*/

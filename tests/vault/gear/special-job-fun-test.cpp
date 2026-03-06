@@ -16,14 +16,14 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
+#include "test/tracking-dummy.hpp"
 //#include "vault/real-clock.hpp"
 //#include "lib/time/timevalue.hpp"
 #include "vault/gear/special-job-fun.hpp"
 #include "lib/format-cout.hpp" ////////////////////////////////////TODO Moo-oh
-#include "lib/test/diagnostic-output.hpp"//////////////////////////TODO TOD-oh
-#include "lib/test/tracking-dummy.hpp"
+#include "test/diagnostic-output.hpp"//////////////////////////////TODO TOD-oh
 //#include "lib/util.hpp"
 
 //#include <array>
@@ -36,7 +36,7 @@
 //using util::isSameObject;
 //using lib::test::randStr;
 //using lib::test::randTime;
-using lib::test::Dummy;
+using test::Dummy;
 //using std::array;
 
 

@@ -16,7 +16,7 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "steam/mobject/session.hpp"
 #include "steam/fixture/fixture.hpp"             // TODO only temporarily needed
 //#include "steam/assetmanager.hpp"          //////??

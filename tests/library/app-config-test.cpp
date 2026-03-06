@@ -17,7 +17,7 @@
 
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "vessel/spine/config-facade.h"
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"

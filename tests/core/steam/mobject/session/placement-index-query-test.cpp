@@ -16,7 +16,7 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "steam/mobject/session/scope-query.hpp"
 #include "steam/mobject/session/session-service-explore-scope.hpp"
 #include "steam/mobject/session/placement-index-query-resolver.hpp"

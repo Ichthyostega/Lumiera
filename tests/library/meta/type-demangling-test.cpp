@@ -17,7 +17,7 @@
 
 
 #include "lib/symbol.hpp"
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "lib/meta/util.hpp"
 
 #include <string>

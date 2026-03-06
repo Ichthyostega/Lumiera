@@ -17,11 +17,11 @@
 
 
 #include "lib/symbol.hpp"
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "lib/meta/util.hpp"
 #include "lib/meta/typelist.hpp"
 #include "lib/hetero-data.hpp"
-#include "lib/test/diagnostic-output.hpp"
+#include "lib/format-cout.hpp"
 
 #include <string>
 #include <array>

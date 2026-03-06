@@ -35,11 +35,10 @@
 
 
 #include "lib/error.hpp"
-#include "lib/test/event-log.hpp"
+#include "test/event-log.hpp"
 
 
 
-namespace lib {
 namespace test{
   namespace error = lumiera::error;
   
@@ -48,6 +47,7 @@ namespace test{
   using util::isnil;
   using lib::Symbol;
   using std::string;
+  using std::forward;
   
   
   namespace { /* == elementary matchers == */
@@ -812,4 +812,4 @@ namespace test{
   
   
   
-}} // namespace lib::test
+}// namespace test

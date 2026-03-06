@@ -17,8 +17,8 @@
 
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "lib/format-util.hpp"
 #include "lib/iter-chain-search.hpp"
 #include "lib/iter-cursor.hpp"

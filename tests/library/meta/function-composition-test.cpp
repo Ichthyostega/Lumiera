@@ -16,8 +16,8 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/function-closure.hpp"
@@ -30,7 +30,7 @@ namespace meta {
 namespace test {
   
   using ::test::Test;
-  using lib::test::showType;
+  using ::test::showType;
   using lib::meta::_Fun;
   using func::bindFirst;
   using func::bindLast;

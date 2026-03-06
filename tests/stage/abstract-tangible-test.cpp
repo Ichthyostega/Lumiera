@@ -35,9 +35,9 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
-#include "lib/test/event-log.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
+#include "test/event-log.hpp"
 #include "test/mock-elm.hpp"
 #include "test/test-nexus.hpp"
 #include "lib/idi/genfunc.hpp"
@@ -57,9 +57,9 @@
 using lib::Symbol;
 using util::isnil;
 using util::toString;
+using test::EventLog;
 using lib::time::Time;
 using stage::test::MockElm;
-using lib::test::EventLog;
 using lib::idi::EntryID;
 using lib::diff::Rec;
 using lib::diff::MakeRec;

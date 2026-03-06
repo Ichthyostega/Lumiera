@@ -72189,7 +72189,7 @@
 </node>
 <node CREATED="1772467713314" ID="ID_1260307377" MODIFIED="1772467717464" TEXT="vessel">
 <node CREATED="1772478667252" ID="ID_1873381687" MODIFIED="1772478785290" TEXT="vessel::spine">
-<linktarget COLOR="#785e5b" DESTINATION="ID_1873381687" ENDARROW="Default" ENDINCLINATION="3167;618;" ID="Arrow_ID_790663035" SOURCE="ID_1230702980" STARTARROW="None" STARTINCLINATION="1144;89;"/>
+<linktarget COLOR="#785e5b" DESTINATION="ID_1873381687" ENDARROW="Default" ENDINCLINATION="3167;618;" ID="Arrow_ID_790663035" SOURCE="ID_1230702980" STARTARROW="None" STARTINCLINATION="1154;87;"/>
 <node COLOR="#56312d" CREATED="1772478751648" ID="ID_1228838617" MODIFIED="1772478768902" TEXT="&#xfc;bergreifende Definitionen und Schnittstellen"/>
 </node>
 <node CREATED="1772467881056" ID="ID_1519471369" MODIFIED="1772467885264" TEXT="vessel::advice"/>
@@ -72493,6 +72493,14 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1697231270063" ID="ID_1888527843" MODIFIED="1697231276175" TEXT="Subsystem-Runner">
 <icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node CREATED="1772672526054" ID="ID_85555678" MODIFIED="1772672533751" TEXT="Bootstrap / Shutdown">
+<node CREATED="1772672668672" ID="ID_386247962" MODIFIED="1772672672988" TEXT="pre-main()">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1772672545371" ID="ID_1518775415" MODIFIED="1772672666550" TEXT="ungekl&#xe4;rt: Initialisieren von NoBug">
+<arrowlink COLOR="#be310e" DESTINATION="ID_1499658866" ENDARROW="Default" ENDINCLINATION="406;-831;" ID="Arrow_ID_1371501056" STARTARROW="None" STARTINCLINATION="1543;113;"/>
+<icon BUILTIN="bell"/>
+</node>
 </node>
 </node>
 </node>
@@ -114904,14 +114912,14 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1772477958773" ID="ID_1191642200" MODIFIED="1772477969130" TEXT="Ausf&#xfc;hrung">
 <icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1772477970489" ID="ID_945262676" MODIFIED="1772478233574" TEXT="Vorbereitungen...">
+<node COLOR="#435e98" CREATED="1772477970489" ID="ID_945262676" MODIFIED="1772672410752" TEXT="Vorbereitungen...">
 <icon BUILTIN="yes"/>
 <node CREATED="1772477978051" ID="ID_1145781733" MODIFIED="1772477987770" TEXT="&#xbb;Vessel&#xab; dokumentieren"/>
 <node CREATED="1772560467924" ID="ID_1419619818" MODIFIED="1772560522485" TEXT="und aus AppState wird eine Voyage">
 <linktarget COLOR="#2e83e6" DESTINATION="ID_1419619818" ENDARROW="Default" ENDINCLINATION="291;21;" ID="Arrow_ID_464210861" SOURCE="ID_92248164" STARTARROW="None" STARTINCLINATION="-19;125;"/>
 <icon BUILTIN="ksmiletris"/>
 </node>
-<node CREATED="1772477989246" ID="ID_1526065242" MODIFIED="1772478019620">
+<node CREATED="1772477989246" ID="ID_1526065242" MODIFIED="1772734890901">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
@@ -114998,26 +115006,15 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1772503464810" ID="ID_1499658866" MODIFIED="1772503479586" TEXT="&#xdc;berraschung: wird gar nicht (mehr) gebraucht?">
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1772503464810" ID="ID_1499658866" MODIFIED="1772672666550" TEXT="&#xdc;berraschung: wird gar nicht (mehr) gebraucht?">
+<linktarget COLOR="#be310e" DESTINATION="ID_1499658866" ENDARROW="Default" ENDINCLINATION="406;-831;" ID="Arrow_ID_1371501056" SOURCE="ID_1518775415" STARTARROW="None" STARTINCLINATION="1543;113;"/>
 <icon BUILTIN="help"/>
 <node CREATED="1772503485519" ID="ID_1516911789" LINK="https://issues.lumiera.org/ticket/1133" MODIFIED="1772503891550" TEXT="hier hat sich wohl mit dem ZombieCheck und #1133 die Begr&#xfc;ndung in &#xbb;Luft&#xab; aufgel&#xf6;st">
 <arrowlink COLOR="#fddcce" DESTINATION="ID_1997666438" ENDARROW="Default" ENDINCLINATION="263;3774;" ID="Arrow_ID_519178011" STARTARROW="Default" STARTINCLINATION="2312;70;"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1772507033399" ID="ID_753555895" LINK="https://issues.lumiera.org/ticket/1416" MODIFIED="1772507046892" TEXT="#1416 clarify lifecycle of the &#xbb;Vessel&#xab; ">
 <icon BUILTIN="flag-yellow"/>
-<node CREATED="1772508264250" ID="ID_1439037571" MODIFIED="1772508277789" TEXT="habe dort mal alle diese Beobachtungen notiert">
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1772508622392" ID="ID_426690721" MODIFIED="1772508665323" TEXT="Vorsicht: Kommentar gespeichert?">
-<richcontent TYPE="NOTE"><html>
-  <head/>
-  <body>
-    <p>
-      Grade Netzwerk-Wartungsarbeiten bei M-Net. Notfalls sollte der Kommentar in der Form-History sein
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="broken-line"/>
-</node>
-</node>
+<node CREATED="1772508264250" ID="ID_1439037571" MODIFIED="1772508277789" TEXT="habe dort mal alle diese Beobachtungen notiert"/>
 <node CREATED="1772508279112" ID="ID_944148147" MODIFIED="1772508282540" TEXT="Idee...">
 <node CREATED="1772508288777" ID="ID_1204563226" MODIFIED="1772508296203" TEXT="ON_BASIC_INIT abschaffen"/>
 <node CREATED="1772508309618" ID="ID_1996440422" MODIFIED="1772508369554" TEXT="danach kl&#xe4;ren, ob wir nobug-init.hpp &#xfc;berhaupt noch brauchen">
@@ -115081,7 +115078,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
     </p>
   </body>
 </html></richcontent>
-<arrowlink COLOR="#785e5b" DESTINATION="ID_1873381687" ENDARROW="Default" ENDINCLINATION="3167;618;" ID="Arrow_ID_790663035" STARTARROW="None" STARTINCLINATION="1144;89;"/>
+<arrowlink COLOR="#785e5b" DESTINATION="ID_1873381687" ENDARROW="Default" ENDINCLINATION="3167;618;" ID="Arrow_ID_790663035" STARTARROW="None" STARTINCLINATION="1154;87;"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1772478793204" HGAP="81" ID="ID_619773844" MODIFIED="1772478808375" TEXT="dorthin..." VSHIFT="22">
 <node COLOR="#435e98" CREATED="1772478866834" ID="ID_734568081" MODIFIED="1772580766202" TEXT="play-facade"/>
@@ -115136,7 +115133,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1772478107573" ID="ID_1357120432" MODIFIED="1772586311743" TEXT="Quellcode verschieben">
+<node COLOR="#338800" CREATED="1772478107573" FOLDED="true" ID="ID_1357120432" MODIFIED="1772586311743" TEXT="Quellcode verschieben">
 <icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1772584502630" ID="ID_1373602101" MODIFIED="1772584531277" TEXT="&apos;appstate.hpp|cpp&apos; wird zu voyage.hpp|cpp"/>
 <node COLOR="#435e98" CREATED="1772583766047" ID="ID_176079965" MODIFIED="1772583842890" TEXT="die ausgew&#xe4;hlten Header in vessel/spine"/>
@@ -115169,12 +115166,132 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1772586215223" ID="ID_1431676379" MODIFIED="1772586251267" TEXT="die Tests selber includieren einander nicht und k&#xf6;nnten in beliebigen Verzeichnissen liegen">
 <icon BUILTIN="idea"/>
 </node>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1772586254019" ID="ID_1101747989" MODIFIED="1772586272421" TEXT="Idee: man k&#xf6;nnte eine separate Sektion f&#xfc;r die Test-Hilfsmittel schaffen">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1772586254019" ID="ID_1101747989" MODIFIED="1772750921925" TEXT="Idee: man k&#xf6;nnte eine separate Sektion f&#xfc;r die Test-Hilfsmittel schaffen">
+<arrowlink COLOR="#733bc5" DESTINATION="ID_1130050398" ENDARROW="Default" ENDINCLINATION="30;-51;" ID="Arrow_ID_580685301" STARTARROW="None" STARTINCLINATION="-262;10;"/>
 <icon BUILTIN="hourglass"/>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1772586284367" ID="ID_815192684" LINK="#ID_389403594" MODIFIED="1772586333967" TEXT="Testsuite l&#xe4;uft wieder wie vorher (derzeit zwei gebrochene Tests)">
 <icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node CREATED="1772734875124" ID="ID_876509086" MODIFIED="1772734883385" TEXT="Test-Support-Komponenten">
+<node CREATED="1772746030333" ID="ID_1311869069" MODIFIED="1772746035156" TEXT="Anforderungen">
+<node CREATED="1772746049047" ID="ID_1822802235" MODIFIED="1772746065274" TEXT="aus der Application-Core heraushalten"/>
+<node CREATED="1772746077541" ID="ID_647564690" MODIFIED="1772746253257" TEXT="haben oft eine statische &#xbb;runtime&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Hier besteht eine gewisse Tendenz zur Systembildung; dieser sollte aber nicht stattgegeben werden, denn Lumiera ist keine Plattform &#8212; was impliziert da&#223; alle essentiellen, system-artigen Strukturen in die Applikation geh&#246;ren
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1772750693985" ID="ID_1754292501" MODIFIED="1772750709101" TEXT="&#xbb;Layered Linkage&#xab; beachten"/>
+<node CREATED="1772750782919" ID="ID_880221294" MODIFIED="1772750800656" TEXT="Include-Path passend zum Namespace"/>
+<node CREATED="1772750802636" ID="ID_1096862657" MODIFIED="1772750829353" TEXT="w&#xfc;nschenswert: stets in einem sub-Namespace test"/>
+</node>
+<node CREATED="1772750954208" ID="ID_1247182351" MODIFIED="1772750958745" TEXT="L&#xf6;sungsans&#xe4;tze">
+<node CREATED="1772734920128" ID="ID_1130050398" MODIFIED="1772751079519" TEXT="Separate Sektion">
+<linktarget COLOR="#733bc5" DESTINATION="ID_1130050398" ENDARROW="Default" ENDINCLINATION="30;-51;" ID="Arrow_ID_580685301" SOURCE="ID_1101747989" STARTARROW="None" STARTINCLINATION="-262;10;"/>
+<node COLOR="#5b280f" CREATED="1772751012088" ID="ID_484445328" MODIFIED="1772751088539" TEXT="ist nicht so einfach realisierbar">
+<icon BUILTIN="stop-sign"/>
+</node>
+<node CREATED="1772751020899" ID="ID_1920052635" MODIFIED="1772751042987" TEXT="dann m&#xfc;&#xdf;te es zumindest f&#xfc;r Vault eine separate L&#xf6;sung geben"/>
+<node CREATED="1772751103418" ID="ID_346407074" MODIFIED="1772751122957" TEXT="dies w&#xe4;re dann eine dedizierte Komponente, auf die die Vault-Tests explizit gelinkt sind"/>
+<node CREATED="1772751175583" ID="ID_872754641" MODIFIED="1772751203434" TEXT="das schlie&#xdf;t Test-Implementierungen f&#xfc;r Komponenten aus h&#xf6;hren Layern aus"/>
+<node CREATED="1772751219205" ID="ID_1591035437" MODIFIED="1772751225560" TEXT="damit w&#xfc;rde diese L&#xf6;sung....">
+<node CREATED="1772751226747" ID="ID_1025898359" MODIFIED="1772751385577" TEXT="alle Tests so lassen wie sie sind">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1772751236431" ID="ID_1155383842" MODIFIED="1772751404483" TEXT="eine neue Test-Support-Library einf&#xfc;hren">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1772751302102" ID="ID_672895906" MODIFIED="1772751394250" TEXT="diese w&#xfc;rde auch den Test-Runner / die Suite umfassen">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1772751347723" ID="ID_1327301155" MODIFIED="1772751377834" TEXT="trotzdem g&#xe4;be es auch noch dedizierte Test-Komponenten in Steam und Stage">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1772752175087" ID="ID_1554413064" MODIFIED="1772752188584" TEXT="im Besonderen f&#xfc;r Stage bleibt das alte Problem ungel&#xf6;st">
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
+</node>
+<node CREATED="1772751445934" ID="ID_1104603650" MODIFIED="1772751466055" TEXT="lediglich f&#xfc;r Vault eine Spezialbehandlung">
+<node CREATED="1772751472565" ID="ID_602088488" MODIFIED="1772751691948" TEXT="entweder indem man eine hart-gecodete Variante im SConscript einf&#xfc;hrt">
+<icon BUILTIN="smiley-angry"/>
+</node>
+<node CREATED="1772751492688" ID="ID_49085207" MODIFIED="1772751698309" TEXT="oder einen neuen Container-Folder, in dem &#xbb;vault&#xab; residiert">
+<icon BUILTIN="smily_bad"/>
+</node>
+<node COLOR="#5b280f" CREATED="1772751653731" ID="ID_1435980519" MODIFIED="1772751709179" TEXT="das gleiche Problem besteht aber auch f&#xfc;r &#xbb;stage&#xab;">
+<icon BUILTIN="closed"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#bf0913" CREATED="1772751718454" HGAP="30" ID="ID_962252938" MODIFIED="1772751748748" TEXT="&#x27f9; das ist also gar keine L&#xf6;sung" VSHIFT="6">
+<font NAME="SansSerif" SIZE="9"/>
+</node>
+</node>
+</node>
+<node CREATED="1772751795632" ID="ID_561199561" MODIFIED="1772751803921" TEXT="&quot;test&quot;-Subfolder f&#xfc;r Vault und Stage">
+<node CREATED="1772751806842" ID="ID_545037302" MODIFIED="1772751817584" TEXT="sonst bleibt alles beim Status-quo">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1772751820548" ID="ID_988474156" MODIFIED="1772752047852" TEXT="Test-Hilfsmittel wandern in top-Level Namespace test::">
+<icon BUILTIN="smiley-neutral"/>
+</node>
+<node CREATED="1772751892683" ID="ID_1975715926" MODIFIED="1772752070139" TEXT="Test-Hilfsmittel werden mit &quot;test/&quot;-Pfr&#xe4;fix includiert">
+<icon BUILTIN="smiley-angry"/>
+</node>
+<node CREATED="1772751908684" ID="ID_561455613" MODIFIED="1772752089589" TEXT="man k&#xf6;nnte dieses Schema auch f&#xfc;r Steam etablieren">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1772752004092" ID="ID_385348264" MODIFIED="1772752013613" TEXT="Test-Runner bleibt in der Library"/>
+<node CREATED="1772751984927" ID="ID_1490429454" MODIFIED="1772751992642" TEXT="Linkage ist gem&#xe4;&#xdf; Layer"/>
+</node>
+<node CREATED="1772752213285" ID="ID_119992226" MODIFIED="1772758923648" TEXT="Test-Folder-Hierarchie umbauen">
+<icon BUILTIN="forward"/>
+<node CREATED="1772752222480" ID="ID_1909429773" MODIFIED="1772752259275" TEXT="in das SConscript kommt nun fest &lt;Projekt&gt;/test als Include">
+<node CREATED="1772758759407" ID="ID_1272067307" MODIFIED="1772758773603" TEXT="k&#xf6;nnte schwierig zu realisieren sein"/>
+<node CREATED="1772758774765" ID="ID_1624766230" LINK="https://stackoverflow.com/q/9806573/444796" MODIFIED="1772758793881" TEXT="L&#xf6;sung aus Stackoverflow"/>
+</node>
+<node CREATED="1772752266378" ID="ID_714310366" MODIFIED="1772752322365" TEXT="jeder Subfolder wird eine eigene Library und damit isoliert">
+<node CREATED="1772757152527" ID="ID_1027840867" MODIFIED="1772757163253" TEXT="&quot;core&quot; f&#xe4;llt weg"/>
+<node CREATED="1772757164308" ID="ID_1257306485" MODIFIED="1772757186074" TEXT="stattdessen steam + vessel"/>
+<node CREATED="1772757187529" ID="ID_842215360" MODIFIED="1772757194316" TEXT="&quot;library&quot; wird zu &quot;lib&quot;"/>
+</node>
+<node CREATED="1772757230370" ID="ID_770966486" MODIFIED="1772759001179" TEXT="sonst kann alles bleiben wie es ist">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1772752342869" ID="ID_1001543443" MODIFIED="1772758997681" TEXT="universelle Test-Komponenten m&#xfc;ssen in die Library">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1772752406382" ID="ID_1284509593" MODIFIED="1772758994194" TEXT="alternativ: separate Test-Komponente">
+<icon BUILTIN="forward"/>
+<node CREATED="1772752442408" ID="ID_106774014" MODIFIED="1772752455213" TEXT="liegt neben oder &#xfc;ber &#xbb;Vessel&#xab;"/>
+<node CREATED="1772756612218" ID="ID_1748402106" MODIFIED="1772756624757" TEXT="eigener top-Namespace test::"/>
+<node CREATED="1772756648816" ID="ID_1312861966" MODIFIED="1772756658066" TEXT="wird allen Test-Komponenten zugelinkt"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1772758927320" ID="ID_1030178738" MODIFIED="1772758932789" TEXT="Beschlu&#xdf;">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#e0d5a7" COLOR="#435e98" CREATED="1772758933963" ID="ID_1303869681" MODIFIED="1772842837273" TEXT="die zuletzt aufgef&#xfc;hrte L&#xf6;sung ist klar &#xfc;berlegen">
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#435e98" CREATED="1772758948030" ID="ID_244079057" MODIFIED="1772842856603" TEXT="die separate Komponente sollte sofort eingef&#xfc;hrt werden">
+<node CREATED="1772823385501" ID="ID_1536853190" MODIFIED="1772824850661" TEXT="Quellverzeichnis: src/test"/>
+<node CREATED="1772823348665" ID="ID_81280209" MODIFIED="1772823364031" TEXT="SCons - Exportvariable &apos;test_support&apos;"/>
+<node CREATED="1772823365541" ID="ID_1605366511" MODIFIED="1772823380198" TEXT="erzeugt libtestsupport.so (nicht installiert)"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#a21384" CREATED="1772842862040" ID="ID_822025236" MODIFIED="1772842887781" TEXT="(puh ... war sehr aufwendig)">
+<font NAME="SansSerif" SIZE="11"/>
+</node>
+</node>
+<node CREATED="1772759056034" ID="ID_261195132" MODIFIED="1772759065317" TEXT="die Reorganisation der Test-Folder">
+<node CREATED="1772759066479" ID="ID_1069566157" MODIFIED="1772759072426" TEXT="ist eigentlich nicht schlimm"/>
+<node CREATED="1772759073470" ID="ID_1564401966" MODIFIED="1772759081236" TEXT="k&#xf6;nnte aber auf sp&#xe4;ter verschoben werden"/>
 </node>
 </node>
 </node>

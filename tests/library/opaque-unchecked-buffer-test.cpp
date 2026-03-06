@@ -17,8 +17,8 @@
 
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/util.hpp"
 
@@ -30,12 +30,12 @@
 namespace lib {
 namespace test{
   
-  using ::Test;
   using util::min;
   using lumiera::error::LUMIERA_ERROR_FATAL;
   using lumiera::error::LUMIERA_ERROR_CAPACITY;
   using util::MoveOnly;
   
+  using std::string;
   using std::strlen;
   using std::cout;
   using std::endl;

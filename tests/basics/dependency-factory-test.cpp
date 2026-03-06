@@ -20,7 +20,7 @@
 
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "lib/format-obj.hpp"
 #include "lib/util.hpp"
 

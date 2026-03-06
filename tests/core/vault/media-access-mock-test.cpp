@@ -25,7 +25,7 @@
 #include "lib/depend-inject.hpp"
 #include "lib/format-cout.hpp"
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "lib/symbol.hpp"
 
 #include <string>

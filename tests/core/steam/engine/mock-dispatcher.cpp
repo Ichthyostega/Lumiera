@@ -32,7 +32,7 @@
 
 #include "steam/engine/mock-dispatcher.hpp"
 #include "vault/gear/nop-job-functor.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/test-helper.hpp"
 #include "lib/time/timevalue.hpp"
 #include "vault/real-clock.hpp"
 #include "lib/hash-combine.hpp"
@@ -179,7 +179,7 @@ namespace test  {
     invoKey.part.a = rani (MAX_PARAM_A);
     invoKey.part.b = rani (2*MAX_PARAM_B - MAX_PARAM_B);
     
-    Time nominalTime = lib::test::randTime();
+    Time nominalTime = ::test::randTime();
     
     return Job(dummyClosure, invoKey, nominalTime);
   }

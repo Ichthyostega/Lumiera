@@ -111,13 +111,13 @@
 
 
 #include "vault/common.hpp"
-#include "lib/test/transiently.hpp"
+#include "test/transiently.hpp"
+#include "test/microbenchmark.hpp"
 
 #include "vault/gear/job.h"
 #include "vault/gear/scheduler.hpp"
 #include "vault/gear/special-job-fun.hpp"
 #include "lib/uninitialised-storage.hpp"
-#include "lib/test/microbenchmark.hpp"
 #include "lib/incidence-count.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/time/quantiser.hpp"
@@ -156,10 +156,10 @@ namespace test {
   using lib::time::TimeValue;
   using lib::time::FrameRate;
   using lib::time::Duration;
-  using lib::test::benchmarkTime;
-  using lib::test::microBenchmark;
-  using lib::test::Transiently;
   using lib::meta::_FunRet;
+  using ::test::benchmarkTime;
+  using ::test::microBenchmark;
+  using ::test::Transiently;
 
   using std::string;
   using std::function;

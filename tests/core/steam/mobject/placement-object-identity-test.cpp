@@ -16,7 +16,7 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "steam/asset/media.hpp"
 #include "steam/mobject/mobject.hpp"
 #include "steam/mobject/mobject-ref.hpp"
@@ -28,7 +28,7 @@
 #include "steam/mobject/explicitplacement.hpp"
 #include "lib/time/timevalue.hpp"
 //#include "steam/mobject/test-dummy-mobject.hpp"
-//#include "lib/test/test-helper.hpp"
+//#include "test/test-helper.hpp"
 
 
 

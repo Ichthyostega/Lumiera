@@ -18,8 +18,8 @@
  */
 
 
-#ifndef LIB_TEST_TEMP_DIR_H
-#define LIB_TEST_TEMP_DIR_H
+#ifndef TESTSUPPORT_TEMP_DIR_H
+#define TESTSUPPORT_TEMP_DIR_H
 
 
 #include "lib/error.hpp"
@@ -27,6 +27,7 @@
 #include "lib/random.hpp"
 #include "include/limits.hpp"
 #include "lib/format-string.hpp"
+#include "lib/format-obj.hpp"
 #include "lib/file.hpp"
 #include "lib/util.hpp"
 
@@ -34,9 +35,7 @@
 #include <string>
 
 
-namespace lib {
 namespace test{
-  
   namespace error = lumiera::error;
   
   using util::_Fmt;
@@ -44,7 +43,7 @@ namespace test{
   using std::string;
   
   namespace {
-    Literal TEMPFILE_PREFIX = "Lux";
+    lib::Literal TEMPFILE_PREFIX = "Lux";
   }
   
   
@@ -98,7 +97,7 @@ namespace test{
           auto tmpDir = fs::temp_directory_path();
           for (uint attempt=0; attempt<LUMIERA_MAX_COMPETITION; ++attempt)
             {
-              auto randName = TEMPFILE_PREFIX + util::showHash (entropyGen.u64());
+              auto randName = TEMPFILE_PREFIX + util::showHash (lib::entropyGen.u64());
               auto newPath = tmpDir / randName;
               //  attempt to create it....
               if (fs::create_directory (newPath)
@@ -117,7 +116,7 @@ namespace test{
         {
           for (uint attempt=0; attempt<LUMIERA_MAX_COMPETITION; ++attempt)
             {
-              auto randName = prefix + "." + util::showHash (entropyGen.u64());
+              auto randName = prefix + "." + util::showHash (lib::entropyGen.u64());
               auto newPath = loc_ / randName;
               //  attempt to create it....
               if (fs::exists(newPath))
@@ -141,5 +140,5 @@ namespace test{
     };
   
   
-}} // namespace lib::test
-#endif /*LIB_TEST_TEMP_DIR_H*/
+}// namespace test
+#endif /*TESTSUPPORT_TEMP_DIR_H*/

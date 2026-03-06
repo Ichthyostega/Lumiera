@@ -17,8 +17,8 @@
 
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "lib/util.hpp"
 
 #include "lib/iter-adapter.hpp"
@@ -26,13 +26,14 @@
 #include <string>
 
 
+using LERR_(ITER_EXHAUST);
+using util::isSameObject;
+using test::showType;
+using std::string;
+
 
 namespace lib {
 namespace test{
-  
-  using LERR_(ITER_EXHAUST);
-  using util::isSameObject;
-  using std::string;
   
   namespace { // Test fixture
     

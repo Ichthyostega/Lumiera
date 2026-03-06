@@ -16,8 +16,8 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/error.hpp"
 #include "lib/util-foreach.hpp"
@@ -40,7 +40,6 @@ using std::function;
 using std::string;
 
 
-namespace lib {
 namespace test{
 namespace test{
   
@@ -143,11 +142,6 @@ namespace test{
         {
           // verify the exception is indeed raised
           VERIFY_ERROR (EXCEPTION, doThrow() );
-          
-#if false ///////////////////////////////////////////////////////////////////////////////////////////////TICKET #537 : restore throwing ASSERT
-          // and when actually no exception is raised, this is an ASSERTION failure
-          VERIFY_ERROR (ASSERTION, VERIFY_ERROR (EXCEPTION, dontThrow() ));
-#endif    ///////////////////////////////////////////////////////////////////////////////////////////////TICKET #537 : restore throwing ASSERT
         }
       
       
@@ -197,5 +191,5 @@ namespace test{
   LAUNCHER (TestHelper_test, "unit common");
   
   
-}}} // namespace lib::test::test
+}} // namespace test::test
 

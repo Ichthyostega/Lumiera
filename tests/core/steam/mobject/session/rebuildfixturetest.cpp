@@ -16,7 +16,7 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "steam/mobject/session.hpp"
 #include "steam/mobject/session/testsession1.hpp"
 //#include "lib/format-cout.hpp"

@@ -17,8 +17,8 @@
 
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/variant.hpp"
@@ -30,10 +30,10 @@
 namespace lib {
 namespace test{
   
-  using ::Test;
   using meta::Types;
   using lib::time::Time;
   using lib::time::TimeVar;
+  using ::test::randTime;
   
   using util::contains;
   using std::string;

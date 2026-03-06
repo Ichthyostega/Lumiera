@@ -29,7 +29,7 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "lib/meta/generator.hpp"
 #include "lib/meta/typelist-manip.hpp"
 #include "meta/typelist-diagnostics.hpp"
@@ -112,7 +112,7 @@ namespace test {
               // Furthermore, we use verification against lib::test::ExpectString,
               // which can be given as literal "some text"_expect, to document and
               // verify that the rendered type structure is indeed as expected
-              CHECK (showType<List1>() == "-<1>-<2>-<3>-"_expect);
+              CHECK (renderSeq<List1>() == "-<1>-<2>-<3>-"_expect);
               
               EXPECT (List2, "-<5>-<6>-<7>-");
             }

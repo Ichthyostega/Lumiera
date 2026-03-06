@@ -16,7 +16,7 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "lib/util-foreach.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/format-util.hpp"

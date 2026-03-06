@@ -17,7 +17,7 @@
 
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "lib/gnuplot-gen.hpp"
 #include "lib/iter-explorer.hpp"
 #include "lib/format-cout.hpp"

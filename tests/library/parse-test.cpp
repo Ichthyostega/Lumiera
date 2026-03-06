@@ -17,8 +17,8 @@
 
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "lib/meta/tuple-helper.hpp"
 #include "lib/parse.hpp"
 
@@ -29,7 +29,7 @@ namespace util {
 namespace parse{
 namespace test {
   
-  using lib::test::showType;
+  using ::test::showType;
   using lib::meta::typeSymbol;
   using lib::meta::is_Tuple;
   using std::decay_t;

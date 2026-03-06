@@ -18,12 +18,12 @@
  */
 
 
+#include "test/test.h"
 #include "lib/tmpbuf.h"
 
 #include "vessel/config.h"
 #include "vessel/configitem.h"
 
-#include "lib/test/test.h"
 
 TESTS_BEGIN
 

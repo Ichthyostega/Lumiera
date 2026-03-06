@@ -16,7 +16,7 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 
 #include "lib/p.hpp"
 #include "lib/diff/gen-node.hpp"

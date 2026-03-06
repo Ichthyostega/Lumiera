@@ -17,8 +17,8 @@
  */
 
 
-#ifndef LIB_TEST_TEST_COLL_H
-#define LIB_TEST_TEST_COLL_H
+#ifndef TESTSUPPORT_TEST_COLL_H
+#define TESTSUPPORT_TEST_COLL_H
 
 
 #include <unordered_map>
@@ -27,8 +27,7 @@
 #include <map>
 
 
-namespace lib {
-namespace test{
+namespace test {
   
   
   typedef std::vector<int> VecI;
@@ -45,11 +44,11 @@ namespace test{
   }
   
 
-  typedef std::map<int,int> MapII;
-  typedef std::multimap<int,int> MMapII;
+  using MapII   = std::map<int,int>;
+  using MMapII  = std::multimap<int,int>;
   
-  typedef std::unordered_map<int,int> HMapII;
-  typedef std::unordered_multimap<int,int> HMMapII;
+  using HMapII  = std::unordered_map<int,int>;
+  using HMMapII = std::unordered_multimap<int,int>;
   
   
   template<class MAP>
@@ -87,5 +86,5 @@ namespace test{
 
   
   
-}} // namespace lib::test
-#endif /*LIB_TEST_TEST_COLL_H*/
+}// namespace test
+#endif /*TESTSUPPORT_TEST_COLL_H*/

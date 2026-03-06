@@ -16,8 +16,8 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "steam/control/command-mutation.hpp"
 #include "steam/control/command-simple-closure.hpp"
 #include "steam/control/memento-tie.hpp"

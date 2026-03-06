@@ -16,12 +16,11 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "lib/time/quantiser.hpp"
 #include "lib/random.hpp"
 #include "lib/util.hpp"
-#include "lib/test/diagnostic-output.hpp"
 
 using lumiera::error::LUMIERA_ERROR_BOTTOM_VALUE;
 using util::isnil;

@@ -12,7 +12,7 @@
 * *****************************************************************/
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "steam/control/command-queue.hpp"
 #include "steam/control/command-def.hpp"
 #include "lib/symbol.hpp"

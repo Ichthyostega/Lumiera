@@ -16,7 +16,7 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 
 #include "steam/play/diagnostic-output-slot.hpp"
 #include "steam/engine/buffhandle.hpp"

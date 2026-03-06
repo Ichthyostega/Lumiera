@@ -16,9 +16,9 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "lib/hash-standard.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/test-helper.hpp"
 #include "lib/util.hpp"
 
 #include <boost/functional/hash.hpp>

@@ -27,14 +27,13 @@
  */
 
 
-#ifndef LIB_TEST_MICROBENCHMARK_ADAPTOR_H
-#define LIB_TEST_MICROBENCHMARK_ADAPTOR_H
+#ifndef TEST_MICROBENCHMARK_ADAPTOR_H
+#define TEST_MICROBENCHMARK_ADAPTOR_H
 
 
 #include "lib/meta/function.hpp"
 #include "lib/meta/util.hpp"
 
-namespace lib {
 namespace test{
 namespace microbenchmark {
   
@@ -158,5 +157,5 @@ namespace microbenchmark {
   
   
   
-}}} // namespace lib::test::microbenchmark
-#endif /*LIB_TEST_MICROBENCHMARK_ADAPTOR_H*/
+}} // namespace test::microbenchmark
+#endif /*TEST_MICROBENCHMARK_ADAPTOR_H*/

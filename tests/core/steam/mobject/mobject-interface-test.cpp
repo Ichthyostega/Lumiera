@@ -16,7 +16,7 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "lib/symbol.hpp"
 
 #include "steam/asset/media.hpp"
@@ -43,8 +43,6 @@ namespace steam    {
 namespace mobject {
 namespace test    {
   
-//  using lib::test::showSizeof;
-  
   using lib::Symbol;
   using lib::time::Duration;
   using lib::time::FSecs;
@@ -59,7 +57,7 @@ namespace test    {
   
   
   using namespace mobject::test;
-  typedef TestPlacement<DummyMO> PDummy;
+  using PDummy = TestPlacement<DummyMO>;
   
   
   /*****************************************************************************//**

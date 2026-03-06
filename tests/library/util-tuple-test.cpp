@@ -16,7 +16,7 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "lib/util-tuple.hpp"
 #include "lib/iter-adapter.hpp"
 #include "lib/util.hpp"

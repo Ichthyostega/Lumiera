@@ -16,7 +16,7 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "lib/meta/util.hpp"
 #include "lib/format-cout.hpp"
 
@@ -113,7 +113,7 @@ namespace test{
           CHECK (typeStr(&magic)    == "Space const* (*)(Outer<Space>::Inner&&)");
           CHECK (typeSymbol(&magic) == "Function");
           
-          CHECK (typeStr   <Outer<decltype(this)>::Inner>()  == "Outer<test::TypeDisplay_test*>::Inner");
+          CHECK (typeStr   <Outer<decltype(this)>::Inner>()  == "Outer<TypeDisplay_test*>::Inner");
           CHECK (typeSymbol<Outer<decltype(this)>::Inner>()  == "Inner"      );
           
           CHECK (primaryTypeComponent("")                    == "void"       );

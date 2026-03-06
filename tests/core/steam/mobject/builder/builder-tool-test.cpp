@@ -16,7 +16,7 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 
 #include "steam/mobject/builder/buildertool.hpp"
 #include "steam/mobject/placement.hpp"

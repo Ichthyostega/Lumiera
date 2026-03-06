@@ -17,11 +17,10 @@
 
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "lib/iter-zip.hpp"
 #include "lib/iter-explorer.hpp"
-#include "lib/test/test-helper.hpp"
-#include "lib/test/diagnostic-output.hpp"/////////////TODO
+#include "test/test-helper.hpp"
 #include "lib/format-util.hpp"
 #include "lib/util.hpp"
 
@@ -64,7 +63,7 @@ namespace test{
     }
   }
   
-  #define TYPE(_EXPR_) showType<decltype(_EXPR_)>()
+  #define TYPE(_EXPR_) ::test::showType<decltype(_EXPR_)>()
 
   
   

@@ -16,7 +16,7 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "lib/error.hpp"
 
 #include "steam/engine/calc-stream.hpp"

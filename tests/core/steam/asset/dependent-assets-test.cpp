@@ -16,7 +16,7 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "steam/asset/testasset.hpp"
 #include "steam/asset/asset-diagnostics.hpp"
 #include "vault/media-access-mock.hpp"

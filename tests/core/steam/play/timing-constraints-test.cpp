@@ -16,7 +16,7 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 
 #include "steam/play/timings.hpp"
 #include "lib/time/timevalue.hpp"
