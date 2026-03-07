@@ -11,7 +11,7 @@
 
 * *****************************************************************/
 
-/** @file testframe.cpp
+/** @file test-frame.cpp
  ** Implementation of fake data frames to support unit testing.
  ** The data generation is based on a _discriminator seed value,_
  ** which is computed as a linear combination of a statically fixed anchor-seed
@@ -36,7 +36,7 @@
 #include "lib/random-reseed.hpp"
 #include "lib/hash-standard.hpp"
 #include "lib/hash-combine.hpp"
-#include "steam/engine/testframe.hpp"
+#include "test/test-frame.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/util.hpp"
 
@@ -46,9 +46,7 @@
 
 
 
-namespace steam {
-namespace engine{
-namespace test  {
+namespace test {
   namespace err = lumiera::error;
   
   using std::deque;
@@ -440,4 +438,4 @@ namespace test  {
   }
   
   
-}}} // namespace steam::engine::test
+}// namespace test

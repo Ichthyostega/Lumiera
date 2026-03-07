@@ -1,5 +1,5 @@
 /*
-  TestOption(Test)  -  parsing of cmd line options for running Testcases
+  TestRunnerConfig(Test)  -  parsing of cmd line options for running Testcases
 
    Copyright (C)
      2008,            Hermann Vosseler <Ichthyostega@web.de>
@@ -11,14 +11,14 @@
 
 * *****************************************************************/
 
-/** @file test-option-test.cpp
- ** unit test \ref TestOption_test
+/** @file test-runner-config-test.cpp
+ ** unit test \ref TestRunnerConfig_test
  */
 
 
 #include "test/run.hpp"
 #include "test/test-helper.hpp"
-#include "test/testoption.hpp"
+#include "test/test-runner-config.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/util.hpp"
 
@@ -36,7 +36,7 @@ namespace test {
    * @see test::Suite
    * @see util::Cmdline
    */
-  class TestOption_test : public Test
+  class TestRunnerConfig_test : public Test
     {
       void
       run (Arg)
@@ -93,7 +93,7 @@ namespace test {
         }
     };
   
-  LAUNCHER (TestOption_test, "function common");
+  LAUNCHER (TestRunnerConfig_test, "function common");
   
   
 } // namespace test

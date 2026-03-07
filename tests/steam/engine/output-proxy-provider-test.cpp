@@ -18,18 +18,21 @@
 
 #include "test/run.hpp"
 
-//#include "steam/play/diagnostic-output-slot.hpp"
+#include "test/test-frame.hpp"
+#include "test/test-rand-ontology.hpp"
 #include "steam/engine/buffer-proxy-adaptor.hpp"
-#include "steam/engine/test-rand-ontology.hpp"
 #include "lib/meta/prop-builder.hpp"
 #include "test/diagnostic-output.hpp" ////////////////////TODO
 
 
+using test::TestFrame;
+using test::ont::manipulateFrame;
+
+using lib::meta::PropBuilder;
+
 namespace steam {
 namespace engine{
 namespace test  {
-  
-  using lib::meta::PropBuilder;
   
   
   
@@ -67,7 +70,7 @@ namespace test  {
           CHECK (handle.isValid());
           auto& data = handle.accessAs<TestFrame>();
           uint64_t param = defaultGen.u64();
-          ont::manipulateFrame (&data, &data, param);
+          manipulateFrame (&data, &data, param);
           HashVal check = data.getChecksum();
 
           // »client« is done...

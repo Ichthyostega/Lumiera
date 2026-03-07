@@ -64,7 +64,7 @@ return: 0
 END
 
 
-TEST "Testsuite option handling" TestOption_test <<END
+TEST "Testsuite option handling" TestRunnerConfig_test <<END
 out-lit: Testing invocation with cmdline: ...
 out-lit: --> Testgroup=ALL
 out-lit: --> Test-ID  =--missing--

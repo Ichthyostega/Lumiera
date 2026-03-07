@@ -11,14 +11,14 @@
 
 * *****************************************************************/
 
-/** @file testframe-test.cpp
+/** @file test-frame-test.cpp
  ** unit test \ref TestFrame_test
  */
 
 
 #include "test/run.hpp"
 #include "test/test-helper.hpp"
-#include "steam/engine/testframe.hpp"
+#include "test/test-frame.hpp"
 #include "lib/util.hpp"
 
 #include <climits>
@@ -28,9 +28,7 @@ using test::Test;
 using util::isSameObject;
 using std::unique_ptr;
 
-
-namespace steam {
-namespace engine{
+namespace test  {
 namespace test  {
   
   namespace { // used internally
@@ -267,4 +265,4 @@ namespace test  {
   
   
   
-}}} // namespace steam::engine::test
+}} // namespace test::test

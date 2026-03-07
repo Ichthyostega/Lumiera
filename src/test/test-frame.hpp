@@ -1,5 +1,5 @@
 /*
-  TESTFRAME.hpp  -  test data frame (stub) for checking Render engine functionality
+  TEST-FRAME.hpp  -  test data frame (stub) for checking Render engine functionality
 
    Copyright (C)
      2011, 2024       Hermann Vosseler <Ichthyostega@web.de>
@@ -11,7 +11,7 @@
 
 */
 
-/** @file testframe.hpp
+/** @file test-frame.hpp
  ** Unit test helper to generate fake test data frames.
  ** Each TestFrame holds a 1k buffer of byte data, which can be
  ** verified, accessed and manipulated to emulate media computations.
@@ -30,8 +30,8 @@
  */
 
 
-#ifndef STEAM_ENGINE_TESTFRAME_H
-#define STEAM_ENGINE_TESTFRAME_H
+#ifndef TEST_TEST_FRAME_H
+#define TEST_TEST_FRAME_H
 
 
 #include "lib/integral.hpp"
@@ -40,9 +40,7 @@
 #include <array>
 
 
-namespace steam {
-namespace engine {
-namespace test   {
+namespace test {
   
   using lib::HashVal;
   
@@ -160,5 +158,5 @@ namespace test   {
   TestFrame& testData (uint seqNr =0, uint chanNr =0);
   
   
-}}} // namespace steam::engine::test
-#endif
+}// namespace test
+#endif /*TEST_TEST_FRAME_H*/

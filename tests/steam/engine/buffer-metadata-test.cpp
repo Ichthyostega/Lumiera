@@ -18,19 +18,21 @@
 
 #include "lib/error.hpp"
 #include "test/run.hpp"
+#include "test/test-frame.hpp"
 #include "test/test-helper.hpp"
 #include "steam/engine/buffer-metadata.hpp"
-#include "steam/engine/testframe.hpp"
 #include "lib/util.hpp"
 
 #include <memory>
 
+
 using std::strncpy;
 using std::unique_ptr;
+using test::TestFrame;
+using test::testData;
 using util::isSameObject;
 using util::isnil;
 using lib::randStr;
-
 
 namespace steam {
 namespace engine{

@@ -1,5 +1,5 @@
 /*
-  Testrunner  -  execute a suite of test objects, possibly filtered by category
+  TestRunner  -  execute a suite of test objects, possibly filtered by category
 
    Copyright (C)
      2007,2008,       Hermann Vosseler <Ichthyostega@web.de>
@@ -11,7 +11,7 @@
 
 * *****************************************************************/
 
-/** @file testrunner.cpp
+/** @file test-runner.cpp
  ** Lumiera unit test suite
  ** A simple test runner application.
  ** The build system will link the individual shared libraries with the test code
@@ -19,7 +19,7 @@
  */
 
 #include "include/lifecycle.hpp"
-#include "test/testoption.hpp"
+#include "test/test-runner-config.hpp"
 #include "test/suite.hpp"
 
 using vessel::LifecycleHook;
@@ -27,8 +27,7 @@ using vessel::ON_GLOBAL_INIT;
 using vessel::ON_GLOBAL_SHUTDOWN;
 
 
-/** run all tests or any single test specified in the first
- *  command line argument.
+/** Run all tests or any single test specified in the first command line argument.
  *  @return exit code signalling if any exception was caught
  *          at the level of individual test cases
  *  @throws any further exceptions raised outside of test cases

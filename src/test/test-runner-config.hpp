@@ -1,5 +1,5 @@
 /*
-  TESTOPTION.hpp  -  handle cmdline for invoking Testsuite
+  TEST-RUNNER-CONFIG.hpp  -  handle cmdline for invoking Testsuite
 
    Copyright (C)
      2008,            Hermann Vosseler <Ichthyostega@web.de>
@@ -12,13 +12,13 @@
 */
 
 
-/** @file testoption.hpp
- ** Commandline options for our unittest test-suite executable.
+/** @file test-runner-config.hpp
+ ** Commandline options for controlling the test-suite.
  */
 
 
-#ifndef TESTSUPPORT_TESTOPTION_H
-#define TESTSUPPORT_TESTOPTION_H
+#ifndef TESTSUPPORT_TEST_RUNNER_CONFIG_H
+#define TESTSUPPORT_TEST_RUNNER_CONFIG_H
 
 #include "lib/cmdline.hpp"
 #include "lib/nocopy.hpp"
@@ -74,4 +74,4 @@ namespace test {
   
   
 } // namespace test
-#endif /*TESTSUPPORT_TESTOPTION_H*/
+#endif /*TESTSUPPORT_TEST_RUNNER_CONFIG_H*/

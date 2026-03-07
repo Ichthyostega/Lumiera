@@ -18,26 +18,28 @@
 
 #include "lib/error.hpp"
 #include "test/run.hpp"
+#include "test/test-frame.hpp"
 #include "test/test-helper.hpp"
 #include "test/tracking-dummy.hpp"
+#include "test/test-rand-ontology.hpp"
 #include "steam/engine/diagnostic-buffer-provider.hpp"
-#include "steam/engine/test-rand-ontology.hpp"
-#include "steam/engine/testframe.hpp"
 #include "lib/iter-zip.hpp"
 
 #include <array>
 
+
 using util::isSameObject;
+using test::TestFrame;
+using test::testData;
 using lib::HashVal;
 using lib::zip;
-
 
 namespace steam {
 namespace engine{
 namespace test  {
+  namespace ont = ::test::ont;
   
   using LERR_(LIFECYCLE);
-  
   
   namespace { // Test fixture
     

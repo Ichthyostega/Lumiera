@@ -82,7 +82,7 @@ testSrcDirs = globRootdirs('*')
 
 testcases  = [testCases(env, dir)  for dir in testSrcDirs if not dir in specialDirs]
 testLibs   = list(sharedTestLibs.values())
-testrunner = envSuite.Program("test-suite", ["testrunner.cpp"]+testLibs+test_support+core_lib)
+testrunner = envSuite.Program("test-suite", ["test-runner.cpp"]+testLibs+test_support+core_lib)
 
 
 testsuite = ( testcases

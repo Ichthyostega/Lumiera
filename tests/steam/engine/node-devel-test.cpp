@@ -19,9 +19,9 @@
 #include "test/run.hpp"
 #include "lib/hash-combine.hpp"
 #include "test/test-helper.hpp"
+#include "test/test-rand-ontology.hpp"
 #include "steam/engine/engine-ctx.hpp"
 #include "steam/engine/node-builder.hpp"
-#include "steam/engine/test-rand-ontology.hpp"
 #include "lib/iter-zip.hpp"
 #include "lib/random.hpp"
 
@@ -34,7 +34,9 @@ using std::array;
 using std::vector;
 using std::make_tuple;
 using test::showType;
-
+using test::TestFrame;
+using test::testRand; 
+namespace ont = test::ont;
 
 namespace steam {
 namespace engine{

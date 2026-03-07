@@ -1,5 +1,5 @@
 /*
-  TestOption  -  handle cmdline for invoking Testsuite
+  TestRunnerConfig  -  handle cmdline for invoking Testsuite
 
    Copyright (C)
      2008,            Hermann Vosseler <Ichthyostega@web.de>
@@ -12,13 +12,13 @@
 * *****************************************************************/
 
 
-/** @file testoption.cpp
+/** @file test-runner-config.cpp
  ** Implementation of commandline parsing for the unittest test-suite.
  */
 
 
 #include "lib/error.hpp"
-#include "test/testoption.hpp"
+#include "test/test-runner-config.hpp"
 #include "test/suite.hpp"
 
 

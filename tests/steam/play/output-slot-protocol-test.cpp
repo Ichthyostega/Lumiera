@@ -20,18 +20,16 @@
 
 #include "steam/play/diagnostic-output-slot.hpp"
 #include "steam/engine/buffhandle.hpp"
-#include "steam/engine/testframe.hpp"
+#include "test/test-frame.hpp"
 
 
+using test::TestFrame;
+using test::testData;
+using steam::engine::BuffHandle;
 
 namespace steam {
 namespace play {
 namespace test {
-  
-  using steam::engine::BuffHandle;
-  using steam::engine::test::testData;
-  using steam::engine::test::TestFrame;
-  
   
   
   

@@ -36,7 +36,7 @@
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
 #include "vessel/advice.hpp"
-#include "steam/engine/testframe.hpp"
+#include "test/test-frame.hpp"
 //#include "lib/sync.hpp"
 
 //#include <string>
@@ -53,11 +53,11 @@ namespace play {
   using lib::HashVal;
   using util::unConst;
   using util::contains;
+  using test::TestFrame;
   using lib::time::FrameRate;
   using steam::asset::meta::PGrid;
   using steam::asset::meta::TimeGrid;
   using steam::engine::BuffDescr;
-  using steam::engine::test::TestFrame;
   using steam::engine::NaiveBufferSetup;
 
 //using std::vector;

@@ -23,7 +23,7 @@
  */
 
 
-#include "steam/engine/test-rand-ontology.hpp"
+#include "test/test-rand-ontology.hpp"
 #include "lib/hash-combine.hpp"
 #include "lib/iter-zip.hpp"
 
@@ -33,10 +33,8 @@ using std::lround;
 using lib::zip;
 
 
-namespace steam {
-namespace engine{
-namespace test  {
-namespace ont   {
+namespace test {
+namespace ont {
 //  namespace err = lumiera::error;
     
     namespace { // hidden local support facilities....
@@ -170,4 +168,4 @@ namespace ont   {
   
   
   
-}}} // namespace steam::engine::test
+}// namespace test

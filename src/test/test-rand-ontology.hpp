@@ -16,8 +16,8 @@
  */
 
 
-#ifndef STEAM_ENGINE_TEST_RAND_ONTOLOGY_H
-#define STEAM_ENGINE_TEST_RAND_ONTOLOGY_H
+#ifndef TEST_TEST_RAND_ONTOLOGY_H
+#define TEST_TEST_RAND_ONTOLOGY_H
 
 
 #include "lib/error.hpp"
@@ -26,7 +26,7 @@
 #include "lib/nocopy.hpp"
 #include "lib/format-obj.hpp"
 #include "lib/format-string.hpp"
-#include "steam/engine/testframe.hpp"
+#include "test/test-frame.hpp"
 
 #include <array>
 #include <tuple>
@@ -35,9 +35,7 @@
 #include <utility>
 
 
-namespace steam {
-namespace engine{
-namespace test  {
+namespace test {
   
   using std::tuple;
   using std::string;
@@ -301,5 +299,5 @@ namespace test  {
   
   
   
-}}} // namespace steam::engine::test
-#endif
+} // namespace test
+#endif /*TEST_TEST_RAND_ONTOLOGY_H*/

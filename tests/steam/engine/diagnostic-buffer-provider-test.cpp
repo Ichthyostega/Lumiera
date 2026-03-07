@@ -18,21 +18,22 @@
 
 #include "lib/error.hpp"
 #include "test/run.hpp"
+#include "test/test-frame.hpp"
 #include "steam/engine/diagnostic-buffer-provider.hpp"
-#include "steam/engine/testframe.hpp"
 #include "lib/util.hpp"
 
 #include <algorithm>
 #include <cstddef>
 #include <vector>
 
+using util::isSameAdr;
+using util::isSameObject;
+using test::TestFrame;
+using test::testData;
 
 namespace steam {
 namespace engine{
 namespace test  {
-  
-  using util::isSameAdr;
-  using util::isSameObject;
   
   namespace { // Test fixture
     

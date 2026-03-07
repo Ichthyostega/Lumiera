@@ -72169,8 +72169,12 @@
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1772210137996" ID="ID_195333171" MODIFIED="1772210172828" TEXT="steam::builder">
 <icon BUILTIN="help"/>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1772210814377" ID="ID_1429381035" MODIFIED="1772210819690" TEXT="steam::query">
+<node COLOR="#5b280f" CREATED="1772210814377" ID="ID_1429381035" MODIFIED="1772923373619" TEXT="steam::query">
 <icon BUILTIN="help"/>
+<icon BUILTIN="button_cancel"/>
+<node COLOR="#435e98" CREATED="1772923385527" HGAP="23" ID="ID_1134279540" MODIFIED="1772923398359" TEXT="&#x27f6; Vessel" VSHIFT="5">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
 </node>
 </node>
 <node CREATED="1772209430903" ID="ID_981451079" MODIFIED="1772209436133" TEXT="steam::session"/>
@@ -114191,6 +114195,162 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#e80a30" CREATED="1772580678521" ID="ID_1986916908" MODIFIED="1772580702520" TEXT="??? warum war das bisher kein Problem???">
 <icon BUILTIN="help"/>
+<node CREATED="1772675996282" ID="ID_1164243555" MODIFIED="1772676150866" TEXT="kann in meinen j&#xfc;ngsten Umbauten keine relevante &#xc4;nderung finden">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <ul>
+      <li>
+        die ont::manipulate()-Funktion ist seit letztem Jahr unver&#228;ndert
+      </li>
+      <li>
+        im NodeDevel_test wurde der direkte Aufruf des DiagnosticBufferProvider durch <font color="#635e96" face="Bitstream Vera Sans Mono"><b>EngineCtx</b></font><font color="#65533c" face="Bitstream Vera Sans Mono">::</font><font color="#0000c0" face="Bitstream Vera Sans Mono"><i>access</i></font><font color="#874a15" face="Bitstream Vera Sans Mono"><b>()</b></font><font color="#65533c" face="Bitstream Vera Sans Mono">.</font><font color="#1a1ac4" face="Bitstream Vera Sans Mono">mem</font>&#160; ersetzt....
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#e393a6" COLOR="#800318" CREATED="1772677652414" ID="ID_1366521291" MODIFIED="1772678408896" TEXT="m&#xf6;glicherweise wieder so ein t&#xfc;ckisches Prolbem mit alten Inhalten im roh-Speicher">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Damit bin ich nun schon bei einigen Tests mit TestFrame &#187;auf die Schnauze gefallen&#171;...
+    </p>
+    <p>
+      Wenn rein-zuf&#228;llig im Speicher von einem vorherigen Test ein valider TestFrame liegt, dann ist der eingebaute Konsistenzcheck ausgehebelt, und man merkt nicht, da&#223; der Test falsch geschrieben ist
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#d61535" DESTINATION="ID_881051095" ENDARROW="Default" ENDINCLINATION="35;-65;" ID="Arrow_ID_475382427" STARTARROW="None" STARTINCLINATION="-152;5;"/>
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1772676154973" ID="ID_1359567770" MODIFIED="1772676365955" TEXT="demnach w&#xe4;re die processing-Function selber zust&#xe4;ndig f&#xfc;r den Ziel-Puffer">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...gem&#228;&#223; der allgemeinen Logik des Render-Node-processing; das Weaving-Pattern stellt die Buffer bereit, so wie per Buffer-Descriptor angefordert &#8212; die proc-Funktion ist dann allein daf&#252;r zust&#228;ndig, was im Zielpuffer passiert; ob die Funktion in-Place-f&#228;hig ist, h&#228;ngt an ihrer internen Implementierung
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#b60233" CREATED="1772676505348" ID="ID_1220701614" MODIFIED="1772676545870">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      hier liegt wohl ein <i>konzeptioneller Mismatch</i>&#160;vor
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="broken-line"/>
+<node CREATED="1772676551855" ID="ID_1262364460" MODIFIED="1772676565454" TEXT="die Implementierungs-Funktion ont::manipulateFrame() ist in-Place-f&#xe4;hig">
+<node CREATED="1772676576492" ID="ID_1250943051" MODIFIED="1772676602300" TEXT="offensichtlich habe ich es extra darauf abgestellt..."/>
+<node CREATED="1772676603449" ID="ID_948383105" MODIFIED="1772676690675" TEXT="das geht eindeutig aus dem Unit-Test hervor">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <font color="#632d2d" face="Bitstream Vera Sans Mono"><b>processing_manipulateFrame</b></font><font color="#11123a" face="Bitstream Vera Sans Mono">()</font>
+    </p>
+    <p>
+      Der Test spielt beide F&#228;lle eigens druch...
+    </p>
+    <ul>
+      <li>
+        im ersten Lauf wird explizit vorher ein Output-Buffer neu erzeugt
+      </li>
+      <li>
+        Im zweiten Fall arbeitet die Funktionauf einem einzigen Buffer
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1772676764031" ID="ID_1191981286" MODIFIED="1772676788363" TEXT="das Setup in ConfMan::binding() reicht dieses Verhalten lediglich durch"/>
+</node>
+<node CREATED="1772677160557" ID="ID_1814896075" MODIFIED="1772677606119" TEXT="aber das Setup im Test reicht den Output-Buffer direkt zu">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <u>Node-Spec</u>:
+    </p>
+    <p>
+      <font color="#996e62" face="Bitstream Vera Sans Mono"><i>&quot;Test:manipulate&#9665;&#8212;Test:generate-&#9678;&quot;</i></font>
+    </p>
+    <p>
+      Das bedeutet...
+    </p>
+    <ul>
+      <li>
+        der pull()-Aufruf aus dem Test operiert direkt auf der Filter-Node
+      </li>
+      <li>
+        der optionale Output-Buffer wird hier gegeben, und wandert in die shed()-Operation
+      </li>
+      <li>
+        damit wird dort lediglich das von au&#223;en gegebene BuffHandle durchgereicht
+      </li>
+      <li>
+        au&#223;erdem ruft shed() &#10230; Feed::connect() &#10233; das greift via BuffHandle und konfiguriertem Typ auf den Buffer zu
+      </li>
+      <li>
+        und invoke() greift lediglich auf den schon bestehenden (bzw. in dem Fall noch nicht bestehenden) Buffer-Inhalt zu
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1772677805516" ID="ID_1951898579" MODIFIED="1772677827539" TEXT="die Proc-Node-Implementierung ist (noch) nicht in-Place-f&#xe4;hig">
+<node CREATED="1772677898590" ID="ID_1875459008" MODIFIED="1772677919263" TEXT="damit f&#xe4;llt die Last v&#xf6;llig zweifelsfrei auf die processing-Funktion"/>
+<node CREATED="1772677920672" ID="ID_1763901246" MODIFIED="1772677935614" TEXT="und unter den gegebenen Umst&#xe4;nden mu&#xdf; das die TestRandOntology abfedern"/>
+<node CREATED="1772677937979" ID="ID_633524291" MODIFIED="1772677960111" TEXT="das ist sogar ein sehr sch&#xf6;nes Beispiel was die Aufgaben eines solchen Ontology-Mappers sind"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1772678357383" ID="ID_881051095" MODIFIED="1772678403184" TEXT="das Test-Setup ist ebenfalls fragw&#xfc;rdig">
+<linktarget COLOR="#d61535" DESTINATION="ID_881051095" ENDARROW="Default" ENDINCLINATION="35;-65;" ID="Arrow_ID_475382427" SOURCE="ID_1366521291" STARTARROW="None" STARTINCLINATION="-152;5;"/>
+<icon BUILTIN="broken-line"/>
+<node CREATED="1772678429968" ID="ID_1839542452" MODIFIED="1772678479130">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      es pr&#252;ft auf einem uninitialised-Block: <font face="Monospaced" color="#815151">TestFrame::isValid()</font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1772678532662" ID="ID_1254112089" MODIFIED="1772678561874" TEXT="damit zusammenh&#xe4;ngende Neben-Frage: ist die TestRandOntology f&#xfc;r TestFrame zust&#xe4;ndig?">
+<icon BUILTIN="help"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1772678572301" ID="ID_969290683" MODIFIED="1772679076713" TEXT="das hier ist ja nur ein modellhaftes Setup">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...was die Situation etwas verwirrend macht: wir haben n&#228;mlich gar keine Echte Sachdom&#228;ne, und damit auch keine Dom&#228;nen-Ontologie; vielmehr &#187;sauge ich mir&#171; die Bedingtheiten aus den Fingern, gem&#228;&#223; einer ungef&#228;hren Vorstellung, wie so eine Media-Lib vorgeht (ich hab n&#228;mlich nie intensiver mit so einer Lib gearbeitet). Hinzu kommt, ich hab nur wenige Bausteine, n&#228;mlich den TestFrame, und ein paar Berechnungsfunktionen. So ziemlich alles, was eine echte Dom&#228;nen-Ontologie ausmacht, fehlt mir hier, daher mu&#223; ich mit &#187;gedachten Bedeutungen&#171; operieren
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="smiley-neutral"/>
+</node>
+<node CREATED="1772678588893" ID="ID_1625895951" MODIFIED="1772678646454" TEXT="wenn TestFrame ein &#xbb;Inlay&#xab; w&#xe4;re, das zur Ontology geh&#xf6;rt...."/>
+<node CREATED="1772678647795" ID="ID_766992048" MODIFIED="1772678651467" TEXT="...dann k&#xf6;nnte man einen getypten Buffer verlangen"/>
+<node CREATED="1772678653490" ID="ID_640199025" MODIFIED="1772678678587" TEXT="Alternative: TestFrame ist ein Dateninhalt, der von der Implementierungs-Library erzeugt wird"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1772677979715" ID="ID_974445691" MODIFIED="1772678040044" TEXT="&#x27f9; TODO : in-Place-f&#xe4;hige Funktion richtig einbinden">
+<icon BUILTIN="yes"/>
+<node CREATED="1772678043698" ID="ID_231080001" MODIFIED="1772678054563" TEXT="&#xfc;berlegen ob man das irgendwo auf dem Deskriptor ausdr&#xfc;ckt"/>
+<node CREATED="1772678055985" ID="ID_1445790" MODIFIED="1772678080954" TEXT="vorl&#xe4;ufig k&#xf6;nnen wir kein in-Place-processing">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1772678083213" ID="ID_842562388" MODIFIED="1772678115270" TEXT="daher mu&#xdf; der Adapter ConfMan::binding() einen neuen Test-Frame erzeugen">
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 </node>
@@ -114919,7 +115079,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <linktarget COLOR="#2e83e6" DESTINATION="ID_1419619818" ENDARROW="Default" ENDINCLINATION="291;21;" ID="Arrow_ID_464210861" SOURCE="ID_92248164" STARTARROW="None" STARTINCLINATION="-19;125;"/>
 <icon BUILTIN="ksmiletris"/>
 </node>
-<node CREATED="1772477989246" ID="ID_1526065242" MODIFIED="1772734890901">
+<node CREATED="1772477989246" FOLDED="true" ID="ID_1526065242" MODIFIED="1772734890901">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
@@ -115147,7 +115307,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1772584410672" ID="ID_724954594" MODIFIED="1772586281437" TEXT="benenne auch den SCons-Export um in &apos;vessel_lib&apos;"/>
 <node COLOR="#435e98" CREATED="1772584431134" ID="ID_1799024403" MODIFIED="1772586281437" TEXT="erzeuge nun &apos;liblumieravessel&apos;"/>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1772584443395" ID="ID_823311690" MODIFIED="1772586046084" TEXT="die vessel-tests sind derzeit weiterhin in libtest-core">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1772584443395" FOLDED="true" ID="ID_823311690" MODIFIED="1772586046084" TEXT="die vessel-tests sind derzeit weiterhin in libtest-core">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1772586048075" ID="ID_1363531045" MODIFIED="1772586171443" TEXT="das ist dem bekannten Problem mit den Include-Pfaden geschuldet">
 <richcontent TYPE="NOTE"><html>
@@ -115166,9 +115326,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1772586215223" ID="ID_1431676379" MODIFIED="1772586251267" TEXT="die Tests selber includieren einander nicht und k&#xf6;nnten in beliebigen Verzeichnissen liegen">
 <icon BUILTIN="idea"/>
 </node>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1772586254019" ID="ID_1101747989" MODIFIED="1772750921925" TEXT="Idee: man k&#xf6;nnte eine separate Sektion f&#xfc;r die Test-Hilfsmittel schaffen">
-<arrowlink COLOR="#733bc5" DESTINATION="ID_1130050398" ENDARROW="Default" ENDINCLINATION="30;-51;" ID="Arrow_ID_580685301" STARTARROW="None" STARTINCLINATION="-262;10;"/>
-<icon BUILTIN="hourglass"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1772586254019" ID="ID_1101747989" MODIFIED="1772922386006" TEXT="Idee: man k&#xf6;nnte eine separate Sektion f&#xfc;r die Test-Hilfsmittel schaffen">
+<arrowlink COLOR="#4c3bc5" DESTINATION="ID_1130050398" ENDARROW="Default" ENDINCLINATION="30;-51;" ID="Arrow_ID_580685301" STARTARROW="None" STARTINCLINATION="-262;10;"/>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1772586284367" ID="ID_815192684" LINK="#ID_389403594" MODIFIED="1772586333967" TEXT="Testsuite l&#xe4;uft wieder wie vorher (derzeit zwei gebrochene Tests)">
@@ -115176,7 +115336,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node CREATED="1772734875124" ID="ID_876509086" MODIFIED="1772734883385" TEXT="Test-Support-Komponenten">
+<node COLOR="#435e98" CREATED="1772734875124" ID="ID_876509086" MODIFIED="1772922412139" TEXT="Test-Support-Komponenten">
 <node CREATED="1772746030333" ID="ID_1311869069" MODIFIED="1772746035156" TEXT="Anforderungen">
 <node CREATED="1772746049047" ID="ID_1822802235" MODIFIED="1772746065274" TEXT="aus der Application-Core heraushalten"/>
 <node CREATED="1772746077541" ID="ID_647564690" MODIFIED="1772746253257" TEXT="haben oft eine statische &#xbb;runtime&#xab;">
@@ -115193,9 +115353,10 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1772750782919" ID="ID_880221294" MODIFIED="1772750800656" TEXT="Include-Path passend zum Namespace"/>
 <node CREATED="1772750802636" ID="ID_1096862657" MODIFIED="1772750829353" TEXT="w&#xfc;nschenswert: stets in einem sub-Namespace test"/>
 </node>
-<node CREATED="1772750954208" ID="ID_1247182351" MODIFIED="1772750958745" TEXT="L&#xf6;sungsans&#xe4;tze">
+<node COLOR="#435e98" CREATED="1772750954208" FOLDED="true" ID="ID_1247182351" MODIFIED="1772922570072" TEXT="L&#xf6;sungsans&#xe4;tze">
+<icon BUILTIN="info"/>
 <node CREATED="1772734920128" ID="ID_1130050398" MODIFIED="1772751079519" TEXT="Separate Sektion">
-<linktarget COLOR="#733bc5" DESTINATION="ID_1130050398" ENDARROW="Default" ENDINCLINATION="30;-51;" ID="Arrow_ID_580685301" SOURCE="ID_1101747989" STARTARROW="None" STARTINCLINATION="-262;10;"/>
+<linktarget COLOR="#4c3bc5" DESTINATION="ID_1130050398" ENDARROW="Default" ENDINCLINATION="30;-51;" ID="Arrow_ID_580685301" SOURCE="ID_1101747989" STARTARROW="None" STARTINCLINATION="-262;10;"/>
 <node COLOR="#5b280f" CREATED="1772751012088" ID="ID_484445328" MODIFIED="1772751088539" TEXT="ist nicht so einfach realisierbar">
 <icon BUILTIN="stop-sign"/>
 </node>
@@ -115250,7 +115411,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1772752004092" ID="ID_385348264" MODIFIED="1772752013613" TEXT="Test-Runner bleibt in der Library"/>
 <node CREATED="1772751984927" ID="ID_1490429454" MODIFIED="1772751992642" TEXT="Linkage ist gem&#xe4;&#xdf; Layer"/>
 </node>
-<node CREATED="1772752213285" ID="ID_119992226" MODIFIED="1772758923648" TEXT="Test-Folder-Hierarchie umbauen">
+<node CREATED="1772752213285" ID="ID_119992226" MODIFIED="1772922554345" TEXT="Test-Folder-Hierarchie umbauen">
+<linktarget COLOR="#99ff46" DESTINATION="ID_119992226" ENDARROW="None" ENDINCLINATION="-139;11;" ID="Arrow_ID_634556813" SOURCE="ID_1303869681" STARTARROW="None" STARTINCLINATION="-102;6;"/>
 <icon BUILTIN="forward"/>
 <node CREATED="1772752222480" ID="ID_1909429773" MODIFIED="1772752259275" TEXT="in das SConscript kommt nun fest &lt;Projekt&gt;/test als Include">
 <node CREATED="1772758759407" ID="ID_1272067307" MODIFIED="1772758773603" TEXT="k&#xf6;nnte schwierig zu realisieren sein"/>
@@ -115279,10 +115441,11 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1772758927320" ID="ID_1030178738" MODIFIED="1772758932789" TEXT="Beschlu&#xdf;">
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1772758927320" ID="ID_1030178738" MODIFIED="1772922508596" TEXT="Beschlu&#xdf;">
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
-<node BACKGROUND_COLOR="#e0d5a7" COLOR="#435e98" CREATED="1772758933963" ID="ID_1303869681" MODIFIED="1772842837273" TEXT="die zuletzt aufgef&#xfc;hrte L&#xf6;sung ist klar &#xfc;berlegen">
+<node BACKGROUND_COLOR="#e0d5a7" COLOR="#435e98" CREATED="1772758933963" ID="ID_1303869681" MODIFIED="1772922568212" TEXT="die zuletzt aufgef&#xfc;hrte L&#xf6;sung ist klar &#xfc;berlegen">
+<arrowlink COLOR="#99ff46" DESTINATION="ID_119992226" ENDARROW="None" ENDINCLINATION="-139;11;" ID="Arrow_ID_634556813" STARTARROW="None" STARTINCLINATION="-102;6;"/>
 <icon BUILTIN="yes"/>
 </node>
 <node COLOR="#435e98" CREATED="1772758948030" ID="ID_244079057" MODIFIED="1772842856603" TEXT="die separate Komponente sollte sofort eingef&#xfc;hrt werden">
@@ -115293,42 +115456,34 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <font NAME="SansSerif" SIZE="11"/>
 </node>
 </node>
-<node COLOR="#435e98" CREATED="1772759056034" ID="ID_261195132" MODIFIED="1772855383402" TEXT="die Reorganisation der Test-Folder">
+<node COLOR="#435e98" CREATED="1772759056034" FOLDED="true" ID="ID_261195132" MODIFIED="1772925008710" TEXT="die Reorganisation der Test-Folder">
 <node COLOR="#5b280f" CREATED="1772850552219" ID="ID_567519443" MODIFIED="1772850581748" TEXT="tests/include pa&#xdf;t nicht in die Architektur">
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1772850589211" ID="ID_830433280" MODIFIED="1772850683999" TEXT="das ist ein Rest von der obsoleten Plugin-Architektur">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...wo es gewollt war, da&#223; jedermann jederzeit irgendwelche &#187;Interfaces&#171; sich ausdenken kann, auf die dann jederzeit jedermann mit irgendwelchen Plug-ins zugreifen kann
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1772850686687" ID="ID_1286343909" MODIFIED="1772850706030" TEXT="merkt man auch daran da&#xdf; ich mehrere Spezial-Tweks im Buildsystem nur daf&#xfc;r brauche"/>
 <node CREATED="1772850722357" ID="ID_735273122" MODIFIED="1772850732218" TEXT="tats&#xe4;chlich haben wir nur (noch) ein Demo-Plugin"/>
 <node CREATED="1772850733599" ID="ID_178022834" MODIFIED="1772850835413" TEXT="daf&#xfc;r gen&#xfc;gt ein Demo-Interface in tests/vessel">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       wo es konzeptionell auch hingeh&#246;ren w&#252;rde (wenn man erst mal zul&#228;&#223;t, da&#223; es Grenzen gibt, und eine Applikation, die diese umfa&#223;t)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1772850843285" ID="ID_670641808" MODIFIED="1772851987780" TEXT="damit kollabiert insgesamt der Grund f&#xfc;r die komplexe Include-Struktur in den Tests">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ....was ich <i>wieder einmal als eine Best&#228;tigung meiner Intuition verbuche...</i>
@@ -115375,15 +115530,12 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       Insofern k&#246;nnen siche beide Seiten jeweils in ihrem Urteil best&#228;tigt sehen.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1772852005446" ID="ID_1622012206" MODIFIED="1772855167667">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       nachdem das nun abger&#228;umt ist, wird die Umstellung des Test-Builds <b>tats&#228;chlich einfach</b>
@@ -115391,9 +115543,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Die Hilfsfunktion hatte ich seinerzeit ja nur eingef&#252;hrt, weil ich mit einem Haufen von Unterverzeichnissen konfontiert war, die keiner &#252;bergreifenden Struktur folgen. Und dazu war die Erwartung gesetzt, da&#223; jede Menge weitere solche ad-hoc-Strukturen dazukommen. Ich wollte aber nicht f&#252;r jede neue Idee von Christian wieder ein neues separates SConscript pflegen, denn dann w&#228;re ich effektiv auf dem gleichen Level von Explizitiheit, den ich bei Autotools abgelehnt habe.
@@ -115414,19 +115564,26 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1772855079650" ID="ID_858506385" MODIFIED="1772855094135" TEXT="wird aber in vielen Tests &#xbb;der ersten Stunde&#xab; noch verwendet"/>
 <node CREATED="1772855095353" ID="ID_1542915091" MODIFIED="1772855134558" TEXT="sollte das als Platzhalter erhalten....">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...damit ich noch eine Chance habe, sp&#228;ter zu entziffern, was ich mir seinerzeit gedacht habe
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1772855174654" ID="ID_881133970" MODIFIED="1772855348683" TEXT="alle &#xbb;nicht ins schema passenden&#xab; Test-Hilfsmittel zun&#xe4;chst direkt in das jeweilige Paket">
+<node COLOR="#435e98" CREATED="1772924936929" ID="ID_1060952181" MODIFIED="1772925004184">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Tests f&#252;r die neue Test-Support-Lib &#10230; neuer Folder / neue Komponente <font face="Monospaced" color="#772a2a">tests/test</font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#338800" CREATED="1772855174654" ID="ID_881133970" MODIFIED="1772924914624" TEXT="alle &#xbb;nicht ins Schema passenden&#xab; Test-Hilfsmittel zun&#xe4;chst direkt in das jeweilige Paket">
 <icon BUILTIN="yes"/>
 <node CREATED="1772855213445" ID="ID_1705164748" MODIFIED="1772855231525" TEXT="das betrifft nur eine kleine Anzahl an Test-Hilfsmitteln"/>
 <node CREATED="1772855236178" ID="ID_1493611651" MODIFIED="1772855249996" TEXT="diese liegen allesamt bereits im korrekten Verzeichnis"/>
@@ -115438,20 +115595,22 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1772855315204" ID="ID_1422239206" MODIFIED="1772855327771" TEXT="... und man kann es sp&#xe4;ter nach Bedarf immer noch machen"/>
 </node>
 </node>
+</node>
 <node BACKGROUND_COLOR="#174956" COLOR="#8dfd49" CREATED="1772855351370" HGAP="13" ID="ID_325609871" MODIFIED="1772855380113" STYLE="bubble" TEXT="Build l&#xe4;uft wieder durch" VSHIFT="7">
 <edge COLOR="#61fe5b" STYLE="bezier" WIDTH="thin"/>
 <font NAME="SansSerif" SIZE="15"/>
 </node>
 </node>
 </node>
-</node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1772478162244" ID="ID_1203250191" MODIFIED="1772478221803" TEXT="Komponenten in Vault verschieben">
 <icon BUILTIN="flag-yellow"/>
+<node COLOR="#435e98" CREATED="1772922668009" ID="ID_1174526532" MODIFIED="1772927710703" TEXT="Voraussetzung &#x27f6; Test-support">
+<node CREATED="1772478205914" ID="ID_231056050" MODIFIED="1772922697240" TEXT="TestFrame"/>
+<node CREATED="1772478191761" ID="ID_1873337000" MODIFIED="1772922653281" TEXT="Test-Rand-Ontology"/>
+</node>
 <node CREATED="1772478171837" ID="ID_1324850294" MODIFIED="1772478177785" TEXT="BufferProvider"/>
 <node CREATED="1772478179206" ID="ID_1477396819" MODIFIED="1772478184401" TEXT="OutputSlot"/>
 <node CREATED="1772478185740" ID="ID_1860322406" MODIFIED="1772478190493" TEXT="OutputManagement"/>
-<node CREATED="1772478191761" ID="ID_1873337000" MODIFIED="1772478204026" TEXT="Test-Rand-Ontology"/>
-<node CREATED="1772478205914" ID="ID_231056050" MODIFIED="1772478212093" TEXT="TestFrame"/>
 </node>
 </node>
 </node>

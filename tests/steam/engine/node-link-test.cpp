@@ -17,10 +17,10 @@
 
 
 #include "test/run.hpp"
+#include "test/test-rand-ontology.hpp"
 #include "steam/engine/engine-ctx.hpp"
 #include "steam/engine/proc-node.hpp"
 #include "steam/engine/node-builder.hpp"
-#include "steam/engine/test-rand-ontology.hpp"
 #include "steam/engine/diagnostic-buffer-provider.hpp"
 #include "steam/asset/meta/time-grid.hpp"
 #include "lib/time/timequant.hpp"
@@ -30,18 +30,19 @@
 #include <array>
 
 using std::array;
+using lib::time::Time;
+using lib::time::QuTime;
+using lib::time::FrameNr;
+using lib::time::FrameCnt;
 using util::isnil;
 using util::isSameObject;
-
+using test::TestFrame;
+using test::testRand; 
+namespace ont = test::ont;
 
 namespace steam {
 namespace engine{
 namespace test  {
-  
-  using lib::time::Time;
-  using lib::time::QuTime;
-  using lib::time::FrameNr;
-  using lib::time::FrameCnt;
   
   namespace {
           ont::Flavr SRC_A    = 10;         ///< »chain-A« arbitrary source frame marker
