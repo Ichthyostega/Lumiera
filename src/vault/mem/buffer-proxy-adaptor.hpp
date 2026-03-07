@@ -20,36 +20,28 @@
  ** @see output-proxy-provider-test.cpp
  */
 
-#ifndef STEAM_ENGINE_BUFFER_PROXY_ADAPTOR_H
-#define STEAM_ENGINE_BUFFER_PROXY_ADAPTOR_H
+#ifndef VAULT_MEM_BUFFER_PROXY_ADAPTOR_H
+#define VAULT_MEM_BUFFER_PROXY_ADAPTOR_H
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/symbol.hpp"
 #include "lib/meta/util.hpp"
-//#include "lib/hash-value.h"
-#include "steam/engine/buffer-provider.hpp"
-#include "steam/engine/buffer-provider-setup.hpp"
-#include "steam/engine/heap-mem-buffer-store.hpp"
-#include "steam/engine/simple-buffer-state-registry.hpp"
-//#include "steam/engine/engine-ctx.hpp"
-//#include "steam/engine/type-handler.hpp"
-//#include "steam/engine/buffer-local-tag.hpp"
-#include "lib/nocopy.hpp"
+#include "vault/mem/buffer-provider.hpp"
+#include "vault/mem/buffer-provider-setup.hpp"
+#include "vault/mem/heap-mem-buffer-store.hpp"
+#include "vault/mem/simple-buffer-state-registry.hpp"
 
 #include <functional>
 #include <utility>
-//#include <memory>
 
 
-namespace steam {
-namespace engine {
+namespace vault{
+namespace mem  {
   
   using lib::Literal;
-//  using std::unique_ptr;
-//  using std::forward;
   using std::move;
-  
   
   
   
@@ -158,16 +150,8 @@ namespace engine {
           ENSURE (buffType.isValid());
           return buffType.lockBuffer();
         }
-      
     };
   
   
-  
-  
-  /* === Implementation === */
-  
-  /** convenience shortcut: */
-  
-  
-}} // namespace steam::engine
-#endif /*STEAM_ENGINE_BUFFER_PROXY_ADAPTOR_H*/
+}} // namespace vault::mem
+#endif /*VAULT_MEM_BUFFER_PROXY_ADAPTOR_H*/

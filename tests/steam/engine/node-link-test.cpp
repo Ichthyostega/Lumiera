@@ -21,8 +21,8 @@
 #include "steam/engine/engine-ctx.hpp"
 #include "steam/engine/proc-node.hpp"
 #include "steam/engine/node-builder.hpp"
-#include "steam/engine/diagnostic-buffer-provider.hpp"
 #include "steam/asset/meta/time-grid.hpp"
+#include "vault/mem/diagnostic-buffer-provider.hpp" /////////////OOO use this to verify no buffers leaked
 #include "lib/time/timequant.hpp"
 #include "lib/time/timecode.hpp"
 #include "lib/symbol.hpp"

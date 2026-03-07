@@ -17,8 +17,8 @@
  */
 
 
-#ifndef STEAM_ENGINE_BUFFR_LOCAL_TAG_H
-#define STEAM_ENGINE_BUFFR_LOCAL_TAG_H
+#ifndef VAULT_MEM_BUFFR_LOCAL_TAG_H
+#define VAULT_MEM_BUFFR_LOCAL_TAG_H
 
 
 #include "lib/error.hpp"
@@ -27,8 +27,8 @@
 #include <boost/functional/hash.hpp>
 
 
-namespace steam {
-namespace engine {
+namespace vault {
+namespace mem   {
   
   namespace metadata {
     class Key;
@@ -122,5 +122,5 @@ namespace engine {
     };
   
   
-}} // namespace steam::engine
-#endif /*STEAM_ENGINE_BUFFR_LOCAL_TAG_H*/
+}} // namespace vault::mem
+#endif /*VAULT_MEM_BUFFR_LOCAL_TAG_H*/

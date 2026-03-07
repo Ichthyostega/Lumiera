@@ -18,27 +18,27 @@
  ** @see buffer-provider.hpp
  */
 
-#ifndef STEAM_ENGINE_BUFFR_PROVIDER_SETUP_H
-#define STEAM_ENGINE_BUFFR_PROVIDER_SETUP_H
+#ifndef VAULT_MEM_BUFFR_PROVIDER_SETUP_H
+#define VAULT_MEM_BUFFR_PROVIDER_SETUP_H
 
 
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
 #include "lib/hash-value.h"
-#include "steam/engine/buffer-provider.hpp"
+#include "vault/mem/buffer-provider.hpp"
 #include "lib/nocopy.hpp"
 
 #include <utility>
 #include <memory>
 
 
-namespace steam {
-namespace engine {
+namespace vault {
+namespace mem   {
   
   using lib::Literal;
   using std::unique_ptr;
   using std::make_unique;
-//  using std::forward;
+  using std::forward;
   using std::move;
   
   
@@ -119,11 +119,5 @@ namespace engine {
   
   
   
-  
-  /* === Implementation === */
-  
-  /** */
-  
-  
-}} // namespace steam::engine
-#endif /*STEAM_ENGINE_BUFFR_PROVIDER_SETUP_H*/
+}} // namespace vault::mem
+#endif /*VAULT_MEM_BUFFR_PROVIDER_SETUP_H*/

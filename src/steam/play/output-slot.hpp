@@ -60,7 +60,7 @@
 #include "lib/error.hpp"
 #include "lib/handle.hpp"
 #include "lib/time/timevalue.hpp"
-#include "steam/engine/buffer-provider.hpp"
+#include "vault/mem/buffer-provider.hpp"
 #include "steam/play/timings.hpp"
 #include "lib/iter-source.hpp"
 #include "lib/nocopy.hpp"
@@ -71,8 +71,8 @@
 namespace steam {
 namespace play {
   
-  using steam::engine::BuffHandle;
-  using steam::engine::BufferProvider;
+  using vault::mem::BuffHandle;
+  using vault::mem::BufferProvider;
   using lib::time::FrameCnt;
   using lib::time::TimeValue;
   using lib::time::Time;
@@ -176,7 +176,6 @@ namespace play {
         return not (sink1 == sink2);
       }
     };
-  
   
   
   

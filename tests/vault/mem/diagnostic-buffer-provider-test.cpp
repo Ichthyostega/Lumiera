@@ -19,7 +19,7 @@
 #include "lib/error.hpp"
 #include "test/run.hpp"
 #include "test/test-frame.hpp"
-#include "steam/engine/diagnostic-buffer-provider.hpp"
+#include "vault/mem/diagnostic-buffer-provider.hpp"
 #include "lib/util.hpp"
 
 #include <algorithm>
@@ -31,8 +31,8 @@ using util::isSameObject;
 using test::TestFrame;
 using test::testData;
 
-namespace steam {
-namespace engine{
+namespace vault {
+namespace mem   {
 namespace test  {
   
   namespace { // Test fixture
@@ -279,4 +279,4 @@ namespace test  {
   
   
   
-}}} // namespace steam::engine::test
+}}} // namespace vault::mem::test

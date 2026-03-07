@@ -20,12 +20,9 @@
  */
 
 
-//#include "lib/error.hpp"
-//#include "include/logging.h"
-//#include "lib/meta/function.hpp"
-
-#include "steam/engine/diagnostic-buffer-provider.hpp"
-#include "steam/engine/heap-mem-buffer-store.hpp"
+#include "lib/error.hpp"
+#include "vault/mem/diagnostic-buffer-provider.hpp"
+#include "vault/mem/heap-mem-buffer-store.hpp"
 #include "lib/format-string.hpp"
 #include "lib/util-foreach.hpp"
 #include "lib/util.hpp"
@@ -35,8 +32,9 @@
 #include <memory>
 
 
-namespace steam {
-namespace engine {
+namespace vault {
+namespace mem   {
+  namespace err = lumiera::error;
   
   using util::_Fmt;
   using util::unConst;
@@ -78,9 +76,9 @@ namespace engine {
     if (seqNr < cnt())
       return reg_[seqNr];
     else
-      return error::Invalid(_Fmt{"no Buffer with seq-nr %d (%d known entries)"}
-                                                   % seqNr % cnt()
-                           , LERR_(BOTTOM_VALUE));
+      return err::Invalid(_Fmt{"no Buffer with seq-nr %d (%d known entries)"}
+                                                 % seqNr % cnt()
+                         , LERR_(BOTTOM_VALUE));
   }
   
   StateReg::Result
@@ -91,8 +89,8 @@ namespace engine {
        )
       return *pos;
     else
-      return error::Invalid("requested Buffer never encountered"
-                           , LERR_(BOTTOM_VALUE));
+      return err::Invalid("requested Buffer never encountered"
+                         , LERR_(BOTTOM_VALUE));
   }
   
   bool
@@ -305,4 +303,4 @@ namespace engine {
   
   
   
-}} // namespace engine
+}} // namespace vault::mem

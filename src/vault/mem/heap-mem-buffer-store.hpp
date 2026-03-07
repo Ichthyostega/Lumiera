@@ -18,36 +18,25 @@
  ** dynamically. This both demonstrates the simplest possible implementation of storage handling, and
  ** allows to investigate additional tracking status flags for each allocated block after the fact.
  ** 
- ** @todo 1/2026 for sake of implementation clarity, the following instrumentation functionality
- **       must be relocated into the DiagnosticOutputProvider: Allocated buffers are numbered
- **       with a simple ascending sequence of integers, used as LocalTag (see BufferMetadata).
- **       Clients can request a Buffer with the given number, causing that block to be allocated.
- **       There is a "backdoor", allowing  to access any allocated block, even if it is considered
- **       "released" by the terms of the usual lifecycle. Only when the provider object itself
- **       gets destroyed, all allocated blocks will be discarded.
- ** 
  ** @see DiagnosticOutputSlot
  ** @see DiagnosticBufferProvider
  ** @see buffer-provider-protocol-test.cpp
  */
 
-#ifndef STEAM_ENGINE_HEAP_MEM_BUFFER_STORE_H
-#define STEAM_ENGINE_HEAP_MEM_BUFFER_STORE_H
+#ifndef VAULT_MEM_HEAP_MEM_BUFFER_STORE_H
+#define VAULT_MEM_HEAP_MEM_BUFFER_STORE_H
 
 
-#include "lib/error.hpp"
 #include "lib/hash-value.h"
-#include "steam/engine/buffer-provider-setup.hpp"
+#include "vault/mem/buffer-provider-setup.hpp"
 #include "lib/scoped-ptrvect.hpp"
 
 #include <unordered_map>
 #include <memory>
 
 
-namespace steam {
-namespace engine {
-  
-  namespace error = lumiera::error;
+namespace vault {
+namespace mem   {
   
   using std::unique_ptr;
   using lib::ScopedPtrVect;
@@ -106,5 +95,5 @@ namespace engine {
   
   
   
-}} // namespace steam::engine
-#endif /*STEAM_ENGINE_HEAP_MEM_BUFFER_STORE_H*/
+}} // namespace vault::mem
+#endif /*VAULT_MEM_HEAP_MEM_BUFFER_STORE_H*/

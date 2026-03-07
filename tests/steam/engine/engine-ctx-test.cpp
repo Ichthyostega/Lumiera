@@ -20,15 +20,13 @@
 #include "test/run.hpp"
 #include "test/test-helper.hpp"
 #include "steam/engine/engine-ctx.hpp"
-#include "steam/engine/buffer-provider.hpp"
-//#include "steam/engine/engine-ctx-facilities.hpp" //////////TODO required?
+#include "vault/mem/buffer-provider.hpp"
 #include "lib/util.hpp"
 
-//#include <limits>
 
-//using util::isnil;
 using util::isSameObject;
-
+using vault::mem::BuffHandle;
+using vault::mem::BufferProvider;
 
 namespace steam {
 namespace engine{

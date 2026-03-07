@@ -25,8 +25,8 @@
 #include "steam/engine/param-weaving-pattern.hpp"
 #include "steam/engine/turnout-system.hpp"
 #include "steam/engine/turnout.hpp"
-#include "steam/engine/diagnostic-buffer-provider.hpp"
 #include "steam/asset/meta/time-grid.hpp"
+#include "vault/mem/diagnostic-buffer-provider.hpp"
 #include "lib/several-builder.hpp"
 #include "lib/time/timecode.hpp"
 #include "test/test-helper.hpp"
@@ -42,10 +42,13 @@ using test::showType;
 using std::make_tuple;
 using std::get;
 
-
 namespace steam {
 namespace engine{
 namespace test  {
+  
+  using vault::mem::BuffDescr;
+  using vault::mem::BuffHandle;
+  using vault::mem::DiagnosticBufferProvider;
   
   
   

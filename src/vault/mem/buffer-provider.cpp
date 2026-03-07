@@ -27,8 +27,8 @@
 
 
 #include "lib/error.hpp"
-#include "steam/engine/buffer-provider.hpp"
-#include "steam/engine/buffer-metadata.hpp"  /////////////////////////OOO must be removed from here
+#include "vault/mem/buffer-provider.hpp"
+#include "vault/mem/buffer-metadata.hpp"
 #include "lib/util.hpp"
 
 #include <utility>
@@ -36,8 +36,8 @@
 using std::move;
 using util::isSameAdr;
 
-namespace steam {
-namespace engine {
+namespace vault {
+namespace mem   {
   
   // storage for the default-marker constants
   const TypeHandler TypeHandler::RAW{};
@@ -117,8 +117,8 @@ namespace engine {
     size_t buffSiz = getBufferSize (type);
     uint actually_possible = bufferStore_->prepareBuffers (cnt, buffSiz, type);
     if (!actually_possible)
-      throw error::State ("unable to fulfil request for buffers"
-                         ,LUMIERA_ERROR_BUFFER_MANAGEMENT);
+      throw err::State ("unable to fulfil request for buffers"
+                       ,LUMIERA_ERROR_BUFFER_MANAGEMENT);
     return actually_possible;
   }
   
@@ -334,4 +334,4 @@ namespace engine {
   
   
   
-}} // namespace engine
+}} // namespace vault::mem

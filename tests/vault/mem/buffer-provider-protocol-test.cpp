@@ -22,7 +22,7 @@
 #include "test/test-helper.hpp"
 #include "test/tracking-dummy.hpp"
 #include "test/test-rand-ontology.hpp"
-#include "steam/engine/diagnostic-buffer-provider.hpp"
+#include "vault/mem/diagnostic-buffer-provider.hpp"
 #include "lib/iter-zip.hpp"
 
 #include <array>
@@ -34,8 +34,8 @@ using test::testData;
 using lib::HashVal;
 using lib::zip;
 
-namespace steam {
-namespace engine{
+namespace vault {
+namespace mem   {
 namespace test  {
   namespace ont = ::test::ont;
   
@@ -458,4 +458,4 @@ namespace test  {
   
   
   
-}}} // namespace steam::engine::test
+}}} // namespace vault::mem::test

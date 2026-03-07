@@ -28,8 +28,8 @@
 #include "steam/play/output-slot.hpp"
 #include "steam/play/output-slot-connection.hpp"
 #include "steam/asset/meta/time-grid.hpp"
-#include "steam/engine/buffhandle.hpp"
-#include "steam/engine/naive-buffer-setup.hpp"
+#include "vault/mem/buffhandle.hpp"
+#include "vault/mem/naive-buffer-setup.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/scoped-ptrvect.hpp"
 #include "lib/iter-source.hpp"
@@ -37,10 +37,7 @@
 #include "lib/util.hpp"
 #include "vessel/advice.hpp"
 #include "test/test-frame.hpp"
-//#include "lib/sync.hpp"
 
-//#include <string>
-//#include <vector>
 #include <unordered_set>
 #include <memory>
 
@@ -48,7 +45,6 @@
 namespace steam {
 namespace play {
 
-//using std::string;
   using lib::Symbol;
   using lib::HashVal;
   using util::unConst;
@@ -57,10 +53,10 @@ namespace play {
   using lib::time::FrameRate;
   using steam::asset::meta::PGrid;
   using steam::asset::meta::TimeGrid;
-  using steam::engine::BuffDescr;
-  using steam::engine::NaiveBufferSetup;
+  using vault::mem::NaiveBufferSetup;
+  using vault::mem::BuffHandle;
+  using vault::mem::BuffDescr;
 
-//using std::vector;
   using std::shared_ptr;
   
   namespace { // diagnostics & internals....

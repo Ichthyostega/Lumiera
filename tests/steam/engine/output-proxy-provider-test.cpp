@@ -20,7 +20,7 @@
 
 #include "test/test-frame.hpp"
 #include "test/test-rand-ontology.hpp"
-#include "steam/engine/buffer-proxy-adaptor.hpp"
+#include "vault/mem/buffer-proxy-adaptor.hpp"
 #include "lib/meta/prop-builder.hpp"
 #include "test/diagnostic-output.hpp" ////////////////////TODO
 
@@ -30,8 +30,8 @@ using test::ont::manipulateFrame;
 
 using lib::meta::PropBuilder;
 
-namespace steam {
-namespace engine{
+namespace vault {
+namespace mem   {
 namespace test  {
   
   
@@ -94,4 +94,4 @@ namespace test  {
   
   
   
-}}} // namespace steam::play::test
+}}} // namespace vault::mem::test

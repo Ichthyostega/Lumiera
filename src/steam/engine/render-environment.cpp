@@ -24,9 +24,12 @@
 
 #include "steam/engine/render-environment.hpp"
 #include "steam/engine/engine-facilities.hpp"
-#include "steam/engine/naive-buffer-setup.hpp"
-#include "steam/engine/buffer-provider.hpp"
+#include "vault/mem/naive-buffer-setup.hpp"
+#include "vault/mem/buffer-provider.hpp"
 
+
+using vault::mem::BufferProvider;
+using vault::mem::NaiveBufferSetup;
 
 namespace steam {
 namespace engine{

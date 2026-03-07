@@ -49,8 +49,8 @@
  ** @see BufferProviderProtocol_test
  */
 
-#ifndef STEAM_ENGINE_BUFFR_METADATA_H
-#define STEAM_ENGINE_BUFFR_METADATA_H
+#ifndef VAULT_MEM_BUFFR_METADATA_H
+#define VAULT_MEM_BUFFR_METADATA_H
 
 
 #include "lib/error.hpp"
@@ -58,22 +58,22 @@
 #include "lib/hash-value.h"
 #include "lib/util-foreach.hpp"
 #include "include/logging.h"
-#include "steam/engine/buffhandle.hpp"
-#include "steam/engine/type-handler.hpp"
-#include "steam/engine/buffer-local-tag.hpp"
+#include "vault/mem/buffhandle.hpp"
+#include "vault/mem/type-handler.hpp"
+#include "vault/mem/buffer-local-tag.hpp"
 #include "lib/nocopy.hpp"
 
 #include <unordered_map>
 
 
-namespace steam {
-namespace engine {
+namespace vault{
+namespace mem {
   
   using lib::HashVal;
   using lib::Literal;
   using util::for_each;
   
-  namespace error = lumiera::error;
+  namespace err = lumiera::error;
   
   namespace metadata {
     class Key;
@@ -225,8 +225,8 @@ namespace engine {
               {
                 if (nontrivial(parent.specifics_)
                     and localTag != parent.specifics_)
-                  throw error::Logic{"Implementation defined local key should not be overridden. "
-                                     "Underlying buffer type already defines a nontrivial LocalTag"};
+                  throw err::Logic{"Implementation defined local key should not be overridden. "
+                                   "Underlying buffer type already defines a nontrivial LocalTag"};
                 newKey.parent_ = HashVal(parent);
                 newKey.hashID_ = chainedHash(newKey.hashID_, localTag);
                 newKey.specifics_ = localTag;
@@ -295,7 +295,7 @@ namespace engine {
           { }
         
         /// BufferMetadata is allowed to create
-        friend class engine::BufferMetadata;
+        friend class vault::mem::BufferMetadata;
         
         // standard copy operations permitted
         
@@ -368,7 +368,7 @@ namespace engine {
                 return *this;
               }
             
-            throw error::Fatal ("Invalid buffer state transition.");
+            throw err::Fatal ("Invalid buffer state transition.");
           }
         
         Entry&
@@ -419,27 +419,27 @@ namespace engine {
         __must_not_be_NIL()  const
           {
             if (NIL == state_)
-              throw error::Fatal ("Buffer metadata entry with state==NIL encountered."
-                                  "State transition logic broken (programming error)"
-                                 , LERR_(LIFECYCLE));
+              throw err::Fatal ("Buffer metadata entry with state==NIL encountered."
+                                "State transition logic broken (programming error)"
+                               , LERR_(LIFECYCLE));
           }
         
         void
         __must_not_be_FREE()  const
           {
             if (FREE == state_)
-                throw error::Logic ("Buffer is inaccessible (marked as free). "
-                                    "Need a new buffer pointer in order to lock an entry. "
-                                    "You should invoke markLocked(buffer) prior to access."
-                                   , LERR_(LIFECYCLE));
+                throw err::Logic ("Buffer is inaccessible (marked as free). "
+                                  "Need a new buffer pointer in order to lock an entry. "
+                                  "You should invoke markLocked(buffer) prior to access."
+                                 , LERR_(LIFECYCLE));
           }
         
         void
         __must_be_FREE()  const
           {
             if (FREE != state_)
-                throw error::Logic ("Buffer already in use"
-                                   , LERR_(LIFECYCLE));
+                throw err::Logic ("Buffer already in use"
+                                 , LERR_(LIFECYCLE));
             REQUIRE (!buffer_, "Buffer marked as free, "
                                "but buffer pointer is set.");
           }
@@ -448,7 +448,7 @@ namespace engine {
         __buffer_required()  const
           {
             if (!buffer_)
-                throw error::Fatal ("Need concrete buffer for any further operations");
+                throw err::Fatal ("Need concrete buffer for any further operations");
           }
       };
     
@@ -674,19 +674,19 @@ namespace engine {
            ,bool onlyNew =false)
         {
           if (!concreteBuffer)
-            throw error::Invalid{"Attempt to lock a slot for a NULL buffer"
-                                , LERR_(BOTTOM_VALUE)};
+            throw err::Invalid{"Attempt to lock a slot for a NULL buffer"
+                              , LERR_(BOTTOM_VALUE)};
           
           Entry newEntry{parentKey, concreteBuffer, specifics};
           Entry* existing = table_.fetch (newEntry);
           
           if (existing and onlyNew)
-            throw error::Logic{"Attempt to lock a slot for a new buffer, "
-                               "while actually the old buffer is still locked"
-                              , LERR_(LIFECYCLE)};
+            throw err::Logic{"Attempt to lock a slot for a new buffer, "
+                             "while actually the old buffer is still locked"
+                            , LERR_(LIFECYCLE)};
           if (existing and existing->isLocked())
-            throw error::Logic{"Attempt to re-lock a buffer still in use"
-                              , LERR_(LIFECYCLE)};
+            throw err::Logic{"Attempt to re-lock a buffer still in use"
+                            , LERR_(LIFECYCLE)};
           
           if (not existing)
             return store_as_locked (newEntry); // actual creation
@@ -707,7 +707,7 @@ namespace engine {
         {
           Entry* entry = table_.fetch (hashID);
           if (!entry)
-            throw error::Invalid ("Attempt to access an unknown buffer metadata entry");
+            throw err::Invalid ("Attempt to access an unknown buffer metadata entry");
           
           return *entry;
         }
@@ -752,8 +752,8 @@ namespace engine {
       markLocked (Key const& parentKey, Buff* buffer, LocalTag const& specifics =LocalTag::UNKNOWN)
         {
           if (!buffer)
-            throw error::Fatal{"Attempt to lock for a NULL buffer. Allocation floundered?"
-                              , LERR_(BOTTOM_VALUE)};
+            throw err::Fatal{"Attempt to lock for a NULL buffer. Allocation floundered?"
+                            , LERR_(BOTTOM_VALUE)};
           
           return this->lock (parentKey, buffer, specifics, true); // force creation of a new entry
         }
@@ -775,8 +775,8 @@ namespace engine {
       release (Entry const& entry)
         {
           if (FREE != entry.state())
-            throw error::Logic{"Attempt to release a buffer still in use"
-                              , LERR_(LIFECYCLE)};
+            throw err::Logic{"Attempt to release a buffer still in use"
+                            , LERR_(LIFECYCLE)};
           
           table_.remove (HashVal(entry));
         }
@@ -831,5 +831,5 @@ namespace engine {
   
   
   
-}} // namespace steam::engine
-#endif /*STEAM_ENGINE_BUFFR_METADATA_H*/
+}} // namespace vault::mem
+#endif /*VAULT_MEM_BUFFR_METADATA_H*/

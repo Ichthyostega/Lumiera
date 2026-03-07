@@ -2,7 +2,7 @@
   DIAGNOSTIC-BUFFER-PROVIDER.hpp  -  helper for testing against the BufferProvider interf,ttace
 
    Copyright (C)
-     2011,            Hermann Vosseler <Ichthyostega@web.de>
+     2011,2026        Hermann Vosseler <Ichthyostega@web.de>
 
   **Lumiera** is free software; you can redistribute it and/or modify it
   under the terms of the GNU General Public License as published by the
@@ -17,14 +17,14 @@
  ** @see buffer-provider-protocol-test.cpp
  */
 
-#ifndef STEAM_ENGINE_DIAGNOSTIC_BUFFR_PROVIDER_H
-#define STEAM_ENGINE_DIAGNOSTIC_BUFFR_PROVIDER_H
+#ifndef VAULT_MEM_DIAGNOSTIC_BUFFR_PROVIDER_H
+#define VAULT_MEM_DIAGNOSTIC_BUFFR_PROVIDER_H
 
 
 #include "lib/error.hpp"
 #include "lib/util.hpp"
-#include "steam/engine/type-handler.hpp"  ///////////////OOO warum?
-#include "steam/engine/naive-buffer-setup.hpp"
+#include "vault/mem/type-handler.hpp"  ///////////////OOO warum?
+#include "vault/mem/naive-buffer-setup.hpp"
 #include "lib/iter-adapter-stl.hpp"
 #include "lib/result.hpp"
 #include "lib/nocopy.hpp"
@@ -33,9 +33,9 @@
 #include <vector>
 
 
-namespace steam {
-namespace engine {
-  namespace error = lumiera::error;
+namespace vault {
+namespace mem   {
+  namespace err = lumiera::error;
   
   class HeapMemBufferStore;  //////////////////////////////OOO fällt dann weg nach dem Umbau
   class BufferDiagnostic;
@@ -90,8 +90,8 @@ namespace engine {
       Block::accessAs()  const
       {
         if (not storage)
-          throw error::Logic ("buffer was never actually locked for access by clients"
-                             , LERR_(LIFECYCLE));
+          throw err::Logic ("buffer was never actually locked for access by clients"
+                           , LERR_(LIFECYCLE));
         return *reinterpret_cast<BU const*> (storage);
       }
     
@@ -159,5 +159,5 @@ namespace engine {
   }
   
   
-}} // namespace steam::engine
+}} // namespace vault::mem
 #endif

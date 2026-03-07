@@ -24,22 +24,19 @@
  ** @see render-environment.cpp
  */
 
-#ifndef STEAM_ENGINE_NAIVE_BUFFER_STEUP_H
-#define STEAM_ENGINE_NAIVE_BUFFER_STEUP_H
+#ifndef VAULT_MEM_NAIVE_BUFFER_STEUP_H
+#define VAULT_MEM_NAIVE_BUFFER_STEUP_H
 
 
-#include "lib/error.hpp"
-#include "steam/engine/buffer-provider-setup.hpp"
-#include "steam/engine/heap-mem-buffer-store.hpp"
-#include "steam/engine/simple-buffer-state-registry.hpp"
+#include "vault/mem/buffer-provider-setup.hpp"
+#include "vault/mem/heap-mem-buffer-store.hpp"
+#include "vault/mem/simple-buffer-state-registry.hpp"
 
 #include <memory>
 
 
-namespace steam {
-namespace engine {
-  
-  namespace error = lumiera::error;
+namespace vault{
+namespace mem  {
   
   
   /**
@@ -64,5 +61,5 @@ namespace engine {
     };
   
   
-}} // namespace steam::engine
-#endif /*STEAM_ENGINE_NAIVE_BUFFER_STEUP_H*/
+}} // namespace vault::mem
+#endif /*VAULT_MEM_NAIVE_BUFFER_STEUP_H*/

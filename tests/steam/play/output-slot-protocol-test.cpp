@@ -19,13 +19,13 @@
 #include "test/run.hpp"
 
 #include "steam/play/diagnostic-output-slot.hpp"
-#include "steam/engine/buffhandle.hpp"
+#include "vault/mem/buffhandle.hpp"
 #include "test/test-frame.hpp"
 
 
 using test::TestFrame;
 using test::testData;
-using steam::engine::BuffHandle;
+using vault::mem::BuffHandle;
 
 namespace steam {
 namespace play {

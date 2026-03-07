@@ -20,8 +20,8 @@
 #include "test/run.hpp"
 #include "test/test-frame.hpp"
 #include "test/test-helper.hpp"
-#include "steam/engine/buffhandle.hpp"
-#include "steam/engine/buffer-metadata.hpp"
+#include "vault/mem/buffhandle.hpp"
+#include "vault/mem/buffer-metadata.hpp"
 #include "lib/util.hpp"
 
 #include <memory>
@@ -35,8 +35,8 @@ using util::isSameObject;
 using util::isnil;
 using lib::randStr;
 
-namespace steam {
-namespace engine{
+namespace vault {
+namespace mem   {
 namespace test  {
   
   using LERR_(FATAL);
@@ -410,4 +410,4 @@ namespace test  {
   
   
   
-}}} // namespace steam::engine::test
+}}} // namespace vault::mem::test

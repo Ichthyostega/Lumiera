@@ -19,7 +19,7 @@
 #include "lib/error.hpp"
 #include "test/run.hpp"
 #include "test/test-helper.hpp"
-#include "steam/engine/buffer-metadata.hpp"
+#include "vault/mem/buffer-metadata.hpp"
 
 #include <cstdlib>
 #include <cstring>
@@ -29,8 +29,8 @@ using util::isnil;
 using util::isSameObject;
 
 
-namespace steam {
-namespace engine{
+namespace vault {
+namespace mem   {
 namespace metadata{
 namespace test  {
   
@@ -393,4 +393,4 @@ namespace test  {
   
   
   
-}}}} // namespace steam::engine::metadata::test
+}}}} // namespace vault::mem::metadata::test

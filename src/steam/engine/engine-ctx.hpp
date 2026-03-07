@@ -42,12 +42,14 @@
 
 
 #include "lib/depend.hpp"
-#include "steam/engine/buffhandle.hpp"
+#include "vault/mem/buffhandle.hpp"
 #include "lib/nocopy.hpp"
 
 
 namespace steam {
 namespace engine {
+  
+  using vault::mem::BufferProvider;
   
   
   class EngineCtx

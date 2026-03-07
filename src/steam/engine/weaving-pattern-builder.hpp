@@ -135,11 +135,10 @@
 #include "lib/several-builder.hpp"
 #include "steam/engine/proc-id.hpp"
 #include "steam/engine/engine-ctx.hpp"
-#include "steam/engine/buffer-provider.hpp"
 #include "steam/engine/media-weaving-pattern.hpp"
+#include "vault/mem/buffer-provider.hpp"
 #include "lib/meta/tuple-closure.hpp"
 #include "lib/meta/tuple-helper.hpp"
-//#include "test/test-helper.hpp" ////////////////////////////OOO TODO added for test
 #include "lib/format-string.hpp"
 #include "lib/iter-zip.hpp"
 #include "lib/util.hpp"
@@ -155,6 +154,8 @@ namespace engine {
   namespace err = lumiera::error;
   
   using StrView = std::string_view;
+  using vault::mem::BufferProvider;
+  using vault::mem::BuffDescr;
   using std::forward;
   using lib::Depend;
   using lib::izip;

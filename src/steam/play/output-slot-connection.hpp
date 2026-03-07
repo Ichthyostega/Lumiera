@@ -33,6 +33,7 @@
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
 #include "steam/play/output-slot.hpp"
+#include "vault/mem/buffhandle.hpp"
 #include "lib/scoped-collection.hpp"
 #include "lib/iter-adapter-stl.hpp"
 #include "lib/iter-source.hpp"
@@ -51,8 +52,8 @@
 namespace steam {
 namespace play {
 
-  using steam::engine::BuffHandle;
-//using steam::engine::BufferProvider;
+  using vault::mem::BuffHandle;
+//using vault::mem::BufferProvider;
 //using lib::time::Time;
 //using std::string;
   using lib::iter_stl::eachElm;

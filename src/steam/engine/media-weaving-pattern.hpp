@@ -138,25 +138,15 @@
 #include "steam/engine/turnout.hpp"
 #include "steam/engine/turnout-system.hpp"
 #include "steam/engine/feed-manifold.hpp"
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1367 : Rebuild the Node Invocation
-//#include "vault/gear/job.h"
-//#include "steam/engine/exit-node.hpp"
-//#include "lib/time/timevalue.hpp"
-//#include "lib/linked-elements.hpp"
+#include "vault/mem/buffhandle.hpp"
 #include "lib/several.hpp"
-//#include "lib/util-foreach.hpp"
-//#include "lib/iter-adapter.hpp"
-//#include "lib/meta/function.hpp"
-//#include "lib/itertools.hpp"
-//#include "lib/util.hpp"      ////////OOO wegen manifoldSiz<FUN>()
-
-//#include <stack>
 
 
 namespace steam {
 namespace engine {
   
   using lib::Several;
+  using vault::mem::BuffDescr;
   
   
     /**

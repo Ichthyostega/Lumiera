@@ -22,7 +22,7 @@
 #include "lib/scoped-ptrvect.hpp"
 #include "lib/util-foreach.hpp"
 
-#include "steam/engine/heap-mem-buffer-store.hpp"
+#include "vault/mem/heap-mem-buffer-store.hpp"
 
 #include <algorithm>
 #include <vector>
@@ -33,9 +33,9 @@ using lib::ScopedPtrVect;
 
 
 
-namespace steam {
-namespace engine {
-  namespace error = lumiera::error;
+namespace vault {
+namespace mem   {
+  namespace err = lumiera::error;
   
   
   
@@ -303,8 +303,8 @@ namespace engine {
   {
     Block* block4buffer = locateBlock (buffSiz, typeID, specifics);
     if (!block4buffer)
-      throw error::Logic ("Attempt to emit a buffer not known to this BufferProvider"
-                         , LUMIERA_ERROR_BUFFER_MANAGEMENT);
+      throw err::Logic ("Attempt to emit a buffer not known to this BufferProvider"
+                       , LUMIERA_ERROR_BUFFER_MANAGEMENT);
     BlockPool& pool = getBlockPoolFor (buffSiz, typeID);
     Block* active = pool.transferResponsibility (block4buffer);
     if (active)
@@ -361,7 +361,7 @@ namespace engine {
   HeapMemBufferStore::withinOutputSequence (uint bufferID)  const
   {
     if (bufferID >= MAX_BUFFERS)
-      throw error::Fatal ("hardwired internal limit for test buffers exceeded");
+      throw err::Fatal ("hardwired internal limit for test buffers exceeded");
     
     return bufferID < outSeq_.size();
   }
@@ -394,5 +394,4 @@ namespace engine {
   
   
   
-  
-}} // namespace engine
+}} // namespace vault::mem

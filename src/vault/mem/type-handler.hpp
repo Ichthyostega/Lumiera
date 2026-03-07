@@ -29,8 +29,8 @@
  ** @see BufferMetadataKey_test#verifyTypeHandler unit-test
  */
 
-#ifndef STEAM_ENGINE_TYPE_HANDLER_H
-#define STEAM_ENGINE_TYPE_HANDLER_H
+#ifndef VAULT_MEM_TYPE_HANDLER_H
+#define VAULT_MEM_TYPE_HANDLER_H
 
 
 #include "lib/error.hpp"
@@ -41,16 +41,14 @@
 #include <boost/functional/hash.hpp>
 
 
-namespace steam {
-namespace engine {
+namespace vault {
+namespace mem   {
   
   using lib::HashVal;
   using std::bind;
   using std::forward;
   using std::function;
   using std::placeholders::_1;
-  
-  namespace error = lumiera::error;
   
   
   namespace { // (optional) helpers to build an object embedded into a buffer...
@@ -178,5 +176,5 @@ namespace engine {
   
   
   
-}} // namespace steam::engine
-#endif
+}} // namespace vault::mem
+#endif /*VAULT_MEM_TYPE_HANDLER_H*/

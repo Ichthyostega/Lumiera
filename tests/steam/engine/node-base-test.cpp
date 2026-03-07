@@ -26,13 +26,14 @@
 #include "steam/engine/turnout-system.hpp"
 #include "steam/engine/feed-manifold.hpp"
 #include "steam/engine/node-builder.hpp"
-#include "steam/engine/buffhandle.hpp"
+#include "vault/mem/buffhandle.hpp"
 #include "test/test-helper.hpp"
 #include "lib/util.hpp"
 
 
 using std::tuple;
 using std::array;
+using vault::mem::BuffHandle;
 using util::isSameAdr;
 using ::test::showType;
 using lib::makeSeveral;

@@ -33,9 +33,10 @@ namespace engine{
   
 //    using std::string;
 //    using vessel::Subsys;
-  using std::function;
-  using std::bind;
   using std::ref;
+  using std::bind;
+  using std::function;
+  using std::placeholders::_1;
   using lib::iter_source::transform;
   using lib::append_all;
 

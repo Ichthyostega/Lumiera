@@ -2,7 +2,7 @@
   BUFFER-PROVIDER.hpp  -  Abstraction for Buffer management during playback/render
 
    Copyright (C)
-     2011,            Hermann Vosseler <Ichthyostega@web.de>
+     2011,2026        Hermann Vosseler <Ichthyostega@web.de>
 
   **Lumiera** is free software; you can redistribute it and/or modify it
   under the terms of the GNU General Public License as published by the
@@ -108,27 +108,28 @@
  ** @see weaving-pattern-builder.hpp
  */
 
-#ifndef STEAM_ENGINE_BUFFR_PROVIDER_H
-#define STEAM_ENGINE_BUFFR_PROVIDER_H
+#ifndef VAULT_MEM_BUFFR_PROVIDER_H
+#define VAULT_MEM_BUFFR_PROVIDER_H
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/symbol.hpp"
 #include "lib/hash-value.h"
-#include "steam/engine/buffhandle.hpp"
-#include "steam/engine/type-handler.hpp"
-#include "steam/engine/buffer-local-tag.hpp"
-#include "lib/nocopy.hpp"
+#include "vault/mem/buffhandle.hpp"
+#include "vault/mem/type-handler.hpp"
+#include "vault/mem/buffer-local-tag.hpp"
 
 #include <utility>
 #include <memory>
 #include <tuple>
 
 
-namespace steam {
-namespace engine {
+namespace vault{
+namespace mem  {
   
   using lib::Literal;
+  using lib::HashVal;
   using std::unique_ptr;
   using std::forward;
   
@@ -262,5 +263,5 @@ namespace engine {
   }
   
   
-}} // namespace steam::engine
-#endif /*STEAM_ENGINE_BUFFR_PROVIDER_H*/
+}} // namespace vault::mem
+#endif /*VAULT_MEM_BUFFR_PROVIDER_H*/

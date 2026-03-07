@@ -45,17 +45,17 @@
  ** @see engine::RenderInvocation
  */
 
-#ifndef ENGINE_BUFFHANDLE_H
-#define ENGINE_BUFFHANDLE_H
+#ifndef VAULT_MEM_BUFFHANDLE_H
+#define VAULT_MEM_BUFFHANDLE_H
 
 
 #include "lib/error.hpp"
 #include "lib/hash-value.h"
 
 
-namespace steam {
-namespace engine {
-  namespace error = lumiera::error;
+namespace vault{
+namespace mem {
+  namespace err = lumiera::error;
   
   using lib::HashVal;
   
@@ -184,13 +184,13 @@ namespace engine {
   BuffHandle::accessAs()
   {
     if (not pBuffer_)
-      throw error::Logic ("buffer not (yet) locked for access by clients"
-                         , LERR_(LIFECYCLE));
+      throw err::Logic ("buffer not (yet) locked for access by clients"
+                       , LERR_(LIFECYCLE));
     return *reinterpret_cast<BU*> (pBuffer_);
   }
   
   
   
   
-}} // namespace steam::engine
-#endif
+}} // namespace vault::mem
+#endif /*VAULT_MEM_BUFFHANDLE_H*/

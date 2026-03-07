@@ -28,7 +28,7 @@
 #include "lib/symbol.hpp"
 //#include "vessel/query.hpp"
 #include "lib/idi/entry-id.hpp"
-#include "steam/engine/buffhandle.hpp"
+#include "vault/mem/buffhandle.hpp"
 
 
 
@@ -109,7 +109,7 @@ namespace steam {
        * The actual buffer will always be provided by a library implementation;
        * Access is coordinated by a BufferProvider.
        */
-      using DataBuffer = steam::engine::Buff;
+      using DataBuffer = vault::mem::Buff;
       
       
       virtual bool operator== (ImplFacade const& other)  const =0;

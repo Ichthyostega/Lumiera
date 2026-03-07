@@ -20,20 +20,18 @@
  ** @see naive-buffer-setup.hpp
  */
 
-#ifndef STEAM_ENGINE_SIMPLE_BUFFER_STATE_REGISTRY_H
-#define STEAM_ENGINE_SIMPLE_BUFFER_STATE_REGISTRY_H
+#ifndef VAULT_MEM_SIMPLE_BUFFER_STATE_REGISTRY_H
+#define VAULT_MEM_SIMPLE_BUFFER_STATE_REGISTRY_H
 
 
-#include "lib/error.hpp"
-#include "steam/engine/buffer-provider-setup.hpp"
-#include "steam/engine/buffer-metadata.hpp"
+#include "vault/mem/buffer-metadata.hpp"
+#include "vault/mem/buffer-provider-setup.hpp"
 
 #include <memory>
 
 
-namespace steam {
-namespace engine {
-  namespace error = lumiera::error;
+namespace vault {
+namespace mem   {
   
   
   
@@ -114,11 +112,9 @@ namespace engine {
       SimpleBufferStateRegistry (Literal implementationID)
         : metadata_{implementationID}
         { }
-      
-    private:
     };
   
   
   
-}} // namespace steam::engine
-#endif /*STEAM_ENGINE_SIMPLE_BUFFER_STATE_REGISTRY_H*/
+}} // namespace vault::mem
+#endif /*VAULT_MEM_SIMPLE_BUFFER_STATE_REGISTRY_H*/

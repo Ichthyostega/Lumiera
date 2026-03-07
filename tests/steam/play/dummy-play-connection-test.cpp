@@ -18,6 +18,7 @@
 
 #include "test/run.hpp"
 
+#include "vault/mem/buffhandle.hpp"
 #include "steam/play/dummy-play-connection.hpp"
 #include "vessel/spine/play-facade.hpp"
 #include "lib/time/control.hpp"
@@ -30,10 +31,7 @@ namespace test {
   
   namespace time = lib::time;
   
-  using steam::engine::BuffHandle;
-//using steam::engine::test::testData;
-//using steam::engine::test::TestFrame;
-  
+  using vault::mem::BuffHandle;
   using vessel::spine::Play;
   
   typedef time::Control<time::Duration> DurationControl;
