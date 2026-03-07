@@ -35,10 +35,8 @@ using lib::ScopedPtrVect;
 
 namespace steam {
 namespace engine {
-  
   namespace error = lumiera::error;
   
-  using Buff = StreamType::ImplFacade::DataBuffer;
   
   
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 1410 : need to question what implementation structures are needed, after »tracking« was extracted...

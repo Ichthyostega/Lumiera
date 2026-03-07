@@ -191,8 +191,6 @@ namespace engine {
       BuffDescr buildDescriptor (HashVal);
       bool was_created_by_this_provider (BuffDescr const&)  const;
       
-      using Buff = StreamType::ImplFacade::DataBuffer;  ///< marker type for an actual data buffer
-      
       
       class BufferStage
         : util::NonCopyable

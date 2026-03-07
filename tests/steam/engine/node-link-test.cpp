@@ -25,6 +25,7 @@
 #include "steam/asset/meta/time-grid.hpp"
 #include "lib/time/timequant.hpp"
 #include "lib/time/timecode.hpp"
+#include "lib/symbol.hpp"
 #include "lib/util.hpp"
 
 #include <array>
@@ -34,6 +35,7 @@ using lib::time::Time;
 using lib::time::QuTime;
 using lib::time::FrameNr;
 using lib::time::FrameCnt;
+using lib::Symbol;
 using util::isnil;
 using util::isSameObject;
 using test::TestFrame;

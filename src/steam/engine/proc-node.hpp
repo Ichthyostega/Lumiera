@@ -99,6 +99,7 @@
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/hash-value.h"
+#include "include/limits.hpp"
 #include "steam/engine/buffhandle.hpp"
 #include "steam/engine/turnout-system.hpp"
 #include "lib/format-string.hpp"

@@ -35,10 +35,7 @@
 
 namespace steam {
 namespace engine {
-  
   namespace error = lumiera::error;
-  
-  using Buff = StreamType::ImplFacade::DataBuffer;  ///////////TODO consider to define that marker type at some suitable central location
   
   class HeapMemBufferStore;  //////////////////////////////OOO fällt dann weg nach dem Umbau
   class BufferDiagnostic;

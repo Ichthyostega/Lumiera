@@ -33,10 +33,8 @@
 
 namespace steam {
 namespace engine {
-  
   namespace error = lumiera::error;
   
-  using metadata::Buff;
   
   
   /**

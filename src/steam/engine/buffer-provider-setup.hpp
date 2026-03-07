@@ -26,7 +26,6 @@
 #include "lib/symbol.hpp"
 #include "lib/hash-value.h"
 #include "steam/engine/buffer-provider.hpp"
-//#include "steam/engine/engine-ctx.hpp"
 #include "lib/nocopy.hpp"
 
 #include <utility>

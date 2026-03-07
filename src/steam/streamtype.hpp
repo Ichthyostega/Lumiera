@@ -28,6 +28,7 @@
 #include "lib/symbol.hpp"
 //#include "vessel/query.hpp"
 #include "lib/idi/entry-id.hpp"
+#include "steam/engine/buffhandle.hpp"
 
 
 
@@ -104,12 +105,11 @@ namespace steam {
       class TypeTag ;
       
       /**
-       * placeholder type for the contents of a data buffer.
-       * The actual buffer will always be provided by a
-       * library implementation; throughout the engine,
-       * it's just hidden behind a DataBuffer pointer.
+       * placeholder marker for the contents of a data buffer.
+       * The actual buffer will always be provided by a library implementation;
+       * Access is coordinated by a BufferProvider.
        */
-      struct DataBuffer { };
+      using DataBuffer = steam::engine::Buff;
       
       
       virtual bool operator== (ImplFacade const& other)  const =0;

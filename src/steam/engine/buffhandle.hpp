@@ -51,7 +51,6 @@
 
 #include "lib/error.hpp"
 #include "lib/hash-value.h"
-#include "steam/streamtype.hpp"
 
 
 namespace steam {
@@ -63,6 +62,13 @@ namespace engine {
   class BuffHandle;
   class BufferProvider;
   
+  /**
+   * Placeholder type for the contents of a data buffer.
+   * @remark The actual buffer will always be provided by a library implementation;
+   *   throughout the engine, this implementation type is represented as BuffDescr.
+   *   A `Buff*` represents the fact that there is a memory block managed by some library.
+   */
+  struct Buff { };
   
   
   /**
@@ -110,8 +116,6 @@ namespace engine {
    */
   class BuffHandle
     {
-      using Buff = StreamType::ImplFacade::DataBuffer;  ///< marker type for an actual data buffer
-      
       BuffDescr descriptor_;
       Buff*     pBuffer_;
       

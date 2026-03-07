@@ -20,6 +20,7 @@
 #include "test/run.hpp"
 #include "test/test-frame.hpp"
 #include "test/test-helper.hpp"
+#include "steam/engine/buffhandle.hpp"
 #include "steam/engine/buffer-metadata.hpp"
 #include "lib/util.hpp"
 
@@ -55,10 +56,10 @@ namespace test  {
     }
     
     template<typename X>
-    metadata::Buff*
+    Buff*
     mark_as_Buffer(X& something)
       {
-        return reinterpret_cast<metadata::Buff*> (std::addressof(something));
+        return reinterpret_cast<Buff*> (std::addressof(something));
       }
     
     
