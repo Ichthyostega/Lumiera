@@ -110780,7 +110780,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1719880204169" ID="ID_826687521" MODIFIED="1720538363696" TEXT="Diskussion / offene Fragen">
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1719880204169" ID="ID_826687521" MODIFIED="1773106788771" TEXT="Diskussion / offene Fragen">
 <icon BUILTIN="bell"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1720537748722" HGAP="55" ID="ID_155032865" MODIFIED="1733426613642" STYLE="bubble" TEXT="es ist kein filligranes Protokoll notwendig" VSHIFT="62">
 <richcontent TYPE="NOTE"><html>
@@ -110826,6 +110826,31 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1738381699283" ID="ID_1808793696" MODIFIED="1738381812146" TEXT="inh&#xe4;rente Struktur-Beschr&#xe4;nkungen des Allocation-Cluster">
 <arrowlink COLOR="#fe4663" DESTINATION="ID_1142487945" ENDARROW="Default" ENDINCLINATION="-862;38;" ID="Arrow_ID_778302658" STARTARROW="None" STARTINCLINATION="-918;43;"/>
 <icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1773106587628" ID="ID_14774780" MODIFIED="1773167973444" TEXT="Erweiterte Anforderung: Call-unwind">
+<linktarget COLOR="#ff1543" DESTINATION="ID_14774780" ENDARROW="Default" ENDINCLINATION="-1473;112;" ID="Arrow_ID_116123183" SOURCE="ID_1318788103" STARTARROW="None" STARTINCLINATION="-1264;77;"/>
+<linktarget COLOR="#ff1543" DESTINATION="ID_14774780" ENDARROW="Default" ENDINCLINATION="-1473;112;" ID="Arrow_ID_1204522057" SOURCE="ID_495439947" STARTARROW="None" STARTINCLINATION="1721;172;"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1773106807352" ID="ID_694860370" MODIFIED="1773107285964" TEXT="Anforderung (3/2026) im Output-Management entdeckt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Die alten Entw&#252;rfe zum Buffer- und Output-Management von 2012 waren zu dem Ergebnis gekommen, da&#223; man praktisch alle Fehlersituationen ger&#228;uschlos im Framework abfangen kann. Diese Einsch&#228;tzung erweist sich nun als vorschnell; tats&#228;chlich kann <i>ein Verfehlen des Ausgabe-Zeitfensters zum schrittweisen Entgleisen des Ausgabevorgangs f&#252;hren. </i>Daher mu&#223; ein Notausgang vorgesehen werden, aber <i>Exceptions schlie&#223;e ich aus anderen Gr&#252;nden als L&#246;sung aus</i>&#160;(abgesehen davon, da&#223; Exceptions generell nur f&#252;r Ausnahmesituationen gedacht sind, und jeweils zu einem Subsystem-Shutdown f&#252;hren; man sollte sie nicht als einen &#187;goto&#171;-Mechanismus verwenden, um regul&#228;r auftretende, und auch beherrschbare Codepfade einfach zu implementieren).
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Also ergibt sich die Konsequenz, da&#223; in den rekursiven pull()-Call ein Mechanismus eingebaut werden mu&#223;, der die Call-Sequenz <b>abk&#252;rzt</b>, aber trotzdem <b>alle Resourcen regul&#228;r handhabt</b>.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="info"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1773108766174" ID="ID_926797316" LINK="https://issues.lumiera.org/ticket/1417" MODIFIED="1773108781099" TEXT="#1417 unwind from Render Node pull">
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1719881279352" ID="ID_1378956447" MODIFIED="1719881489034" TEXT="Re-Entrance f&#xfc;r Buffer-Lebenszyklus-Schritte?">
@@ -114096,7 +114121,66 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 <node CREATED="1771534962783" ID="ID_234219781" MODIFIED="1771534967343" TEXT="Umbau-Plan">
-<node CREATED="1771534972584" ID="ID_1377276921" MODIFIED="1771534982037" TEXT="neues Tracking-API entwerfen"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1771534972584" ID="ID_1377276921" MODIFIED="1773167651952" TEXT="neues Tracking-API entwerfen">
+<arrowlink COLOR="#604371" DESTINATION="ID_76417582" ENDARROW="Default" ENDINCLINATION="-588;-641;" ID="Arrow_ID_1083444621" STARTARROW="None" STARTINCLINATION="-741;71;"/>
+<node CREATED="1773158721999" ID="ID_815516118" MODIFIED="1773158772114" TEXT="k&#xfc;nftig alles per Instanz">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      keine statsische Magie, keine implizite Instanz, das zahlt sich nicht aus in der Praxis!
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1773158703456" ID="ID_290906159" MODIFIED="1773167678342" TEXT="Konfiguration von Limits">
+<icon BUILTIN="hourglass"/>
+<node CREATED="1773158795105" ID="ID_1401626971" MODIFIED="1773158803668" TEXT="speichert intern eine Config"/>
+<node CREATED="1773158555452" ID="ID_1602470940" MODIFIED="1773158691959" TEXT="Builder-Qualifier in den Konstruktor akzeptieren">
+<linktarget COLOR="#3c5f88" DESTINATION="ID_1602470940" ENDARROW="Default" ENDINCLINATION="-1050;65;" ID="Arrow_ID_1529902301" SOURCE="ID_1664483213" STARTARROW="None" STARTINCLINATION="44;-727;"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1773167692429" ID="ID_678395312" MODIFIED="1773167723575" TEXT="noch nicht klar wie viel davon (jetzt) implementiert wird...">
+<icon BUILTIN="bell"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#d0020d" CREATED="1773167732440" ID="ID_218577469" MODIFIED="1773167854628" TEXT="eigentlich brauch ich das gar nicht....">
+<font NAME="SansSerif" SIZE="9"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#9c012d" CREATED="1773167741822" ID="ID_1294825278" MODIFIED="1773167841049" TEXT="...zumindest bis irgendwo tats&#xe4;chliche Konsistenz-Checks implementiert werden">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#9e2065" CREATED="1773167764771" ID="ID_979693912" MODIFIED="1773167850493" TEXT=".....oder bis die Engine mit &#xbb;null-Buffern&#xab; umgehen kann">
+<font NAME="SansSerif" SIZE="11"/>
+<node BACKGROUND_COLOR="#f2cdb2" COLOR="#ff0000" CREATED="1773105886426" HGAP="31" ID="ID_495439947" LINK="https://issues.lumiera.org/ticket/1417" MODIFIED="1773168035923" TEXT="&#xbb;unwind&#xab;-Pfad &#x27f6; #1417" VSHIFT="7">
+<edge COLOR="#fe3c19" STYLE="sharp_linear" WIDTH="2"/>
+<arrowlink COLOR="#ff1543" DESTINATION="ID_14774780" ENDARROW="Default" ENDINCLINATION="-1473;112;" ID="Arrow_ID_1204522057" STARTARROW="None" STARTINCLINATION="1721;172;"/>
+<font NAME="SansSerif" SIZE="9"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1773159363311" ID="ID_361405303" MODIFIED="1773167687038" TEXT="eine TimeVar f&#xfc;r &#xbb;now&#xab; vorsehen">
+<icon BUILTIN="hourglass"/>
+</node>
+<node CREATED="1773159125087" ID="ID_885287826" MODIFIED="1773159130969" TEXT="Diagnose nach dem Test">
+<node CREATED="1773159133396" ID="ID_1831214129" MODIFIED="1773159144772" TEXT="fluent API bauen">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1773159147279" ID="ID_351923331" MODIFIED="1773159237859" TEXT="aber hier nur Zugriff per Feed und Frame-Nr">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Die Situation ist diesbez&#252;glich ganz anders als beim BufferProvider: hier ist es sinnlos, die globale Folge der ausgegebenen Buffer zu betrachten, da jeder Feed separat l&#228;uft.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1773159386871" ID="ID_1559145751" MODIFIED="1773159399319" TEXT="f&#xfc;r jeden Frame">
+<node CREATED="1773159400515" ID="ID_1117722980" MODIFIED="1773159411046" TEXT="wurde er gelockt?"/>
+<node CREATED="1773159412124" ID="ID_536687578" MODIFIED="1773159418649" TEXT="wurde er emitted?"/>
+<node CREATED="1773159421453" ID="ID_548976578" MODIFIED="1773159441321" TEXT="jeweils die &#xbb;now&#xab;-Time kopieren"/>
+</node>
+</node>
+</node>
 <node CREATED="1771535088123" ID="ID_1559134812" MODIFIED="1771535104984" TEXT="nun einen DiagnosticBufferProvider &#xbb;Huckepack&#xab; nehmen"/>
 <node CREATED="1771535954283" ID="ID_83611307" MODIFIED="1771536165619" TEXT="mu&#xdf; hier sofort einen ProxyBufferStore vorsehen und anlegen">
 <linktarget COLOR="#ff0020" DESTINATION="ID_83611307" ENDARROW="Default" ENDINCLINATION="-142;6;" ID="Arrow_ID_47613106" SOURCE="ID_1312596627" STARTARROW="None" STARTINCLINATION="6;-31;"/>
@@ -114104,6 +114188,20 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1771535979276" ID="ID_117213353" MODIFIED="1771536009626" TEXT="alles andere wegholzen und erst mal sonst nichts machen">
 <icon BUILTIN="yes"/>
 <icon BUILTIN="flag-pink"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1773021218420" ID="ID_686997096" MODIFIED="1773021340196" TEXT="Querverbindung zum Layer-Refactoring">
+<arrowlink COLOR="#fe4769" DESTINATION="ID_819469629" ENDARROW="Default" ENDINCLINATION="542;21;" ID="Arrow_ID_254929972" STARTARROW="None" STARTINCLINATION="407;28;"/>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1773021653678" ID="ID_1544005457" MODIFIED="1773021899340" TEXT="nur eine Grid-Abstraktion durchreichen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Diese Feststellung bezeichnet einen Knotenpunkt in der bestehenden Platzhalter-Implementierung, welche dadruch unn&#246;tigerweise an die Assets gebunden ist. Tats&#228;chlich mu&#223; es mir gelingen, die Interfaces so zu strukturieren, da&#223; nur ein Verweis auf ein Grid(Interface) durchgereicht wird. Das dazu geh&#246;rige, tats&#228;chliche Grid ist n&#228;mlich etwas in der konkreten Session; es wird verm&#246;ge der Player-Output-Connection in das Output-System durchgereicht; andererseits gibt es irgendwo in der externen Anbindung an konkrete Hardware-Outputs so etwas wie einen Timing-Anker, an dem das tats&#228;chliche Frame-Grid ausgerichtet wird (zumindest f&#252;r real-Time output)
+    </p>
+  </body>
+</html></richcontent>
+</node>
 </node>
 </node>
 </node>
@@ -115620,6 +115718,20 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1772478179206" ID="ID_1477396819" MODIFIED="1772933010916" TEXT="OutputSlot">
 <icon BUILTIN="help"/>
+<node CREATED="1773021243177" ID="ID_819469629" MODIFIED="1773021647136" TEXT="das &#xbb;Entkernen&#xab; des DiagnosticOutputSlot erm&#xf6;glicht Umzug nach &#xbb;Vault&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...und zwar geht es hier um den &#187;Knackpunkt&#171; mit time::Grid vs asset::Grid.
+    </p>
+    <p>
+      Die Definition der Interfaces l&#228;&#223;t sich komplett auf das Grid-Interface in der Library reduzieren; deshalb sollte es auch m&#246;glich sein, den OutputSlot und die Basis des OutputManagement letztlich in die &#187;Vault&#171; zu verlegen. Die bestehende Draft/Platzhalter-Implementierung allerdings verwendet asset::Grid auf eine undurchsichtige Weise, die ich l&#228;ngerfristig f&#252;r obsolet halte, ohne &#252;berhaupt noch Aufwand zu betreiben, sie zu verstehen. Der Grund ist, da&#223; die Verwaltung der Grids letztlich mit der Session zusammenh&#228;ngt, und daher in der geplanten L&#246;sung es nicht Aufgrabe des OutputSlot sein kann, ein Grid zu erzeugen; vielmehr wird ein im Model bereits bestehendes Grid referenziert. Es kommt also darauf an, die Interaces und die Basis-Implementierung so zu bauen, da&#223; nur eine Grid-Abstraktion durchgereicht wird.
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#fe4769" DESTINATION="ID_819469629" ENDARROW="Default" ENDINCLINATION="542;21;" ID="Arrow_ID_254929972" SOURCE="ID_686997096" STARTARROW="None" STARTINCLINATION="407;28;"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1772478185740" ID="ID_1860322406" MODIFIED="1772933014495" TEXT="OutputManagement">
 <icon BUILTIN="help"/>
@@ -117216,9 +117328,10 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1771532667033" ID="ID_1615837421" MODIFIED="1771532682643" TEXT="zun&#xe4;chst ist das Protokoll zu korrigieren">
 <node CREATED="1771532702299" ID="ID_1332714293" MODIFIED="1771532711704" TEXT="dokumentiert durch OutputSlotProtocol_test">
 <node CREATED="1771532730104" ID="ID_874519449" MODIFIED="1771532748289" TEXT="im bestehenden Code lief der Test (mit einer Dummy-Implementierung)"/>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1771532716678" ID="ID_459952316" MODIFIED="1771533105051" TEXT="dieser Test ist nun gebrochen">
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1771532716678" ID="ID_459952316" MODIFIED="1773076794402" TEXT="dieser Test ist nun gebrochen">
 <linktarget COLOR="#fe1909" DESTINATION="ID_459952316" ENDARROW="Default" ENDINCLINATION="75;-1691;" ID="Arrow_ID_176448794" SOURCE="ID_158180438" STARTARROW="None" STARTINCLINATION="-554;79;"/>
 <linktarget COLOR="#f90134" DESTINATION="ID_459952316" ENDARROW="Default" ENDINCLINATION="-843;75;" ID="Arrow_ID_1183488081" SOURCE="ID_690666245" STARTARROW="None" STARTINCLINATION="345;27;"/>
+<linktarget COLOR="#b22cbe" DESTINATION="ID_459952316" ENDARROW="Default" ENDINCLINATION="-137;3;" ID="Arrow_ID_168875434" SOURCE="ID_1722330743" STARTARROW="Default" STARTINCLINATION="-9;-63;"/>
 <icon BUILTIN="broken-line"/>
 </node>
 </node>
@@ -117228,6 +117341,52 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1771536432658" ID="ID_28988078" MODIFIED="1771536458970" TEXT="daf&#xfc;r soll der Client nun alles auf dem BuffHandle machen"/>
 <node CREATED="1771536466794" ID="ID_48507847" MODIFIED="1771536970615" TEXT="mu&#xdf; eine Proxy-Implementierung des BufferProvider bereitstellen">
 <arrowlink COLOR="#b1000a" DESTINATION="ID_580664253" ENDARROW="Default" ENDINCLINATION="-769;59;" ID="Arrow_ID_1374111018" STARTARROW="None" STARTINCLINATION="366;17;"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1773077339408" ID="ID_9353167" MODIFIED="1773077409753" TEXT="Protokoll final">
+<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1773077433700" HGAP="106" ID="ID_1896993671" MODIFIED="1773077470074" TEXT="der &#xbb;Vertical Slice&#xab; soll das Protokoll validieren" VSHIFT="-9">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+<node CREATED="1773076719646" ID="ID_884669133" MODIFIED="1773076734458" TEXT="mu&#xdf; zus&#xe4;tzlich eine Dummy-Implementierung bauen">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1773076745969" ID="ID_1722330743" MODIFIED="1773077118998" TEXT="Test mu&#xdf; laufen">
+<arrowlink COLOR="#b22cbe" DESTINATION="ID_459952316" ENDARROW="Default" ENDINCLINATION="-137;3;" ID="Arrow_ID_168875434" STARTARROW="Default" STARTINCLINATION="-9;-63;"/>
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1773077173730" ID="ID_76417582" MODIFIED="1773167628789" TEXT="Neubau Diagnose-API &#x27fa; Vorentwurf Implementierung">
+<linktarget COLOR="#604371" DESTINATION="ID_76417582" ENDARROW="Default" ENDINCLINATION="-588;-641;" ID="Arrow_ID_1083444621" SOURCE="ID_1377276921" STARTARROW="None" STARTINCLINATION="-741;71;"/>
+<icon BUILTIN="pencil"/>
+</node>
+<node CREATED="1773077306179" ID="ID_791772240" MODIFIED="1773078563511" TEXT="Analyse mu&#xdf; dieses Mal bottom-up vorgehen">
+<arrowlink COLOR="#df165b" DESTINATION="ID_597179173" ENDARROW="Default" ENDINCLINATION="-647;-29;" ID="Arrow_ID_694305976" STARTARROW="None" STARTINCLINATION="-136;1688;"/>
+<node CREATED="1773077507482" ID="ID_1084930435" MODIFIED="1773078209970" TEXT="das ist die Konsequenz aus diesem &#xbb;Mismatch&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      &#187;man&#171; hatte sich seinerzeit was ausgedacht, ohne sehen zu k&#246;nnen, wohin das f&#252;hrt und wo das <i>vielleicht aneckt.</i>&#160;Durch eine halbe Protion Gl&#252;ck hat sich eine Parallele mit dem Buffer-Provider-Protokoll aufgetan, die zudem nicht richtig funktionert. So da&#223; das &#8222;eigentlich fertige&#8220; Protokoll-Setup nicht zu gebrauchen ist. W&#252;rde ich das ganze Zeug jetzt wegwerfen, und neu bauen, dann w&#228;re es darauf hinausgelaufen, da&#223; das alles ein Irrtum und eine Sackgasse war. Deshalb werde ich das <i>nicht tun, sondern mich an dem vermurksten Entwurf abarbeiten, </i>um aus den Schwierigkeiten<i>&#160;eine R&#252;ckmeldung der Wirklichkeit zu gewinnen</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1773077521860" ID="ID_1181588301" MODIFIED="1773078399225" TEXT="kommt letztlich nicht &#xfc;berraschend...">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Seinerzeit war das Output-Slot-Protokoll der Versuch, einen ganzen Themenbereich erstmals einzufangen &#8212; durch einen <i>Entwurf in's Blaue. </i>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Folglich ist das Protokoll aus einem prinzipiellen Verst&#228;ndnis des Sachverhalts gesch&#246;pft, und die Implementierung zappelt im leeren Raum. Praktisch zeigt (und zeigte) sich das so, da&#223; die Implementierung v&#246;llig <i>ohne Gehalt ist, </i>und daher der Test gewisserma&#223;en nach &#187;Selbstbefriedigung&#171; riecht: man kippt irgengendwelches Zeug in die Tasche und fummelt es auf der anderen Seite wieder heraus. Was sollte da denn auch getestet werden &#8212; eine Implementierung ist gar nicht gegeben. Diese ganze Veranstaltung <i>kann aber sinnvoll gemacht werden, </i>indem die (nicht-vorhandene) Implementierung auf (noch nicht erfahrenen) Schwierigkeiten der tats&#228;chlichen Realisierung aufbaut
+    </p>
+  </body>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -137006,6 +137165,227 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1771532488034" ID="ID_690666245" MODIFIED="1771533022127" TEXT="DiagnosticOutputSlot aufr&#xe4;umen">
 <arrowlink COLOR="#f90134" DESTINATION="ID_459952316" ENDARROW="Default" ENDINCLINATION="-843;75;" ID="Arrow_ID_1183488081" STARTARROW="None" STARTINCLINATION="345;27;"/>
 <icon BUILTIN="pencil"/>
+<node CREATED="1773078490823" HGAP="34" ID="ID_474163351" MODIFIED="1773078511878" TEXT="ein neues sinvolleres Diagnose-API entwerfen" VSHIFT="30">
+<node CREATED="1773078412215" ID="ID_597179173" MODIFIED="1773078565947" TEXT="Test-Dummy bereitet die Prototyp-Implementierung vor">
+<linktarget COLOR="#df165b" DESTINATION="ID_597179173" ENDARROW="Default" ENDINCLINATION="-647;-29;" ID="Arrow_ID_694305976" SOURCE="ID_791772240" STARTARROW="None" STARTINCLINATION="-136;1688;"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1773078521008" ID="ID_363846303" MODIFIED="1773078569280" TEXT="Grundlage: wie k&#xf6;nnte man dieses API realistischerweise implementieren?">
+<icon BUILTIN="help"/>
+<node CREATED="1773088095124" ID="ID_1797165728" MODIFIED="1773088185793" TEXT="Gegebenheiten">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das sage ich hier dem <i>virtuellen Christian:</i>&#160;sorry, Junge, das ist nicht was, was <i>wir</i>&#160;uns so richten k&#246;nnen, wie es uns grad schmeckt.....
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1773087884607" ID="ID_1637402213" MODIFIED="1773087894190" TEXT="Output-Mechanik">
+<node CREATED="1773088070000" ID="ID_1869895337" MODIFIED="1773088073781" TEXT="umkopieren"/>
+<node CREATED="1773088059850" ID="ID_437421950" MODIFIED="1773088068438" TEXT="Buffer-&#xdc;bergabe"/>
+<node CREATED="1773087896734" ID="ID_1789068166" MODIFIED="1773087907322" TEXT="zeitgesteuerter Flip"/>
+<node CREATED="1773088019426" ID="ID_1141427050" MODIFIED="1773088024426" TEXT="Shared-Memory"/>
+<node CREATED="1773087945042" ID="ID_1216518753" MODIFIED="1773087946557" TEXT="DMA"/>
+</node>
+<node CREATED="1773088186969" ID="ID_262693747" MODIFIED="1773088190454" TEXT="Kontrollstruktur">
+<node CREATED="1773088521183" ID="ID_1542583105" MODIFIED="1773088652574" TEXT="callback">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Eine user-provided-Function wird aufgerufen, mit einer Buffer-Adresse als Argument. Sie hat dann eine (meist nur ungef&#228;hr definierte) Zeitspanne, um Daten in diese Adresse zu bekommen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1773088239889" ID="ID_1341314044" MODIFIED="1773088338215" TEXT="push">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ein &#187;Client&#171; der Output-Senke triggert die &#220;bergabe
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1773088405898" ID="ID_50943174" MODIFIED="1773088520034" TEXT="pull">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ein Repr&#228;sentant des Output-Mechanismus holt sich Daten oder initiiert den n&#228;chsten &#187;Flip&#171;
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1773088654168" ID="ID_941261288" MODIFIED="1773088708159" TEXT="Formen des Scheiterns">
+<node CREATED="1773088749227" ID="ID_443400266" MODIFIED="1773093074959" TEXT="passiv">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Dieser Fall ist sehr h&#228;ufig, mutma&#223;lich sogar die Regel: der Ausgabe-Mechanismus l&#228;uft blind, und &#252;bernimmt die Daten, die eben da sind, oft sogar zu einem Zeitpunkt, der nicht ganz pr&#228;zise vorherzusagen ist.
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1773088778186" ID="ID_948288214" MODIFIED="1773088784970" TEXT="M&#xfc;ll im Ausgabekanal"/>
+<node CREATED="1773088787302" ID="ID_827699280" MODIFIED="1773088843690" TEXT="sonst ohne Konsequenz"/>
+</node>
+<node CREATED="1773088910293" ID="ID_1420156535" MODIFIED="1773093425065" TEXT="undefiniert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Dieser Fall hat leider eine gewisse Relevanz; er kommt zustande durch den speziellen Fokus auf Performance, der dem Thema inh&#228;rent ist. Absicherung gegen Timing-Fehler verursacht Kosten, und wird als besonders irrelevant eingestuft, da der Benutzer eines IO-Kanals ein nat&#252;rliches Interesse an korrekter Verwendung haben sollte &#8212; was leider ein Kurzschlu&#223; ist, denn die wenigsten Probleme werden mutwillig verursacht, und unbekannte Probleme sind schwieriger zu erkennen, reparieren und zu verhindern
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1773088964462" ID="ID_1196646352" MODIFIED="1773088971156" TEXT="Konsequenzen sind nicht absehbar"/>
+<node CREATED="1773088973456" ID="ID_135157864" MODIFIED="1773089011981" TEXT="Ausgabesysteme k&#xf6;nnen h&#xe4;ngenbleiben"/>
+</node>
+<node CREATED="1773089069187" ID="ID_755394799" MODIFIED="1773101625525" TEXT="markiert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Dieses Muster ist nicht so h&#228;ufig anzutreffen, jedoch sehr vorteilhaft, weil dadurch effektiv eine weitere Sicherheitsbarriere gegeben ist; abgesehen davon ist es jedoch nicht relevant f&#252;r die Implementierund der Datenanlieferung f&#252;r den Output, denn man sollte ohnehin Sorge tragen, das Protokoll einzuhalten
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1773089074119" ID="ID_500702692" MODIFIED="1773089082186" TEXT="Protokollverletzung wird automatisch erkannt"/>
+<node CREATED="1773089106075" ID="ID_1995564014" MODIFIED="1773089118377" TEXT="Versagen wird gekennzeichnet"/>
+</node>
+<node CREATED="1773089171482" ID="ID_1409584074" MODIFIED="1773101682100" TEXT="bestraft">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Auch diese Variante (die oft mit der vorherigen einhergeht) stellt ein Sicherheitsnetz dar, da eine <i>aus dem Ruder laufende</i>&#160;Datenversorgung rasch gestoppt wird.
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1773089177453" ID="ID_423648183" MODIFIED="1773101391427" TEXT="Erkennung kann passiv oder aktiv sein"/>
+<node CREATED="1773089189999" ID="ID_1851045464" MODIFIED="1773089215032" TEXT="Verbindung wird gesperrt oder getrennt"/>
+</node>
+</node>
+</node>
+<node CREATED="1773101687926" ID="ID_1945550225" MODIFIED="1773101705981" TEXT="&#xdc;berlegungen und Konsequenzen">
+<node CREATED="1773101760561" ID="ID_1216626497" MODIFIED="1773102025488" TEXT="eine qualitativ hochwertige Implementierung verhindert Protokollfehler">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...was im Umkehrschlu&#223; bedeutet, da&#223; es nicht gen&#252;gt, lediglich die Fehler <i>unwahrscheinlicher zu machen.</i>&#160;In dieser Hinsicht waren meine &#220;berlegungen 2012 voreilig und unausgewogen; zwar wollte ich einen de-Clicker, aber wollte mir dann mit einem Implementierungstrick helfen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1773101818138" ID="ID_317443240" MODIFIED="1773105699999" TEXT="dies erfordert (und rechtfertigt) eine gewisse Infrastruktur">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...die wir gr&#246;&#223;tenteils sowiso haben; neu ist nur, da&#223; wir nun eingestehen, <b>eigens f&#252;r die Korrektheit sorgen zu m&#252;ssen</b>. Das Erkennen von Fehlern mu&#223; dabei in der Implementierung liegen, denn die abzudeckenden Situationen sind viel zu divers, um sie sinnvoll in einem einzigen Schema fassen zu k&#246;nnen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1773105708404" ID="ID_457586692" MODIFIED="1773105746195" TEXT="&#x27f9; die Implementierung pr&#xfc;ft ob der Zugriff im Zeitfenster liegt"/>
+<node CREATED="1773105754652" ID="ID_611290260" MODIFIED="1773105791739">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Im Besonderen ein lock() au&#223;erhalb des Zeitfensters mu&#223; <b>aktiv unterbunden</b>&#160;werden
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1773105808702" ID="ID_1988312173" MODIFIED="1773105855803" TEXT="Das ist eine neue Anforderung f&#xfc;r den Node-pull()">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1773105903720" ID="ID_598676426" MODIFIED="1773106038816" TEXT="Exceptions habe ich grunds&#xe4;tzlich ausgeschlossen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Und zwar, weil ich den Overhead f&#252;r automatisches Resource-Management nicht f&#252;r gerechtfertigt halte
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1773105864557" ID="ID_355832289" MODIFIED="1773105880567" TEXT="es k&#xf6;nnen NULL-Handles geliefert werden"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1773105886426" ID="ID_1318788103" LINK="https://issues.lumiera.org/ticket/1417" MODIFIED="1773108850040" TEXT="es braucht einen &#xbb;unwind&#xab;-Pfad &#x27f6; #1417">
+<arrowlink COLOR="#ff1543" DESTINATION="ID_14774780" ENDARROW="Default" ENDINCLINATION="-1473;112;" ID="Arrow_ID_116123183" STARTARROW="None" STARTINCLINATION="-1264;77;"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1773108918866" ID="ID_1178267018" MODIFIED="1773108936427" TEXT="die OutputSlot-Basis-Implementierung sollte ein verletztes Protokollmuster erkennen"/>
+<node CREATED="1773108937563" ID="ID_224988870" MODIFIED="1773109149753" TEXT="aber nur der konkrete ConnectionStateManager kann darauf reagieren">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...weil es realisitischerweise kein generisches Implementierungs-Schema geben wird. Es ist nicht einmal klar, wann genau eine Blockade stattfindet, und dann infolgedessen ein Abbruch getriggert werden mu&#223;. Wir k&#246;nnen lediglich annehmen, da&#223;, aufgrund einer solchen intern erkannten Problemsituation, der weitere Zugang zu den Ausgabe-Puffern unterbunden werden mu&#223;.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1773155990443" ID="ID_1190993728" MODIFIED="1773156025049" TEXT="Diagnose-Mechanismen">
+<node CREATED="1773156135431" ID="ID_1267997680" MODIFIED="1773156181565" TEXT="eigenst&#xe4;ndige Instanzen ohne &#xbb;magische Registrierung&#xab;"/>
+<node CREATED="1773156027518" ID="ID_1029550355" MODIFIED="1773156061189" TEXT="Grunds&#xe4;tzlich gibt es unlimitierte Output-Kapazit&#xe4;t">
+<node CREATED="1773156063226" ID="ID_1574408155" MODIFIED="1773156071119" TEXT="beliebig viele Kan&#xe4;le"/>
+<node CREATED="1773156072059" ID="ID_482463660" MODIFIED="1773156096687" TEXT="darin kann jeder beliebige Frame jederzeit bespielt werden"/>
+</node>
+<node CREATED="1773156183808" ID="ID_1664483213" MODIFIED="1773158691959" TEXT="Konfig einer neuen Instanz kann Limits vorgeben">
+<arrowlink COLOR="#3c5f88" DESTINATION="ID_1602470940" ENDARROW="Default" ENDINCLINATION="-1050;65;" ID="Arrow_ID_1529902301" STARTARROW="None" STARTINCLINATION="44;-727;"/>
+<node CREATED="1773156196542" ID="ID_1234849755" MODIFIED="1773156209009" TEXT="das plane ich als optionale Erweiterung"/>
+<node CREATED="1773156210393" ID="ID_553064748" MODIFIED="1773156223211" TEXT="Anzahl Kan&#xe4;le beschr&#xe4;nken"/>
+<node CREATED="1773156223947" ID="ID_1079197667" MODIFIED="1773156237383" TEXT="Frame-Grid vorgeben"/>
+<node CREATED="1773156241816" ID="ID_1158422515" MODIFIED="1773156277373" TEXT="Anzahl zugleich gesperrter Buffer limitieren"/>
+<node CREATED="1773156341660" ID="ID_407686738" MODIFIED="1773156348999" TEXT="Ausgabezeitfenster limitieren"/>
+</node>
+<node CREATED="1773156351674" ID="ID_1963645100" MODIFIED="1773156369117" TEXT="die Implementierung wird komplett isoliert geschrieben">
+<icon BUILTIN="yes"/>
+<node CREATED="1773156370948" ID="ID_794565342" MODIFIED="1773156513730" TEXT="diese Lehre ziehe ich aus dem &#xbb;Desaster&#xab; mit der ersten Implementierung von 2012">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Eine echte Implementierung f&#252;r eine spezifische Output-Technologie war damals (und heute leider genauso) noch nicht geschrieben; in einer solchen Lage w&#228;re es brandgef&#228;hrlich, sofort eine &#187;default-Implementierung&#171; anzulegen.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1773156516269" ID="ID_1341134692" MODIFIED="1773156541757" TEXT="die Test-Implementierung sehe ich als Prototyp bez&#xfc;glich der Konsistenz-Limits"/>
+<node CREATED="1773156543145" ID="ID_364217869" MODIFIED="1773156636849" TEXT="wenn ich sie &#xfc;berhaupt jetzt entwickle....">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...das ist n&#228;mlich nicht notwendig, um die n&#228;chsten beiden Vertical Slices &#252;ber die B&#252;hne zu bekommen; f&#252;r Video-Output hat man es i.d.R. mit double-buffering zu tun, und <i>daf&#252;r ergeben sich relativ einfache Limits praktisch von selbst, aus der Implementierung</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1773156642079" ID="ID_1747459491" MODIFIED="1773156658302" TEXT="zun&#xe4;chst wird nur die unlimitierte H&#xfc;lle ben&#xf6;tigt, um das Protokoll zu testen"/>
+</node>
+<node CREATED="1773156927734" ID="ID_1001788653" MODIFIED="1773156986131">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <u>Diagnose bedeutet</u>: nachtr&#228;glich alle Ausgabevorg&#228;nge &#252;berpr&#252;fen k&#246;nnen
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1773157002897" ID="ID_365322825" MODIFIED="1773157028020" TEXT="also analog zum Baumuster des DiagnostricBufferProviders"/>
+<node CREATED="1773157051468" ID="ID_241171757" MODIFIED="1773157072045" TEXT="Zugriffs-Koordinaten hier: (Feed, Frame-#)"/>
+</node>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1771532464268" ID="ID_1570776013" MODIFIED="1771532466986" TEXT="Aufbau"/>

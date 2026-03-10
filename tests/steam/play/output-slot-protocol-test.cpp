@@ -56,7 +56,7 @@ namespace test {
           // In real usage, the OutputSlot will be preconfigured
           // (Media format, number of channels, physical connections)
           // and then registered with / retrieved from an OutputManager
-          OutputSlot& oSlot = DiagnosticOutputSlot::build();
+          DiagnosticOutputSlot oSlot;
           
           // Client claims the OutputSlot
           // and opens it for exclusive use.
@@ -66,47 +66,55 @@ namespace test {
           // "calculation streams" for the individual
           // Channels to be output through this slot.
           OutputSlot::OpenedSinks sinks = alloc.getOpenedSinks();
-          DataSink sink1 = *sinks;
-          DataSink sink2 = *++sinks;
+          DataSink sink0 = *sinks;
+          DataSink sink1 = *++sinks;
           
           // within the frame-calculation "loop"
           // we perform a data exchange cycle
           FrameCnt frameNr = 123;
-          BuffHandle buff00 = sink1.lockBufferFor (frameNr);
-          BuffHandle buff10 = sink2.lockBufferFor (frameNr);
+          BuffHandle buff00 = sink0.lockBufferFor (frameNr);
+          BuffHandle buff10 = sink1.lockBufferFor (frameNr);
           
           // rendering process calculates content....
           buff00.accessAs<TestFrame>() = testData(0,0);
           
           // while further frames might be processed in parallel
-          BuffHandle buff11 = sink2.lockBufferFor (++frameNr);
+          BuffHandle buff11 = sink1.lockBufferFor (frameNr+1);
           buff11.accessAs<TestFrame>() = testData(1,1);
           buff10.accessAs<TestFrame>() = testData(1,0);
           
           // Now it's time to emit the output
-          sink2.emit (frameNr-1, buff10);
-          sink2.emit (frameNr  , buff11);
-          sink1.emit (frameNr-1, buff00);
+          buff11.emit();
+          buff00.emit();
+          
+          // Buffers must be marked as released when done
+          buff00.release();
+          buff10.release();
+          buff11.release();
           // that's all for the client
           
           // Verify sane operation....
-          DiagnosticOutputSlot& checker = DiagnosticOutputSlot::access(oSlot);
-          CHECK ( checker.frame_was_allocated (0,123));
-          CHECK (!checker.frame_was_allocated (0,124));
-          CHECK ( checker.frame_was_allocated (1,123));
-          CHECK ( checker.frame_was_allocated (1,124));
+          CHECK (watch(oSlot).cntLocked() == 3);
+          CHECK (watch(oSlot).cntEmitted() == 2);
+          CHECK (watch(oSlot).cntReleased() == 3);
           
-          CHECK (checker.output_was_closed (0,0));
-          CHECK (checker.output_was_closed (1,0));
-          CHECK (checker.output_was_closed (1,1));
+          CHECK (    watch(oSlot).feed(0).frame(123).wasLocked());
+          CHECK (not watch(oSlot).feed(0).frame(124).wasLocked());
+          CHECK (    watch(oSlot).feed(1).frame(123).wasLocked());
+          CHECK (    watch(oSlot).feed(1).frame(124).wasLocked());
           
-          CHECK ( checker.output_was_emitted (0,0));
-          CHECK (!checker.output_was_emitted (0,1));
-          CHECK ( checker.output_was_emitted (1,0));
-          CHECK ( checker.output_was_emitted (1,1));
+          CHECK (    watch(oSlot).feed(0).frame(123).wasEmitted());
+          CHECK (not watch(oSlot).feed(0).frame(124).wasEmitted());
+          CHECK (not watch(oSlot).feed(1).frame(123).wasEmitted());
+          CHECK (    watch(oSlot).feed(1).frame(124).wasEmitted());
           
-          DiagnosticOutputSlot::OutFrames stream0 = checker.getChannel(0); 
-          DiagnosticOutputSlot::OutFrames stream1 = checker.getChannel(1);
+          CHECK (    watch(oSlot).feed(0).frame(123).wasReleased());
+          CHECK (not watch(oSlot).feed(0).frame(124).wasReleased());
+          CHECK (    watch(oSlot).feed(1).frame(123).wasReleased());
+          CHECK (    watch(oSlot).feed(1).frame(124).wasReleased());
+          
+          auto stream0 = watch(oSlot).getFeed(0);
+          auto stream1 = watch(oSlot).getFeed(1);
           
           CHECK ( stream0);
           CHECK (*stream0 == testData(0,0)); ++stream0;

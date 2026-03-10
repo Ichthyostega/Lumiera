@@ -86,7 +86,7 @@ namespace test  {
           PID pipe = Pipe::query("id(dummy)");
           ModelPort port(pipe);
           
-          OutputSlot& oSlot = DiagnosticOutputSlot::build();
+          DiagnosticOutputSlot oSlot;
           Allocation& output = oSlot.allocate();
           Timings timings (FrameRate::PAL); /////////TODO
           

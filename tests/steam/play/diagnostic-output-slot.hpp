@@ -27,23 +27,27 @@
 #include "include/logging.h"
 #include "steam/play/output-slot.hpp"
 #include "steam/play/output-slot-connection.hpp"
-#include "steam/asset/meta/time-grid.hpp"
 #include "vault/mem/buffhandle.hpp"
 #include "vault/mem/naive-buffer-setup.hpp"
 #include "lib/time/timevalue.hpp"
-#include "lib/scoped-ptrvect.hpp"
-#include "lib/iter-source.hpp"
+#include "lib/time/grid.hpp"
+#include "lib/p.hpp"
+#include "lib/null-value.hpp"
+#include "lib/iter-explorer.hpp"
+#include "lib/iter-source.hpp" /////////////OOO wech
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
 #include "vessel/advice.hpp"
 #include "test/test-frame.hpp"
 
 #include <unordered_set>
+#include <vector>
 #include <memory>
 
 
 namespace steam {
 namespace play {
+  namespace err = lumiera::error;
 
   using lib::Symbol;
   using lib::HashVal;
@@ -51,19 +55,23 @@ namespace play {
   using util::contains;
   using test::TestFrame;
   using lib::time::FrameRate;
-  using steam::asset::meta::PGrid;
-  using steam::asset::meta::TimeGrid;
+  using lib::time::TimeVar;
+  using lib::time::Time;
   using vault::mem::NaiveBufferSetup;
   using vault::mem::BuffHandle;
   using vault::mem::BuffDescr;
 
   using std::shared_ptr;
   
+  using PGrid = lib::P<lib::time::Grid>;
+
+  
   namespace { // diagnostics & internals....
     
     inline PGrid
     getTestTimeGrid()
     {
+#if false  //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : disabled code to disentangle BufferProvider implementation
       Symbol gridID("DiagnosticOutputSlot-buffer-grid");
       vessel::advice::Request<PGrid> query4grid(gridID) ;
       PGrid testGrid25 = query4grid.getAdvice();
@@ -72,7 +80,9 @@ namespace play {
         testGrid25 = TimeGrid::build (gridID, FrameRate::PAL);
       
       ENSURE (testGrid25);
-      return testGrid25;
+#endif  /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : (end) disabled code
+      PGrid testGrid; ////////OOO Kaboooom!
+      return testGrid;
     }
   }
   
@@ -247,10 +257,73 @@ namespace play {
     };
   
   
+///////////////////////////////////////////////////////////////////////
+/// ///////////////////////////////////////////////////////////////////
+      ///////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1395 : draft compatible Tracking-API
+  namespace diagn {
+    using Buff = vault::mem::Buff;
+    
+    struct FraInfo
+      {
+        TimeVar locked{Time::NEVER};
+        TimeVar emitted{Time::NEVER};
+        TimeVar released{Time::NEVER};
+        
+        bool wasLocked() const { return locked != Time::NEVER; }
+        bool wasEmitted() const { return locked != Time::NEVER; }
+        bool wasReleased() const { return locked != Time::NEVER; }
+        
+        size_t buffSize{0};
+        Buff* storage{nullptr};
+        Buff* accessMemory()  const { return storage; }
+        
+        template<typename BU>
+        BU const& accessAs()  const;
+        
+        template<typename BU>
+        bool operator== (BU const&)  const;
+      };
+    
+    struct FeedLog
+      {
+        FraInfo const&
+        frame (uint fraNr)  const
+          {
+            ///////////////////////////OOO access stored log
+            return lib::NullValue<FraInfo>::get();
+          }
+        
+        auto
+        blockIter(uint startFrame =0)  const
+          {
+            return lib::explore (lib::NumIter{startFrame, std::numeric_limits<uint>::max()})
+                      .transform([this](uint idx){ return frame(idx); })
+                      ;
+          }
+      };
+  
+    template<typename BU>
+    inline BU const&
+    FraInfo::accessAs()  const
+    {
+      if (not storage)
+        throw err::Logic ("buffer for this frame was never actually locked"
+                         , LERR_(LIFECYCLE));
+      return *reinterpret_cast<BU const*> (storage);
+    }
+    
+    template<typename BU>
+    inline bool
+    FraInfo::operator== (BU const& refVal)  const
+    {
+      return storage
+         and accessAs<BU>() == refVal;
+    }
+  }//(End)Diagnostic data
+
   
   
-  
-  
+  class OutputDiagnostic;
   
   
   
@@ -271,7 +344,7 @@ namespace play {
     : public OutputSlotImplBase
     {
       
-      static const uint MAX_CHANNELS = 5;
+      static const uint MAX_CHANNELS = 5; ///////////////////////////////OOO Build heap-based implementation with arbitrary number of feeds!!
       
       /** @note a real OutputSlot implementation
        * would rely on some kind of embedded
@@ -279,7 +352,7 @@ namespace play {
       uint
       getOutputChannelCount()
         {
-          return MAX_CHANNELS;
+          return MAX_CHANNELS; /////////////OOO No!
         }
       
       
@@ -296,7 +369,9 @@ namespace play {
           void
           buildConnection(ConnectionStorage storage)
             {
+#if false  //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : disabled code to disentangle BufferProvider implementation
               storage.create<TrackingInMemoryBlockSequence>();
+#endif  /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : (end) disabled code
             }
           
         public:
@@ -317,9 +392,6 @@ namespace play {
                         getOutputChannelCount());
         }
         
-      /** @internal is self-managed and non-copyable.
-       * Clients use #build() to get an instance */
-      DiagnosticOutputSlot() { }
       
       /** @internal access the implementation object
        * representing a single stream connection
@@ -334,21 +406,8 @@ namespace play {
       
       
     public:
-      /** build a new Diagnostic Output Slot instance,
-       *  discard the existing one. Use the static query API
-       *  for investigating collected data. */
-      static OutputSlot&
-      build()
-        {
-          static lib::ScopedPtrVect<OutputSlot> diagnosticSlots;
-          return diagnosticSlots.manage(new DiagnosticOutputSlot);
-        }
+      DiagnosticOutputSlot() { }
       
-      static DiagnosticOutputSlot&
-      access (OutputSlot& to_investigate)
-        {
-          return dynamic_cast<DiagnosticOutputSlot&> (to_investigate);
-        }
       
       
       
@@ -394,18 +453,22 @@ namespace play {
       OutFrames
       getChannel (uint channel)
         {
+#if false  //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : disabled code to disentangle BufferProvider implementation
           REQUIRE (channel < MAX_CHANNELS);
           return OutputFramesLog::build(
               new OutputFramesLog (
                   accessSequence(channel)));
+#endif  /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : (end) disabled code
         }
       
       
       bool
       frame_was_allocated (uint channel, FrameID nominalFrame)
         {
+#if false  //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : disabled code to disentangle BufferProvider implementation
           return accessSequence(channel)
                    .wasAllocated(nominalFrame);
+#endif  /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : (end) disabled code
         }
       
       
@@ -431,7 +494,53 @@ namespace play {
              and block->was_closed();
 #endif  /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : (end) disabled code
         }
+      
+      ///////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1395 : draft compatible Tracking-API
+      
+      std::vector<diagn::FeedLog> feed_;
+      
+    private:
+      /// „backdoor“ to watch instrumentation from tests
+      friend class OutputDiagnostic;
     };
+  
+
+  
+  /** Accessor-proxy to investigate transactions */
+  class OutputDiagnostic
+    : util::MoveOnly
+    {
+      DiagnosticOutputSlot& dos_;
+    public:
+      OutputDiagnostic (DiagnosticOutputSlot& theSlot)
+        : dos_{theSlot}
+        { }
+      
+      uint cntLocked() { return 0; }
+      uint cntEmitted() { return 0; }
+      uint cntReleased() { return 0; }
+      
+      auto const&
+      feed (uint feedNr)
+        {
+          if (feedNr < dos_.feed_.size())
+            return dos_.feed_[feedNr];
+          else
+            return lib::NullValue<diagn::FeedLog>::get();
+        }
+      
+      auto
+      getFeed (uint feedNr)
+        {
+          return feed(feedNr).blockIter();
+        }
+    };
+  
+  inline OutputDiagnostic
+  watch (OutputSlot& theSlot)
+  {
+    return OutputDiagnostic{static_cast<DiagnosticOutputSlot&> (theSlot)};
+  }
   
   
   
