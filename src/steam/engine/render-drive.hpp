@@ -33,7 +33,7 @@
 #include "steam/common.hpp"
 #include "steam/engine/render-environment.hpp"
 #include "steam/mobject/model-port.hpp"
-#include "steam/play/timings.hpp"
+#include "vault/out/timings.hpp"
 #include "vault/gear/job.h"
 //#include "lib/nocopy.hpp"
 
@@ -42,9 +42,10 @@ namespace steam {
 namespace engine {
   
 //  using std::function;
+  using mobject::ModelPort;
   using vault::gear::JobParameter;
   using vault::gear::JobClosure;
-  using mobject::ModelPort;
+  using vault::out::Timings; 
 //  using lib::time::TimeSpan;
 //  using lib::time::FSecs;
 //  using lib::time::Time;
@@ -98,7 +99,7 @@ namespace engine {
         { }
       
       
-      play::Timings const&
+      Timings const&
       getTimings()  const
         {
           return engine_.effectiveTimings();

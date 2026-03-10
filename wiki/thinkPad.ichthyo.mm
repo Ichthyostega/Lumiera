@@ -110829,8 +110829,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1773106587628" ID="ID_14774780" MODIFIED="1773167973444" TEXT="Erweiterte Anforderung: Call-unwind">
-<linktarget COLOR="#ff1543" DESTINATION="ID_14774780" ENDARROW="Default" ENDINCLINATION="-1473;112;" ID="Arrow_ID_116123183" SOURCE="ID_1318788103" STARTARROW="None" STARTINCLINATION="-1264;77;"/>
 <linktarget COLOR="#ff1543" DESTINATION="ID_14774780" ENDARROW="Default" ENDINCLINATION="-1473;112;" ID="Arrow_ID_1204522057" SOURCE="ID_495439947" STARTARROW="None" STARTINCLINATION="1721;172;"/>
+<linktarget COLOR="#ff1543" DESTINATION="ID_14774780" ENDARROW="Default" ENDINCLINATION="-1473;112;" ID="Arrow_ID_116123183" SOURCE="ID_1318788103" STARTARROW="None" STARTINCLINATION="-1264;77;"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1773106807352" ID="ID_694860370" MODIFIED="1773107285964" TEXT="Anforderung (3/2026) im Output-Management entdeckt">
 <richcontent TYPE="NOTE"><html>
@@ -114899,19 +114899,32 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <linktarget COLOR="#744d8b" DESTINATION="ID_1595544111" ENDARROW="Default" ENDINCLINATION="628;31;" ID="Arrow_ID_378933605" SOURCE="ID_27406270" STARTARROW="None" STARTINCLINATION="221;-288;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1771195835031" ID="ID_465237496" MODIFIED="1771195857844" TEXT="BufferProvider &#x27f6; in Vault umziehen">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#4c4398" CREATED="1771195835031" FOLDED="true" ID="ID_465237496" MODIFIED="1773180355277" TEXT="BufferProvider &#x27f6; in Vault umziehen">
 <icon BUILTIN="yes"/>
-<node CREATED="1771196048101" ID="ID_1022260808" MODIFIED="1771512711373" TEXT="TypeHandler kann auch dort hin"/>
-<node CREATED="1771196057238" ID="ID_1561084245" MODIFIED="1771196061567" TEXT="LocalTag ebenfalls"/>
-<node CREATED="1771196092641" ID="ID_1744271206" MODIFIED="1771196101419" TEXT="selbst BufferMetadata w&#xe4;re denkbar">
+<node COLOR="#435e98" CREATED="1771196048101" ID="ID_1022260808" MODIFIED="1773180328904" TEXT="TypeHandler kann auch dort hin"/>
+<node COLOR="#435e98" CREATED="1771196057238" ID="ID_1561084245" MODIFIED="1773180328904" TEXT="LocalTag ebenfalls"/>
+<node COLOR="#2b2153" CREATED="1771196092641" ID="ID_1744271206" MODIFIED="1773180321543" TEXT="selbst BufferMetadata w&#xe4;re denkbar">
+<icon BUILTIN="idea"/>
 <node CREATED="1771196102899" ID="ID_840400814" MODIFIED="1772209237864" TEXT="es h&#xe4;ngt nur an dem Typ Buffer (opaque marker)">
 <linktarget COLOR="#3e92dd" DESTINATION="ID_840400814" ENDARROW="Default" ENDINCLINATION="-13;-19;" ID="Arrow_ID_625861293" SOURCE="ID_691064493" STARTARROW="None" STARTINCLINATION="-106;4;"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1771196377439" ID="ID_505136785" MODIFIED="1772208992889" TEXT="die Idee gef&#xe4;lt mir immer besser....">
+<node BACKGROUND_COLOR="#eccc8b" COLOR="#690f14" CREATED="1771196377439" ID="ID_505136785" MODIFIED="1773180264577" TEXT="die Idee gef&#xe4;lt mir immer besser....">
 <linktarget COLOR="#2016a3" DESTINATION="ID_505136785" ENDARROW="Default" ENDINCLINATION="-51;243;" ID="Arrow_ID_407734805" SOURCE="ID_1008519841" STARTARROW="None" STARTINCLINATION="-315;21;"/>
-<icon BUILTIN="flag-pink"/>
+<icon BUILTIN="ksmiletris"/>
 <node CREATED="1772213174695" ID="ID_862271536" MODIFIED="1772213186169" TEXT="dann sollte auch OutputSlot mit umziehen">
-<node CREATED="1772213338241" ID="ID_769676942" MODIFIED="1772213350387" TEXT="Vorsicht: h&#xe4;ngt am asset::TimeGrid"/>
+<node COLOR="#5b280f" CREATED="1772213338241" ID="ID_769676942" MODIFIED="1773180205184" TEXT="Vorsicht: h&#xe4;ngt am asset::TimeGrid">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node COLOR="#5c3f62" CREATED="1773180207141" ID="ID_63185070" MODIFIED="1773180238535">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      das Konzept der Meta-Assets ist <i>unausgegoren....</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
 </node>
 <node CREATED="1772213187533" ID="ID_899353853" MODIFIED="1772213226834" TEXT="wohingegen der OutputManager in Steam bleiben mu&#xdf;">
 <richcontent TYPE="NOTE"><html>
@@ -114925,13 +114938,13 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1772213416430" ID="ID_635296620" MODIFIED="1772213425228" TEXT="aber Vorsicht!">
+<node BACKGROUND_COLOR="#ede19d" COLOR="#5b01a5" CREATED="1772213416430" ID="ID_635296620" MODIFIED="1773180195880" TEXT="aber Vorsicht!">
 <icon BUILTIN="messagebox_warning"/>
-<node CREATED="1772213431584" ID="ID_419696826" MODIFIED="1772213447278" TEXT="die OutputSlot-Implementierung braucht ein TimeGrid">
+<node CREATED="1772213431584" FOLDED="true" ID="ID_419696826" MODIFIED="1773180307624" TEXT="die OutputSlot-Implementierung braucht ein TimeGrid">
 <node CREATED="1772213804758" ID="ID_796255111" MODIFIED="1772213812037" TEXT="und das ist ein Asset"/>
 <node CREATED="1772213813143" ID="ID_73389338" MODIFIED="1772213830590" TEXT="vmtl bekommen auch die Timings noch Bez&#xfc;ge zum Player"/>
 </node>
-<node CREATED="1772213449627" ID="ID_359458461" MODIFIED="1772213462180" TEXT="und BufferProvider testet man mit TestFrame">
+<node CREATED="1772213449627" FOLDED="true" ID="ID_359458461" MODIFIED="1773180308881" TEXT="und BufferProvider testet man mit TestFrame">
 <node CREATED="1772213557833" ID="ID_869716070" MODIFIED="1772213573373" TEXT="oft in Kombination mit test-rand-ontology"/>
 <node CREATED="1772213579026" ID="ID_1443102065" MODIFIED="1772213601057" TEXT="rein bez&#xfc;glich der Abh&#xe4;ngigkeiten k&#xf6;nnten die in Vault umziehen"/>
 <node CREATED="1772213602389" ID="ID_448460336" MODIFIED="1772213610880" TEXT="aber inhaltlich erscheint das nicht korrekt">
@@ -114946,10 +114959,21 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 </node>
 <node CREATED="1772213697113" ID="ID_230462051" MODIFIED="1772213735286" TEXT="auch werden externe Libraries sicher Bez&#xfc;ge zum Builder bekommen"/>
+<node CREATED="1773180093852" ID="ID_127088134" MODIFIED="1773180181058" TEXT="&#x27f9; die gemeinsam genutzten Abstraktionen sind das Problem">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...es gibt nun also Abstraktionen, die zwar <i>inhaltlich</i>&#160;auf Ebene der Modellierung liegen (also in &#187;Steam&#171;), zugleich aber als Bindemittel dienen, um die Zusammenarbeit in der Applikation zu erm&#246;glichen
+    </p>
+  </body>
+</html></richcontent>
 </node>
 </node>
 </node>
-<node CREATED="1772229938158" ID="ID_1979660164" MODIFIED="1772240083747" TEXT="Diskussion">
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1772229938158" FOLDED="true" ID="ID_1979660164" MODIFIED="1773180303114" TEXT="Diskussion">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="forward"/>
 <node CREATED="1772229966112" ID="ID_1673093502" MODIFIED="1772229992176" TEXT="schwierige Lage &#x2014; keine klare Pr&#xe4;ferenz erkennbar">
 <node CREATED="1772229994560" ID="ID_343060971" MODIFIED="1772230061783" TEXT="meine Argumente drehen sich im Kreis">
@@ -114962,7 +114986,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1772230076911" ID="ID_306145803" MODIFIED="1772230101480" TEXT="dahinter steht: die Aufteilung in Layer ist (bisher) spekulativ">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1772230076911" ID="ID_306145803" MODIFIED="1773180052272" TEXT="dahinter steht: die Aufteilung in Layer ist (bisher) spekulativ">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1772230104747" ID="ID_84428623" MODIFIED="1772230569903" TEXT="die Struktur ist anfangs aus &#xbb;Convey&apos;s Law&#xab; entstanden">
 <richcontent TYPE="NOTE"><html>
@@ -115144,8 +115168,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1772239825077" ID="ID_1386677390" MODIFIED="1772240094386" TEXT="dadurch sind nun die Konflikte aufgel&#xf6;st">
-<icon BUILTIN="flag-pink"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1772239825077" ID="ID_1386677390" MODIFIED="1773180045004" TEXT="dadurch sind nun die Konflikte aufgel&#xf6;st">
+<icon BUILTIN="idea"/>
 <node CREATED="1772239839483" ID="ID_1661215444" MODIFIED="1772239864658" TEXT="sofern eine Definition oder ein Interface zyklisch wird &#x27f6; wandert in die Applikation"/>
 <node CREATED="1772239867646" ID="ID_746993760" MODIFIED="1772239889464" TEXT="die Test-Rand-Ontology kann in &#xbb;Vault&#xab; verlegt werden"/>
 <node CREATED="1772239908767" ID="ID_286828282" MODIFIED="1772240004740">
@@ -115168,8 +115192,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node CREATED="1772240015637" ID="ID_1048399889" MODIFIED="1772240053070" TEXT="BufferProvider, OutputSlot und Output-Management ziehen in die &#xbb;Vault&#xab;"/>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1772477958773" ID="ID_1191642200" MODIFIED="1772477969130" TEXT="Ausf&#xfc;hrung">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1772477958773" ID="ID_1191642200" MODIFIED="1773180016532" TEXT="Ausf&#xfc;hrung">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1772477970489" ID="ID_945262676" MODIFIED="1772672410752" TEXT="Vorbereitungen...">
 <icon BUILTIN="yes"/>
 <node CREATED="1772477978051" ID="ID_1145781733" MODIFIED="1772477987770" TEXT="&#xbb;Vessel&#xab; dokumentieren"/>
@@ -115700,24 +115724,25 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1772478162244" ID="ID_1203250191" MODIFIED="1772478221803" TEXT="Komponenten in Vault verschieben">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1772478162244" FOLDED="true" ID="ID_1203250191" MODIFIED="1773180297561" TEXT="Komponenten in Vault verschieben">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1772922668009" ID="ID_1174526532" MODIFIED="1772927710703" TEXT="Voraussetzung &#x27f6; Test-support">
-<node CREATED="1772478205914" ID="ID_231056050" MODIFIED="1772922697240" TEXT="TestFrame"/>
-<node CREATED="1772478191761" ID="ID_1873337000" MODIFIED="1772922653281" TEXT="Test-Rand-Ontology"/>
+<node COLOR="#435e98" CREATED="1772478205914" ID="ID_231056050" MODIFIED="1773179790131" TEXT="TestFrame"/>
+<node COLOR="#435e98" CREATED="1772478191761" ID="ID_1873337000" MODIFIED="1773179790130" TEXT="Test-Rand-Ontology"/>
 </node>
-<node CREATED="1772478171837" ID="ID_1324850294" MODIFIED="1772478177785" TEXT="BufferProvider">
-<node CREATED="1772932920497" ID="ID_1982018302" MODIFIED="1772932925167" TEXT="BuffHandle">
+<node COLOR="#338800" CREATED="1772478171837" ID="ID_1324850294" MODIFIED="1773179774396" TEXT="BufferProvider">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1772932920497" ID="ID_1982018302" MODIFIED="1773179785140" TEXT="BuffHandle">
 <node CREATED="1772933023078" ID="ID_1575332683" MODIFIED="1772933030857" TEXT="Buffer-Marker aus StreamType extrahieren">
 <node CREATED="1772933032509" ID="ID_557325529" MODIFIED="1772933040779" TEXT="wird bisher nur an zwei Stellen verwendet"/>
 <node CREATED="1772933042211" ID="ID_383255164" MODIFIED="1772933072597" TEXT="kann man durch einen Type-Alias (in Stream-Type) propagieren"/>
 </node>
 </node>
-<node CREATED="1772932926562" ID="ID_1211889546" MODIFIED="1772932930209" TEXT="TypeHandler"/>
-<node CREATED="1772932931437" ID="ID_1951270901" MODIFIED="1772932936101" TEXT="BufferMetadata"/>
+<node COLOR="#435e98" CREATED="1772932926562" ID="ID_1211889546" MODIFIED="1773179785140" TEXT="TypeHandler"/>
+<node COLOR="#435e98" CREATED="1772932931437" ID="ID_1951270901" MODIFIED="1773179785139" TEXT="BufferMetadata"/>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1772478179206" ID="ID_1477396819" MODIFIED="1772933010916" TEXT="OutputSlot">
-<icon BUILTIN="help"/>
+<node COLOR="#338800" CREATED="1772478179206" ID="ID_1477396819" MODIFIED="1773179772427" TEXT="OutputSlot">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1773021243177" ID="ID_819469629" MODIFIED="1773021647136" TEXT="das &#xbb;Entkernen&#xab; des DiagnosticOutputSlot erm&#xf6;glicht Umzug nach &#xbb;Vault&#xab;">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -115732,9 +115757,61 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 <linktarget COLOR="#fe4769" DESTINATION="ID_819469629" ENDARROW="Default" ENDINCLINATION="542;21;" ID="Arrow_ID_254929972" SOURCE="ID_686997096" STARTARROW="None" STARTINCLINATION="407;28;"/>
 </node>
+<node CREATED="1773173863618" ID="ID_750786737" MODIFIED="1773173894058">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      &#10233; auch die <font face="Monospaced" color="#764c4c">Timings</font>&#160;m&#252;ssen dorthin umziehen
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1773173898661" ID="ID_1819934861" MODIFIED="1773173911300" TEXT="hier liegt m&#xf6;glicherweise ein verdecktes Problem"/>
+<node CREATED="1773173912994" ID="ID_1547092580" MODIFIED="1773174098896" TEXT="...denn &#xbb;Grid&#xab; wurde in der Vergangenheit wie ein Asset behandelt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Genauer, <font color="#8f6c6c" face="Monospaced">steam::asset::</font><font color="#7d2c2c" face="Monospaced"><b>TimeGrid</b></font>, und hier gibt es einen <b>Diamond-of-Death</b>. Was auch immer das bedeuten mag &#8212; der Sinn des Interfaces MetaAsset ist (noch) nicht so wirklich klar, und auch der Unterschied zwischen time::Grid und time::Quantiser vermischt sich bisweilen
+    </p>
+  </body>
+</html></richcontent>
+<font NAME="SansSerif" SIZE="12"/>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1772478185740" ID="ID_1860322406" MODIFIED="1772933014495" TEXT="OutputManagement">
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1773179799052" ID="ID_1204405773" MODIFIED="1773180006884" TEXT="Test-Hilfsmittel">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1773179808922" ID="ID_486146997" MODIFIED="1773179816632" TEXT="DiagnosticBufferProvider"/>
+<node CREATED="1773179817759" ID="ID_88881624" MODIFIED="1773179823402" TEXT="DiagnosticOutputSlot"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1773179825677" ID="ID_1537673865" MODIFIED="1773179842831" TEXT="Linkage: m&#xfc;ssen in der Applikation bleiben">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1773179846906" ID="ID_1928945020" MODIFIED="1773180003495" TEXT="denn sie werden auch au&#xdf;erhalb des Paktes / Namespaces verwendet">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Konkret m&#252;ssen z.B. Tests aus /tests/steam/engine gegen den diagnostic-buffer-provider.cpp gelinkt sein; mit dem neuen Layout ist das leider nur m&#246;glich, wenn diagnostic-buffer-provider.cpp in liblumieravault.so liegt, aber nicht in libtest-vault.so
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1773179872468" ID="ID_1842088947" MODIFIED="1773179902874" TEXT="Tests sind jetzt in einzelnen Paketen isoliert">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+<node COLOR="#5b280f" CREATED="1772478185740" ID="ID_1860322406" MODIFIED="1773173569658" TEXT="OutputManagement">
 <icon BUILTIN="help"/>
+<icon BUILTIN="button_cancel"/>
+<node COLOR="#5b280f" CREATED="1773173571592" ID="ID_1918504828" MODIFIED="1773173585956" TEXT="definitiv nicht!">
+<icon BUILTIN="closed"/>
+</node>
+<node CREATED="1773173587829" ID="ID_1151035771" MODIFIED="1773173601686" TEXT="das geh&#xf6;rt auf die &#xbb;Vessel&#xab;-Ebene">
+<node CREATED="1773173615026" ID="ID_962160432" MODIFIED="1773173630388" TEXT="es ist ein Framework welches Zusammenarbeit koordiniert"/>
+<node CREATED="1773173631711" ID="ID_861307307" MODIFIED="1773173648529" TEXT="m&#xf6;glicherweise m&#xfc;ssen wir auch ModelPort auf diese Ebene ziehen"/>
+<node CREATED="1773173662155" ID="ID_1834508419" MODIFIED="1773173687730" TEXT="einzelne Bausteine k&#xf6;nnten in Vault liegen, z.B. eine Slot-Registry"/>
+</node>
 </node>
 </node>
 </node>
@@ -117330,8 +117407,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1771532730104" ID="ID_874519449" MODIFIED="1771532748289" TEXT="im bestehenden Code lief der Test (mit einer Dummy-Implementierung)"/>
 <node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1771532716678" ID="ID_459952316" MODIFIED="1773076794402" TEXT="dieser Test ist nun gebrochen">
 <linktarget COLOR="#fe1909" DESTINATION="ID_459952316" ENDARROW="Default" ENDINCLINATION="75;-1691;" ID="Arrow_ID_176448794" SOURCE="ID_158180438" STARTARROW="None" STARTINCLINATION="-554;79;"/>
-<linktarget COLOR="#f90134" DESTINATION="ID_459952316" ENDARROW="Default" ENDINCLINATION="-843;75;" ID="Arrow_ID_1183488081" SOURCE="ID_690666245" STARTARROW="None" STARTINCLINATION="345;27;"/>
 <linktarget COLOR="#b22cbe" DESTINATION="ID_459952316" ENDARROW="Default" ENDINCLINATION="-137;3;" ID="Arrow_ID_168875434" SOURCE="ID_1722330743" STARTARROW="Default" STARTINCLINATION="-9;-63;"/>
+<linktarget COLOR="#f90134" DESTINATION="ID_459952316" ENDARROW="Default" ENDINCLINATION="-843;75;" ID="Arrow_ID_1183488081" SOURCE="ID_690666245" STARTARROW="None" STARTINCLINATION="345;27;"/>
 <icon BUILTIN="broken-line"/>
 </node>
 </node>

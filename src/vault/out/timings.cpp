@@ -21,14 +21,14 @@
  */
 
 
-#include "steam/play/timings.hpp"
+#include "vault/out/timings.hpp"
 #include "lib/time/formats.hpp"
 #include "lib/time/timequant.hpp"
 #include "lib/rational.hpp"
 
 
-namespace steam {
-namespace play {
+namespace vault {
+namespace out {
   
   using lib::time::PQuant;
   using lib::time::Time;
@@ -219,4 +219,4 @@ namespace play {
   
   
   
-}} // namespace steam::play
+}} // namespace vault::out

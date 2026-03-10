@@ -21,7 +21,7 @@
 #include "test/run.hpp"
 #include "test/test-helper.hpp"
 
-#include "steam/play/timings.hpp"
+#include "vault/out/timings.hpp"
 #include "lib/time/timevalue.hpp"
 //#include "lib/time/timequant.hpp"
 //#include "lib/format-cout.hpp"
@@ -37,8 +37,8 @@ using util::isnil;
 //using std::function;
 
 
-namespace steam {
-namespace engine{
+namespace vault {
+namespace out   {
 namespace test  {
   
   using lib::time::FSecs;
@@ -47,13 +47,12 @@ namespace test  {
   using lib::time::Duration;
   using lib::time::Offset;
   using lib::time::Time;
-  using play::Timings;
   
   namespace { // Test fixture...
     
     /* == test parameters == */
     
-    const uint START_FRAME(10);
+    uint const START_FRAME (10);
     
     
     
@@ -125,4 +124,4 @@ namespace test  {
   
   
   
-}}} // namespace steam::engine::test
+}}} // namespace vault::out::test

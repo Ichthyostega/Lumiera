@@ -24,7 +24,8 @@
 
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
-#include "steam/play/output-slot.hpp"
+#include "vault/out/timings.hpp"
+#include "vault/out/output-slot.hpp"
 #include "steam/mobject/model-port.hpp"
 
 //#include <string>
@@ -42,6 +43,12 @@ namespace play {
   
 //using std::string;
 //using std::vector;
+  using vault::out::PlaybackUrgency;
+  using vault::out::TIMEBOUND;
+  using vault::out::NICE;
+  using vault::out::ASAP;
+  using vault::out::Timings;
+  using vault::out::OutputSlot;
   using std::shared_ptr;
   
   

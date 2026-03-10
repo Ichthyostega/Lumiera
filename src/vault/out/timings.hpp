@@ -25,13 +25,16 @@
  **   actual timing specs dictate the constraints for real time frame
  **   delivery to an external output connection.
  **   
- ** @todo WIP-WIP-WIP 8/2011
- ** @see output-slot.hpp  ////TODO
+ ** @todo WIP-WIP-WIP 3/2026 although this class is around for many years now,
+ **   its actual meaning is still not well defined; sometimes it appears as a specification,
+ **   while at places it also plays the role of a constraint.
+ ** @see dispatcher.hpp
+ ** @see output-slot.hpp
  */
 
 
-#ifndef STEAM_PLAY_TIMINGS_H
-#define STEAM_PLAY_TIMINGS_H
+#ifndef VAULT_OUT_TIMINGS_H
+#define VAULT_OUT_TIMINGS_H
 
 
 #include "lib/error.hpp"
@@ -52,8 +55,8 @@ namespace time{
   typedef std::shared_ptr<const Quantiser> PQuant;
 }}
 
-namespace steam {
-namespace play {
+namespace vault {
+namespace out {
 
   using lib::time::FrameCnt;
   using lib::time::FrameRate;
@@ -192,10 +195,10 @@ namespace play {
   inline bool
   Timings::isTimebound()  const
   {
-    return play::TIMEBOUND == playbackUrgency;
+    return out::TIMEBOUND == playbackUrgency;
   }
   
   
   
-}} // namespace steam::play
-#endif
+}} // namespace vault::out
+#endif /*VAULT_OUT_TIMINGS_H*/

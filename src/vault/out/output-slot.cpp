@@ -18,18 +18,18 @@
 
 
 #include "lib/error.hpp"
-#include "steam/play/output-slot.hpp"
-#include "steam/play/output-slot-connection.hpp"
+#include "vault/out/output-slot.hpp"
+#include "vault/out/output-slot-connection.hpp"
 
 #include <vector>
 
 
-namespace steam {
-namespace play {
+namespace vault {
+namespace out   {
+  namespace err = lumiera::error;
   
   using std::vector;
   
-  namespace error = lumiera::error;
   
   
   
@@ -73,7 +73,7 @@ namespace play {
   OutputSlot::allocate()
   {
     if (not isFree())
-      throw error::Logic ("Attempt to open/allocate an OutputSlot already in use.");
+      throw err::Logic ("Attempt to open/allocate an OutputSlot already in use.");
     
     state_.reset (this->buildState());
     return *state_;
@@ -111,4 +111,4 @@ namespace play {
   
   
   
-}} // namespace steam::play
+}} // namespace vault::out

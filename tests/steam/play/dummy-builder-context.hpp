@@ -40,7 +40,7 @@
 
 #include "steam/mobject/model-port.hpp"
 #include "steam/fixture/model-port-registry.hpp"
-#include "steam/play/output-slot-connection.hpp"
+#include "vault/out/output-slot-connection.hpp"
 #include "steam/play/output-manager.hpp"
 #include "steam/asset/timeline.hpp"
 #include "steam/asset/pipe.hpp"
@@ -58,15 +58,19 @@ namespace play {
 namespace test {
   
   using fixture::ModelPortRegistry;
+  using vault::mem::BuffHandle;
+  using vault::out::DataSink;
+  using vault::out::FrameID;
+  using lib::time::TimeValue;
   
   
   /**
    * @todo 5/2023 quick-n-dirty placeholder to be able to fabricate fake DataSink handles (`Handle<Connection>`)
    */
   class UnimplementedConnection
-    : public play::OutputSlot::Connection
+    : public vault::out::OutputSlot::Connection
     {
-      BuffHandle claimBufferFor(FrameID) override { UNIMPLEMENTED ("claimBufferFor(FrameID)");      }
+          BuffHandle claimBufferFor (FrameID) override;
       bool isTimely (FrameID, TimeValue) override { return true;                                    }
       void transfer (BuffHandle &)       override { UNIMPLEMENTED ("transfer (BuffHandle const&)"); }
       void pushout  (BuffHandle &)       override { UNIMPLEMENTED ("pushout  (BuffHandle const&)"); }
@@ -94,7 +98,7 @@ namespace test {
   using TID = asset::ID<Struct>;
   
   using ModelPorts = lib::IterSource<mobject::ModelPort>::iterator;
-  using DummyOutputLink = std::pair<mobject::ModelPort, play::DataSink>;
+  using DummyOutputLink = std::pair<mobject::ModelPort, DataSink>;
   
   
   inline PID
@@ -162,8 +166,8 @@ namespace test {
           modelPorts_.push_back (ModelPort(pipeB));
           
           // prepare corresponding placeholder DataSink (a fake active output connection)
-          dataSinks_.emplace_back().activate(std::make_shared<UnimplementedConnection>());
-          dataSinks_.emplace_back().activate(std::make_shared<UnimplementedConnection>());
+          dataSinks_.emplace_back().activate (std::make_shared<UnimplementedConnection>());
+          dataSinks_.emplace_back().activate (std::make_shared<UnimplementedConnection>());
         }
       
       
@@ -182,7 +186,11 @@ namespace test {
                  };
         }
     };
-  
-  
-}}} // namespace steam::play::test
+      
+      inline vault::mem::BuffHandle UnimplementedConnection::claimBufferFor (FrameID)
+        {
+          UNIMPLEMENTED ("claimBufferFor(FrameID)");
+        }
+    
+    }}} // namespace steam::play::test
 #endif /*STEAM_PLAY_DUMMY_BUILDER_CONTEXT_H*/

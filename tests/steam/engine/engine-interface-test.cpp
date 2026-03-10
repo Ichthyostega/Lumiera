@@ -19,13 +19,14 @@
 #include "test/run.hpp"
 #include "lib/error.hpp"
 
+#include "steam/asset/pipe.hpp"
 #include "steam/engine/calc-stream.hpp"
 #include "steam/engine/engine-service.hpp"
 #include "steam/engine/engine-diagnostics.hpp"
-#include "steam/play/output-slot.hpp"
-#include "steam/play/diagnostic-output-slot.hpp"
 #include "steam/mobject/model-port.hpp"
-#include "steam/asset/pipe.hpp"
+#include "vault/out/diagnostic-output-slot.hpp"
+#include "vault/out/output-slot.hpp"
+#include "vault/out/timings.hpp"
 #include "lib/time/timevalue.hpp"
 
 //#include <ctime>
@@ -41,8 +42,9 @@ namespace test  {
   using asset::Pipe;
   using asset::PPipe;
   using mobject::ModelPort;
-  using steam::play::OutputSlot;
-  using steam::play::DiagnosticOutputSlot;
+  using vault::out::OutputSlot;
+  using vault::out::DiagnosticOutputSlot;
+  using vault::out::Timings;
   using lib::time::FrameRate;
   
   typedef asset::ID<Pipe> PID;

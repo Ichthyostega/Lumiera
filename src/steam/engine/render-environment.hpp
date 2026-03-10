@@ -31,12 +31,14 @@
 
 #include "steam/common.hpp"
 #include "steam/engine/dispatcher.hpp"
-#include "steam/play/timings.hpp"
+#include "vault/out/timings.hpp"
 //#include "lib/nocopy.hpp"
 
 
 namespace steam {
 namespace engine{
+  
+  using vault::out::Timings;
   
   
   
@@ -54,8 +56,8 @@ namespace engine{
     public:
       virtual ~RenderEnvironment() { }   ///< this is an interface
       
-      virtual play::Timings& effectiveTimings()   =0;
-      virtual Dispatcher&    getDispatcher()      =0;
+      virtual Timings&    effectiveTimings()   =0;
+      virtual Dispatcher&    getDispatcher()   =0;
     };
   
   

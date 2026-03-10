@@ -18,16 +18,16 @@
 
 #include "test/run.hpp"
 
-#include "steam/play/timings.hpp"
 #include "lib/time/timevalue.hpp"
+#include "vault/out/timings.hpp"
 //#include "steam/engine/buffhandle.hpp"
 //#include "steam/engine/testframe.hpp"
 //#include "lib/time/control.hpp"
 
 
 
-namespace steam {
-namespace play {
+namespace vault {
+namespace out  {
 namespace test {
   
   using lib::time::Time;
@@ -71,4 +71,4 @@ namespace test {
   
   
   
-}}} // namespace steam::play::test
+}}} // namespace vault::out::test

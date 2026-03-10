@@ -18,7 +18,7 @@
 
 #include "test/run.hpp"
 
-#include "steam/play/diagnostic-output-slot.hpp"
+#include "vault/out/diagnostic-output-slot.hpp"
 #include "vault/mem/buffhandle.hpp"
 #include "test/test-frame.hpp"
 
@@ -27,8 +27,8 @@ using test::TestFrame;
 using test::testData;
 using vault::mem::BuffHandle;
 
-namespace steam {
-namespace play {
+namespace vault{
+namespace out  {
 namespace test {
   
   
@@ -133,4 +133,4 @@ namespace test {
   
   
   
-}}} // namespace steam::play::test
+}}} // namespace vault::out::test

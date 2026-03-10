@@ -18,15 +18,15 @@
  */
 
 
-#ifndef STEAM_PLAY_DIAGNOSTIC_OUTPUT_SLOT_H
-#define STEAM_PLAY_DIAGNOSTIC_OUTPUT_SLOT_H
+#ifndef VAULT_OUT_DIAGNOSTIC_OUTPUT_SLOT_H
+#define VAULT_OUT_DIAGNOSTIC_OUTPUT_SLOT_H
 
 
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
 #include "include/logging.h"
-#include "steam/play/output-slot.hpp"
-#include "steam/play/output-slot-connection.hpp"
+#include "vault/out/output-slot.hpp"
+#include "vault/out/output-slot-connection.hpp"
 #include "vault/mem/buffhandle.hpp"
 #include "vault/mem/naive-buffer-setup.hpp"
 #include "lib/time/timevalue.hpp"
@@ -45,8 +45,8 @@
 #include <memory>
 
 
-namespace steam {
-namespace play {
+namespace vault {
+namespace out   {
   namespace err = lumiera::error;
 
   using lib::Symbol;
@@ -544,5 +544,5 @@ namespace play {
   
   
   
-}} // namespace steam::play
-#endif
+}} // namespace vault::out
+#endif /*VAULT_OUT_DIAGNOSTIC_OUTPUT_SLOT_H*/

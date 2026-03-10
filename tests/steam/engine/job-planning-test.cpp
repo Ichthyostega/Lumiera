@@ -18,7 +18,7 @@
 
 #include "test/run.hpp"
 #include "steam/engine/mock-dispatcher.hpp"
-#include "steam/play/timings.hpp"
+#include "vault/out/timings.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/util.hpp"
@@ -34,10 +34,10 @@ namespace steam {
 namespace engine{
 namespace test  {
   
+  using vault::out::Timings;
   using lib::time::FrameRate;
   using lib::time::Offset;
   using lib::time::Time;
-  using play::Timings;
   
   
   

@@ -2,7 +2,7 @@
   OUTPUT-SLOT-CONNECTION.hpp  -  implementation API for concrete output slots
 
    Copyright (C)
-     2011,            Hermann Vosseler <Ichthyostega@web.de>
+     2011,2026        Hermann Vosseler <Ichthyostega@web.de>
 
   **Lumiera** is free software; you can redistribute it and/or modify it
   under the terms of the GNU General Public License as published by the
@@ -26,13 +26,13 @@
  */
 
 
-#ifndef STEAM_PLAY_OUTPUT_SLOT_CONNECTION_H
-#define STEAM_PLAY_OUTPUT_SLOT_CONNECTION_H
+#ifndef VAULT_OUT_OUTPUT_SLOT_CONNECTION_H
+#define VAULT_OUT_OUTPUT_SLOT_CONNECTION_H
 
 
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
-#include "steam/play/output-slot.hpp"
+#include "vault/out/output-slot.hpp"
 #include "vault/mem/buffhandle.hpp"
 #include "lib/scoped-collection.hpp"
 #include "lib/iter-adapter-stl.hpp"
@@ -49,8 +49,8 @@
 //#include <memory>
 
 
-namespace steam {
-namespace play {
+namespace vault {
+namespace out   {
 
   using vault::mem::BuffHandle;
 //using vault::mem::BufferProvider;
@@ -239,5 +239,5 @@ namespace play {
   
   
   
-}} // namespace steam::play
-#endif
+}} // namespace vault::out
+#endif /*VAULT_OUT_OUTPUT_SLOT_CONNECTION_H*/

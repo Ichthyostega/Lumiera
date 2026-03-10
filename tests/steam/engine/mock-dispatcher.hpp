@@ -49,6 +49,7 @@
 #include "steam/mobject/model-port.hpp"
 #include "steam/engine/dispatcher.hpp"
 #include "steam/engine/job-ticket.hpp"
+#include "vault/out/output-slot.hpp"
 #include "vault/gear/job.h"
 #include "vault/real-clock.hpp"
 #include "lib/allocator-handle.hpp"
@@ -78,6 +79,7 @@ namespace test   {
   using util::isnil;
   using util::isSameObject;
   using fixture::Segmentation;
+  using vault::out::DataSink;
   using vault::RealClock;
   using vault::gear::Job;
   using vault::gear::JobClosure;
@@ -403,7 +405,7 @@ namespace test   {
       /**
        * Test support: verify the given Job is consistent with this Dispatcher.
        */
-      bool verify(Job const& job, ModelPort const& port, play::DataSink const& sink)
+      bool verify(Job const& job, ModelPort const& port, vault::out::DataSink const& sink)
         {
           if (not dummySetup_.isSupported (port, sink)) return false;
           

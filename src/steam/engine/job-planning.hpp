@@ -61,8 +61,8 @@
 #include "steam/common.hpp"
 #include "vault/gear/job.h"
 #include "steam/engine/job-ticket.hpp"
-#include "steam/play/output-slot.hpp"
-#include "steam/play/timings.hpp"
+#include "vault/out/output-slot.hpp"
+#include "vault/out/timings.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/itertools.hpp"
 #include "lib/nocopy.hpp"
@@ -74,11 +74,11 @@ namespace engine {
   
   namespace error = lumiera::error;
 
-  using play::DataSink;
-  using play::Timings;
   using lib::time::Time;
   using lib::time::TimeVar;
   using lib::time::Duration;
+  using vault::out::DataSink;
+  using vault::out::Timings;
   using vault::gear::Job;
   
   
@@ -139,11 +139,11 @@ namespace engine {
         {
           switch (timings.playbackUrgency)
             {
-            case play::ASAP:
-            case play::NICE:
+            case vault::out::ASAP:
+            case vault::out::NICE:
               return Time::ANYTIME;
             
-            case play::TIMEBOUND:
+            case vault::out::TIMEBOUND:
               return doCalcDeadline (timings);
             }
           NOTREACHED ("unexpected playbackUrgency");

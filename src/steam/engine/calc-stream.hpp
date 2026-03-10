@@ -37,8 +37,7 @@
 
 
 #include "lib/error.hpp"
-#include "steam/play/timings.hpp"
-#include "steam/play/output-slot.hpp"
+#include "vault/out/output-slot.hpp"
 #include "steam/engine/render-drive.hpp"
 //#include "include/dummy-player-facade.h"
 //#include "include/display-facade.h"
@@ -98,7 +97,7 @@ namespace engine{
       
      
       void
-      sendToOutput (play::DataSink)
+      sendToOutput (vault::out::DataSink)
         {
           UNIMPLEMENTED ("set up dispatcher to start calculating and feeding to the given output sink");
         }

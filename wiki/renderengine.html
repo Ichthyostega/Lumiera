@@ -5055,7 +5055,7 @@ While actually data frames are //pulled,// on a conceptual level data is assumed
 As both of these specifications are given by [[Pipe]]-~IDs, the actual designation information may be reduced. Much can be infered from the circumstances, because any pipe includes a StreamType, and an output designation for an incompatible stream type is irrelevant. (e.g. and audio output when the pipe currently in question deals with video)
 </pre>
 </div>
-<div title="OutputManagement" modifier="Ichthyostega" created="201007090155" modified="201501051334" tags="Model Rendering Player spec img draft" changecount="5">
+<div title="OutputManagement" modifier="Ichthyostega" created="201007090155" modified="202603102010" tags="Model Rendering Player spec img draft" changecount="6">
 <pre>//writing down some thoughts//
 
 * ruled out the system outputs as OutputDesignation.
@@ -5065,11 +5065,14 @@ As both of these specifications are given by [[Pipe]]-~IDs, the actual designati
 * this introduces the notion of a ModelPort: //a point in the (high level) model where output can be produced//
 * thus obviously we need an OutputManager element to track the association of OutputDesignation to OutputSlot
 
-Do we get a single [[Fixture]] &amp;mdash; guess yes
+There is always a single [[Fixture]] -- which is the seam where the high-level model view meshes up with the rendering graph.
+This Fixture is regenerated or amended, whenever anything in the high-level view has changed. Each change //causes an Event// -- and the Fixture is one of the //projections// of this event (using the terminology from the //Event Sourcing// architecture). The key elements within the Fixture are the [[Model Ports|ModelPort]], because such a port is the only ting that //can be rendered:// it constitutes an ExitNode. 
 
-From the implementation side, the only interesting exit nodes are the ones to be //actually pulled,// i.e. those immeditately corresponding to the final output.
-* __rendering__ happens immediately at the output of a GlobalPipe (i.e. at a [[Timeline]], which is top-level)
+
+From the implementation side, the only interesting [[designations|OutputDesignation]] are the ones to be //actually pulled,// i.e. the Model Ports and Exit nodes immediately corresponding to the final output.
+* __rendering__ happens directly at the output of a GlobalPipe (i.e. at a [[Timeline]], which is top-level)
 * __playback__ always happens at a viewer element
+This assessment might seem incomplete at first sight, because most media handling applications employ an implicit second layer of conversions to accommodate outputs. Not so Lumiera: no mapping or translation or media adaptation operation is performed outside of the Engine, ever. Not even the viewers in the GUI have the ability to //implicitly scale video.// When video is required in a different size for playback, the model is re-built and the necessary conversions are made within the engine, resulting in another ModelPort, that precisely matches what is required at the external interface. (An attentive reader might have noticed that this implies using the GPU. And indeed, the goal is that the Render Engine is generic to such a degree that it can //coordinate and orchestrate// various rendering technologies. {{red{However, the initial round of integration will cut some corners in this respect.}}})
 
 !Attaching and mapping of exit nodes
 Initially, [[Output designations|OutputDesignation]] are typically just local or relative references to another OutputDesignation; yet after some resolution steps, we'll arrive at an OutputDesignation //defined absolute.// Basically, these are equivalent to a [[Pipe]]-ID choosen as target for the connection and -- they become //real//&amp;nbsp; by some object //claiming to root this pipe.// The applicability of this pattern is figured out dynamically while building the render network, resulting in a collection of [[model ports|ModelPort]] as part of the current [[Fixture]]. A RenderProcess can be started to pull from these -- and only from these -- active exit points of the model. Besides, when the timeline enclosing these model ports is [[connected to a viewer|ViewConnection]], an [[output network|OutputNetwork]] //is built to allow hooking exit points to the viewer component.// Both cases encompass a mapping of exit nodes to actual output channels. Usually, this mapping just relies on relative addressing of the output sinks, starting to allocate connections with the //first of each kind// (e.g. &quot;connect to the first usable audio output destination&quot;).
@@ -5092,8 +5095,11 @@ Within the model routing is done mostly just by referring to an OutputDesignatio
 
 The relation between the central OutputDirector and the peripheral OutputManager implementations is hierarchical. Because output slots are usually registered rather at some peripheral output manager implementation, a direct mapping from OutputDesignation (i.e. global pipe) to these slots is created foremost at that peripheral level. Resolving a global pipe into an output slot is the core concern of any OutputManager implementation. Thus, when there is a locally preconfigured mapping, like e.g. for a viewer's video master pipe to the output slot installed by the corresponding GUI viewer element, then this mapping will be picked up foremost to resolve the video master output.
 
-For a viewer widget in the GUI this yields exactly the expeted behaviour, but in other cases, e.g. for sound output, we need more general, more globally scoped output slots. In these cases, when a local mapping is absent, the query for output resolution is passed on up to the  OutputDirector, drawing on the collection of globally available output slots for that specific kind of media.
+For a viewer widget in the GUI this yields exactly the expected behaviour, but in other cases, e.g. for sound output, we need more general, more globally scoped output slots. In these cases, when a local mapping is absent, the query for output resolution is passed on up to the  OutputDirector, drawing on the collection of globally available output slots for that specific kind of media.
 {{red{open question 11/11: is it possible to retrieve a slot from another peripheral node?}}}
+
+!!!channels
+It might seem bewildering that the discussion of output management thus far has not mentioned the ''channels'' within each media stream. In fact, the handling scheme explained here does not rely on this concept, to avoid confusion and ambiguity. Rather, the output handling relies on the concept of a ''media feed'': this is any stream that is connected distinctively and delivered separately, with dedicated [[Timings]]. Such a media feed may -- or may not, depending on circumstances -- carry several media channels. The typical example is the audio connection of a soundcard, that accepts a //single feed// with left and right audio channel interleaved. However, in a different setup, it might be required to produce a dedicated, separate feed at the interface for some multichannel setup; in such a case, the Engine will have to calculate several distinct feeds, and the delivered data format is also different (it is not interleaved).
 
 !!!output modes
 Most output connections and drivers embody some kind of //operation mode:// Display is characterised by resolution and colour depth, sound by number of channels and sampling rate, amongst others. There might be a mismatch with the output expectations represented by [[output designations|OutputDesignation]] within the model. Nontheless we limit those actual operation modes strictly to the OutputManager realm. They should not leak out into the model within the session.
