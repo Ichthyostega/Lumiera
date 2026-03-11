@@ -105,14 +105,14 @@ namespace out  {
     protected:
       
       /** active connections through this OutputSlot */
-      class ConnectionState;
+      class AllocState;
       
-      unique_ptr<ConnectionState> state_;
+      unique_ptr<AllocState> state_;
       
       /** build the \em connected state,
        *  based on the existing configuration
        *  within this concrete OutputSlot */
-      virtual ConnectionState* buildState() =0;
+      virtual unique_ptr<AllocState> buildState() =0;
       
       
     public:

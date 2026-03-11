@@ -62,6 +62,7 @@ namespace out   {
   using vault::mem::BuffDescr;
 
   using std::shared_ptr;
+  using std::make_unique;
   
   using PGrid = lib::P<lib::time::Grid>;
 
@@ -362,9 +363,9 @@ namespace out   {
        * thus allowing to verify the handling of individual buffers
        */
       class SimulatedOutputSequences
-        : public ConnectionManager<TrackingInMemoryBlockSequence>
+        : public AllocStateHub<TrackingInMemoryBlockSequence>
         {
-          typedef ConnectionManager<TrackingInMemoryBlockSequence> _Base;
+          typedef AllocStateHub<TrackingInMemoryBlockSequence> _Base;
           
           void
           buildConnection(ConnectionStorage storage)
@@ -385,10 +386,10 @@ namespace out   {
       
       
       /** hook into the OutputSlot frontend */
-      ConnectionState*
+      unique_ptr<AllocState>
       buildState()
         {
-          return new SimulatedOutputSequences(
+          return make_unique<SimulatedOutputSequences> (
                         getOutputChannelCount());
         }
         

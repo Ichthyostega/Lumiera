@@ -1,5 +1,5 @@
 /*
-  DIAGNOSTIC-BUFFER-PROVIDER.hpp  -  helper for testing against the BufferProvider interf,ttace
+  DIAGNOSTIC-BUFFER-PROVIDER.hpp  -  helper for testing against the BufferProvider interface
 
    Copyright (C)
      2011,2026        Hermann Vosseler <Ichthyostega@web.de>

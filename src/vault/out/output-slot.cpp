@@ -75,7 +75,7 @@ namespace out   {
     if (not isFree())
       throw err::Logic ("Attempt to open/allocate an OutputSlot already in use.");
     
-    state_.reset (this->buildState());
+    state_ = this->buildState();
     return *state_;
   }
   

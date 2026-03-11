@@ -16,7 +16,7 @@
  ** The OutputSlot concept helps to decouple the render engine implementation from the details
  ** of handling external output connections. For this to work, a concrete implementation of such
  ** an external output needs to integrate with the generic OutputSlot frontend, as used by the
- ** engine. This generic frontend uses a PImpl, pointing to a ConnectionState object, which embodies
+ ** engine. This generic frontend uses a PImpl, pointing to a AllocState object, which embodies
  ** the actual implementation. Moreover, this actual implementation is free to use specifically crafted
  ** OutputSlot::Connection elements to handle the ongoing output for individual channels. The latter
  ** thus becomes the central implementation side API for providing actual output capabilities.
@@ -75,7 +75,7 @@ namespace out   {
    * Actually, this extension point towards the implementation
    * of the actual output handling carries the core API of OutputSlot.
    * Thus, the task of actually implementing an OutputSlot boils down
-   * to implementing this interface and providing a ConnectionState.
+   * to implementing this interface and providing a AllocState.
    * - `lock()` announces this FrameID and the corresponding buffer
    *   to be in exclusive use by the client from now on
    * - `transfer()` ends the client sided processing and initiates
@@ -104,17 +104,17 @@ namespace out   {
   
   /**
    * Extension point for Implementation.
-   * The ConnectionState is where the concrete output
+   * The AllocState is where the concrete output
    * handling implementation is expected to reside.
    * OutputSlot is a frontend and accesses
-   * ConnectionState in the way of a PImpl.
+   * AllocState in the way of a PImpl.
    */
-  class OutputSlot::ConnectionState
+  class OutputSlot::AllocState
     : public OutputSlot::Allocation
     , util::NonCopyable
     {
     public:
-      virtual ~ConnectionState() { }
+      virtual ~AllocState() { }
       
       virtual Connection& access (uint)  const    =0;
     };
@@ -130,7 +130,7 @@ namespace out   {
     {
     protected:
       template<class CON>
-      class ConnectionManager;
+      class AllocStateHub;
     };
   
   
@@ -142,7 +142,7 @@ namespace out   {
    * representing the "active points" in several media channels
    * connected through this OutputSlot. These Connection subclasses
    * are what is referenced by the DataSink smart-ptrs handed out
-   * to the client code. As ConnectionState implements the Allocation
+   * to the client code. As AllocState implements the Allocation
    * API, it has the liability to create these DataSink smart-ptrs,
    * which means to wire them appropriately and also provide an
    * deleter function (here #shutdownConnection) to be invoked
@@ -152,8 +152,8 @@ namespace out   {
    * manages a collection of active Connection subclass objects.
    */
   template<class CON>
-  class OutputSlotImplBase::ConnectionManager
-    : public OutputSlot::ConnectionState
+  class OutputSlotImplBase::AllocStateHub
+    : public OutputSlot::AllocState
     {
       typedef lib::ScopedCollection<CON> Connections;
       typedef OutputSlot::OpenedSinks OpenedSinks;
@@ -195,7 +195,7 @@ namespace out   {
       init() ///< derived classes need to invoke this to build the actual connections
         {
                                                                                  //////////////////////////TICKET #878  really build all at once? or on demand?
-          connections_.populate_by (&ConnectionManager::buildConnection, this);
+          connections_.populate_by (&AllocStateHub::buildConnection, this);
         }
       
       using ConnectionStorage = Connections::ElementHolder&;
@@ -205,13 +205,13 @@ namespace out   {
       virtual void buildConnection(ConnectionStorage)  =0;
       
       
-      ConnectionManager(uint numChannels)
+      AllocStateHub(uint numChannels)
         : connections_(numChannels)
         { }
       
     public:
       virtual
-     ~ConnectionManager()
+     ~AllocStateHub()
         { }
       
       
