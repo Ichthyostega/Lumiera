@@ -98,17 +98,5 @@ namespace out   {
   }
   
   
-  void
-  DataSink::emit (FrameID frameNr, BuffHandle& data2emit, TimeValue currentTime)
-  {
-    OutputSlot::Connection& connection = impl();
-    if (connection.isTimely(frameNr,currentTime))
-      connection.transfer(data2emit);
-    else
-      connection.discard(data2emit);
-  }
-  
-  
-  
   
 }} // namespace vault::out
