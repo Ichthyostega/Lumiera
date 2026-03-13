@@ -59,11 +59,11 @@
 
 #include "lib/error.hpp"
 #include "lib/handle.hpp"
-#include "lib/time/timevalue.hpp"
-#include "vault/mem/buffer-provider.hpp"
+#include "vault/mem/buffhandle.hpp"
 #include "vault/out/timings.hpp"
 #include "lib/iter-source.hpp"
 #include "lib/nocopy.hpp"
+#include "lib/util.hpp"
 
 #include <memory>
 
@@ -72,11 +72,7 @@ namespace vault {
 namespace out  {
   
   using vault::mem::BuffHandle;
-  using vault::mem::BufferProvider;
   using lib::time::FrameCnt;
-  using lib::time::TimeValue;
-  using lib::time::Time;
-  
   using std::unique_ptr;
   
   
@@ -93,27 +89,14 @@ namespace out  {
    * channels to some kind of external sink (video in GUI window, video full screen,
    * sound, Jack, rendering to file). Clients are expected to retrieve a suitably
    * preconfigured implementation from some OutputManager instance. An OutputSlot
-   * needs to be \em claimed for output by invoking #allocate, which returns a
+   * needs to be _claimed_ for output by invoking #allocate, which returns a
    * representation of the connection state. This operation is exclusive.
-   * The actual \link DataSink output sinks \endlink can be retrieved
+   * The actual [output sinks](\ref DataSink) can be retrieved
    * through the Allocation object returned from there.
    */
   class OutputSlot
     : util::NonCopyable
     {
-      
-    protected:
-      
-      /** active connections through this OutputSlot */
-      class AllocState;
-      
-      unique_ptr<AllocState> state_;
-      
-      /** build the \em connected state,
-       *  based on the existing configuration
-       *  within this concrete OutputSlot */
-      virtual unique_ptr<AllocState> buildState() =0;
-      
       
     public:
       virtual ~OutputSlot();
@@ -128,12 +111,8 @@ namespace out  {
           
           virtual Timings getTimingConstraints() =0;
           
-        protected:
-         ~Allocation(); ///< never to be managed by clients directly
+         ~Allocation(); ///< this is an interface
         };
-      
-      /** established output channel */
-      class Connection;
       
       
       /** can this OutputSlot be allocated? */
@@ -145,6 +124,22 @@ namespace out  {
       /** disconnect from this OutputSlot
        * @warning may block until DataSinks are gone */
       void disconnect();
+
+      /** established output feed */
+      class Connection;
+      
+      
+    protected:
+      /** active connections through this OutputSlot */
+      template<class CON>
+      class AllocState;
+      
+      unique_ptr<Allocation> state_;
+      
+      /** build the _connected state,_
+       *  based on the existing configuration
+       *  within this concrete OutputSlot */
+      virtual unique_ptr<Allocation> buildState() =0;
     };
   
   
@@ -168,14 +163,9 @@ namespace out  {
       {
         return not (sink1 and sink2)
             or (sink1 and sink2
-                and & sink1.impl() == & sink2.impl());
-      }
-      friend bool operator!= (DataSink const& sink1, DataSink const& sink2)
-      {
-        return not (sink1 == sink2);
+                and util::isSameObject (sink1.impl(), sink2.impl()));
       }
     };
-  
   
   
   

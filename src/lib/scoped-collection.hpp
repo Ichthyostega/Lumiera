@@ -12,44 +12,46 @@
 */
 
 /** @file scoped-collection.hpp
- ** Managing a collection of non-copyable polymorphic objects in compact storage.
- ** This helper supports the frequently encountered situation where a service
- ** implementation internally manages a collection of implementation related
- ** sub-components with reference semantics. Typically, those objects are
- ** being used polymorphically, and often they are also added step by step.
- ** The storage holding all those child objects is allocated in one chunk
- ** and never adjusted.
+ ** Manage a collection of non-copyable polymorphic objects in compact storage.
+ ** This helper supports common situation where a service implementation has to
+ ** manages a fixed collection of implementation related sub-components, treated
+ ** with reference semantics. Typically, those objects are used polymorphically,
+ ** and often even with _type erasure_ and added step by step through a builder.
+ ** The storage to hold all those child objects is allocated in one chunk
+ ** and never adjusted. Individual children are never re-ordered or removed,
+ ** only the collection as a whole is discarded eventually.
  ** 
  ** # usage patterns
  ** 
  ** The common ground for all usage of this container is to hold some elements
  ** with exclusive ownership; when the enclosing container goes out of scope,
  ** all the dtors of the embedded objects will be invoked. Frequently this
- ** side effect is the reason for using the container: we want to own some
- ** resource handles to be available exactly as long as the managing object
- ** needs and accesses them.
+ ** side effect is one of the reasons for using the container: we want to own
+ ** some resource handles and be sure they are available exactly as long as
+ ** the managing scope is alive and able to access them.
  ** 
  ** There are two different usage patterns for populating a ScopedCollection
  ** - the "stack style" usage creates an empty container (using the one arg
- **   ctor just to specify the maximum size). The storage to hold up to this
- **   number of objects is (heap) allocated right away, but no objects are
+ **   ctor to specify the maximum size only). The storage capacity to hold
+ **   a number of objects, up to the predefined maximum, is (heap) allocated
+ **   immediately at construction of the container, yet no child objects are
  **   created. Later on, individual objects are "pushed" into the collection
  **   by invoking #emplaceElement() to create a new element of the default
  **   type `I`) or #emplace<Type>(args) to create some subtype. This way,
- **   the container is being filled successively.
+ **   the container is gradually filled up.
  ** - the "RAII style" usage strives to create all of the content objects
  **   right away, immediately after the memory allocation. This usage pattern
  **   avoids any kind of "lifecycle state". Either the container comes up sane
  **   and fully populated, or the ctor call fails and any already created
  **   objects are discarded.
  ** @note intentionally there is no operation to discard individual objects,
- **       all you can do is to #clear() the whole container.
+ **       the only option is to #clear() the whole container.
  ** @note the container can hold instances of a subclass of the type defined
  **       by the template parameter `I`. But you need to ensure in this case
  **       that the defined buffer size for each element (2nt template parameter)
  **       is sufficient to hold any of these subclass instances. This condition
  **       is protected by a static assertion (compilation failure).
- ** @warning when using subclasses, a virtual dtor is mandatory
+ ** @warning when using subclasses, defining a virtual dtor is mandatory!
  ** @warning deliberately **not threadsafe**
  ** 
  ** @see ScopedCollection_test
@@ -160,7 +162,7 @@ namespace lib {
        *  Ctor fails in case of any error during element creation.
        * @param builder functor to be invoked for each "slot".
        *        It gets an ElementHolder& as parameter, and should
-       *        use this to create an object of some I-subclass
+       *        use this to create an object of suitable I-subclass
        */
       template<class CTOR>
       ScopedCollection (size_t maxElements, CTOR builder)

@@ -188,7 +188,7 @@ namespace test{
             
             
             // Verify correct behaviour of iteration end
-            CHECK (! (coll.end()));
+            CHECK (not bool(coll.end()));
             CHECK (isnil (coll.end()));
             
             VERIFY_ERROR (ITER_EXHAUST, *coll.end() );
@@ -303,7 +303,7 @@ namespace test{
             
             CollD coll (6, Populator(rr, trigger));
             
-            CHECK (!isnil (coll));
+            CHECK (not isnil (coll));
             CHECK (6 == coll.size());
             CHECK (0 != Dummy::checksum());
             
@@ -314,7 +314,7 @@ namespace test{
             CHECK (coll[4].calc(0) == 4 + rr);
             CHECK (coll[5].calc(0) == 5 + rr + trigger);
             // what does this check prove?
-            // - the container was indeed populated with DubDummy objects
+            // - the container was indeed populated with SubDummy objects
             //   since the overridden version of Dummy::acc() did run and
             //   reveal the trigger value
             // - the population was indeed done with the anonymous Populator

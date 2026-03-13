@@ -33,19 +33,20 @@
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
 #include "vault/out/output-slot.hpp"
-#include "vault/mem/buffhandle.hpp"
 #include "lib/scoped-collection.hpp"
 #include "lib/iter-adapter-stl.hpp"
 #include "lib/iter-source.hpp"
 #include "lib/handle.hpp"
-//#include "lib/time/timevalue.hpp"
+#include "lib/time/timevalue.hpp"
 //#include "steam/engine/buffer-provider.hpp"
 //#include "steam/play/timings.hpp"
 //#include "lib/sync.hpp"
+#include "vault/mem/buffer-provider.hpp"
 
 //#include <string>
 #include <functional>
-#include <vector>
+#include <utility>
+//#include <vector>
 //#include <memory>
 
 
@@ -53,8 +54,8 @@ namespace vault {
 namespace out   {
 
   using vault::mem::BuffHandle;
-//using vault::mem::BufferProvider;
-//using lib::time::Time;
+  using vault::mem::BufferProvider;
+  using lib::time::TimeValue; /////////////////OOO Rly?
 //using std::string;
   using lib::iter_stl::eachElm;
   
@@ -102,61 +103,29 @@ namespace out   {
   
   
   
-  /**
-   * Extension point for Implementation.
-   * The AllocState is where the concrete output
-   * handling implementation is expected to reside.
-   * OutputSlot is a frontend and accesses
-   * AllocState in the way of a PImpl.
-   */
-  class OutputSlot::AllocState
-    : public OutputSlot::Allocation
-    , util::NonCopyable
-    {
-    public:
-      virtual ~AllocState() { }
-      
-      virtual Connection& access (uint)  const    =0;
-    };
-  
-  
-  
-  
   /* ===== Building blocks for OutputSlot implementation ===== */
   
-  /** Base for OutputSlot standard implementation */
-  class OutputSlotImplBase
-    : public OutputSlot
-    {
-    protected:
-      template<class CON>
-      class AllocStateHub;
-    };
-  
-  
   /**
-   * Maintaining a list of active connections.
-   * Base class for the typical implementation approach.
-   * Using this class is \em not mandatory. But obviously,
-   * we'd get to manage a selection of Connection objects
-   * representing the "active points" in several media channels
-   * connected through this OutputSlot. These Connection subclasses
-   * are what is referenced by the DataSink smart-ptrs handed out
-   * to the client code. As AllocState implements the Allocation
-   * API, it has the liability to create these DataSink smart-ptrs,
-   * which means to wire them appropriately and also provide an
-   * deleter function (here #shutdownConnection) to be invoked
-   * when the last copy of the smart-handle goes out of scope.
-   * 
-   * The typical standard/base implementation provided here
-   * manages a collection of active Connection subclass objects.
+   * Implementation of active Allocation state: maintaining
+   * a list of active connections. An instance is created whenever
+   * a client _locks_ (and thereby »allocates«) the OutputSlot. The
+   * actual implementation of OutputSlot::buildState() will employ a
+   * custom Connection, where all the actual state handling and data
+   * transport is implemented. Such a Connection subclass is also what
+   * is referenced by the DataSink smart-hendle, that is handed out
+   * to the client code and allows to mark the state transitions.
+   * Theses smart-handles are ref counting and thus the individual
+   * Connection object is kept alive as long as at least one DataSink
+   * handle is retained. The deleter function #shutdownConnection is
+   * is invoked for each abandoned connection; once all connections
+   * are defunct, the AllocState itself can be deconfigured.
    */
   template<class CON>
-  class OutputSlotImplBase::AllocStateHub
-    : public OutputSlot::AllocState
+  class OutputSlot::AllocState
+    : public OutputSlot::Allocation
     {
-      typedef lib::ScopedCollection<CON> Connections;
-      typedef OutputSlot::OpenedSinks OpenedSinks;
+      using Connections = lib::ScopedCollection<CON>;
+      using OpenedSinks = OutputSlot::OpenedSinks;
       
       Connections connections_;
       
@@ -191,32 +160,22 @@ namespace out   {
       
       
     protected: /* == API for OutputSlot-Impl == */
-      void
-      init() ///< derived classes need to invoke this to build the actual connections
-        {
-                                                                                 //////////////////////////TICKET #878  really build all at once? or on demand?
-          connections_.populate_by (&AllocStateHub::buildConnection, this);
-        }
       
-      using ConnectionStorage = Connections::ElementHolder&;
+      using ConnectionStorage = Connections::ElementHolder;
       
-      /** factory function to build the actual
-       *  connection handling objects per channel */
-      virtual void buildConnection(ConnectionStorage)  =0;
-      
-      
-      AllocStateHub(uint numChannels)
-        : connections_(numChannels)
-        { }
-      
-    public:
-      virtual
-     ~AllocStateHub()
+      /**
+       * The actual implementation of OutputSlot::buildState() needs to build
+       * an AllocState<CON> instance, and has to provide a _population functor_
+       * to setup the actual \a CON (Connection implementation) instances.
+       * @see ScopedCollection_test::building_RAII_Style()
+       */
+      template<class CTOR>
+      AllocState(uint numChannels, CTOR&& populator)
+        : connections_(numChannels, std::forward<CTOR>(populator))
         { }
       
       
-      
-    private: // Implementation details
+    private: /* === Implementation details === */
       
       static DataSink
       connectOutputSink (CON& connection)

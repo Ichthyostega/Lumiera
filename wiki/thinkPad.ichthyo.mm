@@ -137463,6 +137463,131 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
+<node CREATED="1773354410472" ID="ID_1743624174" MODIFIED="1773354422590" TEXT="bestehende Implementierung &#xfc;berpr&#xfc;fen">
+<node CREATED="1773366196992" ID="ID_1171528228" MODIFIED="1773366221964" TEXT="die dreistufige Vererbung ist zweifelhaft">
+<node CREATED="1773366223189" ID="ID_1366861589" MODIFIED="1773366246027" TEXT="Kennzeichen: mir fallen keine drei schl&#xfc;ssigen Klassennamen ein">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node COLOR="#491552" CREATED="1773366247597" ID="ID_475172789" MODIFIED="1773366269948" TEXT="wie kam dieses Konstrukt zustande?">
+<icon BUILTIN="info"/>
+<node CREATED="1773366279150" ID="ID_735259479" MODIFIED="1773366302144" TEXT="der PImpl ist bereits auf dem Interface OutputSlot vorhanden"/>
+<node CREATED="1773366338424" ID="ID_1596448185" MODIFIED="1773366367494" TEXT="damit mu&#xdf; auch die Impl-Base f&#xfc;r den PImpl dort zumindest deklariert sein"/>
+<node CREATED="1773366368466" ID="ID_352563837" MODIFIED="1773366385108" TEXT="der Client sieht aber eine Referenz auf diesen PImpl (class Allocation)"/>
+<node CREATED="1773366388230" ID="ID_988189170" MODIFIED="1773366406189" TEXT="damit sind zwei abgestufte Interfaces schon mal zwingend"/>
+<node CREATED="1773366407398" ID="ID_441511007" MODIFIED="1773366422499" TEXT="hinzu kommt: der konkrete PImpl soll auf den Connection-Typ getemplated sein"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1773367153256" ID="ID_632963645" MODIFIED="1773367160887" TEXT="Kritik">
+<icon BUILTIN="yes"/>
+<node CREATED="1773367162551" ID="ID_1839486394" MODIFIED="1773367536301" TEXT="keine Trennung der Zonen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Interessant ist daran, da&#223; ich das damals &#252;berahupt nicht gesehen habe; mein Level war also, da&#223; ich zwar ziemlich direkt ein solches Protokoll in OO-Interfaces &#252;bersetzen konnte, aber das Denken in Zonen / Dom&#228;nen und Perspektiven der Implementierung war mir noch fremd, ich konnte dies grade so ansatzweise erahnen, aber hab mich in der konkreten Implementierung nur von Haken zu &#214;se durchgehangelt...
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1773367173125" ID="ID_1353951708" MODIFIED="1773367178714" TEXT="Implementierung des Protokolls"/>
+<node CREATED="1773367179429" ID="ID_1923303384" MODIFIED="1773367191679" TEXT="Implementierung der konkreten Connection"/>
+<node CREATED="1773367220239" ID="ID_185299510" MODIFIED="1773367232602" TEXT="Implementierung des Buffer-Managements">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1773367257106" ID="ID_998290443" MODIFIED="1773367263978" TEXT="man kann sich hier nicht festlegen">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node COLOR="#524398" CREATED="1773367275715" ID="ID_1202996101" MODIFIED="1773367399070" TEXT="kann zentral oder dezentral sein">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...damit meine ich
+    </p>
+    <ul>
+      <li>
+        entweder die ganze Allokation (und damit die Verwendung des OutputSlot) ist praktisch einheitlich; es werden zwar N Buffer zugewiesen, aber der Transfer-Mechanismus l&#228;uft f&#252;r alle gemeinsam
+      </li>
+      <li>
+        oder die Allokation ist lediglich eine logische Klammer, und die eigentliche Implementierung ist N-fach aufgedoppelt, f&#252;r jeden einzelnen Feed
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node CREATED="1773367564585" ID="ID_200538523" MODIFIED="1773367577454" TEXT="die Implementierungs-Interfaces sind &#xbb;d&#xfc;nn&#xab;">
+<node CREATED="1773367579127" ID="ID_87042655" MODIFIED="1773367935032" TEXT="das PImpl-Interface selber hat nur eine (nicht verwendete) Methode">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <font color="#4a1a65" face="Bitstream Vera Sans Mono" size="9pt"><b>virtual</b></font><font color="#3a1f18" face="Bitstream Vera Sans Mono" size="9pt">&#160;</font><font color="#635e96" face="Bitstream Vera Sans Mono" size="9pt"><b>Connection</b></font><font color="#65533c" face="Bitstream Vera Sans Mono" size="9pt">&amp;</font><font color="#3a1f18" face="Bitstream Vera Sans Mono" size="9pt">&#160;</font><font color="#632d2d" face="Bitstream Vera Sans Mono" size="9pt"><b>access</b></font><font color="#3a1f18" face="Bitstream Vera Sans Mono" size="9pt">&#160; </font><font color="#11123a" face="Bitstream Vera Sans Mono" size="9pt">(</font><font color="#8c505c" face="Bitstream Vera Sans Mono" size="9pt"><b>uint</b></font><font color="#11123a" face="Bitstream Vera Sans Mono" size="9pt">)</font><font color="#3a1f18" face="Bitstream Vera Sans Mono" size="9pt">&#160;</font><font color="#4a1a65" face="Bitstream Vera Sans Mono" size="9pt"><b>const</b></font><font color="#3a1f18" face="Bitstream Vera Sans Mono" size="9pt">&#160;</font>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      ...nat&#252;rlich wird die verwendet, aber irgendwo aus der konkreten Implementierung (DiagnosticOutputSlot) heraus. Das ist ein <i>telltale sign</i>&#160;&#8212; nat&#252;rlich sollte eine solche Interface-Methode verwendet werden, aber die Verwendung einer Methode sollte direkt vom Interface aus offensichtlich sein, ohne in die Implementierung schauen zu m&#252;ssen. Das ist hier nicht der Fall; warum sollte ein konkreter OutputSlot von oben herab auf einzelnen Connections zugreifen m&#252;ssen? Konkret habe ich das verwendet, um das ganze Diagnose-API darauf aufzubauen. Jaja, sowas nennt man &#187;hexagonales Design&#171; &#8212; Diagnose-State und Verifikationen sollte man niemals verwenden, um daran die Architektur auszurichten.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1773367958645" ID="ID_1486878938" MODIFIED="1773369159508" TEXT="OutputSlotImplBase hat &#xfc;berhaupt keine API-Funktion, sondern dient nur als Typing-Scope">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      und daf&#252;r wird aber die VTable &#187;durchgef&#228;delt&#171; ... erst eine davon abgeleitete konkrete Implementierung bietet dann die Factory-Methode, die den Typ tats&#228;chlich festlegt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1773369169156" ID="ID_214225108" MODIFIED="1773369180790" TEXT="Verbesserungsversuch....">
+<node CREATED="1773369183338" ID="ID_1251387186" MODIFIED="1773369195156" TEXT="der PImpl k&#xf6;nnte direkt eine Allocation halten"/>
+<node CREATED="1773369240283" ID="ID_1908925521" MODIFIED="1773369252845" TEXT="dann w&#xe4;re bereits AllocState getemplated">
+<node CREATED="1773369255863" ID="ID_650591769" MODIFIED="1773369272046" TEXT="und h&#xe4;tte nur die Aufgabe, die einzelnen Connections zu managen"/>
+<node CREATED="1773452438012" ID="ID_1278277039" MODIFIED="1773452447061" TEXT="das kann dann aber keine abstrakte Klasse mehr sein"/>
+<node CREATED="1773452448298" ID="ID_1336231928" MODIFIED="1773452466651" TEXT="&#x27f9; umstellen auf den &#xbb;RAII style&#xab; von ScopedCollection">
+<node CREATED="1773452476717" ID="ID_147983584" MODIFIED="1773452494223" TEXT="das alte Design war ungeschickt..."/>
+<node CREATED="1773452495003" ID="ID_546834834" MODIFIED="1773452504462" TEXT="und au&#xdf;erdem auch unn&#xf6;tigerweise stateful"/>
+<node CREATED="1773452514440" ID="ID_287465602" MODIFIED="1773452676005" TEXT="gab&apos;s damals schon den &#xbb;Populator&#xab; ?">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ....oder war das mit der <font face="Monospaced" color="#754848">ScopedCollection</font>&#160;ein sp&#228;terer retro-fit?
+    </p>
+    <p>
+      Jedenfalls halte ich das aus heutiger Sicht immer noch f&#252;r eine gute L&#246;sung; man k&#246;nnte h&#246;chtstens die ScopedCollection noch etwas ausbauen (Policy f&#252;r die Storage? UninitialisedStorage f&#252;r die Impl verwenden?)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#dedca9" CREATED="1773454700253" ID="ID_380862630" MODIFIED="1773454743253">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      eins ist klar:<i>&#160;Lambdas sind sch&#246;n</i>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+</node>
+<node CREATED="1773423115479" ID="ID_1275456830" MODIFIED="1773423123305" TEXT="Probleme / H&#xfc;rden">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1773423124811" ID="ID_1029911055" MODIFIED="1773423172313" TEXT="die Deallokation soll automatisch sein!">
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1773423131415" ID="ID_1566753229" MODIFIED="1773423147739" TEXT="wer mu&#xdf; wen konkret getypt sehen?">
+<icon BUILTIN="help"/>
+</node>
+</node>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1771532464268" ID="ID_1570776013" MODIFIED="1771532466986" TEXT="Aufbau"/>
@@ -168295,7 +168420,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 <node CREATED="1742429811135" ID="ID_586841788" MODIFIED="1742429828889" TEXT="debuild : ein front-End f&#xfc;r dpkg-buildpackage + f&#xfc;r Quellpakete"/>
 </node>
-<node CREATED="1743342264364" FOLDED="true" ID="ID_1682484515" MODIFIED="1743342606290" TEXT="Reprepro">
+<node CREATED="1743342264364" FOLDED="true" ID="ID_1682484515" MODIFIED="1773285915809" TEXT="Reprepro">
 <icon BUILTIN="idea"/>
 <node CREATED="1743342269411" ID="ID_435457412" MODIFIED="1743342277894" TEXT="leichtgewichtiges Setup f&#xfc;r ein DEB-Depot"/>
 <node CREATED="1743342285825" FOLDED="true" ID="ID_888901502" MODIFIED="1743342445654" TEXT="verwende dies f&#xfc;r Lumiera seit vielen Jahren">
@@ -168344,6 +168469,21 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <icon BUILTIN="stop-sign"/>
 <icon BUILTIN="yes"/>
 </node>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1773285927456" ID="ID_314179538" LINK="https://www.debian.org/doc/debian-policy/upgrading-checklist.html#version-4-7-3" MODIFIED="1773286526973" TEXT="Priority &apos;optoinal&apos; ist Default seit Debian-Standard 4.7.3">
+<linktarget COLOR="#b70c25" DESTINATION="ID_314179538" ENDARROW="Default" ENDINCLINATION="-11;644;" ID="Arrow_ID_449203010" SOURCE="ID_1697601750" STARTARROW="None" STARTINCLINATION="1051;70;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1773285988207" ID="ID_825405448" MODIFIED="1773286017503" TEXT="Reprepro braucht aber (noch?) diese Angabe">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      m&#246;glicherweise weil ich eine Version aus Debian/stable verwende?
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1773286019099" ID="ID_633768255" MODIFIED="1773286031902" TEXT="kurzfristiger workaround: -P optional"/>
 </node>
 </node>
 </node>
@@ -205195,6 +205335,12 @@ env.Command('out.bin', 'in.bin', my_action)</code></pre>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1764371603562" ID="ID_1152573390" LINK="#ID_1059101542" MODIFIED="1764371658299" TEXT="FileSupport_test : Check scheitert wenn als &apos;root&apos; ausgef&#xfc;hrt">
 <icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node CREATED="1773286426445" ID="ID_1823743836" MODIFIED="1773286429881" TEXT="Infrastruktur">
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1773286431590" ID="ID_1697601750" MODIFIED="1773286526973" TEXT="Reprepro-Config: Override-File f&#xfc;r Priority?">
+<arrowlink COLOR="#b70c25" DESTINATION="ID_314179538" ENDARROW="Default" ENDINCLINATION="-11;644;" ID="Arrow_ID_449203010" STARTARROW="None" STARTINCLINATION="1051;70;"/>
+<icon BUILTIN="help"/>
 </node>
 </node>
 </node>

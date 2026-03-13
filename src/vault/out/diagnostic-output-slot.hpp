@@ -342,7 +342,7 @@ namespace out   {
    *   remains in memory until shutdown of the current executable
    */
   class DiagnosticOutputSlot
-    : public OutputSlotImplBase
+    : public OutputSlot
     {
       
       static const uint MAX_CHANNELS = 5; ///////////////////////////////OOO Build heap-based implementation with arbitrary number of feeds!!
@@ -363,30 +363,27 @@ namespace out   {
        * thus allowing to verify the handling of individual buffers
        */
       class SimulatedOutputSequences
-        : public AllocStateHub<TrackingInMemoryBlockSequence>
+        : public AllocState<TrackingInMemoryBlockSequence>
         {
-          typedef AllocStateHub<TrackingInMemoryBlockSequence> _Base;
-          
-          void
-          buildConnection(ConnectionStorage storage)
-            {
-#if false  //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : disabled code to disentangle BufferProvider implementation
-              storage.create<TrackingInMemoryBlockSequence>();
-#endif  /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : (end) disabled code
-            }
+          using _Base = AllocState<TrackingInMemoryBlockSequence>;
           
         public:
           SimulatedOutputSequences (uint numChannels)
-            : _Base(numChannels)
-            {
-              init();
-            }
+            : _Base{ numChannels
+                   ,[](ConnectionStorage& storage)
+                      {
+                        UNIMPLEMENTED ("new Tracking implementation for DiagnosticOutputSlot");
+#if false  //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : disabled code to disentangle BufferProvider implementation
+                        storage.create<TrackingInMemoryBlockSequence>();
+#endif  /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : (end) disabled code
+                      }}
+            { }
         };
       
       
       
       /** hook into the OutputSlot frontend */
-      unique_ptr<AllocState>
+      unique_ptr<Allocation>
       buildState()
         {
           return make_unique<SimulatedOutputSequences> (
@@ -402,7 +399,8 @@ namespace out   {
         {
           REQUIRE (!isFree(), "diagnostic OutputSlot not (yet) connected");
           REQUIRE (channel <= getOutputChannelCount());
-          return static_cast<TrackingInMemoryBlockSequence&> (state_->access (channel));
+//        return static_cast<TrackingInMemoryBlockSequence&> (state_->access (channel));
+          UNIMPLEMENTED ("the old tracking API is abandoned, the new one not yet implemented");
         }
       
       
