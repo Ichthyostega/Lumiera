@@ -137586,6 +137586,17 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="help"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1773456815562" ID="ID_1123444875" MODIFIED="1773456858777" TEXT="TODO: Doku">
+<icon BUILTIN="bell"/>
+<node CREATED="1773456831048" ID="ID_351332396" MODIFIED="1773456833387" TEXT="uml/fig151685.png">
+<node CREATED="1773456834663" ID="ID_1714537462" MODIFIED="1773456841682" TEXT="noch mit Bouml erstellt"/>
+<node CREATED="1773456842838" ID="ID_1474443195" MODIFIED="1773456850787" TEXT="mu&#xdf; das sinngem&#xe4;&#xdf; mit Umbrello nachbauen"/>
+</node>
+<node CREATED="1773508665090" ID="ID_971350219" MODIFIED="1773510150951" TEXT="Umbrello hat sich inzwischen drastisch weiterentwickelt">
+<arrowlink COLOR="#338ce4" DESTINATION="ID_1925633738" ENDARROW="Default" ENDINCLINATION="-1811;162;" ID="Arrow_ID_1066867553" STARTARROW="None" STARTINCLINATION="-1496;79;"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -167710,6 +167721,27 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1491098525396" ID="ID_1962242264" MODIFIED="1557498707241" TEXT="Tip: Sqlite-DB wegl&#xf6;schen!!!"/>
 <node CREATED="1611412589929" ID="ID_1865414656" MODIFIED="1611412626461" TEXT="Doxygen 1.8.13 generiert jetzt per default kein Sqlite mehr"/>
 </node>
+</node>
+</node>
+<node CREATED="1773508692618" HGAP="41" ID="ID_529911842" MODIFIED="1773510121795" TEXT="Umbrello" VSHIFT="5">
+<node CREATED="1773508699938" ID="ID_652580034" MODIFIED="1773509983304" TEXT="aus dem KDE Software Development Kit">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>ja leider</i>&#160;... deshalb mu&#223; man nun den halben KDE installieren
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1773509984335" ID="ID_1925633738" MODIFIED="1773510140289" TEXT="aktuell(3/26) in Trixie: 4:25.04.2-1">
+<linktarget COLOR="#338ce4" DESTINATION="ID_1925633738" ENDARROW="Default" ENDINCLINATION="-1811;162;" ID="Arrow_ID_1066867553" SOURCE="ID_971350219" STARTARROW="None" STARTINCLINATION="-1496;79;"/>
+</node>
+<node CREATED="1773510006437" ID="ID_1500639553" MODIFIED="1773510010416" TEXT="Grundeinstellungen">
+<node CREATED="1773510011534" ID="ID_474488894" MODIFIED="1773510019341" TEXT="DejaVu Sans Condensed 9pt"/>
+<node CREATED="1773510020035" ID="ID_927247958" MODIFIED="1773510027318" TEXT="Grid auf 5 x 5"/>
 </node>
 </node>
 <node CREATED="1764593425070" ID="ID_1420199278" MODIFIED="1764593520080" TEXT="Asciidoc">

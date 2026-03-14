@@ -19,7 +19,7 @@ Talking about obvious choices, we get
 
 ArgoUML:: quite capable but also somewhat crappy and hard to use.
 Gnome DIA:: ...which is really just a drawing tool
-Umbrello:: from the KDE Software Collection.
+Umbrello:: from the KDE Software Development Kit.
 
 
 Umbrello
@@ -32,6 +32,20 @@ As of 11/2016, we abandon our existing BoUML model and start over from scratch.
 - typically we render into PNG images, which are _checked in to Git_
 - these can be found in 'doc/devel/uml', also symlinked as 'wiki/uml'
 
+Usage Notes
+^^^^^^^^^^^
+As of 3/2026 Umbrello has evolved significantly. The current version in Debian/stable(Trixie) is 4:25.04.2-1
+There is now support for code roundtrip -- a feature which we do not use, by deliberate choice.
+UML is considered a good tool for explaining ideas, but it is not a good fit for representing the reality in code.
+
+Some hints for working with the diagrams:
+
+- Set the font globally to `DejaVu Sans Condensed' 9pt. This font is available under a free license
+  and almost identical to the tried and true `Bitstream Vera Sans'; furthermore, it is also (almost)
+  identical to the Latin part in `Noto Sans'.
+- Disable display of package names, visibility scopes and signatures
+- Use a 5 x 5 grid for alignment
+
 
 BoUML
 ~~~~~
@@ -39,9 +53,9 @@ When the Lumiera project started, BoUML was a widely known alternative: it was a
 fast, reliable, with even some round trip capabilities. The generated code was highly configurable,
 we were able to produce valid GNU style on our initial code generation round.
 
-http://www.bouml.fr/[Bouml] was written by Bruno Pages (bouml@free.fr).
+https://web.archive.org/web/20070625100128/http://bouml.free.fr/[Bouml] was written by Bruno Pages (bouml@free.fr).
 It used to be OpenSource, released under GPL up to
-http://www.bouml.fr/historic_old.html[Version 4.21].
+https://web.archive.org/web/20120229012107/http://www.bouml.fr/historic_old.html[Version 4.21].
 Some years ago, there was a somewhat confusing move of the original author,
 who blamed ``Wikipedia editors and copyright violation'' to destroy his work.
 Seemingly the point of contention was the licensing of Bouml logo images on
