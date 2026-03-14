@@ -312,7 +312,7 @@ h2,h3 {border-bottom:1px solid [[ColorPalette::TertiaryLight]];}
 <pre>/*{{{*/
 * html .tiddler {height:1%;}
 
-body {font-size:.75em; font-family:arial,helvetica; margin:0; padding:0;}
+body {font-size:.8em; font-family:arial,helvetica; margin:0; padding:0;}
 
 h1,h2,h3,h4,h5,h6 {font-weight:bold; text-decoration:none;}
 h1,h2,h3 {padding-bottom:1px; margin-top:1.2em;margin-bottom:0.3em;}
@@ -5157,7 +5157,7 @@ Thus the mapping is a copyable value object, using an associative array. It may 
 First and foremost, mapping can be seen as a //functional abstraction.// As it's used at implementation level, encapsulation of detail types in't the primary concern, so it's a candidate for generic programming: For each of those use cases outlined above, a distinct mapping type is created by instantiating the {{{OutputMapping&lt;DEF&gt;}}} template with a specifically tailored definition context ({{{DEF}}}), which takes on the role of a strategy. Individual instances of this concrete mapping type may be default created and copied freely. This instantiation process includes picking up the concrete result type and building a functor object for resolving on the fly. Thus, in the way typical for generic programming, the more involved special details are moved out of sight, while being still in scope for the purpose of inlining. But there //is// a concern better to be encapsulated and concealed at the usage site, namely accessing the rules system. Thus mapping leads itself to the frequently used implementation pattern where there is a generic frontend as header, calling into opaque functions embedded within a separate compilation unit.
 </pre>
 </div>
-<div title="OutputSlot" modifier="Ichthyostega" created="201106162339" modified="202603101557" tags="def Concepts Player spec img" changecount="16">
+<div title="OutputSlot" modifier="Ichthyostega" created="201106162339" modified="202603142327" tags="def Concepts Player spec img" changecount="23">
 <pre>Within the Lumiera player and output subsystem, actually sending data to an external output requires to allocate an ''output slot''
 This is the central metaphor for the organisation of actual (system level) outputs; using this concept allows to separate and abstract the data calculation and the organisation of playback and rendering from the specifics of the actual output sink. Actual output possibilities (video in GUI window, video fullscreen, using a beamer, sound, Jack, rendering to file) can be added and removed dynamically from various components (Vault, Stage), all using the same resolution and mapping mechanisms (&amp;rarr; OutputManagement)
 
@@ -5166,7 +5166,7 @@ Each OutputSlot is an unique and distinguishable entity. It corresponds explicit
 
 In order to be usable as //output sink,// an output slot needs to be //allocated,// i.e. tied to and locked for a specific client. At any time, there may be only a single client using a given output slot this way. To stress this point: output slots don't provide any kind of inherent mixing capability; any adaptation, mixing, overlaying and sharing needs to be done within the nodes network producing the output data fed to the slot. (in special cases, some external output capabilities -- e.g. the Jack audio connection system -- may still provide additional mixing capabilities, but that's beyond the scope of the Lumiera application)
 
-[&gt;img[Outputslot implementation structures|uml/fig151685.png]]
+[&gt;img[Outputslot implementation structures|uml/OutputSlot_components.svg]]
 Once allocated, the output slot returns a set of concrete ''sink handles'' (one for each physical channel expecting data). The calculating process feeds its results into those handles. Size and other characteristics of the data frames are assumed to be suitable, which typically won't be verified at that level anymore (but the sink handle provides a hook for assertions). Besides that, the allocation of an output slot reveals detailed ''timing expectations''. The client is required to comply to these [[timings|Timings]] when ''emitting'' data -- he's even required to provide a //current time specification,// alongside with the data. Based on this information, the output slot has the ability to handle timing failures gracefully; the concrete output slot implementation is expected to provide some kind of de-click or de-flicker facility, which kicks in automatically when a timing failure is detected.
 
 !!!usage and implementation
@@ -7235,7 +7235,7 @@ Later on we expect a distinct __query subsystem__ to emerge, presumably embeddin
 
 &amp;rarr; QuantiserImpl</pre>
 </div>
-<div title="Scheduler" creator="Ichthyostega" modifier="Ichthyostega" created="202304140131" modified="202404192301" tags="Rendering spec draft" changecount="32">
+<div title="Scheduler" creator="Ichthyostega" modifier="Ichthyostega" created="202304140131" modified="202603151541" tags="Rendering spec draft" changecount="33">
 <pre>//Invoke and control the dependency and time based execution of  [[render jobs|RenderJob]]//
 The Scheduler acts as the central hub in the implementation of the RenderEngine and coordinates the //processing resources// of the application. Regarding architecture, the Scheduler is located in the Vault-Layer and //running// the Scheduler is equivalent to activating the »Vault Subsystem«. An EngineFaçade acts as entrance point, providing high-level render services to other parts of the application: [[render jobs|RenderJob]] can be activated under various timing and dependency constraints. Internally, the implementation is organised into two layers:
 ;Layer-2: Coordination
@@ -7265,7 +7265,7 @@ This leads to a »chaotic«, event-driven processing style without a central man
 &amp;rarr; SchedulerProcessing
 
 !!!Performance
-Processing is not driven by a centralised algorithm, but rather stochastically by workers becoming available for further work. This allows for adaptation to a wide array of load patterns, but turns assessment of the Scheduler's capabilities and limitations into a challenging task. The speed and throughput of the processing are largely defined by the actual scheduler -- up to the point where the Scheduler is overloaded permanently and the //schedule slips away.// Based on that observation, a framework for [[Scheduler Load- and Performance-testing|SchedulerTest]] was^^{{red{12/2023 rather is about to be}}}^^ established.
+Processing is not driven by a centralised algorithm, but rather stochastically by workers becoming available for further work. This allows for adaptation to a wide array of load patterns, but turns assessment of the Scheduler's capabilities and limitations into a challenging task. The speed and throughput of the processing are largely defined by the actual scheduler -- up to the point where the Scheduler is overloaded permanently and the //schedule slips away.// Based on that observation, a framework for [[Scheduler Load- and Performance-testing|SchedulerTest]] was established.
 
 !!!Instructing the Scheduler
 The Scheduler is now considered an implementation-level facility with an interface specifically tailored at the JobPlanningPipeline: the [[»Render Activity Language«|RenderActivity]]. This //builder-style// setup allows to construct an ''~Activity-Term'' to model all the structural properties of an individual rendering invocation -- it is compriesed of a network of {{{Activity}}} records, which can be directly handled by the Scheduler.

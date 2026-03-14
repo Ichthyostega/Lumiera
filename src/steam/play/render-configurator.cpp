@@ -79,7 +79,7 @@ namespace play {
         buildCalculationStreams (ModelPort port, OutputSlot& output)
           {
             OutputSlot::Allocation& activeOutputConnection = output.allocate();
-            Timings nominalTimings = activeOutputConnection.getTimingConstraints()
+            Timings nominalTimings = activeOutputConnection.timingConstraints()
                                                            .constrainedBy(playbackTimings_);
             
             return activateEngine (port, nominalTimings, activeOutputConnection, renderQuality_);

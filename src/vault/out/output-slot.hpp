@@ -106,10 +106,10 @@ namespace out  {
       class Allocation
         {
         public:
-          virtual OpenedSinks getOpenedSinks()   =0;
-          virtual bool isActive()  const         =0;
+          virtual OpenedSinks getOpenedSinks() =0;
+          virtual Timings timingConstraints()  =0;
           
-          virtual Timings getTimingConstraints() =0;
+          virtual bool isActive()  const       =0;
           
          ~Allocation(); ///< this is an interface
         };

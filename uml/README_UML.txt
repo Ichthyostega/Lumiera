@@ -45,6 +45,15 @@ Some hints for working with the diagrams:
   identical to the Latin part in `Noto Sans'.
 - Disable display of package names, visibility scopes and signatures
 - Use a 5 x 5 grid for alignment
+- do not use inner classes and do not use other elements of the model as parameter types!
+- the automatic layout is inconsitent, lacks precision and can kick elements around aribrtarily;
+  unfortunately it can not be disabled; the only solution is to proceed gradually from element to element.
+- Snap-to has numeric problems; need to zoom in and manually adjust lines to avoid jagged edges in PNG export
+- Undo / Redo is broken and can totally mess up the layout
+
+Umbrello can save as SVG; some glitches can thus be cleaned-up with Inkscape afterwards.
+
+💡 save after each step and make a Git commit; frequently close and re-open the application.
 
 
 BoUML

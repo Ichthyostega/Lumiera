@@ -141,7 +141,7 @@ namespace out   {
         }
       
       Timings
-      getTimingConstraints()
+      timingConstraints()
         {
           UNIMPLEMENTED ("find out about timing constraints");                   //////////////////////////TICKET #831
         }

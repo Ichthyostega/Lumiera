@@ -50,5 +50,4 @@ On occasion, we'll replace them by drawings from our current UML model.
 133637:    classdiagram 143877 "Player Entities"
 133637:    objectdiagram 144005 "Play Process Structure"
 133637:    sequencediagram 145157 "output data exchange"
-133637:    classdiagram 151685 "Player Output"
 128773:    classdiagram 158213 "UIBus"

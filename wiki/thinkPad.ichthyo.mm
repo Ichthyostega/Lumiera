@@ -137595,6 +137595,23 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1773508665090" ID="ID_971350219" MODIFIED="1773510150951" TEXT="Umbrello hat sich inzwischen drastisch weiterentwickelt">
 <arrowlink COLOR="#338ce4" DESTINATION="ID_1925633738" ENDARROW="Default" ENDINCLINATION="-1811;162;" ID="Arrow_ID_1066867553" STARTARROW="None" STARTINCLINATION="-1496;79;"/>
 <icon BUILTIN="idea"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1773526117806" ID="ID_133491459" MODIFIED="1773526142003" TEXT="leider zu Lasten der Qualit&#xe4;t">
+<icon BUILTIN="broken-line"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1773526150799" ID="ID_1281871727" LINK="#ID_55211550" MODIFIED="1773526231110">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      es ist 1 <font size="5" color="#c7121c">KATASTROFE</font>
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="smiley-angry"/>
+</node>
 </node>
 </node>
 </node>
@@ -167742,6 +167759,95 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1773510006437" ID="ID_1500639553" MODIFIED="1773510010416" TEXT="Grundeinstellungen">
 <node CREATED="1773510011534" ID="ID_474488894" MODIFIED="1773510019341" TEXT="DejaVu Sans Condensed 9pt"/>
 <node CREATED="1773510020035" ID="ID_927247958" MODIFIED="1773510027318" TEXT="Grid auf 5 x 5"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1773526215503" ID="ID_55211550" MODIFIED="1773526252075" TEXT="Qualit&#xe4;tsprobleme 3/2026">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1773526257295" ID="ID_520113588" MODIFIED="1773526289207" TEXT="Innere Klassen &#x27f9; &#xd83d;&#xddf1; crash"/>
+<node CREATED="1773526292681" ID="ID_1154051750" MODIFIED="1773526634980" TEXT="Klassen k&#xf6;nnen verschwinden (und sind doch da)">
+<linktarget COLOR="#de1828" DESTINATION="ID_1154051750" ENDARROW="Default" ENDINCLINATION="117;0;" ID="Arrow_ID_485201077" SOURCE="ID_1812355763" STARTARROW="None" STARTINCLINATION="-13;-83;"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1773526559040" ID="ID_396334197" MODIFIED="1773526575914" TEXT="Beziehung zu anderen Klassen als Attribute sind instabil">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1773526597983" ID="ID_1955409924" MODIFIED="1773526607635" TEXT="oft wird ein Duplikat in den globalen Namespace platziert"/>
+<node CREATED="1773526608282" ID="ID_1812355763" MODIFIED="1773526634979" TEXT="kann zum Verschwinden von Klassen f&#xfc;hren">
+<arrowlink COLOR="#de1828" DESTINATION="ID_1154051750" ENDARROW="Default" ENDINCLINATION="117;0;" ID="Arrow_ID_485201077" STARTARROW="None" STARTINCLINATION="-13;-83;"/>
+</node>
+</node>
+<node CREATED="1773526314914" ID="ID_1724000694" MODIFIED="1773526385357" TEXT="automatisches Layout l&#xe4;uft Amok">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      es verschiebt Assoziationen und sogar benachbarte Klassen, oft in komplett irrsinniger Weise
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1773526420281" ID="ID_717493788" MODIFIED="1773526495811" TEXT="Rundungsfehler und Inkonsistenzen im Snap-to">
+<arrowlink COLOR="#c9152a" DESTINATION="ID_860540973" ENDARROW="Default" ENDINCLINATION="-2;-35;" ID="Arrow_ID_1766687506" STARTARROW="None" STARTINCLINATION="64;3;"/>
+</node>
+<node CREATED="1773526387456" ID="ID_1870671204" MODIFIED="1773526399826" TEXT="Zeichen / Renderqualit&#xe4;t ist d&#xfc;rftig">
+<node CREATED="1773526403102" ID="ID_1693251807" MODIFIED="1773526406761" TEXT="kein Antialiasing"/>
+<node CREATED="1773526407453" ID="ID_860540973" MODIFIED="1773526491479" TEXT="oft Treppen an Linien, die grade sein sollten">
+<linktarget COLOR="#c9152a" DESTINATION="ID_860540973" ENDARROW="Default" ENDINCLINATION="-2;-35;" ID="Arrow_ID_1766687506" SOURCE="ID_717493788" STARTARROW="None" STARTINCLINATION="64;3;"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1773526512905" ID="ID_299785037" MODIFIED="1773526525111" TEXT="Globale Settings werden nicht persistent gespeichert">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1773526528818" ID="ID_690020287" MODIFIED="1773526530727" TEXT="Font"/>
+<node CREATED="1773526531357" ID="ID_1045654098" MODIFIED="1773526537600" TEXT="Sichtbarkeit der Attribute"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fefc4e" COLOR="#351d75" CREATED="1773531043541" ID="ID_730387164" MODIFIED="1773531054213" TEXT="Tips zum Umgang">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1773526503440" ID="ID_782422859" MODIFIED="1773531063669" TEXT="Zwischen-Commits in Git machen"/>
+<node CREATED="1773531074325" ID="ID_758283834" MODIFIED="1773531087087" TEXT="Layout erst grob legen, dann systematisch von Objekt zu Objekt gehen"/>
+<node CREATED="1773531089179" ID="ID_1226770282" MODIFIED="1773531184611" TEXT="Beziehungs-Linien kann man editieren, nachdem man einmal &quot;add point&quot; gemacht hat">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...dann wandelt sich der Typ auch in Multiline; danach sollte man zun&#228;chst die inneren Punkte platzieren, erst zuletzt den Start/Endpunkt. Vorsicht, sobald man eines der verbundenen Objekte weiter editiert oder skaliert, greift wieder das automatische Layout ein
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1773531186795" ID="ID_87265001" MODIFIED="1773531288969">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      als <b>SVG</b>&#160;exportieren und im Inkscape reparieren
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1773531211611" ID="ID_1261329208" MODIFIED="1773531235461" TEXT="Rundungsfehler auf der DPI-Zahl">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das ist besonders &#228;rgerlich, denn das f&#252;hrt zu unscharfen Linien
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1773531239072" ID="ID_636064275" MODIFIED="1773531254153" TEXT="Padding auf der Seite einbauen"/>
+<node CREATED="1773531255165" ID="ID_1102039599" MODIFIED="1773531266582" TEXT="Seitenhintergrund: Wei&#xdf;es Rechteck dahinter legen"/>
+<node CREATED="1773531272603" ID="ID_1349168919" MODIFIED="1773531281358" TEXT="speichern als &quot;Plain SVG&quot; oder exportieren"/>
+</node>
 </node>
 </node>
 <node CREATED="1764593425070" ID="ID_1420199278" MODIFIED="1764593520080" TEXT="Asciidoc">
