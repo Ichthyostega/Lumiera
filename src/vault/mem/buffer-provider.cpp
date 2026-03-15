@@ -115,7 +115,7 @@ namespace mem   {
   BufferProvider::announce (uint cnt, BuffDescr const& type)
   {
     size_t buffSiz = getBufferSize (type);
-    uint actually_possible = bufferStore_->prepareBuffers (cnt, buffSiz, type);
+    uint actually_possible = bufferStore_->prepareBuffers (type, cnt, buffSiz);
     if (!actually_possible)
       throw err::State ("unable to fulfil request for buffers"
                        ,LUMIERA_ERROR_BUFFER_MANAGEMENT);
@@ -150,14 +150,14 @@ namespace mem   {
   {
     REQUIRE (was_created_by_this_provider (type));
     auto& typeKey = bufferStage_->lookup (type);
-    auto [storage, localTag] = bufferStore_->provideBuffer (typeKey.storageSize(), type, typeKey.localTag());
+    auto [storage, actualSize, localTag] = bufferStore_->provideBuffer (type,typeKey.storageSize(),typeKey.localTag());
     auto& stateKey = bufferStage_->mark_locked (typeKey, storage, localTag);
     
     return BuffHandle (buildDescriptor(stateKey), storage);
   }                      // NOTE: not the underlying parent descriptor!
   
   
-  /** BufferProvider API: state transition to \em emitted state.
+  /** BufferProvider API: state transition to _emitted state_.
    *  Client code may signal a state transition through this optional operation.
    *  The actual meaning of an "emitted" buffer is implementation defined; similarly,
    *  some back-ends may actually do something when emitting a buffer (e.g. commit data
@@ -173,7 +173,10 @@ namespace mem   {
   BufferProvider::emitBuffer (BuffHandle const& handle)
   {
     auto& stateKey = bufferStage_->mark_emitted (handle);
-    bufferStore_->mark_emitted (stateKey.storageSize(), stateKey.parentKey(), stateKey.localTag());
+    bufferStore_->mark_emitted (stateKey.parentKey()
+                               ,BuffAlloc{handle.rawStorage()
+                                         ,stateKey.storageSize()
+                                         ,stateKey.localTag()});
   }
   
   
@@ -189,8 +192,10 @@ namespace mem   {
   BufferProvider::releaseBuffer (BuffHandle& handle)
   try {                         // might invoke embedded dtor function
     auto& stateKey = bufferStage_->mark_released (handle);
-    bufferStore_->detachBuffer (stateKey.storageSize(), stateKey.parentKey()
-                               ,std::make_tuple (handle.rawStorage(), stateKey.localTag()));
+    bufferStore_->detachBuffer (stateKey.parentKey() 
+                               ,BuffAlloc{handle.rawStorage()
+                                         ,stateKey.storageSize()
+                                         ,stateKey.localTag()});
     bufferStage_->discard (handle);
   }
   ERROR_LOG_AND_IGNORE (engine, "releasing a buffer from BufferProvider")
@@ -207,8 +212,10 @@ namespace mem   {
   BufferProvider::emergencyCleanup (BuffHandle& handle, bool invokeDtor)
   try {
     auto& stateKey = bufferStage_->abandon (handle, invokeDtor);
-    bufferStore_->detachBuffer (stateKey.storageSize(), stateKey.parentKey()
-                               ,std::make_tuple (handle.rawStorage(), stateKey.localTag()));
+    bufferStore_->detachBuffer (stateKey.parentKey()
+                               ,BuffAlloc{handle.rawStorage()
+                                         ,stateKey.storageSize()
+                                         ,stateKey.localTag()});
     bufferStage_->discard (handle);
   }
   ERROR_LOG_AND_IGNORE (engine, "cleanup of buffer metadata while handling an error")

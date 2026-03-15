@@ -66,10 +66,10 @@ namespace mem   {
     public:
       /* === BufferStore interface === */
       
-      virtual uint prepareBuffers (uint cnt, size_t,HashVal typeID) override;
-      virtual Slot provideBuffer (size_t,HashVal, LocalTag)         override;
-      virtual void mark_emitted  (size_t,HashVal, LocalTag const&)  override;
-      virtual void detachBuffer  (size_t,HashVal, Slot alloc)       override;
+      virtual uint prepareBuffers (HashVal typeID, uint cnt, size_t) override;
+      virtual BuffAlloc provideBuffer (HashVal,size_t,LocalTag)  override;
+      virtual void mark_emitted (HashVal typeID, BuffAlloc) override;
+      virtual void detachBuffer (HashVal typeID, BuffAlloc) override;
       
     public:
      ~HeapMemBufferStore();

@@ -16322,7 +16322,7 @@
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1486763185746" FOLDED="true" HGAP="33" ID="ID_362749694" MODIFIED="1557498707220" TEXT="InteractionDirector" VSHIFT="21">
-<arrowlink COLOR="#3b4877" DESTINATION="ID_700485676" ENDARROW="Default" ENDINCLINATION="430;-874;" ID="Arrow_ID_454081114" STARTARROW="Default" STARTINCLINATION="-170;534;"/>
+<arrowlink COLOR="#3b4877" DESTINATION="ID_700485676" ENDARROW="Default" ENDINCLINATION="-92;-298;" ID="Arrow_ID_454081114" STARTARROW="Default" STARTINCLINATION="-123;330;"/>
 <linktarget COLOR="#798eba" DESTINATION="ID_362749694" ENDARROW="Default" ENDINCLINATION="-218;-590;" ID="Arrow_ID_757867749" SOURCE="ID_1440190469" STARTARROW="None" STARTINCLINATION="15;121;"/>
 <linktarget COLOR="#5e4463" DESTINATION="ID_362749694" ENDARROW="Default" ENDINCLINATION="-57;-739;" ID="Arrow_ID_1847127764" SOURCE="ID_474441211" STARTARROW="None" STARTINCLINATION="73;95;"/>
 <linktarget COLOR="#683c5b" DESTINATION="ID_362749694" ENDARROW="Default" ENDINCLINATION="-394;0;" ID="Arrow_ID_1979576517" SOURCE="ID_113005643" STARTARROW="None" STARTINCLINATION="-24;-159;"/>
@@ -20250,7 +20250,7 @@
 <node CREATED="1480639365715" ID="ID_743867283" MODIFIED="1557498707223" TEXT="Bin"/>
 </node>
 <node CREATED="1480639327169" HGAP="36" ID="ID_700485676" MODIFIED="1557498707223" TEXT="Root" VSHIFT="-2">
-<linktarget COLOR="#3b4877" DESTINATION="ID_700485676" ENDARROW="Default" ENDINCLINATION="430;-874;" ID="Arrow_ID_454081114" SOURCE="ID_362749694" STARTARROW="Default" STARTINCLINATION="-170;534;"/>
+<linktarget COLOR="#3b4877" DESTINATION="ID_700485676" ENDARROW="Default" ENDINCLINATION="-92;-298;" ID="Arrow_ID_454081114" SOURCE="ID_362749694" STARTARROW="Default" STARTINCLINATION="-123;330;"/>
 <node CREATED="1504459308239" HGAP="47" ID="ID_247672235" MODIFIED="1557498707223" TEXT="Assets" VSHIFT="-26">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 </node>
@@ -72506,6 +72506,111 @@
 <icon BUILTIN="bell"/>
 </node>
 </node>
+<node CREATED="1773513295211" ID="ID_633637818" MODIFIED="1773513297879" TEXT="Shutdown">
+<node CREATED="1773513298832" ID="ID_856354885" MODIFIED="1773513306170" TEXT="normalerweise lediglich ein &#xbb;unwinding&#xab;">
+<node CREATED="1773513311357" ID="ID_1935806481" MODIFIED="1773513335226" TEXT="Subsysteme werden gem&#xe4;&#xdf; umgekehrter Dependency-Hierarchie heruntergefahren"/>
+<node CREATED="1773513342509" ID="ID_1932185380" MODIFIED="1773513355455" TEXT="danach ist es egal in welcher Reihenfolge Destruktoren aufgerufen werden"/>
+</node>
+<node CREATED="1773513357106" ID="ID_1903354578" MODIFIED="1773513367045" TEXT="Emergency-Shutdown ist latent gef&#xe4;hrlich">
+<node CREATED="1773513439407" ID="ID_1331293218" MODIFIED="1773513541390" TEXT="wird ausgel&#xf6;st durch Versagen eines Subsystems">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      wobei &#187;Versagen&#171; hier bedeutet: Kontrollverlust
+    </p>
+    <ul>
+      <li>
+        GAU : eine wichtige Komponente bricht weg, aber das Subsystem bekommt es noch mit
+      </li>
+      <li>
+        SuperGAU : es wird nur noch das Brechen einer fundamentalen Annahme erkannt
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1773513373550" ID="ID_223873797" MODIFIED="1773513391670" TEXT="inh&#xe4;rentes (ungel&#xf6;stes) Problem: Dependency bricht weg">
+<node CREATED="1773513557615" ID="ID_1998228320" MODIFIED="1773513574009" TEXT="Umgang mit kaskadierendem Zusammenbruch ist nicht gekl&#xe4;rt"/>
+<node CREATED="1773513578764" ID="ID_282544466" MODIFIED="1773513886060" TEXT="per Dekret haben wir auf das Unterbrechen von Threads verzichtet">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das war eine <b>bewu&#223;te Entscheidung</b>. Sie gr&#252;ndet in der Beobachtung, da&#223; Unterbrechnungs-Mechanismen eine erhebliche &#187;Strahlkraft&#171; entwickeln, da sich an ihnen letztlich die Tiefe der Kontrolle und Beherrschung ausdr&#252;ckt. Dieser Belang ist &#8212; vor allem in einem neu aufzubauenden System &#8212; um Vielfaches konkreter und greifbarer als all das, was erst noch entwickelt werden soll. Daher besteht die Gefahr, da&#223; sich dieser einzelne Belang zum Vorherrschenden Prinzip aufschwingt und alles andere dominiert.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1773513637742" ID="ID_1167526415" MODIFIED="1773513709943" TEXT="Signalisierungs-Mechanismen sind freiwillig und meist nicht von Anfang ber&#xfc;cksichtigt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Und das ist auch gut so, denn sonst besteht die Gefahr, unversehens, &#187;durch die Hintert&#252;r&#171; wieder in einen Unterbrechungs-Mechanismus abzugleiten
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1773514427830" ID="ID_1004700723" MODIFIED="1773514467858" TEXT="ganz ehrlich &#x27f9; Notfall-Verhalten ist &#xbb;undefined&#xab;">
+<arrowlink COLOR="#753a8e" DESTINATION="ID_44200873" ENDARROW="Default" ENDINCLINATION="37;-82;" ID="Arrow_ID_1173111178" STARTARROW="None" STARTINCLINATION="-237;15;"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1773513987117" ID="ID_44200873" MODIFIED="1773514459483" TEXT="Gefahr von Deadlocks">
+<linktarget COLOR="#753a8e" DESTINATION="ID_44200873" ENDARROW="Default" ENDINCLINATION="37;-82;" ID="Arrow_ID_1173111178" SOURCE="ID_1004700723" STARTARROW="None" STARTINCLINATION="-237;15;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1773514060125" ID="ID_1655743884" MODIFIED="1773514856470" TEXT="noch laufende Output-Prozesse">
+<linktarget COLOR="#bb425b" DESTINATION="ID_1655743884" ENDARROW="Default" ENDINCLINATION="-1792;163;" ID="Arrow_ID_1087146872" SOURCE="ID_1364886076" STARTARROW="None" STARTINCLINATION="856;31;"/>
+<node CREATED="1773514275901" ID="ID_1965551274" MODIFIED="1773514285257" TEXT="finden statt als Teil von Render-Jobs"/>
+<node CREATED="1773514285945" ID="ID_878831778" MODIFIED="1773514299479" TEXT="diese sind per Design-Entscheidung nicht unterbrechbar"/>
+<node COLOR="#5b280f" CREATED="1773514319730" ID="ID_866946527" MODIFIED="1773514344390" TEXT="Gef&#xe4;hrlich w&#xe4;re es, auf die Render-Jobs zu warten">
+<icon BUILTIN="clanbomber"/>
+</node>
+<node CREATED="1773514357130" ID="ID_1520204221" MODIFIED="1773514746172" TEXT="besser: nur auf externe Sch&#xe4;den konzentrieren">
+<linktarget COLOR="#fdfaca" DESTINATION="ID_1520204221" ENDARROW="Default" ENDINCLINATION="-55;4;" ID="Arrow_ID_1200068806" SOURCE="ID_1676578562" STARTARROW="None" STARTINCLINATION="-235;8;"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1773514483842" ID="ID_994581814" MODIFIED="1773514501475" TEXT="buffer flush und dann file-close"/>
+<node CREATED="1773514503400" ID="ID_262943450" MODIFIED="1773514515015" TEXT="GPU-Resourcen freigeben"/>
+<node CREATED="1773514516766" ID="ID_1661561130" MODIFIED="1773514525040" TEXT="Output-Kan&#xe4;le schlie&#xdf;en"/>
+</node>
+</node>
+</node>
+<node CREATED="1773514551433" ID="ID_741882191" MODIFIED="1773514556921" TEXT="L&#xf6;sungs-Skizze">
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1773514557962" ID="ID_916446877" MODIFIED="1773514575032" TEXT="Stand 2026 noch nicht wirklich umgesetzt">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1773514576374" ID="ID_1565790789" MODIFIED="1773514590256" TEXT="eigener Signalisierungs-Mechanismus gew&#xfc;nscht">
+<node CREATED="1773514591463" ID="ID_321493555" MODIFIED="1773514606481" TEXT="kann Teil des Subsytem-Handlings sein">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das w&#228;re sogar am sch&#246;nsten
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1773514607491" ID="ID_575253797" MODIFIED="1773514619323" TEXT="alternativ k&#xf6;nnte es auch ein Application-Lifecycle-Event sein"/>
+<node CREATED="1773514629631" ID="ID_1676578562" MODIFIED="1773514746172" TEXT="daraufhin sollten alle noch lebenden Teile sich auf einen Crash vorbereiten (nicht mehr)">
+<arrowlink COLOR="#fdfaca" DESTINATION="ID_1520204221" ENDARROW="Default" ENDINCLINATION="-55;4;" ID="Arrow_ID_1200068806" STARTARROW="None" STARTINCLINATION="-235;8;"/>
+</node>
+</node>
+<node CREATED="1773514756143" ID="ID_1465037791" MODIFIED="1773514776615" TEXT="danach sollte die Applikation sich selbst &#xbb;wegschie&#xdf;en&#xab;">
+<node CREATED="1773514790345" ID="ID_1069024099" MODIFIED="1773514799027" TEXT="also den OS-Proze&#xdf; terminieren"/>
+<node CREATED="1773514800184" ID="ID_1796067650" MODIFIED="1773514823262" TEXT="und zwar mit Timeout abgesichert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      denn selbst das Signalisieren eines Lifecycle-Event k&#246;nnte irgendwo blocken
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1721058312039" ID="ID_202200971" MODIFIED="1721058318320" TEXT="Modell-Strukturen">
@@ -113416,6 +113521,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1770839465895" ID="ID_1971787626" MODIFIED="1771012699686" TEXT="und wollte mir selbst nicht im Weg stehen"/>
 </node>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1770839482869" FOLDED="true" ID="ID_1977655709" LINK="#ID_614570936" MODIFIED="1771012736056" TEXT="das mu&#xdf; weg">
+<linktarget COLOR="#6e3843" DESTINATION="ID_1977655709" ENDARROW="Default" ENDINCLINATION="74;529;" ID="Arrow_ID_1500117645" SOURCE="ID_332617296" STARTARROW="None" STARTINCLINATION="497;17;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1770839695480" ID="ID_644844801" MODIFIED="1771012699686" TEXT="wird includiert in weaving-pattern-builder.hpp">
@@ -114473,12 +114579,12 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1771335377727" ID="ID_459405949" MODIFIED="1771347836064" TEXT="nicht wirklich sch&#xf6;n">
 <icon BUILTIN="smiley-neutral"/>
 </node>
-<node CREATED="1771335383471" ID="ID_1401593839" MODIFIED="1771348112895" TEXT="aber so vollst&#xe4;ndig, da&#xdf; ich nix mehr &#xe4;ndern kann">
+<node CREATED="1771335383471" ID="ID_1401593839" MODIFIED="1773620560464" TEXT="aber so vollst&#xe4;ndig, da&#xdf; ich nix mehr &#xe4;ndern kann">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
     <p>
-      Seit 2024 bin ich nun mehrfach durch den Kern der Implementierung durchgegangen, und konnte keine offensichtliche L&#252;cke finden (nur ein paar lokale Inkonsistenzen, wie z.B. da&#223; wir uns den aktuellen Buffer-Pointer im Entry speichern, obwohl es gen&#252;gen w&#252;rde, ihn nur in den Hash einzurechnen). Auch der Zugangs-Funktionen, BufferMetadata::key(...) sind konsistent und korrekt strukturiert: es gibe eine einzige Funktion, mit der man &#187;aus dem Nichts&#171; einsteigen kann (und in dieser Funktion hatte ich 2024 die Reihenfolge der Qualifizierungen in ein verbindliches Schema geordnet). Au&#223;erdem gibt es ein paar weitere Funktionen, mit denen man einen bereits bestehenden Key verfeinern kann, und eine Funktion, die verwendet wird, um daraus einen Entry zu machen.
+      Seit 2024 bin ich nun mehrfach durch den Kern der Implementierung durchgegangen, und konnte keine offensichtliche L&#252;cke finden; nur ein paar lokale Inkonsistenzen, wie z.B. da&#223; wir uns den aktuellen Buffer-Pointer im Entry speichern, <strike><font color="#673636">obwohl es gen&#252;gen w&#252;rde</font></strike>, ihn nur in den Hash einzurechnen <font color="#630e69" size="2">(3/26 das war zu kurz gedacht. BufferMetadata sind die Metadaten eines Storage-Managers. Also m&#252;ssen wir <i>aber Hallo</i>&#160;dort auch den tats&#228;chlichen Pointer speichern, und die Size. Wo denn sonst?!!)</font>. Auch der Zugangs-Funktionen, BufferMetadata::key(...) sind konsistent und korrekt strukturiert: es gibe eine einzige Funktion, mit der man &#187;aus dem Nichts&#171; einsteigen kann (und in dieser Funktion hatte ich 2024 die Reihenfolge der Qualifizierungen in ein verbindliches Schema geordnet). Au&#223;erdem gibt es ein paar weitere Funktionen, mit denen man einen bereits bestehenden Key verfeinern kann, und eine Funktion, die verwendet wird, um daraus einen Entry zu machen.
     </p>
     <p>
       <b>Solange ich mich also nicht aus dem zugrundeliegenden gedanklichen Schema l&#246;se</b><i>, werde ich hier nichts Relevantes in Bewegung bringen k&#246;nnen</i>
@@ -114486,6 +114592,19 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 <arrowlink COLOR="#65343f" DESTINATION="ID_560454050" ENDARROW="Default" ENDINCLINATION="428;-25;" ID="Arrow_ID_267752890" STARTARROW="Default" STARTINCLINATION="-454;26;"/>
+</node>
+<node CREATED="1773620654297" ID="ID_1491048372" MODIFIED="1773620896713" TEXT="Aufruf-Pfad noch etwas stringenter gemacht">
+<arrowlink COLOR="#5c3fb5" DESTINATION="ID_1308293417" ENDARROW="Default" ENDINCLINATION="-48;-555;" ID="Arrow_ID_948177354" STARTARROW="None" STARTINCLINATION="1026;0;"/>
+<node BACKGROUND_COLOR="#e4dfbe" COLOR="#2b41b1" CREATED="1773620912607" HGAP="28" ID="ID_303989240" MODIFIED="1773621083885" TEXT="im Grunde ist das eine Kaskade" VSHIFT="11">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Was die Sache vor allem verwirrend macht, ist die Anordnung im Source-File. Das sind eigentlich mehrere Layer &#8212; der normale Zugangspfad tritt in der Mitte des Files ein, durch die Klasse BufferMetadata, geht dort durch die high-level und low-level-Funktionen und verwendet dann die Metadaten-Tabelle, sowie Key und Entry
+    </p>
+  </body>
+</html></richcontent>
+</node>
 </node>
 <node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1771335394173" ID="ID_1566341422" MODIFIED="1771335450534" TEXT="offene Probleme:">
 <icon BUILTIN="messagebox_warning"/>
@@ -114499,12 +114618,12 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1771184206669" ID="ID_807907887" LINK="#ID_355848157" MODIFIED="1771188172054" TEXT="hab ich eigentlich bereits 2024 getan....">
 <arrowlink COLOR="#38768e" DESTINATION="ID_92190194" ENDARROW="Default" ENDINCLINATION="-1027;35;" ID="Arrow_ID_1107601109" STARTARROW="None" STARTINCLINATION="211;14;"/>
 </node>
-<node CREATED="1771188180430" ID="ID_1525296815" MODIFIED="1771188324498" TEXT="gut ist: habe jetzt die &#xbb;alternativen&#xab; Nutzungsmuster bereits zur&#xfc;ckgebaut">
+<node CREATED="1771188180430" ID="ID_1525296815" MODIFIED="1773613009429" TEXT="gut ist: habe jetzt die &#xbb;alternativen&#xab; Nutzungsmuster bereits zur&#xfc;ckgebaut">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
     <p>
-      BuffHandle sit nun definitiv kein smart-Ptr mehr; damit f&#228;llt alles nachtr&#228;gliche &#187;andocken&#171; und &#187;verfeinern&#171; weg.....
+      BuffHandle ist nun definitiv kein smart-Ptr mehr; damit f&#228;llt alles nachtr&#228;gliche &#187;andocken&#171; und &#187;verfeinern&#171; weg.....
     </p>
   </body>
 </html></richcontent>
@@ -114882,8 +115001,32 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node CREATED="1772129891226" ID="ID_1405915409" MODIFIED="1772129902229" TEXT="&#xdc;berlegungen zum BuffeStore-API">
 <node CREATED="1772129905244" ID="ID_545569208" MODIFIED="1772129929698" TEXT="eigentlich tritt ein charakteristisches Tupel bei jeder Transition auf"/>
-<node CREATED="1772129931304" ID="ID_1142410309" MODIFIED="1772129958147" TEXT="&#x27f9; man k&#xf6;nnte den &#xbb;Slot&#xab;-Datentyp erweitern...">
+<node CREATED="1772129931304" ID="ID_1142410309" MODIFIED="1773599703401" TEXT="&#x27f9; man k&#xf6;nnte den &#xbb;Slot&#xab;-Datentyp erweitern...">
+<linktarget COLOR="#a04e3e" DESTINATION="ID_1142410309" ENDARROW="Default" ENDINCLINATION="-791;48;" ID="Arrow_ID_1325165991" SOURCE="ID_1990206387" STARTARROW="None" STARTINCLINATION="309;21;"/>
 <node CREATED="1772129959849" ID="ID_1378157373" MODIFIED="1772130000767" TEXT="(storage, size, localTag)"/>
+<node CREATED="1773601187335" ID="ID_916507010" MODIFIED="1773601229263">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      der Typ <font face="Monospaced" color="#6a4747">Buff</font>&#160;w&#228;re jetzt in buffhandle.hpp definiert
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_916507010" ENDARROW="Default" ENDINCLINATION="187;0;" ID="Arrow_ID_1685002660" SOURCE="ID_931674085" STARTARROW="None" STARTINCLINATION="11;-53;"/>
+</node>
+<node CREATED="1773601269645" ID="ID_1119705517" MODIFIED="1773601285461">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Namensvorschlag: <b>BuffAlloc</b>
+    </p>
+  </body>
+</html></richcontent>
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1773599779915" ID="ID_487073922" MODIFIED="1773599804006" TEXT="wird relevant f&#xfc;r die Verbindung mit dem OutputSlot"/>
 </node>
 </node>
 <node CREATED="1772209019999" ID="ID_903636266" MODIFIED="1772209035932" TEXT="wirft aber wieder das Problem mit den Marker-Typen auf">
@@ -114892,6 +115035,130 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1772209112564" ID="ID_250526962" MODIFIED="1772209154352" TEXT="es w&#xe4;re denkbar, die Typen lecht erweitert auf Namespace-Ebene zu ziehen"/>
 <node CREATED="1772209164996" ID="ID_691064493" MODIFIED="1772209244110" TEXT="das setzt einen zentralen Header vorraus &#x27f6; buff-handle.hpp w&#xe4;re naheliegend">
 <arrowlink COLOR="#3e92dd" DESTINATION="ID_840400814" ENDARROW="Default" ENDINCLINATION="-13;-19;" ID="Arrow_ID_625861293" STARTARROW="None" STARTINCLINATION="-106;4;"/>
+<node COLOR="#338800" CREATED="1773599758131" HGAP="28" ID="ID_931674085" MODIFIED="1773601229263" TEXT="ist jetzt dementsprechend umgebaut" VSHIFT="10">
+<arrowlink DESTINATION="ID_916507010" ENDARROW="Default" ENDINCLINATION="187;0;" ID="Arrow_ID_1685002660" STARTARROW="None" STARTINCLINATION="11;-53;"/>
+<font NAME="SansSerif" SIZE="11"/>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1773604353753" ID="ID_751533457" MODIFIED="1773604359674" TEXT="BuffAlloc einf&#xfc;hren">
+<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1773604361248" ID="ID_720105604" MODIFIED="1773604407072" TEXT="in das BufferStore-API und Implementierungen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1773604377214" ID="ID_200162330" MODIFIED="1773604392207" TEXT="mu&#xdf; die Size-Info in die Metadaten weitergeben">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1773606726737" ID="ID_1617991320" MODIFIED="1773606747708" TEXT="die BufferMetadata::markLocked() mu&#xdf; eine abweichende BufferSize speichern"/>
+<node CREATED="1773606769685" ID="ID_1643754781" MODIFIED="1773606794678" TEXT="das f&#xfc;hrt in BufferMetadata::lock(parentKey, Buff*, LocalTag,...)"/>
+<node CREATED="1773612115286" ID="ID_282545244" MODIFIED="1773612174969" TEXT="Frage: bricht das die Systematik?">
+<node CREATED="1773612180193" ID="ID_956161008" MODIFIED="1773612197124" TEXT="die nominale buffer-size ist ja in den parentKey eingerechnet"/>
+<node CREATED="1773612219933" ID="ID_1463108347" MODIFIED="1773612283946" TEXT="ein Qualifizieren des Typs per size w&#xe4;re theoretisch m&#xf6;glich / vorgesehen">
+<node CREATED="1773613319606" ID="ID_624178218" MODIFIED="1773613344348" TEXT="man k&#xf6;nnte Key::forEntry() erweitern"/>
+<node CREATED="1773613345709" ID="ID_1786189454" MODIFIED="1773613356985" TEXT="man k&#xf6;nnte auch den Entry-Konstruktor anpassen"/>
+</node>
+<node CREATED="1773612284978" ID="ID_1754903420" MODIFIED="1773612295273" TEXT="vom praktischen Ablauf aber habe ich das ausgeschlossen">
+<node CREATED="1773612469454" ID="ID_1117755719" MODIFIED="1773612491101" TEXT="wir haben jetzt nur noch einen direkten Pfad: Typ &#x27f6; BuffDescr"/>
+<node CREATED="1773613053665" ID="ID_332617296" MODIFIED="1773613149513" TEXT="Funktionalit&#xe4;t zum &#xbb;Andocken&#xab; an bestehenden Typ habe ich neulich explizit verworfen">
+<arrowlink COLOR="#6e3843" DESTINATION="ID_1977655709" ENDARROW="Default" ENDINCLINATION="74;529;" ID="Arrow_ID_1500117645" STARTARROW="None" STARTINCLINATION="497;17;"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1771184206669" ID="ID_1780490976" LINK="#ID_355848157" MODIFIED="1773613303819" TEXT="Vorsicht: es gilt ein Konsistenz-Kriterium (2024 nach Analyse aufgestellt)">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1773613361620" ID="ID_694283848" MODIFIED="1773613396507">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <u>Einsicht</u>: konkrete buffer-size darf <b>nicht</b>&#160;in den stateKey
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1773613406016" ID="ID_1036184975" MODIFIED="1773613555154" TEXT="es k&#xf6;nnte das Konsistenzkriterium aufweichen &#x27f9; double-lock m&#xf6;glich"/>
+<node CREATED="1773613416089" ID="ID_593391664" MODIFIED="1773613627917" TEXT="Szenario: ein weiterer Alloaktions-Versuch auf den gleichen Buffer, mit abweichender size">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...wenn der konkrete Size eingerechnet wird, f&#252;hrt das zu einem abweichenden StateKey, und daher wird die schon bestehende Sperre in den Metadaten nicht bemerkt (weil f&#252;r den neuen Key auch einfach ein neuer Entry erzeugt wird)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1773613635076" ID="ID_1863050688" MODIFIED="1773613650403" TEXT="Konsequenz: das ist ein zus&#xe4;tzliches Datenfeld in den Metadaten"/>
+<node CREATED="1773616741024" ID="ID_1266121816" MODIFIED="1773616777395" TEXT="allerdings sollte das keine redundante Storage sein &#x27f9; also das Feld im Key(Basis) nutzen"/>
+</node>
+</node>
+<node CREATED="1773620718648" ID="ID_1308293417" MODIFIED="1773620896713" TEXT="Struktur der BufferMetadata nochmal kl&#xe4;ren und Validieren">
+<linktarget COLOR="#5c3fb5" DESTINATION="ID_1308293417" ENDARROW="Default" ENDINCLINATION="-48;-555;" ID="Arrow_ID_948177354" SOURCE="ID_1491048372" STARTARROW="None" STARTINCLINATION="1026;0;"/>
+<node CREATED="1773621103140" ID="ID_18529012" MODIFIED="1773621105927" TEXT="Einsichten">
+<node CREATED="1773621106819" ID="ID_1944288889" MODIFIED="1773621199192" TEXT="der Einstiegspunkt ist in der Mitte des Quellcodes. Das verwirrt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Wenn man oben zu lesen anf&#228;ngt, kommen erst die Grund-Bausteine. Soweit logisch. Doch dann kommt man zu BufferMetadata, und das f&#228;ngt mit den public-high-level-Funktionen an, und steigt in die eigene Implementierung ab. Das deutet darauf hin, da&#223; man den Quellcode ggfs. mal in zwei Layer zerlegen sollte....
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1773621210173" ID="ID_356259881" MODIFIED="1773621229735" TEXT="es gibt Type-Handling und State-Handling">
+<node CREATED="1773621232042" ID="ID_299333392" MODIFIED="1773621239838" TEXT="das ist aber nicht klar im API getrennt"/>
+<node CREATED="1773621241290" ID="ID_476319724" MODIFIED="1773621262490" TEXT="vielmehr gilt die Regel: kein Buffer &#x27f9; es geht um Typen"/>
+</node>
+<node CREATED="1773621285532" ID="ID_691862963" MODIFIED="1773621403180" TEXT="strukturelle Doppelung / Parallelle zwischen Key/Hash und den Metadata::key()-Funktionen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...auch das deutet auf zwei Code-Layer hin; nachdem ich nun etliche male aufger&#228;umt habe, sieht man deutlich eine prallel-Struktur
+    </p>
+    <ul>
+      <li>
+        die Key-Konstruktoren erzeugen ein in-sich konsitente Typ-Repr&#228;sentation
+      </li>
+      <li>
+        die entsprechenden BufferMetadata::key()-Funktionen speichern und verwalten diese Typen persistent
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1773621485479" ID="ID_337894220" MODIFIED="1773621527920">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <font face="Monospaced" color="#612323">BufferMetadate::lock()</font>&#160;&#160;&#10235; das ist die low-level worker-Function
+    </p>
+  </body>
+</html></richcontent>
+<node COLOR="#5b280f" CREATED="1773621547320" ID="ID_448637141" MODIFIED="1773621554773" TEXT="die k&#xf6;nnte sogar private sein">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1773621561055" ID="ID_312140215" MODIFIED="1773621572553" TEXT="nein: dann g&#xe4;be es kein re-Locking"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1773621576404" ID="ID_1609614934" MODIFIED="1773621600211" TEXT="(allerdings wird dieses Feature derzeit nicht verwendet)">
+<font NAME="SansSerif" SIZE="11"/>
+<icon BUILTIN="bell"/>
+</node>
+<node BACKGROUND_COLOR="#fec499" COLOR="#cb0b50" CREATED="1773621726683" ID="ID_526151796" MODIFIED="1773621770302" TEXT="ungekl&#xe4;rt: ist das notwendig? kann das passieren?">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1773621841418" ID="ID_1292818494" MODIFIED="1773621860523" TEXT="von markLocked() kommend setzen wir onlyNew &#x2254; true"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1773621875203" ID="ID_1034512279" MODIFIED="1773621897458" TEXT="das funktioniert nur in unserem Test-Setup, wo wir nie einen buffer wiederverwenden">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1773621904288" ID="ID_712968134" MODIFIED="1773624101097" TEXT="tats&#xe4;chlich wird regelm&#xe4;&#xdf;ig vorkommen exakt die gleiche Adresse wiederzuverwenden">
+<icon BUILTIN="clanbomber"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1773621537410" ID="ID_383386793" MODIFIED="1773621721313" TEXT="im Code ganz nach unten schieben (und im Kommentar kennzeichnen)">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -116535,7 +116802,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 <linktarget COLOR="#86858e" DESTINATION="ID_373327393" ENDARROW="Default" ENDINCLINATION="-28;-43;" ID="Arrow_ID_1002798807" SOURCE="ID_502402565" STARTARROW="None" STARTINCLINATION="47;11;"/>
 </node>
-<node CREATED="1772129084894" ID="ID_598702937" MODIFIED="1772129147835" TEXT="jeweils bereitgestellt Daten">
+<node CREATED="1772129084894" ID="ID_598702937" MODIFIED="1772129147835" TEXT="jeweils bereitgestellte Daten">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -116790,6 +117057,20 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node CREATED="1770947390336" ID="ID_1722157621" MODIFIED="1770947419160" TEXT="das wird von der Allokation erzeugt..."/>
 <node CREATED="1770947399557" ID="ID_1598745754" MODIFIED="1770947411455" TEXT="und der de-Allokation wieder angeliefert"/>
+<node CREATED="1773599289290" ID="ID_1990206387" MODIFIED="1773599703401" TEXT="k&#xf6;nnte man noch verallgemeinern ....?">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <u>Anmerkung 1 Monat sp&#228;ter</u>: diese M&#246;glichkeit war mir damals schon nebenbei aufgefallen, allerdings nur getrieben vom Bestreben, die API-Funktionen besser in eine Zeile packen zu k&#246;nnen. Weshalb ich die Idee erst mal als &#187;Spinnerei&#171; abgetan habe. Dann aber, im Zusammenhang mit dem&#160;<font face="Monospaced" color="#815555">OutputSlot</font>&#160;stellte sich erneut das Problem, da&#223; man hier Zustands&#252;berg&#228;nge &#252;ber ein API &#187;durchreichen&#171; mu&#223;.
+    </p>
+    <p>
+      Konkret ist ja nun die Anforderung, da&#223; wir den <font face="Monospaced" color="#815555">OutputSlot</font>&#160; komplett hinter&#160;einem&#160; <font face="Monospaced" color="#815555">BuffHandle</font>&#160;verbergen m&#252;ssen, da die &#252;berarbeitete Implementierung der Render-Engine nur mit BuffHandles (und Deskriptoren) umgehen kann (das war eine Entscheidung auf<i>&#160; theoretischer Basis,</i>&#160;denn alle notwendigen Operationen lassen sich so darstellen). Damit w&#228;re es dann vielleicht doch sinnvoll, die latent vorhandene Symmetrie in diesem Implementierungs-API st&#228;rker herauszuheben?
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#a04e3e" DESTINATION="ID_1142410309" ENDARROW="Default" ENDINCLINATION="-791;48;" ID="Arrow_ID_1325165991" STARTARROW="None" STARTINCLINATION="309;21;"/>
+</node>
 </node>
 </node>
 <node CREATED="1770950337384" ID="ID_853313306" MODIFIED="1770950365227" TEXT="Vorgriff auf das Stage-API">
@@ -137000,7 +137281,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 <arrowlink COLOR="#2b6b92" DESTINATION="ID_84082154" ENDARROW="Default" ENDINCLINATION="-422;17;" ID="Arrow_ID_598368066" STARTARROW="None" STARTINCLINATION="2691;151;"/>
 </node>
-<node CREATED="1771181396918" ID="ID_54983367" LINK="https://git.lumiera.org/gitweb?p=LUMIERA;a=shortlog;h=9a23aa773b93b0be8a3d85437f5f267d405bd87c" MODIFIED="1771184024039" TEXT="2024 : &#xdc;berpr&#xfc;fung und Nachsch&#xe4;rfung der Konsistenz (&#x27f9; LocalTag verallgemeinert)">
+<node CREATED="1771181396918" ID="ID_54983367" LINK="https://git.lumiera.org/gitweb?p=LUMIERA;a=shortlog;h=9a23aa773b93b0be8a3d85437f5f267d405bd87c" MODIFIED="1773624272180" TEXT="2024 : &#xdc;berpr&#xfc;fung und Nachsch&#xe4;rfung der Konsistenz (&#x27f9; LocalTag verallgemeinert)">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -137581,13 +137862,37 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1773423115479" ID="ID_1275456830" MODIFIED="1773423123305" TEXT="Probleme / H&#xfc;rden">
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1773423124811" ID="ID_1029911055" MODIFIED="1773423172313" TEXT="die Deallokation soll automatisch sein!">
 <icon BUILTIN="yes"/>
+<node COLOR="#5b280f" CREATED="1773512654297" ID="ID_1638173657" MODIFIED="1773512694248" TEXT="eine explizite disconnect() - Operation ist nicht m&#xf6;glich">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1773512696096" ID="ID_1294019243" MODIFIED="1773512707442" TEXT="theoretisch schon ...">
+<node CREATED="1773512708976" ID="ID_1096604252" MODIFIED="1773512720076" TEXT="aber dann k&#xf6;nnen wir entweder nur blocken"/>
+<node CREATED="1773512720823" ID="ID_1538018712" MODIFIED="1773512731969" TEXT="oder eine Exception werfen wenn noch Feeds offen sind"/>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1773512767242" ID="ID_1237732879" MODIFIED="1773514865542" TEXT="YAGNI">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1773512779151" ID="ID_568357874" MODIFIED="1773512795800" TEXT="k&#xf6;nnen haben wir ned d&#xfc;rfen"/>
+<node CREATED="1773513107884" ID="ID_1364886076" MODIFIED="1773514856470" TEXT="beim Emergency-Shutdown sollte man sich auf das Wesentliche konzentrieren">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Hier gibt es einen inh&#228;renten Widerspruch, der auf eine grundlegende Entscheidung zur&#252;ckgeht: wir wollen n&#228;mlich bewu&#223;t nicht 100%ig den Shutdown durchdringen und im Besonderen keine Unterbrechungs-Mechanismen implementieren. Daher <i>kann man dieses Problem eigentlich nicht richtig l&#246;sen.</i>&#160;Dementsprechend geht es hier um eine Heuristik: man mu&#223; zusehen, da&#223; noch laufende Prozesse m&#246;glichst keinen Schaden mehr anrichten k&#246;nnen
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#bb425b" DESTINATION="ID_1655743884" ENDARROW="Default" ENDINCLINATION="-1792;163;" ID="Arrow_ID_1087146872" STARTARROW="None" STARTINCLINATION="856;31;"/>
+</node>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1773423131415" ID="ID_1566753229" MODIFIED="1773423147739" TEXT="wer mu&#xdf; wen konkret getypt sehen?">
 <icon BUILTIN="help"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1773456815562" ID="ID_1123444875" MODIFIED="1773456858777" TEXT="TODO: Doku">
-<icon BUILTIN="bell"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1773456815562" ID="ID_1123444875" MODIFIED="1773589752521" TEXT="Doku">
+<arrowlink COLOR="#7e454b" DESTINATION="ID_1937537099" ENDARROW="Default" ENDINCLINATION="1647;-115;" ID="Arrow_ID_1049807970" STARTARROW="None" STARTINCLINATION="-377;112;"/>
+<icon BUILTIN="pencil"/>
 <node CREATED="1773456831048" ID="ID_351332396" MODIFIED="1773456833387" TEXT="uml/fig151685.png">
 <node CREATED="1773456834663" ID="ID_1714537462" MODIFIED="1773456841682" TEXT="noch mit Bouml erstellt"/>
 <node CREATED="1773456842838" ID="ID_1474443195" MODIFIED="1773456850787" TEXT="mu&#xdf; das sinngem&#xe4;&#xdf; mit Umbrello nachbauen"/>
@@ -137600,16 +137905,13 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1773526150799" ID="ID_1281871727" LINK="#ID_55211550" MODIFIED="1773526231110">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       es ist 1 <font size="5" color="#c7121c">KATASTROFE</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="smiley-angry"/>
 </node>
 </node>
@@ -158527,6 +158829,7 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
 <icon BUILTIN="pencil"/>
 <node CREATED="1702416367474" ID="ID_954748325" LINK="file:///Lager/heim/devel/lumi/wiki/renderengine.html#PlaybackVerticalSlice%20RenderEngine%20Scheduler%20SchedulerWorker%20SchedulerMemory%20RenderActivity%20Player%20FrameDispatcher%20JobPlanningPipeline%20PlayProcess%20Rendering%20ProcNode%20NodeOperationProtocol" MODIFIED="1702416400953" TEXT="Permalink-1"/>
 <node CREATED="1713825795423" ID="ID_1279363046" LINK="file:///Lager/heim/devel/lumi/wiki/renderengine.html#PlaybackVerticalSlice%20RenderEngine%20ProcNode%20RenderProcess%20NodeOperationProtocol%20RenderMechanics%20RenderImplDetails%20WiringDescriptor%20BufferTable%20BufferProvider%20BuffHandle%20BufferMetadata%20OutputManagement%20OutputSlot" MODIFIED="1713825800705" TEXT="Permalink-2"/>
+<node CREATED="1773589625457" ID="ID_294217806" LINK="file:///Lager/heim/devel/lumi/wiki/renderengine.html#PlaybackVerticalSlice%20RenderEngine%20Player%20FrameDispatcher%20JobPlanningPipeline%20PlayProcess%20OutputManagement%20OutputSlot%20OutputSlotDesign%20OutputSlotImpl%20Rendering%20BufferManagement%20BufferMetadata%20BufferProvider%20BuffHandle%20ProcNode%20NodePort%20NodeFeedManifold%20RenderParamHandling%20NodeOperationProtocol%20RenderMechanics%20RenderImplDetails" MODIFIED="1773589632245" TEXT="Permalink3"/>
 <node COLOR="#338800" CREATED="1702416739656" ID="ID_768711282" MODIFIED="1713568867103" TEXT="Scheduler">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1702416780922" ID="ID_1005887393" MODIFIED="1713568864194" TEXT="RenderActivity">
@@ -158631,7 +158934,22 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
 <node CREATED="1713825295268" ID="ID_1163491513" MODIFIED="1713825296320" TEXT="BuffHandle"/>
 <node CREATED="1713825314633" ID="ID_896282050" MODIFIED="1713825315510" TEXT="BufferMetadata"/>
 <node CREATED="1713825372517" ID="ID_483066313" MODIFIED="1713825375024" TEXT="OutputManager"/>
-<node CREATED="1713825375559" ID="ID_1937537099" MODIFIED="1713825378379" TEXT="OutputSlot"/>
+<node CREATED="1713825375559" ID="ID_1937537099" MODIFIED="1773589824387" TEXT="OutputSlot">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <ul>
+      <li>
+        UML &#252;berarbeitet und aktualisiert
+      </li>
+      <li>
+        Text durchgegangen und die wenigen relevanten &#196;nderungen eingearbeitet
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#7e454b" DESTINATION="ID_1937537099" ENDARROW="Default" ENDINCLINATION="1647;-115;" ID="Arrow_ID_1049807970" SOURCE="ID_1123444875" STARTARROW="None" STARTINCLINATION="-377;112;"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1719243014832" ID="ID_1997352135" MODIFIED="1719243053242" TEXT="alles komplett &#xfc;berarbeiten">
 <icon BUILTIN="yes"/>
@@ -167743,9 +168061,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1773508692618" HGAP="41" ID="ID_529911842" MODIFIED="1773510121795" TEXT="Umbrello" VSHIFT="5">
 <node CREATED="1773508699938" ID="ID_652580034" MODIFIED="1773509983304" TEXT="aus dem KDE Software Development Kit">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       <i>ja leider</i>&#160;... deshalb mu&#223; man nun den halben KDE installieren
@@ -167775,16 +168091,13 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 <node CREATED="1773526314914" ID="ID_1724000694" MODIFIED="1773526385357" TEXT="automatisches Layout l&#xe4;uft Amok">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       es verschiebt Assoziationen und sogar benachbarte Klassen, oft in komplett irrsinniger Weise
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1773526420281" ID="ID_717493788" MODIFIED="1773526495811" TEXT="Rundungsfehler und Inkonsistenzen im Snap-to">
 <arrowlink COLOR="#c9152a" DESTINATION="ID_860540973" ENDARROW="Default" ENDINCLINATION="-2;-35;" ID="Arrow_ID_1766687506" STARTARROW="None" STARTINCLINATION="64;3;"/>
@@ -167808,41 +168121,32 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1773531074325" ID="ID_758283834" MODIFIED="1773531087087" TEXT="Layout erst grob legen, dann systematisch von Objekt zu Objekt gehen"/>
 <node CREATED="1773531089179" ID="ID_1226770282" MODIFIED="1773531184611" TEXT="Beziehungs-Linien kann man editieren, nachdem man einmal &quot;add point&quot; gemacht hat">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...dann wandelt sich der Typ auch in Multiline; danach sollte man zun&#228;chst die inneren Punkte platzieren, erst zuletzt den Start/Endpunkt. Vorsicht, sobald man eines der verbundenen Objekte weiter editiert oder skaliert, greift wieder das automatische Layout ein
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1773531186795" ID="ID_87265001" MODIFIED="1773531288969">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       als <b>SVG</b>&#160;exportieren und im Inkscape reparieren
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1773531211611" ID="ID_1261329208" MODIFIED="1773531235461" TEXT="Rundungsfehler auf der DPI-Zahl">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       das ist besonders &#228;rgerlich, denn das f&#252;hrt zu unscharfen Linien
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1773531239072" ID="ID_636064275" MODIFIED="1773531254153" TEXT="Padding auf der Seite einbauen"/>
 <node CREATED="1773531255165" ID="ID_1102039599" MODIFIED="1773531266582" TEXT="Seitenhintergrund: Wei&#xdf;es Rechteck dahinter legen"/>
@@ -170698,7 +171002,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 </node>
 </node>
-<node CREATED="1664630921300" FOLDED="true" HGAP="183" ID="ID_1033335255" MODIFIED="1772477229919" TEXT="Dokumentation" VSHIFT="40">
+<node CREATED="1664630921300" FOLDED="true" HGAP="183" ID="ID_1033335255" MODIFIED="1773679545883" TEXT="Dokumentation" VSHIFT="40">
 <edge COLOR="#815b70"/>
 <cloud COLOR="#d7c3a8"/>
 <font NAME="SansSerif" SIZE="12"/>
@@ -175567,7 +175871,7 @@ that situation will improve in forseeable future.</pre>
 <node CREATED="1765904221705" ID="ID_168400791" MODIFIED="1765904240857" TEXT="Projektorganisation">
 <node CREATED="1765904243219" ID="ID_762435721" MODIFIED="1765904327595" TEXT="Ticket-System"/>
 </node>
-<node CREATED="1756651585768" FOLDED="true" ID="ID_1780831155" MODIFIED="1770407261033" TEXT="Website / Infrastruktur">
+<node CREATED="1756651585768" FOLDED="true" ID="ID_1780831155" MODIFIED="1773679549551" TEXT="Website / Infrastruktur">
 <icon BUILTIN="go"/>
 <node BACKGROUND_COLOR="#d4bcb8" COLOR="#435e98" CREATED="1768412090280" FOLDED="true" ID="ID_1149298290" MODIFIED="1769124560527" TEXT="Situation(allgemein)">
 <icon BUILTIN="info"/>
@@ -177533,7 +177837,7 @@ that situation will improve in forseeable future.</pre>
 </node>
 </node>
 </node>
-<node CREATED="1768443086627" FOLDED="true" ID="ID_654151542" MODIFIED="1769124555404" TEXT="Wartung">
+<node CREATED="1768443086627" FOLDED="true" ID="ID_654151542" MODIFIED="1773679561699" TEXT="Wartung">
 <icon BUILTIN="go"/>
 <node COLOR="#338800" CREATED="1768443017812" ID="ID_438074594" MODIFIED="1769124508929" TEXT="Reste der Systemkonfig vor SystemD : ausputzen">
 <arrowlink COLOR="#9d0c3d" DESTINATION="ID_1709626807" ENDARROW="Default" ENDINCLINATION="-522;-32;" ID="Arrow_ID_725735368" STARTARROW="None" STARTINCLINATION="-305;17;"/>
@@ -177543,6 +177847,26 @@ that situation will improve in forseeable future.</pre>
 </node>
 <node COLOR="#574398" CREATED="1769124516016" ID="ID_323622988" MODIFIED="1769124538955" TEXT="alle init.d-Jobs gepr&#xfc;ft und deaktiviert"/>
 <node COLOR="#574398" CREATED="1769124526446" ID="ID_693128180" MODIFIED="1769124538955" TEXT="alle Crontabs ausger&#xe4;umt"/>
+</node>
+<node CREATED="1773679572089" ID="ID_1217832793" MODIFIED="1773679581048" TEXT="HTTPS / LetsEncrypt">
+<node CREATED="1773679585982" ID="ID_678642035" MODIFIED="1773679612530" TEXT="bestehende Konfig stammt von 2017/18"/>
+<node CREATED="1773679613366" ID="ID_7959271" MODIFIED="1773679627227" TEXT="basierte auf Cronjobs + dem &apos;webroot&apos; challenge"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1773679628853" ID="ID_774488210" MODIFIED="1773679656258" TEXT="hab ich Anfang 2026 durch mein Webserver clean-up gebrochen">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1773679657728" ID="ID_1261320073" MODIFIED="1773679674998" TEXT="2026-03-16 : Zetrifikat abgelaufen">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1773679686009" ID="ID_1944607181" MODIFIED="1773679773310" TEXT="Setup modernisiert: nun Apache-Plugin &#x2014; als SystemD-Unit"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1773679731918" ID="ID_1192172590" MODIFIED="1773679755706" TEXT="Vorraussetzung: alle Domains im Zertifikat m&#xfc;ssen per HTTP erreichbar sein">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1773679811912" ID="ID_386132656" MODIFIED="1773679822117" TEXT="checks">
+<icon BUILTIN="idea"/>
+<node CREATED="1773679831704" ID="ID_1817279546" MODIFIED="1773679832676" TEXT="certbot certificates"/>
+<node CREATED="1773679850524" ID="ID_1832734286" MODIFIED="1773679856502" TEXT="systemctl status certbot"/>
+<node CREATED="1773679852797" ID="ID_465332378" MODIFIED="1773679853882" TEXT="systemctl status certbot.timer"/>
+</node>
+</node>
 </node>
 </node>
 </node>

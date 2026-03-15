@@ -138,6 +138,11 @@ namespace mem  {
     class Key;
   }
   
+  /** Information to represent an actual buffer allocation.
+   * @remark LocalTag can be used by the storage-impl. */
+  using BuffAlloc = std::tuple<Buff*,size_t,LocalTag>;
+  
+  
   
   LUMIERA_ERROR_DECLARE (BUFFER_MANAGEMENT); ///< Problem providing working buffers
   
@@ -220,10 +225,10 @@ namespace mem  {
         public:
           virtual ~BufferStore() { } ///< this is an interface
           
-          virtual uint prepareBuffers (uint cnt, size_t,HashVal typeID) =0;
-          virtual Slot provideBuffer (size_t,HashVal typeID, LocalTag)  =0;
-          virtual void mark_emitted (size_t,HashVal, LocalTag const&)   =0;
-          virtual void detachBuffer (size_t,HashVal, Slot alloc)        =0;
+          virtual uint prepareBuffers (HashVal typeID, uint cnt, size_t) =0;
+          virtual BuffAlloc provideBuffer (HashVal typeID, size_t, LocalTag)  =0;
+          virtual void mark_emitted (HashVal typeID, BuffAlloc)   =0;
+          virtual void detachBuffer (HashVal typeID, BuffAlloc)        =0;
         };
       
       unique_ptr<BufferStage> bufferStage_;

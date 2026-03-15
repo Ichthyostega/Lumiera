@@ -324,7 +324,7 @@ namespace test  {
           metadata::Key key = meta_->key(SIZE_A);
           CHECK (NIL == meta_->get(key).state());
           CHECK (meta_->get(key).isTypeKey());
-          CHECK (!meta_->isLocked(key));
+          CHECK (not meta_->isLocked(key));
           
           VERIFY_ERROR (LIFECYCLE, meta_->get(key).mark(LOCKED) );
           VERIFY_ERROR (LIFECYCLE, meta_->get(key).mark(EMITTED));
@@ -335,7 +335,7 @@ namespace test  {
           // now build a concrete buffer entry
           metadata::Entry& entry = meta_->markLocked(key, SOME_POINTER);
           CHECK (LOCKED == entry.state());
-          CHECK (!entry.isTypeKey());
+          CHECK (not entry.isTypeKey());
           
           CHECK (SOME_POINTER == entry.access());
           
@@ -353,8 +353,8 @@ namespace test  {
           
           entry.mark (FREE);
           CHECK (FREE == entry.state());
-          CHECK (!entry.isLocked());
-          CHECK (!entry.isTypeKey());
+          CHECK (not entry.isLocked());
+          CHECK (not entry.isTypeKey());
           
           VERIFY_ERROR (LIFECYCLE, entry.access() );
           VERIFY_ERROR (FATAL, entry.mark(LOCKED) );
@@ -381,7 +381,7 @@ namespace test  {
           CHECK (SOME_OTHER_LOCATION == entry.access());
           
           entry.mark (FREE);
-          CHECK (!entry.isLocked());
+          CHECK (not entry.isLocked());
           VERIFY_ERROR (LIFECYCLE, entry.access() );
           
           meta_->lock(key, SOME_POINTER);
@@ -399,8 +399,8 @@ namespace test  {
           
           entry.mark (FREE);
           meta_->release(entry);
-          CHECK (!meta_->isKnown(entry));
-          CHECK ( meta_->isKnown(key));
+          CHECK (not meta_->isKnown(entry));
+          CHECK (    meta_->isKnown(key));
         }
     };
   

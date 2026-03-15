@@ -281,26 +281,27 @@ namespace mem   {
   /* ==== Implementation of the BufferProvider interface ==== */
   
   uint
-  HeapMemBufferStore::prepareBuffers (uint numBuffers, size_t buffSiz, HashVal typeID)
+  HeapMemBufferStore::prepareBuffers (HashVal typeID, uint numBuffers, size_t buffSiz)
   {
     BlockPool& responsiblePool = getBlockPoolFor (buffSiz, typeID);
     return responsiblePool.prepare_for (numBuffers);
   }
 
   
-  BufferProviderSetup::Store::Slot
-  HeapMemBufferStore::provideBuffer (size_t buffSiz, HashVal typeID, LocalTag)
+  BuffAlloc
+  HeapMemBufferStore::provideBuffer (HashVal typeID, size_t buffSiz, LocalTag)
   {
     BlockPool& blocks = getBlockPoolFor (buffSiz, typeID);
     Block& newBlock = blocks.createBlock();
     LocalTag specifics{&newBlock}; // used by this implementation to find the storage to release later
-    return std::make_tuple (asBuffer(newBlock.accessMemory()), specifics);
+    return std::make_tuple (asBuffer(newBlock.accessMemory()), buffSiz, specifics);
   }
   
   
   void
-  HeapMemBufferStore::mark_emitted (size_t buffSiz, HashVal typeID, LocalTag const& specifics)
+  HeapMemBufferStore::mark_emitted (HashVal typeID, BuffAlloc storageSlot)
   {
+    auto& [_,buffSiz,specifics] = storageSlot;
     Block* block4buffer = locateBlock (buffSiz, typeID, specifics);
     if (!block4buffer)
       throw err::Logic ("Attempt to emit a buffer not known to this BufferProvider"
@@ -320,9 +321,9 @@ namespace mem   {
   
   /** mark a buffer as officially discarded */
   void
-  HeapMemBufferStore::detachBuffer (size_t buffSiz, HashVal typeID, Slot alloc)
+  HeapMemBufferStore::detachBuffer (HashVal typeID, BuffAlloc storageSlot)
   {
-    auto& [storage, specifics] = alloc;
+    auto& [storage,buffSiz,specifics] = storageSlot;
     Block* block4buffer = locateBlock (buffSiz, typeID, specifics);
     REQUIRE (block4buffer, "releasing a buffer not allocated through this provider");
     REQUIRE (util::isSameAdr (storage, block4buffer->accessMemory()));

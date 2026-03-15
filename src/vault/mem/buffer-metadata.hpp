@@ -643,57 +643,6 @@ namespace mem {
                          : markLocked (parentKey,concreteBuffer,specifics);
         }
       
-      /** core operation to access or create a concrete buffer metadata entry.
-       *  The hashID of the entry in question is built, based on the parentKey,
-       *  which denotes a buffer type, optionally a implementation defined LocalTag,
-       *  and the concrete buffer address. If yet unknown, a new concrete buffer
-       *  metadata Entry is created and initialised to LOCKED state. Otherwise
-       *  just the existing Entry is fetched and locked.
-       * @note  this function really \em activates the buffer.
-       *        In case the type (Key) involves a TypeHandler (functor),
-       *        its constructor function will be invoked, if actually a new
-       *        entry gets created. Typically this mechanism will be used
-       *        to placement-create an object into the buffer.
-       * @param parentKey a key describing the _type_ of the buffer
-       * @param concreteBuffer storage pointer, must not be NULL
-       * @param specifics an implementation defined tag
-       * @param onlyNew disallow fetching an existing entry
-       * @throw error::Logic when #onlyNew is set, but an equivalent entry
-       *        was registered previously. This indicates a serious error
-       *        in buffer lifecycle management.
-       * @throw error::Invalid when invoked with NULL buffer. Use the #key
-       *        functions instead to register and track type keys.
-       * @return reference to the entry stored in the metadata table.
-       * @warning the exposed reference might become invalid when the
-       *        buffer is released or re-used later.
-       */
-      Entry&
-      lock (Key const& parentKey
-           ,Buff* concreteBuffer
-           ,LocalTag const& specifics =LocalTag::UNKNOWN
-           ,bool onlyNew =false)
-        {
-          if (!concreteBuffer)
-            throw err::Invalid{"Attempt to lock a slot for a NULL buffer"
-                              , LERR_(BOTTOM_VALUE)};
-          
-          Entry newEntry{parentKey, concreteBuffer, specifics};
-          Entry* existing = table_.fetch (newEntry);
-          
-          if (existing and onlyNew)
-            throw err::Logic{"Attempt to lock a slot for a new buffer, "
-                             "while actually the old buffer is still locked"
-                            , LERR_(LIFECYCLE)};
-          if (existing and existing->isLocked())
-            throw err::Logic{"Attempt to re-lock a buffer still in use"
-                            , LERR_(LIFECYCLE)};
-          
-          if (not existing)
-            return store_as_locked (newEntry); // actual creation
-          else
-            return existing->lock (concreteBuffer);
-        }
-      
       /** access the metadata record registered with the given hash key.
        *  This might be a pseudo entry in case of a Key describing a buffer type.
        *  Otherwise, the entry associated with a concrete buffer pointer is returned
@@ -782,6 +731,58 @@ namespace mem {
         }
       
       
+      /** Core low-level operation to access or create a buffer metadata entry.
+       *  The hashID of the entry in question is built, based on the parentKey,
+       *  which designates a buffer type, optionally an implementation defined
+       *  LocalTag, together with the concrete buffer address and storage size.
+       *  If yet unknown, a new concrete buffer metadata Entry is created and
+       *  initialised immediately to LOCKED state. Otherwise just the matching
+       *  Entry found in the metadata registry is fetched and locked.
+       * @note  This function does the actual work to _activate_ the buffer.
+       *        In case the type (Key) involves a TypeHandler (functor),
+       *        its constructor function will be invoked, if actually a new
+       *        entry gets created. Typically this mechanism will be used
+       *        to placement-create an object into the buffer.
+       * @param parentKey a key describing the _type_ of the buffer
+       * @param concreteBuffer storage pointer, must not be NULL
+       * @param specifics an implementation defined tag
+       * @param onlyNew disallow fetching an existing entry
+       * @throw error::Logic when #onlyNew is set, but an equivalent entry
+       *        was registered previously. This indicates a serious error
+       *        in buffer lifecycle management.
+       * @throw error::Invalid when invoked with NULL buffer. Use the #key
+       *        functions instead to register and track type keys.
+       * @return reference to the entry stored in the metadata table.
+       * @warning the exposed reference might become invalid when the
+       *        buffer is released or re-used later.
+       */
+      Entry&
+      lock (Key const& parentKey
+           ,Buff* concreteBuffer
+           ,LocalTag const& specifics =LocalTag::UNKNOWN
+           ,bool onlyNew =false)
+        {
+          if (!concreteBuffer)
+            throw err::Invalid{"Attempt to lock a slot for a NULL buffer"
+                              , LERR_(BOTTOM_VALUE)};
+          
+          Entry newEntry{parentKey, concreteBuffer, specifics};
+          Entry* existing = table_.fetch (newEntry);
+          
+          if (existing and onlyNew)
+            throw err::Logic{"Attempt to lock a slot for a new buffer, "
+                             "while actually the old buffer is still locked"
+                            , LERR_(LIFECYCLE)};
+          if (existing and existing->isLocked())
+            throw err::Logic{"Attempt to re-lock a buffer still in use"
+                            , LERR_(LIFECYCLE)};
+          
+          if (not existing)
+            return store_as_locked (newEntry); // actual creation
+          else
+            return existing->lock (concreteBuffer);
+        }
+      
       
     private:
       
@@ -802,6 +803,7 @@ namespace mem {
         }
       
       /** store a fully populated entry immediately starting with locked state
+       * @return a persisted copy that will be used to track the state henceforth.
        * @remark the (optional) constructor function for a type embedded into the
        *         buffer is invoked when a _persistent_ entry transitions to _locked_ state;
        *         since a new buffer created with storage location is already marked as _locked,_

@@ -76,28 +76,28 @@ namespace mem  {
             }
           
           uint
-          prepareBuffers (uint,size_t,HashVal)  override
+          prepareBuffers (HashVal,uint,size_t)  override
             {
               WARN (engine, "Announce invoked on a Proxy Buffer Provider; "
                             "Implies misuse as generic BufferProvider");
               return 1;
             }
           
-          Slot
-          provideBuffer (size_t,HashVal, LocalTag targetMarker)  override
+          BuffAlloc
+          provideBuffer (HashVal,size_t siz,LocalTag targetMarker)  override
             {
               CONF::on_lock();
-              return {asBuffer(targetMarker), targetMarker};
+              return {asBuffer(targetMarker), siz, targetMarker};
             }
           
           void
-          mark_emitted (size_t,HashVal, LocalTag const&)  override
+          mark_emitted (HashVal, BuffAlloc storageSlot)  override
             {
               CONF::on_emit();
             }
           
           void
-          detachBuffer (size_t,HashVal,Slot)  override
+          detachBuffer (HashVal, BuffAlloc storageSlot)  override
             {
               CONF::on_release();
             }
