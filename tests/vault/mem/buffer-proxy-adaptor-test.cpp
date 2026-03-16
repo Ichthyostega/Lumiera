@@ -1,5 +1,5 @@
 /*
-  OutputProxyProvider(Test)  -  verify accessing an output sink via BufferProvider protocol
+  BufferProxyAdaptor(Test)  -  verify accessing an output sink via BufferProvider protocol
 
    Copyright (C)
      2024,            Hermann Vosseler <Ichthyostega@web.de>
@@ -11,8 +11,8 @@
 
 * *****************************************************************/
 
-/** @file output-proxy-provider-test.cpp 
- ** unit test \ref OutputProxyProvider_test
+/** @file buffer-proxy-adaptorr-test.cpp
+ ** unit test \ref BufferProxyAdaptor_test
  */
 
 
@@ -37,12 +37,16 @@ namespace test  {
   
   
   /***************************************************************//**
-   * @test verify the design of OutputSlot and BufferProvider by
-   *       implementing a delegating BufferProvider to expose
-   *       output data buffers provided from _some implementation._
-   * @todo 2/2026 now using this setup for prototyping        /////////////////////////////////////////////////TICKET #1415 : explore this design idea through prototyping
+   * @test demonstrate a configuration of the BufferProvider implementation,
+   *       rigged such that a pre-existing given buffer (address) can be
+   *       passed through and exposed as BuffHandle.
+   * @remark while this looks like a rather convoluted implementation setup,
+   *       this feature is crucial to make the »Output Slot Protocol«
+   *       mesh up well ([1415]) with the »Buffer Provider Protocol«,
+   *       used internally within the Render Engine
+   * [1415]: https://issues.lumiera.org/ticket/1415]
    */
-  class OutputProxyProvider_test : public Test
+  class BufferProxyAdaptor_test : public Test
     {
       virtual void
       run (Arg)
@@ -51,9 +55,9 @@ namespace test  {
           
           // setup with notification callback
           BufferProxyAdaptor proxPro{PropBuilder()
-                                      .define (PROP_FIELD(on_lock),   [&]{ state = LOCKED; })
-                                      .define (PROP_FIELD(on_emit),   [&]{ state = EMITTED;})
-                                      .define (PROP_FIELD(on_release),[&]{ state = FREE;   })
+                                      .define (PROP_FIELD(on_lock),   [&](BuffAlloc){ state = LOCKED; })
+                                      .define (PROP_FIELD(on_emit),   [&](BuffAlloc){ state = EMITTED;})
+                                      .define (PROP_FIELD(on_release),[&](BuffAlloc){ state = FREE;   })
                                     };
           
           // Assuming some data block is »given«
@@ -90,7 +94,7 @@ namespace test  {
   
   
   /** Register this test class... */
-  LAUNCHER (OutputProxyProvider_test, "unit play");
+  LAUNCHER (BufferProxyAdaptor_test, "unit play");
   
   
   

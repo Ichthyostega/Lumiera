@@ -115054,7 +115054,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node COLOR="#338800" CREATED="1773604361248" ID="ID_720105604" MODIFIED="1773604407072" TEXT="in das BufferStore-API und Implementierungen">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1773604377214" FOLDED="true" ID="ID_200162330" MODIFIED="1773700514964" TEXT="mu&#xdf; die Size-Info in die Metadaten weitergeben">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1773604377214" ID="ID_200162330" MODIFIED="1773704036391" TEXT="mu&#xdf; die Size-Info in die Metadaten weitergeben">
 <linktarget COLOR="#1c07d0" DESTINATION="ID_200162330" ENDARROW="Default" ENDINCLINATION="-77;817;" ID="Arrow_ID_1474651143" SOURCE="ID_49953306" STARTARROW="None" STARTINCLINATION="1030;40;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1773606726737" ID="ID_1617991320" MODIFIED="1773606747708" TEXT="die BufferMetadata::markLocked() mu&#xdf; eine abweichende BufferSize speichern"/>
@@ -115179,8 +115179,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       Und damit spielt sich das System dann irgendwann auf einen festen Pool von Buffer-&#187;Slots&#171; ein, die permanent im Speicher bleiben. Allerdings bedeutet das dann f&#252;r die Metadaten ein <b>Cartesisches Produkt</b>&#160; zwischen der Zahl der Memory-Slots und der Zahl der verschiedenen Buffer-Typen....
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1773684209259" ID="ID_1502362582" MODIFIED="1773685168035" TEXT="zur Beurteilung dessen brauchen wir aber Praxiserfahrung">
 <richcontent TYPE="NOTE"><html>
@@ -115190,8 +115189,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       Ob das also gef&#228;hrlich wird, oder eine etwas ausufernde Metadaten-Storage durchaus &#252;berkompensiert wird von dem Wegfall der permanenten Allokation/Deallokation (und Hashtable-Pflege), kann nicht auf theoretischer Ebene abgehandelt werden. Mehr noch: es ist sogar zweifelhaft, ob sich <i>diese Frage &#252;berhaupt zuverl&#228;ssig beantworten l&#228;&#223;t, auch empirisch!</i>&#160;Dazu m&#252;&#223;te man einen Weg finden, um die <i>Stabilit&#228;t</i>&#160;des Verhaltens zu beurteilen, &#252;ber verschieden Nutzszenarien hinweg
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1773684267099" ID="ID_223570720" MODIFIED="1773685274668" TEXT="und dann m&#xf6;glicherweise einen Garbage-sweep">
 <richcontent TYPE="NOTE"><html>
@@ -115201,8 +115199,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       Allerdings, wenn man sich darauf einl&#228;&#223;t, Speicher nicht wegzur&#228;umen, dann mu&#223; man explizit den Fall betrachten, da&#223; der Speicher voll&#228;uft. In dem Fall br&#228;uchte es einen &#187;Sweep&#171;, der &#252;ber die Metadaten-Tabelle iteriert und alle Eintr&#228;ge pauschal l&#246;scht, die als FREE markiert sind. <i>The usual trade-offs apply.</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -115214,8 +115211,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       Einsicht: nicht re-Locking sondern das <font face="Monospaced" color="#684e4e"><b>onlyNew</b></font>&#160;ist hier redundant
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 <node CREATED="1773686546507" ID="ID_1896242135" MODIFIED="1773686555542" TEXT="das ist so ein pseudo-Konsistenzcheck"/>
 <node CREATED="1773686569345" ID="ID_811960003" MODIFIED="1773686579555" TEXT="dabei haben wir ohnehin eine State-Machine"/>
@@ -137523,8 +137519,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       fragw&#252;rdig ist im Besonderen der hierarchische Ansatz, der die konkreten Storage-Metadaten als Spezialisierung eines Typ-Eintrags behandelt.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1773685436937" ID="ID_1194997795" MODIFIED="1773685524347" TEXT="Buffer-Metadaten werden mutma&#xdf;lich auch vom Storage-Backend mitverwendet">
 <richcontent TYPE="NOTE"><html>
@@ -137534,8 +137529,10 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       Im Besonderen stehen dort all die relevanten Infos, die jeder Memory-Allocator ben&#246;tigt: die konkrete Adresse und die Size (m&#246;glicherweise sogar ein MRU-counter, oder &#228;hnliche technische Informationen)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
+<node CREATED="1773703954354" ID="ID_1415408255" MODIFIED="1773703991156" TEXT="m&#xf6;glicherweise will man gemeinsame Metadaten-Tabellen">
+<linktarget COLOR="#76516c" DESTINATION="ID_1415408255" ENDARROW="Default" ENDINCLINATION="779;39;" ID="Arrow_ID_1408352744" SOURCE="ID_340628735" STARTARROW="None" STARTINCLINATION="468;17;"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1773686351857" ID="ID_867612305" MODIFIED="1773686475190" TEXT="Performance und Zusammenspiel mit dem Betriebszustand?">
 <linktarget COLOR="#794397" DESTINATION="ID_867612305" ENDARROW="Default" ENDINCLINATION="-1231;58;" ID="Arrow_ID_535246973" SOURCE="ID_339106431" STARTARROW="None" STARTINCLINATION="-148;960;"/>
@@ -138021,6 +138018,23 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <linktarget COLOR="#4b1ec1" DESTINATION="ID_49953306" ENDARROW="Default" ENDINCLINATION="-1107;45;" ID="Arrow_ID_474360109" SOURCE="ID_497122958" STARTARROW="None" STARTINCLINATION="687;22;"/>
 <linktarget COLOR="#5a22df" DESTINATION="ID_49953306" ENDARROW="Default" ENDINCLINATION="770;-33;" ID="Arrow_ID_886780269" SOURCE="ID_1831855764" STARTARROW="None" STARTINCLINATION="751;0;"/>
 <icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1773703618287" HGAP="62" ID="ID_914494536" MODIFIED="1773703647578" TEXT="mu&#xdf; BufferProxyAdaptor in OutputSlot::Allocstate integrieren" VSHIFT="33">
+<icon BUILTIN="pencil"/>
+<node CREATED="1773703751137" ID="ID_340628735" MODIFIED="1773703998020" TEXT="&#xdc;berlegung am Rande: l&#xe4;ngerfristig wollen wir einen globalen Metadaten-Store">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      In der aktuellen Konfiguration hat jeder BufferProvider seine eigenes BufferStage-Implementierung, und darin eingebettet eine eigene Metadaten-Hashtable. Im Falle des BufferProxyAdaptors bedeutet das, f&#252;r jede Allokation eines OutputSlot erneut eine Metadaten-Verwaltung zu konstruieren, die dann aber nur f&#252;r wenige Buffer-Eintr&#228;ge genutzt wird. Da Output-Slots durchaus l&#228;ngerfristig leben, stellt das kein Performance-Problem da, aber k&#246;nnte letztlich schon zu einigem Bloat f&#252;hren
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#76516c" DESTINATION="ID_1415408255" ENDARROW="Default" ENDINCLINATION="779;39;" ID="Arrow_ID_1408352744" STARTARROW="None" STARTINCLINATION="468;17;"/>
+</node>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1773456815562" ID="ID_1123444875" MODIFIED="1773589752521" TEXT="Doku">

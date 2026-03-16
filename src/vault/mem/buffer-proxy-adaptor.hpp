@@ -86,20 +86,21 @@ namespace mem  {
           BuffAlloc
           provideBuffer (HashVal,size_t siz,LocalTag targetMarker)  override
             {
-              CONF::on_lock();
-              return {asBuffer(targetMarker), siz, targetMarker};
+              BuffAlloc storageSlot{asBuffer(targetMarker), siz, targetMarker};
+              CONF::on_lock (storageSlot);
+              return storageSlot;
             }
           
           void
           mark_emitted (HashVal, BuffAlloc storageSlot)  override
             {
-              CONF::on_emit();
+              CONF::on_emit (storageSlot);
             }
           
           void
           detachBuffer (HashVal, BuffAlloc storageSlot)  override
             {
-              CONF::on_release();
+              CONF::on_release (storageSlot);
             }
           
         public:
@@ -143,10 +144,17 @@ namespace mem  {
         { }
       
       template<typename TAR>
+      BuffDescr
+      getDescriptorFor (TAR& dataBlock)
+        {
+          return proxyProvider_.registerBuffer(&dataBlock, sizeof(TAR));
+        }
+      
+      template<typename TAR>
       BuffHandle
       lockBuffer (TAR& dataBlock)
         {
-          BuffDescr buffType = proxyProvider_.registerBuffer(&dataBlock, sizeof(TAR));
+          BuffDescr buffType = getDescriptorFor<TAR> (dataBlock);
           ENSURE (buffType.isValid());
           return buffType.lockBuffer();
         }
