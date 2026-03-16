@@ -704,7 +704,7 @@ namespace mem {
             throw err::Fatal{"Attempt to lock for a NULL buffer. Allocation floundered?"
                             , LERR_(BOTTOM_VALUE)};
           
-          return this->lock (parentKey, buffer, specifics, true); // force creation of a new entry
+          return BufferMetadata::lock (parentKey, buffer, specifics);
         }
       
       /** purge the bare metadata Entry from the metadata tables.
@@ -731,6 +731,7 @@ namespace mem {
         }
       
       
+    private:
       /** Core low-level operation to access or create a buffer metadata entry.
        *  The hashID of the entry in question is built, based on the parentKey,
        *  which designates a buffer type, optionally an implementation defined
@@ -759,8 +760,7 @@ namespace mem {
       Entry&
       lock (Key const& parentKey
            ,Buff* concreteBuffer
-           ,LocalTag const& specifics =LocalTag::UNKNOWN
-           ,bool onlyNew =false)
+           ,LocalTag const& specifics =LocalTag::UNKNOWN)
         {
           if (!concreteBuffer)
             throw err::Invalid{"Attempt to lock a slot for a NULL buffer"
@@ -769,10 +769,6 @@ namespace mem {
           Entry newEntry{parentKey, concreteBuffer, specifics};
           Entry* existing = table_.fetch (newEntry);
           
-          if (existing and onlyNew)
-            throw err::Logic{"Attempt to lock a slot for a new buffer, "
-                             "while actually the old buffer is still locked"
-                            , LERR_(LIFECYCLE)};
           if (existing and existing->isLocked())
             throw err::Logic{"Attempt to re-lock a buffer still in use"
                             , LERR_(LIFECYCLE)};
@@ -783,8 +779,6 @@ namespace mem {
             return existing->lock (concreteBuffer);
         }
       
-      
-    private:
       
       template<typename PAR, typename DEF>
       Key

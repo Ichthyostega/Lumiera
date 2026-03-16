@@ -115145,16 +115145,92 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node BACKGROUND_COLOR="#fec499" COLOR="#cb0b50" CREATED="1773621726683" ID="ID_526151796" MODIFIED="1773621770302" TEXT="ungekl&#xe4;rt: ist das notwendig? kann das passieren?">
 <icon BUILTIN="broken-line"/>
 <node CREATED="1773621841418" ID="ID_1292818494" MODIFIED="1773621860523" TEXT="von markLocked() kommend setzen wir onlyNew &#x2254; true"/>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1773621875203" ID="ID_1034512279" MODIFIED="1773621897458" TEXT="das funktioniert nur in unserem Test-Setup, wo wir nie einen buffer wiederverwenden">
+<node COLOR="#5b280f" CREATED="1773621875203" ID="ID_1034512279" MODIFIED="1773684156215" TEXT="funktioniert wohl nur in unserem Test-Setup, wo wir nie einen buffer wiederverwenden?">
+<icon BUILTIN="messagebox_warning"/>
+<icon BUILTIN="button_cancel"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1773621904288" ID="ID_712968134" MODIFIED="1773684163574" TEXT="tats&#xe4;chlich wird regelm&#xe4;&#xdf;ig vorkommen exakt die gleiche Adresse wiederzuverwenden...">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1773684093307" ID="ID_1100900074" MODIFIED="1773684137239" TEXT="aber derzeit ist es so gecodet, da&#xdf; BufferProvider::release() &#x27f6; discard() aufruft">
+<icon BUILTIN="info"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1773684193958" ID="ID_339106431" MODIFIED="1773686475190" TEXT="was sich aber durchaus &#xe4;ndern k&#xf6;nnte....">
+<arrowlink COLOR="#794397" DESTINATION="ID_867612305" ENDARROW="Default" ENDINCLINATION="-1231;58;" ID="Arrow_ID_535246973" STARTARROW="None" STARTINCLINATION="-148;960;"/>
+<icon BUILTIN="hourglass"/>
+<node CREATED="1773684224455" ID="ID_1521194179" MODIFIED="1773684997338" TEXT="da&#xdf; sich die Buffer-Entries auf einem Level einpendeln erscheint plausibel">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Und damit spielt sich das System dann irgendwann auf einen festen Pool von Buffer-&#187;Slots&#171; ein, die permanent im Speicher bleiben. Allerdings bedeutet das dann f&#252;r die Metadaten ein <b>Cartesisches Produkt</b>&#160; zwischen der Zahl der Memory-Slots und der Zahl der verschiedenen Buffer-Typen....
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1773684209259" ID="ID_1502362582" MODIFIED="1773685168035" TEXT="zur Beurteilung dessen brauchen wir aber Praxiserfahrung">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Ob das also gef&#228;hrlich wird, oder eine etwas ausufernde Metadaten-Storage durchaus &#252;berkompensiert wird von dem Wegfall der permanenten Allokation/Deallokation (und Hashtable-Pflege), kann nicht auf theoretischer Ebene abgehandelt werden. Mehr noch: es ist sogar zweifelhaft, ob sich <i>diese Frage &#252;berhaupt zuverl&#228;ssig beantworten l&#228;&#223;t, auch empirisch!</i>&#160;Dazu m&#252;&#223;te man einen Weg finden, um die <i>Stabilit&#228;t</i>&#160;des Verhaltens zu beurteilen, &#252;ber verschieden Nutzszenarien hinweg
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1773684267099" ID="ID_223570720" MODIFIED="1773685274668" TEXT="und dann m&#xf6;glicherweise einen Garbage-sweep">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Allerdings, wenn man sich darauf einl&#228;&#223;t, Speicher nicht wegzur&#228;umen, dann mu&#223; man explizit den Fall betrachten, da&#223; der Speicher voll&#228;uft. In dem Fall br&#228;uchte es einen &#187;Sweep&#171;, der &#252;ber die Metadaten-Tabelle iteriert und alle Eintr&#228;ge pauschal l&#246;scht, die als FREE markiert sind. <i>The usual trade-offs apply.</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1773686502401" ID="ID_128640725" MODIFIED="1773686541496">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Einsicht: nicht re-Locking sondern das <font face="Monospaced" color="#684e4e"><b>onlyNew</b></font>&#160;ist hier redundant
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+<node CREATED="1773686546507" ID="ID_1896242135" MODIFIED="1773686555542" TEXT="das ist so ein pseudo-Konsistenzcheck"/>
+<node CREATED="1773686569345" ID="ID_811960003" MODIFIED="1773686579555" TEXT="dabei haben wir ohnehin eine State-Machine"/>
+<node COLOR="#5b280f" CREATED="1773686580886" ID="ID_611442402" MODIFIED="1773686661536" TEXT="daher kann es auf Ebene des Entry keine Doppelverwendung geben">
+<icon BUILTIN="stop-sign"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1773686631685" ID="ID_1569031870" MODIFIED="1773686650443" TEXT="das eigentliche Risiko ist vielmehr ein abweichender Typ-Zugangspfad">
 <icon BUILTIN="messagebox_warning"/>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1773621904288" ID="ID_712968134" MODIFIED="1773624101097" TEXT="tats&#xe4;chlich wird regelm&#xe4;&#xdf;ig vorkommen exakt die gleiche Adresse wiederzuverwenden">
-<icon BUILTIN="clanbomber"/>
+<node CREATED="1773686872825" ID="ID_750826408" MODIFIED="1773686932093" TEXT="onlyNew zur&#xfc;ckbauen">
+<arrowlink COLOR="#429cd0" DESTINATION="ID_207080029" ENDARROW="Default" ENDINCLINATION="37;0;" ID="Arrow_ID_1636373225" STARTARROW="None" STARTINCLINATION="-95;13;"/>
 </node>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1773621537410" ID="ID_383386793" MODIFIED="1773621721313" TEXT="im Code ganz nach unten schieben (und im Kommentar kennzeichnen)">
 <icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1773686891293" ID="ID_207080029" MODIFIED="1773686967587" TEXT="damit kann die lock()-Funktion doch noch private werden">
+<linktarget COLOR="#429cd0" DESTINATION="ID_207080029" ENDARROW="Default" ENDINCLINATION="37;0;" ID="Arrow_ID_1636373225" SOURCE="ID_750826408" STARTARROW="None" STARTINCLINATION="-95;13;"/>
+<icon BUILTIN="pencil"/>
 </node>
 </node>
 </node>
@@ -137413,6 +137489,40 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
+</node>
+</node>
+</node>
+<node CREATED="1773685342412" ID="ID_1607917578" MODIFIED="1773685348439" TEXT="Laststeuerung">
+<node CREATED="1773685352696" ID="ID_1581471688" MODIFIED="1773685358427" TEXT="Rolle der Buffer-Metadaten">
+<node CREATED="1773685359633" ID="ID_537180155" MODIFIED="1773685430482" TEXT="2026 haben wir nur einen Entwurf &#xbb;ins Blaue&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      fragw&#252;rdig ist im Besonderen der hierarchische Ansatz, der die konkreten Storage-Metadaten als Spezialisierung eines Typ-Eintrags behandelt.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1773685436937" ID="ID_1194997795" MODIFIED="1773685524347" TEXT="Buffer-Metadaten werden mutma&#xdf;lich auch vom Storage-Backend mitverwendet">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Im Besonderen stehen dort all die relevanten Infos, die jeder Memory-Allocator ben&#246;tigt: die konkrete Adresse und die Size (m&#246;glicherweise sogar ein MRU-counter, oder &#228;hnliche technische Informationen)
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1773686351857" ID="ID_867612305" MODIFIED="1773686475190" TEXT="Performance und Zusammenspiel mit dem Betriebszustand?">
+<linktarget COLOR="#794397" DESTINATION="ID_867612305" ENDARROW="Default" ENDINCLINATION="-1231;58;" ID="Arrow_ID_535246973" SOURCE="ID_339106431" STARTARROW="None" STARTINCLINATION="-148;960;"/>
+<icon BUILTIN="help"/>
 </node>
 </node>
 </node>

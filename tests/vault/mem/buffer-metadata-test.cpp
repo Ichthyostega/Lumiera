@@ -333,7 +333,7 @@ namespace test  {
           VERIFY_ERROR (LIFECYCLE, meta_->get(key).mark(NIL) );
           
           // now build a concrete buffer entry
-          metadata::Entry& entry = meta_->markLocked(key, SOME_POINTER);
+          metadata::Entry& entry = meta_->markLocked (key, SOME_POINTER);
           CHECK (LOCKED == entry.state());
           CHECK (not entry.isTypeKey());
           
@@ -369,7 +369,7 @@ namespace test  {
           CHECK (LOCKED == entry.state());
           CHECK (entry.isLocked());
           
-          VERIFY_ERROR (LIFECYCLE, entry.lock(SOME_POINTER));
+          VERIFY_ERROR (LIFECYCLE, entry.lock (SOME_POINTER));
           
           entry.mark (BLOCKED);                      // go directly to the blocked state
           CHECK (BLOCKED == entry.state());
@@ -384,7 +384,7 @@ namespace test  {
           CHECK (not entry.isLocked());
           VERIFY_ERROR (LIFECYCLE, entry.access() );
           
-          meta_->lock(key, SOME_POINTER);
+          meta_->markLocked (key, SOME_POINTER);
           CHECK (entry.isLocked());
           
           entry.mark (EMITTED);
