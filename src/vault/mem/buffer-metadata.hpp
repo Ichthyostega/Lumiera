@@ -286,13 +286,18 @@ namespace mem {
         
       protected:
         Entry (Key const& parent
-              ,Buff* bufferPtr =nullptr
+              ,Buff* bufferPtr            =nullptr
+              ,size_t actualSize          =0
               ,LocalTag const& specialTag =LocalTag::UNKNOWN
               )
           : Key{Key::forEntry (parent, bufferPtr, specialTag)}
           , state_{bufferPtr? LOCKED:NIL}
           , buffer_{bufferPtr}
-          { }
+          {
+            if (bufferPtr and actualSize)
+                Key::storageSize_ = actualSize;
+            ENSURE (Key::storageSize() >= parent.storageSize());
+          }
         
         /// BufferMetadata is allowed to create
         friend class vault::mem::BufferMetadata;
@@ -372,10 +377,11 @@ namespace mem {
           }
         
         Entry&
-        lock (Buff* newBuffer)
+        lock (Buff* newBuffer, size_t actualSize =0)
           {
             __must_be_FREE();
             buffer_ = newBuffer;
+            storageSize_ = std::max (actualSize, storageSize_);
             return mark (LOCKED);
           }
         
@@ -692,19 +698,44 @@ namespace mem {
        *  metadata Entry to account for this fact. This might include
        *  invoking a constructor function, in case the type (Key)
        *  defines a (nontrivial) TypeHandler.
+       * @param parentKey designates the _buffer type_ to base on
+       * @param buffer an actual memory address, which defines a distinct Entry
+       * @param size the size of the actual allocation. When size ≡ 0,
+       *        the nominal size is assumed, as defined through parentKey.
+       *        Otherwise, the actual size must be _larger_.
+       * @param specifics an optional qualification marker, which is managed
+       *        and evaluated by the BufferStore implementation and treated as
+       *        opaque data, as far as BufferMetadata is concerned. However,
+       *        the LocalTag becomes part of the identity of the metadata record.
+       *        Thus, either the parentKey must not include a LocalTag, or the
+       *        LocalTag given here must be identical to what was associate
+       *        with the _buffer type_ represented by parentKey.
        * @throw error::Fatal when locking a NULL buffer
        * @throw exceptions which might be raised by a TypeHandler's
        *        constructor function. In this case, the Entry remains
        *        created, but is marked as FREE
        */
       Entry&
-      markLocked (Key const& parentKey, Buff* buffer, LocalTag const& specifics =LocalTag::UNKNOWN)
+      markLocked (Key const& parentKey
+                 ,Buff* buffer
+                 ,size_t actualSize  =0
+                 ,LocalTag const& specifics =LocalTag::UNKNOWN)
         {
-          if (!buffer)
+          if (not buffer)
             throw err::Fatal{"Attempt to lock for a NULL buffer. Allocation floundered?"
                             , LERR_(BOTTOM_VALUE)};
+          if (not actualSize)
+            actualSize = parentKey.storageSize();
+          REQUIRE (parentKey.storageSize() <= actualSize);
           
-          return BufferMetadata::lock (parentKey, buffer, specifics);
+          return BufferMetadata::lock (parentKey, buffer, actualSize, specifics);
+        }
+      
+      /** variation to use when a LocalTag is given, yet size is implicitly taken from parent */
+      Entry&
+      markLocked (Key const& parentKey, Buff* buffer, LocalTag const& specifics)
+        {
+          return markLocked (parentKey, buffer, size_t(0), specifics);
         }
       
       /** purge the bare metadata Entry from the metadata tables.
@@ -760,13 +791,14 @@ namespace mem {
       Entry&
       lock (Key const& parentKey
            ,Buff* concreteBuffer
+           ,size_t actualSize
            ,LocalTag const& specifics =LocalTag::UNKNOWN)
         {
-          if (!concreteBuffer)
+          if (not concreteBuffer)
             throw err::Invalid{"Attempt to lock a slot for a NULL buffer"
                               , LERR_(BOTTOM_VALUE)};
           
-          Entry newEntry{parentKey, concreteBuffer, specifics};
+          Entry newEntry{parentKey, concreteBuffer, actualSize, specifics};
           Entry* existing = table_.fetch (newEntry);
           
           if (existing and existing->isLocked())
@@ -774,9 +806,9 @@ namespace mem {
                             , LERR_(LIFECYCLE)};
           
           if (not existing)
-            return store_as_locked (newEntry); // actual creation
+            return store_as_locked (newEntry); // store new Entry marked as locked
           else
-            return existing->lock (concreteBuffer);
+            return existing->lock (concreteBuffer, actualSize);
         }
       
       

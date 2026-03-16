@@ -100,6 +100,15 @@
  ** highly complex setup for the production-grade implementation variant, attempts
  ** towards such a refactoring were postponed, after re-evaluation 2/2026.
  ** 
+ ** @warning buffer management via BufferProvider and BuffHandle does not automatically
+ **          _maintain proper alignment_. Rather, it relies on the storage allocator to
+ **          provide a buffer suitably aligned for the target type to hold. In most cases,
+ **          this target location will actually be storage located on the heap, yet some
+ **          processing might impose additional constraints regarding alignment to memory
+ **          blocks, causing degraded performance when violated; so this topic is a
+ **          possible subtle pitfall.
+ ** @todo 2026 we might consider adding alignment information to the associated TypeHandler.
+ ** 
  ** @see buffer-provider-protocol-test.cpp
  ** @see output-slot.hpp
  ** @see engine-ctx.hpp
@@ -142,6 +151,8 @@ namespace mem  {
    * @remark LocalTag can be used by the storage-impl. */
   using BuffAlloc = std::tuple<Buff*,size_t,LocalTag>;
   
+  inline Buff*  getAddr (BuffAlloc& alloc) { return std::get<0> (alloc); }
+  inline size_t getSize (BuffAlloc& alloc) { return std::get<1> (alloc); }
   
   
   LUMIERA_ERROR_DECLARE (BUFFER_MANAGEMENT); ///< Problem providing working buffers
@@ -207,14 +218,14 @@ namespace mem  {
           virtual ~BufferStage() { } ///< this is an interface
           
           virtual ID defineBufferType (size_t, TypeHandler =TypeHandler::RAW, LocalTag =LocalTag::UNKNOWN) =0;
-          virtual ID lookup (HashVal)                          =0;
-          virtual ID mark_locked (ID typeKey, Buff*, LocalTag) =0;
-          virtual ID mark_emitted (HashVal stateKey)           =0;
-          virtual ID mark_released (HashVal stateKey)          =0;
-          virtual ID abandon (HashVal, bool destroy=false)     =0;
-          virtual void discard (HashVal stateKey)              =0;
-          virtual bool isAllotted   (HashVal stateKey) const   =0;
-          virtual bool isAccessible (HashVal stateKey) const   =0;
+          virtual ID lookup (HashVal)                        =0;
+          virtual ID mark_locked (ID typeKey, BuffAlloc)     =0;
+          virtual ID mark_emitted (HashVal stateKey)         =0;
+          virtual ID mark_released (HashVal stateKey)        =0;
+          virtual ID abandon (HashVal, bool destroy=false)   =0;
+          virtual void discard (HashVal stateKey)            =0;
+          virtual bool isAllotted   (HashVal stateKey) const =0;
+          virtual bool isAccessible (HashVal stateKey) const =0;
         };
       
       class BufferStore
@@ -225,10 +236,10 @@ namespace mem  {
         public:
           virtual ~BufferStore() { } ///< this is an interface
           
-          virtual uint prepareBuffers (HashVal typeID, uint cnt, size_t) =0;
-          virtual BuffAlloc provideBuffer (HashVal typeID, size_t, LocalTag)  =0;
-          virtual void mark_emitted (HashVal typeID, BuffAlloc)   =0;
-          virtual void detachBuffer (HashVal typeID, BuffAlloc)        =0;
+          virtual uint prepareBuffers (HashVal typeID, uint cnt, size_t)     =0;
+          virtual BuffAlloc provideBuffer (HashVal typeID, size_t, LocalTag) =0;
+          virtual void mark_emitted (HashVal typeID, BuffAlloc)              =0;
+          virtual void detachBuffer (HashVal typeID, BuffAlloc)              =0;
         };
       
       unique_ptr<BufferStage> bufferStage_;

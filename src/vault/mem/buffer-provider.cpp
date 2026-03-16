@@ -149,12 +149,12 @@ namespace mem   {
   BufferProvider::lockBuffer (BuffDescr const& type)
   {
     REQUIRE (was_created_by_this_provider (type));
-    auto& typeKey = bufferStage_->lookup (type);
-    auto [storage, actualSize, localTag] = bufferStore_->provideBuffer (type,typeKey.storageSize(),typeKey.localTag());
-    auto& stateKey = bufferStage_->mark_locked (typeKey, storage, localTag);
+    auto& typeKey  = bufferStage_->lookup (type);
+    BuffAlloc alloc= bufferStore_->provideBuffer (type,typeKey.storageSize(),typeKey.localTag());
+    auto& stateKey = bufferStage_->mark_locked (typeKey, alloc);
     
-    return BuffHandle (buildDescriptor(stateKey), storage);
-  }                      // NOTE: not the underlying parent descriptor!
+    return BuffHandle (buildDescriptor(stateKey), getAddr(alloc));
+  }                            // NOTE: not the underlying parent descriptor!
   
   
   /** BufferProvider API: state transition to _emitted state_.

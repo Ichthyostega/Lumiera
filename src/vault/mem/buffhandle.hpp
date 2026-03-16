@@ -15,28 +15,39 @@
  ** A front-end to support the buffer management within the render nodes.
  ** When pulling data from predecessor nodes and calculating new data, each render node
  ** needs several input and output buffers. These may be allocated and provided by various
- ** different "buffer providers" (for example the frame cache). Typically, the real buffers
- ** will be passed as parameters to the actual job instance when scheduled, drawing on the
- ** results of prerequisite jobs. Yet the actual job implementation remains agnostic with
- ** respect to the way actual buffers are provided; the invocation just pushes BuffHandle
- ** objects around. The actual render function gets an array of C-pointers to the actual
- ** buffers, and for accessing those buffers, the node needs to keep a table of buffer
- ** pointers, and for releasing the buffers later on, we utilise the buffer handles.
+ ** different [»buffer providers«](\ref buffer-provider.hpp) (for example the frame cache).
+ ** Buffers are classified by a _buffer type,_ which essentially is the size of the storage,
+ ** but could optionally also include a constructor and destructor function. Which type of
+ ** buffer is used at some node invocation and which provider is backing and managing the
+ ** allocation is considered static configuration of the Render Node Network and established
+ ** by the **Builder**. Typically the actual render job is unaware of these details and only
+ ** provides a parameter, that _just happens to select_ the proper source buffer for the
+ ** frame to be computed.
  ** 
- ** These buffer handles are based on a [Buffer Descriptor record](\ref BuffDescr),
- ** which is opaque as far as the client is concerned. BuffDescr acts as a representation
- ** of the type or kind of buffer. The only way to obtain such a BuffDescr is from a concrete
- ** BufferProvider implementation. A back-link to this owning and managing provider is embedded
- ** into the BuffDescr, which thus may be used as a _configuration tag,_ allowing to retrieve a
- ** concrete buffer handle when needed, corresponding to an actual buffer provided and managed
- ** behind the scenes. There is no automatic resource management; clients are responsible to
- ** invoke BuffHandle#release when done.
+ ** However, the Node Network as such is strictly typed (at compile time). Information regarding
+ ** the _buffer type_ are encoded into a [Buffer Descriptor](\ref BuffDescr). These descriptors
+ ** are embedded into the _feed prototype_ of each node and used, by the actual _Node invocation_,
+ ** to retrieve a [Buffer Handle](\ref BuffHandle). On the other hand, the _feed prototype_ was
+ ** also attached to a typed context at build time, so that the invocation of the actual
+ ** _processing function_ can access the buffers and any further parameters strictly typed.
  ** 
- ** @warning buffer management via BuffHandle and BuffDescr does _not automatically maintain
- **          proper alignment._ Rather, it relies on the storage allocator to provide a buffer
- **          suitably aligned for the target type to hold. In most cases, this target location
- **          will actually be storage maintained on heap through some STL collection;
- **          this topic is a possible subtle pitfall non the less.
+ ** Usage of these descriptors and handles is organised in accordance to the »Buffer Provider Protocol«,
+ ** which also explains the structure of the BufferProvider API.
+ ** - the first step is to obtain a BuffDescr from the BufferProvider, which implies
+ **   to define at least the required storage size (optionally also a constructor/destructor).
+ ** - the usage of some buffers with a given type can be _announced_ optionally, which allows
+ **   to pre-arrange some storage space and associate it with the calling thread.
+ ** - an actual allocation is initiated by _locking_ the descriptor, which yields a BuffHandle.
+ ** - from this handle, the buffer memory can be accessed.
+ ** - the client is then responsible to [»emit«](\ref BuffHandle::emit) on the handle,
+ **   once the computation is complete and data can be published. This step can be omitted,
+ **   and it depends on the actual situation if invoking this operation matters. For example,
+ **   it is very relevant for a result sent to some output sink, or for a buffer attached
+ **   to the frame cache. Without _emitting_, the data will not be propagated in those cases.
+ ** - however, it is always mandatory to [»release«](\ref BuffHandle::release) the handle.
+ ** 
+ ** @note both BuffDescr and BuffHandle store a back-link to the managing BufferProvider.
+ ** @warning BuffHandle is _not a smart-ptr_ — the client is responsible to `release()`
  ** 
  ** @see BufferProvider
  ** @see BufferProviderProtocol_test usage demonstration
@@ -53,8 +64,8 @@
 #include "lib/hash-value.h"
 
 
-namespace vault{
-namespace mem {
+namespace vault {
+namespace mem   {
   namespace err = lumiera::error;
   
   using lib::HashVal;
@@ -75,10 +86,10 @@ namespace mem {
    * An opaque descriptor to identify the type and further properties of a data buffer.
    * For each kind of buffer, there is somewhere a BufferProvider responsible for the
    * actual storage management. This provider may "lock" a buffer for actual use,
-   * returning a BuffHandle.
-   * @note this descriptor and especially the #subClassification_ is really owned
-   *       by the BufferProvider, which may use (and even change) the opaque contents
-   *       to organise the internal buffer management.
+   * returning a BuffHandle. BuffDescr is a convenient front-end to represent the arrangement
+   * for some type / kind of buffer, and to [allocate](\ref BuffDescr::lockBuffer) it actually.
+   * @note this descriptor and especially meaning of the #subClassification_ is
+   *       implementation-defined and tied to a specific BufferProvider.
    */
   class BuffDescr
     {
@@ -111,8 +122,16 @@ namespace mem {
   
   
   /**
-   * Handle for a buffer for processing data, abstracting away the actual implementation.
-   * The real buffer pointer can be retrieved by dereferencing this smart-handle class.
+   * Handle to designate a buffer with data for processing, thereby abstracting from the
+   * memory management implementation. The buffer content can be accessed through an unchecked
+   * cast operation, assuming that the client has otherwise complete control over the data type
+   * to be accessed, since the only way to retrieve such a handle is from a BuffDescr.
+   * Besides some information function, BuffHandle exposes the important API functions
+   * - `emit()` : indicate that processing is complete and the data can be used / published
+   * - `release()` : indicate that the client will not touch this handle any more, so that
+   *   storage can be repurposed.
+   * @note This is a low-level feature and not a *smart-handle* — it is the clien's sole
+   *   responsibility to invoke the `release()` function reliably.
    */
   class BuffHandle
     {
@@ -123,9 +142,9 @@ namespace mem {
     public:
       /** @internal a buffer handle may be obtained by "locking"
        *  a buffer from the corresponding BufferProvider */
-      BuffHandle(BuffDescr const& typeInfo, void* storage = 0)
-        : descriptor_(typeInfo)
-        , pBuffer_(static_cast<Buff*>(storage))
+      BuffHandle(BuffDescr const& typeInfo, Buff* storage =nullptr)
+        : descriptor_{typeInfo}
+        , pBuffer_{storage}
         { }
       
       // using standard copy operations

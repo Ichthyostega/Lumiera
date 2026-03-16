@@ -155,7 +155,7 @@ namespace test  {
           CHECK (LOCKED == m2.state());
           CHECK (SOME_POINTER == m2.access()); // buffer pointer associated
           
-          // entries are unique and identifiable
+          // entries are unique and identifiable by a memory address
           HashVal keyX = meta_->key(key1, SOME_POINTER);
           CHECK (meta_->isLocked(keyX));
           CHECK (keyX != key1);
@@ -385,6 +385,7 @@ namespace test  {
           VERIFY_ERROR (LIFECYCLE, entry.access() );
           
           meta_->markLocked (key, SOME_POINTER);
+          //Note: we locked the key and this changed the existing entry
           CHECK (entry.isLocked());
           
           entry.mark (EMITTED);

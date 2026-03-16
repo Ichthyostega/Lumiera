@@ -170,10 +170,10 @@ namespace mem   {
         }
       
       ID
-      mark_locked (ID typeKey, Buff* storage, LocalTag implMark)  override
+      mark_locked (ID typeKey, BuffAlloc storage)  override
         {
-          ID stateKey = stage_->mark_locked (typeKey, storage, implMark);
-          tracker_.record_locked (stateKey, storage);
+          ID stateKey = stage_->mark_locked (typeKey, storage);
+          tracker_.record_locked (stateKey, getAddr(storage));
           return stateKey;
         }
       

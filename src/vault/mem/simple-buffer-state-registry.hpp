@@ -72,8 +72,9 @@ namespace mem   {
         }     // deliberately: create storage, and return reference to it
       
       ID
-      mark_locked (ID typeKey, Buff* storage, LocalTag implMark)  override
+      mark_locked (ID typeKey, BuffAlloc alloc)  override
         {
+          auto& [storage,size,implMark] = alloc;
           return metadata_.markLocked (typeKey, storage, implMark);
         }
       

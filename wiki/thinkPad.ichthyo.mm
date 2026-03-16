@@ -114290,6 +114290,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1771535088123" ID="ID_1559134812" MODIFIED="1771535104984" TEXT="nun einen DiagnosticBufferProvider &#xbb;Huckepack&#xab; nehmen"/>
 <node CREATED="1771535954283" ID="ID_83611307" MODIFIED="1771536165619" TEXT="mu&#xdf; hier sofort einen ProxyBufferStore vorsehen und anlegen">
 <linktarget COLOR="#ff0020" DESTINATION="ID_83611307" ENDARROW="Default" ENDINCLINATION="-142;6;" ID="Arrow_ID_47613106" SOURCE="ID_1312596627" STARTARROW="None" STARTINCLINATION="6;-31;"/>
+<node CREATED="1773699166727" ID="ID_497122958" MODIFIED="1773699899454" TEXT="dazu mu&#xdf; ich aber sinnvolle Infos durch die BufferProvider-Implementierung durschschleusen">
+<arrowlink COLOR="#4b1ec1" DESTINATION="ID_49953306" ENDARROW="Default" ENDINCLINATION="-1107;45;" ID="Arrow_ID_474360109" STARTARROW="None" STARTINCLINATION="687;22;"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1771535979276" ID="ID_117213353" MODIFIED="1771536009626" TEXT="alles andere wegholzen und erst mal sonst nichts machen">
 <icon BUILTIN="yes"/>
@@ -114593,8 +114596,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 <arrowlink COLOR="#65343f" DESTINATION="ID_560454050" ENDARROW="Default" ENDINCLINATION="428;-25;" ID="Arrow_ID_267752890" STARTARROW="Default" STARTINCLINATION="-454;26;"/>
 </node>
-<node CREATED="1773620654297" ID="ID_1491048372" MODIFIED="1773620896713" TEXT="Aufruf-Pfad noch etwas stringenter gemacht">
-<arrowlink COLOR="#5c3fb5" DESTINATION="ID_1308293417" ENDARROW="Default" ENDINCLINATION="-48;-555;" ID="Arrow_ID_948177354" STARTARROW="None" STARTINCLINATION="1026;0;"/>
+<node CREATED="1773620654297" ID="ID_1491048372" MODIFIED="1773698533165" TEXT="Aufruf-Pfad noch etwas stringenter gemacht">
+<arrowlink COLOR="#5c3fb5" DESTINATION="ID_1308293417" ENDARROW="Default" ENDINCLINATION="-64;-875;" ID="Arrow_ID_948177354" STARTARROW="None" STARTINCLINATION="1103;-40;"/>
 <node BACKGROUND_COLOR="#e4dfbe" COLOR="#2b41b1" CREATED="1773620912607" HGAP="28" ID="ID_303989240" MODIFIED="1773621083885" TEXT="im Grunde ist das eine Kaskade" VSHIFT="11">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -115001,7 +115004,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node CREATED="1772129891226" ID="ID_1405915409" MODIFIED="1772129902229" TEXT="&#xdc;berlegungen zum BuffeStore-API">
 <node CREATED="1772129905244" ID="ID_545569208" MODIFIED="1772129929698" TEXT="eigentlich tritt ein charakteristisches Tupel bei jeder Transition auf"/>
-<node CREATED="1772129931304" ID="ID_1142410309" MODIFIED="1773599703401" TEXT="&#x27f9; man k&#xf6;nnte den &#xbb;Slot&#xab;-Datentyp erweitern...">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1772129931304" ID="ID_1142410309" MODIFIED="1773698831171" TEXT="&#x27f9; man k&#xf6;nnte den &#xbb;Slot&#xab;-Datentyp erweitern...">
 <linktarget COLOR="#a04e3e" DESTINATION="ID_1142410309" ENDARROW="Default" ENDINCLINATION="-791;48;" ID="Arrow_ID_1325165991" SOURCE="ID_1990206387" STARTARROW="None" STARTINCLINATION="309;21;"/>
 <node CREATED="1772129959849" ID="ID_1378157373" MODIFIED="1772130000767" TEXT="(storage, size, localTag)"/>
 <node CREATED="1773601187335" ID="ID_916507010" MODIFIED="1773601229263">
@@ -115015,7 +115018,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_916507010" ENDARROW="Default" ENDINCLINATION="187;0;" ID="Arrow_ID_1685002660" SOURCE="ID_931674085" STARTARROW="None" STARTINCLINATION="11;-53;"/>
 </node>
-<node CREATED="1773601269645" ID="ID_1119705517" MODIFIED="1773601285461">
+<node CREATED="1773601269645" ID="ID_1119705517" MODIFIED="1773698803897">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
@@ -115024,9 +115027,12 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
     </p>
   </body>
 </html></richcontent>
+<arrowlink COLOR="#c1f1af" DESTINATION="ID_751533457" ENDARROW="Default" ENDINCLINATION="91;-109;" ID="Arrow_ID_1493821089" STARTARROW="None" STARTINCLINATION="-128;13;"/>
 <font NAME="SansSerif" SIZE="12"/>
 </node>
-<node CREATED="1773599779915" ID="ID_487073922" MODIFIED="1773599804006" TEXT="wird relevant f&#xfc;r die Verbindung mit dem OutputSlot"/>
+<node CREATED="1773599779915" ID="ID_487073922" MODIFIED="1773700405307" TEXT="wird relevant f&#xfc;r die Verbindung mit dem OutputSlot">
+<linktarget COLOR="#4d50c8" DESTINATION="ID_487073922" ENDARROW="Default" ENDINCLINATION="2209;124;" ID="Arrow_ID_1151349135" SOURCE="ID_1831855764" STARTARROW="None" STARTINCLINATION="1795;-84;"/>
+</node>
 </node>
 </node>
 <node CREATED="1772209019999" ID="ID_903636266" MODIFIED="1772209035932" TEXT="wirft aber wieder das Problem mit den Marker-Typen auf">
@@ -115042,16 +115048,19 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1773604353753" ID="ID_751533457" MODIFIED="1773604359674" TEXT="BuffAlloc einf&#xfc;hren">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1773604353753" ID="ID_751533457" MODIFIED="1773698803897" TEXT="BuffAlloc einf&#xfc;hren">
+<linktarget COLOR="#c1f1af" DESTINATION="ID_751533457" ENDARROW="Default" ENDINCLINATION="91;-109;" ID="Arrow_ID_1493821089" SOURCE="ID_1119705517" STARTARROW="None" STARTINCLINATION="-128;13;"/>
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1773604361248" ID="ID_720105604" MODIFIED="1773604407072" TEXT="in das BufferStore-API und Implementierungen">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1773604377214" ID="ID_200162330" MODIFIED="1773604392207" TEXT="mu&#xdf; die Size-Info in die Metadaten weitergeben">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1773604377214" FOLDED="true" ID="ID_200162330" MODIFIED="1773700514964" TEXT="mu&#xdf; die Size-Info in die Metadaten weitergeben">
+<linktarget COLOR="#1c07d0" DESTINATION="ID_200162330" ENDARROW="Default" ENDINCLINATION="-77;817;" ID="Arrow_ID_1474651143" SOURCE="ID_49953306" STARTARROW="None" STARTINCLINATION="1030;40;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1773606726737" ID="ID_1617991320" MODIFIED="1773606747708" TEXT="die BufferMetadata::markLocked() mu&#xdf; eine abweichende BufferSize speichern"/>
 <node CREATED="1773606769685" ID="ID_1643754781" MODIFIED="1773606794678" TEXT="das f&#xfc;hrt in BufferMetadata::lock(parentKey, Buff*, LocalTag,...)"/>
-<node CREATED="1773612115286" ID="ID_282545244" MODIFIED="1773612174969" TEXT="Frage: bricht das die Systematik?">
+<node COLOR="#435e98" CREATED="1773612115286" ID="ID_282545244" MODIFIED="1773698165853" TEXT="Frage: bricht das die Systematik?">
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1773612180193" ID="ID_956161008" MODIFIED="1773612197124" TEXT="die nominale buffer-size ist ja in den parentKey eingerechnet"/>
 <node CREATED="1773612219933" ID="ID_1463108347" MODIFIED="1773612283946" TEXT="ein Qualifizieren des Typs per size w&#xe4;re theoretisch m&#xf6;glich / vorgesehen">
 <node CREATED="1773613319606" ID="ID_624178218" MODIFIED="1773613344348" TEXT="man k&#xf6;nnte Key::forEntry() erweitern"/>
@@ -115088,12 +115097,15 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="info"/>
 </node>
 <node CREATED="1773613635076" ID="ID_1863050688" MODIFIED="1773613650403" TEXT="Konsequenz: das ist ein zus&#xe4;tzliches Datenfeld in den Metadaten"/>
-<node CREATED="1773616741024" ID="ID_1266121816" MODIFIED="1773616777395" TEXT="allerdings sollte das keine redundante Storage sein &#x27f9; also das Feld im Key(Basis) nutzen"/>
+<node COLOR="#435e98" CREATED="1773616741024" ID="ID_1266121816" MODIFIED="1773698145064" TEXT="allerdings sollte das keine redundante Storage sein &#x27f9; also das Feld im Key(Basis) nutzen">
+<icon BUILTIN="yes"/>
 </node>
 </node>
-<node CREATED="1773620718648" ID="ID_1308293417" MODIFIED="1773620896713" TEXT="Struktur der BufferMetadata nochmal kl&#xe4;ren und Validieren">
-<linktarget COLOR="#5c3fb5" DESTINATION="ID_1308293417" ENDARROW="Default" ENDINCLINATION="-48;-555;" ID="Arrow_ID_948177354" SOURCE="ID_1491048372" STARTARROW="None" STARTINCLINATION="1026;0;"/>
-<node CREATED="1773621103140" ID="ID_18529012" MODIFIED="1773621105927" TEXT="Einsichten">
+</node>
+<node COLOR="#4c4398" CREATED="1773620718648" ID="ID_1308293417" MODIFIED="1773698662500" TEXT="Struktur der BufferMetadata nochmal kl&#xe4;ren und Validieren">
+<linktarget COLOR="#5c3fb5" DESTINATION="ID_1308293417" ENDARROW="Default" ENDINCLINATION="-64;-875;" ID="Arrow_ID_948177354" SOURCE="ID_1491048372" STARTARROW="None" STARTINCLINATION="1103;-40;"/>
+<node CREATED="1773621103140" ID="ID_18529012" MODIFIED="1773698671785" TEXT="Einsichten">
+<icon BUILTIN="idea"/>
 <node CREATED="1773621106819" ID="ID_1944288889" MODIFIED="1773621199192" TEXT="der Einstiegspunkt ist in der Mitte des Quellcodes. Das verwirrt">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -115152,7 +115164,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1773621904288" ID="ID_712968134" MODIFIED="1773684163574" TEXT="tats&#xe4;chlich wird regelm&#xe4;&#xdf;ig vorkommen exakt die gleiche Adresse wiederzuverwenden...">
 <icon BUILTIN="help"/>
 </node>
-<node CREATED="1773684093307" ID="ID_1100900074" MODIFIED="1773684137239" TEXT="aber derzeit ist es so gecodet, da&#xdf; BufferProvider::release() &#x27f6; discard() aufruft">
+<node CREATED="1773684093307" ID="ID_1100900074" MODIFIED="1773698507609" TEXT="aber derzeit ist es so gecodet, da&#xdf; BufferProvider::release() &#x27f6; discard() aufruft">
+<linktarget COLOR="#6585ab" DESTINATION="ID_1100900074" ENDARROW="Default" ENDINCLINATION="-252;9;" ID="Arrow_ID_1243882082" SOURCE="ID_1611649683" STARTARROW="None" STARTINCLINATION="468;15;"/>
 <icon BUILTIN="info"/>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1773684193958" ID="ID_339106431" MODIFIED="1773686475190" TEXT="was sich aber durchaus &#xe4;ndern k&#xf6;nnte....">
@@ -115160,9 +115173,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="hourglass"/>
 <node CREATED="1773684224455" ID="ID_1521194179" MODIFIED="1773684997338" TEXT="da&#xdf; sich die Buffer-Entries auf einem Level einpendeln erscheint plausibel">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Und damit spielt sich das System dann irgendwann auf einen festen Pool von Buffer-&#187;Slots&#171; ein, die permanent im Speicher bleiben. Allerdings bedeutet das dann f&#252;r die Metadaten ein <b>Cartesisches Produkt</b>&#160; zwischen der Zahl der Memory-Slots und der Zahl der verschiedenen Buffer-Typen....
@@ -115173,9 +115184,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node CREATED="1773684209259" ID="ID_1502362582" MODIFIED="1773685168035" TEXT="zur Beurteilung dessen brauchen wir aber Praxiserfahrung">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Ob das also gef&#228;hrlich wird, oder eine etwas ausufernde Metadaten-Storage durchaus &#252;berkompensiert wird von dem Wegfall der permanenten Allokation/Deallokation (und Hashtable-Pflege), kann nicht auf theoretischer Ebene abgehandelt werden. Mehr noch: es ist sogar zweifelhaft, ob sich <i>diese Frage &#252;berhaupt zuverl&#228;ssig beantworten l&#228;&#223;t, auch empirisch!</i>&#160;Dazu m&#252;&#223;te man einen Weg finden, um die <i>Stabilit&#228;t</i>&#160;des Verhaltens zu beurteilen, &#252;ber verschieden Nutzszenarien hinweg
@@ -115186,9 +115195,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node CREATED="1773684267099" ID="ID_223570720" MODIFIED="1773685274668" TEXT="und dann m&#xf6;glicherweise einen Garbage-sweep">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Allerdings, wenn man sich darauf einl&#228;&#223;t, Speicher nicht wegzur&#228;umen, dann mu&#223; man explizit den Fall betrachten, da&#223; der Speicher voll&#228;uft. In dem Fall br&#228;uchte es einen &#187;Sweep&#171;, der &#252;ber die Metadaten-Tabelle iteriert und alle Eintr&#228;ge pauschal l&#246;scht, die als FREE markiert sind. <i>The usual trade-offs apply.</i>
@@ -115201,9 +115208,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node CREATED="1773686502401" ID="ID_128640725" MODIFIED="1773686541496">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Einsicht: nicht re-Locking sondern das <font face="Monospaced" color="#684e4e"><b>onlyNew</b></font>&#160;ist hier redundant
@@ -115220,7 +115225,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1773686631685" ID="ID_1569031870" MODIFIED="1773686650443" TEXT="das eigentliche Risiko ist vielmehr ein abweichender Typ-Zugangspfad">
 <icon BUILTIN="messagebox_warning"/>
 </node>
-<node CREATED="1773686872825" ID="ID_750826408" MODIFIED="1773686932093" TEXT="onlyNew zur&#xfc;ckbauen">
+<node COLOR="#435e98" CREATED="1773686872825" ID="ID_750826408" MODIFIED="1773689900441" TEXT="onlyNew zur&#xfc;ckbauen">
 <arrowlink COLOR="#429cd0" DESTINATION="ID_207080029" ENDARROW="Default" ENDINCLINATION="37;0;" ID="Arrow_ID_1636373225" STARTARROW="None" STARTINCLINATION="-95;13;"/>
 </node>
 </node>
@@ -115228,11 +115233,23 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node COLOR="#338800" CREATED="1773621537410" ID="ID_383386793" MODIFIED="1773621721313" TEXT="im Code ganz nach unten schieben (und im Kommentar kennzeichnen)">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1773686891293" ID="ID_207080029" MODIFIED="1773686967587" TEXT="damit kann die lock()-Funktion doch noch private werden">
+<node COLOR="#338800" CREATED="1773686891293" ID="ID_207080029" MODIFIED="1773689907012" TEXT="damit kann die lock()-Funktion doch noch private werden">
 <linktarget COLOR="#429cd0" DESTINATION="ID_207080029" ENDARROW="Default" ENDINCLINATION="37;0;" ID="Arrow_ID_1636373225" SOURCE="ID_750826408" STARTARROW="None" STARTINCLINATION="-95;13;"/>
-<icon BUILTIN="pencil"/>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
+</node>
+<node CREATED="1773698211457" ID="ID_485099126" MODIFIED="1773698217366" TEXT="es gibt noch Unsch&#xe4;rfen">
+<node CREATED="1773698220718" ID="ID_344879972" MODIFIED="1773698239407" TEXT="die meisten der Key-Generierungs-Funktionen werden nur vom Unit-Test aufgerufen"/>
+<node CREATED="1773698241384" ID="ID_1721048513" MODIFIED="1773698266019" TEXT="es gibt einen Abk&#xfc;rzungspfad der einen Entry sofort als LOCKED erzeugt"/>
+<node CREATED="1773698278788" ID="ID_1611649683" MODIFIED="1773698507608" TEXT="ob wir Metadata-Eintr&#xe4;ge stets verwerfen, wird explizit als Gestaltungs-Option offengehalten">
+<arrowlink COLOR="#6585ab" DESTINATION="ID_1100900074" ENDARROW="Default" ENDINCLINATION="-252;9;" ID="Arrow_ID_1243882082" STARTARROW="None" STARTINCLINATION="468;15;"/>
+</node>
+</node>
+<node CREATED="1773698551282" ID="ID_1035949625" MODIFIED="1773698562250" TEXT="es zeichnen sich drei Layer ab....">
+<node CREATED="1773698567503" ID="ID_1799622771" MODIFIED="1773698578642" TEXT="Key, Entry und die Hash-Verkn&#xfc;pfung"/>
+<node CREATED="1773698583888" ID="ID_1941798995" MODIFIED="1773698616837" TEXT="BufferMetadata / Zustands&#xfc;berg&#xe4;nge"/>
+<node CREATED="1773698617984" ID="ID_647410294" MODIFIED="1773698626088" TEXT="die Metadata-Table"/>
 </node>
 </node>
 </node>
@@ -117793,6 +117810,10 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1773077173730" ID="ID_76417582" MODIFIED="1773167628789" TEXT="Neubau Diagnose-API &#x27fa; Vorentwurf Implementierung">
 <linktarget COLOR="#604371" DESTINATION="ID_76417582" ENDARROW="Default" ENDINCLINATION="-588;-641;" ID="Arrow_ID_1083444621" SOURCE="ID_1377276921" STARTARROW="None" STARTINCLINATION="-741;71;"/>
 <icon BUILTIN="pencil"/>
+<node CREATED="1773700274163" ID="ID_1831855764" MODIFIED="1773700492223" TEXT="mu&#xdf; dazu das direkte DataSink::emit() abl&#xf6;sen durch ein Proxying">
+<arrowlink COLOR="#4d50c8" DESTINATION="ID_487073922" ENDARROW="Default" ENDINCLINATION="2209;124;" ID="Arrow_ID_1151349135" STARTARROW="None" STARTINCLINATION="1795;-84;"/>
+<arrowlink COLOR="#5a22df" DESTINATION="ID_49953306" ENDARROW="Default" ENDINCLINATION="770;-33;" ID="Arrow_ID_886780269" STARTARROW="None" STARTINCLINATION="751;0;"/>
+</node>
 </node>
 <node CREATED="1773077306179" ID="ID_791772240" MODIFIED="1773078563511" TEXT="Analyse mu&#xdf; dieses Mal bottom-up vorgehen">
 <arrowlink COLOR="#df165b" DESTINATION="ID_597179173" ENDARROW="Default" ENDINCLINATION="-647;-29;" ID="Arrow_ID_694305976" STARTARROW="None" STARTINCLINATION="-136;1688;"/>
@@ -137496,9 +137517,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1773685352696" ID="ID_1581471688" MODIFIED="1773685358427" TEXT="Rolle der Buffer-Metadaten">
 <node CREATED="1773685359633" ID="ID_537180155" MODIFIED="1773685430482" TEXT="2026 haben wir nur einen Entwurf &#xbb;ins Blaue&#xab;">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       fragw&#252;rdig ist im Besonderen der hierarchische Ansatz, der die konkreten Storage-Metadaten als Spezialisierung eines Typ-Eintrags behandelt.
@@ -137509,9 +137528,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node CREATED="1773685436937" ID="ID_1194997795" MODIFIED="1773685524347" TEXT="Buffer-Metadaten werden mutma&#xdf;lich auch vom Storage-Backend mitverwendet">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Im Besonderen stehen dort all die relevanten Infos, die jeder Memory-Allocator ben&#246;tigt: die konkrete Adresse und die Size (m&#246;glicherweise sogar ein MRU-counter, oder &#228;hnliche technische Informationen)
@@ -137998,6 +138015,12 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1773423131415" ID="ID_1566753229" MODIFIED="1773423147739" TEXT="wer mu&#xdf; wen konkret getypt sehen?">
 <icon BUILTIN="help"/>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1773699216800" ID="ID_49953306" MODIFIED="1773700514964" TEXT="wirft sofort das Problem auf wie man die Proxy-Callbacks implementiert">
+<arrowlink COLOR="#1c07d0" DESTINATION="ID_200162330" ENDARROW="Default" ENDINCLINATION="-77;817;" ID="Arrow_ID_1474651143" STARTARROW="None" STARTINCLINATION="1030;40;"/>
+<linktarget COLOR="#4b1ec1" DESTINATION="ID_49953306" ENDARROW="Default" ENDINCLINATION="-1107;45;" ID="Arrow_ID_474360109" SOURCE="ID_497122958" STARTARROW="None" STARTINCLINATION="687;22;"/>
+<linktarget COLOR="#5a22df" DESTINATION="ID_49953306" ENDARROW="Default" ENDINCLINATION="770;-33;" ID="Arrow_ID_886780269" SOURCE="ID_1831855764" STARTARROW="None" STARTINCLINATION="751;0;"/>
+<icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1773456815562" ID="ID_1123444875" MODIFIED="1773589752521" TEXT="Doku">
