@@ -130,6 +130,9 @@ namespace out   {
       
       Connections connections_;
       
+      OutputBufferProxy<AllocState> proxyBufferProvider_;
+      
+      
       
       /* == Allocation Interface == */
       
@@ -173,6 +176,7 @@ namespace out   {
       template<class CTOR>
       AllocState(uint numChannels, CTOR&& populator)
         : connections_(numChannels, std::forward<CTOR>(populator))
+        , proxyBufferProvider_{*this}
         { }
       
       

@@ -138099,7 +138099,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1773704486520" ID="ID_1324797839" MODIFIED="1773704500571" TEXT="sie haben nur den Buffer-Ptr, nicht die dazugeh&#xf6;rige Connection"/>
 </node>
 </node>
-<node CREATED="1773797100647" ID="ID_425446315" MODIFIED="1773797118509" TEXT="&#xdc;berlegung: wie k&#xf6;nnt man das Problem &#xfc;berhaupt &#xbb;knacken&#xab;">
+<node COLOR="#435e98" CREATED="1773797100647" ID="ID_425446315" MODIFIED="1773888697408" TEXT="&#xdc;berlegung: wie k&#xf6;nnt man das Problem &#xfc;berhaupt &#xbb;knacken&#xab;">
+<icon BUILTIN="help"/>
 <node CREATED="1773797120055" ID="ID_1455782398" MODIFIED="1773797126986" TEXT="mit Gewalt?">
 <node CREATED="1773797138856" ID="ID_1366418982" MODIFIED="1773797219006" TEXT="jede DataSink bekommt auch einen Basis-Descriptor(&#x27fc;backlink)"/>
 <node CREATED="1773797234722" ID="ID_928593244" MODIFIED="1773797318457" TEXT="jedesmal wenn eine Connection einen Buffer ausgibt, meldet sie das beim AllocState"/>
@@ -138172,7 +138173,37 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1773875219107" ID="ID_1212468658" MODIFIED="1773875229312" TEXT="ich kann den ja f&#xfc;r andere Zwecke mal bestehen lassen"/>
 <node CREATED="1773875230170" ID="ID_1330974689" MODIFIED="1773875244308" TEXT="er war wichtig, um den Mismatch in den APIs zu erkennen und dann zu beheben"/>
 <node CREATED="1773875245243" ID="ID_1639451717" MODIFIED="1773875299381" TEXT="die dort erstmals verwendeten generierten Datentypen sind anderweitig n&#xfc;tzlich"/>
-<node CREATED="1773875306072" ID="ID_1024103205" MODIFIED="1773875342503" TEXT="was wir brauchen: eine direkt an AllocState delegierende BufferStore-Implementierung"/>
+<node CREATED="1773875306072" ID="ID_1024103205" MODIFIED="1773888756205" TEXT="was wir brauchen: eine direkt an AllocState delegierende BufferStore-Implementierung">
+<arrowlink COLOR="#617685" DESTINATION="ID_1250247595" ENDARROW="Default" ENDINCLINATION="642;34;" ID="Arrow_ID_1889600265" STARTARROW="None" STARTINCLINATION="-211;7;"/>
+</node>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1773888286270" ID="ID_1279395018" MODIFIED="1773888766729" TEXT="Fazit">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="forward"/>
+<node CREATED="1773888290871" ID="ID_1640123820" MODIFIED="1773888299240" TEXT="DataSink wird unique"/>
+<node CREATED="1773888299988" ID="ID_1909698021" MODIFIED="1773888311487" TEXT="DataSink verweist auf den PImpl (AllocState)">
+<node CREATED="1773888330075" ID="ID_1924701415" MODIFIED="1773888346410" TEXT="hier wird ein neues Interface ben&#xf6;tigt"/>
+<node CREATED="1773888364124" ID="ID_1625145338" MODIFIED="1773888376862" TEXT="oder eine vergleichbare implementation-level-Indirektion"/>
+<node CREATED="1773888380609" ID="ID_1459481812" MODIFIED="1773888395051" TEXT="(Grund: AllocState ist getemplated auf die tats&#xe4;chliche Connection)"/>
+</node>
+<node CREATED="1773888404158" ID="ID_1250247595" MODIFIED="1773888756205" TEXT="eine neue Hilfskomponente bauen: OutputBufferProxy">
+<linktarget COLOR="#617685" DESTINATION="ID_1250247595" ENDARROW="Default" ENDINCLINATION="642;34;" ID="Arrow_ID_1889600265" SOURCE="ID_1024103205" STARTARROW="None" STARTINCLINATION="-211;7;"/>
+</node>
+<node CREATED="1773888426603" ID="ID_888618711" MODIFIED="1773888441501" TEXT="diese enh&#xe4;lt einen &#xbb;delegating-BufferStore&#xab;"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1773888677730" ID="ID_370790574" MODIFIED="1773888690633" TEXT="dieses neue Verschaltungs-Konzept implementieren">
+<icon BUILTIN="flag-pink"/>
+<node COLOR="#338800" CREATED="1773888784963" ID="ID_1753071442" MODIFIED="1773888798826" TEXT="Struktur eines Proxy-BufferProvider anlegen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1773888800028" ID="ID_756667017" MODIFIED="1773888814028" TEXT="geht ganz einfach: von BufferProxyAdapter ausgehen"/>
+<node CREATED="1773888814799" ID="ID_1048707778" MODIFIED="1773888823194" TEXT="kann hier aber die ganze &#xe4;u&#xdf;ere H&#xfc;lle weglassen"/>
+<node CREATED="1773888824142" ID="ID_16971375" MODIFIED="1773888832921" TEXT="auch die Policy-Konfiguration f&#xe4;llt weg"/>
+<node CREATED="1773888833797" ID="ID_473209009" MODIFIED="1773888851679" TEXT="jedoch der Setup-Mechanismus ist auch hier hilfreich">
+<node CREATED="1773888855315" ID="ID_1311998927" MODIFIED="1773888861475" TEXT="verwende einen Setup-Hiflstyp"/>
+<node CREATED="1773888862176" ID="ID_25602564" MODIFIED="1773888872388" TEXT="dieser wird nur transient w&#xe4;hrend dem Konstruktor erzeugt"/>
+<node CREATED="1773888873544" ID="ID_1930210997" MODIFIED="1773888889891" TEXT="Vorteil: ich kann die back-Reference nach innen in den BufferStore schieben"/>
 </node>
 </node>
 </node>

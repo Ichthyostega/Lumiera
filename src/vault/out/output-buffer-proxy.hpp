@@ -66,15 +66,15 @@ namespace out  {
    * - callback functors for the lifecycle stages related to the client's access
    * @todo 3/2026 this is prototyping code and was retained for demonstration purposes.
    */
-  template<class CONF>
+  template<class HUB>
   class OutputBufferProxy
-    : util::NonCopyable
+    : public BufferProviderSetup
     {
       
-      class ProxyBufferStore
+      class OutputBufferStore
         : public BufferProviderSetup::Store
-        , private CONF
         {
+          HUB& output_;
           
           Buff*
           asBuffer (LocalTag targetMarker)
@@ -86,8 +86,7 @@ namespace out  {
           uint
           prepareBuffers (HashVal,uint,size_t)  override
             {
-              WARN (engine, "Announce invoked on a Proxy Buffer Provider; "
-                            "Implies misuse as generic BufferProvider");
+              NOTREACHED ("This is not a general purpose BufferProvider");
               return 1;
             }
           
@@ -95,67 +94,57 @@ namespace out  {
           provideBuffer (HashVal,size_t siz,LocalTag targetMarker)  override
             {
               BuffAlloc storageSlot{asBuffer(targetMarker), siz, targetMarker};
-              CONF::on_lock (storageSlot);
+              TODO ("delegate buffer lock");
               return storageSlot;
             }
           
           void
           mark_emitted (HashVal, BuffAlloc storageSlot)  override
             {
-              CONF::on_emit (storageSlot);
+              TODO ("delegate buffer emit");
             }
           
           void
           detachBuffer (HashVal, BuffAlloc storageSlot)  override
             {
-              CONF::on_release (storageSlot);
+              TODO ("delegate buffer release");
             }
           
         public:
-          ProxyBufferStore (CONF policy)
-            : CONF{move(policy)}
+          OutputBufferStore(HUB& outputHub)
+            : output_{outputHub}
             { }
         };
       
       struct Setup
-        : CONF
         {
-          auto buildStage() { return std::make_unique<vault::mem::SimpleBufferStateRegistry>("OutputBufferProxy"); }
-          auto buildStore() { return std::make_unique<ProxyBufferStore> (move(*this)); }
-        };                                                           //  Note: possible since Setup does not use CONF
-      
-      class PassThroughBufferProvider
-        : public BufferProviderSetup
-        {
+          HUB& outputHub_;
           
-        public:
-          PassThroughBufferProvider (Setup setup)
-            : BufferProviderSetup{setup}
-            { }
-            
-            BuffDescr
-            registerBuffer (void* buff, size_t siz)
-              {
-                REQUIRE (siz);
-                REQUIRE (buff);
-                auto& typeKey = bufferStage_->defineBufferType (siz, TypeHandler::RAW, LocalTag(buff));
-                return buildDescriptor (typeKey);
-              }
+          auto buildStage() { return std::make_unique<vault::mem::SimpleBufferStateRegistry>("OutputBufferProxy"); }
+          auto buildStore() { return std::make_unique<OutputBufferStore> (outputHub_); }
         };
       
-      PassThroughBufferProvider proxyProvider_;
-      
+      BuffDescr
+      registerBuffer (void* buff, size_t siz)
+        {
+          REQUIRE (siz);
+          REQUIRE (buff);
+          auto& typeKey = bufferStage_->defineBufferType (siz, TypeHandler::RAW, LocalTag(buff));
+          return buildDescriptor (typeKey);
+        }
+
       
     public:
-      OutputBufferProxy(CONF policy)
-        : proxyProvider_{Setup{move(policy)}}
+      OutputBufferProxy(HUB& outputHub)
+        : BufferProviderSetup{Setup{outputHub}}
         { }
+      
       
       template<typename TAR>
       BuffDescr
       getDescriptorFor (TAR& dataBlock)
         {
-          return proxyProvider_.registerBuffer(&dataBlock, sizeof(TAR));
+          return registerBuffer(&dataBlock, sizeof(TAR));
         }
       
       template<typename TAR>
