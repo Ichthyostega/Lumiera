@@ -1,8 +1,8 @@
 /*
-  BUFFER-PROXY-ADAPTOR.hpp  -  Adaptor to access existing allocation via buffer handling protocol
+  OUTPUT-BUFFER-PROXY.hpp  -  Adaptor to access existing allocation via buffer handling protocol
 
    Copyright (C)
-     2024,2026        Hermann Vosseler <Ichthyostega@web.de>
+     2026             Hermann Vosseler <Ichthyostega@web.de>
 
   **Lumiera** is free software; you can redistribute it and/or modify it
   under the terms of the GNU General Public License as published by the
@@ -11,21 +11,18 @@
 
 */
 
-/** @file buffer-proxy-adaptor.hpp
- ** Adapter to expose a given memory block through a BuffHandle.
- ** This implementation building-block allows to integrate some specific data access
- ** through the buffer lifecycle protocol as defined by BufferProvider.
- ** @remark 3/2026 this solution was developed as pathfinder to resolve a mismatch
- **         between the »Buffer Provider Protocol« and the »Output Slot Protocol«.
- **         Ultimately, however, it was not used; instead, a similar, specially
- **         tailored construct was directly integrated.
+/** @file output-buffer-proxy.hpp
+ ** Adapter to expose some buffer memory through a BuffHandle as front-end.
+ ** This implementation building-block allows to integrate the output buffers
+ ** managed by a specific output mechanism with the generic implementation of
+ ** OutputSlote, so that only a BuffHandle needs to be exposed to the client.
  ** @see output-proxy-provider-test.cpp
  ** @see output-buffer-proxy.hpp
  ** @see output-slot.hpp
  */
 
-#ifndef VAULT_MEM_BUFFER_PROXY_ADAPTOR_H
-#define VAULT_MEM_BUFFER_PROXY_ADAPTOR_H
+#ifndef VAULT_OUT_OUTPUT_BUFFER_PROXY_H
+#define VAULT_OUT_OUTPUT_BUFFER_PROXY_H
 
 
 #include "lib/error.hpp"
@@ -42,10 +39,18 @@
 
 
 namespace vault{
-namespace mem  {
+namespace out  {
   
-  using lib::Literal;
   using std::move;
+  using lib::Literal;
+  using lib::HashVal;
+  using vault::mem::Buff;
+  using vault::mem::LocalTag;
+  using vault::mem::BuffAlloc;
+  using vault::mem::BuffDescr;
+  using vault::mem::BuffHandle;
+  using vault::mem::TypeHandler; ///////////////////////////OOO Rly?
+  using vault::mem::BufferProviderSetup;
   
   
   
@@ -62,7 +67,7 @@ namespace mem  {
    * @todo 3/2026 this is prototyping code and was retained for demonstration purposes.
    */
   template<class CONF>
-  class BufferProxyAdaptor
+  class OutputBufferProxy
     : util::NonCopyable
     {
       
@@ -115,7 +120,7 @@ namespace mem  {
       struct Setup
         : CONF
         {
-          auto buildStage() { return std::make_unique<SimpleBufferStateRegistry>("ResourceProxy"); }
+          auto buildStage() { return std::make_unique<vault::mem::SimpleBufferStateRegistry>("OutputBufferProxy"); }
           auto buildStore() { return std::make_unique<ProxyBufferStore> (move(*this)); }
         };                                                           //  Note: possible since Setup does not use CONF
       
@@ -142,7 +147,7 @@ namespace mem  {
       
       
     public:
-      BufferProxyAdaptor(CONF policy)
+      OutputBufferProxy(CONF policy)
         : proxyProvider_{Setup{move(policy)}}
         { }
       
@@ -164,5 +169,5 @@ namespace mem  {
     };
   
   
-}} // namespace vault::mem
-#endif /*VAULT_MEM_BUFFER_PROXY_ADAPTOR_H*/
+}} // namespace vault::out
+#endif /*VAULT_OUT_OUTPUT_BUFFER_PROXY_H*/

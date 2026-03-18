@@ -5214,11 +5214,11 @@ Thus there are two serious problem situations
 &amp;rarr; OutputSlotImpl
 </pre>
 </div>
-<div title="OutputSlotDesign" modifier="Ichthyostega" created="201112190322" tags="design decision">
+<div title="OutputSlotDesign" modifier="Ichthyostega" created="201112190322" modified="202603190010" tags="design decision" changecount="7">
 <pre>The OutputSlot interface describes a point where generated media data can actually be sent to the external world. It is expected to be implemented by adapters and bridges to existing drivers or external interface libraries, like a viewer widget in the GUI, ALSA or Jack sound output, rendering to file, using an external media format library. The design of this core facility was rather difficult and stretched out over quite some time span -- this page documents the considerations and the decisions taken.
 
 !intention
-OutpotSlot is a metaphor to unify the organisation of actual (system level) outputs; using this concept allows to separate and abstract the data calculation and the organisation of playback and rendering from the specifics of the actual output sink. Actual output possibilities (video in GUI window, video fullscreen, sound, Jack, rendering to file) can be added and removed dynamically from various components (Vault, Stage), all using the same resolution and mapping mechanisms (&amp;rarr; OutputManagement)
+OutputSlot is a metaphor to unify the organisation of actual (system level) outputs; using this concept allows to separate and abstract the data calculation and the organisation of playback and rendering from the specifics of the actual output sink. Actual output possibilities (video in GUI window, video fullscreen, sound, Jack, rendering to file) can be added and removed dynamically from various components (Vault, Stage), all using the same resolution and mapping mechanisms (&amp;rarr; OutputManagement)
 
 !design possibilities
 !!properties as a starting point
@@ -5240,16 +5240,16 @@ Data is handed over by the client invoking an {{{emit(time,...)}}} function on t
 :here the output mechanism owns the buffer. Within a certain time window prior to the expected time of the {{{emit()}}}-call, the client may obtain this buffer (pointer) to fill in the data. The slot implementation won't touch this buffer until the {{{emit()}}} handover, which in this case just provides the time and signalles the client is done with that buffer. If the data emitting handshake doesn't happen at all, it counts as late and superseded by the next handshake.
 
 !!relation to timing
-Besides the sink handles, allocation of an output slot defines some timing constraints, which are binding for the client. These include a grid of deadlines for each frame to deliver, plus a fixed //latency.// The output slot implementation itself is bound by external constraints to deliver data at a fixed framerate and aligned to an externally defined timing grid, plus the data needs to be handed over ahead of these time points by an time amount given by the latency. Depending on the data exchange model, there is an additional time window limiting the buffer management.
+Besides the sink handles, allocation of an output slot defines some timing constraints, to which the client must comply. These [[Timings]] are detailed and explicit, including a grid of deadlines for each frame to deliver, plus a fixed //latency.// Within this context, &amp;raquo;latency&amp;laquo; implies a requirement to be ahead of the nominal time by a certain amount, to compensate for the processing time that is necessary to propagate the media to the physical output pin. The output slot implementation itself is bound by external constraints to deliver data at a fixed framerate and aligned to an externally defined timing grid, and furthermore the data needs to be handed over ahead of these time points by an time amount given by the latency. Depending on the data exchange model, additional timing constraints may be imposed to further limit the time window when the buffer must be provided, transferred and released.
 
-The assumption is for the client to have elaborate timing capabilities at his disposal. More specifically, the client is assumed to be a job running within the engine scheduler and thus can be configured to run //after// another job has finished, and to run within certain time limits. Thus the client is able to provide a //current nominal time// -- which is suitably close to the actual wall clock time. The output slot implementation can be written such as to work out from this time specification if the call is timely or overdue -- and react accordingly.
+!!relation to buffer management
+{{red{WIP 11/11}}} meanwhile I have worked out the BufferProvider interface in detail, including an explicit buffer handover protocol that is is backed by a tiny state engine to track the BufferMetadata. This mechanism provides an additional transition to {{{BLOCKED}}} state when order or timing constraints are being violated. Yet how to detect and resolve such a floundered state from the engine point of view still remains to be addressed.
 
-{{red{TODO 6/11}}}in this spec, both data exchange models exhibit a weakness regarding the releasing of buffers. At which time is it safe to release a buffer, when the handover didn't happen? Do we need an explicit callback, and how could this callback be triggered? This is similar to the problem of closing a network connection, i.e. the problem is generally unsolvable, but can be handled pragmatically within certain limits.
-{{red{WIP 11/11}}}meanwhile I've worked out the BufferProvider interface in deail. There's now a deatiled buffer handover protocol defined, which is supported by a little state engine tracking BufferMetadata. This mechanism provides a transition to {{{BLOCKED}}} state when order or timing constraints are being violated, which practically solves this problem. How to detect and resolve such a floundered state from the engine point of view still remains to be addressed.
+{{red{WIP 3/2026}}} after a long break, we are now facing the problem how to make BufferProvider and OutputSlot work together. Both define a protocol and data exchange models -- and both exhibit a weakness regarding the releasing of buffers. At which time is it safe to release a buffer, when the handover didn't happen? This is similar to the problem of closing a network connection, i.e. the problem is generally unsolvable, but can be handled pragmatically within certain limits.
+* For handles in the Render Engine we can generally assume that the regular call path is always completed, which ensures that every handle gets released. Exceptions may happen, but are //not handled// -- rather the Engine will be shut down in such a case, which could be arranged to discard all buffer memory unconditionally
+* Regarding the »Output Slot Protocol« it is not clear yet which part will be responsible for checking the [[timing constraints|Timings]]; the actual {{{Connection}}} implementation looks like a plausible candidate. Furthermore, it is not clear yet {{red{3/26}}} where precisely an underlying buffer provider will be integrated, and if doing so is mandatory
 
-!!!Lifecycle and storage
-The concrete OutputSlot implementation is owned and managed by the facility actually providing the output possibility in question. For example, the GUI provides viewer widgets, while some sound output backend provides sound ports. The associated OutputSlot implementation object is required to stay alive as long as it's registered with some OutputManager. It needs to be de-registered explicitly prior to destruction -- and this deregistration may block until all clients using this slot did terminate. Beyond that, an output slot implementation is expected to handle all kinds of failures gracefully -- preferably just emitting a signal (callback functor).
-{{red{TODO 7/11: Deregistration is an unsolved problem....}}}
+At this point, the initial design draft from 2012 became bogged down in a thicket of confused implementation. Based on, and driven by a placeholder implementation at that time, a {{{BufferProvider}}} utilised to simplify building the test setup was conflated with the //interface// exposed towards prospective clients. Notably the prototype implementation relied on passing a BuffHandle from a backing BufferProvider directly to the client. Yet only the BuffHandle itself can be considered part of the protocol, and acts as client interface, necessitating a mechanism that propagates the //lifecycle events// (locking, emitting, releasing) into a state coordinator within the opened OutputSlot.
 
 -----
 !Implementation / design problems
@@ -5259,23 +5259,38 @@ How to handle the selection of those two data exchange models!
 Thus: Client gets an {{{OutputSlot&amp;}}}, without knowing the exact implementation type &amp;rArr; how can the client pick up the right strategy?
 Solving this problem through //generic programming// -- i.e coding both cases effectively different, but similar -- would require to provide both implementation options already at //compile time!//
 
-{{red{currently}}} I see two possible, yet quite different approaches...
+Generally speaking, I see two possible different approaches...
 ;generic
 :when creating individual jobs, we utilise a //factory obtained from the output slot.//
 ;unified
 :extend and adapt the protocol such to make both models similar; concentrate all differences //within a separate buffer provider.//
 !!!discussion
 the generic approach looks as it's becoming rather convoluted in practice. We'd need to hand over additional parameters to the factory, which passes them through to the actual job implementation created. And there would be a coupling between slot and job (the slot is aware it's going to be used by a job, and even provides the implementation). Obviously, a benefit is that the actual code path executed within the job is without indirections, and all written down in a single location. Another benefit is the possibility to extend this approach to cover further buffer handling models -- it doesn't pose any requirements on the structure of the buffer handling --
-On the other hand, if we accept to retrieve the buffer(s) via an indirection, which we kind of do anyway //within the render node implementation// -- the unified model looks more like a clean solution. It's more like doing away with some local optimisations possible if we handle the models explicitly, so it's not much of a loss, given that the majority of the processing time will be spent within the inner pixel calculation loops for frame processing anyway. When following this approach, the BufferProvider becomes a third, independent partner, and the slot cooperates tightly with this buffer provider, while the client (processing node) still just talks to the slot. Basically, this unified solution works like extending the shared buffer model to both cases.
+On the other hand, if we accept to retrieve the buffer(s) via an indirection, which we kind of do anyway //within the render node implementation// -- the unified model looks more like a clean solution. It's more like doing away with some local optimisations possible if we handle the models explicitly, so it's not much of a loss, given that the majority of the processing time will be spent within the inner pixel calculation loops for frame processing anyway. When following this approach, the BufferProvider becomes a third, independent partner, and the slot cooperates tightly with this buffer provider, while the client (processing node) still just talks to a front-end handle. Basically, this unified solution works like extending the shared buffer model to both cases. It is possible to go even one step further and dress up the output handling such that it looks similar to the normal buffer handling for the client.
 &amp;rArr; __conclusion__: go for the unified approach!
 
 !!!unified data exchange cycle
-The planned delivery time of a frame is used as an ID throughout that cycle
-# within a defined time window prior to delivery, the client can ''allocate and retrieve the buffer'' from the BufferProvider.
+The planned delivery time of a frame, or (equivalently) the frame-number on a well defined time grid is used as an ID throughout that cycle
+# within a defined time window prior to delivery, the client can ''allocate and retrieve a working buffer'' in the form of a BuffHandle.
 # the client has to ''emit'' within a (short) time window prior to deadline
-# now the slot gets exclusive access to the buffer for output, signalling the buffer release to the buffer provider when done.
+# now the output mechanism behind the OutputSlot gets exclusive access to the buffer for output, signalling the buffer release when done.
 
 &amp;rarr; OutputSlotImpl
+
+-----
+!!! Delegation and state managment
+In 2026, the prototype implementation had to be reworked, due to [[#1395|https://issues.lumiera.org/ticket/1395]].
+However, the general structure of a BufferProvider was elaborated to quite some degree, and seems plausible and roughly final. Thus it becomes difficult to integrate the very specific requirements imposed by output handling into an implementation framework concerned primarily with memory management.
+* the output format dictates the buffer layout; whenever an OutputSlot was allocated, there is only a single //buffer type//
+* the client requests a buffer //for a specific frame// (observing the given [[timing constraints|Timings]] however)
+* at that point, the actual connection implementation has to hand-out a buffer pointer
+* so we need to create metadata and track state transitions for a buffer that is managed elsewhere
+* furthermore, calls from the client through the BuffHandle, to signal {{{emit}}} and {{{release}}} must be routed to the proper connection.
+So the problem is that BufferProvider is conceived as a central service facility, while what we need here is a thin abstraction proxy. Fortunately, the {{{BufferProvider}}} implementation scheme offers some wiggle room, insofar a {{{LocalTag}}} can be stored with the metadata. So the task is to provide a suitable implememtation of {{{BufferProvider::BufferStore}}}, such that
+* the index number of the connection / data feed is embedded into a {{{LocalTag}}}
+* an actual output buffer, provided by the {{{Connection}}} back-end, is registered with the metadata and represented as BuffHandle
+* calls on that BuffHandle will invoke the {{{BufferStore}}} API and must be delegated to the corresponding {{{Connection}}}.
+Taken together, this implies that the {{{OutputSlot::AllocState&lt;CON&gt;}}} turns into a delegation hub. It has to maintain the active connections and can thus be used to back a custom made {{{BufferStore}}} implementation, using the information embedded into the {{{LocalTag}}} to select the proper {{{Connection}}} for delegation -- which provides the actual implementation of all buffer management and state handling for the specific output mechanism.
 </pre>
 </div>
 <div title="OutputSlotImpl" modifier="Ichthyostega" created="201107102343" modified="201109232235" tags="spec operational">

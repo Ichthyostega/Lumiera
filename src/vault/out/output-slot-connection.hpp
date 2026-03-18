@@ -33,6 +33,7 @@
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
 #include "vault/out/output-slot.hpp"
+#include "vault/out/output-buffer-proxy.hpp"
 #include "lib/scoped-collection.hpp"
 #include "lib/iter-adapter-stl.hpp"
 #include "lib/iter-source.hpp"

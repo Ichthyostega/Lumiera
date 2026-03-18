@@ -114315,7 +114315,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1771536058707" ID="ID_1312596627" MODIFIED="1771537193386">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1771536058707" ID="ID_1312596627" MODIFIED="1773870715330" STYLE="bubble">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
@@ -114327,9 +114327,26 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
     </p>
   </body>
 </html></richcontent>
+<edge COLOR="#a3026d"/>
 <arrowlink COLOR="#ff0020" DESTINATION="ID_83611307" ENDARROW="Default" ENDINCLINATION="-142;6;" ID="Arrow_ID_47613106" STARTARROW="None" STARTINCLINATION="6;-31;"/>
 <arrowlink COLOR="#8f00c1" DESTINATION="ID_580664253" ENDARROW="Default" ENDINCLINATION="181;-320;" ID="Arrow_ID_553405939" STARTARROW="None" STARTINCLINATION="-172;19;"/>
+<linktarget COLOR="#fd4e1f" DESTINATION="ID_1312596627" ENDARROW="Default" ENDINCLINATION="521;57;" ID="Arrow_ID_75459964" SOURCE="ID_797224940" STARTARROW="None" STARTINCLINATION="879;-27;"/>
 <icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#4e273a" COLOR="#fcdf7d" CREATED="1773870620479" HGAP="45" ID="ID_493983467" MODIFIED="1773871608024" TEXT="indirekte Konsequenz aus den Design-Entw&#xfc;rfen" VSHIFT="3">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Ich hab zu Beginn ein &#187;Buffer Provider Protocol&#171; konzipiert, auf Basis einer abstrakten Analyse der vorhersehbaren Verwendung. Das enth&#228;lt bereits die Idee von Lifecycle-Phasen (und das folgt praktisch direkt aus <i>first principles...</i>). Dann habe ich, etwas sp&#228;ter das &#187;Output Slot Protocol&#171; konzipiert, und mich dabei &#8212; mutma&#223;lich unbewu&#223;t &#8212; an die damit bereits abgesteckte, gedankliche Schablone gehalten. Dieses Design wurde viele Jahre nicht &#252;berpr&#252;ft; erst jetzt, als die Integration der Engine als Ziel gesezt wurde, und dann die Architektur &#187;gedreht&#171; (Stichwort &#187;Domain Ontology&#171;), erst dann zeigte sich, da&#223; beide Entw&#252;rfe im Prinzip kongruent sind, aber praktisch nicht zusammenpassen. In dieser Situation bin ich <i>nicht im Stande, meine Designs einfach wegzuferfen </i>&#8212; denn beide Designs beruhen auf einer Einsicht, die ich immer noch f&#252;r zutreffend halte und nicht ungeschehen machen kann.
+    </p>
+    <p>
+      Allerdings ist dadurch noch nicht die konkrete Form der BufferProvider-Implementierung festgelegt; im Besonderen nicht die Idee, wie ich mit den Metadaten umgehe, und da&#223; wir eine Metadaten-Tabelle haben, die auch die Funktion der State-Engine mit &#252;bernimmt. Zwar k&#246;nnte ich diese bestehende Implementierung &#8222;einfach&#8220; wegwerfen &#8212; ich hab aber das glatte Gegenteil getan: ich hab in sie jetzt viel Zeit investiert. Was hat mich dazu motiviert? Es war nur die Intuition, da&#223; die Idee mit den Metadaten in die richtige Richtung weist, und einen Spielraum &#246;ffnent; demgegen&#252;ber w&#228;re eine Implementierung, die von konkreten Anforderungen getrieben wird, bereits komplett festgelegt. Der Preis daf&#252;r ist allerdings, da&#223; ich mich damit auf das Design-Schema im BufferProvider festgelegt habe, und jetzt die Anfroderung, einen Buffer<i>&#160; lediglich durchzureichen,</i>&#160;um dieses Schema herum einf&#228;deln mu&#223;
+    </p>
+  </body>
+</html></richcontent>
+<edge COLOR="#e60076"/>
+<icon BUILTIN="info"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1771536236498" ID="ID_606028629" MODIFIED="1771536297629" TEXT="Nah-Ziel">
 <icon BUILTIN="yes"/>
@@ -114991,6 +115008,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
     </p>
   </body>
 </html></richcontent>
+<arrowlink COLOR="#fd4e1f" DESTINATION="ID_1312596627" ENDARROW="Default" ENDINCLINATION="521;57;" ID="Arrow_ID_75459964" STARTARROW="None" STARTINCLINATION="879;-27;"/>
 </node>
 <node CREATED="1772129627997" ID="ID_1533127720" MODIFIED="1772129874152" TEXT="weitere Analyse zeigt: die konkrtete Storage-Size weicht ab (kann gr&#xf6;&#xdf;er sein)">
 <richcontent TYPE="NOTE"><html>
@@ -116976,6 +116994,26 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1773871637641" ID="ID_1200164165" MODIFIED="1773871656095" TEXT="das wird jetzt alles ziemlich komplex">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1773871659011" ID="ID_678216230" MODIFIED="1773871668297" TEXT="es wirkt auf den ersten Blick wie ein &#xbb;Hack&#xab;"/>
+<node CREATED="1773871671125" ID="ID_660604335" MODIFIED="1773871709556" TEXT="der Grund ist: ich habe mich auf das Schema des BufferProviders festgelegt"/>
+<node CREATED="1773871721534" ID="ID_563946551" MODIFIED="1773871785505" TEXT="dieses Schema sieht nicht vor, die Koordinierungs-Logik gegen etwas anderes auszutauschen"/>
+<node CREATED="1773871799787" ID="ID_1447337642" MODIFIED="1773871816862" TEXT="dem entsprechend sind die Virtual-Functions eine Ebene nach hinten gewandert"/>
+<node CREATED="1773871818105" ID="ID_1249815623" MODIFIED="1773871903659" TEXT="und ich mu&#xdf; sie nun implementieren">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      schlimmer noch, nach der j&#252;ngsten &#220;berarbeitung sind auch die Datentypen aus der Metadaten-Verwaltung auf das Implementierungs-API gewandert (insofern das BufferStage-API nun dedizierte Lookups macht zu gegebenem typeKey)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1773871912684" ID="ID_229835695" MODIFIED="1773872053431" TEXT="einziger verbleibender Freiheitsgrad: den BufferStore re-interpretieren">
+<arrowlink COLOR="#3c2aa0" DESTINATION="ID_1447615516" ENDARROW="Default" ENDINCLINATION="140;-650;" ID="Arrow_ID_502898501" STARTARROW="None" STARTINCLINATION="1105;47;"/>
 </node>
 </node>
 </node>
@@ -138022,17 +138060,121 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="pencil"/>
 <node CREATED="1773703751137" ID="ID_340628735" MODIFIED="1773703998020" TEXT="&#xdc;berlegung am Rande: l&#xe4;ngerfristig wollen wir einen globalen Metadaten-Store">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       In der aktuellen Konfiguration hat jeder BufferProvider seine eigenes BufferStage-Implementierung, und darin eingebettet eine eigene Metadaten-Hashtable. Im Falle des BufferProxyAdaptors bedeutet das, f&#252;r jede Allokation eines OutputSlot erneut eine Metadaten-Verwaltung zu konstruieren, die dann aber nur f&#252;r wenige Buffer-Eintr&#228;ge genutzt wird. Da Output-Slots durchaus l&#228;ngerfristig leben, stellt das kein Performance-Problem da, aber k&#246;nnte letztlich schon zu einigem Bloat f&#252;hren
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#76516c" DESTINATION="ID_1415408255" ENDARROW="Default" ENDINCLINATION="779;39;" ID="Arrow_ID_1408352744" STARTARROW="None" STARTINCLINATION="468;17;"/>
+</node>
+<node CREATED="1773704083017" ID="ID_446456909" MODIFIED="1773704096521" TEXT="Anordnung und Zugriffe sind problematisch in der bestehenden Architektur">
+<node CREATED="1773704097997" ID="ID_1516975322" MODIFIED="1773704108791" TEXT="man will nur einen einzigen BufferProxyAdaptor"/>
+<node CREATED="1773704125817" ID="ID_1780250199" MODIFIED="1773704161930" TEXT="aber die &#xbb;Typ&#xab;-Eintr&#xe4;ge werden in der Connection konfiguriert"/>
+<node CREATED="1773704176910" ID="ID_1110317988" MODIFIED="1773704206640">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      und die Lebenszyklus-Callbacks m&#252;ssen in diese Connection&#160;<i>zur&#252;ckfinden</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1773704250352" ID="ID_1517610825" MODIFIED="1773704374037" TEXT="zudem hab ich das LocalTag bereits &#x201e;verbraucht&#x201c;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      da steckt die Buffer-Adresse drinnen, die dann konkret vom BufferStore auch wieder zur&#252;ckgeliefert werden soll; denn dieser ist hier in dem speziellen Setup eigentlich nur ein &#187;stub&#171; und dient dazu einen bereits bestehenden und <i>woanders verwalteten</i>&#160;Buffer lediglich durchzureichen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1773704375888" ID="ID_1885968236" MODIFIED="1773704395616" TEXT="das l&#xe4;uft auf eine ekelige Verdrahtungs-Orgie hinaus">
+<icon BUILTIN="smiley-oh"/>
+<node CREATED="1773704412274" ID="ID_1170367903" MODIFIED="1773704427349" TEXT="Connection / oder DataSink brauchen back-Pointer auf den AllocState"/>
+<node CREATED="1773704467940" ID="ID_1643292500" MODIFIED="1773704485525" TEXT="alle Lifecycle-Callbacks kommen im AllocState an"/>
+<node CREATED="1773704486520" ID="ID_1324797839" MODIFIED="1773704500571" TEXT="sie haben nur den Buffer-Ptr, nicht die dazugeh&#xf6;rige Connection"/>
+</node>
+</node>
+<node CREATED="1773797100647" ID="ID_425446315" MODIFIED="1773797118509" TEXT="&#xdc;berlegung: wie k&#xf6;nnt man das Problem &#xfc;berhaupt &#xbb;knacken&#xab;">
+<node CREATED="1773797120055" ID="ID_1455782398" MODIFIED="1773797126986" TEXT="mit Gewalt?">
+<node CREATED="1773797138856" ID="ID_1366418982" MODIFIED="1773797219006" TEXT="jede DataSink bekommt auch einen Basis-Descriptor(&#x27fc;backlink)"/>
+<node CREATED="1773797234722" ID="ID_928593244" MODIFIED="1773797318457" TEXT="jedesmal wenn eine Connection einen Buffer ausgibt, meldet sie das beim AllocState"/>
+<node CREATED="1773797320138" ID="ID_364292629" MODIFIED="1773797363035" TEXT="der AllocState f&#xfc;hrt eine Index-Tabelle Buff-Adr &#x27fc; Connection">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1773797364278" ID="ID_1994968229" MODIFIED="1773797379039" TEXT="bei jedem Callback macht AllocState einen lookup"/>
+<node CREATED="1773797379839" ID="ID_1614645519" MODIFIED="1773797430350" TEXT="und delegiert dann an ein callback-Interface in der Connection"/>
+</node>
+<node CREATED="1773797578422" ID="ID_1046290416" MODIFIED="1773797592886" TEXT="das Proxy-Callback-Interface &#xbb;aufbohren&#xab;">
+<node CREATED="1773797596517" ID="ID_1912686522" MODIFIED="1773797622368" TEXT="wir legen einen lokalen Responder in das LocalTag"/>
+<node CREATED="1773797623708" ID="ID_139729210" MODIFIED="1773797661678" TEXT="man ruft diesen auf, um den tats&#xe4;chlichen buffer zu bekommen"/>
+<node CREATED="1773797677498" ID="ID_47941498" MODIFIED="1773797692733" TEXT="dieser Responder bekommt auch direkt die callbacks"/>
+</node>
+<node CREATED="1773866734065" ID="ID_1762550767" MODIFIED="1773866797883">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <i>Nur das</i>&#160;<font face="Monospaced" color="#523333">LocalTag</font>&#160;ist von Anfang bis Ende da
+    </p>
+  </body>
+</html></richcontent>
+<font NAME="SansSerif" SIZE="12"/>
+<node CREATED="1773866907525" ID="ID_835297439" MODIFIED="1773866922823" TEXT="direkt im AllocState w&#xfc;rde ein Connection-Index gen&#xfc;gen">
+<node CREATED="1773866937489" ID="ID_75609998" MODIFIED="1773867041053" TEXT="sofern alle Aufrufe jeweils (implizit) gesondert daherkommen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...was hei&#223;t, <i>im jeweiligen Aufruf</i>&#160;ist bekannt um welchen Aufruf es sich handelt; sodann gen&#252;gt der Index der Connection als Zusatz-Info, um das jeweils einschl&#228;gige Connection-API aufzurufen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1773867052378" ID="ID_1791077110" MODIFIED="1773867068140" TEXT="Also r&#xfc;ckt der AllocState in den Mittelpunkt ">
+<node CREATED="1773867077554" ID="ID_1292849096" MODIFIED="1773867090761" TEXT="die DataSinks verweisen auf diesen (nicht die Connection)"/>
+<node CREATED="1773867128982" ID="ID_1869189490" MODIFIED="1773867191531" TEXT="oder sie verweisen sogar auf den OutputSlot (und dieser geht &#xfc;ber seinen PImpl)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das w&#228;ren dann aber zwei Indirektions-Schritte (somit komplexer) und au&#223;erdem br&#228;uchte es dann ein Implementierungs-API
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1773867095492" ID="ID_1479457348" MODIFIED="1773867534654" TEXT="die DataSinks bekommen stattdessen einen Connection-Index eingebettet mit"/>
+</node>
+<node CREATED="1773867587451" ID="ID_1716621019" MODIFIED="1773867642960" TEXT="die DataSinks k&#xf6;nnten &#xbb;unique&#xab; sein &#x27f6; flexible direkte Implementierung">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1773867267493" ID="ID_1405576784" MODIFIED="1773867294678" TEXT="wenn dann ein Buffer f&#xfc;r einen bestimmten Frame angefordert wird...">
+<node CREATED="1773867302097" ID="ID_689493546" MODIFIED="1773867317107" TEXT="mu&#xdf; als Response direkt ein BuffHandle geliefert werden"/>
+<node CREATED="1773867317823" ID="ID_1995974743" MODIFIED="1773867329597" TEXT="insofern f&#xe4;llt der Umweg &#xfc;ber einen Typ hier sowiso weg"/>
+<node CREATED="1773867673872" ID="ID_1438192515" MODIFIED="1773867688584" TEXT="es tritt aber die Frame-Nr als zus&#xe4;tzlicher Parameter auf">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1773872350927" ID="ID_1455769657" MODIFIED="1773872371190" TEXT="und hinter dem Callback(s) m&#xfc;&#xdf;te nochmal eine Indirektion folgen"/>
+</node>
+</node>
+<node CREATED="1773872010905" ID="ID_1655981568" MODIFIED="1773872027169" TEXT="Nun steht die inzwischen festgezurrte BufferProvider-Struktur im Weg">
+<node CREATED="1773871942945" ID="ID_1447615516" MODIFIED="1773872053431" TEXT="l&#xe4;uft darauf hinaus, den BufferStore anders zu interpretieren">
+<linktarget COLOR="#3c2aa0" DESTINATION="ID_1447615516" ENDARROW="Default" ENDINCLINATION="140;-650;" ID="Arrow_ID_502898501" SOURCE="ID_229835695" STARTARROW="None" STARTINCLINATION="1105;47;"/>
+</node>
+<node CREATED="1773872076215" ID="ID_1282818549" MODIFIED="1773872198594" TEXT="mein Ansatz war bis jetzt: das ist &#xbb;ein Dummy&#xab; mit Diagnose-Callbacks"/>
+<node CREATED="1773872206676" ID="ID_1935549810" MODIFIED="1773872220263" TEXT="tats&#xe4;chlich replizieren die Callbacks aber das BufferStore-API"/>
+<node CREATED="1773875187789" ID="ID_666457397" MODIFIED="1773875217280" TEXT="unn&#xf6;tige Indirektion und Komplexit&#xe4;t &#x27f9; brauche keinen BufferProxyAdaptor">
+<node CREATED="1773875219107" ID="ID_1212468658" MODIFIED="1773875229312" TEXT="ich kann den ja f&#xfc;r andere Zwecke mal bestehen lassen"/>
+<node CREATED="1773875230170" ID="ID_1330974689" MODIFIED="1773875244308" TEXT="er war wichtig, um den Mismatch in den APIs zu erkennen und dann zu beheben"/>
+<node CREATED="1773875245243" ID="ID_1639451717" MODIFIED="1773875299381" TEXT="die dort erstmals verwendeten generierten Datentypen sind anderweitig n&#xfc;tzlich"/>
+<node CREATED="1773875306072" ID="ID_1024103205" MODIFIED="1773875342503" TEXT="was wir brauchen: eine direkt an AllocState delegierende BufferStore-Implementierung"/>
+</node>
+</node>
 </node>
 </node>
 </node>
