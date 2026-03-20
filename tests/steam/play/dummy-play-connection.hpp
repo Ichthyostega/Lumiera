@@ -59,6 +59,11 @@
  ** @todo this was invented in 2012 -- but development of the player subsystem stalled thereafter.
  **       As of 2016, I still consider this design valid and intend to pick up development when
  **       able to address this topic again. At the moment, the UI-Session connection is more urgent.
+ ** @deprecated 3/2026 the idea as such is valid, but I doubt it can be implemented this way
+ **       without creating a massive amount of fake implementation for the sole purpose of
+ **       demonstrating the component integration. On the other hand, it might be worthwhile
+ **       to build a complete framework for dummy data so that a running render engine
+ **       can be demonstrated at integration test level.
  ** 
  ** @see stage::PlaybackController usage exampleS
  */
@@ -128,7 +133,7 @@ namespace test {
       
       /** search through all port <-> sink connections
        *  supported by this DummyPlayConnection
-       * @return `true` if found both a math on port an sink.
+       * @return `true` if found both a match on port an sink.
        */
       bool
       isSupported (ModelPort port, DataSink sink)
@@ -138,8 +143,11 @@ namespace test {
             if (port == *it)
               {
                 auto [refPort, refSink] = getModelPort(i);
+                UNIMPLEMENTED ("need a fake OutputSlot and need to place some Stream-ID into the data sink");
+#if false  //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : disabled code to allow refactoring of the OutputSlot default implementation
                 if (refSink == sink)
                   return true;
+#endif  /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : (end) disabled code
               }
           return false;
         }

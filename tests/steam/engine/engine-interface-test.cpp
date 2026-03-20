@@ -47,8 +47,7 @@ namespace test  {
   using vault::out::Timings;
   using lib::time::FrameRate;
   
-  typedef asset::ID<Pipe> PID;
-  typedef OutputSlot::Allocation Allocation;
+  using PID = asset::ID<Pipe>;
 
   
   namespace { // test fixture...
@@ -89,11 +88,10 @@ namespace test  {
           ModelPort port(pipe);
           
           DiagnosticOutputSlot oSlot;
-          Allocation& output = oSlot.allocate();
           Timings timings (FrameRate::PAL); /////////TODO
           
           // Invoke test subject...
-          CalcStreams calc = engine.calculate(port, timings, output);
+          CalcStreams calc = engine.calculate(port, timings, oSlot);
           
           ////TODO some direct checks on the calculation stream??
           

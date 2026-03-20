@@ -73,7 +73,7 @@ namespace engine{
   using mobject::ModelPort;
   using vault::out::Timings;
   
-  using OutputConnection = vault::out::OutputSlot::Allocation;
+  using vault::out::OutputSlot;
   
   
   
@@ -141,7 +141,7 @@ namespace engine{
       CalcStreams
       calculate(ModelPort mPort,
                 Timings nominalTimings,
-                OutputConnection& output,
+                OutputSlot& outputSlot,
                 Quality serviceQuality =QoS_DEFAULT);
       
       CalcStreams

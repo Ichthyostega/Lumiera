@@ -58,28 +58,27 @@ namespace test {
           // and then registered with / retrieved from an OutputManager
           DiagnosticOutputSlot oSlot;
           
-          // Client claims the OutputSlot
-          // and opens it for exclusive use.
-          OutputSlot::Allocation& alloc = oSlot.allocate();
+          // Note: an OutputSlot is automatically activated / allocated
+          // for exclusive use by this client.
           
           // Now the client is able to prepare
           // "calculation streams" for the individual
           // Channels to be output through this slot.
-          OutputSlot::OpenedSinks sinks = alloc.getOpenedSinks();
+          OutputSlot::OpenedSinks sinks = oSlot.getOpenedSinks();
           DataSink sink0 = *sinks;
           DataSink sink1 = *++sinks;
           
           // within the frame-calculation "loop"
           // we perform a data exchange cycle
           FrameCnt frameNr = 123;
-          BuffHandle buff00 = sink0.lockBufferFor (frameNr);
-          BuffHandle buff10 = sink1.lockBufferFor (frameNr);
+          BuffHandle buff00 = sink0(frameNr);
+          BuffHandle buff10 = sink1(frameNr);
           
           // rendering process calculates content....
           buff00.accessAs<TestFrame>() = testData(0,0);
           
           // while further frames might be processed in parallel
-          BuffHandle buff11 = sink1.lockBufferFor (frameNr+1);
+          BuffHandle buff11 = sink1(frameNr+1);
           buff11.accessAs<TestFrame>() = testData(1,1);
           buff10.accessAs<TestFrame>() = testData(1,0);
           

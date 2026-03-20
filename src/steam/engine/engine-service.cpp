@@ -69,14 +69,14 @@ namespace engine{
   CalcStreams
   EngineService::calculate(ModelPort mPort,
                            Timings nominalTimings,
-                           OutputConnection& output,
+                           OutputSlot& outputSlot,
                            Quality serviceQuality)
   {                                        //////////////////////////////////////////////////TICKET #1301 : prepare proper Dispatcher here, including translation ModelPort -> portIDX
     RenderEnvironment& renderConfig = configureCalculation (mPort,nominalTimings,serviceQuality);
     function<CalcStream(DataSink)> triggerRenderStart = bind (activateCalculation, _1, ref(renderConfig));
 
     CalcStreams runningCalculations;
-    append_all (transform (output.getOpenedSinks()
+    append_all (transform (outputSlot.getOpenedSinks()
                           ,triggerRenderStart
                           )
                ,runningCalculations);

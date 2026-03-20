@@ -397,15 +397,19 @@ namespace out   {
       TrackingInMemoryBlockSequence const&
       accessSequence (uint channel)
         {
+#if false  //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : disabled code to disentangle BufferProvider implementation
           REQUIRE (!isFree(), "diagnostic OutputSlot not (yet) connected");
           REQUIRE (channel <= getOutputChannelCount());
 //        return static_cast<TrackingInMemoryBlockSequence&> (state_->access (channel));
+#endif  /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : (end) disabled code
           UNIMPLEMENTED ("the old tracking API is abandoned, the new one not yet implemented");
         }
       
       
     public:
-      DiagnosticOutputSlot() { }
+      DiagnosticOutputSlot()
+        : OutputSlot(unique_ptr<Allocation>{nullptr}) //////////////////////OOO Kabooooooom!!  --- should actually configure a suitable Allcation subclass here
+        { }
       
       
       

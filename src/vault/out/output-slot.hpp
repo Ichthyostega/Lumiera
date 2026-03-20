@@ -21,33 +21,44 @@
  **
  ** Each OutputSlot is an unique and distinguishable entity. It corresponds explicitly to an
  ** external output, or a group of such outputs (e.g. left and right sound card output channels),
- ** or an output file or similar capability accepting media content. Initially, an output slot
- ** needs to be provided, configured and registered, using an implementation suitable for the
- ** kind of media data to be sent (sound, video) and also suitable for the special circumstances
- ** of the output capability (render a file, display video in a GUI widget, send video to some
- ** full screen display, establish a Jack port, just use some kind of "sound out"). An output
- ** slot is always limited to a single kind of media, and to a single connection unit, but
- ** this connection may still be comprised of multiple channels
- ** (e.g. stereoscopic video, multichannel sound).
+ ** or an output file or similar capability accepting media content. The setup for an OutputSlot
+ ** is provided, configured and registered with an OutputManager, using an implementation suitable
+ ** for the kind of media data to be sent (sound, video) and also suitable for the desired kind if
+ ** output capability (render to file, display video in a GUI widget, send video to a full screen
+ ** display, establish a Jack port or use any kind of "sound out"). Thus it is always limited to
+ ** a single kind of media, and to a single connection unit, but this connection may still comprise
+ ** several data feeds (e.g. stereoscopic video, multichannel sound). The number of such feeds
+ ** and the expected data format depends on the _media stream type_ used for configuring or
+ ** retrieving this OutputSlot. For example, a stereo sound output may expect only a single
+ ** data feed, where data blocks for both channels are sent in interleaved format.
  ** 
- ** In order to be usable as output sink, an output slot needs to be \em allocated: At any time,
- ** there may be only a single client using a given output slot this way. To stress this point:
- ** output slots don't provide any kind of inherent mixing capability; any adaptation, mixing,
- ** overlaying and sharing needs to be done within the nodes network producing the output data
- ** to be fed into the slot. (in special cases, some external output capabilities -- e.g. the
- ** Jack audio connection system -- may still provide additional mixing capabilities,
- ** but that's beyond the scope of the Lumiera application)
+ ** Once the client retrieves some OutputSlot, it was _allocated_ for exclusive use for that client;
+ ** At any time, there may be only a single client using a given output capability this way. It should
+ ** be noted thus that output slots don't provide any kind of inherent mixing capability; any adaptation,
+ ** mixing, overlaying and sharing needs to be done within the Render Node Network that produces the
+ ** data to be output. (As an aside, _some_ external output frameworks — e.g. the Jack audio connection
+ ** system — may still provide additional mixing capabilities, yet these are beyond the scope of the
+ ** Lumiera application)
  ** 
- ** Once allocated, the output slot returns a set of concrete sink handles (one for each
- ** physical channel expecting data). The calculating process feeds its results into those handles.
- ** Size and other characteristics of the data frames are assumed to be suitable, which typically
- ** won't be verified at that level anymore. Besides that, the allocation of an output slot reveals
- ** detailed timing expectations. The client is required to comply to these timings when _emitting_
- ** data -- they are even required to provide a current time specification, alongside with the data.
- ** Based on this information, the output slot has the ability to handle timing failures gracefully;
- ** the concrete output slot implementation is expected to provide some kind of de-click or
- ** de-flicker facility, which kicks in automatically when a timing failure is detected.
- **
+ ** The OutputSlot object is a (copyable) front-end handle, that should be stored by the client and
+ ** discarded when further output is no longer required. From the OutputSlot, a set of actual DataSink
+ ** handles can be retrieved (one for each possible data feed). Starting from these handles, a two-phase
+ ** output protocol can be executed for each frame of data to send to the output. This includes obtaining
+ ** a BuffHandle, similar to what the BufferProvider exposes. The suitability of the buffer and the data
+ ** format is not validated in any way at that level, since the setup works under the assumption that
+ ** the stream type and further metadata has been validated or configured suitably at a higher level.
+ ** However, the OutputSlot exposes a definition of _timing constraints_ to describe when data must
+ ** be provided, and what deadline to observe for each frame. The client is required to comply to these
+ ** vault::out::Timings both when acquiring the BuffHandle for some frame and when _emitting_ data --
+ ** any use outside these limits will cause that frame to be treated as a glitch. Furthermore,
+ ** the client is required to invoke BuffHandle::release() as soon as no further access to
+ ** the buffer is required (and after invoking `emit()`). Failure to do so will cause
+ ** a blocked buffer and typically leads to abort of the output and play process.
+ ** However, individual frames that miss the deadline are handled gracefully;
+ ** the actual implementation is expected to provide some kind of de-click
+ ** or de-flicker facility, which kicks in automatically whenever
+ ** a timing failure is detected.
+ ** 
  ** @see OutputSlotProtocol_test
  ** @see diagnostic-output-slot.hpp
  */
@@ -66,6 +77,7 @@
 #include "lib/util.hpp"
 
 #include <memory>
+#include <functional>
 
 
 namespace vault {
@@ -73,13 +85,38 @@ namespace out  {
   
   using vault::mem::BuffHandle;
   using lib::time::FrameCnt;
+  using std::shared_ptr;
   using std::unique_ptr;
   
   
-  
-  class DataSink;
-  
   using FrameID = FrameCnt;
+  
+  
+  /**
+   * Handle to represent an opened connection ready to receive media data for output.
+   * Each DataSink (handle) corresponds to an OutputSlot::Connection entry. Data is
+   * published frame wise in a two-phase protocol: in the first stage, the client
+   * gets exclusive access to an output buffer. Once the data is ready for output,
+   * the client signals `emit()` and the buffer enters the second stage, where the
+   * intern output mechanism of that specific connection gets exclusive access.
+   * 
+   * The DataSink handle is a _functor_ and can be invoked with a frame number,
+   * to start such a two-phase transaction for _this specific frame._ The result
+   * is a BuffHandle, to be used in the usual way as with a BufferProvider:
+   * - the client can access the buffer memory, either raw or with a forced cast
+   * - the client invokes BuffHandle::emit() to indicate that data is ready for output
+   * - once the client is done with that handle, it **must** invoke BuffHandle::release()
+   * Each output mechanism defines specific constraints regarding the time window when
+   * to get such a BuffHandle and when `emit()` must have been called. These constraints
+   * are indicated by the vault::out::Timings, that can be retrieved from the OutputSlot.
+   * 
+   * @note DataSink embeds a ref-counting handle to detect automatically when some
+   *       connection can be released; the _allocation of an OutputSlot_ is released
+   *       once all connections were discarded.
+   */
+  class DataSink
+    : public std::function<BuffHandle(FrameID)>
+    { };
   
   
   
@@ -88,85 +125,73 @@ namespace out  {
    * An OutputSlot represents the possibility to send data through multiple
    * channels to some kind of external sink (video in GUI window, video full screen,
    * sound, Jack, rendering to file). Clients are expected to retrieve a suitably
-   * preconfigured implementation from some OutputManager instance. An OutputSlot
-   * needs to be _claimed_ for output by invoking #allocate, which returns a
-   * representation of the connection state. This operation is exclusive.
-   * The actual [output sinks](\ref DataSink) can be retrieved
-   * through the Allocation object returned from there.
+   * preconfigured instance from some OutputManager. At that point, the given
+   * OutputSlot is already activated and reserved for exclusive use for the client.
+   * The further lifecycle is managed by ref-count, which implies that OutputSlot
+   * is a (copyable) front-end handle. For the actual output, the client has to
+   * [retrieve the DataSink handles](\ref getOpenedSinks()), one for each independent
+   * data feed associated with this OutputSlot. How many feeds this are, depends on
+   * the _media stream type_ for which this OutputSlot was configured. The retrieved
+   * DataSink handles also participate in the ref-count based connection state; once
+   * the OutputSlot and all DataSink handles are discarded, the output connection
+   * and all associated resources are released.
+   * @see DataSink for the next steps to perform on the handles for output
+   *      in compliance with the »Output Slot protocol«.
    */
   class OutputSlot
-    : util::NonCopyable
     {
       
     public:
-      virtual ~OutputSlot();
-      
       using OpenedSinks = lib::IterSource<DataSink>::iterator;
       
-      class Allocation
+      OpenedSinks getOpenedSinks();
+      Timings timingConstraints();
+      
+      /** is this OutputSlot allocated/activated? */
+      bool
+      isActive()  const
         {
-        public:
-          virtual OpenedSinks getOpenedSinks() =0;
-          virtual Timings timingConstraints()  =0;
-          
-          virtual bool isActive()  const       =0;
-          
-         ~Allocation(); ///< this is an interface
-        };
-      
-      
-      /** can this OutputSlot be allocated? */
-      bool isFree()  const;
-      
-      /** claim this slot for exclusive use */
-      Allocation& allocate();
-      
-      /** disconnect from this OutputSlot
-       * @warning may block until DataSinks are gone */
-      void disconnect();
+          return bool(alloc_);
+        }
 
       /** established output feed */
       class Connection;
       
       
     protected:
+      /** @internal interface for the allocated state */
+      class Allocation
+        {
+        public:
+          virtual ~Allocation(); ///< this is an interface
+          
+          virtual void release()       =0;
+          virtual Timings getTimings() =0;
+        };
+      
       /** active connections through this OutputSlot */
       template<class CON>
       class AllocState;
       
-      unique_ptr<Allocation> state_;
+      shared_ptr<Allocation> alloc_;
       
-      /** build the _connected state,_
-       *  based on the existing configuration
-       *  within this concrete OutputSlot */
-      virtual unique_ptr<Allocation> buildState() =0;
-    };
-  
-  
-  
-  /**
-   * denotes an opened connection ready to receive media data for output.
-   * Each DataSink (handle) corresponds to an OutputSlot::Connection entry.
-   * Data is handed over frame wise in a two-phase protocol: first, the client
-   * gets exclusive access to an output buffer, and then, when done, the buffer
-   * is handed over by an #emit call.
-   */
-  class DataSink
-    : public lib::Handle<OutputSlot::Connection>
-    {
+      shared_ptr<Allocation>
+      connect (unique_ptr<Allocation>);
       
     public:
-      BuffHandle lockBufferFor(FrameID);
+      /** by default marked as inactive/defunct */
+      OutputSlot() = default;
       
+      /**
+       * Build an OutputSlot that is in  _connected state_.
+       * @param allocation fully configured for a specific kind of Connection.
+       */
+      OutputSlot (unique_ptr<Allocation> allocation)
+        : alloc_{connect (move(allocation))}
+        { }
       
-      friend bool operator== (DataSink const& sink1, DataSink const& sink2)
-      {
-        return not (sink1 and sink2)
-            or (sink1 and sink2
-                and util::isSameObject (sink1.impl(), sink2.impl()));
-      }
+      // standard copy operations acceptable
     };
-  
   
   
 }} // namespace vault::out

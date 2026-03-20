@@ -27,7 +27,16 @@
  ** - a set of ModelPort elements
  ** - a set of DataSink handles, as if an actual playback connection has been established
  ** @todo 5/2023 add more elements as needed for test driven integration of Player and engine
- ** @todo this was invented in 2012 -- but development of the player subsystem stalled thereafter.
+ ** @todo this was invented in 2012 -- as an act of desperation, since everything to build upon
+ **       seemed to evade my grip. My hope at that time was so somehow _bootstrap_ an explorative
+ **       design in order to get away from that top-down reasoning, that seemed to lead nowhere.
+ **       However, work on the player had to be postponed to care for the GUI first; meanwhile
+ **       I follow a similar idea, relying on »vertical integration slices«
+ ** @deprecated 3/2026 not sure if we need this henceforth...
+ **       It might be useful though in case we consider to build some kind of
+ **       _component integration test_ -- yet for this to work, we'd need
+ **       - a fake calculation
+ **       - a fake OutputSlot
  ** 
  ** @see mock-dispatcher.hpp
  ** @see JobPlanningPipeline_test
@@ -66,7 +75,7 @@ namespace test {
   
   /**
    * @todo 5/2023 quick-n-dirty placeholder to be able to fabricate fake DataSink handles (`Handle<Connection>`)
-   */
+   */   /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : after the refactoring of OutputSlot 3/2026 it is not that easy any more. We need a Fake OutputSlot
   class UnimplementedConnection
     : public vault::out::OutputSlot::Connection
     {
@@ -166,8 +175,11 @@ namespace test {
           modelPorts_.push_back (ModelPort(pipeB));
           
           // prepare corresponding placeholder DataSink (a fake active output connection)
+          UNIMPLEMENTED ("need mock/fake OutputSlot");
+#if false  //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : disabled code to disentangle BufferProvider implementation
           dataSinks_.emplace_back().activate (std::make_shared<UnimplementedConnection>());
           dataSinks_.emplace_back().activate (std::make_shared<UnimplementedConnection>());
+#endif  /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : (end) disabled code
         }
       
       

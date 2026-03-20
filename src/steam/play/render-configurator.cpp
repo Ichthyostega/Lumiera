@@ -68,7 +68,7 @@ namespace play {
           {
             REQUIRE (outputResolver_);
             OutputSlot& slot = outputResolver_->getOutputFor (port);
-            if (!slot.isFree())
+            if (not slot.isActive())
               throw error::State{"unable to acquire a suitable output slot"   /////////////////////TICKET #197 #816   --- could use util::_Fmt here
                                 , LERR_(CANT_PLAY)};
             return slot;
@@ -78,16 +78,16 @@ namespace play {
         engine::CalcStreams
         buildCalculationStreams (ModelPort port, OutputSlot& output)
           {
-            OutputSlot::Allocation& activeOutputConnection = output.allocate();
-            Timings nominalTimings = activeOutputConnection.timingConstraints()
-                                                           .constrainedBy(playbackTimings_);
+            Timings nominalTimings = output.timingConstraints()
+                                           .constrainedBy(playbackTimings_);
             
-            return activateEngine (port, nominalTimings, activeOutputConnection, renderQuality_);
+                                                         //////////////////////////////////////////TICKET #878 consider to store a copy of the OutputSlot (≙ref-couting handle) somewhere in a »PlayProcess« to keep it alive
+            return activateEngine (port, nominalTimings, output, renderQuality_);
           }
         
         
         engine::CalcStreams
-        activateEngine (ModelPort port, Timings timings, OutputSlot::Allocation& activeOutputConnection, RenderQuality quality)
+        activateEngine (ModelPort port, Timings timings, OutputSlot& activeOutputConnection, RenderQuality quality)
           {
             return EngineService::instance().calculate (port, timings, activeOutputConnection, quality);
           }

@@ -34,68 +34,61 @@ namespace out   {
   
   
   
-  OutputSlot::~OutputSlot() { }  // emit VTables here....
-  
+  // emit VTables here....
   OutputSlot::Allocation::~Allocation() { }
-  
   OutputSlot::Connection::~Connection() { }
   
   
   
-  
-  
-  /** whether this output slot is occupied
-   * @return true if currently unconnected and
-   *         able to connect and handle output data
+  /**
+   * @internal setup of the OutputSlot and the PImpl (Allocation) for active connected state.
+   *   Some wiring must be carried out here, so that the ref-count based lifecycle management
+   *   works as desired. All customisation for some specific kind of output mechanism and
+   *   the corresponding OutputSlot::Connection implementation is embedded into the actual
+   *   type of the PImpl, i.e. the Allocation subclass passed in as argument. The OutputSlot,
+   *   together with the DataSink handles, will take shared ownership of the connection setup.
    */
-  bool
-  OutputSlot::isFree()  const
+  shared_ptr<OutputSlot::Allocation>
+  OutputSlot::connect (unique_ptr<Allocation> allocation)
   {
-    return not this->state_;
+    REQUIRE (allocation);
+    return {allocation.release()
+           ,[](Allocation* allo) {// disconnection call-back
+                                   REQUIRE(allo);
+                                   allo->release();
+                                   delete allo;
+                                 }};
   }
+
   
   
-  /** claim this OutputSlot for active use as output sink(s).
-   *  At any point, a given slot can only be used for a single
-   *  ongoing output process (which may serve several channels though).
-   *  The assumption is for the OutputSlot to be picked through a query
-   *  to some OutputManater, so the parameters (resolution, sample rate...)
-   *  should be suited for the intended use. Thus no additional configuration
-   *  is necessary.
-   * @return Allocation representing the "connected state" from the client's POV.
-   *         The client may retrieve the effectively required Timings from there,
-   *         as well as the actual output sinks, ready for use.
-   * @remarks calls back into #buildState, where the concrete OutputSlot
-   *         is expected to provide a private Connection implementation,
-   *         subclassing OutputSlot::Allocation
+  /**
+   * Entrance point: retrieve a sequence of actual DataSink handles, one for each data feed.
+   * Typically, these _sink handles_ will be propagated to some calculation stream and further
+   * embedded into render job definitions, so that the render invocation can use the sink handle
+   * to get a buffer for each frame.
+   * @return an iterator that produces DataSink objects; these are ref-counting handles
+   *         and also functor objects with the signature `BuffHandle(FrameID)`, where the
+   *         FrameID is defined in relation to the _frame grid_ defined by the Timings.
    */
-  OutputSlot::Allocation&
-  OutputSlot::allocate()
+  OutputSlot::OpenedSinks
+  OutputSlot::getOpenedSinks()
   {
-    if (not isFree())
-      throw err::Logic ("Attempt to open/allocate an OutputSlot already in use.");
     
-    state_ = this->buildState();
-    return *state_;
   }
   
   
-  void
-  OutputSlot::disconnect()
+  Timings
+  OutputSlot::timingConstraints()
   {
-    if (not isFree())
-      state_.reset(0);
+    REQUIRE(alloc_);
+    return alloc_->getTimings();
   }
   
   
   
   /* === DataSink frontend === */
   
-  BuffHandle
-  DataSink::lockBufferFor(FrameID frameNr)
-  {
-    return impl().claimBufferFor(frameNr);
-  }
   
   
   

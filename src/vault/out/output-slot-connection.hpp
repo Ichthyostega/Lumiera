@@ -71,9 +71,9 @@ namespace out   {
   /** @internal represents the \em active
    *   point in each of the per-channel connections
    *   used when this OutputSlot is operational.
-   *   
+   * 
    * # OutputSlot Core API
-   *   
+   * 
    * Actually, this extension point towards the implementation
    * of the actual output handling carries the core API of OutputSlot.
    * Thus, the task of actually implementing an OutputSlot boils down
@@ -127,40 +127,29 @@ namespace out   {
     {
       using Connections = lib::ScopedCollection<CON>;
       using OpenedSinks = OutputSlot::OpenedSinks;
+      using BufferProxy = OutputBufferProxy<AllocState>;
       
       Connections connections_;
-      
-      OutputBufferProxy<AllocState> proxyBufferProvider_;
-      
+      BufferProxy bufferProxy_;
       
       
       /* == Allocation Interface == */
       
-      OpenedSinks
-      getOpenedSinks()
+      void
+      release()  override
         {
-                                                                                 //////////////////////////TICKET #878  not re-entrant, lifecycle isn't clear
-          REQUIRE (this->isActive());
-          return lib::iter_source::transform (eachElm(connections_), connectOutputSink);
+          TODO ("propagate closing of output");
         }
       
       Timings
-      timingConstraints()
-        {
-          UNIMPLEMENTED ("find out about timing constraints");                   //////////////////////////TICKET #831
+      getTimings()  override
+        { //////////////////TODO somehow configure the timings into this implementation object
+          UNIMPLEMENTED ("a lot regarding the Timings is still not clear...");                   //////////////////////////TICKET #831
         }
       
-      bool
-      isActive()  const
-        {
-          return 0 < connections_.size();
-        }
       
-      CON&
-      access (uint chanNr)  const
-        {
-          return connections_[chanNr];
-        }
+      /* == Callback API for BufferProxy == */
+      
       
       
     protected: /* == API for OutputSlot-Impl == */
@@ -176,7 +165,7 @@ namespace out   {
       template<class CTOR>
       AllocState(uint numChannels, CTOR&& populator)
         : connections_(numChannels, std::forward<CTOR>(populator))
-        , proxyBufferProvider_{*this}
+        , bufferProxy_{*this}
         { }
       
       
@@ -187,9 +176,9 @@ namespace out   {
         {
           TRACE (test, "activating Con=%p", &connection );
           
-          DataSink newSink;
-          newSink.activate(&connection, shutdownConnection);
-          return newSink;
+//        DataSink newSink;
+//        newSink.activate(&connection, shutdownConnection);
+//        return newSink;
         }
       
       static void
