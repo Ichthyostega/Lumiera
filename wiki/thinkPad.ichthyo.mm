@@ -138551,7 +138551,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node CREATED="1774122219137" ID="ID_656953886" MODIFIED="1774122240553" TEXT="&#x27f9; alle weiteren Protokollschritte erfolgen direkt von dort"/>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1774122365597" ID="ID_292817548" MODIFIED="1774122379717" TEXT="Abw&#xe4;gung: wohin delegieren die Proxy-Callbacks?">
+<node COLOR="#435e98" CREATED="1774122365597" ID="ID_292817548" MODIFIED="1774131392789" TEXT="Abw&#xe4;gung: wohin delegieren die Proxy-Callbacks?">
 <icon BUILTIN="help"/>
 <node CREATED="1774122388349" ID="ID_1459974960" MODIFIED="1774122391728" TEXT="m&#xf6;glich w&#xe4;re...">
 <node CREATED="1774122410671" ID="ID_1178347692" MODIFIED="1774124507440" TEXT="an eine Connection (Interface)">
@@ -138655,7 +138655,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1774124482636" ID="ID_99417390" MODIFIED="1774124502539" TEXT="Beschlu&#xdf;: Direk-Aufruf auf das Connection-Interface">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#17196b" CREATED="1774124482636" ID="ID_99417390" MODIFIED="1774131406831" TEXT="Beschlu&#xdf;: Direkt-Aufruf auf das Connection-Interface">
 <icon BUILTIN="forward"/>
 <icon BUILTIN="full-1"/>
 </node>
@@ -138687,6 +138687,105 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1774126796040" ID="ID_1259439489" MODIFIED="1774126831327" TEXT="die jeweils relevante Connection (&#x27f6; als Pointer/Referenz)"/>
 <node CREATED="1774126856640" ID="ID_1792742469" MODIFIED="1774126864387" TEXT="von dieser Connection die Buffer-Size"/>
 <node CREATED="1774126881885" ID="ID_899991315" MODIFIED="1774126887766" TEXT="der Proxy-BufferProvider"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1774132649643" ID="ID_1759796259" MODIFIED="1774132670265" TEXT="Problem &#xfc;bersehen: die Frame-Nummer">
+<icon BUILTIN="broken-line"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1774132731585" ID="ID_396286799" MODIFIED="1774136559514">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      das Connection-Interface (Entwurf) verlangt eine Frame-Nr f&#252;r <font face="Monospaced"><b>claimBufferFor</b>(frame)</font>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1774132780386" ID="ID_837938632" MODIFIED="1774132808434" TEXT="daf&#xfc;r fehlt mir ein Kommunikations-Kanal &#x27f6; OutputBufferProxy">
+<node CREATED="1774132820987" ID="ID_1358245383" MODIFIED="1774132823828" TEXT="LocalTag">
+<node CREATED="1774132825036" ID="ID_588976778" MODIFIED="1774132964077" TEXT="ist entweder die Connection">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das w&#228;re die sch&#246;ne und elegante L&#246;sung die ich mir heute ausgedacht habe (und dabei die Frame-Nr &#252;bersehen)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774132833155" ID="ID_484094660" MODIFIED="1774133019220" TEXT="oder die Connection-Nr + verdrahtete Back-Ref">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das w&#228;re die offensichtliche und d&#228;mliche L&#246;sung: man verdrahtet einen back-Link auf den AllocState, und gibt einen Index in die Connection-Tafel &#252;ber das LocalTag durch.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#5b280f" CREATED="1774132862617" ID="ID_588130028" MODIFIED="1774133294975" TEXT="Buffer geht nicht (brauche dann Index)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Deshalb habe ich die zun&#228;chst gebaute L&#246;sung mit dem <font color="#794c4c" face="Monospaced">BufferProxyAdaptor</font>&#160;aufgegeben: denn in den einzelnen Lifecycle-Methoden wei&#223; man dann nicht, zu welcher Connection der Callback geh&#246;rt. Man m&#252;&#223;te dann im AllocState eine reverse-Index-Tabelle aufbauen, mit der man von der Buffer-Adresse zur passenden Connection zur&#252;ckfindet. Prinzipiell w&#228;re das m&#246;glich (da Buffer-Adressen global eindeutig sind und daher niemals gleichzeitig von zwei verschiedenen Connections verwendet werden k&#246;nnen .... allerdings damit h&#246;rts auch schon auf, denn <i>sp&#228;ter k&#246;nnte durchaus eine andere Connection den gleichen Buffer verwenden</i>)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_cancel"/>
+</node>
+</node>
+<node CREATED="1774133338567" ID="ID_1915597180" MODIFIED="1774133354752" TEXT="v&#xf6;llig egal wie, in jedem Fall ist die Frame-Nummer eine zus&#xe4;tzliche Info"/>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1774133516471" ID="ID_1070291197" MODIFIED="1774136481626" TEXT="&#x27f9; bleibt nur, einen Kanal zu schaffen">
+<icon BUILTIN="yes"/>
+<node CREATED="1774133549299" ID="ID_437134456" MODIFIED="1774134318162" TEXT="L&#xf6;sung-1 : zus&#xe4;tzliches Argument durchf&#xe4;deln">
+<icon BUILTIN="forward"/>
+<node CREATED="1774133599076" ID="ID_1639698129" MODIFIED="1774133622157" TEXT="das w&#xe4;re dann im &#xf6;ffentlichen BufferProviderAPI">
+<node CREATED="1774133628078" ID="ID_1884544207" MODIFIED="1774133676414" TEXT="BufferProvider::lockBuffer (BuffDescr, int64_t customArg =0)"/>
+<node CREATED="1774133685170" ID="ID_1491964539" MODIFIED="1774133704827" TEXT="da der Aufruf hier direkt aus dem Funktor kommt w&#xe4;re das machbar"/>
+<node CREATED="1774133713301" ID="ID_1681738826" MODIFIED="1774133778916" TEXT="m&#xfc;&#xdf;te dann zus&#xe4;tzlich nochmal einen Pointer auf den OutputBufferProxy in die Closure binden"/>
+</node>
+<node CREATED="1774133855977" ID="ID_247819999" MODIFIED="1774133873835" TEXT="k&#xf6;nnte auch ein spezialAPI auf OutputBufferProxy schaffen">
+<node COLOR="#5b280f" CREATED="1774133898723" ID="ID_407416009" MODIFIED="1774133923914" TEXT="das w&#xfc;rde dann zudem noch die interne BufferProvider::lockBuffer aufdoppeln">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1774133925648" ID="ID_1503448137" MODIFIED="1774133930448" TEXT="Implementation-reuse"/>
+</node>
+<node CREATED="1774133931949" ID="ID_1017504193" MODIFIED="1774133950185" TEXT="und obendrein m&#xfc;&#xdf;ten wir auch in dem Fall einen zus&#xe4;tzlichen Pointer mit binden"/>
+</node>
+</node>
+<node CREATED="1774133954237" ID="ID_1833902029" MODIFIED="1774134322458" TEXT="L&#xf6;sung-2 : kontextuell &#xfc;bermitteln">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1774133994727" ID="ID_702943419" MODIFIED="1774134019424" TEXT="das Connection-API wird dadurch (etwas mehr) stateful"/>
+<node CREATED="1774134039902" ID="ID_1189428583" MODIFIED="1774134064802" TEXT="es mu&#xdf; dann einen &#xbb;current frame&#xab; geben"/>
+<node CREATED="1774134118631" ID="ID_1354625599" MODIFIED="1774134133569" TEXT="und dazu eine Konvention, da&#xdf; der Aufruf unmittelbar im gleichen Thread erfolgt"/>
+<node CREATED="1774134140492" ID="ID_260619767" MODIFIED="1774134260873" TEXT="die weiteren API-Funktionen sind ohnehin implizit stateful (&#x27f6; Buffer-Adresse)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das API <i>ist nicht stateless,</i>&#160;da Buffer belegt und verwaltet werden. Das ist essntieller Zustand. Insofern liefert der claimBufferFor(frame)-Aufruf eine Buffer-Adresse, und die weiteren Aufrufe beziehen sich darauf.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1774134324929" ID="ID_1370520896" MODIFIED="1774134730585" TEXT="Entscheidung ist offensichtlich">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Auf den ersten Blick ist nat&#252;rlich L&#246;sung-2 viel attraktiver, denn das ist schnell reingehackt, und dann funktioniert alles wie bisher. Hinsichtlich Interface-Design w&#228;re das aber eine Bankrott-Erkl&#228;rung; jetzt geb ich mir so viel M&#252;he, da ein klares Design zu schaffen, und dann f&#252;hre ich eine solche faule Konvention ein, die beim Implementatior jede Menge Fragen aufwirft, und praktisch dazu zwingt, die Implementierung des Aufrufers (OutputSlot::AllocState&lt;CON&gt; bzw. OutputBufferProxy) im Detail zu durchdringen (&#10233; Kopplung).
+    </p>
+    <p>
+      Dem gegen&#252;ber ist L&#246;sung-1 zwar nicht sch&#246;n, aber akzeptabel; letztlich schaffen wir uns ein Interface immer zu einem Zweck, und hier verlangt der Zweck eben, eine weitere Info zum Buffer-Manager durchzuleiten (ohne sie direkt in die Metadaten zu speichern). SowaskommtindenbestenFamilienvor. Zudem kann ich das Argument defaulten. Ich bin sogar geneigt, das ganz offiziell auch auf das Buffer-Descripter-API zu heben: aus Gr&#252;nden der Symmetrie, und weil wir uns damit den zus&#228;tzlichen Pointer sparen k&#246;nnen)
+    </p>
+  </body>
+</html></richcontent>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
 </node>
 </node>
 </node>

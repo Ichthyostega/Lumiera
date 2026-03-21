@@ -66,7 +66,7 @@ namespace out  {
    * - callback functors for the lifecycle stages related to the client's access
    * @todo 3/2026 this is prototyping code and was retained for demonstration purposes.
    */
-  template<class HUB>
+  template<class CON>
   class OutputBufferProxy
     : public BufferProviderSetup
     {
@@ -74,13 +74,11 @@ namespace out  {
       class OutputBufferStore
         : public BufferProviderSetup::Store
         {
-          HUB& output_;
-          
-          Buff*
-          asBuffer (LocalTag targetMarker)
+          CON&
+          asTarget (LocalTag targetMarker)
             {
-              void* buffMem{targetMarker};
-              return static_cast<Buff*> (buffMem);
+              void* targetAdr{targetMarker};
+              return * static_cast<CON*> (targetAdr);
             }
           
           uint
@@ -91,9 +89,10 @@ namespace out  {
             }
           
           BuffAlloc
-          provideBuffer (HashVal,size_t siz,LocalTag targetMarker)  override
+          provideBuffer (HashVal,size_t siz, LocalTag targetMarker, int64_t frameNr)  override
             {
-              BuffAlloc storageSlot{asBuffer(targetMarker), siz, targetMarker};
+              Buff* buffer = asTarget(targetMarker).claimBufferFor (frameNr);
+              BuffAlloc storageSlot{buffer, siz, targetMarker};
               TODO ("delegate buffer lock");
               return storageSlot;
             }
@@ -109,19 +108,12 @@ namespace out  {
             {
               TODO ("delegate buffer release");
             }
-          
-        public:
-          OutputBufferStore(HUB& outputHub)
-            : output_{outputHub}
-            { }
         };
       
       struct Setup
         {
-          HUB& outputHub_;
-          
           auto buildStage() { return std::make_unique<vault::mem::SimpleBufferStateRegistry>("OutputBufferProxy"); }
-          auto buildStore() { return std::make_unique<OutputBufferStore> (outputHub_); }
+          auto buildStore() { return std::make_unique<OutputBufferStore>(); }
         };
       
       BuffDescr
@@ -135,8 +127,8 @@ namespace out  {
 
       
     public:
-      OutputBufferProxy(HUB& outputHub)
-        : BufferProviderSetup{Setup{outputHub}}
+      OutputBufferProxy()
+        : BufferProviderSetup{Setup{}}
         { }
       
       

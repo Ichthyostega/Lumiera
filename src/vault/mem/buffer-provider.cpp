@@ -134,6 +134,9 @@ namespace mem   {
    *  automatic tracking and clean-up. The client is explicitly
    *  responsible to invoke #releaseBuffer (either on the
    *  BufferProvider, or directly on the BuffHandle).
+   * @param type the _generic buffer type_ to base this buffer allocation on;
+   *       at minimum this implicitly defines the buffer size, possibly also a TypeHandler
+   * @param arg (optional) custom argument to pass-through to the backing buffer manager
    * @return a copyable handle, representing this buffer and this usage transaction.
    * @throw error::State when unable to provide this buffer
    * @note this function may be used right away, without prior announcing, but then
@@ -146,11 +149,11 @@ namespace mem   {
    *       return a metadata::Entry
    */
   BuffHandle
-  BufferProvider::lockBuffer (BuffDescr const& type)
+  BufferProvider::lockBuffer (BuffDescr const& type, int64_t arg)
   {
     REQUIRE (was_created_by_this_provider (type));
     auto& typeKey  = bufferStage_->lookup (type);
-    BuffAlloc alloc= bufferStore_->provideBuffer (type,typeKey.storageSize(),typeKey.localTag());
+    BuffAlloc alloc= bufferStore_->provideBuffer (type,typeKey.storageSize(),typeKey.localTag(),arg);
     auto& stateKey = bufferStage_->mark_locked (typeKey, alloc);
     
     return BuffHandle (buildDescriptor(stateKey), getAddr(alloc));
@@ -299,15 +302,15 @@ namespace mem   {
   BuffDescr::announce (uint count)
   {
     ENSURE (provider_);
-    return provider_->announce(count, *this);
+    return provider_->announce (count, *this);
   }
   
   
   BuffHandle
-  BuffDescr::lockBuffer()
+  BuffDescr::lockBuffer (int64_t arg)
   {
     ENSURE (provider_);
-    return provider_->lockBuffer(*this);
+    return provider_->lockBuffer (*this, arg);
   }
   
   

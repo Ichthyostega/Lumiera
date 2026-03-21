@@ -135,19 +135,21 @@ namespace out   {
       
       /* === Connection API === */
       
-      BuffHandle
-      claimBufferFor(FrameID frameNr)
+      Buff*
+      claimBufferFor (FrameID frameNr)  override
         {
+#if false  //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : disabled code due to OutputSlot refactoring
           TRACE (test, "Con=%p : lock buffer for frame-#%lu", this, frameNr);
           REQUIRE (!closed_);
           
           return trackFrame (frameNr,
                              buffProvider_.lockBuffer (bufferType_));
+#endif  /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : (end) disabled code
         }
       
       
       bool
-      isTimely (FrameID frameNr, TimeValue currentTime)
+      isTimely (FrameID frameNr, TimeValue currentTime)  override
         {
           TRACE (test, "Con=%p : timely? frame-#%lu"
                      , this, frameNr);
@@ -159,32 +161,38 @@ namespace out   {
         }
       
       void
-      transfer (BuffHandle & filledBuffer)
+      transfer (Buff* filledBuffer)  override
         {
+#if false  //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : disabled code due to OutputSlot refactoring
           TRACE (test, "Con=%p : transfer buffer %zu"
                      , this, HashVal(filledBuffer));
           REQUIRE (!closed_);
           
           pushout (filledBuffer);
+#endif  /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : (end) disabled code
         }
       
       void
-      pushout (BuffHandle & data4output)
+      pushout (Buff* data4output)  override
         {
+#if false  //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : disabled code due to OutputSlot refactoring
           REQUIRE (!closed_);
           buffProvider_.emitBuffer   (data4output);
           buffProvider_.releaseBuffer(data4output);
+#endif  /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : (end) disabled code
         }
       
       void
-      discard (BuffHandle & superseededData)
+      discard (Buff* superseededData)  override
         {
+#if false  //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : disabled code due to OutputSlot refactoring
           REQUIRE (!closed_);
           buffProvider_.releaseBuffer (superseededData);
+#endif  /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : (end) disabled code
         }
       
       void
-      shutDown ()
+      shutDown()  override
         {
           closed_ = true;
         }

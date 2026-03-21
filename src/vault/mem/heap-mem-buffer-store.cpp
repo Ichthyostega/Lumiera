@@ -289,7 +289,7 @@ namespace mem   {
 
   
   BuffAlloc
-  HeapMemBufferStore::provideBuffer (HashVal typeID, size_t buffSiz, LocalTag)
+  HeapMemBufferStore::provideBuffer (HashVal typeID, size_t buffSiz, LocalTag, int64_t)
   {
     BlockPool& blocks = getBlockPoolFor (buffSiz, typeID);
     Block& newBlock = blocks.createBlock();

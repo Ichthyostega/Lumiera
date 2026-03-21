@@ -67,6 +67,7 @@ namespace play {
 namespace test {
   
   using fixture::ModelPortRegistry;
+  using vault::mem::Buff;
   using vault::mem::BuffHandle;
   using vault::out::DataSink;
   using vault::out::FrameID;
@@ -79,11 +80,11 @@ namespace test {
   class UnimplementedConnection
     : public vault::out::OutputSlot::Connection
     {
-          BuffHandle claimBufferFor (FrameID) override;
+      Buff* claimBufferFor (FrameID)     override;
       bool isTimely (FrameID, TimeValue) override { return true;                                    }
-      void transfer (BuffHandle &)       override { UNIMPLEMENTED ("transfer (BuffHandle const&)"); }
-      void pushout  (BuffHandle &)       override { UNIMPLEMENTED ("pushout  (BuffHandle const&)"); }
-      void discard  (BuffHandle &)       override { UNIMPLEMENTED ("discard  (BuffHandle const&)"); }
+      void transfer (Buff*)              override { UNIMPLEMENTED ("transfer (BuffHandle const&)"); }
+      void pushout  (Buff*)              override { UNIMPLEMENTED ("pushout  (BuffHandle const&)"); }
+      void discard  (Buff*)              override { UNIMPLEMENTED ("discard  (BuffHandle const&)"); }
       void shutDown ()                   override { UNIMPLEMENTED ("shutDown() Connection");        }
       
     public:
@@ -199,7 +200,7 @@ namespace test {
         }
     };
       
-      inline vault::mem::BuffHandle UnimplementedConnection::claimBufferFor (FrameID)
+      inline vault::mem::Buff* UnimplementedConnection::claimBufferFor (FrameID)
         {
           UNIMPLEMENTED ("claimBufferFor(FrameID)");
         }

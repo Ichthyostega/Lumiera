@@ -54,6 +54,7 @@
 namespace vault {
 namespace out   {
 
+  using vault::mem::Buff;
   using vault::mem::BuffHandle;
   using vault::mem::BufferProvider;
   using lib::time::TimeValue; /////////////////OOO Rly?
@@ -94,12 +95,12 @@ namespace out   {
     public:
       virtual ~Connection();
       
-      virtual BuffHandle claimBufferFor(FrameID)  =0;
-      virtual bool isTimely (FrameID, TimeValue)  =0;
-      virtual void transfer (BuffHandle &)        =0;
-      virtual void pushout  (BuffHandle &)        =0;
-      virtual void discard  (BuffHandle &)        =0;
-      virtual void shutDown ()                    =0;
+      virtual Buff* claimBufferFor(FrameID)      =0;
+      virtual bool isTimely (FrameID, TimeValue) =0;
+      virtual void transfer (Buff*)              =0;
+      virtual void pushout  (Buff*)              =0;
+      virtual void discard  (Buff*)              =0;
+      virtual void shutDown ()                   =0;
     };
   
   
@@ -127,7 +128,7 @@ namespace out   {
     {
       using Connections = lib::ScopedCollection<CON>;
       using OpenedSinks = OutputSlot::OpenedSinks;
-      using BufferProxy = OutputBufferProxy<AllocState>;
+      using BufferProxy = OutputBufferProxy<Connection>;
       
       Connections connections_;
       BufferProxy bufferProxy_;
@@ -171,7 +172,7 @@ namespace out   {
       template<class CTOR>
       AllocState(uint numChannels, CTOR&& populator)
         : connections_(numChannels, std::forward<CTOR>(populator))
-        , bufferProxy_{*this}
+        , bufferProxy_{}
         { }
       
       

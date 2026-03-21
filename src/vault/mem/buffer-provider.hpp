@@ -182,7 +182,7 @@ namespace mem  {
       uint announce (uint count, BuffDescr const&);
       
       /** claim storage for exclusive use, based on a descriptor */
-      BuffHandle lockBuffer (BuffDescr  const&);
+      BuffHandle lockBuffer (BuffDescr const&, int64_t=0);
       
       /** directly claim storage and construct an object,
        *  without preparing a descriptor beforehand */
@@ -236,10 +236,10 @@ namespace mem  {
         public:
           virtual ~BufferStore() { } ///< this is an interface
           
-          virtual uint prepareBuffers (HashVal typeID, uint cnt, size_t)     =0;
-          virtual BuffAlloc provideBuffer (HashVal typeID, size_t, LocalTag) =0;
-          virtual void mark_emitted (HashVal typeID, BuffAlloc)              =0;
-          virtual void detachBuffer (HashVal typeID, BuffAlloc)              =0;
+          virtual uint prepareBuffers (HashVal typeID, uint cnt,size_t) =0;
+          virtual BuffAlloc provideBuffer (HashVal typeID, size_t,LocalTag,int64_t) =0;
+          virtual void mark_emitted (HashVal typeID, BuffAlloc)         =0;
+          virtual void detachBuffer (HashVal typeID, BuffAlloc)         =0;
         };
       
       unique_ptr<BufferStage> bufferStage_;

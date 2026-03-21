@@ -87,7 +87,7 @@ namespace mem  {
             }
           
           BuffAlloc
-          provideBuffer (HashVal,size_t siz,LocalTag targetMarker)  override
+          provideBuffer (HashVal,size_t siz,LocalTag targetMarker, int64_t customArg)  override
             {
               BuffAlloc storageSlot{asBuffer(targetMarker), siz, targetMarker};
               CONF::on_lock (storageSlot);

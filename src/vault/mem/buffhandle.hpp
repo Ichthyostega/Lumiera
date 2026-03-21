@@ -115,7 +115,11 @@ namespace mem   {
       
       /** callback to engage buffer handling cycle */
       uint announce (uint count);
-      BuffHandle lockBuffer();
+      
+      /** claim an actual buffer for exclusive use.
+       * @param arg a custom argument to pass to the buffer manager
+       */
+      BuffHandle lockBuffer (int64_t arg=0);
     };
   
   
