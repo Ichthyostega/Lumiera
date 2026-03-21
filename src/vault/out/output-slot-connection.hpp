@@ -147,6 +147,12 @@ namespace out   {
           UNIMPLEMENTED ("a lot regarding the Timings is still not clear...");                   //////////////////////////TICKET #831
         }
       
+      OpenedSinks
+      connect (PAlloc& lifecycleManager)  override
+        {
+          /////////////////OOO use an iterExplorer-Pipeline to create the functor closure here
+        }
+      
       
       /* == Callback API for BufferProxy == */
       

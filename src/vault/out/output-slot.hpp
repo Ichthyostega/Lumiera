@@ -85,7 +85,6 @@ namespace out  {
   
   using vault::mem::BuffHandle;
   using lib::time::FrameCnt;
-  using std::shared_ptr;
   using std::unique_ptr;
   
   
@@ -160,23 +159,31 @@ namespace out  {
       
     protected:
       /** @internal interface for the allocated state */
+      class Allocation;
+      using PAlloc = std::shared_ptr<Allocation>;
+      
+      PAlloc alloc_;
+      
       class Allocation
         {
         public:
           virtual ~Allocation(); ///< this is an interface
           
-          virtual void release()       =0;
-          virtual Timings getTimings() =0;
+          virtual void release()                =0;
+          virtual Timings getTimings()          =0;
+          virtual OpenedSinks connect (PAlloc&) =0;
         };
       
-      /** active connections through this OutputSlot */
+      PAlloc
+      connect (unique_ptr<Allocation>);
+      
+      /**
+       * @internal Implementation subclass:
+       *   manage active connections through this OutputSlot
+       */
       template<class CON>
       class AllocState;
       
-      shared_ptr<Allocation> alloc_;
-      
-      shared_ptr<Allocation>
-      connect (unique_ptr<Allocation>);
       
     public:
       /** by default marked as inactive/defunct */
@@ -194,5 +201,5 @@ namespace out  {
     };
   
   
-}} // namespace vault::out
+}}// namespace vault::out
 #endif /*VAULT_OUT_OUTPUT_SLOT_H*/

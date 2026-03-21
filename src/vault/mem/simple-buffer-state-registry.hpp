@@ -75,7 +75,7 @@ namespace mem   {
       mark_locked (ID typeKey, BuffAlloc alloc)  override
         {
           auto& [storage,size,implMark] = alloc;
-          return metadata_.markLocked (typeKey, storage, implMark);
+          return metadata_.markLocked (typeKey, storage, size, implMark);
         }
       
       ID

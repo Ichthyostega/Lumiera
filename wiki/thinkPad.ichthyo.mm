@@ -114711,7 +114711,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1771445380969" FOLDED="true" ID="ID_1703778866" MODIFIED="1771523204578" TEXT="Type-Refinement fehlt">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1771445380969" FOLDED="true" ID="ID_1703778866" MODIFIED="1774125003754" TEXT="Type-Refinement fehlt">
 <linktarget COLOR="#b43f57" DESTINATION="ID_1703778866" ENDARROW="Default" ENDINCLINATION="-1037;-26;" ID="Arrow_ID_1563102453" SOURCE="ID_1813249595" STARTARROW="None" STARTINCLINATION="-107;797;"/>
 <icon BUILTIN="hourglass"/>
 <node BACKGROUND_COLOR="#fafe99" COLOR="#b10652" CREATED="1771465736392" ID="ID_983442728" MODIFIED="1771465865302" TEXT="Vorsicht: bekanntes Problem mit der TypeHandler-Identit&#xe4;t">
@@ -114956,6 +114956,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1771512789583" ID="ID_1567622701" MODIFIED="1771522443460" TEXT="Ticket machen und auf sp&#xe4;ter vertagen">
 <arrowlink COLOR="#6e0e30" DESTINATION="ID_916357319" ENDARROW="Default" ENDINCLINATION="3;-26;" ID="Arrow_ID_339622533" STARTARROW="None" STARTINCLINATION="-201;-14;"/>
+<linktarget COLOR="#b4715d" DESTINATION="ID_1567622701" ENDARROW="Default" ENDINCLINATION="-57;1294;" ID="Arrow_ID_646507974" SOURCE="ID_497118718" STARTARROW="None" STARTINCLINATION="910;51;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#db0728" CREATED="1771513582347" ID="ID_94121635" MODIFIED="1771513715826" TEXT="(ausschlaggebend)">
@@ -118997,8 +118998,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 <node BACKGROUND_COLOR="#f9f3e3" COLOR="#a50125" CREATED="1773959558830" ID="ID_1973724646" MODIFIED="1773963271195" TEXT="Achtung: urspr&#xfc;ngliches Konzept &#xbb;Job&#xab; l&#xf6;st sich auf">
-<linktarget COLOR="#fd2e1b" DESTINATION="ID_1973724646" ENDARROW="Default" ENDINCLINATION="-1379;72;" ID="Arrow_ID_862194975" SOURCE="ID_1593586171" STARTARROW="None" STARTINCLINATION="1316;57;"/>
 <linktarget COLOR="#fe6c6c" DESTINATION="ID_1973724646" ENDARROW="Default" ENDINCLINATION="-1379;72;" ID="Arrow_ID_663742943" SOURCE="ID_589497720" STARTARROW="None" STARTINCLINATION="-974;63;"/>
+<linktarget COLOR="#fd2e1b" DESTINATION="ID_1973724646" ENDARROW="Default" ENDINCLINATION="-1379;72;" ID="Arrow_ID_862194975" SOURCE="ID_1593586171" STARTARROW="None" STARTINCLINATION="1316;57;"/>
 <icon BUILTIN="messagebox_warning"/>
 <icon BUILTIN="idea"/>
 <node CREATED="1773959604840" ID="ID_1430634387" MODIFIED="1773959706305" TEXT="notiere diese Beobachtung im R&#xfc;ckblick 2026 (nach einiger Verwirrung)">
@@ -138294,7 +138295,12 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node COLOR="#435e98" CREATED="1773888286270" ID="ID_1279395018" MODIFIED="1773888766729" TEXT="Fazit">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="forward"/>
-<node CREATED="1773888290871" ID="ID_1640123820" MODIFIED="1773888299240" TEXT="DataSink wird unique"/>
+<node COLOR="#5b280f" CREATED="1773888290871" ID="ID_1640123820" MODIFIED="1774117142876" TEXT="DataSink wird unique">
+<icon BUILTIN="button_cancel"/>
+<node BACKGROUND_COLOR="#e5daab" COLOR="#470f69" CREATED="1774117157026" ID="ID_1466239" MODIFIED="1774117235993" TEXT="anders: DataSink wird ein Funktor">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+</node>
 <node CREATED="1773888299988" ID="ID_1909698021" MODIFIED="1773888311487" TEXT="DataSink verweist auf den PImpl (AllocState)">
 <node CREATED="1773888330075" ID="ID_1924701415" MODIFIED="1773888346410" TEXT="hier wird ein neues Interface ben&#xf6;tigt"/>
 <node CREATED="1773888364124" ID="ID_1625145338" MODIFIED="1773888376862" TEXT="oder eine vergleichbare implementation-level-Indirektion"/>
@@ -138363,9 +138369,47 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1773935626212" ID="ID_638151363" MODIFIED="1773935640598" TEXT="also neue L&#xf6;sung f&#xfc;r den Lebenszyklus finden"/>
+<node CREATED="1773935626212" ID="ID_638151363" MODIFIED="1774117448707" TEXT="also neue L&#xf6;sung f&#xfc;r den Lebenszyklus finden">
+<arrowlink COLOR="#e2ecc3" DESTINATION="ID_36151402" ENDARROW="Default" ENDINCLINATION="-14;-78;" ID="Arrow_ID_496758201" STARTARROW="None" STARTINCLINATION="-142;9;"/>
 </node>
-<node CREATED="1774058024248" ID="ID_82008745" MODIFIED="1774058054776" TEXT="aber: daran denken da&#xdf; die DataSink auch sowas wie eine Stream-ID bieten sollte"/>
+</node>
+<node CREATED="1774120269051" ID="ID_1414284795" MODIFIED="1774120274196" TEXT="Einw&#xe4;nde / Abw&#xe4;gung">
+<node CREATED="1774058024248" ID="ID_82008745" LINK="#ID_1047888380" MODIFIED="1774120647806" TEXT="mu&#xdf; daran denken da&#xdf; die DataSink auch sowas wie eine Stream-ID bieten sollte">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...das ist eine absehbare, zuk&#252;nftige Anforderung &#8212; f&#252;r den Frame-Cache; letztlich geht es darum, sparsam mit der Storage f&#252;r Job-Parameter umzugehen, da wir sehr viele Jobs unter hohem Druck durch das System schicken. Das bedeutet, alle Paramter, die <i>nicht beweglich sind (sich pro Frame &#228;ndern),</i>&#160;m&#252;ssen m&#246;glichst zusammengefa&#223;t repr&#228;sentiert werden. Die DataSink mu&#223; dem entsprechend auch alles weitere repr&#228;sentieren, was sich hinter eine bestehende Output-Connection an Metadaten h&#228;ngen l&#228;&#223;t, und was f&#252;r den Cache-Key relevant wird
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774120256991" ID="ID_1157546506" MODIFIED="1774120265316" TEXT="Performance-&#xdc;berlegungen">
+<node CREATED="1774119984274" ID="ID_581830154" LINK="#ID_871196012" MODIFIED="1774120034249" TEXT="Achtung: shared-ptr im &#x3bb;-capture &#x27f9; stets Heap"/>
+<node BACKGROUND_COLOR="#eab2d0" COLOR="#d10120" CREATED="1774121031654" ID="ID_600545894" MODIFIED="1774121434219" TEXT="das &#xe4;rgert mich &#x2014; aber es WIRD KEINE ROLLE SPIELEN">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Diese Funktionalit&#228;t hier, die Ausgabe von Frames, liegt zweifellost bereits weit in der Zone, in der <b>Premature Optimisation</b>&#160;ein echtes Problem ist: Selbst wenn etwas alle 5 Millisekunden einmal passiert, sind +100&#181;s <i>praktisch nicht feststellbar</i>; die absolute Schmerzgrenze f&#252;r Optimierungen in einer solchen Lage w&#228;re, wenn man dadurch eine ganze Millisekunde herausholen k&#246;nnte, und <i>zudem die Operation unter Druck und permanent abl&#228;uft! </i>
+    </p>
+    <p>
+      <br/>Schon erstaunlich, da&#223; es so schwer ist, dieser Einsicht gem&#228;&#223; zu handeln...
+    </p>
+  </body>
+</html></richcontent>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node COLOR="#302180" CREATED="1774121556663" HGAP="30" ID="ID_1178991105" MODIFIED="1774121595961" TEXT="(und wenn doch &#x27f9; durch Invoker-Technik ersetzen, analog zu std::function)" VSHIFT="8">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+</node>
+<node CREATED="1774121472020" ID="ID_922156630" MODIFIED="1774121875612" TEXT="ja dann ... kann man da gleich noch mehr oben drauf packen">
+<arrowlink COLOR="#d2fd54" DESTINATION="ID_602198707" ENDARROW="Default" ENDINCLINATION="555;-30;" ID="Arrow_ID_1933104143" STARTARROW="None" STARTINCLINATION="546;25;"/>
+<icon BUILTIN="smiley-oh"/>
+</node>
+</node>
+</node>
 </node>
 <node CREATED="1774041166497" ID="ID_1405169811" MODIFIED="1774041789004" TEXT="Design nochmal &#xfc;berdenken">
 <linktarget COLOR="#96171e" DESTINATION="ID_1405169811" ENDARROW="Default" ENDINCLINATION="32;82;" ID="Arrow_ID_1850815871" SOURCE="ID_1695581190" STARTARROW="None" STARTINCLINATION="-700;32;"/>
@@ -138412,11 +138456,14 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1774041702802" ID="ID_1059075539" MODIFIED="1774041716165" TEXT="sogar die Allocation ist nur transient"/>
 <node CREATED="1774041720512" ID="ID_699098233" MODIFIED="1774041746264" TEXT="und mit dem shared-ptr kommt noch ein weiteres front-end-Handle ins Spiel"/>
 </node>
-<node CREATED="1774041802165" ID="ID_400821992" MODIFIED="1774041817127" TEXT="OutputSlot und Allocation zu einem neuen front-end-Handle verschmelzen">
+<node COLOR="#338800" CREATED="1774041802165" ID="ID_400821992" MODIFIED="1774116667493" TEXT="OutputSlot und Allocation zu einem neuen front-end-Handle verschmelzen">
+<icon BUILTIN="idea"/>
 <node CREATED="1774041822205" ID="ID_527875329" MODIFIED="1774041843283" TEXT="k&#xfc;nftig bekommt man also den OutputSlot sofort im &#xbb;allozierten&#xab; Zustand"/>
 <node CREATED="1774041847407" ID="ID_883089965" MODIFIED="1774041871047" TEXT="was ich mal (theoretisch) f&#xfc;r den OutputSlot vorgesehen hatte &#x27f6; in den OutputManager"/>
 <node CREATED="1774041924787" ID="ID_1979509297" MODIFIED="1774041966755" TEXT="OutputSlot wird damit kopierbar und verliert die VTable"/>
-<node CREATED="1774041982834" ID="ID_1851190390" MODIFIED="1774042051311" TEXT="der Konstruktor nimmt nun direkt einen unique_ptr&lt;Allocation&gt;"/>
+<node CREATED="1774041982834" ID="ID_1851190390" MODIFIED="1774116941295" TEXT="der Konstruktor nimmt nun direkt einen unique_ptr&lt;Allocation&gt;">
+<arrowlink COLOR="#939dbe" DESTINATION="ID_209194829" ENDARROW="Default" ENDINCLINATION="327;14;" ID="Arrow_ID_1829394358" STARTARROW="None" STARTINCLINATION="263;0;"/>
+</node>
 <node CREATED="1774042055979" ID="ID_1678190677" MODIFIED="1774042077220" TEXT="...und pflanzt den in einen shared-ptr als pImpl"/>
 <node CREATED="1774042095382" ID="ID_409572046" MODIFIED="1774042116105" TEXT="getOpenedSinks() hat darauf nun direkt Zugriff"/>
 <node CREATED="1774042144135" ID="ID_398645730" MODIFIED="1774042163080" TEXT="und delegiert an eine builder/verdrahtungs-Funktion auf dem PImpl"/>
@@ -138425,10 +138472,10 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1773954149241" ID="ID_203883845" MODIFIED="1773954234498" TEXT="Allocation / Lebenszyklus in den Griff bekommen">
 <arrowlink COLOR="#d0020f" DESTINATION="ID_671153651" ENDARROW="Default" ENDINCLINATION="-3;-427;" ID="Arrow_ID_1331623727" STARTARROW="Default" STARTINCLINATION="-756;0;"/>
 <node CREATED="1773971803964" ID="ID_987627732" MODIFIED="1773971813190" TEXT="gemeinamen shared-ptr einf&#xfc;hren">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1773973038119" ID="ID_322920487" MODIFIED="1773973052086" TEXT="Problem: diesen erzeugen und verdrahten">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1773973038119" ID="ID_322920487" MODIFIED="1774116830612" TEXT="Problem: diesen erzeugen und verdrahten">
+<icon BUILTIN="broken-line"/>
 <node CREATED="1773973059692" ID="ID_1788170271" MODIFIED="1773973087364" TEXT="mu&#xdf; eine Deleter-Funktion einbinden"/>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1773973088177" ID="ID_534312365" MODIFIED="1773973144984" TEXT="mu&#xdf; aber diesen Pointer auch im AllocState selber zug&#xe4;nglich machen">
+<node BACKGROUND_COLOR="#e5cca9" COLOR="#a50167" CREATED="1773973088177" ID="ID_534312365" MODIFIED="1774116812214" TEXT="mu&#xdf; aber diesen Pointer auch im AllocState selber zug&#xe4;nglich machen">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -138439,17 +138486,209 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
-<node CREATED="1773973156752" ID="ID_1805849643" MODIFIED="1773973178296" TEXT="und zudem mu&#xdf; die OutputSlot-Impl den tats&#xe4;chlichen AllocState konstruieren k&#xf6;nnen"/>
-<node CREATED="1774041751196" ID="ID_1946395022" MODIFIED="1774041772893" TEXT="nun k&#xf6;nnte man eine Factory bauen, und ein leere Handle &#xfc;berall hin durchschieben"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#27013a" CREATED="1773973156752" ID="ID_1805849643" MODIFIED="1774116754813" TEXT="und zudem mu&#xdf; die OutputSlot-Impl den tats&#xe4;chlichen AllocState konstruieren k&#xf6;nnen">
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#5b280f" CREATED="1774041751196" ID="ID_1946395022" MODIFIED="1774116705999" TEXT="nun k&#xf6;nnte man eine Factory bauen, und ein leere Handle &#xfc;berall hin durchschieben">
+<icon BUILTIN="stop-sign"/>
+</node>
 <node CREATED="1774041103709" ID="ID_1695581190" MODIFIED="1774041789004" TEXT="das ist alles so kompliziert &#x27f9; etwas mit dem Design stimmt nicht">
 <arrowlink COLOR="#96171e" DESTINATION="ID_1405169811" ENDARROW="Default" ENDINCLINATION="32;82;" ID="Arrow_ID_1850815871" STARTARROW="None" STARTINCLINATION="-700;32;"/>
 </node>
 </node>
+<node CREATED="1774116838284" ID="ID_878332497" MODIFIED="1774116859054" TEXT="mit ver&#xe4;nderter Architektur wird das einfach....">
+<node CREATED="1774116894254" ID="ID_209194829" MODIFIED="1774116928285" TEXT="Basis-Verdrahtung kann jetzt im OutputSlot-Konstruktor passieren">
+<linktarget COLOR="#939dbe" DESTINATION="ID_209194829" ENDARROW="Default" ENDINCLINATION="327;14;" ID="Arrow_ID_1829394358" SOURCE="ID_1851190390" STARTARROW="None" STARTINCLINATION="263;0;"/>
 </node>
-<node CREATED="1773971813999" ID="ID_36151402" MODIFIED="1773971845114" TEXT="dieser wird per &#x3bb;-closure im DataSink-Funktor verborgen"/>
-<node CREATED="1773971849966" ID="ID_1738000581" MODIFIED="1773971868607" TEXT="der &#xbb;pImpl&#xab; in OutputSlot wird ein daran angekoppelter weak-ptr"/>
+</node>
+</node>
+<node CREATED="1773971813999" ID="ID_36151402" MODIFIED="1774117434690" TEXT="dieser wird per &#x3bb;-closure im DataSink-Funktor verborgen">
+<linktarget COLOR="#e2ecc3" DESTINATION="ID_36151402" ENDARROW="Default" ENDINCLINATION="-14;-78;" ID="Arrow_ID_496758201" SOURCE="ID_638151363" STARTARROW="None" STARTINCLINATION="-142;9;"/>
+</node>
+<node COLOR="#5b280f" CREATED="1773971849966" ID="ID_1738000581" MODIFIED="1774117476736" TEXT="der &#xbb;pImpl&#xab; in OutputSlot wird ein daran angekoppelter weak-ptr">
+<icon BUILTIN="button_cancel"/>
+<node COLOR="#435e98" CREATED="1774117484906" HGAP="40" ID="ID_1135177401" MODIFIED="1774117513992" TEXT="besser durch ver&#xe4;ndertes Design gel&#xf6;st" VSHIFT="5">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+</node>
 <node CREATED="1773971873811" ID="ID_264465688" MODIFIED="1773971898075" TEXT="auf das vorzeitige Schlie&#xdf;en einzelner Connections wird verzichtet"/>
 <node CREATED="1773971902700" ID="ID_967293485" MODIFIED="1773971931718" TEXT="aber es mu&#xdf; einen globalen (virtuellen) release-Hook im OutputSlot geben"/>
+</node>
+<node CREATED="1774117870539" ID="ID_160673186" MODIFIED="1774117879102" TEXT="Callbacks f&#xfc;r das Buffer-Handling einf&#xe4;deln">
+<node CREATED="1774117886873" ID="ID_1363452049" MODIFIED="1774117892476" TEXT="der Funktor in DataSink">
+<node CREATED="1774117905798" ID="ID_3491981" MODIFIED="1774119797698" TEXT="verwendet einen Slave-shared-ptr">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...das ist ein wenig bekanntes (aber bisweilen n&#252;tzliches) Feature der Standardlib: man kann einen Alias-Pointer an den gleichen shared-State ankoppeln; wohin dieser Alias zeigt, ist komplett beliebig (mu&#223; aber w&#228;hrend der ganzen Lebensdauer existieren, denn dieser Zielort wird nicht eigens gemanaged).
+    </p>
+    <p>
+      Hier k&#246;nnten wir dieses Feature nutzen, um direkt auf die jeweilige Connection zu zeigen, oder (alternativ) auf den OutputBufferProxy den konkret getypten AllocState (Subklasse)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774121832836" ID="ID_602198707" MODIFIED="1774122336107" TEXT="bekommt au&#xdf;erdem softort auch einen Buffer Descriptor mit">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      in dem stecken zwei Informationen:
+    </p>
+    <ul>
+      <li>
+        ein Pointer auf den OutputBufferProxy (Buffer-Provider)
+      </li>
+      <li>
+        eine vorbereitete Typ-Info, die die Buffer-Size, aber auch das LocalTag enth&#228;lt, &#252;ber das die jeweils zust&#228;ndige Connection angesteuert wird
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#d2fd54" DESTINATION="ID_602198707" ENDARROW="Default" ENDINCLINATION="555;-30;" ID="Arrow_ID_1933104143" SOURCE="ID_922156630" STARTARROW="None" STARTINCLINATION="546;25;"/>
+<node CREATED="1774121902242" HGAP="28" ID="ID_643404701" MODIFIED="1774122005097" TEXT="in dem ist per &#xbb;LocalTag&#xab; die Connection-Impl codiert" VSHIFT="5"/>
+</node>
+<node CREATED="1774122219137" ID="ID_656953886" MODIFIED="1774122240553" TEXT="&#x27f9; alle weiteren Protokollschritte erfolgen direkt von dort"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1774122365597" ID="ID_292817548" MODIFIED="1774122379717" TEXT="Abw&#xe4;gung: wohin delegieren die Proxy-Callbacks?">
+<icon BUILTIN="help"/>
+<node CREATED="1774122388349" ID="ID_1459974960" MODIFIED="1774122391728" TEXT="m&#xf6;glich w&#xe4;re...">
+<node CREATED="1774122410671" ID="ID_1178347692" MODIFIED="1774124507440" TEXT="an eine Connection (Interface)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das w&#228;re dann auch der tats&#228;chliche Empf&#228;nger, der letztlich die Entscheidungen trifft &#8212; <b>das w&#228;re sauberes Design</b>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="full-1"/>
+</node>
+<node CREATED="1774122425805" ID="ID_1560232882" MODIFIED="1774124510817" TEXT="an einen konkreten Connection-Subtyp">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das w&#228;re <i>koh&#228;sives Design</i>&#160;&#8212; w&#252;rde aber eine zus&#228;tzliche Indirektion durch die Connection-VTable einsparen &#10233; damit wird das Connection-Interface praktisch wertlos; sinnvollerweise m&#252;&#223;te man es durch ein <b>Concept</b>&#160;ersetzen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="full-2"/>
+</node>
+<node CREATED="1774122436380" ID="ID_1025931134" MODIFIED="1774124514258" TEXT="an den AlocState + Connection-Index">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das w&#228;re die naheliegende (und d&#228;mliche) L&#246;sung &#8212; insofern spricht <i>f&#252;r eine solche L&#246;sung</i>&#160;da&#223; sie nicht viel &#187;Grips&#171; verlangt; man stiefelt sich von Delegation zu Delegation. Das ist leicht zu schreiben, und einigerma&#223;en gut lesbar, wenn die Delegationen gut benannt sind. Insofern <b>setzt diese L&#246;sung den Baseline-Standard</b>&#160;
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="full-3"/>
+</node>
+</node>
+<node CREATED="1774123575010" ID="ID_824191013" MODIFIED="1774123578213" TEXT="Abw&#xe4;gung">
+<node CREATED="1774123579183" ID="ID_1737320485" MODIFIED="1774123596424" TEXT="och schon wieder so eine schwere Abw&#xe4;gung">
+<icon BUILTIN="smily_bad"/>
+</node>
+<node CREATED="1774123608295" ID="ID_1563409432" MODIFIED="1774123673981" TEXT="Lesbarkeit und Verst&#xe4;nglichkeit gewichte ich hier sehr hoch">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      weil es sich um eine sehr zentrale Struktur handelt, welche erwartungsgem&#228;&#223; auch viel in Zukunft erweitert und angepa&#223;t werden mu&#223;
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774123676575" ID="ID_280613834" MODIFIED="1774123762058" TEXT="direkte Delegation an Connection (oder Subtyp) vereinfacht die OutputBufferProxy">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Es f&#228;llt dadurch n&#228;mlich eine weitere, generische Indirektion weg, die dann auch nicht mehr trickreich durch drei Konstruktoren durchgef&#228;delt werden mu&#223;
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774123768156" ID="ID_1416841395" MODIFIED="1774123808063">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Konkrete Connection + Concept w&#228;re <i><font color="#b93ca1">saugeil</font></i>
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1774123818580" ID="ID_1494790648" MODIFIED="1774123821927" TEXT="modern"/>
+<node CREATED="1774123823192" ID="ID_1829897869" MODIFIED="1774124113447" TEXT="Code wird komplett geinlined">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      zumindest in der BufferStore-Implementierung; ein cleverer Optimiser kann u.U. sogar die <i>monomorphic optimisation</i>&#160;machen? (fraglich, denn der Aufrufer hat ja nur ein BuffHandler. Wenngleich auch <i>kontextuelll klar ist,</i>&#160;da&#223; dieses BuffHandle von einer ganz bestimmten Implementierung stammen mu&#223;; fragt sich, wie lange es noch dauert, bis Optimiser sowas auch &#8222;sehen&#8220; order gar beweisen k&#246;nnen, und ob sich daf&#252;r der Aufwand lohnt)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774124115813" ID="ID_83197251" MODIFIED="1774124123303" TEXT="maximale Freiheit f&#xfc;r den Implementator"/>
+</node>
+<node CREATED="1774124125679" ID="ID_1280679186" MODIFIED="1774124476752">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Ich bin skeptisch: <i>f&#252;r wen</i>&#160;ist das &#187;lesbar&#171;?
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Concepts sind ein relativ komplexes Gebilde, und sie haben eine spezielle Notierung, die in der Form nur in C++ gegeben ist. Nur ein Bruchteil der C++ - Entwickler wir mit Konzepten vertraut werden (auf lange Zeit). Zudem hinterl&#228;&#223;t ein Konzept <i>in der Implementierung keine Spuren. </i>Man k&#246;nnte sich da zwar etwas einfallen lassen, aber das w&#228;re dann noch mehr ein Spezial-Konstrukt. Das ist etwas, was sich erst noch herausbilden mu&#223; (auch die Tool-Unterst&#252;tzung ist ein Aspekt).
+    </p>
+    <p>
+      Demgegen&#252;ber ist ein klassisches OO-Interface ein seit 30 Jahren universell bekanntes und weithin unterst&#252;tztes Schema, das in den allermeisten Sprachen in irgend einer Form eingesetzt wird (selbst wenn die Sprachen sonst nicht OO sind). Wenn ich einem durchschnittlichen Entwickler heute sage: &#8222;Du mu&#223;t das Interface Connection implementieren&#8220;, dann setzt der sich einfach hin und klopft das runter.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774124482636" ID="ID_99417390" MODIFIED="1774124502539" TEXT="Beschlu&#xdf;: Direk-Aufruf auf das Connection-Interface">
+<icon BUILTIN="forward"/>
+<icon BUILTIN="full-1"/>
+</node>
+</node>
+</node>
+<node CREATED="1774124656373" ID="ID_1252354115" MODIFIED="1774127022008" TEXT="also binden in die Funktor-Closure">
+<icon BUILTIN="forward"/>
+<node CREATED="1774124694439" ID="ID_775305943" MODIFIED="1774124714000" TEXT="ein shared-ptr mit Alias auf die jeweilige Connection"/>
+<node CREATED="1774124730203" ID="ID_257841074" MODIFIED="1774124780343" TEXT="ein vertig verdrahteter Buffer-Descriptor (&#x27f6; Connection)">
+<node COLOR="#5b280f" CREATED="1774126323430" ID="ID_497118718" MODIFIED="1774126743220" TEXT="doch wieder Buffer-Descriptor-Refinement?">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Ja ich wei&#223;, irgenwie <i>will ich diese Idee</i>&#160;&#8212; und kann dann immer kein gutes Argument daf&#252;r herbeizaubern. So auch in dem Fall; es ist n&#228;mlich hier trotzdem so, da&#223; wir ein ganzes Tupel von Argumenten f&#252;r jede einzelne Connection aufsammeln m&#252;ssen. Ein Type-Refinement w&#252;rde beduten, zwei dieser Argumente zusammen in einem generischen Buffer-Descriptor &#8222;zu verstecken&#8220; (n&#228;mlich den Link auf den OutputBufferProxy, sowie die Buffer-Size). Deshalb bleiben trotzdem weitere Argumente &#252;brig, und auch f&#252;r die Verst&#228;ndlichkeit ist es abtr&#228;glich, wenn die Abh&#228;ngigkeit auf den Proxy-BufferProvider verborgen wird
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#b4715d" DESTINATION="ID_1567622701" ENDARROW="Default" ENDINCLINATION="-57;1294;" ID="Arrow_ID_646507974" STARTARROW="None" STARTINCLINATION="910;51;"/>
+<icon BUILTIN="help"/>
+<icon BUILTIN="button_cancel"/>
+<node COLOR="#b40945" CREATED="1774126746364" HGAP="38" ID="ID_1849597195" MODIFIED="1774126761166" TEXT="NJET" VSHIFT="11">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+</node>
+</node>
+<node CREATED="1774126316622" ID="ID_1460072236" MODIFIED="1774126322206" TEXT="Argumente">
+<node CREATED="1774126777267" ID="ID_1310012432" MODIFIED="1774126788414" TEXT="den shared-ptr als &#xbb;lifecycle-manager&#xab;"/>
+<node CREATED="1774126796040" ID="ID_1259439489" MODIFIED="1774126831327" TEXT="die jeweils relevante Connection (&#x27f6; als Pointer/Referenz)"/>
+<node CREATED="1774126856640" ID="ID_1792742469" MODIFIED="1774126864387" TEXT="von dieser Connection die Buffer-Size"/>
+<node CREATED="1774126881885" ID="ID_899991315" MODIFIED="1774126887766" TEXT="der Proxy-BufferProvider"/>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -166203,6 +166442,20 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
 <node COLOR="#2a2f72" CREATED="1689635451445" ID="ID_1371714413" MODIFIED="1689635519780" TEXT="[x](Arg arg) mutable { /* body */ }">
 <font NAME="Monospaced" SIZE="12"/>
 </node>
+</node>
+<node CREATED="1774119984274" ID="ID_710870030" LINK="#ID_871196012" MODIFIED="1774120713133" TEXT="&#x3bb;-capture Heap-overflow">
+<node CREATED="1774120723265" ID="ID_300417056" MODIFIED="1774120732777" TEXT="passiert automatisch und ist &#xbb;implementation-defined&#xab;"/>
+<node CREATED="1774120733654" ID="ID_794869813" MODIFIED="1774120983814" TEXT="der Schwellwert liegt bei der LibStdC++ relativ niedrig">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Im Zusammenhang mit der &#187;Test-Chain-Load&#171; (wo ich mich wieder einmal wunderbar im Design verlaufen hatte) habe ich ein &#187;trojanisches Lambda&#171; bauen m&#252;ssen wollen. Dieser Programmiertrick funktioniert nur, wenn die Storage f&#252;r das Capture noch &#187;inline&#171; liegt. Empirisch habe ich gefunden, da&#223; ein char[16] oder ein unique-ptr noch inline liegt, aber ein shared-ptr einen Heap-Overflow bewirkt.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774120823962" ID="ID_762343468" MODIFIED="1774120842355" TEXT="wenn man dar&#xfc;ber liegt &#x27f9; schleppt ein Heap-Delegate mit"/>
 </node>
 </node>
 </node>

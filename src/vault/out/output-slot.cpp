@@ -48,7 +48,7 @@ namespace out   {
    *   type of the PImpl, i.e. the Allocation subclass passed in as argument. The OutputSlot,
    *   together with the DataSink handles, will take shared ownership of the connection setup.
    */
-  shared_ptr<OutputSlot::Allocation>
+  OutputSlot::PAlloc
   OutputSlot::connect (unique_ptr<Allocation> allocation)
   {
     REQUIRE (allocation);
@@ -74,14 +74,15 @@ namespace out   {
   OutputSlot::OpenedSinks
   OutputSlot::getOpenedSinks()
   {
-    
+    REQUIRE (alloc_);
+    return alloc_->connect (alloc_);
   }
   
   
   Timings
   OutputSlot::timingConstraints()
   {
-    REQUIRE(alloc_);
+    REQUIRE (alloc_);
     return alloc_->getTimings();
   }
   
