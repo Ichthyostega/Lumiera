@@ -116,15 +116,6 @@ namespace out  {
           auto buildStore() { return std::make_unique<OutputBufferStore>(); }
         };
       
-      BuffDescr
-      registerBuffer (void* buff, size_t siz)
-        {
-          REQUIRE (siz);
-          REQUIRE (buff);
-          auto& typeKey = bufferStage_->defineBufferType (siz, TypeHandler::RAW, LocalTag(buff));
-          return buildDescriptor (typeKey);
-        }
-
       
     public:
       OutputBufferProxy()
@@ -132,20 +123,13 @@ namespace out  {
         { }
       
       
-      template<typename TAR>
       BuffDescr
-      getDescriptorFor (TAR& dataBlock)
+      getDescriptorFor (CON& connection)
         {
-          return registerBuffer(&dataBlock, sizeof(TAR));
-        }
-      
-      template<typename TAR>
-      BuffHandle
-      lockBuffer (TAR& dataBlock)
-        {
-          BuffDescr buffType = getDescriptorFor<TAR> (dataBlock);
-          ENSURE (buffType.isValid());
-          return buffType.lockBuffer();
+          LocalTag connectionID{&connection};
+          size_t buffSiz = connection.getBufferSize();
+          auto& typeKey = bufferStage_->defineBufferType (buffSiz, TypeHandler::RAW, connectionID);
+          return buildDescriptor (typeKey);
         }
     };
   

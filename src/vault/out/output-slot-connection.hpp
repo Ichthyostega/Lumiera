@@ -35,7 +35,7 @@
 #include "vault/out/output-slot.hpp"
 #include "vault/out/output-buffer-proxy.hpp"
 #include "lib/scoped-collection.hpp"
-#include "lib/iter-adapter-stl.hpp"
+#include "lib/iter-explorer.hpp"
 #include "lib/iter-source.hpp"
 #include "lib/handle.hpp"
 #include "lib/time/timevalue.hpp"
@@ -43,6 +43,7 @@
 //#include "steam/play/timings.hpp"
 //#include "lib/sync.hpp"
 #include "vault/mem/buffer-provider.hpp"
+#include "lib/util.hpp"
 
 //#include <string>
 #include <functional>
@@ -59,7 +60,7 @@ namespace out   {
   using vault::mem::BufferProvider;
   using lib::time::TimeValue; /////////////////OOO Rly?
 //using std::string;
-  using lib::iter_stl::eachElm;
+  using util::unConst;
   
 //using std::placeholders::_1;
 //using std::bind;
@@ -95,6 +96,7 @@ namespace out   {
     public:
       virtual ~Connection();
       
+      virtual size_t getBufferSize()  const      =0;
       virtual Buff* claimBufferFor(FrameID)      =0;
       virtual bool isTimely (FrameID, TimeValue) =0;
       virtual void transfer (Buff*)              =0;
@@ -151,7 +153,17 @@ namespace out   {
       OpenedSinks
       connect (PAlloc& lifecycleManager)  override
         {
-          /////////////////OOO use an iterExplorer-Pipeline to create the functor closure here
+          return lib::explore (connections_)
+                    .transform([&](CON& connection) -> DataSink
+                                  { // setup the DataSink functor
+                                    return [bufferDescriptor = bufferProxy_.getDescriptorFor (connection)
+                                           ,lifecycleManager ]
+                                           (FrameID frame) mutable -> BuffHandle
+                                            {
+                                              return bufferDescriptor.lockBuffer (frame);
+                                            };
+                                  })
+                    .asIterSource();
         }
       
       

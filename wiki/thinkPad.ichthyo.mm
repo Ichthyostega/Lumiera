@@ -138663,7 +138663,35 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node CREATED="1774124656373" ID="ID_1252354115" MODIFIED="1774127022008" TEXT="also binden in die Funktor-Closure">
 <icon BUILTIN="forward"/>
-<node CREATED="1774124694439" ID="ID_775305943" MODIFIED="1774124714000" TEXT="ein shared-ptr mit Alias auf die jeweilige Connection"/>
+<node CREATED="1774124694439" ID="ID_775305943" MODIFIED="1774197102402">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ein shared-ptr <strike>mit <font color="#673c22">Alias auf die jeweilige Connection</font></strike>
+    </p>
+  </body>
+</html>
+</richcontent>
+<node COLOR="#5b280f" CREATED="1774196855086" ID="ID_535181506" MODIFIED="1774196868083" TEXT="brauche gar keinen Alias">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1774196869133" ID="ID_733223522" MODIFIED="1774196884004" TEXT="die Connection kann ich bereits in den Buffer-Descriptor einbetten">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1774196885651" ID="ID_840999997" MODIFIED="1774197066154" TEXT="also brauche nur einen shared-ptr als lifecycle-Handle">
+<icon BUILTIN="forward"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1774196906696" ID="ID_136318391" MODIFIED="1774197060965" TEXT="wird im Body des Lambda gar nicht verwendet">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1774196919046" ID="ID_643798814" MODIFIED="1774196936088" TEXT="trotzdem explizit binden im &#x3bb;-capture"/>
+<node CREATED="1774197007200" ID="ID_1031192090" LINK="https://stackoverflow.com/a/12718425/444796" MODIFIED="1774197049385" TEXT="Stackoverflow: C++ garantiert da&#xdf; das Binding erhalten bleibt">
+<icon BUILTIN="info"/>
+</node>
+</node>
+</node>
 <node CREATED="1774124730203" ID="ID_257841074" MODIFIED="1774124780343" TEXT="ein vertig verdrahteter Buffer-Descriptor (&#x27f6; Connection)">
 <node COLOR="#5b280f" CREATED="1774126323430" ID="ID_497118718" MODIFIED="1774126743220" TEXT="doch wieder Buffer-Descriptor-Refinement?">
 <richcontent TYPE="NOTE"><html>
@@ -138682,16 +138710,17 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node CREATED="1774126316622" ID="ID_1460072236" MODIFIED="1774126322206" TEXT="Argumente">
+<node CREATED="1774126316622" ID="ID_1460072236" MODIFIED="1774197144964" TEXT="Argumente">
+<icon BUILTIN="list"/>
 <node CREATED="1774126777267" ID="ID_1310012432" MODIFIED="1774126788414" TEXT="den shared-ptr als &#xbb;lifecycle-manager&#xab;"/>
 <node CREATED="1774126796040" ID="ID_1259439489" MODIFIED="1774126831327" TEXT="die jeweils relevante Connection (&#x27f6; als Pointer/Referenz)"/>
 <node CREATED="1774126856640" ID="ID_1792742469" MODIFIED="1774126864387" TEXT="von dieser Connection die Buffer-Size"/>
-<node CREATED="1774126881885" ID="ID_899991315" MODIFIED="1774126887766" TEXT="der Proxy-BufferProvider"/>
+<node CREATED="1774126881885" ID="ID_899991315" MODIFIED="1774197139349" TEXT="der Proxy-BufferProvider (&#x27f6; implizit im Buffer-Descriptor)"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1774132649643" ID="ID_1759796259" MODIFIED="1774132670265" TEXT="Problem &#xfc;bersehen: die Frame-Nummer">
+<node COLOR="#435e98" CREATED="1774132649643" ID="ID_1759796259" MODIFIED="1774190645402" TEXT="Problem &#xfc;bersehen: die Frame-Nummer">
 <icon BUILTIN="broken-line"/>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1774132731585" ID="ID_396286799" MODIFIED="1774136559514">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1774132731585" ID="ID_396286799" MODIFIED="1774190638918">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
@@ -138738,7 +138767,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node CREATED="1774133338567" ID="ID_1915597180" MODIFIED="1774133354752" TEXT="v&#xf6;llig egal wie, in jedem Fall ist die Frame-Nummer eine zus&#xe4;tzliche Info"/>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1774133516471" ID="ID_1070291197" MODIFIED="1774136481626" TEXT="&#x27f9; bleibt nur, einen Kanal zu schaffen">
+<node COLOR="#435e98" CREATED="1774133516471" ID="ID_1070291197" MODIFIED="1774190629188" TEXT="&#x27f9; bleibt nur, einen Kanal zu schaffen">
 <icon BUILTIN="yes"/>
 <node CREATED="1774133549299" ID="ID_437134456" MODIFIED="1774134318162" TEXT="L&#xf6;sung-1 : zus&#xe4;tzliches Argument durchf&#xe4;deln">
 <icon BUILTIN="forward"/>

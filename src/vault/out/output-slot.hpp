@@ -32,7 +32,7 @@
  ** retrieving this OutputSlot. For example, a stereo sound output may expect only a single
  ** data feed, where data blocks for both channels are sent in interleaved format.
  ** 
- ** Once the client retrieves some OutputSlot, it was _allocated_ for exclusive use for that client;
+ ** Once the client retrieves some OutputSlot, it was _allocated_ for exclusive use for that client.
  ** At any time, there may be only a single client using a given output capability this way. It should
  ** be noted thus that output slots don't provide any kind of inherent mixing capability; any adaptation,
  ** mixing, overlaying and sharing needs to be done within the Render Node Network that produces the
@@ -115,7 +115,13 @@ namespace out  {
    */
   class DataSink
     : public std::function<BuffHandle(FrameID)>
-    { };
+    {
+    public:
+      template<typename FUN>
+      DataSink (FUN&& fun)
+        : std::function<BuffHandle(FrameID)>{std::forward<FUN> (fun)}
+        { }
+    };
   
   
   

@@ -135,6 +135,12 @@ namespace out   {
       
       /* === Connection API === */
       
+      size_t
+      getBufferSize()  const override
+        {
+          UNIMPLEMENTED ("wtf buff?");
+        }
+      
       Buff*
       claimBufferFor (FrameID frameNr)  override
         {

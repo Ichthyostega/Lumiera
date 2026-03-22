@@ -80,6 +80,7 @@ namespace test {
   class UnimplementedConnection
     : public vault::out::OutputSlot::Connection
     {
+      size_t getBufferSize()       const override { UNIMPLEMENTED ("getBufferSize()");              }
       Buff* claimBufferFor (FrameID)     override;
       bool isTimely (FrameID, TimeValue) override { return true;                                    }
       void transfer (Buff*)              override { UNIMPLEMENTED ("transfer (BuffHandle const&)"); }
