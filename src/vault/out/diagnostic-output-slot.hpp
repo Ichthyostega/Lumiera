@@ -153,21 +153,8 @@ namespace out   {
 #endif  /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : (end) disabled code
         }
       
-      
-      bool
-      isTimely (FrameID frameNr, TimeValue currentTime)  override
-        {
-          TRACE (test, "Con=%p : timely? frame-#%lu"
-                     , this, frameNr);
-          
-          if (Time::ANYTIME == currentTime)
-            return true;
-          else
-            return currentTime < deadlineFor (frameNr);
-        }
-      
       void
-      transfer (Buff* filledBuffer)  override
+      publish (Buff* filledBuffer)  override
         {
 #if false  //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : disabled code due to OutputSlot refactoring
           TRACE (test, "Con=%p : transfer buffer %zu"
@@ -179,21 +166,12 @@ namespace out   {
         }
       
       void
-      pushout (Buff* data4output)  override
+      release (Buff* data4output)  override
         {
 #if false  //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : disabled code due to OutputSlot refactoring
           REQUIRE (!closed_);
           buffProvider_.emitBuffer   (data4output);
           buffProvider_.releaseBuffer(data4output);
-#endif  /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : (end) disabled code
-        }
-      
-      void
-      discard (Buff* superseededData)  override
-        {
-#if false  //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : disabled code due to OutputSlot refactoring
-          REQUIRE (!closed_);
-          buffProvider_.releaseBuffer (superseededData);
 #endif  /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : (end) disabled code
         }
       

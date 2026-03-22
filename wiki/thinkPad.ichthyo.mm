@@ -138020,7 +138020,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 <node CREATED="1773354410472" ID="ID_1743624174" MODIFIED="1773354422590" TEXT="bestehende Implementierung &#xfc;berpr&#xfc;fen">
-<node CREATED="1773366196992" ID="ID_1171528228" MODIFIED="1773366221964" TEXT="die dreistufige Vererbung ist zweifelhaft">
+<node COLOR="#5b280f" CREATED="1773366196992" FOLDED="true" ID="ID_1171528228" MODIFIED="1774223759898" TEXT="die dreistufige Vererbung ist zweifelhaft">
+<icon BUILTIN="broken-line"/>
 <node CREATED="1773366223189" ID="ID_1366861589" MODIFIED="1773366246027" TEXT="Kennzeichen: mir fallen keine drei schl&#xfc;ssigen Klassennamen ein">
 <icon BUILTIN="messagebox_warning"/>
 </node>
@@ -138100,7 +138101,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node CREATED="1773369169156" ID="ID_214225108" MODIFIED="1773369180790" TEXT="Verbesserungsversuch....">
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1773369169156" ID="ID_214225108" MODIFIED="1774224646822" TEXT="Verbesserungsversuch starten....">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
 <node CREATED="1773369183338" ID="ID_1251387186" MODIFIED="1773369195156" TEXT="der PImpl k&#xf6;nnte direkt eine Allocation halten"/>
 <node CREATED="1773369240283" ID="ID_1908925521" MODIFIED="1773369252845" TEXT="dann w&#xe4;re bereits AllocState getemplated">
 <node CREATED="1773369255863" ID="ID_650591769" MODIFIED="1773369272046" TEXT="und h&#xe4;tte nur die Aufgabe, die einzelnen Connections zu managen"/>
@@ -138134,8 +138137,10 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node CREATED="1773423115479" ID="ID_1275456830" MODIFIED="1773423123305" TEXT="Probleme / H&#xfc;rden">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1773423124811" ID="ID_1029911055" MODIFIED="1773423172313" TEXT="die Deallokation soll automatisch sein!">
+<node BACKGROUND_COLOR="#483354" COLOR="#fee898" CREATED="1773423115479" ID="ID_1275456830" MODIFIED="1774224627641" TEXT="Probleme / H&#xfc;rden / Redesign">
+<linktarget COLOR="#7c2e4f" DESTINATION="ID_1275456830" ENDARROW="Default" ENDINCLINATION="-171;377;" ID="Arrow_ID_465227693" SOURCE="ID_78273441" STARTARROW="None" STARTINCLINATION="301;22;"/>
+<font BOLD="true" NAME="SansSerif" SIZE="14"/>
+<node COLOR="#435e98" CREATED="1773423124811" ID="ID_1029911055" MODIFIED="1774224570116" TEXT="die Deallokation soll automatisch sein!">
 <icon BUILTIN="yes"/>
 <node COLOR="#5b280f" CREATED="1773512654297" ID="ID_1638173657" MODIFIED="1773954217403" TEXT="eine explizite disconnect() - Operation ist nicht m&#xf6;glich">
 <linktarget COLOR="#8f0506" DESTINATION="ID_1638173657" ENDARROW="Default" ENDINCLINATION="122;886;" ID="Arrow_ID_1863490886" SOURCE="ID_921042105" STARTARROW="None" STARTINCLINATION="93;-343;"/>
@@ -138161,17 +138166,93 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
+<node COLOR="#338800" CREATED="1774223795956" ID="ID_1349320422" MODIFIED="1774223880166" TEXT="nach Umbau wird alles &#xfc;ber einen shared-count gesteuert">
+<linktarget COLOR="#269cc5" DESTINATION="ID_1349320422" ENDARROW="Default" ENDINCLINATION="-544;26;" ID="Arrow_ID_1535498158" SOURCE="ID_1359350896" STARTARROW="None" STARTINCLINATION="-218;26;"/>
+<icon BUILTIN="idea"/>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1773423131415" ID="ID_1566753229" MODIFIED="1773423147739" TEXT="wer mu&#xdf; wen konkret getypt sehen?">
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1773423131415" ID="ID_1566753229" MODIFIED="1774223966437" TEXT="wer mu&#xdf; wen konkret getypt sehen?">
 <icon BUILTIN="help"/>
+<node CREATED="1774223897454" ID="ID_278951543" MODIFIED="1774223927739" TEXT="hat sich auf dem Weg des Refactorings (f&#xfc;r den Lebenszyklus) gekl&#xe4;rt">
+<icon BUILTIN="ksmiletris"/>
 </node>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1773699216800" ID="ID_49953306" MODIFIED="1773700514964" TEXT="wirft sofort das Problem auf wie man die Proxy-Callbacks implementiert">
+<node COLOR="#435e98" CREATED="1774223929315" ID="ID_1944099107" MODIFIED="1774223959282" TEXT="ist immer ein gutes Zeichen wenn sich daneben liegene Probelme ebenfalls f&#xfc;gen">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#435e98" CREATED="1774223969365" ID="ID_1782289710" MODIFIED="1774224564250" TEXT="Fazit">
+<linktarget COLOR="#2129bf" DESTINATION="ID_1782289710" ENDARROW="Default" ENDINCLINATION="-514;144;" ID="Arrow_ID_1760765205" SOURCE="ID_580276809" STARTARROW="None" STARTINCLINATION="470;-797;"/>
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="forward"/>
+<node CREATED="1774223981433" ID="ID_737292723" MODIFIED="1774224003908" TEXT="OutputSlot wird jetzt direkt erstellt &#x2014; hier kein Sub-Typing mehr!"/>
+<node CREATED="1774224007056" ID="ID_1607982980" MODIFIED="1774224037099">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      er bekommt nur in den Konstruktor einen konkreten <font face="Monospaced" color="#6e3f3f">AllocState&lt;CON&gt;</font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774224046618" ID="ID_1967238540" MODIFIED="1774224070787">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      ab dem Punkt passiert f&#252;r den OutputSlot bereits <b>Type-Erasure</b>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774224073211" ID="ID_1528777937" MODIFIED="1774224111715">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      die connect()-Funktion liefert eine <font face="Monospaced" color="#6b4f4f">IterSource&lt;DataSink&gt;</font>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1774224118247" ID="ID_616159623" MODIFIED="1774224145909" TEXT="die Bindings / Verschaltung passiert opaque in einer &#x3bb;-closure"/>
+<node CREATED="1774224151137" ID="ID_1221018251" MODIFIED="1774224182116" TEXT="Hier ist sichtbar">
+<node CREATED="1774224182996" ID="ID_305687317" MODIFIED="1774224210667">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      der konkrete <font color="#6e3f3f" face="Monospaced">AllocState&lt;CON&gt;</font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774224212863" ID="ID_607573548" MODIFIED="1774224226501" TEXT="der OutputBufferProxy (konkret)"/>
+<node CREATED="1774224233033" ID="ID_85951581" MODIFIED="1774224240749" TEXT="NICHT: der konkrete Connection-Typ"/>
+</node>
+<node CREATED="1774224247007" ID="ID_1819525216" MODIFIED="1774224272837">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      die <font face="Monospaced" color="#6b3e3e">Connection</font>-Implementierung bleibt <b>&#252;berall abstrakt</b>
+    </p>
+  </body>
+</html></richcontent>
+<node COLOR="#435e98" CREATED="1774224283050" ID="ID_539669364" MODIFIED="1774224312592" TEXT="NUR der erzeugende OutputManager kennt sie"/>
+<node BACKGROUND_COLOR="#dedaae" COLOR="#3c358a" CREATED="1774224299320" ID="ID_208057035" MODIFIED="1774224335649" TEXT="vielleicht nicht mal der ... man wird sehen">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1773699216800" ID="ID_49953306" MODIFIED="1774223687539" TEXT="wirft sofort das Problem auf wie man die Proxy-Callbacks implementiert">
 <arrowlink COLOR="#1c07d0" DESTINATION="ID_200162330" ENDARROW="Default" ENDINCLINATION="-77;817;" ID="Arrow_ID_1474651143" STARTARROW="None" STARTINCLINATION="1030;40;"/>
 <linktarget COLOR="#4b1ec1" DESTINATION="ID_49953306" ENDARROW="Default" ENDINCLINATION="-1107;45;" ID="Arrow_ID_474360109" SOURCE="ID_497122958" STARTARROW="None" STARTINCLINATION="687;22;"/>
 <linktarget COLOR="#5a22df" DESTINATION="ID_49953306" ENDARROW="Default" ENDINCLINATION="770;-33;" ID="Arrow_ID_886780269" SOURCE="ID_1831855764" STARTARROW="None" STARTINCLINATION="751;0;"/>
 <icon BUILTIN="messagebox_warning"/>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1773703618287" HGAP="62" ID="ID_914494536" MODIFIED="1774041144417" TEXT="mu&#xdf; BufferProxyAdaptor in OutputSlot::AllocState integrieren" VSHIFT="33">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1773703618287" HGAP="62" ID="ID_914494536" MODIFIED="1774223609209" TEXT="mu&#xdf; BufferProxyAdaptor in OutputSlot::AllocState integrieren" VSHIFT="33">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1773703751137" ID="ID_340628735" MODIFIED="1773703998020" TEXT="&#xdc;berlegung am Rande: l&#xe4;ngerfristig wollen wir einen globalen Metadaten-Store">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -138183,7 +138264,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 <arrowlink COLOR="#76516c" DESTINATION="ID_1415408255" ENDARROW="Default" ENDINCLINATION="779;39;" ID="Arrow_ID_1408352744" STARTARROW="None" STARTINCLINATION="468;17;"/>
 </node>
-<node CREATED="1773704083017" ID="ID_446456909" MODIFIED="1773704096521" TEXT="Anordnung und Zugriffe sind problematisch in der bestehenden Architektur">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1773704083017" FOLDED="true" ID="ID_446456909" MODIFIED="1774223593951" TEXT="Anordnung und Zugriffe sind problematisch in der bestehenden Architektur">
+<icon BUILTIN="broken-line"/>
 <node CREATED="1773704097997" ID="ID_1516975322" MODIFIED="1773704108791" TEXT="man will nur einen einzigen BufferProxyAdaptor"/>
 <node CREATED="1773704125817" ID="ID_1780250199" MODIFIED="1773704161930" TEXT="aber die &#xbb;Typ&#xab;-Eintr&#xe4;ge werden in der Connection konfiguriert"/>
 <node CREATED="1773704176910" ID="ID_1110317988" MODIFIED="1773704206640">
@@ -138213,7 +138295,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1773704486520" ID="ID_1324797839" MODIFIED="1773704500571" TEXT="sie haben nur den Buffer-Ptr, nicht die dazugeh&#xf6;rige Connection"/>
 </node>
 </node>
-<node COLOR="#435e98" CREATED="1773797100647" ID="ID_425446315" MODIFIED="1773888697408" TEXT="&#xdc;berlegung: wie k&#xf6;nnt man das Problem &#xfc;berhaupt &#xbb;knacken&#xab;">
+<node COLOR="#435e98" CREATED="1773797100647" FOLDED="true" ID="ID_425446315" MODIFIED="1774223579568" TEXT="&#xdc;berlegung: wie k&#xf6;nnt man das Problem &#xfc;berhaupt &#xbb;knacken&#xab;">
 <icon BUILTIN="help"/>
 <node CREATED="1773797120055" ID="ID_1455782398" MODIFIED="1773797126986" TEXT="mit Gewalt?">
 <node CREATED="1773797138856" ID="ID_1366418982" MODIFIED="1773797219006" TEXT="jede DataSink bekommt auch einen Basis-Descriptor(&#x27fc;backlink)"/>
@@ -138312,8 +138394,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1773888426603" ID="ID_888618711" MODIFIED="1773888441501" TEXT="diese enh&#xe4;lt einen &#xbb;delegating-BufferStore&#xab;"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1773888677730" ID="ID_370790574" MODIFIED="1773888690633" TEXT="dieses neue Verschaltungs-Konzept implementieren">
-<icon BUILTIN="flag-pink"/>
+<node COLOR="#338800" CREATED="1773888677730" ID="ID_370790574" MODIFIED="1774219474051" TEXT="dieses neue Verschaltungs-Konzept implementieren">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1773888784963" ID="ID_1753071442" MODIFIED="1773888798826" TEXT="Struktur eines Proxy-BufferProvider anlegen">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1773888800028" ID="ID_756667017" MODIFIED="1773888814028" TEXT="geht ganz einfach: von BufferProxyAdapter ausgehen"/>
@@ -138325,8 +138407,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1773888873544" ID="ID_1930210997" MODIFIED="1773888889891" TEXT="Vorteil: ich kann die back-Reference nach innen in den BufferStore schieben"/>
 </node>
 </node>
-<node CREATED="1773934250649" ID="ID_1023733837" MODIFIED="1774041080914" TEXT="Umstellen der DataSink">
-<arrowlink COLOR="#512fb3" DESTINATION="ID_848279587" ENDARROW="Default" ENDINCLINATION="-42;-865;" ID="Arrow_ID_998347051" STARTARROW="None" STARTINCLINATION="-628;72;"/>
+<node COLOR="#338800" CREATED="1773934250649" ID="ID_1023733837" MODIFIED="1774219522013" TEXT="Umstellen der DataSink">
+<arrowlink COLOR="#2f56b3" DESTINATION="ID_848279587" ENDARROW="Default" ENDINCLINATION="-42;-865;" ID="Arrow_ID_998347051" STARTARROW="Default" STARTINCLINATION="-663;70;"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1773934262265" ID="ID_1065611224" MODIFIED="1773934275092" TEXT="m&#xf6;glichst das sichtbare API nicht anpassen">
 <node CREATED="1773934291293" ID="ID_736836401" MODIFIED="1773934304615" TEXT="AllocState ist erst der OutputSlot-Impl bekannt"/>
 <node CREATED="1773934310714" ID="ID_424279130" MODIFIED="1773934328756" TEXT="der Vorteil von shared-ptr / lib::Handle war das nachtr&#xe4;gliche &#xbb;connect&#xab;"/>
@@ -138411,7 +138494,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node CREATED="1774041166497" ID="ID_1405169811" MODIFIED="1774041789004" TEXT="Design nochmal &#xfc;berdenken">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1774041166497" ID="ID_1405169811" MODIFIED="1774219476741" TEXT="Design nochmal &#xfc;berdenken">
 <linktarget COLOR="#96171e" DESTINATION="ID_1405169811" ENDARROW="Default" ENDINCLINATION="32;82;" ID="Arrow_ID_1850815871" SOURCE="ID_1695581190" STARTARROW="None" STARTINCLINATION="-700;32;"/>
 <icon BUILTIN="yes"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#8b0655" CREATED="1774041267592" ID="ID_1373364216" MODIFIED="1774041446113" TEXT="dabei ist dieses Design theoretisch so elegant....">
@@ -138468,11 +138551,16 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1774042095382" ID="ID_409572046" MODIFIED="1774042116105" TEXT="getOpenedSinks() hat darauf nun direkt Zugriff"/>
 <node CREATED="1774042144135" ID="ID_398645730" MODIFIED="1774042163080" TEXT="und delegiert an eine builder/verdrahtungs-Funktion auf dem PImpl"/>
 </node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1774223553705" ID="ID_1056437663" MODIFIED="1774223564933" TEXT="f&#xfc;hlt sich jetzt alles viel besser an">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
 </node>
-<node CREATED="1773954149241" ID="ID_203883845" MODIFIED="1773954234498" TEXT="Allocation / Lebenszyklus in den Griff bekommen">
-<arrowlink COLOR="#d0020f" DESTINATION="ID_671153651" ENDARROW="Default" ENDINCLINATION="-3;-427;" ID="Arrow_ID_1331623727" STARTARROW="Default" STARTINCLINATION="-756;0;"/>
+</node>
+<node COLOR="#435e98" CREATED="1773954149241" ID="ID_203883845" MODIFIED="1774219466189" TEXT="Allocation / Lebenszyklus in den Griff bekommen">
+<arrowlink COLOR="#4236b1" DESTINATION="ID_671153651" ENDARROW="Default" ENDINCLINATION="-3;-427;" ID="Arrow_ID_1331623727" STARTARROW="Default" STARTINCLINATION="-756;0;"/>
+<icon BUILTIN="yes"/>
 <node CREATED="1773971803964" ID="ID_987627732" MODIFIED="1773971813190" TEXT="gemeinamen shared-ptr einf&#xfc;hren">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1773973038119" ID="ID_322920487" MODIFIED="1774116830612" TEXT="Problem: diesen erzeugen und verdrahten">
+<node COLOR="#435e98" CREATED="1773973038119" ID="ID_322920487" MODIFIED="1774219483768" TEXT="Problem: diesen erzeugen und verdrahten">
 <icon BUILTIN="broken-line"/>
 <node CREATED="1773973059692" ID="ID_1788170271" MODIFIED="1773973087364" TEXT="mu&#xdf; eine Deleter-Funktion einbinden"/>
 <node BACKGROUND_COLOR="#e5cca9" COLOR="#a50167" CREATED="1773973088177" ID="ID_534312365" MODIFIED="1774116812214" TEXT="mu&#xdf; aber diesen Pointer auch im AllocState selber zug&#xe4;nglich machen">
@@ -138492,7 +138580,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node COLOR="#5b280f" CREATED="1774041751196" ID="ID_1946395022" MODIFIED="1774116705999" TEXT="nun k&#xf6;nnte man eine Factory bauen, und ein leere Handle &#xfc;berall hin durchschieben">
 <icon BUILTIN="stop-sign"/>
 </node>
-<node CREATED="1774041103709" ID="ID_1695581190" MODIFIED="1774041789004" TEXT="das ist alles so kompliziert &#x27f9; etwas mit dem Design stimmt nicht">
+<node COLOR="#b1000c" CREATED="1774041103709" ID="ID_1695581190" MODIFIED="1774223544563" TEXT="das ist alles so kompliziert &#x27f9; etwas mit dem Design stimmt nicht">
 <arrowlink COLOR="#96171e" DESTINATION="ID_1405169811" ENDARROW="Default" ENDINCLINATION="32;82;" ID="Arrow_ID_1850815871" STARTARROW="None" STARTINCLINATION="-700;32;"/>
 </node>
 </node>
@@ -138514,7 +138602,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1773971873811" ID="ID_264465688" MODIFIED="1773971898075" TEXT="auf das vorzeitige Schlie&#xdf;en einzelner Connections wird verzichtet"/>
 <node CREATED="1773971902700" ID="ID_967293485" MODIFIED="1773971931718" TEXT="aber es mu&#xdf; einen globalen (virtuellen) release-Hook im OutputSlot geben"/>
 </node>
-<node CREATED="1774117870539" ID="ID_160673186" MODIFIED="1774117879102" TEXT="Callbacks f&#xfc;r das Buffer-Handling einf&#xe4;deln">
+<node COLOR="#338800" CREATED="1774117870539" ID="ID_160673186" MODIFIED="1774219444172" TEXT="Callbacks f&#xfc;r das Buffer-Handling einf&#xe4;deln">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1774117886873" ID="ID_1363452049" MODIFIED="1774117892476" TEXT="der Funktor in DataSink">
 <node CREATED="1774117905798" ID="ID_3491981" MODIFIED="1774119797698" TEXT="verwendet einen Slave-shared-ptr">
 <richcontent TYPE="NOTE"><html>
@@ -138551,7 +138640,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node CREATED="1774122219137" ID="ID_656953886" MODIFIED="1774122240553" TEXT="&#x27f9; alle weiteren Protokollschritte erfolgen direkt von dort"/>
 </node>
-<node COLOR="#435e98" CREATED="1774122365597" ID="ID_292817548" MODIFIED="1774131392789" TEXT="Abw&#xe4;gung: wohin delegieren die Proxy-Callbacks?">
+<node COLOR="#435e98" CREATED="1774122365597" FOLDED="true" ID="ID_292817548" MODIFIED="1774131392789" TEXT="Abw&#xe4;gung: wohin delegieren die Proxy-Callbacks?">
 <icon BUILTIN="help"/>
 <node CREATED="1774122388349" ID="ID_1459974960" MODIFIED="1774122391728" TEXT="m&#xf6;glich w&#xe4;re...">
 <node CREATED="1774122410671" ID="ID_1178347692" MODIFIED="1774124507440" TEXT="an eine Connection (Interface)">
@@ -138661,13 +138750,11 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node CREATED="1774124656373" ID="ID_1252354115" MODIFIED="1774127022008" TEXT="also binden in die Funktor-Closure">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1774124656373" ID="ID_1252354115" MODIFIED="1774219424401" TEXT="also binden in die Funktor-Closure">
 <icon BUILTIN="forward"/>
 <node CREATED="1774124694439" ID="ID_775305943" MODIFIED="1774197102402">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ein shared-ptr <strike>mit <font color="#673c22">Alias auf die jeweilige Connection</font></strike>
@@ -138718,7 +138805,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1774126881885" ID="ID_899991315" MODIFIED="1774197139349" TEXT="der Proxy-BufferProvider (&#x27f6; implizit im Buffer-Descriptor)"/>
 </node>
 </node>
-<node COLOR="#435e98" CREATED="1774132649643" ID="ID_1759796259" MODIFIED="1774190645402" TEXT="Problem &#xfc;bersehen: die Frame-Nummer">
+<node COLOR="#435e98" CREATED="1774132649643" FOLDED="true" ID="ID_1759796259" MODIFIED="1774190645402" TEXT="Problem &#xfc;bersehen: die Frame-Nummer">
 <icon BUILTIN="broken-line"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1774132731585" ID="ID_396286799" MODIFIED="1774190638918">
 <richcontent TYPE="NODE"><html>
@@ -138820,11 +138907,26 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-</node>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1773935649392" ID="ID_671153651" MODIFIED="1773954244683" TEXT="Steuern des Allocation-Lebenszyklus">
-<linktarget COLOR="#d0020f" DESTINATION="ID_671153651" ENDARROW="Default" ENDINCLINATION="-3;-427;" ID="Arrow_ID_1331623727" SOURCE="ID_203883845" STARTARROW="Default" STARTINCLINATION="-756;0;"/>
+<node COLOR="#338800" CREATED="1774223630666" ID="ID_654626526" MODIFIED="1774223674292" TEXT="ist jetzt implementiert ...">
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1774223648227" ID="ID_1705010271" MODIFIED="1774223676743" TEXT="sieht gut aus...."/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1774223652431" ID="ID_1340307534" MODIFIED="1774223668700">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      aber wurde <b>noch nie irgendwo verwendet</b>
+    </p>
+  </body>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
-<node CREATED="1773935662405" ID="ID_921042105" MODIFIED="1773954217403" TEXT="ehrlich gesagt: diese Aufgabe war bisher gar nicht richtig gel&#xf6;st">
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1773935649392" ID="ID_671153651" MODIFIED="1774223505859" TEXT="Steuern des Allocation-Lebenszyklus">
+<linktarget COLOR="#4236b1" DESTINATION="ID_671153651" ENDARROW="Default" ENDINCLINATION="-3;-427;" ID="Arrow_ID_1331623727" SOURCE="ID_203883845" STARTARROW="Default" STARTINCLINATION="-756;0;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1773935662405" ID="ID_921042105" MODIFIED="1774223839010" TEXT="ehrlich gesagt: diese Aufgabe war bisher gar nicht richtig gel&#xf6;st">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -138835,7 +138937,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 <arrowlink COLOR="#8f0506" DESTINATION="ID_1638173657" ENDARROW="Default" ENDINCLINATION="122;886;" ID="Arrow_ID_1863490886" STARTARROW="None" STARTINCLINATION="93;-343;"/>
 </node>
-<node CREATED="1773936076352" ID="ID_1795427929" MODIFIED="1773936082775" TEXT="m&#xf6;gliche Alternativen">
+<node CREATED="1773936076352" FOLDED="true" ID="ID_1795427929" MODIFIED="1774223469372" TEXT="m&#xf6;gliche Alternativen">
+<icon BUILTIN="list"/>
 <node CREATED="1773936156477" ID="ID_1492599648" MODIFIED="1773936162362" TEXT="auf den Client abw&#xe4;lzen">
 <node CREATED="1773936163386" ID="ID_744734834" MODIFIED="1773936184925" TEXT="der mu&#xdf; explizit ein release() auf der Allokation aufrufen"/>
 <node CREATED="1773936196111" ID="ID_1044373385" MODIFIED="1773936333545" TEXT="das &#xf6;ffnet die M&#xf6;glichkeit einer &#xbb;dangling connection&#xab;">
@@ -138938,7 +139041,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node CREATED="1773957264534" ID="ID_969840903" MODIFIED="1773957275425" TEXT="Kontext f&#xfc;r die Entscheidung">
+<node CREATED="1773957264534" FOLDED="true" ID="ID_969840903" MODIFIED="1774223474330" TEXT="Kontext f&#xfc;r die Entscheidung">
+<icon BUILTIN="info"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1773962991267" ID="ID_589497720" MODIFIED="1773963381592" TEXT="Konzept &#xbb;Job&#xab; hat sich unterwegs ver&#xe4;ndert">
 <arrowlink COLOR="#fe6c6c" DESTINATION="ID_1973724646" ENDARROW="Default" ENDINCLINATION="-1379;72;" ID="Arrow_ID_663742943" STARTARROW="None" STARTINCLINATION="-974;63;"/>
 <icon BUILTIN="messagebox_warning"/>
@@ -138996,7 +139100,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1773968885005" ID="ID_243921844" MODIFIED="1773968896251" TEXT="es fehlt an Kontext um genaue Zielabw&#xe4;gungen zu treffen"/>
 </node>
 </node>
-<node CREATED="1773969731041" ID="ID_1083742526" MODIFIED="1773969741797" TEXT="Entscheidung f&#xfc;r Prototyp">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1773969731041" FOLDED="true" ID="ID_1083742526" MODIFIED="1774223480927" TEXT="Entscheidung f&#xfc;r Prototyp">
 <icon BUILTIN="yes"/>
 <node CREATED="1773969746830" ID="ID_187653058" MODIFIED="1773969766296" TEXT="verwende gemeinsamen shared-ptr f&#xfc;r Allocation (incl. DataSink)"/>
 <node CREATED="1773969768795" ID="ID_794465081" MODIFIED="1773969784333" TEXT="der PImpl im OutputSlot wird ein daran gekoppelter weak-ptr"/>
@@ -139033,6 +139137,10 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="bell"/>
 </node>
 </node>
+<node COLOR="#008860" CREATED="1774223482742" ID="ID_1359350896" MODIFIED="1774223880166" TEXT="(scheint bisher aufzugehen)">
+<arrowlink COLOR="#269cc5" DESTINATION="ID_1349320422" ENDARROW="Default" ENDINCLINATION="-544;26;" ID="Arrow_ID_1535498158" STARTARROW="None" STARTINCLINATION="-218;26;"/>
+<font NAME="SansSerif" SIZE="10"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1773456815562" ID="ID_1123444875" MODIFIED="1773589752521" TEXT="Doku">
@@ -139060,7 +139168,44 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="smiley-angry"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1774223250995" ID="ID_1704442443" MODIFIED="1774223271232" TEXT="Nach Refactoring nochmal komplett zu &#xfc;berarbeiten">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1774223280705" ID="ID_235268548" MODIFIED="1774223287071" TEXT="tja">
+<icon BUILTIN="smily_bad"/>
 </node>
+<node CREATED="1774223288608" ID="ID_1829993438" MODIFIED="1774223305353">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      dabei bleibt die <i>konzeptionelle</i>&#160;Struktur gleich
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774223306438" ID="ID_1996401851" MODIFIED="1774223427932" TEXT="das zeigt erneut die Grenzen von UML auf">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      UML ist in vielerlei hinsicht <i>zu konkret</i>&#160;&#8212; letztlich beruht es auf dem Traum, da&#223; man nur eine Spezifikation schafft, die &#8222;sich dann von selbst implementiert&#8220; ... das ist ja sooo 70ies .... heute soll sich die &#8222;AI&#8220; gleich auch noch die Anforderungen f&#252;r uns ausdenken, und nat&#252;rlich auch implementieren und die Tests organisieren
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1774223704747" ID="ID_638158996" MODIFIED="1774223726691" TEXT="zur Bew&#xe4;hrung: mu&#xdf; nun den DiagnosticOutputSlot neu implementieren">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1774224369655" ID="ID_78273441" MODIFIED="1774224586895" TEXT="das ist jetzt ein Re-Design geworden">
+<arrowlink COLOR="#7c2e4f" DESTINATION="ID_1275456830" ENDARROW="Default" ENDINCLINATION="-171;377;" ID="Arrow_ID_465227693" STARTARROW="None" STARTINCLINATION="301;22;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node COLOR="#574398" CREATED="1774224680125" HGAP="29" ID="ID_1120744588" MODIFIED="1774224701191" TEXT="(finde das Ergebnis richtig sch&#xf6;n)" VSHIFT="30">
+<font ITALIC="true" NAME="SansSerif" SIZE="11"/>
 </node>
 </node>
 </node>
@@ -139069,10 +139214,12 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1771532467904" ID="ID_296392657" MODIFIED="1771532475206" TEXT="Test / Integration"/>
 <node CREATED="1773943696478" ID="ID_804733574" MODIFIED="1773944340005" TEXT="Design-Fragen">
 <arrowlink COLOR="#7e1044" DESTINATION="ID_1994801177" ENDARROW="Default" ENDINCLINATION="-916;-101;" ID="Arrow_ID_1846104737" STARTARROW="None" STARTINCLINATION="-1069;199;"/>
-<node CREATED="1773943137275" ID="ID_848279587" MODIFIED="1774041080915" TEXT="sehe DataSink als kritischen Verkn&#xfc;pfungspunkt">
-<linktarget COLOR="#512fb3" DESTINATION="ID_848279587" ENDARROW="Default" ENDINCLINATION="-42;-865;" ID="Arrow_ID_998347051" SOURCE="ID_1023733837" STARTARROW="None" STARTINCLINATION="-628;72;"/>
-<node CREATED="1773940626128" ID="ID_1007087496" MODIFIED="1773940659120" TEXT="DataSink bleibt (indirekt) ref-counting">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1773943137275" ID="ID_848279587" MODIFIED="1774219532157" TEXT="sehe DataSink als kritischen Verkn&#xfc;pfungspunkt">
+<linktarget COLOR="#2f56b3" DESTINATION="ID_848279587" ENDARROW="Default" ENDINCLINATION="-42;-865;" ID="Arrow_ID_998347051" SOURCE="ID_1023733837" STARTARROW="Default" STARTINCLINATION="-663;70;"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1773940626128" ID="ID_1007087496" MODIFIED="1774223239553" TEXT="DataSink bleibt (indirekt) ref-counting">
 <linktarget COLOR="#5a6a7d" DESTINATION="ID_1007087496" ENDARROW="Default" ENDINCLINATION="1062;0;" ID="Arrow_ID_358885146" SOURCE="ID_143173446" STARTARROW="None" STARTINCLINATION="687;54;"/>
+<icon BUILTIN="messagebox_warning"/>
 </node>
 <node CREATED="1773937504609" ID="ID_795422547" MODIFIED="1773958152739" TEXT="hab mir schon mehrfach dar&#xfc;ber den Kopf zerbrochen">
 <arrowlink COLOR="#ff1125" DESTINATION="ID_1351243761" ENDARROW="Default" ENDINCLINATION="669;80;" ID="Arrow_ID_1409482268" STARTARROW="None" STARTINCLINATION="788;42;"/>
@@ -139081,6 +139228,11 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1773941728897" ID="ID_1047888380" MODIFIED="1773941769804" TEXT="sollte im Data-Sink eine Stream-Type-ID unterbringen (k&#xf6;nnen wollen)">
 <linktarget COLOR="#a35e64" DESTINATION="ID_1047888380" ENDARROW="Default" ENDINCLINATION="807;-31;" ID="Arrow_ID_1643361924" SOURCE="ID_1987838291" STARTARROW="None" STARTINCLINATION="861;0;"/>
 </node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1774224466595" ID="ID_580276809" MODIFIED="1774224564250" STYLE="fork" TEXT="dadurch ist eine sehr sch&#xf6;ne Typ/Sichtbarkeits-Hierarchie entstanden">
+<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
+<arrowlink COLOR="#2129bf" DESTINATION="ID_1782289710" ENDARROW="Default" ENDINCLINATION="-514;144;" ID="Arrow_ID_1760765205" STARTARROW="None" STARTINCLINATION="470;-797;"/>
+<icon BUILTIN="idea"/>
 </node>
 </node>
 </node>

@@ -21,17 +21,10 @@
 #include "vault/out/output-slot.hpp"
 #include "vault/out/output-slot-connection.hpp"
 
-#include <vector>
-
 
 namespace vault {
 namespace out   {
   namespace err = lumiera::error;
-  
-  using std::vector;
-  
-  
-  
   
   
   // emit VTables here....
@@ -59,7 +52,6 @@ namespace out   {
                                    delete allo;
                                  }};
   }
-
   
   
   /**
@@ -85,12 +77,6 @@ namespace out   {
     REQUIRE (alloc_);
     return alloc_->getTimings();
   }
-  
-  
-  
-  /* === DataSink frontend === */
-  
-  
   
   
 }} // namespace vault::out

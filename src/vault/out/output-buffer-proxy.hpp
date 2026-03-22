@@ -100,13 +100,15 @@ namespace out  {
           void
           mark_emitted (HashVal, BuffAlloc storageSlot)  override
             {
-              TODO ("delegate buffer emit");
+              auto& [buffer,siz,targetMarker] = storageSlot;
+              asTarget(targetMarker).publish (buffer);
             }
           
           void
           detachBuffer (HashVal, BuffAlloc storageSlot)  override
             {
-              TODO ("delegate buffer release");
+              auto& [buffer,siz,targetMarker] = storageSlot;
+              asTarget(targetMarker).release (buffer);
             }
         };
       

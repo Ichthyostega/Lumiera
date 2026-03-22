@@ -69,15 +69,14 @@
 
 
 #include "lib/error.hpp"
-#include "lib/handle.hpp"
 #include "vault/mem/buffhandle.hpp"
 #include "vault/out/timings.hpp"
 #include "lib/iter-source.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/util.hpp"
 
-#include <memory>
 #include <functional>
+#include <memory>
 
 
 namespace vault {
@@ -171,6 +170,7 @@ namespace out  {
       PAlloc alloc_;
       
       class Allocation
+        : util::NonCopyable
         {
         public:
           virtual ~Allocation(); ///< this is an interface

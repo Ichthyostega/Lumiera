@@ -5305,25 +5305,32 @@ And this raises another intricate question of design: //shall {{{Connection}}} b
 This would be a very elegant, and modern solution, offering much flexibility for the Implementer of said {{{Connection}}}. The {{{OutputBufferProxy}}} could be templated to that {{{Connection}}} type and thus allow the optimiser to inline and reduce the callback functionality. However -- C++ concepts are a rather new and arcane feature, as they rely on very special syntax and semantics that still requires some time in practical use to catch on and prove its viability. A further objection that can be raised is the fact that compliance to a concept leaves no traces within the implementation -- quite contrary to a classical ~OO-style interface, where the implementation is very obviously marked as such. These considerations bring me to the decision to //reject the use of a concept// here, and to rely on a conventional interface for {{{Connection}}}. Notably it can be expected that new kinds of connection will be added frequently, and so the task for a developer not familiar with all fine points of this design should be reasonably straight forward: „You have to implement the {{{Connection}}} interface“
 </pre>
 </div>
-<div title="OutputSlotImpl" modifier="Ichthyostega" created="201107102343" modified="201109232235" tags="spec operational">
-<pre>OutputSlot is an abstraction, allowing unified treatment of various physical output connections from within the render jobs. The actual output slot is a subclass object, created and managed from the &quot;driver code&quot; for a specific output connection. Moreover, each output slot will be outfitted with a concrete BufferProvider to reflect the actual buffer handling policy applicable for this specific output connection. Some output connections might e.g. require delivery of the media data into a buffer residing on external hardware, while others work just fine when pointed to some arbitrary memory block holding generated data.
+<div title="OutputSlotImpl" modifier="Ichthyostega" created="201107102343" modified="202603222343" tags="spec operational" changecount="5">
+<pre>OutputSlot is an abstraction, allowing unified treatment of various physical output connections from within the render jobs. 
+
+Each distinct output capability must be registered through an OutputManager. When a client wants to output data, it obtains a suitable OutputSlot through the OutputDirector. This OutputSlot is created and initialised properly for this single use by the {{{OutputManager}}} in charge for that kind of output capability; notably it must be outfitted with an actual implementation of the {{{OutputSlot::Allocation}}} interface, and typically {{{OutputSlot::AllocState&lt;CON&gt;}}} will be used for that purpose.
+So actual knowledge regarding the underlying technology is confined to the »driver code« and encapsulated as implementation of the interface {{{OutputSlot::Connection}}}. This interface is deliberately kept rather narrow, working from the assumption that »output« can be described as //hand-over of a buffer filled with data.// Furthermore, some [[timing constraints|Timings]] must be defined, to instruct the client when to deliver the data for each prospective frame. Obviously, details depend on the underlying technology. In some cases, the client might prepare several buffers full of data in advance, while for another technology, that, for example, relies on //double buffering,// the client gets only a single precisely limited time window immediately prior to each //buffer flip//.
+
+The client code interacts with the output data buffer through a BuffHandle as front-end. This access scheme is similar to what is used by the generic BufferProvider within the Render Engine. To enable this setup, the OutputSlot embeds a //proxy {{{BufferProvider}}}// and uses a preconfigured buffer (type) descriptor for each connection, which also includes information about the size of the buffer. To start work on a new frame, the client invokes the {{{DataSink}}}, which actually is a functor, with a signature {{{BuffHandle(FrameID)}}}. This call delegates through the proxy {{{BufferProvider}}} ends up calling into {{{Connection::claimBufferFor(frameNr)}}}.
 
 !operation steps
-[&gt;img[Sequenz of output data exchange steps|uml/fig145157.png]]The OutputSlot class defines some standard operations as protected virtual functions. These represent the actual steps in the data exchange protocol corresponding to this output slot.
-;lock()
-:claims the specified buffer for exclusive use.
-:Client may now dispose output data
-;transfer()
+[&gt;img[Sequenz of output data exchange steps|uml/fig145157.png]]As mentioned, the OutputSlot defines a nested ''interface {{{Connection}}}'', with standard operations defined as virtual functions. Each connection technology is expected somehow to support a sequence of actual steps in a ''data exchange protocol''.
+;claimBufferFor()
+:claims the specified buffer for exclusive use by the client.
+:Client may now generate output data into that buffer.
+;publish(buffer)
 :transfers control from the client to the actual output connection for feeding data.
 :Triggered by the client invoking {{{emit()}}}
-;pushout()
-:request the actual implementation to push the data to output.
-:Usually invoked from the {{{transfer()}}} implementation, alternatively from a separate thread.
+;release(buffer)
+:indicates that the client code will not touch the buffer henceforth.
+:effectively redundant after the client has invoked {{{emit()}}} -- but the client may choose not to do so (when it is foreseeable that the deadline can not reasonably be met); in such cases, the {{{release()}}} call is the only state indication the {{{Connection}}} implementation gets.
+:Triggered by the client invoking {{{release()}}}
 
+{{red{WARNING 3/2026 this UML drawing above is outdated}}}
 
 !buffer states
-While the BufferProvider abstracts away the actual access to the output buffers and just hands out a ''buffer handle'', the server side (here the concrete output slot) is allowed to associate and maintain a ''state flag'' with each buffer. The general assumption is that writing this state flag is atomic, and that other facilities will care for the necessary memory barriers (that is: the output slot and the buffer provider will just access this state flag without much ado). The generic part of the output slot implementation utilises this buffer state flag to implement a state machine, which -- together with the timing constraints established with the [[help of the scheduler|SchedulerRequirements]] -- ensures sane access to the buffer without collisions.
-|        !state||&gt;| !lock()   |&gt;| !transfer() |&gt;| !pushout() |
+While the BufferProvider, used as front-end for the client, abstracts away the actual access to the output buffers and just hands out a [[buffer handle|BuffHandle]], the server side (which here is the concrete output slot and the backing output technology) is allowed to associate and maintain a ''state flag'' with each buffer. The general assumption is that each output cycle for a single frame originates from a single RenderJob and thus happens from a single thread; moreover, a memory barrier can be assumed prior to invoking the next job. This implies that state transitions regarding the BufferMetadata can be mapped to states as seen from the perspective of the {{{Connection}}} implementation:
+|        !state||&gt;| !claim()   |&gt;| !publish() |&gt;| !release() |
 |     {{{NIL}}}||↯| ·        |↯|             | ↯ |          |
 |    {{{FREE}}}||✔|↷ locked  |✔|· (ignore)  | · | ·         |
 |  {{{LOCKED}}}||↯|↷ emitted |✔|↷ emitted   | · |↷ free    |
