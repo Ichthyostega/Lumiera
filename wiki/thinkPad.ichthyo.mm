@@ -138012,7 +138012,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1773156516269" ID="ID_1341134692" MODIFIED="1773156541757" TEXT="die Test-Implementierung sehe ich als Prototyp bez&#xfc;glich der Konsistenz-Limits"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1773156516269" ID="ID_1341134692" MODIFIED="1774313455147" TEXT="die Test-Implementierung sehe ich als Prototyp bez&#xfc;glich der Konsistenz-Limits">
+<icon BUILTIN="hourglass"/>
+</node>
 <node CREATED="1773156543145" ID="ID_364217869" MODIFIED="1773156636849" TEXT="wenn ich sie &#xfc;berhaupt jetzt entwickle....">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -138023,9 +138025,11 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1773156642079" ID="ID_1747459491" MODIFIED="1773156658302" TEXT="zun&#xe4;chst wird nur die unlimitierte H&#xfc;lle ben&#xf6;tigt, um das Protokoll zu testen"/>
+<node CREATED="1773156642079" ID="ID_1747459491" MODIFIED="1774313466273" TEXT="zun&#xe4;chst wird nur die unlimitierte H&#xfc;lle ben&#xf6;tigt, um das Protokoll zu testen">
+<icon BUILTIN="forward"/>
 </node>
-<node CREATED="1773156927734" ID="ID_1001788653" MODIFIED="1773156986131">
+</node>
+<node CREATED="1773156927734" ID="ID_1001788653" MODIFIED="1774313715117">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
@@ -138034,8 +138038,22 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
     </p>
   </body>
 </html></richcontent>
+<linktarget COLOR="#5d70c1" DESTINATION="ID_1001788653" ENDARROW="Default" ENDINCLINATION="-43;224;" ID="Arrow_ID_1160346481" SOURCE="ID_904888776" STARTARROW="None" STARTINCLINATION="-252;22;"/>
 <node CREATED="1773157002897" ID="ID_365322825" MODIFIED="1773157028020" TEXT="also analog zum Baumuster des DiagnostricBufferProviders"/>
 <node CREATED="1773157051468" ID="ID_241171757" MODIFIED="1773157072045" TEXT="Zugriffs-Koordinaten hier: (Feed, Frame-#)"/>
+<node CREATED="1774313511825" ID="ID_1418663316" MODIFIED="1774313523997" TEXT="&#xbb;aktuelle Zeit&#xab;">
+<node CREATED="1774313531713" ID="ID_207817399" MODIFIED="1774313544434" TEXT="wenn man nichts tut &#x27f9; Systemzeit"/>
+<node CREATED="1774313545590" ID="ID_795095840" MODIFIED="1774313663235" TEXT="man kann &#xfc;ber das front-End (DiagnosticBufferProvider) eine explizite Zeit setzen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Diese Zeit ist dann fest &#10233; hei&#223;t, wir brauchen einen Funktor, der entweder die Systemzeit holt (&#8793;default) oder eben eine feste Zeit liefert. &#187;Zeit&#171; &#8801; Lumiera <font face="Monospaced" color="#2717bc">Time</font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -139349,16 +139367,117 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node BACKGROUND_COLOR="#f6b3ac" COLOR="#de0131" CREATED="1774301911034" ID="ID_401388335" MODIFIED="1774301965608" TEXT="&#x21af; Widerspruch: mu&#xdf; das 2.Sub-Objekt vor der 1.Sub-Objekt initialisieren"/>
 </node>
 <node CREATED="1774302051343" ID="ID_697693360" MODIFIED="1774302068409" TEXT="L&#xf6;sung durch einen &#xbb;Kniff&#xab; : Setup-Kontext verwenden">
-<node CREATED="1774302073970" ID="ID_143320134" MODIFIED="1774302113870">
+<node CREATED="1774302073970" ID="ID_143320134" MODIFIED="1774309955517">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
     <p>
-      dieser wird <b>transient</b>&#160;als Konstruktor-Argument gebaut
+      dieser wird <b><font color="#af0444">transient</font></b>&#160;als Konstruktor-Argument gebaut
     </p>
   </body>
 </html></richcontent>
 </node>
+<node CREATED="1774309961821" ID="ID_1353442544" MODIFIED="1774309978978" TEXT="sch&#xf6;n ist das nicht.... (aber wei&#xdf; mir nicht anders zu helfen)"/>
+<node CREATED="1774309988668" ID="ID_1524302929" MODIFIED="1774310010050" TEXT="versuche es wenigstens kompakt und direkt beieinander, im CPP-File zu implementieren"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1774310011821" ID="ID_704173608" MODIFIED="1774310448640" TEXT="AUA: da renne ich in einen Compiler-Bug">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1774310037582" ID="ID_47223426" LINK="https://stackoverflow.com/q/53408962/444796" MODIFIED="1774310068787" TEXT="Stackoverflow: default member initializer required before the end of its enclosing class"/>
+<node CREATED="1774310070042" ID="ID_1247531069" MODIFIED="1774310076413" TEXT="das verweist auf GCC-Bugs">
+<node CREATED="1774310094678" ID="ID_628309521" LINK="https://gcc.gnu.org/bugzilla/show_bug.cgi?id=88165" MODIFIED="1774310181375" TEXT="#88165"/>
+<node CREATED="1774310176164" ID="ID_77624999" LINK="https://gcc.gnu.org/bugzilla/show_bug.cgi?id=96645" MODIFIED="1774310185071" TEXT="#96645"/>
+</node>
+<node CREATED="1774310190403" ID="ID_1966511111" MODIFIED="1774310209939" TEXT="tats&#xe4;chlich ist es eine unerwartete Komplexit&#xe4;t in der Sprachdefinition"/>
+<node CREATED="1774310210990" ID="ID_959033974" MODIFIED="1774310227896" TEXT="Konsens it da&#xdf; sich normale und getemplatete Klassen gleich verhalten sollten"/>
+<node CREATED="1774310228884" ID="ID_1971950950" MODIFIED="1774310258180" TEXT="das bedeutet: der Compiler mu&#xdf; w&#xe4;hrend der Instantiierung &#xbb;on demand&#xab; parsen"/>
+<node CREATED="1774310283474" ID="ID_1683437341" LINK="https://www.open-std.org/jtc1/sc22/wg21/docs/cwg_active.html#2335" MODIFIED="1774310305820" TEXT="Thema f&#xfc;r die Core-Working-Group (#2335)"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1774310309818" ID="ID_1429216112" MODIFIED="1774310317331" TEXT="auch Ende 2025 noch nicht gel&#xf6;st">
+<icon BUILTIN="hourglass"/>
+</node>
+<node CREATED="1774310329862" ID="ID_106696939" MODIFIED="1774310364545" TEXT="konkret ist hier das default-Argument f&#xfc;r den Konstruktor der Ausl&#xf6;ser">
+<icon BUILTIN="idea"/>
+<node CREATED="1774310367348" ID="ID_1876437770" MODIFIED="1774310392930" TEXT="wir haben einen offiziellen Konstruktor, der eine Config nimmt"/>
+<node CREATED="1774310393702" ID="ID_529684221" MODIFIED="1774310410166" TEXT="wir wollen aber auch default-Konstruktion gestatten"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1774310416603" ID="ID_828591057" MODIFIED="1774310444303" TEXT="&#x27f9; Workaround: statische Funktion Config::defaults()">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1774313226716" ID="ID_1611061420" MODIFIED="1774313232907" TEXT="Connection verschalten">
+<node CREATED="1774313235118" ID="ID_80195731" MODIFIED="1774313392812">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Beschlu&#223;: zun&#228;chst Basis-Funktionalit&#228;t <i>ohne jedwede Konsistenzchecks</i>
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das war vermutlich die Stelle, an der ich <i>damals falsch abgebogen bin:</i>&#160; Ich wollte, test-getrieben, das ganze Thema der &#187;Konsistenz-Checks und Timings&#171; ausloten. Dazu habe ich dann <i>fantasiert, was denn &#187;Konsistenz&#171; meinen k&#246;nnte.</i>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Dem entsprechend werde ich dieses mal versuchen, die d&#228;mlichst-m&#246;gliche Implementierung zu bauen: wer einen Buffer will, bekommt ihn. Wir zeichnen lediglich diesen Umstand auf
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1774313938386" ID="ID_1806140175" MODIFIED="1774317911805" TEXT="der BufferProvider bleibt dieses mal ein reines Implementation-detail">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Konsequenz: sogar &#252;ber das interne Tracking-API schicken wir nur Buff*
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+<node CREATED="1774313956016" ID="ID_1633203630" MODIFIED="1774314011532" TEXT="lokale Instanz verwenden">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Kein Zugriff auf irgend einen Service hier. Das ist Konsequenz daraus, da&#223; wir diese Komponente in die Vault verlegt haben
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774313971742" ID="ID_1459227613" MODIFIED="1774313980329" TEXT="NaiveBufferSetup (fix eingebaut)"/>
+</node>
+<node CREATED="1774315799899" ID="ID_8599109" MODIFIED="1774315854340" TEXT="&#x27f9; braucht einen Index (bufferAdr &#x27fc; Buffhandle)">
+<node CREATED="1774315909451" ID="ID_339790699" MODIFIED="1774315916581" TEXT="da reicht eine ganz banale std::map"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#4a0f69" CREATED="1774317846000" ID="ID_572836039" MODIFIED="1774317868679" TEXT="aber aufpassen: BuffHandle hat keinen default-ctor">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+<node CREATED="1774313219258" ID="ID_1837524398" MODIFIED="1774313225581" TEXT="Tracking-Implementierung">
+<node CREATED="1774313683158" ID="ID_904888776" MODIFIED="1774313720723" TEXT="was aufgezeichnert werden soll">
+<arrowlink COLOR="#5d70c1" DESTINATION="ID_1001788653" ENDARROW="Default" ENDINCLINATION="-43;224;" ID="Arrow_ID_1160346481" STARTARROW="None" STARTINCLINATION="-252;22;"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1774313743804" ID="ID_334644227" MODIFIED="1774313749151" TEXT="feed-#"/>
+<node CREATED="1774313749971" ID="ID_1776230198" MODIFIED="1774313752919" TEXT="frame-#"/>
+<node CREATED="1774313754547" ID="ID_797609217" MODIFIED="1774313760862" TEXT="&#xbb;current time&#xab;">
+<node COLOR="#338800" CREATED="1774318367123" ID="ID_1073212702" MODIFIED="1774318394316" TEXT="als konfigurierbarer Funktor implementiert">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#435e98" CREATED="1774318378178" ID="ID_85517080" MODIFIED="1774318391616" TEXT="default: RealClock::now()">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1774313793926" ID="ID_561878743" MODIFIED="1774313798232" TEXT="storage-Pointer"/>
+</node>
+<node CREATED="1774313840079" ID="ID_120795235" MODIFIED="1774313850029" TEXT="l&#xe4;uft auf eine einfache, zweistufige Storage hinaus">
+<node CREATED="1774313851211" ID="ID_1742918623" MODIFIED="1774313860168" TEXT="Ebene-1 : Vector aller Feeds"/>
+<node CREATED="1774313884113" ID="ID_483675708" MODIFIED="1774313922576" TEXT="Ebene-2 : Hashtable mit frameNr als Key"/>
 </node>
 </node>
 </node>

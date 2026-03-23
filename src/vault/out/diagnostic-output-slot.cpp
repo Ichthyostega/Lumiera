@@ -18,44 +18,109 @@
  */
 
 
-#include "lib/error.hpp"
+#include "lib/integral.hpp"
 #include "lib/nocopy.hpp"
 #include "vault/out/diagnostic-output-slot.hpp"
 //#include "vault/out/output-slot-connection.hpp"
+#include "vault/mem/buffhandle.hpp"
+#include "vault/mem/naive-buffer-setup.hpp"
+#include "vault/real-clock.hpp"
+#include "lib/util.hpp"
 
 //#include <vector>
 #include <utility>
+#include <algorithm>
+#include <functional>
+#include <map>
 
+using util::contains;
+//  using std::vector;
+//  using Config = DiagnosticOutputSlot::Config;
+using std::byte;
+using std::move;
+using std::make_unique;
+using std::make_shared;
+using std::function;
+
+using vault::mem::NaiveBufferSetup;
+using vault::mem::BuffHandle;
+using vault::mem::BuffDescr;
 
 namespace vault {
 namespace out   {
   namespace err = lumiera::error;
   
-//  using std::vector;
-//  using Config = DiagnosticOutputSlot::Config;
-  using std::move;
-  using std::make_unique;
-  
   namespace { // Implementation details of tracking
-    
+    inline void
+    zeroFill (void* buf, size_t siz)
+    {
+      auto begin = static_cast<byte*> (buf);
+      std::fill (begin, begin+siz, byte(0));
+    }
   }//(End)Impl details
   
   class DiagnosticOutputSlot::OutputTracker
     : public Config
     , util::NonCopyable
     {
+      std::vector<diagn::FeedLog> feed_;
+      NaiveBufferSetup buffProvider_;
+      BuffDescr bufferType_;
+      
+
     public:
       OutputTracker (Config&& config)
         : Config{move (config)}
+        , feed_{config.numDataFeeds}
+        , buffProvider_{}
+        , bufferType_{buffProvider_.getDescriptorFor (bufferSize
+                                                     ,mem::TypeHandler{[siz=bufferSize](void* buff){ zeroFill (buff, siz);}
+                                                                      ,[](void*){ /* do nothing on release */   }
+                                                                      })}
         { }
+        
+        /** configurable functor: what is used as _current time_
+         * @remark allows the test framework to mark "now" as some
+         *         specific fixed time; default is to return system time
+         */
+        function<Time()> currentTime{[]{ return RealClock::now(); }};
+        
+        
+        BuffHandle
+        getNewBuffer()
+          {
+            return bufferType_.lockBuffer();
+          }
+        
+        diagn::FeedLog const&
+        getFeed (uint feedNr)
+          {
+            REQUIRE (feedNr < feed_.size());
+            return feed_[feedNr];
+          }
     };
+  
+  /**
+   * Front-end for access by test code.
+   * @note tolerates access to arbitrary feeds
+   */
+  diagn::FeedLog const&
+  OutputDiagnostic::feed (uint feedNr)
+  {
+    if (feedNr < dos_.tracker_->numDataFeeds)
+      return dos_.tracker_->getFeed (feedNr);
+    else
+      return lib::NullValue<diagn::FeedLog>::get();
+  }
+
   
   
   class DiagnosticOutputSlot::DummyConnection
     : public OutputSlot::Connection
-    , util::NonCopyable
     {
       OutputTracker& tracker_;
+      
+      std::map<Buff*, BuffHandle> buffIdx_;
       
       
       /* === Connection API === */
@@ -69,19 +134,31 @@ namespace out   {
       Buff*
       claimBufferFor(FrameID frame)  override
         {
-          UNIMPLEMENTED ("lock new buffer");
+          BuffHandle handle = tracker_.getNewBuffer();
+          REQUIRE (handle.isValid());
+          Buff* buff = handle.rawStorage();
+          ENSURE (not contains (buffIdx_, buff));
+          buffIdx_.insert ({buff, handle});
+          UNIMPLEMENTED ("track new buffer");
+          return buff;
         }
       
       void
       publish (Buff* buff)  override
         {
-          UNIMPLEMENTED ("publish buffer");
+          REQUIRE (contains (buffIdx_,buff));
+          auto handle = buffIdx_.find(buff)->second;
+          handle.emit();
+          UNIMPLEMENTED ("track publish buffer");
         }
       
       void
       release (Buff* buff)  override
         {
-          UNIMPLEMENTED ("release buffer");
+          REQUIRE (contains (buffIdx_,buff));
+          auto handle = buffIdx_.find(buff)->second;
+          handle.release();
+          UNIMPLEMENTED ("track release buffer");
         }
       
       void
@@ -130,7 +207,7 @@ namespace out   {
   shared_ptr<DiagnosticOutputSlot::OutputTracker>
   DiagnosticOutputSlot::setupOutputTracker (Config&& config)
   {
-    
+    return make_shared<OutputTracker> (move (config));
   }
   
   unique_ptr<OutputSlot::Allocation>
@@ -143,11 +220,6 @@ namespace out   {
                                    ,[&](ConStorage& storage){ storage.create<DummyConnection> (outputTracker); }
                                    );
   }
-
-  
-  
-  /** */
-  
   
   
   
