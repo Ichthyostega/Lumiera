@@ -69,6 +69,8 @@ namespace out   {
   
   namespace { // diagnostics & internals....
     
+    const uint DEFAULT_DATAFEEDS = 5;
+
     inline PGrid
     getTestTimeGrid()
     {
@@ -397,13 +399,52 @@ namespace out   {
           UNIMPLEMENTED ("the old tracking API is abandoned, the new one not yet implemented");
         }
       
+      class OutputTracker;
+      shared_ptr<OutputTracker> tracker_;
+      
+      /** @internal fake implementation of a connection,
+       *            with callback to the tracker */
+      class DummyConnection;
       
     public:
-      DiagnosticOutputSlot()
-        : OutputSlot(unique_ptr<Allocation>{nullptr}) //////////////////////OOO Kabooooooom!!  --- should actually configure a suitable Allcation subclass here
-        { }
+      struct Config
+        {
+          uint numDataFeeds{DEFAULT_DATAFEEDS};
+          size_t bufferSize{sizeof(TestFrame)};
+          
+          
+          /** @todo workaround for an arcane complier / language problem,
+           *        causing the compiler wrongly to treat Config as incomplete,
+           *        see [Stackoverflow], [Bugzilla], [CoreWorkingGroup-2335].
+           *  @note using a static function, thus keeping Config a plain aggregate.
+           * [Stackoverflow]: https://stackoverflow.com/q/53408962/444796
+           * [Bugzilla]: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=88165
+           * [CoreWorkingGroup-2335]: https://www.open-std.org/jtc1/sc22/wg21/docs/cwg_active.html#2335
+           */
+          static constexpr Config defaults() { return {}; }
+        };
       
+      /**
+       * Official (default) constructor to create a DiagnosticOutputSlot.
+       * When invoked without argument, the default Config applies, otherwise
+       * the explicitly given config values are uses. The resulting object
+       * has value semantics and is automatically activated and ready to use.
+       * It can be used in the same way as a regular OutputSlot, as a copyable
+       * value handle; it can even be slice-copied.
+       * @note you need to keep around one copy after the test,
+       *       in order to [access the diagnostics](\ref watch)
+       */
+      DiagnosticOutputSlot(Config =Config::defaults());
+        
+      // standard copy operations acceptable
       
+     ~DiagnosticOutputSlot();
+      
+    private:
+      DiagnosticOutputSlot(shared_ptr<OutputTracker>);
+      
+      static shared_ptr<OutputTracker> setupOutputTracker(Config&&);
+      static unique_ptr<Allocation> setupTrackingConnections(OutputTracker&);
       
       
       /* === diagnostics API === */

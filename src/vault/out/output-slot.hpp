@@ -120,6 +120,7 @@ namespace out  {
       DataSink (FUN&& fun)
         : std::function<BuffHandle(FrameID)>{std::forward<FUN> (fun)}
         { }
+                                                                /////////////////////////////////////////////TICKET #1377 : presumably we want some stream-type hash ID here -- to allow building a processing-ID for each Render Node invocation
     };
   
   

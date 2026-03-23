@@ -114149,7 +114149,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1771533236307" ID="ID_446738731" MODIFIED="1771533342314" TEXT="DiagnosticOutputSlot irreparabel defekt">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1771533236307" ID="ID_446738731" MODIFIED="1774225767792" TEXT="DiagnosticOutputSlot irreparabel defekt">
+<arrowlink COLOR="#ff2915" DESTINATION="ID_638158996" ENDARROW="Default" ENDINCLINATION="-1375;-44;" ID="Arrow_ID_288442844" STARTARROW="None" STARTINCLINATION="-182;266;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1771533351445" ID="ID_1191713131" MODIFIED="1771533363392" TEXT="Kritik-API"/>
 <node CREATED="1771533365404" ID="ID_1617547990" MODIFIED="1771533395920" TEXT="Implementierung verloren">
@@ -114372,8 +114373,12 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1771536236498" ID="ID_606028629" MODIFIED="1771536297629" TEXT="Nah-Ziel">
 <icon BUILTIN="yes"/>
-<node CREATED="1771536249070" ID="ID_799393197" MODIFIED="1771536279277" TEXT="Test umschreiben auf ein geplantes Tracking-API"/>
-<node CREATED="1771536280375" ID="ID_511987527" MODIFIED="1771536289148" TEXT="Test mu&#xdf; durch den Compiler, mehr nicht"/>
+<node COLOR="#338800" CREATED="1771536249070" ID="ID_799393197" MODIFIED="1774225657002" TEXT="Test umschreiben auf ein geplantes Tracking-API">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1771536280375" ID="ID_511987527" MODIFIED="1774225663881" TEXT="Test mu&#xdf; durch den Compiler, mehr nicht">
+<icon BUILTIN="yes"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1772580027608" ID="ID_17159989" MODIFIED="1772580041236" STYLE="fork" TEXT="NodeDevel_test gebrochen">
@@ -137966,10 +137971,25 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node CREATED="1773155990443" ID="ID_1190993728" MODIFIED="1773156025049" TEXT="Diagnose-Mechanismen">
+<node CREATED="1773155990443" ID="ID_1190993728" MODIFIED="1774225878698" TEXT="Diagnose-Mechanismen">
+<linktarget COLOR="#5c63b1" DESTINATION="ID_1190993728" ENDARROW="Default" ENDINCLINATION="-397;787;" ID="Arrow_ID_1381726156" SOURCE="ID_560760852" STARTARROW="None" STARTINCLINATION="-207;-12;"/>
 <node CREATED="1773156135431" ID="ID_1267997680" MODIFIED="1773156181565" TEXT="eigenst&#xe4;ndige Instanzen ohne &#xbb;magische Registrierung&#xab;"/>
 <node CREATED="1773156027518" ID="ID_1029550355" MODIFIED="1773156061189" TEXT="Grunds&#xe4;tzlich gibt es unlimitierte Output-Kapazit&#xe4;t">
-<node CREATED="1773156063226" ID="ID_1574408155" MODIFIED="1773156071119" TEXT="beliebig viele Kan&#xe4;le"/>
+<node COLOR="#5b280f" CREATED="1773156063226" ID="ID_1574408155" MODIFIED="1774284660541" TEXT="beliebig viele Kan&#xe4;le">
+<icon BUILTIN="button_cancel"/>
+<node COLOR="#5b280f" CREATED="1774284662556" ID="ID_827649743" MODIFIED="1774284701889" TEXT="so nicht m&#xf6;glich">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Die Standard-Implementierung in AllocState&lt;CON&gt; verwendet eine ScopedCollection. Man <i>mu&#223; sich also festlegen</i>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="closed"/>
+</node>
+<node CREATED="1774285504462" ID="ID_715972928" MODIFIED="1774286772116" TEXT="setze einen default-Limit (5 Feeds)"/>
+</node>
 <node CREATED="1773156072059" ID="ID_482463660" MODIFIED="1773156096687" TEXT="darin kann jeder beliebige Frame jederzeit bespielt werden"/>
 </node>
 <node CREATED="1773156183808" ID="ID_1664483213" MODIFIED="1773158691959" TEXT="Konfig einer neuen Instanz kann Limits vorgeben">
@@ -138143,7 +138163,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node COLOR="#435e98" CREATED="1773423124811" ID="ID_1029911055" MODIFIED="1774224570116" TEXT="die Deallokation soll automatisch sein!">
 <icon BUILTIN="yes"/>
 <node COLOR="#5b280f" CREATED="1773512654297" ID="ID_1638173657" MODIFIED="1773954217403" TEXT="eine explizite disconnect() - Operation ist nicht m&#xf6;glich">
-<linktarget COLOR="#8f0506" DESTINATION="ID_1638173657" ENDARROW="Default" ENDINCLINATION="122;886;" ID="Arrow_ID_1863490886" SOURCE="ID_921042105" STARTARROW="None" STARTINCLINATION="93;-343;"/>
+<linktarget COLOR="#8f0506" DESTINATION="ID_1638173657" ENDARROW="Default" ENDINCLINATION="-112;273;" ID="Arrow_ID_1863490886" SOURCE="ID_921042105" STARTARROW="None" STARTINCLINATION="-76;-111;"/>
 <icon BUILTIN="stop-sign"/>
 <node CREATED="1773512696096" ID="ID_1294019243" MODIFIED="1773512707442" TEXT="theoretisch schon ...">
 <node CREATED="1773512708976" ID="ID_1096604252" MODIFIED="1773512720076" TEXT="aber dann k&#xf6;nnen wir entweder nur blocken"/>
@@ -138212,8 +138232,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       die connect()-Funktion liefert eine <font face="Monospaced" color="#6b4f4f">IterSource&lt;DataSink&gt;</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1774224118247" ID="ID_616159623" MODIFIED="1774224145909" TEXT="die Bindings / Verschaltung passiert opaque in einer &#x3bb;-closure"/>
 <node CREATED="1774224151137" ID="ID_1221018251" MODIFIED="1774224182116" TEXT="Hier ist sichtbar">
@@ -138394,8 +138413,17 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1773888426603" ID="ID_888618711" MODIFIED="1773888441501" TEXT="diese enh&#xe4;lt einen &#xbb;delegating-BufferStore&#xab;"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1773888677730" ID="ID_370790574" MODIFIED="1774219474051" TEXT="dieses neue Verschaltungs-Konzept implementieren">
+<node COLOR="#008867" CREATED="1773888677730" FOLDED="true" ID="ID_370790574" MODIFIED="1774225553983">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      dieses <b>neue Verschaltungs-Konzept</b>&#160;implementieren
+    </p>
+  </body>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
+<icon BUILTIN="forward"/>
 <node COLOR="#338800" CREATED="1773888784963" ID="ID_1753071442" MODIFIED="1773888798826" TEXT="Struktur eines Proxy-BufferProvider anlegen">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1773888800028" ID="ID_756667017" MODIFIED="1773888814028" TEXT="geht ganz einfach: von BufferProxyAdapter ausgehen"/>
@@ -138760,8 +138788,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       ein shared-ptr <strike>mit <font color="#673c22">Alias auf die jeweilige Connection</font></strike>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node COLOR="#5b280f" CREATED="1774196855086" ID="ID_535181506" MODIFIED="1774196868083" TEXT="brauche gar keinen Alias">
 <icon BUILTIN="button_cancel"/>
 </node>
@@ -138935,7 +138962,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
     </p>
   </body>
 </html></richcontent>
-<arrowlink COLOR="#8f0506" DESTINATION="ID_1638173657" ENDARROW="Default" ENDINCLINATION="122;886;" ID="Arrow_ID_1863490886" STARTARROW="None" STARTINCLINATION="93;-343;"/>
+<arrowlink COLOR="#8f0506" DESTINATION="ID_1638173657" ENDARROW="Default" ENDINCLINATION="-112;273;" ID="Arrow_ID_1863490886" STARTARROW="None" STARTINCLINATION="-76;-111;"/>
 </node>
 <node CREATED="1773936076352" FOLDED="true" ID="ID_1795427929" MODIFIED="1774223469372" TEXT="m&#xf6;gliche Alternativen">
 <icon BUILTIN="list"/>
@@ -139195,9 +139222,146 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-</node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1774223704747" ID="ID_638158996" MODIFIED="1774223726691" TEXT="zur Bew&#xe4;hrung: mu&#xdf; nun den DiagnosticOutputSlot neu implementieren">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1774223704747" ID="ID_638158996" MODIFIED="1774225767792" TEXT="zur Bew&#xe4;hrung: nun den DiagnosticOutputSlot neu implementieren">
+<linktarget COLOR="#ff2915" DESTINATION="ID_638158996" ENDARROW="Default" ENDINCLINATION="-1375;-44;" ID="Arrow_ID_288442844" SOURCE="ID_446738731" STARTARROW="None" STARTINCLINATION="-182;266;"/>
 <icon BUILTIN="yes"/>
+<node CREATED="1774225831011" ID="ID_560760852" MODIFIED="1774225878698" TEXT="siehe vorhergehende &#xdc;berlegungen zum Diagnose-API">
+<arrowlink COLOR="#5c63b1" DESTINATION="ID_1190993728" ENDARROW="Default" ENDINCLINATION="-397;787;" ID="Arrow_ID_1381726156" STARTARROW="None" STARTINCLINATION="-207;-12;"/>
+<icon BUILTIN="info"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1774225891234" ID="ID_548689470" MODIFIED="1774225903747" TEXT="&#xbb;was hei&#xdf;t das jetzt konkret&#xab;?">
+<icon BUILTIN="help"/>
+<node CREATED="1774225930446" ID="ID_1728122202" MODIFIED="1774225952911" TEXT="bez&#xfc;glich API?">
+<node CREATED="1774286798033" ID="ID_1020564207" MODIFIED="1774286810135" TEXT="pa&#xdf;t wie es ist: man erzeugt das Ding einfach so"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1774290253973" ID="ID_1281001272" MODIFIED="1774290285734" TEXT="Alternative: DiagnosticOutputManager">
+<icon BUILTIN="button_cancel"/>
+<icon BUILTIN="hourglass"/>
+<node CREATED="1774290289592" ID="ID_466939503" MODIFIED="1774290309033" TEXT="nur sinnvoll wenn das auch tats&#xe4;chlich ein OutputManager w&#xe4;re"/>
+<node CREATED="1774290309990" ID="ID_1158027037" MODIFIED="1774290481123" TEXT="grunds&#xe4;tzlich aber ein sehr gutes Design">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...weil es die produktiven Einrichtungen widerspiegelt, genauso verwendet wird, und nach Bedarf auch im weiteren Umfeld als Diagnose-Tracker verwendbar w&#228;re
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1774290346128" ID="ID_926259043" MODIFIED="1774290355008" TEXT="der Tracker w&#xe4;re dann kein PImpl mehr"/>
+<node CREATED="1774290355719" ID="ID_1053747578" MODIFIED="1774290363590" TEXT="die Diagnose-Daten w&#xe4;ren direkt hier"/>
+<node CREATED="1774290385721" ID="ID_458172606" MODIFIED="1774290410931" TEXT="m&#xfc;&#xdf;te nonCopyable oder unique sein"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1774286826317" ID="ID_82092877" MODIFIED="1774286837055" TEXT="Frage: Konfiguration?">
+<icon BUILTIN="help"/>
+<node CREATED="1774286841852" ID="ID_125497669" MODIFIED="1774286847278" TEXT="M&#xf6;glichkeiten">
+<node CREATED="1774286848899" ID="ID_711805711" MODIFIED="1774286867811" TEXT="Config-Builder in den Konstruktor geben"/>
+<node CREATED="1774286869943" ID="ID_138340662" MODIFIED="1774286880590" TEXT="BuilderQualfierSupport verwenden"/>
+<node CREATED="1774286953173" ID="ID_1770577101" MODIFIED="1774290194836" TEXT="direkte Objekt-Felder + explizite activate()-Funktion">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <ul>
+      <li>
+        Vorteil: einfach und offensichtlich
+      </li>
+      <li>
+        Nachteil: komplett anders als der echte OutputSlot
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774293361082" ID="ID_961279953" MODIFIED="1774293697253" TEXT="direkte Felder in einem Setup-Objekt &#x27f6; Konstruktor">
+<icon BUILTIN="forward"/>
+</node>
+</node>
+<node CREATED="1774293599584" ID="ID_1050015822" MODIFIED="1774293687890" TEXT="YAGNI">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das hier ist ein <font size="4" color="#6618c1">TEST</font>.
+    </p>
+    <p>
+      Ich mu&#223; ihn nicht einmal mehr (neu) schreiben, sondern nur noch flicken.
+    </p>
+    <p>
+      Und niemand wei&#223; ob jemals mehr davon gebraucht wird...
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1774289576344" ID="ID_830283711" MODIFIED="1774289593756" TEXT="mu&#xdf; 100% Nutz-Kompatibel sein zum OutputSlot">
+<icon BUILTIN="yes"/>
+<node CREATED="1774289597917" ID="ID_1530295227" MODIFIED="1774289633433" TEXT="Begr&#xfc;ndung: stand-in">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Man mu&#223; einen DiagnosticOutputSlot erzeugen und konfigurieren k&#246;nnen, und diesen dann weiter verwenden, als w&#228;re es ein normaler OutputSlot
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774289638240" ID="ID_92087237" MODIFIED="1774289792000" TEXT="bedeutet: slice-down copy">
+<arrowlink COLOR="#20777c" DESTINATION="ID_18392091" ENDARROW="Default" ENDINCLINATION="52;-3;" ID="Arrow_ID_1927109656" STARTARROW="None" STARTINCLINATION="55;6;"/>
+</node>
+</node>
+</node>
+<node CREATED="1774225941877" ID="ID_64454505" MODIFIED="1774225950735" TEXT="bez&#xfc;glich Tracking-Implementierung?">
+<node CREATED="1774289488172" ID="ID_1329254247" MODIFIED="1774289496376" TEXT="klar ist: PImpl">
+<node CREATED="1774289498554" ID="ID_661468938" MODIFIED="1774289570488" TEXT="hier aber shared">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Mu&#223; offensichtlich, aus Gr&#252;nden der Symmetrie, und wegen den Anforderungen an den Gebrauch
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1774289749305" ID="ID_18392091" MODIFIED="1774289792000" TEXT="als Layer komplett getrennt zu halten">
+<linktarget COLOR="#20777c" DESTINATION="ID_18392091" ENDARROW="Default" ENDINCLINATION="52;-3;" ID="Arrow_ID_1927109656" SOURCE="ID_92087237" STARTARROW="None" STARTINCLINATION="55;6;"/>
+</node>
+</node>
+<node CREATED="1774290064375" ID="ID_1654191814" MODIFIED="1774290076569" TEXT="die Konfig und Steuerung mu&#xdf; komplett in den PImpl"/>
+<node CREATED="1774299695836" ID="ID_184821149" MODIFIED="1774299707235" TEXT="alle Elemente des Tracking als innere Klassen realisieren"/>
+<node CREATED="1774299713063" ID="ID_661464206" MODIFIED="1774299730056" TEXT="dagegen Daten-Records ggfs. in namespace diagn"/>
+<node CREATED="1774299730908" ID="ID_409514424" MODIFIED="1774299746573" TEXT="(also komplett analog zu DiagnosticBufferProvider)"/>
+</node>
+</node>
+</node>
+<node CREATED="1774301662597" ID="ID_1308858144" MODIFIED="1774301672154" TEXT="Konstruktion und Verdrahtung">
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1774301675913" ID="ID_471400878" MODIFIED="1774301698291" TEXT="Widerspruch in der Konstruktions-Reihenfolge">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1774301701838" ID="ID_220793794" MODIFIED="1774301705113" TEXT="ich will...">
+<node CREATED="1774301706276" ID="ID_1669148819" MODIFIED="1774301717217" TEXT="da&#xdf; es im Kern ein OutputSlot ist">
+<node CREATED="1774301726067" ID="ID_1273667781" MODIFIED="1774301734126" TEXT="also mu&#xdf; das die erste Basisklasse sein"/>
+<node CREATED="1774301735458" ID="ID_1476005965" MODIFIED="1774301754577" TEXT="und das Diagnose-Overlay sollte nur den PImpl halten"/>
+</node>
+<node CREATED="1774301759206" ID="ID_1042770741" MODIFIED="1774301787438" TEXT="da&#xdf; das Tracking sofort im Konstruktor per Referenz verdrahtet wird">
+<node CREATED="1774301790697" ID="ID_1211131702" MODIFIED="1774301808803" TEXT="also mu&#xdf; das Tracking vor dem AllocState erzeugt werden"/>
+<node CREATED="1774301809823" ID="ID_427254346" MODIFIED="1774301834196" TEXT="und zu dem Zeitpunkt mu&#xdf; schon der Populator-Funktor definiert sein"/>
+<node CREATED="1774301840487" ID="ID_295567710" MODIFIED="1774301851464" TEXT="dieser mu&#xdf; bereits die Referenz auf das Tracking in die Hand bekommen"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f6b3ac" COLOR="#de0131" CREATED="1774301911034" ID="ID_401388335" MODIFIED="1774301965608" TEXT="&#x21af; Widerspruch: mu&#xdf; das 2.Sub-Objekt vor der 1.Sub-Objekt initialisieren"/>
+</node>
+<node CREATED="1774302051343" ID="ID_697693360" MODIFIED="1774302068409" TEXT="L&#xf6;sung durch einen &#xbb;Kniff&#xab; : Setup-Kontext verwenden">
+<node CREATED="1774302073970" ID="ID_143320134" MODIFIED="1774302113870">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      dieser wird <b>transient</b>&#160;als Konstruktor-Argument gebaut
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1774224369655" ID="ID_78273441" MODIFIED="1774224586895" TEXT="das ist jetzt ein Re-Design geworden">
