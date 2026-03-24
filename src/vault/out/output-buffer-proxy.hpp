@@ -93,7 +93,6 @@ namespace out  {
             {
               Buff* buffer = asTarget(targetMarker).claimBufferFor (frameNr);
               BuffAlloc storageSlot{buffer, siz, targetMarker};
-              TODO ("delegate buffer lock");
               return storageSlot;
             }
           

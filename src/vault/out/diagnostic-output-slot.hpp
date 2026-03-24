@@ -41,8 +41,9 @@
 #include "test/test-frame.hpp"
 
 #include <unordered_set>
-#include <vector>
 #include <memory>
+#include <vector>
+#include <map>
 
 
 namespace vault {
@@ -61,6 +62,7 @@ namespace out   {
   using vault::mem::BuffHandle;
   using vault::mem::BuffDescr;
 
+  using std::as_const;
   using std::shared_ptr;
   using std::make_unique;
   
@@ -72,13 +74,12 @@ namespace out   {
     const uint DEFAULT_DATAFEEDS = 5;
   }
   
-///////////////////////////////////////////////////////////////////////
-/// ///////////////////////////////////////////////////////////////////
-      ///////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1395 : draft compatible Tracking-API
+  
+  
   namespace diagn {
     using Buff = vault::mem::Buff;
     
-    struct FraInfo
+    struct FrameInfo
       {
         TimeVar locked{Time::NEVER};
         TimeVar emitted{Time::NEVER};
@@ -101,11 +102,16 @@ namespace out   {
     
     struct FeedLog
       {
-        FraInfo const&
+        std::map<uint, FrameInfo> recorded;
+        
+        FrameInfo const&
         frame (uint fraNr)  const
           {
-            ///////////////////////////OOO access stored log
-            return lib::NullValue<FraInfo>::get();
+            auto pos = recorded.find (fraNr);
+            if (pos != recorded.end())
+              return pos->second;
+            else
+              return lib::NullValue<FrameInfo>::get();
           }
         
         auto
@@ -116,10 +122,10 @@ namespace out   {
                       ;
           }
       };
-  
+    
     template<typename BU>
     inline BU const&
-    FraInfo::accessAs()  const
+    FrameInfo::accessAs()  const
     {
       if (not storage)
         throw err::Logic ("buffer for this frame was never actually locked"
@@ -129,7 +135,7 @@ namespace out   {
     
     template<typename BU>
     inline bool
-    FraInfo::operator== (BU const& refVal)  const
+    FrameInfo::operator== (BU const& refVal)  const
     {
       return storage
          and accessAs<BU>() == refVal;
@@ -149,7 +155,7 @@ namespace out   {
    * - the implementation uses a special protocol output buffer,
    *   which stores each "frame" in memory for later investigation
    * - the output data in the buffers handed over from client
-   *   actually hold an TestFrame instance 
+   *   actually hold an TestFrame instance
    * - the maximum number of channels and the maximum number
    *   of acceptable frames is limited to 5 and 100.
    * @warning any Captured (test) data from all individual instances

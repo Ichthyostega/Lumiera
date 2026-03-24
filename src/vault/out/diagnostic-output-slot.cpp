@@ -31,9 +31,11 @@
 #include <utility>
 #include <algorithm>
 #include <functional>
+#include <tuple>
 #include <map>
 
 using util::contains;
+using util::isSameAdr;
 //  using std::vector;
 //  using Config = DiagnosticOutputSlot::Config;
 using std::byte;
@@ -45,6 +47,7 @@ using std::function;
 using vault::mem::NaiveBufferSetup;
 using vault::mem::BuffHandle;
 using vault::mem::BuffDescr;
+using vault::mem::Buff;
 
 namespace vault {
 namespace out   {
@@ -98,6 +101,31 @@ namespace out   {
             REQUIRE (feedNr < feed_.size());
             return feed_[feedNr];
           }
+        
+        void
+        recordClaim (uint feedNr, FrameID frame, Buff* buff)
+          {
+            diagn::FrameInfo& frameInfo = feed_[feedNr].recorded[frame];
+            frameInfo.buffSize = bufferSize;
+            frameInfo.storage = buff;
+            frameInfo.locked = currentTime();
+          }
+        
+        void
+        recordPublish (uint feedNr, FrameID frame, Buff* buff)
+          {
+            diagn::FrameInfo& frameInfo = feed_[feedNr].recorded[frame];
+            REQUIRE (isSameAdr(frameInfo.storage, buff));
+            frameInfo.emitted = currentTime();
+          }
+        
+        void
+        recordRelease (uint feedNr, FrameID frame, Buff* buff)
+          {
+            diagn::FrameInfo& frameInfo = feed_[feedNr].recorded[frame];
+            REQUIRE (isSameAdr(frameInfo.storage, buff));
+            frameInfo.released = currentTime();
+          }
     };
   
   /**
@@ -120,7 +148,11 @@ namespace out   {
     {
       OutputTracker& tracker_;
       
-      std::map<Buff*, BuffHandle> buffIdx_;
+      using Claim = std::tuple<FrameID,BuffHandle>;
+      using BuffIdx = std::map<Buff*, Claim>;
+      
+      BuffIdx buffIdx_;
+      uint feedNr_;
       
       
       /* === Connection API === */
@@ -138,8 +170,8 @@ namespace out   {
           REQUIRE (handle.isValid());
           Buff* buff = handle.rawStorage();
           ENSURE (not contains (buffIdx_, buff));
-          buffIdx_.insert ({buff, handle});
-          UNIMPLEMENTED ("track new buffer");
+          buffIdx_.insert ({buff, Claim{frame,handle}});
+          tracker_.recordClaim (feedNr_,frame, buff);
           return buff;
         }
       
@@ -147,18 +179,18 @@ namespace out   {
       publish (Buff* buff)  override
         {
           REQUIRE (contains (buffIdx_,buff));
-          auto handle = buffIdx_.find(buff)->second;
+          auto [frame,handle] = buffIdx_.find(buff)->second;
           handle.emit();
-          UNIMPLEMENTED ("track publish buffer");
+          tracker_.recordPublish (feedNr_,frame, buff);
         }
       
       void
       release (Buff* buff)  override
         {
           REQUIRE (contains (buffIdx_,buff));
-          auto handle = buffIdx_.find(buff)->second;
+          auto [frame,handle] = buffIdx_.find(buff)->second;
           handle.release();
-          UNIMPLEMENTED ("track release buffer");
+          tracker_.recordRelease (feedNr_,frame, buff);
         }
       
       void
@@ -170,8 +202,9 @@ namespace out   {
       
       
     public:
-      DummyConnection (OutputTracker& tracker)
+      DummyConnection (OutputTracker& tracker, uint thisFeed)
         : tracker_{tracker}
+        , feedNr_{thisFeed}
         { }
     };
   
@@ -217,7 +250,7 @@ namespace out   {
     using ConStorage = AllocState::ConnectionStorage;
     
     return make_unique<AllocState> (outputTracker.numDataFeeds
-                                   ,[&](ConStorage& storage){ storage.create<DummyConnection> (outputTracker); }
+                                   ,[&,i=0](ConStorage& storage) mutable { storage.create<DummyConnection> (outputTracker, i++); }
                                    );
   }
   
