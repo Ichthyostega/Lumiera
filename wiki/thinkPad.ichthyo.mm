@@ -114262,11 +114262,27 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1773158703456" ID="ID_290906159" MODIFIED="1773167678342" TEXT="Konfiguration von Limits">
+<node COLOR="#338800" CREATED="1773158703456" ID="ID_290906159" MODIFIED="1774371822989" TEXT="Konfiguration von Limits">
+<icon BUILTIN="button_ok"/>
 <icon BUILTIN="hourglass"/>
 <node CREATED="1773158795105" ID="ID_1401626971" MODIFIED="1773158803668" TEXT="speichert intern eine Config"/>
-<node CREATED="1773158555452" ID="ID_1602470940" MODIFIED="1773158691959" TEXT="Builder-Qualifier in den Konstruktor akzeptieren">
-<linktarget COLOR="#3c5f88" DESTINATION="ID_1602470940" ENDARROW="Default" ENDINCLINATION="-1050;65;" ID="Arrow_ID_1529902301" SOURCE="ID_1664483213" STARTARROW="None" STARTINCLINATION="44;-727;"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1773158555452" ID="ID_1602470940" MODIFIED="1774371711442" TEXT="Builder-Qualifier in den Konstruktor akzeptieren">
+<linktarget COLOR="#3c5f88" DESTINATION="ID_1602470940" ENDARROW="Default" ENDINCLINATION="-1069;59;" ID="Arrow_ID_1529902301" SOURCE="ID_1664483213" STARTARROW="None" STARTINCLINATION="44;-727;"/>
+<icon BUILTIN="hourglass"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#4a2993" CREATED="1774371713401" HGAP="26" ID="ID_1029654183" MODIFIED="1774371799375" TEXT="(vorerst nur einen Config-Record als reines Aggregat definiert)" VSHIFT="4">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      KISS und YAGNI
+    </p>
+    <p>
+      Im Moment brauche ich n&#228;mlich <i>exakt gar keine Validierung, </i>und sehe schon wieder die gefahr, da&#223; ich mir in Gedanken ein gro&#223;es Bauwerk baue
+    </p>
+  </body>
+</html></richcontent>
+<font NAME="SansSerif" SIZE="11"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1773167692429" ID="ID_678395312" MODIFIED="1773167723575" TEXT="noch nicht klar wie viel davon (jetzt) implementiert wird...">
 <icon BUILTIN="bell"/>
@@ -117850,7 +117866,31 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node CREATED="1771536364035" ID="ID_83895308" MODIFIED="1771536373430" TEXT="formal ist mir die n&#xf6;tige Anpassung klar">
 <node CREATED="1771536378293" ID="ID_247458257" MODIFIED="1771536407185" TEXT="die Lebenszyklus-Methoden auf der DataSink fallen weg"/>
-<node CREATED="1771536412047" ID="ID_1065532915" MODIFIED="1771536430976" TEXT="hier kommt ggfs. nur eine Methode dazu f&#xfc;r einen Fehlerfall"/>
+<node COLOR="#5b280f" CREATED="1771536412047" ID="ID_1065532915" MODIFIED="1774371161828" TEXT="hier kommt ggfs. nur eine Methode dazu f&#xfc;r einen Fehlerfall">
+<icon BUILTIN="button_cancel"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1774371164371" HGAP="52" ID="ID_1019309029" MODIFIED="1774371561854" TEXT="davon hab ich abgesehen..." VSHIFT="3">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...es pa&#223;t n&#228;mlich nicht ins Schema:
+    </p>
+    <ul>
+      <li>
+        im Kern ist die DataSink ein SAM-Interface; und dann soll sie's auch wirklich sein
+      </li>
+      <li>
+        das Buffer-Provider-Protokoll sieht da nichts vor und verlangt da&#223; der Client <i>zwingend</i>&#160;<font color="#614444" face="Monospaced">release()</font>&#160;aufrufen mu&#223; (habe mich also letztlich dagegen entschieden, da&#223; das BuffHandle &#187;smart&#171; ist &#8212; und dann ist es eben auch <i>nicht smart</i>)
+      </li>
+    </ul>
+    <p>
+      Letztlich beruhen alle Konsistenzchecks auf dem pr&#252;fen eines Zeitfensters und setzen Mitarbeit durch den Client vorraus; die Interaktion ist als Low-Level-Protokoll charakterisiert, einen Schutz gegen Mi&#223;brauch gibt es nicht. Wenn also der Client <font face="Monospaced" color="#a25959">release()</font>&#160; aufgerufen hat, und es dann sp&#228;ter lustig findet, neue Daten &#252;ber das BuffHandle in den Buffer zu legen, dann sei es so, und dann sollen sich die User beschweren.
+    </p>
+  </body>
+</html></richcontent>
+<font NAME="SansSerif" SIZE="11"/>
+</node>
+</node>
 <node CREATED="1771536432658" ID="ID_28988078" MODIFIED="1771536458970" TEXT="daf&#xfc;r soll der Client nun alles auf dem BuffHandle machen"/>
 <node CREATED="1771536466794" ID="ID_48507847" MODIFIED="1771536970615" TEXT="mu&#xdf; eine Proxy-Implementierung des BufferProvider bereitstellen">
 <arrowlink COLOR="#b1000a" DESTINATION="ID_580664253" ENDARROW="Default" ENDINCLINATION="-769;59;" ID="Arrow_ID_1374111018" STARTARROW="None" STARTINCLINATION="366;17;"/>
@@ -137993,7 +138033,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1773156072059" ID="ID_482463660" MODIFIED="1773156096687" TEXT="darin kann jeder beliebige Frame jederzeit bespielt werden"/>
 </node>
 <node CREATED="1773156183808" ID="ID_1664483213" MODIFIED="1773158691959" TEXT="Konfig einer neuen Instanz kann Limits vorgeben">
-<arrowlink COLOR="#3c5f88" DESTINATION="ID_1602470940" ENDARROW="Default" ENDINCLINATION="-1050;65;" ID="Arrow_ID_1529902301" STARTARROW="None" STARTINCLINATION="44;-727;"/>
+<arrowlink COLOR="#3c5f88" DESTINATION="ID_1602470940" ENDARROW="Default" ENDINCLINATION="-1069;59;" ID="Arrow_ID_1529902301" STARTARROW="None" STARTINCLINATION="44;-727;"/>
 <node CREATED="1773156196542" ID="ID_1234849755" MODIFIED="1773156209009" TEXT="das plane ich als optionale Erweiterung"/>
 <node CREATED="1773156210393" ID="ID_553064748" MODIFIED="1773156223211" TEXT="Anzahl Kan&#xe4;le beschr&#xe4;nken"/>
 <node CREATED="1773156223947" ID="ID_1079197667" MODIFIED="1773156237383" TEXT="Frame-Grid vorgeben"/>
@@ -139478,6 +139518,50 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1774313840079" ID="ID_120795235" MODIFIED="1774313850029" TEXT="l&#xe4;uft auf eine einfache, zweistufige Storage hinaus">
 <node CREATED="1774313851211" ID="ID_1742918623" MODIFIED="1774313860168" TEXT="Ebene-1 : Vector aller Feeds"/>
 <node CREATED="1774313884113" ID="ID_483675708" MODIFIED="1774313922576" TEXT="Ebene-2 : Hashtable mit frameNr als Key"/>
+</node>
+<node CREATED="1774388229445" ID="ID_682904343" MODIFIED="1774388233788" TEXT="Thema Schreibzugriff">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1774388247794" ID="ID_553477117" MODIFIED="1774388271681" TEXT="f&#xfc;r den (test)Client m&#xf6;chte man nur eine const&amp; zug&#xe4;nglich machen">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node COLOR="#5b280f" CREATED="1774388275907" ID="ID_1782743716" MODIFIED="1774388297095" TEXT="man k&#xf6;nnte jetzt zwei Accessoren definieren, oder gar Interface + Subklasse mit storage">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1774388234888" ID="ID_99525916" MODIFIED="1774388244322" TEXT="w&#xe4;hle hier einen banalen Direktzugriff">
+<node CREATED="1774388302654" ID="ID_976590390" MODIFIED="1774388310577" TEXT="es handelt sich um TESTCODE !!!"/>
+<node CREATED="1774388313229" ID="ID_1189539689" MODIFIED="1774388325103" TEXT="und es geht um eine komplett sichtbar definierte Struct"/>
+<node CREATED="1774388327672" ID="ID_339026863" MODIFIED="1774388422089" TEXT="wtf">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...hab zwar jetzt eine Menge &#252;ber C++ gelernt, und ein sch&#246;nes neues Macro gebaut, blo&#223; um dann zu merken, da&#223; const-correctness nicht ohne Grund da ist.
+    </p>
+    <p>
+      Trotzdem &#228;rgere ich mich, da&#223; ich schon wieder so lange mit dem Thema verbracht habe
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="smiley-angry"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1774397274652" ID="ID_1950247310" MODIFIED="1774397289966" TEXT="Konstruktion sollte damit funktionieren...">
+<icon BUILTIN="yes"/>
+<node COLOR="#435e98" CREATED="1774397294907" ID="ID_728936921" MODIFIED="1774397445256" TEXT="SEGFAULT(Stackoverflow)">
+<icon BUILTIN="broken-line"/>
+<node COLOR="#bd0649" CREATED="1774397318144" ID="ID_557942627" MODIFIED="1774397442901" TEXT="std::function-Konstruktor ruft sich selbst auf">
+<icon BUILTIN="broken-line"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1774397340661" ID="ID_810717868" MODIFIED="1774397432870" TEXT="bekanntes Problem: DataSink-value-Konstruktor matcht auf den copy-Konstruktor">
+<icon BUILTIN="clanbomber"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1774397384911" ID="ID_525549912" MODIFIED="1774397420330" TEXT="C++ sollte eigentlich ohne Weiteres einfach die Konstruktoren von std::function erben">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1774397450640" ID="ID_353105094" MODIFIED="1774397471843" TEXT="einmal durch den ganzen Konstruktions-Allokations-Zyklus gesteppt">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
@@ -168179,6 +168263,16 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
 </node>
 </node>
 <node CREATED="1749482827627" ID="ID_1979932613" MODIFIED="1749482839265" TEXT="using &lt;enum class&gt;"/>
+<node CREATED="1774384981645" ID="ID_871169606" LINK="https://en.cppreference.com/w/cpp/language/function.html#Explicit_object_parameter" MODIFIED="1774385039931" TEXT="explicit object parameter (catpure a Self type)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Kann sehr n&#252;tzlich sein, weil man nun in Template-Code den konkreten Subtyp in die Hand bekommen kann. Beispiel in Lumiera: prop-builder.hpp
+    </p>
+  </body>
+</html></richcontent>
+</node>
 </node>
 </node>
 <node CREATED="1617648907316" FOLDED="true" ID="ID_899199723" MODIFIED="1617650703506" TEXT="Coroutine">

@@ -168,6 +168,9 @@ namespace mem   {
       template<typename BU>
       BU& accessAs();
       
+      template<typename BU, typename...ARGS>
+      BU& emplace (ARGS&& ...);
+      
       Buff*
       rawStorage()  const
         {
@@ -213,6 +216,14 @@ namespace mem   {
   }
   
   
+  /** plant a new object of given type into the buffer storage */
+  template<typename BU, typename...ARGS>
+  BU&
+  BuffHandle::emplace (ARGS&& ...args)
+  {
+    REQUIRE (sizeof(BU) <= size(), "Buffer too small for object to build.");
+    return * new(pBuffer_) BU(std::forward<ARGS> (args)...);
+  }
   
   
 }} // namespace vault::mem

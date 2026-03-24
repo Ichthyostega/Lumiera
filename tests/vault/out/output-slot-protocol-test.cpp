@@ -75,12 +75,12 @@ namespace test {
           BuffHandle buff10 = sink1(frameNr);
           
           // rendering process calculates content....
-          buff00.accessAs<TestFrame>() = testData(0,0);
+          buff00.emplace<TestFrame> (testData(0,0));
           
           // while further frames might be processed in parallel
           BuffHandle buff11 = sink1(frameNr+1);
-          buff11.accessAs<TestFrame>() = testData(1,1);
-          buff10.accessAs<TestFrame>() = testData(1,0);
+          buff11.emplace<TestFrame> (testData(1,1));
+          buff10.emplace<TestFrame> (testData(1,0));
           
           // Now it's time to emit the output
           buff11.emit();
