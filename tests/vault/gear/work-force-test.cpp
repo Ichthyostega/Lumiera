@@ -322,9 +322,8 @@ namespace test {
           wof.incScale();
           wof.incScale();
           
-          sleep_for(10us);
+          while (not check) /*spin*/;
           CHECK (3 == wof.size());
-          CHECK (0  < check);
           CHECK (0 == errors);
           
           sleep_for(200ms);   // wait for the programmed disaster

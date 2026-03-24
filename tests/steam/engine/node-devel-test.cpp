@@ -296,7 +296,7 @@ namespace test  {
           // generate a binding as processing-functor
           auto procFun = spec.makeFun();
           using Sig = lib::meta::_Fun<decltype(procFun)>::Sig;
-          CHECK (showType<Sig>() == "void (tuple<ulong, uint>, engine::TestFrame*)"_expect);
+          CHECK (showType<Sig>() == "void (tuple<ulong, uint>, TestFrame*)"_expect);
 
           // Behaves identical to processing_generateFrame() — see above...
           size_t frameNr = defaultGen.u64();
