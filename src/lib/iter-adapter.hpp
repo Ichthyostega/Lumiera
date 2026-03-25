@@ -782,17 +782,22 @@ namespace lib {
   
   
   /**
-   * Accessing a STL element range through a Lumiera forward iterator,
+   * Access a STL element range through a »Lumiera Forward Iterator«.
    * An instance of this iterator adapter is completely self-contained
    * and allows to iterate once over the range of elements, until
    * `pos==end`. Thus, a custom container may expose a range of
    * elements of an embedded STL container, without controlling
-   * the details of the iteration (as is possible using the
+   * the details of the iteration (as would be possible using the
    * more generic IterAdapter).
    * @note
-   *  - when IT is just a pointer, we use the pointee as value type
-   *  - but when IT is a class, we expect the usual STL style nested typedefs
-   *    `value_type`, `reference` and `pointer`
+   *  - when IT is a STL iterator, we use the pointee as value type
+   *  - but when IT is a »Lumiera Forward Iterator«, we need to evaluate
+   *    nested typedefs `value_type`, `reference` and `pointer`
+   * @remark the reason for this tricky distinction is a _clash of concepts:_
+   *    In Lumiera, »Iterator« has a special meaning and can used on itself,
+   *    while in the STL, an »Iterator« is a pointer in disguise and is
+   *    only meaningful when the backing container is known. This adaptor,
+   *    RangeIter, acts as a bridge and levels those usage styles.
    */
   template<class IT>
   class RangeIter
@@ -800,7 +805,9 @@ namespace lib {
       IT p_;
       IT e_;
       
-      using _ValTrait = meta::ValueTypeBinding<meta::remove_pointer_t<IT>>;
+      static constexpr bool _is_LumieraIter = meta::can_IterForEach<IT>::value;
+      using _ValTrait = std::conditional_t<_is_LumieraIter, meta::ValueTypeBinding<IT>
+                                                          , meta::ValueTypeBinding<meta::remove_pointer_t<IT>>>;
       
     public:
       using pointer    = _ValTrait::pointer;

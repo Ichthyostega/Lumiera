@@ -53256,6 +53256,231 @@
 </node>
 </node>
 </node>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1774470739518" ID="ID_1513532591" MODIFIED="1774475574352" TEXT="Typ-Ableitung biegt in den Value-Traits falsch ab">
+<icon BUILTIN="broken-line"/>
+<node BACKGROUND_COLOR="#e1b4a0" COLOR="#690f14" CREATED="1774470739518" ID="ID_1029964723" MODIFIED="1774473599797" TEXT="unsere Value-Traits sind vermutlich nicht auf nested Iterators ausgelegt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Wobei mir nicht klar ist, ob das Problem grunds&#228;tzlicher Natur ist.
+    </p>
+    <p>
+      Jedenfalls haben wir in den ValueTypeTraits (aber <i>nicht </i>in den RefTraits) eine Verzweigung, die pr&#252;ft, ob nested-typedefs da sind. Wenn nicht, gehen wir in die RefTraits (d.h. wir leveln den Einstieg &#252;ber Referenz oder Value). Wenn aber ja, dann nehmen wir die nested Typedefs
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="clanbomber"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1774470901308" ID="ID_1506170632" MODIFIED="1774471215712" TEXT="was hier nun passiert...">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        wir steigen ein &#252;ber den RangeIter&lt;NestedIter *&gt;. Warum? weil im Testfall die Quelle ein Array ist, d.h. VAL* ist der &quot;iterator&quot;
+      </li>
+      <li>
+        erstes Problem ist schon mal, da&#223; wir einen Pointer strippen. Warum habe ich das so geschrieben?&#160;&#160;Ohne dieses Pointer-strippen w&#252;rde (vermutlich) die Weiche in ValueTypeBindings niemals ansprechen k&#246;nnen
+      </li>
+      <li>
+        und dann ist das andere Problem (Folgeprolem? oder die eigentliche Ursache?) da&#223; der pointer-gestrippte Wert eben ein nested Iterator ist, d.h. die Weiche in ValueTypeBinding spricht an
+      </li>
+    </ul>
+    <p>
+      &#10233; wir bekommen bereits auf der Ebene den <b>nested value Type</b>, aber unser Code w&#252;rde erwarten, an der Stelle einen Nested-Iterator in die Hand zu bekommen. Damit steigt die ganze weitere Typenbehandlungs-Logik aus
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="broken-line"/>
+</node>
+<node CREATED="1774471570043" ID="ID_1241566646" MODIFIED="1774471605751" TEXT="Bauchgef&#xfc;hl &#x27f9; das strip-pointer in RangeIter ist eine &#xbb;verschleppte Altlast&#xab;">
+<node CREATED="1774471625212" ID="ID_451783687" MODIFIED="1774471702711" TEXT="daf&#xfc;r spricht das Changeset e176e540043177">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      commit e176e540043177b57b9dfd00ac1b1c837d689a6c
+    </p>
+    <p>
+      Author: Ichthyostega &lt;prg@ichthyostega.de&gt;
+    </p>
+    <p>
+      Date:&#160;&#160;&#160;Sun <b><font color="#5012cb">May 21 02:15:02 2023</font></b>&#160;+0200
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;Library: adjust and fix semantics of nested 'value_type' binding
+    </p>
+    <p>
+      &#160;&#160;&#160;
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;This is a subtle and far reaching fix, which hopefully removes
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;a roadblock regarding a Dispatcher pipeline: Our type rebinding
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;template used to pick up nested type definitions, especially
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;'value_type' and 'reference' from iterators and containers,
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;took an overly simplistic approach, which was then fixed
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;at various places driven by individual problems.
+    </p>
+    <p>
+      &#160;&#160;&#160;
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;Now:
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;- value_type is conceptually the &quot;thing&quot; exposed by the iterator
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;- and pointers are treated as simple values, and no longer linked
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;to their pointee type; rather we handle the twist regarding
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;STL const_iterator direcly (it defines a non const value_type,
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;which is sensible from the STL point of view, but breaks our
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;&#160;&#160;&#160;generic iterator wrapping mechanism)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1774471707012" ID="ID_222828708" MODIFIED="1774471731713" TEXT="(erst) vor zwei Jahren habe ich das Problem versucht bei der Wurzel zu packen"/>
+<node CREATED="1774471733381" ID="ID_8755833" MODIFIED="1774472109854" TEXT="aber exakt in diesem Changeset habe ich den remove-ptr von fr&#xfc;her praktisch &#xfc;bernommen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Obwohl diese Stelle, <i>rein logisch betrachtet,</i>&#160;direkt im Widerspruch steht zu dem Argument, das ich in der Commit-Message aufgef&#252;hrt habe: hier behandle ich n&#228;mlich einen Pointer nicht als &#187;einfach gegebenen Wert&#171;, sondern versuche ihn bez&#252;glich seines Pointee zu &#187;interpretieren&#171;. Das mag an der Stelle naheliegend scheinen, da man in einen RangeIter praktisch immer nur STL-container einwickelt, und die typischen Testf&#228;lle arbeiten mit <i>einfachen Werten im Container</i>. F&#252;r diese gibt es aber keine Weiche in den Value-Traits, und deshalb ist diese alte Logik scheinbar redundant, so nach dem Motto &#8222;kann ja nicht schaden&#8220;
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Mein Bauchgef&#252;hl (oder die Erinnerung) sagt mir, da&#223; ich an der Stelle nicht wu&#223;te, warum ich da dieses remove-ptr eingebaut hatte, mich aber erinnern konnte, da&#223; es das Ergebnis einer extrem t&#252;ckischen Situation war. Unter der Annahme, da&#223; STL-container &#8222;ein einfacher Fall&#8220; sind, erscheint es dann defensiv richtig, diese alte Qualifizierung mal drinnen zu lassen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#5b280f" CREATED="1774472125473" ID="ID_308643784" MODIFIED="1774472840137" TEXT="ohne den strip-ptr w&#xfc;rden wir an der Stelle korrekt abbiegen">
+<icon BUILTIN="idea"/>
+<icon BUILTIN="button_cancel"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#bd1256" CREATED="1774472842137" HGAP="21" ID="ID_44160619" MODIFIED="1774472860956" TEXT="das ist ein Kurzschlu&#xdf;!" VSHIFT="6">
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
+<node CREATED="1774472152381" ID="ID_1172897058" MODIFIED="1774472867948" TEXT="Experiment: entferne den strip-ptr">
+<icon BUILTIN="forward"/>
+<node CREATED="1774472869933" ID="ID_1252763757" MODIFIED="1774472892212" TEXT="bricht massiv"/>
+<node CREATED="1774472893514" ID="ID_276836465" MODIFIED="1774472921127">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ist auch logisch: T* ist <b>hier</b>&#160;ein &#187;Iterator&#171;
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1774472936587" ID="ID_894773701" MODIFIED="1774473005367" TEXT="Bedeutet: T w&#xe4;re der &#xbb;value&#xab;"/>
+<node CREATED="1774472959721" ID="ID_179295366" MODIFIED="1774473016083">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <i>speziell hier</i>&#160;<u>m&#252;ssen</u>&#160;wir den Pointer strippen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774473022015" ID="ID_1145919596" MODIFIED="1774473045137" TEXT="sonst deklarieren wir f&#xe4;lschlich T* als &#xbb;value&#xab;"/>
+<node CREATED="1774473046510" ID="ID_1757759806" MODIFIED="1774473061329" TEXT="&#x27f9; massive Compile-Probleme, deren Ursache nicht offensichtlich ist"/>
+</node>
+<node CREATED="1774473065347" ID="ID_644087481" MODIFIED="1774473505092" TEXT="also war es zwar ein pragmatischer Fix &#x2014; aber ein Spezial-Eingriff ist hier notwendig">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Die Beobachtung ist korrekt: ich hatte fr&#252;her an der Stelle diesen Mismatch lokal gefixt, ohne ihn zu verstehen. Und diesen alten Fix habe ich mitgenommen; rein zuf&#228;llig hat es sich in meinem neuen Framework &#8222;fast korrekt&#8220; verhalten...
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774473105365" ID="ID_863796636" MODIFIED="1774473770697" TEXT="Grund: Mismatch zwischen STL-&#xbb;Iteraor&#xab;-Begriff und unserem &#xbb;Forward-Iterator&#xab;-Konzept">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      In der STL ist ein Iterator lediglich ein verkappter Pointer, und die Semantik bleibt operational. Dazu pa&#223;t, da&#223; zwar eine convenience-Typedef &quot;iterator&quot; bzw. &quot;const_iterator&quot; gegeben ist, diese aber keinen eigenst&#228;ndigen Typ (Wrapper) bezeichnet, sondern nur ein Alias ist. Demnach ist es im STL-Framework nicht m&#246;glich (und auch nicht sinnvoll), f&#252;r einen Iterator einen &#187;value_type&#171; zu defineren: Der Iterator ist stets konzeptionell an einen Container gebunden, und <b>der Container definiert die Typen</b>.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Ganz anders in Lumiera: dort ist &#187;Iterator&#171; ein eigenst&#228;ndiges Konzept. Das geht so weit, da&#223; &#187;Iterator&#171; under &#187;Lumiera-Iterable&#171; kongruent gemacht werden k&#246;nnen (weil wir keinen Reset und keine Navigation erlauben). Insofern inspieriert von Python. Und weil das so ist, <b>m&#252;ssen</b>&#160; wir <i>ausgehend vom Iterator nach den Typen suchen</i>&#160;(value, reference...). Denn was anderes haben wir gar nicht in der Hand. Es gibt nicht den &#187;eigentlichen Container&#171;.
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#d11222" DESTINATION="ID_588223326" ENDARROW="Default" ENDINCLINATION="112;5;" ID="Arrow_ID_480662640" STARTARROW="None" STARTINCLINATION="-29;56;"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node CREATED="1774473642118" ID="ID_1995855949" MODIFIED="1774475476839" TEXT="Also: es sind nicht die Value-Traits das Problem...">
+<icon BUILTIN="forward"/>
+<node CREATED="1774473656226" ID="ID_397410933" MODIFIED="1774473662921" TEXT="...sondern die Verwendung im RangeIter"/>
+<node CREATED="1774473663683" ID="ID_588223326" MODIFIED="1774473770699" TEXT="denn RangeIter ist ein Adapter zum &#xbb;Iterator&#xab;/Range-System der STL">
+<linktarget COLOR="#d11222" DESTINATION="ID_588223326" ENDARROW="Default" ENDINCLINATION="112;5;" ID="Arrow_ID_480662640" SOURCE="ID_863796636" STARTARROW="None" STARTINCLINATION="-29;56;"/>
+</node>
+<node CREATED="1774473725860" ID="ID_950552681" MODIFIED="1774473740500" TEXT="Konsequenz: mu&#xdf; gezielt den RangeIter flexibel gestalten">
+<node CREATED="1774473741840" ID="ID_542386747" MODIFIED="1774473755625" TEXT="der Fall &#xbb;STL-Iterator&#xab; mu&#xdf; eigens erkannt werden">
+<node CREATED="1774473758945" ID="ID_1285126274" MODIFIED="1774473766009" TEXT="Kriterium: IT ist ein Pointer"/>
+</node>
+<node CREATED="1774473775445" ID="ID_984431807" MODIFIED="1774473804324" TEXT="wenn dagegen IT ein Lumiera-Iterator ist, w&#xe4;ren die Value-Traits anzuwenden"/>
+</node>
+<node COLOR="#435e98" CREATED="1774475424051" ID="ID_1227959256" MODIFIED="1774475473698" TEXT="mit aktuellem Toolkit leicht m&#xf6;glich">
+<icon BUILTIN="idea"/>
+<node CREATED="1774475452700" ID="ID_1325042492" MODIFIED="1774475458760" TEXT="unser Trait can_IterForEach"/>
+<node CREATED="1774475461337" ID="ID_489959783" MODIFIED="1774475465447" TEXT="std::conditional_t"/>
+</node>
+<node COLOR="#338800" CREATED="1774475482817" ID="ID_1997734195" MODIFIED="1774475490057" TEXT="Build mit dieser Anpassung l&#xe4;uft durch">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1689102663805" ID="ID_1911278306" MODIFIED="1689182022572" TEXT="Ausbau der Teminal-Ausdr&#xfc;cke">
 <icon BUILTIN="pencil"/>
 <node COLOR="#338800" CREATED="1689102690854" FOLDED="true" ID="ID_590768203" MODIFIED="1689182022574" TEXT="Terminal: effuse()">
