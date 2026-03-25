@@ -274,7 +274,7 @@ namespace lib {
     struct _DecoratorTraits<SRC,   enable_if<is_StateCore<SRC>>>
       {
         using SrcRaw  = lib::meta::Strip<SRC>::Type;
-        using SrcVal  = meta::RefTraits<iter::CoreYield<SrcRaw>>::Value;
+        using SrcVal  = meta::RefTraits<iter::CoreYield<SrcRaw>>::value_type;
         using SrcIter = lib::IterableDecorator<lib::CheckedCore<SrcRaw>>;
       };
     
@@ -478,7 +478,7 @@ namespace lib {
     struct _ReduceTraits
       {
         using Result = iter_explorer::_FunTraits<FUN,SRC>::Res;
-        using ResVal = lib::meta::RefTraits<Result>::Value;
+        using ResVal = lib::meta::RefTraits<Result>::value_type;
       };
     
     
@@ -1038,9 +1038,9 @@ namespace lib {
         Aggregator aggregate_;
         
       public:
-        using value_type = meta::RefTraits<AGG>::Value;
-        using reference  = meta::RefTraits<AGG>::Reference;
-        using pointer    = meta::RefTraits<AGG>::Pointer;
+        using value_type = meta::RefTraits<AGG>::value_type;
+        using reference  = meta::RefTraits<AGG>::reference;
+        using pointer    = meta::RefTraits<AGG>::pointer;
 
         GroupAggregator() =default;
         // inherited default copy operations
@@ -1698,6 +1698,9 @@ namespace lib {
         }
       
       
+      auto
+      flatten();
+      
       /** adapt this IterExplorer to pipe each result value through a transformation function.
        * Several "layers" of mapping can be piled on top of each other, possibly mixed with the
        * other types of adaptation, like the child-expanding operation, or a filter. Obviously,
@@ -1760,7 +1763,7 @@ namespace lib {
           
           static_assert (meta::is_BinaryFun<FAGG>());
           using ArgType1  = _Fun<FAGG>::Args::List::Head;
-          using Aggregate = meta::RefTraits<ArgType1>::Value;
+          using Aggregate = meta::RefTraits<ArgType1>::value_type;
           
           using ResCore = iter_explorer::GroupAggregator<SRC, Aggregate, GroupVal>;
           using ResIter = _DecoratorTraits<ResCore>::SrcIter;

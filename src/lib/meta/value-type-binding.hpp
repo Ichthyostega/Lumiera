@@ -107,16 +107,16 @@ namespace meta {
   template<typename TY, typename SEL =void>
   struct ValueTypeBinding
     {
-      using value_type = RefTraits<TY>::Value;
-      using reference  = RefTraits<TY>::Reference;
-      using pointer    = RefTraits<TY>::Pointer;
+      using value_type = RefTraits<TY>::value_type;
+      using reference  = RefTraits<TY>::reference;
+      using pointer    = RefTraits<TY>::pointer;
     };
   
   /** specialisation for classes providing STL style type binding definitions */
   template<typename TY>
   struct ValueTypeBinding<TY,      enable_if<use_ValueTypebindings<TY>> >
     {
-      using _SrcType   = RefTraits<TY>::Value;
+      using _SrcType   = RefTraits<TY>::value_type;
       
       using value_type = _SrcType::value_type;
       using reference  = _SrcType::reference;
@@ -159,9 +159,9 @@ namespace meta {
                                         >;
       
       using ResType    = _ValRef;
-      using value_type = RefTraits<ResType>::Value;
-      using reference  = RefTraits<ResType>::Reference;
-      using pointer    = RefTraits<ResType>::Pointer;
+      using value_type = RefTraits<ResType>::value_type;
+      using reference  = RefTraits<ResType>::reference;
+      using pointer    = RefTraits<ResType>::pointer;
     };
   
   

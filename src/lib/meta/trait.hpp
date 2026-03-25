@@ -258,33 +258,33 @@ namespace meta {
   template<typename TY>
   struct RefTraits
     {
-      typedef TY  Value;
-      typedef TY* Pointer;
-      typedef TY& Reference;
+      typedef TY  value_type;
+      typedef TY& reference;
+      typedef TY* pointer;
     };
   
   template<typename TY>
   struct RefTraits<TY *>
     {
-      typedef TY*  Value;
-      typedef TY** Pointer;
-      typedef TY*& Reference;
+      typedef TY*  value_type;
+      typedef TY*& reference;
+      typedef TY** pointer;
     };
   
   template<typename TY>
   struct RefTraits<TY &>
     {
-      typedef TY  Value;
-      typedef TY* Pointer;
-      typedef TY& Reference;
+      typedef TY  value_type;
+      typedef TY& reference;
+      typedef TY* pointer;
     };
   
   template<typename TY>
   struct RefTraits<TY &&>
     {
-      typedef TY  Value;
-      typedef TY* Pointer;
-      typedef TY& Reference;
+      typedef TY  value_type;
+      typedef TY& reference;
+      typedef TY* pointer;
     };
   
   
@@ -327,8 +327,8 @@ namespace meta {
   /** verify the first (special) type can stand-in for the second */
   template<typename S, typename G>
   struct can_StandIn
-    : std::is_convertible<typename RefTraits<S>::Reference
-                         ,typename RefTraits<G>::Reference
+    : std::is_convertible<typename RefTraits<S>::reference
+                         ,typename RefTraits<G>::reference
                          >
     { };
   

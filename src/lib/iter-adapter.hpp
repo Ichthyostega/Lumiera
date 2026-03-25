@@ -120,6 +120,9 @@ namespace util {   // see lib/util.hpp
 
 namespace lib {
   
+  using std::is_pointer_v;
+  using std::remove_pointer_t;
+  using std::remove_reference_t;
   
   namespace { // internal helpers
     inline void
@@ -149,6 +152,13 @@ namespace lib {
   
   
   namespace iter {
+    using meta::is_StateCore;
+    using meta::can_IterForEach;
+    using meta::can_STL_ForEach;
+    using meta::ValueTypeBinding;
+    using meta::RefTraits;
+    
+    
     /** type binding helper: an iterato's actual result type */
     template<class IT>
     using Yield = decltype(std::declval<IT>().operator*());
@@ -157,6 +167,34 @@ namespace lib {
     template<class COR>
     using CoreYield = decltype(std::declval<COR>().yield());
     
+    
+    template<class IT>
+    concept legacy_traits_marked = requires
+      {
+        typename std::iterator_traits<IT>::value_type;
+      };
+    
+    template<class IT>
+    concept stl_iter = std::input_iterator<IT> or legacy_traits_marked<IT>;
+    
+    
+    /** Iterator-Traits: definitions to level the difference between
+     *  Lumiera-Iterators and the STL usage of ranges / iterators.
+     */
+    template<class IT>
+    struct Trait
+      {
+        static constexpr bool is_LumieraIter = can_IterForEach<IT>::value;
+        static constexpr bool is_STLIter = stl_iter<IT>;
+        
+//        static_assert(is_LumieraIter or is_STLIter);
+        
+        using _ValTrait = std::conditional_t<is_LumieraIter, ValueTypeBinding<IT>
+                                                           , RefTraits<std::iter_reference_t<IT>>>;
+        using value_type = _ValTrait::value_type;
+        using reference = _ValTrait::reference;
+        using pointer = _ValTrait::pointer;
+      };
   }
   
   
@@ -302,7 +340,7 @@ namespace lib {
       
       
     protected:
-      using ConRef = meta::RefTraits<CON>::Reference;
+      using ConRef = meta::RefTraits<CON>::reference;
       
       /** allow derived classes to access backing container */
       ConRef       source()       { return                source_; }
@@ -376,9 +414,9 @@ namespace lib {
       ST core_;
       
     public:
-      using value_type = meta::RefTraits<T>::Value;
-      using reference  = meta::RefTraits<T>::Reference;
-      using pointer    = meta::RefTraits<T>::Pointer;
+      using value_type = meta::RefTraits<T>::value_type;
+      using reference  = meta::RefTraits<T>::reference;
+      using pointer    = meta::RefTraits<T>::pointer;
       
       IterStateWrapper (ST&& initialState)
         : core_(std::forward<ST>(initialState))
@@ -500,7 +538,7 @@ namespace lib {
   class IterStateCore
     : public IT
     {
-      static_assert (lib::meta::can_IterForEach<IT>::value
+      static_assert (iter::can_IterForEach<IT>::value
                     ,"Lumiera Iterator required as source");
     protected:
       IT&
@@ -545,7 +583,7 @@ namespace lib {
   class CheckedCore
     : public COR
     {
-      static_assert (lib::meta::is_StateCore<COR>::value
+      static_assert (iter::is_StateCore<COR>::value
                     ,"Adapted type must expose a »state core« API");
     protected:
       COR&
@@ -694,9 +732,9 @@ namespace lib {
       
     public:
       using YieldRes   = iter::CoreYield<COR>;
-      using value_type = meta::RefTraits<YieldRes>::Value;
-      using reference  = meta::RefTraits<YieldRes>::Reference;
-      using pointer    = meta::RefTraits<YieldRes>::Pointer;
+      using value_type = meta::RefTraits<YieldRes>::value_type;
+      using reference  = meta::RefTraits<YieldRes>::reference;
+      using pointer    = meta::RefTraits<YieldRes>::pointer;
       
       
       /** by default, pass anything down for initialisation of the core.
@@ -805,16 +843,12 @@ namespace lib {
       IT p_;
       IT e_;
       
-      static constexpr bool _is_LumieraIter = meta::can_IterForEach<IT>::value;
-      using _ValTrait = std::conditional_t<_is_LumieraIter, meta::ValueTypeBinding<IT>
-                                                          , meta::ValueTypeBinding<meta::remove_pointer_t<IT>>>;
-      
     public:
-      using pointer    = _ValTrait::pointer;
-      using reference  = _ValTrait::reference;
+      using pointer    = iter::Trait<IT>::pointer;
+      using reference  = iter::Trait<IT>::reference;
       
       /// @note special twist, since a STL const_iterator would yield a non-const `value_type`
-      using value_type = std::remove_reference<reference>::type;
+      using value_type = std::remove_reference_t<reference>;
       
       
       RangeIter (IT const& start, IT const& end)

@@ -50,8 +50,8 @@ namespace lib {
         
         using ResVal = decltype(data_->operator[](0));
         
-        using value_type = meta::RefTraits<ResVal>::Value;
-        using reference  = meta::RefTraits<ResVal>::Reference;
+        using value_type = meta::RefTraits<ResVal>::value_type;
+        using reference  = meta::RefTraits<ResVal>::reference;
         
         bool
         checkPoint() const
