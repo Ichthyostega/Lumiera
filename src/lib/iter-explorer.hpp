@@ -1908,7 +1908,7 @@ namespace lib {
       asPtr()
         {
           using Val = meta::ValueTypeBinding<SRC>::value_type;
-          static_assert (not std::is_pointer_v<Val>);
+          static_assert (not is_pointer_v<Val>);
           return IterExplorer::transform ([](Val& ref){ return &ref; });
         }
       

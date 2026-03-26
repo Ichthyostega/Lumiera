@@ -61,7 +61,7 @@ namespace lib {
     public:
       /** this iterator adapter is meant to wrap an iterator yielding pointer values */
       using pointer    = meta::ValueTypeBinding<IT>::value_type;
-      static_assert(std::is_pointer_v<pointer>);
+      static_assert(is_pointer_v<pointer>);
       
       using value_type = std::remove_pointer_t<pointer>;
       using reference  = value_type&;
@@ -74,8 +74,8 @@ namespace lib {
       
       using ValueTypeBase = std::remove_const_t<value_type>; // value_type without const
       
-      using WrappedIterType      = IterType<IT>::template SimilarIter<      ValueTypeBase* * >::Type;
-      using WrappedConstIterType = IterType<IT>::template SimilarIter<const ValueTypeBase* * >::Type;
+      using WrappedIterType      = IterRebind<IT>::template SimilarIter<      ValueTypeBase* * >::Type;
+      using WrappedConstIterType = IterRebind<IT>::template SimilarIter<const ValueTypeBase* * >::Type;
       
       using IterType      = PtrDerefIter<WrappedIterType>;
       using ConstIterType = PtrDerefIter<WrappedConstIterType>;

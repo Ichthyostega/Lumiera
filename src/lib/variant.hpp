@@ -71,6 +71,7 @@
 
 
 #include "lib/error.hpp"
+#include "lib/meta/trait.hpp"
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/typelist-util.hpp"
 #include "lib/meta/generator.hpp"

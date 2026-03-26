@@ -776,7 +776,7 @@ namespace diff{
   inline std::optional<X>
   DataCap::retrieveAttribute (string key)  const
   {
-    static_assert (not std::is_reference_v<X>
+    static_assert (not meta::isRef_v<X>
                   ,"optional access only possible by value");
     
     Rec* nested = unConst(this)->maybeAccessNestedRec();

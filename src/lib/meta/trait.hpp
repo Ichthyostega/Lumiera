@@ -87,9 +87,7 @@ namespace meta {
   using std::remove_pointer_t;
   using std::remove_reference_t;
   using std::conditional_t;
-  using std::is_reference_v;
-  using std::is_lvalue_reference_v;
-  using std::is_rvalue_reference_v;
+  using std::is_pointer_v;
   using std::is_pointer;
   using std::is_base_of;
   using std::is_convertible;
@@ -233,8 +231,8 @@ namespace meta {
   template<typename X>
   struct Strip
     {
-      using TypeUnconst  = conditional_t<is_reference_v<X>
-                                        ,  conditional_t<is_rvalue_reference_v<X>
+      using TypeUnconst  = conditional_t<isRef_v<X>
+                                        ,  conditional_t<isRRef_v<X>
                                                         ,  remove_cv_t<remove_reference_t<X>> &&
                                                         ,  remove_cv_t<remove_reference_t<X>> & >
                                         ,  remove_cv_t<X>>;

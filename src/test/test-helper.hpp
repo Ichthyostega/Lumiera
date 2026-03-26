@@ -136,9 +136,12 @@ namespace test{
   string
   showRefKind()
   {
-    return std::is_lvalue_reference<R>::value?       "REF"
-               : std::is_rvalue_reference<R>::value? "MOV"
-                                                   : "VAL";
+    using lib::meta::isLRef_v;
+    using lib::meta::isRRef_v;
+    
+    return isLRef_v<R>?              "REF"
+                      : isRRef_v<R>? "MOV"
+                                   : "VAL";
   }
   
   

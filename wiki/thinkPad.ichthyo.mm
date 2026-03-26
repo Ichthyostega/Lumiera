@@ -1,6 +1,6 @@
 <map version="1.0.1">
 <!-- To view this file, download free mind mapping software FreeMind from http://freemind.sourceforge.net -->
-<node BACKGROUND_COLOR="#6666ff" CREATED="1434127882200" ID="ID_1452170048" MODIFIED="1734743418261" STYLE="fork" TEXT="Lumi">
+<node BACKGROUND_COLOR="#6666ff" CREATED="1434127882200" ID="ID_1452170048" MODIFIED="1764717453015" STYLE="fork" TEXT="Lumi">
 <font NAME="SansSerif" SIZE="25"/>
 <node CREATED="1434128046296" FOLDED="true" ID="ID_1900827283" MODIFIED="1679363052358" POSITION="right" TEXT="GUI">
 <font BOLD="true" NAME="SansSerif" SIZE="14"/>
@@ -51417,7 +51417,7 @@
 <node CREATED="1684890048701" ID="ID_1515151471" MODIFIED="1684890070142" TEXT="greift nested type bindings aus dem gegebenen value_type ab"/>
 </node>
 </node>
-<node CREATED="1718111942637" ID="ID_120263382" MODIFIED="1718112119523" TEXT="Thema: Iteartor-Result-Move">
+<node CREATED="1718111942637" ID="ID_120263382" MODIFIED="1774449616809" TEXT="Thema: Iteartor-Result-Move">
 <linktarget COLOR="#4627b7" DESTINATION="ID_120263382" ENDARROW="Default" ENDINCLINATION="-1618;155;" ID="Arrow_ID_1994292406" SOURCE="ID_526580433" STARTARROW="None" STARTINCLINATION="-646;-77;"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1718112123510" ID="ID_705868253" MODIFIED="1718112157586" TEXT="das Konzept ist stark festgelegt auf Ergebnisse per Referenz">
@@ -51467,6 +51467,21 @@
 </node>
 <node CREATED="1718112886431" ID="ID_996588888" MODIFIED="1718112899866" TEXT="noch als Terminal in IterEplorer"/>
 <node CREATED="1718112914131" ID="ID_38982413" MODIFIED="1718112923134" TEXT="und auch nicht in speziellen Containern"/>
+</node>
+<node COLOR="#3b316f" CREATED="1774450575923" ID="ID_625268615" MODIFIED="1774450575925" TEXT="(naja ... ein halbes Jahr sp&#xe4;ter hab ich doch die T&#xfc;r a bisserl aufgemacht)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Beim zip-Iterator war eine einseitige Festlegung letztlich nicht sinnvoll; au&#223;erdem hatte ich, grade f&#252;r den zip-Iterator sehr m&#252;hsam die ganze Pipeline aufger&#228;umt, so da&#223; jetzt kein einziger unn&#246;tiger Dekorator mehr auftritt. Auf dieser Basis <i>kann man gestatten, </i>da&#223; ein Iterator sein Ergebnis als value abliefert, und die nachgeschaltete Pipeline w&#252;rde dann automatisch schwenken. Den gef&#228;hrlichen operator-&gt; unterdr&#252;cken wir in dem Fall per compile-time Assertion.
+    </p>
+    <p>
+      Dennoch gilt &#187;Ergebnis per Referenz&#171; weiterhin als der Stanard-Fall
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#726ea0" DESTINATION="ID_73007932" ENDARROW="Default" ENDINCLINATION="-605;-685;" ID="Arrow_ID_1417723074" STARTARROW="None" STARTINCLINATION="1034;49;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="10"/>
 </node>
 </node>
 </node>
@@ -52360,6 +52375,7 @@
 </node>
 <node COLOR="#435e98" CREATED="1732499748626" ID="ID_73007932" MODIFIED="1732658339211" TEXT="nochmal untersuchen: k&#xf6;nnen wir Value-Ergebnisse aus der Pipeline unterst&#xfc;tzen?">
 <arrowlink COLOR="#4bb4e2" DESTINATION="ID_1558751662" ENDARROW="Default" ENDINCLINATION="411;23;" ID="Arrow_ID_1082389405" STARTARROW="None" STARTINCLINATION="-3;-253;"/>
+<linktarget COLOR="#726ea0" DESTINATION="ID_73007932" ENDARROW="Default" ENDINCLINATION="-605;-685;" ID="Arrow_ID_1417723074" SOURCE="ID_625268615" STARTARROW="None" STARTINCLINATION="1034;49;"/>
 <linktarget COLOR="#4e6fd7" DESTINATION="ID_73007932" ENDARROW="Default" ENDINCLINATION="-1571;53;" ID="Arrow_ID_1348614829" SOURCE="ID_1087558825" STARTARROW="None" STARTINCLINATION="-292;13;"/>
 <icon BUILTIN="help"/>
 <node COLOR="#435e98" CREATED="1732499767002" FOLDED="true" ID="ID_1245640841" MODIFIED="1732636236208" TEXT="Problem-1 : operator-&gt; kann nicht unterst&#xfc;tzt werden">
@@ -52394,7 +52410,7 @@
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1732576781381" ID="ID_452524052" MODIFIED="1732576819125" TEXT="effektiv l&#xe4;d das das Problem bei konkreten Transformationen und Pr&#xe4;dikaten ab">
 <icon BUILTIN="messagebox_warning"/>
-<node CREATED="1732576832125" ID="ID_443099186" MODIFIED="1732576877954" TEXT="...denn eine Funktion non-const-Referenzen nimmt, scheitert"/>
+<node CREATED="1732576832125" ID="ID_443099186" MODIFIED="1732576877954" TEXT="...denn eine Funktion die non-const-Referenzen nimmt, scheitert"/>
 <node CREATED="1732576887573" ID="ID_687212437" MODIFIED="1732576907676" TEXT="erscheint akzepabel, da das i.d.R Lambdas f&#xfc;r den Einzelfall sind"/>
 </node>
 </node>
@@ -52606,7 +52622,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1535891065189" FOLDED="true" ID="ID_1233342893" MODIFIED="1732655076691" TEXT="Iterator-Monade">
+<node COLOR="#338800" CREATED="1535891065189" FOLDED="true" ID="ID_1233342893" MODIFIED="1774486122123" TEXT="Iterator-Monade">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -52848,7 +52864,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#435e98" CREATED="1535891140563" ID="ID_1503014369" MODIFIED="1687456594305" TEXT="IterExplorer (pipeline)">
+<node COLOR="#435e98" CREATED="1535891140563" ID="ID_1503014369" MODIFIED="1774486122123" TEXT="IterExplorer (pipeline)">
 <icon BUILTIN="forward"/>
 <node CREATED="1535891145922" ID="ID_1982906906" MODIFIED="1535891149925" TEXT="zweiter Anlauf">
 <node CREATED="1535891150825" ID="ID_451523751" MODIFIED="1535891155914" TEXT="funktioniert">
@@ -53276,9 +53292,7 @@
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1774470901308" ID="ID_1506170632" MODIFIED="1774471215712" TEXT="was hier nun passiert...">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <ul>
       <li>
@@ -53301,9 +53315,7 @@
 <node CREATED="1774471570043" ID="ID_1241566646" MODIFIED="1774471605751" TEXT="Bauchgef&#xfc;hl &#x27f9; das strip-pointer in RangeIter ist eine &#xbb;verschleppte Altlast&#xab;">
 <node CREATED="1774471625212" ID="ID_451783687" MODIFIED="1774471702711" TEXT="daf&#xfc;r spricht das Changeset e176e540043177">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       commit e176e540043177b57b9dfd00ac1b1c837d689a6c
@@ -53372,9 +53384,7 @@
 <node CREATED="1774471707012" ID="ID_222828708" MODIFIED="1774471731713" TEXT="(erst) vor zwei Jahren habe ich das Problem versucht bei der Wurzel zu packen"/>
 <node CREATED="1774471733381" ID="ID_8755833" MODIFIED="1774472109854" TEXT="aber exakt in diesem Changeset habe ich den remove-ptr von fr&#xfc;her praktisch &#xfc;bernommen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Obwohl diese Stelle, <i>rein logisch betrachtet,</i>&#160;direkt im Widerspruch steht zu dem Argument, das ich in der Commit-Message aufgef&#252;hrt habe: hier behandle ich n&#228;mlich einen Pointer nicht als &#187;einfach gegebenen Wert&#171;, sondern versuche ihn bez&#252;glich seines Pointee zu &#187;interpretieren&#171;. Das mag an der Stelle naheliegend scheinen, da man in einen RangeIter praktisch immer nur STL-container einwickelt, und die typischen Testf&#228;lle arbeiten mit <i>einfachen Werten im Container</i>. F&#252;r diese gibt es aber keine Weiche in den Value-Traits, und deshalb ist diese alte Logik scheinbar redundant, so nach dem Motto &#8222;kann ja nicht schaden&#8220;
@@ -53400,9 +53410,7 @@
 <node CREATED="1774472869933" ID="ID_1252763757" MODIFIED="1774472892212" TEXT="bricht massiv"/>
 <node CREATED="1774472893514" ID="ID_276836465" MODIFIED="1774472921127">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ist auch logisch: T* ist <b>hier</b>&#160;ein &#187;Iterator&#171;
@@ -53412,9 +53420,7 @@
 <node CREATED="1774472936587" ID="ID_894773701" MODIFIED="1774473005367" TEXT="Bedeutet: T w&#xe4;re der &#xbb;value&#xab;"/>
 <node CREATED="1774472959721" ID="ID_179295366" MODIFIED="1774473016083">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       <i>speziell hier</i>&#160;<u>m&#252;ssen</u>&#160;wir den Pointer strippen
@@ -53427,9 +53433,7 @@
 </node>
 <node CREATED="1774473065347" ID="ID_644087481" MODIFIED="1774473505092" TEXT="also war es zwar ein pragmatischer Fix &#x2014; aber ein Spezial-Eingriff ist hier notwendig">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Die Beobachtung ist korrekt: ich hatte fr&#252;her an der Stelle diesen Mismatch lokal gefixt, ohne ihn zu verstehen. Und diesen alten Fix habe ich mitgenommen; rein zuf&#228;llig hat es sich in meinem neuen Framework &#8222;fast korrekt&#8220; verhalten...
@@ -53439,9 +53443,7 @@
 </node>
 <node CREATED="1774473105365" ID="ID_863796636" MODIFIED="1774473770697" TEXT="Grund: Mismatch zwischen STL-&#xbb;Iteraor&#xab;-Begriff und unserem &#xbb;Forward-Iterator&#xab;-Konzept">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       In der STL ist ein Iterator lediglich ein verkappter Pointer, und die Semantik bleibt operational. Dazu pa&#223;t, da&#223; zwar eine convenience-Typedef &quot;iterator&quot; bzw. &quot;const_iterator&quot; gegeben ist, diese aber keinen eigenst&#228;ndigen Typ (Wrapper) bezeichnet, sondern nur ein Alias ist. Demnach ist es im STL-Framework nicht m&#246;glich (und auch nicht sinnvoll), f&#252;r einen Iterator einen &#187;value_type&#171; zu defineren: Der Iterator ist stets konzeptionell an einen Container gebunden, und <b>der Container definiert die Typen</b>.
@@ -168598,6 +168600,159 @@ class Something
 </html></richcontent>
 <linktarget COLOR="#415ab4" DESTINATION="ID_197491932" ENDARROW="Default" ENDINCLINATION="-1574;159;" ID="Arrow_ID_1382804093" SOURCE="ID_1579820839" STARTARROW="None" STARTINCLINATION="-2029;0;"/>
 <icon BUILTIN="info"/>
+</node>
+<node CREATED="1774627260591" FOLDED="true" ID="ID_1784884752" MODIFIED="1774628681299" TEXT="Grundz&#xfc;ge">
+<icon BUILTIN="back"/>
+<node CREATED="1774627283191" ID="ID_115112464" MODIFIED="1774628259773">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <b>Concept</b>&#160;ist eine spezielle Aufrufschnittstelle f&#252;r eine bool constexpr
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das hei&#223;t, der Rumpf eines Concepts ist eine bool constexpr und wird zur Compile-Zeit ausgewertet. Aber durch die Markierung als &#187;Concept&#171; kann es an besonderen Stellen in der Syntax verwendet werden
+    </p>
+    <ul>
+      <li>
+        in der Deklaration von Template-Parametern
+      </li>
+      <li>
+        als Constraint auf auto-Argumenten
+      </li>
+      <li>
+        in der Result-Expression in einem <b>Requires-Ausdruck</b>
+      </li>
+    </ul>
+    <p>
+      Dar&#252;berhinaus aber kann ein Concept auch als normale bool-constexpr direkt im Code ausgewertet werden. Ein Spezialfall davon ist die <b>Requires-Klausel</b>, mit der beliebige Contraints an eine Template-Definition oder Funktionsdefinition angef&#252;gt werden k&#246;nnen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774627652885" ID="ID_250636866" MODIFIED="1774628267834">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <b>Requires-Ausdruck</b>&#160;definiert Constraints
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1774627743029" ID="ID_1990543481" MODIFIED="1774627754085" TEXT="es erzeugt einen SFINAE-Scope"/>
+<node CREATED="1774627755233" ID="ID_1578349738" MODIFIED="1774627765109" TEXT="sein Ergebnis ist constexpr bool"/>
+<node CREATED="1774627767320" ID="ID_1887793857" MODIFIED="1774628409651" TEXT="er erzeugt declval-Parameter">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das ist der spezielle Knackpunkt, denn man kann dadurch weitere Parameter-Symbole einf&#252;hren, die im Rump wie Objekte (im Sinn der C++ Spezifikation) verwendet werden k&#246;nnen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774628423456" ID="ID_1786394343" MODIFIED="1774628641063" TEXT="der Rumpf ist eine Konjunktion von Ausdr&#xfc;cken"/>
+<node CREATED="1774627786507" ID="ID_1128631817" MODIFIED="1774627793600" TEXT="im Rumpf gibt es spezielle Syntax">
+<node CREATED="1774627797678" ID="ID_1288020421" MODIFIED="1774627872666" TEXT="typename X">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      der angeschriebene Typ mu&#223; valid sein. Das ist das klassische SFINAE
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774627803598" ID="ID_18085442" MODIFIED="1774627908192" TEXT="expression">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      der angeschriebene Ausdruck mu&#223; &#252;bersetzbar und valide sein
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774627813737" ID="ID_1661928474" MODIFIED="1774627962529" TEXT="{ expr } -&gt; concept">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      der angeschriebene Ausdruck im Block mu&#223; &#252;bersetzbar und valide sein, <i>und sein Resultat-Wert</i>&#160;mu&#223; das Concept (als 1. Argument) erf&#252;llen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774627839278" ID="ID_477641322" MODIFIED="1774627981787" TEXT="requires-Klausel">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      die Requires-Klausel darf nicht scheitern
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1774627985459" ID="ID_1134994952" MODIFIED="1774628159532" TEXT="requires-Klausel verwandelt Bool-Check in Compile-Fehler">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...sie ist also eine spezielle Form einer static-assert, welche normalerweise ger&#228;uschlos scheitert; wenn eine requires-Klausel in normalem Code steht, wird sie gepr&#252;ft und f&#252;hrt zum Compile-Fehler, wenn ihr Rumpf zu false evaluiert
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1774562489996" ID="ID_1581229318" MODIFIED="1774563657284" TEXT="Iteratoren">
+<linktarget COLOR="#4c86e5" DESTINATION="ID_1581229318" ENDARROW="Default" ENDINCLINATION="-2159;523;" ID="Arrow_ID_58259000" SOURCE="ID_389716197" STARTARROW="None" STARTINCLINATION="-1280;85;"/>
+<node CREATED="1774562670530" ID="ID_1893015368" LINK="https://en.cppreference.com/w/cpp/iterator.html" MODIFIED="1774562682659" TEXT="siehe: &#xbb;Iterator-Library&#xab;">
+<icon BUILTIN="info"/>
+<node CREATED="1774562734572" ID="ID_1236048963" LINK="https://stackoverflow.com/q/79182541/444796" MODIFIED="1774562900395" TEXT="SO: Which concept to use for checking an iterator&apos;s value type?">
+<linktarget COLOR="#68bac0" DESTINATION="ID_1236048963" ENDARROW="Default" ENDINCLINATION="-140;81;" ID="Arrow_ID_1198778210" SOURCE="ID_44489370" STARTARROW="Default" STARTINCLINATION="73;-56;"/>
+<icon BUILTIN="info"/>
+</node>
+</node>
+<node CREATED="1774562494210" ID="ID_406768197" MODIFIED="1774562510492" TEXT="es gibt concepts entsprechend den alten &#xbb;Iterator-Tags&#xab;">
+<node CREATED="1774562519927" ID="ID_59067545" MODIFIED="1774562525706" TEXT="z.b. std::input_iterator"/>
+<node CREATED="1774562769903" ID="ID_70257471" MODIFIED="1774562798761" TEXT="std::indirectly_writable">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      da&#223; ein Wert in das durch den Iterator referenzierte Objekt geschrieben werden kann
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1774562531981" ID="ID_1945817338" MODIFIED="1774562551787" TEXT="Vorsicht: damit werden std::iterator_traits&lt;IT&gt; tendentiell unzuverl&#xe4;ssig">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1774562559193" ID="ID_480443164" MODIFIED="1774562582178" TEXT="weil man jetzt durch die Concepts direkt auf Vorhandensein der Operationen pr&#xfc;fen kann"/>
+<node CREATED="1774562583419" ID="ID_836415227" MODIFIED="1774562603383" TEXT="daher mu&#xdf; man sich nicht mehr auf ein Tag oder eine iterator_traits-Spezialisierung verlassen"/>
+<node CREATED="1774562605260" ID="ID_1469937348" MODIFIED="1774562624364" TEXT="&#x27f9; was man nicht (mehr) braucht pflegt man nicht"/>
+</node>
+<node CREATED="1774562638656" ID="ID_44489370" MODIFIED="1774562906705" TEXT="f&#xfc;r Typdefiniitionen gibt es jetzt neue Traits">
+<arrowlink COLOR="#68bac0" DESTINATION="ID_1236048963" ENDARROW="Default" ENDINCLINATION="-140;81;" ID="Arrow_ID_1198778210" STARTARROW="Default" STARTINCLINATION="73;-56;"/>
+<node CREATED="1774562885072" MODIFIED="1774562885072" TEXT="iter_value_t"/>
+<node CREATED="1774562885073" MODIFIED="1774562885073" TEXT="iter_reference_t"/>
+<node CREATED="1774562885073" MODIFIED="1774562885073" TEXT="iter_const_reference_t"/>
+<node CREATED="1774562885073" MODIFIED="1774562885073" TEXT="iter_difference_t"/>
+<node CREATED="1774562885073" MODIFIED="1774562885073" TEXT="iter_rvalue_reference_t"/>
+<node CREATED="1774562885073" MODIFIED="1774562885073" TEXT="iter_common_reference_t"/>
+</node>
+<node CREATED="1774563571546" ID="ID_23392065" MODIFIED="1774563583062" TEXT="Bedeutung der Typen">
+<icon BUILTIN="idea"/>
+<node CREATED="1774563584945" ID="ID_1664104813" MODIFIED="1774563596058" TEXT="was mir der Iterator liefert &#x27f9; reference"/>
+<node CREATED="1774563596935" ID="ID_1541313986" MODIFIED="1774563614293" TEXT="in was ich diesen &#xbb;Wert&#xab; speichern kann &#x27f9; value"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1698089401358" FOLDED="true" ID="ID_29991404" MODIFIED="1698090231201" TEXT="&#xd83d;&#xdec7; Wunsch: named Arguments">

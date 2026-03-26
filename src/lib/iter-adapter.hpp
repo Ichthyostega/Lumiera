@@ -30,7 +30,8 @@
  ** - very similar is IterableDecorator, but this time directly as
  **   decorator to inherit from the »state core«, and without checks.
  ** - the RangeIter allows just to expose a range of elements defined
- **   by a STL-like pair of "start" and "end" iterators
+ **   by a STL-like pair of "start" and "end" iterators; thus it
+ **   serves a bridge between STL iterators and Lumiera iterators.
  ** 
  ** Some more specific use cases are provided in the extension header
  ** iter-adapter-ptr-deref.hpp
@@ -62,14 +63,14 @@
  ** Similar to the STL, instead of using a common "Iterator" base class,
  ** we rather define a common set of functions and behaviour which can be
  ** expected from any such iterator. These rules are similar to STL's
- ** "forward iterator", with the addition of an bool check to detect
- ** iteration end. The latter is inspired by the \c hasNext() function
+ ** "input iterator", with the addition of an bool check to detect
+ ** iteration end. The latter is inspired by the `hasNext()` function
  ** found in many current languages supporting iterators. However, by
- ** inspiration from functional programming, we deliberately do not
- ** support the various extended iterator concepts from STL and boost
+ ** drawing from insights promoted in functional programming, deliberately
+ ** we do not support the various extended iterator concepts from the STL
  ** (random access iterators, output iterators, arithmetics, difference
- ** between iterators and the like). According to this concept,
- ** _an iterator is a promise for pulling values once,_
+ ** between iterators and the like). According to this concept proposed
+ ** here, _an iterator is a promise for pulling values once,_
  ** and nothing beyond that.
  ** 
  ** Notably,
@@ -87,10 +88,48 @@
  ** Conceptually, a Lumiera Iterator represents a lazy stream of calculations
  ** rather than a target value considered to be »within« a container. And while
  ** the result is in may cases deliberately _exposed as a reference,_ in order
- ** to keep the door open for special-case manipulations, for the typical usage
- ** it is _discouraged_ to assume anything about the source, beyond the limited
- ** access to some transient state as exposed during active iteration. Together,
- ** these rules enable a _loose coupling_ to the source of data.
+ ** to allow for tightly coupled implementation in special cases -- for the
+ ** typical usage it is _discouraged_ to assume anything about the source,
+ ** beyond the limited access to some transient state as exposed during
+ ** active iteration. Together, these rules enable a _loose coupling_
+ ** to the source of data.
+ ** 
+ ** ## Usage
+ ** 
+ ** All the building blocks defined her provide the bridge definitions to allow
+ ** using a »Lumiera Forward Iterator« in common language constructs: It can be
+ ** used directly in for-each loops (notably this implies that a Lumiera iterator
+ ** is used in the same position where usually the container would be referred).
+ ** Yet, beyond that, Lumiera iterators can also be used in normal `for` loops
+ ** and even in while loops, due to the bool-check to detect iteration end.
+ ** A default constructed Lumiera iterator is always in _invalid state_
+ ** and can be used as _sentinel value_ like the `end()` iterator.
+ ** Yet, while Lumiera iterators can be copied and assigned, the effect of
+ ** these operations is implementation defined; in some cases, taking a copy
+ ** may allow to create a snapshot, while in other cases (especially when the
+ ** Lumiera iterator uses an reference to tap into some remote service) all
+ ** copies will refer to the same shared state. The rationale for this design
+ ** was to simplify both building and using Lumiera Iterators; they are meant
+ ** as an implementation tool, and not for creating external interfaces.
+ ** 
+ ** However, there is a special provision for the latter use case, in the form
+ ** of the lib::IterSource interface and framework; an `IterSource` embeds a
+ ** classic OO interface with virtual methods, and thus allows to abstract the
+ ** backing implementation entirely away.
+ ** 
+ ** ## Concepts and Traits
+ ** 
+ ** The »Lumiera Forward Iterators« do not map directly to any specification from
+ ** the C++ standard. The concept std::input_iterator comes close, but a Lumiera
+ ** iterator can not fulfil this concept, since it lacks the postfix increment.
+ ** In the opposite direction, there is also no subsumption possible, since a
+ ** STL iterator does not offer a bool-check to detect iteration end.
+ ** 
+ ** Notably the header `lib/meta/trait.hpp` defines some detector traits, allowing
+ ** to recognise if something is an iterable STL container, or a Lumiera iterator.
+ ** Furthermore, lib::iter::Trait defines a transparent mechanism to extract the
+ ** basic type definitions (`reference` ≙ what the iterator yields and
+ ** `value_type` ≙ what to use to store results from an iterator)
  ** 
  ** @see iter-adapter-test.cpp
  ** @see itertools.hpp
@@ -187,7 +226,7 @@ namespace lib {
         static constexpr bool is_LumieraIter = can_IterForEach<IT>::value;
         static constexpr bool is_STLIter = stl_iter<IT>;
         
-//        static_assert(is_LumieraIter or is_STLIter);
+        static_assert(is_LumieraIter or is_STLIter, "source type must be an iterator");
         
         using _ValTrait = std::conditional_t<is_LumieraIter, ValueTypeBinding<IT>
                                                            , RefTraits<std::iter_reference_t<IT>>>;
@@ -822,13 +861,14 @@ namespace lib {
   /**
    * Access a STL element range through a »Lumiera Forward Iterator«.
    * An instance of this iterator adapter is completely self-contained
-   * and allows to iterate once over the range of elements, until
+   * and allows to iterate _once_ over the range of elements, until
    * `pos==end`. Thus, a custom container may expose a range of
    * elements of an embedded STL container, without controlling
    * the details of the iteration (as would be possible using the
    * more generic IterAdapter).
    * @note
-   *  - when IT is a STL iterator, we use the pointee as value type
+   *  - when IT is a STL iterator, we rely on the iterator concepts and
+   *    especially on `std::iter_reference_t` to find the `reference_type`
    *  - but when IT is a »Lumiera Forward Iterator«, we need to evaluate
    *    nested typedefs `value_type`, `reference` and `pointer`
    * @remark the reason for this tricky distinction is a _clash of concepts:_
@@ -846,9 +886,7 @@ namespace lib {
     public:
       using pointer    = iter::Trait<IT>::pointer;
       using reference  = iter::Trait<IT>::reference;
-      
-      /// @note special twist, since a STL const_iterator would yield a non-const `value_type`
-      using value_type = std::remove_reference_t<reference>;
+      using value_type = iter::Trait<IT>::value_type;
       
       
       RangeIter (IT const& start, IT const& end)
@@ -1068,13 +1106,13 @@ namespace lib {
   
   /**
    * Helper for type rewritings:
-   * get the element type for an iterator like entity
+   * build a similar iterator with another value type
    */
   template<class TY>
-  struct IterType;
+  struct IterRebind;
   
   template<template<class,class> class Iter, class TY, class CON>
-  struct IterType<Iter<TY,CON>>
+  struct IterRebind<Iter<TY,CON>>
     {
       using Container = CON;
       using ElemType  = TY ;
@@ -1087,13 +1125,13 @@ namespace lib {
     };
   
   template<class IT>
-  struct IterType<RangeIter<IT>>
-    : IterType<IT>
+  struct IterRebind<RangeIter<IT>>
+    : IterRebind<IT>
     {
       template<class T2>
       struct SimilarIter  ///< rebind to rewritten Iterator wrapped into RangeIter
         {
-          using WrappedIter = IterType<IT>::template SimilarIter<T2>::Type;
+          using WrappedIter = IterRebind<IT>::template SimilarIter<T2>::Type;
           using        Type = RangeIter<WrappedIter>;
         };
     };
