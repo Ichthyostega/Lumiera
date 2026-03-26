@@ -493,19 +493,24 @@ namespace meta {
    *  This is just a heuristic, based on some common properties
    *  of such iterators; it is enough to distinguish it from an
    *  STL container, but can certainly be refined.
+   * @note deliberately a Lumiera iterator does _not fulfil_
+   *  the concept std::input_iterator. And vice versa:
+   *  a STL iterator lacks the `bool` check for iteration end.
    */
   template<typename T>
   class can_IterForEach
     {
-      using  Type = Strip<T>::Type;
+      using  Type = Strip<T>::TypeReferred;
        
       META_DETECT_NESTED(value_type);
+      META_DETECT_NESTED(reference);
       META_DETECT_OPERATOR_DEREF();
       META_DETECT_OPERATOR_INC();
       
     public:
       enum{ value = std::is_constructible<bool, Type>::value
                 and HasNested_value_type<Type>::value
+                and HasNested_reference<Type>::value
                 and HasOperator_deref<Type>::value
                 and HasOperator_inc<Type>::value
           };
