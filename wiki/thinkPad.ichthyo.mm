@@ -51897,7 +51897,7 @@
 <node COLOR="#338800" CREATED="1732487080930" ID="ID_1941671854" MODIFIED="1732487106352" TEXT="2. Versuch: an der gleichen Stelle beim Einstieg">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1732487107328" ID="ID_448728086" MODIFIED="1732487121488" TEXT="also jeweils nur wenn der IterExplorer initial konstruiert wird"/>
-<node CREATED="1732487124717" ID="ID_287102344" MODIFIED="1732487148843" TEXT="genaure: sogar nur als ein 2.Preprocessing-Schritt auf der freigelegten BaseSrc"/>
+<node CREATED="1732487124717" ID="ID_287102344" MODIFIED="1732487148843" TEXT="genauer: sogar nur als ein 2.Preprocessing-Schritt auf der freigelegten BaseSrc"/>
 </node>
 </node>
 </node>
@@ -52622,7 +52622,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1535891065189" FOLDED="true" ID="ID_1233342893" MODIFIED="1774486122123" TEXT="Iterator-Monade">
+<node COLOR="#338800" CREATED="1535891065189" FOLDED="true" ID="ID_1233342893" MODIFIED="1774633223638" TEXT="Iterator-Monade">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -52914,8 +52914,8 @@
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
-<node CREATED="1536410175049" ID="ID_1439541143" MODIFIED="1536516072058" TEXT="Erg&#xe4;nzungen">
-<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#1a474a" COLOR="#71f721" CREATED="1536410175049" ID="ID_1439541143" MODIFIED="1774633309617" TEXT="Erg&#xe4;nzungen">
+<icon BUILTIN="go"/>
 <node COLOR="#338800" CREATED="1535894221015" FOLDED="true" ID="ID_977007729" MODIFIED="1573229640628" TEXT="Bug im Filter-Layer">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1535894239308" ID="ID_1809452702" MODIFIED="1535894251655" TEXT="Reihenfolge des Parent-Aufrufes in expandChildren()"/>
@@ -53272,13 +53272,107 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1774470739518" ID="ID_1513532591" MODIFIED="1774475574352" TEXT="Typ-Ableitung biegt in den Value-Traits falsch ab">
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1774450743106" ID="ID_312759335" MODIFIED="1774450759689" TEXT="&#xbb;flatten&#xab; (wie in flatMap)">
+<icon BUILTIN="pencil"/>
+<node CREATED="1774450761782" ID="ID_657002637" MODIFIED="1774450812916" TEXT="tritt sporatisch in der Praxis auf &#x27f5; Beispiel chain-Iterator"/>
+<node CREATED="1774451196653" ID="ID_217480792" MODIFIED="1774451228472" TEXT="indirekt w&#xe4;re damit ein Monaden-Pattern (doch wieder) m&#xf6;glich">
+<icon BUILTIN="idea"/>
+<node CREATED="1774451234232" ID="ID_1417073949" MODIFIED="1774451277231" TEXT="man k&#xf6;nnte nun flatMap() durch zwei Layer darstellen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ein Transform-Layer gefolgt von einem Flatten
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774451292536" ID="ID_1570078692" MODIFIED="1774454167519" TEXT="Abgrenzung: konzeptionell baut das Design nicht auf dem Monaden-Pattern auf">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Zur Erinnerung: diesem Ansatz war ich zun&#228;chst verfallen, habe dann aber erkannt, da&#223; Monaden sehr oft ein Anti-Pattern sein k&#246;nnen. In meinem Fall war das Design dadurch von Grund auf verdorben, so da&#223; ich die nun erfolgreiche Variante komplett neu bauen mu&#223;te. Das leitende Prinzip ist jetzt ein Pipeline-Builder, und nicht mehr eine funktionale Kapsel. Indem ich nun aber ein einfaches &#187;flatten&#171; nachr&#252;ste, w&#228;ren auch Monaden-artige Verarbeitungsmuster <i>darstellbar</i>, wenn man sich auf eine Teilmenge der Funktionalit&#228;t beschr&#228;nkt. Meiner Erfahrung zufolge d&#252;rfte das aber seltener auftreten, als die Suggestiv-Kraft der Monaden-Idee vermuten lie&#223;e; typischerweise mu&#223; man die N&#252;tzlichkeit von Monaden mit speziell ausgew&#228;hlten Beispielen belegen, was eben grade gegen eine Universallit&#228;t spricht.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Der konkrete Anla&#223;, warum ich jetzt eine &#187;flatten&#171;-Operation einbaue, ist auch etwas anderes: eine Folge von Iteratoren nahtlos verbinden. Man <i>kann</i>&#160; zwar behaupten, das <i>sei</i>&#160;der Beleg f&#252;r eine Monaden-Struktur, aber das verfehlt den Kern der Sache, denn es ist nicht konstituierend f&#252;r diesen Vorgang, man kann ihn genauso gut als Coroutine deuten.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1774453329538" ID="ID_131297170" MODIFIED="1774453332998" TEXT="Implementierung">
+<node CREATED="1774453338177" ID="ID_1984582817" MODIFIED="1774453369433" TEXT="zentrale Frage: wo ist die Storage f&#xfc;r den verschachtelten Iterator?">
+<node CREATED="1774453491549" ID="ID_1813207885" MODIFIED="1774454086106" TEXT="Klar ist: keine dynamische Rekursion notwendig">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Monaden leben in der Welt der Typen, deshalb kann man damit auch nicht direkt eine Such-Auswertung bauen (nur indirekt, indem ein Funktionsaufruf einen leeren Iterator liefert). Dem entsprechend ist auch das flatMap-Baumuster an den konkreten Ergebnistyp gebunden, man kann auch eine flatMap-Operation nicht generisch rekursiv anwenden, sondern nur, wenn die gegebenen Typen bereits verschachtelt sind. Hier liegt auch der entscheidene Unterschied zu einer <i>pure functional language:</i>&#160;dort gibt es keine Unterscheidung zwischen Typ und Wert, und entsprechend kann auch eine Typ-Auswertung dann doch zur laufzeit rekursiv sein und nicht terminieren. Was jedoch ehr ein Zeiten daf&#252;r ist, da&#223; diese &#187;reinen&#171; Begriffe an der gegebenen Sache vorbeigehen.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774453505842" ID="ID_1871980985" MODIFIED="1774453517621" TEXT="also kann die Storage auf jeden Fall &#xbb;inline&#xab; liegen"/>
+<node CREATED="1774454091533" ID="ID_1089755564" MODIFIED="1774454127186" TEXT="im besten Fall liegt die Storage im Quell-Iterator"/>
+<node CREATED="1774454133138" ID="ID_750611609" MODIFIED="1774454157576" TEXT="das geht aber nur, wenn der Quell-Iterator einen Iterator-&#xbb;wert&#xab; per Referenz liefert"/>
+</node>
+<node CREATED="1774454273364" ID="ID_283722071" MODIFIED="1774454299237" TEXT="mit dieser Einsicht: relativ einfach als StateCore-Adapter zu realisieren">
+<node CREATED="1774456032054" ID="ID_1379189388" MODIFIED="1774456053876" TEXT="wichtiger Hinweis: auf diese Grundstruktur aufbauen und adaptieren">
+<icon BUILTIN="yes"/>
+<node CREATED="1774456058870" ID="ID_1180777676" MODIFIED="1774456067453" TEXT="es kann komplexere F&#xe4;lle geben">
+<node CREATED="1774456093681" ID="ID_1748395369" MODIFIED="1774456105468" TEXT="wenn der Quell-Iterator als Value geliefert wird"/>
+<node CREATED="1774456106258" ID="ID_945956785" MODIFIED="1774456121106" TEXT="wenn der Quell-Iterator kein Lumiera-Iterator ist"/>
+</node>
+<node CREATED="1774456069677" ID="ID_960299336" MODIFIED="1774456170813" TEXT="dann mu&#xdf; die Builder-Funktion geeignet adaptieren">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      diese zweischichtige Struktur im Quellcode hat sich schrittweise herausgebildet und inzwischen gut bew&#228;hrt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1774470631894" ID="ID_586901779" MODIFIED="1774470636091" TEXT="Basisfall">
+<node CREATED="1774470643122" ID="ID_1020522529" MODIFIED="1774470661867" TEXT="nested Lumiera-Iterator als Quelle geliefert"/>
+<node CREATED="1774470664229" ID="ID_1294085123" MODIFIED="1774470671593" TEXT="konstruieren komplett analog zu Filter">
+<node CREATED="1774470673268" ID="ID_1520761184" MODIFIED="1774470689646" TEXT="Invariante: beide verschachtelten Iteratoren stehen auf dem n&#xe4;chsten Element"/>
+<node CREATED="1774470692342" ID="ID_217842235" MODIFIED="1774470715218" TEXT="sonst pull &#x27f9; wenn innerer Iterator leer, dann &#xe4;u&#xdf;eren iterieren"/>
+</node>
+</node>
+<node CREATED="1774645685915" ID="ID_1637864454" MODIFIED="1774645696083" TEXT="Erweiterung: allgemeines &#xbb;Iterable&#xab;">
+<node CREATED="1774656959677" ID="ID_1616144534" MODIFIED="1774656968996" TEXT="mu&#xdf; in dem Fall einen Transformer vorschalten"/>
+<node CREATED="1774656977650" ID="ID_1110089705" MODIFIED="1774656988301" TEXT="brauche daf&#xfc;r einen Adapter-Iterator-Typ">
+<node CREATED="1774657006975" ID="ID_633121575" MODIFIED="1774657027031" TEXT="mit den DecoratorTraits konstruieren">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1774657044528" ID="ID_881902324" MODIFIED="1774657081713" TEXT="Redundanz vermeiden &#x27f9; &#x3bb;">
+<node COLOR="#5b280f" CREATED="1774657087315" ID="ID_514811912" MODIFIED="1774657098557" TEXT="Versuch: das Ende der Verpackungs-Pipeline">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1774657102834" HGAP="21" ID="ID_1115849426" MODIFIED="1774657125002" TEXT="problematisch: die richtigen Typen abgreifen" VSHIFT="3">
+<font NAME="SansSerif" SIZE="11"/>
+</node>
+</node>
+<node CREATED="1774657127572" ID="ID_923516148" MODIFIED="1774657139361" TEXT="Versuch: nur den finalen Einpack-Schritt">
+<node CREATED="1774657142069" ID="ID_782762772" MODIFIED="1774657153160" TEXT="mu&#xdf; entweder den SRC-Layer durchreichen (falls Lumiera-Iter)"/>
+<node CREATED="1774657153857" ID="ID_1172695368" MODIFIED="1774657160078" TEXT="oder einen Transformer darauf setzen"/>
+<node CREATED="1774657163509" ID="ID_843406645" MODIFIED="1774657170779" TEXT="davon den decltype abgreifen"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1774470727877" ID="ID_886855220" MODIFIED="1774470737912" TEXT="Schwierigkeiten beim Adaptieren">
+<node COLOR="#435e98" CREATED="1774470739518" ID="ID_1513532591" MODIFIED="1774645576498" TEXT="Typ-Ableitung biegt in den Value-Traits falsch ab">
 <icon BUILTIN="broken-line"/>
 <node BACKGROUND_COLOR="#e1b4a0" COLOR="#690f14" CREATED="1774470739518" ID="ID_1029964723" MODIFIED="1774473599797" TEXT="unsere Value-Traits sind vermutlich nicht auf nested Iterators ausgelegt">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Wobei mir nicht klar ist, ob das Problem grunds&#228;tzlicher Natur ist.
@@ -53482,9 +53576,766 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1774476573574" ID="ID_1375774056" MODIFIED="1774485015348" TEXT="Mit diesem Fix: viel besser &#x2014; aber noch ein &#xfc;bersch&#xfc;ssiger Pointer">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1774476614705" ID="ID_1278550682" MODIFIED="1774476638141" TEXT="jetzt tritt das Problem zuerst auf in den DecoratorTraits&lt;IT&gt;"/>
+<node CREATED="1774476665790" ID="ID_82721045" MODIFIED="1774476763587">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      konkret:
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <font face="Monospaced" size="2">iter_explorer::StlRange&lt;array&lt;IterableDecorator&lt;CheckedCore&lt;CountDown&gt; &gt; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;, 3ul </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&gt;&amp; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&gt;</font>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="info"/>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1689102663805" ID="ID_1911278306" MODIFIED="1689182022572" TEXT="Ausbau der Teminal-Ausdr&#xfc;cke">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#3f0f69" CREATED="1774476892116" ID="ID_423296674" MODIFIED="1774485009332" TEXT="funktioniert der Fix wirklich schon richtig?">
+<icon BUILTIN="help"/>
+<node CREATED="1774476915673" ID="ID_17580519" MODIFIED="1774483351837" TEXT="nein..."/>
+<node COLOR="#435e98" CREATED="1774483352483" ID="ID_1150219005" MODIFIED="1774485095578" TEXT="erst mal: isLumiera spricht an">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1774483365817" ID="ID_262798398" MODIFIED="1774483377564" TEXT="liegt daran, da&#xdf; ich im Trait ein meta::Strip eingebaut habe"/>
+<node CREATED="1774483399965" ID="ID_1705325393" MODIFIED="1774483416774" TEXT="m&#xfc;&#xdf;te man also zus&#xe4;tzlich mit not is_pointer&lt;IT&gt; guarden"/>
+<node COLOR="#338800" CREATED="1774483417602" ID="ID_1725870527" MODIFIED="1774645519854" TEXT="oder den Trait entsprechend reparieren">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1774483439879" ID="ID_686398995" MODIFIED="1774483448114" TEXT="immer das gleiche Argument!"/>
+<node CREATED="1774483451878" ID="ID_360291049" MODIFIED="1774483461034" TEXT="nicht zu viel Convenience einbauen"/>
+<node CREATED="1774483461913" ID="ID_938635716" MODIFIED="1774483473350" TEXT="Ref strippen ist OK"/>
+<node CREATED="1774483474006" ID="ID_311302310" MODIFIED="1774483477222" TEXT="const nicht"/>
+<node CREATED="1774483477730" ID="ID_1555108802" MODIFIED="1774483485350" TEXT="und pointer gleich gar nicht!!!">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1774483496407" ID="ID_146836280" MODIFIED="1774485095579" TEXT="weiteres Problem: ValueTypeBinding biegt dann eben doch ab">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1774483584260" ID="ID_1961418463" MODIFIED="1774483641104" TEXT="brauche es aber, da sonst kein einheitlicher Typ-Ausdruck m&#xf6;glich ist">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...denn ich habe im ValueTypeBinding die binding-Typen benannt wie in der STL, aber in RefTraits mein eigenes Schema verwendet
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#5b280f" CREATED="1774483645487" ID="ID_1313355327" MODIFIED="1774483935712" TEXT="man kann das &#xbb;Abbiegen&#xab; unterbinden">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      indem man explizit festlegt, da&#223; die Standard-Instanz des Template gew&#252;nscht ist
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1774483936773" ID="ID_1820530982" MODIFIED="1774483940076" TEXT="klappt nicht"/>
+</node>
+<node COLOR="#435e98" CREATED="1774484424763" ID="ID_1813845821" MODIFIED="1774484981665" TEXT="naja ... eigentlich sollten die type-Bindings auch immer gleich hei&#xdf;en">
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#435e98" CREATED="1774485034192" ID="ID_418957044" MODIFIED="1774485083401" TEXT="dann kann n&#xe4;mlich der STTL-Fall direkt auf die RefTraits gehen">
+<arrowlink COLOR="#2ba0b8" DESTINATION="ID_1311705886" ENDARROW="Default" ENDINCLINATION="316;29;" ID="Arrow_ID_174256041" STARTARROW="None" STARTINCLINATION="-428;19;"/>
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#338800" CREATED="1774484970260" ID="ID_500702578" MODIFIED="1774484979686" TEXT="(ges&#xe4;gt getan)">
+<font NAME="SansSerif" SIZE="11"/>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1774484988707" ID="ID_1311705886" MODIFIED="1774485083401" TEXT="und nun funktioniert der Fix">
+<linktarget COLOR="#2ba0b8" DESTINATION="ID_1311705886" ENDARROW="Default" ENDINCLINATION="316;29;" ID="Arrow_ID_174256041" SOURCE="ID_418957044" STARTARROW="None" STARTINCLINATION="-428;19;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1774485113783" ID="ID_695277235" MODIFIED="1774633346583" TEXT="Code allgemein glattziehen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1774485136300" FOLDED="true" ID="ID_662491929" MODIFIED="1774633351605" TEXT="separates Trait-Template zu RangeIter extrahieren">
+<icon BUILTIN="yes"/>
+<node CREATED="1774485160233" HGAP="18" ID="ID_59467062" MODIFIED="1774485184635" TEXT="dann kann man n&#xe4;mlich besser dokumentieren worum es geht" VSHIFT="-9"/>
+<node CREATED="1774555108768" ID="ID_1209527443" MODIFIED="1774555121830" TEXT="sollte auch nochmal die std::iterator_traits einbeziehen">
+<node CREATED="1774560421105" ID="ID_1710877874" MODIFIED="1774560433963" TEXT="diese decken automatisch auch reine Pointer mit ab"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1774560434645" ID="ID_1763126432" MODIFIED="1774563296761" TEXT="ABER: seit C++20 decken Concepts das besser ab...">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...und damit werden iterator_traits unzuverl&#228;ssig &#8212; wenn sie jemals zuverl&#228;ssig waren.<br />Denn diese ganze Idee mit den Iteratoren in C++ war von Anfang an eigentlich ein Concept. All die Iterator-Tags und die iterator_traits waren nur Kr&#252;cken und Workarounds, und au&#223;erdem wenig bekannt (und too long didnt read, gilt auch f&#252;r mich selber!!!). Insofern konnte man sich bei Iteratoren sowiso auf nix verlassen, jenseits der STL. Somit wird die Situation durch die Concepts jetzt deutlich verbessert
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="clanbomber"/>
+</node>
+<node CREATED="1774563027307" ID="ID_389716197" MODIFIED="1774563657284" TEXT="sollte die Iterator-Concepts einbeziehen">
+<arrowlink COLOR="#4c86e5" DESTINATION="ID_1581229318" ENDARROW="Default" ENDINCLINATION="-2159;523;" ID="Arrow_ID_58259000" STARTARROW="None" STARTINCLINATION="-1280;85;"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1774563314105" HGAP="23" ID="ID_333431530" MODIFIED="1774563358476" TEXT="damit kann ich meinen Conditional-Typ nun korrekt schreiben" VSHIFT="11"/>
+<node CREATED="1774563338257" ID="ID_464561407" MODIFIED="1774563560208" TEXT="und auch gleich das Problem mit dem (const) value_type aushebeln">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das war sowiso (partiell) ein Mi&#223;verst&#228;ndnis von mir.
+    </p>
+    <ul>
+      <li>
+        was der Iterator liefert &#10233; reference
+      </li>
+      <li>
+        in was ich diesen &#187;Wert&#171; dann speichere &#10233; value_type
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+<node CREATED="1774563509883" ID="ID_85048082" MODIFIED="1774563539531" TEXT="std::iter_reference_t&lt;IT&gt;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <div style="background-color: #eee0b5; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 2px">
+      <div style="color: #202020; background-color: #eee0b5; font-family: DejaVu Sans Mono; font-size: 9pt; white-space: pre">
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a1a65"><b>template</b></font><font color="#65533c">&lt;</font><font color="#535773">__detail</font><font color="#65533c">::</font><font color="#3a1f18">__dereferenceable </font><font color="#a34649"><b><u>_Tp</u></b></font><font color="#65533c">&gt;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a1a65"><b>using</b></font><font color="#3a1f18">&#160;</font><font color="#8c505c"><b>iter_reference_t</b></font><font color="#3a1f18">&#160;</font><font color="#65533c">=</font><font color="#3a1f18">&#160; </font><font color="#4a1a65"><b>decltype</b></font><font color="#11123a">(</font><font color="#65533c">*</font><font color="#535773">std</font><font color="#65533c">::</font><font color="#000000">declval</font><font color="#65533c">&lt;</font><font color="#a34649"><b><u>_Tp</u></b></font><font color="#65533c">&amp;&gt;</font><font color="#11123a">())</font><font color="#65533c">;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          
+        </p>
+      </div>
+    </div>
+    <p>
+      
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Es ist einfach sch&#246;n....
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1774570577572" ID="ID_1555255783" MODIFIED="1774574222500" TEXT="Altlast-Problem: iter-adapter-stl">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1774570610832" ID="ID_539929857" MODIFIED="1774570628794" TEXT="die Hilfsklasse WrappedStlIter">
+<node CREATED="1774570631946" ID="ID_680899267" MODIFIED="1774570861868" TEXT="ist kein Lumiera-Iterator (korrekt)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Auch wenn es <i>auf den ersten Blick so aussieht</i>&#160;&#8212; war es offensichtlich nicht so gemeint: Und zwar fehlt der bool-Check auf das Iterations-Ende; den leistet n&#228;mlich erst der im n&#228;chsten Schritt dar&#252;ber gelegte RangeIter
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Klar, heute w&#252;rde ich das anders machen: im Grunde ist das eine Transformer-Pipeline, die ich hier mit sehr einfachen Mitteln (noch vor C++11) realisiert habe. Es funktioniert, indem ein STL-Iterator dekoriert wird, und dabei die Zugriffsfunktion jeweils speziell andgepa&#223;t ist.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#a4060f" CREATED="1774570642763" ID="ID_1007316252" MODIFIED="1774570687039" TEXT="qualifiziert sich nicht als STL-Iterator (soll sie aber)">
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
+<node CREATED="1774571474647" ID="ID_25395946" MODIFIED="1774571479641" TEXT="praktische Untersuchung">
+<node CREATED="1774571480731" ID="ID_196906751" MODIFIED="1774571602639" TEXT="baue mir ein Beispiel, analog zu PlacementIndex::remove_all_from_scope()">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      an der Stelle ist es aufgefallen, weil die static-Assertion getriggert hat; nachdem ich die Assertion auskommentiert habe, lief der Build durch &#10233; es mu&#223; sich um einen Formalismus handeln, und wahrscheinlich daran liegen, da&#223; das Concept f&#252;r input_iterator nicht erf&#252;llt wird (denn ein Lumiera-Iterator soll es ja nicht sein)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#338800" CREATED="1774571680280" ID="ID_1696413550" MODIFIED="1774571726069" TEXT="best&#xe4;tigt:  lib::iter_stl::_MapIterT&lt;Pos&gt;::PickValIter ist kein Lumiera-Iter und kein STL-Iter">
+<icon BUILTIN="broken-line"/>
+</node>
+<node CREATED="1774571604553" ID="ID_731079399" MODIFIED="1774571634520" TEXT="definiere eine Funktion, deren Argument mit dem Concept std::input_iterator qualifiziert wird">
+<icon BUILTIN="forward"/>
+<node CREATED="1774571638822" ID="ID_1624251593" MODIFIED="1774571647816" TEXT="klappt &#x27f9; sch&#xf6;ne Fehlermeldungen"/>
+<node COLOR="#435e98" CREATED="1774571650148" ID="ID_1721889887" MODIFIED="1774574867304" TEXT="Lumiera-Iterator scheitert (korrekt) &#x27f5; hat keinen postfix-inkrement">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <div style="background-color: #f5f8c6; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 2px">
+      <div style="color: #202020; background-color: #f5f8c6; font-family: DejaVu Sans Mono; font-size: 9pt; white-space: pre-wrap">
+        <p style="background-color: #f3cfc3; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#ff0000">/usr/include/c++/14/bits/iterator_concepts.h:633:13: required for the satisfaction of 'weakly_incrementable&lt;_Iter&gt;' [with _Iter = lib::iter_stl::IterSnapshot&lt;long unsigned int&gt;]</font>
+        </p>
+        <p style="background-color: #f3cfc3; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a2626">/usr/include/c++/14/bits/iterator_concepts.h:647:13: required for the satisfaction of 'input_or_output_iterator&lt;_Iter&gt;' [with _Iter = lib::iter_stl::IterSnapshot&lt;long unsigned int&gt;]</font>
+        </p>
+        <p style="background-color: #f3cfc3; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a2626">/usr/include/c++/14/bits/iterator_concepts.h:669:13: required for the satisfaction of 'input_iterator&lt;auto:47&gt;' [with auto:47 = lib::iter_stl::IterSnapshot&lt;long unsigned int&gt;]</font>
+        </p>
+        <p style="background-color: #f3cfc3; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a2626">/usr/include/c++/14/bits/iterator_concepts.h:634:10: in requirements with '_Iter __i' [with _Iter = lib::iter_stl::IterSnapshot&lt;long unsigned int&gt;]</font>
+        </p>
+        <p style="background-color: #f4f7fe; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a2626">/usr/include/c++/14/bits/iterator_concepts.h:637:18: note: nested requirement '__is_signed_integer_like&lt;typename std::__detail::__iter_traits_impl&lt;typename std::remove_cvref&lt;_Tp&gt;::type, std::incrementable_traits&lt;typename std::remove_cvref&lt;_Tp&gt;::type&gt; &gt;::type::difference_type&gt;' is not satisfied</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a2626">637 | requires __detail::__is_signed_integer_like&lt;iter_difference_t&lt;_Iter&gt;&gt;;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a2626">| ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</font>
+        </p>
+        <p style="background-color: #f4f7fe; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a2626">/usr/include/c++/14/bits/iterator_concepts.h:639:12: note: the required expression '(__i ++)' is invalid</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a2626">639 | __i++;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          
+        </p>
+      </div>
+    </div>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#5fbf8a" DESTINATION="ID_1721889887" ENDARROW="Default" ENDINCLINATION="-511;22;" ID="Arrow_ID_886924805" SOURCE="ID_1923510525" STARTARROW="None" STARTINCLINATION="2722;133;"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1774571876818" ID="ID_1646300105" MODIFIED="1774573461346" TEXT="der WrappedStlIter scheitert am gleichen Kriterium">
+<icon BUILTIN="broken-line"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1774573438931" ID="ID_1024929309" MODIFIED="1774573461347" TEXT="und zudem brauchen wir auch noch einen difference_t">
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1774573478325" ID="ID_356575590" MODIFIED="1774574232930" TEXT="zwei Dummy-Definitionen in WrappedStlIter">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1774573490343" ID="ID_1876521282" MODIFIED="1774573505271" TEXT="einen postfix-inkrement &#x27fc; NOTREACHED"/>
+<node CREATED="1774573507914" ID="ID_1390391761" MODIFIED="1774573518308" TEXT="using difference_t = ptrdiff_t"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1774573541526" ID="ID_1484466520" MODIFIED="1774574216107" TEXT="Bewertung">
+<icon BUILTIN="yes"/>
+<node CREATED="1774573546689" ID="ID_1416847324" MODIFIED="1774573554664" TEXT="das ist ein Implementierungs-Konstrukt"/>
+<node CREATED="1774573555412" ID="ID_1781686716" MODIFIED="1774573647962" TEXT="insofern nicht gef&#xe4;hrlich">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      es ist m.E. <i>offensichtlich da&#223; man das nicht n&#228;her anschauen soll</i>. Daf&#252;r sprechen bereits die komplex eingef&#228;delten Hilfs-Traits, und die davor geschalteten Builder-Funktionen. Sogar wenn mal jemand hier was repariert und erweitert, sehe ich keine Gefahr
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774573649143" ID="ID_742278940" MODIFIED="1774573678099" TEXT="Design ist &#xbb;verbesserbar&#xab;">
+<icon BUILTIN="smiley-neutral"/>
+<node CREATED="1774573798803" ID="ID_659729974" MODIFIED="1774573863061" TEXT="das ist eine typische &#xbb;koh&#xe4;sive&#xab; Implementierung">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      &#8222;Ich hab genau verstanden wie es funktioniert, und kann deshalb gezielt an zwei Stellen manipulieren, und hab dann bereits mein Ergebnis&#8220;
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774573919794" ID="ID_1775829137" MODIFIED="1774574188892" TEXT="sch&#xf6;ner (aver vielleicht auf ineffizienter) w&#xe4;re...">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...wenn man den IterExplorer (Pipeline-Builder) verwendet, ihn den jeweiligen Container automatisch adaptieren l&#228;&#223;t, und dann nur noch ein passendes Transformer-&#955; dar&#252;bersetzt. Dadurch w&#252;rde der Code sehr viel knapper und auch sofort verst&#228;ndlich....
+    </p>
+    <p>
+      Allerdings
+    </p>
+    <ul>
+      <li>
+        den Header habe ich noch vor C++11 geschrieben (und den Iter-Explorer gab es auch lange Zeit danach noch nicht)
+      </li>
+      <li>
+        die vom IterExplorer generierten Typen sind monstr&#246;s. Da ist der hier erzeugte RangeIter&lt;Wrapped-irgendwas... vermutlich verst&#228;ndlicher
+      </li>
+      <li>
+        auch ist die Frage, ob der Optimiser so gut mit IterExplorer klarkommt. Das hab ich n&#228;mlich noch nie genau &#252;berpr&#252;ft; wohingegen das hier aufgebaute Konstrukt ganz offensichtlich komplett herunteroptimiert werden kann
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774574241616" ID="ID_768965113" MODIFIED="1774574520943" TEXT="was ich jetzt hier mache um RangeIter zu befriedigen, ist auch &#xbb;koh&#xe4;siv&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...man k&#246;nnte auch sagen, linke Tasche &#8631; rechte Tasche. Ich wei&#223; jetzt (weil ich es gard eben gebaut habe), da&#223; der RangeIter mit den Typdefinitionen verzweigt, wenn er einen Lumiera-Iterator sieht. Au&#223;erdem finde ich die Assertion (da&#223; der Typ-Parameter ein Iterator sein mu&#223;) insgesamt hilfreich. Und drittens &#187;sehe&#171; ich, da&#223; der volle Umfang des STL-Konzepts gar nicht gebraucht wird f&#252;r einen Lumiera-Iterator. <i><font color="#930210">Trotzdem &#252;bel, hier ein </font><font color="#d40448"><b>l&#252;gendes Concept</b></font><font color="#930210">&#160;zu verwenden</font></i>
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#f50e0e" DESTINATION="ID_764079350" ENDARROW="Default" ENDINCLINATION="27;-62;" ID="Arrow_ID_1627890832" STARTARROW="None" STARTINCLINATION="-173;7;"/>
+</node>
+<node CREATED="1774574191430" ID="ID_9214379" MODIFIED="1774574211410" TEXT="der Header wird pervasiv verwendet; insofern k&#xf6;nnte man das mal anschauen..."/>
+</node>
+<node COLOR="#242471" CREATED="1774574679692" ID="ID_401546883" MODIFIED="1774574722891" TEXT="trotz allem gut, jetzt die iter::Traits auf das STL-Concept aufgesetzt zu haben">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1774574440618" ID="ID_764079350" MODIFIED="1774574666534" TEXT="f&#xfc;hle mich in meinem Design f&#xfc;r den &#xbb;Lumiera Forward Iterator&#xab; best&#xe4;tigt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Umso mehr, nachdem ich mir jetzt etwas die Implementierung der STL-concepts angeschaut habe....
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Fazit: die Idee, einen Iterator als &#187;abstrahierten Pointer&#171; zu definieren, ist auf den ersten Blick cool, und hat auch ihren Nutzen. Aber es ist und bleibt schechtes Design, weil man dadruch lediglich Implementierungs-Eigenschaften in eine formale Spezifikaiton mappt. Ich bleibe dabei: die STL-Iteratoren k&#246;nnen viel zu viel, um eine gute Abstraktion zu sein. Daher war es angemessen, f&#252;r Lumiera ein eigenes Konzept aufzubauen, und daf&#252;r den gr&#246;&#223;ten Teil aller F&#228;higkeiten und M&#246;glichkeiten der STL-Iteratoren zu opfern
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#f50e0e" DESTINATION="ID_764079350" ENDARROW="Default" ENDINCLINATION="27;-62;" ID="Arrow_ID_1627890832" SOURCE="ID_768965113" STARTARROW="None" STARTINCLINATION="-173;7;"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1774485124039" ID="ID_1597506196" MODIFIED="1774574884483" TEXT="meta::Strip aus IterForEach entfernen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1774569458307" FOLDED="true" ID="ID_233381529" MODIFIED="1774630651400" TEXT="daf&#xfc;r hier auch explizit typedef reference verlangen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      bisher verlangt der Lumiera-Iterator-Detektor nur eine Typedef <font color="#563f3f" face="Monospaced">value_type</font>&#160; ;
+    </p>
+    <p>
+      das ist zwar korrekt, und gen&#252;gt i.d.R. zur Erkennung. Allerdings ist <font color="#563f3f" face="Monospaced">value_type</font>&#160; nicht das Wichtigste (wie ich fr&#252;her meinte), sondern die Typedef <font color="#563f3f" face="Monospaced">reference</font>, denn diese beschreibt, was der Iterator konkret liefert
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1774579136412" FOLDED="true" ID="ID_123251836" MODIFIED="1774630644131" TEXT="bricht lib::diff:Record::operator string()">
+<icon BUILTIN="broken-line"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1774579184258" ID="ID_189508374" MODIFIED="1774630488319" STYLE="fork" TEXT="util::join biegt falsch ab">
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1774579200014" ID="ID_1786574388" MODIFIED="1774630482944" TEXT="verwendet nicht die Spezialisierung f&#xfc;r Lumiera-Iterator"/>
+<node CREATED="1774579218219" ID="ID_1337571916" MODIFIED="1774630510905">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      l&#228;&#223;t sich zur&#252;ckf&#252;hren auf den Typ <font face="Monospaced" color="#5f3939"><b>Record::scopeIter</b></font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#3c0f69" CREATED="1774579265083" ID="ID_1792093205" MODIFIED="1774630472929" TEXT="Untersuchung im Test-_Setup">
+<icon BUILTIN="forward"/>
+<node CREATED="1774579288641" ID="ID_591921649" MODIFIED="1774579293901" TEXT="baue die Typen in try.cpp nach">
+<node CREATED="1774579308567" ID="ID_832332658" MODIFIED="1774579309789" TEXT="using Storage = std::vector&lt;int&gt;"/>
+<node CREATED="1774579321048" ID="ID_30406163" MODIFIED="1774579322265" TEXT="using scopeIter = lib::iter_stl::_SeqT&lt;const Storage&gt;::Range;"/>
+</node>
+<node COLOR="#435e98" CREATED="1774579912309" ID="ID_1034144598" MODIFIED="1774630435137" TEXT="Ha! ein ganz generischer Fehler im Duck-Detector-Template">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1774579957452" ID="ID_1258668487" MODIFIED="1774579958555" TEXT="META_DETECT_NESTED(reference)"/>
+<node CREATED="1774579972606" ID="ID_1766088848" MODIFIED="1774579983848" TEXT="das erzeugt den Typ TY::reference *"/>
+<node CREATED="1774579985982" ID="ID_1894605513" MODIFIED="1774580166317">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      und das ist hier int&amp; *&#160;&#160;&#10233; &#8623; <font color="#cc0a0a">UNG&#220;LTIG</font>&#160; &#10233; SFINAE-fail
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="broken-line"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1774580189824" ID="ID_357832913" MODIFIED="1774630433166" TEXT="kann man den Check durch die void_t&lt;T&gt; - Technik ersetzen?">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#5b280f" CREATED="1774630532103" ID="ID_1394354807" MODIFIED="1774630546525" TEXT="vorerst aber noch nicht umstellen auf Concept">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1774630550996" ID="ID_801681034" MODIFIED="1774630560375" TEXT="das ist dann doch nicht ganz trivial"/>
+<node CREATED="1774630561037" ID="ID_608706434" MODIFIED="1774630573991" TEXT="sollte n&#xe4;mlich dann auch die StateCore mit einbeziehen"/>
+<node CREATED="1774630574948" ID="ID_1892948077" MODIFIED="1774630586403" TEXT="und die STL-Iterierbarkeit durch Standard-Concepts abdecken"/>
+<node CREATED="1774630587229" ID="ID_1155797573" MODIFIED="1774630605556" TEXT="&#xd83e;&#xdc32; sollte daf&#xfc;r einen eigenen Header schaffen"/>
+<node COLOR="#008874" CREATED="1774630611335" ID="ID_1788133693" MODIFIED="1774630633817" TEXT="dr&#xe4;ngt jetzt nicht, tut ja alles"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1774574800549" ID="ID_1923510525" MODIFIED="1774574867304" TEXT="habe bei der Gelegenheit auch die Trennsch&#xe4;rfe best&#xe4;tigt">
+<arrowlink COLOR="#5fbf8a" DESTINATION="ID_1721889887" ENDARROW="Default" ENDINCLINATION="-511;22;" ID="Arrow_ID_886924805" STARTARROW="None" STARTINCLINATION="2722;133;"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1774645548832" ID="ID_1656634709" MODIFIED="1774645573149" TEXT="Value-Traits nun korrekt &#x27f9; Flattener funktioniert im einfachsten Fall">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1774645596829" ID="ID_1108333109" MODIFIED="1774645625805" TEXT="mu&#xdf; aber auch nested-Iterable wrappen/adaptieren">
+<node CREATED="1774645611931" ID="ID_1847373113" MODIFIED="1774645645970" TEXT="ein nested-Iterable allgemein mu&#xdf; nicht ein Lumiera-Iterator sein"/>
+<node CREATED="1774645647248" ID="ID_1783118750" MODIFIED="1774645656609" TEXT="in dem Fall brauchen wir einen Adapter-Transformer dazwischen"/>
+<node CREATED="1774645659013" ID="ID_163397201" MODIFIED="1774645671791" TEXT="das sollte erst im Builder so konfiguriert werden (h&#xe4;lt den Code klarer)"/>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1774661629241" ID="ID_1366447416" MODIFIED="1774661656900" TEXT="Konsistenzproblem bzgl Wrappen vs Adaptieren">
+<icon BUILTIN="clanbomber"/>
+<node CREATED="1774661707569" ID="ID_1342544444" MODIFIED="1774661727932" TEXT="alle unsere Adapter betten die Quelle ein"/>
+<node CREATED="1774661815728" ID="ID_352915720" MODIFIED="1774661993182">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      so wie jetzt gebaut mit dem Transformer &#10233; Selbstmord <font color="#e8106a" size="6">&#9760;</font>
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Der Transformer enth&#228;lt einen ItemWrapper, in den das Ergebnis der Transformation <b>by value</b>&#160;abgelegt wird. Wir machen also entweder eine Kopie der ganzen Quell-Pipeline, oder, noch schlimmer, wir moven die Quell-Pipeline dorthin, und dann beim n&#228;chsten Pull rufen wir die Zombie-Quell-Pipeline aus dem Transformer auf.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1774664657373" ID="ID_623577442" MODIFIED="1774665522868" TEXT="Analyse &#x2014; Fallunterscheidung">
+<node CREATED="1774665499721" ID="ID_364650146" MODIFIED="1774665531147" TEXT="Verhalten der DecoratorTraits">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das Thema &#187;Dekoration&#171; ist zentral gel&#246;st &#10233; Struktur der<font color="#5d4343">&#160; </font><font color="#552b2b" face="Monospaced">_DecoratorTraits</font>&#160;&#160;befolgen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="list"/>
+<node COLOR="#338800" CREATED="1774664674549" ID="ID_282985153" MODIFIED="1774664702803" TEXT="Lumiera-Iterator &#x27f9; nichts zu tun">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1774664845336" ID="ID_1139397074" MODIFIED="1774664877029" TEXT="StateCore &#x27f9; brauche IterableDecorator&lt;CheckedCore&lt;COR&gt;&gt;">
+<node CREATED="1774665154791" ID="ID_988207721" MODIFIED="1774665169407" TEXT="sizeof(wrapped) &#x2261; raw-Core"/>
+</node>
+<node CREATED="1774664903856" ID="ID_1550446713" MODIFIED="1774664910907" TEXT="STL-iterierbarer Container...">
+<node CREATED="1774664912514" ID="ID_1956232632" MODIFIED="1774664934248" TEXT="mu&#xdf; per LValue-Ref gegeben sein &#x27f9; StlRange">
+<node CREATED="1774665205923" ID="ID_740091937" MODIFIED="1774665220153" TEXT="das ist letztlich ein RangeIter"/>
+<node CREATED="1774665220910" ID="ID_986715529" MODIFIED="1774665232544" TEXT="speichert 2 x einen Container-Iterator"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1774665259441" ID="ID_1344873857" MODIFIED="1774665476796" TEXT="damit definitiv &gt; sizeof(void*)">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1774664936384" ID="ID_1216923819" MODIFIED="1774664943830" TEXT="RValue &#x27f9; compile failure"/>
+</node>
+<node CREATED="1774665057858" ID="ID_1626986192" MODIFIED="1774665060583" TEXT="IterSource">
+<node CREATED="1774665061736" ID="ID_75451297" MODIFIED="1774665072126" TEXT="nur unterst&#xfc;tzt als Pointer oder Ref"/>
+<node CREATED="1774665072858" ID="ID_145216670" MODIFIED="1774665091799" TEXT="&#x27f9; wrap with IterSourceIter">
+<node CREATED="1774665310562" ID="ID_161339050" MODIFIED="1774665316165" TEXT="baut einen IterSource::iterator">
+<node CREATED="1774665382105" ID="ID_950855463" MODIFIED="1774665388340" TEXT="das ist ein IterAdapter"/>
+<node CREATED="1774665388968" ID="ID_605228130" MODIFIED="1774665407116" TEXT="h&#xe4;lt einen Pos* + einen shared-ptr auf die Quelle"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1774665259441" ID="ID_72955686" MODIFIED="1774665470704" TEXT="somit &gt; sizeof(void*)">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#5b280f" CREATED="1774665097567" ID="ID_122424436" MODIFIED="1774665106442" TEXT="sonst &#x27f9; static fail">
+<icon BUILTIN="button_cancel"/>
+</node>
+</node>
+<node CREATED="1774665540676" ID="ID_881315879" MODIFIED="1774665551182" TEXT="es gibt also drei F&#xe4;lle zu unterscheiden">
+<node CREATED="1774665553934" ID="ID_794674450" MODIFIED="1774665562056" TEXT="Lumiera / StateCore">
+<node CREATED="1774665563498" ID="ID_1495786271" MODIFIED="1774665724443" TEXT="direkt verwenden bzw. ein Downcast auf Typ-Ebene">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Das bedeutet:
+    </p>
+    <ul>
+      <li>
+        die Quelle wird per Value genommen und <i>in die Pipeline verschoben....</i>
+      </li>
+      <li>
+        Effektiv ver&#228;ndert sich die Storage nicht; die Wrapper-Typen sind nur eine logische Dekoration ohne zus&#228;tzliche Storage
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1774665727890" ID="ID_1196621650" MODIFIED="1774665738213" TEXT="Referenz auf &#xbb;andere Quelle&#xab;">
+<node CREATED="1774665742059" ID="ID_1490822941" MODIFIED="1774665758274" TEXT="in der Pipeline wird ein Handle-Typ abgelegt"/>
+<node CREATED="1774665759622" ID="ID_1126587550" MODIFIED="1774665781863" TEXT="dessen Storage ist definitiv gr&#xf6;&#xdf;er als der urspr&#xfc;nglich gegebene (Referenz)Typ"/>
+</node>
+<node CREATED="1774665917361" ID="ID_1570916564" MODIFIED="1774665933753" TEXT="sonstiger Container oder Quelle by-value">
+<node CREATED="1774665935618" ID="ID_1662941602" MODIFIED="1774666628453" TEXT="f&#xfc;r die Pipeline nicht unterst&#xfc;tzt (da zu gef&#xe4;hrlich)"/>
+<node CREATED="1774665953652" ID="ID_1470972168" MODIFIED="1774665968790" TEXT="wenn man das will &#x27f9; in ContainerCore einwickeln"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1774666042718" ID="ID_1311935400" MODIFIED="1774667309335" TEXT="L&#xf6;sungansatz entwickeln">
 <icon BUILTIN="pencil"/>
+<node COLOR="#5b280f" CREATED="1774666053791" ID="ID_54434179" MODIFIED="1774666112545" TEXT="der Transformer ist keine sinnvolle L&#xf6;sung">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Ich hatte ihn ja nur gew&#228;hlt, weil er wie ein <i>billiger Fix</i>&#160; aussah, mit dem man den Haupt-Fall (Lumiera-Iterator) noch etwas erweitern k&#246;nnte
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="stop-sign"/>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1774666152505" ID="ID_970274323" MODIFIED="1774666169551" TEXT="ein spezieller Adapter-Layer ist notwendig">
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1774666177230" ID="ID_476791551" MODIFIED="1774666762719" TEXT="er mu&#xdf; unter allen Umst&#xe4;nden die Funktionsf&#xe4;higkeit des Quell-Iterators erhalten">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1774666199163" ID="ID_624634257" MODIFIED="1774666213976" TEXT="Anpassungs-F&#xe4;lle">
+<node CREATED="1774666215760" ID="ID_471378651" MODIFIED="1774667303914" TEXT="Quelle durchreichen / casten">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Wenn letztlich nur eine Referenz auf die Quelle durchgereicht werden mu&#223;, ggfs. mit Cast in einen anderen Typ, dann kann das direkt in einer yield-Operation erfolgen. Konkret ist das etwas trickreicher, da im einen Fall noch der Quell-Typ (virtuell)recastet werden mu&#223;; letztlich &#252;berdeckt der Adapter dann aber nur noch den operator* &#8212; ohne Implementierungsskizze ist nicht klar, ob sich das in einen einzigen Adapter-Typ zusammenfassen l&#228;&#223;t
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1774666845740" ID="ID_1330744788" MODIFIED="1774666859582" TEXT="speziell hier wichtig: Quelle mu&#xdf; per Referenz gegeben sein"/>
+<node CREATED="1774666866523" ID="ID_962856134" MODIFIED="1774666894692">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      wird sie dagegen per Value gegeben, ist sie <b>generiert</b>&#160;&#10233; wie Container behandeln
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1774666302637" ID="ID_24645211" MODIFIED="1774666413066" TEXT="Handle-Typ &#x27f9; braucht jeweils eine re-Dekoration">
+<node CREATED="1774666416006" ID="ID_1224304357" MODIFIED="1774666619651" TEXT="&#xe4;ndert sich mit den Schritten des top-Level iterators">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Um das explizit klarzustellen:
+    </p>
+    <ul>
+      <li>
+        wir haben einen top-level Iterationsmechanismus, der mit jedem Step einen Iterierbaren Wert sichtbar macht, und zwar stets per Referenz (Referenz auf einen Container, bzw. auf ein IterSource-Interface)
+      </li>
+      <li>
+        jedesmal wenn dieser top-Level einen Step macht, mu&#223; in einem <i>daneben liegenden inline-Buffer</i>&#160;ein neuer Handle-Typ erzeugt (und der alte zerst&#246;rt) werden.
+      </li>
+      <li>
+        w&#228;hrend dann aber der flatten()-Mechanismus diesen nested-Iterator traversiert, bleibt dieses Handle an Ort und Stelle liegen
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1774666641351" ID="ID_287267373" MODIFIED="1774666671361" TEXT="Container-by-Value k&#xf6;nnte man wie ein Handle behandeln">
+<node CREATED="1774666683466" ID="ID_1194053201" MODIFIED="1774666710940">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      bedeutet ja, in der Pipeline liegt ein Iterator / eine Quelle, die den Container <b>generiert</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1774666712798" ID="ID_811972261" MODIFIED="1774666733359" TEXT="diesen Container-Value k&#xf6;nnte man in einer Container-Core schieben..."/>
+<node CREATED="1774666734055" ID="ID_1811306623" MODIFIED="1774666745325" TEXT="diese liegt dann genau wie das Handle &#xbb;daneben&#xab;"/>
+</node>
+</node>
+<node CREATED="1774666914091" ID="ID_449870076" MODIFIED="1774666919474" TEXT="Spar-Variante">
+<icon BUILTIN="idea"/>
+<node CREATED="1774666920826" ID="ID_210700855" MODIFIED="1774666947419" TEXT="nur Lumiera-Iterator und State-Core per Referenz unterst&#xfc;tzen"/>
+<node CREATED="1774666948262" ID="ID_1832071317" MODIFIED="1774709423740" TEXT="dann w&#xe4;ren das ganz einfach zu schreibende Adaptoren"/>
+</node>
+<node CREATED="1774709426313" ID="ID_1525744834" MODIFIED="1774709429255" TEXT="Beschlu&#xdf;">
+<node CREATED="1774709430054" ID="ID_912776044" MODIFIED="1774709438555" TEXT="baue zwei generische Adapter">
+<node CREATED="1774709804673" ID="ID_969333386" MODIFIED="1774709861157" TEXT="RedressAdapter">
+<node CREATED="1774709885131" ID="ID_801076314" MODIFIED="1774709900357" TEXT="dekoriert einen Lumiera-Iterator"/>
+<node CREATED="1774709901137" ID="ID_919308916" MODIFIED="1774709914396" TEXT="macht beim Zugriff einen reinterpret-cast"/>
+<node CREATED="1774709921111" ID="ID_1586230087" MODIFIED="1774709983338" TEXT="setzt zwingend einen Referenz-Quellwert voraus">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...denn sonst w&#228;re es kein virtuelles redressing mehr, sondern die Konstruktion eines Wrappers
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1774709864725" ID="ID_238153661" MODIFIED="1774709872674" TEXT="WrapperAdapter">
+<node CREATED="1774709996692" ID="ID_1695770853" MODIFIED="1774710058046" TEXT="ist ein vereinfachter / spezialisierter Transformer">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...der keine Operationen und Funktionen anwendet, sondern nur jeden Wert in einen neu-konstruierten Wrapper &#252;berf&#252;hrt
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1774710061788" ID="ID_908839654" MODIFIED="1774710069599" TEXT="dekoriert einen Lumiera-Iterator"/>
+<node CREATED="1774710079276" ID="ID_1703742511" MODIFIED="1774710093211" TEXT="verwendet einen ItemWrapper als inline-Storage"/>
+</node>
+</node>
+<node CREATED="1774710223103" ID="ID_492034668" MODIFIED="1774710285676" TEXT="der Builder macht eine eigenst&#xe4;ndige Fallunterscheidung">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...denn die Analyse hat gezeigt, da&#223; die DecoratorTraits zwar grunds&#228;tzlich das Feld richtig strukturieren, aber einige Differenzierungen nicht unterst&#252;tzen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e1b4a0" COLOR="#690f14" CREATED="1774656919925" ID="ID_1646281580" MODIFIED="1774656946253" STYLE="fork" TEXT="auch der Transformer ist nicht auf nested Iterators ausgelegt">
+<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
+<icon BUILTIN="clanbomber"/>
+<node COLOR="#435e98" CREATED="1774657302055" ID="ID_789812720" MODIFIED="1774659939214" TEXT="&#x27f9; das stellt das Schema mit dem ValueTypeBinding in Frage">
+<icon BUILTIN="help"/>
+<node CREATED="1774657328740" ID="ID_1402836149" MODIFIED="1774657358881" TEXT="warum ist da &#xfc;berhaupt dieses rekrusive Abgreifen einer Typedef eingebaut worden?">
+<node CREATED="1774657455680" ID="ID_514366098" MODIFIED="1774657461798" TEXT="es gibt auch andere Verwendungen"/>
+<node CREATED="1774657463633" ID="ID_1926724813" MODIFIED="1774657475099" TEXT="die arbeiten auf einem Container"/>
+<node CREATED="1774657475968" ID="ID_8083433" MODIFIED="1774657545675" TEXT="oder wollen tats&#xe4;chlich den value_type eines Iterators">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      beispielsweise in stringify() &#10230; f&#252;r welchen &#187;wert&#171;-Typ brauchen wir einen String-Konverter?
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1774657428926" ID="ID_1704958302" MODIFIED="1774657492098" TEXT="also: nicht grunds&#xe4;tzlich &#x2014; aber f&#xfc;r Iterator-Pipelines">
+<node CREATED="1774657900271" ID="ID_1699849252" MODIFIED="1774657912582" TEXT="also : alle verwendungen durchsehen (ca 30)"/>
+<node COLOR="#435e98" CREATED="1774657913643" ID="ID_506237061" MODIFIED="1774657997027" TEXT="IterCursor &#x27f6; sollte die neuen iter::Traits verwenden">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      da hier stets ein anderer Iterator eingewickelt wird (i.d.R. ein STL-Iterator); also brauchen wir die spezielle Logik, die STL-Iteratoren und Pointer korrekt behandelt
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#5b280f" CREATED="1774657998138" ID="ID_733523241" MODIFIED="1774658216456" TEXT="Itertools-Transformer &#x27f6; fehlerhaft &#x2014; korrekt w&#xe4;ren direkt die RefTraits">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1774658163972" ID="ID_1376599845" MODIFIED="1774658311373" TEXT="ScopePath : hat eine explizite Spezialisierung &#x2014; das ist dann wohl sinnvoll">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      M&#246;glicherweise &#252;berfl&#252;ssig durch die neue Logik, aber so eine explizite Spezialisierung direkt im Scope ist trotzdem vorteilhaft, weil man sie sieht, und die lokal vorhandenen Bedingungen explizit und fest ber&#252;cksichtigt werden, ohne eine ggfs. fragile allgemeine Typ-Selektor-Logik einzubeziehen.
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="help"/>
+</node>
+<node COLOR="#5b280f" CREATED="1774658332725" ID="ID_1972593986" MODIFIED="1774658354844" TEXT="IterExplorer-Transformer &#x27f6; fehlerhaft, analog zu Itertools">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node COLOR="#338800" CREATED="1774658412673" ID="ID_51319654" MODIFIED="1774658480912" TEXT="Itertools-GroupAggregator : korrekt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      schaut sich an, in was f&#252;r einen Typ man Werte des unterliegenden, zu gruppierenden Iterators speichern kann &#8212; so soll das verwendet werden!
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1774658506517" ID="ID_234360994" MODIFIED="1774658529696" TEXT="IterExplorer -  top-Level &#x2014; gleiche situation; korrekt">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1774658552959" ID="ID_823622776" MODIFIED="1774658604911" TEXT="IterExplorer-Builder: grouped(), groupedBy(), asPtr(), derefPrt(), deduplicate() &#x2014; dto">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1774659918584" ID="ID_1977782904" MODIFIED="1774659933329" TEXT="gefixt &#x2014; funktioniert damit">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1774659951194" ID="ID_369619908" MODIFIED="1774660011071" TEXT="Einf&#xfc;gen des Adapters unter dem Flattener schlie&#xdf;t den unterliegenden IterExplorer mit ein">
+<node CREATED="1774660013562" ID="ID_596802349" MODIFIED="1774660038154" TEXT="das ist zwar harmlos, aber bl&#xe4;ht den Pipeline-Typ unn&#xf6;tig auf"/>
+<node CREATED="1774660040017" ID="ID_1062014937" LINK="#ID_1720349507" MODIFIED="1774660392132" TEXT="so ein &#xe4;hnliches Problem gab es doch schon mal beim iter-zip?">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1774660415777" ID="ID_1874366994" MODIFIED="1774660433102" TEXT="tats&#xe4;chlich hinterl&#xe4;&#xdf;t IterExplorer bereits ein Marker-Type-Tag">
+<node CREATED="1774660443001" ID="ID_884871958" MODIFIED="1774660447305" TEXT="dazu gibt es den _PipelineDetector"/>
+<node CREATED="1774660455664" ID="ID_647473304" MODIFIED="1774660467362" TEXT="der extrahiert den gestrippten Base-Iterator"/>
+<node CREATED="1774660486231" ID="ID_1351650503" MODIFIED="1774660526723" TEXT="und strippt auch gleich noch eine CheckedCore">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      weil die in einer solchen Situation, in der eine Pipeline erneut erweitert wird, i.d.R. redundant ist
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774660584342" ID="ID_1456209556" MODIFIED="1774660600528" TEXT="wird bisher nur in der top-Level-explore()-Funktion verwendet"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1689102663805" ID="ID_1911278306" MODIFIED="1774633336499" TEXT="Ausbau der Teminal-Ausdr&#xfc;cke">
+<icon BUILTIN="edit"/>
 <node COLOR="#338800" CREATED="1689102690854" FOLDED="true" ID="ID_590768203" MODIFIED="1689182022574" TEXT="Terminal: effuse()">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1689102718230" ID="ID_369108561" MODIFIED="1689182022601" TEXT="&#xbb;materialisieren&#xab; in einen STL-kompatiblen Container">
@@ -53563,7 +54414,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#435e98" CREATED="1536409170928" ID="ID_1850744645" MODIFIED="1536515953937" TEXT="Design-Probleme">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1536409170928" ID="ID_1850744645" MODIFIED="1536515953937" TEXT="Design-Probleme">
 <icon BUILTIN="go"/>
 <node COLOR="#338800" CREATED="1535919506060" FOLDED="true" ID="ID_1587572708" MODIFIED="1573229614688" TEXT="heterogene Pr&#xe4;dikat-Typen">
 <linktarget COLOR="#616f95" DESTINATION="ID_1587572708" ENDARROW="Default" ENDINCLINATION="49;-142;" ID="Arrow_ID_346491515" SOURCE="ID_1859852045" STARTARROW="None" STARTINCLINATION="-143;0;"/>

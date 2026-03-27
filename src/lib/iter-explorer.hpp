@@ -13,13 +13,13 @@
 */
 
 /** @file iter-explorer.hpp
- ** Building tree expanding and backtracking evaluations within hierarchical scopes.
+ ** Build tree expanding and backtracking evaluations within hierarchical scopes.
  ** Based on the *Lumiera Forward Iterator* concept and using the basic IterAdapter templates,
  ** these components allow to implement typical evaluation strategies, like conditional expanding
  ** or depth-first exploration of a hierarchical structure. Since the access to this structure is
  ** abstracted through the underlying iterator, what we effectively get is a functional datastructure.
- ** The implementation is based on the idea of a "state core", which is wrapped right into the iterator
- ** itself (value semantics) -- similar to the IterStateWrapper, which is one of the basic helper templates
+ ** The implementation is based on the idea of a **State Core**, which is wrapped right into the iterator
+ ** itself (value semantics) — similar to the IterStateWrapper, which is one of the basic helper templates
  ** provided by iter-adapter.hpp.
  ** 
  ** @remark historically, this template, as well as the initial IterExplorer (draft from 2012) can be
@@ -36,7 +36,7 @@
  ** calculations with exception handling but also simple data structures like lists or trees). The key point with any
  ** monad is the ability to _bind a function_ into the monad; this function will work on the _contained base values_
  ** and produce a modified new monad instance. In the simple case of a list, "binding" a function basically means
- ** to _map the function onto_ the elements in the list. (strictly speaking, it means the `flatMap` operation)
+ ** to _map the function onto_ the elements in the list. (more precisely, this indicates a `flatMap` operation)
  ** 
  ** # A Pipeline builder
  ** Based on such concepts, structures and evaluation patterns, the IterExplorer serves the purpose to provide
@@ -49,8 +49,9 @@
  **   on each element, rather it is triggered by issuing a dedicated `expandChildren()` call on the processing
  **   pipeline. Thus, binding the expansion functor has augmented the data source with the ability to explore
  **   some part in more detail _when required_.
- ** - the *transform operation* installs a function to be mapped onto each element retrieved from the underlying source
- ** - in a similar vein, the *filter operation* binds a predicate to decide about using or discarding data
+ ** - the **transform** operation installs a function to be mapped onto each element retrieved from the underlying source
+ ** - in a similar vein, the **filter** operation binds a predicate to decide about using or discarding iterator results
+ ** - the **flatten** operation allows to combine a sequence of nested _iterables_ into a single seamless iterator
  ** - in concert, expand- and transform operation allow to build hierarchy evaluation algorithms without exposing
  **   any knowledge regarding the concrete hierarchy used and explored as data source.
  ** - further special convenience adaptors and _terminal functions_ are provided.
@@ -273,7 +274,7 @@ namespace lib {
     template<class SRC>
     struct _DecoratorTraits<SRC,   enable_if<is_StateCore<SRC>>>
       {
-        using SrcRaw  = lib::meta::Strip<SRC>::Type;
+        using SrcRaw  = lib::meta::Strip<SRC>::TypeReferred;
         using SrcVal  = meta::RefTraits<iter::CoreYield<SrcRaw>>::value_type;
         using SrcIter = lib::IterableDecorator<lib::CheckedCore<SrcRaw>>;
       };
@@ -699,7 +700,7 @@ namespace lib {
     
     /**
      * @internal extension to the Expander decorator to perform expansion automatically on each iteration step.
-     * @todo as of 12/2017, this is more like a proof-of concept and can be seen as indication, that there might
+     * @todo as of 12/2017, this is more like a proof-of concept and can be seen as indication that there might
      *       be several flavours of child expansion. Unfortunately, most of these conceivable extensions would
      *       require a flexibilisation of Expander's internals and thus increase the complexity of the code.
      *       Thus, if we ever encounter the need of anything beyond the basic expansion pattern, we should
@@ -761,6 +762,86 @@ namespace lib {
       };
     
     
+    /**
+     * @internal Decorator for IterExplorer to expand one level of nested iterables.
+     * This mechanism requires that the _result value_ yielded by the underlying iterator
+     * is itself iterable. Applying this decorator thus has the effect to »flatten« exactly
+     * one level of nesting.
+     * @note The result produced by underlying \a SRC _must be a Lumiera iterator_.
+     *       Other kinds of nested iterables can be handled only when adapted accordingly.
+     */
+    template<class SRC>
+    class Flattener
+      : public SRC
+      {
+        static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source");
+
+        using NestedIT = iter::Yield<SRC>;
+        static_assert(can_IterForEach<NestedIT>::value, "flatten() operation expects nested iterator");
+
+      public:
+        using value_type = meta::ValueTypeBinding<NestedIT>::value_type;
+        using reference  = meta::ValueTypeBinding<NestedIT>::reference;
+        using pointer    = meta::ValueTypeBinding<NestedIT>::pointer;
+
+        Flattener() =default;
+        // inherited default copy operations
+        
+        Flattener (SRC&& dataSrc)
+          : SRC{move (dataSrc)}
+          {
+            pullNested();
+          }
+        
+        
+        /** refresh state when other layers manipulate the source sequence.
+         * @note possibly pulls pipeline to re-establish the invariant */
+        void
+        expandChildren()
+          {
+            SRC::expandChildren();
+            pullNested();
+          }
+        
+      public: /* === Iteration control API for IterableDecorator === */
+        
+        bool
+        checkPoint()  const
+          {
+            ENSURE (not srcIter() or * srcIter());
+            return bool(srcIter());
+          }
+        
+        reference
+        yield()  const
+          {
+            return **srcIter();
+          }
+        
+        void
+        iterNext()
+          {
+            ++ *srcIter();
+            pullNested();
+          }
+        
+      protected:
+        SRC&
+        srcIter()  const
+          {
+            return unConst(*this);
+          }
+        
+        /** @note Invariant: positioned at next nested source element, if any */
+        void
+        pullNested()
+          {
+            while (srcIter() and not * srcIter())
+              ++srcIter();
+          }
+      };
+    
+    
     
     /**
      * @internal Decorator for IterExplorer to map a transformation function on all results.
@@ -768,7 +849,7 @@ namespace lib {
      * storing the treated result into an universal value holder buffer. The given functor
      * is adapted in a similar way as the "expand functor", so to detect and convert the
      * expected input on invocation.
-     * @note the result-type of the #yield() function _must be_ `reference`, even when
+     * @note the result-type of the #yield() function _must be_ a `reference`, even when
      *       the TransformFunctor produces a value; otherwise we can not provide a safe
      *       `operator->` on any iterator downstream. This is also the reason why the
      *       ItemWrapper is necessary, precisely _because we want to support_ functions
@@ -1698,8 +1779,23 @@ namespace lib {
         }
       
       
+      /** adapt this IterExploer to flatten _one level of nested Lumiera Iterators_.
+       * Obviously this processing can only be applied when the underlying pipeline yields a result
+       * that can be handled as being iterable; the resulting pipeline will seamlessly produce all
+       * results from all non-empty nested iterators, in sequence.
+       * @remark when chained behind a suitable [transformer(fun)](\ref transform()), the processing
+       *         pattern is similar to the `flatMap(fun)` or `M >= fun` operation known from Monad theory.
+       * @return processing pipeline with attached [flattening](\ref iter_explorer::Flattener) decorator
+       */
       auto
-      flatten();
+      flatten()
+        {
+          using ResCore = iter_explorer::Flattener<SRC>;
+          using ResIter = _DecoratorTraits<ResCore>::SrcIter;
+          
+          return IterExplorer<ResIter> (ResCore{move(*this)});
+        }
+      
       
       /** adapt this IterExplorer to pipe each result value through a transformation function.
        * Several "layers" of mapping can be piled on top of each other, possibly mixed with the

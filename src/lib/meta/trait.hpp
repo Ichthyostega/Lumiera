@@ -524,7 +524,7 @@ namespace meta {
   template<typename T>
   class is_StateCore
     {
-      using  Type = Strip<T>::Type;
+      using  Type = Strip<T>::TypeReferred;
      
       META_DETECT_FUNCTION_ARGLESS(checkPoint);
       META_DETECT_FUNCTION_ARGLESS(iterNext);
@@ -545,7 +545,7 @@ namespace meta {
   template<typename T>
   class can_STL_ForEach
     {
-      using Type = Strip<T>::Type;
+      using Type = Strip<T>::TypeReferred;
       
       struct is_iterable
         {
@@ -609,7 +609,7 @@ namespace meta {
   template<typename T>
   class can_STL_backIteration
     {
-      using Type = Strip<T>::Type;
+      using Type = Strip<T>::TypeReferred;
       
       struct is_backIterable
         {

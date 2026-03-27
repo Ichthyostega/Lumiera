@@ -27,9 +27,9 @@
  ** Within the STL, there is a convention to provide nested typedefs to indicate
  ** type variations in relation to the basic payload type of the container. We
  ** follow this convention and support especially the
- ** - `value_type` (what is conceived to be "in" the container or iterator)
- ** - a simple (LValue) reference to the payload
- ** - a pointer at the payload.
+ ** - `value_type` : how to store what is conceived to be "in" the container or iterator)
+ ** - a simple (LValue) reference to the payload: how you access some content
+ ** - a to form pointer at the payload, which is relevant for `operator->`
  ** 
  ** A custom container should likewise provide such type definitions, and the
  ** type rebinding helper template defined in this header makes it easy to

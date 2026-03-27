@@ -57,6 +57,7 @@
 #include <vector>
 #include <limits>
 #include <string>
+#include <array>
 #include <tuple>
 #include <cmath>
 #include <set>
@@ -71,6 +72,7 @@ using lib::iter_stl::eachElm;
 using LERR_(ITER_EXHAUST);
 using std::vector;
 using std::string;
+using std::array;
 
 namespace lib {
 namespace test{
@@ -662,6 +664,46 @@ namespace test{
           CHECK (2 == *kk); // Surprise -- someone ate my numberz...
           ++kk;
           CHECK (isnil (kk));
+        }
+      
+      
+      
+      /** @test chain the results from a sequence of iterators into a single sequence.
+       * Since this "sequence" of source iterations can itself be treated as iterable,
+       * this amounts to _»flattening«_ a single level of nesting. When linked into the
+       * pipeline behind a transforming function, the combined processing pattern is
+       * similar to the `flatMap(fun)` or `M >= fun` operations known from Monad theory.
+       */
+      void
+      verify_flattenNestedIterator()
+        {
+          using LumieraIter = _DecoratorTraits<CountDown>::SrcIter;
+          
+          // STL-iterable with a sequence of Lumiera iterators
+          auto nested_1 = array{LumieraIter{CountDown{5}}, LumieraIter{CountDown{8,4}}};
+          
+          CHECK (materialise (
+                    explore(nested_1)
+                      .flatten()
+                    )
+                 == "5-4-3-2-1-8-7-6-5"_expect);
+          
+          
+          // Investigate the types used for adapting the iterator pipeline....
+          
+          auto baseType = [](auto& src){ using BasePipeline = _DecoratorTraits<decltype(src)>::SrcIter;
+                                         return showType<BasePipeline>();
+                                       };
+          auto nestedIT = [](auto& src){ using BasePipeline = _DecoratorTraits<decltype(src)>::SrcIter;
+                                         using NestedResult = iter::Yield<BasePipeline>;
+                                         return showType<NestedResult>();
+                                       };
+          
+          // the base pipeline fed into the Flattener..
+          CHECK (baseType(nested_1) == "iter_explorer::StlRange<array<IterableDecorator<CheckedCore<CountDown> >, 2ul>&>"_expect );
+          
+          // the nested (iterable) result type produced by this base pipeline...
+          CHECK (nestedIT(nested_1) == "IterableDecorator<CheckedCore<CountDown> >&"_expect );
         }
       
       

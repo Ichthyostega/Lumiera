@@ -198,7 +198,7 @@ namespace lib {
     using meta::RefTraits;
     
     
-    /** type binding helper: an iterato's actual result type */
+    /** type binding helper: an iterator's actual result type */
     template<class IT>
     using Yield = decltype(std::declval<IT>().operator*());
     
@@ -207,14 +207,13 @@ namespace lib {
     using CoreYield = decltype(std::declval<COR>().yield());
     
     
+    /** some legacy STL type iterators do not strictly fulfil all requirements,
+     *  yet were marked by a specialisation of `std::iterator_traits` */
     template<class IT>
     concept legacy_traits_marked = requires
       {
-        typename std::iterator_traits<IT>::value_type;
+        typename std::iterator_traits<IT>::iterator_category;
       };
-    
-    template<class IT>
-    concept stl_iter = std::input_iterator<IT> or legacy_traits_marked<IT>;
     
     
     /** Iterator-Traits: definitions to level the difference between
@@ -224,9 +223,11 @@ namespace lib {
     struct Trait
       {
         static constexpr bool is_LumieraIter = can_IterForEach<IT>::value;
-        static constexpr bool is_STLIter = stl_iter<IT>;
+        static constexpr bool is_STLIter = std::input_iterator<IT>;
+        static constexpr bool is_Legacy  = legacy_traits_marked<IT>;
         
-        static_assert(is_LumieraIter or is_STLIter, "source type must be an iterator");
+        static_assert(is_LumieraIter or is_STLIter or is_Legacy
+                     ,"source type must be an iterator (either Lumiera or STL");
         
         using _ValTrait = std::conditional_t<is_LumieraIter, ValueTypeBinding<IT>
                                                            , RefTraits<std::iter_reference_t<IT>>>;
