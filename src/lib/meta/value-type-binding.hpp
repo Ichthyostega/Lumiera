@@ -37,6 +37,12 @@
  ** creates an *Extension Point*: when some payload type requires special
  ** treatment, an explicit specialisation to this rebinding trait may be
  ** injected alongside with the definition of the payload type.
+ ** @warning A special twist may happen when processing a function in an iterator (pipeline).
+ **          In this special case, `ValueTypeBinding` should _not_ be used, since the function
+ **          might yield again a nested iterator; yet we want to treat that iterator as a value
+ **          in that special case, and not look into the iterator or retrieve results from it.
+ **          Notably this situation applies to any kind of transforming iterator.
+ **          lib::meta::RefTraits should be used in such cases.
  ** 
  ** The CommonResultYield type rebinding helper allows to reconcile several
  ** essentially compatible result types; it is used in iterator pipelines,

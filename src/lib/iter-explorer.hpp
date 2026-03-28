@@ -486,6 +486,8 @@ namespace lib {
     
     
     
+    /* ========= IterExplorer pipeline building blocks ========= */
+    
     /**
      * @internal Base of pipe processing decorator chain.
      * IterExplorer allows to create a stack out of various decorating processors
@@ -518,37 +520,73 @@ namespace lib {
     
     
     /**
+     * @internal Iterator adapter to _virtually project_ an arbitrary type \a RES
+     * onto the result of the underlying Lumiera Iterator, by means of a force-cast.
+     */
+    template<class SRC, typename RES>
+    class RedressAdapter
+      : public SRC
+      {
+        static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source.");
+        
+        using SrcRes = iter::Yield<SRC>;
+        static_assert(meta::isLRef_v<SrcRes>, "Source iterator must yield its result by-ref.");
+        
+      public:
+        using value_type = meta::RefTraits<RES>::value_type;
+        using reference  = meta::RefTraits<RES>::reference;
+        using pointer    = meta::RefTraits<RES>::pointer;
+        
+        reference
+        operator*() const
+          {
+            return reinterpret_cast<reference> (SRC::operator*());
+          }
+        
+        pointer
+        operator->() const
+          {
+            return & operator*();
+          }
+        
+        using SRC::SRC;
+      };
+    
+    
+    /**
      * @internal Decorator for IterExplorer adding the ability to "expand children".
-     * The expandChildren() operation is the key element of a depth-first evaluation: it consumes
-     * one element and performs a preconfigured _expansion functor_ on that element to yield
-     * its "children". These are given in the form of another iterator, which needs to be
-     * compatible to the source iterator ("compatibility" boils down to both iterators
-     * yielding a compatible value type). Now, this _sequence of children_ effectively
-     * replaces the expanded source element in the overall resulting sequence; which
-     * means, the nested sequence was _flattened_ into the results. Since this expand()
-     * operation can again be invoked on the results, the implementation of such an evaluation
-     * requires a stack datastructure, so the nested iterator from each expand() invocation
-     * can be pushed to become the new active source for iteration. Thus the primary purpose
-     * of this Expander (decorator) is to integrate those "nested child iterators" seamlessly
-     * into the overall iteration process; once a child iterator is exhausted, it will be
-     * popped and iteration continues with the previous child iterator or finally with
-     * the source iterator wrapped by this decorator. The source pipeline is only pulled
-     * once the expanded children are exhausted.
+     * The expandChildren() operation is the key element of a _depth-first evaluation:_
+     * it consumes one element and performs a preconfigured _expansion functor_ on that element
+     * to yield its "children". These are given in the form of another iterator, which needs to be
+     * compatible to the source iterator (within this context, "compatibility" boils down to both
+     * iterators yielding a compatible value type). Now, this _sequence of children_ effectively
+     * replaces the expanded source element in the overall resulting sequence; which means that
+     * the nested sequence was _flattened_ into the results. Since this expand() operation can
+     * again be invoked on the results, the implementation of such an evaluation requires a
+     * **stack datastructure**, so the nested iterator from each expand() invocation can be
+     * _pushed on top_ in order to become the new active source for iteration. Thus the prime
+     * purpose of this Expander (decorator) is to integrate those "nested child iterators"
+     * seamlessly into the overall iteration process; once a child iterator is exhausted,
+     * it will be _popped_ and iteration continues with the previous child iterator, or,
+     * finally, with the source iterator wrapped by this decorator. Overall, the given
+     * source pipeline is only pulled, whenever the expanded children are exhausted.
      * @remark since we allow a lot of leeway regarding the actual form and definition of the
-     *         _expansion functor_, there is a lot of minute technical details, mostly confined
-     *         within the _FunTraits traits. For the same reason, we need to prepare two different
-     *         bindings of the passed raw functor, one to work on the source sequence, and the other
-     *         one to work on the result sequence of a recursive child expansions; these two sequences
-     *         need not be implemented in the same way, which simplifies the definition of algorithms.
-     * @tparam SRC the wrapped source iterator, typically a IterExplorer or nested decorator.
-     * @tparam FUN the concrete type of the functor passed. Will be dissected to find the signature
+     *         _expansion functor_, various technical details must be observed, and these minutiae
+     *         are largely maintained within the _FunTraits traits. For the same reason, we need to
+     *         prepare two different bindings of the passed raw functor, where one of them is used
+     *         to work on the source sequence, while the other one handles the result sequence of
+     *         _recursive child expansions;_ these two sequences need not be implemented precisely
+     *         in the same way — what matters here is compatible behaviour — and this flexible
+     *         setup helps to simplify the definition of search- and evaluation algorithms.
+     * @tparam SRC the wrapped source iterator, typically an iterator adaptor or nested decorator.
+     * @tparam FUN actual type of the functor passed. Will be type-matched to detect its signature.
      * @note the _return type_ of #yield depends _both_ on the return type produced from the original
      *         sequence and the return type of the sequence established through the expand functor.
      *         An attempt is made to _reconcile these_ and this attempt may fail (at compile time).
-     *         The reason is, any further processing downstream can not tell if data was produced
-     *         by the original sequence of the expansion sequence. Notably, if one of these two
-     *         delivers results by-value, then the Expander will _always_ deliver all results
-     *         by-value, because it would not be possible to expose a reference to some value
+     *         The rationale is that any further processing downstream can not tell if a data result
+     *         was produced by the original sequence of the expansion sequence. Notably, if one of
+     *         these two delivers results by-value, then the Expander will _always_ choose to deliver
+     *         all its results by-value, since it is impossible to expose a reference to some value
      *         that was just delivered temporarily from a source iterator.
      */
     template<class SRC, class RES>
@@ -727,7 +765,7 @@ namespace lib {
     
     
     /**
-     * @internal extension to the Expander decorator to perform expansion delayed on next iteration.
+     * @internal extension to the Expander decorator to perform a delayed expansion on next iteration.
      */
     template<class SRC>
     class ScheduledExpander
@@ -844,7 +882,7 @@ namespace lib {
     
     
     /**
-     * @internal Decorator for IterExplorer to map a transformation function on all results.
+     * @internal Decorator for IterExplorer to map a transformation function onto all results.
      * The transformation function is invoked on demand, and only once per item to be treated,
      * storing the treated result into an universal value holder buffer. The given functor
      * is adapted in a similar way as the "expand functor", so to detect and convert the
@@ -871,10 +909,10 @@ namespace lib {
         TransformFunctor trafo_;
         TransformedItem treated_;
         
-      public:
-        using value_type = meta::ValueTypeBinding<RES>::value_type;
-        using reference  = meta::ValueTypeBinding<RES>::reference;
-        using pointer    = meta::ValueTypeBinding<RES>::pointer;
+      public:            // Note: result might be a nested iterator -- not using ValueTypeBinding here!
+        using value_type = meta::RefTraits<RES>::value_type;
+        using reference  = meta::RefTraits<RES>::reference;
+        using pointer    = meta::RefTraits<RES>::pointer;
         
         
         template<typename FUN>
@@ -907,6 +945,7 @@ namespace lib {
             t1.treated_.reset();
             t2.treated_.reset();
             swap (t1.trafo_, t2.trafo_);
+            swap (t1.srcIter(), t2.srcIter());
           }
         
         
@@ -956,6 +995,125 @@ namespace lib {
             if (not treated_)  // invoke transform function once per src item
               treated_ = trafo_(srcIter());
             return *treated_;
+          }
+      };
+    
+    
+    
+    /**
+     * Iterator adapter to package each iterator result into a **wrapper object** of type \a WRA.
+     * Built as a simplified variant of the Transformer, it can not invoke an arbitrary function,
+     * yet will destroy the previous wrapper and construct a new wrapper into the embedded storage
+     * buffer on each iteration.
+     * @note similar as the Transformer, WrapperAdapter will _re-engage_ after copy, move and swap.
+     *    This implies to discard a wrapped object residing in the ItermWrapper's storage; the next
+     *    result-pull will then cause it to be regenerated from source, since the absolute storage
+     *    locations both of the ItemWrapper storage, and the underlying source iterator has changed.
+     *    Notably this protects against insidious data corruption in cases where some part of the
+     *    implementation (typically indirectly) happens to take a reference into the source.
+     * @warning this mechanism might have surprising ramifications, especially when the underlying
+     *    iterator has generated a collection by-value; this data will be discarded whenever the
+     *    iterator pipeline is moved, which might happen automatically when adding further layers.
+     *    Notably there is an interference with possible iterator decorators _added downstream_,
+     *    that need to pull ahead for grouping and filtering.
+     * @remark Users of WrapperAdapter, and of IterExplorer are responsible in general to ensure
+     *    that any embodied structure preferably relies on value copy of iterator results rather,
+     *    and otherwise only employs references into stable memory locations.
+     */
+    template<class SRC, typename WRA>
+    class WrapperAdapter
+      : public SRC
+      {
+        using WrappedItem = wrapper::ItemWrapper<WRA>;
+        
+        WrappedItem wrapped_{/*created empty*/};
+        
+      public:            // Note: result might be a nested iterator -- not using ValueTypeBinding here!
+        using value_type = meta::RefTraits<WRA>::value_type;
+        using reference  = meta::RefTraits<WRA>::reference;
+        using pointer    = meta::RefTraits<WRA>::pointer;
+        
+        WrapperAdapter (SRC&& dataSrc)
+          : SRC{move (dataSrc)}
+          { }
+        
+        WrapperAdapter() =default;
+        WrapperAdapter (WrapperAdapter const& o)
+          : SRC{o}
+          , wrapped_{/* deliberately empty: force re-engage */}
+          { }
+        WrapperAdapter (WrapperAdapter && o)
+          : SRC{move (o)}
+          , wrapped_{/* deliberately empty: force re-engage */}
+          { }
+        WrapperAdapter&
+        operator= (WrapperAdapter changed)
+          {
+            swap (*this,changed);
+            return *this;
+          }
+        friend void
+        swap (WrapperAdapter& t1, WrapperAdapter& t2)
+          {
+            using std::swap;
+            t1.wrapped_.reset();
+            t2.wrapped_.reset();
+            swap (t1.srcIter(), t2.srcIter());
+          }
+        
+        
+        /* === decorated Lumiera Forward Iterator === */
+        
+        reference
+        operator*() const
+          {
+            return unConst(this)->reWrapIt();
+          }
+        
+        pointer
+        operator->() const
+          {
+            return & operator*();
+          }
+        
+        WrapperAdapter&
+        operator++()
+          {
+            wrapped_.reset(); // discard current wrapper
+            ++ srcIter();
+            return *this;
+          }
+        
+        /** refresh state when other layers manipulate the source sequence */
+        void
+        expandChildren()
+          {
+            wrapped_.reset();
+            SRC::expandChildren();
+          }
+        
+        
+        ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (WrapperAdapter);
+        
+        friend bool
+        operator== (WrapperAdapter const& w1, WrapperAdapter const& w2)
+        {
+          return w1.srcIter() == w2.srcIter();
+        }
+        
+      private:
+        SRC&
+        srcIter()  const
+          {
+            return unConst(*this);
+          }
+        
+        reference
+        reWrapIt ()
+          {
+            if (not wrapped_)  // build a wrapper instance once per src item
+              wrapped_ = * srcIter();
+            return *wrapped_;
           }
       };
     
@@ -1083,14 +1241,15 @@ namespace lib {
     
     /**
      * @internal Decorator for IterExplorer to group consecutive elements controlled by some
-     * grouping value \a GRP and compute an aggregate value \a AGG for each such group as
+     * **grouping value** \a GRP and compute an aggregate value \a AGG for each such group as
      * iterator yield. The first group is consumed eagerly, each further group on iteration;
      * thus when the aggregate for the last group appears as result, the source iterator has
-     * already been exhausted. The aggregate is default-initialised at start of each group
-     * and then the computation functor \a FAGG is invoked for each consecutive element marked
-     * with the same _grouping value_ — and this grouping value itself is obtained by invoking
-     * the functor \a FGRP on each source value. All computation are performed on-the-fly. No
-     * capturing or reordering of the source elements takes place, rather groups are formed
+     * already been exhausted. The aggregate is default-initialised at start of each group,
+     * followed by invoking the [computation functor](\ref #Aggregator) for each consecutive
+     * element that has been marked with the same _grouping value_ — and this grouping value
+     * itself is obtained by invoking the [grouping functor](\ref #Grouping) on each value
+     * produced by the underlying source iterator. All computation is performed on-the-fly.
+     * No capturing or reordering of the source elements takes place, rather groups are formed
      * based on the changes of the grouping value over the source iterator's result sequence.
      * @tparam AGG data type to collect the aggregate; must be default constructible and assignable
      * @tparam GRP value type to indicate a group
@@ -1099,7 +1258,7 @@ namespace lib {
      *       This limitation was deemed acceptable (adapting a function with several arguments would
      *       require quite some nasty technicalities). The first argument of this `aggFun` refers
      *       to the accumulator by value, and thereby also implicitly defines the aggregate result type.
-     * @warning the Aggregator \a AGG *must not capture references* to upstream internal state, because
+     * @warning the #Aggregator *must not capture references* to upstream internal state, because
      *       the overall pipeline will be moved into final location _after the initial ctor call._
      */
     template<class SRC, typename AGG, class GRP>
@@ -1189,7 +1348,7 @@ namespace lib {
      * Similar to the Transformer, the given functor is adapted as appropriate. However,
      * we require the functor's result type to be convertible to bool, to serve as approval test.
      * The filter predicate and thus the source iterator is evaluated _eagerly_, to establish the
-     * *invariant* of this class: _if a "current element" exists, it has already been approved._
+     * **invariant** of this class: _if a "current element" exists, it has already been approved._
      */
     template<class SRC>
     class Filter
@@ -1282,7 +1441,7 @@ namespace lib {
      * capturing it _by value._ After building, this remoulded version can be assigned to the
      * original filter functor, under the assumption that both are roughly compatible. Moreover,
      * since we wrap the actual lambda into an adapter, allowing for generic lambdas to be used
-     * as filter predicates, this setup allows for a lot of leeway regarding the concrete predicates.
+     * as filter predicates, this setup provides a lot of wiggle room for defining predicates.
      * @note whenever the filter is remoulded, the invariant is immediately
      *       [re-established](\ref Filter::pullFilter() ), possibly forwarding the sequence
      *       to the next element approved by the new version of the filter.

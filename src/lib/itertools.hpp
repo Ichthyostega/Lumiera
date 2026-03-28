@@ -739,9 +739,9 @@ namespace lib {
           return bool(source_);
         }
       
-      using pointer =  ValueTypeBinding<VAL>::pointer;
-      using reference = ValueTypeBinding<VAL>::reference;
-      using value_type = ValueTypeBinding<VAL>::value_type;
+      using pointer =  meta::RefTraits<VAL>::pointer;
+      using reference = meta::RefTraits<VAL>::reference;
+      using value_type = meta::RefTraits<VAL>::value_type;
     };
   
   

@@ -1,8 +1,8 @@
 /*
-  TUPLE-HELPER.hpp  -  metaprogramming utilities for type and data tuples
+  TUPLE-ACCESSOR.hpp  -  metaprogramming utilities for type and data tuples
 
    Copyright (C)
-     2016,2025        Hermann Vosseler <Ichthyostega@web.de>
+     2016             Hermann Vosseler <Ichthyostega@web.de>
 
   **Lumiera** is free software; you can redistribute it and/or modify it
   under the terms of the GNU General Public License as published by the
@@ -12,7 +12,7 @@
 */
 
 
-/** @file tuple-helper.hpp
+/** @file tuple-accessor.hpp
  ** Metaprogramming with tuples-of-types and the `std::tuple` record.
  ** This header complements typelist.hpp and provides a bridge from type sequences
  ** to the tuple type provided by the standard library, including traits and
@@ -42,8 +42,8 @@
  */
 
 
-#ifndef LIB_META_TUPLE_HELPER_H
-#define LIB_META_TUPLE_HELPER_H
+#ifndef LIB_META_TUPLE_ACCESSOR_H
+#define LIB_META_TUPLE_ACCESSOR_H
 
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/typelist-util.hpp"
@@ -608,4 +608,4 @@ namespace util {
   
   
 } // namespace util
-#endif /*LIB_META_TUPLE_HELPER_H*/
+#endif /*LIB_META_TUPLE_ACCESSOR_H*/

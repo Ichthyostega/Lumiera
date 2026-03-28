@@ -448,15 +448,15 @@ namespace lib {
    * @see iter-explorer-test.hpp
    * @see iter-adaptor-test.cpp
    */
-  template<class ST, typename T =iter::CoreYield<ST>>
+  template<class ST, typename RES =iter::CoreYield<ST>>
   class IterStateWrapper
     {
       ST core_;
       
     public:
-      using value_type = meta::RefTraits<T>::value_type;
-      using reference  = meta::RefTraits<T>::reference;
-      using pointer    = meta::RefTraits<T>::pointer;
+      using value_type = meta::RefTraits<RES>::value_type;
+      using reference  = meta::RefTraits<RES>::reference;
+      using pointer    = meta::RefTraits<RES>::pointer;
       
       IterStateWrapper (ST&& initialState)
         : core_(std::forward<ST>(initialState))
@@ -477,9 +477,9 @@ namespace lib {
         }
       
       
-      /* === lumiera forward iterator concept === */
+      /* === Lumiera Forward Iterator concept === */
       
-      T
+      RES
       operator*() const
         {
           __throw_if_empty();
@@ -489,13 +489,13 @@ namespace lib {
       pointer
       operator->() const
         {
-          if constexpr (meta::isLRef_v<T>)
+          if constexpr (meta::isLRef_v<RES>)
             {
               __throw_if_empty();
               return & core_.yield();    // core interface: yield
             }
           else
-            static_assert (!sizeof(T),
+            static_assert (!sizeof(RES),
                "can not provide operator-> "
                "since iterator pipeline generates a value");
         }

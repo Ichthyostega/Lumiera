@@ -1,8 +1,8 @@
 /*
-  TUPLE-HELPER.hpp  -  metaprogramming utilities for type and data tuples
+  TUPLE-CONCEPT.hpp  -  metaprogramming support for tuple-like data types
 
    Copyright (C)
-     2016,2025        Hermann Vosseler <Ichthyostega@web.de>
+     2025,            Hermann Vosseler <Ichthyostega@web.de>
 
   **Lumiera** is free software; you can redistribute it and/or modify it
   under the terms of the GNU General Public License as published by the
@@ -12,38 +12,34 @@
 */
 
 
-/** @file tuple-helper.hpp
+/** @file tuple-concept.hpp
  ** Metaprogramming with tuples-of-types and the `std::tuple` record.
  ** This header complements typelist.hpp and provides a bridge from type sequences
  ** to the tuple type provided by the standard library, including traits and
  ** helpers to build tuple types from metaprogramming and to pretty-print tuples.
  ** 
- ** Notably the handling of tuples is based on a **Concept** `tuple_like`,
- ** that is satisfied for any type in compliance with the »tuple protocol«.
- ** Together with a [generic accessor][\ref lib::meta::getElm], this allows
- ** to handle all _tuple-like_ types uniformly.
- ** This solution reaches beyond the scope of the C++ standard, which declines
- ** to define such a concept and rather provides an "exposition-only" concept
- ** that is limited to a hard-wired selection of library types, yet does not
- ** cover custom user provided types able to participate in _structured bindings_.
- ** @note Due to that unfortunate limitation of the standard, we're forced to
- **       provide our own alternative implementation of `std::apply`.
+ ** Notably, a `concept tuple_like` is provided here, which is satisfied for any type
+ ** in compliance with the »tuple protocol«. This solution reaches beyond the scope
+ ** of the C++ standard — and in fact opposes the decision of the C++ Committee
+ ** _not to provide such a concept_, since it can not be defined in full genericity
+ ** for any type that can be handled by the _structural bindings of the C++ language.
  ** 
- ** Furthermore, a generic iteration construct is provided, to instantiate
- ** a generic Lambda for each element of a given tuple, which allows to write
- ** generic code »for each tuple element«.
- ** 
- ** @see control::CommandDef usage example
+ ** Since the Lumiera support library is part of a specific application framework, and
+ ** does not intend to be a general purpose library, we prefer a partially complete
+ ** definition that allows us to subsume and handle custom types under a »Tuple« concept. 
+ ** @note Unfortunately the C++ committee did not only decline to provide a tuple_like concept,
+ **       rather they choose to lock-down essential parts of the accompanying library to their
+ **       internal and hard-wired selection of what is considered "tuple-like". This forces us
+ **       to redefine and replace also the crucial function `std::apply`, so that a generic
+ **       function can be applied to any _tuple-like_ entity.
  ** @see TupleHelper_test
- ** @see typelist.hpp
- ** @see function.hpp
- ** @see generator.hpp
+ ** @see tuple-helper.hpp extended tuple support functions
  ** 
  */
 
 
-#ifndef LIB_META_TUPLE_HELPER_H
-#define LIB_META_TUPLE_HELPER_H
+#ifndef LIB_META_TUPLE_CONCEPT_H
+#define LIB_META_TUPLE_CONCEPT_H
 
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/typelist-util.hpp"
@@ -608,4 +604,4 @@ namespace util {
   
   
 } // namespace util
-#endif /*LIB_META_TUPLE_HELPER_H*/
+#endif /*LIB_META_TUPLE_CONCEPT_H*/
