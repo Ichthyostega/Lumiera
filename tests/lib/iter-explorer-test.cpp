@@ -673,6 +673,10 @@ namespace test{
        * this amounts to _»flattening«_ a single level of nesting. When linked into the
        * pipeline behind a transforming function, the combined processing pattern is
        * similar to the `flatMap(fun)` or `M >= fun` operations known from Monad theory.
+       * @note the special twist with this implementation is how to adapt various
+       *   flavours of _nested iterables_ that are produced by the preceding pipeline,
+       *   and will usually be exposed by-reference, yet can in rare corner cases
+       *   also be produced by-value, necessitating the use of a WrapperAdapter.
        */
       void
       verify_flattenNestedIterator()
@@ -689,6 +693,36 @@ namespace test{
                  == "5-4-3-2-1-8-7-6-5"_expect);
           
           
+          // STL-iterable with a sequence of StateCore elements
+          auto nested_2 = array{CountDown{3}, CountDown{7,5}, CountDown{2}};
+          
+          CHECK (materialise (
+                    explore(nested_2)
+                      .flatten()
+                    )
+                 == "3-2-1-7-6-2-1"_expect);
+          
+          
+          // STL-iterable with a sequence of STL containers
+          auto nested_3 = array{array{21,13}, array{8,5}, array{3,2}};
+          
+          CHECK (materialise (
+                    explore(nested_3)
+                      .flatten()
+                    )
+                 == "21-13-8-5-3-2"_expect);
+          
+          
+          // Iterator pipeline that yields STL containers by value-copy
+          auto nested_4 = copyIt (explore (nested_3));
+          
+          CHECK (materialise (
+                    explore(nested_4)
+                      .flatten()
+                    )
+                 == "21-13-8-5-3-2"_expect);
+          
+          
           // Investigate the types used for adapting the iterator pipeline....
           
           auto baseType = [](auto& src){ using BasePipeline = _DecoratorTraits<decltype(src)>::SrcIter;
@@ -698,12 +732,57 @@ namespace test{
                                          using NestedResult = iter::Yield<BasePipeline>;
                                          return showType<NestedResult>();
                                        };
+          auto adapter  = [](auto& src){ using BasePipeline = _DecoratorTraits<decltype(src)>::SrcIter;
+                                         using AdaptedIter  = _FlatteningTraits<BasePipeline>::SrcAdapter;
+                                         return showType<AdaptedIter>();
+                                       };
           
           // the base pipeline fed into the Flattener..
           CHECK (baseType(nested_1) == "iter_explorer::StlRange<array<IterableDecorator<CheckedCore<CountDown> >, 2ul>&>"_expect );
+          CHECK (baseType(nested_2) == "iter_explorer::StlRange<array<CountDown, 3ul>&>"_expect );
+          CHECK (baseType(nested_3) == "iter_explorer::StlRange<array<array<int, 2ul>, 3ul>&>"_expect );
+          CHECK (baseType(nested_4) == "iter::ValueAdapter<IterExplorer<iter_explorer::BaseAdapter<iter_explorer::StlRange<array<array<int, 2ul>, 3ul>&> > >, false>"_expect );
           
           // the nested (iterable) result type produced by this base pipeline...
           CHECK (nestedIT(nested_1) == "IterableDecorator<CheckedCore<CountDown> >&"_expect );
+          CHECK (nestedIT(nested_2) == "CountDown&"_expect );
+          CHECK (nestedIT(nested_3) == "array<int, 2ul>&"_expect );
+          CHECK (nestedIT(nested_4) == "array<int, 2ul>"_expect );
+          
+          // In case of nested_1, no adaptation is necessary,
+          // as this pipeline already yields a nested Lumiera Iterator
+          CHECK ( adapter(nested_1) == baseType(nested_1) );
+          
+          // The pipeline for nested_2 yields a sequence of references to »StateCore« objects;
+          // it is adapted by "projecting" (casting on-the-fly) an IterableDecorator to adapt this StateCore (CountDown)
+          CHECK ( adapter(nested_2) == "iter_explorer::RedressAdapter<iter_explorer::StlRange<array<CountDown, 3ul>&>"
+                                                                    ", IterableDecorator<CountDown> >"_expect );
+          
+          // For the nested_3 case the pipeline yields a sequence of references to STL containers (here: `std::array`)
+          // This requires a WrapperAdapter, that builds a `StlRange` adapter within its embedded storage, for each element anew...
+          CHECK ( adapter(nested_3) == "iter_explorer::WrapperAdapter<iter_explorer::StlRange<array<array<int, 2ul>, 3ul>&>"
+                                                                    ", iter_explorer::StlRange<array<int, 2ul>&> >"_expect );
+          
+          // Finally, the nested_4 is an contrived example, where the underlying pipeline yields
+          // a sequence of STL container *values*. Notably this implies that each "pull" from the
+          // underlying iterator yields a fresh copy, which must be retrieved and packaged into
+          // the WrapperAdapter nested storage, where it is also wrapped into an IdxStoreCore,
+          // so that the embedded STL container can be accessed with the Lumiera iterator scheme.
+          // NOTE: the IdxStoreCore is used, since it embeds a *current index*, so that the iteration
+          //       can be continued seamlessly after the iterator pipeline has been moved to another location...
+          CHECK ( adapter(nested_4) == "iter_explorer::WrapperAdapter<iter::ValueAdapter<IterExplorer<iter_explorer::BaseAdapter<iter_explorer::StlRange<array<array<int, 2ul>, 3ul>&> > >"
+                                                                                       ", false>"
+                                                                    ", IterableDecorator<IdxStoreCore<array<int, 2ul> > > >"_expect );
+          
+          // Document the nested adapter structure
+          // for the complete pipeline used in case-4...
+          using Pipeline4 = decltype( explore(nested_4).flatten() );
+          
+          CHECK (showType<Pipeline4>() == "IterExplorer<"
+                                            "IterableDecorator<CheckedCore<"
+                                              "iter_explorer::Flattener<"
+                                                "iter_explorer::WrapperAdapter<iter::ValueAdapter<IterExplorer<iter_explorer::BaseAdapter<iter_explorer::StlRange<array<array<int, 2ul>, 3ul>&> > >, false>"
+                                                                             ", IterableDecorator<IdxStoreCore<array<int, 2ul> > > > > > > >"_expect);
         }
       
       

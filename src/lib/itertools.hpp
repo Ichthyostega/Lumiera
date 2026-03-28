@@ -803,6 +803,75 @@ namespace lib {
   
   
   
+  
+  namespace iter {
+    
+    /**
+     * Iterator adapter to yield a value,
+     * initialised from the result of an underlying iterator.
+     * @tparam SRC a Lumiera Forward Iterator to wrap and decorate
+     * @tparam forceMove if the value shall be initialised by a forced `std::move`;
+     *                   otherwise it will be initialised by `std::forward`
+     * @warning using this adapter may lead to _consuming_ of results; beware!
+     */
+    template<class SRC, bool forceMove =false>
+    class ValueAdapter
+      : public SRC
+      {
+        static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source.");
+        
+      public:
+        SRC::value_type
+        operator*() const
+          {
+            using Val = SRC::value_type;
+            if constexpr (forceMove)
+                return {move (SRC::operator*())};
+            else
+                return {forward<Val> (SRC::operator*())};
+          }
+        
+        SRC::pointer operator->() const =delete;
+        
+        using SRC::SRC;
+      };
+  } // namespace iter
+  
+  
+  /**
+   * Build an adapter that wraps the given iterator
+   * and returns by-value, taking a copy from the result
+   */
+  template<class IT>
+  auto
+  copyIt (IT&& iterator)
+  {
+    using Iter = meta::RefTraits<IT>::value_type;
+    using CopyAdapter = iter::ValueAdapter<Iter>;
+    return CopyAdapter{std::forward<IT> (iterator)};
+  }
+  
+  /**
+   * Build an adapter that wraps the given iterator
+   * and returns by-value, thereby **forcibly moving** the result.
+   * @warning the resulting behaviour breaks the usual assumptions
+   *          regarding iterators, since the first access **consumes** the result.
+   *          Use with extreme care and be sure to understand all ramifications;
+   *          the forced move might even disrupt the underlying source.
+   */
+  template<class IT>
+  auto
+  moveIt (IT&& iterator)
+  {
+    using Iter = meta::RefTraits<IT>::value_type;
+    using ForceMoveAdapter = iter::ValueAdapter<Iter,true>;
+    return ForceMoveAdapter{std::forward<IT> (iterator)};
+  }
+  
+  
+  
+  
+  
   /* === utility functions === */
   
   template<class IT, class CON>

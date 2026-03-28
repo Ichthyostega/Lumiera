@@ -138,7 +138,6 @@
 #include "steam/engine/media-weaving-pattern.hpp"
 #include "vault/mem/buffer-provider.hpp"
 #include "lib/meta/tuple-closure.hpp"
-#include "lib/meta/tuple-helper.hpp"
 #include "lib/format-string.hpp"
 #include "lib/iter-zip.hpp"
 #include "lib/util.hpp"

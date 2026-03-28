@@ -19,14 +19,14 @@
  ** helpers to build tuple types from metaprogramming and to pretty-print tuples.
  ** 
  ** Notably, a `concept tuple_like` is provided here, which is satisfied for any type
- ** in compliance with the »tuple protocol«. This solution reaches beyond the scope
+ ** in compliance with the »[tuple protocol]«. This solution reaches beyond the scope
  ** of the C++ standard — and in fact opposes the decision of the C++ Committee
- ** _not to provide such a concept_, since it can not be defined in full genericity
+ ** _not to provide such a concept_, as this can not be defined in full genericity
  ** for any type that can be handled by the _structural bindings of the C++ language.
  ** 
  ** Since the Lumiera support library is part of a specific application framework, and
  ** does not intend to be a general purpose library, we prefer a partially complete
- ** definition that allows us to subsume and handle custom types under a »Tuple« concept. 
+ ** definition that allows us to subsume and handle custom types under a »Tuple« concept.
  ** @note Unfortunately the C++ committee did not only decline to provide a tuple_like concept,
  **       rather they choose to lock-down essential parts of the accompanying library to their
  **       internal and hard-wired selection of what is considered "tuple-like". This forces us
@@ -34,50 +34,23 @@
  **       function can be applied to any _tuple-like_ entity.
  ** @see TupleHelper_test
  ** @see tuple-helper.hpp extended tuple support functions
- ** 
+ ** [tuple protocol]: https://en.cppreference.com/w/cpp/language/structured_binding.html#Case_2:_binding_a_type_implementing_the_tuple_operations
  */
 
 
 #ifndef LIB_META_TUPLE_CONCEPT_H
 #define LIB_META_TUPLE_CONCEPT_H
 
-#include "lib/meta/typelist.hpp"
-#include "lib/meta/typelist-util.hpp"
-#include "lib/meta/typeseq-util.hpp"
-#include "lib/meta/variadic-helper.hpp"
 #include "lib/meta/util.hpp"
+#include "lib/meta/variadic-helper.hpp"
 
-#include <tuple>
-#include <utility>
+#include <type_traits>
 #include <functional>
-
-
-namespace util { // forward declaration
-  
-  template<typename TY>
-  std::string
-  toString (TY const& val)  noexcept;
-}
+#include <tuple>
 
 
 namespace lib {
 namespace meta {
-  
-  /** trait to detect tuple types */
-  template<typename T>
-  struct is_Tuple
-    : std::false_type
-    { };
-  
-  template<typename...TYPES>
-  struct is_Tuple<std::tuple<TYPES...>>
-    : std::true_type
-    { };
-  
-  template<typename...TYPES>
-  struct is_Tuple<const std::tuple<TYPES...>>
-    : std::true_type
-    { };
   
   using std::remove_cv_t;
   using std::is_reference_v;
@@ -122,6 +95,9 @@ namespace meta {
   
   /**
    * Concept to mark any type compliant to the »tuple protocol«
+   * @note a type satisfying this concept can participate in _structured bindings_,
+   *       yet not every type that can be used in such bindings will fulfil this concept,
+   *       since structured bindings can also be applied to _some POD like_ data records.
    */
   template<class TUP>
   concept tuple_like = not is_reference_v<TUP>
@@ -158,6 +134,46 @@ namespace meta {
         return get<idx> (std::forward<TUP> (tup));
       }
   }
+  
+  
+  
+  
+  /**
+   * Specialisation of variadic access for any tuple-like
+   * @see variadic-helper.hpp
+   */
+  template<tuple_like TUP>
+  struct ElmTypes<TUP>
+    {
+      template<typename>
+      struct Extract;
+      template<size_t...idx>
+      struct Extract<std::index_sequence<idx...>>
+        {
+          using ElmTypes = Types<std::tuple_element_t<idx,TUP> ...>;
+        };
+      
+      static constexpr size_t SIZ = std::tuple_size_v<TUP>;
+      
+      using Idx = std::make_index_sequence<SIZ>;
+      using Seq = Extract<Idx>::ElmTypes;
+      using Tup = RebindVariadic<std::tuple, Seq>::Type;
+      
+      template<template<class> class META>
+      using Apply = ElmTypes<Seq>::template Apply<META>;
+      
+      template<template<typename...> class O>
+      using Rebind = RebindVariadic<O, Seq>::Type;
+      
+      template<template<class> class PRED>
+      using AndAll = ElmTypes<Apply<PRED>>::template Rebind<std::__and_>;
+      
+      template<template<class> class PRED>
+      using OrAll  = ElmTypes<Apply<PRED>>::template Rebind<std::__or_>;
+    };
+  
+  
+  
   
   
   
@@ -263,345 +279,5 @@ namespace meta {
                             ,std::forward<TUP> (tuple));
   }
   
-  
-  
-  /**
-   * Specialisation of variadic access for any tuple-like
-   * @see variadic-helper.hpp
-   */
-  template<tuple_like TUP>
-  struct ElmTypes<TUP>
-    {
-      template<typename>
-      struct Extract;
-      template<size_t...idx>
-      struct Extract<std::index_sequence<idx...>>
-        {
-          using ElmTypes = Types<std::tuple_element_t<idx,TUP> ...>;
-        };
-      
-      static constexpr size_t SIZ = std::tuple_size_v<TUP>;
-      
-      using Idx = std::make_index_sequence<SIZ>;
-      using Seq = Extract<Idx>::ElmTypes;
-      using Tup = RebindVariadic<std::tuple, Seq>::Type;
-      
-      template<template<class> class META>
-      using Apply = ElmTypes<Seq>::template Apply<META>;
-      
-      template<template<typename...> class O>
-      using Rebind = RebindVariadic<O, Seq>::Type;
-      
-      template<template<class> class PRED>
-      using AndAll = ElmTypes<Apply<PRED>>::template Rebind<std::__and_>;
-      
-      template<template<class> class PRED>
-      using OrAll  = ElmTypes<Apply<PRED>>::template Rebind<std::__or_>;
-    };
-  
-  
-  
-  
-  
-  namespace { // rebinding helper to create std::tuple from a type sequence
-    
-    template<typename SEQ>
-    struct BuildTupleType
-      : std::false_type
-      { };
-    
-    template<typename...TYPES>
-    struct BuildTupleType<Types<TYPES...>>
-      {
-        using Type = std::tuple<TYPES...>;
-      };
-    
-    template<class H, typename TAIL>
-    struct BuildTupleType<Node<H, TAIL>>
-      {
-        using Seq  = Types<Node<H,TAIL>>::Seq;
-        using Type = BuildTupleType<Seq>::Type;
-      };
-    
-    template<>
-    struct BuildTupleType<Nil>
-      {
-        using Type = std::tuple<>;
-      };
-  }
-  
-  
-  /** Build a `std::tuple` from types given as type sequence
-   * @remarks for Lumiera, we deliberately use a dedicated template `Types`
-   *    to mark a type sequence of types as such. This allows to pass such a
-   *    sequence as first-class citizen. The standard library often (ab)uses
-   *    the std::tuple for this purpose, which is an understandable, yet
-   *    inferior design choice. We should always favour dedicated types
-   *    over clever re-use of existing types.
-   */
-  template<typename TYPES>
-  using Tuple = BuildTupleType<TYPES>::Type;
-  
-  
-  using std::tuple_size;
-  using std::tuple_element;
-  
-  
-  
-  /** match and rebind the type sequence from a tuple */
-  template<typename...TYPES>
-  struct RebindTupleTypes
-    {
-      using Seq  = Types<TYPES...>::Seq;
-      using List = Seq::List;
-    };
-  template<typename...TYPES>
-  struct RebindTupleTypes<std::tuple<TYPES...>>
-    {
-      using Seq  = Types<TYPES...>::Seq;
-      using List = Seq::List;
-    };
-  
-  
-  
-  
-  
-  
-  
-  /**
-   * Extensible Adapter to construct a distinct tuple from some arbitrary source type.
-   * This includes the possibility to re-map elements or element positions.
-   * @tparam TYPES sequence of types to use for the tuple
-   * @tparam _ElmMapper_ a _template_ to extract each
-   *         constructor argument from the source value.
-   *         On invocation, we'll pick up the source type from the actual ctor argument,
-   *         and then invoke this helper template iteratively for each component of the
-   *         tuple, passing as template arguments
-   *         - the source type, as picked up from the constructor
-   *         - the target tuple type, i.e. `Tuple<TYPES>`
-   *         - the actual index position of the tuple element
-   *           to be initialised through this concrete instantiation.
-   * @remarks this design has several extension points. Pretty much any conceivable
-   *    initialisation logic can be embodied in the `_ElmMapper_` template.
-   *    Required is that the concrete instance is _constructible_ from the source type
-   *    and _convertible_ to the individual member type of the target tuple it is
-   *    invoked for. Source data _must_ be taken by-value, from the ctor argument.
-   * @note based on this mechanics, a generic _element extractor_ may be built,
-   *    selecting a (partial) specialisation based on the source type given.
-   * @see ExtractArg
-   */
-  template< typename TYPES
-          , template<class,class, size_t> class _ElmMapper_
-          >
-  struct TupleConstructor
-    : Tuple<TYPES>
-    {
-      /** meta-sequence to drive instantiation of the ElmMapper */
-      using SequenceIterator = BuildIdxIter<TYPES>::Ascending;
-      
-      template<size_t idx, class SRC>
-      static auto
-      mapElm (SRC&& init)   ///< initialise an instance of the element-mapper
-        {
-          return _ElmMapper_<std::decay_t<SRC>
-                            ,Tuple<TYPES>
-                            , idx
-                            >{std::forward<SRC> (init)};
-        }
-      
-    protected:
-      template<class SRC, size_t...idx>
-      TupleConstructor (SRC&& initVals, IndexSeq<idx...>)
-        : Tuple<TYPES> {mapElm<idx> (std::forward<SRC>(initVals)) ...}
-        { }
-      
-      
-    public:
-      template<class SRC>
-      TupleConstructor (SRC&& values)
-        : TupleConstructor (std::forward<SRC>(values), SequenceIterator())
-        { }
-    };
-  
-  
-  /**
-   * Generic converter to somehow extract values from the "source"
-   * type to fill and initialise a tuple of given target type.
-   * @note to be specialised. The concrete specialisation is
-   *       assumed to provide a _member template_ `Access<size_t>`,
-   *       which in turn picks and converts the value for the n-th
-   *       tuple element.
-   */
-  template<class SRC, class TAR>
-  struct ElementExtractor;
-  
-
-  template<class SRC, class TAR, size_t i>
-  using ExtractArg = ElementExtractor<SRC, TAR>::template Access<i>;
-  
-  
-  /**
-   * convenience shortcut to build a tuple from some suitable source data.
-   * For this to work, there needs to be a partial specialisation for
-   * (\ref ElementExtractor) to deal with the concrete source type given.
-   * @note we provide such a specialisation for `Record<GenNode>`, which
-   *       allows us to fill an (argument) tuple from a sequence of generic
-   *       data values, with run-time type compatibility check.
-   * @see tuple-record-init.hpp
-   */
-  template<typename TYPES, class SRC>
-  Tuple<TYPES>
-  buildTuple (SRC&& values)
-  {
-    return TupleConstructor<TYPES, ExtractArg>{std::forward<SRC> (values)};
-  }
-
-
-  
-  
-  
-  
-  
-  
-  /**
-   * Decorating a tuple type with auxiliary data access operations.
-   * This helper template builds up a subclass of the given TUP (base) type
-   * (which is assumed to be a Tuple or at least need to be copy constructible
-   * from `Tuple<TYPES>` ). The purpose is to use the Tuple as storage record, but
-   * to add a layer of access functions, which in turn might rely on the exact
-   * type of the individual elements within the Tuple. To achieve this, for each
-   * type within the Tuple, the TUP type is decorated with an instance of the
-   * template passed in as template template parameter _X_. Each of these
-   * decorating instances is provided with an index number, allowing to
-   * access "his" specific element within the underlying tuple.
-   * 
-   * The decorating template _X_ need to take its own base class as template
-   * parameter. Typically, operations on _X_ will be defined in a recursive fashion,
-   * calling down into this templated base class. To support this, an instantiation
-   * of _X_ with the empty type sequence is generated for detecting recursion end
-   * (built as innermost decorator, i.e. the immediate subclass of TUP)
-   */
-  template
-    < template<class,class,class, uint> class _X_   ///< user provided template<Type, Base, TupleType, arg-idx>
-    , typename TYPES                                ///< Sequence of types to use within the Accessor
-    , class TUP =Tuple<TYPES>                       ///< the tuple type to build on
-    , uint i = 0                                    ///< tuple element index counter
-    >
-  class BuildTupleAccessor
-    {
-      // prepare recursion...
-      using Head         = Split<TYPES>::Head;
-      using Tail         = Split<TYPES>::Tail;
-      using NextBuilder  = BuildTupleAccessor<_X_, Tail,TUP, i+1>;
-      using NextAccessor = NextBuilder::Product;
-    public:
-      
-      /** type of the product created by this template.
-       *  Will be a subclass of TUP */
-      using Product = _X_< Head            // the type to use for this accessor
-                         , NextAccessor    // the base type to inherit from
-                         , TUP             // the tuple type we build upon
-                         , i               // current element index
-                         >;
-    };
-  
-  
-  template
-    < template<class,class,class, uint> class _X_
-    , class TUP
-    , uint i
-    >
-  class BuildTupleAccessor< _X_, Types<>, TUP, i>
-    {
-    public:
-      using Product = _X_<Nil, TUP, TUP, i>;   // Note: i == tuple size
-    };
-  
-  
-  
-  /**
-   * Helper to dump tuple contents.
-   * Defined to act as "Accessor" for BuildTupleAccessor, this helper template
-   * allows to create a recursive operation to invoke string conversion on
-   * all elements within any given tuple.
-   */
-  template
-    < typename TY
-    , class BASE
-    , class TUP
-    , uint idx
-    >
-  struct TupleElementDisplayer
-    : BASE
-    {
-      using BASE::BASE;
-      
-      std::string
-      dump (std::string const& prefix ="(")  const
-        {
-          return BASE::dump (prefix + util::toString(std::get<idx>(*this))+",");
-        }
-    };
-  
-  template<class TUP, uint n>
-  struct TupleElementDisplayer<Nil, TUP, TUP, n>
-    : TUP
-    {
-      TupleElementDisplayer (TUP const& tup)
-        : TUP(tup)
-        { }
-      
-      std::string
-      dump (std::string const& prefix ="(")  const
-        {
-          if (1 < prefix.length())
-            // remove the trailing comma
-            return prefix.substr (0, prefix.length()-1) +")";
-          else
-            return prefix+")";
-        }
-    };
-  
-  
-  /**
-   * convenience function to dump a given tuple's contents.
-   * Using the BuildTupleAccessor, we layer a stack of Instantiations of
-   * the TupleElementDisplayer temporarily on top of the given tuple,
-   * just to invoke a recursive call chain through these layers
-   * and get a string representation of each element in the
-   * tuple.
-   */
-  template<typename...TYPES>
-  inline std::string
-  dump (std::tuple<TYPES...> const& tuple)
-  {
-    using BuildAccessor = BuildTupleAccessor<TupleElementDisplayer, Types<TYPES...>>;
-    using Displayer     = BuildAccessor::Product ;
-    
-    return static_cast<Displayer const&> (tuple)
-          .dump();
-  }
-  
-  
-  
 }} // namespace lib::meta
-
-
-// add a specialisation to enable tuple string conversion
-namespace util {
-  
-  template<typename...TYPES>
-  struct StringConv<std::tuple<TYPES...>>
-    {
-      static std::string
-      invoke (std::tuple<TYPES...> const& tuple) noexcept
-        try {
-          return "«"+typeStr(tuple)
-               + "»──" + lib::meta::dump (tuple);
-        }
-        catch(...) { return FAILURE_INDICATOR; }
-    };
-  
-  
-} // namespace util
 #endif /*LIB_META_TUPLE_CONCEPT_H*/

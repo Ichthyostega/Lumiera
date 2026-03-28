@@ -218,6 +218,14 @@ namespace lib {
           }
       };
     
+    
+    // (forward declarations to allow defining all traits together)
+    template<class SRC, typename RES>
+    class RedressAdapter;
+    
+    template<class SRC, typename WRA>
+    class WrapperAdapter;
+    
   }//(End) namespace iter_explorer : basic iterator wrappers
   
   
@@ -238,6 +246,7 @@ namespace lib {
     using std::common_type_t;
     using std::conditional_t;
     using std::is_convertible;
+    using std::is_lvalue_reference;
     using std::remove_reference_t;
     using meta::is_StateCore;
     using meta::can_IterForEach;
@@ -257,6 +266,13 @@ namespace lib {
     struct shall_use_Lumiera_Iter
       : __and_<can_IterForEach<SRC>
               ,__not_<is_StateCore<SRC>>
+              >
+      { };
+    
+    template<class SRC>
+    struct shall_use_StateCore
+      : __and_<__not_<can_IterForEach<SRC>>
+              ,is_StateCore<SRC>
               >
       { };
     
@@ -311,6 +327,78 @@ namespace lib {
     struct _DecoratorTraits<ISO&,  enable_if<is_base_of<IterSource<typename ISO::value_type>, ISO>>>
       : _DecoratorTraits<ISO*>
       { };
+    
+    
+    /**
+     * @internal Type-selector to adapt a recursive iterable for flattening...
+     * @tparam SRC the underlying source iterator (which yields a nested iterable as result)
+     * @tparam RES result type of the source iterator (this is the nested iterable itself)
+     * @remark to explain the general scheme employed here...
+     *       - we want to add a processing layer with a iter_explorer::Flattener
+     *       - this requires a source-iterator that yields a nested iterable of sorts
+     *       - the source-iterator as such has already been adapted by the [generic mechanism](\ref _DecoratorTraits)
+     *       - however there remains the twist that the _nested result_ (which is some kind of iterable)
+     *         also needs to be adapted, so that it can be handled as Lumiera Forward Iterator...
+     *       - this can be achieved by interspersing an adapter layer _below_ the Flattener,
+     *         so that the result of the underlying iterator will be adapted / casted / wrapped
+     *       - furthermore, we have to distinguish the cases where the underlying iterator produces a value result
+     *       - overall this trait template is instantiated with the type \a SRC of the underlying iterator
+     *       - with the help of the second parameter's default, the \a RES result type of this iterator is determined
+     *       - the specialisation matcher then classifies this result type and determines an adaptation strategy
+     *       - finally, the Flattener is parametrised with this `SrcAdapter` type, but we pass `move(*this) to
+     *         its constructor; since `*this` inherits from \a SRC, the Adapter will pick up and wrap \a SRC
+     *     There are two basic adaptation strategies. First, if the source iterator yields an iterator by reference,
+     *     and we can adapt this iterator on-the-fly (without requiring additional storage), we can just cast the result.
+     *     In all other cases, a setup similar to a Transformer is required: for each source-result (which is in itself
+     *     iterable), a wrapper is constructed into an _inline storage space_ (implemented as \ref lib::ItemWrapper),
+     *     and this wrapper is exposed by-ref as "result value", so that the Flattener can iterate it until exhausted.
+     */
+    template<class SRC, typename RES=iter::Yield<SRC>, typename SEL=void>
+    struct _FlatteningTraits
+      {
+        static_assert (!sizeof(SRC), "Can not build Flattener: Unable to figure out how to iterate the nested iterable.");
+      };
+    
+    template<class SRC, typename RES>
+    struct _FlatteningTraits<SRC,RES,     enable_if<__and_<       is_lvalue_reference<RES>,  can_IterForEach<RES> >>>
+      {
+        using SrcAdapter = meta::RefTraits<SRC>::value_type;
+      };
+    template<class SRC, typename RES>
+    struct _FlatteningTraits<SRC,RES,     enable_if<__and_<__not_<is_lvalue_reference<RES>>, can_IterForEach<RES> >>>
+      {
+        using NestedIter = meta::RefTraits<RES>::value_type;
+        using SrcAdapter = iter_explorer::WrapperAdapter<SRC,NestedIter>;
+      };
+    
+    template<class SRC, typename RES>
+    struct _FlatteningTraits<SRC,RES,     enable_if<__and_<       is_lvalue_reference<RES>,  shall_use_StateCore<RES> >>>
+      {
+        using CoreRaw    = lib::meta::Strip<RES>::TypeReferred;
+        using NestedIter = IterableDecorator<CoreRaw>;
+        using SrcAdapter = iter_explorer::RedressAdapter<SRC,NestedIter>;
+      };
+    template<class SRC, typename RES>
+    struct _FlatteningTraits<SRC,RES,     enable_if<__and_<__not_<is_lvalue_reference<RES>>, shall_use_StateCore<RES> >>>
+      {
+        using CoreRaw    = lib::meta::Strip<RES>::TypeReferred;
+        using NestedIter = IterableDecorator<CoreRaw>;
+        using SrcAdapter = iter_explorer::WrapperAdapter<SRC,NestedIter>;
+      };
+    
+    template<class SRC, typename RES>
+    struct _FlatteningTraits<SRC,RES,     enable_if<__and_<       is_lvalue_reference<RES>,  shall_wrap_STL_Iter<RES> >>>
+      {
+        using NestedIter = iter_explorer::StlRange<RES>;
+        using SrcAdapter = iter_explorer::WrapperAdapter<SRC,NestedIter>;
+      };
+    template<class SRC, typename RES>
+    struct _FlatteningTraits<SRC,RES,     enable_if<__and_<__not_<is_lvalue_reference<RES>>, is_subscriptable<RES> >>>
+      {
+        using StoreRaw   = lib::meta::Strip<RES>::TypeReferred;
+        using NestedIter = IterableDecorator<IdxStoreCore<StoreRaw>>;
+        using SrcAdapter = iter_explorer::WrapperAdapter<SRC,NestedIter>;
+      };
     
     
     
@@ -1605,6 +1693,7 @@ namespace lib {
     
     
     
+    
     /**
      * @internal Decorator for IterExplorer to cut iteration once a predicate ceases to be true.
      * Similar to Filter, the given functor is adapted as appropriate, yet is required to yield
@@ -1949,10 +2038,11 @@ namespace lib {
       auto
       flatten()
         {
-          using ResCore = iter_explorer::Flattener<SRC>;
+          using Adapted = _FlatteningTraits<SRC>::SrcAdapter;
+          using ResCore = iter_explorer::Flattener<Adapted>;
           using ResIter = _DecoratorTraits<ResCore>::SrcIter;
           
-          return IterExplorer<ResIter> (ResCore{move(*this)});
+          return IterExplorer<ResIter> (ResCore{Adapted{move(*this)}});
         }
       
       

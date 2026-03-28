@@ -144,6 +144,7 @@
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/meta/value-type-binding.hpp"
 
 #include <iterator>
@@ -686,6 +687,7 @@ namespace lib {
    * @warning be sure to understand the implications of this setup
    *  - when initialised by reference, the container's contents will be copied
    *  - when move-initialised, the container will be destroyed with this iterator
+   *  - when moved / swapped during iteration, the iterator is invalidated (-> data corruption)
    *  - the container API remains visible (baseclass), which could confuse trait detection
    */
   template<class CON>
@@ -725,6 +727,63 @@ namespace lib {
         }
     };
   
+  
+  
+  template<class CON>
+  concept subscriptable = requires (CON& con, size_t idx)
+    {
+      typename CON::reference;
+      { con[idx]   } -> std::convertible_to<typename CON::reference>;
+      { con.size() } -> std::convertible_to<size_t>;
+    };
+  
+  template<class CON>
+  using is_subscriptable = std::bool_constant<subscriptable<remove_reference_t<CON>>>;
+  
+    /**
+     * Adapter to package some container store inline and access it bey sequenced subscript.
+     * This setup works similar to the ContainerCore, yet has the benefit of being movable.
+     * @warning using any kind of inline storage in the context of IterExplorer is dangerous.
+     *   Anything beyond the actual iteration state and especially an extended data storage
+     *   might lead to surprising and harmful behaviour, due to the contradiction to the
+     *   common mental image associated with an iterator. These dangers are amplified
+     *   when such embedded data is transformed, filtered or modified by reference.
+     */
+    template<subscriptable CON>
+    class IdxStoreCore
+      : public CON
+      {
+        size_t i_;
+        
+      public:
+        IdxStoreCore (CON&& container)
+          : CON(std::forward<CON> (container))
+          , i_{0}
+          { }
+        
+        IdxStoreCore() = default;
+        // copy and assignment acceptable (warning!)
+        
+        
+        /* === »state core« protocol API === */
+        bool
+        checkPoint()  const
+          {
+            return i_ < CON::size();
+          }
+        
+        decltype(auto)
+        yield()  const
+          {
+            return CON::operator[] (i_);
+          }
+        
+        void
+        iterNext()
+          {
+            ++i_;
+          }
+      };
   
   
   
