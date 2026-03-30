@@ -57,7 +57,7 @@ using std::string;
 
 using lib::Symbol;
 using lib::append_all;
-using lib::transformIterator;
+using lib::transformIter;
 using lib::diff::Rec;
 using lib::diff::GenNode;
 using lib::diff::DataCap;
@@ -487,8 +487,8 @@ namespace test{
           {
             EventLog::ArgSeq strings;
             strings.reserve (argData.childSize());
-            append_all (transformIterator (childData (argData.scope())
-                                          , util::toString<DataCap>)
+            append_all (transformIter (childData (argData.scope())
+                                      , util::toString<DataCap>)
                        ,strings);
             return strings;
           }

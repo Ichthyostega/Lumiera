@@ -52622,7 +52622,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1535891065189" FOLDED="true" ID="ID_1233342893" MODIFIED="1774633223638" TEXT="Iterator-Monade">
+<node COLOR="#338800" CREATED="1535891065189" FOLDED="true" ID="ID_1233342893" MODIFIED="1774712907980" TEXT="Iterator-Monade">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -53239,7 +53239,7 @@
 <node CREATED="1536713969931" ID="ID_1439776917" MODIFIED="1536714013625" TEXT="verwirft damit auch die urspr&#xfc;ngliche Root-Sequenz"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1536958962984" ID="ID_686602920" MODIFIED="1561827465914" TEXT="custom Layer erm&#xf6;glichen">
+<node COLOR="#338800" CREATED="1536958962984" FOLDED="true" ID="ID_686602920" MODIFIED="1561827465914" TEXT="custom Layer erm&#xf6;glichen">
 <linktarget COLOR="#61afb3" DESTINATION="ID_686602920" ENDARROW="Default" ENDINCLINATION="-230;613;" ID="Arrow_ID_1710661685" SOURCE="ID_519507996" STARTARROW="None" STARTINCLINATION="1241;-1305;"/>
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1536958972703" ID="ID_661166644" MODIFIED="1537050781115" TEXT="generische Builder-Funktion">
@@ -53272,10 +53272,12 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1774450743106" ID="ID_312759335" MODIFIED="1774450759689" TEXT="&#xbb;flatten&#xab; (wie in flatMap)">
-<icon BUILTIN="pencil"/>
-<node CREATED="1774450761782" ID="ID_657002637" MODIFIED="1774450812916" TEXT="tritt sporatisch in der Praxis auf &#x27f5; Beispiel chain-Iterator"/>
-<node CREATED="1774451196653" ID="ID_217480792" MODIFIED="1774451228472" TEXT="indirekt w&#xe4;re damit ein Monaden-Pattern (doch wieder) m&#xf6;glich">
+<node COLOR="#338800" CREATED="1774450743106" ID="ID_312759335" MODIFIED="1775015753754" TEXT="&#xbb;flatten&#xab; (wie in flatMap)">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1774450761782" ID="ID_657002637" MODIFIED="1775017729982" TEXT="tritt sporatisch in der Praxis auf &#x27f5; Beispiel chain-Iterator">
+<linktarget COLOR="#4282ce" DESTINATION="ID_657002637" ENDARROW="Default" ENDINCLINATION="800;41;" ID="Arrow_ID_469905566" SOURCE="ID_778280136" STARTARROW="None" STARTINCLINATION="972;48;"/>
+</node>
+<node COLOR="#591e35" CREATED="1774451196653" FOLDED="true" ID="ID_217480792" MODIFIED="1775017225027" TEXT="indirekt w&#xe4;re damit ein Monaden-Pattern (doch wieder) m&#xf6;glich">
 <icon BUILTIN="idea"/>
 <node CREATED="1774451234232" ID="ID_1417073949" MODIFIED="1774451277231" TEXT="man k&#xf6;nnte nun flatMap() durch zwei Layer darstellen">
 <richcontent TYPE="NOTE"><html>
@@ -53304,8 +53306,10 @@
 </html></richcontent>
 </node>
 </node>
-<node CREATED="1774453329538" ID="ID_131297170" MODIFIED="1774453332998" TEXT="Implementierung">
-<node CREATED="1774453338177" ID="ID_1984582817" MODIFIED="1774453369433" TEXT="zentrale Frage: wo ist die Storage f&#xfc;r den verschachtelten Iterator?">
+<node COLOR="#338800" CREATED="1774453329538" FOLDED="true" ID="ID_131297170" MODIFIED="1775016448223" TEXT="Implementierung">
+<icon BUILTIN="forward"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1774453338177" ID="ID_1984582817" MODIFIED="1774919971353" TEXT="zentrale Frage: wo ist die Storage f&#xfc;r den verschachtelten Iterator?">
+<icon BUILTIN="help"/>
 <node CREATED="1774453491549" ID="ID_1813207885" MODIFIED="1774454086106" TEXT="Klar ist: keine dynamische Rekursion notwendig">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -53320,7 +53324,8 @@
 <node CREATED="1774454091533" ID="ID_1089755564" MODIFIED="1774454127186" TEXT="im besten Fall liegt die Storage im Quell-Iterator"/>
 <node CREATED="1774454133138" ID="ID_750611609" MODIFIED="1774454157576" TEXT="das geht aber nur, wenn der Quell-Iterator einen Iterator-&#xbb;wert&#xab; per Referenz liefert"/>
 </node>
-<node CREATED="1774454273364" ID="ID_283722071" MODIFIED="1774454299237" TEXT="mit dieser Einsicht: relativ einfach als StateCore-Adapter zu realisieren">
+<node COLOR="#338800" CREATED="1774454273364" ID="ID_283722071" MODIFIED="1774919965209" TEXT="mit dieser Einsicht: relativ einfach als StateCore-Adapter zu realisieren">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1774456032054" ID="ID_1379189388" MODIFIED="1774456053876" TEXT="wichtiger Hinweis: auf diese Grundstruktur aufbauen und adaptieren">
 <icon BUILTIN="yes"/>
 <node CREATED="1774456058870" ID="ID_1180777676" MODIFIED="1774456067453" TEXT="es kann komplexere F&#xe4;lle geben">
@@ -53338,21 +53343,25 @@
 </html></richcontent>
 </node>
 </node>
-<node CREATED="1774470631894" ID="ID_586901779" MODIFIED="1774470636091" TEXT="Basisfall">
+<node COLOR="#435e98" CREATED="1774470631894" ID="ID_586901779" MODIFIED="1775016400477" TEXT="Basisfall">
 <node CREATED="1774470643122" ID="ID_1020522529" MODIFIED="1774470661867" TEXT="nested Lumiera-Iterator als Quelle geliefert"/>
 <node CREATED="1774470664229" ID="ID_1294085123" MODIFIED="1774470671593" TEXT="konstruieren komplett analog zu Filter">
 <node CREATED="1774470673268" ID="ID_1520761184" MODIFIED="1774470689646" TEXT="Invariante: beide verschachtelten Iteratoren stehen auf dem n&#xe4;chsten Element"/>
 <node CREATED="1774470692342" ID="ID_217842235" MODIFIED="1774470715218" TEXT="sonst pull &#x27f9; wenn innerer Iterator leer, dann &#xe4;u&#xdf;eren iterieren"/>
 </node>
+<node COLOR="#1c1975" CREATED="1775016406772" ID="ID_1915930767" MODIFIED="1775016423168" TEXT="(das war jetzt nich schwer...)">
+<font NAME="SansSerif" SIZE="10"/>
 </node>
-<node CREATED="1774645685915" ID="ID_1637864454" MODIFIED="1774645696083" TEXT="Erweiterung: allgemeines &#xbb;Iterable&#xab;">
+</node>
+<node COLOR="#5b280f" CREATED="1774645685915" ID="ID_1637864454" MODIFIED="1775016300183" TEXT="Erweiterung: allgemeines &#xbb;Iterable&#xab;">
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1774656959677" ID="ID_1616144534" MODIFIED="1774656968996" TEXT="mu&#xdf; in dem Fall einen Transformer vorschalten"/>
 <node CREATED="1774656977650" ID="ID_1110089705" MODIFIED="1774656988301" TEXT="brauche daf&#xfc;r einen Adapter-Iterator-Typ">
 <node CREATED="1774657006975" ID="ID_633121575" MODIFIED="1774657027031" TEXT="mit den DecoratorTraits konstruieren">
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node CREATED="1774657044528" ID="ID_881902324" MODIFIED="1774657081713" TEXT="Redundanz vermeiden &#x27f9; &#x3bb;">
+<node CREATED="1774657044528" FOLDED="true" ID="ID_881902324" MODIFIED="1774657081713" TEXT="Redundanz vermeiden &#x27f9; &#x3bb;">
 <node COLOR="#5b280f" CREATED="1774657087315" ID="ID_514811912" MODIFIED="1774657098557" TEXT="Versuch: das Ende der Verpackungs-Pipeline">
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1774657102834" HGAP="21" ID="ID_1115849426" MODIFIED="1774657125002" TEXT="problematisch: die richtigen Typen abgreifen" VSHIFT="3">
@@ -53365,10 +53374,19 @@
 <node CREATED="1774657163509" ID="ID_843406645" MODIFIED="1774657170779" TEXT="davon den decltype abgreifen"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#c81b11" CREATED="1775016322846" ID="ID_943461128" MODIFIED="1775016387421" TEXT="geht so nicht &#x2014; Probleme mit move / Konsistenz">
+<arrowlink COLOR="#d23076" DESTINATION="ID_352915720" ENDARROW="Default" ENDINCLINATION="-126;10;" ID="Arrow_ID_143318083" STARTARROW="None" STARTINCLINATION="-5;25;"/>
+<icon BUILTIN="clanbomber"/>
 </node>
 </node>
-<node CREATED="1774470727877" ID="ID_886855220" MODIFIED="1774470737912" TEXT="Schwierigkeiten beim Adaptieren">
-<node COLOR="#435e98" CREATED="1774470739518" ID="ID_1513532591" MODIFIED="1774645576498" TEXT="Typ-Ableitung biegt in den Value-Traits falsch ab">
+<node COLOR="#338800" CREATED="1775016045477" ID="ID_1978559473" MODIFIED="1775016195574" TEXT="&#xdc;berarbeitete L&#xf6;sung: _FlatteningTraits">
+<linktarget COLOR="#e7fdba" DESTINATION="ID_1978559473" ENDARROW="Default" ENDINCLINATION="-865;58;" ID="Arrow_ID_694141560" SOURCE="ID_492034668" STARTARROW="None" STARTINCLINATION="-726;35;"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f4d2a6" COLOR="#690f14" CREATED="1774470727877" ID="ID_886855220" MODIFIED="1774919944670" TEXT="Schwierigkeiten beim Adaptieren">
+<icon BUILTIN="clanbomber"/>
+<node COLOR="#435e98" CREATED="1774470739518" FOLDED="true" ID="ID_1513532591" MODIFIED="1774645576498" TEXT="Typ-Ableitung biegt in den Value-Traits falsch ab">
 <icon BUILTIN="broken-line"/>
 <node BACKGROUND_COLOR="#e1b4a0" COLOR="#690f14" CREATED="1774470739518" ID="ID_1029964723" MODIFIED="1774473599797" TEXT="unsere Value-Traits sind vermutlich nicht auf nested Iterators ausgelegt">
 <richcontent TYPE="NOTE"><html>
@@ -53406,7 +53424,7 @@
 </html></richcontent>
 <icon BUILTIN="broken-line"/>
 </node>
-<node CREATED="1774471570043" ID="ID_1241566646" MODIFIED="1774471605751" TEXT="Bauchgef&#xfc;hl &#x27f9; das strip-pointer in RangeIter ist eine &#xbb;verschleppte Altlast&#xab;">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1774471570043" ID="ID_1241566646" MODIFIED="1775016239363" TEXT="Bauchgef&#xfc;hl &#x27f9; das strip-pointer in RangeIter ist eine &#xbb;verschleppte Altlast&#xab;">
 <node CREATED="1774471625212" ID="ID_451783687" MODIFIED="1774471702711" TEXT="daf&#xfc;r spricht das Changeset e176e540043177">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -53576,10 +53594,10 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1774476573574" ID="ID_1375774056" MODIFIED="1774485015348" TEXT="Mit diesem Fix: viel besser &#x2014; aber noch ein &#xfc;bersch&#xfc;ssiger Pointer">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1774476573574" FOLDED="true" ID="ID_1375774056" MODIFIED="1774485015348" TEXT="Mit diesem Fix: viel besser &#x2014; aber noch ein &#xfc;bersch&#xfc;ssiger Pointer">
 <icon BUILTIN="broken-line"/>
 <node CREATED="1774476614705" ID="ID_1278550682" MODIFIED="1774476638141" TEXT="jetzt tritt das Problem zuerst auf in den DecoratorTraits&lt;IT&gt;"/>
-<node CREATED="1774476665790" ID="ID_82721045" MODIFIED="1774476763587">
+<node CREATED="1774476665790" ID="ID_82721045" MODIFIED="1774881817180">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
@@ -53590,13 +53608,13 @@
       
     </p>
     <p>
-      <font face="Monospaced" size="2">iter_explorer::StlRange&lt;array&lt;IterableDecorator&lt;CheckedCore&lt;CountDown&gt; &gt; </font>
+      <font face="Monospaced" size="2" color="#664c4c">iter_explorer::</font><font face="Monospaced" size="2">StlRange&lt;</font><font face="Monospaced" size="2" color="#b50641"><b>array</b></font><font face="Monospaced" size="2">&lt;IterableDecorator&lt;CheckedCore&lt;</font><font face="Monospaced" size="2" color="#1e07c1">CountDown</font><font face="Monospaced" size="2">&gt; &gt; </font>
     </p>
     <p>
-      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;, 3ul </font>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;,</font><font face="Monospaced" size="2" color="#8c0821">3</font><font face="Monospaced" size="2">ul </font>
     </p>
     <p>
-      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&gt;&amp; </font>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&gt; </font><font face="Monospaced" size="2" color="#b401a6">&amp;</font><font face="Monospaced" size="2">&#160; </font>
     </p>
     <p>
       <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&gt;</font>
@@ -53999,11 +54017,12 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1774645596829" ID="ID_1108333109" MODIFIED="1774645625805" TEXT="mu&#xdf; aber auch nested-Iterable wrappen/adaptieren">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#2842de" CREATED="1774645596829" ID="ID_1108333109" MODIFIED="1774919914819" TEXT="mu&#xdf; aber auch nested-Iterable wrappen/adaptieren">
+<icon BUILTIN="messagebox_warning"/>
 <node CREATED="1774645611931" ID="ID_1847373113" MODIFIED="1774645645970" TEXT="ein nested-Iterable allgemein mu&#xdf; nicht ein Lumiera-Iterator sein"/>
 <node CREATED="1774645647248" ID="ID_1783118750" MODIFIED="1774645656609" TEXT="in dem Fall brauchen wir einen Adapter-Transformer dazwischen"/>
 <node CREATED="1774645659013" ID="ID_163397201" MODIFIED="1774645671791" TEXT="das sollte erst im Builder so konfiguriert werden (h&#xe4;lt den Code klarer)"/>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1774661629241" ID="ID_1366447416" MODIFIED="1774661656900" TEXT="Konsistenzproblem bzgl Wrappen vs Adaptieren">
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1774661629241" FOLDED="true" ID="ID_1366447416" MODIFIED="1775016390278" TEXT="Konsistenzproblem bzgl Wrappen vs Adaptieren">
 <icon BUILTIN="clanbomber"/>
 <node CREATED="1774661707569" ID="ID_1342544444" MODIFIED="1774661727932" TEXT="alle unsere Adapter betten die Quelle ein"/>
 <node CREATED="1774661815728" ID="ID_352915720" MODIFIED="1774661993182">
@@ -54014,8 +54033,7 @@
       so wie jetzt gebaut mit dem Transformer &#10233; Selbstmord <font color="#e8106a" size="6">&#9760;</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -54023,10 +54041,11 @@
       Der Transformer enth&#228;lt einen ItemWrapper, in den das Ergebnis der Transformation <b>by value</b>&#160;abgelegt wird. Wir machen also entweder eine Kopie der ganzen Quell-Pipeline, oder, noch schlimmer, wir moven die Quell-Pipeline dorthin, und dann beim n&#228;chsten Pull rufen wir die Zombie-Quell-Pipeline aus dem Transformer auf.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
+<linktarget COLOR="#d23076" DESTINATION="ID_352915720" ENDARROW="Default" ENDINCLINATION="-126;10;" ID="Arrow_ID_143318083" SOURCE="ID_943461128" STARTARROW="None" STARTINCLINATION="-5;25;"/>
 </node>
-<node CREATED="1774664657373" ID="ID_623577442" MODIFIED="1774665522868" TEXT="Analyse &#x2014; Fallunterscheidung">
+<node COLOR="#435e98" CREATED="1774664657373" ID="ID_623577442" MODIFIED="1774881628647" TEXT="Analyse &#x2014; Fallunterscheidung">
+<icon BUILTIN="forward"/>
 <node CREATED="1774665499721" ID="ID_364650146" MODIFIED="1774665531147" TEXT="Verhalten der DecoratorTraits">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -54073,9 +54092,7 @@
 <node CREATED="1774665553934" ID="ID_794674450" MODIFIED="1774665562056" TEXT="Lumiera / StateCore">
 <node CREATED="1774665563498" ID="ID_1495786271" MODIFIED="1774665724443" TEXT="direkt verwenden bzw. ein Downcast auf Typ-Ebene">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Das bedeutet:
@@ -54089,8 +54106,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1774665727890" ID="ID_1196621650" MODIFIED="1774665738213" TEXT="Referenz auf &#xbb;andere Quelle&#xab;">
@@ -54103,8 +54119,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1774666042718" ID="ID_1311935400" MODIFIED="1774667309335" TEXT="L&#xf6;sungansatz entwickeln">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1774666042718" ID="ID_1311935400" MODIFIED="1774881632023" TEXT="L&#xf6;sungansatz entwickeln">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#5b280f" CREATED="1774666053791" ID="ID_54434179" MODIFIED="1774666112545" TEXT="der Transformer ist keine sinnvolle L&#xf6;sung">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -54116,7 +54132,7 @@
 </html></richcontent>
 <icon BUILTIN="stop-sign"/>
 </node>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1774666152505" ID="ID_970274323" MODIFIED="1774666169551" TEXT="ein spezieller Adapter-Layer ist notwendig">
+<node BACKGROUND_COLOR="#f3d7a8" COLOR="#a50125" CREATED="1774666152505" ID="ID_970274323" MODIFIED="1775015996653" TEXT="ein spezieller Adapter-Layer ist notwendig">
 <icon BUILTIN="messagebox_warning"/>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1774666177230" ID="ID_476791551" MODIFIED="1774666762719" TEXT="er mu&#xdf; unter allen Umst&#xe4;nden die Funktionsf&#xe4;higkeit des Quell-Iterators erhalten">
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
@@ -54131,8 +54147,7 @@
       Wenn letztlich nur eine Referenz auf die Quelle durchgereicht werden mu&#223;, ggfs. mit Cast in einen anderen Typ, dann kann das direkt in einer yield-Operation erfolgen. Konkret ist das etwas trickreicher, da im einen Fall noch der Quell-Typ (virtuell)recastet werden mu&#223;; letztlich &#252;berdeckt der Adapter dann aber nur noch den operator* &#8212; ohne Implementierungsskizze ist nicht klar, ob sich das in einen einzigen Adapter-Typ zusammenfassen l&#228;&#223;t
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1774666845740" ID="ID_1330744788" MODIFIED="1774666859582" TEXT="speziell hier wichtig: Quelle mu&#xdf; per Referenz gegeben sein"/>
 <node CREATED="1774666866523" ID="ID_962856134" MODIFIED="1774666894692">
 <richcontent TYPE="NODE"><html>
@@ -54178,8 +54193,7 @@
       bedeutet ja, in der Pipeline liegt ein Iterator / eine Quelle, die den Container <b>generiert</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1774666712798" ID="ID_811972261" MODIFIED="1774666733359" TEXT="diesen Container-Value k&#xf6;nnte man in einer Container-Core schieben..."/>
 <node CREATED="1774666734055" ID="ID_1811306623" MODIFIED="1774666745325" TEXT="diese liegt dann genau wie das Handle &#xbb;daneben&#xab;"/>
@@ -54190,7 +54204,9 @@
 <node CREATED="1774666920826" ID="ID_210700855" MODIFIED="1774666947419" TEXT="nur Lumiera-Iterator und State-Core per Referenz unterst&#xfc;tzen"/>
 <node CREATED="1774666948262" ID="ID_1832071317" MODIFIED="1774709423740" TEXT="dann w&#xe4;ren das ganz einfach zu schreibende Adaptoren"/>
 </node>
-<node CREATED="1774709426313" ID="ID_1525744834" MODIFIED="1774709429255" TEXT="Beschlu&#xdf;">
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1774709426313" ID="ID_1525744834" MODIFIED="1774881640980" TEXT="Beschlu&#xdf;">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
 <node CREATED="1774709430054" ID="ID_912776044" MODIFIED="1774709438555" TEXT="baue zwei generische Adapter">
 <node CREATED="1774709804673" ID="ID_969333386" MODIFIED="1774709861157" TEXT="RedressAdapter">
 <node CREATED="1774709885131" ID="ID_801076314" MODIFIED="1774709900357" TEXT="dekoriert einen Lumiera-Iterator"/>
@@ -54215,14 +54231,35 @@
       ...der keine Operationen und Funktionen anwendet, sondern nur jeden Wert in einen neu-konstruierten Wrapper &#252;berf&#252;hrt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
-<node CREATED="1774710061788" ID="ID_908839654" MODIFIED="1774710069599" TEXT="dekoriert einen Lumiera-Iterator"/>
+<node CREATED="1774710061788" ID="ID_908839654" MODIFIED="1774716972773" TEXT="dekoriert einen Lumiera-Iterator">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Also ist hier der Implementierungs-Mechanismus geringf&#252;gig anders als beim Transformer; letztlich wird aber auch hier fast alles auf den eingebetteten SRC-Iterator durchgereicht
+    </p>
+  </body>
+</html></richcontent>
+</node>
 <node CREATED="1774710079276" ID="ID_1703742511" MODIFIED="1774710093211" TEXT="verwendet einen ItemWrapper als inline-Storage"/>
+<node CREATED="1774716974844" ID="ID_938734608" MODIFIED="1774717268072" TEXT="Achtung &#x2014; wie beim Transformer: &#xbb;disengage&#xab; on copy">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das ist ein &#187;pragmatischer fix&#171; f&#252;r ein eigentlich unl&#246;sbares t&#252;ckisches Problem: wenn das eingebettete Objekt irgendwelche Referenzen in den Quell-Iterator genommen hat, dann werden diese ung&#252;lig, sobald man die ganze Iterator-Pipeline in die Ziel-Storage verschoben hat (oder wenn man sie sp&#228;ter kopiert). Da, per Definitionem, Lumiera Iteratoren als Value-Objekte gelten, kommt diese t&#252;ckische Falle ganz unerwartet.
+    </p>
+    <p>
+      Indem der ItemWrapper bei Kopie, Zuweisung und Swap jeweils geleert wird, erzwingen wir eine re-Generierung beim ersten Zugriff danach. Auch das k&#246;nnte Seiteneffekte haben, l&#246;st aber in den meisten F&#228;llen das Problem, ohne da&#223; der User es &#252;berhaupt merkt (am h&#228;ufigsten wurde bei mir dieses Problem getriggert durch andere Konstrukte in der Pipeline, die einen eager preview brauchen, wie z.B. Filter oder Gruppierung)
+    </p>
+  </body>
+</html></richcontent>
 </node>
 </node>
-<node CREATED="1774710223103" ID="ID_492034668" MODIFIED="1774710285676" TEXT="der Builder macht eine eigenst&#xe4;ndige Fallunterscheidung">
+</node>
+<node BACKGROUND_COLOR="#ebe2aa" COLOR="#330f69" CREATED="1774710223103" ID="ID_492034668" MODIFIED="1775016195574" TEXT="der Builder macht eine eigenst&#xe4;ndige Fallunterscheidung">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -54231,12 +54268,144 @@
     </p>
   </body>
 </html></richcontent>
+<arrowlink COLOR="#e7fdba" DESTINATION="ID_1978559473" ENDARROW="Default" ENDINCLINATION="-865;58;" ID="Arrow_ID_694141560" STARTARROW="None" STARTINCLINATION="-726;35;"/>
+<icon BUILTIN="forward"/>
+<node CREATED="1774736878797" ID="ID_944763387" MODIFIED="1774736881808" TEXT="LValue">
+<node CREATED="1774736308466" ID="ID_1048987952" MODIFIED="1774736322350" TEXT="Lumiera-Iterator &#x27fc; direkt verwenden"/>
+<node CREATED="1774736323393" ID="ID_792439474" MODIFIED="1774737017118" TEXT="StateCore &#x27fc; RedressAdapter von Decorator"/>
+<node CREATED="1774736492781" ID="ID_768555249" MODIFIED="1774736522250" TEXT="STL-Iterable &#x27fc; WrapperAdapter&lt;StlRange&gt;"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1774736530121" ID="ID_1162459247" MODIFIED="1774739985540" TEXT="IterSource &#x27fc; WrapperAdapter&lt;IterSourceIter&gt;">
+<icon BUILTIN="stop-sign"/>
+<icon BUILTIN="hourglass"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1774739995567" ID="ID_330929633" MODIFIED="1774740014225" TEXT="lasse ich weg">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1774739999498" ID="ID_1408927621" MODIFIED="1774740014226" TEXT="sehe keinen Sinn">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+</node>
+</node>
+<node CREATED="1774736890701" ID="ID_1555112497" MODIFIED="1774736892478" TEXT="RValue">
+<node CREATED="1774736896483" ID="ID_1847245073" MODIFIED="1774736932787" TEXT="Lumiera-Iterator &#x27fc; WrapperAdapter&lt;SRC&gt;"/>
+<node CREATED="1774736935117" ID="ID_580860306" MODIFIED="1774737011847" TEXT="StateCore &#x27fc; WrapperAdapter von Decorator"/>
+<node CREATED="1774737020074" ID="ID_406168837" MODIFIED="1774737032404" TEXT="STL-Iterable &#x27fc; WrapperAdapter&lt;ContainerCore&gt;"/>
+<node COLOR="#5b280f" CREATED="1774736530121" ID="ID_725312821" MODIFIED="1774739979050" TEXT="IterSource &#x27fc; nicht m&#xf6;glich">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      IterSource ist ein virtuelles Interface; sowas zu nutzen ist sinnlos wenn man ein konkretes Objekt in der Hand hat (dann sollte das Objekt stattdessen eine StateCore sein)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="closed"/>
 </node>
 </node>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#e1b4a0" COLOR="#690f14" CREATED="1774656919925" ID="ID_1646281580" MODIFIED="1774656946253" STYLE="fork" TEXT="auch der Transformer ist nicht auf nested Iterators ausgelegt">
+<node COLOR="#338800" CREATED="1774736215790" ID="ID_1071263708" MODIFIED="1774881634559" TEXT="Implementierung">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1774736236516" ID="ID_1280209842" MODIFIED="1774737638591" TEXT="Wrapper als Lumiera-Iteratoren bereitgestellt">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1774737639353" ID="ID_268955964" MODIFIED="1774745953521" TEXT="Aufbau der Fallunterscheidung">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#5b280f" CREATED="1774737656335" ID="ID_386579609" MODIFIED="1774737745743" TEXT="wei&#xdf; nicht ob conditional_t &#xfc;berhaupt gehen w&#xfc;rde">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Er wird komplett ausgewertet, nicht im Kurzschlu&#223; &#8212; das bedeutet da&#223; <i>alle Typen grunds&#228;tzlich substituierbar</i>&#160;sein m&#252;ssen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="stop-sign"/>
+</node>
+<node COLOR="#571b80" CREATED="1774737747063" ID="ID_1356242038" MODIFIED="1774744433424" TEXT="also f&#xfc;hrt kein Weg an einem Trait mit enable-if vorbei">
+<node COLOR="#875045" CREATED="1774740070488" ID="ID_1576986006" MODIFIED="1774744450462" TEXT="IterSource verkompliziert das erheblich &#x27f9; vorerst weglassen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Ein Iterable, aus dem man rekursiv mehrere IterSource-Referenzen bekommt??
+    </p>
+    <p>
+      &#160; <i><font color="#602268">dazu fehlt mir im Moment die Phantasie</font>&#160;....</i>&#160;<font color="#3a2c7e" size="2">(man k&#246;nnte das durchaus implementieren falls gew&#252;nscht)</font>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="stop-sign"/>
+</node>
+<node CREATED="1774742903590" ID="ID_281577256" MODIFIED="1774744590775" TEXT="mu&#xdf; sowohl den SRC-Iterator, alsauch seinen Yield beachten">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Und zwar weil ich die Adapter-Templates ganz streng nach Schema-F aufgebaut habe: sie nehmen als ersten Parameter den Source-Layer und erben davon. Damit wir also durch das Trait-Templat <i>in einem einzigen Schritt den Adapter bestimmen k&#246;nnen,</i>&#160;mu&#223; dieses den kompletten Adapter-Typ instantiieren, den wir dann als SRC-Layer in den Flattener geben. Dieser bekommt dann den aktuellen SRC-Layer als move-Argument, und packt ihn somit in einen Adapter-Layer, der dazwischen liegt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774742930943" ID="ID_1024840679" MODIFIED="1774742944432" TEXT="den Yield-Typ kann man aber per Template-default berechnen"/>
+</node>
+<node COLOR="#5f5ac2" CREATED="1774744373962" ID="ID_1751767289" MODIFIED="1774744423691" TEXT="Puh ... blo&#xdf; nicht die Nverven verlieren">
+<icon BUILTIN="smiley-oh"/>
+</node>
+<node COLOR="#338800" CREATED="1774744397039" ID="ID_875549512" MODIFIED="1774744411978" TEXT="Jaaaa! funktioniert auf Anhieb">
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1774745954444" ID="ID_1449243412" MODIFIED="1774751499460" TEXT="Typ-Selektor-Logik im Detail pr&#xfc;fen...">
+<icon BUILTIN="yes"/>
+<node CREATED="1774745968723" ID="ID_98035743" MODIFIED="1774746307186" TEXT="sollte in diesem Fall tats&#xe4;chlich einem Lumiera-Iterator stets den Vorrang geben">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Hier geht es ja um verschachtelte <i>Resultat-Werte, die iterierbar sind.</i>&#160;Solche Werte sind entweder STL container, oder sie sind wahrscheinlich als Lumiera-Iterator realisiert. Falls letzterer per IterExplorer gebaut wurde (was durchaus wahrscheinlich ist), dann handelt es sich stets um eine <i>fertige Pipeline</i>&#160;&#8212; und in einer solchen liegt stets das Iterator-Interface <i>&#252;ber</i>&#160;einer ggfs. ebenfalls noch sichtbaren StateCore.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774745987296" ID="ID_1633003205" MODIFIED="1774746163960" TEXT="das ist definitiv genau &#xbb;anders herum&#xab; als innerhalb der IterExplorer-Pipeline">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Im Inneren der IterExplorer-Pipeline wird fast immer die gelayerte-Funktionalit&#228;t als StateCore realisiert (da das das einfachere Interface ist); das hat zur Folge, da&#223;, nach mehrfachem Layering, stets zugleich das StateCore-Interface sichtbar ist, und ein (darunter liegendes) Lumiera-Iterator-Interface. Rein anhand der sichtbaren Methoden gibt es keine M&#246;glichkeit, festzustellen, welches Interface &quot;oben&quot; liegt. Daher m&#252;ssen wir hier eine feste Pr&#228;zedenz vorgeben
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774746699104" ID="ID_1701645613" MODIFIED="1774746719921" TEXT="sollte dem entsprechend die _DecoratorTraits &#xfc;berhaupt nicht verwenden hier">
+<node CREATED="1774746721685" ID="ID_1055579619" MODIFIED="1774746726184" TEXT="es verwirrt nur"/>
+<node CREATED="1774746726892" ID="ID_119432674" MODIFIED="1774746762788" TEXT="und ist potentiell gef&#xe4;hrlich">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...weil dann Selector-Logik und ausgew&#228;hlter Typ auseinander scheren k&#246;nnten (theoretisch)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1774746766263" ID="ID_1064322490" MODIFIED="1774746852546" TEXT="kann hier die CheckedCore stets weglassen &#x2014; der Flattener reicht den checkPoint() durch">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...und oberhalb wird nochmal eine CheckedCore liegen; daher ist es nicht m&#246;glich da&#223; ein bottom-Iterator gepullt wird
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e1b4a0" COLOR="#690f14" CREATED="1774656919925" FOLDED="true" ID="ID_1646281580" MODIFIED="1774656946253" STYLE="fork" TEXT="auch der Transformer ist nicht auf nested Iterators ausgelegt">
 <edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
 <icon BUILTIN="clanbomber"/>
 <node COLOR="#435e98" CREATED="1774657302055" ID="ID_789812720" MODIFIED="1774659939214" TEXT="&#x27f9; das stellt das Schema mit dem ValueTypeBinding in Frage">
@@ -54265,8 +54434,7 @@
       da hier stets ein anderer Iterator eingewickelt wird (i.d.R. ein STL-Iterator); also brauchen wir die spezielle Logik, die STL-Iteratoren und Pointer korrekt behandelt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
 <node COLOR="#5b280f" CREATED="1774657998138" ID="ID_733523241" MODIFIED="1774658216456" TEXT="Itertools-Transformer &#x27f6; fehlerhaft &#x2014; korrekt w&#xe4;ren direkt die RefTraits">
@@ -54280,8 +54448,7 @@
       M&#246;glicherweise &#252;berfl&#252;ssig durch die neue Logik, aber so eine explizite Spezialisierung direkt im Scope ist trotzdem vorteilhaft, weil man sie sieht, und die lokal vorhandenen Bedingungen explizit und fest ber&#252;cksichtigt werden, ohne eine ggfs. fragile allgemeine Typ-Selektor-Logik einzubeziehen.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="help"/>
 </node>
 <node COLOR="#5b280f" CREATED="1774658332725" ID="ID_1972593986" MODIFIED="1774658354844" TEXT="IterExplorer-Transformer &#x27f6; fehlerhaft, analog zu Itertools">
@@ -54310,7 +54477,8 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1774659951194" ID="ID_369619908" MODIFIED="1774660011071" TEXT="Einf&#xfc;gen des Adapters unter dem Flattener schlie&#xdf;t den unterliegenden IterExplorer mit ein">
+<node COLOR="#435e98" CREATED="1774659951194" FOLDED="true" ID="ID_369619908" MODIFIED="1775016258181" TEXT="Einf&#xfc;gen des Adapters unter dem Flattener schlie&#xdf;t den unterliegenden IterExplorer mit ein">
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1774660013562" ID="ID_596802349" MODIFIED="1774660038154" TEXT="das ist zwar harmlos, aber bl&#xe4;ht den Pipeline-Typ unn&#xf6;tig auf"/>
 <node CREATED="1774660040017" ID="ID_1062014937" LINK="#ID_1720349507" MODIFIED="1774660392132" TEXT="so ein &#xe4;hnliches Problem gab es doch schon mal beim iter-zip?">
 <icon BUILTIN="idea"/>
@@ -54330,6 +54498,1174 @@
 </node>
 <node CREATED="1774660584342" ID="ID_1456209556" MODIFIED="1774660600528" TEXT="wird bisher nur in der top-Level-explore()-Funktion verwendet"/>
 </node>
+<node COLOR="#534398" CREATED="1774919849701" ID="ID_354781784" MODIFIED="1774919883214">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <u>Fazit</u>: einfach zu l&#246;sen &#8212; aber durch erweiterte Konstruktion nun obsolet
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1774797605629" FOLDED="true" ID="ID_1129175202" MODIFIED="1775015917942" TEXT="Reflexion &#x27f6; was f&#xfc;r ein Problem haben wir hier ?">
+<linktarget COLOR="#ff292c" DESTINATION="ID_1129175202" ENDARROW="Default" ENDINCLINATION="-213;169;" ID="Arrow_ID_1262266814" SOURCE="ID_511605194" STARTARROW="None" STARTINCLINATION="-698;69;"/>
+<icon BUILTIN="help"/>
+<node CREATED="1774797643204" ID="ID_1529723398" MODIFIED="1774797650493" TEXT="eine Kombination">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1774797659226" ID="ID_1303777086" MODIFIED="1774881076259" TEXT="Problem-1 : WrapperAdapter re-engaged on-copy">
+<icon BUILTIN="full-1"/>
+</node>
+<node CREATED="1774797699236" ID="ID_576771642" MODIFIED="1774881080324" TEXT="Problem-2 : ContainerCore h&#xe4;lt einen Container by-Value">
+<icon BUILTIN="full-2"/>
+</node>
+<node CREATED="1774797774512" ID="ID_259987405" MODIFIED="1774881084431" TEXT="Problem-3 : speziell f&#xfc;r den hier interessanten Fall k&#xf6;nnte der Wert einmalig sein">
+<icon BUILTIN="full-3"/>
+</node>
+<node CREATED="1774797840623" ID="ID_381955476" MODIFIED="1774881088647" TEXT="Problem-4 : Wechselwirkung zwischen Kopie und eager-fetch">
+<icon BUILTIN="full-4"/>
+</node>
+<node CREATED="1774798260076" ID="ID_1681516685" MODIFIED="1774881093714" TEXT="Problem-5 : Zwangsl&#xe4;ufigkeit der Kopie">
+<icon BUILTIN="full-5"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1774798445356" ID="ID_763333976" MODIFIED="1774919812266" TEXT="Diskussion und Bewertung">
+<arrowlink COLOR="#fdebd3" DESTINATION="ID_1308880288" ENDARROW="Default" ENDINCLINATION="95;-721;" ID="Arrow_ID_123296710" STARTARROW="None" STARTINCLINATION="-476;46;"/>
+<icon BUILTIN="forward"/>
+<node CREATED="1774798455112" ID="ID_360361964" MODIFIED="1774806563661" TEXT="Meine Situation: habe mir ohne Grund ein &#xbb;wicket problem&#xab; geschaffen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das ganze Abentheuer hier ist ein Nebenthema. Es w&#228;re nicht notwendig f&#252;r den Fortschritt im &#187;Playback Vertical Slice&#171;. Es ist allerdings sinnvoll, weil ein chained-Iterator eine sinnvolle Implementierungs-Erleichterung ist. <i>Ohne diese Einsicht</i>, h&#228;tte ich mir nun bereits drei Tage Arbeit gespart, h&#228;tte nicht das Gef&#252;hl mich zu verzetteln, und h&#228;tte weder die t&#252;ckischen schlummernden Bugs im Iterator gefunden (ein ganzes B&#252;ndel bereits), nocht diese tickende Zeitbombe entdeckt, die ich mir mit dem zip-Iterator gelegt habe, als ich auch Referenzen in das Tupel durchreichen wollte, und dann als Konsequenz zulassen mu&#223;te, da&#223; ein Iterator auch einen Value liefert. Zu allem &#220;berflu&#223; war iter-zip <i>eine exakt genauso gelagerte Aufgabe, sie war und ist nicht notwendig, aber erleichtert die Arbeit erorm.</i>&#160;Aber, alle diese Aufgaben sind ein <b>Investment</b>&#160;&#8212; was mich also hier an meinem eigenen Verhalten st&#246;rt ist, da&#223; ich Investments t&#228;tige ohne Plan und aus einer (offensichtlichen) Laune heraus (Prokrastinieren).
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Um es also genauer zu sagen: ich habe mir das Problem nicht geschaffen, aber es entdeckt im Zuge von Arbeiten, die aktuell jetzt nicht sein m&#252;&#223;ten (aber motivierend erscheinen, da sie mir &#187;sch&#246;nes Tooling&#171; zum Arbeiten geben). Das steht im Zusammenhang mit meiner Grundeinsch&#228;tzung, da&#223; die Lumiera-Codebasis ein Ort sein soll, an dem sich ein Entwickler gerne aufh&#228;lt. Sie unterscheidet sich in diesem zentralen Punkt von Cinelerra, f&#252;r das der Author jede erdenkliche Abk&#252;rzung genommen hat, weil er allein ein Mega-Ziel erreichen wollte (so &#228;hnlich wie ich). Und als Konsequenz ist die Cinelerra-Codebasis schnell nutzbar geworden, in der weiteren Entwicklung festgefahren, und f&#252;hlt sich wie &#187;Treibsand&#171; an.
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#18806b" DESTINATION="ID_360361964" ENDARROW="Default" ENDINCLINATION="1263;0;" ID="Arrow_ID_287930609" SOURCE="ID_1212805708" STARTARROW="Default" STARTINCLINATION="558;0;"/>
+</node>
+<node CREATED="1774799062150" ID="ID_618778116" MODIFIED="1774799603957" TEXT="Andere Perspektive: es zeigen sich die Grenzen des IterExplorer(Pipeline)-Designs">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Es kollidieren Anforderungen, Verhaltensweisen und Design-Entscheidungen, von denen jede &#8212; f&#252;r sich genommen &#8212; v&#246;llig plausibel und ad&#228;quat sind. Somit bin ich leider wieder an dem Punkt angekommen, wo ich &#187;Disclaimer&#171; schreiben m&#252;&#223;te. Nach strengen Ma&#223;st&#228;ben w&#228;re ein Design gescheitert, wenn das passiert. Allerdings erf&#252;llt wohl keine einzige, praktisch brauchbare Programmiersprache diese strengen Ma&#223;st&#228;be.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774799606035" ID="ID_1239651977" MODIFIED="1774800346593" TEXT="Unklar ist: besteht ein tats&#xe4;chliches Problem das mich hindert, weiterzugehen?">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Konkret sehe ich ein <b>undefined behaviour</b>, das sich umst&#228;ndehalber nicht manifestiert, was aber lediglich an dem sehr speziellen Test-Setup liegt. Ich wei&#223; nicht, wie ich <i>angemessen auf diese Situation reagieren soll,</i>&#160;und stecke deshalb im Gr&#252;beln fest. Soll ich das Problem unerw&#228;hnt lassen? Der Test funktioniert ja, und demonstriert da&#223; meine neueste Erungenschaft vollumf&#228;nglich funktioniert. Soll ich vielleicht noch einen Warnungs-Kommentar irgendwo &#187;verstecken&#171;? Soll ich den Fall mit der Container-Core einfach aus der Fallmatrix streichen, wie ich das gestern schon mit dem IterSource-Fall getan habe? Habe ich es mit einem Konstruktionsfehler zu tun, und das Feature w&#228;re tats&#228;chlich sauber und ohne latente Gefahr zu implementieren? Soll ich den Fall mit dem Value-Resultat f&#252;rderhin &#252;berhaupt als <i>validen Fall</i>&#160;mitbetrachten, oder ihn nur tolerieren als Absicherung f&#252;r einen sehr speziellen Grenzfall (den man eben f&#252;r iter::zip braucht)? Bedeutet auch: soll ich den grade eben implementierten moveIt() - Builder wieder verwerfen? oder einen copyIt() - Builder danebenstellen? Oder soll ich das komplette Design von IterExplorer k&#252;nftig als <i>problematisch</i>&#160; einstufen, da es potentiell gef&#228;hrliches Verhalten leicht macht und bef&#246;rdert? Oder sollte ich numindest noch mehr Zeit investieren, um die Grenzen des IterExplorer-Designs klar fassen zu k&#246;nnen?
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774800354340" ID="ID_92965502" MODIFIED="1774800364583" TEXT="denkbare konkrete Ma&#xdf;namen">
+<node CREATED="1774800371178" ID="ID_583241280" MODIFIED="1774881076259" TEXT="Problem-1 beseitigen">
+<icon BUILTIN="full-1"/>
+<node COLOR="#5b280f" CREATED="1774800552266" ID="ID_1161379333" MODIFIED="1774813671887" TEXT="das w&#xe4;re relativ leicht und der konkrete Fehler w&#xe4;re beseitigt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Der WrapperAdapter ist eine vereinfachte Ableitung aus dem Transformer; daher habe ich auch diese Absicherung gegen dangling-references im kopierten Objekt mit &#252;berhommen. Das k&#246;nnte ich einfach r&#252;ckg&#228;ngig machen, denn im Prinzip ist der eingebettete ItemWrapper ja copyable / movable / asignable. Konkret w&#252;rde ein in den ContainerCore eingebetteter Container dann kopiert / verschoben und gut is. F&#252;r die anderen Typen, die ich hier mit diesem neuen Feature ebenfalls in den WrapperAdapter lege, gilt das gleiche Argument: was nicht sicher kopierbar oder relozierbar ist, sollte auch keine Kopie/Verschiebung zulassen.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="stop-sign"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1774813673596" ID="ID_219414857" MODIFIED="1774813686363" TEXT="falsche Einsch&#xe4;tzung">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1774813688355" ID="ID_227142513" MODIFIED="1774813748768" TEXT="das Problem manifestiert sich mehrfach">
+<arrowlink COLOR="#f9438f" DESTINATION="ID_218553534" ENDARROW="Default" ENDINCLINATION="73;-167;" ID="Arrow_ID_1537578454" STARTARROW="Default" STARTINCLINATION="-504;34;"/>
+<icon BUILTIN="info"/>
+</node>
+</node>
+<node CREATED="1774800574863" ID="ID_978467998" MODIFIED="1774801039447" TEXT="man k&#xf6;nnte das argumentativ als eine Einschr&#xe4;nkung oder Design-Wahl einordnen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das w&#228;re dann ein Unterscheidungsmerkmal zum Transformer. Der WrapperAdapter ist ohnehin (bisher) nur ein internes Element, und man k&#246;nnte sagen, der Nutzer mu&#223; diese Einschr&#228;nkung kennen. Man sollte ihn eben nicht dazu verwenden, raffinierte Referenz-Strukturen innerhalb einer Pipeline zu realisieren. Alle in ihn eingebetteten Typen sollten entweder komplett autark sein, oder nur auf Objekte au&#223;erhalb der Pipeline verweisen, deren Adresse stabil ist.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#6223c2" CREATED="1774881104584" ID="ID_1064675223" MODIFIED="1774881148579" TEXT="Fazit: das Problem sitzt viel tiefer &#xd83e;&#xdc46; re-Engage mu&#xdf; erhalten bleiben">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1774881052946" ID="ID_1104149749" MODIFIED="1774881080323" TEXT="ContainerCore ist gef&#xe4;hrlich und sollte nicht verwendet werden...">
+<icon BUILTIN="full-2"/>
+</node>
+<node CREATED="1774801429090" ID="ID_57673018" MODIFIED="1774881084430" TEXT="Problem-3 per Dekret einschr&#xe4;nken">
+<icon BUILTIN="full-3"/>
+<node CREATED="1774801448018" ID="ID_1851767850" MODIFIED="1774801601814" TEXT="es handelt sich bisher nur um eine theoretisch deduzierte M&#xf6;glichkeit">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...die ich rein aus den Typen und den (fehlenden) Beschr&#228;nkungen im Kontrakt ableite: falls man sich mal in der Lage befindet, da&#223; ein Wert wirklich einmalig ist, wie beispielsweise eine Allokation; dann w&#228;re es &#252;berraschend, wenn das die Iter-Pipeline nicht handhaben k&#246;nnte. Deshalb habe ich ja bei iter::zip diese T&#252;r aufgemacht. Und stelle nun fest, da&#223; ich mir schwer tue, selbst auch nur ein Test-Beispiel zu konstruieren.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774801605829" ID="ID_590317634" MODIFIED="1774801727883" TEXT="man k&#xf6;nnte diesen Fall also als &#xbb;grenzwertig&#xab; und nur &#xbb;toleriert&#xab; kennzeichnen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      So habe ich das auch bereits fr&#252;her gehalten, mit der M&#246;glichkeit, downstream in die Interna einer StateCore einzugreifen. Ich lasse es zu, denn es kann manchmal essentiell sein und eine wesentliche Erleichterung darstellen. Es ist aber gef&#228;hrliches Verhalten, und wer das macht, ist f&#252;r alle Konsequenzen verantwortlich.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774801745554" ID="ID_1277759512" MODIFIED="1774801888405" TEXT="man k&#xf6;nnte auch dazu ermuntern, im Zweifelsfall zu kopieren">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Ich k&#246;nnte mir vorstellen, da&#223; in vielen F&#228;llen eine Kopie ebenfalls akzeptabel w&#228;re; es besteht nur stets eine gewisse Versuchung, eine Kopie zu vermeiden (Stichwort &#8222;premature&#8220; &#8212; es gibt ja auch die premature pessimisation, davon hat Knuth selber oft gesprochen). Auch in F&#228;llen, in denen ein Iterator-Ergebnis jeweils berechnet werden mu&#223;, kann man ja eine erneute Berechnung im Einzelfall zulassen.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1774800499657" ID="ID_1447001683" MODIFIED="1774881088646" TEXT="Problem-4 angehen / reduzieren">
+<icon BUILTIN="full-4"/>
+<node CREATED="1774801049236" ID="ID_884381902" MODIFIED="1774801064354" TEXT="das w&#xe4;re ein gruns&#xe4;tzlicher Ansatz"/>
+<node CREATED="1774801068821" ID="ID_527000111" MODIFIED="1774801191065" TEXT="eager-fetch verletzt den impliziten Kontrakt, sobald es nicht mehr komplett transparent ist">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Implizit erwartet man, da&#223; sich das Resultat eines Iterators nur &#228;ndert, wenn man iteriert. Und im Besonderen der reine Zugriff auf dieses Resultat sollte erwartungsgem&#228;&#223; Seiteneffekt-frei sein.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774801195068" ID="ID_1828156597" MODIFIED="1774801428022" TEXT="konkret bedeutet das aber, die Implementierung komplexer und ineffizienter zu machen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Denn eager-Fetch ist manchmal prinzipiell notwendig. Das Beispiel w&#228;re eine Gruppierung, oder das Filtern. Nur k&#246;nnte man in diesem Fall jeweils eine state-Flag einf&#252;hren (bedeutet: ein Slot zus&#228;tzliche Storage, und eine Implementierung, die nicht mehr &#187;pure&#171; ist, sonderen einen internen Zustand konsistent halten mu&#223;). Damit k&#246;nnte man erreichen, da&#223; solche gef&#228;hrlichen Wechselwirkungen erstmals aufteten k&#246;nnen, wenn man den Iterator auswertet. Damit w&#228;re vor diesem Punkt alles sicher, und man k&#246;nnte die Pipeline nach Belieben kopieren und verschieben
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1774881514964" ID="ID_1468984742" MODIFIED="1774881539683" TEXT="Fazit: ich werde diese Richtung nicht weiter verfolgen, da nicht zielf&#xfc;hrend">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1774800513279" ID="ID_181848514" MODIFIED="1774881093714" TEXT="die Angriffsfl&#xe4;che f&#xfc;r Problem-5 vermindern">
+<icon BUILTIN="full-5"/>
+<node CREATED="1774801911956" ID="ID_353546651" MODIFIED="1774801921049" TEXT="das ist oft sehr m&#xfc;hsam...."/>
+<node CREATED="1774802040771" ID="ID_918508790" MODIFIED="1774802171480" TEXT="ist nur unter Mitwirkung des Users m&#xf6;glich">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Damit will ich sagen, da&#223; das Problem-5 grunds&#228;tzlich nicht behoben werden kann. Es gibt eben nun mal Kopien. Aber es gibt F&#228;lle, in denen ein aufmerksamer User die Kopie oder der Verschiebevorgang vermeiden kann, wenn er die richtigen Tools verwendet <b>und</b>&#160;wenn der Libary-Code so geschrieben ist, da&#223; er selber keine unn&#246;tigen Kopien erzwingt. Letzteres ist der Punkt hier in Diskussion
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774801922018" ID="ID_1245677043" MODIFIED="1774801945352" TEXT="w&#xfc;rde aber unter das Stichwort &#xbb;Qualit&#xe4;ts-Code&#xab; fallen"/>
+<node CREATED="1774801946328" ID="ID_1067648618" MODIFIED="1774801976264" TEXT="hei&#xdf;t konkret: ich m&#xfc;&#xdf;te mir util::join(), und die Itertools anschauen">
+<node CREATED="1774802002360" ID="ID_78507729" MODIFIED="1774802288134" TEXT="util::join macht std::forward &#x2014; sieht sauber aus">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      hei&#223;t: es ist der User verantwortlich; eine gef&#228;hrliche Pipeline darf man eben nicht speichern, sondern m&#252;&#223;te sie direkt in join() geben (bzw. dann vielleicht doch ein join-Terminal schaffen9
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1774802507734" ID="ID_708076408" MODIFIED="1774802511877" TEXT="Itertools">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1774802513569" ID="ID_735017138" MODIFIED="1774802519568" TEXT="ist bekannterma&#xdf;en problematisch"/>
+<node CREATED="1774802580149" ID="ID_1019619736" MODIFIED="1774803254301" TEXT="mit dem bestehenden Design &#x27f8; Dead End">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das bestehende Design erzwingt sowohl stets einen eager-fetch, alsauch ein Erzeugen der &#187;processing core&#171; vor dem Haupt-Objekt. Beides zusammen erzwingt gradezu diese problematische Situation.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774802742982" ID="ID_444614486" MODIFIED="1774802746993" TEXT="Alternativen">
+<node CREATED="1774802749165" ID="ID_172397703" MODIFIED="1774803014135" TEXT="stattdessen IterExplorer nutzen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das k&#246;nnte man auch schrittweise tun; im Besonderen util::join() bietet sich an.
+    </p>
+    <p>
+      <b>Problem</b>&#160;dabei ist, da&#223; IterExplorer als Header schwergewichtig ist; er hat einige zus&#228;tzliche Includes, und er ist inzischen sehr gro&#223;, was dann doch jedes Mal wieder Compile-Zeit kostet.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774802770714" ID="ID_1211293644" MODIFIED="1774803133839" TEXT="Reimplementierung als Einfach-Variante">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Die Idee dabei w&#228;re, komplett auf das Degisn von IterExplorer umzustellen, aber alles zu fu&#223; zu implementieren (also Code-Duplikation). Das Ziel bzw. die Ma&#223;gabe w&#228;re, einige elementare F&#228;lle einfacher darzustellen, so da&#223; die Header-Inclusion weniger kostet:
+    </p>
+    <ul>
+      <li>
+        filtern
+      </li>
+      <li>
+        transformieren
+      </li>
+      <li>
+        ggfs Filter + Transformation
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1774813612117" ID="ID_577666674" MODIFIED="1774813624781" TEXT="Reflexion &#x2014; 2.Runde">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1774813810408" ID="ID_622450675" MODIFIED="1774825856302" TEXT="keine grunds&#xe4;tzliche Blockade">
+<icon BUILTIN="idea"/>
+<node CREATED="1774813818913" ID="ID_872687428" MODIFIED="1774813824000" TEXT="der Flattener funktioniert"/>
+<node CREATED="1774813825200" ID="ID_103310226" MODIFIED="1774814232478" TEXT="das IterExplorer-Design hat Grenzen die ich jetzt klarer sehe">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Es handelt sich um keinen grunds&#228;tzlichen Einwand, da sich das Problem nur manifestiert, wenn man den erweiterten Kontrakt &#187;ausreizt&#171;, genauer sogar: mehrfach ausreizt und sich dabei selbst blockiert.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Der saubere Gebrauch
+    </p>
+    <ul>
+      <li>
+        geht entweder von einer externen Quelle aus die nicht in der Pipeline liegt
+      </li>
+      <li>
+        oder verwendet eine Quelle in der Pipeline, die kopierbar/verschiebbar ist (StateCore)
+      </li>
+      <li>
+        in der Pipeline werden maximal Werte gecached, aber jeder Zustand ist lokal
+      </li>
+      <li>
+        Referenzen auf unterliegende Iteratoren sollen nur innerhalb eine einzigen Auswertung der Kette verwendet werden
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774813857268" ID="ID_799705461" MODIFIED="1774813927238" TEXT="die flankierenden Aufr&#xe4;um-Ma&#xdf;nahmen sollten in jedem Fall gemacht werden">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Vor allem: Itertools dort abl&#246;sen, wo sich sonst das Problem nicht vermeiden lie&#223;e, wie in util::join()
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e2c4ac" CREATED="1774814248637" ID="ID_986708984" MODIFIED="1774814401555" STYLE="bubble">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <font size="5"><u>genaue Fassung des Problems</u></font>
+    </p>
+    <p>
+      Die Grenzen des IterExplorer-Designs wurden in einem Konstrukt
+    </p>
+    <p>
+      mehrfach in widerspr&#252;chlichlicher Weise &#252;berschritten
+    </p>
+  </body>
+</html></richcontent>
+<edge COLOR="#9c1a1a"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1774814437135" ID="ID_1898877875" MODIFIED="1774880982248" TEXT="Auswege">
+<linktarget COLOR="#5b70a1" DESTINATION="ID_1898877875" ENDARROW="Default" ENDINCLINATION="49;423;" ID="Arrow_ID_499674660" SOURCE="ID_1996346708" STARTARROW="None" STARTINCLINATION="-2;-458;"/>
+<node CREATED="1774814444797" ID="ID_421555774" MODIFIED="1774814472399" TEXT="diesen hypothetischen Grenzfall (nested container by-value) eben nicht unterst&#xfc;tzen"/>
+<node CREATED="1774817438014" ID="ID_1768685816" MODIFIED="1774817608875" TEXT="die anderen beiden by-Value F&#xe4;lle ebenfalls nicht unterst&#xfc;tzen">
+<node CREATED="1774817453827" ID="ID_1479378657" MODIFIED="1774818145655" TEXT="daf&#xfc;r spricht, da&#xdf; diese auch der Tendenz nach &#xbb;grenzwertig&#xab; sein k&#xf6;nnten">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Zun&#228;chst einmal spricht &#252;berhaupt nichts dagegen, so etwas zu bauen.
+    </p>
+    <p>
+      Allerdings ist die Frage, warum w&#252;rde man das machen, und nicht den naheliegenden Weg gehen, das nested-Iterable in der Pipeline/Core selber zu halten, und nur per Referenz zu exponieren? Ein Grund k&#246;nnte sein, da&#223; ein komplexes Konstrukt aufgebaut werden soll, oder da&#223; eine Art Caching gew&#252;nscht wird. Auch das ist noch nicht verboten, aber weist auf einen Denkansatz hin, der daf&#252;r anf&#228;llig ist, die Grenzen des IterExplorer-Designs zu &#252;berschreiten. Und die <i>besondere Gefahr, die ich jetzt sehe</i>, ist da&#223; das so leicht geht, und in den meisten F&#228;llen auch ohne Symptome bleiben wird.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774817623757" ID="ID_745144268" MODIFIED="1774818247680" TEXT="nach dieser Analyse kann ich mir diverse weitere Problem-Szenarien ausmalen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Immer wenn wir die &#187;sichere Zone&#171; verlassen:
+    </p>
+    <ul>
+      <li>
+        wenn eine spezielle Pipeline konstruiert wird, die intern verdrahtet ist &#252;ber &#955;-captures
+      </li>
+      <li>
+        wenn eine spezielle neue Core konstruiert wird, die intern mit Referenzen verschaltet ist
+      </li>
+    </ul>
+    <p>
+      Beides <i>sollte man nicht machen</i>&#160;(wie ich jetzt verstanden habe), aber beides liegt durchaus nahe, speziell da es mit IterExplorer so bequem zu realisieren ist. Ein re-Engage-Feature k&#246;nnte (auch hier) das Risiko vermindern, aber nicht beseitigen.
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#6a54bb" DESTINATION="ID_745144268" ENDARROW="Default" ENDINCLINATION="382;14;" ID="Arrow_ID_1545734215" SOURCE="ID_1610155334" STARTARROW="None" STARTINCLINATION="868;0;"/>
+</node>
+<node CREATED="1774818503764" ID="ID_373628623" MODIFIED="1774818526808" TEXT="allerdings: mit re-Engage sind diese F&#xe4;lle so &#xbb;halbwegs sicher&#xab; wie alles mit IterExplorer"/>
+</node>
+<node CREATED="1774814523445" ID="ID_1661354435" MODIFIED="1774814594282" TEXT="ContainerCore non-copyable machen">
+<node CREATED="1774814557578" ID="ID_944689091" MODIFIED="1774814591885" TEXT="Konsequenz &#x27f9; Pipeline f&#xfc;r die meisten use-Cases nicht mehr verwendbar"/>
+<node CREATED="1774814650633" ID="ID_1478704290" MODIFIED="1774814754142" TEXT="man w&#xfc;rde so &#xbb;die T&#xfc;r ein bischen offen lassen&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Es g&#228;be eine klare compilation-Failure, und dazu kann man dokumentieren warum.
+    </p>
+    <p>
+      Falls jemand dann doch dieses sehr spezielle Verhalten braucht, gibt es noch Hoffnung, unter starken Einschr&#228;nkungen (oder man mu&#223; halt in dem Fall etwas tun, wie den Container auf den Heap schieben)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#5b280f" CREATED="1774815692493" ID="ID_1540186052" MODIFIED="1774815715590" TEXT="diese L&#xf6;sung ist tats&#xe4;chlich unm&#xf6;glich">
+<icon BUILTIN="closed"/>
+<node CREATED="1774815720923" ID="ID_1980850815" MODIFIED="1774815733852" TEXT="IterExplorer hat generell die Mindestanforderung &#xbb;movable&#xab;"/>
+<node CREATED="1774815734649" ID="ID_1028273232" MODIFIED="1774815746255" TEXT="die ganze Pipeline wird durch move zusammengebaut"/>
+</node>
+</node>
+<node CREATED="1774814756284" ID="ID_749884106" MODIFIED="1774814764176" TEXT="Index-Iteration verwenden">
+<node CREATED="1774814767106" ID="ID_695921290" MODIFIED="1774814942199" TEXT="problematisch da es die Anforderungen verschiebt / einengt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      bisher sagen wir nur &#187;can STL for-each&#171; &#8212; und da gibt es eben diese Einschr&#228;nkung mit der <i>iterator invalidation...</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774814963745" ID="ID_875799890" MODIFIED="1774817192227" TEXT="man m&#xfc;&#xdf;te dann eine andere Typ-Bedingung w&#xe4;hlen: Indizierbarkeit">
+<node CREATED="1774817207358" ID="ID_257317229" MODIFIED="1774817220981" TEXT="w&#xe4;re gut machbar mit den Range-Concepts"/>
+<node CREATED="1774817229186" ID="ID_197019891" MODIFIED="1774817236453" TEXT="zwei Spielarten denkbar">
+<node CREATED="1774817237505" ID="ID_38947648" MODIFIED="1774817242034" TEXT="Subscript-Operator"/>
+<node CREATED="1774817242830" ID="ID_508060735" MODIFIED="1774817251575" TEXT="Continuous Iterator"/>
+</node>
+</node>
+<node CREATED="1774816518821" ID="ID_254093062" MODIFIED="1774817266892" TEXT="damit w&#xfc;rden durchaus relevante Typen wegfallen, wie z.B. List (ggfs sogar deque)"/>
+<node CREATED="1774818651824" ID="ID_1652481125" MODIFIED="1774818665239" TEXT="m&#xfc;&#xdf;te daf&#xfc;r eine neue spezielle Core schreiben"/>
+<node COLOR="#652a8d" CREATED="1774821122994" ID="ID_1674531236" MODIFIED="1774822329296" TEXT="erscheint mir attraktiv">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Weil ich damit die <i>totale Niederlage vermeide</i>&#160;und nicht umsosnst mich tagelang mit theoretischen Weiterungen herumgeplagt h&#228;tte. Zwar hab ich jetzt auch gesehen, da&#223; ich was gesehen und verstanden habe &#8212; dennnoch w&#228;re ein konkretes positives Ergebnis befriedigender als &#8222;ich habe eingesehen da&#223; man das nicht machen sollte...&#8220; &#8212; nicht zuletzt auch weil die Katze da drau&#223;en ja noch gar nicht wei&#223;, da&#223; ich keine Maus bin.
+    </p>
+  </body>
+</html></richcontent>
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="smiley-oh"/>
+</node>
+</node>
+<node CREATED="1774816422758" ID="ID_1320734603" MODIFIED="1774816431942" TEXT="re-Engage-Mechanik bieten">
+<node CREATED="1774816435540" ID="ID_1257617774" MODIFIED="1774816464372" TEXT="die Iteration m&#xfc;&#xdf;te sich eine Index-Position mitspeichern, z.B. via izip"/>
+<node CREATED="1774816466349" ID="ID_924250547" MODIFIED="1774816494352" TEXT="Eingriff falls reEngage notwendig wird (nach Kopie/Verschiebung/Zuweisung/Swap)"/>
+<node CREATED="1774816497349" ID="ID_1916085243" MODIFIED="1774816514773" TEXT="...dann die Iteration von Start bis zum aktuellen Index-Punkt nachholen"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#dea399" COLOR="#990033" CREATED="1774919247638" ID="ID_1347126251" MODIFIED="1774919701736" TEXT="Iterator mit Container-Values f&#xfc;r Test bereitstellen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Damit bin ich bei dem letzten Testfall angekommen, den ich &#8222;nur der Vollst&#228;ndigkeit halber&#8220; mit aufgenommen hatte &#8212; und wie immer, mein &#187;Riecher&#171; war richtig ... da liegen die Hunde begraben...
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#87201e" DESTINATION="ID_1347126251" ENDARROW="Default" ENDINCLINATION="-150;231;" ID="Arrow_ID_71310356" SOURCE="ID_654236226" STARTARROW="None" STARTINCLINATION="-470;-36;"/>
+<icon BUILTIN="clanbomber"/>
+<node CREATED="1774791959277" ID="ID_979868365" MODIFIED="1774792163572" TEXT="ich m&#xf6;chte den Test dauerhaft haben ... also mu&#xdf; er konzis sein">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Denn ich m&#246;chte insgesamt das Thema in der Wahrnehmung herunterspielen, so da&#223; es sich unter den anderen F&#228;llen einfach einreiht; der Expander ist demgegen&#252;ber viel wichtiger
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774792171578" ID="ID_654881311" MODIFIED="1774792193253" TEXT="also k&#xf6;nnte ich das Feature in IterExplorer &#xbb;verstecken&#xab;">
+<node CREATED="1774792256450" ID="ID_522474788" MODIFIED="1774792515865" TEXT="einen offensichtlichen use-case g&#xe4;be es: iter::zip()">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Dort kann der Umstand, da&#223; in der Regel im Tupel nur Referenzen liegen, bisweilen schon l&#228;stig sein; hatte sogar dar&#252;ber nachgedacht, eine eigene Variante zu schaffen (was sehr einfach zu implementieren w&#228;re, war ja sogar anfangs so, und ich mu&#223;te mich eigens anstrengen, um Referenzen in das Ergebnistupel zu bekommen)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774792522351" ID="ID_663288592" MODIFIED="1774792542320" TEXT="zeigt noch einen besseren Fokus: es geht um move statt copy"/>
+</node>
+<node CREATED="1774792655669" ID="ID_1912283627" MODIFIED="1774792670709" TEXT="Name der Builder-Funktion: moveIt()">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1774792682914" ID="ID_1431116060" MODIFIED="1775015792008" TEXT="als direkten Iterator-Dekorator implementieren">
+<linktarget COLOR="#6eabcc" DESTINATION="ID_1431116060" ENDARROW="Default" ENDINCLINATION="-692;711;" ID="Arrow_ID_836382561" SOURCE="ID_723165101" STARTARROW="None" STARTINCLINATION="-437;22;"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1774796839564" ID="ID_111548031" MODIFIED="1774796859933">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      macht <b>zwei</b>&#160;Dinge
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1774796861325" ID="ID_1609330865" MODIFIED="1774796911501">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      stelt das unterliegende Resultat als <b>Value</b>&#160;bereit
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774796872763" ID="ID_10323871" MODIFIED="1774796905312">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      erzeugt diesen Value durch <b>force-Move</b>&#160;aus der unterliegenden Referenz
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#fa1301" CREATED="1774796926553" ID="ID_1801381879" MODIFIED="1774797292012" TEXT="das ist potentiell extrem gef&#xe4;hrlich">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Weil es gegen einen <i>implizierten erweiterten Kontrakt</i>&#160;des Iterators verst&#246;&#223;t!
+    </p>
+    <p>
+      Ich sage <i>impliziert,</i>&#160;weil dieser Kontrakt tats&#228;chlich nicht (oder nur halb) gegeben wurde &#8212; aber plausiblerweise w&#252;rde man diesen erweiterten Kontrakt erwarten: n&#228;mlich da&#223; sich ein Ergebnis eines Iterators nur &#228;ndert, wenn man ihn iteriert. In dem Moment allerdings, wo Referenzen mit im Spiel sind, kann man diesen Kontrakt eigentlich nicht mehr geben. Und das <font color="#a80a0a">wird hier nun virulent</font>: Man kann sich ein so erzeugtes Ergebnis <b>nur ein einziges Mal holen</b>.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="clanbomber"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#5f0f69" CREATED="1774797316312" ID="ID_1234485506" MODIFIED="1774919729867" TEXT="Im Test beobachten">
+<icon BUILTIN="edit"/>
+<node COLOR="#338800" CREATED="1774797322407" ID="ID_18546090" MODIFIED="1774797349323" TEXT="auf den ersten Blick: alles funktioniert wie erwartet">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1774797353643" ID="ID_250840513" MODIFIED="1774797375440" TEXT="mit dem Debugger genauer hinschauen (Bauchgef&#xfc;hl)">
+<icon BUILTIN="forward"/>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1774797377792" ID="ID_1015753826" MODIFIED="1774797396327" TEXT="oh Weh &#x2014; &#x2014; UNDEFINED BEHAVIOUR">
+<icon BUILTIN="broken-line"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1774797404700" ID="ID_455343041" MODIFIED="1774797422792" TEXT="im Testfall: move(array) erh&#xe4;lt das Original">
+<icon BUILTIN="clanbomber"/>
+</node>
+<node BACKGROUND_COLOR="#f1b296" COLOR="#990033" CREATED="1774797424170" ID="ID_823797893" MODIFIED="1774797470721" TEXT="tats&#xe4;chlich ist die Pipeline bereits Invalide, nachdem sie einmal kopiert wurde">
+<icon BUILTIN="broken-line"/>
+</node>
+<node CREATED="1774797478555" ID="ID_1626957151" MODIFIED="1774797483005" TEXT="konkret wird sie">
+<node CREATED="1774797484841" ID="ID_616229205" MODIFIED="1774797501281" TEXT="in util::join() einmal kopiert (da per Referenz gegeben)"/>
+<node CREATED="1774797509721" ID="ID_660947357" MODIFIED="1774797553336" TEXT="im Stringify &#x27f6; itertools-tranfsorm gepullt vor move-in-place">
+<icon BUILTIN="broken-line"/>
+</node>
+<node CREATED="1774797555064" ID="ID_1975852050" MODIFIED="1774797593270" TEXT="das zweite Problem k&#xf6;nnte man ggfs reparieren"/>
+</node>
+</node>
+<node COLOR="#98012d" CREATED="1774880883826" ID="ID_511605194" MODIFIED="1775015912694" TEXT="STOP. Reflexion notwendig">
+<arrowlink COLOR="#ff292c" DESTINATION="ID_1129175202" ENDARROW="Default" ENDINCLINATION="-213;169;" ID="Arrow_ID_1262266814" STARTARROW="None" STARTINCLINATION="-698;69;"/>
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1774803473556" FOLDED="true" ID="ID_1308880288" MODIFIED="1775016268079" TEXT="Beschlu&#xdf;: Ma&#xdf;namen">
+<linktarget COLOR="#fdebd3" DESTINATION="ID_1308880288" ENDARROW="Default" ENDINCLINATION="95;-721;" ID="Arrow_ID_123296710" SOURCE="ID_763333976" STARTARROW="None" STARTINCLINATION="-476;46;"/>
+<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1774803484523" ID="ID_1347545750" MODIFIED="1775015896901" TEXT="der Fall &#xbb;result by value&#xab; wird als &#xbb;grenzwertig&#xab; eingestuft">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1774803510104" ID="ID_1800596158" MODIFIED="1774882824693" TEXT="das ist Problem-3">
+<icon BUILTIN="full-3"/>
+</node>
+<node CREATED="1774803516694" ID="ID_1620146684" MODIFIED="1774803528518" TEXT="er wird unterst&#xfc;tzt, aber nur auf eigenes Risiko"/>
+<node CREATED="1774882848634" ID="ID_1791596935" MODIFIED="1774882873730">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      es ist nicht m&#246;glich, &#187;<b>undefined behaviour</b>&#171; auszuschlie&#223;en
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node COLOR="#5b280f" CREATED="1774803533668" ID="ID_431093928" MODIFIED="1774818178213" TEXT="die re-engage-Funktionalit&#xe4;t aus WrapperAdapter entfernen">
+<icon BUILTIN="button_cancel"/>
+<node COLOR="#435e98" CREATED="1774805345992" ID="ID_932892781" MODIFIED="1774805362552" TEXT="wird dadurch deutlich einfacher">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#338800" CREATED="1774805363786" ID="ID_417194647" MODIFIED="1774805370768" TEXT="Kommentar mit Warnung verfa&#xdf;t">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1774805372056" ID="ID_4511046" MODIFIED="1774805376978" TEXT="Test...">
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1774805377806" FOLDED="true" ID="ID_1857689379" MODIFIED="1775015849966" TEXT="SEGFAULT">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1774805396004" ID="ID_1322700448" MODIFIED="1774805443649" TEXT="++strings in util::join()">
+<icon BUILTIN="forward"/>
+<node CREATED="1774805457534" ID="ID_1862300898" MODIFIED="1774805462711" TEXT="IterTool::operator++"/>
+<node CREATED="1774805476401" ID="ID_387615429" MODIFIED="1774805482426" TEXT="TransformingCore::processItem()"/>
+<node CREATED="1774805493639" ID="ID_636969051" MODIFIED="1774805517891" TEXT="Crash passiert im Aufruf des toString-Funktors"/>
+<node CREATED="1774805518595" ID="ID_404939092" MODIFIED="1774805537790" TEXT="aber offensichtlich hat *source_ einen out-of-bounds-Pointer gelifert"/>
+</node>
+<node BACKGROUND_COLOR="#f1d4d5" COLOR="#a5014d" CREATED="1774805595481" ID="ID_218553534" MODIFIED="1774813748768" TEXT="Back To Square One">
+<linktarget COLOR="#f9438f" DESTINATION="ID_218553534" ENDARROW="Default" ENDINCLINATION="73;-167;" ID="Arrow_ID_1537578454" SOURCE="ID_227142513" STARTARROW="Default" STARTINCLINATION="-504;34;"/>
+<icon BUILTIN="smily_bad"/>
+<node CREATED="1774805689373" ID="ID_1830332322" MODIFIED="1774805705159" TEXT="zwar ist jetzt die Container-Core in Ordnung (wurde verschoben)"/>
+<node CREATED="1774805705946" ID="ID_40648856" MODIFIED="1774806318314" TEXT="aber ein dar&#xfc;berliegender Iterator zeigt noch in die alte Container-Location"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1774806319912" ID="ID_1742499395" MODIFIED="1774806333999" TEXT="wie ist das m&#xf6;glich (in den Code schauen...)?">
+<icon BUILTIN="help"/>
+<node CREATED="1774806337706" ID="ID_512527811" MODIFIED="1774806364389" TEXT="wir verwenden doch gar keinen Range-Iter..."/>
+<node CREATED="1774806349404" ID="ID_1245374199" MODIFIED="1774806357991" TEXT="IterableDecorator&lt;ContainerCore&gt;"/>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1774806368262" ID="ID_1063765724" MODIFIED="1774806379081" TEXT="Ha! Bug in ContainerCore selber">
+<icon BUILTIN="broken-line"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1774806380960" ID="ID_1204543671" MODIFIED="1774806397597" TEXT="gutda&#xdf;wirdar&#xfc;bergeredethaben">
+<font NAME="SansSerif" SIZE="11"/>
+<icon BUILTIN="ksmiletris"/>
+<node COLOR="#435e98" CREATED="1774806405373" ID="ID_1024853822" MODIFIED="1774806467587" TEXT="ich mein das ernst!">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1774806409620" ID="ID_1157789016" MODIFIED="1774806458704" TEXT="auch wenn ich glaube da&#xdf; ich &#xbb;prokrastiniere&#xab;">
+<icon BUILTIN="smily_bad"/>
+</node>
+<node CREATED="1774806426215" ID="ID_41544732" MODIFIED="1774806452198" TEXT="finde ich jetzt schon seit zwei Tagen ziemlich t&#xfc;ckische und alte Bugs">
+<icon BUILTIN="smiley-oh"/>
+</node>
+<node CREATED="1774806498066" ID="ID_1212805708" MODIFIED="1774806716510" TEXT="allesamt in Code der &#xfc;ber das &#xbb;unmittelbar notwendige&#xab; hinausgeht">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das werte ich als Konsequenz meiner grundlegenden Haltung: hat man einmal beschlossen, etwas aufzubauen, das &#252;ber den &#187;pragmatischen Anla&#223;&#171; hinausgeht, dann stellt das auch eine Verpflichtung dar; es rechtfertigt sich nur im R&#252;ckblick, wenn man es auch tats&#228;chlich so vollzogen hat. Wenn man aber unterwegs Angst bekommt, und dann Abk&#252;rzungen nimmt, wird die Lage gef&#228;hrlicher, als wenn man sich stets nur an die Trampepfade gehalten h&#228;tte
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#18806b" DESTINATION="ID_360361964" ENDARROW="Default" ENDINCLINATION="1263;0;" ID="Arrow_ID_287930609" STARTARROW="Default" STARTINCLINATION="558;0;"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#b9030d" CREATED="1774806718962" ID="ID_1841034488" MODIFIED="1774806768082" TEXT="und zwar das Feld p_ (aktuelles Element) ist das Problem">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1774806769340" ID="ID_1267458573" MODIFIED="1774806836600" TEXT="brauche nicht nur re-engage &#x2014; sondern sogar eine &#xdc;bersetzung">
+<icon BUILTIN="clanbomber"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1774806838177" ID="ID_311368896" MODIFIED="1774825808298" TEXT="ist das &#xfc;berhaupt m&#xf6;glich?">
+<icon BUILTIN="help"/>
+<node CREATED="1774806878142" ID="ID_1722757141" MODIFIED="1774806885352" TEXT="in aller Allgemeinheit: Nein!"/>
+<node CREATED="1774806886300" ID="ID_378958722" MODIFIED="1774806897207" TEXT="der end()-Iterator ist nur ein &#xbb;sentinel&#xab;"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1774813486102" ID="ID_1996346708" MODIFIED="1774880982248" TEXT="was f&#xfc;r Auswege g&#xe4;be es...?">
+<arrowlink COLOR="#5b70a1" DESTINATION="ID_1898877875" ENDARROW="Default" ENDINCLINATION="49;423;" ID="Arrow_ID_499674660" STARTARROW="None" STARTINCLINATION="-2;-458;"/>
+<icon BUILTIN="help"/>
+<node CREATED="1774813510112" ID="ID_1815505774" MODIFIED="1774813518829" TEXT="Pointer-Trickserei"/>
+<node CREATED="1774815033424" ID="ID_55293393" MODIFIED="1774815052932">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      eine <font face="Monospaced" color="#6f3e3e">engaged</font>-Flag
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774813525304" ID="ID_1032332878" MODIFIED="1774813545706" TEXT="auf Index-Iteration ausweichen"/>
+<node CREATED="1774813550363" ID="ID_361799295" MODIFIED="1774813562476" TEXT="ContainerCore non-copyable machen"/>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#5b280f" CREATED="1774825773522" ID="ID_339425578" MODIFIED="1774825782697" TEXT="STOP">
+<icon BUILTIN="closed"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1774818183275" ID="ID_26866020" MODIFIED="1774880642323" TEXT="ein Zwischenergebnis ist klar: die re-Engage-Funktionalit&#xe4;t mu&#xdf; bleiben">
+<icon BUILTIN="yes"/>
+<node CREATED="1774818210207" ID="ID_1610155334" MODIFIED="1774818256055" TEXT="sie sichert ein ganzes B&#xfc;ndel von Grenzf&#xe4;llen ab">
+<arrowlink COLOR="#6a54bb" DESTINATION="ID_745144268" ENDARROW="Default" ENDINCLINATION="382;14;" ID="Arrow_ID_1545734215" STARTARROW="None" STARTINCLINATION="868;0;"/>
+</node>
+<node CREATED="1774818287258" ID="ID_905114979" MODIFIED="1774818411079" TEXT="sie stellt eine beschr&#xe4;nkte Toleranz f&#xfc;r grenz&#xfc;berschreitende Verwendung dar">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Der Umstand, da&#223; ich diesen Mechanismus eingef&#252;hrt habe, zeigt deutlich, da&#223; es zum IterExplorer-Design geh&#246;rt, da&#223; man seine Grenzen etwas streckt, sofern man die Realit&#228;t in der Implementierung noch durschaut. Und insofern das eine, wenngleich nicht Norm, doch tolerierte Abweichung ist, sollte man an der Ecke nicht sparen und diesen Bereich konsistent unterst&#252;tzen, selbst wenn es an andere Stelle gewisse Abstriche bedingt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#338800" CREATED="1774880651151" ID="ID_931291193" MODIFIED="1774880689787" TEXT="Umbau entsprechend zur&#xfc;ckgenommen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1774880660798" ID="ID_530120313" MODIFIED="1774880689788" TEXT="Dokumentation angepa&#xdf;t">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#5c0f69" CREATED="1774880669661" ID="ID_1874206873" MODIFIED="1774880780260" TEXT="Test zeigt zu Beginn zwei &#xfc;bersch&#xfc;ssige Kopien">
+<linktarget COLOR="#687a8e" DESTINATION="ID_1874206873" ENDARROW="Default" ENDINCLINATION="-195;11;" ID="Arrow_ID_435055141" SOURCE="ID_1598508197" STARTARROW="Default" STARTINCLINATION="79;-33;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#2c2d94" CREATED="1774826390643" ID="ID_1701398682" MODIFIED="1774919074332" TEXT="der Testfall kann dann nicht mit moveIt() implementiert werden">
+<icon BUILTIN="messagebox_warning"/>
+<node COLOR="#5b280f" CREATED="1774826441884" ID="ID_1578841471" MODIFIED="1774826494912" TEXT="eigentlich darf es moveIt so nicht geben">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      dieser ganzen Analyse zufolge wird damit grenzwertiges Verhalten &#187;ratifiziert&#171;
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="stop-sign"/>
+</node>
+<node COLOR="#1b1d80" CREATED="1774826570474" ID="ID_922060639" MODIFIED="1774919096424" TEXT="man k&#xf6;nnte es als freistehendes Itertool realisieren">
+<icon BUILTIN="idea"/>
+<node CREATED="1774826583785" ID="ID_201879499" MODIFIED="1774826594392" TEXT="im Grunde brauche ich es nur f&#xfc;r Tests wie diesen hier"/>
+<node CREATED="1774826595559" ID="ID_421471459" MODIFIED="1774826609201" TEXT="und eine Copy-Variante w&#xe4;re ebenso d&#xe4;mlich"/>
+<node CREATED="1774826715932" ID="ID_261557368" MODIFIED="1774826748586" TEXT="freistehende Funktion &#x27f9; man kann&apos;s nicht in der Pipeline verwenden">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...wo es besonders gef&#228;hrlich w&#228;re
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1774879596670" ID="ID_1394586954" MODIFIED="1775006320632" TEXT="zwei Iterator-Wrapper">
+<linktarget COLOR="#5eb5d9" DESTINATION="ID_1394586954" ENDARROW="Default" ENDINCLINATION="-537;58;" ID="Arrow_ID_1081468646" SOURCE="ID_723165101" STARTARROW="None" STARTINCLINATION="-317;16;"/>
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1774879607575" ID="ID_1598508197" MODIFIED="1774880780259" TEXT="copyIt()">
+<arrowlink COLOR="#687a8e" DESTINATION="ID_1874206873" ENDARROW="Default" ENDINCLINATION="-195;11;" ID="Arrow_ID_435055141" STARTARROW="Default" STARTINCLINATION="79;-33;"/>
+</node>
+<node COLOR="#435e98" CREATED="1774879611148" ID="ID_326088708" MODIFIED="1774879620408" TEXT="moveIt()"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1774821085927" ID="ID_466332610" MODIFIED="1774826231454" TEXT="eine eingeschr&#xe4;nkte L&#xf6;sung f&#xfc;r indexierbare Container erscheint attraktiv">
+<arrowlink COLOR="#11be10" DESTINATION="ID_863323562" ENDARROW="Default" ENDINCLINATION="-27;-58;" ID="Arrow_ID_758768773" STARTARROW="None" STARTINCLINATION="-192;7;"/>
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1774825868905" ID="ID_675104799" MODIFIED="1774825966531" TEXT="baue mir daf&#xfc;r ein einfaches Concept">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1774825888942" ID="ID_1904128698" MODIFIED="1774825901271" TEXT="hat Typ CON::reference"/>
+<node CREATED="1774825902140" ID="ID_134890946" MODIFIED="1774825914846" TEXT="kann Subscript anwenden"/>
+<node CREATED="1774825915531" ID="ID_1172873169" MODIFIED="1774825923102" TEXT="hat einen size()"/>
+</node>
+<node COLOR="#435e98" CREATED="1774825925369" ID="ID_1645670891" MODIFIED="1774825970285" TEXT="dazu ein (abgeleiteter)  is_subscriptable-Trait">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      da ich generell noch weitgehend SFINAE-Mechanik verwende...
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#338800" CREATED="1774825980020" ID="ID_1929697648" MODIFIED="1774825995258" TEXT="der Rest als Klon von der ContainerCore">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#5b280f" CREATED="1774818419811" ID="ID_1525052096" MODIFIED="1774905873617" TEXT="ContainerCore mu&#xdf; non-Copyable gemacht werden">
+<icon BUILTIN="button_cancel"/>
+<node COLOR="#5b280f" CREATED="1774818442975" ID="ID_678533654" MODIFIED="1774905771418" TEXT="man k&#xf6;nnte sie sogar ganz l&#xf6;schen">
+<icon BUILTIN="closed"/>
+</node>
+<node COLOR="#5b280f" CREATED="1774818452023" ID="ID_682483613" MODIFIED="1774905758617" TEXT="wird ja nicht verwendet (und ist auch unwahrscheinlich)">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1774905773262" ID="ID_1191808227" MODIFIED="1774905777546" TEXT="stimmt nicht!"/>
+<node CREATED="1774905778510" ID="ID_313614715" MODIFIED="1774905802584" TEXT="IterExplorer::deduplicate() verwendet ein std::set &#xbb;inline verpackt&#xab;"/>
+<node CREATED="1774905818016" ID="ID_1524206334" MODIFIED="1774905835440" TEXT="hier wird der Iterator auch nicht invalidiert (da er in Heap-Storage zeigt)">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1774818461478" ID="ID_190350675" MODIFIED="1774818473024" TEXT="allerdings: der Ansatz ist naheliegend"/>
+<node CREATED="1774818473764" ID="ID_355331561" MODIFIED="1774818486926" TEXT="daher besser mit dokumentierter Einschr&#xe4;nkung behalten"/>
+<node CREATED="1774905839869" ID="ID_226340646" MODIFIED="1774905867707">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <b>Fazit</b>: <font color="#980505">gef&#228;hrlich</font>&#160;&#8212; aber bisweilsen valide
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node COLOR="#5b280f" CREATED="1774803563872" ID="ID_1775597177" MODIFIED="1774911338412" TEXT="util::join auf IterAdapter umstellen">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1774911362880" ID="ID_1847674599" MODIFIED="1774911430828" TEXT="habe doch Bedenken wegen dem Gewicht">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      und zwar geht es mir mehr um die Compile-Time; der iter-explorer.hpp ist wirklich gro&#223; und komplex, man sollte ihn doch nicht in eine derart generische Funktion wie util::join() integrieren
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1774911432006" ID="ID_1139560903" MODIFIED="1774911439985" TEXT="besser mit endlich mal einen Ruck geben...."/>
+</node>
+<node COLOR="#338800" CREATED="1774803575093" ID="ID_808274597" MODIFIED="1775015435281" TEXT="Itertools durchsehen, was sonst noch vereinfacht werden kann">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1774911443156" ID="ID_1134186731" MODIFIED="1774911462811" TEXT="jetzt sag ich schon seit Jahren jedes mal wieder &#xbb;oh weh&#xab;"/>
+<node CREATED="1774911463922" ID="ID_1406801395" MODIFIED="1774911506804">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      &#10233; warum nicht wirklich mal eine <i>d&#228;mliche Implementierung</i>&#160;f&#252;r diese einfachen F&#228;lle?
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1774978409356" ID="ID_592937411" MODIFIED="1774978438590" TEXT="Pr&#xe4;misse: &#xbb;no frills&#xab; - implementation">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node COLOR="#435e98" CREATED="1774978444423" ID="ID_1571853443" MODIFIED="1774978455803" TEXT="(es gibt ja den IterExplorer)">
+<font NAME="SansSerif" SIZE="11"/>
+</node>
+<node CREATED="1774978474171" ID="ID_319448474" MODIFIED="1774978490890" TEXT="im Besonderen: Funktoren nicht in std::function wrappen"/>
+<node CREATED="1774978498568" ID="ID_944896894" MODIFIED="1774978655277" TEXT="und keinerlei Hilfstemplates zur Vermeidung von &#xbb;Boilerplate&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...das war das gr&#246;&#223;te Problem mit der alten Implementierung: ich wollte schon wieder ein Framework bauen (was dann sp&#228;ter IterExplorer wurde...), und habe deshalb dieses trickreiche <i>Sandwich-Design</i>&#160;gew&#228;hlt. Und das bedingt dann ein hoch-problematisches Konstruktor-Setup, wo eine Core erzeugt und nach unten geschoben werden mu&#223;. Deshalb werde ich dieses Mal stets <b>direkt das ganze Lumiera-Forward-Iterator-Schema</b>&#160; durchimplementieren.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1774912756647" FOLDED="true" ID="ID_1058596152" MODIFIED="1775015936450" TEXT="Aufgaben">
+<icon BUILTIN="yes"/>
+<node COLOR="#338800" CREATED="1774913180486" ID="ID_1669066665" MODIFIED="1774918719462" TEXT="f&#xfc;r den Umbau: eine Kopie mit Test daneben stellen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1774918726492" ID="ID_1336785093" MODIFIED="1774918764687" TEXT="inclusion-guard vorr&#xfc;bergehend manipulieren">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...damit die Definitionen in &quot;iterools.hpp&quot; und der Kopie nicht kollidieren
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#435e98" CREATED="1774918765749" ID="ID_1225167696" MODIFIED="1774918859082" TEXT="Test auf aktuelle Gepflogenheiten umstellen und vereinfachen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <ul>
+      <li>
+        kein variables Argument mehr
+      </li>
+      <li>
+        bestehende Test-Helper verwenden
+      </li>
+      <li>
+        Iterator in jeder Test-Funktion erneut erzeugen, nicht durchreichen
+      </li>
+      <li>
+        keine Verifikation per STDOUT mehr machen, sondern ExpectString verwenden
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1774912760950" ID="ID_372364320" MODIFIED="1774970939396" TEXT="der ExtensibleFilter ist komplett redundant">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Die gleiche Implementierungs-Technik habe ich inzwischen (f&#252;r das EventLog) auch in IterExplorer eingebaut. Es gibt daf&#252;r sogar einen Testfall in IterExplorer_test. Die Klasse ExtensibleFilter wird anscheinend nur noch im Itertools_test verwendet
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1774913163160" ID="ID_1310304" MODIFIED="1774913178928" TEXT="das ganze Framework mit IterTool und IdentityCore f&#xe4;llt ersatzlos weg"/>
+<node COLOR="#338800" CREATED="1774913291263" ID="ID_418524884" MODIFIED="1774984011691" TEXT="Adapter direkt implementieren">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Jeweils einen Klon der Implementierung aus IterExplorer nehmen und vereinfachen; dabei allerdings direkt auf das Lumiera-Iterator-Concept umschreiben (keine StateCore!)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1774913409719" ID="ID_1712193470" MODIFIED="1774978091158" TEXT="iter::Filter"/>
+<node COLOR="#435e98" CREATED="1774913413140" ID="ID_1930445319" MODIFIED="1774983974711" TEXT="iter::Trans"/>
+<node COLOR="#435e98" CREATED="1774913441235" ID="ID_1326906238" MODIFIED="1774970913857" TEXT="iter::Single"/>
+</node>
+<node COLOR="#338800" CREATED="1774978101013" ID="ID_1190365800" MODIFIED="1775001448341" TEXT="Hilfsmittel erg&#xe4;nzen und anpassen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1774978109756" ID="ID_167324861" MODIFIED="1774978161232" TEXT="Concept iter_predicate&lt;IT&gt;">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1774978166820" ID="ID_534649259" MODIFIED="1774978185494" TEXT="pr&#xfc;ft da&#xdf; ich einen Referenz-Typ auf dem Iterator ermitteln kann"/>
+<node CREATED="1774978186313" ID="ID_1893013588" MODIFIED="1774978212700" TEXT="pr&#xfc;ft da&#xdf; der Funktor tats&#xe4;chlich invocable ist mit diesem Argument"/>
+<node CREATED="1774978269764" ID="ID_1951391237" MODIFIED="1774978286754" TEXT="und nat&#xfc;rlich da&#xdf; das Ergebnis bool-convertible ist"/>
+<node CREATED="1774978213433" ID="ID_291911284" MODIFIED="1774978362908" TEXT="verwendet explizit nicht std::regular_invocable">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Weil wir hier explizit auch Tricksereien mit Seiteneffekten im Funktor oder den Argumenten zulassen wollen; weil dieser Gebrauch realistisch ist (und tats&#228;chlich durch die Pipeline-Idee sogar gef&#246;rdert wird)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1774983978103" ID="ID_170487663" MODIFIED="1774984003865" TEXT="Concept iter_transformer&lt;IT&gt;">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1774983986403" ID="ID_749403638" MODIFIED="1774983993701" TEXT="pr&#xfc;ft eigentlich nur std::invocable"/>
+<node CREATED="1774983994286" ID="ID_476438068" MODIFIED="1774984001461" TEXT="aber auf SRC::reference"/>
+</node>
+<node COLOR="#435e98" CREATED="1775000977290" ID="ID_1410168988" MODIFIED="1775000996240" TEXT="SkpRepetition &#x27fc; ChangeDetector"/>
+<node COLOR="#435e98" CREATED="1775001009270" ID="ID_723165101" MODIFIED="1775006320632" TEXT="auch den neulich geschriebenen ValueAdapter integriert">
+<arrowlink COLOR="#6eabcc" DESTINATION="ID_1431116060" ENDARROW="Default" ENDINCLINATION="-692;711;" ID="Arrow_ID_836382561" STARTARROW="None" STARTINCLINATION="-437;22;"/>
+<arrowlink COLOR="#5eb5d9" DESTINATION="ID_1394586954" ENDARROW="Default" ENDINCLINATION="-537;58;" ID="Arrow_ID_1081468646" STARTARROW="None" STARTINCLINATION="-317;16;"/>
+</node>
+<node COLOR="#338800" CREATED="1775001278907" ID="ID_561699967" MODIFIED="1775001444511" TEXT="append_all und pull_last kann man auch mitnehmen">
+<icon BUILTIN="yes"/>
+<node CREATED="1775001338978" ID="ID_349735157" MODIFIED="1775001365383" TEXT="append_all wird an ein paar Stellen in Kern-Funktionalit&#xe4;t verwendet">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Engine-Service, Session-Scope evaluation
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1775001386852" ID="ID_1165514423" MODIFIED="1775001433351" TEXT="pull_last wird wenigstens in einem Test verwendet (und erscheint sinnvoll)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      GenNodeLocationQuery ....
+    </p>
+    <p>
+      Au&#223;erdem gibt es daf&#252;r keine IterExplorer-L&#246;sung, weil die Implementierung hier so offensichtlich ist
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1774918652365" ID="ID_29780988" MODIFIED="1775015430953" TEXT="bestehenden Code ersetzen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1774918660445" ID="ID_1200048002" MODIFIED="1775001872746" TEXT="neuen Header verwenden">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1774918664884" ID="ID_64427903" MODIFIED="1775001874105" TEXT="neuen Test verwenden">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1774918672187" ID="ID_968606247" MODIFIED="1775015416210" TEXT="Namen vereinfachen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1775002263308" ID="ID_1434418173" MODIFIED="1775002278054" TEXT="singleValIterator &#x27fc; singletonIter"/>
+<node CREATED="1775002278955" ID="ID_790744404" MODIFIED="1775002287485" TEXT="nilIterator &#x27fc; nilIter"/>
+<node CREATED="1775002623108" ID="ID_1734259877" MODIFIED="1775002631787" TEXT="filterIterator &#x27fc; filterIter"/>
+<node CREATED="1775002635434" ID="ID_300938567" MODIFIED="1775006213933" TEXT="transformIterator &#x27fc; transformIter"/>
+<node CREATED="1775002593215" ID="ID_1344075786" MODIFIED="1775002607136" TEXT="filterRepetitions &#x27fc; filterRepeat"/>
+</node>
+<node COLOR="#435e98" CREATED="1775006221916" FOLDED="true" ID="ID_501896563" MODIFIED="1775015584927" TEXT="bestehender Code hat die Klasse TransformIter erzeugt">
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1775006246877" ID="ID_367453125" MODIFIED="1775006363101" TEXT="das geht nicht mehr nach meinem Umbau">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1775006455793" ID="ID_812423744" MODIFIED="1775006471676" TEXT="das ist jetzt ein reines Implementierungs-Delegate">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1775006365901" ID="ID_878976034" MODIFIED="1775006453834">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      im Besonderen ist der 2.Template-Parameter jetzt <i>beweglich</i>
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...es ist der konkrete Funktor- oder &#955;-Typ
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1775006382242" ID="ID_1930105455" MODIFIED="1775006427708" TEXT="und stellt nicht mehr einen &#xbb;Ergebniswert&#xab; dar">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      auch das ein Konzept, das sich inzwischen &#252;berholt hat, insofern wir i.d.R. nur noch einen iter::Yield verwenden
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1775006257387" ID="ID_1028068382" MODIFIED="1775006359382" TEXT="ich halte aber an der &#xc4;nderung fest">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...denn ich sehe eine Berechtigung f&#252;r die eigenst&#228;ndigen &#187;Itertools&#171; (neben IterExplorer) nur noch insofern diese leichtgewichtig und einfach sind; deshalb will ich definitiv keinen std::function-Wrapper mehr, und ich halte auch den Ansatz, die Typen explizit zu konstruieren, f&#252;r obsolet.
+    </p>
+  </body>
+</html></richcontent>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#435e98" CREATED="1775006475150" ID="ID_301415203" MODIFIED="1775015381143" TEXT="Verwendungen betrachten">
+<icon BUILTIN="forward"/>
+<node CREATED="1775006492076" ID="ID_666612008" MODIFIED="1775006505061" TEXT="sehe bisther kein grunds&#xe4;tzliches Problem">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1775006506138" ID="ID_254016009" MODIFIED="1775006517183" TEXT="vieles davon sind die pre-C++11-Trait-Typen"/>
+<node CREATED="1775006518168" ID="ID_279763165" MODIFIED="1775006535993" TEXT="man kann fast immer stattdessen Typ-Inferenz"/>
+<node CREATED="1775006538877" ID="ID_1145062777" MODIFIED="1775006551500">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      einziges Problem: der <b>Placement-Index</b>
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1775006555411" ID="ID_564725720" MODIFIED="1775006569322" TEXT="oh ja ... eine sehr alte Implementierungs-Struktur">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1775006570537" ID="ID_460384337" MODIFIED="1775006597787" TEXT="zwar sauber aber nicht so klar strukturiert wie ich das heute erwarte">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1775006602997" ID="ID_1110282300" MODIFIED="1775006627390" TEXT="hier war PlacementIndex::iterator definiert durch TransformIterator"/>
+<node CREATED="1775006633681" ID="ID_937416550" MODIFIED="1775006650731" TEXT="Ersetzung ausf&#xfc;hren ohne die Details zu verstehen">
+<icon BUILTIN="yes"/>
+<node CREATED="1775006652840" ID="ID_362724294" MODIFIED="1775006659869" TEXT="es gibt nur eine einzige Quelle"/>
+<node CREATED="1775006667268" ID="ID_1877127663" MODIFIED="1775006674447" TEXT="PlacementIndex::Table::queryScopeContents()"/>
+<node CREATED="1775006688065" ID="ID_1917790645" MODIFIED="1775006695572" TEXT="die verwendet als Funktor einen ElementResolver"/>
+<node CREATED="1775006700506" ID="ID_339706376" MODIFIED="1775006748080">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <b><font color="#c60aab">Schwein</font></b>&#160;gehabt: das ist eine <font face="Monospaced" color="#503838">std::<b>function</b></font>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1775006826392" ID="ID_871850754" MODIFIED="1775006887071" TEXT="klingt auch nach einer plausiblen Abstraktion">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...kann mich dabei aber auch in's eigene Bein geschossen haben, wenn es nicht als Abstraktion gedacht war, sondern es nur <i>rein zuf&#228;llig</i>&#160; bisher nur eine Implemenrierung gab...
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#435e98" CREATED="1775006756595" ID="ID_1869498099" MODIFIED="1775006781850" TEXT="&#x27f9; decltype mit std::declval() verwenden"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1775006790012" ID="ID_860541201" MODIFIED="1775007065516" TEXT="auch die Placements werde ich nochmal sehr gr&#xfc;ndlich anschauen m&#xfc;ssen">
+<arrowlink COLOR="#7e23c4" DESTINATION="ID_182440787" ENDARROW="Default" ENDINCLINATION="648;35;" ID="Arrow_ID_1169189687" STARTARROW="None" STARTINCLINATION="496;18;"/>
+<icon BUILTIN="hourglass"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1775015394211" ID="ID_832878316" MODIFIED="1775015408162" TEXT="konnte umgeschrieben werden">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1774971385276" ID="ID_45243206" MODIFIED="1775015428529" TEXT="IterableClassification_test modernisieren">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1775015442855" ID="ID_1933771258" MODIFIED="1775015464863" TEXT="habe jetzt Itertools praktisch komplett neu geschrieben">
+<icon BUILTIN="idea"/>
+<node COLOR="#435e98" CREATED="1775015467378" ID="ID_878324645" MODIFIED="1775015527779" TEXT="oh wie lange schon...">
+<icon BUILTIN="smiley-neutral"/>
+</node>
+<node BACKGROUND_COLOR="#b1d8ea" COLOR="#145098" CREATED="1775015500721" ID="ID_258834651" MODIFIED="1775015557316" TEXT="bin sehr zufrieden mit der neuen L&#xf6;sung">
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#174956" COLOR="#8dfd49" CREATED="1774826167872" HGAP="11" ID="ID_863323562" MODIFIED="1774919539009" STYLE="bubble" TEXT="Durchbruch : Problem grunds&#xe4;tzlich gel&#xf6;st" VSHIFT="2">
+<edge COLOR="#61fe5b" STYLE="bezier" WIDTH="thin"/>
+<linktarget COLOR="#11be10" DESTINATION="ID_863323562" ENDARROW="Default" ENDINCLINATION="-27;-58;" ID="Arrow_ID_758768773" SOURCE="ID_466332610" STARTARROW="None" STARTINCLINATION="-192;7;"/>
+</node>
+<node CREATED="1774882064586" HGAP="-20" ID="ID_517371899" MODIFIED="1774919393341" TEXT="resultierende Pipeline " VSHIFT="14">
+<icon BUILTIN="info"/>
+<node CREATED="1774882090383" ID="ID_955419086" MODIFIED="1774919596093" STYLE="bubble">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <font face="Monospaced" size="2">IterExplorer&lt; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;IterableDecorator&lt;CheckedCore&lt; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;iter_explorer::</font><font face="Monospaced" size="2" color="#5d26af">Flattener</font><font face="Monospaced" size="2">&lt; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;iter_explorer::</font><font face="Monospaced" size="2" color="#7821cb">WrapperAdapter</font><font face="Monospaced" size="2">&lt;iter::ValueAdapter&lt;IterExplorer&lt; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;BaseAdapter&lt; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;StlRange&lt; </font><font face="Monospaced" size="2" color="#820707">array</font><font face="Monospaced" size="2">&lt; </font><font face="Monospaced" size="2" color="#e10101">array</font><font face="Monospaced" size="2">&lt;int, </font><font face="Monospaced" size="2" color="#700416">2</font><font face="Monospaced" size="2">ul&gt; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; &#160;&#160;&#160;&#160;, </font><font face="Monospaced" size="2" color="#9c051e">3</font><font face="Monospaced" size="2">ul </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; &#160;&#160;&#160;&#160;&gt; </font><font face="Monospaced" size="2" color="#9a0789">&amp;</font><font face="Monospaced" size="2">&#160;&gt; &gt; &gt; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;,false&gt; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;, IterableDecorator&lt;</font><font face="Monospaced" size="2" color="#8202b4">IdxStoreCore</font><font face="Monospaced" size="2">&lt;array&lt;int, 2ul&gt; &gt;&gt;&gt;&gt;&gt;&gt;&gt;</font>
+    </p>
+  </body>
+</html></richcontent>
+<edge COLOR="#2409c6"/>
+<linktarget COLOR="#d9fed2" DESTINATION="ID_955419086" ENDARROW="Default" ENDINCLINATION="17;201;" ID="Arrow_ID_768232845" SOURCE="ID_1301174204" STARTARROW="None" STARTINCLINATION="112;9;"/>
+</node>
+</node>
+</node>
+<node COLOR="#311e59" CREATED="1775016464204" ID="ID_505675866" MODIFIED="1775017145560">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <u>Fazit</u>: das war <b>saum&#252;hsam</b>
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...diese &#8222;offensichtliche kleine Erg&#228;nzung&#8220; hat mich <i>vier Tage Arbeit</i>&#160;gekostet, und hat mir die <b><font color="#7a1d52">Grenzen des IterExplorer-Designs</font></b>&#160;sehr deutlich gemacht: die Leichtigkeit, mit der man komplexe Verarbeitungsmuster realisieren kann, zusammen mit dem im Kern zustandsbasierten Design wirkt als <i>ein gef&#228;hrlicher Hebel:</i>&#160;
+    </p>
+    <p>
+      Es ist nur sicher und gut beherrschbar, wenn man sich <font color="#2116a1">strikt an die Semantik des Lumiera-Iterator-Konzepts</font>&#160;h&#228;lt. Im Besonderen sollte das Ergebnis <b>normalerweise als Referenz auf einen Zustand</b>&#160;behandelt werden. Dieser Zustand sollte aber <b>strikt in einer Ebene eingekapselt</b>&#160;&#160;bleiben und sich h&#246;chstens per Referenz auf <b>au&#223;erhalb liegende, stabile Adressen</b>&#160;beziehen.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Was sich nun &#252;ber mehrere Tage hingezogen hat war auch eine weit-gespannte Aufr&#228;um-Aktion; ich habe mehrere, zum Teil sehr alte und t&#252;ckische Fehler behoben, die Traits im Zusammenhang mit den Iterator-Adaptoren nochmal neu durchdacht und bereinigt, stellenweise bereits <b>Concepts</b>&#160;eingef&#252;ht &#8212; und ich habe <b><font color="#2c107b">endlich die &#187;Itertools&#171; aufger&#228;umt</font></b>&#160;<font size="2">(eigentlich auf meinem aktuellen Stand neu geschrieben)</font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#c0efd1" COLOR="#24608e" CREATED="1774751518922" ID="ID_96643848" MODIFIED="1775015645852" TEXT="Test">
+<font NAME="SansSerif" SIZE="13"/>
+<icon BUILTIN="yes"/>
+<node COLOR="#338800" CREATED="1774751521753" ID="ID_102040788" MODIFIED="1774751661100" TEXT="Fall-1 : nested Lumiera-Iterator">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1774751528649" ID="ID_953255582" MODIFIED="1774751661099" TEXT="Fall-2 : nested State-Core">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1774751546942" ID="ID_1662249440" MODIFIED="1774751661098" TEXT="Fall-3 : nested STL-Container by-ref">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1774751559629" FOLDED="true" ID="ID_1301174204" MODIFIED="1774919596093" TEXT="Fall-4 : yield nested STL Container">
+<arrowlink COLOR="#d9fed2" DESTINATION="ID_955419086" ENDARROW="Default" ENDINCLINATION="17;201;" ID="Arrow_ID_768232845" STARTARROW="None" STARTINCLINATION="112;9;"/>
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1774751573435" ID="ID_654236226" MODIFIED="1774919441977" TEXT="woot?? wie baue ich daf&#xfc;r eine Test-Quelle??">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Problem ist: all die einfachen Bausteine liefern das Resultat per Referenz. Das mit dem Value-Resultat ist wirklich ein seltener Grenzfall. Vmtl. werde ich daf&#252;r eine eigene Core oder einen Processing-Layer bauen m&#252;ssen
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#87201e" DESTINATION="ID_1347126251" ENDARROW="Default" ENDINCLINATION="-150;231;" ID="Arrow_ID_71310356" STARTARROW="None" STARTINCLINATION="-470;-36;"/>
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1774919445775" ID="ID_1092433381" MODIFIED="1774919463104" TEXT="oh weh ... da tun sich Abgr&#xfc;nde auf...">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="smily_bad"/>
+</node>
+<node CREATED="1774919465129" ID="ID_1457247045" MODIFIED="1774919509585" TEXT="einige Tage sp&#xe4;ter : durchgek&#xe4;mpft">
+<icon BUILTIN="smiley-angry"/>
 </node>
 </node>
 </node>
@@ -77569,6 +78905,25 @@
 </node>
 <node CREATED="1748736913830" ID="ID_747669722" MODIFIED="1748737076982" TEXT="Repr&#xe4;sentation">
 <arrowlink COLOR="#802752" DESTINATION="ID_1289244616" ENDARROW="Default" ENDINCLINATION="-1333;61;" ID="Arrow_ID_657332017" STARTARROW="None" STARTINCLINATION="-1024;178;"/>
+<node COLOR="#56229b" CREATED="1775006985490" ID="ID_182440787" MODIFIED="1775007350766" TEXT="werde vermutlich hierzu einiges umbauen m&#xfc;ssen...">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Fr&#252;hjahr 2026 bin ich <i>gef&#252;hlt</i>&#160;&#8222;fast&#8220; mit dem &#187;Playback Vertical Slice&#171; fertig. Ich sehe schon, da&#223; das &#187;Load Clip&#171;-VerticalSlice den <b>Builder</b>&#160;erstmals einf&#252;gen und mit dem <b>Event-Sourcing </b>verbinden mu&#223; &#8212; und das sehe ich als <i>die letzte Gelegenheit,</i>&#160;die Session-Storage nochmal zu &#252;berdenken:
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      ich spiele mit der Idee, die Placements <i><font color="#ad0644">nicht mehr als shared-Handles zu implementieren</font>.<b>&#160;&#10233; </b></i>Rewrite Placement-Index
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#7e23c4" DESTINATION="ID_182440787" ENDARROW="Default" ENDINCLINATION="648;35;" ID="Arrow_ID_1169189687" SOURCE="ID_860541201" STARTARROW="None" STARTINCLINATION="496;18;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
 </node>
 </node>
 <node CREATED="1674160453319" ID="ID_1069058254" MODIFIED="1674160457633" TEXT="Fragen der Anordnung">
@@ -140624,8 +141979,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node CREATED="1774397274652" ID="ID_1950247310" MODIFIED="1774397289966" TEXT="Konstruktion sollte damit funktionieren...">
-<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#174956" COLOR="#8dfd49" CREATED="1774397274652" ID="ID_1950247310" MODIFIED="1774399247262" TEXT="Konstruktion funktioniert...">
+<edge COLOR="#3d6b9d" STYLE="bezier" WIDTH="thin"/>
 <node COLOR="#435e98" CREATED="1774397294907" ID="ID_728936921" MODIFIED="1774397445256" TEXT="SEGFAULT(Stackoverflow)">
 <icon BUILTIN="broken-line"/>
 <node COLOR="#bd0649" CREATED="1774397318144" ID="ID_557942627" MODIFIED="1774397442901" TEXT="std::function-Konstruktor ruft sich selbst auf">
@@ -140640,6 +141995,30 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node COLOR="#338800" CREATED="1774397450640" ID="ID_353105094" MODIFIED="1774397471843" TEXT="einmal durch den ganzen Konstruktions-Allokations-Zyklus gesteppt">
 <icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1774399348243" ID="ID_1932552195" MODIFIED="1775017615620" TEXT="nun fehlen nur noch einige convenience-Diagnostic-Helper">
+<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1774399548243" ID="ID_778280136" MODIFIED="1775017729982" TEXT="vor allem allBlocks &#x27f9; mu&#xdf; mehrere Quellen verbinden">
+<arrowlink COLOR="#4282ce" DESTINATION="ID_657002637" ENDARROW="Default" ENDINCLINATION="800;41;" ID="Arrow_ID_469905566" STARTARROW="None" STARTINCLINATION="972;48;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#9d1673" CREATED="1774399648243" HGAP="41" ID="ID_831504293" MODIFIED="1775017879434" TEXT="warum ist das so m&#xfc;hsam??" VSHIFT="13">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+<node COLOR="#bb09ad" CREATED="1775017768941" HGAP="25" ID="ID_731275805" MODIFIED="1775017870017" TEXT="(h&#xe4;tte ich das blo&#xdf; einfach runtergeklopft...)" VSHIFT="1">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ....anstatt mir mal <i>schnell eben ein generisches Tool zu bauen. </i>
+    </p>
+    <p>
+      Tja &#8212; &#187;schnell eben&#171; dauert eine halbe Woche, und man f&#228;llt dabei in ein tiefes Loch
+    </p>
+  </body>
+</html></richcontent>
+<font NAME="SansSerif" SIZE="8"/>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -168896,7 +170275,11 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
 <node CREATED="1733950416539" ID="ID_1732623981" MODIFIED="1733950431054" TEXT="man kann damit ein Tupel in lokale Variable auspacken">
 <icon BUILTIN="idea"/>
 </node>
-<node CREATED="1733950377664" ID="ID_242038986" LINK="https://en.cppreference.com/w/cpp/utility/tuple/tuple-like" MODIFIED="1733950483299" TEXT="verwendbar f&#xfc;r alles was das &#xbb;tuple protocoll&#xab; erf&#xfc;llt"/>
+<node CREATED="1733950377664" ID="ID_242038986" LINK="https://en.cppreference.com/w/cpp/utility/tuple/tuple-like" MODIFIED="1733950483299" TEXT="verwendbar f&#xfc;r alles was das &#xbb;tuple protocoll&#xab; erf&#xfc;llt">
+<node BACKGROUND_COLOR="#e4d79e" COLOR="#2b2979" CREATED="1774899835763" ID="ID_1573277644" LINK="https://en.cppreference.com/w/cpp/language/structured_binding.html#Case_2:_binding_a_type_implementing_the_tuple_operations" MODIFIED="1774905740882" TEXT="siehe auch: Beschreibung der &#xbb;structured bindings&#xab; f&#xfc;r den Tuple-Fall">
+<icon BUILTIN="info"/>
+</node>
+</node>
 <node COLOR="#435e98" CREATED="1734017209791" ID="ID_141049889" LINK="https://en.cppreference.com/w/cpp/language/structured_binding#Binding_process" MODIFIED="1734017690782" TEXT="unterst&#xfc;tzt dar&#xfc;ber hinaus aber noch weitere F&#xe4;lle">
 <linktarget COLOR="#608fc7" DESTINATION="ID_141049889" ENDARROW="Default" ENDINCLINATION="-1267;70;" ID="Arrow_ID_1556834813" SOURCE="ID_1154017972" STARTARROW="None" STARTINCLINATION="-716;33;"/>
 <linktarget COLOR="#4989d4" DESTINATION="ID_141049889" ENDARROW="Default" ENDINCLINATION="-494;29;" ID="Arrow_ID_789791822" SOURCE="ID_1129626446" STARTARROW="None" STARTINCLINATION="-1100;-64;"/>

@@ -310,7 +310,7 @@ namespace test{
       
       template<class MAP>
       void
-      verify_MultimapIters()  ///< @see IterTools_test#verify_filterRepetitions
+      verify_MultimapIters()  ///< @see IterTools_test#verify_filterRepeat
         {
           MAP testMap;
           for (uint i=0; i<NUM_ELMS; ++i)

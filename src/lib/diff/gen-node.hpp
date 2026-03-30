@@ -375,8 +375,6 @@ namespace diff{
       iterator end()   const;
       
       
-      using ChildDataIter = TransformIter<Rec::scopeIter, DataCap const&>;
-      
       /** visit the _data_ of nested child elements
        * @return an iterator over the DataCap elements of all children,
        *         in case this GenNode actually holds a Record.
@@ -384,26 +382,26 @@ namespace diff{
        * @note this iterator visits _only_ the children, which are
        *         by definition unnamed. It does _not_ visit attributes.
        */
-      friend ChildDataIter
+      friend auto
       childData (GenNode const& n)
       {
-        return ChildDataIter{ n.data.childIter()
-                            , [](GenNode const& child) ->DataCap const&
+        return transformIter(n.data.childIter()
+                            ,[](GenNode const& child) ->DataCap const&
                                 {
                                   return child.data;
                                 }
-                            };
+                            );
       }
       
-      friend ChildDataIter
+      friend auto
       childData (Rec::scopeIter&& scopeIter)
       {
-        return ChildDataIter{ std::forward<Rec::scopeIter>(scopeIter)
-                            , [](GenNode const& child) ->DataCap const&
+        return transformIter(std::forward<Rec::scopeIter>(scopeIter)
+                            ,[](GenNode const& child) ->DataCap const&
                                 {
                                   return child.data;
                                 }
-                            };
+                            );
       }
       
       

@@ -110,12 +110,12 @@ namespace diff{
     renderRecord (Rec const& record)
     {
       using util::join;
-      using lib::transformIterator;
+      using lib::transformIter;
       
       return "Rec("
            + (Rec::TYPE_NIL==record.getType()? "" : record.getType())
-           + (isnil(record.attribs())? "" : "| "+join (transformIterator (record.attribs(), renderAttribute))+" ")
-           + (isnil(record.scope())?   "" : "|{"+join (transformIterator (record.scope(), renderChild))+"}")
+           + (isnil(record.attribs())? "" : "| "+join (transformIter (record.attribs(), renderAttribute))+" ")
+           + (isnil(record.scope())?   "" : "|{"+join (transformIter (record.scope(), renderChild))+"}")
            + ")"
            ;
     }
@@ -289,14 +289,14 @@ namespace diff{
       string
       showContent ()  const
         {
-          return join (transformIterator (begin(), renderNode));
+          return join (transformIter (begin(), renderNode));
         }
       
       /** render elements waiting in source buffer to be accepted */
       string
       showSrcBuffer ()  const
         {
-          return join (transformIterator (eachElm(prev_content_), renderNode));
+          return join (transformIter (eachElm(prev_content_), renderNode));
         }
       
       EventMatch

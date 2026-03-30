@@ -176,11 +176,11 @@ namespace engine {
       auto
       buildDependencyPlanning()
         {
-          return lib::transformIterator (jobTicket_.getPrerequisites()
-                                        ,[this](JobTicket& prereqTicket)
-                                                {
-                                                  return JobPlanning{*this, prereqTicket};
-                                                });
+          return lib::transformIter (jobTicket_.getPrerequisites()
+                                    ,[this](JobTicket& prereqTicket)
+                                            {
+                                              return JobPlanning{*this, prereqTicket};
+                                            });
         }
 
     private:

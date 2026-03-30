@@ -219,8 +219,8 @@ namespace interact {
                                   {
                                     return Symbol{id};
                                   };
-          return depth==UIC_PERSP? buildNavigator (node, depth, singleValIterator (internedString (node.getType())))
-                                 : buildNavigator (node, depth, transformIterator (node.keys(), internedString));
+          return depth==UIC_PERSP? buildNavigator (node, depth, singletonIter (internedString (node.getType())))
+                                 : buildNavigator (node, depth, transformIter (node.keys(), internedString));
         }
       
       

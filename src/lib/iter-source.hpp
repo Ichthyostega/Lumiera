@@ -44,6 +44,7 @@
 
 
 #include "lib/meta/util.hpp"
+#include "lib/meta/function.hpp"
 #include "lib/iter-adapter.hpp"
 #include "lib/itertools.hpp"
 #include "lib/nocopy.hpp"
@@ -310,7 +311,7 @@ namespace lib {
         {
           using       Src = std::remove_reference<IT>::type;
           using    ResVal = lib::meta::_Fun<FUN>::Ret;
-          using TransIter = TransformIter<Src, ResVal>;
+          using TransIter = decltype(lib::transformIter (std::declval<IT>(), std::declval<FUN>()));
           using      Iter = IterSource<ResVal>::iterator;
         };
       
@@ -326,26 +327,23 @@ namespace lib {
           // we can strip the const added by the STL map types
           using KeyType = std::remove_const<ConstKeyType>::type;
           
-          using KeyIter = TransformIter<Src, KeyType>;
-          using ValIter = TransformIter<Src, ValType>;
-          
           static KeyType  takeFirst (PairType const& pair) { return pair.first; }
           static ValType  takeSecond(PairType const& pair) { return pair.second;}
         };
       
       
       template<class IT>
-      _PairIterT<IT>::KeyIter
+      auto
       takePairFirst (IT&& source)
       {
-        return transformIterator(forward<IT>(source), _PairIterT<IT>::takeFirst );
+        return transformIter (forward<IT>(source), _PairIterT<IT>::takeFirst );
       }
       
       template<class IT>
-      _PairIterT<IT>::ValIter
+      auto
       takePairSecond (IT&& source)
       {
-        return transformIterator(forward<IT>(source), _PairIterT<IT>::takeSecond );
+        return transformIter (forward<IT>(source), _PairIterT<IT>::takeSecond );
       }
       
     } //(END) type helpers...
@@ -375,10 +373,10 @@ namespace lib {
     auto
     singleVal (VAL&& something)
     {
-      using Src = decltype(singleValIterator (forward<VAL>(something)));
+      using Src = decltype(singletonIter (forward<VAL>(something)));
       using Val = _IterT<Src>::Val;
 
-      return IterSource<Val>::build (new WrappedLumieraIter<Src>{singleValIterator (forward<VAL>(something))});
+      return IterSource<Val>::build (new WrappedLumieraIter<Src>{singletonIter (forward<VAL>(something))});
     }
     
     
@@ -400,7 +398,7 @@ namespace lib {
       
       return IterSource<ValType>::build (
           new WrappedLumieraIter<TransIT> (
-              transformIterator (forward<IT>(source), processingFunc)));
+              transformIter (forward<IT>(source), processingFunc)));
     }
     
     
@@ -408,7 +406,7 @@ namespace lib {
      *          all the keys of the given Map or Hashtable
      */
     template<class MAP>
-    _MapT<MAP>::KeyIter
+    auto
     eachMapKey (MAP& map)
     {
       using Range = RangeIter<typename MAP::iterator>;
@@ -438,13 +436,13 @@ namespace lib {
      *          the distinct keys
      */
     template<class MAP>
-    _MapT<MAP>::KeyIter
+    auto
     eachDistinctKey (MAP& map)
     {
       using Range = RangeIter<typename MAP::iterator>;
       
       Range contents (map.begin(), map.end());
-      return wrapIter (filterRepetitions (takePairFirst(contents)));
+      return wrapIter (filterRepeat (takePairFirst(contents)));
     }
     
     

@@ -494,6 +494,7 @@ namespace meta {
    * @note deliberately a Lumiera iterator does _not fulfil_
    *  the concept std::input_iterator. And vice versa:
    *  a STL iterator lacks the `bool` check for iteration end.
+   * @see IterableClassification_test
    */
   template<typename T>
   class can_IterForEach

@@ -34,7 +34,7 @@ namespace test  {
   
   using ::test::randTime;
   using steam::fixture::Segment;
-  using lib::singleValIterator;
+  using lib::singletonIter;
   using util::isSameObject;
   using util::seqTuple;
 
@@ -351,7 +351,7 @@ namespace test  {
                                              .genNode())
                                      .genNode()};
             
-            auto start = singleValIterator (mockSegs[Time::ZERO].jobTicket(0));
+            auto start = singletonIter (mockSegs[Time::ZERO].jobTicket(0));
             
             auto it = lib::explore(start)
                           .expand ([](JobTicket& ticket)

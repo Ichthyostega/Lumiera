@@ -22,6 +22,7 @@
 #include "lib/diff/mutation-message.hpp"
 #include "lib/diff/tree-diff-application.hpp"
 #include "lib/format-util.hpp"
+#include "lib/itertools.hpp"
 #include "lib/util.hpp"
 
 #include <string>
@@ -47,9 +48,9 @@ namespace test{
     string
     contents (Rec const& object)
     {
-      return util::join (transformIterator (object.scope()
-                                           ,[](GenNode const& n) { return n.data.get<string>(); }
-                                           ));
+      return util::join (transformIter (object.scope()
+                                       ,[](GenNode const& n) { return n.data.get<string>(); }
+                                       ));
     }
     
     string

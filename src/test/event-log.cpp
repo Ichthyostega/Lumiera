@@ -123,7 +123,7 @@ namespace test{
      * @note the match also fails, when the given log entry
      *       has more or less arguments, than the number of
      *       given match expressions in `argSeq`
-     * @see ExtensibleFilterIter::andFilter()
+     * @see lib::iter_explorer::MutableFilter::andFilter()
      */
     inline auto
     matchArguments (ArgSeq&& argSeq)

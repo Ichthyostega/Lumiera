@@ -28,9 +28,9 @@
 
 
 using lumiera::error::Fatal;
-using lib::transformIterator;
 using lib::iter_stl::snapshot;
 using lib::iter_stl::eachElm;
+using lib::transformIter;
 using lib::eachNum;
 using util::_Fmt;
 
@@ -215,7 +215,7 @@ namespace test {
                     "7.7--+--"
                     "8.8--+--"
                     "9.9"_expect);
-          CHECK (join (transformIterator(eachElm(dubious), justCount))
+          CHECK (join (transformIter (eachElm(dubious), justCount))
                  == "Nr.01(0.0), "
                     "Nr.02(2.2), "
                     "Nr.03(4.4), "

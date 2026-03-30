@@ -13,29 +13,37 @@
 
 /** @file iter-explorer-test.cpp
  ** The \ref IterExplorer_test covers and demonstrates a generic mechanism
- ** to expand and evaluate tree like structures. It was created in response to
- ** a recurring need for configurable tree expanding and backtracking evaluations.
- ** Due to the nature of Lumiera's design, we repeatedly encounter this kind of
- ** algorithms, when it comes to matching configuration and parametrisation against
- ** a likewise hierarchical and rules based model. To keep the code base maintainable,
- ** we deem it crucial to reduce the inherent complexity in such algorithms by clearly
- ** separate the _mechanics of evaluation_ from the actual logic of the target domain.
+ ** to expand and evaluate tree like structures. This was created to address
+ ** the recurring need for **tree-expanding and backtracking evaluations**.
+ ** Due to the nature of Lumiera's design, we frequently encounter this type
+ ** of evaluation pattern when it comes to matching a given configuration with
+ ** a hierarchical and rule-based model. To keep the codebase maintainable, it
+ ** is considered crucial to reduce the inherent complexity of such algorithms
+ ** by clearly separating the _evaluation mechanisms_ from the actual logic
+ ** of the target domain.
  ** 
- ** This test relies on a demonstration setup featuring a custom encapsulated state type:
- ** we rely on a counter with start and end value, embedded into an iterator as »state core«.
- ** This running counter, when iterated, generates a descending sequence of numbers start ... end.
- ** So -- conceptually -- this counting iterator can be conceived as _representing_ this sequence
- ** of numbers, while not actually representing all these numbers as data in memory. And this is
- ** the whole point of the exercise: _not to represent_ this sequence in runtime state at once,
- ** rather to __pull and expand it on demand._
+ ** This test relies on a demonstration setup that features a **State Core** —
+ ** which is custom type with encapsulated evaluation state: here we rely on a
+ ** counter with start and end value, which however is not accessed directly from
+ ** the outside, but rather through a set of functions expected to be present on
+ ** every »state core« (effectively this is a Concept). So this running counter,
+ ** when iterated, generates a descending sequence of numbers ∈ [start ... end[.
+ ** So — conceptually — this counting iterator can be conceived as _representing_
+ ** this sequence of numbers, while not actually representing all these numbers as
+ ** data in memory. And this is the whole point of the exercise: _not to materialise_
+ ** this sequence in runtime state at once, rather to _pull and expand it on demand_.
  ** 
- ** All these tests work by first defining these _functional structures_, which just
- ** yields an iterator entity. We get the whole structure it conceptually defines
- ** only if we »pull« and »materialise« this iterator until exhaustion — which essentially
- ** is what the test does to verify proper operation. In contrast, _Real World Code_ of course
- ** would not proceed in this way, like pulling everything from such an iterator. Since often
- ** the very reason we're using such a setup is the ability to represent infinite structures.
- ** Like e.g. the evaluation graph of video passed through a complex processing pipeline.
+ ** All these tests work by first defining these _functional structures_, in the form
+ ** of a pipeline, which, as a language construct, is embodied into an iterator entity.
+ ** This is a copyable value object that implements the common function expected to be
+ ** present on each »Lumiera Forward Iterator«. We then retrieve the whole structure it
+ ** conceptually defines only if we »pull« and »materialise« this iterator until it is
+ ** exhausted — which essentially is what the test does to verify proper operation.
+ ** 
+ ** In contrast, _Real World Code_ of course would not proceed in this way, like pulling
+ ** everything from such an iterator. Since often the very reason we're using such a setup
+ ** is the ability to represent infinite structures. An example would be the evaluation
+ ** graph of video passed through a complex processing pipeline.
  **
  */
 
@@ -474,20 +482,20 @@ namespace test{
           ++ii;
           CHECK (3 == *ii);
           CHECK (0 == ii.depth());
-          CHECK (materialise(ii) == "3-2-1");
+          CHECK (materialise(ii) == "3-2-1"_expect);
           ii.expandChildren();
           CHECK (1 == ii.depth());
-          CHECK (materialise(ii) == "2-1-2-1");
+          CHECK (materialise(ii) == "2-1-2-1"_expect);
           ++++ii;
           CHECK (0 == ii.depth());
-          CHECK (materialise(ii) == "2-1");
+          CHECK (materialise(ii) == "2-1"_expect);
           ii.expandChildren();
           CHECK (1 == ii.depth());
-          CHECK (materialise(ii) == "1-1");
+          CHECK (materialise(ii) == "1-1"_expect);
           ++ii;
           CHECK (0 == ii.depth());
           CHECK (1 == *ii);
-          CHECK (materialise(ii) == "1");
+          CHECK (materialise(ii) == "1"_expect);
           ii.expandChildren();
           CHECK (isnil (ii));
           VERIFY_ERROR (ITER_EXHAUST, *ii );
@@ -586,18 +594,27 @@ namespace test{
           // demonstrate chaining of several transformation layers
           vector<int64_t> numz{1,-2,3,-5,8,-13};
           
-          CHECK ("≺1≻-≺-2≻-≺3≻-≺-5≻-≺8≻-≺-13≻"                == materialise (explore(numz)
-                                                                                .transform(formatify)) );
+          CHECK (materialise (
+                    explore(numz)
+                      .transform(formatify)
+                    )
+                 == "≺1≻-≺-2≻-≺3≻-≺-5≻-≺8≻-≺-13≻"_expect);
           
-          CHECK ("≺2≻-≺-4≻-≺6≻-≺-10≻-≺16≻-≺-26≻"              == materialise (explore(numz)
-                                                                                .transform(multiply)
-                                                                                .transform(formatify)) );
+          CHECK (materialise (
+                    explore(numz)
+                      .transform(multiply)
+                      .transform(formatify)
+                    )
+                 == "≺2≻-≺-4≻-≺6≻-≺-10≻-≺16≻-≺-26≻"_expect);
           
-          CHECK ("≺≺4≻≻-≺≺-8≻≻-≺≺12≻≻-≺≺-20≻≻-≺≺32≻≻-≺≺-52≻≻" == materialise (explore(numz)
-                                                                                .transform(multiply)
-                                                                                .transform(multiply)
-                                                                                .transform(formatify)
-                                                                                .transform(formatify)) );
+          CHECK (materialise (
+                    explore(numz)
+                      .transform(multiply)
+                      .transform(multiply)
+                      .transform(formatify)
+                      .transform(formatify)
+                    )
+                 == "≺≺4≻≻-≺≺-8≻≻-≺≺12≻≻-≺≺-20≻≻-≺≺32≻≻-≺≺-52≻≻"_expect);
           
           
           // demonstrate the functor is evaluated only once per step
@@ -869,8 +886,8 @@ namespace test{
           CHECK (materialise (
                     explore(CountDown{10})
                       .transform(util::toString<uint>)
-                      .groupedBy([](auto& it) { return std::ilogbf (it.p); })    // note trickery: takes not the value, rather the iterator and
-                    )                                                           //  accesses internals of CountDown, bypassing the transform layer above
+                      .groupedBy([](auto& it) { return std::ilogbf (it.p); })    // note trickery: accept not the value, rather the iterator and
+                    )                                                           //  access internals of CountDown, bypassing the transform layer above
                  == "1098-7654-32-1"_expect);  // `+` does string concatenation
           
           
@@ -1577,8 +1594,8 @@ namespace test{
                                   {
                                     uint val = get<0>(tup);
                                     uint sum = get<1>(tup);
-                                    return val? singleValIterator (Tu2{val-1, sum+val})
-                                              : SingleValIter<Tu2>();
+                                    return val? singletonIter(Tu2{val-1, sum+val})
+                                              : nilIter<Tu2>();
                                   };
           
           CHECK (materialise(

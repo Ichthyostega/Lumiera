@@ -13,16 +13,17 @@
 
 /** @file iterable-classification-test.cpp
  ** unit test \ref IterableClassification_test
+ ** @see iter-adapter.hpp
+ ** @see lib/meta/trait.hpp
+ ** @see lib/meta/duck-detector.hpp
  */
 
 
 #include "test/run.hpp"
 
-#include "steam/mobject/session/scope-query.hpp"
-#include "steam/mobject/session/effect.hpp"
-#include "lib/meta/duck-detector.hpp"
+#include "lib/meta/trait.hpp"
+#include "lib/diff/record.hpp"
 #include "lib/time/timevalue.hpp"
-#include "lib/util-foreach.hpp"
 #include "lib/itertools.hpp"
 
 #include <iostream>
@@ -33,51 +34,60 @@
 #include <set>
 
 
+using std::string;
+using std::vector;
+using std::declval;
+using lib::time::TimeVar;
+
 namespace lib  {
 namespace meta {
 namespace test {
   
-  using steam::mobject::session::Effect;
-  using steam::mobject::session::ScopeQuery;
-  typedef lib::time::TimeVar Time;
-  
-  using std::cout;
-  using std::endl;
-  
-  
   namespace { // a custom test container....
     
-    
+    /// @note: a bare type definition is sufficient here....
     struct TestSource
       {
-        vector<int> data_;
-        
         TestSource(uint num);
         
-        typedef vector<int>::iterator sourceIter;
-        typedef RangeIter<sourceIter> iterator;
+        using RawIter  = vector<int>::iterator;
+        using iterator = RangeIter<RawIter>;
         
         iterator begin() ;
         iterator end()   ;
-                        // note: a bare type definition is sufficient here....
       };
     
+    inline auto transformedSource(TestSource& src){ return lib::transformIter (src.begin(), [](int){ return long(0); }); }
+    inline auto filteredSource   (TestSource& src){ return lib::filterIter    (src.begin(), [](int){ return true;    }); }
     
+    
+    /// @note Dummy type that exposes a »*State Core*« interface.
+    struct DummyCore
+      {
+        bool  checkPoint() const;
+        uint& yield()      const;
+        void  iterNext();
+        friend bool operator== (DummyCore const&, DummyCore const&);
+      };
     
   }//(End) test containers
-  
-#define SHOW_CHECK(_EXPR_) cout << STRINGIFY(_EXPR_) << "\t : " << (_EXPR_::value? "Yes":"No") << endl;
   
   
   
   /*******************************************************************************//**
    * @test verify the (static) classification/detection of iterables.
-   *       Currently (1/10) we're able to detect the following
-   *       - a STL like container with \c begin() and \c end()
-   *       - a Lumiera Forward Iterator
-   * This test just retrieves the results of a compile time execution
-   * of the type detection; thus we just define types and then access
+   *       Using some SFINAE trickery, it is possible to detect the following
+   *       - a _STL-like container_ with `begin()` and `end()`
+   *       - a _Lumiera Forward Iterator_
+   *       - a _State Core_
+   * This test ensures this compile time detection works as intended;
+   * it suffices thus to define some minimal types in order to access
    * the generated meta function value.
+   * @see iter-adapter.hpp explanation of _Lumiera Forward Iterator_ and _State Core_
+   * @todo 2026 many years later and this type detection has become a cornerstone
+   *       of Lumiera's iterator pipeline framework. Since the language level has
+   *       been raised recently to C++23, it should be considered to replace
+   *       the SFINAE-based traits with Concept definitions.
    */
   class IterableClassification_test : public Test
     {
@@ -86,45 +96,71 @@ namespace test {
       run (Arg)
         {
           // define a bunch of STL containers
-          typedef std::vector<long>   LongVector;
-          typedef std::multiset<Time> TimeSet;
-          typedef std::map<int,char>  CharMap;
-          typedef std::list<bool>     BoolList;
-          typedef std::deque<ushort>  ShortDeque;
-          typedef TestSource          CustomCont;
+          using TimeVector = std::vector<TimeVar>;
+          using LongSet    = std::multiset<long> ;
+          using CharMap    = std::map<int,char>  ;
+          using BoolList   = std::list<bool>     ;
+          using ShortDeque = std::deque<ushort>  ;
+          using CustomCont = TestSource          ;
           
-          // some types in compliance to the "Lumiera Forward Iterator" concept
-          typedef TestSource::iterator                  ForwardRangeIter;
-          typedef TransformIter<ForwardRangeIter, long> TransformedForwardIter;
-          typedef FilterIter<TransformedForwardIter>    FilteredForwardIter;
-          typedef ScopeQuery<Effect>::iterator          CustomForwardIter;
+          // some types that comply with the "Lumiera Forward Iterator" concept
+          using LumieraRangeIter       = TestSource::iterator;
+          using LumieraFilteredIter    = decltype(    filteredSource (declval<TestSource&>()) );
+          using LumieraTransformedIter = decltype( transformedSource (declval<TestSource&>()) );
+          using CustomLumieraIter      = diff::Record<string>::iterator;
+          
+          // some types that comply with the "State Core" concept
+          using CustomStateCore        = DummyCore;
+          using LumieraCoreIter        = IterableDecorator<DummyCore>;
           
           
           // detect STL iteration
-          SHOW_CHECK( can_STL_ForEach<LongVector> );
-          SHOW_CHECK( can_STL_ForEach<TimeSet>    );
-          SHOW_CHECK( can_STL_ForEach<CharMap>    );
-          SHOW_CHECK( can_STL_ForEach<BoolList>   );
-          SHOW_CHECK( can_STL_ForEach<ShortDeque> );
-          SHOW_CHECK( can_STL_ForEach<CustomCont> );
+          CHECK ( true == can_STL_ForEach<TimeVector>::value );
+          CHECK ( true == can_STL_ForEach<LongSet>   ::value );
+          CHECK ( true == can_STL_ForEach<CharMap>   ::value );
+          CHECK ( true == can_STL_ForEach<BoolList>  ::value );
+          CHECK ( true == can_STL_ForEach<ShortDeque>::value );
+          CHECK ( true == can_STL_ForEach<CustomCont>::value );
           
-          SHOW_CHECK( can_STL_ForEach<ForwardRangeIter> );
-          SHOW_CHECK( can_STL_ForEach<TransformedForwardIter> );
-          SHOW_CHECK( can_STL_ForEach<FilteredForwardIter> );
-          SHOW_CHECK( can_STL_ForEach<CustomForwardIter> );
+          CHECK (false == can_STL_ForEach<LumieraRangeIter>      ::value );
+          CHECK (false == can_STL_ForEach<LumieraFilteredIter>   ::value );
+          CHECK (false == can_STL_ForEach<LumieraTransformedIter>::value );
+          CHECK (false == can_STL_ForEach<CustomLumieraIter>     ::value );
+          
+          CHECK (false == can_STL_ForEach<CustomStateCore>::value );
+          CHECK (false == can_STL_ForEach<LumieraCoreIter>::value );
           
           // detect Lumiera Forward Iterator
-          SHOW_CHECK( can_IterForEach<LongVector> );
-          SHOW_CHECK( can_IterForEach<TimeSet>    );
-          SHOW_CHECK( can_IterForEach<CharMap>    );
-          SHOW_CHECK( can_IterForEach<BoolList>   );
-          SHOW_CHECK( can_IterForEach<ShortDeque> );
-          SHOW_CHECK( can_IterForEach<CustomCont> );
+          CHECK (false == can_IterForEach<TimeVector>::value );
+          CHECK (false == can_IterForEach<LongSet>   ::value );
+          CHECK (false == can_IterForEach<CharMap>   ::value );
+          CHECK (false == can_IterForEach<BoolList>  ::value );
+          CHECK (false == can_IterForEach<ShortDeque>::value );
+          CHECK (false == can_IterForEach<CustomCont>::value );
           
-          SHOW_CHECK( can_IterForEach<ForwardRangeIter> );
-          SHOW_CHECK( can_IterForEach<TransformedForwardIter> );
-          SHOW_CHECK( can_IterForEach<FilteredForwardIter> );
-          SHOW_CHECK( can_IterForEach<CustomForwardIter> );
+          CHECK ( true == can_IterForEach<LumieraRangeIter>      ::value );
+          CHECK ( true == can_IterForEach<LumieraFilteredIter>   ::value );
+          CHECK ( true == can_IterForEach<LumieraTransformedIter>::value );
+          CHECK ( true == can_IterForEach<CustomLumieraIter>     ::value );
+          
+          CHECK (false == can_IterForEach<CustomStateCore>::value );
+          CHECK ( true == can_IterForEach<LumieraCoreIter>::value );     // Note: Lumiera iterator capability added as wrapper
+          
+          // detect State Core
+          CHECK (false == is_StateCore<TimeVector>::value );
+          CHECK (false == is_StateCore<LongSet>   ::value );
+          CHECK (false == is_StateCore<CharMap>   ::value );
+          CHECK (false == is_StateCore<BoolList>  ::value );
+          CHECK (false == is_StateCore<ShortDeque>::value );
+          CHECK (false == is_StateCore<CustomCont>::value );
+          
+          CHECK (false == is_StateCore<LumieraRangeIter>      ::value );
+          CHECK (false == is_StateCore<LumieraFilteredIter>   ::value );
+          CHECK (false == is_StateCore<LumieraTransformedIter>::value );
+          CHECK (false == is_StateCore<CustomLumieraIter>     ::value );
+          
+          CHECK ( true == is_StateCore<CustomStateCore>::value );
+          CHECK ( true == is_StateCore<LumieraCoreIter>::value );
         }
     };
   

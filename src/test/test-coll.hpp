@@ -21,8 +21,9 @@
 #define TESTSUPPORT_TEST_COLL_H
 
 
+#include "lib/format-cout.hpp"
+
 #include <unordered_map>
-#include <iostream>
 #include <vector>
 #include <map>
 
@@ -30,19 +31,19 @@
 namespace test {
   
   
-  typedef std::vector<int> VecI;
-  
   template<class VEC>
   inline VEC
   getTestSeq_int (const uint NUM_ELMS)
   {
     VEC vec;
     for (uint i=0; i<NUM_ELMS; ++i)
-      vec.push_back (i);
+      vec.emplace_back (i);
     
     return vec;
   }
   
+  
+  using VecI    = std::vector<int>;
 
   using MapII   = std::map<int,int>;
   using MMapII  = std::multimap<int,int>;
@@ -81,9 +82,9 @@ namespace test {
   pullOut (ITER const& i)
   {
     for (ITER ii(i); ii ; ++ii )
-      std::cout << "::" << *ii;
+      cout << "::" << *ii;
   }
-
+  
   
   
 }// namespace test

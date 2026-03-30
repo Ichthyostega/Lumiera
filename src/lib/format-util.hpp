@@ -135,7 +135,7 @@ namespace util {
   {
     using Val = lib::meta::ValueTypeBinding<IT>::value_type;
     
-    return lib::transformIterator(forward<IT>(src), util::toString<Val>);
+    return lib::transformIter (forward<IT>(src), util::toString<Val>);
   }
   
   

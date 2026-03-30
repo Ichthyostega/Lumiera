@@ -38,7 +38,7 @@ namespace test{
   namespace { // Test fixture
     
     /**
-     * A test »*State Core*« which steps down a number to zero.
+     * A test »**State Core**« which steps down a number to zero.
      * @note this is a minimal description of a state progression towards a goal
      *     - default constructed is equivalent to _goal was reached_
      *     - can be copied, manipulated and compared
@@ -49,24 +49,24 @@ namespace test{
       {
         uint n;
         
-        StepDown(uint start =0)
-          : n(start)
+        StepDown (uint start =0)
+          : n{start}
           { }
         
         bool
-        checkPoint ()  const
+        checkPoint()  const
           {
             return n != 0;
           }
         
         uint&
-        yield ()  const
+        yield()  const
           {
             return util::unConst(n);
           }
         
         void
-        iterNext ()
+        iterNext()
           {
             --n;
           }
