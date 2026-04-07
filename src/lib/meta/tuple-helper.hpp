@@ -33,8 +33,23 @@
  ** a generic Lambda for each element of a given tuple, which allows to write
  ** generic code »for each tuple element«.
  ** 
+ ** @remark 2026-03 this header underwent some significant rework in recent years.
+ **   The Lumiera project had developed a `Tuple` type way before something similar
+ **   was considered for inclusion into the C++ language standard; flexible and
+ **   specifically typed storage records were used, in conjunction with LISP-style
+ **   metaprogramming (»Loki Typelists«), from the very start of the project.
+ **   Storing an arbitrary function, combined with a tuple of arguments, was a
+ **   major undertaking at those days, and required a huge body of support
+ **   functionality — which needed to be remoulded gradually, over the
+ **   following years, to become compatible with newer C++ features.
+ **   - basic handling, like access and compile-time iteration became trivial
+ **   - however, the project still relies on specific metaprogramming tools,
+ **     to simplify handling and transforming of variadic metafunctions.
+ ** 
  ** [tuple protocol]: https://en.cppreference.com/w/cpp/language/structured_binding.html#Case_2:_binding_a_type_implementing_the_tuple_operations
- ** @see control::CommandDef usage example
+ ** @see variadic-helper.hpp
+ ** @see tuple-closure.hpp : usage example
+ ** @see feed-manifold.hpp : use of unified variadics and tuples
  ** @see TupleHelper_test
  ** @see typelist.hpp
  ** @see function.hpp
@@ -49,9 +64,8 @@
 #include "lib/integral.hpp"
 #include "lib/meta/tuple-concept.hpp"
 #include "lib/meta/variadic-helper.hpp"
-#include "lib/meta/typeseq-util.hpp"
-#include "lib/meta/typelist.hpp"
 #include "lib/meta/typelist-util.hpp"
+#include "lib/meta/typeseq-util.hpp"
 #include "lib/meta/util.hpp"
 
 #include <tuple>
@@ -59,29 +73,17 @@
 #include <functional>
 
 
+namespace util { // forward -> see lib/format-obj.hpp ...
+  
+  template<typename TY>
+  std::string toString (TY const&)  noexcept;
+
+  template<typename X, typename COND>
+  struct StringConv;
+}
+
 namespace lib {
 namespace meta {
-  
-  /** trait to detect tuple types */
-  template<typename T>
-  struct is_Tuple
-    : std::false_type
-    { };
-  
-  template<typename...TYPES>
-  struct is_Tuple<std::tuple<TYPES...>>
-    : std::true_type
-    { };
-  
-  template<typename...TYPES>
-  struct is_Tuple<const std::tuple<TYPES...>>
-    : std::true_type
-    { };
-  
-  
-  
-  
-  
   
   namespace { // rebinding helper to create std::tuple from a type sequence
     
@@ -239,5 +241,85 @@ namespace meta {
   }
   
   
+  
+  
+  
+  /* ======= Tuple toString rendering ======= */
+  
+  /**
+   * convenience function to dump a given tuple's contents, converted to string.
+   * @note this is the basic functionality to place rendered data into a `ostringstream.`
+   */
+  template<class TUP>
+  inline void
+  joinTuple (TUP const& tup, std::string delim, std::ostringstream& buffer)
+    {
+      forEachIDX<TUP> ([&](auto i)
+                          {
+                            using Elm = std::tuple_element_t<i, TUP>;
+                            if (i)
+                              buffer << delim;
+                            buffer << util::toString<Elm> (getElm<i> (tup));
+                          });
+    }
+  
+  template<class TUP>
+  inline void
+  joinTuple (TUP const& tup, std::ostringstream& buffer)
+    {
+      joinTuple (tup, ",");
+    }
+  
+  /** convenience function to join the tuple's contents into a single string.
+   * @param delim optional delimiter to intersperse, defaults to `","`
+   */
+  template<class TUP>
+  inline std::string
+  joinTuple (TUP const& tup, std::string delim =",")
+    {
+      std::ostringstream buffer;
+      joinTuple (tup, delim, buffer);
+      return buffer.str();
+    }
+  
+  template<class TUP>
+  inline void
+  joinTupleParen (TUP const& tup, std::ostringstream& buffer)
+    {
+      buffer << '(';
+      joinTuple (tup, ",", buffer);
+      buffer << ')';
+    }
+  
+  template<class TUP>
+  inline std::string
+  joinTupleParen (TUP const& tup)
+    {
+      std::ostringstream buffer;
+      joinTupleParen (tup, buffer);
+      return buffer.str();
+    }
 }} // namespace lib::meta
+
+
+// add a specialisation to enable tuple string conversion
+namespace util {
+  
+  template<typename...TYPES>
+  struct StringConv<std::tuple<TYPES...>>
+    {
+      static std::string
+      invoke (std::tuple<TYPES...> const& tuple) noexcept
+        try {
+          std::ostringstream buffer;
+          buffer << "«"
+                 << typeStr(tuple)
+                 << "»──";
+          lib::meta::joinTupleParen (tuple, buffer);
+          return buffer.str();
+        }
+        catch(...) { return FAILURE_INDICATOR; }
+    };
+  
+} // namespace util
 #endif /*LIB_META_TUPLE_HELPER_H*/

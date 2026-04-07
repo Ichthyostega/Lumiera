@@ -103,13 +103,22 @@ namespace meta {
   using std::__or_;
   
   template<typename T>
-  static constexpr bool isConst_v = std::is_const_v<remove_reference_t<T>>;
+  using isConst = std::is_const<remove_reference_t<T>>;
   template<typename T>
-  static constexpr bool isLRef_v = std::is_lvalue_reference_v<T>;
+  using isLRef = std::is_lvalue_reference<T>;
   template<typename T>
-  static constexpr bool isRRef_v = std::is_rvalue_reference_v<T>;
+  using isRRef = std::is_rvalue_reference<T>;
   template<typename T>
-  static constexpr bool isRef_v = std::is_reference_v<T>;
+  using isRef = std::is_reference<T>;
+  
+  template<typename T>
+  static constexpr bool isConst_v = isConst<T>::value;
+  template<typename T>
+  static constexpr bool isLRef_v = isLRef<T>::value;
+  template<typename T>
+  static constexpr bool isRRef_v = isRRef<T>::value;
+  template<typename T>
+  static constexpr bool isRef_v = isRef<T>::value;
   
   
   /**

@@ -22,7 +22,7 @@
 #include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/format-util.hpp"
-#include "lib/meta/tuple-accessor.hpp"
+#include "lib/meta/tuple-helper.hpp"
 #include "lib/iter-explorer.hpp"
 
 #include <string>
@@ -108,7 +108,7 @@ namespace test{
         report (Literal func, ARGS&&...args)
           {
             return string(func)
-                +  meta::dump (make_tuple (forward<ARGS>(args)...));
+                +  meta::joinTupleParen (make_tuple (forward<ARGS>(args)...));
           }
       };
     

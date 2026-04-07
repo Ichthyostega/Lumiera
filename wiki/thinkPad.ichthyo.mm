@@ -53273,8 +53273,9 @@
 </node>
 </node>
 <node COLOR="#338800" CREATED="1774450743106" ID="ID_312759335" MODIFIED="1775015753754" TEXT="&#xbb;flatten&#xab; (wie in flatMap)">
+<linktarget COLOR="#2d4868" DESTINATION="ID_312759335" ENDARROW="Default" ENDINCLINATION="-196;20;" ID="Arrow_ID_1581617740" SOURCE="ID_382206638" STARTARROW="None" STARTINCLINATION="-935;121;"/>
 <icon BUILTIN="button_ok"/>
-<node COLOR="#435e98" CREATED="1774450761782" ID="ID_657002637" MODIFIED="1775017729982" TEXT="tritt sporatisch in der Praxis auf &#x27f5; Beispiel chain-Iterator">
+<node COLOR="#435e98" CREATED="1774450761782" ID="ID_657002637" MODIFIED="1775428765812" TEXT="tritt sporadisch in der Praxis auf &#x27f5; Beispiel chain-Iterator">
 <linktarget COLOR="#4282ce" DESTINATION="ID_657002637" ENDARROW="Default" ENDINCLINATION="800;41;" ID="Arrow_ID_469905566" SOURCE="ID_778280136" STARTARROW="None" STARTINCLINATION="972;48;"/>
 </node>
 <node COLOR="#591e35" CREATED="1774451196653" FOLDED="true" ID="ID_217480792" MODIFIED="1775017225027" TEXT="indirekt w&#xe4;re damit ein Monaden-Pattern (doch wieder) m&#xf6;glich">
@@ -55270,6 +55271,7 @@
 <node CREATED="1774911432006" ID="ID_1139560903" MODIFIED="1774911439985" TEXT="besser mit endlich mal einen Ruck geben...."/>
 </node>
 <node COLOR="#338800" CREATED="1774803575093" ID="ID_808274597" MODIFIED="1775015435281" TEXT="Itertools durchsehen, was sonst noch vereinfacht werden kann">
+<linktarget COLOR="#2d4868" DESTINATION="ID_808274597" ENDARROW="Default" ENDINCLINATION="-1796;76;" ID="Arrow_ID_1513162908" SOURCE="ID_1283855792" STARTARROW="None" STARTINCLINATION="-1015;77;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1774911443156" ID="ID_1134186731" MODIFIED="1774911462811" TEXT="jetzt sag ich schon seit Jahren jedes mal wieder &#xbb;oh weh&#xab;"/>
 <node CREATED="1774911463922" ID="ID_1406801395" MODIFIED="1774911506804">
@@ -61007,10 +61009,38 @@
 <node CREATED="1573230307678" ID="ID_1856823830" MODIFIED="1573230336518" TEXT="&#xbb;Lumiera Forward Iterator&#xab; integrieren"/>
 <node COLOR="#338800" CREATED="1751414140665" ID="ID_399045198" MODIFIED="1751414287217" TEXT="concept tuple_like">
 <arrowlink COLOR="#397ed0" DESTINATION="ID_1832825819" ENDARROW="Default" ENDINCLINATION="-696;-52;" ID="Arrow_ID_1181418543" STARTARROW="None" STARTINCLINATION="-1550;197;"/>
+<linktarget COLOR="#3849c8" DESTINATION="ID_399045198" ENDARROW="Default" ENDINCLINATION="-41;139;" ID="Arrow_ID_699995134" SOURCE="ID_1089449607" STARTARROW="None" STARTINCLINATION="-385;24;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1751414204056" ID="ID_1967920089" MODIFIED="1751414220030" TEXT="spricht an f&#xfc;r jeden Typ, der das &#xbb;tuple protocol&#xab; unterst&#xfc;tzt"/>
 <node CREATED="1751414220382" ID="ID_623897833" MODIFIED="1751414269549" TEXT="damit l&#xe4;&#xdf;t sich die unn&#xf6;tige Einschr&#xe4;nkung von std::apply umgehen"/>
 <node CREATED="1751414247721" ID="ID_1171949349" MODIFIED="1751414277013" TEXT="&#x27f9; lib::meta::apply als Ersatz  (und lib::meta::getElm)"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1775172504741" ID="ID_1613911838" MODIFIED="1775172660825" TEXT="concept typeseq &#x27fa; ist eine Lumiera-Typsequenz">
+<linktarget COLOR="#465b9c" DESTINATION="ID_1613911838" ENDARROW="Default" ENDINCLINATION="-3741;219;" ID="Arrow_ID_1655734503" SOURCE="ID_210719572" STARTARROW="Default" STARTINCLINATION="-1494;108;"/>
+<icon BUILTIN="ksmiletris"/>
+<node CREATED="1775407599418" ID="ID_688671555" MODIFIED="1775407675949" TEXT="ist auch ein Muster f&#xfc;r &#xe4;hnliche Aufgaben">
+<linktarget COLOR="#fffed5" DESTINATION="ID_688671555" ENDARROW="Default" ENDINCLINATION="853;60;" ID="Arrow_ID_1476881510" SOURCE="ID_311481243" STARTARROW="None" STARTINCLINATION="454;39;"/>
+</node>
+</node>
+</node>
+<node CREATED="1775400033031" ID="ID_1470717437" MODIFIED="1775400049059" TEXT="Traits / Detektoren / Adapter">
+<node CREATED="1775399901248" ID="ID_989277122" MODIFIED="1775400145329" TEXT="Common-Result-Type">
+<arrowlink COLOR="#277de3" DESTINATION="ID_360119128" ENDARROW="Default" ENDINCLINATION="-1226;104;" ID="Arrow_ID_651955584" STARTARROW="None" STARTINCLINATION="686;92;"/>
+<node CREATED="1775400150762" ID="ID_1792119600" MODIFIED="1775400174978" TEXT="es gibt Metafunktionen aus der STDLIB">
+<node CREATED="1775400177503" ID="ID_1245303353" MODIFIED="1775400181452" TEXT="std::common_type"/>
+<node CREATED="1775400182206" ID="ID_1048472047" MODIFIED="1775400186729" TEXT="std::common_reference"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1775400189053" HGAP="79" ID="ID_440052977" MODIFIED="1775400375931" TEXT="&#xbb;CommonResult&#xbb; : eigene L&#xf6;sung &#x2014; nur die Basis-Technik" VSHIFT="-14">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Habe dennoch eine eigene L&#246;sung entwickelt, da ich mit den Tools aus der STDLIB nicht zurechtgekommen bin: diese sind komplex, haben eine schwer verst&#228;ndliche Spezifikation und sind auf zwei Spezialf&#228;lle ausgerichtet. Meine Implementierung, lib::meta::CommonResult verwendet die gleiche unterliegende Programmiertechnik (n&#228;mlich die type-reconciliation durch den tern&#228;ren-Operator). Aber sie verwendet <b>nur diese Technik</b>, ohne weitere Magie, ist daf&#252;r aber auch mit unseren Typ-Sequenzen integrierbar
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="info"/>
+</node>
 </node>
 </node>
 <node CREATED="1772066411633" ID="ID_50275437" MODIFIED="1772066416949" TEXT="Code-Generierung">
@@ -61067,6 +61097,7 @@
 </node>
 </node>
 <node COLOR="#338800" CREATED="1772068366233" ID="ID_858655013" MODIFIED="1772156709954" TEXT="Implementierung">
+<linktarget COLOR="#2d4868" DESTINATION="ID_858655013" ENDARROW="Default" ENDINCLINATION="-1241;179;" ID="Arrow_ID_1141471471" SOURCE="ID_989200248" STARTARROW="None" STARTINCLINATION="-935;121;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1772068377138" ID="ID_160543739" MODIFIED="1772068386687" TEXT="lib/meta/prop-builder.hpp"/>
 <node COLOR="#338800" CREATED="1772068387673" ID="ID_999468145" MODIFIED="1772156707171" TEXT="PropBuilder_test">
@@ -61105,6 +61136,24 @@
 </node>
 </node>
 </node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1775400415421" ID="ID_115020890" MODIFIED="1775400666832" TEXT="Funktor-Trampoline bauen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Technologie mal beil&#228;ufig ausgearbeitet, als Basis f&#252;r einen laufzeit-indizierten Tuple-Accessor (&#10233; Tuple runtime-Iteration vs. compile-time traversal). Anla&#223; war die &#220;berlegung, wie man eine iter::chain()-Funktion bauen k&#246;nnte.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      2026: f&#252;r all das gibts noch keinen wirklichen Bedarf
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#5399af" DESTINATION="ID_1920067063" ENDARROW="Default" ENDINCLINATION="19;-313;" ID="Arrow_ID_532928793" STARTARROW="None" STARTINCLINATION="445;40;"/>
+<icon BUILTIN="hourglass"/>
+</node>
 </node>
 <node CREATED="1540682664865" ID="ID_1702211999" MODIFIED="1557498707236" TEXT="Metaprogramming">
 <node CREATED="1739742552923" ID="ID_606595417" MODIFIED="1739742563204" TEXT="Typsequenzen und Typlisten">
@@ -61140,8 +61189,8 @@
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1739743030251" ID="ID_860677414" MODIFIED="1739743057642" TEXT="#987 : Umstellen auf variadische Typsequenzen">
-<icon BUILTIN="bell"/>
+<node COLOR="#338800" CREATED="1739743030251" ID="ID_860677414" MODIFIED="1775066997567" TEXT="#987 : Umstellen auf variadische Typsequenzen">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1739743063606" ID="ID_1126377755" MODIFIED="1739743122896" TEXT="wird dringend, da sich die Metaprogrammierung nun ausgeweitet hat">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -61165,6 +61214,48 @@
 <icon BUILTIN="yes"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#b6c0e3" COLOR="#434598" CREATED="1775066810364" ID="ID_426594985" LINK="https://issues.lumiera.org/ticket/987#comment:7" MODIFIED="1775067035971" TEXT="Umbau abgeschlossen: 2025-06-07 16:04:59 UTC">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      commit 20392eee1c3bf5300c6956db27cbcf6722f67a0b
+    </p>
+    <p>
+      Author: Ichthyostega &lt;prg@ichthyostega.de&gt;
+    </p>
+    <p>
+      Date:&#160;&#160;&#160;Sat Jun 7 18:04:59 2025 +0200
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      clean-up: successfully replaced the old fixed type sequence (closes: #987)
+    </p>
+    <p>
+      &#160;&#160;&#160;
+    </p>
+    <p>
+      This resolves an intricate problem related to metaprogramming with variadic templates and function signatures. Due to exceptional complexity, a direct solution was blocked for several years, and required a better organisation of the support code involved; several workarounds were developed, gradually leading to a transition path, which could now be completed in an focused clean-up effort over the last week.
+    </p>
+    <p>
+      Metaprogramming with sequences of types is organised into three layers:
+    </p>
+    <ul>
+      <li>
+        simple tasks can be solved with the standard facilities of the language,&#160;using pattern match with variadic template specialisations
+      </li>
+      <li>
+        the ''type-sequence'' construct `Types&lt;T...&gt;` takes the centre stage&#160;for the explicit definition of collections of types; it can be re-bound to other variadic templates and supports simple direct manipulation
+      </li>
+      <li>
+        for more elaborate and advanced processing tasks, a ''Loki-style type list''&#160;can be obtained from a type-sequence, allowing to perform recursive&#160;list processing task with a technique similar to LISP.
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
 </node>
 <node CREATED="1540682674455" ID="ID_1625152878" MODIFIED="1557498707236" TEXT="Typliste filtern">
 <node CREATED="1540682680286" ID="ID_1172485112" MODIFIED="1557498707236" TEXT="nach canConvert">
@@ -61186,6 +61277,1880 @@
     </p>
   </body>
 </html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1775068804117" ID="ID_528287612" MODIFIED="1775399855287" TEXT="Laufzeit-idx Access">
+<linktarget COLOR="#2d4868" DESTINATION="ID_528287612" ENDARROW="Default" ENDINCLINATION="-1054;161;" ID="Arrow_ID_1760258574" SOURCE="ID_1844807854" STARTARROW="None" STARTINCLINATION="-935;121;"/>
+<node BACKGROUND_COLOR="#e9d798" COLOR="#690f14" CREATED="1775068827991" ID="ID_1401000090" MODIFIED="1775399644888" TEXT="woot?">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Tuple oder Typsequenzen sind heterogen, aber zur Compile-Zeit festgelegt und abz&#228;hlbar. Gew&#252;nscht ist, darauf zugreifen zu k&#246;nnen wie auf einen homogenen Laufzeit-Container mit random-Access, also nach dem Array-Muster. Darauf aufbauend k&#246;nnte man dann eine Laufzeit-Iteration machen, und damit Auswertungen, Suchen, Verzweigungen etc.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Eine Grundvoraussetzung ist, da&#223; man <i>die heterogenen Typen irgendwie in den Griff bekommt.</i>&#160;Dieses Problem l&#228;&#223;t sich nicht generisch l&#246;sen, es h&#228;ngt also vom Einzelfall ab, in dem man eben zus&#228;tzliche Informationen hat, wie z.B. einen <i>common type,</i>&#160; oder man mappt erst einen Funktor darauf (mit meta::ElmTypes), der eine gemeinsame Interpretation herstellt (z.B. toString)...
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="help"/>
+</node>
+<node COLOR="#338800" CREATED="1775069194109" ID="ID_1920067063" MODIFIED="1775400651796" TEXT="Hilfsmittel: Funktor-Trampolin">
+<linktarget COLOR="#5399af" DESTINATION="ID_1920067063" ENDARROW="Default" ENDINCLINATION="19;-313;" ID="Arrow_ID_532928793" SOURCE="ID_115020890" STARTARROW="None" STARTINCLINATION="445;40;"/>
+<linktarget COLOR="#2d4868" DESTINATION="ID_1920067063" ENDARROW="Default" ENDINCLINATION="-805;74;" ID="Arrow_ID_314698705" SOURCE="ID_1228600186" STARTARROW="None" STARTINCLINATION="-935;121;"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1775169641484" ID="ID_1273369704" MODIFIED="1775169666081" TEXT="Name:  &#xbb;FunTrampoline&#xab;"/>
+<node CREATED="1775069219178" ID="ID_237332600" MODIFIED="1775069245394" TEXT="eine statische Tabelle gef&#xfc;llt mit Instanzen eines generic-&#x3bb;"/>
+<node CREATED="1775069260196" ID="ID_1578599760" MODIFIED="1775069550766" TEXT="Basis-Technik: Array-Initialiser mit Index-Seq-unpack definieren ...">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das erschien mir der &#187;offensichtliche&#171; Ansatz, da man ja seit C++17 auch static constexpr mit einem direkten Initialisierer definieren kann. Die Funktoren sollten sowiso in den statischen Speicher, denn das ist fast schon wie ein Code-Block (im einfachsten Fall wird der Compiler nur Sprungadressen codieren die in den Assembly f&#252;r jede Lambda-Instanz f&#252;hren).
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Ist das wieder mall eine &#187;offensichtlich&#171; over-engineered-L&#246;sung (wenn ich schon sage, etwas sei &#8222;offensichtlich&#8220;) &#10233; Websuche zeigt, auf die Idee sind andere Leute auch schon mehrfach gekommen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#338800" CREATED="1775069578458" ID="ID_1365971925" MODIFIED="1775252173208" TEXT="Implementierung">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1775069583961" ID="ID_1068725204" MODIFIED="1775069658979" TEXT="sollte auf ElmTypes aufsetzen (also variadic-helper)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...damit ich mich nicht festlegen mu&#223; auf eine spezielle Art von Produkttyp. Sofern man auch tuple-concept.hpp mit dazunimmt, sollte die Technik automatisch auch f&#252;r jedes &#187;tuple_like&#171; funktionieren
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1775071219109" ID="ID_751917283" MODIFIED="1775071242759" TEXT="m&#xf6;glichst dem Optimiser viel Angriffsfl&#xe4;che bieten"/>
+<node CREATED="1775071255688" ID="ID_778824502" MODIFIED="1775071272222" TEXT="Template-Argumente">
+<node CREATED="1775071277425" ID="ID_984012737" MODIFIED="1775071295165" TEXT="Variadische Typsequenz">
+<node CREATED="1775170792393" ID="ID_958491967" MODIFIED="1775170908593" TEXT="Entscheidung: kein spezielles tuple-like hier">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das w&#252;rde der Design-Ebene widersprechen; eine solche Trampolin-Tabelle ist ein generischer Baustein. Der konkrete Typ wird erst im jeweiligen Funktor relevant &#8212; wobei auch der durchaus conceptisiert-sein k&#246;nnte
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1775172504741" ID="ID_312138588" MODIFIED="1775172608197" TEXT="einschr&#xe4;nken auf Typ-Sequenz">
+<linktarget COLOR="#465b9c" DESTINATION="ID_312138588" ENDARROW="Default" ENDINCLINATION="-3735;326;" ID="Arrow_ID_1988333824" SOURCE="ID_210719572" STARTARROW="None" STARTINCLINATION="-1494;108;"/>
+</node>
+</node>
+<node CREATED="1775071296254" ID="ID_383962056" MODIFIED="1775071310514" TEXT="generischer Funktor">
+<node CREATED="1775071314537" ID="ID_1849533721" MODIFIED="1775071346483" TEXT="kritisch hier: mu&#xdf; diesen Typ deduzieren k&#xf6;nnen"/>
+<node CREATED="1775071347457" ID="ID_698680744" MODIFIED="1775071366180" TEXT="man mu&#xdf; ein generisches Lambda direkt dem Konstructor geben"/>
+</node>
+</node>
+<node CREATED="1775075673332" ID="ID_1387192773" MODIFIED="1775075680799" TEXT="Tabelle bauen">
+<node CREATED="1775075702448" ID="ID_1216308859" MODIFIED="1775075711834" TEXT="hier wirds anspruchsvoll...">
+<icon BUILTIN="smiley-oh"/>
+</node>
+<node CREATED="1775089551041" ID="ID_1264694215" MODIFIED="1775090649415" TEXT="Instanzen und Identit&#xe4;ten">
+<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1775089735421" ID="ID_26431267" MODIFIED="1775090077022" TEXT="Begr&#xfc;ndung der Modellierung">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Die Entscheidung f&#252;r einen weitgehend statischen Fall beruht auf meinem Verst&#228;ndnis der Aufgabe. Man k&#246;nnte es auch anders handhaben; ich sehe aber keinen Grund daf&#252;r. Die Gr&#246;&#223;e einer solchen Trampolin-Tabelle ist eigentlich irrelevant, man m&#246;chte sie nicht als Daten herumschieben (und streng genommen m&#252;&#223;te man auch den Assembly-Code der konkreten Funktionsinstanzen mit zum &#187;Footprint&#171; rechnen).
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <u>Zur Erinnerung</u>: ich modelliere dieses ganze neue Konstrukt anhand der Beispiel-Anwendung &#187;Laufzeit-indizierter Zugriff auf ein Tupel&#171;. Mithin ist dieser Fall gekennzeichnet
+    </p>
+    <ul>
+      <li>
+        durch den Builder, der den Fall generisch repr&#228;sentiert
+      </li>
+      <li>
+        durch die konkrete Sequenz der Typen f&#252;r die eine Tabelle erzeugt wird
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<font ITALIC="true" NAME="SansSerif" SIZE="15"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1775089639651" ID="ID_1540384665" MODIFIED="1775089714473" TEXT="hergestellt wird ein Binding Typ-Signatur &#x27f7; Anwendungs-Fall"/>
+<node CREATED="1775090093076" ID="ID_246986220" MODIFIED="1775090174517" TEXT="dieses Binding mu&#xdf; automatisch herleitbar sein">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Denn wir wollen ein Setup schaffen, in dem ein bestimmtes Bindhing hinter einem Marker-Typ angeh&#228;ngt ist, um es dann bei Bedarf vom Compiler f&#252;r jeweils gegebenen Typ-Sequenzen automatisch instantiiert zu k&#246;nnen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1775089576714" ID="ID_694502312" MODIFIED="1775172741927" TEXT="es geht um das Erzeugen eine Typ-Signatur">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#435e98" CREATED="1775089589280" ID="ID_89648173" MODIFIED="1775172735857" TEXT="die Trampolin-Tabelle soll statisch sein">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1775075718925" ID="ID_154009072" MODIFIED="1775172680094" TEXT="unklar ist: wie wird das &#x3bb; mit dem jeweiligen Typ parametrisiert?">
+<icon BUILTIN="help"/>
+<node CREATED="1775075747794" ID="ID_19336730" MODIFIED="1775075751205" TEXT="M&#xf6;glichkeiten">
+<node CREATED="1775075757456" ID="ID_285231834" MODIFIED="1775075763947" TEXT="nimmt den Typ als Argument"/>
+<node CREATED="1775078459256" ID="ID_1812762722" MODIFIED="1775078474162" TEXT="nimmt den Typ als zus&#xe4;tzliches Template-Argument"/>
+<node CREATED="1775078516753" ID="ID_521950423" MODIFIED="1775078750944" TEXT="Builder-Funktor"/>
+</node>
+<node CREATED="1775078552948" ID="ID_44197221" MODIFIED="1775078699742" TEXT="der Builder-Ansatz ist am einfachsten und klarsten">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      sonst m&#252;&#223;te ich n&#228;mlich verschiedene Varianten definieren, und diese dann durch Metaprogramming erkennen (was u.U. sogar unm&#246;glich ist)
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1775088457064" ID="ID_1315454084" MODIFIED="1775088879664" TEXT="definiere den Builder als Tr&#xe4;ger eine speziellen build-Methode">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Begr&#252;ndung: eine sehr spezielle Methoden-Signatur wird erwartet.
+    </p>
+    <p>
+      Zwar k&#246;nnte man die auch &#252;ber ein Lambda erzeugen, aber weder die Definition, noch der Aufruf w&#228;ren <i>intuitiv</i>&#160;&#8212; insofern ziehe ich eine gute-alte benannte Methode vor.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1775090183505" ID="ID_1500962359" MODIFIED="1775090363358" TEXT="nur der Builder-Typ wird angegeben (und automatisch instantiiert)"/>
+<node CREATED="1775088528871" ID="ID_1736716239" MODIFIED="1775088552919" TEXT="er wird spezifiziert durch ein Concept">
+<node CREATED="1775090288351" ID="ID_850949034" MODIFIED="1775090541355" TEXT="der Builder ist ein Template&lt;SEQ&gt;"/>
+<node CREATED="1775090543880" ID="ID_164593576" MODIFIED="1775090553728" TEXT="SEQ ist die konkrete Typsignatur"/>
+<node CREATED="1775090229092" ID="ID_1577121018" MODIFIED="1775090509274" TEXT="Member-Funktion build&lt;idx&gt;()"/>
+</node>
+</node>
+<node COLOR="#5b280f" CREATED="1775095689763" ID="ID_1043847952" MODIFIED="1775096025995" TEXT="Stop. Nochmal nachdenken!">
+<icon BUILTIN="yes"/>
+<icon BUILTIN="stop-sign"/>
+<node COLOR="#5b280f" CREATED="1775095705434" ID="ID_474577849" MODIFIED="1775172688673" TEXT="k&#xf6;nnte der Builder in dem Design redundant sein?">
+<icon BUILTIN="help"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1775169439215" ID="ID_1658636042" MODIFIED="1775169455737" TEXT="wird meist der Fall sein"/>
+<node CREATED="1775169456871" ID="ID_1392143237" MODIFIED="1775169465576" TEXT="aber der Builder schafft einen Definitions-Kontext"/>
+</node>
+<node CREATED="1775095722856" ID="ID_1580980692" MODIFIED="1775095746825" TEXT="man k&#xf6;nnte stattdessen diese Struktur selber in die Trampolin-Tabelle legen"/>
+<node CREATED="1775144638229" ID="ID_286939645" MODIFIED="1775161869660" TEXT="in dem Zusammenhang auch die Idee einer &#xbb;LocalFun&#xab; in Betracht gezogen (aber vertagt)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Je nachdem, wie effizient eine solche komplett inline gespeicherte Funktor-Abstraktion ist, k&#246;nnte eine solche L&#246;sung relevant werden <i>f&#252;r eine verallgemeinerte Trampolin-Tafel</i>&#160;&#8212; nicht jedoch f&#252;r den konkreten Anwendungsfall, den ich zur Modelliuerung verwende. Denn hier l&#228;&#223;t sich ohne gro&#223;e Schwierigkeiten ein einheitlicher Funktor konstruieren, welcher lediglich auf eine Index-Nummer statisch parametrisiert werden mu&#223;.
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#955f71" DESTINATION="ID_1077323202" ENDARROW="Default" ENDINCLINATION="222;-287;" ID="Arrow_ID_1558977249" STARTARROW="None" STARTINCLINATION="-562;19;"/>
+</node>
+<node BACKGROUND_COLOR="#e2bdab" COLOR="#990033" CREATED="1775095754332" ID="ID_1055719577" MODIFIED="1775172716231" STYLE="fork" TEXT="ein Kernproblem ist: wir brauchen hier eine echte Tabelle">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1775095775353" ID="ID_1681990296" MODIFIED="1775172694855" TEXT="warum? &#x27f9; weil wir einen laufzeit-indizierten Zugriff brauchen"/>
+<node CREATED="1775095799285" ID="ID_1782232261" MODIFIED="1775172694855" TEXT="und damit m&#xfc;ssen alle Eintr&#xe4;ge in der Tabelle den gleichen &#xbb;effektiven Typ&#xab; haben"/>
+<node CREATED="1775096041869" ID="ID_754228497" MODIFIED="1775172694855" TEXT="irgend eine Art von &#xbb;Erasure&#xab; oder &#xbb;Virtualisierung&#xab; ist notwendig">
+<node CREATED="1775096075576" ID="ID_1422504340" MODIFIED="1775172694855" TEXT="entweder ein Call durch einen Funktionspointer"/>
+<node CREATED="1775096088790" ID="ID_1519686747" MODIFIED="1775172694855" TEXT="oder eine VTable hinter einer Basisklassen-Methode"/>
+</node>
+</node>
+<node CREATED="1775161961271" ID="ID_1922214655" MODIFIED="1775161989368" TEXT="zusammengefa&#xdf;t...">
+<node CREATED="1775161983314" ID="ID_1802681547" MODIFIED="1775161986333" TEXT="ohne Ausarbeitung bleibt das spekulativ"/>
+<node CREATED="1775161990435" ID="ID_844146584" MODIFIED="1775162011323" TEXT="deshalb zun&#xe4;chst einen generischen Trampolin-Builder bauen"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1775169484834" ID="ID_664067463" MODIFIED="1775172725543" TEXT="Zusammengefa&#xdf;t">
+<icon BUILTIN="forward"/>
+<node CREATED="1775169498815" ID="ID_1212214899" MODIFIED="1775169517993" TEXT="der Builder bleibt bestehen, aber nur noch als statischer Typisierungs-Kontext"/>
+<node CREATED="1775169518745" ID="ID_1086288042" MODIFIED="1775169538878" TEXT="ebenso bleibt es bei einer build()-Funktion &#x2014; diese wird aber constexpr"/>
+<node CREATED="1775169543713" ID="ID_1331188868" MODIFIED="1775169551196" TEXT="Typ-Parameter">
+<node CREATED="1775169570242" ID="ID_806430719" MODIFIED="1775169600648" TEXT="der Builder &#xfc;bernimmt den Typ-Sequenz-Parameter vom FunTrampoline"/>
+<node CREATED="1775169602841" ID="ID_134851174" MODIFIED="1775169618567" TEXT="die build()-Funktion wird statisch mit dem laufenden Index parametrisiert"/>
+</node>
+<node CREATED="1775169681892" ID="ID_292453858" MODIFIED="1775169921305" TEXT="der Builder mu&#xdf; einen gemeinsamen Funktor-Typ definieren">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      denn auf diesen Typ wird das Trampoline-Array typisiert
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1775169696998" ID="ID_1204730437" MODIFIED="1775169723325" TEXT="using Functor = ..."/>
+<node CREATED="1775169791336" ID="ID_880582725" MODIFIED="1775169804682" TEXT="diese mu&#xdf; constexpr instantiierbar sein"/>
+<node CREATED="1775169805446" ID="ID_159336311" MODIFIED="1775169814007" TEXT="ist derzeit praktisch immer ein Funktionspointer"/>
+<node CREATED="1775169814981" ID="ID_1002112499" MODIFIED="1775169828081" TEXT="k&#xf6;nnte mal eine LocalFun sein...."/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1775172770594" ID="ID_1739644089" MODIFIED="1775520802258" TEXT="Test / Dokumentation">
+<arrowlink COLOR="#231da8" DESTINATION="ID_1015007852" ENDARROW="Default" ENDINCLINATION="562;-82;" ID="Arrow_ID_625074279" STARTARROW="None" STARTINCLINATION="-605;72;"/>
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1775511527267" ID="ID_1685063814" MODIFIED="1775520796440" TEXT="zeige einen toString-Renderer f&#xfc;r Tuples">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#5b280f" CREATED="1775511717235" ID="ID_384415745" MODIFIED="1775516953572" TEXT="verwende util::typedString">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node COLOR="#435e98" CREATED="1775516956276" ID="ID_868249686" MODIFIED="1775516967744" TEXT="verwende util::_Fmt...">
+<node CREATED="1775516982080" ID="ID_520748004" MODIFIED="1775516984621" TEXT="mit toString"/>
+<node CREATED="1775516985373" ID="ID_351627354" MODIFIED="1775517009195" TEXT="und jetzt dann showType">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_351627354" ENDARROW="Default" ENDINCLINATION="497;-39;" ID="Arrow_ID_1713397353" SOURCE="ID_1064570553" STARTARROW="None" STARTINCLINATION="136;-6;"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1775511765435" ID="ID_1875196220" MODIFIED="1775516944523" TEXT="?? der zeigt einen CString als &apos;char&apos;">
+<icon BUILTIN="broken-line"/>
+<icon BUILTIN="button_cancel"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1775511778980" ID="ID_457214243" MODIFIED="1775511948707" TEXT="oh ja ... bekanntes Problem">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...ist inzwischen nicht einmal mehr klar, ob das Bug oder Feature ist; jedenfalls ist lib::meta::typeStr so geschrieben, da&#223; es const, * und &amp; absorbiert. Und typeStr wird an hundertausend Stellen verwendet...
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1775511957169" ID="ID_745916665" MODIFIED="1775511978635" TEXT="deshalb habe ich ja &#x2014; viel sp&#xe4;ter &#x2014; test::showType implementiert"/>
+<node CREATED="1775512025614" ID="ID_1064570553" MODIFIED="1775517009194" TEXT="ja dannn ... sollte die showType-Implementierung eben auch in main-Application">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Vom Umfang der Features her ist das m&#246;glich, und das eine spezialisierte Template werden wir uns wohl noch leisten k&#246;nnen (im Zweifelsfall gibt es durchaus andere Sachen, die k&#246;nnten aus meta/Util in die Traits)
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink DESTINATION="ID_351627354" ENDARROW="Default" ENDINCLINATION="497;-39;" ID="Arrow_ID_1713397353" STARTARROW="None" STARTINCLINATION="136;-6;"/>
+</node>
+<node CREATED="1775516791547" ID="ID_458172444" MODIFIED="1775516925731" TEXT="format-object.hpp scheint ein guter Platz daf&#xfc;r zu sein">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Erst dachte ich meta/util.hpp, aber da gibt es kein lib::Literal, und au&#223;erdem habe ich dann doch etwas Bauchweh mit dem gro&#223;en Template. Demgegen&#252;ber erscheint format-object.hpp der nat&#252;rliche Platz, da sind auch toString() und typedString() und demangleCxx()
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1775511544426" ID="ID_536796264" MODIFIED="1775520797387" TEXT="zeige da&#xdf; der Typ allein gen&#xfc;gt, um das Trampolin zu erzeugen...">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1775520770309" ID="ID_399201804" MODIFIED="1775520793939" TEXT="ein Concept definiert um das Builder-Template zu spezifizieren">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1775174413294" ID="ID_360119128" MODIFIED="1775400128386" TEXT="Hilfsmittel: common result type">
+<linktarget COLOR="#277de3" DESTINATION="ID_360119128" ENDARROW="Default" ENDINCLINATION="-1226;104;" ID="Arrow_ID_651955584" SOURCE="ID_989277122" STARTARROW="None" STARTINCLINATION="686;92;"/>
+<linktarget COLOR="#2d4868" DESTINATION="ID_360119128" ENDARROW="Default" ENDINCLINATION="-1226;104;" ID="Arrow_ID_959368971" SOURCE="ID_1013361274" STARTARROW="None" STARTINCLINATION="-935;121;"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1775174861131" ID="ID_808028174" MODIFIED="1775505449606" TEXT="f&#xfc;r zwei Typen habe ich das bereits implementiert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      und zwar f&#252;r den IterExplorer-Expander:
+    </p>
+    <ul>
+      <li>
+        siehe <font color="#635e96" face="DejaVu Sans Mono"><b>_ExpanderTraits</b></font>
+      </li>
+      <li>
+        implementiert in value-type-binding.hpp
+      </li>
+      <li>
+        das Trait-Template dort: <font color="#635e96" face="DejaVu Sans Mono"><b>CommonResultYield</b></font> hat bereits eine sehr elaborierte Logik, die f&#252;r diesen Fall passend erscheint:
+      </li>
+      <ul>
+        <li>
+          erkennt ob std::common_type erfolgreich war (&#10230; das ist nicht trivial und ich mu&#223;te einen eigenen duck-Detector daf&#252;r bauen)
+        </li>
+        <li>
+          leider impliziert common_type ein decay &#10233; mu&#223; Referenzen und const eigens handhaben
+        </li>
+        <li>
+          kann per non-const-ref nur liefern, wenn das f&#252;r alle beteiligten Typen geht
+        </li>
+        <li>
+          f&#228;llt defensiv zur&#252;ck auf const und by-value result
+        </li>
+      </ul>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1775505452434" ID="ID_1286340755" MODIFIED="1775505609966" TEXT="letztlich hat aber die &#xdc;berarbeitung verdeckte Probleme aufgezeigt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Da std::common_type automatisch den decay_t anwendet, dachte ich damals, ich kann die Referenzen und die Const-ness einfach nachtr&#228;glich fixen. Das f&#252;hrt aber in gewissen Randf&#228;llen zu einem gef&#228;hrlich falschen Ergebnis
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1775505470192" ID="ID_605787580" MODIFIED="1775505489381" TEXT="daher habe ich nun die gleiche Technik wie die STDLIB nochmal zu-Fu&#xdf; implementiert"/>
+<node CREATED="1775505495789" ID="ID_468375453" MODIFIED="1775505565462" TEXT="und damit die M&#xf6;glichkeit, die Auswertung ohne zus&#xe4;tzliche Logik direkt zu machen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      die STDLIB macht ein &#187;decay&#171; (f&#252;r common_type) bzw. hat elaborierte Logik, um mit RValue-Referenzen umzugehen.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1775175227585" ID="ID_1885907974" MODIFIED="1775505433629" TEXT="das nun auf mehrere Typen ausweiten...">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1775175271859" ID="ID_871792525" MODIFIED="1775175279950" TEXT="bisher nur ein einziges mal verwendet..."/>
+<node CREATED="1775175280655" ID="ID_573543566" MODIFIED="1775175290876" TEXT="man k&#xf6;nnte daher noch das Interaface wechseln">
+<node CREATED="1775175306067" ID="ID_166961176" MODIFIED="1775175314009" TEXT="Idee: eine Typ-Sequenz nehmen">
+<node CREATED="1775215414475" ID="ID_347079843" MODIFIED="1775215433134" TEXT="dann k&#xf6;nnte man wohl die bestehende Implementierung &#xbb;aufbohren&#xab;...."/>
+<node CREATED="1775216126050" ID="ID_1094676881" MODIFIED="1775216158399" TEXT="...braucht dann aber zus&#xe4;tzlich eine volle Speziallisierung f&#xfc;r einen und keinen Typ"/>
+</node>
+<node COLOR="#5b280f" CREATED="1775176086838" ID="ID_1099029630" MODIFIED="1775244897071" TEXT="w&#xfc;rde auch ein direkt variadisches API gehen?">
+<linktarget COLOR="#6d7e92" DESTINATION="ID_1099029630" ENDARROW="Default" ENDINCLINATION="10;41;" ID="Arrow_ID_1087335881" SOURCE="ID_381348724" STARTARROW="None" STARTINCLINATION="-109;5;"/>
+<icon BUILTIN="help"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1775177032320" ID="ID_1285053244" MODIFIED="1775177044818" TEXT="vielleicht ..."/>
+<node CREATED="1775177045462" ID="ID_892268280" MODIFIED="1775177111144" TEXT="problematisch ist die ganze Formulierung">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...mit dem default non-type-Argument am Ende der Liste; dort habe ich den Test versteckt, ob es &#252;berhaupt ein Common-Result gibt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1775177317410" ID="ID_1414001744" MODIFIED="1775177338132" TEXT="dann m&#xfc;&#xdf;te man die Metafunktion wohl auseinandernehmen"/>
+</node>
+<node COLOR="#435e98" CREATED="1775216085727" ID="ID_1581414629" MODIFIED="1775244843259" TEXT="Also &#x27f9; was w&#xe4;re ein gutes Interface?">
+<icon BUILTIN="help"/>
+<node CREATED="1775216467021" ID="ID_381348724" MODIFIED="1775244905143" TEXT="allgemein: Types&lt;...&gt; ist immer das bessere Interface">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...da hab ich schon oft dar&#252;ber nachgedacht (vergesse es aber immer wieder): eine (Lumier)-Typsequenz ist ein richtiger Typ, w&#228;hrend ein variadic-argument-pack ein sonderbares Meta-Konstrukt ist, das nur per Pattern-Manching verarbeitet werden kann
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#6d7e92" DESTINATION="ID_1099029630" ENDARROW="Default" ENDINCLINATION="10;41;" ID="Arrow_ID_1087335881" STARTARROW="None" STARTINCLINATION="-109;5;"/>
+<icon BUILTIN="yes"/>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1775216640981" ID="ID_1059363134" MODIFIED="1775244726433" TEXT="bez&#xfc;glich Formulierung im Code: Hilfsfunktionen sind nur gut, wenn sie Text reduzieren">
+<arrowlink DESTINATION="ID_224091939" ENDARROW="Default" ENDINCLINATION="166;0;" ID="Arrow_ID_1829433334" STARTARROW="None" STARTINCLINATION="181;0;"/>
+</node>
+<node CREATED="1775216862271" ID="ID_743808497" MODIFIED="1775216900141" TEXT="k&#xf6;nnte stattdessen die Rekursion durch generische Konstrukte ersetzen">
+<node CREATED="1775216902058" ID="ID_1491286284" MODIFIED="1775217778404" TEXT="std::common_is bereits N-&#xe4;r definiert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...und zwar wendet es zun&#228;chst <i>Decay</i>&#160;an, und extrahiert dann das Verhalten des tern&#228;ren-conditionals (&#183; ? &#183; : &#183; ), was bereits elaobrierte Regeln spezifiziert, um Ergebnistypen zu vereinheitlichen. Eine leere Menge hat keinen common-type. Spezieller twist bei einer einelementigen Menge: auch hier wird auf das Verhalten des tern&#228;ren Operators delegiert
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1775217790628" ID="ID_604017534" MODIFIED="1775217818516" TEXT="au&#xdf;erdem k&#xf6;nnen const und lref auf die Menge gehoben werden">
+<node CREATED="1775217870969" ID="ID_1048983802" MODIFIED="1775217876612" TEXT="&#x2203; const"/>
+<node CREATED="1775217877544" ID="ID_961819479" MODIFIED="1775217887923" TEXT="&#x2200; lref"/>
+</node>
+</node>
+<node CREATED="1775219258688" ID="ID_545634791" MODIFIED="1775219270869" TEXT="Problem: common_type hat nicht immer einen Ergebnistyp">
+<node CREATED="1775219326927" ID="ID_425615616" MODIFIED="1775219336290" TEXT="brauche zus&#xe4;tziches Test-API"/>
+<node CREATED="1775244691400" ID="ID_224091939" MODIFIED="1775244839493" TEXT="sollte ohnehin die Basis-Definition auskoppeln">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das ist hier ein Fall, wo der Code klarer wird, und obendrei die &#187;Hilfsfunktion&#171; eigentlich der Kern ist, und auch f&#252;r sich selbst n&#252;rzlich. Hinzu kommt, da&#223; ich die Basis-Definition &#252;ber ein geschicktes Mapping mit ElmTypes realisieren kann, ohne &#252;berhaupt eine Processing-Logik anschreiben zu m&#252;ssen. Dieses Konstrukt ist jedoch ziemlich technisch, und profitiert davon, wenn es als eigenst&#228;ndige Definition mit Namen gegeben ist.
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_224091939" ENDARROW="Default" ENDINCLINATION="166;0;" ID="Arrow_ID_1829433334" SOURCE="ID_1059363134" STARTARROW="None" STARTINCLINATION="181;0;"/>
+</node>
+<node COLOR="#5b280f" CREATED="1775219345036" ID="ID_144616531" MODIFIED="1775244679973" TEXT="oder doch wieder wie das originale Konstrukt?">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1775219374167" ID="ID_1052149002" MODIFIED="1775244682631" TEXT="static_assert erscheint mir klarer">
+<icon BUILTIN="forward"/>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1775244933637" ID="ID_1445537312" MODIFIED="1775400447970" TEXT="kurz angetestet: funktioniert">
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1775245111269" ID="ID_1687167937" MODIFIED="1775505429389" TEXT="Problem: Header / Code-Anordnung">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1775245124352" ID="ID_1044004556" MODIFIED="1775245147847" TEXT="ich brauche den CommonResultYield f&#xfc;r zwei Typen...">
+<node CREATED="1775245148544" ID="ID_1627273194" MODIFIED="1775245157043" TEXT="in iter-explorer.hpp"/>
+<node CREATED="1775245157841" ID="ID_1531601030" MODIFIED="1775245168027" TEXT="der includiert keine Tupel und Variadic-Tools"/>
+</node>
+<node CREATED="1775245884047" ID="ID_1221259218" MODIFIED="1775245919117" TEXT="wohingegen meine aktuelle Erweiterung zu den Tuple-Tools geh&#xf6;rt">
+<node CREATED="1775246086851" ID="ID_1601475118" MODIFIED="1775246124063" TEXT="...und die will ich definitiv nicht fast &#xfc;berall includieren"/>
+</node>
+<node CREATED="1775246377560" ID="ID_1390064067" MODIFIED="1775246389438" TEXT="m&#xf6;gliche Auswege...">
+<node CREATED="1775246393874" ID="ID_619960860" MODIFIED="1775246402411" TEXT="zweimal implementieren mit verschiedenem Namen"/>
+<node CREATED="1775246532390" ID="ID_4027381" MODIFIED="1775246556024" TEXT="die Typlisten-Form als Spezialisierung anlegen"/>
+<node CREATED="1775246639003" ID="ID_1622292451" MODIFIED="1775246658411" TEXT="die Verwednung von ElmTypes durch direkte Impl ersetzen">
+<node CREATED="1775246690114" ID="ID_1463691773" MODIFIED="1775246707714" TEXT="h&#xe4;tte dann Typelist auch in Iter-Adapter includiert"/>
+<node CREATED="1775246713884" ID="ID_1830552174" MODIFIED="1775246720178" TEXT="und dazu RebindVariadic"/>
+<node CREATED="1775246725917" ID="ID_182832983" MODIFIED="1775246745232" TEXT="praktisch kein Problem &#x2014; aber inhaltlich nicht sch&#xf6;n"/>
+</node>
+<node CREATED="1775246594191" ID="ID_184452090" MODIFIED="1775342861603" TEXT="die Typlisten Form als rekursive Erweiterung einer 2-elementigen Basis-Impl">
+<icon BUILTIN="button_ok"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1775246793112" ID="ID_1838915550" MODIFIED="1775246803335" TEXT="auf theoretischer Ebene w&#xe4;re das der saubere Ansatz"/>
+<node CREATED="1775246810650" ID="ID_313363423" MODIFIED="1775246821040" TEXT="die Implementierung erforder dann aber Spezialisierungen"/>
+<node CREATED="1775246823192" ID="ID_623367529" MODIFIED="1775246836347" TEXT="mal ausprobieren wie schlimm das w&#xe4;re">
+<node CREATED="1775250598791" ID="ID_1893769097" MODIFIED="1775250601701" TEXT="geht..."/>
+<node CREATED="1775250602433" ID="ID_1509828005" MODIFIED="1775250614325" TEXT="Hauptdef + 2 Spezialisierungen"/>
+<node CREATED="1775250614975" ID="ID_139307512" MODIFIED="1775250619914" TEXT="aber jede ist ein 1-Zeiler"/>
+</node>
+</node>
+<node CREATED="1775342865107" ID="ID_1343286472" MODIFIED="1775344194685" TEXT="einen CommonType komplett neu implementieren &#x2014; von Anfang an als Variadic">
+<arrowlink COLOR="#3759d5" DESTINATION="ID_921502644" ENDARROW="Default" ENDINCLINATION="-339;-963;" ID="Arrow_ID_524036197" STARTARROW="None" STARTINCLINATION="-683;25;"/>
+<icon BUILTIN="forward"/>
+</node>
+</node>
+<node CREATED="1775250644331" ID="ID_625638303" MODIFIED="1775250649719" TEXT="damit...">
+<node CREATED="1775250650571" ID="ID_1996526227" MODIFIED="1775250657933" TEXT="auch Basis-Impl etwas reformuliert"/>
+<node CREATED="1775250658746" ID="ID_563605457" MODIFIED="1775250708535" TEXT="definiere mein eigenes CommonType per RebindVariadic">
+<icon BUILTIN="idea"/>
+<node CREATED="1775250710149" ID="ID_677683776" MODIFIED="1775250720341" TEXT="dann funktioniert das erst mal mit N Argumenten"/>
+<node CREATED="1775250720991" ID="ID_1348666929" MODIFIED="1775250736344" TEXT="aber es funktioniert transparent auch f&#xfc;r Typ-Sequenz">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1775250737847" ID="ID_296849928" MODIFIED="1775250751961" TEXT="und zwar ohne da&#xdf; ich irgend etwas machen mu&#xdf; (au&#xdf;er das kommentieren!)"/>
+</node>
+<node CREATED="1775250774756" ID="ID_1891119297" MODIFIED="1775250788908" TEXT="darauf aufsetzend auch ein has_CommonType_v"/>
+</node>
+<node COLOR="#338800" CREATED="1775344139735" ID="ID_194711929" MODIFIED="1775344235395" TEXT="sp&#xe4;ter eine viel einfachere L&#xf6;sung gefunden">
+<arrowlink COLOR="#2bbd58" DESTINATION="ID_248549567" ENDARROW="Default" ENDINCLINATION="-651;-24;" ID="Arrow_ID_1126467412" STARTARROW="None" STARTINCLINATION="606;35;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1775481567565" ID="ID_871223663" MODIFIED="1775482871366" TEXT="nochmal die Frage: wohin damit?">
+<linktarget COLOR="#7f8f98" DESTINATION="ID_871223663" ENDARROW="Default" ENDINCLINATION="75;519;" ID="Arrow_ID_659392665" SOURCE="ID_853872451" STARTARROW="None" STARTINCLINATION="568;38;"/>
+<icon BUILTIN="help"/>
+<node CREATED="1775481437799" ID="ID_1538512119" MODIFIED="1775481530623" TEXT="es gibt keinen guten Grund, das zu value-type-binding zu packen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Seinerzeit war das Gedankenlosigkeit, weil es im gleichen Kontext verwendet wird (n&#228;mlich ein Trait in IterExplorer). Aus der gleichen Gedankenlosigkeit heraus hatte ich auch gleich noch die RefTraits in den CommonResultYield mit eingebaut.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1775481533130" ID="ID_203522228" MODIFIED="1775482533275" TEXT="gebraucht wird es n&#xe4;mlich erst in einem h&#xf6;heren, komplexerem Stratum der Library">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...n&#228;mlich auf dem Level von IterExplorer. Dort sind auch bereits die <i>Function-Tools</i>&#160; da, und damit implizit auch schon Typelist und Typeseq....
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#637488" DESTINATION="ID_1272898154" ENDARROW="Default" ENDINCLINATION="-1279;-294;" ID="Arrow_ID_1757105516" STARTARROW="None" STARTINCLINATION="-1290;45;"/>
+</node>
+<node CREATED="1775481671505" ID="ID_207987949" MODIFIED="1775482303747" TEXT="damit m&#xfc;&#xdf;te die Spezialisierung f&#xfc;r Type-seq gar nicht mehr abgespalten werden">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      So eine Spezialisierung, die in <i>irgend einem Basis-Header versteckt ist,</i>&#160;empfinde ich immer als hochproblematisch; man verwendet sie meist, ohne zu realisieren, da&#223; sie existiert, und man findet sie im Zweifelsfall nur schwer, besonders wenn das Feature viel verwendet wird
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1775481701667" ID="ID_1677342626" MODIFIED="1775482395505" TEXT="daf&#xfc;r kann die Abh&#xe4;ngigkeit auf Typeseq-Utils wegfallen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Es bildet sich n&#228;mlich immer mehr ein eigener Status heraus, auf dem erst die Typlisten- und Sequenz-Manipulationen stattfinden. Dieser wird seit etwa einem Jahr durch das ElmTypes-Template definiert. Und die Tuple-Metafunktionen liegen noch eine Ebene h&#246;her
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1775482439535" ID="ID_439222697" MODIFIED="1775482525982" TEXT="leider &#xfc;bersetzen sich die Strati nicht in Namespaces">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Was ich allerdings auch dann wieder gut finde, denn ich benenne die Namespaces dann lieber inhaltlich, denn sie sollen ja auch dann noch f&#252;r eine gewisse Trennung sorgen, wenn alle Ebenen der Library eingeschlossen sind
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1775250940327" ID="ID_53963302" MODIFIED="1775497110341" TEXT="sollte ausf&#xfc;hrlicheren Unit-Test formulieren">
+<icon BUILTIN="yes"/>
+<node CREATED="1775250953986" ID="ID_947292859" MODIFIED="1775250975974" TEXT="gibt es schon: IterCoreAdapter_test"/>
+<node CREATED="1775497235926" ID="ID_1526074580" MODIFIED="1775497244745" TEXT="dort geh&#xf6;rt es eigentlich nicht hin...."/>
+<node COLOR="#435e98" CREATED="1775497245581" ID="ID_315289686" MODIFIED="1775497315753" TEXT="belasse dort nur einen einfachen Basis-Testfall">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...damit das Feature als Solches in diesem Kontext gezeigt wird, denn <i>inhaltlich</i>&#160; wird es oft relevant, wenn man aus einer StateCore heraus Werte aus verschiedenen Quellen kombiniert
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#338800" CREATED="1775496346190" ID="ID_660654119" MODIFIED="1775496364199" TEXT="Typ-F&#xe4;lle noch systematischer abdecken">
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#338800" CREATED="1775496368154" ID="ID_248271530" MODIFIED="1775497348405" TEXT="auch den unterliegenden Basis-Mechanismus abgedeckt">
+<arrowlink COLOR="#2a226a" DESTINATION="ID_217247552" ENDARROW="Default" ENDINCLINATION="-23;-90;" ID="Arrow_ID_241827572" STARTARROW="None" STARTINCLINATION="-61;3;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1775497083219" ID="ID_686407246" MODIFIED="1775497093601" TEXT="zeige auch ein Beispiel f&#xfc;r Metaprocessing">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1775497094428" ID="ID_22520794" MODIFIED="1775497106638" TEXT="und die Auswahl von Overloads per Concept">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1775251017857" ID="ID_409029208" MODIFIED="1775497107950" TEXT="extrahieren in separaten Test">
+<arrowlink COLOR="#2c56b4" DESTINATION="ID_270766205" ENDARROW="Default" ENDINCLINATION="192;0;" ID="Arrow_ID_385535683" STARTARROW="None" STARTINCLINATION="273;24;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#dfb4a4" COLOR="#990033" CREATED="1775496384527" ID="ID_217247552" MODIFIED="1775497327383" TEXT="sonderbare Beobachtung: Basis-Mechanismus liefert keine RValue-Referenz">
+<linktarget COLOR="#2a226a" DESTINATION="ID_217247552" ENDARROW="Default" ENDINCLINATION="-23;-90;" ID="Arrow_ID_241827572" SOURCE="ID_248271530" STARTARROW="None" STARTINCLINATION="-61;3;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1775496505592" ID="ID_504145807" MODIFIED="1775496655063" TEXT="im Fall  II &#x2229; S1">
+<node CREATED="1775496662723" ID="ID_1208708576" MODIFIED="1775496713087" TEXT="Basis-Ausdruck liefert Typ &quot;II&quot;"/>
+<node CREATED="1775496694206" ID="ID_562887942" MODIFIED="1775496709408" TEXT="CommonResult_t&lt;II,S1&gt; &#x2261; &quot;II &amp;&amp;&quot;"/>
+</node>
+<node CREATED="1775496972365" ID="ID_1178584977" MODIFIED="1775496992427" TEXT="das liegt daran, da&#xdf; unsere Impl. std::declval&lt;T&gt;() verwendet">
+<node CREATED="1775497970136" ID="ID_378682996" MODIFIED="1775497983501" TEXT="seit C++14 f&#xfc;gt das eine &amp;&amp; hinzu"/>
+<node CREATED="1775497984332" ID="ID_903662443" MODIFIED="1775497994666" TEXT="wobei dann Reference-Collapsing stattfindet"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1775497036551" ID="ID_1478232704" MODIFIED="1775498060939" TEXT="Relevanz ist schwer einzusch&#xe4;tzen">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1775498142758" ID="ID_781182972" MODIFIED="1775498162086" TEXT="wirklich sch&#xe4;dlich ist es nicht..."/>
+<node CREATED="1775498162777" ID="ID_1988072678" MODIFIED="1775498176699" TEXT="aber es verhindert die Return-Value-Optimisation"/>
+<node CREATED="1775498207156" ID="ID_1135577091" MODIFIED="1775498241637">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <i>Grunds&#228;tzlich</i>&#160;soll meine Metafunktion den <b>Basismechanismus</b>&#160; exponieren
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node COLOR="#5b280f" CREATED="1775498244915" ID="ID_930355688" MODIFIED="1775499480719" TEXT="also: decval() durch eigene Implementierung ersetzen">
+<icon BUILTIN="broken-line"/>
+<icon BUILTIN="stop-sign"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#d00f1a" CREATED="1775499483137" ID="ID_805273040" MODIFIED="1775502603392" TEXT="Compile-Fehler!">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <div style="background-color: #f5f8c6; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 2px">
+      <div style="color: #202020; background-color: #f5f8c6; font-family: DejaVu Sans Mono; font-size: 9pt; white-space: pre-wrap">
+        <p style="background-color: #f3cfc3; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#ff0000">src/lib/iter-explorer.hpp:423:24: error: static assertion failed: source iterator and result from the expansion must yield compatible values</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a2626">423 | static_assert (can_reconcile,</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a2626">| ^~~~~~~~~~~~~</font>
+        </p>
+        <p style="background-color: #f4f7fe; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a2626">src/lib/iter-explorer.hpp:423:24: note: 'lib::{anonymous}::_ExpanderTraits&lt;lib::iter_explorer::BaseAdapter&lt;lib::iter_explorer::StlRange&lt;lib::Several&lt;std::reference_wrapper&lt;steam::engine::ProcNode&gt; &gt;&amp;&gt; &gt;, lib::IterExplorer&lt;lib::iter_explorer::BaseAdapter&lt;lib::iter_explorer::StlRange&lt;lib::Several&lt;std::reference_wrapper&lt;steam::engine::ProcNode&gt; &gt;&amp;&gt; &gt; &gt; &gt;::can_reconcile' evaluates to false</font>
+        </p>
+        <p style="background-color: #f3cfc3; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a2626">src/lib/iter-explorer.hpp:428:15: error: no type named 'Type' in 'using lib::{anonymous}::_ExpanderTraits&lt;lib::iter_explorer::BaseAdapter&lt;lib::iter_explorer::StlRange&lt;lib::Several&lt;std::reference_wrapper&lt;steam::engine::ProcNode&gt; &gt;&amp;&gt; &gt;, lib::IterExplorer&lt;lib::iter_explorer::BaseAdapter&lt;lib::iter_explorer::StlRange&lt;lib::Several&lt;std::reference_wrapper&lt;steam::engine::ProcNode&gt; &gt;&amp;&gt; &gt; &gt; &gt;::_CommonT = struct lib::meta::CommonResult&lt;std::reference_wrapper&lt;steam::engine::ProcNode&gt;&amp;, std::reference_wrapper&lt;steam::engine::ProcNode&gt;&amp;&gt;' {aka 'struct lib::meta::CommonResult&lt;std::reference_wrapper&lt;steam::engine::ProcNode&gt;&amp;, std::reference_wrapper&lt;steam::engine::ProcNode&gt;&amp;&gt;'}</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a2626">428 | using YieldRes = _CommonT::Type;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a2626">| ^~~~~~~~</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="broken-line"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f67" CREATED="1775499483137" ID="ID_737191527" MODIFIED="1775502595864" TEXT="Compile scheitert in ProcID::genSrcSpec()">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <div style="background-color: #eee0b5; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 2px">
+      <div style="color: #202020; background-color: #eee0b5; font-family: DejaVu Sans Mono; font-size: 9pt; white-space: pre">
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#8c505c"><b>string</b></font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#632d2d"><b>ProcID::genSrcSpec</b></font><font color="#3a1f18">&#160;</font><font color="#11123a">(</font><font color="#8c505c"><b>Leads</b></font><font color="#65533c">&amp;</font><font color="#3a1f18">&#160; leads</font><font color="#11123a">)</font><font color="#3a1f18">&#160;</font><font color="#4a1a65"><b>const</b></font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#11123a">{</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a1a65"><b>return</b></font><font color="#3a1f18">&#160;</font><font color="#000000">isnil</font><font color="#11123a">(</font><font color="#3a1f18">leads</font><font color="#11123a">)</font><font color="#65533c">?</font><font color="#3a1f18">&#160;</font><font color="#8c505c"><b>string</b></font><font color="#11123a">{</font><font color="#996e62"><i>&quot;-&#9678;&quot;</i></font><font color="#11123a">}</font><font color="#3a1f18">&#160; </font><font color="#977b75">// no leads =&gt; starting point itself is a source node</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#65533c">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;:</font><font color="#3a1f18">&#160;</font><font color="#996e62"><i>&quot;&#9481;&#9481;{&quot;</i></font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#65533c">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;+</font><font color="#3a1f18">&#160;</font><font color="#535773">util</font><font color="#65533c">::</font><font color="#000000">join</font><font color="#11123a">(</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#000000">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;explore</font><font color="#11123a">(</font><font color="#b45858"><b>leads</b></font><font color="#11123a">)</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#65533c">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;.</font><font color="#753737">expandAll</font><font color="#11123a">(</font><font color="#635e96"><b>[</b></font><font color="#11123a">](</font><font color="#635e96"><b>ProcNode</b></font><font color="#65533c">&amp;</font><font color="#3a1f18">&#160; n</font><font color="#11123a">){</font><font color="#3a1f18">&#160;</font><font color="#4a1a65"><b>return</b></font><font color="#3a1f18">&#160;</font><font color="#000000">explore</font><font color="#11123a">(</font><font color="#b45858"><b>watch(n).leads()</b></font><font color="#11123a">)</font><font color="#65533c">;</font><font color="#3a1f18">&#160; </font><font color="#11123a">})</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          ...&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <font color="#f50158"><b>&#9650;&#9650;&#9650;&#9650;&#9650; Compile-Error</b></font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          ...
+        </p>
+      </div>
+    </div>
+  </body>
+</html></richcontent>
+<icon BUILTIN="info"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1775499779427" ID="ID_1401185440" MODIFIED="1775502545951" TEXT="puh ... das ist ein komplexer Fall ... sollte das funktionieren?">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Hier liegen mehrere Schichten von Typen &#252;bereinander...
+    </p>
+    <div style="background-color: #eee0b5; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 2px">
+      <div style="color: #202020; background-color: #eee0b5; font-family: DejaVu Sans Mono; font-size: 9pt; white-space: pre">
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a1a65"><b>using</b></font><font color="#3a1f18">&#160;</font><font color="#8c505c"><b>ProcNodeRef</b></font><font color="#3a1f18">&#160;</font><font color="#65533c">=</font><font color="#3a1f18">&#160;</font><font color="#535773">std</font><font color="#65533c">::</font><font color="#635e96"><b>reference_wrapper</b></font><font color="#65533c">&lt;</font><font color="#635e96"><b>ProcNode</b></font><font color="#65533c">&gt;;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a1a65"><b>using</b></font><font color="#3a1f18">&#160;</font><font color="#8c505c"><b>Leads</b></font><font color="#3a1f18">&#160;</font><font color="#65533c">=</font><font color="#3a1f18">&#160;</font><font color="#535773">lib</font><font color="#65533c">::</font><font color="#635e96"><b>Several</b></font><font color="#65533c">&lt;</font><font color="#8c505c"><b>ProcNodeRef</b></font><font color="#65533c">&gt;;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          
+        </p>
+      </div>
+    </div>
+    <p>
+      Und lib::Several definiert seinen value_type und reference per RefTraits. Also kommt hier eine Referenz auf einen std::ReferenceWrapper&lt;ProcNode&gt; raus. Welcher selber wiederum konvertierbar ist auf ProcNode&amp; ... Und dieses Setup wird dann von den Type-Traits in IterExplorer analysiert.
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="help"/>
+<node CREATED="1775504134562" ID="ID_1396995706" MODIFIED="1775504310033" TEXT="analysiert ... ja es sollte funktionieren!">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      beide Z&#252;ge im Expander liefern praktisch den gleichen Lumiera-Iterator-Typ, der durch Dekorieren &#252;ber den Iterator von lib::Several entsteht:
+    </p>
+    <p>
+      <font face="Monospaced" color="#8d0b0b">BaseAdapter&lt;StlRange&lt;Several&lt;reference_wrapper&lt;ProcNode&gt; &gt;&amp; &gt;&gt;</font>
+    </p>
+    <p>
+      Daraus sollte sich in beiden F&#228;llen der gleiche Iterator-Yield ergeben:
+    </p>
+    <p>
+      <font color="#6548ec" face="DejaVu Sans Mono">reference_wrapper&lt;ProcNode&gt;&amp;</font>
+    </p>
+    <p>
+      <br />
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1775504312049" ID="ID_492627855" MODIFIED="1775504333672" TEXT="empirische Analyse &#x27f6; Typen nachbauen">
+<node CREATED="1775504707188" ID="ID_1132038419" MODIFIED="1775504728365" TEXT="sinngem&#xe4;&#xdf; die gleiche Pipeline mit Dummy-Typen nachgebaut"/>
+<node CREATED="1775504729114" ID="ID_791638900" MODIFIED="1775504752396" TEXT="dann per Namespace-Hijack die _ExpanderTraits instantiiert"/>
+<node CREATED="1775504753343" ID="ID_623652245" MODIFIED="1775504764612" TEXT="Typen anschauen &#x27f9; sind gleich"/>
+<node CREATED="1775504765423" ID="ID_866411450" MODIFIED="1775504792229" TEXT="ge&#xe4;nderte Impl. von CommonType daneben setzen &#x27f9; liefert OK"/>
+</node>
+<node CREATED="1775504683336" ID="ID_1710031828" MODIFIED="1775504888098" TEXT="sogar in der Fehlermeldung sieht man da&#xdf; beide Typ-Parameter gleich sind">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <font color="#4a2626">aka 'struct lib::meta::CommonResult&lt;std::reference_wrapper&lt;steam::engine::ProcNode&gt;&amp;, std::reference_wrapper&lt;steam::engine::ProcNode&gt;&amp;&gt;'</font>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1775504902888" ID="ID_652622235" MODIFIED="1775504922374" TEXT="sieht f&#xfc;r mich nach einem Compiler-Bug aus">
+<icon BUILTIN="yes"/>
+<node CREATED="1775504936799" ID="ID_98506859" MODIFIED="1775504944335" TEXT="der w&#xe4;re aber extrem schwer zu reporten"/>
+<node CREATED="1775504945445" ID="ID_1067473064" MODIFIED="1775504968236" TEXT="wenn ich ihn schon nicht einmal mit Dummy-Typen nachbauen kann"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#feb9c4" CREATED="1775423915205" ID="ID_1830273305" MODIFIED="1775505214704" STYLE="bubble">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      da die L&#246;sung mit <font color="#2014cd" face="Monospaced">std::declval&lt;T&gt;()</font>&#160;ja funktioniert &#10233; <b>Problem vertagen</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<edge COLOR="#df0303" STYLE="bezier" WIDTH="thin"/>
+<linktarget COLOR="#6f1930" DESTINATION="ID_1830273305" ENDARROW="Default" ENDINCLINATION="-581;17;" ID="Arrow_ID_216953150" SOURCE="ID_1283719465" STARTARROW="None" STARTINCLINATION="658;39;"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#bbd2d3" COLOR="#435e98" CREATED="1775251109663" ID="ID_1620354138" MODIFIED="1775534216926" TEXT="Bausteine kombinieren...">
+<icon BUILTIN="yes"/>
+<node COLOR="#338800" CREATED="1775251116792" ID="ID_747298710" MODIFIED="1775252186786" TEXT="Builder f&#xfc;r ein Access-Trampolin">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1775251257873" ID="ID_181654457" MODIFIED="1775349536794" TEXT="TupleIndexAdaptor">
+<node COLOR="#435e98" CREATED="1775257901738" ID="ID_1634401509" MODIFIED="1775257914883" TEXT="geht vergleichsweise leicht zusammenzubauen">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#435e98" CREATED="1775257916320" ID="ID_1487076812" MODIFIED="1775258197551" TEXT="Frage: wohin kommt der FunctorBuilder?">
+<node CREATED="1775257939343" ID="ID_512038498" MODIFIED="1775257955623" TEXT="Problem dabei: ich m&#xf6;chte tuple_like akzeptieren"/>
+<node CREATED="1775257956494" ID="ID_966132612" MODIFIED="1775257972924" TEXT="der konkrete Typ ist aber nur im TupleIndexAdapter bekannt"/>
+<node CREATED="1775257973769" ID="ID_803687754" MODIFIED="1775257993188" TEXT="&#x27f9; der Builder mu&#xdf; eine innere Klasse sein...">
+<node CREATED="1775258004068" ID="ID_1129663115" MODIFIED="1775258025405" TEXT="dann kann man auf das Rekonstruieren des Tuple-Typs komplett verzichten"/>
+<node CREATED="1775258026033" ID="ID_678501529" MODIFIED="1775258069829" TEXT="auch die Typ-Sequenz ist dann (streng genommen) gar nicht mehr notwendig">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      weil wir den Typ &#252;ber tuple_element_t&lt;idx&gt; finden
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1775258085329" ID="ID_402261583" MODIFIED="1775258132207" TEXT="unsch&#xf6;n? Nein! deshalb habe ich ja dieses Builder-Konstrukt gemacht....">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...damit es leicht inline verwendbar ist
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1775258198904" ID="ID_450289482" MODIFIED="1775258332904" TEXT="und wohin kommt das Tupel">
+<node CREATED="1775258220999" ID="ID_926896633" MODIFIED="1775258235149" TEXT="ich k&#xf6;nnte mir denken, da&#xdf; man eine Referenz-Variante m&#xf6;chte..."/>
+<node CREATED="1775258235719" ID="ID_434311545" MODIFIED="1775258259796" TEXT="also ein per Template getyptes Objektfeld anlegen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das k&#246;nnte man dann auf Tuple&amp; setzen
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1775258261308" ID="ID_1109779566" MODIFIED="1775258276563" TEXT="Schwierigkeit: tuple_like arbeitet nur auf dem Basistyp"/>
+<node CREATED="1775258277452" ID="ID_1349449110" MODIFIED="1775258292168" TEXT="&#x27f9; werde dann mit einer expliziten requires-Klausel arbeiten m&#xfc;ssen"/>
+</node>
+<node CREATED="1775258206273" ID="ID_210488848" MODIFIED="1775258220235" TEXT="k&#xf6;nnte eine Zugriffs-Policy verwenden"/>
+<node COLOR="#5b280f" CREATED="1775258293722" ID="ID_1133792700" MODIFIED="1775258309687" TEXT="Overengineering!!">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1775258311531" ID="ID_1268872908" MODIFIED="1775258318222" TEXT="von dem Tupel erben und gut is."/>
+<node CREATED="1775258319136" ID="ID_825741644" MODIFIED="1775352878122" TEXT="den Referenz-Fall m&#xf6;chte ich erst mal sehen!!!">
+<arrowlink COLOR="#793553" DESTINATION="ID_23857904" ENDARROW="Default" ENDINCLINATION="-93;-334;" ID="Arrow_ID_213185063" STARTARROW="None" STARTINCLINATION="-340;21;"/>
+</node>
+</node>
+<node CREATED="1775258337529" ID="ID_735845562" MODIFIED="1775258391790" TEXT="einen durchreiche-Init-Konstruktor bauen (der wird auch zum Copy-Konstruktor)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das ist hier ein Kniff, der funktioniert, weil der TupleIndexAdapter tats&#228;chlich auf das Tuple herunter-sliced werden kann
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1775258136986" ID="ID_502341860" MODIFIED="1775258143426" TEXT="Test: funktioniert">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1775258144585" ID="ID_1370084246" MODIFIED="1775258189769" TEXT="ABER &#x2014; f&#xfc;r ein Iteratoren-Tupel brauchen wir doch einen Zugriff per Referenz?">
+<icon BUILTIN="messagebox_warning"/>
+<node COLOR="#602722" CREATED="1775258395528" ID="ID_1027499440" MODIFIED="1775258946860" TEXT="Versuch: den Zugriffs-Funktor eine Referenz zur&#xfc;ckliefern lassen">
+<icon BUILTIN="pencil"/>
+</node>
+<node CREATED="1775258418844" ID="ID_103983328" MODIFIED="1775258432287" TEXT="geht durch den Compiler....">
+<icon BUILTIN="smiley-neutral"/>
+<icon BUILTIN="help"/>
+</node>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1775258433707" ID="ID_467524923" MODIFIED="1775258441177" TEXT="Aua: Data-corruption">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1775258442688" ID="ID_541921516" MODIFIED="1775258462274" TEXT="long&amp; ( short ) &#x27fc; M&#xfc;ll"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1775258481444" ID="ID_1817670962" MODIFIED="1775258493291" TEXT="ist das ein Problem mit dem CommonResultYield?">
+<icon BUILTIN="help"/>
+<node CREATED="1775258495210" ID="ID_1610885873" MODIFIED="1775258509271">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      das mit den Referenzen habe ja <i>ich</i>&#160;dazugebaut
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1775258510320" ID="ID_1060335237" MODIFIED="1775258545346">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      mir d&#228;mmert warum der C++-Standard hier ein <b>decay</b>&#160;eingebaut hat...
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="clanbomber"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1775258555090" ID="ID_687121784" MODIFIED="1775258587806" TEXT="Habe die Funktions-Syntax f&#xfc;r den cast verwendet &#xd83e;&#xdc32; wird hier zum force-cast">
+<icon BUILTIN="broken-line"/>
+<node COLOR="#fa0134" CREATED="1775258711922" ID="ID_1677545959" MODIFIED="1775258848482" TEXT="ohne diesen Cast &#x27f6; Compile-Fehler">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <div style="background-color: #f5f8c6; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 2px">
+      <div style="color: #202020; background-color: #f5f8c6; font-family: DejaVu Sans Mono; font-size: 9pt; white-space: pre-wrap">
+        <p style="background-color: #f3cfc3; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#ff0000">research/try.cpp:190:50: error: cannot bind non-const lvalue reference of type 'lib::meta::TupleIndexAdaptor&lt;std::tuple&lt;long int, short int&gt; &gt;::SubscriptBuilder&lt;lib::meta::Types&lt;long int, short int&gt; &gt;::ResType' {aka 'long int&amp;'} to a value of type 'short int'</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a2626">190 | return getElm&lt;idx&gt; (tuple);</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          
+        </p>
+      </div>
+    </div>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node COLOR="#5b280f" CREATED="1775258859556" ID="ID_468292955" MODIFIED="1775258871076" TEXT="STOP. Nachdenken!">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1775264707230" ID="ID_313027273" MODIFIED="1775264716609" TEXT="wozu nimmt man normalerweise ein Tupel?"/>
+<node CREATED="1775264717338" ID="ID_608938294" MODIFIED="1775264725272" TEXT="und wozu will ich es hier verwenden?"/>
+<node CREATED="1775264744073" ID="ID_793209020" MODIFIED="1775264760119" TEXT="damit ist sofort klar &#x27f9;">
+<node CREATED="1775264761422" ID="ID_1056252715" MODIFIED="1775264783047" TEXT="in vielen F&#xe4;llen w&#xe4;re es kein Problem, Werte zu bekommen"/>
+<node CREATED="1775264795522" ID="ID_459775423" MODIFIED="1775264825441" TEXT="das mit den Referenzen ist ein sehr spezieller Fall (hier am Beispiel der Iteratoren)"/>
+<node CREATED="1775264836467" ID="ID_1382998940" MODIFIED="1775265052023" TEXT="dabei geht es im Grunde um Type-Erasure von Objekten">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Die Referenz impliziert, da&#223; ich mit/an den Objekten etwas machen m&#246;chte. Die Iteration impliziert, da&#223; ich aber nicht gezielt auf einzelne Positionen im Tupel zugreifen m&#246;chte, wie sonst normalerweise immer. <i>Aber</i>&#160;ich m&#246;chte eben auch nicht zun&#228;chst einzeln durchgehen, und jedes Element eigens auf ein gemeinsames Interface adaptieren &#8212; sondern das soll automatisch passieren.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1775265067474" ID="ID_746453001" MODIFIED="1775265093701" TEXT="Also sollte ich einen Weg suchen, wie diesee Anpassung automatisch erfolgen kann">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#a4f1c7" COLOR="#1154a1" CREATED="1775325547187" ID="ID_1183617488" MODIFIED="1775345860036" TEXT="suche eine verfeinerte CommonType-Implementierung">
+<icon BUILTIN="yes"/>
+<node CREATED="1775325578821" ID="ID_1961932738" MODIFIED="1775325644660">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <u>f&#252;r uns hier relevant</u>: auf was k&#246;nnten <b>R&#252;ckgabetypen</b>&#160; <i>vereinigt</i>&#160;werden?
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="help"/>
+<node CREATED="1775325709479" ID="ID_1511873156" MODIFIED="1775325725628" TEXT="...weil wir ein gemeinsames Funktor-Binding erstellen wollen"/>
+<node CREATED="1775325664468" ID="ID_1666582015" MODIFIED="1775325701188" TEXT="std::common_type hat einen anderen Fokus: als was kann gespeichert werden?"/>
+<node CREATED="1775345505576" ID="ID_1730416079" MODIFIED="1775345518963" TEXT="es g&#xe4;be auch std::common_reference">
+<node CREATED="1775345597187" ID="ID_42887363" MODIFIED="1775345704965" TEXT="funktioniert praktisch wie unsere Implementierung hier">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      d.h. der tern&#228;re-Operator macht die eigentliche Arbeit. Und ein gemeinsamer Super-Typ wird ebenfalls <b>nicht</b>&#160;gefunden
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1775345618144" ID="ID_710552526" MODIFIED="1775345635164" TEXT="hab aber zus&#xe4;tzlich eine Spezialbehandlung f&#xfc;r rvalue-Referenzen"/>
+<node CREATED="1775345638410" ID="ID_838454922" MODIFIED="1775345657438" TEXT="und hat das gleiche Problem, da&#xdf; man nicht wei&#xdf; ob der common-type existiert"/>
+</node>
+</node>
+<node CREATED="1775325733276" ID="ID_479438050" MODIFIED="1775326012737" TEXT="die Basis-Implementierungs-Technik anschauen">
+<node CREATED="1775325745241" ID="ID_549839106" MODIFIED="1775325758471" TEXT="libstdc++ verwendet SFINAE-Overloads">
+<node CREATED="1775325778541" ID="ID_1370497999" MODIFIED="1775325838164" TEXT="__true_type&lt;decltype(true? T1 : T2)&gt; fun2(int)"/>
+<node CREATED="1775325764702" ID="ID_759762805" MODIFIED="1775325777528" TEXT="__false_type fun(...)"/>
+<node CREATED="1775325851227" ID="ID_1543636275" MODIFIED="1775325867583" TEXT="also die Technik die ich in meinem DuckDetector verwende">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1775325883320" ID="ID_1646066806" MODIFIED="1775326006273" TEXT="der spezielle Trick f&#xfc;r std::common_type ist aber, von diesen Ergebnistypen zu erben">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      und da __true_type eine nested typedef type = Param hat, taucht dort der Common-Type dann im Ergenistyp auf; dagegen wenn der tern&#228;re Operator keinen Typ finden kann, dann erbt common_type von dem __false_type und hat daher keine nested typedef
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1775326016221" ID="ID_1282284691" MODIFIED="1775326033741" TEXT="Untersuchung: geht das auch mit Concepts?">
+<node CREATED="1775326034920" ID="ID_1510663765" MODIFIED="1775326054787" TEXT="f&#xfc;r meine L&#xf6;sung: sollte gehen, da alles sich in Ausdr&#xfc;cken abspielt"/>
+<node CREATED="1775326055583" ID="ID_145261447" MODIFIED="1775326077592" TEXT="verwende eine Platzhalter-Funktionsdeklaration, die den R&#xfc;ckgabetyp tr&#xe4;gt"/>
+<node CREATED="1775326082875" ID="ID_1624035998" MODIFIED="1775326148154">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      mache eine Typedef <font face="Monospaced" color="#703535">CommonResultType</font>
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <div style="background-color: #eee0b5; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 2px">
+      <div style="color: #202020; background-color: #eee0b5; font-family: DejaVu Sans Mono; font-size: 9pt; white-space: pre">
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a1a65"><b>template</b></font><font color="#65533c">&lt;</font><font color="#4a1a65"><b>typename</b></font><font color="#3a1f18">&#160;</font><font color="#a34649"><b><u>X</u></b></font><font color="#65533c">&gt;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#a34649"><b><u>X</u></b></font><font color="#3a1f18">&#160;</font><font color="#000000"><b>yieldRes</b></font><font color="#11123a">()</font><font color="#65533c">;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a1a65"><b>template</b></font><font color="#65533c">&lt;</font><font color="#4a1a65"><b>typename</b></font><font color="#3a1f18">&#160;</font><font color="#a34649"><b><u>X</u></b></font><font color="#65533c">,</font><font color="#3a1f18">&#160; </font><font color="#4a1a65"><b>typename</b></font><font color="#3a1f18">&#160;</font><font color="#a34649"><b><u>U</u></b></font><font color="#65533c">&gt;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a1a65"><b>using</b></font><font color="#3a1f18">&#160;</font><font color="#8c505c"><b>CommonResultType</b></font><font color="#3a1f18">&#160;</font><font color="#65533c">=</font><font color="#3a1f18">&#160; </font><font color="#4a1a65"><b>decltype</b></font><font color="#11123a">(</font><font color="#4a1a65"><b>true</b></font><font color="#65533c">?</font><font color="#3a1f18">&#160;</font><font color="#000000">yieldRes</font><font color="#65533c">&lt;</font><font color="#a34649"><b><u>X</u></b></font><font color="#65533c">&gt;</font><font color="#11123a">()</font><font color="#3a1f18">&#160; </font><font color="#65533c">:</font><font color="#3a1f18">&#160;</font><font color="#000000">yieldRes</font><font color="#65533c">&lt;</font><font color="#a34649"><b><u>U</u></b></font><font color="#65533c">&gt;</font><font color="#11123a">()</font><font color="#3a1f18">&#160; </font><font color="#11123a">)</font><font color="#65533c">;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          
+        </p>
+      </div>
+    </div>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1775326161509" ID="ID_1789152159" MODIFIED="1775326175859" TEXT="kann das direkt in ein concept reconcilable verwandeln"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1775326177303" ID="ID_499587531" MODIFIED="1775328036127" TEXT="Neue Implementierung direkt m&#xf6;glich, ohne R&#xfc;ckgriff auf std::common_type">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Die ganze komplexe Verbindung von std::common_type mit den const und lref-Checks ist unn&#246;tig (und gef&#228;hrlich, wie ich gesehen habe). Stattdessen kann man alles in einem einzigen Anlauf von dem tern&#228;ren-Operator machen lassen.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+<node CREATED="1775326206595" ID="ID_1981745519" MODIFIED="1775326244920" TEXT="Idee: la&#xdf; den tern&#xe4;ren-Operator die ganze Arbeit machen">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1775326246190" ID="ID_1447874280" MODIFIED="1775326268158" TEXT="das kommt auch mit Value vs. Ref und const-ness zurecht"/>
+<node CREATED="1775326222553" ID="ID_1395630174" MODIFIED="1775326581092" TEXT="es gibt einige wenige F&#xe4;lle, da findet der keine L&#xf6;sung (obwohl es sie gibt)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      beispielsweise const Subclass&amp; und Superclass&amp;&#160;&#160;schafft der Compiler nicht zu vereinigen, obwohl doch die offensichtliche L&#246;sung const Superclass&amp; w&#228;re
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1775326271850" ID="ID_1294052889" LINK="https://en.cppreference.com/w/cpp/language/operator_other.html#Conditional_operator" MODIFIED="1775326408125" TEXT="grunds&#xe4;tzlich ist das Verhalten des tern&#xe4;ren Operators sehr genau spezifiziert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...in der &#252;blichen Weise, indem man einen Typfindungs-Algorithmus spezifziert. Leider ist daraus f&#252;r mich nicht unmittelbar ersichtlich, warum Manches nicht klappt. Ist es nur, weil dieser Fall nicht in dem Algo erfa&#223;t wird, oder gibt es einen tieferen Grund, warum es gar nicht geht, oder ist nur die GCC-Implementierung unzul&#228;nglich?
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1775342913877" ID="ID_921502644" MODIFIED="1775344194685" TEXT="ausweiten auf beliebige variadische Argumente">
+<linktarget COLOR="#3759d5" DESTINATION="ID_921502644" ENDARROW="Default" ENDINCLINATION="-339;-963;" ID="Arrow_ID_524036197" SOURCE="ID_1343286472" STARTARROW="None" STARTINCLINATION="-683;25;"/>
+<node CREATED="1775342947847" ID="ID_1525302257" MODIFIED="1775342967946" TEXT="sollte grunds&#xe4;tzlich m&#xf6;glich sein">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1775342970444" ID="ID_1602443836" MODIFIED="1775342990248">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      ja schon ... aber ist <i>technisch sehr m&#252;hsam</i>
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1775342993385" ID="ID_1750269042" MODIFIED="1775343012347">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Problem-1 : Rekursion <b>korrekt</b>&#160;ansetzen
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1775343028732" ID="ID_896460914" MODIFIED="1775343109807">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      transitive H&#252;lle &#8212; nein das w&#228;re <b>explizit falsch</b>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1775343013335" ID="ID_620318689" MODIFIED="1775343027905" TEXT="die Liste sukzessiv von links her aufrollen">
+<node CREATED="1775343120545" ID="ID_1222462621" MODIFIED="1775343131258" TEXT="den ersten Common-Type mit dem n&#xe4;chsten Element"/>
+<node CREATED="1775343131935" ID="ID_22957087" MODIFIED="1775343146041" TEXT="...so lange bis nur noch die zwei letzten &#xfc;brig sind"/>
+</node>
+</node>
+<node CREATED="1775343157324" ID="ID_1914415377" MODIFIED="1775343518207" TEXT="Problem-2 : den Auswertungs-Ausdruck nur anschreiben wenn er existiert">
+<node CREATED="1775343187695" ID="ID_341553431" MODIFIED="1775343242628" TEXT="besonders problematisch f&#xfc;r Definition der Rekursion">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...denn da brauchen wir bereits den CommonType von den ersten zwei Typen, um den Tail-Ausdruck auch nur anschreiben zu k&#246;nnen.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1775343243712" ID="ID_256314281" MODIFIED="1775343255984" TEXT="klingt nach Henne oder Ei">
+<icon BUILTIN="broken-line"/>
+</node>
+<node COLOR="#435e98" CREATED="1775343257415" ID="ID_777696213" MODIFIED="1775343290426" TEXT="die gute alte SFINAE-Technik">
+<icon BUILTIN="idea"/>
+<node CREATED="1775343276299" ID="ID_837264181" MODIFIED="1775343297178" TEXT="Gru&#xdf; vom DuckDetector">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1775343304040" ID="ID_101346185" MODIFIED="1775343319218" TEXT="die Libstdc++ machts genauso">
+<icon BUILTIN="ksmiletris"/>
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1775343492999" ID="ID_1316209882" MODIFIED="1775343836683" TEXT="der Auswertungs-Ausdruck mu&#xdf; wirklich von den Template-Argumenten abh&#xe4;ngen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Also <i>denjenigen zwei Typen,</i>&#160;die aktuell gepr&#252;ft werden. Wenn nicht wenigstens einer der Typen direkt in diesem Check-Konstrukt gesetzt wird, kann n&#228;mlich der Compiler den Auswertungs-Ausdruck bereits instantiieren, wenn er das Template beginnt zu instantiieren. Da hab ich ein paar Stunden gebraucht, um das zu &#8222;schnallen&#8220; &#8212; die Fehlermeldungen sagen einem n&#228;mlich nicht direkt, aus welchem Kontext heraus die Instanz erfolgt; es wird nur unbestimmt moniert, da&#223; man diesen tern&#228;ren Operator nicht konstruieren kann. Und was noch verwirrender ist: f&#252;r manche Situationen f&#228;ngt das der requires-Ausdruck ab, f&#252;r andere jedoch nicht, und man bekommt dann sogar einen Compile-Fehler aus dem Template. Im R&#252;ckblick wird mir das klar, denn in diesen F&#228;llen ist es<i>&#160; kein Argument-Substitutions-Fehler, </i>sondern ein allgemeiner Compile-Fehler im Rumpf eines Templates, das der Compiler schon mal nebenbei mit &#252;bersetzt. Nur wenn man eine Abh&#228;ngikeit auf den unmittelbar zu pr&#252;fenden Typ herstellt, nur dann wird das zu einem Substitutions-Fehler, und dann klappt der Test auch.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1775343338636" ID="ID_980314561" MODIFIED="1775343924267" TEXT="von der Libstdc++ auch die Technik mit dem Result-Scope">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das ist nicht nur elegant, sondern vmtl. die einzige M&#246;glichkeit, eine kompakte Formulierung hinzubekommen f&#252;r mehr als zwei Typen: letztlich erzeugt man in einer Typ-Auswertung diesen Result-Typ und das front-End-Template kann davon erben.... In diesem Result ist dann entweder die nested typedef f&#252;r das Ergebnis enthalten, oder eben nicht
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#4e8bd4" DESTINATION="ID_1443081020" ENDARROW="Default" ENDINCLINATION="48;1;" ID="Arrow_ID_1009538541" STARTARROW="None" STARTINCLINATION="-166;8;"/>
+</node>
+</node>
+</node>
+<node CREATED="1775343845447" ID="ID_1081879085" MODIFIED="1775343864134" TEXT="jetzt k&#xf6;nnte ich sogar das Template von std::bool_result ableiten">
+<node CREATED="1775343893584" ID="ID_1443081020" MODIFIED="1775343919818" TEXT="Result-Scope-Technik!">
+<linktarget COLOR="#4e8bd4" DESTINATION="ID_1443081020" ENDARROW="Default" ENDINCLINATION="48;1;" ID="Arrow_ID_1009538541" SOURCE="ID_980314561" STARTARROW="None" STARTINCLINATION="-166;8;"/>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1775343865492" ID="ID_735910532" MODIFIED="1775343872143" TEXT="es w&#xe4;re dann stets instantiierbar"/>
+<node CREATED="1775343872763" ID="ID_1734534095" MODIFIED="1775343886797" TEXT="h&#xe4;tte aber nur im Erfolgsfall die nested Typedef"/>
+</node>
+</node>
+<node CREATED="1775343935636" ID="ID_40735737" MODIFIED="1775343948454">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      damit wird alles nun <i>dramatisch vereinfacht</i>
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1775343949769" ID="ID_904541518" MODIFIED="1775343962731" TEXT="im R&#xfc;ckblick hat sich die stundenlange Plagerei also gelohnt"/>
+<node CREATED="1775343964743" ID="ID_828796049" MODIFIED="1775343990351" TEXT="habe nun eine eigenst&#xe4;ndige Metafunktion CommonResult&lt;TYPES...&gt;"/>
+<node CREATED="1775343991202" ID="ID_898735589" MODIFIED="1775344038161" TEXT="das concept reconcilable&lt;TYPES...&gt; baut direkt darauf auf"/>
+<node CREATED="1775344012108" ID="ID_746287824" MODIFIED="1775344032145" TEXT="ein concept reconcilable_ref&lt;TYPES...&gt; ist eine einfache Erg&#xe4;nzung"/>
+<node CREATED="1775344039445" ID="ID_248549567" MODIFIED="1775344228985" TEXT="eine Variante f&#xfc;r TypeSequenz l&#xe4;&#xdf;t sich per einfacher Spezialisierung &#xbb;einschie&#xdf;en&#xab;">
+<linktarget COLOR="#2bbd58" DESTINATION="ID_248549567" ENDARROW="Default" ENDINCLINATION="-651;-24;" ID="Arrow_ID_1126467412" SOURCE="ID_194711929" STARTARROW="None" STARTINCLINATION="606;35;"/>
+<node CREATED="1775344071344" ID="ID_1468648453" MODIFIED="1775344108169" TEXT="einfach die Basis-Metafunktion CommonResult&lt;Types&lt;TYPES...&gt;&gt;"/>
+<node CREATED="1775344109907" ID="ID_1305997091" MODIFIED="1775344125921" TEXT="kann dann in einem anderen Header bei Bedarf passierenpassieren"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1775345918672" ID="ID_1031544835" MODIFIED="1775345939230" TEXT="ist das besser als std::common_reference?">
+<icon BUILTIN="help"/>
+<node CREATED="1775345940610" ID="ID_611262861" MODIFIED="1775348617728" TEXT="ganz ehrlich: ich verstehe std::common_reference nicht zu 100%">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...das alte Problem. Es ist schwerer, fremden Code (und in dem Fall hier, auch fremde formale Specs) zu verstehen, als selber was zu schreiben....
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      In dem Fall hier kommt dazu, da&#223; das Verhalten kritisch ist, und ein Fehler zu Data-corruption f&#252;hren kann. Insofern ist mir eine einfachere Implementierung, die ich zu 100% verstehe, lieber als eine elaborierte Implementierung, die vielleicht auch noch dies und das zus&#228;tzlich kann. Bei meiner Implementierung bin ich mir nun sicher, da&#223; sie wasserdicht ist.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1775345952141" ID="ID_1463737544" MODIFIED="1775345967693" TEXT="die Spezialbehandlung f&#xfc;r RValue-Referenzen macht mir Angst"/>
+<node CREATED="1775345980171" ID="ID_648150346" MODIFIED="1775346004660">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      meine Implementierung hier beruht <b>ausschlie&#223;lich</b>&#160;auf dem tern&#228;ren-Operator
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1775346010924" ID="ID_1589449970" MODIFIED="1775346021206" TEXT="und der ist defensiv / sicher"/>
+<node CREATED="1775346044190" ID="ID_1216174211" MODIFIED="1775346050554" TEXT="und f&#xe4;llt ggfs auf Values zur&#xfc;ck"/>
+</node>
+<node CREATED="1775346052142" ID="ID_487400889" MODIFIED="1775346072814" TEXT="zudem hat meine Implementierung ein flexibleres Interface">
+<node CREATED="1775346074179" ID="ID_1482402656" MODIFIED="1775346083736" TEXT="es gibt einen bool-Check / Pr&#xe4;dikat"/>
+<node CREATED="1775346084709" ID="ID_210476791" MODIFIED="1775346096260" TEXT="es gibt ein zugeh&#xf6;riges Concept"/>
+<node CREATED="1775346097704" ID="ID_1043260580" MODIFIED="1775346114417" TEXT="es funktioniert auch f&#xfc;r Typ-Sequenzen"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1775347924481" ID="ID_1962825012" MODIFIED="1775531184667" TEXT="re-Test : damit kann ich auch Referenzen wie erwartet handhaben">
+<arrowlink DESTINATION="ID_1536446415" ENDARROW="Default" ENDINCLINATION="-216;11;" ID="Arrow_ID_1085798995" STARTARROW="None" STARTINCLINATION="-126;5;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1775347940149" ID="ID_1156189235" MODIFIED="1775347948899" TEXT="aber nur wenn es eine common-Reference gibt"/>
+<node CREATED="1775348260720" ID="ID_1667638580" MODIFIED="1775348271667" TEXT="kann auch ein Referenz-Member durchbinden"/>
+<node CREATED="1775348340997" ID="ID_1976647816" MODIFIED="1775348355663" TEXT="const wird korrekt gehandhabt"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1775251267800" ID="ID_1664400216" MODIFIED="1775531186539" TEXT="Iterator per IndexCore">
+<arrowlink DESTINATION="ID_1536446415" ENDARROW="Default" ENDINCLINATION="-72;7;" ID="Arrow_ID_1203006860" STARTARROW="None" STARTINCLINATION="-12;203;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1775352555034" ID="ID_23857904" MODIFIED="1775352878122" TEXT="hier gehts nur um eine Demonstration">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...ich wei&#223; noch nicht, wof&#252;r ich das brauche; und es sind viele Fragen offen, wie z.B. ob es eine Referenz-Variante braucht, und wie genau man einen const-iterator definiert.
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#793553" DESTINATION="ID_23857904" ENDARROW="Default" ENDINCLINATION="-93;-334;" ID="Arrow_ID_213185063" SOURCE="ID_825741644" STARTARROW="None" STARTINCLINATION="-340;21;"/>
+<icon BUILTIN="stop-sign"/>
+</node>
+<node CREATED="1775352623273" ID="ID_1911711958" MODIFIED="1775531166230">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <font color="#4a1a65" face="DejaVu Sans Mono"><b>using</b></font><font color="#3a1f18" face="DejaVu Sans Mono">&#160;</font><font color="#8c505c" face="DejaVu Sans Mono"><b>TupIt</b></font><font color="#3a1f18" face="DejaVu Sans Mono">&#160;</font><font color="#65533c" face="DejaVu Sans Mono">=</font><font color="#3a1f18" face="DejaVu Sans Mono">&#160;</font><font color="#535773" face="DejaVu Sans Mono">lib</font><font color="#65533c" face="DejaVu Sans Mono">::</font><font color="#635e96" face="DejaVu Sans Mono"><b>IterableDecorator</b></font><font color="#65533c" face="DejaVu Sans Mono">&lt;</font><font color="#535773" face="DejaVu Sans Mono">lib</font><font color="#65533c" face="DejaVu Sans Mono">::</font><font color="#635e96" face="DejaVu Sans Mono"><b>IdxStoreCore</b></font><font color="#65533c" face="DejaVu Sans Mono">&lt;</font><font color="#8c505c" face="DejaVu Sans Mono"><b>IdxApt</b></font><font color="#65533c" face="DejaVu Sans Mono">&gt;&gt;;</font>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node COLOR="#338800" CREATED="1775352669335" ID="ID_309881326" MODIFIED="1775352712936" TEXT="zeige damit...">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1775352676529" ID="ID_1238183953" MODIFIED="1775352680748" TEXT="da&#xdf; man iterieren kann"/>
+<node CREATED="1775352681344" ID="ID_532766574" MODIFIED="1775352696174" TEXT="da&#xdf; der dereference-Operator eine Referenz liefert"/>
+<node CREATED="1775352697015" ID="ID_1441264805" MODIFIED="1775352708496" TEXT="da&#xdf; man damit den Inhalt manipulieren kann"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1775352758949" ID="ID_1078661341" MODIFIED="1775534225926" TEXT="Code extrahieren und testen">
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1775352928110" ID="ID_544942067" MODIFIED="1775534057767" TEXT="CommonResult &#x27f6; neuer Header + Test">
+<node COLOR="#338800" CREATED="1775353247681" ID="ID_270766205" MODIFIED="1775505621691" TEXT="CommonResult_test">
+<linktarget COLOR="#2c56b4" DESTINATION="ID_270766205" ENDARROW="Default" ENDINCLINATION="192;0;" ID="Arrow_ID_385535683" SOURCE="ID_409029208" STARTARROW="None" STARTINCLINATION="273;24;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#435e98" CREATED="1775482830902" ID="ID_853872451" MODIFIED="1775505625507" TEXT="geh&#xf6;rt in das Function-Stratum der Library">
+<arrowlink COLOR="#7f8f98" DESTINATION="ID_871223663" ENDARROW="Default" ENDINCLINATION="75;519;" ID="Arrow_ID_659392665" STARTARROW="None" STARTINCLINATION="568;38;"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1775352993390" ID="ID_1035671310" MODIFIED="1775534057767" TEXT="FunTrampoline &#x27f6; eigener Header + Test">
+<node COLOR="#338800" CREATED="1775353235910" ID="ID_1015007852" MODIFIED="1775520809936" TEXT="FunTrampoline_test">
+<linktarget COLOR="#231da8" DESTINATION="ID_1015007852" ENDARROW="Default" ENDINCLINATION="562;-82;" ID="Arrow_ID_625074279" SOURCE="ID_1739644089" STARTARROW="None" STARTINCLINATION="-605;72;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1775353090479" ID="ID_1089348588" MODIFIED="1775534057767" TEXT="TupleIdxAdaptor &#x27f6; ebenfalls eigener Header">
+<node CREATED="1775353117793" ID="ID_1256790017" MODIFIED="1775353221616" TEXT="besser noch separat halten">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      denke vor allem an die Weiterungen, wie Referenz, Const, weitere Methoden; sowas m&#246;chte man nicht an einer Komponente entwickeln, die in einem zentralen utility-Header sitzt. (Hab ich grad eben wieder schmerzhaft gemerkt, bzgl. der Iter-Adapter)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1775353131058" ID="ID_365953328" MODIFIED="1775353139934" TEXT="bis es einen wirklichen Use-Case gibt"/>
+<node COLOR="#338800" CREATED="1775530995789" ID="ID_1536446415" MODIFIED="1775531186540" TEXT="TupleIdxAdaptor_test">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1536446415" ENDARROW="Default" ENDINCLINATION="-72;7;" ID="Arrow_ID_1203006860" SOURCE="ID_1664400216" STARTARROW="None" STARTINCLINATION="-12;203;"/>
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1536446415" ENDARROW="Default" ENDINCLINATION="-216;11;" ID="Arrow_ID_1085798995" SOURCE="ID_1962825012" STARTARROW="None" STARTINCLINATION="-126;5;"/>
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1775531106271" ID="ID_1950130616" MODIFIED="1775531175017" TEXT="einfacher Fall: Zugriff per-Value"/>
+<node COLOR="#435e98" CREATED="1775531114920" ID="ID_183075057" MODIFIED="1775531175044" TEXT="Demonstriere Zugriff und Manipulation per Referenz"/>
+<node COLOR="#435e98" CREATED="1775531133477" ID="ID_738091674" MODIFIED="1775531175044" TEXT="Baue einen Iterator via IdxStoreCore">
+<node BACKGROUND_COLOR="#eab5a6" COLOR="#990033" CREATED="1775531188854" ID="ID_917000213" MODIFIED="1775533855607" TEXT="Vorsicht : jede Menge &#xbb;Untiefen&#xab;">
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1775531206061" ID="ID_1287308974" MODIFIED="1775531332363">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      das Quell-Objekt liegt <i>im</i>&#160;Iterator
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Meine vorausgegangenen Untersuchungen zur generischen Implementierung einer flatten()-Operation hat mir gezeigt, da&#223; man sich damit in einer gef&#228;hrlichen Grenzzone bewegt &#8212; sobald diese eingebette Quelle irgendwohin kopiert wird, kann die Logik brechen
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="clanbomber"/>
+</node>
+<node COLOR="#435e98" CREATED="1775531365521" ID="ID_1548224877" MODIFIED="1775533833970" TEXT="Bug: IdxStoreCore nimmt an da&#xdf; i_ &#x2261; size() &#x2261; 0 bei invalidem Iterator">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1775531411482" ID="ID_772243124" MODIFIED="1775531427719" TEXT="aber ein default-konstruiertes Tupel hat nicht die size() &#x2261; 0"/>
+<node COLOR="#338800" CREATED="1775531428526" ID="ID_41207453" MODIFIED="1775533824031" TEXT="das kann man leicht durch einen Kniff beheben">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...implementiere den default-Ctor explizit und setze i_ &#8788; size
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1775531487030" ID="ID_1878492524" MODIFIED="1775531528806" TEXT="&#x27f9; Folgefehler: da Iter() nicht &quot;leer&quot; ist, funktioniert die Abbruchbedingung nicht"/>
+</node>
+<node COLOR="#5b280f" CREATED="1775533863916" ID="ID_1187662933" MODIFIED="1775533963947" TEXT="kann also keine for-each-Schleife machen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...weil das auf einer <i>Kopie</i>&#160;des Iterators arbeitet, die durch den Aufruf von begin(it) erzeugt wird &#8212; immerhin funktioniert das Iterations-Ende nun, nachdem ich den Kniff f&#252;r den default-konstruierten IdxStoreCore angewendet habe
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="stop-sign"/>
+</node>
+<node COLOR="#435e98" CREATED="1775533965497" ID="ID_659226776" MODIFIED="1775533982718" TEXT="aber eine while / bzw. do-while-Schleife funktioniert">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#338800" CREATED="1775533986208" ID="ID_774092001" MODIFIED="1775534000848" TEXT="kann Daten-Manipulation per Iterator demonstrieren">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1775397721313" ID="ID_37721098" MODIFIED="1775534036030" TEXT="Aufr&#xe4;umen(allgemein)">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1775397728486" ID="ID_493766887" MODIFIED="1775398059958" TEXT="einiger Code in tuple-helper.hpp ist obsolet geworden durch C++20">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...im Besonderen durch mein neues Framework mit einem allgemeinen Concept tuple_like und direkt dazu passendem apply(f, tuple), forEach(tuple, fun) und mapEach(tuple, fun). Bevor man solchen Code zuverl&#228;ssig bauen konnte (erm&#246;glicht durch C++17 mit den fold-Expressions), war ein sehr viel schwerf&#228;lligerer Ansatz mit Template-Metaprogramming der einzige Weg, um <i>generische Verarbeitungsschritte auf ein beliebiges Tupel anzuwenden.</i>&#160;Und das bedingte stets, da&#223; der Client irgend ein (meist trickreiches und schwer-verst&#228;ndliches) Template spezialisieren mu&#223;te. Mit den neuen Tools besteht diese M&#246;glichkeit implizit immer noch, denn die angewendete &#187;Funktion&#171; mu&#223; ja ein generischer Funktor sein.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1775398061597" ID="ID_1798869143" MODIFIED="1775406801890" TEXT="Status-quo feststellen">
+<linktarget COLOR="#2d4868" DESTINATION="ID_1798869143" ENDARROW="Default" ENDINCLINATION="-1567;197;" ID="Arrow_ID_1785094898" SOURCE="ID_174434060" STARTARROW="None" STARTINCLINATION="-955;106;"/>
+<node CREATED="1775398555880" ID="ID_1902883169" MODIFIED="1775402399311">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <b>Stand</b>&#160;(allgemein)
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Als ich vor einem Jahr den Sprung gemacht habe, <font color="#652848">war ich nat&#252;rlich vorsichtig...</font>
+    </p>
+    <p>
+      Bisher ist mit GCC-14 keinerlei &#187;Desaster&#171; passiert, obwohl ich mich in den letzten Tagen schon mal punktweise <i>aus der Deckung getraut</i>&#160;habe. In einem Fall gabs eine Compile-Failure, die m.E. eigentlich von der requires{}-Expression abgefangen werden sollte (die aber nicht wirklich eine substution-Failure war).
+    </p>
+    <p>
+      Ich m&#246;chte auch weiterhin vorsichtig bleiben, und nur einige wenige Concepts an kritischen Stellen einschleifen. Der n&#228;chste gro&#223;e Schritt w&#228;re dann, ein Concept f&#252;r den Lumiera-Iterator auf den Weg zu bringen. Da habe ich noch etwas Angst davor, denn wenn <i>damit was schief geht, bin ich handlungsunf&#228;hig.</i>&#160;Also w&#228;re es angemessener, zun&#228;chst noch etwas mehr damit zu experimentieren, wie man <b>Concepts als Interface</b>&#160;verwenden kann.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Abgesehen davon macht mir Eclipse enige Sorgen; die neue Editor-Variante mit Language-Server f&#252;hlt sich nach &#187;Steinzeit&#171; an, und die alte Variante wird mit C++20 stellenweise instabil und die Lookup-Indices sind unzuverl&#228;ssig geworden. Sowas kann ein massives Risiko f&#252;r mich selber bei der Arbeit darstellen. Mit JetBrains-Tools kann ich nicht Arbeiten, da werde ich wahnsinnig und aggressiv, und f&#252;hle mich wie ein Anf&#228;nger bevormundet. VisualStudioCode w&#228;re eine Lernkurve, und ich wei&#223; nicht, ob es mir schmeckt. Bliebe nur Emacs (mit dem ich mal sehr gl&#252;cklich war, wenn er halt nich so &#187;anders herum&#171; w&#228;re, in jeder Hinsicht). Aber f&#252;r Emacs ist auch das Language-Server-Tooling wohl noch problematisch (wie mir Benny im Detail berichtet hat).
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#2d4868" DESTINATION="ID_1902883169" ENDARROW="Default" ENDINCLINATION="-438;50;" ID="Arrow_ID_518285214" SOURCE="ID_373036284" STARTARROW="None" STARTINCLINATION="-1005;70;"/>
+<icon BUILTIN="forward"/>
+</node>
+<node CREATED="1775398072864" ID="ID_1883703518" MODIFIED="1775404498686" TEXT="habe bereits einigen Code in tuple-accessor.hpp ausgekoppelt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      wenn ich diesen Code heute sehe, sch&#228;me ich mich &#8212; mu&#223; mir dann aber klar machen, da&#223; das vor 10 Jahren eine besondere Leistung war, so etwas bereits v&#246;llig generisch auf die Beine gestellt zu haben.
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#f22440" DESTINATION="ID_1671577889" ENDARROW="Default" ENDINCLINATION="-71;-16;" ID="Arrow_ID_1526471409" STARTARROW="None" STARTINCLINATION="-365;17;"/>
+</node>
+<node CREATED="1775398126393" ID="ID_1268226020" MODIFIED="1775398281549" TEXT="dieser wird aber noch verwendet von unserem util::toString (wenn spezialisiert auf tuple_like)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Diesen Zusammenhang sollte ich auf jeden Fall beseitigen &#8212; so ein wichtiges Basis-Tool soll nicht einen so &#187;m&#252;hsamen&#171; Header mit sich herumschleppen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1775398283271" ID="ID_1344245428" MODIFIED="1775398286295" TEXT="Verwendungen">
+<node CREATED="1775398291318" ID="ID_404911687" MODIFIED="1775398293566" TEXT="tuple-helper">
+<node CREATED="1775398344187" ID="ID_1922665091" MODIFIED="1775398347263" TEXT="is_Tuple">
+<node CREATED="1775398387179" ID="ID_799405067" MODIFIED="1775398395005" TEXT="war mal eine clevere Idee"/>
+<node CREATED="1775398371384" ID="ID_954680236" MODIFIED="1775398385281" TEXT="das geht doch heutzutage direkt!">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1775398350269" ID="ID_820792220" MODIFIED="1775402517174" TEXT="wenn man auf Concepts vertraut...">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das ist ein echtes &#187;Wenn&#171;....
+    </p>
+    <p>
+      Immerhin habe ich ja jetzt ein Concept tuple_like &#8212; und der reine Check auf ein Concept hat bisher stets v&#246;llig problemlos funktioniert...
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node COLOR="#338800" CREATED="1775402535533" ID="ID_1812138202" MODIFIED="1775441496302" TEXT="nur eine echte Verwendung im parse-test.hpp">
+<arrowlink COLOR="#3454c6" DESTINATION="ID_1872407595" ENDARROW="Default" ENDINCLINATION="556;-41;" ID="Arrow_ID_174806448" STARTARROW="None" STARTINCLINATION="217;13;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1775402640469" ID="ID_504203245" MODIFIED="1775402644626" TEXT="BuildTupleType">
+<node CREATED="1775402645646" ID="ID_615399514" MODIFIED="1775402654113" TEXT="eigentlich redundant, durch meta::ElmTypes"/>
+<node CREATED="1775402656278" ID="ID_282284107" MODIFIED="1775402667177" TEXT="hat aber den Vorteil, direkt / verst&#xe4;ndlich zu sein"/>
+<node CREATED="1775402667931" ID="ID_695197355" MODIFIED="1775402677371" TEXT="und operiert auch direkt auf einer Loki-Typeliste"/>
+<node CREATED="1775402707926" ID="ID_393535363" MODIFIED="1775402813678" TEXT="nur eine Verwendung: using Tuple = ....">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das ist eine Typ-Alias, die direkt per Typlist / Typsequenz gebaut werden kann; es <b>ist tats&#228;chlich ein std::tuple</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1775402726355" ID="ID_1309907727" MODIFIED="1775402731296" TEXT="mal so stehen lassen">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1775402848153" ID="ID_1593449358" MODIFIED="1775402852007" TEXT="RebindTupleType">
+<node CREATED="1775402853403" ID="ID_640817308" MODIFIED="1775402868300" TEXT="ist eine Teilfunktionalit&#xe4;t von dem was ElmTypes leistet"/>
+<node CREATED="1775402868974" ID="ID_111328243" MODIFIED="1775402879091" TEXT="aber auch hier: API einfacher, Struktur etwas anders"/>
+<node CREATED="1775402879779" ID="ID_958650976" MODIFIED="1775402889325" TEXT="Vorteil: es ist ein bi-direktionaler Mapper"/>
+<node CREATED="1775402903004" ID="ID_962629677" MODIFIED="1775402914454" TEXT="2 Verwendungen im Command-System"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#991631" CREATED="1775402918146" ID="ID_945726093" MODIFIED="1775402970421" TEXT="noch belassen &#x2014; sehen ob es weiter zum Einsatz kommt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das ist also ein Experiment: werde ich mich daran erinnern k&#246;nnen, oder doch immer ElmTypes nehmen?
+    </p>
+  </body>
+</html>
+</richcontent>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<icon BUILTIN="help"/>
+</node>
+</node>
+<node CREATED="1775403000033" ID="ID_1901368680" MODIFIED="1775403008415" TEXT="TupleConstructor / ElmExtractor">
+<node CREATED="1775403279578" ID="ID_1247229634" MODIFIED="1775403378937" TEXT="theoretisch klar gegebener use-Case">
+<node CREATED="1775403380311" ID="ID_1400655390" MODIFIED="1775403384220" TEXT="wenngleich selten"/>
+<node CREATED="1775403430523" ID="ID_835969970" MODIFIED="1775403447946">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      hat zwei <b>signifikante</b>&#160;Verwendungen
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1775403455434" ID="ID_1546419099" MODIFIED="1775403463300" TEXT="partielle function-closure"/>
+<node CREATED="1775403495709" ID="ID_1889978216" MODIFIED="1775432735341" TEXT="tuple-record-init (GenNode &#x27fc; Tuple)">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1889978216" ENDARROW="Default" ENDINCLINATION="750;42;" ID="Arrow_ID_57511830" SOURCE="ID_1077989853" STARTARROW="None" STARTINCLINATION="1459;0;"/>
+</node>
+</node>
+<node CREATED="1775403649704" ID="ID_361549909" MODIFIED="1775403657924" TEXT="diese sind in Kern-Funktionalit&#xe4;t integriert">
+<node CREATED="1775403659455" ID="ID_250293172" MODIFIED="1775403671540" TEXT="UIBus &#x27fc; Steam-Dispatcher"/>
+<node CREATED="1775403812871" ID="ID_731978066" MODIFIED="1775403836549" TEXT="tuple-Closure &#x27f9; Parameter-Handling in Render-Node"/>
+<node CREATED="1775403846685" ID="ID_257268026" MODIFIED="1775403854617" TEXT="auch: in MementoTie (Command-Framework)"/>
+</node>
+</node>
+<node CREATED="1775403873648" ID="ID_1424989641" MODIFIED="1775403882489" TEXT="der Code ist kurz und klar geschrieben"/>
+<node CREATED="1775403883194" ID="ID_1949316473" MODIFIED="1775404006989" TEXT="Dieser Ansatz hat den Vorteil, da&#xdf; die eingehenden Typ-Parameter explizit gemacht werden">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      man k&#246;nnte eine neue Implementierung machen, die dann ein generisches Lambda nimmt; dieses h&#228;tte aber eine wesentlich implizitere Schnittstelle und m&#252;&#223;te die Typen von seinen Argumenten abgreifen, bzw. man m&#252;&#223;te auch diesem Lambda ein explizites Typ-Argument geben &#8212; das bedeutet, die Labda-basierte L&#246;sung w&#228;re hier verwirrender und nicht unbedingt eine Verbesserung
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1775404009073" ID="ID_325518052" MODIFIED="1775404023050" TEXT="stehen lassen &#x2014; ist gerechtfertigt">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+<node CREATED="1775404450718" ID="ID_1671577889" MODIFIED="1775404492518" TEXT="tuple-accessor">
+<linktarget COLOR="#f22440" DESTINATION="ID_1671577889" ENDARROW="Default" ENDINCLINATION="-71;-16;" ID="Arrow_ID_1526471409" SOURCE="ID_1883703518" STARTARROW="None" STARTINCLINATION="-365;17;"/>
+<node CREATED="1775404815526" ID="ID_1377430491" MODIFIED="1775404821345" TEXT="Aufruf: per dump(tuple)">
+<node CREATED="1775404823757" ID="ID_449112075" MODIFIED="1775404826320" TEXT="Verwendungen">
+<node CREATED="1775404838690" ID="ID_1778635003" MODIFIED="1775405636909" TEXT="cmd-op-closuere implementiert die gleiche Idee nochmal &#xbb;zu Fu&#xdf;&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...was daran liegt, da&#223; das Command-System angelegt wurde, lange bevor es Tupel gab;
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <u>generell ist das Command-System &#187;on hold&#171;</u>
+    </p>
+    <ul>
+      <li>
+        es ist grunds&#228;tzlich fragw&#252;rdig, in welcher Form es mit CQRS verbunden sein wird
+      </li>
+      <li>
+        die Implementierung ist komplett &#187;ok-ish&#171; (&#8222;heut w&#252;rd ich es nicht mehr so machen&#8220;), gr&#252;ndlich getestet und ausgereift.
+      </li>
+      <li>
+        die meisten Features in diesem System &#8212; vor allem das partielle Binden von Commands &#8212; erscheinen mir an der Aufgabe vorbei entwickelt, weil man es eben machen kann (und damals die Funktor-Tools f&#252;r mich neu und geil waren). Aus heutiger Sicht erscheint es viel wahrscheinlicher, da&#223; man soche Aufgaben <i>im vorbeigehen mit einem Labda erschl&#228;gt....</i>
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<linktarget COLOR="#6c3b4f" DESTINATION="ID_1778635003" ENDARROW="Default" ENDINCLINATION="316;14;" ID="Arrow_ID_1116385327" SOURCE="ID_540926633" STARTARROW="Default" STARTINCLINATION="305;0;"/>
+<node CREATED="1775405639664" ID="ID_1098891312" MODIFIED="1775405655065" TEXT="anscheinend nicht nur das, es verwendet auch BuildTupleAccessor"/>
+</node>
+<node CREATED="1775405192855" ID="ID_1467174848" MODIFIED="1775405204394" TEXT="dump() wird in einigen Tests verwendet">
+<node COLOR="#435e98" CREATED="1775405213558" ID="ID_1825863549" MODIFIED="1775441053121" TEXT="verb-visitor-dispatch-test"/>
+<node CREATED="1775405235646" ID="ID_189906329" MODIFIED="1775405240281" TEXT="late-bind-instance-test"/>
+</node>
+<node CREATED="1775405241796" ID="ID_16413401" MODIFIED="1775405256789" TEXT="in diesen Tests ist es nicht &#xbb;mission-critical&#xab; aber praktisch"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1775405257923" ID="ID_736633783" MODIFIED="1775534084587" TEXT="&#x27f9; Beschlu&#xdf;: durch eine neu-implementierte joinTuple()-Funktion ersetzen">
+<linktarget COLOR="#c5278e" DESTINATION="ID_736633783" ENDARROW="Default" ENDINCLINATION="119;14;" ID="Arrow_ID_544335312" SOURCE="ID_130931381" STARTARROW="None" STARTINCLINATION="189;10;"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1775426581380" ID="ID_1557785578" MODIFIED="1775426586040" TEXT="wie normales join()"/>
+<node CREATED="1775426586758" ID="ID_1436472383" MODIFIED="1775428780755" TEXT="dazu eine vaiante joinTupleParen()">
+<arrowlink COLOR="#5896e0" DESTINATION="ID_412030537" ENDARROW="Default" ENDINCLINATION="95;-10;" ID="Arrow_ID_1699094096" STARTARROW="None" STARTINCLINATION="-26;278;"/>
+<node COLOR="#435e98" CREATED="1775426597636" ID="ID_874806037" MODIFIED="1775426615431" TEXT="die w&#xe4;re das drop-in-Replacement f&#xfc;r dump()">
+<font NAME="SansSerif" SIZE="10"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1775405529351" ID="ID_1196165271" MODIFIED="1775405533793" TEXT="BuildTupleAccessor">
+<node CREATED="1775405534982" ID="ID_650985785" MODIFIED="1775405602992" TEXT="tja ... vor langer Zeit war das bahnbrechend">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      baut einen Dekorator-Chain &#252;ber das Tupel als Basistyp
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="smily_bad"/>
+</node>
+<node CREATED="1775405604493" ID="ID_540926633" MODIFIED="1775405636909" TEXT="es gibt eine Verwendung: in command-op-closure">
+<arrowlink COLOR="#6c3b4f" DESTINATION="ID_1778635003" ENDARROW="Default" ENDINCLINATION="316;14;" ID="Arrow_ID_1116385327" STARTARROW="Default" STARTINCLINATION="305;0;"/>
+<node CREATED="1775405875952" HGAP="35" ID="ID_1118827999" MODIFIED="1775405898002" TEXT="staus von command-op-closure ist nicht klar" VSHIFT="10">
+<node CREATED="1775405898991" ID="ID_189704432" MODIFIED="1775405907784" TEXT="der Code wirkt wie eine Skizze"/>
+<node CREATED="1775405975051" ID="ID_1237617493" MODIFIED="1775406109637" TEXT="zwischen den Zeilen lese ich &#xbb;Hilflosigkeit&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...wie so oft in diesen ersten Jahren; ich hab &#252;ber Wochen oder gar Monate diverse Frameworks gebaut, nur um dann &#8212; <i>schlie&#223;lich, endlich</i>&#160;&#8212; festzustellen, da&#223; ich mir nicht im Entferntesten vorstellen kann, wie ich mit diesem Framework das weiterhin ungreifbare Problem zu fassen bekomme.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1775406302471" ID="ID_940611454" MODIFIED="1775406329167" TEXT="tats&#xe4;chlich vewendet wird OpClosure nur als ein Wrapper f&#xfc;r das Argument-Tuple"/>
+<node CREATED="1775406329939" ID="ID_540166546" MODIFIED="1775406341166" TEXT="es gibt nur eine aktiv genutzte Funktion: invoke()">
+<node CREATED="1775406405373" ID="ID_1661759328" MODIFIED="1775406415220" TEXT="diese verwendet std::apply()"/>
+<node CREATED="1775406415920" ID="ID_361248757" MODIFIED="1775406428359" TEXT="tut sie allerdings erst seit Juni 2025">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1775406429803" ID="ID_409458653" MODIFIED="1775406456758" TEXT="Vorher war das ein zentraler Use-Case der FunctionClosure"/>
+</node>
+</node>
+</node>
+<node CREATED="1775406514882" ID="ID_1476875584" MODIFIED="1775429209576" TEXT="man k&#xf6;nnte den TupleAccessor aus OpClosure &#xbb;herausoperieren&#xab;">
+<arrowlink COLOR="#6b70ac" DESTINATION="ID_1010061094" ENDARROW="Default" ENDINCLINATION="5;-312;" ID="Arrow_ID_733168985" STARTARROW="None" STARTINCLINATION="-336;14;"/>
+<node CREATED="1775406572967" ID="ID_1382703706" MODIFIED="1775406600355" TEXT="die Command-Argumente werden n&#xe4;mlich vor dem Aufruf wieder in ein normales Tupel kopiert"/>
+<node CREATED="1775406601620" ID="ID_914013532" MODIFIED="1775406643492" TEXT="klar ... auch das war fr&#xfc;her mal anders">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Da war das der FunctionApplicator / die FunctionClosure, die an dieser Stelle erzeugt wurde.
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="smiley-oh"/>
+</node>
+</node>
+</node>
+<node CREATED="1775406694322" ID="ID_1673123460" MODIFIED="1775406696707" TEXT="TupleElementDisplayer">
+<node CREATED="1775406697589" ID="ID_126412670" MODIFIED="1775406715395" TEXT="sieht so &#xe4;hnlich aus, hat aber tats&#xe4;chlich gar nix mit dem BuildTupleAccessor zu tun">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1775406742972" ID="ID_130931381" MODIFIED="1775406780101" TEXT="wird nur f&#xfc;r die dump()-Funktion verwendet (siehe oben)">
+<arrowlink COLOR="#c5278e" DESTINATION="ID_736633783" ENDARROW="Default" ENDINCLINATION="119;14;" ID="Arrow_ID_544335312" STARTARROW="None" STARTINCLINATION="189;10;"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1775406815130" ID="ID_1128774480" MODIFIED="1775534028393" TEXT="Vorbereitung / Ersatz schaffen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1775406830714" ID="ID_1144129671" MODIFIED="1775428809388" TEXT="Parse-Test umstellen auf Concept">
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#f0e3c5" COLOR="#7212a3" CREATED="1775407142570" ID="ID_1230479488" MODIFIED="1775408943182" TEXT="was wird hier gebraucht?">
+<icon BUILTIN="help"/>
+<node CREATED="1775407155238" ID="ID_1318344454" MODIFIED="1775421316543" TEXT="wir parsen zwei konsekutive Token">
+<icon BUILTIN="full-1"/>
+</node>
+<node CREATED="1775407169259" ID="ID_1211295812" MODIFIED="1775421320990" TEXT="das liefert ein Ergebnis-Modell">
+<icon BUILTIN="full-2"/>
+</node>
+<node CREATED="1775407181659" ID="ID_1930607503" MODIFIED="1775407199308" TEXT="&#xbb;ach &#xfc;brigens: dieses Modell ist ein Tupel&#xab;">
+<icon BUILTIN="forward"/>
+</node>
+<node CREATED="1775407216040" ID="ID_320714080" MODIFIED="1775407225073" TEXT="und zwar gemeint ist hier wirklich std::tuple">
+<node CREATED="1775407228196" ID="ID_89677644" MODIFIED="1775407234150" TEXT="das kann man gar nicht so einfach testen"/>
+<node CREATED="1775407235018" ID="ID_642542515" MODIFIED="1775407249868" TEXT="exakt das gleiche Problem habe ich vorgestern gel&#xf6;st">
+<node CREATED="1775407275109" ID="ID_1500292374" MODIFIED="1775407277015" TEXT="concept typeseq"/>
+<node CREATED="1775407277676" ID="ID_311481243" MODIFIED="1775407680876" TEXT="mit dem templated-Lambda-Trick">
+<arrowlink COLOR="#4077d8" DESTINATION="ID_713571881" ENDARROW="Default" ENDINCLINATION="-481;35;" ID="Arrow_ID_1535878745" STARTARROW="None" STARTINCLINATION="-1280;110;"/>
+<arrowlink COLOR="#fffed5" DESTINATION="ID_688671555" ENDARROW="Default" ENDINCLINATION="853;60;" ID="Arrow_ID_1476881510" STARTARROW="None" STARTINCLINATION="454;39;"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1775407717910" ID="ID_1872407595" MODIFIED="1775408951169" TEXT="also ersetzen durch ein concept tup">
+<linktarget COLOR="#3454c6" DESTINATION="ID_1872407595" ENDARROW="Default" ENDINCLINATION="556;-41;" ID="Arrow_ID_174806448" SOURCE="ID_1812138202" STARTARROW="None" STARTINCLINATION="217;13;"/>
+<node COLOR="#255e9c" CREATED="1775408952862" HGAP="19" ID="ID_1513745023" MODIFIED="1775409011452" TEXT="is_Tuple nun dadurch redefiniert" VSHIFT="25"/>
+<node COLOR="#255e9c" CREATED="1775408965528" ID="ID_1388200287" MODIFIED="1775409007336" TEXT="is_Tuple_v hinzugef&#xfc;gt"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1775408975747" ID="ID_1424761084" MODIFIED="1775441510767" TEXT="umziehen in tuple-concept.hpp">
+<arrowlink COLOR="#753030" DESTINATION="ID_1800859490" ENDARROW="Default" ENDINCLINATION="24;-183;" ID="Arrow_ID_394688220" STARTARROW="None" STARTINCLINATION="-706;62;"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1775406870988" ID="ID_553028272" MODIFIED="1775428791809" TEXT="joinTuple() neu auf der gr&#xfc;nen Wiese bauen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1775421466771" ID="ID_754070586" MODIFIED="1775421479398" TEXT="die Implementierung d&#xfc;rfte nur wenige Zeilen lang sein..."/>
+<node CREATED="1775421480281" ID="ID_1250883204" MODIFIED="1775421507281" TEXT="HA! und es gibt sie bereits &#xd83e;&#xdc32; TupleHelper_test">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node COLOR="#338800" CREATED="1775428700471" ID="ID_1642153125" MODIFIED="1775428784843" TEXT="schaffe diverse Varianten">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1775428707635" ID="ID_998599796" MODIFIED="1775428710794" TEXT="mit delimiter"/>
+<node CREATED="1775428711422" ID="ID_1025875058" MODIFIED="1775428720105" TEXT="mit ostringstream-Buffer von au&#xdf;en"/>
+<node CREATED="1775428721267" ID="ID_412030537" MODIFIED="1775428776115" TEXT="joinTupleParen() &#x27fb; ersetzt bisheriges dump()">
+<linktarget COLOR="#5896e0" DESTINATION="ID_412030537" ENDARROW="Default" ENDINCLINATION="95;-10;" ID="Arrow_ID_1699094096" SOURCE="ID_1436472383" STARTARROW="None" STARTINCLINATION="-26;278;"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1775408975747" ID="ID_712274758" MODIFIED="1775441518988" TEXT="neue joinTuple()-Impl wieder in tuple-helper zur&#xfc;ckbringen">
+<arrowlink COLOR="#753030" DESTINATION="ID_1800859490" ENDARROW="Default" ENDINCLINATION="24;-183;" ID="Arrow_ID_652786276" STARTARROW="None" STARTINCLINATION="-497;25;"/>
+<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1775428966575" ID="ID_1420512301" MODIFIED="1775428983940" TEXT="sobald tuple-accessor weg kann">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1775428960052" ID="ID_1134455735" MODIFIED="1775428987805" TEXT="incl util::toString()"/>
+<node COLOR="#338800" CREATED="1775428993249" ID="ID_1252054373" MODIFIED="1775534093719" TEXT="dann ExpectStrings im Test einbauen">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1775422096335" ID="ID_1136019091" MODIFIED="1775428798267" TEXT="Weiterungen denkbar....">
+<icon BUILTIN="idea"/>
+<icon BUILTIN="hourglass"/>
+<node CREATED="1775422105113" ID="ID_1894377172" MODIFIED="1775423972745" TEXT="format-util definiert eine vairadische Variante von join()">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1775422345173" ID="ID_140799859" MODIFIED="1775422348118" TEXT="Verwendungen">
+<node CREATED="1775422442692" ID="ID_1537010503" MODIFIED="1775423302182" TEXT="stringify">
+<linktarget COLOR="#808791" DESTINATION="ID_1537010503" ENDARROW="Default" ENDINCLINATION="3;9;" ID="Arrow_ID_1521871600" SOURCE="ID_1313596456" STARTARROW="None" STARTINCLINATION="-39;6;"/>
+<node COLOR="#435e98" CREATED="1775422445973" ID="ID_739065171" MODIFIED="1775534162558" TEXT="event-log.cpp">
+<icon BUILTIN="help"/>
+<node CREATED="1775422452694" ID="ID_1538471511" MODIFIED="1775422458977" TEXT="warum ... sehe keine Verwendung"/>
+<node COLOR="#5b280f" CREATED="1775534155717" ID="ID_974788006" MODIFIED="1775534158589" TEXT="gel&#xf6;scht">
+<icon BUILTIN="button_cancel"/>
+</node>
+</node>
+<node CREATED="1775422513301" ID="ID_1564156001" MODIFIED="1775422518288" TEXT="test/placeholder-command"/>
+</node>
+<node CREATED="1775422351482" ID="ID_1507793856" MODIFIED="1775423292035" TEXT="collectStr">
+<node CREATED="1775422361913" ID="ID_1313596456" MODIFIED="1775423304485" TEXT="f&#xfc;r stringify(TS...)">
+<arrowlink COLOR="#808791" DESTINATION="ID_1537010503" ENDARROW="Default" ENDINCLINATION="3;9;" ID="Arrow_ID_1521871600" STARTARROW="None" STARTINCLINATION="-39;6;"/>
+</node>
+<node CREATED="1775422372641" ID="ID_895689781" MODIFIED="1775422380643" TEXT="im event-log.hpp"/>
+</node>
+</node>
+<node CREATED="1775422658318" ID="ID_94427787" MODIFIED="1775422664681" TEXT="wie funktioniert das?">
+<node CREATED="1775422681603" ID="ID_320947947" MODIFIED="1775422690396" TEXT="verwendet einen speziellen SecContainer-Adapter">
+<node CREATED="1775422754719" ID="ID_754118609" MODIFIED="1775422764004" TEXT="der bietet einen operator+=()"/>
+<node CREATED="1775423064244" ID="ID_1033501070" MODIFIED="1775423079179" TEXT="spezielle Trick: vector macht emplace_back (move(s))">
+<node CREATED="1775423084641" ID="ID_1836943956" MODIFIED="1775423105930" TEXT="normalerweise schiebt das die grade erzeugten Strings in den Vector"/>
+<node CREATED="1775423106607" ID="ID_34081568" MODIFIED="1775423133422" TEXT="aber es kann dort auch andere Objekte erzeugen &#x27f9; regExp"/>
+</node>
+</node>
+<node CREATED="1775422727392" ID="ID_26915910" MODIFIED="1775422738644" TEXT="verwendet damit eine rekursive Implementierung"/>
+</node>
+<node CREATED="1775423450803" ID="ID_41332591" MODIFIED="1775423571343">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <i>ich erinnere mich:</i>&#160;hatte jahrelang damit gek&#228;mpft,
+    </p>
+    <p>
+      einen variadischen Overload von join bereitzustellen
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...was letztlich nur zu endlosen compile-Problemen in speziellen Randf&#228;llen f&#252;hrte &#8212; und schlie&#223;lich zu der Einsicht, da&#223; es ein g&#228;nzlich anderes Tool ist, und auch entsprechend anders hei&#223;en sollte; seitdem hei&#223;t es stringify() und liefert einen Container mit Strings
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1775422143282" ID="ID_1987832574" MODIFIED="1775422166201" TEXT="man k&#xf6;nnte stattdessen...">
+<node CREATED="1775422167198" ID="ID_1530576176" MODIFIED="1775422173096" TEXT="&#xfc;ber ein Tupel gehen">
+<node COLOR="#5b280f" CREATED="1775422174884" ID="ID_855858460" MODIFIED="1775422241213" TEXT="#include-Problematik">
+<icon BUILTIN="closed"/>
+</node>
+<node CREATED="1775422182560" ID="ID_1231025502" MODIFIED="1775422202473" TEXT="habe bisher die &#xd6;kosystem-&#xbb;Layer&#xab; sehr gut getrennt gehalten"/>
+<node CREATED="1775422203603" ID="ID_1585075487" MODIFIED="1775422227055" TEXT="&#x27f9; w&#xfc;rde dann ein format-util-tuple.hpp erforderlich machen"/>
+</node>
+<node CREATED="1775422248752" ID="ID_1115060809" MODIFIED="1775422277257" TEXT="die for-each-fold-Pogrammiertechnik direkt anwenden"/>
+</node>
+<node CREATED="1775423641871" ID="ID_282440287" MODIFIED="1775423650423" TEXT="aber dann? welches API bieten?">
+<node CREATED="1775423652285" ID="ID_972263598" MODIFIED="1775423669367" TEXT="die wenigen Verwendungen au&#xdf;erhalb bauen jeweils einen speziellen Container"/>
+<node CREATED="1775423675418" ID="ID_1560539496" MODIFIED="1775423697799" TEXT="die Verwendung in den format-utils selber braucht eigentlich nur ein Iterable"/>
+<node CREATED="1775423769103" ID="ID_323332261" MODIFIED="1775423798990">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <i>eigentlich</i>&#160;f&#228;llt hier nur eine <font color="#3726db">compile-time</font>&#160;Sequenz von string-Werten an
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1775423803323" ID="ID_547366044" MODIFIED="1775423812911" TEXT="was sich aber im Typsystem schlecht greifen l&#xe4;&#xdf;t"/>
+<node CREATED="1775423813986" ID="ID_1766690061" MODIFIED="1775423851790" TEXT="oft packt man sowas in ein Tupel ... und im n&#xe4;chsten Aufruf (compile-time) wieder aus"/>
+<node CREATED="1775423897721" ID="ID_512954072" MODIFIED="1775423911089" TEXT="eigentlich w&#xe4;re hier ein Lumiera-Iterator die L&#xf6;sung schlechthin"/>
+<node BACKGROUND_COLOR="#dcbfaa" COLOR="#6f1d19" CREATED="1775423915205" ID="ID_1812336088" MODIFIED="1775505212088" TEXT="m&#xfc;&#xdf;te mich dann aber auch mehr mit Range-TS und den STL-Input-Iteratoren besch&#xe4;ftigen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Fragen:
+    </p>
+    <ul>
+      <li>
+        gibt es ein modernes, einfaches und klares API, mit dem man eine Sequenz von Werten an einen Container anh&#228;ngt?
+      </li>
+      <li>
+        k&#246;nnte man generisch, einfach und effizient von einem Lumiera-Iterator in einen Input-Iterator &#187;entladen&#171;?
+      </li>
+      <li>
+        w&#228;re das eine denkbare Variante f&#252;r das IterExplorer::effuse()-Terminal?
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<linktarget COLOR="#6f1930" DESTINATION="ID_1812336088" ENDARROW="Default" ENDINCLINATION="-581;17;" ID="Arrow_ID_1882888787" SOURCE="ID_89714308" STARTARROW="None" STARTINCLINATION="658;39;"/>
+<icon BUILTIN="bell"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1775406906616" ID="ID_1010061094" MODIFIED="1775432759581" TEXT="command-OpClosure &#xbb;entkernen&#xab;">
+<linktarget COLOR="#6b70ac" DESTINATION="ID_1010061094" ENDARROW="Default" ENDINCLINATION="5;-312;" ID="Arrow_ID_733168985" SOURCE="ID_1476875584" STARTARROW="None" STARTINCLINATION="-336;14;"/>
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1775432611456" ID="ID_806126169" MODIFIED="1775432684642" TEXT="kann Standard-Tools direkt nutzen">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#5b280f" CREATED="1775432687550" ID="ID_109015449" MODIFIED="1775432753397" TEXT="hat auch diverse #includes mit angezogen">
+<icon BUILTIN="button_cancel"/>
+<node COLOR="#338800" CREATED="1775432698228" ID="ID_797428595" MODIFIED="1775432743751" TEXT="diese nach downstream ziehen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#435e98" CREATED="1775432706715" ID="ID_1077989853" MODIFIED="1775432745286" TEXT="vor allem wichtig: #include &quot;lib/meta/tuple-record-init.hpp&quot; ">
+<arrowlink DESTINATION="ID_1889978216" ENDARROW="Default" ENDINCLINATION="750;42;" ID="Arrow_ID_57511830" STARTARROW="None" STARTINCLINATION="1459;0;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1775408975747" ID="ID_1601394244" MODIFIED="1775441527221" TEXT="die neue joinTuple() verwenden als Ersatz f&#xfc;r den ParamAccessor">
+<arrowlink COLOR="#753030" DESTINATION="ID_1800859490" ENDARROW="Default" ENDINCLINATION="24;-183;" ID="Arrow_ID_305466579" STARTARROW="None" STARTINCLINATION="-367;16;"/>
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#338800" CREATED="1775432762484" ID="ID_1417298465" MODIFIED="1775444539599" TEXT="compile-test: OK">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1775428840349" ID="ID_1800859490" MODIFIED="1775534040262" TEXT="Code und Tests &#xbb;glatt ziehen&#xab;">
+<linktarget COLOR="#753030" DESTINATION="ID_1800859490" ENDARROW="Default" ENDINCLINATION="24;-183;" ID="Arrow_ID_394688220" SOURCE="ID_1424761084" STARTARROW="None" STARTINCLINATION="-706;62;"/>
+<linktarget COLOR="#753030" DESTINATION="ID_1800859490" ENDARROW="Default" ENDINCLINATION="24;-183;" ID="Arrow_ID_652786276" SOURCE="ID_712274758" STARTARROW="None" STARTINCLINATION="-497;25;"/>
+<linktarget COLOR="#753030" DESTINATION="ID_1800859490" ENDARROW="Default" ENDINCLINATION="24;-183;" ID="Arrow_ID_305466579" SOURCE="ID_1601394244" STARTARROW="None" STARTINCLINATION="-367;16;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#61396c" CREATED="1775424374229" ID="ID_537731561" MODIFIED="1775424400040">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      was ich jetzt <b>nicht</b>&#160;mache...
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="hourglass"/>
+<node CREATED="1775424428856" ID="ID_89714308" MODIFIED="1775505214704" TEXT="der Umbau des util::collectStr (format-util.hpp)">
+<arrowlink COLOR="#6f1930" DESTINATION="ID_1812336088" ENDARROW="Default" ENDINCLINATION="-581;17;" ID="Arrow_ID_1882888787" STARTARROW="None" STARTINCLINATION="658;39;"/>
+</node>
+<node CREATED="1775424428856" ID="ID_1283719465" MODIFIED="1775505251409" TEXT="das compile-Problem mit CommonType aufkl&#xe4;ren">
+<arrowlink COLOR="#6f1930" DESTINATION="ID_1830273305" ENDARROW="Default" ENDINCLINATION="-581;17;" ID="Arrow_ID_216953150" STARTARROW="None" STARTINCLINATION="658;39;"/>
+</node>
 </node>
 </node>
 </node>
@@ -61259,8 +63224,9 @@
 </node>
 </node>
 <node CREATED="1734474134102" ID="ID_1942900317" MODIFIED="1734496125500" TEXT="Hilfsmittel f&#xfc;r Tuple-Protocol">
-<node COLOR="#435e98" CREATED="1734474149788" ID="ID_1392132639" MODIFIED="1734474304945" TEXT="is_Structured">
+<node COLOR="#435e98" CREATED="1734474149788" ID="ID_1392132639" LINK="#ID_1066975990" MODIFIED="1775063408239" TEXT="is_Structured">
 <arrowlink COLOR="#65a0c8" DESTINATION="ID_1962318483" ENDARROW="Default" ENDINCLINATION="-561;59;" ID="Arrow_ID_1253919416" STARTARROW="None" STARTINCLINATION="4095;820;"/>
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1734474272972" HGAP="45" ID="ID_752241989" MODIFIED="1734474297902" TEXT="erkennt ob ein Typ std::tuple_size&lt;T&gt; unterst&#xfc;tzt" VSHIFT="2">
 <font NAME="SansSerif" SIZE="10"/>
 </node>
@@ -61274,6 +63240,11 @@
   </body>
 </html></richcontent>
 <font NAME="SansSerif" SIZE="11"/>
+</node>
+<node COLOR="#3b369b" CREATED="1775063335312" ID="ID_1089449607" MODIFIED="1775063456202" TEXT="mit C++23 ersetzt durch mein Concept tuple_like">
+<arrowlink COLOR="#3849c8" DESTINATION="ID_399045198" ENDARROW="Default" ENDINCLINATION="-41;139;" ID="Arrow_ID_699995134" STARTARROW="None" STARTINCLINATION="-385;24;"/>
+<font NAME="SansSerif" SIZE="11"/>
+<icon BUILTIN="idea"/>
 </node>
 </node>
 <node COLOR="#435e98" CREATED="1734495942965" ID="ID_1890096800" MODIFIED="1734496349526" TEXT="ElmTypes">
@@ -61387,6 +63358,87 @@
     </p>
   </body>
 </html></richcontent>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1775144014199" ID="ID_892437622" MODIFIED="1775144026940" TEXT="Idee: LocalFun">
+<icon BUILTIN="hourglass"/>
+<node CREATED="1775144029256" ID="ID_1639408323" MODIFIED="1775144381506" TEXT="funktioniert wie std::function aber mit inline-Storage">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Es sollten die gleichen, bew&#228;hrten und effizienten Strutkuren zum Einsatz kommen, wie sie eine typische std::function-Implementierung bereitstellt. Abweichend davon sollte es aber niemals Heap-Storage geben, sondern der Functor sollte stets koplett in einem inline-Buffer liegen. Insofern w&#228;re zus&#228;tzliche Infrastruktur notwendig, um ein solches Objekt &#187;abzuwerfen&#171;; ggfs. g&#228;be es auch mehrere <i>standard-Gr&#246;&#223;en</i>&#160; f&#252;r Funktoren, die dann einheitlich behandelt werden k&#246;nnten.
+    </p>
+  </body>
+</html></richcontent>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1775144381496" ID="ID_1077323202" MODIFIED="1775161861491" TEXT="Bedarf ist fraglich">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Bisher komme ich mit den zur Verf&#252;gung stehenden Techniken gut &#252;ber die Runde. Zwar w&#228;re es sicher mal spannend, sowas selber zu entwickeln, w&#252;rde aber auch einen Aufwand f&#252;r Recherche, Konzeption, Test und Verbesserungen erfordern. Ein m&#246;glicher Nutzen w&#228;re im Rahmen eines Custom-Allocators, wenn tats&#228;chlich jede zus&#228;tzliche externe Storage ausgeschlossen werden mu&#223;. Konkret ist f&#252;r lib::Several eine solche spezielle Storage geplant, und wird auch eine zentrale Rolle in der RenderEngine spielen &#8212; mit entsprechend signifikantem Hebel. Die bisherige Platzhalter-Implementierung f&#252;r die lib::Several-Storage verwendet std::function und geht auch sonst grotesk verschwenderisch mit dem Speicher um.
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#955f71" DESTINATION="ID_1077323202" ENDARROW="Default" ENDINCLINATION="222;-287;" ID="Arrow_ID_1558977249" SOURCE="ID_286939645" STARTARROW="None" STARTINCLINATION="-562;19;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1775169853943" ID="ID_1456721795" MODIFIED="1775169873177" TEXT="sollte constexpr erzeugbar sein und EX_FREE"/>
+<node CREATED="1775144865487" ID="ID_263765309" MODIFIED="1775144871926" TEXT="allgemeine Einsichten">
+<icon BUILTIN="idea"/>
+<node CREATED="1775144873522" ID="ID_668924955" MODIFIED="1775147012436">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      ein Funktions-Pointer und ein normaler Funktionsaufruf sind <i>praktisch &#228;quivalent</i>
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Hier gibt es mutma&#223;lich einige subtile Unterschiede, die sich in &#181;-Benchmarks zeigen, f&#252;r die ich jedoch keine allgemeing&#252;ltige Tendenz erwarte.
+    </p>
+    <ul>
+      <li>
+        ein normaler Function-Call springt an eine <i>konstante Adresse</i>, die direkt im Assembly liegt. Zur Ausf&#252;hrung mu&#223; diese Adresse nat&#252;rlich aus dem Code-Segment in die CPU geladen werden, dann folgt ein spezieller Maschinenbefehl. Sie wird dort vom <i>Loader</i>&#160;eingepatcht, nachdem das Code-Objekt reolziert wurde. F&#252;r die Performance ist &#252;berwiegend relevant, ob die angesprungene Code-Page bereits im Prozessor-Cache liegt. Falls allerdings die angesprungene Funktion im gleichen Executable liegt, k&#246;nnte&#8212;&#160; <i>theoretisch</i>&#160;&#8212; ein global arbeitender Optimiser die Anordnung der aufgerufenen Code-Abschnitte verbessern.
+      </li>
+      <li>
+        Ein Funktionspointer dagegen verwendet eine Sprungadresse, die vorher bereits als Datenwert in ein Register gebracht wurde. Auch dieser Datenwert wurde irgendwoher geladen, aber <i>er ist erst zur Laufzeit bekannt (das ist der zentrale Unterschied).</i>&#160;Deshalb kann auch der Optimiser hier kaum etwas machen (es sei denn er erkennt eine<i>&#160;monomorphic translation</i>&#160;und ersetzt einen bekannterma&#223;en konstanten Funktionspointer durch einen direkten Call). Abgesehen davon ist auch f&#252;r einen Funktionspointer-Call das Laden der Code-Segmente in den CPU-Cache der entscheidende Performance-Faktor
+      </li>
+      <li>
+        beide F&#228;lle unterscheiden sich von einer Inline-Funktion, die keinerlei Argument-&#220;bergabe machen mu&#223; und keine externen Code-Segmente zu laden hat &#8212; weshalb sie <i>mindestens um den Faktor 10 schneller ist.</i>
+      </li>
+    </ul>
+    <p>
+      Sieht man von den feinen Unterschieden bez&#252;glich Optimierung ab, ist f&#252;r normale Funktion und Funktionspointer der Ablauf &#228;quivalent: Parameter bereitstellen, Sprungaddresse laden (i.d.R. bereits im Cache), anderes Codesegment anspringen (oft nicht im Cache)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1775147025687" ID="ID_659543362" MODIFIED="1775147883431" TEXT="ein abstrahierter Funktor (std::function) bedingt stets eine zus&#xe4;tzliche Indirektion">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...und zwar ist das der Sprung in den &#187;<b>Invoker</b>&#171;. Das ist der Aufruf eines Funktionspointers, und bekommt zus&#228;tzlich zur Signatur auch noch eine Instanz-Adresse. Oder eben nicht, wenn in dem Funktor tats&#228;chlich ein reiner Funktionspointer steckt. Der Code des Invokers ist jeweils anders f&#252;r jeden unterschiedlichen <i>Typ des aufgerufenen Funktor-Objekts</i>. Ist der invocation-Operators des Zielt-Funktor-Objekts inline, dann kann er in die Invocator-Implementierung geinlined werden. Sonst erfolgt dahinter eben <i>ein weiterer</i>&#160;delegierender Funktionsaufruf &#8212; also wieder eine Indirektion mehr als bei direktem Aufruf. Ist in den Funktor zudem eine Member-Pointer gebunden, oder wurden Argumente closed, dann ist dahinter ein weiterer, delegierender Funktor notwendig
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1775147885693" ID="ID_434045465" MODIFIED="1775148007880" TEXT="ein abstrakter Funktor und eine virtuelle Methode sind somit &#xe4;quivalent">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Denn f&#252;r den Aufruf der virtuellen Methode mu&#223; zun&#228;chst eine Hilfsfunktion aufgerufen werden, um die VTable zu bekommen, und aus dieser wird ein Funktionspointer genommen und angesprungen. Das entspricht in etwa dem Aufwand f&#252;r den Aufruf &#252;ber einen Invoker (f&#252;r std::function). Sobald aber <i>mehrere Funktionen abstrahiert</i>&#160;werden sollen, ist die VTable effizienter.
+    </p>
+  </body>
+</html></richcontent>
+</node>
 </node>
 </node>
 </node>
@@ -141998,7 +144050,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1774399348243" ID="ID_1932552195" MODIFIED="1775017615620" TEXT="nun fehlen nur noch einige convenience-Diagnostic-Helper">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1774399548243" ID="ID_778280136" MODIFIED="1775017729982" TEXT="vor allem allBlocks &#x27f9; mu&#xdf; mehrere Quellen verbinden">
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1774399548243" ID="ID_778280136" MODIFIED="1775428765812" TEXT="vor allem allBlocks &#x27f9; mu&#xdf; mehrere Quellen verbinden">
 <arrowlink COLOR="#4282ce" DESTINATION="ID_657002637" ENDARROW="Default" ENDINCLINATION="800;41;" ID="Arrow_ID_469905566" STARTARROW="None" STARTINCLINATION="972;48;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#9d1673" CREATED="1774399648243" HGAP="41" ID="ID_831504293" MODIFIED="1775017879434" TEXT="warum ist das so m&#xfc;hsam??" VSHIFT="13">
@@ -169561,6 +171613,15 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
 </node>
 <node CREATED="1774120823962" ID="ID_762343468" MODIFIED="1774120842355" TEXT="wenn man dar&#xfc;ber liegt &#x27f9; schleppt ein Heap-Delegate mit"/>
 </node>
+<node CREATED="1775078175290" ID="ID_237865870" MODIFIED="1775078205190" TEXT="&#x3bb; template parameters">
+<node CREATED="1775078210032" ID="ID_662404009" MODIFIED="1775078236035" TEXT="seit C++20 kann Template-Parameterliste zwischen Captures und Argumenten definiert werden"/>
+<node CREATED="1775078237566" ID="ID_1620274990" MODIFIED="1775078271381" TEXT="diese Template-Parameter werden Teil der Signatur des call-Operators operator()"/>
+<node CREATED="1775078277352" ID="ID_1665723938" MODIFIED="1775078337629" TEXT="man kann sie explizit beim Aufruf fixen">
+<icon BUILTIN="idea"/>
+<node CREATED="1775078289095" ID="ID_1778364895" MODIFIED="1775078301737" TEXT="aber nur wenn man den call-operator ausschreibt"/>
+<node CREATED="1775078302428" ID="ID_420244402" MODIFIED="1775078327350" TEXT="fun.operator()&lt;X,Y&gt;(arg1,arg2);"/>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1482365430484" ID="ID_1414724077" MODIFIED="1557498707240" TEXT="chrono">
@@ -170988,6 +173049,17 @@ class Something
 <node CREATED="1774563596935" ID="ID_1541313986" MODIFIED="1774563614293" TEXT="in was ich diesen &#xbb;Wert&#xab; speichern kann &#x27f9; value"/>
 </node>
 </node>
+<node CREATED="1775171707264" ID="ID_585840459" MODIFIED="1775171719702" TEXT="concept for template specialisation">
+<node CREATED="1775171721685" ID="ID_713571881" LINK="https://stackoverflow.com/a/71921982/444796" MODIFIED="1775407680876" TEXT="is a instance of some base template">
+<linktarget COLOR="#4077d8" DESTINATION="ID_713571881" ENDARROW="Default" ENDINCLINATION="-481;35;" ID="Arrow_ID_1535878745" SOURCE="ID_311481243" STARTARROW="None" STARTINCLINATION="-1280;110;"/>
+<node CREATED="1775172126739" ID="ID_954480937" MODIFIED="1775172132771" TEXT="templated-&#x3bb; - Trick"/>
+<node CREATED="1775172133912" ID="ID_1380852395" MODIFIED="1775172153152" TEXT="wenn man per Referenz nimmt &#x27f9; kann auch Subklasse sein"/>
+</node>
+<node CREATED="1775172159916" ID="ID_210719572" MODIFIED="1775172653511" TEXT="hab ich verwendet f&#xfc;r concept typeseq">
+<arrowlink COLOR="#465b9c" DESTINATION="ID_312138588" ENDARROW="Default" ENDINCLINATION="-3735;326;" ID="Arrow_ID_1988333824" STARTARROW="None" STARTINCLINATION="-1494;108;"/>
+<arrowlink COLOR="#465b9c" DESTINATION="ID_1613911838" ENDARROW="Default" ENDINCLINATION="-3741;219;" ID="Arrow_ID_1655734503" STARTARROW="Default" STARTINCLINATION="-1494;108;"/>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1698089401358" FOLDED="true" ID="ID_29991404" MODIFIED="1698090231201" TEXT="&#xd83d;&#xdec7; Wunsch: named Arguments">
 <linktarget COLOR="#967b86" DESTINATION="ID_29991404" ENDARROW="Default" ENDINCLINATION="-1293;117;" ID="Arrow_ID_152389560" SOURCE="ID_713507066" STARTARROW="None" STARTINCLINATION="-2574;139;"/>
@@ -172224,6 +174296,10 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 </node>
 <node CREATED="1491098340549" ID="ID_938211341" MODIFIED="1557498707240" TEXT="Toolchain">
+<node CREATED="1775076914478" ID="ID_769604256" MODIFIED="1775076917889" TEXT="Code-Analyse">
+<node CREATED="1775076919503" ID="ID_29118352" LINK="https://xania.org/202506/how-compiler-explorer-works" MODIFIED="1775077005782" TEXT="Compiler-Explorer(Godbolt)"/>
+<node CREATED="1775076923774" ID="ID_48938755" LINK="https://cppinsights.io/about.html" MODIFIED="1775076930054" TEXT="C++ - Insights"/>
+</node>
 <node CREATED="1764017350940" ID="ID_1070520044" MODIFIED="1764017353708" TEXT="SCons">
 <node CREATED="1764017359298" ID="ID_953636906" MODIFIED="1764017362527" TEXT="Doku">
 <node CREATED="1764017386971" ID="ID_669022261" LINK="https://www.scons.org/doc/production/HTML/scons-user/index.html" MODIFIED="1764017391415" TEXT="User-Manual">
@@ -205602,7 +207678,174 @@ env.Command('out.bin', 'in.bin', my_action)</code></pre>
 </node>
 <node CREATED="1731199725257" HGAP="106" ID="ID_1040358172" MODIFIED="1731199778693" TEXT="Code-Basis" VSHIFT="23">
 <icon BUILTIN="go"/>
-<node CREATED="1731199757351" ID="ID_77153778" MODIFIED="1731199764674" TEXT="Struktur"/>
+<node CREATED="1731199757351" ID="ID_77153778" MODIFIED="1731199764674" TEXT="Struktur">
+<node CREATED="1775481870053" ID="ID_429771684" MODIFIED="1775481873056" TEXT="LIbrary">
+<node CREATED="1775481747213" ID="ID_1272898154" MODIFIED="1775482804837" TEXT="Library-Strati">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <i>Entstanden sind</i>&#160;diese Ebenen aus dem Bestreben, die Compile-Zeiten klein zu halten; ich achte penibel auf die Gegenwart bestimmter &#187;Leit-Header&#171;:
+    </p>
+    <ul>
+      <li>
+        util.hpp
+      </li>
+      <li>
+        meta/trait.hpp
+      </li>
+      <li>
+        iter-adapter.hpp
+      </li>
+      <li>
+        meta/function.hpp
+      </li>
+      <li>
+        meta/variadic-helper
+      </li>
+      <li>
+        meta/tuple-helper
+      </li>
+    </ul>
+    <p>
+      Diese Gewohnheit hat sich nach Bauchgef&#252;hl herausgebildet und ist <i>nicht empirisch fundiert</i>&#160;&#8212; systematisch Messungen zur Compile-Zeit und Executable-Gr&#246;&#223;e habe ich noch nie gemacht. Allerdings orientiert sich die Einteilung daran, wie <i>schmerzhaft</i>&#160;es ist, in einem dieser Leit-Header etwas zu &#228;ndern. Denn das impliziert, wie weitreichend dieses Stratum der Library verwendet wird.
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#637488" DESTINATION="ID_1272898154" ENDARROW="Default" ENDINCLINATION="-1279;-294;" ID="Arrow_ID_1757105516" SOURCE="ID_203522228" STARTARROW="None" STARTINCLINATION="-1290;45;"/>
+<node CREATED="1775481904710" ID="ID_1027336461" MODIFIED="1775482045643" TEXT="S0 : Basics"/>
+<node CREATED="1775481951650" ID="ID_417382062" MODIFIED="1775481959109" TEXT="S1 : Type-Traits"/>
+<node CREATED="1775481994229" ID="ID_1435205045" MODIFIED="1775482001991" TEXT="S2 : Iteratoren"/>
+<node CREATED="1775482004024" ID="ID_1710472918" MODIFIED="1775482037954" TEXT="S3 : Function"/>
+<node CREATED="1775482071898" ID="ID_73437934" MODIFIED="1775482079921" TEXT="S4 : Variadics"/>
+<node CREATED="1775482081137" ID="ID_1549282236" MODIFIED="1775482088580" TEXT="S5 : Tuple-Proc"/>
+</node>
+</node>
+</node>
+<node CREATED="1775399129678" ID="ID_959868130" MODIFIED="1775399132142" TEXT="Entwicklung">
+<node CREATED="1775399069314" ID="ID_233066974" MODIFIED="1775399090755" TEXT="Schaffen">
+<node CREATED="1775399374938" ID="ID_1161786283" MODIFIED="1775399386815" TEXT="2026">
+<node CREATED="1775399387885" ID="ID_1726468370" MODIFIED="1775399390051" TEXT="02">
+<node CREATED="1775399453087" ID="ID_989200248" MODIFIED="1775399675590" TEXT="meta/prop-builder">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      commit 84377102322b128a710cc19617f68f583adc314b
+    </p>
+    <p>
+      Author: Ichthyostega &lt;prg@ichthyostega.de&gt;
+    </p>
+    <p>
+      Date:&#160;&#160;&#160;Wed Feb 25 23:20:26 2026 +0100
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;BufferProvider: research how to build a policy with callbacks
+    </p>
+    <p>
+      &#160;&#160;&#160;
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;While it is trivially simple to define some struct with callback functions,
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;such a definition turns out to be obnoxiously complex and hard to read in pracice,
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;thereby nullifying any benefit from the shorthand &#955;-based notation.
+    </p>
+    <p>
+      &#160;&#160;&#160;
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;This kind of problem with the readability at client-side is quite common
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;when using callbacks for a policy-based design. To overcome this difficutly,
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;it would be necessary to define the policy and the callbacks in one
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;succinct builder expression. Unfortunately such a builder syntax
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;typically requires to write a lot of boilerplate template code.
+    </p>
+    <p>
+      &#160;&#160;&#160;
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;After several failed experiments, I have found a bold new way to
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;exploit features of C++20 in conjunction with a macro, allowing
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;to generate a suitable data record directly form an C++ expression.
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#2d4868" DESTINATION="ID_858655013" ENDARROW="Default" ENDINCLINATION="-1241;179;" ID="Arrow_ID_1141471471" STARTARROW="None" STARTINCLINATION="-935;121;"/>
+</node>
+</node>
+<node CREATED="1775399698270" ID="ID_516321142" MODIFIED="1775399700139" TEXT="03">
+<node CREATED="1775400707272" ID="ID_382206638" MODIFIED="1775401097117" TEXT="IterExplorer-flatten">
+<arrowlink COLOR="#2d4868" DESTINATION="ID_312759335" ENDARROW="Default" ENDINCLINATION="-196;20;" ID="Arrow_ID_1581617740" STARTARROW="None" STARTINCLINATION="-935;121;"/>
+<arrowlink DESTINATION="ID_1283855792" ENDARROW="Default" ENDINCLINATION="156;0;" ID="Arrow_ID_298662590" STARTARROW="None" STARTINCLINATION="188;29;"/>
+</node>
+<node CREATED="1775400415421" ID="ID_1228600186" MODIFIED="1775401153670" TEXT="meta/FunTrampoline">
+<arrowlink COLOR="#2d4868" DESTINATION="ID_1920067063" ENDARROW="Default" ENDINCLINATION="-805;74;" ID="Arrow_ID_314698705" STARTARROW="None" STARTINCLINATION="-935;121;"/>
+</node>
+<node CREATED="1775399774924" ID="ID_1844807854" MODIFIED="1775401145402" TEXT="meta/TupleIndexAdaptor">
+<arrowlink COLOR="#2d4868" DESTINATION="ID_528287612" ENDARROW="Default" ENDINCLINATION="-1054;161;" ID="Arrow_ID_1760258574" STARTARROW="None" STARTINCLINATION="-935;121;"/>
+<arrowlink DESTINATION="ID_1013361274" ENDARROW="Default" ENDINCLINATION="95;0;" ID="Arrow_ID_1610863831" STARTARROW="None" STARTINCLINATION="200;23;"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1775399073794" ID="ID_1783608991" MODIFIED="1775399080709" TEXT="Ausreifen">
+<node CREATED="1775401107274" ID="ID_1782172254" MODIFIED="1775401110060" TEXT="2026">
+<node CREATED="1775401110506" ID="ID_1351739211" MODIFIED="1775401111357" TEXT="03">
+<node CREATED="1775399901248" ID="ID_1013361274" MODIFIED="1775401145402" TEXT="meta/CommonResult">
+<arrowlink COLOR="#2d4868" DESTINATION="ID_360119128" ENDARROW="Default" ENDINCLINATION="-1226;104;" ID="Arrow_ID_959368971" STARTARROW="None" STARTINCLINATION="-935;121;"/>
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1013361274" ENDARROW="Default" ENDINCLINATION="95;0;" ID="Arrow_ID_1610863831" SOURCE="ID_1844807854" STARTARROW="None" STARTINCLINATION="200;23;"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1775399176027" ID="ID_1986849995" MODIFIED="1775399215942" TEXT="Herrschen"/>
+<node CREATED="1775399117038" ID="ID_1005958257" MODIFIED="1775399119384" TEXT="Mitgehen">
+<node CREATED="1775400845589" ID="ID_1548553780" MODIFIED="1775400850036" TEXT="2025">
+<node CREATED="1775400851392" ID="ID_1627038973" MODIFIED="1775400854128" TEXT="C++20"/>
+</node>
+<node CREATED="1775401337139" ID="ID_1613739201" MODIFIED="1775401338775" TEXT="2026">
+<node CREATED="1775401339851" ID="ID_600114365" MODIFIED="1775401341655" TEXT="04">
+<node CREATED="1775401259446" ID="ID_373036284" MODIFIED="1775402399311" TEXT="beginne Concepts mehr zu verwenden...">
+<arrowlink COLOR="#2d4868" DESTINATION="ID_1902883169" ENDARROW="Default" ENDINCLINATION="-438;50;" ID="Arrow_ID_518285214" STARTARROW="None" STARTINCLINATION="-1005;70;"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1775399092335" ID="ID_1905574261" MODIFIED="1775399094299" TEXT="Pflegen">
+<node CREATED="1775401059064" ID="ID_1753879542" MODIFIED="1775401061292" TEXT="2026">
+<node CREATED="1775401063069" ID="ID_543951640" MODIFIED="1775401064228" TEXT="03">
+<node CREATED="1775400970092" ID="ID_1283855792" MODIFIED="1775402390637" TEXT="Itertools aufger&#xe4;umt / reimplementiert">
+<arrowlink COLOR="#2d4868" DESTINATION="ID_808274597" ENDARROW="Default" ENDINCLINATION="-1796;76;" ID="Arrow_ID_1513162908" STARTARROW="None" STARTINCLINATION="-1015;77;"/>
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1283855792" ENDARROW="Default" ENDINCLINATION="156;0;" ID="Arrow_ID_298662590" SOURCE="ID_382206638" STARTARROW="None" STARTINCLINATION="188;29;"/>
+</node>
+</node>
+<node CREATED="1775401345850" ID="ID_422630651" MODIFIED="1775401347126" TEXT="04">
+<node CREATED="1775401208164" ID="ID_174434060" MODIFIED="1775406801889" TEXT="Tuple-Helper ausgeputzt">
+<arrowlink COLOR="#2d4868" DESTINATION="ID_1798869143" ENDARROW="Default" ENDINCLINATION="-1567;197;" ID="Arrow_ID_1785094898" STARTARROW="None" STARTINCLINATION="-955;106;"/>
+</node>
+</node>
+</node>
+</node>
+</node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1731199766411" FOLDED="true" ID="ID_85428678" MODIFIED="1764717915095" TEXT="Aufgaben">
 <icon BUILTIN="bell"/>
 <node CREATED="1731199789772" ID="ID_1736261073" MODIFIED="1731199796691" TEXT="Copyrights">

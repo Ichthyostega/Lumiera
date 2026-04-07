@@ -22,6 +22,7 @@
 #include "lib/util.hpp"
 
 #include "lib/iter-adapter.hpp"
+#include "lib/meta/common-result.hpp"
 
 #include <string>
 
@@ -228,61 +229,26 @@ namespace test{
         }
       
       
-      /** @test construction of a common result type.
-       *      - based on `std::common_type`
-       *      - so there must be some common ground
-       *      - if any of the types is by-value, the result is
-       *      - if any of the types is const, the result is const
+      /** @test when combining functors, a common result type can be detected.
+       * @see CommonResult_test
+       * @see lib/meta/common-result.hpp
        */
       void
       verify_TypeReconciliation()
         {
-          using C1 = Common<int,string>;
-          CHECK (not C1());
+          using C1 = meta::CommonResult<int,string>;
+          CHECK (not C1{});
           CHECK (not C1::value);
           
-          using C2 = Common<int,long*>;
-          CHECK (not C2());                                              // can not be reconciled
-          CHECK (not C2::value);
-//        using X = C2::ResType;                                         // does not (and should not) compile
+          using C2 = Common<string&,string>;
+          CHECK (showType<C2::Type>() == "string"_expect );
           
-          using C3 = Common<string,string>;
-          CHECK (C3());
-          CHECK (showType<C3::ResType>() == "string"_expect );
-          
-          using C4 = Common<string&,string>;
-          CHECK (showType<C4::ResType>() == "string"_expect );
-          
-          using C5 = Common<string&,string&>;
-          CHECK (showType<C5::ResType>() == "string&"_expect );          // ref access to both is possible
-          
-          using C6 = Common<string&,string&&>;
-          CHECK (showType<C6::ResType>() == "string"_expect );           // caution, RValue might be a temporary
-          
-          using C7 = Common<string&&,string&&>;
-          CHECK (showType<C7::ResType>() == "string"_expect );
-          
-          using C8 = Common<string const&, string const&>;
-          CHECK (showType<C8::ResType>() == "string const&"_expect );
-          
-          using C9 = Common<string const&, string&>;
-          CHECK (showType<C9::ResType>() == "string const&"_expect );    // reconcile to const&
-          
-          using C10 = Common<string const&, string>;
-          CHECK (showType<C10::ResType>() == "const string"_expect );
-          
-          using C11 = Common<string&&, string const&>;
-          CHECK (showType<C11::ResType>() == "const string"_expect );    // reconciled to value type
-          
-          using C12 = Common<long const&, int>;
-          CHECK (showType<C12::ResType>() == "const long"_expect );      // reconciled to the larger number type
-          
-          using C13 = Common<double&, long const&>;
-          CHECK (showType<C13::ResType>() == "double const&"_expect );   // usual in C++ (loss of precision possible)
+          using C3 = Common<double&, long const&>;
+          CHECK (showType<C3::Type>() == "double"_expect );   // usual in C++ (loss of precision possible)
         }
       
       template<typename T1, typename T2>
-      using Common = meta::CommonResultYield<T1,T2>;
+      using Common = meta::CommonResult<T1,T2>;
     };
   
   LAUNCHER (IterCoreAdapter_test, "unit common");

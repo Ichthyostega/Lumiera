@@ -31,7 +31,7 @@ namespace test {
   
   using ::test::showType;
   using lib::meta::typeSymbol;
-  using lib::meta::is_Tuple;
+  using lib::meta::is_Tuple_v;
   using std::decay_t;
   using std::vector;
   using std::get;
@@ -183,7 +183,7 @@ namespace test {
           CHECK (    e2.result);
           
           using SeqRes = decltype(e2)::Result;                 // Note: the result type depends on the actual syntax construction
-          CHECK (is_Tuple<SeqRes>());                          //       Result model from sequence is the tuple of terminal results
+          CHECK (is_Tuple_v<SeqRes>);                          //       Result model from sequence is the tuple of terminal results
           auto& [r1,r2] = *e2.result;
           CHECK (r1.str() == "hello"_expect);
           CHECK (r2.str() == "world"_expect);

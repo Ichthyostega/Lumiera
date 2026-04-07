@@ -37,6 +37,7 @@ using test::showSizeof;
 using test::showType;
 using util::toString;
 using util::_Fmt;
+using std::operator""s;
 using std::is_same_v;
 using std::make_tuple;
 using std::get;
@@ -78,6 +79,7 @@ namespace test {
       run (Arg)
         {
           check_diagnostics();
+          check_string_conversion();
           check_tuple_from_Typelist();
           demonstrate_generic_iteration();
           verify_tuple_like_concept();
@@ -110,6 +112,21 @@ namespace test {
           EXPECT (Tup1, "TUPLE-<1>-<3>-<5>-");
           CHECK  (get<2>(tup1x) == Num<5>{55});
           CHECK  (toString(tup1x) == "«tuple<Num<1>, Num<3>, Num<5> >»──({11},(3),{55})"_expect);
+        }
+      
+      
+      /** @test apply generic string conversion, implemented by a fold-expression
+       */
+      void
+      check_string_conversion()
+        {
+          auto tup = make_tuple (1, 2.3, '4', "⁵₅⁵", "😈"s);
+          
+          CHECK (showType<decltype(tup)>() == "tuple<int, double, char, char const*, string>"_expect);
+          
+          CHECK (joinTuple (tup,"•")       == "1•2.3•4•⁵₅⁵•😈"_expect );
+          CHECK (joinTupleParen (tup)      == "(1,2.3,4,⁵₅⁵,😈)"_expect );
+          CHECK (toString (tup)            == "«tuple<int, double, char, char const*, string>»──(1,2.3,4,⁵₅⁵,😈)"_expect );
         }
       
       
@@ -227,7 +244,7 @@ namespace test {
           // Note however, the same can also be achieved simpler,
           // using any meta-function which takes a single type argument...
           CHECK (not ElmTypes<Tup>::AndAll<std::is_integral>());  //   ... __and_<is_integral<int>,is_integral<double>,is_integral<char>>
-          CHECK (    ElmTypes<Tup>::OrAll<std::is_integral>());
+          CHECK (    ElmTypes<Tup>::OrAny<std::is_integral>());
         }
       
       

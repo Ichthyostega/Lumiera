@@ -105,13 +105,35 @@ namespace meta {
                    and tuple_accessible<remove_cv_t<TUP>>;
   
   
+  
+  /**
+   * Concept to require an instance of std::tuple<TYPES...>`
+   * @note other than `concept` \ref tuple_like, this aims
+   *       explicitly at the implementation form STDLIB.
+   */
+  template<class TUP>
+  concept tup = requires (TUP tup)
+    {
+      // check that a function can be invoked with a std::tuple<TYPES>
+      []<typename...TYPES>(std::tuple<TYPES...>){/*placeholder*/}(tup);
+    };
+  
+  template<class TUP>
+  struct is_Tuple : std::bool_constant<tup<TUP>> { };
+  
+  template<class TUP>
+  static constexpr bool is_Tuple_v = is_Tuple<TUP>::value;
+  
+  
+  
+  
   /**
    * Helper for abstracted / unified access to member elements of any _tuple-like_
    * @remark preferably uses a `get<i>` member function, falling back to a
    *         free function `get`, which is found by ADL.
    */
   template<std::size_t idx, class TUP>
-                            requires(tuple_like<std::remove_reference_t<TUP>>)
+                            requires tuple_like<std::remove_reference_t<TUP>>
   decltype(auto)
   getElm (TUP&& tup)
   {
@@ -169,7 +191,7 @@ namespace meta {
       using AndAll = ElmTypes<Apply<PRED>>::template Rebind<std::__and_>;
       
       template<template<class> class PRED>
-      using OrAll  = ElmTypes<Apply<PRED>>::template Rebind<std::__or_>;
+      using OrAny  = ElmTypes<Apply<PRED>>::template Rebind<std::__or_>;
     };
   
   
@@ -221,7 +243,7 @@ namespace meta {
    * @todo 6/2025 as a first step, this replicates the implementation from C++17;
    *       the second step would be to constrain this to a concept `tuple_like`
    */
-  template<class FUN, class TUP>   requires(tuple_like<remove_reference_t<TUP>>)
+  template<class FUN, class TUP>   requires tuple_like<remove_reference_t<TUP>>
   constexpr decltype(auto)
   apply (FUN&& f, TUP&& tup)  noexcept (can_nothrow_invoke_tup<FUN,TUP> )
   {
@@ -242,7 +264,7 @@ namespace meta {
    *       std::apply to unpack the tuple's contents into an argument pack and
    *       then employ a fold expression with the comma operator.
    */
-  template<class TUP, class FUN>   requires(tuple_like<remove_reference_t<TUP>>)
+  template<class TUP, class FUN>   requires tuple_like<remove_reference_t<TUP>>
   constexpr void
   forEach (TUP&& tuple, FUN fun)
   {
@@ -267,7 +289,7 @@ namespace meta {
    *          Notably this differs from #forEach, where a fold-expression with comma-operator
    *          is used, which is guaranteed to evaluate from left to right.
    */
-  template<class TUP, class FUN>   requires(tuple_like<remove_reference_t<TUP>>)
+  template<class TUP, class FUN>   requires tuple_like<remove_reference_t<TUP>>
   constexpr auto
   mapEach (TUP&& tuple, FUN fun)
   {

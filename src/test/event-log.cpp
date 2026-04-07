@@ -42,7 +42,6 @@
 namespace test{
   namespace error = lumiera::error;
   
-  using util::stringify;
   using util::contains;
   using util::isnil;
   using lib::Symbol;

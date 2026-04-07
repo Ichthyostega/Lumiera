@@ -44,6 +44,44 @@
 namespace lib {
 namespace meta {
   
+  template<class T, class TYPES>
+  struct Prepend;
+  
+  
+  
+  /* ========= Specialisations ========= */
+  
+  /**
+   * Additional specialisation of the basic type sequence type,
+   * allowing to re-create a (flat) type sequence from a typelist.
+   * @remark recursively prepend-to-tail of the type sequence.
+   */
+  template<class H, class T>
+  struct Types< Node<H,T> >
+    {
+      using List = Node<H,T>;
+      using Seq  = Prepend< H
+                          , typename Types<T>::Seq
+                          >::Seq;
+    };
+  template<>
+  struct Types<Nil>
+    {
+      using List = Nil;
+      using Seq  = Types<>;
+    };
+  template<>
+  struct Types<NilNode>
+    : Types<Nil>
+    { };
+  
+  
+  
+  
+  
+  
+  
+  /* ========= Information functions ========= */
   
   /**
    * Find the index of the first incidence of a type in a type-sequence.
@@ -82,6 +120,13 @@ namespace meta {
   { };
   
   
+  
+  
+  
+  
+  
+  /* ========= Type Sequence Manipulation ========= */
+  
   /**
    * Helper: prepend a type to an existing type sequence,
    * thus shifting all elements within the sequence
@@ -96,33 +141,6 @@ namespace meta {
     using Seq  = Types<T, TYPES...>;
     using List = Types<T, TYPES...>::List;
   };
-  
-  
-  
-  /**
-   * Additional specialisation of the basic type sequence type,
-   * allowing to re-create a (flat) type sequence from a typelist.
-   * @remark can now be built with the help of \ref Prepend.
-   */
-  template<class H, class T>
-  struct Types< Node<H,T> >
-    {
-      using List = Node<H,T>;
-      using Seq  = Prepend< H
-                          , typename Types<T>::Seq
-                          >::Seq;
-    };
-  template<>
-  struct Types<Nil>
-    {
-      using List = Nil;
-      using Seq  = Types<>;
-    };
-  template<>
-  struct Types<NilNode>
-    : Types<Nil>
-    { };
-  
   
   
   

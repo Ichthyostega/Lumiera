@@ -102,6 +102,7 @@
 #include "lib/error.hpp"
 #include "lib/uninitialised-storage.hpp"
 #include "lib/meta/duck-detector.hpp"
+#include "lib/meta/common-result.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/trait.hpp"
 #include "lib/item-wrapper.hpp"
@@ -305,7 +306,7 @@ namespace lib {
     template<class SRC>
     struct _DecoratorTraits<SRC,   enable_if<shall_wrap_STL_Iter<SRC>>>
       {
-        static_assert (not std::is_rvalue_reference<SRC>::value,
+        static_assert (not std::is_rvalue_reference_v<SRC>,
                        "container needs to exist elsewhere during the lifetime of the iteration");
         using SrcIter = iter_explorer::StlRange<SRC>;
         using SrcVal  = SrcIter::value_type;
@@ -416,19 +417,15 @@ namespace lib {
         using ResIter = _DecoratorTraits<RES>::SrcIter;
         using SrcYield = iter::Yield<SRC>;
         using ResYield = iter::Yield<ResIter>;
-        using _CommonT = meta::CommonResultYield<SrcYield,ResYield>;
+        using _CommonT = meta::CommonResult<SrcYield,ResYield>;
         static constexpr bool can_reconcile = _CommonT::value;
-        static constexpr bool isRefResult = _CommonT::isRef;
         
         static_assert (can_reconcile,
                        "source iterator and result from the expansion must yield compatible values");
         static_assert (is_const_v<SrcYield> == is_const_v<ResYield>,
                        "source and expanded types differ in const-ness");
         
-        using YieldRes   = _CommonT::ResType;
-        using value_type = _CommonT::value_type;
-        using reference  = _CommonT::reference;
-        using pointer    = _CommonT::pointer;
+        using YieldRes   = _CommonT::Type;
       };
     
   }//(End) IterExplorer traits
@@ -749,9 +746,9 @@ namespace lib {
         
         /** @note result type bindings based on a common type of source and expanded result */
         using YieldRes   = _Trait::YieldRes;
-        using value_type = _Trait::value_type;
-        using reference  = _Trait::reference;
-        using pointer    = _Trait::pointer;
+        using value_type = meta::RefTraits<YieldRes>::value_type;
+        using reference  = meta::RefTraits<YieldRes>::reference;
+        using pointer    = meta::RefTraits<YieldRes>::pointer;
         
         
         bool

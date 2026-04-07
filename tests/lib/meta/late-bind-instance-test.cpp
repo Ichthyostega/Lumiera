@@ -19,7 +19,7 @@
 #include "test/run.hpp"
 #include "test/test-helper.hpp"
 #include "test/tracking-dummy.hpp"
-#include "lib/meta/tuple-accessor.hpp"
+#include "lib/meta/tuple-helper.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/format-util.hpp"
@@ -36,7 +36,7 @@ namespace test {
   using std::move;
   using std::tuple;
   using std::string;
-  using lib::meta::dump;
+  using lib::meta::joinTupleParen;
   using ::test::Tracker;
   
   
@@ -160,19 +160,19 @@ namespace test {
         {
           long dummy{555};
           InstancePlaceholder<long> marker;
-         CHECK (dump(lateBindInstance (dummy, tuple<>{}))         == "()"_expect);
-         CHECK (dump(lateBindInstance (dummy, tuple{42}))         == "(42)"_expect);
-         CHECK (dump(lateBindInstance (dummy, tuple{1,2,3}))      == "(1,2,3)"_expect);
-         CHECK (dump(lateBindInstance (dummy, tuple{marker,2,3})) == "(↗555,2,3)"_expect);
-         CHECK (dump(lateBindInstance (dummy, tuple{1,marker,3})) == "(1,↗555,3)"_expect);
-         CHECK (dump(lateBindInstance (dummy, tuple{1,2,marker})) == "(1,2,↗555)"_expect);
-         CHECK (dump(lateBindInstance (dummy, tuple{marker}))     == "(↗555)"_expect);
-         CHECK (dump(lateBindInstance (dummy, tuple{string{"1"}
-                                                   ,"2"
-                                                   ,marker
-                                                   ,tuple(2,3)
-                                                   , 5.5
-                                                   }))            == "(1,2,↗555,«tuple<int, int>»──(2,3),5.5)"_expect);
+         CHECK (joinTupleParen(lateBindInstance (dummy, tuple<>{}))         == "()"_expect);
+         CHECK (joinTupleParen(lateBindInstance (dummy, tuple{42}))         == "(42)"_expect);
+         CHECK (joinTupleParen(lateBindInstance (dummy, tuple{1,2,3}))      == "(1,2,3)"_expect);
+         CHECK (joinTupleParen(lateBindInstance (dummy, tuple{marker,2,3})) == "(↗555,2,3)"_expect);
+         CHECK (joinTupleParen(lateBindInstance (dummy, tuple{1,marker,3})) == "(1,↗555,3)"_expect);
+         CHECK (joinTupleParen(lateBindInstance (dummy, tuple{1,2,marker})) == "(1,2,↗555)"_expect);
+         CHECK (joinTupleParen(lateBindInstance (dummy, tuple{marker}))     == "(↗555)"_expect);
+         CHECK (joinTupleParen(lateBindInstance (dummy, tuple{string{"1"}
+                                                             ,"2"
+                                                             ,marker
+                                                             ,tuple(2,3)
+                                                             , 5.5
+                                                             }))            == "(1,2,↗555,«tuple<int, int>»──(2,3),5.5)"_expect);
         }
     };
   

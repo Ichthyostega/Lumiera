@@ -85,7 +85,7 @@ namespace test {
           CHECK (showType< S1AA    >() == "__and_<is_pointer<int>, is_pointer<double> >"_expect);
           CHECK (false == S1AA::value);
           
-          using S1OA = S1::OrAll<std::is_pointer>;
+          using S1OA = S1::OrAny<std::is_pointer>;
           CHECK (showType< S1OA    >() ==  "__or_<is_pointer<int>, is_pointer<double> >"_expect);
           CHECK (false == S1OA::value);
           
@@ -108,7 +108,7 @@ namespace test {
           CHECK (showType< S0AA    >() ==    "__and_<is_pointer<int*> >"_expect);
           CHECK (true == S0AA::value);
           
-          using S0OA = S0::OrAll<std::is_pointer>;
+          using S0OA = S0::OrAny<std::is_pointer>;
           CHECK (showType< S0OA    >() ==     "__or_<is_pointer<int*> >"_expect);
           CHECK (true == S0OA::value);
 
@@ -131,7 +131,7 @@ namespace test {
           CHECK (showType< S2AA    >() == "__and_<is_pointer<int*>, is_pointer<int*>, is_pointer<int*> >"_expect);
           CHECK (true == S2AA::value);
           
-          using S2OA = S2::OrAll<std::is_pointer>;
+          using S2OA = S2::OrAny<std::is_pointer>;
           CHECK (showType< S2OA    >() ==  "__or_<is_pointer<int*>, is_pointer<int*>, is_pointer<int*> >"_expect);
           CHECK (true == S2OA::value);
 
@@ -153,7 +153,7 @@ namespace test {
           CHECK (showType< S3AA    >() == "__and_<is_pointer<int*>, is_pointer<long>, is_pointer<double*> >"_expect);
           CHECK (false == S3AA::value);
           
-          using S3OA = S3::OrAll<std::is_pointer>;
+          using S3OA = S3::OrAny<std::is_pointer>;
           CHECK (showType< S3OA    >() ==  "__or_<is_pointer<int*>, is_pointer<long>, is_pointer<double*> >"_expect);
           CHECK (true == S3OA::value);
         }

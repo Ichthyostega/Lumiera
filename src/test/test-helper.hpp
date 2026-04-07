@@ -19,8 +19,8 @@
  ** reference kind (value, lvalue, rvalue) of a template parameter instantiation.
  ** For GNU compatible compilers, we expose also the interface to the internal
  ** ABI for [demangling type names](\ref demangleCxx).
- ** 
- ** @note this header is included into a large number of tests.
+ ** @remark util::showType also uses this ABI and indicates also reference / pointer
+ ** @warning this header is included into a large number of tests.
  ** @see TestHelper_test
  ** @see TestHelperDemangling_test
  ** 
@@ -58,6 +58,8 @@ namespace test{
   using lib::meta::disable_if;
   using lib::meta::demangleCxx;
   using lib::meta::humanReadableTypeID;
+  using util::showType;
+  using util::showTypes;
   
   
   constexpr auto ROUGH_PRECISION = pow (10, -3);
@@ -166,116 +168,6 @@ namespace test{
   }
   
   
-  
-  
-  
-  namespace { // helper for printing type diagnostics
-    
-    template<typename X>
-    struct TypeDiagnostics
-      {
-        using Type = X;
-        static constexpr auto prefix  = "";
-        static constexpr auto postfix = "";
-      };
-    template<typename X>
-    struct TypeDiagnostics<const X>
-      {
-        using Type = X;
-        static constexpr auto prefix  = "const ";
-        static constexpr auto postfix = "";
-      };
-    template<typename X>
-    struct TypeDiagnostics<X&>
-      {
-        using Type = X;
-        static constexpr auto prefix  = "";
-        static constexpr auto postfix = "&";
-      };
-    template<typename X>
-    struct TypeDiagnostics<X&&>
-      {
-        using Type = X;
-        static constexpr auto prefix  = "";
-        static constexpr auto postfix = " &&";
-      };
-    template<typename X>
-    struct TypeDiagnostics<X const&>
-      {
-        using Type = X;
-        static constexpr auto prefix  = "";
-        static constexpr auto postfix = " const&";
-      };
-    template<typename X>
-    struct TypeDiagnostics<X const&&>
-      {
-        using Type = X;
-        static constexpr auto prefix  = "const ";
-        static constexpr auto postfix = " &&";
-      };
-    template<typename X>
-    struct TypeDiagnostics<X *>
-      {
-        using Type = X;
-        static constexpr auto prefix  = "";
-        static constexpr auto postfix = " *";
-      };
-    template<typename X>
-    struct TypeDiagnostics<const X *>
-      {
-        using Type = X;
-        static constexpr auto prefix  = "const ";
-        static constexpr auto postfix = " *";
-      };
-    template<typename X>
-    struct TypeDiagnostics<const X * const>
-      {
-        using Type = X;
-        static constexpr auto prefix  = "const ";
-        static constexpr auto postfix = " * const";
-      };
-    template<typename X>
-    struct TypeDiagnostics<X * const>
-      {
-        using Type = X;
-        static constexpr auto prefix  = "";
-        static constexpr auto postfix = " * const";
-      };
-    template<typename X>
-    struct TypeDiagnostics<X * const *>
-      {
-        using Type = X;
-        static constexpr auto prefix  = "";
-        static constexpr auto postfix = " * const *";
-      };
-  }
-  
-  /** diagnostic type output, including const and similar adornments
-   * @warning operates after-the-fact and relies on mangled type names
-   *          plus several heuristics. Output might thus not be entirely correct,
-   *          especially when several levels of const, pointer and references are involved.
-   *          If in doubt, place the TypeDebugger<T> to reveal the type as the compiler sees it.
-   * @remarks the function lib::meta::typeStr removes adornments and does not work on all kinds
-   *          of reference. This helper attempts to work around those limitations.
-   */
-  template<typename X>
-  inline string
-  showType()
-  {
-    using Case = TypeDiagnostics<X>;
-    using Type = Case::Type;
-    
-    return Case::prefix
-         + humanReadableTypeID (typeid(Type).name())
-         + Case::postfix;
-  }
-  
-  template<typename...TS>
-  string
-  showTypes()
-  {
-    return "<| " + ((showType<TS>()+", ") + ... + "|>");
-  }
   
   
   /** helper for investigating a variadic argument pack

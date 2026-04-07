@@ -761,7 +761,11 @@ namespace lib {
           , i_{0}
           { }
         
-        IdxStoreCore() = default;
+        IdxStoreCore()
+          : CON{}
+          , i_{CON::size()}
+          { }    // explicitly ensure that iterator is empty
+        
         // copy and assignment acceptable (warning!)
         
         
@@ -775,8 +779,8 @@ namespace lib {
         decltype(auto)
         yield()  const
           {
-            return CON::operator[] (i_);
-          }
+            return util::unConst(*this).operator[] (i_);
+          }     // rationale: const iterator ≠ const_iterator
         
         void
         iterNext()
