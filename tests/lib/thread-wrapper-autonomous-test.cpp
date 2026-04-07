@@ -79,7 +79,7 @@ namespace test{
                   void
                   doIt (int extra)
                     {
-                      watcher.setVal (extra);
+                      watcher.setID (extra);
                       sleep_for (5ms);
                     }
                 };

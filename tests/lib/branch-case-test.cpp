@@ -147,13 +147,13 @@ namespace test{
           Dummy::checksum() = 0;
           {  //  track instances by checksum...
             Dummy dummy;
-            auto rr = dummy.getVal();
+            auto rr = dummy.getID();
             CHECK (rr == Dummy::checksum());
             CHECK (rr > 0);
             
             using BB = BranchCase<string,Dummy>;
             BB bb1{1, dummy};
-            CHECK (bb1.get<1>().getVal() == rr);
+            CHECK (bb1.get<1>().getID() == rr);
             CHECK (2*rr == Dummy::checksum());   // got two instances due to copy-init
 
             BB bb2{0, "dummy"};
@@ -161,22 +161,22 @@ namespace test{
             
             swap (bb1,bb2);
             CHECK (bb1.get<0>() == "dummy");
-            CHECK (bb2.get<1>().getVal() == rr);
+            CHECK (bb2.get<1>().getID() == rr);
             CHECK (2*rr == Dummy::checksum());
             
             bb1 = bb2;
-            CHECK (bb1.get<1>().getVal() == rr);
+            CHECK (bb1.get<1>().getID() == rr);
             CHECK (3*rr == Dummy::checksum());   // assignment by copy
             
             bb2 = move(bb1);                     // move-assignment
             CHECK (2*rr == Dummy::checksum());   // existing instance destroyed properly
-            CHECK (bb2.get<1>().getVal() == rr);
-            CHECK (bb1.get<1>().getVal() == Dummy::DEFUNCT);
+            CHECK (bb2.get<1>().getID() == rr);
+            CHECK (bb1.get<1>().getID() == Dummy::DEFUNCT);
             
             bb2 = BB{1,Dummy()};                 // wipes out the other copy
-            auto rr2 = bb2.get<1>().getVal();    // but implants a different one
+            auto rr2 = bb2.get<1>().getID();     // but implants a different one
             CHECK (rr+rr2 == Dummy::checksum());
-            CHECK (rr     == dummy.getVal());
+            CHECK (rr     == dummy.getID());
           }// leave scope: invoke dtors here
           
           CHECK (0 == Dummy::checksum());

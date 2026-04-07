@@ -138,6 +138,11 @@ return: 0
 END
 
 
+TEST "opaque functor value object" FunInline_test <<END
+return: 0
+END
+
+
 TEST "generate functor trampoline" FunTrampoline_test <<END
 return: 0
 END

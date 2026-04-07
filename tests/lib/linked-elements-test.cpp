@@ -113,7 +113,7 @@ namespace test{
         virtual void
         nextResult(Pos& num)
           {
-            uint current = num->getVal();
+            uint current = num->getID();
             if (maxNum_ <= current)
               num = 0;
             else
@@ -203,11 +203,11 @@ namespace test{
             CHECK (5 == elements.size());
             CHECK (0 != Dummy::checksum());
             
-            CHECK (Dummy::checksum() == elements[0].getVal()
-                                      + elements[1].getVal()
-                                      + elements[2].getVal()
-                                      + elements[3].getVal()
-                                      + elements[4].getVal());
+            CHECK (Dummy::checksum() == elements[0].getID()
+                                      + elements[1].getID()
+                                      + elements[2].getID()
+                                      + elements[3].getID()
+                                      + elements[4].getID());
             
             elements.clear();
             CHECK (isnil (elements));
@@ -240,7 +240,7 @@ namespace test{
             List::iterator ii = elements.begin();
             while (ii)
               {
-                CHECK (check == ii->getVal());
+                CHECK (check == ii->getID());
                 CHECK (check == ii->calc(+5) - 5);
                 --check;
                 ++ii;
@@ -254,7 +254,7 @@ namespace test{
             List::const_iterator cii = const_elm.begin();
             while (cii)
               {
-                CHECK (check == cii->getVal());
+                CHECK (check == cii->getID());
                 --check;
                 ++cii;
               }
@@ -293,49 +293,49 @@ namespace test{
             
             list.emplace<Nummy>(1);
             CHECK (not isnil (list));
-            CHECK (1 == list[0].getVal());
+            CHECK (1 == list[0].getID());
             CHECK (1 == Dummy::checksum());
             list.reverse();
             CHECK (1 == Dummy::checksum());
-            CHECK (1 == list[0].getVal());
+            CHECK (1 == list[0].getID());
             CHECK (not isnil (list));
             
             list.emplace<Nummy>(2);
             CHECK (not isnil (list));
             CHECK (2 == list.size());
-            CHECK (2 == list[0].getVal());
+            CHECK (2 == list[0].getID());
             CHECK (2+1 == Dummy::checksum());
             list.reverse();
             CHECK (1+2 == Dummy::checksum());
-            CHECK (1 == list[0].getVal());
+            CHECK (1 == list[0].getID());
             CHECK (2 == list.size());
             
             list.emplace<Nummy>(3);
             CHECK (3 == list.size());
-            CHECK (3 == list.top().getVal());
+            CHECK (3 == list.top().getID());
             CHECK (3+1+2 == Dummy::checksum());
             list.reverse();
-            CHECK (2 == list[0].getVal());
-            CHECK (1 == list[1].getVal());
-            CHECK (3 == list[2].getVal());
+            CHECK (2 == list[0].getID());
+            CHECK (1 == list[1].getID());
+            CHECK (3 == list[2].getID());
             List::iterator ii = list.begin();
-            CHECK (2 == ii->getVal());
+            CHECK (2 == ii->getID());
             ++ii;
-            CHECK (1 == ii->getVal());
+            CHECK (1 == ii->getID());
             ++ii;
-            CHECK (3 == ii->getVal());
+            CHECK (3 == ii->getID());
             ++ii;
             CHECK (isnil (ii));
             CHECK (2+1+3 == Dummy::checksum());
 
             list.emplace<Nummy>(4);
-            CHECK (4 == list.top().getVal());
-            CHECK (3 == list[3].getVal());
+            CHECK (4 == list.top().getID());
+            CHECK (3 == list[3].getID());
             list.reverse();
-            CHECK (3 == list[0].getVal());
-            CHECK (1 == list[1].getVal());
-            CHECK (2 == list[2].getVal());
-            CHECK (4 == list[3].getVal());
+            CHECK (3 == list[0].getID());
+            CHECK (1 == list[1].getID());
+            CHECK (2 == list[2].getID());
+            CHECK (4 == list[3].getID());
             CHECK (3+1+2+4 == Dummy::checksum());
           }
           CHECK (0 == Dummy::checksum());
@@ -370,9 +370,9 @@ namespace test{
             CHECK (3 == elements.size());
             CHECK (22+44+66 == Dummy::checksum());   // not altered: we're referring the originals
             
-            CHECK (66 == elements[0].getVal());
-            CHECK (44 == elements[1].getVal());
-            CHECK (22 == elements[2].getVal());
+            CHECK (66 == elements[0].getID());
+            CHECK (44 == elements[1].getID());
+            CHECK (22 == elements[2].getID());
             CHECK (isSameObject(n2, elements[2]));
             CHECK (isSameObject(n4, elements[1]));
             CHECK (isSameObject(n6, elements[0]));
@@ -403,8 +403,8 @@ namespace test{
             CHECK (1+2 == Dummy::checksum());
             CHECK (2 == elements.size());
             
-            CHECK (2 == elements[0].getVal());
-            CHECK (1 == elements[1].getVal());
+            CHECK (2 == elements[0].getID());
+            CHECK (1 == elements[1].getID());
             
             elements.clear();
             CHECK (0 == Dummy::checksum());
@@ -430,7 +430,7 @@ namespace test{
             List::iterator ii = elements.begin();
             while (ii)
               {
-                CHECK (check == ii->getVal());
+                CHECK (check == ii->getID());
                 --check;
                 ++ii;
               }
@@ -513,9 +513,9 @@ namespace test{
             CHECK (sum(9) == Dummy::checksum());
             
             CHECK (3 == elements.size());
-            CHECK (1+2 == elements[2].getVal());
-            CHECK (3+4+5 == elements[1].getVal());
-            CHECK (6+7+8+9 == elements[0].getVal());
+            CHECK (1+2 == elements[2].getID());
+            CHECK (3+4+5 == elements[1].getID());
+            CHECK (6+7+8+9 == elements[0].getID());
             
             elements.clear();
             CHECK (EXPECT == cluster.numBytes());
@@ -540,8 +540,8 @@ namespace test{
             CHECK (sum(5) == Dummy::checksum());
             
             CHECK (2 == elements.size());
-            CHECK (1+2 == elements[1].getVal());
-            CHECK (3+4+5 == elements[0].getVal());
+            CHECK (1+2 == elements[1].getID());
+            CHECK (3+4+5 == elements[0].getID());
             // note: this time the destructors will be invoked
             //       from LinkedElements::clear(), but not from
             //       the destructor of AllocationCluster

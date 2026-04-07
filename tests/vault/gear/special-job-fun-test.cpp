@@ -99,7 +99,7 @@ namespace test {
        *      - verify the front-end can be copied without impact on the JobFunctor
        *      - verify the heap allocated functor keeps itself alive
        *        even when the front-end handle is already gone.
-       *      - verify the functor de-allocates itself after latst invocation
+       *      - verify the functor de-allocates itself after last invocation
        * @todo WIP 12/23 ✔ define ⟶ ✔ implement
        */
       void
@@ -111,7 +111,7 @@ namespace test {
                                    (JobParameter param) mutable
                                     {
                                       int mark = param.invoKey.part.a;
-                                      tracker.setVal (mark);
+                                      tracker.setID (mark);
                                     }};    // △△△ invocation should alter checksum
             
             // one Dummy instance was implanted
@@ -134,7 +134,7 @@ namespace test {
                                    (JobParameter param) mutable
                                     {
                                       int mark = param.invoKey.part.a;
-                                      tracker.setVal (mark);
+                                      tracker.setID (mark);
                                     };
             CHECK (23 == Dummy::checksum());
             

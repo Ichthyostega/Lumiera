@@ -49,12 +49,12 @@ namespace test{
  * Macro to print types and expressions to STDOUT,
  * using Lumiera's string conversion framework
  */
-#define SHOW_TYPE(_TY_) \
-    cout << "typeof( " << STRINGIFY(_TY_) << " )= " << ::test::showType<_TY_>() <<endl;
 #define SHOW_EXPR(_XX_) \
     cout << "#--◆--# " << STRINGIFY(_XX_) << " ? = " << util::toString(_XX_) <<endl;
 #define SHOW_EXPL(_XX_) \
     cout << "#--◆--# " << STRINGIFY(_XX_) << " ? = " << boost::lexical_cast<string>(_XX_) <<endl;
+#define SHOW_TYPE(_TY_) \
+    cout << "#--◆--# " << "showType<"<< STRINGIFY(_TY_) <<">()" << " ? = " << ::test::showType<_TY_>() <<endl;
 
 
 #endif /*TEST_DIAGNOSTIC_OUTPUT_H*/

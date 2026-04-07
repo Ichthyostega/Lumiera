@@ -45,7 +45,7 @@ namespace test {
   class Dummy
     : util::MoveAssign
     {
-      int val_;
+      int id_;
       
       /** to verify ctor/dtor calls */
       static long _local_checksum;
@@ -54,9 +54,9 @@ namespace test {
       void
       init()
         {
-          checksum() += val_;
+          checksum() += id_;
           if (_throw_in_ctor)
-            throw val_;
+            throw id_;
         }
       
     public:
@@ -65,34 +65,34 @@ namespace test {
       
       virtual ~Dummy()       ///< can act as interface
         {
-          if (val_ != DEFUNCT)
-            checksum() -= val_;
-          val_ = DEAD;
+          if (id_ != DEFUNCT)
+            checksum() -= id_;
+          id_ = DEAD;
         }
       
       Dummy ()
-        : val_{1 + rani (100'000'000)}
+        : id_{1 + rani (100'000'000)}
         { init(); }
       
       Dummy (int v)
-        : val_(v)
+        : id_(v)
         { init(); }
       
       friend void
       swap (Dummy& dum1, Dummy& dum2)  ///< checksum neutral
       {
-        std::swap (dum1.val_, dum2.val_);
+        std::swap (dum1.id_, dum2.id_);
       }
       
       Dummy (Dummy const& o)
-        : Dummy{o.val_}
+        : Dummy{o.id_}
         { }
       
       Dummy (Dummy && oDummy)  noexcept
         : Dummy(0)
         {
           swap (*this, oDummy);
-          oDummy.val_ = DEFUNCT;
+          oDummy.id_ = DEFUNCT;
         }
       
       Dummy&
@@ -107,20 +107,20 @@ namespace test {
       virtual long
       calc (int i)
         {
-          return val_+i;
+          return id_+i;
         }
       
       int
-      getVal()  const
+      getID()  const
         {
-          return val_;
+          return id_;
         }
       
       void
-      setVal (int newVal)
+      setID (int newVal)
         {
-          checksum() += newVal - val_;
-          val_ = newVal;
+          checksum() += newVal - id_;
+          id_ = newVal;
         }
       
       static long&

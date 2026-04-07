@@ -117,24 +117,24 @@ namespace test{
           CHECK (Dummy::checksum() == 0);
           {
             Dummy dum1;  // picks a random positive int by default...
-            CHECK (0 < dum1.getVal() and dum1.getVal() <= 100'000'000);
-            CHECK (Dummy::checksum() == dum1.getVal());
+            CHECK (0 < dum1.getID() and dum1.getID() <= 100'000'000);
+            CHECK (Dummy::checksum() == dum1.getID());
             
             Dummy dum2{55};
-            CHECK (dum2.getVal() == 55);
-            CHECK (Dummy::checksum() == dum1.getVal() + 55);
+            CHECK (dum2.getID() == 55);
+            CHECK (Dummy::checksum() == dum1.getID() + 55);
             
             Dummy dum3{move (dum2)};
-            CHECK (dum3.getVal() == 55);
-            CHECK (dum2.getVal() == Dummy::DEFUNCT);
+            CHECK (dum3.getID() == 55);
+            CHECK (dum2.getID() == Dummy::DEFUNCT);
             
-            dum3.setVal (23);
-            CHECK (dum3.getVal() == 23);
+            dum3.setID (23);
+            CHECK (dum3.getID() == 23);
             
             dum1 = move (dum3);
-            CHECK (dum1.getVal() == 23            );
-            CHECK (dum2.getVal() == Dummy::DEFUNCT);
-            CHECK (dum3.getVal() == Dummy::DEFUNCT);
+            CHECK (dum1.getID() == 23            );
+            CHECK (dum2.getID() == Dummy::DEFUNCT);
+            CHECK (dum3.getID() == Dummy::DEFUNCT);
             CHECK (Dummy::checksum() == 23        );
             
             Dummy::activateCtorFailure (true);
@@ -148,9 +148,9 @@ namespace test{
                 Dummy::checksum() -= v;
               }
             Dummy::activateCtorFailure (false);
-            CHECK (dum1.getVal()     == 23            );
-            CHECK (dum2.getVal()     == Dummy::DEFUNCT);
-            CHECK (dum3.getVal()     == Dummy::DEFUNCT);
+            CHECK (dum1.getID()      == 23            );
+            CHECK (dum2.getID()      == Dummy::DEFUNCT);
+            CHECK (dum3.getID()      == Dummy::DEFUNCT);
             CHECK (Dummy::checksum() == 23            );
           }
           CHECK (Dummy::checksum() == 0);

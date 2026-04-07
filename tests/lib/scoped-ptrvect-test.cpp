@@ -107,7 +107,7 @@ namespace test{
             VectD::iterator ii = holder.begin();
             while (ii)
               {
-                CHECK (check == ii->getVal());
+                CHECK (check == ii->getID());
                 ++check;
                 ++ii;
               }
@@ -118,7 +118,7 @@ namespace test{
             VectD::const_iterator cii = holder.begin();
             while (cii)
               {
-                CHECK (check == cii->getVal());
+                CHECK (check == cii->getID());
                 ++check;
                 ++cii;
               }
@@ -160,18 +160,18 @@ namespace test{
             CHECK (5 == holder.size());
             CHECK (0 < Dummy::checksum());
             
-            id2 = holder[2].getVal();
-            id3 = holder[3].getVal();
+            id2 = holder[2].getID();
+            id3 = holder[3].getID();
             
             extracted = holder.detach(& holder[2]);
-            CHECK (id2 == extracted->getVal());
-            CHECK (id3 == holder[2].getVal());
+            CHECK (id2 == extracted->getID());
+            CHECK (id3 == holder[2].getID());
             CHECK (4 == holder.size());
           }
           CHECK (0 < Dummy::checksum());     // not all dummies are dead
           CHECK (id2 == Dummy::checksum()); //  #2 is alive!
           
-          extracted->setVal(id2+id3);
+          extracted->setID (id2+id3);
           CHECK (id2+id3 == Dummy::checksum());
           
           delete extracted;
@@ -194,9 +194,9 @@ namespace test{
             CHECK (    isnil (left));
             auto sum = Dummy::checksum();
             CHECK (sum > 0);
-            int id0 = org[0].getVal(),
-                id1 = org[1].getVal(),
-                id2 = org[2].getVal();
+            int id0 = org[0].getID(),
+                id1 = org[1].getID(),
+                id2 = org[2].getID();
             
             // create by move
             VectD right{std::move (org)};
@@ -211,9 +211,9 @@ namespace test{
             CHECK (not isnil (left));
             CHECK (    isnil (right));
             CHECK (sum == Dummy::checksum());
-            CHECK (id0 == left[0].getVal());
-            CHECK (id1 == left[1].getVal());
-            CHECK (id2 == left[2].getVal());
+            CHECK (id0 == left[0].getID());
+            CHECK (id1 == left[1].getID());
+            CHECK (id2 == left[2].getID());
             
           }
           CHECK (0 == Dummy::checksum());

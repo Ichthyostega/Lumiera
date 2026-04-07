@@ -52318,7 +52318,9 @@
 </html></richcontent>
 </node>
 <node CREATED="1732377394409" ID="ID_205213439" MODIFIED="1732377416893" TEXT="also w&#xfc;rde es gen&#xfc;gen, da&#xdf; jedes Copy/Move &#x27fc; disengaged"/>
-<node CREATED="1732377419435" ID="ID_343740069" LINK="https://stackoverflow.com/a/3279550/444796" MODIFIED="1732377731172" TEXT="Nebenbei: copy-and-swap-Idiom verwenden"/>
+<node CREATED="1732377419435" ID="ID_343740069" MODIFIED="1775593577185" TEXT="Nebenbei: copy-and-swap-Idiom verwenden">
+<arrowlink COLOR="#6176b0" DESTINATION="ID_1782676400" ENDARROW="Default" ENDINCLINATION="-1718;207;" ID="Arrow_ID_511557246" STARTARROW="None" STARTINCLINATION="-532;34;"/>
+</node>
 <node COLOR="#338800" CREATED="1732378142413" ID="ID_1308227786" MODIFIED="1732378149468" TEXT="best&#xe4;tigt: l&#xf6;st das Problem">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -54572,7 +54574,7 @@
 </html></richcontent>
 </node>
 <node CREATED="1774800354340" ID="ID_92965502" MODIFIED="1774800364583" TEXT="denkbare konkrete Ma&#xdf;namen">
-<node CREATED="1774800371178" ID="ID_583241280" MODIFIED="1774881076259" TEXT="Problem-1 beseitigen">
+<node CREATED="1774800371178" ID="ID_583241280" LINK="#ID_1303777086" MODIFIED="1774881076259" TEXT="Problem-1 beseitigen">
 <icon BUILTIN="full-1"/>
 <node COLOR="#5b280f" CREATED="1774800552266" ID="ID_1161379333" MODIFIED="1774813671887" TEXT="das w&#xe4;re relativ leicht und der konkrete Fehler w&#xe4;re beseitigt">
 <richcontent TYPE="NOTE"><html>
@@ -54606,10 +54608,10 @@
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node CREATED="1774881052946" ID="ID_1104149749" MODIFIED="1774881080323" TEXT="ContainerCore ist gef&#xe4;hrlich und sollte nicht verwendet werden...">
+<node CREATED="1774881052946" ID="ID_1104149749" LINK="#ID_576771642" MODIFIED="1774881080323" TEXT="ContainerCore ist gef&#xe4;hrlich und sollte nicht verwendet werden...">
 <icon BUILTIN="full-2"/>
 </node>
-<node CREATED="1774801429090" ID="ID_57673018" MODIFIED="1774881084430" TEXT="Problem-3 per Dekret einschr&#xe4;nken">
+<node CREATED="1774801429090" ID="ID_57673018" LINK="#ID_259987405" MODIFIED="1774881084430" TEXT="Problem-3 per Dekret einschr&#xe4;nken">
 <icon BUILTIN="full-3"/>
 <node CREATED="1774801448018" ID="ID_1851767850" MODIFIED="1774801601814" TEXT="es handelt sich bisher nur um eine theoretisch deduzierte M&#xf6;glichkeit">
 <richcontent TYPE="NOTE"><html>
@@ -54642,7 +54644,7 @@
 </html></richcontent>
 </node>
 </node>
-<node CREATED="1774800499657" ID="ID_1447001683" MODIFIED="1774881088646" TEXT="Problem-4 angehen / reduzieren">
+<node CREATED="1774800499657" ID="ID_1447001683" LINK="#ID_381955476" MODIFIED="1774881088646" TEXT="Problem-4 angehen / reduzieren">
 <icon BUILTIN="full-4"/>
 <node CREATED="1774801049236" ID="ID_884381902" MODIFIED="1774801064354" TEXT="das w&#xe4;re ein gruns&#xe4;tzlicher Ansatz"/>
 <node CREATED="1774801068821" ID="ID_527000111" MODIFIED="1774801191065" TEXT="eager-fetch verletzt den impliziten Kontrakt, sobald es nicht mehr komplett transparent ist">
@@ -54670,7 +54672,7 @@
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node CREATED="1774800513279" ID="ID_181848514" MODIFIED="1774881093714" TEXT="die Angriffsfl&#xe4;che f&#xfc;r Problem-5 vermindern">
+<node CREATED="1774800513279" ID="ID_181848514" LINK="#ID_1681516685" MODIFIED="1774881093714" TEXT="die Angriffsfl&#xe4;che f&#xfc;r Problem-5 vermindern">
 <icon BUILTIN="full-5"/>
 <node CREATED="1774801911956" ID="ID_353546651" MODIFIED="1774801921049" TEXT="das ist oft sehr m&#xfc;hsam...."/>
 <node CREATED="1774802040771" ID="ID_918508790" MODIFIED="1774802171480" TEXT="ist nur unter Mitwirkung des Users m&#xf6;glich">
@@ -54809,6 +54811,7 @@
   </body>
 </html></richcontent>
 <edge COLOR="#9c1a1a"/>
+<linktarget COLOR="#872d44" DESTINATION="ID_986708984" ENDARROW="Default" ENDINCLINATION="143;446;" ID="Arrow_ID_600512504" SOURCE="ID_578430976" STARTARROW="None" STARTINCLINATION="198;16;"/>
 <icon BUILTIN="yes"/>
 </node>
 <node CREATED="1774814437135" ID="ID_1898877875" MODIFIED="1774880982248" TEXT="Auswege">
@@ -55037,7 +55040,7 @@
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1774803484523" ID="ID_1347545750" MODIFIED="1775015896901" TEXT="der Fall &#xbb;result by value&#xab; wird als &#xbb;grenzwertig&#xab; eingestuft">
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
-<node CREATED="1774803510104" ID="ID_1800596158" MODIFIED="1774882824693" TEXT="das ist Problem-3">
+<node CREATED="1774803510104" ID="ID_1800596158" LINK="#ID_259987405" MODIFIED="1774882824693" TEXT="das ist Problem-3">
 <icon BUILTIN="full-3"/>
 </node>
 <node CREATED="1774803516694" ID="ID_1620146684" MODIFIED="1774803528518" TEXT="er wird unterst&#xfc;tzt, aber nur auf eigenes Risiko"/>
@@ -55051,6 +55054,12 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#d19f8f" COLOR="#990033" CREATED="1775585252558" ID="ID_578430976" MODIFIED="1775585466897" TEXT="ich sto&#xdf;e da immer wider darauf">
+<arrowlink COLOR="#872d44" DESTINATION="ID_986708984" ENDARROW="Default" ENDINCLINATION="143;446;" ID="Arrow_ID_600512504" STARTARROW="None" STARTINCLINATION="198;16;"/>
+<arrowlink COLOR="#a36977" DESTINATION="ID_226340646" ENDARROW="Default" ENDINCLINATION="488;0;" ID="Arrow_ID_663992303" STARTARROW="None" STARTINCLINATION="236;20;"/>
+<arrowlink COLOR="#81445a" DESTINATION="ID_917000213" ENDARROW="Default" ENDINCLINATION="933;-2596;" ID="Arrow_ID_1561905715" STARTARROW="None" STARTINCLINATION="765;62;"/>
+<icon BUILTIN="broken-line"/>
 </node>
 </node>
 <node COLOR="#5b280f" CREATED="1774803533668" ID="ID_431093928" MODIFIED="1774818178213" TEXT="die re-engage-Funktionalit&#xe4;t aus WrapperAdapter entfernen">
@@ -55254,6 +55263,7 @@
     </p>
   </body>
 </html></richcontent>
+<linktarget COLOR="#a36977" DESTINATION="ID_226340646" ENDARROW="Default" ENDINCLINATION="488;0;" ID="Arrow_ID_663992303" SOURCE="ID_578430976" STARTARROW="None" STARTINCLINATION="236;20;"/>
 </node>
 </node>
 <node COLOR="#5b280f" CREATED="1774803563872" ID="ID_1775597177" MODIFIED="1774911338412" TEXT="util::join auf IterAdapter umstellen">
@@ -61280,8 +61290,9 @@
 </node>
 </node>
 </node>
-<node CREATED="1775068804117" ID="ID_528287612" MODIFIED="1775399855287" TEXT="Laufzeit-idx Access">
-<linktarget COLOR="#2d4868" DESTINATION="ID_528287612" ENDARROW="Default" ENDINCLINATION="-1054;161;" ID="Arrow_ID_1760258574" SOURCE="ID_1844807854" STARTARROW="None" STARTINCLINATION="-935;121;"/>
+<node COLOR="#338800" CREATED="1775068804117" FOLDED="true" ID="ID_528287612" MODIFIED="1775585854666" TEXT="Laufzeit-idx Access">
+<linktarget COLOR="#2d4868" DESTINATION="ID_528287612" ENDARROW="Default" ENDINCLINATION="-1099;144;" ID="Arrow_ID_1760258574" SOURCE="ID_1844807854" STARTARROW="None" STARTINCLINATION="-935;121;"/>
+<icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#e9d798" COLOR="#690f14" CREATED="1775068827991" ID="ID_1401000090" MODIFIED="1775399644888" TEXT="woot?">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -61299,7 +61310,7 @@
 </html></richcontent>
 <icon BUILTIN="help"/>
 </node>
-<node COLOR="#338800" CREATED="1775069194109" ID="ID_1920067063" MODIFIED="1775400651796" TEXT="Hilfsmittel: Funktor-Trampolin">
+<node COLOR="#338800" CREATED="1775069194109" FOLDED="true" ID="ID_1920067063" MODIFIED="1775585814160" TEXT="Hilfsmittel: Funktor-Trampolin">
 <linktarget COLOR="#5399af" DESTINATION="ID_1920067063" ENDARROW="Default" ENDINCLINATION="19;-313;" ID="Arrow_ID_532928793" SOURCE="ID_115020890" STARTARROW="None" STARTINCLINATION="445;40;"/>
 <linktarget COLOR="#2d4868" DESTINATION="ID_1920067063" ENDARROW="Default" ENDINCLINATION="-805;74;" ID="Arrow_ID_314698705" SOURCE="ID_1228600186" STARTARROW="None" STARTINCLINATION="-935;121;"/>
 <icon BUILTIN="idea"/>
@@ -61334,7 +61345,7 @@
 </html></richcontent>
 </node>
 <node CREATED="1775071219109" ID="ID_751917283" MODIFIED="1775071242759" TEXT="m&#xf6;glichst dem Optimiser viel Angriffsfl&#xe4;che bieten"/>
-<node CREATED="1775071255688" ID="ID_778824502" MODIFIED="1775071272222" TEXT="Template-Argumente">
+<node COLOR="#435e98" CREATED="1775071255688" ID="ID_778824502" MODIFIED="1775071272222" TEXT="Template-Argumente">
 <node CREATED="1775071277425" ID="ID_984012737" MODIFIED="1775071295165" TEXT="Variadische Typsequenz">
 <node CREATED="1775170792393" ID="ID_958491967" MODIFIED="1775170908593" TEXT="Entscheidung: kein spezielles tuple-like hier">
 <richcontent TYPE="NOTE"><html>
@@ -61355,7 +61366,7 @@
 <node CREATED="1775071347457" ID="ID_698680744" MODIFIED="1775071366180" TEXT="man mu&#xdf; ein generisches Lambda direkt dem Konstructor geben"/>
 </node>
 </node>
-<node CREATED="1775075673332" ID="ID_1387192773" MODIFIED="1775075680799" TEXT="Tabelle bauen">
+<node COLOR="#435e98" CREATED="1775075673332" ID="ID_1387192773" MODIFIED="1775075680799" TEXT="Tabelle bauen">
 <node CREATED="1775075702448" ID="ID_1216308859" MODIFIED="1775075711834" TEXT="hier wirds anspruchsvoll...">
 <icon BUILTIN="smiley-oh"/>
 </node>
@@ -61405,7 +61416,7 @@
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1775075718925" ID="ID_154009072" MODIFIED="1775172680094" TEXT="unklar ist: wie wird das &#x3bb; mit dem jeweiligen Typ parametrisiert?">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1775075718925" FOLDED="true" ID="ID_154009072" MODIFIED="1775172680094" TEXT="unklar ist: wie wird das &#x3bb; mit dem jeweiligen Typ parametrisiert?">
 <icon BUILTIN="help"/>
 <node CREATED="1775075747794" ID="ID_19336730" MODIFIED="1775075751205" TEXT="M&#xf6;glichkeiten">
 <node CREATED="1775075757456" ID="ID_285231834" MODIFIED="1775075763947" TEXT="nimmt den Typ als Argument"/>
@@ -61505,7 +61516,7 @@
 <node COLOR="#338800" CREATED="1775172770594" ID="ID_1739644089" MODIFIED="1775520802258" TEXT="Test / Dokumentation">
 <arrowlink COLOR="#231da8" DESTINATION="ID_1015007852" ENDARROW="Default" ENDINCLINATION="562;-82;" ID="Arrow_ID_625074279" STARTARROW="None" STARTINCLINATION="-605;72;"/>
 <icon BUILTIN="button_ok"/>
-<node COLOR="#338800" CREATED="1775511527267" ID="ID_1685063814" MODIFIED="1775520796440" TEXT="zeige einen toString-Renderer f&#xfc;r Tuples">
+<node COLOR="#338800" CREATED="1775511527267" FOLDED="true" ID="ID_1685063814" MODIFIED="1775520796440" TEXT="zeige einen toString-Renderer f&#xfc;r Tuples">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#5b280f" CREATED="1775511717235" ID="ID_384415745" MODIFIED="1775516953572" TEXT="verwende util::typedString">
 <icon BUILTIN="button_cancel"/>
@@ -61528,8 +61539,7 @@
       ...ist inzwischen nicht einmal mehr klar, ob das Bug oder Feature ist; jedenfalls ist lib::meta::typeStr so geschrieben, da&#223; es const, * und &amp; absorbiert. Und typeStr wird an hundertausend Stellen verwendet...
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1775511957169" ID="ID_745916665" MODIFIED="1775511978635" TEXT="deshalb habe ich ja &#x2014; viel sp&#xe4;ter &#x2014; test::showType implementiert"/>
 <node CREATED="1775512025614" ID="ID_1064570553" MODIFIED="1775517009194" TEXT="ja dannn ... sollte die showType-Implementierung eben auch in main-Application">
@@ -61540,8 +61550,7 @@
       Vom Umfang der Features her ist das m&#246;glich, und das eine spezialisierte Template werden wir uns wohl noch leisten k&#246;nnen (im Zweifelsfall gibt es durchaus andere Sachen, die k&#246;nnten aus meta/Util in die Traits)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink DESTINATION="ID_351627354" ENDARROW="Default" ENDINCLINATION="497;-39;" ID="Arrow_ID_1713397353" STARTARROW="None" STARTINCLINATION="136;-6;"/>
 </node>
 <node CREATED="1775516791547" ID="ID_458172444" MODIFIED="1775516925731" TEXT="format-object.hpp scheint ein guter Platz daf&#xfc;r zu sein">
@@ -61552,8 +61561,7 @@
       Erst dachte ich meta/util.hpp, aber da gibt es kein lib::Literal, und au&#223;erdem habe ich dann doch etwas Bauchweh mit dem gro&#223;en Template. Demgegen&#252;ber erscheint format-object.hpp der nat&#252;rliche Platz, da sind auch toString() und typedString() und demangleCxx()
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -61565,7 +61573,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#435e98" CREATED="1775174413294" ID="ID_360119128" MODIFIED="1775400128386" TEXT="Hilfsmittel: common result type">
+<node COLOR="#435e98" CREATED="1775174413294" FOLDED="true" ID="ID_360119128" MODIFIED="1775585818172" TEXT="Hilfsmittel: common result type">
 <linktarget COLOR="#277de3" DESTINATION="ID_360119128" ENDARROW="Default" ENDINCLINATION="-1226;104;" ID="Arrow_ID_651955584" SOURCE="ID_989277122" STARTARROW="None" STARTINCLINATION="686;92;"/>
 <linktarget COLOR="#2d4868" DESTINATION="ID_360119128" ENDARROW="Default" ENDINCLINATION="-1226;104;" ID="Arrow_ID_959368971" SOURCE="ID_1013361274" STARTARROW="None" STARTINCLINATION="-935;121;"/>
 <icon BUILTIN="yes"/>
@@ -61613,8 +61621,7 @@
       Da std::common_type automatisch den decay_t anwendet, dachte ich damals, ich kann die Referenzen und die Const-ness einfach nachtr&#228;glich fixen. Das f&#252;hrt aber in gewissen Randf&#228;llen zu einem gef&#228;hrlich falschen Ergebnis
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1775505470192" ID="ID_605787580" MODIFIED="1775505489381" TEXT="daher habe ich nun die gleiche Technik wie die STDLIB nochmal zu-Fu&#xdf; implementiert"/>
 <node CREATED="1775505495789" ID="ID_468375453" MODIFIED="1775505565462" TEXT="und damit die M&#xf6;glichkeit, die Auswertung ohne zus&#xe4;tzliche Logik direkt zu machen">
@@ -61625,14 +61632,14 @@
       die STDLIB macht ein &#187;decay&#171; (f&#252;r common_type) bzw. hat elaborierte Logik, um mit RValue-Referenzen umzugehen.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1775175227585" ID="ID_1885907974" MODIFIED="1775505433629" TEXT="das nun auf mehrere Typen ausweiten...">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1775175271859" ID="ID_871792525" MODIFIED="1775175279950" TEXT="bisher nur ein einziges mal verwendet..."/>
-<node CREATED="1775175280655" ID="ID_573543566" MODIFIED="1775175290876" TEXT="man k&#xf6;nnte daher noch das Interaface wechseln">
+<node COLOR="#435e98" CREATED="1775175280655" FOLDED="true" ID="ID_573543566" MODIFIED="1775585780094" TEXT="man k&#xf6;nnte daher noch das Interaface wechseln....">
+<icon BUILTIN="idea"/>
 <node CREATED="1775175306067" ID="ID_166961176" MODIFIED="1775175314009" TEXT="Idee: eine Typ-Sequenz nehmen">
 <node CREATED="1775215414475" ID="ID_347079843" MODIFIED="1775215433134" TEXT="dann k&#xf6;nnte man wohl die bestehende Implementierung &#xbb;aufbohren&#xab;...."/>
 <node CREATED="1775216126050" ID="ID_1094676881" MODIFIED="1775216158399" TEXT="...braucht dann aber zus&#xe4;tzlich eine volle Speziallisierung f&#xfc;r einen und keinen Typ"/>
@@ -61714,7 +61721,7 @@
 <font NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1775245111269" ID="ID_1687167937" MODIFIED="1775505429389" TEXT="Problem: Header / Code-Anordnung">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1775245111269" FOLDED="true" ID="ID_1687167937" MODIFIED="1775585757619" TEXT="Problem: Header / Code-Anordnung">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1775245124352" ID="ID_1044004556" MODIFIED="1775245147847" TEXT="ich brauche den CommonResultYield f&#xfc;r zwei Typen...">
 <node CREATED="1775245148544" ID="ID_1627273194" MODIFIED="1775245157043" TEXT="in iter-explorer.hpp"/>
@@ -61764,7 +61771,7 @@
 <icon BUILTIN="button_ok"/>
 </node>
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1775481567565" ID="ID_871223663" MODIFIED="1775482871366" TEXT="nochmal die Frage: wohin damit?">
-<linktarget COLOR="#7f8f98" DESTINATION="ID_871223663" ENDARROW="Default" ENDINCLINATION="75;519;" ID="Arrow_ID_659392665" SOURCE="ID_853872451" STARTARROW="None" STARTINCLINATION="568;38;"/>
+<linktarget COLOR="#7f8f98" DESTINATION="ID_871223663" ENDARROW="Default" ENDINCLINATION="48;277;" ID="Arrow_ID_659392665" SOURCE="ID_853872451" STARTARROW="None" STARTINCLINATION="288;18;"/>
 <icon BUILTIN="help"/>
 <node CREATED="1775481437799" ID="ID_1538512119" MODIFIED="1775481530623" TEXT="es gibt keinen guten Grund, das zu value-type-binding zu packen">
 <richcontent TYPE="NOTE"><html>
@@ -61784,8 +61791,7 @@
       ...n&#228;mlich auf dem Level von IterExplorer. Dort sind auch bereits die <i>Function-Tools</i>&#160; da, und damit implizit auch schon Typelist und Typeseq....
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#637488" DESTINATION="ID_1272898154" ENDARROW="Default" ENDINCLINATION="-1279;-294;" ID="Arrow_ID_1757105516" STARTARROW="None" STARTINCLINATION="-1290;45;"/>
 </node>
 <node CREATED="1775481671505" ID="ID_207987949" MODIFIED="1775482303747" TEXT="damit m&#xfc;&#xdf;te die Spezialisierung f&#xfc;r Type-seq gar nicht mehr abgespalten werden">
@@ -61796,8 +61802,7 @@
       So eine Spezialisierung, die in <i>irgend einem Basis-Header versteckt ist,</i>&#160;empfinde ich immer als hochproblematisch; man verwendet sie meist, ohne zu realisieren, da&#223; sie existiert, und man findet sie im Zweifelsfall nur schwer, besonders wenn das Feature viel verwendet wird
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1775481701667" ID="ID_1677342626" MODIFIED="1775482395505" TEXT="daf&#xfc;r kann die Abh&#xe4;ngigkeit auf Typeseq-Utils wegfallen">
 <richcontent TYPE="NOTE"><html>
@@ -61807,8 +61812,7 @@
       Es bildet sich n&#228;mlich immer mehr ein eigener Status heraus, auf dem erst die Typlisten- und Sequenz-Manipulationen stattfinden. Dieser wird seit etwa einem Jahr durch das ElmTypes-Template definiert. Und die Tuple-Metafunktionen liegen noch eine Ebene h&#246;her
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1775482439535" ID="ID_439222697" MODIFIED="1775482525982" TEXT="leider &#xfc;bersetzen sich die Strati nicht in Namespaces">
 <richcontent TYPE="NOTE"><html>
@@ -61818,8 +61822,7 @@
       Was ich allerdings auch dann wieder gut finde, denn ich benenne die Namespaces dann lieber inhaltlich, denn sie sollen ja auch dann noch f&#252;r eine gewisse Trennung sorgen, wenn alle Ebenen der Library eingeschlossen sind
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -61836,8 +61839,7 @@
       ...damit das Feature als Solches in diesem Kontext gezeigt wird, denn <i>inhaltlich</i>&#160; wird es oft relevant, wenn man aus einer StateCore heraus Werte aus verschiedenen Quellen kombiniert
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 <node COLOR="#338800" CREATED="1775496346190" ID="ID_660654119" MODIFIED="1775496364199" TEXT="Typ-F&#xe4;lle noch systematischer abdecken">
@@ -61858,7 +61860,7 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#dfb4a4" COLOR="#990033" CREATED="1775496384527" ID="ID_217247552" MODIFIED="1775497327383" TEXT="sonderbare Beobachtung: Basis-Mechanismus liefert keine RValue-Referenz">
+<node BACKGROUND_COLOR="#dfb4a4" COLOR="#990033" CREATED="1775496384527" FOLDED="true" ID="ID_217247552" MODIFIED="1775497327383" TEXT="sonderbare Beobachtung: Basis-Mechanismus liefert keine RValue-Referenz">
 <linktarget COLOR="#2a226a" DESTINATION="ID_217247552" ENDARROW="Default" ENDINCLINATION="-23;-90;" ID="Arrow_ID_241827572" SOURCE="ID_248271530" STARTARROW="None" STARTINCLINATION="-61;3;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1775496505592" ID="ID_504145807" MODIFIED="1775496655063" TEXT="im Fall  II &#x2229; S1">
@@ -61881,8 +61883,7 @@
       <i>Grunds&#228;tzlich</i>&#160;soll meine Metafunktion den <b>Basismechanismus</b>&#160; exponieren
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node COLOR="#5b280f" CREATED="1775498244915" ID="ID_930355688" MODIFIED="1775499480719" TEXT="also: decval() durch eigene Implementierung ersetzen">
 <icon BUILTIN="broken-line"/>
@@ -61920,8 +61921,7 @@
       </div>
     </div>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="broken-line"/>
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f67" CREATED="1775499483137" ID="ID_737191527" MODIFIED="1775502595864" TEXT="Compile scheitert in ProcID::genSrcSpec()">
@@ -61993,8 +61993,7 @@
       Und lib::Several definiert seinen value_type und reference per RefTraits. Also kommt hier eine Referenz auf einen std::ReferenceWrapper&lt;ProcNode&gt; raus. Welcher selber wiederum konvertierbar ist auf ProcNode&amp; ... Und dieses Setup wird dann von den Type-Traits in IterExplorer analysiert.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="help"/>
 <node CREATED="1775504134562" ID="ID_1396995706" MODIFIED="1775504310033" TEXT="analysiert ... ja es sollte funktionieren!">
 <richcontent TYPE="NOTE"><html>
@@ -62016,8 +62015,7 @@
       <br />
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1775504312049" ID="ID_492627855" MODIFIED="1775504333672" TEXT="empirische Analyse &#x27f6; Typen nachbauen">
 <node CREATED="1775504707188" ID="ID_1132038419" MODIFIED="1775504728365" TEXT="sinngem&#xe4;&#xdf; die gleiche Pipeline mit Dummy-Typen nachgebaut"/>
@@ -62033,8 +62031,7 @@
       <font color="#4a2626">aka 'struct lib::meta::CommonResult&lt;std::reference_wrapper&lt;steam::engine::ProcNode&gt;&amp;, std::reference_wrapper&lt;steam::engine::ProcNode&gt;&amp;&gt;'</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1775504902888" ID="ID_652622235" MODIFIED="1775504922374" TEXT="sieht f&#xfc;r mich nach einem Compiler-Bug aus">
@@ -62043,7 +62040,7 @@
 <node CREATED="1775504945445" ID="ID_1067473064" MODIFIED="1775504968236" TEXT="wenn ich ihn schon nicht einmal mit Dummy-Typen nachbauen kann"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#feb9c4" CREATED="1775423915205" ID="ID_1830273305" MODIFIED="1775505214704" STYLE="bubble">
+<node BACKGROUND_COLOR="#feb9c4" CREATED="1775423915205" ID="ID_1830273305" LINK="https://issues.lumiera.org/ticket/1418" MODIFIED="1775583103250" STYLE="bubble">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
@@ -62051,8 +62048,7 @@
       da die L&#246;sung mit <font color="#2014cd" face="Monospaced">std::declval&lt;T&gt;()</font>&#160;ja funktioniert &#10233; <b>Problem vertagen</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <edge COLOR="#df0303" STYLE="bezier" WIDTH="thin"/>
 <linktarget COLOR="#6f1930" DESTINATION="ID_1830273305" ENDARROW="Default" ENDINCLINATION="-581;17;" ID="Arrow_ID_216953150" SOURCE="ID_1283719465" STARTARROW="None" STARTINCLINATION="658;39;"/>
 <icon BUILTIN="yes"/>
@@ -62065,11 +62061,12 @@
 <node COLOR="#338800" CREATED="1775251116792" ID="ID_747298710" MODIFIED="1775252186786" TEXT="Builder f&#xfc;r ein Access-Trampolin">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1775251257873" ID="ID_181654457" MODIFIED="1775349536794" TEXT="TupleIndexAdaptor">
+<node COLOR="#338800" CREATED="1775251257873" FOLDED="true" ID="ID_181654457" MODIFIED="1775585713922" TEXT="TupleIndexAdaptor">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1775257901738" ID="ID_1634401509" MODIFIED="1775257914883" TEXT="geht vergleichsweise leicht zusammenzubauen">
 <icon BUILTIN="idea"/>
 </node>
-<node COLOR="#435e98" CREATED="1775257916320" ID="ID_1487076812" MODIFIED="1775258197551" TEXT="Frage: wohin kommt der FunctorBuilder?">
+<node COLOR="#435e98" CREATED="1775257916320" FOLDED="true" ID="ID_1487076812" MODIFIED="1775258197551" TEXT="Frage: wohin kommt der FunctorBuilder?">
 <node CREATED="1775257939343" ID="ID_512038498" MODIFIED="1775257955623" TEXT="Problem dabei: ich m&#xf6;chte tuple_like akzeptieren"/>
 <node CREATED="1775257956494" ID="ID_966132612" MODIFIED="1775257972924" TEXT="der konkrete Typ ist aber nur im TupleIndexAdapter bekannt"/>
 <node CREATED="1775257973769" ID="ID_803687754" MODIFIED="1775257993188" TEXT="&#x27f9; der Builder mu&#xdf; eine innere Klasse sein...">
@@ -62096,7 +62093,7 @@
 </html></richcontent>
 </node>
 </node>
-<node COLOR="#435e98" CREATED="1775258198904" ID="ID_450289482" MODIFIED="1775258332904" TEXT="und wohin kommt das Tupel">
+<node COLOR="#435e98" CREATED="1775258198904" FOLDED="true" ID="ID_450289482" MODIFIED="1775258332904" TEXT="und wohin kommt das Tupel">
 <node CREATED="1775258220999" ID="ID_926896633" MODIFIED="1775258235149" TEXT="ich k&#xf6;nnte mir denken, da&#xdf; man eine Referenz-Variante m&#xf6;chte..."/>
 <node CREATED="1775258235719" ID="ID_434311545" MODIFIED="1775258259796" TEXT="also ein per Template getyptes Objektfeld anlegen">
 <richcontent TYPE="NOTE"><html>
@@ -62133,7 +62130,7 @@
 <node COLOR="#338800" CREATED="1775258136986" ID="ID_502341860" MODIFIED="1775258143426" TEXT="Test: funktioniert">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1775258144585" ID="ID_1370084246" MODIFIED="1775258189769" TEXT="ABER &#x2014; f&#xfc;r ein Iteratoren-Tupel brauchen wir doch einen Zugriff per Referenz?">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1775258144585" ID="ID_1370084246" MODIFIED="1775585694734" TEXT="ABER &#x2014; f&#xfc;r ein Iteratoren-Tupel brauchen wir doch einen Zugriff per Referenz?">
 <icon BUILTIN="messagebox_warning"/>
 <node COLOR="#602722" CREATED="1775258395528" ID="ID_1027499440" MODIFIED="1775258946860" TEXT="Versuch: den Zugriffs-Funktor eine Referenz zur&#xfc;ckliefern lassen">
 <icon BUILTIN="pencil"/>
@@ -62142,7 +62139,7 @@
 <icon BUILTIN="smiley-neutral"/>
 <icon BUILTIN="help"/>
 </node>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1775258433707" ID="ID_467524923" MODIFIED="1775258441177" TEXT="Aua: Data-corruption">
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1775258433707" FOLDED="true" ID="ID_467524923" MODIFIED="1775258441177" TEXT="Aua: Data-corruption">
 <icon BUILTIN="broken-line"/>
 <node CREATED="1775258442688" ID="ID_541921516" MODIFIED="1775258462274" TEXT="long&amp; ( short ) &#x27fc; M&#xfc;ll"/>
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1775258481444" ID="ID_1817670962" MODIFIED="1775258493291" TEXT="ist das ein Problem mit dem CommonResultYield?">
@@ -62193,7 +62190,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#5b280f" CREATED="1775258859556" ID="ID_468292955" MODIFIED="1775258871076" TEXT="STOP. Nachdenken!">
+<node COLOR="#5b280f" CREATED="1775258859556" FOLDED="true" ID="ID_468292955" MODIFIED="1775585689724" TEXT="STOP. Nachdenken!">
 <icon BUILTIN="stop-sign"/>
 <node CREATED="1775264707230" ID="ID_313027273" MODIFIED="1775264716609" TEXT="wozu nimmt man normalerweise ein Tupel?"/>
 <node CREATED="1775264717338" ID="ID_608938294" MODIFIED="1775264725272" TEXT="und wozu will ich es hier verwenden?"/>
@@ -62245,7 +62242,7 @@
 <node CREATED="1775345638410" ID="ID_838454922" MODIFIED="1775345657438" TEXT="und hat das gleiche Problem, da&#xdf; man nicht wei&#xdf; ob der common-type existiert"/>
 </node>
 </node>
-<node CREATED="1775325733276" ID="ID_479438050" MODIFIED="1775326012737" TEXT="die Basis-Implementierungs-Technik anschauen">
+<node CREATED="1775325733276" FOLDED="true" ID="ID_479438050" MODIFIED="1775326012737" TEXT="die Basis-Implementierungs-Technik anschauen">
 <node CREATED="1775325745241" ID="ID_549839106" MODIFIED="1775325758471" TEXT="libstdc++ verwendet SFINAE-Overloads">
 <node CREATED="1775325778541" ID="ID_1370497999" MODIFIED="1775325838164" TEXT="__true_type&lt;decltype(true? T1 : T2)&gt; fun2(int)"/>
 <node CREATED="1775325764702" ID="ID_759762805" MODIFIED="1775325777528" TEXT="__false_type fun(...)"/>
@@ -62341,7 +62338,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1775342913877" ID="ID_921502644" MODIFIED="1775344194685" TEXT="ausweiten auf beliebige variadische Argumente">
+<node CREATED="1775342913877" FOLDED="true" ID="ID_921502644" MODIFIED="1775344194685" TEXT="ausweiten auf beliebige variadische Argumente">
 <linktarget COLOR="#3759d5" DESTINATION="ID_921502644" ENDARROW="Default" ENDINCLINATION="-339;-963;" ID="Arrow_ID_524036197" SOURCE="ID_1343286472" STARTARROW="None" STARTINCLINATION="-683;25;"/>
 <node CREATED="1775342947847" ID="ID_1525302257" MODIFIED="1775342967946" TEXT="sollte grunds&#xe4;tzlich m&#xf6;glich sein">
 <icon BUILTIN="yes"/>
@@ -62436,7 +62433,7 @@
 <node CREATED="1775343872763" ID="ID_1734534095" MODIFIED="1775343886797" TEXT="h&#xe4;tte aber nur im Erfolgsfall die nested Typedef"/>
 </node>
 </node>
-<node CREATED="1775343935636" ID="ID_40735737" MODIFIED="1775343948454">
+<node CREATED="1775343935636" FOLDED="true" ID="ID_40735737" MODIFIED="1775343948454">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
@@ -62455,7 +62452,7 @@
 <node CREATED="1775344109907" ID="ID_1305997091" MODIFIED="1775344125921" TEXT="kann dann in einem anderen Header bei Bedarf passierenpassieren"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1775345918672" ID="ID_1031544835" MODIFIED="1775345939230" TEXT="ist das besser als std::common_reference?">
+<node BACKGROUND_COLOR="#ddcabf" COLOR="#990033" CREATED="1775345918672" FOLDED="true" ID="ID_1031544835" MODIFIED="1775585663409" TEXT="ist das besser als std::common_reference?">
 <icon BUILTIN="help"/>
 <node CREATED="1775345940610" ID="ID_611262861" MODIFIED="1775348617728" TEXT="ganz ehrlich: ich verstehe std::common_reference nicht zu 100%">
 <richcontent TYPE="NOTE"><html>
@@ -62491,6 +62488,9 @@
 <node CREATED="1775346084709" ID="ID_210476791" MODIFIED="1775346096260" TEXT="es gibt ein zugeh&#xf6;riges Concept"/>
 <node CREATED="1775346097704" ID="ID_1043260580" MODIFIED="1775346114417" TEXT="es funktioniert auch f&#xfc;r Typ-Sequenzen"/>
 </node>
+<node CREATED="1775585572955" ID="ID_1216407632" LINK="https://issues.lumiera.org/ticket/1418" MODIFIED="1775585620581" TEXT="Hinweis: potentieller Compiler-Bug (#1418)">
+<arrowlink COLOR="#a07c88" DESTINATION="ID_1271015143" ENDARROW="Default" ENDINCLINATION="661;0;" ID="Arrow_ID_1060716350" STARTARROW="None" STARTINCLINATION="238;15;"/>
+</node>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1775347924481" ID="ID_1962825012" MODIFIED="1775531184667" TEXT="re-Test : damit kann ich auch Referenzen wie erwartet handhaben">
@@ -62501,7 +62501,7 @@
 <node CREATED="1775348340997" ID="ID_1976647816" MODIFIED="1775348355663" TEXT="const wird korrekt gehandhabt"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1775251267800" ID="ID_1664400216" MODIFIED="1775531186539" TEXT="Iterator per IndexCore">
+<node COLOR="#338800" CREATED="1775251267800" FOLDED="true" ID="ID_1664400216" MODIFIED="1775585718540" TEXT="Iterator per IndexCore">
 <arrowlink DESTINATION="ID_1536446415" ENDARROW="Default" ENDINCLINATION="-72;7;" ID="Arrow_ID_1203006860" STARTARROW="None" STARTINCLINATION="-12;203;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1775352555034" ID="ID_23857904" MODIFIED="1775352878122" TEXT="hier gehts nur um eine Demonstration">
@@ -62524,8 +62524,7 @@
       <font color="#4a1a65" face="DejaVu Sans Mono"><b>using</b></font><font color="#3a1f18" face="DejaVu Sans Mono">&#160;</font><font color="#8c505c" face="DejaVu Sans Mono"><b>TupIt</b></font><font color="#3a1f18" face="DejaVu Sans Mono">&#160;</font><font color="#65533c" face="DejaVu Sans Mono">=</font><font color="#3a1f18" face="DejaVu Sans Mono">&#160;</font><font color="#535773" face="DejaVu Sans Mono">lib</font><font color="#65533c" face="DejaVu Sans Mono">::</font><font color="#635e96" face="DejaVu Sans Mono"><b>IterableDecorator</b></font><font color="#65533c" face="DejaVu Sans Mono">&lt;</font><font color="#535773" face="DejaVu Sans Mono">lib</font><font color="#65533c" face="DejaVu Sans Mono">::</font><font color="#635e96" face="DejaVu Sans Mono"><b>IdxStoreCore</b></font><font color="#65533c" face="DejaVu Sans Mono">&lt;</font><font color="#8c505c" face="DejaVu Sans Mono"><b>IdxApt</b></font><font color="#65533c" face="DejaVu Sans Mono">&gt;&gt;;</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node COLOR="#338800" CREATED="1775352669335" ID="ID_309881326" MODIFIED="1775352712936" TEXT="zeige damit...">
 <icon BUILTIN="button_ok"/>
@@ -62542,8 +62541,8 @@
 <linktarget COLOR="#2c56b4" DESTINATION="ID_270766205" ENDARROW="Default" ENDINCLINATION="192;0;" ID="Arrow_ID_385535683" SOURCE="ID_409029208" STARTARROW="None" STARTINCLINATION="273;24;"/>
 <icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#435e98" CREATED="1775482830902" ID="ID_853872451" MODIFIED="1775505625507" TEXT="geh&#xf6;rt in das Function-Stratum der Library">
-<arrowlink COLOR="#7f8f98" DESTINATION="ID_871223663" ENDARROW="Default" ENDINCLINATION="75;519;" ID="Arrow_ID_659392665" STARTARROW="None" STARTINCLINATION="568;38;"/>
+<node COLOR="#435e98" CREATED="1775482830902" ID="ID_853872451" MODIFIED="1775585753019" TEXT="geh&#xf6;rt in das Function-Stratum der Library">
+<arrowlink COLOR="#7f8f98" DESTINATION="ID_871223663" ENDARROW="Default" ENDINCLINATION="48;277;" ID="Arrow_ID_659392665" STARTARROW="None" STARTINCLINATION="288;18;"/>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -62566,13 +62565,15 @@
 </node>
 <node CREATED="1775353131058" ID="ID_365953328" MODIFIED="1775353139934" TEXT="bis es einen wirklichen Use-Case gibt"/>
 <node COLOR="#338800" CREATED="1775530995789" ID="ID_1536446415" MODIFIED="1775531186540" TEXT="TupleIdxAdaptor_test">
-<linktarget COLOR="#a9b4c1" DESTINATION="ID_1536446415" ENDARROW="Default" ENDINCLINATION="-72;7;" ID="Arrow_ID_1203006860" SOURCE="ID_1664400216" STARTARROW="None" STARTINCLINATION="-12;203;"/>
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_1536446415" ENDARROW="Default" ENDINCLINATION="-216;11;" ID="Arrow_ID_1085798995" SOURCE="ID_1962825012" STARTARROW="None" STARTINCLINATION="-126;5;"/>
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1536446415" ENDARROW="Default" ENDINCLINATION="-72;7;" ID="Arrow_ID_1203006860" SOURCE="ID_1664400216" STARTARROW="None" STARTINCLINATION="-12;203;"/>
 <icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1775531106271" ID="ID_1950130616" MODIFIED="1775531175017" TEXT="einfacher Fall: Zugriff per-Value"/>
 <node COLOR="#435e98" CREATED="1775531114920" ID="ID_183075057" MODIFIED="1775531175044" TEXT="Demonstriere Zugriff und Manipulation per Referenz"/>
-<node COLOR="#435e98" CREATED="1775531133477" ID="ID_738091674" MODIFIED="1775531175044" TEXT="Baue einen Iterator via IdxStoreCore">
-<node BACKGROUND_COLOR="#eab5a6" COLOR="#990033" CREATED="1775531188854" ID="ID_917000213" MODIFIED="1775533855607" TEXT="Vorsicht : jede Menge &#xbb;Untiefen&#xab;">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#2a13a1" CREATED="1775531133477" FOLDED="true" ID="ID_738091674" MODIFIED="1775585540283" TEXT="Baue einen Iterator via IdxStoreCore">
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#eab5a6" COLOR="#990033" CREATED="1775531188854" ID="ID_917000213" MODIFIED="1775585466898" TEXT="Vorsicht : jede Menge &#xbb;Untiefen&#xab;">
+<linktarget COLOR="#81445a" DESTINATION="ID_917000213" ENDARROW="Default" ENDINCLINATION="933;-2596;" ID="Arrow_ID_1561905715" SOURCE="ID_578430976" STARTARROW="None" STARTINCLINATION="765;62;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1775531206061" ID="ID_1287308974" MODIFIED="1775531332363">
 <richcontent TYPE="NODE"><html>
@@ -62582,8 +62583,7 @@
       das Quell-Objekt liegt <i>im</i>&#160;Iterator
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -62591,8 +62591,7 @@
       Meine vorausgegangenen Untersuchungen zur generischen Implementierung einer flatten()-Operation hat mir gezeigt, da&#223; man sich damit in einer gef&#228;hrlichen Grenzzone bewegt &#8212; sobald diese eingebette Quelle irgendwohin kopiert wird, kann die Logik brechen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="clanbomber"/>
 </node>
 <node COLOR="#435e98" CREATED="1775531365521" ID="ID_1548224877" MODIFIED="1775533833970" TEXT="Bug: IdxStoreCore nimmt an da&#xdf; i_ &#x2261; size() &#x2261; 0 bei invalidem Iterator">
@@ -62606,8 +62605,7 @@
       ...implementiere den default-Ctor explizit und setze i_ &#8788; size
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -62621,8 +62619,7 @@
       ...weil das auf einer <i>Kopie</i>&#160;des Iterators arbeitet, die durch den Aufruf von begin(it) erzeugt wird &#8212; immerhin funktioniert das Iterations-Ende nun, nachdem ich den Kniff f&#252;r den default-konstruierten IdxStoreCore angewendet habe
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="stop-sign"/>
 </node>
 <node COLOR="#435e98" CREATED="1775533965497" ID="ID_659226776" MODIFIED="1775533982718" TEXT="aber eine while / bzw. do-while-Schleife funktioniert">
@@ -62646,8 +62643,9 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1775398061597" ID="ID_1798869143" MODIFIED="1775406801890" TEXT="Status-quo feststellen">
+<node BACKGROUND_COLOR="#c7b195" COLOR="#73412c" CREATED="1775398061597" ID="ID_1798869143" MODIFIED="1775584923775" TEXT="Status-quo feststellen">
 <linktarget COLOR="#2d4868" DESTINATION="ID_1798869143" ENDARROW="Default" ENDINCLINATION="-1567;197;" ID="Arrow_ID_1785094898" SOURCE="ID_174434060" STARTARROW="None" STARTINCLINATION="-955;106;"/>
+<icon BUILTIN="list"/>
 <node CREATED="1775398555880" ID="ID_1902883169" MODIFIED="1775402399311">
 <richcontent TYPE="NODE"><html>
   <head/>
@@ -62701,7 +62699,9 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1775398283271" ID="ID_1344245428" MODIFIED="1775398286295" TEXT="Verwendungen">
+<node COLOR="#1b3c63" CREATED="1775398283271" FOLDED="true" ID="ID_1344245428" MODIFIED="1775584960118" TEXT="Verwendungen">
+<icon BUILTIN="info"/>
+<icon BUILTIN="forward"/>
 <node CREATED="1775398291318" ID="ID_404911687" MODIFIED="1775398293566" TEXT="tuple-helper">
 <node CREATED="1775398344187" ID="ID_1922665091" MODIFIED="1775398347263" TEXT="is_Tuple">
 <node CREATED="1775398387179" ID="ID_799405067" MODIFIED="1775398395005" TEXT="war mal eine clevere Idee"/>
@@ -62719,8 +62719,7 @@
       Immerhin habe ich ja jetzt ein Concept tuple_like &#8212; und der reine Check auf ein Concept hat bisher stets v&#246;llig problemlos funktioniert...
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node COLOR="#338800" CREATED="1775402535533" ID="ID_1812138202" MODIFIED="1775441496302" TEXT="nur eine echte Verwendung im parse-test.hpp">
 <arrowlink COLOR="#3454c6" DESTINATION="ID_1872407595" ENDARROW="Default" ENDINCLINATION="556;-41;" ID="Arrow_ID_174806448" STARTARROW="None" STARTINCLINATION="217;13;"/>
@@ -62739,8 +62738,7 @@
       das ist eine Typ-Alias, die direkt per Typlist / Typsequenz gebaut werden kann; es <b>ist tats&#228;chlich ein std::tuple</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1775402726355" ID="ID_1309907727" MODIFIED="1775402731296" TEXT="mal so stehen lassen">
@@ -62761,8 +62759,7 @@
       das ist also ein Experiment: werde ich mich daran erinnern k&#246;nnen, oder doch immer ElmTypes nehmen?
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 <icon BUILTIN="help"/>
@@ -62779,8 +62776,7 @@
       hat zwei <b>signifikante</b>&#160;Verwendungen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1775403455434" ID="ID_1546419099" MODIFIED="1775403463300" TEXT="partielle function-closure"/>
 <node CREATED="1775403495709" ID="ID_1889978216" MODIFIED="1775432735341" TEXT="tuple-record-init (GenNode &#x27fc; Tuple)">
 <linktarget COLOR="#a9b4c1" DESTINATION="ID_1889978216" ENDARROW="Default" ENDINCLINATION="750;42;" ID="Arrow_ID_57511830" SOURCE="ID_1077989853" STARTARROW="None" STARTINCLINATION="1459;0;"/>
@@ -62801,8 +62797,7 @@
       man k&#246;nnte eine neue Implementierung machen, die dann ein generisches Lambda nimmt; dieses h&#228;tte aber eine wesentlich implizitere Schnittstelle und m&#252;&#223;te die Typen von seinen Argumenten abgreifen, bzw. man m&#252;&#223;te auch diesem Lambda ein explizites Typ-Argument geben &#8212; das bedeutet, die Labda-basierte L&#246;sung w&#228;re hier verwirrender und nicht unbedingt eine Verbesserung
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1775404009073" ID="ID_325518052" MODIFIED="1775404023050" TEXT="stehen lassen &#x2014; ist gerechtfertigt">
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
@@ -62839,8 +62834,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <linktarget COLOR="#6c3b4f" DESTINATION="ID_1778635003" ENDARROW="Default" ENDINCLINATION="316;14;" ID="Arrow_ID_1116385327" SOURCE="ID_540926633" STARTARROW="Default" STARTINCLINATION="305;0;"/>
 <node CREATED="1775405639664" ID="ID_1098891312" MODIFIED="1775405655065" TEXT="anscheinend nicht nur das, es verwendet auch BuildTupleAccessor"/>
 </node>
@@ -62872,8 +62866,7 @@
       baut einen Dekorator-Chain &#252;ber das Tupel als Basistyp
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="smily_bad"/>
 </node>
 <node CREATED="1775405604493" ID="ID_540926633" MODIFIED="1775405636909" TEXT="es gibt eine Verwendung: in command-op-closure">
@@ -62888,8 +62881,7 @@
       ...wie so oft in diesen ersten Jahren; ich hab &#252;ber Wochen oder gar Monate diverse Frameworks gebaut, nur um dann &#8212; <i>schlie&#223;lich, endlich</i>&#160;&#8212; festzustellen, da&#223; ich mir nicht im Entferntesten vorstellen kann, wie ich mit diesem Framework das weiterhin ungreifbare Problem zu fassen bekomme.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1775406302471" ID="ID_940611454" MODIFIED="1775406329167" TEXT="tats&#xe4;chlich vewendet wird OpClosure nur als ein Wrapper f&#xfc;r das Argument-Tuple"/>
 <node CREATED="1775406329939" ID="ID_540166546" MODIFIED="1775406341166" TEXT="es gibt nur eine aktiv genutzte Funktion: invoke()">
@@ -62901,8 +62893,8 @@
 </node>
 </node>
 </node>
-<node CREATED="1775406514882" ID="ID_1476875584" MODIFIED="1775429209576" TEXT="man k&#xf6;nnte den TupleAccessor aus OpClosure &#xbb;herausoperieren&#xab;">
-<arrowlink COLOR="#6b70ac" DESTINATION="ID_1010061094" ENDARROW="Default" ENDINCLINATION="5;-312;" ID="Arrow_ID_733168985" STARTARROW="None" STARTINCLINATION="-336;14;"/>
+<node CREATED="1775406514882" ID="ID_1476875584" MODIFIED="1775584863755" TEXT="man k&#xf6;nnte den TupleAccessor aus OpClosure &#xbb;herausoperieren&#xab;">
+<arrowlink COLOR="#6b70ac" DESTINATION="ID_1010061094" ENDARROW="Default" ENDINCLINATION="27;-159;" ID="Arrow_ID_733168985" STARTARROW="None" STARTINCLINATION="-114;5;"/>
 <node CREATED="1775406572967" ID="ID_1382703706" MODIFIED="1775406600355" TEXT="die Command-Argumente werden n&#xe4;mlich vor dem Aufruf wieder in ein normales Tupel kopiert"/>
 <node CREATED="1775406601620" ID="ID_914013532" MODIFIED="1775406643492" TEXT="klar ... auch das war fr&#xfc;her mal anders">
 <richcontent TYPE="NOTE"><html>
@@ -62912,8 +62904,7 @@
       Da war das der FunctionApplicator / die FunctionClosure, die an dieser Stelle erzeugt wurde.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="smiley-oh"/>
 </node>
 </node>
@@ -62931,7 +62922,7 @@
 </node>
 <node COLOR="#338800" CREATED="1775406815130" ID="ID_1128774480" MODIFIED="1775534028393" TEXT="Vorbereitung / Ersatz schaffen">
 <icon BUILTIN="button_ok"/>
-<node COLOR="#338800" CREATED="1775406830714" ID="ID_1144129671" MODIFIED="1775428809388" TEXT="Parse-Test umstellen auf Concept">
+<node COLOR="#338800" CREATED="1775406830714" FOLDED="true" ID="ID_1144129671" MODIFIED="1775428809388" TEXT="Parse-Test umstellen auf Concept">
 <icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#f0e3c5" COLOR="#7212a3" CREATED="1775407142570" ID="ID_1230479488" MODIFIED="1775408943182" TEXT="was wird hier gebraucht?">
 <icon BUILTIN="help"/>
@@ -62965,7 +62956,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1775406870988" ID="ID_553028272" MODIFIED="1775428791809" TEXT="joinTuple() neu auf der gr&#xfc;nen Wiese bauen">
+<node COLOR="#338800" CREATED="1775406870988" FOLDED="true" ID="ID_553028272" MODIFIED="1775584842218" TEXT="joinTuple() neu auf der gr&#xfc;nen Wiese bauen">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1775421466771" ID="ID_754070586" MODIFIED="1775421479398" TEXT="die Implementierung d&#xfc;rfte nur wenige Zeilen lang sein..."/>
 <node CREATED="1775421480281" ID="ID_1250883204" MODIFIED="1775421507281" TEXT="HA! und es gibt sie bereits &#xd83e;&#xdc32; TupleHelper_test">
@@ -62990,7 +62981,7 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1775422096335" ID="ID_1136019091" MODIFIED="1775428798267" TEXT="Weiterungen denkbar....">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1775422096335" FOLDED="true" ID="ID_1136019091" MODIFIED="1775428798267" TEXT="Weiterungen denkbar....">
 <icon BUILTIN="idea"/>
 <icon BUILTIN="hourglass"/>
 <node CREATED="1775422105113" ID="ID_1894377172" MODIFIED="1775423972745" TEXT="format-util definiert eine vairadische Variante von join()">
@@ -63035,8 +63026,7 @@
       einen variadischen Overload von join bereitzustellen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -63044,8 +63034,7 @@
       ...was letztlich nur zu endlosen compile-Problemen in speziellen Randf&#228;llen f&#252;hrte &#8212; und schlie&#223;lich zu der Einsicht, da&#223; es ein g&#228;nzlich anderes Tool ist, und auch entsprechend anders hei&#223;en sollte; seitdem hei&#223;t es stringify() und liefert einen Container mit Strings
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1775422143282" ID="ID_1987832574" MODIFIED="1775422166201" TEXT="man k&#xf6;nnte stattdessen...">
@@ -63069,12 +63058,11 @@
       <i>eigentlich</i>&#160;f&#228;llt hier nur eine <font color="#3726db">compile-time</font>&#160;Sequenz von string-Werten an
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1775423803323" ID="ID_547366044" MODIFIED="1775423812911" TEXT="was sich aber im Typsystem schlecht greifen l&#xe4;&#xdf;t"/>
 <node CREATED="1775423813986" ID="ID_1766690061" MODIFIED="1775423851790" TEXT="oft packt man sowas in ein Tupel ... und im n&#xe4;chsten Aufruf (compile-time) wieder aus"/>
 <node CREATED="1775423897721" ID="ID_512954072" MODIFIED="1775423911089" TEXT="eigentlich w&#xe4;re hier ein Lumiera-Iterator die L&#xf6;sung schlechthin"/>
-<node BACKGROUND_COLOR="#dcbfaa" COLOR="#6f1d19" CREATED="1775423915205" ID="ID_1812336088" MODIFIED="1775505212088" TEXT="m&#xfc;&#xdf;te mich dann aber auch mehr mit Range-TS und den STL-Input-Iteratoren besch&#xe4;ftigen">
+<node BACKGROUND_COLOR="#dcbfaa" COLOR="#6f1d19" CREATED="1775423915205" ID="ID_1812336088" LINK="https://issues.lumiera.org/ticket/1419" MODIFIED="1775584778674" TEXT="m&#xfc;&#xdf;te mich dann aber auch mehr mit Range-TS und den STL-Input-Iteratoren besch&#xe4;ftigen">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -63093,8 +63081,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <linktarget COLOR="#6f1930" DESTINATION="ID_1812336088" ENDARROW="Default" ENDINCLINATION="-581;17;" ID="Arrow_ID_1882888787" SOURCE="ID_89714308" STARTARROW="None" STARTINCLINATION="658;39;"/>
 <icon BUILTIN="bell"/>
 </node>
@@ -63102,8 +63089,8 @@
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1775406906616" ID="ID_1010061094" MODIFIED="1775432759581" TEXT="command-OpClosure &#xbb;entkernen&#xab;">
-<linktarget COLOR="#6b70ac" DESTINATION="ID_1010061094" ENDARROW="Default" ENDINCLINATION="5;-312;" ID="Arrow_ID_733168985" SOURCE="ID_1476875584" STARTARROW="None" STARTINCLINATION="-336;14;"/>
+<node COLOR="#338800" CREATED="1775406906616" FOLDED="true" ID="ID_1010061094" MODIFIED="1775432759581" TEXT="command-OpClosure &#xbb;entkernen&#xab;">
+<linktarget COLOR="#6b70ac" DESTINATION="ID_1010061094" ENDARROW="Default" ENDINCLINATION="27;-159;" ID="Arrow_ID_733168985" SOURCE="ID_1476875584" STARTARROW="None" STARTINCLINATION="-114;5;"/>
 <icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1775432611456" ID="ID_806126169" MODIFIED="1775432684642" TEXT="kann Standard-Tools direkt nutzen">
 <icon BUILTIN="idea"/>
@@ -63142,14 +63129,20 @@
       was ich jetzt <b>nicht</b>&#160;mache...
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="hourglass"/>
 <node CREATED="1775424428856" ID="ID_89714308" MODIFIED="1775505214704" TEXT="der Umbau des util::collectStr (format-util.hpp)">
 <arrowlink COLOR="#6f1930" DESTINATION="ID_1812336088" ENDARROW="Default" ENDINCLINATION="-581;17;" ID="Arrow_ID_1882888787" STARTARROW="None" STARTINCLINATION="658;39;"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1775584782776" HGAP="58" ID="ID_546628710" LINK="https://issues.lumiera.org/ticket/1419" MODIFIED="1775584820600" TEXT="#1419 improve implementation of multiple-object formatting" VSHIFT="-9">
+<icon BUILTIN="hourglass"/>
+</node>
 </node>
 <node CREATED="1775424428856" ID="ID_1283719465" MODIFIED="1775505251409" TEXT="das compile-Problem mit CommonType aufkl&#xe4;ren">
 <arrowlink COLOR="#6f1930" DESTINATION="ID_1830273305" ENDARROW="Default" ENDINCLINATION="-581;17;" ID="Arrow_ID_216953150" STARTARROW="None" STARTINCLINATION="658;39;"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1775583136794" HGAP="49" ID="ID_1271015143" LINK="https://issues.lumiera.org/ticket/1418" MODIFIED="1775585620581" TEXT="#1418 Compile problems with `CommonType`" VSHIFT="17">
+<linktarget COLOR="#a07c88" DESTINATION="ID_1271015143" ENDARROW="Default" ENDINCLINATION="661;0;" ID="Arrow_ID_1060716350" SOURCE="ID_1216407632" STARTARROW="None" STARTINCLINATION="238;15;"/>
+<icon BUILTIN="bell"/>
+</node>
 </node>
 </node>
 </node>
@@ -63361,7 +63354,7 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1775144014199" ID="ID_892437622" MODIFIED="1775144026940" TEXT="Idee: LocalFun">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1775144014199" ID="ID_892437622" MODIFIED="1775587130619" TEXT="Idee: FunInline">
 <icon BUILTIN="hourglass"/>
 <node CREATED="1775144029256" ID="ID_1639408323" MODIFIED="1775144381506" TEXT="funktioniert wie std::function aber mit inline-Storage">
 <richcontent TYPE="NOTE"><html>
@@ -63385,7 +63378,7 @@
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node CREATED="1775169853943" ID="ID_1456721795" MODIFIED="1775169873177" TEXT="sollte constexpr erzeugbar sein und EX_FREE"/>
-<node CREATED="1775144865487" ID="ID_263765309" MODIFIED="1775144871926" TEXT="allgemeine Einsichten">
+<node CREATED="1775144865487" ID="ID_263765309" MODIFIED="1775604904608" TEXT="allgemeine Einsichten">
 <icon BUILTIN="idea"/>
 <node CREATED="1775144873522" ID="ID_668924955" MODIFIED="1775147012436">
 <richcontent TYPE="NODE"><html>
@@ -63439,6 +63432,314 @@
   </body>
 </html></richcontent>
 </node>
+<node CREATED="1775587256910" ID="ID_1526317757" MODIFIED="1775587520125" TEXT="ein virtuelles Interface ist effizienter als ein Funktor">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das ergibt sich direkt aus der beschriebenen &#196;quivalenz: sobald es n&#228;mlich <i>mehrere Methoden</i>&#160;gibt, m&#252;ssen auch mehrere Funktionspointer irgendwo gespeichert werden. Insoweit w&#228;ren beide Ans&#228;tze noch &#228;quivalent. Aber die Implementierung eines virtuellen Iterfaces bedingt <i>praktisch immer</i>&#160;auch einen gemeinsamen Implementierungs-Scope, also ein Objekt mit gemeinsamen Daten. Und <i>um aus mehreren Funktionen darauf zuzugreifen</i>&#160;brauchen wir in jeder Funktion einen Funktor, der &#252;ber einen weiteren Pointer an das gemeinsame Implementierungs-Objekt delegiert. Demgegen&#252;ber ist das Setup einers virtuellen Interfaces durchaus effizient....
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1775587521795" ID="ID_1990803098" MODIFIED="1775604900653" TEXT="ein &#xbb;polymorphic value&#xab; ist noch effizienter">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...als der Aufruf eines virtuellen Interfaces &#252;ber eine Referenz-auf-das-Interface. Dieser Aufruf durch die Referenz stellt eine weitere Indirektion dar, und damit ein weiteres Risiko f&#252;r Cache-miss. Dagegen bei einem &#187;polymorphic value&#171; kann das nicht passieren, denn dort ist das Implementierungs-Objekt bereits lokal da, wenngleich auch in einem opaque-buffer. F&#252;r den Aufruf wird nur der Zugang zur VTable ben&#246;tigt, und das ist eine lokal sichtbare Funktion (wenn der Compiler/Optimiser nicht komplett dumm ist). Danach wird durch die Funktion in der VTable ein &quot;this&quot;-Pointer durchgereicht, welcher bereits in lokal vorhandene Storage zeigt.
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#fee3da" DESTINATION="ID_1990803098" ENDARROW="Default" ENDINCLINATION="390;23;" ID="Arrow_ID_130931000" SOURCE="ID_350312708" STARTARROW="None" STARTINCLINATION="259;-11;"/>
+</node>
+<node CREATED="1775587823683" ID="ID_163822396" MODIFIED="1775587875476" TEXT="Aufruf einer virtuellen Methode durch einen Funktor dagegen ist Unsinn">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Denn das ist eine doppelte-Indirektion; das kann nur gerechtfertigt sein, wenn es sich auch um einen double-dispatch handelt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1775587879627" ID="ID_1687804713" MODIFIED="1775612154226" TEXT="Implementierungs-Skizze">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#e8c5a5" COLOR="#901b12" CREATED="1775587888122" ID="ID_1305860555" MODIFIED="1775588107090" TEXT="warum jetzt?">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Weil ich das Thema immer schon interessant fand, und mich jetzt grunds&#228;tzlich mit den Zusammenh&#228;ngen vertraut gemacht habe, da ich verschiedene Design-Varianten f&#252;r den OutputSlot + BufferProvider durchdacht habe. Ich sehe jetzt eine erste Basis-Implementierung bereits &#187;vor meinem geistigen Auge&#171;. Und ich wei&#223;, da&#223; ich diese Einsicht wieder verlieren werde &#8212; sowas kann man nicht aufschreiben (au&#223;er in Code). Zur weiteren Rechtfertigung (ja ich f&#252;hle mich schuldig) m&#246;chte ich hinzuf&#252;gen, da&#223; ein neues Design erfahrungsgem&#228;&#223; viel Zeit und mehrere Anl&#228;ufe zur Reife braucht.
+    </p>
+  </body>
+</html></richcontent>
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="help"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1775593109235" ID="ID_1610985307" MODIFIED="1775593113022" TEXT="Grunds&#xe4;tzliches">
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1775593113914" ID="ID_1117264500" MODIFIED="1775593122464" TEXT="es ist ein Library-Baustein">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1775593123361" ID="ID_868768831" MODIFIED="1775593131441" TEXT="also geht es nicht darum, den User zu erziehen"/>
+<node CREATED="1775593138978" ID="ID_1856842286" MODIFIED="1775593163937" TEXT="es mu&#xdf; die gesamte Palette unterst&#xfc;tzt werden">
+<arrowlink DESTINATION="ID_993765688" ENDARROW="Default" ENDINCLINATION="-15;-117;" ID="Arrow_ID_1525043859" STARTARROW="None" STARTINCLINATION="211;13;"/>
+<node CREATED="1775593179200" ID="ID_952494982" MODIFIED="1775593189236" TEXT="functor-activation-State"/>
+<node CREATED="1775593189997" ID="ID_776252138" MODIFIED="1775593195055" TEXT="Kopie / Move"/>
+<node CREATED="1775593195703" HGAP="58" ID="ID_1668223206" MODIFIED="1775593216818" TEXT="Assignments" VSHIFT="-26">
+<arrowlink DESTINATION="ID_1009232912" ENDARROW="Default" ENDINCLINATION="304;-32;" ID="Arrow_ID_297012658" STARTARROW="None" STARTINCLINATION="49;108;"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1775604643410" ID="ID_1226135351" MODIFIED="1775610475249" TEXT="Aua &#x27f9; das bedingt virtual copy support">
+<linktarget COLOR="#ff0005" DESTINATION="ID_1226135351" ENDARROW="Default" ENDINCLINATION="-368;23;" ID="Arrow_ID_1727514874" SOURCE="ID_268216143" STARTARROW="None" STARTINCLINATION="-368;23;"/>
+<icon BUILTIN="broken-line"/>
+<node COLOR="#9d000b" CREATED="1775604673510" ID="ID_845721805" MODIFIED="1775604693106" TEXT="das stellt die gesamte Design-Idee in Frage">
+<icon BUILTIN="stop-sign"/>
+</node>
+<node CREATED="1775604699544" ID="ID_604505043" MODIFIED="1775604718108" TEXT="denn damit werden effektiv mehrere Funktions-Pointer ben&#xf6;tigt"/>
+<node CREATED="1775604718928" ID="ID_350312708" MODIFIED="1775604900653">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      also eigentlich eine VTable &#8212; oder gleich ein &#187;<b>polymorphic value</b>&#171;
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#fee3da" DESTINATION="ID_1990803098" ENDARROW="Default" ENDINCLINATION="390;23;" ID="Arrow_ID_130931000" STARTARROW="None" STARTINCLINATION="259;-11;"/>
+</node>
+<node CREATED="1775604949785" ID="ID_318776154" MODIFIED="1775605025911">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      std::function (Lib StdC++) verwendet daf&#252;r einen separaten <font face="Monospaced" color="#642020">Manager*</font>
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1775605033866" ID="ID_522163368" MODIFIED="1775605048776" TEXT="das ist ein Funktor"/>
+<node CREATED="1775605049451" ID="ID_1281272317" MODIFIED="1775605064984" TEXT="wird aber mit einem Operations-Selektor ENUM aufgerufen"/>
+<node CREATED="1775605080543" ID="ID_1705021221" MODIFIED="1775605108423" TEXT="hier wollte man offensichtlich vermeiden, jeweils eine VTable zu generieren"/>
+</node>
+<node BACKGROUND_COLOR="#ed958f" COLOR="#9c0135" CREATED="1775605720473" ID="ID_343583180" MODIFIED="1775605857708">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <u>Weiterer Einwand</u>: Kopie des eingebetteten Funktors &#10230; was passiert dann mit dem <b>Zustand</b>?
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="clanbomber"/>
+<node CREATED="1775605889137" ID="ID_1990459152" MODIFIED="1775605898706" TEXT="das Problem hat allerdings std::function ebenfalls"/>
+<node CREATED="1775605900068" ID="ID_1868818614" MODIFIED="1775605914000" TEXT="es ist nicht so relevant: Lambdas sind meist stateless"/>
+<node CREATED="1775605923285" ID="ID_1266183237" MODIFIED="1775606079926" TEXT="trotzdem eine Falle, da man eigentlich ein &#xbb;Handle&#xab; erwartet">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...das hei&#223;t, man erwartet eigentlich, da&#223; eine &quot;function&quot; eine eindeutige Identit&#228;t hat, und ich das front-End-Handle beliebig herumschieben kann; ob dem tats&#228;chlich so ist, h&#228;ngt aber an Feinheiten der Implementierung
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#636acb" DESTINATION="ID_1266183237" ENDARROW="Default" ENDINCLINATION="143;6;" ID="Arrow_ID_907645693" SOURCE="ID_556566081" STARTARROW="None" STARTINCLINATION="145;-3;"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1775605179070" ID="ID_1492110569" MODIFIED="1775605282579">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Dieses Experiment erst mal als <b>NonCopyable</b>&#160;fertigstellen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+<node CREATED="1775605221012" ID="ID_1320311039" LINK="#ID_1305860555" MODIFIED="1775605367410" TEXT="um die gewonnenen Einsichten nicht wieder zu verlieren">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...denn (abgesehen von dem virtual copy support) w&#228;re die sonstige Aufgabe im Grunde verbl&#252;ffend einfach
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1775605233523" ID="ID_849729048" MODIFIED="1775605245555" TEXT="um die N&#xfc;tzlichkeit in der Praxis auszuloten">
+<node CREATED="1775605258869" ID="ID_1053882133" MODIFIED="1775605271801" TEXT="InPlaceBuffer ist auch NonCopyable"/>
+<node CREATED="1775605300354" ID="ID_430390338" MODIFIED="1775605317007" TEXT="auch eine Verwendung in Allokatoren oder statischen Trampolines w&#xe4;re m&#xf6;glich"/>
+<node CREATED="1775606028864" ID="ID_556566081" MODIFIED="1775606091937" TEXT="durch NonCopyable w&#xe4;re auch das Problem mit der Zustands-Identit&#xe4;t abgedichtet">
+<arrowlink COLOR="#636acb" DESTINATION="ID_1266183237" ENDARROW="Default" ENDINCLINATION="143;6;" ID="Arrow_ID_907645693" STARTARROW="None" STARTINCLINATION="145;-3;"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1775606624301" ID="ID_357417886" MODIFIED="1775606659028" TEXT="Aua&#xb2; &#x27f6; nicht einmal das geht sich auf...">
+<icon BUILTIN="broken-line"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1775606662008" ID="ID_1081551062" MODIFIED="1775606684145" TEXT="wir brauchen Zugang zum Destruktor">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node COLOR="#8c017b" CREATED="1775606832608" ID="ID_1844823919" MODIFIED="1775606855329" TEXT="also doch sowas wie ein Manager...">
+<icon BUILTIN="smily_bad"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f6cdfc" COLOR="#5f1cb4" CREATED="1775610359164" ID="ID_751562944" MODIFIED="1775610394457" TEXT="Augen zu und durch!!!!">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+<node CREATED="1775590133085" ID="ID_718956283" MODIFIED="1775590145751" TEXT="Usages">
+<node CREATED="1775590159346" ID="ID_517686592" MODIFIED="1775590162205" TEXT="aufrufen">
+<node CREATED="1775590185037" ID="ID_1927874261" MODIFIED="1775590190441" TEXT="passende Signatur"/>
+<node CREATED="1775590168995" ID="ID_390710046" MODIFIED="1775590183045" TEXT="geeigneter Function-Operator"/>
+<node CREATED="1775590196722" ID="ID_659829296" MODIFIED="1775590204137" TEXT="dieser delegiert durch den Invoker"/>
+</node>
+<node CREATED="1775590214130" ID="ID_1939644366" MODIFIED="1775590219596" TEXT="definieren">
+<node CREATED="1775590299222" ID="ID_1588345027" MODIFIED="1775590304985" TEXT="Konstruktor">
+<node CREATED="1775590306237" ID="ID_1588995784" MODIFIED="1775590318744" TEXT="Buffer-Gr&#xf6;&#xdf;e gesetzt"/>
+<node CREATED="1775590322859" ID="ID_448677490" MODIFIED="1775590330908" TEXT="default: defunct"/>
+<node COLOR="#5b280f" CREATED="1775590332419" ID="ID_13487543" MODIFIED="1775592272782" TEXT="Dropper">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1775590449266" ID="ID_1948269272" MODIFIED="1775590455502" TEXT="kennt den Typ des Funktors"/>
+<node CREATED="1775590457480" ID="ID_1578428304" MODIFIED="1775590518868" TEXT="Alternative-A : erbt vom Funktor"/>
+<node CREATED="1775590542245" ID="ID_1495208925" MODIFIED="1775590551312" TEXT="Alternative-B : kann den Funktor emplacen"/>
+<node COLOR="#5b280f" CREATED="1775592274635" ID="ID_1631550429" MODIFIED="1775592292970" TEXT="Stop. Overengineering!">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1775592295784" ID="ID_993765688" MODIFIED="1775593163937" TEXT="der Funktor ist nicht zwangsl&#xe4;ufig stateless">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_993765688" ENDARROW="Default" ENDINCLINATION="-15;-117;" ID="Arrow_ID_1525043859" SOURCE="ID_1856842286" STARTARROW="None" STARTINCLINATION="211;13;"/>
+<node CREATED="1775592335187" ID="ID_966038532" MODIFIED="1775592453326" TEXT="das steht definitiv fest">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...weil es sich um einen Container handelt, &#252;ber dessen Inhalt wir nichst wissen(wollen). Deshalb <i>kann</i>&#160;es sein, da&#223; ein Objekt im Container eine Identit&#228;t hat. Und ein Objekt mit Identit&#228;t hat <i>immer einen Lebenszyklus</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1775592456087" ID="ID_328334219" MODIFIED="1775592469496" TEXT="wenn man will, kann man es stateless behandeln"/>
+</node>
+<node CREATED="1775592479112" ID="ID_402768759" MODIFIED="1775592497119" TEXT="insofern kann man den emplace()-Fall von au&#xdf;en handhaben"/>
+</node>
+</node>
+<node CREATED="1775592519739" ID="ID_186465049" MODIFIED="1775592531873" TEXT="nimmt also eine Universelle-Referenz f&#xfc;r den Funktor"/>
+</node>
+<node CREATED="1775592560333" ID="ID_121987209" MODIFIED="1775592573159" TEXT="den passenden Invoker spezifizieren"/>
+<node CREATED="1775592580370" ID="ID_1591156783" MODIFIED="1775592587510" TEXT="function-pointer initialisieren"/>
+<node CREATED="1775592588380" ID="ID_1250122601" MODIFIED="1775592592360" TEXT="emplace()"/>
+</node>
+<node CREATED="1775593053130" ID="ID_1448389007" MODIFIED="1775593057534" TEXT="assignment">
+<node CREATED="1775593059180" ID="ID_1009232912" MODIFIED="1775593216818" TEXT="ja das kommt vor">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1009232912" ENDARROW="Default" ENDINCLINATION="304;-32;" ID="Arrow_ID_297012658" SOURCE="ID_1668223206" STARTARROW="None" STARTINCLINATION="49;108;"/>
+</node>
+<node CREATED="1775593256319" ID="ID_1617484181" MODIFIED="1775593265827" TEXT="kann auf leeren / nicht-leeren Zustand erfolgen"/>
+<node CREATED="1732377419435" ID="ID_43210524" MODIFIED="1775593749986" TEXT="Typischer Fall &#x27f9; sollte copy-and-swap-Idiom anwenden">
+<arrowlink COLOR="#314ae1" DESTINATION="ID_1782676400" ENDARROW="Default" ENDINCLINATION="-1264;147;" ID="Arrow_ID_968690038" STARTARROW="None" STARTINCLINATION="-1984;102;"/>
+</node>
+</node>
+<node CREATED="1775590221561" ID="ID_1595816969" MODIFIED="1775590223952" TEXT="totmachen">
+<node CREATED="1775590225232" ID="ID_136178124" MODIFIED="1775590227184" TEXT="clear()"/>
+<node CREATED="1775590229034" ID="ID_1682370968" MODIFIED="1775590281606" TEXT="leert den Invoker-Pointer">
+<linktarget COLOR="#2d4fc7" DESTINATION="ID_1682370968" ENDARROW="Default" ENDINCLINATION="-19;20;" ID="Arrow_ID_747148516" SOURCE="ID_762674831" STARTARROW="None" STARTINCLINATION="18;7;"/>
+</node>
+</node>
+<node CREATED="1775590240606" ID="ID_762674831" MODIFIED="1775590288736" TEXT="bool()">
+<arrowlink COLOR="#2d4fc7" DESTINATION="ID_1682370968" ENDARROW="Default" ENDINCLINATION="-19;20;" ID="Arrow_ID_747148516" STARTARROW="None" STARTINCLINATION="18;7;"/>
+</node>
+</node>
+<node CREATED="1775592634580" ID="ID_550824825" MODIFIED="1775592637411" TEXT="brauche">
+<node COLOR="#435e98" CREATED="1775592638367" ID="ID_638148372" MODIFIED="1775602794812" TEXT="Invoker-Template">
+<node CREATED="1775592650077" ID="ID_1114299083" MODIFIED="1775592660355" TEXT="generiert eine passende, erweiterte Signatur">
+<node COLOR="#b51763" CREATED="1775602826670" ID="ID_85657671" MODIFIED="1775602844910" TEXT="Ha! Metaprogramming macht Spa&#xdf;">
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node CREATED="1775592669826" ID="ID_152802240" MODIFIED="1775602860702" TEXT="hat dahinter eine einfache delegate-Implementierung"/>
+</node>
+<node COLOR="#435e98" CREATED="1775610411812" ID="ID_1408866405" MODIFIED="1775610530898" TEXT="Inline Storage Buffer">
+<node CREATED="1775610420839" ID="ID_251833350" MODIFIED="1775610445796" TEXT="halte mich an das Muster vom InPlaceBuffer"/>
+<node COLOR="#045a6e" CREATED="1775610535092" ID="ID_1732468619" MODIFIED="1775610559598" TEXT="die &#xfc;bliche LIfecycle-Logik implementieren...">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1775610447358" ID="ID_268216143" MODIFIED="1775610481789" TEXT="oha ... da zeigen sich sofort die Diskrepanzen">
+<arrowlink COLOR="#ff0005" DESTINATION="ID_1226135351" ENDARROW="Default" ENDINCLINATION="-368;23;" ID="Arrow_ID_1727514874" STARTARROW="None" STARTINCLINATION="-368;23;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node COLOR="#435e98" CREATED="1775610490074" ID="ID_1826853912" MODIFIED="1775610501661" TEXT="also NonCopyable">
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#8a4398" CREATED="1775610502419" ID="ID_293609016" MODIFIED="1775610524899" TEXT="und einen zweiten Function-Pointer akzeptieren">
+<icon BUILTIN="smily_bad"/>
+</node>
+</node>
+<node CREATED="1775592709726" ID="ID_1985461536" MODIFIED="1775592712313" TEXT="Builder">
+<node CREATED="1775592713399" ID="ID_1656738004" MODIFIED="1775592717939" TEXT="mu&#xdf; F&#xe4;lle unterscheiden">
+<node CREATED="1775592718999" ID="ID_1864841684" MODIFIED="1775592764769" TEXT="reiner Funktionspointer">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      dann die wrapped-pointer-Variante instantiieren
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1775602885927" ID="ID_161994306" MODIFIED="1775602909832" TEXT="Funktor-Objekt / &#x3bb;"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1775602912076" ID="ID_1634054510" MODIFIED="1775602930956" TEXT="wollen wir auch Member-Pointer unterst&#xfc;tzen?">
+<icon BUILTIN="help"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1775593760265" ID="ID_1488995573" MODIFIED="1775593766071" TEXT="Aufbau (testgetrieben)">
+<node COLOR="#338800" CREATED="1775593768986" ID="ID_640981778" MODIFIED="1775602786147" TEXT="Invoker">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1775593804094" ID="ID_1660405443" MODIFIED="1775610568432" TEXT="Buffer-Handling &amp; Copy">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1775610570391" ID="ID_1815089866" MODIFIED="1775610641396" TEXT="lege eine Tracker-Instanz an"/>
+<node COLOR="#435e98" CREATED="1775610578086" ID="ID_1201084568" MODIFIED="1775610641396" TEXT="kopiere diese in den Ctor"/>
+<node COLOR="#435e98" CREATED="1775610583310" ID="ID_579417532" MODIFIED="1775610641396" TEXT="verifiziere da&#xdf; zwei Instanzen existieren"/>
+<node COLOR="#435e98" CREATED="1775610628167" ID="ID_1635694965" MODIFIED="1775610641395" TEXT="verifiziere die ID des gebundenen Funktors"/>
+<node COLOR="#435e98" CREATED="1775610590880" ID="ID_965928575" MODIFIED="1775610641395" TEXT="FunInline out of scope &#x27f9; nur noch eine Instanz"/>
+<node COLOR="#435e98" CREATED="1775610618697" ID="ID_1129802017" MODIFIED="1775610641395" TEXT="am Ende alles sauber"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1775610932406" ID="ID_243505135" MODIFIED="1775612149106" TEXT="Zwischenstand">
+<icon BUILTIN="forward"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1775610939773" ID="ID_1353004585" MODIFIED="1775610951840" TEXT="halbe Niederlage!!">
+<icon BUILTIN="smily_bad"/>
+<node CREATED="1775610955779" ID="ID_523828560" MODIFIED="1775610966939" TEXT="brauche zwei Function-Pointer"/>
+<node CREATED="1775610969482" ID="ID_441164087" MODIFIED="1775611393132" TEXT="der Function-Wrapper mu&#xdf; NonCopyable sein"/>
+</node>
+<node COLOR="#1c4a7c" CREATED="1775611959011" ID="ID_1371961365" MODIFIED="1775612020825" TEXT="wenigstens ist der Code gradlinig und &#xfc;berschauber">
+<icon BUILTIN="smiley-neutral"/>
+</node>
+<node COLOR="#338800" CREATED="1775611986600" ID="ID_592036124" MODIFIED="1775612000762" TEXT="und es funktioniert wie erwartet">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1775612057598" ID="ID_1713510844" MODIFIED="1775612072352" TEXT="TODO: brauche noch...">
+<icon BUILTIN="bell"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1775612073773" ID="ID_1167327800" MODIFIED="1775612139984" TEXT="ein convenience front-End">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1775612081243" ID="ID_949439997" MODIFIED="1775612139984" TEXT="Lifecycle: clear() / oder reset()">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1775612100072" ID="ID_795978468" MODIFIED="1775612139983" TEXT="sp&#xe4;teres emplace()">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node CREATED="1775612033401" ID="ID_969557535" MODIFIED="1775612040848" TEXT="hab viel gelernt">
+<icon BUILTIN="smiley-oh"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1775612044456" ID="ID_315574274" MODIFIED="1775612168772" TEXT="mal sehen ob das Ding n&#xfc;tzlich ist...">
+<icon BUILTIN="bell"/>
 </node>
 </node>
 </node>
@@ -172050,7 +172351,8 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
 </node>
 </node>
 </node>
-<node CREATED="1620405445951" ID="ID_1127258714" MODIFIED="1620405460977" TEXT="&#xbb;perfect forwarding&#xab;">
+<node CREATED="1775593633153" ID="ID_977477303" MODIFIED="1775593645994" TEXT="bew&#xe4;hrte Pattern">
+<node CREATED="1620405445951" FOLDED="true" ID="ID_1127258714" MODIFIED="1620405460977" TEXT="&#xbb;perfect forwarding&#xab;">
 <node BACKGROUND_COLOR="#d5bfb3" CREATED="1739804777416" ID="ID_1413281090" MODIFIED="1739804885525" TEXT="Vorsicht Falle: setzt Match auf freien Template-Parameter voraus">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1739804887609" ID="ID_357922580" MODIFIED="1739804899364" TEXT="Type&amp;&amp; ist stets eine RValue-Referenz"/>
@@ -172298,6 +172600,9 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
   </body>
 </html></richcontent>
 </node>
+<node COLOR="#126484" CREATED="1775593687709" ID="ID_1720284808" MODIFIED="1775593719848" TEXT="wird viel einfacher mit C++20 (Template-&#x3bb;)">
+<icon BUILTIN="idea"/>
+</node>
 <node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1700535233362" ID="ID_767885543" MODIFIED="1700535264581" TEXT="Warnung: bei solchen &#x3bb; mu&#xdf; man oft den Return-Typ explizit deklarieren">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1700535294817" ID="ID_1372454543" MODIFIED="1700535550594">
@@ -172332,7 +172637,37 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
 </node>
 </node>
 </node>
-<node CREATED="1733950360795" ID="ID_28461925" MODIFIED="1733950367973" TEXT="Tupel und structured binding">
+<node CREATED="1732377419435" ID="ID_1782676400" LINK="https://stackoverflow.com/a/3279550/444796" MODIFIED="1775593749986" TEXT="copy-and-swap-Idiom">
+<linktarget COLOR="#6176b0" DESTINATION="ID_1782676400" ENDARROW="Default" ENDINCLINATION="-1718;207;" ID="Arrow_ID_511557246" SOURCE="ID_343740069" STARTARROW="None" STARTINCLINATION="-532;34;"/>
+<linktarget COLOR="#314ae1" DESTINATION="ID_1782676400" ENDARROW="Default" ENDINCLINATION="-1264;147;" ID="Arrow_ID_968690038" SOURCE="ID_43210524" STARTARROW="None" STARTINCLINATION="-1984;102;"/>
+<node CREATED="1732396455842" ID="ID_378208144" MODIFIED="1732396464585" TEXT="implementiere eigenen friend swap"/>
+<node CREATED="1732396465773" ID="ID_550439194" MODIFIED="1732396482416" TEXT="definiere move-ctor (ggfs durch swap von Members)"/>
+<node CREATED="1732396483041" ID="ID_383403178" MODIFIED="1732396497235" TEXT="implementiere einen universal-assignment-operator">
+<node CREATED="1732396498135" ID="ID_784625223" MODIFIED="1732396595641">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      nimmt zuzuweisendes Argument <b>by-value</b>
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das ist der Kniff!<br />Der Compiler kann das bestens optimieren; wenn eine Referenz zugewiesen wird, geht das durch den copy-ctor, sonst durch den move-ctor &#10233; man implementiert diese Logik nur ein einziges mal
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1732396597194" ID="ID_1541496962" MODIFIED="1732396618694" TEXT="rufe eigenes swap auf &#x27f9; strong Exception Savety">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1733950360795" FOLDED="true" ID="ID_28461925" MODIFIED="1733950367973" TEXT="Tupel und structured binding">
 <node CREATED="1733950416539" ID="ID_1732623981" MODIFIED="1733950431054" TEXT="man kann damit ein Tupel in lokale Variable auspacken">
 <icon BUILTIN="idea"/>
 </node>
@@ -207801,7 +208136,7 @@ env.Command('out.bin', 'in.bin', my_action)</code></pre>
 <arrowlink COLOR="#2d4868" DESTINATION="ID_1920067063" ENDARROW="Default" ENDINCLINATION="-805;74;" ID="Arrow_ID_314698705" STARTARROW="None" STARTINCLINATION="-935;121;"/>
 </node>
 <node CREATED="1775399774924" ID="ID_1844807854" MODIFIED="1775401145402" TEXT="meta/TupleIndexAdaptor">
-<arrowlink COLOR="#2d4868" DESTINATION="ID_528287612" ENDARROW="Default" ENDINCLINATION="-1054;161;" ID="Arrow_ID_1760258574" STARTARROW="None" STARTINCLINATION="-935;121;"/>
+<arrowlink COLOR="#2d4868" DESTINATION="ID_528287612" ENDARROW="Default" ENDINCLINATION="-1099;144;" ID="Arrow_ID_1760258574" STARTARROW="None" STARTINCLINATION="-935;121;"/>
 <arrowlink DESTINATION="ID_1013361274" ENDARROW="Default" ENDINCLINATION="95;0;" ID="Arrow_ID_1610863831" STARTARROW="None" STARTINCLINATION="200;23;"/>
 </node>
 </node>

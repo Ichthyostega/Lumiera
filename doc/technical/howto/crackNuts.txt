@@ -235,4 +235,14 @@ unpack iterator into tuple::
 - see tuple-record-init-test.cpp
 - used in 'command-simple-closure.hpp' to receive parameter values sent via UI-Bus and package them
   into a tuple for invocation of a Steam-Layer command.
++
+index and iterate over tuple elements::
+  This is another example of bridging the compile-time / runtime barrier, using a trampoline.
+  Obviously such a solution requires that it is somehow possible to define a generic functor / λ that
+  can accept any of the tuple elements. And, in order to build a runtime index access, we additionally
+  need to convert each of the tuple elements into a _common reconciled type.
++
+- If such a type exists, can be figured out with the help of the `meta::CommonReturn` _metafunction_
+- `lib::meta::TupleIdxAdaptor` provides the necessary machinery to define a subscript `operator[]`
+- see `TupleIdxAdaptor_test` for some usage examples, including a runtime iteration...
 

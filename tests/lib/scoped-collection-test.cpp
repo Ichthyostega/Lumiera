@@ -47,7 +47,7 @@ namespace test{
         calc (int i)
           {
             if (!i)
-              return getVal() + trigger_;
+              return getID() + trigger_;
             else
               return Dummy::calc(i);
           }
@@ -57,7 +57,7 @@ namespace test{
           : Dummy(id)
           , trigger_(trigger)
           {
-            if (trigger == getVal())
+            if (trigger == getID())
               throw error::Fatal ("Subversive Bomb", LUMIERA_ERROR_SUBVERSIVE);
           }
         
@@ -130,11 +130,11 @@ namespace test{
             CHECK (0 == Dummy::checksum());
             
             container.populate();
-            CHECK (Dummy::checksum() == container[0].getVal()
-                                      + container[1].getVal()
-                                      + container[2].getVal()
-                                      + container[3].getVal()
-                                      + container[4].getVal());
+            CHECK (Dummy::checksum() == container[0].getID()
+                                      + container[1].getID()
+                                      + container[2].getID()
+                                      + container[3].getID()
+                                      + container[4].getID());
           }
           CHECK (0 == Dummy::checksum());
         }
@@ -153,7 +153,7 @@ namespace test{
             CollD::iterator ii = coll.begin();
             while (ii)
               {
-                CHECK (check == ii->getVal());
+                CHECK (check == ii->getID());
                 CHECK (check == ii->calc(+5) - 5);
                 ++check;
                 ++ii;
@@ -166,7 +166,7 @@ namespace test{
             CollD::const_iterator cii = const_coll.begin();
             while (cii)
               {
-                CHECK (check == cii->getVal());
+                CHECK (check == cii->getID());
                 ++check;
                 ++cii;
               }
@@ -176,13 +176,13 @@ namespace test{
             check = 0;
             for (auto& entry : coll)
               {
-                CHECK (check == entry.getVal());
+                CHECK (check == entry.getID());
                 ++check;
               }
             check = 0;
             for (auto const& entry : const_coll)
               {
-                CHECK (check == entry.getVal());
+                CHECK (check == entry.getID());
                 ++check;
               }
             
@@ -252,7 +252,7 @@ namespace test{
             CHECK (sum + rr == Dummy::checksum());
             
             
-            CHECK (d0.calc(11) == coll[0].getVal() + 11 );
+            CHECK (d0.calc(11) == coll[0].getID() + 11 );
             CHECK (d1.calc(22) == rr + 22);
             CHECK (d2.calc(33) == rr + 33);
             CHECK (d2.calc(0)  == rr + (rr+1) );     // SubDummy's special implementation of the acc()-function
@@ -270,7 +270,7 @@ namespace test{
             CHECK (d0.calc(0) == 11 + 22);
             
             // The others even point into obsoleted storage holding zombie objects
-            CHECK (d1.getVal() == Dummy::DEAD);
+            CHECK (d1.getID() == Dummy::DEAD);
             
           }
           CHECK (0 == Dummy::checksum());

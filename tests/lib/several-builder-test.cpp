@@ -72,11 +72,11 @@ namespace test{
           : Dummy(seed)
           {
             ext_.fill(seed);
-            setVal ((i+1)*seed);
+            setID ((i+1)*seed);
           }
        ~Num()
           {
-            setVal (getVal() - explore(ext_).resultSum());
+            setID (getID() - explore(ext_).resultSum());
           }
         
         long
@@ -193,7 +193,7 @@ namespace test{
             builder.emplace<Num<3>>()
                    .emplace<Num<2>>(1);
             CHECK (2 == builder.size());                                 // use information functions...
-            CHECK (3 == builder[1].getVal());                            // to peek into contents assembled thus far...
+            CHECK (3 == builder[1].getID());                             // to peek into contents assembled thus far...
             VERIFY_ERROR (INDEX_BOUNDS, builder[2] );                    // runtime bounds check on the builder (but not on the product!)
             builder.fillElm(2);
             CHECK (4 == builder.size());
@@ -204,16 +204,16 @@ namespace test{
             CHECK (    isnil(builder));
             CHECK (not isnil(elms));
             CHECK (7 == elms.size());
-            CHECK (elms[0].getVal() == (3+1)*3);                         // indeed a Num<3> with default-seed ≡ 3
-            CHECK (elms[0].calc(1)  == 3 + 1 + (3+3+3));                 // indeed called the overridden calc() operation
-            CHECK (elms[1].getVal() == (2+1)*1);                         // indeed a Num<2> with seed ≡ 1
-            CHECK (elms[1].calc(1)  == 2 + 1 + (1+1));                   // indeed the overridden calc() picking from the Array(1,1)
-            CHECK (isLimited (1, elms[2].getVal(), 100'000'000));        // indeed a Dummy with default random seed
-            CHECK (isLimited (1, elms[3].getVal(), 100'000'000));        // and this one too, since we filled in two instances
-            CHECK (elms[4].getVal() == 5);                               // followed by tree instances Dummy(5)
-            CHECK (elms[5].getVal() == 5);
-            CHECK (elms[6].getVal() == 5);
-            CHECK (elms[6].calc(1)  == 5+1);                             // indeed invoking the base implementation of calc()
+            CHECK (elms[0].getID() == (3+1)*3);                          // indeed a Num<3> with default-seed ≡ 3
+            CHECK (elms[0].calc(1) == 3 + 1 + (3+3+3));                  // indeed called the overridden calc() operation
+            CHECK (elms[1].getID() == (2+1)*1);                          // indeed a Num<2> with seed ≡ 1
+            CHECK (elms[1].calc(1) == 2 + 1 + (1+1));                    // indeed the overridden calc() picking from the Array(1,1)
+            CHECK (isLimited (1, elms[2].getID(), 100'000'000));         // indeed a Dummy with default random seed
+            CHECK (isLimited (1, elms[3].getID(), 100'000'000));         // and this one too, since we filled in two instances
+            CHECK (elms[4].getID() == 5);                                // followed by tree instances Dummy(5)
+            CHECK (elms[5].getID() == 5);
+            CHECK (elms[6].getID() == 5);
+            CHECK (elms[6].calc(1) == 5+1);                              // indeed invoking the base implementation of calc()
           }
           
           { // Scenario-2 : unrelated element types
@@ -656,11 +656,11 @@ namespace test{
               
               elms = builder.build();                                // Note: assigning to the existing front-end (which is storage agnostic)
               CHECK (5 == elms.size());
-              CHECK (23 == elms.back().getVal());
-              CHECK (55 == extraDummy.getVal());
+              CHECK (23 == elms.back().getID());
+              CHECK (55 == extraDummy.getID());
             }                                                        // Now the Builder and the ExtraDummy is gone...
             CHECK (5 == elms.size());                                // while all created elements are still there, sitting in the Allocationcluster
-            CHECK (23 == elms.back().getVal());
+            CHECK (23 == elms.back().getID());
             CHECK (2 == clu.numExtents());
             CHECK (clu.numBytes() == allotted);
             
