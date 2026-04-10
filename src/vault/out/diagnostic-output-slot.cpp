@@ -14,20 +14,49 @@
 
 /** @file diagnostic-output-slot.cpp
  ** Internal implementation parts of a state-tracking dummy implementation
- ** of the OutputSlot interface and framework.
+ ** of the OutputSlot interface and framework. This setup uses the standard
+ ** base implementation of OutputSlot and layers a diagnostic context on
+ ** top, using a _PImpl_ — which in this case is a shared-ptr to a heap
+ ** allocated OutputTracker object. Furthermore, the basic OutputSlot
+ ** was configured at construction time to create instances of
+ ** DummyConnection, which are wired internally to the OutputTracker.
+ ** When the client invokes one of the DataSink handles with a frame number,
+ ** this call is propagated through the default implementation of OutputSlot
+ ** and ends up as invocation of OutputSlot::Connection::claimBufferFor(FrameID).
+ ** The DummyConnection implements this call by retrieving a new buffer from the
+ ** default BufferProvider (which is always a Test setup, since the real Render
+ ** Engine uses a specifically configured BufferProvider, injected through the
+ ** steam::engine::EngineCtx). Notably, this (default) test implementation of
+ ** the BufferProvider framework will actually never discard any allocated
+ ** memory — which is an essential prerequisite for this DiagnosticOutputSlot
+ ** implementation, insofar it allows to access the buffer memory even after
+ ** it has been released, officially.
+ ** 
+ ** The OutputTracker establishes a vault::out::diagn::FrameInfo record for each
+ ** distinct frame number encountered on each activated output feed. In this
+ ** diagnostic record, a timestamp is recorded for each of the three lifecycle
+ ** steps (lock, emit, release), together with the size and the actual memory
+ ** address of the data buffer handed out to the client. The OutputDiagnostic
+ ** wrapper adds some convenience access functions, allowing to query if (and when)
+ ** a frame went through some lifecycle step, and to traverse all recorded
+ ** FrameInfo records for each data feed.
+ ** @note \ref OutputSlotProtocol_test::verifyStandardCase() uses this setup
+ **       to walk through the standard stages of the _»Output Slot Protocol«_,
+ **       which also validates the default implementation of OutputSlot::AllocState.
  */
 
 
 #include "lib/integral.hpp"
 #include "lib/nocopy.hpp"
 #include "vault/out/diagnostic-output-slot.hpp"
-//#include "vault/out/output-slot-connection.hpp"
-#include "vault/mem/buffhandle.hpp"
+#include "vault/out/output-slot-connection.hpp"
 #include "vault/mem/naive-buffer-setup.hpp"
+#include "vault/mem/buffhandle.hpp"
 #include "vault/real-clock.hpp"
+#include "lib/iter-explorer.hpp"
 #include "lib/util.hpp"
 
-//#include <vector>
+#include <vector>
 #include <utility>
 #include <algorithm>
 #include <functional>
@@ -36,8 +65,7 @@
 
 using util::contains;
 using util::isSameAdr;
-//  using std::vector;
-//  using Config = DiagnosticOutputSlot::Config;
+using std::vector;
 using std::byte;
 using std::move;
 using std::make_unique;
@@ -62,6 +90,11 @@ namespace out   {
     }
   }//(End)Impl details
   
+  
+  /**
+   * @internal the diagnostic tracking PImpl
+   * @remark this defines the _actual identity_ of an DiagnostricOutputSlot
+   *         and is also the place where all observed data is collected  */
   class DiagnosticOutputSlot::OutputTracker
     : public Config
     , util::NonCopyable
@@ -95,13 +128,6 @@ namespace out   {
             return bufferType_.lockBuffer();
           }
         
-        diagn::FeedLog const&
-        getFeed (uint feedNr)
-          {
-            REQUIRE (feedNr < feed_.size());
-            return feed_[feedNr];
-          }
-        
         void
         recordClaim (uint feedNr, FrameID frame, Buff* buff)
           {
@@ -126,6 +152,25 @@ namespace out   {
             REQUIRE (isSameAdr(frameInfo.storage, buff));
             frameInfo.released = currentTime();
           }
+        
+        
+        /* ===== diagnostic functions  ===== */
+        
+        /** skim through all recorded FrameInfo, over all feeds */
+        auto
+        allBlocks()  const
+          {
+            return lib::explore(feed_)
+                      .transform([](diagn::FeedLog const& feedLog){ return feedLog.allRecordedBlocks(); })
+                      .flatten();
+          }
+        
+        diagn::FeedLog const&
+        getFeed (uint feedNr)  const
+          {
+            REQUIRE (feedNr < feed_.size());
+            return feed_[feedNr];
+          }
     };
   
   /**
@@ -141,8 +186,44 @@ namespace out   {
       return lib::NullValue<diagn::FeedLog>::get();
   }
 
+  uint
+  OutputDiagnostic::cntLocked()
+  {
+    return dos_.tracker_->allBlocks()
+                            .filter([](diagn::FrameInfo const& frame){ return frame.wasLocked(); })
+                            .count();
+  }
+  
+  uint
+  OutputDiagnostic::cntEmitted()
+  {
+    return dos_.tracker_->allBlocks()
+                            .filter([](diagn::FrameInfo const& frame){ return frame.wasEmitted(); })
+                            .count();
+  }
+  
+  uint
+  OutputDiagnostic::cntReleased()
+  {
+    return dos_.tracker_->allBlocks()
+                            .filter([](diagn::FrameInfo const& frame){ return frame.wasReleased(); })
+                            .count();
+  }
   
   
+  
+  
+  
+  /**
+   * An instrumented dummy data output connection.
+   * By default, it supports an unlimited number of frames
+   * and exposes a new buffer for each different frame requested.
+   * @remark the implementation uses an index table to detect if
+   *         buffer memory address passed back from the client
+   *         was actually a buffer handed out by this connection,
+   *         and to retrieve the associated BuffHandle that was used
+   *         to get this buffer from a backing memory manager.
+   */
   class DiagnosticOutputSlot::DummyConnection
     : public OutputSlot::Connection
     {
@@ -200,13 +281,13 @@ namespace out   {
         }
       
       
-      
     public:
       DummyConnection (OutputTracker& tracker, uint thisFeed)
         : tracker_{tracker}
         , feedNr_{thisFeed}
         { }
     };
+  
   
   
   
@@ -230,13 +311,19 @@ namespace out   {
    * so that this contradiction can be circumvented by constructing it first, as a constructor
    * argument \a trackingSetup prepared through a chained constructor call. It is thus visible
    * in the complete scope of the constructor, so that we can pass it to the base class
-   * constructor, and later then move it into the final location in the derived class. 
+   * constructor, and later then move it into the final location in the derived class.
+   * 
+   * @note \ref setupTrackingConnections performs that kind of wiring,
+   *       that usually would be done within an OutputManager: it prepares a set of
+   *       OutputSlot::Connection objects, which however are implemented as DummyConnection here,
+   *       and back-wired internally to the OututTracker, so that it is possible to verify
+   *       the invocations that actually happened while using the DiagnosticOutputSlot.
    */
   DiagnosticOutputSlot::DiagnosticOutputSlot (shared_ptr<OutputTracker> trackingSetup)
     : OutputSlot{setupTrackingConnections (*trackingSetup)}
     , tracker_{move(trackingSetup)}
     { }
-      
+  
   shared_ptr<DiagnosticOutputSlot::OutputTracker>
   DiagnosticOutputSlot::setupOutputTracker (Config&& config)
   {
@@ -251,9 +338,20 @@ namespace out   {
     
     return make_unique<AllocState> (outputTracker.numDataFeeds
                                    ,[&,i=0](ConStorage& storage) mutable { storage.create<DummyConnection> (outputTracker, i++); }
-                                   );
+                                   );                        //  a »population functor« that creates a sequence of DummyConnections
   }
   
+  
+  /**
+   * @param timePoint reference to a "current" time point,
+   *        that can be manipulated from the test setup.
+   */
+  void
+  DiagnosticOutputSlot::fixCurrentTime (TimeVar const& timePoint)
+  {
+    REQUIRE (tracker_);
+    tracker_->currentTime = [&timePoint] ->Time { return timePoint; };
+  }
   
   
 }} // namespace vault::out

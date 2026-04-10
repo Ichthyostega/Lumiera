@@ -22,8 +22,8 @@
  ** Each OutputSlot is an unique and distinguishable entity. It corresponds explicitly to an
  ** external output, or a group of such outputs (e.g. left and right sound card output channels),
  ** or an output file or similar capability accepting media content. The setup for an OutputSlot
- ** is provided, configured and registered with an OutputManager, using an implementation suitable
- ** for the kind of media data to be sent (sound, video) and also suitable for the desired kind if
+ ** is provided, configured and registered with an OutputManager, using a suitable implementation
+ ** for the kind of media data to be sent (sound, video), and also suitable for the desired kind of
  ** output capability (render to file, display video in a GUI widget, send video to a full screen
  ** display, establish a Jack port or use any kind of "sound out"). Thus it is always limited to
  ** a single kind of media, and to a single connection unit, but this connection may still comprise
@@ -160,6 +160,7 @@ namespace out  {
       
       
     protected:
+      
       /** @internal interface for the allocated state */
       class Allocation;
       using PAlloc = std::shared_ptr<Allocation>;

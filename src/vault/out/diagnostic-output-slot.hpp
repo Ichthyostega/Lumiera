@@ -13,8 +13,33 @@
 
 /** @file diagnostic-output-slot.hpp
  ** An facility for writing unit-tests against the OutputSlot interface.
- **
+ ** The setup of DiagnosticOutputSlot is layered, insofar it is foremost
+ ** a regular OutputSlot, yet has some kind of special _Output Manager_
+ ** layered on top. For context, in regular use, it is the task of some
+ ** specialised OutputManager to provide a suitably configured OutputSlot
+ ** so that the client can use a specific output facility, like e.g. a
+ ** video viewer in the UI, or the sound card output. Yet since this is
+ ** a test setup, DiagnosticOutputSlot is backed by a _fake implementation_
+ ** of the OutputSlot::Connection interface.
+ ** 
+ ** This layered construction allows for a simple and straight-forward
+ ** usage, where the test can just create a DiagnosticOutputSlot instance,
+ ** possibly passing a configuration record. This is in contrast to the
+ ** real usage, where, as pointed out above, the OutputSlot must be
+ ** maintained and connected to a real output driver by the OutputManager.
+ ** By default, a configurable number of DataSink handles can be retrieved
+ ** from this setup, and each sink allows to allocate an unlimited number
+ ** of different frame buffers, in any order. Furthermore, the OutputSlot
+ ** can be copied (and thereby sliced) and passed to the code to be tested.
+ ** @todo 4/2026 the plan is to add the ability to define constraints and
+ **       limitations through the configuration passed at construction.
+ ** 
+ ** After invoking the code under test, it is necessary to hold onto
+ ** one copy of DiagnostricOutputSlot, which maintains the internal
+ ** connection to the diagnostic information collected. Using the
+ ** `watch(slot)` syntax, this information can be investigated.
  ** @see output-slot-protocol-test.cpp
+ ** @see output-slot.hpp
  */
 
 
@@ -24,23 +49,14 @@
 
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
-#include "include/logging.h"
-#include "vault/out/output-slot.hpp"
-#include "vault/out/output-slot-connection.hpp"
-#include "vault/mem/buffhandle.hpp"
-#include "vault/mem/naive-buffer-setup.hpp"
-#include "lib/time/timevalue.hpp"
-#include "lib/time/grid.hpp"
-#include "lib/p.hpp"
-#include "lib/null-value.hpp"
-#include "lib/iter-explorer.hpp"
-#include "lib/iter-source.hpp" /////////////OOO wech
-#include "lib/symbol.hpp"
-#include "lib/util.hpp"
-#include "vessel/advice.hpp"
 #include "test/test-frame.hpp"
+#include "lib/time/timevalue.hpp"
+#include "lib/iter-adapter-stl.hpp"
+#include "lib/iter-explorer.hpp"
+#include "lib/null-value.hpp"
 
-#include <unordered_set>
+#include "vault/out/output-slot.hpp"
+
 #include <memory>
 #include <vector>
 #include <map>
@@ -50,24 +66,14 @@ namespace vault {
 namespace out   {
   namespace err = lumiera::error;
 
-  using lib::Symbol;
   using lib::HashVal;
-  using util::unConst;
-  using util::contains;
   using test::TestFrame;
-  using lib::time::FrameRate;
+//using lib::time::FrameRate; ///////TODO planned for time restrictions
   using lib::time::TimeVar;
   using lib::time::Time;
-  using vault::mem::NaiveBufferSetup;
-  using vault::mem::BuffHandle;
-  using vault::mem::BuffDescr;
 
-  using std::as_const;
   using std::shared_ptr;
-  using std::make_unique;
   
-  using PGrid = lib::P<lib::time::Grid>;
-
   
   namespace { // diagnostics & internals....
     
@@ -79,6 +85,7 @@ namespace out   {
   namespace diagn {
     using Buff = vault::mem::Buff;
     
+    /** diagnostic record from handling one data frame */
     struct FrameInfo
       {
         TimeVar locked{Time::NEVER};
@@ -86,8 +93,8 @@ namespace out   {
         TimeVar released{Time::NEVER};
         
         bool wasLocked() const { return locked != Time::NEVER; }
-        bool wasEmitted() const { return locked != Time::NEVER; }
-        bool wasReleased() const { return locked != Time::NEVER; }
+        bool wasEmitted() const { return emitted != Time::NEVER; }
+        bool wasReleased() const { return released != Time::NEVER; }
         
         size_t buffSize{0};
         Buff* storage{nullptr};
@@ -100,6 +107,7 @@ namespace out   {
         bool operator== (BU const&)  const;
       };
     
+    /** diagnostic record of handled frames _in a single feed_ */
     struct FeedLog
       {
         std::map<uint, FrameInfo> recorded;
@@ -115,11 +123,17 @@ namespace out   {
           }
         
         auto
-        blockIter(uint startFrame =0)  const
+        allBlocks(uint startFrame =0)  const
           {
             return lib::explore (lib::NumIter{startFrame, std::numeric_limits<uint>::max()})
                       .transform([this](uint idx){ return frame(idx); })
                       ;
+          }
+        
+        auto
+        allRecordedBlocks()  const
+          {
+            return lib::iter_stl::eachVal (recorded);
           }
       };
     
@@ -189,6 +203,14 @@ namespace out   {
           static constexpr Config defaults() { return {}; }
         };
       
+      /** set the _running current time_ to be fixed to the given value.
+       * @remark by default, without calling this function, each tracked invocation
+       *         is marked by the current system time; by calling this function
+       *         however, instead of a running time, fixed step stones will be
+       *         recorded, so that the test can basically define the time axis.
+       */
+      void fixCurrentTime (TimeVar const&);
+      
       /**
        * Official (default) constructor to create a DiagnosticOutputSlot.
        * When invoked without argument, the default Config applies, otherwise
@@ -228,17 +250,17 @@ namespace out   {
         : dos_{theSlot}
         { }
       
-      uint cntLocked() { return 0; }
-      uint cntEmitted() { return 0; }
-      uint cntReleased() { return 0; }
+      uint cntLocked();
+      uint cntEmitted();
+      uint cntReleased();
       
       diagn::FeedLog const&
       feed (uint feedNr);
       
       auto
-      getFeed (uint feedNr)
+      getFeed (uint feedNr, uint startFrame =0)
         {
-          return feed(feedNr).blockIter();
+          return feed(feedNr).allBlocks(startFrame);
         }
     };
   

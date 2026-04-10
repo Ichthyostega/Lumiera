@@ -144,7 +144,7 @@ namespace meta{
         };
       
       /** allow the Unit test to poke into internals */
-      friend class FunInline_test;
+      friend class test::FunInline_test;
       
       
       

@@ -51617,6 +51617,8 @@
 <node CREATED="1732663177454" ID="ID_1504939437" LINK="#ID_1774747868" MODIFIED="1732663196246" TEXT="Dokumentation: IterCoreAdapter_test"/>
 </node>
 </node>
+<node CREATED="1775752365678" ID="ID_963057958" MODIFIED="1775752370809" TEXT="Iterator-Interface">
+<node CREATED="1775752378645" ID="ID_918700135" MODIFIED="1775752385276" TEXT="Interface-Design"/>
 <node CREATED="1535890810111" ID="ID_677938944" MODIFIED="1557498707236" TEXT="IterSource">
 <node CREATED="1535890823613" ID="ID_1227701237" MODIFIED="1557498707236" TEXT="Lumiera Iterator als Abstraktion"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1535890830772" ID="ID_1558484735" MODIFIED="1557498707236" TEXT="bestehendes Design ist ungeschickt">
@@ -51625,1006 +51627,22 @@
 <node CREATED="1535890915576" ID="ID_8718412" MODIFIED="1557498707236" TEXT="Semantik der Abbruchbedingung ist verwirrend"/>
 </node>
 <node CREATED="1535890958987" ID="ID_71109348" MODIFIED="1557498707236" TEXT="alternatives Design">
-<node CREATED="1535890965170" ID="ID_1363636315" MODIFIED="1557498707236" TEXT="was geht hier?">
-<node CREATED="1535890972609" ID="ID_1586923063" MODIFIED="1557498707236" TEXT="wie state core?"/>
+<node CREATED="1535890965170" ID="ID_1363636315" MODIFIED="1557498707236" TEXT="was geht hier?"/>
+<node CREATED="1535890972609" ID="ID_1586923063" MODIFIED="1557498707236" TEXT="wie state core?">
+<node CREATED="1775752410097" ID="ID_203557279" MODIFIED="1775752423698" TEXT="k&#xf6;nnte den IterAdapter umstellen auf StateCore-Inteface"/>
+<node CREATED="1775752430270" ID="ID_167764686" MODIFIED="1775752442839" TEXT="und dann IterSource redefinieren als eine virtuelle StateCore"/>
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1732154493179" FOLDED="true" ID="ID_1329557703" MODIFIED="1732663211618" TEXT="iter-zip">
-<icon BUILTIN="button_ok"/>
-<node CREATED="1732154503106" ID="ID_852276140" MODIFIED="1732662891264" TEXT="N Iteratoren in Tupel zusammenf&#xfc;hren">
-<icon BUILTIN="info"/>
-<node CREATED="1732154525721" ID="ID_161696884" MODIFIED="1732154540166" TEXT="zum Verbinden mehrerer Datenquellen"/>
-<node CREATED="1732154540893" ID="ID_1426555488" MODIFIED="1732154577823" TEXT="es gilt die kleinst-m&#xf6;gliche Gesamtsequenz">
-<richcontent TYPE="NOTE"><html>
-  <head/>
-  <body>
-    <p>
-      das hei&#223;t, der erste ersch&#246;pfte Iterator terminiert die gesamte Sequenz
-    </p>
-  </body>
-</html></richcontent>
+<node CREATED="1775769532209" ID="ID_9277766" MODIFIED="1775769537531" TEXT="Iterator-function">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1775769548596" ID="ID_396906197" LINK="https://issues.lumiera.org/ticket/190" MODIFIED="1775769752536" TEXT="#190 Iterator-function to piggyback a lazy evaluation">
+<linktarget COLOR="#b34e74" DESTINATION="ID_396906197" ENDARROW="Default" ENDINCLINATION="431;21;" ID="Arrow_ID_644180135" SOURCE="ID_205807285" STARTARROW="None" STARTINCLINATION="390;18;"/>
+<icon BUILTIN="flag-yellow"/>
 </node>
-<node CREATED="1732154580080" ID="ID_336146444" MODIFIED="1732662882164" TEXT="wichtige Variante: izip &#x2259; zip-with-index">
-<richcontent TYPE="NOTE"><html>
-  <head/>
-  <body>
-    <p>
-      damit man auch die F&#228;lle erschlagen kann, in denen irgendwo eine Index-Variable gebraucht wird; oft ist das n&#228;mlich der einzige Grund, dann doch eine klassische For-Iteration zu machen
-    </p>
-  </body>
-</html></richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1732154647647" ID="ID_232099852" MODIFIED="1732636366058" TEXT="Technologie">
-<icon BUILTIN="forward"/>
-<node CREATED="1732154651158" ID="ID_660736150" MODIFIED="1732154675895" TEXT="komplexes Konstrukt aus variadischen Templates"/>
-<node CREATED="1732154676675" ID="ID_515540198" MODIFIED="1732154705046" TEXT="beruht auf Tuples, std::apply und dem IterExplorer als Builder"/>
-<node COLOR="#338800" CREATED="1732154713702" ID="ID_1753947869" MODIFIED="1732636354403" TEXT="per Experiment schrittweise aufbauen">
-<icon BUILTIN="button_ok"/>
-<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1732154727348" ID="ID_1216046809" MODIFIED="1732636358766" TEXT="IterZip_test">
-<font BOLD="true" NAME="SansSerif" SIZE="12"/>
-</node>
-<node COLOR="#338800" CREATED="1732207603752" FOLDED="true" ID="ID_1484345238" MODIFIED="1732636351867" TEXT="Anforderung: Funktion auf Tupel anwenden">
-<icon BUILTIN="button_ok"/>
-<node CREATED="1732207627754" ID="ID_1652254138" MODIFIED="1732207631076" TEXT="sollte gehen...."/>
-<node CREATED="1732207631631" ID="ID_1627692250" MODIFIED="1732207639059" TEXT="ist aber &#xfc;berraschend trickreich im Detail"/>
-<node CREATED="1732207656021" ID="ID_239336325" MODIFIED="1732207680094" TEXT="mu&#xdf; &#xfc;berall perfect-forwarding einf&#xfc;hren">
-<node CREATED="1732207683833" ID="ID_410737614" MODIFIED="1732207689141" TEXT="auch auf die Funktions-Argumente"/>
-<node CREATED="1732207704615" ID="ID_136259188" MODIFIED="1732207746785" TEXT="auto&amp;&amp;... elms &#x27fc; fun (forward&lt;decltype(elms)&gt; (elms)) ...">
-<font NAME="Monospaced" SIZE="10"/>
-</node>
-</node>
-<node COLOR="#435e98" CREATED="1732207762039" ID="ID_1456671988" MODIFIED="1732220042510" TEXT="Problem: R&#xfc;ckgabewert der Funktion">
-<icon BUILTIN="messagebox_warning"/>
-<node CREATED="1732207772990" ID="ID_1470710997" MODIFIED="1732207779577" TEXT="std::make_tuple macht ein decay()"/>
-<node CREATED="1732207780261" ID="ID_1005625769" MODIFIED="1732207798438" TEXT="std::forward_as_tuple erzeugt &#xfc;berall R|L-Referenzen"/>
-<node COLOR="#435e98" CREATED="1732220024861" ID="ID_1608709580" MODIFIED="1732220040329" TEXT="mu&#xdf; also explizit den Ergebnis-Tupel-Typ konstruieren">
-<icon BUILTIN="yes"/>
-</node>
-</node>
-</node>
-<node COLOR="#338800" CREATED="1732220073140" FOLDED="true" ID="ID_1314042362" MODIFIED="1732636349311" TEXT="Iteratoren-Tupel konstruieren">
-<icon BUILTIN="button_ok"/>
-<node CREATED="1732220106650" ID="ID_230100123" MODIFIED="1732220117095" TEXT="lib::explore() sollte die eigentliche (schwere) Arbeit machen"/>
-<node CREATED="1732220131993" ID="ID_1112527704" MODIFIED="1732234616020" TEXT="hoffe, da&#xdf; das mit perfect-forwarding funktioniert">
-<arrowlink COLOR="#d41f46" DESTINATION="ID_1711720667" ENDARROW="Default" ENDINCLINATION="-179;-10;" ID="Arrow_ID_880963824" STARTARROW="None" STARTINCLINATION="176;10;"/>
-</node>
-<node COLOR="#338800" CREATED="1732220149904" ID="ID_734335248" MODIFIED="1732235197250" TEXT="im Testfall explizit durchspielen">
-<icon BUILTIN="button_ok"/>
-<node COLOR="#435e98" CREATED="1732220193074" ID="ID_322908141" MODIFIED="1732636334951" TEXT="demo_construction()"/>
-<node COLOR="#338800" CREATED="1732220196361" FOLDED="true" ID="ID_1154553759" MODIFIED="1732636325808" TEXT="schrittweise mit lokalen Klassen aufbauen...">
-<icon BUILTIN="button_ok"/>
-<node COLOR="#435e98" CREATED="1732220420635" ID="ID_665925849" MODIFIED="1732234993815" TEXT="Builder f&#xfc;r das Iteratoren-Tupel">
-<node CREATED="1732234471735" ID="ID_1749059928" MODIFIED="1732234491522">
-<richcontent TYPE="NODE"><html>
-  <head/>
-  <body>
-    <p>
-      stelle fest: ich <b>darf kein Quell-Tupel</b>&#160;konstruieren
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1732234492677" ID="ID_1711720667" MODIFIED="1732234609138" TEXT="weil dann das Thema perfect-forwarding dazwischen liegt">
-<linktarget COLOR="#d41f46" DESTINATION="ID_1711720667" ENDARROW="Default" ENDINCLINATION="-179;-10;" ID="Arrow_ID_880963824" SOURCE="ID_1112527704" STARTARROW="None" STARTINCLINATION="176;10;"/>
-</node>
-<node CREATED="1732234626323" ID="ID_987261541" MODIFIED="1732234641012" TEXT="der Tupel-Konstruktor &#xbb;materialsiert&#xab; dann praktisch immer eine Kopie"/>
-<node COLOR="#338800" CREATED="1732234650247" ID="ID_1807559774" MODIFIED="1732328124794" TEXT="brauche also eine dedizierte Funktion buildIterTuple&lt;ARGS....&gt;">
-<icon BUILTIN="button_ok"/>
-<node COLOR="#5b280f" CREATED="1732234686810" ID="ID_1016277466" MODIFIED="1732234699400" TEXT="k&#xf6;nnte man auch als generisches Util extrahieren">
-<icon BUILTIN="button_cancel"/>
-</node>
-<node CREATED="1732234700409" ID="ID_1071100462" MODIFIED="1732234887753" TEXT="nein: ist aus diversen Gr&#xfc;nden ungl&#xfc;cklich">
-<richcontent TYPE="NOTE"><html>
-  <head/>
-  <body>
-    <p>
-      Es ist eigentlich nur eine Verpackung f&#252;r std::apply, welches man mit dem gleichen Aufruf-Aufwand stets auch direkt aufrufen k&#246;nnte. Hinzu kommt, da&#223; nun die Argument-Ordnung auf dem API entweder links-rum oder rechts-rum nicht pa&#223;t und verwirrend ist
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1732234715777" ID="ID_1569189170" MODIFIED="1732234822377" TEXT="braucht abar auch gar nicht den Indirektions-Trick">
-<richcontent TYPE="NOTE"><html>
-  <head/>
-  <body>
-    <p>
-      der spezielle Trick mit dem inneren Lambda ist nur f&#252;r ein Tupel notwendig, um die Tupel-Elemente flexibel aber korrekt wieder in die Hand zu bekommen (alternativ mu&#223;te man vor C++17 mit einem Index-Seq-Iterator arbeiten, was sehr undurchsichtig ist)
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="idea"/>
-</node>
-<node BACKGROUND_COLOR="#e0daaa" COLOR="#54207a" CREATED="1732234889375" ID="ID_1286476344" MODIFIED="1732234957940" TEXT="insofern war forEach und mapEach nur eine sinnvolle Finger&#xfc;bung">
-<icon BUILTIN="smiley-angry"/>
-</node>
-<node BACKGROUND_COLOR="#dae0aa" COLOR="#2b4871" CREATED="1732234910836" ID="ID_641389884" MODIFIED="1732234976379" TEXT="und hat einen Bug entdeckt">
-<icon BUILTIN="smiley-oh"/>
-</node>
-</node>
-</node>
-<node CREATED="1732220486306" ID="ID_1365741784" MODIFIED="1732220498253" TEXT="darauf aufbauende StateCore">
-<node COLOR="#435e98" CREATED="1732235006036" ID="ID_1047395328" MODIFIED="1732235081898" TEXT="Problem: Konstruktor und Typ-Deduktion">
-<icon BUILTIN="messagebox_warning"/>
-<node COLOR="#6e1370" CREATED="1732235022069" ID="ID_79338843" MODIFIED="1732235075381" TEXT="ja das leidige Problem mit Katze und Schwanz">
-<icon BUILTIN="smiley-angry"/>
-</node>
-<node COLOR="#435e98" CREATED="1732235026957" ID="ID_340250680" MODIFIED="1732235048697" TEXT="hilft nur: builderTuple als free-Function vorschalten">
-<icon BUILTIN="idea"/>
-</node>
-</node>
-<node CREATED="1732220525941" ID="ID_1741213182" MODIFIED="1732233792633" TEXT="exponiert das Iteratoren-Tupel">
-<arrowlink COLOR="#fdfbda" DESTINATION="ID_214181349" ENDARROW="Default" ENDINCLINATION="-24;-16;" ID="Arrow_ID_568621399" STARTARROW="None" STARTINCLINATION="-144;12;"/>
-<icon BUILTIN="idea"/>
-</node>
-<node CREATED="1732220536045" ID="ID_1165298197" MODIFIED="1732220565132" TEXT="implementiert die Produkt-Operationen durch Delegieren"/>
-</node>
-<node COLOR="#435e98" CREATED="1732221642486" ID="ID_1450873226" MODIFIED="1732488888160" TEXT="neues Problem: expander-Kollaborations-API weitergeben">
-<icon BUILTIN="messagebox_warning"/>
-<node CREATED="1732221665403" ID="ID_421112241" MODIFIED="1732221694417" TEXT="bisher wurde dieses auf dem BaseAdapter terminiert"/>
-<node CREATED="1732221701598" ID="ID_776445249" MODIFIED="1732404349453" TEXT="ich brauche also einen anderen oder gar keinen Base-Adapter"/>
-<node COLOR="#435e98" CREATED="1732221711745" ID="ID_1004997061" MODIFIED="1732489026963" TEXT="&#x27f9; M&#xf6;glichkeit zur Anpassung des Base-Adapters schaffen">
-<arrowlink COLOR="#4129a2" DESTINATION="ID_87985222" ENDARROW="Default" ENDINCLINATION="-276;-254;" ID="Arrow_ID_125112633" STARTARROW="None" STARTINCLINATION="-524;25;"/>
-</node>
-</node>
-<node CREATED="1732233745033" ID="ID_214181349" MODIFIED="1732233786889" TEXT="daraus das Value-Tuple per Transformer erzeugen">
-<linktarget COLOR="#fdfbda" DESTINATION="ID_214181349" ENDARROW="Default" ENDINCLINATION="-24;-16;" ID="Arrow_ID_568621399" SOURCE="ID_1741213182" STARTARROW="None" STARTINCLINATION="-144;12;"/>
-<icon BUILTIN="idea"/>
-<node BACKGROUND_COLOR="#c8c0b6" COLOR="#990033" CREATED="1732233814628" ID="ID_1179162924" MODIFIED="1732233837028" TEXT="ist das ineffizient? Nein!">
-<icon BUILTIN="help"/>
-<node CREATED="1732233846981" ID="ID_1798367169" MODIFIED="1732233860677" TEXT="und zwar deshalb weil alle Iteratoren per Referenz liefern"/>
-<node CREATED="1732234159618" ID="ID_778779021" MODIFIED="1732234307409" TEXT="...hat aber zur Konsequenz, da&#xdf; der Transformer ggfs ein Zwischenergebnis materialisiert">
-<richcontent TYPE="NOTE"><html>
-  <head/>
-  <body>
-    <p>
-      ...und damit sind n&#228;mlich beide Ans&#228;tze letzlich wieder vers&#246;hnt. Das war die wichtige Einsicht beim zweiten Design-Anlauf. Beim ersten Anlauf wollte ich &#187;brav&#171; sein und Werte liefern, und das ganze Design wurde dadurch extrem undurchschaubar und wackelig, denn nat&#252;rlich wurde beim ersten Kontakt mit der Realit&#228;t klar, da&#223; man dann smart-Pointer durch die Gegend schiebt.
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1732233861279" ID="ID_1970755076" MODIFIED="1732234153457" TEXT="das ist ein ganz zentrales Element in meinem Design">
-<richcontent TYPE="NOTE"><html>
-  <head/>
-  <body>
-    <p>
-      ....aber auch der Punkt, an dem es immer wieder gef&#228;hrlich wird.
-    </p>
-    <p>
-      <b>Warum ist das so wichtig</b>?
-    </p>
-    <p>
-      <u>Antwort</u>: weil <i>nur dadurch</i>&#160;ein Iterator durch eine Abstraktions-Barriere hindurch arbeiten kann. Der Aufbau eines komplexen Such-Algorithmus erfolgt meist in mehreren Layern, und man m&#246;chte eben nicht, da&#223; irgendwo von unten Werte geliefert werden m&#252;ssen, die dann oben &#187;passen&#171;. Sondern man m&#246;chte mehrere (oft virtuelle) Funktionsaufrufe aufeinander mappen. Und nicht zuletzt dadurch kann man geziehlt einzelne Werte in einem anderen Implementierungs-Realm zur Manipulation exponieren. Denn tats&#228;chlich ist ein solcher IterExplorer eine <b>View in eine State-Core</b>
-    </p>
-  </body>
-</html></richcontent>
-</node>
-</node>
-<node CREATED="1732234325771" ID="ID_1993168197" MODIFIED="1732234454948" TEXT="normalerweise liegen im Wert-Tupel im ItemWrapper stets Referenzen">
-<richcontent TYPE="NOTE"><html>
-  <head/>
-  <body>
-    <p>
-      Im Normalfall liefert schon der Quell-Iterator eine Referenz (oder const-Referenz). Und die wird dann durch das Value-Tuple durchgemappt und zeigt eigentlich in die State-Core oder einen unterliegenden Container. Wenn aber an irgend einer Stelle tats&#228;chlich ein Wert geliefert werden mu&#223;, so wird das auf diesem Level stets abgefedert, und die stabile Storage f&#252;r den Wert liegt dann im Iterator selber (im ItemWrapper)
-    </p>
-  </body>
-</html></richcontent>
-</node>
-</node>
-</node>
-<node COLOR="#338800" CREATED="1732235101418" ID="ID_1293064302" MODIFIED="1732235109330" TEXT="erzeugten Typ ausgeben und analysieren">
-<icon BUILTIN="button_ok"/>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1732235110393" ID="ID_862638498" MODIFIED="1732235133794" TEXT="oh weh">
-<icon BUILTIN="smily_bad"/>
-</node>
-<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1732235118688" ID="ID_1779616765" MODIFIED="1732235137022" TEXT="ja ... alles sauber">
-<icon BUILTIN="ksmiletris"/>
-</node>
-<node COLOR="#891569" CREATED="1732235143421" ID="ID_492860011" MODIFIED="1732235191567">
-<richcontent TYPE="NODE"><html>
-  <head/>
-  <body>
-    <p>
-      (ob dieserer test portabel ist....)
-    </p>
-  </body>
-</html></richcontent>
-<font NAME="SansSerif" SIZE="10"/>
-<icon BUILTIN="clanbomber"/>
-</node>
-</node>
-<node COLOR="#338800" CREATED="1732235200691" ID="ID_1709342851" MODIFIED="1732235204957" TEXT="Iteration FUNKTIONIERT">
-<icon BUILTIN="button_ok"/>
-</node>
-</node>
-</node>
-<node COLOR="#338800" CREATED="1732404219427" FOLDED="true" ID="ID_87985222" MODIFIED="1732489122964" TEXT="Adapter-Generierung neu ordnen">
-<linktarget COLOR="#4129a2" DESTINATION="ID_87985222" ENDARROW="Default" ENDINCLINATION="-276;-254;" ID="Arrow_ID_125112633" SOURCE="ID_1004997061" STARTARROW="None" STARTINCLINATION="-524;25;"/>
-<linktarget COLOR="#599ced" DESTINATION="ID_87985222" ENDARROW="Default" ENDINCLINATION="180;171;" ID="Arrow_ID_1403487927" SOURCE="ID_1051749303" STARTARROW="None" STARTINCLINATION="425;-32;"/>
-<icon BUILTIN="button_ok"/>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1732404405058" ID="ID_912348266" MODIFIED="1732489063402" TEXT="Feststellungen">
-<icon BUILTIN="forward"/>
-<node CREATED="1732404411080" ID="ID_619838250" MODIFIED="1732404450348" TEXT="IterExplorer f&#xfc;gt bisweilen unn&#xf6;tig Adapter hinzu"/>
-<node CREATED="1732404451204" ID="ID_1816461381" MODIFIED="1732404472437" TEXT="der Base-Adapter k&#xf6;nnte ganz wegfallen &#x2014; wenn bereits einer da ist"/>
-<node CREATED="1732404473288" ID="ID_1944760216" MODIFIED="1732404531008" TEXT="ein IterableDecorator und ggfs ein IterExplorer k&#xf6;nnen abgehoben werden"/>
-</node>
-<node COLOR="#435e98" CREATED="1732405205696" ID="ID_474793959" MODIFIED="1732489043595" TEXT="ich ziehe hier vor, auf explizite Type-Tags zu setzen">
-<icon BUILTIN="yes"/>
-<node CREATED="1732405221708" ID="ID_156327017" MODIFIED="1732405242941" TEXT="diese geh&#xf6;ren sicher zum IterExplorer-&#xd6;kosystem"/>
-<node CREATED="1732405244193" ID="ID_1388758928" MODIFIED="1732405273344" TEXT="als Extension-Point k&#xf6;nnen sie auch explizit gesetzt werden &#x27f9; L&#xf6;sung"/>
-</node>
-<node COLOR="#338800" CREATED="1732405282395" ID="ID_1720349507" MODIFIED="1732488878408" TEXT="zwei neue Aufbereitungs-Schritte">
-<icon BUILTIN="button_ok"/>
-<node COLOR="#338800" CREATED="1732405300562" ID="ID_1747377543" MODIFIED="1732418717425" TEXT="BaseSrc freilgen anhand von Type-Tags">
-<icon BUILTIN="button_ok"/>
-<node COLOR="#338800" CREATED="1732405337093" ID="ID_119797718" MODIFIED="1732418749082" TEXT="IterExplorer setzt dieses Tag stets auf den direkt unterliegenden SRC-Typ">
-<icon BUILTIN="button_ok"/>
-</node>
-<node COLOR="#435e98" CREATED="1732405363656" ID="ID_1939842999" MODIFIED="1732418735716" TEXT="darunter liegender IterableDecorator wird automatisch auf Core gestrippt">
-<icon BUILTIN="idea"/>
-</node>
-<node COLOR="#338800" CREATED="1732405652074" ID="ID_3854674" MODIFIED="1732418743893" TEXT="sonst: nichts machen (d.h. IT &#x2259; BaseSrc)">
-<icon BUILTIN="button_ok"/>
-</node>
-<node COLOR="#435e98" CREATED="1732418790617" ID="ID_817698426" MODIFIED="1732487151425" TEXT="kann man hier auch noch eine redundant eingef&#xfc;gte CheckedCore strippen?">
-<font NAME="SansSerif" SIZE="12"/>
-<icon BUILTIN="help"/>
-<node COLOR="#5b280f" CREATED="1732418814782" ID="ID_1506139893" MODIFIED="1732418841725" TEXT="1. Versuch: direkt in die _DecoratorTraits">
-<icon BUILTIN="button_cancel"/>
-<node CREATED="1732418842978" ID="ID_1120619472" MODIFIED="1732418878886" TEXT="erst mal : mu&#xdf; die CheckedCore selber mit Type-Tag markieren">
-<richcontent TYPE="NOTE"><html>
-  <head/>
-  <body>
-    <p>
-      andere Tricks mit der _rawCore()-Zugriffsfunktion scheinen nicht zu gehen
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node COLOR="#5b280f" CREATED="1732418880968" ID="ID_1435649475" MODIFIED="1732418978932" TEXT="Tilt! das f&#xfc;hrt dazu, da&#xdf; jeder Processing-Layer sofort wieder gestrippt wird">
-<richcontent TYPE="NOTE"><html>
-  <head/>
-  <body>
-    <p>
-      ...da alle Processing-Layer auf State-Cores beruhen, pr&#228;sentieren wir dem dar&#252;berzulegenden IterExplorer die neue Core, und der findet dann die unter diesem Layer liegende CheckedCore des Vorg&#228;ngers und strippt den neuen Layer weg. <i>YESS es funktioniert!!!!!!</i>
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="broken-line"/>
-</node>
-</node>
-<node COLOR="#338800" CREATED="1732487080930" ID="ID_1941671854" MODIFIED="1732487106352" TEXT="2. Versuch: an der gleichen Stelle beim Einstieg">
-<icon BUILTIN="button_ok"/>
-<node CREATED="1732487107328" ID="ID_448728086" MODIFIED="1732487121488" TEXT="also jeweils nur wenn der IterExplorer initial konstruiert wird"/>
-<node CREATED="1732487124717" ID="ID_287102344" MODIFIED="1732487148843" TEXT="genauer: sogar nur als ein 2.Preprocessing-Schritt auf der freigelegten BaseSrc"/>
-</node>
-</node>
-</node>
-<node COLOR="#338800" CREATED="1732405404073" ID="ID_1428756660" MODIFIED="1732418719461" TEXT="Optional einen Base-Adapter einf&#xfc;gen">
-<icon BUILTIN="button_ok"/>
-<node COLOR="#338800" CREATED="1732405423113" ID="ID_1973273876" MODIFIED="1732418740596" TEXT="falls kein Base-Adapter-Tag gefunden wurde">
-<icon BUILTIN="button_ok"/>
-</node>
-<node COLOR="#338800" CREATED="1732405460404" ID="ID_994840933" MODIFIED="1732418741710" TEXT="sonst: nichts machen (d.h. bestehenden Base-Adapter verwenden)">
-<icon BUILTIN="button_ok"/>
-</node>
-</node>
-<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1732487170847" ID="ID_1262167504" MODIFIED="1732487199877" TEXT="Ergebnis: nun viel schlankere und minimale Typ-Schachtelung">
-<linktarget COLOR="#67697e" DESTINATION="ID_1262167504" ENDARROW="Default" ENDINCLINATION="-307;14;" ID="Arrow_ID_1075091501" SOURCE="ID_1811172733" STARTARROW="None" STARTINCLINATION="163;-136;"/>
-<icon BUILTIN="forward"/>
-<node CREATED="1732487344743" HGAP="31" ID="ID_488136081" MODIFIED="1732487803727" STYLE="bubble" VSHIFT="11">
-<richcontent TYPE="NODE"><html>
-  <head/>
-  <body>
-    <p>
-      <u><font size="2">vorher</font></u><font size="2">:</font>
-    </p>
-    <p>
-      <font face="Monospaced" size="1">IterExplorer&lt; </font>
-    </p>
-    <p>
-      <font face="Monospaced" size="1">&#160; </font><font color="#a70230" face="Monospaced" size="1">BaseAdapter</font><font face="Monospaced" size="1">&lt; </font>
-    </p>
-    <p>
-      <font face="Monospaced" size="1">&#160;&#160;&#160;&#160;IterableDecorator&lt;uint, </font>
-    </p>
-    <p>
-      <font face="Monospaced" size="1">&#160;&#160;&#160;&#160;&#160;&#160;CheckedCore&lt; </font>
-    </p>
-    <p>
-      <font face="Monospaced" size="1">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</font><font color="#9301d5" face="Monospaced" size="1">IterExplorer</font><font face="Monospaced" size="1">&lt; </font>
-    </p>
-    <p>
-      <font face="Monospaced" size="1">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</font><font color="#da3300" face="Monospaced" size="1">IterableDecorator</font><font face="Monospaced" size="1">&lt;uint, </font>
-    </p>
-    <p>
-      <font face="Monospaced" size="1">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</font><font color="#da3300" face="Monospaced" size="1">CheckedCore</font><font face="Monospaced" size="1">&lt; </font>
-    </p>
-    <p>
-      <font face="Monospaced" size="1">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Transformer&lt; </font>
-    </p>
-    <p>
-      <font face="Monospaced" size="1">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;BaseAdapter&lt;NumIter&lt;int&gt; &gt;, </font>
-    </p>
-    <p>
-      <font face="Monospaced" size="1">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;uint </font>
-    </p>
-    <p>
-      <u><font size="2">nachher</font></u><font size="2">:</font>
-    </p>
-    <p>
-      <font face="Monospaced" size="1">IterExplorer&lt; </font>
-    </p>
-    <p>
-      <font face="Monospaced" size="1">&#160;&#160;IterableDecorator&lt;uint, </font>
-    </p>
-    <p>
-      <font face="Monospaced" size="1">&#160;&#160;&#160;&#160;CheckedCore&lt; </font>
-    </p>
-    <p>
-      <font face="Monospaced" size="1">&#160;&#160;&#160;&#160;&#160;&#160;Transformer&lt; </font>
-    </p>
-    <p>
-      <font face="Monospaced" size="1">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;BaseAdapter&lt;NumIter&lt;int&gt; &gt;, </font>
-    </p>
-    <p>
-      <font face="Monospaced" size="1">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;uint </font>
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="idea"/>
-</node>
-</node>
-</node>
-</node>
-</node>
-</node>
-<node COLOR="#338800" CREATED="1732235208972" FOLDED="true" ID="ID_1764687143" MODIFIED="1732636372831" TEXT="nun in Library-Code extrahieren">
-<icon BUILTIN="button_ok"/>
-<node COLOR="#435e98" CREATED="1732299521810" ID="ID_185815307" MODIFIED="1732313502381" TEXT="schlank halten: es gen&#xfc;gt die ProductCore">
-<icon BUILTIN="yes"/>
-</node>
-<node COLOR="#338800" CREATED="1732299561444" ID="ID_1140916206" MODIFIED="1732328110469" TEXT="dazu eine free-function iter::buildIterTuple(its...)">
-<icon BUILTIN="button_ok"/>
-</node>
-<node COLOR="#338800" CREATED="1732308743486" ID="ID_1261102696" MODIFIED="1732328080578" TEXT="Pr&#xfc;fen und erweitern auf das Durchreichen von Referenzen">
-<linktarget COLOR="#b36e78" DESTINATION="ID_1261102696" ENDARROW="Default" ENDINCLINATION="243;11;" ID="Arrow_ID_1182778536" SOURCE="ID_1663970369" STARTARROW="None" STARTINCLINATION="212;14;"/>
-<icon BUILTIN="button_ok"/>
-<node COLOR="#435e98" CREATED="1732315275749" FOLDED="true" ID="ID_769235796" MODIFIED="1732328069516" TEXT="liefert dann &#xfc;berraschend oft eine Referenz">
-<icon BUILTIN="messagebox_warning"/>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1732315295690" ID="ID_565969002" MODIFIED="1732315304625" TEXT="m&#xf6;chte man das?"/>
-<node CREATED="1732315305473" ID="ID_1790636201" MODIFIED="1732315324906" TEXT="ja &#x2014; und es gibt const">
-<node CREATED="1732315656617" ID="ID_1754114367" MODIFIED="1732315684037" TEXT="bei Containern und Services kann man davon ausgehen da&#xdf; die Problematik bekannt ist"/>
-<node CREATED="1732315685980" ID="ID_543097466" MODIFIED="1732315711158" TEXT="und dem User kann ein gewisser Grad an Intelligenz unterstellt werden"/>
-</node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1732315327534" ID="ID_1282656380" MODIFIED="1732315716097" TEXT="&#xfc;berraschend beim Loop-Index">
-<icon BUILTIN="broken-line"/>
-<node CREATED="1732315341532" ID="ID_42867523" MODIFIED="1732315347625" TEXT="NumIter liefert eine const&amp;"/>
-<node CREATED="1732315348475" ID="ID_681059696" MODIFIED="1732315437859" TEXT="das ist jetzt die erste echte Verwednung">
-<richcontent TYPE="NOTE"><html>
-  <head/>
-  <body>
-    <p>
-      NumIter hatte ich bei Gelegenheit aus Test-Code extrahiert, ohne weiter viel Gedanken darauf zu ver(sch)wenden....
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1732315439551" ID="ID_933184220" MODIFIED="1732315647938" TEXT="eine Referenz auf eine einfache Zahl ist selten sinnvoll">
-<richcontent TYPE="NOTE"><html>
-  <head/>
-  <body>
-    <p>
-      Bestenfalls eliminiert der Optimiser ohnehin alle Indirektionen, aber auch alle Kopien. Wenn das aber nicht geht, weil es von irgendwo noch einen Zugriff geben k&#246;nnte, dann sitzt man auf einem Speicherzugriff, wo andernfalls direkt ein Register verwendet werden k&#246;nnte. Und wenn dann auch noch die Referenz non-const ist, versaut man sich leicht internen State und wundert sich dann... Nee, nee! Wenn man wirklich Seiteneffekte &#252;ber Referenzen m&#246;chte, dann soll man sich das bitte explizit auscoden, aber nicht eine Library-Funktion kreativ nutzen
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node COLOR="#338800" CREATED="1732315722881" ID="ID_506428359" MODIFIED="1732327993905" TEXT="also hier stellen wir um">
-<icon BUILTIN="yes"/>
-<node CREATED="1732315731512" ID="ID_70704811" MODIFIED="1732315759207" TEXT="die yield-Operation liefert explizit die Zahl by-value"/>
-<node CREATED="1732315759868" ID="ID_1323105276" MODIFIED="1732315833747" TEXT="der operator-&gt; wird sogar entfernt">
-<richcontent TYPE="NOTE"><html>
-  <head/>
-  <body>
-    <p>
-      ich kann mir keinen Anwendungsfall vorstellen, wo so etwas nicht zumindest <i>&#252;berraschend</i>&#160;w&#228;re.... Ja man k&#246;nnte INT = custom magic type setzen, aber wie war das nochmal mit <i>Magie und so?</i>
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node COLOR="#435e98" CREATED="1732317048384" FOLDED="true" ID="ID_146419454" MODIFIED="1732328064072" TEXT="Konsequenzen">
-<node COLOR="#435e98" CREATED="1732317059614" ID="ID_20106465" MODIFIED="1732327929262" TEXT="Problem mit stringify / Itertools - TransformIter">
-<icon BUILTIN="broken-line"/>
-<node CREATED="1732317140456" ID="ID_837986381" MODIFIED="1732317155688" TEXT="kann nicht double&amp; an double-val binden">
-<icon BUILTIN="stop-sign"/>
-</node>
-<node COLOR="#435e98" CREATED="1732317156849" ID="ID_255372861" MODIFIED="1732322150442" TEXT="wie kommt das zustande?">
-<node CREATED="1732317164400" ID="ID_1970930063" MODIFIED="1732317249441" TEXT="in TransformIter ist ein &#xbb;signature-check&#xab; eingebaut">
-<richcontent TYPE="NOTE"><html>
-  <head/>
-  <body>
-    <p>
-      Das hei&#223;t: in dem Moment wo wir die transformer-Funktion tats&#228;chlich installieren, packen wir sie in ein std::function-Objekt mit einer <b>neu synthetisierten Signatur</b>. Diese ist (der Intention nach) pa&#223;genau, d.h. sie nimmt den yield des vorgelagerten Iterators als Input
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1732317252324" ID="ID_417114818" MODIFIED="1732322136155" TEXT="hier liegt der Hund begraben...">
-<icon BUILTIN="broken-line"/>
-<node CREATED="1732317307077" ID="ID_577545728" MODIFIED="1732322142648" STYLE="bubble">
-<richcontent TYPE="NODE"><html>
-  <head/>
-  <body>
-    <p>
-      <font face="Monospaced">typedef typename IT::</font><font face="Monospaced" color="#c81212">reference</font><font face="Monospaced">&#160;InType; </font>
-    </p>
-    <p>
-      <font face="Monospaced">function&lt;VAL(InType)&gt; trafo_; </font>
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1732317376563" ID="ID_627865570" MODIFIED="1732317617944" TEXT="das ist ein Schnellschlu&#xdf;...">
-<richcontent TYPE="NOTE"><html>
-  <head/>
-  <body>
-    <p>
-      damals wollte ich erst mal schnell durch, wie &#252;blich;
-    </p>
-    <p>
-      viele Jahre sp&#228;ter habe ich dann den NumIter definiert, und das ist vielleicht das erste Beispiel, bei dem dieses neue Konzept wirklich ausgereitzt wurde. Ich habe so dunkel in Erinnerung, da&#223; es dann nicht funktioniert hat, und ich deshalb &#8222;einfach&#8220; das <font color="#7510cd" face="Monospaced">const</font>&#160;in die eingebetteten Ergebnis-Typdefinitionen gepackt habe. Was ja nicht falsch war, aber der Weg des geringsten Wiederstandes
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1732317416174" ID="ID_1286735666" MODIFIED="1732317436999" TEXT="es ist in 90% der F&#xe4;lle in der Praxis so"/>
-<node CREATED="1732317386082" ID="ID_1276663187" MODIFIED="1732317855187" TEXT="Nach aktuellem Stand gibt es aber keine entsprechende Konvention">
-<richcontent TYPE="NOTE"><html>
-  <head/>
-  <body>
-    <p>
-      Und das ist mir zunehmend wichtiger geworden, vor allem nach meinen Erfahrungen mit dem monadischen IterExplorer v1. Grade <i>weil man manchmal wirklich nur Values bieten kann,</i>&#160;mu&#223; diese Hintert&#252;r offen bleiben. Andererseits w&#228;re es ein gef&#228;hrlicher Fehlschlu&#223;, da&#223; eine Type-def &#187;reference&#171; hier &#8222;in Wirkklichkeit&#8220; meint, das was der Iterator liefert. Der Schlu&#223; liegt nahe, und deshalb bin ich ihm hier auch verfallen. Aber wenn man mit derartigem Konzept-Mapping erst mal anf&#228;ngt, dann verliert man schnell die Kontrolle
-    </p>
-  </body>
-</html></richcontent>
-</node>
-</node>
-<node COLOR="#338800" CREATED="1732317867385" ID="ID_1371439047" MODIFIED="1732322117846" TEXT="also: stattdessen explizit den realen yield-Typ verwenden">
-<icon BUILTIN="button_ok"/>
-<node COLOR="#338800" CREATED="1732318665574" ID="ID_1457902866" MODIFIED="1732322128177" TEXT="daf&#xfc;r eine neue Typfunktion: iter::Yield&lt;IT&gt;">
-<richcontent TYPE="NOTE"><html>
-  <head/>
-  <body>
-    <p>
-      in iter-adapter.hpp
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="button_ok"/>
-</node>
-<node COLOR="#338800" CREATED="1732318689596" ID="ID_1684194462" MODIFIED="1732322119411" TEXT="nach weiteren &#xe4;hnlichen Kurzschl&#xfc;ssen suchen...">
-<icon BUILTIN="button_ok"/>
-<node COLOR="#435e98" CREATED="1732319377134" ID="ID_1458322060" MODIFIED="1732322123341" TEXT="weiterer Fall in Itertools (im Filter)"/>
-<node COLOR="#435e98" CREATED="1732318704077" ID="ID_1614481458" MODIFIED="1732322123344" TEXT="HA!  iter-explorer : ArgAdapter-Magic">
-<richcontent TYPE="NOTE"><html>
-  <head/>
-  <body>
-    <p>
-      also exakt die zentrale Stelle, an der entschieden wird, ob eine nachgeschaltete Funktion auf den Resultat-Wert losgeht, oder direkt auf den Iterator-Typ zugreift
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node COLOR="#435e98" CREATED="1732319784560" ID="ID_866009173" MODIFIED="1732322123344" TEXT="&#xe4;hnliches Denkmuster auch in util-coll">
-<node COLOR="#435e98" CREATED="1732319797920" ID="ID_1305250293" MODIFIED="1732319806708" TEXT="hier ist auto viel besser!">
-<icon BUILTIN="yes"/>
-</node>
-</node>
-</node>
-</node>
-</node>
-</node>
-<node COLOR="#5b280f" CREATED="1732322088730" ID="ID_1242739907" MODIFIED="1732323499529" TEXT="w&#xe4;re das auch anwendbar auf IterExplorer.transform() und expand() ?">
-<icon BUILTIN="help"/>
-<icon BUILTIN="closed"/>
-<node CREATED="1732322588222" ID="ID_1443186617" MODIFIED="1732322613161">
-<richcontent TYPE="NODE"><html>
-  <head/>
-  <body>
-    <p>
-      jetzt wirds aber <b><font color="#e82105">brandgef&#228;hrlich</font></b>
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1732322629737" ID="ID_676096219" MODIFIED="1732322648571" TEXT="operator-&gt; k&#xf6;nnte Adresse-von-Temporary nehmen">
-<icon BUILTIN="broken-line"/>
-</node>
-<node COLOR="#5b280f" CREATED="1732323357278" ID="ID_1689757044" MODIFIED="1732327891664" TEXT="unm&#xf6;glich da wir effektiv nur einen Ausgabepfad haben">
-<arrowlink COLOR="#6f141e" DESTINATION="ID_738246140" ENDARROW="Default" ENDINCLINATION="194;-414;" ID="Arrow_ID_768211036" STARTARROW="None" STARTINCLINATION="507;142;"/>
-<icon BUILTIN="stop-sign"/>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1732323518400" ID="ID_1448081421" MODIFIED="1732327912529" TEXT="operator-&gt; verlangt zwingend nach einem stabilen Value">
-<icon BUILTIN="messagebox_warning"/>
-</node>
-<node COLOR="#5b280f" CREATED="1732323556923" ID="ID_1568353234" MODIFIED="1732327907757" TEXT="daher kann Core::yield() niemals anders als per Ref auf einen stabilen Wert arbeiten">
-<icon BUILTIN="yes"/>
-</node>
-<node CREATED="1732323615259" ID="ID_183489075" MODIFIED="1732499554636" TEXT="wollte man hier flexibel sein, ginge das stets nur an der Au&#xdf;engrenze">
-<richcontent TYPE="NOTE"><html>
-  <head/>
-  <body>
-    <p>
-      ...das w&#252;rde bedeuten: man reicht eine weitere Typ-Def komplett durch die ganze Kette durch, und jeweils nur am Ende der Kette w&#252;rde diese f&#252;r den operator* gelten. Da wir aber Ketten im Builder auch noch nachtr&#228;glich weiter verl&#228;ngern, indem eine neue Core dar&#252;ber gesetzt wird, ist das jedoch nicht ohne Weiteres realisierbar
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="idea"/>
-<icon BUILTIN="button_cancel"/>
-</node>
-</node>
-</node>
-</node>
-</node>
-<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1732327966521" ID="ID_1122071116" MODIFIED="1732327983573" TEXT="erscheint mir nun ein guter Komrpomi&#xdf;">
-<icon BUILTIN="yes"/>
-<node CREATED="1732328013291" ID="ID_1566390757" MODIFIED="1732328021229" TEXT="der Loop-Index kommt als reine Zahl"/>
-<node CREATED="1732328021813" ID="ID_253756107" MODIFIED="1732328030900" TEXT="ansonsten kann man auf Quellwerte durchgreifen"/>
-<node CREATED="1732328031488" ID="ID_1120812520" MODIFIED="1732328043338" TEXT="sofern die zugrundeliegende Situation dies zul&#xe4;&#xdf;t"/>
-<node CREATED="1732328044567" ID="ID_369672919" MODIFIED="1732328061744" TEXT="und der user kann stets values konstruieren"/>
-</node>
-</node>
-</node>
-</node>
-</node>
-<node COLOR="#338800" CREATED="1732235272468" FOLDED="true" ID="ID_1892180908" MODIFIED="1732637867027" TEXT="gr&#xfc;ndlich testen">
-<icon BUILTIN="button_ok"/>
-<node COLOR="#338800" CREATED="1732308670586" ID="ID_351914878" MODIFIED="1732308678431" TEXT="einfaches Demo-Beispiel">
-<icon BUILTIN="button_ok"/>
-<node COLOR="#435e98" CREATED="1732308679924" ID="ID_762659981" MODIFIED="1732308713186" TEXT="sollte eine For-Schleife zeigen"/>
-<node COLOR="#435e98" CREATED="1732308687234" ID="ID_981998183" MODIFIED="1732308713186" TEXT="sollte direkten Gebrauch als Iterator sichtbar machen"/>
-</node>
-<node COLOR="#338800" CREATED="1732235323997" ID="ID_1085200650" MODIFIED="1732584375034" TEXT="Iteratoren verschiedenen Typs">
-<icon BUILTIN="button_ok"/>
-<node COLOR="#338800" CREATED="1732313512667" ID="ID_1362209953" MODIFIED="1732328099863" TEXT="verschieden dekorierte Sequenzen">
-<icon BUILTIN="button_ok"/>
-</node>
-<node COLOR="#338800" CREATED="1732313524489" ID="ID_824059713" MODIFIED="1732584368643" TEXT="Sequenzen verschiedener L&#xe4;nge">
-<icon BUILTIN="button_ok"/>
-</node>
-<node COLOR="#338800" CREATED="1732313533659" ID="ID_1229132868" MODIFIED="1732584370123" TEXT="verschiedene Quellen">
-<icon BUILTIN="button_ok"/>
-<node COLOR="#435e98" CREATED="1732313542680" ID="ID_918133774" MODIFIED="1732584373490" TEXT="Lumiera-Iterator"/>
-<node COLOR="#435e98" CREATED="1732313547158" ID="ID_1297222060" MODIFIED="1732584373490" TEXT="STL-Container"/>
-<node COLOR="#435e98" CREATED="1732313554272" ID="ID_628954162" MODIFIED="1732584373490" TEXT="State-Core"/>
-<node COLOR="#435e98" CREATED="1732313559148" ID="ID_888513620" MODIFIED="1732584373489" TEXT="IterSource"/>
-</node>
-</node>
-<node COLOR="#338800" CREATED="1732235343138" ID="ID_1943784376" MODIFIED="1732584376431" TEXT="per structured Binding verarbeiten">
-<icon BUILTIN="button_ok"/>
-</node>
-<node COLOR="#338800" CREATED="1732235434406" ID="ID_1663970369" MODIFIED="1732328083295" TEXT="Durchgriff auf die Quellen per Referenz">
-<arrowlink COLOR="#b36e78" DESTINATION="ID_1261102696" ENDARROW="Default" ENDINCLINATION="243;11;" ID="Arrow_ID_1182778536" STARTARROW="None" STARTINCLINATION="212;14;"/>
-<icon BUILTIN="button_ok"/>
-</node>
-<node COLOR="#338800" CREATED="1732332677537" ID="ID_800914951" MODIFIED="1732489241725" TEXT="nachgeschaltete Pipeline">
-<icon BUILTIN="button_ok"/>
-<node COLOR="#338800" CREATED="1732332692124" ID="ID_1457478622" MODIFIED="1732401346084" TEXT="transformer in einfache Zahl">
-<icon BUILTIN="button_ok"/>
-</node>
-<node COLOR="#338800" CREATED="1732332702041" ID="ID_682214158" MODIFIED="1732401344958" TEXT="Filter basierend auf Werten aus dem Tupel">
-<icon BUILTIN="button_ok"/>
-<node COLOR="#435e98" CREATED="1732333449943" ID="ID_1811172733" MODIFIED="1732489128888" TEXT="Beobachtung: direkt gegebener IterExplorer wird nochmal gewrapped">
-<arrowlink COLOR="#67697e" DESTINATION="ID_1262167504" ENDARROW="Default" ENDINCLINATION="-307;14;" ID="Arrow_ID_1075091501" STARTARROW="None" STARTINCLINATION="163;-136;"/>
-<icon BUILTIN="messagebox_warning"/>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1732333481816" ID="ID_488310307" MODIFIED="1732489228315" TEXT="das ist unsch&#xf6;n">
-<richcontent TYPE="NOTE"><html>
-  <head/>
-  <body>
-    <p>
-      ...auch wenn es normalerweise kein Performance-Problem darstellt, weil der Optimiser redundante Aufrufe problemlos eliminiert, macht es die Typen f&#252;r den Au&#223;enstehend noch viel undurchtringbarer, und belastet auch die Debug-Builds durch den Umfang unn&#246;tiger Typ-Information
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="smily_bad"/>
-</node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1732333491869" ID="ID_34490328" MODIFIED="1732489232938" TEXT="...und w&#xfc;rde das Durchreichen eines Child-Expanders verhindern">
-<arrowlink COLOR="#7d7a99" DESTINATION="ID_1051749303" ENDARROW="Default" ENDINCLINATION="47;-71;" ID="Arrow_ID_922384929" STARTARROW="None" STARTINCLINATION="-576;25;"/>
-<icon BUILTIN="broken-line"/>
-</node>
-</node>
-<node COLOR="#435e98" CREATED="1732332721552" FOLDED="true" ID="ID_884561005" MODIFIED="1732380040032" TEXT="erstes Ausgabetupel enth&#xe4;lt uninitialisierte Werte">
-<icon BUILTIN="broken-line"/>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1732335037680" ID="ID_883671623" MODIFIED="1732488924547" TEXT="Ursache: das erste pullFilter() im ctor wird vor dem move() aufgerufen">
-<icon BUILTIN="broken-line"/>
-</node>
-<node BACKGROUND_COLOR="#e2ba5e" COLOR="#b70624" CREATED="1732334924952" ID="ID_1746517643" MODIFIED="1732488958484" TEXT="das ist ein schlummernder Bug im IterExplorer-Filter">
-<icon BUILTIN="clanbomber"/>
-<node CREATED="1732334965186" ID="ID_1456555909" MODIFIED="1732335007808" TEXT="tritt nur auf wenn der darunter liegende Iterator eine Referenz speichert"/>
-<node CREATED="1732335008372" ID="ID_1329188040" MODIFIED="1732335016335" TEXT="und diese Referenz in den Iterator selbst zeigt"/>
-<node COLOR="#b80990" CREATED="1732335125501" ID="ID_1555472016" MODIFIED="1732335151624" TEXT="&#xd83d;&#xdc80; Teufelszeug!!">
-<font NAME="SansSerif" SIZE="14"/>
-<node CREATED="1732335207642" ID="ID_955481326" MODIFIED="1732335217996" TEXT="immer wieder das Problem mit diesen move-Buildern"/>
-<node CREATED="1732335320131" ID="ID_166629885" MODIFIED="1732335329917" TEXT="unklar: w&#xfc;rde ein RVO-Builder hier helfen??"/>
-<node CREATED="1732335356217" ID="ID_1122958962" MODIFIED="1732335515135" TEXT="eigentliches Problem ist das Zwiebelschalen-Design">
-<richcontent TYPE="NOTE"><html>
-  <head/>
-  <body>
-    <p>
-      das zwingt mich, einen inneren Quell-Layer in den &#228;u&#223;eren Wrapper zu schieben; selbst wenn ich das Argument by-value nehme, ist es damit noch nicht in dem Objekt-Feld, wo es hingeh&#246;rt. Das bedeutet dann, entweder eine Kopie (und man ist vom Optimiser abh&#228;ngig), oder eben ein move(SRC).
-    </p>
-  </body>
-</html></richcontent>
-</node>
-</node>
-</node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1732335090297" ID="ID_1603332767" MODIFIED="1732335111791" TEXT="konkret liegt danach im ItemWrapper ein Tuple mit dangling-references">
-<icon BUILTIN="info"/>
-</node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1732335516273" ID="ID_77601" MODIFIED="1732380035456" TEXT="Konsequenz: KEINE Aktivit&#xe4;t in einem Konstruktor darf Referenzen binden">
-<icon BUILTIN="yes"/>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1732336927298" ID="ID_1133143344" MODIFIED="1732379480374" TEXT="das betrifft m&#xf6;glicherweise auch Weitere, z.B. das Grouping">
-<icon BUILTIN="messagebox_warning"/>
-<node CREATED="1732378962487" ID="ID_507210660" MODIFIED="1732378981608" TEXT="alle durchgesehen: tats&#xe4;chlich ist das Grouping i.d.R davon nicht betroffen"/>
-<node CREATED="1732378982412" ID="ID_298559499" MODIFIED="1732379024090" TEXT="alles was per-Value arbeitet, ist sicher (ein Aggregator ist potentiell gef&#xe4;hrlich)"/>
-<node CREATED="1732379482769" ID="ID_1391046371" MODIFIED="1732379567301">
-<richcontent TYPE="NODE"><html>
-  <head/>
-  <body>
-    <p>
-      tats&#228;chlich ist der Filter <b>besonders</b>&#160;gef&#228;hrdet
-    </p>
-  </body>
-</html></richcontent>
-<richcontent TYPE="NOTE"><html>
-  <head/>
-  <body>
-    <p>
-      weil der Filter selber ja nur den Feed pullt, aber selber keine Werte speichert; damit erzeugt er m&#246;glicherweise <i>upstream</i>&#160;obsolete Referenzen.
-    </p>
-  </body>
-</html></richcontent>
-</node>
-</node>
-<node CREATED="1732336967005" ID="ID_643449650" MODIFIED="1732337008685">
-<richcontent TYPE="NODE"><html>
-  <head/>
-  <body>
-    <p>
-      ich brauche einen <b>engaged</b>-State
-    </p>
-  </body>
-</html></richcontent>
-<node CREATED="1732337022157" ID="ID_544252009" MODIFIED="1732337084587" TEXT="das k&#xf6;nnte dann weiteres Verschieben sperren"/>
-<node CREATED="1732337085316" ID="ID_487485041" MODIFIED="1732337085316" TEXT="zumindest darf Invarianten-Processing erst mit diesem Schritt passieren"/>
-<node CREATED="1732372728476" ID="ID_1531001529" MODIFIED="1732373067818" TEXT="&#xe4;rgerlich: bl&#xe4;ht Storage auf und bricht Invarianten"/>
-</node>
-<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1732377283840" ID="ID_1863518121" MODIFIED="1732378140499" TEXT="versuche Workaround: re-engage">
-<icon BUILTIN="help"/>
-<icon BUILTIN="idea"/>
-<node CREATED="1732377307860" ID="ID_410007394" MODIFIED="1732377339117" TEXT="das Problem besteht einzig im Transformer">
-<icon BUILTIN="idea"/>
-</node>
-<node CREATED="1732377323718" ID="ID_250925762" MODIFIED="1732377333805" TEXT="die Grouper kopieren n&#xe4;mlich per-Value"/>
-<node CREATED="1732377340359" ID="ID_1293483567" MODIFIED="1732377393572" TEXT="der Transformer hat schon impliziten &quot;engaged&quot;-State">
-<richcontent TYPE="NOTE"><html>
-  <head/>
-  <body>
-    <p>
-      ...er l&#228;&#223;t n&#228;mlich den ItemWrapper zun&#228;chst leer, und verwendet das f&#252;r eine Lazy-invocation der Transformation
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1732377394409" ID="ID_205213439" MODIFIED="1732377416893" TEXT="also w&#xfc;rde es gen&#xfc;gen, da&#xdf; jedes Copy/Move &#x27fc; disengaged"/>
-<node CREATED="1732377419435" ID="ID_343740069" MODIFIED="1775593577185" TEXT="Nebenbei: copy-and-swap-Idiom verwenden">
-<arrowlink COLOR="#6176b0" DESTINATION="ID_1782676400" ENDARROW="Default" ENDINCLINATION="-1718;207;" ID="Arrow_ID_511557246" STARTARROW="None" STARTINCLINATION="-532;34;"/>
-</node>
-<node COLOR="#338800" CREATED="1732378142413" ID="ID_1308227786" MODIFIED="1732378149468" TEXT="best&#xe4;tigt: l&#xf6;st das Problem">
-<icon BUILTIN="button_ok"/>
-</node>
-</node>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#5617c6" CREATED="1732379576452" ID="ID_1580080364" MODIFIED="1732379866080">
-<richcontent TYPE="NODE"><html>
-  <head/>
-  <body>
-    <p>
-      ungutes Gef&#252;hl...
-    </p>
-    <p>
-      <font size="5">das Design hat hier eine </font><font size="5" color="#c20c49">Schwachstelle</font>
-    </p>
-  </body>
-</html></richcontent>
-<linktarget COLOR="#dc1411" DESTINATION="ID_1580080364" ENDARROW="Default" ENDINCLINATION="-714;76;" ID="Arrow_ID_705169700" SOURCE="ID_1846153024" STARTARROW="None" STARTINCLINATION="639;23;"/>
-<icon BUILTIN="clanbomber"/>
-</node>
-</node>
-<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1732380041706" ID="ID_1315871262" MODIFIED="1732380070726" TEXT="mit dem Workaround ist das Problem (in diesem Fall) behoben">
-<icon BUILTIN="smiley-oh"/>
-</node>
-</node>
-</node>
-</node>
-<node COLOR="#338800" CREATED="1732235523602" FOLDED="true" ID="ID_1940842867" MODIFIED="1732577239677" TEXT="Durchgriff auf Child-Expander im Quell-Iterator">
-<icon BUILTIN="button_ok"/>
-<node COLOR="#338800" CREATED="1732404127247" ID="ID_1051749303" MODIFIED="1732489015844" TEXT="setzt Anpassungen an den Adaptern voraus">
-<arrowlink COLOR="#599ced" DESTINATION="ID_87985222" ENDARROW="Default" ENDINCLINATION="180;171;" ID="Arrow_ID_1403487927" STARTARROW="None" STARTINCLINATION="425;-32;"/>
-<linktarget COLOR="#7d7a99" DESTINATION="ID_1051749303" ENDARROW="Default" ENDINCLINATION="47;-71;" ID="Arrow_ID_922384929" SOURCE="ID_34490328" STARTARROW="None" STARTINCLINATION="-576;25;"/>
-<icon BUILTIN="button_ok"/>
-<node CREATED="1732489248682" ID="ID_1208683398" MODIFIED="1732489263569" TEXT="BaseAdapter wird nun &#xfc;berhaupt nur einmal pro Pipeline eingef&#xfc;gt"/>
-<node CREATED="1732489265869" ID="ID_454730383" MODIFIED="1732489281623" TEXT="und ob er noch eingef&#xfc;gt wird, l&#xe4;&#xdf;t sich &#xfc;ber ein Typ-Tag steuern"/>
-<node CREATED="1732489282051" ID="ID_1170202318" MODIFIED="1732489328431" TEXT="eine custom-Core (wie hier) kann also die Rolle eines Base-Adapter explizit &#xfc;bernehmen">
-<icon BUILTIN="idea"/>
-</node>
-</node>
-<node COLOR="#338800" CREATED="1732489334100" ID="ID_744918133" MODIFIED="1732489351281" TEXT="das eigentliche Weiterleiten der Aufrufe ist trivial einfach zu implementieren">
-<icon BUILTIN="button_ok"/>
-</node>
-<node COLOR="#435e98" CREATED="1732489352034" ID="ID_1389747588" MODIFIED="1732636282025" TEXT="Testen ist m&#xfc;hsam....">
-<node BACKGROUND_COLOR="#c8c0b6" CREATED="1732499374948" ID="ID_1694141748" MODIFIED="1732576950165" TEXT="geht schon los mit....">
-<node COLOR="#435e98" CREATED="1732499382404" ID="ID_298429500" MODIFIED="1732636249571" TEXT="...dem Umstand, da&#xdf; der Expander nicht auf Value-Result funktioniert">
-<icon BUILTIN="broken-line"/>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1732499558508" ID="ID_738246140" MODIFIED="1732499660372" TEXT="hatte das schon einmal vor ein paar Tagen erfolglos untersucht">
-<linktarget COLOR="#6f141e" DESTINATION="ID_738246140" ENDARROW="Default" ENDINCLINATION="194;-414;" ID="Arrow_ID_768211036" SOURCE="ID_1689757044" STARTARROW="None" STARTINCLINATION="507;142;"/>
-<icon BUILTIN="broken-line"/>
-</node>
-<node CREATED="1732499692888" ID="ID_1624652047" MODIFIED="1732499711525" TEXT="der Expander enth&#xe4;lt eines dieser hart-gecodeten &quot;reference&quot;-Typen">
-<node CREATED="1732499718302" ID="ID_1327516976" MODIFIED="1732499730864" TEXT="dabei w&#xfc;rde es hier gehen"/>
-<node CREATED="1732499731453" ID="ID_524965988" MODIFIED="1732499744446" TEXT="sofern man sinnvoll auf einen kleinsten gemeinsamen Nenner zur&#xfc;ckf&#xe4;llt"/>
-</node>
-</node>
-<node COLOR="#435e98" CREATED="1732499748626" ID="ID_73007932" MODIFIED="1732658339211" TEXT="nochmal untersuchen: k&#xf6;nnen wir Value-Ergebnisse aus der Pipeline unterst&#xfc;tzen?">
-<arrowlink COLOR="#4bb4e2" DESTINATION="ID_1558751662" ENDARROW="Default" ENDINCLINATION="411;23;" ID="Arrow_ID_1082389405" STARTARROW="None" STARTINCLINATION="-3;-253;"/>
-<linktarget COLOR="#726ea0" DESTINATION="ID_73007932" ENDARROW="Default" ENDINCLINATION="-605;-685;" ID="Arrow_ID_1417723074" SOURCE="ID_625268615" STARTARROW="None" STARTINCLINATION="1034;49;"/>
-<linktarget COLOR="#4e6fd7" DESTINATION="ID_73007932" ENDARROW="Default" ENDINCLINATION="-1571;53;" ID="Arrow_ID_1348614829" SOURCE="ID_1087558825" STARTARROW="None" STARTINCLINATION="-292;13;"/>
-<icon BUILTIN="help"/>
-<node COLOR="#435e98" CREATED="1732499767002" FOLDED="true" ID="ID_1245640841" MODIFIED="1732636236208" TEXT="Problem-1 : operator-&gt; kann nicht unterst&#xfc;tzt werden">
-<node CREATED="1732499786605" ID="ID_1510842318" MODIFIED="1732499805038" TEXT="diesen m&#xfc;&#xdf;te man dann per conditional-Definiton entfernen"/>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1732499810538" ID="ID_1382366845" MODIFIED="1732576617138" TEXT="vielleicht ist das akzeptabel (Konsequenzen noch nicht klar...)">
-<icon BUILTIN="help"/>
-<node COLOR="#435e98" CREATED="1732576620377" ID="ID_801036210" MODIFIED="1732576650829" TEXT="die code-Basis jedenfalls compiliert weiterhin"/>
-<node COLOR="#435e98" CREATED="1732576632416" ID="ID_1935979671" MODIFIED="1732576647957" TEXT="noch einen static_assert eingebaut f&#xfc;r bessere Fehlermeldung"/>
-</node>
-</node>
-<node COLOR="#435e98" CREATED="1732499843557" FOLDED="true" ID="ID_1131882712" MODIFIED="1732636221004" TEXT="Problem-2 : mu&#xdf; zwischen Value/Ref umschalten k&#xf6;nnen">
-<node CREATED="1732499861875" ID="ID_297864909" MODIFIED="1732499878292" TEXT="brauche effektiv einen weiteren &#xbb;Ausgabekanal&#xab; &#xfc;ber den Typ"/>
-<node CREATED="1732499879180" ID="ID_152140001" MODIFIED="1732576772094" TEXT="denkbar: wenn die R&#xfc;ckgabetypen aufeinander aufbauen">
-<richcontent TYPE="NOTE"><html>
-  <head/>
-  <body>
-    <p>
-      ...dann w&#252;rden wir eine ganze Pipeline &#187;flippen&#171; k&#246;nnen, wenn der erste Result-Typ auf Value schwenkt
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1732499895991" ID="ID_1513249083" MODIFIED="1732500014771" TEXT="die Pipeline ist jetzt hinreichend aufger&#xe4;umt">
-<richcontent TYPE="NOTE"><html>
-  <head/>
-  <body>
-    <p>
-      habe die mehrfachen Adapter nun allesamt weg; daher w&#228;re es nun doch denkbar, da die Call-Pfade nun von einem Punkt aus aufspalten (n&#228;mlich Core::yield -&gt;&#160;&#160;entweder operator* oder operator-&gt; )
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1732576781381" ID="ID_452524052" MODIFIED="1732576819125" TEXT="effektiv l&#xe4;d das das Problem bei konkreten Transformationen und Pr&#xe4;dikaten ab">
-<icon BUILTIN="messagebox_warning"/>
-<node CREATED="1732576832125" ID="ID_443099186" MODIFIED="1732576877954" TEXT="...denn eine Funktion die non-const-Referenzen nimmt, scheitert"/>
-<node CREATED="1732576887573" ID="ID_687212437" MODIFIED="1732576907676" TEXT="erscheint akzepabel, da das i.d.R Lambdas f&#xfc;r den Einzelfall sind"/>
-</node>
-</node>
-<node COLOR="#338800" CREATED="1732500030252" FOLDED="true" ID="ID_1233066521" MODIFIED="1732636215230" TEXT="Proof-of-Concept machen">
-<icon BUILTIN="button_ok"/>
-<node COLOR="#338800" CREATED="1732500037694" ID="ID_1099507221" MODIFIED="1732576467794" TEXT="neues Trait:  lib::meta::CommonResultYield">
-<icon BUILTIN="yes"/>
-<node COLOR="#435e98" CREATED="1732500063864" ID="ID_1307133504" MODIFIED="1732576476301" TEXT="mithilfe von std::common_type implementieren">
-<icon BUILTIN="idea"/>
-<node CREATED="1732576477599" ID="ID_724368575" MODIFIED="1732576484055" TEXT="das hat so seine Schw&#xe4;chen"/>
-<node CREATED="1732576490514" ID="ID_43853125" MODIFIED="1732576498906" TEXT="im Besonderen impliziert es std::decay()"/>
-</node>
-<node COLOR="#338800" CREATED="1732500078558" ID="ID_1560553142" MODIFIED="1732576505729" TEXT="explizit die const-Ness und Referenz steuern">
-<icon BUILTIN="button_ok"/>
-<node CREATED="1732500096323" ID="ID_295136585" MODIFIED="1732500101720" TEXT="const wenn einer der beiden Typen const"/>
-<node CREATED="1732500102266" ID="ID_910645487" MODIFIED="1732500113788" TEXT="(L)Ref nur wenn beider Typen LRef"/>
-</node>
-<node COLOR="#338800" CREATED="1732500120132" ID="ID_1315885808" MODIFIED="1732576513152" TEXT="saubere Funktionsweise erst mal isoliert testen">
-<icon BUILTIN="button_ok"/>
-<node CREATED="1732505350051" ID="ID_120652623" MODIFIED="1732505403271">
-<richcontent TYPE="NODE"><html>
-  <head/>
-  <body>
-    <p>
-      Booo!&#160;&#160;<font face="Monospaced" color="#582e24">is_const_v&lt;T&amp;&gt;</font>&#160;ist <b><font color="#e00b0b">immer false</font></b>
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1732573450476" ID="ID_1325209644" MODIFIED="1732573474740" TEXT="und X &amp; const &#x2260; X const&amp;"/>
-<node CREATED="1732576525640" ID="ID_1638928832" MODIFIED="1732576557732" TEXT="tja">
-<richcontent TYPE="NOTE"><html>
-  <head/>
-  <body>
-    <p>
-      ruck-zuck ein paar Stunden weg ... h&#228;tte man doch gleich einen Test geschrieben
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="smily_bad"/>
-</node>
-</node>
-<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1732584495255" ID="ID_910412701" MODIFIED="1732636199249" TEXT="&#x27f6; eigens als Test dokumentiert">
-<arrowlink COLOR="#1c61d4" DESTINATION="ID_1750877358" ENDARROW="Default" ENDINCLINATION="1071;0;" ID="Arrow_ID_626641268" STARTARROW="None" STARTINCLINATION="385;33;"/>
-</node>
-</node>
-<node COLOR="#338800" CREATED="1732576300069" ID="ID_1496960816" MODIFIED="1732576458151" TEXT="IterableDecorator flexibel machen : hier Vorgabe (referenz) &#x27f7; tats&#xe4;chliches yield()">
-<icon BUILTIN="button_ok"/>
-</node>
-<node COLOR="#338800" CREATED="1732576329179" ID="ID_67215000" MODIFIED="1732576459743" TEXT="Typ-Logik in iter_explorer::Expander auf CommonResultYield umstellen">
-<icon BUILTIN="button_ok"/>
-</node>
-</node>
-<node COLOR="#435e98" CREATED="1732576979521" ID="ID_193097642" MODIFIED="1732576987652" TEXT="Fazit">
-<font BOLD="true" NAME="SansSerif" SIZE="12"/>
-<icon BUILTIN="forward"/>
-<node CREATED="1732576989241" ID="ID_597816803" MODIFIED="1732577212565" TEXT="technisch ohne Weiteres m&#xf6;glich">
-<richcontent TYPE="NOTE"><html>
-  <head/>
-  <body>
-    <ul>
-      <li>
-        dediziertes Trait schaffen
-      </li>
-      <li>
-        Propagations-Logik explizit auscoden
-      </li>
-      <li>
-        den operator-&gt; auf Values weglassen bzw mit compile-Fehler unterdr&#252;cken
-      </li>
-    </ul>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1732576997102" ID="ID_1924173493" MODIFIED="1732577133634" TEXT="bestehendes System dadurch nicht gef&#xe4;hrdet">
-<richcontent TYPE="NOTE"><html>
-  <head/>
-  <body>
-    <p>
-      ...da bisher alles auf R&#252;ckgabe by-ref ausgelegt ist, und dieser Fall deshalb durch die &#196;nderung ohne Modifikation durchgereicht wird
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1732577018219" ID="ID_226679397" MODIFIED="1732577103664" TEXT="man k&#xf6;nnte wagen, diese Variante ebenfalls zuzulassen">
-<richcontent TYPE="NOTE"><html>
-  <head/>
-  <body>
-    <p>
-      es wird vermutlich auf wenige F&#228;lle beschr&#228;nkt bleiben, in denen es aber durchaus hilfreich ist, da sowohl Generatoren als auch Transformatoren einfacher zu schreiben sind
-    </p>
-  </body>
-</html></richcontent>
-</node>
-</node>
-</node>
-<node COLOR="#435e98" CREATED="1732576921726" ID="ID_23499408" MODIFIED="1732576947137" TEXT="OK &#x27f9; kann nun sehr einfach eine depth-first-exploration demonstrieren">
-<icon BUILTIN="ksmiletris"/>
-</node>
-</node>
-<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1732576952252" ID="ID_115461255" MODIFIED="1732577229895" TEXT="der Rest ist gar nicht m&#xfc;hsam sondern funktioniert auf Anhieb">
-<icon BUILTIN="smiley-oh"/>
-</node>
-</node>
-<node COLOR="#338800" CREATED="1732577241029" ID="ID_994951030" MODIFIED="1732577657422" TEXT="best&#xe4;tigt: funktioniert">
-<icon BUILTIN="button_ok"/>
-<node CREATED="1732577251908" ID="ID_313126773" MODIFIED="1732577264497" TEXT="verwende zwei komplett verschieden arbeitende Expander"/>
-<node COLOR="#435e98" CREATED="1732577265065" ID="ID_1527782902" MODIFIED="1732577661937" TEXT="Fall-1 : autoExpand unterhalb der zip()-Operation"/>
-<node COLOR="#435e98" CREATED="1732577580608" ID="ID_88998768" MODIFIED="1732577661937" TEXT="Fall-2 : autoExpand oberhalb der zip()-Operation erzeugen">
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1732577599605" HGAP="27" ID="ID_52497187" MODIFIED="1732577651345" TEXT="&#x27f8; Unterschied: die Sequenz ohne Expander bleibt stehen" VSHIFT="12">
-<icon BUILTIN="messagebox_warning"/>
-</node>
-<node COLOR="#338800" CREATED="1732577638050" ID="ID_288695828" MODIFIED="1732577734390" TEXT="das ist korrekt so">
-<richcontent TYPE="NOTE"><html>
-  <head/>
-  <body>
-    <p>
-      der auto-Expander kann und darf ja nicht wissen, wo genau unterhalb die Expansion stattfindet; wenn eben gar keine stattfindet, dann bleiben alle durchgereichten expandChildren()-Aufrufe ohne Wirkung, aber ein iterNext() wird dann auch nicht mehr gesendet
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="button_ok"/>
-</node>
-</node>
-</node>
-</node>
-<node COLOR="#338800" CREATED="1732584380577" ID="ID_907702003" MODIFIED="1732637858939" TEXT="nebenbei: IterableDecorator ist nun flexibler &#x27f6; Test">
-<icon BUILTIN="yes"/>
-<icon BUILTIN="button_ok"/>
-<node COLOR="#435e98" CREATED="1732584408909" ID="ID_1774747868" MODIFIED="1732658996535" TEXT="iter-core-adapter-test.cpp">
-<font BOLD="true" NAME="SansSerif" SIZE="12"/>
-<node CREATED="1732584417772" ID="ID_710320129" MODIFIED="1732584430262" TEXT="weil das eigentlich mit dem Thema &#xbb;State Core&#xab; zu tun hat"/>
-<node CREATED="1732584430730" ID="ID_1543136731" MODIFIED="1732584440733" TEXT="...wof&#xfc;r es bisher gar keine Tests gab">
-<icon BUILTIN="smiley-neutral"/>
-</node>
-</node>
-<node COLOR="#338800" CREATED="1732584446602" ID="ID_72717134" MODIFIED="1732584461134" TEXT="sollte dann auch gleich mal die Grundmuster mit dokumentieren">
-<icon BUILTIN="button_ok"/>
-</node>
-<node COLOR="#338800" CREATED="1732584463118" ID="ID_1750877358" MODIFIED="1732636191954" TEXT="Testfall mit den Typkonvertierungen extrahieren">
-<linktarget COLOR="#1c61d4" DESTINATION="ID_1750877358" ENDARROW="Default" ENDINCLINATION="1071;0;" ID="Arrow_ID_626641268" SOURCE="ID_910412701" STARTARROW="None" STARTINCLINATION="385;33;"/>
-<linktarget COLOR="#69c89b" DESTINATION="ID_1750877358" ENDARROW="Default" ENDINCLINATION="69;1076;" ID="Arrow_ID_813654437" SOURCE="ID_1771231866" STARTARROW="None" STARTINCLINATION="260;-379;"/>
-<icon BUILTIN="button_ok"/>
-</node>
-<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1732584616649" ID="ID_1631761913" MODIFIED="1732658977729" TEXT="aufr&#xe4;umen...">
-<icon BUILTIN="yes"/>
-<node COLOR="#338800" CREATED="1732584624472" FOLDED="true" ID="ID_447849996" MODIFIED="1732658984799" TEXT="Typ-Parameter von IterStateWrapper">
-<icon BUILTIN="button_ok"/>
-<node COLOR="#338800" CREATED="1732584638326" ID="ID_200640906" MODIFIED="1732628617817" TEXT="der default auf dem 2.Parameter kann weg">
-<icon BUILTIN="button_ok"/>
-<node CREATED="1732628224293" ID="ID_766835440" MODIFIED="1732628228755" TEXT="er wird nie verwendet"/>
-<node CREATED="1732628229301" ID="ID_744093810" MODIFIED="1732628286463" TEXT="er ist parktisch unsinnig">
-<richcontent TYPE="NOTE"><html>
-  <head/>
-  <body>
-    <p>
-      ich kann mir keinen Fall vorstellen, in dem der Default gelten k&#246;nnte; vermutlich habe ich den Default damals angeschrieben, als ich mir das Konzept neu ausgedacht habe, und mir noch nicht klar war, wohin das f&#252;hrt (und wie bedeutend das mal wird....)
-    </p>
-  </body>
-</html></richcontent>
-</node>
-</node>
-<node COLOR="#435e98" CREATED="1732584652068" ID="ID_1279596515" MODIFIED="1732658915633" TEXT="kann man den Typ-Parameter deduzierbar machen?">
-<icon BUILTIN="help"/>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1732628298530" ID="ID_831486797" MODIFIED="1732628304606" TEXT="man k&#xf6;nnte in der Tat">
-<icon BUILTIN="hourglass"/>
-</node>
-<node CREATED="1732628308553" ID="ID_637227327" MODIFIED="1732628328434" TEXT="dazu m&#xfc;&#xdf;te die Reihenfolge der Parameter vertauscht werden"/>
-<node CREATED="1732628329022" ID="ID_1632926300" MODIFIED="1732628380419" TEXT="und der zweite Parameter m&#xfc;&#xdf;te der tats&#xe4;chliche yield-Typ sein"/>
-<node CREATED="1732628383213" ID="ID_1968872393" MODIFIED="1732628509959" TEXT="es gibt einen einzigen Fall, in dem das tats&#xe4;chlich notwendig ist">
-<richcontent TYPE="NOTE"><html>
-  <head/>
-  <body>
-    <p>
-      ...und zwar in <b>LinkedElements</b>.
-    </p>
-    <p>
-      Das ist nicht <i>irgend ein Randfall, </i>sondern eine der zentralen Nutzungsm&#246;glichkeiten: um n&#228;mlich einen iterator und einen const-iterator aus der gleichen Core zu erzeugen
-    </p>
-  </body>
-</html></richcontent>
-</node>
-<node CREATED="1732628547993" ID="ID_1897860408" MODIFIED="1732628563866" TEXT="deshalb mu&#xdf; der zweite (jetzt erste) Parameter bleiben, kann aber defaultet sein"/>
-<node CREATED="1732628564623" ID="ID_1023873369" MODIFIED="1732628576939" TEXT="und w&#xfc;rde damit auch konsistent der tats&#xe4;chliche R&#xfc;ckgabetyp sein"/>
-<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1732628578845" ID="ID_734093259" MODIFIED="1732658950621" TEXT="disruptiv &#x2014; aber substantielle Verbesserung">
-<icon BUILTIN="yes"/>
-</node>
-</node>
-<node COLOR="#435e98" CREATED="1732629696172" ID="ID_830334020" MODIFIED="1732658953629" TEXT="dann auch nochmal &#xfc;ber die Parameter von IterStateWrapper nachdenken">
-<icon BUILTIN="yes"/>
-<node COLOR="#338800" CREATED="1732658923278" ID="ID_1898212478" MODIFIED="1732658944678" TEXT="in der Tat: hier ist die gleiche Vereinfachung m&#xf6;glich">
-<icon BUILTIN="button_ok"/>
-</node>
-<node COLOR="#338800" CREATED="1732658934303" ID="ID_1974065226" MODIFIED="1732658944678" TEXT="der explizite Typ-Parameter kann sogar ganz weg">
-<icon BUILTIN="button_ok"/>
-</node>
-</node>
-<node COLOR="#338800" CREATED="1732658954909" ID="ID_1267513558" MODIFIED="1732658969610" TEXT="Anpassungen ausgef&#xfc;hrt &#x27f9; funktioniert auf Anhieb">
-<icon BUILTIN="button_ok"/>
-</node>
-</node>
-<node COLOR="#338800" CREATED="1732584709076" ID="ID_1502894530" MODIFIED="1732630636890" TEXT="Kommentare in iter-adapter">
-<icon BUILTIN="button_ok"/>
-</node>
-<node COLOR="#338800" CREATED="1732584812346" ID="ID_88185433" MODIFIED="1732637846063" TEXT="Kommentare zu iter-zip">
-<icon BUILTIN="button_ok"/>
-</node>
-</node>
-</node>
-</node>
-</node>
-<node COLOR="#338800" CREATED="1535891065189" FOLDED="true" ID="ID_1233342893" MODIFIED="1774712907980" TEXT="Iterator-Monade">
+<node CREATED="1536015468698" ID="ID_84209919" MODIFIED="1775752319756" TEXT="Iterator-Framework">
+<node COLOR="#338800" CREATED="1535891065189" FOLDED="true" ID="ID_1233342893" MODIFIED="1775752330745" TEXT="Iterator-Monade">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -57610,7 +56628,1175 @@
 </node>
 </node>
 </node>
-<node CREATED="1536015468698" ID="ID_1045359957" MODIFIED="1557498707236" TEXT="utils">
+<node COLOR="#338800" CREATED="1536015471377" ID="ID_467909786" MODIFIED="1736882848055" TEXT="regex-Iterator / Helper">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1536015489143" ID="ID_22887204" MODIFIED="1557498707236" TEXT="std::sregex_token_itertor"/>
+<node CREATED="1536015509308" ID="ID_1822556913" MODIFIED="1557498707236" TEXT="geschickt verpacken"/>
+<node COLOR="#5b280f" CREATED="1536015513076" ID="ID_720148094" MODIFIED="1736882832134" TEXT="den Regex-Include opaque halten">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#5c4d6e" CREATED="1710170380632" ID="ID_57020171" MODIFIED="1736882869209" TEXT="aus Yoshimi-test &#x27f9; lib/regex.hpp">
+<icon BUILTIN="info"/>
+<node CREATED="1736882878445" ID="ID_1888946328" MODIFIED="1736882888025" TEXT="hat sich als enorm praktisch erwiesen"/>
+<node CREATED="1736882888710" ID="ID_937892223" MODIFIED="1736882902736" TEXT="wird wohl zum &#xbb;standard-handle&#xab; f&#xfc;r RegExp"/>
+</node>
+<node CREATED="1736882909699" ID="ID_1961087217" MODIFIED="1736883001565" TEXT="erg&#xe4;nzende Utils">
+<icon BUILTIN="idea"/>
+<node CREATED="1736882922041" ID="ID_288933536" MODIFIED="1736885150227">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <font face="Monospaced" color="#0b19d4"><b>matchAtStart</b>(str, regex)</font>&#160;: partieller Match am Anfang verankert
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      wichtig f&#252;r Text-Parsing, wo man bestimmte Tokens <i>akzeptieren</i>&#160; m&#246;chte, aber durchaus ein Rest &#187;dahinter&#171; &#252;brig bleibten darf.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1685583627381" FOLDED="true" ID="ID_1310742780" MODIFIED="1685631528263" TEXT="iterierbare Integer-Sequenz">
+<linktarget COLOR="#64a3bc" DESTINATION="ID_1310742780" ENDARROW="Default" ENDINCLINATION="-872;80;" ID="Arrow_ID_874900916" SOURCE="ID_1477861363" STARTARROW="None" STARTINCLINATION="-1069;-69;"/>
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1685583658136" ID="ID_1674609936" MODIFIED="1685631307702" TEXT="Basis-Baustein f&#xfc;r diverse Iterations-Schemata">
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#435e98" CREATED="1685584188194" ID="ID_1025479131" MODIFIED="1685631521912" TEXT="NumIter gibt&apos;s schon in iter-adapter.hpp &#x2014; ausreichend?">
+<icon BUILTIN="idea"/>
+<node COLOR="#435e98" CREATED="1685584668136" ID="ID_161250988" MODIFIED="1685630942654" TEXT="nebenbei: warum in iter-adapter #include &lt;iterator&gt; ?">
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="help"/>
+<node COLOR="#338800" CREATED="1685630944569" ID="ID_331877945" MODIFIED="1685630959773" TEXT="kann problemlos weg">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1685584919441" ID="ID_383588315" MODIFIED="1685584940405" TEXT="NumIter wird bisher noch &#xfc;berhaupt nicht verwendet!">
+<icon BUILTIN="idea"/>
+<node CREATED="1685584987258" ID="ID_1848971704" MODIFIED="1685584996537" TEXT="doch: in FormatHelper_test">
+<icon BUILTIN="stop-sign"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1685585015569" ID="ID_850733680" MODIFIED="1685585032068" TEXT="hilfsfunktion eachNum()">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1685585034287" ID="ID_785887435" MODIFIED="1685585152408" TEXT="ein gef&#xe4;hrlich allgemeiner Name">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das hei&#223;t, diese Funktion darf es nur einmal geben, und das mu&#223; dann &#187;die&#171; einschl&#228;gige Implementierung sein, ohne Wenn und Aber
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1685584692820" ID="ID_1808802441" MODIFIED="1685631035675" TEXT="ggfs eine Variante ohne Stop-Bedingung schaffen?">
+<icon BUILTIN="hourglass"/>
+</node>
+<node COLOR="#338800" CREATED="1685584741200" ID="ID_761439428" MODIFIED="1685631186794" TEXT="IterStateCore-Adapter schaffen">
+<linktarget COLOR="#91c390" DESTINATION="ID_761439428" ENDARROW="Default" ENDINCLINATION="-103;177;" ID="Arrow_ID_641857138" SOURCE="ID_277620521" STARTARROW="None" STARTINCLINATION="-149;129;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1685584762627" ID="ID_1425536882" MODIFIED="1685584825968" TEXT="das Gegenst&#xfc;ck zu IterStateWrapper">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      also...
+    </p>
+    <ul>
+      <li>
+        nimmt einen Lumiera Forward-Iterator
+      </li>
+      <li>
+        verpackt ihn als &#187;state-core&#171;
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#435e98" CREATED="1685584828250" ID="ID_414953901" MODIFIED="1685630992855" TEXT="sinnvoll hier? oder doch in TreeExplorer?">
+<icon BUILTIN="help"/>
+<node CREATED="1685630996913" ID="ID_758562926" MODIFIED="1685631016990" TEXT="pa&#xdf;t hier perfekt (auch f&#xfc;r Doku)"/>
+<node CREATED="1685631002757" ID="ID_1776169658" MODIFIED="1685631008736" TEXT="braucht keinerlei weitere Hilfsmittel"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1685631328816" ID="ID_199147719" MODIFIED="1685631519429" TEXT="ja: vorerst ausreichend">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      einfach und minimalistisch implementiert &#8212; und zudem sind <i>undendliche Folgen</i>&#160;nur etwas f&#252;r Mathematiker und Freunde der funktionalen Programmierung; in der Praxis braucht man <b>zwingend</b>&#160;stets eine Abbruch-Bedingung, allein schon weil sonst die Engine &#8222;Amok laufen&#8220; k&#246;nnte (man bedenke nur, da&#223; die interne Zeit-Repr&#228;sentation bereits <i>lange vor der Frame-Nummer </i>wrappt)
+    </p>
+  </body>
+</html></richcontent>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1685583679366" ID="ID_1166028888" MODIFIED="1685631288209">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <b>optional</b>&#160;die M&#246;glichkeit f&#252;r einen getriggerten Stop vorsehen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1685583844103" ID="ID_1617399022" MODIFIED="1685631284892" TEXT="until-Dekorator">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1685584282950" ID="ID_1555842173" MODIFIED="1685631096769" TEXT="wo ansiedeln?">
+<icon BUILTIN="help"/>
+<node CREATED="1685584292265" ID="ID_1007965524" MODIFIED="1685584302429" TEXT="iter-adapter w&#xe4;re sch&#xf6;n..."/>
+<node CREATED="1685584303269" ID="ID_1302214601" MODIFIED="1685584316100" TEXT="aber der hat kein #include &lt;functional&gt;">
+<icon BUILTIN="stop-sign"/>
+</node>
+<node COLOR="#5b280f" CREATED="1685584323374" ID="ID_19399029" MODIFIED="1685631108394" TEXT="itertools w&#xe4;re OK (mit Einschr&#xe4;nkung)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <ul>
+      <li>
+        Hilfsfunktionen fehlen (z.B. Adaptieren des Funktors an StateCore)
+      </li>
+      <li>
+        TreeExplorer sollte itertools nicht includieren (gegenw&#228;rtig tut er's aber nur wegen IterSource, und das k&#246;nnte man refactorn)
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_cancel"/>
+</node>
+<node COLOR="#338800" CREATED="1685584350243" ID="ID_1176593747" MODIFIED="1685631094358" TEXT="sonst: direkt in TreeExplorer">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1685584477881" ID="ID_1923860338" MODIFIED="1685631208219" TEXT="sollte eine Trigger-Funktion auswerten und daraufhin destruktiv stoppen">
+<icon BUILTIN="info"/>
+</node>
+<node COLOR="#338800" CREATED="1685584554975" ID="ID_1885062249" MODIFIED="1685631217868" TEXT="sehr einfach als StateCore zu implementieren">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1685584586562" ID="ID_1234332463" MODIFIED="1685584592110" TEXT="ganz analog wie Filter"/>
+<node COLOR="#435e98" CREATED="1685584593570" ID="ID_277620521" MODIFIED="1685631233266" TEXT="profitiert von einer &#xbb;IterStateCore&#xab; implementierung">
+<arrowlink COLOR="#91c390" DESTINATION="ID_761439428" ENDARROW="Default" ENDINCLINATION="-103;177;" ID="Arrow_ID_641857138" STARTARROW="None" STARTINCLINATION="-149;129;"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1685631237101" ID="ID_519084321" MODIFIED="1685631283904" TEXT="while-Dokorator">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1685631243653" ID="ID_1295067440" MODIFIED="1685631281410" TEXT="gegebenes Pr&#xe4;dikat negiert verpacken">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1685631253952" ID="ID_1669237917" MODIFIED="1685631280458" TEXT="&#x3bb; verschieben und Argument-Typ abgreifen">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1732154493179" FOLDED="true" ID="ID_1329557703" MODIFIED="1732663211618" TEXT="iter-zip">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1732154503106" ID="ID_852276140" MODIFIED="1732662891264" TEXT="N Iteratoren in Tupel zusammenf&#xfc;hren">
+<icon BUILTIN="info"/>
+<node CREATED="1732154525721" ID="ID_161696884" MODIFIED="1732154540166" TEXT="zum Verbinden mehrerer Datenquellen"/>
+<node CREATED="1732154540893" ID="ID_1426555488" MODIFIED="1732154577823" TEXT="es gilt die kleinst-m&#xf6;gliche Gesamtsequenz">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das hei&#223;t, der erste ersch&#246;pfte Iterator terminiert die gesamte Sequenz
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1732154580080" ID="ID_336146444" MODIFIED="1732662882164" TEXT="wichtige Variante: izip &#x2259; zip-with-index">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      damit man auch die F&#228;lle erschlagen kann, in denen irgendwo eine Index-Variable gebraucht wird; oft ist das n&#228;mlich der einzige Grund, dann doch eine klassische For-Iteration zu machen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1732154647647" ID="ID_232099852" MODIFIED="1732636366058" TEXT="Technologie">
+<icon BUILTIN="forward"/>
+<node CREATED="1732154651158" ID="ID_660736150" MODIFIED="1732154675895" TEXT="komplexes Konstrukt aus variadischen Templates"/>
+<node CREATED="1732154676675" ID="ID_515540198" MODIFIED="1732154705046" TEXT="beruht auf Tuples, std::apply und dem IterExplorer als Builder"/>
+<node COLOR="#338800" CREATED="1732154713702" ID="ID_1753947869" MODIFIED="1732636354403" TEXT="per Experiment schrittweise aufbauen">
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1732154727348" ID="ID_1216046809" MODIFIED="1732636358766" TEXT="IterZip_test">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node COLOR="#338800" CREATED="1732207603752" FOLDED="true" ID="ID_1484345238" MODIFIED="1732636351867" TEXT="Anforderung: Funktion auf Tupel anwenden">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1732207627754" ID="ID_1652254138" MODIFIED="1732207631076" TEXT="sollte gehen...."/>
+<node CREATED="1732207631631" ID="ID_1627692250" MODIFIED="1732207639059" TEXT="ist aber &#xfc;berraschend trickreich im Detail"/>
+<node CREATED="1732207656021" ID="ID_239336325" MODIFIED="1732207680094" TEXT="mu&#xdf; &#xfc;berall perfect-forwarding einf&#xfc;hren">
+<node CREATED="1732207683833" ID="ID_410737614" MODIFIED="1732207689141" TEXT="auch auf die Funktions-Argumente"/>
+<node CREATED="1732207704615" ID="ID_136259188" MODIFIED="1732207746785" TEXT="auto&amp;&amp;... elms &#x27fc; fun (forward&lt;decltype(elms)&gt; (elms)) ...">
+<font NAME="Monospaced" SIZE="10"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1732207762039" ID="ID_1456671988" MODIFIED="1732220042510" TEXT="Problem: R&#xfc;ckgabewert der Funktion">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1732207772990" ID="ID_1470710997" MODIFIED="1732207779577" TEXT="std::make_tuple macht ein decay()"/>
+<node CREATED="1732207780261" ID="ID_1005625769" MODIFIED="1732207798438" TEXT="std::forward_as_tuple erzeugt &#xfc;berall R|L-Referenzen"/>
+<node COLOR="#435e98" CREATED="1732220024861" ID="ID_1608709580" MODIFIED="1732220040329" TEXT="mu&#xdf; also explizit den Ergebnis-Tupel-Typ konstruieren">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1732220073140" FOLDED="true" ID="ID_1314042362" MODIFIED="1732636349311" TEXT="Iteratoren-Tupel konstruieren">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1732220106650" ID="ID_230100123" MODIFIED="1732220117095" TEXT="lib::explore() sollte die eigentliche (schwere) Arbeit machen"/>
+<node CREATED="1732220131993" ID="ID_1112527704" MODIFIED="1732234616020" TEXT="hoffe, da&#xdf; das mit perfect-forwarding funktioniert">
+<arrowlink COLOR="#d41f46" DESTINATION="ID_1711720667" ENDARROW="Default" ENDINCLINATION="-179;-10;" ID="Arrow_ID_880963824" STARTARROW="None" STARTINCLINATION="176;10;"/>
+</node>
+<node COLOR="#338800" CREATED="1732220149904" ID="ID_734335248" MODIFIED="1732235197250" TEXT="im Testfall explizit durchspielen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1732220193074" ID="ID_322908141" MODIFIED="1732636334951" TEXT="demo_construction()"/>
+<node COLOR="#338800" CREATED="1732220196361" FOLDED="true" ID="ID_1154553759" MODIFIED="1732636325808" TEXT="schrittweise mit lokalen Klassen aufbauen...">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1732220420635" ID="ID_665925849" MODIFIED="1732234993815" TEXT="Builder f&#xfc;r das Iteratoren-Tupel">
+<node CREATED="1732234471735" ID="ID_1749059928" MODIFIED="1732234491522">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      stelle fest: ich <b>darf kein Quell-Tupel</b>&#160;konstruieren
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1732234492677" ID="ID_1711720667" MODIFIED="1732234609138" TEXT="weil dann das Thema perfect-forwarding dazwischen liegt">
+<linktarget COLOR="#d41f46" DESTINATION="ID_1711720667" ENDARROW="Default" ENDINCLINATION="-179;-10;" ID="Arrow_ID_880963824" SOURCE="ID_1112527704" STARTARROW="None" STARTINCLINATION="176;10;"/>
+</node>
+<node CREATED="1732234626323" ID="ID_987261541" MODIFIED="1732234641012" TEXT="der Tupel-Konstruktor &#xbb;materialsiert&#xab; dann praktisch immer eine Kopie"/>
+<node COLOR="#338800" CREATED="1732234650247" ID="ID_1807559774" MODIFIED="1732328124794" TEXT="brauche also eine dedizierte Funktion buildIterTuple&lt;ARGS....&gt;">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#5b280f" CREATED="1732234686810" ID="ID_1016277466" MODIFIED="1732234699400" TEXT="k&#xf6;nnte man auch als generisches Util extrahieren">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1732234700409" ID="ID_1071100462" MODIFIED="1732234887753" TEXT="nein: ist aus diversen Gr&#xfc;nden ungl&#xfc;cklich">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Es ist eigentlich nur eine Verpackung f&#252;r std::apply, welches man mit dem gleichen Aufruf-Aufwand stets auch direkt aufrufen k&#246;nnte. Hinzu kommt, da&#223; nun die Argument-Ordnung auf dem API entweder links-rum oder rechts-rum nicht pa&#223;t und verwirrend ist
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1732234715777" ID="ID_1569189170" MODIFIED="1732234822377" TEXT="braucht abar auch gar nicht den Indirektions-Trick">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      der spezielle Trick mit dem inneren Lambda ist nur f&#252;r ein Tupel notwendig, um die Tupel-Elemente flexibel aber korrekt wieder in die Hand zu bekommen (alternativ mu&#223;te man vor C++17 mit einem Index-Seq-Iterator arbeiten, was sehr undurchsichtig ist)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node BACKGROUND_COLOR="#e0daaa" COLOR="#54207a" CREATED="1732234889375" ID="ID_1286476344" MODIFIED="1732234957940" TEXT="insofern war forEach und mapEach nur eine sinnvolle Finger&#xfc;bung">
+<icon BUILTIN="smiley-angry"/>
+</node>
+<node BACKGROUND_COLOR="#dae0aa" COLOR="#2b4871" CREATED="1732234910836" ID="ID_641389884" MODIFIED="1732234976379" TEXT="und hat einen Bug entdeckt">
+<icon BUILTIN="smiley-oh"/>
+</node>
+</node>
+</node>
+<node CREATED="1732220486306" ID="ID_1365741784" MODIFIED="1732220498253" TEXT="darauf aufbauende StateCore">
+<node COLOR="#435e98" CREATED="1732235006036" ID="ID_1047395328" MODIFIED="1732235081898" TEXT="Problem: Konstruktor und Typ-Deduktion">
+<icon BUILTIN="messagebox_warning"/>
+<node COLOR="#6e1370" CREATED="1732235022069" ID="ID_79338843" MODIFIED="1732235075381" TEXT="ja das leidige Problem mit Katze und Schwanz">
+<icon BUILTIN="smiley-angry"/>
+</node>
+<node COLOR="#435e98" CREATED="1732235026957" ID="ID_340250680" MODIFIED="1732235048697" TEXT="hilft nur: builderTuple als free-Function vorschalten">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1732220525941" ID="ID_1741213182" MODIFIED="1732233792633" TEXT="exponiert das Iteratoren-Tupel">
+<arrowlink COLOR="#fdfbda" DESTINATION="ID_214181349" ENDARROW="Default" ENDINCLINATION="-24;-16;" ID="Arrow_ID_568621399" STARTARROW="None" STARTINCLINATION="-144;12;"/>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1732220536045" ID="ID_1165298197" MODIFIED="1732220565132" TEXT="implementiert die Produkt-Operationen durch Delegieren"/>
+</node>
+<node COLOR="#435e98" CREATED="1732221642486" ID="ID_1450873226" MODIFIED="1732488888160" TEXT="neues Problem: expander-Kollaborations-API weitergeben">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1732221665403" ID="ID_421112241" MODIFIED="1732221694417" TEXT="bisher wurde dieses auf dem BaseAdapter terminiert"/>
+<node CREATED="1732221701598" ID="ID_776445249" MODIFIED="1732404349453" TEXT="ich brauche also einen anderen oder gar keinen Base-Adapter"/>
+<node COLOR="#435e98" CREATED="1732221711745" ID="ID_1004997061" MODIFIED="1732489026963" TEXT="&#x27f9; M&#xf6;glichkeit zur Anpassung des Base-Adapters schaffen">
+<arrowlink COLOR="#4129a2" DESTINATION="ID_87985222" ENDARROW="Default" ENDINCLINATION="-276;-254;" ID="Arrow_ID_125112633" STARTARROW="None" STARTINCLINATION="-524;25;"/>
+</node>
+</node>
+<node CREATED="1732233745033" ID="ID_214181349" MODIFIED="1732233786889" TEXT="daraus das Value-Tuple per Transformer erzeugen">
+<linktarget COLOR="#fdfbda" DESTINATION="ID_214181349" ENDARROW="Default" ENDINCLINATION="-24;-16;" ID="Arrow_ID_568621399" SOURCE="ID_1741213182" STARTARROW="None" STARTINCLINATION="-144;12;"/>
+<icon BUILTIN="idea"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#990033" CREATED="1732233814628" ID="ID_1179162924" MODIFIED="1732233837028" TEXT="ist das ineffizient? Nein!">
+<icon BUILTIN="help"/>
+<node CREATED="1732233846981" ID="ID_1798367169" MODIFIED="1732233860677" TEXT="und zwar deshalb weil alle Iteratoren per Referenz liefern"/>
+<node CREATED="1732234159618" ID="ID_778779021" MODIFIED="1732234307409" TEXT="...hat aber zur Konsequenz, da&#xdf; der Transformer ggfs ein Zwischenergebnis materialisiert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...und damit sind n&#228;mlich beide Ans&#228;tze letzlich wieder vers&#246;hnt. Das war die wichtige Einsicht beim zweiten Design-Anlauf. Beim ersten Anlauf wollte ich &#187;brav&#171; sein und Werte liefern, und das ganze Design wurde dadurch extrem undurchschaubar und wackelig, denn nat&#252;rlich wurde beim ersten Kontakt mit der Realit&#228;t klar, da&#223; man dann smart-Pointer durch die Gegend schiebt.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1732233861279" ID="ID_1970755076" MODIFIED="1732234153457" TEXT="das ist ein ganz zentrales Element in meinem Design">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ....aber auch der Punkt, an dem es immer wieder gef&#228;hrlich wird.
+    </p>
+    <p>
+      <b>Warum ist das so wichtig</b>?
+    </p>
+    <p>
+      <u>Antwort</u>: weil <i>nur dadurch</i>&#160;ein Iterator durch eine Abstraktions-Barriere hindurch arbeiten kann. Der Aufbau eines komplexen Such-Algorithmus erfolgt meist in mehreren Layern, und man m&#246;chte eben nicht, da&#223; irgendwo von unten Werte geliefert werden m&#252;ssen, die dann oben &#187;passen&#171;. Sondern man m&#246;chte mehrere (oft virtuelle) Funktionsaufrufe aufeinander mappen. Und nicht zuletzt dadurch kann man geziehlt einzelne Werte in einem anderen Implementierungs-Realm zur Manipulation exponieren. Denn tats&#228;chlich ist ein solcher IterExplorer eine <b>View in eine State-Core</b>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1732234325771" ID="ID_1993168197" MODIFIED="1732234454948" TEXT="normalerweise liegen im Wert-Tupel im ItemWrapper stets Referenzen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Im Normalfall liefert schon der Quell-Iterator eine Referenz (oder const-Referenz). Und die wird dann durch das Value-Tuple durchgemappt und zeigt eigentlich in die State-Core oder einen unterliegenden Container. Wenn aber an irgend einer Stelle tats&#228;chlich ein Wert geliefert werden mu&#223;, so wird das auf diesem Level stets abgefedert, und die stabile Storage f&#252;r den Wert liegt dann im Iterator selber (im ItemWrapper)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1732235101418" ID="ID_1293064302" MODIFIED="1732235109330" TEXT="erzeugten Typ ausgeben und analysieren">
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1732235110393" ID="ID_862638498" MODIFIED="1732235133794" TEXT="oh weh">
+<icon BUILTIN="smily_bad"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1732235118688" ID="ID_1779616765" MODIFIED="1732235137022" TEXT="ja ... alles sauber">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node COLOR="#891569" CREATED="1732235143421" ID="ID_492860011" MODIFIED="1732235191567">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      (ob dieserer test portabel ist....)
+    </p>
+  </body>
+</html></richcontent>
+<font NAME="SansSerif" SIZE="10"/>
+<icon BUILTIN="clanbomber"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1732235200691" ID="ID_1709342851" MODIFIED="1732235204957" TEXT="Iteration FUNKTIONIERT">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1732404219427" FOLDED="true" ID="ID_87985222" MODIFIED="1732489122964" TEXT="Adapter-Generierung neu ordnen">
+<linktarget COLOR="#4129a2" DESTINATION="ID_87985222" ENDARROW="Default" ENDINCLINATION="-276;-254;" ID="Arrow_ID_125112633" SOURCE="ID_1004997061" STARTARROW="None" STARTINCLINATION="-524;25;"/>
+<linktarget COLOR="#599ced" DESTINATION="ID_87985222" ENDARROW="Default" ENDINCLINATION="180;171;" ID="Arrow_ID_1403487927" SOURCE="ID_1051749303" STARTARROW="None" STARTINCLINATION="425;-32;"/>
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1732404405058" ID="ID_912348266" MODIFIED="1732489063402" TEXT="Feststellungen">
+<icon BUILTIN="forward"/>
+<node CREATED="1732404411080" ID="ID_619838250" MODIFIED="1732404450348" TEXT="IterExplorer f&#xfc;gt bisweilen unn&#xf6;tig Adapter hinzu"/>
+<node CREATED="1732404451204" ID="ID_1816461381" MODIFIED="1732404472437" TEXT="der Base-Adapter k&#xf6;nnte ganz wegfallen &#x2014; wenn bereits einer da ist"/>
+<node CREATED="1732404473288" ID="ID_1944760216" MODIFIED="1732404531008" TEXT="ein IterableDecorator und ggfs ein IterExplorer k&#xf6;nnen abgehoben werden"/>
+</node>
+<node COLOR="#435e98" CREATED="1732405205696" ID="ID_474793959" MODIFIED="1732489043595" TEXT="ich ziehe hier vor, auf explizite Type-Tags zu setzen">
+<icon BUILTIN="yes"/>
+<node CREATED="1732405221708" ID="ID_156327017" MODIFIED="1732405242941" TEXT="diese geh&#xf6;ren sicher zum IterExplorer-&#xd6;kosystem"/>
+<node CREATED="1732405244193" ID="ID_1388758928" MODIFIED="1732405273344" TEXT="als Extension-Point k&#xf6;nnen sie auch explizit gesetzt werden &#x27f9; L&#xf6;sung"/>
+</node>
+<node COLOR="#338800" CREATED="1732405282395" ID="ID_1720349507" MODIFIED="1732488878408" TEXT="zwei neue Aufbereitungs-Schritte">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1732405300562" ID="ID_1747377543" MODIFIED="1732418717425" TEXT="BaseSrc freilgen anhand von Type-Tags">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1732405337093" ID="ID_119797718" MODIFIED="1732418749082" TEXT="IterExplorer setzt dieses Tag stets auf den direkt unterliegenden SRC-Typ">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#435e98" CREATED="1732405363656" ID="ID_1939842999" MODIFIED="1732418735716" TEXT="darunter liegender IterableDecorator wird automatisch auf Core gestrippt">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#338800" CREATED="1732405652074" ID="ID_3854674" MODIFIED="1732418743893" TEXT="sonst: nichts machen (d.h. IT &#x2259; BaseSrc)">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#435e98" CREATED="1732418790617" ID="ID_817698426" MODIFIED="1732487151425" TEXT="kann man hier auch noch eine redundant eingef&#xfc;gte CheckedCore strippen?">
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="help"/>
+<node COLOR="#5b280f" CREATED="1732418814782" ID="ID_1506139893" MODIFIED="1732418841725" TEXT="1. Versuch: direkt in die _DecoratorTraits">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1732418842978" ID="ID_1120619472" MODIFIED="1732418878886" TEXT="erst mal : mu&#xdf; die CheckedCore selber mit Type-Tag markieren">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      andere Tricks mit der _rawCore()-Zugriffsfunktion scheinen nicht zu gehen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#5b280f" CREATED="1732418880968" ID="ID_1435649475" MODIFIED="1732418978932" TEXT="Tilt! das f&#xfc;hrt dazu, da&#xdf; jeder Processing-Layer sofort wieder gestrippt wird">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...da alle Processing-Layer auf State-Cores beruhen, pr&#228;sentieren wir dem dar&#252;berzulegenden IterExplorer die neue Core, und der findet dann die unter diesem Layer liegende CheckedCore des Vorg&#228;ngers und strippt den neuen Layer weg. <i>YESS es funktioniert!!!!!!</i>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1732487080930" ID="ID_1941671854" MODIFIED="1732487106352" TEXT="2. Versuch: an der gleichen Stelle beim Einstieg">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1732487107328" ID="ID_448728086" MODIFIED="1732487121488" TEXT="also jeweils nur wenn der IterExplorer initial konstruiert wird"/>
+<node CREATED="1732487124717" ID="ID_287102344" MODIFIED="1732487148843" TEXT="genauer: sogar nur als ein 2.Preprocessing-Schritt auf der freigelegten BaseSrc"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1732405404073" ID="ID_1428756660" MODIFIED="1732418719461" TEXT="Optional einen Base-Adapter einf&#xfc;gen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1732405423113" ID="ID_1973273876" MODIFIED="1732418740596" TEXT="falls kein Base-Adapter-Tag gefunden wurde">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1732405460404" ID="ID_994840933" MODIFIED="1732418741710" TEXT="sonst: nichts machen (d.h. bestehenden Base-Adapter verwenden)">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1732487170847" ID="ID_1262167504" MODIFIED="1732487199877" TEXT="Ergebnis: nun viel schlankere und minimale Typ-Schachtelung">
+<linktarget COLOR="#67697e" DESTINATION="ID_1262167504" ENDARROW="Default" ENDINCLINATION="-307;14;" ID="Arrow_ID_1075091501" SOURCE="ID_1811172733" STARTARROW="None" STARTINCLINATION="163;-136;"/>
+<icon BUILTIN="forward"/>
+<node CREATED="1732487344743" HGAP="31" ID="ID_488136081" MODIFIED="1732487803727" STYLE="bubble" VSHIFT="11">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <u><font size="2">vorher</font></u><font size="2">:</font>
+    </p>
+    <p>
+      <font face="Monospaced" size="1">IterExplorer&lt; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="1">&#160; </font><font color="#a70230" face="Monospaced" size="1">BaseAdapter</font><font face="Monospaced" size="1">&lt; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="1">&#160;&#160;&#160;&#160;IterableDecorator&lt;uint, </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="1">&#160;&#160;&#160;&#160;&#160;&#160;CheckedCore&lt; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="1">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</font><font color="#9301d5" face="Monospaced" size="1">IterExplorer</font><font face="Monospaced" size="1">&lt; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="1">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</font><font color="#da3300" face="Monospaced" size="1">IterableDecorator</font><font face="Monospaced" size="1">&lt;uint, </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="1">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</font><font color="#da3300" face="Monospaced" size="1">CheckedCore</font><font face="Monospaced" size="1">&lt; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="1">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Transformer&lt; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="1">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;BaseAdapter&lt;NumIter&lt;int&gt; &gt;, </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="1">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;uint </font>
+    </p>
+    <p>
+      <u><font size="2">nachher</font></u><font size="2">:</font>
+    </p>
+    <p>
+      <font face="Monospaced" size="1">IterExplorer&lt; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="1">&#160;&#160;IterableDecorator&lt;uint, </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="1">&#160;&#160;&#160;&#160;CheckedCore&lt; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="1">&#160;&#160;&#160;&#160;&#160;&#160;Transformer&lt; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="1">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;BaseAdapter&lt;NumIter&lt;int&gt; &gt;, </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="1">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;uint </font>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1732235208972" FOLDED="true" ID="ID_1764687143" MODIFIED="1732636372831" TEXT="nun in Library-Code extrahieren">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1732299521810" ID="ID_185815307" MODIFIED="1732313502381" TEXT="schlank halten: es gen&#xfc;gt die ProductCore">
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#338800" CREATED="1732299561444" ID="ID_1140916206" MODIFIED="1732328110469" TEXT="dazu eine free-function iter::buildIterTuple(its...)">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1732308743486" ID="ID_1261102696" MODIFIED="1732328080578" TEXT="Pr&#xfc;fen und erweitern auf das Durchreichen von Referenzen">
+<linktarget COLOR="#b36e78" DESTINATION="ID_1261102696" ENDARROW="Default" ENDINCLINATION="243;11;" ID="Arrow_ID_1182778536" SOURCE="ID_1663970369" STARTARROW="None" STARTINCLINATION="212;14;"/>
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1732315275749" FOLDED="true" ID="ID_769235796" MODIFIED="1732328069516" TEXT="liefert dann &#xfc;berraschend oft eine Referenz">
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1732315295690" ID="ID_565969002" MODIFIED="1732315304625" TEXT="m&#xf6;chte man das?"/>
+<node CREATED="1732315305473" ID="ID_1790636201" MODIFIED="1732315324906" TEXT="ja &#x2014; und es gibt const">
+<node CREATED="1732315656617" ID="ID_1754114367" MODIFIED="1732315684037" TEXT="bei Containern und Services kann man davon ausgehen da&#xdf; die Problematik bekannt ist"/>
+<node CREATED="1732315685980" ID="ID_543097466" MODIFIED="1732315711158" TEXT="und dem User kann ein gewisser Grad an Intelligenz unterstellt werden"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1732315327534" ID="ID_1282656380" MODIFIED="1732315716097" TEXT="&#xfc;berraschend beim Loop-Index">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1732315341532" ID="ID_42867523" MODIFIED="1732315347625" TEXT="NumIter liefert eine const&amp;"/>
+<node CREATED="1732315348475" ID="ID_681059696" MODIFIED="1732315437859" TEXT="das ist jetzt die erste echte Verwednung">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      NumIter hatte ich bei Gelegenheit aus Test-Code extrahiert, ohne weiter viel Gedanken darauf zu ver(sch)wenden....
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1732315439551" ID="ID_933184220" MODIFIED="1732315647938" TEXT="eine Referenz auf eine einfache Zahl ist selten sinnvoll">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Bestenfalls eliminiert der Optimiser ohnehin alle Indirektionen, aber auch alle Kopien. Wenn das aber nicht geht, weil es von irgendwo noch einen Zugriff geben k&#246;nnte, dann sitzt man auf einem Speicherzugriff, wo andernfalls direkt ein Register verwendet werden k&#246;nnte. Und wenn dann auch noch die Referenz non-const ist, versaut man sich leicht internen State und wundert sich dann... Nee, nee! Wenn man wirklich Seiteneffekte &#252;ber Referenzen m&#246;chte, dann soll man sich das bitte explizit auscoden, aber nicht eine Library-Funktion kreativ nutzen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#338800" CREATED="1732315722881" ID="ID_506428359" MODIFIED="1732327993905" TEXT="also hier stellen wir um">
+<icon BUILTIN="yes"/>
+<node CREATED="1732315731512" ID="ID_70704811" MODIFIED="1732315759207" TEXT="die yield-Operation liefert explizit die Zahl by-value"/>
+<node CREATED="1732315759868" ID="ID_1323105276" MODIFIED="1732315833747" TEXT="der operator-&gt; wird sogar entfernt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ich kann mir keinen Anwendungsfall vorstellen, wo so etwas nicht zumindest <i>&#252;berraschend</i>&#160;w&#228;re.... Ja man k&#246;nnte INT = custom magic type setzen, aber wie war das nochmal mit <i>Magie und so?</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#435e98" CREATED="1732317048384" FOLDED="true" ID="ID_146419454" MODIFIED="1732328064072" TEXT="Konsequenzen">
+<node COLOR="#435e98" CREATED="1732317059614" ID="ID_20106465" MODIFIED="1732327929262" TEXT="Problem mit stringify / Itertools - TransformIter">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1732317140456" ID="ID_837986381" MODIFIED="1732317155688" TEXT="kann nicht double&amp; an double-val binden">
+<icon BUILTIN="stop-sign"/>
+</node>
+<node COLOR="#435e98" CREATED="1732317156849" ID="ID_255372861" MODIFIED="1732322150442" TEXT="wie kommt das zustande?">
+<node CREATED="1732317164400" ID="ID_1970930063" MODIFIED="1732317249441" TEXT="in TransformIter ist ein &#xbb;signature-check&#xab; eingebaut">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das hei&#223;t: in dem Moment wo wir die transformer-Funktion tats&#228;chlich installieren, packen wir sie in ein std::function-Objekt mit einer <b>neu synthetisierten Signatur</b>. Diese ist (der Intention nach) pa&#223;genau, d.h. sie nimmt den yield des vorgelagerten Iterators als Input
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1732317252324" ID="ID_417114818" MODIFIED="1732322136155" TEXT="hier liegt der Hund begraben...">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1732317307077" ID="ID_577545728" MODIFIED="1732322142648" STYLE="bubble">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <font face="Monospaced">typedef typename IT::</font><font face="Monospaced" color="#c81212">reference</font><font face="Monospaced">&#160;InType; </font>
+    </p>
+    <p>
+      <font face="Monospaced">function&lt;VAL(InType)&gt; trafo_; </font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1732317376563" ID="ID_627865570" MODIFIED="1732317617944" TEXT="das ist ein Schnellschlu&#xdf;...">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      damals wollte ich erst mal schnell durch, wie &#252;blich;
+    </p>
+    <p>
+      viele Jahre sp&#228;ter habe ich dann den NumIter definiert, und das ist vielleicht das erste Beispiel, bei dem dieses neue Konzept wirklich ausgereitzt wurde. Ich habe so dunkel in Erinnerung, da&#223; es dann nicht funktioniert hat, und ich deshalb &#8222;einfach&#8220; das <font color="#7510cd" face="Monospaced">const</font>&#160;in die eingebetteten Ergebnis-Typdefinitionen gepackt habe. Was ja nicht falsch war, aber der Weg des geringsten Wiederstandes
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1732317416174" ID="ID_1286735666" MODIFIED="1732317436999" TEXT="es ist in 90% der F&#xe4;lle in der Praxis so"/>
+<node CREATED="1732317386082" ID="ID_1276663187" MODIFIED="1732317855187" TEXT="Nach aktuellem Stand gibt es aber keine entsprechende Konvention">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Und das ist mir zunehmend wichtiger geworden, vor allem nach meinen Erfahrungen mit dem monadischen IterExplorer v1. Grade <i>weil man manchmal wirklich nur Values bieten kann,</i>&#160;mu&#223; diese Hintert&#252;r offen bleiben. Andererseits w&#228;re es ein gef&#228;hrlicher Fehlschlu&#223;, da&#223; eine Type-def &#187;reference&#171; hier &#8222;in Wirkklichkeit&#8220; meint, das was der Iterator liefert. Der Schlu&#223; liegt nahe, und deshalb bin ich ihm hier auch verfallen. Aber wenn man mit derartigem Konzept-Mapping erst mal anf&#228;ngt, dann verliert man schnell die Kontrolle
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1732317867385" ID="ID_1371439047" MODIFIED="1732322117846" TEXT="also: stattdessen explizit den realen yield-Typ verwenden">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1732318665574" ID="ID_1457902866" MODIFIED="1732322128177" TEXT="daf&#xfc;r eine neue Typfunktion: iter::Yield&lt;IT&gt;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      in iter-adapter.hpp
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1732318689596" ID="ID_1684194462" MODIFIED="1732322119411" TEXT="nach weiteren &#xe4;hnlichen Kurzschl&#xfc;ssen suchen...">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1732319377134" ID="ID_1458322060" MODIFIED="1732322123341" TEXT="weiterer Fall in Itertools (im Filter)"/>
+<node COLOR="#435e98" CREATED="1732318704077" ID="ID_1614481458" MODIFIED="1732322123344" TEXT="HA!  iter-explorer : ArgAdapter-Magic">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      also exakt die zentrale Stelle, an der entschieden wird, ob eine nachgeschaltete Funktion auf den Resultat-Wert losgeht, oder direkt auf den Iterator-Typ zugreift
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#435e98" CREATED="1732319784560" ID="ID_866009173" MODIFIED="1732322123344" TEXT="&#xe4;hnliches Denkmuster auch in util-coll">
+<node COLOR="#435e98" CREATED="1732319797920" ID="ID_1305250293" MODIFIED="1732319806708" TEXT="hier ist auto viel besser!">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#5b280f" CREATED="1732322088730" ID="ID_1242739907" MODIFIED="1732323499529" TEXT="w&#xe4;re das auch anwendbar auf IterExplorer.transform() und expand() ?">
+<icon BUILTIN="help"/>
+<icon BUILTIN="closed"/>
+<node CREATED="1732322588222" ID="ID_1443186617" MODIFIED="1732322613161">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      jetzt wirds aber <b><font color="#e82105">brandgef&#228;hrlich</font></b>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1732322629737" ID="ID_676096219" MODIFIED="1732322648571" TEXT="operator-&gt; k&#xf6;nnte Adresse-von-Temporary nehmen">
+<icon BUILTIN="broken-line"/>
+</node>
+<node COLOR="#5b280f" CREATED="1732323357278" ID="ID_1689757044" MODIFIED="1732327891664" TEXT="unm&#xf6;glich da wir effektiv nur einen Ausgabepfad haben">
+<arrowlink COLOR="#6f141e" DESTINATION="ID_738246140" ENDARROW="Default" ENDINCLINATION="194;-414;" ID="Arrow_ID_768211036" STARTARROW="None" STARTINCLINATION="507;142;"/>
+<icon BUILTIN="stop-sign"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1732323518400" ID="ID_1448081421" MODIFIED="1732327912529" TEXT="operator-&gt; verlangt zwingend nach einem stabilen Value">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node COLOR="#5b280f" CREATED="1732323556923" ID="ID_1568353234" MODIFIED="1732327907757" TEXT="daher kann Core::yield() niemals anders als per Ref auf einen stabilen Wert arbeiten">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1732323615259" ID="ID_183489075" MODIFIED="1732499554636" TEXT="wollte man hier flexibel sein, ginge das stets nur an der Au&#xdf;engrenze">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...das w&#252;rde bedeuten: man reicht eine weitere Typ-Def komplett durch die ganze Kette durch, und jeweils nur am Ende der Kette w&#252;rde diese f&#252;r den operator* gelten. Da wir aber Ketten im Builder auch noch nachtr&#228;glich weiter verl&#228;ngern, indem eine neue Core dar&#252;ber gesetzt wird, ist das jedoch nicht ohne Weiteres realisierbar
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+<icon BUILTIN="button_cancel"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1732327966521" ID="ID_1122071116" MODIFIED="1732327983573" TEXT="erscheint mir nun ein guter Komrpomi&#xdf;">
+<icon BUILTIN="yes"/>
+<node CREATED="1732328013291" ID="ID_1566390757" MODIFIED="1732328021229" TEXT="der Loop-Index kommt als reine Zahl"/>
+<node CREATED="1732328021813" ID="ID_253756107" MODIFIED="1732328030900" TEXT="ansonsten kann man auf Quellwerte durchgreifen"/>
+<node CREATED="1732328031488" ID="ID_1120812520" MODIFIED="1732328043338" TEXT="sofern die zugrundeliegende Situation dies zul&#xe4;&#xdf;t"/>
+<node CREATED="1732328044567" ID="ID_369672919" MODIFIED="1732328061744" TEXT="und der user kann stets values konstruieren"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1732235272468" FOLDED="true" ID="ID_1892180908" MODIFIED="1732637867027" TEXT="gr&#xfc;ndlich testen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1732308670586" ID="ID_351914878" MODIFIED="1732308678431" TEXT="einfaches Demo-Beispiel">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1732308679924" ID="ID_762659981" MODIFIED="1732308713186" TEXT="sollte eine For-Schleife zeigen"/>
+<node COLOR="#435e98" CREATED="1732308687234" ID="ID_981998183" MODIFIED="1732308713186" TEXT="sollte direkten Gebrauch als Iterator sichtbar machen"/>
+</node>
+<node COLOR="#338800" CREATED="1732235323997" ID="ID_1085200650" MODIFIED="1732584375034" TEXT="Iteratoren verschiedenen Typs">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1732313512667" ID="ID_1362209953" MODIFIED="1732328099863" TEXT="verschieden dekorierte Sequenzen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1732313524489" ID="ID_824059713" MODIFIED="1732584368643" TEXT="Sequenzen verschiedener L&#xe4;nge">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1732313533659" ID="ID_1229132868" MODIFIED="1732584370123" TEXT="verschiedene Quellen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1732313542680" ID="ID_918133774" MODIFIED="1732584373490" TEXT="Lumiera-Iterator"/>
+<node COLOR="#435e98" CREATED="1732313547158" ID="ID_1297222060" MODIFIED="1732584373490" TEXT="STL-Container"/>
+<node COLOR="#435e98" CREATED="1732313554272" ID="ID_628954162" MODIFIED="1732584373490" TEXT="State-Core"/>
+<node COLOR="#435e98" CREATED="1732313559148" ID="ID_888513620" MODIFIED="1732584373489" TEXT="IterSource"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1732235343138" ID="ID_1943784376" MODIFIED="1732584376431" TEXT="per structured Binding verarbeiten">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1732235434406" ID="ID_1663970369" MODIFIED="1732328083295" TEXT="Durchgriff auf die Quellen per Referenz">
+<arrowlink COLOR="#b36e78" DESTINATION="ID_1261102696" ENDARROW="Default" ENDINCLINATION="243;11;" ID="Arrow_ID_1182778536" STARTARROW="None" STARTINCLINATION="212;14;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1732332677537" ID="ID_800914951" MODIFIED="1732489241725" TEXT="nachgeschaltete Pipeline">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1732332692124" ID="ID_1457478622" MODIFIED="1732401346084" TEXT="transformer in einfache Zahl">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1732332702041" ID="ID_682214158" MODIFIED="1732401344958" TEXT="Filter basierend auf Werten aus dem Tupel">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1732333449943" ID="ID_1811172733" MODIFIED="1732489128888" TEXT="Beobachtung: direkt gegebener IterExplorer wird nochmal gewrapped">
+<arrowlink COLOR="#67697e" DESTINATION="ID_1262167504" ENDARROW="Default" ENDINCLINATION="-307;14;" ID="Arrow_ID_1075091501" STARTARROW="None" STARTINCLINATION="163;-136;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1732333481816" ID="ID_488310307" MODIFIED="1732489228315" TEXT="das ist unsch&#xf6;n">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...auch wenn es normalerweise kein Performance-Problem darstellt, weil der Optimiser redundante Aufrufe problemlos eliminiert, macht es die Typen f&#252;r den Au&#223;enstehend noch viel undurchtringbarer, und belastet auch die Debug-Builds durch den Umfang unn&#246;tiger Typ-Information
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="smily_bad"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1732333491869" ID="ID_34490328" MODIFIED="1732489232938" TEXT="...und w&#xfc;rde das Durchreichen eines Child-Expanders verhindern">
+<arrowlink COLOR="#7d7a99" DESTINATION="ID_1051749303" ENDARROW="Default" ENDINCLINATION="47;-71;" ID="Arrow_ID_922384929" STARTARROW="None" STARTINCLINATION="-576;25;"/>
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1732332721552" FOLDED="true" ID="ID_884561005" MODIFIED="1732380040032" TEXT="erstes Ausgabetupel enth&#xe4;lt uninitialisierte Werte">
+<icon BUILTIN="broken-line"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1732335037680" ID="ID_883671623" MODIFIED="1732488924547" TEXT="Ursache: das erste pullFilter() im ctor wird vor dem move() aufgerufen">
+<icon BUILTIN="broken-line"/>
+</node>
+<node BACKGROUND_COLOR="#e2ba5e" COLOR="#b70624" CREATED="1732334924952" ID="ID_1746517643" MODIFIED="1732488958484" TEXT="das ist ein schlummernder Bug im IterExplorer-Filter">
+<icon BUILTIN="clanbomber"/>
+<node CREATED="1732334965186" ID="ID_1456555909" MODIFIED="1732335007808" TEXT="tritt nur auf wenn der darunter liegende Iterator eine Referenz speichert"/>
+<node CREATED="1732335008372" ID="ID_1329188040" MODIFIED="1732335016335" TEXT="und diese Referenz in den Iterator selbst zeigt"/>
+<node COLOR="#b80990" CREATED="1732335125501" ID="ID_1555472016" MODIFIED="1732335151624" TEXT="&#xd83d;&#xdc80; Teufelszeug!!">
+<font NAME="SansSerif" SIZE="14"/>
+<node CREATED="1732335207642" ID="ID_955481326" MODIFIED="1732335217996" TEXT="immer wieder das Problem mit diesen move-Buildern"/>
+<node CREATED="1732335320131" ID="ID_166629885" MODIFIED="1732335329917" TEXT="unklar: w&#xfc;rde ein RVO-Builder hier helfen??"/>
+<node CREATED="1732335356217" ID="ID_1122958962" MODIFIED="1732335515135" TEXT="eigentliches Problem ist das Zwiebelschalen-Design">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das zwingt mich, einen inneren Quell-Layer in den &#228;u&#223;eren Wrapper zu schieben; selbst wenn ich das Argument by-value nehme, ist es damit noch nicht in dem Objekt-Feld, wo es hingeh&#246;rt. Das bedeutet dann, entweder eine Kopie (und man ist vom Optimiser abh&#228;ngig), oder eben ein move(SRC).
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1732335090297" ID="ID_1603332767" MODIFIED="1732335111791" TEXT="konkret liegt danach im ItemWrapper ein Tuple mit dangling-references">
+<icon BUILTIN="info"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1732335516273" ID="ID_77601" MODIFIED="1732380035456" TEXT="Konsequenz: KEINE Aktivit&#xe4;t in einem Konstruktor darf Referenzen binden">
+<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1732336927298" ID="ID_1133143344" MODIFIED="1732379480374" TEXT="das betrifft m&#xf6;glicherweise auch Weitere, z.B. das Grouping">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1732378962487" ID="ID_507210660" MODIFIED="1732378981608" TEXT="alle durchgesehen: tats&#xe4;chlich ist das Grouping i.d.R davon nicht betroffen"/>
+<node CREATED="1732378982412" ID="ID_298559499" MODIFIED="1732379024090" TEXT="alles was per-Value arbeitet, ist sicher (ein Aggregator ist potentiell gef&#xe4;hrlich)"/>
+<node CREATED="1732379482769" ID="ID_1391046371" MODIFIED="1732379567301">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      tats&#228;chlich ist der Filter <b>besonders</b>&#160;gef&#228;hrdet
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      weil der Filter selber ja nur den Feed pullt, aber selber keine Werte speichert; damit erzeugt er m&#246;glicherweise <i>upstream</i>&#160;obsolete Referenzen.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1732336967005" ID="ID_643449650" MODIFIED="1732337008685">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      ich brauche einen <b>engaged</b>-State
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1732337022157" ID="ID_544252009" MODIFIED="1732337084587" TEXT="das k&#xf6;nnte dann weiteres Verschieben sperren"/>
+<node CREATED="1732337085316" ID="ID_487485041" MODIFIED="1732337085316" TEXT="zumindest darf Invarianten-Processing erst mit diesem Schritt passieren"/>
+<node CREATED="1732372728476" ID="ID_1531001529" MODIFIED="1732373067818" TEXT="&#xe4;rgerlich: bl&#xe4;ht Storage auf und bricht Invarianten"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1732377283840" ID="ID_1863518121" MODIFIED="1732378140499" TEXT="versuche Workaround: re-engage">
+<icon BUILTIN="help"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1732377307860" ID="ID_410007394" MODIFIED="1732377339117" TEXT="das Problem besteht einzig im Transformer">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1732377323718" ID="ID_250925762" MODIFIED="1732377333805" TEXT="die Grouper kopieren n&#xe4;mlich per-Value"/>
+<node CREATED="1732377340359" ID="ID_1293483567" MODIFIED="1732377393572" TEXT="der Transformer hat schon impliziten &quot;engaged&quot;-State">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...er l&#228;&#223;t n&#228;mlich den ItemWrapper zun&#228;chst leer, und verwendet das f&#252;r eine Lazy-invocation der Transformation
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1732377394409" ID="ID_205213439" MODIFIED="1732377416893" TEXT="also w&#xfc;rde es gen&#xfc;gen, da&#xdf; jedes Copy/Move &#x27fc; disengaged"/>
+<node CREATED="1732377419435" ID="ID_343740069" MODIFIED="1775593577185" TEXT="Nebenbei: copy-and-swap-Idiom verwenden">
+<arrowlink COLOR="#6176b0" DESTINATION="ID_1782676400" ENDARROW="Default" ENDINCLINATION="-1718;207;" ID="Arrow_ID_511557246" STARTARROW="None" STARTINCLINATION="-532;34;"/>
+</node>
+<node COLOR="#338800" CREATED="1732378142413" ID="ID_1308227786" MODIFIED="1732378149468" TEXT="best&#xe4;tigt: l&#xf6;st das Problem">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#5617c6" CREATED="1732379576452" ID="ID_1580080364" MODIFIED="1732379866080">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      ungutes Gef&#252;hl...
+    </p>
+    <p>
+      <font size="5">das Design hat hier eine </font><font size="5" color="#c20c49">Schwachstelle</font>
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#dc1411" DESTINATION="ID_1580080364" ENDARROW="Default" ENDINCLINATION="-714;76;" ID="Arrow_ID_705169700" SOURCE="ID_1846153024" STARTARROW="None" STARTINCLINATION="639;23;"/>
+<icon BUILTIN="clanbomber"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1732380041706" ID="ID_1315871262" MODIFIED="1732380070726" TEXT="mit dem Workaround ist das Problem (in diesem Fall) behoben">
+<icon BUILTIN="smiley-oh"/>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1732235523602" FOLDED="true" ID="ID_1940842867" MODIFIED="1732577239677" TEXT="Durchgriff auf Child-Expander im Quell-Iterator">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1732404127247" ID="ID_1051749303" MODIFIED="1732489015844" TEXT="setzt Anpassungen an den Adaptern voraus">
+<arrowlink COLOR="#599ced" DESTINATION="ID_87985222" ENDARROW="Default" ENDINCLINATION="180;171;" ID="Arrow_ID_1403487927" STARTARROW="None" STARTINCLINATION="425;-32;"/>
+<linktarget COLOR="#7d7a99" DESTINATION="ID_1051749303" ENDARROW="Default" ENDINCLINATION="47;-71;" ID="Arrow_ID_922384929" SOURCE="ID_34490328" STARTARROW="None" STARTINCLINATION="-576;25;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1732489248682" ID="ID_1208683398" MODIFIED="1732489263569" TEXT="BaseAdapter wird nun &#xfc;berhaupt nur einmal pro Pipeline eingef&#xfc;gt"/>
+<node CREATED="1732489265869" ID="ID_454730383" MODIFIED="1732489281623" TEXT="und ob er noch eingef&#xfc;gt wird, l&#xe4;&#xdf;t sich &#xfc;ber ein Typ-Tag steuern"/>
+<node CREATED="1732489282051" ID="ID_1170202318" MODIFIED="1732489328431" TEXT="eine custom-Core (wie hier) kann also die Rolle eines Base-Adapter explizit &#xfc;bernehmen">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1732489334100" ID="ID_744918133" MODIFIED="1732489351281" TEXT="das eigentliche Weiterleiten der Aufrufe ist trivial einfach zu implementieren">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#435e98" CREATED="1732489352034" ID="ID_1389747588" MODIFIED="1732636282025" TEXT="Testen ist m&#xfc;hsam....">
+<node BACKGROUND_COLOR="#c8c0b6" CREATED="1732499374948" ID="ID_1694141748" MODIFIED="1732576950165" TEXT="geht schon los mit....">
+<node COLOR="#435e98" CREATED="1732499382404" ID="ID_298429500" MODIFIED="1732636249571" TEXT="...dem Umstand, da&#xdf; der Expander nicht auf Value-Result funktioniert">
+<icon BUILTIN="broken-line"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1732499558508" ID="ID_738246140" MODIFIED="1732499660372" TEXT="hatte das schon einmal vor ein paar Tagen erfolglos untersucht">
+<linktarget COLOR="#6f141e" DESTINATION="ID_738246140" ENDARROW="Default" ENDINCLINATION="194;-414;" ID="Arrow_ID_768211036" SOURCE="ID_1689757044" STARTARROW="None" STARTINCLINATION="507;142;"/>
+<icon BUILTIN="broken-line"/>
+</node>
+<node CREATED="1732499692888" ID="ID_1624652047" MODIFIED="1732499711525" TEXT="der Expander enth&#xe4;lt eines dieser hart-gecodeten &quot;reference&quot;-Typen">
+<node CREATED="1732499718302" ID="ID_1327516976" MODIFIED="1732499730864" TEXT="dabei w&#xfc;rde es hier gehen"/>
+<node CREATED="1732499731453" ID="ID_524965988" MODIFIED="1732499744446" TEXT="sofern man sinnvoll auf einen kleinsten gemeinsamen Nenner zur&#xfc;ckf&#xe4;llt"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1732499748626" ID="ID_73007932" MODIFIED="1732658339211" TEXT="nochmal untersuchen: k&#xf6;nnen wir Value-Ergebnisse aus der Pipeline unterst&#xfc;tzen?">
+<arrowlink COLOR="#4bb4e2" DESTINATION="ID_1558751662" ENDARROW="Default" ENDINCLINATION="411;23;" ID="Arrow_ID_1082389405" STARTARROW="None" STARTINCLINATION="-3;-253;"/>
+<linktarget COLOR="#726ea0" DESTINATION="ID_73007932" ENDARROW="Default" ENDINCLINATION="-605;-685;" ID="Arrow_ID_1417723074" SOURCE="ID_625268615" STARTARROW="None" STARTINCLINATION="1034;49;"/>
+<linktarget COLOR="#4e6fd7" DESTINATION="ID_73007932" ENDARROW="Default" ENDINCLINATION="-1571;53;" ID="Arrow_ID_1348614829" SOURCE="ID_1087558825" STARTARROW="None" STARTINCLINATION="-292;13;"/>
+<icon BUILTIN="help"/>
+<node COLOR="#435e98" CREATED="1732499767002" FOLDED="true" ID="ID_1245640841" MODIFIED="1732636236208" TEXT="Problem-1 : operator-&gt; kann nicht unterst&#xfc;tzt werden">
+<node CREATED="1732499786605" ID="ID_1510842318" MODIFIED="1732499805038" TEXT="diesen m&#xfc;&#xdf;te man dann per conditional-Definiton entfernen"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1732499810538" ID="ID_1382366845" MODIFIED="1732576617138" TEXT="vielleicht ist das akzeptabel (Konsequenzen noch nicht klar...)">
+<icon BUILTIN="help"/>
+<node COLOR="#435e98" CREATED="1732576620377" ID="ID_801036210" MODIFIED="1732576650829" TEXT="die code-Basis jedenfalls compiliert weiterhin"/>
+<node COLOR="#435e98" CREATED="1732576632416" ID="ID_1935979671" MODIFIED="1732576647957" TEXT="noch einen static_assert eingebaut f&#xfc;r bessere Fehlermeldung"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1732499843557" FOLDED="true" ID="ID_1131882712" MODIFIED="1732636221004" TEXT="Problem-2 : mu&#xdf; zwischen Value/Ref umschalten k&#xf6;nnen">
+<node CREATED="1732499861875" ID="ID_297864909" MODIFIED="1732499878292" TEXT="brauche effektiv einen weiteren &#xbb;Ausgabekanal&#xab; &#xfc;ber den Typ"/>
+<node CREATED="1732499879180" ID="ID_152140001" MODIFIED="1732576772094" TEXT="denkbar: wenn die R&#xfc;ckgabetypen aufeinander aufbauen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...dann w&#252;rden wir eine ganze Pipeline &#187;flippen&#171; k&#246;nnen, wenn der erste Result-Typ auf Value schwenkt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1732499895991" ID="ID_1513249083" MODIFIED="1732500014771" TEXT="die Pipeline ist jetzt hinreichend aufger&#xe4;umt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      habe die mehrfachen Adapter nun allesamt weg; daher w&#228;re es nun doch denkbar, da die Call-Pfade nun von einem Punkt aus aufspalten (n&#228;mlich Core::yield -&gt;&#160;&#160;entweder operator* oder operator-&gt; )
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1732576781381" ID="ID_452524052" MODIFIED="1732576819125" TEXT="effektiv l&#xe4;d das das Problem bei konkreten Transformationen und Pr&#xe4;dikaten ab">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1732576832125" ID="ID_443099186" MODIFIED="1732576877954" TEXT="...denn eine Funktion die non-const-Referenzen nimmt, scheitert"/>
+<node CREATED="1732576887573" ID="ID_687212437" MODIFIED="1732576907676" TEXT="erscheint akzepabel, da das i.d.R Lambdas f&#xfc;r den Einzelfall sind"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1732500030252" FOLDED="true" ID="ID_1233066521" MODIFIED="1732636215230" TEXT="Proof-of-Concept machen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1732500037694" ID="ID_1099507221" MODIFIED="1732576467794" TEXT="neues Trait:  lib::meta::CommonResultYield">
+<icon BUILTIN="yes"/>
+<node COLOR="#435e98" CREATED="1732500063864" ID="ID_1307133504" MODIFIED="1732576476301" TEXT="mithilfe von std::common_type implementieren">
+<icon BUILTIN="idea"/>
+<node CREATED="1732576477599" ID="ID_724368575" MODIFIED="1732576484055" TEXT="das hat so seine Schw&#xe4;chen"/>
+<node CREATED="1732576490514" ID="ID_43853125" MODIFIED="1732576498906" TEXT="im Besonderen impliziert es std::decay()"/>
+</node>
+<node COLOR="#338800" CREATED="1732500078558" ID="ID_1560553142" MODIFIED="1732576505729" TEXT="explizit die const-Ness und Referenz steuern">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1732500096323" ID="ID_295136585" MODIFIED="1732500101720" TEXT="const wenn einer der beiden Typen const"/>
+<node CREATED="1732500102266" ID="ID_910645487" MODIFIED="1732500113788" TEXT="(L)Ref nur wenn beider Typen LRef"/>
+</node>
+<node COLOR="#338800" CREATED="1732500120132" ID="ID_1315885808" MODIFIED="1732576513152" TEXT="saubere Funktionsweise erst mal isoliert testen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1732505350051" ID="ID_120652623" MODIFIED="1732505403271">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Booo!&#160;&#160;<font face="Monospaced" color="#582e24">is_const_v&lt;T&amp;&gt;</font>&#160;ist <b><font color="#e00b0b">immer false</font></b>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1732573450476" ID="ID_1325209644" MODIFIED="1732573474740" TEXT="und X &amp; const &#x2260; X const&amp;"/>
+<node CREATED="1732576525640" ID="ID_1638928832" MODIFIED="1732576557732" TEXT="tja">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ruck-zuck ein paar Stunden weg ... h&#228;tte man doch gleich einen Test geschrieben
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="smily_bad"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1732584495255" ID="ID_910412701" MODIFIED="1732636199249" TEXT="&#x27f6; eigens als Test dokumentiert">
+<arrowlink COLOR="#1c61d4" DESTINATION="ID_1750877358" ENDARROW="Default" ENDINCLINATION="1071;0;" ID="Arrow_ID_626641268" STARTARROW="None" STARTINCLINATION="385;33;"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1732576300069" ID="ID_1496960816" MODIFIED="1732576458151" TEXT="IterableDecorator flexibel machen : hier Vorgabe (referenz) &#x27f7; tats&#xe4;chliches yield()">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1732576329179" ID="ID_67215000" MODIFIED="1732576459743" TEXT="Typ-Logik in iter_explorer::Expander auf CommonResultYield umstellen">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1732576979521" ID="ID_193097642" MODIFIED="1732576987652" TEXT="Fazit">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="forward"/>
+<node CREATED="1732576989241" ID="ID_597816803" MODIFIED="1732577212565" TEXT="technisch ohne Weiteres m&#xf6;glich">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <ul>
+      <li>
+        dediziertes Trait schaffen
+      </li>
+      <li>
+        Propagations-Logik explizit auscoden
+      </li>
+      <li>
+        den operator-&gt; auf Values weglassen bzw mit compile-Fehler unterdr&#252;cken
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1732576997102" ID="ID_1924173493" MODIFIED="1732577133634" TEXT="bestehendes System dadurch nicht gef&#xe4;hrdet">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...da bisher alles auf R&#252;ckgabe by-ref ausgelegt ist, und dieser Fall deshalb durch die &#196;nderung ohne Modifikation durchgereicht wird
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1732577018219" ID="ID_226679397" MODIFIED="1732577103664" TEXT="man k&#xf6;nnte wagen, diese Variante ebenfalls zuzulassen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      es wird vermutlich auf wenige F&#228;lle beschr&#228;nkt bleiben, in denen es aber durchaus hilfreich ist, da sowohl Generatoren als auch Transformatoren einfacher zu schreiben sind
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1732576921726" ID="ID_23499408" MODIFIED="1732576947137" TEXT="OK &#x27f9; kann nun sehr einfach eine depth-first-exploration demonstrieren">
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1732576952252" ID="ID_115461255" MODIFIED="1732577229895" TEXT="der Rest ist gar nicht m&#xfc;hsam sondern funktioniert auf Anhieb">
+<icon BUILTIN="smiley-oh"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1732577241029" ID="ID_994951030" MODIFIED="1732577657422" TEXT="best&#xe4;tigt: funktioniert">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1732577251908" ID="ID_313126773" MODIFIED="1732577264497" TEXT="verwende zwei komplett verschieden arbeitende Expander"/>
+<node COLOR="#435e98" CREATED="1732577265065" ID="ID_1527782902" MODIFIED="1732577661937" TEXT="Fall-1 : autoExpand unterhalb der zip()-Operation"/>
+<node COLOR="#435e98" CREATED="1732577580608" ID="ID_88998768" MODIFIED="1732577661937" TEXT="Fall-2 : autoExpand oberhalb der zip()-Operation erzeugen">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1732577599605" HGAP="27" ID="ID_52497187" MODIFIED="1732577651345" TEXT="&#x27f8; Unterschied: die Sequenz ohne Expander bleibt stehen" VSHIFT="12">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node COLOR="#338800" CREATED="1732577638050" ID="ID_288695828" MODIFIED="1732577734390" TEXT="das ist korrekt so">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      der auto-Expander kann und darf ja nicht wissen, wo genau unterhalb die Expansion stattfindet; wenn eben gar keine stattfindet, dann bleiben alle durchgereichten expandChildren()-Aufrufe ohne Wirkung, aber ein iterNext() wird dann auch nicht mehr gesendet
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1732584380577" ID="ID_907702003" MODIFIED="1732637858939" TEXT="nebenbei: IterableDecorator ist nun flexibler &#x27f6; Test">
+<icon BUILTIN="yes"/>
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1732584408909" ID="ID_1774747868" MODIFIED="1732658996535" TEXT="iter-core-adapter-test.cpp">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1732584417772" ID="ID_710320129" MODIFIED="1732584430262" TEXT="weil das eigentlich mit dem Thema &#xbb;State Core&#xab; zu tun hat"/>
+<node CREATED="1732584430730" ID="ID_1543136731" MODIFIED="1732584440733" TEXT="...wof&#xfc;r es bisher gar keine Tests gab">
+<icon BUILTIN="smiley-neutral"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1732584446602" ID="ID_72717134" MODIFIED="1732584461134" TEXT="sollte dann auch gleich mal die Grundmuster mit dokumentieren">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1732584463118" ID="ID_1750877358" MODIFIED="1732636191954" TEXT="Testfall mit den Typkonvertierungen extrahieren">
+<linktarget COLOR="#1c61d4" DESTINATION="ID_1750877358" ENDARROW="Default" ENDINCLINATION="1071;0;" ID="Arrow_ID_626641268" SOURCE="ID_910412701" STARTARROW="None" STARTINCLINATION="385;33;"/>
+<linktarget COLOR="#69c89b" DESTINATION="ID_1750877358" ENDARROW="Default" ENDINCLINATION="69;1076;" ID="Arrow_ID_813654437" SOURCE="ID_1771231866" STARTARROW="None" STARTINCLINATION="260;-379;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1732584616649" ID="ID_1631761913" MODIFIED="1732658977729" TEXT="aufr&#xe4;umen...">
+<icon BUILTIN="yes"/>
+<node COLOR="#338800" CREATED="1732584624472" FOLDED="true" ID="ID_447849996" MODIFIED="1732658984799" TEXT="Typ-Parameter von IterStateWrapper">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1732584638326" ID="ID_200640906" MODIFIED="1732628617817" TEXT="der default auf dem 2.Parameter kann weg">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1732628224293" ID="ID_766835440" MODIFIED="1732628228755" TEXT="er wird nie verwendet"/>
+<node CREATED="1732628229301" ID="ID_744093810" MODIFIED="1732628286463" TEXT="er ist parktisch unsinnig">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ich kann mir keinen Fall vorstellen, in dem der Default gelten k&#246;nnte; vermutlich habe ich den Default damals angeschrieben, als ich mir das Konzept neu ausgedacht habe, und mir noch nicht klar war, wohin das f&#252;hrt (und wie bedeutend das mal wird....)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1732584652068" ID="ID_1279596515" MODIFIED="1732658915633" TEXT="kann man den Typ-Parameter deduzierbar machen?">
+<icon BUILTIN="help"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1732628298530" ID="ID_831486797" MODIFIED="1732628304606" TEXT="man k&#xf6;nnte in der Tat">
+<icon BUILTIN="hourglass"/>
+</node>
+<node CREATED="1732628308553" ID="ID_637227327" MODIFIED="1732628328434" TEXT="dazu m&#xfc;&#xdf;te die Reihenfolge der Parameter vertauscht werden"/>
+<node CREATED="1732628329022" ID="ID_1632926300" MODIFIED="1732628380419" TEXT="und der zweite Parameter m&#xfc;&#xdf;te der tats&#xe4;chliche yield-Typ sein"/>
+<node CREATED="1732628383213" ID="ID_1968872393" MODIFIED="1732628509959" TEXT="es gibt einen einzigen Fall, in dem das tats&#xe4;chlich notwendig ist">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...und zwar in <b>LinkedElements</b>.
+    </p>
+    <p>
+      Das ist nicht <i>irgend ein Randfall, </i>sondern eine der zentralen Nutzungsm&#246;glichkeiten: um n&#228;mlich einen iterator und einen const-iterator aus der gleichen Core zu erzeugen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1732628547993" ID="ID_1897860408" MODIFIED="1732628563866" TEXT="deshalb mu&#xdf; der zweite (jetzt erste) Parameter bleiben, kann aber defaultet sein"/>
+<node CREATED="1732628564623" ID="ID_1023873369" MODIFIED="1732628576939" TEXT="und w&#xfc;rde damit auch konsistent der tats&#xe4;chliche R&#xfc;ckgabetyp sein"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1732628578845" ID="ID_734093259" MODIFIED="1732658950621" TEXT="disruptiv &#x2014; aber substantielle Verbesserung">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1732629696172" ID="ID_830334020" MODIFIED="1732658953629" TEXT="dann auch nochmal &#xfc;ber die Parameter von IterStateWrapper nachdenken">
+<icon BUILTIN="yes"/>
+<node COLOR="#338800" CREATED="1732658923278" ID="ID_1898212478" MODIFIED="1732658944678" TEXT="in der Tat: hier ist die gleiche Vereinfachung m&#xf6;glich">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1732658934303" ID="ID_1974065226" MODIFIED="1732658944678" TEXT="der explizite Typ-Parameter kann sogar ganz weg">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1732658954909" ID="ID_1267513558" MODIFIED="1732658969610" TEXT="Anpassungen ausgef&#xfc;hrt &#x27f9; funktioniert auf Anhieb">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1732584709076" ID="ID_1502894530" MODIFIED="1732630636890" TEXT="Kommentare in iter-adapter">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1732584812346" ID="ID_88185433" MODIFIED="1732637846063" TEXT="Kommentare zu iter-zip">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1536015468698" ID="ID_1045359957" MODIFIED="1775752199534" TEXT="Utilities">
 <node COLOR="#338800" CREATED="1536015471377" ID="ID_1732583592" MODIFIED="1736882848055" TEXT="regex-Iterator / Helper">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1536015489143" ID="ID_979562288" MODIFIED="1557498707236" TEXT="std::sregex_token_itertor"/>
@@ -60977,7 +61163,6 @@
 </node>
 </node>
 </node>
-</node>
 <node CREATED="1695850005910" ID="ID_673181142" MODIFIED="1695851233120" TEXT="&#xbb;Either&#xab; : lib::Result">
 <linktarget COLOR="#fdfbd7" DESTINATION="ID_673181142" ENDARROW="Default" ENDINCLINATION="-862;-131;" ID="Arrow_ID_956072053" SOURCE="ID_1274858318" STARTARROW="None" STARTINCLINATION="-678;66;"/>
 <linktarget COLOR="#fdfbd7" DESTINATION="ID_673181142" ENDARROW="Default" ENDINCLINATION="-977;134;" ID="Arrow_ID_1350491310" SOURCE="ID_1460243569" STARTARROW="None" STARTINCLINATION="-878;104;"/>
@@ -63354,7 +63539,7 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1775144014199" ID="ID_892437622" MODIFIED="1775587130619" TEXT="Idee: FunInline">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1775144014199" FOLDED="true" ID="ID_892437622" MODIFIED="1775823875508" TEXT="Idee: FunInline">
 <icon BUILTIN="hourglass"/>
 <node CREATED="1775144029256" ID="ID_1639408323" MODIFIED="1775144381506" TEXT="funktioniert wie std::function aber mit inline-Storage">
 <richcontent TYPE="NOTE"><html>
@@ -63365,7 +63550,7 @@
     </p>
   </body>
 </html></richcontent>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1775144381496" ID="ID_1077323202" MODIFIED="1775161861491" TEXT="Bedarf ist fraglich">
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1775144381496" ID="ID_1077323202" MODIFIED="1775769756028" TEXT="Bedarf ist fraglich">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -63376,6 +63561,29 @@
 </html></richcontent>
 <linktarget COLOR="#955f71" DESTINATION="ID_1077323202" ENDARROW="Default" ENDINCLINATION="222;-287;" ID="Arrow_ID_1558977249" SOURCE="ID_286939645" STARTARROW="None" STARTINCLINATION="-562;19;"/>
 <icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1775769570952" ID="ID_205807285" MODIFIED="1775769758010" TEXT="k&#xf6;nnte als Basis f&#xfc;r eine &#xbb;Iterator-function&#xab; verwendet werden">
+<arrowlink COLOR="#b34e74" DESTINATION="ID_396906197" ENDARROW="Default" ENDINCLINATION="431;21;" ID="Arrow_ID_644180135" STARTARROW="None" STARTINCLINATION="390;18;"/>
+<icon BUILTIN="hourglass"/>
+</node>
+<node BACKGROUND_COLOR="#e6bead" COLOR="#690f14" CREATED="1775769769290" ID="ID_669428979" MODIFIED="1775770270635" TEXT="und diese wiederum k&#xf6;nnte eine bestehende Iterator-Pipeline &#xbb;virtuell huckepack&#xab; nehmen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ....wobei allerdings <i>auch das letztlich fraglich ist </i>&#8212; denn was genau w&#228;re der Unterschied zu dem bereits implementierten Mechanismus, der die Pipeline hinter ein IterSource-Interface packt?
+    </p>
+    <p>
+      &#10233; es w&#228;re ausschlie&#223;lich der Umstand, da&#223; die Pipeline-Implementierung in lokaler Storage liegt, und keinen Heap-Speicher ben&#246;tigt. Abgesehen davon sind beide L&#246;sungen &#228;quivalent (unter der Annahme, da&#223; IterSource wie geplant &#252;berarbeitet wird, so da&#223; dieses Interface kongruent wird zur &#187;StateCore&#171;). Denn, wie ich durch meine Implementierungs-Studie gesehen habe, es geht hier nicht nur um einen verpackten Function-Pointer, sondern es geht stets um ein<i>&#160;virtuelles interface,</i>&#160; denn auch das Instance-Management (copy, move, assign, swap, destroy) mu&#223; virtualisiert werden.
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#b44554" DESTINATION="ID_1657369911" ENDARROW="Default" ENDINCLINATION="-871;-29;" ID="Arrow_ID_205894406" STARTARROW="None" STARTINCLINATION="-665;21;"/>
+<icon BUILTIN="idea"/>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1775772955563" ID="ID_694614870" MODIFIED="1775773003114" TEXT="design-Trade-off f&#xfc;r unseren Use-case ist nicht klar">
+<arrowlink COLOR="#ff0011" DESTINATION="ID_1015322412" ENDARROW="Default" ENDINCLINATION="-43;-885;" ID="Arrow_ID_1900360199" STARTARROW="None" STARTINCLINATION="1464;75;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
 </node>
 <node CREATED="1775169853943" ID="ID_1456721795" MODIFIED="1775169873177" TEXT="sollte constexpr erzeugbar sein und EX_FREE"/>
 <node CREATED="1775144865487" ID="ID_263765309" MODIFIED="1775604904608" TEXT="allgemeine Einsichten">
@@ -63501,7 +63709,7 @@
 <icon BUILTIN="stop-sign"/>
 </node>
 <node CREATED="1775604699544" ID="ID_604505043" MODIFIED="1775604718108" TEXT="denn damit werden effektiv mehrere Funktions-Pointer ben&#xf6;tigt"/>
-<node CREATED="1775604718928" ID="ID_350312708" MODIFIED="1775604900653">
+<node CREATED="1775604718928" ID="ID_350312708" MODIFIED="1775752043798">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
@@ -63511,6 +63719,7 @@
   </body>
 </html></richcontent>
 <arrowlink COLOR="#fee3da" DESTINATION="ID_1990803098" ENDARROW="Default" ENDINCLINATION="390;23;" ID="Arrow_ID_130931000" STARTARROW="None" STARTINCLINATION="259;-11;"/>
+<linktarget COLOR="#fef7ce" DESTINATION="ID_350312708" ENDARROW="Default" ENDINCLINATION="1485;0;" ID="Arrow_ID_1028825620" SOURCE="ID_1009499088" STARTARROW="None" STARTINCLINATION="579;0;"/>
 </node>
 <node CREATED="1775604949785" ID="ID_318776154" MODIFIED="1775605025911">
 <richcontent TYPE="NODE"><html>
@@ -63716,6 +63925,16 @@
 <icon BUILTIN="smily_bad"/>
 <node CREATED="1775610955779" ID="ID_523828560" MODIFIED="1775610966939" TEXT="brauche zwei Function-Pointer"/>
 <node CREATED="1775610969482" ID="ID_441164087" MODIFIED="1775611393132" TEXT="der Function-Wrapper mu&#xdf; NonCopyable sein"/>
+<node CREATED="1775751661217" ID="ID_981519980" MODIFIED="1775751751449" TEXT="damit ist meine Absicht durchkreuzt...">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...denn ich wollte eine Iterator-Funktion definieren, und als Abstraktionsbarriere verwenden. Iteratoren sind aber essentiell kopierbar
+    </p>
+  </body>
+</html></richcontent>
+</node>
 </node>
 <node COLOR="#1c4a7c" CREATED="1775611959011" ID="ID_1371961365" MODIFIED="1775612020825" TEXT="wenigstens ist der Code gradlinig und &#xfc;berschauber">
 <icon BUILTIN="smiley-neutral"/>
@@ -63723,8 +63942,16 @@
 <node COLOR="#338800" CREATED="1775611986600" ID="ID_592036124" MODIFIED="1775612000762" TEXT="und es funktioniert wie erwartet">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1775612057598" ID="ID_1713510844" MODIFIED="1775612072352" TEXT="TODO: brauche noch...">
+<node CREATED="1775612033401" ID="ID_969557535" MODIFIED="1775612040848" TEXT="hab viel gelernt">
+<icon BUILTIN="smiley-oh"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1775612044456" ID="ID_315574274" MODIFIED="1775612168772" TEXT="mal sehen ob das Ding n&#xfc;tzlich ist...">
 <icon BUILTIN="bell"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1775751758759" ID="ID_1523287534" MODIFIED="1775751766751" TEXT="wie geht es hier weiter?">
+<icon BUILTIN="help"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1775612057598" ID="ID_1713510844" MODIFIED="1775751844971" TEXT="M&#xf6;glichkeit-1 : akzeptieren und abrunden">
+<icon BUILTIN="full-1"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1775612073773" ID="ID_1167327800" MODIFIED="1775612139984" TEXT="ein convenience front-End">
 <icon BUILTIN="flag-yellow"/>
 </node>
@@ -63734,12 +63961,165 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1775612100072" ID="ID_795978468" MODIFIED="1775612139983" TEXT="sp&#xe4;teres emplace()">
 <icon BUILTIN="flag-yellow"/>
 </node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1775772553475" ID="ID_1658923821" MODIFIED="1775778686061" TEXT="doch noch auf einen allgemeinen Instance-Manager ausweiten">
+<arrowlink COLOR="#313bd5" DESTINATION="ID_297232550" ENDARROW="Default" ENDINCLINATION="147;-4;" ID="Arrow_ID_604220325" STARTARROW="None" STARTINCLINATION="117;8;"/>
+<arrowlink COLOR="#d82c52" DESTINATION="ID_1022383031" ENDARROW="Default" ENDINCLINATION="56;-41;" ID="Arrow_ID_686464144" STARTARROW="Default" STARTINCLINATION="113;5;"/>
+<linktarget COLOR="#ff1900" DESTINATION="ID_1658923821" ENDARROW="Default" ENDINCLINATION="-8;41;" ID="Arrow_ID_1324792504" SOURCE="ID_112575747" STARTARROW="None" STARTINCLINATION="-725;32;"/>
+<icon BUILTIN="forward"/>
 </node>
-<node CREATED="1775612033401" ID="ID_969557535" MODIFIED="1775612040848" TEXT="hab viel gelernt">
-<icon BUILTIN="smiley-oh"/>
 </node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1775612044456" ID="ID_315574274" MODIFIED="1775612168772" TEXT="mal sehen ob das Ding n&#xfc;tzlich ist...">
-<icon BUILTIN="bell"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1775751794934" ID="ID_1657369911" MODIFIED="1775770270635" TEXT="M&#xf6;glichkeit-2 : optimale L&#xf6;sung realisieren">
+<linktarget COLOR="#b44554" DESTINATION="ID_1657369911" ENDARROW="Default" ENDINCLINATION="-871;-29;" ID="Arrow_ID_205894406" SOURCE="ID_669428979" STARTARROW="None" STARTINCLINATION="-665;21;"/>
+<icon BUILTIN="full-2"/>
+<node CREATED="1775751848910" ID="ID_1009499088" MODIFIED="1775778545119" TEXT="das w&#xe4;re wohl ein Polymorphic value">
+<arrowlink COLOR="#fef7ce" DESTINATION="ID_350312708" ENDARROW="Default" ENDINCLINATION="1485;0;" ID="Arrow_ID_1028825620" STARTARROW="None" STARTINCLINATION="579;0;"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1775771601220" HGAP="105" ID="ID_1022383031" MODIFIED="1775778686062" TEXT="diese Aussage nochmal &#xfc;berpr&#xfc;fen" VSHIFT="1">
+<linktarget COLOR="#d82c52" DESTINATION="ID_1022383031" ENDARROW="Default" ENDINCLINATION="56;-41;" ID="Arrow_ID_686464144" SOURCE="ID_1658923821" STARTARROW="Default" STARTINCLINATION="113;5;"/>
+<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1775771626592" ID="ID_1277077327" MODIFIED="1775771788370" TEXT="Knackpunkt ist die Gefahr von &#xbb;Template-bloat&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Wenn man f&#252;r jede auftretende Kombination von Funktions-Signatur und konkret gebundenem Funktor eine Basisklasse generiert, dann erzeugt man eine Menge von Funktionen, die jeweils eine VTable liefern; und da andererseist so ein Function-Wrapper gerne aus generischem Code verwendet wird, kann daraus ein gef&#228;hrlicher Hebel entstehen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#fdddb2" COLOR="#640099" CREATED="1775771644677" ID="ID_1358238601" MODIFIED="1775774603376" TEXT="was macht die Implementierung von std::function?">
+<icon BUILTIN="help"/>
+<node CREATED="1775771799082" ID="ID_328591465" MODIFIED="1775771849627" TEXT="klar ist: _Function_base::_Base_manager ist ein getemplateter Funktor">
+<node CREATED="1775771859602" ID="ID_174129382" MODIFIED="1775771874220" TEXT="er wird f&#xfc;r einen konkreten Functor-Template-Parameter instantiiert"/>
+<node CREATED="1775771875143" ID="ID_700467088" MODIFIED="1775771888686" TEXT="und enth&#xe4;lt den Code, alle Instance-Management-Operationen konkret auszuf&#xfc;hren"/>
+<node CREATED="1775771975258" ID="ID_448837258" MODIFIED="1775772005327" TEXT="er wird eingebunden &#xfc;ber class _Function_handler&lt;Signature, Functor&gt;"/>
+<node CREATED="1775772028459" ID="ID_1151224914" MODIFIED="1775772059010" TEXT="diese ist aliased als template Handler&lt;Functor&gt; in std::function"/>
+<node CREATED="1775772104961" ID="ID_1940448800" MODIFIED="1775772127217" TEXT="und wird nur instantiiert aus dem Kontext des Konstrukturs std::function(Functor)"/>
+</node>
+<node CREATED="1775771889607" ID="ID_1934227632" MODIFIED="1775772161213" TEXT="das ist exakt das gleiche Design, was mir zun&#xe4;chst vorschwebte">
+<node CREATED="1775772162441" ID="ID_372843409" MODIFIED="1775772175211" TEXT="...und das ich dann im ersten Anlauf implementiert habe"/>
+<node CREATED="1775772175815" ID="ID_28971545" MODIFIED="1775772189514" TEXT="dort allerdings nur Non-copyable"/>
+</node>
+<node CREATED="1775772283249" ID="ID_1015322412" MODIFIED="1775772995727" TEXT="&#x27f9; Design-Trade-off">
+<linktarget COLOR="#ff0011" DESTINATION="ID_1015322412" ENDARROW="Default" ENDINCLINATION="-43;-885;" ID="Arrow_ID_1900360199" SOURCE="ID_694614870" STARTARROW="None" STARTINCLINATION="1464;75;"/>
+<node CREATED="1775772295838" ID="ID_1123536064" MODIFIED="1775772334662" TEXT="der Manager-Funktor wird f&#xfc;r jeden gebundenen Target-Typ einmal instantiiert"/>
+<node CREATED="1775772335935" ID="ID_261540643" MODIFIED="1775772367905" TEXT="allerdings ist das keine VTable, d.h. kein RTTI und keine get_vtable_for()-Funktion"/>
+<node CREATED="1775772719519" ID="ID_328959785" MODIFIED="1775772748477" TEXT="daf&#xfc;r wird ein zweiter Function-Pointer _M_invoker in Kauf genommen"/>
+<node CREATED="1775773012193" ID="ID_1905304675" MODIFIED="1775773508015" TEXT="aus Sicht einer Standard-Library ist das eine gute Wahl">
+<icon BUILTIN="forward"/>
+<node CREATED="1775773027381" ID="ID_1493377193" MODIFIED="1775773064561" TEXT="man verschwendet etwas Speicher">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Kopien und Datenbewegungen machen aktuelle CPUs extrem schnell, und Speicher ist billig
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1775773072073" ID="ID_1141565798" MODIFIED="1775773149785" TEXT="daf&#xfc;r bekommt man eine optimal schnelle Implementierung">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das hei&#223;t, <b>jede der beiden Operationen</b>&#160;wir mit dem absoluten Minimum an Indirektion aufgerufen (n&#228;mlich ein Funktionspointer)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1775773549864" ID="ID_1005280812" MODIFIED="1775773670627" TEXT="es wird nur das Minimum an Instance-Management-Code emittiert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      und zwar einmal als Funktion; das ist u.U dann etwas mehr Code, als wenn man das Roh-Objekt bewegen w&#252;rde (weil der Optimiser da nichts machen kann), aber auch weniger, als u.U. das direkte Inlinen von mehreren Instanz-Operationen. Jedenfalls kann auch eine VTable-basierte Implementierung nicht mit weniger Code auskommen, sofern <i>virtual copy support</i>&#160;gew&#252;nscht ist
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1775773673532" ID="ID_55296655" MODIFIED="1775774360097" TEXT="die Executable-Header werden relativ wenig belastet">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Es gibt jeweils eine Instanz der Invoke und der Manager-Funktion <i>f&#252;r jeden Typ </i>(also jeweils zwei Funktionen) &#8212; aber <b>keine VTable</b>&#160; und <b>keine Typeinfo</b>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fce6e2" COLOR="#c90848" CREATED="1775774544604" ID="ID_407806095" MODIFIED="1775774573748" TEXT="was w&#xe4;re denn der Trade-off f&#xfc;r Lumiera??">
+<icon BUILTIN="help"/>
+<node CREATED="1775774614488" ID="ID_656946479" MODIFIED="1775774622726" TEXT="Beispiel liblumierasteam.so">
+<node CREATED="1775774636117" ID="ID_839755447" MODIFIED="1775774704209" TEXT="grep -c &apos;Function_handler&apos;  &#xd83e;&#xdc32; 483"/>
+<node CREATED="1775774636117" ID="ID_1998023224" MODIFIED="1775774675491" TEXT="grep -c &apos;vtable&apos;  &#xd83e;&#xdc32; 311"/>
+</node>
+<node CREATED="1775774841346" ID="ID_1959787851" MODIFIED="1775774845901" TEXT="Beispiel libtest-lib.so">
+<node CREATED="1775774636117" ID="ID_339151851" MODIFIED="1775774862723" TEXT="grep -c &apos;Function_handler&apos;  &#xd83e;&#xdc32; 858"/>
+<node CREATED="1775774636117" ID="ID_1886737964" MODIFIED="1775774869906" TEXT="grep -c &apos;vtable&apos;  &#xd83e;&#xdc32; 722"/>
+</node>
+<node CREATED="1775776135813" ID="ID_1105821021" MODIFIED="1775777860652" TEXT="ohne vertiefte Kenntnisse der Sprach-Plattform f&#xfc;r mich schwer abw&#xe4;gbar">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Rein auf Basis der abz&#228;hlbaren Eintr&#228;ge im Executable sehe ich nur einen geringen Unterschied: n&#228;mlich da&#223; die generischen VTable-Operationen wegfallen. Abgesehen davon erfordern beide Ans&#228;tze jeweils zwei Funktionen / virtuelle Funktionen.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Der Trade-off besteht also zwischen ein paar tausend (unterer Bereich) zus&#228;tzliche Eintr&#228;ge vs. jeweils ein zus&#228;tzliches Datenwort in jeder Instanz zur Laufzeit.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1775777862982" ID="ID_861764572" MODIFIED="1775778437999" TEXT="auch f&#xfc;r Lumiera handelt es sich (aktuell) um Library-Design...">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Und das hei&#223;t, ich kann keine Entscheidungen &#252;ber knapp bemessene Performance-Unterschiede treffen auf einer rein-generischen Basis. Im Einzelfall (wie z.B. f&#252;r lib::Several) besteht ja immer noch die M&#246;glichkeit einer handgeschriebenen Implementierung, die u.U auch zus&#228;tzliches Wissen bez&#252;glich der konkreten Situation nutzbar machen k&#246;nnte (beispielsweise geht es im ArrayBucket f&#252;r lib::Several nur um eine abstrahierte Deleter-Funktion, d.h. es gen&#252;gt tats&#228;chlich ein einziger Funktionspointer).
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Insofern gibt es auf generischer Ebene nur die Feststellung, da&#223; man mit einer ansonsten &#187;praktisch &#228;quivalenten&#171; implementierung (halt ein Pointer mehr) f&#252;r jede Instanz zwei Interface-Eintr&#228;ge und den zugeh&#246;rigen Assembly einspart.... Im Vergleich dazu ist bez&#252;glich der Laufzeit der Unterschied viel relevanter, wenn f&#252;r transiente Operationen (wie einen Iterator) eine Heap-Allokation vermieden werden kann.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1775778291381" ID="ID_112575747" MODIFIED="1775778727792" TEXT="der Tendenz nach spricht das doch auch ehr gegen die VTable">
+<arrowlink COLOR="#ff1900" DESTINATION="ID_1658923821" ENDARROW="Default" ENDINCLINATION="-8;41;" ID="Arrow_ID_1324792504" STARTARROW="None" STARTINCLINATION="-725;32;"/>
+<arrowlink COLOR="#fe2e46" DESTINATION="ID_1255208607" ENDARROW="Default" ENDINCLINATION="229;0;" ID="Arrow_ID_606284855" STARTARROW="None" STARTINCLINATION="-417;19;"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1775778441257" ID="ID_1531100336" MODIFIED="1775778468509" TEXT="das hei&#xdf;t...">
+<node CREATED="1775778469581" ID="ID_916684524" MODIFIED="1775778469581" TEXT="FunInline &#x27f8; zwei Funktionspointer"/>
+<node CREATED="1775778471285" ID="ID_1352352543" MODIFIED="1775778530327" TEXT="IterSource &#x27f8; Interface-Call + VTable"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1775751859578" ID="ID_297232550" LINK="https://issues.lumiera.org/ticket/1421" MODIFIED="1775772626416" TEXT="dazu ein Instance-Manager-Interface entwickeln">
+<arrowlink COLOR="#feefb5" DESTINATION="ID_1520505813" ENDARROW="Default" ENDINCLINATION="22;-857;" ID="Arrow_ID_960733347" STARTARROW="None" STARTINCLINATION="-127;7;"/>
+<linktarget COLOR="#313bd5" DESTINATION="ID_297232550" ENDARROW="Default" ENDINCLINATION="147;-4;" ID="Arrow_ID_604220325" SOURCE="ID_1658923821" STARTARROW="None" STARTINCLINATION="117;8;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1775751872730" ID="ID_106564309" MODIFIED="1775770628001" TEXT="damit den bestehenden PolymorphicValue modernisieren">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1775751886640" ID="ID_635074732" MODIFIED="1775770630422" TEXT="und auf dieser Basis die FunInline redefinieren">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1775778558919" ID="ID_1255208607" MODIFIED="1775778727792" TEXT="vorl&#xe4;ufiges Fazit: doch das bestehende Design auf einen Manager-Pointer ausbauen">
+<linktarget COLOR="#fe2e46" DESTINATION="ID_1255208607" ENDARROW="Default" ENDINCLINATION="229;0;" ID="Arrow_ID_606284855" SOURCE="ID_112575747" STARTARROW="None" STARTINCLINATION="-417;19;"/>
+<icon BUILTIN="yes"/>
+</node>
 </node>
 </node>
 </node>
@@ -64379,6 +64759,62 @@
 </node>
 </node>
 <node CREATED="1700762558645" ID="ID_1575178578" MODIFIED="1700762562411" TEXT="Hilfsmittel">
+<node CREATED="1775752599797" ID="ID_1919885443" MODIFIED="1775752606231" TEXT="Wrapper / Adapter">
+<node CREATED="1775752607988" ID="ID_296585015" MODIFIED="1775752625561">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      &#187;<u>Polymorphic Value</u>&#171;
+    </p>
+  </body>
+</html></richcontent>
+<node COLOR="#338800" CREATED="1775752655431" ID="ID_351049479" MODIFIED="1775752852326" TEXT="erster Entwurf">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1775752665974" ID="ID_130160205" MODIFIED="1775752751048" TEXT="entstanden aus dem Wunsch f&#xfc;r elegantes Interface-Design">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Es gab also keinen unmittelbaren Bedarf, aber ich habe immer wieder bemerkt, da&#223; <i>so etwas n&#252;tzlich w&#228;re und konzisere APIs erm&#246;glichen w&#252;rde...</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1775752753447" ID="ID_554924494" MODIFIED="1775752768892" TEXT="diese erste Implementierung ist &#xbb;nicht sch&#xf6;n&#xab;">
+<node CREATED="1775752775166" ID="ID_743033078" MODIFIED="1775752800695" TEXT="es funktioniert alles"/>
+<node CREATED="1775752784934" ID="ID_1021435610" MODIFIED="1775752797526" TEXT="es ist auch gut optimiert"/>
+<node CREATED="1775752801877" ID="ID_1873210580" MODIFIED="1775752823699" TEXT="aber man vermeidet jede Anpassung"/>
+<node CREATED="1775752824541" ID="ID_1199118483" MODIFIED="1775752834819" TEXT="der Code ist ziemlich schwer zu verstehen"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1775752853151" ID="ID_87627416" MODIFIED="1775752859037" TEXT="Re-Implementierung">
+<icon BUILTIN="hourglass"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1775752860084" ID="ID_1520505813" MODIFIED="1775769457487" TEXT="Idee: ein Instance-Manager-Interface schaffen">
+<linktarget COLOR="#feefb5" DESTINATION="ID_1520505813" ENDARROW="Default" ENDINCLINATION="22;-857;" ID="Arrow_ID_960733347" SOURCE="ID_297232550" STARTARROW="None" STARTINCLINATION="-127;7;"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1775752880080" ID="ID_1260280050" MODIFIED="1775755381079" TEXT="das w&#xe4;re auch allgemein n&#xfc;tzlich">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Eine Komponente, die geeignet einen Instance-Manager unterst&#252;tzt, w&#252;rde automatisch wie ein einfacher Value handhabbar, mit Move-, Copy-, Asignment und Swap-Support. Zwar wird all dies normalerweise automatisch von der C++ - Sprache unterst&#252;tzt, erfordert aber komplette Offenlegung des Typs &#8212; ein Instance-Manager wird also relevant, wenn man den konkreten Typ verbergen m&#246;chte, aber trotzdem Wert-Semantik bieten m&#246;chte
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1775752933506" ID="ID_868304108" MODIFIED="1775752972169" TEXT="w&#xe4;re direkt implementierbar als Komponente, ohne Virtualisierung"/>
+<node CREATED="1775752903046" ID="ID_1216439634" MODIFIED="1775752913919" TEXT="man k&#xf6;nnte den VirtualCopySupport direkt darauf aufsetzen"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1775769404408" ID="ID_862372565" LINK="https://issues.lumiera.org/ticket/1421" MODIFIED="1775769417192" TEXT="#1421 define Instance-Manager interface">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1775769220570" ID="ID_572028635" LINK="https://issues.lumiera.org/ticket/1197" MODIFIED="1775769238759" TEXT="#1197 rationalise copy support in PolymorphicValue">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
+</node>
 <node CREATED="1700762565756" ID="ID_449088160" MODIFIED="1700762567887" TEXT="Container"/>
 <node CREATED="1700762569236" ID="ID_1666233122" MODIFIED="1700762579454" TEXT="Simulation / Generierung">
 <node COLOR="#11660e" CREATED="1700761069915" FOLDED="true" ID="ID_1582937575" MODIFIED="1700763387735">
@@ -64700,7 +65136,7 @@
 <node CREATED="1729977630194" ID="ID_321831322" MODIFIED="1729977633485" TEXT="Testrunner"/>
 <node CREATED="1729977638416" ID="ID_416747057" MODIFIED="1729977665035" TEXT="Test-Helper"/>
 <node CREATED="1729977672836" ID="ID_1398918893" MODIFIED="1729977678199" TEXT="Einrichtungen">
-<node CREATED="1729977681582" ID="ID_1459314283" MODIFIED="1729977733876">
+<node CREATED="1729977681582" FOLDED="true" ID="ID_1459314283" MODIFIED="1729977733876">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
@@ -64909,7 +65345,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1728786417609" ID="ID_1581017843" MODIFIED="1729977820280">
+<node CREATED="1728786417609" FOLDED="true" ID="ID_1581017843" MODIFIED="1729977820280">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
@@ -65219,7 +65655,7 @@
     </p>
   </body>
 </html></richcontent>
-<linktarget COLOR="#a00e3d" DESTINATION="ID_1995924412" ENDARROW="Default" ENDINCLINATION="-2471;146;" ID="Arrow_ID_1407537427" SOURCE="ID_262212223" STARTARROW="None" STARTINCLINATION="-636;133;"/>
+<linktarget COLOR="#590ea0" DESTINATION="ID_1995924412" ENDARROW="Default" ENDINCLINATION="-2471;146;" ID="Arrow_ID_1407537427" SOURCE="ID_262212223" STARTARROW="None" STARTINCLINATION="-636;133;"/>
 <node CREATED="1771788718816" ID="ID_1308819378" MODIFIED="1771788732388" TEXT="TestFrame::reseed() zieht einen neuen Diskriminator"/>
 <node CREATED="1771788734069" ID="ID_1418590090" MODIFIED="1771788755081">
 <richcontent TYPE="NODE"><html>
@@ -73813,7 +74249,7 @@
     </p>
     <ul>
       <li>
-        die Factory kann sich selbst erzeugen, indem sie auf einen Monostate zur&#252;ckgreift. Das ist in der Praxis der wichtigste Fall, der im Besonderen f&#252;r die normale Heap-Allokation gilt, aber auch Thread-Local und damit Kontext-Bezogen auslegbar ist.
+        die Factory kann sich selbst erzeugen, indem sie auf einen Monostate zur&#252;ckgreift. Das ist in der Praxis der wichtigste Fall, der im Besonderen f&#252;r die normale Heap-Allokation gilt, aber auch Thread-Local und damit Kontext-bezogen auslegbar ist.
       </li>
       <li>
         es k&#246;nnte nur Copy-Construction oder Delegation erlaubt sein, und die Factory ist in diesem Fall nur ein Front-End-Handle
@@ -73916,7 +74352,7 @@
   <head/>
   <body>
     <p>
-      ...auch hier soll die Verdrahtung <i>verborgen bleiben; </i>jedoch ist man nicht auf einen Objekttyp festgelegt, und au&#223;erdem soll es die M&#246;glichkeit geben, esplizit eine <font face="Monospaced">destroy()</font>-Funktion aufzurufen, oder alternativ schon aus der Erzeugung ein <i>managing-handle </i>zu bekommen
+      ...auch hier soll die Verdrahtung <i>verborgen bleiben; </i>jedoch ist man nicht auf einen Objekttyp festgelegt, und au&#223;erdem soll es die M&#246;glichkeit geben, explizit eine <font face="Monospaced">destroy()</font>-Funktion aufzurufen, oder alternativ schon aus der Erzeugung ein <i>managing-handle </i>zu bekommen
     </p>
   </body>
 </html></richcontent>
@@ -82238,8 +82674,8 @@
 </node>
 </node>
 <node CREATED="1512925246057" ID="ID_181262071" MODIFIED="1686839807822" TEXT="JobPlanning">
-<linktarget COLOR="#5379b5" DESTINATION="ID_181262071" ENDARROW="Default" ENDINCLINATION="-150;-386;" ID="Arrow_ID_1786254694" SOURCE="ID_1543264108" STARTARROW="Default" STARTINCLINATION="-1298;0;"/>
 <linktarget COLOR="#596573" DESTINATION="ID_181262071" ENDARROW="Default" ENDINCLINATION="336;992;" ID="Arrow_ID_1922586461" SOURCE="ID_608495626" STARTARROW="None" STARTINCLINATION="253;-27;"/>
+<linktarget COLOR="#5379b5" DESTINATION="ID_181262071" ENDARROW="Default" ENDINCLINATION="-150;-386;" ID="Arrow_ID_1786254694" SOURCE="ID_1543264108" STARTARROW="Default" STARTINCLINATION="-1298;0;"/>
 <node CREATED="1535892806131" ID="ID_513357674" MODIFIED="1535892890103" TEXT="k&#xf6;nnte eine Monade sein.....?">
 <arrowlink COLOR="#6c79a2" DESTINATION="ID_1502143527" ENDARROW="Default" ENDINCLINATION="-606;743;" ID="Arrow_ID_616092581" STARTARROW="None" STARTINCLINATION="229;19;"/>
 <icon BUILTIN="help"/>
@@ -82247,8 +82683,8 @@
 <node CREATED="1535891554587" ID="ID_185594200" MODIFIED="1687443459355" TEXT="Implementierung beruht auf IterExplorer">
 <arrowlink COLOR="#625975" DESTINATION="ID_409327286" ENDARROW="Default" ENDINCLINATION="-843;1771;" ID="Arrow_ID_86323098" STARTARROW="None" STARTINCLINATION="-493;-1123;"/>
 <node COLOR="#338800" CREATED="1680567733451" ID="ID_896127270" MODIFIED="1687456300887" TEXT="Kritik / Refactoring Monaden">
-<linktarget COLOR="#2c9fa6" DESTINATION="ID_896127270" ENDARROW="Default" ENDINCLINATION="-1310;-138;" ID="Arrow_ID_1052952035" SOURCE="ID_30857289" STARTARROW="None" STARTINCLINATION="-424;31;"/>
 <linktarget COLOR="#3598d7" DESTINATION="ID_896127270" ENDARROW="Default" ENDINCLINATION="-1096;-80;" ID="Arrow_ID_1764912075" SOURCE="ID_1805461369" STARTARROW="None" STARTINCLINATION="-511;24;"/>
+<linktarget COLOR="#2c9fa6" DESTINATION="ID_896127270" ENDARROW="Default" ENDINCLINATION="-1310;-138;" ID="Arrow_ID_1052952035" SOURCE="ID_30857289" STARTARROW="None" STARTINCLINATION="-424;31;"/>
 <icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#a51558" CREATED="1680568362230" ID="ID_1855480415" MODIFIED="1680568445542" TEXT="Problem: Code selbst f&#xfc;r micht nicht mehr verst&#xe4;ndlich">
 <richcontent TYPE="NOTE"><html>
@@ -86895,6 +87331,7 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 </node>
 <node COLOR="#338800" CREATED="1685585183914" ID="ID_1477861363" MODIFIED="1685631559728" TEXT="einfache Integer-Sequenz iterieren">
 <arrowlink COLOR="#64a3bc" DESTINATION="ID_1193075176" ENDARROW="Default" ENDINCLINATION="-872;80;" ID="Arrow_ID_49892110" STARTARROW="None" STARTINCLINATION="-1069;-69;"/>
+<arrowlink COLOR="#64a3bc" DESTINATION="ID_1310742780" ENDARROW="Default" ENDINCLINATION="-872;80;" ID="Arrow_ID_874900916" STARTARROW="None" STARTINCLINATION="-1069;-69;"/>
 <icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1685631561759" ID="ID_196221498" MODIFIED="1685631585003" TEXT="die bestehende Implementierung aus iter-adapter.hpp ist v&#xf6;llig ausreichend">
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
@@ -104917,7 +105354,7 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 <node BACKGROUND_COLOR="#eadca7" COLOR="#690f14" CREATED="1734900837143" HGAP="32" ID="ID_1904321525" LINK="#ID_670416401" MODIFIED="1734900885391" TEXT="letztlich diese L&#xf6;sung gew&#xe4;hlt" VSHIFT="12"/>
 </node>
 </node>
-<node COLOR="#5b280f" CREATED="1721956892200" FOLDED="true" ID="ID_1451110951" MODIFIED="1722470788939" TEXT="strukturell w&#xe4;re das Spezial-Tag die beste L&#xf6;sung">
+<node COLOR="#5b280f" CREATED="1721956892200" FOLDED="true" ID="ID_1451110951" MODIFIED="1775871756710" TEXT="strukturell w&#xe4;re das Spezial-Tag die beste L&#xf6;sung">
 <arrowlink COLOR="#4395d3" DESTINATION="ID_1329080039" ENDARROW="Default" ENDINCLINATION="-105;0;" ID="Arrow_ID_1999279188" STARTARROW="None" STARTINCLINATION="6;-21;"/>
 <arrowlink COLOR="#414bc3" DESTINATION="ID_603785440" ENDARROW="Default" ENDINCLINATION="-465;-28;" ID="Arrow_ID_1386315858" STARTARROW="None" STARTINCLINATION="-31;500;"/>
 <icon BUILTIN="yes"/>
@@ -105020,6 +105457,18 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 </html></richcontent>
 <arrowlink COLOR="#ae163a" DESTINATION="ID_593967041" ENDARROW="Default" ENDINCLINATION="27;97;" ID="Arrow_ID_558973560" STARTARROW="None" STARTINCLINATION="132;5;"/>
 <icon BUILTIN="yes"/>
+</node>
+<node CREATED="1775874112227" ID="ID_1800347495" MODIFIED="1775874548336" TEXT="(l&#xe4;ngerfristig): das LocalTag wird zu einem Bindeglied f&#xfc;r den Buffer-Allokator">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <u>Stand 2026</u>: nach dem Aufr&#228;umen und Restrukturieren der Implementierung von BufferProvider habe ich die Metadaten behutsam verallgemeintert, und nun konsitent auf der internen Ebene zwischen BufferStage und BufferStore zug&#228;nglich gemacht. Speziell das LocalTag wird damit zu einem Kommunikations-System, &#252;ber das sich eine konkrete Einbindung in ein Storage- oder Output-System &#252;ber das ganze Protokoll hinweg koordinieren kann. Im OutputSlot stellt das LocalTag in jedem DataSink-Handle intern die Verkn&#252;pfung zur darunterliegenden Connection-Implementierung her, und erm&#246;glicht so einen BufferStore, der direkt an die Output-Bufferverwaltung in der Connection delegiert.
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#40477c" DESTINATION="ID_118444511" ENDARROW="Default" ENDINCLINATION="886;35;" ID="Arrow_ID_672245073" STARTARROW="Default" STARTINCLINATION="-1402;54;"/>
+<arrowlink COLOR="#516089" DESTINATION="ID_450967698" ENDARROW="Default" ENDINCLINATION="-909;0;" ID="Arrow_ID_523015272" STARTARROW="None" STARTINCLINATION="-143;5;"/>
 </node>
 </node>
 </node>
@@ -105406,6 +105855,7 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 <node CREATED="1722384774724" ID="ID_231403168" MODIFIED="1722384802636" TEXT="das bestehende API f&#xfc;r Output-Management deckt diesen Fall bereits komplett ab"/>
 <node CREATED="1722384803792" ID="ID_450967698" MODIFIED="1722445233553" TEXT="es gen&#xfc;gt, ein zus&#xe4;tzliches LocalTag in das Typ-Feld f&#xfc;r das BuffHandle einzubauen">
 <linktarget COLOR="#8c1444" DESTINATION="ID_450967698" ENDARROW="Default" ENDINCLINATION="-313;-10;" ID="Arrow_ID_414353144" SOURCE="ID_128884200" STARTARROW="None" STARTINCLINATION="-367;0;"/>
+<linktarget COLOR="#516089" DESTINATION="ID_450967698" ENDARROW="Default" ENDINCLINATION="-909;0;" ID="Arrow_ID_523015272" SOURCE="ID_1800347495" STARTARROW="None" STARTINCLINATION="-143;5;"/>
 </node>
 <node CREATED="1722445242908" ID="ID_1389873312" MODIFIED="1722445279859" TEXT="allerdings wird dieses speziell pr&#xe4;parierte BuffHandle besser direkt eingef&#xfc;gt"/>
 <node COLOR="#5b280f" CREATED="1722384890441" ID="ID_438526459" MODIFIED="1728653318306" TEXT="zu kl&#xe4;ren bleibt: wie wird diese Info genau eingebunden?">
@@ -105422,6 +105872,9 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
     </p>
   </body>
 </html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1775871790659" ID="ID_1445106219" LINK="#ID_86806939" MODIFIED="1775871901718" TEXT="Aber sp&#xe4;ter, f&#xfc;r den OutputSlot wurde das LocalTag entscheidend f&#xfc;r die saubere L&#xf6;sung">
+<icon BUILTIN="idea"/>
 </node>
 </node>
 </node>
@@ -113642,8 +114095,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node CREATED="1738092795598" ID="ID_461276578" MODIFIED="1738285081902" TEXT="uuuuund ... kaum wart&apos; ma zwei Wochen, schon k&#xf6;nnen &#x201e;wir&#x201c; das">
 <arrowlink COLOR="#996494" DESTINATION="ID_1363201028" ENDARROW="Default" ENDINCLINATION="-20;-32;" ID="Arrow_ID_621419348" STARTARROW="None" STARTINCLINATION="132;6;"/>
-<linktarget COLOR="#2469a2" DESTINATION="ID_461276578" ENDARROW="Default" ENDINCLINATION="1338;-36;" ID="Arrow_ID_1078242662" SOURCE="ID_195611513" STARTARROW="Default" STARTINCLINATION="1743;85;"/>
 <linktarget COLOR="#4690c4" DESTINATION="ID_461276578" ENDARROW="Default" ENDINCLINATION="-782;31;" ID="Arrow_ID_774773700" SOURCE="ID_537165384" STARTARROW="None" STARTINCLINATION="-239;-11;"/>
+<linktarget COLOR="#2469a2" DESTINATION="ID_461276578" ENDARROW="Default" ENDINCLINATION="1338;-36;" ID="Arrow_ID_1078242662" SOURCE="ID_195611513" STARTARROW="Default" STARTINCLINATION="1743;85;"/>
 <icon BUILTIN="smily_bad"/>
 </node>
 </node>
@@ -118894,7 +119347,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node COLOR="#338800" CREATED="1771335644345" ID="ID_4824008" MODIFIED="1771523276121" TEXT="beide Tests wieder komplett gr&#xfc;n">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1771335654738" ID="ID_642670991" MODIFIED="1771335670282" TEXT="Zwischenstand: was ist mit Output-Slot?">
+<node BACKGROUND_COLOR="#e5d8b9" COLOR="#435e98" CREATED="1771335654738" ID="ID_642670991" MODIFIED="1775873068879" TEXT="Zwischenstand: was ist mit Output-Slot?">
 <font NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="help"/>
 <node CREATED="1771524337952" ID="ID_1284484982" MODIFIED="1771524337952" TEXT="OutputSlotProtocol_test">
@@ -118922,8 +119375,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1771533043910" ID="ID_158180438" MODIFIED="1771533105051" TEXT="Test gebrochen">
-<arrowlink COLOR="#fe1909" DESTINATION="ID_459952316" ENDARROW="Default" ENDINCLINATION="75;-1691;" ID="Arrow_ID_176448794" STARTARROW="None" STARTINCLINATION="-554;79;"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1771533043910" ID="ID_158180438" MODIFIED="1775868717190" TEXT="Test gebrochen">
+<arrowlink COLOR="#3a6aea" DESTINATION="ID_459952316" ENDARROW="Default" ENDINCLINATION="75;-1691;" ID="Arrow_ID_176448794" STARTARROW="None" STARTINCLINATION="-554;79;"/>
 <icon BUILTIN="broken-line"/>
 <node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1771533146004" ID="ID_1541172409" MODIFIED="1771533206365" TEXT="&#xd83d;&#xddf1; Crash">
 <richcontent TYPE="NOTE"><html>
@@ -118935,8 +119388,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1771533236307" ID="ID_446738731" MODIFIED="1774225767792" TEXT="DiagnosticOutputSlot irreparabel defekt">
-<arrowlink COLOR="#ff2915" DESTINATION="ID_638158996" ENDARROW="Default" ENDINCLINATION="-1375;-44;" ID="Arrow_ID_288442844" STARTARROW="None" STARTINCLINATION="-182;266;"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#d80612" CREATED="1771533236307" ID="ID_446738731" MODIFIED="1775872104384" TEXT="DiagnosticOutputSlot irreparabel defekt">
+<arrowlink COLOR="#158dff" DESTINATION="ID_638158996" ENDARROW="Default" ENDINCLINATION="-1375;-44;" ID="Arrow_ID_288442844" STARTARROW="None" STARTINCLINATION="-182;266;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1771533351445" ID="ID_1191713131" MODIFIED="1771533363392" TEXT="Kritik-API"/>
 <node CREATED="1771533365404" ID="ID_1617547990" MODIFIED="1771533395920" TEXT="Implementierung verloren">
@@ -118944,7 +119397,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1771533451213" MODIFIED="1771533451213" TEXT="output_was_emitted"/>
 <node CREATED="1771533457562" MODIFIED="1771533457562" TEXT="output_was_closed"/>
 </node>
-<node CREATED="1771533466655" ID="ID_1586318555" MODIFIED="1771533488855" TEXT="internes Schema untragbar">
+<node COLOR="#5b280f" CREATED="1771533466655" FOLDED="true" ID="ID_1586318555" MODIFIED="1775873034755" TEXT="internes Schema untragbar">
+<icon BUILTIN="stop-sign"/>
 <node CREATED="1771533507587" ID="ID_1087905288" MODIFIED="1771533531883" TEXT="accessSequence() &#x27fc; TrackingInMemoryBlockSequence"/>
 <node CREATED="1771533533709" ID="ID_1742759190" MODIFIED="1771533535985" TEXT="TrackingInMemoryBlockSequence">
 <node CREATED="1771533566719" ID="ID_861650404" MODIFIED="1771533684000" TEXT="ist ein ConnectionState">
@@ -118987,7 +119441,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node CREATED="1771534268577" ID="ID_1415998477" MODIFIED="1771534284685" TEXT="interessannte Beobachtungen am Rande">
+<node CREATED="1771534268577" ID="ID_1415998477" MODIFIED="1775872988131" TEXT="interessannte Beobachtungen am Rande">
+<icon BUILTIN="forward"/>
 <node CREATED="1771534286122" ID="ID_1922500968" MODIFIED="1771534549340" TEXT="ich war damals wohl nicht im Stande, es besser zu implementieren">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -119022,22 +119477,41 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#fefc4e" COLOR="#351d75" CREATED="1771534807668" ID="ID_314210533" MODIFIED="1771534909632" TEXT="im R&#xfc;ckblick habe ich hier Gl&#xfc;ck im Ungl&#xfc;ck gehabt">
+<node BACKGROUND_COLOR="#fefc4e" COLOR="#351d75" CREATED="1771534807668" ID="ID_314210533" MODIFIED="1775872767593" TEXT="im R&#xfc;ckblick habe ich hier Gl&#xfc;ck im Ungl&#xfc;ck gehabt">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
     <p>
-      Auf dem Weg einer systematischen Analyse w&#228;re ich (mein typisches Mindset zugrunde gelegt) niemals darauf gekommen, diese Kongruenz zwischen den Interfaces zu sehen. Erfahrungsgem&#228;&#223; finde ich solche Dinge immer erst durch eine extrem m&#252;hsame Empirie, viel Aufr&#228;umen, und unvorstellbar langwierige Reflexionen. Das alles ist mir hier erstpart geblieben
+      Auf dem Weg einer systematischen Analyse w&#228;re ich (mein typisches Mindset zugrunde gelegt) niemals darauf gekommen, diese Kongruenz zwischen den Interfaces zu sehen. Erfahrungsgem&#228;&#223; finde ich solche Dinge immer erst durch eine extrem m&#252;hsame Empirie, viel Aufr&#228;umen, und unvorstellbar langwierige Reflexionen....
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Das alles ist mir hier erstpart geblieben &#8212; und ich nehme das als Wink, da&#223; ich dieser F&#228;hrte weiter folgen sollte (und meine Zweifel beiseite legen)
     </p>
   </body>
 </html></richcontent>
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="idea"/>
 </node>
+<node BACKGROUND_COLOR="#edd7ad" COLOR="#4a0721" CREATED="1775872543715" ID="ID_1494172354" MODIFIED="1775872974634" TEXT="...und bin nun erfolgreich dieser F&#xe4;hrte gefolgt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das sah erst wie ein Hack aus, und wie der Versuch, zwei unzusamenh&#228;ngende Systeme zusammenzuw&#252;rgen. Ich bin dann aber langsam, schrittweise den Widerspr&#252;chen nachgegangen, und habe die Struktur rebalanciert. Ich wei&#223; dann gar nicht, wie das gegangen ist, aber pl&#246;tzlich hatte sich das Design im OutputSlot &#187;gelegt&#171; &#8212; und die ganze Struktur (BufferProvider, BufferMetadata, OutputBufferProxy, AllocState) erscheint mir jetzt koh&#228;rent und erweiterungsf&#228;hig.
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#fdf6ca" DESTINATION="ID_798771495" ENDARROW="Default" ENDINCLINATION="620;-30;" ID="Arrow_ID_544721861" STARTARROW="None" STARTINCLINATION="884;54;"/>
 </node>
-<node CREATED="1771534962783" ID="ID_234219781" MODIFIED="1771534967343" TEXT="Umbau-Plan">
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1771534972584" ID="ID_1377276921" MODIFIED="1773167651952" TEXT="neues Tracking-API entwerfen">
-<arrowlink COLOR="#604371" DESTINATION="ID_76417582" ENDARROW="Default" ENDINCLINATION="-588;-641;" ID="Arrow_ID_1083444621" STARTARROW="None" STARTINCLINATION="-741;71;"/>
+</node>
+<node CREATED="1771534962783" ID="ID_234219781" MODIFIED="1775873013672" TEXT="Umbau-Plan">
+<icon BUILTIN="edit"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1771534972584" ID="ID_1377276921" MODIFIED="1775872092339" TEXT="neues Tracking-API entwerfen">
+<arrowlink COLOR="#604371" DESTINATION="ID_76417582" ENDARROW="Default" ENDINCLINATION="-588;-641;" ID="Arrow_ID_1083444621" STARTARROW="None" STARTINCLINATION="-764;68;"/>
+<icon BUILTIN="yes"/>
 <node CREATED="1773158721999" ID="ID_815516118" MODIFIED="1773158772114" TEXT="k&#xfc;nftig alles per Instanz">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -119118,15 +119592,26 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1773699166727" ID="ID_497122958" MODIFIED="1773699899454" TEXT="dazu mu&#xdf; ich aber sinnvolle Infos durch die BufferProvider-Implementierung durschschleusen">
 <arrowlink COLOR="#4b1ec1" DESTINATION="ID_49953306" ENDARROW="Default" ENDINCLINATION="-1107;45;" ID="Arrow_ID_474360109" STARTARROW="None" STARTINCLINATION="687;22;"/>
 </node>
+<node CREATED="1775872443884" ID="ID_91634632" MODIFIED="1775872459053" TEXT="das hat zum Aufr&#xe4;umen und Kl&#xe4;ren der Buffer-Metadaten beigetragen"/>
+<node CREATED="1775872461658" ID="ID_864186372" MODIFIED="1775872511068" TEXT="(und war letztlich der entscheidende Schritt)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das war zun&#228;chst der Blocker in der OutputSlot-Implementierung; und indem ich die Widerspr&#252;che hier aufgel&#246;st habe, hat sich diese Implementierung &#187;gelegt&#171;
+    </p>
+  </body>
+</html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1771535979276" ID="ID_117213353" MODIFIED="1771536009626" TEXT="alles andere wegholzen und erst mal sonst nichts machen">
+</node>
+<node COLOR="#5b280f" CREATED="1771535979276" ID="ID_117213353" MODIFIED="1775872048170" TEXT="alles andere wegholzen und erst mal sonst nichts machen">
 <icon BUILTIN="yes"/>
-<icon BUILTIN="flag-pink"/>
+<icon BUILTIN="button_cancel"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1773021218420" ID="ID_686997096" MODIFIED="1773021340196" TEXT="Querverbindung zum Layer-Refactoring">
 <arrowlink COLOR="#fe4769" DESTINATION="ID_819469629" ENDARROW="Default" ENDINCLINATION="542;21;" ID="Arrow_ID_254929972" STARTARROW="None" STARTINCLINATION="407;28;"/>
 <icon BUILTIN="idea"/>
 </node>
-<node CREATED="1773021653678" ID="ID_1544005457" MODIFIED="1773021899340" TEXT="nur eine Grid-Abstraktion durchreichen">
+<node COLOR="#5b280f" CREATED="1773021653678" ID="ID_1544005457" MODIFIED="1775872296684" TEXT="nur eine Grid-Abstraktion durchreichen">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -119135,12 +119620,22 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
     </p>
   </body>
 </html></richcontent>
+<icon BUILTIN="closed"/>
+<node CREATED="1775872272483" HGAP="36" ID="ID_1688759459" MODIFIED="1775872372515" TEXT="habe das Thema &#xbb;Timing-Constraints&#xab; vertagt" VSHIFT="22">
+<arrowlink COLOR="#6230ae" DESTINATION="ID_287470270" ENDARROW="Default" ENDINCLINATION="415;0;" ID="Arrow_ID_960703567" STARTARROW="None" STARTINCLINATION="503;31;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1775872132382" ID="ID_1288483653" MODIFIED="1775873137126" TEXT="es hat sich dann aber doch in ein Re-Design weiterentwickelt">
+<arrowlink COLOR="#4543ea" DESTINATION="ID_78273441" ENDARROW="Default" ENDINCLINATION="-571;-43;" ID="Arrow_ID_1128316353" STARTARROW="None" STARTINCLINATION="791;35;"/>
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1288483653" ENDARROW="Default" ENDINCLINATION="-56;111;" ID="Arrow_ID_1363093046" SOURCE="ID_1389022203" STARTARROW="None" STARTINCLINATION="212;8;"/>
+<icon BUILTIN="ksmiletris"/>
 </node>
 </node>
 </node>
 </node>
-</node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1771536058707" ID="ID_1312596627" MODIFIED="1773870715330" STYLE="bubble">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1771536058707" ID="ID_1312596627" MODIFIED="1775872112161" STYLE="bubble">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
@@ -119154,7 +119649,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 <edge COLOR="#a3026d"/>
 <arrowlink COLOR="#ff0020" DESTINATION="ID_83611307" ENDARROW="Default" ENDINCLINATION="-142;6;" ID="Arrow_ID_47613106" STARTARROW="None" STARTINCLINATION="6;-31;"/>
-<arrowlink COLOR="#8f00c1" DESTINATION="ID_580664253" ENDARROW="Default" ENDINCLINATION="181;-320;" ID="Arrow_ID_553405939" STARTARROW="None" STARTINCLINATION="-172;19;"/>
+<arrowlink COLOR="#4200c1" DESTINATION="ID_580664253" ENDARROW="Default" ENDINCLINATION="181;-320;" ID="Arrow_ID_553405939" STARTARROW="None" STARTINCLINATION="-172;19;"/>
 <linktarget COLOR="#fd4e1f" DESTINATION="ID_1312596627" ENDARROW="Default" ENDINCLINATION="521;57;" ID="Arrow_ID_75459964" SOURCE="ID_797224940" STARTARROW="None" STARTINCLINATION="879;-27;"/>
 <icon BUILTIN="yes"/>
 <node BACKGROUND_COLOR="#4e273a" COLOR="#fcdf7d" CREATED="1773870620479" HGAP="45" ID="ID_493983467" MODIFIED="1773871608024" TEXT="indirekte Konsequenz aus den Design-Entw&#xfc;rfen" VSHIFT="3">
@@ -119173,7 +119668,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="info"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1771536236498" ID="ID_606028629" MODIFIED="1771536297629" TEXT="Nah-Ziel">
+<node COLOR="#435e98" CREATED="1771536236498" ID="ID_606028629" MODIFIED="1775872120392" TEXT="Nah-Ziel">
 <icon BUILTIN="yes"/>
 <node COLOR="#338800" CREATED="1771536249070" ID="ID_799393197" MODIFIED="1774225657002" TEXT="Test umschreiben auf ein geplantes Tracking-API">
 <icon BUILTIN="button_ok"/>
@@ -119181,6 +119676,10 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node COLOR="#338800" CREATED="1771536280375" ID="ID_511987527" MODIFIED="1774225663881" TEXT="Test mu&#xdf; durch den Compiler, mehr nicht">
 <icon BUILTIN="yes"/>
 </node>
+</node>
+<node COLOR="#437498" CREATED="1775873087106" ID="ID_1389022203" MODIFIED="1775873155398" TEXT="mehr noch &#x2014; hab jetzt ein erfolgreiches Redesign des OutputSlot geschafft">
+<arrowlink DESTINATION="ID_1288483653" ENDARROW="Default" ENDINCLINATION="-56;111;" ID="Arrow_ID_1363093046" STARTARROW="None" STARTINCLINATION="212;8;"/>
+<icon BUILTIN="idea"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1772580027608" ID="ID_17159989" MODIFIED="1772580041236" STYLE="fork" TEXT="NodeDevel_test gebrochen">
@@ -119484,7 +119983,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <arrowlink COLOR="#5f6c81" DESTINATION="ID_17538120" ENDARROW="Default" ENDINCLINATION="107;-147;" ID="Arrow_ID_196819766" STARTARROW="None" STARTINCLINATION="261;19;"/>
 <icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#5b280f" CREATED="1771267184811" ID="ID_693750944" MODIFIED="1771267514738" TEXT="man k&#xf6;nnte die API-Funktionen auf BufferProvider etwas restriktiver machen">
+<node COLOR="#5b280f" CREATED="1771267184811" FOLDED="true" ID="ID_693750944" MODIFIED="1771267514738" TEXT="man k&#xf6;nnte die API-Funktionen auf BufferProvider etwas restriktiver machen">
 <linktarget COLOR="#6d4975" DESTINATION="ID_693750944" ENDARROW="Default" ENDINCLINATION="-1078;42;" ID="Arrow_ID_480988688" SOURCE="ID_19949747" STARTARROW="None" STARTINCLINATION="-465;29;"/>
 <icon BUILTIN="help"/>
 <icon BUILTIN="button_cancel"/>
@@ -119826,7 +120325,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1772129298282" ID="ID_1032607524" MODIFIED="1772129491113" TEXT="Implementierungs-API konsistenter gestalten">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1772129298282" FOLDED="true" ID="ID_1032607524" MODIFIED="1775870211465" TEXT="Implementierungs-API konsistenter gestalten">
 <linktarget COLOR="#71434f" DESTINATION="ID_1032607524" ENDARROW="Default" ENDINCLINATION="-1142;72;" ID="Arrow_ID_1327695220" SOURCE="ID_1927667326" STARTARROW="None" STARTINCLINATION="-295;-14;"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1772129494743" ID="ID_797224940" MODIFIED="1772129626006" TEXT="aufgefallen beim OutputSlot / BufferProxyAdaptor">
@@ -119880,6 +120379,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node CREATED="1773599779915" ID="ID_487073922" MODIFIED="1773700405307" TEXT="wird relevant f&#xfc;r die Verbindung mit dem OutputSlot">
 <linktarget COLOR="#4d50c8" DESTINATION="ID_487073922" ENDARROW="Default" ENDINCLINATION="2209;124;" ID="Arrow_ID_1151349135" SOURCE="ID_1831855764" STARTARROW="None" STARTINCLINATION="1795;-84;"/>
+<node COLOR="#435e98" CREATED="1775870116166" HGAP="51" ID="ID_1543405397" MODIFIED="1775870150655" TEXT="dadurch wird der OutputBufferProxy zu einem sinnvollen Mittelglied" VSHIFT="-2">
+<icon BUILTIN="idea"/>
+</node>
 </node>
 </node>
 </node>
@@ -119902,7 +120404,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node COLOR="#338800" CREATED="1773604361248" ID="ID_720105604" MODIFIED="1773604407072" TEXT="in das BufferStore-API und Implementierungen">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1773604377214" ID="ID_200162330" MODIFIED="1773704036391" TEXT="mu&#xdf; die Size-Info in die Metadaten weitergeben">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1773604377214" FOLDED="true" ID="ID_200162330" MODIFIED="1773704036391" TEXT="mu&#xdf; die Size-Info in die Metadaten weitergeben">
 <linktarget COLOR="#1c07d0" DESTINATION="ID_200162330" ENDARROW="Default" ENDINCLINATION="-77;817;" ID="Arrow_ID_1474651143" SOURCE="ID_49953306" STARTARROW="None" STARTINCLINATION="1030;40;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1773606726737" ID="ID_1617991320" MODIFIED="1773606747708" TEXT="die BufferMetadata::markLocked() mu&#xdf; eine abweichende BufferSize speichern"/>
@@ -121021,8 +121523,10 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node CREATED="1770590206837" ID="ID_933010628" MODIFIED="1770590228576" TEXT="den DiagnosticOutputSlot seitw&#xe4;rts abspalten">
-<node CREATED="1770686001136" ID="ID_936149730" MODIFIED="1771537001161" TEXT="mu&#xdf; zun&#xe4;chst das Tracking-API angleichen">
+<node COLOR="#338800" CREATED="1770590206837" ID="ID_933010628" MODIFIED="1775871367625" TEXT="den DiagnosticOutputSlot seitw&#xe4;rts abspalten">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#246d7c" CREATED="1770686001136" ID="ID_936149730" MODIFIED="1775871385435" TEXT="mu&#xdf; zun&#xe4;chst das Tracking-API angleichen">
+<icon BUILTIN="yes"/>
 <node CREATED="1771537004430" ID="ID_430866149" MODIFIED="1771537120820" TEXT="analog gestalten wie im DiagnosticBufferProvider">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -121044,13 +121548,14 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1771536576103" ID="ID_580664253" MODIFIED="1771537185987" TEXT="brauche einen Proxy-Buffer-Provider">
-<linktarget COLOR="#8f00c1" DESTINATION="ID_580664253" ENDARROW="Default" ENDINCLINATION="181;-320;" ID="Arrow_ID_553405939" SOURCE="ID_1312596627" STARTARROW="None" STARTINCLINATION="-172;19;"/>
-<linktarget COLOR="#b1000a" DESTINATION="ID_580664253" ENDARROW="Default" ENDINCLINATION="-769;59;" ID="Arrow_ID_1374111018" SOURCE="ID_48507847" STARTARROW="None" STARTINCLINATION="366;17;"/>
+<node BACKGROUND_COLOR="#b3affc" COLOR="#514398" CREATED="1771536576103" ID="ID_580664253" MODIFIED="1775873218706" TEXT="brauche einen Proxy-Buffer-Provider">
+<linktarget COLOR="#4200c1" DESTINATION="ID_580664253" ENDARROW="Default" ENDINCLINATION="181;-320;" ID="Arrow_ID_553405939" SOURCE="ID_1312596627" STARTARROW="None" STARTINCLINATION="-172;19;"/>
+<linktarget COLOR="#4300b1" DESTINATION="ID_580664253" ENDARROW="Default" ENDINCLINATION="-769;59;" ID="Arrow_ID_1374111018" SOURCE="ID_48507847" STARTARROW="None" STARTINCLINATION="368;16;"/>
 <icon BUILTIN="yes"/>
-<node CREATED="1771537210274" ID="ID_1406812048" MODIFIED="1771537219956" TEXT="Aufgaben und Probleme">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1771537210274" FOLDED="true" ID="ID_1406812048" MODIFIED="1775871345229" TEXT="Aufgaben und Probleme">
+<icon BUILTIN="list"/>
 <node CREATED="1771537230222" ID="ID_317567016" MODIFIED="1771537246912" TEXT="er darf nur einige wenige vorgegebene Buffer-Typen unterst&#xfc;tzen"/>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1771537249453" ID="ID_74221925" MODIFIED="1771537273138" TEXT="kann man das irgendwie auf einer Schnittstelle ausdr&#xfc;cken?">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1771537249453" ID="ID_74221925" MODIFIED="1775871293930" TEXT="kann man das irgendwie auf einer Schnittstelle ausdr&#xfc;cken?">
 <icon BUILTIN="help"/>
 <node CREATED="1771537294455" ID="ID_884114357" MODIFIED="1771537373660" TEXT="das ist dann wohl ehr eine Builder-Schnittstelle">
 <icon BUILTIN="help"/>
@@ -121069,7 +121574,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1771537472443" ID="ID_255875197" MODIFIED="1771537487299" TEXT="mu&#xdf; aber effektiv die freie Registrierung unterdr&#xfc;cken"/>
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1771537493583" ID="ID_1750140995" MODIFIED="1771537500136" TEXT="ist das ein Design-Fehler?">
 <icon BUILTIN="help"/>
-<node CREATED="1771537504016" ID="ID_229966390" MODIFIED="1771537517084" TEXT="&#xbb;Dog-no-wag Problem&#xab;">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#cc062d" CREATED="1771537504016" ID="ID_229966390" MODIFIED="1775871307692" TEXT="&#xbb;Dog-no-wag Problem&#xab;">
 <node CREATED="1771537571509" ID="ID_472062204" MODIFIED="1771537585019" TEXT="das bricht zweifellos den Kontrakt"/>
 <node CREATED="1771537593362" ID="ID_891213469" MODIFIED="1771537611777" TEXT="es gibt aber ein Schlupfloch: BuffDescr::isValid()"/>
 </node>
@@ -121120,7 +121625,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1771538988011" ID="ID_925176651" MODIFIED="1771538991120" TEXT="on_release"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1771539172066" ID="ID_1289388836" MODIFIED="1771539178100" TEXT="w&#xe4;re das machbar?">
+<node BACKGROUND_COLOR="#ead89f" COLOR="#690f14" CREATED="1771539172066" ID="ID_1289388836" MODIFIED="1775871342229" TEXT="w&#xe4;re das machbar?">
 <icon BUILTIN="help"/>
 <node CREATED="1771539179797" ID="ID_1430381078" MODIFIED="1771539192610" TEXT="Idee: als Template...?">
 <icon BUILTIN="idea"/>
@@ -121143,8 +121648,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1771539807853" ID="ID_1455262817" MODIFIED="1771539852207" TEXT="Prototyping : OutputProxyProvider_test als Experimentierfeld">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1771539807853" ID="ID_1455262817" MODIFIED="1775870271708" TEXT="Prototyping : OutputProxyProvider_test als Experimentierfeld">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1771616038792" FOLDED="true" ID="ID_1389235656" MODIFIED="1772157520866" TEXT="Forschung: Policy konfigurieren">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1771616054739" ID="ID_297187964" MODIFIED="1771616315207" TEXT="hab die dunkle Erinnerung da&#xdf; in so was &#xc4;hnliches schon zig mal vergeblich versucht habe">
@@ -121446,7 +121951,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node CREATED="1771634755779" ID="ID_1904273320" MODIFIED="1771634765200" TEXT="Skizze: Grundstruktur">
+<node COLOR="#236d75" CREATED="1771634755779" ID="ID_1904273320" MODIFIED="1775873858375" TEXT="Skizze: Grundstruktur">
+<icon BUILTIN="yes"/>
 <node CREATED="1771634766556" ID="ID_1120594617" MODIFIED="1771634791497" TEXT="daraus ergibt sich dann vielleicht auch ein klareres Bild bez&#xfc;glich Policy"/>
 <node CREATED="1771703279221" ID="ID_1542796261" MODIFIED="1771703286375" TEXT="Setup / Indirektionen">
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1771703394164" ID="ID_1984712040" MODIFIED="1771703407734" TEXT="Buffer-Provider verwendet eine PImpl-Struktur">
@@ -121482,7 +121988,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node CREATED="1771705501545" ID="ID_79262911" MODIFIED="1771705506478" TEXT="Schnittstelle">
+<node COLOR="#338800" CREATED="1771705501545" ID="ID_79262911" MODIFIED="1775873858385" TEXT="Schnittstelle">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1771705507309" ID="ID_562114083" MODIFIED="1771705515125" TEXT="was wird eigentlich ben&#xf6;tigt?">
 <node CREATED="1771705536632" ID="ID_310243250" MODIFIED="1771705579435">
 <richcontent TYPE="NODE"><html>
@@ -121511,9 +122018,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1771705980824" ID="ID_1686738897" MODIFIED="1771706158844" TEXT="Trotzdem mu&#xdf; das in die Systematik des BufferProvider-Interfaces integriert werden">
+<node BACKGROUND_COLOR="#bcbcd9" COLOR="#435e98" CREATED="1771705980824" ID="ID_1686738897" MODIFIED="1775870367719" TEXT="Trotzdem mu&#xdf; das in die Systematik des BufferProvider-Interfaces integriert werden">
 <icon BUILTIN="yes"/>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1771706162105" ID="ID_611447212" MODIFIED="1771706168771" TEXT="fragt sich. wie tief?">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1771706162105" ID="ID_611447212" MODIFIED="1775870344484" TEXT="fragt sich. wie tief?">
 <icon BUILTIN="help"/>
 <node CREATED="1771706171494" ID="ID_1522772740" MODIFIED="1771706182447" TEXT="billigste L&#xf6;sung: Quereinstieg">
 <icon BUILTIN="idea"/>
@@ -121561,8 +122068,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node CREATED="1771707935389" ID="ID_1214821648" MODIFIED="1771707962630" TEXT="riecht trotzdem alles sehr nach &#xbb;Dog-no-wag-tail&#xab;"/>
 </node>
-<node CREATED="1771708344624" ID="ID_1354666582" MODIFIED="1771719230095" TEXT="Versuch einer Kongruenz">
+<node COLOR="#435e98" CREATED="1771708344624" ID="ID_1354666582" MODIFIED="1775870337054" TEXT="Versuch einer Kongruenz">
 <arrowlink COLOR="#2b76ce" DESTINATION="ID_519692328" ENDARROW="Default" ENDINCLINATION="132;-103;" ID="Arrow_ID_1503824025" STARTARROW="None" STARTINCLINATION="-14;40;"/>
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="forward"/>
 <node CREATED="1771708383738" ID="ID_922262838" MODIFIED="1771708403996" TEXT="strebe danach, das API zu verwennden &#x2014; wenngleich auch nur partiell"/>
 <node CREATED="1771706397232" ID="ID_345438988" MODIFIED="1771708419315" TEXT="man w&#xfc;rde hier die tats&#xe4;chliche Adresse im LocalTag transportieren">
@@ -121654,7 +122162,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1771712212106" ID="ID_602415725" MODIFIED="1771712260398" TEXT="hilfsweise eine andere Hinsicht: wie wird zugegriffen?">
+<node COLOR="#435e98" CREATED="1771712212106" ID="ID_602415725" MODIFIED="1775870314945" TEXT="hilfsweise eine andere Hinsicht: wie wird zugegriffen?">
 <font NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="help"/>
 <node CREATED="1771712263157" ID="ID_2790879" MODIFIED="1771712405342" TEXT="das LocalTag generell auf das &#xf6;ffentliche API herausf&#xfc;hren?">
@@ -121666,7 +122174,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1771712415919" ID="ID_242083706" MODIFIED="1771712543285" TEXT="bestimmte fest kodifizierte Bedeutungen des LocalTag herausf&#xfc;hren?">
 <arrowlink COLOR="#c20668" DESTINATION="ID_285015399" ENDARROW="Default" ENDINCLINATION="0;39;" ID="Arrow_ID_120611600" STARTARROW="None" STARTINCLINATION="119;5;"/>
 </node>
-<node CREATED="1771712441179" ID="ID_537265649" MODIFIED="1771712585905" TEXT="als einen Implementierungs-Ansatz im Einzelfall betrachten?">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1771712441179" ID="ID_537265649" MODIFIED="1775870324292" TEXT="als einen Implementierungs-Ansatz im Einzelfall betrachten?">
 <icon BUILTIN="forward"/>
 <node CREATED="1771712588687" ID="ID_799491728" MODIFIED="1771712600088" TEXT="as w&#xfc;rde dann in RIchtung &#xbb;YAGNI&#xab; weisen"/>
 <node CREATED="1771712601958" ID="ID_1764682703" MODIFIED="1771712622919" TEXT="also Pfad-A (das Konzept vorerst nicht ausbauen)"/>
@@ -121692,7 +122200,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1771712853464" ID="ID_1615212019" MODIFIED="1771719095962" TEXT="Beschlu&#xdf;">
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
-<node CREATED="1771712862746" ID="ID_1469972490" MODIFIED="1771712891270" TEXT="Pfad-A : das LocalTag wird direkt f&#xfc;r die erst-Registrierung auf das Stage-API gebracht"/>
+<node CREATED="1771712862746" ID="ID_1469972490" MODIFIED="1775871202224" TEXT="Pfad-A : das LocalTag wird direkt f&#xfc;r die erst-Registrierung auf das Stage-API gebracht">
+<arrowlink COLOR="#4650ed" DESTINATION="ID_86806939" ENDARROW="Default" ENDINCLINATION="2299;0;" ID="Arrow_ID_281891249" STARTARROW="None" STARTINCLINATION="365;12;"/>
+</node>
 <node CREATED="1771712893587" ID="ID_446434016" MODIFIED="1771712905953" TEXT="das Konzept Type-Refining ist &#xbb;on hold&#xab;"/>
 <node CREATED="1771712909957" ID="ID_1714428831" MODIFIED="1771712924567" TEXT="es gibt kein Front-End-API daf&#xfc;r"/>
 <node CREATED="1771712925979" ID="ID_500369618" MODIFIED="1771712995933" TEXT="die spezielle BufferProvider-Impl bekommt ein spezial-API"/>
@@ -121700,10 +122210,11 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node CREATED="1771719110564" ID="ID_519692328" MODIFIED="1771719224911" TEXT="jetzt geht die Sache auf">
+<node COLOR="#544398" CREATED="1771719110564" ID="ID_519692328" MODIFIED="1775870388581" TEXT="jetzt geht die Sache auf">
 <linktarget COLOR="#2b76ce" DESTINATION="ID_519692328" ENDARROW="Default" ENDINCLINATION="132;-103;" ID="Arrow_ID_1503824025" SOURCE="ID_1354666582" STARTARROW="None" STARTINCLINATION="-14;40;"/>
+<icon BUILTIN="ksmiletris"/>
 </node>
-<node CREATED="1771719121320" ID="ID_1296228121" MODIFIED="1771719201907" TEXT="hab aber trotzdem ein schlechtes &#xbb;Bauchgef&#xfc;hlt&#xab;">
+<node CREATED="1771719121320" ID="ID_1296228121" MODIFIED="1771719201907" TEXT="hab aber trotzdem ein schlechtes &#xbb;Bauchgef&#xfc;hl&#xab;">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -121712,11 +122223,14 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
     </p>
   </body>
 </html></richcontent>
+<arrowlink COLOR="#773e4e" DESTINATION="ID_411783696" ENDARROW="Default" ENDINCLINATION="604;37;" ID="Arrow_ID_1774866216" STARTARROW="None" STARTINCLINATION="236;315;"/>
+<icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
 </node>
-<node CREATED="1771719247697" ID="ID_1277905446" MODIFIED="1771719262138" TEXT="biete also f&#xfc;r diese Skizze erst mal nur ein Spezial-API"/>
-<node CREATED="1772128789402" ID="ID_858761125" MODIFIED="1772128800353" TEXT="Interface: Callback-Funktionen">
+<node COLOR="#435e98" CREATED="1771719247697" ID="ID_1277905446" MODIFIED="1775871242473" TEXT="biete also f&#xfc;r diese Skizze erst mal nur ein Spezial-API"/>
+<node COLOR="#435e98" CREATED="1772128789402" ID="ID_858761125" MODIFIED="1775871247135" TEXT="Interface: Callback-Funktionen">
+<icon BUILTIN="forward"/>
 <node CREATED="1772128802215" ID="ID_258480503" MODIFIED="1772128808917" TEXT="werden per Policy konfiguriert"/>
 <node CREATED="1772128810953" ID="ID_1904023092" MODIFIED="1772128829194" TEXT="f&#xfc;r jede State-Transition eine andere Funktion">
 <node CREATED="1772128834199" ID="ID_1497809945" MODIFIED="1772128839049" TEXT="on_lock"/>
@@ -121754,7 +122268,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node CREATED="1771719274535" ID="ID_1815060462" MODIFIED="1771719385960" TEXT="Implementierung zusammenschalten...">
+<node COLOR="#338800" CREATED="1771719274535" FOLDED="true" ID="ID_1815060462" MODIFIED="1775871260360" TEXT="Implementierung zusammenschalten...">
+<icon BUILTIN="yes"/>
 <node CREATED="1771719283904" ID="ID_270233023" MODIFIED="1771719295702" TEXT="es gibt schon einen bestehenden Test, der sogar was verifiziert"/>
 <node CREATED="1771719296937" ID="ID_113976281" MODIFIED="1771719310660" TEXT="kann jetzt durch-implementieren">
 <icon BUILTIN="ksmiletris"/>
@@ -121805,7 +122320,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 </node>
 <node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1771788450555" ID="ID_262212223" MODIFIED="1771803693549" TEXT="also: fixen">
-<arrowlink COLOR="#a00e3d" DESTINATION="ID_1995924412" ENDARROW="Default" ENDINCLINATION="-2471;146;" ID="Arrow_ID_1407537427" STARTARROW="None" STARTINCLINATION="-636;133;"/>
+<arrowlink COLOR="#590ea0" DESTINATION="ID_1995924412" ENDARROW="Default" ENDINCLINATION="-2471;146;" ID="Arrow_ID_1407537427" STARTARROW="None" STARTINCLINATION="-636;133;"/>
 <icon BUILTIN="yes"/>
 <node COLOR="#984392" CREATED="1771803653032" HGAP="25" ID="ID_1693381367" MODIFIED="1771803688021" TEXT="( wieder mal erfolgreich prokrastiniert )" VSHIFT="11">
 <font NAME="SansSerif" SIZE="8"/>
@@ -121825,8 +122340,14 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
+<node COLOR="#5b280f" CREATED="1775870236315" ID="ID_411783696" MODIFIED="1775870463276" TEXT="aber: in dieser Form zu koh&#xe4;siv und komplex">
+<arrowlink COLOR="#cf0d23" DESTINATION="ID_1200164165" ENDARROW="Default" ENDINCLINATION="80;-71;" ID="Arrow_ID_111677079" STARTARROW="None" STARTINCLINATION="-224;0;"/>
+<linktarget COLOR="#773e4e" DESTINATION="ID_411783696" ENDARROW="Default" ENDINCLINATION="604;37;" ID="Arrow_ID_1774866216" SOURCE="ID_1296228121" STARTARROW="None" STARTINCLINATION="236;315;"/>
+<icon BUILTIN="stop-sign"/>
 </node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1773871637641" ID="ID_1200164165" MODIFIED="1773871656095" TEXT="das wird jetzt alles ziemlich komplex">
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1773871637641" ID="ID_1200164165" MODIFIED="1775870457774" TEXT="das wird jetzt alles ziemlich komplex">
+<linktarget COLOR="#cf0d23" DESTINATION="ID_1200164165" ENDARROW="Default" ENDINCLINATION="80;-71;" ID="Arrow_ID_111677079" SOURCE="ID_411783696" STARTARROW="None" STARTINCLINATION="-224;0;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1773871659011" ID="ID_678216230" MODIFIED="1773871668297" TEXT="es wirkt auf den ersten Blick wie ein &#xbb;Hack&#xab;"/>
 <node CREATED="1773871671125" ID="ID_660604335" MODIFIED="1773871709556" TEXT="der Grund ist: ich habe mich auf das Schema des BufferProviders festgelegt"/>
@@ -121842,8 +122363,41 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1773871912684" ID="ID_229835695" MODIFIED="1773872053431" TEXT="einziger verbleibender Freiheitsgrad: den BufferStore re-interpretieren">
-<arrowlink COLOR="#3c2aa0" DESTINATION="ID_1447615516" ENDARROW="Default" ENDINCLINATION="140;-650;" ID="Arrow_ID_502898501" STARTARROW="None" STARTINCLINATION="1105;47;"/>
+<node CREATED="1773871912684" ID="ID_229835695" MODIFIED="1775871426977" TEXT="einziger verbleibender Freiheitsgrad: den BufferStore re-interpretieren">
+<arrowlink COLOR="#9a16bb" DESTINATION="ID_400588167" ENDARROW="Default" ENDINCLINATION="35;-77;" ID="Arrow_ID_639178305" STARTARROW="None" STARTINCLINATION="-4;91;"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1775870590004" ID="ID_1564213101" MODIFIED="1775870594461" TEXT="Neuer Anlauf">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1775870608217" ID="ID_1019759052" MODIFIED="1775870628597" TEXT="Name: OutputBufferProxy">
+<icon BUILTIN="forward"/>
+</node>
+<node CREATED="1775870596299" ID="ID_1032999217" MODIFIED="1775870632149" TEXT="verwende die gleiche Struktur wie im ProxyBufferProvider">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1775870634224" ID="ID_1213117848" MODIFIED="1775870658381" TEXT="aber ordne die Metadaten_Verwendung geringf&#xfc;gig um">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1775870760647" ID="ID_976769791" MODIFIED="1775870898001" TEXT="das war der entscheidende Trick">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1775870770154" ID="ID_86806939" MODIFIED="1775871196392" TEXT="ich verstecke die Connection-Numemr im LocalTag">
+<linktarget COLOR="#4650ed" DESTINATION="ID_86806939" ENDARROW="Default" ENDINCLINATION="2299;0;" ID="Arrow_ID_281891249" SOURCE="ID_1469972490" STARTARROW="None" STARTINCLINATION="365;12;"/>
+</node>
+<node CREATED="1775870794937" ID="ID_1572141437" MODIFIED="1775870823877" TEXT="damit brauche ich eigentlich keine delegation-&#x3bb; mehr"/>
+<node CREATED="1775870869116" ID="ID_886432903" MODIFIED="1775870890712" TEXT="sondern kann direkt aus dem Bufferstrore &#x27f6; OutputSlot::Connection"/>
+</node>
+<node COLOR="#281dbe" CREATED="1773871912684" ID="ID_400588167" MODIFIED="1775871426978" TEXT="dadurch wird der Buffer-Store zu einem vermittelnden Bindeglied">
+<arrowlink COLOR="#3c2aa0" DESTINATION="ID_1447615516" ENDARROW="Default" ENDINCLINATION="140;-650;" ID="Arrow_ID_1106908380" STARTARROW="None" STARTINCLINATION="1105;47;"/>
+<linktarget COLOR="#9a16bb" DESTINATION="ID_400588167" ENDARROW="Default" ENDINCLINATION="35;-77;" ID="Arrow_ID_639178305" SOURCE="ID_229835695" STARTARROW="None" STARTINCLINATION="-4;91;"/>
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="forward"/>
+<node CREATED="1775870993140" ID="ID_798771495" MODIFIED="1775872943671" TEXT="und das hat zugleich auch die Struktur-Probleme im OutputSlot gel&#xf6;st">
+<linktarget COLOR="#fdf6ca" DESTINATION="ID_798771495" ENDARROW="Default" ENDINCLINATION="620;-30;" ID="Arrow_ID_544721861" SOURCE="ID_1494172354" STARTARROW="None" STARTINCLINATION="884;54;"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1775870659680" ID="ID_1971624737" MODIFIED="1775871401946" TEXT="Setup / Implementierungs-Struktur an den OutputSlot / AllocState anpassen">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
@@ -122638,19 +123192,48 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 <node CREATED="1771532610321" ID="ID_463184828" MODIFIED="1771532623570" TEXT="Koordination der Schnittstellen">
-<node CREATED="1771532633501" ID="ID_1704365570" MODIFIED="1771532654798" TEXT="BufferProvider"/>
+<node CREATED="1771532633501" ID="ID_1704365570" MODIFIED="1771532654798" TEXT="BufferProvider">
+<node CREATED="1775871527978" ID="ID_130684756" MODIFIED="1775871551269" TEXT="mu&#xdf; hier die Buffer-Metadaten etwas mehr nach au&#xdf;en bringen"/>
+<node CREATED="1775871553160" ID="ID_118444511" MODIFIED="1775874249600" TEXT="das &#xbb;LocalTag&#xab; ist ein Kommunikations-System f&#xfc;r das BufferStore-Backend">
+<linktarget COLOR="#40477c" DESTINATION="ID_118444511" ENDARROW="Default" ENDINCLINATION="886;35;" ID="Arrow_ID_672245073" SOURCE="ID_1800347495" STARTARROW="Default" STARTINCLINATION="-1402;54;"/>
+</node>
+</node>
 <node CREATED="1771532655924" ID="ID_1197925974" MODIFIED="1771532662283" TEXT="OutputSlot">
-<node CREATED="1771532667033" ID="ID_1615837421" MODIFIED="1771532682643" TEXT="zun&#xe4;chst ist das Protokoll zu korrigieren">
-<node CREATED="1771532702299" ID="ID_1332714293" MODIFIED="1771532711704" TEXT="dokumentiert durch OutputSlotProtocol_test">
+<node COLOR="#338800" CREATED="1771532667033" ID="ID_1615837421" MODIFIED="1775871471196" TEXT="zun&#xe4;chst ist das Protokoll zu korrigieren">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1771532702299" ID="ID_1332714293" MODIFIED="1775868517318" TEXT="dokumentiert durch OutputSlotProtocol_test">
+<icon BUILTIN="idea"/>
 <node CREATED="1771532730104" ID="ID_874519449" MODIFIED="1771532748289" TEXT="im bestehenden Code lief der Test (mit einer Dummy-Implementierung)"/>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1771532716678" ID="ID_459952316" MODIFIED="1773076794402" TEXT="dieser Test ist nun gebrochen">
-<linktarget COLOR="#fe1909" DESTINATION="ID_459952316" ENDARROW="Default" ENDINCLINATION="75;-1691;" ID="Arrow_ID_176448794" SOURCE="ID_158180438" STARTARROW="None" STARTINCLINATION="-554;79;"/>
-<linktarget COLOR="#b22cbe" DESTINATION="ID_459952316" ENDARROW="Default" ENDINCLINATION="-137;3;" ID="Arrow_ID_168875434" SOURCE="ID_1722330743" STARTARROW="Default" STARTINCLINATION="-9;-63;"/>
-<linktarget COLOR="#f90134" DESTINATION="ID_459952316" ENDARROW="Default" ENDINCLINATION="-843;75;" ID="Arrow_ID_1183488081" SOURCE="ID_690666245" STARTARROW="None" STARTINCLINATION="345;27;"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1771532716678" ID="ID_459952316" MODIFIED="1775868197177" TEXT="dieser Test ist nun gebrochen">
+<linktarget COLOR="#3a6aea" DESTINATION="ID_459952316" ENDARROW="Default" ENDINCLINATION="75;-1691;" ID="Arrow_ID_176448794" SOURCE="ID_158180438" STARTARROW="None" STARTINCLINATION="-554;79;"/>
+<linktarget COLOR="#2c56be" DESTINATION="ID_459952316" ENDARROW="Default" ENDINCLINATION="-137;3;" ID="Arrow_ID_168875434" SOURCE="ID_1722330743" STARTARROW="Default" STARTINCLINATION="-9;-63;"/>
+<linktarget COLOR="#009462" DESTINATION="ID_459952316" ENDARROW="Default" ENDINCLINATION="-843;75;" ID="Arrow_ID_1183488081" SOURCE="ID_690666245" STARTARROW="None" STARTINCLINATION="345;27;"/>
 <icon BUILTIN="broken-line"/>
+<node COLOR="#435e98" CREATED="1775868215599" ID="ID_599822804" MODIFIED="1775868230906" TEXT="l&#xe4;uft wieder"/>
+<node COLOR="#435e98" CREATED="1775868220357" ID="ID_788847014" MODIFIED="1775868230906" TEXT="Tracking-Implementierung aufger&#xe4;umt"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1775868234670" ID="ID_287470270" MODIFIED="1775872372515" TEXT="Unterst&#xfc;tzung f&#xfc;r Timings / Constraints auf sp&#xe4;ter vertagt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Der erste Entwurf von 2012 hatte da so einige Funktionalit&#228;t, von der ich nicht wei&#223;, ob sie was taugt; allein schon die Definition eines &#187;Time Grid&#171; h&#228;ngt komplett in der Luft. Seinerzeit hatte ich ein TimeGrid-Asset reingezogen, was die Layer-Ordnung &#252;berwirft, denn das Thema &#187;Output&#171; geh&#246;rt ganz klar zu den low-Level-Services, darf sich also nur auf LIbrary-Funktionen abst&#252;tzen. Tats&#228;chlich werden wir ein Grid in den &#187;Timings&#171; (Constraints) haben, aber das klingt ehr nach einem runtime-Setup f&#252;r einen konkreten laufenden Ausgabe-Proze&#223;, und nicht nach einem Modell-Element.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Ich habe diesen Teil des Entwurfs nun komplett gel&#246;scht, denn ich halte nichts davon, mir hier etwas auszudenken, bevor ich nicht wenigstens <i>eine konkrete laufende Implementierung zustandegebracht habe (seufz)</i>
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#6230ae" DESTINATION="ID_287470270" ENDARROW="Default" ENDINCLINATION="415;0;" ID="Arrow_ID_960703567" SOURCE="ID_1688759459" STARTARROW="None" STARTINCLINATION="503;31;"/>
+<icon BUILTIN="hourglass"/>
 </node>
 </node>
-<node CREATED="1771536364035" ID="ID_83895308" MODIFIED="1771536373430" TEXT="formal ist mir die n&#xf6;tige Anpassung klar">
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1771536364035" ID="ID_83895308" MODIFIED="1775873239188" TEXT="formal ist mir die n&#xf6;tige Anpassung klar">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
 <node CREATED="1771536378293" ID="ID_247458257" MODIFIED="1771536407185" TEXT="die Lebenszyklus-Methoden auf der DataSink fallen weg"/>
 <node COLOR="#5b280f" CREATED="1771536412047" ID="ID_1065532915" MODIFIED="1774371161828" TEXT="hier kommt ggfs. nur eine Methode dazu f&#xfc;r einen Fehlerfall">
 <icon BUILTIN="button_cancel"/>
@@ -122678,8 +123261,22 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 <node CREATED="1771536432658" ID="ID_28988078" MODIFIED="1771536458970" TEXT="daf&#xfc;r soll der Client nun alles auf dem BuffHandle machen"/>
-<node CREATED="1771536466794" ID="ID_48507847" MODIFIED="1771536970615" TEXT="mu&#xdf; eine Proxy-Implementierung des BufferProvider bereitstellen">
-<arrowlink COLOR="#b1000a" DESTINATION="ID_580664253" ENDARROW="Default" ENDINCLINATION="-769;59;" ID="Arrow_ID_1374111018" STARTARROW="None" STARTINCLINATION="366;17;"/>
+<node COLOR="#30297a" CREATED="1771536466794" ID="ID_48507847" MODIFIED="1775873226545" TEXT="mu&#xdf; eine Proxy-Implementierung des BufferProvider bereitstellen">
+<arrowlink COLOR="#4300b1" DESTINATION="ID_580664253" ENDARROW="Default" ENDINCLINATION="-769;59;" ID="Arrow_ID_1374111018" STARTARROW="None" STARTINCLINATION="368;16;"/>
+<icon BUILTIN="yes"/>
+<node COLOR="#338800" CREATED="1775868534688" HGAP="43" ID="ID_809493894" MODIFIED="1775869570097" TEXT="das ist nun gelungen" VSHIFT="12">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      der OutputBufferProxy ist jetzt nahtlos in die &#252;berarbeitete Standard-Implementierung des OutputSlot integriert ... das war sehr m&#252;hsam, am Ende ist aber das Design wunderbar aufgegangen
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#2724d3" DESTINATION="ID_1056437663" ENDARROW="Default" ENDINCLINATION="-2006;-113;" ID="Arrow_ID_1445047837" STARTARROW="None" STARTINCLINATION="928;107;"/>
+<arrowlink COLOR="#0eb58e" DESTINATION="ID_1552790778" ENDARROW="Default" ENDINCLINATION="5;-124;" ID="Arrow_ID_729970542" STARTARROW="None" STARTINCLINATION="-39;4;"/>
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1773077339408" ID="ID_9353167" MODIFIED="1773077409753" TEXT="Protokoll final">
@@ -122690,21 +123287,56 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node CREATED="1773076719646" ID="ID_884669133" MODIFIED="1773076734458" TEXT="mu&#xdf; zus&#xe4;tzlich eine Dummy-Implementierung bauen">
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1773076745969" ID="ID_1722330743" MODIFIED="1773077118998" TEXT="Test mu&#xdf; laufen">
-<arrowlink COLOR="#b22cbe" DESTINATION="ID_459952316" ENDARROW="Default" ENDINCLINATION="-137;3;" ID="Arrow_ID_168875434" STARTARROW="Default" STARTINCLINATION="-9;-63;"/>
+<node COLOR="#338800" CREATED="1773076719646" ID="ID_884669133" MODIFIED="1775871474052" TEXT="mu&#xdf; zus&#xe4;tzlich eine Dummy-Implementierung bauen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1773076745969" ID="ID_1722330743" MODIFIED="1775868209439" TEXT="Test mu&#xdf; laufen">
+<arrowlink COLOR="#2c56be" DESTINATION="ID_459952316" ENDARROW="Default" ENDINCLINATION="-137;3;" ID="Arrow_ID_168875434" STARTARROW="Default" STARTINCLINATION="-9;-63;"/>
 <icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1773077173730" ID="ID_76417582" MODIFIED="1773167628789" TEXT="Neubau Diagnose-API &#x27fa; Vorentwurf Implementierung">
-<linktarget COLOR="#604371" DESTINATION="ID_76417582" ENDARROW="Default" ENDINCLINATION="-588;-641;" ID="Arrow_ID_1083444621" SOURCE="ID_1377276921" STARTARROW="None" STARTINCLINATION="-741;71;"/>
-<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#b6b7c8" COLOR="#322a95" CREATED="1773077173730" ID="ID_76417582" MODIFIED="1775872089201" TEXT="Neubau Diagnose-API &#x27fa; Vorentwurf Implementierung">
+<linktarget COLOR="#604371" DESTINATION="ID_76417582" ENDARROW="Default" ENDINCLINATION="-588;-641;" ID="Arrow_ID_1083444621" SOURCE="ID_1377276921" STARTARROW="None" STARTINCLINATION="-764;68;"/>
+<icon BUILTIN="yes"/>
 <node CREATED="1773700274163" ID="ID_1831855764" MODIFIED="1773700492223" TEXT="mu&#xdf; dazu das direkte DataSink::emit() abl&#xf6;sen durch ein Proxying">
 <arrowlink COLOR="#4d50c8" DESTINATION="ID_487073922" ENDARROW="Default" ENDINCLINATION="2209;124;" ID="Arrow_ID_1151349135" STARTARROW="None" STARTINCLINATION="1795;-84;"/>
 <arrowlink COLOR="#5a22df" DESTINATION="ID_49953306" ENDARROW="Default" ENDINCLINATION="770;-33;" ID="Arrow_ID_886780269" STARTARROW="None" STARTINCLINATION="751;0;"/>
 </node>
+<node CREATED="1775869377870" ID="ID_1628926812" MODIFIED="1775869385488" TEXT="Anpassungen auf Protokoll-Ebene">
+<icon BUILTIN="info"/>
+<node CREATED="1775869391117" ID="ID_1028272322" MODIFIED="1775869403196" TEXT="der OutputSlot ist jetzt ein kopierbares Value-Handle"/>
+<node CREATED="1775869404106" ID="ID_1984385901" MODIFIED="1775869414149" TEXT="er wird sofort im aktivierten Zustand gebaut"/>
+<node CREATED="1775869435805" ID="ID_1368967564" MODIFIED="1775869458759" TEXT="der OutputManager mu&#xdf; dazu eine Konfiguration mit konkreten Connections bereitstellen"/>
+<node CREATED="1775869461312" ID="ID_1160465684" MODIFIED="1775869473283" TEXT="diese sind in dem Moment bereits alloziert / aktiviert"/>
+<node CREATED="1775869476040" ID="ID_637005911" MODIFIED="1775869502073" TEXT="auch in den Sink-Handles partizipieren in dem ref-counting smart-Ptr"/>
+<node CREATED="1775869512742" ID="ID_1459365567" MODIFIED="1775869528476" TEXT="DataSink ist jetzt nur noch ein Funktor, der direkt einen Buffer lockt"/>
+<node CREATED="1775869529641" ID="ID_1763841907" MODIFIED="1775869545418" TEXT="die gesamte Kommunikation l&#xe4;uft &#xfc;ber das BufferProvider-Protocol"/>
 </node>
-<node CREATED="1773077306179" ID="ID_791772240" MODIFIED="1773078563511" TEXT="Analyse mu&#xdf; dieses Mal bottom-up vorgehen">
+<node BACKGROUND_COLOR="#d8eea9" COLOR="#014a07" CREATED="1775869057329" ID="ID_1552790778" MODIFIED="1775869604162" TEXT="aus &#xbb;Vorentwurf&#xab; wurde ein Re-Design">
+<arrowlink COLOR="#6a5ffe" DESTINATION="ID_78273441" ENDARROW="Default" ENDINCLINATION="-1068;-80;" ID="Arrow_ID_1534724962" STARTARROW="None" STARTINCLINATION="1067;77;"/>
+<linktarget COLOR="#0eb58e" DESTINATION="ID_1552790778" ENDARROW="Default" ENDINCLINATION="5;-124;" ID="Arrow_ID_729970542" SOURCE="ID_809493894" STARTARROW="None" STARTINCLINATION="-39;4;"/>
+<icon BUILTIN="forward"/>
+<node CREATED="1775869679499" ID="ID_537606249" MODIFIED="1775869698867" TEXT="das alte Design &#xfc;berpr&#xfc;ft &#x27f6; die Grundidee war in Ordnung"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1775869711450" HGAP="33" ID="ID_964595399" MODIFIED="1775870055846" STYLE="bubble" TEXT="systematische Kritik der Widerspr&#xfc;che &#x27f9; L&#xf6;sung" VSHIFT="-17">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Der Schl&#252;ssel war, die Dependency-Ebenen auseinander zu sortieren, und genau zu pr&#252;fen, wer wen wie genau getypt sehen mu&#223;. &#220;berraschenderweise hat sich dabei der Proxy-Buffer-Provider von einer Not-Kompromi&#223; in ein entscheidendes Design-Element verwandelt: er stellt n&#228;mlich jetzt die Verbindung zwischen front-End (DataSink) und Backend (Connection) her. Der OutputSlot::AllocState ist nur noch daf&#252;r zust&#228;ndig, die Connections zu halten/managen, aber partizipiert nicht mehr im eigentlichen Protokoll. Und der Lebenszyklus wird durch das ref-counting-Handle zusammengehalten, das ganz oben, im OutputSlot sitzt, aber zugleich auch in die &#955;-capture der DataSinks eingebettet ist.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Im Grunde wei&#223; ich nicht, wie ich da drauf gekommen bin &#8212; auf einmal hatte sich alles &#187;gelegt&#171;
+    </p>
+  </body>
+</html></richcontent>
+<edge COLOR="#2344cc"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1773077306179" ID="ID_791772240" MODIFIED="1775871480184" TEXT="Analyse mu&#xdf; dieses Mal bottom-up vorgehen">
 <arrowlink COLOR="#df165b" DESTINATION="ID_597179173" ENDARROW="Default" ENDINCLINATION="-647;-29;" ID="Arrow_ID_694305976" STARTARROW="None" STARTINCLINATION="-136;1688;"/>
+<icon BUILTIN="messagebox_warning"/>
 <node CREATED="1773077507482" ID="ID_1084930435" MODIFIED="1773078209970" TEXT="das ist die Konsequenz aus diesem &#xbb;Mismatch&#xab;">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -122731,6 +123363,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1775871488385" ID="ID_1717235847" MODIFIED="1775871500964" TEXT="(und war der richtige Ansatz)"/>
 </node>
 </node>
 </node>
@@ -142367,6 +143000,17 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1771183400259" ID="ID_886897159" MODIFIED="1771183644696" TEXT="2026 : Konsolidierung BufferProvider-Implementierung">
 <arrowlink COLOR="#5c617e" DESTINATION="ID_417601632" ENDARROW="Default" ENDINCLINATION="-1000;61;" ID="Arrow_ID_993142525" STARTARROW="None" STARTINCLINATION="-1410;73;"/>
 </node>
+<node CREATED="1775873393327" ID="ID_1254948925" MODIFIED="1775873731261" TEXT="2026 : Redesign OutputSlot">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das hat sich als die entscheidende Gelenkstelle herausgestellt, an der ich beim ersten Entwurf 2012 gescheitert bin; nun habe ich unter der Vorgabe, da&#223; beide Protokolle <i>kongruent gemacht werden m&#252;ssen</i>, die Implementierungen neu verbunden, und daf&#252;r ein Proxy-Setup f&#252;r den BufferProvider geschaffen. Das war nur m&#246;glich auf Basis der vorausgegangenen &#220;berarbeitung der internen Struktur im BufferProvider, und einem behutsamen Glattziehen und Verallgemeinern der Metadataten. Damit wurde der OutputBufferProxy, und das LocalTag in den Metadaten, zu dem Bindeglied, das nun die ganze Struktur zusammenh&#228;lt
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#796369" DESTINATION="ID_78273441" ENDARROW="Default" ENDINCLINATION="-357;-789;" ID="Arrow_ID_1295978639" STARTARROW="None" STARTINCLINATION="-470;45;"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1769303576693" ID="ID_399072135" MODIFIED="1770828085997" TEXT="die Implementierung ist nicht ausreichend auf Zustands&#xfc;berg&#xe4;nge zentriert">
@@ -142626,14 +143270,16 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1771532229650" ID="ID_1491926682" MODIFIED="1771532234442" TEXT="Subsystem-Einbindung"/>
 </node>
 <node CREATED="1771532460133" ID="ID_50065520" MODIFIED="1771532463537" TEXT="Vorbereitungen">
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1771532488034" ID="ID_690666245" MODIFIED="1771533022127" TEXT="DiagnosticOutputSlot aufr&#xe4;umen">
-<arrowlink COLOR="#f90134" DESTINATION="ID_459952316" ENDARROW="Default" ENDINCLINATION="-843;75;" ID="Arrow_ID_1183488081" STARTARROW="None" STARTINCLINATION="345;27;"/>
-<icon BUILTIN="pencil"/>
-<node CREATED="1773078490823" HGAP="34" ID="ID_474163351" MODIFIED="1773078511878" TEXT="ein neues sinvolleres Diagnose-API entwerfen" VSHIFT="30">
-<node CREATED="1773078412215" ID="ID_597179173" MODIFIED="1773078565947" TEXT="Test-Dummy bereitet die Prototyp-Implementierung vor">
+<node COLOR="#338800" CREATED="1771532488034" ID="ID_690666245" MODIFIED="1775868388520" TEXT="DiagnosticOutputSlot aufr&#xe4;umen">
+<arrowlink COLOR="#009462" DESTINATION="ID_459952316" ENDARROW="Default" ENDINCLINATION="-843;75;" ID="Arrow_ID_1183488081" STARTARROW="None" STARTINCLINATION="345;27;"/>
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1773078490823" HGAP="34" ID="ID_474163351" MODIFIED="1775868124349" TEXT="ein neues sinvolleres Diagnose-API entwerfen" VSHIFT="30">
+<icon BUILTIN="yes"/>
+<node CREATED="1773078412215" ID="ID_597179173" MODIFIED="1775868161362" TEXT="Test-Dummy bereitet die Prototyp-Implementierung vor">
 <linktarget COLOR="#df165b" DESTINATION="ID_597179173" ENDARROW="Default" ENDINCLINATION="-647;-29;" ID="Arrow_ID_694305976" SOURCE="ID_791772240" STARTARROW="None" STARTINCLINATION="-136;1688;"/>
+<icon BUILTIN="idea"/>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1773078521008" ID="ID_363846303" MODIFIED="1773078569280" TEXT="Grundlage: wie k&#xf6;nnte man dieses API realistischerweise implementieren?">
+<node COLOR="#435e98" CREATED="1773078521008" FOLDED="true" ID="ID_363846303" MODIFIED="1775868132525" TEXT="Grundlage: wie k&#xf6;nnte man dieses API realistischerweise implementieren?">
 <icon BUILTIN="help"/>
 <node CREATED="1773088095124" ID="ID_1797165728" MODIFIED="1773088185793" TEXT="Gegebenheiten">
 <richcontent TYPE="NOTE"><html>
@@ -142797,8 +143443,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node CREATED="1773155990443" ID="ID_1190993728" MODIFIED="1774225878698" TEXT="Diagnose-Mechanismen">
+<node COLOR="#435e98" CREATED="1773155990443" ID="ID_1190993728" MODIFIED="1775868141947" TEXT="Diagnose-Mechanismen">
 <linktarget COLOR="#5c63b1" DESTINATION="ID_1190993728" ENDARROW="Default" ENDINCLINATION="-397;787;" ID="Arrow_ID_1381726156" SOURCE="ID_560760852" STARTARROW="None" STARTINCLINATION="-207;-12;"/>
+<icon BUILTIN="info"/>
 <node CREATED="1773156135431" ID="ID_1267997680" MODIFIED="1773156181565" TEXT="eigenst&#xe4;ndige Instanzen ohne &#xbb;magische Registrierung&#xab;"/>
 <node CREATED="1773156027518" ID="ID_1029550355" MODIFIED="1773156061189" TEXT="Grunds&#xe4;tzlich gibt es unlimitierte Output-Kapazit&#xe4;t">
 <node COLOR="#5b280f" CREATED="1773156063226" ID="ID_1574408155" MODIFIED="1774284660541" TEXT="beliebig viele Kan&#xe4;le">
@@ -142838,7 +143485,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1773156516269" ID="ID_1341134692" MODIFIED="1774313455147" TEXT="die Test-Implementierung sehe ich als Prototyp bez&#xfc;glich der Konsistenz-Limits">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1773156516269" ID="ID_1341134692" MODIFIED="1775825631829" TEXT="die Test-Implementierung sehe ich als Prototyp bez&#xfc;glich der Konfigurations-Limits">
 <icon BUILTIN="hourglass"/>
 </node>
 <node CREATED="1773156543145" ID="ID_364217869" MODIFIED="1773156636849" TEXT="wenn ich sie &#xfc;berhaupt jetzt entwickle....">
@@ -142883,7 +143530,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node CREATED="1773354410472" ID="ID_1743624174" MODIFIED="1773354422590" TEXT="bestehende Implementierung &#xfc;berpr&#xfc;fen">
+<node COLOR="#435e98" CREATED="1773354410472" ID="ID_1743624174" MODIFIED="1775868044712" TEXT="bestehende Implementierung &#xfc;berpr&#xfc;fen">
+<icon BUILTIN="yes"/>
 <node COLOR="#5b280f" CREATED="1773366196992" FOLDED="true" ID="ID_1171528228" MODIFIED="1774223759898" TEXT="die dreistufige Vererbung ist zweifelhaft">
 <icon BUILTIN="broken-line"/>
 <node CREATED="1773366223189" ID="ID_1366861589" MODIFIED="1773366246027" TEXT="Kennzeichen: mir fallen keine drei schl&#xfc;ssigen Klassennamen ein">
@@ -142965,7 +143613,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1773369169156" ID="ID_214225108" MODIFIED="1774224646822" TEXT="Verbesserungsversuch starten....">
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1773369169156" FOLDED="true" ID="ID_214225108" MODIFIED="1774224646822" TEXT="Verbesserungsversuch starten....">
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1773369183338" ID="ID_1251387186" MODIFIED="1773369195156" TEXT="der PImpl k&#xf6;nnte direkt eine Allocation halten"/>
@@ -143078,7 +143726,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1774224118247" ID="ID_616159623" MODIFIED="1774224145909" TEXT="die Bindings / Verschaltung passiert opaque in einer &#x3bb;-closure"/>
+<node CREATED="1774224118247" ID="ID_616159623" MODIFIED="1775825823155" TEXT="die Bindings / Verschaltung passieren opaque in einer &#x3bb;-closure"/>
 <node CREATED="1774224151137" ID="ID_1221018251" MODIFIED="1774224182116" TEXT="Hier ist sichtbar">
 <node CREATED="1774224182996" ID="ID_305687317" MODIFIED="1774224210667">
 <richcontent TYPE="NODE"><html>
@@ -143223,8 +143871,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 <node CREATED="1773872010905" ID="ID_1655981568" MODIFIED="1773872027169" TEXT="Nun steht die inzwischen festgezurrte BufferProvider-Struktur im Weg">
-<node CREATED="1773871942945" ID="ID_1447615516" MODIFIED="1773872053431" TEXT="l&#xe4;uft darauf hinaus, den BufferStore anders zu interpretieren">
-<linktarget COLOR="#3c2aa0" DESTINATION="ID_1447615516" ENDARROW="Default" ENDINCLINATION="140;-650;" ID="Arrow_ID_502898501" SOURCE="ID_229835695" STARTARROW="None" STARTINCLINATION="1105;47;"/>
+<node CREATED="1773871942945" ID="ID_1447615516" MODIFIED="1775870950916" TEXT="l&#xe4;uft darauf hinaus, den BufferStore anders zu interpretieren">
+<linktarget COLOR="#3c2aa0" DESTINATION="ID_1447615516" ENDARROW="Default" ENDINCLINATION="140;-650;" ID="Arrow_ID_1106908380" SOURCE="ID_400588167" STARTARROW="None" STARTINCLINATION="1105;47;"/>
 </node>
 <node CREATED="1773872076215" ID="ID_1282818549" MODIFIED="1773872198594" TEXT="mein Ansatz war bis jetzt: das ist &#xbb;ein Dummy&#xab; mit Diagnose-Callbacks"/>
 <node CREATED="1773872206676" ID="ID_1935549810" MODIFIED="1773872220263" TEXT="tats&#xe4;chlich replizieren die Callbacks aber das BufferStore-API"/>
@@ -143423,7 +144071,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1774042095382" ID="ID_409572046" MODIFIED="1774042116105" TEXT="getOpenedSinks() hat darauf nun direkt Zugriff"/>
 <node CREATED="1774042144135" ID="ID_398645730" MODIFIED="1774042163080" TEXT="und delegiert an eine builder/verdrahtungs-Funktion auf dem PImpl"/>
 </node>
-<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1774223553705" ID="ID_1056437663" MODIFIED="1774223564933" TEXT="f&#xfc;hlt sich jetzt alles viel besser an">
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1774223553705" ID="ID_1056437663" MODIFIED="1775869201379" TEXT="f&#xfc;hlt sich jetzt alles viel besser an">
+<linktarget COLOR="#2724d3" DESTINATION="ID_1056437663" ENDARROW="Default" ENDINCLINATION="-2006;-113;" ID="Arrow_ID_1445047837" SOURCE="ID_809493894" STARTARROW="None" STARTINCLINATION="928;107;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 </node>
@@ -144014,9 +144663,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1773456815562" ID="ID_1123444875" MODIFIED="1773589752521" TEXT="Doku">
+<node BACKGROUND_COLOR="#82beb5" COLOR="#0d564f" CREATED="1773456815562" ID="ID_1123444875" MODIFIED="1775868023912" TEXT="Doku">
 <arrowlink COLOR="#7e454b" DESTINATION="ID_1937537099" ENDARROW="Default" ENDINCLINATION="1647;-115;" ID="Arrow_ID_1049807970" STARTARROW="None" STARTINCLINATION="-377;112;"/>
-<icon BUILTIN="pencil"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1773456831048" ID="ID_351332396" MODIFIED="1773456833387" TEXT="uml/fig151685.png">
 <node CREATED="1773456834663" ID="ID_1714537462" MODIFIED="1773456841682" TEXT="noch mit Bouml erstellt"/>
 <node CREATED="1773456842838" ID="ID_1474443195" MODIFIED="1773456850787" TEXT="mu&#xdf; das sinngem&#xe4;&#xdf; mit Umbrello nachbauen"/>
@@ -144039,10 +144688,16 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="smiley-angry"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1774223250995" ID="ID_1704442443" MODIFIED="1774223271232" TEXT="Nach Refactoring nochmal komplett zu &#xfc;berarbeiten">
-<icon BUILTIN="broken-line"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#570f69" CREATED="1774223250995" ID="ID_1704442443" MODIFIED="1775867483515" TEXT="Nach Refactoring nochmal komplett zu &#xfc;berarbeiten">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1774223280705" ID="ID_235268548" MODIFIED="1774223287071" TEXT="tja">
 <icon BUILTIN="smily_bad"/>
+<node COLOR="#fa0b30" CREATED="1775867552051" ID="ID_1015470023" MODIFIED="1775867579684" TEXT="insgesamt war das eine irre Zeitverschwendung">
+<icon BUILTIN="clanbomber"/>
+</node>
+<node CREATED="1775867582111" ID="ID_893040997" MODIFIED="1775867607394" TEXT="(ich h&#xe4;tte das Diagramm locker &#xbb;zu Fu&#xdf;&#xab; in Inkscape gezeichnet)">
+<font NAME="SansSerif" SIZE="11"/>
+</node>
 </node>
 <node CREATED="1774223288608" ID="ID_1829993438" MODIFIED="1774223305353">
 <richcontent TYPE="NODE"><html>
@@ -144064,15 +144719,68 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1775850628859" FOLDED="true" ID="ID_617738757" MODIFIED="1775867991246" TEXT="was hat sich konkret ge&#xe4;ndert?">
+<icon BUILTIN="info"/>
+<node CREATED="1775850937260" ID="ID_1898645004" MODIFIED="1775850941878" TEXT="OutputSlot">
+<node CREATED="1775851018840" ID="ID_873743322" MODIFIED="1775851029232" TEXT="ist &#xbb;fast&#xab; stateless geworden...."/>
+<node CREATED="1775850943549" ID="ID_1589554053" MODIFIED="1775850982656" TEXT="Operationen haben sich ge&#xe4;ndert"/>
+<node CREATED="1775850984123" ID="ID_1483232318" MODIFIED="1775851003207" TEXT="getOpenedSinks nun direkt hier"/>
+<node CREATED="1775851007821" ID="ID_1126730834" MODIFIED="1775851015095" TEXT="timingContstraints ebenfalls"/>
+</node>
+<node CREATED="1775851059307" ID="ID_1118636643" MODIFIED="1775851069382" TEXT="wird nun direkt vom OutputManager erzeugt und verdrahtet"/>
+<node COLOR="#5b280f" CREATED="1775851036902" ID="ID_673119027" MODIFIED="1775851909714" TEXT="es gibt keine OutputSlot-Subklasse mehr">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1775851928745" ID="ID_22666242" MODIFIED="1775851933651" TEXT="OutputManager">
+<node CREATED="1775851934656" ID="ID_704676878" MODIFIED="1775851954444" TEXT="ist nun die Br&#xfc;cke zwischen &#xbb;allgemein&#xab; und &#xbb;speziell&#xab;"/>
+<node CREATED="1775851957233" ID="ID_644963862" MODIFIED="1775851968299" TEXT="erzeugt nun direkten den AllocState&lt;CON&gt;"/>
+<node CREATED="1775851992567" ID="ID_581485875" MODIFIED="1775851998985" TEXT="konfiguriert damit den OutputManager"/>
+</node>
+<node CREATED="1775852078139" ID="ID_66327858" MODIFIED="1775852081534" TEXT="DataSink">
+<node CREATED="1775852082455" ID="ID_1255757407" MODIFIED="1775852090602" TEXT="wandert mehr &#xbb;nach unten&#xab;"/>
+<node CREATED="1775852093765" ID="ID_53599366" MODIFIED="1775852108355" TEXT="ist jetzt per smart-Handle mit AllocState&lt;CON&gt; verbunden"/>
+<node CREATED="1775852166808" ID="ID_71590603" MODIFIED="1775852203907" TEXT="hat nur noch eine invoke()-Methode"/>
+<node CREATED="1775852158305" ID="ID_1934622944" MODIFIED="1775852164532" TEXT="hat einen BufferDescriptor">
+<node CREATED="1775852205942" ID="ID_1851085589" MODIFIED="1775852235540" TEXT="der hat nun die lockBuffer()">
+<arrowlink COLOR="#3f6189" DESTINATION="ID_1146624921" ENDARROW="Default" ENDINCLINATION="98;-7;" ID="Arrow_ID_798762941" STARTARROW="None" STARTINCLINATION="61;66;"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1774223704747" ID="ID_638158996" MODIFIED="1774225767792" TEXT="zur Bew&#xe4;hrung: nun den DiagnosticOutputSlot neu implementieren">
-<linktarget COLOR="#ff2915" DESTINATION="ID_638158996" ENDARROW="Default" ENDINCLINATION="-1375;-44;" ID="Arrow_ID_288442844" SOURCE="ID_446738731" STARTARROW="None" STARTINCLINATION="-182;266;"/>
+</node>
+<node CREATED="1775852219312" ID="ID_1146624921" MODIFIED="1775852231708" TEXT="BuffHandle">
+<linktarget COLOR="#3f6189" DESTINATION="ID_1146624921" ENDARROW="Default" ENDINCLINATION="98;-7;" ID="Arrow_ID_798762941" SOURCE="ID_1851085589" STARTARROW="None" STARTINCLINATION="61;66;"/>
+</node>
+<node CREATED="1775852320203" ID="ID_1269479312" MODIFIED="1775852325982" TEXT="BufferProxyAdaptor">
+<node CREATED="1775852327314" ID="ID_619125292" MODIFIED="1775852342788" TEXT="nur noch: getDescriptorFor(connection)"/>
+<node CREATED="1775852469423" ID="ID_1538390063" MODIFIED="1775852476618" TEXT="hat Direkt-Verbindung zur Connection"/>
+</node>
+<node CREATED="1775852490491" ID="ID_902653062" MODIFIED="1775852492952" TEXT="Connection">
+<node CREATED="1775852494132" ID="ID_1716852970" MODIFIED="1775852499623" TEXT="Interface-Methoden umbenannt">
+<node CREATED="1775852516121" ID="ID_599145771" MODIFIED="1775852520855" TEXT="getBufferSize"/>
+<node CREATED="1775852521672" ID="ID_1040813199" MODIFIED="1775852532283" TEXT="claimBufferFor(frame)"/>
+<node CREATED="1775852537086" ID="ID_517369262" MODIFIED="1775852542121" TEXT="publish"/>
+<node CREATED="1775852545253" ID="ID_1080614101" MODIFIED="1775852547137" TEXT="release"/>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1775867629519" ID="ID_487617493" MODIFIED="1775867647693" TEXT="auch nocmal grob durch den Text im TiddlyWiki durchgeschaut">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1775867649121" ID="ID_1307679851" MODIFIED="1775867660310" TEXT="das ist im Grunde uferlos...">
+<icon BUILTIN="smily_bad"/>
+</node>
+<node CREATED="1775867700030" ID="ID_309199961" MODIFIED="1775867723544" TEXT="da ist viel Text der nicht wei&#xdf; was er will &#x2014; und die Implementierung ist nicht fertig">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node COLOR="#435e98" CREATED="1775867661891" ID="ID_1335283877" MODIFIED="1775867728298" TEXT="hab aber wenigstens sichergestellt, da&#xdf; keine grob falsche Info dort steht"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1774223704747" ID="ID_638158996" MODIFIED="1775867748869" TEXT="zur Bew&#xe4;hrung: nun den DiagnosticOutputSlot neu implementieren">
+<linktarget COLOR="#158dff" DESTINATION="ID_638158996" ENDARROW="Default" ENDINCLINATION="-1375;-44;" ID="Arrow_ID_288442844" SOURCE="ID_446738731" STARTARROW="None" STARTINCLINATION="-182;266;"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1774225831011" ID="ID_560760852" MODIFIED="1774225878698" TEXT="siehe vorhergehende &#xdc;berlegungen zum Diagnose-API">
 <arrowlink COLOR="#5c63b1" DESTINATION="ID_1190993728" ENDARROW="Default" ENDINCLINATION="-397;787;" ID="Arrow_ID_1381726156" STARTARROW="None" STARTINCLINATION="-207;-12;"/>
 <icon BUILTIN="info"/>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1774225891234" ID="ID_548689470" MODIFIED="1774225903747" TEXT="&#xbb;was hei&#xdf;t das jetzt konkret&#xab;?">
+<node COLOR="#435e98" CREATED="1774225891234" FOLDED="true" ID="ID_548689470" MODIFIED="1775867798021" TEXT="&#xbb;was hei&#xdf;t das jetzt konkret&#xab;?">
 <icon BUILTIN="help"/>
 <node CREATED="1774225930446" ID="ID_1728122202" MODIFIED="1774225952911" TEXT="bez&#xfc;glich API?">
 <node CREATED="1774286798033" ID="ID_1020564207" MODIFIED="1774286810135" TEXT="pa&#xdf;t wie es ist: man erzeugt das Ding einfach so"/>
@@ -144094,7 +144802,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1774290385721" ID="ID_458172606" MODIFIED="1774290410931" TEXT="m&#xfc;&#xdf;te nonCopyable oder unique sein"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1774286826317" ID="ID_82092877" MODIFIED="1774286837055" TEXT="Frage: Konfiguration?">
+<node COLOR="#435e98" CREATED="1774286826317" ID="ID_82092877" MODIFIED="1774399294384" TEXT="Frage: Konfiguration?">
 <icon BUILTIN="help"/>
 <node CREATED="1774286841852" ID="ID_125497669" MODIFIED="1774286847278" TEXT="M&#xf6;glichkeiten">
 <node CREATED="1774286848899" ID="ID_711805711" MODIFIED="1774286867811" TEXT="Config-Builder in den Konstruktor geben"/>
@@ -144135,7 +144843,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 </node>
 </node>
-<node CREATED="1774289576344" ID="ID_830283711" MODIFIED="1774289593756" TEXT="mu&#xdf; 100% Nutz-Kompatibel sein zum OutputSlot">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#480f69" CREATED="1774289576344" ID="ID_830283711" MODIFIED="1774399306301" TEXT="mu&#xdf; 100% Nutz-Kompatibel sein zum OutputSlot">
 <icon BUILTIN="yes"/>
 <node CREATED="1774289597917" ID="ID_1530295227" MODIFIED="1774289633433" TEXT="Begr&#xfc;ndung: stand-in">
 <richcontent TYPE="NOTE"><html>
@@ -144149,6 +144857,37 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node CREATED="1774289638240" ID="ID_92087237" MODIFIED="1774289792000" TEXT="bedeutet: slice-down copy">
 <arrowlink COLOR="#20777c" DESTINATION="ID_18392091" ENDARROW="Default" ENDINCLINATION="52;-3;" ID="Arrow_ID_1927109656" STARTARROW="None" STARTINCLINATION="55;6;"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1775826747134" ID="ID_1844043879" MODIFIED="1775827099799" TEXT="(wobei: Handle mu&#xdf; &#xfc;berleben)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Um es explizit auszuformulieren...
+    </p>
+    <ul>
+      <li>
+        das Test-Setup erzeugt einen DiagnosticOutputSlot
+      </li>
+      <li>
+        dieser ist aber kopierbar, d.h. das zu testende Subjekt kann eine Kopie bekommen
+      </li>
+      <li>
+        u.U wird das zu testende <i>Output-Slot-Protocol</i>&#160;auf dieser Kopie ausgef&#252;hrt
+      </li>
+      <li>
+        nach dem Testaufruf geht man &#252;ber das Verifikations-API auf irgend eine Kopie los &#8212;
+      </li>
+      <li>
+        <i>aber diese Kopie mu&#223; nat&#252;rlich tats&#228;chlich ein DiagnosticOutputSlot sein,</i>&#160;(damit sie den shared-PImpl enth&#228;lt, denn sonst w&#252;rde man ja an die Tracking-Daten gar nicht mehr rankommen)
+      </li>
+      <li>
+        au&#223;erdem mu&#223; w&#228;hrend dem Test irgendwo diese DiagnosticOutputSlot-Variante bestehen bleiben, um die Tracking-Infrastruktur am Leben zu halten; weil dem so ist, habe ich auch darauf verzichtet, shared-ptr f&#252;r die R&#252;ck-Kan&#228;le in der Tracking-Instrumentierung zu verwenden. Denn letztlich ist das hier <i>Testcode</i>, also wenn's knallt, dann knallts
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<font NAME="SansSerif" SIZE="10"/>
 </node>
 </node>
 </node>
@@ -144176,8 +144915,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node CREATED="1774301662597" ID="ID_1308858144" MODIFIED="1774301672154" TEXT="Konstruktion und Verdrahtung">
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1774301675913" ID="ID_471400878" MODIFIED="1774301698291" TEXT="Widerspruch in der Konstruktions-Reihenfolge">
+<node COLOR="#338800" CREATED="1774301662597" FOLDED="true" ID="ID_1308858144" MODIFIED="1775867804272" TEXT="Konstruktion und Verdrahtung">
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1774301675913" ID="ID_471400878" MODIFIED="1774399270227" TEXT="Widerspruch in der Konstruktions-Reihenfolge">
 <icon BUILTIN="broken-line"/>
 <node CREATED="1774301701838" ID="ID_220793794" MODIFIED="1774301705113" TEXT="ich will...">
 <node CREATED="1774301706276" ID="ID_1669148819" MODIFIED="1774301717217" TEXT="da&#xdf; es im Kern ein OutputSlot ist">
@@ -144190,9 +144930,10 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1774301840487" ID="ID_295567710" MODIFIED="1774301851464" TEXT="dieser mu&#xdf; bereits die Referenz auf das Tracking in die Hand bekommen"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#f6b3ac" COLOR="#de0131" CREATED="1774301911034" ID="ID_401388335" MODIFIED="1774301965608" TEXT="&#x21af; Widerspruch: mu&#xdf; das 2.Sub-Objekt vor der 1.Sub-Objekt initialisieren"/>
+<node BACKGROUND_COLOR="#f6b3ac" COLOR="#de0131" CREATED="1774301911034" ID="ID_401388335" MODIFIED="1774301965608" TEXT="&#x21af; Widerspruch: mu&#xdf; das 2.Sub-Objekt vor dem 1.Sub-Objekt initialisieren"/>
 </node>
-<node CREATED="1774302051343" ID="ID_697693360" MODIFIED="1774302068409" TEXT="L&#xf6;sung durch einen &#xbb;Kniff&#xab; : Setup-Kontext verwenden">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1774302051343" ID="ID_697693360" MODIFIED="1774399282292" TEXT="L&#xf6;sung durch einen &#xbb;Kniff&#xab; : Setup-Kontext verwenden">
+<icon BUILTIN="idea"/>
 <node CREATED="1774302073970" ID="ID_143320134" MODIFIED="1774309955517">
 <richcontent TYPE="NODE"><html>
   <head/>
@@ -144213,7 +144954,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1774310176164" ID="ID_77624999" LINK="https://gcc.gnu.org/bugzilla/show_bug.cgi?id=96645" MODIFIED="1774310185071" TEXT="#96645"/>
 </node>
 <node CREATED="1774310190403" ID="ID_1966511111" MODIFIED="1774310209939" TEXT="tats&#xe4;chlich ist es eine unerwartete Komplexit&#xe4;t in der Sprachdefinition"/>
-<node CREATED="1774310210990" ID="ID_959033974" MODIFIED="1774310227896" TEXT="Konsens it da&#xdf; sich normale und getemplatete Klassen gleich verhalten sollten"/>
+<node CREATED="1774310210990" ID="ID_959033974" MODIFIED="1774310227896" TEXT="Konsens ist da&#xdf; sich normale und getemplatete Klassen gleich verhalten sollten"/>
 <node CREATED="1774310228884" ID="ID_1971950950" MODIFIED="1774310258180" TEXT="das bedeutet: der Compiler mu&#xdf; w&#xe4;hrend der Instantiierung &#xbb;on demand&#xab; parsen"/>
 <node CREATED="1774310283474" ID="ID_1683437341" LINK="https://www.open-std.org/jtc1/sc22/wg21/docs/cwg_active.html#2335" MODIFIED="1774310305820" TEXT="Thema f&#xfc;r die Core-Working-Group (#2335)"/>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1774310309818" ID="ID_1429216112" MODIFIED="1774310317331" TEXT="auch Ende 2025 noch nicht gel&#xf6;st">
@@ -144230,8 +144971,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node CREATED="1774313226716" ID="ID_1611061420" MODIFIED="1774313232907" TEXT="Connection verschalten">
-<node CREATED="1774313235118" ID="ID_80195731" MODIFIED="1774313392812">
+<node COLOR="#338800" CREATED="1774313226716" ID="ID_1611061420" MODIFIED="1774399341651" TEXT="Connection verschalten">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1774313235118" ID="ID_80195731" MODIFIED="1774399334316">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
@@ -144256,7 +144998,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
-<node CREATED="1774313938386" ID="ID_1806140175" MODIFIED="1774317911805" TEXT="der BufferProvider bleibt dieses mal ein reines Implementation-detail">
+<node COLOR="#435e98" CREATED="1774313938386" ID="ID_1806140175" MODIFIED="1774399334319" TEXT="der BufferProvider bleibt dieses mal ein reines Implementation-detail">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -144285,7 +145027,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node CREATED="1774313219258" ID="ID_1837524398" MODIFIED="1774313225581" TEXT="Tracking-Implementierung">
+<node COLOR="#338800" CREATED="1774313219258" ID="ID_1837524398" MODIFIED="1774399348243" TEXT="Tracking-Implementierung">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1774313683158" ID="ID_904888776" MODIFIED="1774313720723" TEXT="was aufgezeichnert werden soll">
 <arrowlink COLOR="#5d70c1" DESTINATION="ID_1001788653" ENDARROW="Default" ENDINCLINATION="-43;224;" ID="Arrow_ID_1160346481" STARTARROW="None" STARTINCLINATION="-252;22;"/>
 <icon BUILTIN="yes"/>
@@ -144349,9 +145092,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node COLOR="#338800" CREATED="1774397450640" ID="ID_353105094" MODIFIED="1774397471843" TEXT="einmal durch den ganzen Konstruktions-Allokations-Zyklus gesteppt">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1774399348243" ID="ID_1932552195" MODIFIED="1775017615620" TEXT="nun fehlen nur noch einige convenience-Diagnostic-Helper">
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1774399548243" ID="ID_778280136" MODIFIED="1775428765812" TEXT="vor allem allBlocks &#x27f9; mu&#xdf; mehrere Quellen verbinden">
+<node COLOR="#338800" CREATED="1774399348243" ID="ID_1932552195" MODIFIED="1775837107606" TEXT="nun fehlen nur noch einige convenience-Diagnostic-Helper">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1774399548243" ID="ID_778280136" MODIFIED="1775837069952" TEXT="vor allem allBlocks &#x27f9; mu&#xdf; mehrere Quellen verbinden">
 <arrowlink COLOR="#4282ce" DESTINATION="ID_657002637" ENDARROW="Default" ENDINCLINATION="800;41;" ID="Arrow_ID_469905566" STARTARROW="None" STARTINCLINATION="972;48;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#9d1673" CREATED="1774399648243" HGAP="41" ID="ID_831504293" MODIFIED="1775017879434" TEXT="warum ist das so m&#xfc;hsam??" VSHIFT="13">
@@ -144371,17 +145114,60 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 <font NAME="SansSerif" SIZE="8"/>
 </node>
+<node COLOR="#435e98" CREATED="1775837076421" ID="ID_1431776404" MODIFIED="1775837096516" TEXT="JETZT geht der &#xbb;Rest&#xab; gaanz einfach...">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1775836993045" ID="ID_906961060" MODIFIED="1775837060010" TEXT="const-correctness ist wichtig hier">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      wir erzeugen leere diagn::Frame information-Records bei Bedarf, und diese beruhen auf lib::NullValue, werden also (statsich) shared.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1775837170050" ID="ID_812493088" MODIFIED="1775850463723" TEXT="sollte noch die &#xbb;current time&#xab; verifizieren">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1775867842306" ID="ID_88229206" MODIFIED="1775867977038" TEXT="Fazit">
+<font BOLD="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="forward"/>
+<node CREATED="1775867853221" ID="ID_863536395" MODIFIED="1775867858116" TEXT="Design geht auf"/>
+<node CREATED="1775867882175" ID="ID_890537548" MODIFIED="1775867895024" TEXT="Standard-Implementierung in OutputSlot ist viel klarer"/>
+<node CREATED="1775867895923" ID="ID_157604092" MODIFIED="1775867944506" TEXT="...und kann den Tracking-Fall ohne jedwede Anpassung unterst&#xfc;tzen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      man mu&#223; lediglich einen passenden <b>Populator-Funktor</b>&#160;in den Konstruktor geben, der mit der konkreten Connection-Implementierung verdrahtet
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1775867859264" ID="ID_1169105981" MODIFIED="1775867878066" TEXT="Tracking-Implementierung ist jetzt ein in-sich geschlossenes Detail"/>
+<node CREATED="1775867946605" ID="ID_409424422" MODIFIED="1775867957368" TEXT="Probleme mit dem Lebenszyklus sind jetzt gel&#xf6;st"/>
+<node BACKGROUND_COLOR="#174956" COLOR="#8dfd49" CREATED="1775867958811" ID="ID_49003482" MODIFIED="1775868074433" STYLE="fork" TEXT="voller Erfolg">
+<edge COLOR="#3d6b9d" STYLE="bezier" WIDTH="thin"/>
+<linktarget COLOR="#3c34ce" DESTINATION="ID_49003482" ENDARROW="Default" ENDINCLINATION="-31;79;" ID="Arrow_ID_1728201521" SOURCE="ID_1120744588" STARTARROW="None" STARTINCLINATION="134;11;"/>
 </node>
 </node>
 </node>
 </node>
-</node>
-</node>
-<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1774224369655" ID="ID_78273441" MODIFIED="1774224586895" TEXT="das ist jetzt ein Re-Design geworden">
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1774224369655" ID="ID_78273441" MODIFIED="1775873534849" TEXT="das ist jetzt ein Re-Design geworden">
 <arrowlink COLOR="#7c2e4f" DESTINATION="ID_1275456830" ENDARROW="Default" ENDINCLINATION="-171;377;" ID="Arrow_ID_465227693" STARTARROW="None" STARTINCLINATION="301;22;"/>
+<linktarget COLOR="#6a5ffe" DESTINATION="ID_78273441" ENDARROW="Default" ENDINCLINATION="-1068;-80;" ID="Arrow_ID_1534724962" SOURCE="ID_1552790778" STARTARROW="None" STARTINCLINATION="1067;77;"/>
+<linktarget COLOR="#4543ea" DESTINATION="ID_78273441" ENDARROW="Default" ENDINCLINATION="-571;-43;" ID="Arrow_ID_1128316353" SOURCE="ID_1288483653" STARTARROW="None" STARTINCLINATION="791;35;"/>
+<linktarget COLOR="#796369" DESTINATION="ID_78273441" ENDARROW="Default" ENDINCLINATION="-357;-789;" ID="Arrow_ID_1295978639" SOURCE="ID_1254948925" STARTARROW="None" STARTINCLINATION="-470;45;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
-<node COLOR="#574398" CREATED="1774224680125" HGAP="29" ID="ID_1120744588" MODIFIED="1774224701191" TEXT="(finde das Ergebnis richtig sch&#xf6;n)" VSHIFT="30">
+<node COLOR="#574398" CREATED="1774224680125" HGAP="29" ID="ID_1120744588" MODIFIED="1775868081125" TEXT="(finde das Ergebnis richtig sch&#xf6;n)" VSHIFT="30">
+<arrowlink COLOR="#3c34ce" DESTINATION="ID_49003482" ENDARROW="Default" ENDINCLINATION="-31;79;" ID="Arrow_ID_1728201521" STARTARROW="None" STARTINCLINATION="134;11;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="11"/>
 </node>
 </node>
@@ -159571,8 +160357,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node COLOR="#435e98" CREATED="1710351185059" ID="ID_431256200" MODIFIED="1710352477645" STYLE="fork" TEXT="saveAs()-Funktion bereistellen"/>
 </node>
 <node COLOR="#338800" CREATED="1711983612740" ID="ID_902546947" MODIFIED="1712089787472" TEXT="vereinfachte / erweiterte CSV-Notation f&#xfc;r Tests">
-<linktarget COLOR="#3483c8" DESTINATION="ID_902546947" ENDARROW="Default" ENDINCLINATION="-1334;77;" ID="Arrow_ID_606537608" SOURCE="ID_1834207024" STARTARROW="None" STARTINCLINATION="1430;149;"/>
 <linktarget COLOR="#2a9fe5" DESTINATION="ID_902546947" ENDARROW="Default" ENDINCLINATION="-1334;77;" ID="Arrow_ID_47054806" SOURCE="ID_1350863024" STARTARROW="None" STARTINCLINATION="-1467;-42;"/>
+<linktarget COLOR="#3483c8" DESTINATION="ID_902546947" ENDARROW="Default" ENDINCLINATION="-1334;77;" ID="Arrow_ID_606537608" SOURCE="ID_1834207024" STARTARROW="None" STARTINCLINATION="1430;149;"/>
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1711983784796" ID="ID_1350290271" MODIFIED="1712081833591" TEXT="CSVLine : string der Felder anh&#xe4;ngen kann">
 <icon BUILTIN="button_ok"/>
@@ -172638,8 +173424,8 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
 </node>
 </node>
 <node CREATED="1732377419435" ID="ID_1782676400" LINK="https://stackoverflow.com/a/3279550/444796" MODIFIED="1775593749986" TEXT="copy-and-swap-Idiom">
-<linktarget COLOR="#6176b0" DESTINATION="ID_1782676400" ENDARROW="Default" ENDINCLINATION="-1718;207;" ID="Arrow_ID_511557246" SOURCE="ID_343740069" STARTARROW="None" STARTINCLINATION="-532;34;"/>
 <linktarget COLOR="#314ae1" DESTINATION="ID_1782676400" ENDARROW="Default" ENDINCLINATION="-1264;147;" ID="Arrow_ID_968690038" SOURCE="ID_43210524" STARTARROW="None" STARTINCLINATION="-1984;102;"/>
+<linktarget COLOR="#6176b0" DESTINATION="ID_1782676400" ENDARROW="Default" ENDINCLINATION="-1718;207;" ID="Arrow_ID_511557246" SOURCE="ID_343740069" STARTARROW="None" STARTINCLINATION="-532;34;"/>
 <node CREATED="1732396455842" ID="ID_378208144" MODIFIED="1732396464585" TEXT="implementiere eigenen friend swap"/>
 <node CREATED="1732396465773" ID="ID_550439194" MODIFIED="1732396482416" TEXT="definiere move-ctor (ggfs durch swap von Members)"/>
 <node CREATED="1732396483041" ID="ID_383403178" MODIFIED="1732396497235" TEXT="implementiere einen universal-assignment-operator">
@@ -208129,8 +208915,8 @@ env.Command('out.bin', 'in.bin', my_action)</code></pre>
 </node>
 <node CREATED="1775399698270" ID="ID_516321142" MODIFIED="1775399700139" TEXT="03">
 <node CREATED="1775400707272" ID="ID_382206638" MODIFIED="1775401097117" TEXT="IterExplorer-flatten">
-<arrowlink COLOR="#2d4868" DESTINATION="ID_312759335" ENDARROW="Default" ENDINCLINATION="-196;20;" ID="Arrow_ID_1581617740" STARTARROW="None" STARTINCLINATION="-935;121;"/>
 <arrowlink DESTINATION="ID_1283855792" ENDARROW="Default" ENDINCLINATION="156;0;" ID="Arrow_ID_298662590" STARTARROW="None" STARTINCLINATION="188;29;"/>
+<arrowlink COLOR="#2d4868" DESTINATION="ID_312759335" ENDARROW="Default" ENDINCLINATION="-196;20;" ID="Arrow_ID_1581617740" STARTARROW="None" STARTINCLINATION="-935;121;"/>
 </node>
 <node CREATED="1775400415421" ID="ID_1228600186" MODIFIED="1775401153670" TEXT="meta/FunTrampoline">
 <arrowlink COLOR="#2d4868" DESTINATION="ID_1920067063" ENDARROW="Default" ENDINCLINATION="-805;74;" ID="Arrow_ID_314698705" STARTARROW="None" STARTINCLINATION="-935;121;"/>
