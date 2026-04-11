@@ -217,7 +217,6 @@ namespace mem   {
   
   DiagnosticBufferProvider::DiagnosticBufferProvider()
     : NaiveBufferSetup{}
-    , heapStore_{dynamic_cast<HeapMemBufferStore&> (*bufferStore_)}   //////////////////////////////////////////TICKET 1410 : obsolete after switch to newtracking-API
     , tracker_{std::make_unique<BlockTracker>()}
     {
       decorate<InstrumentedStageProxy> (bufferStage_, *tracker_, *this);
@@ -238,22 +237,6 @@ namespace mem   {
   
   
   /* === diagnostic API === */
-  
-  bool
-  BufferDiagnostic::buffer_was_used (uint bufferID)
-    {
-      NOTREACHED ("shall use new API only");
-//    return dbp_.heapStore_.access_emitted(bufferID).was_used();  //////////////////////////////////////////TICKET 1410 : switch to newly defined tracking-API
-    }
-  
-  
-  bool
-  BufferDiagnostic::buffer_was_closed (uint bufferID)
-    {
-      NOTREACHED ("shall use new API only");
-//    return dbp_.heapStore_.access_emitted(bufferID).was_closed();//////////////////////////////////////////TICKET 1410 : switch to newly defined tracking-API
-    }
-  
   
   Buff*
   BufferDiagnostic::accessMemory (HashVal id)

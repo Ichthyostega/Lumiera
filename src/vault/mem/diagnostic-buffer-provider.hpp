@@ -115,7 +115,6 @@ namespace mem   {
   class DiagnosticBufferProvider
     : public NaiveBufferSetup
     {
-      HeapMemBufferStore& heapStore_;  //////////////////////////////OOO fällt dann weg nach dem Umbau
       class InstrumentedStageProxy;
       struct BlockTracker;
       std::unique_ptr<BlockTracker> tracker_;
@@ -138,8 +137,6 @@ namespace mem   {
     public:
       BufferDiagnostic (DiagnosticBufferProvider&);
       
-      bool buffer_was_used (uint bufferID);   ///< @deprecated       ////////////////////////////////////////TICKET 1410
-      bool buffer_was_closed (uint bufferID); ///< @deprecated       ////////////////////////////////////////TICKET 1410
       bool was_created (HashVal);
       bool was_emitted (HashVal);
       bool was_released (HashVal);

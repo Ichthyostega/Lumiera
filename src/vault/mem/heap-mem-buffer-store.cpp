@@ -18,18 +18,27 @@
 
 
 #include "lib/error.hpp"
+#include "lib/integral.hpp"
 #include "include/logging.h"
 #include "lib/scoped-ptrvect.hpp"
+#include "vault/mem/buffer-metadata.hpp"
+#include "lib/format-string.hpp"
+#include "lib/format-obj.hpp"
 #include "lib/util-foreach.hpp"
+#include "lib/nocopy.hpp"
 
 #include "vault/mem/heap-mem-buffer-store.hpp"
 
 #include <algorithm>
 #include <vector>
+#include <array>
 
 using util::and_all;
 using std::vector;
+using std::array;
 using lib::ScopedPtrVect;
+using util::contains;
+using util::_Fmt;
 
 
 
@@ -261,8 +270,145 @@ namespace mem   {
     const uint MAX_BUFFERS = 50;
     
     Block emptyPlaceholder(0);
+    
+    using StorageWord = uint64_t;
+    constexpr inline size_t WORD_SIZ = sizeof(StorageWord);
+    
+    constexpr size_t
+    ceilDiv (size_t num, size_t den) noexcept
+    {
+      return (num + den - 1u) / den;
+    }
+    
+    constexpr size_t
+    wordCnt (size_t sizeRequest) noexcept
+    {
+      return ceilDiv (sizeRequest, WORD_SIZ);
+    }
   
+    static_assert (0 == wordCnt(0));
+    static_assert (1 == wordCnt(1));
+    static_assert (1 == wordCnt(WORD_SIZ));
+    
+    inline void
+    zeroFill (void* buf, size_t cnt)
+    {
+      auto begin = static_cast<StorageWord*> (buf);
+      std::fill (begin, begin+cnt, StorageWord(0));
+    }
+    
   } // (END) Details of allocation and accounting
+  
+  
+  /**
+   * @internal smart-handle and administrative record
+   *  to manage a single buffer allocation and verify
+   *  the proper sequence of lifecycle steps.
+   * @remark since HeapMemBufferStore is the default for tests,
+   *         it seems prudent to perform additional sanity checks.
+   */
+  class HeapMemBufferStore::Alloc
+    : util::MoveOnly
+    {
+      Buff* mem_{nullptr};
+      size_t siz_{0};
+      BufferState state_{NIL};
+
+      void
+      __requireState (BufferState expected)
+        {
+          if (state_ != expected)
+                throw err::Logic{_Fmt{"HeapMemBufferStore: Lifecycle broken: "
+                                      "expected_state:%d actual_state:%d"}
+                                     % expected % state_
+                                ,LERR_(LIFECYCLE)
+                                };
+        }
+
+      void
+      allocate (size_t cnt)
+        {
+          __requireState (NIL);
+          REQUIRE (!mem_,"Attempt to re-allocate / double-allocate");
+          REQUIRE (cnt,  "Attempt to create a zero-sized buffer");
+          siz_ = cnt;
+          size_t words = wordCnt(cnt);
+          mem_ = static_cast<Buff*> (std::aligned_alloc (std::alignment_of<StorageWord>(), words ));
+          ENSURE (mem_);
+          state_ = LOCKED;
+        }
+      
+      void
+      discard()
+        {
+          if (mem_)
+            std::free (mem_);
+          mem_ = nullptr;
+          siz_ = 0;
+          state_ = BLOCKED;
+        }
+      
+      
+      Alloc (size_t size) { allocate(size); }
+      
+    public:
+     ~Alloc() { discard(); }
+      Alloc() = default;
+      
+      Alloc (Alloc&& rr)
+        : Alloc{}
+        {
+          std::swap (state_, rr.state_);
+          std::swap (siz_,   rr.siz_);
+          std::swap (mem_,   rr.mem_);
+        }
+      
+      
+      using IdxEntry = Index::value_type;
+      
+      /**
+       * Create new allocation and map a new entry for the
+       * internal allocation index of HeapMemBufferStore.
+       * @remark this is the only way to allocate.
+       */
+      static Buff*
+      makeNewAllocEntry (Index& idx, size_t buffSize)
+        {
+          Alloc newAlloc{buffSize};
+          Buff* memLocation = newAlloc.mem_;
+          if (contains (idx, memLocation))
+            throw err::State{"HeapMemBufferStore allocated already "
+                             "registered memory address again."};
+          idx.emplace (memLocation, move(newAlloc));
+          ENSURE (contains (idx, memLocation));
+          return memLocation;
+        }
+      
+      void
+      verify (Buff* address, size_t size)
+        {
+          if (mem_ != address or siz_ != size)
+            throw err::State{_Fmt{"HeapMemBufferStore allocation identity corrupted: "
+                                  "Expect (size=%d|%s) yet invoked at state:%d with (%d|%s)."}
+                                 % siz_ % util::showAdr(mem_) % state_ % size % util::showAdr(address)};
+        }
+      
+      
+      void
+      emit()
+        {
+          __requireState (LOCKED);
+          state_ = EMITTED;
+        }
+      
+      void
+      release()
+        {
+          if (state_ != LOCKED)
+            __requireState (EMITTED);
+          state_ = FREE;
+        } // NOTE: Allocation retained (for diagnostics)
+    };
   
   
   
@@ -270,64 +416,60 @@ namespace mem   {
    * @internal create a memory tracking BufferProvider,
    */
   HeapMemBufferStore::HeapMemBufferStore()
-    : pool_(new PoolTable)
+    : allocIdx_{}
+    , pool_(new PoolTable)
     , outSeq_()
     { }
   
+  HeapMemBufferStore::~HeapMemBufferStore() { /* dtor of index table -> de-allocation here */ }
   
-  HeapMemBufferStore::~HeapMemBufferStore() { /* emit dtor of BlockPool here */ }
   
   
   /* ==== Implementation of the BufferProvider interface ==== */
   
   uint
-  HeapMemBufferStore::prepareBuffers (HashVal typeID, uint numBuffers, size_t buffSiz)
+  HeapMemBufferStore::prepareBuffers (HashVal, uint numBuffers, size_t)
   {
-    BlockPool& responsiblePool = getBlockPoolFor (buffSiz, typeID);
-    return responsiblePool.prepare_for (numBuffers);
+    return numBuffers;
   }
 
   
   BuffAlloc
-  HeapMemBufferStore::provideBuffer (HashVal typeID, size_t buffSiz, LocalTag, int64_t)
+  HeapMemBufferStore::provideBuffer (HashVal, size_t buffSiz, LocalTag specifics, int64_t)
   {
-    BlockPool& blocks = getBlockPoolFor (buffSiz, typeID);
-    Block& newBlock = blocks.createBlock();
-    LocalTag specifics{&newBlock}; // used by this implementation to find the storage to release later
-    return std::make_tuple (asBuffer(newBlock.accessMemory()), buffSiz, specifics);
+    Buff* storage = Alloc::makeNewAllocEntry (allocIdx_, buffSiz);
+    return std::make_tuple (storage, buffSiz, specifics);
   }
   
   
   void
-  HeapMemBufferStore::mark_emitted (HashVal typeID, BuffAlloc storageSlot)
+  HeapMemBufferStore::mark_emitted (HashVal, BuffAlloc storageSlot)
   {
-    auto& [_,buffSiz,specifics] = storageSlot;
-    Block* block4buffer = locateBlock (buffSiz, typeID, specifics);
-    if (!block4buffer)
-      throw err::Logic ("Attempt to emit a buffer not known to this BufferProvider"
-                       , LUMIERA_ERROR_BUFFER_MANAGEMENT);
-    BlockPool& pool = getBlockPoolFor (buffSiz, typeID);
-    Block* active = pool.transferResponsibility (block4buffer);
-    if (active)
-      outSeq_.manage (active);
-    else
-    if (block4buffer->was_closed())
-      WARN (proc_mem, "Attempt to emit() an already closed buffer.");
-    else
-      WARN (proc_mem, "Attempt to emit() a buffer not found in active pool. "
-                      "Maybe duplicate call to emit()?");
+    auto& [storage,buffSiz,specifics] = storageSlot;
+    if (not contains (allocIdx_, storage))
+      throw err::Invalid{_Fmt{"Passed buffer (size=%d|%s) for emit() call "
+                              "that is not recognised by this HeapMemBufferStore"}
+                             % buffSiz % util::showAdr(storage)};
+    
+    auto& entry = allocIdx_[storage];
+    entry.verify (storage,buffSiz);
+    entry.emit();
   }
   
   
   /** mark a buffer as officially discarded */
   void
-  HeapMemBufferStore::detachBuffer (HashVal typeID, BuffAlloc storageSlot)
+  HeapMemBufferStore::detachBuffer (HashVal, BuffAlloc storageSlot)
   {
     auto& [storage,buffSiz,specifics] = storageSlot;
-    Block* block4buffer = locateBlock (buffSiz, typeID, specifics);
-    REQUIRE (block4buffer, "releasing a buffer not allocated through this provider");
-    REQUIRE (util::isSameAdr (storage, block4buffer->accessMemory()));
-    block4buffer->markReleased();
+    if (not contains (allocIdx_, storage))
+      throw err::Invalid{_Fmt{"Passed buffer (size=%d|%s) for release() call "
+                              "that is not recognised by this HeapMemBufferStore"}
+                             % buffSiz % util::showAdr(storage)};
+    
+    auto& entry = allocIdx_[storage];
+    entry.verify (storage,buffSiz);
+    entry.release();
   }
   
   

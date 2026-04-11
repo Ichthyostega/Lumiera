@@ -237,7 +237,7 @@ namespace mem  {
           virtual ~BufferStore() { } ///< this is an interface
           
           virtual uint prepareBuffers (HashVal typeID, uint cnt,size_t) =0;
-          virtual BuffAlloc provideBuffer (HashVal typeID, size_t,LocalTag,int64_t) =0;
+          virtual BuffAlloc provideBuffer (HashVal typeID, size_t,LocalTag,int64_t customArg) =0;
           virtual void mark_emitted (HashVal typeID, BuffAlloc)         =0;
           virtual void detachBuffer (HashVal typeID, BuffAlloc)         =0;
         };

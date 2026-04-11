@@ -35,6 +35,12 @@
 #include <memory>
 
 
+namespace std {
+    /// Partial specializations for pointer types.
+  template<typename _Tp>
+    struct hash<_Tp*> : public hash_HIDDEN<_Tp*> { };
+
+}
 namespace vault {
 namespace mem   {
   
@@ -55,6 +61,10 @@ namespace mem   {
   class HeapMemBufferStore
     : public BufferProviderSetup::Store
     {
+      class Alloc;
+      using Index = std::unordered_map<Buff*,Alloc>;
+      
+      Index allocIdx_;
     public: /////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : looks like I'll re-implement the storage from scratch, since »tracking« is no longer required here
       class Block;
       class BlockPool;
