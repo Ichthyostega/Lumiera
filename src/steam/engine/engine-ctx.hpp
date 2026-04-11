@@ -27,8 +27,9 @@
  ** are configured as part of starting the steam::engine::RenderEnvironment.
  ** @todo who is responsible for setup of the services for the actual render engine?
  **       Might be closely related to brining up façade interfaces.
- ** @todo WIP-WIP 1/2026 provide a default implementation for test
- **       and find a way to populate the Facilities with the
+ ** @todo WIP-WIP 1/2026
+ **     - ✔ provide a default implementation for test
+ **     - 🔁 find a way to populate the Facilities with the
  **       production variant of the services...
  ** 
  ** @see engine-ctx-test.cpp

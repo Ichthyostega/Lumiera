@@ -12,8 +12,8 @@
 */
 
 /** @file heap-mem-provider.hpp
- ** Dummy engine::BufferProvider storage implementation, for sake of conceptual
- ** demonstration and unit testing. This BufferProvider implementation is notably straight forward,
+ ** Dummy engine::BufferProvider BufferStore implementation, for sake of conceptual
+ ** demonstration and unit testing. Notably this buffer allocator implementation is straight forward,
  ** if not outright silly: it happily claims more and more heap blocks and never releases any memory
  ** dynamically. This both demonstrates the simplest possible implementation of storage handling, and
  ** allows to investigate additional tracking status flags for each allocated block after the fact.
@@ -21,32 +21,21 @@
  ** @see DiagnosticOutputSlot
  ** @see DiagnosticBufferProvider
  ** @see buffer-provider-protocol-test.cpp
+ ** @see engine-ctx.hpp
+ ** @see naive-buffer-setup.hpp
  */
 
 #ifndef VAULT_MEM_HEAP_MEM_BUFFER_STORE_H
 #define VAULT_MEM_HEAP_MEM_BUFFER_STORE_H
 
 
-#include "lib/hash-value.h"
 #include "vault/mem/buffer-provider-setup.hpp"
-#include "lib/scoped-ptrvect.hpp"
 
 #include <unordered_map>
-#include <memory>
 
 
-namespace std {
-    /// Partial specializations for pointer types.
-  template<typename _Tp>
-    struct hash<_Tp*> : public hash_HIDDEN<_Tp*> { };
-
-}
 namespace vault {
 namespace mem   {
-  
-  using std::unique_ptr;
-  using lib::ScopedPtrVect;
-  using lib::HashVal;
   
   
   /**
@@ -65,15 +54,8 @@ namespace mem   {
       using Index = std::unordered_map<Buff*,Alloc>;
       
       Index allocIdx_;
-    public: /////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : looks like I'll re-implement the storage from scratch, since »tracking« is no longer required here
-      class Block;
-      class BlockPool;
-    private:
-      using PoolTable = std::unordered_map<HashVal,BlockPool>;
-      unique_ptr<PoolTable> pool_;
-      ScopedPtrVect<Block> outSeq_;
       
-    public:
+      
       /* === BufferStore interface === */
       
       uint prepareBuffers (HashVal typeID, uint cnt, size_t)    override;
@@ -84,23 +66,6 @@ namespace mem   {
     public:
      ~HeapMemBufferStore();
       HeapMemBufferStore();
-      
-#if false    ////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : this additional tracking API is obsolete and need to be removed
-      size_t emittedCnt()  const;
-      
-      Block& access_emitted (uint bufferID);
-      
-      template<typename TY>
-      TY&  accessAs (uint bufferID);
-      
-      void markAllEmitted();
-#endif       ////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : (End) obsoleted API
-      
-    private:
-      bool withinOutputSequence (uint bufferID)  const;
-      BlockPool& getBlockPoolFor (size_t,HashVal typeID);
-      Block* locateBlock (size_t,HashVal typeID, void*);
-      Block* searchInOutSeqeuence (void* storage);
     };
   
   
