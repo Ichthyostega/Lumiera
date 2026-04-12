@@ -22,7 +22,6 @@
 
 #include "lib/error.hpp"
 #include "vault/mem/diagnostic-buffer-provider.hpp"
-#include "vault/mem/heap-mem-buffer-store.hpp"
 #include "lib/format-string.hpp"
 #include "lib/util-foreach.hpp"
 #include "lib/util.hpp"
@@ -37,7 +36,6 @@ namespace mem   {
   namespace err = lumiera::error;
   
   using util::_Fmt;
-  using util::unConst;
   using diagn::Block;
   using diagn::StateReg;
   using std::unique_ptr;
@@ -81,10 +79,20 @@ namespace mem   {
                          , LERR_(BOTTOM_VALUE));
   }
   
+  
+  namespace {
+    inline auto
+    findHash (auto& registry, HashVal handle)
+    {
+      return find_if (registry
+                     ,[handle](auto& entry) { return handle == HashVal(entry); });
+    }
+  }
+  
   StateReg::Result
   StateReg::byHandle (HashVal handle) const
   {
-    if (auto pos = find_if (reg_, [&](auto& entry){ return handle == HashVal(entry); })
+    if (auto pos = findHash (reg_, handle)
        ;pos != reg_.end()
        )
       return *pos;
@@ -96,7 +104,8 @@ namespace mem   {
   bool
   StateReg::contains (HashVal handle) const
     {
-      return bool(byHandle (handle));
+      auto pos = findHash (reg_, handle);
+      return pos != reg_.end();
     }
   
   
@@ -194,9 +203,11 @@ namespace mem   {
         }
       
       ID
-      abandon (HashVal stateKey, bool invokeDtor)  override
+      abandon (HashVal id, bool invokeDtor)  override
         {
-          return stage_->abandon (stateKey, invokeDtor);
+          ID stateKey = stage_->abandon (id, invokeDtor);
+          tracker_.record_released (stateKey);
+          return stateKey;
         }
       
       void
@@ -213,6 +224,10 @@ namespace mem   {
         { }
     };
   
+  //(End) internal diagnostics helper
+  
+  
+  
   
   
   DiagnosticBufferProvider::DiagnosticBufferProvider()
@@ -224,7 +239,13 @@ namespace mem   {
   
   DiagnosticBufferProvider::~DiagnosticBufferProvider()
     {
-//    INFO (proc_mem, "discarding %zu diagnostic buffer entries", outSeq_.size());   ////////////OOO implement based on dedicated tracking information in-object
+      ENSURE (tracker_);
+      auto created  = [this]{ return tracker_->created.cnt(); };
+      auto released = [this]{ return tracker_->released.cnt(); };
+      INFO (proc_mem, "discarding %zu diagnostic buffer entries", created() );
+      REQUIRE (released() <= created(), "Buffer handling broken: %zu excess released", released() - created());
+      WARN_IF (created() > released()
+              ,proc_mem, "Allocation Logic mishap: %zu buffers not released", created() - released());
     }
   
   BufferDiagnostic::BufferDiagnostic (DiagnosticBufferProvider& thePro)

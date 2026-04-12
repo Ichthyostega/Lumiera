@@ -68,7 +68,7 @@ namespace mem   {
     
     
     inline void
-    zeroFill (void* buf, size_t cnt)
+    zeroWordsFill (void* buf, size_t cnt)
     {
       auto begin = static_cast<StorageWord*> (buf);
       std::fill (begin, begin+cnt, StorageWord(0));
@@ -111,8 +111,9 @@ namespace mem   {
           REQUIRE (cnt,  "Attempt to create a zero-sized buffer");
           siz_ = cnt;
           size_t words = wordCnt(cnt);
-          mem_ = static_cast<Buff*> (std::aligned_alloc (std::alignment_of<StorageWord>(), words ));
+          mem_ = static_cast<Buff*> (std::aligned_alloc (std::alignment_of<StorageWord>(), words*WORD_SIZ ));
           ENSURE (mem_);
+          zeroWordsFill (mem_, words);
           state_ = LOCKED;
         }
       

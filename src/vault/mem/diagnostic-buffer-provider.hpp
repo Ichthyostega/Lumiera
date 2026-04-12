@@ -12,8 +12,18 @@
 */
 
 /** @file diagnostic-buffer-provider.hpp
- ** A facility for writing unit-tests targeting the BufferProvider interface.
- ** 
+ ** A facility for writing unit-tests that target the BufferProvider interface.
+ ** A DiagnosticBufferProvider is a complete self-contained implementation of the
+ ** BufferProvider interface, with added diagnostic tracking of protocol steps.
+ ** The observed behaviour data can be retrieved and inspected using a special
+ ** "diagnostic backdoor", accessible through the call \ref watch(BufferProvider&).
+ ** Since by default the \ref HeapMemBufferStore is used, all allocated blocks are
+ ** retained and not released, as long as the BufferProvider front-end object
+ ** is alive; this allows to access the buffer memory, even from buffers
+ ** formally marked as released.
+ ** @todo 4/2026 the BufferStore API has also an `abandon()` call, that is invoked
+ **       in case of an _emergency clean-up_. This relevance of this feature is not
+ **       yet clear; thus _abandoned_ buffers are simply recorded as _released_.
  ** @see buffer-provider-protocol-test.cpp
  */
 
@@ -22,8 +32,6 @@
 
 
 #include "lib/error.hpp"
-#include "lib/util.hpp"
-#include "vault/mem/type-handler.hpp"  ///////////////OOO warum?
 #include "vault/mem/naive-buffer-setup.hpp"
 #include "lib/iter-adapter-stl.hpp"
 #include "lib/result.hpp"
@@ -36,9 +44,6 @@
 namespace vault {
 namespace mem   {
   namespace err = lumiera::error;
-  
-  class HeapMemBufferStore;  //////////////////////////////OOO fällt dann weg nach dem Umbau
-  class BufferDiagnostic;
   
   namespace diagn {// state descriptors for diagnostics....
     
@@ -99,6 +104,9 @@ namespace mem   {
 
   
   
+  class BufferDiagnostic;
+  
+  
   /********************************************************************//**
    * Helper for unit tests: Buffer provider that tracks state transitions.
    * This is a variant of the _naive_ heap based BufferProvider implementation,
@@ -115,9 +123,10 @@ namespace mem   {
   class DiagnosticBufferProvider
     : public NaiveBufferSetup
     {
-      class InstrumentedStageProxy;
       struct BlockTracker;
       std::unique_ptr<BlockTracker> tracker_;
+      
+      class InstrumentedStageProxy;
       
     public:
      ~DiagnosticBufferProvider();
