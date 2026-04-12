@@ -111338,6 +111338,25 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1732852977368" ID="ID_1396802326" MODIFIED="1736123587199" TEXT="Varianten dann als smart-PImpl"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1776038185488" ID="ID_1303326184" MODIFIED="1776038199366" TEXT="offen / ungel&#xf6;st">
+<icon BUILTIN="bell"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1776038202100" ID="ID_390330463" MODIFIED="1776038352831" TEXT="wie kann der Builder spezielle Aspekte konfigurierbar machen?">
+<linktarget COLOR="#ac0e1c" DESTINATION="ID_390330463" ENDARROW="Default" ENDINCLINATION="-1612;75;" ID="Arrow_ID_1622958105" SOURCE="ID_1314154398" STARTARROW="None" STARTINCLINATION="-949;-41;"/>
+<icon BUILTIN="help"/>
+<node CREATED="1776038541385" ID="ID_1301465945" MODIFIED="1776038555675" TEXT="bisher definiert er nur die Terminal-Operationen"/>
+<node CREATED="1776038557007" ID="ID_1741840673" MODIFIED="1776038587575" TEXT="man m&#xf6;chte aber die Conf anpassen k&#xf6;nnnen"/>
+<node CREATED="1776038589754" ID="ID_945656584" MODIFIED="1776038625211" TEXT="und das stellt eine gewisse H&#xfc;rde dar...">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...da die Conf bewu&#223;t <i>nicht uniform</i>&#160;ist, sondern mehr sowas wie ein Concept
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
 </node>
 <node CREATED="1736120728615" ID="ID_1716702522" MODIFIED="1739117933166" TEXT="bietet Test-Primitive">
 <icon BUILTIN="yes"/>
@@ -117719,9 +117738,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1770588964880" ID="ID_692469584" MODIFIED="1770588990867" TEXT="TrackingHeapBlockProvider &#x27fc; HeapMemProvider"/>
 <node CREATED="1770590017550" ID="ID_1783096429" MODIFIED="1770590027209" TEXT="einfache Verwendungen direkt darauf abstellen"/>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1770590030827" ID="ID_995145745" MODIFIED="1770835372155" TEXT="Schritt-2 : Tracking abstrahieren">
+<node COLOR="#338800" CREATED="1770590030827" ID="ID_995145745" MODIFIED="1776041905341" TEXT="Schritt-2 : Tracking abstrahieren">
 <linktarget COLOR="#396eac" DESTINATION="ID_995145745" ENDARROW="Default" ENDINCLINATION="4;-850;" ID="Arrow_ID_468011216" SOURCE="ID_1846831481" STARTARROW="None" STARTINCLINATION="-239;11;"/>
-<icon BUILTIN="pencil"/>
+<icon BUILTIN="button_ok"/>
 <node COLOR="#4e0f5b" CREATED="1770590041763" FOLDED="true" ID="ID_707087059" MODIFIED="1770826874642" TEXT="DiagnosticBufferProvider als Wrapper redefinieren">
 <icon BUILTIN="button_ok"/>
 <icon BUILTIN="button_cancel"/>
@@ -119369,8 +119388,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1771335613418" ID="ID_389403594" MODIFIED="1771354255277" TEXT="an dieser Stelle: Status-quo best&#xe4;tigen">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1771335613418" ID="ID_389403594" MODIFIED="1776041895459" TEXT="an dieser Stelle: Status-quo best&#xe4;tigen">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1771335628925" ID="ID_832109359" MODIFIED="1771372132494" TEXT="die beiden Test-F&#xe4;lle aufr&#xe4;umen">
 <arrowlink COLOR="#445360" DESTINATION="ID_1793741597" ENDARROW="Default" ENDINCLINATION="-400;726;" ID="Arrow_ID_389390476" STARTARROW="Default" STARTINCLINATION="60;-1173;"/>
 <icon BUILTIN="button_ok"/>
@@ -119715,10 +119734,11 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1772580027608" ID="ID_17159989" MODIFIED="1772580041236" STYLE="fork" TEXT="NodeDevel_test gebrochen">
+<node COLOR="#435e98" CREATED="1772580027608" FOLDED="true" ID="ID_17159989" MODIFIED="1776041917355" STYLE="fork" TEXT="NodeDevel_test gebrochen">
 <font NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="broken-line"/>
-<node CREATED="1772580043203" ID="ID_1564270895" MODIFIED="1772580049365" TEXT="Testfall: testRand_buildFilterNode()">
+<node CREATED="1772580043203" ID="ID_1564270895" MODIFIED="1776041136751" TEXT="Testfall: testRand_buildFilterNode()">
+<icon BUILTIN="info"/>
 <node CREATED="1772580051298" ID="ID_1770027833" MODIFIED="1772580064370" TEXT="das ist der erste &#xbb;substantielle&#xab; Integrations-Testfall"/>
 <node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1772580065781" ID="ID_981982347" MODIFIED="1772580093881" TEXT="Symptom: invalider Output-Buffer">
 <icon BUILTIN="messagebox_warning"/>
@@ -119745,8 +119765,34 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1772580243636" ID="ID_1772869914" MODIFIED="1772580276111" TEXT="Vermutung: da es der Output-Buffer ist, k&#xf6;nnte es direkt mit dem Umbau zusammenh&#xe4;ngen">
-<icon BUILTIN="idea"/>
+<node COLOR="#5b280f" CREATED="1772580243636" ID="ID_1772869914" MODIFIED="1776041149785">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Vermutung: da es der <i>Output-Buffer</i>&#160;ist,
+    </p>
+    <p>
+      k&#246;nnte es direkt mit dem Umbau zusammenh&#228;ngen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_cancel"/>
+<node COLOR="#435e98" CREATED="1776041152591" HGAP="40" ID="ID_1697651753" MODIFIED="1776041195931" TEXT="(nein das war es nicht)" VSHIFT="17">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...der Umbau hat vermutlich nur ein latentes Problem aufgedeckt, insofern der Test auch bisher schon auf uninitialisiertem Speicher lief
+    </p>
+  </body>
+</html></richcontent>
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#dfd4c1" COLOR="#6b01a5" CREATED="1776028997173" ID="ID_678626087" MODIFIED="1776041017837" TEXT="genauer anschauen (Debugger)">
+<icon BUILTIN="forward"/>
 <node CREATED="1772580361639" ID="ID_670863367" MODIFIED="1772580393253" TEXT="der Testfall verwendet den high-level Zugang per EngineCtx">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -119761,10 +119807,10 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1772580462582" ID="ID_1698761525" MODIFIED="1772580479814" TEXT="die Buffer-Addresse kommt unten im Aufruf korrekt an">
 <icon BUILTIN="idea"/>
 </node>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1772580483689" ID="ID_1718534673" MODIFIED="1772580551967" TEXT="&#x27f9; Buffer vom Test-Setup her nicht initialisiert">
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1772580483689" FOLDED="true" ID="ID_1718534673" MODIFIED="1772580483689" TEXT="&#x27f9; Buffer vom Test-Setup her nicht initialisiert">
 <icon BUILTIN="clanbomber"/>
 <node CREATED="1772580523957" ID="ID_908318379" MODIFIED="1772580539683" TEXT="das wird sogar Asserted (ist also erwartet)"/>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1772580556946" ID="ID_1418529434" MODIFIED="1772580582793" TEXT="wo in der Node-pull()-Logik h&#xe4;tte der Buffer initialisiert werden sollen?">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1772580556946" ID="ID_1418529434" MODIFIED="1776041107229" TEXT="wo in der Node-pull()-Logik h&#xe4;tte der Buffer initialisiert werden sollen?">
 <font NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="help"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1772580613906" ID="ID_1766680714" MODIFIED="1772580674329" TEXT="laut Test-Fixture: gar nicht">
@@ -119909,8 +119955,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1772678532662" ID="ID_1254112089" MODIFIED="1772678561874" TEXT="damit zusammenh&#xe4;ngende Neben-Frage: ist die TestRandOntology f&#xfc;r TestFrame zust&#xe4;ndig?">
+<node COLOR="#5b280f" CREATED="1772678532662" ID="ID_1254112089" MODIFIED="1776035705729" TEXT="damit zusammenh&#xe4;ngende Neben-Frage: ist die TestRandOntology f&#xfc;r TestFrame zust&#xe4;ndig?">
 <icon BUILTIN="help"/>
+<icon BUILTIN="button_cancel"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1772678572301" ID="ID_969290683" MODIFIED="1772679076713" TEXT="das hier ist ja nur ein modellhaftes Setup">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -119924,22 +119971,111 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node CREATED="1772678588893" ID="ID_1625895951" MODIFIED="1772678646454" TEXT="wenn TestFrame ein &#xbb;Inlay&#xab; w&#xe4;re, das zur Ontology geh&#xf6;rt...."/>
 <node CREATED="1772678647795" ID="ID_766992048" MODIFIED="1772678651467" TEXT="...dann k&#xf6;nnte man einen getypten Buffer verlangen"/>
-<node CREATED="1772678653490" ID="ID_640199025" MODIFIED="1772678678587" TEXT="Alternative: TestFrame ist ein Dateninhalt, der von der Implementierungs-Library erzeugt wird"/>
+<node CREATED="1772678653490" ID="ID_640199025" MODIFIED="1776035701517" TEXT="Alternative: TestFrame ist ein Dateninhalt, der von der Implementierungs-Library erzeugt wird">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das entspricht mehr der Weise, in der die Test-Rand-Ontology die Struktur einer Medien-Verarbeitungs-Library nachbildet
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="forward"/>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1772677979715" ID="ID_974445691" MODIFIED="1772678040044" TEXT="&#x27f9; TODO : in-Place-f&#xe4;hige Funktion richtig einbinden">
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1772677979715" ID="ID_974445691" MODIFIED="1776041091571" TEXT="&#x27f9; TODO : in-Place-f&#xe4;hige Funktion richtig einbinden">
+<arrowlink COLOR="#32476d" DESTINATION="ID_1882974895" ENDARROW="Default" ENDINCLINATION="0;-58;" ID="Arrow_ID_584031539" STARTARROW="None" STARTINCLINATION="-450;24;"/>
 <icon BUILTIN="yes"/>
-<node CREATED="1772678043698" ID="ID_231080001" MODIFIED="1772678054563" TEXT="&#xfc;berlegen ob man das irgendwo auf dem Deskriptor ausdr&#xfc;ckt"/>
+<icon BUILTIN="hourglass"/>
+<node CREATED="1772678043698" ID="ID_231080001" MODIFIED="1772678054563" TEXT="&#xfc;berlegen ob man das irgendwo auf dem Deskriptor ausdr&#xfc;ckt">
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1776036803044" ID="ID_538217187" MODIFIED="1776036811829" TEXT="wie war das denn gemeint?">
+<icon BUILTIN="help"/>
+<node CREATED="1776038267626" ID="ID_1314154398" MODIFIED="1776038427571" TEXT="gar nicht....">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Vor einem Jahr, als ich den &#187;umgepolten&#171; Entwurf zur Renderengine zustande gebracht habe, hat es mir gen&#252;gt, <i>irgendwie brauchbare Processing-Funktionen zu bekommen.</i>
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#ac0e1c" DESTINATION="ID_390330463" ENDARROW="Default" ENDINCLINATION="-1612;75;" ID="Arrow_ID_1622958105" STARTARROW="None" STARTINCLINATION="-949;-41;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1776038429611" ID="ID_345739942" MODIFIED="1776038509373" TEXT="das Design sieht einen Builder vor (der bisher fast nicht genutzt wird)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...er hat nur die generischen Terminal-Funktionen
+    </p>
+    <ul>
+      <li>
+        makeFun()
+      </li>
+      <li>
+        procID()
+      </li>
+      <li>
+        nodeID()
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1776038634561" ID="ID_1616543622" MODIFIED="1776040940805" TEXT="also sinngem&#xe4;&#xdf; &#x27f9; das weiterreichende Problem vertagen">
+<arrowlink COLOR="#4e2dc4" DESTINATION="ID_1710559503" ENDARROW="Default" ENDINCLINATION="168;8;" ID="Arrow_ID_1648218062" STARTARROW="None" STARTINCLINATION="-166;46;"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1776038664173" ID="ID_1963584158" MODIFIED="1776038674333" TEXT="nur eine Flag in die Conf einbauen"/>
+<node CREATED="1776038684702" ID="ID_741197789" MODIFIED="1776038698543" TEXT="diese auf &#xbb;nicht-inplace&#xab; vorkonfigurieren"/>
+<node COLOR="#7f1951" CREATED="1776038701755" ID="ID_1261939184" MODIFIED="1776038722087" TEXT="(und auf die sp&#xe4;tere Erleuchtung hoffen)">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+</node>
+</node>
 <node CREATED="1772678055985" ID="ID_1445790" MODIFIED="1772678080954" TEXT="vorl&#xe4;ufig k&#xf6;nnen wir kein in-Place-processing">
 <icon BUILTIN="messagebox_warning"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1772678083213" ID="ID_842562388" MODIFIED="1772678115270" TEXT="daher mu&#xdf; der Adapter ConfMan::binding() einen neuen Test-Frame erzeugen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1772678083213" ID="ID_842562388" MODIFIED="1776040841550" TEXT="daher mu&#xdf; der Adapter ConfMan::binding() einen neuen Test-Frame erzeugen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1776040696429" ID="ID_1897997813" MODIFIED="1776040812427" TEXT="schaffe neue Basis-Funktion ont::initBuff()">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      diese bekommt einen Zielpuffer und optional einen Quellpuffer und kopiert einfach den TestFrame aus dem Quellpuffer &#8212; was uns ganz banal einen validen Header liefert, und doch etwas effizienter sein d&#252;rfte, als nochmal die Daten zu generieren. Geht wohl nicht anders, denn ich habe TestFrame ziemlich &#187;zugedengelt&#171; und opaque gemacht.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1776040814400" ID="ID_813791357" MODIFIED="1776040827926" TEXT="sehe zumindest for ConfMan eine flexible Konfig vor"/>
+<node CREATED="1776040829154" ID="ID_649147081" MODIFIED="1776040836360" TEXT="...die aber derzeit noch nicht gesetzt werden kann"/>
+</node>
+<node COLOR="#338800" CREATED="1776040842854" ID="ID_233813848" MODIFIED="1776040871354" TEXT="auch ConfMix hat das gleiche Design-Problem &#x2014; l&#xf6;se es analog">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1776040892893" ID="ID_1710559503" MODIFIED="1776040972179">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      also nur <i>halb engageiert</i>&#160;... <font size="2" color="#782493">und das Design-Problem vertagt</font>
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#4e2dc4" DESTINATION="ID_1710559503" ENDARROW="Default" ENDINCLINATION="168;8;" ID="Arrow_ID_1648218062" SOURCE="ID_1616543622" STARTARROW="None" STARTINCLINATION="-166;46;"/>
+<icon BUILTIN="idea"/>
 </node>
 </node>
 </node>
 </node>
+<node COLOR="#338800" CREATED="1776041024498" ID="ID_1882974895" MODIFIED="1776041085553" TEXT="mit diesem Fix l&#xe4;uft der Test">
+<linktarget COLOR="#32476d" DESTINATION="ID_1882974895" ENDARROW="Default" ENDINCLINATION="0;-58;" ID="Arrow_ID_584031539" SOURCE="ID_974445691" STARTARROW="None" STARTINCLINATION="-450;24;"/>
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1776041039141" ID="ID_1980820402" MODIFIED="1776041050065" TEXT="auch etwas Doku nachgetragen"/>
 </node>
 </node>
 </node>
@@ -144072,9 +144208,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node COLOR="#338800" CREATED="1773934250649" ID="ID_1023733837" MODIFIED="1774219522013" TEXT="Umstellen der DataSink">
 <arrowlink COLOR="#2f56b3" DESTINATION="ID_848279587" ENDARROW="Default" ENDINCLINATION="-42;-865;" ID="Arrow_ID_998347051" STARTARROW="Default" STARTINCLINATION="-663;70;"/>
+<linktarget COLOR="#498ad6" DESTINATION="ID_1023733837" ENDARROW="Default" ENDINCLINATION="-757;-817;" ID="Arrow_ID_867939478" SOURCE="ID_784653137" STARTARROW="None" STARTINCLINATION="888;64;"/>
 <linktarget COLOR="#4a697c" DESTINATION="ID_1023733837" ENDARROW="Default" ENDINCLINATION="31;-117;" ID="Arrow_ID_50406176" SOURCE="ID_1909698021" STARTARROW="None" STARTINCLINATION="-24;182;"/>
 <linktarget COLOR="#498ad6" DESTINATION="ID_1023733837" ENDARROW="Default" ENDINCLINATION="-757;-817;" ID="Arrow_ID_534861876" SOURCE="ID_926670050" STARTARROW="None" STARTINCLINATION="688;37;"/>
-<linktarget COLOR="#498ad6" DESTINATION="ID_1023733837" ENDARROW="Default" ENDINCLINATION="-757;-817;" ID="Arrow_ID_867939478" SOURCE="ID_784653137" STARTARROW="None" STARTINCLINATION="888;64;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1773934262265" ID="ID_1065611224" MODIFIED="1773934275092" TEXT="m&#xf6;glichst das sichtbare API nicht anpassen">
 <node CREATED="1773934291293" ID="ID_736836401" MODIFIED="1773934304615" TEXT="AllocState ist erst der OutputSlot-Impl bekannt"/>

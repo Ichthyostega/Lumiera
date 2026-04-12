@@ -76,6 +76,20 @@ namespace test {
     const Literal DUMMY_PROC_ID{"op(int)"};
     
     
+    /** prime a working buffer so that it holds some valid TestFrame.
+     * @param src a source buffer to copy, when given
+     * @warning contents of the target buffer will be overwritten.
+     */
+    inline void
+    initBuff (TestFrame* buff, TestFrame const* src = nullptr)
+    {
+      REQUIRE (buff);
+      if (not src)
+        src = & testData(0,0);
+      new(buff) TestFrame{*src};
+    }
+    
+    
     /** produce sequences of frames with (reproducible) random data */
     void generateFrame (TestFrame* buff, FraNo frameNr =0, Flavr flavour =0);
     
@@ -128,7 +142,9 @@ namespace test {
   
   
   
-  
+  /** _common core_ of the configuration.
+   * to be extended for each special form of processing.
+   */
   struct TestRandOntology::Spec
     : util::Cloneable
     {
@@ -145,6 +161,18 @@ namespace test {
         { }
     };
   
+  
+  /**
+   * Generic front-End for the client to setup some processing,
+   * and to qualify and configure possible flavours and variations.
+   * Invoke the _terminal operations_ to get a processing function
+   * or similar config artifacts that can be passed to a NodeBuilder.
+   * @tparam CONF specialised config for some form of processing.
+   * @todo 4/2026 unsolved problem: how can the Builder expose
+   *       setters to adapt special aspects of some processing,
+   *       as opposed to control elements that are present in
+   *       any kind of config / spec...?
+   */
   template<class CONF>
   class TestRandOntology::Builder
     : public Spec
@@ -205,6 +233,7 @@ namespace test {
         
         Param filter = 0;
         string streamType;
+        bool procInplace{false};
         
         ConfMan(Spec const& spec)
           : streamType{spec.BASE_TYPE}
@@ -213,9 +242,12 @@ namespace test {
         auto
         binding()
           {
-            return [offset = filter]
+            return [offset = filter
+                   ,inplace = procInplace]
                    (Param par, TestFrame const* in, TestFrame* out)
                       {
+                        if (not inplace)
+                          initBuff (out, in);
                         manipulateFrame (out, in, par);
                       };
           }
@@ -246,6 +278,7 @@ namespace test {
             return []
                    (Factr mix, InFeed inChan, TestFrame* out)
                       {
+                        initBuff (out);
                         combineFrames (out, inChan[0],inChan[1], mix);
                       };
           }

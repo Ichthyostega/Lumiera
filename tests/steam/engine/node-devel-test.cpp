@@ -326,7 +326,7 @@ namespace test  {
           BuffHandle buffHandle = provider.lockBuffer (provider.getDescriptorFor(sizeof(TestFrame)));
           uint port{0};
           
-          CHECK (not buffHandle.accessAs<TestFrame>().isSane());
+          CHECK (not buffHandle.accessAs<TestFrame>().isSane()); // no valid data yet in the buffer...
           
           // Trigger Node invocation...
           buffHandle = node.pull (port, buffHandle, Time::ZERO, ProcessKey{0});
@@ -375,7 +375,7 @@ namespace test  {
           // generate a binding as processing-functor
           auto procFun = spec.makeFun();
           using Sig = lib::meta::_Fun<decltype(procFun)>::Sig;
-          CHECK (showType<Sig>() == "void (ulong, engine::TestFrame const*, engine::TestFrame*)"_expect);
+          CHECK (showType<Sig>() == "void (ulong, TestFrame const*, TestFrame*)"_expect);
           
           // Results can be verified by ont::manipulateFrame() — see above
           size_t frameNr = defaultGen.u64();
@@ -449,8 +449,8 @@ namespace test  {
           // generate a binding as processing-functor
           auto procFun = spec.makeFun();
           using Sig = lib::meta::_Fun<decltype(procFun)>::Sig;
-          CHECK (showType<Sig>() == "void (double, array<engine::TestFrame const*, 2ul>, "
-                                                  "engine::TestFrame*)"_expect);  //^^/////////////////TICKET #1391 needlessly rendered as `long`
+          CHECK (showType<Sig>() == "void (double, array<TestFrame const*, 2ul>, "
+                                                  "TestFrame*)"_expect);  //^^///////////////////////////////TICKET #1391 needlessly rendered as `long`
           size_t frameNr = defaultGen.u64();
           uint flavour   = defaultGen.u64();
           double mix     = defaultGen.uni();

@@ -35,11 +35,6 @@ using lib::zip;
 
 namespace test {
 namespace ont {
-//  namespace err = lumiera::error;
-    
-    namespace { // hidden local support facilities....
-      
-    } // (End) hidden impl details
     
     /** @remark will be returned from dummyOp() */
     int dummyNum{-1};
@@ -120,11 +115,14 @@ namespace ont {
     }
     
     /**
-     * @param out   existing allocation to place the generated TestFrame into
+     * @param out   existing allocation with a TestFrame to receive manipulated data
      * @param in    allocation holding the input TestFrame data
      * @param param parameter to control or »mark« the data manipulation (hash-combining)
      * @remark this function emulates „media data processing“: data is processed in 64-bit words,
      *         by hash-chaining with \a param. The generated result is marked with a valid checksum.
+     * @note this function is _in-place capable_; `*out` must point to a valid TestFrame
+     *         that will never be read and only receive the result word by word, which
+     *         implies that this can be the same location as the input TestFrame.
      */
     void
     manipulateFrame (TestFrame* out, TestFrame const* in, Param param)
@@ -138,12 +136,13 @@ namespace ont {
     }
     
     /**
-     * @param out  existing allocation to receive the calculated result TestFrame
+     * @param out  existing allocation with a TestFrame to receive the combined data
      * @param srcA a buffer holding the input data for feed-A
      * @param srcB a buffer holding the input data for feed-B
      * @param mix  degree of mixing (by integer arithmetics): 100 means 100% feed-B
      * @remark this function emulates a mixing or overlaying operation:
      *         each result byte is the linear interpolation between the corresponding inputs.
+     * @note  similar to \ref manipulateFrame, this function is _in-place capable_.
      */
     void
     combineFrames (TestFrame* out, TestFrame const* srcA, TestFrame const* srcB, Factr mix)
