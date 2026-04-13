@@ -32,13 +32,7 @@ namespace steam {
 namespace engine{
 namespace test  {
   
-  namespace { // Test fixture
-    
-    
-  }//(End) Test helpers
-  
   using LERR_(LIFECYCLE);
-
   
   
   
@@ -52,14 +46,6 @@ namespace test  {
       
       virtual void
       run (Arg)
-        {
-//          seedRand();
-          simpleUsage();
-        }
-      
-      
-      void
-      simpleUsage()
         {
           auto& ctx = EngineCtx::access;
           BufferProvider& provider = ctx().mem;
@@ -80,14 +66,6 @@ namespace test  {
           buff.release();
           CHECK (not buff.isValid());
           VERIFY_ERROR (LIFECYCLE, buff.accessAs<int>() );
-        }
-      
-      
-      /** @todo automagically post on X with lots of UPERCASE LETTERS */
-      void
-      verify_disaster()
-        {
-          UNIMPLEMENTED ("general meltdown");
         }
     };
   

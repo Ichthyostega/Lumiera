@@ -32,6 +32,11 @@ return: 0
 END
 
 
+TEST "BufferStore interface" BufferStore_test <<END
+return: 0
+END
+
+
 PLANNED "Engine Interface basics" EngineInterface_test <<END
 END
 

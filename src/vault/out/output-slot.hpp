@@ -202,6 +202,20 @@ namespace out  {
         { }
       
       // standard copy operations acceptable
+      
+      
+      /**
+       * Builder: allocate a set of connections of the given type
+       * @note usually there is no need to subclass OutputSlot or AllocState,
+       *       rather this factory should be used to establish an activated
+       *       OutputSlot configured to use a specific OutputSlot::Connection.
+       */
+      template<class CON, class FUN>
+      static OutputSlot
+      allocate (size_t cnt, FUN&& populator)
+        {
+          return OutputSlot{std::make_unique<AllocState<CON>> (cnt, std::forward<FUN>(populator))};
+        }
     };
   
   
