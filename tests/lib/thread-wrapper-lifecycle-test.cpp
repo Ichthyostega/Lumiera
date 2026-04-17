@@ -17,15 +17,14 @@
 
 
 #include "test/run.hpp"
-#include "test/tracking-dummy.hpp"
 #include "lib/thread.hpp"
+#include "lib/iter-explorer.hpp"
 
 #include <atomic>
 #include <chrono>
 #include <memory>
 
 using test::Test;
-using test::Dummy;
 using lib::explore;
 using std::atomic_uint;
 using std::this_thread::yield;
@@ -138,8 +137,6 @@ namespace test{
                       sleep_for (5ms);
                     }
                 };
-            // Note the Dummy member allows to watch instance lifecycle
-            CHECK (0 == Dummy::checksum());
             
             // the frontEnd allows to access the TestThread component
             // and also represents the running state

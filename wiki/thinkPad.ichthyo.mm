@@ -144086,6 +144086,14 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1776296068447" ID="ID_882324053" LINK="https://alexander-ostrovskiy-c.co.uk/posts/thread-local-storage-in-c-best-practices-and-pitfalls/" MODIFIED="1776299538975" TEXT="Practical usage and hidden risks"/>
 <node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1776296046515" ID="ID_962020738" LINK="https://yosefk.com/blog/cxx-thread-local-storage-performance.html" MODIFIED="1776299543765" TEXT="Thread-local Performance">
 <icon BUILTIN="broken-line"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1776475228247" ID="ID_566732298" MODIFIED="1776476062001" TEXT="besteht dieses Problem noch?">
+<arrowlink COLOR="#5423b6" DESTINATION="ID_751382987" ENDARROW="Default" ENDINCLINATION="918;0;" ID="Arrow_ID_1654719917" STARTARROW="None" STARTINCLINATION="897;75;"/>
+<icon BUILTIN="help"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#172ce6" CREATED="1776475271089" ID="ID_622277074" MODIFIED="1776475364341" TEXT="mein Microbenchmark sieht nicht so schlimm aus">
+<linktarget COLOR="#515284" DESTINATION="ID_622277074" ENDARROW="Default" ENDINCLINATION="296;0;" ID="Arrow_ID_1814168977" SOURCE="ID_580360080" STARTARROW="Default" STARTINCLINATION="296;0;"/>
+<font NAME="SansSerif" SIZE="11"/>
+</node>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1776299548025" ID="ID_410006825" MODIFIED="1776299559493" TEXT="ist das jetzt schlimmmmm?">
@@ -144195,10 +144203,17 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 <icon BUILTIN="forward"/>
-<node CREATED="1776359147782" ID="ID_49027423" MODIFIED="1776359159216" TEXT="als notieren wir dieses potentielle Problem"/>
+<node CREATED="1776359147782" ID="ID_49027423" MODIFIED="1776359159216" TEXT="als notieren wir dieses potentielle Problem">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1776475337836" ID="ID_580360080" LINK="https://issues.lumiera.org/ticket/1427" MODIFIED="1776475378273" TEXT="#1427 performance-impact of thread_local ">
+<arrowlink COLOR="#515284" DESTINATION="ID_622277074" ENDARROW="Default" ENDINCLINATION="296;0;" ID="Arrow_ID_1814168977" STARTARROW="Default" STARTINCLINATION="296;0;"/>
+<icon BUILTIN="hourglass"/>
+</node>
+</node>
 <node CREATED="1776359159957" ID="ID_611795063" MODIFIED="1776359168445" TEXT="untersuchen es ggfs. sp&#xe4;ter empirisch"/>
 <node CREATED="1776359169275" ID="ID_1606858571" MODIFIED="1776359191747" TEXT="und bauen notfalls ein &#xbb;ThreadLocal&#xab;, das optimal effizient ist"/>
-<node CREATED="1776359203560" ID="ID_240001081" MODIFIED="1776359249485" TEXT="&#x27f9; den aktuellen Entwruf unter dieser Ma&#xdf;gabe weiterentwickeln">
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1776359203560" ID="ID_240001081" MODIFIED="1776477644814" TEXT="&#x27f9; den aktuellen Entwruf unter dieser Ma&#xdf;gabe weiterentwickeln">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
 <node CREATED="1776359250702" ID="ID_1110100689" MODIFIED="1776359257699" TEXT="er ist klar strukturiert"/>
 <node CREATED="1776359258534" ID="ID_193416980" MODIFIED="1776359267522" TEXT="er enth&#xe4;lt ein Element der Eleganz"/>
 <node CREATED="1776359271069" ID="ID_859503094" MODIFIED="1776359280656" TEXT="er ist noch nicht optimiert (was gut ist)"/>
@@ -144206,11 +144221,16 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node CREATED="1776204526672" ID="ID_961403309" MODIFIED="1776204711931" TEXT="Prototyping (testgetrieben)">
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1776204526672" ID="ID_961403309" MODIFIED="1776477618192" TEXT="Prototyping (testgetrieben)">
+<icon BUILTIN="pencil"/>
 <node CREATED="1776204565654" ID="ID_45614742" MODIFIED="1776204569140" TEXT="generischer Slice">
-<node CREATED="1776292208608" ID="ID_1141218614" MODIFIED="1776292245482" TEXT="Zweck: Anbinden eines Slice in einem normalen Objekt-Kontext">
-<node CREATED="1776292987880" ID="ID_808037956" MODIFIED="1776292998479" TEXT="Zugriff &#xfc;ber Pointer-artige Syntax"/>
-<node CREATED="1776293021744" ID="ID_808171568" MODIFIED="1776293034905" TEXT="Problem: thread_local ist implizit statisch">
+<node CREATED="1776292208608" ID="ID_1141218614" MODIFIED="1776477482889" TEXT="Zweck: Anbinden eines Slice in einem normalen Objekt-Kontext">
+<icon BUILTIN="info"/>
+<node CREATED="1776292987880" ID="ID_808037956" MODIFIED="1776477504910" TEXT="Zugriff &#xfc;ber Pointer-artige Syntax">
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1776293021744" ID="ID_808171568" MODIFIED="1776477489785" TEXT="Problem: thread_local ist implizit statisch">
+<icon BUILTIN="messagebox_warning"/>
 <node CREATED="1776293040334" ID="ID_555811092" MODIFIED="1776293060463" TEXT="das hei&#xdf;t es ist eine &#xbb;versteckte globale Variable&#xab;"/>
 <node CREATED="1776295872712" ID="ID_906429004" MODIFIED="1776295889501" TEXT="stellt das f&#xfc;r den konkteten Use-Case &#xfc;berhaupt eine Beschr&#xe4;nkung dar?">
 <node CREATED="1776295891705" ID="ID_877250740" MODIFIED="1776295921697" TEXT="ja &#x2014; eine hexagonale Beschr&#xe4;nkung: &#x27f9; man kann&apos;s nur einmal Unit-testen"/>
@@ -144253,8 +144273,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 </node>
 </node>
-<node CREATED="1776442726252" ID="ID_1448305654" MODIFIED="1776442778834" TEXT="dadurch w&#xfc;rde &#xbb;automatisch&#xab; eine einzige Metadata-Storage im System entstehen">
-<linktarget COLOR="#fefdd2" DESTINATION="ID_1448305654" ENDARROW="Default" ENDINCLINATION="480;17;" ID="Arrow_ID_972765157" SOURCE="ID_1548755064" STARTARROW="None" STARTINCLINATION="469;0;"/>
+<node CREATED="1776442726252" ID="ID_1448305654" MODIFIED="1776477701154" TEXT="dadurch w&#xfc;rde &#xbb;automatisch&#xab; eine einzige Metadata-Storage im System entstehen">
+<linktarget COLOR="#fefdd2" DESTINATION="ID_1448305654" ENDARROW="Default" ENDINCLINATION="480;17;" ID="Arrow_ID_972765157" SOURCE="ID_1548755064" STARTARROW="None" STARTINCLINATION="613;24;"/>
 <icon BUILTIN="idea"/>
 <node CREATED="1776442794218" HGAP="25" ID="ID_1105253979" MODIFIED="1776442814861" TEXT="man m&#xfc;&#xdf;te dann nur noch OutputSlot &#xbb;einfangen&#xab;" VSHIFT="-3"/>
 </node>
@@ -144271,6 +144291,62 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 </node>
 <node CREATED="1776438572468" ID="ID_1804894411" MODIFIED="1776438590402" TEXT="die einzelne Instanz ist Monostate und default-konstruierbar und kopierbar"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1776461384382" ID="ID_43420839" MODIFIED="1776477478439" TEXT="Implementierung / Test">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1776461548757" ID="ID_1399164537" MODIFIED="1776477531388">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <b>Name</b>: <font face="Monospaced">LocalSlice&lt;CONF&gt;</font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1776474854867" ID="ID_1487038882" MODIFIED="1776474859837" TEXT="CONF">
+<node CREATED="1776474861216" ID="ID_399712480" MODIFIED="1776474870435" TEXT="typedef Service"/>
+<node CREATED="1776474871327" ID="ID_142831800" MODIFIED="1776474879674" TEXT="eine init-Funktion"/>
+</node>
+<node COLOR="#338800" CREATED="1776474884669" ID="ID_66962199" MODIFIED="1776477543983" TEXT="LocalSlice_test">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1776474892988" ID="ID_1841154811" MODIFIED="1776474911245" TEXT="verwende ein Backend das eine Variable inkrementiert"/>
+<node CREATED="1776474912122" ID="ID_225188556" MODIFIED="1776474931651" TEXT="verwende einen front-End-Service, der das Backend mehrfach aufruft"/>
+<node CREATED="1776474932743" ID="ID_285414025" MODIFIED="1776474959191" TEXT="erst mal im main-Thread: stimmen die produzierten Zahlen?"/>
+<node CREATED="1776474960491" ID="ID_670758355" MODIFIED="1776474975933" TEXT="massiv mit parallellen Threads pressen"/>
+<node BACKGROUND_COLOR="#a1d4d1" COLOR="#135d40" CREATED="1776474978433" ID="ID_104524737" MODIFIED="1776477604743" TEXT="Benchmark">
+<node CREATED="1776474985168" ID="ID_722554158" MODIFIED="1776475006881" TEXT="verwende mein threadBenchmark"/>
+<node CREATED="1776475011468" ID="ID_572983472" MODIFIED="1776475941260" TEXT="dieses Mal nur 4 Threads">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      wir wollen nicht die Contention des OS-Schedulers messen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1776475054583" ID="ID_139797430" MODIFIED="1776475070624" TEXT="aber eine Million mal in jedem Thread wiederholen"/>
+<node CREATED="1776475071885" ID="ID_1243408123" MODIFIED="1776475095349" TEXT="zum Vergleich: ein Lambda das direkt eine lokale Variable im Thread hochz&#xe4;hlt"/>
+<node COLOR="#435e98" CREATED="1776475100532" ID="ID_1636417377" MODIFIED="1776475388401" TEXT="Ergebnis">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="idea"/>
+<node BACKGROUND_COLOR="#e1efac" COLOR="#0155a5" CREATED="1776475103868" ID="ID_751382987" MODIFIED="1776475434097" TEXT="naja ... also soooo dramatisch langsamer ist das nicht">
+<linktarget COLOR="#5423b6" DESTINATION="ID_751382987" ENDARROW="Default" ENDINCLINATION="918;0;" ID="Arrow_ID_1654719917" SOURCE="ID_566732298" STARTARROW="None" STARTINCLINATION="897;75;"/>
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1776475117023" ID="ID_1331151971" MODIFIED="1776475997517" TEXT="mit thread_local : ~ 20ns"/>
+<node CREATED="1776475134176" ID="ID_462698106" MODIFIED="1776476001516" TEXT="lokale Variable : ~ 9ns"/>
+<node CREATED="1776475155945" ID="ID_4564368" MODIFIED="1776475171818" TEXT="Auch ein nicht-trivialer Konstruktor macht keinen me&#xdf;baren Unterschied"/>
+<node CREATED="1776475174183" ID="ID_562193803" MODIFIED="1776475187901" TEXT="und zudem linken wir ja schon in eine Shared-Lib mit -fPIC"/>
+<node CREATED="1776476081141" ID="ID_1398683528" MODIFIED="1776476100906" TEXT="Anzahl Threads variieren">
+<icon BUILTIN="forward"/>
+<node CREATED="1776476103003" ID="ID_1673139479" MODIFIED="1776476126644" TEXT="die thread-local-Variante w&#xe4;chst linear mit der Zahl der Threads"/>
+<node CREATED="1776476128271" ID="ID_452771680" MODIFIED="1776476144920" TEXT="die lokale Variable &#xe4;ndert sich fast gar nicht"/>
+</node>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -144312,13 +144388,24 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1776442525319" ID="ID_401093527" MODIFIED="1776442557719" TEXT="es gibt nur den einen Aufruf aus der BufferStage-Impl (+Tests)"/>
 <node CREATED="1776442560275" ID="ID_993355013" MODIFIED="1776442576727" TEXT="&#x27f9; die FamilyID k&#xf6;nnte auch als Parameter kommen"/>
 </node>
-<node CREATED="1776442580542" ID="ID_1214945994" MODIFIED="1776442607448" TEXT="es w&#xe4;re ohne Weiteres m&#xf6;glich, die Family-ID in die Buffer-Stage-Implementierung zu heben">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1776442580542" ID="ID_1214945994" MODIFIED="1776477692805" TEXT="es w&#xe4;re ohne Weiteres m&#xf6;glich, die Family-ID in die Buffer-Stage-Implementierung zu heben">
 <icon BUILTIN="idea"/>
 <node CREATED="1776442609827" ID="ID_570121338" MODIFIED="1776442627773" TEXT="damit w&#xe4;re sie aus der &#xbb;Thread-Local-Zone&#xab; raus"/>
 <node CREATED="1776442630476" ID="ID_1314697653" MODIFIED="1776442651841" TEXT="und eine einzige BufferMetadata-Storage k&#xf6;nnte alle BufferProvider im Stystem bedienen"/>
-<node CREATED="1776442666774" ID="ID_1548755064" MODIFIED="1776442784578" TEXT="das w&#xfc;rde dann sogar implizit passieren &#x2014; weil thread_local &#x27f9; static">
-<arrowlink COLOR="#fefdd2" DESTINATION="ID_1448305654" ENDARROW="Default" ENDINCLINATION="480;17;" ID="Arrow_ID_972765157" STARTARROW="None" STARTINCLINATION="469;0;"/>
+<node CREATED="1776442666774" ID="ID_1548755064" MODIFIED="1776477701154" TEXT="das w&#xfc;rde dann sogar implizit passieren &#x2014; weil thread_local &#x27f9; static">
+<arrowlink COLOR="#fefdd2" DESTINATION="ID_1448305654" ENDARROW="Default" ENDINCLINATION="480;17;" ID="Arrow_ID_972765157" STARTARROW="None" STARTINCLINATION="613;24;"/>
 </node>
+</node>
+<node COLOR="#338800" CREATED="1776477706236" ID="ID_17016961" MODIFIED="1776477711154" TEXT="ges&#xe4;gt ... getan">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1776477731488" ID="ID_1764139922" MODIFIED="1776477873117" TEXT="Fazit">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1776477743564" ID="ID_893955025" MODIFIED="1776477774653" TEXT="durch Heben in die BufferStage wird BufferMetadata ein beliebig nutzbarer Service"/>
+<node CREATED="1776477775546" ID="ID_1413251785" MODIFIED="1776477827799" TEXT="zudem noch Import/Export von Registrierungen &#x27f9; thread-local aufrufbar"/>
+<node CREATED="1776477847655" ID="ID_1038306996" MODIFIED="1776477868291" TEXT="einen globalen Metadataten-Store bekommt man so &#xbb;nebenbei geschenkt&#xab;">
+<icon BUILTIN="idea"/>
 </node>
 </node>
 </node>
