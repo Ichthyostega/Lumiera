@@ -22,6 +22,7 @@
 #include "test/test-helper.hpp"
 #include "vault/mem/buffhandle.hpp"
 #include "vault/mem/buffer-metadata.hpp"
+#include "lib/symbol.hpp"
 #include "lib/util.hpp"
 
 #include <memory>
@@ -34,6 +35,7 @@ using test::testData;
 using util::isSameObject;
 using util::isnil;
 using lib::randStr;
+using lib::Literal;
 
 namespace vault {
 namespace mem   {
@@ -85,7 +87,10 @@ namespace test  {
       size_t SIZE_A{0};
       size_t SIZE_B{0};
       
-      /** common Metadata table to be tested */
+      /// root anchor for all type-keys, similar to a mandator ID
+      HashVal FAM{hash_value (Literal{"BufferMetadata_test"})};
+      
+      /// common Metadata table to be tested
       unique_ptr<BufferMetadata> meta_;
       
       virtual void
@@ -106,11 +111,11 @@ namespace test  {
       ensure_proper_fixture()
         {
           if (!meta_)
-            meta_.reset(new BufferMetadata("BufferMetadata_test"));
+            meta_.reset(new BufferMetadata);
           
           return (SIZE_A != SIZE_B)
-             and (JUST_SOMETHING != meta_->key(SIZE_A))
-             and (JUST_SOMETHING != meta_->key(SIZE_B))
+             and (JUST_SOMETHING != meta_->key(FAM, SIZE_A))
+             and (JUST_SOMETHING != meta_->key(FAM, SIZE_B))
                ;
         }
       
@@ -119,11 +124,11 @@ namespace test  {
       verifyBasicProperties()
         {
           // retrieve some type keys
-          metadata::Key key = meta_->key(SIZE_A);
+          metadata::Key key = meta_->key(FAM, SIZE_A);
           CHECK (key);
           
-          metadata::Key key1 = meta_->key(SIZE_A);
-          metadata::Key key2 = meta_->key(SIZE_B);
+          metadata::Key key1 = meta_->key(FAM, SIZE_A);
+          metadata::Key key2 = meta_->key(FAM, SIZE_B);
           CHECK (key1);
           CHECK (key2);
           CHECK (key == key1);
@@ -204,10 +209,10 @@ namespace test  {
         {
           // to build a descriptor for a buffer holding a TestFrame
           TypeHandler attachTestFrame = TypeHandler::create<TestFrame>();
-          metadata::Key bufferType1 = meta_->key(sizeof(TestFrame), attachTestFrame);
+          metadata::Key bufferType1 = meta_->key(FAM, sizeof(TestFrame), attachTestFrame);
           
           // to build a descriptor for a raw buffer of size SIZE_B
-          metadata::Key rawBuffType = meta_->key(SIZE_B);
+          metadata::Key rawBuffType = meta_->key(FAM, SIZE_B);
           
           // to announce using a number of buffers of this type
           LocalTag transaction1(1);
@@ -321,7 +326,7 @@ namespace test  {
       verifyStateMachine()
         {
           // start with building a type key....
-          metadata::Key key = meta_->key(SIZE_A);
+          metadata::Key key = meta_->key(FAM, SIZE_A);
           CHECK (NIL == meta_->get(key).state());
           CHECK (meta_->get(key).isTypeKey());
           CHECK (not meta_->isLocked(key));

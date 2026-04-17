@@ -42,6 +42,7 @@ namespace mem   {
   class SimpleBufferStateRegistry
     : public BufferProviderSetup::Stage
     {
+      HashVal familyID_;
       BufferMetadata metadata_;
 
       /* === BufferStage interface === */
@@ -68,8 +69,8 @@ namespace mem   {
       ID
       defineBufferType (size_t buffSiz, TypeHandler handlerFunctions, LocalTag localTag)
         {
-          return lookup (metadata_.key (buffSiz, move (handlerFunctions), localTag));
-        }     // deliberately: create storage, and return reference to it
+          return lookup (metadata_.key (familyID_, buffSiz, move (handlerFunctions), localTag));
+        }     // deliberately: maybe create storage, and return reference to it
       
       ID
       mark_locked (ID typeKey, BuffAlloc alloc)  override
@@ -111,7 +112,8 @@ namespace mem   {
       
     public:
       SimpleBufferStateRegistry (Literal implementationID)
-        : metadata_{implementationID}
+        : familyID_{hash_value (implementationID)}
+        , metadata_{}
         { }
     };
   

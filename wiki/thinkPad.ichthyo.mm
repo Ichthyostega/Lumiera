@@ -77868,6 +77868,63 @@
 </node>
 </node>
 </node>
+<node CREATED="1776202406458" ID="ID_1592585058" MODIFIED="1776203851816" TEXT="Verbindung zwischen StreamType-ImplType und Buffer-typeID zeichnet sich ab">
+<arrowlink COLOR="#d75c58" DESTINATION="ID_817437949" ENDARROW="Default" ENDINCLINATION="594;-20;" ID="Arrow_ID_1233499517" STARTARROW="None" STARTINCLINATION="629;24;"/>
+<arrowlink COLOR="#eb5e70" DESTINATION="ID_967352308" ENDARROW="Default" ENDINCLINATION="1756;0;" ID="Arrow_ID_273064285" STARTARROW="None" STARTINCLINATION="604;22;"/>
+<arrowlink COLOR="#d05b84" DESTINATION="ID_493181849" ENDARROW="Default" ENDINCLINATION="999;0;" ID="Arrow_ID_1009980554" STARTARROW="None" STARTINCLINATION="459;17;"/>
+<node CREATED="1776203007056" ID="ID_155729424" MODIFIED="1776203019574" TEXT="hier entsteht Layering der Bestimmungen">
+<node CREATED="1776203032173" ID="ID_702428578" MODIFIED="1776203174358" TEXT="Domain-Ontology">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      enth&#228;lt implizit ein System der Bedingtheiten: bestimmte &#187;Arten&#171; von Daten k&#246;nnen bearbeitet und transformiert werden, bisweileilen ist eine Adaptierung m&#246;glich, aber manche Verbindungen sind &#8222;ganz offensichtlich&#8220; nicht m&#246;glich. Im Rahmen einer Domain-Ontology sind deratige Zusammenh&#228;nge zumeist unmittelbar gegeben, und werden daher oft gar nicht richtig ausformuliert
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1776203181668" ID="ID_319859218" MODIFIED="1776203289566" TEXT="High-Level-Model">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Hier werden nur symbolische Repr&#228;sentationen der Bez&#252;ge in eine Domain-Ontology festgehalten, und hinter der Konzeption eines &#187;Asset&#171; zusammengefa&#223;t. In der Regel ist das hier nur ein indirekter Verweis: von einer Medien, oder Processor-ID kommt man auf die dahinter liegende Domain-Ontology, die letztlich die Frage beantworden mu&#223;, ob &#187;etwas geht&#171;
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1776203291856" ID="ID_1872157292" MODIFIED="1776203430615" TEXT="Builder">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das ist die einzige Stelle, and der alle Bez&#252;ge konkret aufgel&#246;st und neu verkn&#252;pft werden m&#252;ssen; wenn im Rahmen einer Processing-Pipeline ein Abschnitt &#187;auf&#171; einem bestimmten StreamType &#187;laufen&#171; mu&#223;, dann wird ein StreamType-ImplementationType ben&#246;tigt; dieser legt u.A. die ben&#246;igten Buffer fest &#10233; der Builder h&#228;lt dies in Form eines Buffer-Descriptors fest, und bettet diesen in die Render-Nodes ein
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1776203432267" ID="ID_687643706" MODIFIED="1776203531666" TEXT="Buffer-Metadata">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Hier entspricht der Buffer-Descriptor einer Buffer typeID, welche irgenwann einmal von &#8222;jemandem&#8220; aufgel&#246;st und zugeordnet wurde; diese Zuordnung ist auf dieser Ebene in der Engine bereits nur noch implizit in das Node-Network &#187;gebacken&#171;, und zeigt sich nur in Form der hinterlegten Buffer-Descriptoren und Render-Funktionen.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1776203542860" ID="ID_1847879822" MODIFIED="1776203662093" TEXT="Buffer-Store">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Dieser l&#228;uft im Wesentlichen Thread-local; er erzeugt im Moment der tats&#228;chlichen Buffer-Zuordnung einen sub-Key, den &#187;stateKey&#171; &#8212; und im zugeh&#246;rigen Metadaten-Eintrag speichert der BufferStore wichtige Verwaltungsinformationen, wie MRU-Daten
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1719689444617" ID="ID_1839118482" MODIFIED="1719689676839" STYLE="fork" TEXT="Implementierung">
@@ -91695,6 +91752,7 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 <node CREATED="1715177649235" ID="ID_732364224" MODIFIED="1715177654639" TEXT="StreamType-*"/>
 </node>
 <node BACKGROUND_COLOR="#d3c798" COLOR="#990000" CREATED="1715177776654" ID="ID_817437949" MODIFIED="1736107728590" TEXT="Verbindung zwischen StreamType (ImplFacade) und konkreten Buffer-Layout">
+<linktarget COLOR="#d75c58" DESTINATION="ID_817437949" ENDARROW="Default" ENDINCLINATION="594;-20;" ID="Arrow_ID_1233499517" SOURCE="ID_1592585058" STARTARROW="None" STARTINCLINATION="629;24;"/>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
@@ -99651,6 +99709,18 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 </html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
+<node CREATED="1776202642967" ID="ID_493181849" MODIFIED="1776202757042" TEXT="eine m&#xf6;gliche Verbindung l&#xe4;uft &#xfc;ber die Buffer-Metadaten (Buffer-typeID)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...denn dort ist nicht nur die Buffer-size, sonder ggfs. auch ein TypeHandler hinterlegt. Alle diese Informationen zusammen werden abstrakt repr&#228;sentiert als Buffer-Descriptor, und in dieser Form auch schon vom Builder angelegt und in die Nodes eingebettet
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#d05b84" DESTINATION="ID_493181849" ENDARROW="Default" ENDINCLINATION="999;0;" ID="Arrow_ID_1009980554" SOURCE="ID_1592585058" STARTARROW="None" STARTINCLINATION="459;17;"/>
+<icon BUILTIN="info"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1719627010609" ID="ID_1087699314" MODIFIED="1719627015478" TEXT="Beispiele durchgehen">
@@ -106146,8 +106216,9 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 <font NAME="SansSerif" SIZE="11"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1771465174999" ID="ID_1884464720" LINK="https://issues.lumiera.org/ticket/1411" MODIFIED="1771465865302" TEXT="#1411 Aliasing of Buffer TypeHandler instances">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1771465174999" ID="ID_1884464720" LINK="https://issues.lumiera.org/ticket/1411" MODIFIED="1776202055802" TEXT="#1411 Aliasing of Buffer TypeHandler instances">
 <linktarget COLOR="#f3173a" DESTINATION="ID_1884464720" ENDARROW="Default" ENDINCLINATION="650;39;" ID="Arrow_ID_125159421" SOURCE="ID_983442728" STARTARROW="None" STARTINCLINATION="838;36;"/>
+<linktarget COLOR="#f62244" DESTINATION="ID_1884464720" ENDARROW="Default" ENDINCLINATION="929;56;" ID="Arrow_ID_1092187353" SOURCE="ID_1218434069" STARTARROW="Default" STARTINCLINATION="652;-35;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
@@ -106175,15 +106246,23 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 <node CREATED="1731889697236" ID="ID_1573431621" MODIFIED="1731889706151" TEXT="StreamType / ImplType?"/>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1731890121591" HGAP="46" ID="ID_1319945622" MODIFIED="1735004946234" TEXT="wird relevant in dem Moment wo wir aufrufen wollen...." VSHIFT="-1">
-<arrowlink COLOR="#e0092c" DESTINATION="ID_1476280091" ENDARROW="Default" ENDINCLINATION="60;-97;" ID="Arrow_ID_602010804" STARTARROW="None" STARTINCLINATION="-541;28;"/>
+<arrowlink COLOR="#0933e0" DESTINATION="ID_1476280091" ENDARROW="Default" ENDINCLINATION="60;-97;" ID="Arrow_ID_602010804" STARTARROW="None" STARTINCLINATION="-541;28;"/>
 <linktarget COLOR="#bb4c6b" DESTINATION="ID_1319945622" ENDARROW="Default" ENDINCLINATION="-663;35;" ID="Arrow_ID_542692149" SOURCE="ID_447051297" STARTARROW="None" STARTINCLINATION="745;112;"/>
 <icon BUILTIN="flag-pink"/>
+<node CREATED="1776201545007" ID="ID_475307896" MODIFIED="1776201574193" TEXT="an dem Punkt mu&#xdf; es den Buffer-Descriptor bereits geben">
+<arrowlink DESTINATION="ID_1082706809" ENDARROW="Default" ENDINCLINATION="237;0;" ID="Arrow_ID_369900856" STARTARROW="None" STARTINCLINATION="-19;70;"/>
+<icon BUILTIN="idea"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1721238837562" HGAP="148" ID="ID_610272532" MODIFIED="1731890424341" STYLE="bubble" TEXT="ungel&#xf6;st: Buffer-Typisierung" VSHIFT="44">
 <edge COLOR="#ff5d00" STYLE="sharp_linear"/>
 <arrowlink COLOR="#fe512a" DESTINATION="ID_1884956005" ENDARROW="Default" ENDINCLINATION="1101;-48;" ID="Arrow_ID_538032456" STARTARROW="None" STARTINCLINATION="-805;76;"/>
 <icon BUILTIN="bell"/>
-<node CREATED="1721239003353" ID="ID_1445103400" MODIFIED="1731889907429" STYLE="fork" TEXT="wer verwaltet diese Info generisch?">
+<node CREATED="1721239003353" HGAP="19" ID="ID_1445103400" MODIFIED="1776201979377" STYLE="fork" TEXT="wer verwaltet diese Info generisch?" VSHIFT="16">
+<font NAME="SansSerif" SIZE="8"/>
+</node>
+<node CREATED="1776201897896" ID="ID_1555779183" MODIFIED="1776201949957" STYLE="fork" TEXT="wie identifizieren wir Type-Handler?">
+<edge COLOR="#ff5d00" STYLE="sharp_linear" WIDTH="thin"/>
 <font NAME="SansSerif" SIZE="8"/>
 </node>
 <node CREATED="1721239003353" ID="ID_1561511907" MODIFIED="1731889878331" STYLE="fork" TEXT="wie bekommen wir eine passende Allokation?">
@@ -106197,26 +106276,61 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 <arrowlink COLOR="#6c169e" DESTINATION="ID_1655919747" ENDARROW="Default" ENDINCLINATION="619;33;" ID="Arrow_ID_1405551684" STARTARROW="None" STARTINCLINATION="-249;15;"/>
 <icon BUILTIN="bell"/>
 </node>
+<node COLOR="#435e98" CREATED="1776201446901" HGAP="31" ID="ID_1082706809" MODIFIED="1776201697309" TEXT="(inzwischen wurde deutlich: der Builder erzeugt die Buffer-Descriptoren)" VSHIFT="1">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...hier hat sich einiges gekl&#228;rt im Zuge der &#220;berarbeitung BufferProvider / OutputSlot im Fr&#252;hjahr 2026. Die Buffer-Metadaten sind hierarchisch, und das &#252;bersetzt sich zur Laufzeit in eine <i>layered structure</i>
+    </p>
+    <ul>
+      <li>
+        ein allgemeinter type-Key liegt in einer zentralen Metadaten-Tabelle
+      </li>
+      <li>
+        thread-local gibt es einen Eintrag mit einem Sub-Typ, der auf der konkreten Buffer-Adresse basiert (und die kann es nur einmal geben)
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1082706809" ENDARROW="Default" ENDINCLINATION="237;0;" ID="Arrow_ID_369900856" SOURCE="ID_475307896" STARTARROW="None" STARTINCLINATION="-19;70;"/>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1721238814245" ID="ID_1476280091" MODIFIED="1735004940722" TEXT="Schwierigkeit: BufferProvider im OutputSlot Protokoll">
-<linktarget COLOR="#e0092c" DESTINATION="ID_1476280091" ENDARROW="Default" ENDINCLINATION="60;-97;" ID="Arrow_ID_602010804" SOURCE="ID_1319945622" STARTARROW="None" STARTINCLINATION="-541;28;"/>
+</node>
+<node COLOR="#338800" CREATED="1721238814245" ID="ID_1476280091" MODIFIED="1776201108511" TEXT="Schwierigkeit: BufferProvider im OutputSlot Protokoll">
+<linktarget COLOR="#0933e0" DESTINATION="ID_1476280091" ENDARROW="Default" ENDINCLINATION="60;-97;" ID="Arrow_ID_602010804" SOURCE="ID_1319945622" STARTARROW="None" STARTINCLINATION="-541;28;"/>
 <linktarget COLOR="#fe512a" DESTINATION="ID_1476280091" ENDARROW="Default" ENDINCLINATION="-997;55;" ID="Arrow_ID_4728843" SOURCE="ID_1160117239" STARTARROW="None" STARTINCLINATION="-865;41;"/>
-<icon BUILTIN="bell"/>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1735004955001" ID="ID_393137872" MODIFIED="1735005013973" TEXT="DataSink soll ein BuffHandle liefern">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1735004955001" ID="ID_393137872" MODIFIED="1776201051002" TEXT="DataSink soll ein BuffHandle liefern">
 <icon BUILTIN="broken-line"/>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1735004968712" ID="ID_62347373" MODIFIED="1735005006450" TEXT="aber BufferProvider ist nicht auf Delegieren ausgelegt">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1735004968712" ID="ID_62347373" MODIFIED="1776201028285">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      aber BufferProvider <strike>ist nicht</strike><font color="#8221c9" size="2">(war nicht)</font>&#160;auf Delegieren ausgelegt
+    </p>
+  </body>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node COLOR="#5b280f" CREATED="1735005016587" ID="ID_348220482" MODIFIED="1735005042022" TEXT="deshalb verwendet DataSink eine separate emit()-Methode">
 <icon BUILTIN="stop-sign"/>
 </node>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1735005044143" ID="ID_1580601333" MODIFIED="1736092914290" TEXT="die ist aber f&#xfc;r die Node-Invocation gar nicht zug&#xe4;nglich">
+<node COLOR="#5b280f" CREATED="1735005044143" ID="ID_1580601333" MODIFIED="1776201046903" TEXT="die ist aber f&#xfc;r die Node-Invocation gar nicht zug&#xe4;nglich">
 <linktarget COLOR="#ba0855" DESTINATION="ID_1580601333" ENDARROW="Default" ENDINCLINATION="-484;22;" ID="Arrow_ID_1229889232" SOURCE="ID_1338134836" STARTARROW="None" STARTINCLINATION="-571;787;"/>
 <linktarget COLOR="#cc0a6d" DESTINATION="ID_1580601333" ENDARROW="Default" ENDINCLINATION="-290;14;" ID="Arrow_ID_972000949" SOURCE="ID_1501030777" STARTARROW="None" STARTINCLINATION="579;-32;"/>
 <icon BUILTIN="broken-line"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1776201071069" HGAP="26" ID="ID_243215236" MODIFIED="1776201094642" TEXT="4/2026 jetzt schon" VSHIFT="3">
+<icon BUILTIN="ksmiletris"/>
 </node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1776201119822" ID="ID_1232755696" MODIFIED="1776201351351" TEXT="Problem wurde durch Aufr&#xe4;umen im BufferProvider + re-Design OutputSlot gel&#xf6;st">
+<arrowlink COLOR="#25fd1a" DESTINATION="ID_1552790778" ENDARROW="Default" ENDINCLINATION="59;-688;" ID="Arrow_ID_990862040" STARTARROW="None" STARTINCLINATION="-3509;123;"/>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
@@ -122946,7 +123060,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1770827094068" FOLDED="true" ID="ID_1067363374" MODIFIED="1776112151452">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1770827094068" FOLDED="true" ID="ID_1067363374" MODIFIED="1776201747067">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
@@ -123854,6 +123968,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#d8eea9" COLOR="#014a07" CREATED="1775869057329" ID="ID_1552790778" MODIFIED="1775869604162" TEXT="aus &#xbb;Vorentwurf&#xab; wurde ein Re-Design">
 <arrowlink COLOR="#6a5ffe" DESTINATION="ID_78273441" ENDARROW="Default" ENDINCLINATION="-1068;-80;" ID="Arrow_ID_1534724962" STARTARROW="None" STARTINCLINATION="1067;77;"/>
+<linktarget COLOR="#25fd1a" DESTINATION="ID_1552790778" ENDARROW="Default" ENDINCLINATION="59;-688;" ID="Arrow_ID_990862040" SOURCE="ID_1232755696" STARTARROW="None" STARTINCLINATION="-3509;123;"/>
 <linktarget COLOR="#0eb58e" DESTINATION="ID_1552790778" ENDARROW="Default" ENDINCLINATION="5;-124;" ID="Arrow_ID_729970542" SOURCE="ID_809493894" STARTARROW="None" STARTINCLINATION="-39;4;"/>
 <icon BUILTIN="forward"/>
 <node CREATED="1775869679499" ID="ID_537606249" MODIFIED="1775869698867" TEXT="das alte Design &#xfc;berpr&#xfc;ft &#x27f6; die Grundidee war in Ordnung"/>
@@ -143539,7 +143654,38 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 <arrowlink COLOR="#244ad5" DESTINATION="ID_1284720886" ENDARROW="Default" ENDINCLINATION="-1522;391;" ID="Arrow_ID_597904659" STARTARROW="None" STARTINCLINATION="1182;40;"/>
 </node>
-<node CREATED="1771183400259" ID="ID_886897159" MODIFIED="1771183644696" TEXT="2026 : Konsolidierung BufferProvider-Implementierung">
+<node CREATED="1771183400259" ID="ID_886897159" MODIFIED="1776195310378" TEXT="2026 : Konsolidierung BufferProvider-Implementierung">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Nach erster Bestandsaufnahme konnte ich best&#228;tigen, da&#223; das <i>Buffer Provider Protocol</i>&#160;im aktuellen Horizont gut genug ist und keiner Revision unterzogen werden mu&#223;. Die massiven Probleme steckten in der Implementierung, die sich tats&#228;chlich als eine Test-Implementierung mit Support f&#252;r Tracking und nachtr&#228;gliche Verifikationen herausstellt &#8212; zudem bestand hier eine giftige Verkopplung mit dem OutputSlot, f&#252;r den es nichteinmal ein klares Abstraktions-Interface gab, und dessen Implementierung ein reiner Test-Entwurf war, der direkt in die BufferProvider-Implementierung eingesprungen ist.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Daher habe ich beschlossen, den BufferProvider <i>komplett zu &#187;entkernen&#171;. </i>Die bestehende Implementierungs-Logik wurde auf <b>zwei S&#228;ulen</b>&#160;aufgeteilt:
+    </p>
+    <ul>
+      <li>
+        die Metadaten-Verwaltung&#160;(Interface: <font color="#5e3f3f" face="Monospaced">BufferStage</font>)
+      </li>
+      <li>
+        die Storage-Verwaltung&#160;&#160;(Interface: <font color="#5e3f3f" face="Monospaced">BufferStore</font>)
+      </li>
+    </ul>
+    <p>
+      Sodann wurde der (vorerst beiseite gestellte) alte Implementierungs-Code in dieses Schema eingef&#252;gt, und alle Teile ausgelassen und neu implementiert, die ersichtlich mit Diagnose/Tracking vermischt waren. Damit konnte die Funktionsf&#228;higkeit auf Interface-Ebene demonstriert werden (<font color="#5e3f3f" face="Monospaced">BufferProviderProtocol_test</font>). Danach wurden die Diagnose-Tools komplett als neue Erweiterung &#252;ber diese aufger&#228;umte Struktur gesetzt, und als sehr viel einfachere, eingekapselte, eigenst&#228;ndige Komponente neu entwickelt. In einem letzten Schritt konnte ich den alten Backend-Code (mit dem inzwischen stillgelegten Tracking) komplett abl&#246;sen und ebenfalls durch eine sehr einfache, &#187;naive&#171; Implementierung ersetzen.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Im Ergebnis gibt es nun eine viel flexiblere interne Struktur, in der Sub-Classing auf beiden S&#228;ulen m&#246;gich ist, oder auch Anpassung per Proxying. Die <b>Buffer-Metadaten-Implementierung</b>&#160;konnte dabei nahezu komplett so &#252;bernommen und best&#228;tigt werden, wie sie seit 2024 vorliegt; es wurden lediglich einige API-Methoden etwas vers&#228;ubert.
+    </p>
+  </body>
+</html></richcontent>
 <arrowlink COLOR="#5c617e" DESTINATION="ID_417601632" ENDARROW="Default" ENDINCLINATION="-1000;61;" ID="Arrow_ID_993142525" STARTARROW="None" STARTINCLINATION="-1410;73;"/>
 </node>
 <node CREATED="1775873393327" ID="ID_1254948925" MODIFIED="1775873731261" TEXT="2026 : Redesign OutputSlot">
@@ -143762,6 +143908,458 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
     </p>
   </body>
 </html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1776195345475" ID="ID_773105612" MODIFIED="1776195351345" TEXT="Problem der Code-Struktur">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1776195352772" ID="ID_865032756" MODIFIED="1776195928687">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      nach den Aufr&#228;um-Arbeiten liegt nun eine <i><font size="4">saubere default-Implementierung</font></i>&#160;vor
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+<node CREATED="1776195410413" ID="ID_1578016013" MODIFIED="1776195421788" TEXT="dieser Mittelbau ist &#xbb;stateless&#xab;"/>
+<node CREATED="1776195425260" ID="ID_870091214" MODIFIED="1776195441972" TEXT="Zustand steckt in den beiden Implementierungs-Backends">
+<node CREATED="1776195443253" ID="ID_680653382" MODIFIED="1776195450832" TEXT="Stage: Buffer-Metadaten-Tabelle"/>
+<node CREATED="1776195451804" ID="ID_1991940719" MODIFIED="1776195461215" TEXT="Store: aktuelle Speicherbelegung"/>
+</node>
+<node CREATED="1776195471387" ID="ID_1068582113" MODIFIED="1776195495322" TEXT="Zustand wird nach au&#xdf;en als Type-Key(Handle) repr&#xe4;sentiert"/>
+</node>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1776195497158" ID="ID_1528939449" MODIFIED="1776195528413" TEXT="dieser Code ist aber koh&#xe4;siv und nicht thread-aware">
+<icon BUILTIN="clanbomber"/>
+<node CREATED="1776195534439" ID="ID_1983847516" MODIFIED="1776195614354" TEXT="das war eine bewu&#xdf;te Wahl">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...um die Komplexit&#228;t beherrschbar zu machen; ich habe gemerkt, da&#223; das Durchdenken des <i>Buffer-Provider-Protocols</i>&#160;mich bereits an gedankliche Kapazit&#228;tsgrenzen bringt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1776195641179" ID="ID_1676439249" MODIFIED="1776195725456" TEXT="allerdings sind alle Aufrufe direkte Ketten">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      also: front-end-Handle &#10230; function-call-chain &#10230; Implementierungs-Backend &#10226; Response
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1776195780538" ID="ID_364343301" MODIFIED="1776195807148" TEXT="&#x27f9; Multithreading wird erst im jeweiligen Backend relevant">
+<node CREATED="1776195835578" ID="ID_1455463636" MODIFIED="1776195852605" TEXT="wenn ein Client-Thread einen type-Key hat/sieht ..."/>
+<node CREATED="1776195853376" ID="ID_54490595" MODIFIED="1776195872385" TEXT="kaskadiert ein Aufruf problemlos durch bist zum Lookup im Backend"/>
+</node>
+</node>
+<node CREATED="1776196576826" ID="ID_850704640" MODIFIED="1776196651213">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      &#10233; die Aufgabe : <b>Thread-lokale Slices</b>&#160;schaffen
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1776196622969" ID="ID_109574683" MODIFIED="1776196629161" TEXT="Anforderungen">
+<node CREATED="1776196630096" ID="ID_1510075065" MODIFIED="1776196674318" TEXT="jedes Slice mu&#xdf; stets von Null-auf handlungsf&#xe4;hig sein"/>
+<node CREATED="1776196881798" ID="ID_1250147382" MODIFIED="1776196902243" TEXT="jedes Slice mu&#xdf; als eigenst&#xe4;ndige Instanz mit einer Zentrale kommunizieren k&#xf6;nnen"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1776196927192" ID="ID_1790936937" MODIFIED="1776196934764" TEXT="Analyse: ist das m&#xf6;glich?">
+<icon BUILTIN="help"/>
+<node CREATED="1776199263823" ID="ID_11659909" MODIFIED="1776199286039" TEXT="Store">
+<node CREATED="1776199287308" ID="ID_1968928582" MODIFIED="1776199292991" TEXT="erscheint einfach...."/>
+<node CREATED="1776199318668" ID="ID_236929298" MODIFIED="1776199330718" TEXT="lokaler Buffer und ansonsten...">
+<node CREATED="1776199331910" ID="ID_139914418" MODIFIED="1776199338388" TEXT="Zentrale fragen"/>
+<node CREATED="1776199339150" ID="ID_1256667957" MODIFIED="1776199341072" TEXT="Heap"/>
+</node>
+</node>
+<node CREATED="1776199346352" ID="ID_1614149847" MODIFIED="1776199348252" TEXT="Stage">
+<node CREATED="1776199351699" ID="ID_1600621472" MODIFIED="1776199412375" TEXT="die Typ-Hierarchie wird hier zur t&#xfc;ckischen Falle">
+<node CREATED="1776199439271" ID="ID_1228644162" MODIFIED="1776200088982" TEXT="zwei parallele Threads k&#xf6;nnten den gleichen Sub-Typ erzeugen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      dazu m&#252;&#223;ten sie allerdings die gleiche Buffer-Adresse registrieren;
+    </p>
+    <p>
+      insofern die Buffer-Adressen vom Store-Backend stammen, und konkret einem thread-lokalen Store geh&#246;ren m&#252;ssen, kann <b>dieser Fall nicht auftreten</b>.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1776199524124" ID="ID_624621825" MODIFIED="1776200388258" TEXT="was wenn ein Thread einen bereits registrierten Typ nicht kennt?">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Aber das stellt insofern eine Gefahr dar, als da&#223; in den dadurch erzeugten duplikaten Eintr&#228;gen tats&#228;chlich verschiedene Daten liegen k&#246;nnten. Wenn dagegen zwei Threads eine neu-Registrierung machen w&#252;rden, dann k&#246;nnte diese einfach in die Zentrale propagiert, und dort dedupliziert werden
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1776199902638" ID="ID_1239938132" MODIFIED="1776199920202" TEXT="&#x27f9; bedeutet: diese Gefahrsituationen m&#xfc;ssen verhindert werden">
+<node CREATED="1776200398600" ID="ID_1570370873" MODIFIED="1776200451325" TEXT="sub-Typen h&#xe4;ngen an der konkreten Speicher-Adresse (die unique ist)"/>
+<node CREATED="1776200454105" ID="ID_1248388353" MODIFIED="1776200473996" TEXT="problematisch sind typ-Keys, und zwar bez&#xfc;glich der Type-Handler"/>
+<node CREATED="1776200497774" ID="ID_1039074673" MODIFIED="1776200508694" TEXT="Schlu&#xdf;folgerungen...">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1776200510094" ID="ID_1218434069" MODIFIED="1776202055802" TEXT="das Identit&#xe4;ts-Problem im Typ-Funktor mu&#xdf; gel&#xf6;st werden">
+<arrowlink COLOR="#f62244" DESTINATION="ID_1884464720" ENDARROW="Default" ENDINCLINATION="929;56;" ID="Arrow_ID_1092187353" STARTARROW="Default" STARTINCLINATION="652;-35;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1776200560492" ID="ID_394534485" MODIFIED="1776200580572" TEXT="niemals d&#xfc;rfen zwei verschiedene Funktionen den gleichen Hash bekommen"/>
+<node CREATED="1776200683846" ID="ID_897159086" MODIFIED="1776200690709" TEXT="erscheint l&#xf6;sbar">
+<node CREATED="1776200691825" ID="ID_522566119" MODIFIED="1776200705923" TEXT="entweder indem der Erzeuger eine SpecID mitliefern mu&#xdf;"/>
+<node CREATED="1776200706983" ID="ID_99543390" MODIFIED="1776203862174" TEXT="oder indem man auf die Funktor-Identit&#xe4;ten abstellt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das hei&#223;t, auf zwei Komponenten
+    </p>
+    <ul>
+      <li>
+        einen C++ - Funktor-Typ
+      </li>
+      <li>
+        die konkrete Speicheradresse eines Funktors, der als Closure fungiert.
+      </li>
+    </ul>
+    <p>
+      Sofern man diese beiden Informationen in den Hash kombiniert, w&#252;rde ein &#187;Aliasing&#171; verschiedener Type-Handler vermieden.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1776202090769" ID="ID_967352308" MODIFIED="1776203851816" TEXT="redundante Duplikate des gleichen Funktors...">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Nehmen zwar Speicher weg, sind aber ansonsten harmlos, da sie funktional &#228;quivalent sind. Vermutlich k&#246;nnen solche Duplikate auf einer h&#246;heren Ebene vermieden werden, sofern dort ebenfalls die Metadaten-typeIDs verkn&#252;pft werden &#8212; z.B. als Teil des StreamType-Implementation-Type. Wenn letztlich der gleiche Implementation-Type auch immer den gleichen Buffer-Type referenziert, w&#228;ren wir sauber.
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#eb5e70" DESTINATION="ID_967352308" ENDARROW="Default" ENDINCLINATION="1756;0;" ID="Arrow_ID_273064285" SOURCE="ID_1592585058" STARTARROW="None" STARTINCLINATION="604;22;"/>
+</node>
+</node>
+</node>
+<node CREATED="1776203872355" ID="ID_586910446" MODIFIED="1776203924100" TEXT="Neu-Registrierung eines typeKey ist jederzeit m&#xf6;glich &#x2014; und wird nach oben propagiert"/>
+<node CREATED="1776203930600" ID="ID_1247662701" MODIFIED="1776203991160">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      eine Anfrage nur mit gegebenem typeKey mu&#223; dagegen <b>blockend</b>&#160; aufgel&#246;st werden
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1776204046168" ID="ID_1917619704" MODIFIED="1776204123944" TEXT="unter dieser Ma&#xdf;gabe: ein Stage-Slice hat seine eigene, lokale BufferMetadata-Instanz">
+<node CREATED="1776204200537" ID="ID_1381554308" MODIFIED="1776204219236" TEXT="diese wei&#xdf; zun&#xe4;chst nicht einmal, ob sie &quot;lokal&quot; ist."/>
+<node CREATED="1776204220032" ID="ID_565607454" MODIFIED="1776204230203" TEXT="Aber es braucht Methoden zur Synchronisation">
+<node CREATED="1776204237246" ID="ID_121957568" MODIFIED="1776204253671" TEXT="konkret: &#xdc;bernehmen eines Metadata-Entry"/>
+<node CREATED="1776204280414" ID="ID_944581715" MODIFIED="1776204521467" TEXT="theoretisch mu&#xdf; hier ein ganzer Chain geliefert werden">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      m&#246;glicherweise auch praktisch, weil das Buffer-Metadaten-System offen angelegt ist; ich kann jetzt nicht alle Nutzungsmuster &#252;berblocken, und kann deshalb auch nicht entscheiden, ob garantiert nur einziger Knoten ben&#246;tigt wird (was aber in der Regel der Fall sein wird, da wir derzeit noch keine Type-Refinements machen)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1776296002882" ID="ID_1463821218" MODIFIED="1776300340560" TEXT="Neu-Einsch&#xe4;tzung der Situation">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1776296015452" ID="ID_1553381862" MODIFIED="1776300348346" TEXT="thread_lokal hat gewisse T&#xfc;cken">
+<icon BUILTIN="clanbomber"/>
+<node CREATED="1776296068447" ID="ID_882324053" LINK="https://alexander-ostrovskiy-c.co.uk/posts/thread-local-storage-in-c-best-practices-and-pitfalls/" MODIFIED="1776299538975" TEXT="Practical usage and hidden risks"/>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1776296046515" ID="ID_962020738" LINK="https://yosefk.com/blog/cxx-thread-local-storage-performance.html" MODIFIED="1776299543765" TEXT="Thread-local Performance">
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1776299548025" ID="ID_410006825" MODIFIED="1776299559493" TEXT="ist das jetzt schlimmmmm?">
+<icon BUILTIN="help"/>
+<node CREATED="1776299579309" ID="ID_1984164694" MODIFIED="1776300160805" TEXT="passiert dieser Zugriff auf einen Buffer auf einem relevanten Performance-Level?">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Wir bekommen also u.U einen oder mehrere Function-Calls, zus&#228;tzlich zu einer Indirektion durch einen Pointer. Nach Bauchgef&#252;hl klingt das f&#252;r mich nach einem Overhead ~ 500ns. La&#223; uns das, angenommen, 10 mal machen m&#252;ssen pro Verwemdung eines Buffer-Cycle &#10233; dann w&#228;ren das 5&#181;s Overhead. Andererseits wei&#223; ich von meinen Scheduler-Untersuchungen, da&#223; ein einziger Zugang zu einer atomic-Flag schon mal 30&#181;s kosten kann. Also allein das w&#252;rde den Trade-off (thread_local zu verwenden) schon rechtfertigen. La&#223; uns dann 50 Buffer in einem Job verwenden &#10233; dann w&#228;ren das 50*5&#181;s &#8801; 250&#181;s f&#252;r einen Job der <i>mindestens 5ms</i>&#160;lang sein sollte, damit mein Scheduler-Konzept aufgeht....
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1776300163087" ID="ID_1159201025" MODIFIED="1776300573707" TEXT="habe ich mich &#xbb;auf peinliche Weise&#xab; verrannt &#x2014; mit diesem Buffer-Provider-Design?">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...ich meine, weil ich jetzt, kummulativ, monatelang daran herumgedoktort habe, nur um jetzt <i>nachtr&#228;glich</i>&#160;das Probem mit den per-Thread-Allokatoren zu sehen?
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1776439686153" ID="ID_1557325974" MODIFIED="1776439735673">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <u>Klar ist</u>: ich sp&#252;re <b>Gegenwind</b>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="forward"/>
+<node CREATED="1776439765547" ID="ID_645576260" MODIFIED="1776439781590">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      besonders bei den <b>BufferMetadata</b>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1776439782405" ID="ID_1166311821" MODIFIED="1776439855412" TEXT="die sind ohne Einsicht in dieses Problem entworfen worden">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Hier meine ich sogar das weitere Problem, n&#228;mlich da&#223; das Buffer-Management in einem massiv-concurrent-Environment funktionieren mu&#223;
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1776305000767" ID="ID_1274607292" MODIFIED="1776305029772" TEXT="mein Bauchgef&#xfc;hl sagt, ich sollte das notieren und dann weiter gehen">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1776305039040" ID="ID_66491214" MODIFIED="1776305057218" TEXT="m&#xf6;glicherweise ist das BuffHandle die eigentliche Errungenschaft"/>
+<node CREATED="1776305059318" ID="ID_1886832076" MODIFIED="1776305082303" TEXT="wohingegen die Implementierung des BufferProviders eine Analyse unterzogen werden sollte"/>
+<node CREATED="1776305083670" ID="ID_1806403735" MODIFIED="1776305106923" TEXT="welche allerdings erst m&#xf6;glich wird, wenn man die Trends in einer echten Engine kennt"/>
+<node CREATED="1776305131316" ID="ID_666199695" MODIFIED="1776357974462">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      das gr&#246;&#223;te Problem ist da&#223; es eine solche <i>immer noch nicht gibt</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1776305156825" ID="ID_314010206" MODIFIED="1776305166558" TEXT="und ich versteh nicht recht, warum?"/>
+<node CREATED="1776357995603" ID="ID_1210353497" MODIFIED="1776359107787" TEXT="ich wei&#xdf; was ich getan habe...">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      und auch warum: ich wollte an den offensichtlichen Stellen nicht &#187;durchmarschieren&#171;.
+    </p>
+    <p>
+      Ich wei&#223; aber nicht, was dann passiert w&#228;re, ob ich von der &#8222;offensichtlich einfachen&#8220; L&#246;sung weitergekommen w&#228;re, ohne diese naheliegende L&#246;sung dann doch letztlich komplet wieder einzureissen und das zu bauen, was ich jetzt zu bauen versuche?
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Und noch etwas hat stets eine Rolle gespielt: ich habe mir immer die Frage gestellt, was w&#252;rde passieren, wenn Du zusammen mit einem &#187;Pragmatiker&#171; allein im Boot sitzt? Dann st&#252;rzt sich der Pragmatiker auf das Offensichtliche und verbaut Dir alles, was Dir wichtig ist und warum Du die ganzen M&#252;hen auf Dich nimmst. Mehr noch, ich befand mich die ganzen ersten Jahre in dieser Position, und habe nach au&#223;en hin vorgegeben, da&#223; ich an der &#187;pragmatischen&#171; L&#246;sung arbeite, wohl wissend, da&#223; ich tats&#228;chlich der Einzige mit entsprechendem Stehverm&#246;gen bin.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Insofern bin ich noch nicht <i>out of the woods,</i>&#160;und sollte keine Zeit mit Zweifeln verbringen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1776359123481" ID="ID_935313258" MODIFIED="1776359291236">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <b>Fazit</b>: wenn thread_local wie erwartet funktioneren w&#252;rde, g&#228;be es kein Problem
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="forward"/>
+<node CREATED="1776359147782" ID="ID_49027423" MODIFIED="1776359159216" TEXT="als notieren wir dieses potentielle Problem"/>
+<node CREATED="1776359159957" ID="ID_611795063" MODIFIED="1776359168445" TEXT="untersuchen es ggfs. sp&#xe4;ter empirisch"/>
+<node CREATED="1776359169275" ID="ID_1606858571" MODIFIED="1776359191747" TEXT="und bauen notfalls ein &#xbb;ThreadLocal&#xab;, das optimal effizient ist"/>
+<node CREATED="1776359203560" ID="ID_240001081" MODIFIED="1776359249485" TEXT="&#x27f9; den aktuellen Entwruf unter dieser Ma&#xdf;gabe weiterentwickeln">
+<node CREATED="1776359250702" ID="ID_1110100689" MODIFIED="1776359257699" TEXT="er ist klar strukturiert"/>
+<node CREATED="1776359258534" ID="ID_193416980" MODIFIED="1776359267522" TEXT="er enth&#xe4;lt ein Element der Eleganz"/>
+<node CREATED="1776359271069" ID="ID_859503094" MODIFIED="1776359280656" TEXT="er ist noch nicht optimiert (was gut ist)"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1776204526672" ID="ID_961403309" MODIFIED="1776204711931" TEXT="Prototyping (testgetrieben)">
+<node CREATED="1776204565654" ID="ID_45614742" MODIFIED="1776204569140" TEXT="generischer Slice">
+<node CREATED="1776292208608" ID="ID_1141218614" MODIFIED="1776292245482" TEXT="Zweck: Anbinden eines Slice in einem normalen Objekt-Kontext">
+<node CREATED="1776292987880" ID="ID_808037956" MODIFIED="1776292998479" TEXT="Zugriff &#xfc;ber Pointer-artige Syntax"/>
+<node CREATED="1776293021744" ID="ID_808171568" MODIFIED="1776293034905" TEXT="Problem: thread_local ist implizit statisch">
+<node CREATED="1776293040334" ID="ID_555811092" MODIFIED="1776293060463" TEXT="das hei&#xdf;t es ist eine &#xbb;versteckte globale Variable&#xab;"/>
+<node CREATED="1776295872712" ID="ID_906429004" MODIFIED="1776295889501" TEXT="stellt das f&#xfc;r den konkteten Use-Case &#xfc;berhaupt eine Beschr&#xe4;nkung dar?">
+<node CREATED="1776295891705" ID="ID_877250740" MODIFIED="1776295921697" TEXT="ja &#x2014; eine hexagonale Beschr&#xe4;nkung: &#x27f9; man kann&apos;s nur einmal Unit-testen"/>
+<node CREATED="1776295943826" ID="ID_896591615" MODIFIED="1776295967932" TEXT="nein &#x2014; der BufferProvider in der Engine ist sowiso ein Singleton"/>
+<node CREATED="1776436869043" ID="ID_1444097357" MODIFIED="1776439761005" TEXT="aber &#x2014; Buffer-Metadata baucht eine RootID">
+<arrowlink COLOR="#5b39d7" DESTINATION="ID_1105234662" ENDARROW="Default" ENDINCLINATION="113;-353;" ID="Arrow_ID_8614584" STARTARROW="None" STARTINCLINATION="-450;30;"/>
+</node>
+</node>
+<node CREATED="1776437522354" ID="ID_1884586370" MODIFIED="1776437530564" TEXT="Bedeutung f&#xfc;r den Lebenszyklus">
+<node CREATED="1776437601915" ID="ID_813699540" MODIFIED="1776437622336" TEXT="w&#xe4;re k&#xfc;nstlich"/>
+<node CREATED="1776437695249" ID="ID_322380530" MODIFIED="1776437901918" TEXT="instance-State f&#xfc;hrt zu Non-Deteminism">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...weil dann potentiell der State der Thread-Local-Instance davon abh&#228;ngt, wann der Thread gestartet wurde im Verh&#228;ltnis zur &#196;nderung des Instance-State im Zugriffs-Pfad; zudem geht aus dem Standard nicht hervor, <i>wann konkret</i>&#160;eine einzelne thread-Lokale Instanz erzeugt wird
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1776437547951" ID="ID_1822334340" MODIFIED="1776437563496" TEXT="das LocalSlice-Objekt ist ein Monostate"/>
+<node CREATED="1776437903095" ID="ID_1647425761" MODIFIED="1776438127593" TEXT="Init-Parameter f&#xfc;r die thread-Locals ist sinnvollerweise static constexpr">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Ich wei&#223; nicht, ob das sogar vom Standard so verlangt wird (hab ihn nicht gelesen, und CPPReference sagt nichts dazu). Aber da die Lebensspanne nur indirekt definiert wird (lebt l&#228;nger als der Thread), w&#252;rde alles andere letztlich auf <i>undefined behavour</i>&#160; hinauslaufen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1776438375366" ID="ID_630250259" MODIFIED="1776438402243">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      &#10233; mu&#223; <b>in den Typ repr&#228;sentiert</b>&#160;werden
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1776442726252" ID="ID_1448305654" MODIFIED="1776442778834" TEXT="dadurch w&#xfc;rde &#xbb;automatisch&#xab; eine einzige Metadata-Storage im System entstehen">
+<linktarget COLOR="#fefdd2" DESTINATION="ID_1448305654" ENDARROW="Default" ENDINCLINATION="480;17;" ID="Arrow_ID_972765157" SOURCE="ID_1548755064" STARTARROW="None" STARTINCLINATION="469;0;"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1776442794218" HGAP="25" ID="ID_1105253979" MODIFIED="1776442814861" TEXT="man m&#xfc;&#xdf;te dann nur noch OutputSlot &#xbb;einfangen&#xab;" VSHIFT="-3"/>
+</node>
+</node>
+<node CREATED="1776438434768" ID="ID_983236748" MODIFIED="1776438441595" TEXT="Definition und Verwendung">
+<node CREATED="1776438447894" ID="ID_1968488456" MODIFIED="1776438567887" TEXT="verwendet sinnvollerweise einen CONF-Typparameter">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...denn effektiv definiert jede Kombination von Template-Parametern einen neuen Typ-Scope; aus Gr&#252;nden der klaren Formulierung sollte diese Diversit&#228;t in einen einzigen, benannten Parameter zusammengefa&#223;t werden
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1776438572468" ID="ID_1804894411" MODIFIED="1776438590402" TEXT="die einzelne Instanz ist Monostate und default-konstruierbar und kopierbar"/>
+</node>
+</node>
+</node>
+<node CREATED="1776204569932" ID="ID_1285006287" MODIFIED="1776204574453" TEXT="Stage-Slice"/>
+<node CREATED="1776204575221" ID="ID_869340284" MODIFIED="1776204579271" TEXT="Store-Slice"/>
+<node CREATED="1776204694205" ID="ID_1617552510" MODIFIED="1776204701641" TEXT="WorkerBufferStage">
+<node CREATED="1776436907819" ID="ID_1105234662" MODIFIED="1776439761005" TEXT="Rolle der RootID kl&#xe4;ren">
+<linktarget COLOR="#5b39d7" DESTINATION="ID_1105234662" ENDARROW="Default" ENDINCLINATION="113;-353;" ID="Arrow_ID_8614584" SOURCE="ID_1444097357" STARTARROW="None" STARTINCLINATION="-450;30;"/>
+<node CREATED="1776436962370" ID="ID_1640147854" MODIFIED="1776436990673" TEXT="dient als Parent-ID f&#xfc;r alle abstrakten Buffer-Types"/>
+<node CREATED="1776436992946" ID="ID_1491925884" MODIFIED="1776437012665" TEXT="k&#xf6;nnte damit wie eine Mandant-ID wirken">
+<node CREATED="1776439531426" ID="ID_1417995514" MODIFIED="1776439536521" TEXT="aktuelle Implementierung">
+<node CREATED="1776439537615" ID="ID_765591297" MODIFIED="1776439591395" TEXT="neuer Typ &#x27f6; BufferStage::defineBufferType() &#x27f6; BufferMetadata::Key"/>
+<node CREATED="1776439592374" ID="ID_195017187" MODIFIED="1776439628902" TEXT="hier wird der in der Instanz gespeicherte Family-Hash als root-Seed verwendet"/>
+<node CREATED="1776441321945" ID="ID_227233326" MODIFIED="1776441343588" TEXT="es wird m&#xf6;glicherweise ein neuer Entry angelegt">
+<node CREATED="1776441345413" ID="ID_1462687607" MODIFIED="1776441351904" TEXT="der Key wird systematisch konstruiert"/>
+<node CREATED="1776441353963" ID="ID_872678467" MODIFIED="1776441470139" TEXT="im Key werden die Bestimmungs-Elemente jedoch explizit mitgespeichert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      diese Redundanz war entscheidend f&#252;r die neue Implementierung des BufferProvider. Denn verm&#246;ge der Metadaten-Tabelle k&#246;nnen wir jederzeit von einem gegebenen Hash wieder auf den Entry kommen, und somit die Storage, Size und den TypeHandler wieder zug&#228;nglich machen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1776441476224" ID="ID_70785499" MODIFIED="1776441492245" TEXT="der angelegte Entry ist &#xbb;abstrakt&#xab;, d.h. hat einen NULL-Ptr f&#xfc;r die Storage"/>
+<node CREATED="1776441498751" ID="ID_239255386" MODIFIED="1776441539500" TEXT="der zur&#xfc;ckgelieferte Entry kann aber bereits am Ende einer hierarchischen Kette h&#xe4;ngen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      n&#228;mlich wenn zus&#228;tzlich zur Storage-Size auch schon ein TypeHandler und gar ein LocalTag gegeben wird
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1776442066477" ID="ID_1909295766" MODIFIED="1776442103152" TEXT="nur auf diesem Zugangsweg geht die FamilyID ein"/>
+<node CREATED="1776442525319" ID="ID_401093527" MODIFIED="1776442557719" TEXT="es gibt nur den einen Aufruf aus der BufferStage-Impl (+Tests)"/>
+<node CREATED="1776442560275" ID="ID_993355013" MODIFIED="1776442576727" TEXT="&#x27f9; die FamilyID k&#xf6;nnte auch als Parameter kommen"/>
+</node>
+<node CREATED="1776442580542" ID="ID_1214945994" MODIFIED="1776442607448" TEXT="es w&#xe4;re ohne Weiteres m&#xf6;glich, die Family-ID in die Buffer-Stage-Implementierung zu heben">
+<icon BUILTIN="idea"/>
+<node CREATED="1776442609827" ID="ID_570121338" MODIFIED="1776442627773" TEXT="damit w&#xe4;re sie aus der &#xbb;Thread-Local-Zone&#xab; raus"/>
+<node CREATED="1776442630476" ID="ID_1314697653" MODIFIED="1776442651841" TEXT="und eine einzige BufferMetadata-Storage k&#xf6;nnte alle BufferProvider im Stystem bedienen"/>
+<node CREATED="1776442666774" ID="ID_1548755064" MODIFIED="1776442784578" TEXT="das w&#xfc;rde dann sogar implizit passieren &#x2014; weil thread_local &#x27f9; static">
+<arrowlink COLOR="#fefdd2" DESTINATION="ID_1448305654" ENDARROW="Default" ENDINCLINATION="480;17;" ID="Arrow_ID_972765157" STARTARROW="None" STARTINCLINATION="469;0;"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1776204702568" ID="ID_1197574712" MODIFIED="1776204706747" TEXT="WorkerBufferStore"/>
+<node CREATED="1776204787207" ID="ID_1425789996" MODIFIED="1776204792254" TEXT="vorerst nur anlegen">
+<node CREATED="1776204765269" ID="ID_1404790840" MODIFIED="1776204785977" TEXT="EngineBufferMetadata"/>
+<node CREATED="1776204795573" ID="ID_1001789565" MODIFIED="1776204802934" TEXT="EngineBufferManager"/>
+</node>
+<node CREATED="1776442826894" ID="ID_509761355" MODIFIED="1776442834087" TEXT="OutputSlot mit integrieren">
+<node CREATED="1776442835820" ID="ID_1709918207" MODIFIED="1776442866636" TEXT="der integrierte OutputBufferProxy hat auch eine BufferStage-Implementierung"/>
+<node CREATED="1776442867383" ID="ID_1166356526" MODIFIED="1776442917901" TEXT="diese ist bisher hart gecodet &#x2014; k&#xf6;nnte nat&#xfc;rlich (statisch) konfigurierbar sein"/>
+<node CREATED="1776442948509" ID="ID_652246892" MODIFIED="1776443208611" TEXT="OutputSlot hinter BuffHandle versteckt &#x27f9; &#xdc;berlegungen zum BufferProvider gelten analog">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Konkret:
+    </p>
+    <ul>
+      <li>
+        OutputSlot ist (neuerdings) ein ref-counting front-End-Handle. Es kann per Ref oder Kopie weitergereicht werden
+      </li>
+      <li>
+        wo die Connection-Impl gespeichert wird, bestimmt der OutputManager
+      </li>
+      <li>
+        die jeweilige JobInvocation gibt das BuffHandle vom OutputSlot als Ausgabe-Buffer in den Node-pull()
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1776443222077" ID="ID_1588377123" MODIFIED="1776443240902" TEXT="AUA! an die Concurrency in OutputSlot habe ich noch gar nicht gedacht">
+<icon BUILTIN="smily_bad"/>
+<node CREATED="1776443274627" ID="ID_1179051881" MODIFIED="1776443293851" TEXT="jeder Frame-Ausgabevorgang kann aus einem anderen Thread kommen"/>
+<node CREATED="1776443294663" ID="ID_603938434" MODIFIED="1776443307734" TEXT="allerdings wird niemals der gleiche Frame contended"/>
+<node CREATED="1776443311725" ID="ID_1518887346" MODIFIED="1776443326639" TEXT="und der Slot ist f&#xfc;r einen einzigen Play-Proze&#xdf;"/>
+</node>
+</node>
+</node>
 </node>
 </node>
 </node>

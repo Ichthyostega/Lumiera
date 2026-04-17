@@ -20,7 +20,7 @@
  ** expose the correct buffer for each request. Typically -- and independent of the actual
  ** implementation -- the following properties need to be tracked
  ** - that overall storage size available within the buffer
- ** - a pair of custom \em creator and \em destructor functions to use together with this buffer
+ ** - a pair of custom _creator_ and _destructor_ functions to use together with this buffer
  ** - an additional client key to distinguish otherwise otherwise identical client requests
  ** These three distinctions are applied in sequence, thus forming a type tree with 3 levels.
  ** Only the first distinguishing level (the size) is mandatory. The others are provided,
@@ -34,7 +34,10 @@
  ** [Buffer Descriptor](\ref BuffDescr), embedded into each BuffHandle. While the engine
  ** mostly uses these handles in the way of a pointer, the buffer descriptor acts as a
  ** configuration tag attached to the buffer access, allowing to re-access a context
- ** within the buffer provider implementation.
+ ** within the buffer provider implementation. Notably the Render Engine employs
+ ** several BufferProvider services (Memory, Cache, Output) that share the metadata
+ ** table, albeit with thread-local caches. For this reason, the registered types
+ ** are anchored at a root-hash, allowing to keep those several clients apart.
  ** 
  ** @todo 2/2026 After refactoring the BufferProvider and splitting up the implementation
  **       in two realms (state and storage), the purpose of this code her became much
@@ -54,7 +57,6 @@
 
 
 #include "lib/error.hpp"
-#include "lib/symbol.hpp"
 #include "lib/hash-value.h"
 #include "lib/util-foreach.hpp"
 #include "include/logging.h"
@@ -70,7 +72,6 @@ namespace vault{
 namespace mem {
   
   using lib::HashVal;
-  using lib::Literal;
   using util::for_each;
   
   namespace err = lumiera::error;
@@ -557,23 +558,25 @@ namespace mem {
    * Registry for managing buffer metadata.
    * This is an implementation level service,
    * used by the standard BufferProvider implementation.
-   * Each metadata registry (instance) defines and maintains
-   * a family of "buffer types"; beyond the buffer storage size,
-   * the concrete meaning of those types is tied to the corresponding
-   * BufferProvider implementation and remains opaque. These types are
-   * represented as hierarchically linked hash keys. The implementation
-   * may bind a TypeHandler to a specific type, allowing automatic invocation
-   * of a "constructor" and "destructor" function on each buffer of this type,
-   * when _locking_ or _freeing_ the corresponding buffer.
-   * @todo 2/2026 must extract an interface here.....  //////////////////////////////////////////////////////TICKET #1410 : clean-up BufferProvider base implementation
-   * 
+   * A metadata registry defines and maintains several families
+   * of "buffer types"; beyond the buffer storage size, the concrete
+   * meaning of those types is tied to the corresponding BufferProvider
+   * implementation and remains opaque. These types are represented as
+   * hierarchically linked hash keys. The implementation may bind a
+   * TypeHandler to a specific type, allowing automatic invocation
+   * of a "constructor" and "destructor" function on each buffer
+   * of this type, when _locking_ or _freeing_ the corresponding
+   * buffer. When creating or accessing a top-level (type)-Key,
+   * a hash-ID of the "family" must be provided; this is a
+   * root anchor and allows several clients to use a common
+   * metadata table
+   * @remark in the Render Engine there can be several
+   *         BufferProvider services, while the BufferMetadata
+   *         uses a common setup with thread-local caches.
    */
   class BufferMetadata
     : util::NonCopyable
     {
-      Literal id_;
-      HashVal family_;
-      
       metadata::Table table_;
                                           ///////////////////////////TICKET #854 : ensure proper locking happens "somewhere" when mutating metadata
       
@@ -588,9 +591,8 @@ namespace mem {
        * @param implementationID to distinguish families of
        *        type keys belonging to different registries.
        */
-      BufferMetadata (Literal implementationID)
-        : id_(implementationID)
-        , family_(hash_value(id_))
+      BufferMetadata()
+        : table_{}
         { }
       
       /** combine the distinguishing properties
@@ -602,14 +604,16 @@ namespace mem {
        *  the third level. All these levels describe abstract type
        *  keys, not entries for concrete buffers. The latter are
        *  always created as children of a known type key.
+       * @param familyID root anchor to keep mandators apart
        */
       Key
-      key (size_t storageSize
+      key (HashVal familyID
+          ,size_t storageSize
           ,TypeHandler instanceFunc =TypeHandler::RAW
           ,LocalTag specifics       =LocalTag::UNKNOWN)
         {
           REQUIRE (storageSize);
-          Key typeKey = trackKey (family_, storageSize);
+          Key typeKey = trackKey (familyID, storageSize);
           
           if (nontrivial(instanceFunc))
               typeKey = trackKey (typeKey, instanceFunc);
@@ -826,6 +830,9 @@ namespace mem {
         {
           if (isKnown (key)) return;
           table_.store (Entry{key, nullptr});
+          // stored a type marker entry with this key
+          ENSURE (HashVal(key) == HashVal(get(key)));
+          ENSURE (get(key).isTypeKey());
         }
       
       /** store a fully populated entry immediately starting with locked state
