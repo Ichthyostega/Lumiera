@@ -57,14 +57,7 @@ namespace test {
           }
       };
     
-    struct DummySetup
-      {
-        using Service = DummyBackend;
-        
-        static Service init() { return Service(); }
-      };
-    
-    using DummySlice = LocalSlice<DummySetup>;
+    using DummySlice = LocalSlice<DummyBackend>;
     
     
     /**

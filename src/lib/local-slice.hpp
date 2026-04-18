@@ -41,21 +41,28 @@
 
 
 namespace lib {
+
+  /** Extension point for LocalSlice: Service initialisation */
+  template<class SRV>
+  struct LocalSlice_DefaultSetup
+    {
+      using Service = SRV;
+      static Service init() { return Service(); }
+    };
+  
   
   /**
    * Common access point to thread-local service instances.
-   * @tparam CONF static config / setup to initialise the service.
+   * @tparam CONF setup to initialise the service.
    */
-  template<class CONF>
-  class LocalSlice
+  template<class SRV, class CONF =LocalSlice_DefaultSetup<SRV>>
+  struct LocalSlice
     {
-      using Service = CONF::Service;
-      
-    public:
       LocalSlice()  = default;
-      
       // using default copy/assignment
       
+      
+      using Service = CONF::Service;
       
       /** service access */
       Service&

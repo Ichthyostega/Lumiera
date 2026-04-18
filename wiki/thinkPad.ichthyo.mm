@@ -144308,6 +144308,47 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1776474854867" ID="ID_1487038882" MODIFIED="1776474859837" TEXT="CONF">
 <node CREATED="1776474861216" ID="ID_399712480" MODIFIED="1776474870435" TEXT="typedef Service"/>
 <node CREATED="1776474871327" ID="ID_142831800" MODIFIED="1776474879674" TEXT="eine init-Funktion"/>
+<node COLOR="#338800" CREATED="1776518244557" ID="ID_69243918" MODIFIED="1776522105417" TEXT="Verbesserung : Setup f&#xfc;r Service-Typ">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1776518286073" ID="ID_992160718" MODIFIED="1776518303060" TEXT="LocalSlice&lt;SRV&gt;"/>
+<node CREATED="1776518303809" ID="ID_1039989287" MODIFIED="1776518323133" TEXT="normalerweise gen&#xfc;gt ein default-Setup-Template"/>
+<node COLOR="#435e98" CREATED="1776518324108" ID="ID_1914807086" MODIFIED="1776522047530" TEXT="explizite Spezialisierung soll m&#xf6;glich sein">
+<icon BUILTIN="yes"/>
+<node CREATED="1776521876873" ID="ID_1636226712" MODIFIED="1776522039333" TEXT="puh ... das wird in jedem Fall h&#xe4;sslich">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      man mu&#223; den aktuellen Namespace schlie&#223;en, in lib gehen, dort die explizite Spezialisierung definieren...
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="smiley-angry"/>
+</node>
+<node CREATED="1776521934417" ID="ID_130169122" MODIFIED="1776522032176" TEXT="L&#xf6;sung: 2.Template-Parameter mit Default-Init">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1776521973780" ID="ID_1887344423" MODIFIED="1776522004871" TEXT="default ist dann LocalSlice_DefaultSetup&lt;SRV&gt;">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      direkt bei LocalSlice definiert; erzeugt eine default-konstruierte Instanz vom Service
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node COLOR="#338800" CREATED="1776522006689" ID="ID_1991943573" MODIFIED="1776522019517" TEXT="getested: Spezialisierung ist m&#xf6;glich">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
 </node>
 <node COLOR="#338800" CREATED="1776474884669" ID="ID_66962199" MODIFIED="1776477543983" TEXT="LocalSlice_test">
 <icon BUILTIN="button_ok"/>
