@@ -144223,13 +144223,35 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1776204526672" ID="ID_961403309" MODIFIED="1776477618192" TEXT="Prototyping (testgetrieben)">
 <icon BUILTIN="pencil"/>
-<node CREATED="1776204565654" ID="ID_45614742" MODIFIED="1776204569140" TEXT="generischer Slice">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1776293021744" ID="ID_290625266" MODIFIED="1776522855937" TEXT="Problem: dieses Setup ist effektiv statisch/global">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Das erfordert Vorsicht, weil man dadurch die Eigenschaft einer geschlossenen Service-Instanz verliert; es ist also leider kein drop-in-replacement, mit dem man einfach eine tief eingebettete Koponente thread-local macht; theoretisch w&#252;rde letzteres zwar gehen, aber dann auf einen zweistufigen Dispatch hinauslaufen, d.h. nach dem thread-local-Zugriff m&#252;&#223;te noch ein Dispatch &#252;ber eine Map per umschlie&#223;ender Service-Instanz erfolgen.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      In dem Fall beschr&#228;nke ich mich aber letztlich auf unsere Anforderungen hier, und da brauchen wir tats&#228;hchlich nur eine globale Instanz &#8212; ich hatte mir ja sogar schon &#252;berlegt, ob man nicht sogar die BufferMetadata koplett als separaten Service herausl&#246;sen m&#252;&#223;te; das bekommen wir hier nun als Nebeneffekt geschenkt
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#a61032" DESTINATION="ID_808171568" ENDARROW="Default" ENDINCLINATION="11;-94;" ID="Arrow_ID_66477268" STARTARROW="None" STARTINCLINATION="259;15;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node COLOR="#338800" CREATED="1776204565654" ID="ID_45614742" MODIFIED="1776522493293" TEXT="generischer Slice">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1776292208608" ID="ID_1141218614" MODIFIED="1776477482889" TEXT="Zweck: Anbinden eines Slice in einem normalen Objekt-Kontext">
 <icon BUILTIN="info"/>
 <node CREATED="1776292987880" ID="ID_808037956" MODIFIED="1776477504910" TEXT="Zugriff &#xfc;ber Pointer-artige Syntax">
 <icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1776293021744" ID="ID_808171568" MODIFIED="1776477489785" TEXT="Problem: thread_local ist implizit statisch">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1776293021744" ID="ID_808171568" MODIFIED="1776522852160" TEXT="Problem: thread_local ist implizit statisch">
+<linktarget COLOR="#a61032" DESTINATION="ID_808171568" ENDARROW="Default" ENDINCLINATION="11;-94;" ID="Arrow_ID_66477268" SOURCE="ID_290625266" STARTARROW="None" STARTINCLINATION="259;15;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1776293040334" ID="ID_555811092" MODIFIED="1776293060463" TEXT="das hei&#xdf;t es ist eine &#xbb;versteckte globale Variable&#xab;"/>
 <node CREATED="1776295872712" ID="ID_906429004" MODIFIED="1776295889501" TEXT="stellt das f&#xfc;r den konkteten Use-Case &#xfc;berhaupt eine Beschr&#xe4;nkung dar?">
@@ -144324,8 +144346,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       man mu&#223; den aktuellen Namespace schlie&#223;en, in lib gehen, dort die explizite Spezialisierung definieren...
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="smiley-angry"/>
 </node>
 <node CREATED="1776521934417" ID="ID_130169122" MODIFIED="1776522032176" TEXT="L&#xf6;sung: 2.Template-Parameter mit Default-Init">
@@ -144341,8 +144362,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       direkt bei LocalSlice definiert; erzeugt eine default-konstruierte Instanz vom Service
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node COLOR="#338800" CREATED="1776522006689" ID="ID_1991943573" MODIFIED="1776522019517" TEXT="getested: Spezialisierung ist m&#xf6;glich">
 <icon BUILTIN="button_ok"/>
@@ -144391,7 +144411,89 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node CREATED="1776204569932" ID="ID_1285006287" MODIFIED="1776204574453" TEXT="Stage-Slice"/>
+<node CREATED="1776204569932" ID="ID_1285006287" MODIFIED="1776204574453" TEXT="Stage-Slice">
+<node COLOR="#338800" CREATED="1776522893322" ID="ID_1694212347" MODIFIED="1776566332195" TEXT="BufferMetadata um Migration erweitern">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1776556044669" ID="ID_857328588" MODIFIED="1776556055571" TEXT="Begriff: Key-chain">
+<node CREATED="1776556089572" ID="ID_565019641" MODIFIED="1776556103328" TEXT="ein Entry mit allen seinen Parent-Entries"/>
+</node>
+<node CREATED="1776556171704" ID="ID_1788136226" MODIFIED="1776556247063" TEXT="Zweck: Abgleich zwischen zwei Metadata-Tabellen">
+<node CREATED="1776556712396" ID="ID_346498254" MODIFIED="1776556720533" TEXT="Erg&#xe4;nzen fehlender Informationen"/>
+<node CREATED="1776556725461" ID="ID_154374768" MODIFIED="1776556776087" TEXT="beschr&#xe4;nkter Abgleich bestimmter Daten"/>
+<node CREATED="1776556777026" ID="ID_441313668" MODIFIED="1776556800521" TEXT="Exception falls inkonsistenter Abgleich verlangt wird">
+<node CREATED="1776556809443" ID="ID_480351503" MODIFIED="1776556822013" TEXT="ein Buffer darf nicht NULL werden"/>
+<node CREATED="1776556823233" ID="ID_964120138" MODIFIED="1776556838587" TEXT="State darf nur erlaubten Transitionen folgen"/>
+<node CREATED="1776556866299" ID="ID_1595480658" MODIFIED="1776557157499" TEXT="setzt implizit einen logisch koh&#xe4;renten Aufruf der Synchronisation vorraus">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Das bedeutet, die hier aufgestellten Regeln/Verbote sind so konstruiert, da&#223; sie bei einem sinnvollen Abgleich niemals auftreten k&#246;nnen.&#160;&#160;Der Sinn ergibt sich dabei aus den vorgesehenen Zustands&#252;berg&#228;ngen; es sollten nur Typ-Informationen angereichert werden, und konkrete Eintr&#228;ge sollten eigentlich gar nicht synchronisiert werden; hilfsweise sehe ich die M&#246;glichkeit vor, da&#223; konkrete Eintr&#228;ge sich gem&#228;&#223; State-Machine vorw&#228;rts bewegen (falls wir tats&#228;chlich konkrete Eintr&#228;ge zentral ablegen, wenn sie in den Cache wandern &#8212; ich kann diese M&#246;glichkeit derzeit nicht ausschlie&#223;en)
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1776557583845" ID="ID_1234349568" MODIFIED="1776566359211" TEXT="Schnittstelle / Mechanismus">
+<icon BUILTIN="list"/>
+<node CREATED="1776557598572" ID="ID_930030080" MODIFIED="1776557685683" TEXT="hier tritt das Problem der Storage auf">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      es sollte nur alloziert werden, wenn das auch notwendig ist; man k&#246;nnte entweder einen Buffer vorsehen, oder direkt von Quelle zu Ziel arbeiten.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1776557687442" ID="ID_1438523066" MODIFIED="1776557735700" TEXT="Einsicht: das hier ist Implementierung / es geht nur um Komplexit&#xe4;t">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      es m&#252;ssen keine Komponenten gegeneinander isoliert werden; die Schnittstelle dient nur dazu, den vorgang leicht beherrschbar zu machen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1776557770647" ID="ID_1041865636" MODIFIED="1776557793535" TEXT="&#x27f9; Operation sitzt auf dem Empf&#xe4;nger und bekommt die Quelle als const"/>
+<node CREATED="1776557806144" ID="ID_1595165986" MODIFIED="1776557808303" TEXT="Logik">
+<node CREATED="1776557909652" ID="ID_1185060059" MODIFIED="1776557938771" TEXT="wenn Quelle den Key nicht hat &#x27f9; fertig">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_1185060059" ENDARROW="Default" ENDINCLINATION="102;0;" ID="Arrow_ID_680660049" SOURCE="ID_294261855" STARTARROW="None" STARTINCLINATION="102;0;"/>
+</node>
+<node CREATED="1776557809545" ID="ID_1932336352" MODIFIED="1776557831449" TEXT="wenn ich den Key nicht habe &#x27f9; Daten kopieren"/>
+<node CREATED="1776557832463" ID="ID_727929224" MODIFIED="1776557843944" TEXT="wenn ich den Key habe &#x27f9; Abgleich mit Konsistenzcheck"/>
+<node CREATED="1776557887075" ID="ID_294261855" MODIFIED="1776557938772" TEXT="rekursiv den Abgleich f&#xfc;r den parent-Hash ausl&#xf6;sen">
+<arrowlink DESTINATION="ID_1185060059" ENDARROW="Default" ENDINCLINATION="102;0;" ID="Arrow_ID_680660049" STARTARROW="None" STARTINCLINATION="102;0;"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1776566204691" ID="ID_1993707384" MODIFIED="1776566327373" TEXT="Test">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1776566208368" ID="ID_318163591" MODIFIED="1776566219745" TEXT="verwende zwei lokal instantiierte BufferMetadata-Registries"/>
+<node CREATED="1776566220517" ID="ID_268834894" MODIFIED="1776566230815" TEXT="bef&#xfc;lle sie schrittweise mit Typ-Keys"/>
+<node CREATED="1776566231540" ID="ID_368942183" MODIFIED="1776566246638" TEXT="synchronsiere jeweils hin- und her"/>
+<node CREATED="1776566247466" ID="ID_268191870" MODIFIED="1776566267353" TEXT="zeige da&#xdf; die Metadaten auch in der enderen Registry sind"/>
+<node CREATED="1776566268399" ID="ID_1584729655" MODIFIED="1776566286040" TEXT="lege sogar einen aktiven Buffer-Entry an..."/>
+<node CREATED="1776566286951" ID="ID_1237749199" MODIFIED="1776566301833" TEXT="kann auch hier synchronisieren, solange die State-Transitions valide sind"/>
+<node CREATED="1776566302722" ID="ID_563548473" MODIFIED="1776566323627" TEXT="ein release / dtor-call kann nicht synchronisiert werden"/>
+</node>
+</node>
+<node CREATED="1776566422332" ID="ID_773286904" MODIFIED="1776566436334" TEXT="Verbindung zur zentral-Registry">
+<node CREATED="1776566441432" ID="ID_83703051" MODIFIED="1776566458537" TEXT="neue Typ-Registrierung im Thread &#x27f9; zur Zentrale publiziert"/>
+<node CREATED="1776566459396" ID="ID_20651536" MODIFIED="1776566492396" TEXT="Verwendung im Thread &#x27f8; Typ aus Zentrale synchronisiert"/>
+</node>
+</node>
 <node CREATED="1776204575221" ID="ID_869340284" MODIFIED="1776204579271" TEXT="Store-Slice"/>
 <node CREATED="1776204694205" ID="ID_1617552510" MODIFIED="1776204701641" TEXT="WorkerBufferStage">
 <node CREATED="1776436907819" ID="ID_1105234662" MODIFIED="1776439761005" TEXT="Rolle der RootID kl&#xe4;ren">

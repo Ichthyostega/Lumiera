@@ -58,12 +58,12 @@
 
 #include "lib/error.hpp"
 #include "lib/hash-value.h"
-#include "lib/util-foreach.hpp"
 #include "include/logging.h"
 #include "vault/mem/buffhandle.hpp"
 #include "vault/mem/type-handler.hpp"
 #include "vault/mem/buffer-local-tag.hpp"
 #include "lib/nocopy.hpp"
+#include "lib/util.hpp"
 
 #include <unordered_map>
 
@@ -72,7 +72,7 @@ namespace vault{
 namespace mem {
   
   using lib::HashVal;
-  using util::for_each;
+  using util::unConst;
   
   namespace err = lumiera::error;
   
@@ -98,6 +98,18 @@ namespace mem {
       BLOCKED     ///< allocated buffer blocked by protocol failure
     };
   
+  inline bool
+  isValidBufferTransition (BufferState oldState, BufferState newState)
+  {
+    return (  (oldState == FREE    and newState == LOCKED)
+           or (oldState == LOCKED  and newState == EMITTED)
+           or (oldState == LOCKED  and newState == BLOCKED)
+           or (oldState == LOCKED  and newState == FREE)
+           or (oldState == EMITTED and newState == BLOCKED)
+           or (oldState == EMITTED and newState == FREE)
+           or (oldState == BLOCKED and newState == FREE)
+           );
+  }
   
   
   
@@ -357,15 +369,8 @@ namespace mem {
           {
             __must_not_be_NIL();
             
-            if (  (state_ == FREE    and newState == LOCKED)
-               or (state_ == LOCKED  and newState == EMITTED)
-               or (state_ == LOCKED  and newState == BLOCKED)
-               or (state_ == LOCKED  and newState == FREE)
-               or (state_ == EMITTED and newState == BLOCKED)
-               or (state_ == EMITTED and newState == FREE)
-               or (state_ == BLOCKED and newState == FREE))
-              {
-                // allowed transition
+            if (isValidBufferTransition (state_, newState))
+              { // perform transition
                 if (newState == FREE)
                   invokeEmbeddedDtor_and_clear();
                 if (newState == LOCKED)
@@ -534,7 +539,8 @@ namespace mem {
         verify_all_buffers_freed()
           try
             {
-              for_each (entries_, verify_is_free);
+              for (auto const& entry : entries_)
+                verify_is_free(entry);
             }
           ERROR_LOG_AND_IGNORE (engine,"Shutdown of BufferProvider metadata store")
           
@@ -671,6 +677,12 @@ namespace mem {
           return *entry;
         }
       
+      Entry const&
+      get (HashVal hashID)  const
+        {
+          return unConst(this)->get (hashID);
+        }
+      
       bool
       isKnown (HashVal key)  const
         {
@@ -763,6 +775,22 @@ namespace mem {
                             , LERR_(LIFECYCLE)};
           
           table_.remove (HashVal(entry));
+        }
+      
+      
+      /** Synchronise metadata, including the key path up to root
+       * @param key start point of data exchange
+       * @param srcReg another BufferMetadata registry from which
+       *        metadata shall be retrieved and imported
+       */
+      void
+      import (HashVal key, BufferMetadata const& srcReg)
+        {
+          if (not srcReg.isKnown (key))
+            return;
+          Entry const& entry{srcReg.get(key)};
+          doSynchronise (entry);
+          import (entry.parentKey(), srcReg);
         }
       
       
@@ -860,6 +888,35 @@ namespace mem {
               throw;
             }
           return newEntry;
+        }
+      
+      
+      /** import data from another metadata entry,
+       *  without violating sanity rules 
+       * @remark usually this is used to import new type-keys;
+       *  an active buffer entry can only be handled if it is new,
+       *  or implies a valid state transition.
+       * @note if the buffer is not NULL, it must be the same address,
+       *  otherwise the keys would differ, since they are generated
+       *  with \ref Key::forEntry()
+       */
+      void
+      doSynchronise (Entry const& otherEntry)
+        {
+          Entry* entry = table_.fetch (otherEntry);
+          if (not entry)
+              table_.store (otherEntry);
+          else
+          if (not otherEntry.isTypeKey()
+              and otherEntry.state() != entry->state())
+            {
+              ASSERT (not entry->isTypeKey(), "Metadata State-Engine corrupted");
+              if (   otherEntry.state() == FREE
+                  or otherEntry.state() == LOCKED)
+                throw err::Logic ("Metadata synchronisation can not imply allocation/deallocation.");
+              else
+                entry->mark(otherEntry.state());
+            }
         }
     };
   

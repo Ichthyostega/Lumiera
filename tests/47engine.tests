@@ -72,6 +72,11 @@ return: 0
 END
 
 
+TEST "Local buffer state management" LocalBufferStage_test <<END
+return: 0
+END
+
+
 TEST "Mock support for render job planning" MockSupport_test <<END
 return: 0
 END
