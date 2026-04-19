@@ -144475,6 +144475,20 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1776557832463" ID="ID_727929224" MODIFIED="1776557843944" TEXT="wenn ich den Key habe &#x27f9; Abgleich mit Konsistenzcheck"/>
 <node CREATED="1776557887075" ID="ID_294261855" MODIFIED="1776557938772" TEXT="rekursiv den Abgleich f&#xfc;r den parent-Hash ausl&#xf6;sen">
 <arrowlink DESTINATION="ID_1185060059" ENDARROW="Default" ENDINCLINATION="102;0;" ID="Arrow_ID_680660049" STARTARROW="None" STARTINCLINATION="102;0;"/>
+<node CREATED="1776604115107" HGAP="30" ID="ID_1186161854" MODIFIED="1776604293378" TEXT="aber nur wenn f&#xfc;r den aktuellen Eintrag was zu tun war" VSHIFT="11">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...damit kann man in der Regel das rekursive Traversieren der Kette vorzeitig abbrechen; das beruht auf einem &#187;Invarianten-Argument&#171;: Daten in der Registry sind stets konsistent, was impliziert, da&#223; wir auch den Parent-Key bereits gespeichert haben, entweder durch regul&#228;res Anlegen, oder durch eine vorausgegangenen Synchronisation
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
 </node>
 </node>
 </node>

@@ -160,7 +160,7 @@ namespace test  {
           CHECK (eDD.state() == FREE);
           CHECK (meta2.get(eDD).state() == EMITTED);
           
-          // it is not allowed to mark de-allocated through synchronisation
+          // it is not allowed to mark as de-allocated through synchronisation
           VERIFY_ERROR (LOGIC, meta2.import (eDD, meta1) );
           
           VERIFY_ERROR (LIFECYCLE, meta2.release(HashVal(eDD)) );

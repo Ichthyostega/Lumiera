@@ -789,8 +789,8 @@ namespace mem {
           if (not srcReg.isKnown (key))
             return;
           Entry const& entry{srcReg.get(key)};
-          doSynchronise (entry);
-          import (entry.parentKey(), srcReg);
+          if (doSynchronise (entry))
+            import (entry.parentKey(), srcReg);
         }
       
       
@@ -892,15 +892,17 @@ namespace mem {
       
       
       /** import data from another metadata entry,
-       *  without violating sanity rules 
+       *  yet reject violating sanity rules.
        * @remark usually this is used to import new type-keys;
        *  an active buffer entry can only be handled if it is new,
        *  or implies a valid state transition.
        * @note if the buffer is not NULL, it must be the same address,
        *  otherwise the keys would differ, since they are generated
        *  with \ref Key::forEntry()
+       * @return `true` if new data was stored, which implies
+       *  that synchronisation should proceed up to the parent
        */
-      void
+      bool
       doSynchronise (Entry const& otherEntry)
         {
           Entry* entry = table_.fetch (otherEntry);
@@ -917,6 +919,10 @@ namespace mem {
               else
                 entry->mark(otherEntry.state());
             }
+          else
+            return true;
+          // something to synchronise => continue up the path
+          return false;
         }
     };
   
