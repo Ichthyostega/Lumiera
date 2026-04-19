@@ -21,8 +21,9 @@
 #include "test/test-frame.hpp"
 #include "test/test-helper.hpp"
 #include "vault/mem/buffhandle.hpp"
-#include "vault/mem/buffer-metadata.hpp"
+#include "vault/mem/engine-buffer-metadata.hpp"
 #include "vault/mem/local-buffer-stage.hpp"
+#include "lib/depend-inject.hpp"
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
 
@@ -177,6 +178,7 @@ namespace test  {
       void
       verify_publishNewKey()
         {
+          lib::DependInject<EngineBufferMetadata>::Local<EngineBufferMetadata> metaHub;
         }
       
       

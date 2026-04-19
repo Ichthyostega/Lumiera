@@ -2,7 +2,7 @@
   BUFFER-METADATA.hpp  -  internal metadata for data buffer providers
 
    Copyright (C)
-     2011,            Hermann Vosseler <Ichthyostega@web.de>
+     2011,2026        Hermann Vosseler <Ichthyostega@web.de>
 
   **Lumiera** is free software; you can redistribute it and/or modify it
   under the terms of the GNU General Public License as published by the
@@ -41,11 +41,29 @@
  ** 
  ** @todo 2/2026 After refactoring the BufferProvider and splitting up the implementation
  **       in two realms (state and storage), the purpose of this code her became much
- **       clearer. The problem remains however, that the BufferMetadata directly links
- **       to the one central metadata hashtable. We'll have to reconsider this aspect
- **       once we have to build a metadata store that works well in a massively
- **       concurrent environment, where requests for state transition emanate
- **       any time form within all worker threads!
+ **       clearer. The problem remains however, that the BufferMetadata directly
+ **       maintains its metadata in an embedded hashtable. This is problematic
+ **       when operating within a massively concurrent environment.
+ ** @todo 4/2026 After resolving the problems related to BufferProvidder and OutputSlot,
+ **       the next task is to build a first draft implementation for a production-grade
+ **       buffer allocator and manager. I decided to employ thread-local »satellite«
+ **       tables, and a central EngineBufferMetadata hub. It remains to be seen
+ **       if this design is sustainable.
+ ** 
+ ** @warning BufferMetadata entails an intricate setup of chained hash keys, which relies
+ **       on several implicit assumptions regarding consistency. These are largely unchecked
+ **       (beyond the unit test) and guaranteed only through the call sequence in proper use.
+ **       - there are Key entries that represent a _buffer type_ — these must not be mutated.
+ **       - the hash value for these typeKeys is totally determined by their properties
+ **       - a child entry can only vary _one_ of these properties, and the change should
+ **         be applied in the fixed sequence as defined in BufferMetadata::key()
+ **       - any violation to this scheme might lead to *duplicate entries* -> buffer corruption
+ **       - active state entries should only added as leaves, and should be removed after use.
+ **       - the hash of an active entry must reflect its associated memory address.
+ **       - Warning: this is only ensured by invoking Key::forEntry, but not persisted in the
+ **         Key itself. A directly computed hash of such a Key differs from the explicitly
+ **         associated hashID_. If the associated buffer* is changed, the entry can not be
+ **         found anymore, which might lead to double allocation and memory corruption.
  ** 
  ** @see buffer-provider.hpp
  ** @see BufferMetadata_test
@@ -591,11 +609,9 @@ namespace mem {
       using Entry = metadata::Entry;
       
       /** establish a metadata registry.
-       *  Such will maintain a family of buffer type entries
+       *  Such will maintain families of chained buffer type entries
        *  and provide a service for storing and retrieving metadata
        *  for concrete buffer entries associated with these types.
-       * @param implementationID to distinguish families of
-       *        type keys belonging to different registries.
        */
       BufferMetadata()
         : table_{}

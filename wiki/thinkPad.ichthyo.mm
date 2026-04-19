@@ -144503,9 +144503,51 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1776566302722" ID="ID_563548473" MODIFIED="1776566323627" TEXT="ein release / dtor-call kann nicht synchronisiert werden"/>
 </node>
 </node>
-<node CREATED="1776566422332" ID="ID_773286904" MODIFIED="1776566436334" TEXT="Verbindung zur zentral-Registry">
-<node CREATED="1776566441432" ID="ID_83703051" MODIFIED="1776566458537" TEXT="neue Typ-Registrierung im Thread &#x27f9; zur Zentrale publiziert"/>
-<node CREATED="1776566459396" ID="ID_20651536" MODIFIED="1776566492396" TEXT="Verwendung im Thread &#x27f8; Typ aus Zentrale synchronisiert"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1776566422332" ID="ID_773286904" MODIFIED="1776604505367" TEXT="Verbindung zur zentral-Registry">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1776566441432" ID="ID_83703051" MODIFIED="1776604516229" TEXT="neue Typ-Registrierung im Thread &#x27f9; zur Zentrale publiziert">
+<node CREATED="1776604591195" ID="ID_1133340482" MODIFIED="1776604688880" TEXT="brauche daf&#xfc;r die zentralen EngineMetadata">
+<node COLOR="#5b280f" CREATED="1776604776169" ID="ID_1295263836" MODIFIED="1776604807258" TEXT="Aua &#x2014; jetzt gibt&apos;s doch eine statische Initialisierung">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1776604808417" ID="ID_1839658680" MODIFIED="1776604847186" TEXT="besser &#xfc;ber lib::Depend l&#xf6;sen &#x27f9; initialisiert sich lazy"/>
+<node CREATED="1776604894666" ID="ID_1374623359" MODIFIED="1776605011172" TEXT="wird nur relevant an den zweien hier besprochenen Synchronisations-Szenarien">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      also entweder wenn jeman eine lokale Instanz aufruft, um einen neuen Typ zu registrieren, oder wenn ein lokal nicht bekannter type-Key auftritt
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1776604670575" ID="ID_1448023528" MODIFIED="1776604672346" TEXT="Test">
+<node COLOR="#338800" CREATED="1776604673415" ID="ID_1473562963" MODIFIED="1776612748341" TEXT="die zentralen EngineMetadata mocken">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      soll auf jeden Fall ausschlie&#223;en, da&#223; dieser Test die zentral-Instanz verschmutzt
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1776612751815" ID="ID_423973357" MODIFIED="1776612774748" TEXT="verifiziert(Debugger): die globale Instanz ist vorher undefiniert"/>
+<node CREATED="1776612775704" ID="ID_1966664848" MODIFIED="1776612787131" TEXT="und wird nachher wieder in undefinierten Zustand zur&#xfc;ckversetzt"/>
+<node CREATED="1776612790102" ID="ID_798359000" MODIFIED="1776612794696" TEXT="geiler code">
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1776566459396" ID="ID_20651536" MODIFIED="1776604516229" TEXT="Verwendung im Thread &#x27f8; Typ aus Zentrale synchronisiert"/>
 </node>
 </node>
 <node CREATED="1776204575221" ID="ID_869340284" MODIFIED="1776204579271" TEXT="Store-Slice"/>
@@ -144569,7 +144611,86 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node CREATED="1776204702568" ID="ID_1197574712" MODIFIED="1776204706747" TEXT="WorkerBufferStore"/>
 <node CREATED="1776204787207" ID="ID_1425789996" MODIFIED="1776204792254" TEXT="vorerst nur anlegen">
-<node CREATED="1776204765269" ID="ID_1404790840" MODIFIED="1776204785977" TEXT="EngineBufferMetadata"/>
+<node CREATED="1776204765269" ID="ID_1404790840" MODIFIED="1776204785977" TEXT="EngineBufferMetadata">
+<node CREATED="1776605957061" ID="ID_405169256" MODIFIED="1776606058887" TEXT="eigenst&#xe4;ndiger Service">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      zwar k&#246;nnte man einfach eine Instanz von BufferMetadata hinstellen &#8212; ich halte das aber nicht f&#252;r klug, denn BufferMetadata ist Implementierungs-Code (und ich bin nicht gl&#252;cklich damit, wiewohl ich keine Argumente dagegen finde)
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1776606067153" ID="ID_1057221878" MODIFIED="1776611491005" TEXT="bekommt ein reduziertes Interface">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Keine Funktionalit&#228;t zum Bedienen konkreter Allokationen
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1776611243004" ID="ID_1857604671" MODIFIED="1776611263510" TEXT="nehme die SimpleBufferStateRegistry als Vorbild"/>
+<node CREATED="1776611264755" ID="ID_403795481" MODIFIED="1776611278322" TEXT="lasse alle Allokations-bezogenen Aufrufe weg"/>
+<node CREATED="1776611279319" ID="ID_436854947" MODIFIED="1776611476802" TEXT="biete eine generalisierte discard()-Operation">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <ul>
+      <li>
+        ist NOP wenn es sich um einen typeKey handelt. Diese <b>l&#246;schen wir niemals</b>, weil dadruch die <font color="#bf0707">Hierarchie zerst&#246;rt</font>&#160;werden k&#246;nnte
+      </li>
+      <li>
+        kann auf einem stateKey m&#246;glicherweise auch die Destruktoren aufrufen (default: <font face="Monospaced" color="#644545">true </font>)
+      </li>
+      <li>
+        aber dann auch den Entry aus der Tabelle tilgen. Sonst k&#246;nnte er wiederverwendet werden &#10233; w&#252;rde Konsistenz der Keys <b>brechen</b>
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1776605772600" ID="ID_1300641128" MODIFIED="1776605856910" TEXT="mu&#xdf; aber auf Vault-Level definiert sein">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      darf also keinerlei Funktionalit&#228;t aus dem Steam-Layer voraussetzen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1776605858192" ID="ID_563549971" MODIFIED="1776605951752" TEXT="bleibe aber bei dem Namen &#x2014; weil er klar ist">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das hier ist keine generische Library, sondern ein Application-Framework. Auch &#187;Vault&#171; ist inhaltlich genau auf Lumiera ausgerichtet, der Unterschied liegt nur im Grad der Integration mit Application-level Services
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1776611511064" ID="ID_419155046" MODIFIED="1776611525083" TEXT="Mutex-Locking einf&#xfc;hren">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
 <node CREATED="1776204795573" ID="ID_1001789565" MODIFIED="1776204802934" TEXT="EngineBufferManager"/>
 </node>
 <node CREATED="1776442826894" ID="ID_509761355" MODIFIED="1776442834087" TEXT="OutputSlot mit integrieren">

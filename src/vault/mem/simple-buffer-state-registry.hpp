@@ -69,7 +69,7 @@ namespace mem   {
       ID
       defineBufferType (size_t buffSiz, TypeHandler handlerFunctions, LocalTag localTag)
         {
-          return lookup (metadata_.key (familyID_, buffSiz, move (handlerFunctions), localTag));
+          return lookup (metadata_.key (familyID_, buffSiz, move(handlerFunctions), localTag));
         }     // deliberately: maybe create storage, and return reference to it
       
       ID
