@@ -144525,7 +144525,11 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </richcontent>
 </node>
 </node>
-<node CREATED="1776604670575" ID="ID_1448023528" MODIFIED="1776604672346" TEXT="Test">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1776617913235" ID="ID_484033659" MODIFIED="1776617923691" TEXT="mu&#xdf; Synchronisationspunkt einschleifen">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1776604670575" ID="ID_1448023528" MODIFIED="1776619327263" TEXT="Test">
+<icon BUILTIN="pencil"/>
 <node COLOR="#338800" CREATED="1776604673415" ID="ID_1473562963" MODIFIED="1776612748341" TEXT="die zentralen EngineMetadata mocken">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -144543,6 +144547,37 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1776612775704" ID="ID_1966664848" MODIFIED="1776612787131" TEXT="und wird nachher wieder in undefinierten Zustand zur&#xfc;ckversetzt"/>
 <node CREATED="1776612790102" ID="ID_798359000" MODIFIED="1776612794696" TEXT="geiler code">
 <icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1776617819504" ID="ID_1759039036" MODIFIED="1776617830911" TEXT="einen test-Thread(worker) bereitstellen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1776617832875" ID="ID_1106246702" MODIFIED="1776617844968" TEXT="Daten f&#xfc;r Typ-Registrierung vorbereiten">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1776617847069" ID="ID_1390721757" MODIFIED="1776617855687" TEXT="aus dem Thread einen Typ registrieren">
+<node COLOR="#338800" CREATED="1776617861154" ID="ID_1231327024" MODIFIED="1776617886524" TEXT="Meta-Entry wurde im Thread angelegt">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1776617887545" ID="ID_469498353" MODIFIED="1776619185986" TEXT="Metadaten wurden synchronisiert in den EngineBufferMetadata-Hub">
+<icon BUILTIN="flag-pink"/>
+</node>
+</node>
+<node CREATED="1776619194372" ID="ID_1251103269" MODIFIED="1776619205443" TEXT="au&#xdf;erdem die internen Schritte f&#xfc;r eine Allokation machen">
+<node CREATED="1776619206646" ID="ID_419064528" MODIFIED="1776619213721" TEXT="aus BufferProvider kopieren..."/>
+<node COLOR="#338800" CREATED="1776619214497" ID="ID_931246531" MODIFIED="1776619325326" TEXT="Buffer-Konstruktor wurde tats&#xe4;chlich aufgerufen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Ich verwende hier einen TypeHandler, der einen vorher im Test festgelegten random-double-Wert in den buffer pflanzt. Da wir bisher noch den Bug mit dem TypeHandler-Aliasing haben, gehat das &#187;knapp am Abgrund vorbei&#171; (aber wir verwenden ja eine komplett leere BufferMetadata registry....
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>

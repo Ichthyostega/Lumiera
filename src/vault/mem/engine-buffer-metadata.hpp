@@ -89,7 +89,13 @@ namespace mem {
         : registry_{}
         { }
       
-
+      
+      size_t
+      cntEntries()  const
+        {
+          return registry_.cntEntries();
+        }
+      
       bool
       isKnown (HashVal metaID)  const
         {

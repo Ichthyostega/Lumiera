@@ -18,26 +18,31 @@
 
 #include "lib/error.hpp"
 #include "test/run.hpp"
-#include "test/test-frame.hpp"
+//#include "test/test-frame.hpp"
 #include "test/test-helper.hpp"
 #include "vault/mem/buffhandle.hpp"
 #include "vault/mem/engine-buffer-metadata.hpp"
 #include "vault/mem/local-buffer-stage.hpp"
+//#include "lib/uninitialised-storage.hpp"
 #include "lib/depend-inject.hpp"
-#include "lib/symbol.hpp"
+#include "lib/thread.hpp"
+//#include "lib/symbol.hpp"
 #include "lib/util.hpp"
+#include "test/diagnostic-output.hpp"////////////////TODO
 
 #include <memory>
 
 
-using std::strncpy;
-using std::unique_ptr;
-using test::TestFrame;
-using test::testData;
-using util::isSameObject;
-using util::isnil;
-using lib::randStr;
-using lib::Literal;
+//using std::strncpy;
+//using std::unique_ptr;
+//using test::TestFrame;
+//using test::testData;
+//using util::isSameObject;
+//using util::isnil;
+//using lib::randStr;
+//using lib::Literal;
+using std::this_thread::yield;
+using lib::Thread;
 
 namespace vault {
 namespace mem   {
@@ -67,7 +72,11 @@ namespace test  {
         return reinterpret_cast<Buff*> (std::addressof(something));
       }
     
-    
+//    struct TestBuff
+//      : lib::UninitialisedStorage<TestFrame>
+//      {
+//        
+//      };
     const size_t TEST_MAX_SIZE = 1024 * 1024;
     
     HashVal JUST_SOMETHING = 123;
@@ -107,7 +116,7 @@ namespace test  {
           
           const HashVal FAM = ranHash();
           const size_t SIZ_D = sizeof(double);
-          const double RAND1 = 1.0 + defaultGen.uni();
+          const double RANDD = 1.0 + defaultGen.uni();
           
           // create one type-key in Registry-1
           metadata::Key keyD = meta1.key (FAM,SIZ_D);
@@ -116,7 +125,7 @@ namespace test  {
           CHECK (meta1.get(keyD).isTypeKey());
           
           // create another type-key in Registry-2, this time with a constructor
-          metadata::Key keyDD = meta2.key (FAM,SIZ_D, TypeHandler::create<double> (RAND1));
+          metadata::Key keyDD = meta2.key (FAM,SIZ_D, TypeHandler::create<double> (RANDD));
           CHECK (meta2.isKnown (keyDD));
           CHECK (not meta1.isKnown (keyDD));
           CHECK (meta2.get(keyDD).isTypeKey());
@@ -135,7 +144,7 @@ namespace test  {
           CHECK (eDD.state() == LOCKED);
           CHECK (eDD.parentKey() == HashVal(keyDD));
           // and the »constructor« was indeed invoked...
-          CHECK (testBuffer == RAND1);
+          CHECK (testBuffer == RANDD);
           testBuffer += 1.1;   // add marker...
           
           // within the confines of allowed state transitions,
@@ -147,7 +156,7 @@ namespace test  {
           CHECK (meta2.get(eDD).state() == LOCKED);
           
           // importing the state record did not re-invoke the constructor
-          CHECK (testBuffer == RAND1 + 1.1);
+          CHECK (testBuffer == RANDD + 1.1);
           
           meta2.get(eDD).mark(EMITTED);
           CHECK (meta2.get(eDD).state() == EMITTED);
@@ -173,12 +182,65 @@ namespace test  {
         }
       
       
-      /** @test simulate a standard buffer provider usage cycle
+      /** @test simulate a common buffer provider usage situation,
+       *        whereby a local instance in some worker thread provides
+       *        a new (or refined) buffer type.
+       *      - create empty new EngineBufferMetadata end inject it as mock
+       *      - use a free standing LocalBufferStage instance (instead of a BufferProvider)
+       *      - launch a worker thread to conduct the test invocation of this subject
+       *      - notably register a totally new buffer type, from within the worker
+       *      - then also perform the steps necessary to lock and release a buffer
+       *      - check that the new type was migrated into the central metadata hub
        */
       void
       verify_publishNewKey()
         {
+          // provide a »central Metadata hub«
           lib::DependInject<EngineBufferMetadata>::Local<EngineBufferMetadata> metaHub;
+          metaHub.triggerCreate();
+          CHECK (0 == metaHub->cntEntries());
+          
+          // provide the test subject,
+          // which implements the BufferStage API
+          // and uses a thread-local metadata table internally
+          LocalBufferStage localStage{"verify_publishNewKey"};
+          BufferProviderSetup::Stage& stageAPI = localStage;
+          
+          // setup information used for buffer type registration
+          const size_t SIZ_D = sizeof(double);
+          const double RANDD = 1.0 + defaultGen.uni();
+          const auto HANDLER = TypeHandler::create<double>(RANDD);
+          const LocalTag TAG{defaultGen.u64()};
+          
+          HashVal metaID{0};
+          
+          // this is our »allocated buffer«
+          double testBuffer{0};
+          Buff* alloc = mark_as_Buffer (testBuffer);
+          
+          Thread testWorker{[&]
+                              {
+                                auto& typeKey = stageAPI.defineBufferType (SIZ_D, HANDLER, TAG);
+                                metaID = HashVal(typeKey); // sneak out to verify later
+                                
+                                // emulate allocation and usage of a buffer
+                                BuffAlloc allocRecord{alloc, typeKey.storageSize(),typeKey.localTag()};
+                                auto& stateKey = stageAPI.mark_locked (typeKey, allocRecord);
+                                
+                                // verify the buffer constructor was applied
+                                CHECK (testBuffer = RANDD);
+                                
+                                // release the buffer...
+                                stageAPI.mark_released (stateKey);
+                                stageAPI.discard (stateKey);
+                              }};
+          while (testWorker)
+            yield();     // wait for worker to finish
+          
+          
+          CHECK (0 != metaID);
+SHOW_EXPR(metaHub->cntEntries());
+          /////////////////////////////////////////OOO verify the complete chain from the type key to the root
         }
       
       

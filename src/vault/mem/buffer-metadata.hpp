@@ -502,6 +502,9 @@ namespace mem {
       public:
        ~Table() { verify_all_buffers_freed(); }
         
+        size_t size() const { return entries_.size(); }
+        
+        
         /** fetch metadata record, if any
          * @param hashID for the Key part of the metadata entry
          * @return pointer to the entry in the table or NULL
@@ -719,6 +722,12 @@ namespace mem {
           const Entry* entry = table_.fetch (key);
           return entry
              and entry->isAccessible();
+        }
+      
+      size_t
+      cntEntries()  const
+        {
+          return table_.size();
         }
       
       
