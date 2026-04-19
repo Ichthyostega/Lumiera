@@ -42,10 +42,11 @@
 #define VAULT_MEM_LOCAL_BUFFER_STAGE_H
 
 
-#include "vault/mem/buffer-metadata.hpp"
 #include "vault/mem/buffer-provider-setup.hpp"
-
-#include <memory>
+#include "vault/mem/engine-buffer-metadata.hpp"
+#include "vault/mem/buffer-metadata.hpp"
+#include "lib/local-slice.hpp"
+#include "lib/depend.hpp"
 
 
 namespace vault {
@@ -54,53 +55,67 @@ namespace mem   {
   
   
   /**
-   * Simple Buffer type and state tracking registry, for test and demonstration.
-   * Relies on a central hashtable, without considering any concurrency concerns.
+   * Buffer type and state tracking registry, specialised for running
+   * in a worker thread and within a massively concurrent environment.
+   * Requests are first and foremost handled by a thread-local registry.
+   * Metadata is synchronised with a global registry only when types are
+   * defined anew in the worker, or when a worker refers for the first
+   * time to an type predefined from the Builder. In those (rare) cases
+   * however, a mutex synchronisation is necessary to protect the global
+   * metadata table against corruption and ensure synchronous response:
    */
   class LocalBufferStage
     : public BufferProviderSetup::Stage
     {
+      using LocalRegistry = lib::LocalSlice<BufferMetadata>;
+      using EngineRegistry = lib::Depend<EngineBufferMetadata>;
+      
       HashVal familyID_;
-      BufferMetadata metadata_;
-
+      LocalRegistry localReg_;
+      EngineRegistry globalReg_;
+      
+      
       /* === BufferStage interface === */
 
       ID
       lookup (HashVal key)  override
         {
-          return metadata_.isKnown(key)? metadata_.get (key)
-                                       : metadata::Key::INVALID;
+          return localReg_->isKnown(key)? localReg_->get (key)
+                                        : metadata::Key::INVALID;
         }
       
       bool
       isAllotted (HashVal stateKey)  const override
         {
-          return metadata_.isLocked (stateKey);
+          return localReg_->isLocked (stateKey);
         }
       
       bool
       isAccessible (HashVal stateKey)  const override
         {
-          return metadata_.isAccessible (stateKey);
+          return localReg_->isAccessible (stateKey);
         }
       
       ID
       defineBufferType (size_t buffSiz, TypeHandler handlerFunctions, LocalTag localTag)
         {
-          return lookup (metadata_.key (familyID_, buffSiz, move (handlerFunctions), localTag));
-        }     // deliberately: maybe create storage, and return reference to it
+          ID typeKey = lookup (localReg_->key (familyID_, buffSiz, move (handlerFunctions), localTag));
+                           //  possibly create new entry, and retrieve (stable) reference
+          globalReg_().propagateUp (typeKey, *localReg_);
+          return typeKey;
+        }
       
       ID
       mark_locked (ID typeKey, BuffAlloc alloc)  override
         {
           auto& [storage,size,implMark] = alloc;
-          return metadata_.markLocked (typeKey, storage, size, implMark);
+          return localReg_->markLocked (typeKey, storage, size, implMark);
         }
       
       ID
       mark_emitted (HashVal stateKey)  override
         {
-          metadata::Entry& metaEntry = metadata_.get (stateKey);
+          metadata::Entry& metaEntry = localReg_->get (stateKey);
           metaEntry.mark(EMITTED);
           return metaEntry;   // contains also the key
         }
@@ -108,7 +123,7 @@ namespace mem   {
       ID
       mark_released (HashVal stateKey)  override
         {
-          metadata::Entry& metaEntry = metadata_.get (stateKey);
+          metadata::Entry& metaEntry = localReg_->get (stateKey);
           metaEntry.mark(FREE);   // might invoke embedded dtor function
           return metaEntry;
         }
@@ -116,7 +131,7 @@ namespace mem   {
       ID
       abandon (HashVal stateKey, bool invokeDtor)  override
         {
-          metadata::Entry& metaEntry = metadata_.get (stateKey);
+          metadata::Entry& metaEntry = localReg_->get (stateKey);
           metaEntry.invalidate (invokeDtor);
           return metaEntry;
         }
@@ -124,15 +139,16 @@ namespace mem   {
       void
       discard (HashVal stateKey)  override
         {
-          metadata_.release (stateKey);
+          localReg_->release (stateKey);
         }
       
       
     public:
       LocalBufferStage (Literal implementationID)
         : familyID_{hash_value (implementationID)}
-        , metadata_{}
         { }
+      
+      HashVal getFamilyID() const override { return familyID_; }
     };
   
   

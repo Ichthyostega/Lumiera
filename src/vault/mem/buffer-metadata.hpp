@@ -84,11 +84,14 @@
 #include "lib/util.hpp"
 
 #include <unordered_map>
+#include <utility>
 
 
 namespace vault{
 namespace mem {
   
+  using std::move;
+  using std::forward;
   using lib::HashVal;
   using util::unConst;
   
@@ -157,7 +160,7 @@ namespace mem {
     namespace { // details of hash calculation
         template<typename VAL>
         HashVal
-        chainedHash(HashVal accumulatedHash, VAL changedValue)
+        chainedHash(HashVal accumulatedHash, VAL const& changedValue)
         {
           boost::hash_combine (accumulatedHash, changedValue);
           return accumulatedHash;
@@ -210,7 +213,7 @@ namespace mem {
         Key (Key const& parent, size_t differingStorageSize)
           : parent_(parent.hashID_)
           , hashID_(chainedHash (parent_, differingStorageSize))
-          , storageSize_(differingStorageSize)  // differing from parent
+          , storageSize_(differingStorageSize)  //  ◁────────────────────────────────┨ differing from the parent
           , instanceFunc_(parent.instanceFunc_)
           , specifics_(parent.specifics_)
           { }
@@ -220,11 +223,11 @@ namespace mem {
          *  Using different ctor and dtor functions,
          *  all else remaining the same as with parent
          */
-        Key (Key const& parent, TypeHandler const& differingTypeHandlerFunctions)
+        Key (Key const& parent, TypeHandler differingTypeHandlerFunctions)
           : parent_(parent.hashID_)
           , hashID_(chainedHash (parent_, differingTypeHandlerFunctions))
           , storageSize_(parent.storageSize_)
-          , instanceFunc_(differingTypeHandlerFunctions)  // differing from parent
+          , instanceFunc_(move(differingTypeHandlerFunctions)) //  ◁─────────────────┨ differing from the parent
           , specifics_(parent.specifics_)
           { }
         
@@ -238,7 +241,7 @@ namespace mem {
           , hashID_(chainedHash (parent_, anotherTypeSpecificInternalTag))
           , storageSize_(parent.storageSize_)
           , instanceFunc_(parent.instanceFunc_)
-          , specifics_(anotherTypeSpecificInternalTag)  // differing from parent
+          , specifics_(anotherTypeSpecificInternalTag)   //  ◁───────────────────────┨ differing from the parent
           { }
         
         
@@ -600,12 +603,14 @@ namespace mem {
    * @remark in the Render Engine there can be several
    *         BufferProvider services, while the BufferMetadata
    *         uses a common setup with thread-local caches.
+   * @note BufferMetadata is *not threadsafe*, thus the workers
+   *         rely on thread-local instances, while the central
+   *         EngineBufferMetadata is protected by a monitor.
    */
   class BufferMetadata
     : util::NonCopyable
     {
       metadata::Table table_;
-                                          ///////////////////////////TICKET #854 : ensure proper locking happens "somewhere" when mutating metadata
       
     public:
       using Key   = metadata::Key;
@@ -629,7 +634,7 @@ namespace mem {
        *  the third level. All these levels describe abstract type
        *  keys, not entries for concrete buffers. The latter are
        *  always created as children of a known type key.
-       * @param familyID root anchor to keep mandators apart
+       * @param familyID root anchor to keep the mandators apart
        */
       Key
       key (HashVal familyID
@@ -641,7 +646,7 @@ namespace mem {
           Key typeKey = trackKey (familyID, storageSize);
           
           if (nontrivial(instanceFunc))
-              typeKey = trackKey (typeKey, instanceFunc);
+              typeKey = trackKey (typeKey, move(instanceFunc));
           
           if (nontrivial(specifics))
               typeKey = trackKey (typeKey, specifics);
@@ -651,9 +656,9 @@ namespace mem {
       
       /** create a sub-type, using a different type/handler functor */
       Key
-      key (Key const& parentKey, TypeHandler const& instanceFunc)
+      key (Key const& parentKey, TypeHandler instanceFunc)
         {
-          return trackKey (parentKey, instanceFunc);
+          return trackKey (parentKey, move(instanceFunc));
         }
       
       /** create a sub-type,
@@ -871,9 +876,9 @@ namespace mem {
       
       template<typename PAR, typename DEF>
       Key
-      trackKey (PAR parent, DEF specialisation)
+      trackKey (PAR parent, DEF&& specialisation)
         {
-          Key newKey{parent, specialisation};
+          Key newKey{parent, forward<DEF>(specialisation)};
           maybeStore (newKey);
           return newKey;
         }
@@ -945,9 +950,9 @@ namespace mem {
                 entry->mark(otherEntry.state());
             }
           else
-            return true;
+            return false;
           // something to synchronise => continue up the path
-          return false;
+          return true;
         }
     };
   

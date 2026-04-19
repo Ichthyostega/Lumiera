@@ -226,6 +226,7 @@ namespace mem  {
           virtual void discard (HashVal stateKey)            =0;
           virtual bool isAllotted   (HashVal stateKey) const =0;
           virtual bool isAccessible (HashVal stateKey) const =0;
+          virtual HashVal getFamilyID()  const               =0;
         };
       
       class BufferStore

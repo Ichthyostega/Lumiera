@@ -27,8 +27,6 @@
 #include "vault/mem/buffer-metadata.hpp"
 #include "vault/mem/buffer-provider-setup.hpp"
 
-#include <memory>
-
 
 namespace vault {
 namespace mem   {
@@ -115,6 +113,8 @@ namespace mem   {
         : familyID_{hash_value (implementationID)}
         , metadata_{}
         { }
+      
+      HashVal getFamilyID() const override { return familyID_; }
     };
   
   

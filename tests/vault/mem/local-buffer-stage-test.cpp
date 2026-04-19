@@ -56,31 +56,12 @@ namespace test  {
   
   namespace { // Test fixture
     
-    template<typename TY>
-    TY&
-    accessAs (metadata::Entry& entry)
-    {
-      TY* ptr = reinterpret_cast<TY*> (entry.access());
-      ASSERT (ptr);
-      return *ptr;
-    }
-    
     template<typename X>
     Buff*
     mark_as_Buffer(X& something)
       {
         return reinterpret_cast<Buff*> (std::addressof(something));
       }
-    
-//    struct TestBuff
-//      : lib::UninitialisedStorage<TestFrame>
-//      {
-//        
-//      };
-    const size_t TEST_MAX_SIZE = 1024 * 1024;
-    
-    HashVal JUST_SOMETHING = 123;
-    auto SOME_POINTER = mark_as_Buffer(JUST_SOMETHING);
     
   }//(End) Test fixture and helpers
   
@@ -106,6 +87,7 @@ namespace test  {
           verify_publishNewKey();
           verify_fetchNewKeyOnUse();
         }
+      
       
       
       /** @test key-chains can be exported and imported */
@@ -182,6 +164,7 @@ namespace test  {
         }
       
       
+      
       /** @test simulate a common buffer provider usage situation,
        *        whereby a local instance in some worker thread provides
        *        a new (or refined) buffer type.
@@ -191,16 +174,17 @@ namespace test  {
        *      - notably register a totally new buffer type, from within the worker
        *      - then also perform the steps necessary to lock and release a buffer
        *      - check that the new type was migrated into the central metadata hub
+       *      - verify that also the complete paretn-chain was published
        */
       void
       verify_publishNewKey()
         {
-          // provide a »central Metadata hub«
+          // provide a »central Metadata hub« (as a transient instance for this test)
           lib::DependInject<EngineBufferMetadata>::Local<EngineBufferMetadata> metaHub;
           metaHub.triggerCreate();
-          CHECK (0 == metaHub->cntEntries());
+          CHECK (0 == metaHub->cntEntries()); // no buffer metadata yet...
           
-          // provide the test subject,
+          // provide the *test subject*,
           // which implements the BufferStage API
           // and uses a thread-local metadata table internally
           LocalBufferStage localStage{"verify_publishNewKey"};
@@ -218,9 +202,9 @@ namespace test  {
           double testBuffer{0};
           Buff* alloc = mark_as_Buffer (testBuffer);
           
-          Thread testWorker{[&]
+          Thread testWorker{[&] /* === Use Case : a worker defines a new buffer type === */
                               {
-                                auto& typeKey = stageAPI.defineBufferType (SIZ_D, HANDLER, TAG);
+                                auto& typeKey = stageAPI.defineBufferType (SIZ_D, HANDLER, TAG); //  ◁─────────────────┨ data up-sync happens here
                                 metaID = HashVal(typeKey); // sneak out to verify later
                                 
                                 // emulate allocation and usage of a buffer
@@ -232,15 +216,27 @@ namespace test  {
                                 
                                 // release the buffer...
                                 stageAPI.mark_released (stateKey);
-                                stageAPI.discard (stateKey);
+                                stageAPI.discard (stateKey);    //  ◁──────────────────────────────────────────────────┨ buffer state entry never leaves the worker thread
                               }};
           while (testWorker)
             yield();     // wait for worker to finish
           
           
           CHECK (0 != metaID);
-SHOW_EXPR(metaHub->cntEntries());
-          /////////////////////////////////////////OOO verify the complete chain from the type key to the root
+          CHECK (3 == metaHub->cntEntries());
+          CHECK (metaHub->isKnown (metaID));
+          
+          // complete registration chain has been published to the central registry
+          HashVal FAM_ID  = localStage.getFamilyID();
+          HashVal parent1 = metaHub->lookup(metaID).parentKey();
+          CHECK (metaHub->isKnown (parent1));
+          CHECK (parent1 == metaHub->defineBufferType (FAM_ID, SIZ_D, HANDLER));
+          
+          HashVal parent0 = metaHub->lookup(parent1).parentKey();
+          CHECK (metaHub->isKnown (parent0));
+          CHECK (parent0 == metaHub->defineBufferType (FAM_ID, SIZ_D));
+          
+          CHECK (FAM_ID == metaHub->lookup(parent0).parentKey());
         }
       
       

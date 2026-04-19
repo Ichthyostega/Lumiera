@@ -149,7 +149,6 @@ namespace mem   {
       
       StageImp stage_;
       Tracker& tracker_;
-      DiagnosticBufferProvider& provider_;
       
       
       /* === BufferStage proxy implementation === */
@@ -217,11 +216,12 @@ namespace mem   {
         }
       
     public:
-      InstrumentedStageProxy (StageImp rawImpl, Tracker& tracker, DiagnosticBufferProvider& provider)
+      InstrumentedStageProxy (StageImp rawImpl, Tracker& tracker)
         : stage_{move(rawImpl)}
         , tracker_{tracker}
-        , provider_{provider}
         { }
+      
+      HashVal getFamilyID() const override { return stage_->getFamilyID(); }
     };
   
   //(End) internal diagnostics helper
@@ -234,7 +234,7 @@ namespace mem   {
     : NaiveBufferSetup{}
     , tracker_{std::make_unique<BlockTracker>()}
     {
-      decorate<InstrumentedStageProxy> (bufferStage_, *tracker_, *this);
+      decorate<InstrumentedStageProxy> (bufferStage_, *tracker_);
     }
   
   DiagnosticBufferProvider::~DiagnosticBufferProvider()

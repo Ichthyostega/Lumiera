@@ -57,6 +57,7 @@
 #include "include/logging.h"
 #include "vault/mem/buffer-metadata.hpp"
 #include "lib/nocopy.hpp"
+#include "lib/sync.hpp"
 #include "lib/util.hpp"
 
 #include <utility>
@@ -68,18 +69,24 @@ namespace mem {
   using std::move;
   using util::unConst;
   
+  using lib::Sync;
+  using lib::RecursiveLock_NoWait;
+  
   
   
   
   
   /**
    * Exchange hub for buffer metadata in the Render Engine.
+   * @note all access is threadsafe (protected by mutex)
+   * @remark in the Render Engine, the bulk of metadata handling
+   *         happens in the worker threads, using LocalBufferStage.
    */
   class EngineBufferMetadata
     : util::NonCopyable
+    , public Sync<RecursiveLock_NoWait>
     {
       BufferMetadata registry_;
-                                          ///////////////////////////TICKET #854 : ensure proper locking happens "somewhere" when mutating metadata
       
     public:
       using Key   = metadata::Key;
@@ -99,31 +106,39 @@ namespace mem {
       bool
       isKnown (HashVal metaID)  const
         {
+          Lock sync{this};
           return registry_.isKnown (metaID);
         }
       
       bool
       isAllotted (HashVal metaID)  const
         {
+          Lock sync{this};
           return registry_.isLocked (metaID);
         }
       
       bool
       isAccessible (HashVal metaID)  const
         {
+          Lock sync{this};
           return registry_.isAccessible (metaID);
         }
       
       Key const&
       lookup (HashVal metaID)  const
         {
+          Lock sync{this};
           return isKnown (metaID)? registry_.get (metaID)
                                  : metadata::Key::INVALID;
         }
       
       Key const&
-      defineBufferType (HashVal familyID, size_t buffSiz, TypeHandler handlerFunctions, LocalTag localTag)
+      defineBufferType (HashVal familyID
+                       ,size_t buffSiz
+                       ,TypeHandler handlerFunctions  =TypeHandler::RAW
+                       ,LocalTag localTag             =LocalTag::UNKNOWN)
         {
+          Lock sync{this};
           return lookup (registry_.key (familyID, buffSiz, move(handlerFunctions), localTag));
         }             // possibly create new entry, and return (stable) reference to it
       
@@ -134,6 +149,7 @@ namespace mem {
       bool
       abandon (HashVal metaID, bool invokeDtor =true)
         {
+          Lock sync{this};
           Key const& key = lookup (metaID);
           Entry& metaEntry = static_cast<Entry&> (unConst(key));
           if (metaEntry.isTypeKey())
@@ -142,9 +158,25 @@ namespace mem {
           registry_.release (metaEntry);
           return true;
         }
+      
+      
+      /** push a new metadata chain from the local registry into the central hub.
+       * @remark typically required after defining a new buffer type locally */
+      void
+      propagateUp (HashVal metaID, BufferMetadata const& localRegistry)
+        {
+          Lock sync{this};
+          registry_.import(metaID, localRegistry);
+        }
+      
+      /** retrieve a metadata chain from the central registry */
+      void
+      propagateDown (HashVal metaID, BufferMetadata& localRegistry)  const
+        {
+          Lock sync{this};
+          localRegistry.import(metaID, registry_);
+        }
     };
-  
-  
   
   
 }} // namespace vault::mem

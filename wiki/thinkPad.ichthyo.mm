@@ -144225,9 +144225,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="pencil"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1776293021744" ID="ID_290625266" MODIFIED="1776522855937" TEXT="Problem: dieses Setup ist effektiv statisch/global">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Das erfordert Vorsicht, weil man dadurch die Eigenschaft einer geschlossenen Service-Instanz verliert; es ist also leider kein drop-in-replacement, mit dem man einfach eine tief eingebettete Koponente thread-local macht; theoretisch w&#252;rde letzteres zwar gehen, aber dann auf einen zweistufigen Dispatch hinauslaufen, d.h. nach dem thread-local-Zugriff m&#252;&#223;te noch ein Dispatch &#252;ber eine Map per umschlie&#223;ender Service-Instanz erfolgen.
@@ -144338,9 +144336,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="yes"/>
 <node CREATED="1776521876873" ID="ID_1636226712" MODIFIED="1776522039333" TEXT="puh ... das wird in jedem Fall h&#xe4;sslich">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       man mu&#223; den aktuellen Namespace schlie&#223;en, in lib gehen, dort die explizite Spezialisierung definieren...
@@ -144354,9 +144350,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node CREATED="1776521973780" ID="ID_1887344423" MODIFIED="1776522004871" TEXT="default ist dann LocalSlice_DefaultSetup&lt;SRV&gt;">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       direkt bei LocalSlice definiert; erzeugt eine default-konstruierte Instanz vom Service
@@ -144425,46 +144419,38 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1776556823233" ID="ID_964120138" MODIFIED="1776556838587" TEXT="State darf nur erlaubten Transitionen folgen"/>
 <node CREATED="1776556866299" ID="ID_1595480658" MODIFIED="1776557157499" TEXT="setzt implizit einen logisch koh&#xe4;renten Aufruf der Synchronisation vorraus">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Das bedeutet, die hier aufgestellten Regeln/Verbote sind so konstruiert, da&#223; sie bei einem sinnvollen Abgleich niemals auftreten k&#246;nnen.&#160;&#160;Der Sinn ergibt sich dabei aus den vorgesehenen Zustands&#252;berg&#228;ngen; es sollten nur Typ-Informationen angereichert werden, und konkrete Eintr&#228;ge sollten eigentlich gar nicht synchronisiert werden; hilfsweise sehe ich die M&#246;glichkeit vor, da&#223; konkrete Eintr&#228;ge sich gem&#228;&#223; State-Machine vorw&#228;rts bewegen (falls wir tats&#228;chlich konkrete Eintr&#228;ge zentral ablegen, wenn sie in den Cache wandern &#8212; ich kann diese M&#246;glichkeit derzeit nicht ausschlie&#223;en)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1776557583845" ID="ID_1234349568" MODIFIED="1776566359211" TEXT="Schnittstelle / Mechanismus">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1776557583845" ID="ID_1234349568" MODIFIED="1776639506739" TEXT="Schnittstelle / Mechanismus">
+<linktarget COLOR="#4898e1" DESTINATION="ID_1234349568" ENDARROW="Default" ENDINCLINATION="-650;566;" ID="Arrow_ID_82908836" SOURCE="ID_1544517395" STARTARROW="None" STARTINCLINATION="-183;12;"/>
 <icon BUILTIN="list"/>
 <node CREATED="1776557598572" ID="ID_930030080" MODIFIED="1776557685683" TEXT="hier tritt das Problem der Storage auf">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       es sollte nur alloziert werden, wenn das auch notwendig ist; man k&#246;nnte entweder einen Buffer vorsehen, oder direkt von Quelle zu Ziel arbeiten.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1776557687442" ID="ID_1438523066" MODIFIED="1776557735700" TEXT="Einsicht: das hier ist Implementierung / es geht nur um Komplexit&#xe4;t">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       es m&#252;ssen keine Komponenten gegeneinander isoliert werden; die Schnittstelle dient nur dazu, den vorgang leicht beherrschbar zu machen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1776557770647" ID="ID_1041865636" MODIFIED="1776557793535" TEXT="&#x27f9; Operation sitzt auf dem Empf&#xe4;nger und bekommt die Quelle als const"/>
 <node CREATED="1776557806144" ID="ID_1595165986" MODIFIED="1776557808303" TEXT="Logik">
@@ -144477,16 +144463,13 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <arrowlink DESTINATION="ID_1185060059" ENDARROW="Default" ENDINCLINATION="102;0;" ID="Arrow_ID_680660049" STARTARROW="None" STARTINCLINATION="102;0;"/>
 <node CREATED="1776604115107" HGAP="30" ID="ID_1186161854" MODIFIED="1776604293378" TEXT="aber nur wenn f&#xfc;r den aktuellen Eintrag was zu tun war" VSHIFT="11">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...damit kann man in der Regel das rekursive Traversieren der Kette vorzeitig abbrechen; das beruht auf einem &#187;Invarianten-Argument&#171;: Daten in der Registry sind stets konsistent, was impliziert, da&#223; wir auch den Parent-Key bereits gespeichert haben, entweder durch regul&#228;res Anlegen, oder durch eine vorausgegangenen Synchronisation
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -144513,35 +144496,36 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1776604808417" ID="ID_1839658680" MODIFIED="1776604847186" TEXT="besser &#xfc;ber lib::Depend l&#xf6;sen &#x27f9; initialisiert sich lazy"/>
 <node CREATED="1776604894666" ID="ID_1374623359" MODIFIED="1776605011172" TEXT="wird nur relevant an den zweien hier besprochenen Synchronisations-Szenarien">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       also entweder wenn jeman eine lokale Instanz aufruft, um einen neuen Typ zu registrieren, oder wenn ein lokal nicht bekannter type-Key auftritt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1776617913235" ID="ID_484033659" MODIFIED="1776617923691" TEXT="mu&#xdf; Synchronisationspunkt einschleifen">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1776617913235" ID="ID_484033659" MODIFIED="1776639405911" TEXT="mu&#xdf; Synchronisationspunkt einschleifen">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1776639369543" ID="ID_757411317" MODIFIED="1776639385010" TEXT="verwende getrennte Funktionen f&#xfc;r up-sync und down-sync">
+<icon BUILTIN="idea"/>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1776604670575" ID="ID_1448023528" MODIFIED="1776619327263" TEXT="Test">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1776639386094" ID="ID_808614387" MODIFIED="1776639429905" TEXT="baue bei der Gelegenheit auch gleich die globale Mutex-Sync ein">
+<arrowlink COLOR="#4ff278" DESTINATION="ID_419155046" ENDARROW="Default" ENDINCLINATION="1269;0;" ID="Arrow_ID_703288918" STARTARROW="None" STARTINCLINATION="1269;0;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1776604670575" ID="ID_1448023528" MODIFIED="1776639366613" TEXT="Test">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1776604673415" ID="ID_1473562963" MODIFIED="1776612748341" TEXT="die zentralen EngineMetadata mocken">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       soll auf jeden Fall ausschlie&#223;en, da&#223; dieser Test die zentral-Instanz verschmutzt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1776612751815" ID="ID_423973357" MODIFIED="1776612774748" TEXT="verifiziert(Debugger): die globale Instanz ist vorher undefiniert"/>
 <node CREATED="1776612775704" ID="ID_1966664848" MODIFIED="1776612787131" TEXT="und wird nachher wieder in undefinierten Zustand zur&#xfc;ckversetzt"/>
@@ -144555,28 +144539,27 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node COLOR="#338800" CREATED="1776617832875" ID="ID_1106246702" MODIFIED="1776617844968" TEXT="Daten f&#xfc;r Typ-Registrierung vorbereiten">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1776617847069" ID="ID_1390721757" MODIFIED="1776617855687" TEXT="aus dem Thread einen Typ registrieren">
+<node COLOR="#435e98" CREATED="1776617847069" ID="ID_1390721757" MODIFIED="1776639361490" TEXT="aus dem Thread einen Typ registrieren">
 <node COLOR="#338800" CREATED="1776617861154" ID="ID_1231327024" MODIFIED="1776617886524" TEXT="Meta-Entry wurde im Thread angelegt">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1776617887545" ID="ID_469498353" MODIFIED="1776619185986" TEXT="Metadaten wurden synchronisiert in den EngineBufferMetadata-Hub">
-<icon BUILTIN="flag-pink"/>
+<node COLOR="#338800" CREATED="1776617887545" ID="ID_469498353" MODIFIED="1776639340169" TEXT="Metadaten wurden synchronisiert in den EngineBufferMetadata-Hub">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1776619194372" ID="ID_1251103269" MODIFIED="1776619205443" TEXT="au&#xdf;erdem die internen Schritte f&#xfc;r eine Allokation machen">
-<node CREATED="1776619206646" ID="ID_419064528" MODIFIED="1776619213721" TEXT="aus BufferProvider kopieren..."/>
+<node COLOR="#435e98" CREATED="1776619194372" ID="ID_1251103269" MODIFIED="1776639361489" TEXT="au&#xdf;erdem die internen Schritte f&#xfc;r eine Allokation machen">
+<node COLOR="#435e98" CREATED="1776619206646" ID="ID_419064528" MODIFIED="1776639345520" TEXT="aus BufferProvider kopieren...">
+<icon BUILTIN="idea"/>
+</node>
 <node COLOR="#338800" CREATED="1776619214497" ID="ID_931246531" MODIFIED="1776619325326" TEXT="Buffer-Konstruktor wurde tats&#xe4;chlich aufgerufen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Ich verwende hier einen TypeHandler, der einen vorher im Test festgelegten random-double-Wert in den buffer pflanzt. Da wir bisher noch den Bug mit dem TypeHandler-Aliasing haben, gehat das &#187;knapp am Abgrund vorbei&#171; (aber wir verwenden ja eine komplett leere BufferMetadata registry....
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -144649,36 +144632,29 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1776204765269" ID="ID_1404790840" MODIFIED="1776204785977" TEXT="EngineBufferMetadata">
 <node CREATED="1776605957061" ID="ID_405169256" MODIFIED="1776606058887" TEXT="eigenst&#xe4;ndiger Service">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       zwar k&#246;nnte man einfach eine Instanz von BufferMetadata hinstellen &#8212; ich halte das aber nicht f&#252;r klug, denn BufferMetadata ist Implementierungs-Code (und ich bin nicht gl&#252;cklich damit, wiewohl ich keine Argumente dagegen finde)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
-<node CREATED="1776606067153" ID="ID_1057221878" MODIFIED="1776611491005" TEXT="bekommt ein reduziertes Interface">
+<node COLOR="#435e98" CREATED="1776606067153" ID="ID_1057221878" MODIFIED="1776639521908" TEXT="bekommt ein reduziertes Interface">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Keine Funktionalit&#228;t zum Bedienen konkreter Allokationen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
+<icon BUILTIN="yes"/>
 <node CREATED="1776611243004" ID="ID_1857604671" MODIFIED="1776611263510" TEXT="nehme die SimpleBufferStateRegistry als Vorbild"/>
 <node CREATED="1776611264755" ID="ID_403795481" MODIFIED="1776611278322" TEXT="lasse alle Allokations-bezogenen Aufrufe weg"/>
 <node CREATED="1776611279319" ID="ID_436854947" MODIFIED="1776611476802" TEXT="biete eine generalisierte discard()-Operation">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <ul>
       <li>
@@ -144695,35 +144671,34 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
+<node COLOR="#435e98" CREATED="1776639443069" ID="ID_1544517395" MODIFIED="1776639513459" TEXT="zus&#xe4;tzlich Funktionen f&#xfc;r Daten-Abgleich">
+<arrowlink COLOR="#4898e1" DESTINATION="ID_1234349568" ENDARROW="Default" ENDINCLINATION="-650;566;" ID="Arrow_ID_82908836" STARTARROW="None" STARTINCLINATION="-183;12;"/>
+<icon BUILTIN="idea"/>
+</node>
 </node>
 <node CREATED="1776605772600" ID="ID_1300641128" MODIFIED="1776605856910" TEXT="mu&#xdf; aber auf Vault-Level definiert sein">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       darf also keinerlei Funktionalit&#228;t aus dem Steam-Layer voraussetzen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1776605858192" ID="ID_563549971" MODIFIED="1776605951752" TEXT="bleibe aber bei dem Namen &#x2014; weil er klar ist">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       das hier ist keine generische Library, sondern ein Application-Framework. Auch &#187;Vault&#171; ist inhaltlich genau auf Lumiera ausgerichtet, der Unterschied liegt nur im Grad der Integration mit Application-level Services
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1776611511064" ID="ID_419155046" MODIFIED="1776611525083" TEXT="Mutex-Locking einf&#xfc;hren">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1776611511064" ID="ID_419155046" MODIFIED="1776639433744" TEXT="Mutex-Locking einf&#xfc;hren">
+<linktarget COLOR="#4ff278" DESTINATION="ID_419155046" ENDARROW="Default" ENDINCLINATION="1269;0;" ID="Arrow_ID_703288918" SOURCE="ID_808614387" STARTARROW="None" STARTINCLINATION="1269;0;"/>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node CREATED="1776204795573" ID="ID_1001789565" MODIFIED="1776204802934" TEXT="EngineBufferManager"/>
