@@ -144486,9 +144486,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1776566302722" ID="ID_563548473" MODIFIED="1776566323627" TEXT="ein release / dtor-call kann nicht synchronisiert werden"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1776566422332" ID="ID_773286904" MODIFIED="1776604505367" TEXT="Verbindung zur zentral-Registry">
-<icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1776566441432" ID="ID_83703051" MODIFIED="1776604516229" TEXT="neue Typ-Registrierung im Thread &#x27f9; zur Zentrale publiziert">
+<node COLOR="#338800" CREATED="1776566422332" ID="ID_773286904" MODIFIED="1776707180399" TEXT="Verbindung zur zentral-Registry">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1776566441432" ID="ID_83703051" MODIFIED="1776707176040" TEXT="neue Typ-Registrierung im Thread &#x27f9; zur Zentrale publiziert">
 <node CREATED="1776604591195" ID="ID_1133340482" MODIFIED="1776604688880" TEXT="brauche daf&#xfc;r die zentralen EngineMetadata">
 <node COLOR="#5b280f" CREATED="1776604776169" ID="ID_1295263836" MODIFIED="1776604807258" TEXT="Aua &#x2014; jetzt gibt&apos;s doch eine statische Initialisierung">
 <icon BUILTIN="button_cancel"/>
@@ -144565,7 +144565,23 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1776566459396" ID="ID_20651536" MODIFIED="1776604516229" TEXT="Verwendung im Thread &#x27f8; Typ aus Zentrale synchronisiert"/>
+<node COLOR="#435e98" CREATED="1776566459396" ID="ID_20651536" MODIFIED="1776707176041" TEXT="Verwendung im Thread &#x27f8; Typ aus Zentrale synchronisiert">
+<node COLOR="#435e98" CREATED="1776704448745" ID="ID_1701721015" MODIFIED="1776707039908" TEXT="wo wird der down-sync eingeschleift?">
+<icon BUILTIN="help"/>
+<node CREATED="1776704463019" ID="ID_1647332020" MODIFIED="1776704470100" TEXT="mu&#xdf; in lookup() sitzen"/>
+<node CREATED="1776706983787" ID="ID_1432209099" MODIFIED="1776707010485" TEXT="der wird n&#xe4;mlich auch bereits von BufferProvider::lockBuffer() verwendet"/>
+<node CREATED="1776707011321" ID="ID_70753884" MODIFIED="1776707021020" TEXT="auch andere Informations-Funktionen machen einen lookup()"/>
+</node>
+<node COLOR="#338800" CREATED="1776707043517" ID="ID_1534309023" MODIFIED="1776707166222" TEXT="Test">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1776707049394" ID="ID_1727759495" MODIFIED="1776707052989" TEXT="Aufbau ganz analog"/>
+<node COLOR="#338800" CREATED="1776707072891" ID="ID_1256499400" MODIFIED="1776707169760" TEXT="mir fehlt ein Beleg da&#xdf; tats&#xe4;chlich eine Synchronisation stattfindet">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1776707101847" ID="ID_1368500895" MODIFIED="1776707138447" TEXT="lege die cntEntries() auf die LocalBufferStage-Schnittstelle"/>
+<node CREATED="1776707139396" ID="ID_1964413531" MODIFIED="1776707159816" TEXT="das ist nur f&#xfc;r den Test relevant (aber schadet nicht)"/>
+</node>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1776204575221" ID="ID_869340284" MODIFIED="1776204579271" TEXT="Store-Slice"/>

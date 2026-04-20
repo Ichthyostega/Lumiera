@@ -16,31 +16,15 @@
  */
 
 
-#include "lib/error.hpp"
 #include "test/run.hpp"
-//#include "test/test-frame.hpp"
 #include "test/test-helper.hpp"
-#include "vault/mem/buffhandle.hpp"
 #include "vault/mem/engine-buffer-metadata.hpp"
 #include "vault/mem/local-buffer-stage.hpp"
-//#include "lib/uninitialised-storage.hpp"
 #include "lib/depend-inject.hpp"
 #include "lib/thread.hpp"
-//#include "lib/symbol.hpp"
-#include "lib/util.hpp"
-#include "test/diagnostic-output.hpp"////////////////TODO
-
-#include <memory>
+#include "lib/error.hpp"
 
 
-//using std::strncpy;
-//using std::unique_ptr;
-//using test::TestFrame;
-//using test::testData;
-//using util::isSameObject;
-//using util::isnil;
-//using lib::randStr;
-//using lib::Literal;
 using std::this_thread::yield;
 using lib::Thread;
 
@@ -49,12 +33,10 @@ namespace mem   {
 namespace test  {
   
   using LERR_(LOGIC);
-//  using LERR_(FATAL);
-//  using LERR_(INVALID);
   using LERR_(LIFECYCLE);
   
   
-  namespace { // Test fixture
+  namespace { // Test helper
     
     template<typename X>
     Buff*
@@ -63,7 +45,7 @@ namespace test  {
         return reinterpret_cast<Buff*> (std::addressof(something));
       }
     
-  }//(End) Test fixture and helpers
+  }
   
   
   
@@ -83,6 +65,7 @@ namespace test  {
       run (Arg)
         {
           seedRand();
+          
           verify_DataTransfer();
           verify_publishNewKey();
           verify_fetchNewKeyOnUse();
@@ -174,7 +157,7 @@ namespace test  {
        *      - notably register a totally new buffer type, from within the worker
        *      - then also perform the steps necessary to lock and release a buffer
        *      - check that the new type was migrated into the central metadata hub
-       *      - verify that also the complete paretn-chain was published
+       *      - verify that also the complete parent-chain was published
        */
       void
       verify_publishNewKey()
@@ -196,7 +179,7 @@ namespace test  {
           const auto HANDLER = TypeHandler::create<double>(RANDD);
           const LocalTag TAG{defaultGen.u64()};
           
-          HashVal metaID{0};
+          HashVal typeID{0};
           
           // this is our »allocated buffer«
           double testBuffer{0};
@@ -205,7 +188,7 @@ namespace test  {
           Thread testWorker{[&] /* === Use Case : a worker defines a new buffer type === */
                               {
                                 auto& typeKey = stageAPI.defineBufferType (SIZ_D, HANDLER, TAG); //  ◁─────────────────┨ data up-sync happens here
-                                metaID = HashVal(typeKey); // sneak out to verify later
+                                typeID = HashVal(typeKey); // sneak out to verify later
                                 
                                 // emulate allocation and usage of a buffer
                                 BuffAlloc allocRecord{alloc, typeKey.storageSize(),typeKey.localTag()};
@@ -222,13 +205,13 @@ namespace test  {
             yield();     // wait for worker to finish
           
           
-          CHECK (0 != metaID);
+          CHECK (0 != typeID);
           CHECK (3 == metaHub->cntEntries());
-          CHECK (metaHub->isKnown (metaID));
+          CHECK (metaHub->isKnown (typeID));
           
           // complete registration chain has been published to the central registry
           HashVal FAM_ID  = localStage.getFamilyID();
-          HashVal parent1 = metaHub->lookup(metaID).parentKey();
+          HashVal parent1 = metaHub->lookup(typeID).parentKey();
           CHECK (metaHub->isKnown (parent1));
           CHECK (parent1 == metaHub->defineBufferType (FAM_ID, SIZ_D, HANDLER));
           
@@ -240,9 +223,70 @@ namespace test  {
         }
       
       
+      /** @test simulate another common buffer provider usage situation,
+       *        where a local instance starts using a type that was previously
+       *        defined in the central registry.
+       *      - setup an empty new EngineBufferMetadata end inject it as mock
+       *      - this time however a new type is defined into this central registry
+       *      - in a new worker thread, the local registry is initially empty
+       *      - yet when a lookup fails, a down-sync from the global registry happens
+       *      - after that the type is also known locally and can be used for allocations.
+       *      - nothing is published back and so any state records remain conined
+       *        to the current worker thread
+       */ 
       void
       verify_fetchNewKeyOnUse()
         {
+          lib::DependInject<EngineBufferMetadata>::Local<EngineBufferMetadata> metaHub;
+          
+          // setup information used for buffer type registration
+          const size_t SIZ_D = sizeof(double);
+          const double RANDD = 1.0 + defaultGen.uni();
+          const auto HANDLER = TypeHandler::create<double>(RANDD);
+          
+          LocalBufferStage localStage{"verify_fetchNewKeyOnUse"};
+          BufferProviderSetup::Stage& stageAPI = localStage;
+          HashVal FAM_ID  = localStage.getFamilyID();
+          CHECK (FAM_ID == hash_value (Literal{"verify_fetchNewKeyOnUse"}));
+          
+          metaHub.triggerCreate();
+          HashVal typeID = metaHub->defineBufferType (FAM_ID, SIZ_D, HANDLER);
+          CHECK (metaHub->isKnown(typeID));
+          CHECK (metaHub->lookup(typeID).storageSize() == SIZ_D);
+          CHECK (2 == metaHub->cntEntries());
+          
+          Thread testWorker{[&] /* === Use Case : worker uses a buffer type defined "elsewhere" type === */
+                              {
+                                // initially the thread-local registry is empty
+                                CHECK (0 == localStage.cntEntries());
+                                
+                                auto& typeKey = stageAPI.lookup(typeID); //  ◁─────────────────────────────────────────┨ data down-sync happens here
+                                CHECK (typeKey != metadata::Key::INVALID);
+                                CHECK (typeKey.storageSize() == SIZ_D);
+                                CHECK (typeKey.localTag() == LocalTag::UNKNOWN);
+                                CHECK (2 == localStage.cntEntries());
+                                
+                                double testBuffer{0};
+                                Buff* alloc = mark_as_Buffer (testBuffer);
+
+                                // emulate allocation and usage of a buffer
+                                BuffAlloc allocRecord{alloc, typeKey.storageSize(),typeKey.localTag()};
+                                auto& stateKey = stageAPI.mark_locked (typeKey, allocRecord);
+                                CHECK (3 == localStage.cntEntries()); // one additional (state)entry
+                                
+                                // verify the buffer constructor was applied
+                                CHECK (testBuffer = RANDD);
+                                
+                                // release the buffer...
+                                stageAPI.mark_released (stateKey);
+                                stageAPI.discard (stateKey);    //  ◁──────────────────────────────────────────────────┨ buffer state entry never leaves the worker thread
+                                CHECK (2 == localStage.cntEntries());
+                              }};
+          while (testWorker)
+            yield();     // wait for worker to finish
+          
+          // no new entries in central registry
+          CHECK (2 == metaHub->cntEntries());
         }
     };
   

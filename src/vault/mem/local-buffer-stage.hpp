@@ -62,7 +62,7 @@ namespace mem   {
    * defined anew in the worker, or when a worker refers for the first
    * time to an type predefined from the Builder. In those (rare) cases
    * however, a mutex synchronisation is necessary to protect the global
-   * metadata table against corruption and ensure synchronous response:
+   * metadata table against corruption and ensure synchronous response.
    */
   class LocalBufferStage
     : public BufferProviderSetup::Stage
@@ -76,10 +76,13 @@ namespace mem   {
       
       
       /* === BufferStage interface === */
-
+      
       ID
       lookup (HashVal key)  override
         {
+          if (not localReg_->isKnown(key))
+            globalReg_().propagateDown(key, *localReg_);
+          // try it again after sync with central registry
           return localReg_->isKnown(key)? localReg_->get (key)
                                         : metadata::Key::INVALID;
         }
@@ -149,6 +152,7 @@ namespace mem   {
         { }
       
       HashVal getFamilyID() const override { return familyID_; }
+      size_t  cntEntries()  const          { return localReg_->cntEntries(); }
     };
   
   
