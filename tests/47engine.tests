@@ -77,6 +77,16 @@ return: 0
 END
 
 
+TEST "Local buffer memory handling" LocalBufferStore_test <<END
+return: 0
+END
+
+
+TEST "Local pool for buffer memory" LocalMemPool_test <<END
+return: 0
+END
+
+
 TEST "Mock support for render job planning" MockSupport_test <<END
 return: 0
 END

@@ -74191,7 +74191,8 @@
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
-<node CREATED="1716728664652" ID="ID_1644685634" MODIFIED="1716728666879" TEXT="Strukturen">
+<node CREATED="1716728664652" ID="ID_1644685634" MODIFIED="1776730151948" TEXT="Strukturen">
+<linktarget COLOR="#5c6c7a" DESTINATION="ID_1644685634" ENDARROW="Default" ENDINCLINATION="-892;2424;" ID="Arrow_ID_284707831" SOURCE="ID_622928577" STARTARROW="None" STARTINCLINATION="-1922;116;"/>
 <node CREATED="1716728667779" ID="ID_467995115" MODIFIED="1716728670092" TEXT="Namen">
 <node CREATED="1716728670955" ID="ID_1816165091" MODIFIED="1716728689109">
 <richcontent TYPE="NODE"><html>
@@ -104114,7 +104115,7 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1734633240020" ID="ID_1833389965" MODIFIED="1734633492466" TEXT="Dokumentation FeedManifold">
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1734633240020" ID="ID_1833389965" MODIFIED="1776722093773" TEXT="Dokumentation FeedManifold">
 <linktarget COLOR="#82878e" DESTINATION="ID_1833389965" ENDARROW="Default" ENDINCLINATION="-1293;117;" ID="Arrow_ID_1228391309" SOURCE="ID_1954201095" STARTARROW="None" STARTINCLINATION="1447;0;"/>
 <icon BUILTIN="pencil"/>
 <node COLOR="#435e98" CREATED="1734633366137" ID="ID_1795683894" MODIFIED="1734633419361" TEXT="beispielhafte Demonstration im NodeBase_test">
@@ -143866,8 +143867,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1770828120216" ID="ID_1112258994" MODIFIED="1770828480214" TEXT="vorl&#xe4;ufige Implementierung">
 <icon BUILTIN="hourglass"/>
-<node CREATED="1771434625350" ID="ID_87043838" MODIFIED="1771434634233" TEXT="vorgreifende Vereinfachungen">
-<node CREATED="1771434938648" ID="ID_598910343" MODIFIED="1771435079926" TEXT="Anouncements ignorieren und jeweils per Heap allozieren">
+<node CREATED="1771434625350" ID="ID_87043838" MODIFIED="1776718387608" TEXT="vorgreifende Vereinfachungen">
+<arrowlink COLOR="#1d52cb" DESTINATION="ID_675333491" ENDARROW="Default" ENDINCLINATION="-1046;-49;" ID="Arrow_ID_1903219737" STARTARROW="None" STARTINCLINATION="178;997;"/>
+<node CREATED="1771434938648" ID="ID_598910343" MODIFIED="1776718297756" TEXT="Anouncements ignorieren und jeweils per Heap allozieren">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -143876,9 +143878,10 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
     </p>
   </body>
 </html></richcontent>
+<icon BUILTIN="full-1"/>
 <icon BUILTIN="forward"/>
 </node>
-<node CREATED="1771434732657" ID="ID_1779414160" MODIFIED="1771435551701" TEXT="Verwaltung nur lokal im Thread">
+<node CREATED="1771434732657" ID="ID_1779414160" MODIFIED="1776718304320" TEXT="Verwaltung nur lokal im Thread">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -143887,6 +143890,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
     </p>
   </body>
 </html></richcontent>
+<icon BUILTIN="full-2"/>
+<icon BUILTIN="hourglass"/>
 <node CREATED="1771434757430" ID="ID_460264122" MODIFIED="1771434936057" TEXT="es gibt dort bereits ein gewisses Pooling">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -143899,7 +143904,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node CREATED="1771434769658" ID="ID_830753719" MODIFIED="1771434796468" TEXT="aber neu-Allokationen und Freigaben passieren direkt per Heap-Memory"/>
 </node>
-<node CREATED="1771435088490" ID="ID_1084049036" MODIFIED="1771435456405" TEXT="Zentraler Pool arbeitet identisch wie die thread-lokale Verwaltung">
+<node CREATED="1771435088490" ID="ID_1084049036" MODIFIED="1776718310328" TEXT="Zentraler Pool arbeitet identisch wie die thread-lokale Verwaltung">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -143908,6 +143913,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
     </p>
   </body>
 </html></richcontent>
+<icon BUILTIN="full-3"/>
+<icon BUILTIN="hourglass"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1776195345475" ID="ID_773105612" MODIFIED="1776195351345" TEXT="Problem der Code-Struktur">
@@ -144148,6 +144155,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
+<node CREATED="1776718003509" ID="ID_647108530" MODIFIED="1776718243116" TEXT="nach Durcharbeiten eines Prototypen &#x27f6; viel weniger dramatisch"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1776305000767" ID="ID_1274607292" MODIFIED="1776305029772" TEXT="mein Bauchgef&#xfc;hl sagt, ich sollte das notieren und dann weiter gehen">
@@ -144223,7 +144231,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1776204526672" ID="ID_961403309" MODIFIED="1776477618192" TEXT="Prototyping (testgetrieben)">
 <icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1776293021744" ID="ID_290625266" MODIFIED="1776522855937" TEXT="Problem: dieses Setup ist effektiv statisch/global">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1776293021744" ID="ID_290625266" MODIFIED="1776717333143" TEXT="Problem: dieses Setup ist effektiv statisch/global">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -144238,7 +144246,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
     </p>
   </body>
 </html></richcontent>
-<arrowlink COLOR="#a61032" DESTINATION="ID_808171568" ENDARROW="Default" ENDINCLINATION="11;-94;" ID="Arrow_ID_66477268" STARTARROW="None" STARTINCLINATION="259;15;"/>
+<arrowlink COLOR="#a61032" DESTINATION="ID_808171568" ENDARROW="Default" ENDINCLINATION="11;-94;" ID="Arrow_ID_66477268" STARTARROW="None" STARTINCLINATION="257;14;"/>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node COLOR="#338800" CREATED="1776204565654" ID="ID_45614742" MODIFIED="1776522493293" TEXT="generischer Slice">
@@ -144248,8 +144256,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1776292987880" ID="ID_808037956" MODIFIED="1776477504910" TEXT="Zugriff &#xfc;ber Pointer-artige Syntax">
 <icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1776293021744" ID="ID_808171568" MODIFIED="1776522852160" TEXT="Problem: thread_local ist implizit statisch">
-<linktarget COLOR="#a61032" DESTINATION="ID_808171568" ENDARROW="Default" ENDINCLINATION="11;-94;" ID="Arrow_ID_66477268" SOURCE="ID_290625266" STARTARROW="None" STARTINCLINATION="259;15;"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1776293021744" FOLDED="true" ID="ID_808171568" MODIFIED="1776717333143" TEXT="Problem: thread_local ist implizit statisch">
+<linktarget COLOR="#a61032" DESTINATION="ID_808171568" ENDARROW="Default" ENDINCLINATION="11;-94;" ID="Arrow_ID_66477268" SOURCE="ID_290625266" STARTARROW="None" STARTINCLINATION="257;14;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1776293040334" ID="ID_555811092" MODIFIED="1776293060463" TEXT="das hei&#xdf;t es ist eine &#xbb;versteckte globale Variable&#xab;"/>
 <node CREATED="1776295872712" ID="ID_906429004" MODIFIED="1776295889501" TEXT="stellt das f&#xfc;r den konkteten Use-Case &#xfc;berhaupt eine Beschr&#xe4;nkung dar?">
@@ -144300,7 +144308,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 <node CREATED="1776438434768" ID="ID_983236748" MODIFIED="1776438441595" TEXT="Definition und Verwendung">
-<node CREATED="1776438447894" ID="ID_1968488456" MODIFIED="1776438567887" TEXT="verwendet sinnvollerweise einen CONF-Typparameter">
+<node COLOR="#5b280f" CREATED="1776438447894" ID="ID_1968488456" MODIFIED="1776716436255" TEXT="verwendet sinnvollerweise einen CONF-Typparameter">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -144309,6 +144317,11 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
     </p>
   </body>
 </html></richcontent>
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1776716439084" ID="ID_224588412" MODIFIED="1776716578096" TEXT="Kompromi&#xdf;: eine Definition LocalSlice&lt;SRV, CONF&gt; ist klarer &#x2014; und CONF hat Default">
+<arrowlink COLOR="#6fa89b" DESTINATION="ID_69243918" ENDARROW="Default" ENDINCLINATION="22;-44;" ID="Arrow_ID_1076534574" STARTARROW="None" STARTINCLINATION="-123;4;"/>
+<icon BUILTIN="idea"/>
 </node>
 <node CREATED="1776438572468" ID="ID_1804894411" MODIFIED="1776438590402" TEXT="die einzelne Instanz ist Monostate und default-konstruierbar und kopierbar"/>
 </node>
@@ -144328,7 +144341,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1776474854867" ID="ID_1487038882" MODIFIED="1776474859837" TEXT="CONF">
 <node CREATED="1776474861216" ID="ID_399712480" MODIFIED="1776474870435" TEXT="typedef Service"/>
 <node CREATED="1776474871327" ID="ID_142831800" MODIFIED="1776474879674" TEXT="eine init-Funktion"/>
-<node COLOR="#338800" CREATED="1776518244557" ID="ID_69243918" MODIFIED="1776522105417" TEXT="Verbesserung : Setup f&#xfc;r Service-Typ">
+<node COLOR="#338800" CREATED="1776518244557" FOLDED="true" ID="ID_69243918" MODIFIED="1776716567158" TEXT="Verbesserung : Setup f&#xfc;r Service-Typ">
+<linktarget COLOR="#6fa89b" DESTINATION="ID_69243918" ENDARROW="Default" ENDINCLINATION="22;-44;" ID="Arrow_ID_1076534574" SOURCE="ID_224588412" STARTARROW="None" STARTINCLINATION="-123;4;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1776518286073" ID="ID_992160718" MODIFIED="1776518303060" TEXT="LocalSlice&lt;SRV&gt;"/>
 <node CREATED="1776518303809" ID="ID_1039989287" MODIFIED="1776518323133" TEXT="normalerweise gen&#xfc;gt ein default-Setup-Template"/>
@@ -144364,7 +144378,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1776474884669" ID="ID_66962199" MODIFIED="1776477543983" TEXT="LocalSlice_test">
+<node COLOR="#338800" CREATED="1776474884669" FOLDED="true" ID="ID_66962199" MODIFIED="1776717007045" TEXT="LocalSlice_test">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1776474892988" ID="ID_1841154811" MODIFIED="1776474911245" TEXT="verwende ein Backend das eine Variable inkrementiert"/>
 <node CREATED="1776474912122" ID="ID_225188556" MODIFIED="1776474931651" TEXT="verwende einen front-End-Service, der das Backend mehrfach aufruft"/>
@@ -144405,13 +144419,18 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node CREATED="1776204569932" ID="ID_1285006287" MODIFIED="1776204574453" TEXT="Stage-Slice">
-<node COLOR="#338800" CREATED="1776522893322" ID="ID_1694212347" MODIFIED="1776566332195" TEXT="BufferMetadata um Migration erweitern">
+<node COLOR="#338800" CREATED="1776204569932" ID="ID_1285006287" MODIFIED="1776717570113" TEXT="Technologie: lokaler Metadaten-Store">
+<linktarget COLOR="#3c578a" DESTINATION="ID_1285006287" ENDARROW="Default" ENDINCLINATION="-27;32;" ID="Arrow_ID_145731778" SOURCE="ID_292130223" STARTARROW="None" STARTINCLINATION="-327;39;"/>
 <icon BUILTIN="button_ok"/>
-<node CREATED="1776556044669" ID="ID_857328588" MODIFIED="1776556055571" TEXT="Begriff: Key-chain">
+<node COLOR="#338800" CREATED="1776522893322" FOLDED="true" ID="ID_1694212347" MODIFIED="1776717948394" TEXT="BufferMetadata um Migration erweitern">
+<linktarget COLOR="#d9fdb2" DESTINATION="ID_1694212347" ENDARROW="Default" ENDINCLINATION="-99;6;" ID="Arrow_ID_1098636138" SOURCE="ID_1413251785" STARTARROW="None" STARTINCLINATION="-278;-12;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1776556044669" ID="ID_857328588" MODIFIED="1776717311121" TEXT="Begriff: Key-chain">
+<icon BUILTIN="info"/>
 <node CREATED="1776556089572" ID="ID_565019641" MODIFIED="1776556103328" TEXT="ein Entry mit allen seinen Parent-Entries"/>
 </node>
-<node CREATED="1776556171704" ID="ID_1788136226" MODIFIED="1776556247063" TEXT="Zweck: Abgleich zwischen zwei Metadata-Tabellen">
+<node CREATED="1776556171704" ID="ID_1788136226" MODIFIED="1776717303124" TEXT="Zweck: Abgleich zwischen zwei Metadata-Tabellen">
+<icon BUILTIN="yes"/>
 <node CREATED="1776556712396" ID="ID_346498254" MODIFIED="1776556720533" TEXT="Erg&#xe4;nzen fehlender Informationen"/>
 <node CREATED="1776556725461" ID="ID_154374768" MODIFIED="1776556776087" TEXT="beschr&#xe4;nkter Abgleich bestimmter Daten"/>
 <node CREATED="1776556777026" ID="ID_441313668" MODIFIED="1776556800521" TEXT="Exception falls inkonsistenter Abgleich verlangt wird">
@@ -144488,7 +144507,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node COLOR="#338800" CREATED="1776566422332" ID="ID_773286904" MODIFIED="1776707180399" TEXT="Verbindung zur zentral-Registry">
 <icon BUILTIN="button_ok"/>
-<node COLOR="#435e98" CREATED="1776566441432" ID="ID_83703051" MODIFIED="1776707176040" TEXT="neue Typ-Registrierung im Thread &#x27f9; zur Zentrale publiziert">
+<node COLOR="#435e98" CREATED="1776566441432" FOLDED="true" ID="ID_83703051" MODIFIED="1776717324379" TEXT="neue Typ-Registrierung im Thread &#x27f9; zur Zentrale publiziert">
 <node CREATED="1776604591195" ID="ID_1133340482" MODIFIED="1776604688880" TEXT="brauche daf&#xfc;r die zentralen EngineMetadata">
 <node COLOR="#5b280f" CREATED="1776604776169" ID="ID_1295263836" MODIFIED="1776604807258" TEXT="Aua &#x2014; jetzt gibt&apos;s doch eine statische Initialisierung">
 <icon BUILTIN="button_cancel"/>
@@ -144565,7 +144584,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node COLOR="#435e98" CREATED="1776566459396" ID="ID_20651536" MODIFIED="1776707176041" TEXT="Verwendung im Thread &#x27f8; Typ aus Zentrale synchronisiert">
+<node COLOR="#435e98" CREATED="1776566459396" FOLDED="true" ID="ID_20651536" MODIFIED="1776717325670" TEXT="Verwendung im Thread &#x27f8; Typ aus Zentrale synchronisiert">
 <node COLOR="#435e98" CREATED="1776704448745" ID="ID_1701721015" MODIFIED="1776707039908" TEXT="wo wird der down-sync eingeschleift?">
 <icon BUILTIN="help"/>
 <node CREATED="1776704463019" ID="ID_1647332020" MODIFIED="1776704470100" TEXT="mu&#xdf; in lookup() sitzen"/>
@@ -144584,12 +144603,13 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node CREATED="1776204575221" ID="ID_869340284" MODIFIED="1776204579271" TEXT="Store-Slice"/>
-<node CREATED="1776204694205" ID="ID_1617552510" MODIFIED="1776204701641" TEXT="WorkerBufferStage">
-<node CREATED="1776436907819" ID="ID_1105234662" MODIFIED="1776439761005" TEXT="Rolle der RootID kl&#xe4;ren">
+<node COLOR="#338800" CREATED="1776204694205" ID="ID_1617552510" MODIFIED="1776717871305" TEXT="LocalBufferStage">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1776436907819" ID="ID_1105234662" MODIFIED="1776717877295" TEXT="Rolle der RootID kl&#xe4;ren">
 <linktarget COLOR="#5b39d7" DESTINATION="ID_1105234662" ENDARROW="Default" ENDINCLINATION="113;-353;" ID="Arrow_ID_8614584" SOURCE="ID_1444097357" STARTARROW="None" STARTINCLINATION="-450;30;"/>
+<icon BUILTIN="yes"/>
 <node CREATED="1776436962370" ID="ID_1640147854" MODIFIED="1776436990673" TEXT="dient als Parent-ID f&#xfc;r alle abstrakten Buffer-Types"/>
-<node CREATED="1776436992946" ID="ID_1491925884" MODIFIED="1776437012665" TEXT="k&#xf6;nnte damit wie eine Mandant-ID wirken">
+<node CREATED="1776436992946" FOLDED="true" ID="ID_1491925884" MODIFIED="1776717882558" TEXT="k&#xf6;nnte damit wie eine Mandant-ID wirken">
 <node CREATED="1776439531426" ID="ID_1417995514" MODIFIED="1776439536521" TEXT="aktuelle Implementierung">
 <node CREATED="1776439537615" ID="ID_765591297" MODIFIED="1776439591395" TEXT="neuer Typ &#x27f6; BufferStage::defineBufferType() &#x27f6; BufferMetadata::Key"/>
 <node CREATED="1776439592374" ID="ID_195017187" MODIFIED="1776439628902" TEXT="hier wird der in der Instanz gespeicherte Family-Hash als root-Seed verwendet"/>
@@ -144636,16 +144656,129 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node COLOR="#435e98" CREATED="1776477731488" ID="ID_1764139922" MODIFIED="1776477873117" TEXT="Fazit">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <node CREATED="1776477743564" ID="ID_893955025" MODIFIED="1776477774653" TEXT="durch Heben in die BufferStage wird BufferMetadata ein beliebig nutzbarer Service"/>
-<node CREATED="1776477775546" ID="ID_1413251785" MODIFIED="1776477827799" TEXT="zudem noch Import/Export von Registrierungen &#x27f9; thread-local aufrufbar"/>
+<node CREATED="1776477775546" ID="ID_1413251785" MODIFIED="1776717963200" TEXT="zudem noch Import/Export von Registrierungen &#x27f9; thread-local aufrufbar">
+<arrowlink COLOR="#d9fdb2" DESTINATION="ID_1694212347" ENDARROW="Default" ENDINCLINATION="-99;6;" ID="Arrow_ID_1098636138" STARTARROW="None" STARTINCLINATION="-278;-12;"/>
+</node>
 <node CREATED="1776477847655" ID="ID_1038306996" MODIFIED="1776477868291" TEXT="einen globalen Metadataten-Store bekommt man so &#xbb;nebenbei geschenkt&#xab;">
 <icon BUILTIN="idea"/>
 </node>
 </node>
 </node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1776717506994" ID="ID_1042445347" MODIFIED="1776717829645" TEXT="Setup">
+<node CREATED="1776717529469" ID="ID_976163129" MODIFIED="1776717537610" TEXT="LocalSlice&lt;BufferMetadata&gt;"/>
+<node CREATED="1776717539011" ID="ID_1202139011" MODIFIED="1776717548429" TEXT="lib::Depend&lt;EngineBufferMetadata&gt;">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#a3020b" CREATED="1776717684522" ID="ID_86581395" MODIFIED="1776717708497" TEXT="hier Monitor-Lock auf allen Zugriffen">
+<font NAME="SansSerif" SIZE="11"/>
+<icon BUILTIN="messagebox_warning"/>
 </node>
-<node CREATED="1776204702568" ID="ID_1197574712" MODIFIED="1776204706747" TEXT="WorkerBufferStore"/>
+</node>
+<node CREATED="1776717549236" ID="ID_292130223" MODIFIED="1776717585916" TEXT="Synchronisationspunkte">
+<arrowlink COLOR="#3c578a" DESTINATION="ID_1285006287" ENDARROW="Default" ENDINCLINATION="-27;32;" ID="Arrow_ID_145731778" STARTARROW="None" STARTINCLINATION="-327;39;"/>
+<node CREATED="1776717616255" ID="ID_1345485576" MODIFIED="1776717650141" TEXT="defineBufferType &#x27f9; propagateUp"/>
+<node CREATED="1776717630558" ID="ID_211240465" MODIFIED="1776717671951" TEXT="lookup(fail) &#x27f9; propagateDown"/>
+</node>
+<node COLOR="#338800" CREATED="1776717842661" ID="ID_299627358" MODIFIED="1776717850818" TEXT="LocalBufferStage_test">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1776717717869" ID="ID_1249350870" MODIFIED="1776717825852" TEXT="sonst ist das API-Mapping komplett identisch wie SimpleBufferStateRegistry">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...was mich <i>tats&#228;chlich etwas verbl&#252;fft,</i>&#160;aber es geht wohl grade glatt auf (und das best&#228;tigt m.E. auch das API-Design)
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1776204702568" ID="ID_1197574712" MODIFIED="1776717865253" TEXT="LocalBufferStore">
+<node CREATED="1776718325330" ID="ID_675333491" MODIFIED="1776718375192" TEXT="in mehreren Schritten eine &#xbb;einfache&#xab; Implementierung aufbauen">
+<linktarget COLOR="#1d52cb" DESTINATION="ID_675333491" ENDARROW="Default" ENDINCLINATION="-1046;-49;" ID="Arrow_ID_1903219737" SOURCE="ID_87043838" STARTARROW="None" STARTINCLINATION="178;997;"/>
+<node CREATED="1776720614578" ID="ID_1271966009" MODIFIED="1776720628696" TEXT="im ersten Schritt ohne Pooling, direkt auf den Heap"/>
+<node CREATED="1776720640172" ID="ID_953357896" MODIFIED="1776720658883" TEXT="dann eine einfache Pool-Steuerung dazubauen"/>
+</node>
+<node CREATED="1776720939330" ID="ID_1122029657" MODIFIED="1776720953799" TEXT="eine Test-Instrumentierung mu&#xdf; mit entwickelt werden">
+<node CREATED="1776720954934" ID="ID_533496174" MODIFIED="1776721127952" TEXT="Vorbild ist der BlockFlow">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      dort gibt es die Syntax <font face="Monospaced" color="#4f3a3a">watch(blockFlow)</font>, f&#252;r den Zugang zu einem Diagnostic-Wrapper, der als friend deklariert ist, aber im Prod-Betrieb einfach nicht vorhanden ist. Durch ein solches Schema kann man sich bis in kritische Details hinein das Verhalten eines production-Grade Memory-Managers anschauen, ohne spezielle Mocks und Stubs einsetzen zu m&#252;ssen.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1776721171818" ID="ID_1260732507" MODIFIED="1776721345544" TEXT="die zweite Ausbaustufe ist das Ziel &#x27f9; Diagnostik darauf auslegen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Mit &#187;zweite Ausbaustufe&#171; meine ich, da&#223; ein lokaler Pool da ist. Auch wenn dann sp&#228;ter auch noch ein Austausch von Datenbl&#246;cken die direkte Allokation erg&#228;nzt.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Demnach mu&#223; ich von Anfang an eine solche Pool-Struktur vorsehen, obschon er zu Beginn niemals passiv Speicher vorh&#228;lt
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1776721908184" ID="ID_1043942557" MODIFIED="1776721969540" TEXT="LocalMemPool &#x27f5; als Basis-Service">
+<node CREATED="1776721990317" ID="ID_939953958" MODIFIED="1776722093776" TEXT="dieser soll thread-local laufen und den gesamten Aufruf-&#xfc;bergreifenden State enthalten">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Diese Komponente entspricht also den BufferMetadata im LocalBufferStage: es ist ein technischer Implementierungs-Service, auf dessen Basis das BufferStore-API durch Abstraktion realisiert werden kann
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1776722096447" ID="ID_1042530898" MODIFIED="1776730063985" TEXT="Vorraussetzungen und Intentionen kl&#xe4;ren">
+<icon BUILTIN="yes"/>
+<node CREATED="1776722126935" ID="ID_622928577" MODIFIED="1776730151948" TEXT="verwendet C++ Allocator als Basis-Komponente">
+<arrowlink COLOR="#5c6c7a" DESTINATION="ID_1644685634" ENDARROW="Default" ENDINCLINATION="-892;2424;" ID="Arrow_ID_284707831" STARTARROW="None" STARTINCLINATION="-1922;116;"/>
+<node CREATED="1776728829329" ID="ID_668886450" MODIFIED="1776728839460" TEXT="puh ... damit kann ich jetzt wenig anfangen"/>
+<node CREATED="1776728840468" ID="ID_790562538" MODIFIED="1776728850563" TEXT="das ist eine Menge von unfertigen Anl&#xe4;ufen"/>
+<node CREATED="1776728968556" ID="ID_668224503" MODIFIED="1776729214247" TEXT="ein zentrales Problem ist da&#xdf; der &#xbb;C++ Allocator&#xab; selber &#x201e;halb daneben&#x201c; ist">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      in Ticket #1366 (und auch oben in der Mindmap) habe ich definiert, wie ein gutes Framework aussehen sollte. Aber das ist mehr eine Wunschliste &#8212; was gebraucht w&#252;rde w&#228;re ein Satz koh&#228;renter Concepts, denn es geht grade <i>nicht</i>&#160;darum, eine einzige &#187;Library-Implementierung&#171; zu schaffen; vielmehr geht es darum, die diversen Library-Container und Frameworks so unter einen Hut zu bekommen, da&#223; sie <i>composable</i>&#160;werden.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1776729354439" ID="ID_1095417165" MODIFIED="1776729378457" TEXT="LinkedElements und die StdFactory dort k&#xf6;nnten ein Beispiel sein"/>
+<node CREATED="1776729996848" ID="ID_1369917935" MODIFIED="1776730019385" TEXT="&#x27f9; das Schema ist da&#xdf; eine &#xbb;Factory&#xab; den Allocator dekoriert"/>
+</node>
+</node>
+<node CREATED="1776722100558" ID="ID_1140947088" MODIFIED="1776722105058" TEXT="LocalMemPool_test"/>
+</node>
+</node>
 <node CREATED="1776204787207" ID="ID_1425789996" MODIFIED="1776204792254" TEXT="vorerst nur anlegen">
-<node CREATED="1776204765269" ID="ID_1404790840" MODIFIED="1776204785977" TEXT="EngineBufferMetadata">
+<node COLOR="#338800" CREATED="1776204765269" ID="ID_1404790840" MODIFIED="1776718452275" TEXT="EngineBufferMetadata">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1776605957061" ID="ID_405169256" MODIFIED="1776606058887" TEXT="eigenst&#xe4;ndiger Service">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -144716,8 +144849,34 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <linktarget COLOR="#4ff278" DESTINATION="ID_419155046" ENDARROW="Default" ENDINCLINATION="1269;0;" ID="Arrow_ID_703288918" SOURCE="ID_808614387" STARTARROW="None" STARTINCLINATION="1269;0;"/>
 <icon BUILTIN="button_ok"/>
 </node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1776718454776" ID="ID_945576551" MODIFIED="1776718582794">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <u>Stand</u>: <i>bis auf weiteres</i>&#160;bereits fertig
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Das erscheint bereits elaboriert genug, um damit eine echte Render-Engine zu betreiben. Wobei festzuhalten ist, da&#223; das genze Konzept mit den hierarchiscen Metadaten bisher eine &#187;frei drehende Idee&#171; ist, und einer gr&#252;ndlichen Kritik unterzogen werden sollte.
+    </p>
+  </body>
+</html>
+</richcontent>
 </node>
-<node CREATED="1776204795573" ID="ID_1001789565" MODIFIED="1776204802934" TEXT="EngineBufferManager"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1776204795573" ID="ID_1001789565" MODIFIED="1776718587143" TEXT="EngineBufferManager">
+<icon BUILTIN="hourglass"/>
+</node>
 </node>
 <node CREATED="1776442826894" ID="ID_509761355" MODIFIED="1776442834087" TEXT="OutputSlot mit integrieren">
 <node CREATED="1776442835820" ID="ID_1709918207" MODIFIED="1776442866636" TEXT="der integrierte OutputBufferProxy hat auch eine BufferStage-Implementierung"/>
@@ -167563,7 +167722,7 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1702415671495" ID="ID_690521198" MODIFIED="1702416445460" TEXT="Doxygen">
 <icon BUILTIN="prepare"/>
 <node CREATED="1702416632230" ID="ID_842762054" MODIFIED="1702416637945" TEXT="zentrale Technologien">
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1734633109131" ID="ID_1954201095" MODIFIED="1734633492466" TEXT="FeedManifold">
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1734633109131" ID="ID_1954201095" MODIFIED="1776722093773" TEXT="FeedManifold">
 <arrowlink COLOR="#82878e" DESTINATION="ID_1833389965" ENDARROW="Default" ENDINCLINATION="-1293;117;" ID="Arrow_ID_1228391309" STARTARROW="None" STARTINCLINATION="1447;0;"/>
 <icon BUILTIN="pencil"/>
 </node>

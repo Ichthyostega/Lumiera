@@ -1,5 +1,5 @@
 /*
-  SIMPLE-BUFFER-STATE-REGISTRY.hpp  -  buffer state management with thread-local sub-services
+  LOCAL-BUFFER-STAGE.hpp  -  buffer state management with thread-local sub-services
 
    Copyright (C)
      2026             Hermann Vosseler <Ichthyostega@web.de>
