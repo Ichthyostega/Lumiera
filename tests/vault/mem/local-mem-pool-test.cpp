@@ -38,13 +38,19 @@ namespace test  {
   
   namespace { // Test helper
     
-//    template<typename X>
-//    Buff*
-//    mark_as_Buffer(X& something)
-//      {
-//        return reinterpret_cast<Buff*> (std::addressof(something));
-//      }
-//    
+    inline constexpr Buff*
+    fake_Buffer(size_t id)
+      {
+        return reinterpret_cast<Buff*> (id);
+      }
+    
+    Buff* const MEM1 = fake_Buffer(1);
+    Buff* const MEM2 = fake_Buffer(2);
+    Buff* const MEM3 = fake_Buffer(3);
+    
+    const size_t SIZ10{10};
+    const size_t SIZ20{20};
+    const size_t SIZ30{30};
   }
   
   
@@ -63,15 +69,52 @@ namespace test  {
         {
           seedRand();
           
-          verify_blah();
-          verify_lolz();
+          simpleUse();
+          verify_matchAlloc();
+          verify_selectAlloc();
+          verify_pruneAlloc();
         }
       
       
       
-      /** @test  */
+      /** @test show how to place an allocation into the pool */
       void
-      verify_blah()
+      simpleUse()
+        {
+          LocalMemPool pool;
+          pool.add (MEM1, SIZ20);
+          CHECK (pool.canServe(SIZ20));
+          CHECK (pool.canServe(SIZ10));
+          
+          auto [mem,siz] = pool.retrieve (SIZ10); 
+          CHECK (MEM1 == mem);
+          CHECK (SIZ20 == siz);
+          CHECK (not pool.canServe(SIZ10));
+          
+          pool.reAdd (MEM1);
+          CHECK (pool.canServe(SIZ20));
+        }
+      
+      
+      
+      /** @test 
+       */
+      void
+      verify_matchAlloc()
+        {
+          LocalMemPool pool;
+          CHECK (watch(pool).isEmpty());
+          
+          pool.add (MEM1, SIZ10);
+          CHECK (watch(pool).cnt(SIZ10) == 1);
+        }
+      
+      
+      
+      /** @test 
+       */
+      void
+      verify_selectAlloc()
         {
         }
       
@@ -80,7 +123,7 @@ namespace test  {
       /** @test 
        */
       void
-      verify_lolz()
+      verify_pruneAlloc()
         {
         }
     };
