@@ -145846,6 +145846,16 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1777050440887" ID="ID_1006627416" MODIFIED="1777066692859" TEXT="Verhalten spezifizieren">
 <icon BUILTIN="yes"/>
 <node CREATED="1777050520227" ID="ID_796153621" MODIFIED="1777050524094" TEXT="Use-Cases">
+<node CREATED="1777068198295" ID="ID_1010651012" MODIFIED="1777068390012" TEXT="Allokationsbedarf ank&#xfc;ndigen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      zwar wird das niemals einer konkreten Allokation vorgreifen, sollte aber <i>den internen Seiten-Effekt haben da&#223; Pool-Eingr&#228;ge &#187;beiseitegelegt&#171; werden.</i>&#160; Denn sonst w&#252;rden die gleichen Eintr&#228;ge u.U. f&#252;r nachfolgende Vorank&#252;ndigungen nochmal verbucht werden, wodurch dann insgesamt zu wenig zus&#228;tzlicher Speicher angefordert wird. Das bedeutet, wir brauchen nicht nur eine Flag, sondern verschiedene Grade der Reservierung
+    </p>
+  </body>
+</html></richcontent>
+</node>
 <node CREATED="1777051227060" ID="ID_847462254" MODIFIED="1777051382666" TEXT="Allokation in den Pool &#xfc;bernehmen"/>
 <node CREATED="1777051616687" ID="ID_142096290" MODIFIED="1777051638112" TEXT="Allokation aus dem Pool entnehmen"/>
 <node CREATED="1777051746358" ID="ID_658492297" MODIFIED="1777051798530" TEXT="Allokation in den Pool zur&#xfc;ckgeben"/>
@@ -145866,14 +145876,64 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1777050453251" ID="ID_1529547535" MODIFIED="1777066700207" TEXT="Implementieren">
 <icon BUILTIN="pencil"/>
-<node CREATED="1777052048904" ID="ID_1403107789" MODIFIED="1777052073352" TEXT="die Eingangs-Queue wird komplett (transparent) integriert"/>
+<node CREATED="1777052048904" ID="ID_1403107789" MODIFIED="1777052073352" TEXT="die Eingangs-Queue wird komplett (transparent) integriert">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1777078419796" ID="ID_1966959598" MODIFIED="1777084265167" TEXT="verwende boost::lockfree::queue"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1777078428098" ID="ID_1939142827" MODIFIED="1777078435459" TEXT="ist das die richtige Wahl?">
+<icon BUILTIN="help"/>
+<node CREATED="1777078440070" ID="ID_885005752" MODIFIED="1777078470502" TEXT="verlangt &#xbb;trivial assignment&#xab; und Destructor"/>
+<node CREATED="1777078471365" ID="ID_769328039" MODIFIED="1777078487222" TEXT="hei&#xdf;t im Klartext: darf keine default-Initialiser haben">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1777078531972" ID="ID_921695652" LINK="https://stackoverflow.com/a/38780211/444796" MODIFIED="1777084274162" TEXT="Konkret: kein std::tuple">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node COLOR="#435e98" CREATED="1777078635327" ID="ID_238173965" MODIFIED="1777084271658" TEXT="mu&#xdf; mir selber eine passende Struct bauen"/>
+</node>
+<node CREATED="1777078489787" ID="ID_1970735736" MODIFIED="1777084225822" TEXT="Vorteile">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...da es sich um einen Prototyp handelt, halte ich diese Vorteile f&#252;r sehr wichtig; im Besonderen das mit dem single producer/consumer l&#228;&#223;t sich nicht ohne Weiteres sicherstellen (es ergibt sich hier nur indirekt, indem man die Klasse dann thread_local definiert und auf der anderen Seite einen zentralen Allokations-Manager als Singleton hat. Aber selbst dann k&#246;nnte man den Allokations-Manager noch von verschiedenen Threads aus nutzen.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Dazu kommt, da&#223; ich generell eine Aversion gegen Ringbuffer habe, speziell dann, wenn man keine Garantie geben kann zur maximalen Bef&#252;llung. Es &#228;rgert mich immer wieder, wenn &#187;coole&#171; Leute mit Ringbuffern um sich werfen.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="forward"/>
+<node CREATED="1777078498513" ID="ID_1558383335" MODIFIED="1777078503445" TEXT="kann dynamisch wachsen"/>
+<node CREATED="1777078504193" ID="ID_1364741326" MODIFIED="1777078513262" TEXT="kann mit mehreren Producern/Consumern umgehen"/>
+</node>
+</node>
+</node>
 <node CREATED="1777052358645" ID="ID_1367907395" MODIFIED="1777052396869" TEXT="zum Aufr&#xe4;umen wird ein Empf&#xe4;nger-&#x3bb; &#xfc;bergeben"/>
 <node CREATED="1777052497154" ID="ID_1906132363" MODIFIED="1777052517239" TEXT="vorerst den default(-Heap)-Allokator f&#xfc;r alles verwenden"/>
+<node CREATED="1777073876105" ID="ID_1153882258" MODIFIED="1777073995987" TEXT="stelle fest: LinkedElements sind nicht gut geeignet">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...und zwar, weil sie bisher kein Entfernen von Eintr&#228;gen unterst&#252;tzen (und sinnvollerweise w&#228;re auch nur ein pop() vom Anfang der Liste); au&#223;erdem w&#228;re schwierig, da&#223; man beim Entfernen die Ownership &#252;bertragen m&#252;&#223;te, um eine Re-Allokation zu verhindern.
+    </p>
+  </body>
+</html></richcontent>
+<node COLOR="#338800" CREATED="1777074497539" ID="ID_1587444173" MODIFIED="1777084232736" TEXT="sollte eine std::list verwenden (double-linked)">
+<icon BUILTIN="yes"/>
 </node>
-<node CREATED="1777050457640" ID="ID_55967690" MODIFIED="1777050461566" TEXT="Dokumentieren per Test">
+<node CREATED="1777074521660" ID="ID_1763982951" MODIFIED="1777074532534" TEXT="grunds&#xe4;tzlich: gehe von einer kleinen Anzahl an Eintr&#xe4;gen aus"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1777050457640" ID="ID_55967690" MODIFIED="1777084249904" TEXT="Dokumentieren per Test">
+<icon BUILTIN="pencil"/>
 <node CREATED="1777050471715" ID="ID_694034532" MODIFIED="1777050476406" TEXT="LocalMemPool_test"/>
-<node CREATED="1777052679889" ID="ID_1809859332" MODIFIED="1777052689966" TEXT="simpleUse()"/>
-<node CREATED="1777052647931" ID="ID_1721020388" MODIFIED="1777052658570" TEXT="verify_matchAlloc"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1777052679889" ID="ID_1809859332" MODIFIED="1777084246555" TEXT="simpleUse()">
+<icon BUILTIN="pencil"/>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1777052647931" ID="ID_1721020388" MODIFIED="1777084246554" TEXT="verify_matchAlloc">
+<icon BUILTIN="pencil"/>
+</node>
 <node CREATED="1777052660303" ID="ID_1192169892" MODIFIED="1777052665482" TEXT="verify_selectAlloc"/>
 <node CREATED="1777052670304" ID="ID_924547131" MODIFIED="1777052674241" TEXT="verify_pruneAlloc"/>
 </node>

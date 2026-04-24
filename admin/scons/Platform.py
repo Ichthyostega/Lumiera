@@ -97,6 +97,8 @@ def configure(env):
             problems.append('We need boost::lexical_cast')
         if not conf.CheckCXXHeader('boost/format.hpp'):
             problems.append('We need boost::format (header).')
+        if not conf.CheckCXXHeader('boost/lockfree/queue.hpp'):
+            problems.append('We need boost::lockfree (header).')
         if not conf.CheckLibWithHeader('boost_program_options','boost/program_options.hpp','C++'):
             problems.append('We need boost::program_options (including binary lib for linking).')
     

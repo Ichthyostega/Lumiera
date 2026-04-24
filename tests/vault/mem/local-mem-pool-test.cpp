@@ -86,7 +86,7 @@ namespace test  {
           CHECK (pool.canServe(SIZ20));
           CHECK (pool.canServe(SIZ10));
           
-          auto [mem,siz] = pool.retrieve (SIZ10); 
+          auto [mem,siz] = pool.retrieve (SIZ10);
           CHECK (MEM1 == mem);
           CHECK (SIZ20 == siz);
           CHECK (not pool.canServe(SIZ10));
@@ -97,7 +97,7 @@ namespace test  {
       
       
       
-      /** @test 
+      /** @test allocations are accounted by size
        */
       void
       verify_matchAlloc()
@@ -106,7 +106,12 @@ namespace test  {
           CHECK (watch(pool).isEmpty());
           
           pool.add (MEM1, SIZ10);
+          CHECK (watch(pool).cnt(SIZ10) == 0);                 // new allotment not ingested yet,....
+          CHECK (not watch(pool).isEmpty());                   // however, there is an entry in the in-queue
+          
+          CHECK (pool.canServe(SIZ10));                        // query causes a scan and retrieval from the in-queu
           CHECK (watch(pool).cnt(SIZ10) == 1);
+          CHECK (not watch(pool).isEmpty());
         }
       
       

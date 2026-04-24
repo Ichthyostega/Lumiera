@@ -32,7 +32,7 @@
  **       under the assumption that the allocator is a _monostate_, and
  **       exploiting _empty-base-optimisation,_ footprint is minimal.
  ** @note this linked list container is _intrusive_ and thus needs the help
- **       of the element type, which must *provide a pointer member* `next`.
+ **       of the element type, which must **provide a pointer member** `next`.
  **       Consequently, each such node element can not be member in
  **       several collections at the same time (unless they share all elements)
  ** @note as usual, any iterator relies on the continued existence and

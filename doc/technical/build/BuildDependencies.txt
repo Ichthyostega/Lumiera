@@ -40,7 +40,7 @@ Lumiera expects a ``standard'' desktop installation running a XServer.footnote:[
   Wayland is ``just around the corner'' since 10 years now. Well, recently it
   seems it is _really_ just around the corner. We are aware of the necessary
   changes, which are not very complicated to implement (since we are using
-  GTK-3). However, as long as Wayland simply crashes or hands in our
+  GTK-3). However, as long as Wayland simply crashes or hangs in our
   everyday work setup with XFCE, we will not consider this topic
   a priority. In the meantime, please report any problems
   you encounter with Lumiera running on XWayland.
@@ -97,7 +97,8 @@ Languages and Tools
 
 * BOOST (listed below are the Debian package names)
  - libboost-dev (at least *1.83*)
- - libboost-program-options-dev
+ - notably including `boost::lockfree`
+ - libboost-program-options-dev (link dependency)
 
 * Script languages
  - Python (*3.10*) required for building (->SCons)
