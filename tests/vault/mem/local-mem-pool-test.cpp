@@ -112,6 +112,28 @@ namespace test  {
           CHECK (pool.canServe(SIZ10));                        // query causes a scan and retrieval from the in-queu
           CHECK (watch(pool).cnt(SIZ10) == 1);
           CHECK (not watch(pool).isEmpty());
+          
+          pool.add (MEM2, SIZ20);
+          pool.add (MEM3, SIZ30);
+          CHECK (pool.canServe(SIZ20));
+          CHECK (pool.canServe(SIZ10));
+          CHECK (pool.size() == 3);
+          CHECK (watch(pool).cnt(SIZ10) == 1);
+          CHECK (watch(pool).cnt(SIZ20) == 1);
+          CHECK (watch(pool).cnt(SIZ30) == 1);
+          CHECK (watch(pool).cntFree()  == 3);
+          
+          auto [m1,s1] = pool.retrieve (SIZ20 -2);
+          CHECK (SIZ20 == s1);
+          CHECK (MEM2 == m1);
+          CHECK (watch(pool).cntFree()  == 2);
+          auto [m2,s2] = pool.retrieve (SIZ10);
+          CHECK (SIZ10 == s2);
+          CHECK (MEM1 == m2);
+          CHECK (watch(pool).cntFree()  == 1);
+          CHECK (pool.canServe(SIZ10));
+          CHECK (pool.canServe(SIZ20));
+          CHECK (pool.canServe(SIZ30));
         }
       
       

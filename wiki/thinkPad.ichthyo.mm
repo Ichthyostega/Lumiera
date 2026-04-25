@@ -145876,9 +145876,10 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1777050453251" ID="ID_1529547535" MODIFIED="1777066700207" TEXT="Implementieren">
 <icon BUILTIN="pencil"/>
-<node CREATED="1777052048904" ID="ID_1403107789" MODIFIED="1777052073352" TEXT="die Eingangs-Queue wird komplett (transparent) integriert">
+<node COLOR="#338800" CREATED="1777052048904" ID="ID_1403107789" MODIFIED="1777084853433" TEXT="die Eingangs-Queue wird komplett (transparent) integriert">
+<icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1777078419796" ID="ID_1966959598" MODIFIED="1777084265167" TEXT="verwende boost::lockfree::queue"/>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1777078428098" ID="ID_1939142827" MODIFIED="1777078435459" TEXT="ist das die richtige Wahl?">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#470f69" CREATED="1777078428098" ID="ID_1939142827" MODIFIED="1777084838373" TEXT="ist das die richtige Wahl?">
 <icon BUILTIN="help"/>
 <node CREATED="1777078440070" ID="ID_885005752" MODIFIED="1777078470502" TEXT="verlangt &#xbb;trivial assignment&#xab; und Destructor"/>
 <node CREATED="1777078471365" ID="ID_769328039" MODIFIED="1777078487222" TEXT="hei&#xdf;t im Klartext: darf keine default-Initialiser haben">
@@ -145887,7 +145888,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node COLOR="#435e98" CREATED="1777078635327" ID="ID_238173965" MODIFIED="1777084271658" TEXT="mu&#xdf; mir selber eine passende Struct bauen"/>
 </node>
-<node CREATED="1777078489787" ID="ID_1970735736" MODIFIED="1777084225822" TEXT="Vorteile">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1777078489787" ID="ID_1970735736" MODIFIED="1777084845753" TEXT="Vorteile">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -145909,7 +145910,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 <node CREATED="1777052358645" ID="ID_1367907395" MODIFIED="1777052396869" TEXT="zum Aufr&#xe4;umen wird ein Empf&#xe4;nger-&#x3bb; &#xfc;bergeben"/>
-<node CREATED="1777052497154" ID="ID_1906132363" MODIFIED="1777052517239" TEXT="vorerst den default(-Heap)-Allokator f&#xfc;r alles verwenden"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#620dbd" CREATED="1777052497154" ID="ID_1906132363" MODIFIED="1777084874533" TEXT="vorerst den default(-Heap)-Allokator f&#xfc;r alles verwenden">
+<icon BUILTIN="yes"/>
+</node>
 <node CREATED="1777073876105" ID="ID_1153882258" MODIFIED="1777073995987" TEXT="stelle fest: LinkedElements sind nicht gut geeignet">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -145923,6 +145926,64 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="yes"/>
 </node>
 <node CREATED="1777074521660" ID="ID_1763982951" MODIFIED="1777074532534" TEXT="grunds&#xe4;tzlich: gehe von einer kleinen Anzahl an Eintr&#xe4;gen aus"/>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1777159795008" ID="ID_851031995" MODIFIED="1777168836233" TEXT="Heuristik zum Aufr&#xe4;umen schaffen">
+<icon BUILTIN="pencil"/>
+<node CREATED="1777160636295" ID="ID_1174478817" MODIFIED="1777160642510" TEXT="gew&#xfc;nschter Effekt">
+<node CREATED="1777160710978" ID="ID_393248452" MODIFIED="1777160729106" TEXT="m&#xf6;glichst wenige und m&#xf6;glichst gut passende Buffer lokal halten"/>
+<node CREATED="1777162022979" ID="ID_763110420" MODIFIED="1777162035764" TEXT="Prio-1 ist stets den am besten passenden Buffer zu verwenden"/>
+<node CREATED="1777162072416" ID="ID_133387683" MODIFIED="1777162520272" TEXT="allerdings soll unter einem gewissen &#xbb;misfit&#xab;-Level dann MRU wichtiger werden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      denn sonst h&#228;lt nach einiger Zeit jeder Pool eine Menge selten genutzter Buffer, obwohl man mit einem Bruchteil davon auch &#252;ber die Runden kommen k&#246;nnte
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1777162521383" ID="ID_215039061" MODIFIED="1777162527306" TEXT="Ansatz">
+<node CREATED="1777162528726" ID="ID_875736163" MODIFIED="1777162538808" TEXT="vergebe einen Score f&#xfc;r erfolgreichen Match"/>
+<node CREATED="1777162540196" ID="ID_1866543398" MODIFIED="1777162577399" TEXT="reduziere den Score f&#xfc;r zu gro&#xdf;en Buffer"/>
+<node CREATED="1777162589638" ID="ID_175029995" MODIFIED="1777162673190" TEXT="ziehe Punkte ab f&#xfc;r zu kleinen (unbauchbaren) Buffer"/>
+<node CREATED="1777162681518" ID="ID_1045190433" MODIFIED="1777162711729" TEXT="clean-up verwirft Buffer,,,">
+<node CREATED="1777162712892" ID="ID_1388888751" MODIFIED="1777162719520" TEXT="die nicht reserviert oder belegt sind"/>
+<node CREATED="1777162720405" ID="ID_718342875" MODIFIED="1777162812203" TEXT="deren Score prozentual unterhalb dem Max-Score liegen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wobei dieser Prozentsatz aus dem <font face="Monospaced" color="#683d3d">degree</font>&#160;- Parameter abgeleittet wird (mit umgekehrter Orientierung)
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1777162841060" ID="ID_1652390427" MODIFIED="1777162844852" TEXT="Punkts&#xe4;tze">
+<node CREATED="1777162851571" ID="ID_1498523122" MODIFIED="1777162858662" TEXT="+10 Punkte f&#xfc;r erfolgreichen Gebrauch"/>
+<node CREATED="1777162861786" ID="ID_990114851" MODIFIED="1777162887674" TEXT="bis zu 9 Punkte Abzug davon f&#xfc;r zu gro&#xdf;en Buffer"/>
+<node CREATED="1777162888442" ID="ID_416693693" MODIFIED="1777162913895" TEXT="jeder unbrauchbare Buffer bekommt einen Malus von -2"/>
+<node CREATED="1777162914715" ID="ID_577486589" MODIFIED="1777162923685" TEXT="Score kann nicht negativ werden"/>
+</node>
+</node>
+<node CREATED="1777162988481" ID="ID_1170538606" MODIFIED="1777162995671" TEXT="Implementierung">
+<node CREATED="1777162997152" ID="ID_833672862" MODIFIED="1777163012266" TEXT="berechne f&#xfc;r jeden Buffer einen waste-Score (0..9)"/>
+<node CREATED="1777163103258" ID="ID_1723954782" MODIFIED="1777163118028" TEXT="oder besser: eine matchQuality 1..10"/>
+<node CREATED="1777164416380" ID="ID_740262476" MODIFIED="1777164435189" TEXT="auf diese wende ich den allgemeinen Score graduell an">
+<node CREATED="1777164437720" ID="ID_712610709" MODIFIED="1777164452490" TEXT="und zwar mit steigendem Gewicht f&#xfc;r schlechteren Match"/>
+<node CREATED="1777164453966" ID="ID_1158139935" MODIFIED="1777164476724" TEXT="und als Malus f&#xfc;r seltener verwendete Buffer"/>
+</node>
+<node CREATED="1777164501370" ID="ID_1271851142" MODIFIED="1777164513738" TEXT="daraus ergibt sich ein transienter selectionScore"/>
+<node CREATED="1777164514849" ID="ID_489761092" MODIFIED="1777164525297" TEXT="und gew&#xe4;hlt wird nach maximalem selectionScore"/>
+<node CREATED="1777164528024" ID="ID_1047876896" MODIFIED="1777164541639" TEXT="dieser gew&#xe4;hlte Buffer bekommt dann einen Score-Update"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1777050457640" ID="ID_55967690" MODIFIED="1777084249904" TEXT="Dokumentieren per Test">

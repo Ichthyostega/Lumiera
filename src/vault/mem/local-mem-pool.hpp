@@ -13,6 +13,31 @@
 
 /** @file local-mem-pool.hpp
  ** A local cache of buffer allocations to facilitate reuse of memory in a worker.
+ ** Since the Lumiera Render Engine relies on scheduled jobs running concurrently,
+ ** it is essential to avoid any kind of locking that might prevent the calculations
+ ** from moving past each other. One crucial functionality that might lead to such
+ ** a subtle cross-wise obstruction is the handling of buffer memory allocations.
+ ** Each worker thread in the engine thus needs a (small) thread-local pool of
+ ** buffer allocations to handle all foreseeable allocation requests. Whenever
+ ** a render job starts, the information regarding a _maximal allocation footprint_
+ ** can be retrieved from the ProcNode, since this information is determined solely
+ ** by the expected call topology. Based on this information, additional memory
+ ** can be requested from a global buffer memory allocator; and while any new
+ ** allocation will take some time, the alloted buffer entries can be sent down
+ ** to the worker's local allocation pool through a lock-free queue, so that —
+ ** hopefully — these entries have already arrived at the point when the memory
+ ** is actually required from within the recursive Render Node `pull()` call.
+ ** 
+ ** LocalMemPool is responsible for receiving those memory provisions and for
+ ** managing and assigning available buffer blocks, drawing from the pool of
+ ** locally known allocations. For every new allocation request, an attempt
+ ** is made to find a best match within the available allotments of memory.
+ ** In the exceptional case however when no suitable prepared allocation
+ ** can be found locally, new memory must be acquired right away, since
+ ** render jobs are assumed to run through without blocking waits.
+ ** 
+ ** To avoid the hazard of the pool accumulating an increasing number of surplus
+ ** allocations over time, less frequently used blocks are culled using a heuristic.  
  ** 
  ** @see local-mem-pool-test.cpp
  ** @see local-buffer-store.hpp
@@ -49,7 +74,11 @@ namespace mem   {
   
   namespace { // Configuration tuning parameters
     
-    const size_t INQUEUE_SIZ = 30; ///< initial size of the lock-free provision queue
+    const size_t INQUEUE_SIZ = 30;   ///< initial size of the lock-free provision queue
+    
+    const uint MATCH_SCORE    = 10;  ///< score to add when a buffer can be used to satisfy a request 
+    const uint UNUSABLE_MALUS = 2;   ///< reduce score whenever a buffer is too small to be useful
+    const double USAGE_WEIGHT = 0.9; ///< degree to which very frequent usage counteracts waste of memory
     
   }//(End) config parameters and internals
   
@@ -91,6 +120,8 @@ namespace mem   {
       
       InQueue inQueue_;
       BlockList blocks_;
+      
+      int32_t maxScore_{1};
       
     public:
       LocalMemPool()
@@ -138,11 +169,26 @@ namespace mem   {
        *         \ref retrieve() an allocation will use available memory.
        *         There is no _handle_ to refer to some specific reservation.
        */
-      size_t
+      uint
       reserve (uint cnt, size_t sizRequest)
         {
           ingest();
-          return 0; ///////////////////////////////////////OOO
+          uint reserved{0};
+          for (Block& block : blocks_)
+            if (reserved >= cnt)
+              break;
+            else
+            if (not (block.used or block.resd)
+                and block.alloc.siz == sizRequest)
+              { // perfect match, reserve this allocation
+                block.resd = true;
+                ++reserved;
+              }
+          if (reserved < cnt)
+            { // now look for imperfect matches
+              TODO ("how to select best matches?");
+            }
+          return reserved;
         }
       
       /**
@@ -198,7 +244,6 @@ namespace mem   {
           else
             {
               ENSURE (not found->used);
-              found->score += 1; ///////////////////TODO
               found->resd = false;
               found->used = true;
               return found->alloc;
@@ -212,11 +257,26 @@ namespace mem   {
        * @return actual number of allocations removed from the pool.
        */
       template<class FUN> ////////TODO requires std::invocable<FUN,Buff*,size_t>
-      size_t
+      uint
       yield (uint cnt, size_t siz, FUN&& consumer)
         {
           ingest();
-          return 0;///////////////////////OOO
+          uint removed{0};
+          for (auto pos = blocks_.begin()
+              ; pos != blocks_.end()
+              ; ++pos)
+            if (cnt == 0)
+              break;
+            else
+            if (not pos->used
+                and siz == pos->alloc.siz)
+              {
+                consumer (pos->alloc.mem, pos->alloc.siz);
+                blocks_.erase (pos);
+                ++removed;
+                --cnt;
+              }
+          return removed;
         }
       
       /**
@@ -228,12 +288,29 @@ namespace mem   {
        * @return actual number of allocations removed from the pool.
        */
       template<class FUN> ////////TODO requires std::invocable<FUN,Buff*,size_t>
-      size_t
+      uint
       cleanup (double degree, FUN&& consumer)
         {
           ingest();
-          return 0;///////////////////////OOO
+          uint removed{0};
+          int32_t killLevel = degree * maxScore_;
+          for (auto pos = blocks_.begin()
+              ; pos != blocks_.end()
+              ; ++pos)
+            if (not (pos->used or pos->resd)
+                and pos->score <= killLevel)
+              { // send this allocation away and remove it from the pool
+                consumer (pos->alloc.mem, pos->alloc.siz);
+                blocks_.erase (pos);
+                ++removed;
+              }
+            else
+              pos->score -= killLevel;
+           // recalibrate all score levels
+          maxScore_ -= killLevel;
+          return removed;
         }
+      
       
     private:
       void
@@ -274,23 +351,39 @@ namespace mem   {
       selectBestMatch (size_t sizRequest)
         {
           Block* match{nullptr};
-          size_t waste(-1);
+          double bestSelector{0.0};
           for (Block& block : blocks_)
-            if (not block.used
-                and sizRequest <= block.alloc.siz)
+            if (not block.used)
               {
-                size_t wasted = block.alloc.siz - sizRequest;
-                if (wasted < waste)
+                if (sizRequest > block.alloc.siz)
+                  block.score -= UNUSABLE_MALUS;
+                else
                   {
-                    waste = wasted;
-                    match = &block;
+                    double wasted = block.alloc.siz - sizRequest;
+                    double wasteScore = wasted / block.alloc.siz;
+                    double usageFact = block.score / maxScore_; 
+                    double selector = 1.0 - wasteScore * (1.0 - usageFact * USAGE_WEIGHT);
+                    if (selector > bestSelector)
+                      {
+                        bestSelector = selector;
+                        match = &block;
+                      }
                   }
               }
+          if (match)
+            {
+              ENSURE (match->alloc.siz >= sizRequest);
+              match->score += int(MATCH_SCORE * (1 - (1 - double(sizRequest) / match->alloc.siz)));
+              if (match->score > maxScore_)       // reduce score by waste factor as malus
+                maxScore_ = match->score;
+            }
           return match;
         }
       
       friend class PoolDiagnostic;
     };
+  
+  
   
   
   class PoolDiagnostic
@@ -315,6 +408,13 @@ namespace mem   {
         {
           return std::ranges::count_if (memPool_.blocks_
                                        ,[siz](Block const& b){ return siz == b.alloc.siz; });
+        }
+      
+      size_t
+      cntFree()
+        {
+          return std::ranges::count_if (memPool_.blocks_
+                                       ,[](Block const& b){ return not b.used; });
         }
     };
   
