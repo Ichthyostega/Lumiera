@@ -146072,14 +146072,23 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1777050457640" ID="ID_55967690" MODIFIED="1777084249904" TEXT="Dokumentieren per Test">
 <icon BUILTIN="pencil"/>
-<node CREATED="1777050471715" ID="ID_694034532" MODIFIED="1777050476406" TEXT="LocalMemPool_test"/>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1777052679889" ID="ID_1809859332" MODIFIED="1777084246555" TEXT="simpleUse()">
-<icon BUILTIN="pencil"/>
+<node COLOR="#435e98" CREATED="1777050471715" ID="ID_694034532" MODIFIED="1777250236591" STYLE="fork" TEXT="LocalMemPool_test">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="info"/>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1777052647931" ID="ID_1721020388" MODIFIED="1777084246554" TEXT="verify_matchAlloc">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1777052679889" ID="ID_1809859332" MODIFIED="1777250222071" TEXT="simpleUse()">
+<icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1777052660303" ID="ID_1192169892" MODIFIED="1777052665482" TEXT="verify_selectAlloc"/>
+<node COLOR="#338800" CREATED="1777052647931" ID="ID_1721020388" MODIFIED="1777252434731" TEXT="verify_matchAlloc">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1777052660303" ID="ID_1192169892" MODIFIED="1777255538360" TEXT="verify_selectAlloc">
+<icon BUILTIN="pencil"/>
+<node CREATED="1777255542851" ID="ID_1123855450" MODIFIED="1777255577205" TEXT="hier gezielt einen Mismatch provozieren"/>
+<node CREATED="1777255578550" ID="ID_912741988" MODIFIED="1777255590015" TEXT="zeigen da&#xdf; dieser nicht f&#xfc;r Reservierung herangezogen wird..."/>
+<node CREATED="1777255590787" ID="ID_1143192408" MODIFIED="1777255607747" TEXT="jedoch stets versucht wird, alle Allokations-Requests direkt zu befriedigen"/>
+<node CREATED="1777255608745" ID="ID_832626969" MODIFIED="1777255619923" TEXT="dann aber auch die Scores anschauen..."/>
+</node>
 <node CREATED="1777052670304" ID="ID_924547131" MODIFIED="1777052674241" TEXT="verify_pruneAlloc"/>
 </node>
 </node>

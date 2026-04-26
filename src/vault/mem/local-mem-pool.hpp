@@ -57,14 +57,16 @@
 #include "vault/mem/buffhandle.hpp" //////////////TODO
 //#include "lib/local-slice.hpp"
 //#include "lib/depend.hpp"
+#include "lib/iter-explorer.hpp"
+#include "lib/format-string.hpp"
 #include "lib/util.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/meta/trait.hpp"//////////////TODO
 
 #include <boost/lockfree/queue.hpp>
 #include <algorithm>
-//#include <tuple>
 #include <utility>
+#include <string>
 #include <list>
 
 
@@ -77,7 +79,7 @@ namespace mem   {
     const size_t INQUEUE_SIZ = 30;   ///< initial size of the lock-free provision queue
     
     const uint MATCH_SCORE    = 10;  ///< score to add when a buffer can be used to satisfy a request 
-    const uint UNUSABLE_MALUS = 2;   ///< reduce score whenever a buffer is too small to be useful
+    const uint MISFIT_PENALTY = 2;   ///< reduce score whenever a buffer is too small to be useful
     const double USAGE_WEIGHT = 0.9; ///< degree to which very frequent usage counteracts waste of memory
     const double CLOSE_MATCH  = 0.2; ///< fraction of wasted memory that still counts as /good match/
     
@@ -370,7 +372,7 @@ namespace mem   {
             if (not block.used)
               {
                 if (sizRequest > block.alloc.siz)
-                  block.score -= UNUSABLE_MALUS;
+                  block.score -= MISFIT_PENALTY;
                 else
                   {
                     double wasted = block.alloc.siz - sizRequest;
@@ -387,7 +389,7 @@ namespace mem   {
           if (match)
             {
               ENSURE (match->alloc.siz >= sizRequest);
-              match->score += int(MATCH_SCORE * (1 - (1 - double(sizRequest) / match->alloc.siz)));
+              match->score += int(MATCH_SCORE * double(sizRequest) / match->alloc.siz);
               if (match->score > maxScore_)       // reduce score by waste factor as malus
                 maxScore_ = match->score;
             }
@@ -435,6 +437,14 @@ namespace mem   {
         {
           return std::ranges::count_if (memPool_.blocks_
                                        ,[](Block const& b){ return not b.used; });
+        }
+      
+      auto
+      allScores()
+        {
+          return lib::explore (memPool_.blocks_)
+                    .transform([](Block const& b){ return std::string{util::_Fmt{"%d:%02d"} % b.alloc.siz % b.score}; })
+                    .effuse();
         }
     };
   

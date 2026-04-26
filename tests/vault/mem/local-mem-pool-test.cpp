@@ -55,7 +55,15 @@ namespace test  {
     const size_t SIZ10{10};
     const size_t SIZ20{20};
     const size_t SIZ30{30};
-  }
+
+    Buff* const MEM11 = fake_Buffer(11);
+    Buff* const MEM12 = fake_Buffer(12);
+    Buff* const MEM13 = fake_Buffer(13);
+    Buff* const MEM21 = fake_Buffer(21);
+    Buff* const MEM31 = fake_Buffer(31);
+    Buff* const MEM32 = fake_Buffer(32);
+    Buff* const MEM33 = fake_Buffer(33);
+}
   
   
   
@@ -102,6 +110,10 @@ namespace test  {
       
       
       /** @test allocations are accounted by size
+       *      - new memory is posted through an in-queue
+       *      - for each request, the closest matching allocation is handed out
+       *      - a partial clean-up removes unused / bad matching allocations first
+       *      - a complete clean-up clears out the pool
        */
       void
       verify_matchAlloc()
@@ -109,6 +121,7 @@ namespace test  {
           LocalMemPool pool;
           CHECK (watch(pool).isEmpty());
           
+          // Feed new allocations through the in-queue...
           pool.add (MEM1, SIZ10);
           CHECK (watch(pool).cnt(SIZ10) == 0);                 // new allotment not ingested yet,....
           CHECK (not watch(pool).isEmpty());                   // however, there is an entry in the in-queue
@@ -127,39 +140,99 @@ namespace test  {
           CHECK (watch(pool).cnt(SIZ30) == 1);
           CHECK (watch(pool).cntFree()  == 3);
           
-          auto [m1,s1] = pool.retrieve (SIZ20 -2);
-          CHECK (SIZ20 == s1);
-          CHECK (MEM2 == m1);
+          // Request some allocations from the pool....
+          auto [m1,s1] = pool.retrieve (SIZ10 -2);
+          CHECK (SIZ10 == s1);
+          CHECK (MEM1 == m1);
           CHECK (watch(pool).cntFree()  == 2);
-          auto [m2,s2] = pool.retrieve (SIZ10);
-          CHECK (SIZ10 == s2);
-          CHECK (MEM1 == m2);
+          auto [m2,s2] = pool.retrieve (SIZ20);
+          CHECK (SIZ20 == s2);
+          CHECK (MEM2 == m2);
           CHECK (watch(pool).size()     == 3);
           CHECK (watch(pool).cntFree()  == 1);
-          CHECK (pool.canServe(SIZ10));
-          CHECK (pool.canServe(SIZ20));
+          CHECK (pool.canServe(SIZ10));                        // only the SIZ30-allocation is available from the pool
+          CHECK (pool.canServe(SIZ20));                        // which however could serve also smaller requests...
           CHECK (pool.canServe(SIZ30));
           
+          // Return allocations back into the pool
           pool.reAdd (m2);
           pool.reAdd (m1);
           CHECK (watch(pool).cntFree()  == 3);
           
+          // Shrink / clean-up will return allocations through a consumer
           lib::IterQueue<size_t> returned;
-          uint cnt = pool.cleanup(0.5
-                                 ,[&](auto, size_t siz){ returned.feed (siz);});
+          auto returnAlloc = [&](auto, size_t siz){ returned.feed (siz); };
+          
+          uint cnt = pool.cleanup(0.5 ,returnAlloc);           // heuristic partial clean-up
           CHECK (cnt == 1);
-          CHECK (join(returned) == "30"_expect);
+          CHECK (join(returned) == "30"_expect);               // the SIZ30 allocation was not used yet, and thus returned first
           CHECK (watch(pool).cntFree()  == 2);
           CHECK (watch(pool).size()     == 2);
+          
+          cnt = 0;
+          cnt = pool.yield(2, SIZ20, returnAlloc);             // explicit request to return two SIZ20 allocations...
+          CHECK (cnt == 1);                                    // yet there is only one such block in the pool
+          CHECK (join(returned) == "30, 20"_expect);
+          CHECK (watch(pool).cnt(SIZ10) == 1);
+          CHECK (watch(pool).cnt(SIZ20) == 0);
+          CHECK (watch(pool).cnt(SIZ30) == 0);
+          CHECK (watch(pool).cntFree()  == 1);
+          CHECK (watch(pool).size()     == 1);
+          
+          // add a further allocation with SIZ30
+          CHECK (not pool.canServe(SIZ30));
+          pool.add (MEM3, SIZ30);
+          CHECK (watch(pool).size()     == 1);
+          CHECK (    pool.canServe(SIZ30));
+          CHECK (watch(pool).size()     == 2);
+          
+          cnt = 0;
+          cnt = pool.cleanup(1.0 ,returnAlloc);                // complete clean-up requested
+          CHECK (cnt == 2);
+          CHECK (join(returned) == "30, 20, 30, 10"_expect);
+          CHECK (watch(pool).isEmpty());
         }
       
       
       
-      /** @test 
+      /** @test the pool picks allocations heuristically
        */
       void
       verify_selectAlloc()
         {
+          LocalMemPool pool;
+          pool.add (MEM11, SIZ10);
+          pool.add (MEM31, SIZ30);
+          pool.add (MEM32, SIZ30);
+          pool.add (MEM33, SIZ30);
+          
+          uint cnt = pool.reserve(4, SIZ10);                   // request to reserve 4 blocks of SIZ10
+          CHECK (cnt == 1);                                    // yet only one block is a good match and thus reserved
+          cnt = pool.reserve(2, SIZ30-5);
+          CHECK (cnt == 2);                                    // these two reservation requests can be satisfied
+          cnt = pool.reserve(2, SIZ10);
+          CHECK (cnt == 0);                                    // but the pool is now unable to reserve more SIZ10 (without wasting memory)
+          
+          auto [m1,s1] = pool.retrieve (SIZ10);                // actual allocation requests are always served however, if possible at all
+          auto [m2,s2] = pool.retrieve (SIZ10);
+          auto [m3,s3] = pool.retrieve (SIZ10);
+          auto [m4,s4] = pool.retrieve (SIZ20+SIZ20);          // this one can certainly not be satisfied
+          CHECK (MEM11 == m1);                                 // the first request gets the good match
+          CHECK (MEM33 == m2);                                 // the following ones are satisfied with an over-allocation
+          CHECK (MEM32 == m3);
+          CHECK (not m4);
+          CHECK (watch(pool).cntFree()  == 1);
+          CHECK (watch(pool).size()     == 4);
+          
+          // return all blocks...
+          pool.reAdd (m1);
+          pool.reAdd (m2);
+          pool.reAdd (m3);
+          VERIFY_FAIL ("unknown allocation", pool.reAdd (m4))
+          VERIFY_FAIL ("unknown allocation", pool.reAdd (fake_Buffer(12345)))
+          VERIFY_FAIL ("not marked as used", pool.reAdd (MEM31))
+          CHECK (watch(pool).cntFree()  == 4);
+SHOW_EXPR(join(watch(pool).allScores()))
         }
       
       
