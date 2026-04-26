@@ -20,13 +20,17 @@
 #include "test/test-helper.hpp"
 //#include "vault/mem/engine-buffer-metadata.hpp"
 #include "vault/mem/local-mem-pool.hpp"
+#include "lib/iter-stack.hpp"
 //#include "lib/depend-inject.hpp"
 //#include "lib/thread.hpp"
 //#include "lib/error.hpp"
+#include "lib/format-util.hpp"
+#include "test/diagnostic-output.hpp"
 
 
 //using std::this_thread::yield;
 //using lib::Thread;
+using util::join;
 
 namespace vault {
 namespace mem   {
@@ -117,7 +121,7 @@ namespace test  {
           pool.add (MEM3, SIZ30);
           CHECK (pool.canServe(SIZ20));
           CHECK (pool.canServe(SIZ10));
-          CHECK (pool.size() == 3);
+          CHECK (watch(pool).size()     == 3);
           CHECK (watch(pool).cnt(SIZ10) == 1);
           CHECK (watch(pool).cnt(SIZ20) == 1);
           CHECK (watch(pool).cnt(SIZ30) == 1);
@@ -130,10 +134,23 @@ namespace test  {
           auto [m2,s2] = pool.retrieve (SIZ10);
           CHECK (SIZ10 == s2);
           CHECK (MEM1 == m2);
+          CHECK (watch(pool).size()     == 3);
           CHECK (watch(pool).cntFree()  == 1);
           CHECK (pool.canServe(SIZ10));
           CHECK (pool.canServe(SIZ20));
           CHECK (pool.canServe(SIZ30));
+          
+          pool.reAdd (m2);
+          pool.reAdd (m1);
+          CHECK (watch(pool).cntFree()  == 3);
+          
+          lib::IterQueue<size_t> returned;
+          uint cnt = pool.cleanup(0.5
+                                 ,[&](auto, size_t siz){ returned.feed (siz);});
+          CHECK (cnt == 1);
+          CHECK (join(returned) == "30"_expect);
+          CHECK (watch(pool).cntFree()  == 2);
+          CHECK (watch(pool).size()     == 2);
         }
       
       

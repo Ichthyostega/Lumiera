@@ -79,12 +79,14 @@ namespace mem   {
     const uint MATCH_SCORE    = 10;  ///< score to add when a buffer can be used to satisfy a request 
     const uint UNUSABLE_MALUS = 2;   ///< reduce score whenever a buffer is too small to be useful
     const double USAGE_WEIGHT = 0.9; ///< degree to which very frequent usage counteracts waste of memory
+    const double CLOSE_MATCH  = 0.2; ///< fraction of wasted memory that still counts as /good match/
     
   }//(End) config parameters and internals
   
   using std::move;
   using std::forward;
   using util::unConst;
+  using util::isLimited;
   
   class PoolDiagnostic;
   
@@ -164,10 +166,14 @@ namespace mem   {
        * An allocation promised hereby will be marked as reserved internally,
        * and will thus not be considered for further `reserve()` requests.
        * @return number of allocations of the indicated size,
-       *         that are available immediately and have been reserved now.
-       * @note irrespective of any reservation, an immediate request to
-       *         \ref retrieve() an allocation will use available memory.
-       *         There is no _handle_ to refer to some specific reservation.
+       *   that are available immediately and have been reserved now.
+       * @note only allocations larger yet comparatively close to the desired
+       *   size are considered; instead of reserving an over-allocation, it seems
+       *   preferable to request a fitting new one asynchronously from the global
+       *   memory pool, given that there is still some time left until it's actually
+       *   needed. However, irrespective of any reservation, an immediate request to
+       *   \ref retrieve() an allocation will use any locally available memory.
+       *   There is no _handle_ to refer to some specific reservation.
        */
       uint
       reserve (uint cnt, size_t sizRequest)
@@ -179,15 +185,17 @@ namespace mem   {
               break;
             else
             if (not (block.used or block.resd)
-                and block.alloc.siz == sizRequest)
-              { // perfect match, reserve this allocation
+                and isLimited(0.0, 1 - double(sizRequest)/block.alloc.siz, CLOSE_MATCH))
+              { // good match, reserve this allocation
                 block.resd = true;
                 ++reserved;
               }
-          if (reserved < cnt)
-            { // now look for imperfect matches
-              TODO ("how to select best matches?");
-            }
+          /*  Note we did not consider to use much larger blocks
+           *  even while they might be used to satisfy the request.
+           *  In theory, we could even sort matches by amount of waste,
+           *  but it's doubtful this would be better than requesting
+           *  a really fitting new allocation from the global manager.
+           */
           return reserved;
         }
       
@@ -264,7 +272,7 @@ namespace mem   {
           uint removed{0};
           for (auto pos = blocks_.begin()
               ; pos != blocks_.end()
-              ; ++pos)
+              ; )
             if (cnt == 0)
               break;
             else
@@ -272,10 +280,13 @@ namespace mem   {
                 and siz == pos->alloc.siz)
               {
                 consumer (pos->alloc.mem, pos->alloc.siz);
-                blocks_.erase (pos);
+                pos = blocks_.erase (pos);
                 ++removed;
                 --cnt;
               }
+            else
+              ++pos;
+            
           return removed;
         }
       
@@ -296,16 +307,19 @@ namespace mem   {
           int32_t killLevel = degree * maxScore_;
           for (auto pos = blocks_.begin()
               ; pos != blocks_.end()
-              ; ++pos)
+              ; )
             if (not (pos->used or pos->resd)
                 and pos->score <= killLevel)
               { // send this allocation away and remove it from the pool
                 consumer (pos->alloc.mem, pos->alloc.siz);
-                blocks_.erase (pos);
+                pos = blocks_.erase (pos);
                 ++removed;
               }
             else
-              pos->score -= killLevel;
+              {
+                pos->score -= killLevel;
+                ++pos;
+              }
            // recalibrate all score levels
           maxScore_ -= killLevel;
           return removed;
@@ -403,6 +417,12 @@ namespace mem   {
           return memPool_.empty();
         }
       
+      size_t
+      size()
+        {
+          return memPool_.size();
+        }
+
       size_t
       cnt (size_t siz)
         {

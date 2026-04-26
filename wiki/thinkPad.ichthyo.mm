@@ -145909,7 +145909,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node CREATED="1777052358645" ID="ID_1367907395" MODIFIED="1777052396869" TEXT="zum Aufr&#xe4;umen wird ein Empf&#xe4;nger-&#x3bb; &#xfc;bergeben"/>
+<node COLOR="#081963" CREATED="1777052358645" ID="ID_1367907395" MODIFIED="1777245268291" TEXT="zum Aufr&#xe4;umen wird ein Empf&#xe4;nger-&#x3bb; &#xfc;bergeben"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#620dbd" CREATED="1777052497154" ID="ID_1906132363" MODIFIED="1777084874533" TEXT="vorerst den default(-Heap)-Allokator f&#xfc;r alles verwenden">
 <icon BUILTIN="yes"/>
 </node>
@@ -145983,6 +145983,90 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1777164501370" ID="ID_1271851142" MODIFIED="1777164513738" TEXT="daraus ergibt sich ein transienter selectionScore"/>
 <node CREATED="1777164514849" ID="ID_489761092" MODIFIED="1777164525297" TEXT="und gew&#xe4;hlt wird nach maximalem selectionScore"/>
 <node CREATED="1777164528024" ID="ID_1047876896" MODIFIED="1777164541639" TEXT="dieser gew&#xe4;hlte Buffer bekommt dann einen Score-Update"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1777206625753" ID="ID_1782953860" MODIFIED="1777245252573" TEXT="Vor-Reservierung implementieren">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1777206637762" ID="ID_1447848991" MODIFIED="1777206704359" TEXT="Problem hier: wir sollten gute Matches bevorzugen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      sonst besteht die Gefahr, sehr gro&#223;e Bl&#246;cke f&#252;r kleine Anforderungen zu verschwenden und dann nachfolgend gr&#246;&#223;ere Allokationen anforern zu m&#252;ssen, obwohl eigentlich gen&#252;gend Storage lokal schon da w&#228;re
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1777206710869" ID="ID_1181820372" MODIFIED="1777230701643">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Schwierige Entscheidung: <b>Laufzeit-Trend ist nicht bekannt</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Insofern wei&#223; man nicht einmal, ob der Aufwand hier bedeutsam ist, oder man einfach einen Vector sortieren k&#246;nnte
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1777206798288" ID="ID_226587276" MODIFIED="1777230690484" TEXT="m&#xf6;gliche Ans&#xe4;tze">
+<icon BUILTIN="edit"/>
+<icon BUILTIN="help"/>
+<node CREATED="1777206894812" ID="ID_1484542373" MODIFIED="1777206896343" TEXT="Pass-1 gute Matches"/>
+<node CREATED="1777206897340" ID="ID_623647353" MODIFIED="1777207043059" TEXT="dann Pass-2 erst mal Kandidaten in einen Vector sammeln">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Das Problem hierbei ist, da&#223; wir daf&#252;r bereits Aufwand treiben m&#252;ssen, der u.U den Aufwand f&#252;r das Sortieren &#252;bersteigt
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1777206924680" ID="ID_849247711" MODIFIED="1777207115135" TEXT="oder bei kleiner Zahl fehlender Allokationen diese einfach nicht reservieren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Da wir letztlich sowiso einen Pool-Allokator haben, kann es durchaus sinnvoll sein, neue Allokationen zu holen, und die unpassenden alten Allokationen zeitnah aber asynchron zum Pool zur&#252;ckzuschicken
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1777207118494" ID="ID_979090781" MODIFIED="1777207124089" TEXT="Hybrid-L&#xf6;sung">
+<node CREATED="1777207132147" ID="ID_229232835" MODIFIED="1777207150800" TEXT="sofort ein kleines Array auf dem Stack bereitlegen"/>
+<node CREATED="1777207151639" ID="ID_423296164" MODIFIED="1777207164964" TEXT="im ersten Pa&#xdf; in drei Kategorien aufteilen">
+<node CREATED="1777207166712" ID="ID_6555170" MODIFIED="1777207175786" TEXT="gute Matches"/>
+<node CREATED="1777207176590" ID="ID_864575958" MODIFIED="1777207184966" TEXT="m&#xe4;&#xdf;ige Matches"/>
+<node CREATED="1777207185766" ID="ID_1169920501" MODIFIED="1777207190601" TEXT="schlechte Matches"/>
+</node>
+<node CREATED="1777207242030" ID="ID_1071090391" MODIFIED="1777207263436" TEXT="die m&#xe4;&#xdf;igen Matches nur sortieren, wenn es deutlich mehr als angefordert sind"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1777230638540" ID="ID_905617278" MODIFIED="1777230684307" TEXT="w&#xe4;hle KISS &#x27f9; ein pass mit &#xbb;guten&#xab; Matches und den Rest ignorieren">
+<icon BUILTIN="yes"/>
 </node>
 </node>
 </node>
