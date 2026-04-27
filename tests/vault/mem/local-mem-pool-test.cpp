@@ -18,27 +18,16 @@
 
 #include "test/run.hpp"
 #include "test/test-helper.hpp"
-//#include "vault/mem/engine-buffer-metadata.hpp"
 #include "vault/mem/local-mem-pool.hpp"
 #include "lib/iter-stack.hpp"
-//#include "lib/depend-inject.hpp"
-//#include "lib/thread.hpp"
-//#include "lib/error.hpp"
 #include "lib/format-util.hpp"
-#include "test/diagnostic-output.hpp"
 
 
-//using std::this_thread::yield;
-//using lib::Thread;
 using util::join;
 
 namespace vault {
 namespace mem   {
 namespace test  {
-  
-//  using LERR_(LOGIC);
-//  using LERR_(LIFECYCLE);
-  
   
   namespace { // Test helper
     
@@ -72,6 +61,11 @@ namespace test  {
   
   /**********************************************************************//**
    * @test verify handling of prospective buffer allocations in a local pool.
+   *     - demonstrate usage of the API
+   *     - show how allocations are selected and discarded
+   * @remark this covers the mechanics how allocation entries are
+   *       managed in the pool, without any infrastructure and
+   *       notably without the connection to a global manager.
    */
   class LocalMemPool_test : public Test
     {
@@ -79,12 +73,9 @@ namespace test  {
       virtual void
       run (Arg)
         {
-          seedRand();
-          
           simpleUse();
           verify_matchAlloc();
           verify_selectAlloc();
-          verify_pruneAlloc();
         }
       
       
@@ -195,7 +186,17 @@ namespace test  {
       
       
       
-      /** @test the pool picks allocations heuristically
+      /** @test the pool picks and discards allocations heuristically:
+       *      - allocations are only marked as reserved when they are
+       *        pretty close above the requested amount of memory
+       *      - however, all allocations in the pool are used
+       *        to handle requests, irrespective of reservation status
+       *      - the prime criterion to select an entry is the match quality
+       *      - yet frequently used blocks are preferred for a rather poor match
+       *      - each usage adds to the score, but better matches score higher
+       *      - but when an entry is too small to be used, it is marked with a penalty
+       *      - entries with low score are cleaned and returned first, while
+       *        successful entries with high score are retained
        */
       void
       verify_selectAlloc()
@@ -217,9 +218,9 @@ namespace test  {
           auto [m2,s2] = pool.retrieve (SIZ10);
           auto [m3,s3] = pool.retrieve (SIZ10);
           auto [m4,s4] = pool.retrieve (SIZ20+SIZ20);          // this one can certainly not be satisfied
-          CHECK (MEM11 == m1);                                 // the first request gets the good match
-          CHECK (MEM33 == m2);                                 // the following ones are satisfied with an over-allocation
-          CHECK (MEM32 == m3);
+          CHECK (m1 == MEM11);                                 // the first request gets the good match
+          CHECK (m2 == MEM33);                                 // the following ones are satisfied with an over-allocation
+          CHECK (m3 == MEM32);
           CHECK (not m4);
           CHECK (watch(pool).cntFree()  == 1);
           CHECK (watch(pool).size()     == 4);
@@ -232,16 +233,69 @@ namespace test  {
           VERIFY_FAIL ("unknown allocation", pool.reAdd (fake_Buffer(12345)))
           VERIFY_FAIL ("not marked as used", pool.reAdd (MEM31))
           CHECK (watch(pool).cntFree()  == 4);
-SHOW_EXPR(join(watch(pool).allScores()))
-        }
-      
-      
-      
-      /** @test 
-       */
-      void
-      verify_pruneAlloc()
-        {
+          
+          // all entries in the pool were scored....
+          CHECK (watch(pool).getScore(MEM31) == -2);           // never used and -2 penalty for being once to small to be useful (for SIZ20+SIZ20)
+          CHECK (watch(pool).getScore(MEM32) ==  3);           // these were used once, but as over-allocation using only 1/3 of their size SIZ30
+          CHECK (watch(pool).getScore(MEM33) ==  3);
+          CHECK (watch(pool).getScore(MEM11) == 10);           // this one was used as a perfect match and thus got the full score
+          
+          // this score determines how they are used further....
+          pool.add (MEM12, SIZ10);
+          auto [m5,s5] = pool.retrieve (SIZ10-5);
+          auto [m6,s6] = pool.retrieve (SIZ10);
+          auto [m7,s7] = pool.retrieve (SIZ10);
+          auto [m8,s8] = pool.retrieve (SIZ20);
+          auto [m9,s9] = pool.retrieve (SIZ20);
+          CHECK (m5 == MEM11);                                 // used first because it matches and has the best score
+          CHECK (m6 == MEM12);                                 // used next because it's a perfect match
+          CHECK (m7 == MEM33);                                 // this is a bad match, but it's the one left with the largest score
+          CHECK (m8 == MEM32);                                 // the next best score is used to satisfy this request for SIZ20
+          CHECK (m9 == MEM31);                                 // only one left (which has the worst score because it was never used yet)
+          CHECK (watch(pool).cntFree()  == 0);
+          CHECK (watch(pool).size()     == 5);
+          
+          pool.reAdd (m8);
+          pool.reAdd (m7);
+          pool.reAdd (m6);
+          pool.reAdd (m5);
+          CHECK (watch(pool).cntFree()  == 4);
+          CHECK (watch(pool).getScore(MEM11) == 15);           // got +5 score because the match quality was only 50% (SIZ10 but only 5 needed)
+          CHECK (watch(pool).getScore(MEM12) == 10);           // this one was new, but got a +10 score due to the perfect match
+          CHECK (watch(pool).getScore(MEM31) ==  4);           // this had -1 score but got +6 due to 60% match quality (SIZ30 but SIZ20 requested)
+          CHECK (watch(pool).getScore(MEM32) ==  9);           // previous score was +3 and it likewise got +6
+          CHECK (watch(pool).getScore(MEM33) ==  6);           // this had also +3 and was first in the list, but got only +3 (SIZ30 used to satisfy SIZ10)
+          
+          // entries removed from pool...
+          lib::IterQueue<size_t> returned;
+          auto returnAlloc = [&](Buff* mem, size_t){ returned.feed (size_t(mem)); };
+          
+          // perform a rather aggressive clean-up
+          cnt = pool.cleanup(0.7 ,returnAlloc);                // max score is 15, so anything below 0.7*15 ≡ 10 will be expunged
+          CHECK (cnt == 3);
+          CHECK (join(returned) == "12, 33, 32"_expect);       // MEM12, MEM33 and MEM32 returned, since their score as <= 10
+          CHECK (watch(pool).cntFree()  == 1);
+          CHECK (watch(pool).size()     == 2);
+          
+          CHECK (not watch(pool).isFree(MEM31));               // Note: MEM31 is still in use and thus remains in pool, even with that low score of 4
+          
+          CHECK (watch(pool).getScore(MEM11) ==  5);           // Scores were reduced accordingly, cutting away a the »kill level« of +10
+          CHECK (watch(pool).getScore(MEM31) == -6);
+          
+          pool.reAdd (MEM31);
+          auto [mX,sX] = pool.retrieve (SIZ20);
+          CHECK (mX == MEM31);
+          CHECK (sX == SIZ30);
+          pool.reAdd (MEM31);
+          CHECK (watch(pool).cntFree()  == 2);
+          CHECK (watch(pool).getScore(MEM11) ==  3);           // was penalised with -2 since MEM11 was too small to satisfy a SIZ20 request
+          CHECK (watch(pool).getScore(MEM31) ==  0);           // while MEM31 got a score of +6 for a usage with 60% match quality (SIZ30 used for SIZ20)
+          
+          // shut down the pool...
+          cnt = pool.cleanup(1.0 ,returnAlloc);
+          CHECK (cnt == 2);
+          CHECK (join(returned) == "12, 33, 32, 31, 11"_expect);
+          CHECK (pool.empty());
         }
     };
   

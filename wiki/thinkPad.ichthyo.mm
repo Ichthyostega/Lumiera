@@ -145442,7 +145442,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node CREATED="1776817873864" ID="ID_1964767554" MODIFIED="1776993703346" TEXT="Diskussion und Abw&#xe4;gung">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1776817873864" ID="ID_1964767554" MODIFIED="1777317537379" TEXT="Diskussion und Abw&#xe4;gung">
 <node CREATED="1776817881283" ID="ID_1958629364" MODIFIED="1776817923320" TEXT="tats&#xe4;chlich liegen die Modelle gar nicht so weit auseinander....">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -145489,27 +145489,28 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node COLOR="#5b280f" CREATED="1776818311073" ID="ID_52317148" MODIFIED="1776993715217" TEXT="Ich halte es f&#xfc;r gerechtfertigt, mein bestehendes Design weiterzuverfolgen">
 <font NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="button_cancel"/>
-<node CREATED="1776993849979" ID="ID_553679429" MODIFIED="1776993858232" TEXT="was mu&#xdf; ich daf&#xfc;r tun....?">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1776818387320" ID="ID_1007099106" MODIFIED="1776993904981" TEXT="BufferMetadata braucht ein Interface f&#xfc;r das Umh&#xe4;ngen von Typen">
+<node COLOR="#5b280f" CREATED="1776993849979" FOLDED="true" ID="ID_553679429" MODIFIED="1777317428449" TEXT="was mu&#xdf; ich daf&#xfc;r tun....?">
+<icon BUILTIN="button_cancel"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1776818387320" ID="ID_1007099106" MODIFIED="1777317376634" TEXT="BufferMetadata braucht ein Interface f&#xfc;r das Umh&#xe4;ngen von Typen">
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1776823231012" ID="ID_523327146" MODIFIED="1776823243844" TEXT="vielleicht auch nur einen internen Mechanismus hierf&#xfc;r"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1776819030129" ID="ID_1481123783" MODIFIED="1776819064832" TEXT="den Lebenszyklus um einen Zustand RESERVED erweitern oder FREE anders definieren">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1776819030129" ID="ID_1481123783" MODIFIED="1777317376633" TEXT="den Lebenszyklus um einen Zustand RESERVED erweitern oder FREE anders definieren">
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1776818439396" ID="ID_1036425192" MODIFIED="1776818855873" TEXT="au&#xdf;erdem: das API zum Anlegen von metadata::Entry &#xfc;berarbeiten">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1776818439396" ID="ID_1036425192" MODIFIED="1777317376633" TEXT="au&#xdf;erdem: das API zum Anlegen von metadata::Entry &#xfc;berarbeiten">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1776818867061" ID="ID_250531323" MODIFIED="1776818976504" TEXT="die Konsistenz-Bedingungen &#xfc;berdenken">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1776818867061" ID="ID_250531323" MODIFIED="1777317376632" TEXT="die Konsistenz-Bedingungen &#xfc;berdenken">
 <icon BUILTIN="yes"/>
 </node>
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1776818879574" ID="ID_864292841" MODIFIED="1776818967738" TEXT="Fragestellung: wann mu&#xdf; ein Entry &#xfc;berhaupt systematisch gefunden werden?">
 <icon BUILTIN="help"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1776878313251" ID="ID_1989720923" MODIFIED="1776878399322" TEXT="erweitern auf einen Metadaten-Payload-Typ (Template)">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1776878313251" ID="ID_1989720923" MODIFIED="1777317376633" TEXT="erweitern auf einen Metadaten-Payload-Typ (Template)">
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1776818400486" ID="ID_1741215998" MODIFIED="1776993941373" TEXT="zu untersuchen: l&#xe4;&#xdf;t sich das sogar in das interne Protokoll von BufferProvider integrieren?">
+<node BACKGROUND_COLOR="#f3d4b2" COLOR="#990033" CREATED="1776818400486" ID="ID_1741215998" MODIFIED="1777317413665" TEXT="zu untersuchen: l&#xe4;&#xdf;t sich das sogar in das interne Protokoll von BufferProvider integrieren?">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -145525,7 +145526,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1776819486115" ID="ID_754896437" MODIFIED="1776819515209" TEXT="nur provideBuffer() mu&#xdf; die &#xbb;Inbox&#xab; lesen"/>
 <node CREATED="1776819565318" ID="ID_1485868221" MODIFIED="1776819582499" TEXT="die Entscheidung &#xfc;ber discard() vom BufferStore treffen lassen"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1776819614915" ID="ID_1631834937" MODIFIED="1776819673460" TEXT="demnach m&#xfc;&#xdf;te mark_locked() intelligenter werden">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1776819614915" ID="ID_1631834937" MODIFIED="1777317376632" TEXT="demnach m&#xfc;&#xdf;te mark_locked() intelligenter werden">
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1776819766367" ID="ID_1983111074" MODIFIED="1776819782225" TEXT="m&#xfc;&#xdf;te automatisch nach einem bestehenden Entry suchen"/>
 </node>
@@ -145700,7 +145701,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node CREATED="1776993954400" ID="ID_864271040" MODIFIED="1776993961225" TEXT="nochmal nachdenken!">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1776993954400" ID="ID_864271040" MODIFIED="1777317529563" TEXT="nochmal nachdenken!">
 <icon BUILTIN="yes"/>
 <node CREATED="1776993967934" ID="ID_1550862400" MODIFIED="1776993981224" TEXT="ich sehe jetzt drei m&#xf6;gliche L&#xf6;sungen">
 <node CREATED="1776993982660" ID="ID_1304666636" MODIFIED="1776994204836" TEXT="alles neu implementieren">
@@ -145826,11 +145827,21 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-</node>
-</node>
-</node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1776818369490" ID="ID_1521404080" MODIFIED="1776819977482" TEXT="Konsequenzen und Aufgaben">
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1777317444445" ID="ID_361235105" MODIFIED="1777317455959" TEXT="Entscheidung">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
+<node CREATED="1777317458007" ID="ID_850656820" MODIFIED="1777317465421" TEXT="die Trennung akzeptieren"/>
+<node CREATED="1777317466489" ID="ID_1271076546" MODIFIED="1777317484091" TEXT="die Heuristik als eine isolierte Komponente implementieren"/>
+<node CREATED="1777317485167" ID="ID_613094753" MODIFIED="1777317500153" TEXT="&#xfc;berall die sinnvoll-einfache Variante w&#xe4;hlen"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1777317501238" ID="ID_1322641585" MODIFIED="1777317522894" TEXT="Empirische Verbessungen auf sp&#xe4;ter vertagen">
+<icon BUILTIN="hourglass"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1776818369490" ID="ID_1521404080" MODIFIED="1777317328349" TEXT="Konsequenzen und Aufgaben">
+<icon BUILTIN="pencil"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1776818377985" ID="ID_892319469" MODIFIED="1776819082287" TEXT="BufferMetadata">
 <icon BUILTIN="yes"/>
 <node CREATED="1777024713120" ID="ID_24309556" MODIFIED="1777024728172" TEXT="eigentlich keine Anpassung notwendig">
@@ -145841,7 +145852,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1777024772191" ID="ID_645148091" MODIFIED="1777024802721" TEXT="erneute Allokation mit gleicher Adresse aus FREE-State zulassen"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1777050407430" ID="ID_1385383632" MODIFIED="1777050418990" TEXT="LocalMemPool">
+<node COLOR="#435e98" CREATED="1777050407430" ID="ID_1385383632" MODIFIED="1777317323338" TEXT="LocalMemPool">
 <icon BUILTIN="yes"/>
 <node CREATED="1777050440887" ID="ID_1006627416" MODIFIED="1777066692859" TEXT="Verhalten spezifizieren">
 <icon BUILTIN="yes"/>
@@ -145874,8 +145885,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1777050453251" ID="ID_1529547535" MODIFIED="1777066700207" TEXT="Implementieren">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1777050453251" ID="ID_1529547535" MODIFIED="1777317280989" TEXT="Implementieren">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1777052048904" ID="ID_1403107789" MODIFIED="1777084853433" TEXT="die Eingangs-Queue wird komplett (transparent) integriert">
 <icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1777078419796" ID="ID_1966959598" MODIFIED="1777084265167" TEXT="verwende boost::lockfree::queue"/>
@@ -145927,23 +145938,20 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node CREATED="1777074521660" ID="ID_1763982951" MODIFIED="1777074532534" TEXT="grunds&#xe4;tzlich: gehe von einer kleinen Anzahl an Eintr&#xe4;gen aus"/>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1777159795008" ID="ID_851031995" MODIFIED="1777168836233" TEXT="Heuristik zum Aufr&#xe4;umen schaffen">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1777159795008" ID="ID_851031995" MODIFIED="1777317278947" TEXT="Heuristik zum Aufr&#xe4;umen schaffen">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1777160636295" ID="ID_1174478817" MODIFIED="1777160642510" TEXT="gew&#xfc;nschter Effekt">
 <node CREATED="1777160710978" ID="ID_393248452" MODIFIED="1777160729106" TEXT="m&#xf6;glichst wenige und m&#xf6;glichst gut passende Buffer lokal halten"/>
 <node CREATED="1777162022979" ID="ID_763110420" MODIFIED="1777162035764" TEXT="Prio-1 ist stets den am besten passenden Buffer zu verwenden"/>
 <node CREATED="1777162072416" ID="ID_133387683" MODIFIED="1777162520272" TEXT="allerdings soll unter einem gewissen &#xbb;misfit&#xab;-Level dann MRU wichtiger werden">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       denn sonst h&#228;lt nach einiger Zeit jeder Pool eine Menge selten genutzter Buffer, obwohl man mit einem Bruchteil davon auch &#252;ber die Runden kommen k&#246;nnte
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1777162521383" ID="ID_215039061" MODIFIED="1777162527306" TEXT="Ansatz">
@@ -145954,16 +145962,13 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1777162712892" ID="ID_1388888751" MODIFIED="1777162719520" TEXT="die nicht reserviert oder belegt sind"/>
 <node CREATED="1777162720405" ID="ID_718342875" MODIFIED="1777162812203" TEXT="deren Score prozentual unterhalb dem Max-Score liegen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       wobei dieser Prozentsatz aus dem <font face="Monospaced" color="#683d3d">degree</font>&#160;- Parameter abgeleittet wird (mit umgekehrter Orientierung)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1777162841060" ID="ID_1652390427" MODIFIED="1777162844852" TEXT="Punkts&#xe4;tze">
@@ -145973,7 +145978,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1777162914715" ID="ID_577486589" MODIFIED="1777162923685" TEXT="Score kann nicht negativ werden"/>
 </node>
 </node>
-<node CREATED="1777162988481" ID="ID_1170538606" MODIFIED="1777162995671" TEXT="Implementierung">
+<node COLOR="#338800" CREATED="1777162988481" ID="ID_1170538606" MODIFIED="1777317307630" TEXT="Implementierung">
+<arrowlink COLOR="#eafdb6" DESTINATION="ID_1192169892" ENDARROW="Default" ENDINCLINATION="168;-26;" ID="Arrow_ID_1362515070" STARTARROW="None" STARTINCLINATION="15;61;"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1777162997152" ID="ID_833672862" MODIFIED="1777163012266" TEXT="berechne f&#xfc;r jeden Buffer einen waste-Score (0..9)"/>
 <node CREATED="1777163103258" ID="ID_1723954782" MODIFIED="1777163118028" TEXT="oder besser: eine matchQuality 1..10"/>
 <node CREATED="1777164416380" ID="ID_740262476" MODIFIED="1777164435189" TEXT="auf diese wende ich den allgemeinen Score graduell an">
@@ -145989,40 +145996,31 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="button_ok"/>
 <node CREATED="1777206637762" ID="ID_1447848991" MODIFIED="1777206704359" TEXT="Problem hier: wir sollten gute Matches bevorzugen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       sonst besteht die Gefahr, sehr gro&#223;e Bl&#246;cke f&#252;r kleine Anforderungen zu verschwenden und dann nachfolgend gr&#246;&#223;ere Allokationen anforern zu m&#252;ssen, obwohl eigentlich gen&#252;gend Storage lokal schon da w&#228;re
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1777206710869" ID="ID_1181820372" MODIFIED="1777230701643">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Schwierige Entscheidung: <b>Laufzeit-Trend ist nicht bekannt</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Insofern wei&#223; man nicht einmal, ob der Aufwand hier bedeutsam ist, oder man einfach einen Vector sortieren k&#246;nnte
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1777206798288" ID="ID_226587276" MODIFIED="1777230690484" TEXT="m&#xf6;gliche Ans&#xe4;tze">
@@ -146031,29 +146029,23 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1777206894812" ID="ID_1484542373" MODIFIED="1777206896343" TEXT="Pass-1 gute Matches"/>
 <node CREATED="1777206897340" ID="ID_623647353" MODIFIED="1777207043059" TEXT="dann Pass-2 erst mal Kandidaten in einen Vector sammeln">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Das Problem hierbei ist, da&#223; wir daf&#252;r bereits Aufwand treiben m&#252;ssen, der u.U den Aufwand f&#252;r das Sortieren &#252;bersteigt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1777206924680" ID="ID_849247711" MODIFIED="1777207115135" TEXT="oder bei kleiner Zahl fehlender Allokationen diese einfach nicht reservieren">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Da wir letztlich sowiso einen Pool-Allokator haben, kann es durchaus sinnvoll sein, neue Allokationen zu holen, und die unpassenden alten Allokationen zeitnah aber asynchron zum Pool zur&#252;ckzuschicken
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1777207118494" ID="ID_979090781" MODIFIED="1777207124089" TEXT="Hybrid-L&#xf6;sung">
 <node CREATED="1777207132147" ID="ID_229232835" MODIFIED="1777207150800" TEXT="sofort ein kleines Array auf dem Stack bereitlegen"/>
@@ -146070,8 +146062,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1777050457640" ID="ID_55967690" MODIFIED="1777084249904" TEXT="Dokumentieren per Test">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1777050457640" ID="ID_55967690" MODIFIED="1777315081840" TEXT="Dokumentieren per Test">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1777050471715" ID="ID_694034532" MODIFIED="1777250236591" STYLE="fork" TEXT="LocalMemPool_test">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="info"/>
@@ -146082,14 +146074,21 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node COLOR="#338800" CREATED="1777052647931" ID="ID_1721020388" MODIFIED="1777252434731" TEXT="verify_matchAlloc">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1777052660303" ID="ID_1192169892" MODIFIED="1777255538360" TEXT="verify_selectAlloc">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1777052660303" FOLDED="true" ID="ID_1192169892" MODIFIED="1777317299301" TEXT="verify_selectAlloc">
+<linktarget COLOR="#eafdb6" DESTINATION="ID_1192169892" ENDARROW="Default" ENDINCLINATION="168;-26;" ID="Arrow_ID_1362515070" SOURCE="ID_1170538606" STARTARROW="None" STARTINCLINATION="15;61;"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1777255542851" ID="ID_1123855450" MODIFIED="1777255577205" TEXT="hier gezielt einen Mismatch provozieren"/>
 <node CREATED="1777255578550" ID="ID_912741988" MODIFIED="1777255590015" TEXT="zeigen da&#xdf; dieser nicht f&#xfc;r Reservierung herangezogen wird..."/>
 <node CREATED="1777255590787" ID="ID_1143192408" MODIFIED="1777255607747" TEXT="jedoch stets versucht wird, alle Allokations-Requests direkt zu befriedigen"/>
 <node CREATED="1777255608745" ID="ID_832626969" MODIFIED="1777255619923" TEXT="dann aber auch die Scores anschauen..."/>
+<node CREATED="1777315047141" ID="ID_1195705832" MODIFIED="1777315071055" TEXT="sinnvollerweise hier auch gleich das Aufr&#xe4;umen mit testen">
+<linktarget COLOR="#f2ddc1" DESTINATION="ID_1195705832" ENDARROW="Default" ENDINCLINATION="16;47;" ID="Arrow_ID_296050493" SOURCE="ID_924547131" STARTARROW="None" STARTINCLINATION="85;12;"/>
 </node>
-<node CREATED="1777052670304" ID="ID_924547131" MODIFIED="1777052674241" TEXT="verify_pruneAlloc"/>
+</node>
+<node COLOR="#5b280f" CREATED="1777052670304" ID="ID_924547131" MODIFIED="1777315077071" TEXT="verify_pruneAlloc">
+<arrowlink COLOR="#f2ddc1" DESTINATION="ID_1195705832" ENDARROW="Default" ENDINCLINATION="16;47;" ID="Arrow_ID_296050493" STARTARROW="None" STARTINCLINATION="85;12;"/>
+<icon BUILTIN="button_cancel"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1776819109351" ID="ID_1998897998" MODIFIED="1776819155584" TEXT="EngineBufferManager">

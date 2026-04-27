@@ -36,8 +36,31 @@
  ** can be found locally, new memory must be acquired right away, since
  ** render jobs are assumed to run through without blocking waits.
  ** 
+ ** # Allocation selection heuristic
+ ** 
  ** To avoid the hazard of the pool accumulating an increasing number of surplus
- ** allocations over time, less frequently used blocks are culled using a heuristic.  
+ ** allocations over time, less frequently used blocks are culled using a heuristic.
+ ** - The memory block to use for a given allocation request is selected foremost
+ **   based on the _match quality_, so that the amount of wasted excess memory
+ **   is ideally rather small.
+ ** - Furthermore, more frequently used blocks are preferred
+ ** - Whenever a block can be used, its score is increased, yet when some
+ **   block is to small to satisfy a given request, it is penalised
+ ** - less successful blocks can be culled by heuristic partial clean-up
+ ** - the hard-coded tuning parameters allow to adjust the weight assigned
+ **   to the quality of the match and the usage score.
+ ** 
+ ** In addition, currently unused blocks can be [reserved](\ref reserve),
+ ** yet only if their size is reasonably close to the requested size. Using
+ ** this feature at the beginning of a render job allows to probe which buffer
+ ** allocations could be satisfied from memory already associated to the current
+ ** worker thread; any further memory can be requested from the central allocator,
+ ** to be sent asynchronously to the local pool. However, since there is always the
+ ** possibility that some allocation request can not be satisfied immediately, using
+ ** only the blocks in the local pool, an additional mechanism should be provided
+ ** to allocate the missing memory directly, and in a blocking way, since the
+ ** requests to BufferProvider happen from within the Render Node pull()
+ ** and are expected to be immediately successful.
  ** 
  ** @see local-mem-pool-test.cpp
  ** @see local-buffer-store.hpp
@@ -51,17 +74,9 @@
 
 
 #include "lib/error.hpp"
-//#include "vault/mem/buffer-provider-setup.hpp"
-//#include "vault/mem/engine-buffer-metadata.hpp"
-//#include "vault/mem/buffer-metadata.hpp"
-#include "vault/mem/buffhandle.hpp" //////////////TODO
-//#include "lib/local-slice.hpp"
-//#include "lib/depend.hpp"
-#include "lib/iter-explorer.hpp"
-#include "lib/format-string.hpp"
-#include "lib/util.hpp"
+#include "vault/mem/buffhandle.hpp"
 #include "lib/nocopy.hpp"
-#include "lib/meta/trait.hpp"//////////////TODO
+#include "lib/util.hpp"
 
 #include <boost/lockfree/queue.hpp>
 #include <algorithm>
@@ -78,7 +93,7 @@ namespace mem   {
     
     const size_t INQUEUE_SIZ = 30;   ///< initial size of the lock-free provision queue
     
-    const uint MATCH_SCORE    = 10;  ///< score to add when a buffer can be used to satisfy a request 
+    const uint MATCH_SCORE    = 10;  ///< score to add when a buffer can be used to satisfy a request
     const uint MISFIT_PENALTY = 2;   ///< reduce score whenever a buffer is too small to be useful
     const double USAGE_WEIGHT = 0.9; ///< degree to which very frequent usage counteracts waste of memory
     const double CLOSE_MATCH  = 0.2; ///< fraction of wasted memory that still counts as /good match/
@@ -95,6 +110,20 @@ namespace mem   {
   
   /**
    * Low-level Building block for Render Engine memory management.
+   * A pool of buffer memory blocks can be maintained, reserved
+   * and used to satisfy allocation requests relying on a best
+   * match heuristic. Each usage of an allocation is scored,
+   * so that frequently used and well matching blocks are
+   * preferred and less useful blocks can be expunged.
+   * @note uses a `boost::lockfree::queue` as input channel
+   *   to receive new allocations from a central manager,
+   *   while unused allocations are passed into a consumer
+   *   functor on clean-up.
+   * @remark the intention is to use a thread-local instance
+   *   of LocalMemPool, connected to the EngineBufferManger
+   *   thorough lock-free queues. This setup allows to
+   *   implement the BufferProvider::BufferStore interface
+   *   for use in a massive multithreaded environment.
    */
   class LocalMemPool
     {
@@ -103,7 +132,6 @@ namespace mem   {
           Buff* mem;
           size_t siz;
         };
-      static_assert (std::is_trivially_copy_assignable_v<Alloc>);
       
       struct Block
         {
@@ -117,7 +145,6 @@ namespace mem   {
             : alloc{move(alloc)}
             { }
         };
-      static_assert (std::is_trivially_copy_assignable_v<Block>);
       
       using InQueue = boost::lockfree::queue<Alloc>;
       using BlockList = std::list<Block>;
@@ -224,7 +251,7 @@ namespace mem   {
       reAdd (Buff* mem)
         {
           ingest();
-          Block* block = UN_CONST (anyMatch (mem));
+          Block* block = UN_CONST (find (mem));
           if (not block)
             throw err::Logic{"returning unknown allocation to LocalMemPool"};
           if (not block->used)
@@ -324,6 +351,7 @@ namespace mem   {
               }
            // recalibrate all score levels
           maxScore_ -= killLevel;
+          maxScore_ = util::max (maxScore_, 1);
           return removed;
         }
       
@@ -358,7 +386,7 @@ namespace mem   {
         }
       
       Block const*
-      anyMatch (Buff* mem)  const
+      find (Buff* mem)  const
         {
           return findMatch ([mem](Block const& b){ return mem == b.alloc.mem; });
         }
@@ -374,10 +402,10 @@ namespace mem   {
                 if (sizRequest > block.alloc.siz)
                   block.score -= MISFIT_PENALTY;
                 else
-                  {
+                  { // compute heuristic selector for best match
                     double wasted = block.alloc.siz - sizRequest;
                     double wasteScore = wasted / block.alloc.siz;
-                    double usageFact = block.score / maxScore_; 
+                    double usageFact = block.score / maxScore_;
                     double selector = 1.0 - wasteScore * (1.0 - usageFact * USAGE_WEIGHT);
                     if (selector > bestSelector)
                       {
@@ -387,29 +415,31 @@ namespace mem   {
                   }
               }
           if (match)
-            {
+            { // increase score of the winning block
               ENSURE (match->alloc.siz >= sizRequest);
               match->score += int(MATCH_SCORE * double(sizRequest) / match->alloc.siz);
-              if (match->score > maxScore_)       // reduce score by waste factor as malus
+              if (match->score > maxScore_)       // reduce score by waste factor as penalty
                 maxScore_ = match->score;
             }
           return match;
         }
       
+      /** a »backdoor« for unit testing */
       friend class PoolDiagnostic;
     };
   
   
   
   
+  /** wrapper to inspect internals from a unit test */
   class PoolDiagnostic
     : util::MoveOnly
     {
       using Block = LocalMemPool::Block;
       
-      LocalMemPool& memPool_;
+      LocalMemPool const& memPool_;
     public:
-      PoolDiagnostic (LocalMemPool& lmp)
+      PoolDiagnostic (LocalMemPool const& lmp)
         : memPool_{lmp}
         { }
       
@@ -439,18 +469,27 @@ namespace mem   {
                                        ,[](Block const& b){ return not b.used; });
         }
       
-      auto
-      allScores()
+      bool
+      isFree (Buff* mem)
         {
-          return lib::explore (memPool_.blocks_)
-                    .transform([](Block const& b){ return std::string{util::_Fmt{"%d:%02d"} % b.alloc.siz % b.score}; })
-                    .effuse();
+          Block const* entry = memPool_.find (mem);
+          REQUIRE (entry, "Test refers to entry unknown in pool");
+          return not entry->used;
+        }
+      
+      int32_t
+      getScore (Buff* mem)
+        {
+          Block const* entry = memPool_.find (mem);
+          REQUIRE (entry, "Test refers to entry unknown in pool");
+          return entry->score;
         }
     };
   
   
+  /** entrance point to inspection for test */
   inline PoolDiagnostic
-  watch (LocalMemPool& lmp)
+  watch (LocalMemPool const& lmp)
   {
     return PoolDiagnostic{lmp};
   }
