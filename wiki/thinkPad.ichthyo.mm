@@ -74191,8 +74191,9 @@
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
-<node CREATED="1716728664652" ID="ID_1644685634" MODIFIED="1776730151948" TEXT="Strukturen">
+<node CREATED="1716728664652" ID="ID_1644685634" MODIFIED="1777328614629" TEXT="Strukturen">
 <linktarget COLOR="#5c6c7a" DESTINATION="ID_1644685634" ENDARROW="Default" ENDINCLINATION="-892;2424;" ID="Arrow_ID_284707831" SOURCE="ID_622928577" STARTARROW="None" STARTINCLINATION="-1922;116;"/>
+<linktarget COLOR="#345274" DESTINATION="ID_1644685634" ENDARROW="Default" ENDINCLINATION="-529;1146;" ID="Arrow_ID_491300253" SOURCE="ID_1944871660" STARTARROW="None" STARTINCLINATION="-2513;119;"/>
 <node CREATED="1716728667779" ID="ID_467995115" MODIFIED="1716728670092" TEXT="Namen">
 <node CREATED="1716728670955" ID="ID_1816165091" MODIFIED="1716728689109">
 <richcontent TYPE="NODE"><html>
@@ -74481,7 +74482,7 @@
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#46418e" CREATED="1696538113039" ID="ID_314350695" MODIFIED="1696538164825" TEXT="#1279 : Beschlu&#xdf;(9/23) &#x27f9; auf C++ Standardlib aufgebaut">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1696538113039" MODIFIED="1696538113039" TEXT="fr&#xfc;her gab es einen in C implementieren Threadpool-Service"/>
-<node CREATED="1696538113039" MODIFIED="1696538113039" TEXT="im Zuge &#xbb;Playback Vertical Slice&#xab; wurde Anforderungs-Analyse gemacht"/>
+<node CREATED="1696538113039" ID="ID_49590855" MODIFIED="1696538113039" TEXT="im Zuge &#xbb;Playback Vertical Slice&#xab; wurde Anforderungs-Analyse gemacht"/>
 </node>
 <node COLOR="#338800" CREATED="1695597011139" FOLDED="true" ID="ID_956380031" MODIFIED="1696538202836" TEXT="Neues Design Thread-Wrapper">
 <linktarget COLOR="#499ca8" DESTINATION="ID_956380031" ENDARROW="Default" ENDINCLINATION="-1261;104;" ID="Arrow_ID_482806479" SOURCE="ID_125138411" STARTARROW="None" STARTINCLINATION="-1063;-42;"/>
@@ -145856,7 +145857,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="yes"/>
 <node CREATED="1777050440887" ID="ID_1006627416" MODIFIED="1777066692859" TEXT="Verhalten spezifizieren">
 <icon BUILTIN="yes"/>
-<node CREATED="1777050520227" ID="ID_796153621" MODIFIED="1777050524094" TEXT="Use-Cases">
+<node CREATED="1777050520227" ID="ID_796153621" MODIFIED="1777325912544" TEXT="Use-Cases">
+<linktarget COLOR="#36506f" DESTINATION="ID_796153621" ENDARROW="Default" ENDINCLINATION="-452;0;" ID="Arrow_ID_1304449539" SOURCE="ID_1675354420" STARTARROW="Default" STARTINCLINATION="-32;-602;"/>
 <node CREATED="1777068198295" ID="ID_1010651012" MODIFIED="1777068390012" TEXT="Allokationsbedarf ank&#xfc;ndigen">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -146091,10 +146093,191 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1776819109351" ID="ID_1998897998" MODIFIED="1776819155584" TEXT="EngineBufferManager">
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1776819109351" ID="ID_1998897998" MODIFIED="1777339324992" TEXT="EngineBufferManager">
 <icon BUILTIN="yes"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1776819156872" ID="ID_1476925601" MODIFIED="1776819956355" TEXT="Grundkonzeption schaffen">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1776819156872" ID="ID_1476925601" MODIFIED="1777339332224" TEXT="Grundkonzeption schaffen">
+<icon BUILTIN="pencil"/>
+<node CREATED="1777325396485" ID="ID_947969066" MODIFIED="1777325400377" TEXT="Interface">
+<node CREATED="1777325407524" ID="ID_1333052454" MODIFIED="1777325421966" TEXT="Zugang via lib::Depend&lt;EngineBufferManager&gt;">
+<node CREATED="1777325446047" ID="ID_1500798718" MODIFIED="1777325451218" TEXT="geht das &#xfc;berhaupt?"/>
+<node CREATED="1777325452127" ID="ID_1999785214" MODIFIED="1777325463483" TEXT="m&#xfc;&#xdf;te n&#xe4;mlich default-konstruierbar sein"/>
+<node CREATED="1777325557816" ID="ID_1748588651" MODIFIED="1777325642908" TEXT="wird hier jemals ein &#xbb;Default-Setup&#xab; gebraucht?">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...das w&#228;re nur der Fall, wenn ein Unit-Test &#8222;mal eben&#8220; eine Render-Engine braucht. Denn sonst decken wir den Default-Fall bereits mit dem NaiveBufferSetup ab
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1777325501367" ID="ID_586279034" MODIFIED="1777325521405" TEXT="tats&#xe4;chlich wollen wir hier eine explizit gemanagete Server-Komponente"/>
+<node CREATED="1777325699181" ID="ID_1392466705" MODIFIED="1777325832394" TEXT="Dependency-Factory kann auf abstrakte Basisklasse konfiguriert werdn">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Und dann w&#252;rde jeder Zugriff mit einer Exception scheitern....
+    </p>
+    <p>
+      So lange, bis man den statische Aufruf t&#228;tigt:&#160;
+    </p>
+    <p>
+      <font color="#635e96" face="DejaVu Sans Mono" size="9pt"><b>DependInject</b></font><font color="#65533c" face="DejaVu Sans Mono" size="9pt">&lt;</font><font color="#635e96" face="DejaVu Sans Mono" size="9pt"><b>Base</b></font><font color="#65533c" face="DejaVu Sans Mono" size="9pt">&gt;::</font><font color="#61143c" face="DejaVu Sans Mono" size="9pt"><i>useSingleton&lt;Sub&gt;</i></font>
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1777325872302" ID="ID_1675354420" MODIFIED="1777325912544" TEXT="Use-Cases">
+<arrowlink COLOR="#36506f" DESTINATION="ID_796153621" ENDARROW="Default" ENDINCLINATION="-452;0;" ID="Arrow_ID_1304449539" STARTARROW="Default" STARTINCLINATION="-32;-602;"/>
+<node CREATED="1777326001051" ID="ID_825262980" MODIFIED="1777326053002" TEXT="Allokation(en) asynchron beauftragen"/>
+<node CREATED="1777326037424" ID="ID_613961876" MODIFIED="1777326058745" TEXT="Allokation(en) synchron beauftragen"/>
+<node CREATED="1777326109630" ID="ID_1521192845" MODIFIED="1777326120671" TEXT="Allokation asynchron zur&#xfc;ckgeben"/>
+<node CREATED="1777326206909" ID="ID_421293619" MODIFIED="1777326210833" TEXT="Allokator-Steuerung">
+<node CREATED="1777326212094" ID="ID_1130719488" MODIFIED="1777326215708" TEXT="Allokation"/>
+<node CREATED="1777326216481" ID="ID_1774862481" MODIFIED="1777326219716" TEXT="Deallokation"/>
+<node CREATED="1777326220702" ID="ID_911135656" MODIFIED="1777326226035" TEXT="Kapazit&#xe4;tsmanagement"/>
+</node>
+</node>
+</node>
+<node CREATED="1777326654102" ID="ID_499885447" MODIFIED="1777326656831" TEXT="Struktur">
+<node CREATED="1777326657789" ID="ID_831464061" MODIFIED="1777326715033" TEXT="L&#xe4;ngerfristig: Policy-based-Design">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Schon allein um die konfigurierbaren Aspekte klar herauszustellen, und um ggfs. Quellen dynamischer Konfiguration zu verdrahten
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1777326753646" ID="ID_448684473" MODIFIED="1777326779620" TEXT="doch zun&#xe4;chst einmal: alles direkt coden">
+<icon BUILTIN="yes"/>
+<node CREATED="1777339002955" ID="ID_758544304" MODIFIED="1777339007206" TEXT="typedef BufferAllocator"/>
+<node CREATED="1777339008730" ID="ID_1534654283" MODIFIED="1777339172707" TEXT="verwende fix eine Tile-Size von 64 Bytes">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...das ist die &#252;bliche Cache-Line-Size auf x86_64
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1777339178309" ID="ID_142350391" MODIFIED="1777339187028" TEXT="verdrahte direkt auf std::allocator"/>
+</node>
+<node CREATED="1777326795907" ID="ID_1470622255" MODIFIED="1777339362483" TEXT="verwendet einen Allocator">
+<arrowlink COLOR="#47c9c9" DESTINATION="ID_1644044904" ENDARROW="Default" ENDINCLINATION="6;-56;" ID="Arrow_ID_1619156849" STARTARROW="None" STARTINCLINATION="-20;33;"/>
+<node CREATED="1777328509534" ID="ID_1944871660" MODIFIED="1777328772390" TEXT="sollte mich an mein Allokatoren-Konzept-Framework halten....">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      auch wenn es erst mal gedanklich schwerf&#228;llt, und f&#252;r die zun&#228;chst angestrebte <i>naive Implementierung</i>&#160;wie ein sinnloser Tanz aussieht; denn dieses Framework ist gut durchdacht und sollte langsam zu einem R&#252;ckgrat f&#252;r Allokationsvorg&#228;nge werden. Zur Erinnerung: dieses Konzept habe ich an die Stelle eines &#187;globalen Allokators&#171; gestellt. Zun&#228;chst hatten wir ja den Ansatz mit Christian's &quot;Mempool&quot; &#8212; und ich habe mich jahrelang mit der Planlosigkeit dieser Idee herumgeplagt, bis ich langsam verstanden habe, was daran schief ist....
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#345274" DESTINATION="ID_1644685634" ENDARROW="Default" ENDINCLINATION="-529;1146;" ID="Arrow_ID_491300253" STARTARROW="None" STARTINCLINATION="-2513;119;"/>
+<node CREATED="1777328785465" ID="ID_1420803190" MODIFIED="1777328795899" TEXT="wir verwenden einen unterliegenden &#xbb;Allokator&#xab;"/>
+<node CREATED="1777329110029" ID="ID_1388976086" MODIFIED="1777329129190" TEXT="Hier ist der base_type nur eine Speicherkachel"/>
+<node CREATED="1777328936437" ID="ID_558800878" MODIFIED="1777328948520">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Allokatoren sind <i>composable</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1777329176181" ID="ID_381595151" MODIFIED="1777329187583" TEXT="der unterliegende Allokator mag eine Pool-Hierarchie haben"/>
+<node CREATED="1777329188341" ID="ID_323248358" MODIFIED="1777329208588" TEXT="der dar&#xfc;berliegende Allokator h&#xe4;lt die Ownership und leiht Allokationen aus"/>
+</node>
+</node>
+<node CREATED="1777329356340" ID="ID_235497917" MODIFIED="1777330790158" TEXT="die &#xbb;Ownership&#xab;-Ebene mu&#xdf; zun&#xe4;chst ausgeklammert bleiben">
+<arrowlink COLOR="#ce0827" DESTINATION="ID_860687505" ENDARROW="Default" ENDINCLINATION="135;-10;" ID="Arrow_ID_1201137989" STARTARROW="None" STARTINCLINATION="-14;74;"/>
+<node CREATED="1777329370541" ID="ID_1130144304" MODIFIED="1777330545220">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      weil sie f&#252;r einen <i>naiven Allokator</i>&#160;nur schlecht zu implementieren ist
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...da wir ja letztlich alles an den globalen Allokator durchreichen wollen (weil der's sowiso besser kann), haben wir keinerlei Struktur mehr, die wir uns zunutze machen k&#246;nnen &#10233; f&#252;r jede de-Allokation m&#252;ssen wir den Tracking-Eintrag suchen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1777329418716" ID="ID_1818082361" MODIFIED="1777330552447">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      f&#252;r eine <i>Pool-Hierarchie</i>&#160;dagegen ist eine effiziente Implementierung m&#246;glich
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      hierbei kann man sich die bekannte Element-Gr&#246;&#223;e zunutze machen
+    </p>
+    <ul>
+      <li>
+        zun&#228;chst findet man den zust&#228;ndigen Pool
+      </li>
+      <li>
+        sodann braucht es ggfs. einen Meta-Index oder eine sonstige Hilfstruktur, um ggfs. den jeweilgen Extent zu finden
+      </li>
+      <li>
+        im Extent mu&#223; man dann ein Bit in der Belegungs-Bitmap flippen
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1776819169143" ID="ID_1367745941" MODIFIED="1777050391595" TEXT="Schnittstelle f&#xfc;r asynchrones Messaging bedenken">
 <arrowlink COLOR="#fefab1" DESTINATION="ID_1503539674" ENDARROW="Default" ENDINCLINATION="-233;10;" ID="Arrow_ID_451160831" STARTARROW="None" STARTINCLINATION="92;5;"/>
@@ -146102,19 +146285,65 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1776819181261" ID="ID_1026628741" MODIFIED="1776819956356" TEXT="alternative synchrone Schnittstelle bereitstellen">
 <icon BUILTIN="flag-yellow"/>
-<node CREATED="1776819196456" ID="ID_1985019567" MODIFIED="1776819221279">
-<richcontent TYPE="NODE"><html>
-  <head/>
-  <body>
-    <p>
-      zun&#228;chst wird <u>nur diese</u>&#160;genutzt
-    </p>
-  </body>
-</html></richcontent>
-<icon BUILTIN="idea"/>
-</node>
+<node CREATED="1777324291441" ID="ID_336948545" MODIFIED="1777324316333" TEXT="ist relevant f&#xfc;r &#xbb;sofort&#xab;-Allokation (Fallback)"/>
 <node CREATED="1776819226503" ID="ID_1059062619" MODIFIED="1777051865655" TEXT="sollte kongruent zum Messaging sein"/>
 <node CREATED="1776819244365" ID="ID_933815031" MODIFIED="1776819258406" TEXT="aber stets ein &#xbb;pull&#xab; vom lokalen Manager"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1777324327301" ID="ID_1965528564" MODIFIED="1777324340058" TEXT="lege zun&#xe4;chst einen &#xbb;naiven&#xab; Memory-Manager an">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1777324341484" ID="ID_269815037" MODIFIED="1777324543018" TEXT="einzig sinnvoll: direkt vom/zum Heap">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Es ist nicht sinnvoll, eine &#187;vorl&#228;ufige&#171; Implementierung eines heterogenen Memory-Managers zu machen. Da ist n&#228;mlich der Heap-Allokator<i>&#160; stets besser geeignet</i>&#160;&#8212; ist inzwischen einigerma&#223;en schwer geworden, den Heap-Allokator &#252;berhaupt noch zu schlagen. Mithin wird das auch gleich eine gute <b>Baseline-Implementierung</b>&#160;f&#252;r Performance-Messungen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1777324354872" ID="ID_33339353" MODIFIED="1777324362776" TEXT="sp&#xe4;ter geplant: System von Pools">
+<icon BUILTIN="hourglass"/>
+<node CREATED="1777324463807" ID="ID_64824853" MODIFIED="1777324471021" TEXT="dabei ist aber sehr vieles noch unklar"/>
+<node CREATED="1777324471804" ID="ID_409561662" MODIFIED="1777324485502" TEXT="kann das &#xfc;berhaupt funktionieren, ohne massiv Speicher zu verschwenden?"/>
+<node CREATED="1777324494396" ID="ID_23718162" MODIFIED="1777324511253" TEXT="m&#xf6;glicherweise ist eine dynamische Steuerung notwendig + fall-Back auf den Heap-Allokator"/>
+</node>
+</node>
+<node CREATED="1777324560690" ID="ID_318881353" MODIFIED="1777324567396" TEXT="Rahmen per Test abstecken">
+<node COLOR="#338800" CREATED="1777339205760" ID="ID_1644044904" MODIFIED="1777339355233" TEXT="demonstrate_AllocatorInterface">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Das ist nun wirklich mehr eine Demonstration, denn ich kann da praktisch nichts verifizieren (au&#223;er da&#223; es keinen SEGFAULT gibt, wenn ich in den allozierten Speicher schreibe). Wenigstens ist damit schon mal sichergestellt, da&#223; der Code durch den Compiler geht
+    </p>
+  </body>
+</html>
+</richcontent>
+<linktarget COLOR="#47c9c9" DESTINATION="ID_1644044904" ENDARROW="Default" ENDINCLINATION="6;-56;" ID="Arrow_ID_1619156849" SOURCE="ID_1470622255" STARTARROW="None" STARTINCLINATION="-20;33;"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1777330585249" ID="ID_1415692101" MODIFIED="1777330598348" TEXT="Ergebnis / Einsichten">
+<icon BUILTIN="forward"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1777330604883" ID="ID_860687505" MODIFIED="1777330785076" TEXT="&#xbb;Ownership&#xab; ist zun&#xe4;chst freischwebend">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Das hei&#223;t, wir m&#252;ssen uns darauf verlassen, da&#223; der ganze komplexe Klapperatismus absolut korrekt funktioniert; wenn dem so ist, gen&#252;gt es, einfach blindlings neue Allokationen an die lokalen Pools zu schicken und freizugeben was aus den lokalen Pools zur&#252;ckgesendet wird. Das <b>hat zur Konsequenz</b>&#160;da&#223; gewisse zus&#228;tzliche Konsistenzchecks eingebaut werden m&#252;ssen, damit sich die Korrektheit auch erweisen l&#228;&#223;t
+    </p>
+  </body>
+</html>
+</richcontent>
+<linktarget COLOR="#ce0827" DESTINATION="ID_860687505" ENDARROW="Default" ENDINCLINATION="135;-10;" ID="Arrow_ID_1201137989" SOURCE="ID_235497917" STARTARROW="None" STARTINCLINATION="-14;74;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
 </node>
 </node>
 </node>

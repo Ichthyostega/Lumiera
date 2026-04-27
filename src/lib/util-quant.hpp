@@ -20,6 +20,9 @@
 #ifndef LIB_UTIL_QUANT_H
 #define LIB_UTIL_QUANT_H
 
+#include "lib/integral.hpp"
+
+#include <concepts>
 #include <cstdlib>
 #include <climits>
 #include <cfloat>
@@ -31,7 +34,7 @@ namespace util {
   
   template<typename N>
   inline constexpr bool
-  isPow2 (N n)
+  isPow2 (N n)  noexcept
     {
       return n > 0 and !(n & (n-1));
     };    // at each power of 2, a new bit is set for the first time
@@ -44,7 +47,8 @@ namespace util {
       I quot;
       I rem;
       
-      IDiv (I num, I den)
+      constexpr
+      IDiv (I num, I den)  noexcept
         : quot(num/den)
         , rem(num - quot*den)
         { }
@@ -54,7 +58,8 @@ namespace util {
   struct IDiv<int>
     : div_t
     {
-      IDiv (int num, int den)
+      constexpr
+      IDiv (int num, int den)  noexcept
         : div_t(div (num,den))
         { }
     };
@@ -63,7 +68,8 @@ namespace util {
   struct IDiv<long>
     : ldiv_t
     {
-      IDiv (long num, long den)
+      constexpr
+      IDiv (long num, long den)  noexcept
         : ldiv_t(ldiv (num,den))
         { }
     };
@@ -72,14 +78,15 @@ namespace util {
   struct IDiv<llong>
     : lldiv_t
     {
-      IDiv (llong num, llong den)
+      constexpr
+      IDiv (llong num, llong den)  noexcept
         : lldiv_t(lldiv (num,den))
         { }
     };
   
   template<typename I>
-  inline IDiv<I>
-  iDiv (I num, I den)  ///< support type inference and auto typing...
+  inline constexpr IDiv<I>
+  iDiv (I num, I den)  noexcept  ///< support type inference and auto typing...
   {
     return IDiv<I>{num,den};
   }
@@ -93,8 +100,8 @@ namespace util {
    * @see UtilFloordiv_test
    */
   template<typename I>
-  inline I
-  floordiv (I num, I den)
+  inline constexpr I
+  floordiv (I num, I den)  noexcept
   {
     if (0 < (num^den))
       return num/den;
@@ -115,8 +122,8 @@ namespace util {
    * @see UtilFloorwarp_test
    */
   template<typename I>
-  inline IDiv<I>
-  floorwrap (I num, I den)
+  inline constexpr IDiv<I>
+  floorwrap (I num, I den)  noexcept
   {
     IDiv<I> res(num,den);
     if (0 > (num^den) and res.rem)
@@ -127,6 +134,23 @@ namespace util {
       }
     return res;
   }
+  
+  
+  /** quantise towards ceiling. 
+   *  This function models to fit something into a tiled structure.
+   */
+  template<typename U>   requires std::unsigned_integral<U>
+  inline constexpr U
+  ceilDiv (U num, U den) noexcept
+  {
+    return (num + den - 1u) / den;
+  }
+  
+  static_assert (0 == ceilDiv (0u,5u));
+  static_assert (1 == ceilDiv (1u,5u));
+  static_assert (1 == ceilDiv (4u,5u));
+  static_assert (1 == ceilDiv (5u,5u));
+  static_assert (2 == ceilDiv (6u,5u));
   
   
   
@@ -146,8 +170,8 @@ namespace util {
    * @see https://en.wikipedia.org/wiki/Unit_in_the_last_place
    * @todo 3/2024 seems we have solved this problem several times meanwhile /////////////////////////////////TICKET #1360 sort out floating-point rounding and precision
    */
-  inline bool
-  almostEqual (double d1, double d2, unsigned int ulp =2)
+  inline constexpr bool
+  almostEqual (double d1, double d2, unsigned int ulp =2)  noexcept
   {
     using std::fabs;
     return fabs (d1-d2) < DBL_EPSILON * fabs (d1+d2) * ulp

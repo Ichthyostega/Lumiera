@@ -30,6 +30,7 @@
 
 #include "lib/error.hpp"
 #include "lib/integral.hpp"
+#include "lib/util-quant.hpp"
 #include "vault/mem/buffer-metadata.hpp"
 #include "lib/format-string.hpp"
 #include "lib/format-obj.hpp"
@@ -51,15 +52,9 @@ namespace mem   {
     constexpr inline size_t WORD_SIZ = sizeof(StorageWord);
     
     constexpr size_t
-    ceilDiv (size_t num, size_t den) noexcept
-    {
-      return (num + den - 1u) / den;
-    }
-    
-    constexpr size_t
     wordCnt (size_t sizeRequest) noexcept
     {
-      return ceilDiv (sizeRequest, WORD_SIZ);
+      return util::ceilDiv (sizeRequest, WORD_SIZ);
     }
     
     static_assert (0 == wordCnt(0));

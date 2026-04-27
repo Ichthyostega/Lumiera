@@ -37,6 +37,10 @@ return: 0
 END
 
 
+TEST "Engine Buffer-Manager interface" EngineBufferManager_test <<END
+END
+
+
 PLANNED "Engine Interface basics" EngineInterface_test <<END
 END
 
