@@ -178,106 +178,122 @@ which different NLE's handle this and will propose possible directions for Lumie
 certain workflows.
 
 Project creation
+~~~~~~~~~~~~~~~~
 When starting a new project, a user often needs to set the project resolution and framerate. Adobe
 Premiere (optionally) shows an import panel immediately after this. The first time you drop a clip
 on a timeline, Resolve and Premiere will ask if you want to change your project settings to match
 the clip settings, when these are different.
 
-Premiere''s import panel
+[red]#TODO: Image#
+
+Premiere's import panel
 
 Projects themselves exist within an application's database (Resolve), or as a file/folder on local or
 shared storage (Avid, Premiere, Lightworks, FCP).
+
 One of the first things that needs to be setup is the organisational structure of the project, in other
 words: the structure that's going to house all of the project's contents. Most applications use bins for
 this, a bin being simply a container for items like video clips. In a sense they are similar to folders
-on a computer''s storage, except bins usually only exist within the project in your NLE. Avid's bins
+on a computer's storage, except bins usually only exist within the project in your NLE. Avid's bins
 also exist as folders on local or shared storage, but this is an exception.
+
 For top level organisation, bins can either be placed in other bins (Premiere, Resolve) or in
 groups/folders (Avid, Lightworks).
+
 As we'll see throughout this document, Final Cut Pro is usually the only application that takes a
-different approach. Projects are called 'libraries' and FCP sorts footage based on events (top level
+different approach. Projects are called ``libraries'' and FCP sorts footage based on events (top level
 containers of timelines, footage and keyword collections), keywords (tags) and collections, instead
-of bins (timelines are confusingly called 'projects'). Footage, when imported, is placed in an event
+of bins (timelines are confusingly called ``projects''). Footage, when imported, is placed in an event
 and from there all emphasis is on the metadata, in how you rate and tag (parts of) the footage. This
 also serves as a replacement of the subclips feature found in other NLE's.
 
-Final Cut Pro''s Keywords dialog. ``Travel part 1'' and ``Travel part 2'' on the left are events.
+[red]#TODO: Image#
+
+Final Cut Pro's Keywords dialog. ``Travel part 1'' and ``Travel part 2'' on the left are events.
 
 In any case, when working in a professional environment, you will probably want to start with a
-template that defines your top level structure, instead of having to recreate your entire bin setup for
-every project. Surprisingly, at the time of writing only Adobe Premiere has introduced a project
-template feature (in version 2024). In other apps you will need to manually create your own
-template project and duplicate that, or even literally copy and paste bins from a template project in a
-file browser (Avid).
+template that defines your top level structure, instead of having to recreate your entire bin setup
+for every project. Surprisingly, at the time of writing only Adobe Premiere has introduced a project
+template feature (in version 2024). In other apps you will need to manually create your own template project
+and duplicate that, or even literally copy and paste bins from a template project in a file browser (Avid).
 
 Importing footage
+~~~~~~~~~~~~~~~~~
 Every application works with clips: virtual representations of (parts of) the video files that exist on
-your preferred type of storage. Getting footage into your project ('ingest') will create these clips in
+your preferred type of storage. Getting footage into your project (``ingest'') will create these clips in
 your project. Most apps will offer several options to do this:
-1. Creating links to the original video files, wherever these may reside (on your computer,
+
+. Creating links to the original video files, wherever these may reside (on your computer,
 external storage, network storage or in the cloud).
-2. Copying your files to a dedicated folder managed by the application (this could again be on
+. Copying your files to a dedicated folder managed by the application (this could again be on
 local or network storage). Importing to a dedicated application folder is very useful for
 feature film editing and TV production, but is less common elsewhere in the media industry.
 Its strong point is that when your media is managed by the application, you won't have to
-relink files when moving to a different editing station.
-3. Optionally, files can be transcoded during import. New media files will be created in either
+re-link files when moving to a different editing station.
+. Optionally, files can be transcoded during import. New media files will be created in either
 the app's dedicated folder or to a user specified location. The transcoded files will be much
-more optimised for editing, resulting in better playback performance. This is part of a socalled offline-online workflow, in which you work on optimised files, and once an edit is
-finished (picture lock), the clips on the timeline will be exchanged with clips that link to the
-original camera files. Often, after color grading in an external application, all color graded
-shots are rendered with their color corrections and placed back onto the timeline in the NLE.
-A specific type of offline-online workflow is the proxy workflow. The proxy workflow
-allows on-the-fly switching between the proxy files and the original camera files and will
-ensure that exports of your video will use these original camera files when rendering. When
-using a proxy workflow you can either create optimised files inside the application itself (or
+more optimised for editing, resulting in better playback performance.
 
-in Premiere''s case, via Adobe Media Encoder) or attach existing proxy files that were
-created by a third party application or by the camera during recording.
-After importing and possibly creating/attaching proxies, clip attributes might need altering. You
-might need to change incorrectly determined frame rates or, more commonly, change the audio
+The latter is part of what is known as the *offline-online* workflow, in which you work with
+optimised files, and once an edit is finished (``picture lock''), the clips on the timeline
+will be exchanged with clips that link to the original camera files. Often, after colour grading
+in an external application, all colour graded shots are rendered with their colour corrections
+and placed back onto the timeline in the NLE.
+
+A specific type of offline-online workflow is the *proxy workflow*, that allows switching
+on-the-fly between the proxy files and the original camera files and will ensure that exports
+of your video will use these original camera files when rendering. When using a proxy workflow,
+you can either create optimised files inside the application itself (or in Premiere's case, via
+Adobe Media Encoder) or attach existing proxy files that were created by a third party application
+or by the camera during recording.
+
+After importing media and possibly creating/attaching proxies, clip attributes might need altering.
+You might need to change incorrectly determined frame rates or, more commonly, change the audio
 channel mapping of your clips (e.g. setup clips with two audio channels as dual mono instead of
 stereo).
 
 Clip types
+^^^^^^^^^^
 We usually find the following types of clips in NLE's:
-* Source clips which represent media files (containing video and/or audio streams) to its full
-extent, and for other types of media (most notably still images) - these usually get a default
+
+Source clips:: they represent media files (containing video and/or audio streams) to its full
+extent, and for other types of media (most notably still images) -- these usually get a default
 duration upon import.
-
-* Subclips which represent a portion of a video or audio file.
-
-* Timeline clips: duplicates of source clips that only exist within a timeline. Properties of
+Subclips:: they represent a portion of a video or audio file.
+Timeline clips:: duplicates of source clips that only exist within a timeline. Properties of
 these clips can often be altered without altering the same properties of the source clip.
-
-* Compound clips/nested sequences: these are in fact (sub)timelines that can contain any
+Compound clips/nested sequences:: these are in fact (sub)timelines that can contain any
 number of tracks and clips.
-
-* Multicam clips (group clips in Avid), in which multiple clips are synchronized and
-combined into one. These clips contain clips with different camera angles (for video) or
-audio recordings for the same event.
-
-* Filler (Avid), FX clips (Lightworks) or Adjustment Clips (Premiere, Resolve) that can hold
-effects that are applied to all clips on lower tracks of a timeline, directly underneath.
+Multicam clips:: (group clips in Avid), these are compound clips, in which multiple clips are
+synchronised and combined into one. This compound contains clips with different camera angles
+(for video) or audio recordings for the same event.
+Filler (Avid), FX clips (Lightworks) or Adjustment Clips (Premiere, Resolve):: these special clips
+can hold effects that are applied to all clips on lower tracks of a timeline, directly underneath.
 
 Bin types
-Often there are two types of bins in which these clips sit, withrResolve having a third kind:
-1. 'Normal' bins.
-2. Search bins (Premiere) / filters (Lightworks) / smart bins (Resolve) / smart collections
+^^^^^^^^^
+Often there are two types of bins in which these clips sit
+
+. ``Normal'' bins.
+. Search bins (Premiere) / filters (Lightworks) / smart bins (Resolve) / smart collections
 (FCP): for these you setup certain rules based on clip names or metadata. All clips to which
 these rules apply are automatically added to these bins. This means that the same clip can
 simultaneously exist in a regular bin and a search bin, in contrast to normal bins, where each
 clip will only exist in a single bin and you'd have to duplicate this clip for it to be also
 placed in another bin (Lightworks being the exception here).
 
-Filter options in Lightworks
+[red]#TODO: Image#
 
-3. Power bins (Resolve): these are bins that are accessable by all projects.
+Filter options in Lightworks
+
+Resolve adds a third kind of bins, known as ``Power bins'': these are bins that are accessible by all projects.
 
 Bin views
+^^^^^^^^^
 Bins offer several views to see its contents. These include:
+
 * List View / Text View: all items in the bin are listed vertically. Multiple columns will show
-different kinds of metadata – the user can choose which fields are displayed and can
+different kinds of metadata -- the user can choose which fields are displayed and can
 rearrange their order.
 
 * Icon View (Premiere) / Frame View (Avid) / Thumbnail View (Resolve) / Tile View
@@ -292,9 +308,9 @@ View itself.
 a large field for entering comments. In Script View, the vertical order of clips can be
 rearranged, in contrast to Text View, which only supports automatic sorting.
 
-* Metadata View (Resolve): similar to Avid's Script View, except you can''t reorder clips.
+* Metadata View (Resolve): similar to Avid's Script View, except you can't reorder clips.
 
-* Filmstrip View (Final Cut Pro): similar to Icon View, but
+* Filmstrip View (Final Cut Pro): similar to Icon View, but [red]#TODO: missing text??#
 
 Avid is famous for allowing you to save your Text or Script View configuration as a preset that can
 be quickly recalled. Premiere allows this through its Metadata Display window, Final Cut Pro by
@@ -302,19 +318,23 @@ Control+left clicking any column header and Lightworks via the Columns > Presets
 methods are less straightforward than Avid's. Another neat feature that Avid has is a bin map: an
 overview of bin contents that can be toggled when in Frame View.
 
-Creating a custom view preset in Avid Media Composer, which can be selected from the dropdown menu in the top bar.
+[red]#TODO: Image#
+
+Creating a custom view preset in Avid Media Composer, which can be selected from the drop-down menu in the top bar.
 
 Note that all apps offer a search/filter box (or button) on top of each bin view. Final Cut Pro and
 Resolve allow skimming clips from the bin view, simply by hovering the mouse on top of the
 thumbnail and moving it from left to right.
 
+
 Organising footage
+~~~~~~~~~~~~~~~~~~
 Once your footage is represented by clips in bins, organisation can begin. Wildly different methods
 exist for this. In the simplest version you will just drop your footage in one or several bins and be
 done with it. In professional environments there are often strict bin structures and naming
 conventions, and additional methods for organising are being used:
 
-* First and foremost: with multi-camera shoots and/or when audio has been recorded
+* First and foremost: with multi-camera shoots and/or when audio has been recorded
 separately, now is the time to synchronise these. Create multicam clips and/or synchronise
 sound, either in the NLE itself, or in an external application. I personally create source reels
 first (see further down this list), export these to another application for syncing, import the
@@ -332,29 +352,32 @@ option to (automatically or manually) connect clips to lines in a script (Script
 
 * Sequence/timeline markers to mark points in time, or sections (so-called ranged or spanned
 markers; terminology is different per app).
-
++
+[red]#TODO: Image#
++
 Plenty of marker options in Adobe Premiere
 
 * Timeline clip notes (Avid): these can be added to a timeline clip, and will stay connected to
-this clip. You can''t trim them off and they will automatically move whenever a clip moves.
+this clip. You can't trim them off and they will automatically move whenever a clip moves.
 They can be burned into a render upon export. Premiere and Resolve offer clip markers
-instead – these are similar to sequence markers, but are attached to clips.
+instead -- these are similar to sequence markers, but are attached to clips.
 
 * Tagging or rating (parts of) clips (FCP and to a lesser extent Resolve). FCP's rating only
-goes as far as letting you mark clips or sections as ``favorite'' or reject clips entirely, but its
-keyword system (as described later in this chapter) is much more elaborate and useful.
+goes as far as letting you mark clips or sections as ``favourite'' or reject clips entirely,
+but its keyword system (as described later in this chapter) is much more elaborate and useful.
 Resolve has an option to add keywords, but its workflow is quite clunky when trying to
 apply this to a section within a clip.
 
-* Clip colors. Often there exist multiple levels at which a clip can get a color. Colors can be
-applied based on source clip (usually different colors for different media types), timeline
-
-clip, timeline track, offline footage, different framerates, and more. Avid has the most
-options in this field and lets you choose exactly which types of colors to display on the
-timeline. Manually set clip colors are a very useful organisational tool, e.g. to differentiate
-between camera''s, interviewed persons in a documentary or different locations.
-
-Avid has many options for choosing how clips are colored in the timeline
+* Clip colours. Often there exist multiple levels at which a clip can get a colour. Colours can be
+applied based on source clip (usually different colours for different media types), timeline
+clip, timeline track, offline footage, different framerates, and more. Avid has the most
+options in this field and lets you choose exactly which types of colours to display on the
+timeline. Manually set clip colours are a very useful organisational tool, e.g. to differentiate
+between several cameras, interviewed persons in a documentary or different locations.
++
+[red]#TODO: Image#
++
+Avid has many options for choosing how clips are coloured in the timeline
 
 * Flags (Resolve). Similar to markers, but these apply to entire (source) clips, while markers
 apply to a single point in time or a time range within a clip. Multiple flags can be added to
@@ -362,14 +385,17 @@ each source clip.
 
 * Reels: source footage is divided over one or multiple timelines to be able to quickly navigate
 many clips without having to load individual clips in the source viewer. These are called
-'source reels'. A special kind of source reel is a 'sync map', which contains all footage of a
-day of shooting from multiple cameras synced and layed out chronologically.
+``source reels''. A special kind of source reel is a ``sync map'', which contains all footage
+of a day of shooting from multiple cameras synced and laid out chronologically.
 FCP doesn't quite support source reels and instead offers continuous playback from the
-browser window. Resolve has a 'source tape' option that works in a similar way.
+browser window. Resolve has a ``source tape'' option that works in a similar way.
 
-Simple example of a source reel (top), converted to a sync map (bottom)
+[red]#TODO: Image#
+
+Simple example of a source reel (top), converted to a sync map (bottom)
 
 Viewing footage
+^^^^^^^^^^^^^^^
 Once basic organisation is in place, the editor can start watching and adding further notes/comments
 to narrow down large amounts of footage and seek out options of useful content for the edit. Most
 apps offer two types of monitors for video playback: source and record/program monitors. FCP has
@@ -377,77 +403,95 @@ only a single monitor that switches between these two functions. Some others (Av
 users the choice between single or multi viewer modes. Lightworks and Avid support an unlimited
 amount of floating viewers.
 
-You can open (and position) as many viewers as you like in Lightworks
+[red]#TODO: Image#
 
-Viewers are usually coupled with timecode display and have a ton of settings. I won't go into details
-about these.
+You can open (and position) as many viewers as you like in Lightworks
+
+Viewers are usually coupled with timecode display and have a ton of settings.
+I won't go into details about these.
+
 In most applications you can also watch your source footage from the bin when in Frame/Icon
-View. You''ll be able to use JKL shortcuts for playback, mark in and out points and add it to the
+View. You'll be able to use JKL shortcuts for playback, mark in and out points and add it to the
 timeline, similar as to when the clip is loaded in the source viewer. Final Cut Pro lets you click and
 drag in-out regions in the thumbnail.
 
 Selects
+^^^^^^^
 Time to create a selection of material to consider for the rough cut. One way to do this, as
-previously described, is by creating subclips or by tagging. Drop the subclips in a bin in Icon /
-Frame View and you have a good visual overview of selected shots. This is great for selecting Broll or for projects that require a very visual approach, f.e. trailers, music videos or aftermovies (not
-hoping to ever cut one of those again though, but that''s a different story ;).
+previously described, is by creating subclips or by tagging. Drop the subclips in a bin in
+Icon / Frame View and you have a good visual overview of selected shots. This is great for selecting
+B-roll material, or for projects that require a very visual approach, f.e. trailers, music videos
+or aftermovies (not hoping to ever cut one of those again though, but that's a different story 😉).
+
 Another way to select footage is to cut selections from source clips or source reels to one or more
 selects reels: these are timelines that hold your selections and are only used for that purpose. Selects
 reels can then be loaded again as if they were a source clip, in order for an another selection to be
-made. This is called reel-to-reel editing. Many apps allow seeing the source timeline, either in their
+made. This is called *reel-to-reel editing*. Many apps allow seeing the source timeline, either in their
 own panel (Premiere) or window (Lightworks), or by switching the timeline panel between a source
-and record mode (Avid, Resolve). A method known as ``pancake timeline editing'' works when an
+and record mode (Avid, Resolve). A method known as _pancake timeline editing_ works when an
 application supports viewing multiple timelines simultaneously. By stacking timelines above each
 other you can easily drag selections from one timeline to another. This is possible in Premiere,
 Lightworks and Resolve.
 
-Pancake timeline editing in Lightworks
+[red]#TODO: Image#
+
+Pancake timeline editing in Lightworks
 
 Reels can be further managed by using markers to describe certain points in time or sections, and
 these markers can be viewed as a list in their own panel. When selecting a marker in this panel, the
 playhead of the corresponding monitor will jump to the (start) frame of this marker. Markers can
-have multiple input fields and a color. They are one of the most important tools to be able to make
+have multiple input fields and a colour. They are one of the most important tools to be able to make
 notes and navigate large amounts of footage over extended periods of time. As an aside: Lightworks
-has an option to turn ranged markers into subclips, quite useful, as it allows you to use markers to
-make your selection.
-Some NLE's have a 'ripple markers' option for timeline markers. This means markers will move
+has an option to turn ranged markers into subclips, quite useful, as it allows you to use markers
+to make your selection.
+
+Some NLE's have a ``ripple markers'' option for timeline markers. This means markers will move
 when clips in the timeline are shortened or extended.
+
 FCP has ``todo markers'' that can be checked. And when tagging clips with keywords in FCP,
 keyword collections are automatically created in which all sections of clips with the same keyword
 can be found. It's also possible to manually create keyword collections and drag and drop clips or
-tagged sections ('content ranges') there.
+tagged sections (``content ranges'') there.
+
 Back to the reels: one advantage of reel-to-reel editing is that it's very useful to see the audio
 waveforms of your source clips on an actual timeline: this way you can freely zoom and scroll.
-Final Cut Pro will only display a clip''s waveform at the bottom of the clip preview in the browser,
+Final Cut Pro will only display a clip's waveform at the bottom of the clip preview in the browser,
 but when an interview is an hour or longer, this waveform will be squeezed in a way that's of little
 use.
+
 Another advantage of reel-to-reel editing is a sense of space: you get an idea of where certain
 footage can be found (more to the left, in the middle, or at the end of a reel). Combined with
-markers, clip colors and gaps between sections, this makes it easier to find things back later. A third
-advantage is that it's easy to filter in rounds: you can narrow down your footage in multiple reel-toreel selection passes.
-I personally often use a variation of reel-to-reel editing, in which I lift sections in my source reel. I
-then duplicate this reel, remove the first video and audio track(s) and keep the lifted parts to create
-my selects reel. The advantage here is that I can rate sections as ``not useful'' (V1), 'possibly useful'
-(V2), 'quite useful' (V3) or 'highly useful' (V4) by lifting the video clip one, two or three tracks up –
-see it as a 4-star rating system. I''ve seen other editors use this method for selecting footage,
-although in all fairness I''m not sure how widespread this technique is.
+markers, clip colours and gaps between sections, this makes it easier to find things back later. A third
+advantage is that it's easy to filter in rounds: you can narrow down your footage in multiple reel-to-reel
+selection passes.
 
-Lifting selections; also note the use of clip colors, gaps and markers for organising the selects reel.
+I personally often use a variation of reel-to-reel editing, in which I lift sections in my source reel.
+I then duplicate this reel, remove the first video and audio track(s) and keep the lifted parts to create
+my selects reel. The advantage here is that I can rate sections as _not useful_ (V1), _possibly useful_
+(V2), _quite useful_ (V3) or _highly useful_ (V4) by lifting the video clip one, two or three tracks up --
+see it as a 4-star rating system. I have seen other editors use this method for selecting footage,
+although in all fairness I'm not sure how widespread this technique is.
+
+[red]#TODO: Image#
+
+Lifting selections; also note the use of clip colours, gaps and markers for organising the selects reel.
 
 In FCP you can create your own rating system by using keywords (as shown in the screenshot at the
 start of this chapter) and then having everything filtered through keyword collections, as described
-in this blog post at Frame.io. Quite handy as well!
+in this https://blog.frame.io/2016/10/18/make-fcp-x-log-better-1/[blog post at Frame.io].
+Quite handy as well!
 
 Proposals
+~~~~~~~~~
 * Which system(s) of organising a project and selecting footage should Lumiera support? I
 would say: most. They don't interfere with each other, so let the user choose. Definitely
 support source timelines and let people rate, tag and mark all they want. Subclips might not
 be necessary when a tagging/keyword system is present, as Final Cut has proven.
 
-* Metadata-based organising, searching and filtering of content are must-haves.
+* Metadata-based organising, searching and filtering of content are _must-haves_.
 
 * I would include a native rating system (1 to 5 stars should suffice) that works both on clip
-sections and entire clips, rather than FCP's favorite/reject system, as it's more granular.
+sections and entire clips, rather than FCP's favourite/reject system, as it's more granular.
 
 * As for bins-in-bins vs bins-in-folders: the first one is more flexible (bins can contain both
 media files and other bins, while folders can only contain bins) and more closely resembles
@@ -457,8 +501,8 @@ something to be said for the strict division of function that folders+bins have.
 * I would like to propose an option to automatically create source reels based on rules you can
 set, for example: one source reel for every day of shooting. These automatic source reels
 could have a filter function to select which clips are being displayed on the timeline. This
-way it becomes easy to say something like "show me all clips from the second day of the
-shoot from camera A".
+way it becomes easy to say something like ``show me all clips from the second day of the
+shoot from camera A''.
 
 * A versioning system for timelines is something that only Resolve has recently picked up
 with its Create (and Restore) Timeline Backup feature, and honestly I've been amazed by
@@ -479,9 +523,10 @@ local sound effect libraries.
 
 * A small one: I'd like each project to remember the last location you imported from. I often
 switch between projects and each time I want to import something in current NLE's, the file
+dialog points to the last used directory, which is often the wrong one.
+Not a big deal, but not ideal either.
 
-dialog points to the last used directory, which is often the wrong one. Not a big deal, but not
-ideal either.
+
 
 Chapter 2: the timeline
 -----------------------
