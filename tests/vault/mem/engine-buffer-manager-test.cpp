@@ -20,6 +20,7 @@
 #include "test/test-helper.hpp"
 //#include "vault/mem/engine-buffer-metadata.hpp"
 #include "vault/mem/engine-buffer-manager.hpp"
+#include "vault/mem/engine-buffer-allocator.hpp"
 //#include "lib/depend-inject.hpp"
 //#include "lib/thread.hpp"
 //#include "lib/error.hpp"
@@ -83,7 +84,7 @@ namespace test  {
       void
       demonstrate_AllocatorInterface()
         {
-          using Allo = EngineBufferManager::BufferAllocator;
+          using Allo = HeapBufferAllocator;
           CHECK (lib::allo::is_Stateless_v<Allo>);
           
           Allo allo;

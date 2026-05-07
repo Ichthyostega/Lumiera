@@ -1,5 +1,5 @@
 /*
-  ENGINE-BUFFER-MANAGER.hpp  -  central buffer allocation coordinator
+  EnginePufferManager  -  central buffer allocation coordinator
 
    Copyright (C)
      2026,            Hermann Vosseler <Ichthyostega@web.de>
@@ -9,10 +9,11 @@
   Free Software Foundation; either version 2 of the License, or (at your
   option) any later version. See the file COPYING for further details.
 
-*/
+* *****************************************************************/
 
-/** @file engine-buffer-manager.hpp
- ** Central hub of buffer management within the Lumiera Render Engine.
+
+/** @file engine-buffer-manager.cpp
+ ** Implementation of render buffer allocation for the Lumiera Engine.
  ** Instantiated as global service and part of the Engine, this global
  ** allocation coordinator is responsible to provide pre-allocated blocks
  ** for render buffers. These allocations are categorised by their size,
@@ -39,17 +40,20 @@
  ** @see buffer-provider.hpp
  */
 
-#ifndef VAULT_MEM_ENGINE_BUFFR_MANAGA_H
-#define VAULT_MEM_ENGINE_BUFFR_MANAGA_H
 
-
+#include "lib/error.hpp"
+#include "lib/util-quant.hpp"
+#include "lib/allocator-handle.hpp"
 //#include "lib/hash-value.h"
 #include "vault/mem/buffhandle.hpp"
-//#include "vault/mem/type-handler.hpp"
+#include "vault/mem/engine-buffer-manager.hpp"
+#include "vault/mem/engine-buffer-allocator.hpp"
 //#include "vault/mem/buffer-local-tag.hpp"
 #include "lib/nocopy.hpp"
 //#include "lib/util.hpp"
 
+#include <memory>
+#include <array>
 
 
 namespace vault{
@@ -60,29 +64,24 @@ namespace mem {
   
   namespace err = lumiera::error;
   
+  using std::byte;
   
   
   namespace { // config and internal helpers...
     
   }
   
-  struct Alloc
-    {
-      Buff* mem;
-      size_t siz;
-    };
   
   
   
-  /*********************************************************//**
-   * Core service of the Render Engine : global buffer manager.
-   */
-  class EngineBufferManager
-    : util::NonCopyable
-    {
-    public:
-    };
+  
+  using BufferAllocator = HeapBufferAllocator;
+  
+  
+  
+  
+  /* === EngineBufferManager implementation === */
+  
   
   
 }} // namespace vault::mem
-#endif /*VAULT_MEM_ENGINE_BUFFR_MANAGA_H*/

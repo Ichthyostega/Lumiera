@@ -51,6 +51,7 @@
 
 #include <cstddef>
 #include <utility>
+#include <memory>
 #include <list>
 
 

@@ -85,7 +85,7 @@ namespace test  {
       simpleUse()
         {
           LocalMemPool pool;
-          pool.add (MEM1, SIZ20);
+          pool.supply (MEM1, SIZ20);
           CHECK (pool.canServe(SIZ20));
           CHECK (pool.canServe(SIZ10));
           
@@ -94,7 +94,7 @@ namespace test  {
           CHECK (SIZ20 == siz);
           CHECK (not pool.canServe(SIZ10));
           
-          pool.reAdd (MEM1);
+          pool.reSupply (MEM1);
           CHECK (pool.canServe(SIZ20));
         }
       
@@ -113,7 +113,7 @@ namespace test  {
           CHECK (watch(pool).isEmpty());
           
           // Feed new allocations through the in-queue...
-          pool.add (MEM1, SIZ10);
+          pool.supply (MEM1, SIZ10);
           CHECK (watch(pool).cnt(SIZ10) == 0);                 // new allotment not ingested yet,....
           CHECK (not watch(pool).isEmpty());                   // however, there is an entry in the in-queue
           
@@ -121,8 +121,8 @@ namespace test  {
           CHECK (watch(pool).cnt(SIZ10) == 1);
           CHECK (not watch(pool).isEmpty());
           
-          pool.add (MEM2, SIZ20);
-          pool.add (MEM3, SIZ30);
+          pool.supply (MEM2, SIZ20);
+          pool.supply (MEM3, SIZ30);
           CHECK (pool.canServe(SIZ20));
           CHECK (pool.canServe(SIZ10));
           CHECK (watch(pool).size()     == 3);
@@ -146,8 +146,8 @@ namespace test  {
           CHECK (pool.canServe(SIZ30));
           
           // Return allocations back into the pool
-          pool.reAdd (m2);
-          pool.reAdd (m1);
+          pool.reSupply (m2);
+          pool.reSupply (m1);
           CHECK (watch(pool).cntFree()  == 3);
           
           // Shrink / clean-up will return allocations through a consumer
@@ -172,7 +172,7 @@ namespace test  {
           
           // add a further allocation with SIZ30
           CHECK (not pool.canServe(SIZ30));
-          pool.add (MEM3, SIZ30);
+          pool.supply (MEM3, SIZ30);
           CHECK (watch(pool).size()     == 1);
           CHECK (    pool.canServe(SIZ30));
           CHECK (watch(pool).size()     == 2);
@@ -202,10 +202,10 @@ namespace test  {
       verify_selectAlloc()
         {
           LocalMemPool pool;
-          pool.add (MEM11, SIZ10);
-          pool.add (MEM31, SIZ30);
-          pool.add (MEM32, SIZ30);
-          pool.add (MEM33, SIZ30);
+          pool.supply (MEM11, SIZ10);
+          pool.supply (MEM31, SIZ30);
+          pool.supply (MEM32, SIZ30);
+          pool.supply (MEM33, SIZ30);
           
           uint cnt = pool.reserve(4, SIZ10);                   // request to reserve 4 blocks of SIZ10
           CHECK (cnt == 1);                                    // yet only one block is a good match and thus reserved
@@ -226,12 +226,12 @@ namespace test  {
           CHECK (watch(pool).size()     == 4);
           
           // return all blocks...
-          pool.reAdd (m1);
-          pool.reAdd (m2);
-          pool.reAdd (m3);
-          VERIFY_FAIL ("unknown allocation", pool.reAdd (m4))
-          VERIFY_FAIL ("unknown allocation", pool.reAdd (fake_Buffer(12345)))
-          VERIFY_FAIL ("not marked as used", pool.reAdd (MEM31))
+          pool.reSupply (m1);
+          pool.reSupply (m2);
+          pool.reSupply (m3);
+          VERIFY_FAIL ("unknown allocation", pool.reSupply (m4))
+          VERIFY_FAIL ("unknown allocation", pool.reSupply (fake_Buffer(12345)))
+          VERIFY_FAIL ("not marked as used", pool.reSupply (MEM31))
           CHECK (watch(pool).cntFree()  == 4);
           
           // all entries in the pool were scored....
@@ -241,7 +241,7 @@ namespace test  {
           CHECK (watch(pool).getScore(MEM11) == 10);           // this one was used as a perfect match and thus got the full score
           
           // this score determines how they are used further....
-          pool.add (MEM12, SIZ10);
+          pool.supply (MEM12, SIZ10);
           auto [m5,s5] = pool.retrieve (SIZ10-5);
           auto [m6,s6] = pool.retrieve (SIZ10);
           auto [m7,s7] = pool.retrieve (SIZ10);
@@ -255,10 +255,10 @@ namespace test  {
           CHECK (watch(pool).cntFree()  == 0);
           CHECK (watch(pool).size()     == 5);
           
-          pool.reAdd (m8);
-          pool.reAdd (m7);
-          pool.reAdd (m6);
-          pool.reAdd (m5);
+          pool.reSupply (m8);
+          pool.reSupply (m7);
+          pool.reSupply (m6);
+          pool.reSupply (m5);
           CHECK (watch(pool).cntFree()  == 4);
           CHECK (watch(pool).getScore(MEM11) == 15);           // got +5 score because the match quality was only 50% (SIZ10 but only 5 needed)
           CHECK (watch(pool).getScore(MEM12) == 10);           // this one was new, but got a +10 score due to the perfect match
@@ -282,11 +282,11 @@ namespace test  {
           CHECK (watch(pool).getScore(MEM11) ==  5);           // Scores were reduced accordingly, cutting away a the »kill level« of +10
           CHECK (watch(pool).getScore(MEM31) == -6);
           
-          pool.reAdd (MEM31);
+          pool.reSupply (MEM31);
           auto [mX,sX] = pool.retrieve (SIZ20);
           CHECK (mX == MEM31);
           CHECK (sX == SIZ30);
-          pool.reAdd (MEM31);
+          pool.reSupply (MEM31);
           CHECK (watch(pool).cntFree()  == 2);
           CHECK (watch(pool).getScore(MEM11) ==  3);           // was penalised with -2 since MEM11 was too small to satisfy a SIZ20 request
           CHECK (watch(pool).getScore(MEM31) ==  0);           // while MEM31 got a score of +6 for a usage with 60% match quality (SIZ30 used for SIZ20)

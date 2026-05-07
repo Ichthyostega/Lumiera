@@ -74,7 +74,7 @@
 
 
 #include "lib/error.hpp"
-#include "vault/mem/buffhandle.hpp"
+#include "vault/mem/engine-buffer-manager.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/util.hpp"
 
@@ -127,12 +127,6 @@ namespace mem   {
    */
   class LocalMemPool
     {
-      struct Alloc
-        {
-          Buff* mem;
-          size_t siz;
-        };
-      
       struct Block
         {
           Alloc   alloc{nullptr,0};
@@ -236,7 +230,7 @@ namespace mem   {
        *       unless it is [yielded](\ref yield()) or disposed as part of clean-up.
        */
       void
-      add (Buff* mem, size_t siz)
+      supply (Buff* mem, size_t siz)
         {
           inQueue_.push ({mem,siz});
         }
@@ -248,7 +242,7 @@ namespace mem   {
        * @warning **not threadsafe** — invoke from worker thread only
        */
       void
-      reAdd (Buff* mem)
+      reSupply (Buff* mem)
         {
           ingest();
           Block* block = UN_CONST (find (mem));

@@ -77983,6 +77983,9 @@
 </node>
 </node>
 </node>
+<node CREATED="1778113356971" ID="ID_977105409" MODIFIED="1778113528245" TEXT="Technologie: Async-IO">
+<arrowlink COLOR="#392ba1" DESTINATION="ID_513273421" ENDARROW="Default" ENDINCLINATION="-1790;-510;" ID="Arrow_ID_1192232127" STARTARROW="None" STARTINCLINATION="2404;307;"/>
+</node>
 </node>
 <node CREATED="1482524516371" ID="ID_396707258" MODIFIED="1557498707236" TEXT="Event-Sourcing">
 <node CREATED="1539135156755" ID="ID_1302245670" MODIFIED="1557498707236" TEXT="vermittelnder Tr&#xe4;ger">
@@ -91575,6 +91578,7 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1714182997931" ID="ID_1800457140" MODIFIED="1714183006724" TEXT="Anforderungen">
 <icon BUILTIN="yes"/>
 <node CREATED="1714183028139" ID="ID_196869837" MODIFIED="1714183035818" TEXT="Node kennt N Vorl&#xe4;ufer">
+<linktarget COLOR="#b32548" DESTINATION="ID_196869837" ENDARROW="Default" ENDINCLINATION="-511;2047;" ID="Arrow_ID_1323458981" SOURCE="ID_542260966" STARTARROW="None" STARTINCLINATION="917;51;"/>
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1714268733821" ID="ID_419173079" MODIFIED="1714328850202" TEXT="welche Rolle spielen diese Vorl&#xe4;ufer?">
 <arrowlink COLOR="#ae506a" DESTINATION="ID_1837848811" ENDARROW="Default" ENDINCLINATION="-736;34;" ID="Arrow_ID_1857939913" STARTARROW="None" STARTINCLINATION="-150;-171;"/>
 <icon BUILTIN="help"/>
@@ -143914,6 +143918,63 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
+<node CREATED="1778113600754" ID="ID_688748631" MODIFIED="1778113686162" TEXT="Spezial-Variante: Input-BufferProvider">
+<arrowlink COLOR="#4359d9" DESTINATION="ID_1131259858" ENDARROW="Default" ENDINCLINATION="-1448;-166;" ID="Arrow_ID_863939341" STARTARROW="None" STARTINCLINATION="-1197;90;"/>
+<node CREATED="1778113691625" ID="ID_1816417895" MODIFIED="1778113700651" TEXT="Interface / Verwendung">
+<node CREATED="1778113708111" ID="ID_1426869397" MODIFIED="1778113765577" TEXT="f&#xfc;gt sich nahtlos ein">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Ein Job will seine Eingabedaten in einem Buffer &#10230; Zugang per BuffHandle
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1778115434027" ID="ID_147619275" MODIFIED="1778115455653" TEXT="aber: zus&#xe4;tzliche Konventionen">
+<node CREATED="1778115461192" ID="ID_33862077" MODIFIED="1778115484908" TEXT="der &#xbb;Buffer-Typ&#xab; beinhaltet auch einen Code der Quelle">
+<node CREATED="1778115520944" ID="ID_903089643" MODIFIED="1778115529600" TEXT="abgelegt als LocalTag"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1778115530662" ID="ID_849839614" MODIFIED="1778115781595" TEXT="zu kl&#xe4;ren: Zuordnung?">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Es mu&#223; irgend eine Art tempor&#228;re Index-Tabelle geben, damit wir einen einfachen Code f&#252;r das LocalTag bekommen. (Denkbar w&#228;re auch ein Hash)...
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Letztlich sind alle im Projekt verwendeten Medien als Assets verzeichnet, und von dort m&#252;&#223;te es eine Aufl&#246;sung geben, die dann in einen IO-Job &#252;bersetzt werden kann
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="help"/>
+</node>
+</node>
+<node CREATED="1778115785107" ID="ID_1844500061" MODIFIED="1778115862918" TEXT="der Zugriffs-Proze&#xdf; ist zweistufig">
+<node CREATED="1778115867246" ID="ID_1798856044" MODIFIED="1778116012364" TEXT="Phase-1 : Daten per IO holen"/>
+<node CREATED="1778115888294" ID="ID_729607754" MODIFIED="1778116016450" TEXT="Phase-2 : Datenbuffer verwenden"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1778115919470" ID="ID_1095533538" MODIFIED="1778116026569" TEXT="TODO: Spec &#x2014; Festlegen der Phase">
+<icon BUILTIN="bell"/>
+<node CREATED="1778116034852" ID="ID_1749559867" MODIFIED="1778116046750" TEXT="was bedeutet hier &#xbb;lock buffer&#xab;?">
+<node CREATED="1778116051994" ID="ID_106149054" MODIFIED="1778116062723" TEXT="Phase-1 : leeren Buffer allozieren"/>
+<node CREATED="1778116063836" ID="ID_1187365379" MODIFIED="1778116075642" TEXT="Phase-2 : Buffer mit Daten &#xfc;bernehmen"/>
+</node>
+<node CREATED="1778116218356" ID="ID_311266412" MODIFIED="1778116257947" TEXT="welche Rolle spielt &#xbb;emit&#xab;?">
+<node CREATED="1778116259911" ID="ID_1434260216" MODIFIED="1778116274945" TEXT="Phase-1 : IO-Task kommt vom Kernel zur&#xfc;ck"/>
+<node CREATED="1778116393437" ID="ID_952128815" MODIFIED="1778116428724" TEXT="Phase-2 : es gibt keinen Vorg&#xe4;nger-Job &#x27f9; damit kein &#xbb;emit&#xab;"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1778116492368" ID="ID_847440044" MODIFIED="1778116538951" TEXT="TODO: Struktur der Jobs kl&#xe4;ren">
+<arrowlink COLOR="#4b5174" DESTINATION="ID_1679522795" ENDARROW="Default" ENDINCLINATION="28;-1464;" ID="Arrow_ID_934032093" STARTARROW="None" STARTINCLINATION="-552;47;"/>
+<icon BUILTIN="bell"/>
+</node>
+</node>
+</node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1770828120216" ID="ID_1112258994" MODIFIED="1770828480214" TEXT="vorl&#xe4;ufige Implementierung">
 <icon BUILTIN="hourglass"/>
 <node CREATED="1771434625350" ID="ID_87043838" MODIFIED="1776718387608" TEXT="vorgreifende Vereinfachungen">
@@ -145418,7 +145479,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 <node CREATED="1776814507533" ID="ID_189865287" MODIFIED="1776814576271" TEXT="Ownership / Transaktionelle Sicherheit">
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1776816810560" ID="ID_1402352728" MODIFIED="1776816982093" TEXT="das System mu&#xdf; auch korrekt arbeiten, wenn ein Worker-Thread terminiert">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1776816810560" ID="ID_1402352728" MODIFIED="1778205114333" TEXT="das System mu&#xdf; auch korrekt arbeiten, wenn ein Worker-Thread terminiert">
+<arrowlink COLOR="#e01436" DESTINATION="ID_609664480" ENDARROW="Default" ENDINCLINATION="-1139;0;" ID="Arrow_ID_649333039" STARTARROW="None" STARTINCLINATION="707;0;"/>
 <icon BUILTIN="yes"/>
 </node>
 <node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1776816880663" ID="ID_233138855" MODIFIED="1776816975061" TEXT="das ist nicht-trivial &#x2014; ohne weitere Ma&#xdf;namen &#xbb;verlieren&#xab; wir Buffer">
@@ -146103,24 +146165,19 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1777325452127" ID="ID_1999785214" MODIFIED="1777325463483" TEXT="m&#xfc;&#xdf;te n&#xe4;mlich default-konstruierbar sein"/>
 <node CREATED="1777325557816" ID="ID_1748588651" MODIFIED="1777325642908" TEXT="wird hier jemals ein &#xbb;Default-Setup&#xab; gebraucht?">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...das w&#228;re nur der Fall, wenn ein Unit-Test &#8222;mal eben&#8220; eine Render-Engine braucht. Denn sonst decken wir den Default-Fall bereits mit dem NaiveBufferSetup ab
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="help"/>
 </node>
 <node CREATED="1777325501367" ID="ID_586279034" MODIFIED="1777325521405" TEXT="tats&#xe4;chlich wollen wir hier eine explizit gemanagete Server-Komponente"/>
-<node CREATED="1777325699181" ID="ID_1392466705" MODIFIED="1777325832394" TEXT="Dependency-Factory kann auf abstrakte Basisklasse konfiguriert werdn">
+<node CREATED="1777325699181" ID="ID_1392466705" MODIFIED="1777325832394" TEXT="Dependency-Factory kann auf abstrakte Basisklasse konfiguriert werden">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Und dann w&#252;rde jeder Zugriff mit einer Exception scheitern....
@@ -146132,8 +146189,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       <font color="#635e96" face="DejaVu Sans Mono" size="9pt"><b>DependInject</b></font><font color="#65533c" face="DejaVu Sans Mono" size="9pt">&lt;</font><font color="#635e96" face="DejaVu Sans Mono" size="9pt"><b>Base</b></font><font color="#65533c" face="DejaVu Sans Mono" size="9pt">&gt;::</font><font color="#61143c" face="DejaVu Sans Mono" size="9pt"><i>useSingleton&lt;Sub&gt;</i></font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -146152,32 +146208,26 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1777326654102" ID="ID_499885447" MODIFIED="1777326656831" TEXT="Struktur">
 <node CREATED="1777326657789" ID="ID_831464061" MODIFIED="1777326715033" TEXT="L&#xe4;ngerfristig: Policy-based-Design">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Schon allein um die konfigurierbaren Aspekte klar herauszustellen, und um ggfs. Quellen dynamischer Konfiguration zu verdrahten
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1777326753646" ID="ID_448684473" MODIFIED="1777326779620" TEXT="doch zun&#xe4;chst einmal: alles direkt coden">
 <icon BUILTIN="yes"/>
 <node CREATED="1777339002955" ID="ID_758544304" MODIFIED="1777339007206" TEXT="typedef BufferAllocator"/>
 <node CREATED="1777339008730" ID="ID_1534654283" MODIFIED="1777339172707" TEXT="verwende fix eine Tile-Size von 64 Bytes">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...das ist die &#252;bliche Cache-Line-Size auf x86_64
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1777339178309" ID="ID_142350391" MODIFIED="1777339187028" TEXT="verdrahte direkt auf std::allocator"/>
 </node>
@@ -146185,31 +146235,25 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <arrowlink COLOR="#47c9c9" DESTINATION="ID_1644044904" ENDARROW="Default" ENDINCLINATION="6;-56;" ID="Arrow_ID_1619156849" STARTARROW="None" STARTINCLINATION="-20;33;"/>
 <node CREATED="1777328509534" ID="ID_1944871660" MODIFIED="1777328772390" TEXT="sollte mich an mein Allokatoren-Konzept-Framework halten....">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       auch wenn es erst mal gedanklich schwerf&#228;llt, und f&#252;r die zun&#228;chst angestrebte <i>naive Implementierung</i>&#160;wie ein sinnloser Tanz aussieht; denn dieses Framework ist gut durchdacht und sollte langsam zu einem R&#252;ckgrat f&#252;r Allokationsvorg&#228;nge werden. Zur Erinnerung: dieses Konzept habe ich an die Stelle eines &#187;globalen Allokators&#171; gestellt. Zun&#228;chst hatten wir ja den Ansatz mit Christian's &quot;Mempool&quot; &#8212; und ich habe mich jahrelang mit der Planlosigkeit dieser Idee herumgeplagt, bis ich langsam verstanden habe, was daran schief ist....
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#345274" DESTINATION="ID_1644685634" ENDARROW="Default" ENDINCLINATION="-529;1146;" ID="Arrow_ID_491300253" STARTARROW="None" STARTINCLINATION="-2513;119;"/>
 <node CREATED="1777328785465" ID="ID_1420803190" MODIFIED="1777328795899" TEXT="wir verwenden einen unterliegenden &#xbb;Allokator&#xab;"/>
 <node CREATED="1777329110029" ID="ID_1388976086" MODIFIED="1777329129190" TEXT="Hier ist der base_type nur eine Speicherkachel"/>
 <node CREATED="1777328936437" ID="ID_558800878" MODIFIED="1777328948520">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Allokatoren sind <i>composable</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1777329176181" ID="ID_381595151" MODIFIED="1777329187583" TEXT="der unterliegende Allokator mag eine Pool-Hierarchie haben"/>
 <node CREATED="1777329188341" ID="ID_323248358" MODIFIED="1777329208588" TEXT="der dar&#xfc;berliegende Allokator h&#xe4;lt die Ownership und leiht Allokationen aus"/>
 </node>
@@ -146218,44 +146262,33 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <arrowlink COLOR="#ce0827" DESTINATION="ID_860687505" ENDARROW="Default" ENDINCLINATION="135;-10;" ID="Arrow_ID_1201137989" STARTARROW="None" STARTINCLINATION="-14;74;"/>
 <node CREATED="1777329370541" ID="ID_1130144304" MODIFIED="1777330545220">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       weil sie f&#252;r einen <i>naiven Allokator</i>&#160;nur schlecht zu implementieren ist
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...da wir ja letztlich alles an den globalen Allokator durchreichen wollen (weil der's sowiso besser kann), haben wir keinerlei Struktur mehr, die wir uns zunutze machen k&#246;nnen &#10233; f&#252;r jede de-Allokation m&#252;ssen wir den Tracking-Eintrag suchen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1777329418716" ID="ID_1818082361" MODIFIED="1777330552447">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       f&#252;r eine <i>Pool-Hierarchie</i>&#160;dagegen ist eine effiziente Implementierung m&#246;glich
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       hierbei kann man sich die bekannte Element-Gr&#246;&#223;e zunutze machen
@@ -146272,8 +146305,296 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node COLOR="#5b280f" CREATED="1777999099111" ID="ID_85312156" MODIFIED="1778118551056" TEXT="verwendet nur eine Auftrags-Queue">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1777999467138" ID="ID_845392021" MODIFIED="1778199985120" TEXT="bevorzuge hier eine Implementierungs-interne Konvention">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Ich betrachte das alles hier als &#187;tief in der Implementierung&#171;, und zudem performance-kritisch. Daher halte ich eine einfache Struktur mit einer festen Konvention f&#252;r angemessen. Das ganze Setup funktioniert ohnehin nur in einer speziell abgezierkelten Konfiguration, und mu&#223; dar&#252;ber hinaus auch von niemandem verstanden und verwendet werden. Die sichtbare Schnittstelle ist der BufferProvider
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#694543" DESTINATION="ID_444542765" ENDARROW="Default" ENDINCLINATION="-442;-19;" ID="Arrow_ID_1733074661" STARTARROW="None" STARTINCLINATION="183;9;"/>
+<node CREATED="1777999618193" ID="ID_789887542" MODIFIED="1777999637689" TEXT="wir schicken Alloc-Records durch die Queue"/>
+<node CREATED="1778199927304" HGAP="51" ID="ID_851101924" MODIFIED="1778199972851" TEXT="mu&#xdf; ausgehende und eingehende Allokationen unterscheiden" VSHIFT="-7"/>
+</node>
+<node CREATED="1777999710369" ID="ID_280190900" MODIFIED="1777999729221" TEXT="dazu braucht es dann einen Dispatcher">
+<node CREATED="1777999730802" ID="ID_905298528" MODIFIED="1777999737616" TEXT="das ist eine einzige, synchrone Funktion"/>
+<node CREATED="1777999738279" ID="ID_594018419" MODIFIED="1777999747900" TEXT="Name: dispatchAllocations()"/>
+</node>
+<node COLOR="#5b280f" CREATED="1778118565741" ID="ID_1827334487" MODIFIED="1778118581191" TEXT="Das geht so gar nicht auf!">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1778118584591" ID="ID_609821079" MODIFIED="1778118599988" TEXT="wir m&#xfc;ssen einen &#xbb;Callback&#xab; mit vermerken"/>
+<node CREATED="1778118602224" ID="ID_1766767758" MODIFIED="1778118613210" TEXT="damit wird die Struktur asymetrisch"/>
+<node CREATED="1778118614195" ID="ID_1998156675" MODIFIED="1778118765570">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      und jede <i>vereinheitlichende Konvention</i>&#160;wird verwirrend
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      weil die Struktur von sich selber her nicht uniform ist:
+    </p>
+    <ul>
+      <li>
+        eingehende Allocation-Requests m&#252;ssen an <i>diverse lokale</i>&#160;Pools zugestellt werden
+      </li>
+      <li>
+        zur&#252;ckkommende Allokationen dagegen haben zwar eine Speicher-Addresse des Buffers, daf&#252;r aber gehen sie stets in eine einzige Funktion im EngineBufferManager
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1778118771505" ID="ID_1314536256" MODIFIED="1778118805988" TEXT="also &#x27f9; sinnvollerweise die Eingangs- und Ausgangs-Seite dediziert und separat bauen">
+<icon BUILTIN="yes"/>
+<node CREATED="1778118817300" ID="ID_1259663169" MODIFIED="1778118842536" TEXT="Ausgang &#x2259; Allokations-Requests">
+<node CREATED="1778118984391" ID="ID_231045425" MODIFIED="1778118994533" TEXT="angefordert wird nur eine size"/>
+<node CREATED="1778118995115" ID="ID_1837404142" MODIFIED="1778119005838" TEXT="Aber: der Callback ist eine Member-Funktion">
+<node CREATED="1778119010570" ID="ID_1042885761" MODIFIED="1778119024572" TEXT="m&#xf6;gliche Darstellung">
+<node COLOR="#5b280f" CREATED="1778119025799" ID="ID_582301331" MODIFIED="1778119039754" TEXT="als std::function">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      zu gro&#223; und zu schwer!!!
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1778119081560" ID="ID_980404507" LINK="#ID_263765309" MODIFIED="1778119263086" TEXT="als ausimplementierte Struktur mit &#xbb;Invoker&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Zur Erinnerung (hatte mir vor ein paar Wochen das Thema bereits im Detail analysiert, als ich die Implementierungs-Skizze f&#252;r die &#187;LocalFun&#171; gemacht habe)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1778119348551" ID="ID_1733239947" MODIFIED="1778119367938" TEXT="als statische callback-Funktion mit &#xbb;Instance&#xab;-Parameter">
+<icon BUILTIN="forward"/>
+<node CREATED="1778119381603" ID="ID_954784730" MODIFIED="1778119390390" TEXT="Vorsicht! kein Over-Engineering"/>
+<node CREATED="1778119391222" ID="ID_1689068968" MODIFIED="1778119443403" TEXT="klar ist hier: es gibt nur eine einzige Implementierung des Empf&#xe4;ngers">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      und das ist der thread-local pool-Allocator
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1778119450587" ID="ID_1806367243" MODIFIED="1778119470264" TEXT="Anordnung im Code">
+<icon BUILTIN="flag-pink"/>
+<node CREATED="1778119474043" ID="ID_898200002" MODIFIED="1778119501037">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      l&#228;uft auf eine <i>mutual dependency</i>&#160;hinaus....
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1778119510575" ID="ID_551520406" MODIFIED="1778119541536" TEXT="wenn ich maximale Effizienz will &#x2014; mu&#xdf; der Queue-Dispatcher die Empf&#xe4;nger-Impl sehen"/>
+<node CREATED="1778119547314" ID="ID_1716166005" MODIFIED="1778119602383" TEXT="Thread &#x27f6; Zentrale">
+<node CREATED="1778119733361" ID="ID_663737041" MODIFIED="1778119765873" TEXT="alle LocalBufferStore kommunizieren mit einem EngineBufferManager"/>
+<node CREATED="1778119767252" ID="ID_1107935266" MODIFIED="1778119786166" TEXT="Konsequenz: der LocalBufferStore mu&#xdf; den EngineBufferManager sehen"/>
+</node>
+<node CREATED="1778119603617" ID="ID_6607464" MODIFIED="1778119607940" TEXT="Zentrale &#x27f6; Thread">
+<node CREATED="1778119618178" ID="ID_910664412" MODIFIED="1778119639019" TEXT="hier tritt der flexible Dispatch mit Callback-Instanz auf"/>
+<node CREATED="1778119639862" ID="ID_1359278383" MODIFIED="1778119728301" TEXT="Konsequenz: der EngineBufferManager mu&#xdf; den LocalBufferStore sehen"/>
+</node>
+</node>
+<node CREATED="1778199712170" ID="ID_334307615" MODIFIED="1778199836250" TEXT="aufl&#xf6;sen durch getrennte Translation-Units">
+<node COLOR="#5b280f" CREATED="1778199840557" ID="ID_444542765" MODIFIED="1778200791662" TEXT="hier nochmal die Diskussion: Abstraktion einf&#xfc;hren?">
+<linktarget COLOR="#694543" DESTINATION="ID_444542765" ENDARROW="Default" ENDINCLINATION="-442;-19;" ID="Arrow_ID_1733074661" SOURCE="ID_845392021" STARTARROW="None" STARTINCLINATION="183;9;"/>
+<icon BUILTIN="help"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1778199995272" ID="ID_1242813918" MODIFIED="1778200005925" TEXT="nach Bauchgef&#xfc;hl: Nein!"/>
+<node CREATED="1778200008428" ID="ID_49143735" MODIFIED="1778200022919" TEXT="das hier ist alles reine Implementierung"/>
+<node CREATED="1778200023739" ID="ID_1564797103" MODIFIED="1778200036521" TEXT="der Code ist seiner Natur nach sehr koh&#xe4;siv"/>
+<node CREATED="1778200046721" ID="ID_1805659029" MODIFIED="1778200058754" TEXT="er stellt nichts anderes dar, als das was er tut"/>
+<node CREATED="1778200592864" ID="ID_1738648373" MODIFIED="1778200772895" TEXT="&#x27f9; eine Abstraktion l&#xe4;uft auf Duplikation hinaus">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Man w&#252;rde h&#246;chstens Teile der Implementierung auseinanderrei&#223;en, w&#252;rde aber die Implementierungs-Logik gr&#246;&#223;tenteils auch in den Deklarationen aufdoppeln. Den gleichen Effekt bekommt man bereits durch eine Trennung Header / Translation-Unit; und es gibt keine Stelle im Code, die nur rein auf Ebene der Abstraktion f&#252;r sich verst&#228;ndlich w&#228;re
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1778200776431" ID="ID_633380599" MODIFIED="1778200789719" TEXT="damit dann die Frage: wer steht &#xbb;vorne&#xab;?">
+<icon BUILTIN="help"/>
+<node CREATED="1778200986313" ID="ID_833445396" MODIFIED="1778201001726" TEXT="render-environment.cpp : orchestriert alle Komponenten"/>
+<node CREATED="1778201611985" ID="ID_915606652" MODIFIED="1778201663551" TEXT="local-buffer-store.hpp : mu&#xdf; Interface + Impl sichtbar includieren">
+<node CREATED="1778201675305" ID="ID_1039214761" MODIFIED="1778201733017" TEXT="#include engine-buffer-manager"/>
+<node CREATED="1778201666227" ID="ID_1743353862" MODIFIED="1778201674089" TEXT="#include local-mem-pool"/>
+</node>
+<node CREATED="1778201686727" ID="ID_1440245566" MODIFIED="1778201705302" TEXT="engine-buffer-manager.cpp : verbirgt den Memory-Manager">
+<node CREATED="1778203861114" ID="ID_1565577566" MODIFIED="1778203927457" TEXT="engine-buffer-allocator.hpp : in Header auskoppeln....">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Zun&#228;chst einmal notwendig, damit ich den auch in einem Test verwenden kann; l&#228;ngerfristig ist das auch sinnvoll, denn der Buffer-Allocator selber wird komplex werden (ich plane ein System von Pools)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1778201747177" ID="ID_1235232289" MODIFIED="1778201802499" TEXT="&#x27f9; engine-buffer-manager.hpp : sichtbares Backend-Service-Interface"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1778203953066" ID="ID_570673188" MODIFIED="1778203985427" TEXT="brauche dann aber doch eine Konvention / Abstraktion f&#xfc;r den Callback">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1778203987341" ID="ID_384285004" MODIFIED="1778204998986" TEXT="und zwar gibt es eine zus&#xe4;tzliche Komplikation durch das Thread-Local-Slice">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...denn der Callback mu&#223; ja an den lokalen Pool im Thread gehen, und den wiederum wollte ich von der weiteren Implementierung isoliert halten (da er allein f&#252;r sich schon komplex genug ist, und einen eigenen Test rechtfertigt). Der lokale Pool mu&#223; <b>zwingend</b>&#160;direkt per Referenz angesprochen werden, da die Zustellung der beauftragten Allokationen aus einem anderen Thread heraus erfolgt (und die Allokationen gehen dann im LocalMemPool auch noch in eine Eingangsqueue)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1778204388008" ID="ID_1260979702" MODIFIED="1778204394931" TEXT="was g&#xe4;be es f&#xfc;r M&#xf6;glichkeiten?">
+<node CREATED="1778204396280" ID="ID_1593493246" MODIFIED="1778204416185" TEXT="eine statische Basisklassen-Abstraktion"/>
+<node CREATED="1778336717573" ID="ID_587131373" MODIFIED="1778336724483" TEXT="Interface mit dynamischem Dispatch"/>
+<node CREATED="1778204417915" ID="ID_1736901960" MODIFIED="1778204424935" TEXT="eine freistehende Methode"/>
+</node>
+<node CREATED="1778337183089" ID="ID_1017617432" MODIFIED="1778337187792" TEXT="Diskussion">
+<node CREATED="1778337199470" ID="ID_55562349" MODIFIED="1778337351601" TEXT="es geht um Klarheit und gute Struktur">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      praktisch jede der diskutierten Varianten w&#228;re <i>irgendwie machbar </i>&#8212; es k&#246;nnten sich sogar beite Implementierungen wechselseitig aufrufen (sofern wenigstens <i>eine</i>&#160;in einer separaten Translation-Unit residiert). Jedoch wird dieses Aggregat absehbar ein komplexes (und auch fragiles) St&#252;ck der Implementierung, und eine solche wechselseitige Abh&#228;ngigkeit ist viel leichter gebaut, als verstanden.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1778337511312" ID="ID_129672845" MODIFIED="1778337524522" TEXT="der Callback-Aufruf selber ist nicht performance-kritisch"/>
+<node CREATED="1778337913680" ID="ID_777187606" MODIFIED="1778337967531" TEXT="die freistehende Funkion erscheint zun&#xe4;chst attraktiv">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...insofern sich damit vermeiden lie&#223;e, ein <i>pseudu-bedeutsames Interface</i>&#160;zu erfinden
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1778337969610" ID="ID_1944293584" MODIFIED="1778338077257" TEXT="allerdings br&#xe4;uchte es dann eine zweite Translation-unit">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...n&#228;mlich f&#252;r den localBufferStore; allerdings hat diese Translation-Unit keinerlei <i>eigene Substanz,</i>&#160;da alle Typen bereits im Header voll definiert sein m&#252;ssen, wegen der Lock-free-Queue und derm LocalSlice
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1778338086407" ID="ID_540821014" MODIFIED="1778338102529" TEXT="damit bleibt ein Interface als einzige L&#xf6;sung &#xfc;brig"/>
+<node CREATED="1778338455958" ID="ID_1837745925" MODIFIED="1778338481318" TEXT="Idee: einen AllocReceiver schaffen">
+<icon BUILTIN="idea"/>
+<node CREATED="1778338483900" ID="ID_886291553" MODIFIED="1778338496471" TEXT="der enth&#xe4;lt bereits die Lock-free Queue"/>
+<node CREATED="1778338497805" ID="ID_642065562" MODIFIED="1778338510741" TEXT="EngineBufferManager w&#xfc;rde den ebenfalls includieren"/>
+<node CREATED="1778338523503" ID="ID_1064061032" MODIFIED="1778339579889" TEXT="es handelt sich tats&#xe4;chlich um weitgehend eigenst&#xe4;ndige Funktionalit&#xe4;t">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das ist klar im Fall vom LocalMemPool: es gibt nur einen einzigen Verkn&#252;pfungspunkt, n&#228;mlich die consume_all(&#955;)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1778339597916" ID="ID_1989526780" MODIFIED="1778339631163">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      damit w&#228;re es auch keine <i>abstrakte Methode</i>&#160;mehr &#8212; sondern ein <i>Baustein</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1778205040426" ID="ID_609664480" MODIFIED="1778205118401" TEXT="weiteres Problem: Race mit Ende des Worker-Thread">
+<linktarget COLOR="#e01436" DESTINATION="ID_609664480" ENDARROW="Default" ENDINCLINATION="-1139;0;" ID="Arrow_ID_649333039" SOURCE="ID_1402352728" STARTARROW="None" STARTINCLINATION="707;0;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1778205127309" ID="ID_174843767" MODIFIED="1778205132800" TEXT="Beispiel-Szenario">
+<node CREATED="1778205135600" ID="ID_1730604347" MODIFIED="1778205230908" TEXT="neuer Job &#x27f9; Anforderung an EngineBufferManager">
+<icon BUILTIN="full-1"/>
+</node>
+<node CREATED="1778205155009" ID="ID_536238884" MODIFIED="1778205234412" TEXT="Problem im Job &#x27f9; Unwind, Worker terminiert">
+<icon BUILTIN="full-2"/>
+</node>
+<node BACKGROUND_COLOR="#f9e4d6" COLOR="#c00244" CREATED="1778205192805" ID="ID_931645192" MODIFIED="1778205307186">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      sp&#228;ter versucht ein anderer Thread,
+    </p>
+    <p>
+      die angeforderten Allokationen zuzustellen
+    </p>
+    <p>
+      <b><font size="6">&#8623;</font></b>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="clanbomber"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1778118843392" ID="ID_45310528" MODIFIED="1778118856450" TEXT="Eingang &#x2259; zur&#xfc;ckgegebene Allokationen">
+<node CREATED="1778118860685" ID="ID_744369649" MODIFIED="1778118884334" TEXT="hier kommt eine Alloc, d.h. (Buffer-Adr, Size)"/>
+<node CREATED="1778118904520" ID="ID_1909917635" MODIFIED="1778118915854" TEXT="diese werden alle intern konsumiert"/>
+<node CREATED="1778118916726" ID="ID_1993073258" MODIFIED="1778118979086">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      es ist auch sinnvoll, sie zuerst <i>en bloc</i>&#160;zu verarbeiten
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      weil dadurch n&#228;mlich zus&#228;tzlicher Speicer zur Verf&#252;gung steht, und ggfs. sogar die Fragmentierung reduziert wird
+    </p>
+  </body>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -146293,16 +146614,13 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1777324341484" ID="ID_269815037" MODIFIED="1777324543018" TEXT="einzig sinnvoll: direkt vom/zum Heap">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Es ist nicht sinnvoll, eine &#187;vorl&#228;ufige&#171; Implementierung eines heterogenen Memory-Managers zu machen. Da ist n&#228;mlich der Heap-Allokator<i>&#160; stets besser geeignet</i>&#160;&#8212; ist inzwischen einigerma&#223;en schwer geworden, den Heap-Allokator &#252;berhaupt noch zu schlagen. Mithin wird das auch gleich eine gute <b>Baseline-Implementierung</b>&#160;f&#252;r Performance-Messungen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1777324354872" ID="ID_33339353" MODIFIED="1777324362776" TEXT="sp&#xe4;ter geplant: System von Pools">
 <icon BUILTIN="hourglass"/>
@@ -146314,16 +146632,13 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1777324560690" ID="ID_318881353" MODIFIED="1777324567396" TEXT="Rahmen per Test abstecken">
 <node COLOR="#338800" CREATED="1777339205760" ID="ID_1644044904" MODIFIED="1777339355233" TEXT="demonstrate_AllocatorInterface">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Das ist nun wirklich mehr eine Demonstration, denn ich kann da praktisch nichts verifizieren (au&#223;er da&#223; es keinen SEGFAULT gibt, wenn ich in den allozierten Speicher schreibe). Wenigstens ist damit schon mal sichergestellt, da&#223; der Code durch den Compiler geht
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <linktarget COLOR="#47c9c9" DESTINATION="ID_1644044904" ENDARROW="Default" ENDINCLINATION="6;-56;" ID="Arrow_ID_1619156849" SOURCE="ID_1470622255" STARTARROW="None" STARTINCLINATION="-20;33;"/>
 </node>
 </node>
@@ -146331,16 +146646,13 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="forward"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1777330604883" ID="ID_860687505" MODIFIED="1777330785076" TEXT="&#xbb;Ownership&#xab; ist zun&#xe4;chst freischwebend">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Das hei&#223;t, wir m&#252;ssen uns darauf verlassen, da&#223; der ganze komplexe Klapperatismus absolut korrekt funktioniert; wenn dem so ist, gen&#252;gt es, einfach blindlings neue Allokationen an die lokalen Pools zu schicken und freizugeben was aus den lokalen Pools zur&#252;ckgesendet wird. Das <b>hat zur Konsequenz</b>&#160;da&#223; gewisse zus&#228;tzliche Konsistenzchecks eingebaut werden m&#252;ssen, damit sich die Korrektheit auch erweisen l&#228;&#223;t
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <linktarget COLOR="#ce0827" DESTINATION="ID_860687505" ENDARROW="Default" ENDINCLINATION="135;-10;" ID="Arrow_ID_1201137989" SOURCE="ID_235497917" STARTARROW="None" STARTINCLINATION="-14;74;"/>
 <icon BUILTIN="messagebox_warning"/>
 </node>
@@ -146388,6 +146700,65 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1702414560197" ID="ID_1321884127" MODIFIED="1702414571124" TEXT="Verhalten unter echter Last beobachten">
 <icon BUILTIN="hourglass"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1778113213950" ID="ID_934176919" MODIFIED="1778113231009" STYLE="fork" TEXT="Thema: File-I/O">
+<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
+<icon BUILTIN="bell"/>
+<node CREATED="1778113251791" ID="ID_719985737" MODIFIED="1778113329577" TEXT="Basis: Async-IO (IO_URING)">
+<arrowlink COLOR="#323ccd" DESTINATION="ID_513273421" ENDARROW="Default" ENDINCLINATION="-1630;-298;" ID="Arrow_ID_1806410644" STARTARROW="None" STARTINCLINATION="-1524;159;"/>
+</node>
+<node CREATED="1778113564544" ID="ID_1131259858" MODIFIED="1778113686162" TEXT="Integration IO-Buffer">
+<linktarget COLOR="#4359d9" DESTINATION="ID_1131259858" ENDARROW="Default" ENDINCLINATION="-1448;-166;" ID="Arrow_ID_863939341" SOURCE="ID_688748631" STARTARROW="None" STARTINCLINATION="-1197;90;"/>
+<node CREATED="1778116471691" ID="ID_1679522795" MODIFIED="1778116528777" TEXT="Struktur der Jobs">
+<linktarget COLOR="#4b5174" DESTINATION="ID_1679522795" ENDARROW="Default" ENDINCLINATION="28;-1464;" ID="Arrow_ID_934032093" SOURCE="ID_847440044" STARTARROW="None" STARTINCLINATION="-552;47;"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1778116557314" ID="ID_1411146534" MODIFIED="1778116580325" TEXT="der IO-Job ist gar nicht mit einer (normalen) Node verbunden...?">
+<icon BUILTIN="help"/>
+<node CREATED="1778116600409" ID="ID_970184894" MODIFIED="1778116941174" TEXT="oder vielleicht doch?">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...wie wird der IO-Vorgang im Modell dargestellt?
+    </p>
+    <ul>
+      <li>
+        man k&#246;nnte ihn komplett heraushalten und in einer separaten Datenstruktur verwalten, die dann auch als Index-Tabelle dienen k&#246;nnte zur Aufl&#246;sung einer Quellen-ID
+      </li>
+      <li>
+        man k&#246;nnte eine speziell pr&#228;parierte Quell-Node einf&#252;hren, die sich dann aber im shed() und im weft()-Schritt anders verhalten m&#252;&#223;te
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1778116949044" ID="ID_1923307878" MODIFIED="1778117221275" TEXT="der nachgelagerte Render-Job mu&#xdf; irgendwie den Quell-Buffer schon bekommen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Zum Vergleich: eine gew&#246;hnliche Node mit Media-Weaving-Pattern &#8222;findet&#8220; nach dem pull()-Schritt einen Satz allozierter Vorl&#228;ufer-Buffer vor. Aber hier gibt es keine Vorl&#228;ufer, also f&#228;llt das pull() leer durch. Mithin ist zu kl&#228;ren, wann und wie diese Quellbufer belegt werden
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="bell"/>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1778117224343" ID="ID_1315110259" MODIFIED="1778117645283" TEXT="special twist: wenn mehrere Frame-Jobs aus dem gleichen Datenpuffer lesen m&#xfc;ssen...">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das d&#252;rfte sogar der Regelfall sein; der IO-Job hat ein gewisses Datenfenster in einen Buffer geladen, das dort aber noch komprimiert vorliegt. Als erstes mu&#223; nun ein Codec-Schritt aufgerufen werden, der als Resultat eine &#187;Group-of-Pictures&#171; in einen Satz von Buffern ausgibt. Aber der n&#228;chste Schritt in der Pipeline braucht nur genau einen von diesen Buffern, w&#228;hrend alle weiteren Render-Jobs, die sich aus der gleichen GoP bedienen, den Decoder-Schritt &#252;berhaupt nicht mehr machen m&#252;ssen. Wie stellt man das am geschicktesten im Modell dar? <i>Naheliegend w&#228;re,</i>&#160;die Verbindung &#252;ber den Cache herzustellen, d.h. <i>pro forma</i>&#160;w&#252;rde jeder pull() wieder auch den Decoder-Schritt aktivieren, aber da die decodierten Frames bereits im Cache liegen, w&#252;rde dieser Schritt stillschweigend &#252;bersprungen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1778118401539" ID="ID_542260966" MODIFIED="1778118493245" TEXT="bisher ungekl&#xe4;rt: N:M-Verbindung zwischen Nodes">
+<arrowlink COLOR="#b32548" DESTINATION="ID_196869837" ENDARROW="Default" ENDINCLINATION="-511;2047;" ID="Arrow_ID_1323458981" STARTARROW="None" STARTINCLINATION="917;51;"/>
+</node>
+</node>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1771531099475" ID="ID_628281312" MODIFIED="1771531122758" TEXT="Thema: Video Output">
@@ -171263,7 +171634,12 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
 <node CREATED="1773944073911" ID="ID_1249734675" MODIFIED="1773944076217" TEXT="Datei"/>
 </node>
 </node>
-<node CREATED="1720994187035" ID="ID_1817562586" MODIFIED="1720994190143" TEXT="Basis-Dienste"/>
+<node CREATED="1720994187035" ID="ID_1817562586" MODIFIED="1720994190143" TEXT="Basis-Dienste">
+<node CREATED="1778113273194" ID="ID_513273421" MODIFIED="1778113528245" TEXT="Async-IO">
+<linktarget COLOR="#323ccd" DESTINATION="ID_513273421" ENDARROW="Default" ENDINCLINATION="-1630;-298;" ID="Arrow_ID_1806410644" SOURCE="ID_719985737" STARTARROW="None" STARTINCLINATION="-1524;159;"/>
+<linktarget COLOR="#392ba1" DESTINATION="ID_513273421" ENDARROW="Default" ENDINCLINATION="-1790;-510;" ID="Arrow_ID_1192232127" SOURCE="ID_977105409" STARTARROW="None" STARTINCLINATION="2404;307;"/>
+</node>
+</node>
 </node>
 <node CREATED="1720131181173" ID="ID_792463857" MODIFIED="1720131194751" TEXT="Extern">
 <node CREATED="1720131209154" ID="ID_218200346" MODIFIED="1720131229705" TEXT="Integration"/>
