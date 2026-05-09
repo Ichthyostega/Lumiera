@@ -184,9 +184,8 @@ Premiere (optionally) shows an import panel immediately after this. The first ti
 on a timeline, Resolve and Premiere will ask if you want to change your project settings to match
 the clip settings, when these are different.
 
-[red]#TODO: Image#
-
-Premiere's import panel
+.Premiere's import panel
+image::{imgg}/wouter/v4-01-importPanel.jpg[width="100%", alt="Premiere's import panel"]
 
 Projects themselves exist within an application's database (Resolve), or as a file/folder on local or
 shared storage (Avid, Premiere, Lightworks, FCP).
@@ -207,9 +206,10 @@ of bins (timelines are confusingly called ``projects''). Footage, when imported,
 and from there all emphasis is on the metadata, in how you rate and tag (parts of) the footage. This
 also serves as a replacement of the subclips feature found in other NLE's.
 
-[red]#TODO: Image#
+.Final Cut Pro's Keywords dialog. +
+image::{imgg}/wouter/v4-02-keywords.jpg[width="100%", alt="Final Cut Pro's Keywords dialog"]
+^↑``Travel part 1'' and ``Travel part 2'' on the left are events.^
 
-Final Cut Pro's Keywords dialog. ``Travel part 1'' and ``Travel part 2'' on the left are events.
 
 In any case, when working in a professional environment, you will probably want to start with a
 template that defines your top level structure, instead of having to recreate your entire bin setup
@@ -282,9 +282,9 @@ simultaneously exist in a regular bin and a search bin, in contrast to normal bi
 clip will only exist in a single bin and you'd have to duplicate this clip for it to be also
 placed in another bin (Lightworks being the exception here).
 
-[red]#TODO: Image#
+.Filter options in Lightworks
+image::{imgg}/wouter/v4-03-filterOptions.jpg[alt="Filter options in Lightworks"]
 
-Filter options in Lightworks
 
 Resolve adds a third kind of bins, known as ``Power bins'': these are bins that are accessible by all projects.
 
@@ -318,9 +318,9 @@ Control+left clicking any column header and Lightworks via the Columns > Presets
 methods are less straightforward than Avid's. Another neat feature that Avid has is a bin map: an
 overview of bin contents that can be toggled when in Frame View.
 
-[red]#TODO: Image#
+.Creating a custom view preset in Avid Media Composer, which can be selected from the drop-down menu in the top bar.
+image::{imgg}/wouter/v4-04-customView.jpg[width="120%", alt="Creating a custom view preset"]
 
-Creating a custom view preset in Avid Media Composer, which can be selected from the drop-down menu in the top bar.
 
 Note that all apps offer a search/filter box (or button) on top of each bin view. Final Cut Pro and
 Resolve allow skimming clips from the bin view, simply by hovering the mouse on top of the
@@ -353,9 +353,9 @@ option to (automatically or manually) connect clips to lines in a script (Script
 * Sequence/timeline markers to mark points in time, or sections (so-called ranged or spanned
 markers; terminology is different per app).
 +
-[red]#TODO: Image#
+.Plenty of marker options in Adobe Premiere
+image::{imgg}/wouter/v4-05-markerOptions.png[width="70%", alt="Marker options in Premiere"]
 +
-Plenty of marker options in Adobe Premiere
 
 * Timeline clip notes (Avid): these can be added to a timeline clip, and will stay connected to
 this clip. You can't trim them off and they will automatically move whenever a clip moves.
@@ -375,9 +375,9 @@ options in this field and lets you choose exactly which types of colours to disp
 timeline. Manually set clip colours are a very useful organisational tool, e.g. to differentiate
 between several cameras, interviewed persons in a documentary or different locations.
 +
-[red]#TODO: Image#
+.Avid has many options for choosing how clips are coloured in the timeline
+image::{imgg}/wouter/v4-06-clipColor.png[width="50%", alt="Coosing clip colours in Avid"]
 +
-Avid has many options for choosing how clips are coloured in the timeline
 
 * Flags (Resolve). Similar to markers, but these apply to entire (source) clips, while markers
 apply to a single point in time or a time range within a clip. Multiple flags can be added to
@@ -390,9 +390,9 @@ of a day of shooting from multiple cameras synced and laid out chronologically.
 FCP doesn't quite support source reels and instead offers continuous playback from the
 browser window. Resolve has a ``source tape'' option that works in a similar way.
 
-[red]#TODO: Image#
 
-Simple example of a source reel (top), converted to a sync map (bottom)
+.Simple example of a source reel (top), converted to a sync map (bottom)
+image::{imgg}/wouter/v4-07-syncMap.png[width="100%", alt="Example of a sync map", link="{imgg}/wouter/v4-07-syncMap.png"]
 
 Viewing footage
 ^^^^^^^^^^^^^^^
@@ -403,9 +403,8 @@ only a single monitor that switches between these two functions. Some others (Av
 users the choice between single or multi viewer modes. Lightworks and Avid support an unlimited
 amount of floating viewers.
 
-[red]#TODO: Image#
-
-You can open (and position) as many viewers as you like in Lightworks
+.You can open (and position) as many viewers as you like in Lightworks
+image::{imgg}/wouter/v4-08-multiViewer.jpg[width="120%", alt="Multiple viewers in Lightworks", link="{imgg}/wouter/v4-08-multiViewer.jpg"]
 
 Viewers are usually coupled with timecode display and have a ton of settings.
 I won't go into details about these.
@@ -433,9 +432,8 @@ application supports viewing multiple timelines simultaneously. By stacking time
 other you can easily drag selections from one timeline to another. This is possible in Premiere,
 Lightworks and Resolve.
 
-[red]#TODO: Image#
-
-Pancake timeline editing in Lightworks
+.Pancake timeline editing in Lightworks
+image::{imgg}/wouter/v4-09-pancake.png[width="110%", alt="Example of a sync map", link="{imgg}/wouter/v4-09-pancake.png"]
 
 Reels can be further managed by using markers to describe certain points in time or sections, and
 these markers can be viewed as a list in their own panel. When selecting a marker in this panel, the
@@ -472,9 +470,9 @@ my selects reel. The advantage here is that I can rate sections as _not useful_ 
 see it as a 4-star rating system. I have seen other editors use this method for selecting footage,
 although in all fairness I'm not sure how widespread this technique is.
 
-[red]#TODO: Image#
+.Lifting selections; also note the use of clip colours, gaps and markers for organising the selects reel.
+image::{imgg}/wouter/v4-10-selectsReel.png[width="100%", alt="Example of a sync map", link="{imgg}/wouter/v4-10-selectsReel.png"]
 
-Lifting selections; also note the use of clip colours, gaps and markers for organising the selects reel.
 
 In FCP you can create your own rating system by using keywords (as shown in the screenshot at the
 start of this chapter) and then having everything filtered through keyword collections, as described
@@ -624,7 +622,7 @@ Editors often proudly share screenshots of their timelines on social media, and 
 impressive, but these are in fact pretty fragile structures.
 
 .One of my own timelines, which is relatively simple by comparison to those of many Hollywood movies
-image::{imgg}/wouter/01-timeline.jpg[width="110%", alt="Screenshot of a timeline", link="{imgg}/wouter/01-timeline.jpg"]
+image::{imgg}/wouter/v3-01-timeline.jpg[width="110%", alt="Screenshot of a timeline", link="{imgg}/wouter/v3-01-timeline.jpg"]
 
 So naturally, a question would be: what will happen if we would let go of the track paradigm? This
 is what Final Cut Pro has done, starting from the rewrite of Final Cut Pro X. At the time, a
@@ -641,10 +639,10 @@ primary storyline, and all connected clips automatically move with it. With a mo
 ignore clip connections, so that you can also easily move a primary clip elsewhere without its
 connected siblings coming along.
 
-image::{imgg}/wouter/02-trim-magnetic-1.jpg[width="100%", alt="(before trim)"]
+image::{imgg}/wouter/v3-02-trim-magnetic-1.jpg[width="100%", alt="(before trim)"]
 
 .Extending one clip will automatically move all connected clips in order to keep sync
-image::{imgg}/wouter/02-trim-magnetic-2.jpg[width="100%", alt="(after trim)"]
+image::{imgg}/wouter/v3-02-trim-magnetic-2.jpg[width="100%", alt="(after trim)"]
 
 _Sounds good._ Why not just copy this? One reason is that FCP assumes that all clips that are not on
 the primary storyline should be connected to this primary storyline. This might work well for fiction
@@ -659,7 +657,7 @@ How else could we group clips together that ought to be connected? +
 We could create groups that are directly editable, like so:
 
 .Compound clips
-image::{imgg}/wouter/03-grouped-1.png[width="100%", alt="Timeline with compound clips"]
+image::{imgg}/wouter/v3-03-grouped-1.png[width="100%", alt="Timeline with compound clips"]
 
 However, there are a few problems with this: we expect rendering to happen from top to bottom, in
 which case the b-roll would cover the subtitles. On top of that, it's hard to see at which points video
@@ -668,7 +666,7 @@ clips overlap. Last but not least: it looks rather unorganised.
 Can we restructure this? Perhaps like this:
 
 .Overlapping compound clips
-image::{imgg}/wouter/03-grouped-2.png[width="100%", alt="Timeline with stacked overlapping compound clips"]
+image::{imgg}/wouter/v3-03-grouped-2.png[width="100%", alt="Timeline with stacked overlapping compound clips"]
 
 But how exactly would a user interact with a timeline like this? I will leave the answer to that
 question for an actual design document, as for now I just wanted to show the concept of grouping so
@@ -695,7 +693,7 @@ FCP's precision editor. It doesn't change the working of keyboard shortcuts or t
 alters the timeline via animations in a very fluid way.
 
 .Final Cut Pro's precision editor
-image::{imgg}/wouter/04-fcp-precision-editor.jpg[precision editor]
+image::{imgg}/wouter/v3-04-fcp-precision-editor.jpg[precision editor]
 
 Another example is the Trim View in DaVinci Resolve: whenever you perform a trimming
 operation, the program monitor displays a trim view (showing the frames left and right of the cut
@@ -727,7 +725,7 @@ the use of a _contextual bar_ that appears over the bottom part of the timeline 
 mode is active.
 
 .Contextual bar with options for the mode/tool
-image::{imgg}/wouter/05-contextual-bar.png[width="100%", alt="contextual bar"]
+image::{imgg}/wouter/v3-05-contextual-bar.png[width="100%", alt="contextual bar"]
 
 Currently I'm thinking of using this bar on two or three occasions:
 
@@ -808,10 +806,10 @@ One last thing I would like to address is the destruction that an insert operati
 this can be prevented by proper track management, but you can wonder why you would ever want
 an insert action to cause the following:
 
-image::{imgg}/wouter/06-sync-insert-1.png[height=110, alt="sync insert"]
+image::{imgg}/wouter/v3-06-sync-insert-1.png[height=110, alt="sync insert"]
 
 .Inserting a clip with sync locks enabled for V2 might split a clip in Avid Media Composer.
-image::{imgg}/wouter/06-sync-insert-2.png[height=110, alt="sync insert"]
+image::{imgg}/wouter/v3-06-sync-insert-2.png[height=110, alt="sync insert"]
 
 In this case, if you'd like the clips on V2 to stay in sync, the overlapping clip will be split in two.
 If you don't want this to happen you would have to move the overlapping clip to another track
@@ -963,7 +961,7 @@ will move both the viewport and playhead. Clicking the left mouse button will ac
 position and close the widget.
 +
 .Skim widget
-image::{imgg}/wouter/07-1-skim.png[width="100%", alt="A skim widget rendered as overlay"]
+image::{imgg}/wouter/v3-07-1-skim.png[width="100%", alt="A skim widget rendered as overlay"]
 
 
 Autoscroll widget:: when the user moves the mouse cursor slightly left or right, it will enter zones
@@ -972,14 +970,14 @@ When the user moves the mouse farther away from the initial starting point, the 
 increase. This will also work vertically. The playhead will move along as well.
 +
 .Autoscroll widget
-image::{imgg}/wouter/07-2-autoscroll.png[width="100%", alt="A widget for auto-scrolling"]
+image::{imgg}/wouter/v3-07-2-autoscroll.png[width="100%", alt="A widget for auto-scrolling"]
 
 
 Zoom widget:: moving the mouse left or right from the centre will zoom horizontally, up and
 down will zoom vertically.
 +
 .Zoom widget
-image::{imgg}/wouter/07-3-zoom.png[width="100%", alt="An overlay widget to control zooming"]
+image::{imgg}/wouter/v3-07-3-zoom.png[width="100%", alt="An overlay widget to control zooming"]
 
 Mouse-only navigation:
 
@@ -989,7 +987,7 @@ mouse button. When released, it will commit to the new location/view. If a user 
 immediately releases the button, a regular context menu will appear.
 +
 .Combined skim, zoom and scroll widget
-image::{imgg}/wouter/07-4-combined.png[width="100%", alt="Overlay widget to combin skim, zoom and autoscrol function"]
+image::{imgg}/wouter/v3-07-4-combined.png[width="100%", alt="Overlay widget to combin skim, zoom and autoscrol function"]
 
 
 Why popup widgets?
@@ -1049,7 +1047,7 @@ what any other NLE does at the moment, but enabling multi-clip selection by keyb
 good reason to go in this direction.
 
 .Selection mockup: selected clips are highlighted in yellow, the cursor is a white dot.
-image::{imgg}/wouter/08-selection.png[width="100%", alt="selecting clips"]
+image::{imgg}/wouter/v3-08-selection.png[width="100%", alt="selecting clips"]
 
 For selecting, we can introduce an ``add to selection'' key which adds the highlighted clip to the
 current selection (apart from the convention of using Ctrl+mouse click). We could also think of
@@ -1157,10 +1155,10 @@ tracks automatically stay in sync. This means (manually) enabling or disabling t
 track. Once set, trimming a single clip can be enough to have all tracks move along, although you
 might still need to manually select trim sides for overlapping clips to get the desired result.
 
-image::{imgg}/wouter/09-sync-trim-1.png[height=140, alt="trimming with sync-lock(before)"]
+image::{imgg}/wouter/v3-09-sync-trim-1.png[height=140, alt="trimming with sync-lock(before)"]
 
 .Avid's sync locks will split longer clips by default, in order to keep sync. Such destructive behaviour should be avoided in Lumiera.
-image::{imgg}/wouter/09-sync-trim-2.png[height=140, alt="trimming with sync-lock(after)"]
+image::{imgg}/wouter/v3-09-sync-trim-2.png[height=140, alt="trimming with sync-lock(after)"]
 
 Without sync locks you will have to select trim sides on every track that needs to stay in sync,
 although, as we'll see, even that can be accomplished by a single keystroke. FCP is the exception
@@ -1191,7 +1189,7 @@ These commands can be combined: when pressing multiple keys, new trim sides are 
 selection. This allows for quickly selecting many trim sides on many tracks.
 
 .One keystroke led to the selection of these four trim sides in Lightworks
-image::{imgg}/wouter/10-trim-side.png["select trim side"]
+image::{imgg}/wouter/v3-10-trim-side.png["select trim side"]
 
 Another feature that was already mentioned in a previous chapter, is FCP's precision editor, which
 can be triggered by double clicking a cut or by keyboard shortcut. This shows how much footage
@@ -1278,7 +1276,7 @@ exited automatically whenever the user clicks in an empty spot of the timeline o
 mode key (T). This key can also be used to return to the last-used trim configuration.
 
 .Mockup of the trim mode. The striped area marks the pre- and post-roll that will be previewed.
-image::{imgg}/wouter/11-trim-mode.png[width="100%", alt="using trim mode"]
+image::{imgg}/wouter/v3-11-trim-mode.png[width="100%", alt="using trim mode"]
 
 
 Splitting and merging clips
@@ -1314,7 +1312,7 @@ I would like to propose the ability to divide a timeline into multiple sections.
 will have a header in the ruler that can be edited, to give each section a name (similar to how
 duration markers in Premiere are displayed).
 
-image::{imgg}/wouter/12-sections.png[width="100%", alt="Timeline with sections"]
+image::{imgg}/wouter/v3-12-sections.png[width="100%", alt="Timeline with sections"]
 
 The benefits of sections:
 
@@ -1371,7 +1369,7 @@ transition from a clip's start or end to the position of the playhead.
 
 * Avid has a configuration panel for adding transitions:
 
-image::{imgg}/wouter/13-transition.png[align="center", alt="transition properties"]
+image::{imgg}/wouter/v3-13-transition.png[align="center", alt="transition properties"]
 
 * Some apps allow adding transitions to every cut in the in-out range (Avid, Lightworks). Avid
 gives you the option to skip cuts that already have a transition. Very useful for adding short
