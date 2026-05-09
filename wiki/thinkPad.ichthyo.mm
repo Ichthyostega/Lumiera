@@ -146571,6 +146571,92 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="clanbomber"/>
 </node>
 </node>
+<node CREATED="1778372162541" ID="ID_1423477043" MODIFIED="1778372391306">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das ist zwar nur ein Grenzfall
+    </p>
+    <p>
+      &#160;&#8212; aber er stellt das gesamte Konzept in Frage
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Es handelt sich ganz klassisch um einen &#187;Race&#171; &#8212; das hei&#223;t, diese Situation ist in keinster Weise regul&#228;r vorgesehen, und d&#252;rfrte auch auch schwierig zu reproduzieren sein; sie sollte daher nicht der Ma&#223;stab sein, an dem das Konstrukt insgeseamt ausgerichtet wird. Leider aber f&#252;hrt diese Situation zur <i>memory corruption,</i>&#160;wenn wir das bisher ausgearbeitete Konzept umsetzen
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1778372393169" ID="ID_1109770264" MODIFIED="1778372505015" TEXT="Schwierigkeit: der LocalMemPool wei&#xdf; nicht, was er angefordert hat">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      denn andernfalls k&#246;nnte man versuchen, &#252;ber eine Spezialbehandlung im Destruktor die gesendete Speicher-Anforderung irgendwie stornieren (wiewohl auch dabei noch ein Race auftreten k&#246;nnte)
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1778372507757" ID="ID_228507573" MODIFIED="1778372578208" TEXT="eine M&#xf6;glichkeit w&#xe4;re, eine zus&#xe4;tzliche Sicherung im empfangenden Code vorzusehen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      So &#228;hnlich wie der ZombieCheck...
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1778372538869" ID="ID_398624236" MODIFIED="1778373145721" TEXT="diese Sicherung m&#xfc;&#xdf;te allerdings wirksam werden vor dem ersten tats&#xe4;chlichen Speicherzugriff">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Erl&#228;uterung...
+    </p>
+    <ul>
+      <li>
+        der Callback ruft direkt oder indirekt eine Funktion auf, die den Speicher entgegennimmt
+      </li>
+      <li>
+        dieser Funktion wird eine &quot;self&quot;-Referenz &#252;bergeben, die aber zum Zeitpunkt des Aufrufes bereits nicht mehr valide sein k&#246;nnte
+      </li>
+      <li>
+        solange nur der Code l&#228;uft, und auf Parameter und statische Variable zugreift, ist diese Operation selbst dann noch fehlerfrei ausf&#252;hrbar, wenn die self-Referenz ung&#252;ltig ist
+      </li>
+      <li>
+        aber da die Queue an der self-Referenz h&#228;ngt, w&#252;rde beim ersten Zugriff bereits anderweitig verwendeter Speicher referenziert.
+      </li>
+      <li>
+        man m&#252;&#223;te also irgend eine Art von ID erzeugen, &#252;ber die sich feststellen l&#228;&#223;t, ob die self-Referenz noch g&#252;ltig ist, beispielsweise als Eintrag in einer statischen Hashtable
+      </li>
+      <li>
+        einfach ist das nicht, da auch dieser Check selber wieder threadsafe sein mu&#223; (allerdings ist der relevante Codepfad weder kritisch, noch strongly contended)
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -171636,8 +171722,8 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
 </node>
 <node CREATED="1720994187035" ID="ID_1817562586" MODIFIED="1720994190143" TEXT="Basis-Dienste">
 <node CREATED="1778113273194" ID="ID_513273421" MODIFIED="1778113528245" TEXT="Async-IO">
-<linktarget COLOR="#323ccd" DESTINATION="ID_513273421" ENDARROW="Default" ENDINCLINATION="-1630;-298;" ID="Arrow_ID_1806410644" SOURCE="ID_719985737" STARTARROW="None" STARTINCLINATION="-1524;159;"/>
 <linktarget COLOR="#392ba1" DESTINATION="ID_513273421" ENDARROW="Default" ENDINCLINATION="-1790;-510;" ID="Arrow_ID_1192232127" SOURCE="ID_977105409" STARTARROW="None" STARTINCLINATION="2404;307;"/>
+<linktarget COLOR="#323ccd" DESTINATION="ID_513273421" ENDARROW="Default" ENDINCLINATION="-1630;-298;" ID="Arrow_ID_1806410644" SOURCE="ID_719985737" STARTARROW="None" STARTINCLINATION="-1524;159;"/>
 </node>
 </node>
 </node>

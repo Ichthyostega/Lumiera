@@ -75,10 +75,8 @@
 
 #include "lib/error.hpp"
 #include "vault/mem/engine-buffer-manager.hpp"
-#include "lib/nocopy.hpp"
 #include "lib/util.hpp"
 
-#include <boost/lockfree/queue.hpp>
 #include <algorithm>
 #include <utility>
 #include <string>
@@ -90,8 +88,6 @@ namespace mem   {
   namespace err = lumiera::error;
   
   namespace { // Configuration tuning parameters
-    
-    const size_t INQUEUE_SIZ = 30;   ///< initial size of the lock-free provision queue
     
     const uint MATCH_SCORE    = 10;  ///< score to add when a buffer can be used to satisfy a request
     const uint MISFIT_PENALTY = 2;   ///< reduce score whenever a buffer is too small to be useful
@@ -126,6 +122,7 @@ namespace mem   {
    *   for use in a massive multithreaded environment.
    */
   class LocalMemPool
+    : public AllocReceiver
     {
       struct Block
         {
@@ -140,17 +137,15 @@ namespace mem   {
             { }
         };
       
-      using InQueue = boost::lockfree::queue<Alloc>;
       using BlockList = std::list<Block>;
       
-      InQueue inQueue_;
       BlockList blocks_;
       
       int32_t maxScore_{1};
       
     public:
       LocalMemPool()
-        : inQueue_{INQUEUE_SIZ}
+        : AllocReceiver{}
         , blocks_{}
         { }
       
@@ -232,7 +227,7 @@ namespace mem   {
       void
       supply (Buff* mem, size_t siz)
         {
-          inQueue_.push ({mem,siz});
+          AllocReceiver::supply ({mem,siz});
         }
       
       /**

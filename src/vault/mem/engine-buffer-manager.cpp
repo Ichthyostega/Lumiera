@@ -15,29 +15,17 @@
 /** @file engine-buffer-manager.cpp
  ** Implementation of render buffer allocation for the Lumiera Engine.
  ** Instantiated as global service and part of the Engine, this global
- ** allocation coordinator is responsible to provide pre-allocated blocks
- ** for render buffers. These allocations are categorised by their size,
- ** and will be sent down to LocalMemPool instances running in each
- ** worker thread. This involves asynchronous messaging to avoid
- ** any blocking of work jobs due to central resource management.
- ** 
- ** @todo WIP-WIP 4/2026 The intention is to use a family of pools eventually,
- **       with some of the most relevant tile sizes. The EngineBufferManager
- **       would then actually retain ownership of all allocations and just
- **       _lease_ them to the LocalMemPool instances. Allocations would be
- **       added in extents, likely also using some usage bitmap. However
- **       building any such kind of optimised allocator requires to conduct
- **       very detailed _and_ realistic performance observations; furthermore
- **       it is likely that we'd need some dynamic scheme to select suitable
- **       tile sizes and pool dimensions. Not sure if it is even possible
- **       to improve performance by such a scheme; with some likelihood
- **       the majority of the benefits will be reaped already just by
- **       introducing thread-local pools without wasting too much memory.
+ ** buffer coordinator uses the [actual allocator](\ref engine-buffer-allocator.hpp)
+ ** internally to maintain a pool of usage buffer memory blocks. Furthermore,
+ ** both a synchronous and an asynchronous interface is provided to request
+ ** allocations, that will be sent as \ref Alloc entries to some local memory
+ ** pool, that is an \ref AllocReceiver, thereby passing control over these
+ ** blocks of memory. The contract is that the local memory user has to
+ ** return those blocks reliably to the EngineBuffrerManager, which
+ ** itself is also an \ref AllocReceiver.
  ** 
  ** @see EnginePufferManager_test
  ** @see LocalBufferStore_test
- ** @see BufferProviderProtocol_test
- ** @see buffer-provider.hpp
  */
 
 
@@ -82,6 +70,18 @@ namespace mem {
   
   /* === EngineBufferManager implementation === */
   
+  void
+  EngineBufferManager::handleAllocRequests()
+  {
+    requestQueue_.consume_all ([this](AllocRequest request)
+                                {
+                                  REQUIRE (request.receiver);
+                                  BufferAllocator allocator;
+                                  Alloc alloc = allocator.allocate (request.sizRequest);
+                                  ENSURE (alloc.mem);
+                                  request.receiver->supply (alloc);
+                                });
+  }
   
   
 }} // namespace vault::mem

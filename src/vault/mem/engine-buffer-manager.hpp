@@ -20,18 +20,15 @@
  ** worker thread. This involves asynchronous messaging to avoid
  ** any blocking of work jobs due to central resource management.
  ** 
- ** @todo WIP-WIP 4/2026 The intention is to use a family of pools eventually,
- **       with some of the most relevant tile sizes. The EngineBufferManager
- **       would then actually retain ownership of all allocations and just
- **       _lease_ them to the LocalMemPool instances. Allocations would be
- **       added in extents, likely also using some usage bitmap. However
- **       building any such kind of optimised allocator requires to conduct
- **       very detailed _and_ realistic performance observations; furthermore
- **       it is likely that we'd need some dynamic scheme to select suitable
- **       tile sizes and pool dimensions. Not sure if it is even possible
- **       to improve performance by such a scheme; with some likelihood
- **       the majority of the benefits will be reaped already just by
- **       introducing thread-local pools without wasting too much memory.
+ ** Besides the interface of the EngineBufferManager, this header also
+ ** defines some common structures, like the \ref mem::Alloc, and the
+ ** baseclass \ref AllocReceiver, with a lock-free inbound queue
+ ** so that allocations can be supplied to a local memory manager
+ ** and picked up from within the worker thread later.
+ ** @remark both the LocalMemPool (for each worker thread) and the
+ **   EngineBufferManager, as global memory service, are based on
+ **   such an input queue, allowing to transfer control over some
+ **   allocation from the central allocator to a local memory pool.
  ** 
  ** @see EnginePufferManager_test
  ** @see LocalBufferStore_test
@@ -50,6 +47,7 @@
 #include "lib/nocopy.hpp"
 //#include "lib/util.hpp"
 
+#include <boost/lockfree/queue.hpp>
 
 
 namespace vault{
@@ -64,6 +62,8 @@ namespace mem {
   
   namespace { // config and internal helpers...
     
+    const size_t INQUEUE_SIZ = 30;   ///< initial size of the lock-free provision queue
+    
   }
   
   struct Alloc
@@ -73,14 +73,60 @@ namespace mem {
     };
   
   
+  /**
+   * Base building block: a memory handler
+   * that can receive memory allocations for further use.
+   */
+  class AllocReceiver
+    : util::NonCopyable
+    {
+    protected:
+      using InQueue = boost::lockfree::queue<Alloc>;
+      InQueue inQueue_;
+      
+      AllocReceiver()
+        : inQueue_{INQUEUE_SIZ}
+        { }
+      
+    public:
+      /** Transfer control over the given allocation.
+       * @remark the \ref Alloc is placed into a lock-free queue;
+       *         implementation code from a subclass will have to
+       *         receive and dispatch those entries */
+      void
+      supply (Alloc const& alloc)
+        {
+          inQueue_.push (alloc);
+        }
+    };
+  
+  
+  
   
   /*********************************************************//**
    * Core service of the Render Engine : global buffer manager.
    */
   class EngineBufferManager
-    : util::NonCopyable
+    : public AllocReceiver
     {
+      struct AllocRequest
+        {
+          AllocReceiver* receiver;
+          size_t sizRequest;
+        };
+      
+      using RequestQueue = boost::lockfree::queue<AllocRequest>;
+      RequestQueue requestQueue_;
+      
     public:
+      EngineBufferManager()
+        : AllocReceiver{}
+        , requestQueue_{INQUEUE_SIZ}
+        { }
+        
+    private:
+      /** process all pending requests in the queue */
+      void handleAllocRequests();
     };
   
   

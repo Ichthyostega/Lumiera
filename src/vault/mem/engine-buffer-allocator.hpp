@@ -13,12 +13,11 @@
 
 /** @file engine-buffer-allocator.hpp
  ** Implementation of render buffer allocation for the Lumiera Engine.
- ** Instantiated as global service and part of the Engine, this global
- ** allocation coordinator is responsible to provide pre-allocated blocks
- ** for render buffers. These allocations are categorised by their size,
- ** and will be sent down to LocalMemPool instances running in each
- ** worker thread. This involves asynchronous messaging to avoid
- ** any blocking of work jobs due to central resource management.
+ ** Memory for render buffer is allocated in blocks with a size aligned
+ ** to the typical cache-line granularity. These allocations are maintained
+ ** in thread-local pools and re-used to the extent possible. Excess blocks
+ ** are sent back and collected by the EngineBufferManager, which serves
+ ** thus as an background collector and manager for the buffer memory.
  ** 
  ** @todo WIP-WIP 4/2026 The intention is to use a family of pools eventually,
  **       with some of the most relevant tile sizes. The EngineBufferManager
@@ -46,7 +45,7 @@
 #include "lib/util-quant.hpp"
 #include "lib/allocator-handle.hpp"
 //#include "lib/hash-value.h"
-#include "vault/mem/buffhandle.hpp"
+#include "vault/mem/engine-buffer-manager.hpp"
 //#include "vault/mem/type-handler.hpp"
 //#include "vault/mem/buffer-local-tag.hpp"
 #include "lib/nocopy.hpp"
@@ -92,12 +91,6 @@ namespace mem {
       static_assert (util::isPow2 (sizeof(BaseTile)));
       static_assert (lib::allo::is_Stateless_v<Allo>);
       
-      
-      struct Alloc
-        {
-          Buff* mem;
-          size_t siz;
-        };
       
       static constexpr size_t
       numTiles (size_t sizRequest)
